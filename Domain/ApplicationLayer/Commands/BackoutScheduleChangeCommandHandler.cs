@@ -46,15 +46,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				return;
 			}
 
-			var version = versions.Last();
+			var currentVersion = versions.First();
+			var lastVersion = versions.Last();
 
-			if (version.ModifiedBy.Id != _loggedOnUser.CurrentUser().Id)
+			if (currentVersion.ModifiedBy.Id != _loggedOnUser.CurrentUser().Id)
 			{
 				command.ErrorMessages.Add(Resources.CannotBackoutScheduleChange);
 				return;
 			}
 
-			var scheduleData = _scheduleHistoryRepository.FindSchedules(version, person, command.Date).ToList();
+			var scheduleData = _scheduleHistoryRepository.FindSchedules(lastVersion, person, command.Date).ToList();
 			IList<IPersonAssignment> personAssignments = new List<IPersonAssignment>();
 			IList<IPersonAbsence> personAbsences = new List<IPersonAbsence>();
 

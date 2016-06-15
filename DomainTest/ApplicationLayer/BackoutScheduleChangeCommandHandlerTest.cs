@@ -79,16 +79,31 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			LoggedOnUser.SetFakeLoggedOnUser(person2);
 			ScheduleHistoryRepository.ClearRevision();
 
-			var rev = new Revision {Id = 1};
+			var person = PersonFactory.CreatePerson("aa","aa").WithId();
+			PersonRepository.Add(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+			var dateTimePeriod = new DateTimePeriod(2016,6,11,8,2016,6,11,17);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(CurrentScenario.Current(),person,dateTimePeriod);
+			ScheduleHistoryRepository.ClearRevision();
+			var rev = new Revision { Id = 2 };
 			rev.SetRevisionData(person1);
-			ScheduleHistoryRepository.SetRevision(rev, null);
+			var lstRev = new Revision { Id = 1 };
+			lstRev.SetRevisionData(person1);
+			ScheduleHistoryRepository.SetRevision(rev,pa.CreateTransient());
+			pa.SetDayOff(DayOffFactory.CreateDayOff());
+			ScheduleHistoryRepository.SetRevision(lstRev,pa.CreateTransient());
 
 			var command = new BackoutScheduleChangeCommand
 			{
-				PersonId = person1.Id.Value,
-				Date = new DateOnly(2016,06,11)
+				PersonId = person.Id.Value,
+				Date = new DateOnly(2016,06,11),
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					TrackId = Guid.NewGuid()
+				}
 			};
-
+			target.Handle(command);
+		
 			target.Handle(command);
 
 			command.ErrorMessages.Count.Should().Be.EqualTo(1);
