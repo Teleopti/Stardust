@@ -31,18 +31,18 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var offeredCallsSeries = new List<double?>();
 			var averageHandleTimeSeries = new List<double?>();
 			var latestQueueStatsIntervalId = -1;
-            var averageSpeedOfAnswer = new List<double?>();
-            var abandonedRate = new List<double?>();
-            var serviceLevel = new List<double?>();
+			var averageSpeedOfAnswer = new List<double?>();
+			var abandonedRate = new List<double?>();
+			var serviceLevel = new List<double?>();
 
-            foreach (var interval in intervals)
+			foreach (var interval in intervals)
 			{
 				summary.OfferedCalls += interval.OfferedCalls ?? 0;
 				summary.HandleTime += interval.HandleTime ?? 0;
-			    summary.SpeedOfAnswer += interval.SpeedOfAnswer ?? 0;
-			    summary.AnsweredCalls += interval.AnsweredCalls ?? 0;
-			    summary.AnsweredCallsWithinSL += interval.AnsweredCallsWithinSL ?? 0;
-			    summary.AbandonedCalls += interval.AbandonedCalls ?? 0;
+				summary.SpeedOfAnswer += interval.SpeedOfAnswer ?? 0;
+				summary.AnsweredCalls += interval.AnsweredCalls ?? 0;
+				summary.AnsweredCallsWithinSL += interval.AnsweredCallsWithinSL ?? 0;
+				summary.AbandonedCalls += interval.AbandonedCalls ?? 0;
 
 				timeSeries.Add(DateTime.MinValue.AddMinutes(interval.IntervalId * intervalLength));
 				forecastedCallsSeries.Add(interval.ForecastedCalls);
@@ -52,54 +52,54 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 				if (interval.OfferedCalls.HasValue)
 					latestQueueStatsIntervalId = interval.IntervalId;
-			    averageSpeedOfAnswer.Add(interval.SpeedOfAnswer.HasValue ? interval.SpeedOfAnswer/interval.AnsweredCalls : null);
-                abandonedRate.Add(interval.AbandonedCalls.HasValue ? interval.AbandonedRate : null);
-                serviceLevel.Add(interval.AnsweredCallsWithinSL.HasValue ? interval.ServiceLevel : null);
+				averageSpeedOfAnswer.Add(interval.SpeedOfAnswer.HasValue ? interval.SpeedOfAnswer / interval.AnsweredCalls : null);
+				abandonedRate.Add(interval.AbandonedCalls.HasValue ? interval.AbandonedRate * 100 : null);
+				serviceLevel.Add(interval.AnsweredCallsWithinSL.HasValue ? interval.ServiceLevel * 100 : null);
 
 			}
 
-		    foreach (var interval in intervals.Where(interval => interval.IntervalId <= latestQueueStatsIntervalId))
-		    {
-		        summary.ForecastedCalls += interval.ForecastedCalls;
-		        summary.ForecastedHandleTime += interval.ForecastedHandleTime;
-		    }
+			foreach (var interval in intervals.Where(interval => interval.IntervalId <= latestQueueStatsIntervalId))
+			{
+				summary.ForecastedCalls += interval.ForecastedCalls;
+				summary.ForecastedHandleTime += interval.ForecastedHandleTime;
+			}
 
-            summary.ForecastedAverageHandleTime = Math.Abs(summary.ForecastedCalls) < 0.0001
-                ? 0 
-                : summary.ForecastedHandleTime / summary.ForecastedCalls;
-			summary.AverageHandleTime = Math.Abs(summary.OfferedCalls) < 0.0001 
-                ? 0 
-                : summary.HandleTime / summary.OfferedCalls;
+			summary.ForecastedAverageHandleTime = Math.Abs(summary.ForecastedCalls) < 0.0001
+					? 0
+					: summary.ForecastedHandleTime / summary.ForecastedCalls;
+			summary.AverageHandleTime = Math.Abs(summary.OfferedCalls) < 0.0001
+								? 0
+								: summary.HandleTime / summary.OfferedCalls;
 
 			summary.ForecastedActualCallsDiff = Math.Abs(summary.ForecastedCalls) < 0.0001
 				 ? -99
-				 :(summary.OfferedCalls - summary.ForecastedCalls) * 100 / summary.ForecastedCalls;
+				 : (summary.OfferedCalls - summary.ForecastedCalls) * 100 / summary.ForecastedCalls;
 
-		    summary.ForecastedActualHandleTimeDiff = Math.Abs(summary.ForecastedAverageHandleTime) < 0.0001
-		        ? -99
-		        : (summary.AverageHandleTime - summary.ForecastedAverageHandleTime)*100/
-		          summary.ForecastedAverageHandleTime;
+			summary.ForecastedActualHandleTimeDiff = Math.Abs(summary.ForecastedAverageHandleTime) < 0.0001
+					? -99
+					: (summary.AverageHandleTime - summary.ForecastedAverageHandleTime) * 100 /
+						summary.ForecastedAverageHandleTime;
 
-		    summary.AverageSpeedOfAnswer = Math.Abs(summary.AnsweredCalls) < 0.0001
-		        ? -99
-		        : summary.SpeedOfAnswer/summary.AnsweredCalls;
+			summary.AverageSpeedOfAnswer = Math.Abs(summary.AnsweredCalls) < 0.0001
+					? -99
+					: summary.SpeedOfAnswer / summary.AnsweredCalls;
 
-		    summary.ServiceLevel = Math.Abs(summary.OfferedCalls) < 0.0001
-		        ? -99
-		        : summary.AnsweredCallsWithinSL/summary.OfferedCalls;
+			summary.ServiceLevel = Math.Abs(summary.OfferedCalls) < 0.0001
+					? -99
+					: summary.AnsweredCallsWithinSL / summary.OfferedCalls;
 
-		    summary.AbandonRate = Math.Abs(summary.OfferedCalls) < 0.0001
-		        ? -99
-		        : summary.AbandonedCalls/summary.OfferedCalls;
+			summary.AbandonRate = Math.Abs(summary.OfferedCalls) < 0.0001
+					? -99
+					: summary.AbandonedCalls / summary.OfferedCalls;
 
-            return new MonitorDataViewModel()
+			return new MonitorDataViewModel()
 			{
 				LatestActualIntervalStart = latestQueueStatsIntervalId == -1
-					? null
-					: (DateTime?)DateTime.MinValue.AddMinutes(latestQueueStatsIntervalId * intervalLength),
+		? null
+		: (DateTime?)DateTime.MinValue.AddMinutes(latestQueueStatsIntervalId * intervalLength),
 				LatestActualIntervalEnd = latestQueueStatsIntervalId == -1
-					? null
-					: (DateTime?)DateTime.MinValue.AddMinutes(latestQueueStatsIntervalId * intervalLength + intervalLength),
+		? null
+		: (DateTime?)DateTime.MinValue.AddMinutes(latestQueueStatsIntervalId * intervalLength + intervalLength),
 				Summary = summary,
 				DataSeries = new MonitorIntradayDataSeries
 				{
@@ -108,9 +108,9 @@ namespace Teleopti.Ccc.Domain.Intraday
 					ForecastedAverageHandleTime = forecastedAverageHandleTimeSeries.ToArray(),
 					OfferedCalls = offeredCallsSeries.ToArray(),
 					AverageHandleTime = averageHandleTimeSeries.ToArray(),
-                    AverageSpeedOfAnswer = averageSpeedOfAnswer.ToArray(),
-                    AbandonedRate = abandonedRate.ToArray(),
-                    ServiceLevel = serviceLevel.ToArray()
+					AverageSpeedOfAnswer = averageSpeedOfAnswer.ToArray(),
+					AbandonedRate = abandonedRate.ToArray(),
+					ServiceLevel = serviceLevel.ToArray()
 				}
 			};
 		}
