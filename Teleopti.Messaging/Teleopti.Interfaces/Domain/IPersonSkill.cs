@@ -23,6 +23,7 @@
     /// </summary>
     public interface IPersonSkill : IAggregateEntity, ICloneableEntity<IPersonSkill>
     {
+	    bool HasActivity(IActivity activity);
         /// <summary>
         /// Gets or sets the skill.
         /// </summary>

@@ -24,7 +24,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			_active = true;
 		}
 
-        public virtual ISkill Skill
+		public bool HasActivity(IActivity activity)
+		{
+			return Skill.Activity?.Equals(activity) ?? Skill.Activity == null;
+		}
+
+		public virtual ISkill Skill
         {
             get { return _skill; }
         }
