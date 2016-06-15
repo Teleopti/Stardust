@@ -1,12 +1,40 @@
-<button class="wfm-btn wfm-btn-invis-primary view-header with-fab with-desc staffing-head">
-	<div class="view-title" ng-click="viewCal = !viewCal">
-		<h1><i class="mdi mdi-calendar"></i>{{intervalDate | amDateFormat:"L"}}</h1>
+<div class="view-header with-fab with-desc">
+	<div class="view-title">
+		<h1><i class="mdi mdi-calendar"></i> Intraday Staffing</h1>
+		<p class="con-flex">Monitor your staffing levels </p>
 	</div>
-</button>
-<div class="wfm-datepicker-wrap" ng-show="viewCal">
-	<uib-datepicker show-weeks="true" ng-model="intervalDate" class="wfm-datepicker">
-		</datepicker>
+	<div class="fab-wrapper">
+		<button class="wfm-fab  material-depth-1" ng-click="TriggerResourceCalculate()">
+			<i class="mdi mdi-plus"></i>
+			<md-tooltip>Trigger resourceCalculate</md-tooltip>
+		</button>
+	</div>
 </div>
+
+
+<div class="con-row panel material-depth-1">
+	<div class="con-flex">
+			<div class="wfm-btn-invis-primary" style="cursor:pointer; text-align:center;" ng-click="viewCal = !viewCal">
+				<h1><i class="mdi mdi-calendar"></i>{{intervalDate | amDateFormat:"L"}}</h1>
+			</div>
+
+		<div class="wfm-datepicker-wrap" ng-show="viewCal">
+			<uib-datepicker show-weeks="true" ng-model="intervalDate" class="wfm-datepicker">
+			</datepicker>
+		</div>
+	</div>
+	<div class="con-flex split-3-1">
+		<md-autocomplete id="skill-id" class="autocomplete-skill" md-selected-item="selectedSkill" md-search-text="searchSkillText" md-selected-item-change="" md-items="skill in skills" md-item-text="skill.Name" md-min-length="0" placeholder="{{'SelectSkill'|translate}}">
+			<md-item-template>
+				<span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
+			</md-item-template>
+			<md-not-found>
+				{{'RepViewerNoMoreMatches'|translate}}
+			</md-not-found>
+		</md-autocomplete>
+	</div>
+</div>
+
 
 <div class="loadWrapper" ng-if="loading">
 	<md-progress-linear md-mode="indeterminate" ng-show="loading"></md-progress-linear>

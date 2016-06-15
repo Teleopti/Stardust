@@ -10,6 +10,13 @@
 						isArray: false
 					}
 				});
+				this.TriggerResourceCalculate = $resource('../TriggerResourceCalculate', {}, {
+					query: {
+						method: 'GET',
+						params: {},
+						isArray: false
+					}
+				});
 			}
 		]);
 })();

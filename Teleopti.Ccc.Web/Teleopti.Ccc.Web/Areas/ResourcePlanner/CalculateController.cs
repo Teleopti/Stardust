@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		    _loggedOnUser = loggedOnUser;
 	    }
 
-	    [HttpGet, Route("ResourceCalculate")]
+	    [UnitOfWork, HttpGet, Route("ResourceCalculate")]
 		public virtual IHttpActionResult ResourceCalculate(DateTime date)
 		{
 			//var period = new DateOnlyPeriod(new DateOnly(input.StartDate), new DateOnly(input.EndDate));
