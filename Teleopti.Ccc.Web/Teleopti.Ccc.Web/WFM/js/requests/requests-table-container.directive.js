@@ -329,15 +329,18 @@
 
 			var shiftTradeDayView = '.shift-trade-view .ui-grid-render-container-body .ui-grid-viewport';
 
-			function thereIsScrollBar() { return $(shiftTradeDayView)[0].scrollWidth > $(shiftTradeDayView).width() };
+			if ($(shiftTradeDayView).length) {
 
-			scope.$watch(function () {
-				return $(shiftTradeDayView).width();
-			}, function() {
-				thereIsScrollBar() ?
-					$(shiftTradeDayView).css('height', requestsTableContainerCtrl.gridApi.grid.gridHeight - 65 + 18)
-					: $(shiftTradeDayView).css('height', requestsTableContainerCtrl.gridApi.grid.gridHeight - 65);
-			});
+				function thereIsScrollBar() { return $(shiftTradeDayView)[0].scrollWidth > $(shiftTradeDayView).width() };
+
+				scope.$watch(function () {
+					return $(shiftTradeDayView).width();
+				}, function () {
+					thereIsScrollBar() ?
+						$(shiftTradeDayView).css('height', requestsTableContainerCtrl.gridApi.grid.gridHeight - 65 + 18)
+						: $(shiftTradeDayView).css('height', requestsTableContainerCtrl.gridApi.grid.gridHeight - 65);
+				});
+			}
 			
 			scope.$on('reload.requests.without.selection', function () {
 				requestsTableContainerCtrl.clearSelection();
