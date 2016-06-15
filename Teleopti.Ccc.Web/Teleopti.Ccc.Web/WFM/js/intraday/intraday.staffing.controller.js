@@ -2,24 +2,28 @@
 	'use strict';
 	angular.module('wfm.intraday')
 		.controller('IntradayStaffingCtrl', [
-			'$scope', '$state', '$stateParams', 'intradayStaffingService', 'intradayService', '$filter', 'NoticeService', '$translate', '$q',
-			function($scope, $state, $stateParams, intradayStaffingService, intradayService, $filter, NoticeService, $translate, $q) {
+			'$scope', '$state', '$stateParams', 'intradayStaffingService', 'Toggle', 'intradayService', '$filter', 'NoticeService', '$translate', '$q',
+			function($scope, $state, $stateParams, intradayStaffingService, toggleService, intradayService, $filter, NoticeService, $translate, $q) {
 				var chartData = {};
-
+				$scope.isVisible = true;
 				if ($stateParams.intervalDate) {
 					$scope.intervalDate = $stateParams.intervalDate;
 				} else {
 					$scope.intervalDate = moment();
 				};
 
+			 	toggleService.togglesLoaded.then(function(result) {
+					$scope.isVisible = toggleService.Intraday_ResourceCalculateReadModel_39200;
+				});
+
 				$scope.$watch('intervalDate', function() {
 					var newDate = moment($scope.intervalDate).format("YYYY-MM-DD");
 					runIntradayFetch(newDate);
 				});
 
-				$scope.TriggerResourceCalculate = function(){
+				$scope.TriggerResourceCalculate = function() {
 					console.log('triggered!');
-					intradayStaffingService.TriggerResourceCalculate.query().$promise.then(function(response){
+					intradayStaffingService.TriggerResourceCalculate.query().$promise.then(function(response) {
 						console.log(response);
 					})
 				};

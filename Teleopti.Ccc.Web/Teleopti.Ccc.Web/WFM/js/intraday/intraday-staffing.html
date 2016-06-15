@@ -3,7 +3,7 @@
 		<h1><i class="mdi mdi-calendar"></i> Intraday Staffing</h1>
 		<p class="con-flex">Monitor your staffing levels </p>
 	</div>
-	<div class="fab-wrapper">
+	<div class="fab-wrapper" ng-if="isVisible">
 		<button class="wfm-fab  material-depth-1" ng-click="TriggerResourceCalculate()">
 			<i class="mdi mdi-plus"></i>
 			<md-tooltip>Trigger resourceCalculate</md-tooltip>
@@ -23,7 +23,7 @@
 			</datepicker>
 		</div>
 	</div>
-	<div class="con-flex split-3-1">
+	<div class="con-flex split-3-1" ng-if="isVisible">
 		<md-autocomplete id="skill-id" class="autocomplete-skill" md-selected-item="selectedSkill" md-search-text="searchSkillText" md-selected-item-change="" md-items="skill in skills" md-item-text="skill.Name" md-min-length="0" placeholder="{{'SelectSkill'|translate}}">
 			<md-item-template>
 				<span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>

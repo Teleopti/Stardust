@@ -1,6 +1,6 @@
 ﻿
 (function() {
-	var intraday = angular.module('wfm.intraday', ['gridshore.c3js.chart', 'ngResource', 'ui.router', 'wfm.notice', 'pascalprecht.translate', 'wfm.autofocus']);
+	var intraday = angular.module('wfm.intraday', ['gridshore.c3js.chart', 'ngResource', 'ui.router', 'wfm.notice', 'pascalprecht.translate', 'wfm.autofocus','toggleService']);
 
 	intraday.run([
 		'$rootScope', '$state', '$location',
