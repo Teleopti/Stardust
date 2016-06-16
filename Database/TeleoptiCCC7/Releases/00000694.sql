@@ -1,12 +1,12 @@
 CREATE TABLE [ReadModel].[PersonSkills]
 	(
+	Id uniqueidentifier NOT NULL,
 	PersonId uniqueidentifier NOT NULL,
 	SkillId uniqueidentifier NOT NULL
 	)
 ON [PRIMARY]
-ALTER TABLE  [ReadModel].[PersonSkills] ADD CONSTRAINT [UQ_Person_Skill] UNIQUE NONCLUSTERED 
+ALTER TABLE [ReadModel].[PersonSkills] ADD CONSTRAINT PK_PersonSkills PRIMARY KEY CLUSTERED 
 (
-	[PersonId] ASC,
-	[SkillId] ASC
+	[Id] ASC
 )
 ON [PRIMARY]
