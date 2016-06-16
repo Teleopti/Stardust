@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 						EndTime = TimeZoneHelper.ConvertFromUtc(y.EndTime.Utc(), _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
 						Name = y.Name
 					}),
-					OutOfAdherences = x.OutOfAdherences.Select(y => new AgentOutOfAdherenceViewModel()
+					OutOfAdherences = x.OutOfAdherences?.Select(y => new AgentOutOfAdherenceViewModel()
 					{
 						StartTime = y.StartTime.ToString("yyyy-MM-ddTHH:mm:ss"),
 						EndTime = y.EndTime?.ToString("yyyy-MM-ddTHH:mm:ss")
