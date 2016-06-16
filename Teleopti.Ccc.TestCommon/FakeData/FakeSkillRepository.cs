@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 			if (cascadingIndex.HasValue)
 			{
-				skill.SetCascadingIndex_UseFromTestOnly(cascadingIndex.Value);
+				skill.SetCascadingIndex(cascadingIndex.Value);
 			}
 			return skill;
 		}

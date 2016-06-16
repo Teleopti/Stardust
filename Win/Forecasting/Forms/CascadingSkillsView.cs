@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Win.Common;
@@ -7,46 +9,44 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms
 {
-    public partial class CascadingSkillsView : BaseDialogForm
-    {
-	    private readonly CascadingSkillPresenter _presenter;
-	    private BindingSource _bindingSourceNonCascading;
-	    private BindingSource _bindingSourceCascading;
+	public partial class CascadingSkillsView : BaseDialogForm
+	{
+		private readonly CascadingSkillPresenter _presenter;
+		private BindingSource _bindingSourceNonCascading;
+		private BindingSource _bindingSourceCascading;
 
 		public CascadingSkillsView(CascadingSkillPresenter presenter)
-        {
-		    _presenter = presenter;
-		    InitializeComponent();
-				
-            if (DesignMode) return;
-            SetTexts();
-        }
+		{
+			_presenter = presenter;
+			InitializeComponent();
 
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-            if (DesignMode)return;
-			
-	        _bindingSourceNonCascading = new BindingSource {DataSource = _presenter.NonCascadingSkills};
-			_bindingSourceCascading = new BindingSource { DataSource = _presenter.CascadingSkills};
+			if (DesignMode) return;
+			SetTexts();
+		}
 
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
+			if (DesignMode) return;
+
+			_bindingSourceNonCascading = new BindingSource { DataSource = _presenter.NonCascadingSkills };
+			_bindingSourceCascading = new BindingSource { DataSource = _presenter.CascadingSkills };
 			listBoxNonCascading.DataSource = _bindingSourceNonCascading;
-	        listBoxNonCascading.DisplayMember = "Name";
-
-	        listBoxCascading.DataSource = _bindingSourceCascading;
-	        listBoxCascading.DisplayMember = "Name";
-        }
+			listBoxNonCascading.DisplayMember = "Name";
+			listBoxCascading.DataSource = _bindingSourceCascading;
+			listBoxCascading.DrawMode = DrawMode.OwnerDrawFixed;
+		}
 
 		private void buttonAdvMoveUpClick(object sender, EventArgs e)
 		{
 			var selectedIndices = listBoxCascading.SelectedIndices.Cast<int>().ToList();
 
-			if (selectedIndices.Count > 0 &&  selectedIndices[0] > 0)
+			if (selectedIndices.Count > 0 && selectedIndices[0] > 0)
 			{
 				foreach (var selectedItem in listBoxCascading.SelectedItems)
-				{ 
-					var skill = selectedItem as ISkill;
-					_presenter.MoveUpCascadingSkill(skill);
+				{
+					var skill = (IList<ISkill>)selectedItem;
+					_presenter.MoveUpCascadingSkills(skill.Single()); //will throw when multiple
 				}
 
 				_bindingSourceCascading.ResetBindings(false);
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 				foreach (var selectedIndex in selectedIndices)
 				{
-					var index = ((int) selectedIndex) - 1;
+					var index = selectedIndex - 1;
 					listBoxCascading.SetSelected(index, true);
 				}
 			}
@@ -63,13 +63,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private void buttonAdvMoveDownClick(object sender, EventArgs e)
 		{
 			var selectedIndices = listBoxCascading.SelectedIndices.Cast<int>().ToList();
-			var selectedItems = listBoxCascading.SelectedItems.Cast<ISkill>().ToList();
+			var selectedItems = listBoxCascading.SelectedItems.Cast<IList<ISkill>>().ToList();
 
-			if(selectedIndices.Count > 0 && selectedIndices[selectedIndices.Count - 1] < _presenter.CascadingSkills.Count() - 1)
+			if (selectedIndices.Count > 0 && selectedIndices[selectedIndices.Count - 1] < _presenter.CascadingSkills.Count() - 1)
 			{
-				foreach (var skill in selectedItems.Reverse<ISkill>())
+				foreach (var skill in selectedItems.Reverse<IList<ISkill>>())
 				{
-					_presenter.MoveDownCascadingSkill(skill);
+					_presenter.MoveDownCascadingSkills(skill.Single()); //will throw when multiple
 				}
 
 				_bindingSourceCascading.ResetBindings(false);
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		{
 			foreach (var selectedItem in listBoxNonCascading.SelectedItems)
 			{
-				var skill = selectedItem as ISkill;
+				var skill = (ISkill) selectedItem;
 				_presenter.MakeCascading(skill);
 			}
 
@@ -99,12 +99,30 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		{
 			foreach (var selectedItem in listBoxCascading.SelectedItems)
 			{
-				var skill = selectedItem as ISkill;
-				_presenter.MakeNonCascading(skill);
+				var skill = (IList<ISkill>)selectedItem;
+				_presenter.MakeNonCascading(skill.Single()); //will throw when multiple
 			}
 
 			_bindingSourceCascading.ResetBindings(false);
 			_bindingSourceNonCascading.ResetBindings(false);
+		}
+
+		private void listBoxCascadingDrawItem(object sender, DrawItemEventArgs e)
+		{
+			if (e.Index <= -1)
+				return;
+
+			var isSelected = (e.State & DrawItemState.Selected) == DrawItemState.Selected;
+			var color = isSelected ? SystemColors.Highlight : Color.White;
+			using (var textBrush = new SolidBrush(e.ForeColor))
+			{
+				using (var backgroundBrush = new SolidBrush(color))
+				{
+					e.Graphics.FillRectangle(backgroundBrush, e.Bounds);
+					var outputText = string.Join(", ", ((IList<ISkill>)listBoxCascading.Items[e.Index]).Select(x => x.Name));
+					e.Graphics.DrawString(outputText, e.Font, textBrush, e.Bounds, StringFormat.GenericDefault);
+				}
+			}
 		}
 	}
 }

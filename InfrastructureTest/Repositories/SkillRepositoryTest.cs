@@ -619,7 +619,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var index = new Random().Next();
 			var skill = new Skill("_", "_", Color.AliceBlue, 1, _skillType) { Activity = _activity, TimeZone = TimeZoneInfo.Utc };
-			skill.SetCascadingIndex_UseFromTestOnly(index);
+			skill.SetCascadingIndex(index);
 			PersistAndRemoveFromUnitOfWork(skill);
 
 			var target = new SkillRepository(CurrUnitOfWork);

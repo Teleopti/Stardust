@@ -139,6 +139,7 @@
 			this.listBoxCascading.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
 			this.listBoxCascading.Size = new System.Drawing.Size(315, 582);
 			this.listBoxCascading.TabIndex = 4;
+			this.listBoxCascading.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.listBoxCascadingDrawItem);
 			// 
 			// listBoxNonCascading
 			// 

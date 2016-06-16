@@ -37,11 +37,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
 			contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
 			var skillA = new Skill("A", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillA.SetCascadingIndex_UseFromTestOnly(1);
+			skillA.SetCascadingIndex(1);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(8, 0, 16, 0));
 			var skillADay = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 2);
 			var skillB = new Skill("B", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillB.SetCascadingIndex_UseFromTestOnly(2);
+			skillB.SetCascadingIndex(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(8, 0, 16, 0));
 			var skillBDay = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 2);
 

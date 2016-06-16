@@ -453,17 +453,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 		public virtual bool CanBeCascading()
 		{
-			return (SkillType == null || SkillType.ForecastSource != ForecastSource.MaxSeatSkill);
+			return SkillType == null || SkillType.ForecastSource != ForecastSource.MaxSeatSkill;
 		}
 
-		public virtual void SetCascadingIndex_UseFromTestOnly(int index)
+		public virtual void SetCascadingIndex(int index)
 		{
 			CascadingIndex = index;
-		}
-
-		public virtual void SetCascadingIndex(IList<ISkill> cascadingSkills)
-		{
-			CascadingIndex = cascadingSkills.IndexOf(this) + 1;
 		}
 
 		public virtual void ClearCascadingIndex()

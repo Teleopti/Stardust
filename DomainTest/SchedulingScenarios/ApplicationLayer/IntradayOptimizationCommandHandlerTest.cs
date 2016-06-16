@@ -98,9 +98,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ApplicationLayer
 		public void ShouldCreateTwoEventsIfSameSkillsButDiffersDueToPrimarySkill()
 		{
 			var skill1 = new Skill().WithId();
-			skill1.SetCascadingIndex_UseFromTestOnly(1);
+			skill1.SetCascadingIndex(1);
 			var skill2 = new Skill().WithId();
-			skill2.SetCascadingIndex_UseFromTestOnly(2);
+			skill2.SetCascadingIndex(2);
 			var agent1 = new Person().WithId();
 			agent1.AddPeriodWithSkills(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()),
 				new[] { skill1, skill2 });
@@ -124,9 +124,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ApplicationLayer
 		{
 			//remove me when toggle is gone!
 			var skill1 = new Skill().WithId();
-			skill1.SetCascadingIndex_UseFromTestOnly(1);
+			skill1.SetCascadingIndex(1);
 			var skill2 = new Skill().WithId();
-			skill2.SetCascadingIndex_UseFromTestOnly(2);
+			skill2.SetCascadingIndex(2);
 			var agent1 = new Person().WithId();
 			agent1.AddPeriodWithSkills(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()),
 				new[] { skill1, skill2 });
