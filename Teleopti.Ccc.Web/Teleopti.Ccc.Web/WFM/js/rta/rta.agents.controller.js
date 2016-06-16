@@ -232,34 +232,15 @@
 						var agentInfo = $filter('filter')($scope.agentsInfo, {
 							PersonId: state.PersonId
 						});
+
 						state.Shift = state.Shift || [];
+						state.OutOfAdherences = state.OutOfAdherences || [];
 
 						var now = moment(states.Time);
 						var windowStart = now.clone().add(-1, 'hours');
 						var windowEnd = now.clone().add(3, 'hours');
-						var shift = state.Shift
-							.filter(function(layer) {
-								return windowStart < moment(layer.EndTime) && windowEnd > moment(layer.StartTime);
-							})
-							.map(function(s) {
-								return {
-									Color: s.Color,
-									Offset: Math.max(timeToPercent(states.Time, s.StartTime), 0) + '%',
-									Width: Math.min(timePeriodToPercent(windowStart, s.StartTime, s.EndTime), 100) + "%",
-									Name: s.Name,
-									Class: getClassForActivity(states.Time, s.StartTime, s.EndTime)
-								};
-							});
-						if (agentInfo.length > 0) {
 
-							var OutOfAdherences = state.OutOfAdherences || [];
-							var outOfAdherenceTimeBars = OutOfAdherences.map(function(t) {
-								t.EndTime = t.EndTime || states.Time;
-								return {
-									Offset: Math.max(timeToPercent(states.Time, t.StartTime), 0) + '%',
-									Width: Math.min(timePeriodToPercent(windowStart, t.StartTime, t.EndTime), 100) + "%"
-								};
-							});
+						if (agentInfo.length > 0) {
 
 							$scope.agents.push({
 								Name: agentInfo[0].Name,
@@ -275,6 +256,27 @@
 								TimeInState: state.TimeInState,
 								TimeInAlarm: state.TimeInAlarm,
 								TimeInRule: state.TimeInAlarm ? state.TimeInRule : null,
+
+								TimeOutOfAdherence: function() {
+									if (state.OutOfAdherences.length > 0) {
+										var lastOOA = state.OutOfAdherences[state.OutOfAdherences.length - 1];
+										if (lastOOA.EndTime == null) {
+											var seconds = moment(states.Time).diff(moment(lastOOA.StartTime), 'seconds');
+											return $scope.formatDuration(seconds);
+										}
+									}
+								}(),
+
+								OutOfAdherences: function() {
+									return state.OutOfAdherences.map(function(t) {
+										var endTime = t.EndTime || states.Time;
+										return {
+											Offset: Math.max(timeToPercent(states.Time, t.StartTime), 0) + '%',
+											Width: Math.min(timePeriodToPercent(windowStart, t.StartTime, endTime), 100) + "%"
+										};
+									});
+								}(),
+
 								ShiftTimeBar: function() {
 									var percentForTimeBar = function(seconds) {
 										return Math.min(secondsToPercent(seconds), 25);
@@ -284,8 +286,23 @@
 									return percentForTimeBar(state.TimeInAlarm) + "%";
 
 								}(),
-								OutOfAdherences: outOfAdherenceTimeBars,
-								Shift: shift
+
+								Shift: function() {
+									return state.Shift
+										.filter(function(layer) {
+											return windowStart < moment(layer.EndTime) && windowEnd > moment(layer.StartTime);
+										})
+										.map(function(s) {
+											return {
+												Color: s.Color,
+												Offset: Math.max(timeToPercent(states.Time, s.StartTime), 0) + '%',
+												Width: Math.min(timePeriodToPercent(windowStart, s.StartTime, s.EndTime), 100) + "%",
+												Name: s.Name,
+												Class: getClassForActivity(states.Time, s.StartTime, s.EndTime)
+											};
+										});
+								}()
+
 							});
 						}
 					});
