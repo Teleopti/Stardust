@@ -121,7 +121,7 @@ wfm.config([
 			templateUrl: 'js/intraday/intraday-config.html',
 			controller: 'IntradayConfigCtrl'
 		}).state('intraday.staffing', {
-			url: '/staffing/:intervalDate',
+			url: '/staffing?date&id',
 			templateUrl: 'js/intraday/intraday-staffing.html',
 			controller: 'IntradayStaffingCtrl'
 		}).state('outbound', {

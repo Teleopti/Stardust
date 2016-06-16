@@ -1,12 +1,21 @@
-(function () {
+(function() {
 	'use strict';
 	angular.module('wfm.intraday')
 		.service('intradayStaffingService', [
-			'$resource', function ($resource) {
-				this.resourceCalculate = $resource('../resourcecalculate', {date: '@date'}, {
+			'$resource', 'intradayService', '$q',
+			function($resource, intradayService, $q) {
+
+
+				this.resourceCalculate = $resource('../resourcecalculate', {
+					date: '@date',
+					skillId: '@skillId'
+				}, {
 					query: {
 						method: 'GET',
-						params: {date:name},
+						params: {
+							date: name,
+							skillId: name
+						},
 						isArray: false
 					}
 				});
@@ -17,6 +26,21 @@
 						isArray: false
 					}
 				});
+
+				this.matchSkill = function(id) {
+					var deferred = $q.defer();
+					intradayService.getSkills.query().$promise.then(function(response) {
+						var matched;
+						response.forEach(function(skill) {
+							if (skill.Id === id) {
+								matched = skill
+								console.log('from the service',matched);
+							}
+						})
+						deferred.resolve(matched);
+					})
+					return deferred.promise;
+				};
 			}
 		]);
 })();

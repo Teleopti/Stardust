@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 	    }
 
 	    [UnitOfWork, HttpGet, Route("ResourceCalculate")]
-		public virtual IHttpActionResult ResourceCalculate(DateTime date)
+		public virtual IHttpActionResult ResourceCalculate(DateTime date, Guid skillId)
 		{
 			//var period = new DateOnlyPeriod(new DateOnly(input.StartDate), new DateOnly(input.EndDate));
 			var result = _calculateForReadModel.ResourceCalculatePeriod(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date.AddDays(1))));
