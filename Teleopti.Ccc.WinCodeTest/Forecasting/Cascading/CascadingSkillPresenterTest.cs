@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -309,6 +310,96 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 			var target = new CascadingSkillPresenter(SkillRepository);
 
 			target.NonCascadingSkills.Should().Be.Empty();	
+		}
+
+		[Test]
+		public void ShouldMakeTwoSkillsParalell()
+		{
+			var skillA=new Skill();
+			skillA.SetCascadingIndex(1);
+			var skillB = new Skill();
+			skillB.SetCascadingIndex(2);
+			SkillRepository.Has(skillA, skillB);
+			var target = new CascadingSkillPresenter(SkillRepository);
+
+			target.MakeParalell(skillA, skillB);
+
+			target.CascadingSkills.Single().Should().Have.SameValuesAs(skillA, skillB);
+		}
+
+		[Test]
+		public void ShouldIncludeAlreadyParalellSkillWhenMakeParalell()
+		{
+			var skillA = new Skill();
+			skillA.SetCascadingIndex(1);
+			var skillB1 = new Skill();
+			skillB1.SetCascadingIndex(2);
+			var skillB2 = new Skill();
+			skillB2.SetCascadingIndex(2);
+			SkillRepository.Has(skillA, skillB1, skillB2);
+			var target = new CascadingSkillPresenter(SkillRepository);
+
+			target.MakeParalell(skillA, skillB1);
+
+			target.CascadingSkills.Single().Should().Have.SameValuesAs(skillA, skillB1, skillB2);
+		}
+
+		[Test]
+		public void ShouldPlaceParalellSkillsOnPositionOfFirstParameter()
+		{
+			var skillA = new Skill();
+			skillA.SetCascadingIndex(1);
+			var skillB = new Skill();
+			skillB.SetCascadingIndex(2);
+			var skillC = new Skill();
+			skillC.SetCascadingIndex(3);
+			SkillRepository.Has(skillA, skillB, skillC);
+
+			var target = new CascadingSkillPresenter(SkillRepository);
+
+			target.MakeParalell(skillC, skillA);
+
+			target.CascadingSkills[0].Should().Have.SameValuesAs(skillB);
+			target.CascadingSkills[1].Should().Have.SameValuesAs(skillC, skillA);
+		}
+
+		[Test]
+		public void ShouldOrderParalellSkillsByName()
+		{
+			var skillA = new Skill();
+			skillA.ChangeName("A");
+			skillA.SetCascadingIndex(1);
+			var skillB = new Skill();
+			skillB.ChangeName("B");
+			skillB.SetCascadingIndex(2);
+			SkillRepository.Has(skillA, skillB);
+			var target = new CascadingSkillPresenter(SkillRepository);
+
+			target.MakeParalell(skillB, skillA);
+
+			target.CascadingSkills[0].Should().Have.SameSequenceAs(skillA, skillB);
+		}
+
+		[Test]
+		public void ShouldUnparalell()
+		{
+			var skillA = new Skill();
+			skillA.SetCascadingIndex(1);
+			var skillB1 = new Skill();
+			skillB1.SetCascadingIndex(2);
+			var skillB2 = new Skill();
+			skillB2.SetCascadingIndex(2);
+			var skillC = new Skill();
+			skillC.SetCascadingIndex(3);
+			SkillRepository.Has(skillA, skillB1, skillB2, skillC);
+			var target = new CascadingSkillPresenter(SkillRepository);
+
+			target.Unparalell(skillB1);
+
+			target.CascadingSkills[0].Should().Have.SameValuesAs(skillA);
+			target.CascadingSkills[1].Should().Have.SameValuesAs(skillB1);
+			target.CascadingSkills[2].Should().Have.SameValuesAs(skillB2);
+			target.CascadingSkills[3].Should().Have.SameValuesAs(skillC);
 		}
 	}
 }

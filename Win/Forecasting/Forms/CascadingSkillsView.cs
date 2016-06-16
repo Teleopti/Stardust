@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				foreach (var selectedItem in listBoxCascading.SelectedItems)
 				{
 					var skill = (IList<ISkill>)selectedItem;
-					_presenter.MoveUpCascadingSkills(skill.Single()); //will throw when multiple
+					_presenter.MoveUpCascadingSkills(skill.First());
 				}
 
 				_bindingSourceCascading.ResetBindings(false);
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			{
 				foreach (var skill in selectedItems.Reverse<IList<ISkill>>())
 				{
-					_presenter.MoveDownCascadingSkills(skill.Single()); //will throw when multiple
+					_presenter.MoveDownCascadingSkills(skill.First());
 				}
 
 				_bindingSourceCascading.ResetBindings(false);
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			foreach (var selectedItem in listBoxCascading.SelectedItems)
 			{
 				var skill = (IList<ISkill>)selectedItem;
-				_presenter.MakeNonCascading(skill.Single()); //will throw when multiple
+				_presenter.MakeNonCascading(skill.First());
 			}
 
 			_bindingSourceCascading.ResetBindings(false);
