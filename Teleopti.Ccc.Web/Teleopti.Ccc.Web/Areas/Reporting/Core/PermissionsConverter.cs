@@ -40,7 +40,11 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 				foreach (var function in role.ApplicationFunctionCollection.FilterBySpecification(_matrixFunctionSpecification))
 				{
 					foreach (var stuff in teams)
-						yield return convertToAnalyticsPermission(new MatrixPermissionHolder(person, stuff.Team, stuff.IsMy, function), analyticTeams, analyticsBusinessUnitId, now);
+					{
+						var analyticsPermission = convertToAnalyticsPermission(new MatrixPermissionHolder(person, stuff.Team, stuff.IsMy, function), analyticTeams, analyticsBusinessUnitId, now);
+						if (analyticsPermission != null)
+							yield return analyticsPermission;
+					}
 				}
 			}
 		}
