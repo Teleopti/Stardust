@@ -36,12 +36,12 @@ namespace Teleopti.Ccc.Domain.Cascading
 					if (last == null || !skillInSameChainAsPrimarySkill.CascadingIndex.Value.Equals(last.CascadingIndex))
 					{
 						var cascadingSkillGroupItem = new CascadingSkillGroupItem();
-						cascadingSkillGroupItem.AddSkill(skillInSameChainAsPrimarySkill);
+						cascadingSkillGroupItem.AddSubSkill(skillInSameChainAsPrimarySkill);
 						cascadingSkillGroupItems.Add(cascadingSkillGroupItem);
 					}
 					else
 					{
-						last.AddSkill(skillInSameChainAsPrimarySkill);
+						last.AddSubSkill(skillInSameChainAsPrimarySkill);
 					}
 				}
 				ret.Add(new CascadingSkillGroup(primarySkills, cascadingSkillGroupItems, skillGroup.Resource));

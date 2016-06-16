@@ -5,23 +5,23 @@ namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class CascadingSkillGroupItem
 	{
-		private readonly IList<ISkill> _skills;
+		private readonly IList<ISkill> _subSkills;
 
 		public CascadingSkillGroupItem()
 		{
-			_skills = new List<ISkill>();
+			_subSkills = new List<ISkill>();
 		}
 
-		public IEnumerable<ISkill> Skills => _skills;
+		public IEnumerable<ISkill> SubSkills => _subSkills;
 
 		public int NumberOfSkills { get; private set; }
 		public int CascadingIndex { get; private set; }
 
-		public void AddSkill(ISkill skill)
+		public void AddSubSkill(ISkill subSkill)
 		{
-			_skills.Add(skill);
+			_subSkills.Add(subSkill);
 			NumberOfSkills++;
-			CascadingIndex = skill.CascadingIndex.Value;
+			CascadingIndex = subSkill.CascadingIndex.Value;
 		}
 	}
 }

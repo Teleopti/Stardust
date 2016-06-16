@@ -82,13 +82,13 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 			foreach (var cascadingSkillGroupItem in skillGroup.CascadingSkillGroupItems)
 			{
-				var totalUnderstaffingInSkillGroup = cascadingSkillGroupItem.Skills
+				var totalUnderstaffingInSkillGroup = cascadingSkillGroupItem.SubSkills
 					.Select(skillToMoveTo => stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodOrDefault(skillToMoveTo, interval, 0).AbsoluteDifference)
 					.Where(absoluteDifference => absoluteDifference.IsUnderstaffed())
 					.Sum(absoluteDifference => -absoluteDifference);
 
 				var remainingOverstaff = Math.Min(remainingPrimarySkillOverstaff, remainingResourcesInGroup);
-				foreach (var skillToMoveTo in cascadingSkillGroupItem.Skills)
+				foreach (var skillToMoveTo in cascadingSkillGroupItem.SubSkills)
 				{
 					var skillStaffPeriodTo = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodOrDefault(skillToMoveTo, interval, 0);
 					var skillToMoveToAbsoluteDifference = skillStaffPeriodTo.AbsoluteDifference;
