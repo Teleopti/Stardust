@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 				var overstaffForSkill = skillStaffPeriod.AbsoluteDifference;
 				var percentageOverstaff = overstaffForSkill/primarySkillOverstaff;
 				var resourceToSubtract = resourcesMoved*percentageOverstaff;
-				skillStaffPeriod.SetCalculatedResource65(skillStaffPeriod.CalculatedResource - resourceToSubtract);
+				skillStaffPeriod.AddResources(-resourceToSubtract);
 			}
 		}
 
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 					var proportionalResourcesToMove = -skillToMoveToAbsoluteDifference / totalUnderstaffingInSkillGroup * remainingOverstaff;
 					var resourceToMove = Math.Min(-skillToMoveToAbsoluteDifference, proportionalResourcesToMove);
 
-					skillStaffPeriodTo.SetCalculatedResource65(skillStaffPeriodTo.CalculatedResource + resourceToMove);
+					skillStaffPeriodTo.AddResources(resourceToMove);
 					remainingResourcesInGroup -= resourceToMove;
 					remainingPrimarySkillOverstaff -= resourceToMove;
 					resourcesMoved += resourceToMove;

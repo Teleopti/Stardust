@@ -32,6 +32,11 @@ namespace Teleopti.Ccc.Domain.Collection
 			return SkillStaffPeriodOrDefault(skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, skill, period, absoluteDiffIfNoSkillStaffPeriod);
 		}
 
+		public static void AddResources(this ISkillStaffPeriod skillStaffPeriod, double resourceToAdd)
+		{
+			skillStaffPeriod.SetCalculatedResource65(skillStaffPeriod.CalculatedResource + resourceToAdd);
+		}
+
 
 		//behövs period?
 		private static ISkillStaffPeriod createNullObject(int absoluteDiffIfNoSkillStaffPeriod)
