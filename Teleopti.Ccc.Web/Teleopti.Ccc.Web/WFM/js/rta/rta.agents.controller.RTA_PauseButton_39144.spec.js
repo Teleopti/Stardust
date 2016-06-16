@@ -1,5 +1,5 @@
 'use strict';
-describe('RtaAgentsCtrlPauseButton_39144', function() {
+fdescribe('RtaAgentsCtrlPauseButton_39144', function() {
 	var $interval,
 		$httpBackend,
 		$state,
@@ -38,17 +38,6 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 
 	}));
 
-	it('should set pause to true when pressing button', function() {
-
-		$controllerBuilder.createController()
-			.apply('agentsInAlarm = true')
-			.apply(function() {
-				scope.togglePolling();
-			});
-
-		expect(scope.pause).toBe(true);
-	});
-
 	it('should stop polling agent states when paused', function() {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
 		$fakeBackend.withAgent({
@@ -57,18 +46,24 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 			})
 			.withState({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				TimeInState: 15473
+				State: "Phone"
 			});
 
 		$controllerBuilder.createController()
 			.apply('agentsInAlarm = false')
 			.wait(5000)
-			.apply('pause = true');
+			.apply('pause = true')
+			.apply(function() {
+				$fakeBackend
+					.clearStates()
+					.withState({
+						PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+						State: "Ready"
+					})
+			})
+			.wait(5000);
 
-		$fakeBackend.clearStates();
-		$interval.flush(5000);
-
-		expect(scope.agents[0].TimeInState).toEqual(15473);
+		expect(scope.agents[0].State).toEqual("Phone");
 	});
 
 	it('should restart polling when unpausing', function() {
@@ -78,21 +73,20 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
 		});
 
-		var c = $controllerBuilder.createController()
+		$controllerBuilder.createController()
 			.apply('agentsInAlarm = false')
 			.apply('pause = true')
 			.wait(5000)
-			.apply('pause = false');
+			.apply('pause = false')
+			.apply(function() {
+				$fakeBackend.withState({
+					PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+					State: "Ready"
+				})
+			})
+			.wait(5000);
 
-		$fakeBackend.withState({
-			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-			TimeInState: 15473
-		})
-
-		expect(scope.agents[0].TimeInState).toBe(undefined)
-
-		c.wait(5000);
-		expect(scope.agents[0].TimeInState).toEqual(15473)
+		expect(scope.agents[0].State).toEqual("Ready")
 	});
 
 	it('should display time from when paused', function() {
@@ -104,9 +98,7 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 
 		$controllerBuilder.createController()
 			.wait(5000)
-			.apply(function() {
-				scope.togglePolling();
-			})
+			.apply('pause = true')
 			.apply(function() {
 				$fakeBackend.withTime('2016-06-13T16:00:05')
 			})
@@ -121,14 +113,11 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 			.withAgent({
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
 			});
-		var c = $controllerBuilder.createController()
+
+		$controllerBuilder.createController()
 			.wait(5000)
-			.apply(function() {
-				scope.togglePolling();
-			})
-			.apply(function() {
-				scope.togglePolling();
-			});
+			.apply('pause = true')
+			.apply('pause = false');
 
 		expect(scope.pausedAt).toBeNull();
 	});
@@ -137,9 +126,7 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 		spyOn(NoticeService, 'warning');
 		$controllerBuilder
 			.createController()
-			.apply(function() {
-				scope.togglePolling();
-			})
+			.apply('pause = true');
 
 		expect(NoticeService.warning).toHaveBeenCalled();
 	});
@@ -149,9 +136,7 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 		$controllerBuilder
 			.createController()
 			.apply('pause = true')
-			.apply(function() {
-				scope.togglePolling();
-			})
+			.apply('pause = false');
 
 		expect(NoticeService.info).toHaveBeenCalled();
 	});
@@ -163,14 +148,10 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 		spyOn(NoticeService, 'warning').and.returnValue(destroyer);
 		spyOn(destroyer, 'destroy');
 
-		var c = $controllerBuilder
+		$controllerBuilder
 			.createController()
-			.apply(function() {
-				scope.togglePolling();
-			})
-			.apply(function() {
-				scope.togglePolling();
-			});
+			.apply('pause = true')
+			.apply('pause = false');
 
 		expect(destroyer.destroy).toHaveBeenCalled();
 	})
@@ -180,11 +161,37 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 		spyOn(NoticeService, 'warning');
 		$controllerBuilder
 			.createController()
-			.apply(function() {
-				scope.togglePolling();
-			})
+			.apply('pause = true');
 
 		expect(NoticeService.warning.calls.mostRecent().args[0]).toContain("2016-06-15 09:00:46");
+	});
+
+	it('should not update when paused and toggling agents in alarm', function() {
+		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		$fakeBackend.withAgent({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
+			})
+			.withState({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				State: "Phone"
+			});
+
+		$controllerBuilder.createController()
+			.apply('agentsInAlarm = false')
+			.wait(5000)
+			.apply('pause = true')
+			.apply(function() {
+				$fakeBackend.clearStates()
+					.withState({
+						PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+						TimeInAlarm: 1,
+						State: "Ready"
+					})
+			})
+			.apply('agentsInAlarm = true');
+
+		expect(scope.agents[0].State).toEqual("Phone");
 	});
 
 });

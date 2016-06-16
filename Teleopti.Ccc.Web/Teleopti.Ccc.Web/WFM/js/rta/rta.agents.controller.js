@@ -34,8 +34,7 @@
 				$scope.pausedAt = null;
 				var lastUpdate, notice;
 
-				$scope.togglePolling = function() {
-					$scope.pause = !$scope.pause;
+				$scope.$watch('pause', function() {
 					if ($scope.pause) {
 						$scope.pausedAt = moment(lastUpdate).format('YYYY-MM-DD HH:mm:ss');
 						notice = NoticeService.warning('Real time adherence monitoring paused at ' + $scope.pausedAt + '!<br>Re-enable by clicking play', null, true);
@@ -48,7 +47,7 @@
 						NoticeService.info('Real time adherence monitoring activated', 5000, true);
 						setupPolling();
 					}
-				};
+				});
 
 				$scope.getTableHeight = function() {
 					var rowHeight = 30;
@@ -156,8 +155,7 @@
 
 				function setupPolling() {
 					polling = $interval(function() {
-						if (!$scope.pause)
-							updateStates();
+						updateStates();
 					}, 5000);
 				}
 
@@ -179,6 +177,8 @@
 				}
 
 				function updateStates() {
+					if ($scope.pause)
+						return;
 					getStates($scope.agentsInAlarm)({
 							siteIds: siteIds,
 							teamIds: teamIds,
