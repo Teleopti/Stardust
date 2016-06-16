@@ -21,7 +21,7 @@
 					var NoticeService = $injector.get('NoticeService');
 					var Settings = $injector.get('Settings');
 					switch (true) {
-						case (rejection.status === 0):
+						case (rejection.status === -1):
 							//don't remove class test-alert - used in perf tests
 							NoticeService.error("<span class='test-alert'></span>" + $translate.instant('ConnectionErrorMessage'), null, false);
 							break;

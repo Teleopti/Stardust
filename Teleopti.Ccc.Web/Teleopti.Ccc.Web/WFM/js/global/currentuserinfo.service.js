@@ -12,8 +12,8 @@
 
 			return service;
 		}])
-		.service('CurrentUserInfo', ['AuthenticationRequests', '$q', '$sessionStorage', 'wfmI18nService', 'BusinessUnitsService', 'ThemeService', '$http',
-			function (AuthenticationRequests, $q, $sessionStorage, wfmI18nService, BusinessUnitsService, ThemeService, $http) {
+		.service('CurrentUserInfo', ['AuthenticationRequests', '$q', '$sessionStorage', 'wfmI18nService', 'BusinessUnitsService', 'ThemeService', 'Settings',
+			function (AuthenticationRequests, $q, $sessionStorage, wfmI18nService, BusinessUnitsService, ThemeService, Settings) {
 				var userName;
 				var defaultTimeZone;
 				var language;
@@ -53,6 +53,7 @@
 						wfmI18nService.setLocales(data);
 						service.SetCurrentUserInfo(data);
 						BusinessUnitsService.initBusinessUnit();
+						Settings.init();
 						ThemeService.init().then(function(){
 							deferred.resolve(data);
 						},function(error){
@@ -83,11 +84,12 @@
 			function ($http) {
 				var service = {};
 
-				service.supportEmailSetting = '';
-
-				$http.get('../api/Settings/SupportEmail').success(function (data) {
-					service.supportEmailSetting = data;
-				});
+				service.supportEmailSetting = 'ServiceDesk@teleopti.com';
+				service.init = function() {
+					return $http.get('../api/Settings/SupportEmail').success(function (data) {
+						service.supportEmailSetting = data ? data : 'ServiceDesk@teleopti.com';
+					});
+				};
 
 				return service;
 			}]);

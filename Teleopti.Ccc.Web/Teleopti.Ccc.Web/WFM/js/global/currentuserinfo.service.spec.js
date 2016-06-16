@@ -61,6 +61,7 @@
 				$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, {'WfmGlobalLayout_personalOptions_37114': true});
 				$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, { Language: 'en', DateFormat: 'en', UserName: 'Ashley' });
 				$httpBackend.expectGET("../api/BusinessUnit").respond(200, ['mock']);
+				$httpBackend.expectGET("../api/Settings/SupportEmail").respond(200, '');
 				$httpBackend.expectGET("../api/Theme").respond(200, {Name:'light'});
 
 				CurrentUserInfo.initContext().then(function() {
@@ -77,10 +78,35 @@
 				$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, {'WfmGlobalLayout_personalOptions_37114': false});
 				$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, { Language: 'en', DateFormat: 'en', UserName: 'Ashley' });
 				$httpBackend.expectGET("../api/BusinessUnit").respond(200, ['mock']);
+				$httpBackend.expectGET("../api/Settings/SupportEmail").respond(200, '');
 
 				CurrentUserInfo.initContext().then(function() {
 					var result = CurrentUserInfo.isConnected();
 					expect(result).toBe(true);
+					done();
+				});
+				$httpBackend.flush();
+			});
+		});
+
+		it('should init the support email', function (done) {
+			inject(function (Settings) {
+				$httpBackend.expectGET("../api/Settings/SupportEmail").respond(200, 'servicedesk@teleopti.com');
+
+				Settings.init().then(function () {
+					expect(Settings.supportEmailSetting).toBe('servicedesk@teleopti.com');
+					done();
+				});
+				$httpBackend.flush();
+			});
+		});
+
+		it('should init with the default support email if nothing is provided by the server', function (done) {
+			inject(function (Settings) {
+				$httpBackend.expectGET("../api/Settings/SupportEmail").respond(200, '');
+
+				Settings.init().then(function () {
+					expect(Settings.supportEmailSetting).toBe('ServiceDesk@teleopti.com');
 					done();
 				});
 				$httpBackend.flush();

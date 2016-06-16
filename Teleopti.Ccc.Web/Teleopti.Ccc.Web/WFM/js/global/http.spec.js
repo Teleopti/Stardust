@@ -64,7 +64,7 @@ describe('HttpTest', function() {
 		$httpBackend.flush();
 	});
 
-	it('Should react to http error 0', function(done) {
+	it('Should react to http error -1', function(done) {
 		var scope = $rootScope.$new();
 		$httpBackend.expectGET("../api/Settings/SupportEmail").respond(200, 'mock');
 		spyOn(NoticeService, 'error');
