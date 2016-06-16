@@ -525,7 +525,6 @@
     <Compile Include="Areas\Reporting\Core\GeneratedReport.cs" />
     <Compile Include="Areas\Reporting\Core\ICommonReportsFactory.cs" />
     <Compile Include="Areas\Reporting\Core\AnalyticsPermissionsUpdater.cs" />
-    <Compile Include="Areas\Reporting\Core\ApplicationPermissionProvider.cs" />
     <Compile Include="Areas\Reporting\Core\IAnalyticsPermissionsUpdater.cs" />
     <Compile Include="Areas\Reporting\Core\IApplicationPermissionProvider.cs" />
     <Compile Include="Areas\Reporting\Core\IPermissionsConverter.cs" />

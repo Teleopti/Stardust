@@ -273,7 +273,6 @@
     <Compile Include="Areas\Permissions\FakeApplicationRolePersonRepository.cs" />
     <Compile Include="Areas\Reporting\Controller\ReportControllerTest.cs" />
     <Compile Include="Areas\Reporting\Core\AnalyticsPermissionsUpdaterTest.cs" />
-    <Compile Include="Areas\Reporting\Core\ApplicationPermissionProviderTest.cs" />
     <Compile Include="Areas\Reporting\Core\ReportGeneratorTests.cs" />
     <Compile Include="Areas\Reporting\Core\PermissionsConverterTest.cs" />
     <Compile Include="Areas\Reports\Core\ReportNavigationProviderTest.cs" />

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 				return;
 
 			var businessUnit = _analyticsBusinessUnitRepository.Get(businessUnitId);
-			var currentPermissions = _permissionsConverter.GetApplicationPermissionsAndConvert(personId, businessUnit.BusinessUnitId);
+			var currentPermissions = _permissionsConverter.GetApplicationPermissionsAndConvert(personId, businessUnit.BusinessUnitId).ToList();
 			var currentAnalyticsPermissions = _analyticsPermissionRepository.GetPermissionsForPerson(personId);
 
 			var toBeAdded = currentPermissions.Where(p => !currentAnalyticsPermissions.Any(x => x.Equals(p)));

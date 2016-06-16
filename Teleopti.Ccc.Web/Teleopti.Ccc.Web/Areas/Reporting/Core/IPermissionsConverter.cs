@@ -6,6 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 {
 	public interface IPermissionsConverter
 	{
-		ICollection<AnalyticsPermission> GetApplicationPermissionsAndConvert(Guid personId, int analyticsBusinessUnitId);
+		IEnumerable<AnalyticsPermission> GetApplicationPermissionsAndConvert(Guid personId, int analyticsBusinessUnitId);
 	}
 }
