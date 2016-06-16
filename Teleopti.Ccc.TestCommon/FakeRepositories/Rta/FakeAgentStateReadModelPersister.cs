@@ -92,5 +92,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				orderby m.AlarmStartTime
 				select m;
 		}
+
+		public IEnumerable<AgentStateReadModel> LoadBySkill(Guid skill)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

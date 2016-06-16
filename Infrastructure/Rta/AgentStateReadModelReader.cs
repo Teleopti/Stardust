@@ -103,6 +103,41 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.List<AgentStateReadModel>();
 		}
 
+		public IEnumerable<AgentStateReadModel> LoadBySkill(Guid skillId)
+		{
+			const string query = @"
+SELECT a.[PersonId]
+      ,[BusinessUnitId]
+      ,[SiteId]
+      ,[TeamId]
+      ,[ReceivedTime]
+      ,[Activity]
+      ,[NextActivity]
+      ,[NextActivityStartTime]
+      ,[StateCode]
+      ,[StateName]
+      ,[StateStartTime]
+      ,[RuleName]
+      ,[RuleStartTime]
+      ,[RuleColor]
+      ,[StaffingEffect]
+      ,[IsRuleAlarm]
+      ,[AlarmStartTime]
+      ,[AlarmColor]
+      ,[Shift]
+FROM ReadModel.AgentState AS a WITH (NOLOCK)
+INNER JOIN ReadModel.PersonSkills AS p
+ON p.PersonId = a.PersonId
+WHERE p.SkillId = :skillId
+";
+			return _unitOfWork.Current().Session()
+				.CreateSQLQuery(query)
+				.SetParameter("skillId", skillId)
+				.SetResultTransformer(Transformers.AliasToBean(typeof (internalModel)))
+				.SetReadOnly(true)
+				.List<AgentStateReadModel>();
+		}
+
 		private static readonly string selectAgentState = @"SELECT * FROM [ReadModel].AgentState ";
 
 		private class internalModel : AgentStateReadModel

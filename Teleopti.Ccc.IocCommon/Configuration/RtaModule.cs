@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<AgentStatePersister>().As<IAgentStatePersister>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStateReadModelPersister>().As<IAgentStateReadModelPersister>().SingleInstance().ApplyAspects();
+			builder.RegisterType<PersonSkillsReadModelPersister>().As<IPersonSkillsReadModelPersister>().SingleInstance().ApplyAspects();
 
 			builder.RegisterType<AgentViewModelBuilder>().SingleInstance();
 			builder.RegisterType<AgentStatesViewModelBuilder>().SingleInstance();

@@ -13,5 +13,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		IEnumerable<AgentStateReadModel> LoadForTeams(IEnumerable<Guid> teamIds);
 		IEnumerable<AgentStateReadModel> LoadAlarmsForSites(IEnumerable<Guid> siteIds);
 		IEnumerable<AgentStateReadModel> LoadAlarmsForTeams(IEnumerable<Guid> teamIds);
+		IEnumerable<AgentStateReadModel> LoadBySkill(Guid skill);
     }
 }
