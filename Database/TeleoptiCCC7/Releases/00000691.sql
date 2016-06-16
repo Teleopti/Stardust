@@ -16,4 +16,3 @@ update ApplicationFunction set Parent = @MyTimeWebPermissionId where Id = @Shift
 
 SET NOCOUNT OFF
 GO
-

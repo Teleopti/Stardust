@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public int? TimeInRule { get; set; }
 		public int? TimeInAlarm { get; set; }
 		public IEnumerable<AgentStateActivityViewModel> Shift { get; set; }
+		public IEnumerable<AgentOutOfAdherenceViewModel> OutOfAdherences { get; set; }
 	}
 
 	public class AgentStateActivityViewModel
@@ -35,6 +36,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public string StartTime { get; set; }
 		public string EndTime { get; set; }
 		public string Name { get; set; }
+	}
+
+	public class AgentOutOfAdherenceViewModel
+	{
+		public string StartTime { get; set; }
+		public string EndTime { get; set; }
 	}
 
 	public class AgentStatesViewModelBuilder
@@ -106,7 +113,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 						StartTime = TimeZoneHelper.ConvertFromUtc(y.StartTime.Utc(), _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
 						EndTime = TimeZoneHelper.ConvertFromUtc(y.EndTime.Utc(), _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
 						Name = y.Name
+					}),
+					OutOfAdherences = x.OutOfAdherences.Select(y => new AgentOutOfAdherenceViewModel()
+					{
+						StartTime = y.StartTime.ToString("yyyy-MM-ddTHH:mm:ss"),
+						EndTime = y.EndTime?.ToString("yyyy-MM-ddTHH:mm:ss")
+						
 					})
+					
 				};
 			});
 		}

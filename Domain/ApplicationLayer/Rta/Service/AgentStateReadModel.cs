@@ -30,6 +30,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public IEnumerable<AgentStateActivityReadModel> Shift { get; set; }
 
+		public IEnumerable<AgentStateOutOfAdherenceReadModel> OutOfAdherences { get; set; }
+
 		public override string ToString()
 		{
 			return string.Format(
@@ -66,5 +68,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
 		public string Name { get; set; }
+	}
+
+	public class AgentStateOutOfAdherenceReadModel
+	{
+		public DateTime StartTime { get; set; }
+		public DateTime? EndTime { get; set; }
 	}
 }

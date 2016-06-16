@@ -43,7 +43,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 						IsRuleAlarm = :IsRuleAlarm, 
 						AlarmStartTime = :AlarmStartTime, 
 						AlarmColor = :AlarmColor,
-						Shift = :Shift
+						Shift = :Shift,
+						OutOfAdherences = :OutOfAdherences
 					WHERE 
 						PersonId = :PersonId
 				")
@@ -66,6 +67,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.SetParameter("AlarmStartTime", model.AlarmStartTime)
 				.SetParameter("AlarmColor", model.AlarmColor)
 				.SetParameter("Shift", _serializer.SerializeObject(model.Shift))
+				.SetParameter("OutOfAdherences", _serializer.SerializeObject(model.OutOfAdherences))
 				.ExecuteUpdate();
 			if (updated == 0)
 			{
@@ -91,7 +93,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 							IsRuleAlarm, 
 							AlarmStartTime, 
 							AlarmColor,
-							Shift
+							Shift,
+							OutOfAdherences
 						)
 						VALUES
 						(
@@ -113,7 +116,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 							:IsRuleAlarm, 
 							:AlarmStartTime, 
 							:AlarmColor,
-							:Shift
+							:Shift,
+							:OutOfAdherences
 						)
 					")
 					.SetParameter("PersonId", model.PersonId)
@@ -135,6 +139,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 					.SetParameter("AlarmStartTime", model.AlarmStartTime)
 					.SetParameter("AlarmColor", model.AlarmColor)
 					.SetParameter("Shift", _serializer.SerializeObject(model.Shift))
+					.SetParameter("OutOfAdherences", _serializer.SerializeObject(model.OutOfAdherences))
 					.ExecuteUpdate();
 			}
 		}

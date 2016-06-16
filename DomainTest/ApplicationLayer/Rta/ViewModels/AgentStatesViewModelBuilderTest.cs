@@ -264,5 +264,97 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			
 			agentState.TimeInRule.Should().Be(null);
 		}
+
+		[Test]
+		public void ShouldGetRecentOutOfAdherence()
+		{
+			var personId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			Database.Has(new AgentStateReadModel
+			{
+				PersonId = personId,
+				TeamId = teamId,
+				OutOfAdherences = new[]
+				{
+					new AgentStateOutOfAdherenceReadModel
+					{
+						StartTime = "2016-06-16 07:40".Utc(),
+						EndTime = "2016-06-16 07:50".Utc()
+					}
+				}
+			});
+			Now.Is("2016-06-16 08:00");
+
+			var outOfAdherence = Target.ForTeams(new[] {teamId}, false).States.Single()
+				.OutOfAdherences.Single();
+
+			outOfAdherence.StartTime.Should().Be("2016-06-16T07:40:00");
+			outOfAdherence.EndTime.Should().Be("2016-06-16T07:50:00");
+		}
+
+		[Test]
+		public void ShouldGetOngoingOutOfAdherence()
+		{
+			var personId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			Database.Has(new AgentStateReadModel
+			{
+				PersonId = personId,
+				TeamId = teamId,
+				OutOfAdherences = new[]
+				{
+					new AgentStateOutOfAdherenceReadModel
+					{
+						StartTime = "2016-06-16 07:40".Utc(),
+						EndTime = null
+					}
+				}
+			});
+			Now.Is("2016-06-16 08:00");
+
+			var outOfAdherence = Target.ForTeams(new[] { teamId }, false).States.Single()
+				.OutOfAdherences.Single();
+
+			outOfAdherence.StartTime.Should().Be("2016-06-16T07:40:00");
+			outOfAdherence.EndTime.Should().Be(null);
+		}
+
+		//[Test]
+		//public void ShouldGetRecentOutOfAdherencesNotTooEarly()
+		//{
+		//	var personId = Guid.NewGuid();
+		//	var teamId = Guid.NewGuid();
+		//	Database.Has(new AgentStateReadModel
+		//	{
+		//		PersonId = personId,
+		//		TeamId = teamId,
+		//		OutOfAdherences = new[]
+		//		{
+		//			new AgentOutOfAdherence
+		//			{
+		//				StartTime = "2016-06-16 05:00".Utc(),
+		//				EndTime = "2016-06-16 05:10".Utc()
+		//			},
+		//			new AgentOutOfAdherence
+		//			{
+		//				StartTime = "2016-06-16 07:40".Utc(),
+		//				EndTime = "2016-06-16 07:50".Utc()
+		//			},
+		//			new AgentOutOfAdherence
+		//			{
+		//				StartTime = "2016-06-16 07:55".Utc(),
+		//				EndTime = null
+		//			}
+		//		}
+		//	});
+		//	Now.Is("2016-06-16 08:00");
+
+		//	var outOfAdherences = Target.ForTeams(new[] { teamId }, false).States.Single().OutOfAdherences;
+
+		//	outOfAdherences.First().StartTime.Should().Be("2016-06-16 07:40:00");
+		//	outOfAdherences.First().EndTime.Should().Be("2016-06-16 07:50:00");
+		//	outOfAdherences.Last().StartTime.Should().Be("2016-06-16 07:55:00");
+		//	outOfAdherences.Last().EndTime.Should().Be(null);
+		//}
 	}
 }

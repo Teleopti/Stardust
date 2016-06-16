@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.UnitOfWork;
 
@@ -117,6 +118,74 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Reader.Load(new[] { state.PersonId }).Single()
 				.IsRuleAlarm.Should().Be(true);
+		}
+
+		[Test]
+		public void ShouldPersistOutOfAdherences()
+		{
+			var state = new AgentStateReadModelForTest
+			{
+				OutOfAdherences = new[]
+				{
+					new AgentStateOutOfAdherenceReadModel
+					{
+						StartTime = "2016-06-16 08:00".Utc(),
+						EndTime = "2016-06-16 08:10".Utc()
+					}
+				}
+			};
+
+			Target.Persist(state);
+
+			var outOfAdherence = Reader.Load(new[] {state.PersonId}).Single()
+				.OutOfAdherences.Single();
+
+			outOfAdherence.StartTime.Should().Be("2016-06-16 08:00".Utc());
+			outOfAdherence.EndTime.Should().Be("2016-06-16 08:10".Utc());
+		}
+
+		[Test]
+		public void ShouldUpdateOutOfAdherences()
+		{
+			var state = new AgentStateReadModelForTest
+			{
+				OutOfAdherences = new[]
+				{
+					new AgentStateOutOfAdherenceReadModel
+					{
+						StartTime = "2016-06-16 08:00".Utc(),
+						EndTime = "2016-06-16 08:10".Utc()
+					}
+				}
+			};
+
+			Target.Persist(state);
+
+			state = new AgentStateReadModelForTest
+			{
+				OutOfAdherences = new[]
+				{
+					new AgentStateOutOfAdherenceReadModel
+					{
+						StartTime = "2016-06-16 08:00".Utc(),
+						EndTime = "2016-06-16 08:10".Utc()
+					},
+					new AgentStateOutOfAdherenceReadModel
+					{
+						StartTime = "2016-06-16 08:20".Utc(),
+						EndTime = null
+					}
+				}
+			};
+
+			Target.Persist(state);
+
+			var outOfAdherences = Reader.Load(new[] { state.PersonId }).Single().OutOfAdherences;
+
+			outOfAdherences.First().StartTime.Should().Be("2016-06-16 08:00".Utc());
+			outOfAdherences.First().EndTime.Should().Be("2016-06-16 08:10".Utc());
+			outOfAdherences.Last().StartTime.Should().Be("2016-06-16 08:20".Utc());
+			outOfAdherences.Last().EndTime.Should().Be(null);
 		}
 
 		[Test]

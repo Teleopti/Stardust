@@ -111,6 +111,11 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			{
 				set { base.Shift = JsonConvert.DeserializeObject<IEnumerable<AgentStateActivityReadModel>>(value); }
 			}
+
+			public new string OutOfAdherences
+			{
+				set { base.OutOfAdherences = JsonConvert.DeserializeObject<IEnumerable<AgentStateOutOfAdherenceReadModel>>(value); }
+			}
 		}
 	}
 }
