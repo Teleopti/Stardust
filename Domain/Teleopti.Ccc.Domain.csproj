@@ -197,7 +197,9 @@
     <Compile Include="ApplicationLayer\Availability\AnalyticsAvailabilityUpdater.cs" />
     <Compile Include="ApplicationLayer\Events\AvailabilityChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonRequestChangedEvent.cs" />
+    <Compile Include="Cascading\AddResourcesToSubSkills.cs" />
     <Compile Include="Cascading\CascadingSkillGroupItem.cs" />
+    <Compile Include="Cascading\ReducePrimarySkillResources.cs" />
     <Compile Include="Infrastructure\DatabaseEnum.cs" />
     <Compile Include="Infrastructure\Events\IndexMaintenanceEvent.cs" />
     <Compile Include="ApplicationLayer\Events\WorkloadChangedEvent.cs" />

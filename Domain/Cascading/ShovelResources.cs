@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -11,14 +10,20 @@ namespace Teleopti.Ccc.Domain.Cascading
 	public class ShovelResources
 	{
 		private readonly Func<ISchedulerStateHolder> _stateHolder;
+		private readonly AddResourcesToSubSkills _addResourcesToSubSkills;
+		private readonly ReducePrimarySkillResources _reducePrimarySkillResources;
 		private readonly SkillGroupPerActivityProvider _skillGroupPerActivityProvider;
 		private readonly ITimeZoneGuard _timeZoneGuard;
 
-		public ShovelResources(Func<ISchedulerStateHolder> stateHolder, 
-												SkillGroupPerActivityProvider skillGroupPerActivityProvider,
-												ITimeZoneGuard timeZoneGuard)
+		public ShovelResources(Func<ISchedulerStateHolder> stateHolder,
+			AddResourcesToSubSkills addResourcesToSubSkills,
+			ReducePrimarySkillResources reducePrimarySkillResources,
+			SkillGroupPerActivityProvider skillGroupPerActivityProvider,
+			ITimeZoneGuard timeZoneGuard)
 		{
 			_stateHolder = stateHolder;
+			_addResourcesToSubSkills = addResourcesToSubSkills;
+			_reducePrimarySkillResources = reducePrimarySkillResources;
 			_skillGroupPerActivityProvider = skillGroupPerActivityProvider;
 			_timeZoneGuard = timeZoneGuard;
 		}
@@ -41,9 +46,8 @@ namespace Teleopti.Ccc.Domain.Cascading
 							{
 								foreach (var skillGroup in _skillGroupPerActivityProvider.FetchOrdered(activity, interval))
 								{
-									//TODO - make this seperate classes/components if we want to keep this structure
-									var resourcesMoved = addSubSkillResoures(skillGroup, interval);
-									reducePrimarySkillResources(skillGroup, interval, resourcesMoved);
+									var resourcesMoved = _addResourcesToSubSkills.Execute(skillGroup, interval);
+									_reducePrimarySkillResources.Execute(skillGroup.PrimarySkills, interval, resourcesMoved);
 								}
 							}
 						}
@@ -51,62 +55,5 @@ namespace Teleopti.Ccc.Domain.Cascading
 				}
 			}
 		}
-
-		private void reducePrimarySkillResources(CascadingSkillGroup skillGroup, DateTimePeriod interval, double resourcesMoved)
-		{
-			var stateHolder = _stateHolder();
-			var primarySkillOverstaff = skillGroup.PrimarySkills
-				.Sum(primarySkill => stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodOrDefault(primarySkill, interval, 0).AbsoluteDifference);
-			if (primarySkillOverstaff.IsZero())
-				return;
-
-			foreach (var primarySkill in skillGroup.PrimarySkills)
-			{
-				var skillStaffPeriod = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodOrDefault(primarySkill, interval, 0);
-				var overstaffForSkill = skillStaffPeriod.AbsoluteDifference;
-				var percentageOverstaff = overstaffForSkill/primarySkillOverstaff;
-				var resourceToSubtract = resourcesMoved*percentageOverstaff;
-				skillStaffPeriod.AddResources(-resourceToSubtract);
-			}
-		}
-
-		private double addSubSkillResoures(CascadingSkillGroup skillGroup, DateTimePeriod interval)
-		{
-			var resourcesMoved = 0d;
-			var stateHolder = _stateHolder();
-			var remainingResourcesInGroup = skillGroup.Resources;
-			var remainingPrimarySkillOverstaff = skillGroup.PrimarySkills
-				.Sum(primarySkill => stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodOrDefault(primarySkill, interval, int.MaxValue).AbsoluteDifference);
-			if (!remainingPrimarySkillOverstaff.IsOverstaffed())
-				return 0;
-
-			foreach (var cascadingSkillGroupItem in skillGroup.CascadingSkillGroupItems)
-			{
-				var totalUnderstaffingInSkillGroup = cascadingSkillGroupItem.SubSkills
-					.Select(skillToMoveTo => stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodOrDefault(skillToMoveTo, interval, 0).AbsoluteDifference)
-					.Where(absoluteDifference => absoluteDifference.IsUnderstaffed())
-					.Sum(absoluteDifference => -absoluteDifference);
-
-				var remainingOverstaff = Math.Min(remainingPrimarySkillOverstaff, remainingResourcesInGroup);
-				foreach (var skillToMoveTo in cascadingSkillGroupItem.SubSkills)
-				{
-					var skillStaffPeriodTo = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodOrDefault(skillToMoveTo, interval, 0);
-					var skillToMoveToAbsoluteDifference = skillStaffPeriodTo.AbsoluteDifference;
-					if (!skillToMoveToAbsoluteDifference.IsUnderstaffed())
-						continue;
-
-					var proportionalResourcesToMove = -skillToMoveToAbsoluteDifference / totalUnderstaffingInSkillGroup * remainingOverstaff;
-					var resourceToMove = Math.Min(-skillToMoveToAbsoluteDifference, proportionalResourcesToMove);
-
-					skillStaffPeriodTo.AddResources(resourceToMove);
-					remainingResourcesInGroup -= resourceToMove;
-					remainingPrimarySkillOverstaff -= resourceToMove;
-					resourcesMoved += resourceToMove;
-					if (remainingPrimarySkillOverstaff.IsZero() || remainingResourcesInGroup.IsZero())
-						return resourcesMoved;
-				}
-			}
-			return resourcesMoved;
-		}	
 	}
 }
