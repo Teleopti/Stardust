@@ -112,53 +112,55 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		//	Assert.AreEqual(1,cancelRequestCommand.ErrorMessages.Count);
 		//}
 
-		[Test]
-		public void ShouldFailGracefullyWhenAttemptingToCancelRequestWhereAbsenceCannotBeFound()
-		{
-			commonSetup();
-			var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(2016,03,01,2016,03,01);
+		// TODO: bugs #39138,#39065 have caused the absence request cancellation functionality to be reverted
+		//[Test]
+		//public void ShouldFailGracefullyWhenAttemptingToCancelRequestWhereAbsenceCannotBeFound()
+		//{
+		//	commonSetup();
+		//	var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(2016,03,01,2016,03,01);
 
-			var absenceRequest = createApprovedAbsenceRequest(absence,dateTimePeriodOfAbsenceRequest, person);
-			var personRequest = absenceRequest.Parent as PersonRequest;
+		//	var absenceRequest = createApprovedAbsenceRequest(absence,dateTimePeriodOfAbsenceRequest, person);
+		//	var personRequest = absenceRequest.Parent as PersonRequest;
 
-			var cancelRequestCommand = new CancelAbsenceRequestCommand()
-			{
-				PersonRequestId = personRequest.Id.GetValueOrDefault()
-			};
+		//	var cancelRequestCommand = new CancelAbsenceRequestCommand()
+		//	{
+		//		PersonRequestId = personRequest.Id.GetValueOrDefault()
+		//	};
 
-			Target.Handle(cancelRequestCommand);
+		//	Target.Handle(cancelRequestCommand);
 
-			Assert.AreEqual(1,cancelRequestCommand.ErrorMessages.Count);
-			Assert.AreEqual(string.Format(Resources.CouldNotCancelRequestNoAbsence,
-				CommonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(person),
-				absenceRequest.Period.StartDateTimeLocal(LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()).Date.ToString("d", UserCulture.GetCulture())),
-				cancelRequestCommand.ErrorMessages[0]);
-		}
+		//	Assert.AreEqual(1,cancelRequestCommand.ErrorMessages.Count);
+		//	Assert.AreEqual(string.Format(Resources.CouldNotCancelRequestNoAbsence,
+		//		CommonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(person),
+		//		absenceRequest.Period.StartDateTimeLocal(LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()).Date.ToString("d", UserCulture.GetCulture())),
+		//		cancelRequestCommand.ErrorMessages[0]);
+		//}
 
-		[Test]
-		public void ShouldFailGracefullyWhenAttemptingToCancelRequestWhereAbsenceRequestHasNotBeenAccepted()
-		{
-			commonSetup();
-			var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(2016,03,01,2016,03,01);
+		// TODO: bugs #39138,#39065 have caused the absence request cancellation functionality to be reverted
+		//[Test]
+		//public void ShouldFailGracefullyWhenAttemptingToCancelRequestWhereAbsenceRequestHasNotBeenAccepted()
+		//{
+		//	commonSetup();
+		//	var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(2016,03,01,2016,03,01);
 
-			var absenceRequest = new AbsenceRequest(absence,dateTimePeriodOfAbsenceRequest);
-			var personRequest = new PersonRequest(person,absenceRequest).WithId();
-			RequestRepository.Add(personRequest);
-			personRequest.Pending();
+		//	var absenceRequest = new AbsenceRequest(absence,dateTimePeriodOfAbsenceRequest);
+		//	var personRequest = new PersonRequest(person,absenceRequest).WithId();
+		//	RequestRepository.Add(personRequest);
+		//	personRequest.Pending();
 
-			var cancelRequestCommand = new CancelAbsenceRequestCommand()
-			{
-				PersonRequestId = personRequest.Id.GetValueOrDefault()
-			};
+		//	var cancelRequestCommand = new CancelAbsenceRequestCommand()
+		//	{
+		//		PersonRequestId = personRequest.Id.GetValueOrDefault()
+		//	};
 
-			Target.Handle(cancelRequestCommand);
+		//	Target.Handle(cancelRequestCommand);
 
-			Assert.AreEqual(1,cancelRequestCommand.ErrorMessages.Count);
-			Assert.AreEqual(string.Format(Resources.CanOnlyCancelApprovedAbsenceRequest,
-				CommonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(person),
-				absenceRequest.Period.StartDateTimeLocal(LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()).Date.ToString("d", UserCulture.GetCulture())),
-				cancelRequestCommand.ErrorMessages[0]);
-		}
+		//	Assert.AreEqual(1,cancelRequestCommand.ErrorMessages.Count);
+		//	Assert.AreEqual(string.Format(Resources.CanOnlyCancelApprovedAbsenceRequest,
+		//		CommonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(person),
+		//		absenceRequest.Period.StartDateTimeLocal(LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()).Date.ToString("d", UserCulture.GetCulture())),
+		//		cancelRequestCommand.ErrorMessages[0]);
+		//}
 
 
 
