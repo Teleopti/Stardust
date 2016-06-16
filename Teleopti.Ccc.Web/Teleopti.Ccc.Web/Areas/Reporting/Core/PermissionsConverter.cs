@@ -41,31 +41,8 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 				{
 					foreach (var stuff in teams)
 						yield return convertToAnalyticsPermission(new MatrixPermissionHolder(person, stuff.Team, stuff.IsMy, function), analyticTeams, analyticsBusinessUnitId, now);
-					//foreach (var team in role.AvailableData.AvailableTeams)
-					//{
-					//	var analyticsTeam = analyticTeams.FirstOrDefault(t => t.TeamCode == team.Id);
-					//	if (analyticsTeam == null)
-					//	{
-					//		continue;
-					//	}
-					//	yield return new AnalyticsPermission
-					//	{
-					//		PersonCode = personId,
-					//		DatasourceId = 1,
-					//		ReportId = new Guid(function.ForeignId),
-					//		BusinessUnitId = analyticsBusinessUnitId,
-					//		MyOwn = false,//arg.IsMy,
-					//		TeamId = analyticsTeam.TeamId,
-					//		DatasourceUpdateDate = now
-					//	};
-					//}
 				}
 			}
-
-			//return
-			//	applicationPermissions.Select(ap => convertToAnalyticsPermission(ap, analyticTeams, analyticsBusinessUnitId, now))
-			//		.Where(x => x != null)
-			//		.ToList();
 		}
 
 		private static AnalyticsPermission convertToAnalyticsPermission(MatrixPermissionHolder arg, IEnumerable<AnalyticTeam> analyticTeams, int analyticsBusinessUnitId, DateTime updateDate)
