@@ -34,8 +34,8 @@ SET BatchPath=%TargetFolder%
 ECHO ============== >> "%BatchLogFile%"
 date /t >> "%BatchLogFile%"
 time /t >> "%BatchLogFile%"
-ECHO "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "%WinSvcLogin%" "%WinEtlLogin%" "%BatchPath%" >> "%BatchLogFile%"
-CALL "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "%WinSvcLogin%" "%WinEtlLogin%" "%BatchPath%" >> "%BatchLogFile%"
+ECHO "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "%WinSvcLogin%" "%WinEtlLogin%" "%BatchPath%" "(OI)(CI)M" >> "%BatchLogFile%"
+CALL "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "%WinSvcLogin%" "%WinEtlLogin%" "%BatchPath%" "(OI)(CI)M" >> "%BatchLogFile%"
 ECHO The errorcode from SetPermissionsSub is: %localError% >> "%BatchLogFile%"
 ECHO ============== >> "%BatchLogFile%"
 
@@ -65,8 +65,8 @@ ping 127.0.0.1 -n 2 >NUL
 ECHO ============== >> "%BatchLogFile%"
 date /t >> "%BatchLogFile%"
 time /t >> "%BatchLogFile%"
-ECHO "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "%WinSvcLogin%" "%WinEtlLogin%" "%BatchPath%\..\ConfigurationFiles" >> "%BatchLogFile%"
-CALL "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "%WinSvcLogin%" "%WinEtlLogin%" "%BatchPath%\..\ConfigurationFiles" >> "%BatchLogFile%"
+ECHO "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "%WinSvcLogin%" "%WinEtlLogin%" "%BatchPath%\..\ConfigurationFiles" "(OI)(CI)R" >> "%BatchLogFile%"
+CALL "%BatchPath%\SetPermissionsSub.bat" "%WindowsNT%" "%SPLevel%" "%WinSvcLogin%" "%WinEtlLogin%" "%BatchPath%\..\ConfigurationFiles" "(OI)(CI)R" >> "%BatchLogFile%"
 ECHO The errorcode from SetPermissionsSub is: %localError% >> "%BatchLogFile%"
 ECHO ============== >> "%BatchLogFile%"
 

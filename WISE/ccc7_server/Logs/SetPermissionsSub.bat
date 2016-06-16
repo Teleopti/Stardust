@@ -17,6 +17,7 @@ SET IIS7PoolUser40Broker=IIS APPPOOL\Teleopti Broker
 SET IIS7PoolUser40RTA=IIS APPPOOL\Teleopti RTA
 SET IIS7PoolUser40SDK=IIS APPPOOL\Teleopti SDK
 SET TargetFolder=%~5
+SET PermissionLevel=%~6
 
 
 ::create the TargetFolder if missing
@@ -116,8 +117,8 @@ SETLOCAL
 SET SvcLogin=%~1
 SET /A LocalError=%~2
 ECHO Setting permissions using icacls ...
-ECHO icacls "%TargetFolder%" /grant "%SvcLogin%":(OI)(CI)M
-icacls "%TargetFolder%" /grant "%SvcLogin%":(OI)(CI)M
+ECHO icacls "%TargetFolder%" /grant "%SvcLogin%":%PermissionLevel%
+icacls "%TargetFolder%" /grant "%SvcLogin%":%PermissionLevel%
 SET /A LocalError=%LocalError%+%errorlevel%
 if not "%DRIVELETTER%"=="%mySystemDrive%" ECHO icacls "%DRIVELETTER%" /grant "%SvcLogin%":R
 if not "%DRIVELETTER%"=="%mySystemDrive%" icacls "%DRIVELETTER%" /grant "%SvcLogin%":R
