@@ -24,19 +24,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			_indexMaintenanceRepository.SetTimespanBetweenRetries(TimeSpan.FromSeconds(1));
 		}
 
-		[Test]
+		[Test, Ignore("Not correct permission to do this on build server")]
 		public void ShouldWorkToRunIndexForAnalytics()
 		{
 			_indexMaintenanceRepository.PerformIndexMaintenance(DatabaseEnum.Analytics);
 		}
 
-		[Test]
+		[Test, Ignore("Not correct permission to do this on build server")]
 		public void ShouldWorkToRunIndexForApplication()
 		{
 			_indexMaintenanceRepository.PerformIndexMaintenance(DatabaseEnum.Application);
 		}
 
-		[Test]
+		[Test, Ignore("Not correct permission to do this on build server")]
 		public void ShouldWorkToRunIndexForAgg()
 		{
 			_indexMaintenanceRepository.PerformIndexMaintenance(DatabaseEnum.Agg);
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test, ExpectedException(typeof(SqlException))]
-		public void ShouldThrowExeption()
+		public void ShouldThrowException()
 		{
 			var mock = MockRepository.GenerateMock<IConnectionStrings>();
 			mock.Stub(x => x.Application()).Return(InfraTestConfigReader.InvalidConnectionString);
