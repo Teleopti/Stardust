@@ -5,7 +5,9 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Intraday
 {
@@ -71,6 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			IntradayMonitorDataLoader.AddInterval(_secondInterval);
 			IntradayMonitorDataLoader.AddInterval(thirdInterval);
 			IntervalLengthFetcher.Has(minutesPerInterval);
+			
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 

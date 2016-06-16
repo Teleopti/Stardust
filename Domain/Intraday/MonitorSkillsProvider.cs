@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -12,16 +13,18 @@ namespace Teleopti.Ccc.Domain.Intraday
 	{
 		private readonly IIntradayMonitorDataLoader _intradayMonitorDataLoader;
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
+		private readonly INow _now;
 
-		public MonitorSkillsProvider(IIntradayMonitorDataLoader intradayMonitorDataLoader, IIntervalLengthFetcher intervalLengthFetcher)
+		public MonitorSkillsProvider(IIntradayMonitorDataLoader intradayMonitorDataLoader, IIntervalLengthFetcher intervalLengthFetcher, INow now)
 		{
 			_intradayMonitorDataLoader = intradayMonitorDataLoader;
 			_intervalLengthFetcher = intervalLengthFetcher;
+			_now = now;
 		}
 
 		public MonitorDataViewModel Load(Guid[] skillIdList)
 		{
-			var intervals = _intradayMonitorDataLoader.Load(skillIdList, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone, DateOnly.Today);
+			var intervals = _intradayMonitorDataLoader.Load(skillIdList, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone, _now.LocalDateOnly());
 			var intervalLength = _intervalLengthFetcher.IntervalLength;
 
 			var summary = new MonitorIntradaySummary();
