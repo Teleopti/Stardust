@@ -10,11 +10,6 @@
     <many-to-one name="Absence"
                  class="Teleopti.Ccc.Domain.Scheduling.Absence"
                  not-null="true" foreign-key="FK_AbsenceRequest_Absence" />
-
-    <bag name="PersonAbsences" inverse="true" lazy="false">
-      <key column="AbsenceRequest"></key>
-      <one-to-many class="Teleopti.Ccc.Domain.Scheduling.PersonAbsence"/>
-    </bag>
-
+   
   </joined-subclass>
 </hibernate-mapping>

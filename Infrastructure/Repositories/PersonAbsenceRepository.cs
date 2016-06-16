@@ -102,20 +102,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			initializeAbsences(retList);
 			return retList;
 		}
-
-
-		public IList<IPersonAbsence> Find(IAbsenceRequest absenceRequest)
-		{
-			IList<IPersonAbsence> retList = Session.CreateCriteria(typeof(PersonAbsence))
-						.Add(Restrictions.Eq("AbsenceRequest", absenceRequest))
-						.List<IPersonAbsence>();
-
-			return retList;
-		}
-
-
-
-
+		
 
 		public ICollection<DateTimePeriod> AffectedPeriods(IPerson person, IScenario scenario, DateTimePeriod period, IAbsence absence = null)
 		{

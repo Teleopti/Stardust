@@ -41,8 +41,6 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         DateTime? LastChange { get; set; }
 
-	    IAbsenceRequest AbsenceRequest{ get; set; }
-
 	    void ReplaceLayer(IAbsence newAbsence, DateTimePeriod newPeriod);
 	    void RemovePersonAbsence (TrackedCommandInfo trackedCommandInfo);
     }

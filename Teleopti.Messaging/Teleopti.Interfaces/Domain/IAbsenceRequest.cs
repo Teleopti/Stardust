@@ -24,8 +24,6 @@ namespace Teleopti.Interfaces.Domain
 
 	    bool IsRequestForOneLocalDay (TimeZoneInfo timeZone);
 
-		IList<IPersonAbsence> PersonAbsences { get;  }
-
 
 	}
 }

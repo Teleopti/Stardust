@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
@@ -17,28 +18,35 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 		public void CancelAbsenceRequest(IAbsenceRequest absenceRequest)
 		{
-			var personRequest = absenceRequest.Parent as IPersonRequest;
+			// TODO: bugs #39138,#39065 have caused the cancellation functionality to be reverted
+			throw new NotImplementedException();
 
-			if (personRequest == null || !personRequest.IsApproved)
-			{
-				return;
-			}
+			//var personRequest = absenceRequest.Parent as IPersonRequest;
 
-			if (absenceRequest.PersonAbsences.IsEmpty())
-			{
-				personRequest?.Cancel(_personRequestCheckAuthorization);
-			}
+			//if (personRequest == null || !personRequest.IsApproved)
+			//{
+			//	return;
+			//}
+
+			//if (absenceRequest.PersonAbsences.IsEmpty())
+			//{
+			//	personRequest?.Cancel(_personRequestCheckAuthorization);
+			//}
 		}
 
 		public void CancelAbsenceRequestsFromPersonAbsences (IEnumerable<IPersonAbsence> personAbsences)
 		{
-			foreach (var personAbsence in personAbsences.Where(perAbs => perAbs.AbsenceRequest != null))
-			{
-				var absenceRequest = personAbsence.AbsenceRequest;
-				absenceRequest.PersonAbsences.Remove(personAbsence);
 
-				CancelAbsenceRequest (absenceRequest);
-			}
+			// TODO: bugs #39138,#39065 have caused the cancellation functionality to be reverted
+			throw new NotImplementedException();
+
+			//foreach (var personAbsence in personAbsences.Where(perAbs => perAbs.AbsenceRequest != null))
+			//{
+			//	var absenceRequest = personAbsence.AbsenceRequest;
+			//	absenceRequest.PersonAbsences.Remove(personAbsence);
+
+			//	CancelAbsenceRequest (absenceRequest);
+			//}
 		}
 	}
 

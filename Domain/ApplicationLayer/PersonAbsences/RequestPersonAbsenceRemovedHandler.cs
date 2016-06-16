@@ -47,8 +47,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonAbsences
 				{
 					return;
 				}
+				
+				// TODO: bugs #39138,#39065 have caused the cancellation functionality to be reverted
+				//	_absenceRequestCancelService.CancelAbsenceRequest(absenceRequest);
 
-				_absenceRequestCancelService.CancelAbsenceRequest(absenceRequest);
 				unitOfWork.PersistAll();
 				
 				if (shouldUseWaitlisting(absenceRequest))

@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.WinCodeTest
 			
 			_target.Execute();
 
-			_schedulePart.AssertWasCalled(x => x.CreateAndAddAbsence(null, null),
+			_schedulePart.AssertWasCalled(x => x.CreateAndAddAbsence(null),
 			                                 o =>
 			                                 o.IgnoreArguments()
 			                                  .Repeat.Once()

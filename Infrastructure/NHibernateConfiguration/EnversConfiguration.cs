@@ -70,8 +70,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			         .Exclude(pa => pa.UpdatedBy)
 			         .Exclude(pa => pa.UpdatedOn)
 			         .ExcludeRelationData(pa => pa.Person)
-			         .ExcludeRelationData(pa => pa.Scenario)
-					 .ExcludeRelationData (pa => pa.AbsenceRequest);
+			         .ExcludeRelationData(pa => pa.Scenario);
 			fluentCfg.Audit<AbsenceLayer>()
 				.ExcludeRelationData(pa => pa.Payload);
 		}

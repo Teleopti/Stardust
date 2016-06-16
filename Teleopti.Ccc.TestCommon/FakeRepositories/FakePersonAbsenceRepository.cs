@@ -92,11 +92,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _personAbsences.Where(x => idList.Contains(x.Id.GetValueOrDefault())).ToArray();
 		}
 
-		public IList<IPersonAbsence> Find (IAbsenceRequest absenceRequest)
-		{
-			return _personAbsences.Where(personAbsence => personAbsence.AbsenceRequest == absenceRequest).ToList();
-		}
-
 		public ICollection<DateTimePeriod> AffectedPeriods(IPerson person, IScenario scenario, DateTimePeriod period, IAbsence absence)
 		{
 			throw new NotImplementedException();

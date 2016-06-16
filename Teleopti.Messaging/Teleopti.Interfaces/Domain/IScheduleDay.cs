@@ -281,7 +281,7 @@ namespace Teleopti.Interfaces.Domain
 		/// </summary>
 		/// <param name="layer"></param>
 		/// <param name="request"></param>
-		IPersonAbsence CreateAndAddAbsence(IAbsenceLayer layer, IAbsenceRequest request = null );
+		IPersonAbsence CreateAndAddAbsence(IAbsenceLayer layer);
 
 		void CreateAndAddActivity(IActivity activity, DateTimePeriod period, IShiftCategory shiftCategory);
 		IScheduleDay CreateAndAddActivity(IActivity activity, DateTimePeriod period);

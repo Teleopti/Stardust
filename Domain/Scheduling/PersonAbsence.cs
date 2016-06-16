@@ -17,8 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private IScenario _scenario;
 		private IAbsenceLayer _layer;
 		private DateTime? _lastChange;
-		private IAbsenceRequest _absenceRequest;
-
+		
 		/// <summary>
 		/// Creates a new instance of PersonAbsence
 		/// </summary>
@@ -32,20 +31,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_person = agent;
 			_scenario = scenario;
 			_layer = layer;
-		}
-
-		public PersonAbsence(IPerson agent, IScenario scenario, IAbsenceLayer layer, IAbsenceRequest absenceRequest)
-		{
-			_person = agent;
-			_scenario = scenario;
-			_layer = layer;
-
-			_absenceRequest = absenceRequest;
-
-			if (_absenceRequest != null)
-			{
-				_absenceRequest.PersonAbsences.Add (this);
-			}
 		}
 
 		/// <summary>
@@ -180,10 +165,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()					
 				};
 
-				if (AbsenceRequest != null)
-				{
-					requestPersonAbsenceRemovedEvent.AbsenceRequestId = AbsenceRequest.Id.GetValueOrDefault();
-				}
+				// TODO: bugs #39138,#39065 have caused the cancellation functionality to be reverted
+				//if (AbsenceRequest != null)
+				//{
+				//	requestPersonAbsenceRemovedEvent.AbsenceRequestId = AbsenceRequest.Id.GetValueOrDefault();
+				//}
+
 				events.Add(requestPersonAbsenceRemovedEvent);
 			}
 			return events;
@@ -250,7 +237,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var retObj = (PersonAbsence)NoneEntityClone();
 			retObj._scenario = parameters.Scenario;
 			retObj._person = parameters.Person;
-			retObj._absenceRequest = null;
 			return retObj;
 		}
 
@@ -287,7 +273,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 						if (dateTimePeriod.ElapsedTime() > TimeSpan.Zero)
 						{
 							var newLayer = new AbsenceLayer(Layer.Payload, dateTimePeriod);
-							IPersonAbsence personAbsence = new PersonAbsence(Person, Scenario, newLayer, _absenceRequest);
+							IPersonAbsence personAbsence = new PersonAbsence(Person, Scenario, newLayer);
 							splitList.Add(personAbsence);
 						}
 					}
@@ -323,12 +309,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			get { return _lastChange; }
 			set { _lastChange = value; }
-		}
-
-		public virtual IAbsenceRequest AbsenceRequest
-		{
-			get { return _absenceRequest; }
-			set { _absenceRequest = value; }
 		}
 
 		public virtual void ReplaceLayer(IAbsence newAbsence, DateTimePeriod newPeriod)

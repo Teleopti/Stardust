@@ -41,9 +41,7 @@ namespace Teleopti.Interfaces.Domain
 		/// Created date: 2007-11-12
 		/// </remarks>
 		ICollection<IPersonAbsence> Find(DateTimePeriod period, IScenario scenario);
-
-
-		IList<IPersonAbsence> Find (IAbsenceRequest absenceRequest);
+		
 
 		/// <summary>
 		/// Find by specific Id collection

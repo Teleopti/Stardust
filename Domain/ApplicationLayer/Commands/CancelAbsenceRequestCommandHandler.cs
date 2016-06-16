@@ -32,71 +32,79 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public void Handle(CancelAbsenceRequestCommand command)
 		{
 
-			command.ErrorMessages = new List<string>();
+			// TODO: bugs #39138,#39065 have caused the absence request cancellation functionality to be reverted
+			throw new NotImplementedException();
 
-			var personRequest = _personRequestRepository.Get(command.PersonRequestId);
-			if (personRequest == null)
-			{
-				return;
-			}
+			//command.ErrorMessages = new List<string>();
+
+			//var personRequest = _personRequestRepository.Get(command.PersonRequestId);
+			//if (personRequest == null)
+			//{
+			//	return;
+			//}
 			
-			if (!_writeProtectedScheduleCommandValidator.ValidateCommand (personRequest.RequestedDate, personRequest.Person, command))
-			{
-				return;
-			}
+			//if (!_writeProtectedScheduleCommandValidator.ValidateCommand (personRequest.RequestedDate, personRequest.Person, command))
+			//{
+			//	return;
+			//}
 
-			if (cancelRequest(personRequest, command))
-			{
-				command.AffectedRequestId = command.PersonRequestId;
-			}
+			//if (cancelRequest(personRequest, command))
+			//{
+			//	command.AffectedRequestId = command.PersonRequestId;
+			//}
 		}
 		
 		private bool cancelRequest(IPersonRequest personRequest, CancelAbsenceRequestCommand command)
 		{
-			var absenceRequest = personRequest.Request as IAbsenceRequest;
 
-			if (absenceRequest == null)
-			{
-				return false;
-			}
-
-			var personAbsences = _personAbsenceRepository.Find(absenceRequest);
-
-			if (!_cancelAbsenceRequestCommandValidator.ValidateCommand(personRequest, command, absenceRequest, personAbsences))
-			{
-				return false;
-			}
-
-			try
-			{
-				var person = personRequest.Person;
-				var startDate = personAbsences.Min(pa => pa.Period.StartDateTime);
-				var endDate = personAbsences.Max (pa => pa.Period.EndDateTime);
-				var scheduleRange = getScheduleRange(person, startDate, endDate);
-
-				IList<string> errorMessages = new List<string>();
-
-				foreach (var personAbsence in personAbsences)
-				{
-					errorMessages = _personAbsenceRemover.RemovePersonAbsence (new DateOnly (personAbsence.Period.LocalStartDateTime),
-						personRequest.Person,new[] {personAbsence},scheduleRange).ToList();
-
-					if (errorMessages.Any())
-					{
-						command.ErrorMessages = command.ErrorMessages.Concat (errorMessages).ToList() ;
-						return false;
-					}
-				}
-
-				return true;
-			}
-
-			catch (InvalidRequestStateTransitionException)
-			{
-				command.ErrorMessages.Add(string.Format(UserTexts.Resources.RequestInvalidStateTransition, personRequest.StatusText, UserTexts.Resources.Cancelled));
-			}
-
+			// TODO: bugs #39138,#39065 have caused the absence request cancellation functionality to be reverted
 			return false;
+
+			//var absenceRequest = personRequest.Request as IAbsenceRequest;
+
+			//if (absenceRequest == null)
+			//{
+			//	return false;
+			//}
+
+
+			//var personAbsences = _personAbsenceRepository.Find(absenceRequest);
+
+			//if (!_cancelAbsenceRequestCommandValidator.ValidateCommand(personRequest, command, absenceRequest, personAbsences))
+			//{
+			//	return false;
+			//}
+
+			//try
+			//{
+			//	var person = personRequest.Person;
+			//	var startDate = personAbsences.Min(pa => pa.Period.StartDateTime);
+			//	var endDate = personAbsences.Max (pa => pa.Period.EndDateTime);
+			//	var scheduleRange = getScheduleRange(person, startDate, endDate);
+
+			//	IList<string> errorMessages = new List<string>();
+
+			//	foreach (var personAbsence in personAbsences)
+			//	{
+			//		errorMessages = _personAbsenceRemover.RemovePersonAbsence (new DateOnly (personAbsence.Period.LocalStartDateTime),
+			//			personRequest.Person,new[] {personAbsence},scheduleRange).ToList();
+
+			//		if (errorMessages.Any())
+			//		{
+			//			command.ErrorMessages = command.ErrorMessages.Concat (errorMessages).ToList() ;
+			//			return false;
+			//		}
+			//	}
+
+			//	return true;
+			//}
+
+			//catch (InvalidRequestStateTransitionException)
+			//{
+			//	command.ErrorMessages.Add(string.Format(UserTexts.Resources.RequestInvalidStateTransition, personRequest.StatusText, UserTexts.Resources.Cancelled));
+			//}
+
+			//return false;
 		}
 
 		private IScheduleRange getScheduleRange (IPerson person, DateTime startDate, DateTime endDate)

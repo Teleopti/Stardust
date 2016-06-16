@@ -120,7 +120,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				errorMessages = createNewAbsencesForSplitAbsence(person, personAbsences, periodToRemove.Value, commandInfo, scheduleDay, scheduleRange);
 			}
 
-			_absenceRequestCancelService.CancelAbsenceRequestsFromPersonAbsences(personAbsences);
+			// TODO: #39138,#39065 - have caused the cancellation functionality to be reverted
+			//_absenceRequestCancelService.CancelAbsenceRequestsFromPersonAbsences(personAbsences);
 
 			return errorMessages;
 		}
@@ -145,7 +146,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 						Absence = personAbsence.Layer.Payload,
 						ScheduleDay = scheduleDay,
 						ScheduleRange = scheduleRange,
-						AbsenceRequest = personAbsence.AbsenceRequest,
 						AbsenceTimePeriod = period,
 						TrackedCommandInfo = commandInfo
 					}, false);

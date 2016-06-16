@@ -19,8 +19,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
     {
         private readonly IAbsence _absence;
         private string _typeDescription = string.Empty;
-	    private IList<IPersonAbsence> _personAbsences = new List<IPersonAbsence>();
-
+	    
 	    /// <summary>
         /// Initializes a new instance of the <see cref="AbsenceRequest"/> class.
         /// For NHibernate to use.
@@ -54,12 +53,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         {
             get { return _absence; }
         }
-
-	    public virtual IList<IPersonAbsence> PersonAbsences
-	    {
-		    get { return _personAbsences; }
-		    
-	    }
 
 	    public override void Deny(IPerson denyPerson)
 		{
