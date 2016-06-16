@@ -70,6 +70,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AggregateRootInitilizer>()
 				.As<IAggregateRootInitializer>()
 				.SingleInstance();
+
+			builder.RegisterType<AuditSettingRepository>()
+				.As<IAuditSettingRepository>()
+				.SingleInstance();
 		}
 
 		private bool hasCorrectCtor(Type repositoryType)

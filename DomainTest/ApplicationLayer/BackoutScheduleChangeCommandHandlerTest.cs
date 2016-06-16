@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public FakeScheduleStorage ScheduleStorage;
 		public FakeCurrentScenario CurrentScenario;
 		public FakeScheduleDifferenceSaver ScheduleDifferenceSaver;
-
+		public FakeAuditSettingRepository AuditSettingRepository;
 		public BackoutScheduleChangeCommandHandler target;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
 			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
 			system.UseTestDouble<FakeAggregateRootInitializer>().For<IAggregateRootInitializer>();
+			system.UseTestDouble<FakeAuditSettingRepository>().For<IAuditSettingRepository>();
 			system.AddService<BackoutScheduleChangeCommandHandler>();
 		}
 
@@ -47,6 +48,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void HanlderShouldBeResolved()
 		{
 			target.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldIndicateScheduleAuditTrailNotEnabled()
+		{
+			var person = PersonFactory.CreatePerson("aa","aa").WithId();
+			PersonRepository.Add(person);
+			ScheduleHistoryRepository.ClearRevision();
+
+			AuditSettingRepository.SetSetting(false);
+
+			var command = new BackoutScheduleChangeCommand
+			{
+				PersonId = person.Id.Value,
+				Date = new DateOnly(2016,06,11)
+			};
+
+			target.Handle(command);
+
+			command.ErrorMessages.Count.Should().Be.EqualTo(1);
+			command.ErrorMessages.First().Should().Be.EqualTo(Resources.ScheduleAuditTrailIsNotRunning);
 		}
 
 		[Test]
@@ -191,4 +213,50 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 	}	
+
+	public class FakeAuditSettingRepository: IAuditSettingRepository
+	{
+		private bool _setting = true;
+
+		public void TruncateAndMoveScheduleFromCurrentToAuditTables()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void SetSetting(bool setting)
+		{
+			_setting = setting;
+		}
+
+		public IAuditSetting Read()
+		{
+			var setting = new FakeAuditSetting();
+			setting.SetScheduleEnabled(_setting);
+			return setting;
+		}
+
+		internal class FakeAuditSetting : IAuditSetting
+		{
+			public void SetScheduleEnabled(bool v)
+			{
+				IsScheduleEnabled = v;
+			}
+
+			public bool IsScheduleEnabled { get; protected set; }
+			public void TurnOffScheduleAuditing(IAuditSetter auditSettingSetter)
+			{
+				throw new NotImplementedException();
+			}
+
+			public void TurnOnScheduleAuditing(IAuditSettingRepository auditSettingRepository, IAuditSetter auditSettingSetter)
+			{
+				throw new NotImplementedException();
+			}
+
+			public bool ShouldBeAudited(object entity)
+			{
+				throw new NotImplementedException();
+			}
+		}
+	}
 }

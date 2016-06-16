@@ -20,9 +20,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IScheduleDifferenceSaver _scheduleDifferenceSaver;
 		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
+		private readonly IAuditSettingRepository _auditSettingRepository;
 
 
-		public BackoutScheduleChangeCommandHandler(IScheduleHistoryRepository scheduleHistoryRepository, IPersonRepository personRepository, ILoggedOnUser loggedOnUser, IAggregateRootInitializer aggregateRootInitializer, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IScheduleDifferenceSaver scheduleDifferenceSaver, IDifferenceCollectionService<IPersistableScheduleData> differenceService)
+		public BackoutScheduleChangeCommandHandler(IScheduleHistoryRepository scheduleHistoryRepository, IPersonRepository personRepository, ILoggedOnUser loggedOnUser, IAggregateRootInitializer aggregateRootInitializer, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IScheduleDifferenceSaver scheduleDifferenceSaver, IDifferenceCollectionService<IPersistableScheduleData> differenceService, IAuditSettingRepository auditSettingRepository)
 		{
 			_scheduleHistoryRepository = scheduleHistoryRepository;
 			_personRepository = personRepository;
@@ -32,11 +33,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_currentScenario = currentScenario;
 			_scheduleDifferenceSaver = scheduleDifferenceSaver;
 			_differenceService = differenceService;
+			_auditSettingRepository = auditSettingRepository;
 		}
 
 		public void Handle(BackoutScheduleChangeCommand command)
 		{
 			command.ErrorMessages = new List<string>();
+
+			if (!_auditSettingRepository.Read().IsScheduleEnabled)
+			{
+				command.ErrorMessages.Add(Resources.ScheduleAuditTrailIsNotRunning);
+				return;
+			}
+
 			var person = _personRepository.Get(command.PersonId);
 			var versions = _scheduleHistoryRepository.FindRevisions(person,command.Date,2).ToList();
 
