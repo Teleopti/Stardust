@@ -251,8 +251,9 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			_startPollingToAvoidLogOut();
 		},
 		ListenForScheduleChanges: _listenForScheduleChanges,
-		NotifyWhenScheduleChangedListener: function (notification) {
-			if (_validSchedulePeriod(notification) && _validateNotificationSource(notification)) {
+		NotifyWhenScheduleChangedListener: function (notification, skipValidSchedulePeriod) {
+		    var shouldValid = skipValidSchedulePeriod ? true : _validSchedulePeriod(notification);
+		    if ( shouldValid && _validateNotificationSource(notification)) {
 				var changedDateRange;
 				if (notification.StartDate == notification.EndDate)
 				{

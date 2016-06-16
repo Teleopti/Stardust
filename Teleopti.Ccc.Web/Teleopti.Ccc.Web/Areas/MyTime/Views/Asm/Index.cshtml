@@ -38,7 +38,7 @@
                 header: '@Resources.Teleopti' 
             },
             function (notification) {
-                Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);
+                Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification, true);
                 Teleopti.MyTimeWeb.AlertActivity.RefreshAlertNextActivity();
             },
             'IShiftTradeScheduleChangedInDefaultScenario'
