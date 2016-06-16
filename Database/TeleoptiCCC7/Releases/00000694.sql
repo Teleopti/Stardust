@@ -1,6 +1,6 @@
 CREATE TABLE [ReadModel].[PersonSkills]
 	(
-	Id uniqueidentifier NOT NULL,
+	Id uniqueidentifier NOT NULL DEFAULT(newid()),
 	PersonId uniqueidentifier NOT NULL,
 	SkillId uniqueidentifier NOT NULL
 	)
