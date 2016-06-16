@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public virtual ResourcesDataModel ResourceCalculatePeriod(DateOnlyPeriod period)
 		{
 			var stateHolder = _schedulerStateHolder();
+			
 			_fillSchedulerStateHolderForResourceCalculation.Fill(stateHolder, period);
 
 			DoCalculation(period);
@@ -56,27 +57,30 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			//just return first skill for now
 			if (skillSkillStaffPeriodExtendedDictionary.Keys.Count > 0)
 			{
-				var skill = skillSkillStaffPeriodExtendedDictionary.Keys.First();
-				ret.Id = skill.Id.GetValueOrDefault();
-				ret.Area = skill.Name;
-				ret.Intervals = new List<SkillStaffingInterval>();
-				foreach (var skillStaffPeriod in skillSkillStaffPeriodExtendedDictionary[skill].Values)
+				foreach (var skill in skillSkillStaffPeriodExtendedDictionary.Keys)
 				{
-					if(skillStaffPeriod.Period.StartDateTime < period.StartDate.Date || skillStaffPeriod.Period.StartDateTime > period.EndDate.Date)
-						continue;
-					ret.Intervals.Add(new SkillStaffingInterval
+					ret.Id = skill.Id.GetValueOrDefault();
+					ret.Area = skill.Name;
+					ret.Intervals = new List<SkillStaffingInterval>();
+					foreach (var skillStaffPeriod in skillSkillStaffPeriodExtendedDictionary[skill].Values)
 					{
-						StartDateTime = skillStaffPeriod.Period.StartDateTime,
-						EndDateTime = skillStaffPeriod.Period.EndDateTime,
-						Forecast = skillStaffPeriod.ForecastedDistributedDemandWithShrinkage,
-						StaffingLevel = skillStaffPeriod.CalculatedResource
-					});
+						if (skillStaffPeriod.Period.StartDateTime < period.StartDate.Date || skillStaffPeriod.Period.StartDateTime > period.EndDate.Date)
+							continue;
+						ret.Intervals.Add(new SkillStaffingInterval
+						{
+							StartDateTime = skillStaffPeriod.Period.StartDateTime,
+							EndDateTime = skillStaffPeriod.Period.EndDateTime,
+							Forecast = skillStaffPeriod.ForecastedDistributedDemandWithShrinkage,
+							StaffingLevel = skillStaffPeriod.CalculatedResource
+						});
+					}
 				}
 			}
 	
 			return ret;
 		}
 	}
+
 
 	public class ResourcesDataModel
 	{

@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
 		private readonly IScheduleStorage _scheduleStorage;
-		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
 		private readonly ICurrentTeleoptiPrincipal _principal;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly IRepositoryFactory _repositoryFactory;
@@ -29,7 +28,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		public FillSchedulerStateHolderForResourceCalculation(IScenarioRepository scenarioRepository,
 					ISkillDayLoadHelper skillDayLoadHelper,
 					IScheduleStorage scheduleStorage,
-					IPersonAbsenceAccountRepository personAbsenceAccountRepository,
 					ICurrentTeleoptiPrincipal principal,
 					ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
 					IRepositoryFactory repositoryFactory,
@@ -39,7 +37,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			_scenarioRepository = scenarioRepository;
 			_skillDayLoadHelper = skillDayLoadHelper;
 			_scheduleStorage = scheduleStorage;
-			_personAbsenceAccountRepository = personAbsenceAccountRepository;
 			_principal = principal;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_repositoryFactory = repositoryFactory;
@@ -112,40 +109,40 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			schedulerStateHolderTo.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(period, timeZone);
 		}
 
-		private static void removeUnwantedAgents(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIdsToKeep)
-		{
-			if (agentIdsToKeep != null) //remove this when also scheduling is converted to "events"
-			{
-				foreach (var agent in schedulerStateHolderTo.AllPermittedPersons.ToList().Where(agent => !agentIdsToKeep.Contains(agent.Id.Value)))
-				{
-					schedulerStateHolderTo.AllPermittedPersons.Remove(agent);
-				}
-				foreach (var agent in schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization.ToList().Where(agent => !agentIdsToKeep.Contains(agent.Id.Value)))
-				{
-					schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization.Remove(agent);
-				}
-			}
-		}
+		//private static void removeUnwantedAgents(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIdsToKeep)
+		//{
+		//	if (agentIdsToKeep != null) //remove this when also scheduling is converted to "events"
+		//	{
+		//		foreach (var agent in schedulerStateHolderTo.AllPermittedPersons.ToList().Where(agent => !agentIdsToKeep.Contains(agent.Id.Value)))
+		//		{
+		//			schedulerStateHolderTo.AllPermittedPersons.Remove(agent);
+		//		}
+		//		foreach (var agent in schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization.ToList().Where(agent => !agentIdsToKeep.Contains(agent.Id.Value)))
+		//		{
+		//			schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization.Remove(agent);
+		//		}
+		//	}
+		//}
 
-		private static void removeUnwantedSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<ISkill> skillsToKeep)
-		{
-			foreach (var skill in schedulerStateHolderTo.SchedulingResultState.Skills.ToList().Where(skill => !skillsToKeep.Contains(skill)))
-			{
-				schedulerStateHolderTo.SchedulingResultState.RemoveSkill(skill);
-			}
-			foreach (var skillDay in schedulerStateHolderTo.SchedulingResultState.SkillDays.ToList().Where(skillDay => !skillsToKeep.Contains(skillDay.Key)))
-			{
-				schedulerStateHolderTo.SchedulingResultState.SkillDays.Remove(skillDay.Key);
-			}
-		}
+		//private static void removeUnwantedSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<ISkill> skillsToKeep)
+		//{
+		//	foreach (var skill in schedulerStateHolderTo.SchedulingResultState.Skills.ToList().Where(skill => !skillsToKeep.Contains(skill)))
+		//	{
+		//		schedulerStateHolderTo.SchedulingResultState.RemoveSkill(skill);
+		//	}
+		//	foreach (var skillDay in schedulerStateHolderTo.SchedulingResultState.SkillDays.ToList().Where(skillDay => !skillsToKeep.Contains(skillDay.Key)))
+		//	{
+		//		schedulerStateHolderTo.SchedulingResultState.SkillDays.Remove(skillDay.Key);
+		//	}
+		//}
 
-		private static void removeUnwantedScheduleRanges(ISchedulerStateHolder schedulerStateHolderTo)
-		{
-			foreach (var person in schedulerStateHolderTo.Schedules.Keys.Where(person => !schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization.Contains(person)).ToList())
-			{
-				schedulerStateHolderTo.Schedules.Remove(person);
-			}
-		}
+		//private static void removeUnwantedScheduleRanges(ISchedulerStateHolder schedulerStateHolderTo)
+		//{
+		//	foreach (var person in schedulerStateHolderTo.Schedules.Keys.Where(person => !schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization.Contains(person)).ToList())
+		//	{
+		//		schedulerStateHolderTo.Schedules.Remove(person);
+		//	}
+		//}
 
 
 		private IEnumerable<ISkill> skillsToUse(IEnumerable<IPerson> agents, DateOnlyPeriod period)
