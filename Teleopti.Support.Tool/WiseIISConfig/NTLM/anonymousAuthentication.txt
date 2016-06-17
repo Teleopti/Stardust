@@ -4,7 +4,7 @@ PMService;True
 RTA;True
 SDK;False
 Web;True
-Client;False
+Client;True
 TeleoptiWFM;True
 AuthenticationBridge;True
 WindowsIdentityProvider;True
