@@ -140,16 +140,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			foreach (var selectedItem in selectedItems)
 			{
 				if (selectedItem.Equals(selectedItems.First())) continue;
-
-				if (selectedItem.Count > 1)
-				{
-					_presenter.Unparalell(selectedItem.First());	
-				}
-
-				foreach (var skill in selectedItem.ToList())
-				{
-					_presenter.MakeParalell(masterSkill, skill);
-				}
+				_presenter.MakeParalell(masterSkill, selectedItem.First());
 			}
 
 			_bindingSourceCascading.ResetBindings(false);
