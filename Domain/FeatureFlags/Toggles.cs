@@ -86,6 +86,7 @@
 		Wfm_Requests_Cancel_Agent_38055,
 		Wfm_Requests_Run_waitlist_38071,
 		Wfm_Requests_ShiftTrade_37751,
+		Wfm_Requests_ShiftTrade_More_Relevant_Information_38492,
 		Wfm_Requests_PrepareForRelease_38771,
 
 		Wfm_Intraday_38074,
