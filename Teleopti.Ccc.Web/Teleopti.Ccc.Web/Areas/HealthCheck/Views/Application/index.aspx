@@ -9,14 +9,14 @@ var identity = (ITeleoptiIdentity) CurrentTeleoptiPrincipal.Make().Current().Ide
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge;IE=8;FF=3;OtherUA=4,chrome=1" />
-    <title>Teleopti WFM Health Check Tool</title>
-    <meta name="description" content="" />
-    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge;IE=8;FF=3;OtherUA=4,chrome=1" />
+	<title>Teleopti WFM Health Check Tool</title>
+	<meta name="description" content="" />
+	<meta name="viewport" content="width=device-width,initial-scale=1.0" />
 		
-    <link rel="stylesheet" href="<%= Url.Content("~/Content/bootstrap/Content/bootstrap.css") %>" />
-    <link rel="stylesheet" href="<%= Url.Content("~/Content/bootstrap/Content/bootstrap-theme.css") %>" />	
+	<link rel="stylesheet" href="<%= Url.Content("~/Content/bootstrap/Content/bootstrap.css") %>" />
+	<link rel="stylesheet" href="<%= Url.Content("~/Content/bootstrap/Content/bootstrap-theme.css") %>" />	
 	
 	  <%--<script>var require = { urlArgs: 'v=<%=new ResourceVersion().Version()%>' };</script>--%>
 	  <script>var require = { urlArgs: 'v=<%=1%>' };</script>
@@ -27,14 +27,14 @@ var identity = (ITeleoptiIdentity) CurrentTeleoptiPrincipal.Make().Current().Ide
 		}
 	</script>
 	<script src="Areas/HealthCheck/Content/Scripts/require/configuration.js"></script>
-    <script data-main="Areas/HealthCheck/Content/Scripts/main" type="text/javascript" src="<%= Url.Content("~/Content/require/require.js") %>"></script>
+	<script data-main="Areas/HealthCheck/Content/Scripts/main" type="text/javascript" src="<%= Url.Content("~/Content/require/require.js") %>"></script>
 </head>
 
 <body >
 	
-    <!--[if lt IE 7]>
-        <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this application.</p>
-    <![endif]-->
+	<!--[if lt IE 7]>
+		<p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this application.</p>
+	<![endif]-->
 	<div id="Health-Check" class="container">
 		<div class="row">
 			<div class="col-xs-12">
@@ -104,6 +104,20 @@ var identity = (ITeleoptiIdentity) CurrentTeleoptiPrincipal.Make().Current().Ide
 						<li class="list-group-item">Physical memory available: <span data-bind="text: (AvailablePhysicalMemory / (1024.0 * 1024 * 1024)).toFixed(2)"></span> GB</li>
 					</ul>
 					<!-- /ko -->
+					<h3>Check read model</h3>
+					<div>
+						<form>
+							<label>
+								Start date
+								<input type="date" data-bind="value: readModelCheckStartDate"/>
+							</label>
+							<label>
+								End date
+								<input type="date" data-bind="value: readModelCheckEndDate"/>
+							</label>
+							<button class="btn btn-primary" data-bind="click: checkReadModel">Start check</button>
+						</form>
+					</div>
 					<h3>Configured URL:s</h3>
 					<ul class="list-group" data-bind="foreach: configuredUrls">
 						<li class="list-group-item configured-url" data-bind="css: { 'list-group-item-success': Reachable == true }">

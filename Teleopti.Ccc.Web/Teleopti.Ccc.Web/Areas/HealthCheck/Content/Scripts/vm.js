@@ -15,6 +15,8 @@ define([
 		self.services = ko.observableArray();
 		self.etlJobHistory = ko.observableArray();
 		self.busResults = ko.observable();
+		self.readModelCheckStartDate = ko.observable();
+		self.readModelCheckEndDate = ko.observable();
 		self.logObjects = ko.observable();
 		self.checkBusEnabled = ko.observable(true);
 		self.checkBusEnabled = ko.observable(true);
@@ -57,6 +59,12 @@ define([
 			checkBusFunc();
 		};
 
+		var checkReadModelFunc;
+		self.checkReadModel = function() {
+			console.log(self.readModelCheckStartDate(), self.readModelCheckEndDate());
+			checkReadModelFunc();
+		};
+
 		self.initialize = function(options) {
 			if (options) {
 				self.hub = options.messageBroker;
@@ -66,6 +74,7 @@ define([
 					domainType: 'ITeleoptiDiagnosticsInformation', businessUnitId: Teleopti.BusinessUnitId, datasource: Teleopti.DataSource
 				});
 				loadEtlHistory = options.loadEtlHistory;
+				checkReadModelFunc = options.requestReadModelCheck;
 			}
 			if (self.hub && self.hub.client) {
 				self.hub.client.onEventMessage = function(notification, route) {

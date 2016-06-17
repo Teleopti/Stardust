@@ -27,13 +27,20 @@ define([
 		});
 	};
 
+	var requestReadModelCheck = function () {
+		console.log(vm);
+		http.get('HealthCheck/CheckScheduleProjectionReadOnly', { start: new Date(vm.readModelCheckStartDate()).toISOString(), end: new Date(vm.readModelCheckEndDate()).toISOString() }).done(function(data) {
+		});
+	};
+
 	vm.initialize({
     	signalR: sigR,
     	messageBroker: $.connection.MessageBrokerHub,
 		checkBus: function() {
 			http.get('api/HealthCheck/CheckBus').done(function () {  });
 		},
-		loadEtlHistory: loadEtlHistory
+		loadEtlHistory: loadEtlHistory,
+		requestReadModelCheck: requestReadModelCheck
     });
 
 	http.get('HealthCheck/CheckStardust').done(function (data) {
