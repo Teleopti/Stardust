@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	{
 		public OptimizeIntradayIslandsDesktop Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
+		public Func<IGridlockManager> LockManager;
 
 		public IntradayOptimizationIslandDesktopTest(bool cascading) 
 			: base(cascading)
@@ -724,6 +725,43 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				ass.AddActivity(phoneActivity, new TimePeriod(8, 0, 17, 0));
 				ass.SetShiftCategory(new ShiftCategory("_").WithId());
 				asses.Add(ass);
+			}
+			SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), asses.Select(x => x.Person), asses, skillDays);
+
+			Assert.DoesNotThrow(() =>
+			{
+				Target.Optimize(asses.Select(x => x.Person), new DateOnlyPeriod(dateOnly, dateOnly), new OptimizationPreferencesDefaultValueProvider().Fetch(), null);
+			});
+		}
+
+		[Test]
+		public void ShouldNotCrashIfLockExistsForAgentInAnotherIsland()
+		{
+			const int numberOfIslands = 2;
+			var scenario = new Scenario("_");
+			var phoneActivity = ActivityFactory.CreateActivity("_");
+			var dateOnly = new DateOnly(2010, 1, 1);
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(8, 15, 8, 15, 15), new TimePeriodWithSegment(17, 15, 17, 15, 15), new ShiftCategory("_").WithId()));
+			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36)),PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9)
+			};
+			var asses = new List<IPersonAssignment>();
+			var skillDays = new List<ISkillDay>();
+			for (var i = 0; i < numberOfIslands; i++)
+			{
+				var skill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = phoneActivity, TimeZone = TimeZoneInfo.Utc }.WithId();
+				WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
+				var skillDay = skill.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(60));
+				skillDays.Add(skillDay);
+				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+				agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
+				agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
+				agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
+
+				var ass = new PersonAssignment(agent, scenario, dateOnly);
+				ass.AddActivity(phoneActivity, new TimePeriod(8, 0, 17, 0));
+				ass.SetShiftCategory(new ShiftCategory("_").WithId());
+				asses.Add(ass);
+				LockManager().AddLock(agent, dateOnly, LockType.Normal, new DateTimePeriod()); 
 			}
 			SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), asses.Select(x => x.Person), asses, skillDays);
 

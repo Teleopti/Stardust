@@ -41,8 +41,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 			foreach (var lockInfo in locks)
 			{
-				var agent = schedulerStateHolderTo.AllPermittedPersons.Single(x => x.Id.Value == lockInfo.AgentId);
-				gridlockManager.AddLock(agent, lockInfo.Date, LockType.Normal, new DateTimePeriod());
+				var agent = schedulerStateHolderTo.AllPermittedPersons.SingleOrDefault(x => x.Id.Value == lockInfo.AgentId);
+				if (agent != null)
+				{
+					gridlockManager.AddLock(agent, lockInfo.Date, LockType.Normal, new DateTimePeriod());
+				}
 			}
 		}
 
