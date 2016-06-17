@@ -196,7 +196,7 @@ describe('RtaAgentsCtrl for teams', function() {
 		expect($state.go).toHaveBeenCalledWith('rta');
 	});
 
-	xit('should stop polling when page is about to destroy', function() {
+	it('should stop polling when page is about to destroy', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495", "103afc66-2bfa-45f4-9823-9e06008d5062"];
 		$fakeBackend.withAgent({
 				Name: "Ashley Andeen",

@@ -108,7 +108,7 @@ describe('RtaAgentsCtrl for sites', function() {
 				State: "In Call"
 			});
 
-		
+
 
 		$controllerBuilder.createController()
 			.apply("agentsInAlarm = false")
@@ -122,10 +122,10 @@ describe('RtaAgentsCtrl for sites', function() {
 						PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
 						State: "Ready"
 					});
-				
+
 		})
 		.wait(5000);
-	
+
 
 		expect(scope.agents[0].State).toEqual("In Call");
 		expect(scope.agents[1].State).toEqual("Ready");
@@ -202,7 +202,7 @@ describe('RtaAgentsCtrl for sites', function() {
 		expect(scope.filteredData[0].Name).toEqual("Ashley Andeen");
 	});
 
-	xit('should stop polling when page is about to destroy', function() {
+	it('should stop polling when page is about to destroy', function() {
 		stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c", "6a21c802-7a34-4917-8dfd-9b5e015ab461"];
 		$fakeBackend.withAgent({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",

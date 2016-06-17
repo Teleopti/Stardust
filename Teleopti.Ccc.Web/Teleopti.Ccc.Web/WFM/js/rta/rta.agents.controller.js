@@ -147,8 +147,6 @@
 					})
 					.then(updateStates);
 
-				setupPolling();
-
 				$scope.$on('$destroy', function() {
 					cancelPolling();
 				});
