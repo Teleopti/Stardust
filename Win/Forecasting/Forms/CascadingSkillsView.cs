@@ -127,5 +127,45 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				}
 			}
 		}
+
+		private void buttonAdvEqualClick(object sender, EventArgs e)
+		{
+			var selectedIndices = listBoxCascading.SelectedIndices.Cast<int>().ToList();
+			var selectedItems = listBoxCascading.SelectedItems.Cast<IList<ISkill>>().ToList();
+
+			if (selectedIndices.Count <= 1) return;
+			var masterSkill = selectedItems.First().First();
+
+			foreach (var selectedItem in selectedItems)
+			{
+				if (selectedItem.Equals(selectedItems.First())) continue;
+				foreach (var skill in selectedItem)
+				{
+					_presenter.MakeParalell(masterSkill, skill);
+				}
+			}
+
+			_bindingSourceCascading.ResetBindings(false);
+			listBoxCascading.SelectedItems.Clear();
+			listBoxCascading.SetSelected(selectedIndices.First(), true);
+		}
+
+		private void buttonAdvUnEqualClick(object sender, EventArgs e)
+		{
+			var selectedIndices = listBoxCascading.SelectedIndices.Cast<int>().ToList();
+			var selectedItems = listBoxCascading.SelectedItems.Cast<IList<ISkill>>().ToList();
+
+			if (selectedIndices.Count <= 0) return;
+			foreach (var selectedItem in selectedItems)
+			{
+				if (selectedItem.Count <= 1) continue;
+				_presenter.Unparalell(selectedItem.First());
+				break;
+			}
+
+			_bindingSourceCascading.ResetBindings(false);
+			listBoxCascading.SelectedItems.Clear();
+			listBoxCascading.SetSelected(selectedIndices.First(), true);
+		}
 	}
 }
