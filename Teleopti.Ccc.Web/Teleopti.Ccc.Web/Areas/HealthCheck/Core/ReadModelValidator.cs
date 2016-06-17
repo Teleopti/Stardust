@@ -40,35 +40,12 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Core
 			{
 				dateOnlyPeriod.DayCollection().ForEach(day =>
 				{
-					var schedule = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
-						new ScheduleDictionaryLoadOptions(false, false),
-						day.ToDateTimePeriod(TimeZoneInfo.Utc),
-						scenario);
-					var scheduleDay = schedule.SchedulesForDay(day).Single();
-					var projection = scheduleDay.ProjectionService().CreateProjection();
-					var layers = _builder.BuildProjectionChangedEventLayers(projection);
-
 					var readModelLayers =
 						_persister.ForPerson(day, person.Id.GetValueOrDefault(), scenario.Id.GetValueOrDefault())
 							.ToList()
 							.OrderBy(l => l.StartDateTime);
 
-					var mappedLayers = layers.Select(layer => new ScheduleProjectionReadOnlyModel
-					{
-						PersonId = person.Id.Value,
-						ScenarioId = scenario.Id.Value,
-						BelongsToDate = day,
-						PayloadId = layer.PayloadId,
-						WorkTime = layer.WorkTime,
-						ContractTime = layer.ContractTime,
-						StartDateTime = layer.StartDateTime,
-						EndDateTime = layer.EndDateTime,
-						Name = layer.Name,
-						ShortName = layer.ShortName,
-						DisplayColor = layer.DisplayColor
-					});
-
-					 
+					var mappedLayers = BuildReadModel(person, day);
 
 					if (mappedLayers.Count() != readModelLayers.Count() 
 					|| mappedLayers.Zip(readModelLayers, IsReadModelDifferent).Any(x => x))
