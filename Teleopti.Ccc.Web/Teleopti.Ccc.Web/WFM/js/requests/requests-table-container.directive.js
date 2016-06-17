@@ -54,7 +54,7 @@
 			}
 
 			vm.gridOptions.columnDefs = vm.gridConfigurationService.columnDefinitions(vm.shiftTradeRequestDateSummary);
-			vm.gridOptions.enablePinning = vm.shiftTradeRequestDateSummary;
+			vm.gridOptions.enablePinning = vm.shiftTradeView;
 			vm.gridOptions.category = vm.gridConfigurationService.categories(vm.shiftTradeRequestDateSummary);
 			vm.gridOptions.enableVerticalScrollbar = 0;
 			applyColumnFilters(vm.gridOptions.columnDefs);
@@ -322,23 +322,26 @@
 				return scope.requestsTableContainer.requests;
 			}, function (requests) {
 				requestsTableContainerCtrl.prepareComputedColumns(requests);
-				
+
 				requestsTableContainerCtrl.reselectRequests();
+
 				var shiftTradeDayView = '.shift-trade-view .ui-grid-render-container-body .ui-grid-viewport';
 
 				if ($(shiftTradeDayView).length && scope.requestsTableContainer.requests.length > 0) {
+					(function () {
+						function thereIsScrollBar() {
+							return $(shiftTradeDayView)[0].scrollWidth > $(shiftTradeDayView).width();
+						};
 
-					function thereIsScrollBar() { return $(shiftTradeDayView)[0].scrollWidth > $(shiftTradeDayView).width() };
-
-					scope.$watch(function () {
-						return $(shiftTradeDayView).width();
-					}, function () {
-						thereIsScrollBar() ?
-							$(shiftTradeDayView).css('height', requestsTableContainerCtrl.gridApi.grid.gridHeight - 65 + 18)
-							: $(shiftTradeDayView).css('height', requestsTableContainerCtrl.gridApi.grid.gridHeight - 65);
-					});
+						scope.$watch(function () {
+							return $(shiftTradeDayView).width();
+						}, function () {
+							thereIsScrollBar() ?
+							$(shiftTradeDayView).css('height', requestsTableContainerCtrl.gridApi.grid.gridHeight - 65 + 18) :
+							$(shiftTradeDayView).css('height', requestsTableContainerCtrl.gridApi.grid.gridHeight - 65);
+						});
+					})();
 				}
-
 			}, true);
 			
 			scope.$on('reload.requests.without.selection', function () {
