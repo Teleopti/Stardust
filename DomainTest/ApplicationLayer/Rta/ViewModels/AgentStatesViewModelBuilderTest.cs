@@ -319,42 +319,32 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			outOfAdherence.EndTime.Should().Be(null);
 		}
 
-		//[Test]
-		//public void ShouldGetRecentOutOfAdherencesNotTooEarly()
-		//{
-		//	var personId = Guid.NewGuid();
-		//	var teamId = Guid.NewGuid();
-		//	Database.Has(new AgentStateReadModel
-		//	{
-		//		PersonId = personId,
-		//		TeamId = teamId,
-		//		OutOfAdherences = new[]
-		//		{
-		//			new AgentOutOfAdherence
-		//			{
-		//				StartTime = "2016-06-16 05:00".Utc(),
-		//				EndTime = "2016-06-16 05:10".Utc()
-		//			},
-		//			new AgentOutOfAdherence
-		//			{
-		//				StartTime = "2016-06-16 07:40".Utc(),
-		//				EndTime = "2016-06-16 07:50".Utc()
-		//			},
-		//			new AgentOutOfAdherence
-		//			{
-		//				StartTime = "2016-06-16 07:55".Utc(),
-		//				EndTime = null
-		//			}
-		//		}
-		//	});
-		//	Now.Is("2016-06-16 08:00");
+		[Test]
+		public void ShouldGetOutOfAdherenceInUserTimeZone()
+		{
+			var personId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			Database.Has(new AgentStateReadModel
+			{
+				PersonId = personId,
+				TeamId = teamId,
+				OutOfAdherences = new[]
+				{
+					new AgentStateOutOfAdherenceReadModel
+					{
+						StartTime = "2016-06-16 12:00".Utc(),
+						EndTime = "2016-06-16 12:10".Utc()
+					}
+				}
+			});
+			Now.Is("2016-06-16 12:30");
+			TimeZone.IsSweden();
 
-		//	var outOfAdherences = Target.ForTeams(new[] { teamId }, false).States.Single().OutOfAdherences;
+			var outOfAdherence = Target.ForTeams(new[] { teamId }, false).States.Single()
+				.OutOfAdherences.Single();
 
-		//	outOfAdherences.First().StartTime.Should().Be("2016-06-16 07:40:00");
-		//	outOfAdherences.First().EndTime.Should().Be("2016-06-16 07:50:00");
-		//	outOfAdherences.Last().StartTime.Should().Be("2016-06-16 07:55:00");
-		//	outOfAdherences.Last().EndTime.Should().Be(null);
-		//}
+			outOfAdherence.StartTime.Should().Be("2016-06-16T14:00:00");
+			outOfAdherence.EndTime.Should().Be("2016-06-16T14:10:00");
+		}
 	}
 }

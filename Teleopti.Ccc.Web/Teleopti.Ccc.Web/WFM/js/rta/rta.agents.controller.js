@@ -281,7 +281,9 @@
 										var endTime = t.EndTime || states.Time;
 										return {
 											Offset: Math.max(timeToPercent(states.Time, t.StartTime), 0) + '%',
-											Width: Math.min(timePeriodToPercent(windowStart, t.StartTime, endTime), 100) + "%"
+											Width: Math.min(timePeriodToPercent(windowStart, t.StartTime, endTime), 100) + "%",
+											StartTime: moment(t.StartTime).format('HH:mm:ss'),
+											EndTime: t.EndTime ? moment(t.EndTime).format('HH:mm:ss') : null,
 										};
 									});
 								}(),

@@ -1,7 +1,7 @@
 <div class="ui-grid-cell-contents rta-schedule-container">
-	<span ng-repeat="timeBar in row.entity.ShiftTimeBars" class="rta-alarmline" ng-attr-style="width: {{timeBar.width}}; right: {{timeBar.right}};">
+	<span ng-repeat="outOfAdherence in row.entity.OutOfAdherences" class="rta-alarmline" ng-attr-style="left: {{outOfAdherence.Offset}}; width: {{outOfAdherence.Width}};">
 		<md-tooltip md-direction="top">
-			15 minutes
+			{{outOfAdherence.StartTime}} - {{outOfAdherence.EndTime}}
 		</md-tooltip>
 	</span>
 	<!-- <span class="rta-alarmline"  ng-attr-style="width: 2.5%; right: {{row.entity.ShiftTimeBarR3}};">

@@ -116,7 +116,6 @@
 					headerCellFilter: 'translate',
 					width: toggleService.RTA_AlarmContext_29357 ? "7%" : null,
 				};
-
 				var timeInRule = {
 					displayName: 'TimeInRule',
 					field: 'TimeInRule',
@@ -125,6 +124,15 @@
 					cellTemplate: timeInRuleTemplate,
 					headerCellFilter: 'translate',
 					width: toggleService.RTA_AlarmContext_29357 ? "7%" : null,
+				};
+				var timeOutOfAdherence = {
+					displayName: 'TimeOutOfAdherence',
+					field: 'TimeOutOfAdherence',
+					enableColumnMenu: false,
+					headerCellTemplate: headerCellTemplate,
+					cellTemplate: coloredCellTemplate,
+					headerCellFilter: 'translate',
+					width: "7%",
 				};
 
 				var shiftcelltemplate =  'js/rta/rta-agent-shiftcelltemplate-RTA_AlarmContext_29357.html';
@@ -156,7 +164,12 @@
 					columnDefs.push(team);
 					columnDefs.push(shift);
 					columnDefs.push(alarm);
-					columnDefs.push(toggleService.RTA_TotalOutOfAdherenceTime_38702 ? timeInRule : timeInAlarm);
+					if (toggleService.RTA_RecentOutOfAdherences_39145)
+						columnDefs.push(timeOutOfAdherence)
+					else if (toggleService.RTA_TotalOutOfAdherenceTime_38702)
+						columnDefs.push(timeInRule);
+					else
+						columnDefs.push(timeInAlarm);
 					columnDefs.push(state);
 				} else {
 					columnDefs.push(name);
@@ -165,7 +178,7 @@
 					columnDefs.push(activity);
 					columnDefs.push(nextActivity);
 					columnDefs.push(alarm);
-					columnDefs.push(toggleService.RTA_TotalOutOfAdherenceTime_38702 ? timeInRule : timeInAlarm);
+					columnDefs.push(timeInAlarm);
 				}
 
 				return {
