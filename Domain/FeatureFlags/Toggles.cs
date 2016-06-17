@@ -148,6 +148,7 @@
 		Intraday_ResourceCalculateReadModel_39200,
 		ETL_SpeedUpIntradayWorkload_38928,
 		ETL_SpeedUpNightlyWorkload_38928,
+		ETL_SpeedUpIntradayDate_38934,
 		// ReSharper restore InconsistentNaming
 	}
 }

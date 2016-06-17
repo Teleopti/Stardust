@@ -10,8 +10,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 		public IntradayJobCollection(IJobParameters jobParameters)
 		{
 			// STAGE TABLES
-			Add(new StageDateJobStep(jobParameters));                    // BU independent
-			Add(new DimDateJobStep(jobParameters));                     // BU independent
+			AddWhenAllDisabled(new StageDateJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayDate_38934);                    // BU independent
+			AddWhenAllDisabled(new DimDateJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayDate_38934);                     // BU independent
 			Add(new StageBusinessUnitJobStep(jobParameters));            // BU independent
 			Add(new DimQueueJobStep(jobParameters));                    // BU independent
 			Add(new DimAcdLogOnJobStep(jobParameters));                 // BU independent
