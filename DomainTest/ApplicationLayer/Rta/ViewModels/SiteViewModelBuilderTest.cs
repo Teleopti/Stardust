@@ -18,11 +18,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 	{
 		public SiteViewModelBuilder Target;
 		public FakeSiteRepository Sites;
-		public FakeUserCulture Culture;
+		public FakeUserUiCulture UiCulture;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture())).For<IUserCulture>();
+			system.UseTestDouble(new FakeUserUiCulture(CultureInfoFactory.CreateSwedishCulture())).For<IUserUiCulture>();
 		}
 
 		[Test]
@@ -53,13 +53,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		{
 			Sites.Has(new Site("Ä"));
 			Sites.Has(new Site("A"));
-			Sites.Has(new Site("Ĺ"));
+			Sites.Has(new Site("Å"));
 
-			Culture.IsSwedish();
+			UiCulture.IsSwedish();
 			var result = Target.Build();
 
 			result.Select(x => x.Name)
-				.Should().Have.SameSequenceAs(new[] {"A", "Ĺ", "Ä"});
+				.Should().Have.SameSequenceAs(new[] {"A", "Å", "Ä"});
 		}
 	}
 }

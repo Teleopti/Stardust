@@ -85,6 +85,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IAuthorizationScope>()
 				.SingleInstance();
 			builder.RegisterType<UserCulture>().As<IUserCulture>().SingleInstance();
+			builder.RegisterType<UserUiCulture>().As<IUserUiCulture>().SingleInstance();
 			builder.RegisterType<LoggedOnUser>().As<ILoggedOnUser>().SingleInstance();
 			builder.RegisterType<UserTimeZone>().As<IUserTimeZone>().SingleInstance();
 			

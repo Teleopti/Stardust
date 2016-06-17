@@ -397,6 +397,7 @@
     <Compile Include="Core\PersonNameProviderTest.cs" />
     <Compile Include="Core\Portal\DataProvider\ReportsNavigationProviderTest.cs" />
     <Compile Include="Core\Portal\ViewModelFactory\PortalViewModelFactoryMyReportTest.cs" />
+    <Compile Include="Core\RequestContext\UserUICultureTest.cs" />
     <Compile Include="Core\RequestContext\SessionSpecificForIdentityProviderDataProviderTest.cs" />
     <Compile Include="Core\Requests\DataProvider\AbsenceAccountProviderTest.cs" />
     <Compile Include="Core\Requests\Mapping\AbsenceAccountMappingProfileTest.cs" />
