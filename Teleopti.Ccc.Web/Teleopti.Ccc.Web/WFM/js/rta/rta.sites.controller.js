@@ -7,18 +7,6 @@
 
 				$scope.underToggle = toggleService.RTA_MonitorBySkills_39081;
 
-				$scope.rightPanelOptions = {
-					panelState: false,
-					panelTitle: "Show agents by skill",
-					showCloseButton: true,
-					showBackdrop: true,
-					showResizer: true,
-					showPopupButton: true
-				};
-				$scope.ifVisible = function() {
-					return toggleService.RTA_MonitorBySkills_39081;
-				}();
-
 				$scope.getAdherencePercent = RtaFormatService.numberToPercent;
 				$scope.checkboxesChecked = 0;
 				var selectedSiteIds = [];
@@ -74,7 +62,6 @@
 
 				$scope.goToAgents = function() {
 					$state.go('rta.agents-view');
-					console.log($state);
 				}
 				$scope.$on('$destroy', function() {
 					$interval.cancel(polling);

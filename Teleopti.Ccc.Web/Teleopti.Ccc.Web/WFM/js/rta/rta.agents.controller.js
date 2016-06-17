@@ -186,7 +186,7 @@
 				}
 
 				function updateStates() {
-					if ($scope.pause)
+					if ($scope.pause || !(siteIds.length > 0 || teamIds.length > 0))
 						return;
 					getStates($scope.agentsInAlarm)({
 							siteIds: siteIds,
@@ -350,12 +350,10 @@
 
 				$scope.querySearch = function (query, myArray) {
 					var results = query ? myArray.filter(createFilterFor(query)) : myArray, deferred;
-					console.log(results);
 					return results;
 				};
 
 				function createFilterFor(query) {
-					console.log('query',query);
 					var lowercaseQuery = angular.lowercase(query);
 					return function filterFn(item) {
 						var lowercaseName = angular.lowercase(item.Name);
@@ -364,7 +362,6 @@
 				};
 
 				$scope.selectedSkillChange = function (item) {
-					console.log(item);
 					if (item) {
 						$scope.skillSelected(item);
 					}
@@ -374,13 +371,13 @@
 				};
 
 				$scope.skillSelected = function (item) {
-					console.log('Skill selected', item);
 					$scope.selectedItem = item;
 
 					pollSkillMonitorData();
 				};
 
 				var pollSkillMonitorData = function () {
+
 					getAgents({
 							siteIds: ['d970a45a-90ff-4111-bfe1-9b5e015ab45c'],
 							teamIds: ['34590a63-6331-4921-bc9f-9b5e015ab495']
@@ -397,7 +394,6 @@
 								teamIds: ['34590a63-6331-4921-bc9f-9b5e015ab495']
 								})
 								.then(setStatesInAgents);
-								console.log('pulled data');
 								$scope.showGrid = true;
 						});
 					};
