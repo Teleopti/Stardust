@@ -13,17 +13,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly FillSchedulerStateHolderForResourceCalculation _fillSchedulerStateHolderForResourceCalculation;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
-		private readonly IScheduleForecastSkillReadModelPersister _scheduleForecastSkillReadModelPersister;
+		private readonly IScheduleForecastSkillReadModelRepository _scheduleForecastSkillReadModelRepository;
 
 		public CalculateForReadModel(
 			FillSchedulerStateHolderForResourceCalculation fillSchedulerStateHolderForResourceCalculation,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
-			IResourceOptimizationHelper resourceOptimizationHelper, IScheduleForecastSkillReadModelPersister scheduleForecastSkillReadModelPersister)
+			IResourceOptimizationHelper resourceOptimizationHelper, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository)
 		{
 			_fillSchedulerStateHolderForResourceCalculation = fillSchedulerStateHolderForResourceCalculation;
 			_schedulerStateHolder = schedulerStateHolder;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
-			_scheduleForecastSkillReadModelPersister = scheduleForecastSkillReadModelPersister;
+			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
 		}
 
 		[LogTime]
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				var skillStaffPeriodDictionary =
 					stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary;
 				var model = CreateReadModel(skillStaffPeriodDictionary, day.Date);
-				_scheduleForecastSkillReadModelPersister.Persist(model,day);
+				_scheduleForecastSkillReadModelRepository.Persist(model,day);
 			}
 			
 			return null;

@@ -13,11 +13,11 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Intraday
 {
-	public class ScheduleForecastSkillReadModelPersister : IScheduleForecastSkillReadModelPersister
+	public class ScheduleForecastSkillReadModelRepository : IScheduleForecastSkillReadModelRepository
 	{
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
-		public ScheduleForecastSkillReadModelPersister(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
+		public ScheduleForecastSkillReadModelRepository(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
 		{
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 		}
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 		}
 		
 
-		public IEnumerable<SkillStaffingInterval> GetBySkill(Guid skillId, DateOnly dateOnly)
+		public IEnumerable<SkillStaffingInterval> GetBySkill(Guid skillId, DateTime startDateTime, DateTime endDateTime)
 		{
 			var result = ((NHibernateUnitOfWork) _currentUnitOfWorkFactory.Current().CurrentUnitOfWork()).Session.CreateSQLQuery(
 				@"SELECT 
@@ -80,15 +80,39 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			,[Forecast]
 			,[StaffingLevel]
 				 FROM [ReadModel].[ScheduleForecastSkill]
-				where [BelongsToDate] = :belongsToDate
+				where [startDateTime] between :startDateTime and :endDateTime
 				and SkillId = :skillId")
 				.AddScalar("StartDateTime", NHibernateUtil.DateTime)
 				.AddScalar("EndDateTime", NHibernateUtil.DateTime)
 				.AddScalar("Forecast", NHibernateUtil.Double)
 				.AddScalar("StaffingLevel", NHibernateUtil.Double)
-				.SetDateOnly("belongsToDate", dateOnly)
+				.SetDateTime("startDateTime", startDateTime)
+				.SetDateTime("endDateTime", endDateTime)
 				.SetGuid("skillId", skillId)
 				.SetResultTransformer(Transformers.AliasToBean(typeof (SkillStaffingInterval)))
+				.List<SkillStaffingInterval>();
+
+			return result;
+		}
+
+		public IEnumerable<SkillStaffingInterval> GetBySkillArea(Guid id, DateTime startDateTime, DateTime endDateTime)
+		{
+			var result = ((NHibernateUnitOfWork)_currentUnitOfWorkFactory.Current().CurrentUnitOfWork()).Session.CreateSQLQuery(
+				@"SELECT 
+					StartDateTime,EndDateTime,Sum(Forecast) as Forecast,Sum(StaffingLevel) as StaffingLevel
+				 FROM [ReadModel].[ScheduleForecastSkill]
+				inner join SkillAreaSkillCollection on SkillId = Skill
+				where [startDateTime] between :startDateTime and :endDateTime
+				and SkillArea = :id
+				group by  StartDateTime, EndDateTime")
+				.AddScalar("StartDateTime", NHibernateUtil.DateTime)
+				.AddScalar("EndDateTime", NHibernateUtil.DateTime)
+				.AddScalar("Forecast", NHibernateUtil.Double)
+				.AddScalar("StaffingLevel", NHibernateUtil.Double)
+				.SetDateTime("startDateTime", startDateTime)
+				.SetDateTime("endDateTime", endDateTime)
+				.SetGuid("id", id)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(SkillStaffingInterval)))
 				.List<SkillStaffingInterval>();
 
 			return result;

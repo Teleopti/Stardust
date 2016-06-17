@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<LoadSkillInIntradays>().As<ILoadAllSkillInIntradays>().SingleInstance();
 			builder.RegisterType<IntradayMonitorDataLoader>().As<IIntradayMonitorDataLoader>().SingleInstance();
 			builder.RegisterType<MonitorSkillsProvider>().SingleInstance();
-			builder.RegisterType<ScheduleForecastSkillReadModelPersister>().As<IScheduleForecastSkillReadModelPersister>().SingleInstance();
+			builder.RegisterType<ScheduleForecastSkillReadModelRepository>().As<IScheduleForecastSkillReadModelRepository>().SingleInstance();
 		}
 	}
 }

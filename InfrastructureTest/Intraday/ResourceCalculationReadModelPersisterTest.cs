@@ -1,11 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Intraday;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Intraday
@@ -14,7 +19,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 	[UnitOfWorkTest]
 	public class ResourceCalculationReadModelPersisterTest
 	{
-		public IScheduleForecastSkillReadModelPersister Target { get; set; }
+		public IScheduleForecastSkillReadModelRepository Target { get; set; }
+		public ISkillRepository SkillRepository;
 
 		[Test]
 		public void ShouldPersist()
@@ -31,16 +37,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 							new SkillStaffingInterval()
 							{
 								StaffingLevel = 10,
-								EndDateTime = new DateTime(2016, 06, 16,02,15,0),
+								EndDateTime = new DateTime(2016, 06, 16, 02, 15, 0,DateTimeKind.Utc),
 								Forecast = 20,
-								StartDateTime = new DateTime(2016, 06, 16,02,15,0)
+								StartDateTime = new DateTime(2016, 06, 16, 02, 0, 0,DateTimeKind.Utc)
+							},
+							new SkillStaffingInterval()
+							{
+								StaffingLevel = 10,
+								EndDateTime = new DateTime(2016, 06, 17, 0, 15, 0,DateTimeKind.Utc),
+								Forecast = 20,
+								StartDateTime = new DateTime(2016, 06, 17, 0, 0, 0,DateTimeKind.Utc)
 							}
 						}
 				}
 			};
-			Target.Persist(items, new DateOnly(2016,06,16));
+			Target.Persist(items, new DateOnly(2016, 06, 16));
 
-			Target.GetBySkill(skillId, new DateOnly(2016, 06, 16)).Count().Should().Be.EqualTo(1);
+			Target.GetBySkill(skillId,new DateTime(2016, 06, 16, 0, 0, 0), new DateTime(2016, 06, 16, 23, 59, 59))
+				.Count()
+				.Should()
+				.Be.EqualTo(1);
 
 		}
 
