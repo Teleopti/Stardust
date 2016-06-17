@@ -135,6 +135,58 @@ function CopyFileFromBlobStorage {
     }
 }
 
+function GetAppLock {
+	Param(
+		[System.Data.SqlClient.SqlConnection] $Connection,
+        [string] $LockResource
+	)
+	log-info "Getting distributed lock $LockResource"
+	$cmd = New-Object System.Data.SqlClient.SqlCommand
+    $cmd.Connection = $connection
+	$cmd.CommandText = "sp_getapplock"
+    $cmd.CommandType = [System.Data.CommandType]::StoredProcedure;
+	$cmd.Parameters.AddWithValue("@Resource", $LockResource) | Out-Null
+	$cmd.Parameters.AddWithValue("@LockMode", "Exclusive") | Out-Null
+	$cmd.Parameters.AddWithValue("@LockOwner", "Session") | Out-Null
+	$cmd.Parameters.AddWithValue("@LockTimeout", 0) | Out-Null
+	$cmd.Parameters.AddWithValue("@DbPrincipal", "public") | Out-Null
+
+    $outParameter = new-object System.Data.SqlClient.SqlParameter;
+    $outParameter.ParameterName = "@Result";
+    $outParameter.Direction = [System.Data.ParameterDirection]::ReturnValue
+    $outParameter.DbType = [System.Data.SqlDbType]::Int;
+    $cmd.Parameters.Add($outParameter) | Out-Null
+
+    $affectedRows = $cmd.ExecuteNonQuery();
+    $result = [int]$cmd.Parameters["@Result"].Value;
+    log-info "Getting distributed lock result $result"
+    return $result -eq 0;
+}
+
+function ReleaseAppLock {
+	Param(
+		[System.Data.SqlClient.SqlConnection] $Connection,
+        [string] $LockResource
+	)
+    log-info "Releasing distributed lock $LockResource"
+	$cmd = New-Object System.Data.SqlClient.SqlCommand
+    $cmd.Connection = $connection
+	$cmd.CommandText = "sp_releaseapplock"
+    $cmd.CommandType = [System.Data.CommandType]::StoredProcedure;
+	$cmd.Parameters.AddWithValue("@Resource", $LockResource) | Out-Null
+	$cmd.Parameters.AddWithValue("@LockOwner", "Session") | Out-Null
+
+    $outParameter = new-object System.Data.SqlClient.SqlParameter;
+    $outParameter.ParameterName = "@Result";
+    $outParameter.Direction = [System.Data.ParameterDirection]::ReturnValue;
+    $outParameter.DbType = [System.Data.SqlDbType]::Int;
+    $cmd.Parameters.Add($outParameter) | Out-Null
+
+    $affectedRows = $cmd.ExecuteNonQuery();
+    $result = [int]$cmd.Parameters["@Result"].Value;
+    log-info "Releasing lock result $result"
+}
+
 ##===========
 ## Main
 ##===========
@@ -262,10 +314,20 @@ Try
     $con.open()
     log-info "opened " $con.ConnectionString 
 
+	# Getting distributed lock to make sure no one else is updating the databases as well.
+	$lockResource = "AzurePatchDatabaseLock"
+	$gotLock = GetAppLock -Connection $con -LockResource $lockResource
+	if ($gotLock -eq $false)
+	{
+		log-info "Another process had the distributed lock for patching the database. Exiting this process."
+		return;
+	}
+
     # Create SqlCommand object, define command text, and set the connection
     $cmd = New-Object System.Data.SqlClient.SqlCommand
     $cmd.Connection = $con
 
+ 
     $cmd.CommandText = "UPDATE Tenant.Tenant SET ApplicationConnectionString = REPLACE(ApplicationConnectionString, 'Data Source=', 'Data Source=tcp:') WHERE ApplicationConnectionString NOT LIKE 'Data Source=tcp:%'"
     $rowsAffected = $cmd.ExecuteNonQuery()
 
@@ -322,6 +384,10 @@ Try
         &"$command" $SECSQLServer $SECappDb $SECanalDb $SECloggDb $CONNSTRINGBASE $SECPATCHUSER $SECPATCHPWD
       }
     }
+	
+	# Releasing distributed lock
+	ReleaseAppLock -Connection $con -LockResource $lockResource
+	
 # Close the data reader and the connection
 $dr.Close()
 $con.Close()
