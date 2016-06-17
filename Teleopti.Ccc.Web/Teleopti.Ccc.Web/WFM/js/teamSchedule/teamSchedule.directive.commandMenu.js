@@ -98,7 +98,7 @@
 		];
 
 		vm.canBackout = function () {
-			return personSelectionSvc.isAnyAgentSelected();
+			return personSelectionSvc.anyAgentChecked();
 		};
 
 		vm.canActiveBackoutCmd = function () {
