@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 			if (!cascadingSkills.Any())
 				return;
 
-			var defaultResolution = cascadingSkills.First().DefaultResolution; //strange but cascading skills must have same resolution. also should check that cascading skills exists);
+			var defaultResolution = cascadingSkills.First().DefaultResolution; //strange but cascading skills must have same resolution.
 			var activities = cascadingSkills.AffectedActivities().ToArray();
 
 			using (ResourceCalculationCurrent.PreserveContext())

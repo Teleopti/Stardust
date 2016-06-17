@@ -34,12 +34,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var schedulerStateHolder = _schedulerStateHolder();
 			var createResources = new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() =>
 			{
-				var minutesPerInterval = 15;
-
-				if (schedulerStateHolder.SchedulingResultState.Skills.Any())
-				{
-					minutesPerInterval = schedulerStateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution);
-				}
+				var minutesPerInterval = schedulerStateHolder.SchedulingResultState.Skills.Any() ? 
+					schedulerStateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution) 
+					: 15;
 				var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), minutesPerInterval);
 				return period.HasValue ? 
 					extractor.CreateRelevantProjectionList(schedulerStateHolder.Schedules, period.Value.ToDateTimePeriod(_timeZoneGuard.CurrentTimeZone())) : 
