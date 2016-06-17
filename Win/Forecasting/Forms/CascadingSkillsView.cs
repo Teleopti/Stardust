@@ -36,6 +36,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			listBoxNonCascading.DisplayMember = "Name";
 			listBoxCascading.DataSource = _bindingSourceCascading;
 			listBoxCascading.DrawMode = DrawMode.OwnerDrawFixed;
+
+			tableLayoutPanel5.Visible = false; //chicken
 		}
 
 		private void buttonAdvMoveUpClick(object sender, EventArgs e)

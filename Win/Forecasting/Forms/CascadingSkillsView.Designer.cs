@@ -39,13 +39,13 @@
 			this.buttonAdvMakeNonCascading = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonAdvMakeCascading = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
-			this.buttonAdvMoveDown = new Syncfusion.Windows.Forms.ButtonAdv();
+			this.buttonAdvEqual = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonAdvMoveUp = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.labelCascadingSkills = new System.Windows.Forms.Label();
 			this.labelNonCascadingSkills = new System.Windows.Forms.Label();
 			this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
-			this.buttonAdvEqual = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonAdvUnEqual = new Syncfusion.Windows.Forms.ButtonAdv();
+			this.buttonAdvMoveDown = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
@@ -214,8 +214,8 @@
 			this.tableLayoutPanel4.ColumnCount = 2;
 			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel4.Controls.Add(this.buttonAdvEqual, 0, 0);
 			this.tableLayoutPanel4.Controls.Add(this.buttonAdvMoveUp, 0, 0);
+			this.tableLayoutPanel4.Controls.Add(this.buttonAdvMoveDown, 1, 0);
 			this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 621);
 			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
 			this.tableLayoutPanel4.RowCount = 1;
@@ -223,22 +223,22 @@
 			this.tableLayoutPanel4.Size = new System.Drawing.Size(315, 39);
 			this.tableLayoutPanel4.TabIndex = 7;
 			// 
-			// buttonAdvMoveDown
+			// buttonAdvEqual
 			// 
-			this.buttonAdvMoveDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-			this.buttonAdvMoveDown.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.buttonAdvMoveDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.buttonAdvMoveDown.BeforeTouchSize = new System.Drawing.Size(87, 24);
-			this.buttonAdvMoveDown.ForeColor = System.Drawing.Color.White;
-			this.buttonAdvMoveDown.IsBackStageButton = false;
-			this.buttonAdvMoveDown.Location = new System.Drawing.Point(31, 3);
-			this.buttonAdvMoveDown.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
-			this.buttonAdvMoveDown.Name = "buttonAdvMoveDown";
-			this.buttonAdvMoveDown.Size = new System.Drawing.Size(87, 24);
-			this.buttonAdvMoveDown.TabIndex = 8;
-			this.buttonAdvMoveDown.Text = "xxMoveDown";
-			this.buttonAdvMoveDown.UseVisualStyle = true;
-			this.buttonAdvMoveDown.Click += new System.EventHandler(this.buttonAdvMoveDownClick);
+			this.buttonAdvEqual.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+			this.buttonAdvEqual.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonAdvEqual.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonAdvEqual.BeforeTouchSize = new System.Drawing.Size(87, 24);
+			this.buttonAdvEqual.ForeColor = System.Drawing.Color.White;
+			this.buttonAdvEqual.IsBackStageButton = false;
+			this.buttonAdvEqual.Location = new System.Drawing.Point(31, 3);
+			this.buttonAdvEqual.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
+			this.buttonAdvEqual.Name = "buttonAdvEqual";
+			this.buttonAdvEqual.Size = new System.Drawing.Size(87, 24);
+			this.buttonAdvEqual.TabIndex = 8;
+			this.buttonAdvEqual.Text = "Equal";
+			this.buttonAdvEqual.UseVisualStyle = true;
+			this.buttonAdvEqual.Click += new System.EventHandler(this.buttonAdvEqualClick);
 			// 
 			// buttonAdvMoveUp
 			// 
@@ -282,31 +282,14 @@
 			this.tableLayoutPanel5.ColumnCount = 2;
 			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanel5.Controls.Add(this.buttonAdvEqual, 0, 0);
 			this.tableLayoutPanel5.Controls.Add(this.buttonAdvUnEqual, 1, 0);
-			this.tableLayoutPanel5.Controls.Add(this.buttonAdvMoveDown, 0, 0);
 			this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 666);
 			this.tableLayoutPanel5.Name = "tableLayoutPanel5";
 			this.tableLayoutPanel5.RowCount = 1;
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel5.Size = new System.Drawing.Size(315, 37);
 			this.tableLayoutPanel5.TabIndex = 10;
-			// 
-			// buttonAdvEqual
-			// 
-			this.buttonAdvEqual.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-			this.buttonAdvEqual.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
-			this.buttonAdvEqual.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
-			this.buttonAdvEqual.BeforeTouchSize = new System.Drawing.Size(87, 26);
-			this.buttonAdvEqual.ForeColor = System.Drawing.Color.White;
-			this.buttonAdvEqual.IsBackStageButton = false;
-			this.buttonAdvEqual.Location = new System.Drawing.Point(189, 3);
-			this.buttonAdvEqual.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
-			this.buttonAdvEqual.Name = "buttonAdvEqual";
-			this.buttonAdvEqual.Size = new System.Drawing.Size(87, 26);
-			this.buttonAdvEqual.TabIndex = 8;
-			this.buttonAdvEqual.Text = "Equal";
-			this.buttonAdvEqual.UseVisualStyle = true;
-			this.buttonAdvEqual.Click += new System.EventHandler(this.buttonAdvEqualClick);
 			// 
 			// buttonAdvUnEqual
 			// 
@@ -324,6 +307,23 @@
 			this.buttonAdvUnEqual.Text = "Unequal";
 			this.buttonAdvUnEqual.UseVisualStyle = true;
 			this.buttonAdvUnEqual.Click += new System.EventHandler(this.buttonAdvUnEqualClick);
+			// 
+			// buttonAdvMoveDown
+			// 
+			this.buttonAdvMoveDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+			this.buttonAdvMoveDown.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Metro;
+			this.buttonAdvMoveDown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
+			this.buttonAdvMoveDown.BeforeTouchSize = new System.Drawing.Size(87, 26);
+			this.buttonAdvMoveDown.ForeColor = System.Drawing.Color.White;
+			this.buttonAdvMoveDown.IsBackStageButton = false;
+			this.buttonAdvMoveDown.Location = new System.Drawing.Point(189, 3);
+			this.buttonAdvMoveDown.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
+			this.buttonAdvMoveDown.Name = "buttonAdvMoveDown";
+			this.buttonAdvMoveDown.Size = new System.Drawing.Size(87, 26);
+			this.buttonAdvMoveDown.TabIndex = 8;
+			this.buttonAdvMoveDown.Text = "xxMoveDown";
+			this.buttonAdvMoveDown.UseVisualStyle = true;
+			this.buttonAdvMoveDown.Click += new System.EventHandler(this.buttonAdvMoveDownClick);
 			// 
 			// CascadingSkillsView
 			// 
