@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private readonly CascadingSkillPresenter _presenter;
 		private BindingSource _bindingSourceNonCascading;
 		private BindingSource _bindingSourceCascading;
+		private int _cascadingItemMaxLength = 0;
 
 		public CascadingSkillsView(CascadingSkillPresenter presenter)
 		{
@@ -120,6 +121,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				{
 					e.Graphics.FillRectangle(backgroundBrush, e.Bounds);
 					var outputText = string.Join(", ", ((IList<ISkill>)listBoxCascading.Items[e.Index]).Select(x => x.Name));
+					_cascadingItemMaxLength = Math.Max(_cascadingItemMaxLength, TextRenderer.MeasureText(outputText, e.Font).Width);
+					listBoxCascading.HorizontalExtent = _cascadingItemMaxLength + 10;
 					e.Graphics.DrawString(outputText, e.Font, textBrush, e.Bounds, StringFormat.GenericDefault);
 				}
 			}

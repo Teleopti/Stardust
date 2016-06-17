@@ -133,6 +133,7 @@
 			// 
 			this.listBoxCascading.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listBoxCascading.FormattingEnabled = true;
+			this.listBoxCascading.HorizontalScrollbar = true;
 			this.listBoxCascading.ItemHeight = 15;
 			this.listBoxCascading.Location = new System.Drawing.Point(3, 33);
 			this.listBoxCascading.Name = "listBoxCascading";
