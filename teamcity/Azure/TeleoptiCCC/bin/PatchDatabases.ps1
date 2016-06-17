@@ -154,7 +154,7 @@ function GetAppLock {
     $outParameter = new-object System.Data.SqlClient.SqlParameter;
     $outParameter.ParameterName = "@Result";
     $outParameter.Direction = [System.Data.ParameterDirection]::ReturnValue
-    $outParameter.DbType = [System.Data.SqlDbType]::Int;
+    $outParameter.DbType = [System.Data.DbType]::Int32;
     $cmd.Parameters.Add($outParameter) | Out-Null
 
     $affectedRows = $cmd.ExecuteNonQuery();
@@ -179,7 +179,7 @@ function ReleaseAppLock {
     $outParameter = new-object System.Data.SqlClient.SqlParameter;
     $outParameter.ParameterName = "@Result";
     $outParameter.Direction = [System.Data.ParameterDirection]::ReturnValue;
-    $outParameter.DbType = [System.Data.SqlDbType]::Int;
+    $outParameter.DbType = [System.Data.DbType]::Int32;
     $cmd.Parameters.Add($outParameter) | Out-Null
 
     $affectedRows = $cmd.ExecuteNonQuery();
@@ -385,12 +385,14 @@ Try
       }
     }
 	
-	# Releasing distributed lock
+    # Close the data reader 
+    $dr.Close()
+	
+    # Releasing distributed lock
 	ReleaseAppLock -Connection $con -LockResource $lockResource
 	
-# Close the data reader and the connection
-$dr.Close()
-$con.Close()
+    # Close the connection
+    $con.Close()
 }
 Catch [Exception]
 {
