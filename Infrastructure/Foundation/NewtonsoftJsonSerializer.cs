@@ -21,7 +21,9 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 		public T DeserializeObject<T>(string value)
 		{
-			return JsonConvert.DeserializeObject<T>(value);
+			return value == null ? 
+				default(T) : 
+				JsonConvert.DeserializeObject<T>(value);
 		}
 
 		public object DeserializeObject(string value, Type type)

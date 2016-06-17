@@ -50,17 +50,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		}
 
 
-		public IList<AgentStateReadModel> Load(IEnumerable<IPerson> persons)
+		public IEnumerable<AgentStateReadModel> Load(IEnumerable<IPerson> persons)
 		{
 			throw new NotImplementedException();
 		}
 
-		public IList<AgentStateReadModel> Load(IEnumerable<Guid> personIds)
+		public IEnumerable<AgentStateReadModel> Load(IEnumerable<Guid> personIds)
 		{
 			throw new NotImplementedException();
 		}
 		
-		public IList<AgentStateReadModel> LoadForTeam(Guid teamId)
+		public IEnumerable<AgentStateReadModel> LoadForTeam(Guid teamId)
 		{
 			return _data.Values.Where(x => x.TeamId == teamId).ToArray();
 		}

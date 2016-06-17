@@ -6,7 +6,10 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Interfaces;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
@@ -18,6 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public IAgentStateReadModelReader Target;
 		public IAgentStateReadModelPersister Persister;
 		public MutableNow Now;
+		public ICurrentUnitOfWork UnitOfWork;
 
 		[Test]
 		public void ShouldLoadAgentStateByTeamId()
@@ -45,7 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 			var result = Target.LoadForTeam(teamId);
 
-			result.Count.Should().Be(2);
+			result.Count().Should().Be(2);
 		}
 
 		[Test]
@@ -250,6 +254,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				.OutOfAdherences.Single();
 			outOfAdherence.StartTime.Should().Be("2016-06-16 08:00".Utc());
 			outOfAdherence.EndTime.Should().Be("2016-06-16 08:10".Utc());
+		}
+
+		[Test]
+		public void ShouldLoadNullJsonValues()
+		{
+			var teamId = Guid.NewGuid();
+			var personId = Guid.NewGuid();
+			Persister.Persist(new AgentStateReadModelForTest
+			{
+				TeamId = teamId,
+				PersonId = personId,
+			});
+			UnitOfWork.Current().FetchSession()
+				.CreateSQLQuery("UPDATE [ReadModel].[AgentState] SET Shift = NULL, OutOfAdherences = NULL")
+				.ExecuteUpdate();
+
+			Assert.DoesNotThrow(() => Target.LoadForTeam(teamId));
 		}
 
 	}

@@ -15,11 +15,13 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly IJsonSerializer _serializer;
+		private readonly IJsonDeserializer _deserializer;
 
-		public AgentStateReadModelPersister(ICurrentUnitOfWork unitOfWork, IJsonSerializer serializer)
+		public AgentStateReadModelPersister(ICurrentUnitOfWork unitOfWork, IJsonSerializer serializer, IJsonDeserializer deserializer)
 		{
 			_unitOfWork = unitOfWork;
 			_serializer = serializer;
+			_deserializer = deserializer;
 		}
 
 		[InfoLog]
@@ -165,21 +167,22 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.SetParameter("PersonId", personId)
 				.SetResultTransformer(Transformers.AliasToBean(typeof (internalModel)))
 				.SetReadOnly(true)
-				.List<AgentStateReadModel>()
+				.List<internalModel>()
+				.Select(x =>
+				{
+					(x as AgentStateReadModel).Shift = _deserializer.DeserializeObject<AgentStateActivityReadModel[]>(x.Shift);
+					x.Shift = null;
+					(x as AgentStateReadModel).OutOfAdherences = _deserializer.DeserializeObject<AgentStateOutOfAdherenceReadModel[]>(x.OutOfAdherences);
+					x.OutOfAdherences = null;
+					return x;
+				})
 				.FirstOrDefault();
 		}
 
 		private class internalModel : AgentStateReadModel
 		{
-			public new string Shift
-			{
-				set { base.Shift = JsonConvert.DeserializeObject<IEnumerable<AgentStateActivityReadModel>>(value); }
-			}
-
-			public new string OutOfAdherences
-			{
-				set { base.OutOfAdherences = JsonConvert.DeserializeObject<IEnumerable<AgentStateOutOfAdherenceReadModel>>(value); }
-			}
+			public new string Shift { get; set; }
+			public new string OutOfAdherences{ get; set; }
 		}
 	}
 }
