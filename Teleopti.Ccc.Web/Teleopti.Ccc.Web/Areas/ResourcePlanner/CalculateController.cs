@@ -4,6 +4,7 @@ using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -13,14 +14,23 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 	{
 		private readonly IEventPublisher _publisher;
 		private readonly ILoggedOnUser _loggedOnUser;
-		private IPersonRepository _personRepository;
+		private readonly IPersonRepository _personRepository;
+		private readonly IScheduleForecastSkillReadModelPersister _readModelPersister;
 
-		public CalculateController(IEventPublisher publisher, ILoggedOnUser loggedOnUser, IPersonRepository personRepository)
+		public CalculateController(IEventPublisher publisher, ILoggedOnUser loggedOnUser, IPersonRepository personRepository,
+			IScheduleForecastSkillReadModelPersister readModelPersister)
 		{
 			_publisher = publisher;
 			_loggedOnUser = loggedOnUser;
 			_personRepository = personRepository;
+			_readModelPersister = readModelPersister;
+		}
+
+		[UnitOfWork, HttpGet, Route("ResourceCalculate")]
 		public virtual IHttpActionResult ResourceCalculate(DateTime date, Guid skillId)
+		{
+			var intervals = _readModelPersister.GetBySkill(skillId, new DateOnly(date));
+			return Json(intervals);
 		}
 
 		[UnitOfWork, HttpGet, Route("TriggerResourceCalculate")]
