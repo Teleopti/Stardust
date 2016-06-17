@@ -371,7 +371,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var extractor = GetExtractorForAbsence(absenceRequest.Absence);
 			extractor.ViewpointDate = DateOnly.Today;
 
-			var openPeriods = extractor.Projection.GetProjectedPeriods(dateOnlyPeriod, absenceRequest.Person.PermissionInformation.Culture());
+			var openPeriods = extractor.Projection.GetProjectedPeriods(dateOnlyPeriod, absenceRequest.Person.PermissionInformation.Culture(), absenceRequest.Person.PermissionInformation.UICulture());
 			return new AbsenceRequestOpenPeriodMerger().Merge(openPeriods);
 		}
 	}

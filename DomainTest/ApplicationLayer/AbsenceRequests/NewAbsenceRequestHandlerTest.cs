@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_workflowControlSet.Stub(x => x.GetExtractorForAbsence(_absence)).Return(openAbsenceRequestPeriodExtractor);
 			openAbsenceRequestPeriodExtractor.Stub(x => x.Projection).Return(openAbsenceRequestPeriodProjection);
 			openAbsenceRequestPeriodProjection.Stub(
-				x => x.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture()))
+				x => x.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture(), _person.PermissionInformation.UICulture()))
 											  .IgnoreArguments()
 											  .Return(periodList);
 			absenceRequestOpenDatePeriod.Stub(x => x.AbsenceRequestProcess).Return(processAbsenceRequest);
@@ -250,7 +250,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_workflowControlSet.Stub(x => x.GetExtractorForAbsence(_absence)).Return(openAbsenceRequestPeriodExtractor);
 			openAbsenceRequestPeriodExtractor.Stub(x => x.Projection).Return(openAbsenceRequestPeriodProjection);
 			openAbsenceRequestPeriodProjection.Stub(
-				x => x.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture()))
+				x => x.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture(), _person.PermissionInformation.UICulture()))
 											  .IgnoreArguments()
 											  .Return(periodList);
 			absenceRequestOpenDatePeriod.Stub(x => x.AbsenceRequestProcess).Return(processAbsenceRequest);
@@ -292,7 +292,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_workflowControlSet.Stub(x => x.GetMergedAbsenceRequestOpenPeriod(_absenceRequest)).Return(absenceRequestOpenDatePeriod);
 			_workflowControlSet.Stub(x => x.GetExtractorForAbsence(_absence)).Return(openAbsenceRequestPeriodExtractor);
 			openAbsenceRequestPeriodExtractor.Stub(x => x.Projection).Return(openAbsenceRequestPeriodProjection);
-			openAbsenceRequestPeriodProjection.Stub(x => x.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture())).IgnoreArguments().Return(periodList);
+			openAbsenceRequestPeriodProjection.Stub(x => x.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture(), _person.PermissionInformation.UICulture())).IgnoreArguments().Return(periodList);
 			absenceRequestOpenDatePeriod.Stub(x => x.AbsenceRequestProcess).Return(processAbsenceRequest);
 			absenceRequestOpenDatePeriod.Stub(x => x.GetSelectedValidatorList()).Return(validatorList);
 			_factory.Stub(x => x.GetRequestApprovalService(null, _scenario, _schedulingResultStateHolder)).IgnoreArguments().Return(_requestApprovalService);
@@ -328,7 +328,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_workflowControlSet.Stub(x => x.GetMergedAbsenceRequestOpenPeriod(_absenceRequest)).Return(absenceRequestOpenDatePeriod);
 			_workflowControlSet.Stub(x => x.GetExtractorForAbsence(_absence)).Return(openAbsenceRequestPeriodExtractor);
 			openAbsenceRequestPeriodExtractor.Stub(x => x.Projection).Return(openAbsenceRequestPeriodProjection);
-			openAbsenceRequestPeriodProjection.Stub(x => x.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture())).IgnoreArguments().Return(periodList);
+			openAbsenceRequestPeriodProjection.Stub(x => x.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture(), _person.PermissionInformation.UICulture())).IgnoreArguments().Return(periodList);
 			absenceRequestOpenDatePeriod.Stub(x => x.AbsenceRequestProcess).Return(processAbsenceRequest);
 			absenceRequestOpenDatePeriod.Stub(x => x.GetSelectedValidatorList()).Return(validatorList);
 			_factory.Stub(x => x.GetRequestApprovalService(null, _scenario, _schedulingResultStateHolder)).IgnoreArguments().Return(_requestApprovalService);
@@ -362,7 +362,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_workflowControlSet.Stub(x => x.GetMergedAbsenceRequestOpenPeriod(_absenceRequest)).Return(absenceRequestOpenDatePeriod);
 			_workflowControlSet.Stub(x => x.GetExtractorForAbsence(_absence)).Return(openAbsenceRequestPeriodExtractor);
 			openAbsenceRequestPeriodExtractor.Stub(x => x.Projection).Return(openAbsenceRequestPeriodProjection);
-			openAbsenceRequestPeriodProjection.Stub(x => x.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture())).IgnoreArguments().Return(periodList);
+			openAbsenceRequestPeriodProjection.Stub(x => x.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture(), _person.PermissionInformation.UICulture())).IgnoreArguments().Return(periodList);
 			absenceRequestOpenDatePeriod.Stub(x => x.AbsenceRequestProcess).Return(processAbsenceRequest);
 			absenceRequestOpenDatePeriod.Stub(x => x.GetSelectedValidatorList()).Return(validatorList);
 			_factory.Stub(x => x.GetRequestApprovalService(null, _scenario, _schedulingResultStateHolder)).IgnoreArguments().Return(_requestApprovalService);
@@ -394,7 +394,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_workflowControlSet.Stub(x => x.GetExtractorForAbsence(_absence)).Return(openAbsenceRequestPeriodExtractor);
 			openAbsenceRequestPeriodExtractor.Stub(x => x.Projection).Return(openAbsenceRequestPeriodProjection);
 			openAbsenceRequestPeriodProjection.Stub(
-				x => x.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture()))
+				x => x.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture(), _person.PermissionInformation.UICulture()))
 											  .IgnoreArguments()
 											  .Return(periodList);
 			_workflowControlSet.Stub(x => x.GetMergedAbsenceRequestOpenPeriod(_absenceRequest)).Return(absenceRequestOpenDatePeriod);
@@ -448,7 +448,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_workflowControlSet.Stub(x => x.GetExtractorForAbsence(_absence)).Return(openAbsenceRequestPeriodExtractor);
 			openAbsenceRequestPeriodExtractor.Stub(x => x.Projection).Return(openAbsenceRequestPeriodProjection);
 			openAbsenceRequestPeriodProjection.Stub(
-				x => x.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture()))
+				x => x.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture(), _person.PermissionInformation.UICulture()))
 											  .IgnoreArguments()
 											  .Return(periodList);
 			absenceRequestOpenDatePeriod.Stub(x => x.AbsenceRequestProcess).Return(processAbsenceRequest);
@@ -505,7 +505,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_workflowControlSet.Stub(x => x.GetMergedAbsenceRequestOpenPeriod(_absenceRequest)).Return(absenceRequestOpenDatePeriod);
 			_workflowControlSet.Stub(x => x.GetExtractorForAbsence(_absence)).Return(openAbsenceRequestPeriodExtractor);
 			openAbsenceRequestPeriodExtractor.Stub(x => x.Projection).Return(openAbsenceRequestPeriodProjection);
-			openAbsenceRequestPeriodProjection.Stub(x => x.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture())).IgnoreArguments().Return(periodList);
+			openAbsenceRequestPeriodProjection.Stub(x => x.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture(), _person.PermissionInformation.UICulture())).IgnoreArguments().Return(periodList);
 			absenceRequestOpenDatePeriod.Stub(x => x.AbsenceRequestProcess).Return(processAbsenceRequest);
 			absenceRequestOpenDatePeriod.Stub(x => x.GetSelectedValidatorList()).Return(validatorList);
 			_factory.Stub(x => x.GetRequestApprovalService(null, _scenario, _schedulingResultStateHolder)).IgnoreArguments().Return(_requestApprovalService);

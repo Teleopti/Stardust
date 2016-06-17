@@ -598,7 +598,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			extractor.ViewpointDate = new DateOnly(dateTimePickerAdvViewpoint.Value);
 			e.Style.CellType = "Control";
 
-			var layers = extractor.Projection.GetProjectedPeriods(_presenter.ProjectionPeriod,CultureInfo.InvariantCulture).OfType<AbsenceRequestOpenDatePeriod>();
+			var layers = extractor.Projection.GetProjectedPeriods(_presenter.ProjectionPeriod,CultureInfo.InvariantCulture, CultureInfo.InvariantCulture).OfType<AbsenceRequestOpenDatePeriod>();
 			MonthlyProjectionVisualiser visualiser;
 			if (!_projectionCache.TryGetValue(absence, out visualiser))
 			{

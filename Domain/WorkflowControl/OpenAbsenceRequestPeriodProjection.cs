@@ -11,16 +11,18 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private readonly IOpenAbsenceRequestPeriodExtractor _openAbsenceRequestPeriodExtractor;
 
 		private IList<DateOnlyPeriodWithAbsenceRequestPeriod> _layerCollectionOriginal;
-		private CultureInfo _cultureInfo;
+		private CultureInfo _dateCultureInfo;
+		private CultureInfo _languageCultureInfo;
 
 		public OpenAbsenceRequestPeriodProjection(IOpenAbsenceRequestPeriodExtractor openAbsenceRequestPeriodExtractor)
 		{
 			_openAbsenceRequestPeriodExtractor = openAbsenceRequestPeriodExtractor;
 		}
 
-		public IList<IAbsenceRequestOpenPeriod> GetProjectedPeriods(DateOnlyPeriod limitToPeriod, CultureInfo personCulture)
+		public IList<IAbsenceRequestOpenPeriod> GetProjectedPeriods(DateOnlyPeriod limitToPeriod, CultureInfo date, CultureInfo language)
 		{
-			_cultureInfo = personCulture;
+			_dateCultureInfo = date;
+			_languageCultureInfo = language;
 
 			IList<IAbsenceRequestOpenPeriod> workingColl = new List<IAbsenceRequestOpenPeriod>();
 
@@ -75,7 +77,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private void AddBottomLayer(DateOnlyPeriod limitToPeriod)
 		{
 
-			var denyReason = UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonClosedPeriod", _cultureInfo);
+			var denyReason = UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonClosedPeriod", _languageCultureInfo);
 		
 			foreach (var absenceRequestOpenPeriod in _openAbsenceRequestPeriodExtractor.AllPeriods)
 			{
@@ -123,10 +125,10 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 			if (isPeriodOpensLater(absenceRequestOpenPeriod) && isNextOpenPeriod(absenceRequestOpenPeriod))
 			{
-				denyReason = string.Format(_cultureInfo,
+				denyReason = string.Format(_languageCultureInfo,
 				                           UserTexts.Resources.ResourceManager.GetString(
-					                           "RequestDenyReasonPeriodOpenAfterSendRequest", _cultureInfo),
-				                           absenceRequestOpenPeriod.OpenForRequestsPeriod.StartDate.ToShortDateString(_cultureInfo));
+					                           "RequestDenyReasonPeriodOpenAfterSendRequest", _languageCultureInfo),
+				                           absenceRequestOpenPeriod.OpenForRequestsPeriod.StartDate.ToShortDateString(_dateCultureInfo));
 			}
 			return denyReason;
 		}
@@ -175,9 +177,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 			if (isPeriodOutside(requestPeriod, absenceRequestOpenPeriod) && isNextPeriod(absenceRequestOpenPeriod))
 			{
-				denyReason = string.Format(_cultureInfo,
-				                           UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonNoPeriod", _cultureInfo),
-				                           period.ToShortDateString(_cultureInfo));
+				denyReason = string.Format(_languageCultureInfo,
+				                           UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonNoPeriod", _languageCultureInfo),
+				                           period.ToShortDateString(_dateCultureInfo));
 			}
 			return denyReason;
 		}
