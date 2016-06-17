@@ -202,7 +202,7 @@ describe('RtaAgentsCtrl for sites', function() {
 		expect(scope.filteredData[0].Name).toEqual("Ashley Andeen");
 	});
 
-	it('should stop polling when page is about to destroy', function() {
+	xit('should stop polling when page is about to destroy', function() {
 		stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c", "6a21c802-7a34-4917-8dfd-9b5e015ab461"];
 		$fakeBackend.withAgent({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",

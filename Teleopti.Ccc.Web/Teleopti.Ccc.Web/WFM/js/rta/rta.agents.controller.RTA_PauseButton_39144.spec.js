@@ -1,5 +1,5 @@
 'use strict';
-fdescribe('RtaAgentsCtrlPauseButton_39144', function() {
+describe('RtaAgentsCtrlPauseButton_39144', function() {
 	var $interval,
 		$httpBackend,
 		$state,

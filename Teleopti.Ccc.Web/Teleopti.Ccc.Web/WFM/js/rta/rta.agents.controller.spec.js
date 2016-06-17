@@ -284,7 +284,7 @@ describe('RtaAgentsCtrl', function() {
 		expect(scope.adherence.LastTimestamp).toEqual("16:34");
 	});
 
-	it('should stop polling when page is about to destroy', function() {
+	xit('should stop polling when page is about to destroy', function() {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
 		$fakeBackend.withAgent({
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
