@@ -6,5 +6,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		void Persist(AgentStateReadModel model);
 		void Delete(Guid personId);
+		AgentStateReadModel Get(Guid personId);
 	}
 }

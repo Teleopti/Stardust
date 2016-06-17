@@ -10,7 +10,7 @@ using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
-    [TestFixture]
+	[TestFixture]
 	[RtaTest]
 	public class UpdateAgentStateReadModelShiftTest
 	{

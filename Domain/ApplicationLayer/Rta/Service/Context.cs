@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -63,7 +66,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_appliedAlarm = appliedAlarm;
 
 			Schedule = new ScheduleInfo(scheduleLazy, _stored, CurrentTime);
-			State = new StateRuleInfo(mappingsState, _stored, stateCode, platformTypeId, businessUnitId, Input, Schedule, stateMapper);
+			State = new StateRuleInfo(mappingsState, _stored, StateCode, PlatformTypeId, businessUnitId, Input, Schedule, stateMapper);
 			Adherence = new AdherenceInfo(Input, _stored, mappingsState, businessUnitId, State, Schedule, appliedAdherence, stateMapper);
 		}
 
@@ -82,7 +85,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public bool ShouldProcessState()
 		{
 			return
-				!batchId.Equals(Stored.BatchId()) ||
+				!BatchId.Equals(Stored.BatchId()) ||
 				!Schedule.CurrentActivityId().Equals(Stored.ActivityId()) ||
 				!Schedule.NextActivityId().Equals(Stored.NextActivityId()) ||
 				!Schedule.NextActivityStartTime().Equals(Stored.NextActivityStartTime()) ||
@@ -104,37 +107,37 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				PersonId, BusinessUnitId, TeamId, SiteId);
 		}
 
-		private DateTime? batchId
+		public DateTime? BatchId
 		{
 			get { return Input.IsSnapshot ? Input.BatchId : Stored.BatchId(); }
 		}
 
-		private Guid platformTypeId
+		public Guid PlatformTypeId
 		{
 			get { return string.IsNullOrEmpty(Input.PlatformTypeId) ? Stored.PlatformTypeId() : Input.ParsedPlatformTypeId(); }
 		}
 
-	    private string stateCode
+		public string StateCode
 	    {
 	        get { return Input.StateCode ?? Stored.StateCode(); }
 	    }
 
-	    private DateTime? stateStartTime
+		public DateTime? StateStartTime
 	    {
 	        get { return State.StateGroupChanged() ? CurrentTime : Stored.StateStartTime; }
 	    }
 
-	    private DateTime? ruleStartTime
+		public DateTime? RuleStartTime
 	    {
 		    get { return State.HasRuleChanged() ? CurrentTime : Stored.RuleStartTime; }
 	    }
 
-		private bool isAlarm
+		public bool IsAlarm
 		{
 			get { return _appliedAlarm.IsAlarm(State); }
 		}
 
-		private DateTime? alarmStartTime
+		public DateTime? AlarmStartTime
 		{
 		    get { return _appliedAlarm.StartTime(State, Stored, CurrentTime); }
 		}
@@ -147,69 +150,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				BusinessUnitId = BusinessUnitId,
 				SiteId = SiteId,
 				TeamId = TeamId,
-				BatchId = batchId,
+				BatchId = BatchId,
 
-				PlatformTypeId = platformTypeId,
+				PlatformTypeId = PlatformTypeId,
 				SourceId = Input.SourceId ?? Stored.SourceId(),
 				ReceivedTime = CurrentTime,
 
-				StateCode = stateCode,
+				StateCode = StateCode,
 				StateGroupId = State.StateGroupId(),
-				StateStartTime = stateStartTime,
+				StateStartTime = StateStartTime,
 
 				ActivityId = Schedule.CurrentActivityId(),
 				NextActivityId = Schedule.NextActivityId(),
 				NextActivityStartTime = Schedule.NextActivityStartTime(),
 
 				RuleId = State.RuleId(),
-				RuleStartTime = ruleStartTime,
+				RuleStartTime = RuleStartTime,
 				StaffingEffect = State.StaffingEffect(),
 				Adherence = State.Adherence(),
 
-				AlarmStartTime = alarmStartTime,
+				AlarmStartTime = AlarmStartTime,
 
 				TimeWindowCheckSum = Schedule.TimeWindowCheckSum()
 			};
 		}
-
-		public AgentStateReadModel MakeAgentStateReadModel()
-		{
-			var shift = Schedule.ActivitiesInTimeWindow()
-				.Select(a => new AgentStateActivityReadModel
-				{
-					Color = a.DisplayColor,
-					StartTime = a.StartDateTime,
-					EndTime = a.EndDateTime,
-					Name = a.Name
-				});
-
-			return new AgentStateReadModel
-			{
-				ReceivedTime = CurrentTime,
-				PersonId = PersonId,
-				BusinessUnitId = BusinessUnitId,
-				SiteId = SiteId,
-				TeamId = TeamId,
-
-				Activity = Schedule.CurrentActivityName(),
-				NextActivity = Schedule.NextActivityName(),
-				NextActivityStartTime = Schedule.NextActivityStartTime(),
-
-				StateCode = stateCode,
-				StateName = State.StateGroupName(),
-				StateStartTime = stateStartTime,
-
-				RuleName = State.RuleName(),
-				RuleStartTime = ruleStartTime,
-				RuleColor = State.RuleDisplayColor(),
-				StaffingEffect = State.StaffingEffect(),
-
-				IsRuleAlarm = isAlarm,
-				AlarmStartTime = alarmStartTime,
-				AlarmColor = State.AlarmColor(),
-
-				Shift = shift
-			};
-		}
+		
 	}
 }

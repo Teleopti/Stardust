@@ -4,7 +4,6 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.UnitOfWork;
 
@@ -15,7 +14,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 	public class AgentStateReadModelPersisterTest
 	{
 		public IAgentStateReadModelPersister Target;
-		public IAgentStateReadModelReader Reader;
 		public WithUnitOfWork UnitOfWork;
 
 		[Test]
@@ -25,8 +23,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Persist(state);
 
-			var result = Reader.Load(new[] { state.PersonId }).SingleOrDefault();
-			result.Should().Not.Be.Null();
+			Target.Get(state.PersonId)
+				.Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -37,7 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Persist(state);
 
-			Reader.Load(new[] { state.PersonId }).Single()
+			Target.Get(state.PersonId)
 				.BusinessUnitId.Should().Be(businessUnitId);
 		}
 
@@ -49,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Persist(state);
 
-			Reader.Load(new[] { state.PersonId }).Single()
+			Target.Get(state.PersonId)
 				.TeamId.Should().Be(teamId);
 		}
 
@@ -61,7 +59,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Persist(state);
 
-			Reader.Load(new[] { state.PersonId }).Single()
+			Target.Get(state.PersonId)
 				.SiteId.Should().Be(siteId);
 		}
 
@@ -93,7 +91,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				RuleColor = null,
 			});
 
-			Reader.Load(new[] { personId }).Single()
+			Target.Get(personId)
 				.Should().Not.Be.Null();
 		}
 
@@ -105,7 +103,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Persist(state);
 
-			Reader.Load(new[] { state.PersonId }).Single()
+			Target.Get(state.PersonId)
 				.AlarmStartTime.Should().Be("2015-12-11 08:00".Utc());
 		}
 
@@ -116,86 +114,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Persist(state);
 
-			Reader.Load(new[] { state.PersonId }).Single()
+			Target.Get(state.PersonId)
 				.IsRuleAlarm.Should().Be(true);
-		}
-
-		[Test]
-		public void ShouldPersistOutOfAdherences()
-		{
-			var state = new AgentStateReadModelForTest
-			{
-				OutOfAdherences = new[]
-				{
-					new AgentStateOutOfAdherenceReadModel
-					{
-						StartTime = "2016-06-16 08:00".Utc(),
-						EndTime = "2016-06-16 08:10".Utc()
-					}
-				}
-			};
-
-			Target.Persist(state);
-
-			var outOfAdherence = Reader.Load(new[] {state.PersonId}).Single()
-				.OutOfAdherences.Single();
-
-			outOfAdherence.StartTime.Should().Be("2016-06-16 08:00".Utc());
-			outOfAdherence.EndTime.Should().Be("2016-06-16 08:10".Utc());
-		}
-
-		[Test]
-		public void ShouldUpdateOutOfAdherences()
-		{
-			var state = new AgentStateReadModelForTest
-			{
-				OutOfAdherences = new[]
-				{
-					new AgentStateOutOfAdherenceReadModel
-					{
-						StartTime = "2016-06-16 08:00".Utc(),
-						EndTime = "2016-06-16 08:10".Utc()
-					}
-				}
-			};
-
-			Target.Persist(state);
-
-			state = new AgentStateReadModelForTest
-			{
-				OutOfAdherences = new[]
-				{
-					new AgentStateOutOfAdherenceReadModel
-					{
-						StartTime = "2016-06-16 08:00".Utc(),
-						EndTime = "2016-06-16 08:10".Utc()
-					},
-					new AgentStateOutOfAdherenceReadModel
-					{
-						StartTime = "2016-06-16 08:20".Utc(),
-						EndTime = null
-					}
-				}
-			};
-
-			Target.Persist(state);
-
-			var outOfAdherences = Reader.Load(new[] { state.PersonId }).Single().OutOfAdherences;
-
-			outOfAdherences.First().StartTime.Should().Be("2016-06-16 08:00".Utc());
-			outOfAdherences.First().EndTime.Should().Be("2016-06-16 08:10".Utc());
-			outOfAdherences.Last().StartTime.Should().Be("2016-06-16 08:20".Utc());
-			outOfAdherences.Last().EndTime.Should().Be(null);
 		}
 
 		[Test]
 		public void ShouldPersistAlarmColor()
 		{
-			var state = new AgentStateReadModelForTest { AlarmColor = Color.Red.ToArgb() };
+			var personId = Guid.NewGuid();
 
-			Target.Persist(state);
+			Target.Persist(new AgentStateReadModelForTest
+			{
+				PersonId = personId,
+				AlarmColor = Color.Red.ToArgb()
+			});
 
-			Reader.Load(new[] { state.PersonId }).Single()
+			Target.Get(personId)
 				.AlarmColor.Should().Be(Color.Red.ToArgb());
 		}
 
@@ -219,7 +153,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				}
 			});
 
-			var shift = Reader.Load(new[] {personId}).Single().Shift.Single();
+			var shift = Target.Get(personId).Shift.Single();
 			shift.Color.Should().Be(Color.Green.ToArgb());
 			shift.StartTime.Should().Be("2016-06-01 10:00".Utc());
 			shift.EndTime.Should().Be("2016-06-01 11:00".Utc());
@@ -251,9 +185,73 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				}
 			});
 
-			Reader.LoadForTeams(new[] { teamId })
-				.Single()
+			Target.Get(personId)
 				.Shift.Single().Color.Should().Be(Color.Green.ToArgb());
+		}
+
+		[Test]
+		public void ShouldPersistOutOfAdherences()
+		{
+			var state = new AgentStateReadModelForTest
+			{
+				OutOfAdherences = new[]
+				{
+					new AgentStateOutOfAdherenceReadModel
+					{
+						StartTime = "2016-06-16 08:00".Utc(),
+						EndTime = "2016-06-16 08:10".Utc()
+					}
+				}
+			};
+
+			Target.Persist(state);
+
+			var outOfAdherence = Target.Get(state.PersonId)
+				.OutOfAdherences.Single();
+			outOfAdherence.StartTime.Should().Be("2016-06-16 08:00".Utc());
+			outOfAdherence.EndTime.Should().Be("2016-06-16 08:10".Utc());
+		}
+
+		[Test]
+		public void ShouldUpdateOutOfAdherences()
+		{
+			var personId = Guid.NewGuid();
+			Target.Persist(new AgentStateReadModelForTest
+			{
+				PersonId = personId,
+				OutOfAdherences = new[]
+				{
+					new AgentStateOutOfAdherenceReadModel
+					{
+						StartTime = "2016-06-16 08:00".Utc(),
+						EndTime = "2016-06-16 08:10".Utc()
+					}
+				}
+			});
+
+			Target.Persist(new AgentStateReadModelForTest
+			{
+				PersonId = personId,
+				OutOfAdherences = new[]
+				{
+					new AgentStateOutOfAdherenceReadModel
+					{
+						StartTime = "2016-06-16 08:00".Utc(),
+						EndTime = "2016-06-16 08:10".Utc()
+					},
+					new AgentStateOutOfAdherenceReadModel
+					{
+						StartTime = "2016-06-16 08:20".Utc(),
+						EndTime = null
+					}
+				}
+			});
+
+			var outOfAdherences = Target.Get(personId).OutOfAdherences;
+			outOfAdherences.First().StartTime.Should().Be("2016-06-16 08:00".Utc());
+			outOfAdherences.First().EndTime.Should().Be("2016-06-16 08:10".Utc());
+			outOfAdherences.Last().StartTime.Should().Be("2016-06-16 08:20".Utc());
+			outOfAdherences.Last().EndTime.Should().Be(null);
 		}
 
 		[Test]
@@ -265,7 +263,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Delete(personId);
 
-			Reader.Load(new[] { personId }).SingleOrDefault()
+			Target.Get(personId)
 				.Should().Be.Null();
 		}
 	}

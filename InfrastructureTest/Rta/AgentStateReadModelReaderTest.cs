@@ -228,5 +228,29 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			result.Shift.Single().EndTime.Should().Be("2016-05-30 09:00".Utc());
 			result.Shift.Single().Name.Should().Be("Phone");
 		}
+
+		[Test]
+		public void ShouldLoadOutOfAdherences()
+		{
+			var teamId = Guid.NewGuid();
+			Persister.Persist(new AgentStateReadModelForTest
+			{
+				TeamId = teamId,
+				OutOfAdherences = new[]
+				{
+					new AgentStateOutOfAdherenceReadModel
+					{
+						StartTime = "2016-06-16 08:00".Utc(),
+						EndTime = "2016-06-16 08:10".Utc()
+					}
+				}
+			});
+
+			var outOfAdherence = Target.LoadForTeam(teamId).Single()
+				.OutOfAdherences.Single();
+			outOfAdherence.StartTime.Should().Be("2016-06-16 08:00".Utc());
+			outOfAdherence.EndTime.Should().Be("2016-06-16 08:10".Utc());
+		}
+
 	}
 }

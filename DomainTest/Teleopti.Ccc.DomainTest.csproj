@@ -197,6 +197,7 @@
     <Compile Include="ApplicationLayer\Request\AnalyticsRequestUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\NightshiftTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\PersonShiftStartEventNightShiftTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelOutOfAdherencesTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStatesViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStatesViewModelBuilderStateValuesTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentViewModelBuilderTest.cs" />

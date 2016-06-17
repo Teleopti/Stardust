@@ -90,6 +90,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var to = AdherenceForNewStateAndCurrentActivity();
 			return from != to;
 		}
-		
 	}
 }

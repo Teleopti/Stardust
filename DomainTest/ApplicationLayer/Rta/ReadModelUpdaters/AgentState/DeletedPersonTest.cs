@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 	[ReadModelUpdaterTest]
 	public class DeletedPersonTest
 	{
-		public AgentStateReadModelUpdater Target;
+		public AgentStateReadModelCleaner Target;
 		public FakeAgentStateReadModelPersister Persister;
 
 		[Test]

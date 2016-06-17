@@ -20,16 +20,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			events.ForEach(_events.Add);
 		}
 
-		public void PublishTransitions()
+		public IEnumerable<IEvent> PublishTransitions()
 		{
 			var publisher = _publisher.Current();
 			// of duplicate events, publish the first, which IS the first in time because..
 			// they are already in order of time because they are currently collected in that order by the callers...
-			var toPublish = from e in _events
+			var toPublish = (
+				from e in _events
 				group e by e.GetType()
 				into x
-				select x.First();
+				select x.First()
+				).ToArray();
 			toPublish.ForEach(@event => publisher.Publish(@event));
+
+			return toPublish;
 		}
 
 	}

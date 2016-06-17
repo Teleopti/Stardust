@@ -41,6 +41,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_data.TryRemove(personId, out model);
 		}
 
+		public AgentStateReadModel Get(Guid personId)
+		{
+			if (_data.ContainsKey(personId))
+				return _data[personId].CopyBySerialization();
+
+			return null;
+		}
+
 
 		public IList<AgentStateReadModel> Load(IEnumerable<IPerson> persons)
 		{

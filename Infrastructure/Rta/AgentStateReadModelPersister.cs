@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Newtonsoft.Json;
+using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -152,6 +156,30 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.SetParameter("PersonId", personId)
 				.ExecuteUpdate()
 				;
+		}
+
+		public AgentStateReadModel Get(Guid personId)
+		{
+			return _unitOfWork.Current().Session()
+				.CreateSQLQuery(@"SELECT * FROM [ReadModel].[AgentState] WHERE PersonId = :PersonId")
+				.SetParameter("PersonId", personId)
+				.SetResultTransformer(Transformers.AliasToBean(typeof (internalModel)))
+				.SetReadOnly(true)
+				.List<AgentStateReadModel>()
+				.FirstOrDefault();
+		}
+
+		private class internalModel : AgentStateReadModel
+		{
+			public new string Shift
+			{
+				set { base.Shift = JsonConvert.DeserializeObject<IEnumerable<AgentStateActivityReadModel>>(value); }
+			}
+
+			public new string OutOfAdherences
+			{
+				set { base.OutOfAdherences = JsonConvert.DeserializeObject<IEnumerable<AgentStateOutOfAdherenceReadModel>>(value); }
+			}
 		}
 	}
 }
