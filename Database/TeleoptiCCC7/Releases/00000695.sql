@@ -15,13 +15,12 @@ CREATE TABLE [CheckReadModel].[ScheduleProjectionReadOnly]
 	BelongsToDate datetime NOT NULL,
 	IsValid bit NOT NULL,
 	UpdateOn datetime NOT NULL
+	
+	 CONSTRAINT [PK_ScheduleProjectionReadOnly] PRIMARY KEY CLUSTERED 
+	(
+		[PersonId] ASC,
+		[BelongsToDate] ASC
+	)
 	)  
-	ON [PRIMARY]
-ALTER TABLE [CheckReadModel].[ScheduleProjectionReadOnly] ADD CONSTRAINT PK_PersonIdBelongsToDate PRIMARY KEY CLUSTERED 
-(
-	[PersonId] ASC,
-	[BelongsToDate] ASC
-)
-ON [PRIMARY]
 END
 GO
