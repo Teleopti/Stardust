@@ -1,24 +1,15 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class SkillGroupPerActivityProvider
 	{
-		private readonly Func<ISchedulerStateHolder> _stateHolder;
-
-		public SkillGroupPerActivityProvider(Func<ISchedulerStateHolder> stateHolder)
-		{
-			_stateHolder = stateHolder;
-		}
-
-		public IEnumerable<CascadingSkillGroup> FetchOrdered(IActivity activity, DateTimePeriod period)
+		public IEnumerable<CascadingSkillGroup> FetchOrdered(CascadingSkills cascadingSkills, IActivity activity, DateTimePeriod period)
 		{
 			var affectedSkills = ResourceCalculationContext.Fetch().AffectedResources(activity, period).Values;
-			var cascadingSkillsForActivity = _stateHolder().SchedulingResultState.CascadingSkills().Where(x => x.Activity.Equals(activity)).ToArray();
+			var cascadingSkillsForActivity = cascadingSkills.ForActivity(activity).ToArray();
 			var ret = new List<CascadingSkillGroup>();
 
 			foreach (var skillGroup in affectedSkills)

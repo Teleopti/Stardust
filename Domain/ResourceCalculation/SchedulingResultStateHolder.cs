@@ -86,11 +86,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			get { return _skills.ToArray(); }
 		}
 
-		public IEnumerable<ISkill> CascadingSkills()
-		{
-			return _skills.Where(x => x.IsCascading()).OrderBy(x => x.CascadingIndex);
-		}
-
 		public void AddSkills(params ISkill[] skills)
 		{
 			skills.ForEach(s => _skills.Add(s));

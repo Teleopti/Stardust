@@ -204,6 +204,7 @@
     <Compile Include="ApplicationLayer\ReadModelValidator\ValidateScheduleProjectionReadOnlyEventHandler.cs" />
     <Compile Include="Cascading\AddResourcesToSubSkills.cs" />
     <Compile Include="Cascading\CascadingSkillGroupItem.cs" />
+    <Compile Include="Cascading\CascadingSkills.cs" />
     <Compile Include="Cascading\ReducePrimarySkillResources.cs" />
     <Compile Include="Infrastructure\DatabaseEnum.cs" />
     <Compile Include="Infrastructure\Events\IndexMaintenanceEvent.cs" />

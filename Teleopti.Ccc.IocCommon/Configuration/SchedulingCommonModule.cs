@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ShovelResources>().InstancePerLifetimeScope();
 			builder.RegisterType<AddResourcesToSubSkills>().InstancePerLifetimeScope();
 			builder.RegisterType<ReducePrimarySkillResources>().InstancePerLifetimeScope();
-			builder.RegisterType<SkillGroupPerActivityProvider>().InstancePerLifetimeScope();
+			builder.RegisterType<SkillGroupPerActivityProvider>().SingleInstance();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_CascadingSkills_38524))
 			{
 				builder.RegisterType<FullResourceCalculationWithCascading>().As<IFullResourceCalculation>().InstancePerLifetimeScope();

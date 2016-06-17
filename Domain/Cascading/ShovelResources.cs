@@ -30,21 +30,24 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 		public void Execute(DateOnlyPeriod period)
 		{
-			var cascadingSkills = _stateHolder().SchedulingResultState.CascadingSkills().ToArray();
+			var cascadingSkills = new CascadingSkills(_stateHolder().SchedulingResultState.Skills); 
 			if (!cascadingSkills.Any())
 				return;
+
+			var defaultResolution = cascadingSkills.First().DefaultResolution; //strange but cascading skills must have same resolution. also should check that cascading skills exists);
+			var activities = cascadingSkills.AffectedActivities().ToArray();
+
 			using (ResourceCalculationCurrent.PreserveContext())
 			{
 				using (new ResourceCalculationContextFactory(_stateHolder, () => new PersonSkillProvider(), _timeZoneGuard).Create(period))
 				{
 					foreach (var date in period.DayCollection())
 					{
-						var defaultResolution = cascadingSkills.First().DefaultResolution; //strange but cascading skills must have same resolution
-						foreach (var activity in cascadingSkills.Select(x => x.Activity).Distinct())
+						foreach (var activity in activities)
 						{
 							foreach (var interval in date.ToDateTimePeriod(_timeZoneGuard.CurrentTimeZone()).Intervals(TimeSpan.FromMinutes(defaultResolution)))
 							{
-								foreach (var skillGroup in _skillGroupPerActivityProvider.FetchOrdered(activity, interval))
+								foreach (var skillGroup in _skillGroupPerActivityProvider.FetchOrdered(cascadingSkills, activity, interval))
 								{
 									var resourcesMoved = _addResourcesToSubSkills.Execute(skillGroup, interval);
 									_reducePrimarySkillResources.Execute(skillGroup.PrimarySkills, interval, resourcesMoved);
