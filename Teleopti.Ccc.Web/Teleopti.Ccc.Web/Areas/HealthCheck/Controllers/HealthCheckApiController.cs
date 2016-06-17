@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Web.Areas.HealthCheck.Core;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
@@ -29,10 +30,11 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		private readonly IStardustSender _stardustSender;
 		private readonly IToggleManager _toggleManager;
 		private readonly IHangfireUtilities _hangfireUtilities;
+		private IReadModelValidator _readModelValidator;
 
-	    public HealthCheckApiController(IMessagePopulatingServiceBusSender populatingPublisher,
+		public HealthCheckApiController(IMessagePopulatingServiceBusSender populatingPublisher,
 												  IEtlJobStatusRepository etlJobStatusRepository, IEtlLogObjectRepository etlLogObjectRepository,
-												  IStardustSender stardustSender, IToggleManager toggleManager, IHangfireUtilities hangfireUtilities)
+												  IStardustSender stardustSender, IToggleManager toggleManager, IHangfireUtilities hangfireUtilities, IReadModelValidator readModelValidator)
 		{
 			_populatingPublisher = populatingPublisher;
 			_etlJobStatusRepository = etlJobStatusRepository;
@@ -40,6 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 			_stardustSender = stardustSender;
 			_toggleManager = toggleManager;
 		    _hangfireUtilities = hangfireUtilities;
+			_readModelValidator = readModelValidator;
 		}
 
 		[HttpGet, UnitOfWork, Route("api/HealthCheck/CheckBus")]
@@ -149,6 +152,14 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		{
 			var failedCount = _hangfireUtilities.NumberOfFailedJobs();
 			return Ok(failedCount);
+		}
+
+
+		[HttpGet, UnitOfWork, Route("HealthCheck/CheckScheduleProjectionReadOnly")]
+		public virtual IHttpActionResult CheckScheduleProjectionReadOnly(DateTime start, DateTime end)
+		{
+			_readModelValidator.Validate(start, end);
+			return Ok();
 		}
 	}
 }

@@ -8,5 +8,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 	{
 		IEnumerable<T> Build<T>(ScheduleChangedEventBase message, IScheduleRange range, DateOnlyPeriod realPeriod, IEnumerable<ProjectionVersion> versions)
 			where T : ProjectionChangedEventBase, new();
+
+		IEnumerable<ProjectionChangedEventLayer> BuildProjectionChangedEventLayers(IVisualLayerCollection projection);
 	}
 }

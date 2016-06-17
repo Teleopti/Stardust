@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 						CheckSum = new ShiftTradeChecksumCalculator(scheduleDay).CalculateChecksum(),
 						Version = versions.Single(x => x.Date == date).Version
 					};
-					var layers = new List<ProjectionChangedEventLayer>();
+					
 
 					switch (significantPart)
 					{
@@ -89,42 +89,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 							break;
 					}
 
-					foreach (var layer in ((VisualLayerCollection)projection).UnMergedCollection)
-					{
-						var isPayloadAbsence = (layer.Payload is IAbsence);
-						var description = isPayloadAbsence
-											  ? (layer.Payload as IAbsence).Description
-											  : layer.DisplayDescription();
-						var contractTime = projection.ContractTime(layer.Period);
-						var overTime = projection.Overtime(layer.Period);
-						var paidTime = projection.PaidTime(layer.Period);
-						var workTime = projection.WorkTime(layer.Period);
-						var requiresSeat = false;
-						var activity = layer.Payload.UnderlyingPayload as IActivity;
-						if (activity != null)
-						{
-							requiresSeat = activity.RequiresSeat;
-						}
-
-						layers.Add(new ProjectionChangedEventLayer
-						{
-							Name = description.Name,
-							ShortName = description.ShortName,
-							ContractTime = contractTime,
-							Overtime = overTime,
-							MultiplicatorDefinitionSetId = layer.DefinitionSet != null ? layer.DefinitionSet.Id.GetValueOrDefault() : Guid.Empty,
-							PayloadId = layer.Payload.UnderlyingPayload.Id.GetValueOrDefault(),
-							IsAbsence = layer.Payload.UnderlyingPayload is IAbsence,
-							DisplayColor =
-									isPayloadAbsence ? (layer.Payload as IAbsence).DisplayColor.ToArgb() : layer.DisplayColor().ToArgb(),
-							RequiresSeat = requiresSeat,
-							WorkTime = workTime,
-							PaidTime = paidTime,
-							StartDateTime = layer.Period.StartDateTime,
-							EndDateTime = layer.Period.EndDateTime,
-							IsAbsenceConfidential = isPayloadAbsence && (layer.Payload as IAbsence).Confidential
-						});
-					}
+					var layers = BuildProjectionChangedEventLayers(projection).ToList();
 
 					ProjectionChangedEventShift shift = null;
 
@@ -158,6 +123,49 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 
 				};
 			}
+		}
+
+		public IEnumerable<ProjectionChangedEventLayer> BuildProjectionChangedEventLayers(IVisualLayerCollection projection)
+		{
+			var layers = new List<ProjectionChangedEventLayer>();
+
+			foreach (var layer in ((VisualLayerCollection) projection).UnMergedCollection)
+			{
+				var isPayloadAbsence = (layer.Payload is IAbsence);
+				var description = isPayloadAbsence
+					? (layer.Payload as IAbsence).Description
+					: layer.DisplayDescription();
+				var contractTime = projection.ContractTime(layer.Period);
+				var overTime = projection.Overtime(layer.Period);
+				var paidTime = projection.PaidTime(layer.Period);
+				var workTime = projection.WorkTime(layer.Period);
+				var requiresSeat = false;
+				var activity = layer.Payload.UnderlyingPayload as IActivity;
+				if (activity != null)
+				{
+					requiresSeat = activity.RequiresSeat;
+				}
+
+				layers.Add(new ProjectionChangedEventLayer
+				{
+					Name = description.Name,
+					ShortName = description.ShortName,
+					ContractTime = contractTime,
+					Overtime = overTime,
+					MultiplicatorDefinitionSetId = layer.DefinitionSet != null ? layer.DefinitionSet.Id.GetValueOrDefault() : Guid.Empty,
+					PayloadId = layer.Payload.UnderlyingPayload.Id.GetValueOrDefault(),
+					IsAbsence = layer.Payload.UnderlyingPayload is IAbsence,
+					DisplayColor =
+						isPayloadAbsence ? (layer.Payload as IAbsence).DisplayColor.ToArgb() : layer.DisplayColor().ToArgb(),
+					RequiresSeat = requiresSeat,
+					WorkTime = workTime,
+					PaidTime = paidTime,
+					StartDateTime = layer.Period.StartDateTime,
+					EndDateTime = layer.Period.EndDateTime,
+					IsAbsenceConfidential = isPayloadAbsence && (layer.Payload as IAbsence).Confidential
+				});
+			}
+			return layers;
 		}
 
 		private static bool emptyScheduleOnInitialLoad(ScheduleChangedEventBase message, SchedulePartView significantPart)

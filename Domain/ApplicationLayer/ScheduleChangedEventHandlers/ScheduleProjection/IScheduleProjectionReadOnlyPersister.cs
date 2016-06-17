@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection
 {
-	public class ScheduleProjectionReadOnlyModel
+	public class ScheduleProjectionReadOnlyModel : IEquatable<ScheduleProjectionReadOnlyModel>
 	{
 		public Guid PersonId { get; set; }
 		public Guid ScenarioId { get; set; }
@@ -18,6 +18,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		public string Name { get; set; }
 		public string ShortName { get; set; }
 		public int DisplayColor { get; set; }
+		public bool Equals(ScheduleProjectionReadOnlyModel other)
+		{
+			return (PersonId == other.PersonId && ScenarioId == other.ScenarioId && BelongsToDate == other.BelongsToDate
+				&& PayloadId == other.PayloadId && WorkTime == other.WorkTime
+				&& ContractTime == other.ContractTime
+				&& StartDateTime == other.StartDateTime
+				&& EndDateTime == other.EndDateTime
+				&& Name == other.Name
+				&& ShortName == other.ShortName
+				&& DisplayColor == other.DisplayColor);
+		}
 	}
 	
 	public interface IScheduleProjectionReadOnlyPersister

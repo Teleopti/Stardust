@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IPerson> LoadAllPeopleWithHierarchyDataSortByName(DateOnly earliestTerminalDate)
 		{
-			throw new NotImplementedException();
+			return _persons;
 		}
 
 		public ICollection<IPerson> FindPeopleBelongTeam(ITeam team, DateOnlyPeriod period)
