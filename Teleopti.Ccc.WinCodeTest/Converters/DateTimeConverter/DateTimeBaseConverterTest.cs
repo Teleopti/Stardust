@@ -58,6 +58,13 @@ namespace Teleopti.Ccc.WinCodeTest.Converters.DateTimeConverter
             Assert.AreEqual(_utcDateTime, convertedTime);
         }
 
+	    [Test]
+	    public void VerifyConvertingLocalTimeToNonExistingUtc()
+	    {
+			var convertedTime = _target.ConvertBack(new DateTime(2015,3,29,2,0,0), typeof(DateTime), TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"), null);
+			Assert.AreEqual(new DateTime(2015,3, 29,1,0,0), convertedTime);
+		}
+
         [Test]
         public void VerifyTransform()
         {

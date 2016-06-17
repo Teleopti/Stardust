@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WinCode.Converters.DateTimeConverter
             DateTime toConvertBack = (DateTime)value;
             if (toConvertBack.Kind == DateTimeKind.Utc) return TransformBack(toConvertBack,parameter);
 
-            DateTime retValue = TimeZoneInfo.ConvertTimeToUtc(toConvertBack, ConverterTimeZone);
+            DateTime retValue = TimeZoneHelper.ConvertToUtc(toConvertBack, ConverterTimeZone);
 
             return TransformBack(retValue,parameter);
         }
