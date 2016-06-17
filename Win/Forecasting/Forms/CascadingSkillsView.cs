@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private readonly CascadingSkillPresenter _presenter;
 		private BindingSource _bindingSourceNonCascading;
 		private BindingSource _bindingSourceCascading;
-		private int _cascadingItemMaxLength = 0;
+		private int _cascadingItemMaxLength;
 
 		public CascadingSkillsView(CascadingSkillPresenter presenter)
 		{
@@ -36,8 +36,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			listBoxNonCascading.DisplayMember = "Name";
 			listBoxCascading.DataSource = _bindingSourceCascading;
 			listBoxCascading.DrawMode = DrawMode.OwnerDrawFixed;
-
-			tableLayoutPanel5.Visible = false; //chicken
 		}
 
 		private void buttonAdvMoveUpClick(object sender, EventArgs e)
@@ -106,6 +104,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				_presenter.MakeNonCascading(skill.First());
 			}
 
+			_cascadingItemMaxLength = 0;
 			_bindingSourceCascading.ResetBindings(false);
 			_bindingSourceNonCascading.ResetBindings(false);
 		}
@@ -141,7 +140,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			foreach (var selectedItem in selectedItems)
 			{
 				if (selectedItem.Equals(selectedItems.First())) continue;
-				foreach (var skill in selectedItem)
+
+				if (selectedItem.Count > 1)
+				{
+					_presenter.Unparalell(selectedItem.First());	
+				}
+
+				foreach (var skill in selectedItem.ToList())
 				{
 					_presenter.MakeParalell(masterSkill, skill);
 				}
@@ -162,10 +167,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			{
 				if (selectedItem.Count <= 1) continue;
 				_presenter.Unparalell(selectedItem.First());
-				break;
 			}
 
 			_bindingSourceCascading.ResetBindings(false);
+			_cascadingItemMaxLength = 0;
 			listBoxCascading.SelectedItems.Clear();
 			listBoxCascading.SetSelected(selectedIndices.First(), true);
 		}
