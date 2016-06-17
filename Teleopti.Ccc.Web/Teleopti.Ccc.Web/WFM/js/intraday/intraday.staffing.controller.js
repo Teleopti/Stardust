@@ -28,6 +28,10 @@
 					$scope.skills = response;
 				});
 
+				intradayService.getSkillAreas.query().$promise.then(function(response){
+					$scope.skillAreas = response;
+				});
+
 				$scope.TriggerResourceCalculate = function() {
 					console.log('triggered!');
 					intradayStaffingService.TriggerResourceCalculate.query().$promise.then(function(response) {
