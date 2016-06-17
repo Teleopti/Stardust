@@ -64,12 +64,12 @@ describe('HttpTest', function() {
 		$httpBackend.flush();
 	});
 
-	xit('Should react to http error -1', function(done) {
+	it('Should react to http error -1', function(done) {
 		var scope = $rootScope.$new();
 		$httpBackend.expectGET("../api/Settings/SupportEmail").respond(200, 'mock');
 		spyOn(NoticeService, 'error');
 		var rejection = {
-			status: 0
+			status: -1
 		};
 		var response = httpInterceptor.responseError(rejection);
 		var successCallback = function() {};
