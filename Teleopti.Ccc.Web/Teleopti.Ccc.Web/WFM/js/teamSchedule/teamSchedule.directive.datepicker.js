@@ -46,9 +46,9 @@
 
 		vm.currentDateString = vm.shortDateFormat;
 
-		vm.afterDateChangeDatePicker = function (curDate) {
+		vm.afterDateChangeDatePicker = function () {
 			vm.toggleCalendar();
-			vm.afterDateChange(curDate);
+			vm.onDateChange && $timeout(function () { vm.onDateChange({ date: vm.selectedDate }) });
 		};
 
 		vm.afterDateChangeInput = function (currentDateStr) {
