@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
@@ -62,7 +61,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldGetMutipleShiftTradeRequests()
 		{
-
 			createShiftTradeRequest(new DateOnly(2016, 3, 1), new DateOnly(2016, 3, 1),
 					PersonFactory.CreatePerson("Person", "From"), PersonFactory.CreatePerson("Person", "To"));
 
@@ -79,11 +77,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			requestListViewModel.Requests.Count().Should().Be.EqualTo(2);
 		}
 
-
 		[Test]
 		public void ShouldReturnMinimumAndMaximumDate()
 		{
-
 			var minRequest = createShiftTradeRequest(new DateOnly(2016, 3, 2), new DateOnly(2016, 3, 2),
 					PersonFactory.CreatePerson("Person", "From"), PersonFactory.CreatePerson("Person", "To"));
 
@@ -109,7 +105,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		public void ShouldReturnStartAndEndOfWeekBasedOnLocale()
 		{
 			UserCulture = new FakeUserCulture(CultureInfo.GetCultureInfo("en-US"));
-
 
 			createShiftTradeRequest(new DateOnly(2016, 3, 2), new DateOnly(2016, 3, 2),
 					PersonFactory.CreatePerson("Person", "From"), PersonFactory.CreatePerson("Person", "To"));
@@ -139,6 +134,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var timeZone = TimeZoneInfoFactory.ChinaTimeZoneInfo();
 
 			var personTo = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(2016, 01, 01), personToTeam);
+			personTo.SetId(Guid.NewGuid());
 			personTo.PermissionInformation.SetDefaultTimeZone(timeZone);
 
 			createShiftTradeRequest(new DateOnly(2016, 3, 1), new DateOnly(2016, 3, 1),
@@ -154,6 +150,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var requestViewModel = (ShiftTradeRequestViewModel)requestListViewModel.Requests.First();
 
 			requestViewModel.PersonTo.Should().Not.Be.NullOrEmpty();
+			requestViewModel.PersonIdTo.Should().Be.EqualTo(personTo.Id);
 			requestViewModel.PersonToTeam.Should().Be(personToTeam.SiteAndTeam);
 			requestViewModel.PersonToTimeZone.Should().Be(new IanaTimeZoneProvider().WindowsToIana(timeZone.Id));
 		}
@@ -161,7 +158,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldGetShiftTradeDay()
 		{
-
 			var personTo = PersonFactory.CreatePerson("Person", "To");
 			var personFrom = PersonFactory.CreatePerson("Person", "From");
 
@@ -176,7 +172,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 
 			var personToAssignment = addPersonAssignment(personTo, "sdfTo", "shiftCategory", Color.PaleVioletRed, new DateOnly(2016, 3, 1));
 			var personFromAssignment = addPersonAssignment(personFrom, "sdfFrom", "shiftCategoryFrom", Color.AliceBlue, new DateOnly(2016, 3, 1));
-
 
 			var schedule = ScheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom }, new ScheduleDictionaryLoadOptions(false, false),
 				new DateOnlyPeriod(2016, 03, 01, 2016, 03, 02), Scenario.Current());
@@ -200,7 +195,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldGetShiftTradeDayWithAbsence()
 		{
-
 			var personTo = PersonFactory.CreatePerson("Person", "To").WithId();
 			var personFrom = PersonFactory.CreatePerson("Person", "From").WithId();
 
@@ -239,7 +233,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldGetMultiDayShiftTradeWithDayOff()
 		{
-
 			var personTo = PersonFactory.CreatePerson("Person", "To");
 			var personFrom = PersonFactory.CreatePerson("Person", "From");
 
@@ -327,15 +320,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				DisplayColor = displayColor
 			});
 
-
 			ScheduleStorage.Add(personAssignment);
 			return personAssignment;
 		}
 
-
 		private PersonAbsence addPersonAbsence(IPerson person, string name, string shortName, Color displayColor, DateOnly date)
 		{
-
 			var personfromAssignment = addPersonAssignment(person, "sdfTo", "shiftCategory", Color.PaleVioletRed, date);
 			ScheduleStorage.Add(personfromAssignment);
 
@@ -356,7 +346,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			return personAssignment;
 		}
 
-
 		private void runSingleShiftTradeRequestTest()
 		{
 			getSimpleRequestListViewModel().Requests.Count().Should().Be.EqualTo(1);
@@ -376,7 +365,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
 			return requestListViewModel;
 		}
-
 
 		private PersonRequest createShiftTradeRequest(DateOnly dateFrom, DateOnly dateTo, IPerson personFrom, IPerson personTo)
 		{
@@ -413,6 +401,5 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
 			StateHolderProxyHelper.ClearAndSetStateHolder(stateMock);
 		}
-
 	}
 }

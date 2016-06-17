@@ -75,6 +75,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			return new ShiftTradeRequestViewModel
 			{
 				PersonTo = _personNameProvider.BuildNameFromSetting(personTo.Name),
+				PersonIdTo = personTo.Id.GetValueOrDefault(),
 				PersonToTeam = personToTeam?.SiteAndTeam,
 				PersonToTimeZone = _ianaTimeZoneProvider.WindowsToIana(personTo.PermissionInformation.DefaultTimeZone().Id),
 				ShiftTradeDays = shiftTradeDays.ToList()

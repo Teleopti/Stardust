@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 				? TimeZoneHelper.ConvertFromUtc(request.UpdatedOn.Value, request.Person.PermissionInformation.DefaultTimeZone())
 				: (DateTime?)null;
 			requestViewModel.AgentName = _personNameProvider.BuildNameFromSetting(request.Person.Name);
+			requestViewModel.PersonId = request.Person.Id.GetValueOrDefault();
 			requestViewModel.Seniority = request.Person.Seniority;
 			requestViewModel.Type = request.Request.RequestType;
 			requestViewModel.TypeText = request.Request.RequestTypeDescription;

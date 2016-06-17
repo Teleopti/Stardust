@@ -5,11 +5,11 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
 {
 	public class RequestViewModel
-
 	{
 		public string Subject { get; set; }
 		public string Message { get; set; }
 		public string AgentName { get; set; }
+		public Guid PersonId { get; set; }
 		public string TimeZone { get; set; }
 		public Guid Id { get; set; }
 		public int Seniority { get; set; }
@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
 	public class ShiftTradeRequestViewModel : RequestViewModel
 	{
 		public string PersonTo { get; set; }
+		public Guid PersonIdTo { get; set; }
 		public string PersonToTeam { get; set; }
 		public string PersonToTimeZone { get; set; }
 
