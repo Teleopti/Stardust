@@ -2,8 +2,22 @@
 	'use strict';
 	angular.module('wfm.rta')
 		.controller('RtaSitesCtrl', [
-			'$scope', '$filter', '$state', '$stateParams', '$interval', 'RtaService', 'RtaOrganizationService', 'RtaFormatService', 'NoticeService',
-			function($scope, $filter, $state, $stateParams, $interval, RtaService, RtaOrganizationService, RtaFormatService, NoticeService) {
+			'$scope', '$filter', '$state', '$stateParams', '$interval', 'RtaService', 'RtaOrganizationService', 'RtaFormatService', 'NoticeService', 'Toggle',
+			function($scope, $filter, $state, $stateParams, $interval, RtaService, RtaOrganizationService, RtaFormatService, NoticeService, toggleService) {
+
+				$scope.underToggle = toggleService.RTA_MonitorBySkills_39081;
+
+				$scope.rightPanelOptions = {
+					panelState: false,
+					panelTitle: "Show agents by skill",
+					showCloseButton: true,
+					showBackdrop: true,
+					showResizer: true,
+					showPopupButton: true
+				};
+				$scope.ifVisible = function() {
+					return toggleService.RTA_MonitorBySkills_39081;
+				}();
 
 				$scope.getAdherencePercent = RtaFormatService.numberToPercent;
 				$scope.checkboxesChecked = 0;
@@ -58,6 +72,10 @@
 					});
 				};
 
+				$scope.goToAgents = function() {
+					$state.go('rta.agents-view');
+					console.log($state);
+				}
 				$scope.$on('$destroy', function() {
 					$interval.cancel(polling);
 				});

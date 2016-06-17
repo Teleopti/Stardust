@@ -157,7 +157,12 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 	})
 
 	it('should display time in notice when pausing', function() {
-		$fakeBackend.withTime('2016-06-15T09:00:46');
+		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		$fakeBackend.withTime('2016-06-15T09:00:46')
+		.withAgent({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
+			});
 		spyOn(NoticeService, 'warning');
 		$controllerBuilder
 			.createController()
