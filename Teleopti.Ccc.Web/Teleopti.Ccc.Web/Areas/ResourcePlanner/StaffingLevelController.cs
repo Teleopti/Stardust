@@ -10,14 +10,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {
-	public class CalculateController : ApiController
+	public class StaffingLevelController : ApiController
 	{
 		private readonly IEventPublisher _publisher;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IPersonRepository _personRepository;
 		private readonly IScheduleForecastSkillReadModelRepository _scheduleForecastSkillReadModelRepository;
 
-		public CalculateController(IEventPublisher publisher, ILoggedOnUser loggedOnUser, IPersonRepository personRepository,
+		public StaffingLevelController(IEventPublisher publisher, ILoggedOnUser loggedOnUser, IPersonRepository personRepository,
 			IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository)
 		{
 			_publisher = publisher;

@@ -647,7 +647,7 @@
     <Compile Include="Areas\Requests\Core\ViewModelFactory\RequestViewModelMapper.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\ShiftTradeRequestViewModelFactory.cs" />
     <Compile Include="Areas\Requests\Core\ViewModel\RequestViewModel.cs" />
-    <Compile Include="Areas\ResourcePlanner\CalculateController.cs" />
+    <Compile Include="Areas\ResourcePlanner\StaffingLevelController.cs" />
     <Compile Include="Areas\ResourcePlanner\DayOffRulesController.cs" />
     <Compile Include="Areas\ResourcePlanner\FilterController.cs" />
     <Compile Include="Areas\ResourcePlanner\GroupPagesController.cs" />

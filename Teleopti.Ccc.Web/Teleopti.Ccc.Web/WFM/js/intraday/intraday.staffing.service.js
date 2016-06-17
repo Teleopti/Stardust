@@ -6,7 +6,7 @@
 			function($resource, intradayService, $q) {
 
 
-				this.resourceCalculate = $resource('../resourcecalculate', {
+				this.resourceCalculate = $resource('../ForecastAndStaffingForSkill', {
 					date: '@date',
 					skillId: '@skillId'
 				}, {
@@ -16,7 +16,20 @@
 							date: name,
 							skillId: name
 						},
-						isArray: false
+						isArray: true
+					}
+				});
+				this.resourceCalculateForArea = $resource('../ForecastAndStaffingForSkillArea', {
+					date: '@date',
+					skillAreaId: '@skillAreaId'
+				}, {
+					query: {
+						method: 'GET',
+						params: {
+							date: name,
+							skillAreaId: name
+						},
+						isArray: true
 					}
 				});
 				this.TriggerResourceCalculate = $resource('../TriggerResourceCalculate', {}, {

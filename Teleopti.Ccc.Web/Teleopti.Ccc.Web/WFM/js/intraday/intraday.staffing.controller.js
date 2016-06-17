@@ -48,7 +48,7 @@
 					chartData.Intervals = ['x'];
 				};
 				var extractRelevantData = function(data) {
-					angular.forEach(data, function(single) {
+					data.forEach(function(single) {
 						chartData.Forcast.push(single.Forecast);
 						chartData.Staffing.push(single.StaffingLevel);
 						chartData.Intervals.push(new Date(single.StartDateTime));
@@ -64,8 +64,8 @@
 					$scope.loading = true;
 					intradayStaffingService.resourceCalculate.query({
 						date: actualDate,skillId:actualSkill
-					}).$promise.then(function(response) {
-						extractRelevantData(response.Intervals);
+					}).$promise.then(function (response) {
+						extractRelevantData(response);
 						$scope.loading = false;
 					});
 				};
