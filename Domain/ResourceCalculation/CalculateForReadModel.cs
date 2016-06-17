@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
-using Teleopti.Ccc.Domain.Logon;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Interfaces.Domain;
@@ -16,32 +13,43 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly FillSchedulerStateHolderForResourceCalculation _fillSchedulerStateHolderForResourceCalculation;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+		private readonly IScheduleForecastSkillReadModelPersister _scheduleForecastSkillReadModelPersister;
 
 		public CalculateForReadModel(
 			FillSchedulerStateHolderForResourceCalculation fillSchedulerStateHolderForResourceCalculation,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
-			IResourceOptimizationHelper resourceOptimizationHelper)
+			IResourceOptimizationHelper resourceOptimizationHelper, IScheduleForecastSkillReadModelPersister scheduleForecastSkillReadModelPersister)
 		{
 			_fillSchedulerStateHolderForResourceCalculation = fillSchedulerStateHolderForResourceCalculation;
 			_schedulerStateHolder = schedulerStateHolder;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
+			_scheduleForecastSkillReadModelPersister = scheduleForecastSkillReadModelPersister;
 		}
 
 		[LogTime]
-		public virtual ResourcesDataModel ResourceCalculatePeriod(DateOnlyPeriod period)
+		public virtual IEnumerable<ResourcesDataModel> ResourceCalculatePeriod(DateOnlyPeriod publishedPeriod)
 		{
 			var stateHolder = _schedulerStateHolder();
+
+			_fillSchedulerStateHolderForResourceCalculation.PreFillInformation(stateHolder, publishedPeriod);
+
+			foreach (var day in publishedPeriod.DayCollection())
+			{
+				var period = new DateOnlyPeriod(day, day.AddDays(1));
+				_fillSchedulerStateHolderForResourceCalculation.Fill(stateHolder, period);
+
+				DoCalculation(period);
+
+				var skillStaffPeriodDictionary =
+					stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary;
+				var model = CreateReadModel(skillStaffPeriodDictionary, day.Date);
+				_scheduleForecastSkillReadModelPersister.Persist(model,day);
+			}
 			
-			_fillSchedulerStateHolderForResourceCalculation.Fill(stateHolder, period);
-
-			DoCalculation(period);
-			var skillStaffPeriodDictionary =
-				stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary;
-
-			return CreateReadModel(skillStaffPeriodDictionary, period);
+			return null;
 		}
 
-		[LogTime]
+	   [LogTime]
 		public virtual void DoCalculation(DateOnlyPeriod period)
 		{
 			foreach (var dateOnly in period.DayCollection())
@@ -50,21 +58,23 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 		}
 
+		
 		[LogTime]
-		public virtual ResourcesDataModel CreateReadModel(ISkillSkillStaffPeriodExtendedDictionary skillSkillStaffPeriodExtendedDictionary, DateOnlyPeriod period)
+		public virtual IEnumerable<ResourcesDataModel> CreateReadModel(ISkillSkillStaffPeriodExtendedDictionary skillSkillStaffPeriodExtendedDictionary, DateTime date)
 		{
-			var ret = new ResourcesDataModel();
+			var items  = new List<ResourcesDataModel>(); 
+
 			//just return first skill for now
 			if (skillSkillStaffPeriodExtendedDictionary.Keys.Count > 0)
 			{
 				foreach (var skill in skillSkillStaffPeriodExtendedDictionary.Keys)
 				{
+					var ret = new ResourcesDataModel();
 					ret.Id = skill.Id.GetValueOrDefault();
-					ret.Area = skill.Name;
 					ret.Intervals = new List<SkillStaffingInterval>();
 					foreach (var skillStaffPeriod in skillSkillStaffPeriodExtendedDictionary[skill].Values)
 					{
-						if (skillStaffPeriod.Period.StartDateTime < period.StartDate.Date || skillStaffPeriod.Period.StartDateTime > period.EndDate.Date)
+						if (  skillStaffPeriod.Period.StartDateTime.Date != date )
 							continue;
 						ret.Intervals.Add(new SkillStaffingInterval
 						{
@@ -74,14 +84,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 							StaffingLevel = skillStaffPeriod.CalculatedResource
 						});
 					}
+					items.Add(ret);
 				}
 			}
-	
-			return ret;
+
+			return items;
 		}
 	}
 
 
+	
 	public class ResourcesDataModel
 	{
 		public Guid Id { get; set; }

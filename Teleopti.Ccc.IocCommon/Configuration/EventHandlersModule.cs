@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -23,6 +24,7 @@ using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnly;
+using Teleopti.Ccc.Infrastructure.Intraday;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Ccc.Infrastructure.Rta.Persisters;
@@ -183,6 +185,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	        builder.RegisterType<ScheduleProjectionReadOnlyPersister>()
 		        .As<IScheduleProjectionReadOnlyPersister>()
 		        .SingleInstance();
+			  builder.RegisterType<ScheduleForecastSkillReadModelPersister>()
+				  .As<IScheduleForecastSkillReadModelPersister>()
+				  .SingleInstance();
 		}
 	}
 

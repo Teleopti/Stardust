@@ -14,40 +14,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 	public class ResourceCalculateReadModelUpdater : IHandleEvent<UpdateResourceCalculateReadModelEvent>, IRunOnStardust
 	{
 		private readonly CalculateForReadModel _calculateForReadModel;
-		private IPersonRepository _personRepository;
 
-		public ResourceCalculateReadModelUpdater(CalculateForReadModel calculateForReadModel, IPersonRepository personRepository)
+		public ResourceCalculateReadModelUpdater(CalculateForReadModel calculateForReadModel)
 		{
 			_calculateForReadModel = calculateForReadModel;
-			_personRepository = personRepository;
 		}
 
 		[AsSystem]
 		[UnitOfWork]
 		public virtual void Handle(UpdateResourceCalculateReadModelEvent @event)
 		{
-			//get the scheduled period or inside the method below
-			//may be have another smarter way of loading all
-			var allPeople = _personRepository.LoadAll();
-
-			var maxPublishedDate =
-				allPeople.Where(x => x.WorkflowControlSet != null)
-					.Select(y => y.WorkflowControlSet)
-					.Where(w => w.SchedulePublishedToDate != null)
-					.Max(u => u.SchedulePublishedToDate);
-			var publishedPeriod = new DateOnlyPeriod(DateOnly.Today, new DateOnly(maxPublishedDate.Value));
-
-			foreach (var day in publishedPeriod.DayCollection())
-			{
-				var model = _calculateForReadModel.ResourceCalculatePeriod(new DateOnlyPeriod(day,day.AddDays(1)));
-			}
-			
-			//save model to DB
+			var period = new DateOnlyPeriod( new DateOnly( @event.StartDateTime),new DateOnly(@event.EndDateTime));
+			_calculateForReadModel.ResourceCalculatePeriod(period);
 		}
 	}
 
 	public class UpdateResourceCalculateReadModelEvent : EventWithInfrastructureContext
 	{
-		
+		public DateTime EndDateTime { get; set; }
+		public DateTime StartDateTime { get; set; }
 	}
 }

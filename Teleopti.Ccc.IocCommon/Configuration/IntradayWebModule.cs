@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Intraday;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 
@@ -17,6 +18,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<LoadSkillInIntradays>().As<ILoadAllSkillInIntradays>().SingleInstance();
 			builder.RegisterType<IntradayMonitorDataLoader>().As<IIntradayMonitorDataLoader>().SingleInstance();
 			builder.RegisterType<MonitorSkillsProvider>().SingleInstance();
+			builder.RegisterType<ScheduleForecastSkillReadModelPersister>().As<IScheduleForecastSkillReadModelPersister>().SingleInstance();
 		}
 	}
 }
