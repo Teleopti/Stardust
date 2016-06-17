@@ -7,7 +7,9 @@ using System.Web.Http;
 using System.Web.Http.ModelBinding;
 using Microsoft.VisualBasic.Devices;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -29,10 +31,11 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		private readonly IStardustSender _stardustSender;
 		private readonly IToggleManager _toggleManager;
 		private readonly IHangfireUtilities _hangfireUtilities;
+		private readonly IEventPublisher _publisher;
 
 		public HealthCheckApiController(IMessagePopulatingServiceBusSender populatingPublisher,
 												  IEtlJobStatusRepository etlJobStatusRepository, IEtlLogObjectRepository etlLogObjectRepository,
-												  IStardustSender stardustSender, IToggleManager toggleManager, IHangfireUtilities hangfireUtilities)
+												  IStardustSender stardustSender, IToggleManager toggleManager, IHangfireUtilities hangfireUtilities, IEventPublisher publisher)
 		{
 			_populatingPublisher = populatingPublisher;
 			_etlJobStatusRepository = etlJobStatusRepository;
@@ -40,6 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 			_stardustSender = stardustSender;
 			_toggleManager = toggleManager;
 		    _hangfireUtilities = hangfireUtilities;
+			_publisher = publisher;
 		}
 
 		[HttpGet, UnitOfWork, Route("api/HealthCheck/CheckBus")]
@@ -152,11 +156,15 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		}
 
 
-		//[HttpGet, UnitOfWork, Route("HealthCheck/CheckScheduleProjectionReadOnly")]
-		//public virtual IHttpActionResult CheckScheduleProjectionReadOnly(DateTime start, DateTime end)
-		//{
-		//	_readModelValidator.Validate(start, end);
-		//	return Ok();
-		//}
+		[HttpGet, UnitOfWork, Route("HealthCheck/CheckScheduleProjectionReadOnly")]
+		public virtual IHttpActionResult CheckScheduleProjectionReadOnly(DateTime start, DateTime end)
+		{
+			_publisher.Publish(new ValidateScheduleProjectionReadOnlyEvent
+			{
+				StartDate = start,
+				EndDate = end
+			});
+			return Ok();
+		}
 	}
 }

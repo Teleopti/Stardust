@@ -479,9 +479,6 @@
     <Compile Include="Areas\Global\WfmAreaRegistration.cs" />
     <Compile Include="Areas\Global\UserController.cs" />
     <Compile Include="Areas\HealthCheck\Controllers\HealthCheckApiController.cs" />
-    <Compile Include="Areas\HealthCheck\Core\IReadModelValidator.cs" />
-    <Compile Include="Areas\HealthCheck\Core\Models\ScheduleProjectionReadOnlyValidationResult.cs" />
-    <Compile Include="Areas\HealthCheck\Core\ReadModelValidator.cs" />
     <Compile Include="Areas\Intraday\IntradayAreaModule.cs" />
     <Compile Include="Areas\Intraday\IntradaySkillAreaController.cs" />
     <Compile Include="Areas\Intraday\IntradaySkillController.cs" />

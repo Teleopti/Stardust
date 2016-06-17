@@ -3,6 +3,7 @@ using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
@@ -43,7 +44,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterAssemblyTypes(typeof(IHandleEvent<>).Assembly)
+	        builder.RegisterType<ReadModelValidator>().As<IReadModelValidator>().SingleInstance();
+			builder.RegisterAssemblyTypes(typeof(IHandleEvent<>).Assembly)
                 .Where(t =>
                 {
                     var handleInterfaces = (
