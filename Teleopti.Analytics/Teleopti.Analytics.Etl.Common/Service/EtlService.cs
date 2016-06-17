@@ -1,4 +1,5 @@
 using System;
+using System.Data.SqlClient;
 using System.Threading;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -17,9 +18,11 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		private readonly IRecurringEventPublisher _recurringEventPublisher;
 		private DateTime? lastTenantRecurringJobPublishing;
 		private INow _now;
+		private int tickTries;
 
 		public EtlService(EtlJobStarter etlJobStarter, TenantTickEventPublisher tenantTickEventPublisher, IRecurringEventPublisher recurringEventPublisher, INow now)
 		{
+			tickTries = 0;
 			_etlJobStarter = etlJobStarter;
 			_tenantTickEventPublisher = tenantTickEventPublisher;
 			_recurringEventPublisher = recurringEventPublisher;
@@ -45,17 +48,27 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			var stop = false;
 
 			log.Debug("Tick");
-			
+
 			EnsureTenantRecurringJobs();
 
 			try
 			{
 				stop = !_etlJobStarter.Tick();
+				tickTries = 0;
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine(ex);
-				log.Error("Exception occurred invoking EtlJobStarter", ex);
+				tickTries++;
+				if (ex is SqlException && tickTries <= 3)
+				{
+					Console.WriteLine(ex);
+					log.Warn("Exception occurred invoking EtlJobStarter", ex);
+				}
+				else
+				{
+					Console.WriteLine(ex);
+					log.Error("Exception occurred invoking EtlJobStarter", ex);
+				}
 			}
 
 			log.DebugFormat("stop: {0}", stop);
