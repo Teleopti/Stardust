@@ -17,7 +17,7 @@ CREATE TABLE [CheckReadModel].[ScheduleProjectionReadOnly]
 	UpdateOn datetime NOT NULL
 	)  
 	ON [PRIMARY]
-ALTER TABLE [CheckReadModel].[ScheduleProjectionReadOnly] ADD CONSTRAINT PK_PersonId_BelongsToDate PRIMARY KEY CLUSTERED 
+ALTER TABLE [CheckReadModel].[ScheduleProjectionReadOnly] ADD CONSTRAINT PK_PersonIdBelongsToDate PRIMARY KEY CLUSTERED 
 (
 	[PersonId] ASC,
 	[BelongsToDate] ASC
