@@ -133,7 +133,10 @@ namespace Teleopti.Ccc.Win.Grouping
 
 		public TabPageAdv SelectedTab
 		{
-			get { return tabControlAdv.SelectedTab; }
+			get
+			{
+				return tabControlAdv?.SelectedTab;
+			}
 		}
 
 		public TabControlAdv TabControl
