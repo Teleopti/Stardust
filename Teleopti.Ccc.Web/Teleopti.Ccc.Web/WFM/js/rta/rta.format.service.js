@@ -13,7 +13,10 @@
 			};
 
 			this.formatDuration = function(duration) {
-				var durationInSeconds = moment.duration(duration === null ? 0 : duration, 'seconds');
+				if(duration === null){
+					return "";
+				}
+				var durationInSeconds = moment.duration(duration, 'seconds');
 				return (Math.floor(durationInSeconds.asHours()) + moment(durationInSeconds.asMilliseconds()).format(':mm:ss'));
 			};
 
