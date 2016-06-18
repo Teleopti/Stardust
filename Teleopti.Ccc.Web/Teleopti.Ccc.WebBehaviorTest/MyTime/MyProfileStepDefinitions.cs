@@ -6,7 +6,6 @@ using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Navigation;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse;
@@ -129,18 +128,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeUSDateFormat()
 		{
 			var date = new DateTime(2014, 5, 2);
-			TryGotoTeamSchedule(date);
+			Navigation.GotoTeamSchedule(date);
 			Browser.Interactions.AssertInputValueUsingJQuery("input.date-input-style", date.ToShortDateString());
 		}
-
-		private void TryGotoTeamSchedule(DateTime date)
-		{
-			//for some unsure reason, it will random failed when go to TeamSchedule page one time, so here try twice
-			Navigation.GotoTeamSchedule(date);
-			Navigation.GotoTeamSchedule(date);
-		}
-
-
+		
 		[Then(@"I should see english text")]
 		public void ThenIShouldSeeEnglishText()
 		{
