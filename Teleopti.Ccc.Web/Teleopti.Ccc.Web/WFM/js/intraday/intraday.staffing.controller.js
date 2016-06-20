@@ -42,21 +42,36 @@
 					$scope.skillAreas = response.SkillAreas;
 				});
 
+				$scope.querySearch = function(query) {
+					var results = query ? $scope.skills.filter(matchQuery(query)) : $scope.skills,
+						deferred;
+					return results;
+				};
+
+				var matchQuery = function(query) {
+					var lowercaseQuery = angular.lowercase(query);
+					return function filterFn(item) {
+						var lowercaseName = angular.lowercase(item.Name);
+						return (lowercaseName.indexOf(lowercaseQuery) === 0);
+					};
+				};
+
 				$scope.TriggerResourceCalculate = function() {
 					console.log('triggered!');
 					intradayStaffingService.TriggerResourceCalculate.query().$promise.then(function(response) {
 						console.log(response);
 					})
 				};
+
 				$scope.updateSelectedSkill = function(skill) {
 					$scope.selectedSkill = skill;
 					$scope.selectedSkillArea = {};
 				};
 
-				$scope.skillAreaIsSelected = function(area){
+				$scope.skillAreaIsSelected = function(area) {
 					$scope.selectedSkillArea = area;
 					$scope.selectedSkill = {};
-				}
+				};
 
 				var initArrays = function() {
 					chartData.Forcast = ['Forcasted'];
@@ -65,9 +80,9 @@
 				};
 				var extractRelevantData = function(data) {
 					data.forEach(function(single) {
-						chartData.Forcast.push(single.Forecast);
-						chartData.Staffing.push(single.StaffingLevel);
-						chartData.Intervals.push(moment(single.StartDateTime).toDate());
+						chartData.Forcast.push(single.Forecast.toFixed(2));
+						chartData.Staffing.push(single.StaffingLevel.toFixed(2));
+						chartData.Intervals.push(new Date(single.StartDateTime));
 					});
 					generateChart();
 				};
@@ -111,6 +126,7 @@
 						},
 						axis: {
 							x: {
+								localtime: false,
 								type: 'timeseries',
 								tick: {
 									format: 'T%H:%M:%S'

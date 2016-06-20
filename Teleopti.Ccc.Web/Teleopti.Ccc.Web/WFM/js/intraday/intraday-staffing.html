@@ -14,7 +14,7 @@
 
 		</div>
 		<div class="con-flex" ng-if="isVisible">
-			<md-autocomplete id="skill-id" class="autocomplete-skill" md-selected-item="selectedSkill" md-search-text="searchSkillText" md-selected-item-change="updateSelectedSkill(selectedSkill)" md-items="skill in skills" md-item-text="skill.Name" md-min-length="0" placeholder="{{'SelectSkill'|translate}}">
+			<md-autocomplete id="skill-id" class="autocomplete-skill" md-selected-item="selectedSkill" md-select-on-match="true" md-search-text="searchSkillText" md-selected-item-change="updateSelectedSkill(selectedSkill)" md-items="skill in querySearch(searchSkillText)" md-item-text="skill.Name" md-min-length="0" placeholder="{{'SelectSkill'|translate}}">
 				<md-item-template>
 					<span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
 				</md-item-template>
@@ -24,9 +24,9 @@
 			</md-autocomplete>
 		</div>
 		<div class="con-flex" ng-if="isVisible">
-			<md-autocomplete id="skill-id" class="autocomplete-skill" md-selected-item="selectedSkillArea" md-search-text="searchSkillText" md-selected-item-change="" md-items="skillArea in skillAreas" md-item-text="skillArea.Name" md-min-length="0" placeholder="{{'SelectSkillArea'|translate}}">
+			<md-autocomplete id="Area-id" class="autocomplete-skill" md-selected-item="selectedSkillArea" md-search-text="searchAreaText" md-selected-item-change="" md-items="skillArea in skillAreas" md-item-text="skillArea.Name" md-min-length="0" placeholder="{{'SelectSkillArea'|translate}}">
 				<md-item-template>
-					<span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skillArea.Name}}</span>
+					<span md-highlight-text="searchAreaText" md-highlight-flags="^i">{{skillArea.Name}}</span>
 				</md-item-template>
 				<md-not-found>
 					{{'RepViewerNoMoreMatches'|translate}}
