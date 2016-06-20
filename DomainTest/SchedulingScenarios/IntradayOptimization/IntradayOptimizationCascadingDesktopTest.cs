@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Linq;
+using NHibernate.Hql.Ast;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -193,6 +194,73 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				.Should().Be.True();
 		}
 
+		[Test]
+		public void ShouldCalculateIntraIntervalDeviationWhenStateHolderIsConsideringShortBreaks()
+		{	
+			var scenario = new Scenario("_");
+			var phoneActivity = ActivityFactory.CreateActivity("_");
+			var dateOnly = new DateOnly(2010, 1, 1);
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(8, 0, 8, 0, 5), new TimePeriodWithSegment(8, 5, 8, 5, 5), new ShiftCategory("_").WithId()));
+			var contract = new Contract("_")
+			{
+				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36)),
+				PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9)
+			};
+			var skillA = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = phoneActivity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillA.SetCascadingIndex(1);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(8, 0, 8, 15));
+			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+			agent.AddPeriodWithSkills(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA });
+			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
+			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
+			var ass = new PersonAssignment(agent, scenario, dateOnly);
+			ass.AddActivity(phoneActivity, new TimePeriod(8, 0, 8, 5));
+			ass.SetShiftCategory(new ShiftCategory("_").WithId());
+			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { skillDayA });
+			schedulerStateHolderFrom.ConsiderShortBreaks = true;
+
+			Target.Optimize(new[] { agent }, new DateOnlyPeriod(dateOnly, dateOnly), new OptimizationPreferencesDefaultValueProvider().Fetch(), null);
+
+			schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillA].Single().SkillStaffPeriodCollection.First().IntraIntervalDeviation
+				.Should().Not.Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldNotCalculateIntraIntervalDeviationWhenStateHolderIsNotConsideringShortBreaks()
+		{
+			var scenario = new Scenario("_");
+			var phoneActivity = ActivityFactory.CreateActivity("_");
+			var dateOnly = new DateOnly(2010, 1, 1);
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(8, 0, 8, 0, 5), new TimePeriodWithSegment(8, 5, 8, 5, 5), new ShiftCategory("_").WithId()));
+			var contract = new Contract("_")
+			{
+				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36)),
+				PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9)
+			};
+			var skillA = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = phoneActivity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillA.SetCascadingIndex(1);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(8, 0, 8, 15));
+			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+			agent.AddPeriodWithSkills(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA });
+			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
+			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
+			var ass = new PersonAssignment(agent, scenario, dateOnly);
+			ass.AddActivity(phoneActivity, new TimePeriod(8, 0, 8, 5));
+			ass.SetShiftCategory(new ShiftCategory("_").WithId());
+			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { skillDayA });
+			schedulerStateHolderFrom.ConsiderShortBreaks = false;
+
+			//TODO consider to check/set consider short breaks in one place only
+			var optimizationPreferences = new OptimizationPreferencesDefaultValueProvider().Fetch();
+			optimizationPreferences.Rescheduling.ConsiderShortBreaks = false;
+
+			Target.Optimize(new[] { agent }, new DateOnlyPeriod(dateOnly, dateOnly), optimizationPreferences, null);
+
+			schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillA].Single().SkillStaffPeriodCollection.First().IntraIntervalDeviation
+				.Should().Be.EqualTo(0);
+		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{

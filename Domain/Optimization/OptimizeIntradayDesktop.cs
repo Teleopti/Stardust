@@ -38,8 +38,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				_intradayOptimizationCommandHandler.Execute(command);
 			}
-			//TODO: what params?
-			selectedPeriod.DayCollection().ForEach(x => _resourceOptimizationHelper.ResourceCalculateDate(x, true, false));
+		
+			selectedPeriod.DayCollection().ForEach(x => _resourceOptimizationHelper.ResourceCalculateDate(x, _currentSchedulerStateHolder().ConsiderShortBreaks, false));
 		}	
 	}
 }

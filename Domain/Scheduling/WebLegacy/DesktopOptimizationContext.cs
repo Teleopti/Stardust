@@ -83,6 +83,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		protected override void PostFill(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
 			schedulerStateHolderTo.RequestedPeriod = schedulerStateHolderFrom().RequestedPeriod;
+			schedulerStateHolderTo.ConsiderShortBreaks = false; //TODO check if this is the wanted behaviour in other cases than intraday optimization
 		}
 
 		public void Synchronize(IScheduleDictionary modifiedScheduleDictionary, DateOnlyPeriod period)
