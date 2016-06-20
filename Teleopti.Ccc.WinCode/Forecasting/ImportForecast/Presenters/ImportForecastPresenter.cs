@@ -92,7 +92,14 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters
 					JobName = "Import forecast from file",
 					InitiatorId = person.Id.GetValueOrDefault()
 				};
-				_eventPublisher.Publish(message);
+				try
+				{
+					_eventPublisher.Publish(message);
+				}
+				catch 
+				{
+					_view.ShowError("Error occured when trying to import file.");
+				}
 			}
 
 			_view.ShowStatusDialog(jobResultId);

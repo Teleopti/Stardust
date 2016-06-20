@@ -246,7 +246,15 @@ namespace Teleopti.Ccc.Win.Payroll
 				}
 
 				if (_toggleManager.IsEnabled(Toggles.Payroll_ToStardust_38204))
-					_stardustSender.Send(message);
+					try
+					{
+						_stardustSender.Send(message);
+					}
+					catch
+					{
+						ViewBase.ShowErrorMessage("An error occured when trying to run a payroll export.", "");
+					}
+
 				else
 					_messageSender.Send(message, true);
 			}
