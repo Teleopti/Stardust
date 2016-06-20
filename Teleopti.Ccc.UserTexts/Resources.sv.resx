@@ -13390,4 +13390,77 @@ Dessa val är aktiverade:
   <data name="CanNotMoveMultipleActivitiesForSelectedAgents" xml:space="preserve">
     <value>Kan inte flytta flera aktiviteter för valda agenter</value>
   </data>
+  <data name="LatestActualInterval" xml:space="preserve">
+    <value>Senaste intervall med verklig data</value>
+  </data>
+  <data name="SubmitProcessWaitlistedRequestsSuccess" xml:space="preserve">
+    <value>Förfrågningarna på väntelistan för perioden {0} har börjat behandlas. </value>
+  </data>
+  <data name="ProductActivationKeyV8Perpetual" xml:space="preserve">
+    <value>Systemet är licensierat till "{0}" enligt villkoren i licensavtalet. 
+
+Produktaktiveringsnyckeln täcker maximalt {1} aktiva agenter.
+
+Huvudversion: {4}
+
+Produktaktiveringsnyckeln gäller "{2}".
+Dessa val är aktiverade:
+{3}</value>
+  </data>
+  <data name="SeatProductActivationKeyV8Perpetual" xml:space="preserve">
+    <value>Systemet är licensierat till "{0}" enligt villkoren i licensavtalet. 
+
+Produktaktiveringsnyckeln täcker maximalt {1} arbetsplatser.
+
+Huvudversion: {4}
+
+Produktaktiveringsnyckeln gäller "{2}".
+Dessa val är aktiverade:
+{3}</value>
+  </data>
+  <data name="FilterReports" xml:space="preserve">
+    <value>Filtrera rapporter</value>
+  </data>
+  <data name="AbandonedRate" xml:space="preserve">
+    <value>Andel tappade</value>
+  </data>
+  <data name="SummaryUpToLatestActualInterval" xml:space="preserve">
+    <value>Summering till och med senaste intervall med verklig data</value>
+  </data>
+  <data name="ShiftLengthExceed36Hours" xml:space="preserve">
+    <value>Skiftlängden överskrider 36 timmar</value>
+  </data>
+  <data name="PreviewTheNewRequestsModule" xml:space="preserve">
+    <value>Ta en förhandstitt på den nya modulen för Förfrågningar!</value>
+  </data>
+  <data name="PreviewTheNewPeopleModule" xml:space="preserve">
+    <value>Ta en förhandstitt på nya Personer-modulen!</value>
+  </data>
+  <data name="DateRange" xml:space="preserve">
+    <value>Datumintervall</value>
+  </data>
+  <data name="ReportOptions" xml:space="preserve">
+    <value>Rapportinställningar</value>
+  </data>
+  <data name="ShowOnlyAgentsWithNoSeat" xml:space="preserve">
+    <value>Visa bara agenter utan sittplats</value>
+  </data>
+  <data name="FailedMessageForBackoutSchedule" xml:space="preserve">
+    <value>Misslyckades med att ångra schemaändringar för valda agenter</value>
+  </data>
+  <data name="ShiftTradeRequestScheduleChanged" xml:space="preserve">
+    <value>Skiftbytesförfrågan för {0} behöver accepteras igen. Den andra agentens schema har ändrats. </value>
+  </data>
+  <data name="Pause" xml:space="preserve">
+    <value>Pausa</value>
+  </data>
+  <data name="PausedAt" xml:space="preserve">
+    <value>Pausat</value>
+  </data>
+  <data name="Play" xml:space="preserve">
+    <value>Starta</value>
+  </data>
+  <data name="RtaPauseDisableNotice" xml:space="preserve">
+    <value>RTA-övervakning aktiverad</value>
+  </data>
 </root>
