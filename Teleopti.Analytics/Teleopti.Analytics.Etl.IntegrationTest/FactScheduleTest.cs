@@ -79,7 +79,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				new FakeContainerHolder(), false
 				)
 			{
-				Helper = new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, "", null), null),
+				Helper = new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, null), null),
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
 
@@ -146,7 +146,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				new FakeContainerHolder(), false
 				)
 			{
-				Helper = new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, "", null), null),
+				Helper = new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, null), null),
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
 
@@ -214,7 +214,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				new FakeContainerHolder(), false
 				)
 			{
-				Helper = new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, "", null), null),
+				Helper = new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, null), null),
 				DataSource = SqlCommands.DataSourceIdGet(datasourceName)
 			};
 

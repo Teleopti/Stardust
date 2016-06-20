@@ -65,7 +65,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				new FakeContainerHolder(), false)
 				{
 					Helper =
-						new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, "", null), null)
+						new JobHelperForTest(new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, null), null)
 				};
 
 			//transfer site, team contract etc from app to analytics

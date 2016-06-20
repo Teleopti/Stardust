@@ -101,8 +101,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 
 					//Create repository when logged in to raptor domain
 					_repository = new RaptorRepository(
-						SelectedDataSourceContainer.DataSource.Analytics.ConnectionString,
-						ConfigurationManager.AppSettings["isolationLevel"], _indexMaintenanceRepository);
+						SelectedDataSourceContainer.DataSource.Analytics.ConnectionString, _indexMaintenanceRepository);
 					return true;
 				}
 			}

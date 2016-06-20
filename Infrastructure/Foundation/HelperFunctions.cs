@@ -1,18 +1,20 @@
 using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics;
+using log4net;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	public static class HelperFunctions
 	{
+		private static readonly ILog logger = LogManager.GetLogger(typeof(HelperFunctions));
+
 		public static int BulkInsert(DataTable dataTable, string tableName, string connectionString)
 		{
 			if (dataTable == null)
 				return 0;
 
 			new BulkWriter().WriteWithRetries(dataTable, connectionString, tableName);
-			Trace.WriteLine("Rows bulk-inserted into '" + tableName + "' : " + dataTable.Rows.Count);
+			logger.Debug($"Rows bulk-inserted into '{tableName}' : {dataTable.Rows.Count}");
 			return dataTable.Rows.Count;
 		}
 
@@ -24,7 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			{
 				rowsAffected = 0;
 			}
-			Trace.WriteLine("Rows affected by command '" + commandText + "': " + rowsAffected);
+			logger.Debug($"Rows affected by command '{commandText}' : {rowsAffected}");
 			return rowsAffected;
 		}
 
@@ -37,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			{
 				rowsAffected = 0;
 			}
-			Trace.WriteLine("Rows affected by command '" + commandText + "': " + rowsAffected);
+			logger.Debug($"Rows affected by command '{commandText}' : {rowsAffected}");
 			return rowsAffected;
 		}
 
@@ -61,7 +63,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 		public static void TruncateTable(string storedProcedureName, string connectionString)
 		{
-			Trace.WriteLine("Before TruncateTable");
+			logger.Debug("Before TruncateTable");
 			ExecuteNonQuery(CommandType.StoredProcedure, storedProcedureName, null, connectionString);
 		}
 	}
