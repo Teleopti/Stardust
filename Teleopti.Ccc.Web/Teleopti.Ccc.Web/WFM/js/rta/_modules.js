@@ -3,7 +3,7 @@
 		'ui.grid',
 		'ui.grid.autoResize',
 		'ui.grid.selection',
-		'ngResource', 'ui.router', 'ngStorage', 'toggleService', 'wfm.notice']);
+		'ngResource', 'ui.router', 'ngStorage', 'toggleService', 'wfm.notice', 'pascalprecht.translate']);
 
 		rta.run([
 		'$rootScope', '$state', '$location', function ($rootScope, $state, $location) {
