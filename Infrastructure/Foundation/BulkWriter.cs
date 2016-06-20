@@ -11,9 +11,9 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 	public class BulkWriter
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(BulkWriter));
-		private const int maxRetry = 5;
-		private const int delayMs = 100;
+		private const int maxRetry = 7;
 		private readonly int _bulkTimeoutSeconds;
+		public int Retries { get; private set; }
 
 		public BulkWriter()
 		{
@@ -24,17 +24,23 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			}
 		}
 
+		public BulkWriter(int bulkTimeoutSeconds)
+		{
+			_bulkTimeoutSeconds = bulkTimeoutSeconds;
+		}
+
 		public void WriteWithRetries(DataTable dataTable, string connectionString, string tableName)
 		{
 			tryWrite(dataTable, connectionString, tableName);
 		}
 
-		private RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy> makeRetryPolicy()
+		private RetryPolicy<ConcatenatedTransientErrorDetectionStrategy> makeRetryPolicy()
 		{
-			var fromMilliseconds = TimeSpan.FromMilliseconds(delayMs);
-			var policy = new RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy>(maxRetry, fromMilliseconds);
+			var policy = new RetryPolicy<ConcatenatedTransientErrorDetectionStrategy>(new ExponentialBackoff(maxRetry, TimeSpan.FromMilliseconds(500),
+					TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(2)));
 			policy.Retrying += (sender, args) =>
 			{
+				Retries++;
 				logger.Debug($"Retry - Count:{args.CurrentRetryCount}, Delay:{args.Delay}, Exception:{args.LastException}");
 			};
 			return policy;
@@ -42,10 +48,14 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 		private void tryWrite(DataTable dataTable, string connectionString, string tableName)
 		{
+			Retries = 0;
 			var policy = makeRetryPolicy();
 			try
 			{
-				policy.ExecuteAction(() => write(dataTable, connectionString, tableName));
+				policy.ExecuteAction(() =>
+				{
+					write(dataTable, connectionString, tableName);
+				});
 			}
 			catch (Exception ex)
 			{

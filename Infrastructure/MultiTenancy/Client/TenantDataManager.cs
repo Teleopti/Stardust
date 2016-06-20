@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using log4net;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
-using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
@@ -34,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 
 			policy.Retrying += (sender, args) =>
 			{
-				logger.InfoFormat("Retry - Count:{0}, Delay:{1}, Exception:{2}", args.CurrentRetryCount, args.Delay, args.LastException);
+				logger.Info($"Retry - Count:{args.CurrentRetryCount}, Delay:{args.Delay}, Exception:{args.LastException}");
 			};
 
 			return policy;

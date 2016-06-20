@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Infrastructure.Util
 
 		public void Run(Func<SqlConnection> connection, Action<SqlConnection> action)
 		{
-			handleWithRetry(connection,action,0);
+			handleWithRetry(connection, action, 0);
 		}
 
 		private void handleWithRetry(Func<SqlConnection> connection, Action<SqlConnection> action, int attempt)

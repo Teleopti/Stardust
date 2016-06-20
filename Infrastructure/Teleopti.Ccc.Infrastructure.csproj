@@ -254,6 +254,7 @@
     <Compile Include="Authentication\NonceInfoRepository.cs" />
     <Compile Include="Config\ThrowingLoadPasswordPolicyService.cs" />
     <Compile Include="Foundation\BulkWriter.cs" />
+    <Compile Include="Foundation\ConcatenatedTransientErrorDetectionStrategy.cs" />
     <Compile Include="Foundation\DatabaseCommand.cs" />
     <Compile Include="DistributedLock\DistributedLockAcquirer.cs" />
     <Compile Include="DistributedLock\DistributedLockException.cs" />
