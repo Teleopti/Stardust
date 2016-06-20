@@ -319,8 +319,17 @@
 			scope.requestsTableContainer.isUsingRequestSubmitterTimeZone = true;
 
 			scope.$watch(function () {
-				return scope.requestsTableContainer.requests;
-			}, function (requests) {
+
+				return {
+					
+					requests: scope.requestsTableContainer.requests,
+					shiftTradeRequestDateSummmary: scope.requestsTableContainer.shiftTradeRequestDateSummary
+
+				}
+
+			}, function (requestWatch) {
+
+				var requests = requestWatch.requests;
 				requestsTableContainerCtrl.prepareComputedColumns(requests);
 
 				requestsTableContainerCtrl.reselectRequests();

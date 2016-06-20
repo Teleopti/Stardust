@@ -231,7 +231,7 @@
 					enablePinning: false,
 					enableColumnMenu: false,
 					enableHiding: false,
-					enableColumnResizing: true,
+					enableColumnResizing: false,
 					category: $filter('date')(startOfWeek.toDate(), 'shortDate'),
 					cellTemplate: 'shift-trade-day-template.html',
 					headerCellClass: isWeekend ? 'shift-trade-header-weekend' : '',
@@ -244,9 +244,9 @@
 			}
 
 			function getShiftTradeVisualisationDayColumns(shiftTradeRequestDateSummary) {
-				var day = moment(shiftTradeRequestDateSummary.StartOfWeek);
-				var maxDay = moment(shiftTradeRequestDateSummary.EndOfWeek);
-				var startOfWeekIsoDay = day.isoWeekday();
+				var day = moment(shiftTradeRequestDateSummary.Minimum);
+				var maxDay = moment(shiftTradeRequestDateSummary.Maximum);
+				var startOfWeekIsoDay = shiftTradeRequestDateSummary.FirstDayOfWeek; //day.isoWeekday();
 
 				var columnArray = [];
 
@@ -256,6 +256,7 @@
 					columnArray.push(getColumnForDay(day.clone(), startOfWeekIsoDay));
 				}
 
+
 				return columnArray;
 			}
 
@@ -263,21 +264,36 @@
 
 				var categories = [];
 				if (shiftTradeRequestDateSummary) {
-				
+
 					var maximum = shiftTradeRequestDateSummary.Maximum;
-					var startOfWeek = shiftTradeRequestDateSummary.StartOfWeek;
+					var minimum = shiftTradeRequestDateSummary.Minimum;
 
-					var day = moment(startOfWeek);
+					var day = moment(minimum);
+					var startOfWeekDay = null;
 
-					
-					while (!day.isAfter(maximum)) {
-						categories.push({
-							name: $filter('date')(day.toDate(), 'shortDate'),
-							visible: true
-						});
+					while (startOfWeekDay == null) {
 
-						day.add(1, 'weeks');
+						if (day.isoWeekday() === shiftTradeRequestDateSummary.FirstDayOfWeek) {
+							startOfWeekDay = day;
+							break;
+						}
+						day.add(-1, 'days');
 					}
+					
+					if (startOfWeekDay) {
+
+						while (!startOfWeekDay.isAfter(maximum)) {
+
+							categories.push({
+								name: $filter('date')(startOfWeekDay.toDate(), 'shortDate'),
+								visible: true,
+								suppressCategoryHeader : startOfWeekDay.isBefore(minimum)
+							});
+
+							startOfWeekDay.add(1, 'weeks');
+						}
+					}
+					
 				}
 
 				return categories;

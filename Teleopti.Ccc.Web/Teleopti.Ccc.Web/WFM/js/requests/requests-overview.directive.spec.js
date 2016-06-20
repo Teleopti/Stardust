@@ -49,6 +49,7 @@
 			targetScope.$digest();
 			var targets = targetElement.find('requests-table-container');
 			expect(targets.length).toEqual(1);
+			
 		});
 			
 		it("populate requests data from requests data service", function () {
@@ -164,6 +165,7 @@
 			requestCommandParamsHolder.setSelectedRequestIds([]);
 			targetScope.$digest();
 			expect(vm.showSelectedRequestsInfo()).toEqual('');
+
 		});
 
 		function getInnerScope(element) {
@@ -269,6 +271,7 @@
 		});
 
 		it("should be able to calculate column categorys for weeks using supplied period startofweek", function () {
+
 			var test = setUpTarget();
 			
 			setUpShiftTradeRequestData(test);
@@ -276,7 +279,7 @@
 			test.scope.shiftTradeRequestDateSummary = {
 				Minimum: '2016-05-25T00:00:00',
 				Maximum: '2016-06-02T00:00:00',
-				StartOfWeek: '2016-05-23T00:00:00'
+				FirstDayOfWeek: 1
 			};
 
 			
@@ -287,11 +290,11 @@
 			
 			expect(categories[0].name).toEqual(toShortDateString('2016-05-23T00:00:00'));
 			expect(categories[1].name).toEqual(toShortDateString('2016-05-30T00:00:00'));
-			
+
 		});
 
 		
-		it("should get columns representing the days involved in the shift trade, starting on Monday", function () {
+		it("should get columns representing the days involved in the shift trade, category should start Monday", function () {
 			var test = setUpTarget();
 
 			setUpShiftTradeRequestData(test);
@@ -299,8 +302,7 @@
 			test.scope.shiftTradeRequestDateSummary = {
 				Minimum: '2016-05-25T00:00:00',
 				Maximum: '2016-06-02T00:00:00',
-				StartOfWeek: '2016-05-23T00:00:00',
-				EndOfWeek: '2016-06-05T00:00:00'
+				FirstDayOfWeek : 1
 			};
 
 			test.scope.$digest();
@@ -316,29 +318,29 @@
 					columns.push(columnDefs[i]);
 				}
 			}
+			
+			expect(columns.length).toEqual(9);
 
-			expect(columns.length).toEqual(14);
-
-			expect(columns[0].displayName).toEqual('23');
+			expect(columns[0].displayName).toEqual('25');
 			expect(columns[0].category).toEqual(toShortDateString('2016-05-23T00:00:00'));
 			
-			expect(columns[13].displayName).toEqual('05');
-			expect(columns[13].category).toEqual(toShortDateString('2016-05-30T00:00:00'));
+			expect(columns[8].displayName).toEqual('02');
+			expect(columns[8].category).toEqual(toShortDateString('2016-05-30T00:00:00'));
 
 		});
 
-
-		it("should get columns representing the days involved in the shift trade, starting on Sunday", function () {
+		it("should get columns representing the days involved in the shift trade, category should start Sunday", function () {
 			var test = setUpTarget();
-
+			
 			setUpShiftTradeRequestData(test);
 
 			test.scope.shiftTradeRequestDateSummary = {
 				Minimum: '2016-05-25T00:00:00',
 				Maximum: '2016-06-02T00:00:00',
-				StartOfWeek: '2016-05-22T00:00:00',
-				EndOfWeek: '2016-06-04T00:00:00'
+				FirstDayOfWeek: 7
 			};
+
+			console.log('gotHere');
 
 			test.scope.$digest();
 
@@ -353,17 +355,14 @@
 					columns.push(columnDefs[i]);
 				}
 			}
+			
 
-			expect(columns.length).toEqual(14);
-
-			expect(columns[0].displayName).toEqual('22');
+			expect(columns.length).toEqual(9);
+			expect(columns[0].displayName).toEqual('25');
 			expect(columns[0].category).toEqual(toShortDateString('2016-05-22T00:00:00'));
-
 			expect(columns[1].category).toEqual(toShortDateString('2016-05-22T00:00:00'));
-
-			expect(columns[13].category).toEqual(toShortDateString('2016-05-29T00:00:00'));
-
-			expect(columns[13].displayName).toEqual('04');
+			expect(columns[8].category).toEqual(toShortDateString('2016-05-29T00:00:00'));
+			expect(columns[8].displayName).toEqual('02');
 
 
 		});

@@ -102,15 +102,20 @@
 			
 			vm.requestsPromise(requestsFilter, sortingOrders, paging).then(function (requests) {
 				vm.requests = requests.data.Requests;
+				
 				if (vm.requests && vm.requests.length > 0) {
 					vm.shiftTradeRequestDateSummary = {
 						Minimum: requests.data.MinimumDateTime,
 						Maximum: requests.data.MaximumDateTime,
-						StartOfWeek: requests.data.FirstDateForVisualisation,
-						EndOfWeek: requests.data.LastDateForVisualisation
+						FirstDayOfWeek: requests.data.FirstDayOfWeek
 					}
 				} else {
-					vm.shiftTradeRequestDateSummary = null;
+					vm.shiftTradeRequestDateSummary = {
+						Minimum: requests.data.MinimumDateTime,
+						Maximum: requests.data.MaximumDateTime,
+						FirstDayOfWeek: requests.data.FirstDayOfWeek
+
+					};
 				}
 
 

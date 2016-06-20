@@ -80,37 +80,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldReturnMinimumAndMaximumDate()
 		{
-			var minRequest = createShiftTradeRequest(new DateOnly(2016, 3, 2), new DateOnly(2016, 3, 2),
-					PersonFactory.CreatePerson("Person", "From"), PersonFactory.CreatePerson("Person", "To"));
-
-			createShiftTradeRequest(new DateOnly(2016, 3, 3), new DateOnly(2016, 3, 3),
-				PersonFactory.CreatePerson("Person", "From"), PersonFactory.CreatePerson("Person", "To"));
-
-			var maxRequest = createShiftTradeRequest(new DateOnly(2016, 3, 5), new DateOnly(2016, 3, 8),
-				PersonFactory.CreatePerson("Person2", "From2"), PersonFactory.CreatePerson("Person2", "To2"));
-
-			var input = new AllRequestsFormData
-			{
-				StartDate = new DateOnly(2016, 3, 1),
-				EndDate = new DateOnly(2016, 3, 10)
-			};
-
-			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
-
-			requestListViewModel.MinimumDateTime.Should().Be.EqualTo(minRequest.Request.Period.LocalStartDateTime);
-			requestListViewModel.MaximumDateTime.Should().Be.EqualTo(maxRequest.Request.Period.LocalEndDateTime);
-		}
-
-		[Test]
-		public void ShouldReturnStartAndEndOfWeekBasedOnLocale()
-		{
-			UserCulture = new FakeUserCulture(CultureInfo.GetCultureInfo("en-US"));
-
 			createShiftTradeRequest(new DateOnly(2016, 3, 2), new DateOnly(2016, 3, 2),
 					PersonFactory.CreatePerson("Person", "From"), PersonFactory.CreatePerson("Person", "To"));
-
-			createShiftTradeRequest(new DateOnly(2016, 3, 3), new DateOnly(2016, 3, 3),
-				PersonFactory.CreatePerson("Person", "From"), PersonFactory.CreatePerson("Person", "To"));
 
 			createShiftTradeRequest(new DateOnly(2016, 3, 5), new DateOnly(2016, 3, 8),
 				PersonFactory.CreatePerson("Person2", "From2"), PersonFactory.CreatePerson("Person2", "To2"));
@@ -123,9 +94,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 
 			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
 
-			requestListViewModel.FirstDateForVisualisation.Should().Be.EqualTo(new DateOnly(2016, 02, 28));
-			requestListViewModel.LastDateForVisualisation.Should().Be.EqualTo(new DateOnly(2016, 03, 12));
+			requestListViewModel.MinimumDateTime.Should().Be.EqualTo(input.StartDate.Date);
+			requestListViewModel.MaximumDateTime.Should().Be.EqualTo(input.EndDate.Date);
 		}
+		
+		
 
 		[Test]
 		public void ShouldGetShiftTradeRequestPersonToDetails()

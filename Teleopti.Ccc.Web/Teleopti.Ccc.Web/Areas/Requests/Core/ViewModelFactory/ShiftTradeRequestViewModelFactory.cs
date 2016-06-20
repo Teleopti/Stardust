@@ -17,17 +17,17 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 		private readonly IRequestViewModelMapper _requestViewModelMapper;
 		private readonly IPersonNameProvider _personNameProvider;
 		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
-		private readonly IUserCulture _userCulture;
 		private readonly IScheduleProvider _scheduleProvider;
+		private readonly IUserCulture _userCulture;
 
-		public ShiftTradeRequestViewModelFactory(IRequestsProvider requestsProvider, IRequestViewModelMapper requestViewModelMapper, IPersonNameProvider personNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider, IUserCulture userCulture, IScheduleProvider scheduleProvider)
+		public ShiftTradeRequestViewModelFactory(IRequestsProvider requestsProvider, IRequestViewModelMapper requestViewModelMapper, IPersonNameProvider personNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider, IScheduleProvider scheduleProvider, IUserCulture userCulture)
 		{
 			_requestsProvider = requestsProvider;
 			_requestViewModelMapper = requestViewModelMapper;
 			_personNameProvider = personNameProvider;
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
-			_userCulture = userCulture;
 			_scheduleProvider = scheduleProvider;
+			_userCulture = userCulture;
 		}
 
 		public ShiftTradeRequestListViewModel CreateRequestListViewModel(AllRequestsFormData input)
@@ -53,13 +53,10 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 
 			if (existsRequests)
 			{
-				var requestMinDate = requests.Min(r => r.Request.Period.LocalStartDateTime);
-				var requestMaxDate = requests.Max(r => r.Request.Period.LocalEndDateTime);
 				requestListModel.Requests = requests.Select(request => _requestViewModelMapper.Map(createShiftTradeRequestViewModel(request), request)).ToList();
-				requestListModel.MinimumDateTime = requestMinDate;
-				requestListModel.MaximumDateTime = requestMaxDate;
-				requestListModel.FirstDateForVisualisation = new DateOnly(DateHelper.GetFirstDateInWeek(requestMinDate, _userCulture.GetCulture()));
-				requestListModel.LastDateForVisualisation = new DateOnly(DateHelper.GetLastDateInWeek(requestMaxDate, _userCulture.GetCulture()));
+				requestListModel.MinimumDateTime = input.StartDate.Date;
+				requestListModel.MaximumDateTime = input.EndDate.Date;
+				requestListModel.FirstDayOfWeek = (int)_userCulture.GetCulture().DateTimeFormat.FirstDayOfWeek;
 			}
 
 			return requestListModel;

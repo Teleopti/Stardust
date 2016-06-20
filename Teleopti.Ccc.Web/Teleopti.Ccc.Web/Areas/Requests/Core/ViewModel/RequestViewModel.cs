@@ -72,9 +72,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
 	{
 		public DateTime MinimumDateTime;
 		public DateTime MaximumDateTime;
-		public DateOnly FirstDateForVisualisation { get; set; }
-		public DateOnly LastDateForVisualisation { get; set; }
-			
+
+		public int FirstDayOfWeek { get; set; }
 	}
 
 }

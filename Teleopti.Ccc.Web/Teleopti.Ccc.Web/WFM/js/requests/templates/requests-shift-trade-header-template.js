@@ -13,7 +13,8 @@
 					'						<div class=\"ui-grid-header-cell ui-grid-clearfix ui-grid-category\"' +
 					'							 ng-repeat=\"cat in grid.options.category\"' +
 					'							 ng-if=\"cat.visible && (colContainer.renderedColumns | filter:{ colDef:{category: cat.name} }).length>0\">' +
-					'							<div class=\"ui-grid-category-text\">{{cat.name}}</div>' +
+					'							<div ng-if=\"!cat.suppressCategoryHeader\" class=\"ui-grid-category-text\">{{cat.name}}</div>' +
+					'							<div ng-if=\"cat.suppressCategoryHeader\" class=\"ui-grid-category-text\">&nbsp;</div>' +
 					'							<div class=\"ui-grid-header-cell ui-grid-clearfix ui-grid-category-weekday\"' +
 					'								 ng-repeat=\"col in colContainer.renderedColumns | filter:{ colDef:{category: cat.name} }\"' +
 					'								 ui-grid-header-cell' +
