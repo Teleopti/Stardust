@@ -454,5 +454,33 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             Assert.AreEqual(new DateOnlyPeriod(2010, 6, 28, 2010, 8, 31), projectedOpenAbsenceRequestPeriods[3].GetPeriod(DateOnly.Today));
             Assert.AreEqual(new DateOnlyPeriod(2010, 9, 1, 2010, 12, 31), projectedOpenAbsenceRequestPeriods[4].GetPeriod(DateOnly.Today));
         }
+
+	    [Test]
+	    public void ShouldGetNoPeriodDenyReasonForSpecifiedCulture()
+	    {
+		    var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod();
+		    absenceRequestOpenPeriod.Period = new DateOnlyPeriod(new DateOnly(2010, 1, 1), new DateOnly(2010, 6, 30));
+		    _openAbsenceRequestPeriods.Clear();
+		    _openAbsenceRequestPeriods.Add(absenceRequestOpenPeriod);
+
+		    using (_mocks.Record())
+		    {
+			    Expect.Call(_openAbsenceRequestPeriodExtractor.AvailablePeriods).Return(_openAbsenceRequestPeriods);
+			    Expect.Call(_openAbsenceRequestPeriodExtractor.AllPeriods).Return(_openAbsenceRequestPeriods);
+			    Expect.Call(_openAbsenceRequestPeriodExtractor.ViewpointDate).Return(DateOnly.Today).Repeat.AtLeastOnce();
+		    }
+
+		    var dateCulture = CultureInfo.GetCultureInfo("sv-SE");
+		    var languageCulture = CultureInfo.GetCultureInfo("zh-CN");
+		    var requestPeriod = new DateOnlyPeriod(2011, 06, 25, 2011, 06, 26);
+
+		    var projectedPeriods = _target.GetProjectedPeriods(requestPeriod, dateCulture, languageCulture);
+
+		    var expected =
+			    string.Format(UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonNoPeriod", languageCulture)
+				    , absenceRequestOpenPeriod.Period.ToShortDateString(dateCulture));
+
+		    Assert.AreEqual(expected, ((DenyAbsenceRequest) projectedPeriods[0].AbsenceRequestProcess).DenyReason);
+	    }
     }
 }

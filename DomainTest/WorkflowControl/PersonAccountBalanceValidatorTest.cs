@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -138,5 +139,35 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             var result = _target.GetHashCode();
             Assert.IsNotNull(result);
         }
-    }
+
+		[Test]
+	    public void ShouldGetDenyReasonForSpecifiedCulture()
+	    {
+			var requestedDateTimePeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 100);
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var absenceRequest = _personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod);
+			var languageCulture = CultureInfo.GetCultureInfo("zh-CN");
+			absenceRequest.Person.PermissionInformation.SetUICulture(languageCulture);
+
+			using (_mocks.Record())
+			{
+				Expect.Call(
+					_personAccountBalanceCalculator.CheckBalance(
+						_schedulingResultStateHolder.Schedules[absenceRequest.Person],
+						requestedDateTimePeriod.ToDateOnlyPeriod(
+							absenceRequest.Person.PermissionInformation.DefaultTimeZone()))).Return(false);
+
+			}
+
+			var result = _target.Validate(absenceRequest,
+										  new RequiredForHandlingAbsenceRequest(_schedulingResultStateHolder,
+																				_personAccountBalanceCalculator, null,
+																				null, null));
+
+			var expect = UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonPersonAccount", languageCulture);
+
+			Assert.IsTrue(expect.Equals(result.ValidationErrors));
+	    }
+
+	}
 }

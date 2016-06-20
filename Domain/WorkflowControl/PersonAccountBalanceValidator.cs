@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             if (!validatedRequest.IsValid)
                 validatedRequest.ValidationErrors =
                     UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonPersonAccount",
-                                                                  person.PermissionInformation.Culture());
+                                                                  person.PermissionInformation.UICulture());
             return validatedRequest;
         }
 
