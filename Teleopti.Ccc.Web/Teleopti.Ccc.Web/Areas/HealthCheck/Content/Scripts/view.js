@@ -28,7 +28,6 @@ define([
 	};
 
 	var requestReadModelCheck = function () {
-		console.log(vm);
 		http.get('HealthCheck/CheckScheduleProjectionReadOnly', { start: new Date(vm.readModelCheckStartDate()).toISOString(), end: new Date(vm.readModelCheckEndDate()).toISOString() }).done(function(data) {
 		});
 	};

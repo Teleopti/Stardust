@@ -61,7 +61,6 @@ define([
 
 		var checkReadModelFunc;
 		self.checkReadModel = function() {
-			console.log(self.readModelCheckStartDate(), self.readModelCheckEndDate());
 			checkReadModelFunc();
 		};
 
