@@ -14598,4 +14598,24 @@ These options are activated:
     <value>The shift trade request for {0} needs to be accepted again. The other agent's schedule has changed.</value>
     <comment>Your shift trade request has been denied. due to one of the agent's schedule is changed.</comment>
   </data>
+  <data name="Pause" xml:space="preserve">
+    <value>Pause</value>
+    <comment>Pause</comment>
+  </data>
+  <data name="PausedAt" xml:space="preserve">
+    <value>Paused at</value>
+    <comment>paused at</comment>
+  </data>
+  <data name="Play" xml:space="preserve">
+    <value>Play</value>
+    <comment>Play</comment>
+  </data>
+  <data name="RtaPauseDisableNotice" xml:space="preserve">
+    <value>Real time adherence monitoring activated</value>
+    <comment>Monitoring reactivated</comment>
+  </data>
+  <data name="RtaPauseEnabledNotice" xml:space="preserve">
+    <value>Real time adherence monitoring paused at {0}! Re-enable by clicking play</value>
+    <comment>Monitoring paused in rta at time: {0} </comment>
+  </data>
 </root>
