@@ -295,7 +295,7 @@
     <Compile Include="RetryingQueueSimulator.cs" />
     <Compile Include="Rta\Persisters\AdherencePercentageReadModelPersisterConcurrencyTest.cs" />
     <Compile Include="Rta\Persisters\AgentStateReadModelPersisterTest.cs" />
-    <Compile Include="Rta\Persisters\AgentStateReadModelReaderForSkillTest.cs" />
+    <Compile Include="Rta\AgentStateReadModelReaderForSkillTest.cs" />
     <Compile Include="Rta\Persisters\PersonSkillsReadModelPersisterTest.cs" />
     <Compile Include="Rta\Persisters\SiteOutOfAdherenceReadModelPersisterConcurrencyTest.cs" />
     <Compile Include="Rta\Persisters\TeamOutOfAdherenceReadModelPersisterConcurrencyTest.cs" />
