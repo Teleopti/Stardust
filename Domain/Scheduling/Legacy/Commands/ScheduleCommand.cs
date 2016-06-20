@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			var selectedPersons = selectedScheduleDays.Select(x => x.Person).Distinct().ToList();
 
-			using (_resourceCalculationContextFactory.Create())
+			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills))
 			{
 				if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff)
 				{

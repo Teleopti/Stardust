@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			assB.AddActivity(activity, new TimePeriod(8, 0, 17, 0));
 			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date), new[] { agentAB, agentB }, new[] { assAB, assB }, new[] { skillDayA, skillDayB });
 
-			using (ResourceCalculationContextFactory.Create())
+			using (ResourceCalculationContextFactory.Create(schedulerStateHolderFrom.Schedules, schedulerStateHolderFrom.SchedulingResultState.Skills))
 			{
 				FullResourceCalculation.Execute();
 

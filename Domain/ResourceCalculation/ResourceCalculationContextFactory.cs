@@ -1,46 +1,44 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class ResourceCalculationContextFactory : IResourceCalculationContextFactory
 	{
-		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly Func<IPersonSkillProvider> _personSkillProvider;
 		private readonly ITimeZoneGuard _timeZoneGuard;
 
-		public ResourceCalculationContextFactory(Func<ISchedulerStateHolder> schedulerStateHolder, Func<IPersonSkillProvider> personSkillProvider, ITimeZoneGuard timeZoneGuard)
+		//TODO: why is func needed? remove?
+		public ResourceCalculationContextFactory(Func<IPersonSkillProvider> personSkillProvider, ITimeZoneGuard timeZoneGuard)
 		{
-			_schedulerStateHolder = schedulerStateHolder;
 			_personSkillProvider = personSkillProvider;
 			_timeZoneGuard = timeZoneGuard;
 		}
 
-		public IDisposable Create()
+		public IDisposable Create(IScheduleDictionary scheduleDictionary, IEnumerable<ISkill> allSkills)
 		{
-			return new ResourceCalculationContext(createResources(null));
+			return new ResourceCalculationContext(createResources(scheduleDictionary, allSkills, null));
 		}
 
-		public IDisposable Create(DateOnlyPeriod period)
+		public IDisposable Create(IScheduleDictionary scheduleDictionary, IEnumerable<ISkill> allSkills, DateOnlyPeriod period)
 		{
-			return new ResourceCalculationContext(createResources(period));
+			return new ResourceCalculationContext(createResources(scheduleDictionary, allSkills, period));
 		}
 
-		private Lazy<IResourceCalculationDataContainerWithSingleOperation> createResources(DateOnlyPeriod? period)
+		private Lazy<IResourceCalculationDataContainerWithSingleOperation> createResources(IScheduleDictionary scheduleDictionary, IEnumerable<ISkill> allSkills, DateOnlyPeriod? period)
 		{
-			var schedulerStateHolder = _schedulerStateHolder();
 			var createResources = new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() =>
 			{
-				var minutesPerInterval = schedulerStateHolder.SchedulingResultState.Skills.Any() ? 
-					schedulerStateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution) 
+				var minutesPerInterval = allSkills.Any() ?
+					allSkills.Min(s => s.DefaultResolution) 
 					: 15;
 				var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), minutesPerInterval);
 				return period.HasValue ? 
-					extractor.CreateRelevantProjectionList(schedulerStateHolder.Schedules, period.Value.ToDateTimePeriod(_timeZoneGuard.CurrentTimeZone())) : 
-					extractor.CreateRelevantProjectionList(schedulerStateHolder.Schedules);
+					extractor.CreateRelevantProjectionList(scheduleDictionary, period.Value.ToDateTimePeriod(_timeZoneGuard.CurrentTimeZone())) : 
+					extractor.CreateRelevantProjectionList(scheduleDictionary);
 			});
 			return createResources;
 		}

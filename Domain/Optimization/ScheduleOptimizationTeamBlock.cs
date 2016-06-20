@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var teamInfoFactory = new TeamInfoFactory(_groupPersonBuilderWrapper);
 			var backgroundWorker = new NoSchedulingProgress();
 			_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker, false);
-			using (_resourceCalculationContextFactory.Create())
+			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills))
 			{
 				_teamBlockDayOffOptimizerService.OptimizeDaysOff(
 					matrixListForDayOffOptimization, period,

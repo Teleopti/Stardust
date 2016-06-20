@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IDisposable contextDisposal = null;
 			if (!ResourceCalculationContext.InContext)
 			{
-				contextDisposal = _resourceCalculationContextFactory.Create();
+				contextDisposal = _resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills);
 			}
 			
 				EventHandler<ResourceOptimizerProgressEventArgs> onResolvingWeek = (sender, e) =>

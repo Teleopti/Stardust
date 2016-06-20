@@ -30,7 +30,8 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 		public void Execute(DateOnlyPeriod period)
 		{
-			var cascadingSkills = new CascadingSkills(_stateHolder().SchedulingResultState.Skills); 
+			var stateHolder = _stateHolder();
+			var cascadingSkills = new CascadingSkills(stateHolder.SchedulingResultState.Skills); 
 			if (!cascadingSkills.Any())
 				return;
 
@@ -39,7 +40,8 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 			using (ResourceCalculationCurrent.PreserveContext())
 			{
-				using (new ResourceCalculationContextFactory(_stateHolder, () => new PersonSkillProvider(), _timeZoneGuard).Create(period))
+				using (new ResourceCalculationContextFactory(() => new PersonSkillProvider(), _timeZoneGuard)
+					.Create(stateHolder.Schedules, stateHolder.SchedulingResultState.Skills, period))
 				{
 					foreach (var date in period.DayCollection())
 					{

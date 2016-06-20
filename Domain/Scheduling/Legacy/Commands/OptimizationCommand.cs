@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			if (optimizationMethodBackToLegalState)
 			{
-				using (_resourceCalculationContextFactory.Create())
+				using (_resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills))
 				{
 					var scheduleMatrixOriginalStateContainers =
 						_scheduleMatrixOriginalStateContainerCreator.CreateScheduleMatrixOriginalStateContainers(selectedSchedules,
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 				if (optimizationPreferences.Extra.UseTeamBlockOption || optimizationPreferences.Extra.UseTeams)
 				{
-					using (_resourceCalculationContextFactory.Create())
+					using (_resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills))
 					{
 						_teamBlockOptimizationCommand.Execute(backgroundWorker, selectedPeriod.Value, selectedPersons,
 							optimizationPreferences,
