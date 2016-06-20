@@ -404,7 +404,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			{
 				foreach (var dateOnly in selectedPeriod.DayCollection())
 				{
-					_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, false);
+					_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, _stateHolder().ToResourceOptimizationData(true, false));
 				}
 			}
 		}
@@ -453,7 +453,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder(), _scheduleDayChangeCallback(),
 				tagSetter);
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
-				schedulingOptions.ConsiderShortBreaks);
+				schedulingOptions.ConsiderShortBreaks, _stateHolder());
 			var intraIntervalOptimizationCommand = _container.Resolve<IIntraIntervalOptimizationCommand>();
 			intraIntervalOptimizationCommand.Execute(optimizationPreferences, selectedPeriod, selectedDays,
 				_schedulerStateHolder().SchedulingResultState, allMatrixes, rollbackService, resourceCalculateDelayer,
@@ -575,7 +575,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var scheduleService = _container.Resolve<IScheduleService>();
 
 			// schedule those are the white spots after back to legal state
-			_optimizerHelper.ScheduleBlankSpots(matrixContainerList, scheduleService, _container, rollbackService);
+			_optimizerHelper.ScheduleBlankSpots(matrixContainerList, scheduleService, _container, rollbackService, _stateHolder());
 
 
 			bool notFullyScheduledMatrixFound = false;
@@ -597,10 +597,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			if (notFullyScheduledMatrixFound)
 			{
+				var resCalcData = _stateHolder().ToResourceOptimizationData(optimizerPreferences.Rescheduling.ConsiderShortBreaks, false);
 				foreach (var dateOnly in selectedPeriod.DayCollection())
 				{
-					_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, optimizerPreferences.Rescheduling.ConsiderShortBreaks,
-						false);
+					_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, resCalcData);
 				}
 			}
 

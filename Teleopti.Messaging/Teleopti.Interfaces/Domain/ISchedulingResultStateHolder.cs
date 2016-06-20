@@ -27,15 +27,15 @@ namespace Teleopti.Interfaces.Domain
         /// </value>
         bool SkipResourceCalculation { get; set; }
 
-        /// <summary>
-        /// Gets or sets the persons in organization.
-        /// </summary>
-        /// <value>The persons in organization.</value>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-11-10
-        /// </remarks>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+		/// <summary>
+		/// Gets or sets the persons in organization.
+		/// </summary>
+		/// <value>The persons in organization.</value>
+		/// <remarks>
+		/// Created by: micke
+		/// Created date: 2008-11-10
+		/// </remarks>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         ICollection<IPerson> PersonsInOrganization { get; set; }
 
         /// <summary>
@@ -136,5 +136,6 @@ namespace Teleopti.Interfaces.Domain
 	    void ClearSkills();
 	    void RemoveSkill(ISkill skill);
 	    bool GuessResourceCalculationHasBeenMade();
+	    ResourceOptimizationData ToResourceOptimizationData(bool considerShortBreaks, bool doIntraIntervalCalculation);
     }
 }

@@ -96,8 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			};
 
 			var selectedSchedules = stateHolder.Schedules[agent1].ScheduledDayCollection(period).ToList();
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(ResourceOptimizationHelper, 1,
-							schedulingOptions.ConsiderShortBreaks);
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(ResourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, null); //CHECK THIS
 
 			ISchedulePartModifyAndRollbackService rollbackService =
 				new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState,

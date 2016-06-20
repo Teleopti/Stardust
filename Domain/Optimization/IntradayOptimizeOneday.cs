@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IResourceCalculateDelayer _resourceCalculateDelayer;
 		private readonly IScheduleMatrixPro _matrix;
 		private readonly IIntradayOptimizeOneDayCallback _intradayOptimizeOneDayCallback;
+		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 
 		public IntradayOptimizeOneday(IScheduleResultDailyValueCalculator dailyValueCalculator,
 			IScheduleService scheduleService,
@@ -37,7 +38,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			IScheduleMatrixPro matrix,
-			IIntradayOptimizeOneDayCallback intradayOptimizeOneDayCallback)
+			IIntradayOptimizeOneDayCallback intradayOptimizeOneDayCallback,
+			ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			_dailyValueCalculator = dailyValueCalculator;
 			_scheduleService = scheduleService;
@@ -53,6 +55,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_resourceCalculateDelayer = resourceCalculateDelayer;
 			_matrix = matrix;
 			_intradayOptimizeOneDayCallback = intradayOptimizeOneDayCallback;
+			_schedulingResultStateHolder = schedulingResultStateHolder;
 		}
 
 		//change to void when toggle is gone
@@ -136,7 +139,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IScheduleDayPro scheduleDay = _matrix.FullWeeksPeriodDictionary[day];
 			schedulingOptions.WorkShiftLengthHintOption = workShiftLengthHintOption;
 
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks);
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder);
 
 			if (!_scheduleService.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), schedulingOptions, effectiveRestriction, resourceCalculateDelayer, _rollbackService))
 			{

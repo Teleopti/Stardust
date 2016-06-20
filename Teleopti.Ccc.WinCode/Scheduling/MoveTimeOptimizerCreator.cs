@@ -100,7 +100,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 						optimizationLimits,
 						schedulingOptionsCreator,
 						mainShiftOptimizeActivitySpecificationSetter,
-						scheduleMatrixPro);
+						scheduleMatrixPro,
+						_schedulingResultStateHolder);
 
 				result.Add(optimizer);
 			}

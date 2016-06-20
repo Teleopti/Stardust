@@ -52,9 +52,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	   [LogTime]
 		public virtual void DoCalculation(DateOnlyPeriod period)
 		{
+			var resCalcData = _schedulerStateHolder().SchedulingResultState.ToResourceOptimizationData(true, true);
 			foreach (var dateOnly in period.DayCollection())
 			{
-				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
+				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, resCalcData);
 			}
 		}
 

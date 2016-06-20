@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
@@ -14,15 +15,18 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 		private readonly ITeamBlockDayOffOptimizerService _teamBlockDayOffOptimizerService;
+		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 
 		public DayOffOptimizationDesktopTeamBlock(
 			IResourceOptimizationHelper resourceOptimizationHelper,
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
-			ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService)
+			ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService,
+			Func<ISchedulingResultStateHolder> schedulingResultStateHolder)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
 			_teamBlockDayOffOptimizerService = teamBlockDayOffOptimizerService;
+			_schedulingResultStateHolder = schedulingResultStateHolder;
 		}
 
 		public void Execute(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization,
@@ -35,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var matrixListForDayOffOptimization = matrixOriginalStateContainerListForDayOffOptimization.Select(container => container.ScheduleMatrix).ToList();
 			var selectedPersons = matrixListForDayOffOptimization.Select(matrixList => matrixList.Person).Distinct().ToList();
 
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks);
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder());
 			_groupPersonBuilderWrapper.SetSingleAgentTeam();
 			var teamInfoFactory = new TeamInfoFactory(_groupPersonBuilderWrapper);
 

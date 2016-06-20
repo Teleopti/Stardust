@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Secrets.DayOffPlanning;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
@@ -18,7 +17,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IEnumerable<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
 			IScheduleService scheduleService,
 			IComponentContext container,
-			ISchedulePartModifyAndRollbackService rollbackService)
+			ISchedulePartModifyAndRollbackService rollbackService,
+			ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 
 			var effectiveRestrictionCreator = container.Resolve<IEffectiveRestrictionCreator>();
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					{
 						var effectiveRestriction =
 							effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDayPro.DaySchedulePart(), schedulingOptions);
-						var resourceCalculateDelayer = new ResourceCalculateDelayer(container.Resolve<IResourceOptimizationHelper>(), 1, schedulingOptions.ConsiderShortBreaks);
+						var resourceCalculateDelayer = new ResourceCalculateDelayer(container.Resolve<IResourceOptimizationHelper>(), 1, schedulingOptions.ConsiderShortBreaks, schedulingResultStateHolder);
 
 						result = scheduleService.SchedulePersonOnDay(scheduleDayPro.DaySchedulePart(), schedulingOptions, effectiveRestriction, resourceCalculateDelayer, rollbackService);
 					}

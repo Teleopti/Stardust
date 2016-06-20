@@ -47,9 +47,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA, skillB1, skillB2 });
 			var ass = new PersonAssignment(agent, scenario, dateOnly);
 			ass.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
-			SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { skillDayA, skillDayB1, skillDayB2 });
+			var stateholder=SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { skillDayA, skillDayB1, skillDayB2 });
 
-			Target.ResourceCalculateDate(dateOnly, false, false);
+			Target.ResourceCalculateDate(dateOnly, stateholder.SchedulingResultState.ToResourceOptimizationData(false, false));
 
 			skillDayA.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0);
@@ -81,9 +81,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA, skillB1, skillB2 });
 			var ass = new PersonAssignment(agent, scenario, dateOnly);
 			ass.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
-			SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { skillDayA, skillDayB1, skillDayB2 });
+			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { skillDayA, skillDayB1, skillDayB2 });
 
-			Target.ResourceCalculateDate(dateOnly, false, false);
+			Target.ResourceCalculateDate(dateOnly, stateHolder.SchedulingResultState.ToResourceOptimizationData(false, false));
 
 			var b1Understaffed = -skillDayB1.SkillStaffPeriodCollection.First().AbsoluteDifference;
 			var b2Understaffed = -skillDayB2.SkillStaffPeriodCollection.First().AbsoluteDifference;
@@ -112,9 +112,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA, skillB1, skillB2 });
 			var ass = new PersonAssignment(agent, scenario, dateOnly);
 			ass.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
-			SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { skillDayA, skillDayB1, skillDayB2 });
+			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { skillDayA, skillDayB1, skillDayB2 });
 
-			Target.ResourceCalculateDate(dateOnly, false, false);
+			Target.ResourceCalculateDate(dateOnly, stateHolder.SchedulingResultState.ToResourceOptimizationData(false, false));
 
 			skillDayA.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0);
@@ -151,9 +151,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var assB2 = new PersonAssignment(agentB2, scenario, dateOnly);
 			assB2.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
 
-			SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent, agentB2 }, new[] { ass, assB2 }, new[] { skillDayA, skillDayB1, skillDayB2 });
+			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent, agentB2 }, new[] { ass, assB2 }, new[] { skillDayA, skillDayB1, skillDayB2 });
 
-			Target.ResourceCalculateDate(dateOnly, false, false);
+			Target.ResourceCalculateDate(dateOnly, stateHolder.SchedulingResultState.ToResourceOptimizationData(false, false));
 
 			skillDayA.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0);
@@ -185,9 +185,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA1, skillA2, skillB });
 			var ass = new PersonAssignment(agent, scenario, dateOnly);
 			ass.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
-			SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { skillDayA1, skillDayA2, skillDayB });
+			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { skillDayA1, skillDayA2, skillDayB });
 
-			Target.ResourceCalculateDate(dateOnly, false, false);
+			Target.ResourceCalculateDate(dateOnly, stateHolder.SchedulingResultState.ToResourceOptimizationData(false, false));
 
 			skillDayA1.SkillStaffPeriodCollection.First().AbsoluteDifference
 				  .Should().Be.IncludedIn(0.079, 0.081); //double rounding errors

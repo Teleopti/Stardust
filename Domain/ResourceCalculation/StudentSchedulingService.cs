@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		    var skills = _schedulingResultStateHolder.Skills;
 		    if (skills.Length == 0) return false;
 		    var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
-			    schedulingOptions.ConsiderShortBreaks);
+			    schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder);
 
 
 		    schedulingOptions.OnlyShiftsWhenUnderstaffed = true;

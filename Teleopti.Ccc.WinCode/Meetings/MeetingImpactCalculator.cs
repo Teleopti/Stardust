@@ -31,15 +31,15 @@ namespace Teleopti.Ccc.WinCode.Meetings
             RemoveMeetingFromDictionary(_meeting);
             AddPersonMeetingsToDictionary(_meeting);
 
-            _resourceOptimizationHelper.ResourceCalculateDate(dateToCalculate, true, false);
+            _resourceOptimizationHelper.ResourceCalculateDate(dateToCalculate, _schedulerStateHolder.SchedulingResultState.ToResourceOptimizationData(true, false));
         }
 
         public void RemoveAndRecalculateResources(IMeeting meeting, DateOnly dateToCalculate)
         {
             RemoveMeetingFromDictionary(_meeting);
 
-            _resourceOptimizationHelper.ResourceCalculateDate(dateToCalculate, true, false);
-        }
+			_schedulerStateHolder.SchedulingResultState.ToResourceOptimizationData(true, false);
+		}
 
         private void RemoveMeetingFromDictionary(IMeeting meeting)
         {

@@ -375,7 +375,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 							), new TimeZoneGuardWrapper(), new ResourceCalculationContextFactory(() => new PersonSkillProvider(), new TimeZoneGuardWrapper())
 						),
 					1,
-					true
+					true,
+					SchedulerStateHolder.SchedulingResultState
 					),
 				selectedPeriod,
 				matrixlist,
@@ -546,7 +547,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 							), new TimeZoneGuardWrapper(), new ResourceCalculationContextFactory(() => new PersonSkillProvider(), new TimeZoneGuardWrapper())
 						),
 					1,
-					true
+					true,
+					SchedulerStateHolder.SchedulingResultState
 					),
 				selectedPeriod,
 				matrixlist,

@@ -20,11 +20,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var schedDic = new ScheduleDictionaryForTest(new Scenario("_"), new DateTimePeriod(1900, 1, 1, 2100, 1, 1));
 			var scheduleDay = ExtractedSchedule.CreateScheduleDay(schedDic, agent, date);
 			skillGroupInfo.Expect(x => x.DoCalculation(agent, date)).Return(true);
+			var stateHolder = MockRepository.GenerateStub<ISchedulingResultStateHolder>();
 
-			var target = new DeleteAndResourceCalculateService(MockRepository.GenerateStub<IDeleteSchedulePartService>(), resourceOptHelper, MockRepository.GenerateStub<IResourceCalculateDaysDecider>(), skillGroupInfo);
+			var target = new DeleteAndResourceCalculateService(() => stateHolder, MockRepository.GenerateStub<IDeleteSchedulePartService>(), resourceOptHelper, MockRepository.GenerateStub<IResourceCalculateDaysDecider>(), skillGroupInfo);
 			target.DeleteWithResourceCalculation(scheduleDay, null, false, false);
 
-			resourceOptHelper.AssertWasCalled(x => x.ResourceCalculateDate(date, false, false));
+			resourceOptHelper.AssertWasCalled(x => x.ResourceCalculateDate(date, new ResourceOptimizationData(false, false)), options => options.IgnoreArguments());
 		}
 
 		[Test]
@@ -37,11 +38,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var schedDic = new ScheduleDictionaryForTest(new Scenario("_"), new DateTimePeriod(1900, 1, 1, 2100, 1, 1));
 			var scheduleDay = ExtractedSchedule.CreateScheduleDay(schedDic, agent, date);
 			skillGroupInfo.Expect(x => x.DoCalculation(agent, date)).Return(false);
+			var stateHolder = MockRepository.GenerateStub<ISchedulingResultStateHolder>();
 
-			var target = new DeleteAndResourceCalculateService(MockRepository.GenerateStub<IDeleteSchedulePartService>(), resourceOptHelper, MockRepository.GenerateStub<IResourceCalculateDaysDecider>(), skillGroupInfo);
+			var target = new DeleteAndResourceCalculateService(() => stateHolder, MockRepository.GenerateStub<IDeleteSchedulePartService>(), resourceOptHelper, MockRepository.GenerateStub<IResourceCalculateDaysDecider>(), skillGroupInfo);
 			target.DeleteWithResourceCalculation(scheduleDay, null, false, false);
 
-			resourceOptHelper.AssertWasNotCalled(x => x.ResourceCalculateDate(date, false, false));
+			resourceOptHelper.AssertWasNotCalled(x => x.ResourceCalculateDate(date, new ResourceOptimizationData(false, false)), options => options.IgnoreArguments());
 		}
 	}
 }

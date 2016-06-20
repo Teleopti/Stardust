@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					if (schedulingOptions.UseBlock || schedulingOptions.UseTeam)
 					{
 						var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
-							schedulingOptions.ConsiderShortBreaks);
+							schedulingOptions.ConsiderShortBreaks, schedulerStateHolder.SchedulingResultState);
 
 						ISchedulePartModifyAndRollbackService rollbackService =
 							new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState,
@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 															ISchedulingProgress backgroundWorker, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState, _scheduleDayChangeCallback(), new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks);
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, schedulerStateHolder.SchedulingResultState);
 			_weeklyRestSolverCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons, rollbackService, resourceCalculateDelayer, selectedPeriod,
 											matrixesOfSelectedScheduleDays, backgroundWorker, dayOffOptimizationPreferenceProvider);
 		}	

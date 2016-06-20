@@ -921,7 +921,6 @@
     <Compile Include="ResourceCalculation\SwapServiceNewTest.cs" />
     <Compile Include="ResourceCalculation\WorkShiftCalculatorsManagerTest.cs" />
     <Compile Include="Scheduling\AffectsSameDayAndPersonSpecificationTest.cs" />
-    <Compile Include="Scheduling\Assignment\DeleteAndResourceCalculateServiceTest.cs" />
     <Compile Include="Scheduling\Assignment\HasContractDayOffDefinitionTest.cs" />
     <Compile Include="Scheduling\Assignment\NewDynamicDayOffSchedulePeriodTargetCalculatorTest.cs" />
     <Compile Include="Scheduling\Assignment\NewFixedDayOffSchedulePeriodTargetCalculatorTest.cs" />
@@ -1134,7 +1133,6 @@
     <Compile Include="Scheduling\NoteTest.cs" />
     <Compile Include="Scheduling\PersonalAccount\PersonAccountCloserTest.cs" />
     <Compile Include="Scheduling\PersonalAccount\PersonAccountCollectionTest.cs" />
-    <Compile Include="Scheduling\ResourceCalculateDelayerTest.cs" />
     <Compile Include="Scheduling\Restrictions\AvailabilitySpecificationTest.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionCreatorTest.cs" />
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionForDisplayCreatorTest.cs" />
@@ -1210,7 +1208,6 @@
     <Compile Include="Scheduling\TeamBlock\EqualWorkShiftValueDeciderTest.cs" />
     <Compile Include="Scheduling\TeamBlock\GroupPersonSkillAggregatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\IntervalDataMedianCalculatorTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\SafeRollbackAndResourceCalculationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleRestrictionExtractorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataAggregatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataDividerTest.cs" />

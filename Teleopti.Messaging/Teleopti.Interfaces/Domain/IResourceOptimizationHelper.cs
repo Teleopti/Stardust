@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-
-namespace Teleopti.Interfaces.Domain
+﻿namespace Teleopti.Interfaces.Domain
 {
-    /// <summary>
+	/// <summary>
     /// The resource optimization helper.
     /// </summary>
     /// <remarks>
@@ -11,6 +9,6 @@ namespace Teleopti.Interfaces.Domain
     /// </remarks>
     public interface IResourceOptimizationHelper
     {
-		void ResourceCalculateDate(DateOnly localDate, bool considerShortBreaks, bool doIntraIntervalCalculation);
+		void ResourceCalculateDate(DateOnly localDate, ResourceOptimizationData resourceOptimizationData);
 	}
 }

@@ -1,5 +1,6 @@
 ﻿
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
@@ -14,10 +15,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	public class SafeRollbackAndResourceCalculation : ISafeRollbackAndResourceCalculation
 	{
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 
-		public SafeRollbackAndResourceCalculation(IResourceOptimizationHelper resourceOptimizationHelper)
+		public SafeRollbackAndResourceCalculation(IResourceOptimizationHelper resourceOptimizationHelper, Func<ISchedulingResultStateHolder> schedulingResultStateHolder)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;
+			_schedulingResultStateHolder = schedulingResultStateHolder;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -38,9 +41,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				dates.Add(initialDate.AddDays(1));
 			}
 
+			var resCalcData = _schedulingResultStateHolder().ToResourceOptimizationData(schedulingOptions.ConsiderShortBreaks, false);
 			foreach (var dateOnly in dates)
 			{
-				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, schedulingOptions.ConsiderShortBreaks, false);
+				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, resCalcData);
 			}
 		}
 	}

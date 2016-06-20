@@ -36,7 +36,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			using (PerformanceOutput.ForOperation("PrepareAndCalculateDate " + date.ToShortDateString(CultureInfo.CurrentCulture)))
 			{
-				_basicHelper.ResourceCalculateDate(date, considerShortBreaks, doIntraIntervalCalculation);
+				var resCalcData = _stateHolder().SchedulingResultState.ToResourceOptimizationData(considerShortBreaks, doIntraIntervalCalculation);
+				_basicHelper.ResourceCalculateDate(date, resCalcData);
 			}
 		}
 

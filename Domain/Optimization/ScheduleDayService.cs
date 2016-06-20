@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
 			var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(schedulePart, schedulingOptions);
 
-        	var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks);
+        	var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder().SchedulingResultState);
 			return _scheduleService.SchedulePersonOnDay(schedulePart, schedulingOptions, effectiveRestriction, resourceCalculateDelayer, _schedulePartModifyAndRollbackService);
         }
 
@@ -55,9 +55,10 @@ namespace Teleopti.Ccc.Domain.Optimization
                 daysToRecalculate.Add(date.AddDays(1));
             }
 
-            foreach (var date in daysToRecalculate)
+			var resCalcData = _schedulingResultStateHolder().SchedulingResultState.ToResourceOptimizationData(schedulingOptions.ConsiderShortBreaks, false);
+			foreach (var date in daysToRecalculate)
             {
-				_resourceOptimizationHelper.ResourceCalculateDate(date, schedulingOptions.ConsiderShortBreaks, false);
+				_resourceOptimizationHelper.ResourceCalculateDate(date, resCalcData);
             }
 
             return retList;

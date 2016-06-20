@@ -46,6 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		private IEditableShift _mainShift;
 		private IDictionary<DateOnly, IScheduleDay> _originalDays;
 	    private OverLimitResults _overLimitCounts;
+	    private ISchedulingResultStateHolder _schedulingResultStateHolder;
 
 	    [SetUp]
         public void Setup()
@@ -53,7 +54,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_schedulingOptions = new SchedulingOptions{ConsiderShortBreaks = true};
             _mockRepository = new MockRepository();
 			_resourceOptimizationHelper = _mockRepository.StrictMock<IResourceOptimizationHelper>();
-			_resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true);
+		    _schedulingResultStateHolder = MockRepository.GenerateStub<ISchedulingResultStateHolder>();
+			_resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, _schedulingResultStateHolder);
             _periodValueCalculator = _mockRepository.StrictMock<IPeriodValueCalculator>();
             _personalSkillsDataExtractor = _mockRepository.StrictMock<IScheduleResultDataExtractor>();
             _decisionMaker = _mockRepository.StrictMock<IMoveTimeDecisionMaker>();
@@ -97,7 +99,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				_optimizationLimits,
         		_schedulingOptionsCreator,
         		_mainShiftOptimizeActivitySpecificationSetter,
-				_scheduleMatrix);
+				_scheduleMatrix,
+				_schedulingResultStateHolder);
         }
 
 		[Test]
@@ -437,8 +440,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 		private void resourceCalculation()
 		{
-            Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_mostUnderStaffDate, true, false)).IgnoreArguments();
-            Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_mostOverStaffDate, true, false)).IgnoreArguments();
+            Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_mostUnderStaffDate, new ResourceOptimizationData(false, false))).IgnoreArguments();
+            Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(_mostOverStaffDate, new ResourceOptimizationData(false, false))).IgnoreArguments();
 		}
     }
 }

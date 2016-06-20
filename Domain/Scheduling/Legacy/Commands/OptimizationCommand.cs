@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			{
 				var selectedPersons = _personExtractor.ExtractPersons(selectedSchedules);
 				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
-					schedulingOptions.ConsiderShortBreaks);
+					schedulingOptions.ConsiderShortBreaks, schedulerStateHolder.SchedulingResultState);
 				var tagSetter = new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling);
 				var rollbackService = new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState,
 					_scheduleDayChangeCallback,

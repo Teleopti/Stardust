@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					25,
 					_dayOffDecisionMaker);
 
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true);
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, scheduleResultStateHolder());
 
 			var dayOffOptimizerConflictHandler = new DayOffOptimizerConflictHandler(scheduleMatrix, scheduleService,
 				_effectiveRestrictionCreator,
@@ -194,7 +194,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					_schedulingOptionsCreator,
 					mainShiftOptimizeActivitySpecificationSetter,
 					dayOffOptimizerPreMoveResultPredictor,
-					daysOffPreferences);
+					daysOffPreferences,
+					_schedulerStateHolder().SchedulingResultState);
 
 			IDayOffOptimizerContainer optimizerContainer =
 				new DayOffOptimizerContainer(_bitArrayConverter,

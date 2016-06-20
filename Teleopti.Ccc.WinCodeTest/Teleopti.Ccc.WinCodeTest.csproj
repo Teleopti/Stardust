@@ -464,7 +464,6 @@
     <Compile Include="Meetings\Overview\InfoWindowTextFormatterTest.cs" />
     <Compile Include="Meetings\Overview\MeetingChangerAndPersisterTest.cs" />
     <Compile Include="Meetings\Overview\MeetingClipboardHandlerTest.cs" />
-    <Compile Include="Meetings\MeetingImpactCalculatorTest.cs" />
     <Compile Include="Meetings\MeetingImpactPresenterTest.cs" />
     <Compile Include="Meetings\ContactPersonViewModelTest.cs" />
     <Compile Include="Meetings\MeetingImpactSkillGridHandlerTest.cs" />

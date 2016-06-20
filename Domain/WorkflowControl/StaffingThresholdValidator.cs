@@ -49,10 +49,11 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
                 //As the resource calculation currently always being made from the viewpoint timezone, this is what we need here!
                 var dayPeriod = scheduleDay.DateOnlyAsPeriod.Period();
                 var datesToResourceCalculate = dayPeriod.ToDateOnlyPeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
-                
+
+	            var resCalcData =requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.ToResourceOptimizationData(true, false);
                 foreach (DateOnly dateOnly in datesToResourceCalculate.DayCollection())
                 {
-                    requiredForHandlingAbsenceRequest.ResourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, false);
+                    requiredForHandlingAbsenceRequest.ResourceOptimizationHelper.ResourceCalculateDate(dateOnly, resCalcData);
                 }
                 
                 var calculatedPeriod = datesToResourceCalculate.ToDateTimePeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);

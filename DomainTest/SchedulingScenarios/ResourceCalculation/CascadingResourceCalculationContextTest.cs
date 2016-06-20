@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var presentContext = new ResourceCalculationDataContainer(null, 0);
 			using (new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => presentContext)))
 			{
-				Target.ResourceCalculateDate(DateOnly.Today, false, false);
+				Target.ResourceCalculateDate(DateOnly.Today, new ResourceOptimizationData(false, false));
 
 				ResourceCalculationContext.Fetch()
 					.Should().Be.SameInstanceAs(presentContext);
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		[Test]
 		public void ShouldNotReturnContextIfThereWasNone()
 		{
-			Target.ResourceCalculateDate(DateOnly.Today, false, false);
+			Target.ResourceCalculateDate(DateOnly.Today, new ResourceOptimizationData(false, false));
 
 			ResourceCalculationContext.InContext
 				.Should().Be.False();

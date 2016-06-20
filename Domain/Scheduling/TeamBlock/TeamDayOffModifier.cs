@@ -23,23 +23,26 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	{
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly Func<IScheduleDayForPerson> _scheduleDayForPerson;
+		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 
-		public TeamDayOffModifier(IResourceOptimizationHelper resourceOptimizationHelper, Func<IScheduleDayForPerson> scheduleDayForPerson)
+		public TeamDayOffModifier(IResourceOptimizationHelper resourceOptimizationHelper, Func<IScheduleDayForPerson> scheduleDayForPerson, Func<ISchedulingResultStateHolder> schedulingResultStateHolder)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_scheduleDayForPerson = scheduleDayForPerson;
+			_schedulingResultStateHolder = schedulingResultStateHolder;
 		}
 
 		public void AddDayOffForTeamAndResourceCalculate(
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			ITeamInfo teamInfo, DateOnly dateOnly, IDayOffTemplate dayOffTemplate)
 		{
+			var resCalcData = _schedulingResultStateHolder().ToResourceOptimizationData(true, false);
 			foreach (var person in teamInfo.GroupMembers)
 			{
 				AddDayOffForMember(schedulePartModifyAndRollbackService, person, dateOnly, dayOffTemplate, false);
 			}
 
-			_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, false);
+			_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, resCalcData);
 		}
 
 		public void AddDayOffForMember(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
@@ -55,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			schedulePartModifyAndRollbackService.Modify(scheduleDay);
 
 			if (resourceCalculate)
-				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, false);
+				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, _schedulingResultStateHolder().ToResourceOptimizationData(true, false));
 		}
 
 		public void RemoveDayOffForTeam(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,

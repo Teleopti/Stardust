@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -41,7 +40,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		}
 
 
-		public void ResourceCalculateDate(DateOnly localDate, bool considerShortBreaks, bool doIntraIntervalCalculation)
+		public void ResourceCalculateDate(DateOnly localDate, ResourceOptimizationData resourceOptimizationData)
 		{
 			var stateHolder = _schedulingResultStateHolder();
 			if (stateHolder.TeamLeaderMode)
@@ -61,9 +60,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					context = _resourceCalculationContextFactory.Create(stateHolder.Schedules, stateHolder.Skills, new DateOnlyPeriod(localDate.AddDays(-1), localDate.AddDays(1)));
 				}
 				var relevantProjections = ResourceCalculationContext.Fetch();
-				ResourceCalculateDate(relevantProjections, localDate, considerShortBreaks);
+				ResourceCalculateDate(relevantProjections, localDate, resourceOptimizationData.ConsiderShortBreaks);
 
-				if (doIntraIntervalCalculation)
+				if (resourceOptimizationData.DoIntraIntervalCalculation)
 				{
 					_intraIntervalFinderService.Execute(stateHolder, localDate, relevantProjections);
 				}

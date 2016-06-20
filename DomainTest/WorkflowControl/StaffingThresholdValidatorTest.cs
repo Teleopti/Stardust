@@ -80,28 +80,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             Assert.IsInstanceOf<StaffingThresholdValidator>(newInstance);
         }
 
-        [Test]
-        public void CanValidate()
-        {
-            DateTimePeriod requestedDateTimePeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
-            IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
-            var absenceRequest = GetAbsenceRequest(absence, requestedDateTimePeriod);
-            
-            createSkillDay(requestedDateTimePeriod);
-            var stateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod, _skill, new List<ISkillDay> { _skillDay });
-            stateHolder.Schedules = _dictionary;
-
-            var date = new DateOnly(2010, 02, 01);
-
-                _dictionary.AddTestItem(absenceRequest.Person, GetExpectationForTwoDays(date, absence, requestedDateTimePeriod));
-
-                var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder,null,_resourceOptimizationHelper,null,null));
-                Assert.IsFalse(result.IsValid);
-
-			_resourceOptimizationHelper.AssertWasCalled(x => x.ResourceCalculateDate(date, true, false));
-			_resourceOptimizationHelper.AssertWasCalled(x => x.ResourceCalculateDate(date.AddDays(1), true, false));
-            
-        }
 
 		private IScheduleRange GetExpectationForTwoDays(DateOnly date, IAbsence absence, DateTimePeriod requestedDateTimePeriod, IVisualLayer extraLayer=null)
         {
@@ -173,7 +151,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			    new RequiredForHandlingAbsenceRequest(stateHolder, null, _resourceOptimizationHelper, null, null));
 
 		    Assert.IsFalse(result.IsValid);
-		    _resourceOptimizationHelper.AssertWasCalled(x => x.ResourceCalculateDate(date, true, false));
 	    }
 
 	    private IScheduleRange GetExpectationsForOneDay(DateOnly date, IAbsence absence, DateTimePeriod requestedDateTimePeriod)
@@ -212,7 +189,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			_dictionary.AddTestItem(absenceRequest.Person, GetExpectationsForOneDay(date, absence, requestedDateTimePeriod.ChangeEndTime(TimeSpan.FromMinutes(15))));
 
 			var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder, null, _resourceOptimizationHelper, null, null));
-			_resourceOptimizationHelper.AssertWasCalled(x => x.ResourceCalculateDate(date, true, false));
 			Assert.IsFalse(result.IsValid);
 	    }
 
@@ -249,8 +225,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			_dictionary.AddTestItem(absenceRequest.Person, GetExpectationForTwoDays(date, absence, requestedDateTimePeriod));
 
 				var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder, null, _resourceOptimizationHelper, null, null));
-				_resourceOptimizationHelper.AssertWasCalled(x => x.ResourceCalculateDate(date, true, false));
-				_resourceOptimizationHelper.AssertWasCalled(x => x.ResourceCalculateDate(date.AddDays(1), true, false));
                 Assert.IsFalse(result.IsValid);
         }
 
@@ -291,9 +265,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             
             var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder, null, _resourceOptimizationHelper, null, null));
             Assert.IsTrue(result.IsValid);
-
-			_resourceOptimizationHelper.AssertWasCalled(x => x.ResourceCalculateDate(date, true, false));
-			_resourceOptimizationHelper.AssertWasCalled(x => x.ResourceCalculateDate(date.AddDays(1), true, false));
         }
 
         [Test]
@@ -338,8 +309,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             
             var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder, null, _resourceOptimizationHelper, null, null));
 			Assert.IsTrue(result.IsValid);
-			_resourceOptimizationHelper.AssertWasCalled(x => x.ResourceCalculateDate(date, true, false));
-			_resourceOptimizationHelper.AssertWasCalled(x => x.ResourceCalculateDate(date.AddDays(1), true, false));
         }
 
 	    [Test]
@@ -530,9 +499,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             
             var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder, null, _resourceOptimizationHelper, null, null));
             Assert.IsTrue(result.IsValid);
-
-			_resourceOptimizationHelper.AssertWasCalled(x => x.ResourceCalculateDate(date, true, false));
-			_resourceOptimizationHelper.AssertWasCalled(x => x.ResourceCalculateDate(date.AddDays(1), true, false));
         }
 
 	    [Test, ExpectedException(typeof (ArgumentNullException))]

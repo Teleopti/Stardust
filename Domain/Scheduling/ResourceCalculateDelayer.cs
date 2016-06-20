@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly int _calculationFrequency;
 		private readonly bool _considerShortBreaks;
+		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private DateOnly? _lastDate;
 		private int _counter = 1;
 		private bool _paused;
@@ -15,11 +16,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public ResourceCalculateDelayer(
 			IResourceOptimizationHelper resourceOptimizationHelper, 
 			int calculationFrequency, 
-			bool considerShortBreaks)
+			bool considerShortBreaks,
+			ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_calculationFrequency = calculationFrequency;
 			_considerShortBreaks = considerShortBreaks;
+			_schedulingResultStateHolder = schedulingResultStateHolder;
 		}
 
 		public bool CalculateIfNeeded(DateOnly scheduleDateOnly, DateTimePeriod? workShiftProjectionPeriod, bool doIntraIntervalCalculation)
@@ -80,7 +83,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		private void resourceCalculateDate(DateOnly date, bool considerShortBreaks, bool doIntraIntervalCalculation)
 		{
-			_resourceOptimizationHelper.ResourceCalculateDate(date, considerShortBreaks, doIntraIntervalCalculation);
+			_resourceOptimizationHelper.ResourceCalculateDate(date, _schedulingResultStateHolder.ToResourceOptimizationData(considerShortBreaks, doIntraIntervalCalculation));
 		}
 	}
 }

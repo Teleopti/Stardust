@@ -69,7 +69,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		    var resourceCalculateDelayer = new ResourceCalculateDelayer(
 			    _resourceOptimizationHelper,
 			    schedulingOptions.ResourceCalculateFrequency,
-			    schedulingOptions.ConsiderShortBreaks);
+			    schedulingOptions.ConsiderShortBreaks,
+					_schedulingResultStateHolder());
 
 		    var personDateDictionary = (from p in selectedParts
 			    group p.DateOnlyAsPeriod.DateOnly by p.Person
