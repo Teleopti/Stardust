@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 								foreach (var skillGroup in _skillGroupPerActivityProvider.FetchOrdered(cascadingSkills, activity, interval))
 								{
 									var resourcesMoved = _addResourcesToSubSkills.Execute(skillGroup, interval);
-									_reducePrimarySkillResources.Execute(skillGroup.PrimarySkills, interval, resourcesMoved);
+									_reducePrimarySkillResources.Execute(stateHolder.SchedulingResultState.SkillStaffPeriodHolder, skillGroup.PrimarySkills, interval, resourcesMoved);
 								}
 							}
 						}
