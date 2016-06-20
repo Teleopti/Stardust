@@ -19,15 +19,16 @@ namespace Teleopti.Ccc.Domain.Cascading
 			_stateHolder = stateHolder;
 			_shovelResources = shovelResources;
 		}
-
-		public void ForDay(DateOnly date)
-		{
-			doForPeriod(new DateOnlyPeriod(date, date));
-		}
-
+		
 		public void ForAll()
 		{
 			doForPeriod(_stateHolder().RequestedPeriod.DateOnlyPeriod);
+		}
+
+		public void ResourceCalculateDate(DateOnly localDate, bool considerShortBreaks, bool doIntraIntervalCalculation)
+		{
+			//TODO: need to consider params above
+			doForPeriod(new DateOnlyPeriod(localDate, localDate));
 		}
 
 		private void doForPeriod(DateOnlyPeriod period)
@@ -41,12 +42,6 @@ namespace Teleopti.Ccc.Domain.Cascading
 			{
 				_shovelResources.Execute(period);
 			}
-		}
-
-		public void ResourceCalculateDate(DateOnly localDate, bool considerShortBreaks, bool doIntraIntervalCalculation)
-		{
-			//TODO: need to consider params above
-			ForDay(localDate);
 		}
 	}
 }

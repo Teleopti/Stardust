@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			ass2.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
 			SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent1, agent2 }, new[] { ass1, ass2 }, new[] { skillADay, skillBDay, skillCDay });
 
-			Target.ForDay(dateOnly);
+			Target.ResourceCalculateDate(dateOnly, false, false);
 
 			skillADay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0);
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			//B = 0.5 from skillgrupp B C
 			//C = -0.5
 
-			Target.ForDay(dateOnly);
+			Target.ResourceCalculateDate(dateOnly, false, false);
 
 			skillADay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0.5);
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			//C = -0.5
 			//D = 0
 
-			Target.ForDay(dateOnly);
+			Target.ResourceCalculateDate(dateOnly, false, false);
 
 			skillADay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0.5);
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			//A = 2 from skillgrupp A B
 			//B = -2 from skillgrupp B C
 
-			Target.ForDay(dateOnly);
+			Target.ResourceCalculateDate(dateOnly, false, false);
 
 			skillADay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(1);
@@ -235,7 +235,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			ass2.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
 			SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent1, agent2 }, new[] { ass1, ass2 }, new[] { skillADay, skillBDay, skillCDay });
 
-			Target.ForDay(dateOnly);
+			Target.ResourceCalculateDate(dateOnly, false, false);
 
 			skillADay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0.5);
@@ -289,7 +289,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			//B = -0.5 
 			//C = 0.5 
 			//D = -1 
-			Target.ForDay(dateOnly);
+			Target.ResourceCalculateDate(dateOnly, false, false);
 
 			skillADay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0);
@@ -336,7 +336,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			//B = -1 
 			//C = -1
 
-			Target.ForDay(dateOnly);
+			Target.ResourceCalculateDate(dateOnly, false, false);
 
 			skillADay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0);
