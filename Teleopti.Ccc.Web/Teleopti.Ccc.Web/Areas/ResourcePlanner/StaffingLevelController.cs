@@ -15,42 +15,28 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		private readonly IEventPublisher _publisher;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IPersonRepository _personRepository;
-		private readonly IScheduleForecastSkillReadModelRepository _scheduleForecastSkillReadModelRepository;
+		private readonly IScheduleForecastSkillProvider _scheduleForecastSkillProvider;
 
 		public StaffingLevelController(IEventPublisher publisher, ILoggedOnUser loggedOnUser, IPersonRepository personRepository,
-			IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository)
+			 IScheduleForecastSkillProvider scheduleForecastSkillProvider)
 		{
 			_publisher = publisher;
 			_loggedOnUser = loggedOnUser;
 			_personRepository = personRepository;
-			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
+			_scheduleForecastSkillProvider = scheduleForecastSkillProvider;
 		}
 
 		[UnitOfWork, HttpGet, Route("ForecastAndStaffingForSkill")]
 		public virtual IHttpActionResult ForecastAndStaffingForSkill(DateTime date, Guid skillId)
 		{
-			var timezoneOffset = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone().BaseUtcOffset;
-			var intervals = _scheduleForecastSkillReadModelRepository.GetBySkill(skillId, date.Subtract(timezoneOffset),
-				date.Add(TimeSpan.FromDays(1)).Subtract(timezoneOffset).AddSeconds(-1));
-			foreach (var skillStaffingInterval in intervals)
-			{
-				skillStaffingInterval.StartDateTime = skillStaffingInterval.StartDateTime.Add(timezoneOffset);
-				skillStaffingInterval.EndDateTime = skillStaffingInterval.EndDateTime.Add(timezoneOffset);
-			}
+			var intervals =  _scheduleForecastSkillProvider.GetBySkill(skillId, date);
 			return Json(intervals);
 		}
 
 		[UnitOfWork, HttpGet, Route("ForecastAndStaffingForSkillArea")]
 		public virtual IHttpActionResult ForecastAndStaffingForSkillArea(DateTime date, Guid skillAreaId)
 		{
-			var timezoneOffset = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone().BaseUtcOffset;
-			var intervals = _scheduleForecastSkillReadModelRepository.GetBySkillArea(skillAreaId, date.Subtract(timezoneOffset),
-				date.Add(TimeSpan.FromDays(1)).Subtract(timezoneOffset).AddSeconds(-1));
-			foreach (var skillStaffingInterval in intervals)
-			{
-				skillStaffingInterval.StartDateTime  = skillStaffingInterval.StartDateTime.Add(timezoneOffset);
-				skillStaffingInterval.EndDateTime = skillStaffingInterval.EndDateTime.Add(timezoneOffset);
-			}
+			var intervals = _scheduleForecastSkillProvider.GetBySkillArea(skillAreaId, date);
 			return Json(intervals);
 		}
 

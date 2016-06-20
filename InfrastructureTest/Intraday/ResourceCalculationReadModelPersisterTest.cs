@@ -1,16 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Infrastructure.Intraday;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Intraday
@@ -86,25 +81,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 			Target.Persist(items, new DateOnly(2016, 06, 16));
 			Target.Persist(items, new DateOnly(2016, 06, 16));
 
-		}
-
-		[Test]
-		public void ShouldUpdateExistingModel()
-		{
-			//should we delete the previous skill data and add new one for now
-		}
-
-		[Test]
-		public void ShouldGetNullIfNotExists()
-		{
-			
-		}
-		
-
-		[Test]
-		public void ShouldClear()
-		{
-		
 		}
 		
 	}
