@@ -19,11 +19,10 @@ namespace Teleopti.Ccc.Domain.Cascading
 			_stateHolder = stateHolder;
 			_shovelResources = shovelResources;
 		}
-		
-		public void ForAll()
+
+		public void ForAll(DateOnlyPeriod dateOnlyPeriod, ResourceOptimizationData resourceOptimizationData)
 		{
-			var stateHolder = _stateHolder();
-			doForPeriod(stateHolder.RequestedPeriod.DateOnlyPeriod, stateHolder.SchedulingResultState.ToResourceOptimizationData(stateHolder.ConsiderShortBreaks, false));
+			doForPeriod(dateOnlyPeriod, resourceOptimizationData);
 		}
 
 		public void ResourceCalculateDate(DateOnly localDate, ResourceOptimizationData resourceOptimizationData)

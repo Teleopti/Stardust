@@ -293,9 +293,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			agent.AddPeriodWithSkill(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), nonCascadingSkill);
 			var assignment = new PersonAssignment(agent, scenario, dateOnly);
 			assignment.AddActivity(activity, new TimePeriod(5, 0, 10, 0)); //1 agent per interval
-			SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { assignment }, skillDay);
+			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { assignment }, skillDay);
 
-			Target.ForAll();
+			Target.ForAll(new DateOnlyPeriod(dateOnly.AddDays(-1), dateOnly.AddDays(1)), stateHolder.SchedulingResultState.ToResourceOptimizationData(false, false));
 
 			skillDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(-1);
