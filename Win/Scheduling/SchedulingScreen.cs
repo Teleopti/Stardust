@@ -2165,7 +2165,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (!ResourceCalculationContext.InContext)
 			{
 				var period = new DateOnlyPeriod(_schedulerState.DaysToRecalculate.Min().AddDays(-1), _schedulerState.DaysToRecalculate.Max());
-				disposableContext = _container.Resolve<IResourceCalculationContextFactory>().Create(period);
+				disposableContext = _container.Resolve<IResourceCalculationContextFactory>().Create(_schedulerState.Schedules, _schedulerState.SchedulingResultState.Skills, period);
 			}
 			_optimizationHelperExtended.ResourceCalculateMarkedDays(
 				new BackgroundWorkerWrapper(_backgroundWorkerResourceCalculator), SchedulerState.ConsiderShortBreaks, true);

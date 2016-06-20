@@ -265,7 +265,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			var continuedStep = false;
 
-			using (_resourceCalculationContextFactory.Create())
+			using (_resourceCalculationContextFactory.Create(_stateHolder().Schedules, _stateHolder().Skills))
 			{
 				if (optimizerPreferences.General.OptimizationStepDaysOff)
 				{
@@ -321,7 +321,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				}
 			}
 
-			using (_resourceCalculationContextFactory.Create())
+			using (_resourceCalculationContextFactory.Create(_stateHolder().Schedules, _stateHolder().Skills))
 			{
 				if (optimizerPreferences.General.OptimizationStepFairness)
 				{
