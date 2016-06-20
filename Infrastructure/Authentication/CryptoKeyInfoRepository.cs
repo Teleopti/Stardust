@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using NHibernate;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 

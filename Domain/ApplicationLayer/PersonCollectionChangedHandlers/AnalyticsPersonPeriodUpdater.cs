@@ -35,11 +35,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork,
 			IAnalyticsDateRepository analyticsDateRepository,
 			IAnalyticsTimeZoneRepository analyticsTimeZoneRepository,
-			 IGlobalSettingDataRepository globalSettingDataRepository)
+			 IGlobalSettingDataRepository globalSettingDataRepository,
+			IAnalyticsIntervalRepository analyticsIntervalRepository)
 			: base(
 				personRepository, analyticsPersonPeriodRepository, analyticsSkillRepository, eventPublisher,
 				analyticsBusinessUnitRepository, analyticsTeamRepository, analyticsPersonPeriodMapNotDefined,
-				currentAnalyticsUnitOfWork, analyticsDateRepository, analyticsTimeZoneRepository, globalSettingDataRepository)
+				currentAnalyticsUnitOfWork, analyticsDateRepository, analyticsTimeZoneRepository, globalSettingDataRepository, analyticsIntervalRepository)
 		{
 		}
 
@@ -66,11 +67,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork,
 			IAnalyticsDateRepository analyticsDateRepository,
 			IAnalyticsTimeZoneRepository analyticsTimeZoneRepository,
-			IGlobalSettingDataRepository globalSettingDataRepository)
+			IGlobalSettingDataRepository globalSettingDataRepository,
+			IAnalyticsIntervalRepository analyticsIntervalRepository)
 			: base(
 				personRepository, analyticsPersonPeriodRepository, analyticsSkillRepository, eventPublisher,
 				analyticsBusinessUnitRepository, analyticsTeamRepository, analyticsPersonPeriodMapNotDefined,
-				currentAnalyticsUnitOfWork, analyticsDateRepository, analyticsTimeZoneRepository, globalSettingDataRepository)
+				currentAnalyticsUnitOfWork, analyticsDateRepository, analyticsTimeZoneRepository, globalSettingDataRepository, analyticsIntervalRepository)
 		{
 		}
 
@@ -97,6 +99,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		private readonly IAnalyticsDateRepository _analyticsDateRepository;
 		private readonly IAnalyticsTimeZoneRepository _analyticsTimeZoneRepository;
 		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
+		private readonly IAnalyticsIntervalRepository _analyticsIntervalRepository;
 
 		public AnalyticsPersonPeriodUpdater(IPersonRepository personRepository,
 			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository,
@@ -108,7 +111,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork,
 			IAnalyticsDateRepository analyticsDateRepository,
 			IAnalyticsTimeZoneRepository analyticsTimeZoneRepository,
-			IGlobalSettingDataRepository globalSettingDataRepository)
+			IGlobalSettingDataRepository globalSettingDataRepository, 
+			IAnalyticsIntervalRepository analyticsIntervalRepository)
 		{
 			_personRepository = personRepository;
 			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
@@ -121,6 +125,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			_analyticsDateRepository = analyticsDateRepository;
 			_analyticsTimeZoneRepository = analyticsTimeZoneRepository;
 			_globalSettingDataRepository = globalSettingDataRepository;
+			_analyticsIntervalRepository = analyticsIntervalRepository;
 
 			_analyticsAcdLoginPerson = new AcdLoginPersonTransformer(_analyticsPersonPeriodRepository);
 		}
@@ -141,7 +146,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 				_analyticsPersonPeriodMapNotDefined,
 				_analyticsDateRepository,
 				_analyticsTimeZoneRepository,
-				GetCommonNameDescription(_globalSettingDataRepository));
+				GetCommonNameDescription(_globalSettingDataRepository),
+				_analyticsIntervalRepository);
 
 			foreach (var personCodeGuid in @event.PersonIdCollection.Distinct())
 			{

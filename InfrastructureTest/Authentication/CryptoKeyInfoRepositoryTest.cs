@@ -2,13 +2,13 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 
 namespace Teleopti.Ccc.InfrastructureTest.Authentication
 {
 	[DatabaseTest]
+	[Category("LongRunning")]
 	public class CryptoKeyInfoRepositoryTest 
 	{
 		public ITenantUnitOfWork TenantUnitOfWork;
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Authentication
 					CryptoKeyExpiration = cryptoKeyExpiration
 				});
 
-				var result = Target.Find(bucket);
+				var result = Target.Find(bucket).ToList();
 
 				result.Count().Should().Be.EqualTo(2);
 				result.ForEach(x => x.Bucket.Should().Be.EqualTo(bucket));

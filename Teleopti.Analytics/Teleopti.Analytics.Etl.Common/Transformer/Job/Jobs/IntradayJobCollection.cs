@@ -30,8 +30,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			AddWhenAllDisabled(new IntradayStageAvailabilityJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayAvailability_38926);
 			AddWhenAllDisabled(new StageSkillJobStep(jobParameters), Toggles.ETL_SpeedUpIntradaySkill_37543);
 			AddWhenAllDisabled(new StageWorkloadJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayWorkload_38928);
-			
-			Add(new IntradayStageForecastWorkloadJobStep(jobParameters));
+
+			AddWhenAllDisabled(new IntradayStageForecastWorkloadJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayForecastWorkload_38929);
 			AddWhenAllDisabled(new StageKpiJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayScorecard_38933);
 			AddWhenAllDisabled(new StageScorecardJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayScorecard_38933);
 			AddWhenAllDisabled(new StageScorecardKpiJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayScorecard_38933);
@@ -82,7 +82,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			AddWhenAllDisabled(new FactAgentQueueJobStep(jobParameters), Toggles.ETL_OnlyLatestQueueAgentStatistics_30787); // BU independent
 
 			Add(new FactQualityLoadJobStep(jobParameters));             // BU independent
-			Add(new FactForecastWorkloadJobStep(jobParameters, true));
+			AddWhenAllDisabled(new FactForecastWorkloadJobStep(jobParameters, true), Toggles.ETL_SpeedUpIntradayForecastWorkload_38929);
 			Add(new FactScheduleDeviationJobStep(jobParameters, true));
 			AddWhenAllDisabled(new FactKpiTargetTeamJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayScorecard_38933);
 			AddWhenAllDisabled(new FactRequestJobStep(jobParameters, true), Toggles.ETL_SpeedUpIntradayRequest_38914);

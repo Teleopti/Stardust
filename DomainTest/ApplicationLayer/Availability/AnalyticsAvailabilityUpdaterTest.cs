@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 			_personRepository.Add(person);
 			_availabilityDayRepository.Add(new StudentAvailabilityDay(person, today, new IStudentAvailabilityRestriction[] { new StudentAvailabilityRestriction() }));
 			_analyticsPersonPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod {PersonId = personId, PersonCode = personCode, PersonPeriodCode = personPeroidId });
-			_analyticsScenarioRepository.AddScenario(new AnalyticsScenario {ScenarioCode = scenarioCode, BusinessUnitId = businessUnitId});
+			_analyticsScenarioRepository.AddScenario(AnalyticsScenarioFactory.CreateAnalyticsScenario(scenario, businessUnitId));
 			_scenarioRepository.Add(scenario);
 
 			_target.Handle(new AvailabilityChangedEvent
@@ -115,11 +115,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 			var scenario = new Scenario("Asd");
 			scenario.SetId(scenarioCode);
 			scenario.EnableReporting = false;
-
+			
 			_personRepository.Add(person);
 			_availabilityDayRepository.Add(new StudentAvailabilityDay(person, today, new IStudentAvailabilityRestriction[] { new StudentAvailabilityRestriction() }));
 			_analyticsPersonPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod { PersonId = personId, PersonCode = personCode, PersonPeriodCode = personPeroidId });
-			_analyticsScenarioRepository.AddScenario(new AnalyticsScenario { ScenarioCode = scenarioCode, BusinessUnitId = businessUnitId });
+			_analyticsScenarioRepository.AddScenario(AnalyticsScenarioFactory.CreateAnalyticsScenario(scenario, businessUnitId));
 			_scenarioRepository.Add(scenario);
 
 			_target.Handle(new AvailabilityChangedEvent
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 
 			_personRepository.Add(person);
 			_analyticsPersonPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod { PersonId = personId, PersonCode = personCode, PersonPeriodCode = personPeroidId });
-			_analyticsScenarioRepository.AddScenario(new AnalyticsScenario { ScenarioCode = scenarioCode, BusinessUnitId = businessUnitId });
+			_analyticsScenarioRepository.AddScenario(AnalyticsScenarioFactory.CreateAnalyticsScenario(scenario, businessUnitId));
 			_scenarioRepository.Add(scenario);
 			_analyticsHourlyAvailabilityRepository.AnalyticsHourlyAvailabilities.Add(new AnalyticsHourlyAvailability {DateId = _analyticsDateRepository.Date(today.Date).DateId, PersonId = personId, ScenarioId = _analyticsScenarioRepository.Scenarios().First().ScenarioId});
 

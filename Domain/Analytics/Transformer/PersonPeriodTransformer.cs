@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 		private readonly IAnalyticsDateRepository _analyticsDateRepository;
 		private readonly IAnalyticsTimeZoneRepository _analyticsTimeZoneRepository;
 		private readonly ICommonNameDescriptionSetting _commonNameDescription;
+		private readonly IAnalyticsIntervalRepository _analyticsIntervalRepository;
 
 		public PersonPeriodTransformer(
 			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository, 
@@ -29,7 +30,8 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined, 
 			IAnalyticsDateRepository analyticsDateRepository, 
 			IAnalyticsTimeZoneRepository analyticsTimeZoneRepository, 
-			ICommonNameDescriptionSetting commonNameDescription)
+			ICommonNameDescriptionSetting commonNameDescription, 
+			IAnalyticsIntervalRepository analyticsIntervalRepository)
 		{
 			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
 			_analyticsSkillRepository = analyticsSkillRepository;
@@ -39,6 +41,7 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 			_analyticsDateRepository = analyticsDateRepository;
 			_analyticsTimeZoneRepository = analyticsTimeZoneRepository;
 			_commonNameDescription = commonNameDescription;
+			_analyticsIntervalRepository = analyticsIntervalRepository;
 		}
 
 		public AnalyticsPersonPeriod Transform(IPerson person, IPersonPeriod personPeriod, out List<AnalyticsSkill> analyticsSkills)
@@ -123,7 +126,7 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 			var validFromDateIdLocal = MapDateId(validFromDateLocal);
 			var validToDateIdLocal = ValidToDateIdLocal(MapDateId(validToDateLocal), maxDate);
 
-			var intervalsPerDay = _analyticsPersonPeriodRepository.IntervalsPerDay();
+			var intervalsPerDay = _analyticsIntervalRepository.IntervalsPerDay();
 			var validFromIntervalId = ValidFromIntervalId(validFromDate, intervalsPerDay);
 			var validToIntervalId = ValidToIntervalId(validToDate, intervalsPerDay);
 
@@ -181,7 +184,7 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 			// Samma som ValidToIntervalId om inte validToDateId är eterntity då ska det vara sista interval i dim_interval
 			if (validToDateId != -2)
 				return validToIntervalId;
-			return _analyticsPersonPeriodRepository.MaxIntervalId();
+			return _analyticsIntervalRepository.MaxIntervalId();
 		}
 
 		private static DateTime getPeriodIntervalEndDate(DateTime endDate, int intervalsPerDay)

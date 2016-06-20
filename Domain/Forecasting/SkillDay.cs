@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Forecasting.Template;
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
     /// Created by: micke
     /// Created date: 18.12.2007
     /// </remarks>
-	public class SkillDay : VersionedAggregateRootWithBusinessUnit, ISkillDay, IMaxSeatSkillDay, IPeriodized
+	public class SkillDay : VersionedAggregateRootWithBusinessUnit, ISkillDay, IMaxSeatSkillDay, IPeriodized, IAggregateRootWithEvents
     {
         private DateOnly _currentDate;
         private ISkill _skill;
@@ -1587,5 +1588,23 @@ namespace Teleopti.Ccc.Domain.Forecasting
                         _currentDate.AddDays(1).Date.Add(_skill.MidnightBreakOffset), _skill.TimeZone);
             }
         }
+
+	    public override IEnumerable<IEvent> PopAllEvents(INow now, DomainUpdateType? operation = null)
+	    {
+		    var events = base.PopAllEvents(now, operation).ToList();
+		    switch (operation)
+		    {
+			    case DomainUpdateType.Insert:
+			    case DomainUpdateType.Update:
+			    case DomainUpdateType.Delete:
+					events.Add(new SkillDayChangedEvent
+					{
+						SkillDayId = Id.GetValueOrDefault()
+					});
+				    break;
+		    }
+
+		    return events;
+	    }
     }
 }

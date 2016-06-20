@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Util;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -31,7 +30,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ISkillDay Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return _skillDays.FirstOrDefault(x => x.Id.GetValueOrDefault() == id);
 		}
 
 		public IList<ISkillDay> LoadAll()

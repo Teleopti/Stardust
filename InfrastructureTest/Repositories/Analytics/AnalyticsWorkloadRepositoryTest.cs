@@ -64,6 +64,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				WorkloadName = "WorkloadName"
 			}));
 
+			var result = WithAnalyticsUnitOfWork.Get(() => Target.GetWorkload(workloadCode));
+			result.Should().Not.Be.Null();
+			result.WorkloadId.Should().Be.EqualTo(workloadId);
+
 			var workloadIdUpdated = WithAnalyticsUnitOfWork.Get(() => Target.AddOrUpdate(new AnalyticsWorkload
 			{
 				BusinessUnitId = businessUnit.BusinessUnitId,
@@ -87,6 +91,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			}));
 
 			workloadIdUpdated.Should().Be.EqualTo(workloadId);
+
+			result = WithAnalyticsUnitOfWork.Get(() => Target.GetWorkload(workloadCode));
+			result.Should().Not.Be.Null();
+			result.WorkloadId.Should().Be.EqualTo(workloadId);
 		}
 
 		[Test]

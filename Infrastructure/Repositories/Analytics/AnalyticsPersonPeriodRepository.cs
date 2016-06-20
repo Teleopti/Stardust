@@ -262,22 +262,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			query.ExecuteUpdate();
 		}
 
-		public int IntervalsPerDay()
-		{
-
-			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				"select count(*) from mart.dim_interval WITH (NOLOCK)")
-				.UniqueResult<int>();
-		}
-
-		public int MaxIntervalId()
-		{
-
-			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				"select max(interval_id) from mart.dim_interval WITH (NOLOCK)")
-				.UniqueResult<short>();
-		}
-
 		public void DeletePersonPeriod(AnalyticsPersonPeriod analyticsPersonPeriod)
 		{
 

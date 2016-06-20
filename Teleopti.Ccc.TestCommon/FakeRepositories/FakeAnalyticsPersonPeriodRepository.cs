@@ -41,16 +41,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			fakePersonPeriods.Add(personPeriod);
 		}
 
-		public int IntervalsPerDay()
-		{
-			return 96;
-		}
-
-		public int MaxIntervalId()
-		{
-			return 95;
-		}
-
 		public void DeletePersonPeriod(AnalyticsPersonPeriod analyticsPersonPeriod)
 		{
 			throw new NotImplementedException();

@@ -12,9 +12,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		AnalyticsPersonPeriod PersonPeriod(Guid personPeriodCode);
 		void AddPersonPeriod(AnalyticsPersonPeriod personPeriod);
 		void UpdatePersonPeriod(AnalyticsPersonPeriod personPeriod);
-		
-		int IntervalsPerDay();
-		int MaxIntervalId();
+	
 		void DeletePersonPeriod(AnalyticsPersonPeriod analyticsPersonPeriod);
 
 		IList<AnalyticsBridgeAcdLoginPerson> GetBridgeAcdLoginPersonsForPerson(int personId);

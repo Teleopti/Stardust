@@ -9,7 +9,8 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 namespace Teleopti.Ccc.InfrastructureTest.Authentication
 {
     [DatabaseTest]
-    public class NonceInfoRepositoryTest
+	[Category("LongRunning")]
+	public class NonceInfoRepositoryTest
     {
         public ITenantUnitOfWork TenantUnitOfWork;
         public INonceInfoRepository Target;

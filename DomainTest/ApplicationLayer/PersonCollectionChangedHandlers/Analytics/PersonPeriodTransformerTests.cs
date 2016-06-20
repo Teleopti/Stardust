@@ -2,6 +2,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics.Transformer;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -19,6 +20,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		private ThrowExceptionOnSkillMapError throwExceptionOnSkillMapError;
 		private FakeAnalyticsDateRepository fakeAnalyticsDateRepository;
 		private FakeAnalyticsTimeZoneRepository fakeAnalyticsTimeZoneRepository;
+		private IAnalyticsIntervalRepository _analyticsIntervalRepository;
 
 		[SetUp]
 		public void Setup()
@@ -30,6 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			 throwExceptionOnSkillMapError = new ThrowExceptionOnSkillMapError();
 			 fakeAnalyticsDateRepository = new FakeAnalyticsDateRepository();
 			 fakeAnalyticsTimeZoneRepository = new FakeAnalyticsTimeZoneRepository();
+			_analyticsIntervalRepository = new FakeAnalyticsIntervalRepository();
 		}
 
 		[Test]
@@ -42,7 +45,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				throwExceptionOnSkillMapError,
 				fakeAnalyticsDateRepository,
 				fakeAnalyticsTimeZoneRepository,
-				new CommonNameDescriptionSetting($"{CommonNameDescriptionSetting.FirstName} {CommonNameDescriptionSetting.LastName}"));
+				new CommonNameDescriptionSetting($"{CommonNameDescriptionSetting.FirstName} {CommonNameDescriptionSetting.LastName}"),
+				_analyticsIntervalRepository);
 
 			var person = PersonFactory.CreatePerson("First", "Last");
 			transformer.GetPersonName(person).Should().Be.EqualTo("First Last");
@@ -58,7 +62,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				throwExceptionOnSkillMapError,
 				fakeAnalyticsDateRepository,
 				fakeAnalyticsTimeZoneRepository,
-				new CommonNameDescriptionSetting($"{CommonNameDescriptionSetting.LastName} {CommonNameDescriptionSetting.FirstName}"));
+				new CommonNameDescriptionSetting($"{CommonNameDescriptionSetting.LastName} {CommonNameDescriptionSetting.FirstName}"),
+				_analyticsIntervalRepository);
 
 			var person = PersonFactory.CreatePerson("First", "Last");
 			transformer.GetPersonName(person).Should().Be.EqualTo("Last First");

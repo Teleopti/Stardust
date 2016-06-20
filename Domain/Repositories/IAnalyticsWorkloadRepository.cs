@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Analytics;
 
@@ -9,5 +10,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		void AddOrUpdateBridge(AnalyticsBridgeQueueWorkload bridgeQueueWorkload);
 		IList<AnalyticsBridgeQueueWorkload> GetBridgeQueueWorkloads(int workloadId);
 		void DeleteBridge(int workloadId, int queueId);
+		AnalyticsWorkload GetWorkload(Guid workloadCode);
 	}
 }

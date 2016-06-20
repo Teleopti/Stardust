@@ -150,6 +150,8 @@
     <Compile Include="CatalanCulture.cs" />
     <Compile Include="ConcurrencyRunner.cs" />
     <Compile Include="Database.cs" />
+    <Compile Include="FakeData\AnalyticsScenarioFactory.cs" />
+    <Compile Include="FakeData\AnalyticsWorkloadFactory.cs" />
     <Compile Include="FakeData\FakeAnalyticsUnitOfWorkFactory.cs" />
     <Compile Include="FakeData\FakeIntervalLengthFetcher.cs" />
     <Compile Include="FakeData\FakeSchedulingResultStateHolderProvider.cs" />
@@ -163,7 +165,9 @@
     <Compile Include="FakeRepositories\FakeAggregateRootInitializer.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsActivityRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsAbsenceRepository.cs" />
+    <Compile Include="FakeRepositories\FakeAnalyticsForecastWorkloadRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsHourlyAvailabilityRepository.cs" />
+    <Compile Include="FakeRepositories\FakeAnalyticsIntervalRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsRequestRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsScenarioRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsDayOffRepository.cs" />

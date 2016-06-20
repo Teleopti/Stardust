@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Analytics;
@@ -36,6 +37,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public void DeleteBridge(int workloadId, int queueId)
 		{
 			_bridgeQueueWorkloads.RemoveAll(x => x.QueueId == queueId && x.WorkloadId == workloadId);
+		}
+
+		public AnalyticsWorkload GetWorkload(Guid workloadCode)
+		{
+			return Workloads.FirstOrDefault(x => x.WorkloadCode == workloadCode);
 		}
 	}
 }

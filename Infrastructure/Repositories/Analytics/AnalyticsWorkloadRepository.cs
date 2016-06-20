@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Analytics;
@@ -106,6 +107,40 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.SetParameter(nameof(workloadId), workloadId)
 				.SetParameter(nameof(queueId), queueId)
 				.ExecuteUpdate();
+		}
+
+		public AnalyticsWorkload GetWorkload(Guid workloadCode)
+		{
+			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery($@"
+					SELECT 
+						[workload_id] {nameof(AnalyticsWorkload.WorkloadId)}
+						,[workload_code] {nameof(AnalyticsWorkload.WorkloadCode)}
+						,[workload_name] {nameof(AnalyticsWorkload.WorkloadName)}
+						,[skill_id] {nameof(AnalyticsWorkload.SkillId)}
+						,[skill_code] {nameof(AnalyticsWorkload.SkillCode)}
+						,[skill_name] {nameof(AnalyticsWorkload.SkillName)}
+						,[time_zone_id] {nameof(AnalyticsWorkload.TimeZoneId)}
+						,[forecast_method_code] {nameof(AnalyticsWorkload.ForecastMethodCode)}
+						,[forecast_method_name] {nameof(AnalyticsWorkload.ForecastMethodName)}
+						,[percentage_offered] {nameof(AnalyticsWorkload.PercentageOffered)}
+						,[percentage_overflow_in] {nameof(AnalyticsWorkload.PercentageOverflowIn)}
+						,[percentage_overflow_out] {nameof(AnalyticsWorkload.PercentageOverflowOut)}
+						,[percentage_abandoned] {nameof(AnalyticsWorkload.PercentageAbandoned)}
+						,[percentage_abandoned_short] {nameof(AnalyticsWorkload.PercentageAbandonedShort)}
+						,[percentage_abandoned_within_service_level] {nameof(AnalyticsWorkload.PercentageAbandonedWithinServiceLevel)}
+						,[percentage_abandoned_after_service_level] {nameof(AnalyticsWorkload.PercentageAbandonedAfterServiceLevel)}
+						,[business_unit_id] {nameof(AnalyticsWorkload.BusinessUnitId)}
+						,[datasource_id] {nameof(AnalyticsWorkload.DatasourceId)}
+						,[insert_date] {nameof(AnalyticsWorkload.InsertDate)}
+						,[update_date] {nameof(AnalyticsWorkload.UpdateDate)}
+						,[datasource_update_date] {nameof(AnalyticsWorkload.DatasourceUpdateDate)}
+						,[is_deleted] {nameof(AnalyticsWorkload.IsDeleted)}
+					FROM [mart].[dim_workload] WITH (NOLOCK)
+					WHERE [workload_code]=:{nameof(workloadCode)}	
+				")
+			.SetParameter(nameof(workloadCode), workloadCode)
+			.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsWorkload)))
+			.UniqueResult<AnalyticsWorkload>();
 		}
 	}
 }

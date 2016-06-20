@@ -158,6 +158,7 @@
     <Compile Include="Analytics\AnalyticBusinessUnit.cs" />
     <Compile Include="Analytics\AnalyticsActivity.cs" />
     <Compile Include="Analytics\AnalyticsBridgeQueueWorkload.cs" />
+    <Compile Include="Analytics\AnalyticsForcastWorkload.cs" />
     <Compile Include="Analytics\AnalyticsHourlyAvailability.cs" />
     <Compile Include="Analytics\AnalyticsOvertime.cs" />
     <Compile Include="Analytics\AnalyticsAbsence.cs" />
@@ -197,10 +198,12 @@
     <Compile Include="ApplicationLayer\Availability\AnalyticsAvailabilityUpdater.cs" />
     <Compile Include="ApplicationLayer\Events\AvailabilityChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonRequestChangedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\SkillDayChangedEvent.cs" />
     <Compile Include="ApplicationLayer\ReadModelValidator\IReadModelValidator.cs" />
     <Compile Include="ApplicationLayer\ReadModelValidator\ReadModelValidator.cs" />
     <Compile Include="ApplicationLayer\ReadModelValidator\ValidateScheduleProjectionReadOnlyEvent.cs" />
     <Compile Include="ApplicationLayer\ReadModelValidator\ValidateScheduleProjectionReadOnlyEventHandler.cs" />
+    <Compile Include="ApplicationLayer\SkillDay\AnalyticsForecastWorkloadUpdater.cs" />
     <Compile Include="Cascading\AddResourcesToSubSkills.cs" />
     <Compile Include="Cascading\CascadingSkillGroupItem.cs" />
     <Compile Include="Cascading\CascadingSkills.cs" />
@@ -347,7 +350,9 @@
     <Compile Include="Logon\ImpersonateSystemAspect.cs" />
     <Compile Include="Logon\ImpersonateSystemAttribute.cs" />
     <Compile Include="Repositories\IAnalyticsAbsenceRepository.cs" />
+    <Compile Include="Repositories\IAnalyticsForecastWorkloadRepository.cs" />
     <Compile Include="Repositories\IAnalyticsHourlyAvailabilityRepository.cs" />
+    <Compile Include="Repositories\IAnalyticsIntervalRepository.cs" />
     <Compile Include="Repositories\IAnalyticsOvertimeRepository.cs" />
     <Compile Include="Repositories\IAnalyticsRequestRepository.cs" />
     <Compile Include="Repositories\IAnalyticsScenarioRepository.cs" />
