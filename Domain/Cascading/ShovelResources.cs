@@ -1,37 +1,33 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class ShovelResources
 	{
-		private readonly Func<ISchedulerStateHolder> _stateHolder;
 		private readonly AddResourcesToSubSkills _addResourcesToSubSkills;
 		private readonly ReducePrimarySkillResources _reducePrimarySkillResources;
 		private readonly SkillGroupPerActivityProvider _skillGroupPerActivityProvider;
 		private readonly ITimeZoneGuard _timeZoneGuard;
 
-		public ShovelResources(Func<ISchedulerStateHolder> stateHolder,
-			AddResourcesToSubSkills addResourcesToSubSkills,
+		public ShovelResources(AddResourcesToSubSkills addResourcesToSubSkills,
 			ReducePrimarySkillResources reducePrimarySkillResources,
 			SkillGroupPerActivityProvider skillGroupPerActivityProvider,
 			ITimeZoneGuard timeZoneGuard)
 		{
-			_stateHolder = stateHolder;
 			_addResourcesToSubSkills = addResourcesToSubSkills;
 			_reducePrimarySkillResources = reducePrimarySkillResources;
 			_skillGroupPerActivityProvider = skillGroupPerActivityProvider;
 			_timeZoneGuard = timeZoneGuard;
 		}
 
-		public void Execute(DateOnlyPeriod period)
+		public void Execute(ISkillStaffPeriodHolder skillStaffPeriodHolder, IScheduleDictionary scheduleDictionary, IEnumerable<ISkill> allSkills, DateOnlyPeriod period)
 		{
-			var stateHolder = _stateHolder();
-			var cascadingSkills = new CascadingSkills(stateHolder.SchedulingResultState.Skills); 
+			var cascadingSkills = new CascadingSkills(allSkills); 
 			if (!cascadingSkills.Any())
 				return;
 
@@ -40,8 +36,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 			using (ResourceCalculationCurrent.PreserveContext())
 			{
-				using (new ResourceCalculationContextFactory(() => new PersonSkillProvider(), _timeZoneGuard)
-					.Create(stateHolder.Schedules, stateHolder.SchedulingResultState.Skills, period))
+				using (new ResourceCalculationContextFactory(() => new PersonSkillProvider(), _timeZoneGuard).Create(scheduleDictionary, allSkills, period))
 				{
 					foreach (var date in period.DayCollection())
 					{
@@ -51,8 +46,8 @@ namespace Teleopti.Ccc.Domain.Cascading
 							{
 								foreach (var skillGroup in _skillGroupPerActivityProvider.FetchOrdered(cascadingSkills, activity, interval))
 								{
-									var resourcesMoved = _addResourcesToSubSkills.Execute(stateHolder.SchedulingResultState.SkillStaffPeriodHolder, skillGroup, interval);
-									_reducePrimarySkillResources.Execute(stateHolder.SchedulingResultState.SkillStaffPeriodHolder, skillGroup.PrimarySkills, interval, resourcesMoved);
+									var resourcesMoved = _addResourcesToSubSkills.Execute(skillStaffPeriodHolder, skillGroup, interval);
+									_reducePrimarySkillResources.Execute(skillStaffPeriodHolder, skillGroup.PrimarySkills, interval, resourcesMoved);
 								}
 							}
 						}

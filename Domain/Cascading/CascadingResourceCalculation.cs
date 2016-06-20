@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 		private void doForPeriod(DateOnlyPeriod period)
 		{
+			var resultState = _stateHolder().SchedulingResultState;
 			foreach (var date in period.DayCollection())
 			{
 				//TODO: ska det vara true, true (?) här - fixa och lägg på test senare. behövs nog i nästkommande PBIer...
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 			}
 			if (!ResourceCalculationContext.PrimarySkillMode()) 
 			{
-				_shovelResources.Execute(period);
+				_shovelResources.Execute(resultState.SkillStaffPeriodHolder, resultState.Schedules, resultState.Skills, period);
 			}
 		}
 	}

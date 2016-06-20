@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<ShovelResources>().InstancePerLifetimeScope();
+			builder.RegisterType<ShovelResources>().SingleInstance();
 			builder.RegisterType<AddResourcesToSubSkills>().SingleInstance();
 			builder.RegisterType<ReducePrimarySkillResources>().SingleInstance();
 			builder.RegisterType<SkillGroupPerActivityProvider>().SingleInstance();
