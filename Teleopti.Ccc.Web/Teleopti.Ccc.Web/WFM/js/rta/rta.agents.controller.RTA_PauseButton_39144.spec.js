@@ -123,12 +123,12 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 	});
 
 	it('should trigger notice when pausing', function() {
-		spyOn(NoticeService, 'warning');
+		spyOn(NoticeService, 'info');
 		$controllerBuilder
 			.createController()
 			.apply('pause = true');
 
-		expect(NoticeService.warning).toHaveBeenCalled();
+		expect(NoticeService.info).toHaveBeenCalled();
 	});
 
 	it('should trigger notice when unpausing', function() {
@@ -145,7 +145,7 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 		var destroyer = {
 			destroy: function() {}
 		};
-		spyOn(NoticeService, 'warning').and.returnValue(destroyer);
+		spyOn(NoticeService, 'info').and.returnValue(destroyer);
 		spyOn(destroyer, 'destroy');
 
 		$controllerBuilder
@@ -163,12 +163,12 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
 			});
-		spyOn(NoticeService, 'warning');
+		spyOn(NoticeService, 'info');
 		$controllerBuilder
 			.createController()
 			.apply('pause = true');
 
-		expect(NoticeService.warning.calls.mostRecent().args[0]).toContain("2016-06-15 09:00:46");
+		expect(NoticeService.info.calls.mostRecent().args[0]).toContain("2016-06-15 09:00:46");
 	});
 
 	it('should not update when paused and toggling agents in alarm', function() {

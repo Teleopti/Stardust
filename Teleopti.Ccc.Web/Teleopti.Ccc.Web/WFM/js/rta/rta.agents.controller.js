@@ -46,7 +46,7 @@
 				$scope.$watch('pause', function() {
 					if ($scope.pause) {
 						$scope.pausedAt = moment(lastUpdate).format('YYYY-MM-DD HH:mm:ss');
-						notice = NoticeService.warning('Real time adherence monitoring paused at ' + $scope.pausedAt + '!<br>Re-enable by clicking play', null, true);
+						notice = NoticeService.info('Real time adherence monitoring paused at ' + $scope.pausedAt + '!<br>Re-enable by clicking play', null, true);
 						cancelPolling();
 					} else {
 						$scope.pausedAt = null;
