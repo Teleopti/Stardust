@@ -20019,6 +20019,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pause.
+        /// </summary>
+        public static string Pause {
+            get {
+                return ResourceManager.GetString("Pause", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paused at.
+        /// </summary>
+        public static string PausedAt {
+            get {
+                return ResourceManager.GetString("PausedAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Payroll System Code.
         /// </summary>
         public static string PayrollCode {
@@ -20999,6 +21017,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PlanSeats {
             get {
                 return ResourceManager.GetString("PlanSeats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Play.
+        /// </summary>
+        public static string Play {
+            get {
+                return ResourceManager.GetString("Play", resourceCulture);
             }
         }
         
@@ -24032,6 +24059,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string RtaLoggedOut {
             get {
                 return ResourceManager.GetString("RtaLoggedOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Real time adherence monitoring activated.
+        /// </summary>
+        public static string RtaPauseDisableNotice {
+            get {
+                return ResourceManager.GetString("RtaPauseDisableNotice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Real time adherence monitoring paused at {0}! Re-enable by clicking play.
+        /// </summary>
+        public static string RtaPauseEnabledNotice {
+            get {
+                return ResourceManager.GetString("RtaPauseEnabledNotice", resourceCulture);
             }
         }
         

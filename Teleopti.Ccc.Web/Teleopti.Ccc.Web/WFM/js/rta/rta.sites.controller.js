@@ -2,16 +2,19 @@
 	'use strict';
 	angular.module('wfm.rta')
 		.controller('RtaSitesCtrl', [
-			'$scope', '$filter', '$state', '$stateParams', '$interval', 'RtaService', 'RtaOrganizationService', 'RtaFormatService', 'NoticeService', 'Toggle',
-			function($scope, $filter, $state, $stateParams, $interval, RtaService, RtaOrganizationService, RtaFormatService, NoticeService, toggleService) {
+			'$scope', '$filter', '$state', '$stateParams', '$interval', 'RtaService', 'RtaOrganizationService', 'RtaFormatService', 'NoticeService', 'Toggle', '$translate',
+			function($scope, $filter, $state, $stateParams, $interval, RtaService, RtaOrganizationService, RtaFormatService, NoticeService, toggleService, $translate) {
 
 				$scope.underToggle = toggleService.RTA_MonitorBySkills_39081;
 
 				$scope.getAdherencePercent = RtaFormatService.numberToPercent;
 				$scope.checkboxesChecked = 0;
 				var selectedSiteIds = [];
-				var message = "RTA has been improved! We appreciate your <a href=' http://www.teleopti.com/wfm/customer-feedback.aspx'>feedback.</a>\
-				Old <a href='../Anywhere#realtimeadherencesites'>RTA</a> can be accessed for a limited time.";
+				var message = $translate.instant('WFMReleaseNotification')
+					.replace('{0}', 'RTA')
+					.replace('{1}', "<a href=' http://www.teleopti.com/wfm/customer-feedback.aspx'>")
+					.replace('{2}', '</a>')
+					.replace('{3}', "<a href='../Anywhere#realtimeadherencesites'>RTA</a>");
 
 				NoticeService.info(message, null, true);
 
