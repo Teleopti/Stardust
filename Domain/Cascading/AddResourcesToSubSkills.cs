@@ -7,34 +7,26 @@ namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class AddResourcesToSubSkills
 	{
-		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
-
-		public AddResourcesToSubSkills(Func<ISchedulingResultStateHolder> schedulingResultStateHolder)
-		{
-			_schedulingResultStateHolder = schedulingResultStateHolder;
-		}
-
-		public double Execute(CascadingSkillGroup skillGroup, DateTimePeriod interval)
+		public double Execute(ISkillStaffPeriodHolder skillStaffPeriodHolder, CascadingSkillGroup skillGroup, DateTimePeriod interval)
 		{
 			var resourcesMoved = 0d;
-			var schedulingResultStateHolder = _schedulingResultStateHolder();
 			var remainingResourcesInGroup = skillGroup.Resources;
 			var remainingPrimarySkillOverstaff = skillGroup.PrimarySkills
-				.Sum(primarySkill => schedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodOrDefault(primarySkill, interval, int.MaxValue).AbsoluteDifference);
+				.Sum(primarySkill => skillStaffPeriodHolder.SkillStaffPeriodOrDefault(primarySkill, interval, int.MaxValue).AbsoluteDifference);
 			if (!remainingPrimarySkillOverstaff.IsOverstaffed())
 				return 0;
 
 			foreach (var cascadingSkillGroupItem in skillGroup.CascadingSkillGroupItems)
 			{
 				var totalUnderstaffingInSkillGroup = cascadingSkillGroupItem.SubSkills
-					.Select(skillToMoveTo => schedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodOrDefault(skillToMoveTo, interval, 0).AbsoluteDifference)
+					.Select(skillToMoveTo => skillStaffPeriodHolder.SkillStaffPeriodOrDefault(skillToMoveTo, interval, 0).AbsoluteDifference)
 					.Where(absoluteDifference => absoluteDifference.IsUnderstaffed())
 					.Sum(absoluteDifference => -absoluteDifference);
 
 				var remainingOverstaff = Math.Min(remainingPrimarySkillOverstaff, remainingResourcesInGroup);
 				foreach (var skillToMoveTo in cascadingSkillGroupItem.SubSkills)
 				{
-					var skillStaffPeriodTo = schedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodOrDefault(skillToMoveTo, interval, 0);
+					var skillStaffPeriodTo = skillStaffPeriodHolder.SkillStaffPeriodOrDefault(skillToMoveTo, interval, 0);
 					var skillToMoveToAbsoluteDifference = skillStaffPeriodTo.AbsoluteDifference;
 					if (!skillToMoveToAbsoluteDifference.IsUnderstaffed())
 						continue;

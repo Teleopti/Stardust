@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<ShovelResources>().InstancePerLifetimeScope();
-			builder.RegisterType<AddResourcesToSubSkills>().InstancePerLifetimeScope();
+			builder.RegisterType<AddResourcesToSubSkills>().SingleInstance();
 			builder.RegisterType<ReducePrimarySkillResources>().SingleInstance();
 			builder.RegisterType<SkillGroupPerActivityProvider>().SingleInstance();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_CascadingSkills_38524))
