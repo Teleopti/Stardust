@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		}
 
 
-		[HttpGet, UnitOfWork, Route("HealthCheck/CheckScheduleProjectionReadOnly")]
+		[HttpGet, Route("HealthCheck/CheckScheduleProjectionReadOnly")]
 		public virtual IHttpActionResult CheckScheduleProjectionReadOnly(DateTime start, DateTime end)
 		{
 			_publisher.Publish(new ValidateScheduleProjectionReadOnlyEvent

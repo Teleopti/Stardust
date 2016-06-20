@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 {
@@ -9,6 +10,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 	{
 
 		IEnumerable<ScheduleProjectionReadOnlyModel> BuildReadModel(IPerson person, DateOnly date);
-		IEnumerable<ScheduleProjectionReadOnlyValidationResult> Validate(DateTime start, DateTime end);
+
+		void Validate(DateTime start, DateTime end, Action<ScheduleProjectionReadOnlyValidationResult> reportProgress, bool ignoreValid = false);
+
 	}
 }

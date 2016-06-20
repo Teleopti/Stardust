@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -7,11 +8,13 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Schedule
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 {
@@ -52,9 +55,14 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 					EndDateTime = "2016-01-01 15:00".Utc()
 				});
 
-			var result = Target.Validate(new DateTime(2016, 1, 1), new DateTime(2016, 1, 1));
+			var result = new List<ScheduleProjectionReadOnlyValidationResult>();
+			Action<ScheduleProjectionReadOnlyValidationResult> action = x =>
+			{
+				result.Add(x);
+			};
 
-
+			Target.Validate(new DateTime(2016, 1, 1), new DateTime(2016, 1, 1), action, true);
+	
 			result.Count().Should().Be.EqualTo(1);
 			result.Single().PersonId.Should().Be.EqualTo(person.Id.Value);
 			result.Single().Date.Should().Be.EqualTo("2016-01-01".Date().Date);
@@ -86,7 +94,12 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 					ShortName = ""
 				});
 
-			var result = Target.Validate(new DateTime(2016, 1, 1), new DateTime(2016, 1, 1));
+			var result = new List<ScheduleProjectionReadOnlyValidationResult>();
+			Action<ScheduleProjectionReadOnlyValidationResult> action = x =>
+			{
+				result.Add(x);
+			};
+			Target.Validate(new DateTime(2016, 1, 1), new DateTime(2016, 1, 1), action, true);
 
 
 			result.Count().Should().Be.EqualTo(0);

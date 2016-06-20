@@ -232,6 +232,7 @@
     <Compile Include="ApplicationLayer\NoServiceBusSender.cs" />
     <Compile Include="ApplicationLayer\MultiEventPublisherServiceBusAsSync.cs" />
     <Compile Include="ApplicationLayer\RunInProcessEventPublisher.cs" />
+    <Compile Include="ApplicationLayer\ScheduleProjectionReadOnly\ScheduleProjectionReadOnlyCheckResultPersister.cs" />
     <Compile Include="ApplicationLayer\StardustEventPublisher.cs" />
     <Compile Include="ApplicationLayer\ServiceBusEventProcessor.cs" />
     <Compile Include="ApplicationLayer\StardustSender.cs" />

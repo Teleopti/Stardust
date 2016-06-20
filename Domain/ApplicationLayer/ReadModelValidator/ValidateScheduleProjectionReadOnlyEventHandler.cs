@@ -1,5 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 {
@@ -7,15 +8,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 		IRunOnStardust
 	{
 		private readonly IReadModelValidator _validator;
+		private readonly IScheduleProjectionReadOnlyCheckResultPersister _persister;
 
-		public ValidateScheduleProjectionReadOnlyEventHandler(IReadModelValidator validator)
+		public ValidateScheduleProjectionReadOnlyEventHandler(IReadModelValidator validator, IScheduleProjectionReadOnlyCheckResultPersister persister)
 		{
 			_validator = validator;
+			_persister = persister;
 		}
 
 		public void Handle(ValidateScheduleProjectionReadOnlyEvent @event)
 		{
-			var result = _validator.Validate(@event.StartDate, @event.EndDate);
+				_persister.Reset();
+				_validator.Validate(@event.StartDate, @event.EndDate, _persister.Save);
 		}
 	}
 }

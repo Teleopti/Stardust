@@ -5,6 +5,7 @@ using Stardust.Node.Interfaces;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator;
+using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 {
@@ -18,8 +19,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			_componentContext = componentContext;
 
 		}
-		[UnitOfWork]
-		public void Handle(ValidateScheduleProjectionReadOnlyEvent parameters, CancellationTokenSource cancellationTokenSource,
+		[AsSystem, UnitOfWork]
+		public virtual void Handle(ValidateScheduleProjectionReadOnlyEvent parameters, CancellationTokenSource cancellationTokenSource,
 			Action<string> sendProgress)
 		{
 			var theRealOne = _componentContext.Resolve<IHandleEvent<ValidateScheduleProjectionReadOnlyEvent>>();

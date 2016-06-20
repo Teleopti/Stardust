@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 {
@@ -27,13 +28,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 			_builder = builder;
 		}
 
-		public IEnumerable<ScheduleProjectionReadOnlyValidationResult> Validate(DateTime start, DateTime end)
+		public void Validate(DateTime start, DateTime end, Action<ScheduleProjectionReadOnlyValidationResult> reportProgress, bool ignoreValid = false)
 		{
 
 			var people = _personRepository.LoadAllPeopleWithHierarchyDataSortByName(new DateOnly(start));
 			var scenario = _currentScenario.Current();
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(start), new DateOnly(end));
-			var ret = new List<ScheduleProjectionReadOnlyValidationResult>();
 
 			people.ForEach(person =>
 			{
@@ -46,20 +46,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 
 					var mappedLayers = BuildReadModel(person, day);
 
-					if (mappedLayers.Count() != readModelLayers.Count() 
-					|| mappedLayers.Zip(readModelLayers, IsReadModelDifferent).Any(x => x))
-					{
-						ret.Add(new ScheduleProjectionReadOnlyValidationResult
+					var isInValid = mappedLayers.Count() != readModelLayers.Count()
+									|| mappedLayers.Zip(readModelLayers, IsReadModelDifferent).Any(x => x);
+
+					if (isInValid || !ignoreValid)
+						reportProgress(new ScheduleProjectionReadOnlyValidationResult
 						{
 							PersonId = person.Id.GetValueOrDefault(),
 							Date = day.Date,
-							IsValid = false
+							IsValid = !isInValid
 						});
-					}				
-				
 				});
 			});
-			return ret;
+
 		}
 
 
@@ -75,25 +74,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 				new ScheduleDictionaryLoadOptions(false, false),
 				date.ToDateTimePeriod(TimeZoneInfo.Utc),
 				scenario);
-			var scheduleDay = schedule.SchedulesForDay(date).Single();
-			var projection = scheduleDay.ProjectionService().CreateProjection();
-			var layers = _builder.BuildProjectionChangedEventLayers(projection);
-
-			return layers.Select(layer => new ScheduleProjectionReadOnlyModel
+			var scheduleDay = schedule.SchedulesForDay(date).SingleOrDefault();
+			if (scheduleDay != null)
 			{
-				PersonId = person.Id.Value,
-				ScenarioId = scenario.Id.Value,
-				BelongsToDate = date,
-				PayloadId = layer.PayloadId,
-				WorkTime = layer.WorkTime,
-				ContractTime = layer.ContractTime,
-				StartDateTime = layer.StartDateTime,
-				EndDateTime = layer.EndDateTime,
-				Name = layer.Name,
-				ShortName = layer.ShortName,
-				DisplayColor = layer.DisplayColor
-			});
+				var projection = scheduleDay.ProjectionService().CreateProjection();
+				var layers = _builder.BuildProjectionChangedEventLayers(projection);
 
+				return layers.Select(layer => new ScheduleProjectionReadOnlyModel
+				{
+					PersonId = person.Id.Value,
+					ScenarioId = scenario.Id.Value,
+					BelongsToDate = date,
+					PayloadId = layer.PayloadId,
+					WorkTime = layer.WorkTime,
+					ContractTime = layer.ContractTime,
+					StartDateTime = layer.StartDateTime,
+					EndDateTime = layer.EndDateTime,
+					Name = layer.Name,
+					ShortName = layer.ShortName,
+					DisplayColor = layer.DisplayColor
+				});
+			}
+
+			return new List<ScheduleProjectionReadOnlyModel>();
 		}
 
 	}

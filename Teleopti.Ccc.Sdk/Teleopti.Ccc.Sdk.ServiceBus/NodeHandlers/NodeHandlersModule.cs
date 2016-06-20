@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			builder.RegisterType<StardustJobFeedback>().As<IStardustJobFeedback>().SingleInstance();
 			builder.RegisterType<ResourceCalculateReadModelUpdater>().As<IHandle<UpdateResourceCalculateReadModelEvent>>().SingleInstance();
 			builder.RegisterType<ValidateScheduleProjectionReadOnlyReadModelHandler>()
-				.As<IHandle<ValidateScheduleProjectionReadOnlyEvent>>();
+				.As<IHandle<ValidateScheduleProjectionReadOnlyEvent>>().SingleInstance().ApplyAspects();
 		}
 	}
 }

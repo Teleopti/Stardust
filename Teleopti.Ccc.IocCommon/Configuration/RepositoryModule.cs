@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnly;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Audit;
@@ -73,6 +74,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<AuditSettingRepository>()
 				.As<IAuditSettingRepository>()
+				.SingleInstance();
+
+			builder.RegisterType<ScheduleProjectionReadOnlyCheckResultPersister>()
+				.As<IScheduleProjectionReadOnlyCheckResultPersister>()
 				.SingleInstance();
 		}
 
