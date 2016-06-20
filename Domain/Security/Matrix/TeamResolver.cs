@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
 					}
 					break;
 				default:
-					throw new ArgumentOutOfRangeException("role", "Unknown enumerator in AvailableData");
+					throw new ArgumentOutOfRangeException(nameof(role), "Unknown enumerator in AvailableData");
 			}
 
 			addMyOwnPermissions(myTeam);
