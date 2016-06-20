@@ -14560,8 +14560,8 @@ These options are activated:
     <comment>Text for notice in navbar of fat client</comment>
   </data>
   <data name="WFMReleaseNotificationWithoutOldModuleLink" xml:space="preserve">
-    <value>{0} has been improved! We appreciate your &lt;a href='http://www.teleopti.com/wfm/customer-feedback.aspx' target='_blank'&gt;feedback.&lt;/a&gt;</value>
-    <comment>Notification message to the user in the web released WFM. {0} is the module name, like MyTime for example.</comment>
+    <value>{0} has been improved! We appreciate your {1}feedback.{2}</value>
+    <comment>Notification message to the user in the web released WFM. {0} is the module name, like MyTime for example.{1} and {2} are used to embed a link to the customer feedback form.</comment>
   </data>
   <data name="DateRange" xml:space="preserve">
     <value>Date Range</value>

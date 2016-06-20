@@ -371,9 +371,10 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 	$scope.searchKeyword();
 
 	if (toggleSvc.Wfm_People_PrepareForRelease_39040) {
-		var template = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink');
-		var moduleName = $translate.instant('People');
-		var message = template.replace('{0}', moduleName);
+		var message = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink')
+				.replace('{0}', $translate.instant('People'))
+				.replace('{1}', "<a href=' http://www.teleopti.com/wfm/customer-feedback.aspx' target='_blank' target='_blank'>")
+				.replace('{2}', '</a>');
 		NoticeService.info(message, null, true);
 	}
 }

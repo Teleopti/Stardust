@@ -32230,7 +32230,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} has been improved! We appreciate your &lt;a href=&apos;http://www.teleopti.com/wfm/customer-feedback.aspx&apos; target=&apos;_blank&apos;&gt;feedback.&lt;/a&gt;.
+        ///   Looks up a localized string similar to {0} has been improved! We appreciate your {1}feedback.{2}.
         /// </summary>
         public static string WFMReleaseNotificationWithoutOldModuleLink {
             get {
