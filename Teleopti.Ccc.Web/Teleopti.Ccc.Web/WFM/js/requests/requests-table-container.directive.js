@@ -7,9 +7,9 @@
 		.directive('requestsTableContainer', requestsTableContainerDirective);
 
 
-	requestsTableContainerController.$inject = ['$scope', '$translate', '$filter', '$timeout', 'Toggle', 'requestsDefinitions', 'requestCommandParamsHolder', 'CurrentUserInfo', 'RequestsFilter', 'requestsDataService', 'uiGridConstants','$injector'];
+	requestsTableContainerController.$inject = ['$scope', '$translate', '$filter', '$timeout', 'Toggle', 'requestsDefinitions', 'requestCommandParamsHolder', 'CurrentUserInfo', 'RequestsFilter', 'requestsDataService', 'uiGridConstants', '$injector', 'TeamSchedule', 'ScheduleManagement'];
 
-	function requestsTableContainerController($scope, $translate, $filter, $timeout, toggleSvc, requestsDefinitions, requestCommandParamsHolder, CurrentUserInfo, requestFilterSvc, requestsDataSvc, uiGridConstants, $injector) {
+	function requestsTableContainerController($scope, $translate, $filter, $timeout, toggleSvc, requestsDefinitions, requestCommandParamsHolder, CurrentUserInfo, requestFilterSvc, requestsDataSvc, uiGridConstants, $injector, teamScheduleSvc, scheduleMgmtSvc) {
 		var vm = this;
 
 		vm.getGridOptions = getGridOptions;
@@ -20,8 +20,55 @@
 		vm.thereIsRequest = thereIsRequest;
 		vm.isDayOff = isDayOff;
 		vm.shouldDisplayShiftTradeDayDetail = shouldDisplayShiftTradeDayDetail;
+	    vm.showRelevantInfo = toggleSvc.Wfm_Requests_ShiftTrade_More_Relevant_Information_38492;
+		vm.showShiftDetail = showShiftDetail;
+		vm.hideShiftDetail = hideShiftDetail;
+		vm.shiftDetailStyleJson = shiftDetailStyleJson;
+		vm.shiftDetailLeft;
+		vm.shiftDetailTop;
+		vm.displayShiftDetail;
 
-		function isDayOff(scheduleDayDetail) {
+
+	    function updateShiftStatusForSelectedPerson(scheduleDate) {
+	        var selectedPersonIdList = vm.personIds;
+			if (selectedPersonIdList.length === 0) {
+				return;
+			}
+
+			var currentDate = scheduleDate.format('YYYY-MM-DD');
+
+			teamScheduleSvc.getSchedules(currentDate, selectedPersonIdList).then(function (result) {
+			    scheduleMgmtSvc.resetSchedules(result.Schedules, scheduleDate);
+			    vm.displayShiftDetail = true;
+				});
+	    }
+
+	    function showShiftDetail(oEvent, personFromId, personToId, scheduleDate) {
+	        if (!vm.showRelevantInfo) return;
+	        vm.personIds = [personFromId, personToId];
+	        vm.shiftDetailLeft = oEvent.pageX - 5;
+	        vm.shiftDetailTop = oEvent.pageY - 5;
+	        updateShiftStatusForSelectedPerson(moment(scheduleDate));
+	    }
+
+
+	    function hideShiftDetail() {
+	        if (!vm.showRelevantInfo) return;
+            vm.displayShiftDetail = false;
+        }
+
+
+
+	    function shiftDetailStyleJson() {
+	        return {
+	            top: vm.shiftDetailTop + 'px',
+	            left: vm.shiftDetailLeft + 'px',
+	            position: 'fixed'
+	        };
+
+	    }
+
+	    function isDayOff(scheduleDayDetail) {
 			return (scheduleDayDetail && (scheduleDayDetail.Type === requestsDefinitions.SHIFT_OBJECT_TYPE.DayOff));
 		}
 

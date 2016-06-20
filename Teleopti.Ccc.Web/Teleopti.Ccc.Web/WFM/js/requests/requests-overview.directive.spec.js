@@ -175,13 +175,14 @@
 	});
 
 	describe('requests table container directive', function () {
-		var $compile, $rootScope, requestsDefinitions, $filter;
+	    var $compile, $rootScope, requestsDefinitions, $filter, teamSchedule;
 
 		beforeEach(module('wfm.templates'));
 		beforeEach(module('wfm.requests'));
 
 		beforeEach(function () {
-			var requestsDataService = new FakeRequestsDataService();
+		    var requestsDataService = new FakeRequestsDataService();
+		    teamSchedule = new FakeTeamSchedule();
 			module(function ($provide) {
 				$provide.service('Toggle', function () {
 					return {
@@ -190,6 +191,7 @@
 						Wfm_Requests_Performance_36295: true,
 						Wfm_Requests_ApproveDeny_36297: true,
 						Wfm_Requests_Filtering_37748: true,
+						Wfm_Requests_ShiftTrade_More_Relevant_Information_38492:true,
 						togglesLoaded: {
 							then: function (cb) { cb(); }
 						}
@@ -198,6 +200,10 @@
 
 				$provide.service('requestsDataService', function () {
 					return requestsDataService;
+				});
+
+				$provide.service('TeamSchedule', function () {
+				    return teamSchedule;
 				});
 			});
 		});
@@ -367,6 +373,26 @@
 
 		});
 
+		it('should load schedules for shift trade request', function () {
+		    var test = setUpTarget();
+
+		    setUpShiftTradeRequestData(test);
+
+		    test.scope.shiftTradeRequestDateSummary = {
+		        Minimum: '2016-05-25T00:00:00',
+		        Maximum: '2016-06-02T00:00:00',
+		        StartOfWeek: '2016-05-22T00:00:00',
+		        EndOfWeek: '2016-06-04T00:00:00'
+		    };
+
+		    test.scope.$digest();
+
+		    var vm = test.target.isolateScope().requestsTableContainer;
+		    vm.showShiftDetail({}, 1, 1, "2016-06-21T00:00:00");
+		    expect(teamSchedule.getSchedulesCallTimes()).toEqual(1);
+
+		});
+
 		function setUpShiftTradeRequestData(test) {
 			var shiftTradeDays = [
 				{
@@ -422,6 +448,20 @@
 
 
 	});
+	function FakeTeamSchedule() {
+	    var searchScheduleCalledTimes = 0;
+	    this.getSchedules = function (date, agents) {
+	        return {
+	            then: function (cb) {
+	                searchScheduleCalledTimes = searchScheduleCalledTimes + 1;
+	            }
+	        }
+	    }
+	    this.getSchedulesCallTimes=function() {
+	        return searchScheduleCalledTimes;
+	    }
+	}
+
 	function FakeRequestsDataService() {
 		var _requests;
 		var _hasSentRequests;

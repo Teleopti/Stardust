@@ -11,7 +11,8 @@
 		'wfm.notice',
 		'currentUserInfoService',
 		'isteven-multi-select',
-        'wfm.signalR'
+        'wfm.signalR',
+        'wfm.teamSchedule'
 	]);
 
 })();

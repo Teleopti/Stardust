@@ -7,6 +7,72 @@
 	.inline-block, .wfm-date-range-picker-wrap {
 		display: inline-block;
 	}
+    .relative{
+        position:relative;
+    }
+    .absolute{
+        position:absolute;
+    }
+   schedule-table .wfm-checkbox-toggle{
+       display:none;
+    }
+    .schedule-container{
+        border:1px solid #A3A3A3;
+        background-color:#fff;
+        padding:5px;
+        min-width:500px;
+        width:35%;
+    }
+   .time-line {
+        min-width: 300px;
+        z-index: 10;
+
+        .ruler {
+            height: 100%;
+            width: 1px;
+            background-color: $gray012;
+            z-index: 10;
+        }
+
+        .label {
+            font-size: xx-small;
+            height: 1.32em;
+            z-index: 11;
+            transform: translateX(-50%);
+        }
+    }
+   .shift {
+        .layer {
+            z-index: 10;
+            height: 22px;
+            text-align: center;
+        }
+
+        .layer.noneSelected {
+            opacity: 1;
+        }
+        .layer.lighterBorder {
+            border-color: #00ffff;
+        }
+
+        .layer:first-of-type {
+            -webkit-border-radius: 4px 0px 0px 4px;
+            -moz-border-radius: 4px 0px 0px 4px;
+            border-radius: 4px 0px 0px 4px;
+        }
+
+        .layer:last-of-type {
+            -webkit-border-radius: 0px 4px 4px 0px;
+            -moz-border-radius: 0px 4px 4px 0px;
+            border-radius: 0px 4px 4px 0px;
+        }
+
+        .layer:only-child {
+            -webkit-border-radius: 4px 4px 4px 4px;
+            -moz-border-radius: 4px 4px 4px 4px;
+            border-radius: 4px 4px 4px 4px;
+        }
+    }
 
 	[id="time-zone-switch"] {
 		position: relative;

@@ -14,7 +14,7 @@
 					'			<td class=\"shift-trade-cell\" ng-style=\"{\'background-color\': \'$white\'}\"></td>' +
 					'		</tr>' +
 					'	</table>' +
-					'	<table ng-if=\"matchingShiftTradeDays.length == 1\" style=\"width: 100%;\">' +
+					'	<table ng-click=\"grid.appScope.showShiftDetail($event,row.entity[\'PersonId\'],row.entity[\'PersonIdTo\'],matchingShiftTradeDays[0].Date)\" ng-if=\"matchingShiftTradeDays.length == 1\" style=\"width:100%\" ng-style=\"{cursor: grid.appScope.showRelevantInfo ? \'pointer\' : \'default\' }\">' +
 					'		<tr class=\"shift-trade-row\" ng-repeat=\"shiftTradeDay in  matchingShiftTradeDays\">' +
 					'			<td class=\"shift-trade-cell\">' +
 					'				<div class=\"shift-trade-cell-text\"' +
