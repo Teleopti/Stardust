@@ -101,7 +101,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				select m;
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadBySkill(Guid skill)
+		public IEnumerable<AgentStateReadModel> LoadForSkill(Guid skill)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IEnumerable<AgentStateReadModel> LoadAlarmsForSkill(Guid skill)
 		{
 			throw new NotImplementedException();
 		}

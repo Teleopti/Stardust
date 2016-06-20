@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Persist(new PersonSkillsReadModel { PersonId = person, SkillIds = new[] { skill } });
 
-			var result = Reader.LoadBySkill(skill).Single();
+			var result = Reader.LoadForSkill(skill).Single();
 			result.PersonId.Should().Be(person);
 		}
 
@@ -39,9 +39,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Persist(new PersonSkillsReadModel { PersonId = person, SkillIds = new[] { skill1, skill2 } });
 
-			var result = Reader.LoadBySkill(skill1).Single();
+			var result = Reader.LoadForSkill(skill1).Single();
 			result.PersonId.Should().Be(person);
-			result = Reader.LoadBySkill(skill2).Single();
+			result = Reader.LoadForSkill(skill2).Single();
 			result.PersonId.Should().Be(person);
 		}
 
@@ -56,8 +56,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Persist(new PersonSkillsReadModel { PersonId = person, SkillIds = new[] { skill2 } });
 
-			Reader.LoadBySkill(skill1).Should().Have.Count.EqualTo(0);
-			var result = Reader.LoadBySkill(skill2).Single();
+			Reader.LoadForSkill(skill1).Should().Have.Count.EqualTo(0);
+			var result = Reader.LoadForSkill(skill2).Single();
 			result.PersonId.Should().Be(person);
 		}
 		
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Delete(person);
 
-			Reader.LoadBySkill(skill).Should().Have.Count.EqualTo(0);
+			Reader.LoadForSkill(skill).Should().Have.Count.EqualTo(0);
 		}
 	}
 }

@@ -144,26 +144,36 @@ namespace Teleopti.Ccc.TestCommon
 		 	return WithAgent(RandomName.Make());
 		}
 
-
 		[UnitOfWork]
 		public virtual Database WithSkill(string name)
 		{
+			var skill = this.skill(name);
+
+			var personSkill = new PersonSkill(skill, new Percent(100));
+			person().AddSkill(personSkill, person().PersonPeriodCollection.OrderBy(x => x.StartDate).First());
+			return this;
+		}
+
+		private ISkill skill(string name)
+		{
+			var existing = _skills.LoadAll().SingleOrDefault(x => x.Name == name);
+			if (existing != null)
+				return existing;
+			
 			var skillType = SkillTypeFactory.CreateSkillType();
 			_skillTypes.Add(skillType);
 			var staffingThresholds = new StaffingThresholds(new Percent(0.1), new Percent(0.2), new Percent(0.3));
 			var midnightBreakOffset = new TimeSpan(3, 0, 0);
 			var activity = new Activity(name);
 			_activities.Add(activity);
-			
+
 			var skill = SkillFactory.CreateSkill(name, skillType, 15);
 			skill.Activity = activity;
 			skill.StaffingThresholds = staffingThresholds;
 			skill.MidnightBreakOffset = midnightBreakOffset;
-			
 			_skills.Add(skill);
-			var personSkill = new PersonSkill(skill, new Percent(100));
-			person().AddSkill(personSkill, person().PersonPeriodCollection.OrderBy(x => x.StartDate).First());
-			return this;
+			
+			return skill;
 		}
 
 		[UnitOfWork]
@@ -258,8 +268,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		private IPerson person()
 		{
-			var loadAll = _persons.LoadAll();
-			return loadAll.Single(x => x.Name.ToString() == _person);
+			return _persons.LoadAll().Single(x => x.Name.ToString() == _person);
 		}
 
 		private IPersonAssignment assignment()
