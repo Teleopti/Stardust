@@ -161,3 +161,5 @@ ETL_SpeedUpGroupPagePersonNightly_37623 = RC
 ETL_SpeedUpIntradayWorkload_38928 = RC
 ETL_SpeedUpNightlyWorkload_38928 = RC
 ETL_SpeedUpIntradayDate_38934 = RC
+ETL_SpeedUpIntradayForecastWorkload_38929 = RC
+ETL_SpeedUpNightlyForecastWorkload_38929 = RC
