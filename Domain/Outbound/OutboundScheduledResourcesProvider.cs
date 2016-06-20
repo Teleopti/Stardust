@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 			var resCalcData = _schedulerStateHolder().SchedulingResultState.ToResourceOptimizationData(true, false);
 			foreach (var dateOnly in period.DayCollection())
 			{
-				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, resCalcData);
+				_resourceOptimizationHelper.ResourceCalculate(dateOnly, resCalcData);
 			}
 		}
 

@@ -20,12 +20,12 @@ namespace Teleopti.Ccc.Domain.Cascading
 			_shovelResources = shovelResources;
 		}
 
-		public void ForAll(DateOnlyPeriod dateOnlyPeriod, ResourceOptimizationData resourceOptimizationData)
+		public void ResourceCalculate(DateOnlyPeriod dateOnlyPeriod, ResourceOptimizationData resourceOptimizationData)
 		{
 			doForPeriod(dateOnlyPeriod, resourceOptimizationData);
 		}
 
-		public void ResourceCalculateDate(DateOnly localDate, ResourceOptimizationData resourceOptimizationData)
+		public void ResourceCalculate(DateOnly localDate, ResourceOptimizationData resourceOptimizationData)
 		{
 			doForPeriod(new DateOnlyPeriod(localDate, localDate), resourceOptimizationData);
 		}
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 			var resultState = _stateHolder().SchedulingResultState;
 			foreach (var date in period.DayCollection())
 			{
-				_resourceOptimizationHelper.ResourceCalculateDate(date, resourceOptimizationData);
+				_resourceOptimizationHelper.ResourceCalculate(date, resourceOptimizationData);
 			}
 			if (!ResourceCalculationContext.PrimarySkillMode()) 
 			{

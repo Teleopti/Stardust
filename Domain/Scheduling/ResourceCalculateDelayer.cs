@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		private void resourceCalculateDate(DateOnly date, bool considerShortBreaks, bool doIntraIntervalCalculation)
 		{
-			_resourceOptimizationHelper.ResourceCalculateDate(date, _schedulingResultStateHolder.ToResourceOptimizationData(considerShortBreaks, doIntraIntervalCalculation));
+			_resourceOptimizationHelper.ResourceCalculate(date, _schedulingResultStateHolder.ToResourceOptimizationData(considerShortBreaks, doIntraIntervalCalculation));
 		}
 	}
 }

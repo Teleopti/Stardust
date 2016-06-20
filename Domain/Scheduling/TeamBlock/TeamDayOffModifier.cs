@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				AddDayOffForMember(schedulePartModifyAndRollbackService, person, dateOnly, dayOffTemplate, false);
 			}
 
-			_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, resCalcData);
+			_resourceOptimizationHelper.ResourceCalculate(dateOnly, resCalcData);
 		}
 
 		public void AddDayOffForMember(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			schedulePartModifyAndRollbackService.Modify(scheduleDay);
 
 			if (resourceCalculate)
-				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, _schedulingResultStateHolder().ToResourceOptimizationData(true, false));
+				_resourceOptimizationHelper.ResourceCalculate(dateOnly, _schedulingResultStateHolder().ToResourceOptimizationData(true, false));
 		}
 
 		public void RemoveDayOffForTeam(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,

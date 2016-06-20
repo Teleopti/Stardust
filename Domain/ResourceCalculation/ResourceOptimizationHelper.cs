@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		}
 
 
-		public void ResourceCalculateDate(DateOnly localDate, ResourceOptimizationData resourceOptimizationData)
+		public void ResourceCalculate(DateOnly localDate, ResourceOptimizationData resourceOptimizationData)
 		{
 			var stateHolder = _schedulingResultStateHolder();
 			if (stateHolder.TeamLeaderMode)

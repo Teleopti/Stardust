@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 					foreach (DateOnly dateTime in dateOnlyPeriodForResourceCalc.DayCollection())
 					{
-						_resourceOptimizationHelper.ResourceCalculateDate(dateTime, _schedulingResultStateHolder.ToResourceOptimizationData(true, false));
+						_resourceOptimizationHelper.ResourceCalculate(dateTime, _schedulingResultStateHolder.ToResourceOptimizationData(true, false));
 					}
 
 					foreach (ISkill skill in _schedulingResultStateHolder.VisibleSkills)

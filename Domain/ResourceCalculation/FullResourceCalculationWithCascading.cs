@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public void Execute()
 		{
 			var stateHolder = _stateHolder();
-			_cascadingResourceCalculation.ForAll(stateHolder.RequestedPeriod.DateOnlyPeriod, stateHolder.SchedulingResultState.ToResourceOptimizationData(stateHolder.ConsiderShortBreaks, false));
+			_cascadingResourceCalculation.ResourceCalculate(stateHolder.RequestedPeriod.DateOnlyPeriod, stateHolder.SchedulingResultState.ToResourceOptimizationData(stateHolder.ConsiderShortBreaks, false));
 		}
 	}
 }

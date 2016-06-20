@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var resCalcData = _schedulingResultStateHolder().SchedulingResultState.ToResourceOptimizationData(schedulingOptions.ConsiderShortBreaks, false);
 			foreach (var date in daysToRecalculate)
             {
-				_resourceOptimizationHelper.ResourceCalculateDate(date, resCalcData);
+				_resourceOptimizationHelper.ResourceCalculate(date, resCalcData);
             }
 
             return retList;

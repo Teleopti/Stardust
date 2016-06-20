@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
             RemoveMeetingFromDictionary(_meeting);
             AddPersonMeetingsToDictionary(_meeting);
 
-            _resourceOptimizationHelper.ResourceCalculateDate(dateToCalculate, _schedulerStateHolder.SchedulingResultState.ToResourceOptimizationData(true, false));
+            _resourceOptimizationHelper.ResourceCalculate(dateToCalculate, _schedulerStateHolder.SchedulingResultState.ToResourceOptimizationData(true, false));
         }
 
         public void RemoveAndRecalculateResources(IMeeting meeting, DateOnly dateToCalculate)

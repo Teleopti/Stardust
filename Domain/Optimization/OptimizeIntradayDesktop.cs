@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 
 			var resCalcData =_currentSchedulerStateHolder().SchedulingResultState.ToResourceOptimizationData(_currentSchedulerStateHolder().ConsiderShortBreaks, false);
-			selectedPeriod.DayCollection().ForEach(x => _resourceOptimizationHelper.ResourceCalculateDate(x, resCalcData));
+			selectedPeriod.DayCollection().ForEach(x => _resourceOptimizationHelper.ResourceCalculate(x, resCalcData));
 		}	
 	}
 }

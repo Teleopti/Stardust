@@ -46,10 +46,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 				var resCalcData = _schedulingResultStateHolder().ToResourceOptimizationData(considerShortBreaks, doIntraIntervalCalculation);
 				var date = dayToDelete.DateOnlyAsPeriod.DateOnly;
-				_resourceOptimizationHelper.ResourceCalculateDate(date, resCalcData);
+				_resourceOptimizationHelper.ResourceCalculate(date, resCalcData);
 				if (_resourceCalculateDaysDecider.IsNightShift(dayToDelete))
 				{
-					_resourceOptimizationHelper.ResourceCalculateDate(date.AddDays(1), resCalcData);
+					_resourceOptimizationHelper.ResourceCalculate(date.AddDays(1), resCalcData);
 				}
 			}
 		}
@@ -71,9 +71,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var resCalcData = _schedulingResultStateHolder().ToResourceOptimizationData(considerShortBreaks, doIntraIntervalCalculation);
 			foreach (var pair in dic)
 			{
-				_resourceOptimizationHelper.ResourceCalculateDate(pair.Key, resCalcData);
+				_resourceOptimizationHelper.ResourceCalculate(pair.Key, resCalcData);
 				if (!dic.ContainsKey(pair.Key.AddDays(1)))
-					_resourceOptimizationHelper.ResourceCalculateDate(pair.Key.AddDays(1), resCalcData);
+					_resourceOptimizationHelper.ResourceCalculate(pair.Key.AddDays(1), resCalcData);
 			}
 		}
 	}

@@ -404,7 +404,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			{
 				foreach (var dateOnly in selectedPeriod.DayCollection())
 				{
-					_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, _stateHolder().ToResourceOptimizationData(true, false));
+					_resourceOptimizationHelper.ResourceCalculate(dateOnly, _stateHolder().ToResourceOptimizationData(true, false));
 				}
 			}
 		}
@@ -600,7 +600,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				var resCalcData = _stateHolder().ToResourceOptimizationData(optimizerPreferences.Rescheduling.ConsiderShortBreaks, false);
 				foreach (var dateOnly in selectedPeriod.DayCollection())
 				{
-					_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, resCalcData);
+					_resourceOptimizationHelper.ResourceCalculate(dateOnly, resCalcData);
 				}
 			}
 

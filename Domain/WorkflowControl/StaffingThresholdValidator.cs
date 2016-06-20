@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 	            var resCalcData =requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.ToResourceOptimizationData(true, false);
                 foreach (DateOnly dateOnly in datesToResourceCalculate.DayCollection())
                 {
-                    requiredForHandlingAbsenceRequest.ResourceOptimizationHelper.ResourceCalculateDate(dateOnly, resCalcData);
+                    requiredForHandlingAbsenceRequest.ResourceOptimizationHelper.ResourceCalculate(dateOnly, resCalcData);
                 }
                 
                 var calculatedPeriod = datesToResourceCalculate.ToDateTimePeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
