@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 
@@ -22,6 +25,8 @@ namespace Teleopti.Ccc.TestCommon
 		private readonly IContractScheduleRepository _contractSchedules;
 		private readonly IScenarioRepository _scenarios;
 		private readonly IActivityRepository _activities;
+		private readonly ISkillRepository _skills;
+		private readonly ISkillTypeRepository _skillTypes;
 
 		private DateOnly _date;
 		private string _person;
@@ -41,7 +46,7 @@ namespace Teleopti.Ccc.TestCommon
 			IPartTimePercentageRepository partTimePercentages,
 			IContractScheduleRepository contractSchedules,
 			IScenarioRepository scenarios, 
-			IActivityRepository activities)
+			IActivityRepository activities, ISkillRepository skills, ISkillTypeRepository skillTypes)
 		{
 			_assignments = assignments;
 			_persons = persons;
@@ -52,6 +57,8 @@ namespace Teleopti.Ccc.TestCommon
 			_contractSchedules = contractSchedules;
 			_scenarios = scenarios;
 			_activities = activities;
+			_skills = skills;
+			_skillTypes = skillTypes;
 		}
 
 		[UnitOfWork]
@@ -71,22 +78,54 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			return assignment();
 		}
+
+		[UnitOfWork]
+		public virtual Guid SkillIdFor(string name)
+		{
+			return _skills.LoadAll().Where(x => x.Name == name).Select(x => x.Id).Single().Value;
+		}
 		
+		[UnitOfWork]
+		public virtual Guid PersonIdFor(string name)
+		{
+			return _persons.LoadAll().Single(x => x.Name == new Name(name, name)).Id.Value;
+		}
+
+		[UnitOfWork]
 		public virtual Database WithPerson(string name)
 		{
-			_person = name;
+			var person = new Person { Name = new Name(name, name) };
+			_person = person.Name.ToString();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			_persons.Add(person);
 			return this;
 		}
 
 		[UnitOfWork]
-		public virtual Database WithAgent()
+		public virtual Database WithPersonPeriod(DateOnly date)
 		{
-			var person = new Person {Name = new Name(RandomName.Make(), RandomName.Make())};
+			var personContract = new PersonContract(
+				contract(),
+				partTimePercentage(),
+				contractSchedule());
+
+			person().AddPersonPeriod(
+				new PersonPeriod(date,
+				personContract,
+				team()));
+			
+			return this;
+		}
+
+		[UnitOfWork]
+		public virtual Database WithAgent(string name)
+		{
+			var person = new Person { Name = new Name(name, name) };
 			_person = person.Name.ToString();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			
+
 			var personContract = new PersonContract(
-				contract(), 
+				contract(),
 				partTimePercentage(),
 				contractSchedule());
 
@@ -95,7 +134,35 @@ namespace Teleopti.Ccc.TestCommon
 				personContract,
 				team()));
 			_persons.Add(person);
+
+			return this;
+		}
+
+		[UnitOfWork]
+		public virtual Database WithAgent()
+		{
+		 	return WithAgent(RandomName.Make());
+		}
+
+
+		[UnitOfWork]
+		public virtual Database WithSkill(string name)
+		{
+			var skillType = SkillTypeFactory.CreateSkillType();
+			_skillTypes.Add(skillType);
+			var staffingThresholds = new StaffingThresholds(new Percent(0.1), new Percent(0.2), new Percent(0.3));
+			var midnightBreakOffset = new TimeSpan(3, 0, 0);
+			var activity = new Activity(name);
+			_activities.Add(activity);
 			
+			var skill = SkillFactory.CreateSkill(name, skillType, 15);
+			skill.Activity = activity;
+			skill.StaffingThresholds = staffingThresholds;
+			skill.MidnightBreakOffset = midnightBreakOffset;
+			
+			_skills.Add(skill);
+			var personSkill = new PersonSkill(skill, new Percent(100));
+			person().AddSkill(personSkill, person().PersonPeriodCollection.OrderBy(x => x.StartDate).First());
 			return this;
 		}
 
@@ -191,9 +258,10 @@ namespace Teleopti.Ccc.TestCommon
 
 		private IPerson person()
 		{
-			return _persons.LoadAll().Single(x => x.Name.ToString() == _person);
+			var loadAll = _persons.LoadAll();
+			return loadAll.Single(x => x.Name.ToString() == _person);
 		}
-		
+
 		private IPersonAssignment assignment()
 		{
 			var pa = _assignments.LoadAll().Single(x => x.Date == _date && x.Person == person());

@@ -96,37 +96,43 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				);
 		}
 
+		private const string hardcodedSkillGroupingPageId = "4CE00B41-0722-4B36-91DD-0A3B63C545CF";
 		public IEnumerable<AgentStateReadModel> LoadBySkill(Guid skillId)
 		{
 			const string query = @"
-SELECT a.[PersonId]
-      ,[BusinessUnitId]
-      ,[SiteId]
-      ,[TeamId]
-      ,[ReceivedTime]
-      ,[Activity]
-      ,[NextActivity]
-      ,[NextActivityStartTime]
-      ,[StateCode]
-      ,[StateName]
-      ,[StateStartTime]
-      ,[RuleName]
-      ,[RuleStartTime]
-      ,[RuleColor]
-      ,[StaffingEffect]
-      ,[IsRuleAlarm]
-      ,[AlarmStartTime]
-      ,[AlarmColor]
-      ,[Shift]
+SELECT
+	a.[PersonId],
+	a.[BusinessUnitId],
+	a.[SiteId],
+	a.[TeamId],
+	a.[ReceivedTime],
+	a.[Activity],
+	a.[NextActivity],
+	a.[NextActivityStartTime],
+	a.[StateCode],
+	a.[StateName],
+	a.[StateStartTime],
+	a.[RuleName],
+	a.[RuleStartTime],
+	a.[RuleColor],
+	a.[StaffingEffect],
+	a.[IsRuleAlarm],
+	a.[AlarmStartTime],
+	a.[AlarmColor],
+	a.[Shift]
 FROM ReadModel.AgentState AS a WITH (NOLOCK)
-INNER JOIN ReadModel.PersonSkills AS p
-ON p.PersonId = a.PersonId
-WHERE p.SkillId = :skillId
+INNER JOIN ReadModel.GroupingReadOnly AS g
+	ON a.PersonId = g.PersonId
+WHERE PageId = :skillGroupingPageId
+AND g.GroupId = :skillId
+AND :today BETWEEN g.StartDate and g.EndDate
 ";
 			return transform(
 				_unitOfWork.Current().Session()
 				.CreateSQLQuery(query)
 				.SetParameter("skillId", skillId)
+				.SetParameter("today", _now.UtcDateTime().Date)
+				.SetParameter("skillGroupingPageId", hardcodedSkillGroupingPageId)
 				);
 		}
 
