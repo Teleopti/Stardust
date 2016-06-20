@@ -2,13 +2,13 @@
 	<div class="view-title">
 		<h1>
 			<i class="mdi mdi-alarm"></i> {{'Agents'|translate}}
-			<span ng-if="pausedAt" class="h4">({{'PausedAt'|translate}} {{pausedAt}})</span>
+			<span ng-if="pausedAt" class="h4">(Paused at {{pausedAt}})</span>
 		</h1>
 	</div>
 		<div class="fab-wrapper">
 			<button class="wfm-fab material-depth-1" ng-click="pause = !pause">
 				<i ng-class="{'mdi mdi-play': pause, 'mdi mdi-pause': !pause}"></i>
-				<md-tooltip>{{(pause ? 'Play' : 'Pause')|translate}}</md-tooltip>
+				<md-tooltip>{{pause ? 'Play' : 'Pause'}}</md-tooltip>
 			</button>
 </div>
 </div>

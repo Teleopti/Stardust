@@ -4,8 +4,8 @@
 	angular
 		.module('wfm.rta')
 		.controller('RtaAgentsCtrl', [
-			'$scope', '$filter', '$state', '$stateParams', '$interval', '$sessionStorage', 'RtaService', 'RtaGridService', 'RtaFormatService', 'RtaRouteService', 'FakeTimeService', 'Toggle', 'NoticeService', '$translate',
-			function($scope, $filter, $state, $stateParams, $interval, $sessionStorage, RtaService, RtaGridService, RtaFormatService, RtaRouteService, FakeTimeService, toggleService, NoticeService, $translate) {
+			'$scope', '$filter', '$state', '$stateParams', '$interval', '$sessionStorage', 'RtaService', 'RtaGridService', 'RtaFormatService', 'RtaRouteService', 'FakeTimeService', 'Toggle', 'NoticeService',
+			function($scope, $filter, $state, $stateParams, $interval, $sessionStorage, RtaService, RtaGridService, RtaFormatService, RtaRouteService, FakeTimeService, toggleService, NoticeService) {
 				var polling = null;
 				var selectedPersonId;
 				var siteIds = $stateParams.siteIds || ($stateParams.siteId ? [$stateParams.siteId] : []);
@@ -43,24 +43,20 @@
 				{"Id":"48d3423f-d044-45f0-8c5b-a0a200f2f3c0","Name":"Store London North"},{"Id":"e0af5f19-9fa7-4f16-b294-a0a200fa4d31","Name":"Store London South"},{"Id":"adbc5dca-73f8-400b-9b59-a0a200f345de","Name":"Store New York 5:th Ave"},{"Id":"39c05ed3-29a1-4a20-b3de-a47600dfef79","Name":"Store New York Broadway"},{"Id":"c32c0cde-e1cb-4d25-a7ac-a47600d4e96a","Name":"Store New York Soho"},
 				{"Id":"cdc2ccc7-8eaf-4380-abaa-a0a200f25a74","Name":"Store Tokyo Ginza"},{"Id":"a3784b8b-3aac-4781-b1c8-a474009f89a8","Name":"Web Chat"}];
 
-				if (toggleService.RTA_PauseButton_39144) {
-					$scope.$watch('pause', function() {
-						if ($scope.pause) {
-							$scope.pausedAt = moment(lastUpdate).format('YYYY-MM-DD HH:mm:ss');
-							var template = $translate.instant('RtaPauseEnabledNotice')
-							var noticeText = template.replace('{0}', $scope.pausedAt)
-							notice = NoticeService.info(noticeText, null, true);
-							cancelPolling();
-						} else {
-							$scope.pausedAt = null;
-							if (notice != null) {
-								notice.destroy();
-							}
-							NoticeService.info($translate.instant('RtaPauseDisableNotice'), 5000, true);
-							setupPolling();
+				$scope.$watch('pause', function() {
+					if ($scope.pause) {
+						$scope.pausedAt = moment(lastUpdate).format('YYYY-MM-DD HH:mm:ss');
+						notice = NoticeService.info('Real time adherence monitoring paused at ' + $scope.pausedAt + '!<br>Re-enable by clicking play', null, true);
+						cancelPolling();
+					} else {
+						$scope.pausedAt = null;
+						if (notice != null) {
+							notice.destroy();
 						}
-					});
-				}
+						NoticeService.info('Real time adherence monitoring activated', 5000, true);
+						setupPolling();
+					}
+				});
 
 				$scope.getTableHeight = function() {
 					var rowHeight = 30;
