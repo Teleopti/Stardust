@@ -22,22 +22,22 @@ namespace Teleopti.Ccc.Domain.Cascading
 		
 		public void ForAll()
 		{
-			doForPeriod(_stateHolder().RequestedPeriod.DateOnlyPeriod);
+			doForPeriod(_stateHolder().RequestedPeriod.DateOnlyPeriod, _stateHolder().ConsiderShortBreaks);
 		}
 
 		public void ResourceCalculateDate(DateOnly localDate, bool considerShortBreaks, bool doIntraIntervalCalculation)
 		{
 			//TODO: need to consider params above
-			doForPeriod(new DateOnlyPeriod(localDate, localDate));
+			doForPeriod(new DateOnlyPeriod(localDate, localDate), considerShortBreaks);
 		}
 
-		private void doForPeriod(DateOnlyPeriod period)
+		private void doForPeriod(DateOnlyPeriod period, bool considerShortBreaks)
 		{
 			var resultState = _stateHolder().SchedulingResultState;
 			foreach (var date in period.DayCollection())
 			{
 				//TODO: ska det vara true, true (?) här - fixa och lägg på test senare. behövs nog i nästkommande PBIer...
-				_resourceOptimizationHelper.ResourceCalculateDate(date, false, false);
+				_resourceOptimizationHelper.ResourceCalculateDate(date, considerShortBreaks, false);
 			}
 			if (!ResourceCalculationContext.PrimarySkillMode()) 
 			{
