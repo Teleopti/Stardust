@@ -14,17 +14,21 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private readonly IIntradayMonitorDataLoader _intradayMonitorDataLoader;
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
 		private readonly INow _now;
+		private readonly IUserTimeZone _userTimeZone;
 
-		public MonitorSkillsProvider(IIntradayMonitorDataLoader intradayMonitorDataLoader, IIntervalLengthFetcher intervalLengthFetcher, INow now)
+		public MonitorSkillsProvider(IIntradayMonitorDataLoader intradayMonitorDataLoader, IIntervalLengthFetcher intervalLengthFetcher, INow now, IUserTimeZone userTimeZone)
 		{
 			_intradayMonitorDataLoader = intradayMonitorDataLoader;
 			_intervalLengthFetcher = intervalLengthFetcher;
 			_now = now;
+			_userTimeZone = userTimeZone;
 		}
 
 		public MonitorDataViewModel Load(Guid[] skillIdList)
 		{
-			var intervals = _intradayMonitorDataLoader.Load(skillIdList, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone, _now.LocalDateOnly());
+			var intervals = _intradayMonitorDataLoader.Load(skillIdList, 
+				TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone,
+				new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _userTimeZone.TimeZone())));
 			var intervalLength = _intervalLengthFetcher.IntervalLength;
 
 			var summary = new MonitorIntradaySummary();

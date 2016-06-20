@@ -159,14 +159,7 @@
 					return;
 				} else {
 					$scope.latestActualInterval = $filter('date')(result.LatestActualIntervalStart, 'shortTime') + ' - ' + $filter('date')(result.LatestActualIntervalEnd, 'shortTime');
-					$scope.summaryForecastedCalls = $filter('number')(result.Summary.ForecastedCalls, 1);
-					$scope.summaryForecastedAverageHandleTime = $filter('number')(result.Summary.ForecastedAverageHandleTime, 1);
-					$scope.summaryOfferedCalls = $filter('number')(result.Summary.OfferedCalls, 1);
-					$scope.summaryAverageHandleTime = $filter('number')(result.Summary.AverageHandleTime, 1);
-					$scope.summaryAsa = $filter('number')(result.Summary.AverageSpeedOfAnswer, 1);
-					$scope.summaryAbandonedRate = $filter('number')(result.Summary.AbandonRate * 100, 1);
-					$scope.summaryServiceLevel = $filter('number')(result.Summary.ServiceLevel * 100, 1);
-
+					
 					$scope.timeSeries = [];
 					angular.forEach(result.DataSeries.Time, function (value, key) {
 						this.push($filter('date')(value, 'shortTime'));
@@ -178,9 +171,6 @@
 					$scope.averageSpeedOfAnswerObj.Series = result.DataSeries.AverageSpeedOfAnswer;
 					$scope.abandonedRateObj.Series = result.DataSeries.AbandonedRate;
 					$scope.serviceLevelObj.Series = result.DataSeries.ServiceLevel;
-
-					$scope.forecastActualCallsDifference = $filter('number')(result.Summary.ForecastedActualCallsDiff, 1);
-					$scope.forecastActualAverageHandleTimeDifference = $filter('number')(result.Summary.ForecastedActualHandleTimeDiff, 1);
 
 					$scope.forecastedCallsObj.Max = Math.max.apply(Math, $scope.forecastedCallsObj.Series);
 					$scope.actualCallsObj.Max = Math.max.apply(Math, $scope.actualCallsObj.Series);
@@ -204,6 +194,17 @@
 					$scope.HasMonitorData = true;
 					loadIntradayChart();
 					loadPrefChart();
+
+					$scope.summaryForecastedCalls = $filter('number')(result.Summary.ForecastedCalls, 1);
+					$scope.summaryForecastedAverageHandleTime = $filter('number')(result.Summary.ForecastedAverageHandleTime, 1);
+					$scope.summaryOfferedCalls = $filter('number')(result.Summary.OfferedCalls, 1);
+					$scope.summaryAverageHandleTime = $filter('number')(result.Summary.AverageHandleTime, 1);
+					$scope.summaryAsa = $filter('number')(result.Summary.AverageSpeedOfAnswer, 1);
+					$scope.summaryAbandonedRate = $filter('number')(result.Summary.AbandonRate * 100, 1);
+					$scope.summaryServiceLevel = $filter('number')(result.Summary.ServiceLevel * 100, 1);
+
+					$scope.forecastActualCallsDifference = $filter('number')(result.Summary.ForecastedActualCallsDiff, 1);
+					$scope.forecastActualAverageHandleTimeDifference = $filter('number')(result.Summary.ForecastedActualHandleTimeDiff, 1);
 				}
 			};
 

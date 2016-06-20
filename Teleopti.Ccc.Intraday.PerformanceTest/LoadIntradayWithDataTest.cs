@@ -26,9 +26,9 @@ namespace Teleopti.Ccc.Intraday.PerformanceTest
 
 				logonToIntraday(browserInteractions);
 
-				using (new TimeoutScope(browserActivator, TimeSpan.FromSeconds(30)))
+				using (new TimeoutScope(browserActivator, TimeSpan.FromSeconds(60)))
 				{
-					browserInteractions.AssertJavascriptResultContains("return $('.offered-calls').text() > 0", "True");
+					browserInteractions.AssertJavascriptResultContains("return $('.offered-calls').text().length > 0", "True");
 				}
 				browserInteractions.AssertNotVisibleUsingJQuery(".no-data-available");
 			}
