@@ -225,7 +225,7 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 		});
 	};
 
-	self.missingWorkflowControlSet = ko.observable(true);
+	self.missingWorkflowControlSet = ko.observable(false);
 	self.LoadPeriod = function () {
 		ajax.Ajax({
 			url: "Requests/ShiftTradeRequestPeriod",
