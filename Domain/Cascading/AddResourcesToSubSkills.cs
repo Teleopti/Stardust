@@ -11,8 +11,23 @@ namespace Teleopti.Ccc.Domain.Cascading
 		{
 			var resourcesMoved = 0d;
 			var remainingResourcesInGroup = skillGroup.Resources;
-			var remainingPrimarySkillOverstaff = skillGroup.PrimarySkills
-				.Sum(primarySkill => skillStaffPeriodHolder.SkillStaffPeriodOrDefault(primarySkill, interval, int.MaxValue).AbsoluteDifference);
+			double remainingPrimarySkillOverstaff = 0;
+			bool allPrimarySkillsClosed = true;
+
+			foreach (var primarySkill in skillGroup.PrimarySkills)
+			{
+				var overStaff = skillStaffPeriodHolder.SkillStaffPeriodOrDefault(primarySkill, interval, DoubleExtensionsInCascadingScenarios.ValueForClosedSkill).AbsoluteDifference;
+
+				if (!overStaff.IsClosed())
+				{
+					allPrimarySkillsClosed = false;
+					remainingPrimarySkillOverstaff += overStaff;
+				}		
+			}
+
+			if (allPrimarySkillsClosed)
+				remainingPrimarySkillOverstaff = int.MaxValue;
+
 			if (!remainingPrimarySkillOverstaff.IsOverstaffed())
 				return 0;
 

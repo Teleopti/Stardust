@@ -196,5 +196,69 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			skillDayB.SkillStaffPeriodCollection.First().AbsoluteDifference
 				  .Should().Be.EqualTo(0);
 		}
+
+		[Test]
+		public void ShouldOnlyConsiderOpenParalellPrimarySkillsWhenMovingResourcesToSubSkill()
+		{
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var dateOnly = DateOnly.Today;
+			var skillA1 = new Skill("skillA1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillA1.SetCascadingIndex(1);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillA1, new TimePeriod(7, 0, 9, 0));
+			var skillDayA1 = skillA1.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var skillA2 = new Skill("skillA2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillA2.SetCascadingIndex(1);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillA2, new TimePeriod(8, 0, 9, 0));
+			var skillDayA2 = skillA2.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var skillB = new Skill("skillB", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillB.SetCascadingIndex(2);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(7, 0, 9, 0));
+			var skillDayB = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
+			agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA1, skillA2, skillB });
+			var ass = new PersonAssignment(agent, scenario, dateOnly);
+			ass.AddActivity(activity, new TimePeriod(7, 0, 8, 0));
+			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { skillDayA1, skillDayA2, skillDayB });
+
+			Target.ResourceCalculate(dateOnly, stateHolder.SchedulingResultState.ToResourceOptimizationData(false, false));
+
+			skillDayA1.SkillStaffPeriodCollection.First().AbsoluteDifference
+				.Should().Be.EqualTo(0);
+			skillDayB.SkillStaffPeriodCollection.First().AbsoluteDifference
+				  .Should().Be.EqualTo(-1);
+		}
+
+		[Test]
+		public void ShouldGetResourcesFromSkillGroupWhenAllPrimarySkillsAreClosed()
+		{
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var dateOnly = DateOnly.Today;
+			var skillA1 = new Skill("skillA1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillA1.SetCascadingIndex(1);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillA1, new TimePeriod(8, 0, 9, 0));
+			var skillDayA1 = skillA1.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var skillA2 = new Skill("skillA2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillA2.SetCascadingIndex(1);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillA2, new TimePeriod(8, 0, 9, 0));
+			var skillDayA2 = skillA2.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var skillB = new Skill("skillB", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillB.SetCascadingIndex(2);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(7, 0, 9, 0));
+			var skillDayB = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
+			agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA1, skillA2, skillB });
+			var ass = new PersonAssignment(agent, scenario, dateOnly);
+			ass.AddActivity(activity, new TimePeriod(7, 0, 8, 0));
+			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { skillDayA1, skillDayA2, skillDayB });
+
+			Target.ResourceCalculate(dateOnly, stateHolder.SchedulingResultState.ToResourceOptimizationData(false, false));
+
+			skillDayA1.SkillStaffPeriodCollection.First().AbsoluteDifference
+				.Should().Be.EqualTo(-1);
+			skillDayB.SkillStaffPeriodCollection.First().AbsoluteDifference
+				  .Should().Be.EqualTo(0);
+		}
 	}
 }
