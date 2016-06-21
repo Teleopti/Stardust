@@ -24,18 +24,18 @@
 	</div>
 
 	<div class="fab-wrapper" ng-if="seatplan.isReportOpened">
-		<button class="wfm-fab  material-depth-1" ng-click="seatplan.printReport($event)">
+		<button class="wfm-fab  material-depth-1" ng-click="seatplan.printReport()">
 			<i class="mdi mdi-printer"></i>
 			<md-tooltip>{{'Print' | translate}}</md-tooltip>
 		</button>
 	</div>
-	
+
 </div>
 
 
-<div id="seatplan" class="material-depth-1" ui-view>
+<div class="seatplan material-depth-1" ui-view>
 	<seat-plan-report ng-if="seatplan.isReportOpened" toggle="seatplan.isReportOpened = !seatplan.isReportOpened"
-					  selected-period="seatplan.reportPeriod" selected-teams="seatplan.reportSelectedTeams" 
+					  selected-period="seatplan.reportPeriod" selected-teams="seatplan.reportSelectedTeams"
 					  selected-locations="seatplan.reportSelectedLocations" seat-bookings-all="seatplan.seatBookingsAll"></seat-plan-report>
 
 	<seatmap-canvas occupancy date="seatplan.selectedDate" toggle="seatplan.showSeatmap()" ng-if="seatplan.isSeatMapBookingViewOpened"></seatmap-canvas>
@@ -52,7 +52,7 @@
 		</div>
 
 		<div class="planning-day-detail" ng-if="seatplan.selectedDate!=null">
-			
+
 			<h3>{{seatplan.selectedDate | date : "fullDate"}}</h3>
 			<md-divider md-insert></md-divider>
 			<p>{{ seatplan.getToDayInfo() | translate}}</p>
@@ -94,6 +94,3 @@
 
 	</div>
 </div>
-
-<div class="clearfix"></div>
-

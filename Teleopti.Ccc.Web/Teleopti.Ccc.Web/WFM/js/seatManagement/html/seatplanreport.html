@@ -1,14 +1,4 @@
-﻿<style type="text/css">
-	#materialcontainer > div[ui-view] {
-		height: 100%;
-	}
-
-	.container.content {
-		overflow: visible;
-	}
-</style>
-
-<div class="row seatplan-report">
+﻿<div class="row seatplan-report">
 	<div class="seatplan-report-header">
 
 		<button class="wfm-btn pull-left" ng-click="vm.toggle()">
@@ -106,7 +96,7 @@
 		</div>
 	</div>
 
-	<div class="seatplan-report-content" id="seatplan-report-to-view" ng-init="vm.init()" ng-click="vm.isFilterOpened = false">
+	<div class="seatplan-report-content seatplan-report-to-view" id="seatplan-report-to-view" ng-init="vm.init()" ng-click="vm.isFilterOpened = false">
 		<div ng-if="vm.isLoadingReport" class="report-spinner">
 			<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 		</div>
@@ -119,7 +109,7 @@
 		</div>
 	</div>
 
-	<div class="seatplan-report-content" id="seatplan-report-to-print">
+	<div class="seatplan-report-content seatplan-report-to-print" id="seatplan-report-to-print">
 		<h2>{{'SeatPlanReport' | translate}}</h2>
 		<h5 ng-if="vm.seatBookings.length == 0 ">{{'NoDataAvailable' | translate}}</h5>
 		<seat-plan-report-table seat-bookings="vm.seatBookingsAll"></seat-plan-report-table>
