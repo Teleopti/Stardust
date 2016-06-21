@@ -64,9 +64,9 @@
 					if (skill) {
 						$scope.skillIsSelected = true
 						$scope.selectedSkill = skill;
-						$scope.selectedSkillArea = {};
 					}else {
 						$scope.skillIsSelected = false;
+						$scope.selectedSkill = null;
 					}
 				};
 
@@ -76,6 +76,7 @@
 						$scope.areaIsSelected = true;
 					} else {
 						$scope.areaIsSelected = false;
+						$scope.selectedSkillArea = null;
 					}
 				};
 
@@ -117,10 +118,12 @@
 					var actualDate = moment($scope.intervalDate).format('YYYY-MM-DD');
 					var actualId = $scope.skillIsSelected ? $scope.selectedSkill.Id : $scope.selectedSkillArea.Id ;
 					$scope.loading = true;
-					if ($scope.skillIsSelected) {
-						fetchDataForSkill(actualDate, actualId)
-					}else {
-						fetchDataForArea(actualDate, actualId)
+					if (actualId) {
+						if ($scope.skillIsSelected) {
+							fetchDataForSkill(actualDate, actualId)
+						}else {
+							fetchDataForArea(actualDate, actualId)
+						}
 					}
 				};
 
