@@ -343,7 +343,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             skillDaysChild2[0].CompleteSkillStaffPeriodCollection[10].SetCalculatedResource65(20d);
             skillDaysChild2[0].CompleteSkillStaffPeriodCollection[10].Payload.CalculatedLoggedOn = 4;
 
-            IDictionary<ISkill,IList<ISkillDay>> skillDayDictionary = new Dictionary<ISkill, IList<ISkillDay>>();
+            IDictionary<ISkill, IEnumerable<ISkillDay>> skillDayDictionary = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
             skillDayDictionary.Add(childSkill1,skillDaysChild1);
             skillDayDictionary.Add(childSkill2,skillDaysChild2);
             skillDayDictionary.Add(skill,skillDays);
@@ -359,7 +359,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifySummarizeWithNullDoesNotThrowException()
         {
-            MultisiteSkillDayCalculator.SummarizeStaffingForMultisiteSkillDays(childSkill2 as IMultisiteSkill,new Dictionary<ISkill, IList<ISkillDay>>());
+            MultisiteSkillDayCalculator.SummarizeStaffingForMultisiteSkillDays(childSkill2 as IMultisiteSkill,new Dictionary<ISkill, IEnumerable<ISkillDay>>());
             Assert.IsNotNull(childSkill2);
         }
 

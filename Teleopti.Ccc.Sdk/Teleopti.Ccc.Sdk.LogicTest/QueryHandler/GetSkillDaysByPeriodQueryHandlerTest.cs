@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 
 			schedulingResultStateHolder = new SchedulingResultStateHolder();
 			schedulingResultStateHolder.AddSkills(skills);
-			schedulingResultStateHolder.SkillDays = new Dictionary<ISkill, IList<ISkillDay>>
+			schedulingResultStateHolder.SkillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>>
 				{
 					{skill, new List<ISkillDay> { skillDay}},
 					{multisiteSkill, new List<ISkillDay> { skillDay}}
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 
 			schedulingResultStateHolder = new SchedulingResultStateHolder();
 			schedulingResultStateHolder.AddSkills(skills);
-			schedulingResultStateHolder.SkillDays = new Dictionary<ISkill, IList<ISkillDay>>
+			schedulingResultStateHolder.SkillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>>
 				{
 					{childskill, new List<ISkillDay> { skillDay}},
 					{multisiteSkill, new List<ISkillDay> { skillDay}}

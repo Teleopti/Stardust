@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			StateHolder.SchedulingResultState.AddSkills(skill);
 
 			var skillDays = Enumerable.Range(-7, 10).Select(i => createSkillDay(skill, date.AddDays(i), scenario)).ToArray();
-			StateHolder.SchedulingResultState.SkillDays = new Dictionary<ISkill, IList<ISkillDay>> {{skill, skillDays}};
+			StateHolder.SchedulingResultState.SkillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>> {{skill, skillDays}};
 
 			ResourceCalculator.ResourceCalculateAllDays(new NoSchedulingProgress(), false);
 

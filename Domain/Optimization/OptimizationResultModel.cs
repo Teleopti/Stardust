@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			get { return _skillResultList; }
 		}
 
-		public void Map(IDictionary<ISkill, IList<ISkillDay>> skillDays, DateOnlyPeriod period)
+		public void Map(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, DateOnlyPeriod period)
 		{
 			foreach (var keyValuePair in skillDays)
 			{

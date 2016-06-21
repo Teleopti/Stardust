@@ -34,7 +34,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 
 			foreach (IScenario scenario in _jobParameters.StateHolder.ScenarioCollectionDeletedExcluded)
 			{
-				IDictionary<ISkill, IList<ISkillDay>> skillDaysDictionary =
+				var skillDaysDictionary =
 					_jobParameters.StateHolder.GetSkillDaysDictionary(period, skills, scenario);
 				IScheduleDictionary scheduleDictionary = _jobParameters.StateHolder.GetSchedules(period, scenario);
 

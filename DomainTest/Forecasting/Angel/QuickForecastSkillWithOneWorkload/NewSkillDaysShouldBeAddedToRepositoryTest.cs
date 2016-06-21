@@ -60,11 +60,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 				throw new NotImplementedException();
 			}
 
-			public long CountAllEntities()
-			{
-				throw new NotImplementedException();
-			}
-
 			public void AddRange(IEnumerable<ISkillDay> entityCollection)
 			{
 				AddedSkillDays.AddRange(entityCollection);
@@ -97,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 				throw new NotImplementedException();
 			}
 
-			public ICollection<ISkillDay> FindReadOnlyRange(DateOnlyPeriod period, IList<ISkill> skills, IScenario scenario)
+			public ICollection<ISkillDay> FindReadOnlyRange(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario)
 			{
 				throw new NotImplementedException();
 			}

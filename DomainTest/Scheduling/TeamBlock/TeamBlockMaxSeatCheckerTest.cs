@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         private DateOnly _dateOnly;
         private ISkill _skill1;
         private ISkillDay _skillDay;
-        private Dictionary<ISkill, IList<ISkillDay>> _skillDaysPair;
+        private Dictionary<ISkill, IEnumerable<ISkillDay>> _skillDaysPair;
         private ISkillType _skillType;
         private ReadOnlyCollection<ISkillStaffPeriod> _skillStaffPeriodCollection;
         private ISkillStaffPeriod _skillStaffPeriod1;
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _skill2 = _mock.StrictMock<ISkill>();
             _skillDay = _mock.StrictMock<ISkillDay>(); 
             
-            _skillDaysPair = new Dictionary<ISkill, IList<ISkillDay>>();
+            _skillDaysPair = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
             _skillDaysPair.Add(_skill1, new List<ISkillDay>() { _skillDay });
             _skillDaysPair.Add(_skill2, new List<ISkillDay>() { _skillDay });
 

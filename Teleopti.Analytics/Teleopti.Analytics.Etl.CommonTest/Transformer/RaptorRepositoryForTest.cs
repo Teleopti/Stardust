@@ -319,9 +319,9 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			return 0;
 		}
 
-		public IDictionary<ISkill, IList<ISkillDay>> LoadSkillDays(DateTimePeriod period, IList<ISkill> skills, IScenario scenario)
+		public IDictionary<ISkill, IEnumerable<ISkillDay>> LoadSkillDays(DateTimePeriod period, IList<ISkill> skills, IScenario scenario)
 		{
-			return new Dictionary<ISkill, IList<ISkillDay>>();
+			return new Dictionary<ISkill, IEnumerable<ISkillDay>>();
 		}
 
 		public IEnumerable<ISkillDay> LoadSkillDays(IScenario scenario, DateTime lastCheck)

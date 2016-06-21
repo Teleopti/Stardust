@@ -311,7 +311,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			return _skillDaysCollection;
 		}
 
-		public IDictionary<ISkill, IList<ISkillDay>> GetSkillDaysDictionary(DateTimePeriod period, IList<ISkill> skills, IScenario scenario)
+		public IDictionary<ISkill, IEnumerable<ISkillDay>> GetSkillDaysDictionary(DateTimePeriod period, IList<ISkill> skills, IScenario scenario)
 		{
 			return _jobParameters.Helper.Repository.LoadSkillDays(period, skills, scenario);
 		}

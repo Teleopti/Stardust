@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created date: 2008-09-23
         /// </remarks>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        public static void SummarizeStaffingForMultisiteSkillDays(IMultisiteSkill multisiteSkill, IDictionary<ISkill, IList<ISkillDay>> skillDays)
+        public static void SummarizeStaffingForMultisiteSkillDays(IMultisiteSkill multisiteSkill, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays)
         {
             if (multisiteSkill == null) return;
 

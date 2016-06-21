@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return skillDays;
 		}
 
-        public ICollection<ISkillDay> FindReadOnlyRange(DateOnlyPeriod period, IList<ISkill> skills, IScenario scenario)
+        public ICollection<ISkillDay> FindReadOnlyRange(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario)
         {
             InParameter.NotNull("period", period);
             InParameter.NotNull("skillCollection", skills);

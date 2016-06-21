@@ -8,7 +8,6 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.Web.Areas.ResourcePlanner;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
@@ -21,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		private ISkill _skill2;
 		private ISkillDay _skillDay1;
 		private ISkillDay _skillDay2;
-		private Dictionary<ISkill, IList<ISkillDay>> _skillDays;
+		private Dictionary<ISkill, IEnumerable<ISkillDay>> _skillDays;
 		private DateOnlyPeriod _period;
 
 		[SetUp]
@@ -34,7 +33,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			_skillDay1.SkillDayCalculator = new SkillDayCalculator(_skill1, new List<ISkillDay> { _skillDay1 }, new DateOnlyPeriod(new DateOnly(2015, 9, 4), new DateOnly(2015, 9, 4)));
 			_skillDay2 = SkillDayFactory.CreateSkillDay(_skill1, new DateOnly(2015, 9, 5));
 			_skillDay2.SkillDayCalculator = new SkillDayCalculator(_skill1, new List<ISkillDay> { _skillDay2 }, new DateOnlyPeriod(new DateOnly(2015, 9, 5), new DateOnly(2015, 9, 5)));
-			_skillDays = new Dictionary<ISkill, IList<ISkillDay>>();
+			_skillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
 			_period = new DateOnlyPeriod(new DateOnly(2015, 9, 4), new DateOnly(2015, 9, 5));
 		}
 

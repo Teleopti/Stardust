@@ -17,12 +17,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     public class SkillStaffPeriodHolderTest
     {
         private SkillStaffPeriodHolder _skillStaffPeriodHolder;
-        private IDictionary<ISkill, IList<ISkillDay>> _skillDays;
+        private IDictionary<ISkill, IEnumerable<ISkillDay>> _skillDays;
 
         [SetUp]
         public void Setup()
         {
-            _skillDays  = new Dictionary<ISkill, IList<ISkillDay>>();
+            _skillDays  = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
             _skillStaffPeriodHolder = new SkillStaffPeriodHolder(_skillDays);
         }
 
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             DateTimePeriod dateTimePeriod2 = dateTimePeriod1.MovePeriod(TimeSpan.FromMinutes(15));
             DateTimePeriod dateTimePeriod3 = dateTimePeriod2.MovePeriod(TimeSpan.FromMinutes(15));
 
-            IDictionary<ISkill, IList<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IList<ISkillDay>>
+            IDictionary<ISkill, IEnumerable<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IEnumerable<ISkillDay>>
                                                                             {{skill, skillDays}};
 
             using (mocks.Record())
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             DateTimePeriod dateTimePeriod2 = dateTimePeriod1.MovePeriod(TimeSpan.FromMinutes(15));
             DateTimePeriod dateTimePeriod3 = dateTimePeriod2.MovePeriod(TimeSpan.FromMinutes(15));
 
-            IDictionary<ISkill, IList<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IList<ISkillDay>> { { skill1, skillDays1 },{skill2,skillDays2} };
+            IDictionary<ISkill, IEnumerable<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IEnumerable<ISkillDay>> { { skill1, skillDays1 },{skill2,skillDays2} };
 
             using (mocks.Record())
             {
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var dateTimePeriod2 = dateTimePeriod1.MovePeriod(TimeSpan.FromMinutes(15));
 			var dateTimePeriod3 = dateTimePeriod2.MovePeriod(TimeSpan.FromMinutes(15));
 
-			IDictionary<ISkill, IList<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IList<ISkillDay>> { { skill1, skillDays1 }, { skill2, skillDays2 } };
+			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IEnumerable<ISkillDay>> { { skill1, skillDays1 }, { skill2, skillDays2 } };
 
 			using (mocks.Record())
 			{
@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             ReadOnlyCollection<ISkillStaffPeriod> readOnlySkillStaffPeriods1 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods1);
             ReadOnlyCollection<ISkillStaffPeriod> readOnlySkillStaffPeriods2 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods2);
 
-            IDictionary<ISkill, IList<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IList<ISkillDay>> { { skill1, skillDays1 }, { skill2, skillDays2 } };
+            IDictionary<ISkill, IEnumerable<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IEnumerable<ISkillDay>> { { skill1, skillDays1 }, { skill2, skillDays2 } };
 
             using (mocks.Record())
             {
@@ -316,7 +316,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var readOnlySkillStaffPeriods1 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods1);
 			var readOnlySkillStaffPeriods2 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods2);
 
-			IDictionary<ISkill, IList<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IList<ISkillDay>> { { skill1, skillDays1 }, { skill2, skillDays2 } };
+			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IEnumerable<ISkillDay>> { { skill1, skillDays1 }, { skill2, skillDays2 } };
 
 			using (mocks.Record())
 			{
@@ -376,7 +376,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IList<ISkillStaffPeriod> skillStaffPeriods1 = new List<ISkillStaffPeriod> { period1 };
             ReadOnlyCollection<ISkillStaffPeriod> readOnlySkillStaffPeriods1 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods1);
 
-            IDictionary<ISkill, IList<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IList<ISkillDay>> { { skill1, skillDays1 } };
+            IDictionary<ISkill, IEnumerable<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IEnumerable<ISkillDay>> { { skill1, skillDays1 } };
             
             using (mocks.Record())
             {
@@ -436,7 +436,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			ReadOnlyCollection<ISkillStaffPeriod> readOnlySkillStaffPeriods1 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods1);
 			ReadOnlyCollection<ISkillStaffPeriod> readOnlySkillStaffPeriods2 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods2);
 
-			IDictionary<ISkill, IList<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IList<ISkillDay>> { { skill1, skillDays1 }, { skill2, skillDays2 } };
+			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IEnumerable<ISkillDay>> { { skill1, skillDays1 }, { skill2, skillDays2 } };
 
 			using (mocks.Record())
 			{
@@ -500,7 +500,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             ReadOnlyCollection<ISkillStaffPeriod> readOnlySkillStaffPeriods1 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods1);
             ReadOnlyCollection<ISkillStaffPeriod> readOnlySkillStaffPeriods2 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods2);
 
-            IDictionary<ISkill, IList<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IList<ISkillDay>> { { skill1, skillDays1 }, { skill2, skillDays2 } };
+            IDictionary<ISkill, IEnumerable<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IEnumerable<ISkillDay>> { { skill1, skillDays1 }, { skill2, skillDays2 } };
 
             using (mocks.Record())
             {
@@ -543,7 +543,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             var skillStaffPeriods1 = new List<ISkillStaffPeriod> { period1};
             var readOnlySkillStaffPeriods1 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods1);
-            var skillDaysDictionary = new Dictionary<ISkill, IList<ISkillDay>> { { skill1, skillDays1 } };
+            var skillDaysDictionary = new Dictionary<ISkill, IEnumerable<ISkillDay>> { { skill1, skillDays1 } };
 
             using (mocks.Record())
             {
@@ -597,7 +597,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             IList<ISkill> skills = new List<ISkill> {skill1, skill2};
 
-            IDictionary<ISkill, IList<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IList<ISkillDay>>
+            IDictionary<ISkill, IEnumerable<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IEnumerable<ISkillDay>>
                                                                             {
                                                                                 {skill1, skillDays},
                                                                                 {skill2, skillDays2}

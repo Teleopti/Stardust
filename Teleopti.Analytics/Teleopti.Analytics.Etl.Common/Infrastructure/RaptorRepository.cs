@@ -1250,7 +1250,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 												_dataMartConnectionString);
 		}
 
-		public IDictionary<ISkill, IList<ISkillDay>> LoadSkillDays(DateTimePeriod period, IList<ISkill> skills, IScenario scenario)
+		public IDictionary<ISkill, IEnumerable<ISkillDay>> LoadSkillDays(DateTimePeriod period, IList<ISkill> skills, IScenario scenario)
 		{
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -1276,10 +1276,10 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 				ISkillDayRepository skillDayRepository = new SkillDayRepository(uow);
 				IMultisiteDayRepository multisiteDayRepository = new MultisiteDayRepository(uow);
-				IDictionary<ISkill, IList<ISkillDay>> skillDays = new SkillDayLoadHelper(skillDayRepository, multisiteDayRepository).LoadSchedulerSkillDays(period.ToDateOnlyPeriod(TimeZoneInfo.Utc),
+				IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays = new SkillDayLoadHelper(skillDayRepository, multisiteDayRepository).LoadSchedulerSkillDays(period.ToDateOnlyPeriod(TimeZoneInfo.Utc),
 																											skills,
 																											scenario);
-				foreach (KeyValuePair<ISkill, IList<ISkillDay>> keyValuePair in skillDays)
+				foreach (var keyValuePair in skillDays)
 				{
 					foreach (ISkillDay skillDay in keyValuePair.Value)
 					{

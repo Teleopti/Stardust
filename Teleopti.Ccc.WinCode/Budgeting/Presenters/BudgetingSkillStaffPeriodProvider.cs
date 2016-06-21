@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Presenters
 			return new BudgetSkillStaffPeriodContainer(allSkillStaffPeriods, selectedBudgetDays);
 		}
 
-	    private IEnumerable<ISkillStaffPeriod> GetAllSkillStaffPeriods(IDictionary<ISkill, IList<ISkillDay>> skillDaysForSkills)
+	    private IEnumerable<ISkillStaffPeriod> GetAllSkillStaffPeriods(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDaysForSkills)
 	    {
 	    	var skillDayList = new List<ISkillDay>();
 			foreach (var skill in _mainModel.BudgetGroup.SkillCollection)

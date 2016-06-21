@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         {
             return new SchedulingResultStateHolder(new List<IPerson>(),
                                                    new ScheduleDictionary(new Scenario("test"), new ScheduleDateTimePeriod(period), new PersistableScheduleDataPermissionChecker()),
-                                                   new Dictionary<ISkill, IList<ISkillDay>>());
+                                                   new Dictionary<ISkill, IEnumerable<ISkillDay>>());
         }
 
         /// <summary>

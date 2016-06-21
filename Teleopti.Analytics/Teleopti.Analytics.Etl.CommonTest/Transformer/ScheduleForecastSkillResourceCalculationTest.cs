@@ -19,7 +19,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 		private ScheduleForecastSkillResourceCalculation _target;
 		private MockRepository _mocks;
 		private ISchedulingResultService _schedulingResultService;
-		private IDictionary<ISkill, IList<ISkillDay>> _skillDaysDictionary;
+		private IDictionary<ISkill, IEnumerable<ISkillDay>> _skillDaysDictionary;
 		private DateTimePeriod _scheduleLoadedForPeriod;
 		private readonly DateTime _updatedOnDateTime = DateTime.Now;
 
@@ -35,7 +35,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			var period = new DateOnlyPeriod(2009, 9, 11, 2009, 9, 11);
 			ICollection<ISkillDay> skillDayCollection = ForecastFactory.CreateSkillDayCollection(period, skill, _updatedOnDateTime);
 			_scheduleLoadedForPeriod = period.ToDateTimePeriod(skill.TimeZone);
-			_skillDaysDictionary = new Dictionary<ISkill, IList<ISkillDay>>();
+			_skillDaysDictionary = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
 			_skillDaysDictionary.Add(skill, skillDayCollection.ToList());
 
 			ISkillStaffPeriod skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod();

@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		protected override void FillSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<ISkill> skills, DateOnlyPeriod period)
 		{
 			var stateHolderFrom = schedulerStateHolderFrom();
-			schedulerStateHolderTo.SchedulingResultState.SkillDays = new Dictionary<ISkill, IList<ISkillDay>>(stateHolderFrom.SchedulingResultState.SkillDays);
+			schedulerStateHolderTo.SchedulingResultState.SkillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>>(stateHolderFrom.SchedulingResultState.SkillDays);
 			schedulerStateHolderTo.SchedulingResultState.AddSkills(skills.ToArray());
 		}
 

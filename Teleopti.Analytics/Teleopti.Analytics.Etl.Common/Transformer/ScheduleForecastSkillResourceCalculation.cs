@@ -7,7 +7,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 {
 	public class ScheduleForecastSkillResourceCalculation : IScheduleForecastSkillResourceCalculation
 	{
-		private readonly IDictionary<ISkill, IList<ISkillDay>> _skillDaysDictionary;
+		private readonly IDictionary<ISkill, IEnumerable<ISkillDay>> _skillDaysDictionary;
 		private readonly ISchedulingResultService _schedulingResultService;
 		private readonly IList<ISkillStaffPeriod> _skillStaffPeriodCollection;
 		private Dictionary<IScheduleForecastSkillKey, IScheduleForecastSkill> _scheduleForecastSkillDictionary;
@@ -19,7 +19,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 
 		}
 
-		public ScheduleForecastSkillResourceCalculation(IDictionary<ISkill, IList<ISkillDay>> skillDaysDictionary, ISchedulingResultService schedulingResultService, IList<ISkillStaffPeriod> skillStaffPeriodCollection, int intervalsPerDay, DateTimePeriod period)
+		public ScheduleForecastSkillResourceCalculation(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDaysDictionary, ISchedulingResultService schedulingResultService, IList<ISkillStaffPeriod> skillStaffPeriodCollection, int intervalsPerDay, DateTimePeriod period)
 			: this()
 		{
 			_skillDaysDictionary = skillDaysDictionary;
@@ -63,11 +63,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			}
 		}
 
-		private void collectResourceData(IEnumerable<KeyValuePair<ISkill, IList<ISkillDay>>> skillDaysDictionary, bool useShrinkage, DateTime insertDateTime)
+		private void collectResourceData(IEnumerable<KeyValuePair<ISkill, IEnumerable<ISkillDay>>> skillDaysDictionary, bool useShrinkage, DateTime insertDateTime)
 		{
 			int minutesPerInterval = 1440 / _intervalsPerDay;
 
-			foreach (KeyValuePair<ISkill, IList<ISkillDay>> skill in skillDaysDictionary)
+			foreach (KeyValuePair<ISkill, IEnumerable<ISkillDay>> skill in skillDaysDictionary)
 			{
 				foreach (ISkillDay skillDay in skill.Value)
 				{

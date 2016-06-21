@@ -47,7 +47,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2008-11-10
         /// </remarks>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        IDictionary<ISkill, IList<ISkillDay>> SkillDays { get; set; }
+        IDictionary<ISkill, IEnumerable<ISkillDay>> SkillDays { get; set; }
 
         /// <summary>
         /// Gets or sets the schedules.

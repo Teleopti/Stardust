@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 		private readonly IEnumerable<IPerson> _personList;
 		private DateOnly _date;
 		private readonly IList<ISkill> _loadedSkillList;
-		private readonly IDictionary<ISkill, IList<ISkillDay>> _skillDays;
+		private readonly IDictionary<ISkill, IEnumerable<ISkillDay>> _skillDays;
 		private readonly DateOnlyPeriod _datePeriod;
 		private VirtualSkillGroupsCreatorResult _skillGroupsCreatorResult;
 		private IList<Island> _islandList;
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			InitializeComponent();
 		}
 
-		public AgentSkillAnalyzer(IEnumerable<IPerson> personList, IEnumerable<ISkill> skillList, IDictionary<ISkill, IList<ISkillDay>> skillDays, DateOnlyPeriod datePeriod)
+		public AgentSkillAnalyzer(IEnumerable<IPerson> personList, IEnumerable<ISkill> skillList, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, DateOnlyPeriod datePeriod)
 		{		
 			InitializeComponent();
 			_dtpDate = new DateTimePicker {Format = DateTimePickerFormat.Short};

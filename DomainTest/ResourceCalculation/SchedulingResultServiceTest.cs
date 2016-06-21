@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			
 			_target =
 				new SchedulingResultService(
-					new SchedulingResultStateHolder(_personAssignmentListContainer.ContainedPersons.Values, scheduleDictionary, new Dictionary<ISkill, IList<ISkillDay>>
+					new SchedulingResultStateHolder(_personAssignmentListContainer.ContainedPersons.Values, scheduleDictionary, new Dictionary<ISkill, IEnumerable<ISkillDay>>
 						                                {
 							                                {_personAssignmentListContainer.AllSkills[0], new List<ISkillDay>()}
 						                                }),

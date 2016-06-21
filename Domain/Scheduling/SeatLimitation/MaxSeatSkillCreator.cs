@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 	    public class MaxSeatCretorResult
 	    {
 			public IEnumerable<ISkill> SkillsToAddToStateholder { get; set; }
-			public IDictionary<ISkill, IList<ISkillDay>> SkillDaysToAddToStateholder { get; set; }
+			public IDictionary<ISkill, IEnumerable<ISkillDay>> SkillDaysToAddToStateholder { get; set; }
 
 	    }
     }

@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting
         private IList<ISkillDay> _closedDays;
         private Dictionary<DateOnly, IBudgetGroupDayDetailModel> _selectedDsysdic;
 
-        public ClosedBudgetDayResolver(IEnumerable<IBudgetGroupDayDetailModel> selectedBudgetDays, IDictionary<ISkill, IList<ISkillDay>> skillDaysForSkills)
+        public ClosedBudgetDayResolver(IEnumerable<IBudgetGroupDayDetailModel> selectedBudgetDays, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDaysForSkills)
         {
 
             _closedDays = new List<ISkillDay>();

@@ -44,10 +44,10 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			    .IgnoreArguments()
 			    .Return(MockRepository.GenerateMock<ILoaderDeciderResult>());
 
-			_schedulerState = new SchedulerStateHolder(scenario, new DateOnlyPeriodAsDateTimePeriod(_requestedPeriod, TimeZoneInfoFactory.UtcTimeZoneInfo()), _permittedPeople, new DisableDeletedFilter(new ThisUnitOfWork(_uow)), new SchedulingResultStateHolder(new List<IPerson>(), new FakeScheduleDictionary(), new Dictionary<ISkill, IList<ISkillDay>>()), new TimeZoneGuardWrapper());
+			_schedulerState = new SchedulerStateHolder(scenario, new DateOnlyPeriodAsDateTimePeriod(_requestedPeriod, TimeZoneInfoFactory.UtcTimeZoneInfo()), _permittedPeople, new DisableDeletedFilter(new ThisUnitOfWork(_uow)), new SchedulingResultStateHolder(new List<IPerson>(), new FakeScheduleDictionary(), new Dictionary<ISkill, IEnumerable<ISkillDay>>()), new TimeZoneGuardWrapper());
 
 		    var skillDayLoadHelper = MockRepository.GenerateMock<ISkillDayLoadHelper>();
-		    skillDayLoadHelper.Expect(x => x.LoadSchedulerSkillDays(new DateOnlyPeriod(), null, null)).IgnoreArguments().Return(new Dictionary<ISkill, IList<ISkillDay>>());
+		    skillDayLoadHelper.Expect(x => x.LoadSchedulerSkillDays(new DateOnlyPeriod(), null, null)).IgnoreArguments().Return(new Dictionary<ISkill, IEnumerable<ISkillDay>>());
 			target = new SchedulingResultLoader(_schedulerState, _repositoryFactory, new EventAggregator(), MockRepository.GenerateMock<ILazyLoadingManager>(), peopleAndSkillLoaderDecider, MockRepository.GenerateMock<IPeopleLoader>(), skillDayLoadHelper, MockRepository.GenerateMock<IResourceOptimizationHelper>(), MockRepository.GenerateMock<LoadScheduleByPersonSpecification>());
         }
 

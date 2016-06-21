@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
     public interface ISchedulerSkillDayHelper
     {
-		IDictionary<ISkill, IList<ISkillDay>> AddMaxSeatSkillDaysToStateHolder(DateOnlyPeriod datePeriod, IEnumerable<ISkill> maxSeatSkills, IScenario scenario);
+		IDictionary<ISkill, IEnumerable<ISkillDay>> AddMaxSeatSkillDaysToStateHolder(DateOnlyPeriod datePeriod, IEnumerable<ISkill> maxSeatSkills, IScenario scenario);
     }
 
     public class SchedulerSkillDayHelper : ISchedulerSkillDayHelper
@@ -20,9 +20,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		    _workLoadDayHelper = workLoadDayHelper;
 	    }
 
-	    public IDictionary<ISkill, IList<ISkillDay>> AddMaxSeatSkillDaysToStateHolder(DateOnlyPeriod datePeriod, IEnumerable<ISkill> maxSeatSkills, IScenario scenario)
+	    public IDictionary<ISkill, IEnumerable<ISkillDay>> AddMaxSeatSkillDaysToStateHolder(DateOnlyPeriod datePeriod, IEnumerable<ISkill> maxSeatSkills, IScenario scenario)
 		{
-			var theSkillDays = new Dictionary<ISkill, IList<ISkillDay>>();
+			var theSkillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
 			foreach (var skill in maxSeatSkills)
 			{
 					ICollection<ISkillDay> skillDays =

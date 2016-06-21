@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Skill skill = new Skill("skilling me softly", "with his song", Color.Red, 50, new SkillTypePhone(new Description("amfal"), ForecastSource.InboundTelephony));
             SchedulingResultStateHolder target = SchedulingResultStateHolderFactory.Create(_period, skill);
             var previousHolder = target.SkillStaffPeriodHolder;
-            target.SkillDays = new Dictionary<ISkill, IList<ISkillDay>>();
+            target.SkillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
             Assert.AreNotSame(previousHolder, target.SkillStaffPeriodHolder);
         }
 

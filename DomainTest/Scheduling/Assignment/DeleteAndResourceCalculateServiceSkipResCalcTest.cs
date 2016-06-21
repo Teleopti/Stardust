@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var schedDic = new ScheduleDictionaryForTest(new Scenario("_"), new DateTimePeriod(1900, 1, 1, 2100, 1, 1));
 			var scheduleDay = ExtractedSchedule.CreateScheduleDay(schedDic, agent, date);
 			skillGroupInfo.Expect(x => x.DoCalculation(agent, date)).Return(true);
-			var stateHolder = new SchedulingResultStateHolder(new List<IPerson>(), new FakeScheduleDictionary(), new Dictionary<ISkill, IList<ISkillDay>>());
+			var stateHolder = new SchedulingResultStateHolder(new List<IPerson>(), new FakeScheduleDictionary(), new Dictionary<ISkill, IEnumerable<ISkillDay>>());
 
 			var target = new DeleteAndResourceCalculateService(() => stateHolder, MockRepository.GenerateStub<IDeleteSchedulePartService>(), resourceOptHelper, MockRepository.GenerateStub<IResourceCalculateDaysDecider>(), skillGroupInfo);
 			target.DeleteWithResourceCalculation(scheduleDay, null, false, false);
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var schedDic = new ScheduleDictionaryForTest(new Scenario("_"), new DateTimePeriod(1900, 1, 1, 2100, 1, 1));
 			var scheduleDay = ExtractedSchedule.CreateScheduleDay(schedDic, agent, date);
 			skillGroupInfo.Expect(x => x.DoCalculation(agent, date)).Return(false);
-			var stateHolder = new SchedulingResultStateHolder(new List<IPerson>(), new FakeScheduleDictionary(), new Dictionary<ISkill, IList<ISkillDay>>());
+			var stateHolder = new SchedulingResultStateHolder(new List<IPerson>(), new FakeScheduleDictionary(), new Dictionary<ISkill, IEnumerable<ISkillDay>>());
 
 			var target = new DeleteAndResourceCalculateService(() => stateHolder, MockRepository.GenerateStub<IDeleteSchedulePartService>(), resourceOptHelper, MockRepository.GenerateStub<IResourceCalculateDaysDecider>(), skillGroupInfo);
 			target.DeleteWithResourceCalculation(scheduleDay, null, false, false);

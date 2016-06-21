@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             var result = _target.LoadSchedulerSkillDays(_dtp, _skills, _scenario);
             var resultSkillDays = result[multisiteSkill];
 
-            Assert.AreEqual(3, resultSkillDays.Count);
+            Assert.AreEqual(3, resultSkillDays.Count());
             Assert.AreEqual(multisiteDays[0].MultisiteSkillDay,resultSkillDays.ElementAt(0));
             Assert.AreEqual(multisiteDays[1].MultisiteSkillDay, resultSkillDays.ElementAt(1)); 
             Assert.AreEqual(multisiteDays[2].MultisiteSkillDay, resultSkillDays.ElementAt(2));
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             var result = _target.LoadSchedulerSkillDays(_dtp, _skills, _scenario);
 
             var resultSkillDays = result[_skills[0]];
-            Assert.AreEqual(3, resultSkillDays.Count);
+            Assert.AreEqual(3, resultSkillDays.Count());
             Assert.AreEqual(skillDays[0], resultSkillDays.ElementAt(0));
             Assert.AreEqual(skillDays[1], resultSkillDays.ElementAt(1));
             Assert.AreEqual(skillDays[2], resultSkillDays.ElementAt(2));
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             var result = _target.LoadBudgetSkillDays(_dtp, _skills, _scenario);
             var resultSkillDays = result[childSkill];
             
-            Assert.AreEqual(1, resultSkillDays.Count);
+            Assert.AreEqual(1, resultSkillDays.Count());
             _mocks.VerifyAll();
         }
 
@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyNullValuesGiveEmptyResults()
         {
-            IDictionary<ISkill,IList<ISkillDay>> result;
+            IDictionary<ISkill, IEnumerable<ISkillDay>> result;
             result = _target.LoadSchedulerSkillDays(_dtp, null, _scenario);
             Assert.AreEqual(0, result.Count);
             result = _target.LoadSchedulerSkillDays(_dtp, _skills, null);

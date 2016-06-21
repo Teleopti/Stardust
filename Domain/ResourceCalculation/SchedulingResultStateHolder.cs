@@ -10,12 +10,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class SchedulingResultStateHolder : ISchedulingResultStateHolder
 	{
-		private IDictionary<ISkill, IList<ISkillDay>> _skillDays;
+		private IDictionary<ISkill, IEnumerable<ISkillDay>> _skillDays;
 		private readonly HashSet<ISkill> _skills = new HashSet<ISkill>();
 
 		private Lazy<SkillStaffPeriodHolder> _skillStaffPeriodHolder =
 			new Lazy<SkillStaffPeriodHolder>(
-				() => new SkillStaffPeriodHolder(Enumerable.Empty<KeyValuePair<ISkill, IList<ISkillDay>>>()));
+				() => new SkillStaffPeriodHolder(Enumerable.Empty<KeyValuePair<ISkill, IEnumerable<ISkillDay>>>()));
 		private Lazy<ISkill[]> _visibleSkills;
 
 		private ISkill[] visibleSkills()
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_visibleSkills = new Lazy<ISkill[]>(visibleSkills);
 		}
 
-		public SchedulingResultStateHolder(ICollection<IPerson> personsInOrganization, IScheduleDictionary schedules, IDictionary<ISkill, IList<ISkillDay>> skillDays)
+		public SchedulingResultStateHolder(ICollection<IPerson> personsInOrganization, IScheduleDictionary schedules, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays)
 			: this()
 		{
 			PersonsInOrganization = personsInOrganization;
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 		}
 
-		public IDictionary<ISkill, IList<ISkillDay>> SkillDays
+		public IDictionary<ISkill, IEnumerable<ISkillDay>> SkillDays
 		{
 			get { return _skillDays; }
 			set
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public ISkillDay SkillDayOnSkillAndDateOnly(ISkill skill, DateOnly dateOnly)
 		{
-			IList<ISkillDay> foundSkillDays;
+			IEnumerable<ISkillDay> foundSkillDays;
 			if (SkillDays != null && SkillDays.TryGetValue(skill, out foundSkillDays))
 			{
 				return foundSkillDays.FirstOrDefault(s => s.CurrentDate == dateOnly);

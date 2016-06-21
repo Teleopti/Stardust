@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 		private BudgetGroupMainModel mainModel;
 		private ISkill skill;
 		private IScenario scenario;
-		private IDictionary<ISkill, IList<ISkillDay>> skillDayDictionary;
+		private IDictionary<ISkill, IEnumerable<ISkillDay>> skillDayDictionary;
 		private ISkillStaffPeriod skillStaffPeriod1;
 		private ISkillStaffPeriod skillStaffPeriod2;
 
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 
 		private void prepareDictionaryForRegularSkill(ISkillDay skillDay1, ISkillDay skillDay2)
 		{
-			skillDayDictionary = new Dictionary<ISkill, IList<ISkillDay>>();
+			skillDayDictionary = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
 			skillDayDictionary.Add(skill, new List<ISkillDay> { skillDay1, skillDay2 });
 		}
 
@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 			budgetGroup.RemoveAllSkills();
 			budgetGroup.AddSkill(childSkill);
 
-			skillDayDictionary = new Dictionary<ISkill, IList<ISkillDay>>();
+			skillDayDictionary = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
 			skillDayDictionary.Add(multisiteSkill, new List<ISkillDay> { skillDay1 });
 			skillDayDictionary.Add(childSkill, new List<ISkillDay> { skillDay2 });
 		}

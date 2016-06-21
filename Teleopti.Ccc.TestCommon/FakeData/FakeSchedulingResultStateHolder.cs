@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public IDictionary<IPerson, IPersonAccountCollection> AllPersonAccounts { get; set; }
 		public bool SkipResourceCalculation { get; set; }
 		public ICollection<IPerson> PersonsInOrganization { get; set; }
-		public IDictionary<ISkill, IList<ISkillDay>> SkillDays { get; set; }
+		public IDictionary<ISkill, IEnumerable<ISkillDay>> SkillDays { get; set; }
 
 		public IScheduleDictionary Schedules { get; set; }
 		public ISkill[] Skills { get { return _skills.ToArray(); } }

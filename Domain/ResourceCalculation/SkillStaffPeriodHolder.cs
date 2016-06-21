@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private ISkillSkillStaffPeriodExtendedDictionary _internalDictionary;
         private readonly object Locker = new object();
 
-        public SkillStaffPeriodHolder(IEnumerable<KeyValuePair<ISkill, IList<ISkillDay>>> skillDays)
+        public SkillStaffPeriodHolder(IEnumerable<KeyValuePair<ISkill, IEnumerable<ISkillDay>>> skillDays)
         {
             CreateInternalDictionary(skillDays);
         }
@@ -183,11 +183,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             get { return _internalDictionary; }
         }
 
-        private void CreateInternalDictionary(IEnumerable<KeyValuePair<ISkill, IList<ISkillDay>>> skillDays)
+        private void CreateInternalDictionary(IEnumerable<KeyValuePair<ISkill, IEnumerable<ISkillDay>>> skillDays)
         {
             _internalDictionary = new SkillSkillStaffPeriodExtendedDictionary();
 
-            foreach (KeyValuePair<ISkill, IList<ISkillDay>> skillDay in skillDays)
+            foreach (var skillDay in skillDays)
             {
                 ISkillStaffPeriodDictionary skillStaffPeriods = new SkillStaffPeriodDictionary(skillDay.Key);
                 foreach (ISkillDay day in skillDay.Value)

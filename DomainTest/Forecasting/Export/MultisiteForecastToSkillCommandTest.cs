@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
 				Expect.Call(scenarioRepository.LoadDefaultScenario(multisiteSkill.BusinessUnit)).Return(sourceScenario);
 				Expect.Call(skillDayLoadHelper.LoadSchedulerSkillDays(selection.Period, new[] { multisiteSkill },
 																	  sourceScenario)).Return(
-																		  new Dictionary<ISkill, IList<ISkillDay>> { { childSkill, new[] { childSkillDay } } });
+																		  new Dictionary<ISkill, IEnumerable<ISkillDay>> { { childSkill, new[] { childSkillDay } } });
 				var forecastcastRow = new[] {new ForecastsRow()};
 				Expect.Call(() => _splitImportForecastMessage.Process(forecastcastRow, targetSkill, selection.Period)).IgnoreArguments();
 				Expect.Call(childSkillDay.SkillStaffPeriodCollection).Return(
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
 				Expect.Call(scenarioRepository.LoadDefaultScenario(multisiteSkill.BusinessUnit)).Return(sourceScenario);
 				Expect.Call(skillDayLoadHelper.LoadSchedulerSkillDays(selection.Period, new[] { multisiteSkill },
 																	  sourceScenario)).Return(
-																		  new Dictionary<ISkill, IList<ISkillDay>> { { childSkill, new[] { childSkillDay } } });
+																		  new Dictionary<ISkill, IEnumerable<ISkillDay>> { { childSkill, new[] { childSkillDay } } });
 
 				Expect.Call(childSkillDay.SkillStaffPeriodCollection).Return(
 					new ReadOnlyCollection<ISkillStaffPeriod>(new ISkillStaffPeriod[] { })).Repeat.Any();

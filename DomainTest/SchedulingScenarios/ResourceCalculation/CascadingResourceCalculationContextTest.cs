@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var presentContext = new ResourceCalculationDataContainer(null, 0);
 			using (new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => presentContext)))
 			{
-				Target.ResourceCalculate(DateOnly.Today, new ResourceCalculationData(new SchedulingResultStateHolder(new List<IPerson>(), new FakeScheduleDictionary(), new Dictionary<ISkill, IList<ISkillDay>>()), false, false));
+				Target.ResourceCalculate(DateOnly.Today, new ResourceCalculationData(new SchedulingResultStateHolder(new List<IPerson>(), new FakeScheduleDictionary(), new Dictionary<ISkill, IEnumerable<ISkillDay>>()), false, false));
 
 				ResourceCalculationContext.Fetch()
 					.Should().Be.SameInstanceAs(presentContext);
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		[Test]
 		public void ShouldNotReturnContextIfThereWasNone()
 		{
-			Target.ResourceCalculate(DateOnly.Today, new ResourceCalculationData(new SchedulingResultStateHolder(new List<IPerson>(), new FakeScheduleDictionary(), new Dictionary<ISkill, IList<ISkillDay>>()), false, false));
+			Target.ResourceCalculate(DateOnly.Today, new ResourceCalculationData(new SchedulingResultStateHolder(new List<IPerson>(), new FakeScheduleDictionary(), new Dictionary<ISkill, IEnumerable<ISkillDay>>()), false, false));
 
 			ResourceCalculationContext.InContext
 				.Should().Be.False();

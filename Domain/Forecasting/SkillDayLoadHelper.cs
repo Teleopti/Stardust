@@ -21,10 +21,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		/// Created date: 2008-05-08
 		/// </remarks>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-		IDictionary<ISkill,IList<ISkillDay>> LoadSchedulerSkillDays(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario);
+		IDictionary<ISkill, IEnumerable<ISkillDay>> LoadSchedulerSkillDays(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario);
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        IDictionary<ISkill, IList<ISkillDay>> LoadBudgetSkillDays(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario);
+        IDictionary<ISkill, IEnumerable<ISkillDay>> LoadBudgetSkillDays(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario);
 	}
 
 	/// <summary>
@@ -60,17 +60,17 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created date: 2008-05-08
         /// </remarks>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        public IDictionary<ISkill,IList<ISkillDay>> LoadSchedulerSkillDays(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario)
+        public IDictionary<ISkill, IEnumerable<ISkillDay>> LoadSchedulerSkillDays(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario)
         {
-            if (skills == null || scenario==null) return new Dictionary<ISkill,IList<ISkillDay>>();
+            if (skills == null || scenario==null) return new Dictionary<ISkill, IEnumerable<ISkillDay>>();
             
 		    var skillsToLoad = skills.Where(skill => !(skill is IChildSkill)).ToList();
 		    return calculateSkillSkillDayDictionary(period, scenario, skillsToLoad);
         }
 
-        public IDictionary<ISkill, IList<ISkillDay>> LoadBudgetSkillDays(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario)
+        public IDictionary<ISkill, IEnumerable<ISkillDay>> LoadBudgetSkillDays(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario)
         {
-            if (skills == null || scenario == null) return new Dictionary<ISkill, IList<ISkillDay>>();
+            if (skills == null || scenario == null) return new Dictionary<ISkill, IEnumerable<ISkillDay>>();
             var skillsToLoad = new List<ISkill>();
             foreach (var skill in skills)
             {
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             return calculateSkillSkillDayDictionary(period, scenario, skillsToLoad);
         }
 
-	    private IDictionary<ISkill, IList<ISkillDay>> calculateSkillSkillDayDictionary(DateOnlyPeriod period, IScenario scenario, IList<ISkill> skillsToLoad)
+	    private IDictionary<ISkill, IEnumerable<ISkillDay>> calculateSkillSkillDayDictionary(DateOnlyPeriod period, IScenario scenario, IEnumerable<ISkill> skillsToLoad)
 	    {
 	        IList<SkillDayCalculator> calculators = new List<SkillDayCalculator>();
 	        // now we don't know the timezone stretch the period one day more in start and end
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	            }
 	        }
 
-	        IDictionary<ISkill, IList<ISkillDay>> skillSkillDayDictionary = new Dictionary<ISkill, IList<ISkillDay>>();
+	        var skillSkillDayDictionary = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
 	        foreach (ISkillDayCalculator calculator in calculators)
 	        {
 	            var multisiteSkillDayCalculator = calculator as MultisiteSkillDayCalculator;

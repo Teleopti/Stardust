@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 				((ScheduleRange)stateHolder.Schedules[scheduleData.Person]).Add(scheduleData);
 			}
 			var uniqueSkills = new HashSet<ISkill>();
-			stateHolder.SchedulingResultState.SkillDays = new Dictionary<ISkill, IList<ISkillDay>>();
+			stateHolder.SchedulingResultState.SkillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
 			foreach (var skillDay in skillDays)
 			{
 				uniqueSkills.Add(skillDay.Skill);

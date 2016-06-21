@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 
         public IEnumerable<string> SerializeForecastData(ISkill skill, ExportSkillToFileCommandModel model, IEnumerable<ISkillDay> skillDays)
         {
-            var loadSkillSchedule = new Dictionary<ISkill, IList<ISkillDay>> { { skill, skillDays.ToList() } };
+            var loadSkillSchedule = new Dictionary<ISkill, IEnumerable<ISkillDay>> { { skill, skillDays.ToList() } };
             var skillStaffPeriodHolder = new SkillStaffPeriodHolder(loadSkillSchedule);
             ISkillStaffPeriodDictionary skillStaffPeriods;
             var fileData = new List<string>();

@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var requestedPeople = new List<IPerson> {person};
 			var peopleInOrganization = new List<IPerson> {person};
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(TimeZoneInfoFactory.UtcTimeZoneInfo());
-			var skillDictionary = new Dictionary<ISkill, IList<ISkillDay>>{{skills[0],new ISkillDay[]{}}};
+			var skillDictionary = new Dictionary<ISkill, IEnumerable<ISkillDay>>{{skills[0],new ISkillDay[]{}}};
 			
 			_workloadRepository.Stub(x => x.LoadAll()).Return(new List<IWorkload>());
 			_personRepository.Stub(x => x.FindPeopleInOrganization(dateOnlyPeriod, false)).Return(peopleInOrganization);
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var requestedPeople = new List<IPerson> { person };
 			var peopleInOrganization = new List<IPerson> { person };
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(TimeZoneInfoFactory.UtcTimeZoneInfo());
-			var skillDictionary = new Dictionary<ISkill, IList<ISkillDay>> { { skills[0], new ISkillDay[] { } } };
+			var skillDictionary = new Dictionary<ISkill, IEnumerable<ISkillDay>> { { skills[0], new ISkillDay[] { } } };
 
 			_workloadRepository.Stub(x => x.LoadAll()).Return(new List<IWorkload>());
 			_personRepository.Stub(x => x.FindPeopleInOrganization(dateOnlyPeriod, false)).Return(peopleInOrganization);
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_peopleAndSkillLoadDecider.Stub(x => x.Execute(scenario, period, requestedPeople))
 				.Return(MockRepository.GenerateMock<ILoaderDeciderResult>());
 			_skillDayLoadHelper.Stub(x => x.LoadSchedulerSkillDays(period.ToDateOnlyPeriod(skills[0].TimeZone), skills, scenario))
-				.Return(new Dictionary<ISkill, IList<ISkillDay>>());
+				.Return(new Dictionary<ISkill, IEnumerable<ISkillDay>>());
 
 			Assert.AreEqual(0, _schedulingResultStateHolder.PersonsInOrganization.Count);
 			_target.Execute(scenario, period, requestedPeople, _schedulingResultStateHolder);

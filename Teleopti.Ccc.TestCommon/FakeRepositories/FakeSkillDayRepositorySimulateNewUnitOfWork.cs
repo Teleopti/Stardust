@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public ICollection<ISkillDay> FindReadOnlyRange(DateOnlyPeriod period, IList<ISkill> skills, IScenario scenario)
+		public ICollection<ISkillDay> FindReadOnlyRange(DateOnlyPeriod period, IEnumerable<ISkill> skills, IScenario scenario)
 		{
 			return _skillDays
 				.Select(skillDayFunc => skillDayFunc())
