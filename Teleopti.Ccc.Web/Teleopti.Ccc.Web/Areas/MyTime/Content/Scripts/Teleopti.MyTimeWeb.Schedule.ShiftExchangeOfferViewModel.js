@@ -29,6 +29,8 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	self.EndTime = ko.observable();
 	self.DateFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
 	
+	self.isReadyLoaded = ko.observable(false);
+
 	self.Id = ko.observable(null);
 	self.WeekStart = ko.observable(1);
 
@@ -237,6 +239,7 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 					self.OpenPeriodRelativeEnd(data.OpenPeriodRelativeEnd);
 				}
 				self.missingWorkflowControlSet(!data.HasWorkflowControlSet);
+				self.isReadyLoaded(true);
 			}
 		});
 	};

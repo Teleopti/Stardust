@@ -3,7 +3,12 @@
 <div class="shift-exchange-missing-wcs-message alert alert-warning" data-bind="visible: missingWorkflowControlSet">
 	@Resources.MissingWorkflowControlSet
 </div>
-<div data-bind="if: !missingWorkflowControlSet()">
+
+<div id="loadingRequestIndicator" class="loading-gradient" data-bind="if: !isReadyLoaded()">
+	<div class="loading"></div>
+</div>
+
+<div data-bind="if: !missingWorkflowControlSet() && isReadyLoaded()">
 	<table class="table-condensed">
 		<tr>
 			<td>
