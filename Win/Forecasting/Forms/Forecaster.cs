@@ -315,9 +315,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 
-				_currentForecasterSettings = new PersonalSettingDataRepository(unitOfWork).FindValueByKey("Forecaster",
-																																																	new ForecasterSettings
-																																																			());
+				_currentForecasterSettings = new PersonalSettingDataRepository(unitOfWork).FindValueByKey("Forecaster", new ForecasterSettings());
+				if (_currentForecasterSettings.NumericCellVariableDecimals > 9)
+					_currentForecasterSettings.NumericCellVariableDecimals = 9;
 
 				unitOfWork.Reassociate(_skill);
 				if (isMultisiteSkill)
@@ -1455,6 +1455,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private void toolStripButtonIncreaseDecimalsClick(object sender, EventArgs e)
 		{
+			if (_currentForecasterSettings.NumericCellVariableDecimals >= 9)
+				return;
+
 			_currentForecasterSettings.NumericCellVariableDecimals++;
 			foreach (KeyValuePair<string, TeleoptiGridControl> keyValuePair in _gridCollection)
 			{

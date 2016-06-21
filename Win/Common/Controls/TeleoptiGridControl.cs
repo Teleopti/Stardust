@@ -123,6 +123,8 @@ namespace Teleopti.Ccc.Win.Common.Controls
 					{
 						_currentSettings = new PersonalSettingDataRepository(uow).FindValueByKey("Forecaster",
 																								 new ForecasterSettings());
+						if (_currentSettings.NumericCellVariableDecimals > 9)
+							_currentSettings.NumericCellVariableDecimals = 9;
 						return _currentSettings;
 					}
 				}
