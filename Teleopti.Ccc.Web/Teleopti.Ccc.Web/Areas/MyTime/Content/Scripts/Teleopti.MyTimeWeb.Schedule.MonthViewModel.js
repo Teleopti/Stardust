@@ -35,7 +35,8 @@ Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function (scheduleDate, selected
 	this.isFullDayAbsence = scheduleDate.Absence ? scheduleDate.Absence.IsFullDayAbsence : null;
 	this.hasOvertime = scheduleDate.HasOvertime;
 
-	this.hasSeatBooking = scheduleDate.SeatBookings.length > 0;
+	this.hasSeatBooking = scheduleDate.SeatBookings && scheduleDate.SeatBookings.length > 0;
+
 	this.seatBookings = scheduleDate.SeatBookings;
 
 	var formatSeatBooking = function (seatBooking) {
@@ -54,8 +55,11 @@ Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function (scheduleDate, selected
 	};
 
 	self.seatBookingMessage = ko.computed(function () {
+
+		var seatBookingsTitle = parent.userTexts ? parent.userTexts.seatBookingsTitle : '';
+
 		var message = '<div class="seatbooking-tooltip">' +
-							'<span class="tooltip-header">{0}</span><table class="seatbooking-tooltip-table">'.format(parent.userTexts.seatBookingsTitle);
+			'<span class="tooltip-header">{0}</span><table class="seatbooking-tooltip-table">'.format(seatBookingsTitle);
 		var messageEnd = '</table></div>';
 
 		if (self.seatBookings != null) {
@@ -64,6 +68,7 @@ Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function (scheduleDate, selected
 			});
 		}
 		message += messageEnd;
+
 
 		return message;
 
@@ -170,5 +175,5 @@ Teleopti.MyTimeWeb.Schedule.MonthViewModel = function () {
 	};
 
 
-	
+
 };
