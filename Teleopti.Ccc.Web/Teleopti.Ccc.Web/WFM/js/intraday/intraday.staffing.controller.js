@@ -7,6 +7,7 @@
 				var chartData = {};
 				$scope.isVisible = true;
 				$scope.skills;
+				$scope.selectedSkill = null;
 
 				if ($stateParams.date) {
 					$scope.intervalDate = $stateParams.date;
@@ -22,8 +23,8 @@
 					});
 				};
 
-				$scope.$watchGroup(['intervalDate', 'selectedSkill'], function(newValues, oldValues, scope) {
-					if (newValues[1]) {
+				$scope.$watchGroup(['intervalDate', 'selectedSkill','selectedSkillArea'], function(newValues, oldValues, scope) {
+					if (newValues[1] || newValues[2]) {
 						$scope.runIntradayFetch()
 					}
 
@@ -38,7 +39,6 @@
 				});
 
 				intradayService.getSkillAreas.query().$promise.then(function(response) {
-					console.log(response);
 					$scope.skillAreas = response.SkillAreas;
 				});
 
@@ -57,24 +57,30 @@
 				};
 
 				$scope.TriggerResourceCalculate = function() {
-					console.log('triggered!');
-					intradayStaffingService.TriggerResourceCalculate.query().$promise.then(function(response) {
-						console.log(response);
-					})
+					intradayStaffingService.TriggerResourceCalculate.query().$promise.then(function(response) {})
 				};
 
 				$scope.updateSelectedSkill = function(skill) {
-					$scope.selectedSkill = skill;
-					$scope.selectedSkillArea = {};
+					if (skill) {
+						$scope.skillIsSelected = true
+						$scope.selectedSkill = skill;
+						$scope.selectedSkillArea = {};
+					}else {
+						$scope.skillIsSelected = false;
+					}
 				};
 
-				$scope.skillAreaIsSelected = function(area) {
-					$scope.selectedSkillArea = area;
-					$scope.selectedSkill = {};
+				$scope.updateSelectedArea = function(area) {
+					if (area) {
+						$scope.selectedSkillArea = area;
+						$scope.areaIsSelected = true;
+					} else {
+						$scope.areaIsSelected = false;
+					}
 				};
 
 				var initArrays = function() {
-					chartData.Forcast = ['Forcasted'];
+					chartData.Forcast = ['Forecasted'];
 					chartData.Staffing = ['Staffing'];
 					chartData.Intervals = ['x'];
 				};
@@ -87,19 +93,35 @@
 					generateChart();
 				};
 
-				$scope.runIntradayFetch = function() {
-					initArrays();
-					var actualDate = moment($scope.intervalDate).format('YYYY-MM-DD');
-					var actualSkill = $scope.selectedSkill.Id;
-
-					$scope.loading = true;
+				var fetchDataForSkill = function(date,id){
 					intradayStaffingService.resourceCalculate.query({
-						date: actualDate,
-						skillId: actualSkill
+						date: date,
+						skillId: id
 					}).$promise.then(function(response) {
 						extractRelevantData(response);
 						$scope.loading = false;
 					});
+				};
+				var fetchDataForArea = function(date,id){
+					intradayStaffingService.resourceCalculateForArea.query({
+						date: date,
+						skillAreaId: id
+					}).$promise.then(function(response) {
+						extractRelevantData(response);
+						$scope.loading = false;
+					});
+				}
+
+				$scope.runIntradayFetch = function() {
+					initArrays();
+					var actualDate = moment($scope.intervalDate).format('YYYY-MM-DD');
+					var actualId = $scope.skillIsSelected ? $scope.selectedSkill.Id : $scope.selectedSkillArea.Id ;
+					$scope.loading = true;
+					if ($scope.skillIsSelected) {
+						fetchDataForSkill(actualDate, actualId)
+					}else {
+						fetchDataForArea(actualDate, actualId)
+					}
 				};
 
 				$scope.regenerateChart = function() {
@@ -121,7 +143,7 @@
 								enabled: true,
 							},
 							types: {
-								Forcasted: 'bar'
+								Forecasted: 'bar'
 							},
 						},
 						axis: {
@@ -129,7 +151,7 @@
 								localtime: false,
 								type: 'timeseries',
 								tick: {
-									format: 'T%H:%M:%S'
+									format: '%H:%M'
 								}
 							}
 						},
