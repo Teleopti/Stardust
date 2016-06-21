@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class ResourceOptimizationHelper : IResourceOptimizationHelper
 	{
-		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IOccupiedSeatCalculator _occupiedSeatCalculator;
 		private readonly INonBlendSkillCalculator _nonBlendSkillCalculator;
 		private readonly Func<IPersonSkillProvider> _personSkillProvider;
@@ -20,8 +19,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly ITimeZoneGuard _timeZoneGuard;
 		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
 
-		public ResourceOptimizationHelper(Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
-			IOccupiedSeatCalculator occupiedSeatCalculator,
+		public ResourceOptimizationHelper(IOccupiedSeatCalculator occupiedSeatCalculator,
 			INonBlendSkillCalculator nonBlendSkillCalculator,
 			Func<IPersonSkillProvider> personSkillProvider,
 			IPeriodDistributionService periodDistributionService,
@@ -29,7 +27,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			ITimeZoneGuard timeZoneGuard,
 			IResourceCalculationContextFactory resourceCalculationContextFactory)
 		{
-			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_occupiedSeatCalculator = occupiedSeatCalculator;
 			_nonBlendSkillCalculator = nonBlendSkillCalculator;
 			_personSkillProvider = personSkillProvider;
@@ -41,11 +38,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public void ResourceCalculate(DateOnly localDate, ResourceCalculationData resourceCalculationData)
 		{
-			var stateHolder = _schedulingResultStateHolder();
-			if (stateHolder.TeamLeaderMode)
-				return;
-
-			if (stateHolder.SkipResourceCalculation)
+			if (resourceCalculationData.SkipResourceCalculation)
 				return;
 
 			if (!resourceCalculationData.Skills.Any())

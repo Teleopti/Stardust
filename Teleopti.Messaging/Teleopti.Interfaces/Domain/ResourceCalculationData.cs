@@ -13,6 +13,7 @@ namespace Teleopti.Interfaces.Domain
 			Skills = schedulingResultStateHolder.Skills;
 			SkillStaffPeriodHolder = schedulingResultStateHolder.SkillStaffPeriodHolder;
 			SkillDays = schedulingResultStateHolder.SkillDays.SelectMany(s => s.Value); //TODO: check if perf drops due to this one
+			SkipResourceCalculation = schedulingResultStateHolder.TeamLeaderMode || schedulingResultStateHolder.SkipResourceCalculation;
 		}
 
 		public IScheduleDictionary Schedules { get; }
@@ -21,5 +22,6 @@ namespace Teleopti.Interfaces.Domain
 		public IEnumerable<ISkill> Skills { get; }
 		public ISkillStaffPeriodHolder SkillStaffPeriodHolder { get; }
 		public IEnumerable<ISkillDay> SkillDays { get; }
+		public bool SkipResourceCalculation { get; }
 	}
 }

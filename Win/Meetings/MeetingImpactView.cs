@@ -63,8 +63,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			var slotCalculator = new MeetingSlotImpactCalculator(schedulerStateHolder.SchedulingResultState, new AllLayersAreInWorkTimeSpecification());
 			var slotFinder = new BestSlotForMeetingFinder(slotCalculator);
 			var personSkillProvider = new PersonSkillProvider();
-			var optimizationHelperWin = new ResourceOptimizationHelper(()=>schedulerStateHolder.SchedulingResultState,
-																	   new OccupiedSeatCalculator(),
+			var optimizationHelperWin = new ResourceOptimizationHelper(new OccupiedSeatCalculator(),
 																	   new NonBlendSkillCalculator(),
 																	   ()=>personSkillProvider, new PeriodDistributionService(), 
 																		intraIntervalFinderService, new TimeZoneGuardWrapper(), _resourceCalculationContextFactory);

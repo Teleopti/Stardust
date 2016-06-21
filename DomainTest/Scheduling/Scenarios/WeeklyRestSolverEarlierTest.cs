@@ -352,7 +352,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 					),
 				new ResourceCalculateDelayer(
 					new ResourceOptimizationHelper(
-						() => SchedulerStateHolder.SchedulingResultState,
 						new OccupiedSeatCalculator(),
 						new NonBlendSkillCalculator(),
 						() => new PersonSkillProvider(),
@@ -524,7 +523,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 					),
 				new ResourceCalculateDelayer(
 					new ResourceOptimizationHelper(
-						() => SchedulerStateHolder.SchedulingResultState,
 						new OccupiedSeatCalculator(),
 						new NonBlendSkillCalculator(),
 						() => new PersonSkillProvider(),
