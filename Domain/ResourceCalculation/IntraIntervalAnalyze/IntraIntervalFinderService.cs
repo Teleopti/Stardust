@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze
 {
 	public interface IIntraIntervalFinderService
 	{
-		void Execute(ISchedulingResultStateHolder schedulingResultStateHolder, DateOnly dateOnly, IResourceCalculationDataContainer resourceCalculationDataContainer);
+		void Execute(IEnumerable<ISkillDay> allSkillDays, DateOnly dateOnly, IResourceCalculationDataContainer resourceCalculationDataContainer);
 	}
 
 	public class IntraIntervalFinderService : IIntraIntervalFinderService
@@ -17,9 +19,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze
 			_skillDayIntraIntervalFinder = skillDayIntraIntervalFinder;
 		}
 
-		public void Execute(ISchedulingResultStateHolder schedulingResultStateHolder, DateOnly dateOnly, IResourceCalculationDataContainer resourceCalculationDataContainer)
+		public void Execute(IEnumerable<ISkillDay> allSkillDays, DateOnly dateOnly, IResourceCalculationDataContainer resourceCalculationDataContainer)
 		{
-			var skillDays = schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>{dateOnly});
+			var skillDays = allSkillDays.FilterOnDates(new []{dateOnly});
 			
 			foreach (var skillDay in skillDays)
 			{

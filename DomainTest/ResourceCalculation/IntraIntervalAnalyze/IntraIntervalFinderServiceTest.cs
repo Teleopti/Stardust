@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.IntraIntervalAnalyze
 
 			using (_mock.Record())
 			{
-				_target.Execute(_schedulingResultStateHolder, new DateOnly(), _resourceCalculationDataContainer);
+				_target.Execute(new []{ _skillDay }, new DateOnly(), _resourceCalculationDataContainer);
 			}
 		}
 
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.IntraIntervalAnalyze
 
 			using (_mock.Record())
 			{
-				_target.Execute(_schedulingResultStateHolder, new DateOnly(), _resourceCalculationDataContainer);
+				_target.Execute(new[] { _skillDay }, new DateOnly(), _resourceCalculationDataContainer);
 			}
 		}
 
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.IntraIntervalAnalyze
 
 			using (_mock.Record())
 			{
-				_target.Execute(_schedulingResultStateHolder, new DateOnly(), _resourceCalculationDataContainer);
+				_target.Execute(new[] { _skillDay }, new DateOnly(), _resourceCalculationDataContainer);
 			}
 		}
 
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.IntraIntervalAnalyze
 
 			using (_mock.Record())
 			{
-				_target.Execute(_schedulingResultStateHolder, new DateOnly(), _resourceCalculationDataContainer);
+				_target.Execute(new[] { _skillDay }, new DateOnly(), _resourceCalculationDataContainer);
 			}
 		}
 	}

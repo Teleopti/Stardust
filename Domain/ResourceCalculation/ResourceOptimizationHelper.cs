@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 				if (resourceCalculationData.DoIntraIntervalCalculation)
 				{
-					_intraIntervalFinderService.Execute(stateHolder, localDate, relevantProjections);
+					_intraIntervalFinderService.Execute(resourceCalculationData.SkillDays, localDate, relevantProjections);
 				}
 
 				if (context != null)

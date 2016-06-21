@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -11,6 +12,7 @@ namespace Teleopti.Interfaces.Domain
 			Schedules = schedulingResultStateHolder.Schedules;
 			Skills = schedulingResultStateHolder.Skills;
 			SkillStaffPeriodHolder = schedulingResultStateHolder.SkillStaffPeriodHolder;
+			SkillDays = schedulingResultStateHolder.SkillDays.SelectMany(s => s.Value); //TODO: check if perf drops due to this one
 		}
 
 		public IScheduleDictionary Schedules { get; }
@@ -18,5 +20,6 @@ namespace Teleopti.Interfaces.Domain
 		public bool DoIntraIntervalCalculation { get; }
 		public IEnumerable<ISkill> Skills { get; }
 		public ISkillStaffPeriodHolder SkillStaffPeriodHolder { get; }
+		public IEnumerable<ISkillDay> SkillDays { get; }
 	}
 }

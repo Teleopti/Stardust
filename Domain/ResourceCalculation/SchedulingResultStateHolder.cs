@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Interfaces.Domain;
 
@@ -137,13 +138,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var ret = new List<ISkillDay>();
 			if (SkillDays == null) return ret;
 
-			var days = SkillDays.SelectMany(s => s.Value).ToLookup(k => k.CurrentDate);
-			foreach (var dateOnly in theDateList)
-			{
-				ret.AddRange(days[dateOnly]);
-			}
-
-			return ret;
+			return SkillDays.SelectMany(s => s.Value).FilterOnDates(theDateList).ToList(); //kolla om ienumerable
 		}
 
 		public ISkillDay SkillDayOnSkillAndDateOnly(ISkill skill, DateOnly dateOnly)
