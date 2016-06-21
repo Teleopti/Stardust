@@ -222,10 +222,12 @@
 
 				function buildTimeline(states) {
 					var timeline = function(time) {
-						return {
-							Time: time.format('HH:mm'),
-							Offset: timeToPercent(states.Time, time) + "%"
-						};
+						var percent = timeToPercent(states.Time, time);
+						if (percent <= 94)
+							return {
+								Time: time.format('HH:mm'),
+								Offset: percent + "%"
+							};
 					};
 
 					var time = moment(states.Time).startOf('hour');
@@ -234,7 +236,7 @@
 						timeline(time.add(1, 'hour')),
 						timeline(time.add(1, 'hour')),
 						timeline(time.add(1, 'hour'))
-					];
+					].filter(function(tl) { return tl != null; });
 
 				}
 
