@@ -88,15 +88,20 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 		protected override void Dispose(bool disposing)
 		{
-			Grid.HorizontalScroll -= gridHorizontalScroll;
+			if(Grid != null)
+				Grid.HorizontalScroll -= gridHorizontalScroll;
 			_currentSelectedPersonPeriods = null;
-			_addNewPersonPeriodMenuItem.Click -= AddNewGridRow;
+			if(_addNewPersonPeriodMenuItem != null)
+				_addNewPersonPeriodMenuItem.Click -= AddNewGridRow;
 			_addNewPersonPeriodMenuItem = null;
-			_deletePersonPeriodMenuItem.Click -= DeleteSelectedGridRows;
+			if(_deletePersonPeriodMenuItem != null)
+				_deletePersonPeriodMenuItem.Click -= DeleteSelectedGridRows;
 			_deletePersonPeriodMenuItem = null;
-			_copySpecialPersonPeriodMenuItem.Click -= CopySpecial;
+			if(_copySpecialPersonPeriodMenuItem != null)
+				_copySpecialPersonPeriodMenuItem.Click -= CopySpecial;
 			_copySpecialPersonPeriodMenuItem = null;
-			_pasteSpecialPersonPeriodMenuItem.Click -= PasteSpecial;
+			if(_pasteSpecialPersonPeriodMenuItem != null)
+				_pasteSpecialPersonPeriodMenuItem.Click -= PasteSpecial;
 			_pasteSpecialPersonPeriodMenuItem = null;
 
 			if (GridCreator != null)
