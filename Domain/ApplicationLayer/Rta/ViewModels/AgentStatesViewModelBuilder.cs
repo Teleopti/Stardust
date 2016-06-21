@@ -81,6 +81,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				_agentStateReadModelReader.LoadForTeams(teamIds));
 		}
 
+		public AgentStatesViewModel ForSkill(Guid skill)
+		{
+			return build(_agentStateReadModelReader.LoadForSkill(skill));
+		}
+		
+		public AgentStatesViewModel InAlarmForSkill(Guid skill)
+		{
+			return build(_agentStateReadModelReader.LoadAlarmsForSkill(skill));
+		}
+
 		private AgentStatesViewModel build(IEnumerable<AgentStateReadModel> states)
 		{
 			return new AgentStatesViewModel

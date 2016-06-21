@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 	{
 		private readonly INow _now;
 		private readonly ConcurrentDictionary<Guid, AgentStateReadModel> _data = new ConcurrentDictionary<Guid, AgentStateReadModel>(); 
+		private List<personSkill> _personSkills = new List<personSkill>();
 
 		public FakeAgentStateReadModelPersister(INow now)
 		{
@@ -103,12 +104,38 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public IEnumerable<AgentStateReadModel> LoadForSkill(Guid skill)
 		{
-			throw new NotImplementedException();
+			return from s in _data.Values
+				from p in _personSkills
+				where s.PersonId == p.PersonId && p.SkillId == skill
+				select s;
 		}
 
 		public IEnumerable<AgentStateReadModel> LoadAlarmsForSkill(Guid skill)
 		{
-			throw new NotImplementedException();
+			return from s in _data.Values
+				from p in _personSkills
+				where s.PersonId == p.PersonId && p.SkillId == skill
+					  && s.AlarmStartTime <= _now.UtcDateTime()
+				orderby s.AlarmStartTime
+				select s;
+		}
+
+		public FakeAgentStateReadModelPersister WithPersonSkill(Guid person, Guid skill)
+		{
+			_personSkills.Add(new personSkill(person, skill));
+			return this;
+		}
+
+		private class personSkill
+		{
+			public Guid PersonId { get;}
+			public Guid SkillId { get;}
+
+			public personSkill(Guid personId, Guid skillId)
+			{
+				PersonId = personId;
+				SkillId = skillId;
+			}
 		}
 	}
 }
