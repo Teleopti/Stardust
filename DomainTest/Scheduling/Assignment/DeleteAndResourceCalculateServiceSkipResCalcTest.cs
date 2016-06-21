@@ -1,7 +1,9 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -20,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var schedDic = new ScheduleDictionaryForTest(new Scenario("_"), new DateTimePeriod(1900, 1, 1, 2100, 1, 1));
 			var scheduleDay = ExtractedSchedule.CreateScheduleDay(schedDic, agent, date);
 			skillGroupInfo.Expect(x => x.DoCalculation(agent, date)).Return(true);
-			var stateHolder = MockRepository.GenerateStub<ISchedulingResultStateHolder>();
+			var stateHolder = new SchedulingResultStateHolder(new List<IPerson>(), new FakeScheduleDictionary(), new Dictionary<ISkill, IList<ISkillDay>>());
 
 			var target = new DeleteAndResourceCalculateService(() => stateHolder, MockRepository.GenerateStub<IDeleteSchedulePartService>(), resourceOptHelper, MockRepository.GenerateStub<IResourceCalculateDaysDecider>(), skillGroupInfo);
 			target.DeleteWithResourceCalculation(scheduleDay, null, false, false);
@@ -38,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var schedDic = new ScheduleDictionaryForTest(new Scenario("_"), new DateTimePeriod(1900, 1, 1, 2100, 1, 1));
 			var scheduleDay = ExtractedSchedule.CreateScheduleDay(schedDic, agent, date);
 			skillGroupInfo.Expect(x => x.DoCalculation(agent, date)).Return(false);
-			var stateHolder = MockRepository.GenerateStub<ISchedulingResultStateHolder>();
+			var stateHolder = new SchedulingResultStateHolder(new List<IPerson>(), new FakeScheduleDictionary(), new Dictionary<ISkill, IList<ISkillDay>>());
 
 			var target = new DeleteAndResourceCalculateService(() => stateHolder, MockRepository.GenerateStub<IDeleteSchedulePartService>(), resourceOptHelper, MockRepository.GenerateStub<IResourceCalculateDaysDecider>(), skillGroupInfo);
 			target.DeleteWithResourceCalculation(scheduleDay, null, false, false);
