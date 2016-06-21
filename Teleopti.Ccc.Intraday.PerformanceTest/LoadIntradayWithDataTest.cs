@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Intraday.PerformanceTest
 		public TimeSetter TimeSetter;
 
 		[Test]
+		[Ignore]
 		public void MeasurePerformance()
 		{
 			TimeSetter.SetDateTime("2016-05-27 00:00");
