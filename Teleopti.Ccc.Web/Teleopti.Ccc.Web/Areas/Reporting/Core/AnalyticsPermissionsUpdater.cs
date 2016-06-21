@@ -23,20 +23,21 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 
 		public void Handle(Guid personId, Guid businessUnitId)
 		{
-			var lastUpdate = _analyticsPermissionExecutionRepository.Get(personId);
+			var businessUnit = _analyticsBusinessUnitRepository.Get(businessUnitId);
+
+			var lastUpdate = _analyticsPermissionExecutionRepository.Get(personId, businessUnit.BusinessUnitId);
 			if (DateTime.UtcNow - lastUpdate < TimeSpan.FromMinutes(15))
 				return;
 
-			var businessUnit = _analyticsBusinessUnitRepository.Get(businessUnitId);
 			var currentPermissions = _permissionsConverter.GetApplicationPermissionsAndConvert(personId, businessUnit.BusinessUnitId).ToList();
-			var currentAnalyticsPermissions = _analyticsPermissionRepository.GetPermissionsForPerson(personId);
+			var currentAnalyticsPermissions = _analyticsPermissionRepository.GetPermissionsForPerson(personId, businessUnit.BusinessUnitId);
 
 			var toBeAdded = currentPermissions.Where(p => !currentAnalyticsPermissions.Any(x => x.Equals(p)));
 			var toBeDeleted = currentAnalyticsPermissions.Where(p => !currentPermissions.Any(x => x.Equals(p)));
 			_analyticsPermissionRepository.InsertPermissions(toBeAdded);
 			_analyticsPermissionRepository.DeletePermissions(toBeDeleted);
 
-			_analyticsPermissionExecutionRepository.Set(personId);
+			_analyticsPermissionExecutionRepository.Set(personId, businessUnit.BusinessUnitId);
 		}
 	}
 }

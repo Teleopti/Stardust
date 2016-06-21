@@ -64,11 +64,47 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				Target.InsertPermissions(new[] { permissionForPerson, permissionNotForPerson });
 			});
 
-			var permissions = WithAnalyticsUnitOfWork.Get(() => Target.GetPermissionsForPerson(personId));
+			var permissions = WithAnalyticsUnitOfWork.Get(() => Target.GetPermissionsForPerson(personId, businessUnit.BusinessUnitId));
 			
 			permissions.Should().Not.Be.Empty();
 			permissions.Where(x => x.Equals(permissionForPerson)).Should().Not.Be.Empty();
 			permissions.Where(x => x.Equals(permissionNotForPerson)).Should().Be.Empty();
+		}
+
+		[Test]
+		public void GetPermissionsForPerson_ShouldNotReturnPermissionsForPersonInDifferentBusinessUnit()
+		{
+			var personId = Guid.NewGuid();
+			var permissionForPersonInOtherBusinessUnit = new AnalyticsPermission
+			{
+				BusinessUnitId = businessUnit.BusinessUnitId+1,
+				DatasourceId = datasource.RaptorDefaultDatasourceId,
+				PersonCode = personId,
+				MyOwn = false,
+				TeamId = 10,
+				ReportId = Guid.NewGuid(),
+				DatasourceUpdateDate = DateTime.Now
+			};
+
+			var permissionNotForPerson = new AnalyticsPermission
+			{
+				BusinessUnitId = businessUnit.BusinessUnitId,
+				DatasourceId = datasource.RaptorDefaultDatasourceId,
+				PersonCode = Guid.NewGuid(),
+				MyOwn = false,
+				TeamId = 10,
+				ReportId = Guid.NewGuid(),
+				DatasourceUpdateDate = DateTime.Now
+			};
+
+			WithAnalyticsUnitOfWork.Do(() =>
+			{
+				Target.InsertPermissions(new[] { permissionForPersonInOtherBusinessUnit, permissionNotForPerson });
+			});
+
+			var permissions = WithAnalyticsUnitOfWork.Get(() => Target.GetPermissionsForPerson(personId, businessUnit.BusinessUnitId));
+
+			permissions.Should().Be.Empty();
 		}
 
 		[Test]
@@ -109,7 +145,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				Target.DeletePermissions(new[] { permissionForPerson });
 			});
 
-			var permissions = WithAnalyticsUnitOfWork.Get(() => Target.GetPermissionsForPerson(personId));
+			var permissions = WithAnalyticsUnitOfWork.Get(() => Target.GetPermissionsForPerson(personId, businessUnit.BusinessUnitId));
 			permissions.Should().Be.Empty();
 		}
 	}

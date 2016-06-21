@@ -8,6 +8,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 	{
 		void DeletePermissions(IEnumerable<AnalyticsPermission> permissions);
 		void InsertPermissions(IEnumerable<AnalyticsPermission> permissions);
-		IList<AnalyticsPermission> GetPermissionsForPerson(Guid personId);
+		IList<AnalyticsPermission> GetPermissionsForPerson(Guid personId, int businessUnitId);
 	}
 }

@@ -41,103 +41,105 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
 		[Test]
 		public void ShouldNotUpdatePermissionsIfRecentlyUpdated()
 		{
-			_analyticsPermissionExecutionRepository.Stub(x => x.Get(personId)).Return(DateTime.UtcNow);
+			const int analyticsBusinessUnitId = 1;
+			_analyticsBusinessUnitRepository.Stub(r => r.Get(businessUnitId)).Return(new AnalyticBusinessUnit { BusinessUnitId = analyticsBusinessUnitId });
+			_analyticsPermissionExecutionRepository.Stub(x => x.Get(personId, analyticsBusinessUnitId)).Return(DateTime.UtcNow);
 
 			target.Handle(personId, businessUnitId);
 
 			_analyticsPermissionRepository.AssertWasNotCalled(r => r.InsertPermissions(Arg<IEnumerable<AnalyticsPermission>>.Is.Anything));
 			_analyticsPermissionRepository.AssertWasNotCalled(r => r.DeletePermissions(Arg<IEnumerable<AnalyticsPermission>>.Is.Anything));
-			_analyticsPermissionExecutionRepository.AssertWasNotCalled(r => r.Set(personId));
+			_analyticsPermissionExecutionRepository.AssertWasNotCalled(r => r.Set(personId, analyticsBusinessUnitId));
 		}
 
 		[Test]
 		public void ShouldUpdateWithEmptySetWhenNoPermissions()
 		{
 			const int analyticsBusinessUnitId = 1;
-			_analyticsPermissionExecutionRepository.Stub(x => x.Get(personId)).Return(DateTime.UtcNow-TimeSpan.FromMinutes(16));
+			_analyticsPermissionExecutionRepository.Stub(x => x.Get(personId, analyticsBusinessUnitId)).Return(DateTime.UtcNow-TimeSpan.FromMinutes(16));
 			_analyticsBusinessUnitRepository.Stub(r => r.Get(businessUnitId)).Return(new AnalyticBusinessUnit {BusinessUnitId = analyticsBusinessUnitId });
 			_permissionsConverter.Stub(r => r.GetApplicationPermissionsAndConvert(personId, analyticsBusinessUnitId))
 				.Return(new AnalyticsPermission[] {});
-			_analyticsPermissionRepository.Stub(r => r.GetPermissionsForPerson(personId))
+			_analyticsPermissionRepository.Stub(r => r.GetPermissionsForPerson(personId, analyticsBusinessUnitId))
 				.Return(new AnalyticsPermission[] {});
 			_analyticsPermissionRepository.Stub(r => r.InsertPermissions(Arg<IEnumerable<AnalyticsPermission>>.Is.Anything));
 			_analyticsPermissionRepository.Stub(r => r.DeletePermissions(Arg<IEnumerable<AnalyticsPermission>>.Is.Anything));
-			_analyticsPermissionExecutionRepository.Stub(r => r.Set(personId));
+			_analyticsPermissionExecutionRepository.Stub(r => r.Set(personId, analyticsBusinessUnitId));
 
 			target.Handle(personId, businessUnitId);
 
 			_analyticsPermissionRepository.AssertWasCalled(r => r.InsertPermissions((Arg<IEnumerable<AnalyticsPermission>>.Matches(x => x.IsEmpty()))));
 			_analyticsPermissionRepository.AssertWasCalled(r => r.DeletePermissions((Arg<IEnumerable<AnalyticsPermission>>.Matches(x => x.IsEmpty()))));
-			_analyticsPermissionExecutionRepository.AssertWasCalled(r => r.Set(personId));
+			_analyticsPermissionExecutionRepository.AssertWasCalled(r => r.Set(personId, analyticsBusinessUnitId));
 		}
 
 		[Test]
 		public void ShouldRemovePermissionsThatAreNotInApplicationDatabase()
 		{
 			const int analyticsBusinessUnitId = 1;
-			_analyticsPermissionExecutionRepository.Stub(x => x.Get(personId)).Return(DateTime.UtcNow - TimeSpan.FromMinutes(16));
+			_analyticsPermissionExecutionRepository.Stub(x => x.Get(personId, analyticsBusinessUnitId)).Return(DateTime.UtcNow - TimeSpan.FromMinutes(16));
 			_analyticsBusinessUnitRepository.Stub(r => r.Get(businessUnitId)).Return(new AnalyticBusinessUnit { BusinessUnitId = analyticsBusinessUnitId });
 			_permissionsConverter.Stub(r => r.GetApplicationPermissionsAndConvert(personId, analyticsBusinessUnitId))
 				.Return(new AnalyticsPermission[] { });
 			var toBeRemoved = new AnalyticsPermission {BusinessUnitId = analyticsBusinessUnitId, DatasourceId = 1, DatasourceUpdateDate = DateTime.UtcNow, MyOwn = false, PersonCode = personId, ReportId = Guid.NewGuid(), TeamId = 123};
-			_analyticsPermissionRepository.Stub(r => r.GetPermissionsForPerson(personId))
+			_analyticsPermissionRepository.Stub(r => r.GetPermissionsForPerson(personId, analyticsBusinessUnitId))
 				.Return(new[] { toBeRemoved });
 			_analyticsPermissionRepository.Stub(r => r.InsertPermissions(Arg<IEnumerable<AnalyticsPermission>>.Is.Anything));
 			_analyticsPermissionRepository.Stub(r => r.DeletePermissions(Arg<IEnumerable<AnalyticsPermission>>.Is.Anything));
-			_analyticsPermissionExecutionRepository.Stub(r => r.Set(personId));
+			_analyticsPermissionExecutionRepository.Stub(r => r.Set(personId, analyticsBusinessUnitId));
 
 			target.Handle(personId, businessUnitId);
 
 			_analyticsPermissionRepository.AssertWasCalled(r => r.InsertPermissions((Arg<IEnumerable<AnalyticsPermission>>.Matches(x => x.IsEmpty()))));
 			_analyticsPermissionRepository.AssertWasCalled(r => r.DeletePermissions(Arg<IEnumerable<AnalyticsPermission>>.Matches(x => x.Contains(toBeRemoved))));
-			_analyticsPermissionExecutionRepository.AssertWasCalled(r => r.Set(personId));
+			_analyticsPermissionExecutionRepository.AssertWasCalled(r => r.Set(personId, analyticsBusinessUnitId));
 		}
 
 		[Test]
 		public void ShouldAddPermissionsThatAreInApplicationDatabase()
 		{
 			const int analyticsBusinessUnitId = 1;
-			_analyticsPermissionExecutionRepository.Stub(x => x.Get(personId)).Return(DateTime.UtcNow - TimeSpan.FromMinutes(16));
+			_analyticsPermissionExecutionRepository.Stub(x => x.Get(personId, analyticsBusinessUnitId)).Return(DateTime.UtcNow - TimeSpan.FromMinutes(16));
 			_analyticsBusinessUnitRepository.Stub(r => r.Get(businessUnitId)).Return(new AnalyticBusinessUnit { BusinessUnitId = analyticsBusinessUnitId });
 			var toBeAdded = new AnalyticsPermission { BusinessUnitId = analyticsBusinessUnitId, DatasourceId = 1, DatasourceUpdateDate = DateTime.UtcNow, MyOwn = false, PersonCode = personId, ReportId = Guid.NewGuid(), TeamId = 123 };
 
 			_permissionsConverter.Stub(r => r.GetApplicationPermissionsAndConvert(personId, analyticsBusinessUnitId))
 				.Return(new [] { toBeAdded });
 			
-			_analyticsPermissionRepository.Stub(r => r.GetPermissionsForPerson(personId))
+			_analyticsPermissionRepository.Stub(r => r.GetPermissionsForPerson(personId, analyticsBusinessUnitId))
 				.Return(new AnalyticsPermission[] { });
 			_analyticsPermissionRepository.Stub(r => r.InsertPermissions(Arg<IEnumerable<AnalyticsPermission>>.Is.Anything));
 			_analyticsPermissionRepository.Stub(r => r.DeletePermissions(Arg<IEnumerable<AnalyticsPermission>>.Is.Anything));
-			_analyticsPermissionExecutionRepository.Stub(r => r.Set(personId));
+			_analyticsPermissionExecutionRepository.Stub(r => r.Set(personId, analyticsBusinessUnitId));
 
 			target.Handle(personId, businessUnitId);
 			
 			_analyticsPermissionRepository.AssertWasCalled(r => r.InsertPermissions(Arg<IEnumerable<AnalyticsPermission>>.Matches(x => x.Contains(toBeAdded))));
 			_analyticsPermissionRepository.AssertWasCalled(r => r.DeletePermissions(Arg<IEnumerable<AnalyticsPermission>>.Matches(x => x.IsEmpty())));
-			_analyticsPermissionExecutionRepository.AssertWasCalled(r => r.Set(personId));
+			_analyticsPermissionExecutionRepository.AssertWasCalled(r => r.Set(personId, analyticsBusinessUnitId));
 		}
 
 		[Test]
 		public void ShouldUpdateWithEmptySetWhenExistsInBoth()
 		{
 			const int analyticsBusinessUnitId = 1;
-			_analyticsPermissionExecutionRepository.Stub(x => x.Get(personId)).Return(DateTime.UtcNow - TimeSpan.FromMinutes(16));
+			_analyticsPermissionExecutionRepository.Stub(x => x.Get(personId, analyticsBusinessUnitId)).Return(DateTime.UtcNow - TimeSpan.FromMinutes(16));
 			_analyticsBusinessUnitRepository.Stub(r => r.Get(businessUnitId)).Return(new AnalyticBusinessUnit { BusinessUnitId = analyticsBusinessUnitId });
 			var existsInBoth = new AnalyticsPermission { BusinessUnitId = analyticsBusinessUnitId, DatasourceId = 1, DatasourceUpdateDate = DateTime.UtcNow, MyOwn = false, PersonCode = personId, ReportId = Guid.NewGuid(), TeamId = 123 };
 
 			_permissionsConverter.Stub(r => r.GetApplicationPermissionsAndConvert(personId, analyticsBusinessUnitId))
 				.Return(new[] { existsInBoth });
-			_analyticsPermissionRepository.Stub(r => r.GetPermissionsForPerson(personId))
+			_analyticsPermissionRepository.Stub(r => r.GetPermissionsForPerson(personId, analyticsBusinessUnitId))
 				.Return(new[] { existsInBoth });
 			_analyticsPermissionRepository.Stub(r => r.InsertPermissions(Arg<IEnumerable<AnalyticsPermission>>.Is.Anything));
 			_analyticsPermissionRepository.Stub(r => r.DeletePermissions(Arg<IEnumerable<AnalyticsPermission>>.Is.Anything));
-			_analyticsPermissionExecutionRepository.Stub(r => r.Set(personId));
+			_analyticsPermissionExecutionRepository.Stub(r => r.Set(personId, analyticsBusinessUnitId));
 
 			target.Handle(personId, businessUnitId);
 
 			_analyticsPermissionRepository.AssertWasCalled(r => r.InsertPermissions((Arg<IEnumerable<AnalyticsPermission>>.Matches(x => x.IsEmpty()))));
 			_analyticsPermissionRepository.AssertWasCalled(r => r.DeletePermissions((Arg<IEnumerable<AnalyticsPermission>>.Matches(x => x.IsEmpty()))));
-			_analyticsPermissionExecutionRepository.AssertWasCalled(r => r.Set(personId));
+			_analyticsPermissionExecutionRepository.AssertWasCalled(r => r.Set(personId, analyticsBusinessUnitId));
 		}
 	}
 }

@@ -1,6 +1,5 @@
 using System;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Analytics;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -17,35 +16,38 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			_now = now;
 		}
 
-		public DateTime Get(Guid personId)
+		public DateTime Get(Guid personId, int businessUnitId)
 		{
-			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(@"
+			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery($@"
 				select update_date 
 				from mart.permission_report_execution WITH (NOLOCK)
-				where person_code=:PersonCode
+				where person_code=:{nameof(personId)} AND business_unit_id=:{nameof(businessUnitId)}
 				")
-				.SetGuid("PersonCode", personId)
+				.SetParameter(nameof(personId), personId)
+				.SetParameter(nameof(businessUnitId), businessUnitId)
 				.UniqueResult<DateTime>();
 		}
 
-		public void Set(Guid personId)
+		public void Set(Guid personId, int businessUnitId)
 		{
-			var existing = Get(personId);
-			string query = @"
+			var existing = Get(personId, businessUnitId);
+			var now = _now.UtcDateTime();
+			string query = $@"
 					update mart.permission_report_execution
-					set update_date=:Now
-					where person_code=:PersonCode
+					set update_date=:{nameof(now)}
+					where person_code=:{nameof(personId)} AND business_unit_id=:{nameof(businessUnitId)}
 					";
 			if (existing == DateTime.MinValue)
 			{
-				query = @"
+				query = $@"
 					insert into mart.permission_report_execution
-					values (:PersonCode, :Now)
+					values (:{nameof(personId)}, :{nameof(businessUnitId)}, :{nameof(now)})
 					";
 			}
 			_analyticsUnitOfWork.Current().Session().CreateSQLQuery(query)
-				.SetGuid("PersonCode", personId)
-				.SetDateTime("Now", _now.UtcDateTime())
+				.SetParameter(nameof(personId), personId)
+				.SetParameter(nameof(now), now)
+				.SetParameter(nameof(businessUnitId), businessUnitId)
 				.ExecuteUpdate();
 		}
 	}

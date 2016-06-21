@@ -15,8 +15,6 @@ namespace Teleopti.Ccc.Domain.Analytics
 
 		public override bool Equals(object obj)
 		{
-			if (obj == null)
-				return false;
 			var analyticsPermission = obj as AnalyticsPermission;
 			if (analyticsPermission == null)
 				return false;
@@ -28,8 +26,7 @@ namespace Teleopti.Ccc.Domain.Analytics
 		}
 		public override int GetHashCode()
 		{
-			return string.Format("{0}|{1}|{2}|{3}|{4}", PersonCode, TeamId, MyOwn, BusinessUnitId, ReportId)
-				.GetHashCode();
+			return $"{PersonCode}|{TeamId}|{MyOwn}|{BusinessUnitId}|{ReportId}".GetHashCode();
 		}
 	}
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Analytics;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
@@ -33,11 +32,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
-		public IList<AnalyticsPermission> GetPermissionsForPerson(Guid personId)
+		public IList<AnalyticsPermission> GetPermissionsForPerson(Guid personId, int businessUnitId)
 		{
 
 			var query = _analyticsUnitOfWork.Current().Session().CreateCriteria<AnalyticsPermission>()
-				.Add(Restrictions.Eq("PersonCode", personId));
+				.Add(Restrictions.Eq(nameof(AnalyticsPermission.PersonCode), personId))
+				.Add(Restrictions.Eq(nameof(AnalyticsPermission.BusinessUnitId), businessUnitId));
 
 			var result = query.List<AnalyticsPermission>();
 			return result;
