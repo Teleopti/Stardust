@@ -60,7 +60,6 @@
 }
 
 @media print {
-
 	.seatplan-header,
 	.seatplan-report-header,
 	.seatplan-report-to-view.seatplan-report-to-view {
@@ -72,8 +71,12 @@
 		top: 0;
 		display: block;
 		overflow: visible;
-		width: auto;
+		width: 100%;
 		height: auto;
+	}
+
+	.layout-container, .navbar, .shortcut-trick-ie, wfm-notice, md-tooltip {
+		display: none !important;
 	}
 }
 

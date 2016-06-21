@@ -183,7 +183,7 @@
 			seatPlanService.seatBookingReport.get(seatBookingReportParams).$promise.then(function (data) {
 				vm.seatBookingsAll = data.SeatBookingsByDate;
 				angular.element(document).ready(function () {
-					var targetElement = $('.seatplan-report-to-print').prependTo('body');
+					var targetElement = $('.seatplan-report-to-print').clone().prependTo('body');
 					window.print();
 					targetElement.remove();
 				});
