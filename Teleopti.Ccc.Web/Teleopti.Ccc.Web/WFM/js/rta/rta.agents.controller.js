@@ -155,7 +155,6 @@
 					$scope.multipleTeamsName = "Multiple Teams";
 					updateBreadCrumb = function () { };
 				}
-
 				if (skillId) {
 					RtaService.getSkillName(skillId)
 						.then(function (skill) {
