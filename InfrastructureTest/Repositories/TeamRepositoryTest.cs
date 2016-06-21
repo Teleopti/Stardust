@@ -15,80 +15,80 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-    /// <summary>
-    /// Tests for TeamRepository
-    /// </summary>
-    [TestFixture]
-    [Category("LongRunning")]
-    public class TeamRepositoryTest : RepositoryTest<ITeam>
-    {
-        private ISite teamSite;
-        private IScorecard scorecard;
-        private const string teamName = "Morsmors";
+	/// <summary>
+	/// Tests for TeamRepository
+	/// </summary>
+	[TestFixture]
+	[Category("LongRunning")]
+	public class TeamRepositoryTest : RepositoryTest<ITeam>
+	{
+		private ISite teamSite;
+		private IScorecard scorecard;
+		private const string teamName = "Morsmors";
 
-        /// <summary>
-        /// Runs every test. Implemented by repository's concrete implementation.
-        /// </summary>
-        protected override void ConcreteSetup()
-        {
-            teamSite = SiteFactory.CreateSimpleSite("hejhej");
-            PersistAndRemoveFromUnitOfWork(teamSite);
+		/// <summary>
+		/// Runs every test. Implemented by repository's concrete implementation.
+		/// </summary>
+		protected override void ConcreteSetup()
+		{
+			teamSite = SiteFactory.CreateSimpleSite("hejhej");
+			PersistAndRemoveFromUnitOfWork(teamSite);
 
-            scorecard = new Scorecard {Name = "test"};
-            PersistAndRemoveFromUnitOfWork(scorecard);
-        }
+			scorecard = new Scorecard { Name = "test" };
+			PersistAndRemoveFromUnitOfWork(scorecard);
+		}
 
 
-        /// <summary>
-        /// Creates an aggreagte using the Bu of logged in user.
-        /// Should be a "full detailed" aggregate
-        /// </summary>
-        /// <returns></returns>
-        protected override ITeam CreateAggregateWithCorrectBusinessUnit()
-        {
-            ITeam team = TeamFactory.CreateSimpleTeam(teamName);
-            teamSite.AddTeam(team);
-            team.Scorecard = scorecard;
-            return team;
-        }
+		/// <summary>
+		/// Creates an aggreagte using the Bu of logged in user.
+		/// Should be a "full detailed" aggregate
+		/// </summary>
+		/// <returns></returns>
+		protected override ITeam CreateAggregateWithCorrectBusinessUnit()
+		{
+			ITeam team = TeamFactory.CreateSimpleTeam(teamName);
+			teamSite.AddTeam(team);
+			team.Scorecard = scorecard;
+			return team;
+		}
 
-        /// <summary>
-        /// Verifies the aggregate graph properties.
-        /// </summary>
-        /// <param name="loadedAggregateFromDatabase">The loaded aggregate from database.</param>
-        protected override void VerifyAggregateGraphProperties(ITeam loadedAggregateFromDatabase)
-        {
-            ITeam org = CreateAggregateWithCorrectBusinessUnit();
-            Assert.IsNotNull(loadedAggregateFromDatabase.Id);
-            Assert.AreEqual(org.Description.Name, loadedAggregateFromDatabase.Description.Name);
-            Assert.IsNotNull(loadedAggregateFromDatabase.Site);
-            Assert.IsNotNull(loadedAggregateFromDatabase.Scorecard);
-            Assert.AreEqual(org.Scorecard,loadedAggregateFromDatabase.Scorecard);
-        }
+		/// <summary>
+		/// Verifies the aggregate graph properties.
+		/// </summary>
+		/// <param name="loadedAggregateFromDatabase">The loaded aggregate from database.</param>
+		protected override void VerifyAggregateGraphProperties(ITeam loadedAggregateFromDatabase)
+		{
+			ITeam org = CreateAggregateWithCorrectBusinessUnit();
+			Assert.IsNotNull(loadedAggregateFromDatabase.Id);
+			Assert.AreEqual(org.Description.Name, loadedAggregateFromDatabase.Description.Name);
+			Assert.IsNotNull(loadedAggregateFromDatabase.Site);
+			Assert.IsNotNull(loadedAggregateFromDatabase.Scorecard);
+			Assert.AreEqual(org.Scorecard, loadedAggregateFromDatabase.Scorecard);
+		}
 
-        /// <summary>
-        /// Determines whether this instance can be created.
-        /// </summary>
-        [Test]
-        public void CanCreate()
-        {
-            ITeam team = CreateAggregateWithCorrectBusinessUnit();
-            PersistAndRemoveFromUnitOfWork(team);
-            ICollection<ITeam> teams = new TeamRepository(UnitOfWork).FindAllTeamByDescription();
-            Assert.AreEqual(1,teams.Count);
-            teams.First().Site.GetType()
-                .Should().Be.EqualTo(typeof(Site));
-        }
+		/// <summary>
+		/// Determines whether this instance can be created.
+		/// </summary>
+		[Test]
+		public void CanCreate()
+		{
+			ITeam team = CreateAggregateWithCorrectBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(team);
+			ICollection<ITeam> teams = new TeamRepository(UnitOfWork).FindAllTeamByDescription();
+			Assert.AreEqual(1, teams.Count);
+			teams.First().Site.GetType()
+				.Should().Be.EqualTo(typeof(Site));
+		}
 
-        [Test]
-        public void ShouldFindTeamByName()
-        {
-            ITeam team = CreateAggregateWithCorrectBusinessUnit();
-            PersistAndRemoveFromUnitOfWork(team);
+		[Test]
+		public void ShouldFindTeamByName()
+		{
+			ITeam team = CreateAggregateWithCorrectBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(team);
 
-            IList<ITeam> teams = new TeamRepository(UnitOfWork).FindTeamByDescriptionName(teamName).ToList();
-            Assert.AreEqual(teamName, teams[0].Description.Name);
-        }
+			IList<ITeam> teams = new TeamRepository(UnitOfWork).FindTeamByDescriptionName(teamName).ToList();
+			Assert.AreEqual(teamName, teams[0].Description.Name);
+		}
 
 		[Test]
 		public void ShouldFindTeamByIds()
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldFindTeamContain()
 		{
 			var name = RandomName.Make();
-			var team = new Team {Description = new Description(RandomName.Make() + name + RandomName.Make()), Site=teamSite};
+			var team = new Team { Description = new Description(RandomName.Make() + name + RandomName.Make()), Site = teamSite };
 			PersistAndRemoveFromUnitOfWork(team);
 
 			var loaded = new TeamRepository(UnitOfWork).FindTeamsContain(name, 20);
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			const int maxHits = 2;
 			var name = RandomName.Make();
-			PersistAndRemoveFromUnitOfWork(new Team {Description = new Description(name), Site = teamSite});
+			PersistAndRemoveFromUnitOfWork(new Team { Description = new Description(name), Site = teamSite });
 			PersistAndRemoveFromUnitOfWork(new Team { Description = new Description(name), Site = teamSite });
 			PersistAndRemoveFromUnitOfWork(new Team { Description = new Description(name), Site = teamSite });
 
@@ -152,44 +152,27 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			(statementsAfter - statementsBefore).Should().Be.EqualTo(0);
 		}
 
-	    [Test]
-	    public void ShouldOrderByName()
-	    {
-		    var site = new Site("Paris");
+		[Test]
+		public void ShouldLoadBySite()
+		{
+			var site = new Site("Paris");
 			var anotherSite = new Site("Rome");
 			PersistAndRemoveFromUnitOfWork(site);
 			PersistAndRemoveFromUnitOfWork(anotherSite);
-		    PersistAndRemoveFromUnitOfWork(new Team
-		    {
-				Site = site,
-			    Description = new Description("A")
-		    });
 			PersistAndRemoveFromUnitOfWork(new Team
 			{
 				Site = site,
-				Description = new Description("C")
+				Description = new Description("A")
 			});
-			PersistAndRemoveFromUnitOfWork(new Team
-			{
-				Site = site,
-				Description = new Description("B")
-			});
-			PersistAndRemoveFromUnitOfWork(new Team
-			{
-				Site = anotherSite,
-				Description = new Description("Y")
-			});
+			var teams = new TeamRepository(UnitOfWork).FindTeamsForSite(site.Id.Value);
 
-		    var teams = new TeamRepository(UnitOfWork).FindTeamsForSiteOrderByName(site.Id.Value);
-
-		    teams.Select(x => x.Description.Name).Should()
-			    .Have.SameSequenceAs("A", "B", "C");
-	    }
+			teams.Select(x => x.Description.Name).Single().Should().Be("A");
+		}
 
 
 		protected override Repository<ITeam> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
-        {
-            return new TeamRepository(currentUnitOfWork);
-        }
-    }
+		{
+			return new TeamRepository(currentUnitOfWork);
+		}
+	}
 }

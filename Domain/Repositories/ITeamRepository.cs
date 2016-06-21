@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		ICollection<ITeam> FindTeamByDescriptionName(string name);
 		ICollection<ITeam> FindTeams (IEnumerable<Guid> teamId);
 		IEnumerable<ITeam> FindTeamsContain(string searchString, int maxHits);
-		IEnumerable<ITeam> FindTeamsForSiteOrderByName(Guid siteId);
+		IEnumerable<ITeam> FindTeamsForSite(Guid siteId);
 	}
 
 }

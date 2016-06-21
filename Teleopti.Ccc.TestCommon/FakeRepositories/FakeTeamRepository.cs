@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _teams.Where(x => x.Description.Name.Contains(searchString)).Take(maxHits);
 		}
 
-		public IEnumerable<ITeam> FindTeamsForSiteOrderByName(Guid siteId)
+		public IEnumerable<ITeam> FindTeamsForSite(Guid siteId)
 		{
 			return _teams.Where(t => t.Site.Id.Equals(siteId))
 				.OrderBy(t => t.Description.Name)

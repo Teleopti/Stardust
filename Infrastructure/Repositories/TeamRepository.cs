@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.List<ITeam>();
 		}
 
-	    public IEnumerable<ITeam> FindTeamsForSiteOrderByName(Guid siteId)
+	    public IEnumerable<ITeam> FindTeamsForSite(Guid siteId)
 	    {
 			return Session.CreateCriteria<Team>()
 				.Add(Restrictions.Eq("Site.Id", siteId))
