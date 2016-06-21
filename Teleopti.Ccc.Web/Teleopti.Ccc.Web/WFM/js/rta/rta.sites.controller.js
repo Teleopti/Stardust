@@ -5,7 +5,7 @@
 			'$scope', '$filter', '$state', '$stateParams', '$interval', 'RtaService', 'RtaOrganizationService', 'RtaFormatService', 'NoticeService', 'Toggle', '$translate',
 			function($scope, $filter, $state, $stateParams, $interval, RtaService, RtaOrganizationService, RtaFormatService, NoticeService, toggleService, $translate) {
 
-				$scope.underToggle = toggleService.RTA_MonitorBySkills_39081;
+				$scope.monitorBySkill = toggleService.RTA_MonitorBySkills_39081;
 
 				$scope.getAdherencePercent = RtaFormatService.numberToPercent;
 				$scope.checkboxesChecked = 0;
@@ -63,8 +63,8 @@
 					});
 				};
 
-				$scope.goToAgents = function() {
-					$state.go('rta.agents-view');
+				$scope.goToSkillSelection = function () {
+					$state.go('rta.select-skill');
 				}
 				$scope.$on('$destroy', function() {
 					$interval.cancel(polling);

@@ -4,11 +4,11 @@
 			<div style="float:left">
 				<h1><i class="mdi mdi-alarm"></i> {{'RTA'|translate}}</h1>
 			</div>
-			<div style="float:left; margin-left:20px" ng-show="underToggle">
+			<div style="float:left; margin-left:20px" ng-show="monitorBySkill">
 				<span>
-      <button class="wfm-btn wfm-btn-primary">Overview</button>
-      <button class="wfm-btn wfm-btn-default" ng-click="goToAgents()">Details</button>
-    </span>
+					<button class="wfm-btn wfm-btn-primary">Overview</button>
+					<button class="wfm-btn wfm-btn-default" ng-click="goToSkillSelection()">Details</button>
+				</span>
 			</div>
 		</div>
 	</div>
@@ -27,7 +27,7 @@
 					<div class="con-flex">
 						<div class="card-group">
 							<div class="wfm-card site rta-info-card" ng-if="site.NumberOfAgents > 0" ng-class="{good: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) <= 33, warning: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) >= 34 && getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) <= 66, danger: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) >= 67, 'rta-small-card': sites.length > 10}"
-											ng-repeat="site in sites" tabindex="0">
+								 ng-repeat="site in sites" tabindex="0">
 								<div class="wfm-checkbox rta-checkbox">
 									<label ng-attr-name="{{site.Name}}" style="width: 20px; height: 20px; display:block!important;">
 										<input ng-checked="selectedSites.indexOf(site.Id) > -1" ng-click="toggleSelection(site.Id)" ng-model="selected" type="checkbox" value="value">
@@ -38,7 +38,7 @@
 									<p class="site-name" ng-attr-data-max="{{site.NumberOfAgents}}" ng-attr-data-value="{{site.OutOfAdherence}}">{{site.Name}}</p>
 									<div class="site-data">
 										<p>{{'OutOfAdherence'|translate}}:&nbsp;
-											<p class="rta-adherence">{{site.OutOfAdherence}}</p>
+										<p class="rta-adherence">{{site.OutOfAdherence}}</p>
 										</p>
 									</div>
 								</div>

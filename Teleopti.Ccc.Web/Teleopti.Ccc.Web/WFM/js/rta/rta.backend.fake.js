@@ -15,6 +15,7 @@
 			var siteAdherences = [];
 			var teams = [];
 			var teamAdherences = [];
+			var skills = [];
 
 			var paramsOf = function(url) {
 				var result = {};
@@ -40,6 +41,11 @@
 						return response(params2, method, url, data, headers, params);
 					});
 			};
+
+			fake(/\.\.\/api\/BusinessUnit\/Skills(.*)/,
+				function () {
+					return [200, skills];
+				});
 
 			fake(/\.\.\/api\/Adherence\/ForToday(.*)/,
 				function(params) {
@@ -228,6 +234,16 @@
 				teamAdherences = [];
 				return this;
 			};
+
+			this.withSkill = function (skill) {
+				skills.push(skill);
+				return this;
+			}
+
+			this.withSkills = function (newSkills) {
+				skills = skills.concat(newSkills);
+				return this;
+			}
 
 		});
 })();

@@ -15,7 +15,18 @@
 				}).$promise;
 			};
 
-			this.getAgentsForTeams = function(data) {
+			this.getSkills = function(data) {
+				return $resource('../api/BusinessUnit/Skills', {}, {
+					query: {
+						method: 'GET',
+						isArray: true
+					}
+				}).query({
+					teamIds: data,
+				}).$promise;
+			};
+
+			this.getAgentsForSkills = function (data) {
 				return $resource('../api/Agents/ForTeams', {}, {
 					query: {
 						method: 'GET',

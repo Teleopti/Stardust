@@ -10,6 +10,7 @@
 				var selectedPersonId;
 				var siteIds = $stateParams.siteIds || ($stateParams.siteId ? [$stateParams.siteId] : []);
 				var teamIds = $stateParams.teamIds || ($stateParams.teamId ? [$stateParams.teamId] : []);
+				console.log($stateParams)
 				var propertiesForFiltering = ["Name", "TeamName", "State", "Activity", "Alarm"];
 				$scope.adherence = {};
 				$scope.adherencePercent = null;
