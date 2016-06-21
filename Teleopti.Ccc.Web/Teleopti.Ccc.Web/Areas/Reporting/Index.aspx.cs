@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.Threading;
+using System.Web;
 using System.Web.UI;
 using Teleopti.Analytics.Parameters;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -16,6 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 		protected override void OnInit(EventArgs e)
 		{
 			base.OnInit(e);
+			
 			if (!string.IsNullOrEmpty(Request.QueryString.Get("REPORTID")))
 			{
 				if (!Guid.TryParse(Request.QueryString["REPORTID"], out ReportId))
@@ -130,7 +132,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			if (!ParameterSelector.IsValid) return;
 
 			var reportGenerator = new ReportGenerator(new ServerPathProvider());
-
+			
 			var generatedReport = reportGenerator.GenerateReport(ReportId, ParameterSelector.ConnectionString,
 				ParameterSelector.Parameters, ParameterSelector.ParameterTexts, ParameterSelector.UserCode,
 				ParameterSelector.BusinessUnitCode, format);
@@ -143,6 +145,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 
 			Response.AddHeader("content-disposition",
 				inlineOrAtt + " filename=" + uniqueFileName + "." + generatedReport.Extension);
+			Response.AppendCookie(new HttpCookie("fileIsDownloadedToken", "itsDownloaded") { HttpOnly = false, Shareable = true});
 			Response.BinaryWrite(generatedReport.Bytes); // create the file
 			if (Response.IsClientConnected)
 			{

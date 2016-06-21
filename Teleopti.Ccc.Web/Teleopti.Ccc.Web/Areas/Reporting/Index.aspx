@@ -18,13 +18,55 @@
 		//to refresh if frame in frame
 		if (window.top != window.parent.self)
 			window.parent.parent.location = window.parent.location;
+
+		var cookieName = "fileIsDownloadedToken";
+		var fileDownloadCheckTimer;
+		function checkForDownload() {
+			fileDownloadCheckTimer = setInterval(function () {
+				var cookieValue = getCookie(cookieName);
+				if (cookieValue) {
+					document.body.style.cursor = 'auto';
+					clearInterval(fileDownloadCheckTimer);
+					document.cookie = cookieName + '=; path=/';
+				}
+					
+			}, 2000);
+		}
+
+		function getCookie(cname) {
+			var name = cname + "=";
+			var theValue = "";
+			//console.log('cookies=' + document.cookie);
+			var ca = document.cookie.split(';');
+			for (var i = 0; i < ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0) == ' ') {
+					c = c.substring(1);
+				}
+				if (c.indexOf(name) == 0) {
+					theValue = c.substring(name.length, c.length);
+				}
+				if(theValue !== "")
+					return theValue;
+			}
+			return theValue;
+		}
+		function submitIt(button) {
+			var oldThingy = getCookie(cookieName);
+			if(oldThingy !== "")
+				document.cookie = cookieName + '=; path=/';
+			document.body.style.cursor = 'wait';
+			checkForDownload();
+			__doPostBack(button, '');
+		}
+			
 	</script>
 	<link href="Content/Styles/persianDatepicker-default.css" rel="stylesheet" />
 	<link href="Content/Styles/Styles.css" rel="stylesheet" />
 	<link href="Content/Styles/calendar.css" rel="stylesheet" />
 </head>
 
-<body >
+<body  style="height: 100%;" >
 	<form id="aspnetForm" runat="server">
 		<asp:ScriptManager ID="ScriptManager1" EnablePartialRendering="true" runat="server" EnableScriptGlobalization="true" EnableScriptLocalization="true" />
 		<div class="Panel">
@@ -36,17 +78,17 @@
 				</div>
 				<div style="float: right; width: 69%">
 				    <div style="float: right; width: 20%">
-						<asp:ImageButton Style="float: left" formtarget="_self" OnClick="ButtonShowClickWord" ID="buttonShowWord"  ImageUrl="images/icon.doc.png" ToolTip='' runat="server" />
+						<asp:ImageButton Style="float: left" formtarget="_self" OnClientClick="submitIt('buttonShowWord')" UseSubmitBehavior="false"   OnClick="ButtonShowClickWord" ID="buttonShowWord"  ImageUrl="images/icon.doc.png" ToolTip='' runat="server" />
 					</div>
 					
 					<div style="float: right; width: 20%">
-						<asp:ImageButton Style="float: left" formtarget="_self" OnClick="ButtonShowClickExcel" ID="buttonShowExcel" Width="48" Height="48" ImageUrl="images/excel.png" ToolTip='' runat="server" />
+						<asp:ImageButton Style="float: left" formtarget="_self" OnClientClick="submitIt('buttonShowExcel')" UseSubmitBehavior="false"  OnClick="ButtonShowClickExcel" ID="buttonShowExcel" Width="48" Height="48" ImageUrl="images/excel.png" ToolTip='' runat="server" />
 					</div>
 					<div style="float:right; width: 20%;">
-						<asp:ImageButton Style="float: left;" formtarget="_blank" OnClick="ButtonShowClickPdf" ID="buttonShowPdf" Width="48" Height="48" ImageUrl="images/filetype_pdf.png" ToolTip='' runat="server" />
+						<asp:ImageButton Style="float: left;" formtarget="_blank" OnClientClick="submitIt('buttonShowPdf')" UseSubmitBehavior="false" OnClick="ButtonShowClickPdf" ID="buttonShowPdf" Width="48" Height="48" ImageUrl="images/filetype_pdf.png" ToolTip='' runat="server" />
 					</div>
                     <div style="float:left; width: 25%">
-						<asp:ImageButton Style="float:right; " formtarget="_self" OnClick="ButtonShowClickImage" ID="buttonShowImage" Width="48" Height="48" ImageUrl="images/icon-show.png" ToolTip='' runat="server" />
+						<asp:ImageButton Style="float:right; " formtarget="_self" OnClientClick="submitIt('buttonShowImage')" UseSubmitBehavior="false" OnClick="ButtonShowClickImage" ID="buttonShowImage" Width="48" Height="48" ImageUrl="images/icon-show.png" ToolTip='' runat="server" />
 					</div>
 				</div>
 				
@@ -54,5 +96,7 @@
 	</div>
 	</form>
 	<asp:Label runat="server" ForeColor="red" ID="labelError"></asp:Label>
+	<div style="width: 100%; height: 100%">&nbsp</div>
 </body>
+	
 </html>
