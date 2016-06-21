@@ -96,7 +96,4 @@
 			$scope.showFixDetail = !$scope.showFixDetail;
 		}
 	}
-
-
-
 })();

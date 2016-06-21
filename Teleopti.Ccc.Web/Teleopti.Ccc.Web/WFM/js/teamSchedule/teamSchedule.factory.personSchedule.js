@@ -44,7 +44,6 @@
 
 			var personSchedule = {
 				PersonId: schedule.PersonId,
-
 				Name: schedule.Name,
 				Date: moment.tz(schedule.Date, currentUserInfo.CurrentUserInfo().DefaultTimeZone),
 				Shifts: projectionVms == undefined ? [] : [
@@ -106,7 +105,7 @@
 		};
 
 		function createProjections(projections, timeLine) {
-			if (projections == undefined || projections == null || projections.length === 0) {
+			if (projections == undefined || projections.length === 0) {
 				return undefined;
 			}
 
@@ -122,24 +121,28 @@
 		}
 
 		function createDayOffViewModel(dayOff, timeLine) {
-			if (dayOff == undefined || dayOff == null) {
+			if (dayOff == undefined) {
 				return undefined;
 			}
 
+			var timelineStartMinute = timeLine.StartMinute;
+			var timelineEndMinute = timeLine.EndMinute;
+			var lengthPercentPerMinute = timeLine.LengthPercentPerMinute;
+			
 			var startTime = moment(dayOff.Start);
 			var startTimeMinutes = startTime.diff(timeLine.Offset, 'minutes');
 
-			if (startTimeMinutes > timeLine.EndMinute) {
+			if (startTimeMinutes > timelineEndMinute) {
 				return undefined;
 			}
 
-			var displayStart = startTimeMinutes < timeLine.StartMinute ? timeLine.StartMinute : startTimeMinutes;
-			var start = displayStart - timeLine.StartMinute;
-			var startPosition = start * timeLine.LengthPercentPerMinute;
+			var displayStart = startTimeMinutes < timelineStartMinute ? timelineStartMinute : startTimeMinutes;
+			var start = displayStart - timelineStartMinute;
+			var startPosition = start * lengthPercentPerMinute;
 
 			var displayEnd = startTimeMinutes + dayOff.Minutes;
-			displayEnd = displayEnd <= timeLine.EndMinute ? displayEnd : timeLine.EndMinute;
-			var length = (displayEnd - displayStart) * timeLine.LengthPercentPerMinute;
+			displayEnd = displayEnd <= timelineEndMinute ? displayEnd : timelineEndMinute;
+			var length = (displayEnd - displayStart) * lengthPercentPerMinute;
 
 			var dayOffVm = {
 				DayOffName: dayOff.DayOffName,
@@ -155,16 +158,20 @@
 
 			var startTime = moment(projection.Start);
 			var startTimeMinutes = startTime.diff(timeLine.Offset, 'minutes');
+			var timelineStartMinute = timeLine.StartMinute;
+			var timelineEndMinute = timeLine.EndMinute;
 
-			if ((startTimeMinutes > timeLine.EndMinute) || ((startTimeMinutes + projection.Minutes) <= timeLine.StartMinute)) {
+			var projectionMinutes = projection.Minutes;
+
+			if ((startTimeMinutes > timelineEndMinute) || ((startTimeMinutes + projectionMinutes) <= timelineStartMinute)) {
 				return undefined;
 			}
 
 			var displayStartTimeMinutes = startTimeMinutes >= 0 ? startTimeMinutes : 0;
-			var start = displayStartTimeMinutes - timeLine.StartMinute;
+			var start = displayStartTimeMinutes - timelineStartMinute;
 			var startPosition = start * timeLine.LengthPercentPerMinute;
 
-			var lengthMinutes = startTimeMinutes < 0 ? projection.Minutes - (startTimeMinutes * -1) : projection.Minutes;
+			var lengthMinutes = startTimeMinutes < 0 ? projectionMinutes - (startTimeMinutes * -1) : projectionMinutes;
 			var length = lengthMinutes * timeLine.LengthPercentPerMinute;
 
 			var borderColorPicker = function (color) {
@@ -195,7 +202,7 @@
 				ToggleSelection: function () {
 					this.Selected = !this.Selected;
 				},
-				Minutes: projection.Minutes,
+				Minutes: projectionMinutes,
 				UseLighterBorder: borderColorPicker(projection.Color)
 			};
 

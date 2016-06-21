@@ -28,8 +28,8 @@
 			}
 		};
 	};
+
 	angular.module('wfm.teamSchedule')
 		.directive('timeLine', directive)
 		.controller('TimeLineCtrl', ['$scope', timeLineCtrl]);
-	
 }());

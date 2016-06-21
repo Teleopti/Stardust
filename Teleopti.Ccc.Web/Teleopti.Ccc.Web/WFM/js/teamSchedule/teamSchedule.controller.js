@@ -249,7 +249,11 @@
 			}
 			vm.permissionsAndTogglesLoaded = true;
 
-			vm.scheduleTableSelectMode = vm.toggles.AbsenceReportingEnabled || vm.toggles.AddActivityEnabled || vm.toggles.RemoveActivityEnabled || vm.toggles.RemoveAbsenceEnabled || vm.toggles.SwapShiftEnabled;
+			vm.scheduleTableSelectMode = vm.toggles.AbsenceReportingEnabled
+										|| vm.toggles.AddActivityEnabled
+										|| vm.toggles.RemoveActivityEnabled
+										|| vm.toggles.RemoveAbsenceEnabled
+										|| vm.toggles.SwapShiftEnabled;
 
 			if (vm.toggles.PrepareToRelease) {
 				var template = $translate.instant('WFMReleaseNotification');

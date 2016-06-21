@@ -12,19 +12,19 @@
 
 		vm.selectedPersonProjections = PersonSelection.getSelectedPersonInfoList();
 		vm.removeAbsence = function () {
-			var personIds = vm.selectedPersonProjections.map(function (x) { return x.personId; });
+			var personIds = vm.selectedPersonProjections.map(function (x) { return x.PersonId; });
 			var selectedPersonAbsences = vm.selectedPersonProjections.filter(function (x) {
-				return x.personAbsenceCount > 0;
+				return x.PersonAbsenceCount > 0;
 			});
 			var requestData = {
 				ScheduleDate: moment(vm.selectedDate()).format("YYYY-MM-DD"),
 				SelectedPersonAbsences: selectedPersonAbsences.map(function (x) {
-					return { PersonId: x.personId, Name: x.name, PersonAbsenceIds: x.selectedAbsences };
+					return { PersonId: x.PersonId, Name: x.Name, PersonAbsenceIds: x.SelectedAbsences };
 				}),
 				RemoveEntireCrossDayAbsence: false,
 				TrackedCommandInfo: { TrackId: vm.trackId }
 			};
-			
+
 			PersonAbsenceSvc.removeAbsence(requestData).then(function (response) {
 				if (vm.getActionCb(vm.label)) {
 					vm.getActionCb(vm.label)(vm.trackId, personIds);
@@ -35,13 +35,12 @@
 					"warning": 'PartialSuccessMessageForRemovingAbsence'
 				}, selectedPersonAbsences.map(function (x) {
 					return {
-						PersonId: x.personId,
-						Name: x.name
+						PersonId: x.PersonId,
+						Name: x.Name
 					}
 				}), response.data);
 			});
-		}
-
+		};
 
 		// ToDo[Yanyi] refactor write protection into commandContainer.
 		vm.popDialog = function () {
@@ -69,16 +68,15 @@
 					}
 				}
 			});
-		}
+		};
 
 		vm.init = function () {
 			if (ScenarioTestUtil.isScenarioTest())
 				vm.removeAbsence();
 			else
 				vm.popDialog();
-		}
+		};
 	}
-
 
 	function removeAbsenceDirective() {
 		return {
@@ -101,11 +99,6 @@
 			scope.vm.resetActiveCmd = containerCtrl.resetActiveCmd;
 
 			selfCtrl.init();
-
-
 		}
-
 	}
-
-
 })();

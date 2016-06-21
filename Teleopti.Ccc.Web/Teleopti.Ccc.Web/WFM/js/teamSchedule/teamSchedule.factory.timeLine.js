@@ -52,7 +52,7 @@
 				return undefined;
 			}
 
-			var sortedProjections = availibleProjections.sort(compareProjectionByStartTime)
+			var sortedProjections = availibleProjections.sort(compareProjectionByStartTime);
 
 			var minStartOrMaxEndProjection = sortedProjections[0];
 			return moment(minStartOrMaxEndProjection.Start).diff(baseDate, 'minutes');
@@ -60,7 +60,9 @@
 
 		function hasAvailibleProjections(personSchedule, baseDate) {
 			var scheduleDate = moment(personSchedule.Date);
-			var hasProjections = personSchedule.Projection != undefined && personSchedule.Projection.length > 0;
+			var projection = personSchedule.Projection;
+
+			var hasProjections = projection != undefined && projection.length > 0;
 			var isScheduleBelongsToTheDateBefore = scheduleDate.diff(baseDate, "days") <= 0;
 			return hasProjections && isScheduleBelongsToTheDateBefore;
 		};

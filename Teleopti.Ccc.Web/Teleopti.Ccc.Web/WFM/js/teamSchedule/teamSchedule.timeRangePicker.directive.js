@@ -121,7 +121,7 @@
 			}
 
 			function makeViewValue(startTime, endTime, nextDay) {
-				var viewValue = null;
+				var viewValue;
 
 				if (angular.isDefined(scope.referenceDay)) {
 					viewValue = {

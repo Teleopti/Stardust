@@ -13,13 +13,13 @@
 		vm.selectedPersonInfo = PersonSelection.getCheckedPersonInfoList();
 		vm.swapShifts = function () {
 
-			var personIds = vm.selectedPersonInfo.map(function(x) { return x.personId; });
+			var personIds = vm.selectedPersonInfo.map(function (x) { return x.PersonId; });
 
 			var requestData = {
 				PersonIdFrom: personIds[0],
 				PersonIdTo: personIds[1],
 				ScheduleDate: vm.selectedDate(),
-				TrackedCommandInfo: { TrackId: vm.trackId }				
+				TrackedCommandInfo: { TrackId: vm.trackId }
 			}
 
 			SwapShiftsSvc.swapShifts(requestData).then(function (response) {
@@ -32,16 +32,16 @@
 					"warning": 'FailedToSwapShifts'
 				}, vm.selectedPersonInfo.map(function (x) {
 					return {
-						PersonId: x.personId,
-						Name: x.name
+						PersonId: x.PersonId,
+						Name: x.Name
 					}
 				}), response.data);
 			});
-		}
+		};
 
 		vm.init = function () {
 			vm.swapShifts();
-		}
+		};
 	}
 
 
@@ -67,8 +67,5 @@
 
 			selfCtrl.init();
 		}
-
 	}
-
-
 })();

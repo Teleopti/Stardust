@@ -3,7 +3,7 @@
 (function () {
 	angular.module('wfm.teamSchedule')
 		.directive('scheduleTable', scheduleTableDirective)
-		.controller('scheduleTableCtrl', ['Toggle', 'PersonSelection', '$scope','ScheduleManagement', scheduleTableController]);
+		.controller('scheduleTableCtrl', ['Toggle', 'PersonSelection', '$scope', 'ScheduleManagement', scheduleTableController]);
 
 	function scheduleTableDirective() {
 		return {
@@ -39,13 +39,13 @@
 				vm.init();
 		});
 
-		$scope.$watch(function(){
+		$scope.$watch(function () {
 			return isAllInCurrentPageSelected();
-		}, function(newVal){
+		}, function (newVal) {
 			vm.toggleAllInCurrentPage = newVal;
 		});
 
-		vm.totalSelectedProjections = function() {
+		vm.totalSelectedProjections = function () {
 			return personSelectionSvc.getTotalSelectedPersonAndProjectionCount().CheckedPersonCount +
 				personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.ActivityCount +
 				personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedAbsenceInfo.AbsenceCount;
@@ -56,7 +56,7 @@
 			personSelectionSvc.toggleAllPersonProjections(personSchedule, vm.selectedDate);
 		};
 
-		vm.canToggleSelection = function(currentProjection, shift, viewDate) {
+		vm.canToggleSelection = function (currentProjection, shift, viewDate) {
 			if (!toggleSvc.WfmTeamSchedule_RemoveAbsence_36705 && !toggleSvc.WfmTeamSchedule_RemoveActivity_37743)
 				return false;
 
@@ -67,7 +67,7 @@
 			}
 
 			return true;
-		}
+		};
 
 
 		vm.ToggleProjectionSelection = function (currentProjection, personSchedule, shift, viewDate) {
@@ -76,9 +76,7 @@
 			personSelectionSvc.updatePersonProjectionSelection(currentProjection, personSchedule);
 		};
 
-		vm.togglePerson = togglePerson;
-
-		function togglePerson(personSchedule, $event) {
+		vm.togglePerson = function (personSchedule, $event) {
 			if ($event.target instanceof HTMLTableCellElement) {
 				personSchedule.IsSelected = !personSchedule.IsSelected;
 				vm.updatePersonSelection(personSchedule);
@@ -107,4 +105,4 @@
 			vm.scheduleVm = ScheduleMgmt.groupScheduleVm;
 		}
 	};
-} ());
+}());

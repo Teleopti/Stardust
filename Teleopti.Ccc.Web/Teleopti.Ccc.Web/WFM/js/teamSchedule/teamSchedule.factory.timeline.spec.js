@@ -93,10 +93,7 @@ describe("teamschedule timeLine tests", function () {
 		expect(lastHourPoint.Position()).toEqual(100);
 	}));
 
-
-
 	function createSchedule(belongsToDate, dayOff, projectionInfoArray) {
-
 		var dateMoment = moment(belongsToDate);
 		var projections = [];
 
@@ -134,5 +131,4 @@ describe("teamschedule timeLine tests", function () {
 
 		return fakeSchedule;
 	}
-
 });

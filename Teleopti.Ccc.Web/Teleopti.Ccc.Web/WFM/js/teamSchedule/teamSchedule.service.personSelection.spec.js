@@ -70,26 +70,26 @@ describe("teamschedule person selection tests", function() {
 		expect(target.isAnyAgentSelected()).toEqual(false);
 
 		target.personInfo[personId1] = {
-			checked: true,
-			selectedAbsences:[],
-			selectedActivities:[],
-			personAbsenceCount:0,
-			personActivityCount:0,
-			allowSwap:true
+			Checked: true,
+			SelectedAbsences:[],
+			SelectedActivities:[],
+			PersonAbsenceCount:0,
+			PersonActivityCount:0,
+			AllowSwap:true
 			}
 		target.updatePersonInfo([schedule1, schedule2]);
 		var person1 = target.personInfo[personId1];
-		expect(person1.checked).toEqual(true);
-		expect(person1.allowSwap).toEqual(schedule1.AllowSwap());
-		expect(person1.personAbsenceCount).toEqual(0);
-		expect(person1.personActivityCount).toEqual(0);
+		expect(person1.Checked).toEqual(true);
+		expect(person1.AllowSwap).toEqual(schedule1.AllowSwap());
+		expect(person1.PersonAbsenceCount).toEqual(0);
+		expect(person1.PersonActivityCount).toEqual(0);
 
 		target.updatePersonInfo([newSchedule1]);
 
 		person1 = target.personInfo[personId1];
-		expect(person1.checked).toEqual(true);
-		expect(person1.allowSwap).toEqual(newSchedule1.AllowSwap());
-		expect(person1.personAbsenceCount).toEqual(0);
+		expect(person1.Checked).toEqual(true);
+		expect(person1.AllowSwap).toEqual(newSchedule1.AllowSwap());
+		expect(person1.PersonAbsenceCount).toEqual(0);
 	}));
 
 	it("Should clear person info", inject(function () {
@@ -103,7 +103,7 @@ describe("teamschedule person selection tests", function() {
 		target.updatePersonSelection(schedule1);
 
 		var person1 = target.personInfo[personId1];
-		expect(person1.checked).toEqual(true);
+		expect(person1.Checked).toEqual(true);
 		expect(target.getSelectedPersonInfoList().length).toEqual(1);
 		
 		schedule1.IsSelected = false;
@@ -117,8 +117,8 @@ describe("teamschedule person selection tests", function() {
 		schedule2.IsSelected = true;
 		target.selectAllPerson([schedule1, schedule2]);
 
-		expect(target.personInfo[personId1].checked).toEqual(true);
-		expect(target.personInfo[personId2].checked).toEqual(true);
+		expect(target.personInfo[personId1].Checked).toEqual(true);
+		expect(target.personInfo[personId2].Checked).toEqual(true);
 		expect(target.getSelectedPersonInfoList().length).toEqual(2);
 	}));
 
@@ -143,8 +143,8 @@ describe("teamschedule person selection tests", function() {
 		expect(selectedPerson.length).toEqual(1);
 
 		var person = selectedPerson[0];
-		expect(person.personId).toEqual(personId1);
-		expect(person.allowSwap).toEqual(newSchedule1.AllowSwap());
-		expect(person.personAbsenceCount).toEqual(0);
+		expect(person.PersonId).toEqual(personId1);
+		expect(person.AllowSwap).toEqual(newSchedule1.AllowSwap());
+		expect(person.PersonAbsenceCount).toEqual(0);
 	}));
 });

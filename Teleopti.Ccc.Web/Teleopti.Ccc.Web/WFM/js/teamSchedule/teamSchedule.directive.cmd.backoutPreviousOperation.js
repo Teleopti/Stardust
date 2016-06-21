@@ -11,7 +11,7 @@
 
 		vm.selectedPersonInfo = PersonSelection.getCheckedPersonInfoList();
 
-		var personIds = vm.selectedPersonInfo.map(function (x) { return x.personId; });
+		var personIds = vm.selectedPersonInfo.map(function (x) { return x.PersonId; });
 
 		vm.backoutSchedule = function () {
 
@@ -32,8 +32,8 @@
 					'error': 'FailedMessageForBackoutSchedule'
 				}, vm.selectedPersonInfo.map(function (agent) {
 					return {
-						PersonId: agent.personId,
-						Name: agent.name
+						PersonId: agent.PersonId,
+						Name: agent.Name
 					}
 				}), reponse.data);
 			});

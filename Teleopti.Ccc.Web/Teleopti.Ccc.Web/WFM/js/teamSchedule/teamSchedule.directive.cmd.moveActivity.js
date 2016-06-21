@@ -15,9 +15,9 @@
 
 		vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
 
-		vm.getDefaultMoveToStartTime = function () {
+		vm.getDefaultMoveToStartTime = function() {
 			var curDateMoment = moment(vm.selectedDate());
-			var personIds = vm.selectedAgents.map(function (agent) { return agent.personId; });
+			var personIds = vm.selectedAgents.map(function(agent) { return agent.PersonId; });
 			var selectedDateProjectionLatestStart = scheduleManagementSvc.getLatestStartTimeOfSelectedScheduleProjection(curDateMoment, personIds);
 			var previousDateProjectionLatestEnd = scheduleManagementSvc.getLatestPreviousDayOvernightShiftEnd(curDateMoment, personIds);
 			var time = new Date();
@@ -26,11 +26,11 @@
 			time = previousDateProjectionLatestEnd != null && previousDateProjectionLatestEnd > time ? previousDateProjectionLatestEnd : time;
 
 			return moment(time).add(1, 'hour').toDate();
-		}
+		};
 
-		vm.isInputValid = function () {
+		vm.isInputValid = function() {
 			return validator.validateMoveToTime(moment(vm.getMoveToStartTimeStr()));
-		}
+		};
 
 		vm.invalidPeople = function () {
 			var people = validator.getInvalidPeople().join(', ');
@@ -41,17 +41,17 @@
 			var dateStr = (vm.nextDay ? moment(vm.selectedDate()).add(1, 'days') : moment(vm.selectedDate())).format('YYYY-MM-DD');
 			var timeStr = moment(vm.moveToTime).format('HH:mm');
 			return dateStr + 'T' + timeStr;
-		}
+		};
 
 		vm.moveActivity = function () {
 			var isMultiAcitvitiesSelectForOneAgent = false;
 			var multiActivitiesSelectedAgentsList = [];
 			var personProjectionsWithSelectedActivities = vm.selectedAgents.filter(function (x) {
-				if (x.selectedActivities.length > 1) {
+				if (x.SelectedActivities.length > 1) {
 					isMultiAcitvitiesSelectForOneAgent = true;
-					multiActivitiesSelectedAgentsList.push(x.name);
+					multiActivitiesSelectedAgentsList.push(x.Name);
 				}
-				return (Array.isArray(x.selectedActivities) && x.selectedActivities.length == 1);
+				return (Array.isArray(x.SelectedActivities) && x.SelectedActivities.length === 1);
 			});
 
 			if (isMultiAcitvitiesSelectForOneAgent) {
@@ -61,12 +61,12 @@
 				return;
 			}
 
-			var personIds = vm.selectedAgents.map(function (agent) { return agent.personId; });
+			var personIds = vm.selectedAgents.map(function (agent) { return agent.PersonId; });
 
 			var requestData = {
 				Date: vm.selectedDate(),
 				PersonActivities: personProjectionsWithSelectedActivities.map(function (x) {
-					return { PersonId: x.personId, ShiftLayerIds: x.selectedActivities };
+					return { PersonId: x.PersonId, ShiftLayerIds: x.SelectedActivities };
 				}),
 				StartTime: vm.getMoveToStartTimeStr(),
 				TrackedCommandInfo: { TrackId: vm.trackId }
@@ -81,8 +81,8 @@
 					warning: 'PartialSuccessMessageForMovingActivity'
 				}, vm.selectedAgents.map(function (x) {
 					return {
-						PersonId: x.personId,
-						Name: x.name
+						PersonId: x.PersonId,
+						Name: x.Name
 					}
 				}), response.data);
 

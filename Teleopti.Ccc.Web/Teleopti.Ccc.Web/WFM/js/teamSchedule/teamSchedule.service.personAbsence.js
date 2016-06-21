@@ -29,9 +29,7 @@ angular.module("wfm.teamSchedule").service("PersonAbsence", [
 			return $http.post(removeAbsenceUrl, data);
 		}		
 
-		service.removePersonAbsence = removePersonAbsence;
-
-		function removePersonAbsence(scheduleDate, selectedPersonAbsences, removeEntireCrossDayAbsence, trackId) {
+		service.removePersonAbsence = function (scheduleDate, selectedPersonAbsences, removeEntireCrossDayAbsence, trackId) {
 			var cmd = {
 				ScheduleDate: scheduleDate.format("YYYY-MM-DD"),
 				SelectedPersonAbsences: selectedPersonAbsences,

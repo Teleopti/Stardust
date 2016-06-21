@@ -30,7 +30,6 @@ angular.module('wfm.teamSchedule').factory('GroupScheduleFactory', ['CurrentUser
 					existedPersonSchedule.Merge(schedule, timeLine);
 				}
 			});
-
 			return schedules;
 		}
 

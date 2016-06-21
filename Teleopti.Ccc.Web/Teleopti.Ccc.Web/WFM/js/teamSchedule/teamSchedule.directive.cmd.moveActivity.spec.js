@@ -81,11 +81,11 @@ describe("teamschedule move activity directive tests", function () {
 
 		vm.moveToTime = new Date('2016-06-14');
 		vm.selectedAgents = [{
-			personId: 'agent1',
-			name: 'agent1',
-			scheduleStartTime: '2016-06-15T08:00:00Z',
-			scheduleEndTime: '2016-06-15T17:00:00Z',
-			selectedActivities: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
+			PersonId: 'agent1',
+			Name: 'agent1',
+			ScheduleStartTime: '2016-06-15T08:00:00Z',
+			ScheduleEndTime: '2016-06-15T17:00:00Z',
+			SelectedActivities: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
 		}];
 
 		expect(vm.isInputValid()).toBe(false);
@@ -101,17 +101,17 @@ describe("teamschedule move activity directive tests", function () {
 
 		vm.selectedAgents = [
 			{
-				personId: 'agent1',
-				name: 'agent1',
-				scheduleStartTime: '2016-06-15T08:00:00Z',
-				scheduleEndTime: '2016-06-15T17:00:00Z',
-				selectedActivities: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
+				PersonId: 'agent1',
+				Name: 'agent1',
+				ScheduleStartTime: '2016-06-15T08:00:00Z',
+				ScheduleEndTime: '2016-06-15T17:00:00Z',
+				SelectedActivities: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
 			}, {
-				personId: 'agent2',
-				name: 'agent2',
-				scheduleStartTime: '2016-06-15T19:00:00Z',
-				scheduleEndTime: '2016-06-16T08:00:00Z',
-				selectedActivities: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
+				PersonId: 'agent2',
+				Name: 'agent2',
+				ScheduleStartTime: '2016-06-15T19:00:00Z',
+				ScheduleEndTime: '2016-06-16T08:00:00Z',
+				SelectedActivities: '472e02c8-1a84-4064-9a3b-9b5e015ab3c6'
 			}];
 
 		var applyButton = angular.element(result.container[0].querySelector(".move-activity .form-submit"));
@@ -136,17 +136,17 @@ describe("teamschedule move activity directive tests", function () {
 
 		vm.selectedAgents = [
 			{
-				personId: 'agent1',
-				name: 'agent1',
-				scheduleStartTime: '2016-06-15T08:00:00Z',
-				scheduleEndTime: '2016-06-15T17:00:00Z',
-				selectedActivities: selectedActivities
+				SersonId: 'agent1',
+				Name: 'agent1',
+				ScheduleStartTime: '2016-06-15T08:00:00Z',
+				ScheduleEndTime: '2016-06-15T17:00:00Z',
+				SelectedActivities: selectedActivities
 			}, {
-				personId: 'agent2',
-				name: 'agent2',
-				scheduleStartTime: '2016-06-15T09:00:00Z',
-				scheduleEndTime: '2016-06-15T18:00:00Z',
-				selectedActivities: selectedActivities
+				PersonId: 'agent2',
+				Name: 'agent2',
+				CheduleStartTime: '2016-06-15T09:00:00Z',
+				ScheduleEndTime: '2016-06-15T18:00:00Z',
+				SelectedActivities: selectedActivities
 			}];
 
 		var applyButton = angular.element(result.container[0].querySelector(".move-activity .form-submit"));
@@ -182,17 +182,17 @@ describe("teamschedule move activity directive tests", function () {
 
 		vm.selectedAgents = [
 			{
-				personId: 'agent1',
-				name: 'agent1',
-				scheduleStartTime: '2016-06-15T08:00:00Z',
-				scheduleEndTime: '2016-06-15T17:00:00Z',
-				selectedActivities: selectedActivities
+				PersonId: 'agent1',
+				Name: 'agent1',
+				ScheduleStartTime: '2016-06-15T08:00:00Z',
+				ScheduleEndTime: '2016-06-15T17:00:00Z',
+				SelectedActivities: selectedActivities
 			}, {
-				personId: 'agent2',
-				name: 'agent2',
-				scheduleStartTime: '2016-06-15T09:00:00Z',
-				scheduleEndTime: '2016-06-15T18:00:00Z',
-				selectedActivities: selectedActivities
+				PersonId: 'agent2',
+				Name: 'agent2',
+				ScheduleStartTime: '2016-06-15T09:00:00Z',
+				ScheduleEndTime: '2016-06-15T18:00:00Z',
+				SelectedActivities: selectedActivities
 			}];
 
 		result.scope.$apply();

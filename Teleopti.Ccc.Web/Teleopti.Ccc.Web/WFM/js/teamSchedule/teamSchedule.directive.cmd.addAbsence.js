@@ -31,7 +31,7 @@
 
 		vm.getDefaultAbsenceStartTime = function () {
 			var curDateMoment = moment(vm.selectedDate());
-			var personIds = vm.selectedAgents.map(function (agent) { return agent.personId; });
+			var personIds = vm.selectedAgents.map(function (agent) { return agent.PersonId; });
 			return scheduleManagementSvc.getEarliestStartOfSelectedSchedule(curDateMoment, personIds);
 		}
 
@@ -41,7 +41,7 @@
 
 		vm.addAbsence = function () {
 			var requestData = {
-				PersonIds: vm.selectedAgents.map(function (agent) { return agent.personId; }),
+				PersonIds: vm.selectedAgents.map(function (agent) { return agent.PersonId; }),
 				Date: vm.selectedDate(),
 				AbsenceId: vm.selectedAbsenceId,
 				TrackedCommandInfo: { TrackId: vm.trackId }
@@ -66,8 +66,8 @@
 					warning: 'AddAbsenceTotalResult'
 				}, vm.selectedAgents.map(function (x) {
 					return {
-						PersonId: x.personId,
-						Name: x.name
+						PersonId: x.PersonId,
+						Name: x.Name
 					}
 				}), response.data);
 			});

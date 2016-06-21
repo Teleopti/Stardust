@@ -25,16 +25,16 @@
 			if (vm.timeRange == undefined || vm.selectedActivityId == undefined || vm.timeRange.startTime == undefined) return false;
 
 			var invalidAgents = vm.selectedAgents.filter(function (agent) { return !vm.isNewActivityAllowedForAgent(agent, vm.timeRange); });
-			vm.notAllowedNameListString = invalidAgents.map(function (x) { return x.name; }).join(', ');
+			vm.notAllowedNameListString = invalidAgents.map(function (x) { return x.Name; }).join(', ');
 
 			return invalidAgents.length === 0;
 		};
 
-		vm.isNewActivityAllowedForAgent = function (agent, timeRange) {
+		vm.isNewActivityAllowedForAgent = function(agent, timeRange) {
 			var mNewActivityStart = moment(timeRange.startTime);
 			var mNewActivityEnd = moment(timeRange.endTime);
-			var mScheduleStart = moment(agent.scheduleStartTime);
-			var mScheduleEnd = moment(agent.scheduleEndTime);
+			var mScheduleStart = moment(agent.ScheduleStartTime);
+			var mScheduleEnd = moment(agent.ScheduleEndTime);
 			var allowShiftTotalMinutes = 36 * 60;
 			var totalMinutes = (mNewActivityEnd.days() - mScheduleStart.days()) * 24 * 60 + (mNewActivityEnd.hours() - mScheduleStart.hours()) * 60 + (mNewActivityEnd.minutes() - mScheduleStart.minutes());
 
@@ -45,11 +45,11 @@
 			} else {
 				return withinAllowShiftPeriod && (mScheduleEnd.isAfter(mNewActivityStart));
 			}
-		}
+		};
 
 		vm.addActivity = function () {
 			var requestData = {
-				PersonIds: vm.selectedAgents.map(function (agent) { return agent.personId; }),
+				PersonIds: vm.selectedAgents.map(function (agent) { return agent.PersonId; }),
 				Date: vm.selectedDate(),
 				StartTime: moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm"),
 				EndTime: moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm"),
@@ -66,18 +66,16 @@
 					warning: 'PartialSuccessMessageForAddingActivity'
 				}, vm.selectedAgents.map(function (x) {
 					return {
-						PersonId: x.personId,
-						Name: x.name
+						PersonId: x.PersonId,
+						Name: x.Name
 					}
 				}), response.data);
 			});
 		};
 
-		vm.getDefaultActvityStartTime = getDefaultActvityStartTime;
-
-		function getDefaultActvityStartTime() {
+		vm.getDefaultActvityStartTime =  function () {
 			var curDateMoment = moment(vm.selectedDate());
-			var personIds = vm.selectedAgents.map(function (agent) { return agent.personId; });
+			var personIds = vm.selectedAgents.map(function (agent) { return agent.PersonId; });
 			var overnightEnds = scheduleManagementSvc.getLatestPreviousDayOvernightShiftEnd(curDateMoment, personIds);
 			var latestShiftStart = scheduleManagementSvc.getLatestStartOfSelectedSchedule(curDateMoment, personIds);
 
@@ -103,10 +101,9 @@
 		}
 
 		vm.getDefaultActvityEndTime = function () {
-			return moment(getDefaultActvityStartTime()).add(1, 'hour').toDate();
+			return moment(vm.getDefaultActvityStartTime()).add(1, 'hour').toDate();
 		};
 	}
-
 
 	function addActivityDirective() {
 		return {
@@ -156,7 +153,4 @@
 			elem.removeAttr('tabindex');
 		}
 	}
-
-
-
 })();

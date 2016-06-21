@@ -1,4 +1,4 @@
-﻿(function() {
+﻿(function () {
 
 	'use strict';
 
@@ -12,28 +12,28 @@
 
 		vm.selectedPersonProjections = PersonSelection.getSelectedPersonInfoList();
 		vm.removeActivity = function () {
-			var personIds = vm.selectedPersonProjections.map(function(x) { return x.personId; });
+			var personIds = vm.selectedPersonProjections.map(function (x) { return x.PersonId; });
 			var personProjectionsWithSelectedActivities = vm.selectedPersonProjections.filter(function (x) {
-				return (Array.isArray(x.selectedActivities) && x.selectedActivities.length > 0);
+				return (Array.isArray(x.SelectedActivities) && x.SelectedActivities.length > 0);
 			});
 			var requestData = {
 				Date: vm.selectedDate(),
 				PersonActivities: personProjectionsWithSelectedActivities.map(function (x) {
-					return { PersonId: x.personId, Name: x.name, ShiftLayerIds: x.selectedActivities };
+					return { PersonId: x.PersonId, Name: x.Name, ShiftLayerIds: x.SelectedActivities };
 				}),
 				TrackedCommandInfo: { TrackId: vm.trackId }
 			};
 
-			ActivityService.removeActivity(requestData).then(function(response) {
+			ActivityService.removeActivity(requestData).then(function (response) {
 				if (vm.getActionCb(vm.label)) {
 					vm.getActionCb(vm.label)(vm.trackId, personIds);
 				}
 				var personActivities = [];
-				personProjectionsWithSelectedActivities.forEach(function(x) {
-					x.selectedActivities.forEach(function(a) {
+				personProjectionsWithSelectedActivities.forEach(function (x) {
+					x.SelectedActivities.forEach(function (a) {
 						personActivities.push({
-							PersonId: x.personId,
-							Name: x.name,
+							PersonId: x.PersonId,
+							Name: x.Name,
 							Activity: a
 						});
 					});
@@ -43,18 +43,16 @@
 					"warning": 'PartialSuccessMessageForRemovingActivity'
 				}, personActivities, response.data);
 			});
-		}
+		};
 
-
-		// ToDo[Yanyi] refactor write protection into commandContainer.
-		vm.popDialog = function() {
+		vm.popDialog = function () {
 			return $mdDialog.show({
 				controller: 'commandConfirmDialog',
 				templateUrl: 'js/teamSchedule/html/commandConfirmDialog.tpl.html',
 				parent: angular.element(document.body),
 				clickOutsideToClose: true,
 				bindToController: true,
-				onRemoving: function() {
+				onRemoving: function () {
 					vm.resetActiveCmd();
 				},
 				locals: {
@@ -63,22 +61,23 @@
 					getTargets: PersonSelection.getSelectedPersonIdList,
 					command: vm.removeActivity,
 					require: null,
-					getCommandMessage: function() {
+					getCommandMessage: function () {
 						return notification.buildConfirmationMessage(
 							'AreYouSureToRemoveSelectedActivity',
 							PersonSelection.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.PersonCount,
 							PersonSelection.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.ActivityCount,
-							true)}
+							true);
+					}
 				}
 			});
-		}
+		};
 
-		vm.init = function() {
+		vm.init = function () {
 			if (ScenarioTestUtil.isScenarioTest())
 				vm.removeActivity();
 			else
 				vm.popDialog();
-		}
+		};
 	}
 
 
@@ -103,11 +102,6 @@
 			scope.vm.resetActiveCmd = containerCtrl.resetActiveCmd;
 
 			selfCtrl.init();
-
-			
 		}
-
 	}
-
-
 })();

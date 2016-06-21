@@ -35,15 +35,15 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 					});
 				}
 				selectedPeople[personSchedule.PersonId] = {
-					name: personSchedule.Name,
-					checked: true,
-					allowSwap: personSchedule.AllowSwap(),
-					scheduleStartTime: personSchedule.ScheduleStartTime(),
-					scheduleEndTime: personSchedule.ScheduleEndTime(),
-					personAbsenceCount: absences.length,
-					personActivityCount: activities.length,
-					selectedAbsences: absences,
-					selectedActivities: activities
+					Name: personSchedule.Name,
+					Checked: true,
+					AllowSwap: personSchedule.AllowSwap(),
+					ScheduleStartTime: personSchedule.ScheduleStartTime(),
+					ScheduleEndTime: personSchedule.ScheduleEndTime(),
+					PersonAbsenceCount: absences.length,
+					PersonActivityCount: activities.length,
+					SelectedAbsences: absences,
+					SelectedActivities: activities
 				};
 			} else if (!personSchedule.IsSelected && selectedPeople[personSchedule.PersonId]) {
 				delete selectedPeople[personSchedule.PersonId];
@@ -52,28 +52,25 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 
 		svc.updatePersonInfo = function (schedules) {
 			angular.forEach(schedules, function (personSchedule) {
-				var allowSwap = personSchedule.AllowSwap();
-
 				var selectedPerson = svc.personInfo[personSchedule.PersonId];
-				if(selectedPerson && selectedPerson.checked){
+				if (selectedPerson && selectedPerson.Checked)
 					personSchedule.IsSelected = true;
-				}
-				else {
+				else
 					personSchedule.IsSelected = false;
-				}
 
 				if (selectedPerson) {
-					selectedPerson.scheduleEndTime = personSchedule.ScheduleEndTime();
-					selectedPerson.allowSwap = allowSwap;
+					selectedPerson.ScheduleEndTime = personSchedule.ScheduleEndTime();
+					selectedPerson.AllowSwap = personSchedule.AllowSwap();;
 					for (var i = 0; i < personSchedule.Shifts.length; i++) {
 						if (!personSchedule.Shifts[i].Date.isSame(personSchedule.Date, 'day')) {
 							continue;
 						}
 						angular.forEach(personSchedule.Shifts[i].Projections, function (projection) {
+							var selected;
 							if (projection.ParentPersonAbsences && projection.ParentPersonAbsences.length > 0) {
-								var selected = true;
+								selected = true;
 								for (var i = 0; i < projection.ParentPersonAbsences.length; i++) {
-									if (selectedPerson.selectedAbsences.indexOf(projection.ParentPersonAbsences[i]) === -1) {
+									if (selectedPerson.SelectedAbsences.indexOf(projection.ParentPersonAbsences[i]) === -1) {
 										selected = false;
 										break;
 									}
@@ -81,9 +78,9 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 								projection.Selected = selected;
 							}
 							else if (projection.ShiftLayerIds) {
-								var selected = true;
+								selected = true;
 								for (var i = 0; i < projection.ShiftLayerIds.length; i++) {
-									if (selectedPerson.selectedActivities.indexOf(projection.ShiftLayerIds[i]) === -1) {
+									if (selectedPerson.SelectedActivities.indexOf(projection.ShiftLayerIds[i]) === -1) {
 										selected = false;
 										break;
 									}
@@ -126,39 +123,40 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 			if (selected && !selectedPeople[personId]) {
 
 				selectedPeople[personId] = {
-					name: personSchedule.Name,
-					allowSwap: personSchedule.AllowSwap(),
-					scheduleStartTime: personSchedule.ScheduleStartTime(),
-					scheduleEndTime: personSchedule.ScheduleEndTime(),
-					personAbsenceCount: 0,
-					personActivityCount: 0,
-					selectedAbsences: [],
-					selectedActivities: []
+					Name: personSchedule.Name,
+					AllowSwap: personSchedule.AllowSwap(),
+					ScheduleStartTime: personSchedule.ScheduleStartTime(),
+					ScheduleEndTime: personSchedule.ScheduleEndTime(),
+					PersonAbsenceCount: 0,
+					PersonActivityCount: 0,
+					SelectedAbsences: [],
+					SelectedActivities: []
 				};
+
+
 				if(currentProjection.ParentPersonAbsences !== null){
-					selectedPeople[personId].selectedAbsences = selectedPeople[personId].selectedAbsences.concat(currentProjection.ParentPersonAbsences);
-					selectedPeople[personId].personAbsenceCount = currentProjection.ParentPersonAbsences.length;
+					selectedPeople[personId].SelectedAbsences = selectedPeople[personId].SelectedAbsences.concat(currentProjection.ParentPersonAbsences);
+					selectedPeople[personId].PersonAbsenceCount = currentProjection.ParentPersonAbsences.length;
 				}
 				if(currentProjection.ShiftLayerIds !== null){
-					selectedPeople[personId].selectedActivities = selectedPeople[personId].selectedActivities.concat(currentProjection.ShiftLayerIds);
-					selectedPeople[personId].personActivityCount = currentProjection.ShiftLayerIds.length;
+					selectedPeople[personId].SelectedActivities = selectedPeople[personId].SelectedActivities.concat(currentProjection.ShiftLayerIds);
+					selectedPeople[personId].PersonActivityCount = currentProjection.ShiftLayerIds.length;
 				}
-
 			}
 			else if (selected && selectedPeople[personId]) {
 				if (currentProjection.ParentPersonAbsences !== null) {
 					angular.forEach(currentProjection.ParentPersonAbsences, function(personAbs) {
-						if (selectedPeople[personId].selectedAbsences.indexOf(personAbs) === -1) {
-							selectedPeople[personId].selectedAbsences.push(personAbs);
-							selectedPeople[personId].personAbsenceCount++;
+						if (selectedPeople[personId].SelectedAbsences.indexOf(personAbs) === -1) {
+							selectedPeople[personId].SelectedAbsences.push(personAbs);
+							selectedPeople[personId].PersonAbsenceCount++;
 						}
 					});
 				}
 				if (currentProjection.ShiftLayerIds !== null) {
 					angular.forEach(currentProjection.ShiftLayerIds, function(shiftLayer) {
-						if (selectedPeople[personId].selectedActivities.indexOf(shiftLayer) === -1) {
-							selectedPeople[personId].selectedActivities.push(shiftLayer);
-							selectedPeople[personId].personActivityCount++;
+						if (selectedPeople[personId].SelectedActivities.indexOf(shiftLayer) === -1) {
+							selectedPeople[personId].SelectedActivities.push(shiftLayer);
+							selectedPeople[personId].PersonActivityCount++;
 						}
 					});
 				}
@@ -166,30 +164,32 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 			else if (!selected && selectedPeople[personId]) {
 				if (currentProjection.ParentPersonAbsences) {
 					angular.forEach(currentProjection.ParentPersonAbsences, function(personAbs) {
-						var absenceIndex = selectedPeople[personId].selectedAbsences.indexOf(personAbs);
+						var absenceIndex = selectedPeople[personId].SelectedAbsences.indexOf(personAbs);
 						if (absenceIndex > -1) {
-							selectedPeople[personId].selectedAbsences.splice(absenceIndex, 1);
-							selectedPeople[personId].personAbsenceCount--;
+							selectedPeople[personId].SelectedAbsences.splice(absenceIndex, 1);
+							selectedPeople[personId].PersonAbsenceCount--;
 						}
 					});
 				}
 				if (currentProjection.ShiftLayerIds) {
 					angular.forEach(currentProjection.ShiftLayerIds, function(shiftLayer) {
-						var activityIndex = selectedPeople[personId].selectedActivities.indexOf(shiftLayer);
+						var activityIndex = selectedPeople[personId].SelectedActivities.indexOf(shiftLayer);
 						if (activityIndex > -1) {
-							selectedPeople[personId].selectedActivities.splice(activityIndex, 1);
-							selectedPeople[personId].personActivityCount--;
+							selectedPeople[personId].SelectedActivities.splice(activityIndex, 1);
+							selectedPeople[personId].PersonActivityCount--;
 						}
 					});
 				}
 
-				if (selectedPeople[personId].personAbsenceCount === 0 && selectedPeople[personId].personActivityCount === 0) {
+				if (selectedPeople[personId].PersonAbsenceCount === 0 && selectedPeople[personId].PersonActivityCount === 0) {
 					delete selectedPeople[personId];
 				}
 			}
-			personSchedule.IsSelected = selectedPeople[personId] && selectedPeople[personId].personAbsenceCount == personSchedule.AbsenceCount() && selectedPeople[personId].personActivityCount == personSchedule.ActivityCount();
+			personSchedule.IsSelected = selectedPeople[personId]
+										&& selectedPeople[personId].PersonAbsenceCount === personSchedule.AbsenceCount()
+										&& selectedPeople[personId].PersonActivityCount === personSchedule.ActivityCount();
 			if (selectedPeople[personId]) {
-				selectedPeople[personId].checked = personSchedule.IsSelected;
+				selectedPeople[personId].Checked = personSchedule.IsSelected;
 			}
 		};
 
@@ -209,7 +209,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 		svc.getCheckedPersonIds = function () {
 			var result = [];
 			for (var personId in svc.personInfo) {
-				if (svc.personInfo[personId].checked === true) {
+				if (svc.personInfo[personId].Checked === true) {
 					result.push(personId);
 				}
 			}
@@ -219,11 +219,11 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 		svc.getCheckedPersonInfoList = function () {
 			var result = [];
 			for (var personId in svc.personInfo) {
-				if (svc.personInfo[personId].checked === true) {
+				if (svc.personInfo[personId].Checked === true) {
 					result.push({
-						personId: personId,
-						name: svc.personInfo[personId].name,
-						scheduleEndTime: svc.personInfo[personId].scheduleEndTime
+						PersonId: personId,
+						Name: svc.personInfo[personId].Name,
+						ScheduleEndTime: svc.personInfo[personId].ScheduleEndTime
 					});
 				}
 			}
@@ -235,15 +235,15 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 			for (var key in svc.personInfo) {
 				var schedule = svc.personInfo[key];
 				result.push({
-					personId: key,
-					name: schedule.name,
-					allowSwap: schedule.allowSwap,
-					scheduleStartTime: schedule.scheduleStartTime,
-					scheduleEndTime: schedule.scheduleEndTime,
-					personAbsenceCount: schedule.personAbsenceCount,
-					personActivityCount: schedule.personActivityCount,
-					selectedAbsences: schedule.selectedAbsences,
-					selectedActivities: schedule.selectedActivities
+					PersonId: key,
+					Name: schedule.Name,
+					AllowSwap: schedule.AllowSwap,
+					ScheduleStartTime: schedule.ScheduleStartTime,
+					ScheduleEndTime: schedule.ScheduleEndTime,
+					PersonAbsenceCount: schedule.PersonAbsenceCount,
+					PersonActivityCount: schedule.PersonActivityCount,
+					SelectedAbsences: schedule.SelectedAbsences,
+					SelectedActivities: schedule.SelectedActivities
 				});
 			}
 			return result;
@@ -269,8 +269,8 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 				return false;
 			}
 
-			var isBothAllowSwap = svc.personInfo[personIds[0]].allowSwap && svc.personInfo[personIds[1]].allowSwap;
-			var isOnlyTodaySchedules = moment(svc.personInfo[personIds[0]].scheduleStartTime).format('YYYY-MM-DD') === moment(svc.personInfo[personIds[1]].scheduleStartTime).format('YYYY-MM-DD');
+			var isBothAllowSwap = svc.personInfo[personIds[0]].AllowSwap && svc.personInfo[personIds[1]].AllowSwap;
+			var isOnlyTodaySchedules = moment(svc.personInfo[personIds[0]].ScheduleStartTime).format('YYYY-MM-DD') === moment(svc.personInfo[personIds[1]].ScheduleStartTime).format('YYYY-MM-DD');
 
 			return isBothAllowSwap && isOnlyTodaySchedules;
 		};
@@ -291,15 +291,15 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 			var selectedPersonInfo = svc.getSelectedPersonInfoList();
 			for (var j = 0; j < selectedPersonInfo.length; j++) {
 				var selectedPerson = selectedPersonInfo[j];
-				if (selectedPerson.checked) {
+				if (selectedPerson.Checked) {
 					ret.CheckedPersonCount++;
 				}
-				if (selectedPerson.personAbsenceCount > 0) {
-					ret.SelectedAbsenceInfo.AbsenceCount += selectedPerson.personAbsenceCount;
+				if (selectedPerson.PersonAbsenceCount > 0) {
+					ret.SelectedAbsenceInfo.AbsenceCount += selectedPerson.PersonAbsenceCount;
 					ret.SelectedAbsenceInfo.PersonCount++;
 				}
-				if (selectedPerson.personActivityCount > 0) {
-					ret.SelectedActivityInfo.ActivityCount += selectedPerson.personActivityCount;
+				if (selectedPerson.PersonActivityCount > 0) {
+					ret.SelectedActivityInfo.ActivityCount += selectedPerson.PersonActivityCount;
 					ret.SelectedActivityInfo.PersonCount++;
 				}
 			}

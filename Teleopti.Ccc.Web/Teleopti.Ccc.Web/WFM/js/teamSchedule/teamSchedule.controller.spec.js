@@ -46,7 +46,7 @@ describe("teamschedule controller tests", function() {
 		controller.scheduleDate = new Date("2015-10-26");
 		rootScope.$digest();
 
-		personSelection.personInfo['person-emptySchedule'] = { checked: true };
+		personSelection.personInfo['person-emptySchedule'] = { Checked: true };
 		controller.loadSchedules();
 		rootScope.$digest();
 
@@ -61,8 +61,8 @@ describe("teamschedule controller tests", function() {
 		controller.scheduleDate = new Date("2015-10-26");
 		rootScope.$digest();
 		personSelection.personInfo['221B-Baker-SomeoneElse'] = {
-			selectedActivities: ["activity1"],
-			selectedAbsences:[]
+			SelectedActivities: ["activity1"],
+			SelectedAbsences:[]
 		}
 
 		controller.loadSchedules();

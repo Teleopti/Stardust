@@ -1,4 +1,4 @@
-﻿describe("team schedule command menu directive test", function() {
+﻿describe("team schedule command menu directive test", function () {
 	var $compile,
 		$rootScope;
 
@@ -6,12 +6,12 @@
 	beforeEach(module('wfm.teamSchedule'));
 
 	var fakeShortCuts = {
-		registerKeySequence: function() {}
+		registerKeySequence: function () { }
 	};
 
 	beforeEach(function () {
-		module(function ($provide) {		
-			$provide.value('ShortCuts', function() {
+		module(function ($provide) {
+			$provide.value('ShortCuts', function () {
 				return fakeShortCuts;
 			}());
 			$provide.value('keyCodes', function () { });
@@ -25,17 +25,16 @@
 
 	}));
 
-
 	it('should view menu when adding activity is permitted', function () {
 
 		var html = '<teamschedule-command-menu configurations="getConfigurations()"></teamschedule-command>';
 		var scope = $rootScope.$new();
 		scope.vm = { toggleCurrentSidenav: function () { } };
 		var config = {
-			toggles: {AddActivityEnabled: true},
-			permissions: { HasAddingActivityPermission: true, HasModifyAssignmentPermission:true}
+			toggles: { AddActivityEnabled: true },
+			permissions: { HasAddingActivityPermission: true, HasModifyAssignmentPermission: true }
 		};
-		scope.getConfigurations = function() {
+		scope.getConfigurations = function () {
 			return config;
 		}
 		var element = $compile(html)(scope);

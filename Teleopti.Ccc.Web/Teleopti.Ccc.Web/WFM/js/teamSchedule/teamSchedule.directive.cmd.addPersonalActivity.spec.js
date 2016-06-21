@@ -100,6 +100,27 @@
 		expect(vm.isNewActivityAllowedForAgent(agent, vm.timeRange.startTime)).toBe(false);
 	});
 
+	it('should not allow to add personal activity if agents shift exceed 36 hours', function () {
+		var result = setUp();
+
+		var vm = result.commandControl;
+
+		vm.isNextDay = true;
+		vm.disableNextDay = false;
+		vm.timeRange = {
+			startTime: new Date('2016-06-16T07:00:00Z'),
+			endTime: new Date('2016-06-16T12:01:00Z')
+		};
+		var agent = {
+			personId: 'agent1',
+			name: 'agent1',
+			scheduleStartTime: new Date('2016-06-15T00:00:00Z'),
+			scheduleEndTime: new Date('2016-06-16T08:00:00Z')
+		};
+
+		expect(vm.isNewActivityAllowedForAgent(agent, vm.timeRange)).toBe(false);
+	});
+
 	it('should see a disabled button when anyone in selected is not allowed to add current activity', function () {
 		var result = setUp();
 

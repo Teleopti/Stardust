@@ -9,18 +9,18 @@
 			svc.rawSchedules = [];
 			svc.groupScheduleVm = {};
 
-			var recreateScheduleVm = function (scheduleDateMoment) {
+			var recreateScheduleVm = function(scheduleDateMoment) {
 				svc.groupScheduleVm = groupScheduleFactory.Create(svc.rawSchedules, scheduleDateMoment);
-			}
+			};
 
 			svc.resetSchedules = function (schedules, scheduleDateMoment) {
 				svc.rawSchedules = schedules;
 				recreateScheduleVm(scheduleDateMoment);
 			};
 
-			svc.mergeSchedules = function (schedules, scheduleDateMoment) {
+			svc.mergeSchedules = function(schedules, scheduleDateMoment) {
 				recreateScheduleVm(scheduleDateMoment);
-			}
+			};
 
 			svc.updateScheduleForPeoples = function(personIdList, scheduleDateMoment, afterLoading) {
 				var scheduleDateStr = scheduleDateMoment.format('YYYY-MM-DD');
@@ -28,7 +28,7 @@
 
 					angular.forEach(result.Schedules, function(schedule) {
 						var personId = schedule.PersonId;
-						
+
 						if (schedule.Date === scheduleDateStr) {
 							for (var i = 0; i < svc.rawSchedules.length; i++) {
 								if (personId === svc.rawSchedules[i].PersonId && svc.rawSchedules[i].Date === scheduleDateStr) {
@@ -43,19 +43,20 @@
 					svc.mergeSchedules(svc.rawSchedules, scheduleDateMoment);
 					afterLoading();
 				});
-			}
+			};
 
-			svc.resetSchedulesForPeople = function (personIds) {
-				angular.forEach(personIds, function (person) {
-					for (var i = 0; i < svc.groupScheduleVm.Schedules.length; i++) {
+			svc.resetSchedulesForPeople = function(personIds) {
+				angular.forEach(personIds, function(person) {
+					var length = svc.groupScheduleVm.Schedules.length;
+					for (var i = 0; i < length; i++) {
 						var schedule = svc.groupScheduleVm.Schedules[i];
-						if (person == schedule.PersonId) {
+						if (person === schedule.PersonId) {
 							schedule.IsSelected = false;
-							var shiftsForSelectedDate = schedule.Shifts.filter(function (shift) {
+							var shiftsForSelectedDate = schedule.Shifts.filter(function(shift) {
 								return shift.Date.isSame(schedule.Date, 'day');
 							});
 							if (shiftsForSelectedDate.length > 0) {
-								angular.forEach(shiftsForSelectedDate[0].Projections, function (projection) {
+								angular.forEach(shiftsForSelectedDate[0].Projections, function(projection) {
 									projection.Selected = false;
 								});
 							}
@@ -64,7 +65,7 @@
 					}
 				});
 
-			}
+			};
 
 			svc.getEarliestStartOfSelectedSchedule = function (scheduleDateMoment, selectedPersonIds) {
 				selectedPersonIds.forEach(function (x) {
@@ -135,7 +136,7 @@
 					}
 				});
 
-				if (previousDayShifts.length == 0) return null;
+				if (previousDayShifts.length === 0) return null;
 
 				var latestEndTimeMoment = null;
 
