@@ -1,8 +1,8 @@
 namespace Teleopti.Interfaces.Domain
 {
-	public class ResourceOptimizationData
+	public class ResourceCalculationData
 	{
-		public ResourceOptimizationData(ISchedulingResultStateHolder schedulingResultStateHolder, bool considerShortBreaks, bool doIntraIntervalCalculation)
+		public ResourceCalculationData(ISchedulingResultStateHolder schedulingResultStateHolder, bool considerShortBreaks, bool doIntraIntervalCalculation)
 		{
 			ConsiderShortBreaks = considerShortBreaks;
 			DoIntraIntervalCalculation = doIntraIntervalCalculation;

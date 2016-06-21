@@ -9,6 +9,6 @@
     /// </remarks>
     public interface IResourceOptimizationHelper
     {
-		void ResourceCalculate(DateOnly localDate, ResourceOptimizationData resourceOptimizationData);
+		void ResourceCalculate(DateOnly localDate, ResourceCalculationData resourceCalculationData);
 	}
 }

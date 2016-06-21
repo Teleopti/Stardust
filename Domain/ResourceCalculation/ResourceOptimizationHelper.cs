@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		}
 
 
-		public void ResourceCalculate(DateOnly localDate, ResourceOptimizationData resourceOptimizationData)
+		public void ResourceCalculate(DateOnly localDate, ResourceCalculationData resourceCalculationData)
 		{
 			var stateHolder = _schedulingResultStateHolder();
 			if (stateHolder.TeamLeaderMode)
@@ -57,12 +57,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				IDisposable context = null;
 				if (!ResourceCalculationContext.InContext)
 				{
-					context = _resourceCalculationContextFactory.Create(resourceOptimizationData.Schedules, stateHolder.Skills, new DateOnlyPeriod(localDate.AddDays(-1), localDate.AddDays(1)));
+					context = _resourceCalculationContextFactory.Create(resourceCalculationData.Schedules, stateHolder.Skills, new DateOnlyPeriod(localDate.AddDays(-1), localDate.AddDays(1)));
 				}
 				var relevantProjections = ResourceCalculationContext.Fetch();
-				ResourceCalculateDate(relevantProjections, localDate, resourceOptimizationData.ConsiderShortBreaks);
+				ResourceCalculateDate(relevantProjections, localDate, resourceCalculationData.ConsiderShortBreaks);
 
-				if (resourceOptimizationData.DoIntraIntervalCalculation)
+				if (resourceCalculationData.DoIntraIntervalCalculation)
 				{
 					_intraIntervalFinderService.Execute(stateHolder, localDate, relevantProjections);
 				}

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var target = new DeleteAndResourceCalculateService(() => stateHolder, MockRepository.GenerateStub<IDeleteSchedulePartService>(), resourceOptHelper, MockRepository.GenerateStub<IResourceCalculateDaysDecider>(), skillGroupInfo);
 			target.DeleteWithResourceCalculation(scheduleDay, null, false, false);
 
-			resourceOptHelper.AssertWasCalled(x => x.ResourceCalculate(date, new ResourceOptimizationData(stateHolder, false, false)), options => options.IgnoreArguments());
+			resourceOptHelper.AssertWasCalled(x => x.ResourceCalculate(date, new ResourceCalculationData(stateHolder, false, false)), options => options.IgnoreArguments());
 		}
 
 		[Test]
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var target = new DeleteAndResourceCalculateService(() => stateHolder, MockRepository.GenerateStub<IDeleteSchedulePartService>(), resourceOptHelper, MockRepository.GenerateStub<IResourceCalculateDaysDecider>(), skillGroupInfo);
 			target.DeleteWithResourceCalculation(scheduleDay, null, false, false);
 
-			resourceOptHelper.AssertWasNotCalled(x => x.ResourceCalculate(date, new ResourceOptimizationData(stateHolder, false, false)), options => options.IgnoreArguments());
+			resourceOptHelper.AssertWasNotCalled(x => x.ResourceCalculate(date, new ResourceCalculationData(stateHolder, false, false)), options => options.IgnoreArguments());
 		}
 	}
 }
