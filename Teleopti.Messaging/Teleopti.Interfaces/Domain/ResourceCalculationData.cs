@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Teleopti.Interfaces.Domain
 {
 	public class ResourceCalculationData
@@ -7,10 +9,12 @@ namespace Teleopti.Interfaces.Domain
 			ConsiderShortBreaks = considerShortBreaks;
 			DoIntraIntervalCalculation = doIntraIntervalCalculation;
 			Schedules = schedulingResultStateHolder.Schedules;
+			Skills = schedulingResultStateHolder.Skills;
 		}
 
 		public IScheduleDictionary Schedules { get; }
 		public bool ConsiderShortBreaks { get; }
 		public bool DoIntraIntervalCalculation { get; }
+		public IEnumerable<ISkill> Skills { get; }
 	}
 }

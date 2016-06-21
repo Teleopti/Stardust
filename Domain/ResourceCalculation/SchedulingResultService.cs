@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -9,12 +8,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public class SchedulingResultService : ISchedulingResultService
 	{
 		private readonly ISkillSkillStaffPeriodExtendedDictionary _relevantSkillStaffPeriods;
-		private readonly IList<ISkill> _allSkills;
+		private readonly IEnumerable<ISkill> _allSkills;
 		private readonly IResourceCalculationDataContainer _relevantProjections;
 		private readonly IPersonSkillProvider _personSkillProvider;
 
 		public SchedulingResultService(ISchedulingResultStateHolder stateHolder,
-			IList<ISkill> allSkills,
+			IEnumerable<ISkill> allSkills,
 			IPersonSkillProvider personSkillProvider)
 		{
 			_relevantSkillStaffPeriods = stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary;
@@ -25,7 +24,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 
 		public SchedulingResultService(ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods,
-			IList<ISkill> allSkills,
+			IEnumerable<ISkill> allSkills,
 			IResourceCalculationDataContainer relevantProjections,
 			IPersonSkillProvider personSkillProvider)
 		{
@@ -52,7 +51,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public ISkillSkillStaffPeriodExtendedDictionary SchedulingResult(DateTimePeriod periodToRecalculate, bool emptyCache)
 		{
-			if (_allSkills.Count == 0)
+			if (!_allSkills.Any())
 				return _relevantSkillStaffPeriods;
 			IAffectedPersonSkillService personSkillService = new AffectedPersonSkillService(_allSkills);
 
@@ -65,7 +64,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		private ResourceCalculationDataContainer createRelevantProjectionList(IScheduleDictionary scheduleDictionary)
 		{
-			if (_allSkills.Count.Equals(0))
+			if (!_allSkills.Any())
 				return new ResourceCalculationDataContainer(_personSkillProvider, 60);
 
 			int minutesSplit = _allSkills.Min(s => s.DefaultResolution);

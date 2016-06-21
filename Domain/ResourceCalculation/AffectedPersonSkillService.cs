@@ -5,9 +5,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
     public class AffectedPersonSkillService : IAffectedPersonSkillService
     {
-        private readonly ICollection<ISkill> _skillCollection;
+        private readonly IEnumerable<ISkill> _skillCollection;
 
-        public AffectedPersonSkillService(ICollection<ISkill> skillCollection)
+        public AffectedPersonSkillService(IEnumerable<ISkill> skillCollection)
         {
             InParameter.NotNull("validSkillCollection", skillCollection);
             _skillCollection = skillCollection;
