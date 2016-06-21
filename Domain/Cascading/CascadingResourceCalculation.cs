@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 			}
 			if (!ResourceCalculationContext.PrimarySkillMode()) 
 			{
-				_shovelResources.Execute(resultState.SkillStaffPeriodHolder, resultState.Schedules, resultState.Skills, period);
+				_shovelResources.Execute(resultState.SkillStaffPeriodHolder, resourceOptimizationData.Schedules, resultState.Skills, period);
 			}
 		}
 	}

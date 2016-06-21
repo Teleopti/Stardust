@@ -440,8 +440,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 		private void resourceCalculation()
 		{
-            Expect.Call(() => _resourceOptimizationHelper.ResourceCalculate(_mostUnderStaffDate, new ResourceOptimizationData(false, false))).IgnoreArguments();
-            Expect.Call(() => _resourceOptimizationHelper.ResourceCalculate(_mostOverStaffDate, new ResourceOptimizationData(false, false))).IgnoreArguments();
+            Expect.Call(() => _resourceOptimizationHelper.ResourceCalculate(_mostUnderStaffDate, new ResourceOptimizationData(null, false, false))).IgnoreArguments();
+            Expect.Call(() => _resourceOptimizationHelper.ResourceCalculate(_mostOverStaffDate, new ResourceOptimizationData(null, false, false))).IgnoreArguments();
 		}
     }
 }

@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public ResourceOptimizationData ToResourceOptimizationData(bool considerShortBreaks, bool doIntraIntervalCalculation)
 		{
-			return new ResourceOptimizationData(considerShortBreaks, doIntraIntervalCalculation);
+			return new ResourceOptimizationData(this, considerShortBreaks, doIntraIntervalCalculation);
 		}
 
 		/// <summary>

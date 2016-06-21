@@ -2,13 +2,15 @@ namespace Teleopti.Interfaces.Domain
 {
 	public class ResourceOptimizationData
 	{
-		public ResourceOptimizationData(bool considerShortBreaks, bool doIntraIntervalCalculation)
+		public ResourceOptimizationData(ISchedulingResultStateHolder schedulingResultStateHolder, bool considerShortBreaks, bool doIntraIntervalCalculation)
 		{
 			ConsiderShortBreaks = considerShortBreaks;
 			DoIntraIntervalCalculation = doIntraIntervalCalculation;
+			Schedules = schedulingResultStateHolder.Schedules;
 		}
 
-		public bool ConsiderShortBreaks { get; private set; }
-		public bool DoIntraIntervalCalculation { get; private set; }
+		public IScheduleDictionary Schedules { get; }
+		public bool ConsiderShortBreaks { get; }
+		public bool DoIntraIntervalCalculation { get; }
 	}
 }
