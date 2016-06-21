@@ -136,6 +136,6 @@ namespace Teleopti.Interfaces.Domain
 	    void ClearSkills();
 	    void RemoveSkill(ISkill skill);
 	    bool GuessResourceCalculationHasBeenMade();
-	    ResourceCalculationData ToResourceOptimizationData(bool considerShortBreaks, bool doIntraIntervalCalculation);
+	    IResourceCalculationData ToResourceOptimizationData(bool considerShortBreaks, bool doIntraIntervalCalculation);
     }
 }

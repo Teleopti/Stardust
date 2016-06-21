@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return _skillStaffPeriodHolder.Value.GuessResourceCalculationHasBeenMade();
 		}
 
-		public ResourceCalculationData ToResourceOptimizationData(bool considerShortBreaks, bool doIntraIntervalCalculation)
+		public IResourceCalculationData ToResourceOptimizationData(bool considerShortBreaks, bool doIntraIntervalCalculation)
 		{
 			return new ResourceCalculationData(this, considerShortBreaks, doIntraIntervalCalculation);
 		}

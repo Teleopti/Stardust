@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 		}
 
-		public void ResourceCalculate(DateOnly localDate, ResourceCalculationData resourceCalculationData)
+		public void ResourceCalculate(DateOnly localDate, IResourceCalculationData resourceCalculationData)
 		{
 			if (resourceCalculationData.SkipResourceCalculation)
 				return;
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return new DateOnlyPeriod(currentStart, currentStart).ToDateTimePeriod(_timeZoneGuard.CurrentTimeZone()); 
 		}
 
-		private void resourceCalculateDate(ResourceCalculationData resourceCalculationData, IResourceCalculationDataContainer relevantProjections, DateOnly localDate, bool considerShortBreaks)
+		private void resourceCalculateDate(IResourceCalculationData resourceCalculationData, IResourceCalculationDataContainer relevantProjections, DateOnly localDate, bool considerShortBreaks)
 		{
 			var timePeriod = getPeriod(localDate);
 			var ordinarySkills = new List<ISkill>();
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			calculateMaxSeatsAndNonBlend(resourceCalculationData, relevantProjections, localDate, timePeriod);
 		}
 
-		private void calculateMaxSeatsAndNonBlend(ResourceCalculationData resourceCalculationData, IResourceCalculationDataContainer relevantProjections, DateOnly localDate,
+		private void calculateMaxSeatsAndNonBlend(IResourceCalculationData resourceCalculationData, IResourceCalculationDataContainer relevantProjections, DateOnly localDate,
 			DateTimePeriod timePeriod)
 		{
 			var maxSeatSkills =

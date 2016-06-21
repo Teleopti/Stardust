@@ -15,17 +15,17 @@ namespace Teleopti.Ccc.Domain.Cascading
 			_shovelResources = shovelResources;
 		}
 
-		public void ResourceCalculate(DateOnlyPeriod dateOnlyPeriod, ResourceCalculationData resourceCalculationData)
+		public void ResourceCalculate(DateOnlyPeriod dateOnlyPeriod, IResourceCalculationData resourceCalculationData)
 		{
 			doForPeriod(dateOnlyPeriod, resourceCalculationData);
 		}
 
-		public void ResourceCalculate(DateOnly localDate, ResourceCalculationData resourceCalculationData)
+		public void ResourceCalculate(DateOnly localDate, IResourceCalculationData resourceCalculationData)
 		{
 			doForPeriod(new DateOnlyPeriod(localDate, localDate), resourceCalculationData);
 		}
 
-		private void doForPeriod(DateOnlyPeriod period, ResourceCalculationData resourceCalculationData)
+		private void doForPeriod(DateOnlyPeriod period, IResourceCalculationData resourceCalculationData)
 		{
 			foreach (var date in period.DayCollection())
 			{
