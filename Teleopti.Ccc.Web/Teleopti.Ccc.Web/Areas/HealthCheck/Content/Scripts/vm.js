@@ -64,6 +64,11 @@ define([
 			checkReadModelFunc();
 		};
 
+		var fixReadModelFunc;
+		self.fixReadModel = function() {
+			fixReadModelFunc();
+		};
+
 		self.initialize = function(options) {
 			if (options) {
 				self.hub = options.messageBroker;
@@ -74,6 +79,7 @@ define([
 				});
 				loadEtlHistory = options.loadEtlHistory;
 				checkReadModelFunc = options.requestReadModelCheck;
+				fixReadModelFunc = options.requestReadModelFix;
 			}
 			if (self.hub && self.hub.client) {
 				self.hub.client.onEventMessage = function(notification, route) {

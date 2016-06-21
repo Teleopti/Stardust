@@ -118,6 +118,9 @@ var identity = (ITeleoptiIdentity) CurrentTeleoptiPrincipal.Make().Current().Ide
 							<button class="btn btn-primary" data-bind="click: checkReadModel">Start check</button>
 						</form>
 					</div>
+                    <div>
+                        <p>Fix invalid records in table CheckReadModel.ScheduleProjectionReadOnly <button class="btn btn-primary" data-bind="click: fixReadModel">Fix</button></p>
+                    </div>
 					<h3>Configured URL:s</h3>
 					<ul class="list-group" data-bind="foreach: configuredUrls">
 						<li class="list-group-item configured-url" data-bind="css: { 'list-group-item-success': Reachable == true }">

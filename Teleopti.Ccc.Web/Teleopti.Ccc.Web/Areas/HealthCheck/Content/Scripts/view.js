@@ -32,6 +32,10 @@ define([
 		});
 	};
 
+	var requestReadModelFix = function() {
+		http.get('HealthCheck/FixScheduleProjectionReadOnly').done(function (data) {});
+	};
+
 	vm.initialize({
     	signalR: sigR,
     	messageBroker: $.connection.MessageBrokerHub,
@@ -39,7 +43,8 @@ define([
 			http.get('api/HealthCheck/CheckBus').done(function () {  });
 		},
 		loadEtlHistory: loadEtlHistory,
-		requestReadModelCheck: requestReadModelCheck
+		requestReadModelCheck: requestReadModelCheck,
+		requestReadModelFix: requestReadModelFix
     });
 
 	http.get('HealthCheck/CheckStardust').done(function (data) {
