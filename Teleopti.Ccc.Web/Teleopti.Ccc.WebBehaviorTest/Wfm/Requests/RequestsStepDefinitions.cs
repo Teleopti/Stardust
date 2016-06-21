@@ -113,5 +113,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".request-status:contains('{0}')", "Denied"));
 		}
 
+		[When(@"I click the shift trade schedule day")]
+		public void ClickShiftTradeScheduleDay()
+		{
+			Browser.Interactions.ClickUsingJQuery(".ui-grid-canvas table[style*='pointer']:first");
+		}
+
+		[Then(@"I should see schedule detail")]
+		public void ShouldSeeScheduleDetail()
+		{
+			Browser.Interactions.AssertExistsUsingJQuery(".schedule-container:visible");
+		}
 	}
 }

@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 	public class ShiftCategoryConfigurable : IDataSetup
 	{
 		public string Name { get; set; }
+		public string ShortName { get; set; }
 		public string Color { get; set; }
 		public string BusinessUnit { get; set; }
 
@@ -17,7 +18,10 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			ShiftCategory = new ShiftCategory(Name);
+			ShiftCategory = new ShiftCategory(Name)
+			{
+				Description = new Description(Name, ShortName ?? string.Empty)
+			};
 			if (Color != null)
 				ShiftCategory.DisplayColor = System.Drawing.Color.FromName(Color);
 			if (!string.IsNullOrEmpty(BusinessUnit))

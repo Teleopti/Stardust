@@ -23,6 +23,15 @@ Background:
     | Name                   | Resource Planner |
     | Access to wfm requests | true             |
     | Access to everyone     | true             |
+	And there is a shift category with
+	| Field     | Value |
+	| Name      | Day   |
+	| ShortName | DA    |
+	| Color     | Green |
+	And there are activities
+	| Name     | Color    |
+	| Phone    | Green    |
+	| Sales    | Red      |
     And 'I' has the workflow control set 'Trade from tomorrow until 30 days forward'
     And 'John Smith' has the workflow control set 'Trade from tomorrow until 30 days forward'
     And 'Pence H' has the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -41,8 +50,8 @@ Background:
     And I have created a shift trade request
     | Field    | Value      |
     | To       | John Smith |
-    | DateTo   | 2016-05-21 |
-    | DateFrom | 2016-05-17 |
+    | DateTo   | 2016-05-19 |
+    | DateFrom | 2016-05-19 |
     | Pending  | True       |
     And I have created a shift trade request
     | Field    | Value      |
@@ -50,6 +59,30 @@ Background:
     | DateTo   | 2016-05-27 |
     | DateFrom | 2016-05-22 |
     | Pending  | True       |
+	And I has a shift with
+	| Field            | Value            |
+	| Shift category   | Day              |
+	| Activity         | Phone            |
+	| StartTime        | 2016-05-19 09:00 |
+	| EndTime          | 2016-05-19 17:00 |
+	And I has a shift with
+	| Field            | Value            |
+	| Shift category   | Day              |
+	| Activity         | Phone            |
+	| StartTime        | 2016-05-23 09:00 |
+	| EndTime          | 2016-05-23 17:00 |
+	And John Smith has a shift with
+	| Field            | Value            |
+	| Shift category   | Day              |
+	| Activity         | Phone            |
+	| StartTime        | 2016-05-19 14:00 |
+	| EndTime          | 2016-05-19 22:00 |
+	And Pence H has a shift with
+	| Field            | Value            |
+	| Shift category   | Day              |
+	| Activity         | Sales            |
+	| StartTime        | 2016-05-23 15:30 |
+	| EndTime          | 2016-05-23 23:30 |
 
 Scenario: View shift trade requests 
     When I view wfm requests
@@ -57,6 +90,14 @@ Scenario: View shift trade requests
 	And I select to go to shift trade requests view
     Then I should see a shift request from 'John Smith' in the list
     And I should see a shift request from 'Pence H' in the list
+
+@OnlyRunIfEnabled('Wfm_Requests_ShiftTrade_More_Relevant_Information_38492')
+Scenario: View schedule detail
+ When I view wfm requests
+ And I select to load requests from '2016-05-17' to '2016-05-24'
+ And I select to go to shift trade requests view
+ When I click the shift trade schedule day
+ Then I should see schedule detail
 
 @ignore
 Scenario: Search for shift trade

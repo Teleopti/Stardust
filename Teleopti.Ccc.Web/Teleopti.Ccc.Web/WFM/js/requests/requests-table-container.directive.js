@@ -48,7 +48,7 @@
 	        vm.personIds = [personFromId, personToId];
 	        vm.shiftDetailLeft = oEvent.pageX - 5;
 	        vm.shiftDetailTop = oEvent.pageY - 5;
-	        updateShiftStatusForSelectedPerson(moment(scheduleDate));
+	        updateShiftStatusForSelectedPerson(moment.tz(scheduleDate, CurrentUserInfo.CurrentUserInfo().DefaultTimeZone));
 	    }
 
 
