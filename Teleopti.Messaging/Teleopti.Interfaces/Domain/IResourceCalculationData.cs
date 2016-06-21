@@ -10,7 +10,7 @@ namespace Teleopti.Interfaces.Domain
 		bool DoIntraIntervalCalculation { get; }
 		IEnumerable<ISkill> Skills { get; }
 		ISkillStaffPeriodHolder SkillStaffPeriodHolder { get; }
-		IEnumerable<ISkillDay> SkillDays { get; }
+		IDictionary<ISkill, IEnumerable<ISkillDay>> SkillDays { get; }
 		bool SkipResourceCalculation { get; }
 	}
 }

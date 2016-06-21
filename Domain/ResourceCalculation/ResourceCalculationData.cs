@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -13,7 +12,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			Schedules = schedulingResultStateHolder.Schedules;
 			Skills = schedulingResultStateHolder.Skills;
 			SkillStaffPeriodHolder = schedulingResultStateHolder.SkillStaffPeriodHolder;
-			SkillDays = schedulingResultStateHolder.SkillDays.SelectMany(s => s.Value); //TODO: check if perf drops due to this one
+			SkillDays = schedulingResultStateHolder.SkillDays;
 			SkipResourceCalculation = schedulingResultStateHolder.TeamLeaderMode || schedulingResultStateHolder.SkipResourceCalculation;
 		}
 
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public bool DoIntraIntervalCalculation { get; }
 		public IEnumerable<ISkill> Skills { get; }
 		public ISkillStaffPeriodHolder SkillStaffPeriodHolder { get; }
-		public IEnumerable<ISkillDay> SkillDays { get; }
+		public IDictionary<ISkill, IEnumerable<ISkillDay>> SkillDays { get; }
 		public bool SkipResourceCalculation { get; }
 	}
 }

@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			return SkillDays == null ? 
 				Enumerable.Empty<ISkillDay>() : 
-				SkillDays.SelectMany(s => s.Value).FilterOnDates(theDateList);
+				SkillDays.FilterOnDates(theDateList);
 		}
 
 		public ISkillDay SkillDayOnSkillAndDateOnly(ISkill skill, DateOnly dateOnly)
