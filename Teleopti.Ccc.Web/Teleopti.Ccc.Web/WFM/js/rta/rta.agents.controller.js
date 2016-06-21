@@ -36,14 +36,10 @@
 				var lastUpdate, notice;
 
 				$scope.noSiteIds = siteIds.length == 0;
-				$scope.underToggle = toggleService.RTA_MonitorBySkills_39081;
+				$scope.monitorBySkill = toggleService.RTA_MonitorBySkills_39081;
 				$scope.showGrid = teamIds.length > 0;
 				$scope.showBreadcrumb = teamIds.length > 0;
-				// need to remove later
-				$scope.skills = [{ "Id": "f08d75b3-fdb4-484a-ae4c-9f0800e2f753", "Name": "Channel Sales" }, { "Id": "c5fffc8f-bcd6-47f7-9352-9f0800e39578", "Name": "Direct Sales" }, { "Id": "bc50fc19-c211-4e7a-8a1a-9f0801134e37", "Name": "Email" }, { "Id": "24ab69f5-1c47-4f26-9bcd-9f0801140b7f", "Name": "Invoice" }, { "Id": "52fb01c8-d2e3-47f9-85de-9f0901884fe6", "Name": "Social Media" },
-				{ "Id": "48d3423f-d044-45f0-8c5b-a0a200f2f3c0", "Name": "Store London North" }, { "Id": "e0af5f19-9fa7-4f16-b294-a0a200fa4d31", "Name": "Store London South" }, { "Id": "adbc5dca-73f8-400b-9b59-a0a200f345de", "Name": "Store New York 5:th Ave" }, { "Id": "39c05ed3-29a1-4a20-b3de-a47600dfef79", "Name": "Store New York Broadway" }, { "Id": "c32c0cde-e1cb-4d25-a7ac-a47600d4e96a", "Name": "Store New York Soho" },
-				{ "Id": "cdc2ccc7-8eaf-4380-abaa-a0a200f25a74", "Name": "Store Tokyo Ginza" }, { "Id": "a3784b8b-3aac-4781-b1c8-a474009f89a8", "Name": "Web Chat" }];
-
+				
 				$scope.$watch('pause', function () {
 					if ($scope.pause) {
 						$scope.pausedAt = moment(lastUpdate).format('YYYY-MM-DD HH:mm:ss');
@@ -366,62 +362,6 @@
 					else if (now > end)
 						return 'previous-activity';
 					return 'current-activity';
-				}
-
-				if (toggleService.RTA_MonitorBySkills_39081) {
-
-					$scope.querySearch = function (query, myArray) {
-						var results = query ? myArray.filter(createFilterFor(query)) : myArray, deferred;
-						return results;
-					};
-
-					function createFilterFor(query) {
-						var lowercaseQuery = angular.lowercase(query);
-						return function filterFn(item) {
-							var lowercaseName = angular.lowercase(item.Name);
-							return (lowercaseName.indexOf(lowercaseQuery) === 0);
-						};
-					};
-
-					$scope.selectedSkillChange = function (item) {
-						if (item) {
-							$scope.skillSelected(item);
-						}
-						else {
-							$scope.showGrid = false;
-						}
-					};
-
-					$scope.skillSelected = function (item) {
-						$scope.selectedItem = item;
-
-						pollSkillMonitorData();
-					};
-
-					var pollSkillMonitorData = function () {
-
-						getAgents({
-							siteIds: ['d970a45a-90ff-4111-bfe1-9b5e015ab45c'],
-							teamIds: ['34590a63-6331-4921-bc9f-9b5e015ab495']
-						})
-							.then(function (agentsInfo) {
-								$scope.agentsInfo = agentsInfo;
-								$scope.agents = agentsInfo;
-								$scope.$watchCollection('agents', filterData);
-								updateBreadCrumb(agentsInfo);
-							})
-							.then(function () {
-								getStates($scope.agentsInAlarm)({
-									siteIds: ['d970a45a-90ff-4111-bfe1-9b5e015ab45c'],
-									teamIds: ['34590a63-6331-4921-bc9f-9b5e015ab495']
-								})
-									.then(setStatesInAgents);
-								$scope.showGrid = true;
-							});
-					};
-					$scope.goToOverview = function () {
-						$state.go('rta.sites');
-					}
 				}
 			}
 		]);
