@@ -275,12 +275,14 @@
 	}
 }
 
+/*work around for IE issues with date range picker*/ 
 @media screen and (min-width:0\0) {
-	.date-range-end-date {
+	.seatplan-report-filter .date-range-end-date {
 		margin-left: 280px;
 	}
 
-	.report-show-options {
+	.seatplan-report-filter .report-show-options {
 		margin-left: 555px;
 	}
 }
+

@@ -3,12 +3,12 @@
 		<button class="wfm-btn wfm-btn-invis-primary add-agents pull-right" ng-click="vm.showPersonSelectionPanel()">{{'Add' | translate}}</button>
 	</div>
 
-	<div class="seatbooking-operations-cancel" ng-if="vm.showPeopleSelection">
+	<div class="seatbooking-operations-cancel" ng-if="vm.showPeopleSelection && vm.occupancyDetails">
 		<button class="wfm-btn wfm-btn-invis-primary assign-agents pull-right" ng-click="vm.asignAgentsToSeats();vm.showPeopleSelection = false;">{{'Assign' | translate}}</button>
 		<button class="wfm-btn wfm-btn-invis-primary cancel-operation pull-right" ng-click="vm.showPeopleSelection = false;">{{'Cancel' | translate}}</button>
 	</div>
 
-	<div class="add-booking-detail" ng-show="vm.showPeopleSelection">
+	<div class="add-booking-detail" ng-show="vm.showPeopleSelection  && vm.occupancyDetails">
 
 		<div class="date-range-picker-wrapper">
 			<date-range-picker ng-model="vm.selectedPeriod" template-type="vm.dateRangeTemplateType"></date-range-picker>

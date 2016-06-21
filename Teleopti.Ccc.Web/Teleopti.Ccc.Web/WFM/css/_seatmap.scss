@@ -338,13 +338,16 @@ seatmap-occupancy-detail {
 	position: absolute;
 	right: 0;
 	left: 0;
-
-	.add-booking-detail {
+    
+    .add-booking-detail {
 		top: 50px;
-		position: relative;
+        bottom: 0;
+        position: absolute !important;
+	    width: 100%;
 
 		.date-range-picker-wrapper {
 			width: 250px;
+            height: 30px;
 		}
 
 
@@ -378,12 +381,18 @@ seatmap-occupancy-detail {
 }
 
 people-selection-list {
-	top: 10px;
+	top: 40px;
 	bottom: 0;
-	position: relative;
+	position: absolute;
 	right: 0;
 	left: 0;
 	overflow: hidden;
+
+    advance-search{
+        width: 300px;
+    }
+        
+
 }
 
 people-selection-list > div.view-header {
@@ -391,12 +400,15 @@ people-selection-list > div.view-header {
 }
 
 people-selection-list .panel {
-	/*top: 0;
-	bottom: 90px;*/
-	position: relative;
-	right: 0;
-	left: 0;
 
+    bottom: 80px;
+    position : absolute;
+    top: 0px;
+    width: 100%;
+    padding-left: 10px;
+    box-shadow: none;
+
+    
 	.people-search {
 		padding-top: 5px;
 		padding-bottom: 3px;
@@ -459,6 +471,8 @@ people-selection-list .panel {
 }
 
 .seatmap-occupancy-detail {
+
+    height: 100%;
 
 	.seat-booking-list {
 		overflow: auto;

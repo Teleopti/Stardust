@@ -12,15 +12,9 @@
 		vm.hasOpenedPersonSelectionPanel = false;
 		vm.previousSelectedSeatIds = [];
 		vm.dateRangeTemplateType = 'popup';
-
-
-		vm.selectedPeriod = { startDate: vm.scheduleDate, endDate: vm.scheduleDate };
-
+		
 		vm.asignAgentsToSeats = function () {
-			//var selectedDay = moment(vm.scheduleDate).format("YYYY-MM-DD");
-
-			console.log(vm.selectedPeriod);
-
+		
 			seatPlanService.seatPlan.add(
 				{
 					StartDate: moment(vm.selectedPeriod.startDate).format("YYYY-MM-DD"),
@@ -46,6 +40,8 @@
 		};
 
 		vm.showPersonSelectionPanel = function () {
+
+			vm.selectedPeriod = { startDate: vm.scheduleDate, endDate: vm.scheduleDate };
 
 			if (vm.hasOpenedPersonSelectionPanel) {
 				vm.resetPersonSearch();
