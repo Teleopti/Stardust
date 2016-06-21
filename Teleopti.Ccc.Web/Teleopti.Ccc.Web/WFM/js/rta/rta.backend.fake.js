@@ -42,7 +42,7 @@
 					});
 			};
 
-			fake(/\.\.\/api\/BusinessUnit\/Skills(.*)/,
+			fake(/\.\.\/api\/Skills(.*)/,
 				function () {
 					return [200, skills];
 				});
@@ -151,7 +151,7 @@
 				function (params) {
 					return [200, toggles];
 				});
-			
+
 			fake(/\.\.\/api\/Agents\/PersonDetails(.*)/,
 				function (params) {
 					return [200, personDetails.find(function(p) { return p.PersonId === params.personId })];

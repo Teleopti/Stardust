@@ -14,16 +14,14 @@
 					siteIds: data.siteIds,
 				}).$promise;
 			};
-			
+
 			this.getSkills = function(data) {
-				return $resource('../api/BusinessUnit/Skills', {}, {
+				return $resource('../api/Skills', {}, {
 					query: {
 						method: 'GET',
 						isArray: true
 					}
-				}).query({
-					teamIds: data,
-				}).$promise;
+				}).query().$promise;
 			};
 
 			this.getAgentsForTeams = function (data) {
