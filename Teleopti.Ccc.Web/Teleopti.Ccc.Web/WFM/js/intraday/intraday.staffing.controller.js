@@ -8,6 +8,7 @@
 				$scope.isVisible = true;
 				$scope.skills;
 				$scope.selectedSkill = null;
+				$scope.viewCal = true;
 
 				if ($stateParams.date) {
 					$scope.intervalDate = $stateParams.date;
