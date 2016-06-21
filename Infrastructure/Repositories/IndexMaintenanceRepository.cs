@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					connectionString = _connectionStrings.Application();
 					break;
 				case DatabaseEnum.Agg:
-					connectionString = getAggConnectionString(getAggName(), _connectionStrings.Analytics());
+					connectionString = GetAggConnectionString(getAggName(), _connectionStrings.Analytics());
 					break;
 				default:
 					throw new ArgumentOutOfRangeException(nameof(database), database, null);
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return connectionString;
 		}
 
-		private static string getAggConnectionString(string aggName, string analyticsConnectionString)
+		public static string GetAggConnectionString(string aggName, string analyticsConnectionString)
 		{
 			const string initCatString = "Initial Catalog=";
 			var firstIndex = analyticsConnectionString.IndexOf(initCatString, StringComparison.Ordinal) + initCatString.Length;
