@@ -33,6 +33,20 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			_fillSchedulerStateHolderForResourceCalculation.PreFillInformation(stateHolder, publishedPeriod);
 
+	/* Ola - something like this!
+
+			//det finns tyvärr "implicita" beroende som t ex personer och vilka skills dom har
+			//i kod går det dock via scheman så logiskt sätt behöver man inte ladda personer/agenter (de lazy loadas)
+			//inbillar mig dock att det går fortare att börja allt med typ
+			//_personRep.LaddaSnubbarMedPErsonPerioder();
+
+			IScheduleDictionary schedules = loadit();
+			IEnumerable<ISkill> skills = loadit();
+			IDictionary<ISkill, IEnumerable<ISkill>> skillDays = loadit() //man får en dictionary när man laddar därför denna "märkliga" typ här
+			var resourceCalculateData = new ResourceCalculationData(schedules, skills, skillDays, true/false, true/false);
+			//ta bort allt kring fillschedulerstateholder och använd resourceCalculationData för "resCalcData" på rad ~69
+	*/
+
 			foreach (var day in publishedPeriod.DayCollection())
 			{
 				var period = new DateOnlyPeriod(day, day.AddDays(1));
