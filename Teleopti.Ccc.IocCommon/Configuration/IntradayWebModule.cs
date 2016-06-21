@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Intraday;
@@ -9,6 +11,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	public class IntradayWebModule : Module
 	{
+		private IIocConfiguration _configuration;
+
+		public IntradayWebModule(IIocConfiguration configuration)
+		{
+			_configuration = configuration;
+		}
+
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<FetchSkillInIntraday>().SingleInstance();
@@ -20,6 +29,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<MonitorSkillsProvider>().SingleInstance();
 			builder.RegisterType<ScheduleForecastSkillReadModelRepository>().As<IScheduleForecastSkillReadModelRepository>().SingleInstance();
 			builder.RegisterType<ScheduleForecastSkillProvider>().As<IScheduleForecastSkillProvider>().SingleInstance();
+			if (_configuration.Toggle(Toggles.AddActivity_TriggerResourceCalculation_39346))
+				builder.RegisterType<AddActivityWithResourceCalculation>().As<IPersonAssignmentAddActivity>().SingleInstance();
+			else
+				builder.RegisterType<AddActivityWithoutResourceCalculation>().As<IPersonAssignmentAddActivity>().SingleInstance();
 		}
 	}
 }

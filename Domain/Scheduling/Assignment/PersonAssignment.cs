@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Interfaces.Domain;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
@@ -348,7 +349,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			AddActivity(activity, periodAsDateTimePeriod);
 		}
 
-		public virtual void AddActivity(IActivity activity, DateTimePeriod period, TrackedCommandInfo trackedCommandInfo)
+		public virtual void AddActivity(IActivity activity, DateTimePeriod period, TrackedCommandInfo trackedCommandInfo, bool triggerResourceCalcualtion = false)
 		{
 			addActivityInternal(activity, period);
 			AddEvent(() =>
@@ -370,6 +371,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				}
 				return activityAddedEvent;
 			});
+			if (triggerResourceCalcualtion)
+			{
+				AddEvent(() =>
+				{
+					var activityAddedEvent = new UpdateResourceCalculateReadModelEvent()
+					{
+						JobName = "Resource Calculate",
+						StartDateTime = period.StartDateTime.Date,
+						EndDateTime = period.EndDateTime.Date
+					};
+					
+					return activityAddedEvent;
+				});
+			}
 		}
 
 		private void addActivityInternal(IActivity activity, DateTimePeriod period)

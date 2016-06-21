@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule<SchedulePersistModule>();
 			builder.RegisterModule(new HangfireModule(_configuration));
 			builder.RegisterModule<ForecastEventModule>();
-			builder.RegisterModule<IntradayWebModule>();
+			builder.RegisterModule(new IntradayWebModule(_configuration));
 			builder.RegisterModule<StardustModule>();
 			builder.RegisterModule(new RequestModule(_configuration));
 			builder.RegisterModule<PersonAccountModule>();

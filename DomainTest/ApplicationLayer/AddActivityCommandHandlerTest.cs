@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var mainActivity = ActivityFactory.CreateActivity("Phone");
 			var addedActivity = ActivityFactory.CreateActivity("Added activity");
 			var activityRepository = new FakeWriteSideRepository<IActivity> { mainActivity, addedActivity };
+			var addActivity = new AddActivityWithoutResourceCalculation();
 			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository
 				{
 					PersonAssignmentFactory.CreateAssignmentWithMainShift(
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
 			var target = new AddActivityCommandHandler(personAssignmentRepository,
 								   scenario,
-								   activityRepository, personRepository, new UtcTimeZone(), null);
+								   activityRepository, personRepository, new UtcTimeZone(), null, addActivity);
 
 			var operatedPersonId = Guid.NewGuid();
 			var trackId = Guid.NewGuid();
@@ -73,6 +74,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var mainActivity = ActivityFactory.CreateActivity("Phone");
 			var addedActivity = ActivityFactory.CreateActivity("Added activity");
 			var activityRepository = new FakeWriteSideRepository<IActivity> { mainActivity, addedActivity };
+			var addActivity = new AddActivityWithoutResourceCalculation();
 			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository
 				{
 					PersonAssignmentFactory.CreateAssignmentWithMainShift(
@@ -81,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				};
 			var target = new AddActivityCommandHandler(personAssignmentRepository,
 								   new ThisCurrentScenario(personAssignmentRepository.Single().Scenario),
-								   activityRepository, personRepository, new UtcTimeZone(), null);
+								   activityRepository, personRepository, new UtcTimeZone(), null,addActivity);
 
 			var command = new AddActivityCommand
 			{
@@ -106,6 +108,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var mainActivity = ActivityFactory.CreateActivity("Phone");
 			var addedActivity = ActivityFactory.CreateActivity("Added activity");
 			var activityRepository = new FakeWriteSideRepository<IActivity> { mainActivity, addedActivity };
+			var addActivity = new AddActivityWithoutResourceCalculation();
 			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository
 				{
 					PersonAssignmentFactory.CreateAssignmentWithMainShift(
@@ -115,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var target = new AddActivityCommandHandler(personAssignmentRepository,
 								   new ThisCurrentScenario(personAssignmentRepository.Single().Scenario),
 								   activityRepository, personRepository,
-								   new SpecificTimeZone(TimeZoneInfoFactory.HawaiiTimeZoneInfo()), null);
+								   new SpecificTimeZone(TimeZoneInfoFactory.HawaiiTimeZoneInfo()), null,addActivity);
 
 			var command = new AddActivityCommand
 			{
@@ -141,13 +144,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository();
 			var shiftCategoryRepository = MockRepository.GenerateMock<IShiftCategoryRepository>();
 			var shiftCategory = new ShiftCategory("Day");
+			var addActivity = new AddActivityWithoutResourceCalculation();
 			shiftCategoryRepository.Stub(x => x.FindAll()).Return(new List<IShiftCategory> { shiftCategory });
 
 			var target = new AddActivityCommandHandler(personAssignmentRepository,
 								   new ThisCurrentScenario(ScenarioFactory.CreateScenarioWithId("scenario", true)),
 								   activityRepository, personRepository,
-								   new UtcTimeZone(), shiftCategoryRepository
-								   );
+								   new UtcTimeZone(), shiftCategoryRepository, addActivity
+									);
 
 			personAssignmentRepository.Count().Should().Be.EqualTo(0);
 
@@ -172,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var addedActivity = ActivityFactory.CreateActivity("Added activity");
 			var activityRepository = new FakeWriteSideRepository<IActivity> { addedActivity };
 			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository();
-
+			var addActivity = new AddActivityWithoutResourceCalculation();
 			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(new Scenario("scenario"), personRepository.SingleOrDefault(), date, new DayOffTemplate());
 			personAssignmentRepository.Add(dayOff);
 
@@ -183,8 +187,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var target = new AddActivityCommandHandler(personAssignmentRepository,
 									new ThisCurrentScenario(personAssignmentRepository.SingleOrDefault().Scenario),
 								   activityRepository, personRepository,
-								   new UtcTimeZone(), shiftCategoryRepository
-								   );
+								   new UtcTimeZone(), shiftCategoryRepository, addActivity
+									);
 
 			personAssignmentRepository.Count().Should().Be.EqualTo(1);
 			personAssignmentRepository.SingleOrDefault().ShiftLayers.Count().Should().Be.EqualTo(0);
@@ -211,7 +215,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var shiftCategoryRepository = MockRepository.GenerateMock<IShiftCategoryRepository>();
 			var shiftCategory = new ShiftCategory("Day");
 			shiftCategoryRepository.Stub(x => x.FindAll()).Return(new List<IShiftCategory> { shiftCategory });
-
+			var addActivity = new AddActivityWithoutResourceCalculation();
 			var mainActivity = ActivityFactory.CreateActivity("Phone");
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
 				mainActivity, personRepository.Single(),
@@ -222,7 +226,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var target = new AddActivityCommandHandler(personAssignmentRepository,
 								   new ThisCurrentScenario(personAssignmentRepository.Single().Scenario),
 								   activityRepository, personRepository,
-								   new UtcTimeZone(), shiftCategoryRepository
+								   new UtcTimeZone(), shiftCategoryRepository,addActivity
 								   );
 
 			var command = new AddActivityCommand
