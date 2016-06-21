@@ -67,6 +67,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 			return  !a.Equals(b);
 		}
 
+		public IEnumerable<ScheduleProjectionReadOnlyModel> BuildReadModel(Guid personId, DateOnly date)
+		{
+			return BuildReadModel(_personRepository.Get(personId), date);
+		}
+
 		public IEnumerable<ScheduleProjectionReadOnlyModel> BuildReadModel(IPerson person, DateOnly date)
 		{
 			var scenario = _currentScenario.Current();

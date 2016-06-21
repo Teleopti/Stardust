@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Teleopti.Interfaces.Infrastructure
 {
@@ -13,6 +14,7 @@ namespace Teleopti.Interfaces.Infrastructure
 	public interface IScheduleProjectionReadOnlyCheckResultPersister
 	{
 		void Save(ScheduleProjectionReadOnlyValidationResult input);
+		IEnumerable<ScheduleProjectionReadOnlyValidationResult> LoadAllInvalid();
 		void Reset();
 	}
 }

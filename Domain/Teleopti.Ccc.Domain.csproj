@@ -199,6 +199,8 @@
     <Compile Include="ApplicationLayer\Events\AvailabilityChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonRequestChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\SkillDayChangedEvent.cs" />
+    <Compile Include="ApplicationLayer\ReadModelValidator\FixScheduleProjectionReadOnlyEvent.cs" />
+    <Compile Include="ApplicationLayer\ReadModelValidator\FixScheduleProjectionReadOnlyEventHandler.cs" />
     <Compile Include="ApplicationLayer\ReadModelValidator\IReadModelValidator.cs" />
     <Compile Include="ApplicationLayer\ReadModelValidator\ReadModelValidator.cs" />
     <Compile Include="ApplicationLayer\ReadModelValidator\ValidateScheduleProjectionReadOnlyEvent.cs" />

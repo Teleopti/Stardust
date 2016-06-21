@@ -1,5 +1,4 @@
-﻿using System;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+﻿using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator

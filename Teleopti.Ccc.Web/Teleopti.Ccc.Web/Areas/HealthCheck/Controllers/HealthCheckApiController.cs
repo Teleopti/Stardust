@@ -166,5 +166,12 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 			});
 			return Ok();
 		}
+
+		[HttpGet, Route("HealthCheck/FixScheduleProjectionReadOnly")]
+		public virtual IHttpActionResult FixScheduleProjectionReadOnly()
+		{
+			_publisher.Publish(new FixScheduleProjectionReadOnlyEvent());
+			return Ok();
+		}
 	}
 }

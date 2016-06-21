@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using NHibernate.Transform;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -22,6 +24,15 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 				.SetBoolean("IsValid", input.IsValid)
 				.SetDateTime("UpdateOn", DateTime.UtcNow)
 				.ExecuteUpdate();
+		}
+
+		public IEnumerable<ScheduleProjectionReadOnlyValidationResult> LoadAllInvalid()
+		{
+			var result = _currentUnitOfWork.Session().CreateSQLQuery(
+				@"SELECT PersonId, BelongsToDate as [Date], IsValid FROM [CheckReadModel].[ScheduleProjectionReadOnly] WHERE IsValid = 0")
+				.SetResultTransformer(Transformers.AliasToBean<ScheduleProjectionReadOnlyValidationResult>())
+				.List<ScheduleProjectionReadOnlyValidationResult>();
+			return result;
 		}
 
 		public void Reset()
