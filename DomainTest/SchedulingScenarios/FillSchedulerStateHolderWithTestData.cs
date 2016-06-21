@@ -21,15 +21,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 		{
 			var stateHolder = stateHolderFunc();
 			var dateTimePeriod = period.ToDateTimePeriod(TimeZoneInfo.Utc);
-			stateHolder.SchedulingResultState.Schedules = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(dateTimePeriod), new PersistableScheduleDataPermissionChecker());
+			stateHolder.SchedulingResultState.Schedules = ScheduleDictionaryCreator.WithData(scenario, period, persistableScheduleData);
 			foreach (var agent in agents)
 			{
 				stateHolder.AllPermittedPersons.Add(agent);
-				stateHolder.SchedulingResultState.PersonsInOrganization.Add(agent);			
-			}
-			foreach (var scheduleData in persistableScheduleData)
-			{
-				((ScheduleRange)stateHolder.Schedules[scheduleData.Person]).Add(scheduleData);
+				stateHolder.SchedulingResultState.PersonsInOrganization.Add(agent);
 			}
 			var uniqueSkills = new HashSet<ISkill>();
 			stateHolder.SchedulingResultState.SkillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>>();

@@ -5,7 +5,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class ResourceCalculationData : IResourceCalculationData
 	{
-		public ResourceCalculationData(ISchedulingResultStateHolder schedulingResultStateHolder, bool considerShortBreaks, bool doIntraIntervalCalculation)
+		public ResourceCalculationData(ISchedulingResultStateHolder schedulingResultStateHolder, 
+																bool considerShortBreaks, 
+																bool doIntraIntervalCalculation)
 		{
 			ConsiderShortBreaks = considerShortBreaks;
 			DoIntraIntervalCalculation = doIntraIntervalCalculation;
@@ -16,15 +18,19 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			SkipResourceCalculation = schedulingResultStateHolder.TeamLeaderMode || schedulingResultStateHolder.SkipResourceCalculation;
 		}
 
-		//public ResourceCalculationData(IScheduleDictionary scheduleDictionary, IEnumerable<ISkill> skills, IEnumerable<ISkillDay> skillDays, bool considerShortBreaks, bool doIntraIntervalCalculation)
-		//{
-		//	ConsiderShortBreaks = considerShortBreaks;
-		//	DoIntraIntervalCalculation = doIntraIntervalCalculation;
-		//	Schedules = scheduleDictionary;
-		//	Skills = skills;
-		//	SkillStaffPeriodHolder = new SkillStaffPeriodHolder();
-		//	SkillDays = skillDays;
-		//}
+		public ResourceCalculationData(IScheduleDictionary scheduleDictionary, 
+																	IEnumerable<ISkill> skills, 
+																	IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, 
+																	bool considerShortBreaks, 
+																	bool doIntraIntervalCalculation)
+		{
+			ConsiderShortBreaks = considerShortBreaks;
+			DoIntraIntervalCalculation = doIntraIntervalCalculation;
+			Schedules = scheduleDictionary;
+			Skills = skills;
+			SkillStaffPeriodHolder = new SkillStaffPeriodHolder(skillDays);
+			SkillDays = skillDays;
+		}
 
 		public IScheduleDictionary Schedules { get; }
 		public bool ConsiderShortBreaks { get; }

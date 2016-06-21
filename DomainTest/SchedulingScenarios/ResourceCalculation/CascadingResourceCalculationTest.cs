@@ -41,9 +41,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			agent.AddPeriodWithSkill(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), nonCascadingSkill);
 			var assignment = new PersonAssignment(agent, scenario, dateOnly);
 			assignment.AddActivity(activity, new TimePeriod(5, 0, 10, 0)); //1 agent per interval
-			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] {assignment}, skillDay);
 
-			Target.ResourceCalculate(dateOnly, stateHolder.SchedulingResultState.ToResourceOptimizationData(false, false));
+			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { assignment }, new[] { skillDay }, false, false));
 
 			skillDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(-1); 
@@ -66,10 +65,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { prioritizedSkill, nonPrioritizedSkill});
 			var ass = new PersonAssignment(agent, scenario, dateOnly);
-			ass.AddActivity(activity, new TimePeriod(5, 0, 10, 0)); 
-			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { prioritizedSkillDay, nonPrioritizedSkillDay });
+			ass.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
 
-			Target.ResourceCalculate(dateOnly, stateHolder.SchedulingResultState.ToResourceOptimizationData(false, false));
+			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { ass }, new[] { prioritizedSkillDay, nonPrioritizedSkillDay }, false, false));
 
 			prioritizedSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0);
@@ -95,11 +93,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { prioritizedSkill, nonPrioritizedSkill });
 			var ass = new PersonAssignment(agent, scenario, dateOnly);
 			ass.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
-			var schedulerStateHolderFrom = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { prioritizedSkillDay, nonPrioritizedSkillDay });
+			var resCalcData = ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] {ass}, new[] {prioritizedSkillDay, nonPrioritizedSkillDay}, false, false);
 
-			using (ResourceCalculationContextFactory.Create(schedulerStateHolderFrom.Schedules, schedulerStateHolderFrom.SchedulingResultState.Skills))
+			using (ResourceCalculationContextFactory.Create(resCalcData.Schedules, resCalcData.Skills))
 			{
-				Target.ResourceCalculate(dateOnly, schedulerStateHolderFrom.SchedulingResultState.ToResourceOptimizationData(false, false));
+				Target.ResourceCalculate(dateOnly, resCalcData);
 
 				prioritizedSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 					.Should().Be.EqualTo(0);
@@ -129,9 +127,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { prioritizedSkill, nonCascadingSkill, nonPrioritizedSkill });
 			var ass = new PersonAssignment(agent, scenario, dateOnly);
 			ass.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
-			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { prioritizedSkillDay,  nonCascadingSkillDay, nonPrioritizedSkillDay });
 
-			Target.ResourceCalculate(dateOnly, stateHolder.SchedulingResultState.ToResourceOptimizationData(false, false));
+			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { ass }, new[] { prioritizedSkillDay, nonCascadingSkillDay, nonPrioritizedSkillDay }, false, false));
 
 			prioritizedSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(-0.5);
@@ -158,9 +155,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			((PersonSkill) agent.Period(dateOnly).PersonSkillCollection.Single(x => x.Skill.Equals(prioritizedSkill))).Active = false;
 			var ass = new PersonAssignment(agent, scenario, dateOnly);
 			ass.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
-			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { prioritizedSkillDay, nonPrioritizedSkillDay });
 
-			Target.ResourceCalculate(dateOnly, stateHolder.SchedulingResultState.ToResourceOptimizationData(false, false));
+			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { ass }, new[] { prioritizedSkillDay, nonPrioritizedSkillDay }, false, false));
 
 			prioritizedSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(-1);
@@ -187,9 +183,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { prioritizedSkill, nonPrioritizedSkill });
 			var ass = new PersonAssignment(agent, scenario, dateOnly);
 			ass.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
-			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { prioritizedSkillDay, nonPrioritizedSkillDay });
 
-			Target.ResourceCalculate(dateOnly, stateHolder.SchedulingResultState.ToResourceOptimizationData(false, false));
+			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { ass }, new[] { prioritizedSkillDay, nonPrioritizedSkillDay }, false, false));
 
 			prioritizedSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(-1);
@@ -215,9 +210,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { highestPrioSkill, nonHighestPrioSkill });
 			var ass = new PersonAssignment(agent, scenario, dateOnly);
 			ass.AddActivity(scheduledActivity, new TimePeriod(5, 0, 10, 0));
-			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { highestPrioSkillDay, nonHighestPrioSkillDay });
 
-			Target.ResourceCalculate(dateOnly, stateHolder.SchedulingResultState.ToResourceOptimizationData(false, false));
+			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { ass }, new[] { highestPrioSkillDay, nonHighestPrioSkillDay }, false, false));
 
 			highestPrioSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(-1);
@@ -243,9 +237,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { prioritizedSkill, nonPrioritizedSkill });
 			var ass = new PersonAssignment(agent, scenario, dateOnly);
 			ass.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
-			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { prioritizedSkillDay, nonPrioritizedSkillDay });
 
-			Target.ResourceCalculate(dateOnly, stateHolder.SchedulingResultState.ToResourceOptimizationData(false, false));
+			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { ass }, new[] { prioritizedSkillDay, nonPrioritizedSkillDay }, false, false));
 
 			agent.Period(dateOnly).PersonSkillCollection.Count(x => x.Active)
 				.Should().Be.EqualTo(2);
@@ -269,10 +262,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { prioritizedSkill, nonPrioritizedSkill });
 			var ass = new PersonAssignment(agent, scenario, dateOnly);
 			ass.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
-			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { prioritizedSkillDay, nonPrioritizedSkillDay });
-
 			PersonSkillProvider.SkillsOnPersonDate(agent, dateOnly);
-			Target.ResourceCalculate(dateOnly, stateHolder.SchedulingResultState.ToResourceOptimizationData(false, false));
+
+			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { ass }, new[] { prioritizedSkillDay, nonPrioritizedSkillDay }, false, false));
 
 			prioritizedSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0);
@@ -293,9 +285,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			agent.AddPeriodWithSkill(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), nonCascadingSkill);
 			var assignment = new PersonAssignment(agent, scenario, dateOnly);
 			assignment.AddActivity(activity, new TimePeriod(5, 0, 10, 0)); //1 agent per interval
-			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { assignment }, skillDay);
 
-			Target.ResourceCalculate(new DateOnlyPeriod(dateOnly.AddDays(-1), dateOnly.AddDays(1)), stateHolder.SchedulingResultState.ToResourceOptimizationData(false, false));
+			Target.ResourceCalculate(new DateOnlyPeriod(dateOnly.AddDays(-1), dateOnly.AddDays(1)), ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { assignment }, new[] { skillDay }, false, false));
 
 			skillDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(-1);
@@ -317,13 +308,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var nonPrioritizedSkillDay = nonPrioritizedSkill.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { prioritizedSkill, nonPrioritizedSkill });
-
 			var ass = new PersonAssignment(agent, scenario, dateOnly);
 			ass.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
 
-			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { prioritizedSkillDay, nonPrioritizedSkillDay });
-
-			Target.ResourceCalculate(dateOnly, stateHolder.SchedulingResultState.ToResourceOptimizationData(false, false));
+			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { ass }, new[] { prioritizedSkillDay, nonPrioritizedSkillDay }, false, false));
 
 			nonPrioritizedSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0);
@@ -348,9 +336,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				new[] { prioritizedSkill, nonPrioritizedSkill });
 			var ass = new PersonAssignment(agent, scenario, dateOnly);
 			ass.AddActivity(activity, new TimePeriod(8, 0, 10, 0));
-			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { prioritizedSkillDay, nonPrioritizedSkillDay });
 
-			Target.ResourceCalculate(dateOnly, stateHolder.SchedulingResultState.ToResourceOptimizationData(false, false));
+			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { ass }, new[] { prioritizedSkillDay, nonPrioritizedSkillDay }, false, false));
 
 			prioritizedSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0);

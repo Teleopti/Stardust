@@ -264,6 +264,7 @@
     <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeOnNonScheduleDaysCascadingTest.cs" />
     <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeOnScheduleDaysTest.cs" />
     <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeOnScheduledDaysCascadingTest.cs" />
+    <Compile Include="SchedulingScenarios\ResourceCalculationDataCreator.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationContextTest.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationOverstaffedParallellSkillsTest.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationTest.cs" />
@@ -324,6 +325,7 @@
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationScenario.cs" />
     <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeOnNonScheduledDaysTest.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\GuessResourceCalculationHasBeenMadeTest.cs" />
+    <Compile Include="SchedulingScenarios\ScheduleDictionaryCreator.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\BackToLegalShiftCommandTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\FullSchedulingTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCallbackDesktopTest.cs" />
