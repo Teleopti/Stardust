@@ -14,7 +14,7 @@
 					siteIds: data.siteIds,
 				}).$promise;
 			};
-
+			
 			this.getSkills = function(data) {
 				return $resource('../api/BusinessUnit/Skills', {}, {
 					query: {
@@ -33,7 +33,40 @@
 						isArray: true
 					}
 				}).query({
-					teamIds: data.teamIds,
+					teamIds: data.teamIds,			
+	}).$promise;
+			};
+
+
+			this.getSkills = function(data) {
+				return $resource('../api/BusinessUnit/Skills', {}, {
+					query: {
+						method: 'GET',
+						isArray: true
+					}
+				}).query({
+					teamIds: data,
+				}).$promise;
+			};
+
+			this.getAgentsForSkill = function (data) {
+				return $resource('../api/Agents/ForSkill', {}, {
+					query: {
+						method: 'GET',
+						isArray: true
+					}
+				}).query({
+					skillId: data.skillId,
+				}).$promise;
+			};
+
+			this.getStatesForSkill = function (data) {
+				return $resource('../api/Agents/GetStatesForSkill', {}, {
+					query: {
+						method: 'GET'
+					}
+				}).query({
+					skillId: data.skillId
 				}).$promise;
 			};
 
@@ -54,6 +87,16 @@
 					}
 				}).query({
 					ids: data.siteIds
+				}).$promise;
+			};
+
+			this.getAlarmStatesForSkill = function (data) {
+				return $resource('../api/Agents/GetAlarmStatesForSkill', {}, {
+					query: {
+						method: 'GET'
+					}
+				}).query({
+					skillId: data.skillId
 				}).$promise;
 			};
 
@@ -112,6 +155,16 @@
 					}
 				}).query({
 					siteId: data.siteId
+				}).$promise;
+			};
+
+			this.getSkillName = function (data) {
+				return $resource('../api/Skill/NameFor', {}, {
+					query: {
+						method: 'GET'
+					}
+				}).query({
+					skillId: data
 				}).$promise;
 			};
 

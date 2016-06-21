@@ -1426,6 +1426,7 @@
     <Content Include="WFM\js\rta\rta.agentdetails.controller.js" />
     <Content Include="WFM\js\rta\rta.agentdetails.controller.spec.js" />
     <Content Include="WFM\js\rta\rta.selectSkill.controller.js" />
+    <Content Include="WFM\js\rta\rta.agents.controller.RTA_MonitorBySkills_39081.spec.js" />
     <Content Include="WFM\js\rta\rta.agents.controller.inalarm.spec.js" />
     <Content Include="WFM\js\rta\rta.agents.controller.alarmcontext.spec.js" />
     <Content Include="WFM\js\rta\rta.agents.controller.RTA_PauseButton_39144.spec.js" />
@@ -1444,6 +1445,7 @@
     <Content Include="WFM\js\rta\rta.organization.service.spec.js" />
     <Content Include="WFM\js\rta\rta.route.service.spec.js" />
     <Content Include="WFM\js\rta\rta.sites.controller.js" />
+    <Content Include="WFM\js\rta\rta.selectSkill.controller.spec.js" />
     <Content Include="WFM\js\rta\rta.sites.controller.spec.js" />
     <Content Include="WFM\js\rta\rta.state.provider.js" />
     <Content Include="WFM\js\rta\rta.teams.controller.spec.js" />

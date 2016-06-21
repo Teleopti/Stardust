@@ -47,6 +47,14 @@
 					return [200, skills];
 				});
 
+			fake(/\.\.\/api\/Skill\/NameFor(.*)/,
+				function (params) {
+					var result = skills
+						.filter(function(s) { return params.skillId === s.SkillId })
+						.map(function (s) { return s.Name; });
+					return [200, { Name: result[0] }];
+				});
+
 			fake(/\.\.\/api\/Adherence\/ForToday(.*)/,
 				function(params) {
 					var result = adherences.find(function(a) {
@@ -63,6 +71,11 @@
 			fake(/\.\.\/api\/Agents\/ForSites(.*)/,
 				function (params) {
 					return [200, agents.filter(function(a) { return params.siteIds.indexOf(a.SiteId) >= 0; })];
+				});
+
+			fake(/\.\.\/api\/Agents\/ForSkill(.*)/,
+				function (params) {
+					return [200, agents.filter(function (a) { return params.skillId === a.SkillId; })];
 				});
 
 			fake(/\.\.\/api\/Agents\/GetStatesForTeams(.*)/,
@@ -106,6 +119,29 @@
 						}).filter(function(s) {
 							return s.TimeInAlarm > 0;
 						}).sort(function(s1, s2) {
+							return s2.TimeInAlarm - s1.TimeInAlarm;
+						});
+					return [200, { Time: serverTime, States: result }];
+				});
+
+			fake(/\.\.\/api\/Agents\/GetStatesForSkill(.*)/,
+				function (params) {
+					var result = states.filter(function (s) {
+						var a = agents.find(function (a) { return a.PersonId === s.PersonId; });
+						return a != null && params.skillId === a.SkillId;
+					});
+					return [200, { Time: serverTime, States: result }];
+				});
+
+			fake(/\.\.\/api\/Agents\/GetAlarmStatesForSkill(.*)/,
+				function (params) {
+					var result =
+						states.filter(function (s) {
+							var a = agents.find(function (a) { return a.PersonId === s.PersonId; });
+							return a != null && params.skillId === a.SkillId;
+						}).filter(function (s) {
+							return s.TimeInAlarm > 0;
+						}).sort(function (s1, s2) {
 							return s2.TimeInAlarm - s1.TimeInAlarm;
 						});
 					return [200, { Time: serverTime, States: result }];

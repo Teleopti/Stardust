@@ -1,16 +1,16 @@
-(function() {
+(function () {
 	'use strict';
 
 	angular
 		.module('wfm.rta')
 		.controller('RtaAgentsCtrl', [
 			'$scope', '$filter', '$state', '$stateParams', '$interval', '$sessionStorage', 'RtaService', 'RtaGridService', 'RtaFormatService', 'RtaRouteService', 'FakeTimeService', 'Toggle', 'NoticeService', '$translate',
-			function($scope, $filter, $state, $stateParams, $interval, $sessionStorage, RtaService, RtaGridService, RtaFormatService, RtaRouteService, FakeTimeService, toggleService, NoticeService, $translate) {
+			function ($scope, $filter, $state, $stateParams, $interval, $sessionStorage, RtaService, RtaGridService, RtaFormatService, RtaRouteService, FakeTimeService, toggleService, NoticeService, $translate) {
 				var polling = null;
 				var selectedPersonId;
 				var siteIds = $stateParams.siteIds || ($stateParams.siteId ? [$stateParams.siteId] : []);
 				var teamIds = $stateParams.teamIds || ($stateParams.teamId ? [$stateParams.teamId] : []);
-				console.log($stateParams)
+				var skillId = $stateParams.skillId || undefined;
 				var propertiesForFiltering = ["Name", "TeamName", "State", "Activity", "Alarm"];
 				$scope.adherence = {};
 				$scope.adherencePercent = null;
@@ -35,16 +35,16 @@
 				$scope.pausedAt = null;
 				var lastUpdate, notice;
 
-				$scope.noSiteIds = siteIds.length == 0 ;
+				$scope.noSiteIds = siteIds.length == 0;
 				$scope.underToggle = toggleService.RTA_MonitorBySkills_39081;
 				$scope.showGrid = teamIds.length > 0;
 				$scope.showBreadcrumb = teamIds.length > 0;
 				// need to remove later
-				$scope.skills = [{"Id":"f08d75b3-fdb4-484a-ae4c-9f0800e2f753","Name":"Channel Sales"},{"Id":"c5fffc8f-bcd6-47f7-9352-9f0800e39578","Name":"Direct Sales"},{"Id":"bc50fc19-c211-4e7a-8a1a-9f0801134e37","Name":"Email"},{"Id":"24ab69f5-1c47-4f26-9bcd-9f0801140b7f","Name":"Invoice"},{"Id":"52fb01c8-d2e3-47f9-85de-9f0901884fe6","Name":"Social Media"},
-				{"Id":"48d3423f-d044-45f0-8c5b-a0a200f2f3c0","Name":"Store London North"},{"Id":"e0af5f19-9fa7-4f16-b294-a0a200fa4d31","Name":"Store London South"},{"Id":"adbc5dca-73f8-400b-9b59-a0a200f345de","Name":"Store New York 5:th Ave"},{"Id":"39c05ed3-29a1-4a20-b3de-a47600dfef79","Name":"Store New York Broadway"},{"Id":"c32c0cde-e1cb-4d25-a7ac-a47600d4e96a","Name":"Store New York Soho"},
-				{"Id":"cdc2ccc7-8eaf-4380-abaa-a0a200f25a74","Name":"Store Tokyo Ginza"},{"Id":"a3784b8b-3aac-4781-b1c8-a474009f89a8","Name":"Web Chat"}];
+				$scope.skills = [{ "Id": "f08d75b3-fdb4-484a-ae4c-9f0800e2f753", "Name": "Channel Sales" }, { "Id": "c5fffc8f-bcd6-47f7-9352-9f0800e39578", "Name": "Direct Sales" }, { "Id": "bc50fc19-c211-4e7a-8a1a-9f0801134e37", "Name": "Email" }, { "Id": "24ab69f5-1c47-4f26-9bcd-9f0801140b7f", "Name": "Invoice" }, { "Id": "52fb01c8-d2e3-47f9-85de-9f0901884fe6", "Name": "Social Media" },
+				{ "Id": "48d3423f-d044-45f0-8c5b-a0a200f2f3c0", "Name": "Store London North" }, { "Id": "e0af5f19-9fa7-4f16-b294-a0a200fa4d31", "Name": "Store London South" }, { "Id": "adbc5dca-73f8-400b-9b59-a0a200f345de", "Name": "Store New York 5:th Ave" }, { "Id": "39c05ed3-29a1-4a20-b3de-a47600dfef79", "Name": "Store New York Broadway" }, { "Id": "c32c0cde-e1cb-4d25-a7ac-a47600d4e96a", "Name": "Store New York Soho" },
+				{ "Id": "cdc2ccc7-8eaf-4380-abaa-a0a200f25a74", "Name": "Store Tokyo Ginza" }, { "Id": "a3784b8b-3aac-4781-b1c8-a474009f89a8", "Name": "Web Chat" }];
 
-				$scope.$watch('pause', function() {
+				$scope.$watch('pause', function () {
 					if ($scope.pause) {
 						$scope.pausedAt = moment(lastUpdate).format('YYYY-MM-DD HH:mm:ss');
 						var template = $translate.instant('RtaPauseEnabledNotice')
@@ -61,7 +61,7 @@
 					}
 				});
 
-				$scope.getTableHeight = function() {
+				$scope.getTableHeight = function () {
 					var rowHeight = 30;
 					var headerHeight = 30;
 					var agentMenuHeight = 45;
@@ -70,59 +70,68 @@
 					};
 				};
 
-				$scope.selectAgent = function(personId) {
+				$scope.selectAgent = function (personId) {
 					selectedPersonId = $scope.isSelected(personId) ? '' : personId;
 				};
-				$scope.isSelected = function(personId) {
+				$scope.isSelected = function (personId) {
 					return selectedPersonId === personId;
 				};
-				$scope.showAdherenceUpdates = function() {
+				$scope.showAdherenceUpdates = function () {
 					return $scope.adherencePercent !== null;
 				};
-				$scope.getAdherenceForAgent = function(personId) {
+				$scope.getAdherenceForAgent = function (personId) {
 					if (!$scope.isSelected(personId)) {
 						RtaService.forToday({
-								personId: personId
-							})
-							.then(function(data) {
+							personId: personId
+						})
+							.then(function (data) {
 								$scope.adherence = data;
 								$scope.adherencePercent = data.AdherencePercent;
 								$scope.timestamp = data.LastTimestamp;
 							});
 					}
 				};
-				$scope.changeScheduleUrl = function(teamId, personId) {
+				$scope.changeScheduleUrl = function (teamId, personId) {
 					return RtaRouteService.urlForChangingSchedule($sessionStorage.buid, teamId, personId);
 				};
-				$scope.agentDetailsUrl = function(personId) {
+				$scope.agentDetailsUrl = function (personId) {
 					return RtaRouteService.urlForAgentDetails(personId);
 				};
 
 				$scope.$watch('filterText', filterData);
-				$scope.$watch('agentsInAlarm', function(newValue, oldValue) {
+				$scope.$watch('agentsInAlarm', function (newValue, oldValue) {
 					if (newValue !== oldValue) {
 						updateStates();
 						filterData();
 					}
 				});
 				$scope.$watch(
-					function() {
+					function () {
 						return $sessionStorage.buid;
 					},
-					function(newValue, oldValue) {
+					function (newValue, oldValue) {
 						if (oldValue !== undefined && newValue !== oldValue) {
 							RtaRouteService.goToSites();
 						}
 					}
 				);
 
-				var getAgents = (function() {
-					if (teamIds.length > 0)
+				var getAgents = (function () {
+					if (skillId) {
+						return RtaService.getAgentsForSkill;
+					}
+					if (teamIds.length > 0) {
 						return RtaService.getAgentsForTeams;
+					}
 					return RtaService.getAgentsForSites;
 				})();
 
-				var getStates = function(inAlarm) {
+				var getStates = function (inAlarm) {
+					if (skillId) {
+						if (inAlarm)
+							return RtaService.getAlarmStatesForSkill;
+						return RtaService.getStatesForSkill;
+					}
 					if (teamIds.length > 0) {
 						if (inAlarm)
 							return RtaService.getAlarmStatesForTeams;
@@ -133,7 +142,7 @@
 					return RtaService.getStatesForSites;
 				};
 
-				var updateBreadCrumb = function(agentsInfo) {
+				var updateBreadCrumb = function (agentsInfo) {
 					if (agentsInfo.length > 0) {
 						$scope.siteName = agentsInfo[0].SiteName;
 						$scope.teamName = agentsInfo[0].TeamName;
@@ -141,32 +150,40 @@
 				};
 				if (siteIds.length > 1) {
 					$scope.multipleSitesName = "Multiple Sites";
-					updateBreadCrumb = function() {};
+					updateBreadCrumb = function () { };
 				} else if (teamIds.length > 1) {
 					$scope.multipleTeamsName = "Multiple Teams";
-					updateBreadCrumb = function() {};
+					updateBreadCrumb = function () { };
 				}
 
-			if(siteIds.length > 0 || teamIds.length > 0) {
-				getAgents({
+				if (skillId) {
+					RtaService.getSkillName(skillId)
+						.then(function (skill) {
+							$scope.skillName = skill.Name;
+						});
+				}
+
+				if (siteIds.length > 0 || teamIds.length > 0 || skillId) {
+					getAgents({
 						siteIds: siteIds,
 						teamIds: teamIds,
+						skillId: skillId
 					})
-					.then(function(agentsInfo) {
-						$scope.agentsInfo = agentsInfo;
-						$scope.agents = agentsInfo;
-						$scope.$watchCollection('agents', filterData);
-						updateBreadCrumb(agentsInfo);
-					})
-					.then(updateStates);
+						.then(function (agentsInfo) {
+							$scope.agentsInfo = agentsInfo;
+							$scope.agents = agentsInfo;
+							$scope.$watchCollection('agents', filterData);
+							updateBreadCrumb(agentsInfo);
+						})
+						.then(updateStates);
 				}
 
-				$scope.$on('$destroy', function() {
+				$scope.$on('$destroy', function () {
 					cancelPolling();
 				});
 
 				function setupPolling() {
-					polling = $interval(function() {
+					polling = $interval(function () {
 						updateStates();
 					}, 5000);
 				}
@@ -189,12 +206,13 @@
 				}
 
 				function updateStates() {
-					if ($scope.pause || !(siteIds.length > 0 || teamIds.length > 0))
+					if ($scope.pause || !(siteIds.length > 0 || teamIds.length > 0 || skillId))
 						return;
 					getStates($scope.agentsInAlarm)({
-							siteIds: siteIds,
-							teamIds: teamIds,
-						})
+						siteIds: siteIds,
+						teamIds: teamIds,
+						skillId: skillId
+					})
 						.then(setStatesInAgents);
 				}
 
@@ -222,7 +240,7 @@
 				}
 
 				function buildTimeline(states) {
-					var timeline = function(time) {
+					var timeline = function (time) {
 						var percent = timeToPercent(states.Time, time);
 						if (percent <= 94)
 							return {
@@ -242,7 +260,7 @@
 				}
 
 				function fillAgentsWithState(states) {
-					states.States.forEach(function(state, i) {
+					states.States.forEach(function (state, i) {
 						var agentInfo = $filter('filter')($scope.agentsInfo, {
 							PersonId: state.PersonId
 						});
@@ -271,7 +289,7 @@
 								TimeInAlarm: state.TimeInAlarm,
 								TimeInRule: state.TimeInAlarm ? state.TimeInRule : null,
 
-								TimeOutOfAdherence: function() {
+								TimeOutOfAdherence: function () {
 									if (state.OutOfAdherences.length > 0) {
 										var lastOOA = state.OutOfAdherences[state.OutOfAdherences.length - 1];
 										if (lastOOA.EndTime == null) {
@@ -281,8 +299,8 @@
 									}
 								}(),
 
-								OutOfAdherences: function() {
-									return state.OutOfAdherences.map(function(t) {
+								OutOfAdherences: function () {
+									return state.OutOfAdherences.map(function (t) {
 										var endTime = t.EndTime || states.Time;
 										return {
 											Offset: Math.max(timeToPercent(states.Time, t.StartTime), 0) + '%',
@@ -293,8 +311,8 @@
 									});
 								}(),
 
-								ShiftTimeBar: function() {
-									var percentForTimeBar = function(seconds) {
+								ShiftTimeBar: function () {
+									var percentForTimeBar = function (seconds) {
 										return Math.min(secondsToPercent(seconds), 25);
 									}
 									if (toggleService.RTA_TotalOutOfAdherenceTime_38702)
@@ -303,12 +321,12 @@
 
 								}(),
 
-								Shift: function() {
+								Shift: function () {
 									return state.Shift
-										.filter(function(layer) {
+										.filter(function (layer) {
 											return windowStart < moment(layer.EndTime) && windowEnd > moment(layer.StartTime);
 										})
-										.map(function(s) {
+										.map(function (s) {
 											return {
 												Color: s.Color,
 												Offset: Math.max(timeToPercent(states.Time, s.StartTime), 0) + '%',
@@ -325,7 +343,7 @@
 				}
 
 				function fillAgentsWithoutState() {
-					$scope.agentsInfo.forEach(function(agentInfo) {
+					$scope.agentsInfo.forEach(function (agentInfo) {
 						var agentFilled = $filter('filter')($scope.agents, {
 							PersonId: agentInfo.PersonId
 						});
@@ -353,59 +371,59 @@
 
 				if (toggleService.RTA_MonitorBySkills_39081) {
 
-				$scope.querySearch = function (query, myArray) {
-					var results = query ? myArray.filter(createFilterFor(query)) : myArray, deferred;
-					return results;
-				};
-
-				function createFilterFor(query) {
-					var lowercaseQuery = angular.lowercase(query);
-					return function filterFn(item) {
-						var lowercaseName = angular.lowercase(item.Name);
-						return (lowercaseName.indexOf(lowercaseQuery) === 0);
+					$scope.querySearch = function (query, myArray) {
+						var results = query ? myArray.filter(createFilterFor(query)) : myArray, deferred;
+						return results;
 					};
-				};
 
-				$scope.selectedSkillChange = function (item) {
-					if (item) {
-						$scope.skillSelected(item);
-					}
-					else {
-						$scope.showGrid = false;
-					}
-				};
+					function createFilterFor(query) {
+						var lowercaseQuery = angular.lowercase(query);
+						return function filterFn(item) {
+							var lowercaseName = angular.lowercase(item.Name);
+							return (lowercaseName.indexOf(lowercaseQuery) === 0);
+						};
+					};
 
-				$scope.skillSelected = function (item) {
-					$scope.selectedItem = item;
+					$scope.selectedSkillChange = function (item) {
+						if (item) {
+							$scope.skillSelected(item);
+						}
+						else {
+							$scope.showGrid = false;
+						}
+					};
 
-					pollSkillMonitorData();
-				};
+					$scope.skillSelected = function (item) {
+						$scope.selectedItem = item;
 
-				var pollSkillMonitorData = function () {
+						pollSkillMonitorData();
+					};
 
-					getAgents({
+					var pollSkillMonitorData = function () {
+
+						getAgents({
 							siteIds: ['d970a45a-90ff-4111-bfe1-9b5e015ab45c'],
 							teamIds: ['34590a63-6331-4921-bc9f-9b5e015ab495']
 						})
-						.then(function(agentsInfo) {
-							$scope.agentsInfo = agentsInfo;
-							$scope.agents = agentsInfo;
-							$scope.$watchCollection('agents', filterData);
-							updateBreadCrumb(agentsInfo);
-						})
-						.then(function(){
-							getStates($scope.agentsInAlarm)({
-								siteIds: ['d970a45a-90ff-4111-bfe1-9b5e015ab45c'],
-								teamIds: ['34590a63-6331-4921-bc9f-9b5e015ab495']
+							.then(function (agentsInfo) {
+								$scope.agentsInfo = agentsInfo;
+								$scope.agents = agentsInfo;
+								$scope.$watchCollection('agents', filterData);
+								updateBreadCrumb(agentsInfo);
+							})
+							.then(function () {
+								getStates($scope.agentsInAlarm)({
+									siteIds: ['d970a45a-90ff-4111-bfe1-9b5e015ab45c'],
+									teamIds: ['34590a63-6331-4921-bc9f-9b5e015ab495']
 								})
-								.then(setStatesInAgents);
+									.then(setStatesInAgents);
 								$scope.showGrid = true;
-						});
+							});
 					};
-				$scope.goToOverview = function() {
-					$state.go('rta.sites');
+					$scope.goToOverview = function () {
+						$state.go('rta.sites');
+					}
 				}
-			}
 			}
 		]);
 })();
