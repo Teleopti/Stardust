@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 	        return result;
         }
 
-	    private IList<IList<IOvertimeSkillIntervalData>> createOvertimeSkillIntervalDataList(List<ISkill> skills, IList<ISkillDay> skillDays, int minimumResolution)
+	    private IList<IList<IOvertimeSkillIntervalData>> createOvertimeSkillIntervalDataList(List<ISkill> skills, IEnumerable<ISkillDay> skillDays, int minimumResolution)
 	    {
 		    IList<IList<IOvertimeSkillIntervalData>> nestedList = new List<IList<IOvertimeSkillIntervalData>>();
 		    foreach (var personsActiveSkill in skills)

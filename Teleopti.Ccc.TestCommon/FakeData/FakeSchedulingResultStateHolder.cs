@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public ISkill[] Skills { get { return _skills.ToArray(); } }
 
 		public IList<ISkill> VisibleSkills { get; private set; }
-		public IList<ISkillDay> SkillDaysOnDateOnly(IList<DateOnly> theDateList)
+		public IEnumerable<ISkillDay> SkillDaysOnDateOnly(IEnumerable<DateOnly> theDateList)
 		{
 			throw new NotImplementedException();
 		}

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -69,9 +70,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
             using (mocks.Playback())
             {
-                IList<ISkillDay> ret = target.SkillDaysOnDateOnly(dateOnlys);
+                var ret = target.SkillDaysOnDateOnly(dateOnlys);
                 Assert.IsNotNull(ret);
-                Assert.AreEqual(2, ret.Count);
+                Assert.AreEqual(2, ret.Count());
             }
         }
 

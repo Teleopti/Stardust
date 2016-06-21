@@ -5,13 +5,13 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 {
 	public interface ISkillDayIntraIntervalIssueExtractor
 	{
-		IList<ISkillStaffPeriod> ExtractOnIssues(IList<ISkillDay> skillDays, ISkill skill);
-		IList<ISkillStaffPeriod> ExtractAll(IList<ISkillDay> skillDays, ISkill skill);
+		IList<ISkillStaffPeriod> ExtractOnIssues(IEnumerable<ISkillDay> skillDays, ISkill skill);
+		IList<ISkillStaffPeriod> ExtractAll(IEnumerable<ISkillDay> skillDays, ISkill skill);
 	}
 
 	public class SkillDayIntraIntervalIssueExtractor : ISkillDayIntraIntervalIssueExtractor
 	{
-		public IList<ISkillStaffPeriod> ExtractOnIssues(IList<ISkillDay> skillDays, ISkill skill)
+		public IList<ISkillStaffPeriod> ExtractOnIssues(IEnumerable<ISkillDay> skillDays, ISkill skill)
 		{
 			var result = new List<ISkillStaffPeriod>();
 
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			return result;	
 		}
 
-		public IList<ISkillStaffPeriod> ExtractAll(IList<ISkillDay> skillDays, ISkill skill)
+		public IList<ISkillStaffPeriod> ExtractAll(IEnumerable<ISkillDay> skillDays, ISkill skill)
 		{
 			var result = new List<ISkillStaffPeriod>();
 

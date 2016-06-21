@@ -85,7 +85,7 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <param name="theDateList">The DateOnlys.</param>
         /// <returns></returns>
-        IList<ISkillDay> SkillDaysOnDateOnly(IList<DateOnly> theDateList);
+        IEnumerable<ISkillDay> SkillDaysOnDateOnly(IEnumerable<DateOnly> theDateList);
 
 		
         /// <summary>

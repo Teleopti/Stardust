@@ -257,7 +257,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			ISkillDay retSkillDay = null;
 			double highestValue = double.MinValue;
 			
-			IList<ISkillDay> skillDays = _schedulingResultStateHolder.SkillDaysOnDateOnly(theDates);
+			var skillDays = _schedulingResultStateHolder.SkillDaysOnDateOnly(theDates);
 
 			foreach (ISkillDay skillDay in skillDays)
 			{
@@ -279,7 +279,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 			if (retSkillDay == null)
 			{
-				System.Diagnostics.Debug.Print(" Hittade ingen mest underbemannad skilldag bland " + skillDays.Count + " skilldagar");
+				System.Diagnostics.Debug.Print(" Hittade ingen mest underbemannad skilldag bland " + skillDays.Count() + " skilldagar");
 			}
 			return retSkillDay;
 		}

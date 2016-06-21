@@ -133,12 +133,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 		}
 
-		public IList<ISkillDay> SkillDaysOnDateOnly(IList<DateOnly> theDateList)
+		public IEnumerable<ISkillDay> SkillDaysOnDateOnly(IEnumerable<DateOnly> theDateList)
 		{
-			var ret = new List<ISkillDay>();
-			if (SkillDays == null) return ret;
-
-			return SkillDays.SelectMany(s => s.Value).FilterOnDates(theDateList).ToList(); //kolla om ienumerable
+			return SkillDays == null ? 
+				Enumerable.Empty<ISkillDay>() : 
+				SkillDays.SelectMany(s => s.Value).FilterOnDates(theDateList);
 		}
 
 		public ISkillDay SkillDayOnSkillAndDateOnly(ISkill skill, DateOnly dateOnly)
