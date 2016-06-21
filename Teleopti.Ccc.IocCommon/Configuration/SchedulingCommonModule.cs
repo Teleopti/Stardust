@@ -72,6 +72,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<ShovelResources>().SingleInstance();
 			builder.RegisterType<AddResourcesToSubSkills>().SingleInstance();
+			builder.RegisterType<PrimarySkillOverstaff>().SingleInstance();
 			builder.RegisterType<ReducePrimarySkillResources>().SingleInstance();
 			builder.RegisterType<SkillGroupPerActivityProvider>().SingleInstance();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_CascadingSkills_38524))

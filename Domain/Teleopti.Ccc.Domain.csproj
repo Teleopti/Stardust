@@ -209,6 +209,7 @@
     <Compile Include="Cascading\AddResourcesToSubSkills.cs" />
     <Compile Include="Cascading\CascadingSkillGroupItem.cs" />
     <Compile Include="Cascading\CascadingSkills.cs" />
+    <Compile Include="Cascading\PrimarySkillOverstaff.cs" />
     <Compile Include="Cascading\ReducePrimarySkillResources.cs" />
     <Compile Include="Forecasting\SkillDayExtensions.cs" />
     <Compile Include="Infrastructure\DatabaseEnum.cs" />
