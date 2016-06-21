@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -24,7 +23,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 	public class CascadingResourceCalculationTest
 	{
 		public CascadingResourceCalculation Target;
-		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public IPersonSkillProvider PersonSkillProvider;
 		public IResourceCalculationContextFactory ResourceCalculationContextFactory;
 			
