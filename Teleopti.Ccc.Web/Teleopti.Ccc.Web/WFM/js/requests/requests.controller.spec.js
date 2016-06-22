@@ -16,6 +16,7 @@ describe('RequestsControllerTests', function () {
 					Wfm_Requests_People_Search_36294: true,
 					Wfm_Requests_Performance_36295: true,
 					Wfm_Requests_ApproveDeny_36297: true,
+					Wfm_Requests_ApproveDeny_ShiftTrade_38494: true,
 					togglesLoaded: {
 						then: function(cb) { cb(); }
 					}
@@ -31,8 +32,6 @@ describe('RequestsControllerTests', function () {
 		$rootScope = _$rootScope_;
 		$controller = _$controller_;
 	}));
-
-
 	
 	function setUpTarget() {
 		var scope = $rootScope.$new();
@@ -51,4 +50,15 @@ describe('RequestsControllerTests', function () {
 			return requestIds;
 		}
 	}
+
+	fit('should display approve deny command', function () {
+		var test = setUpTarget();
+		test.scope.$digest();
+
+		test.target.selectedTabIndex = 0;
+		expect(test.target.canApproveOrDenyRequest()).toEqual(true);
+
+		test.target.selectedTabIndex = 1;
+		expect(test.target.canApproveOrDenyRequest()).toEqual(true);
+	});
 });

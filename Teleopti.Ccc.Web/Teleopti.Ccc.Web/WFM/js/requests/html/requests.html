@@ -24,7 +24,7 @@
 		</div>
 
 	</div>
-	<requests-commands-pane ng-if="requests.isRequestsCommandsEnabled && !requests.isShiftTradeViewActive()"
+	<requests-commands-pane ng-if="requests.isRequestsCommandsEnabled && requests.canApproveOrDenyRequest()"
 							before-command="requests.onBeforeCommand()"
 							is-shift-trade-view-active="requests.isShiftTradeViewActive()"
 							after-command-success="requests.onCommandSuccess(commandType, changedRequestsCount, requestsCount, commandId, waitlistPeriod)"

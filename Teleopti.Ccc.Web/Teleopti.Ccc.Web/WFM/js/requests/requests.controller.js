@@ -15,7 +15,9 @@
             monitorRunRequestWaitlist();
             vm.isRequestsEnabled = toggleService.Wfm_Requests_Basic_35986;
             vm.isPeopleSearchEnabled = toggleService.Wfm_Requests_People_Search_36294;
+            vm.canApproveOrDenyShiftTradeRequest = toggleService.Wfm_Requests_ApproveDeny_ShiftTrade_38494;
             vm.isShiftTradeViewActive = isShiftTradeViewActive;
+            vm.canApproveOrDenyRequest = canApproveOrDenyRequest;
             vm.isRequestsCommandsEnabled = toggleService.Wfm_Requests_ApproveDeny_36297;
 			vm.isShiftTradeViewVisible = toggleService.Wfm_Requests_ShiftTrade_37751;
             vm.forceRequestsReloadWithoutSelection = forceRequestsReloadWithoutSelection;
@@ -49,8 +51,12 @@
 	        }
         }
 
-		function isShiftTradeViewActive() {
-			return vm.selectedTabIndex === 1;
+	    function isShiftTradeViewActive() {
+		    return vm.selectedTabIndex === 1;
+	    }
+
+	    function canApproveOrDenyRequest() {
+		    return (vm.selectedTabIndex === 0) || (vm.selectedTabIndex === 1 && vm.canApproveOrDenyShiftTradeRequest);
         }
 		
         function onAgentSearchTermChanged(agentSearchTerm) {
