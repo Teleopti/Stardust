@@ -4,7 +4,6 @@ using log4net;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
@@ -20,7 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.DayOff
 		private readonly IAnalyticsDayOffRepository _analyticsDayOffRepository;
 		private readonly IDayOffTemplateRepository _dayOffTemplateRepository;
 
-		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsDayOffUpdater));
+		private readonly static ILog logger = LogManager.GetLogger(typeof(AnalyticsDayOffUpdater));
 
 		public AnalyticsDayOffUpdater(IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, IAnalyticsDayOffRepository analyticsDayOffRepository, IDayOffTemplateRepository dayOffTemplateRepository)
 		{
@@ -38,16 +37,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.DayOff
 		[AnalyticsUnitOfWork]
 		public virtual void Handle(DayOffTemplateChangedEvent @event)
 		{
-			logger.Debug($"Consuming {nameof(DayOffTemplateChangedEvent)} for day off template id = {@event.DayOffTemplateId}.");
+			if (logger.IsDebugEnabled)
+			{
+				logger.Debug($"Consuming {nameof(DayOffTemplateChangedEvent)} for day off template id = {@event.DayOffTemplateId}.");
+			}
 
-			var businessUnit = _analyticsBusinessUnitRepository.Get(@event.LogOnBusinessUnitId);
-			if (businessUnit == null) throw new BusiessUnitMissingInAnalytics();
+			var businessUnitId = _analyticsBusinessUnitRepository.Get(@event.LogOnBusinessUnitId).BusinessUnitId;
 			var dayOffTemplate = _dayOffTemplateRepository.Get(@event.DayOffTemplateId);
-
+			
 			var dayOff = new AnalyticsDayOff
 			{
 				DayOffCode = @event.DayOffTemplateId,
-				BusinessUnitId = businessUnit.BusinessUnitId,
+				BusinessUnitId = businessUnitId,
 				DayOffName = dayOffTemplate.Description.Name,
 				DayOffShortname = dayOffTemplate.Description.ShortName,
 				DisplayColor = dayOffTemplate.DisplayColor.ToArgb(),
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.DayOff
 				DatasourceUpdateDate = dayOffTemplate.UpdatedOn ?? DateTime.UtcNow,
 				DatasourceId = 1
 			};
-
+			
 			_analyticsDayOffRepository.AddOrUpdate(dayOff);
 		}
 	}

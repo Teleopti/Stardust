@@ -212,9 +212,6 @@
     <Compile Include="Cascading\CascadingSkills.cs" />
     <Compile Include="Cascading\PrimarySkillOverstaff.cs" />
     <Compile Include="Cascading\ReducePrimarySkillResources.cs" />
-    <Compile Include="Exceptions\BusiessUnitMissingInAnalytics.cs" />
-    <Compile Include="Exceptions\DataMissingInAnalytics.cs" />
-    <Compile Include="Exceptions\TimeZoneMissingInAnalytics.cs" />
     <Compile Include="Forecasting\SkillDayExtensions.cs" />
     <Compile Include="Infrastructure\DatabaseEnum.cs" />
     <Compile Include="Infrastructure\Events\IndexMaintenanceEvent.cs" />
