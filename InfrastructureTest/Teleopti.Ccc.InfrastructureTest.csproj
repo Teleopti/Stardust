@@ -314,7 +314,7 @@
     <Compile Include="Repositories\PlanningPeriodRepositoryTest.cs" />
     <Compile Include="Repositories\SeatBookingRepositoryTest.cs" />
     <Compile Include="Repositories\SeatPlanRepositoryTest.cs" />
-    <Compile Include="Rta\DatabaseReaderTest.cs" />
+    <Compile Include="Rta\DatabaseReaderLoadScheduleTest.cs" />
     <Compile Include="Rta\InfrastructureTest.cs" />
     <Compile Include="Rta\Persisters\AdherenceDetailsReadModelPersisterTest.cs" />
     <Compile Include="Aop\AspectsTest.cs" />

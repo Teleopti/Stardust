@@ -5,62 +5,62 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using log4net;
+using NHibernate;
+using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
 	public class DatabaseReader : IDatabaseReader
 	{
 		private readonly IConnectionStrings _connectionStrings;
+		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly INow _now;
 		private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof(IDatabaseReader));
 
 		public DatabaseReader(
 			IConnectionStrings connectionStrings,
+			ICurrentUnitOfWork unitOfWork,
 			INow now)
 		{
 			_connectionStrings = connectionStrings;
+			_unitOfWork = unitOfWork;
 			_now = now;
 		}
 
 		public IList<ScheduledActivity> GetCurrentSchedule(Guid personId)
 		{
 			var utcDate = _now.UtcDateTime().Date;
-			const string query = @"SELECT PayloadId,StartDateTime,EndDateTime,rta.Name,rta.ShortName,DisplayColor, BelongsToDate 
-											FROM ReadModel.ScheduleProjectionReadOnly rta
-											WHERE PersonId=@PersonId
-											AND BelongsToDate BETWEEN @StartDate AND @EndDate";
+			return _unitOfWork.Current()
+				.Session()
+				.CreateSQLQuery(@"SELECT 
+					PayloadId,
+					StartDateTime,
+					EndDateTime,
+					Name,
+					ShortName,
+					DisplayColor, 
+					BelongsToDate 
+					FROM ReadModel.ScheduleProjectionReadOnly
+					WHERE PersonId = :PersonId
+					AND BelongsToDate BETWEEN :StartDate AND :EndDate
+					ORDER BY EndDateTime ASC")
+				.SetParameter("PersonId", personId)
+				.SetParameter("StartDate", utcDate.AddDays(-1))
+				.SetParameter("EndDate", utcDate.AddDays(1))
+				.SetResultTransformer(Transformers.AliasToBean(typeof (internalModel)))
+				.List<ScheduledActivity>();
+		}
 
-			var layers = new List<ScheduledActivity>();
-			using (var connection = new SqlConnection(_connectionStrings.Application()))
-			{
-				var command = connection.CreateCommand();
-				command.CommandType = CommandType.Text;
-				command.CommandText = query;
-				command.Parameters.AddWithValue("@PersonId", personId);
-				command.Parameters.AddWithValue("@StartDate", utcDate.AddDays(-1));
-				command.Parameters.AddWithValue("@EndDate", utcDate.AddDays(1));
-				connection.Open();
-				var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
-				while (reader.Read())
-				{
-					var layer = new ScheduledActivity
-					{
-						PayloadId = reader.GetGuid(reader.GetOrdinal("PayloadId")),
-						StartDateTime = reader.GetDateTime(reader.GetOrdinal("StartDateTime")),
-						EndDateTime = reader.GetDateTime(reader.GetOrdinal("EndDateTime")),
-						Name = reader.String("Name"),
-						ShortName = reader.String("ShortName"),
-						DisplayColor = reader.GetInt32(reader.GetOrdinal("DisplayColor")),
-						BelongsToDate = new DateOnly(reader.GetDateTime(reader.GetOrdinal("BelongsToDate")))
-					};
-					layers.Add(layer);
-				}
-				reader.Close();
-			}
-			return layers.OrderBy(l => l.EndDateTime).ToList();
+		private class internalModel : ScheduledActivity
+		{
+			public new DateTime BelongsToDate { set { base.BelongsToDate = new DateOnly(value); } }
+			public new DateTime StartDateTime {  set { base.StartDateTime = DateTime.SpecifyKind(value, DateTimeKind.Utc); } }
+			public new DateTime EndDateTime {  set { base.EndDateTime = DateTime.SpecifyKind(value, DateTimeKind.Utc); } }
 		}
 
 		public ConcurrentDictionary<string, int> Datasources()
@@ -98,59 +98,43 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		
 		public IEnumerable<PersonOrganizationData> LoadPersonOrganizationData(int dataSourceId, string externalLogOn)
 		{
-			using (var conn = new SqlConnection(_connectionStrings.Application()))
-			{
-				conn.Open();
-				using (var cmd = new SqlCommand("exec [dbo].[LoadPersonOrganizationData] @now, @dataSourceId, @externalLogOn", conn))
-				{
-					cmd.Parameters.AddWithValue("@now", _now.UtcDateTime());
-					cmd.Parameters.AddWithValue("@dataSourceId", dataSourceId);
-					cmd.Parameters.AddWithValue("@externalLogOn", externalLogOn);
-
-					return readPersonOrganizationDatas(cmd).ToArray();
-				}
-			}
+			return readPersonOrganizationDatas(_unitOfWork.Current()
+				.Session()
+				.CreateSQLQuery("exec[dbo].[LoadPersonOrganizationData] :now, :dataSourceId, :externalLogOn")
+				.SetParameter("now", _now.UtcDateTime())
+				.SetParameter("dataSourceId", dataSourceId)
+				.SetParameter("externalLogOn", externalLogOn));
 		}
 		
 		public IEnumerable<PersonOrganizationData> LoadAllPersonOrganizationData()
 		{
-			using (var conn = new SqlConnection(_connectionStrings.Application()))
-			{
-				conn.Open();
-				using (var cmd = new SqlCommand("exec [dbo].[LoadAllPersonOrganizationData] @now", conn))
-				{
-					cmd.Parameters.AddWithValue("@now", _now.UtcDateTime());
-					return readPersonOrganizationDatas(cmd).ToArray();
-				}
-			}
-
+			return readPersonOrganizationDatas(_unitOfWork.Current()
+				.Session()
+				.CreateSQLQuery("exec [dbo].[LoadAllPersonOrganizationData] :now")
+				.SetParameter("now", _now.UtcDateTime()));
 		}
 
-		private IEnumerable<PersonOrganizationData> readPersonOrganizationDatas(SqlCommand cmd)
+		private IEnumerable<PersonOrganizationData> readPersonOrganizationDatas(IQuery query)
 		{
-			using (var reader = cmd.ExecuteReader())
-			{
-				while (reader.Read())
+			return query.SetResultTransformer(Transformers.AliasToBean(typeof (internalModel2)))
+				.List<internalModel2>()
+				.Where(x =>
 				{
-					var timeZoneValue = reader.GetString(reader.GetOrdinal("TimeZone"));
-					var endDateValue = reader.GetDateTime(reader.GetOrdinal("EndDate"));
+					var timeZoneValue = x.TimeZone;
+					var endDateValue = x.EndDate;
 
 					var timeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneValue);
 					var terminatedAt = endDateValue.AddDays(1);
 					terminatedAt = TimeZoneInfo.ConvertTimeToUtc(terminatedAt, timeZone);
 
-					if (terminatedAt > _now.UtcDateTime())
-					{
-						yield return new PersonOrganizationData
-						{
-							PersonId = reader.GetGuid(reader.GetOrdinal("PersonId")),
-							TeamId = reader.GetGuid(reader.GetOrdinal("TeamId")),
-							SiteId = reader.GetGuid(reader.GetOrdinal("SiteId")),
-							BusinessUnitId = reader.GetGuid(reader.GetOrdinal("BusinessUnitId")),
-						};
-					}
-				}
-			}
+					return terminatedAt > _now.UtcDateTime();
+				}).ToList();
+		}
+
+		private class internalModel2 : PersonOrganizationData
+		{
+			public string TimeZone { get; set; }
+			public DateTime EndDate { get; set; }
 		}
 	}
 }

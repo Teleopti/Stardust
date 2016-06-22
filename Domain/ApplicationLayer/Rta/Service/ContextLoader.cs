@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Resolvers;
@@ -61,10 +62,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var dataSourceId = validateSourceId(input);
 			var userCode = input.UserCode;
 
-			_databaseReader.LoadPersonOrganizationData(dataSourceId, userCode)
-				.ForEach(x =>
-				{
-					WithUnitOfWork(() =>
+			WithUnitOfWork(() =>
+			{
+				_databaseReader.LoadPersonOrganizationData(dataSourceId, userCode)
+					.ForEach(x =>
 					{
 						action.Invoke(new Context(
 							input,
@@ -93,33 +94,38 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							_appliedAlarm
 							));
 					});
-				});
+			});
 		}
 
 		public virtual void ForAll(Action<Context> action)
 		{
-			_databaseReader.LoadAllPersonOrganizationData()
-				.ForEach(x =>
+			IEnumerable<PersonOrganizationData> persons = null;
+			WithUnitOfWork(() =>
+			{
+				persons = _databaseReader.LoadAllPersonOrganizationData();
+			});
+
+			persons.ForEach(x =>
+			{
+				WithUnitOfWork(() =>
 				{
-					WithUnitOfWork(() =>
-					{
-						action.Invoke(new Context(
-							null,
-							x.PersonId,
-							x.BusinessUnitId,
-							x.TeamId,
-							x.SiteId,
-							() => _agentStatePersister.Get(x.PersonId),
-							() => _databaseReader.GetCurrentSchedule(x.PersonId),
-							s => _mappingReader.Read(),
-							c => _agentStatePersister.Persist(c.MakeAgentState()),
-							_now,
-							_stateMapper,
-							_appliedAdherence,
-							_appliedAlarm
-							));
-					});
+					action.Invoke(new Context(
+						null,
+						x.PersonId,
+						x.BusinessUnitId,
+						x.TeamId,
+						x.SiteId,
+						() => _agentStatePersister.Get(x.PersonId),
+						() => _databaseReader.GetCurrentSchedule(x.PersonId),
+						s => _mappingReader.Read(),
+						c => _agentStatePersister.Persist(c.MakeAgentState()),
+						_now,
+						_stateMapper,
+						_appliedAdherence,
+						_appliedAlarm
+						));
 				});
+			});
 		}
 
 		[AllBusinessUnitsUnitOfWork]

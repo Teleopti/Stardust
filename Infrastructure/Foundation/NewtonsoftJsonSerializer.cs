@@ -42,9 +42,12 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		{
 			return JsonConvert.DeserializeObject(value, type, _eventSerializationSettings);
 		}
+		
 
 		private readonly JsonSerializerSettings _eventSerializationSettings = new JsonSerializerSettings
 		{
+			//Maybe this is a good idea? ;)
+			//DateTimeZoneHandling = DateTimeZoneHandling.Utc,
 			ContractResolver = new customContractResolver()
 		};
 

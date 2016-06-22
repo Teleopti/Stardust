@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var person1 = addPerson("user1", 1);
 			var person2 = addPerson("user2", 1);
 
-			var result = Reader.LoadPersonOrganizationData(1, "user2");
+			var result = WithUnitOfWork.Get(() => Reader.LoadPersonOrganizationData(1, "user2"));
 
 			result.Single().PersonId.Should().Be(person2.Id);
 		}
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		{
 			addPerson("user", 1);
 
-			var result = Reader.LoadPersonOrganizationData(1, "unknownUser");
+			var result = WithUnitOfWork.Get(() => Reader.LoadPersonOrganizationData(1, "unknownUser"));
 
 			result.Should().Be.Empty();
 		}
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			addPerson("user", 1);
 			addPerson("user", 1);
 
-			var result = Reader.LoadPersonOrganizationData(1, "user");
+			var result = WithUnitOfWork.Get(() => Reader.LoadPersonOrganizationData(1, "user"));
 
 			result.Should().Have.Count.EqualTo(2);
 		}
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var currentUser = addPerson("user", 1, "2015-11-01".Date());
 			var futureUser = addPerson("user", 1, "2015-12-31".Date());
 
-			var result = Reader.LoadPersonOrganizationData(1, "user");
+			var result = WithUnitOfWork.Get(() => Reader.LoadPersonOrganizationData(1, "user"));
 
 			result.Single().PersonId.Should().Be(currentUser.Id);
 		}
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var person1 = addPerson("user", 2);
 			var person2 = addPerson("user", 3);
 
-			var result = Reader.LoadPersonOrganizationData(2, "user");
+			var result = WithUnitOfWork.Get(() => Reader.LoadPersonOrganizationData(2, "user"));
 
 			result.Single().PersonId.Should().Be(person1.Id);
 		}
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		{
 			var person = addPerson("user", 1);
 
-			var result = Reader.LoadPersonOrganizationData(1, "user");
+			var result = WithUnitOfWork.Get(() => Reader.LoadPersonOrganizationData(1, "user"));
 
 			result.Single().TeamId.Should().Be(person.PersonPeriodCollection.Single().Team.Id);
 			result.Single().SiteId.Should().Be(person.PersonPeriodCollection.Single().Team.Site.Id);
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			Now.Is("2016-01-20 00:00");
 			var person = addPerson("user", 1, "2016-01-01".Date(), "2016-01-19".Date());
 
-			var result = Reader.LoadPersonOrganizationData(1, "user");
+			var result = WithUnitOfWork.Get(() => Reader.LoadPersonOrganizationData(1, "user"));
 
 			result.Should().Be.Empty();
 		}
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			Now.Is("2016-01-20 08:00");
 			var person = addPerson("user", 1, "2016-01-01".Date(), "2016-01-20".Date());
 
-			var result = Reader.LoadPersonOrganizationData(1, "user");
+			var result = WithUnitOfWork.Get(() => Reader.LoadPersonOrganizationData(1, "user"));
 
 			result.Single().PersonId.Should().Be(person.Id.Value);
 		}
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			Now.Is("2016-01-20 23:00");
 			var person = addPerson("user", 1, "2016-01-01".Date(), "2016-01-20".Date(), TimeZoneInfoFactory.IstanbulTimeZoneInfo());
 
-			var result = Reader.LoadPersonOrganizationData(1, "user");
+			var result = WithUnitOfWork.Get(() => Reader.LoadPersonOrganizationData(1, "user"));
 
 			result.Should().Be.Empty();
 		}
@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			Now.Is("2016-01-21 09:00");
 			var person = addPerson("user", 1, "2016-01-01".Date(), "2016-01-20".Date(), TimeZoneInfoFactory.HawaiiTimeZoneInfo());
 
-			var result = Reader.LoadPersonOrganizationData(1, "user");
+			var result = WithUnitOfWork.Get(() => Reader.LoadPersonOrganizationData(1, "user"));
 
 			result.Single().PersonId.Should().Be(person.Id.Value);
 		}
