@@ -168,9 +168,9 @@
 				Name: 'agent1',
 				ScheduleEndTime: '2016-06-15T17:00:00Z'
 			}, {
-				personId: 'agent2',
-				name: 'agent2',
-				scheduleEndTime: '2016-06-15T17:00:00Z'
+				PersonId: 'agent2',
+				Name: 'agent2',
+				ScheduleEndTime: '2016-06-15T17:00:00Z'
 			}];
 
 		vm.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';

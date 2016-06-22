@@ -93,10 +93,10 @@
 		};
 
 		var agent = {
-			personId: 'agent1',
-			name: 'agent1',
-			scheduleStartTime: new Date('2016-06-15T08:00:00Z'),
-			scheduleEndTime: new Date('2016-06-15T17:00:00Z')
+			PersonId: 'agent1',
+			Name: 'agent1',
+			ScheduleStartTime: new Date('2016-06-15T08:00:00Z'),
+			ScheduleEndTime: new Date('2016-06-15T17:00:00Z')
 		};
 
 		expect(vm.isNewActivityAllowedForAgent(agent, vm.timeRange)).toBe(false);
