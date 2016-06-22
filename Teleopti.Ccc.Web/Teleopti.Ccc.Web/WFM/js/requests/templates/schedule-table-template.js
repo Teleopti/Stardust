@@ -1,7 +1,7 @@
 ﻿angular.module('wfm.requests').run(['$templateCache', function ($templateCache) {
 	'use strict';
 
-	$templateCache.put('js/teamSchedule/html/scheduletable.html',
+	$templateCache.put('requests-schedule-table.html',
 	  "<table class=\"table\" ng-if=\"vm.schedules.Schedules.length > 0\">\r" +
 	  "\n" +
 	  "\t<thead>\r" +

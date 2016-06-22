@@ -3,7 +3,7 @@
 (function () {
 	angular.module('wfm.requests')
 		.directive('requestsScheduleTable', scheduleTableDirective)
-		.controller('scheduleTableCtrl', ['PersonSelection', '$scope', 'ScheduleManagement', scheduleTableController]);
+		.controller('requestsScheduleTableCtrl', [requestsScheduleTableController]);
 
 	function scheduleTableDirective() {
 		return {
@@ -13,10 +13,10 @@
 			restrict: 'E',
 			controllerAs: 'vm',
 			bindToController: true,
-			controller: 'scheduleTableCtrl',
-			templateUrl: "js/teamSchedule/html/scheduletable.html"
+			controller: 'requestsScheduleTableCtrl',
+			templateUrl: "requests-schedule-table.html"
 		};
 	};
-	function scheduleTableController() {
+	function requestsScheduleTableController() {
 	};
 }());
