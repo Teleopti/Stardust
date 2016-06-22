@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 		{
 			var requestListModel = new ShiftTradeRequestListViewModel()
 			{
+				FirstDayOfWeek = (int)_userCulture.GetCulture().DateTimeFormat.FirstDayOfWeek,
 				Requests = new RequestViewModel[] { }
 			};
 
@@ -41,6 +42,9 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			{
 				return requestListModel;
 			}
+
+			requestListModel.MinimumDateTime = input.StartDate.Date;
+			requestListModel.MaximumDateTime = input.EndDate.Date;
 
 			int totalCount;
 			var requests = _requestsProvider.RetrieveRequests(input, new[] { RequestType.ShiftTradeRequest }, out totalCount).ToArray();
@@ -54,9 +58,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			if (existsRequests)
 			{
 				requestListModel.Requests = requests.Select(request => _requestViewModelMapper.Map(createShiftTradeRequestViewModel(request), request)).ToList();
-				requestListModel.MinimumDateTime = input.StartDate.Date;
-				requestListModel.MaximumDateTime = input.EndDate.Date;
-				requestListModel.FirstDayOfWeek = (int)_userCulture.GetCulture().DateTimeFormat.FirstDayOfWeek;
+				requestListModel.MaximumDateTime = requests.Max (r => r.Request.Period.LocalEndDateTime);
 			}
 
 			return requestListModel;
