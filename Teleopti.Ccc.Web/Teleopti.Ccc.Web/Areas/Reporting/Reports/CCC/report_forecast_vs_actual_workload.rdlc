@@ -3717,7 +3717,7 @@ Public Function ToPeriod(ByVal TheDate As DateTime, ByVal Period As String, ByVa
 	End Select
 End Function
 
-Public Function Divide(a as integer, b as integer) as Decimal
+Public Function Divide(a as Double, b as Double) as Double
 	if b=0 then
 		return 0
 	else
