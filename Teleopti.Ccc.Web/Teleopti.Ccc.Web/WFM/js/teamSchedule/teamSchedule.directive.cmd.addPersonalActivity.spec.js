@@ -92,9 +92,9 @@
 			endTime: new Date('2016-06-16T16:00:00Z')
 		};
 		var agent = {
-			personId: 'agent1',
-			name: 'agent1',
-			scheduleEndTime: '2016-06-15T17:00:00Z'
+			PersonId: 'agent1',
+			Name: 'agent1',
+			ScheduleEndTime: '2016-06-15T17:00:00Z'
 		};
 
 		expect(vm.isNewActivityAllowedForAgent(agent, vm.timeRange.startTime)).toBe(false);
@@ -112,10 +112,10 @@
 			endTime: new Date('2016-06-16T12:01:00Z')
 		};
 		var agent = {
-			personId: 'agent1',
-			name: 'agent1',
-			scheduleStartTime: new Date('2016-06-15T00:00:00Z'),
-			scheduleEndTime: new Date('2016-06-16T08:00:00Z')
+			PersonId: 'agent1',
+			Name: 'agent1',
+			ScheduleStartTime: new Date('2016-06-15T00:00:00Z'),
+			ScheduleEndTime: new Date('2016-06-16T08:00:00Z')
 		};
 
 		expect(vm.isNewActivityAllowedForAgent(agent, vm.timeRange)).toBe(false);
@@ -135,13 +135,13 @@
 
 		vm.selectedAgents = [
 			{
-				personId: 'agent1',
-				name: 'agent1',
-				scheduleEndTime: '2016-06-15T17:00:00Z'
+				PersonId: 'agent1',
+				Name: 'agent1',
+				ScheduleEndTime: '2016-06-15T17:00:00Z'
 			}, {
-				personId: 'agent2',
-				name: 'agent2',
-				scheduleEndTime: '2016-06-16T09:00:00Z'
+				PersonId: 'agent2',
+				Name: 'agent2',
+				ScheduleEndTime: '2016-06-16T09:00:00Z'
 			}];
 
 		var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));
@@ -164,9 +164,9 @@
 
 		vm.selectedAgents = [
 			{
-				personId: 'agent1',
-				name: 'agent1',
-				scheduleEndTime: '2016-06-15T17:00:00Z'
+				PersonId: 'agent1',
+				Name: 'agent1',
+				ScheduleEndTime: '2016-06-15T17:00:00Z'
 			}, {
 				personId: 'agent2',
 				name: 'agent2',
@@ -213,13 +213,13 @@
 
 		vm.selectedAgents = [
 			{
-				personId: 'agent1',
-				name: 'agent1',
-				scheduleEndTime: '2016-06-15T17:00:00Z'
+				PersonId: 'agent1',
+				Name: 'agent1',
+				ScheduleEndTime: '2016-06-15T17:00:00Z'
 			}, {
-				personId: 'agent2',
-				name: 'agent2',
-				scheduleEndTime: '2016-06-15T17:00:00Z'
+				PersonId: 'agent2',
+				Name: 'agent2',
+				ScheduleEndTime: '2016-06-15T17:00:00Z'
 			}];
 
 		vm.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
