@@ -4,7 +4,6 @@ using System.Web;
 using System.Web.Security;
 using Microsoft.IdentityModel.Web;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Interfaces.Domain;
 
@@ -16,7 +15,6 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 		private readonly IBaseSessionSpecificCookieDataProviderSettings _sessionSpecificCookieDataProviderSettings;
 		private readonly INow _now;
 		private readonly ISessionSpecificDataStringSerializer _dataStringSerializer;
-
 
 		protected AbstractCookieDataProvider(ICurrentHttpContext httpContext, IBaseSessionSpecificCookieDataProviderSettings sessionSpecificCookieDataProviderSettings, INow now, ISessionSpecificDataStringSerializer dataStringSerializer)
 		{
@@ -74,12 +72,12 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 
 		public void RemoveAuthBridgeCookie()
 		{
-			FederatedAuthentication.SessionAuthenticationModule.SignOut();
+			FederatedAuthentication.SessionAuthenticationModule.DeleteSessionTokenCookie();
 		}
 
 		public void RemoveCookie()
 		{
-			var cookie = new HttpCookie(_sessionSpecificCookieDataProviderSettings.AuthenticationCookieName) { Expires = _now.LocalDateTime().AddYears(-2),HttpOnly = true};
+			var cookie = new HttpCookie(_sessionSpecificCookieDataProviderSettings.AuthenticationCookieName) { Expires = _now.LocalDateTime().AddYears(-2), HttpOnly = true };
 			setCookie(cookie);
 			RemoveAuthBridgeCookie();
 		}

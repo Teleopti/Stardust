@@ -33,12 +33,15 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 		private string getWSFederationMessageReturnUrl()
 		{
-			var wsFederationMessage = WSFederationMessage.CreateFromNameValueCollection(WSFederationMessage.GetBaseUrl(ControllerContext.HttpContext.Request.Url), ControllerContext.HttpContext.Request.Form);
+			var wsFederationMessage =
+				WSFederationMessage.CreateFromNameValueCollection(
+					WSFederationMessage.GetBaseUrl(ControllerContext.HttpContext.Request.Url),
+					ControllerContext.HttpContext.Request.Form);
 			if (wsFederationMessage == null || wsFederationMessage.Context == null) return null;
 
 			return getReturnUrlQueryParameterFromUrl(wsFederationMessage.Context);
-			
-			}
+
+		}
 
 		private string getReturnUrlQueryParameterFromUrl(string context)
 		{
