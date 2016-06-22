@@ -25394,6 +25394,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select all people on every page.
+        /// </summary>
+        public static string SelectAllPeopleInEveryPage {
+            get {
+                return ResourceManager.GetString("SelectAllPeopleInEveryPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select a Multiplicator.
         /// </summary>
         public static string SelectAMultiplicator {
@@ -30731,6 +30740,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Unselect {
             get {
                 return ResourceManager.GetString("Unselect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unselect all people on every page.
+        /// </summary>
+        public static string UnselectAllPeopleInEveryPage {
+            get {
+                return ResourceManager.GetString("UnselectAllPeopleInEveryPage", resourceCulture);
             }
         }
         

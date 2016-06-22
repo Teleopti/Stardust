@@ -24,6 +24,7 @@
 		vm.isLoading = false;
 		vm.scheduleDate = new Date();
 		vm.scheduleFullyLoaded = false;
+		vm.hasSelectedAllPeopleInEveryPage = false;
 
 		vm.triggerCommand = function(label, needToOpenSidePanel) {
 			$mdSidenav(commandContainerId).close().then(function () {
@@ -116,6 +117,7 @@
 
 		vm.resetSchedulePage = function () {
 			vm.paginationOptions.pageNumber = 1;
+			vm.hasSelectedAllPeopleInEveryPage = false;
 			vm.loadSchedules();
 		};
 
@@ -170,6 +172,16 @@
 				var groupSchedule = groupScheduleFactory.Create(result.Schedules, vm.scheduleDateMoment());
 				personSelectionSvc.selectAllPerson(groupSchedule.Schedules);
 				personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
+				vm.hasSelectedAllPeopleInEveryPage = true;
+			});
+		};
+
+		vm.unselectAllForAllPages = function() {
+			vm.loadAllResults(function (result) {
+				var groupSchedule = groupScheduleFactory.Create(result.Schedules, vm.scheduleDateMoment());
+				personSelectionSvc.unselectAllPerson(groupSchedule.Schedules);
+				personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
+				vm.hasSelectedAllPeopleInEveryPage = false;
 			});
 		};
 
@@ -181,6 +193,10 @@
 		vm.selectAllVisible = function () {
 			var selectedPersonIdList = personSelectionSvc.getSelectedPersonIdList();
 			return vm.paginationOptions.totalPages > 1 && selectedPersonIdList.length < vm.total;
+		};
+
+		vm.hasSelectedAllPeople = function () {
+			return vm.hasSelectedAllPeopleInEveryPage;
 		};
 
 		vm.toggleErrorDetails = function() {

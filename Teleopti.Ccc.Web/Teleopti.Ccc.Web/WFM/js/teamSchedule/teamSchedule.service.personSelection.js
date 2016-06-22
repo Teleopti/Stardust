@@ -200,6 +200,13 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 			});
 		};
 
+		svc.unselectAllPerson = function (schedules) {
+			angular.forEach(schedules, function (schedule) {
+				schedule.IsSelected = false;
+				svc.updatePersonSelection(schedule);
+			});
+		};
+
 		svc.unselectPersonsWithIds = function (personIds) {
 			angular.forEach(personIds, function(id) {
 				delete svc.personInfo[id];

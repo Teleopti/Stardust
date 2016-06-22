@@ -14618,4 +14618,12 @@ These options are activated:
     <value>Real time adherence monitoring paused at {0}! Re-enable by clicking play</value>
     <comment>Monitoring paused in rta at time: {0} </comment>
   </data>
+  <data name="SelectAllPeopleInEveryPage" xml:space="preserve">
+    <value>Select all people on every page</value>
+    <comment>Select all people on every page link in teamschedule</comment>
+  </data>
+  <data name="UnselectAllPeopleInEveryPage" xml:space="preserve">
+    <value>Unselect all people on every page</value>
+    <comment>Unselect all people on every page link i teamschedule</comment>
+  </data>
 </root>
