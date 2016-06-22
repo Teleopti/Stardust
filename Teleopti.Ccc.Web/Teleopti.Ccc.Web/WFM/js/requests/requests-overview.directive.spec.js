@@ -10,18 +10,16 @@
 		beforeEach(module('wfm.requests'));
 
 		beforeEach(function () {
-
 			var requestsDataService = new FakeRequestsDataService();
 
 			module(function ($provide) {
-
 				$provide.service('Toggle', function () {
 					return {
 						Wfm_Requests_Basic_35986: true,
 						Wfm_Requests_People_Search_36294: true,
 						Wfm_Requests_Performance_36295: true,
 						Wfm_Requests_ApproveDeny_36297: true,
-						Wfm_Requests_Filtering_37748 : true,
+						Wfm_Requests_Filtering_37748: true,
 						togglesLoaded: {
 							then: function (cb) { cb(); }
 						}
@@ -53,7 +51,6 @@
 		});
 
 		it("populate requests data from requests data service", function () {
-
 			var request = {
 				Id: 1,
 				Type: requestsDefinitions.REQUEST_TYPES.TEXT
@@ -69,7 +66,7 @@
 			expect(scope.requestsOverview.requests[0]).toEqual(request);
 		});
 
-		it("should not populate requests data from requests data service when inactive", function() {
+		it("should not populate requests data from requests data service when inactive", function () {
 
 			var request = {
 				Id: 1,
@@ -145,7 +142,6 @@
 		});
 
 		it('should show selected requests information when requests get selected and nothing vice verse', function () {
-
 			var requestIds = [{ id: 1 }, { id: 2 }];
 			requestsDataService.setRequests([]);
 
@@ -165,7 +161,6 @@
 			requestCommandParamsHolder.setSelectedRequestIds([]);
 			targetScope.$digest();
 			expect(vm.showSelectedRequestsInfo()).toEqual('');
-
 		});
 
 		function getInnerScope(element) {
@@ -175,14 +170,14 @@
 	});
 
 	describe('requests table container directive', function () {
-	    var $compile, $rootScope, requestsDefinitions, $filter, teamSchedule;
+		var $compile, $rootScope, requestsDefinitions, $filter, teamSchedule;
 
 		beforeEach(module('wfm.templates'));
 		beforeEach(module('wfm.requests'));
 
 		beforeEach(function () {
-		    var requestsDataService = new FakeRequestsDataService();
-		    teamSchedule = new FakeTeamSchedule();
+			var requestsDataService = new FakeRequestsDataService();
+			teamSchedule = new FakeTeamSchedule();
 			module(function ($provide) {
 				$provide.service('Toggle', function () {
 					return {
@@ -191,7 +186,7 @@
 						Wfm_Requests_Performance_36295: true,
 						Wfm_Requests_ApproveDeny_36297: true,
 						Wfm_Requests_Filtering_37748: true,
-						Wfm_Requests_ShiftTrade_More_Relevant_Information_38492:true,
+						Wfm_Requests_ShiftTrade_More_Relevant_Information_38492: true,
 						togglesLoaded: {
 							then: function (cb) { cb(); }
 						}
@@ -203,7 +198,7 @@
 				});
 
 				$provide.service('TeamSchedule', function () {
-				    return teamSchedule;
+					return teamSchedule;
 				});
 			});
 		});
@@ -229,7 +224,6 @@
 
 			var targets = Array.from(test.target.children());
 			expect(targets.some(function (target) { return angular.element(target).hasClass('ui-grid'); })).toBeTruthy();
-
 		});
 
 		it("see table rows for each request", function () {
@@ -277,7 +271,6 @@
 		});
 
 		it("should be able to calculate column categorys for weeks using supplied period startofweek", function () {
-
 			var test = setUpTarget();
 
 			setUpShiftTradeRequestData(test);
@@ -292,13 +285,11 @@
 			test.scope.$digest();
 			var vm = test.target.isolateScope().requestsTableContainer;
 
-			var categories= vm.gridOptions.category;
+			var categories = vm.gridOptions.category;
 
 			expect(categories[0].name).toEqual(toShortDateString('2016-05-23T00:00:00'));
 			expect(categories[1].name).toEqual(toShortDateString('2016-05-30T00:00:00'));
-
 		});
-
 
 		it("should get columns representing the days involved in the shift trade, category should start Monday", function () {
 			var test = setUpTarget();
@@ -308,7 +299,7 @@
 			test.scope.shiftTradeRequestDateSummary = {
 				Minimum: '2016-05-25T00:00:00',
 				Maximum: '2016-06-02T00:00:00',
-				FirstDayOfWeek : 1
+				FirstDayOfWeek: 1
 			};
 
 			test.scope.$digest();
@@ -332,7 +323,6 @@
 
 			expect(columns[8].displayName).toEqual('02');
 			expect(columns[8].category).toEqual(toShortDateString('2016-05-30T00:00:00'));
-
 		});
 
 		it("should get columns representing the days involved in the shift trade, category should start Sunday", function () {
@@ -346,14 +336,10 @@
 				FirstDayOfWeek: 7
 			};
 
-			console.log('gotHere');
-
 			test.scope.$digest();
 
 			var vm = test.target.isolateScope().requestsTableContainer;
-
 			var columnDefs = vm.gridOptions.columnDefs;
-
 			var columns = [];
 
 			for (var i = 0; i < columnDefs.length; i++) {
@@ -362,34 +348,31 @@
 				}
 			}
 
-
 			expect(columns.length).toEqual(9);
 			expect(columns[0].displayName).toEqual('25');
 			expect(columns[0].category).toEqual(toShortDateString('2016-05-22T00:00:00'));
 			expect(columns[1].category).toEqual(toShortDateString('2016-05-22T00:00:00'));
 			expect(columns[8].category).toEqual(toShortDateString('2016-05-29T00:00:00'));
 			expect(columns[8].displayName).toEqual('02');
-
-
 		});
 
 		xit('should load schedules for shift trade request', function () {
-		    var test = setUpTarget();
+			var test = setUpTarget();
 
-		    setUpShiftTradeRequestData(test);
+			setUpShiftTradeRequestData(test);
 
-		    test.scope.shiftTradeRequestDateSummary = {
-		        Minimum: '2016-05-25T00:00:00',
-		        Maximum: '2016-06-02T00:00:00',
-		        StartOfWeek: '2016-05-22T00:00:00',
-		        EndOfWeek: '2016-06-04T00:00:00'
-		    };
+			test.scope.shiftTradeRequestDateSummary = {
+				Minimum: '2016-05-25T00:00:00',
+				Maximum: '2016-06-02T00:00:00',
+				StartOfWeek: '2016-05-22T00:00:00',
+				EndOfWeek: '2016-06-04T00:00:00'
+			};
 
-		    test.scope.$digest();
+			test.scope.$digest();
 
-		    var vm = test.target.isolateScope().requestsTableContainer;
-		    vm.showShiftDetail({}, 1, 1, "2016-06-21T00:00:00");
-		    expect(teamSchedule.getSchedulesCallTimes()).toEqual(1);
+			var vm = test.target.isolateScope().requestsTableContainer;
+			vm.showShiftDetail({}, 1, 1, "2016-06-21T00:00:00");
+			expect(teamSchedule.getSchedulesCallTimes()).toEqual(1);
 
 		});
 
@@ -405,26 +388,13 @@
 				}
 			];
 
-
 			test.scope.requests = [{ Id: 1, PeriodStartTime: '2016-01-06T14:00:00', PeriodEndTime: '2016-01-09T20:00:00', CreatedTime: '2016-01-06T10:17:31', TimeZone: 'Pacific/Port_Moresby', UpdatedTime: '2016-01-06T10:17:31', IsFullDay: false, ShiftTradeDays: shiftTradeDays }];
 			test.scope.shiftTradeView = true;
 		}
 
-		xit("should hide grid when there is no requests", function () {
-
-					var test = setUpTarget();
-					test.scope.requests = [];
-					test.scope.$digest();
-					var targets = test.target[0].querySelectorAll('.ui-grid-render-container-body .ui-grid-row');
-					var messageTargets = test.target[0].querySelectorAll('.notification-list.wfm-simple-list');
-					expect(targets.length).toEqual(0);
-					expect(messageTargets.length).toEqual(1);
-				});
-
 		function toShortDateString(dateString) {
 			return $filter('date')(moment(dateString).toDate(), "shortDate");
 		}
-
 
 		function toDateString(date, timeZone) {
 			var _isNowDST = moment.tz(timeZone).isDST();
@@ -445,21 +415,19 @@
 
 			return { scope: scope, target: directiveElem };
 		}
-
-
 	});
 	function FakeTeamSchedule() {
-	    var searchScheduleCalledTimes = 0;
-	    this.getSchedules = function (date, agents) {
-	        return {
-	            then: function (cb) {
-	                searchScheduleCalledTimes = searchScheduleCalledTimes + 1;
-	            }
-	        }
-	    }
-	    this.getSchedulesCallTimes=function() {
-	        return searchScheduleCalledTimes;
-	    }
+		var searchScheduleCalledTimes = 0;
+		this.getSchedules = function (date, agents) {
+			return {
+				then: function (cb) {
+					searchScheduleCalledTimes = searchScheduleCalledTimes + 1;
+				}
+			}
+		}
+		this.getSchedulesCallTimes = function () {
+			return searchScheduleCalledTimes;
+		}
 	}
 
 	function FakeRequestsDataService() {
@@ -525,5 +493,4 @@
 			];
 		}
 	}
-
 })();
