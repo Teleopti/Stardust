@@ -53,12 +53,15 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			requestListModel.Skip = input.Paging.Skip;
 			requestListModel.Take = input.Paging.Take;
 
-			var existsRequests = requests.Any();
-
-			if (existsRequests)
+			if (requests.Any())
 			{
 				requestListModel.Requests = requests.Select(request => _requestViewModelMapper.Map(createShiftTradeRequestViewModel(request), request)).ToList();
-				requestListModel.MaximumDateTime = requests.Max (r => r.Request.Period.LocalEndDateTime);
+				var maximumRequestDate = requests.Max(r => r.Request.Period.LocalEndDateTime);
+				if (maximumRequestDate > requestListModel.MaximumDateTime)
+				{
+					requestListModel.MaximumDateTime = maximumRequestDate;
+				}
+				
 			}
 
 			return requestListModel;
