@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		}
 
 		[Test]
-		public void ShouldReturnMinimumAndMaximumDate()
+		public void ShouldReturnMinimumAndMaximumDateOfInputWhenAllRequestsAreInsidePeriod()
 		{
 			createShiftTradeRequest(new DateOnly(2016, 3, 2), new DateOnly(2016, 3, 2),
 					PersonFactory.CreatePerson("Person", "From"), PersonFactory.CreatePerson("Person", "To"));
@@ -98,7 +98,33 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			requestListViewModel.MaximumDateTime.Should().Be.EqualTo(input.EndDate.Date);
 		}
 		
-		
+
+
+		[Test]
+		public void ShouldReturnMaximumDateOfRequestWhenOutsideOfInputPeriod()
+		{
+			createShiftTradeRequest(new DateOnly(2016, 3, 2), new DateOnly(2016, 3, 2),
+					PersonFactory.CreatePerson("Person", "From"), PersonFactory.CreatePerson("Person", "To"));
+
+			createShiftTradeRequest(new DateOnly(2016, 3, 5), new DateOnly(2016, 3, 8),
+				PersonFactory.CreatePerson("Person2", "From2"), PersonFactory.CreatePerson("Person2", "To2"));
+
+			var shiftTradeWithLaterEndDate  = createShiftTradeRequest(new DateOnly(2016, 3, 9), new DateOnly(2016, 3, 11),
+				PersonFactory.CreatePerson("Person2", "From2"), PersonFactory.CreatePerson("Person2", "To2"));
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2016, 3, 1),
+				EndDate = new DateOnly(2016, 3, 10)
+			};
+
+			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
+
+			requestListViewModel.MinimumDateTime.Should().Be.EqualTo(input.StartDate.Date);
+			requestListViewModel.MaximumDateTime.Should().Be.EqualTo(shiftTradeWithLaterEndDate.Request.Period.LocalEndDateTime);
+		}
+
+
 
 		[Test]
 		public void ShouldGetShiftTradeRequestPersonToDetails()
