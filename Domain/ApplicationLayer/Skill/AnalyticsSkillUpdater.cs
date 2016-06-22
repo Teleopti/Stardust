@@ -2,6 +2,7 @@ using System;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Infrastructure;
@@ -33,8 +34,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Skill
 			var skill = _skillRepository.Get(skillId);
 			var businessUnit = _analyticsBusinessUnitRepository.Get(skill.BusinessUnit.Id.GetValueOrDefault());
 			var timezone = _analyticsTimeZoneRepository.Get(skill.TimeZone.Id);
-			if (businessUnit == null) return;
-			if (timezone == null) return;
+			if (businessUnit == null) throw new BusiessUnitMissingInAnalytics();
+			if (timezone == null) throw new TimeZoneMissingInAnalytics();
+			
 			var deleteTag = skill as IDeleteTag;
 			var analyticsSkill = new AnalyticsSkill
 			{
