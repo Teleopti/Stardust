@@ -9,8 +9,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 	{
 		public void Execute(ISkillStaffPeriodHolder skillStaffPeriodHolder, IEnumerable<ISkill> primarySkills, DateTimePeriod interval, double resourcesMoved)
 		{
-			var primarySkillOverstaff = primarySkills
-				.Sum(primarySkill => skillStaffPeriodHolder.SkillStaffPeriodOrDefault(primarySkill, interval, 0).AbsoluteDifference);
+			var primarySkillOverstaff = primarySkills.Sum(primarySkill => skillStaffPeriodHolder.SkillStaffPeriodOrDefault(primarySkill, interval, 0).AbsoluteDifference);
 			if (primarySkillOverstaff.IsZero())
 				return;
 

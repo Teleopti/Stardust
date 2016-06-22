@@ -1,4 +1,4 @@
-using System;
+using static System.Math;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 					.Where(absoluteDifference => absoluteDifference.IsUnderstaffed())
 					.Sum(absoluteDifference => -absoluteDifference);
 
-				var remainingOverstaff = Math.Min(remainingPrimarySkillOverstaff, remainingResourcesInGroup);
+				var remainingOverstaff = Min(remainingPrimarySkillOverstaff, remainingResourcesInGroup);
 				foreach (var skillToMoveTo in cascadingSkillGroupItem.SubSkills)
 				{
 					var skillStaffPeriodTo = skillStaffPeriodHolder.SkillStaffPeriodOrDefault(skillToMoveTo, interval, 0);
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 						continue;
 
 					var proportionalResourcesToMove = -skillToMoveToAbsoluteDifference / totalUnderstaffingInSkillGroup * remainingOverstaff;
-					var resourceToMove = Math.Min(-skillToMoveToAbsoluteDifference, proportionalResourcesToMove);
+					var resourceToMove = Min(-skillToMoveToAbsoluteDifference, proportionalResourcesToMove);
 
 					skillStaffPeriodTo.AddResources(resourceToMove);
 					remainingResourcesInGroup -= resourceToMove;
