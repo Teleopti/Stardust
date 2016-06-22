@@ -60,8 +60,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
         {
             var significantPart = part.SignificantPart();
 		    var significantPartForDisplay = part.SignificantPartForDisplay();
+			if(part.PersonAssignment() != null && part.PersonAssignment().OvertimeActivities().Any())
+				return false;
 
-            return (significantPart == SchedulePartView.FullDayAbsence ||
+			return (significantPart == SchedulePartView.FullDayAbsence ||
                     significantPartForDisplay == SchedulePartView.FullDayAbsence
                     || significantPart == SchedulePartView.DayOff ||
                     significantPartForDisplay == SchedulePartView.DayOff
@@ -86,7 +88,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 			float left = 490;
 
             var projection = part.ProjectionService().CreateProjection();
-            if (!GetSchedulePartView(part) && projection.HasLayers && projection.Period().HasValue)
+		
+			if (!GetSchedulePartView(part) && projection.HasLayers && projection.Period().HasValue )
             {
 	            left = 190;
                 // ReSharper disable PossibleNullReferenceException
