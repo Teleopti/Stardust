@@ -102,7 +102,22 @@
 	color: red;
 	font-weight: 600;
 }
+
+.rta-site-name-label {
+	width: 20px;
+	height: 20px;
+	display:block!important;
+}
 /////////End of Sites & teams///////////////
+///////////rta-skills///////////////////////
+.rta-title-wrapper, .rta-top-buttons-wrapper {
+	float: left;
+}
+
+.rta-top-buttons-wrapper {
+	margin-left: 20px;
+}
+///////////End of rta-skills///////////////////////
 ///////////rta-agents///////////////////////
 .agent-row {
 	cursor: pointer;

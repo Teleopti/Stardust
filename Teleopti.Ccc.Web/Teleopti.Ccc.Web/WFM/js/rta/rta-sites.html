@@ -18,7 +18,7 @@
 												<div class="card-group">
 																<div class="wfm-card site rta-info-card" ng-if="site.NumberOfAgents > 0" ng-class="{good: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) <= 33, warning: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) >= 34 && getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) <= 66, danger: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) >= 67, 'rta-small-card': sites.length > 10}" ng-repeat="site in sites" tabindex="0">
 																				<div class="wfm-checkbox rta-checkbox">
-																								<label ng-attr-name="{{site.Name}}" style="width: 20px; height: 20px; display:block!important;">
+																								<label ng-attr-name="{{site.Name}}" class="rta-site-name-label">
 																												<input ng-checked="selectedSites.indexOf(site.Id) > -1" ng-click="toggleSelection(site.Id)" ng-model="selected" type="checkbox" value="value">
 																												<span class="wfm-checkbox-toggle"></span>
 																								</label>
