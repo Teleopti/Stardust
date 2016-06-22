@@ -1,6 +1,8 @@
 ﻿.team-schedule {
     background-color: $white;
-    margin: auto 5px 10em 5px;
+    max-height: 85vh;
+    overflow: hidden;
+    padding: 0;
 
     input {
         background-color: transparent;
@@ -13,6 +15,7 @@
     .teamschedule-header {
         min-height: 44px;
         padding: 5px;
+        border-bottom: 1px solid $gray026;
 
         .leftside-part {
             display: flex;
@@ -109,6 +112,13 @@
         align-items: flex-start;
         position: relative;
         min-height: 500px;
+        max-height: 62vh;
+        overflow: auto;
+        display: block !important;
+    }
+
+    .con-row.teamschedule-body tbody{
+
     }
 
     .big-table-wrapper {
@@ -361,7 +371,9 @@
         max-height: 430px;
     }
 
-    .con-footer {
+    .con-footer.teamschedule-footer {
+        border-top: 1px solid $gray026;
+
         .notice-spacer {
             float: left;
             margin-bottom: 0;

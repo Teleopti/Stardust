@@ -4,7 +4,7 @@
 	</div>
 </div>
 
-<div class="team-schedule panel material-depth-1">
+<div class="team-schedule panel wfm-block material-depth-1">
 	<div class="teamschedule-header">
 		<div class="leftside-part">
 			<span class="people-search-container">
@@ -24,17 +24,16 @@
 			</div>
 		</div>
 
-		<teamschedule-command-menu class="teamschedule-command" ng-if="vm.permissionsAndTogglesLoaded" configurations="vm.cmdConfigurations" trigger-command="vm.triggerCommand(label, needToOpenSidePanel)" ></teamschedule-command-menu>
+		<teamschedule-command-menu class="teamschedule-command" ng-if="vm.permissionsAndTogglesLoaded" configurations="vm.cmdConfigurations" trigger-command="vm.triggerCommand(label, needToOpenSidePanel)"></teamschedule-command-menu>
 		<div class="clearfix"></div>
 	</div>
-
 	<div class="con-row teamschedule-body">
 		<div class="big-table-wrapper">
 			<div class="alert-warning notice-spacer" ng-if="vm.total > 500">
 				<i class='mdi mdi-alert'></i>{{'TooManyResultsForSearchKeywords'|translate}}
 			</div>
 			<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
-			<schedule-table select-mode="vm.scheduleTableSelectMode" selected-date="vm.scheduleDate"/>
+			<schedule-table select-mode="vm.scheduleTableSelectMode" selected-date="vm.scheduleDate" />
 		</div>
 
 		<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="teamschedule-command-container">
@@ -46,7 +45,7 @@
 
 	</div>
 
-	<div class="con-footer" ng-if="vm.paginationOptions.totalPages > 0">
+	<div class="con-footer teamschedule-footer" ng-if="vm.paginationOptions.totalPages > 0">
 		<div class="notice-spacer" ng-show="vm.selectAllVisible()" ng-click="vm.selectAllForAllPages()">
 			<a href="javascript: void(0);"> {{'SelectAllMatchedPeople'|translate}}</a>
 		</div>
@@ -56,6 +55,3 @@
 		<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.loadSchedules"></wfm-pagination>
 	</div>
 </div>
-<!-- a hack for creating space in IE -->
-<div></div>
-<!-- .a hack for creating space in IE -->
