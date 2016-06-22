@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 		public void Handle(ValidateScheduleProjectionReadOnlyEvent @event)
 		{
 				_persister.Reset();
-				_validator.Validate(@event.StartDate, @event.EndDate, _persister.Save);
+				_validator.Validate(@event.StartDate, @event.EndDate, _persister.Save, true);
 		}
 	}
 }
