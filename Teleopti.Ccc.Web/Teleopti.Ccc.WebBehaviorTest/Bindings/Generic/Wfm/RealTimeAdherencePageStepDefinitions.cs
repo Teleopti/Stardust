@@ -84,6 +84,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			var status = table.CreateInstance<RealTimeAdherenceAgentState>();
 			assertAgentStatus(status);
 		}
+		
+		[Then(@"I should not see agent '(.*)'")]
+		public void ThenIShouldNotSeeAgent(string agent)
+		{
+			var personId = DataMaker.Person(agent).Person.Id.Value;
+			Browser.Interactions.AssertNotExists("body","[agentid='" + personId + "']");
+		}
 
 		[Then(@"I should see agent '(.*)' before '(.*)'")]
 		public void ThenIShouldSeeAgentBefore(string firstPerson, string secondPerson)

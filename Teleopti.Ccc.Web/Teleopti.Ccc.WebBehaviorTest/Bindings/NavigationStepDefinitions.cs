@@ -295,6 +295,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			return buId;
 		}
 
+		private static Guid IdForSkill(string skillName)
+		{
+			var skillId = (from s in DataMaker.Data().UserDatasOfType<SkillConfigurable>()
+				where s.Name.Equals(skillName, StringComparison.InvariantCultureIgnoreCase)
+				select s.Skill.Id.Value).First();
+			return skillId;
+		}
+
 		[When(@"I view person schedule for '(.*)' in '(.*)' on '(.*)'")]
 		public void WhenIViewPersonScheduleForInOn(string person, string group, DateTime date)
 		{
@@ -591,6 +599,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoRealTimeAdherenceAllAgentsOnTeam(buIdForTeam(team), SiteIdForTeam(team), IdForTeam(team));
+		}
+
+		[When(@"I view real time adherence for agents with skills '(.*)'")]
+		public void WhenIViewRealTimeAdherenceForAgentsWithSkills(string skill)
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoRealTimeAdherenceAllAgentsWithSkill(IdForSkill(skill));
 		}
 
 		[When(@"I view real time adherence view for team '(.*)'")]

@@ -491,6 +491,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		{
 			GoToPage("wfm/#/rta/agent-details/" + personId);
 		}
+		
+		public static void GotoRealTimeAdherenceAllAgentsWithSkill(Guid skillId)
+		{
+			GoToPage("wfm/#/rta/agents-skill/" + skillId);
+		}
 
 		public static void GotoPageCiscoFinesse()
 		{
@@ -510,5 +515,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
         {
             GoToPage("wfm/#/reports");
         }
-    }
+	}
 }
