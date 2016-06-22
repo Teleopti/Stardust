@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -60,15 +60,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			var site = Guid.NewGuid();
 			Database
 				.WithSite(site)
-				.WithTeam("Ä")
+				.WithTeam("Ã„")
 				.WithTeam("A")
-				.WithTeam("Å");
+				.WithTeam("Ä¹");
 			UiCulture.IsSwedish();
 
 			var result = Target.Build(site);
 
 			result.Select(x => x.Name)
-				.Should().Have.SameSequenceAs(new[] { "A", "Å", "Ä" });
+				.Should().Have.SameSequenceAs(new[] { "A", "Ä¹", "Ã„" });
 		}
 	}
 }
