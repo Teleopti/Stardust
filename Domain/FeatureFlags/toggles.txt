@@ -121,6 +121,8 @@ ResourcePlanner_TeamBlockDayOffForIndividuals_37998 = false # needs to be false 
 ResourcePlanner_ScheduleOvertimeOnNonWorkingDays_38025 = true
 ResourcePlanner_CascadingSkills_38524 = RC # Should not be set to true yet
 
+Wfm_DisplayOnlineHelp_39402 = RC
+
 Wfm_QuickForecastOnHangfire_35845 = true
 ETL_SpeedUpPermissionReport_33584 = true
 Wfm_RecalculateForecastOnHangfire_37971 = true

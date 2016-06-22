@@ -3,8 +3,12 @@
 	var help = angular.module('wfm.help', []);
 
 	help.controller('HelpController', [
-		'$scope', 'HelpService', function ($scope, HelpService) {
+		'$scope', 'HelpService', 'Toggle', function ($scope, HelpService, toggleService) {
 			$scope.help = HelpService;
+			$scope.displayHelp = false;
+			if(toggleService.Wfm_DisplayOnlineHelp_39402){
+				$scope.displayHelp = true;
+			}
 		}
 	]);
 

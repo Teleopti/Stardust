@@ -110,7 +110,9 @@
 		ResourcePlanner_ScheduleOvertimeOnNonWorkingDays_38025,
 		ResourcePlanner_CascadingSkills_38524,
 
-		Wfm_QuickForecastOnHangfire_35845,
+        Wfm_DisplayOnlineHelp_39402,
+
+        Wfm_QuickForecastOnHangfire_35845,
 		ETL_SpeedUpPermissionReport_33584,
 		Wfm_RecalculateForecastOnHangfire_37971,
 		ETL_SpeedUpFactScheduleNightly_38019,
