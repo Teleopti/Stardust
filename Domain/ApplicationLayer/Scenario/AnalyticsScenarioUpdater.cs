@@ -4,7 +4,6 @@ using log4net;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
@@ -23,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Scenario
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IBusinessUnitRepository _businessUnitRepository;
 
-		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsScenarioUpdater));
+		private readonly static ILog logger = LogManager.GetLogger(typeof(AnalyticsScenarioUpdater));
 
 		public AnalyticsScenarioUpdater(IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, IAnalyticsScenarioRepository analyticsScenarioRepository, IScenarioRepository scenarioRepository, IBusinessUnitRepository businessUnitRepository)
 		{
@@ -68,10 +67,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Scenario
 			var scenario = _scenarioRepository.Load(@event.ScenarioId);
 			var businessUnit = _businessUnitRepository.Load(@event.LogOnBusinessUnitId);
 			var analyticsBusinessUnit = _analyticsBusinessUnitRepository.Get(@event.LogOnBusinessUnitId);
-			if (analyticsBusinessUnit == null) throw new BusinessUnitMissingInAnalyticsException();
 			var analyticsScenario = _analyticsScenarioRepository.Scenarios().FirstOrDefault(a => a.ScenarioCode == @event.ScenarioId);
 
-			if (scenario == null || businessUnit == null)
+			if (scenario == null || businessUnit == null || analyticsBusinessUnit == null)
 				return;
 
 			// Add

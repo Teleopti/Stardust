@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure.Analytics;
@@ -253,7 +252,6 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 		public int MapBusinessId(Guid businessUnitCode)
 		{
 			var businessUnit = _analyticsBusinessUnitRepository.Get(businessUnitCode);
-			if (businessUnit == null) throw new BusinessUnitMissingInAnalyticsException();
 			return businessUnit.BusinessUnitId;
 		}
 

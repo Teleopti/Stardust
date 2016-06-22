@@ -3,7 +3,6 @@ using log4net;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
@@ -19,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.MultiplicatorDefinitionSetHandler
 		IHandleEvent<MultiplicatorDefinitionSetChanged>,
 		IHandleEvent<MultiplicatorDefinitionSetDeleted>
 	{
-		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsOvertimeUpdater));
+		private readonly static ILog logger = LogManager.GetLogger(typeof(AnalyticsOvertimeUpdater));
 
 		private readonly IAnalyticsOvertimeRepository _analyticsOvertimeRepository;
 		private readonly IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
@@ -68,12 +67,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.MultiplicatorDefinitionSetHandler
 				return;
 			}
 			var multiplicatorDefinitionSet = _multiplicatorDefinitionSetRepository.Get(@event.MultiplicatorDefinitionSetId);
-			var analyticsBusinessUnit = _analyticsBusinessUnitRepository.Get(@event.LogOnBusinessUnitId);
-			if (analyticsBusinessUnit == null) throw new BusinessUnitMissingInAnalyticsException();
+			var businessUnit = _analyticsBusinessUnitRepository.Get(@event.LogOnBusinessUnitId);
 
 			_analyticsOvertimeRepository.AddOrUpdate(new AnalyticsOvertime
 			{
-				BusinessUnitId = analyticsBusinessUnit.BusinessUnitId,
+				BusinessUnitId = businessUnit.BusinessUnitId,
 				OvertimeCode = @event.MultiplicatorDefinitionSetId,
 				OvertimeName = @multiplicatorDefinitionSet.Name,
 				DatasourceUpdateDate = multiplicatorDefinitionSet.UpdatedOn ?? DateTime.UtcNow,

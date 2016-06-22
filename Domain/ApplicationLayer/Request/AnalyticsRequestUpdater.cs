@@ -3,7 +3,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
@@ -74,9 +73,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 				return;
 			}
 
-			var analyticsBusinessUnit = _analyticsBusinessUnitRepository.Get(@event.LogOnBusinessUnitId);
-			if (analyticsBusinessUnit == null) throw new BusinessUnitMissingInAnalyticsException();
-
+			var businessUnit = _analyticsBusinessUnitRepository.Get(@event.LogOnBusinessUnitId);
 			var personPeriod = getPersonPeriod(personRequest);
 
 			var personTimeZone = personRequest.Person.PermissionInformation.DefaultTimeZone();
@@ -101,7 +98,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 				RequestTypeId = requestTypeId,
 				RequestDayCount = dayIdCollection.Count,
 				ApplicationDatetime = TimeZoneInfo.ConvertTimeFromUtc(personRequest.CreatedOn.GetValueOrDefault(), personTimeZone),
-				BusinessUnitId = analyticsBusinessUnit.BusinessUnitId,
+				BusinessUnitId = businessUnit.BusinessUnitId,
 				DatasourceUpdateDate = personRequest.UpdatedOn.GetValueOrDefault(DateTime.UtcNow),
 				PersonId = personPeriod.PersonId,
 				RequestCode = @event.PersonRequestId,
@@ -124,7 +121,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 				{
 					RequestDateId = dateId,
 					AbsenceId = absenceId,
-					BusinessUnitId = analyticsBusinessUnit.BusinessUnitId,
+					BusinessUnitId = businessUnit.BusinessUnitId,
 					DatasourceUpdateDate = personRequest.UpdatedOn.GetValueOrDefault(DateTime.UtcNow),
 					PersonId = personPeriod.PersonId,
 					RequestCode = @event.PersonRequestId,

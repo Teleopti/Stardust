@@ -3,7 +3,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
@@ -99,14 +98,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Workload
 		{
 			var analyticsSkills = _analyticsSkillRepository.Skills(businessUnit.BusinessUnitId);
 			var analyticsSkill = analyticsSkills.FirstOrDefault(s => s.SkillCode == workload.Skill.Id.GetValueOrDefault());
-			if (analyticsSkill == null) throw new SkillMissingInAnalyticsException();
+			if (analyticsSkill == null)
+				throw new ArgumentException($"{typeof(AnalyticsSkill)} missing from database.");
 			return analyticsSkill;
 		}
 
 		private AnalyticBusinessUnit getAnalyticsBusinessUnit(Guid businessUnitId)
 		{
 			var analyticsBusinessUnit = _analyticsBusinessUnitRepository.Get(businessUnitId);
-			if (analyticsBusinessUnit == null) throw new BusinessUnitMissingInAnalyticsException();
+			if (analyticsBusinessUnit == null)
+				throw new ArgumentException($"{typeof(AnalyticBusinessUnit)} missing in database.");
 			return analyticsBusinessUnit;
 		}
 	}

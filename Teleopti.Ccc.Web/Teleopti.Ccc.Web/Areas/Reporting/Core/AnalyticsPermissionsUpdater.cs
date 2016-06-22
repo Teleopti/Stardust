@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Web.Areas.Reporting.Core
@@ -25,7 +24,6 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 		public void Handle(Guid personId, Guid businessUnitId)
 		{
 			var businessUnit = _analyticsBusinessUnitRepository.Get(businessUnitId);
-			if (businessUnit == null) throw new BusinessUnitMissingInAnalyticsException();
 
 			var lastUpdate = _analyticsPermissionExecutionRepository.Get(personId, businessUnit.BusinessUnitId);
 			if (DateTime.UtcNow - lastUpdate < TimeSpan.FromMinutes(15))

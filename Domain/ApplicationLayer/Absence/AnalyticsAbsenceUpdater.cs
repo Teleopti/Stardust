@@ -5,7 +5,6 @@ using log4net;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
@@ -19,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Absence
 		IHandleEvent<AbsenceDeletedEvent>,
 		IRunOnHangfire
 	{
-		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsAbsenceUpdater));
+		private readonly static ILog logger = LogManager.GetLogger(typeof(AnalyticsAbsenceUpdater));
 		private readonly IAbsenceRepository _absenceRepository;
 		private readonly IAnalyticsAbsenceRepository _analyticsAbsenceRepository;
 		private readonly IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
@@ -41,8 +40,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Absence
 			var analyticsBusinessUnit = _analyticsBusinessUnitRepository.Get(@event.LogOnBusinessUnitId);
 			var analyticsAbsence = _analyticsAbsenceRepository.Absences().FirstOrDefault(a => a.AbsenceCode == @event.AbsenceId);
 
-			if (analyticsBusinessUnit == null) throw new BusinessUnitMissingInAnalyticsException();
-			if (absence == null)
+			if (absence == null || analyticsBusinessUnit == null)
 				return;
 
 			// Add

@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.DayOff
 			logger.Debug($"Consuming {nameof(DayOffTemplateChangedEvent)} for day off template id = {@event.DayOffTemplateId}.");
 
 			var businessUnit = _analyticsBusinessUnitRepository.Get(@event.LogOnBusinessUnitId);
-			if (businessUnit == null) throw new BusinessUnitMissingInAnalyticsException();
+			if (businessUnit == null) throw new BusiessUnitMissingInAnalytics();
 			var dayOffTemplate = _dayOffTemplateRepository.Get(@event.DayOffTemplateId);
 
 			var dayOff = new AnalyticsDayOff
