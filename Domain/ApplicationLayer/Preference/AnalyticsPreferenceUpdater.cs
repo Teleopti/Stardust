@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Interfaces.Infrastructure.Analytics;
 
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 		IHandleEvent<PreferenceChangedEvent>,
 		IRunOnHangfire
 	{
-		private readonly static ILog logger = LogManager.GetLogger(typeof(AnalyticsPreferenceUpdater));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsPreferenceUpdater));
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IPreferenceDayRepository _preferenceDayRepository;
 		private readonly IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository;
@@ -71,10 +72,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			restrictionChecker = new RestrictionChecker();
 			scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, false, true) { LoadDaysAfterLeft = true };
 
-			if (logger.IsInfoEnabled)
-			{
-				logger.Info("New instance of handler was created");
-			}
+			logger.Info("New instance of handler was created");
 		}
 
 		[AsSystem]
@@ -82,11 +80,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 		[UnitOfWork]
 		public virtual void Handle(PreferenceDeletedEvent @event)
 		{
-			if (logger.IsDebugEnabled)
-			{
-				logger.Debug($"Consuming deleted event for preference Id = {@event.PreferenceDayId}. (Message timestamp = {@event.Timestamp})");
-			}
+			logger.Debug($"Consuming deleted event for preference Id = {@event.PreferenceDayId}. (Message timestamp = {@event.Timestamp})");
 			var dateId = _analyticsDateRepository.Date(@event.RestrictionDate.Date);
+			if (dateId == null) throw new DateMissingInAnalyticsException(@event.RestrictionDate.Date);
 			var person = _personRepository.FindPeople(new[] { @event.PersonId }).First();
 			var personPeriod = person.Period(new DateOnly(@event.RestrictionDate.Date));
 			var analyticsPersonPeriodId = _analyticsPersonPeriodRepository.PersonPeriod(personPeriod.Id.GetValueOrDefault()).PersonId;
@@ -125,16 +121,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 		{
 			// Preference, person look ups, mapping
 			var preferenceDay = _preferenceDayRepository.Find(preferenceDayId);
-			var dateId = _analyticsDateRepository.Date(restrictionDate.Date);
-			var person = _personRepository.FindPeople(new[] { personId }).First();
-			var personPeriod = person.Period(new DateOnly(restrictionDate.Date));
-			var analyticsPersonPeriodId = _analyticsPersonPeriodRepository.PersonPeriod(personPeriod.Id.GetValueOrDefault()).PersonId;
-
 			if (preferenceDay == null)
 			{
 				// Preference day does not exists anymore so it has been deleted, will be handled by other event.
 				return;
 			}
+
+			var dateId = _analyticsDateRepository.Date(restrictionDate.Date);
+			if (dateId == null) throw new DateMissingInAnalyticsException(restrictionDate.Date);
+			var person = _personRepository.FindPeople(new[] { personId }).First();
+			var personPeriod = person.Period(new DateOnly(restrictionDate.Date));
+			var analyticsPersonPeriodId = _analyticsPersonPeriodRepository.PersonPeriod(personPeriod.Id.GetValueOrDefault()).PersonId;
 
 			IList<IScenario> scenarios;
 			if (scenarioId == Guid.Empty)
@@ -205,16 +202,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 		}
 
 		private AnalyticsFactSchedulePreference mapSchedulePreference(
-			IScheduleDay schedulePart, 
-			IEnumerable<AnalyticsScenario> analyticsScenarios, 
-			IScenario scenario, 
+			IScheduleDay schedulePart,
+			IEnumerable<AnalyticsScenario> analyticsScenarios,
+			IScenario scenario,
 			IEnumerable<AnalyticsShiftCategory> analyticsShiftCategories,
-			IPreferenceRestriction preferenceRestriction, 
-			IEnumerable<AnalyticsAbsence> analyticsAbsences, 
+			IPreferenceRestriction preferenceRestriction,
+			IEnumerable<AnalyticsAbsence> analyticsAbsences,
 			IEnumerable<AnalyticsDayOff> analyticsDayOffs,
-			AnalyticBusinessUnit businessUnitId, 
-			IAnalyticsDate analyticsDate, 
-			int analyticsPersonPeriodId, 
+			AnalyticBusinessUnit businessUnitId,
+			IAnalyticsDate analyticsDate,
+			int analyticsPersonPeriodId,
 			IPreferenceDay preferenceDay)
 		{
 			var permissionState = restrictionChecker.CheckPreference(schedulePart);
