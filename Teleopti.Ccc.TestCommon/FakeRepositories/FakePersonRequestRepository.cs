@@ -79,33 +79,38 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerable<IPersonRequest> FindAllRequests(RequestFilter filter, out int count, bool ignoreCount = false)
 		{
-			List<IPersonRequest> requests;
+			IEnumerable<IPersonRequest> requests;
 
 			if (filter.ExcludeRequestsOnFilterPeriodEdge)
 			{
 				requests = (from request in _requestRepository
 							where request.Request.Period.EndDateTime > filter.Period.StartDateTime &&
 									request.Request.Period.StartDateTime < filter.Period.EndDateTime
-							select request).ToList();
+							select request);
 			}
 			else
 			{
-				requests = _requestRepository.Where(request => filter.Period.ContainsPart(request.Request.Period)).ToList();
+				requests = _requestRepository.Where(request => filter.Period.ContainsPart(request.Request.Period));
+			}
+
+
+			if (filter.OnlyIncludeRequestsStartingWithinPeriod)
+			{
+				requests = requests.Where (request => request.Request.Period.StartDateTime >= filter.Period.StartDateTime);
 			}
 
 			if (filter.RequestTypes != null)
 			{
-				requests = requests.Where(request => filter.RequestTypes.Contains(request.Request.RequestType)).ToList();
+				requests = requests.Where(request => filter.RequestTypes.Contains(request.Request.RequestType));
 			}
 
 			if (filter.Persons != null)
 			{
-				requests = requests.Where(request => filter.Persons.Contains(request.Person)).ToList();
+				requests = requests.Where(request => filter.Persons.Contains(request.Person));
 			}
 
-
 			count = requests.Count();
-			return requests;
+			return requests.ToList();
 		}
 
 		public IEnumerable<IPersonRequest> FindAllRequestsForAgentByType(IPerson person, Paging paging,

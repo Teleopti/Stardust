@@ -19,8 +19,9 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
 		private readonly IScheduleProvider _scheduleProvider;
 		private readonly IUserCulture _userCulture;
+		private readonly IRequestFilterCreator _requestFilterCreator;
 
-		public ShiftTradeRequestViewModelFactory(IRequestsProvider requestsProvider, IRequestViewModelMapper requestViewModelMapper, IPersonNameProvider personNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider, IScheduleProvider scheduleProvider, IUserCulture userCulture)
+		public ShiftTradeRequestViewModelFactory(IRequestsProvider requestsProvider, IRequestViewModelMapper requestViewModelMapper, IPersonNameProvider personNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider, IScheduleProvider scheduleProvider, IUserCulture userCulture, IRequestFilterCreator requestFilterCreator)
 		{
 			_requestsProvider = requestsProvider;
 			_requestViewModelMapper = requestViewModelMapper;
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
 			_scheduleProvider = scheduleProvider;
 			_userCulture = userCulture;
+			_requestFilterCreator = requestFilterCreator;
 		}
 
 		public ShiftTradeRequestListViewModel CreateRequestListViewModel(AllRequestsFormData input)
@@ -47,7 +49,11 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			requestListModel.MaximumDateTime = input.EndDate.Date;
 
 			int totalCount;
-			var requests = _requestsProvider.RetrieveRequests(input, new[] { RequestType.ShiftTradeRequest }, out totalCount).ToArray();
+
+			var requestFilter = _requestFilterCreator.Create(input, new[] { RequestType.ShiftTradeRequest });
+			requestFilter.OnlyIncludeRequestsStartingWithinPeriod = true;
+
+			var requests = _requestsProvider.RetrieveRequests(requestFilter, out totalCount).ToArray();
 
 			requestListModel.TotalCount = totalCount;
 			requestListModel.Skip = input.Paging.Skip;

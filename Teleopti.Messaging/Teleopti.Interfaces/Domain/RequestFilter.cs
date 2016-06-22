@@ -36,5 +36,6 @@ namespace Teleopti.Interfaces.Domain
 		public IList<RequestsSortingOrder> SortingOrders;
 		public IPaging Paging;
 		public bool ExcludeRequestsOnFilterPeriodEdge;
+		public bool OnlyIncludeRequestsStartingWithinPeriod;
 	}
 }

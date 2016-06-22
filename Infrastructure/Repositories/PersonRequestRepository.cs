@@ -179,6 +179,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 
 
+			if (filter.OnlyIncludeRequestsStartingWithinPeriod)
+			{
+				requestForPeriod
+					.Add (Restrictions.Ge ("Period.period.Minimum", period.StartDateTime));
+			}
+
+
 			criteria.Add(Subqueries.PropertyIn("Id", requestForPeriod));
 		}
 

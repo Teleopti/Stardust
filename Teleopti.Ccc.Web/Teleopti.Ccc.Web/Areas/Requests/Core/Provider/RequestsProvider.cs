@@ -4,8 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
-using Teleopti.Ccc.Web.Areas.People.Core.Providers;
-using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
@@ -13,25 +11,21 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 	public class RequestsProvider : IRequestsProvider
 	{
 		private readonly IPersonRequestRepository _repository;
-		private readonly IUserTimeZone _userTimeZone;
 		private readonly IPermissionProvider _permissionProvider;
-		private readonly IPeopleSearchProvider _peopleSearchProvider;
 		private readonly IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
 		private readonly IShiftTradeSwapScheduleDetailsMapper _shiftTradeSwapScheduleDetailsMapper;
 
-		public RequestsProvider(IPersonRequestRepository repository, IUserTimeZone userTimeZone, IPermissionProvider permissionProvider, IPeopleSearchProvider peopleSearchProvider, IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker, IShiftTradeSwapScheduleDetailsMapper shiftTradeSwapScheduleDetailsMapper )
+		public RequestsProvider(IPersonRequestRepository repository, IPermissionProvider permissionProvider, IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker, IShiftTradeSwapScheduleDetailsMapper shiftTradeSwapScheduleDetailsMapper )
 		{
 			_repository = repository;
-			_userTimeZone = userTimeZone;
 			_permissionProvider = permissionProvider;
-			_peopleSearchProvider = peopleSearchProvider;
 			_shiftTradeRequestStatusChecker = shiftTradeRequestStatusChecker;
 			_shiftTradeSwapScheduleDetailsMapper = shiftTradeSwapScheduleDetailsMapper;
 		}
 
-		public IEnumerable<IPersonRequest> RetrieveRequests(AllRequestsFormData input, IEnumerable<RequestType> requestTypes, out int totalCount)
+		public IEnumerable<IPersonRequest> RetrieveRequests(RequestFilter filter, out int totalCount)
 		{
-			var requests = _repository.FindAllRequests(toRequestFilter(input, requestTypes), out totalCount).Where(permissionCheckPredicate).ToList();
+			var requests = _repository.FindAllRequests(filter, out totalCount).Where(permissionCheckPredicate).ToList();
 
 			return setupShiftTradeRequestStatus(requests);
 		}
@@ -55,29 +49,6 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			}
 
 			return requests;
-		}
-
-		private RequestFilter toRequestFilter(AllRequestsFormData input, IEnumerable<RequestType> requestTypes)
-		{
-			var dateTimePeriod = new DateOnlyPeriod(input.StartDate, input.EndDate).ToDateTimePeriod(_userTimeZone.TimeZone());
-			var queryDateTimePeriod = dateTimePeriod.ChangeEndTime(TimeSpan.FromSeconds(-1));
-
-			var filter = new RequestFilter
-			{
-				RequestFilters = input.Filters,
-				Period = queryDateTimePeriod,
-				Paging = input.Paging,
-				RequestTypes = requestTypes,
-				SortingOrders = input.SortingOrders
-			};
-
-			if (input.AgentSearchTerm != null)
-			{
-				filter.Persons = _peopleSearchProvider.SearchPermittedPeople(input.AgentSearchTerm,
-					input.StartDate, DefinedRaptorApplicationFunctionPaths.WebRequests);
-			}
-
-			return filter;
 		}
 
 

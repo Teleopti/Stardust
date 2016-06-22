@@ -1542,7 +1542,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.PeriodStartDesc }
 			};
 
-			var resultDesc = setupOverlapTest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(1)), filter);
+			var resultDesc = simpleRequestFilter(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(1)), filter);
 
 			resultDesc.Should().Have.Count.EqualTo(1);
 		}
@@ -1556,7 +1556,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.PeriodStartDesc }
 			};
 
-			var resultDesc = setupOverlapTest(new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow), filter);
+			var resultDesc = simpleRequestFilter(new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow), filter);
 
 			resultDesc.Should().Have.Count.EqualTo(1);
 		}
@@ -1571,7 +1571,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.PeriodStartDesc }
 			};
 
-			var resultDesc = setupOverlapTest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(1)), filter);
+			var resultDesc = simpleRequestFilter(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(1)), filter);
 
 			resultDesc.Should().Have.Count.EqualTo(0);
 		}
@@ -1586,7 +1586,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.PeriodStartDesc }
 			};
 
-			var resultDesc = setupOverlapTest(new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow), filter);
+			var resultDesc = simpleRequestFilter(new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow), filter);
+
+			resultDesc.Should().Have.Count.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldOnlyReturnRequestsStartWithinPeriod()
+		{
+			var filter = new RequestFilter
+			{
+				Period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(7)),
+				OnlyIncludeRequestsStartingWithinPeriod = true,
+				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.PeriodStartDesc }
+			};
+
+			var resultDesc = simpleRequestFilter(new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays (7)), filter);
 
 			resultDesc.Should().Have.Count.EqualTo(0);
 		}
@@ -1819,7 +1834,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			return person;
 		}
 
-		private IEnumerable<IPersonRequest> setupOverlapTest(DateTimePeriod existingRequestPeriod, RequestFilter filter)
+		private IEnumerable<IPersonRequest> simpleRequestFilter(DateTimePeriod existingRequestPeriod, RequestFilter filter)
 		{
 			var person1 = PersonFactory.CreatePerson("A");
 

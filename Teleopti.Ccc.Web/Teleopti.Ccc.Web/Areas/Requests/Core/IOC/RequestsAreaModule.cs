@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.IOC
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<RequestsProvider>().As<IRequestsProvider>().InstancePerLifetimeScope();
+			builder.RegisterType<RequestFilterCreator>().As<IRequestFilterCreator>().InstancePerLifetimeScope();
 			builder.RegisterType<RequestsViewModelFactory>().As<IRequestsViewModelFactory>().SingleInstance();
 			builder.RegisterType<ShiftTradeRequestViewModelFactory>().As<IShiftTradeRequestViewModelFactory>().SingleInstance();
 			builder.RegisterType<RequestCommandHandlingProvider>().As<IRequestCommandHandlingProvider>().InstancePerLifetimeScope();

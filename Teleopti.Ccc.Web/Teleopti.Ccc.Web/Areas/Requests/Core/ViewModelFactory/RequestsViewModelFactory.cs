@@ -12,18 +12,22 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 	{
 		private readonly IRequestsProvider _requestsProvider;
 		private readonly IRequestViewModelMapper _requestViewModelMapper;
+		private readonly IRequestFilterCreator _requestFilterCreator;
 
-		public RequestsViewModelFactory(IRequestsProvider requestsProvider, IRequestViewModelMapper requestViewModelMapper)
+		public RequestsViewModelFactory(IRequestsProvider requestsProvider, IRequestViewModelMapper requestViewModelMapper, IRequestFilterCreator requestFilterCreator)
 		{
 			_requestsProvider = requestsProvider;
 			_requestViewModelMapper = requestViewModelMapper;
+			_requestFilterCreator = requestFilterCreator;
 		}
 
 		// Deprecate after Wfm_Requests_Performance_36295. Use CreateRequestListViewModel instead.
 		public IEnumerable<RequestViewModel> Create(AllRequestsFormData input)
 		{
 			int totalCount;
-			var requests = _requestsProvider.RetrieveRequests(input, new[] { RequestType.AbsenceRequest, RequestType.TextRequest }, out totalCount);
+
+			var requestFilter = _requestFilterCreator.Create (input, new[] {RequestType.AbsenceRequest, RequestType.TextRequest});
+			var requests = _requestsProvider.RetrieveRequests(requestFilter, out totalCount);
 			var requestViewModels = requests.Select(toViewModel).ToArray();
 
 			var mapping = new Dictionary<RequestsSortingOrder, Func<RequestViewModel, object>>
@@ -61,7 +65,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			}
 
 			int totalCount;
-			var requests = _requestsProvider.RetrieveRequests(input, new[] { RequestType.AbsenceRequest, RequestType.TextRequest }, out totalCount);
+			var requestFilter = _requestFilterCreator.Create(input, new[] { RequestType.AbsenceRequest, RequestType.TextRequest });
+			var requests = _requestsProvider.RetrieveRequests(requestFilter, out totalCount);
 
 			return new RequestListViewModel
 			{
