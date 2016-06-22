@@ -1,18 +1,14 @@
 ﻿using Autofac;
-using Microsoft.AspNet.SignalR.Hubs;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
-using Teleopti.Ccc.Web.Core.Startup;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.IOC
 {
 	public class SeatPlannerAreaModule : Module
 	{
-
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<ExceptionHandlerPipelineModule>().As<IHubPipelineModule>();
 			builder.RegisterType<TeamsProvider>().As<ITeamsProvider>().InstancePerLifetimeScope();
 			builder.RegisterType<SeatMapProvider>().As<ISeatMapProvider>().InstancePerLifetimeScope();
 			builder.RegisterType<SeatPlanProvider>().As<ISeatPlanProvider>().InstancePerLifetimeScope();
@@ -24,7 +20,6 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.IOC
 			builder.RegisterType<SeatMapPersister>().As<ISeatMapPersister>().InstancePerLifetimeScope();
 			builder.RegisterType<SeatBookingRequestAssembler>().As<ISeatBookingRequestAssembler>().InstancePerLifetimeScope();
 			builder.RegisterType<SeatFrequencyCalculator>().As<ISeatFrequencyCalculator>().InstancePerLifetimeScope();
-			
 		}
 	}
 }

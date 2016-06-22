@@ -418,6 +418,7 @@
     <Compile Include="Areas\MyTime\Controllers\TeamControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\ViewModelFactory\TeamViewModelFactoryTest.cs" />
     <Compile Include="Core\Startup\FindAreaRegistrationsTest.cs" />
+    <Compile Include="Core\Startup\OriginHandlerPipelineModule.cs" />
     <Compile Include="Core\Startup\RegisterAreasTest.cs" />
     <Compile Include="Core\Startup\RegisterGlobalApiFiltersTaskTest.cs" />
     <Compile Include="Core\TeamSchedule\ViewModelFactory\TeamScheduleViewModelReworkedFactoryTest.cs" />

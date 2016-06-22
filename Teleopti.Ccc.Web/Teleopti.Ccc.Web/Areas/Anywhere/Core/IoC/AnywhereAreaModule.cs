@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Microsoft.AspNet.SignalR.Hubs;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -33,6 +32,11 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<ExceptionHandlerPipelineModule>().As<IHubPipelineModule>();
+
+			if (!_config.Args().DisableWebSocketCors)
+			{
+				builder.RegisterType<OriginHandlerPipelineModule>().As<IHubPipelineModule>();
+			}
 
 			builder.RegisterType<GroupScheduleViewModelFactory>().As<IGroupScheduleViewModelFactory>().SingleInstance();
 			builder.RegisterType<GroupScheduleViewModelMapper>().As<IGroupScheduleViewModelMapper>().SingleInstance();

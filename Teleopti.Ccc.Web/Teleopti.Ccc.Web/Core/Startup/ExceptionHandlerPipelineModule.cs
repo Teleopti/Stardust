@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNet.SignalR.Hubs;
 
 namespace Teleopti.Ccc.Web.Core.Startup

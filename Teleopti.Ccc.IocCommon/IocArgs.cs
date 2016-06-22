@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.IocCommon
 		public string ReportServer { get; set; }
 		public string MatrixWebSiteUrl { get; set; }
 		public bool ThrottleMessages { get; set; }
+		public bool DisableWebSocketCors { get; set; }
 		public int MessagesPerSecond { get; set; }
 		public bool OptimizeScheduleChangedEvents_DontUseFromWeb { get; set; }
 
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.IocCommon
 			ReportServer = configReader.AppConfig("ReportServer");
 			MatrixWebSiteUrl = configReader.AppConfig("MatrixWebSiteUrl");
 			ThrottleMessages = configReader.ReadValue("ThrottleMessages", true);
+			DisableWebSocketCors = configReader.ReadValue("DisableWebSocketCors", false);
 			MessagesPerSecond = configReader.ReadValue("MessagesPerSecond", 80);
 			BehaviorTestServer = configReader.ReadValue("BehaviorTestServer", false);
 			AllEventPublishingsAsSync = configReader.ReadValue("AllEventPublishingsAsSync", false);
