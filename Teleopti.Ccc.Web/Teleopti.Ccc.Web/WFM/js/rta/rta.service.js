@@ -145,7 +145,7 @@
 			};
 
 			this.getSkillName = function (data) {
-				return $resource('../api/Skill/NameFor', {}, {
+				return $resource('../api/Skills/NameFor', {}, {
 					query: {
 						method: 'GET'
 					}

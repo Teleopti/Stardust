@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 					SiteName = _siteRepository.Load(x.SiteId.Value).Description.Name,
 					TeamId = x.TeamId.ToString(),
 					TeamName = _teamRepository.Load(x.TeamId.Value).Description.Name
-				});
+				}).ToArray();
 		}
 	}
 }

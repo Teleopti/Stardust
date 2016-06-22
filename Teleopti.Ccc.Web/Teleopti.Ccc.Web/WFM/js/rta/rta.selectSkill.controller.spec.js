@@ -42,7 +42,7 @@ describe('RtaSelectSkillCtrl', function () {
 		});
 
 		$controllerBuilder.createController();
-		
+
 		expect(scope.skills[0].Name).toEqual("Channel Sales");
 		expect(scope.skills[0].Id).toEqual("f08d75b3-fdb4-484a-ae4c-9f0800e2f753");
 	});
@@ -96,8 +96,8 @@ describe('RtaSelectSkillCtrl', function () {
 			});
 
 		expect($state.go).toHaveBeenCalledWith('rta.agents-skill', {
-			skillIds: ['f08d75b3-fdb4-484a-ae4c-9f0800e2f753']
+			skillId: 'f08d75b3-fdb4-484a-ae4c-9f0800e2f753'
 		});
 	});
-	
+
 });

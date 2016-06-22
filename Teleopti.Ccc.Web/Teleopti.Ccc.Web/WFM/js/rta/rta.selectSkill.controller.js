@@ -26,7 +26,7 @@
 
 				$scope.selectedSkillChange = function(item) {
 					if (item) {
-						$state.go('rta.agents-skill', { skillIds: [item.Id] });
+						$state.go('rta.agents-skill', { skillId: item.Id });
 					};
 				}
 			}

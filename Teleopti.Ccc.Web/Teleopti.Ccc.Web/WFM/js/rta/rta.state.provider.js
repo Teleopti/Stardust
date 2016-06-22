@@ -94,7 +94,7 @@ angular.module('wfm.rta').provider('RtaState', function () {
 			})
 			.state('rta.agents-skill',
 			{
-				url: '/agents-skill/?skillIds',
+				url: '/agents-skill/:skillId',
 				templateUrl: rtaAgentsTemplate,
 				controller: 'RtaAgentsCtrl',
 				params: {
