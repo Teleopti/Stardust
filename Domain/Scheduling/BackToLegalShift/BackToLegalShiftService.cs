@@ -59,6 +59,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 				var date = selectedTeamBlock.BlockInfo.BlockPeriod.StartDate;
 				var timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
 				var ruleSetBag = person.Period(date).RuleSetBag;
+
 				processedBlocks++;
 				var roleModel = _firstShiftInTeamBlockFinder.FindFirst(selectedTeamBlock, person, date, schedulingResultStateHolder);
 				CancelSignal progressResult;
@@ -89,6 +90,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 					continue;
 				}
 
+				var scheduleMatrixPro = selectedTeamBlock.MatrixesForGroupAndBlock().First();
+				var originalDay = scheduleMatrixPro.GetScheduleDayByKey(date).DaySchedulePart();
+				var overTimeActivities = originalDay.PersonAssignment(true).OvertimeActivities();
+
 				success = _backToLegalShiftWorker.ReSchedule(selectedTeamBlock, schedulingOptions, roleModel, rollbackService,
 					resourceCalculateDelayer, schedulingResultStateHolder);
 
@@ -97,6 +102,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 					var workShiftFinderResult = new WorkShiftFinderResult(person, date);
 					workShiftFinderResult.AddFilterResults(new WorkShiftFilterResult(Resources.CouldNotFindAnyValidShiftInShiftBag, 0, 0));
 					workShiftFinderResultList.Add(workShiftFinderResult);
+				}
+				else
+				{
+					if (overTimeActivities.Any())
+					{
+						var scheduledDay = schedulingResultStateHolder.Schedules[person].ScheduledDay(date);
+
+						foreach (var overtimeShiftLayer in overTimeActivities)
+						{
+							scheduledDay.CreateAndAddOvertime(overtimeShiftLayer.Payload, overtimeShiftLayer.Period, overtimeShiftLayer.DefinitionSet);
+						}
+						schedulingResultStateHolder.Schedules.Modify(scheduledDay);
+						resourceCalculateDelayer.CalculateIfNeeded(date, null, false);
+					}
 				}
 
 				progressResult = onProgress(selectedTeamBlocks.Count, processedBlocks);
