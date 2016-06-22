@@ -6,11 +6,17 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class FakeCommonAgentNameProvider : ICommonAgentNameProvider
 	{
-		public ICommonNameDescriptionSetting CommonAgentNameSettings { get; private set; }
+		public ICommonNameDescriptionSetting CommonAgentNameSettings { get; set; }
 
 		public FakeCommonAgentNameProvider()
 		{
 			CommonAgentNameSettings = new CommonNameDescriptionSetting("{FirstName}@{LastName}");
 		}
+
+	    public FakeCommonAgentNameProvider Has(CommonNameDescriptionSetting setting)
+	    {
+	        CommonAgentNameSettings = setting;
+	        return this;
+	    }
 	}
 }

@@ -21,5 +21,13 @@
         ///<param name="lightPerson"></param>
         ///<returns></returns>
         string BuildCommonNameDescription(ILightPerson lightPerson);
+
+	    /// <summary>
+	    /// </summary>
+	    /// <param name="firstName"></param>
+	    /// <param name="lastName"></param>
+	    /// <param name="employmentNumber"></param>
+	    /// <returns></returns>
+	    string BuildCommonNameDescription(string firstName, string lastName, string employmentNumber);
     }
 }

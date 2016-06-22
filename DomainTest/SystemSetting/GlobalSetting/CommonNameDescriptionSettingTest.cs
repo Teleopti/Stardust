@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -77,5 +78,15 @@ namespace Teleopti.Ccc.DomainTest.SystemSetting.GlobalSetting
 			ILightPerson person = null;
 			_target2.BuildCommonNameDescription(person);
 		}
+
+        [Test]
+        public void ShouldFormat()
+        {
+            var target = new CommonNameDescriptionSetting("{EmployeeNumber} - {FirstName} {LastName}");
+
+            var name = target.BuildCommonNameDescription("John", "Smith", "123");
+
+            name.Should().Be("123 - John Smith");
+        }
     }
 }

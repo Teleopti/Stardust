@@ -19,14 +19,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private readonly IPersonRepository _personRepository;
 		private readonly ISiteRepository _siteRepository;
 		private readonly ITeamRepository _teamRepository;
+		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
 		private readonly INow _now;
 
 		public AgentViewModelBuilder(
 			ICurrentAuthorization permissionProvider,
-			ICommonAgentNameProvider commonAgentNameProvider, 
-			IPersonRepository personRepository, 
-			ISiteRepository siteRepository, 
-			ITeamRepository teamRepository, 
+			ICommonAgentNameProvider commonAgentNameProvider,
+			IPersonRepository personRepository,
+			ISiteRepository siteRepository,
+			ITeamRepository teamRepository,
+			IGroupingReadOnlyRepository groupingReadOnlyRepository,
 			INow now)
 		{
 			_permissionProvider = permissionProvider;
@@ -34,6 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_personRepository = personRepository;
 			_siteRepository = siteRepository;
 			_teamRepository = teamRepository;
+			_groupingReadOnlyRepository = groupingReadOnlyRepository;
 			_now = now;
 		}
 
@@ -81,8 +84,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		{
 			var team = _teamRepository.Get(teamId);
 			var isPermitted = _permissionProvider.Current().IsPermitted(
-				DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, 
-				_now.LocalDateOnly(), 
+				DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview,
+				_now.LocalDateOnly(),
 				team);
 			if (!isPermitted)
 			{
@@ -104,6 +107,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 								TeamId = team.Id.ToString(),
 								TeamName = team.Description.Name
 							}).ToArray();
+		}
+
+
+		public IEnumerable<AgentViewModel> ForSkill(Guid skill)
+		{
+			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
+			return _groupingReadOnlyRepository.DetailsForGroup(skill, _now.LocalDateOnly())
+				.Select(x => new AgentViewModel
+				{
+					PersonId = x.PersonId,
+					Name = commonAgentNameSettings.BuildCommonNameDescription(x.FirstName, x.LastName, x.EmploymentNumber),
+					SiteId = x.SiteId.ToString(),
+					SiteName = _siteRepository.Load(x.SiteId.Value).Description.Name,
+					TeamId = x.TeamId.ToString(),
+					TeamName = _teamRepository.Load(x.TeamId.Value).Description.Name
+				});
 		}
 	}
 }

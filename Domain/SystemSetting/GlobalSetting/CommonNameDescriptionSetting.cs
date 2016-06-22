@@ -87,5 +87,14 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
             builded = builded.Replace(EmployeeNumber, lightPerson.EmploymentNumber);
             return builded;
         }
+
+	    public string BuildCommonNameDescription(string firstName, string lastName, string employmentNumber)
+	    {
+		    var builded = AliasFormat;
+		    builded = builded.Replace(FirstName, firstName);
+		    builded = builded.Replace(LastName, lastName);
+		    builded = builded.Replace(EmployeeNumber, employmentNumber);
+		    return builded;
+	    }
     }
 }
