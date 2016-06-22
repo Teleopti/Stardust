@@ -32,28 +32,21 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			IRtaRule rule = null;
 			if (Name != null)
-			{
 				rule = ruleRepository.LoadAll().FirstOrDefault(x => x.Description.Name == Name);
-				if (rule == null)
+
+			if (rule == null)
+			{
+				rule = new RtaRule(new Description(Name ?? RandomName.Make()), displayColor, TimeSpan.Zero, StaffingEffect)
 				{
-					rule = new RtaRule(new Description(Name), displayColor, TimeSpan.Zero, StaffingEffect)
-					{
-						AlarmColor = alarmColor
-					};
-					if (!string.IsNullOrWhiteSpace(Adherence))
-					{
-						Adherence adherence;
-						if (Enum.TryParse(Adherence, true, out adherence))
-							rule.Adherence = adherence;
-					}
-
-					if (!string.IsNullOrWhiteSpace(IsAlarm))
-						rule.IsAlarm = bool.Parse(IsAlarm);
-
-					if (!string.IsNullOrWhiteSpace(AlarmThreshold))
-						rule.ThresholdTime = TimeSpan.Parse(AlarmThreshold);
-					ruleRepository.Add(rule);
-				}
+					AlarmColor = alarmColor
+				};
+				if (!string.IsNullOrWhiteSpace(Adherence))
+					rule.Adherence = (Adherence)Enum.Parse(typeof(Adherence), Adherence);
+				if (!string.IsNullOrWhiteSpace(IsAlarm))
+					rule.IsAlarm = bool.Parse(IsAlarm);
+				if (!string.IsNullOrWhiteSpace(AlarmThreshold))
+					rule.ThresholdTime = TimeSpan.Parse(AlarmThreshold);
+				ruleRepository.Add(rule);
 			}
 
 			var activityRepository = new ActivityRepository(currentUnitOfWork);

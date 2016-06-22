@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see real time agent details for '(.*)'")]
 		public void ThenIShouldSeeRealTimeAgentDetailsFor(string name, Table table)
 		{
-			var status = table.CreateInstance<RealTimeAdherenceAgentStatus>();
+			var status = table.CreateInstance<RealTimeAdherenceAgentState>();
 
 			const string selector = ".agent-name:contains('{0}') ~ :contains('{1}')";
 
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see agent status")]
 		public void ThenIShouldSeeAgentDetailsFor(Table table)
 		{
-			var status = table.CreateInstance<RealTimeAdherenceAgentStatus>();
+			var status = table.CreateInstance<RealTimeAdherenceAgentState>();
 			assertAgentStatus(status);
 		}
 
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see agent status for '(.*)'")]
 		public void ThenIShouldSeeAgentStatusFor(string name)
 		{
-			var status = new RealTimeAdherenceAgentStatus() {Name = name};
+			var status = new RealTimeAdherenceAgentState() {Name = name};
 			assertAgentStatus(status);
 		}
 		
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public void WhenISelect(Table table)
 		{
 			Browser.Interactions.AssertExists(".send-message");
-			var persons = table.CreateSet<RealTimeAdherenceAgentStatus>();
+			var persons = table.CreateSet<RealTimeAdherenceAgentState>();
 			foreach (var person in persons)
 			{
 				Browser.Interactions.ClickUsingJQuery(".agent-state:has(.agent-name:contains('" + person.Name + "')) .selectable-agent input");
@@ -205,56 +205,84 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.ClickContaining("md-option", businessUnitName);
 		}
 		
-		private static void assertAgentStatus(RealTimeAdherenceAgentStatus status)
+		private static void assertAgentStatus(RealTimeAdherenceAgentState state)
 		{
-			var personId = DataMaker.Person(status.Name).Person.Id.Value;
+			var personId = DataMaker.Person(state.Name).Person.Id.Value;
 			var selector = "[agentid='" + personId + "']";
 
-			if (status.State != null)
-				Browser.Interactions.AssertAnyContains(selector, status.State);
+			if (state.State != null)
+				Browser.Interactions.AssertAnyContains(selector, state.State);
+			if (state.Alarm != null)
+				Browser.Interactions.AssertAnyContains(selector, state.Alarm);
 
 			if (SystemSetup.Toggles.IsEnabled(Toggles.RTA_AlarmContext_29357))
 			{
-				if (status.PreviousActivity != null)
+				if (state.PreviousActivity != null)
 				{
-					if (status.PreviousActivity == "<none>")
+					if (state.PreviousActivity == "<none>")
 						Browser.Interactions.AssertNotExists(selector, selector + " .previous-activity");
 					else
-						Browser.Interactions.AssertExists(selector + " .previous-activity[name='{0}']", status.PreviousActivity);
+						Browser.Interactions.AssertExists(selector + " .previous-activity[name='{0}']", state.PreviousActivity);
 				}
-				if (status.Activity != null)
-					Browser.Interactions.AssertExists(selector + " .current-activity[name='{0}']", status.Activity);
-				if (status.NextActivity != null)
-					Browser.Interactions.AssertExists(selector + " .next-activity[name='{0}']", status.NextActivity);
-				if (status.NextActivityStartTimeFormatted() != null)
+				if (state.Activity != null)
+					Browser.Interactions.AssertExists(selector + " .current-activity[name='{0}']", state.Activity);
+				if (state.NextActivity != null)
+					Browser.Interactions.AssertExists(selector + " .next-activity[name='{0}']", state.NextActivity);
+				if (state.NextActivityStartTimeFormatted() != null)
 				{
-					//Assert.Fail("Remove from scenarios when removing toggle?");
+					//Assert.Fail("Enable this assert and remove from scenarios when toggle is removed");
 				}
-				if (status.AlarmColor != null)
-					Browser.Interactions.AssertExists(selector + " [style*='background-color: " + toRGBA(status.AlarmColor, "0.6") + "']");
-				if (status.Color != null)
-					Browser.Interactions.AssertExists(selector + " [style*='background-color: " + toRGBA(status.Color, "0.6") + "']");
+				if (state.AlarmColor != null)
+					Browser.Interactions.AssertExists(selector + " [style*='background-color: " + toRGBA(state.AlarmColor, "0.6") + "']");
+				if (state.Color != null)
+					Browser.Interactions.AssertExists(selector + " [style*='background-color: " + toRGBA(state.Color, "0.6") + "']");
+				if (SystemSetup.Toggles.IsEnabled(Toggles.RTA_TotalOutOfAdherenceTime_38702))
+				{
+					if (SystemSetup.Toggles.IsEnabled(Toggles.RTA_RecentOutOfAdherences_39145))
+					{
+						if (state.RuleTimeFormatted() != null)
+						{
+							//Assert.Fail("Enable this assert and remove from scenarios when toggle is removed");
+						}
+						if (state.AlarmTimeFormatted() != null)
+						{
+							//Assert.Fail("Enable this assert and remove from scenarios when toggle is removed");
+						}
+						if (state.OutOfAdherenceTimeFormatted() != null)
+							Browser.Interactions.AssertAnyContains(selector, state.OutOfAdherenceTimeFormatted());
+					}
+					else
+					{
+						if (state.RuleTimeFormatted() != null)
+							Browser.Interactions.AssertAnyContains(selector, state.RuleTimeFormatted());
+						if (state.AlarmTimeFormatted() != null)
+						{
+							//Assert.Fail("Enable this assert and remove from scenarios when toggle is removed");
+						}
+					}
+
+				}
+				else
+				{
+					if (state.AlarmTimeFormatted() != null)
+						Browser.Interactions.AssertAnyContains(selector, state.AlarmTimeFormatted());
+				}
 			}
 			else
 			{
-				if (status.Activity != null)
-					Browser.Interactions.AssertAnyContains(selector, status.Activity);
-				if (status.NextActivity != null)
-					Browser.Interactions.AssertAnyContains(selector, status.NextActivity);
-				if (status.NextActivityStartTimeFormatted() != null)
-					Browser.Interactions.AssertAnyContains(selector, status.NextActivityStartTimeFormatted());
-				if (status.AlarmColor != null)
-					Browser.Interactions.AssertExists(selector + "[style*='background-color: " + toRGBA(status.AlarmColor, "0.6") + "']");
-				if (status.Color != null)
-					Browser.Interactions.AssertExists(selector + "[style*='background-color: " + toRGBA(status.Color, "0.6") + "']");
+				if (state.Activity != null)
+					Browser.Interactions.AssertAnyContains(selector, state.Activity);
+				if (state.NextActivity != null)
+					Browser.Interactions.AssertAnyContains(selector, state.NextActivity);
+				if (state.NextActivityStartTimeFormatted() != null)
+					Browser.Interactions.AssertAnyContains(selector, state.NextActivityStartTimeFormatted());
+				if (state.AlarmColor != null)
+					Browser.Interactions.AssertExists(selector + "[style*='background-color: " + toRGBA(state.AlarmColor, "0.6") + "']");
+				if (state.Color != null)
+					Browser.Interactions.AssertExists(selector + "[style*='background-color: " + toRGBA(state.Color, "0.6") + "']");
+				if (state.AlarmTimeFormatted() != null)
+					Browser.Interactions.AssertAnyContains(selector, state.AlarmTimeFormatted());
 			}
-
-			if (status.Alarm != null)
-				Browser.Interactions.AssertAnyContains(selector, status.Alarm);
-			if (status.AlarmTimeFormatted() != null)
-				Browser.Interactions.AssertAnyContains(selector, status.AlarmTimeFormatted());
-			if (status.RuleTimeFormatted() != null)
-				Browser.Interactions.AssertAnyContains(selector, status.RuleTimeFormatted());
 
 		}
 		
@@ -265,7 +293,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		}
 	}
 
-	public class RealTimeAdherenceAgentStatus
+	public class RealTimeAdherenceAgentState
 	{
 		public string Name	{ get; set; }
 		public string State	{ get; set; }
@@ -279,6 +307,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public string AlarmTime	{ get; set; }
 		public string RuleTime { get; set; }
 		public string TimeInState { get; set; }
+		public string OutOfAdherenceTime { get; set; }
 
 		public string NextActivityStartTimeFormatted()
 		{
@@ -293,6 +322,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public string RuleTimeFormatted()
 		{
 			return formatTime(RuleTime);
+		}
+
+		public string OutOfAdherenceTimeFormatted()
+		{
+			return formatTime(OutOfAdherenceTime);
 		}
 
 		private static string formatTime(string time)

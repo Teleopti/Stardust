@@ -44,7 +44,6 @@ Background:
 	| Alarm threshold | 00:01:00     |
 	| Alarm color     | Red          |
 
-@OnlyRunIfDisabled('RTA_TotalOutOfAdherenceTime_38702')
 Scenario: See agents with the highest alarm time first
 	Given the time is '2015-11-23 08:00:00'
 	And I am viewing real time adherence for agents on team 'Red'
@@ -55,37 +54,4 @@ Scenario: See agents with the highest alarm time first
 	When the time is '2015-11-23 08:11:00'
 	And 'John King' sets his phone state to 'Pause'
 	When the time is '2015-11-23 08:15:00'
-	Then I should see agent status
-		| Name       |              |
-		| Name       | Pierre Baldi |
-		| Color      | Red          |
-		| Alarm Time | 0:04:00      |
-	And I should see agent status
-		| Name       |           |
-		| Name       | John King |
-		| Color      | Red       |
-		| Alarm Time | 0:03:00   |
-	And I should see agent 'Pierre Baldi' before 'John King'
-
-@OnlyRunIfEnabled('RTA_TotalOutOfAdherenceTime_38702')
-Scenario: See agents with the highest rule time first
-	Given the time is '2015-11-23 08:00:00'
-	And I am viewing real time adherence for agents on team 'Red'
-	And 'Pierre Baldi' sets his phone state to 'Ready'
-	And 'John King' sets his phone state to 'Ready'
-	When the time is '2015-11-23 08:10:00'
-	And 'Pierre Baldi' sets his phone state to 'Pause'
-	When the time is '2015-11-23 08:11:00'
-	And 'John King' sets his phone state to 'Pause'
-	When the time is '2015-11-23 08:15:00'
-	Then I should see agent status
-		| Name      |              |
-		| Name      | Pierre Baldi |
-		| Color     | Red          |
-		| Rule Time | 0:05:00      |
-	And I should see agent status
-		| Name      |           |
-		| Name      | John King |
-		| Color     | Red       |
-		| Rule Time | 0:04:00   |
-	And I should see agent 'Pierre Baldi' before 'John King'
+	Then I should see agent 'Pierre Baldi' before 'John King'

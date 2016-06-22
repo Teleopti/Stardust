@@ -123,7 +123,9 @@ INNER JOIN ReadModel.GroupingReadOnly AS g
 WHERE PageId = :skillGroupingPageId
 AND g.GroupId = :skillId
 AND :today BETWEEN g.StartDate and g.EndDate ";
+
 		private const string hardcodedSkillGroupingPageId = "4CE00B41-0722-4B36-91DD-0A3B63C545CF";
+
 		public IEnumerable<AgentStateReadModel> LoadForSkill(Guid skillId)
 		{
 			return transform(
@@ -134,6 +136,7 @@ AND :today BETWEEN g.StartDate and g.EndDate ";
 				.SetParameter("skillGroupingPageId", hardcodedSkillGroupingPageId)
 				);
 		}
+
 		public IEnumerable<AgentStateReadModel> LoadAlarmsForSkill(Guid skillId)
 		{
 			var query = agentsForSkillQuery + " AND AlarmStartTime <= :now ORDER BY AlarmStartTime ASC ";

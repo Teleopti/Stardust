@@ -585,6 +585,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoRealTimeAdherenceAgentsOnTeam(buIdForTeam(team), SiteIdForTeam(team), IdForTeam(team));
 		}
 
+		[Given(@"I am viewing real time adherence for all agents on team '(.*)'")]
 		[When(@"I view real time adherence for all agents on team '(.*)'")]
 		public void WhenIViewRealTimeAdherenceForAllAgentsOnTeam(string team)
 		{

@@ -1,5 +1,4 @@
-﻿@ignore
-Feature: Recent out of adherences
+﻿Feature: Recent out of adherences
 	In order to ??
 	As a real time analyst
 	I want to see recent out of adherence times
@@ -15,6 +14,15 @@ Background:
 	 | Team       | Red        |
 	 | Start Date | 2016-05-19 |
 	And Pierre Baldi has a shift with
+	| Field      | Value            |
+	| Activity   | Phone            |
+	| Start time | 2016-05-20 08:00 |
+	| End time   | 2016-05-20 17:00 |
+	And John King has a person period with
+	 | Field      | Value      |
+	 | Team       | Red        |
+	 | Start Date | 2016-05-19 |
+	And John King has a shift with
 	| Field      | Value            |
 	| Activity   | Phone            |
 	| Start time | 2016-05-20 08:00 |

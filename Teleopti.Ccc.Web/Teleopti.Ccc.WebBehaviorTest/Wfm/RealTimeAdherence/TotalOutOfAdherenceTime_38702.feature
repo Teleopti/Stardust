@@ -27,6 +27,7 @@ Background:
 	| Alarm threshold | 00:02:00     |
 
 @OnlyRunIfEnabled('RTA_TotalOutOfAdherenceTime_38702')
+@OnlyRunIfDisabled('RTA_RecentOutOfAdherences_39145')
 Scenario: See rule time for alarm
 	Given the time is '2016-06-08 09:00:00'
 	And 'Pierre Baldi' sets his phone state to 'LoggedOut'
