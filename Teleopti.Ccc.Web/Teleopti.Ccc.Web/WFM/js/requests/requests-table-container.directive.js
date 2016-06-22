@@ -7,9 +7,9 @@
 		.directive('requestsTableContainer', requestsTableContainerDirective);
 
 
-	requestsTableContainerController.$inject = ['$scope', '$translate', '$filter', '$timeout', 'Toggle', 'requestsDefinitions', 'requestCommandParamsHolder', 'CurrentUserInfo', 'RequestsFilter', 'requestsDataService', 'uiGridConstants', '$injector', 'TeamSchedule', 'ScheduleManagement'];
+	requestsTableContainerController.$inject = ['$scope', '$translate', '$filter', '$timeout', 'Toggle', 'requestsDefinitions', 'requestCommandParamsHolder', 'CurrentUserInfo', 'RequestsFilter', 'requestsDataService', 'uiGridConstants', '$injector', 'TeamSchedule', 'ScheduleManagement', 'GroupScheduleFactory'];
 
-	function requestsTableContainerController($scope, $translate, $filter, $timeout, toggleSvc, requestsDefinitions, requestCommandParamsHolder, CurrentUserInfo, requestFilterSvc, requestsDataSvc, uiGridConstants, $injector, teamScheduleSvc, scheduleMgmtSvc) {
+	function requestsTableContainerController($scope, $translate, $filter, $timeout, toggleSvc, requestsDefinitions, requestCommandParamsHolder, CurrentUserInfo, requestFilterSvc, requestsDataSvc, uiGridConstants, $injector, teamScheduleSvc, scheduleMgmtSvc, groupScheduleFactory) {
 		var vm = this;
 
 		vm.getGridOptions = getGridOptions;
@@ -28,6 +28,8 @@
 		vm.shiftDetailTop;
 		vm.displayShiftDetail;
 
+		
+
 
 	    function updateShiftStatusForSelectedPerson(scheduleDate) {
 	        var selectedPersonIdList = vm.personIds;
@@ -38,7 +40,11 @@
 			var currentDate = scheduleDate.format('YYYY-MM-DD');
 
 			teamScheduleSvc.getSchedules(currentDate, selectedPersonIdList).then(function (result) {
-			    scheduleMgmtSvc.resetSchedules(result.Schedules, scheduleDate);
+				//scheduleMgmtSvc.resetSchedules(result.Schedules, scheduleDate);
+
+				vm.schedules = groupScheduleFactory.Create(result.Schedules, scheduleDate);
+				console.log('vm.schedules', vm.schedules);
+
 			    vm.displayShiftDetail = true;
 				});
 	    }

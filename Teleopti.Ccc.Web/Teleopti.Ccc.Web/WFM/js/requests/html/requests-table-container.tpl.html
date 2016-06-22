@@ -20,7 +20,6 @@
 </div>
 
 <i ng-show="requestsTableContainer.gridOptions.enableFiltering" ng-click="requestsTableContainer.clearFilters()" class="mdi mdi-close" style="cursor: pointer; position: absolute; top: 5rem; left: 2rem;"></i>
-<div  ng-mouseleave="requestsTableContainer.hideShiftDetail()" ng-if="requestsTableContainer.displayShiftDetail" ng-style="requestsTableContainer.shiftDetailStyleJson()" class="schedule-container">
-   
-     <schedule-table select-mode="true" selected-date="requestsTableContainer.scheduleDate" />
+<div  ng-mouseleave1="requestsTableContainer.hideShiftDetail()" ng-if="requestsTableContainer.displayShiftDetail" ng-style="requestsTableContainer.shiftDetailStyleJson()" class="schedule-container">
+	<requests-schedule-table schedules="requestsTableContainer.schedules"/>
 </div>
