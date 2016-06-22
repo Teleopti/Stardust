@@ -51,7 +51,7 @@ describe('RequestsControllerTests', function () {
 		}
 	}
 
-	fit('should display approve deny command', function () {
+	it('should display approve deny command', function () {
 		var test = setUpTarget();
 		test.scope.$digest();
 
