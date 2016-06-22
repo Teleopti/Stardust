@@ -125,13 +125,11 @@
 
     .time-line {
         min-width: 300px;
-        z-index: 10;
 
         .ruler {
             height: 100%;
             width: 1px;
             background-color: $gray012;
-            z-index: 10;
         }
 
         .label {
@@ -144,7 +142,6 @@
 
     .shift {
         .layer {
-            z-index: 10;
             height: 22px;
             text-align: center;
         }
