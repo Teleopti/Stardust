@@ -505,6 +505,10 @@ people-selection-list .panel {
 			margin-left: 0;
 		}
 
+        .seat-booking-item.not-first-seat-booking {
+			padding-left: 30px;
+		}
+
 		span {
 			max-width: 100%;
 		}
