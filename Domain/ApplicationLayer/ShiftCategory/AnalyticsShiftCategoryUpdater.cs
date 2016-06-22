@@ -4,6 +4,7 @@ using log4net;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategory
 		IHandleEvent<ShiftCategoryDeletedEvent>,
 		IRunOnHangfire
 	{
-		private readonly static ILog logger = LogManager.GetLogger(typeof(AnalyticsShiftCategoryUpdater));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsShiftCategoryUpdater));
 		private readonly IShiftCategoryRepository _shiftCategoryRepository;
 		private readonly IAnalyticsShiftCategoryRepository _analyticsShiftCategoryRepository;
 		private readonly IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
@@ -37,9 +38,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategory
 			logger.Debug($"Consuming {nameof(AnalyticsShiftCategoryUpdater)} for shiftCategory id = {@event.ShiftCategoryId}. (Message timestamp = {@event.Timestamp})");
 			var shiftCategory = _shiftCategoryRepository.Load(@event.ShiftCategoryId);
 			var analyticsBusinessUnit = _analyticsBusinessUnitRepository.Get(@event.LogOnBusinessUnitId);
+			if (analyticsBusinessUnit == null) throw new BusinessUnitMissingInAnalyticsException();
 			var analyticsShiftCategory = _analyticsShiftCategoryRepository.ShiftCategories().FirstOrDefault(a => a.ShiftCategoryCode == @event.ShiftCategoryId);
 
-			if (shiftCategory == null || analyticsBusinessUnit == null)
+			if (shiftCategory == null)
 				return;
 
 			// Add

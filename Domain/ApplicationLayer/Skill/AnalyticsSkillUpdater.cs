@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Skill
 			var skill = _skillRepository.Get(skillId);
 			var businessUnit = _analyticsBusinessUnitRepository.Get(skill.BusinessUnit.Id.GetValueOrDefault());
 			var timezone = _analyticsTimeZoneRepository.Get(skill.TimeZone.Id);
-			if (businessUnit == null) throw new BusiessUnitMissingInAnalytics();
-			if (timezone == null) throw new TimeZoneMissingInAnalytics();
+			if (businessUnit == null) throw new BusinessUnitMissingInAnalyticsException();
+			if (timezone == null) throw new TimeZoneMissingInAnalyticsException();
 			
 			var deleteTag = skill as IDeleteTag;
 			var analyticsSkill = new AnalyticsSkill

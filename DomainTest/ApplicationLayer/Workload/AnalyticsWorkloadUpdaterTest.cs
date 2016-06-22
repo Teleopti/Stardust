@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Workload;
+using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Workload
 			_target.Handle(new WorkloadChangedEvent {WorkloadId = workloadId, LogOnBusinessUnitId = businessUnitId});
 		}
 
-		[Test, ExpectedException(typeof(ArgumentException))]
+		[Test, ExpectedException(typeof(BusinessUnitMissingInAnalyticsException))]
 		public void ShouldThrowWhenBusinessUnitMissingFromAnalytics()
 		{
 			var skill = SkillFactory.CreateSkill("TestSkill");
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Workload
 			_target.Handle(new WorkloadChangedEvent { WorkloadId = workloadId, LogOnBusinessUnitId = businessUnitId });
 		}
 
-		[Test, ExpectedException(typeof(ArgumentException))]
+		[Test, ExpectedException(typeof(SkillMissingInAnalyticsException))]
 		public void ShouldThrowWhenSkillMissingFromAnalytics()
 		{
 			var skill = SkillFactory.CreateSkill("TestSkill");
