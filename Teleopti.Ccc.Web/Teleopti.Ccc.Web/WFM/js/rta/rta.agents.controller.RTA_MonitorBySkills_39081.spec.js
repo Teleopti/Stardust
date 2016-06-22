@@ -43,14 +43,14 @@ describe('RtaAgentsCtrlMonitorBySkills_39081', function () {
 		$fakeBackend
 			.withSkill({
 				Name: "Phone",
-				SkillId: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753",
+				Id: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753",
 			});
 
 		$controllerBuilder.createController();
 
 		expect(scope.skillName).toEqual("Phone");
 	});
-	
+
 	it('should get agent for skill', function () {
 		stateParams.skillId = "f08d75b3-fdb4-484a-ae4c-9f0800e2f753";
 		$fakeBackend.withAgent({

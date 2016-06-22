@@ -42,17 +42,18 @@
 					});
 			};
 
+
+			fake(/\.\.\/api\/Skills\/NameFor(.*)/,
+			function (params) {
+				var result = skills
+				.filter(function(s) { return params.skillId === s.Id })
+				.map(function (s) { return s.Name; });
+				return [200, { Name: result[0] }];
+			});
+
 			fake(/\.\.\/api\/Skills(.*)/,
 				function () {
 					return [200, skills];
-				});
-
-			fake(/\.\.\/api\/Skill\/NameFor(.*)/,
-				function (params) {
-					var result = skills
-						.filter(function(s) { return params.skillId === s.SkillId })
-						.map(function (s) { return s.Name; });
-					return [200, { Name: result[0] }];
 				});
 
 			fake(/\.\.\/api\/Adherence\/ForToday(.*)/,
