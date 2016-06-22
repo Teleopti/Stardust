@@ -521,7 +521,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 						break;
 					case DefinedRaptorApplicationFunctionPaths.OpenIntradayPage:
 						outlookBarSmartPartInfo.Icon = Resources.Intraday_filled_space_32x32;
-						if (_toggleManager.IsEnabled(Toggles.Wfm_Intraday_38074))
+						if (_toggleManager.IsEnabled(Toggles.Wfm_Intraday_38074) && 
+							PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebIntraday))
 						{
 							outlookBarSmartPartInfo.PreviewText = UserTexts.Resources.PreviewTheNewIntradayTool;
 							outlookBarSmartPartInfo.PreviewUrl = buildWfmUri("WFM/#/intraday");
