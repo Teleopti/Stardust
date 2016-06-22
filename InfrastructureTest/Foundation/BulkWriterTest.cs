@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			_transaction = null;
 		}
 
+		[Ignore]
 		[Test]
 		public void ShouldWork()
 		{
@@ -31,6 +32,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			writer.WriteWithRetries(dt, InfraTestConfigReader.AnalyticsConnectionString, dt.TableName);
 		}
 
+		[Ignore]
 		[Test]
 		public void ShouldDoRetriesDuringTableLock()
 		{
