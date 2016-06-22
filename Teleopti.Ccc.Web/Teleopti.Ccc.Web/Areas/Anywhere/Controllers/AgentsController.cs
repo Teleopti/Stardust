@@ -98,13 +98,30 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		{
 			return Ok(_agentStatesBuilder.ForSites(query.Ids, true));
 		}
+
+		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForSkill")]
+		public virtual IHttpActionResult GetStatesForSkill([FromUri] SkillQuery query)
+		{
+			return Ok(_agentStatesBuilder.ForSkill(query.SkillId));
+		}
+
+		[UnitOfWork, HttpGet, Route("api/Agents/GetAlarmStatesForSkill")]
+		public virtual IHttpActionResult GetAlarmStatesForSkill([FromUri] SkillQuery query)
+		{
+			return Ok(_agentStatesBuilder.InAlarmForSkill(query.SkillId));
+		}
 	}
 
 	public class StatesQuery
 	{
 		public Guid[] Ids { get; set; }
-    }
-	
+	}
+
+	public class SkillQuery
+	{
+		public Guid SkillId { get; set; }
+	}
+
 	public class PersonDetailModel
 	{
 		public PersonDetailModel(string name)
