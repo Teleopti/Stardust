@@ -48,7 +48,7 @@ namespace Teleopti.Interfaces.Domain
 		/// </summary>
 		/// <param name="personAbsenceIds">Id collection</param>
 		/// <returns></returns>
-		ICollection<IPersonAbsence> Find(IEnumerable<Guid> personAbsenceIds);
+		ICollection<IPersonAbsence> Find(IEnumerable<Guid> personAbsenceIds, IScenario scenario);
 
 		/// <summary>
 		/// </summary>
@@ -62,5 +62,8 @@ namespace Teleopti.Interfaces.Domain
 		/// Created date: 2009-02-12
 		/// </remarks>
 		ICollection<DateTimePeriod> AffectedPeriods(IPerson person, IScenario scenario, DateTimePeriod period, IAbsence absence = null);
+
+		IList<IPersonAbsence> Find (IPersonRequest personRequest, IScenario scenario);
+
 	}
 }

@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		}
 
-		public IEnumerable<IBusinessRuleResponse> ApproveAbsence(IAbsence absence, DateTimePeriod period, IPerson person, IAbsenceRequest absenceRequest = null)
+		public IEnumerable<IBusinessRuleResponse> ApproveAbsence(IAbsence absence, DateTimePeriod period, IPerson person, IPersonRequest personRequest =  null)
 		{
 			IScheduleRange totalScheduleRange = _scheduleDictionary[person];
 			IScheduleDay dayScheduleForAbsenceReqStart =
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			if (dayScheduleForAbsenceReqStart.FullAccess)
 			{
 				var layer = new AbsenceLayer(absence, period);
-				var personAbsence = new PersonAbsence(person, _scenario, layer);
+				var personAbsence = new PersonAbsence(person, _scenario, layer, personRequest);
 
 				dayScheduleForAbsenceReqStart.Add(personAbsence);
 

@@ -241,19 +241,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
         }
 
-		// TODO: bugs #39138,#39065 have caused the absence request cancellation functionality to be reverted
-		//   [Test]
-		//public void AllSplitPartsShouldRetainRequestReference()
-		//   {
-		//	var period = new DateTimePeriod(2000, 10, 1, 2000, 10, 6);
-		//	var absenceRequest = new AbsenceRequest( AbsenceFactory.CreateAbsence ("Holiday"), period);
-		//	var personAbsence = new PersonAbsence(person, scenario, new AbsenceLayer(absence, period), absenceRequest);
+		[Test]
+		public void AllSplitPartsShouldRetainRequestReference()
+		{
+			var period = new DateTimePeriod(2000, 10, 1, 2000, 10, 6);
+			var absenceRequest = new AbsenceRequest(AbsenceFactory.CreateAbsence("Holiday"), period);
+			  var personRequest = absenceRequest.Parent as IPersonRequest;
+			var personAbsence = new PersonAbsence(person, scenario, new AbsenceLayer(absence, period), personRequest );
 
-		//	var splitPersonAbsences = personAbsence.Split (new DateTimePeriod (2000, 10, 2, 2000, 10, 3));
+			var splitPersonAbsences = personAbsence.Split(new DateTimePeriod(2000, 10, 2, 2000, 10, 3));
 
-		//	Assert.AreEqual (2, splitPersonAbsences.Count);
-		//	Assert.AreSame(absenceRequest, splitPersonAbsences[0].AbsenceRequest);
-		//	Assert.AreSame(absenceRequest, splitPersonAbsences[1].AbsenceRequest);
-		//}
+			Assert.AreEqual(2, splitPersonAbsences.Count);
+			Assert.AreSame(personRequest, splitPersonAbsences[0].PersonRequest);
+			Assert.AreSame(personRequest, splitPersonAbsences[1].PersonRequest);
+		}
 	}
 }

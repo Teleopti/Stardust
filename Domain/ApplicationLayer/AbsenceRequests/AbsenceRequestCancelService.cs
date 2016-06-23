@@ -18,35 +18,33 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 		public void CancelAbsenceRequest(IAbsenceRequest absenceRequest)
 		{
-			// TODO: bugs #39138,#39065 have caused the cancellation functionality to be reverted
-			throw new NotImplementedException();
+			var personRequest = absenceRequest.Parent as IPersonRequest;
 
-			//var personRequest = absenceRequest.Parent as IPersonRequest;
+			if (personRequest == null || !personRequest.IsApproved)
+			{
+				return;
+			}
 
-			//if (personRequest == null || !personRequest.IsApproved)
-			//{
-			//	return;
-			//}
-
-			//if (absenceRequest.PersonAbsences.IsEmpty())
-			//{
-			//	personRequest?.Cancel(_personRequestCheckAuthorization);
-			//}
+			if (personRequest.PersonAbsences.IsEmpty())
+			{
+				personRequest?.Cancel(_personRequestCheckAuthorization);
+			}
 		}
 
 		public void CancelAbsenceRequestsFromPersonAbsences (IEnumerable<IPersonAbsence> personAbsences)
 		{
 
-			// TODO: bugs #39138,#39065 have caused the cancellation functionality to be reverted
-			throw new NotImplementedException();
+			foreach (var personAbsence in personAbsences.Where(perAbs => perAbs.PersonRequest != null))
+			{
+				var personRequest= personAbsence.PersonRequest;
+				personRequest.PersonAbsences.Remove(personAbsence);
 
-			//foreach (var personAbsence in personAbsences.Where(perAbs => perAbs.AbsenceRequest != null))
-			//{
-			//	var absenceRequest = personAbsence.AbsenceRequest;
-			//	absenceRequest.PersonAbsences.Remove(personAbsence);
-
-			//	CancelAbsenceRequest (absenceRequest);
-			//}
+				var absenceRequest = personRequest.Request as IAbsenceRequest;
+				if (absenceRequest != null)
+				{
+					CancelAbsenceRequest(absenceRequest);
+				}
+			}
 		}
 	}
 

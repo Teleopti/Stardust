@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Infrastructure.Persisters.Refresh;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -86,7 +87,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _personAbsences.Where(x => x.BelongsToScenario(scenario) && x.Period.Intersect(period)).ToArray();
 		}
 
-		public ICollection<IPersonAbsence> Find(IEnumerable<Guid> personAbsenceIds)
+		public ICollection<IPersonAbsence> Find(IEnumerable<Guid> personAbsenceIds, IScenario scenario)
 		{
 			var idList = personAbsenceIds.ToList();
 			return _personAbsences.Where(x => idList.Contains(x.Id.GetValueOrDefault())).ToArray();
@@ -97,5 +98,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-	}
+		public IList<IPersonAbsence> Find(IPersonRequest personRequest, IScenario scenario)
+		{
+			return _personAbsences.Where(personAbsence => personAbsence.PersonRequest == personRequest).ToList();
+		}
+
+
+}
 }

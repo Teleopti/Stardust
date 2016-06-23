@@ -95,165 +95,165 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Target.Should().Not.Be.Null();
 		}
 
-		// TODO: bugs #39138,#39065 have caused the absence request cancellation functionality to be reverted
-		//[Test]
-		//public void ShouldNotCancelRequestWhenNoPermission()
-		//{
-		//	commonSetup();
-		//	var cancelRequestCommand = new CancelAbsenceRequestCommand();
 
-		//	PersonRequestAuthorizationChecker.RevokeCancelRequestPermission();
+		[Test]
+		public void ShouldNotCancelRequestWhenNoPermission()
+		{
+			commonSetup();
+			var cancelRequestCommand = new CancelAbsenceRequestCommand();
 
-
-		//	var personRequest = basicCancelAbsenceRequest(cancelRequestCommand);
-
-		//	Assert.AreEqual(false,personRequest.IsCancelled);
-		//	Assert.AreEqual(1, ScheduleStorage.LoadAll().Count);
-		//	Assert.AreEqual(1,cancelRequestCommand.ErrorMessages.Count);
-		//}
-
-		// TODO: bugs #39138,#39065 have caused the absence request cancellation functionality to be reverted
-		//[Test]
-		//public void ShouldFailGracefullyWhenAttemptingToCancelRequestWhereAbsenceCannotBeFound()
-		//{
-		//	commonSetup();
-		//	var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(2016,03,01,2016,03,01);
-
-		//	var absenceRequest = createApprovedAbsenceRequest(absence,dateTimePeriodOfAbsenceRequest, person);
-		//	var personRequest = absenceRequest.Parent as PersonRequest;
-
-		//	var cancelRequestCommand = new CancelAbsenceRequestCommand()
-		//	{
-		//		PersonRequestId = personRequest.Id.GetValueOrDefault()
-		//	};
-
-		//	Target.Handle(cancelRequestCommand);
-
-		//	Assert.AreEqual(1,cancelRequestCommand.ErrorMessages.Count);
-		//	Assert.AreEqual(string.Format(Resources.CouldNotCancelRequestNoAbsence,
-		//		CommonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(person),
-		//		absenceRequest.Period.StartDateTimeLocal(LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()).Date.ToString("d", UserCulture.GetCulture())),
-		//		cancelRequestCommand.ErrorMessages[0]);
-		//}
-
-		// TODO: bugs #39138,#39065 have caused the absence request cancellation functionality to be reverted
-		//[Test]
-		//public void ShouldFailGracefullyWhenAttemptingToCancelRequestWhereAbsenceRequestHasNotBeenAccepted()
-		//{
-		//	commonSetup();
-		//	var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(2016,03,01,2016,03,01);
-
-		//	var absenceRequest = new AbsenceRequest(absence,dateTimePeriodOfAbsenceRequest);
-		//	var personRequest = new PersonRequest(person,absenceRequest).WithId();
-		//	RequestRepository.Add(personRequest);
-		//	personRequest.Pending();
-
-		//	var cancelRequestCommand = new CancelAbsenceRequestCommand()
-		//	{
-		//		PersonRequestId = personRequest.Id.GetValueOrDefault()
-		//	};
-
-		//	Target.Handle(cancelRequestCommand);
-
-		//	Assert.AreEqual(1,cancelRequestCommand.ErrorMessages.Count);
-		//	Assert.AreEqual(string.Format(Resources.CanOnlyCancelApprovedAbsenceRequest,
-		//		CommonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(person),
-		//		absenceRequest.Period.StartDateTimeLocal(LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()).Date.ToString("d", UserCulture.GetCulture())),
-		//		cancelRequestCommand.ErrorMessages[0]);
-		//}
+			PersonRequestAuthorizationChecker.RevokeCancelRequestPermission();
 
 
+			var personRequest = basicCancelAbsenceRequest(cancelRequestCommand);
 
-		// TODO: bugs #39138,#39065 have caused the absence request cancellation functionality to be reverted
-		//[Test]
-		//public void CancellingARequestWithMultipleAbsencesShouldUpdatePersonAccount()
-		//{
-		//	commonSetup();
-		//	var accountDay = new AccountDay(new DateOnly(2016,03,1))
-		//	{
-		//		BalanceIn = TimeSpan.FromDays(5),
-		//		Accrued = TimeSpan.FromDays(25),
-		//		Extra = TimeSpan.FromDays(0),
-		//		LatestCalculatedBalance = TimeSpan.FromDays(8)  // have used 8 days
-		//	};
-
-		//	createPersonAbsenceAccount(person,absence,accountDay);
-
-		//	var cancelRequestCommand = new CancelAbsenceRequestCommand();
-		//	cancelAbsenceRequestWithMultipleAbsences(cancelRequestCommand,true);
-
-		//	Assert.AreEqual(30,accountDay.Remaining.TotalDays);
-		//}
-
-		//[Test]
-		//public void ShouldCancelAcceptedRequestAndDeleteMultipleRelatedAbsences()
-		//{
-		//	commonSetup();
-		//	var cancelRequestCommand = new CancelAbsenceRequestCommand();
-		//	var personRequest = cancelAbsenceRequestWithMultipleAbsences(cancelRequestCommand);
-
-		//	Assert.IsTrue(personRequest.IsCancelled);
-		//	Assert.IsTrue(ScheduleStorage.LoadAll().IsEmpty());
-		//	Assert.IsTrue(cancelRequestCommand.ErrorMessages.IsEmpty());
-		//}
+			Assert.AreEqual(false, personRequest.IsCancelled);
+			Assert.AreEqual(1, ScheduleStorage.LoadAll().Count);
+			Assert.AreEqual(1, cancelRequestCommand.ErrorMessages.Count);
+		}
 
 
-		//[Test]
-		//public void BasicCancelAbsenceRequestShouldFireRequestPersonAbsenceRemovedEvent()
-		//{
-		//	commonSetup();
-		//	var cancelRequestCommand = new CancelAbsenceRequestCommand();
-		//	basicCancelAbsenceRequest(cancelRequestCommand);
-		//	var personAbsence = PersonAbsenceRepository.LoadAll().First();
+		[Test]
+		public void ShouldFailGracefullyWhenAttemptingToCancelRequestWhereAbsenceCannotBeFound()
+		{
+			commonSetup();
+			var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(2016, 03, 01, 2016, 03, 01);
 
-		//	var events = personAbsence.PopAllEvents(Now, DomainUpdateType.Delete).ToArray();
+			var absenceRequest = createApprovedAbsenceRequest(absence, dateTimePeriodOfAbsenceRequest, person);
+			var personRequest = absenceRequest.Parent as PersonRequest;
 
-		//	events.Length.Should().Be.EqualTo(2);
-		//	events[0].Should().Be.OfType<PersonAbsenceRemovedEvent>();
-		//	events[1].Should().Be.OfType<RequestPersonAbsenceRemovedEvent>();			
-		//}
+			var cancelRequestCommand = new CancelAbsenceRequestCommand()
+			{
+				PersonRequestId = personRequest.Id.GetValueOrDefault()
+			};
 
-		//[Test]
-		//public void BasicCancelAbsenceRequestShouldEventuallyFireOnlyOneScheduleChangedEvent()
-		//{
-		//	commonSetup();
-		//	var cancelRequestCommand = new CancelAbsenceRequestCommand();
-		//	basicCancelAbsenceRequest(cancelRequestCommand);
-		//	var personAbsence = PersonAbsenceRepository.LoadAll().First();
+			Target.Handle(cancelRequestCommand);
 
-		//	var events = personAbsence.PopAllEvents(Now,DomainUpdateType.Delete).ToList();
-
-		//	EventPublisher.OverwriteHandler(typeof(ScheduleChangedEvent),typeof(ScheduleChangedEventDetector));
-		//	ScheduleChangedEventDetector.Reset();
-
-		//	events.ForEach(e => EventPublisher.Publish(e));
-		//	var scheduleChangedEvents = ScheduleChangedEventDetector.GetEvents();
-
-		//	scheduleChangedEvents.Count().Should().Be.EqualTo(1);
-		//}
+			Assert.AreEqual(1, cancelRequestCommand.ErrorMessages.Count);
+			Assert.AreEqual(string.Format(Resources.CouldNotCancelRequestNoAbsence,
+				CommonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(person),
+				absenceRequest.Period.StartDateTimeLocal(LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()).Date.ToString("d", UserCulture.GetCulture())),
+				cancelRequestCommand.ErrorMessages[0]);
+		}
 
 
-		//private PersonRequest cancelAbsenceRequestWithMultipleAbsences(CancelAbsenceRequestCommand cancelRequestCommand,bool checkPersonAccounts = false)
-		//{
-		//	var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(2016,03,01,2016,03,14);
-		//	var absenceRequest = createApprovedAbsenceRequest(absence, dateTimePeriodOfAbsenceRequest, person);
-		//	var personRequest = absenceRequest.Parent as PersonRequest;
+		[Test]
+		public void ShouldFailGracefullyWhenAttemptingToCancelRequestWhereAbsenceRequestHasNotBeenAccepted()
+		{
+			commonSetup();
+			var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(2016, 03, 01, 2016, 03, 01);
 
-		//	if(checkPersonAccounts)
-		//	{
-		//		createShiftsForPeriod(dateTimePeriodOfAbsenceRequest);
-		//	}
+			var absenceRequest = new AbsenceRequest(absence, dateTimePeriodOfAbsenceRequest);
+			var personRequest = new PersonRequest(person, absenceRequest).WithId();
+			RequestRepository.Add(personRequest);
+			personRequest.Pending();
 
-		//	createPersonAbsence(absence,new DateTimePeriod(2016,03,05,2016,03,07), person,absenceRequest);
-		//	createPersonAbsence(absence,new DateTimePeriod(2016,03,09,2016,03,13), person,absenceRequest);
-		//	createPersonAbsence(absence,new DateTimePeriod(2016,03,01,2016,03,03), person,absenceRequest);
+			var cancelRequestCommand = new CancelAbsenceRequestCommand()
+			{
+				PersonRequestId = personRequest.Id.GetValueOrDefault()
+			};
 
-		//	cancelRequestCommand.PersonRequestId = personRequest.Id.GetValueOrDefault();
+			Target.Handle(cancelRequestCommand);
 
-		//	Target.Handle(cancelRequestCommand);
+			Assert.AreEqual(1, cancelRequestCommand.ErrorMessages.Count);
+			Assert.AreEqual(string.Format(Resources.CanOnlyCancelApprovedAbsenceRequest,
+				CommonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(person),
+				absenceRequest.Period.StartDateTimeLocal(LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()).Date.ToString("d", UserCulture.GetCulture())),
+				cancelRequestCommand.ErrorMessages[0]);
+		}
 
-		//	return personRequest;
-		//}
+
+
+
+		[Test]
+		public void CancellingARequestWithMultipleAbsencesShouldUpdatePersonAccount()
+		{
+			commonSetup();
+			var accountDay = new AccountDay(new DateOnly(2016, 03, 1))
+			{
+				BalanceIn = TimeSpan.FromDays(5),
+				Accrued = TimeSpan.FromDays(25),
+				Extra = TimeSpan.FromDays(0),
+				LatestCalculatedBalance = TimeSpan.FromDays(8)  // have used 8 days
+			};
+
+			createPersonAbsenceAccount(person, absence, accountDay);
+
+			var cancelRequestCommand = new CancelAbsenceRequestCommand();
+			cancelAbsenceRequestWithMultipleAbsences(cancelRequestCommand, true);
+
+			Assert.AreEqual(30, accountDay.Remaining.TotalDays);
+		}
+
+		[Test]
+		public void ShouldCancelAcceptedRequestAndDeleteMultipleRelatedAbsences()
+		{
+			commonSetup();
+			var cancelRequestCommand = new CancelAbsenceRequestCommand();
+			var personRequest = cancelAbsenceRequestWithMultipleAbsences(cancelRequestCommand);
+
+			Assert.IsTrue(personRequest.IsCancelled);
+			Assert.IsTrue(ScheduleStorage.LoadAll().IsEmpty());
+			Assert.IsTrue(cancelRequestCommand.ErrorMessages.IsEmpty());
+		}
+
+
+		[Test]
+		public void BasicCancelAbsenceRequestShouldFireRequestPersonAbsenceRemovedEvent()
+		{
+			commonSetup();
+			var cancelRequestCommand = new CancelAbsenceRequestCommand();
+			basicCancelAbsenceRequest(cancelRequestCommand);
+			var personAbsence = PersonAbsenceRepository.LoadAll().First();
+
+			var events = personAbsence.PopAllEvents(Now, DomainUpdateType.Delete).ToArray();
+
+			events.Length.Should().Be.EqualTo(2);
+			events[0].Should().Be.OfType<PersonAbsenceRemovedEvent>();
+			events[1].Should().Be.OfType<RequestPersonAbsenceRemovedEvent>();
+		}
+
+		[Test]
+		public void BasicCancelAbsenceRequestShouldEventuallyFireOnlyOneScheduleChangedEvent()
+		{
+			commonSetup();
+			var cancelRequestCommand = new CancelAbsenceRequestCommand();
+			basicCancelAbsenceRequest(cancelRequestCommand);
+			var personAbsence = PersonAbsenceRepository.LoadAll().First();
+
+			var events = personAbsence.PopAllEvents(Now, DomainUpdateType.Delete).ToList();
+
+			EventPublisher.OverwriteHandler(typeof(ScheduleChangedEvent), typeof(ScheduleChangedEventDetector));
+			ScheduleChangedEventDetector.Reset();
+
+			events.ForEach(e => EventPublisher.Publish(e));
+			var scheduleChangedEvents = ScheduleChangedEventDetector.GetEvents();
+
+			scheduleChangedEvents.Count().Should().Be.EqualTo(1);
+		}
+
+
+		private PersonRequest cancelAbsenceRequestWithMultipleAbsences(CancelAbsenceRequestCommand cancelRequestCommand, bool checkPersonAccounts = false)
+		{
+			var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(2016, 03, 01, 2016, 03, 14);
+			var absenceRequest = createApprovedAbsenceRequest(absence, dateTimePeriodOfAbsenceRequest, person);
+			var personRequest = absenceRequest.Parent as PersonRequest;
+
+			if (checkPersonAccounts)
+			{
+				createShiftsForPeriod(dateTimePeriodOfAbsenceRequest);
+			}
+
+			createPersonAbsence(absence, new DateTimePeriod(2016, 03, 05, 2016, 03, 07), person, personRequest);
+			createPersonAbsence(absence, new DateTimePeriod(2016, 03, 09, 2016, 03, 13), person, personRequest);
+			createPersonAbsence(absence, new DateTimePeriod(2016, 03, 01, 2016, 03, 03), person, personRequest);
+
+			cancelRequestCommand.PersonRequestId = personRequest.Id.GetValueOrDefault();
+
+			Target.Handle(cancelRequestCommand);
+
+			return personRequest;
+		}
 
 
 		private void createPersonAbsenceAccount(IPerson person,IAbsence absence,IAccount accountDay)
@@ -265,20 +265,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			PersonAbsenceAccountRepository.Add(personAbsenceAccount);
 		}
 
-		// TODO: bugs #39138,#39065 have caused the absence request cancellation functionality to be reverted
-		//private PersonRequest basicCancelAbsenceRequest(CancelAbsenceRequestCommand cancelRequestCommand)
-		//{
-		//	var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(2016,03,01,2016,03,03);
+		private PersonRequest basicCancelAbsenceRequest(CancelAbsenceRequestCommand cancelRequestCommand)
+		{
+			var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(2016, 03, 01, 2016, 03, 03);
 
-		//	var absenceRequest = createApprovedAbsenceRequest(absence ,dateTimePeriodOfAbsenceRequest, person);
-		//	var personRequest = absenceRequest.Parent as PersonRequest;
+			var absenceRequest = createApprovedAbsenceRequest(absence, dateTimePeriodOfAbsenceRequest, person);
+			var personRequest = absenceRequest.Parent as PersonRequest;
 
-		//	createPersonAbsence(absence ,dateTimePeriodOfAbsenceRequest, person, absenceRequest);
-		//	cancelRequestCommand.PersonRequestId = personRequest.Id.GetValueOrDefault();
+			createPersonAbsence(absence, dateTimePeriodOfAbsenceRequest, person, personRequest);
+			cancelRequestCommand.PersonRequestId = personRequest.Id.GetValueOrDefault();
 
-		//	Target.Handle(cancelRequestCommand);
-		//	return personRequest;
-		//}
+			Target.Handle(cancelRequestCommand);
+			return personRequest;
+		}
 
 		private AbsenceRequest createApprovedAbsenceRequest(IAbsence absence,DateTimePeriod dateTimePeriodOfAbsenceRequest,IPerson person)
 		{
@@ -297,10 +296,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			return personRequest;
 		}
 
-		private PersonAbsence createPersonAbsence(IAbsence absence,DateTimePeriod dateTimePeriodOfAbsenceRequest,IPerson person)
+		private PersonAbsence createPersonAbsence(IAbsence absence,DateTimePeriod dateTimePeriodOfAbsenceRequest,IPerson person, IPersonRequest personRequest)
 		{
 			var absenceLayer = new AbsenceLayer(absence,dateTimePeriodOfAbsenceRequest);
-			var personAbsence = new PersonAbsence(person, CurrentScenario.Current(), absenceLayer).WithId();
+			var personAbsence = new PersonAbsence(person, CurrentScenario.Current(), absenceLayer, personRequest).WithId();
 
 			PersonAbsenceRepository.Add(personAbsence);
 			ScheduleStorage.Add(personAbsence);

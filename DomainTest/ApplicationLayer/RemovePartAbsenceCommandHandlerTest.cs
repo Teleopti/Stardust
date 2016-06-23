@@ -97,27 +97,26 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			Assert.That(!allPersonAbsences.Any());
 		}
 
-		// TODO: bugs #39138,#39065 have caused the absence request cancellation functionality to be reverted
-		//[Test]
-		//public void ShouldRetainAbsenceRequestAfterPartOfAbsenceIsDeleted()
-		//{
-		//	var periodForAbsence = new DateTimePeriod(
-		//		new DateTime(2016, 03, 1, 13, 0, 0, DateTimeKind.Utc),
-		//		new DateTime(2016, 03, 5, 17, 0, 0, DateTimeKind.Utc));
+		[Test]
+		public void ShouldRetainAbsenceRequestAfterPartOfAbsenceIsDeleted()
+		{
+			var periodForAbsence = new DateTimePeriod(
+				new DateTime(2016, 03, 1, 13, 0, 0, DateTimeKind.Utc),
+				new DateTime(2016, 03, 5, 17, 0, 0, DateTimeKind.Utc));
 
-		//	var periodToRemove = new DateTimePeriod(
-		//		new DateTime(2016, 03, 2, 0, 0, 0, DateTimeKind.Utc),
-		//		new DateTime(2016, 03, 3, 8, 0, 0, DateTimeKind.Utc));
+			var periodToRemove = new DateTimePeriod(
+				new DateTime(2016, 03, 2, 0, 0, 0, DateTimeKind.Utc),
+				new DateTime(2016, 03, 3, 8, 0, 0, DateTimeKind.Utc));
 
-		//	var absence = AbsenceFactory.CreateAbsence("holiday");
-		//	var absenceRequest = new AbsenceRequest(absence, periodForAbsence);
+			var absence = AbsenceFactory.CreateAbsence("holiday");
+			var absenceRequest = new AbsenceRequest(absence, periodForAbsence);
 
-		//	var allPersonAbsences = removePartPersonAbsence(periodForAbsence, periodToRemove, absenceRequest).ToArray();
-		//	var personAbsence1 = (PersonAbsence)allPersonAbsences[0];
-		//	var personAbsence2 = (PersonAbsence)allPersonAbsences[1];
-		//	Assert.AreSame(absenceRequest, personAbsence1.AbsenceRequest);
-		//	Assert.AreSame(absenceRequest, personAbsence2.AbsenceRequest);
-		//}
+			var allPersonAbsences = removePartPersonAbsence(periodForAbsence, periodToRemove, absenceRequest).ToArray();
+			var personAbsence1 = (PersonAbsence)allPersonAbsences[0];
+			var personAbsence2 = (PersonAbsence)allPersonAbsences[1];
+			Assert.AreSame(absenceRequest.Parent, personAbsence1.PersonRequest);
+			Assert.AreSame(absenceRequest.Parent, personAbsence2.PersonRequest);
+		}
 
 		[Test]
 		public void ShouldRemovePartPersonAbsenceWhenAbsencePeriodCoveredPeriodToRemove()

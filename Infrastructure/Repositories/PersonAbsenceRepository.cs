@@ -1,8 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Criterion;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -85,7 +87,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		}
 
-		public ICollection<IPersonAbsence> Find(IEnumerable<Guid> personAbsenceIds)
+		public ICollection<IPersonAbsence> Find(IEnumerable<Guid> personAbsenceIds, IScenario scenario)
 		{
 			InParameter.NotNull("personAbsenceIds", personAbsenceIds);
 
@@ -118,6 +120,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 			return criteria.List<DateTimePeriod>();
 		}
+
+
+		public IList<IPersonAbsence> Find(IPersonRequest personRequest, IScenario scenario)
+		{
+			var retList = Session.CreateCriteria(typeof(PersonAbsence))
+                       .Add(Restrictions.Eq("PersonRequest", personRequest))
+                       .List<IPersonAbsence>();
+
+			return retList;
+		}
+
 
 
 		/// <summary>

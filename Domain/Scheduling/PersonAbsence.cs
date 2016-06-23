@@ -17,20 +17,24 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private IScenario _scenario;
 		private IAbsenceLayer _layer;
 		private DateTime? _lastChange;
-		
-		/// <summary>
-		/// Creates a new instance of PersonAbsence
-		/// </summary>
-		/// <param name="agent">The agent.</param>
-		/// <param name="scenario">The scenario.</param>
-		/// <param name="layer">The layer.</param>
-		public PersonAbsence(IPerson agent,
-							 IScenario scenario,
-							 IAbsenceLayer layer)
+		private IPersonRequest _personRequest;
+
+
+		public PersonAbsence(IPerson agent, IScenario scenario, IAbsenceLayer layer)
 		{
 			_person = agent;
 			_scenario = scenario;
 			_layer = layer;
+			
+		}
+
+
+		public PersonAbsence(IPerson agent, IScenario scenario, IAbsenceLayer layer, IPersonRequest personRequest)
+		{
+			_person = agent;
+			_scenario = scenario;
+			_layer = layer;
+			_personRequest = personRequest;
 		}
 
 		/// <summary>
@@ -165,11 +169,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()					
 				};
 
-				// TODO: bugs #39138,#39065 have caused the cancellation functionality to be reverted
-				//if (AbsenceRequest != null)
-				//{
-				//	requestPersonAbsenceRemovedEvent.AbsenceRequestId = AbsenceRequest.Id.GetValueOrDefault();
-				//}
+				if (PersonRequest != null)
+				{
+					requestPersonAbsenceRemovedEvent.PersonRequestId = PersonRequest.Id.GetValueOrDefault();
+				}
 
 				events.Add(requestPersonAbsenceRemovedEvent);
 			}
@@ -222,6 +225,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return Scenario.Equals(scenario);
 		}
 
+
+
+		public virtual IPersonRequest PersonRequest
+		{
+			get { return _personRequest; }
+			set { _personRequest = value; }
+		}
+
+
 		public virtual string FunctionPath
 		{
 			get { return DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence; }
@@ -237,6 +249,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var retObj = (PersonAbsence)NoneEntityClone();
 			retObj._scenario = parameters.Scenario;
 			retObj._person = parameters.Person;
+			
+			//ROBTODO: REVIEW do we need a retObj._personRequest = null here?
+
 			return retObj;
 		}
 
@@ -273,7 +288,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 						if (dateTimePeriod.ElapsedTime() > TimeSpan.Zero)
 						{
 							var newLayer = new AbsenceLayer(Layer.Payload, dateTimePeriod);
-							IPersonAbsence personAbsence = new PersonAbsence(Person, Scenario, newLayer);
+							IPersonAbsence personAbsence = new PersonAbsence(Person, Scenario, newLayer, _personRequest);
 							splitList.Add(personAbsence);
 						}
 					}

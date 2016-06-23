@@ -299,7 +299,8 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 		private static void simulateApproveAbsence(IAbsenceRequest absenceRequest, IRequestApprovalService requestApprovalServiceScheduler)
 		{
-			var brokenBusinessRules = requestApprovalServiceScheduler.ApproveAbsence(absenceRequest.Absence, absenceRequest.Period, absenceRequest.Person, absenceRequest);
+			var personRequest = absenceRequest.Parent as IPersonRequest;
+			var brokenBusinessRules = requestApprovalServiceScheduler.ApproveAbsence(absenceRequest.Absence, absenceRequest.Period, absenceRequest.Person, personRequest);
 			if (logger.IsDebugEnabled)
 			{
 				foreach (var brokenBusinessRule in brokenBusinessRules)

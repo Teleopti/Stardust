@@ -276,12 +276,7 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="dayOff"></param>
 		void CreateAndAddDayOff(IDayOffTemplate dayOff);
 
-		/// <summary>
-		/// Creates and adds absence
-		/// </summary>
-		/// <param name="layer"></param>
-		/// <param name="request"></param>
-		IPersonAbsence CreateAndAddAbsence(IAbsenceLayer layer);
+		IPersonAbsence CreateAndAddAbsence(IAbsenceLayer layer, IPersonRequest personRequest = null);
 
 		void CreateAndAddActivity(IActivity activity, DateTimePeriod period, IShiftCategory shiftCategory);
 		IScheduleDay CreateAndAddActivity(IActivity activity, DateTimePeriod period);

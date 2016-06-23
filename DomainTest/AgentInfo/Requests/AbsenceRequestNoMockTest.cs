@@ -33,40 +33,38 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			_scheduleRepository = new FakeScheduleDataReadScheduleStorage();
 			_swapAndModifyService = new SwapAndModifyService(new SwapService(), new DoNothingScheduleDayChangeCallBack());
 		}
-
-
-		// TODO: bugs #39138,#39065 have caused the absence request cancellation functionality to be reverted
-		//[Test]
-		//public void WhenAbsenceRequestIsAcceptedAbsenceShouldHaveRequestReference()
-		//{
-		//	var startDateTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc);
-		//	var endDateTime = new DateTime(2016, 3, 1, 23, 59, 00, DateTimeKind.Utc);
-		//	var period = new DateTimePeriod (startDateTime, endDateTime);
-
-		//	var absence = AbsenceFactory.CreateAbsence("Holiday");
-		//	var person = createAndSetupPerson(startDateTime, endDateTime);
-
-		//	var personRequest = createAbsenceRequest(person, absence, new DateTimePeriod(startDateTime, endDateTime));
-		//	var scheduleDictionary = _scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod (person, null, period, _currentScenario.Current());
-			
-		//	var requestApprovalServiceScheduler = new RequestApprovalServiceScheduler(
-		//		scheduleDictionary,
-		//		_currentScenario.Current(),
-		//		_swapAndModifyService,
-		//		NewBusinessRuleCollection.Minimum(), new DoNothingScheduleDayChangeCallBack(), new FakeGlobalSettingDataRepository());
-
-		//	personRequest.Pending();
-		//	personRequest.Approve (requestApprovalServiceScheduler, new PersonRequestAuthorizationCheckerForTest());
-
-		//	var scheduleDay = scheduleDictionary[person].ScheduledDay(new DateOnly (startDateTime));
-		//	var personAbsences = scheduleDay.PersonAbsenceCollection (true);
-		//	var personAbsence = personAbsences[0];
-			
-		//	Assert.AreSame (personRequest.Request, personAbsence.AbsenceRequest);
-
-		//}
 		
-		
+		[Test]
+		public void WhenAbsenceRequestIsAcceptedAbsenceShouldHaveRequestReference()
+		{
+			var startDateTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc);
+			var endDateTime = new DateTime(2016, 3, 1, 23, 59, 00, DateTimeKind.Utc);
+			var period = new DateTimePeriod(startDateTime, endDateTime);
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var person = createAndSetupPerson(startDateTime, endDateTime);
+
+			var personRequest = createAbsenceRequest(person, absence, new DateTimePeriod(startDateTime, endDateTime));
+			var scheduleDictionary = _scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(person, null, period, _currentScenario.Current());
+
+			var requestApprovalServiceScheduler = new RequestApprovalServiceScheduler(
+				scheduleDictionary,
+				_currentScenario.Current(),
+				_swapAndModifyService,
+				NewBusinessRuleCollection.Minimum(), new DoNothingScheduleDayChangeCallBack(), new FakeGlobalSettingDataRepository());
+
+			personRequest.Pending();
+			personRequest.Approve(requestApprovalServiceScheduler, new PersonRequestAuthorizationCheckerForTest());
+
+			var scheduleDay = scheduleDictionary[person].ScheduledDay(new DateOnly(startDateTime));
+			var personAbsences = scheduleDay.PersonAbsenceCollection(true);
+			var personAbsence = personAbsences[0];
+
+			Assert.AreSame(personRequest, personAbsence.PersonRequest);
+
+		}
+
+
 		private PersonRequest createAbsenceRequest(IPerson person, IAbsence absence, DateTimePeriod requestDateTimePeriod)
 		{
 			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, requestDateTimePeriod));

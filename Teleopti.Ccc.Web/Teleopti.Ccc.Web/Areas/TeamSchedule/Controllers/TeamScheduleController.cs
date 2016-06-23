@@ -7,6 +7,7 @@ using DotNetOpenAuth.Messaging;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -35,6 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		private readonly ISwapMainShiftForTwoPersonsCommandHandler _swapMainShiftForTwoPersonsHandler;
 		private readonly IPersonNameProvider _personNameProvider;
 		private readonly ICommandDispatcher _commandDispatcher;
+		private readonly ICurrentScenario _currentScenario;
 
 		public TeamScheduleController(ITeamScheduleViewModelFactory teamScheduleViewModelFactory,
 			ILoggedOnUser loggonUser,
@@ -43,7 +45,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			ISettingsPersisterAndProvider<AgentsPerPageSetting> agentsPerPagePersisterAndProvider,
 			ISwapMainShiftForTwoPersonsCommandHandler swapMainShiftForTwoPersonsHandler,
 			IPersonNameProvider personNameProvider,
-			ICommandDispatcher commandDispatcher)
+			ICommandDispatcher commandDispatcher,
+			ICurrentScenario currentScenario)
 		{
 			_teamScheduleViewModelFactory = teamScheduleViewModelFactory;
 			_loggonUser = loggonUser;
@@ -54,6 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			_swapMainShiftForTwoPersonsHandler = swapMainShiftForTwoPersonsHandler;
 			_personNameProvider = personNameProvider;
 			_commandDispatcher = commandDispatcher;
+			_currentScenario = currentScenario;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamSchedule/GetPermissions")]
@@ -175,7 +179,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			var errors = new List<FailActionResult>();
 			foreach (var personAbsence in command.SelectedPersonAbsences)
 			{
-				var personAbsencesForRemove = _personAbsenceRepository.Find(personAbsence.PersonAbsenceIds);
+				var personAbsencesForRemove = _personAbsenceRepository.Find(personAbsence.PersonAbsenceIds, _currentScenario.Current());
 				var result = command.RemoveEntireCrossDayAbsence
 				? removeEntirePersonAbsence(command.ScheduleDate, personAbsencesForRemove, command.TrackedCommandInfo)
 				: removePartPersonAbsence(command.ScheduleDate, personAbsencesForRemove, command.ScheduleDate,

@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private string _denyReason = string.Empty;
 		private bool _alreadyAbsent;
 		private DateTime _updatedOnServerUtc;
+		private IList<IPersonAbsence> _personAbsences = new List<IPersonAbsence>();
 
 		protected PersonRequest()
 		{
@@ -85,7 +86,14 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			get { return _person; }
 		}
 
-		public virtual bool TrySetMessage(string message)
+
+		public virtual IList<IPersonAbsence> PersonAbsences
+	    {
+		    get { return _personAbsences; }
+		    
+	    }
+
+public virtual bool TrySetMessage(string message)
 		{
 			checkIfEditable();
 			message = message ?? string.Empty;

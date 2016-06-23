@@ -52,7 +52,14 @@
         type="string"
         length="2000"/>
 
-	<property name="DenyReason"
+
+    <bag name="PersonAbsences" inverse="true" lazy="false">
+           <key column="PersonRequest"></key>
+           <one-to-many class="Teleopti.Ccc.Domain.Scheduling.PersonAbsence"/>
+    </bag>
+    
+
+    <property name="DenyReason"
 		not-null="false"
 		type="string"
 		length="300"/>

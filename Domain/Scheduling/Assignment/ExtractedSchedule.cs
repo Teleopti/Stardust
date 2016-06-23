@@ -652,7 +652,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					foundPersonAssignment.SetDayOff(dayOff);
 		}
 
-		 public void CreateAndAddNote(string text)
+		public void CreateAndAddNote(string text)
 		 {
 			 var dateOnly = DateOnlyAsPeriod.DateOnly;
 			 var note = new Note(Person, dateOnly, Scenario, text);
@@ -668,9 +668,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			 Add(publicNote);
 		 }
 
-        public IPersonAbsence CreateAndAddAbsence(IAbsenceLayer layer)
+        public IPersonAbsence CreateAndAddAbsence(IAbsenceLayer layer, IPersonRequest personRequest = null)
 		{
-			var personAbsence = new PersonAbsence(Person, Scenario, layer) {LastChange = DateTime.UtcNow};
+			var personAbsence = new PersonAbsence(Person, Scenario, layer, personRequest) {LastChange = DateTime.UtcNow};
 			Add(personAbsence);
 	        return personAbsence;
 		}

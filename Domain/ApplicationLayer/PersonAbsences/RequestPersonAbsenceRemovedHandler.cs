@@ -41,15 +41,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonAbsences
 			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 
-				var personRequest = _personRequestRepository.FindPersonRequestByRequestId(@event.AbsenceRequestId);
+				var personRequest = _personRequestRepository.Find(@event.PersonRequestId);
 				var absenceRequest = personRequest?.Request as IAbsenceRequest;
 				if (absenceRequest == null || !shouldProcessPersonRequest(personRequest))
 				{
 					return;
 				}
 				
-				// TODO: bugs #39138,#39065 have caused the cancellation functionality to be reverted
-				//	_absenceRequestCancelService.CancelAbsenceRequest(absenceRequest);
+				_absenceRequestCancelService.CancelAbsenceRequest(absenceRequest);
 
 				unitOfWork.PersistAll();
 				

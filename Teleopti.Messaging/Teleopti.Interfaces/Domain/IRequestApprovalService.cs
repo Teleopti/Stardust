@@ -11,18 +11,8 @@ namespace Teleopti.Interfaces.Domain
 	/// </remarks>
 	public interface IRequestApprovalService
 	{
-		/// <summary>
-		/// Approves the absence.
-		/// </summary>
-		/// <param name="absence">The absence.</param>
-		/// <param name="period">The period.</param>
-		/// <param name="person">The person.</param>
-		/// <returns>any rules broken</returns>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-10-10
-		/// </remarks>
-		IEnumerable<IBusinessRuleResponse> ApproveAbsence(IAbsence absence, DateTimePeriod period, IPerson person, IAbsenceRequest absenceRequest = null);
+		
+		IEnumerable<IBusinessRuleResponse> ApproveAbsence(IAbsence absence, DateTimePeriod period, IPerson person, IPersonRequest personRequest = null);
 
 		/// <summary>
 		/// Approves the shift trade.

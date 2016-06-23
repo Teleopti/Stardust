@@ -188,7 +188,8 @@ namespace Teleopti.Ccc.WinCodeTest
 			                                 o.IgnoreArguments()
 			                                  .Repeat.Once()
 			                                  .Constraints(
-				                                  Rhino.Mocks.Constraints.Is.Matching<IAbsenceLayer>(p => p.Period.StartDateTime == period.StartDateTime)));
+				                                  Rhino.Mocks.Constraints.Is.Matching<IAbsenceLayer>(p => p.Period.StartDateTime == period.StartDateTime),
+												  Rhino.Mocks.Constraints.Is.Anything()));
 		}
 
 

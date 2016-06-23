@@ -120,8 +120,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				errorMessages = createNewAbsencesForSplitAbsence(person, personAbsences, periodToRemove.Value, commandInfo, scheduleDay, scheduleRange);
 			}
 
-			// TODO: #39138,#39065 - have caused the cancellation functionality to be reverted
-			//_absenceRequestCancelService.CancelAbsenceRequestsFromPersonAbsences(personAbsences);
+			
+			_absenceRequestCancelService.CancelAbsenceRequestsFromPersonAbsences(personAbsences);
 
 			return errorMessages;
 		}
