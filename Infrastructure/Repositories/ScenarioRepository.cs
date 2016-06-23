@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using NHibernate.Criterion;
 using System.Linq;
+using NHibernate;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -56,10 +58,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                  .UniqueResult<IScenario>();
 			if (defaultScenario == null)
 			{
-				var bu = ServiceLocatorForEntity.CurrentBusinessUnit.Current();
-				throw new DataSourceException(string.Format(CultureInfo.CurrentCulture, "Business unit '{0}' has no default scenario", bu.Name));
+				var businessUnitId = ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id;
+				throw new DataSourceException(string.Format(CultureInfo.CurrentCulture, "Business unit '{0}' has no default scenario", businessUnitId));
 			}
-        	return defaultScenario;
+	        return defaultScenario;
         }
 
         public IScenario LoadDefaultScenario(IBusinessUnit businessUnit)

@@ -466,7 +466,6 @@
     <Compile Include="Repositories\ApplicationRolePersonRepositoryTest.cs" />
     <Compile Include="Repositories\Audit\AuditSettingRepositoryTest.cs" />
     <Compile Include="Repositories\Audit\AuditTest.cs" />
-    <Compile Include="Repositories\Audit\RevisionListenerTest.cs" />
     <Compile Include="Repositories\Audit\ScheduleHistoryReportTest.cs" />
     <Compile Include="Repositories\Audit\ScheduleHistoryRepositoryTest.cs" />
     <Compile Include="Repositories\EtlReadModelRepositoryTest.cs" />

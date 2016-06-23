@@ -1,4 +1,3 @@
-using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.TestCommon;
 
@@ -16,12 +15,14 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 		}
 
 		[LogTime]
-		[UnitOfWork]
 		public virtual void Create()
 		{
-			_database.WithActivity("Phone");
-			_database.WithActivity("Lunch");
-			_database.WithActivity("Break");
+			_database
+				.WithDefaultScenario("Default")
+				.WithActivity("Phone")
+				.WithActivity("Lunch")
+				.WithActivity("Break")
+				;
 
 			_configuration.NumberOfAgents.Times(() =>
 			{

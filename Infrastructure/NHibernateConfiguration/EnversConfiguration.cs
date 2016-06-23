@@ -4,8 +4,10 @@ using NHibernate.Cfg;
 using NHibernate.Envers.Configuration;
 using NHibernate.Envers.Configuration.Fluent;
 using Teleopti.Ccc.Domain.Auditing;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories.Audit;
@@ -41,7 +43,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			var eventListener = new TeleoptiAuditEventListener(_auditSettingProvider);
 			var fluentCfg = new FluentConfiguration();
 			configureSchedule(fluentCfg);
-			fluentCfg.SetRevisionEntity<Revision>(rev => rev.Id, rev => rev.ModifiedAt, new RevisionListener(new UnsafePersonProvider()));
+			fluentCfg.SetRevisionEntity<Revision>(rev => rev.Id, rev => rev.ModifiedAt, new RevisionListener(ServiceLocatorForEntity.UpdatedBy));
 			nhibConfiguration.SetEnversProperty(ConfigurationKey.StoreDataAtDelete, true)
 								.SetEnversProperty(ConfigurationKey.DoNotAuditOptimisticLockingField, false)
 								.SetEnversProperty(ConfigurationKey.DefaultSchema, AuditingSchema)

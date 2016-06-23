@@ -46,7 +46,9 @@ namespace Teleopti.Ccc.TestCommon
 			IPartTimePercentageRepository partTimePercentages,
 			IContractScheduleRepository contractSchedules,
 			IScenarioRepository scenarios, 
-			IActivityRepository activities, ISkillRepository skills, ISkillTypeRepository skillTypes)
+			IActivityRepository activities, 
+			ISkillRepository skills, 
+			ISkillTypeRepository skillTypes)
 		{
 			_assignments = assignments;
 			_persons = persons;
@@ -89,6 +91,15 @@ namespace Teleopti.Ccc.TestCommon
 		public virtual Guid PersonIdFor(string name)
 		{
 			return _persons.LoadAll().Single(x => x.Name == new Name(name, name)).Id.Value;
+		}
+
+		[UnitOfWork]
+		public virtual Database WithDefaultScenario(string name)
+		{
+			var scenario = new Scenario(name) {DefaultScenario = true};
+			_scenario = scenario.Description.Name;
+			_scenarios.Add(scenario);
+			return this;
 		}
 
 		[UnitOfWork]

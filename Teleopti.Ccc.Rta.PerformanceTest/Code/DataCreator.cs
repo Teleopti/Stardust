@@ -46,6 +46,9 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			var datasource = new Datasources(_testConfiguration.DataSourceId, " ", -1, " ", -1, " ", " ", 1, false, _testConfiguration.SourceId, false);
 			new AnalyticsDataFactory().Apply(datasource);
 
+			var businessUnit = DefaultBusinessUnit.BusinessUnit;
+
+			data.Apply(new ScenarioConfigurable { Name = "Default", BusinessUnit = businessUnit.Name });
 			data.Apply(new ActivityConfigurable { Name = "Phone" });
 			data.Apply(new ActivityConfigurable { Name = "Lunch" });
 			data.Apply(new ActivityConfigurable { Name = "Break" });
@@ -71,7 +74,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 					data.Apply(new SiteConfigurable
 					{
 						Name = "site" + site,
-						BusinessUnit = DefaultBusinessUnit.BusinessUnit.Name
+						BusinessUnit = businessUnit.Name
 					});
 				});
 
@@ -102,7 +105,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 
 					data.Person(name).Apply(new ShiftConfigurable
 					{
-						Scenario = DefaultScenario.Scenario.Description.Name
+						Scenario = "Default"
 					}
 						.AddActivity("Phone", "2016-02-25 08:00".Utc(), "2016-02-25 17:00".Utc())
 						.AddActivity("Break", "2016-02-25 10:00".Utc(), "2016-02-25 10:15".Utc())
@@ -112,7 +115,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 
 					data.Person(name).Apply(new ShiftConfigurable
 					{
-						Scenario = DefaultScenario.Scenario.Description.Name
+						Scenario = "Default"
 					}
 						.AddActivity("Phone", "2016-02-26 08:00".Utc(), "2016-02-26 17:00".Utc())
 						.AddActivity("Break", "2016-02-26 10:00".Utc(), "2016-02-26 10:15".Utc())
@@ -122,7 +125,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 
 					data.Person(name).Apply(new ShiftConfigurable
 					{
-						Scenario = DefaultScenario.Scenario.Description.Name
+						Scenario = "Default"
 					}
 						.AddActivity("Phone", "2016-02-27 08:00".Utc(), "2016-02-27 17:00".Utc())
 						.AddActivity("Break", "2016-02-27 10:00".Utc(), "2016-02-27 10:15".Utc())
