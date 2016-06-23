@@ -215,7 +215,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var existingDeniedRequest = createAbsenceRequest(personOne, absence, requestDateTimePeriod);
 			existingDeniedRequest.Pending(); 
 			existingDeniedRequest.Deny(null, "Work Hard!", new PersonRequestAuthorizationCheckerForTest());  // waitlist
-			existingDeniedRequest.Deny(null, "Work Hard!", new PersonRequestAuthorizationCheckerForTest());	// deny
 
 			var newRequest = createAbsenceRequest(personTwo, absence, requestDateTimePeriod);
 			var newAbsenceRequestConsumer = createNewAbsenceRequestHandler(true, false);
