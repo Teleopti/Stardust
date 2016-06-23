@@ -9,6 +9,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		public Guid PersonId { get; set; }
 		public DateTime Date { get; set; }
 		public DateOnly BelongsToDate { get { return new DateOnly(Date); } }
+		public DateTime? ShiftStartTime { get; set; }
+		public DateTime? ShiftEndTime { get; set; }
 
 		public int Version { get; set; }
 

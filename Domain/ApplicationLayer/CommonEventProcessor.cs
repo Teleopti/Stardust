@@ -42,33 +42,37 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 					{
 						var handler = scope.Resolve(handlerType);
 						var method = _resolver.HandleMethodFor(handler.GetType(), @event);
-						try
-						{
-							method.Invoke(handler, new[] { @event });
-						}
-						catch (TargetInvocationException e)
-						{
-							PreserveStack.ForInnerOf(e);
-							throw e;
-						}
+						method.Invoke(handler, new[] { @event });
 					}
 				}
-				catch (Exception)
+				catch (TargetInvocationException e)
 				{
-					var commandIdentifier = @event as ICommandIdentifier;
-					if (commandIdentifier == null) throw;
-					if (commandIdentifier.CommandId != Guid.Empty)
-						_trackingMessageSender.SendTrackingMessage(
-							@event,
-							new TrackingMessage
-							{
-								Status = TrackingMessageStatus.Failed,
-								TrackId = commandIdentifier.CommandId
-							});
-					throw;
+					PreserveStack.ForInnerOf(e);
+					sendTrackingMessage(@event);
+					throw e;
+				}
+				catch (Exception e)
+				{
+					PreserveStack.For(e);
+					sendTrackingMessage(@event);
+					throw e;
 				}
 			}
 		}
 
+		private void sendTrackingMessage(IEvent @event)
+		{
+			var commandIdentifier = @event as ICommandIdentifier;
+			if (commandIdentifier != null && commandIdentifier.CommandId != Guid.Empty)
+			{
+				_trackingMessageSender.SendTrackingMessage(
+					@event,
+					new TrackingMessage
+					{
+						Status = TrackingMessageStatus.Failed,
+						TrackId = commandIdentifier.CommandId
+					});
+			}
+		}
 	}
 }

@@ -184,7 +184,6 @@
     <Compile Include="Aop\Bug32045.cs" />
     <Compile Include="Aop\OrderedAspectsTest.cs" />
     <Compile Include="Aop\ValidationTest.cs" />
-    <Compile Include="ApplicationLayer\Events\ConfigurableAsyncEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireEventProcessorTest.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireEventShortNameSerializationTest.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireEventPublishingTest.cs" />
@@ -291,6 +290,7 @@
     <Compile Include="Rta\MappingReaderSelectionTest.cs" />
     <Compile Include="Rta\MappingReaderTest.cs" />
     <Compile Include="Rta\Persisters\AdherenceDetailsReadModelPersisterConcurrencyTest.cs" />
+    <Compile Include="Rta\Persisters\AdherencePercentageReadModelReaderTest.cs" />
     <Compile Include="Rta\Persisters\AgentStatePersisterConcurrencyTest.cs" />
     <Compile Include="RetryingQueueSimulator.cs" />
     <Compile Include="Rta\Persisters\AdherencePercentageReadModelPersisterConcurrencyTest.cs" />

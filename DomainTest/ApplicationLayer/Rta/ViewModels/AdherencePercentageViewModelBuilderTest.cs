@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -235,28 +234,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 
 			result.LastTimestamp.Should().Be("2014-12-24 14:00".InHawaii().AsCatalanShortTime());
 		}
-
-		[Test]
-		public void ShouldBuildForAgentsDate()
-		{
-			var person = new Person();
-			person.SetId(Guid.NewGuid());
-			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.HawaiiTimeZoneInfo());
-			PersonRepository.Has(person);
-			Now.Is("2015-02-24 09:00");
-			Reader.Has(new AdherencePercentageReadModel
-			{
-				PersonId = person.Id.GetValueOrDefault(),
-				Date = new DateTime(2015, 02, 23),
-				TimeInAdherence = "1".Minutes(),
-				LastTimestamp = "2015-02-24 09:00".Utc()
-			});
-
-			var result = Target.Build(person.Id.Value);
-
-			result.AdherencePercent.Should().Not.Be(null);
-		}
-
+		
 		[Test]
 		public void ShouldSetAgentDateToUtcNowWhenPersonNotFound()
 		{
@@ -292,6 +270,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 
 			result.AdherencePercent.Should().Be.EqualTo(50);
 		}
-
 	}
 }

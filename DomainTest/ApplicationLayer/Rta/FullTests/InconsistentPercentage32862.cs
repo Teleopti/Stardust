@@ -7,7 +7,9 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -16,6 +18,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 {
 	[DomainTest]
 	[TestFixture]
+	[Toggle(Toggles.RTA_AdherenceDetails_34267)]
 	public class InconsistentPercentage32862 : ISetup
 	{
 		public FakeRtaDatabase Database;
@@ -25,23 +28,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 		public FakeAdherencePercentageReadModelPersister Percentage;
 		public IAdherenceDetailsViewModelBuilder DetailsView;
 		public IAdherencePercentageViewModelBuilder PercentageView;
+		public ConfigurableSyncEventPublisher Publisher;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			var detailsPersister = new FakeAdherenceDetailsReadModelPersister();
-			var percentagePersister = new FakeAdherencePercentageReadModelPersister();
-			var detailsUpdater = new AdherenceDetailsReadModelUpdater(detailsPersister, null, null);
-			var percentageUpdater = new AdherencePercentageReadModelUpdater(percentagePersister);
-			var publisher = new SyncPublishTo(new ResolveEventHandlers(null),  new object[] {detailsUpdater, percentageUpdater});
-
-			system.UseTestDouble(detailsPersister).For<IAdherenceDetailsReadModelPersister, IAdherenceDetailsReadModelReader>();
-			system.UseTestDouble(percentagePersister).For<IAdherencePercentageReadModelPersister, IAdherencePercentageReadModelReader>();
-			system.UseTestDouble(publisher).For<IEventPublisher>();
+			system.UseTestDouble<ConfigurableSyncEventPublisher>().For<IEventPublisher>();
 		}
 
 		[Test]
 		public void TestReadModels()
 		{
+			Publisher.AddHandler(typeof(AdherenceDetailsReadModelUpdater));
+			Publisher.AddHandler(typeof(AdherencePercentageReadModelUpdater));
 			var personId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			var admin = Guid.NewGuid();
@@ -85,6 +83,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 		[Test]
 		public void TestViewModels()
 		{
+			Publisher.AddHandler(typeof(AdherenceDetailsReadModelUpdater));
+			Publisher.AddHandler(typeof(AdherencePercentageReadModelUpdater));
 			var personId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			var admin = Guid.NewGuid();

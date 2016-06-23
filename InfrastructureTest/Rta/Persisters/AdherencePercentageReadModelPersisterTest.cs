@@ -167,32 +167,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		}
 
 		[Test]
-		public void ShouldRead()
-		{
-			var personId = Guid.NewGuid();
-			Target.Persist(new AdherencePercentageReadModel
-			{
-				Date = new DateTime(2012, 08, 29),
-				PersonId = personId,
-				TimeInAdherence = "17".Minutes(),
-				TimeOutOfAdherence = "28".Minutes(),
-				IsLastTimeInAdherence = true,
-				LastTimestamp = "2012-08-29 8:00".Utc(),
-				ShiftHasEnded = true
-			});
-
-			var model = Reader.Read("2012-08-29".Date(), personId);
-
-			model.PersonId.Should().Be.EqualTo(model.PersonId);
-			model.BelongsToDate.Should().Be.EqualTo("2012-08-29".Date());
-			model.TimeOutOfAdherence.Should().Be.EqualTo("28".Minutes());
-			model.TimeInAdherence.Should().Be.EqualTo("17".Minutes());
-			model.IsLastTimeInAdherence.Should().Be.EqualTo(true);
-			model.LastTimestamp.Should().Be.EqualTo("2012-08-29 8:00".Utc());
-			model.ShiftHasEnded.Should().Be.EqualTo(true);
-		}
-
-		[Test]
 		public void ShouldSaveReadModelWithVeryLongStateString()
 		{
 			var personId = Guid.NewGuid();
@@ -211,7 +185,43 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				State = states
 			}));
 		}
-		
+
+		[Test]
+		public void ShouldPersistShiftStartEndTime()
+		{
+			var personId = Guid.NewGuid();
+			Target.Persist(new AdherencePercentageReadModel
+			{
+				Date = "2016-06-23".Utc(),
+				PersonId = personId,
+				ShiftStartTime = "2016-06-23 08:00".Utc(),
+				ShiftEndTime = "2016-06-23 17:00".Utc()
+			});
+
+			var actual = Target.Get("2016-06-23".Date(), personId);
+			actual.ShiftStartTime.Should().Be("2016-06-23 08:00".Utc());
+			actual.ShiftEndTime.Should().Be("2016-06-23 17:00".Utc());
+		}
+
+		[Test]
+		public void ShouldUpdateShiftStartEndTime()
+		{
+			var personId = Guid.NewGuid();
+			var model = new AdherencePercentageReadModel
+			{
+				Date = "2016-06-23".Utc(),
+				PersonId = personId
+			};
+			Target.Persist(model);
+			model.ShiftStartTime = "2016-06-23 08:00".Utc();
+			model.ShiftEndTime = "2016-06-23 17:00".Utc();
+			Target.Persist(model);
+
+			var actual = Target.Get("2016-06-23".Date(), personId);
+			actual.ShiftStartTime.Should().Be("2016-06-23 08:00".Utc());
+			actual.ShiftEndTime.Should().Be("2016-06-23 17:00".Utc());
+		}
+
 	}
 }
 

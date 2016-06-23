@@ -15,12 +15,18 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 		private readonly ICurrentReadModelUnitOfWork _unitOfWork;
 		private readonly IJsonSerializer _serializer;
 		private readonly IJsonDeserializer _deserializer;
+		private readonly INow _now;
 
-		public AdherencePercentageReadModelPersister(ICurrentReadModelUnitOfWork unitOfWork, IJsonSerializer serializer, IJsonDeserializer deserializer)
+		public AdherencePercentageReadModelPersister(
+			ICurrentReadModelUnitOfWork unitOfWork, 
+			IJsonSerializer serializer, 
+			IJsonDeserializer deserializer,
+			INow now)
 		{
 			_unitOfWork = unitOfWork;
 			_serializer = serializer;
 			_deserializer = deserializer;
+			_now = now;
 		}
 
 		public void Persist(AdherencePercentageReadModel model)
@@ -28,72 +34,84 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 			var fromVersion = model.Version;
 			var toVersion = model.Version + 1;
 			_unitOfWork.Current().CreateSqlQuery(
-				"MERGE INTO ReadModel.AdherencePercentage AS T " +
-				"USING (" +
-				"	VALUES " +
-				"	(" +
-				"		:PersonId, " +
-				"		:Date, " +
-				"		:FromVersion," +
-				"		:ToVersion," +
-				"		:LastTimestamp," +
-				"		:IsLastTimeInAdherence," +
-				"		:TimeInAdherence," +
-				"		:TimeOutOfAdherence," +
-				"		:ShiftHasEnded," +
-				"		:State" +
-				"		)" +
-				") AS S (" +
-				"	PersonId, " +
-				"	Date, " +
-				"	FromVersion," +
-				"	ToVersion," +
-				"	LastTimestamp," +
-				"	IsLastTimeInAdherence," +
-				"	TimeInAdherence," +
-				"	TimeOutOfAdherence," +
-				"	ShiftHasEnded," +
-				"	[State]" +
-				") " +
-				"ON " +
-				"	T.PersonId = S.PersonId AND " +
-				"	T.BelongsToDate = S.Date AND " +
-				"	T.[Version] = S.FromVersion " +
-				"WHEN NOT MATCHED THEN " +
-				"	INSERT " +
-				"	(" +
-				"		PersonId," +
-				"		BelongsToDate," +
-				"		[Version]," +
-				"		LastTimestamp," +
-				"		IsLastTimeInAdherence," +
-				"		TimeInAdherence," +
-				"		TimeOutOfAdherence," +
-				"		ShiftHasEnded," +
-				"		[State]" +
-				"	) VALUES (" +
-				"		S.PersonId," +
-				"		S.Date," +
-				"		S.ToVersion," +
-				"		S.LastTimestamp," +
-				"		S.IsLastTimeInAdherence," +
-				"		S.TimeInAdherence," +
-				"		S.TimeOutOfAdherence," +
-				"		S.ShiftHasEnded," +
-				"		S.State" +
-				"	) " +
-				"WHEN MATCHED THEN " +
-				"	UPDATE SET" +
-				"		[Version] = S.ToVersion," +
-				"		LastTimestamp = S.LastTimestamp," +
-				"		IsLastTimeInAdherence = S.IsLastTimeInAdherence," +
-				"		TimeInAdherence = S.TimeInAdherence," +
-				"		TimeOutOfAdherence = S.TimeOutOfAdherence," +
-				"		ShiftHasEnded = S.ShiftHasEnded, " +
-				"		[State] = S.State " +
-				";")
+				@"MERGE INTO ReadModel.AdherencePercentage AS T
+				USING (
+					VALUES 
+					(
+						:PersonId, 
+						:Date,
+						:ShiftStartTime,
+						:ShiftEndTime, 
+						:FromVersion,
+						:ToVersion,
+						:LastTimestamp,
+						:IsLastTimeInAdherence,
+						:TimeInAdherence,
+						:TimeOutOfAdherence,
+						:ShiftHasEnded,
+						:State
+						)
+				) AS S (
+					PersonId, 
+					Date, 
+					ShiftStartTime,
+					ShiftEndTime,
+					FromVersion,
+					ToVersion,
+					LastTimestamp,
+					IsLastTimeInAdherence,
+					TimeInAdherence,
+					TimeOutOfAdherence,
+					ShiftHasEnded,
+					[State]
+				) 
+				ON 
+					T.PersonId = S.PersonId AND 
+					T.BelongsToDate = S.Date AND 
+					T.[Version] = S.FromVersion 
+				WHEN NOT MATCHED THEN 
+					INSERT 
+					(
+						PersonId,
+						BelongsToDate,
+						ShiftStartTime,
+						ShiftEndTime,
+						[Version],
+						LastTimestamp,
+						IsLastTimeInAdherence,
+						TimeInAdherence,
+						TimeOutOfAdherence,
+						ShiftHasEnded,
+						[State]
+					) VALUES (
+						S.PersonId,
+						S.Date,
+						S.ShiftStartTime,
+						S.ShiftEndTime,
+						S.ToVersion,
+						S.LastTimestamp,
+						S.IsLastTimeInAdherence,
+						S.TimeInAdherence,
+						S.TimeOutOfAdherence,
+						S.ShiftHasEnded,
+						S.State
+					) 
+				WHEN MATCHED THEN 
+					UPDATE SET
+						ShiftStartTime = S.ShiftStartTime,
+						ShiftEndTime = S.ShiftEndTime,
+						[Version] = S.ToVersion,
+						LastTimestamp = S.LastTimestamp,
+						IsLastTimeInAdherence = S.IsLastTimeInAdherence,
+						TimeInAdherence = S.TimeInAdherence,
+						TimeOutOfAdherence = S.TimeOutOfAdherence,
+						ShiftHasEnded = S.ShiftHasEnded, 
+						[State] = S.State 
+				;")
 				.SetGuid("PersonId", model.PersonId)
 				.SetDateTime("Date", model.Date)
+				.SetParameter("ShiftStartTime", model.ShiftStartTime)
+				.SetParameter("ShiftEndTime", model.ShiftEndTime)
 				.SetParameter("FromVersion", fromVersion)
 				.SetParameter("ToVersion", toVersion)
 				.SetParameter("LastTimestamp", model.LastTimestamp)
@@ -109,21 +127,25 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 		public AdherencePercentageReadModel Get(DateOnly date, Guid personId)
 		{
 			var result = _unitOfWork.Current().CreateSqlQuery(
-				"SELECT " +
-				"	PersonId," +
-				"	BelongsToDate AS Date," +
-				"	LastTimestamp," +
-				"	IsLastTimeInAdherence," +
-				"	TimeInAdherence," +
-				"	TimeOutOfAdherence," +
-				"	ShiftHasEnded, " +
-				"	[State] AS StateJson, " +
-				"	[Version] " +
-				"FROM ReadModel.AdherencePercentage WITH (UPDLOCK) WHERE" +
-				"	PersonId =:PersonId AND " +
-				"	BelongsToDate =:Date ")
+				@"SELECT 
+					PersonId,
+					BelongsToDate AS Date,
+					ShiftStartTime,
+					ShiftEndTime,
+					LastTimestamp,
+					IsLastTimeInAdherence,
+					TimeInAdherence,
+					TimeOutOfAdherence,
+					ShiftHasEnded, 
+					[State] AS StateJson, 
+					[Version] 
+				FROM ReadModel.AdherencePercentage WITH (UPDLOCK) WHERE
+					PersonId =:PersonId AND 
+					BelongsToDate =:Date ")
 				.AddScalar("PersonId", NHibernateUtil.Guid)
 				.AddScalar("Date", NHibernateUtil.DateTime)
+				.AddScalar("ShiftStartTime", NHibernateUtil.DateTime)
+				.AddScalar("ShiftEndTime", NHibernateUtil.DateTime)
 				.AddScalar("LastTimestamp", NHibernateUtil.DateTime)
 				.AddScalar("IsLastTimeInAdherence", NHibernateUtil.Boolean)
 				.AddScalar("TimeInAdherence", NHibernateUtil.TimeSpan)
@@ -166,29 +188,34 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 			public string StateJson { get; set; }
 		}
 
-		public AdherencePercentageReadModel Read(DateOnly date, Guid personId)
+		public AdherencePercentageReadModel ReadCurrent(Guid personId)
 		{
 			return _unitOfWork.Current().CreateSqlQuery(
-				"SELECT " +
-				"	PersonId," +
-				"	BelongsToDate AS Date," +
-				"	LastTimestamp," +
-				"	IsLastTimeInAdherence," +
-				"	TimeInAdherence," +
-				"	TimeOutOfAdherence," +
-				"	ShiftHasEnded " +
-				"FROM ReadModel.AdherencePercentage WHERE" +
-				"	PersonId =:PersonId AND " +
-				"	BelongsToDate =:Date ")
+				@"SELECT 
+					PersonId,
+					BelongsToDate AS Date,
+					ShiftStartTime,
+					ShiftEndTime,
+					LastTimestamp,
+					IsLastTimeInAdherence,
+					TimeInAdherence,
+					TimeOutOfAdherence,
+					ShiftHasEnded 
+				FROM ReadModel.AdherencePercentage WHERE
+					PersonId =:PersonId AND 
+					:Time BETWEEN ShiftStartTime AND DATEADD(hour, 1, ShiftEndTime) 
+				")
 				.AddScalar("PersonId", NHibernateUtil.Guid)
 				.AddScalar("Date", NHibernateUtil.DateTime)
+				.AddScalar("ShiftStartTime", NHibernateUtil.DateTime)
+				.AddScalar("ShiftEndTime", NHibernateUtil.DateTime)
 				.AddScalar("LastTimestamp", NHibernateUtil.DateTime)
 				.AddScalar("IsLastTimeInAdherence", NHibernateUtil.Boolean)
 				.AddScalar("TimeInAdherence", NHibernateUtil.TimeSpan)
 				.AddScalar("TimeOutOfAdherence", NHibernateUtil.TimeSpan)
 				.AddScalar("ShiftHasEnded", NHibernateUtil.Boolean)
 				.SetGuid("PersonId", personId)
-				.SetDateOnly("Date", date)
+				.SetDateTime("Time", _now.UtcDateTime())
 				.SetResultTransformer(Transformers.AliasToBean(typeof (AdherencePercentageReadModel)))
 				.List<AdherencePercentageReadModel>()
 				.SingleOrDefault();

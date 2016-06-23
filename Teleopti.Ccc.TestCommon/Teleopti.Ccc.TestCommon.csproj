@@ -149,6 +149,8 @@
     <Compile Include="BitArrayHelper.cs" />
     <Compile Include="CatalanCulture.cs" />
     <Compile Include="ConcurrencyRunner.cs" />
+    <Compile Include="ConfigurableAsyncEventPublisher.cs" />
+    <Compile Include="ConfigurableSyncEventPublisher.cs" />
     <Compile Include="Database.cs" />
     <Compile Include="FakeData\AnalyticsScenarioFactory.cs" />
     <Compile Include="FakeData\AnalyticsWorkloadFactory.cs" />

@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 {
 	public interface IAdherencePercentageReadModelReader
 	{
-		AdherencePercentageReadModel Read(DateOnly date, Guid personId);
+		AdherencePercentageReadModel ReadCurrent(Guid personId);
 	}
 
 	public interface IAdherencePercentageReadModelPersister

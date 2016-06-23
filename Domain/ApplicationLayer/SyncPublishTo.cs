@@ -3,6 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
+
 	public class SyncPublishTo : IEventPublisher
 	{
 		private readonly ResolveEventHandlers _resolver;

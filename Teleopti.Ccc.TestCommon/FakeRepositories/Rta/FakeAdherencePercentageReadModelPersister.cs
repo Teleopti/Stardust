@@ -9,24 +9,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
 	public class FakeAdherencePercentageReadModelPersister : IAdherencePercentageReadModelPersister, IAdherencePercentageReadModelReader
 	{
+		private readonly INow _now;
 		private IList<AdherencePercentageReadModel> _data = new List<AdherencePercentageReadModel>();
 
 		public AdherencePercentageReadModel PersistedModel { get { return PersistedModels.FirstOrDefault(); } }
 
 		public IEnumerable<AdherencePercentageReadModel> PersistedModels { get { return _data; }}
 
-		public FakeAdherencePercentageReadModelPersister()
+		public FakeAdherencePercentageReadModelPersister(INow now)
 		{
-		}
-
-		public FakeAdherencePercentageReadModelPersister(AdherencePercentageReadModel model)
-		{
-			_data.Add(model);
-		}
-		
-		public FakeAdherencePercentageReadModelPersister(IEnumerable<AdherencePercentageReadModel> models)
-		{
-			models.ForEach(x => _data.Add(x));
+			_now = now;
 		}
 
 		public void Has(AdherencePercentageReadModel adherencePercentageReadModel)
@@ -59,9 +51,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_data.Clear();
 		}
 
-		public AdherencePercentageReadModel Read(DateOnly date, Guid personId)
+		public AdherencePercentageReadModel ReadCurrent(Guid personId)
 		{
-			return Get(date, personId);
+			return Get(new DateOnly(_now.UtcDateTime()), personId);
 		}
 	}
 }

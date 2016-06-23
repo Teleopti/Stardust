@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		public AdherencePercentageViewModel Build(Guid personId)
 		{
-			var readModel = _adherencePercentageReadModelReader.Read(_date.ForPerson(personId), personId);
+			var readModel = _adherencePercentageReadModelReader.ReadCurrent(personId);
 			if (readModel == null)
 				return new AdherencePercentageViewModel();
 
