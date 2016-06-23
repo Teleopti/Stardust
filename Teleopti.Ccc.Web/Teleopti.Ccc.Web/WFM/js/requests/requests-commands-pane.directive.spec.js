@@ -11,7 +11,6 @@ describe('RequestsControllerTests', function () {
 
 		requestsDataService = new FakeRequestsDataService();
 		requestsNotificationService = new FakeRequestsNotificationService();
-		requestCommandParamsHolder = new FakeRequestCommandParamsHolder();
 		module(function ($provide) {
 
 			$provide.service('Toggle', function () {
@@ -31,16 +30,14 @@ describe('RequestsControllerTests', function () {
 			$provide.service('requestsNotificationService', function () {
 				return requestsNotificationService;
 			});
-			$provide.service('requestCommandParamsHolder', function () {
-				return requestCommandParamsHolder;
-			});
 		});
 	});
 
-	beforeEach(inject(function (_$rootScope_, _$controller_, _$compile_) {
+	beforeEach(inject(function (_$rootScope_, _$controller_, _$compile_, _requestCommandParamsHolder_) {
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
 		$controller = _$controller_;
+		requestCommandParamsHolder = _requestCommandParamsHolder_;
 	}));
 
 	it('processWaitlistedRequests command sunbmit scucess, should notify the result', function () {
@@ -61,7 +58,7 @@ describe('RequestsControllerTests', function () {
 		var test = setUpTarget();
 		requestsDataService.submitCommandIsASucess(true);
 		var requestIds = [{ id: 1 }, { id: 2 }];
-		requestCommandParamsHolder.setSelectedRequestsIds(requestIds);
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
 		var handleResult = {
 			Success: true,
 			AffectedRequestIds: [{ id: 1 }]
@@ -78,7 +75,7 @@ describe('RequestsControllerTests', function () {
 		var test = setUpTarget();
 		requestsDataService.submitCommandIsASucess(true);
 		var requestIds = [{ id: 1 }, { id: 2 }];
-		requestCommandParamsHolder.setSelectedRequestsIds(requestIds);
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
 		var handleResult = {
 			Success: false,
 			ErrorMessages: ['A request that is New cannot be Approved.']
@@ -94,7 +91,7 @@ describe('RequestsControllerTests', function () {
 		var test = setUpTarget();
 		requestsDataService.submitCommandIsASucess(true);
 		var requestIds = [{ id: 1 }, { id: 2 }];
-		requestCommandParamsHolder.setSelectedRequestsIds(requestIds);
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
 		var handleResult = {
 			Success: true,
 			AffectedRequestIds: [{ id: 1 }]
@@ -111,7 +108,7 @@ describe('RequestsControllerTests', function () {
 		var test = setUpTarget();
 		requestsDataService.submitCommandIsASucess(true);
 		var requestIds = [{ id: 1 }, { id: 2 }];
-		requestCommandParamsHolder.setSelectedRequestsIds(requestIds);
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
 		var handleResult = {
 			Success: false,
 			ErrorMessages: ['something is wrong with this deny']
@@ -127,7 +124,7 @@ describe('RequestsControllerTests', function () {
 		var test = setUpTarget();
 		requestsDataService.submitCommandIsASucess(true);
 		var requestIds = [{ id: 1 }, { id: 2 }];
-		requestCommandParamsHolder.setSelectedRequestsIds(requestIds);
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
 		var handleResult = {
 			Success: true,
 			AffectedRequestIds: [{ id: 1 }]
@@ -144,7 +141,7 @@ describe('RequestsControllerTests', function () {
 		var test = setUpTarget();
 		requestsDataService.submitCommandIsASucess(true);
 		var requestIds = [{ id: 1 }, { id: 2 }];
-		requestCommandParamsHolder.setSelectedRequestsIds(requestIds);
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
 		var handleResult = {
 			Success: false,
 			ErrorMessages: ['something is wrong with this cancel']
@@ -159,12 +156,19 @@ describe('RequestsControllerTests', function () {
 	it('submit any command is a fail, should notify the result', function () {
 		var test = setUpTarget();
 		var requestIds = [{ id: 1 }, { id: 2 }];
-		requestCommandParamsHolder.setSelectedRequestsIds(requestIds);
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
 		requestsDataService.submitCommandIsASucess(false);
 
 		test.requestCommandPaneScope.denyRequests();
 
 		expect(_notificationResult).toEqual('submit error');
+	});
+
+	it('should command enabled in shift trade tab', function() {
+		var test = setUpTarget(true);
+		var requestIds = [{ id: 1 }, { id: 2 }];
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds, true);
+		expect(test.requestCommandPaneScope.disableCommands()).toEqual(false);
 	});
 
 	function FakeRequestsNotificationService() {
@@ -224,17 +228,10 @@ describe('RequestsControllerTests', function () {
 		}
 	}
 
-	function FakeRequestCommandParamsHolder() {
-		var _selectedRequestsIds;
-		this.setSelectedRequestsIds = function (ids) {
-			_selectedRequestsIds = ids;
+	function setUpTarget(isShiftTradeViewActived) {
+		if (isShiftTradeViewActived == undefined) {
+			isShiftTradeViewActived = false;
 		}
-		this.getSelectedRequestsIds = function () {
-			return _selectedRequestsIds;
-		}
-	}
-
-	function setUpTarget() {
 		var scope = $rootScope.$new();
 		var target = $controller('RequestsCtrl', {
 			$scope: scope
@@ -248,6 +245,7 @@ describe('RequestsControllerTests', function () {
 			'after-command-success="onCommandSuccess(commandType, changedRequestsCount, requestsCount, commandId, waitlistPeriod) "' +
 			'on-error-messages="onErrorMessages(errorMessages) "' +
 			'after-command-error="onCommandError(error)"' +
+			'is-shift-trade-view-active="' + isShiftTradeViewActived + '"' +
 			'"></requests-commands-pane>')(targetScope);
 		targetScope.$digest();
 		return { targetElement: targetElement, requestCommandPaneScope: getRequestCommandPaneScope(targetElement) }

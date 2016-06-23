@@ -29,13 +29,15 @@
             <li class="wfm-btn wfm-btn-invis-primary"
                 ng-click="requestsCommandsPane.toggleCancelConfirmationModal()"
                 ng-show="requestsCommandsPane.cancelToggleIsEnabled()"
-                ng-class="{'wfm-btn-primary-disabled' : !requestsCommandsPane.canCancelRequests()}">
+                ng-class="{'wfm-btn-primary-disabled' : !requestsCommandsPane.canCancelRequests()}"
+				ng-if="!requestsCommandsPane.isShiftTradeViewActive">
                 <i class="mdi mdi-close"></i>
                 <label><span translate>Cancel</span></label>
             </li>
             <li class="wfm-btn wfm-btn-invis-primary"
                 ng-show="requestsCommandsPane.runWaitlistToggleIsEnabled()"
-                ng-click="requestsCommandsPane.toggleProcessWaitlistModal()">
+                ng-click="requestsCommandsPane.toggleProcessWaitlistModal()"
+				ng-if="!requestsCommandsPane.isShiftTradeViewActive">
                 <i class="mdi mdi-check"></i>
                 <label><span translate>ProcessWaitlist</span></label>
             </li>
