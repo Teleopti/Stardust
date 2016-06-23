@@ -7,7 +7,7 @@ IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[CheckReadMod
 DROP TABLE [CheckReadModel].[ScheduleProjectionReadOnly]
 
 IF EXISTS (SELECT * FROM sys.schemas WHERE name = N'CheckReadModel')
-EXEC sp_executesql N'DROP SCHEMA [CheckReadModel] AUTHORIZATION [dbo]'
+EXEC sp_executesql N'DROP SCHEMA [CheckReadModel]'
 GO
 
 IF NOT EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].[ScheduleProjectionReadOnly_check]') AND type in (N'U'))
