@@ -380,7 +380,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IntradayOptimizationFromWeb>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<PersistIntradayOptimizationResult>().As<ISynchronizeIntradayOptimizationResult>().SingleInstance();
 
-			builder.RegisterType<FillSchedulerStateHolderForResourceCalculation>().InstancePerLifetimeScope().ApplyAspects();
+			builder.RegisterType<LoaderForResourceCalculation>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<CalculateForReadModel>().InstancePerLifetimeScope().ApplyAspects();
 
 			// Analytics fact schedule updates

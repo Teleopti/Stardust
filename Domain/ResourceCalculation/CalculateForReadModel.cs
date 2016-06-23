@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Intraday;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Interfaces.Domain;
 
@@ -10,18 +9,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class CalculateForReadModel
 	{
-		private readonly FillSchedulerStateHolderForResourceCalculation _fillSchedulerStateHolderForResourceCalculation;
-		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
+		private readonly LoaderForResourceCalculation _loaderForResourceCalculation;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly IScheduleForecastSkillReadModelRepository _scheduleForecastSkillReadModelRepository;
 
 		public CalculateForReadModel(
-			FillSchedulerStateHolderForResourceCalculation fillSchedulerStateHolderForResourceCalculation,
-			Func<ISchedulerStateHolder> schedulerStateHolder,
+			LoaderForResourceCalculation loaderForResourceCalculation,
 			IResourceOptimizationHelper resourceOptimizationHelper, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository)
 		{
-			_fillSchedulerStateHolderForResourceCalculation = fillSchedulerStateHolderForResourceCalculation;
-			_schedulerStateHolder = schedulerStateHolder;
+			_loaderForResourceCalculation = loaderForResourceCalculation;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
 		}
@@ -29,33 +25,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		[LogTime]
 		public virtual IEnumerable<ResourcesDataModel> ResourceCalculatePeriod(DateOnlyPeriod publishedPeriod)
 		{
-			var stateHolder = _schedulerStateHolder();
 
-			_fillSchedulerStateHolderForResourceCalculation.PreFillInformation(stateHolder, publishedPeriod);
-
-	/* Ola - something like this!
-
-			//det finns tyvärr "implicita" beroende som t ex personer och vilka skills dom har
-			//i kod går det dock via scheman så logiskt sätt behöver man inte ladda personer/agenter (de lazy loadas)
-			//inbillar mig dock att det går fortare att börja allt med typ
-			//_personRep.LaddaSnubbarMedPErsonPerioder();
-
-			IScheduleDictionary schedules = loadit();
-			IEnumerable<ISkill> skills = loadit();
-			IDictionary<ISkill, IEnumerable<ISkill>> skillDays = loadit() //man får en dictionary när man laddar därför denna "märkliga" typ här
-			var resourceCalculateData = new ResourceCalculationData(schedules, skills, skillDays, true/false, true/false);
-			//ta bort allt kring fillschedulerstateholder och använd resourceCalculationData för "resCalcData" på rad ~69
-	*/
+			_loaderForResourceCalculation.PreFillInformation( publishedPeriod);
 
 			foreach (var day in publishedPeriod.DayCollection())
 			{
 				var period = new DateOnlyPeriod(day, day.AddDays(1));
-				_fillSchedulerStateHolderForResourceCalculation.Fill(stateHolder, period);
+				var resCalcData = _loaderForResourceCalculation.ResourceCalculationData(period);
+				DoCalculation(period, resCalcData);
 
-				DoCalculation(period);
-
-				var skillStaffPeriodDictionary =
-					stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary;
+				var skillStaffPeriodDictionary = resCalcData.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary;
 				var model = CreateReadModel(skillStaffPeriodDictionary, day.Date);
 				_scheduleForecastSkillReadModelRepository.Persist(model,day);
 			}
@@ -64,9 +43,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		}
 
 	   [LogTime]
-		public virtual void DoCalculation(DateOnlyPeriod period)
+		public virtual void DoCalculation(DateOnlyPeriod period, IResourceCalculationData resCalcData)
 		{
-			var resCalcData = _schedulerStateHolder().SchedulingResultState.ToResourceOptimizationData(true, true);
 			foreach (var dateOnly in period.DayCollection())
 			{
 				_resourceOptimizationHelper.ResourceCalculate(dateOnly, resCalcData);
@@ -79,7 +57,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			var items  = new List<ResourcesDataModel>(); 
 
-			//just return first skill for now
 			if (skillSkillStaffPeriodExtendedDictionary.Keys.Count > 0)
 			{
 				foreach (var skill in skillSkillStaffPeriodExtendedDictionary.Keys)
@@ -95,7 +72,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 						{
 							StartDateTime = skillStaffPeriod.Period.StartDateTime,
 							EndDateTime = skillStaffPeriod.Period.EndDateTime,
-							Forecast = skillStaffPeriod.ForecastedDistributedDemandWithShrinkage,
+							Forecast = skillStaffPeriod.FStaff,
 							StaffingLevel = skillStaffPeriod.CalculatedResource
 						});
 					}

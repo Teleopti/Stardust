@@ -397,7 +397,7 @@
     <Compile Include="Scheduling\TeamBlock\ReturnPeriodBasedOnDayBlockFinder.cs" />
     <Compile Include="Scheduling\TeamBlock\SchedulePeriodBlockFinder.cs" />
     <Compile Include="Scheduling\TeamBlock\SingleDayBlockFinder.cs" />
-    <Compile Include="Scheduling\WebLegacy\FillSchedulerStateHolderForResourceCalculation.cs" />
+    <Compile Include="Scheduling\WebLegacy\LoaderForResourceCalculation.cs" />
     <Compile Include="Security\Principal\CurrentAuthorization.cs" />
     <Compile Include="Security\Principal\IUpdatedBy.cs" />
     <Compile Include="Security\Principal\IUpdatedByScope.cs" />
