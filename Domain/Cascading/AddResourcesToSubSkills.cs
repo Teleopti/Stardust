@@ -21,22 +21,22 @@ namespace Teleopti.Ccc.Domain.Cascading
 				return 0;
 			var shovelResourcesState = new ShovelResourcesState(skillGroup.Resources, primarySkillOverstaff);
 
-			foreach (var subSkill in skillGroup.SubSkills)
+			foreach (var subSkillsWithSameIndex in skillGroup.SubSkillsWithSameIndex)
 			{
-				var totalUnderstaffingInSkillGroup = subSkill
+				var totalUnderstaffingForSkillsWithSameIndex = subSkillsWithSameIndex
 					.Select(skillToMoveTo => skillStaffPeriodHolder.SkillStaffPeriodOrDefault(skillToMoveTo, interval, 0).AbsoluteDifference)
 					.Where(absoluteDifference => absoluteDifference.IsUnderstaffed())
 					.Sum(absoluteDifference => -absoluteDifference);
 
 				var remainingOverstaff = shovelResourcesState.RemaingOverstaff();
-				foreach (var skillToMoveTo in subSkill)
+				foreach (var skillToMoveTo in subSkillsWithSameIndex)
 				{
 					var skillStaffPeriodTo = skillStaffPeriodHolder.SkillStaffPeriodOrDefault(skillToMoveTo, interval, 0);
 					var skillToMoveToAbsoluteDifference = skillStaffPeriodTo.AbsoluteDifference;
 					if (!skillToMoveToAbsoluteDifference.IsUnderstaffed())
 						continue;
 
-					var proportionalResourcesToMove = -skillToMoveToAbsoluteDifference / totalUnderstaffingInSkillGroup * remainingOverstaff;
+					var proportionalResourcesToMove = -skillToMoveToAbsoluteDifference / totalUnderstaffingForSkillsWithSameIndex * remainingOverstaff;
 					var resourceToMove = Min(-skillToMoveToAbsoluteDifference, proportionalResourcesToMove);
 
 					shovelResourcesState.AddResourcesTo(skillStaffPeriodTo, resourceToMove);

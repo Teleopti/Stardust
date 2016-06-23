@@ -208,7 +208,7 @@
     <Compile Include="ApplicationLayer\Rta\ViewModels\SkillViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\SkillDay\AnalyticsForecastWorkloadUpdater.cs" />
     <Compile Include="Cascading\AddResourcesToSubSkills.cs" />
-    <Compile Include="Cascading\CascadingSubSkills.cs" />
+    <Compile Include="Cascading\SubSkillsWithSameIndex.cs" />
     <Compile Include="Cascading\CascadingSkills.cs" />
     <Compile Include="Cascading\PrimarySkillOverstaff.cs" />
     <Compile Include="Cascading\ReducePrimarySkillResources.cs" />

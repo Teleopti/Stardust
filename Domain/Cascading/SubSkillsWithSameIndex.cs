@@ -4,11 +4,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Cascading
 {
-	public class CascadingSubSkills : IEnumerable<ISkill>
+	public class SubSkillsWithSameIndex : IEnumerable<ISkill>
 	{
 		private readonly IList<ISkill> _subSkills;
 
-		public CascadingSubSkills()
+		public SubSkillsWithSameIndex()
 		{
 			_subSkills = new List<ISkill>();
 		}

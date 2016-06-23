@@ -6,17 +6,17 @@ namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class CascadingSkillGroup
 	{
-		public CascadingSkillGroup(IEnumerable<ISkill> primarySkills, IEnumerable<CascadingSubSkills> subSkills, double resources)
+		public CascadingSkillGroup(IEnumerable<ISkill> primarySkills, IEnumerable<SubSkillsWithSameIndex> subSkillsWithSameIndex, double resources)
 		{
 			PrimarySkills = primarySkills;
-			SubSkills = subSkills;
+			SubSkillsWithSameIndex = subSkillsWithSameIndex;
 			Resources = resources;
 			PrimarySkillsCascadingIndex = primarySkills.First().CascadingIndex.Value;
 		}
 
 		public int PrimarySkillsCascadingIndex { get; }
 		public IEnumerable<ISkill> PrimarySkills { get; }
-		public IEnumerable<CascadingSubSkills> SubSkills { get; }
+		public IEnumerable<SubSkillsWithSameIndex> SubSkillsWithSameIndex { get; }
 		public double Resources { get; }
 	}
 }
