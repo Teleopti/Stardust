@@ -98,7 +98,7 @@ Wfm_Requests_Run_waitlist_38071 = true
 Wfm_Requests_ShiftTrade_37751 = RC
 Wfm_Requests_ShiftTrade_More_Relevant_Information_38492 = RC
 Wfm_Requests_PrepareForRelease_38771 = true
-Wfm_Requests_ApproveDeny_ShiftTrade_38494 = DEV
+Wfm_Requests_ApproveDeny_ShiftTrade_38494 = RC
 
 Wfm_Intraday_38074 = true
 
