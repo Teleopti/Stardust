@@ -45,4 +45,4 @@ Scenario: Monitor agents by skills
 	And 'John King' sets his phone state to 'LoggedOut'
 	When I view real time adherence for agents with skills 'Sales'
 	Then I should see agent status for 'Pierre Baldi'
-	And I should not see agent 'Ashley Andeen'
+	And I should not see agent 'John King'
