@@ -37,6 +37,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 
 			people.ForEach(person =>
 			{
+				var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
+				new ScheduleDictionaryLoadOptions(false, false),
+				dateOnlyPeriod.ToDateTimePeriod(TimeZoneInfo.Utc),
+				scenario);
 				dateOnlyPeriod.DayCollection().ForEach(day =>
 				{
 					var readModelLayers =
@@ -44,7 +48,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 							.ToList()
 							.OrderBy(l => l.StartDateTime);
 
-					var mappedLayers = BuildReadModel(person, day);
+					var mappedLayers = BuildReadModel(person, schedules.SchedulesForDay(day).SingleOrDefault());
 
 					var isInValid = mappedLayers.Count() != readModelLayers.Count()
 									|| mappedLayers.Zip(readModelLayers, IsReadModelDifferent).Any(x => x);
@@ -89,7 +93,33 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 				{
 					PersonId = person.Id.Value,
 					ScenarioId = scenario.Id.Value,
-					BelongsToDate = date,
+					BelongsToDate = scheduleDay.DateOnlyAsPeriod.DateOnly,
+					PayloadId = layer.PayloadId,
+					WorkTime = layer.WorkTime,
+					ContractTime = layer.ContractTime,
+					StartDateTime = layer.StartDateTime,
+					EndDateTime = layer.EndDateTime,
+					Name = layer.Name,
+					ShortName = layer.ShortName,
+					DisplayColor = layer.DisplayColor
+				});
+			}
+
+			return new List<ScheduleProjectionReadOnlyModel>();
+		}
+		public IEnumerable<ScheduleProjectionReadOnlyModel> BuildReadModel(IPerson person, IScheduleDay scheduleDay)
+		{
+			var scenario = _currentScenario.Current();
+			if (scheduleDay != null)
+			{
+				var projection = scheduleDay.ProjectionService().CreateProjection();
+				var layers = _builder.BuildProjectionChangedEventLayers(projection);
+
+				return layers.Select(layer => new ScheduleProjectionReadOnlyModel
+				{
+					PersonId = person.Id.GetValueOrDefault(),
+					ScenarioId = scenario.Id.GetValueOrDefault(),
+					BelongsToDate = scheduleDay.DateOnlyAsPeriod.DateOnly,
 					PayloadId = layer.PayloadId,
 					WorkTime = layer.WorkTime,
 					ContractTime = layer.ContractTime,
