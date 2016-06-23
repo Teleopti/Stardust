@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 			new DefaultPersonThatCreatesData(),
 			new DefaultLicense(),
 			new DefaultBusinessUnit(),
-			new DefaultScenario(),
 			new DefaultRaptorApplicationFunctions(),
 			new DefaultMatrixApplicationFunctions()
 		};
@@ -49,6 +48,15 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 				}
 			});
 			setups.ForEach(dataFactory.Apply);
+		}
+
+		public void CreateDefaultScenario()
+		{
+			using (var uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
+				new DefaultScenario().Apply(new ThisUnitOfWork(uow));
+				uow.PersistAll();
+			}
 		}
 	}
 }
