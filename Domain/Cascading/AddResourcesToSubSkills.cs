@@ -7,19 +7,10 @@ namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class AddResourcesToSubSkills
 	{
-		private readonly PrimarySkillOverstaff _primarySkillOverstaff;
-
-		public AddResourcesToSubSkills(PrimarySkillOverstaff primarySkillOverstaff)
+		public void Execute(ShovelResourcesState shovelResourcesState, ISkillStaffPeriodHolder skillStaffPeriodHolder, CascadingSkillGroup skillGroup, DateTimePeriod interval)
 		{
-			_primarySkillOverstaff = primarySkillOverstaff;
-		}
-
-		public double Execute(ISkillStaffPeriodHolder skillStaffPeriodHolder, CascadingSkillGroup skillGroup, DateTimePeriod interval)
-		{
-			var primarySkillOverstaff = _primarySkillOverstaff.Sum(skillStaffPeriodHolder, skillGroup, interval);
-			if (!primarySkillOverstaff.IsOverstaffed())
-				return 0;
-			var shovelResourcesState = new ShovelResourcesState(skillGroup.Resources, primarySkillOverstaff);
+			if (shovelResourcesState.NoMoreResourcesToMove())
+				return;
 
 			foreach (var subSkillsWithSameIndex in skillGroup.SubSkillsWithSameIndex)
 			{
@@ -41,10 +32,9 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 					shovelResourcesState.AddResourcesTo(skillStaffPeriodTo, resourceToMove);
 					if (shovelResourcesState.NoMoreResourcesToMove())
-						return shovelResourcesState.ResourcesMoved;
+						return;
 				}
 			}
-			return shovelResourcesState.ResourcesMoved;
 		}
 	}
 }

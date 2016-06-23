@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 		public bool NoMoreResourcesToMove()
 		{
-			return _remainingPrimarySkillOverstaff.IsZero() || _remainingResourcesInSkillGroup.IsZero();
+			return !_remainingPrimarySkillOverstaff.IsOverstaffed() || _remainingResourcesInSkillGroup.IsZero();
 		}
 	}
 }

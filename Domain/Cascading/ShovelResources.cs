@@ -12,16 +12,19 @@ namespace Teleopti.Ccc.Domain.Cascading
 		private readonly AddResourcesToSubSkills _addResourcesToSubSkills;
 		private readonly ReducePrimarySkillResources _reducePrimarySkillResources;
 		private readonly SkillGroupPerActivityProvider _skillGroupPerActivityProvider;
+		private readonly PrimarySkillOverstaff _primarySkillOverstaff;
 		private readonly ITimeZoneGuard _timeZoneGuard;
 
 		public ShovelResources(AddResourcesToSubSkills addResourcesToSubSkills,
 			ReducePrimarySkillResources reducePrimarySkillResources,
 			SkillGroupPerActivityProvider skillGroupPerActivityProvider,
+			PrimarySkillOverstaff primarySkillOverstaff,
 			ITimeZoneGuard timeZoneGuard)
 		{
 			_addResourcesToSubSkills = addResourcesToSubSkills;
 			_reducePrimarySkillResources = reducePrimarySkillResources;
 			_skillGroupPerActivityProvider = skillGroupPerActivityProvider;
+			_primarySkillOverstaff = primarySkillOverstaff;
 			_timeZoneGuard = timeZoneGuard;
 		}
 
@@ -46,8 +49,10 @@ namespace Teleopti.Ccc.Domain.Cascading
 							{
 								foreach (var skillGroup in _skillGroupPerActivityProvider.FetchOrdered(cascadingSkills, activity, interval))
 								{
-									var resourcesMoved = _addResourcesToSubSkills.Execute(skillStaffPeriodHolder, skillGroup, interval);
-									_reducePrimarySkillResources.Execute(skillStaffPeriodHolder, skillGroup.PrimarySkills, interval, resourcesMoved);
+									var primarySkillOverstaff = _primarySkillOverstaff.Sum(skillStaffPeriodHolder, skillGroup, interval);
+									var shovelResourcesState = new ShovelResourcesState(skillGroup.Resources, primarySkillOverstaff);
+									_addResourcesToSubSkills.Execute(shovelResourcesState, skillStaffPeriodHolder, skillGroup, interval);
+									_reducePrimarySkillResources.Execute(skillStaffPeriodHolder, skillGroup.PrimarySkills, interval, shovelResourcesState.ResourcesMoved);
 								}
 							}
 						}
