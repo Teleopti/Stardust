@@ -160,13 +160,11 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 
 		public WorkerNode WorkerNode(Guid nodeId)
 		{
-			const string selectCommandText = @"SELECT w.Id, Url, Heartbeat, Alive, CASE 
-							WHEN j.Ended IS NOT NULL AND w.Alive = 1
-							THEN CONVERT(bit,1) ELSE CONVERT(bit,0) END AS Running  
-							FROM [Stardust].WorkerNode w 
-							LEFT JOIN [Stardust].[job] j ON w.Url=j.SentToWorkerNodeUri
-							WHERE w.Id = @Id";
-
+			const string selectCommandText = @"SELECT DISTINCT Id, Url, Heartbeat, Alive, Running
+											FROM (SELECT Id, Url, Heartbeat, Alive, CASE WHEN Url IN 
+											(SELECT SentToWorkerNodeUri FROM Stardust.Job WHERE Ended IS NULL) THEN CONVERT(bit,1) ELSE CONVERT(bit,0) END AS Running 
+											FROM [Stardust].WorkerNode, [Stardust].job) w
+											WHERE w.Id = @Id";
 			WorkerNode node = null;
 			using (var connection = new SqlConnection(_connectionString))
 			{
@@ -194,12 +192,14 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			}
 			return node;
 		}
-
+		
 		public List<WorkerNode> GetAllWorkerNodes()
 		{
 			var listToReturn = new List<WorkerNode>();
-			var commandText = "SELECT Id, Url, Heartbeat, Alive " +
-							  "FROM [Stardust].[WorkerNode]";
+			var commandText = @"SELECT DISTINCT Id, Url, Heartbeat, Alive, Running
+							FROM (SELECT Id, Url, Heartbeat, Alive, CASE WHEN Url IN 
+							(SELECT SentToWorkerNodeUri FROM Stardust.Job WHERE Ended IS NULL) THEN CONVERT(bit,1) ELSE CONVERT(bit,0) END AS Running 
+							FROM [Stardust].WorkerNode, [Stardust].job) w";
 			using (var connection = new SqlConnection(_connectionString))
 			{
 				connection.OpenWithRetry(_retryPolicy);
@@ -213,6 +213,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 							var ordinalPositionForIdField = reader.GetOrdinal("Id");
 							var ordinalPositionForUrlField = reader.GetOrdinal("Url");
 							var ordinalPositionForAliveField = reader.GetOrdinal("Alive");
+							var ordinalPositionForRunningField = reader.GetOrdinal("Running");
 							var ordinalPositionForHeartbeatField = reader.GetOrdinal("Heartbeat");
 
 							while (reader.Read())
@@ -222,7 +223,8 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 									Id = (Guid) reader.GetValue(ordinalPositionForIdField),
 									Url = new Uri((string) reader.GetValue(ordinalPositionForUrlField)),
 									Alive = (bool) reader.GetValue(ordinalPositionForAliveField),
-									Heartbeat = (DateTime) reader.GetValue(ordinalPositionForHeartbeatField)
+									Heartbeat = (DateTime) reader.GetValue(ordinalPositionForHeartbeatField),
+									Running = (bool)reader.GetValue(ordinalPositionForRunningField),
 								};
 								listToReturn.Add(workerNode);
 							}
