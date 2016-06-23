@@ -168,33 +168,31 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			notifyPropertyChanged("IsApproved");
 		}
 
-		public virtual void Deny(IPerson denyPerson, string denyReasonTextResourceKey, IPersonRequestCheckAuthorization authorization, bool isAutoDeny = false, bool alreadyAbsence = false)
+		public virtual void Deny(IPerson denyPerson, string denyReasonTextResourceKey,
+			IPersonRequestCheckAuthorization authorization, bool isAutoDeny = false, bool alreadyAbsence = false)
 		{
 			authorization.VerifyEditRequestPermission(this);
 			_alreadyAbsent = alreadyAbsence;
-			if (CanDeny(isAutoDeny))
+			if (!CanDeny(isAutoDeny))
 			{
-				RequestState.Deny();
+				throw new InvalidRequestStateTransitionException();
 			}
+
+			RequestState.Deny();
 
 			var request = getRequest();
-			if (request != null)
-			{
-				request.Deny(denyPerson);
-			}
+			request?.Deny(denyPerson);
 
 			_denyReason = denyReasonTextResourceKey ?? string.Empty;
-			
 			notifyOnStatusChange();
 		}
-
 
 		public virtual void Cancel(IPersonRequestCheckAuthorization authorization)
 		{
 			if (!authorization.HasCancelRequestPermission (this))
 			{
 				throw new PermissionException (Resources.InsufficientPermission);
-			};
+			}
 
 			var request = getRequest();
 			var absenceRequest = request as AbsenceRequest;
@@ -209,11 +207,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			notifyOnStatusChange();
 		}
 
-
 		public virtual bool CanDeny(bool isAutoDeny)
 		{
-			return (!isAutoDeny && IsWaitlisted) || (!IsDenied);
-
+			return (!isAutoDeny && IsWaitlisted) || !IsDenied;
 		}
 
 		public virtual bool IsEditable
@@ -666,7 +662,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 					case PersonRequestStatus.Cancelled:
 						return new cancelledPersonRequest(personRequest);
 				}
-				throw new ArgumentOutOfRangeException("requestStatusId", "The request status id is invalid");
+				throw new ArgumentOutOfRangeException(nameof(requestStatusId), @"The request status id is invalid");
 			}
 		}
 

@@ -10,7 +10,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IPersonRequestCheckAuthorization _authorization;
 
-		public DenyRequestCommandHandler(IPersonRequestRepository personRequestRepository, IPersonRequestCheckAuthorization authorization)
+		public DenyRequestCommandHandler(IPersonRequestRepository personRequestRepository,
+			IPersonRequestCheckAuthorization authorization)
 		{
 			_personRequestRepository = personRequestRepository;
 			_authorization = authorization;
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			if (personRequest != null && denyRequest(personRequest, command))
 			{
 				command.AffectedRequestId = command.PersonRequestId;
-			}			
+			}
 		}
 
 		private bool denyRequest(IPersonRequest personRequest, DenyRequestCommand command)
@@ -36,11 +37,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 			catch (InvalidRequestStateTransitionException)
 			{
-				command.ErrorMessages.Add (string.Format(UserTexts.Resources.RequestInvalidStateTransition, personRequest.StatusText, UserTexts.Resources.RequestStatusDenied));
+				command.ErrorMessages.Add(string.Format(UserTexts.Resources.RequestInvalidStateTransition, personRequest.StatusText,
+					UserTexts.Resources.RequestStatusDenied));
 			}
 
 			return false;
-
 		}
 	}
 }
