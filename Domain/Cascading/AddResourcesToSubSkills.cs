@@ -21,15 +21,15 @@ namespace Teleopti.Ccc.Domain.Cascading
 				return 0;
 			var shovelResourcesState = new ShovelResourcesState(skillGroup.Resources, primarySkillOverstaff);
 
-			foreach (var cascadingSkillGroupItem in skillGroup.CascadingSkillGroupItems)
+			foreach (var subSkill in skillGroup.SubSkills)
 			{
-				var totalUnderstaffingInSkillGroup = cascadingSkillGroupItem.SubSkills
+				var totalUnderstaffingInSkillGroup = subSkill
 					.Select(skillToMoveTo => skillStaffPeriodHolder.SkillStaffPeriodOrDefault(skillToMoveTo, interval, 0).AbsoluteDifference)
 					.Where(absoluteDifference => absoluteDifference.IsUnderstaffed())
 					.Sum(absoluteDifference => -absoluteDifference);
 
 				var remainingOverstaff = shovelResourcesState.RemaingOverstaff();
-				foreach (var skillToMoveTo in cascadingSkillGroupItem.SubSkills)
+				foreach (var skillToMoveTo in subSkill)
 				{
 					var skillStaffPeriodTo = skillStaffPeriodHolder.SkillStaffPeriodOrDefault(skillToMoveTo, interval, 0);
 					var skillToMoveToAbsoluteDifference = skillStaffPeriodTo.AbsoluteDifference;

@@ -12,15 +12,15 @@ namespace Teleopti.Ccc.Domain.Cascading
 			{
 				return primaryDiff;
 			}
-			var firstSkills = first.CascadingSkillGroupItems.ToArray();
-			var secondSkills = second.CascadingSkillGroupItems.ToArray();
-			for (var i = 0; i < firstSkills.Length; i++)
+			var firstSubSkill = first.SubSkills.ToArray();
+			var secondSubSkill = second.SubSkills.ToArray();
+			for (var i = 0; i < firstSubSkill.Length; i++)
 			{
-				if (i > secondSkills.Length - 1)
+				if (i > secondSubSkill.Length - 1)
 				{
 					return 0;
 				}
-				var subSkillDiff = firstSkills[i].CascadingIndex - secondSkills[i].CascadingIndex;
+				var subSkillDiff = firstSubSkill[i].CascadingIndex - secondSubSkill[i].CascadingIndex;
 				if (subSkillDiff != 0)
 				{
 					return subSkillDiff;

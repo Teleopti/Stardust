@@ -20,22 +20,22 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 				var lowestCascadingIndex = cascadingSkillsInSkillGroup.Min(x => x.CascadingIndex.Value);
 				var primarySkills = cascadingSkillsInSkillGroup.Where(x => x.CascadingIndex.Value==lowestCascadingIndex);
-				var cascadingSkillGroupItems = new List<CascadingSkillGroupItem>();
+				var cascadingSubSkills = new List<CascadingSubSkills>();
 				foreach (var skillInSameChainAsPrimarySkill in cascadingSkillsInSkillGroup.Where(x => !primarySkills.Contains(x)))
 				{
-					var last = cascadingSkillGroupItems.LastOrDefault();
+					var last = cascadingSubSkills.LastOrDefault();
 					if (last == null || !skillInSameChainAsPrimarySkill.CascadingIndex.Value.Equals(last.CascadingIndex))
 					{
-						var cascadingSkillGroupItem = new CascadingSkillGroupItem();
+						var cascadingSkillGroupItem = new CascadingSubSkills();
 						cascadingSkillGroupItem.AddSubSkill(skillInSameChainAsPrimarySkill);
-						cascadingSkillGroupItems.Add(cascadingSkillGroupItem);
+						cascadingSubSkills.Add(cascadingSkillGroupItem);
 					}
 					else
 					{
 						last.AddSubSkill(skillInSameChainAsPrimarySkill);
 					}
 				}
-				ret.Add(new CascadingSkillGroup(primarySkills, cascadingSkillGroupItems, skillGroup.Resource));
+				ret.Add(new CascadingSkillGroup(primarySkills, cascadingSubSkills, skillGroup.Resource));
 			}
 			ret.Sort(new CascadingSkillGroupSorter());
 			return ret;
