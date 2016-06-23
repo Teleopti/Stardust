@@ -16,11 +16,10 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 		public double Execute(ISkillStaffPeriodHolder skillStaffPeriodHolder, CascadingSkillGroup skillGroup, DateTimePeriod interval)
 		{
-			var resourcesMoved = 0d;
-			var remainingResourcesInGroup = skillGroup.Resources;
-			var remainingPrimarySkillOverstaff = _primarySkillOverstaff.Sum(skillStaffPeriodHolder, skillGroup, interval);
-			if (!remainingPrimarySkillOverstaff.IsOverstaffed())
+			var primarySkillOverstaff = _primarySkillOverstaff.Sum(skillStaffPeriodHolder, skillGroup, interval);
+			if (!primarySkillOverstaff.IsOverstaffed())
 				return 0;
+			var shovelResourcesState = new ShovelResourcesState(skillGroup.Resources, primarySkillOverstaff);
 
 			foreach (var cascadingSkillGroupItem in skillGroup.CascadingSkillGroupItems)
 			{
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 					.Where(absoluteDifference => absoluteDifference.IsUnderstaffed())
 					.Sum(absoluteDifference => -absoluteDifference);
 
-				var remainingOverstaff = Min(remainingPrimarySkillOverstaff, remainingResourcesInGroup);
+				var remainingOverstaff = shovelResourcesState.RemaingOverstaff();
 				foreach (var skillToMoveTo in cascadingSkillGroupItem.SubSkills)
 				{
 					var skillStaffPeriodTo = skillStaffPeriodHolder.SkillStaffPeriodOrDefault(skillToMoveTo, interval, 0);
@@ -40,15 +39,12 @@ namespace Teleopti.Ccc.Domain.Cascading
 					var proportionalResourcesToMove = -skillToMoveToAbsoluteDifference / totalUnderstaffingInSkillGroup * remainingOverstaff;
 					var resourceToMove = Min(-skillToMoveToAbsoluteDifference, proportionalResourcesToMove);
 
-					skillStaffPeriodTo.AddResources(resourceToMove);
-					remainingResourcesInGroup -= resourceToMove;
-					remainingPrimarySkillOverstaff -= resourceToMove;
-					resourcesMoved += resourceToMove;
-					if (remainingPrimarySkillOverstaff.IsZero() || remainingResourcesInGroup.IsZero())
-						return resourcesMoved;
+					shovelResourcesState.AddResourcesTo(skillStaffPeriodTo, resourceToMove);
+					if (shovelResourcesState.NoMoreResourcesToMove())
+						return shovelResourcesState.ResourcesMoved;
 				}
 			}
-			return resourcesMoved;
+			return shovelResourcesState.ResourcesMoved;
 		}
 	}
 }

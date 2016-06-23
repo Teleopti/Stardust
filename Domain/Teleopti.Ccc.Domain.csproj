@@ -212,6 +212,7 @@
     <Compile Include="Cascading\CascadingSkills.cs" />
     <Compile Include="Cascading\PrimarySkillOverstaff.cs" />
     <Compile Include="Cascading\ReducePrimarySkillResources.cs" />
+    <Compile Include="Cascading\ShovelResourcesState.cs" />
     <Compile Include="Exceptions\BusinessUnitMissingInAnalyticsException.cs" />
     <Compile Include="Exceptions\DataMissingInAnalyticsException.cs" />
     <Compile Include="Exceptions\DateMissingInAnalyticsException.cs" />
