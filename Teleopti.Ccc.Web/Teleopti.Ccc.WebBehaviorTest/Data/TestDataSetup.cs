@@ -33,8 +33,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 			SystemSetup.DefaultDataCreator.Create();
 			SystemSetup.DefaultAnalyticsDataCreator.OneTimeSetup();
-			ClearAnalyticsData();
-			SetupDefaultScenario();
 
 			DataSourceHelper.BackupApplicationDatabase(SystemSetup.DefaultDataCreator.HashValue);			
 		}

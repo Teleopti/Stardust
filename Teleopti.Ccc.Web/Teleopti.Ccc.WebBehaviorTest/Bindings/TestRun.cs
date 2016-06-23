@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 			TestDataSetup.RestoreCcc7Data();
 			TestDataSetup.ClearAnalyticsData();
+			TestDataSetup.SetupDefaultScenario();
 
 			TestControllerMethods.ClearConnections();
 
@@ -82,8 +83,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		private static void handleScenarioException()
 		{
 			if (ScenarioContext.Current.TestError == null) return;
-			Console.WriteLine("\r\nTest Scenario \"{0}\" failed, please check the error message.",
-				ScenarioContext.Current.ScenarioInfo.Title);
+			Console.WriteLine($"\r\nTest Scenario \"{ScenarioContext.Current.ScenarioInfo.Title}\" failed, please check the error message.");
 		}
 	}
 }
