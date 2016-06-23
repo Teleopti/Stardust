@@ -38,12 +38,9 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
             }
         }
 
-        public IPerson Parent
-        {
-            get { return (IPerson)ContainedEntity.Root(); }
-        }
+        public IPerson Parent => (IPerson)ContainedEntity.Root();
 
-        /// <summary>
+	    /// <summary>
         /// Gets or sets the current person contract.
         /// </summary>
         /// <value>The current person contract.</value>
@@ -70,17 +67,11 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         {
             get
             {
-                if (ContainedEntity.PersonContract != null && ContainedEntity.PersonContract.PartTimePercentage != null)
-                {
-                    return ContainedEntity.PersonContract.PartTimePercentage;
-                }
-                return null;
+	            return ContainedEntity.PersonContract?.PartTimePercentage;
             }
             set
             {
-                if (ContainedEntity.PersonContract != null && 
-                    ContainedEntity.PersonContract.PartTimePercentage != null && 
-                    !ContainedEntity.PersonContract.PartTimePercentage.Equals(value))
+                if (ContainedEntity.PersonContract?.PartTimePercentage != null && !ContainedEntity.PersonContract.PartTimePercentage.Equals(value))
                 {
                     ContainedEntity.PersonContract.PartTimePercentage = value;
                 }
@@ -95,17 +86,11 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         {
             get
             {
-                if (ContainedEntity.PersonContract != null && ContainedEntity.PersonContract.Contract != null)
-                {
-                    return ContainedEntity.PersonContract.Contract;
-                }
-                return null;
+	            return ContainedEntity.PersonContract?.Contract;
             }
             set
             {
-                if (ContainedEntity.PersonContract != null && 
-                    ContainedEntity.PersonContract.Contract != null &&
-                    !ContainedEntity.PersonContract.Contract.Equals(value))
+                if (ContainedEntity.PersonContract?.Contract != null && !ContainedEntity.PersonContract.Contract.Equals(value))
                 {
                     ContainedEntity.PersonContract.Contract = value;
                 }
@@ -120,17 +105,11 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         {
             get
             {
-                if (ContainedEntity.PersonContract != null && ContainedEntity.PersonContract.ContractSchedule != null)
-                {
-                    return ContainedEntity.PersonContract.ContractSchedule;
-                }
-                return null;
+	            return ContainedEntity.PersonContract?.ContractSchedule;
             }
             set
             {
-                if (ContainedEntity.PersonContract != null && 
-                    ContainedEntity.PersonContract.ContractSchedule != null &&
-                    !ContainedEntity.PersonContract.ContractSchedule.Equals(value))
+                if (ContainedEntity.PersonContract?.ContractSchedule != null && !ContainedEntity.PersonContract.ContractSchedule.Equals(value))
                 {
                     ContainedEntity.PersonContract.ContractSchedule = value;
                 }
@@ -185,26 +164,22 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         /// <returns></returns>
         private string GetPersonSkills()
         {
-            if (ContainedEntity != null)
-            {
-                StringBuilder personSkillString = new StringBuilder();
+	        if (ContainedEntity == null) return string.Empty;
+	        var personSkillString = new StringBuilder();
 
-                if (ContainedEntity.PersonSkillCollection != null)
-                {
-                    IEnumerable<IPersonSkill> personSkillCollection = ContainedEntity.PersonSkillCollection.OrderBy(s => s.Skill.Name);
+	        if (ContainedEntity.PersonSkillCollection != null)
+	        {
+		        IEnumerable<IPersonSkill> personSkillCollection = ContainedEntity.PersonSkillCollection.OrderBy(s => s.Skill.Name);
 
-                    foreach (IPersonSkill personSkill in personSkillCollection)
-                    {
-                        if (personSkillString.Length>0)
-                            personSkillString.Append(", ");
+		        foreach (var personSkill in personSkillCollection)
+		        {
+			        if (personSkillString.Length>0)
+				        personSkillString.Append(", ");
 
-                        personSkillString.Append(personSkill.Skill.Name);
-                    }
-                }
-                return personSkillString.ToString();
-            }
-
-            return string.Empty;
+			        personSkillString.Append(personSkill.Skill.Name);
+		        }
+	        }
+	        return personSkillString.ToString();
         }
 
         /// <summary>
@@ -228,15 +203,9 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         /// Gets a value indicating whether this instance can gray.
         /// </summary>
         /// <value><c>true</c> if this instance can gray; otherwise, <c>false</c>.</value>
-        public bool CanGray
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool CanGray => false;
 
-        /// <summary>
+	    /// <summary>
         /// Gets or sets the person external log on names.
         /// </summary>
         /// <value>The person external log on names.</value>
@@ -244,15 +213,13 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         {
             get
             {
-                if (ContainedEntity == null) return string.Empty;
-
-                return _externalLogOnParser.GetExternalLogOnsDisplayText(ContainedEntity.ExternalLogOnCollection);
+	            return ContainedEntity == null ? string.Empty : _externalLogOnParser.GetExternalLogOnsDisplayText(ContainedEntity.ExternalLogOnCollection);
             }
-            set
+		    set
             {
                 if (ContainedEntity != null)
                 {
-						 Parent.ResetExternalLogOn(ContainedEntity);
+					Parent.ResetExternalLogOn(ContainedEntity);
                     var selectedExternalLogOns = _externalLogOnParser.ParsePersonExternalLogOn(value);
                     foreach (var selectedExternalLogOn in selectedExternalLogOns)
                     {
@@ -295,12 +262,9 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         /// Gets the period.
         /// </summary>
         /// <value>The period.</value>
-        public IPersonPeriod Period
-        {
-            get { return ContainedEntity; }
-        }
+        public IPersonPeriod Period => ContainedEntity;
 
-        /// <summary>
+	    /// <summary>
         /// Gets or sets the site team.
         /// </summary>
         /// <value>The site team.</value>

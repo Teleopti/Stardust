@@ -35,10 +35,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
 
         public DropDownColumnForPeriodGrids(string bindingProperty, string headerText,
                                             IEnumerable<TItems> comboItems,
-                                            string displayMember, Type baseClass)
+                                            string displayMember, Type baseClass, bool allowNullValue=true)
             : this(bindingProperty, headerText, comboItems, displayMember)
         {
             _baseClass = baseClass;
+	        _allowNullValue = allowNullValue;
+
         }
 
         public DropDownColumnForPeriodGrids(string bindingProperty, string headerText,
@@ -50,10 +52,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
         }
 
         public DropDownColumnForPeriodGrids(string bindingProperty, string headerText, IEnumerable<TItems> comboItems,
-                                            string displayMember, bool allwoNullValue)
+                                            string displayMember, bool allowNullValue)
             : this(bindingProperty, headerText, comboItems, displayMember)
         {
-            _allowNullValue = allwoNullValue;
+            _allowNullValue = allowNullValue;
         }
 
 
