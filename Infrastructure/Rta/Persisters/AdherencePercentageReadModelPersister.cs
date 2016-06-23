@@ -41,7 +41,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				"		:TimeInAdherence," +
 				"		:TimeOutOfAdherence," +
 				"		:ShiftHasEnded," +
-				"		:NightShift," +
 				"		:State" +
 				"		)" +
 				") AS S (" +
@@ -54,7 +53,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				"	TimeInAdherence," +
 				"	TimeOutOfAdherence," +
 				"	ShiftHasEnded," +
-				"	NightShift," +
 				"	[State]" +
 				") " +
 				"ON " +
@@ -72,7 +70,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				"		TimeInAdherence," +
 				"		TimeOutOfAdherence," +
 				"		ShiftHasEnded," +
-				"		NightShift," +
 				"		[State]" +
 				"	) VALUES (" +
 				"		S.PersonId," +
@@ -83,7 +80,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				"		S.TimeInAdherence," +
 				"		S.TimeOutOfAdherence," +
 				"		S.ShiftHasEnded," +
-				"		S.NightShift," +
 				"		S.State" +
 				"	) " +
 				"WHEN MATCHED THEN " +
@@ -94,7 +90,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				"		TimeInAdherence = S.TimeInAdherence," +
 				"		TimeOutOfAdherence = S.TimeOutOfAdherence," +
 				"		ShiftHasEnded = S.ShiftHasEnded, " +
-				"		NightShift = S.NightShift," +
 				"		[State] = S.State " +
 				";")
 				.SetGuid("PersonId", model.PersonId)
@@ -106,7 +101,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				.SetParameter("TimeInAdherence", model.TimeInAdherence)
 				.SetParameter("TimeOutOfAdherence", model.TimeOutOfAdherence)
 				.SetParameter("ShiftHasEnded", model.ShiftHasEnded)
-				.SetParameter("NightShift", model.NightShift)
 				.SetParameter("State", _serializer.SerializeObject(model.State), NHibernateUtil.StringClob)
 				.ExecuteUpdate();
 			model.Version = toVersion;
@@ -123,7 +117,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				"	TimeInAdherence," +
 				"	TimeOutOfAdherence," +
 				"	ShiftHasEnded, " +
-				"	NightShift," +
 				"	[State] AS StateJson, " +
 				"	[Version] " +
 				"FROM ReadModel.AdherencePercentage WITH (UPDLOCK) WHERE" +
@@ -136,7 +129,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				.AddScalar("TimeInAdherence", NHibernateUtil.TimeSpan)
 				.AddScalar("TimeOutOfAdherence", NHibernateUtil.TimeSpan)
 				.AddScalar("ShiftHasEnded", NHibernateUtil.Boolean)
-				.AddScalar("NightShift", NHibernateUtil.Boolean)
 				.AddScalar("StateJson", NHibernateUtil.StringClob)
 				.AddScalar("Version", NHibernateUtil.Int32)
 				.SetGuid("PersonId", personId)
@@ -184,7 +176,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				"	IsLastTimeInAdherence," +
 				"	TimeInAdherence," +
 				"	TimeOutOfAdherence," +
-				"	NightShift," +
 				"	ShiftHasEnded " +
 				"FROM ReadModel.AdherencePercentage WHERE" +
 				"	PersonId =:PersonId AND " +
@@ -195,7 +186,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				.AddScalar("IsLastTimeInAdherence", NHibernateUtil.Boolean)
 				.AddScalar("TimeInAdherence", NHibernateUtil.TimeSpan)
 				.AddScalar("TimeOutOfAdherence", NHibernateUtil.TimeSpan)
-				.AddScalar("NightShift", NHibernateUtil.Boolean)
 				.AddScalar("ShiftHasEnded", NHibernateUtil.Boolean)
 				.SetGuid("PersonId", personId)
 				.SetDateOnly("Date", date)

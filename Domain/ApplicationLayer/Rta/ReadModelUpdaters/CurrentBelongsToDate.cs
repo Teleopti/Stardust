@@ -22,10 +22,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				new DateOnly(TimeZoneInfo.ConvertTimeFromUtc(_now.UtcDateTime(), person.PermissionInformation.DefaultTimeZone())) :
 				new DateOnly(_now.UtcDateTime());
 		}
-
-		public DateOnly PreviousDateForPerson(Guid personId)
-		{
-			return ForPerson(personId).AddDays(-1);
-		}
 	}
 }

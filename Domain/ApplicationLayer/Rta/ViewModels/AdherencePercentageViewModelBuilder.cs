@@ -36,12 +36,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		{
 			var readModel = _adherencePercentageReadModelReader.Read(_date.ForPerson(personId), personId);
 			if (readModel == null)
-			{
-				var model = _adherencePercentageReadModelReader.Read(_date.PreviousDateForPerson(personId), personId);
-				if (model?.NightShift != null && model.NightShift.Value)
-					readModel = model;
-			}
-			if (readModel == null)
 				return new AdherencePercentageViewModel();
 
 			return new AdherencePercentageViewModel

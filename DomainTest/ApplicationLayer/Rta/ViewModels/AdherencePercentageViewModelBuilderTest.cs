@@ -293,23 +293,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			result.AdherencePercent.Should().Be.EqualTo(50);
 		}
 
-		[Test]
-		public void ShouldBuildFromPreviousDayIfMarkedAsNightShift()
-		{
-			var personId = Guid.NewGuid();
-			Now.Is("2016-06-08 09:00");
-			Reader.Has(new AdherencePercentageReadModel
-			{
-				PersonId = personId,
-				Date = "2016-06-07 00:00".Utc(),
-				TimeInAdherence = "30".Minutes(),
-				TimeOutOfAdherence = "30".Minutes(),
-				NightShift = true
-			});
-
-			var result = Target.Build(personId);
-
-			result.AdherencePercent.Should().Be(50);
-		}
 	}
 }

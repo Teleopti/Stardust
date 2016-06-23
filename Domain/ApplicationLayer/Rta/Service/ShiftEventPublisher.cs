@@ -1,5 +1,4 @@
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Helper;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -26,8 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			{
 				PersonId = info.PersonId,
 				ShiftStartTime = info.Schedule.CurrentShiftStartTime,
-				ShiftEndTime = info.Schedule.CurrentShiftEndTime,
-				Nightshift = info.Schedule.CurrentShiftStartTime.Date != info.Schedule.CurrentShiftEndTime.Date
+				ShiftEndTime = info.Schedule.CurrentShiftEndTime
 			});
 		}
 

@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		public bool ShiftHasEnded { get; set; }
 
 		public IEnumerable<AdherencePercentageReadModelState> State { get; set; }
-		public bool? NightShift { get; set; }
 	}
 
 	public class AdherencePercentageReadModelState

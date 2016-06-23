@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				IsLastTimeInAdherence = true,
 				LastTimestamp = "2012-08-29 8:00".Utc(),
 				ShiftHasEnded = true,
-				NightShift = true,
 				State = new[] { new AdherencePercentageReadModelState { Timestamp = "2012-08-29 8:00".Utc() } }
 			});
 
@@ -42,7 +41,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			model.IsLastTimeInAdherence.Should().Be.EqualTo(true);
 			model.LastTimestamp.Should().Be.EqualTo("2012-08-29 8:00".Utc());
 			model.ShiftHasEnded.Should().Be.EqualTo(true);
-			model.NightShift.Should().Be(true);
 			model.State.Single().Timestamp.Should().Be("2012-08-29 8:00".Utc());
 		}
 
@@ -80,7 +78,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				PersonId = personId,
 				LastTimestamp = "2012-08-29 8:00".Utc(),
 				TimeInAdherence = "0".Minutes(),
-				TimeOutOfAdherence = "10".Minutes(),
+				TimeOutOfAdherence = "10".Minutes()
 			};
 			Target.Persist(model);
 			model.Date = new DateTime(2012, 08, 29);
@@ -89,7 +87,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			model.TimeInAdherence = "17".Minutes();
 			model.TimeOutOfAdherence = "28".Minutes();
 			model.State = new[] {new AdherencePercentageReadModelState {Timestamp = "2012-08-29 8:15".Utc()}};
-			model.NightShift = true;
 			Target.Persist(model);
 
 			var actual = Target.Get("2012-08-29".Date(), personId);
@@ -97,7 +94,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			actual.BelongsToDate.Should().Be.EqualTo("2012-08-29".Date());
 			actual.TimeOutOfAdherence.Should().Be.EqualTo("28".Minutes());
 			actual.TimeInAdherence.Should().Be.EqualTo("17".Minutes());
-			actual.NightShift.Should().Be.EqualTo(true);
 			actual.State.Single().Timestamp.Should().Be("2012-08-29 8:15".Utc());
 		}
 
@@ -182,8 +178,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				TimeOutOfAdherence = "28".Minutes(),
 				IsLastTimeInAdherence = true,
 				LastTimestamp = "2012-08-29 8:00".Utc(),
-				ShiftHasEnded = true,
-				NightShift = true
+				ShiftHasEnded = true
 			});
 
 			var model = Reader.Read("2012-08-29".Date(), personId);
@@ -195,7 +190,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			model.IsLastTimeInAdherence.Should().Be.EqualTo(true);
 			model.LastTimestamp.Should().Be.EqualTo("2012-08-29 8:00".Utc());
 			model.ShiftHasEnded.Should().Be.EqualTo(true);
-			model.NightShift.Should().Be.EqualTo(true);
 		}
 
 		[Test]
