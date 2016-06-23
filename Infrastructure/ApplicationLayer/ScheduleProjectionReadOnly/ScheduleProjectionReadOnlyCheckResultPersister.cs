@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 		public void Save(ScheduleProjectionReadOnlyValidationResult input)
 		{
 			_currentUnitOfWork.Session().CreateSQLQuery(
-				@"INSERT INTO [CheckReadModel].[ScheduleProjectionReadOnly] (PersonId, BelongsToDate, IsValid, UpdateOn) VALUES (:PersonId, :BelongsToDate, :IsValid, :UpdateOn)")
+				@"INSERT INTO [ReadModel].[ScheduleProjectionReadOnly_check] (PersonId, BelongsToDate, IsValid, UpdateOn) VALUES (:PersonId, :BelongsToDate, :IsValid, :UpdateOn)")
 				.SetDateTime("BelongsToDate", input.Date)
 				.SetGuid("PersonId", input.PersonId)
 				.SetBoolean("IsValid", input.IsValid)
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 		public IEnumerable<ScheduleProjectionReadOnlyValidationResult> LoadAllInvalid()
 		{
 			var result = _currentUnitOfWork.Session().CreateSQLQuery(
-				@"SELECT PersonId, BelongsToDate as [Date], IsValid FROM [CheckReadModel].[ScheduleProjectionReadOnly] WHERE IsValid = 0")
+				@"SELECT PersonId, BelongsToDate as [Date], IsValid FROM [ReadModel].[ScheduleProjectionReadOnly_check] WHERE IsValid = 0")
 				.SetResultTransformer(Transformers.AliasToBean<ScheduleProjectionReadOnlyValidationResult>())
 				.List<ScheduleProjectionReadOnlyValidationResult>();
 			return result;
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 
 		public void Reset()
 		{
-			_currentUnitOfWork.Session().CreateSQLQuery("TRUNCATE TABLE [CheckReadModel].[ScheduleProjectionReadOnly]")
+			_currentUnitOfWork.Session().CreateSQLQuery("TRUNCATE TABLE [ReadModel].[ScheduleProjectionReadOnly_check]")
 				.ExecuteUpdate();
 		}
 	}
