@@ -6,6 +6,7 @@
 Background:
 	Given there is a switch
 
+@ignore
 Scenario: Should be able to see adherence percentage from agent state overview
 	Given there is an activity named 'Phone'
 	And there is a site named 'Paris'
