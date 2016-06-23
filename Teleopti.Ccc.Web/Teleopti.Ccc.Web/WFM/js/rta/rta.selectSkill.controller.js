@@ -2,8 +2,8 @@
 	'use strict';
 	angular.module('wfm.rta')
 		.controller('RtaSelectSkillCtrl', [
-			'$scope', '$state', 'RtaService', '$stateParams', '$interval', 'RtaOrganizationService', 'RtaFormatService', 'NoticeService', 'Toggle', '$translate',
-			function ($scope, $state, RtaService) {
+			'$scope', '$state', 'RtaService', '$timeout',
+			function ($scope, $state, RtaService, $timeout) {
 				$scope.skills = [];
 
 				RtaService.getSkills()
@@ -26,9 +26,17 @@
 
 				$scope.selectedSkillChange = function(item) {
 					if (item) {
-						$state.go('rta.agents-skill', { skillId: item.Id });
+						 $timeout(function(){
+							$state.go('rta.agents-skill', { skillId: item.Id });
+						});
 					};
+
 				}
+
+				$scope.goToOverview = function(){
+					$state.go('rta');
+				}
+
 			}
 		]);
 })();

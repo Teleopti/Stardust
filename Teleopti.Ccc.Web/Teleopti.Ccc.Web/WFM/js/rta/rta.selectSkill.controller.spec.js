@@ -6,8 +6,8 @@ describe('RtaSelectSkillCtrl', function () {
 		$sessionStorage,
 		scope,
 		$fakeBackend,
-		$controllerBuilder;
-
+		$controllerBuilder,
+		$timeout;
 	var stateParams = {};
 
 	beforeEach(module('wfm.rta'));
@@ -21,13 +21,14 @@ describe('RtaSelectSkillCtrl', function () {
 		});
 	});
 
-	beforeEach(inject(function (_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_) {
+	beforeEach(inject(function (_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_, _$timeout_) {
 		$interval = _$interval_;
 		$state = _$state_;
 		$sessionStorage = _$sessionStorage_;
 		$httpBackend = _$httpBackend_;
 		$fakeBackend = _FakeRtaBackend_;
 		$controllerBuilder = _ControllerBuilder_;
+		$timeout = _$timeout_;
 
 		scope = $controllerBuilder.setup('RtaSelectSkillCtrl');
 
@@ -94,10 +95,12 @@ describe('RtaSelectSkillCtrl', function () {
 					Id: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753"
 				});
 			});
-
-		expect($state.go).toHaveBeenCalledWith('rta.agents-skill', {
-			skillId: 'f08d75b3-fdb4-484a-ae4c-9f0800e2f753'
-		});
+		 $timeout(function() {
+	           expect($state.go).toHaveBeenCalledWith('rta.agents-skill', {
+				skillId: 'f08d75b3-fdb4-484a-ae4c-9f0800e2f753'
+				});
+        });
+		
 	});
 
 });

@@ -11,9 +11,7 @@ angular.module('wfm.rta').provider('RtaState', function () {
 			if (toggles.RTA_PauseButton_39144) {
 				return 'js/rta/rta-agents-RTA_PauseButton_39144.html';
 			}
-			if (toggles.RTA_MonitorBySkills_39081) {
-				return 'js/rta/rta-agents-RTA_MonitorBySkills_39081.html';
-			}
+			
 			return 'js/rta/rta-agents-RTA_AlarmContext_29357.html';
 		}
 		return 'js/rta/rta-agents.html';
@@ -24,6 +22,13 @@ angular.module('wfm.rta').provider('RtaState', function () {
 			return 'js/rta/rta-sites-RTA_MonitorBySkills_39081.html';
 		}
 		return 'js/rta/rta-sites.html';
+	};
+
+	var rtaAgentsBySkillsTemplate = function (elem, attr) {
+		if (toggles.RTA_MonitorBySkills_39081) {
+			return 'js/rta/rta-agents-RTA_MonitorBySkills_39081.html';
+		}
+		return 'js/rta/rta-agents.html';
 	};
 
 	this.$get = function () {
@@ -95,7 +100,7 @@ angular.module('wfm.rta').provider('RtaState', function () {
 			.state('rta.agents-skill',
 			{
 				url: '/agents-skill/:skillId',
-				templateUrl: rtaAgentsTemplate,
+				templateUrl: rtaAgentsBySkillsTemplate,
 				controller: 'RtaAgentsCtrl',
 				params: {
 					skillIds: {

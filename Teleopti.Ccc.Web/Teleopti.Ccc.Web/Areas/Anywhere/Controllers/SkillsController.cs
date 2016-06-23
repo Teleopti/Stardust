@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		[UnitOfWork, HttpGet, Route("api/Skills/NameFor")]
 		public virtual IHttpActionResult NameFor(Guid skillId)
 		{
-			return Json(_skillRepository.Load(skillId).Name);
+			return Json(new SkillViewModel {Name = _skillRepository.Load(skillId).Name});
 		}
 	}
 }

@@ -37,8 +37,9 @@
 
 				$scope.noSiteIds = siteIds.length == 0;
 				$scope.monitorBySkill = toggleService.RTA_MonitorBySkills_39081;
-				$scope.showGrid = teamIds.length > 0;
-				$scope.showBreadcrumb = teamIds.length > 0;
+				$scope.showBreadcrumb = skillId !== undefined ? false : true;
+				$scope.showGrid = !$scope.showBreadcrumb;
+				$scope.skillName = "";
 				
 				$scope.$watch('pause', function () {
 					if ($scope.pause) {
@@ -154,7 +155,7 @@
 				if (skillId) {
 					RtaService.getSkillName(skillId)
 						.then(function (skill) {
-							$scope.skillName = skill.Name;
+							$scope.skillName = skill.Name || '?' ;
 						});
 				}
 
@@ -363,6 +364,14 @@
 						return 'previous-activity';
 					return 'current-activity';
 				}
+				$scope.goToOverview = function(){
+					$state.go('rta');
+				}
+				$scope.goToSelectItem = function(){
+					$state.go('rta.select-skill');
+				}
+
+				
 			}
 		]);
 })();
