@@ -19,7 +19,7 @@ CREATE TABLE [ReadModel].[ScheduleProjectionReadOnly_check]
 	IsValid bit NOT NULL,
 	UpdateOn datetime NOT NULL
 	
-	 CONSTRAINT [PK_ScheduleProjectionReadOnlyCheck] PRIMARY KEY CLUSTERED 
+	 CONSTRAINT [PK_ScheduleProjectionReadOnly_check] PRIMARY KEY CLUSTERED 
 	(
 		[PersonId] ASC,
 		[BelongsToDate] ASC
