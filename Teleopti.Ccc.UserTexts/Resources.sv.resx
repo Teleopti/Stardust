@@ -13445,9 +13445,6 @@ Dessa val är aktiverade:
   <data name="ShowOnlyAgentsWithNoSeat" xml:space="preserve">
     <value>Visa bara agenter utan sittplats</value>
   </data>
-  <data name="FailedMessageForBackoutSchedule" xml:space="preserve">
-    <value>Misslyckades med att ångra schemaändringar för valda agenter</value>
-  </data>
   <data name="ShiftTradeRequestScheduleChanged" xml:space="preserve">
     <value>Skiftbytesförfrågan för {0} behöver accepteras igen. Den andra agentens schema har ändrats. </value>
   </data>
@@ -13462,5 +13459,11 @@ Dessa val är aktiverade:
   </data>
   <data name="RtaPauseDisableNotice" xml:space="preserve">
     <value>RTA-övervakning aktiverad</value>
+  </data>
+  <data name="SelectAllPeopleInEveryPage" xml:space="preserve">
+    <value>Markera alla agenter på alla sidor</value>
+  </data>
+  <data name="UnselectAllPeopleInEveryPage" xml:space="preserve">
+    <value>Avmarkera alla agenter på alla sidor</value>
   </data>
 </root>

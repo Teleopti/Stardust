@@ -8329,7 +8329,7 @@ Długoterminowy</value>
     <value>Rozszerzone preferencje</value>
   </data>
   <data name="DistributionBetweenSubskillsMustbeEqualToOneHundredPercent" xml:space="preserve">
-    <value>Podział między pod-umiejętności musi dać razem 100%.</value>
+    <value>Podział pomiędzy podumiejętności musi dać razem 100%.</value>
   </data>
   <data name="MaximumAgentOccupancyMustBeLargerThanOrEqualToMinimumAgentOccupancy" xml:space="preserve">
     <value>Maksymalne obłożenie agentów nie może być mniejsze niż minimalne.</value>
@@ -10320,5 +10320,797 @@ Te opcje są aktywowane:
   </data>
   <data name="ReferToFileTemplate" xml:space="preserve">
     <value>Proszę zapoznać się z szablonem pliku</value>
+  </data>
+  <data name="CallsSlashDay" xml:space="preserve">
+    <value>Połączenia/dzień</value>
+  </data>
+  <data name="ProcessFailedErrorColon" xml:space="preserve">
+    <value>Proces nie powiódł się! Błąd:</value>
+  </data>
+  <data name="SuccessfullyUpdatedPeopleCountColon" xml:space="preserve">
+    <value>Poprawnie zaktualizowano:</value>
+  </data>
+  <data name="YouMightNeedToChangeTheShiftBagAccordingly" xml:space="preserve">
+    <value>Trzeba </value>
+  </data>
+  <data name="ModifySkill" xml:space="preserve">
+    <value>Modyfikuj Umiejętność</value>
+  </data>
+  <data name="NameCantBeMoreThan" xml:space="preserve">
+    <value>Nazwa musi być krótsza niż 50 znaków</value>
+  </data>
+  <data name="ShrinkageSpan" xml:space="preserve">
+    <value>Zmniejszenie powinno być pomiędzy 1 i 99</value>
+  </data>
+  <data name="AllDaysAreClosed" xml:space="preserve">
+    <value>Wszystkie dni są zamknięte</value>
+  </data>
+  <data name="NewSkill" xml:space="preserve">
+    <value>Nowa Umiejętność</value>
+  </data>
+  <data name="Accuracy" xml:space="preserve">
+    <value>Dokładność</value>
+  </data>
+  <data name="ForecastMethodIDColon" xml:space="preserve">
+    <value>Id metody prognozy:</value>
+  </data>
+  <data name="BestForecastMethod" xml:space="preserve">
+    <value>Najlepsza metoda</value>
+  </data>
+  <data name="StaffingLevels" xml:space="preserve">
+    <value>Poziom zatrudnienia</value>
+  </data>
+  <data name="WarningNoHistorícalData" xml:space="preserve">
+    <value>Ostrzeżenie! Nie ma dostępnych danych historycznych</value>
+  </data>
+  <data name="ProductActivationKeyV8" xml:space="preserve">
+    <value>System jest licencjonowany dla "{0}", zgodnie z warunkami umowy licencyjnej i aktywacji produktu klucz wygaśnie {1}.
+
+Klucz aktywacyjny produktu obejmuje maksymalnie {2} aktywnych agentów.
+
+Wersja Główna: {5}
+
+Schemat klucza aktywacyjnego produktu "{3}".
+Opcje aktywowane:
+{4}</value>
+  </data>
+  <data name="CreateSkill" xml:space="preserve">
+    <value>Utwórz umiejętność</value>
+  </data>
+  <data name="AddCampaignIntro" xml:space="preserve">
+    <value>Określ wartość procentową dla oczekiwanego wzrostu lub spadku</value>
+  </data>
+  <data name="Overstaff" xml:space="preserve">
+    <value>Nadmiar załogi</value>
+  </data>
+  <data name="SeatProductActivationKeyV8" xml:space="preserve">
+    <value>System jest licencjonowany dla "{0}", zgodnie z warunkami umowy licencyjnej i aktywacji produktu klucz wygaśnie {1}.
+
+Klucz aktywacyjny produktu obejmuje maksymalnie {2} stanowisk.
+
+Wersja Główna: {5}
+
+Schemat klucza aktywacyjnego produktu "{3}".
+Opcje aktywowane:
+{4}</value>
+  </data>
+  <data name="TotalCallsCaret" xml:space="preserve">
+    <value>Wszystkich połączeń &lt;</value>
+  </data>
+  <data name="CallsCaret" xml:space="preserve">
+    <value>Połączeń &lt;</value>
+  </data>
+  <data name="TalkTimeCaret" xml:space="preserve">
+    <value>Czas rozmowy &lt;</value>
+  </data>
+  <data name="AcwCaret" xml:space="preserve">
+    <value>ACW &lt;</value>
+  </data>
+  <data name="ForecastValueOverride" xml:space="preserve">
+    <value>Prognozowana wartość nadpisana</value>
+  </data>
+  <data name="CampaignAdded" xml:space="preserve">
+    <value>Kampania dodana</value>
+  </data>
+  <data name="CouldNotApply" xml:space="preserve">
+    <value>Nie można zastosować. Zobacz powyższe problemy.</value>
+  </data>
+  <data name="Outliers" xml:space="preserve">
+    <value>Odstający</value>
+  </data>
+  <data name="QueueStatWoOutliers" xml:space="preserve">
+    <value>Statystyki kolejki bez odstających</value>
+  </data>
+  <data name="Statistics" xml:space="preserve">
+    <value>Statystyki</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>Powiadomienia</value>
+  </data>
+  <data name="Disable" xml:space="preserve">
+    <value>Wyłacz</value>
+  </data>
+  <data name="Enable" xml:space="preserve">
+    <value>Włącz</value>
+  </data>
+  <data name="ForecastOverrideMsg" xml:space="preserve">
+    <value>Nadpisanie prognozowanych wartości.</value>
+  </data>
+  <data name="With campaign" xml:space="preserve">
+    <value>W kampanii</value>
+  </data>
+  <data name="SuccessTip" xml:space="preserve">
+    <value>Sukces</value>
+  </data>
+  <data name="RunningForecast" xml:space="preserve">
+    <value>Prognoza jest uruchomiona</value>
+  </data>
+  <data name="ForecastWorkloadIntro" xml:space="preserve">
+    <value>Jest to istniejąca prognoza. Aby móc modyfikować połączenia wybierz jakiś dzień (dni) na wykresie.</value>
+  </data>
+  <data name="ClearForecastChart" xml:space="preserve">
+    <value>Wyczyść zaznaczenie wykresu</value>
+  </data>
+  <data name="ForecastDo" xml:space="preserve">
+    <value>Prognoza</value>
+  </data>
+  <data name="Method" xml:space="preserve">
+    <value>Metoda</value>
+  </data>
+  <data name="ForecastPeriod" xml:space="preserve">
+    <value>Przyszły okres</value>
+  </data>
+  <data name="ForecastPeriodLength" xml:space="preserve">
+    <value>Okres prognozy nie może być większy niż 1 rok</value>
+  </data>
+  <data name="Ongoing" xml:space="preserve">
+    <value>Trwający</value>
+  </data>
+  <data name="CampaignOverstaff" xml:space="preserve">
+    <value>Wczesne</value>
+  </data>
+  <data name="CampaignUnderSLA" xml:space="preserve">
+    <value>Późny</value>
+  </data>
+  <data name="DragAndDropExcelFilesHereOrClickToUpload" xml:space="preserve">
+    <value>Przeciągaj i upuść pliki .xls lub .xlsx albo kliknij tutaj, aby przesłać</value>
+  </data>
+  <data name="ManuallyPlanned" xml:space="preserve">
+    <value>Zaplanowane Ręcznie</value>
+  </data>
+  <data name="AllPeopleOnCurrentPageSelected" xml:space="preserve">
+    <value>Wszystkie osoby na tej stronie są zaznaczone.</value>
+  </data>
+  <data name="SelectAllMatchedPeople" xml:space="preserve">
+    <value>Kliknij tutaj, aby wybrać wszystkie osoby, na każdej stronie.</value>
+  </data>
+  <data name="StartDateMustBeEqualToOrEarlierThanEndDate" xml:space="preserve">
+    <value>Data rozpoczęcia musi być równa lub wcześniejsza niż data zakończenia</value>
+  </data>
+  <data name="StartDateAndEndDateMustBeSet" xml:space="preserve">
+    <value>Należy ustawić datę rozpoczęcia i zakończenia.</value>
+  </data>
+  <data name="ViewSeatBookings" xml:space="preserve">
+    <value>Zobacz Alokację Miejsc</value>
+  </data>
+  <data name="ClosedDay" xml:space="preserve">
+    <value>Dzień Zamknięty</value>
+  </data>
+  <data name="ViewReport" xml:space="preserve">
+    <value>Zobacz Raport</value>
+  </data>
+  <data name="ManagePeople" xml:space="preserve">
+    <value>Zarządzanie Personelem</value>
+  </data>
+  <data name="AdjustSkill" xml:space="preserve">
+    <value>Dostosowanie umiejętności</value>
+  </data>
+  <data name="ChangeShiftBag" xml:space="preserve">
+    <value>Zmień aktówkę dyżurów</value>
+  </data>
+  <data name="PickAShiftBag" xml:space="preserve">
+    <value>Wybierz aktówkę dyżurów</value>
+  </data>
+  <data name="SeatHasNoBookings" xml:space="preserve">
+    <value>Brak rezerwacji</value>
+  </data>
+  <data name="ConfirmRemoveCampaign" xml:space="preserve">
+    <value>Czy na pewno chcesz usunąć tę kampanię?</value>
+  </data>
+  <data name="RemoveCampaign" xml:space="preserve">
+    <value>Usuń Kampanię</value>
+  </data>
+  <data name="CampaignFailedRemove" xml:space="preserve">
+    <value>Nie udało się usunąć kampanii: {0}.</value>
+  </data>
+  <data name="SelectedPeople" xml:space="preserve">
+    <value>Wybrane osoby</value>
+  </data>
+  <data name="ResetSelection" xml:space="preserve">
+    <value>Usuń wybór</value>
+  </data>
+  <data name="SelectDateInChart" xml:space="preserve">
+    <value>Wybierz daty na wykresie</value>
+  </data>
+  <data name="MissingColumnX" xml:space="preserve">
+    <value>Brakująca kolumna: {0}.</value>
+  </data>
+  <data name="TheSelectedFileCanNotBeAcceptedPleaseCheckTheFileType" xml:space="preserve">
+    <value>Wybrany plik nie może zostać przyjęty. Proszę sprawdzić typ pliku.</value>
+  </data>
+  <data name="SeatBookings" xml:space="preserve">
+    <value>Rezerwacje Miejsc</value>
+  </data>
+  <data name="FailedImportedCountColon" xml:space="preserve">
+    <value>Importowanie nie powiodło się:</value>
+  </data>
+  <data name="InternalErrorXMsg" xml:space="preserve">
+    <value>wewnętrzny błąd: {0};</value>
+  </data>
+  <data name="PleaseFindTheDownloadedExcelSheetToCheckTheError" xml:space="preserve">
+    <value>Proszę znaleźć pobrany arkusz Excel w celu szczegółowego zapoznania się z błędem.</value>
+  </data>
+  <data name="SuccessfullyImportedCountColon" xml:space="preserve">
+    <value>Zaimportowane pomyślnie:</value>
+  </data>
+  <data name="ApplicationUserIdShouldBeAValidEmailAddressErrorMsg" xml:space="preserve">
+    <value>ApplicationUserId powinno być prawidłowym adresem e-mail;</value>
+  </data>
+  <data name="TooLongWindowsUserErrorMsgSemicolon" xml:space="preserve">
+    <value>zbyt długa nazwa użytkownika windows;</value>
+  </data>
+  <data name="SeatBookingDeletedSuccessfully" xml:space="preserve">
+    <value>Rezerwacja miejsca	{0}  dla {1} została usunięta</value>
+  </data>
+  <data name="CampaignFailedResetManual" xml:space="preserve">
+    <value>Należy wybrać co najmniej jeden dzień!</value>
+  </data>
+  <data name="CampaignThreshold" xml:space="preserve">
+    <value>próg kampanii</value>
+  </data>
+  <data name="RtaLoggedIn" xml:space="preserve">
+    <value>Zalogowany</value>
+  </data>
+  <data name="RtaLoggedOut" xml:space="preserve">
+    <value>Wylogowany</value>
+  </data>
+  <data name="SeatPlanResultDetailMessage" xml:space="preserve">
+    <value>Próby {0} rezerwacje miejsc, {1} udało i {2} nie powiodło się. Było {3} nieplanowanych dni agenta</value>
+  </data>
+  <data name="Seasonality" xml:space="preserve">
+    <value>Sezonowość</value>
+  </data>
+  <data name="ClearBackgroundImage" xml:space="preserve">
+    <value>Wczyść Obraz Tła</value>
+  </data>
+  <data name="Image" xml:space="preserve">
+    <value>Obraz</value>
+  </data>
+  <data name="Seat" xml:space="preserve">
+    <value>Miejsce</value>
+  </data>
+  <data name="SetBackgroundImage" xml:space="preserve">
+    <value>Ustaw Obraz Tła</value>
+  </data>
+  <data name="Text" xml:space="preserve">
+    <value>Tekst</value>
+  </data>
+  <data name="AlignBottom" xml:space="preserve">
+    <value>Wyrównaj do Dołu</value>
+  </data>
+  <data name="AlignLeft" xml:space="preserve">
+    <value>Wyrównaj do Lewej</value>
+  </data>
+  <data name="AlignRight" xml:space="preserve">
+    <value>Wyrównaj do Prawej</value>
+  </data>
+  <data name="AlignTop" xml:space="preserve">
+    <value>Wyrównaj do Góry</value>
+  </data>
+  <data name="BringToFront" xml:space="preserve">
+    <value>Przenieś na Przód</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Utwórz</value>
+  </data>
+  <data name="Dismiss" xml:space="preserve">
+    <value>Odwołaj</value>
+  </data>
+  <data name="FlipItemHorizontally" xml:space="preserve">
+    <value>Przerzuć Wybrane Elementy Poziomo</value>
+  </data>
+  <data name="FlipItemVertically" xml:space="preserve">
+    <value>Przerzuć Wybrane Elementy Pionowo</value>
+  </data>
+  <data name="GroupSelectedItems" xml:space="preserve">
+    <value>Grupuj Zaznaczone Pozycje</value>
+  </data>
+  <data name="MoveBack" xml:space="preserve">
+    <value>Cofnij</value>
+  </data>
+  <data name="MoveForwards" xml:space="preserve">
+    <value>Wprzód</value>
+  </data>
+  <data name="Rotate" xml:space="preserve">
+    <value>Obróć</value>
+  </data>
+  <data name="SendToBack" xml:space="preserve">
+    <value>Przenieś na Spód</value>
+  </data>
+  <data name="SpaceHorizontally" xml:space="preserve">
+    <value>Rozmieść Wybrane Elementy Poziomo</value>
+  </data>
+  <data name="SpaceVertically" xml:space="preserve">
+    <value>Rozmieść Wybrane Elementy Pionowo</value>
+  </data>
+  <data name="RevertToLastSave" xml:space="preserve">
+    <value>Powróć do ostatniego zapisu</value>
+  </data>
+  <data name="UngroupItems" xml:space="preserve">
+    <value>Rozgrupuj Elementy</value>
+  </data>
+  <data name="NotAllowed" xml:space="preserve">
+    <value>Nie dozwolone!</value>
+  </data>
+  <data name="CreateAndManagePlanningPeriods" xml:space="preserve">
+    <value>Tworzenie i zarządzanie różnymi okresami planowania</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>Domyślny</value>
+  </data>
+  <data name="PlanningPeriodIsScheduled" xml:space="preserve">
+    <value>Zaplanowano okres planowania</value>
+  </data>
+  <data name="PlanningPeriods" xml:space="preserve">
+    <value>Okres Planowania</value>
+  </data>
+  <data name="SelectedFiltersColon" xml:space="preserve">
+    <value>Wybrane Filtry:</value>
+  </data>
+  <data name="StartNext" xml:space="preserve">
+    <value>Uruchom Następne</value>
+  </data>
+  <data name="DailyTotal" xml:space="preserve">
+    <value>Suma Dzienna</value>
+  </data>
+  <data name="SelectToModify" xml:space="preserve">
+    <value>Wybierz dni na wykresie przed modyfikacją</value>
+  </data>
+  <data name="Modify" xml:space="preserve">
+    <value>Modyfikuj</value>
+  </data>
+  <data name="AccessAllFunctions" xml:space="preserve">
+    <value>Dostęp do wszystkich funkcji:</value>
+  </data>
+  <data name="ChangesAreDisabled" xml:space="preserve">
+    <value>Zmiany są wyłączone dla predefiniowanych ról.</value>
+  </data>
+  <data name="UnselectedItems" xml:space="preserve">
+    <value>Niezaznaczone pozycje</value>
+  </data>
+  <data name="TooManyResultsForSearchKeywords" xml:space="preserve">
+    <value>Wynik wyszukiwania słów kluczowych przekracza 500, proszę zawęzić wyszukiwanie.</value>
+  </data>
+  <data name="ValidationforFilter" xml:space="preserve">
+    <value>Proszę dodać filtr</value>
+  </data>
+  <data name="BothOverrideAndCampaignAdded" xml:space="preserve">
+    <value>Zarówno nadpisanie i kampania dodana</value>
+  </data>
+  <data name="NameRequired" xml:space="preserve">
+    <value>Nazwa jest wymagana</value>
+  </data>
+  <data name="TotalAcwCaret" xml:space="preserve">
+    <value>Suma ACW &gt;</value>
+  </data>
+  <data name="ScheduleIsRunning" xml:space="preserve">
+    <value>Ostrzeżenie: Serwer jest zajęty grafikowaniem, spróbuj ponownie później.</value>
+  </data>
+  <data name="TotalTalkTimeCaret" xml:space="preserve">
+    <value>Łączny czas rozmów&gt;</value>
+  </data>
+  <data name="ChangePlanningPeriod" xml:space="preserve">
+    <value>Zmień okres planowania</value>
+  </data>
+  <data name="EditFilter" xml:space="preserve">
+    <value>Edytuj filtr</value>
+  </data>
+  <data name="DeleteFilter" xml:space="preserve">
+    <value>Usuń filtr</value>
+  </data>
+  <data name="PickAnAbsence" xml:space="preserve">
+    <value>Wybierz nieobecność</value>
+  </data>
+  <data name="ManageRules" xml:space="preserve">
+    <value>Zarządzaj Regułami</value>
+  </data>
+  <data name="AddLocation" xml:space="preserve">
+    <value>Dodaj Lokalizację</value>
+  </data>
+  <data name="ManageMappings" xml:space="preserve">
+    <value>Zarządzaj Regułami Mapowania</value>
+  </data>
+  <data name="Mappings" xml:space="preserve">
+    <value>Reguły Mapowania</value>
+  </data>
+  <data name="Threshold" xml:space="preserve">
+    <value>Próg</value>
+  </data>
+  <data name="IsAlarm" xml:space="preserve">
+    <value>Alarm</value>
+  </data>
+  <data name="createNewRuleset" xml:space="preserve">
+    <value>Utwórz nowy zestaw reguł</value>
+  </data>
+  <data name="noSearchResults" xml:space="preserve">
+    <value>Nie znaleziono żadnych wyników</value>
+  </data>
+  <data name="AlarmColor" xml:space="preserve">
+    <value>Kolor Alarmu</value>
+  </data>
+  <data name="CannotBeDeletedBecauseItIsBeingUsedInMappings" xml:space="preserve">
+    <value>Nie może zostać usunięty, ponieważ jest on używany w mapowaniach.</value>
+  </data>
+  <data name="SecondsSlashCalls" xml:space="preserve">
+    <value>Sekund/rozmowa</value>
+  </data>
+  <data name="DaysAreSelectedFrom" xml:space="preserve">
+    <value>{0} dni wybranych od {1} do {2}</value>
+  </data>
+  <data name="SelectedDayIs" xml:space="preserve">
+    <value>Wybranych dni {0}</value>
+  </data>
+  <data name="OverrideCallsForCampaign" xml:space="preserve">
+    <value>Nadpisz połączenia lub kampanię dla scenariusza</value>
+  </data>
+  <data name="SecondsSpan" xml:space="preserve">
+    <value>Sekundy powinny wynosić pomiędzy 1 a 86400</value>
+  </data>
+  <data name="LatestAcquiredTime" xml:space="preserve">
+    <value>Najnowszy osiągnięty czas</value>
+  </data>
+  <data name="PageSize" xml:space="preserve">
+    <value>Rozmiar strony</value>
+  </data>
+  <data name="TotalRequestsCount" xml:space="preserve">
+    <value>Suma wszystkich żądań</value>
+  </data>
+  <data name="ClearOverride" xml:space="preserve">
+    <value>Wyczyśc nadpisanie</value>
+  </data>
+  <data name="AddAbsenceSuccessedResult" xml:space="preserve">
+    <value>Pomyślnie dodano nieobecności do wybranych agentów</value>
+  </data>
+  <data name="AddAbsenceTotalResult" xml:space="preserve">
+    <value>Pomyślnie dodano {0} nieobecności, {1} nieobecności nie zosytało dodane</value>
+  </data>
+  <data name="SwapShifts" xml:space="preserve">
+    <value>Zamień zmiany</value>
+  </data>
+  <data name="ScheduleHasBeenChanged" xml:space="preserve">
+    <value>Harmonogram został zmieniony przez innych, proszę przeładować grafik.</value>
+  </data>
+  <data name="CommandFailed" xml:space="preserve">
+    <value>Żądana operacja nie powiodła się. {0}</value>
+  </data>
+  <data name="RequestsHaveBeenApproved" xml:space="preserve">
+    <value>{0} wniosków zostało zatwierdzonych.</value>
+  </data>
+  <data name="RequestsHaveBeenDenied" xml:space="preserve">
+    <value>{0} wniosków zostałoodrzuconych.</value>
+  </data>
+  <data name="FailedToSwapShifts" xml:space="preserve">
+    <value>Nie udało się zamienić zmian.</value>
+  </data>
+  <data name="FinishedSwapShifts" xml:space="preserve">
+    <value>Zamiana zmian zakończona sukcesem.</value>
+  </data>
+  <data name="RemoveAbsence" xml:space="preserve">
+    <value>Usuń Nieobecność</value>
+  </data>
+  <data name="AreYouSureToRemoveSelectedAbsence" xml:space="preserve">
+    <value>Czy na pewno chcesz usunąć {0} nieobecności z {1} agentów?</value>
+  </data>
+  <data name="FailedToRemoveAbsence" xml:space="preserve">
+    <value>Nie udało się usunąć wybranych nieobecności.</value>
+  </data>
+  <data name="FinishedRemoveAbsence" xml:space="preserve">
+    <value>Nieobecność usunięta pomyślnie.</value>
+  </data>
+  <data name="NoPermisionAddIntradayAbsenceForAgent" xml:space="preserve">
+    <value>Nie masz uprawnień do dodawania nieobecności dziennych dla {0}</value>
+  </data>
+  <data name="NoPermissionAddFullDayAbsenceForAgent" xml:space="preserve">
+    <value>Nie masz uprawnień do dodawania pełnych nieobecności dziennych dla {0}</value>
+  </data>
+  <data name="NoPermissionToModifyPersonAbsence" xml:space="preserve">
+    <value>Nie masz uprawnień do modyfikowania nieobecności.</value>
+  </data>
+  <data name="ConnectionErrorMessage" xml:space="preserve">
+    <value>Serwer jest nieosiągalny!
+Sprawdź swoje połączenie internetowe lub skontaktuj się z administratorem.</value>
+  </data>
+  <data name="InternalErrorMessage" xml:space="preserve">
+    <value>Aplikacja napotkała nieoczekiwany błąd.
+Pomóż nam ulepszyć swoje doświadczenie poprzez wysłanie raportu o błędzie</value>
+  </data>
+  <data name="LogonUserTimeZone" xml:space="preserve">
+    <value>Twoja Strefa Czasowa</value>
+  </data>
+  <data name="RequestSubmitterTimeZone" xml:space="preserve">
+    <value>Strefa Czasowa żądania</value>
+  </data>
+  <data name="FilterRoles" xml:space="preserve">
+    <value>Filtr Ról</value>
+  </data>
+  <data name="InvalidDimensionsExpectingAnImageSmallerThan2000x4000" xml:space="preserve">
+    <value>Nieprawidłowe wymiary! Spodziewając obraz mniejszy niż 2000x4000.</value>
+  </data>
+  <data name="LoadImage" xml:space="preserve">
+    <value>Załaduj zdjęcie</value>
+  </data>
+  <data name="NotAJPEGSVGOrAPNG" xml:space="preserve">
+    <value>Plik nie jest w formacie JPEG, PNG lub SVG!</value>
+  </data>
+  <data name="RequestsHaveNotBeenApproved" xml:space="preserve">
+    <value>{0} wniosków nie zostało zatwierdzonych.</value>
+  </data>
+  <data name="RequestsHaveNotBeenDenied" xml:space="preserve">
+    <value>{0} wniosków nie zostało odrzuconych.</value>
+  </data>
+  <data name="PresentTenseSchedule" xml:space="preserve">
+    <value>Planowanie</value>
+  </data>
+  <data name="SelectedRequestsInfo" xml:space="preserve">
+    <value>Wybrano {0} z {1} żądań</value>
+  </data>
+  <data name="DayOffRules" xml:space="preserve">
+    <value>Zasady dla Dnia Wolnego</value>
+  </data>
+  <data name="NewDayOffRule" xml:space="preserve">
+    <value>Nowa Zadada dla Dnia Wolnego</value>
+  </data>
+  <data name="AgentsSuccessfullyScheduled" xml:space="preserve">
+    <value>agenci zostali pomyślnie zaplanowani</value>
+  </data>
+  <data name="CriticalUnderstaffingColon" xml:space="preserve">
+    <value>Krytyczne Braki Obsady:</value>
+  </data>
+  <data name="InvalidInput" xml:space="preserve">
+    <value>Nieprawidłowe dane wejściowe</value>
+  </data>
+  <data name="UnderstaffingColon" xml:space="preserve">
+    <value>Braki Obsady:</value>
+  </data>
+  <data name="WeekendColon" xml:space="preserve">
+    <value>Weekend:</value>
+  </data>
+  <data name="OverstaffingColon" xml:space="preserve">
+    <value>Nadmiar załogi</value>
+  </data>
+  <data name="ClearCampaign" xml:space="preserve">
+    <value>Wyczyść kampanię</value>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Pamiętasz mnie?</value>
+  </data>
+  <data name="MyTeam" xml:space="preserve">
+    <value>Mój Zespół</value>
+  </data>
+  <data name="CurrentPlanningPeriodMessage" xml:space="preserve">
+    <value>Ten okres planowania będzie od</value>
+  </data>
+  <data name="AppliedFilters" xml:space="preserve">
+    <value>Ustawienia mają zastosowanie do następujących:</value>
+  </data>
+  <data name="SeatBookingsList" xml:space="preserve">
+    <value>Lista Rezerwacji Miejsc</value>
+  </data>
+  <data name="SeatProperties" xml:space="preserve">
+    <value>Właściwości Miejsca</value>
+  </data>
+  <data name="IntraOptimize" xml:space="preserve">
+    <value>Optymalizacja Dzienna</value>
+  </data>
+  <data name="ShowErrors" xml:space="preserve">
+    <value>Pokaż błędy</value>
+  </data>
+  <data name="Anonymous" xml:space="preserve">
+    <value>Anonimowy</value>
+  </data>
+  <data name="InvalidNumber" xml:space="preserve">
+    <value>Nieprawidłowy numer</value>
+  </data>
+  <data name="ShowRightPanel" xml:space="preserve">
+    <value>Pokaż prawy panel</value>
+  </data>
+  <data name="ShowOnlyAbsence" xml:space="preserve">
+    <value>Pokaz tylko nieobecności</value>
+  </data>
+  <data name="HidePanel" xml:space="preserve">
+    <value>Ukryj Panel</value>
+  </data>
+  <data name="DoubleClickHereToEditText" xml:space="preserve">
+    <value>Dwukrotnie kliknij tutaj, aby edytować teksty</value>
+  </data>
+  <data name="EnableWaitlisting" xml:space="preserve">
+    <value>Włacz Listy Oczekujących</value>
+  </data>
+  <data name="AbsenceRequestForOneDayHasBeenWaitlisted" xml:space="preserve">
+    <value>Żądanie nieobecności z {0} nie może być zatwierdzone w tym czasie i zostało dodane do lisy oczekujących.</value>
+  </data>
+  <data name="AbsenceRequestHasBeenWaitlisted" xml:space="preserve">
+    <value>Żądanie nieobecności od {0} do {1} nie mógło zostać zatwierdzone w tym czasie i zostało dodane do listy oczekujących.</value>
+  </data>
+  <data name="Waitlisted" xml:space="preserve">
+    <value>Lista Oczekujących</value>
+  </data>
+  <data name="AddEmptyPeriod" xml:space="preserve">
+    <value>Dodaj pusty okres</value>
+  </data>
+  <data name="DeletePeriod" xml:space="preserve">
+    <value>Usuń okres</value>
+  </data>
+  <data name="AgentDetails" xml:space="preserve">
+    <value>Dane agenta</value>
+  </data>
+  <data name="InAlarm" xml:space="preserve">
+    <value>W Alarmie</value>
+  </data>
+  <data name="SelectSites" xml:space="preserve">
+    <value>Wybierz miejsca</value>
+  </data>
+  <data name="SelectTeams" xml:space="preserve">
+    <value>Wybierz zespoły</value>
+  </data>
+  <data name="Personalize" xml:space="preserve">
+    <value>Personalizuj</value>
+  </data>
+  <data name="ToggleLowLightFilter" xml:space="preserve">
+    <value>Włącz niski filtr światła</value>
+  </data>
+  <data name="NoHierarchiesExist" xml:space="preserve">
+    <value>Nie można znaleźć hierarhii dla bieżącej jednostki organizacyjnej</value>
+  </data>
+  <data name="ToggleAll" xml:space="preserve">
+    <value>Przełącz wszystko</value>
+  </data>
+  <data name="WaitlistPosition" xml:space="preserve">
+    <value>Pozycja na Liście Oczekujących:</value>
+  </data>
+  <data name="LoadedColon" xml:space="preserve">
+    <value>Załadowane:</value>
+  </data>
+  <data name="RemoveEntireAbsenceForMultiDayPersonAbsence" xml:space="preserve">
+    <value>Usuń całą kilkudniową nieobecność osoby</value>
+  </data>
+  <data name="ToggleDarkTheme" xml:space="preserve">
+    <value>Włącz ciemny motyw</value>
+  </data>
+  <data name="CanNotModifyMyRole" xml:space="preserve">
+    <value>Nie można modyfikować swojej roli</value>
+  </data>
+  <data name="ProductActivationKeyMajorVersionWrong" xml:space="preserve">
+    <value>Do uruchomienia systemu Teleopti WFM wersja 8 wymagany jest Product Activation Key, prosimy o kontakt z biurem serwisowym lub Account Managerem, aby poprosić o nowy PAK.</value>
+  </data>
+  <data name="Replan" xml:space="preserve">
+    <value>Powtórz Planowanie</value>
+  </data>
+  <data name="ConfirmToggleAllPermissions" xml:space="preserve">
+    <value>Spowoduje to przełączenie stanu wszystkich funkcji, jesteś pewien, że chcesz kontynuować?</value>
+  </data>
+  <data name="ConfirmToggleChildPermissions" xml:space="preserve">
+    <value>Spowoduje to usunięcie tej funkcji i wszystkich funkcji podrzędnych poniżej niej, jesteś pewien, że chcesz kontynuować?</value>
+  </data>
+  <data name="SameDay" xml:space="preserve">
+    <value>Ten Sam Dzień</value>
+  </data>
+  <data name="FailedMessageForAddingActivity" xml:space="preserve">
+    <value>Nie udało się dodać żadnych działań dla wybranych środków</value>
+  </data>
+  <data name="SuccessfulMessageForAddingActivity" xml:space="preserve">
+    <value>Pomyślnie dodano działania dla wybranych agentów</value>
+  </data>
+  <data name="SelectAnActivity" xml:space="preserve">
+    <value>Wybierz aktywność</value>
+  </data>
+  <data name="CouldNotRemoveAbsenceFromProtectedSchedule" xml:space="preserve">
+    <value>Nie można usunąć nieobecności w chronionym harmonogramie.</value>
+  </data>
+  <data name="DenyReason" xml:space="preserve">
+    <value>Powód Odrzucenia</value>
+  </data>
+  <data name="ChangeWillAffectAgents" xml:space="preserve">
+    <value>Zmiana wpłynie na {0} agentów.</value>
+  </data>
+  <data name="RemoveActivity" xml:space="preserve">
+    <value>Usuń Aktywność</value>
+  </data>
+  <data name="PersonsAreWriteProtected" xml:space="preserve">
+    <value>Znaleziono harmonogram chroniony przed zapisem dla {0} agentów.</value>
+  </data>
+  <data name="MustSelectAtLeastOneAgent" xml:space="preserve">
+    <value>Musisz wybrać przynajmniej jednego agenta.</value>
+  </data>
+  <data name="MustSelectTwoAgentsToSwap" xml:space="preserve">
+    <value>Musisz wybrać dwu agentów do zamiany.</value>
+  </data>
+  <data name="NoPermissionAddAgentActivity" xml:space="preserve">
+    <value>Brak uprawnień do dodawania aktywności dla agenta {0}.</value>
+  </data>
+  <data name="NoPermissionRemoveAgentActivity" xml:space="preserve">
+    <value>Brak uprawnień do usuwania aktywności dla agenta {0}.</value>
+  </data>
+  <data name="AbsenceRequestForOneDayWasCancelled" xml:space="preserve">
+    <value>Żądanie nieobecności z {0} zostało anulowane i nieobecność została usunięta z harmonogramu.</value>
+  </data>
+  <data name="AbsenceRequestWasCancelled" xml:space="preserve">
+    <value>Żądanie nieobecności z {0} - {1} zostało anulowane i nieobecność została usunięta z harmonogramu.</value>
+  </data>
+  <data name="Cancelled" xml:space="preserve">
+    <value>Anulowane</value>
+  </data>
+  <data name="ModifySkillArea" xml:space="preserve">
+    <value>Modyfikowanie obszaru umiejętności</value>
+  </data>
+  <data name="CreateSkillArea" xml:space="preserve">
+    <value>Tworzenie obszaru umiejętności</value>
+  </data>
+  <data name="ForecastedAverageHandleTime" xml:space="preserve">
+    <value>Prognozowany średni czas obsługi</value>
+  </data>
+  <data name="IncomingTraffic" xml:space="preserve">
+    <value>Ruch przychodzący</value>
+  </data>
+  <data name="IntradayIntroText" xml:space="preserve">
+    <value>Tutaj można monitorować wartości dzienne, zacznij od wyboru umiejętności lub obszaru</value>
+  </data>
+  <data name="OfferedAverageHandleTime" xml:space="preserve">
+    <value>Oferowane średni czas obsługi</value>
+  </data>
+  <data name="SelectSkillArea" xml:space="preserve">
+    <value>Wybierz obszar umiejętności</value>
+  </data>
+  <data name="ToggleIncludedSkills" xml:space="preserve">
+    <value>Włącz zawarte umiejętności</value>
+  </data>
+  <data name="AreYouSureToRemoveSelectedActivity" xml:space="preserve">
+    <value>Czy na pewno chcesz usunąć {0} działań dla {1} agentów?</value>
+  </data>
+  <data name="SuccessfulMessageForRemovingActivity" xml:space="preserve">
+    <value>Pomyślnie usunięto działania dla wybranych środków</value>
+  </data>
+  <data name="FailedMessageForRemovingActivity" xml:space="preserve">
+    <value>Nie można usunąć działań dla wybranych agentów</value>
+  </data>
+  <data name="CouldNotCancelRequestNoAbsence" xml:space="preserve">
+    <value>Żądanie nieobecności dla {0} w dniu {1} nie może być anulowane ponieważ nie stwierdzono powiązanej nieobecności.</value>
+  </data>
+  <data name="CouldNotCancelRequestNoAbsenceMultiDay" xml:space="preserve">
+    <value>Żądanie nieobecności dla {0} w dniach {1} - {2} nie może być anulowane ponieważ nie stwierdzono powiązanej nieobecności.</value>
+  </data>
+  <data name="RequestsHaveBeenCancelled" xml:space="preserve">
+    <value>{0} żądań zostało odwołanych</value>
+  </data>
+  <data name="RequestsHaveNotBeenCancelled" xml:space="preserve">
+    <value>{0} żądań nie zostało odwołanych</value>
+  </data>
+  <data name="CancelRequest" xml:space="preserve">
+    <value>Anuluj Żądanie</value>
+  </data>
+  <data name="CanOnlyCancelApprovedAbsenceRequest" xml:space="preserve">
+    <value>Nie można anulować żądania nieobecności dla {0} w dniu {1} ponieważ nie została zatwierdzona.</value>
+  </data>
+  <data name="CanOnlyCancelApprovedAbsenceRequestMultiDay" xml:space="preserve">
+    <value>Nie można anulować żądania nieobecności dla {0} w dniach {1} - {2} ponieważ nie została zatwierdzona.</value>
+  </data>
+  <data name="AreYouSureYouWishToCancelAbsence" xml:space="preserve">
+    <value>Czy na pewno chcesz anulować tę prośbę o nieobecność?</value>
+  </data>
+  <data name="CancelAbsenceRequest" xml:space="preserve">
+    <value>Anuluj Zatwierdzoną Prośbę Nieobecności</value>
+  </data>
+  <data name="CancelAbsenceRequestDescription" xml:space="preserve">
+    <value>Jeśli anuljesz zatwierdzony wniosek o nieobecność to wszelkie nieobecności utworzone na podstawie tego wniosku zostaną usunięte z harmonogramu agenta.</value>
   </data>
 </root>
