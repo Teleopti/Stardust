@@ -35,11 +35,12 @@
 					headerCellClass: 'request-type-header',
 					enableSorting: false,
 					visible: true,
-					filterHeaderTemplate: '<div class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\">'
-						+ '<div isteven-multi-select input-model=\"grid.appScope.AllRequestableAbsences\" output-model=\"grid.appScope.SelectedAbsences\" '
-						+ 'button-label=\"Name\" item-label=\"Name\" on-close=\"grid.appScope.absenceFilterClose()\" '
-						+ 'tick-property=\"Selected\" max-labels=\"1\" helper-elements=\"\"></div>'
-						+ '</div>'
+					filterHeaderTemplate: '<md-select ng-repeat=\"colFilter in col.filters\" md-on-close=\"grid.appScope.absenceFilterClose()\"'
+					+ 'multiple ng-model=\"grid.appScope.SelectedAbsences\" placeholder=\"{{\'FilterColon\' | translate}} {{\'Type\' | translate}}\" aria-label=\"{{\'Type\' | translate}}\">'
+					+ '<md-option ng-repeat=\"item in grid.appScope.AllRequestableAbsences\" ng-value=\"item\">'
+					+ '<span ng-bind=\"item.Name\"></span>'
+					+ '</md-option>'
+					+ '</md-select>'
 				},
 				{
 					displayName: 'Subject',
@@ -52,7 +53,7 @@
 						placeholder: 'Filter...'
 					},
 					filterHeaderTemplate: '<div class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\">' +
-						'<input xng-enter=\"enter()\" style=\"background-color:#FFF\" type=\"text\" class=\"ui-grid-filter-input ui-grid-filter-input-{{$index}}\" ng-model=\"colFilter.term\" ng-attr-placeholder=\"{{colFilter.placeholder || \'\'}}\" aria-label=\"{{colFilter.ariaLabel || aria.defaultFilterLabel}}\" /></div>'
+						'<input xng-enter=\"enter()\" type=\"text\"  ng-model=\"colFilter.term\" ng-attr-placeholder=\"{{colFilter.placeholder || \'\'}}\" aria-label=\"{{colFilter.ariaLabel || aria.defaultFilterLabel}}\" /></div>'
 				},
 				{
 					displayName: 'Message',
@@ -65,7 +66,7 @@
 						disableCancelFilterButton: true,
 						placeholder: 'Filter...'
 					},
-					filterHeaderTemplate: '<div class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\" > <input ng-enter=\"enter()\" style=\"background-color:#FFF\" type=\"text\" class=\"ui-grid-filter-input ui-grid-filter-input-{{$index}}\" ng-model=\"colFilter.term\" ng-attr-placeholder=\"{{colFilter.placeholder || \'\'}}\" aria-label=\"{{colFilter.ariaLabel || aria.defaultFilterLabel}}\" /></div>'
+					filterHeaderTemplate: '<div class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\" > <input ng-enter=\"enter()\" type=\"text\" ng-model=\"colFilter.term\" ng-attr-placeholder=\"{{colFilter.placeholder || \'\'}}\" aria-label=\"{{colFilter.ariaLabel || aria.defaultFilterLabel}}\" /></div>'
 				},
 				{ displayName: 'DenyReason', field: 'DenyReason', headerCellFilter: 'translate', cellClass: 'request-deny-reason', headerCellClass: 'request-deny-reason-header', visible: false },
 				{
@@ -75,26 +76,26 @@
 					cellClass: 'request-status',
 					headerCellClass: 'request-status-header',
 					enableSorting: false,
-					filterHeaderTemplate: '<div class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\">'
-						+ '<div isteven-multi-select input-model=\"grid.appScope.AllRequestStatuses\" output-model=\"grid.appScope.SelectedRequestStatuses\" '
-						+ 'button-label=\"Name\" item-label=\"Name\" on-close=\"grid.appScope.statusFilterClose()\" '
-						+ 'tick-property=\"Selected\" max-labels=\"1\" helper-elements=\"\"></div>'
-						+ '</div>'
+					filterHeaderTemplate: '<md-select ng-repeat=\"colFilter in col.filters\" md-on-close=\"grid.appScope.statusFilterClose()\"'
+					+ 'multiple ng-model=\"grid.appScope.SelectedRequestStatuses\" placeholder=\"{{\'FilterColon\' | translate}} {{\'Status\' | translate}}\" aria-label=\"{{\'Status\' | translate}}\">'
+					+ '<md-option ng-repeat=\"item in grid.appScope.AllRequestStatuses\" ng-value=\"item\">'
+					+ '<span ng-bind=\"item.Name\"></span>'
+					+ '</md-option>'
+					+ '</md-select>'
 				},
 				{ displayName: 'CreatedOn', field: 'FormatedCreatedTime()', headerCellFilter: 'translate', cellClass: 'request-created-time', headerCellClass: 'request-created-time-header' },
 				{ displayName: 'Id', field: 'Id', headerCellFilter: 'translate', cellClass: 'request-id', visible: false, headerCellClass: 'request-id-header' },
 				{ displayName: 'UpdatedOn', field: 'FormatedUpdatedTime()', headerCellFilter: 'translate', cellClass: 'request-updated-time', visible: false, headerCellClass: 'request-updated-time-header' }
 				];
 
-
 			}
 
 			function columnDefinitions() {
-				
+
 				if (columns.length == 0) {
 					setupColumns();
 				}
-				
+
 				return columns;
 			}
 

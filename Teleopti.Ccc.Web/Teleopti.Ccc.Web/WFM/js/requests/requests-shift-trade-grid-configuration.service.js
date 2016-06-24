@@ -129,7 +129,7 @@
 							placeholder: 'Filter...'
 						},
 						filterHeaderTemplate: '<div class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\" > <input ng-enter=\"enter()\" ' +
-							'style=\"background-color:#FFF\" type=\"text\" class=\"ui-grid-filter-input ui-grid-filter-input-{{$index}}\" ng-model=\"colFilter.term\" ' +
+							'type=\"text\" class=\"ui-grid-filter-input ui-grid-filter-input-{{$index}}\" ng-model=\"colFilter.term\" ' +
 							'ng-attr-placeholder=\"{{colFilter.placeholder || \'\'}}\" aria-label=\"{{colFilter.ariaLabel || aria.defaultFilterLabel}}\" /></div>'
 					},
 					{
@@ -154,11 +154,12 @@
 						pinnedRight: true,
 						enablePinning: false,
 						minWidth: 111,
-						filterHeaderTemplate: '<div class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\">'
-							+ '<div isteven-multi-select input-model=\"grid.appScope.AllRequestStatuses\" output-model=\"grid.appScope.SelectedRequestStatuses\" '
-							+ 'button-label=\"Name\" item-label=\"Name\" on-close=\"grid.appScope.statusFilterClose()\" '
-							+ 'tick-property=\"Selected\" max-labels=\"1\" helper-elements=\"\"></div>'
-							+ '</div>'
+						filterHeaderTemplate: '<md-select ng-repeat=\"colFilter in col.filters\" md-on-close=\"grid.appScope.absenceFilterClose()\"'
+							+ 'multiple ng-model=\"grid.appScope.SelectedRequestStatuses\" placeholder=\"{{\'FilterColon\' | translate}} {{\'Status\' | translate}}\" aria-label=\"{{\'Status\' | translate}}\">'
+							+ '<md-option ng-repeat=\"item in grid.appScope.AllRequestStatuses\" ng-value=\"item\">'
+							+ '<span ng-bind=\"item.Name\"></span>'
+							+ '</md-option>'
+							+ '</md-select>'
 					},
 					{
 						displayName: 'CreatedOn',
@@ -204,7 +205,7 @@
 
 				if (shiftTradeRequestDateSummary) {
 					return columns.concat(getShiftTradeVisualisationDayColumns(shiftTradeRequestDateSummary));
-				} 
+				}
 
 				return columns;
 			}
@@ -223,7 +224,7 @@
 			function getColumnForDay(day, startOfWeekIsoDay) {
 				var isWeekend = (day.isoWeekday() === 6 || day.isoWeekday() === 7);
 				var startOfWeek = getStartOfWeek(day.clone(), startOfWeekIsoDay);
-				
+
 				return {
 					displayName: $filter('date')(day.toDate(), 'dd'),
 					field: $filter('date')(day.toDate(), 'shortDate'),
@@ -279,7 +280,7 @@
 						}
 						day.add(-1, 'days');
 					}
-					
+
 					if (startOfWeekDay) {
 
 						while (!startOfWeekDay.isAfter(maximum)) {
@@ -293,11 +294,11 @@
 							startOfWeekDay.add(1, 'weeks');
 						}
 					}
-					
+
 				}
 
 				return categories;
-				
+
 			}
 
 			return service;

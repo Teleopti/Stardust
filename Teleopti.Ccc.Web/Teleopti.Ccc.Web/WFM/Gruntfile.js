@@ -127,7 +127,6 @@ module.exports = function(grunt) {
 					'node_modules/teleopti-styleguide/dist/templates.js',
 					'node_modules/filesaver.js/FileSaver.min.js',
 					'node_modules/jquery/dist/jquery.min.js',
-					'node_modules/isteven-angular-multiselect/isteven-multi-select.js',
 					'vendor/hammerjs/hammer.min.js',
 					'node_modules/angular-material/angular-material.min.js',
 					'node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.min.js',
@@ -176,7 +175,6 @@ module.exports = function(grunt) {
 					'node_modules/teleopti-styleguide/dist/templates.js',
 					'node_modules/filesaver.js/FileSaver.min.js',
 					'node_modules/jquery/dist/jquery.min.js',
-					'node_modules/isteven-angular-multiselect/isteven-multi-select.js',
 					'vendor/hammerjs/hammer.min.js',
 					'node_modules/angular-material/angular-material.min.js',
 					'node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.min.js',
@@ -207,7 +205,6 @@ module.exports = function(grunt) {
 					'node_modules/angular-gantt/assets/angular-gantt-plugins.css',
 					'node_modules/angular-gantt/assets/angular-gantt-table-plugin.css',
 					'node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.css',
-					'node_modules/isteven-angular-multiselect/isteven-multi-select.css',
 					'vendor/c3/c3.min.css',
 					'node_modules/teleopti-styleguide/css/main.min.css'
 				],

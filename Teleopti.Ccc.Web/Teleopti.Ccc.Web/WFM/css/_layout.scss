@@ -130,3 +130,7 @@ wfm-notice{
 @media screen and (max-width: 768px) {
 	.c3 svg { font: .6em sans-serif; }
 }
+
+md-select-menu md-option:focus:not([disabled]):not([selected]){
+	background-color: $gray012;
+}
