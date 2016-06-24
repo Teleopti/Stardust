@@ -32,11 +32,17 @@
         }
     }
 
+    span.people-search-input {
+        display: block;
+        margin-bottom: 10px;
+    }
+
     .leader-board {
-        padding-bottom: 50px;
+        padding-bottom: 80px;
         background: $white;
-        max-height: 88vh;
+        max-height: 83vh;
         overflow: auto;
+
 
         table {
             width: 100%;
