@@ -82,6 +82,7 @@ WfmTeamSchedule_PrepareForRelease_37752 = true
 WfmTeamSchedule_RevertToPreviousSchedule_39002 = RC
 
 WfmReportPortal_Basic_38825 = true
+WfmReportPortal_LeaderBoard_39440 = DEV
 
 WebByPassDefaultPermissionCheck_37984 = true
 

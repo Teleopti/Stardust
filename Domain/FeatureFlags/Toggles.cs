@@ -77,6 +77,7 @@
 		WfmTeamSchedule_RevertToPreviousSchedule_39002,
 
 		WfmReportPortal_Basic_38825,
+		WfmReportPortal_LeaderBoard_39440,
 
 		Wfm_Requests_Basic_35986,
 		Wfm_Requests_People_Search_36294,

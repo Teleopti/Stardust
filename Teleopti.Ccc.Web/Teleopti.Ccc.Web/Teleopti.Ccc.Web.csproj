@@ -1362,7 +1362,10 @@
     <Content Include="WFM\js\intraday\intraday.staffing.service.js" />
     <Content Include="WFM\js\intraday\intraday.staffing.service.spec.js" />
     <Content Include="WFM\js\people\people.searchInputDirective.controller.spec.js" />
+    <Content Include="WFM\js\reports\html\leaderboard.html" />
+    <Content Include="WFM\js\reports\leaderboard.service.js" />
     <Content Include="WFM\js\reports\html\reports.html" />
+    <Content Include="WFM\js\reports\leaderboard.controller.js" />
     <Content Include="WFM\js\reports\reports.controller.js" />
     <Content Include="WFM\js\reports\reports.service.js" />
     <Content Include="WFM\js\reports\_modules.js" />
