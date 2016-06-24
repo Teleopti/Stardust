@@ -5,13 +5,12 @@
 
 	LeaderBoardCtrl.$inject = ['LeaderBoardService'];
 
+
 	function LeaderBoardCtrl(LeaderBoardSvc) {
+
 		var vm = this;
 
-		init();
+		vm.searchOptions = {};
 
-		function init() {
-
-		}
 	}
 })();
