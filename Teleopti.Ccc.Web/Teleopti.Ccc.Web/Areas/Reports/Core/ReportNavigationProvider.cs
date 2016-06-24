@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Core
 				Name = applicationFunction.LocalizedFunctionDescription,
 			}).ToList();
 
-			if (_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboardUnderReports) || _toggleManager.IsEnabled(Toggles.WfmReportPortal_LeaderBoard_39440))
+			if (_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboardUnderReports) && _toggleManager.IsEnabled(Toggles.WfmReportPortal_LeaderBoard_39440))
 			{
 				reportList.Add(new ReportItem
 				{
