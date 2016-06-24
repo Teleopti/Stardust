@@ -8,11 +8,11 @@
 	<div class="teamschedule-header">
 		<div class="leftside-part">
 			<span class="people-search-container">
-				<people-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged"/>
+				<people-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged"></people-search-input>
 			</span>
 
 			<span class="datepicker-container">
-				<team-schedule-datepicker selected-date="vm.scheduleDate" on-date-change="vm.onScheduleDateChanged()" />
+				<team-schedule-datepicker selected-date="vm.scheduleDate" on-date-change="vm.onScheduleDateChanged()"></team-schedule-datepicker>
 			</span>
 
 			<div class="wfm-switch" ng-if="vm.toggles.RemoveAbsenceEnabled">
