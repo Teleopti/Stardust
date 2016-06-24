@@ -89,6 +89,9 @@
 		public const string ScheduleAuditTrailReport = "Raptor/OnlineReports/ScheduleAuditTrailReport";
 		public const string ScheduleTimeVersusTargetTimeReport = "Raptor/OnlineReports/ScheduleTimeVersusTargetTimeReport";
 
+		// Reports
+		public const string ViewBadgeLeaderboardUnderReports = "Raptor/Reports/ViewBadgeLeaderboard";
+
 		// Agent Portal Web
 		public const string StudentAvailability = "Raptor/MyTimeWeb/StudentAvailability";
 		public const string StandardPreferences = "Raptor/MyTimeWeb/StandardPreferences";

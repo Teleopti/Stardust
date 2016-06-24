@@ -90,6 +90,8 @@
 		public const string ScheduleAuditTrailReport = "0059";
 		public const string ScheduleTimeVersusTargetTimeReport = "0064";
 
+
+
 		// Agent Portal Web
 		public const string MyTimeWeb = "0065";
 		public const string StudentAvailability = "0066";
@@ -140,5 +142,8 @@
 
 		//Outbound
 		public const string Outbound = "0120";
+
+		// Reports
+		public const string ViewBadgeLeaderboardUnderReports = "0134";
 	}
 }
