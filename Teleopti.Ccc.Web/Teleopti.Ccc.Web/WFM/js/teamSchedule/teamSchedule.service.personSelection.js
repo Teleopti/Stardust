@@ -10,8 +10,6 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 		};
 
 		svc.updatePersonSelection = function (personSchedule) {
-			var selectedPeople = svc.personInfo;
-
 			if (personSchedule.IsSelected) {
 				var absences = [], activities = [];
 				var shiftsForCurrentDate = personSchedule.Shifts.filter(function (shift) {
@@ -35,7 +33,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 						}
 					});
 				}
-				selectedPeople[personSchedule.PersonId] = {
+				svc.personInfo[personSchedule.PersonId] = {
 					Name: personSchedule.Name,
 					Checked: true,
 					AllowSwap: personSchedule.AllowSwap(),
@@ -46,23 +44,22 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 					SelectedAbsences: absences,
 					SelectedActivities: activities
 				};
-			} else if (!personSchedule.IsSelected && selectedPeople[personSchedule.PersonId]) {
-				delete selectedPeople[personSchedule.PersonId];
+			} else if (!personSchedule.IsSelected && svc.personInfo[personSchedule.PersonId]) {
+				delete svc.personInfo[personSchedule.PersonId];
 			}
 		};
 
 		svc.updatePersonInfo = function (schedules) {
 			angular.forEach(schedules, function (personSchedule) {
-				var selectedPerson = svc.personInfo[personSchedule.PersonId];
-
-				if (selectedPerson && selectedPerson.Checked)
+				var personId = personSchedule.PersonId;
+				if (svc.personInfo[personId] && svc.personInfo[personId].Checked)
 					personSchedule.IsSelected = true;
 				else
 					personSchedule.IsSelected = false;
 
-				if (selectedPerson) {
-					selectedPerson.ScheduleEndTime = personSchedule.ScheduleEndTime();
-					selectedPerson.AllowSwap = personSchedule.AllowSwap();
+				if (svc.personInfo[personId]) {
+					svc.personInfo[personId].ScheduleEndTime = personSchedule.ScheduleEndTime();
+					svc.personInfo[personId].AllowSwap = personSchedule.AllowSwap();
 					var shiftLength = personSchedule.Shifts.length;
 					for (var i = 0; i < shiftLength; i++) {
 						if (!personSchedule.Shifts[i].Date.isSame(personSchedule.Date, 'day')) {
@@ -73,7 +70,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 							if (projection.ParentPersonAbsences && projection.ParentPersonAbsences.length > 0) {
 								selected = true;
 								for (var i = 0; i < projection.ParentPersonAbsences.length; i++) {
-									if (selectedPerson.SelectedAbsences.indexOf(projection.ParentPersonAbsences[i]) === -1) {
+									if (svc.personInfo[personId].SelectedAbsences.indexOf(projection.ParentPersonAbsences[i]) === -1) {
 										selected = false;
 										break;
 									}
@@ -84,7 +81,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 								selected = true;
 								var shiftIdLength = projection.ShiftLayerIds.length;
 								for (var i = 0; i < shiftIdLength; i++) {
-									if (selectedPerson.SelectedActivities.indexOf(projection.ShiftLayerIds[i]) === -1) {
+									if (svc.personInfo[personId].SelectedActivities.indexOf(projection.ShiftLayerIds[i]) === -1) {
 										selected = false;
 										break;
 									}
@@ -112,7 +109,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 		svc.updatePersonProjectionSelection = function (currentProjection, personSchedule) {
 			var selected = currentProjection.Selected;
 			var personId = personSchedule.PersonId;
-			var selectedPeople = svc.personInfo;
+
 			angular.forEach(personSchedule.Shifts, function (shift) {
 				if (shift.Date.isSame(personSchedule.Date, 'day')) {
 					angular.forEach(shift.Projections, function (projection) {
@@ -124,9 +121,9 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 					});
 				}
 			});
-			if (selected && !selectedPeople[personId]) {
+			if (selected && !svc.personInfo[personId]) {
 
-				selectedPeople[personId] = {
+				svc.personInfo[personId] = {
 					Name: personSchedule.Name,
 					AllowSwap: personSchedule.AllowSwap(),
 					ScheduleStartTime: personSchedule.ScheduleStartTime(),
@@ -139,61 +136,61 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 
 
 				if (currentProjection.ParentPersonAbsences !== null) {
-					selectedPeople[personId].SelectedAbsences = selectedPeople[personId].SelectedAbsences.concat(currentProjection.ParentPersonAbsences);
-					selectedPeople[personId].PersonAbsenceCount = currentProjection.ParentPersonAbsences.length;
+					svc.personInfo[personId].SelectedAbsences = svc.personInfo[personId].SelectedAbsences.concat(currentProjection.ParentPersonAbsences);
+					svc.personInfo[personId].PersonAbsenceCount = currentProjection.ParentPersonAbsences.length;
 				}
 				if (currentProjection.ShiftLayerIds !== null) {
-					selectedPeople[personId].SelectedActivities = selectedPeople[personId].SelectedActivities.concat(currentProjection.ShiftLayerIds);
-					selectedPeople[personId].PersonActivityCount = currentProjection.ShiftLayerIds.length;
+					svc.personInfo[personId].SelectedActivities = svc.personInfo[personId].SelectedActivities.concat(currentProjection.ShiftLayerIds);
+					svc.personInfo[personId].PersonActivityCount = currentProjection.ShiftLayerIds.length;
 				}
 			}
-			else if (selected && selectedPeople[personId]) {
+			else if (selected && svc.personInfo[personId]) {
 				if (currentProjection.ParentPersonAbsences !== null) {
 					angular.forEach(currentProjection.ParentPersonAbsences, function (personAbs) {
-						if (selectedPeople[personId].SelectedAbsences.indexOf(personAbs) === -1) {
-							selectedPeople[personId].SelectedAbsences.push(personAbs);
-							selectedPeople[personId].PersonAbsenceCount++;
+						if (svc.personInfo[personId].SelectedAbsences.indexOf(personAbs) === -1) {
+							svc.personInfo[personId].SelectedAbsences.push(personAbs);
+							svc.personInfo[personId].PersonAbsenceCount++;
 						}
 					});
 				}
 				if (currentProjection.ShiftLayerIds !== null) {
 					angular.forEach(currentProjection.ShiftLayerIds, function (shiftLayer) {
-						if (selectedPeople[personId].SelectedActivities.indexOf(shiftLayer) === -1) {
-							selectedPeople[personId].SelectedActivities.push(shiftLayer);
-							selectedPeople[personId].PersonActivityCount++;
+						if (svc.personInfo[personId].SelectedActivities.indexOf(shiftLayer) === -1) {
+							svc.personInfo[personId].SelectedActivities.push(shiftLayer);
+							svc.personInfo[personId].PersonActivityCount++;
 						}
 					});
 				}
 			}
-			else if (!selected && selectedPeople[personId]) {
+			else if (!selected && svc.personInfo[personId]) {
 				if (currentProjection.ParentPersonAbsences) {
 					angular.forEach(currentProjection.ParentPersonAbsences, function (personAbs) {
-						var absenceIndex = selectedPeople[personId].SelectedAbsences.indexOf(personAbs);
+						var absenceIndex = svc.personInfo[personId].SelectedAbsences.indexOf(personAbs);
 						if (absenceIndex > -1) {
-							selectedPeople[personId].SelectedAbsences.splice(absenceIndex, 1);
-							selectedPeople[personId].PersonAbsenceCount--;
+							svc.personInfo[personId].SelectedAbsences.splice(absenceIndex, 1);
+							svc.personInfo[personId].PersonAbsenceCount--;
 						}
 					});
 				}
 				if (currentProjection.ShiftLayerIds) {
 					angular.forEach(currentProjection.ShiftLayerIds, function (shiftLayer) {
-						var activityIndex = selectedPeople[personId].SelectedActivities.indexOf(shiftLayer);
+						var activityIndex = svc.personInfo[personId].SelectedActivities.indexOf(shiftLayer);
 						if (activityIndex > -1) {
-							selectedPeople[personId].SelectedActivities.splice(activityIndex, 1);
-							selectedPeople[personId].PersonActivityCount--;
+							svc.personInfo[personId].SelectedActivities.splice(activityIndex, 1);
+							svc.personInfo[personId].PersonActivityCount--;
 						}
 					});
 				}
 
-				if (selectedPeople[personId].PersonAbsenceCount === 0 && selectedPeople[personId].PersonActivityCount === 0) {
-					delete selectedPeople[personId];
+				if (svc.personInfo[personId].PersonAbsenceCount === 0 && svc.personInfo[personId].PersonActivityCount === 0) {
+					delete svc.personInfo[personId];
 				}
 			}
-			personSchedule.IsSelected = selectedPeople[personId]
-										&& selectedPeople[personId].PersonAbsenceCount === personSchedule.AbsenceCount()
-										&& selectedPeople[personId].PersonActivityCount === personSchedule.ActivityCount();
-			if (selectedPeople[personId]) {
-				selectedPeople[personId].Checked = personSchedule.IsSelected;
+			personSchedule.IsSelected = svc.personInfo[personId]
+										&& svc.personInfo[personId].PersonAbsenceCount === personSchedule.AbsenceCount()
+										&& svc.personInfo[personId].PersonActivityCount === personSchedule.ActivityCount();
+			if (svc.personInfo[personId]) {
+				svc.personInfo[personId].Checked = personSchedule.IsSelected;
 			}
 		};
 
