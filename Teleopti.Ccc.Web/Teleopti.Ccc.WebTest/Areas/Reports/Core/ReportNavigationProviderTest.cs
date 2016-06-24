@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Reports.Core
 			_reportUrl = new FakeReportUrl();
 			_reportProvider = new FakeReportProvider();
 			_authorizor = new ConfigurablePermissions();
-			target = new ReportNavigationProvider(_reportProvider, _reportUrl, _authorizor, new FakeToggleManager());
+			target = new ReportNavigationProvider(_reportProvider, _reportUrl, _authorizor, new TrueToggleManager());
 		}
 
 		[Test]
