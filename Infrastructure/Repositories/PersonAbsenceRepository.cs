@@ -97,6 +97,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				retList.AddRange(Session.CreateCriteria(typeof(PersonAbsence), "abs")
 					.Add(Restrictions.InG("Id", personAbsenceIdList))
+					.Add(Restrictions.Eq("Scenario", scenario))
 					.SetResultTransformer(Transformers.DistinctRootEntity)
 					.List<IPersonAbsence>());
 			}
@@ -126,7 +127,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			var retList = Session.CreateCriteria(typeof(PersonAbsence))
                        .Add(Restrictions.Eq("PersonRequest", personRequest))
-                       .List<IPersonAbsence>();
+					   .Add(Restrictions.Eq("Scenario", scenario))
+					   .List<IPersonAbsence>();
 
 			return retList;
 		}

@@ -352,7 +352,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 		
 		[Test]
-		public void CanFindRequestThatCreatedTheAbsencIfInSameScenario()
+		public void CanFindRequestThatCreatedTheAbsenceIfInSameScenario()
 		{
 			Assert.IsTrue(testFindAbsenceFromPersonRequest(defaultScenario));
 		}
@@ -380,11 +380,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(personAbsence);
 
 			var personAbsences = new PersonAbsenceRepository(CurrUnitOfWork).Find(personRequest, queryScenario).ToArray();
-			var personAbsenceRetrieved = personAbsences[0];
 
-			return personRequest.Id == personAbsenceRetrieved.PersonRequest.Id;
+			if (personAbsences.Any())
+			{
+				var personAbsenceRetrieved = personAbsences[0];
+				return personRequest.Id == personAbsenceRetrieved.PersonRequest.Id;
+			}
 
-		}
+			return false;
+
+	    }
 
 		/// <summary>
 		/// Determines whether this instance [can find agent absences with correct scenario and priod].
