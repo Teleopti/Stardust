@@ -7,8 +7,15 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 {
-	public static class SearchTermParser
+	public class SearchTermParser : ISearchTermParser
 	{
+		private readonly ILoggedOnUser _loggonUser;
+
+		public SearchTermParser(ILoggedOnUser loggonUser)
+		{
+			_loggonUser = loggonUser;
+		}
+
 		public static IDictionary<PersonFinderField, string> Parse(string values)
 		{
 			const char keyValueSplitter = ':';
@@ -65,5 +72,34 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 
 			return parsedTerms;
 		}
+
+		public IDictionary<PersonFinderField, string> Parse(string values, DateOnly date)
+		{
+			values = Keyword(values, date);
+			return Parse(values);
+		}
+
+		public string Keyword(string values, DateOnly date)
+		{
+			var myTeam = _loggonUser.CurrentUser().MyTeam(date);
+
+			if (string.IsNullOrEmpty(values))
+			{
+				var siteTerm = myTeam.Site.Description.Name.Contains(" ")
+					? "\"" + myTeam.Site.Description.Name + "\""
+					: myTeam.Site.Description.Name;
+				var teamTerm = myTeam.Description.Name.Contains(" ")
+					? "\"" + myTeam.Description.Name + "\""
+					: myTeam.Description.Name;
+				values = siteTerm + " " + teamTerm;
+			}
+			return values;
+		}
+	}
+
+	public interface ISearchTermParser
+	{
+		IDictionary<PersonFinderField, string> Parse(string values, DateOnly date);
+		string Keyword(string values, DateOnly date);
 	}
 }

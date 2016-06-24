@@ -19,7 +19,6 @@ using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
-using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
@@ -34,9 +33,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		private readonly IAbsencePersister _absencePersister;
 		private readonly ISettingsPersisterAndProvider<AgentsPerPageSetting> _agentsPerPagePersisterAndProvider;
 		private readonly ISwapMainShiftForTwoPersonsCommandHandler _swapMainShiftForTwoPersonsHandler;
-		private readonly IPersonNameProvider _personNameProvider;
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly ICurrentScenario _currentScenario;
+		private readonly ISearchTermParser _parser;
 
 		public TeamScheduleController(ITeamScheduleViewModelFactory teamScheduleViewModelFactory,
 			ILoggedOnUser loggonUser,
@@ -44,9 +43,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			IAuthorization authorization, IAbsencePersister absencePersister,
 			ISettingsPersisterAndProvider<AgentsPerPageSetting> agentsPerPagePersisterAndProvider,
 			ISwapMainShiftForTwoPersonsCommandHandler swapMainShiftForTwoPersonsHandler,
-			IPersonNameProvider personNameProvider,
 			ICommandDispatcher commandDispatcher,
-			ICurrentScenario currentScenario)
+			ICurrentScenario currentScenario, 
+			ISearchTermParser parser)
 		{
 			_teamScheduleViewModelFactory = teamScheduleViewModelFactory;
 			_loggonUser = loggonUser;
@@ -55,9 +54,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			_absencePersister = absencePersister;
 			_agentsPerPagePersisterAndProvider = agentsPerPagePersisterAndProvider;
 			_swapMainShiftForTwoPersonsHandler = swapMainShiftForTwoPersonsHandler;
-			_personNameProvider = personNameProvider;
 			_commandDispatcher = commandDispatcher;
 			_currentScenario = currentScenario;
+			_parser = parser;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamSchedule/GetPermissions")]
@@ -91,22 +90,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 					Json(new GroupScheduleViewModel {Schedules = new List<GroupScheduleShiftViewModel>(), Total = 0, Keyword = ""});
 			}
 
-			if (string.IsNullOrEmpty(keyword))
-			{
-				var siteTerm = myTeam.Site.Description.Name.Contains(" ")
-					? "\"" + myTeam.Site.Description.Name + "\""
-					: myTeam.Site.Description.Name;
-				var teamTerm = myTeam.Description.Name.Contains(" ")
-					? "\"" + myTeam.Description.Name + "\""
-					: myTeam.Description.Name;
-				keyword = siteTerm + " " + teamTerm;
-			}
-
-			var criteriaDictionary = SearchTermParser.Parse(keyword);
+			var criteriaDictionary = _parser.Parse(keyword, currentDate);
 
 			var result =
 				_teamScheduleViewModelFactory.CreateViewModel(criteriaDictionary, currentDate, pageSize, currentPageIndex, isOnlyAbsences);
-			result.Keyword = keyword;
+			result.Keyword = _parser.Keyword(keyword, currentDate);
 
 			return Json(result);
 		}

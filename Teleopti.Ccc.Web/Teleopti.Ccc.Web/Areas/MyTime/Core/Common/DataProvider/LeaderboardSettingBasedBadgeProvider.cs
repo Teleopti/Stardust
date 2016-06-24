@@ -108,6 +108,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			return getPermittedAgentOverviews(permittedAgentBadgeList);
 		}
 
+		public IEnumerable<AgentBadgeOverview> GetAgentBadgeOverviewsForPeople(IEnumerable<Guid> personIds, DateOnly date)
+		{
+			teamSettings = _teamSettingRepository.FindAllTeamGamificationSettingsSortedByTeam();
+			var agentBadgeList = getAgentBadgeListForPeople(date, personIds.ToList());
+
+			return getPermittedAgentOverviews(agentBadgeList);
+		} 
 		private IEnumerable<agentWithBadge> mergeAgentWithBadges(IEnumerable<agentWithBadge> agentWithBadges1,
 			IEnumerable<agentWithBadge> agentWithBadges2)
 		{
@@ -132,6 +139,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			permittedPersonList = getPermittedAgents(functionPath, allAgents, date);
 			var permittedPersonIdList = permittedPersonList.Select(x => x.PersonId).ToList();
 
+			return getAgentBadgeListForPeople(date, permittedPersonIdList);
+		}
+
+		private IEnumerable<agentWithBadge> getAgentBadgeListForPeople(DateOnly date, IList<Guid> permittedPersonIdList)
+		{
 			var agentWithBadgesConvertedFromRatio = new List<agentWithBadge>();
 			var agentIdListWithDifferentThreshold = new List<Guid>();
 			foreach (var teamSetting in teamSettings)
@@ -145,17 +157,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				var agentBadgesConvertedFromRatio = _agentBadgeRepository.Find(permittedAgentIdListWithSetting);
 				agentWithBadgesConvertedFromRatio.AddRange(getAgentWithBadges(agentBadgesConvertedFromRatio,
 					teamSetting.GamificationSetting.SilverToBronzeBadgeRate, teamSetting.GamificationSetting.GoldToSilverBadgeRate));
-				
-				agentIdListWithDifferentThreshold.AddRange(permittedAgentIdListWithSetting);
-				
 
+				agentIdListWithDifferentThreshold.AddRange(permittedAgentIdListWithSetting);
 			}
 
-			
+
 			var agentBadgesWithRank = _agentBadgeWithRankRepository.Find(agentIdListWithDifferentThreshold);
 			var agentWithRankedBadges = getAgentWithBadges(agentBadgesWithRank).ToList();
 			return mergeAgentWithBadges(agentWithBadgesConvertedFromRatio, agentWithRankedBadges);
-						
 		}
 
 		private static IEnumerable<agentWithBadge> getAgentWithBadges(IEnumerable<AgentBadge> agentBadges,
