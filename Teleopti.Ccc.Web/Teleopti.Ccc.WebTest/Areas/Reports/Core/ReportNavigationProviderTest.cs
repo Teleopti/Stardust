@@ -3,6 +3,10 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
 using Teleopti.Ccc.Web.Areas.Reports.Core;
 using Teleopti.Interfaces.Domain;
@@ -15,12 +19,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Reports.Core
 	{
 		private FakeReportProvider _reportProvider;
 		private IReportUrl _reportUrl;
+		private ConfigurablePermissions _authorizor;
+		private IReportNavigationProvider target;
 
 		[SetUp]
 		public void SetUp()
 		{
 			_reportUrl = new FakeReportUrl();
 			_reportProvider = new FakeReportProvider();
+			_authorizor = new ConfigurablePermissions();
+			target = new ReportNavigationProvider(_reportProvider, _reportUrl, _authorizor, new FakeToggleManager());
 		}
 
 		[Test]
@@ -30,7 +38,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Reports.Core
 			report.Stub(x => x.LocalizedFunctionDescription).Return("report1");
 			report.Stub(x => x.ForeignId).Return("report1");
 			_reportProvider.PermitReport(report);
-			var target = new ReportNavigationProvider(_reportProvider, _reportUrl);
 
 			var result = target.GetNavigationItems();
 
@@ -44,8 +51,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Reports.Core
 			var report = MockRepository.GenerateMock<IApplicationFunction>();
 			report.Stub(x => x.LocalizedFunctionDescription).Return("report1");
 			report.Stub(x => x.ForeignId).Return("report1");
-
-			var target = new ReportNavigationProvider(_reportProvider, _reportUrl);
 
 			var result = target.GetNavigationItems();
 
@@ -65,13 +70,29 @@ namespace Teleopti.Ccc.WebTest.Areas.Reports.Core
 
 			_reportProvider.PermitReport(report);
 
-			var target = new ReportNavigationProvider(_reportProvider, _reportUrl);
-
 			var result = target.GetNavigationItems();
 
 			result.Count.Should().Be.EqualTo(1);
 			result.SingleOrDefault().Url.Should().Be.EqualTo("Selection.aspx?ReportId=report1&BuId=00000001");
 			result.SingleOrDefault().Name.Should().Be.EqualTo("report1");
+		}
+
+		[Test]
+		public void ShouldGetBadgeLeaderboardReportItemWhenHasPermission()
+		{
+			_authorizor.HasPermission(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboardUnderReports);
+
+			var result = target.GetNavigationItems();
+
+			result.Count.Should().Be.EqualTo(1);
+			result.SingleOrDefault().Name.Should().Be.EqualTo(Resources.BadgeLeaderBoardReport);
+		}
+		[Test]
+		public void ShouldNotGetBadgeLeaderboardReportItemWhenHasNoPermission()
+		{
+			var result = target.GetNavigationItems();
+
+			result.Count.Should().Be.EqualTo(0);
 		}
 	}
 

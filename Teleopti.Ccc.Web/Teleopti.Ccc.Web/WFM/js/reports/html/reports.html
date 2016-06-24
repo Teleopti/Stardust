@@ -9,12 +9,12 @@
 		<input type="text" id="report-query" ng-model="reportFilter.Name" placeholder="{{'FilterReports'|translate}}..." />
 	</div>
 	<div class="report-list">
-		<a class="report-item" ui-sref="reports/leaderboard" target="_blank" tabindex="0">
+		<a class="report-item" ng-repeat="report in reports.reports | filter: reportFilter" ng-if="!report.IsWebReport" ng-href="{{report.Url}}" target="_blank" tabindex="0">
 			<div class="wfm-card">
-				<h3>{{'BadgeLeaderBoardReport' | translate}}</h3>
+				<h3>{{report.Name}}</h3>
 			</div>
 		</a>
-		<a class="report-item" ng-repeat="report in reports.reports | filter: reportFilter" ng-href="{{report.Url}}" target="_blank" tabindex="0">
+		<a class="report-item" ng-repeat="report in reports.reports | filter: reportFilter" ng-if="report.IsWebReport" ui-sref="{{report.Url}}" target="_blank" tabindex="0">
 			<div class="wfm-card">
 				<h3>{{report.Name}}</h3>
 			</div>
