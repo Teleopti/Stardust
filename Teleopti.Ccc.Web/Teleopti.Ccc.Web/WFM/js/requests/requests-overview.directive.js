@@ -109,15 +109,7 @@
 						Maximum: requests.data.MaximumDateTime,
 						FirstDayOfWeek: requests.data.FirstDayOfWeek
 					}
-				} else {
-					vm.shiftTradeRequestDateSummary = {
-						Minimum: requests.data.MinimumDateTime,
-						Maximum: requests.data.MaximumDateTime,
-						FirstDayOfWeek: requests.data.FirstDayOfWeek
-
-					};
 				}
-
 
 				if (vm.totalRequestsCount !== requests.data.TotalCount) {
 					vm.totalRequestsCount = requests.data.TotalCount;
