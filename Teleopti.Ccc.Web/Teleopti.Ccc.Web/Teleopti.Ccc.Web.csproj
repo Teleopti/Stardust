@@ -1683,7 +1683,6 @@
     <EmbeddedResource Include="tzdb2016c.nzd" />
     <Content Include="WFM\css\_navbar.scss" />
     <Content Include="WFM\css\_main.scss" />
-    <Content Include="WFM\css\reports.scss" />
     <Content Include="Areas\MultiTenancy\Views\TenantAdminInfo\Index.cshtml" />
     <Content Include="Areas\MultiTenancy\Views\web.config" />
     <None Include="WFM\css\_forecasting.scss" />
@@ -2377,6 +2376,7 @@
     <Content Include="WFM\css\_wfmrightpanel.scss" />
     <Content Include="WFM\css\_requests.scss" />
     <Content Include="WFM\css\_start.scss" />
+    <Content Include="WFM\css\_reports.scss" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
