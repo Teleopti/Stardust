@@ -1,16 +1,17 @@
-﻿"use strict";
+﻿(function() {
+	"use strict";
 
-angular.module("wfm.teamSchedule").service("ScenarioTestUtil", function () {
-	var scenario = this;
+	angular.module("wfm.teamSchedule").service("ScenarioTestUtil", function() {
+		var scenario = this;
 
-	var inTest = false;
+		var inTest = false;
 
-	scenario.isScenarioTest = function () {
-		return inTest;
-	}
+		scenario.isScenarioTest = function() {
+			return inTest;
+		}
 
-	scenario.inScenarioTest = function () {
-		inTest = true;
-	}
-
-});
+		scenario.inScenarioTest = function() {
+			inTest = true;
+		}
+	});
+})();
