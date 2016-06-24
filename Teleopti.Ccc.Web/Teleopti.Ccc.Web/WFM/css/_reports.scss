@@ -1,35 +1,76 @@
-﻿.wfm-reports{
-	max-width: 100em;
+﻿.wfm-reports {
+    max-width: 100em;
 
-	.report-filter{
-		padding: 1em;
-	}
+    .report-filter {
+        padding: 1em;
+    }
 
-	.report-list{
-		display: flex;
-		flex-wrap: wrap;
+    .report-list {
+        display: flex;
+        flex-wrap: wrap;
 
-		.report-item {
-			// IE 10:
-			display: -ms-flexbox;
-			-ms-flex-negative: 1;
-			-ms-flex-preferred-size: 30%;
+        .report-item {
+            // IE 10:
+            display: -ms-flexbox;
+            -ms-flex-negative: 1;
+            -ms-flex-preferred-size: 30%;
+            display: flex;
+            flex-shrink: 1;
+            flex-basis: 30%;
 
-			display: flex;
-			flex-shrink: 1;
-			flex-basis: 30%;
+            .wfm-card {
+                min-height: 0;
+                margin: 8px;
+                padding: 16px;
+                width: 100%;
 
-			.wfm-card {
-				min-height: 0;
-				margin: 8px;
-				padding: 16px;
-				width: 100%;
+                h3 {
+                    font-weight: normal;
+                    margin: 4px 0 4px 0 !important;
+                }
+            }
+        }
+    }
 
-				h3 {
-					font-weight: normal;
-					margin: 4px 0 4px 0 !important;
-				}
-			}
-		}
-	}
+    .leader-board {
+        padding-bottom: 50px;
+        background: $white;
+        max-height: 88vh;
+        overflow: auto;
+
+        table {
+            width: 100%;
+        }
+
+        table thead tr {
+            height: 42px;
+            font-weight: bold;
+        }
+
+        table tr {
+            height: 30px;
+        }
+
+        table td.agent-badge-num {
+            width: 10%;
+            text-align: center;
+        }
+
+        td.gold {
+            background: url('../js/reports/images/gold.png') no-repeat center center;
+        }
+
+        td.silver {
+            background: url('../js/reports/images/silver.png') no-repeat center center;
+        }
+
+        td.bronze {
+            background: url('../js/reports/images/bronze.png') no-repeat center center;
+        }
+
+        .background-gray {
+            background: $gray012;
+            -webkit-print-color-adjust: exact;
+        }
+    }
 }

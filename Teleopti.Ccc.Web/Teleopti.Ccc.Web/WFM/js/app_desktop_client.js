@@ -185,7 +185,7 @@ wfm.config([
 		}).state('reports/leaderboard', {
 			url: '/reports/leaderboard',
 			templateUrl: 'js/reports/html/leaderboard.html',
-			controller: 'LeaderBoardController as leaderboard'
+			controller: 'LeaderBoardController as vm'
 		});
 
 		RtaStateProvider.config($stateProvider);

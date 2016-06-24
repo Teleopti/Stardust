@@ -1,4 +1,13 @@
-﻿<div id="reports" class="wfm-reports">
+﻿<style type="text/css">
+	#materialcontainer.container.content {
+		overflow: visible;
+	}
+
+	.wfm-reports.wfm-reports {
+		max-width: none;
+	}
+</style>
+<div id="reports" class="wfm-reports">
 	<div class="view-header">
 		<div class="view-title">
 			<h1><i class="mdi mdi-chart-bar"></i> <span translate>{{'BadgeLeaderBoardReport' | translate}}</span></h1>
@@ -7,25 +16,25 @@
 
 	<!--<people-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged" />-->
 
-	<div class="leader-board-table">
+	<div class="leader-board material-depth-1 wfm-block">
 		<table>
 			<thead>
 				<tr>
 					<td class="agent-badge-header">{{'Rank' | translate}}</td>
 					<td class="agent-badge-header">{{'AgentName' | translate}} </td>
-					<td class="agent-badge-num"><img src="~/Areas/MyTime/Content/Images/gold.png" /></td>
-					<td class="agent-badge-num"><img src="~/Areas/MyTime/Content/Images/silver.png" /></td>
-					<td class="agent-badge-num"><img src="~/Areas/MyTime/Content/Images/bronze.png" /></td>
+					<td class="agent-badge-num gold"></td>
+					<td class="agent-badge-num silver"></td>
+					<td class="agent-badge-num bronze"></td>
 				</tr>
 			</thead>
 
-			<tbody class="badge-leader-board-report">
-				<tr class="agent-badge">
-					<td data-bind="text:rank" class="agent-rank"></td>
-					<td data-bind="text:name" class="agent-name"></td>
-					<td class="agent-badge-num" data-bind="text: gold"></td>
-					<td class="agent-badge-num" data-bind="text: silver"></td>
-					<td class="agent-badge-num" data-bind="text: bronze"></td>
+			<tbody>
+				<tr class="agent-badge" ng-repeat="agent in vm.fakeData.Agents" ng-class="[$index % 2== 0 ? 'background-gray':'']">
+					<td class="agent-rank">{{agent.AgentName}}</td>
+					<td class="agent-name">{{agent.AgentName}}</td>
+					<td class="agent-badge-num">{{agent.Gold}}</td>
+					<td class="agent-badge-num">{{agent.Silver}}</td>
+					<td class="agent-badge-num">{{agent.Bronze}}</td>
 				</tr>
 			</tbody>
 		</table>

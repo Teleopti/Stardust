@@ -1363,6 +1363,9 @@
     <Content Include="WFM\js\intraday\intraday.staffing.service.spec.js" />
     <Content Include="WFM\js\people\people.searchInputDirective.controller.spec.js" />
     <Content Include="WFM\js\reports\html\leaderboard.html" />
+    <Content Include="WFM\js\reports\images\bronze.png" />
+    <Content Include="WFM\js\reports\images\gold.png" />
+    <Content Include="WFM\js\reports\images\silver.png" />
     <Content Include="WFM\js\reports\leaderboard.service.js" />
     <Content Include="WFM\js\reports\html\reports.html" />
     <Content Include="WFM\js\reports\leaderboard.controller.js" />
