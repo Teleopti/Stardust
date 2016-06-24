@@ -27,13 +27,13 @@ define([
 		});
 	};
 
-	var requestReadModelCheck = function () {
-		http.get('HealthCheck/CheckScheduleProjectionReadOnly', { start: new Date(vm.readModelCheckStartDate()).toISOString(), end: new Date(vm.readModelCheckEndDate()).toISOString() }).done(function(data) {
-		});
+	var requestReadModelCheck = function (cb) {
+		http.get('HealthCheck/CheckScheduleProjectionReadOnly', { start: new Date(vm.readModelCheckStartDate()).toISOString(), end: new Date(vm.readModelCheckEndDate()).toISOString() })
+			.done(cb);
 	};
 
-	var requestReadModelFix = function() {
-		http.get('HealthCheck/FixScheduleProjectionReadOnly').done(function (data) {});
+	var requestReadModelFix = function(cb) {
+		http.get('HealthCheck/FixScheduleProjectionReadOnly').done(cb);
 	};
 
 	vm.initialize({

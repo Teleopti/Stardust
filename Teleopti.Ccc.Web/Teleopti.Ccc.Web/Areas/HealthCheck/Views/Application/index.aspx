@@ -16,7 +16,7 @@ var identity = (ITeleoptiIdentity) CurrentTeleoptiPrincipal.Make().Current().Ide
 	<meta name="viewport" content="width=device-width,initial-scale=1.0" />
 		
 	<link rel="stylesheet" href="<%= Url.Content("~/Content/bootstrap/Content/bootstrap.css") %>" />
-	<link rel="stylesheet" href="<%= Url.Content("~/Content/bootstrap/Content/bootstrap-theme.css") %>" />	
+	<link rel="stylesheet" href="<%= Url.Content("~/Content/bootstrap/Content/bootstrap-theme.css") %>" />
 	
 	  <%--<script>var require = { urlArgs: 'v=<%=new ResourceVersion().Version()%>' };</script>--%>
 	  <script>var require = { urlArgs: 'v=<%=1%>' };</script>
@@ -35,6 +35,9 @@ var identity = (ITeleoptiIdentity) CurrentTeleoptiPrincipal.Make().Current().Ide
 	<!--[if lt IE 7]>
 		<p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this application.</p>
 	<![endif]-->
+	<style>
+		input[type=date] { line-height: initial; }
+	</style>
 	<div id="Health-Check" class="container">
 		<div class="row">
 			<div class="col-xs-12">
@@ -106,20 +109,30 @@ var identity = (ITeleoptiIdentity) CurrentTeleoptiPrincipal.Make().Current().Ide
 					<!-- /ko -->
 					<h3>Check read model</h3>
 					<div>
-						<form>
-							<label>
-								Start date
-								<input type="date" data-bind="value: readModelCheckStartDate"/>
-							</label>
-							<label>
-								End date
-								<input type="date" data-bind="value: readModelCheckEndDate"/>
-							</label>
+						<!-- ko if: trackReadModelCheckId() && readmodelCheckIsRunning() -->
+						<p>Last check is <b>running</b>. See <a target="_blank" data-bind="attr: { href: getReadmodelCheckUrl() }">details</a>.</p>
+						<!-- /ko -->
+						<!-- ko if: trackReadModelCheckId() && !readmodelCheckIsRunning() -->
+						<p>Last check has <b>finished</b>. See <a target="_blank" data-bind="attr: { href: getReadmodelCheckUrl() }">details</a>.</p>
+						<!-- /ko -->
+						<!-- ko if: !trackReadModelCheckId() || ( trackReadModelCheckId() && !readmodelCheckIsRunning() ) -->
+						<form class="form-inline">
+							<div class="form-group">
+								<label for="readmodelCheckStartDate">Start date</label>
+								<input id="readmodelCheckStartDate" class="datepicker" type="date" data-bind="value: readModelCheckStartDate"/>
+							</div>
+							<div class="form-group">
+								<label for="readmodelCheckEndDate">End date</label>
+								<input id="readmodelCheckEndDate" class="datepicker" type="date" data-bind="value: readModelCheckEndDate"/>
+							</div>
 							<button class="btn btn-primary" data-bind="click: checkReadModel">Start check</button>
 						</form>
+						<!-- /ko -->
 					</div>
+					<h4>Fix read model</h4>
                     <div>
-                        <p>Fix invalid records in table CheckReadModel.ScheduleProjectionReadOnly <button class="btn btn-primary" data-bind="click: fixReadModel">Fix</button></p>
+                        <p>Fix invalid records in table <b>ReadModel.ScheduleProjectionReadOnly_check</b></p>
+						<button class="btn btn-default" data-bind="click: fixReadModel">Fix</button>
                     </div>
 					<h3>Configured URL:s</h3>
 					<ul class="list-group" data-bind="foreach: configuredUrls">
