@@ -1,32 +1,33 @@
 ﻿"use strict";
 
 angular.module("wfm.teamSchedule").service("PersonSelection", [
-	function() {
+	function () {
 		var svc = this;
 		svc.personInfo = {};
 
-		svc.clearPersonInfo = function() {
+		svc.clearPersonInfo = function () {
 			svc.personInfo = {};
 		};
 
 		svc.updatePersonSelection = function (personSchedule) {
 			var selectedPeople = svc.personInfo;
+
 			if (personSchedule.IsSelected) {
 				var absences = [], activities = [];
 				var shiftsForCurrentDate = personSchedule.Shifts.filter(function (shift) {
 					return personSchedule.Date.isSame(shift.Date, 'day');
 				});
-				if(shiftsForCurrentDate.length > 0){
+				if (shiftsForCurrentDate.length > 0) {
 					var projectionsForCurrentDate = shiftsForCurrentDate[0].Projections;
-					angular.forEach(projectionsForCurrentDate, function(projection) {
+					angular.forEach(projectionsForCurrentDate, function (projection) {
 						if (projection.ParentPersonAbsences && projection.ParentPersonAbsences.length > 0) {
-							angular.forEach(projection.ParentPersonAbsences, function(personAbsId) {
+							angular.forEach(projection.ParentPersonAbsences, function (personAbsId) {
 								if (absences.indexOf(personAbsId) === -1) {
 									absences.push(personAbsId);
 								}
 							});
 						} else if (projection.ShiftLayerIds && !projection.IsOvertime) {
-							angular.forEach(projection.ShiftLayerIds, function(shiftLayer) {
+							angular.forEach(projection.ShiftLayerIds, function (shiftLayer) {
 								if (activities.indexOf(shiftLayer) === -1) {
 									activities.push(shiftLayer);
 								}
@@ -53,6 +54,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 		svc.updatePersonInfo = function (schedules) {
 			angular.forEach(schedules, function (personSchedule) {
 				var selectedPerson = svc.personInfo[personSchedule.PersonId];
+
 				if (selectedPerson && selectedPerson.Checked)
 					personSchedule.IsSelected = true;
 				else
@@ -60,8 +62,9 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 
 				if (selectedPerson) {
 					selectedPerson.ScheduleEndTime = personSchedule.ScheduleEndTime();
-					selectedPerson.AllowSwap = personSchedule.AllowSwap();;
-					for (var i = 0; i < personSchedule.Shifts.length; i++) {
+					selectedPerson.AllowSwap = personSchedule.AllowSwap();
+					var shiftLength = personSchedule.Shifts.length;
+					for (var i = 0; i < shiftLength; i++) {
 						if (!personSchedule.Shifts[i].Date.isSame(personSchedule.Date, 'day')) {
 							continue;
 						}
@@ -79,7 +82,8 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 							}
 							else if (projection.ShiftLayerIds) {
 								selected = true;
-								for (var i = 0; i < projection.ShiftLayerIds.length; i++) {
+								var shiftIdLength = projection.ShiftLayerIds.length;
+								for (var i = 0; i < shiftIdLength; i++) {
 									if (selectedPerson.SelectedActivities.indexOf(projection.ShiftLayerIds[i]) === -1) {
 										selected = false;
 										break;
@@ -105,13 +109,13 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 			});
 		};
 
-		svc.updatePersonProjectionSelection = function(currentProjection, personSchedule){
+		svc.updatePersonProjectionSelection = function (currentProjection, personSchedule) {
 			var selected = currentProjection.Selected;
 			var personId = personSchedule.PersonId;
 			var selectedPeople = svc.personInfo;
-			angular.forEach(personSchedule.Shifts, function(shift) {
+			angular.forEach(personSchedule.Shifts, function (shift) {
 				if (shift.Date.isSame(personSchedule.Date, 'day')) {
-					angular.forEach(shift.Projections, function(projection) {
+					angular.forEach(shift.Projections, function (projection) {
 						var sameActivity = currentProjection.ShiftLayerIds && angular.equals(projection.ShiftLayerIds, currentProjection.ShiftLayerIds);
 						var sameAbsence = currentProjection.ParentPersonAbsences && angular.equals(currentProjection.ParentPersonAbsences, projection.ParentPersonAbsences);
 						if (sameActivity || sameAbsence) {
@@ -134,18 +138,18 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 				};
 
 
-				if(currentProjection.ParentPersonAbsences !== null){
+				if (currentProjection.ParentPersonAbsences !== null) {
 					selectedPeople[personId].SelectedAbsences = selectedPeople[personId].SelectedAbsences.concat(currentProjection.ParentPersonAbsences);
 					selectedPeople[personId].PersonAbsenceCount = currentProjection.ParentPersonAbsences.length;
 				}
-				if(currentProjection.ShiftLayerIds !== null){
+				if (currentProjection.ShiftLayerIds !== null) {
 					selectedPeople[personId].SelectedActivities = selectedPeople[personId].SelectedActivities.concat(currentProjection.ShiftLayerIds);
 					selectedPeople[personId].PersonActivityCount = currentProjection.ShiftLayerIds.length;
 				}
 			}
 			else if (selected && selectedPeople[personId]) {
 				if (currentProjection.ParentPersonAbsences !== null) {
-					angular.forEach(currentProjection.ParentPersonAbsences, function(personAbs) {
+					angular.forEach(currentProjection.ParentPersonAbsences, function (personAbs) {
 						if (selectedPeople[personId].SelectedAbsences.indexOf(personAbs) === -1) {
 							selectedPeople[personId].SelectedAbsences.push(personAbs);
 							selectedPeople[personId].PersonAbsenceCount++;
@@ -153,7 +157,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 					});
 				}
 				if (currentProjection.ShiftLayerIds !== null) {
-					angular.forEach(currentProjection.ShiftLayerIds, function(shiftLayer) {
+					angular.forEach(currentProjection.ShiftLayerIds, function (shiftLayer) {
 						if (selectedPeople[personId].SelectedActivities.indexOf(shiftLayer) === -1) {
 							selectedPeople[personId].SelectedActivities.push(shiftLayer);
 							selectedPeople[personId].PersonActivityCount++;
@@ -163,7 +167,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 			}
 			else if (!selected && selectedPeople[personId]) {
 				if (currentProjection.ParentPersonAbsences) {
-					angular.forEach(currentProjection.ParentPersonAbsences, function(personAbs) {
+					angular.forEach(currentProjection.ParentPersonAbsences, function (personAbs) {
 						var absenceIndex = selectedPeople[personId].SelectedAbsences.indexOf(personAbs);
 						if (absenceIndex > -1) {
 							selectedPeople[personId].SelectedAbsences.splice(absenceIndex, 1);
@@ -172,7 +176,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 					});
 				}
 				if (currentProjection.ShiftLayerIds) {
-					angular.forEach(currentProjection.ShiftLayerIds, function(shiftLayer) {
+					angular.forEach(currentProjection.ShiftLayerIds, function (shiftLayer) {
 						var activityIndex = selectedPeople[personId].SelectedActivities.indexOf(shiftLayer);
 						if (activityIndex > -1) {
 							selectedPeople[personId].SelectedActivities.splice(activityIndex, 1);
@@ -200,15 +204,31 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 			});
 		};
 
+		svc.uncheckAllPersonProjectionSelection = function (schedules) {
+			angular.forEach(schedules, function (personSchedule) {
+				var selectedPerson = svc.personInfo[personSchedule.PersonId];
+					personSchedule.IsSelected = false;
+
+				if (selectedPerson) {
+					var shiftLength = personSchedule.Shifts.length;
+					for (var i = 0; i < shiftLength; i++) {
+						angular.forEach(personSchedule.Shifts[i].Projections, function(projection) {
+							projection.Selected = false;
+						});
+					}
+				}
+			});
+		};
+
 		svc.unselectAllPerson = function (schedules) {
-			angular.forEach(schedules, function (schedule) {
-				schedule.IsSelected = false;
-				svc.updatePersonSelection(schedule);
+			angular.forEach(schedules, function (personSchedule) {
+				personSchedule.IsSelected = false;
+				svc.updatePersonSelection(personSchedule);
 			});
 		};
 
 		svc.unselectPersonsWithIds = function (personIds) {
-			angular.forEach(personIds, function(id) {
+			angular.forEach(personIds, function (id) {
 				delete svc.personInfo[id];
 			});
 		};
@@ -237,7 +257,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 			return result;
 		};
 
-		svc.getSelectedPersonInfoList = function() {
+		svc.getSelectedPersonInfoList = function () {
 			var result = [];
 			for (var key in svc.personInfo) {
 				var schedule = svc.personInfo[key];
@@ -256,11 +276,11 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 			return result;
 		};
 
-		svc.getSelectedPersonIdList = function() {
+		svc.getSelectedPersonIdList = function () {
 			return Object.keys(svc.personInfo);
 		};
 
-		svc.isAnyAgentSelected = function() {
+		svc.isAnyAgentSelected = function () {
 			var selectedPersonList = svc.getSelectedPersonIdList();
 			return selectedPersonList.length > 0;
 		};
@@ -270,7 +290,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 			return personInfoList.length > 0;
 		};
 
-		svc.canSwapShifts = function() {
+		svc.canSwapShifts = function () {
 			var personIds = svc.getCheckedPersonIds();
 			if (personIds.length !== 2) {
 				return false;
@@ -282,7 +302,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 			return isBothAllowSwap && isOnlyTodaySchedules;
 		};
 
-		svc.getTotalSelectedPersonAndProjectionCount = function() {
+		svc.getTotalSelectedPersonAndProjectionCount = function () {
 			var ret = {
 				CheckedPersonCount: 0,
 				SelectedActivityInfo: {

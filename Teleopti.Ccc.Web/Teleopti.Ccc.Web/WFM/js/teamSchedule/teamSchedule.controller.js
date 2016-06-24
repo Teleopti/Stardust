@@ -164,6 +164,7 @@
 			scheduleMgmtSvc.updateScheduleForPeoples(personIdList, vm.scheduleDateMoment(), function() {
 				personSelectionSvc.clearPersonInfo();
 				vm.isLoading = false;
+				vm.hasSelectedAllPeopleInEveryPage = false;
 			});
 		};
 
@@ -178,9 +179,9 @@
 
 		vm.unselectAllForAllPages = function() {
 			vm.loadAllResults(function (result) {
-				var groupSchedule = groupScheduleFactory.Create(result.Schedules, vm.scheduleDateMoment());
-				personSelectionSvc.unselectAllPerson(groupSchedule.Schedules);
-				personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
+				var groupSchedules = groupScheduleFactory.Create(result.Schedules, vm.scheduleDateMoment()).Schedules;
+				personSelectionSvc.uncheckAllPersonProjectionSelection(scheduleMgmtSvc.groupScheduleVm.Schedules);
+				personSelectionSvc.unselectAllPerson(groupSchedules);
 				vm.hasSelectedAllPeopleInEveryPage = false;
 			});
 		};
