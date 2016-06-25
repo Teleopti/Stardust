@@ -53,9 +53,10 @@
 		public const string ModifyPeopleWithinGroupPage = "Raptor/PersonAdmin/ModifyPeopleWithinGroupPage";
 		public const string SendAsm = "Raptor/PersonAdmin/SendAsm";
 		public const string AllowPersonModifications = "Raptor/PersonAdmin/AllowPersonModifications";
+        public const string DeletePerson = "Raptor/PersonAdmin/DeletePerson";
 
-		// Options
-		public const string ManageRealTimeAdherence = "Raptor/Options/RTA";
+        // Options
+        public const string ManageRealTimeAdherence = "Raptor/Options/RTA";
 		public const string ManageScorecards = "Raptor/Options/Scorecards";
 		public const string AbsenceRequests = "Raptor/Options/AbsenceRequests";
 		public const string ShiftTradeRequests = "Raptor/Options/ShiftTradeRequests";

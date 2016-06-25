@@ -8069,6 +8069,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete persons.
+        /// </summary>
+        public static string DeletePerson {
+            get {
+                return ResourceManager.GetString("DeletePerson", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete Personal Shift.
         /// </summary>
         public static string DeletePersonalShift {

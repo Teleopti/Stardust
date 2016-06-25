@@ -94,6 +94,11 @@ namespace Teleopti.Ccc.Win.Common.Controls
             get { return toolStripSplitButtonNew; }   
         }
 
+        public ToolStripSplitButton ToolStripButtonDelete
+        {
+            get { return toolStripSplitButtonDelete; }
+        }
+
         public ToolStripPanelItem PanelItem
         {
             get { return toolStripPanelItem1; }

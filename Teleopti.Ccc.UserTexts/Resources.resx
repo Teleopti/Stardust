@@ -14626,4 +14626,8 @@ These options are activated:
     <value>Unselect all people on every page</value>
     <comment>Unselect all people on every page link i teamschedule</comment>
   </data>
+  <data name="DeletePerson" xml:space="preserve">
+    <value>Delete persons</value>
+    <comment>Delete persons</comment>
+  </data>
 </root>

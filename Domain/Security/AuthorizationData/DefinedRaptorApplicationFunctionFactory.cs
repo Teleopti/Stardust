@@ -83,9 +83,10 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifyPeopleWithinGroupPage, "xxModifyPeopleWithinGroupPage", DefinedRaptorApplicationFunctionForeignIds.ModifyPeopleWithinGroupPage, null);
 			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.SendAsm, "xxSendAsm", DefinedRaptorApplicationFunctionForeignIds.SendAsm, null);
 			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AllowPersonModifications, "xxAllowPersonModifications", DefinedRaptorApplicationFunctionForeignIds.AllowPersonModifications, null);
+            createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.DeletePerson, "xxDeletePerson", DefinedRaptorApplicationFunctionForeignIds.DeletePerson, null);
 
-			// Options
-			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ManageRealTimeAdherence, "xxManageRTA", DefinedRaptorApplicationFunctionForeignIds.ManageRealTimeAdherence, null);
+            // Options
+            createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ManageRealTimeAdherence, "xxManageRTA", DefinedRaptorApplicationFunctionForeignIds.ManageRealTimeAdherence, null);
 			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ManageScorecards, "xxManageScorecards", DefinedRaptorApplicationFunctionForeignIds.ManageScorecards, null);
 			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AbsenceRequests, "xxAbsenceRequest", DefinedRaptorApplicationFunctionForeignIds.AbsenceRequests, null);
 			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequests, "xxShiftTradeRequest", DefinedRaptorApplicationFunctionForeignIds.ShiftTradeRequests, null);

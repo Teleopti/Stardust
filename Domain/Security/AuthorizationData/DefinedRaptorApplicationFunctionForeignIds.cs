@@ -54,9 +54,10 @@
 		public const string ModifyPeopleWithinGroupPage = "0038";
 		public const string SendAsm = "0067";
 		public const string AllowPersonModifications = "0071";
+        public const string DeletePerson = "0134";
 
-		// Options
-		public const string ManageRealTimeAdherence = "0032";
+        // Options
+        public const string ManageRealTimeAdherence = "0032";
 		public const string ManageScorecards = "0033";
 		public const string AbsenceRequests = "0053";
 		public const string ShiftTradeRequests = "0056";

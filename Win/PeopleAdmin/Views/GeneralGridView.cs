@@ -579,6 +579,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 		private void deletePersons()
 		{
+		    if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.DeletePerson))
+		        return;
+
 			if (Grid.Model.SelectedRanges.Count > 0)
 			{
 				var result = ViewBase.ShowConfirmationMessage(Resources.AreYouSureYouWantToDelete, Resources.AreYouSureYouWantToDelete);
