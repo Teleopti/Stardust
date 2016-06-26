@@ -58,12 +58,23 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 			}
 
 			var periodWithExtraAtEnd = new DateTimePeriod(dateTimePeriod.StartDateTime, periodEnd);
-			return session().Auditer().CreateQuery()
+			var absences =  session().Auditer().CreateQuery()
 				.ForEntitiesAtRevision<PersonAbsence>(revision.Id)
 				.Add(AuditEntity.Property("Person").Eq(agent))
 				.Add(AuditEntity.Property("Layer.Period.period.Minimum").Lt(periodWithExtraAtEnd.EndDateTime))
 				.Add(AuditEntity.Property("Layer.Period.period.Maximum").Gt(periodWithExtraAtEnd.StartDateTime))
 				.Results();
+
+
+			foreach (var absence in absences)
+			{
+				if (!LazyLoadingManager.IsInitialized(absence.PersonRequest))
+					LazyLoadingManager.Initialize(absence.PersonRequest);
+			}
+
+
+			return absences;
+
 		}
 
 		private IEnumerable<PersonAssignment> findAssignment(IPerson agent, DateOnly dateOnly, IRevision revision)
