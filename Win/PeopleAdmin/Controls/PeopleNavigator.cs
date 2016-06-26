@@ -84,7 +84,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 			if (DesignMode) return;
 
 			toolStripButtonOpen.Click += onOpenPeople;
-			toolStripButtonAddPerson.Click += onAddNewPeople;
+			var addPersonPermission = PrincipalAuthorization.Current().IsPermitted(
+				DefinedRaptorApplicationFunctionPaths.AddPerson);
+			toolStripButtonAddPerson.Enabled = addPersonPermission;
+			if(addPersonPermission)
+				toolStripButtonAddPerson.Click += onAddNewPeople;
 
 			tryLoadNavigationPanel();
 		}
