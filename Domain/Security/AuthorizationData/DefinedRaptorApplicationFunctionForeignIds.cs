@@ -6,7 +6,7 @@
 	/// <remarks>
 	/// Structure of a key: Unique Id
 	/// Must be unique. Do NOT USE the Unique Id even of a deleted function to avoid conflict. 
-	/// Use a higher number than the current maximum Unique Id which is 0132 currently.  
+	/// Use a higher number than the current maximum Unique Id which is 0136 currently.  
 	/// </remarks>
 	public static class DefinedRaptorApplicationFunctionForeignIds
 	{
@@ -54,10 +54,11 @@
 		public const string ModifyPeopleWithinGroupPage = "0038";
 		public const string SendAsm = "0067";
 		public const string AllowPersonModifications = "0071";
-        public const string DeletePerson = "0134";
+        public const string DeletePerson = "0136";
+		public const string AddPerson = "0135";
 
-        // Options
-        public const string ManageRealTimeAdherence = "0032";
+		// Options
+		public const string ManageRealTimeAdherence = "0032";
 		public const string ManageScorecards = "0033";
 		public const string AbsenceRequests = "0053";
 		public const string ShiftTradeRequests = "0056";

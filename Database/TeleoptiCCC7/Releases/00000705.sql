@@ -1,7 +1,7 @@
 ----------------  
 --Name: MD
---Date: 2016-06-20
---Desc: Add new application function "Delete Person"
+--Date: 2016-06-26
+--Desc: Add new application function "Add Person"
 ----------------  
 SET NOCOUNT ON
 	
@@ -28,9 +28,9 @@ SELECT @ParentForeignId = '0004'	--Parent Foreign id that is hardcoded
 SELECT @ParentId = Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ParentForeignId + '%')
 	
 --insert/modify application function
-SELECT @ForeignId = '0136' --Foreign id of the function > hardcoded	
-SELECT @FunctionCode = 'DeletePerson' --Name of the function > hardcoded
-SELECT @FunctionDescription = 'xxDeletePerson' --Description of the function > hardcoded
+SELECT @ForeignId = '0135' --Foreign id of the function > hardcoded	
+SELECT @FunctionCode = 'AddPerson' --Name of the function > hardcoded
+SELECT @FunctionDescription = 'xxAddPerson' --Description of the function > hardcoded
 SELECT @ParentId = @ParentId
 
 IF  (NOT EXISTS (SELECT Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ForeignId + '%')))
@@ -48,7 +48,7 @@ select @OpenPeople = id from ApplicationFunction
 where ForeignId = '0004'
 
 select @ChangePeople = id from ApplicationFunction
-where ForeignId = '0136'
+where ForeignId = '0135'
 
 INSERT INTO ApplicationFunctionInRole
 SELECT ApplicationRole, @ChangePeople, GETDATE() FROM ApplicationFunctionInRole AFR
