@@ -13,7 +13,9 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Commands
 	{
 		public bool CanExecute()
 		{
-            return PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.AllowPersonModifications);
+			return
+				(PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.AllowPersonModifications) &&
+				 PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.AddPerson));
 		}
 	}
 }

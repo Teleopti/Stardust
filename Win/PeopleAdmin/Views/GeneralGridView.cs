@@ -409,16 +409,26 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		{
 			Grid.ContextMenuStrip = new ContextMenuStrip();
 
+			var addPersonPermission =
+				PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.AddPerson);
+			var deletePersonPermission =
+				PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.DeletePerson);
 			_addNewPersonMenuItem = new ToolStripMenuItem(Resources.New);
-			_addNewPersonMenuItem.Click += AddNewGridRow;
+			if(addPersonPermission)
+				_addNewPersonMenuItem.Click += AddNewGridRow;
+			_addNewPersonMenuItem.Enabled = addPersonPermission;
 			Grid.ContextMenuStrip.Items.Add(_addNewPersonMenuItem);
 
 			_addNewPersonFromClipboardMenuItem = new ToolStripMenuItem(Resources.PasteNew);
-			_addNewPersonFromClipboardMenuItem.Click += AddNewGridRowFromClipboard;
+			if (addPersonPermission)
+				_addNewPersonFromClipboardMenuItem.Click += AddNewGridRowFromClipboard;
+			_addNewPersonFromClipboardMenuItem.Enabled = addPersonPermission;
 			Grid.ContextMenuStrip.Items.Add(_addNewPersonFromClipboardMenuItem);
 
 			_deleteSelectedPeopleMenuItem = new ToolStripMenuItem(Resources.Delete);
-			_deleteSelectedPeopleMenuItem.Click += DeleteSelectedGridRows;
+			if(deletePersonPermission)
+				_deleteSelectedPeopleMenuItem.Click += DeleteSelectedGridRows;
+			_deleteSelectedPeopleMenuItem.Enabled = deletePersonPermission;
 			//_deleteSelectedPeopleMenuItem.ShortcutKeys = Keys.Delete;
 			Grid.ContextMenuStrip.Items.Add(_deleteSelectedPeopleMenuItem);
 
@@ -628,6 +638,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 		internal override void AddNewGridRow<T>(object sender, T eventArgs)
 		{
+			if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.AddPerson))
+				return;
 			addPerson();
 		}
 

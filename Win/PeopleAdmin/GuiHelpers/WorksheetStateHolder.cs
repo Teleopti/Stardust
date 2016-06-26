@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -122,6 +123,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
 		internal void AddAndSavePerson(int rowIndex, FilteredPeopleHolder filteredPeopleHolder)
 		{
+			if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.AddPerson))
+				return;
+
 			IPerson newPerson = new Person
 										{
 											Name =
@@ -178,6 +182,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
 		internal void InsertFromClipHandler(int rowIndex, ClipHandler<string> clipHandler, FilteredPeopleHolder filteredPeopleHolder)
 		{
+			if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.AddPerson))
+				return;
+
 			var persons = new List<IPerson>();
 			for (int row = 0; row < clipHandler.RowSpan(); row++)
 			{

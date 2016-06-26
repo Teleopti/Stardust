@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             toolStripButtonContract.Enabled = optionPagePermission;
             toolStripButtonContractSchedule.Enabled = optionPagePermission;
             toolStripButtonPartTimePercentage.Enabled = optionPagePermission;
-        }
+		}
 
         private void dateNavigatePeriodsSelectedDateChanged(object sender, CustomEventArgs<DateOnly> e)
         {
@@ -241,7 +241,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
                 {
                     case ViewType.GeneralView:
                         theButton = _editControl.NewSpecialItems.FirstOrDefault(c => c.Text == UserTexts.Resources.NewPerson);
-                        break;
+						if(theButton != null)
+							theButton.Enabled = PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.AddPerson);
+						break;
                     case ViewType.PeoplePeriodView:
                         theButton = _editControl.NewSpecialItems.FirstOrDefault(c => c.Text == UserTexts.Resources.NewPersonPeriod);
                         break;
@@ -1316,7 +1318,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
                         toolStripButtonPersonAvailability.PerformClick();
                         break;
                 }
-                //gridConstructor.View.SetSelectedPersons(selectedPersons);
                 _gridConstructor.View.AddNewGridRow<EventArgs>(sender, e);
             }
             catch (Exception ex)
