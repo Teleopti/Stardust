@@ -1001,7 +1001,7 @@ END
         BEGIN
           SET @CurrentCommand10 = ''
           IF @LockTimeout IS NOT NULL SET @CurrentCommand10 = 'SET LOCK_TIMEOUT ' + CAST(@LockTimeout * 1000 AS nvarchar) + '; '
-          IF (@Version >= 10.504000 AND @Version < 11) OR @Version >= 11.03000
+          IF @Version >= 11.03000
           BEGIN
             SET @CurrentCommand10 = @CurrentCommand10 + 'USE ' + QUOTENAME(@CurrentDatabaseName) + '; IF EXISTS(SELECT * FROM sys.dm_db_stats_properties (@ParamObjectID, @ParamStatisticsID) WHERE modification_counter > 0) BEGIN SET @ParamStatisticsModified = 1 END'
           END

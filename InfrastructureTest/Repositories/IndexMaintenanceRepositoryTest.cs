@@ -24,13 +24,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			_indexMaintenanceRepository.SetTimespanBetweenRetries(TimeSpan.FromSeconds(1));
 		}
 
-		[Test, Ignore("Not correct permission to do this on build server")]
+		[Test]
 		public void ShouldWorkToRunIndexForAnalytics()
 		{
 			_indexMaintenanceRepository.PerformIndexMaintenance(DatabaseEnum.Analytics);
 		}
 
-		[Test, Ignore("Not correct permission to do this on build server")]
+		[Test]
 		public void ShouldWorkToRunIndexForApplication()
 		{
 			_indexMaintenanceRepository.PerformIndexMaintenance(DatabaseEnum.Application);
