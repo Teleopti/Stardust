@@ -43,7 +43,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 				new Scenario(12, DefaultBusinessUnit.BusinessUnit.Id.GetValueOrDefault(), true),
 				Team.NotDefinedTeam(),
 				Person.NotDefinedPerson(existingDatasources),
-				Absence.NotDefinedAbsence(existingDatasources, 1)
+				Absence.NotDefinedAbsence(existingDatasources, 1),
+				DimDayOff.NotDefined(existingDatasources, 1)
 			};
 		};
 		private static readonly IList<IAnalyticsDataSetup> setups = generateSetups();

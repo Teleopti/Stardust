@@ -45,5 +45,9 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 
 		public IEnumerable<DataRow> Rows { get; private set; }
 
+		public static DimDayOff NotDefined(IDatasourceData datasource, int businessUnitId)
+		{
+			return new DimDayOff(-1, Guid.Empty, "Not Defined", datasource, businessUnitId);
+		}
 	}
 }
