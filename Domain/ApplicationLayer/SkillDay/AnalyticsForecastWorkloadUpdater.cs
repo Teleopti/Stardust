@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Analytics.Transformer;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
@@ -42,7 +43,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 		[AnalyticsUnitOfWork]
 		public virtual void Handle(SkillDayChangedEvent @event)
 		{
-			var skillDay = getSkillDay(@event);
+			var skillDay = _skillDayRepository.Get(@event.SkillDayId);
+			if (skillDay == null)
+			{
+				logger.Warn($"Aborting because {typeof(ISkillDay)} {@event.SkillDayId} was not found in Application database.");
+				return;
+			}
 			if (!skillDay.Scenario.EnableReporting)
 			{
 				logger.Debug($"Aborting because {typeof(ISkillDay)} {@event.SkillDayId} is not for a reportable scenario.");
@@ -101,7 +107,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 		{
 			var analyticsScenario = _analyticsScenarioRepository.Scenarios().FirstOrDefault(s => s.ScenarioCode.GetValueOrDefault() == skillDay.Scenario.Id.GetValueOrDefault());
 			if (analyticsScenario == null)
-				throw new ArgumentException($"{typeof(AnalyticsScenario)} missing from Analytics.");
+				throw new ScenarioMissingInAnalyticsException();
 			return analyticsScenario;
 		}
 
@@ -109,7 +115,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 		{
 			var analyticsDate = _analyticsDateRepository.Date(date);
 			if (analyticsDate == null)
-				throw new ArgumentException($"{typeof(IAnalyticsDate)} for {date} missing from Analytics.");
+				throw new DateMissingInAnalyticsException(date);
 			return analyticsDate;
 		}
 
@@ -117,16 +123,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 		{
 			var analyticsWorkload = _analyticsWorkloadRepository.GetWorkload(workloadDay.Workload.Id.GetValueOrDefault());
 			if (analyticsWorkload == null)
-				throw new ArgumentException($"{typeof(AnalyticsWorkload)} missing from Analytics.");
+				throw new WorkloadMissingInAnalyticsException();
 			return analyticsWorkload;
-		}
-
-		private ISkillDay getSkillDay(SkillDayChangedEvent @event)
-		{
-			var skillDay = _skillDayRepository.Get(@event.SkillDayId);
-			if (skillDay == null)
-				throw new ArgumentException($"{typeof(ISkillDay)} missing from App-database.");
-			return skillDay;
 		}
 	}
 }

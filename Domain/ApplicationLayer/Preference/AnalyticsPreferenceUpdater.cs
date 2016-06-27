@@ -81,13 +81,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 		public virtual void Handle(PreferenceDeletedEvent @event)
 		{
 			logger.Debug($"Consuming deleted event for preference Id = {@event.PreferenceDayId}. (Message timestamp = {@event.Timestamp})");
-			var dateId = _analyticsDateRepository.Date(@event.RestrictionDate.Date);
-			if (dateId == null) throw new DateMissingInAnalyticsException(@event.RestrictionDate.Date);
-			var person = _personRepository.FindPeople(new[] { @event.PersonId }).First();
-			var personPeriod = person.Period(new DateOnly(@event.RestrictionDate.Date));
-			var analyticsPersonPeriodId = _analyticsPersonPeriodRepository.PersonPeriod(personPeriod.Id.GetValueOrDefault()).PersonId;
+			var analyticsDate = getAnalyticsDate(@event.RestrictionDate);
+			var person = _personRepository.Get(@event.PersonId);
+			if (person == null)
+			{
+				logger.Warn("Could not find person in Application database, aborting.");
+				return;
+			}
+			var analyticsPersonPeriod = getAnalyticsPersonPeriod(@event.RestrictionDate, person);
 
-			_analyticsPreferenceRepository.DeletePreferences(dateId.DateId, analyticsPersonPeriodId);
+			_analyticsPreferenceRepository.DeletePreferences(analyticsDate.DateId, analyticsPersonPeriod.PersonId);
 		}
 
 		[AsSystem]
@@ -95,10 +98,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 		[UnitOfWork]
 		public virtual void Handle(PreferenceCreatedEvent @event)
 		{
-			if (logger.IsDebugEnabled)
-			{
-				logger.Debug($"Consuming created event for preference Id = {@event.PreferenceDayId}. (Message timestamp = {@event.Timestamp})");
-			}
+			logger.Debug($"Consuming created event for preference Id = {@event.PreferenceDayId}. (Message timestamp = {@event.Timestamp})");
 
 			commonHandle(@event.PreferenceDayId, @event.RestrictionDate.Date, @event.PersonId, @event.ScenarioId);
 		}
@@ -108,13 +108,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 		[UnitOfWork]
 		public virtual void Handle(PreferenceChangedEvent @event)
 		{
-			if (logger.IsDebugEnabled)
-			{
-				logger.Debug($"Consuming changed event for preference Id = {@event.PreferenceDayId}. (Message timestamp = {@event.Timestamp})");
-			}
+			logger.Debug($"Consuming changed event for preference Id = {@event.PreferenceDayId}. (Message timestamp = {@event.Timestamp})");
 
 			commonHandle(@event.PreferenceDayId, @event.RestrictionDate.Date, @event.PersonId, @event.ScenarioId);
-
 		}
 
 		private void commonHandle(Guid preferenceDayId, DateTime restrictionDate, Guid personId, Guid scenarioId)
@@ -127,20 +123,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 				return;
 			}
 
-			var dateId = _analyticsDateRepository.Date(restrictionDate.Date);
-			if (dateId == null) throw new DateMissingInAnalyticsException(restrictionDate.Date);
-			var person = _personRepository.FindPeople(new[] { personId }).First();
-			var personPeriod = person.Period(new DateOnly(restrictionDate.Date));
-			var analyticsPersonPeriodId = _analyticsPersonPeriodRepository.PersonPeriod(personPeriod.Id.GetValueOrDefault()).PersonId;
-
-			IList<IScenario> scenarios;
-			if (scenarioId == Guid.Empty)
+			var dateId = getAnalyticsDate(restrictionDate);
+			var person = _personRepository.Get(personId);
+			if (person == null)
 			{
-				scenarios = _scenarioRepository.FindEnabledForReportingSorted();
+				logger.Warn("Could not find person in Application database, aborting.");
+				return;
 			}
-			else
+			var analyticsPersonPeriod = getAnalyticsPersonPeriod(restrictionDate, person);
+
+			var scenarios = _scenarioRepository.FindEnabledForReportingSorted();
+			if (scenarioId != Guid.Empty)
 			{
-				scenarios = _scenarioRepository.FindEnabledForReportingSorted().Where(a => a.Id.Equals(scenarioId)).ToList();
+				scenarios = scenarios.Where(a => a.Id.Equals(scenarioId)).ToList();
 				if (scenarios.IsEmpty())
 				{
 					logger.Debug($"Nothing to do with preference id {preferenceDayId} because scenario {scenarioId} was not found as reportable.");
@@ -161,7 +156,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			{
 				var schedulesDictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, scheduleDictionaryLoadOptions, period, scenario);
 				var scheduleParts = schedulesDictionary[person].ScheduledDayCollection(period);
-				var businessUnitId = _analyticsBusinessUnitRepository.Get(scenario.BusinessUnit.Id.GetValueOrDefault());
+				var analyticsBusinessUnit = getBusinessUnit(scenario);
 
 				foreach (var schedulePart in scheduleParts)
 				{
@@ -177,7 +172,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 						if (!SchedulePreferenceTransformerHelper.CheckIfPreferenceIsValid(preferenceRestriction))
 							continue;
 
-						var preferenceItem = mapSchedulePreference(schedulePart, analyticsScenarios, scenario, analyticsShiftCategories, preferenceRestriction, analyticsAbsences, analyticsDayOffs, businessUnitId, dateId, analyticsPersonPeriodId, preferenceDay);
+						var preferenceItem = mapSchedulePreference(schedulePart, analyticsScenarios, scenario, analyticsShiftCategories, preferenceRestriction, analyticsAbsences, analyticsDayOffs, analyticsBusinessUnit, dateId, analyticsPersonPeriod.PersonId, preferenceDay);
 						resultFactSchedulePreference.Add(preferenceItem);
 					}
 				}
@@ -186,12 +181,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			// Delete
 			if (scenarioId == Guid.Empty)
 			{
-				_analyticsPreferenceRepository.DeletePreferences(dateId.DateId, analyticsPersonPeriodId);
+				_analyticsPreferenceRepository.DeletePreferences(dateId.DateId, analyticsPersonPeriod.PersonId);
 			}
 			else
 			{
-				var analyticScenarioId = analyticsScenarios.First(a => a.ScenarioCode.GetValueOrDefault() == scenarioId).ScenarioId;
-				_analyticsPreferenceRepository.DeletePreferences(dateId.DateId, analyticsPersonPeriodId, analyticScenarioId);
+				var analyticsScenario = getAnalyticsScenario(analyticsScenarios, scenarioId);
+				_analyticsPreferenceRepository.DeletePreferences(dateId.DateId, analyticsPersonPeriod.PersonId, analyticsScenario.ScenarioId);
 			}
 
 			// Insert
@@ -215,18 +210,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			IPreferenceDay preferenceDay)
 		{
 			var permissionState = restrictionChecker.CheckPreference(schedulePart);
-			var scenarioId = analyticsScenarios.First(a => a.ScenarioCode.GetValueOrDefault() == scenario.Id.GetValueOrDefault()).ScenarioId;
+			var analyticsScenario = getAnalyticsScenario(analyticsScenarios, scenario.Id.GetValueOrDefault());
+			var dayOffId = getDayOff(preferenceRestriction, analyticsDayOffs, businessUnitId);
 			var shiftCategory = analyticsShiftCategories.FirstOrDefault(a => a.ShiftCategoryCode == (preferenceRestriction.ShiftCategory?.Id ?? Guid.Empty));
 			var absence = analyticsAbsences.FirstOrDefault(a => a.AbsenceCode == (preferenceRestriction.Absence?.Id ?? Guid.Empty));
-			var dayOffId = preferenceRestriction.DayOffTemplate == null ? -1 :
-				analyticsDayOffs.First(a => a.DayOffName == preferenceRestriction.DayOffTemplate.Description.Name && a.BusinessUnitId == businessUnitId.BusinessUnitId).DayOffId;
+			
 
 			var preferenceItem = new AnalyticsFactSchedulePreference
 			{
 				DateId = analyticsDate.DateId,
 				IntervalId = 0,
 				PersonId = analyticsPersonPeriodId,
-				ScenarioId = scenarioId,
+				ScenarioId = analyticsScenario.ScenarioId,
 				PreferenceTypeId = SchedulePreferenceTransformerHelper.GetPreferenceTypeId(preferenceRestriction),
 				ShiftCategoryId = shiftCategory?.ShiftCategoryId ?? -1,
 				DayOffId = dayOffId,
@@ -240,6 +235,49 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 				AbsenceId = absence?.AbsenceId ?? -1
 			};
 			return preferenceItem;
+		}
+
+		private IAnalyticsDate getAnalyticsDate(DateTime restrictionDate)
+		{
+			var dateId = _analyticsDateRepository.Date(restrictionDate.Date);
+			if (dateId == null)
+				throw new DateMissingInAnalyticsException(restrictionDate.Date);
+			return dateId;
+		}
+
+		private static AnalyticsScenario getAnalyticsScenario(IEnumerable<AnalyticsScenario> analyticsScenarios, Guid scenarioId)
+		{
+			var scenario = analyticsScenarios.FirstOrDefault(a => a.ScenarioCode.GetValueOrDefault() == scenarioId);
+			if (scenario == null)
+				throw new ScenarioMissingInAnalyticsException();
+			return scenario;
+		}
+
+		private static int getDayOff(IPreferenceRestriction preferenceRestriction, IEnumerable<AnalyticsDayOff> analyticsDayOffs, AnalyticBusinessUnit businessUnitId)
+		{
+			if (preferenceRestriction.DayOffTemplate == null)
+				return -1;
+			var dayOff = analyticsDayOffs.FirstOrDefault(a => a.DayOffName == preferenceRestriction.DayOffTemplate.Description.Name && a.BusinessUnitId == businessUnitId.BusinessUnitId);
+			if (dayOff == null)
+				throw new DayOffMissingInAnalyticsException();
+			return dayOff.DayOffId;
+		}
+
+		private AnalyticBusinessUnit getBusinessUnit(IScenario scenario)
+		{
+			var analyticBusinessUnit = _analyticsBusinessUnitRepository.Get(scenario.BusinessUnit.Id.GetValueOrDefault());
+			if (analyticBusinessUnit == null)
+				throw new BusinessUnitMissingInAnalyticsException();
+			return analyticBusinessUnit;
+		}
+
+		private AnalyticsPersonPeriod getAnalyticsPersonPeriod(DateTime restrictionDate, IPerson person)
+		{
+			var personPeriod = person.Period(new DateOnly(restrictionDate.Date));
+			var analyticsPersonPeriod = _analyticsPersonPeriodRepository.PersonPeriod(personPeriod.Id.GetValueOrDefault());
+			if (analyticsPersonPeriod == null)
+				throw new PersonPeriodMissingInAnalyticsException();
+			return analyticsPersonPeriod;
 		}
 	}
 }

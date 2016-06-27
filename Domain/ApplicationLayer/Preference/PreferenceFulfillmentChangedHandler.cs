@@ -34,11 +34,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			}
 		}
 
-		[AsSystem]
+		[ImpersonateSystem]
 		[UnitOfWork]
 		public virtual void Handle(ProjectionChangedEvent @event)
 		{
-			var person = _personRepository.FindPeople(new[] { @event.PersonId }).FirstOrDefault();
+			var person = _personRepository.Get(@event.PersonId);
 			if (person == null)
 				return;
 

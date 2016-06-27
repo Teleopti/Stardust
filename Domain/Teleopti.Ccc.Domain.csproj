@@ -218,8 +218,12 @@
     <Compile Include="Exceptions\BusinessUnitMissingInAnalyticsException.cs" />
     <Compile Include="Exceptions\DataMissingInAnalyticsException.cs" />
     <Compile Include="Exceptions\DateMissingInAnalyticsException.cs" />
+    <Compile Include="Exceptions\DayOffMissingInAnalyticsException.cs" />
+    <Compile Include="Exceptions\PersonPeriodMissingInAnalyticsException.cs" />
+    <Compile Include="Exceptions\ScenarioMissingInAnalyticsException.cs" />
     <Compile Include="Exceptions\SkillMissingInAnalyticsException.cs" />
     <Compile Include="Exceptions\TimeZoneMissingInAnalyticsException.cs" />
+    <Compile Include="Exceptions\WorkloadMissingInAnalyticsException.cs" />
     <Compile Include="Forecasting\SkillDayExtensions.cs" />
     <Compile Include="Infrastructure\DatabaseEnum.cs" />
     <Compile Include="Infrastructure\Events\IndexMaintenanceEvent.cs" />

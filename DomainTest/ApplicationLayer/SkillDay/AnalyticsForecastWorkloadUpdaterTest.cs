@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.SkillDay;
+using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -35,14 +36,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SkillDay
 			_target = new AnalyticsForecastWorkloadUpdater(_skillDayRepository, _analyticsWorkloadRepository, _analyticsDateRepository, _analyticsScenarioRepository, _analyticsForecastWorkloadRepository, _analyticsIntervalRepository);
 		}
 
-		[Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "SkillDay missing", MatchType = MessageMatch.Contains)]
-		public void ShouldThrowWhenMissingSkillDay()
+		[Test]
+		public void ShouldDoNothingWhenSkillDayMissing()
 		{
 			_target.Handle(new SkillDayChangedEvent
 			{
 				SkillDayId = Guid.NewGuid(),
 				LogOnBusinessUnitId = Guid.NewGuid()
 			});
+
+			_analyticsForecastWorkloadRepository.AnalyticsForcastWorkloads.Should().Be.Empty();
 		}
 
 		[Test]
@@ -63,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SkillDay
 			_analyticsForecastWorkloadRepository.AnalyticsForcastWorkloads.Should().Be.Empty();
 		}
 
-		[Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "AnalyticsScenario missing", MatchType = MessageMatch.Contains)]
+		[Test, ExpectedException(typeof(ScenarioMissingInAnalyticsException))]
 		public void ShouldThrowWhenScenarioMissingFromAnalytics()
 		{
 			var skill = SkillFactory.CreateSkill("TestSkill");
@@ -79,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SkillDay
 			});
 		}
 
-		[Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "AnalyticsWorkload missing", MatchType = MessageMatch.Contains)]
+		[Test, ExpectedException(typeof(WorkloadMissingInAnalyticsException))]
 		public void ShouldThrowWhenWorkloadMissingFromAnalytics()
 		{
 			var skill = SkillFactory.CreateSkill("TestSkill");
@@ -100,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SkillDay
 			});
 		}
 
-		[Test, ExpectedException(typeof(ArgumentException), ExpectedMessage = "AnalyticsDate", MatchType = MessageMatch.Contains)]
+		[Test, ExpectedException(typeof(DateMissingInAnalyticsException))]
 		public void ShouldThrowWhenDateMissingFromAnalytics()
 		{
 			_analyticsDateRepository.Dates().Clear();
