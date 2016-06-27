@@ -42,7 +42,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategory
 			var analyticsShiftCategory = _analyticsShiftCategoryRepository.ShiftCategories().FirstOrDefault(a => a.ShiftCategoryCode == @event.ShiftCategoryId);
 
 			if (shiftCategory == null)
+			{
+				logger.Warn($"ShiftCategory '{@event.ShiftCategoryId}' was not found in application.");
 				return;
+			}
 
 			// Add
 			if (analyticsShiftCategory == null)

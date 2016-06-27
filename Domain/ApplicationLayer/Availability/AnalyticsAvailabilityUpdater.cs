@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
@@ -52,8 +53,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 		public virtual void Handle(AvailabilityChangedEvent @event)
 		{
 			var person = _personRepository.Get(@event.PersonId);
+			var analyticsPersonPeriod = getAnalyticsPersonPeriod(@event, person);
 			var availabilityDays = _availabilityDayRepository.Find(@event.Date, person);
-			var personPeriod = _analyticsPersonPeriodRepository.PersonPeriod(person.Period(@event.Date).Id.GetValueOrDefault());
 			var date = getAnalyticsDate(@event);
 			var scenarios = getScenarios();
 
@@ -61,8 +62,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 			{
 				foreach (var scenario in scenarios)
 				{
-					logger.Debug($"Deleting availability for PersonPeriod:{personPeriod.PersonId}, Date:{date.DateId}, Scenario:{scenario.ScenarioId}");
-					_analyticsHourlyAvailabilityRepository.Delete(personPeriod.PersonId, date.DateId, scenario.ScenarioId);
+					logger.Debug($"Deleting availability for PersonPeriod:{analyticsPersonPeriod.PersonId}, Date:{date.DateId}, Scenario:{scenario.ScenarioId}");
+					_analyticsHourlyAvailabilityRepository.Delete(analyticsPersonPeriod.PersonId, date.DateId, scenario.ScenarioId);
 				}
 				return;
 			}
@@ -83,21 +84,32 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 					AvailableTimeMinutes = getMaxAvailable(availabilityDay),
 					BusinessUnitId = scenario.BusinessUnitId,
 					DateId = date.DateId,
-					PersonId = personPeriod.PersonId,
+					PersonId = analyticsPersonPeriod.PersonId,
 					ScenarioId = scenario.ScenarioId,
 					ScheduledDays = Convert.ToInt32(scheduledTime > 0),
 					ScheduledTimeMinutes = scheduledTime
 				};
-				logger.Debug($"Adding or updating availability for PersonPeriod:{personPeriod.PersonId}, Date:{date.DateId}, Scenario:{scenario.ScenarioId}");
+				logger.Debug($"Adding or updating availability for PersonPeriod:{analyticsPersonPeriod.PersonId}, Date:{date.DateId}, Scenario:{scenario.ScenarioId}");
 				_analyticsHourlyAvailabilityRepository.AddOrUpdate(analyticsHourlyAvailability);
 			}
+		}
+
+		private AnalyticsPersonPeriod getAnalyticsPersonPeriod(AvailabilityChangedEvent @event, IPerson person)
+		{
+			var personPeriod = person.Period(@event.Date);
+			if (personPeriod?.Id == null)
+				throw new ApplicationException("Person period was not found for person in application");
+			var analyticsPersonPeriod = _analyticsPersonPeriodRepository.PersonPeriod(personPeriod.Id.GetValueOrDefault());
+			if (analyticsPersonPeriod == null)
+				throw new PersonPeriodMissingInAnalyticsException();
+			return analyticsPersonPeriod;
 		}
 
 		private IAnalyticsDate getAnalyticsDate(AvailabilityChangedEvent @event)
 		{
 			var date = _analyticsDateRepository.Date(@event.Date.Date);
 			if (date == null)
-				throw new ArgumentException("Date missing in analytics.");
+				throw new DateMissingInAnalyticsException(@event.Date.Date);
 			return date;
 		}
 

@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Activity
 {
@@ -43,6 +44,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Activity
 				_analyticsActivityRepository.Activities().FirstOrDefault(a => a.ActivityCode == @event.ActivityId);
 
 			var applicationActivity = _activityRepository.Get(@event.ActivityId);
+			if (applicationActivity == null)
+			{
+				logger.Warn($"{nameof(IActivity)} '{@event.ActivityId}' was not found in application database.");
+				return;
+			}
 			var analyticsBusinessUnit = _analyticsBusinessUnitRepository.Get(@event.LogOnBusinessUnitId);
 			if (analyticsBusinessUnit == null) throw new BusinessUnitMissingInAnalyticsException();
 

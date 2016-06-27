@@ -14,7 +14,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Absence
 {
 	[EnabledBy(Toggles.ETL_SpeedUpIntradayAbsence_38301)]
-	public class AnalyticsAbsenceUpdater:
+	public class AnalyticsAbsenceUpdater :
 		IHandleEvent<AbsenceChangedEvent>,
 		IHandleEvent<AbsenceDeletedEvent>,
 		IRunOnHangfire
@@ -38,12 +38,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Absence
 		{
 			logger.Debug($"Consuming {nameof(AbsenceChangedEvent)} for absence id = {@event.AbsenceId}. (Message timestamp = {@event.Timestamp})");
 			var absence = _absenceRepository.Load(@event.AbsenceId);
+			if (absence == null)
+			{
+				logger.Warn($"Absence '{@event.AbsenceId}' was not found in applicaton database.");
+				return;
+			}
+
 			var analyticsBusinessUnit = _analyticsBusinessUnitRepository.Get(@event.LogOnBusinessUnitId);
 			var analyticsAbsence = _analyticsAbsenceRepository.Absences().FirstOrDefault(a => a.AbsenceCode == @event.AbsenceId);
 
 			if (analyticsBusinessUnit == null) throw new BusinessUnitMissingInAnalyticsException();
-			if (absence == null)
-				return;
 
 			// Add
 			if (analyticsAbsence == null)
@@ -89,7 +93,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Absence
 				return;
 
 			analyticsAbsence.IsDeleted = true;
-			// Delete
 			_analyticsAbsenceRepository.UpdateAbsence(analyticsAbsence);
 		}
 	}

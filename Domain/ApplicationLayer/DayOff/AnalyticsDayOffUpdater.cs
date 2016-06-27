@@ -27,10 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.DayOff
 			_analyticsBusinessUnitRepository = analyticsBusinessUnitRepository;
 			_analyticsDayOffRepository = analyticsDayOffRepository;
 			_dayOffTemplateRepository = dayOffTemplateRepository;
-			if (logger.IsInfoEnabled)
-			{
-				logger.Info($"New instance of {nameof(AnalyticsDayOffUpdater)} was created");
-			}
+			logger.Info($"New instance of {nameof(AnalyticsDayOffUpdater)} was created");
 		}
 
 		[AsSystem]
@@ -43,7 +40,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.DayOff
 			var businessUnit = _analyticsBusinessUnitRepository.Get(@event.LogOnBusinessUnitId);
 			if (businessUnit == null) throw new BusinessUnitMissingInAnalyticsException();
 			var dayOffTemplate = _dayOffTemplateRepository.Get(@event.DayOffTemplateId);
-
+			if (dayOffTemplate == null)
+			{
+				logger.Warn($"DayOff '{@event.DayOffTemplateId}' was not found in applicationd database.");
+				return;
+			}
 			var dayOff = new AnalyticsDayOff
 			{
 				DayOffCode = @event.DayOffTemplateId,

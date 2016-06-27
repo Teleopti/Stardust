@@ -1,4 +1,5 @@
 using System;
+using log4net;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Skill
 		private readonly IAnalyticsSkillRepository _analyticsSkillRepository;
 		private readonly IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
 		private readonly IAnalyticsTimeZoneRepository _analyticsTimeZoneRepository;
+		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsSkillUpdater));
 
 		public AnalyticsSkillUpdater(ISkillRepository skillRepository, IAnalyticsSkillRepository analyticsSkillRepository, IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, IAnalyticsTimeZoneRepository analyticsTimeZoneRepository)
 		{
@@ -32,6 +34,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Skill
 		public virtual void Handle(Guid skillId)
 		{
 			var skill = _skillRepository.Get(skillId);
+			if (skill == null)
+			{
+				logger.Warn($"Skill {skillId} does not exists in application.");
+				return;
+			}
 			var businessUnit = _analyticsBusinessUnitRepository.Get(skill.BusinessUnit.Id.GetValueOrDefault());
 			var timezone = _analyticsTimeZoneRepository.Get(skill.TimeZone.Id);
 			if (businessUnit == null) throw new BusinessUnitMissingInAnalyticsException();

@@ -154,6 +154,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 				// Check if person does exists => if not it is deleted and handled by other handle-method
 				if (!persons.Any(a => a.Id.Equals(personCodeGuid)))
 				{
+					logger.Warn($"Person '{personCodeGuid}' was not found in application.");
 					continue;
 				}
 
@@ -191,7 +192,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 
 					var newOrUpdatedPersonPeriod = _analyticsPersonPeriodRepository.GetPersonPeriods(personCodeGuid).
 						FirstOrDefault(a => a.PersonPeriodCode.Equals(personPeriod.Id.GetValueOrDefault()));
-					if (newOrUpdatedPersonPeriod == null) continue;
+					if (newOrUpdatedPersonPeriod == null)
+					{
+						logger.Warn($"PersonPeriod '{personPeriod.Id.GetValueOrDefault()}' could not be found in analytics after update or insert.");
+						continue;
+					}
 
 					if ((existingPeriod == null && newOrUpdatedPersonPeriod.SkillsetId != null) ||
 						(existingPeriod != null && newOrUpdatedPersonPeriod.SkillsetId != existingPeriod.SkillsetId))

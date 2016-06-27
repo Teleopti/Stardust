@@ -68,6 +68,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.MultiplicatorDefinitionSetHandler
 				return;
 			}
 			var multiplicatorDefinitionSet = _multiplicatorDefinitionSetRepository.Get(@event.MultiplicatorDefinitionSetId);
+			if (multiplicatorDefinitionSet == null)
+			{
+				logger.Warn($"{nameof(IMultiplicatorDefinitionSet)} '{@event.MultiplicatorDefinitionSetId}' did not exists in application.");
+				return;
+			}
 			var analyticsBusinessUnit = _analyticsBusinessUnitRepository.Get(@event.LogOnBusinessUnitId);
 			if (analyticsBusinessUnit == null) throw new BusinessUnitMissingInAnalyticsException();
 
