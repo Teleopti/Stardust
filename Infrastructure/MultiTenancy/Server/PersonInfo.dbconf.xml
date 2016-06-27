@@ -81,4 +81,19 @@ select p from PersonInfo p
 where p.Id = :id
 ]]>
 	</query>
+
+	<query name="applicationLogonNameUQCheck">
+		<![CDATA[
+select p from PersonInfo p
+where p.Id != :id and p.ApplicationLogonInfo.LogonName = :applicationLogonName
+]]>
+	</query>
+	
+	<query name="identityUQCheck">
+		<![CDATA[
+select p from PersonInfo p
+where p.Id != :id and p.Identity = :identity
+]]>
+	</query>
+	
 </hibernate-mapping>
