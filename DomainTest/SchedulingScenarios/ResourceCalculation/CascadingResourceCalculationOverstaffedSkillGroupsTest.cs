@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -19,9 +20,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_CascadingSkills_38524)]
+	[TestFixture(typeof(ShovelResourcesPercentageDistribution))]
 	public class CascadingResourceCalculationOverstaffedSkillGroupsTest
 	{
+		private readonly Type _implTypeToTest;
 		public CascadingResourceCalculation Target;
+
+		public CascadingResourceCalculationOverstaffedSkillGroupsTest(Type implTypeToTest)
+		{
+			_implTypeToTest = implTypeToTest;
+		}
 
 		[Test]
 		public void ShouldMoveResourceOnlyWithinSkillGroup()
@@ -310,6 +318,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				.Should().Be.EqualTo(0);
 			skillCDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(-1);
+		}
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDoubleForType(_implTypeToTest).For<IShovelResourcesPerActivityIntervalSkillGroup>();
 		}
 	}
 }

@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -20,12 +21,19 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_CascadingSkills_38524)]
-	public class CascadingResourceCalculationTest
+	[TestFixture(typeof(ShovelResourcesPercentageDistribution))]
+	public class CascadingResourceCalculationTest : ISetup
 	{
+		private readonly Type _implTypeToUse;
 		public CascadingResourceCalculation Target;
 		public IPersonSkillProvider PersonSkillProvider;
 		public IResourceCalculationContextFactory ResourceCalculationContextFactory;
-			
+
+		public CascadingResourceCalculationTest(Type implTypeToUse)
+		{
+			_implTypeToUse = implTypeToUse;
+		}
+
 		[Test]
 		public void ShouldCalculateNonCascadingSkills()
 		{
@@ -341,6 +349,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				.Should().Be.EqualTo(0);
 			nonPrioritizedSkillDay.SkillStaffPeriodCollection.Last().AbsoluteDifference
 				.Should().Be.EqualTo(0);
+		}
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDoubleForType(_implTypeToUse).For<IShovelResourcesPerActivityIntervalSkillGroup>();
 		}
 	}
 }
