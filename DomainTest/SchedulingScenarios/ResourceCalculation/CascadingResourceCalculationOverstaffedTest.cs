@@ -21,7 +21,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_CascadingSkills_38524)]
 	[TestFixture(typeof(ShovelResourcesPercentageDistribution))]
-	public class CascadingResourceCalculationOverstaffedTest
+	[TestFixture(typeof(ShovelResourcesFocusHighUnderstaffingPercentage))]
+	public class CascadingResourceCalculationOverstaffedTest : ISetup
 	{
 		private readonly Type _implTypeToTest;
 		public CascadingResourceCalculation Target;
