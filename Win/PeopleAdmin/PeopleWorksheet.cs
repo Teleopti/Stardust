@@ -59,6 +59,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
         private IToggleManager _toggleManager;
         private Form _mainWindow;
         private DateNavigateControl _dateNavigatePeriods;
+	    private static int _numberOfOpened = 0;
 
         protected PeopleWorksheet()
         {
@@ -132,6 +133,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
             Cursor.Current = Cursors.Default;
             toolStripButtonMainSave.Enabled = !_readOnly;
+	        _numberOfOpened++;
         }
 
         private void unregisterEventsForFormKill()
@@ -1435,7 +1437,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
         private void peopleWorksheetFormClosed(object sender, FormClosedEventArgs e)
         {
-            _mainWindow.Activate();
+			_numberOfOpened--;
+			_mainWindow.Activate();
             unregisterEventsForFormKill();
 
             disposeAllChildGrids();
@@ -1454,12 +1457,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
                 _peopleAdminFilterPanel.Dispose();
                 _peopleAdminFilterPanel = null;
             }
-            if (_stateHolder != null)
-            {
-                _stateHolder.Dispose();
-                _stateHolder = null;
-            }
-            if (_gridConstructor != null)
+	        if (_stateHolder != null && _numberOfOpened == 0)
+	        {
+		        _stateHolder.Dispose();
+		        _stateHolder = null;
+	        }
+	        if (_gridConstructor != null)
             {
                 _gridConstructor.Dispose();
                 _gridConstructor = null;
