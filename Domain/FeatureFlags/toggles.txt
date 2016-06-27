@@ -96,10 +96,11 @@ Wfm_Requests_Cancel_37741 = RC
 Wfm_Requests_Cancel_Agent_38055 = RC
 Wfm_Requests_Filtering_37748 = true
 Wfm_Requests_Run_waitlist_38071 = true
-Wfm_Requests_ShiftTrade_37751 = RC
-Wfm_Requests_ShiftTrade_More_Relevant_Information_38492 = RC
+Wfm_Requests_ShiftTrade_37751 = true
+Wfm_Requests_ShiftTrade_More_Relevant_Information_38492 = true
 Wfm_Requests_PrepareForRelease_38771 = true
-Wfm_Requests_ApproveDeny_ShiftTrade_38494 = RC
+Wfm_Requests_ApproveDeny_ShiftTrade_38494 = true
+Wfm_Requests_Default_Status_Filter_39472 = DEV
 
 Wfm_Intraday_38074 = true
 
