@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.BadgeLeaderBoardReport;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 
@@ -112,8 +109,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		{
 			teamSettings = _teamSettingRepository.FindAllTeamGamificationSettingsSortedByTeam();
 			var agentBadgeList = getAgentBadgeListForPeople(date, personIds.ToList());
+			var people = _personRepo.FindPeople(personIds);
 
-			return getPermittedAgentOverviews(agentBadgeList);
+			return getPermittedAgentOverviews(agentBadgeList, people);
 		} 
 		private IEnumerable<agentWithBadge> mergeAgentWithBadges(IEnumerable<agentWithBadge> agentWithBadges1,
 			IEnumerable<agentWithBadge> agentWithBadges2)
@@ -218,6 +216,32 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 					overview = new AgentBadgeOverview
 					{
 						AgentName = _personNameProvider.BuildNameFromSetting(detail.FirstName, detail.LastName, nameSetting)
+					};
+					dic.Add(personId, overview);
+				}
+
+				overview.Gold += agentBadge.GoldBadgeAmount;
+				overview.Silver += agentBadge.SilverBadgeAmount;
+				overview.Bronze += agentBadge.BronzeBadgeAmount;
+			}
+			return dic.Values;
+		}
+		private IEnumerable<AgentBadgeOverview> getPermittedAgentOverviews(IEnumerable<agentWithBadge> permittedAgentBadgeList, IEnumerable<IPerson> permittedPeople )
+		{
+			var dic = new Dictionary<Guid, AgentBadgeOverview>();
+			var nameSetting = _nameFormatSettings.Get();
+
+			foreach (var agentBadge in permittedAgentBadgeList)
+			{
+				var personId = agentBadge.Person;
+
+				AgentBadgeOverview overview;
+				if (!dic.TryGetValue(personId, out overview))
+				{
+					var person = permittedPeople.First(p => p.Id.GetValueOrDefault() == personId);
+					overview = new AgentBadgeOverview
+					{
+						AgentName = _personNameProvider.BuildNameFromSetting(person.Name.FirstName, person.Name.LastName, nameSetting)
 					};
 					dic.Add(personId, overview);
 				}

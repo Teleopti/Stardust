@@ -532,6 +532,10 @@
     <Compile Include="Areas\Reporting\Core\IReportGenerator.cs" />
     <Compile Include="Areas\Reporting\Core\PermissionsConverter.cs" />
     <Compile Include="Areas\Reporting\Core\ReportGenerator.cs" />
+    <Compile Include="Areas\Reports\Core\AgentBadgeProvider.cs" />
+    <Compile Include="Areas\Reports\Core\IAgentBadgeProvider.cs" />
+    <Compile Include="Areas\Reports\Controllers\LeaderboardController.cs" />
+    <Compile Include="Areas\Reports\Models\LeaderboardViewModel.cs" />
     <Compile Include="Areas\Reports\Controllers\ReportsController.cs" />
     <Compile Include="Areas\Reports\Core\IReportNavigationProvider.cs" />
     <Compile Include="Areas\Reports\Core\ReportNavigationProvider.cs" />

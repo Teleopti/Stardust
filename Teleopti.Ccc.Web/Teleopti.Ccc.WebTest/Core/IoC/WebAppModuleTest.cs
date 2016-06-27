@@ -43,6 +43,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
+using Teleopti.Ccc.Web.Areas.Reports.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
@@ -758,6 +759,13 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 					.Should()
 					.Be<PersistableScheduleDataPermissionChecker>();
 			}
+		}
+
+		[Test]
+		public void ShouldResolveLeaderboardController()
+		{
+			requestContainer.Resolve<LeaderboardController>()
+				.Should().Not.Be.Null();
 		}
 	}
 }

@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
@@ -114,8 +115,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 			person1 = MockRepository.GenerateMock<IPerson>();
 			person1.Stub(x => x.Id.GetValueOrDefault()).Return(personDetail1.PersonId);
+			person1.Stub(x => x.Name).Return(new Name("first1", "last1"));
 			person2 = MockRepository.GenerateMock<IPerson>();
 			person2.Stub(x => x.Id.GetValueOrDefault()).Return(personDetail2.PersonId);
+			person2.Stub(x => x.Name).Return(new Name("first2", "last2"));
 
 			personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			personRepository.Stub(x => x.FindPeopleBelongTeam(team0, new DateOnlyPeriod(date.AddDays(-1), date)))
@@ -193,6 +196,24 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				option);
 
 			agentBadgeRepository.AssertWasCalled(x => x.Find(new[] {personDetail1.PersonId}));
+		}
+		[Test]
+		public void ShouldGetBadgesForPeople()
+		{
+			agentBadgeRepository.Stub(x => x.Find(new[] { personDetail1.PersonId }))
+				.Return(agentBadges.Where(b => b.Person == personDetail1.PersonId).ToArray());
+			agentBadgeWithRankRepository.Stub(x => x.Find(new[] { personDetail1.PersonId }))
+				.Return(new Collection<IAgentBadgeWithRank>());
+			permissionProvider.Stub(
+				x =>
+					x.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboardUnderReports, date, personDetail1))
+				.Return(true);
+
+			personRepository.Stub(x => x.FindPeople(new[] {person1.Id.Value, person2.Id.Value})).Return(new[] {person1, person2});
+
+			var result = target.GetAgentBadgeOverviewsForPeople(new[] {person1.Id.Value, person2.Id.Value},DateOnly.Today);
+
+			result.First().AgentName.Should().Be(personName1);
 		}
 
 		[Test]

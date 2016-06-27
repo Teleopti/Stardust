@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Web.Areas.Reports.IoC
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<ReportNavigationProvider>().As<IReportNavigationProvider>().SingleInstance();
+			builder.RegisterType<AgentBadgeProvider>().As<IAgentBadgeProvider>().SingleInstance();
 		}
 	}
 }
