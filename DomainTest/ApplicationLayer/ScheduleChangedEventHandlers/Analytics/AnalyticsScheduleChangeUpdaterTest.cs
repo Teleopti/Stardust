@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure.Analytics;
 
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			_analyticsScheduleChangeUpdaterFilter = MockRepository.GenerateMock<IAnalyticsScheduleChangeUpdaterFilter>();
 			_analyticsScheduleChangeUpdaterFilter.Stub(x => x.ContinueProcessingEvent(Arg<ProjectionChangedEvent>.Is.Anything))
 				.Return(true);
-			_analyticsScenarioRepository = MockRepository.GenerateMock<IAnalyticsScenarioRepository>();
+			_analyticsScenarioRepository = new FakeAnalyticsScenarioRepository();
 			_analyticsShiftCategoryRepository = MockRepository.GenerateMock<IAnalyticsShiftCategoryRepository>();
 
 			_target = new AnalyticsScheduleChangeUpdater(
@@ -72,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			};
 			var personPart = new AnalyticsFactSchedulePerson();
 
-			_analyticsScenarioRepository.Stub(x => x.Scenarios()).Return(new List<AnalyticsScenario> { scenario });
+			_analyticsScenarioRepository.AddScenario(scenario);
 			_personHandler.Stub(x => x.Handle(scheduleDay.PersonPeriodId)).Return(personPart);
 			_analyticsShiftCategoryRepository.Stub(x => x.ShiftCategories()).Return(new List<AnalyticsShiftCategory>());
 			const int dateId = 0;
@@ -99,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			};
 			var personPart = new AnalyticsFactSchedulePerson();
 
-			_analyticsScenarioRepository.Stub(x => x.Scenarios()).Return(new List<AnalyticsScenario> { scenario });
+			_analyticsScenarioRepository.AddScenario(scenario);
 			_personHandler.Stub(x => x.Handle(scheduleDay.PersonPeriodId)).Return(personPart);
 			_analyticsShiftCategoryRepository.Stub(x => x.ShiftCategories()).Return(new List<AnalyticsShiftCategory>());
 			const int dateId = 0;
@@ -142,7 +143,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			var scheduleDayCountPart = new AnalyticsFactScheduleDayCount();
 			const int dateId = 0;
 
-			_analyticsScenarioRepository.Stub(x => x.Scenarios()).Return(new List<AnalyticsScenario> { scenario });
+			_analyticsScenarioRepository.AddScenario(scenario);
 			_analyticsShiftCategoryRepository.Stub(x => x.ShiftCategories()).Return(new List<AnalyticsShiftCategory> { cat });
 			_dateHandler.Stub(x => x.MapDateId(Arg<DateOnly>.Is.Anything, out Arg<int>.Out(dateId).Dummy)).Return(true);
 			_personHandler.Stub(x => x.Handle(scheduleDay.PersonPeriodId)).Return(scheduleRow.PersonPart);
@@ -180,7 +181,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			var personPart = new AnalyticsFactSchedulePerson {PersonId = 55};
 			_personHandler.Stub(x => x.Handle(Arg<Guid>.Is.Anything)).Return(personPart);
 			_analyticsShiftCategoryRepository.Stub(x => x.ShiftCategories()).Return(new List<AnalyticsShiftCategory>());
-			_analyticsScenarioRepository.Stub(x => x.Scenarios()).Return(new List<AnalyticsScenario> { scenario });
+			_analyticsScenarioRepository.AddScenario(scenario);
 			_dateHandler.Stub(
 				x => x.MapDateId(Arg.Is(new DateOnly(scheduleDay.Date)), out Arg<int>.Out(dateId).Dummy)).Return(true);
 			_target.Handle(@event);
@@ -216,7 +217,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			var scheduleDayCountPart = new AnalyticsFactScheduleDayCount();
 			const int dateId = 0;
 
-			_analyticsScenarioRepository.Stub(x => x.Scenarios()).Return(new List<AnalyticsScenario> { scenario });
+			_analyticsScenarioRepository.AddScenario(scenario);
 			_dateHandler.Stub(x => x.MapDateId(Arg<DateOnly>.Is.Anything, out Arg<int>.Out(dateId).Dummy)).Return(true);
 			_personHandler.Stub(x => x.Handle(scheduleDay.PersonPeriodId)).Return(personPart);
 			_analyticsShiftCategoryRepository.Stub(x => x.ShiftCategories()).Return(new List<AnalyticsShiftCategory> { cat });
@@ -255,7 +256,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			var personPart = new AnalyticsFactSchedulePerson{PersonId = 11};
 			const int dateId = 0;
 
-			_analyticsScenarioRepository.Stub(x => x.Scenarios()).Return(new List<AnalyticsScenario> { scenario });
+			_analyticsScenarioRepository.AddScenario(scenario);
 
 			_dateHandler.Stub(x => x.MapDateId(Arg<DateOnly>.Is.Anything, out Arg<int>.Out(dateId).Dummy)).Return(true);
 			_personHandler.Stub(x => x.Handle(scheduleDay.PersonPeriodId)).Return(personPart);
@@ -284,7 +285,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			var personPart = new AnalyticsFactSchedulePerson();
 			const int dateId = 0;
 
-			_analyticsScenarioRepository.Stub(x => x.Scenarios()).Return(new List<AnalyticsScenario> { scenario });
+			_analyticsScenarioRepository.AddScenario(scenario);
 
 			_dateHandler.Stub(x => x.MapDateId(Arg<DateOnly>.Is.Anything, out Arg<int>.Out(dateId).Dummy)).Return(true);
 			_personHandler.Stub(x => x.Handle(scheduleDay.PersonPeriodId)).Return(personPart);
@@ -313,7 +314,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			var personPart = new AnalyticsFactSchedulePerson { PersonId = 11 };
 			const int dateId = 0;
 
-			_analyticsScenarioRepository.Stub(x => x.Scenarios()).Return(new List<AnalyticsScenario> { scenario });
+			_analyticsScenarioRepository.AddScenario(scenario);
 
 			_dateHandler.Stub(x => x.MapDateId(Arg<DateOnly>.Is.Anything, out Arg<int>.Out(dateId).Dummy)).Return(true);
 			_personHandler.Stub(x => x.Handle(scheduleDay.PersonPeriodId)).Return(personPart);
@@ -346,7 +347,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			var personPart = new AnalyticsFactSchedulePerson { PersonId = 11 };
 			const int dateId = 0;
 
-			_analyticsScenarioRepository.Stub(x => x.Scenarios()).Return(new List<AnalyticsScenario> { scenario });
+			_analyticsScenarioRepository.AddScenario(scenario);
 
 			_dateHandler.Stub(x => x.MapDateId(Arg<DateOnly>.Is.Anything, out Arg<int>.Out(dateId).Dummy)).Return(true);
 			_personHandler.Stub(x => x.Handle(scheduleDay.PersonPeriodId)).Return(personPart);
@@ -373,8 +374,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> { scheduleDay },
 				ScenarioId = Guid.NewGuid()
 			};
-
-			_analyticsScenarioRepository.Stub(x => x.Scenarios()).Return(new List<AnalyticsScenario>());
 
 			_target.Handle(@event);
 

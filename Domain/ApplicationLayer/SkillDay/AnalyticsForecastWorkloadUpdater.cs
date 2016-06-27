@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SkillDay
 
 		private AnalyticsScenario getAnalyticsScenario(ISkillDay skillDay)
 		{
-			var analyticsScenario = _analyticsScenarioRepository.Scenarios().FirstOrDefault(s => s.ScenarioCode.GetValueOrDefault() == skillDay.Scenario.Id.GetValueOrDefault());
+			var analyticsScenario = _analyticsScenarioRepository.Get(skillDay.Scenario.Id.GetValueOrDefault());
 			if (analyticsScenario == null)
 				throw new ScenarioMissingInAnalyticsException();
 			return analyticsScenario;

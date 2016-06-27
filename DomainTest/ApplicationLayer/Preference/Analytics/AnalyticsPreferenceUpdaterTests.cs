@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			{
 				PersonId = 0,
 				DateId = _analyticsDateRepository.Date(date1).DateId,
-				ScenarioId = 1 // Matched
+				ScenarioId = 0 // Matched
 			});
 			_analyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(2);
 
@@ -293,7 +293,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			scenario.DefaultScenario = true;
 			scenario.EnableReporting = true;
 			_scenarioRepository.Add(scenario);
-			_analyticsScenarioRepository.AddScenario(new AnalyticsScenario { ScenarioCode = scenario.Id.GetValueOrDefault()});
+			_analyticsScenarioRepository.AddScenario(new AnalyticsScenario { ScenarioCode = scenario.Id.GetValueOrDefault(), ScenarioId = 1});
 
 			var preferenceDay = new PreferenceDay(person, new DateOnly(date), preferenceRestriction);
 			preferenceDay.WithId();

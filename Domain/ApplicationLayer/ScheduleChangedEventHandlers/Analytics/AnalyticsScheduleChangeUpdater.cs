@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		IRunOnServiceBus
 #pragma warning restore 618
 	{
-		private readonly static ILog logger = LogManager.GetLogger(typeof(AnalyticsScheduleChangeUpdater));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsScheduleChangeUpdater));
 		private readonly IAnalyticsFactScheduleHandler _factScheduleHandler;
 		private readonly IAnalyticsFactSchedulePersonHandler _factSchedulePersonHandler;
 		private readonly IAnalyticsFactScheduleDateHandler _factScheduleDateHandler;
@@ -154,11 +154,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 
 		private int getScenario(Guid scenarioCode)
 		{
-			var scenarios = _analyticsScenarioRepository.Scenarios();
-			var scen = scenarios.FirstOrDefault(x => x.ScenarioCode == scenarioCode);
-			if (scen == null)
+			var scenario = _analyticsScenarioRepository.Get(scenarioCode);
+			if (scenario == null)
 				return -1;
-			return scen.ScenarioId;
+			return scenario.ScenarioId;
 		}
 
 		private int getCategory(Guid shiftCategoryCode)

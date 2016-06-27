@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Util;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
 
@@ -18,7 +17,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		
 		public void AddScenario(AnalyticsScenario scenario)
 		{
-			scenario.ScenarioId = fakeScenarios.Any() ? fakeScenarios.Max(a => a.ScenarioId) + 1 : 1;
+			if (fakeScenarios.Any(x => x.ScenarioId == scenario.ScenarioId))
+				scenario.ScenarioId = fakeScenarios.Max(a => a.ScenarioId) + 1;
 			fakeScenarios.Add(scenario);
 		}
 

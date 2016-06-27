@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
@@ -37,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Scenario
 		public virtual void Handle(ScenarioDeleteEvent @event)
 		{
 			logger.Debug($"Consuming {nameof(ScenarioDeleteEvent)} for scenario id = {@event.ScenarioId}. (Message timestamp = {@event.Timestamp})");
-			var analyticsScenario = _analyticsScenarioRepository.Scenarios().FirstOrDefault(a => a.ScenarioCode == @event.ScenarioId);
+			var analyticsScenario = _analyticsScenarioRepository.Get(@event.ScenarioId);
 
 			if (analyticsScenario == null)
 				return;
@@ -72,7 +71,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Scenario
 				
 			var analyticsBusinessUnit = _analyticsBusinessUnitRepository.Get(@event.LogOnBusinessUnitId);
 			if (analyticsBusinessUnit == null) throw new BusinessUnitMissingInAnalyticsException();
-			var analyticsScenario = _analyticsScenarioRepository.Scenarios().FirstOrDefault(a => a.ScenarioCode == @event.ScenarioId);
+			var analyticsScenario = _analyticsScenarioRepository.Get(@event.ScenarioId);
 
 			// Add
 			if (analyticsScenario == null)
