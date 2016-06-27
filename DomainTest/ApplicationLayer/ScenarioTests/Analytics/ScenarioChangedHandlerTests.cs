@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScenarioTests.Analytics
 		private FakeAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
 		private FakeAnalyticsScenarioRepository _analyticsScenarioRepository;
 		private FakeScenarioRepository _scenarioRepository;
-		private FakeBusinessUnitRepository _businessUnitRepository;
 
 		[SetUp]
 		public void Setup()
@@ -24,17 +23,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScenarioTests.Analytics
 			_analyticsBusinessUnitRepository = new FakeAnalyticsBusinessUnitRepository();
 			_analyticsScenarioRepository = new FakeAnalyticsScenarioRepository();
 			_scenarioRepository = new FakeScenarioRepository();
-			_businessUnitRepository = new FakeBusinessUnitRepository();
 
-			_businessUnitRepository.Add(BusinessUnitFactory.BusinessUnitUsedInTest);
-
-			_target = new AnalyticsScenarioUpdater(_analyticsBusinessUnitRepository, _analyticsScenarioRepository, _scenarioRepository, _businessUnitRepository);
+			_target = new AnalyticsScenarioUpdater(_analyticsBusinessUnitRepository, _analyticsScenarioRepository, _scenarioRepository);
 		}
 
 		[Test]
 		public void ShouldAddScenarioToAnalytics()
 		{
-			_analyticsScenarioRepository.Scenarios().Count.Should().Be.EqualTo(0);
+			_analyticsScenarioRepository.Scenarios().Should().Be.Empty();
 			var scenario = ScenarioFactory.CreateScenarioWithId("Test scenario", true);
 			_scenarioRepository.Add(scenario);
 			_target.Handle(new ScenarioChangeEvent
@@ -52,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScenarioTests.Analytics
 		[Test]
 		public void ShouldUpdateScenarioToAnalytics()
 		{
-			_analyticsScenarioRepository.Scenarios().Count.Should().Be.EqualTo(0);
+			_analyticsScenarioRepository.Scenarios().Should().Be.Empty();
 			var scenario = ScenarioFactory.CreateScenarioWithId("New scenario name", true);
 			_scenarioRepository.Add(scenario);
 			_analyticsScenarioRepository.AddScenario(new AnalyticsScenario
@@ -78,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScenarioTests.Analytics
 		[Test]
 		public void ShouldSetScenarioToDelete()
 		{
-			_analyticsScenarioRepository.Scenarios().Count.Should().Be.EqualTo(0);
+			_analyticsScenarioRepository.Scenarios().Should().Be.Empty();
 			var scenario = ScenarioFactory.CreateScenarioWithId("Scenario name", true);
 			_scenarioRepository.Add(scenario);
 			_analyticsScenarioRepository.AddScenario(new AnalyticsScenario

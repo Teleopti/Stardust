@@ -21,16 +21,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Scenario
 		private readonly IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
 		private readonly IAnalyticsScenarioRepository _analyticsScenarioRepository;
 		private readonly IScenarioRepository _scenarioRepository;
-		private readonly IBusinessUnitRepository _businessUnitRepository;
 
 		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsScenarioUpdater));
 
-		public AnalyticsScenarioUpdater(IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, IAnalyticsScenarioRepository analyticsScenarioRepository, IScenarioRepository scenarioRepository, IBusinessUnitRepository businessUnitRepository)
+		public AnalyticsScenarioUpdater(IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, IAnalyticsScenarioRepository analyticsScenarioRepository, IScenarioRepository scenarioRepository)
 		{
 			_analyticsBusinessUnitRepository = analyticsBusinessUnitRepository;
 			_analyticsScenarioRepository = analyticsScenarioRepository;
 			_scenarioRepository = scenarioRepository;
-			_businessUnitRepository = businessUnitRepository;
 
 			logger.Debug($"New instance of {nameof(AnalyticsScenarioUpdater)} was created");
 		}
@@ -66,35 +64,34 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Scenario
 		{
 			logger.Debug($"Consuming {nameof(ScenarioChangeEvent)} for scenario id = {@event.ScenarioId}. (Message timestamp = {@event.Timestamp})");
 			var scenario = _scenarioRepository.Load(@event.ScenarioId);
-			var businessUnit = _businessUnitRepository.Load(@event.LogOnBusinessUnitId);
 			var analyticsBusinessUnit = _analyticsBusinessUnitRepository.Get(@event.LogOnBusinessUnitId);
 			if (analyticsBusinessUnit == null) throw new BusinessUnitMissingInAnalyticsException();
 			var analyticsScenario = _analyticsScenarioRepository.Scenarios().FirstOrDefault(a => a.ScenarioCode == @event.ScenarioId);
 
-			if (scenario == null || businessUnit == null)
+			if (scenario == null)
 				return;
 
 			// Add
 			if (analyticsScenario == null)
 			{
-				_analyticsScenarioRepository.AddScenario(transformToAnalyticsScenario(@event, scenario, businessUnit, analyticsBusinessUnit));
+				_analyticsScenarioRepository.AddScenario(transformToAnalyticsScenario(@event, scenario, analyticsBusinessUnit));
 			}
 			// Update
 			else
 			{
-				_analyticsScenarioRepository.UpdateScenario(transformToAnalyticsScenario(@event, scenario, businessUnit, analyticsBusinessUnit));
+				_analyticsScenarioRepository.UpdateScenario(transformToAnalyticsScenario(@event, scenario, analyticsBusinessUnit));
 			}
 		}
 
-		private static AnalyticsScenario transformToAnalyticsScenario(ScenarioChangeEvent @event, IScenario scenario, IBusinessUnit businessUnit, AnalyticBusinessUnit analyticsBusinessUnit)
+		private static AnalyticsScenario transformToAnalyticsScenario(ScenarioChangeEvent @event, IScenario scenario, AnalyticBusinessUnit analyticsBusinessUnit)
 		{
 			return new AnalyticsScenario
 			{
 				ScenarioCode = @event.ScenarioId,
 				ScenarioName = scenario.Description.Name,
 				BusinessUnitId = analyticsBusinessUnit.BusinessUnitId,
-				BusinessUnitCode = businessUnit.Id.GetValueOrDefault(),
-				BusinessUnitName = businessUnit.Name,
+				BusinessUnitCode = analyticsBusinessUnit.BusinessUnitCode,
+				BusinessUnitName = analyticsBusinessUnit.BusinessUnitName,
 				DatasourceId = 1,
 				DatasourceUpdateDate = scenario.UpdatedOn.GetValueOrDefault(DateTime.UtcNow),
 				DefaultScenario = scenario.DefaultScenario,
