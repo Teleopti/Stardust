@@ -95,6 +95,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I change culture to US")]
 		public void WhenIChangeCultureToUS()
 		{
+			Browser.Interactions.AssertKnockoutContextContains("#Culture-Picker", "settingsLoaded()", "True");
 			Browser.Interactions.SelectOptionByTextUsingJQuery("#Culture-Picker", CultureInfo.GetCultureInfo(1033).DisplayName);
 		}
 
