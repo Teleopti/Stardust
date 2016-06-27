@@ -49,5 +49,9 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 		}
 
 		public IEnumerable<DataRow> Rows { get; private set; }
+		public static ShiftCategory NotDefined(IDatasourceData datasource, int businessUnitId)
+		{
+			return new ShiftCategory(-1, Guid.Empty, "Not Defined", Color.Empty, datasource, businessUnitId);
+		}
 	}
 }
