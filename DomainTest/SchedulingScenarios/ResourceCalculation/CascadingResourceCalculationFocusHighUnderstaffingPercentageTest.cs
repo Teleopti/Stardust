@@ -19,6 +19,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
+	//specific tests when ShovelResourcesFocusHighUnderstaffingPercentage is used for IShovelResourcesPerActivityIntervalSkillGroup
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_CascadingSkills_38524)]
 	public class CascadingResourceCalculationFocusHighUnderstaffingPercentageTest : ISetup
