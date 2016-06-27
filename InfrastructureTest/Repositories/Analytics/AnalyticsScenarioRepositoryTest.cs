@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
@@ -53,8 +52,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			};
 
 			WithAnalyticsUnitOfWork.Do(() => Target.AddScenario(analyticsScenario));
-			WithAnalyticsUnitOfWork.Do(() => Target.Scenarios().Count.Should().Be.EqualTo(1));
-			var scenario = WithAnalyticsUnitOfWork.Get(() => Target.Scenarios().First(a => a.ScenarioCode == analyticsScenario.ScenarioCode));
+			WithAnalyticsUnitOfWork.Get(() => Target.Scenarios()).Count.Should().Be.EqualTo(1);
+			var scenario = WithAnalyticsUnitOfWork.Get(() => Target.Get(analyticsScenario.ScenarioCode.GetValueOrDefault()));
 			scenario.ScenarioCode.Should().Be.EqualTo(analyticsScenario.ScenarioCode);
 			scenario.ScenarioName.Should().Be.EqualTo(analyticsScenario.ScenarioName);
 			scenario.BusinessUnitId.Should().Be.EqualTo(analyticsScenario.BusinessUnitId);
@@ -89,8 +88,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			};
 
 			WithAnalyticsUnitOfWork.Do(() => Target.UpdateScenario(analyticsScenario));
-			WithAnalyticsUnitOfWork.Do(() => Target.Scenarios().Count.Should().Be.EqualTo(1));
-			var scenario = WithAnalyticsUnitOfWork.Get(() => Target.Scenarios().First(a => a.ScenarioCode == analyticsScenario.ScenarioCode));
+			WithAnalyticsUnitOfWork.Get(() => Target.Scenarios()).Count.Should().Be.EqualTo(1);
+			var scenario = WithAnalyticsUnitOfWork.Get(() => Target.Get(analyticsScenario.ScenarioCode.GetValueOrDefault()));
 			scenario.ScenarioCode.Should().Be.EqualTo(analyticsScenario.ScenarioCode);
 			scenario.ScenarioName.Should().Be.EqualTo(analyticsScenario.ScenarioName);
 			scenario.BusinessUnitId.Should().Be.EqualTo(analyticsScenario.BusinessUnitId);

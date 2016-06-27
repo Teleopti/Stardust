@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Util;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
 
@@ -30,6 +32,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IList<AnalyticsScenario> Scenarios()
 		{
 			return fakeScenarios;
+		}
+
+		public AnalyticsScenario Get(Guid scenarioCode)
+		{
+			return fakeScenarios.FirstOrDefault(x => x.ScenarioCode == scenarioCode);
 		}
 	}
 }

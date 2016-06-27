@@ -64,12 +64,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Scenario
 		{
 			logger.Debug($"Consuming {nameof(ScenarioChangeEvent)} for scenario id = {@event.ScenarioId}. (Message timestamp = {@event.Timestamp})");
 			var scenario = _scenarioRepository.Load(@event.ScenarioId);
+			if (scenario == null)
+			{
+				logger.Warn("Scenario missing from Application database, aborting.");
+				return;
+			}
+				
 			var analyticsBusinessUnit = _analyticsBusinessUnitRepository.Get(@event.LogOnBusinessUnitId);
 			if (analyticsBusinessUnit == null) throw new BusinessUnitMissingInAnalyticsException();
 			var analyticsScenario = _analyticsScenarioRepository.Scenarios().FirstOrDefault(a => a.ScenarioCode == @event.ScenarioId);
-
-			if (scenario == null)
-				return;
 
 			// Add
 			if (analyticsScenario == null)

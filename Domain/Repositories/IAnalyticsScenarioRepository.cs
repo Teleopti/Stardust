@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Analytics;
 
@@ -8,5 +9,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		void AddScenario(AnalyticsScenario scenario);
 		void UpdateScenario(AnalyticsScenario scenario);
 		IList<AnalyticsScenario> Scenarios();
+		AnalyticsScenario Get(Guid scenarioCode);
 	}
 }
