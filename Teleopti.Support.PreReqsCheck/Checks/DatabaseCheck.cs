@@ -62,9 +62,9 @@ namespace CheckPreRequisites.Checks
 			var sqlEngineService = "MSSQLSERVER";
 			var sqlAgentService = "SQLSERVERAGENT";
 			var olapService = "MSSQLServerOLAPService";
-			var ssis = "MSDTSSERVER100";
-			if (sqlVersion >= 11)
-				ssis = "MSDTSSERVER110";
+			//var ssis = "MSDTSSERVER100";
+			//if (sqlVersion >= 11)
+			//	ssis = "MSDTSSERVER110";
 
 			//Next, find out if this is a named instance
 			var index = dbServer.IndexOf(@"\", StringComparison.Ordinal);
@@ -87,7 +87,7 @@ namespace CheckPreRequisites.Checks
 			ServiceCheck(dbServer, sqlEngineService);
 			ServiceCheck(dbServer, sqlAgentService);
 			ServiceCheck(dbServer, olapService);
-			ServiceCheck(dbServer, ssis);
+			//ServiceCheck(dbServer, ssis);
 		}
 
 		private static string SQLServerFullVersion(string connString)
