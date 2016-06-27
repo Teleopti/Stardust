@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -171,6 +172,39 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var agents = WithUnitOfWork.Get(() => Target.LoadAlarmsForSkill(currentSkillId).ToArray());
 			agents.First().PersonId.Should().Be(personId1);
 			agents.Last().PersonId.Should().Be(personId2);
+		}
+
+
+		[Test]
+		public void ShouldLoadOutOfAdherences()
+		{
+			Database
+				.WithAgent()
+				.WithSkill("phone");
+			var personId = Database.CurrentPersonId();
+			var currentSkillId = Database.SkillIdFor("phone");
+			WithUnitOfWork.Do(() =>
+			{
+				Groupings.UpdateGroupingReadModel(new[] {personId});
+				StatePersister.Persist(new AgentStateReadModelForTest
+				{
+					PersonId = personId,
+					OutOfAdherences = new[]
+					{
+						new AgentStateOutOfAdherenceReadModel
+						{
+							StartTime = "2016-06-16 08:00".Utc(),
+							EndTime = "2016-06-16 08:10".Utc()
+						}
+					}
+				});
+			});
+
+			var outOfAdherence = WithUnitOfWork.Get(() => Target.LoadForSkill(currentSkillId))
+				.Single().OutOfAdherences.Single();
+
+			outOfAdherence.StartTime.Should().Be("2016-06-16 08:00".Utc());
+			outOfAdherence.EndTime.Should().Be("2016-06-16 08:10".Utc());
 		}
 	}
 }

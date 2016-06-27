@@ -116,7 +116,8 @@ SELECT
 	a.[IsRuleAlarm],
 	a.[AlarmStartTime],
 	a.[AlarmColor],
-	a.[Shift]
+	a.[Shift],
+	a.[OutOfAdherences]
 FROM ReadModel.AgentState AS a WITH (NOLOCK)
 INNER JOIN ReadModel.GroupingReadOnly AS g
 	ON a.PersonId = g.PersonId
