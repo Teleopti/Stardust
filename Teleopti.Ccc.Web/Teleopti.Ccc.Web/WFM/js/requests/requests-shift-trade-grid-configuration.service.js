@@ -154,7 +154,7 @@
 						pinnedRight: true,
 						enablePinning: false,
 						minWidth: 111,
-						filterHeaderTemplate: '<md-select ng-repeat=\"colFilter in col.filters\" md-on-close=\"grid.appScope.absenceFilterClose()\"'
+						filterHeaderTemplate: '<md-select ng-repeat=\"colFilter in col.filters\" md-on-close=\"grid.appScope.statusFilterClose()\"'
 							+ 'multiple ng-model=\"grid.appScope.SelectedRequestStatuses\" placeholder=\"{{\'FilterColon\' | translate}} {{\'Status\' | translate}}\" aria-label=\"{{\'Status\' | translate}}\">'
 							+ '<md-option ng-repeat=\"item in grid.appScope.AllRequestStatuses\" ng-value=\"item\">'
 							+ '<span ng-bind=\"item.Name\"></span>'
