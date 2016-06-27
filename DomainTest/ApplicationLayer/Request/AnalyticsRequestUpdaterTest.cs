@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Request;
+using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -36,13 +37,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 			_target = new AnalyticsRequestUpdater(_personRequestRepository, _analyticsRequestRepository, _analyticsDateRepository, _analyticsBusinessUnitRepository, _personPeriodRepository, _analyticsAbsenceRepository);
 		}
 
-		[Test, ExpectedException(typeof(ArgumentException))]
-		public void MissingRequestInAppDatabaseThrows()
+		[Test]
+		public void MissingRequestInAppDatabaseDoesNothing()
 		{
 			_target.Handle(new PersonRequestChangedEvent { PersonRequestId = Guid.NewGuid(), LogOnBusinessUnitId = Guid.NewGuid()});
+
+			_analyticsRequestRepository.AnalyticsRequestedDays.Should().Be.Empty();
+			_analyticsRequestRepository.AnalyticsRequests.Should().Be.Empty();
 		}
 
-		[Test, ExpectedException(typeof(ArgumentException))]
+		[Test, ExpectedException(typeof(PersonPeriodMissingInAnalyticsException))]
 		public void MissingPersonPeriodInAnalyticsDatabaseThrows()
 		{
 			var personRequest = new PersonRequestFactory().CreatePersonRequest();

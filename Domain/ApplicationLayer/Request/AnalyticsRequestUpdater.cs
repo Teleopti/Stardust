@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using log4net;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -19,6 +20,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 		IHandleEvent<PersonRequestDeletedEvent>,
 		IRunOnHangfire
 	{
+		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsRequestUpdater));
+
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IAnalyticsRequestRepository _analyticsRequestRepository;
 		private readonly IAnalyticsDateRepository _analyticsDateRepository;
@@ -64,8 +67,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 		{
 			var personRequest = _personRequestRepository.Get(@event.PersonRequestId);
 			if (personRequest == null)
-				throw new ArgumentException("Request missing in app database");
-
+			{
+				logger.Warn("Request missing from Application database, aborting.");
+				return;
+			}
 			var deleteTag = personRequest as IDeleteTag;
 			if (deleteTag != null && deleteTag.IsDeleted)
 			{
@@ -146,7 +151,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 				.FirstOrDefault(x => x.AbsenceCode == absenceRequest.Absence.Id.GetValueOrDefault());
 			if (analyticsAbsence != null)
 				return analyticsAbsence.AbsenceId;
-			throw new ArgumentException("Absence missing from analytics.");
+			throw new AbsenceMissingInAnalyticsException();
 		}
 
 		private static int getRequestType(IPersonRequest personRequest)
@@ -174,13 +179,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 		private AnalyticsPersonPeriod getPersonPeriod(IPersonRequest personRequest)
 		{
 			var personPeriods = _analyticsPersonPeriodRepository.GetPersonPeriods(personRequest.Person.Id.GetValueOrDefault());
-			if (!personPeriods.Any())
-				throw new ArgumentException("Person period missing from analytics.");
 			var personPeriod =
 				personPeriods.FirstOrDefault(
 					x => x.ValidFromDate <= personRequest.RequestedDate && x.ValidToDate > personRequest.RequestedDate);
 			if (personPeriod == null)
-				throw new ArgumentException("A person period does not exist for the required date period.");
+				throw new PersonPeriodMissingInAnalyticsException();
 			return personPeriod;
 		}
 	}

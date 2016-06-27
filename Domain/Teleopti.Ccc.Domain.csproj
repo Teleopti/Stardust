@@ -215,6 +215,7 @@
     <Compile Include="Cascading\PrimarySkillOverstaff.cs" />
     <Compile Include="Cascading\ReducePrimarySkillResourcesPercentageDistribution.cs" />
     <Compile Include="Cascading\ShovelResourcesState.cs" />
+    <Compile Include="Exceptions\AbsenceMissingInAnalyticsException.cs" />
     <Compile Include="Exceptions\BusinessUnitMissingInAnalyticsException.cs" />
     <Compile Include="Exceptions\DataMissingInAnalyticsException.cs" />
     <Compile Include="Exceptions\DateMissingInAnalyticsException.cs" />
