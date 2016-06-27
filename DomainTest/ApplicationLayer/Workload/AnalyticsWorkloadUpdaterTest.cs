@@ -38,10 +38,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Workload
 			businessUnitId = Guid.NewGuid();
 		}
 
-		[Test, ExpectedException(typeof(ArgumentException))]
-		public void ShouldThrowWhenWorkloadMissing()
+		[Test]
+		public void ShouldDoNothingWhenWorkloadMissing()
 		{
 			_target.Handle(new WorkloadChangedEvent {WorkloadId = workloadId, LogOnBusinessUnitId = businessUnitId});
+
+			_analyticsWorkloadRepository.Workloads.Should().Be.Empty();
 		}
 
 		[Test, ExpectedException(typeof(BusinessUnitMissingInAnalyticsException))]

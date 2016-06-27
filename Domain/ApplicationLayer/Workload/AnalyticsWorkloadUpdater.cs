@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using log4net;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -17,6 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Workload
 		IHandleEvent<WorkloadChangedEvent>, 
 		IRunOnHangfire
 	{
+		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsWorkloadUpdater));
 		private readonly IWorkloadRepository _workloadRepository;
 		private readonly IAnalyticsSkillRepository _analyticsSkillRepository;
 		private readonly IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
@@ -35,7 +37,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Workload
 		[AnalyticsUnitOfWork]
 		public virtual void Handle(WorkloadChangedEvent @event)
 		{
-			var workload = getWorkload(@event.WorkloadId);
+			var workload = _workloadRepository.Get(@event.WorkloadId);
+			if (workload == null)
+			{
+				logger.Warn("Workload missing from Application database, aborting.");
+				return;
+			}
 			var businessUnit = getAnalyticsBusinessUnit(@event.LogOnBusinessUnitId);
 			var analyticsSkill = getAnalyticsSkill(businessUnit, workload);
 			var skill = workload.Skill;
@@ -85,14 +92,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Workload
 			{
 				_analyticsWorkloadRepository.DeleteBridge(workloadId, queue.QueueId);
 			}
-		}
-
-		private IWorkload getWorkload(Guid workloadId)
-		{
-			var workload = _workloadRepository.Get(workloadId);
-			if (workload == null)
-				throw new ArgumentException($"{typeof(IWorkload)} missing from database.");
-			return workload;
 		}
 
 		private AnalyticsSkill getAnalyticsSkill(AnalyticBusinessUnit businessUnit, IWorkload workload)
