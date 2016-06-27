@@ -50,6 +50,8 @@
 	        vm.personIds = [personFromId, personToId];
 	        vm.shiftDetailLeft = oEvent.pageX - 5;
 	        vm.shiftDetailTop = oEvent.pageY - 5;
+	        if ((document.body.clientWidth - oEvent.pageX) < 710) vm.shiftDetailLeft = document.body.clientWidth - 710;
+	        if ((document.body.clientHeight - oEvent.pageY) < 145) vm.shiftDetailTop = document.body.clientHeight - 145;
 	        updateShiftStatusForSelectedPerson(moment(scheduleDate));
 	    }
 
