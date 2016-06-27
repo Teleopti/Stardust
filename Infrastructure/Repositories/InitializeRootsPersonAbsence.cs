@@ -19,6 +19,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             {
                 if (!LazyLoadingManager.IsInitialized(personAbsence.Layer.Payload))
                     LazyLoadingManager.Initialize(personAbsence.Layer.Payload);
+
+	            if (!LazyLoadingManager.IsInitialized (personAbsence.PersonRequest))
+					LazyLoadingManager.Initialize(personAbsence.PersonRequest);
+	            
+
             }
         }
     }
