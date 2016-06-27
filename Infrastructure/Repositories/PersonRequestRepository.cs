@@ -141,6 +141,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			filterRequestByPersons(criteria, filter.Persons);
 			filterRequestByRequestType(criteria, filter.RequestTypes);
 			filterRequestByRequestFilters(criteria, filter.RequestFilters);
+			filterRequestByShiftTradeStatus(criteria, filter);
 			if (ignoreCount)
 			{
 				count = -1;
@@ -261,6 +262,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					default:
 						continue;
 				}
+			}
+		}
+
+		private void filterRequestByShiftTradeStatus(ICriteria criteria, RequestFilter filter)
+		{
+			if (filter.ExcludeShiftTradeRequestOkByMe)
+			{
+				criteria.Add(toRequestClassTypeConstraint(RequestType.ShiftTradeRequest));
+				criteria.Add(!Restrictions.Eq("req.shiftTradeStatus", ShiftTradeStatus.OkByMe));
 			}
 		}
 

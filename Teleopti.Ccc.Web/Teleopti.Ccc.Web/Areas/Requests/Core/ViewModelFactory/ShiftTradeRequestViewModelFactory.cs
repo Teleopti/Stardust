@@ -21,7 +21,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 		private readonly IUserCulture _userCulture;
 		private readonly IRequestFilterCreator _requestFilterCreator;
 
-		public ShiftTradeRequestViewModelFactory(IRequestsProvider requestsProvider, IRequestViewModelMapper requestViewModelMapper, IPersonNameProvider personNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider, IScheduleProvider scheduleProvider, IUserCulture userCulture, IRequestFilterCreator requestFilterCreator)
+		public ShiftTradeRequestViewModelFactory(IRequestsProvider requestsProvider, IRequestViewModelMapper requestViewModelMapper, IPersonNameProvider personNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider, IScheduleProvider scheduleProvider, IUserCulture userCulture
+			, IRequestFilterCreator requestFilterCreator)
 		{
 			_requestsProvider = requestsProvider;
 			_requestViewModelMapper = requestViewModelMapper;
@@ -52,6 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 
 			var requestFilter = _requestFilterCreator.Create(input, new[] { RequestType.ShiftTradeRequest });
 			requestFilter.OnlyIncludeRequestsStartingWithinPeriod = true;
+			requestFilter.ExcludeShiftTradeRequestOkByMe = true;
 
 			var requests = _requestsProvider.RetrieveRequests(requestFilter, out totalCount).ToArray();
 

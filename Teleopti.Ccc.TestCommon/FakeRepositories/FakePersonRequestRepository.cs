@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -107,6 +108,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			if (filter.Persons != null)
 			{
 				requests = requests.Where(request => filter.Persons.Contains(request.Person));
+			}
+
+			if (filter.ExcludeShiftTradeRequestOkByMe)
+			{
+				requests = requests.Where(request => (request.Request is ShiftTradeRequest)
+													 && ((ShiftTradeRequest) request.Request)
+														 .GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()) != ShiftTradeStatus.OkByMe);
 			}
 
 			count = requests.Count();
