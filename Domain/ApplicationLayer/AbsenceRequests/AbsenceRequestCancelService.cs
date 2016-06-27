@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
@@ -10,10 +11,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 	{
 
 		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
+		private readonly ICurrentScenario _currentScenario;
 
-		public AbsenceRequestCancelService(IPersonRequestCheckAuthorization personRequestCheckAuthorization)
+		public AbsenceRequestCancelService(IPersonRequestCheckAuthorization personRequestCheckAuthorization, ICurrentScenario currentScenario)
 		{
 			_personRequestCheckAuthorization = personRequestCheckAuthorization;
+			_currentScenario = currentScenario;
 		}
 
 		public void CancelAbsenceRequest(IAbsenceRequest absenceRequest)
@@ -25,7 +28,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				return;
 			}
 
-			if (personRequest.PersonAbsences.IsEmpty())
+			var scenario = _currentScenario.Current();
+			var personAbsenceInCurrentScenarioExists = personRequest.PersonAbsences.Any (absence => absence.Scenario == scenario);
+
+			if (!personAbsenceInCurrentScenarioExists)
 			{
 				personRequest?.Cancel(_personRequestCheckAuthorization);
 			}

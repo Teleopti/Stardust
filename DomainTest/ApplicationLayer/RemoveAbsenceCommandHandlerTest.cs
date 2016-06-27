@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 
 			_personAbsenceRemover = new PersonAbsenceRemover(_businessRulesForAccountUpdate, _saveSchedulePartService, personAbsenceCreator,
-				loggedOnUser, new AbsenceRequestCancelService (new PersonRequestAuthorizationCheckerForTest()));
+				loggedOnUser, new AbsenceRequestCancelService (new PersonRequestAuthorizationCheckerForTest(), _scenario));
 		}
 
 		[Test]
@@ -94,11 +94,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var absence = AbsenceFactory.CreateAbsence("Holiday").WithId();
 			var absenceRequest = new AbsenceRequest(absence, dateTimePeriod);
 			var personRequest = new PersonRequest(person, absenceRequest);
+
 			var personAbsence = new PersonAbsence(person, _scenario.Current(), absenceLayer, personRequest).WithId();
+			var personAbsenceInDifferentScenario = new PersonAbsence(person, ScenarioFactory.CreateScenarioWithId ("Low", false), absenceLayer, personRequest).WithId();
+
+			personRequest.PersonAbsences.Add (personAbsence);
+			personRequest.PersonAbsences.Add(personAbsenceInDifferentScenario);
+
 			personRequest.Pending();
 			personRequest.Approve(new ApprovalServiceForTest(), new PersonRequestAuthorizationCheckerForTest());
 
 			_scheduleStorage.Add(personAbsence);
+			_scheduleStorage.Add(personAbsenceInDifferentScenario);
 
 			var target = new RemovePersonAbsenceCommandHandler(_personAbsenceRemover, _scheduleStorage, _scenario);
 
@@ -111,10 +118,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			target.Handle(command);
 
-			Assert.That(_scheduleStorage.LoadAll().Any() == false);
 			Assert.That(personRequest.IsCancelled);
-
 		}
+
+
+
 
 		[Test]
 		public void ShouldNotCancelApprovedRequestWhenRelatedPersonAbsenceIsRemovedAndTheRequestHasSplitPartsRemaining()
