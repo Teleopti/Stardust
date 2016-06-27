@@ -1778,7 +1778,8 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				{
 					var repository = inner.Resolve<ISkillRepository>();
 					var skillAssembler = inner.Resolve<IAssembler<ISkill, SkillDto>>();
-					returnList.AddRange(skillAssembler.DomainEntitiesToDtos(repository.LoadAll()));
+					var skills = repository.LoadAll().ToList();
+					returnList.AddRange(skillAssembler.DomainEntitiesToDtos(skills));
 				}
 			}
 			return returnList;
