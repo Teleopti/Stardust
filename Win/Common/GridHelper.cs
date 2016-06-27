@@ -644,34 +644,42 @@ namespace Teleopti.Ccc.Win.Common
             //check if there is any data in clipboard
             if (Clipboard.ContainsText())
             {
-                //get text in clipboard
-                string clipboardText = Clipboard.GetText();
-                //remove "\n"
-                clipboardText = clipboardText.Replace("\n", "");
-                //remove empty string at end
-                clipboardText = clipboardText.TrimEnd();
-                //split on rows
-                string[] clipBoardRows = clipboardText.Split('\r');
+	            try
+	            {
+		            //get text in clipboard
+		            string clipboardText = Clipboard.GetText();
+		            //remove "\n"
+		            clipboardText = clipboardText.Replace("\n", "");
+		            //remove empty string at end
+		            clipboardText = clipboardText.TrimEnd();
+		            //split on rows
+		            string[] clipBoardRows = clipboardText.Split('\r');
 
-                int row = 0;
-                //loop each row
-                foreach (string rowString in clipBoardRows)
-                {
-                    //split on columns
-                    string[] clipBoardCols = rowString.Split('\t');
+		            int row = 0;
+		            //loop each row
+		            foreach (string rowString in clipBoardRows)
+		            {
+			            //split on columns
+			            string[] clipBoardCols = rowString.Split('\t');
 
-                    int col = 0;
-                    //loop each column
-                    foreach (string columnString in clipBoardCols)
-                    {
-                        //add to cliphandler
-                        clipHandler.AddClip(row, col, columnString);
+			            int col = 0;
+			            //loop each column
+			            foreach (string columnString in clipBoardCols)
+			            {
+				            //add to cliphandler
+				            clipHandler.AddClip(row, col, columnString);
 
-                        col++;
-                    }
+				            col++;
+			            }
 
-                    row++;
-                }
+			            row++;
+		            }
+	            }
+	            catch (OutOfMemoryException ex)
+	            {
+					//#39436 not crash if it's out of memory
+					MessageBox.Show(ex.Message);
+				}
             }
 
             return clipHandler;
