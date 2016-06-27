@@ -190,7 +190,9 @@
 				return target;
 			}, function (newValue) {
 
-				if (!validateDateParameters(newValue.startDate, newValue.endDate)) {
+				if (!newValue || !validateDateParameters(newValue.startDate, newValue.endDate)) {
+
+					vm.loaded = true;
 					return;
 				}
 				
@@ -208,9 +210,10 @@
 				return vm.isActive;
 			}, function(newValue) {
 
-
-				if (!validateDateParameters(vm.period.startDate, vm.period.endDate)) {
+				if (vm.period == null || !validateDateParameters(vm.period.startDate, vm.period.endDate)) {
+					vm.loaded = true;
 					return;
+
 				}
 
 				vm.onIsActiveChange(newValue);
