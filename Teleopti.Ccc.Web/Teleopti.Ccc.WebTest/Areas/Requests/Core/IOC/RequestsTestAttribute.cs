@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC
 			system.UseTestDouble(personRequestCheckAuthorization).For<IPersonRequestCheckAuthorization>();
 			system.UseTestDouble(new ConfigurablePermissions()).For<IAuthorization>();
 			system.UseTestDouble(new FakeCommonAgentNameProvider()).For<ICommonAgentNameProvider>();
-			system.UseTestDouble(new AbsenceRequestCancelService(personRequestCheckAuthorization)).For<IAbsenceRequestCancelService>();
+			system.UseTestDouble(new AbsenceRequestCancelService(personRequestCheckAuthorization, scenario)).For<IAbsenceRequestCancelService>();
 
 			system.UseTestDouble(new FakeLoggedOnUser()).For<ILoggedOnUser>();
 			system.UseTestDouble(new FakeUserCulture(CultureInfo.GetCultureInfo("en-US"))).For<IUserCulture>();
