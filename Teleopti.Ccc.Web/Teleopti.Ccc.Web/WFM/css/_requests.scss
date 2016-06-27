@@ -113,6 +113,14 @@
 	.wfm-date-range-picker-wrap {
 		width: 260px;
 
+		.con-row {
+			display: inline-flex;
+
+			.con-flex {
+				flex: auto 1 1;
+			}
+		}
+
 		input {
 			width: 100px !important;
 		}
