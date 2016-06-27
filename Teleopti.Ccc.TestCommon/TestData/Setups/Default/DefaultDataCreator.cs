@@ -54,7 +54,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 		{
 			using (var uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				DefaultScenario.Scenario.SetId(null);
 				new DefaultScenario().Apply(new ThisUnitOfWork(uow));
 				uow.PersistAll();
 			}
