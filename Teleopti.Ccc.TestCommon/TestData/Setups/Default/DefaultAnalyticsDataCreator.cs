@@ -45,7 +45,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 				Person.NotDefinedPerson(existingDatasources),
 				Absence.NotDefinedAbsence(existingDatasources, 1),
 				DimDayOff.NotDefined(existingDatasources, 1),
-				ShiftCategory.NotDefined(existingDatasources, 1)
+				ShiftCategory.NotDefined(existingDatasources, 1),
+				Activity.NotDefined(existingDatasources, 1)
 			};
 		};
 		private static readonly IList<IAnalyticsDataSetup> setups = generateSetups();

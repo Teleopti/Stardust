@@ -48,5 +48,9 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 		}
 
 		public IEnumerable<DataRow> Rows { get; private set; }
+		public static Activity NotDefined(IDatasourceData datasource, int businessUnitId)
+		{
+			return new Activity(-1, Guid.Empty, "Not Defined", Color.Empty, datasource, businessUnitId);
+		}
 	}
 }
