@@ -152,11 +152,12 @@
 			// 
 			// labelExplanation
 			// 
+			this.labelExplanation.AutoSize = true;
 			this.tableLayoutPanel1.SetColumnSpan(this.labelExplanation, 2);
 			this.labelExplanation.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.labelExplanation.Location = new System.Drawing.Point(3, 0);
 			this.labelExplanation.Name = "labelExplanation";
-			this.labelExplanation.Size = new System.Drawing.Size(673, 35);
+			this.labelExplanation.Size = new System.Drawing.Size(673, 15);
 			this.labelExplanation.TabIndex = 4;
 			this.labelExplanation.Tag = "";
 			this.labelExplanation.Text = "Explanation";
@@ -166,11 +167,11 @@
 			this.textBoxIntructions.BackColor = System.Drawing.SystemColors.Window;
 			this.tableLayoutPanel1.SetColumnSpan(this.textBoxIntructions, 2);
 			this.textBoxIntructions.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.textBoxIntructions.Location = new System.Drawing.Point(3, 38);
+			this.textBoxIntructions.Location = new System.Drawing.Point(3, 18);
 			this.textBoxIntructions.Multiline = true;
 			this.textBoxIntructions.Name = "textBoxIntructions";
 			this.textBoxIntructions.ReadOnly = true;
-			this.textBoxIntructions.Size = new System.Drawing.Size(673, 361);
+			this.textBoxIntructions.Size = new System.Drawing.Size(673, 381);
 			this.textBoxIntructions.TabIndex = 5;
 			this.textBoxIntructions.Text = "xxApplyProductActivationKeyInstructions";
 			// 
@@ -189,7 +190,7 @@
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 4;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
