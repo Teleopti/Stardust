@@ -84,6 +84,7 @@ Background:
 	| StartTime        | 2016-05-23 15:30 |
 	| EndTime          | 2016-05-23 23:30 |
 
+@ignore
 Scenario: View shift trade requests 
 	When I view wfm requests
 	And I select to load requests from '2016-05-01' to '2016-06-01'
@@ -91,7 +92,7 @@ Scenario: View shift trade requests
 	Then I should see a shift request from 'John Smith' in the list
 	And I should see a shift request from 'Pence H' in the list
 
-@OnlyRunIfEnabled('Wfm_Requests_ShiftTrade_More_Relevant_Information_38492')
+@ignore
 Scenario: View schedule detail
  When I view wfm requests
  And I select to load requests from '2016-05-17' to '2016-05-24'
