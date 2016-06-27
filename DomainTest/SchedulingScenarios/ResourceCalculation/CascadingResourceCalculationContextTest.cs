@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 	public class CascadingResourceCalculationContextTest : ISetup
 	{
 		private readonly Type _implTypeToTest;
-		public CascadingResourceCalculation Target;
+		public IResourceOptimizationHelper Target;
 
 		public CascadingResourceCalculationContextTest(Type implTypeToTest)
 		{

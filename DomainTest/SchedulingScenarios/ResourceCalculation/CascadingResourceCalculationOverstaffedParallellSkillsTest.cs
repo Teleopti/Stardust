@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 	public class CascadingResourceCalculationOverstaffedParallellSkillsTest : ISetup
 	{
 		private readonly Type _implTypeToTest;
-		public CascadingResourceCalculation Target;
+		public IResourceOptimizationHelper Target;
 
 		public CascadingResourceCalculationOverstaffedParallellSkillsTest(Type implTypeToTest)
 		{

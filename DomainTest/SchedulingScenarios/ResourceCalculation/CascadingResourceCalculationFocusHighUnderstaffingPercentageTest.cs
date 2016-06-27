@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 	[Toggle(Toggles.ResourcePlanner_CascadingSkills_38524)]
 	public class CascadingResourceCalculationFocusHighUnderstaffingPercentageTest : ISetup
 	{
-		public CascadingResourceCalculation Target; //TODO: ändra alla test att gå mot interfacet (togglen är ändå på)
+		public IResourceOptimizationHelper Target;
 
 		[Test]
 		public void ShouldPutMoreResourcesOnSkillsWithHighestUnderstaffPercentage()

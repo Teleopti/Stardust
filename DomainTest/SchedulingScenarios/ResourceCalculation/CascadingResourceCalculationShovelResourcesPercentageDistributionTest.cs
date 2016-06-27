@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 	[Toggle(Toggles.ResourcePlanner_CascadingSkills_38524)]
 	public class CascadingResourceCalculationShovelResourcesPercentageDistributionTest : ISetup
 	{
-		public CascadingResourceCalculation Target;
+		public IResourceOptimizationHelper Target;
 
 		[Test]
 		public void ShouldMoveResourcesToTwoSkillsWithDifferentDemandBasedOnPercentageDistribution()
