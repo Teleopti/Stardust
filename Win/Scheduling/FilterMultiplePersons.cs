@@ -288,7 +288,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 				for (var row = gridRangeInfo.Top - 1; row <= gridRangeInfo.Bottom - 1; row++)
 				{
 					if (!gridRangeInfo.IsRows) continue;
-					if (!(gridListControlDefaultSearch.Items.Count >= row)) continue;
+					if (!(gridListControlDefaultSearch.Items.Count > row)) continue;
+					if(row < 0) continue;
 					var item = (FilterMultiplePersonGridControlItem)gridListControlDefaultSearch.Items[row];
 					selectedPersons.Add(item.Person);
 				}
