@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 		public void BeforeScenario()
 		{
-			log.Debug("Preparing for scenario " + ScenarioContext.Current.ScenarioInfo.Title);
+			log.Debug($"Preparing for scenario {ScenarioContext.Current.ScenarioInfo.Title}");
 			Browser.SelectBrowserByTag();
 
 			ToggleStepDefinition.IgnoreScenarioIfDisabledByToggle();
@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 			TestDataSetup.RestoreCcc7Data();
 			TestDataSetup.ClearAnalyticsData();
+			TestDataSetup.SetupDefaultScenario();
 
 			TestControllerMethods.ClearConnections();
 
@@ -46,19 +47,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 			Browser.Interactions.Javascript("sessionStorage.clear();");
 			
-			log.Debug("Starting scenario " + ScenarioContext.Current.ScenarioInfo.Title);
+			log.Debug($"Starting scenario {ScenarioContext.Current.ScenarioInfo.Title}");
 		}
 
 		public void AfterScenario()
 		{
-			log.Debug("Cleaning up after scenario " + ScenarioContext.Current.ScenarioInfo.Title);
+			log.Debug($"Cleaning up after scenario {ScenarioContext.Current.ScenarioInfo.Title}");
 
 			Browser.Interactions.GoTo("about:blank");
 
 			ScenarioUnitOfWorkState.TryDisposeUnitOfWork();
 			handleScenarioException();
 
-			log.Debug("Finished scenario " + ScenarioContext.Current.ScenarioInfo.Title);
+			log.Debug($"Finished scenario {ScenarioContext.Current.ScenarioInfo.Title}");
 		}
 
 		public void AfterStep()
@@ -82,8 +83,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		private static void handleScenarioException()
 		{
 			if (ScenarioContext.Current.TestError == null) return;
-			Console.WriteLine("\r\nTest Scenario \"{0}\" failed, please check the error message.",
-				ScenarioContext.Current.ScenarioInfo.Title);
+			Console.WriteLine($"\r\nTest Scenario \"{ScenarioContext.Current.ScenarioInfo.Title}\" failed, please check the error message.");
 		}
 	}
 }

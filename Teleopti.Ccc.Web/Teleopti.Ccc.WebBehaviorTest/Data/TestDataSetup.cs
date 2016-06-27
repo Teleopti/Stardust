@@ -33,10 +33,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 			SystemSetup.DefaultDataCreator.Create();
 			SystemSetup.DefaultAnalyticsDataCreator.OneTimeSetup();
-			ClearAnalyticsData();
-			SetupDefaultScenario();
 
-			DataSourceHelper.BackupApplicationDatabase(SystemSetup.DefaultDataCreator.HashValue);			
+			DataSourceHelper.BackupApplicationDatabase(SystemSetup.DefaultDataCreator.HashValue);
 		}
 
 		public static void ClearAnalyticsData()
@@ -53,6 +51,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static void SetupDefaultScenario()
 		{
+			StateHolderProxyHelper.SetupFakeState(
+				datasource,
+				DefaultPersonThatCreatesData.PersonThatCreatesDbData,
+				DefaultBusinessUnit.BusinessUnit
+				);
+
 			SystemSetup.DefaultDataCreator.CreateDefaultScenario();
 		}
 	}
