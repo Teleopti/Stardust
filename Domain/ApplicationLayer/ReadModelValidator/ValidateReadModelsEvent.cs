@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 {
@@ -6,5 +8,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 	{
 		public DateTime StartDate { get; set; }
 		public DateTime EndDate { get; set; }
+		public IList<ValidateReadModelType> Targets { get; set; }
 	}
 }

@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 {
 	public interface IReadModelValidator
 	{
+		void SetTargetTypes(IList<ValidateReadModelType> types);
 
 		IEnumerable<ScheduleProjectionReadOnlyModel> BuildReadModel(IPerson person, DateOnly date);
 		IEnumerable<ScheduleProjectionReadOnlyModel> BuildReadModel(Guid personId, DateOnly date);

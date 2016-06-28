@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IProjectionChangedEventBuilder _builder;
+		private IList<ValidateReadModelType> _targetTypes = new List<ValidateReadModelType>();
 
 		public ReadModelValidator(IScheduleProjectionReadOnlyPersister persister, IPersonRepository personRepository, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IProjectionChangedEventBuilder builder)
 		{
@@ -26,6 +27,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 			_scheduleStorage = scheduleStorage;
 			_currentScenario = currentScenario;
 			_builder = builder;
+		}
+
+		public void SetTargetTypes(IList<ValidateReadModelType> types)
+		{
+			_targetTypes = types;
 		}
 
 		public void Validate(DateTime start, DateTime end, Action<ReadModelValidationResult> reportProgress, bool ignoreValid = false)
@@ -43,24 +49,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 				scenario);
 				dateOnlyPeriod.DayCollection().ForEach(day =>
 				{
-					var readModelLayers =
-						_persister.ForPerson(day, person.Id.GetValueOrDefault(), scenario.Id.GetValueOrDefault())
-							.ToList()
-							.OrderBy(l => l.StartDateTime);
+					if (_targetTypes.Contains(ValidateReadModelType.ScheduleProjectionReadOnly))
+					{
+						var scheduleDay = schedules.SchedulesForDay(day).SingleOrDefault();
+						var readModelLayers =
+							_persister.ForPerson(day, person.Id.GetValueOrDefault(), scenario.Id.GetValueOrDefault())
+								.ToList()
+								.OrderBy(l => l.StartDateTime);
 
-					var mappedLayers = BuildReadModel(person, schedules.SchedulesForDay(day).SingleOrDefault());
+						var mappedLayers = BuildReadModel(person, scheduleDay);
+						var isInValid = mappedLayers.Count() != readModelLayers.Count()
+										|| mappedLayers.Zip(readModelLayers, IsReadModelDifferent).Any(x => x);
 
-					var isInValid = mappedLayers.Count() != readModelLayers.Count()
-									|| mappedLayers.Zip(readModelLayers, IsReadModelDifferent).Any(x => x);
-
-					if (isInValid || !ignoreValid)
-						reportProgress(new ReadModelValidationResult
-						{
-							PersonId = person.Id.GetValueOrDefault(),
-							Date = day.Date,
-							IsValid = !isInValid,
-							Type = ValidateReadModelType.ScheduleProjectionReadOnly
-						});
+						if (isInValid || !ignoreValid)
+							reportProgress(new ReadModelValidationResult
+							{
+								PersonId = person.Id.GetValueOrDefault(),
+								Date = day.Date,
+								IsValid = !isInValid,
+								Type = ValidateReadModelType.ScheduleProjectionReadOnly
+							});
+					}
 				});
 			});
 
@@ -85,28 +94,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 				date.ToDateTimePeriod(TimeZoneInfo.Utc),
 				scenario);
 			var scheduleDay = schedule.SchedulesForDay(date).SingleOrDefault();
-			if (scheduleDay != null)
-			{
-				var projection = scheduleDay.ProjectionService().CreateProjection();
-				var layers = _builder.BuildProjectionChangedEventLayers(projection);
-
-				return layers.Select(layer => new ScheduleProjectionReadOnlyModel
-				{
-					PersonId = person.Id.Value,
-					ScenarioId = scenario.Id.Value,
-					BelongsToDate = scheduleDay.DateOnlyAsPeriod.DateOnly,
-					PayloadId = layer.PayloadId,
-					WorkTime = layer.WorkTime,
-					ContractTime = layer.ContractTime,
-					StartDateTime = layer.StartDateTime,
-					EndDateTime = layer.EndDateTime,
-					Name = layer.Name,
-					ShortName = layer.ShortName,
-					DisplayColor = layer.DisplayColor
-				});
-			}
-
-			return new List<ScheduleProjectionReadOnlyModel>();
+			return BuildReadModel(person, scheduleDay);
 		}
 		public IEnumerable<ScheduleProjectionReadOnlyModel> BuildReadModel(IPerson person, IScheduleDay scheduleDay)
 		{

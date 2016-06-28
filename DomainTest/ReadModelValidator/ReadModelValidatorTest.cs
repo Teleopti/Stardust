@@ -61,6 +61,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 				result.Add(x);
 			};
 
+			Target.SetTargetTypes(new List<ValidateReadModelType> {ValidateReadModelType.ScheduleProjectionReadOnly});
 			Target.Validate(new DateTime(2016, 1, 1), new DateTime(2016, 1, 1), action, true);
 	
 			result.Count().Should().Be.EqualTo(1);
