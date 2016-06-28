@@ -3,9 +3,9 @@
     'use strict';
 
     angular.module('outboundServiceModule')
-        .service('outboundTranslationService', ['$q', '$translate', outboundTranslationService]);
+        .service('outboundTranslationService', ['$q', '$translate', '$locale', outboundTranslationService]);
 
-    function outboundTranslationService($q, $translate) {
+    function outboundTranslationService($q, $translate, $locale) {
               
         this.translate = translate;
         this.applyTranslation = applyTranslation;
@@ -41,9 +41,7 @@
         }
 
         function translateWeekdays(cb, target) {
-
-            var localeData = moment.localeData($translate.use()),
-                weekdayNames = localeData._weekdaysShort,
+	        var weekdayNames = $locale.DATETIME_FORMATS.SHORTDAY,
                 weekdays = [];
 
             var startDow = (moment.localeData()._week) ? moment.localeData()._week.dow : 0;

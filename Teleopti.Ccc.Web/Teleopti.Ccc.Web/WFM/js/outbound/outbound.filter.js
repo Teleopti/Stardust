@@ -3,7 +3,7 @@
 	'use strict';
 
 	angular.module('wfm.outbound')
-		.filter('showWeekdays', ['$translate', showWeekdays])
+		.filter('showWeekdays', ['$locale', showWeekdays])
 		.filter('showPhase', [showPhase])
 		.filter('showTimespan', showTimespan)
 		.filter('decreaseOneDay', decreaseOneDay)
@@ -30,10 +30,9 @@
 		}
 	};
 
-	function showWeekdays($translate) {	    
+	function showWeekdays($locale) {
 	    return function (input) {
-	        var localeData = moment.localeData($translate.use());	     
-	        var weekdays = localeData._weekdaysShort;
+	        var weekdays = $locale.DATETIME_FORMATS.SHORTDAY;
 
 			if (input.WeekDay >= weekdays.length) {
 				return "";
