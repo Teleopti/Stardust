@@ -174,6 +174,26 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 			exception.Should().Be.OfType<DistributedLockException>();
 		}
 
+		[Test]
+		public void ShouldTryLock()
+		{
+			var successCount = 0;
+			Target.TryLockForTypeOf(new Lock1(), () =>
+			{
+				successCount++;
+				Target.TryLockForTypeOf(new Lock1(), () =>
+				{
+					successCount++;
+				});
+			});
+			Target.TryLockForTypeOf(new Lock1(), () =>
+			{
+				successCount++;
+			});
+
+			successCount.Should().Be.EqualTo(2);
+		}
+
 		public class Lock1
 		{
 		}

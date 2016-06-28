@@ -13,5 +13,10 @@ namespace Teleopti.Ccc.TestCommon
 			Monitor.Enter(type);
 			return new GenericDisposable(() => Monitor.Exit(type));
 		}
+
+		public void TryLockForTypeOf(object lockObject, Action action)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

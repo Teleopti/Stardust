@@ -18,7 +18,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		const string insertStatement = "INSERT INTO mart.sys_etl_running_lock (computer_name,start_time,job_name,is_started_by_service,lock_until) VALUES (@computer_name,@start_time,@job_name,@is_started_by_service,DATEADD(mi,1,GETUTCDATE()))";
 		const string updateStatement = "UPDATE mart.sys_etl_running_lock SET lock_until=DATEADD(mi,1,GETUTCDATE())";
 		const string deleteStatement = "DELETE FROM mart.sys_etl_running_lock";
-		private readonly SqlServerDistributedLock sqlServerDistributedLock;
+		private readonly IDisposable sqlServerDistributedLock;
 
 		public EtlJobLock(string connectionString, string jobName, bool isStartByService)
 		{
@@ -30,7 +30,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			};
 
 			// Aquire a distributed lock
-			sqlServerDistributedLock = new SqlServerDistributedLock("ETLJobLock", TimeSpan.Zero, _connection());
+			sqlServerDistributedLock = new SqlMonitor().Enter("ETLJobLock", TimeSpan.Zero, _connection());
 			createLock(jobName, isStartByService);
 		}
 

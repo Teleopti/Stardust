@@ -1,50 +1,55 @@
 using System;
 using System.Data;
 using System.Data.SqlClient;
+using Teleopti.Ccc.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.DistributedLock
 {
-	public class SqlServerDistributedLock : IDisposable
+	public class SqlMonitor
 	{
-		private readonly SqlConnection _connection;
-		private readonly string _resource;
-
-		public SqlServerDistributedLock(string resource, TimeSpan timeout, SqlConnection connection)
+		public bool TryEnter(string resource, TimeSpan timeout, SqlConnection connection)
 		{
-			_resource = resource;
-			_connection = connection;
+			var getCommand = connection.CreateCommand();
+			getCommand.CommandType = CommandType.StoredProcedure;
+			getCommand.CommandText = @"sp_getapplock";
+			getCommand.Parameters.AddWithValue("@Resource", resource);
+			getCommand.Parameters.AddWithValue("@DbPrincipal", "public");
+			getCommand.Parameters.AddWithValue("@LockMode", "Exclusive");
+			getCommand.Parameters.AddWithValue("@LockOwner", "Session");
+			getCommand.Parameters.AddWithValue("@LockTimeout", timeout.TotalMilliseconds);
+			getCommand.Parameters.Add("@Result", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
+			getCommand.ExecuteNonQuery();
 
-			var command = connection.CreateCommand();
-			command.CommandType = CommandType.StoredProcedure;
-			command.CommandText = @"sp_getapplock";
-			command.Parameters.AddWithValue("@Resource", _resource);
-			command.Parameters.AddWithValue("@DbPrincipal", "public");
-			command.Parameters.AddWithValue("@LockMode", "Exclusive");
-			command.Parameters.AddWithValue("@LockOwner", "Session");
-			command.Parameters.AddWithValue("@LockTimeout", timeout.TotalMilliseconds);
-			command.Parameters.Add("@Result", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
-			command.ExecuteNonQuery();
+			var lockResult = (int)getCommand.Parameters["@Result"].Value;
 
-			var lockResult = (int) command.Parameters["@Result"].Value;
-
-			if (lockResult < 0)
-				throw new DistributedLockException(string.Format("Could not place a lock on the resource " + _resource));
+			return lockResult >= 0;
 		}
 
-		public void Dispose()
+		public void Exit(string resource, TimeSpan timeout, SqlConnection connection)
 		{
-			var command = _connection.CreateCommand();
-			command.CommandType = CommandType.StoredProcedure;
-			command.CommandText = @"sp_releaseapplock";
-			command.Parameters.AddWithValue("@Resource", _resource);
-			command.Parameters.AddWithValue("@LockOwner", "Session");
-			command.Parameters.Add("@Result", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
-			command.ExecuteNonQuery();
+			var releaseCommand = connection.CreateCommand();
+			releaseCommand.CommandType = CommandType.StoredProcedure;
+			releaseCommand.CommandText = @"sp_releaseapplock";
+			releaseCommand.Parameters.AddWithValue("@Resource", resource);
+			releaseCommand.Parameters.AddWithValue("@LockOwner", "Session");
+			releaseCommand.Parameters.Add("@Result", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
+			releaseCommand.ExecuteNonQuery();
 
-			var releaseResult = (int)command.Parameters["@Result"].Value;
+			var releaseResult = (int)releaseCommand.Parameters["@Result"].Value;
 
 			if (releaseResult < 0)
-				throw new DistributedLockException(string.Format("Could not release a lock on the resource " + _resource));
+				throw new DistributedLockException(string.Format("Could not release a lock on the resource " + resource));
 		}
+
+		public IDisposable Enter(string resource, TimeSpan timeout, SqlConnection connection)
+		{
+			if (!TryEnter(resource, timeout, connection))
+				throw new DistributedLockException(string.Format("Could not place a lock on the resource " + resource));
+			return new GenericDisposable(() =>
+			{
+				Exit(resource, timeout, connection);
+			});
+		}
+		
 	}
 }

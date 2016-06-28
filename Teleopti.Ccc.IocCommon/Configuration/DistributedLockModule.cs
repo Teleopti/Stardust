@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<DistributedLockAcquirer>().As<IDistributedLockAcquirer>().SingleInstance();
+			builder.RegisterType<SqlMonitor>().SingleInstance();
 		}
 	}
 }
