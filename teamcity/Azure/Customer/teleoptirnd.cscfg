@@ -20,4 +20,19 @@
 	  <Certificate name="fakedress.teleopticloud.com" thumbprint="3206E29CF2B81CF830CE6E026A4148849EA06F27" thumbprintAlgorithm="sha1"/>
     </Certificates>
   </Role>
+   <NetworkConfiguration> 
+    <AccessControls> 
+      <AccessControl name="RDPRestrict"> 
+        <Rule action="permit" description="PermitRDPTeleoptiDenver" order="100" remoteSubnet="174.16.142.1/32" /> 
+		<Rule action="permit" description="PermitRDPTeleoptiBeijing2" order="101" remoteSubnet="119.40.52.69/32" /> 
+		<Rule action="permit" description="PermitRDPTeleoptiBeijing" order="102" remoteSubnet="119.40.52.66/32" /> 
+		<Rule action="permit" description="PermitRDPTeleoptiSthlm" order="103" remoteSubnet="195.67.17.194/32" /> 
+		<Rule action="permit" description="PermitRDPTeleoptiStrangnas" order="104" remoteSubnet="195.234.150.70/32" /> 
+        <Rule action="deny" description="DenyRDP" order="200" remoteSubnet="0.0.0.0/0" /> 
+      </AccessControl> 
+    </AccessControls> 
+    <EndpointAcls> 
+      <EndpointAcl role="TeleoptiCCC" endPoint="Microsoft.WindowsAzure.Plugins.RemoteForwarder.RdpInput" accessControl="RDPRestrict" /> 
+    </EndpointAcls> 
+  </NetworkConfiguration>
 </ServiceConfiguration>
