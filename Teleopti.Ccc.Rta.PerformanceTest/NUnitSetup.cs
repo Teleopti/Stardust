@@ -1,6 +1,9 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using Autofac;
+using log4net;
 using log4net.Config;
+using log4net.Core;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
@@ -26,6 +29,8 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 		private ICurrentTransactionHooks transactionHooks;
 		private DefaultDataCreator defaultDataCreator;
 		private DataCreator dataCreator;
+
+		private static readonly ILog logger = LogManager.GetLogger(typeof(NUnitSetup));
 
 		[SetUp]
 		public void Setup()
@@ -64,7 +69,11 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			if (!haveDatabases)
 				createDatabase(path, dataHash);
 
+			var stopwatch = new Stopwatch();
+			logger.Debug("Starting");
+			stopwatch.Start();
 			TestSiteConfigurationSetup.StartApplicationSync();
+			logger.Debug("Started " + stopwatch.Elapsed.ToString(@"hh\:mm\:ss"));
 		}
 
 		private void createDatabase(string path, int dataHash)
