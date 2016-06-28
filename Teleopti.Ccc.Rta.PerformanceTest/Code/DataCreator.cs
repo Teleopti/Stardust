@@ -68,6 +68,16 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 
 			data.Apply(new RtaMapConfigurable { Activity = null, PhoneState = "LoggedOff", Adherence = "In", Name = "InAdherence" });
 
+			Enumerable.Range(0, (_testConfiguration.NumberOfMappings / 4))
+				.ForEach(code =>
+				{
+					var phoneState = $"Misc{code}";
+					data.Apply(new RtaMapConfigurable { Activity = null, PhoneState = phoneState, Adherence = "Neutral", Name = "NeutralAdherence" });
+					data.Apply(new RtaMapConfigurable { Activity = "Phone", PhoneState = phoneState, Adherence = "In", Name = "InAdherence" });
+					data.Apply(new RtaMapConfigurable { Activity = "Break", PhoneState = phoneState, Adherence = "Out", Name = "OutOfAdherence" });
+					data.Apply(new RtaMapConfigurable { Activity = "Lunch", PhoneState = phoneState, Adherence = "Out", Name = "OutOfAdherence" });
+				});
+
 			Enumerable.Range(0, (_testConfiguration.NumberOfAgents / 100) + 1)
 				.ForEach(site =>
 				{
