@@ -157,9 +157,8 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			_personRequestList = new List<IPersonRequest>() { personRequest };
 			_target = new RequestTransformer();
 			_target.Transform(_personRequestList, 96, _dataTable);
-
 			Assert.AreEqual(1, _personRequestList.Count);
-			Assert.AreEqual(1, _dataTable.Rows.Count);
+
 			var row = _dataTable.Rows[0];
 			Assert.IsTrue (personRequest.IsWaitlisted);
 			Assert.AreEqual(4, row["request_status_code"]);
