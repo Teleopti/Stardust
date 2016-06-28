@@ -20,7 +20,8 @@
 		vm.thereIsRequest = thereIsRequest;
 		vm.isDayOff = isDayOff;
 		vm.shouldDisplayShiftTradeDayDetail = shouldDisplayShiftTradeDayDetail;
-	    vm.showRelevantInfo = toggleSvc.Wfm_Requests_ShiftTrade_More_Relevant_Information_38492;
+		vm.showRelevantInfo = toggleSvc.Wfm_Requests_ShiftTrade_More_Relevant_Information_38492;
+		vm.showRequestsInDefaultStatus = toggleSvc.Wfm_Requests_Default_Status_Filter_39472;
 		vm.showShiftDetail = showShiftDetail;
 		vm.hideShiftDetail = hideShiftDetail;
 		vm.shiftDetailStyleJson = shiftDetailStyleJson;
@@ -28,7 +29,20 @@
 		vm.shiftDetailTop;
 		vm.displayShiftDetail;
 
-		
+		vm.init = function() {
+			if (vm.showRequestsInDefaultStatus) {
+				vm.SelectedRequestStatuses = [];
+				var defaultFilter = vm.shiftTradeView ? "0" : "0,5";
+				requestFilterSvc.SetFilter("Status", defaultFilter);
+				vm.filters = requestFilterSvc.Filters;
+				angular.forEach(defaultFilter.split(','),
+					function(value) {
+						vm.SelectedRequestStatuses.push({ Id: value });
+					});
+			}
+		}
+
+		vm.init();
 
 
 	    function updateShiftStatusForSelectedPerson(scheduleDate) {

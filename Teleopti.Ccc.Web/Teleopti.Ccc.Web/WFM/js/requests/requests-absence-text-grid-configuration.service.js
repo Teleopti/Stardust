@@ -76,7 +76,7 @@
 					cellClass: 'request-status',
 					headerCellClass: 'request-status-header',
 					enableSorting: false,
-					filterHeaderTemplate: '<md-select ng-repeat=\"colFilter in col.filters\" md-on-close=\"grid.appScope.statusFilterClose()\"'
+					filterHeaderTemplate: '<md-select ng-model-options=\"{trackBy: \'$value.Id\'}\" ng-repeat=\"colFilter in col.filters\" md-on-close=\"grid.appScope.statusFilterClose()\"'
 					+ 'multiple ng-model=\"grid.appScope.SelectedRequestStatuses\" placeholder=\"{{\'FilterColon\' | translate}} {{\'Status\' | translate}}\" aria-label=\"{{\'Status\' | translate}}\">'
 					+ '<md-option ng-repeat=\"item in grid.appScope.AllRequestStatuses\" ng-value=\"item\">'
 					+ '<span ng-bind=\"item.Name\"></span>'
