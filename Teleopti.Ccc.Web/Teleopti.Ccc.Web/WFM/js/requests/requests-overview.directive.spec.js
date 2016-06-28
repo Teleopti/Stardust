@@ -187,6 +187,7 @@
 						Wfm_Requests_ApproveDeny_36297: true,
 						Wfm_Requests_Filtering_37748: true,
 						Wfm_Requests_ShiftTrade_More_Relevant_Information_38492: true,
+						Wfm_Requests_Default_Status_Filter_39472: true,
 						togglesLoaded: {
 							then: function (cb) { cb(); }
 						}
@@ -356,6 +357,22 @@
 			expect(columns[8].displayName).toEqual('02');
 		});
 
+		it('should have default status for absence request',
+			function() {
+				var test = setUpTarget();
+				test.scope.shiftTradeView = false;
+				test.scope.$digest();
+				expect(test.scope.filters[0].Status).toEqual('0,5');
+			});
+
+		it('should have default status for shift trade request',
+			function() {
+				var test = setUpTarget();
+				test.scope.shiftTradeView = true;
+				test.scope.$digest();
+				expect(test.scope.filters[0].Status).toEqual('0');
+			});
+
 		xit('should load schedules for shift trade request', function () {
 			var test = setUpTarget();
 
@@ -407,7 +424,7 @@
 			var directiveElem = getCompiledElement();
 
 			function getCompiledElement() {
-				var element = angular.element('<requests-table-container requests="requests" shift-trade-view="shiftTradeView" shift-trade-request-date-summary="shiftTradeRequestDateSummary" ></requests-table-container>');
+				var element = angular.element('<requests-table-container filters="filters" requests="requests" shift-trade-view="shiftTradeView" shift-trade-request-date-summary="shiftTradeRequestDateSummary" ></requests-table-container>');
 				var compiledElement = $compile(element)(scope);
 				//scope.$digest();
 				return compiledElement;
