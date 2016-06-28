@@ -220,7 +220,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			{
 				_hangfire.TriggerReccuringJobs();
 			});
-			_hangfire.WaitForQueue();
 		}
 
 		private static void clearAllConnectionPools()
