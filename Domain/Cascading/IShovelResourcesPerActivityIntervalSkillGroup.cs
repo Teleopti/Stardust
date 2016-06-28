@@ -2,7 +2,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Cascading
 {
-	//TODO: can be removed when we know what impl to use
+	//TODO: remove me when #39463 is released/confirmed to work
 	public interface IShovelResourcesPerActivityIntervalSkillGroup
 	{
 		void Execute(ShovelResourcesState state, ISkillStaffPeriodHolder skillStaffPeriodHolder, IActivity activity, DateTimePeriod interval, CascadingSkillGroup skillGroup);

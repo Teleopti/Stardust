@@ -5,6 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Cascading
 {
+	//TODO: remove me when #39463 is released/confirmed to work
 	public class AddResourcesToSubSkillsPercentageDistribution
 	{
 		public void Execute(ShovelResourcesState shovelResourcesState, ISkillStaffPeriodHolder skillStaffPeriodHolder, CascadingSkillGroup skillGroup, DateTimePeriod interval)

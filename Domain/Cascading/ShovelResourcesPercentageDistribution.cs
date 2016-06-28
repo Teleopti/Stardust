@@ -2,6 +2,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Cascading
 {
+	//TODO: remove me when #39463 is released/confirmed to work
 	public class ShovelResourcesPercentageDistribution : IShovelResourcesPerActivityIntervalSkillGroup
 	{
 		private readonly AddResourcesToSubSkillsPercentageDistribution _addResourcesToSubSkillsPercentageDistribution;

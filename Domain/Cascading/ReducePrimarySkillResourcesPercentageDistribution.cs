@@ -5,6 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Cascading
 {
+	//TODO: remove me when #39463 is released/confirmed to work
 	public class ReducePrimarySkillResourcesPercentageDistribution
 	{
 		public void Execute(ISkillStaffPeriodHolder skillStaffPeriodHolder, IEnumerable<ISkill> primarySkills, DateTimePeriod interval, double resourcesMoved)
