@@ -5,8 +5,9 @@
 	
 Background:
 	Given I have a role with
-	| Field | Value     |
-	| Name  | Developer |
+	| Field                 | Value     |
+	| Name                  | Developer |
+	| Access to permissions | True      |
 	And I have a person period with
     | Field      | Value      |	
 	| Start date | 2013-06-01 |
