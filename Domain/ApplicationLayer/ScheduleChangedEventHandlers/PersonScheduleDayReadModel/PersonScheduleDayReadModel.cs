@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel
 {
-	public class PersonScheduleDayReadModel : IPersonScheduleDayReadModel
+	public class PersonScheduleDayReadModel : IPersonScheduleDayReadModel, IEquatable<PersonScheduleDayReadModel>
 	{
 		public Guid PersonId { get; set; }
 		public Guid TeamId { get; set; }
@@ -23,6 +23,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		public bool IsLastPage { get; set; }
 		public int Total { get; set; }
 		public DateTime ScheduleLoadTimestamp { get; set; }
+		public bool Equals(PersonScheduleDayReadModel other)
+		{
+			return (PersonId == other.PersonId && TeamId == other.TeamId && SiteId == other.SiteId &&
+					BusinessUnitId == other.BusinessUnitId && Date == other.Date && 
+					BelongsToDate == other.BelongsToDate && Start == other.Start &&
+					End == other.End && IsDayOff == other.IsDayOff
+					&& Model == other.Model);
+		}
 	}
 
 	public class Model

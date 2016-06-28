@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			};
 			var model = new Model
 			{
+				Id = person.Id.ToString(),
 				FirstName = person.Name.FirstName,
 				LastName = person.Name.LastName,
 				Shift = shift  ,
@@ -75,23 +76,28 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		}
 
 
-		static public PersonScheduleDayReadModel CreatePersonScheduleDayReadModelWithSimpleShift(IPerson person, DateOnly date,  IList<SimpleLayer> simpleLayers)		
+		static public PersonScheduleDayReadModel CreatePersonScheduleDayReadModelWithSimpleShift(IPerson person, DateOnly date,  IList<SimpleLayer> simpleLayers)
 		{
+			var contractTimeMinutes = (int)simpleLayers.Last().End.Subtract(simpleLayers.First().Start).TotalMinutes;
 			var shift = new Shift
 			{
-				Projection = simpleLayers
+				Projection = simpleLayers,
+				ContractTimeMinutes = contractTimeMinutes
 			};
 			var model = new Model
 			{
+				Id = person.Id.ToString(),
 				FirstName = person.Name.FirstName,
 				LastName = person.Name.LastName,
 				Shift = shift,
-				Date = date.Date
+				Date = date.Date,
+				EmploymentNumber = person.EmploymentNumber,
 			};
 			return new PersonScheduleDayReadModel
 			{
 				PersonId = person.Id.Value,
 				TeamId = person.MyTeam(date).Id.Value,
+				SiteId = person.MyTeam(date).Site.Id.Value,
 				Start = simpleLayers.Any()? simpleLayers.Min( x => x.Start): date.Date,	
 				End = simpleLayers.Any()? simpleLayers.Max( x => x.End): date.Date.Add(new TimeSpan(23,59,59)),
 				Model = JsonConvert.SerializeObject(model),

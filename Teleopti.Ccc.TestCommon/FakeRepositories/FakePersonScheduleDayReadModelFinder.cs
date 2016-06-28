@@ -1,16 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
+namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-
-
-	class FakePersonScheduleDayReadModelFinder : IPersonScheduleDayReadModelFinder
+	public class FakePersonScheduleDayReadModelFinder : IPersonScheduleDayReadModelFinder
 	{
 
 		private IPersonRepository _personRepository;
@@ -47,7 +46,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			{
 				Start = shiftLayer.Period.StartDateTime,
 				End = shiftLayer.Period.EndDateTime,
-				Description = shiftLayer.Payload.Name
+				Description = shiftLayer.Payload.Name,
+				Color = ColorTranslator.ToHtml(Color.FromArgb(shiftLayer.Payload.DisplayColor.ToArgb())),
+				Minutes = (int)shiftLayer.Period.EndDateTime.Subtract(shiftLayer.Period.StartDateTime).TotalMinutes
 			}).ToList();
 
 			return PersonScheduleDayReadModelFactory.CreatePersonScheduleDayReadModelWithSimpleShift(assignment.Person, date, simpleLayers);

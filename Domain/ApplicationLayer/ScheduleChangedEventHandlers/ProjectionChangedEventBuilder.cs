@@ -25,14 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 					Logger.Debug("Adding a day to ProjectionChangedEvent");
 
 					var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
-					var personPeriod = scheduleDay.Person.Period(date);
-					if (personPeriod == null)
-					{
-						Logger.Debug("Person did not have this day in any person period, skipping that day");
-						continue;
-					}
-
-					var projection = scheduleDay.ProjectionService().CreateProjection();
+					var version = versions.Single(x => x.Date == date).Version;
 
 					var significantPart = scheduleDay.SignificantPart();
 					if (emptyScheduleOnInitialLoad(message, significantPart))
@@ -41,72 +34,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 						continue;
 					}
 
-					var eventScheduleDay = new ProjectionChangedEventScheduleDay
-					{
-						TeamId = personPeriod.Team.Id.GetValueOrDefault(),
-						SiteId = personPeriod.Team.Site.Id.GetValueOrDefault(),
-						Date = date.Date,
-						WorkTime = projection.WorkTime(),
-						ContractTime = projection.ContractTime(),
-						PersonPeriodId = personPeriod.Id.GetValueOrDefault(),
-						CheckSum = new ShiftTradeChecksumCalculator(scheduleDay).CalculateChecksum(),
-						Version = versions.Single(x => x.Date == date).Version
-					};
-					
+					var eventScheduleDay = BuildEventScheduleDay(scheduleDay);
 
-					switch (significantPart)
-					{
-						case SchedulePartView.Overtime:
-							eventScheduleDay.IsWorkday = true;
-							break;
-						case SchedulePartView.MainShift:
-							var shiftCategory = scheduleDay.PersonAssignment().ShiftCategory;
-							eventScheduleDay.IsWorkday = true;
-							eventScheduleDay.ShiftCategoryId = shiftCategory.Id.GetValueOrDefault();
-							eventScheduleDay.ShortName = shiftCategory.Description.ShortName;
-							eventScheduleDay.DisplayColor = shiftCategory.DisplayColor.ToArgb();
-							break;
-						case SchedulePartView.FullDayAbsence:
-							eventScheduleDay.IsFullDayAbsence = true;
-							eventScheduleDay.ShortName = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.Description.ShortName;
-							break;
-						case SchedulePartView.DayOff:
-							var dayOff = scheduleDay.PersonAssignment().DayOff();
-							eventScheduleDay.ShortName = dayOff.Description.ShortName;
-							eventScheduleDay.Name = dayOff.Description.Name;
-							eventScheduleDay.DayOff = new ProjectionChangedEventDayOff
-							{
-								StartDateTime = scheduleDay.DateOnlyAsPeriod.Period().StartDateTime,
-								EndDateTime = scheduleDay.DateOnlyAsPeriod.Period().EndDateTime,
-								Anchor = dayOff.Anchor
-							};
-							if (projection.HasLayers)
-								eventScheduleDay.IsFullDayAbsence = true;
-							break;
-						default:
-							eventScheduleDay.ShortName = "";
-							eventScheduleDay.NotScheduled = true;
-							break;
-					}
+					eventScheduleDay.Version = version;
 
-					var layers = BuildProjectionChangedEventLayers(projection).ToList();
-
-					ProjectionChangedEventShift shift = null;
-
-					var projectedPeriod = projection.Period();
-					if (projectedPeriod != null || layers.Count > 0)
-					{
-						shift = new ProjectionChangedEventShift();
-						if (projectedPeriod != null)
-						{
-							shift.StartDateTime = projectedPeriod.Value.StartDateTime;
-							shift.EndDateTime = projectedPeriod.Value.EndDateTime;
-						}
-						shift.Layers = layers;
-					}
-
-					eventScheduleDay.Shift = shift;
-					scheduleDays.Add(eventScheduleDay);
+					if (eventScheduleDay!= null)
+						scheduleDays.Add(eventScheduleDay);
 				}
 
 				yield return new T
@@ -123,6 +56,87 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 
 				};
 			}
+		}
+
+		public ProjectionChangedEventScheduleDay BuildEventScheduleDay(IScheduleDay scheduleDay)
+		{
+			var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
+			var personPeriod = scheduleDay.Person.Period(date);
+			if (personPeriod == null)
+			{
+				Logger.Debug("Person did not have this day in any person period, skipping that day");
+				return null;
+			}
+
+			var projection = scheduleDay.ProjectionService().CreateProjection();
+
+			var significantPart = scheduleDay.SignificantPart();
+
+			var eventScheduleDay = new ProjectionChangedEventScheduleDay
+			{
+				TeamId = personPeriod.Team.Id.GetValueOrDefault(),
+				SiteId = personPeriod.Team.Site.Id.GetValueOrDefault(),
+				Date = date.Date,
+				WorkTime = projection.WorkTime(),
+				ContractTime = projection.ContractTime(),
+				PersonPeriodId = personPeriod.Id.GetValueOrDefault(),
+				CheckSum = new ShiftTradeChecksumCalculator(scheduleDay).CalculateChecksum()
+			};
+
+
+			switch (significantPart)
+			{
+				case SchedulePartView.Overtime:
+					eventScheduleDay.IsWorkday = true;
+					break;
+				case SchedulePartView.MainShift:
+					var shiftCategory = scheduleDay.PersonAssignment().ShiftCategory;
+					eventScheduleDay.IsWorkday = true;
+					eventScheduleDay.ShiftCategoryId = shiftCategory.Id.GetValueOrDefault();
+					eventScheduleDay.ShortName = shiftCategory.Description.ShortName;
+					eventScheduleDay.DisplayColor = shiftCategory.DisplayColor.ToArgb();
+					break;
+				case SchedulePartView.FullDayAbsence:
+					eventScheduleDay.IsFullDayAbsence = true;
+					eventScheduleDay.ShortName = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.Description.ShortName;
+					break;
+				case SchedulePartView.DayOff:
+					var dayOff = scheduleDay.PersonAssignment().DayOff();
+					eventScheduleDay.ShortName = dayOff.Description.ShortName;
+					eventScheduleDay.Name = dayOff.Description.Name;
+					eventScheduleDay.DayOff = new ProjectionChangedEventDayOff
+					{
+						StartDateTime = scheduleDay.DateOnlyAsPeriod.Period().StartDateTime,
+						EndDateTime = scheduleDay.DateOnlyAsPeriod.Period().EndDateTime,
+						Anchor = dayOff.Anchor
+					};
+					if (projection.HasLayers)
+						eventScheduleDay.IsFullDayAbsence = true;
+					break;
+				default:
+					eventScheduleDay.ShortName = "";
+					eventScheduleDay.NotScheduled = true;
+					break;
+			}
+
+			var layers = BuildProjectionChangedEventLayers(projection).ToList();
+
+			ProjectionChangedEventShift shift = null;
+
+			var projectedPeriod = projection.Period();
+			if (projectedPeriod != null || layers.Count > 0)
+			{
+				shift = new ProjectionChangedEventShift();
+				if (projectedPeriod != null)
+				{
+					shift.StartDateTime = projectedPeriod.Value.StartDateTime;
+					shift.EndDateTime = projectedPeriod.Value.EndDateTime;
+				}
+				shift.Layers = layers;
+			}
+
+			eventScheduleDay.Shift = shift;
+			return eventScheduleDay;
 		}
 
 		public IEnumerable<ProjectionChangedEventLayer> BuildProjectionChangedEventLayers(IVisualLayerCollection projection)

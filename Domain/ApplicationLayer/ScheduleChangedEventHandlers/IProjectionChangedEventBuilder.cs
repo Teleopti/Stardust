@@ -10,5 +10,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			where T : ProjectionChangedEventBase, new();
 
 		IEnumerable<ProjectionChangedEventLayer> BuildProjectionChangedEventLayers(IVisualLayerCollection projection);
+		ProjectionChangedEventScheduleDay BuildEventScheduleDay(IScheduleDay scheduleDay);
 	}
 }

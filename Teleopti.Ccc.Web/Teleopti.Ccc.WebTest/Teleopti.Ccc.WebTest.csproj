@@ -286,7 +286,6 @@
     <Compile Include="Areas\Outbound\Core\FakeOutboundScheduledResourcesCacher.cs" />
     <Compile Include="Areas\Outbound\Core\OutboundThresholdSettingsPersistorAndProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\FakePersonForScheduleFinder.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\FakePersonScheduleDayReadModelFinder.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\FakePersonScheduleDayReadModelRepository.cs" />
     <Compile Include="Areas\Outbound\Controllers\OutboundControllerTest.cs" />
     <Compile Include="Areas\Outbound\Core\CampaignListProviderTest.cs" />
