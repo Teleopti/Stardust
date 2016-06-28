@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 		IEnumerable<ScheduleProjectionReadOnlyModel> BuildReadModel(IPerson person, DateOnly date);
 		IEnumerable<ScheduleProjectionReadOnlyModel> BuildReadModel(Guid personId, DateOnly date);
 
-		void Validate(DateTime start, DateTime end, Action<ScheduleProjectionReadOnlyValidationResult> reportProgress,
+		void Validate(DateTime start, DateTime end, Action<ReadModelValidationResult> reportProgress,
 			bool ignoreValid = false);
 
 	}

@@ -203,8 +203,8 @@
     <Compile Include="ApplicationLayer\ReadModelValidator\FixScheduleProjectionReadOnlyEventHandler.cs" />
     <Compile Include="ApplicationLayer\ReadModelValidator\IReadModelValidator.cs" />
     <Compile Include="ApplicationLayer\ReadModelValidator\ReadModelValidator.cs" />
-    <Compile Include="ApplicationLayer\ReadModelValidator\ValidateScheduleProjectionReadOnlyEvent.cs" />
-    <Compile Include="ApplicationLayer\ReadModelValidator\ValidateScheduleProjectionReadOnlyEventHandler.cs" />
+    <Compile Include="ApplicationLayer\ReadModelValidator\ValidateReadModelsEvent.cs" />
+    <Compile Include="ApplicationLayer\ReadModelValidator\ValidateReadModelsEventHandler.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\SkillViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\SkillDay\AnalyticsForecastWorkloadUpdater.cs" />
     <Compile Include="Cascading\AddResourcesToSubSkillsFocusHighUnderstaffingPercentage.cs" />

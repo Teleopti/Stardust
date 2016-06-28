@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 			_currentUnitOfWork = currentUnitOfWork;
 		}
 
-		public void Save(ScheduleProjectionReadOnlyValidationResult input)
+		public void Save(ReadModelValidationResult input)
 		{
 			_currentUnitOfWork.Session().CreateSQLQuery(
 				@"INSERT INTO [ReadModel].[ScheduleProjectionReadOnly_check] (PersonId, BelongsToDate, IsValid, UpdateOn) VALUES (:PersonId, :BelongsToDate, :IsValid, :UpdateOn)")
@@ -26,12 +26,12 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 				.ExecuteUpdate();
 		}
 
-		public IEnumerable<ScheduleProjectionReadOnlyValidationResult> LoadAllInvalid()
+		public IEnumerable<ReadModelValidationResult> LoadAllInvalid()
 		{
 			var result = _currentUnitOfWork.Session().CreateSQLQuery(
 				@"SELECT PersonId, BelongsToDate as [Date], IsValid FROM [ReadModel].[ScheduleProjectionReadOnly_check] WHERE IsValid = 0")
-				.SetResultTransformer(Transformers.AliasToBean<ScheduleProjectionReadOnlyValidationResult>())
-				.List<ScheduleProjectionReadOnlyValidationResult>();
+				.SetResultTransformer(Transformers.AliasToBean<ReadModelValidationResult>())
+				.List<ReadModelValidationResult>();
 			return result;
 		}
 

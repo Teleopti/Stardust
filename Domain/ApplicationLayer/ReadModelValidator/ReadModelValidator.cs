@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 			_builder = builder;
 		}
 
-		public void Validate(DateTime start, DateTime end, Action<ScheduleProjectionReadOnlyValidationResult> reportProgress, bool ignoreValid = false)
+		public void Validate(DateTime start, DateTime end, Action<ReadModelValidationResult> reportProgress, bool ignoreValid = false)
 		{
 
 			var people = _personRepository.LoadAllPeopleWithHierarchyDataSortByName(new DateOnly(start));
@@ -54,11 +54,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 									|| mappedLayers.Zip(readModelLayers, IsReadModelDifferent).Any(x => x);
 
 					if (isInValid || !ignoreValid)
-						reportProgress(new ScheduleProjectionReadOnlyValidationResult
+						reportProgress(new ReadModelValidationResult
 						{
 							PersonId = person.Id.GetValueOrDefault(),
 							Date = day.Date,
-							IsValid = !isInValid
+							IsValid = !isInValid,
+							Type = ValidateReadModelType.ScheduleProjectionReadOnly
 						});
 				});
 			});

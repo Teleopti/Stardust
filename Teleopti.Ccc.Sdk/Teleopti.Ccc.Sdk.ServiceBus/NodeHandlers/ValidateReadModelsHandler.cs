@@ -9,21 +9,21 @@ using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 {
-	public class ValidateScheduleProjectionReadOnlyReadModelHandler : IHandle<ValidateScheduleProjectionReadOnlyEvent>
+	public class ValidateReadModelsHandler : IHandle<ValidateReadModelsEvent>
 	{
 		private readonly IComponentContext _componentContext;
 
 
-		public ValidateScheduleProjectionReadOnlyReadModelHandler(IComponentContext componentContext)
+		public ValidateReadModelsHandler(IComponentContext componentContext)
 		{
 			_componentContext = componentContext;
 
 		}
 		[AsSystem, UnitOfWork]
-		public virtual void Handle(ValidateScheduleProjectionReadOnlyEvent parameters, CancellationTokenSource cancellationTokenSource,
+		public virtual void Handle(ValidateReadModelsEvent parameters, CancellationTokenSource cancellationTokenSource,
 			Action<string> sendProgress)
 		{
-			var theRealOne = _componentContext.Resolve<IHandleEvent<ValidateScheduleProjectionReadOnlyEvent>>();
+			var theRealOne = _componentContext.Resolve<IHandleEvent<ValidateReadModelsEvent>>();
 			theRealOne.Handle(parameters);
 		}
 	}

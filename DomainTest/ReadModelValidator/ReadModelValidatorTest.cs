@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 		}
 
 		[Test]
-		public void ShouldFindErrorRecordWhenProjectionLayerMismatchWithScheduleData()
+		public void ShouldFindErrorInScheduleProjectionReadOnlyWhenProjectionLayerMismatchWithScheduleData()
 		{
 			var scenario = CurrentScenario.Current();
 			var person = PersonFactory.CreatePersonWithGuid("Peter", "peter");
@@ -55,8 +55,8 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 					EndDateTime = "2016-01-01 15:00".Utc()
 				});
 
-			var result = new List<ScheduleProjectionReadOnlyValidationResult>();
-			Action<ScheduleProjectionReadOnlyValidationResult> action = x =>
+			var result = new List<ReadModelValidationResult>();
+			Action<ReadModelValidationResult> action = x =>
 			{
 				result.Add(x);
 			};
@@ -66,6 +66,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			result.Count().Should().Be.EqualTo(1);
 			result.Single().PersonId.Should().Be.EqualTo(person.Id.Value);
 			result.Single().Date.Should().Be.EqualTo("2016-01-01".Date().Date);
+			result.Single().Type.Should().Be.EqualTo(ValidateReadModelType.ScheduleProjectionReadOnly);
 		}
 
 		[Test]
@@ -94,8 +95,8 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 					ShortName = ""
 				});
 
-			var result = new List<ScheduleProjectionReadOnlyValidationResult>();
-			Action<ScheduleProjectionReadOnlyValidationResult> action = x =>
+			var result = new List<ReadModelValidationResult>();
+			Action<ReadModelValidationResult> action = x =>
 			{
 				result.Add(x);
 			};

@@ -156,10 +156,10 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		}
 
 
-		[HttpGet, Route("HealthCheck/CheckScheduleProjectionReadOnly")]
-		public virtual IHttpActionResult CheckScheduleProjectionReadOnly(DateTime start, DateTime end)
+		[HttpGet, Route("HealthCheck/CheckReadModels")]
+		public virtual IHttpActionResult CheckReadModels(DateTime start, DateTime end)
 		{				
-			var jobId = _stardustSender.Send(new ValidateScheduleProjectionReadOnlyEvent
+			var jobId = _stardustSender.Send(new ValidateReadModelsEvent
 			{
 				StartDate = start,
 				EndDate = end
