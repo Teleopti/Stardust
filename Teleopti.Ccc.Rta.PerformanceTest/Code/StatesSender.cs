@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		private readonly MutableNow _now;
 		private readonly TestConfiguration _stateHolder;
 		private readonly Http _http;
-		private TimeStateInfo[] changes;
+		private StateChange[] stateChanges;
 
 		public StatesSender(
 			MutableNow now, 
@@ -28,85 +28,97 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			_http = http;
 		}
 
-			
 		[LogTime]
 		public virtual void Send()
 		{
-			changes = new[]
+			stateChanges = new[]
 			{
-				new TimeStateInfo {Time = "2016-02-26 07:00", StateCode = "LoggedOff"},
-				new TimeStateInfo {Time = "2016-02-26 07:05", StateCode = "Ready"},
-				new TimeStateInfo {Time = "2016-02-26 07:06", StateCode = "LoggedOff"},
+				new StateChange {Time = "2016-02-26 07:00", StateCode = "LoggedOff"},
+				new StateChange {Time = "2016-02-26 07:05", StateCode = "Ready"},
+				new StateChange {Time = "2016-02-26 07:06", StateCode = "LoggedOff"},
 
 				// 08:00 phone
-				new TimeStateInfo {Time = "2016-02-26 08:01", StateCode = "Ready"},
-				new TimeStateInfo {Time = "2016-02-26 08:30", StateCode = "LoggedOff"},
-				new TimeStateInfo {Time = "2016-02-26 08:32", StateCode = "Ready"},
-				new TimeStateInfo {Time = "2016-02-26 09:00", StateCode = "LoggedOff"},
-				new TimeStateInfo {Time = "2016-02-26 09:05", StateCode = "Ready"},
+				new StateChange {Time = "2016-02-26 08:01", StateCode = "Ready"},
+				new StateChange {Time = "2016-02-26 08:30", StateCode = "LoggedOff"},
+				new StateChange {Time = "2016-02-26 08:32", StateCode = "Ready"},
+				new StateChange {Time = "2016-02-26 09:00", StateCode = "LoggedOff"},
+				new StateChange {Time = "2016-02-26 09:05", StateCode = "Ready"},
 
 				// 10:00 break
-				new TimeStateInfo {Time = "2016-02-26 10:00", StateCode = "LoggedOff"},
-				new TimeStateInfo {Time = "2016-02-26 10:02", StateCode = "Ready"},
-				new TimeStateInfo {Time = "2016-02-26 10:03", StateCode = "LoggedOff"},
-				new TimeStateInfo {Time = "2016-02-26 10:15", StateCode = "Ready"},
+				new StateChange {Time = "2016-02-26 10:00", StateCode = "LoggedOff"},
+				new StateChange {Time = "2016-02-26 10:02", StateCode = "Ready"},
+				new StateChange {Time = "2016-02-26 10:03", StateCode = "LoggedOff"},
+				new StateChange {Time = "2016-02-26 10:15", StateCode = "Ready"},
 
 				// 11:30 lunch
-				new TimeStateInfo {Time = "2016-02-26 11:35", StateCode = "LoggedOff"},
-				new TimeStateInfo {Time = "2016-02-26 11:36", StateCode = "Ready"},
-				new TimeStateInfo {Time = "2016-02-26 11:37", StateCode = "LoggedOff"},
+				new StateChange {Time = "2016-02-26 11:35", StateCode = "LoggedOff"},
+				new StateChange {Time = "2016-02-26 11:36", StateCode = "Ready"},
+				new StateChange {Time = "2016-02-26 11:37", StateCode = "LoggedOff"},
 
 				// 12:00 phone
-				new TimeStateInfo {Time = "2016-02-26 11:55", StateCode = "Ready"},
-				new TimeStateInfo {Time = "2016-02-26 12:20", StateCode = "LoggedOff"},
-				new TimeStateInfo {Time = "2016-02-26 12:22", StateCode = "Ready"},
-				new TimeStateInfo {Time = "2016-02-26 12:30", StateCode = "LoggedOff"},
-				new TimeStateInfo {Time = "2016-02-26 12:21", StateCode = "Ready"},
+				new StateChange {Time = "2016-02-26 11:55", StateCode = "Ready"},
+				new StateChange {Time = "2016-02-26 12:20", StateCode = "LoggedOff"},
+				new StateChange {Time = "2016-02-26 12:22", StateCode = "Ready"},
+				new StateChange {Time = "2016-02-26 12:30", StateCode = "LoggedOff"},
+				new StateChange {Time = "2016-02-26 12:21", StateCode = "Ready"},
 
 				// 15:00 break
-				new TimeStateInfo {Time = "2016-02-26 14:55", StateCode = "LoggedOff"},
-				new TimeStateInfo {Time = "2016-02-26 15:02", StateCode = "Ready"},
-				new TimeStateInfo {Time = "2016-02-26 15:03", StateCode = "LoggedOff"},
+				new StateChange {Time = "2016-02-26 14:55", StateCode = "LoggedOff"},
+				new StateChange {Time = "2016-02-26 15:02", StateCode = "Ready"},
+				new StateChange {Time = "2016-02-26 15:03", StateCode = "LoggedOff"},
 
 				// 15:15 phone
-				new TimeStateInfo {Time = "2016-02-26 15:15", StateCode = "Ready"},
-				new TimeStateInfo {Time = "2016-02-26 15:45", StateCode = "LoggedOff"},
-				new TimeStateInfo {Time = "2016-02-26 15:47", StateCode = "Ready"},
-				new TimeStateInfo {Time = "2016-02-26 16:10", StateCode = "LoggedOff"},
-				new TimeStateInfo {Time = "2016-02-26 16:15", StateCode = "Ready"},
+				new StateChange {Time = "2016-02-26 15:15", StateCode = "Ready"},
+				new StateChange {Time = "2016-02-26 15:45", StateCode = "LoggedOff"},
+				new StateChange {Time = "2016-02-26 15:47", StateCode = "Ready"},
+				new StateChange {Time = "2016-02-26 16:10", StateCode = "LoggedOff"},
+				new StateChange {Time = "2016-02-26 16:15", StateCode = "Ready"},
 
 				// 17:00 off
-				new TimeStateInfo {Time = "2016-02-26 17:05", StateCode = "LoggedOff"},
-				new TimeStateInfo {Time = "2016-02-26 17:10", StateCode = "Ready"},
-				new TimeStateInfo {Time = "2016-02-26 17:11", StateCode = "LoggedOff"},
+				new StateChange {Time = "2016-02-26 17:05", StateCode = "LoggedOff"},
+				new StateChange {Time = "2016-02-26 17:10", StateCode = "Ready"},
+				new StateChange {Time = "2016-02-26 17:11", StateCode = "LoggedOff"},
 			};
 
-			changes.ForEach(i =>
+			stateChanges.ForEach(stateChange =>
 			{
-				_now.Is(i.Time.Utc());
-				_http.Get("/Test/SetCurrentTime?ticks=" + _now.UtcDateTime().Ticks);
+				var now = stateChange.Time.Utc();
+				FakeTime(now);
 				Enumerable.Range(0, _stateHolder.NumberOfAgents)
 					.ForEach(roger =>
 					{
-						_http.PostJson(
-							"Rta/State/Change",
-							new ExternalUserStateWebModel
-							{
-								AuthenticationKey = LegacyAuthenticationKey.TheKey,
-								UserCode = "roger" + roger,
-								StateCode = i.StateCode,
-								IsLoggedOn = true,
-								PlatformTypeId = Guid.Empty.ToString(),
-								SourceId = _stateHolder.SourceId,
-								IsSnapshot = false
-							});
+						SendState($"roger{roger}", stateChange);
 					});
 			});
 		}
 
-		public IEnumerable<TimeStateInfo> SentSates()
+		[LogTime]
+		protected virtual void SendState(string userCode, StateChange stateChange)
 		{
-			return changes;
+			_http.PostJson(
+				"Rta/State/Change",
+				new ExternalUserStateWebModel
+				{
+					AuthenticationKey = LegacyAuthenticationKey.TheKey,
+					UserCode = userCode,
+					StateCode = stateChange.StateCode,
+					IsLoggedOn = true,
+					PlatformTypeId = Guid.Empty.ToString(),
+					SourceId = _stateHolder.SourceId,
+					IsSnapshot = false
+				});
+		}
+
+		[LogTime]
+		protected virtual void FakeTime(DateTime now)
+		{
+			_now.Is(now);
+			_http.Get("/Test/SetCurrentTime?ticks=" + now.Ticks);
+		}
+
+		public IEnumerable<StateChange> SentSates()
+		{
+			return stateChanges;
 		}
 	}
 }
