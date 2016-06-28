@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 			foreach (var personList in affectedInterfaces.Batch(25))
 			{
-				var idsAsString = personList.Select(p => p.Id.GetValueOrDefault()).ToArray();
+				var idsAsString = personList.Where(p => p.Id.HasValue).Select(p => p.Id.GetValueOrDefault()).ToArray();
 				var message = new PersonCollectionChangedEvent();
 				message.SetPersonIdCollection(idsAsString);
 				_eventsPublisher.Publish(message);

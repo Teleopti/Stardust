@@ -149,12 +149,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 				GetCommonNameDescription(_globalSettingDataRepository),
 				_analyticsIntervalRepository);
 
+			var changedPeople = new List<Guid>();
 			foreach (var personCodeGuid in @event.PersonIdCollection.Distinct())
 			{
 				// Check if person does exists => if not it is deleted and handled by other handle-method
 				if (!persons.Any(a => a.Id.Equals(personCodeGuid)))
 				{
-					logger.Warn($"Person '{personCodeGuid}' was not found in application.");
+					logger.Debug($"Person '{personCodeGuid}' was not found in application.");
 					continue;
 				}
 
@@ -167,7 +168,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					// Check if person period already exists in database
 					var existingPeriod = personPeriodsInAnalytics.FirstOrDefault(a => a.PersonPeriodCode.Equals(personPeriod.Id.GetValueOrDefault()));
 					List<AnalyticsSkill> analyticsSkills;
-
+					changedPeople.Add(person.Id.GetValueOrDefault());
 					if (existingPeriod != null)
 					{
 						logger.Debug($"Update person period for {person.Name}");
@@ -251,14 +252,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			}
 			_currentAnalyticsUnitOfWork.Current().AfterSuccessfulTx(() =>
 			{
-				_eventPublisher.Publish(new AnalyticsPersonCollectionChangedEvent
+				changedPeople = changedPeople.Distinct().ToList();
+				if (!changedPeople.Any()) return;
+				var analyticsPersonCollectionChangedEvent = new AnalyticsPersonCollectionChangedEvent
 				{
 					InitiatorId = @event.InitiatorId,
 					LogOnBusinessUnitId = @event.LogOnBusinessUnitId,
 					LogOnDatasource = @event.LogOnDatasource,
-					SerializedPeople = @event.SerializedPeople,
 					Timestamp = @event.Timestamp
-				});
+				};
+				analyticsPersonCollectionChangedEvent.SetPersonIdCollection(changedPeople);
+				_eventPublisher.Publish(analyticsPersonCollectionChangedEvent);
 			});
 
 		}
