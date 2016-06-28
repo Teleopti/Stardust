@@ -232,11 +232,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		public void ShouldNotMakeSubskillOverstaffed([Values(true, false)] bool b1BeforeB2)
+		public void ShouldMoveResourcesFromPrimarySkillWhileSubSkillIsUnderStaffed([Values(true, false)] bool b1BeforeB2)
 		{
-			if(_implTypeToTest==typeof(ShovelResourcesFocusHighUnderstaffingPercentage))
-				Assert.Ignore("Claes! Kolla gärna på detta!");
-
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
