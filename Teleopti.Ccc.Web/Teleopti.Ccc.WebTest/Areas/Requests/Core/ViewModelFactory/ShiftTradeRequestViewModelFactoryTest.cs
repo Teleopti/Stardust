@@ -19,6 +19,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.People.Core.Providers;
 using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
+using Teleopti.Ccc.Web.Areas.Requests.Core.Provider;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory;
 using Teleopti.Ccc.Web.Core;
@@ -334,6 +335,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
 			requestListViewModel.Requests.Count().Should().Be(0);
 		}
+
+
+		[Test]
+		public void ShouldGetISO8601FirstDayOfWeek()
+		{
+			
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly (2016, 3, 1),
+				EndDate = new DateOnly (2016,3 , 3)
+			};
+
+			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel (input);
+			requestListViewModel.FirstDayOfWeek.Should().Be (7);
+		}
+
 
 		private static void setShiftTradeSwapDetailsToAndFrom(IShiftTradeRequest shiftTradeRequest, IScheduleDictionary schedule,
 			IPerson personTo, IPerson personFrom)

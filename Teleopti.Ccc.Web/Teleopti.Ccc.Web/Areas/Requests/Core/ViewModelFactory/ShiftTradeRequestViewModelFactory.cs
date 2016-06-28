@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 		{
 			var requestListModel = new ShiftTradeRequestListViewModel()
 			{
-				FirstDayOfWeek = (int)_userCulture.GetCulture().DateTimeFormat.FirstDayOfWeek,
+				FirstDayOfWeek = toIso8601DayNumber(_userCulture.GetCulture().DateTimeFormat.FirstDayOfWeek),
 				Requests = new RequestViewModel[] { }
 			};
 
@@ -182,5 +182,20 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			shiftTradeScheduleDayDetailViewModel.Type = ShiftObjectType.DayOff;
 
 		}
+
+		private int toIso8601DayNumber(DayOfWeek dayOfWeek)
+		{
+			//ISO8601 = 1-7, 1 = Monday and 7 = Sunday.
+			if (dayOfWeek == DayOfWeek.Sunday)
+			{
+				return 7;
+			}
+			else
+			{
+				return (int)dayOfWeek;
+			}
+
+		}
+
 	}
 }
