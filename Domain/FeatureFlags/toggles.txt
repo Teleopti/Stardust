@@ -170,3 +170,4 @@ ETL_SpeedUpIntradayDate_38934 = RC
 ETL_SpeedUpIntradayForecastWorkload_38929 = RC
 ETL_SpeedUpNightlyForecastWorkload_38929 = RC
 HealthCheck_ValidateReadModelPersonScheduleDay_39421 = DEV
+Intraday_ResourceCalculateReadModel_39200 = RC
