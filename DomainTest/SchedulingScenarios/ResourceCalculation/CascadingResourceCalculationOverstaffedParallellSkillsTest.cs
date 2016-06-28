@@ -278,6 +278,57 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				.Should().Be.IncludedIn(-1, 0);
 		}
 
+		[Test]
+		public void ShouldStopExecutingWhenNoSubSkillIsUnderStaffed([Values(true, false)] bool b1BeforeB2)
+		{
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var dateOnly = DateOnly.Today;
+			var skillA = new Skill("A", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillA.SetCascadingIndex(1);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(8, 0, 9, 0));
+			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 0);
+			var skillB1 = new Skill("B1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillB1.SetCascadingIndex(2);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillB1, new TimePeriod(8, 0, 9, 0));
+			var skillDayB1 = skillB1.CreateSkillDayWithDemand(scenario, dateOnly, 10);
+			var skillB2 = new Skill("B2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillB2.SetCascadingIndex(2);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillB2, new TimePeriod(8, 0, 9, 0));
+			var skillDayB2 = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var asses = new List<IPersonAssignment>();
+			for (var i = 0; i < 20; i++)
+			{
+				var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
+				agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }),
+					new[] { skillA, skillB1, skillB2 });
+				var ass = new PersonAssignment(agent, scenario, dateOnly);
+				ass.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
+				asses.Add(ass);	
+			}
+
+			for (var i = 0; i < 5; i++)
+			{
+				var agentB1 = new Person().InTimeZone(TimeZoneInfo.Utc);
+				agentB1.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }),
+					new[] { skillB1 });
+				var assB1 = new PersonAssignment(agentB1, scenario, dateOnly);
+				assB1.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
+				asses.Add(assB1);
+			}
+
+			var skillDays = b1BeforeB2 ? new[] { skillDayA, skillDayB1, skillDayB2 } : new[] { skillDayA, skillDayB2, skillDayB1 };
+
+			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, asses, skillDays, false, false));
+
+			skillDayA.SkillStaffPeriodCollection.First().AbsoluteDifference
+				.Should().Be.EqualTo(14);
+			skillDayB1.SkillStaffPeriodCollection.First().AbsoluteDifference
+				.Should().Be.EqualTo(0);
+			skillDayB2.SkillStaffPeriodCollection.First().AbsoluteDifference
+				.Should().Be.EqualTo(0);
+		}
+
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDoubleForType(_implTypeToTest).For<IShovelResourcesPerActivityIntervalSkillGroup>();
