@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 		{
 			while (!shovelResourcesState.NoMoreResourcesToMove())
 			{
-				var subSkillIsUnderstaffed = false;
+				var anySubSkillIsUnderstaffed = false;
 
 				foreach (var subSkillsWithSameIndex in skillGroup.SubSkillsWithSameIndex)
 				{
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 						if (!skillToMoveToAbsoluteDifference.IsUnderstaffed())
 							continue;
 
-						subSkillIsUnderstaffed = true;
+						anySubSkillIsUnderstaffed = true;
 						var understaffingPercent = -skillStaffPeriodTo.RelativeDifference;
 						var proportionalResourcesToMove = understaffingPercent/totalUnderstaffingPercent*remainingOverstaff;
 
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 					}
 				}
 
-				if (!subSkillIsUnderstaffed)
+				if (!anySubSkillIsUnderstaffed)
 					return;
 			}
 		}
