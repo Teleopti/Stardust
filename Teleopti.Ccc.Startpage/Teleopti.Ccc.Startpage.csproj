@@ -273,6 +273,7 @@
     <Content Include="assets\vendor\respond\README.md" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="robots.txt" />
     <Content Include="web.config" />
   </ItemGroup>
   <PropertyGroup>
