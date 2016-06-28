@@ -3,48 +3,48 @@
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 @using Teleopti.Interfaces.Domain
 @{
-    var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0))
-                      let value = Html.AttributeEncode(TimeHelper.GetLongHourMinuteTimeString(t, CultureInfo.CurrentCulture))
-                      let text = TimeHelper.GetLongHourMinuteTimeString(t, CultureInfo.CurrentCulture)
-                      select new Option
-                      {
-                          Value = value,
-                          Text = text
-                      };
+	var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0))
+					  let value = Html.AttributeEncode(TimeHelper.GetLongHourMinuteTimeString(t, CultureInfo.CurrentCulture))
+					  let text = TimeHelper.GetLongHourMinuteTimeString(t, CultureInfo.CurrentCulture)
+					  select new Option
+					  {
+						  Value = value,
+						  Text = text
+					  };
 }
 
 <span class="form-inline clearfix">
-    <span>
-        <button class="preference-toggle-save-template btn" data-bind="click: IsSaveAsNewTemplateToggle" title="@Resources.SaveAsTemplate">
-            <i class="glyphicon glyphicon-plus-sign" data-bind="css: IsSaveAsNewTemplateClass"></i>
-        </button>
-        <span data-bind="if: IsSaveAsNewTemplate()">
-            <span id="Template-name-section">
-                <input class="preference-template-name form-control" type="text" placeholder="@Resources.NewTemplateName" data-bind="value: NewTemplateName"/>
-                <button id="Preference-extended-save-template" class="btn btn-primary" data-bind="click: SaveAsNewTemplate">@Resources.Save</button>
-            </span>
-        </span>
-    </span>
-    <span data-bind="visible: HasTemplates">
-        <select class="preference-template-list form-control" data-bind="foreach: AvailableTemplates, value: SelectedTemplateId" title="@Resources.ExtendedPreferencesTemplate">
-            <option data-bind="text: Text, value: Value"></option>
-        </select>
-        <button class="preference-template-delete btn" data-bind="click: DeleteTemplate, enable: DeleteTemplateEnabled" title="@Resources.Delete">
-            <i class="glyphicon glyphicon-remove-sign"></i>
-        </button>
-    </span>
-    <button class="btn pull-right" data-bind="click: IsPreferenceInputVisibleToggle">
-        <i class="glyphicon glyphicon-circle-arrow-up" data-bind="css: IsPreferenceInputVisibleToggleCss"></i>
-    </button>
+	<span>
+		<button class="preference-toggle-save-template btn" data-bind="click: IsSaveAsNewTemplateToggle" title="@Resources.SaveAsTemplate">
+			<i class="glyphicon glyphicon-plus-sign" data-bind="css: IsSaveAsNewTemplateClass"></i>
+		</button>
+		<span data-bind="if: IsSaveAsNewTemplate()">
+			<span id="Template-name-section">
+				<input class="preference-template-name form-control" type="text" placeholder="@Resources.NewTemplateName" data-bind="value: NewTemplateName" />
+				<button id="Preference-extended-save-template" class="btn btn-primary" data-bind="click: SaveAsNewTemplate">@Resources.Save</button>
+			</span>
+		</span>
+	</span>
+	<span data-bind="visible: HasTemplates">
+		<select class="preference-template-list form-control" data-bind="foreach: AvailableTemplates, value: SelectedTemplateId" title="@Resources.ExtendedPreferencesTemplate">
+			<option data-bind="text: Text, value: Value"></option>
+		</select>
+		<button class="preference-template-delete btn" data-bind="click: DeleteTemplate, enable: DeleteTemplateEnabled" title="@Resources.Delete">
+			<i class="glyphicon glyphicon-remove-sign"></i>
+		</button>
+	</span>
+	<button class="btn pull-right" data-bind="click: IsPreferenceInputVisibleToggle">
+		<i class="glyphicon glyphicon-circle-arrow-up" data-bind="css: IsPreferenceInputVisibleToggleCss"></i>
+	</button>
 </span>
 <hr class="hr-thin" data-bind="visible: IsPreferenceInputVisible" />
 <div data-bind="if: ShowError">
-    <div class="preference-error-panel alert alert-danger" data-bind="html: ValidationError" />
+	<div class="preference-error-panel alert alert-danger" data-bind="html: ValidationError" />
 </div>
 
 <table class="table-condensed preference-input-container">
 	<tr>
-		<td  class="col-xs-5">
+		<td class="col-xs-5">
 			<table class="table-condensed preference-input-container " data-bind="visible: IsPreferenceInputVisible">
 				<tr>
 					<td class="preference-input-icon-cell ">
@@ -59,7 +59,7 @@
 									<optgroup label="@optionGroup.Text">
 										@foreach (var option in optionGroup.Options)
 										{
-                                        <option value="@option.Value" data-color="@option.Color" data-preference-extended="@option.Extended.ToString().ToLower()">@Html.Encode(option.Text)</option>
+											<option value="@option.Value" data-color="@option.Color" data-preference-extended="@option.Extended.ToString().ToLower()">@Html.Encode(option.Text)</option>
 										}
 									</optgroup>
 								}
@@ -182,7 +182,7 @@
 								<optgroup label="@Model.Options.ActivityOptions.Text">
 									@foreach (var option in Model.Options.ActivityOptions.Options)
 									{
-                                    <option value="@option.Value" data-color="@option.Color">@Html.Encode(option.Text)</option>
+										<option value="@option.Value" data-color="@option.Color">@Html.Encode(option.Text)</option>
 									}
 								</optgroup>
 							</select>

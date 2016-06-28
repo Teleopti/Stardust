@@ -35,19 +35,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I select an editable day without preference")]
 		public void WhenISelectAnEditableDayWithoutPreference()
 		{
-			PreferencesPageStepDefinitions.SelectCalendarCellByClass(new DateTime(2014,5,3));
+			PreferencesPageStepDefinitions.SelectCalendarCellByClass(new DateTime(2014, 5, 3));
 		}
 
 		[When(@"I select an editable day with standard preference")]
-		public void WhenISelectAnEditableDayWithStandardPreference() 
-		{ 
-			PreferencesPageStepDefinitions.SelectCalendarCellByClass(new DateTime(2014,5,3));
+		public void WhenISelectAnEditableDayWithStandardPreference()
+		{
+			PreferencesPageStepDefinitions.SelectCalendarCellByClass(new DateTime(2014, 5, 3));
 		}
 
 		[When(@"I also select an editable day without standard preference")]
 		public void WhenISelectAnEditableDayWithoutStandardPreference()
 		{
-			PreferencesPageStepDefinitions.SelectCalendarCellByClass(new DateTime(2014,5,4));
+			PreferencesPageStepDefinitions.SelectCalendarCellByClass(new DateTime(2014, 5, 4));
 		}
 
 		[When(@"I select 2 editable day with standard preference")]
@@ -56,11 +56,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			PreferencesPageStepDefinitions.SelectCalendarCellByClass(new DateTime(2014, 5, 3));
 			PreferencesPageStepDefinitions.SelectCalendarCellByClass(new DateTime(2014, 5, 4));
 		}
-	
+
 		[Then(@"I should see my existing '(.*)' preference")]
 		public void ThenIShouldSeeMyExistingDayOffPreference(string preference)
 		{
-			var cell = CalendarCells.DateSelector("2014-05-03");
+			var date = "2014-05-03";
+			var cell = CalendarCells.DateSelector(date);
+
+			Browser.Interactions.AssertKnockoutContextContains("li[data-mytime-date=\"" + date + "\"] .day-content figure.cover-me", "IsLoading()", "False");
 			Browser.Interactions.AssertFirstContains(cell, preference);
 		}
 
@@ -85,21 +88,30 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see the standard preference '(.*)' in the calendar")]
 		public void ThenIShouldSeeTheStandardPreferenceInTheCalendar(string preference)
 		{
-			Browser.Interactions.AssertFirstContains(CalendarCells.DateSelector("2014-05-03"), preference);
+			var date = "2014-05-03";
+			Browser.Interactions.AssertKnockoutContextContains("li[data-mytime-date=\"" + date + "\"] .day-content figure.cover-me", "IsLoading()", "False");
+			Browser.Interactions.AssertFirstContains(CalendarCells.DateSelector(date), preference);
 		}
 
 		[Then(@"I should see the 2 standard preferences '(.*)' in the calendar")]
 		public void ThenIShouldSeeThe2StandardPreferencesInTheCalendar(string preference)
 		{
-			Browser.Interactions.AssertFirstContains(CalendarCells.DateSelector("2014-05-03"), preference);
-			Browser.Interactions.AssertFirstContains(CalendarCells.DateSelector("2014-05-04"), preference);
+			var dateStr1 = "2014-05-03";
+			var dateStr2 = "2014-05-04";
+			Browser.Interactions.AssertKnockoutContextContains("li[data-mytime-date=\"" + dateStr1 + "\"] .day-content figure.cover-me", "IsLoading()", "False");
+			Browser.Interactions.AssertKnockoutContextContains("li[data-mytime-date=\"" + dateStr2 + "\"] .day-content figure.cover-me", "IsLoading()", "False");
+
+			Browser.Interactions.AssertFirstContains(CalendarCells.DateSelector(dateStr1), preference);
+			Browser.Interactions.AssertFirstContains(CalendarCells.DateSelector(dateStr2), preference);
 		}
 
 		[Then(@"I should not see the former standard preference in the calendar")]
 		public void ThenIShouldNotSeeTheFormerStandardPreferenceInTheCalendar()
 		{
+			var date = "2014-05-03";
 			var data = DataMaker.Data().UserData<StandardPreference>();
-			Browser.Interactions.AssertFirstNotContains(CalendarCells.DateSelector("2014-05-03"), data.Preference);
+			Browser.Interactions.AssertKnockoutContextContains("li[data-mytime-date=\"" + date + "\"] .day-content figure.cover-me", "IsLoading()", "False");
+			Browser.Interactions.AssertFirstNotContains(CalendarCells.DateSelector(date), data.Preference);
 		}
 
 		[Then(@"I should see the first virtual schedule period overlapping open preference period starting at '(.*)'")]
@@ -110,7 +122,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		}
 
 		[Then(@"I should see the preference period information with open from '(.*)' to '(.*)' and input from '(.*)' to '(.*)'")]
-		public void ThenIShouldSeeThePreferencePeriodInformation(DateTime startDate,DateTime endDate,DateTime inputStartDate,DateTime inputEndDate)
+		public void ThenIShouldSeeThePreferencePeriodInformation(DateTime startDate, DateTime endDate, DateTime inputStartDate, DateTime inputEndDate)
 		{
 			var cultureInfo = DataMaker.Data().MyCulture;
 
@@ -123,12 +135,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should no longer see the 2 standard preferences in the calendar")]
 		public void ThenIShouldNoLongerSeeThe2StandardPreferencesInTheCalendar()
 		{
+			var date = "2014-05-03";
+			var date2 = "2014-05-04";
 			var data1 = DataMaker.Data().UserData<StandardPreference>();
 			var data2 = DataMaker.Data().UserData<AnotherStandardPreference>();
-			var cell1 = CalendarCells.DateSelector("2014-05-03");
-			var cell2 = CalendarCells.DateSelector("2014-05-04");
-			Browser.Interactions.AssertFirstNotContains(cell1,data1.Preference);
-			Browser.Interactions.AssertFirstNotContains(cell2,data2.Preference);
+			var cell1 = CalendarCells.DateSelector(date);
+			var cell2 = CalendarCells.DateSelector(date2);
+
+			Browser.Interactions.AssertKnockoutContextContains("li[data-mytime-date=\"" + date + "\"] .day-content figure.cover-me", "IsLoading()", "False");
+			Browser.Interactions.AssertKnockoutContextContains("li[data-mytime-date=\"" + date2 + "\"] .day-content figure.cover-me", "IsLoading()", "False");
+			Browser.Interactions.AssertFirstNotContains(cell1, data1.Preference);
+			Browser.Interactions.AssertFirstNotContains(cell2, data2.Preference);
 		}
 
 		[Then(@"the preference calendar should not be editable")]
@@ -147,7 +164,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"the preference calendar should be editable")]
 		public void ThenThePreferenceCalendarShouldBeEditable()
 		{
-			var cell = CalendarCells.DateSelector("2014-05-03");
+			var date = "2014-05-03";
+			var cell = CalendarCells.DateSelector(date);
 			Browser.Interactions.Click(cell);
 			Browser.Interactions.AssertExists(string.Format("{0}.{1}", cell, "ui-selected"));
 		}
@@ -155,7 +173,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should not be able to see preferences link")]
 		public void ThenIShouldNotBeAbleToSeePreferencesLink()
 		{
-			Browser.Interactions.AssertNotExists(".container", "[href*='#PreferenceTab']");
+			Browser.Interactions.AssertNotExists(".container", "[href*='#PreferenceTab\"]");
 		}
 
 		[Then(@"I should see the contract time of '(.*)' hours")]
@@ -173,33 +191,43 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see the start time boundry (.*) to (.*)")]
 		public void ThenIShouldSeeTheStartTimeBoundryTo(string earliest, string latest)
 		{
+			var date = "2014-05-03";
 			var expected = GetExpectedTimesString(earliest, latest);
-			var cell = CalendarCells.DateSelector("2014-05-03");
+			var cell = CalendarCells.DateSelector(date);
+			Browser.Interactions.AssertKnockoutContextContains("li[data-mytime-date=\"" + date + "\"] .day-content figure.cover-me", "IsLoading()", "False");
 			Browser.Interactions.AssertFirstContains(string.Format("{0} .{1}", cell, "possible-start-times"), expected);
 		}
 
 		[Then(@"I should see the end time boundry (.*) to (.*)")]
 		public void ThenIShouldSeeTheEndTimeBoundryTo(string earliest, string latest)
 		{
+			var date = "2014-05-03";
 			var expected = GetExpectedTimesString(earliest, latest);
-			var cell = CalendarCells.DateSelector("2014-05-03");
+			var cell = CalendarCells.DateSelector(date);
+			Browser.Interactions.AssertKnockoutContextContains("li[data-mytime-date=\"" + date + "\"] .day-content figure.cover-me", "IsLoading()", "False");
 			Browser.Interactions.AssertFirstContains(string.Format("{0} .{1}", cell, "possible-end-times"), expected);
 		}
 
 		[Then(@"I should see the contract time boundry (\d+) to (\d+)")]
 		public void ThenIShouldSeeTheContractTimeBoundryTo(string earliest, string latest)
 		{
+			var date = "2014-05-03";
+			Browser.Interactions.AssertKnockoutContextContains("li[data-mytime-date=\"" + date + "\"] .day-content figure.cover-me", "IsLoading()", "False");
+
 			var culture = DataMaker.Data().MePerson.PermissionInformation.Culture();
 			var expected = GetExpectedContractTimesString(earliest, latest, culture);
 
-			var cell = CalendarCells.DateSelector("2014-05-03");
+			var cell = CalendarCells.DateSelector(date);
+			Browser.Interactions.AssertKnockoutContextContains("li[data-mytime-date=\"" + date + "\"] .day-content figure.cover-me", "IsLoading()", "False");
 			Browser.Interactions.AssertFirstContains(string.Format("{0} .{1}", cell, "possible-contract-times"), expected);
 		}
 
 		[Then(@"I should see that there are no available shifts")]
 		public void ThenIShouldSeeThatThereAreNoAvailableShifts()
 		{
-			var cell = CalendarCells.DateSelector("2014-05-03");
+			var date = "2014-05-03";
+			var cell = CalendarCells.DateSelector(date);
+			Browser.Interactions.AssertKnockoutContextContains("li[data-mytime-date=\"" + date + "\"] .day-content figure.cover-me", "IsLoading()", "False");
 			Browser.Interactions.AssertFirstContains(cell, Resources.NoAvailableShifts);
 		}
 
@@ -207,6 +235,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeMyShiftFor(string date)
 		{
 			var cell = CalendarCells.DateSelector(date);
+			Browser.Interactions.AssertKnockoutContextContains("li[data-mytime-date=\"" + date + "\"] .day-content figure.cover-me", "IsLoading()", "False");
 			Browser.Interactions.AssertAnyContains(cell, "09:00 - 17:00");
 		}
 
@@ -216,6 +245,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			var date = DataMaker.Data().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
 
 			var cell = CalendarCells.DateSelector(date);
+			Browser.Interactions.AssertKnockoutContextContains("li[data-mytime-date=\"" + date + "\"] .day-content figure.cover-me", "IsLoading()", "False");
+
 			Browser.Interactions.AssertNotExists("#Preference-body-inner", string.Format("{0} .{1}:empty", cell, "possible-start-times"));
 			Browser.Interactions.AssertNotExists("#Preference-body-inner", string.Format("{0} .{1}:empty", cell, "possible-end-times"));
 			Browser.Interactions.AssertNotExists("#Preference-body-inner", string.Format("{0} .{1}:empty", cell, "possible-contract-times"));
@@ -246,8 +277,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			TimeHelper.TryParse(latest, out latestTime);
 			var culture = DataMaker.Data().MePerson.PermissionInformation.Culture();
 			var expected = TimeHelper.TimeOfDayFromTimeSpan(earliestTime, culture).ToLower()
-			               + "-" +
-			               TimeHelper.TimeOfDayFromTimeSpan(latestTime, culture).ToLower();
+						   + "-" +
+						   TimeHelper.TimeOfDayFromTimeSpan(latestTime, culture).ToLower();
 			return expected;
 		}
 

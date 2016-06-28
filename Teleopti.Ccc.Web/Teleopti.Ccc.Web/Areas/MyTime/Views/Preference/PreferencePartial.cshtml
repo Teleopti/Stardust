@@ -36,30 +36,31 @@
 			}
 			else
 			{
-				<li class="dropdown preference-split-button  col-xs-12 col-sm-4" data-mytime-preference-option="[@{
-					                                                                                                 var oIdx = 0;
-					                                                                                                 foreach (var optionGroup in Model.Options.PreferenceOptions)
-					                                                                                                 {
-						                                                                                                 oIdx++;
-						                                                                                                 if (optionGroup.Text != Resources.ShiftCategory)
-						                                                                                                 {
-							                                                                                                 @Html.Raw("{'Color': '', 'Value': '-', 'Text': ''},")
-						                                                                                                 }
-						                                                                                                 var idx = 0;
-						                                                                                                 foreach (var option in optionGroup.Options)
-						                                                                                                 {
-							                                                                                                 if (idx + 1 == optionGroup.Options.Count() && Model.Options.PreferenceOptions.Count() == oIdx)
-							                                                                                                 {
-								                                                                                                 @Html.Raw("{'Color': '" + @option.Color + "', 'Value': '" + @option.Value + "', 'Text': '" + @option.Text + "'}")
-							                                                                                                 }
-							                                                                                                 else
-							                                                                                                 {
-								                                                                                                 @Html.Raw("{'Color': '" + @option.Color + "', 'Value': '" + @option.Value + "', 'Text': '" + @option.Text + "'},")
-							                                                                                                 }
-							                                                                                                 idx++;
-						                                                                                                 }
-					                                                                                                 }
-				                                                                                                 }]">
+				<li class="dropdown preference-split-button col-xs-12 col-sm-4" data-mytime-preference-option="[@{
+					var oIdx = 0;
+					foreach (var optionGroup in Model.Options.PreferenceOptions)
+					{
+						oIdx++;
+						if (optionGroup.Text != Resources.ShiftCategory)
+						{
+							@Html.Raw("{'Color': '', 'Value': '-', 'Text': ''},")
+						}
+						var idx = 0;
+						foreach (var option in optionGroup.Options)
+						{
+							if (idx + 1 == optionGroup.Options.Count() && Model.Options.PreferenceOptions.Count() == oIdx)
+							{
+								@Html.Raw("{'Color': '" + @option.Color + "', 'Value': '" + @option.Value + "', 'Text': '" + @option.Text + "'}")
+							}
+							else
+							{
+								@Html.Raw("{'Color': '" + @option.Color + "', 'Value': '" + @option.Value + "', 'Text': '" + @option.Text + "'},")
+
+							}
+							idx++;
+						}
+					}
+					}]">
 					<button type="button" data-toggle="dropdown" style="margin-left: 15px" class="btn btn-default navbar-btn dropdown-toggle">
 						<span data-bind="'text': selectedPreferenceText()"></span>
 						<span class="caret"></span>
@@ -89,11 +90,11 @@
 								<i class=" glyphicon glyphicon-heart"></i>&nbsp;
 								<span>@Resources.MustHave</span>&nbsp;
 								<span data-bind="text: currentMustHaves" class="musthave-current"></span>&nbsp;
-								(<span data-bind="	text: maxMustHave" class="musthave-max"></span>)
+								(<span data-bind="text: maxMustHave" class="musthave-max"></span>)
 								<span class="caret"></span>
-							</button> 
+							</button>
 							<ul class="dropdown-menu" role="menu">
-								<li><a href="#" class="remove-musthave" data-bind="click: removeMustHave">@Resources.RemoveMustHave</a></li>								
+								<li><a href="#" class="remove-musthave" data-bind="click: removeMustHave">@Resources.RemoveMustHave</a></li>
 								<li><a href="#" class="add-musthave" data-bind="click: addMustHave, enabled: addMustHaveEnabled">@Resources.AddMustHave</a></li>
 							</ul>
 						</div>
@@ -128,23 +129,23 @@
 			<span class="glyphicon glyphicon-exclamation-sign" title="@Resources.YourPreferenceIsOutOfRange" />
 			<!-- /ko -->
 		</div>
-	    <div>
-	        <!-- ko if: TargetDaysOffLower() == TargetDaysOffUpper() -->
-	        @Html.Raw(string.Format(Resources.YouShouldHaveXDaysOff, "<span data-bind='text: TargetDaysOffLower' class='feedback-detail'>-</span>"))
-	        <!-- /ko -->
-	        <!-- ko if: TargetDaysOffLower() != TargetDaysOffUpper() -->
-	        @Html.Raw(string.Format(Resources.YouShouldHaveBetweenXAndYDaysOff, "<span data-bind='text: TargetDaysOffLower' class='feedback-detail'>-</span>", "<span data-bind='text: TargetDaysOffUpper' class='feedback-detail'>-</span>"))
-	        <!-- /ko -->
-	        @Html.Raw(string.Format(Resources.YourPreferencesCanResultXDaysOff, "<span data-bind='text: PossibleResultDaysOff' class='feedback-detail'>-</span>"))
-	        <!-- ko if: PreferenceDaysOffIsOutOfRange-->
-	        <span class="glyphicon glyphicon-exclamation-sign" title="@Resources.YourPreferenceIsOutOfRange" />
-	        <!-- /ko -->
-	    </div>
-	    <div data-bind="foreach:PossibleNightRestViolations()">
-	        <div>
-	        @Html.Raw(string.Format(Resources.BusinessRuleNightlyRestRuleErrorMessage, "<span data-bind='text:nightRestTimes'>-</span>", "<span data-bind='text:firstDay'>-</span>", "<span data-bind='text:sencondDay'>-</span>", "<span data-bind='text:hoursBetweenTwoDays'>-</span>"))
+		<div>
+			<!-- ko if: TargetDaysOffLower() == TargetDaysOffUpper() -->
+			@Html.Raw(string.Format(Resources.YouShouldHaveXDaysOff, "<span data-bind='text: TargetDaysOffLower' class='feedback-detail'>-</span>"))
+			<!-- /ko -->
+			<!-- ko if: TargetDaysOffLower() != TargetDaysOffUpper() -->
+			@Html.Raw(string.Format(Resources.YouShouldHaveBetweenXAndYDaysOff, "<span data-bind='text: TargetDaysOffLower' class='feedback-detail'>-</span>", "<span data-bind='text: TargetDaysOffUpper' class='feedback-detail'>-</span>"))
+			<!-- /ko -->
+			@Html.Raw(string.Format(Resources.YourPreferencesCanResultXDaysOff, "<span data-bind='text: PossibleResultDaysOff' class='feedback-detail'>-</span>"))
+			<!-- ko if: PreferenceDaysOffIsOutOfRange-->
+			<span class="glyphicon glyphicon-exclamation-sign" title="@Resources.YourPreferenceIsOutOfRange" />
+			<!-- /ko -->
+		</div>
+		<div data-bind="foreach:PossibleNightRestViolations()">
+			<div>
+				@Html.Raw(string.Format(Resources.BusinessRuleNightlyRestRuleErrorMessage, "<span data-bind='text:nightRestTimes'>-</span>", "<span data-bind='text:firstDay'>-</span>", "<span data-bind='text:sencondDay'>-</span>", "<span data-bind='text:hoursBetweenTwoDays'>-</span>"))
 			</div>
-	    </div>
+		</div>
 		@if (Model.IsWeeklyWorkTimeEnabled)
 		{
 			<!-- ko if: IsWeeklyWorkTimeBroken() -->
@@ -155,18 +156,18 @@
 			<!-- /ko -->
 		}
 		<p></p>
-	    <div>
-	        @if (Model.PreferencePeriod == null)
-	        {
-	            @String.Format("{0} : {1}", Resources.PreferencePeriod, Resources.MissingWorkflowControlSet)
-	        }
-	        else
-	        {
-	            @String.Format("{0} : {1} | ", Resources.PreferencePeriod, Model.PreferencePeriod.Period)
-	            @String.Format("{0} : {1}", Resources.IsOpen, Model.PreferencePeriod.OpenPeriod)
-	        }
-	    </div>
-		
+		<div>
+			@if (Model.PreferencePeriod == null)
+			{
+				@String.Format("{0} : {1}", Resources.PreferencePeriod, Resources.MissingWorkflowControlSet)
+			}
+			else
+			{
+				@String.Format("{0} : {1} | ", Resources.PreferencePeriod, Model.PreferencePeriod.Period)
+				@String.Format("{0} : {1}", Resources.IsOpen, Model.PreferencePeriod.OpenPeriod)
+			}
+		</div>
+
 	</div>
 
 	<div id="Preference-body" class="clearfix pagebody" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)' data-mytime-maxmusthave="@Model.MaxMustHave">
@@ -221,7 +222,7 @@
 								</div>
 								<div class="day-content">
 									<figure class="cover-me" data-bind="visible: IsLoading"><img src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..." /></figure>
-									
+
 									<!-- ko if: HasAjaxError -->
 									<div class="error" data-bind="text: AjaxError" style="font-weight: bold;"></div>
 									<!-- /ko -->
@@ -242,7 +243,6 @@
 												<div class="extended-indication" data-bind="tooltip: { title: tooltipText, html: true }">&raquo;</div>
 											</div>
 											<!-- /ko -->
-
 											<!-- ko if: HasPersonalShiftsOrMeetings -->
 											<div class="preference-indicator">
 												<i class="meeting-icon glyphicon glyphicon-user">
@@ -254,19 +254,19 @@
 													<table>
 														<thead>@Resources.Meetings</thead>
 														<tbody data-bind="foreach: Meetings">
-														<tr>
-															<td data-bind="text: TimeSpan"></td>
-														</tr>
-														<tr>
-															<td>
-																<div class="preference-tooltip-subject">
-																	<label class="preference-tooltip-font" data-bind="text : Subject"></label>
-																</div>
-															</td>
-															<!-- ko if: IsOptional -->
-															<td>(@Resources.Optional)</td>
-															<!-- /ko -->
-														</tr>
+															<tr>
+																<td data-bind="text: TimeSpan"></td>
+															</tr>
+															<tr>
+																<td>
+																	<div class="preference-tooltip-subject">
+																		<label class="preference-tooltip-font" data-bind="text : Subject"></label>
+																	</div>
+																</td>
+																<!-- ko if: IsOptional -->
+																<td>(@Resources.Optional)</td>
+																<!-- /ko -->
+															</tr>
 														</tbody>
 													</table>
 													<!-- /ko -->
@@ -274,11 +274,11 @@
 													<table>
 														<thead>@Resources.PersonalShift</thead>
 														<tbody data-bind="foreach: PersonalShifts">
-														<tr>
-															<td data-bind="text: Subject"></td>
-															<td>:</td>
-															<td data-bind="text: TimeSpan"></td>
-														</tr>
+															<tr>
+																<td data-bind="text: Subject"></td>
+																<td>:</td>
+																<td data-bind="text: TimeSpan"></td>
+															</tr>
 														</tbody>
 													</table>
 													<!-- /ko -->
