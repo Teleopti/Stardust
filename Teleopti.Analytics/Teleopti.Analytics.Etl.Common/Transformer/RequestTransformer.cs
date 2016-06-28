@@ -59,8 +59,12 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 						row["request_status_code"] = 0;
 					if (personRequest.IsApproved)
 						row["request_status_code"] = 1;
-					if (personRequest.IsDenied)
+					if (personRequest.IsDenied && !personRequest.IsWaitlisted)
 						row["request_status_code"] = 2;
+					if (personRequest.IsCancelled)
+						row["request_status_code"] = 3;
+					if (personRequest.IsWaitlisted)
+						row["request_status_code"] = 4;
 
 					row["request_date"] = dateOnly.Date;
 					row["application_datetime"] = convertedTimeFromUtc;
