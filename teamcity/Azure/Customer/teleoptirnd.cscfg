@@ -27,6 +27,7 @@
 		<Rule action="permit" description="PermitRDPTeleoptiBeijing2" order="101" remoteSubnet="119.40.52.69/32" /> 
 		<Rule action="permit" description="PermitRDPTeleoptiBeijing" order="102" remoteSubnet="119.40.52.66/32" /> 
 		<Rule action="permit" description="PermitRDPTeleoptiSthlm" order="103" remoteSubnet="195.67.17.194/32" /> 
+		<Rule action="permit" description="PermitRDPTeleoptiStrangnas" order="104" remoteSubnet="195.234.150.70/32" /> 
         <Rule action="deny" description="DenyRDP" order="200" remoteSubnet="0.0.0.0/0" /> 
       </AccessControl> 
     </AccessControls> 
