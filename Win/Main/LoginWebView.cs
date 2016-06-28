@@ -68,6 +68,9 @@ namespace Teleopti.Ccc.Win.Main
 			webView1.RegisterJSExtensionFunction("isTeleoptiProvider", WebView_JSIsTeleoptiProvider);
 			_logger.Info("EO Browser: Loading URL to show the login web view.");
 			webView1.Url = ServerUrl + "start/Url/RedirectToWebLogin";
+			// some defensive coding to prevent bug 39408
+			if (Visible)
+				return true;
 			DialogResult result = ShowDialog();
 			return result != DialogResult.Cancel;
 		}
