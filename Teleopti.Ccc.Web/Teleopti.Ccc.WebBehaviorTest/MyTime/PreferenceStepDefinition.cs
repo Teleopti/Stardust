@@ -239,11 +239,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertAnyContains(cell, "09:00 - 17:00");
 		}
 
-		[Then(@"I should see the preference feedback")]
-		public void ThenIShouldSeeThePreferenceFeedback()
+		[Then(@"I should see the preference feedback for date ""(.*)""")]
+		public void ThenIShouldSeeThePreferenceFeedbackForDate(string date)
 		{
-			var date = DataMaker.Data().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
-
 			var cell = CalendarCells.DateSelector(date);
 			Browser.Interactions.AssertKnockoutContextContains("li[data-mytime-date=\"" + date + "\"] .day-content figure.cover-me", "IsLoading()", "False");
 

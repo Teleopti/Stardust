@@ -127,7 +127,7 @@ Scenario: Feedback from an added preference
 	And I am viewing preferences
 	When I select an editable day without preference
 	And I select shift category 'Day' as standard preference
-	Then I should see the preference feedback
+	Then I should see the preference feedback for date "2014-05-02"
 	
 Scenario: Feedback from a deleted preference
 	Given I am an agent
@@ -140,7 +140,7 @@ Scenario: Feedback from a deleted preference
 	And I am viewing preferences
 	When I select an editable day with standard preference
 	And I click the delete preference button
-	Then I should see the preference feedback
+	Then I should see the preference feedback for date "2014-05-03"
 
 Scenario: Feedback for a day with a shift
 	Given I am an agent
