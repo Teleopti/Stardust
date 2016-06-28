@@ -21,6 +21,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 		public void CancelAbsenceRequest(IAbsenceRequest absenceRequest)
 		{
+			// only allow cancel if this is the default scenario.
+			if (!_currentScenario.Current().DefaultScenario)
+			{
+				return;
+			}
+
 			var personRequest = absenceRequest.Parent as IPersonRequest;
 
 			if (personRequest == null || !personRequest.IsApproved)

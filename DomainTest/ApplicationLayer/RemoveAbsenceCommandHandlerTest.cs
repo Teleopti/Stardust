@@ -29,6 +29,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		private BusinessRulesForPersonalAccountUpdate _businessRulesForAccountUpdate;
 		private PersonAbsenceRemover _personAbsenceRemover;
 		private ICurrentScenario _scenario;
+		private PersonAbsenceCreator _personAbsenceCreator;
+		private ILoggedOnUser _loggedOnUser;
 
 		[SetUp]
 		public void Setup()
@@ -44,14 +46,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var scheduleDifferenceSaver = new ScheduleDifferenceSaver(_scheduleStorage);
 			_saveSchedulePartService = new SaveSchedulePartService(scheduleDifferenceSaver, personAbsenceAccountRepository);
 
-			var personAbsenceCreator = new PersonAbsenceCreator(_saveSchedulePartService, _businessRulesForAccountUpdate);
+			_personAbsenceCreator = new PersonAbsenceCreator(_saveSchedulePartService, _businessRulesForAccountUpdate);
 
 			var person = PersonFactory.CreatePersonWithApplicationRolesAndFunctions();
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			_loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 
-			_personAbsenceRemover = new PersonAbsenceRemover(_businessRulesForAccountUpdate, _saveSchedulePartService, personAbsenceCreator,
-				loggedOnUser, new AbsenceRequestCancelService (new PersonRequestAuthorizationCheckerForTest(), _scenario));
+			_personAbsenceRemover = new PersonAbsenceRemover(_businessRulesForAccountUpdate, _saveSchedulePartService, _personAbsenceCreator,
+				_loggedOnUser, new AbsenceRequestCancelService (new PersonRequestAuthorizationCheckerForTest(), _scenario));
 		}
 
 		[Test]
@@ -121,7 +123,50 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			Assert.That(personRequest.IsCancelled);
 		}
 
+		[Test]
+		public void ShouldNotCancelApprovedRequestWhenNotDefaultScenario()
+		{
 
+			var nonDefaultScenario = ScenarioFactory.CreateScenarioWithId ("Low", false);
+			var currentScenario = new FakeCurrentScenario();
+			currentScenario.FakeScenario (nonDefaultScenario);
+
+			_personAbsenceRemover = new PersonAbsenceRemover(_businessRulesForAccountUpdate, _saveSchedulePartService, _personAbsenceCreator,
+				_loggedOnUser, new AbsenceRequestCancelService(new PersonRequestAuthorizationCheckerForTest(), currentScenario));
+
+
+			var startDate = new DateTime(2015, 10, 1, 13, 0, 0, DateTimeKind.Utc);
+			var endDate = new DateTime(2015, 10, 1, 17, 0, 0, DateTimeKind.Utc);
+			var dateTimePeriod = new DateTimePeriod(startDate, endDate);
+
+			var person = PersonFactory.CreatePersonWithId();
+			var absenceLayer = new AbsenceLayer(new Absence(), dateTimePeriod);
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday").WithId();
+			var absenceRequest = new AbsenceRequest(absence, dateTimePeriod);
+			var personRequest = new PersonRequest(person, absenceRequest);
+
+			var personAbsence = new PersonAbsence(person, currentScenario.Current(), absenceLayer, personRequest).WithId();
+			
+			personRequest.PersonAbsences.Add(personAbsence);
+			
+			personRequest.Pending();
+			personRequest.Approve(new ApprovalServiceForTest(), new PersonRequestAuthorizationCheckerForTest());
+
+			_scheduleStorage.Add(personAbsence);
+			
+			var target = new RemovePersonAbsenceCommandHandler (_personAbsenceRemover, _scheduleStorage, currentScenario);
+			var command = new RemovePersonAbsenceCommand
+			{
+				ScheduleDate = startDate,
+				Person = person,
+				PersonAbsences = new[] { personAbsence }
+			};
+
+			target.Handle(command);
+
+			Assert.IsFalse(personRequest.IsCancelled);
+		}
 
 
 		[Test]
