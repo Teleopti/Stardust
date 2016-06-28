@@ -43,8 +43,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			Guid teamId, 
 			Guid siteId, 
 			Func<AgentState> stored, 
-			Func<IEnumerable<ScheduledActivity>> schedule, 
-			Func<Context, IEnumerable<Mapping>> mappings,
+			Func<IEnumerable<ScheduledActivity>> schedule,
+			Func<Context, MappingsState> mappings,
 			Action<Context> updateState, 
 			INow now,
 			StateMapper stateMapper,
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var dontDeferForNow = stored == null ? null : stored.Invoke();
 			_stored = new Lazy<AgentState>(() => dontDeferForNow);
 			var scheduleLazy = new Lazy<IEnumerable<ScheduledActivity>>(schedule);
-			var mappingsState = new MappingsState(() => mappings.Invoke(this));
+			var mappingsState = mappings.Invoke(this);
 			Input = input ?? new ExternalUserStateInputModel();
 			CurrentTime = now.UtcDateTime();
 			PersonId = personId;

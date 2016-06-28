@@ -77,15 +77,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							() => _databaseReader.GetCurrentSchedule(x.PersonId),
 							s =>
 							{
-								var stateCodes =
-									new[] {s.Stored.StateCode(), s.Input.StateCode}
-										.Distinct()
-										.ToArray();
-								var activities =
-									new[] {s.Schedule.CurrentActivityId(), s.Schedule.PreviousActivityId(), s.Schedule.NextActivityId()}
-										.Distinct()
-										.ToArray();
-								return _mappingReader.ReadFor(stateCodes, activities);
+								return new MappingsState(() =>
+								{
+									var stateCodes =
+										new[] {s.Stored.StateCode(), s.Input.StateCode}
+											.Distinct()
+											.ToArray();
+									var activities =
+										new[] {s.Schedule.CurrentActivityId(), s.Schedule.PreviousActivityId(), s.Schedule.NextActivityId()}
+											.Distinct()
+											.ToArray();
+									return _mappingReader.ReadFor(stateCodes, activities);
+								});
 							},
 							c => _agentStatePersister.Persist(c.MakeAgentState()),
 							_now,
@@ -99,6 +102,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public virtual void ForAll(Action<Context> action)
 		{
+			var mappings = new MappingsState(() => _mappingReader.Read());
+
 			IEnumerable<PersonOrganizationData> persons = null;
 			WithUnitOfWork(() =>
 			{
@@ -117,7 +122,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						x.SiteId,
 						() => _agentStatePersister.Get(x.PersonId),
 						() => _databaseReader.GetCurrentSchedule(x.PersonId),
-						s => _mappingReader.Read(),
+						s => mappings,
 						c => _agentStatePersister.Persist(c.MakeAgentState()),
 						_now,
 						_stateMapper,
@@ -136,6 +141,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				from a in missingAgents
 				where a.StateCode != input.StateCode
 				select a;
+			var mappings = new MappingsState(() => _mappingReader.Read());
 
 			agentsNotAlreadyLoggedOut.ForEach(x =>
 			{
@@ -147,7 +153,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					x.SiteId.GetValueOrDefault(),
 					() => x,
 					() => _databaseReader.GetCurrentSchedule(x.PersonId),
-					s => _mappingReader.Read(),
+					s => mappings,
 					c => _agentStatePersister.Persist(c.MakeAgentState()),
 					_now,
 					_stateMapper,
@@ -160,6 +166,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[AllBusinessUnitsUnitOfWork]
 		public virtual void ForSynchronize(Action<Context> action)
 		{
+			var mappings = new MappingsState(() => _mappingReader.Read());
+
 			_agentStatePersister.GetAll()
 				.ForEach(x =>
 				{
@@ -175,7 +183,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						x.SiteId.GetValueOrDefault(),
 						null,
 						() => _databaseReader.GetCurrentSchedule(x.PersonId),
-						s => _mappingReader.Read(),
+						s => mappings,
 						null,
 						_now,
 						_stateMapper,
