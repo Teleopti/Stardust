@@ -74,6 +74,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool QuickForecaster { get; set; }
 		public bool AccessToIntraday { get; set; }
 
+		public bool AccessToPermissions { get; set; }
+
 		public RoleConfigurable()
 		{
 			// DONT default permissions to false!
@@ -119,7 +121,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToOutbound = false;
 			AccessToWfmRequests = false;
 			AccessToWfmMyTeamSchedule = false;
+			AccessToPermissions = false;
 		}
+
+		
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
@@ -349,6 +354,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.WebIntraday
 						  & f.FunctionPath != DefinedRaptorApplicationFunctionPaths.WebModifySkillArea
 					select f;
+
+			if (!AccessToPermissions)
+				applicationFunctions = from f in applicationFunctions
+											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.OpenPermissionPage
+													 & f.FunctionPath != DefinedRaptorApplicationFunctionPaths.WebPermissions
+											  select f;
 
 			return applicationFunctions;
 		}
