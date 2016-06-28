@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 			if (!cascadingSkills.Any())
 				return;
 
-			var defaultResolution = cascadingSkills.First().DefaultResolution; //strange but cascading skills must have same resolution.
+			var defaultResolution = TimeSpan.FromMinutes(cascadingSkills.First().DefaultResolution); //strange but cascading skills must have same resolution.
 			var activities = cascadingSkills.AffectedActivities().ToArray();
 
 			using (ResourceCalculationCurrent.PreserveContext())
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 					{
 						foreach (var activity in activities)
 						{
-							foreach (var interval in date.ToDateTimePeriod(_timeZoneGuard.CurrentTimeZone()).Intervals(TimeSpan.FromMinutes(defaultResolution)))
+							foreach (var interval in date.ToDateTimePeriod(_timeZoneGuard.CurrentTimeZone()).Intervals(defaultResolution))
 							{
 								foreach (var skillGroup in _skillGroupPerActivityProvider.FetchOrdered(cascadingSkills, activity, interval))
 								{
