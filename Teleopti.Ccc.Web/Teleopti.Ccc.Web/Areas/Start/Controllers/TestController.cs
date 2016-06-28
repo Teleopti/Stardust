@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using Microsoft.IdentityModel.Claims;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -197,14 +198,16 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			});
 		}
 
-		public ViewResult SetCurrentTime(long ticks, string time)
+		[LogTime]
+		public virtual ViewResult SetCurrentTime(long ticks, string time)
 		{
 			if (time != null)
 				_mutateNow.Is(time.Utc());
 			else
 				_mutateNow.Is(new DateTime(ticks));
 
-			fakeRecurringJobs();
+			TouchRta();
+			TriggerRecurringJobs();
 
 			return View("Message", new TestMessageViewModel
 			{
@@ -213,9 +216,15 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			});
 		}
 
-		private void fakeRecurringJobs()
+		[LogTime]
+		protected virtual void TouchRta()
 		{
 			_rta.Touch("TestData");
+		}
+
+		[LogTime]
+		protected virtual void TriggerRecurringJobs()
+		{
 			_tenantTickEventPublisher.WithPublishingsForTest(() =>
 			{
 				_hangfire.TriggerReccuringJobs();

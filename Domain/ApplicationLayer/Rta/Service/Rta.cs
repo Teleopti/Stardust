@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Logon.Aspects;
 
@@ -209,6 +210,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_activityChangeProcessor.CheckForActivityChanges();
 		}
 
+		[InfoLog]
+		[LogTime]
 		[TenantScope]
 		public virtual void Touch(string tenant)
 		{
