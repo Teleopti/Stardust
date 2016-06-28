@@ -56,7 +56,6 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AssertConfigurationTest.cs" />
     <Compile Include="LoadIntradayWithDataTest.cs" />
     <Compile Include="NUnitSetup.cs" />
     <Compile Include="IntradayPerformanceTestAttribute.cs" />
