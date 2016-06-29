@@ -40,7 +40,7 @@
 				$scope.showBreadcrumb = skillId !== undefined ? false : true;
 				$scope.showGrid = !$scope.showBreadcrumb;
 				$scope.skillName = "";
-				
+
 				$scope.$watch('pause', function () {
 					if ($scope.pause) {
 						$scope.pausedAt = moment(lastUpdate).format('YYYY-MM-DD HH:mm:ss');
@@ -151,7 +151,11 @@
 				} else if (teamIds.length > 1) {
 					$scope.multipleTeamsName = "Multiple Teams";
 					updateBreadCrumb = function () { };
+				} else if (siteIds.length === 1 && teamIds.length !== 1){
+					$scope.multipleTeamsName = "Multiple Teams";
+					updateBreadCrumb = function () { };
 				}
+
 				if (skillId) {
 					RtaService.getSkillName(skillId)
 						.then(function (skill) {
@@ -371,7 +375,7 @@
 					$state.go('rta.select-skill');
 				}
 
-				
+
 			}
 		]);
 })();
