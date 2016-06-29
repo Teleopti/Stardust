@@ -20,6 +20,7 @@
 						Wfm_Requests_Performance_36295: true,
 						Wfm_Requests_ApproveDeny_36297: true,
 						Wfm_Requests_Filtering_37748: true,
+						Wfm_Requests_Default_Status_Filter_39472: true,
 						togglesLoaded: {
 							then: function (cb) { cb(); }
 						}
@@ -47,7 +48,6 @@
 			targetScope.$digest();
 			var targets = targetElement.find('requests-table-container');
 			expect(targets.length).toEqual(1);
-
 		});
 
 		it("populate requests data from requests data service", function () {
@@ -67,7 +67,6 @@
 		});
 
 		it("should not populate requests data from requests data service when inactive", function () {
-
 			var request = {
 				Id: 1,
 				Type: requestsDefinitions.REQUEST_TYPES.TEXT
@@ -101,7 +100,6 @@
 		});
 
 		it("should request data when filter change to valid values", function () {
-
 			requestsDataService.setRequests([]);
 			targetScope.period = {};
 			targetElement = $compile('<requests-overview period="period"></requests-overview>')(targetScope);
@@ -123,7 +121,6 @@
 		});
 
 		it("should request data when search term changed", function () {
-
 			requestsDataService.setRequests([]);
 			targetScope.period = {};
 			targetScope.agentSearchTerm = "";
@@ -161,6 +158,22 @@
 			requestCommandParamsHolder.setSelectedRequestIds([]);
 			targetScope.$digest();
 			expect(vm.showSelectedRequestsInfo()).toEqual('');
+		});
+
+		it('should show pending and waitlisted absence requests only by default', function() {
+			targetElement = $compile('<requests-overview></requests-overview>')(targetScope);
+			targetScope.$digest();
+
+			var vm = getInnerScope(targetElement).requestsOverview;
+			expect(vm.filters[0].Status).toEqual('0,5');
+		});
+
+		it('should show pending shift trade request only by default', function () {
+			targetElement = $compile('<requests-overview shift-trade-view="true"></requests-overview>')(targetScope);
+			targetScope.$digest();
+
+			var vm = getInnerScope(targetElement).requestsOverview;
+			expect(vm.filters[0].Status).toEqual('0');
 		});
 
 		function getInnerScope(element) {
@@ -282,7 +295,6 @@
 				FirstDayOfWeek: 1
 			};
 
-
 			test.scope.$digest();
 			var vm = test.target.isolateScope().requestsTableContainer;
 
@@ -357,21 +369,20 @@
 			expect(columns[8].displayName).toEqual('02');
 		});
 
-		it('should have default status for absence request',
-			function() {
-				var test = setUpTarget();
-				test.scope.shiftTradeView = false;
-				test.scope.$digest();
-				expect(test.scope.filters[0].Status).toEqual('0,5');
-			});
+		it('should select default status filter', function() {
+			var test = setUpTarget();
+			var status0 = " 79";
+			var status1 = "86 ";
+			var status2 = " 93 ";
+			test.scope.filters = [{ "Status": status0 + "," + status1 + "," + status2 }];
+			test.scope.$digest();
 
-		it('should have default status for shift trade request',
-			function() {
-				var test = setUpTarget();
-				test.scope.shiftTradeView = true;
-				test.scope.$digest();
-				expect(test.scope.filters[0].Status).toEqual('0');
-			});
+			var selectedStatus = test.target.isolateScope().requestsTableContainer.SelectedRequestStatuses;
+			expect(selectedStatus.length).toEqual(3);
+			expect(selectedStatus[0].Id).toEqual(status0.trim());
+			expect(selectedStatus[1].Id).toEqual(status1.trim());
+			expect(selectedStatus[2].Id).toEqual(status2.trim());
+		});
 
 		xit('should load schedules for shift trade request', function () {
 			var test = setUpTarget();
@@ -390,7 +401,6 @@
 			var vm = test.target.isolateScope().requestsTableContainer;
 			vm.showShiftDetail({}, 1, 1, "2016-06-21T00:00:00");
 			expect(teamSchedule.getSchedulesCallTimes()).toEqual(1);
-
 		});
 
 		function setUpShiftTradeRequestData(test) {
@@ -433,6 +443,7 @@
 			return { scope: scope, target: directiveElem };
 		}
 	});
+	
 	function FakeTeamSchedule() {
 		var searchScheduleCalledTimes = 0;
 		this.getSchedules = function (date, agents) {

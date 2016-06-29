@@ -6,9 +6,9 @@
 		.controller('requestsOverviewCtrl', requestsOverviewController)
 		.directive('requestsOverview', requestsOverviewDirective);
 
-	requestsOverviewController.$inject = ['$scope', 'requestsDataService', "Toggle", "requestCommandParamsHolder", "$translate"];
+	requestsOverviewController.$inject = ['$scope', "$attrs", 'requestsDataService', "Toggle", "requestCommandParamsHolder", "$translate"];
 
-	function requestsOverviewController($scope, requestsDataService, toggleService, requestCommandParamsHolder, $translate) {
+	function requestsOverviewController($scope, $attrs, requestsDataService, toggleService, requestCommandParamsHolder, $translate) {
 		var vm = this;
 
 		vm.loadRequestWatchersInitialised = false;
@@ -19,10 +19,8 @@
 			endDate: moment().endOf('week')._d
 		};
 
-		toggleService.togglesLoaded.then(init);
-				
-		vm.agentSearchTerm = "";
 		vm.filters = [];
+		vm.agentSearchTerm = "";
 		vm.period.endDate = moment().endOf('week')._d;
 		vm.reload = reload;
 		vm.sortingOrders = [];
@@ -33,8 +31,9 @@
 		vm.onPageSizeChanges = onPageSizeChanges;
 		vm.init = init;
 		vm.onIsActiveChange = onIsActiveChange;
-		vm.showSelectedRequestsInfo = showSelectedRequestsInfo;	
-		
+		vm.showSelectedRequestsInfo = showSelectedRequestsInfo;
+		vm.shiftTradeView = $attrs.shiftTradeView;
+
 		getSelectedRequestsInfoText();
 		
 		vm.paging = {
@@ -43,13 +42,19 @@
 			totalPages: 1,
 			totalRequestsCount: 0
 		};
-
 		
 		function init() {
 			vm.requestsPromise = vm.shiftTradeView ? requestsDataService.getShiftTradeRequestsPromise : requestsDataService.getAllRequestsPromise;
 			vm.isPaginationEnabled = toggleService.Wfm_Requests_Performance_36295;
+			// By default, show shift trade requests in pending only;
+			// and show absence and text requests in pending and waitlisted only;
+			if (toggleService.Wfm_Requests_Default_Status_Filter_39472) {
+				vm.filters = [{ "Status": vm.shiftTradeView ? "0" : "0,5" }];
+			}
 			vm.loaded = false;
 		}
+
+		toggleService.togglesLoaded.then(init);
 
 		function onIsActiveChange(isActive) {
 			if (isActive) {
@@ -123,9 +128,7 @@
 		}
 
 		function reload(callback) {
-
 			if (!vm.isActive) {
-
 				vm.isDirty = true; // will cause a reload when is made active.
 				return;
 			}
@@ -135,7 +138,7 @@
 				agentSearchTerm: vm.agentSearchTerm,
 				filters: vm.filters
 			}
-		
+
 			vm.loaded = false;
 			vm.isDirty = false;
 
@@ -162,7 +165,6 @@
 				filters: '=?',
 				filterEnabled: '=',
 				isActive: '='
-				
 			},
 			restrict: 'E',
 			templateUrl: 'js/requests/html/requests-overview.tpl.html',
@@ -175,9 +177,6 @@
 		}
 
 		function postlink(scope, elem, attrs, ctrl) {
-
-			ctrl.shiftTradeView = 'shiftTradeView' in attrs;
-
 			var vm = scope.requestsOverview;
 
 			scope.$watch(function() {
@@ -185,39 +184,31 @@
 					startDate: vm.period ? vm.period.startDate : null,
 					endDate: vm.period ? vm.period.endDate : null,
 					agentSearchTerm: vm.agentSearchTerm ? vm.agentSearchTerm : '',
-					filters: vm.filters ? vm.filters : ''
+					filters: vm.filters
 				};
 				return target;
 			}, function (newValue) {
-
 				if (!newValue || !validateDateParameters(newValue.startDate, newValue.endDate)) {
-
 					vm.loaded = true;
 					return;
 				}
 				
-				scope.$broadcast('reload.requests.without.selection');
-				
+				scope.$broadcast('reload.requests.without.selection');				
 				
 				if (!ctrl.loadRequestWatchersInitialised) {
 					listenToReload();
-				}
-
-				
+				}				
 			}, true);
 
 			scope.$watch(function() {
 				return vm.isActive;
 			}, function(newValue) {
-
 				if (vm.period == null || !validateDateParameters(vm.period.startDate, vm.period.endDate)) {
 					vm.loaded = true;
 					return;
-
 				}
 
-				vm.onIsActiveChange(newValue);
-			
+				vm.onIsActiveChange(newValue);			
 			});
 
 			scope.$watch(function() {
@@ -236,15 +227,12 @@
 				});
 
 				scope.$on('reload.requests.without.selection', function(event) {
-
 					reload();
-
 				});
 			}
 
 			function reload(callback) {
 				ctrl.reload(callback);
-
 			}
 		}
 	}

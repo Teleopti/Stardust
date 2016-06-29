@@ -6,7 +6,6 @@
 		.controller('requestsTableContainerCtrl', requestsTableContainerController)
 		.directive('requestsTableContainer', requestsTableContainerDirective);
 
-
 	requestsTableContainerController.$inject = ['$scope', '$translate', '$filter', '$timeout', 'Toggle', 'requestsDefinitions', 'requestCommandParamsHolder', 'CurrentUserInfo', 'RequestsFilter', 'requestsDataService', 'uiGridConstants', '$injector', 'TeamSchedule', 'GroupScheduleFactory'];
 
 	function requestsTableContainerController($scope, $translate, $filter, $timeout, toggleSvc, requestsDefinitions, requestCommandParamsHolder, CurrentUserInfo, requestFilterSvc, requestsDataSvc, uiGridConstants, $injector, teamScheduleSvc, groupScheduleFactory) {
@@ -29,21 +28,18 @@
 		vm.shiftDetailTop;
 		vm.displayShiftDetail;
 
-		vm.init = function() {
-			if (vm.showRequestsInDefaultStatus) {
+		vm.init = function () {
+			if (!vm.showRequestsInDefaultStatus) return;
+			if (vm.filters && vm.filters.length > 0) {
 				vm.SelectedRequestStatuses = [];
-				var defaultFilter = vm.shiftTradeView ? "0" : "0,5";
-				requestFilterSvc.SetFilter("Status", defaultFilter);
-				vm.filters = requestFilterSvc.Filters;
-				angular.forEach(defaultFilter.split(','),
-					function(value) {
-						vm.SelectedRequestStatuses.push({ Id: value });
-					});
+				var defaultStatusFilter = vm.filters[0].Status;
+				angular.forEach(defaultStatusFilter.split(','), function (value) {
+					vm.SelectedRequestStatuses.push({ Id: value.trim() });
+				});
 			}
 		}
 
 		vm.init();
-
 
 	    function updateShiftStatusForSelectedPerson(scheduleDate) {
 	        var selectedPersonIdList = vm.personIds;
