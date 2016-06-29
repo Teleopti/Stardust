@@ -179,4 +179,18 @@ describe('RtaAgentsFilters', function() {
 
 		expect(filteredData.length).toEqual(0);
 	}));
+
+	it('should filter on all special values', inject(function($filter) {
+		var data = [{
+			name: 'out'
+		}, {
+			name: 'out(\^$*+?.()|{}[])'
+		}];
+		var filter = $filter('agentFilter');
+
+		var filteredData = filter(data, 'out(\^$*+?.()|{}[])');
+
+		expect(filteredData.length).toEqual(1);
+		expect(filteredData[0].name).toEqual('out(\^$*+?.()|{}[])');
+	}));
 });

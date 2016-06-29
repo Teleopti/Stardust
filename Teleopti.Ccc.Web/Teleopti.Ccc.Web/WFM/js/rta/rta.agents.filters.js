@@ -5,6 +5,9 @@
 
 	rtaAgentsFilters.filter('agentFilter', [
 		function() {
+			function escapeRegExp(str) {
+				return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+			}
 			return function(data, input, includes) {
 				var matchedItems = data.slice();
 				var keywords = input.split(' ');
@@ -16,7 +19,7 @@
 							if (includes !== undefined && includes.indexOf(property) === -1)
 								continue;
 							if (item[property] !== null && item[property] !== undefined)
-								matched = matched || (item[property].toString().search(new RegExp(keyword, "i")) !== -1 ? true : false);
+								matched = matched || (item[property].toString().search(new RegExp(escapeRegExp(keyword), "i")) !== -1 ? true : false);
 						}
 						if (matched === false) {
 							var index = matchedItems.indexOf(item);
