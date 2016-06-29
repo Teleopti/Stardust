@@ -43,6 +43,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 			});
 		}
 
+		[When(@"I select to load requests in status '(.*)'")]
+		public void WhenISelectToLoadRequestInStatus(string status)
+		{
+			Browser.Interactions.ClickUsingJQuery(".test-status-selector");
+			Browser.Interactions.ClickUsingJQuery("md-select-menu md-option:contains(\'" + status + "\'):visible");
+			Browser.Interactions.ClickUsingJQuery(".md-click-catcher");
+		}
+
 		[Then(@"I should see a request from '(.*)' in the list")]
 		public void ThenIShouldSeeARequestFromInTheList(string userName)
 		{

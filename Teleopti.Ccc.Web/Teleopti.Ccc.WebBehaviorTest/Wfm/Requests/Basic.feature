@@ -31,24 +31,24 @@ Background:
 	| End date | 2015-05-30 |
 	| Team      | Green Team |
 	And 'Ashley Andeen' has an existing text request with
-	| Field     | Value            |
-	| StartTime | 2015-10-03 10:00 |
-	| End Time  | 2015-10-03 14:00 |
-	| Update Time  | 2015-09-03 14:00 |
+	| Field       | Value            |
+	| StartTime   | 2015-10-03 10:00 |
+	| End Time    | 2015-10-03 14:00 |
+	| Update Time | 2015-09-03 14:00 |
+	| Status      | Pending          |
 	And 'John Smith' has an existing absence request with
 	| Field       | Value            |
 	| StartTime   | 2015-10-03 10:00 |
 	| End Time    | 2015-10-03 14:00 |
 	| Update Time | 2015-09-01 14:00 |
+	| Status      | Pending          |
 
-@ignore
 Scenario: Display requests	
 	When I view wfm requests
 	And I select to load requests from '2015-10-01' to '2015-10-04'
 	Then I should see a request from 'Ashley Andeen' in the list
 	And I should see a request from 'John Smith' in the list
 
-@ignore
 Scenario: Sort requests	
 	When I view wfm requests
 	And I select to load requests from '2015-10-01' to '2015-10-04'
@@ -201,7 +201,6 @@ Scenario: Can view different page
 	And I select to view the last page
 	Then I see the request from 'John Smith' in the list	
 
-@ignore
 @OnlyRunIfEnabled('Wfm_Requests_ApproveDeny_36297')
 Scenario: Can approve requests
 	Given 'Ashley Andeen' has an existing text request with
@@ -213,6 +212,7 @@ Scenario: Can approve requests
 	When I view wfm requests
 	And I select to load requests from '2016-01-01' to '2016-01-07'
 	And I approve all requests that I see
+	And I select to load requests in status 'Approved'
 	Then I should see request for 'Ashley Andeen' approved
 
 @ignore

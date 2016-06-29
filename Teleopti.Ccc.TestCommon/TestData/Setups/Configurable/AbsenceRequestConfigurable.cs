@@ -46,6 +46,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			{
 				personRequest.Deny (null, null, new PersonRequestAuthorizationCheckerForTest(), true);
 			}
+
+			if (Status == "Pending")
+			{
+				personRequest.ForcePending();
+			}
 			
 			requestRepository.Add(personRequest);
 		}
