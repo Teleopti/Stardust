@@ -34,11 +34,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	public static class AgentStateExtensions
 	{
-		public static DateTime? BatchId(this AgentState stored)
-		{
-			return stored.get(s => s.BatchId);
-		}
-
 		public static Guid PlatformTypeId(this AgentState stored)
 		{
 			return stored.get(s => s.PlatformTypeId);
@@ -53,50 +48,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			return stored.get(s => s.ReceivedTime);
 		}
-
-
-
-		public static string StateCode(this AgentState stored)
-		{
-			return stored.get(s => s.StateCode);
-		}
-
-		public static Guid? StateGroupId(this AgentState stored)
-		{
-			return stored.get(s => s.StateGroupId);
-		}
-
-
-
-		public static Guid? ActivityId(this AgentState stored)
-		{
-			return stored.get(s => s.ActivityId);
-		}
-
-		public static DateTime? NextActivityStartTime(this AgentState stored)
-		{
-			return stored.get(s => s.NextActivityStartTime);
-		}
-
-		public static Guid? NextActivityId(this AgentState stored)
-		{
-			return stored.get(s => s.NextActivityId);
-		}
-
-
-
-		public static Guid? RuleId(this AgentState stored)
-		{
-			return stored.get(s => s.RuleId);
-		}
-
-
-
-		public static int? TimeWindowCheckSum(this AgentState stored)
-		{
-			return stored.get(s => s.TimeWindowCheckSum);
-		}
-
+		
 
 
 		private static T get<T>(this AgentState stored, Func<AgentState, T> getter)

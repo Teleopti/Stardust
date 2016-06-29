@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public EventAdherence AdherenceForStoredState()
 		{
-			return adherenceFor(_stored.Value.StateCode(), _stored.Value.PlatformTypeId(), _stored.Value.ActivityId());
+			return adherenceFor(_stored.Value?.StateCode, _stored.Value.PlatformTypeId(), _stored.Value?.ActivityId);
 		}
 
 		public EventAdherence AdherenceForNewStateAndPreviousActivity()
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public EventAdherence AdherenceForStoredStateAndCurrentActivity()
 		{
-			return adherenceFor(_stored.Value.StateCode(), _stored.Value.PlatformTypeId(), _scheduleInfo.CurrentActivity());
+			return adherenceFor(_stored.Value?.StateCode, _stored.Value.PlatformTypeId(), _scheduleInfo.CurrentActivity());
 		}
 
 		private EventAdherence adherenceFor(string stateCode, Guid platformTypeId, ScheduledActivity activity)

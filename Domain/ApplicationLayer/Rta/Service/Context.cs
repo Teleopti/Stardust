@@ -88,12 +88,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				return true;
 			
 			var isSameState =
-				BatchId.Equals(Stored.BatchId()) &&
-				Schedule.CurrentActivityId().Equals(Stored.ActivityId()) &&
-				Schedule.NextActivityId().Equals(Stored.NextActivityId()) &&
-				Schedule.NextActivityStartTime().Equals(Stored.NextActivityStartTime()) &&
-				State.StateGroupId().Equals(Stored.StateGroupId()) &&
-				Schedule.TimeWindowCheckSum().Equals(Stored.TimeWindowCheckSum().GetValueOrDefault())
+				BatchId.Equals(Stored?.BatchId) &&
+				Schedule.CurrentActivityId().Equals(Stored?.ActivityId) &&
+				Schedule.NextActivityId().Equals(Stored?.NextActivityId) &&
+				Schedule.NextActivityStartTime().Equals(Stored?.NextActivityStartTime) &&
+				State.StateGroupId().Equals(Stored?.StateGroupId) &&
+				Schedule.TimeWindowCheckSum().Equals(Stored?.TimeWindowCheckSum)
 				;
 
 			return !isSameState;
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public DateTime? BatchId
 		{
-			get { return Input.IsSnapshot ? Input.BatchId : Stored.BatchId(); }
+			get { return Input.IsSnapshot ? Input.BatchId : Stored?.BatchId; }
 		}
 
 		public Guid PlatformTypeId
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public string StateCode
 	    {
-	        get { return Input.StateCode ?? Stored.StateCode(); }
+	        get { return Input.StateCode ?? Stored?.StateCode; }
 	    }
 
 		public DateTime? StateStartTime

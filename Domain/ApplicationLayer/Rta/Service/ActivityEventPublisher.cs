@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			var currentActivity = info.Schedule.CurrentActivity();
 
-			if (info.Schedule.CurrentActivityId() == info.Stored.ActivityId())
+			if (info.Schedule.CurrentActivityId() == info.Stored?.ActivityId)
 				return;
 			
 			DateTime? activityStartTime = null; 

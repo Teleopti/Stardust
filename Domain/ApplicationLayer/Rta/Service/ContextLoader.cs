@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 								return new MappingsState(() =>
 								{
 									var stateCodes =
-										new[] {s.Stored.StateCode(), s.Input.StateCode}
+										new[] {s.Stored?.StateCode, s.Input.StateCode}
 											.Distinct()
 											.ToArray();
 									var activities =

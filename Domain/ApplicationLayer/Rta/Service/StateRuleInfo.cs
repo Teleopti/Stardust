@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			if (_stored.Value == null)
 				return true;
-			return _mappedState.Value?.StateGroupId != _stored.Value.StateGroupId();
+			return _mappedState.Value?.StateGroupId != _stored.Value?.StateGroupId;
 		}
 
 		public Guid? StateGroupId()
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public bool HasRuleChanged()
 		{
-			return _mappedRule.Value.RuleId != _stored.Value.RuleId();
+			return _mappedRule.Value.RuleId != _stored.Value?.RuleId;
 		}
 
 		public Guid? RuleId()
