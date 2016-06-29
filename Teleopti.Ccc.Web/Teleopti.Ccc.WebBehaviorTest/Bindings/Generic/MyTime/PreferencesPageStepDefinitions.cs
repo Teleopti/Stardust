@@ -77,6 +77,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see that I have a pre-scheduled meeting on '(.*)'")]
 		public void ThenIShouldSeeThatIHaveAPreScheduledMeetingOn(DateTime date)
 		{
+			Browser.Interactions.AssertKnockoutContextContains("li[data-mytime-date=\"" + date.ToString("yyyy-MM-dd") + "\"] .day-content figure.cover-me", "IsLoading()", "False");
 			Browser.Interactions.AssertVisibleUsingJQuery(string.Format("li[data-mytime-date='{0}'] .meeting-icon", date.ToString("yyyy-MM-dd")));
 		}
 
@@ -85,6 +86,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			var fields = table.CreateInstance<MeetingConfigurable>();
 			var cell = CalendarCells.DateSelector(fields.StartTime);
+
+			Browser.Interactions.AssertKnockoutContextContains("li[data-mytime-date=\"" + fields.StartTime.ToString("yyyy-MM-dd") + "\"] .day-content figure.cover-me", "IsLoading()", "False");
 
 			var selector = string.Format("{0} .{1}", cell, "meeting-tooltip");
 			Browser.Interactions.AssertFirstContainsUsingJQuery(selector, fields.StartTime.ToShortTimeString().Split(' ').First());
@@ -98,6 +101,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			var fields = table.CreateInstance<PersonalShiftConfigurable>();
 			var cell = CalendarCells.DateSelector(fields.StartTime);
 
+			Browser.Interactions.AssertKnockoutContextContains("li[data-mytime-date=\"" + fields.StartTime.ToString("yyyy-MM-dd") + "\"] .day-content figure.cover-me", "IsLoading()", "False");
+
 			var selector = string.Format("{0} .{1}", cell, "meeting-tooltip");
 			Browser.Interactions.AssertFirstContainsUsingJQuery(selector, fields.StartTime.ToShortTimeString().Split(' ').First());
 			Browser.Interactions.AssertFirstContainsUsingJQuery(selector, fields.EndTime.ToShortTimeString().Split(' ').First());
@@ -108,6 +113,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void ThenIShouldNotSeeAnExtendedPreferenceIndicationOn(DateTime date)
 		{
 			var cell = CalendarCells.DateSelector(date);
+
+			Browser.Interactions.AssertKnockoutContextContains("li[data-mytime-date=\"" + date.ToString("yyyy-MM-dd") + "\"] .day-content figure.cover-me", "IsLoading()", "False");
 			Browser.Interactions.AssertNotExists(cell, string.Format("{0} .{1}", cell, "extended-indication"));
 		}
 
@@ -121,6 +128,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void ThenIShouldSeeThePreferenceLateOn(string preference, DateTime date)
 		{
 			var cell = CalendarCells.DateSelector(date);
+
+			Browser.Interactions.AssertKnockoutContextContains("li[data-mytime-date=\"" + date.ToString("yyyy-MM-dd") + "\"] .day-content figure.cover-me", "IsLoading()", "False");
 			Browser.Interactions.AssertFirstContains(cell, preference);
 		}
 
@@ -129,6 +138,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			var fields = table.CreateInstance<PreferenceConfigurable>();
 			var cell = CalendarCells.DateSelector(fields.Date);
+
+			Browser.Interactions.AssertKnockoutContextContains("li[data-mytime-date=\"" + fields.Date.ToString("yyyy-MM-dd") + "\"] .day-content figure.cover-me", "IsLoading()", "False");
 
 			Browser.Interactions.AssertFirstContains(cell, fields.Date.Day.ToString(CultureInfo.CurrentCulture));
 
