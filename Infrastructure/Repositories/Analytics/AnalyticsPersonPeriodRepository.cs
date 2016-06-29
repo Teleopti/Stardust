@@ -120,17 +120,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.UniqueResult<AnalyticsPersonPeriod>();
 		}
 
-		public int SiteId(Guid siteCode, string siteName, int businessUnitId)
+		public int GetOrCreateSite(Guid siteCode, string siteName, int businessUnitId)
 		{
 
 			return
 				_analyticsUnitOfWork.Current()
 					.Session()
 					.CreateSQLQuery(
-						@"mart.etl_dim_site_id_get @site_code=:siteCode , @site_name=:siteName, @business_unit_id=:businessUnitId")
-					.SetGuid("siteCode", siteCode)
-					.SetString("siteName", siteName)
-					.SetInt32("businessUnitId", businessUnitId)
+						$@"mart.etl_dim_site_id_get @site_code=:{nameof(siteCode)} , @site_name=:{nameof(siteName)}, @business_unit_id=:{nameof(businessUnitId)}")
+					.SetParameter(nameof(siteCode), siteCode)
+					.SetParameter(nameof(siteName), siteName)
+					.SetParameter(nameof(businessUnitId), businessUnitId)
 					.UniqueResult<int>();
 		}
 

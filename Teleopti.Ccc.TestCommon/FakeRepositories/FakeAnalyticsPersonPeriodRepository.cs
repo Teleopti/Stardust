@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return fakePersonPeriods.Where(a => a.PersonCode.Equals(personCode)).ToArray();
 		}
 
-		public int SiteId(Guid siteCode, string siteName, int businessUnitId)
+		public int GetOrCreateSite(Guid siteCode, string siteName, int businessUnitId)
 		{
 			return 123;
 		}

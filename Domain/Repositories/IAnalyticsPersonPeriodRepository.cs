@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 {
 	public interface IAnalyticsPersonPeriodRepository
 	{
-		int SiteId(Guid siteCode, string siteName, int businessUnitId);
+		int GetOrCreateSite(Guid siteCode, string siteName, int businessUnitId);
 
 		IList<AnalyticsPersonPeriod> GetPersonPeriods(Guid personCode);
 		AnalyticsPersonPeriod PersonPeriod(Guid personPeriodCode);

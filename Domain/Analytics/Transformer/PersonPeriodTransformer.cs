@@ -259,7 +259,7 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 
 		public int MapSiteId(int businessUnitId, Guid siteCode, string siteName)
 		{
-			return _analyticsPersonPeriodRepository.SiteId(siteCode, siteName, businessUnitId);
+			return _analyticsPersonPeriodRepository.GetOrCreateSite(siteCode, siteName, businessUnitId);
 		}
 
 		public static AnalyticsSkillSet NewSkillSetFromSkills(List<AnalyticsSkill> skills)

@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void GetOrCreate_ShouldReturnTeamId()
 		{
-			siteId = AnalyticsPersonPeriodRepository.SiteId(Guid.NewGuid(), "Site name 1", businessUnit.BusinessUnitId);
+			siteId = AnalyticsPersonPeriodRepository.GetOrCreateSite(Guid.NewGuid(), "Site name 1", businessUnit.BusinessUnitId);
 
 			var teamId = Target.GetOrCreate(Guid.NewGuid(), siteId, "Team Name", businessUnit.BusinessUnitId);
 			teamId.Should().Be.GreaterThan(0);
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void GetAll_ShouldReturnAllTeams()
 		{
-			siteId = AnalyticsPersonPeriodRepository.SiteId(Guid.NewGuid(), "Site name 1", businessUnit.BusinessUnitId);
+			siteId = AnalyticsPersonPeriodRepository.GetOrCreateSite(Guid.NewGuid(), "Site name 1", businessUnit.BusinessUnitId);
 
 			var teamGuid1 = Guid.NewGuid();
 			var teamGuid2 = Guid.NewGuid();
