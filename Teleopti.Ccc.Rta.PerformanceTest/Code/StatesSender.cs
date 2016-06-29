@@ -83,37 +83,25 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			stateChanges.ForEach(stateChange =>
 			{
 				var now = stateChange.Time.Utc();
-				FakeTime(now);
+				_now.Is(now);
+				_http.Get("/Test/SetCurrentTime?ticks=" + now.Ticks);
 				Enumerable.Range(0, _stateHolder.NumberOfAgents)
 					.ForEach(roger =>
 					{
-						SendState($"roger{roger}", stateChange);
+						_http.PostJson(
+							"Rta/State/Change",
+							new ExternalUserStateWebModel
+							{
+								AuthenticationKey = LegacyAuthenticationKey.TheKey,
+								UserCode = $"roger{roger}",
+								StateCode = stateChange.StateCode,
+								IsLoggedOn = true,
+								PlatformTypeId = Guid.Empty.ToString(),
+								SourceId = _stateHolder.SourceId,
+								IsSnapshot = false
+							});
 					});
 			});
-		}
-
-		[LogTime]
-		protected virtual void SendState(string userCode, StateChange stateChange)
-		{
-			_http.PostJson(
-				"Rta/State/Change",
-				new ExternalUserStateWebModel
-				{
-					AuthenticationKey = LegacyAuthenticationKey.TheKey,
-					UserCode = userCode,
-					StateCode = stateChange.StateCode,
-					IsLoggedOn = true,
-					PlatformTypeId = Guid.Empty.ToString(),
-					SourceId = _stateHolder.SourceId,
-					IsSnapshot = false
-				});
-		}
-
-		[LogTime]
-		protected virtual void FakeTime(DateTime now)
-		{
-			_now.Is(now);
-			_http.Get("/Test/SetCurrentTime?ticks=" + now.Ticks);
 		}
 
 		public IEnumerable<StateChange> SentSates()
