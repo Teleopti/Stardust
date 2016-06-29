@@ -67,7 +67,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var person2 = PersonFactory.CreatePersonWithGuid("person", "a");
 			var person3 = PersonFactory.CreatePersonWithGuid("Unpublish_person", "3");
 
+			var site = SiteFactory.CreateSimpleSite("s");
 			team = TeamFactory.CreateTeamWithId("team1");
+			team.Site = site;
 			TeamRepository.Add(team);
 
 			person1.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), PersonContractFactory.CreatePersonContract(), team));

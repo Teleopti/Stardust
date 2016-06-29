@@ -33,8 +33,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var person2 = PersonFactory.CreatePersonWithGuid("person", "2");
 			var person3 = PersonFactory.CreatePersonWithGuid("Unpublished", "3");
 			var person4 = PersonFactory.CreatePersonWithGuid("NoShiftTrade", "4");
-
+			var site = SiteFactory.CreateSimpleSite("s");
 			ITeam team = TeamFactory.CreateTeamWithId("team1");
+			team.Site = site;
 			TeamRepository.Add(team);
 
 			person1.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), PersonContractFactory.CreatePersonContract(), team));
