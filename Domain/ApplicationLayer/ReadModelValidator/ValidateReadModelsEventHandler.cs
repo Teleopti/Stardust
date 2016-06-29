@@ -29,11 +29,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 						_readModelValidationResultPersister.SavePersonScheduleDay(result);
 						break;
 					case ValidateReadModelType.ScheduleDay:
+					        _readModelValidationResultPersister.SaveScheduleDay(result);
 						break;
 
 				}
 			};
-			_readModelValidationResultPersister.Reset();
+			_readModelValidationResultPersister.Reset(@event.Targets);
 
 			_validator.SetTargetTypes(@event.Targets);
 			_validator.Validate(@event.StartDate, @event.EndDate, action, true);

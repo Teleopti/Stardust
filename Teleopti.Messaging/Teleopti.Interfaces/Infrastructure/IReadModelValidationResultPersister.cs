@@ -6,7 +6,8 @@ namespace Teleopti.Interfaces.Infrastructure
 	{
 		void SaveScheduleProjectionReadOnly(ReadModelValidationResult input);
 		void SavePersonScheduleDay(ReadModelValidationResult input);
+		void SaveScheduleDay(ReadModelValidationResult input);
 		IEnumerable<ReadModelValidationResult> LoadAllInvalid();
-		void Reset();
+		void Reset(IList<ValidateReadModelType> types);
 	}
 }
