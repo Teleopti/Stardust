@@ -21,28 +21,32 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		public FakeEventPublisher Publisher;
 		public MutableNow Now;
 		public FakeDatabase Data;
-
+		
 		[Test]
-		public void ShouldPublishWhenPeriodChanges()
+		public void ShouldPublishWhenTeamChanged()
 		{
+			var previousTeam = Guid.NewGuid();
+			var newTeam = Guid.NewGuid();
 			Now.Is("2016-02-01 00:00");
 			Data.WithAgent("pierre")
-				.WithPeriod("2016-02-01");
+				.WithPeriod("2016-01-02", previousTeam)
+				.WithPeriod("2016-02-01", newTeam);
 
 			Target.Handle(new TenantHourTickEvent());
 
 			Publisher.PublishedEvents.Single().Should().Be.OfType<PersonAssociationChangedEvent>();
 		}
-
+		
 		[Test]
 		public void ShouldPublishWithProperties()
 		{
-			Now.Is("2016-02-01 00:00");
 			var personId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
+			Now.Is("2016-02-01 00:00");
 			Data.WithAgent(personId, "pierre")
+				.WithPeriod("2016-01-02", Guid.NewGuid(), siteId, businessUnitId)
 				.WithPeriod("2016-02-01", teamId, siteId, businessUnitId);
 
 			Target.Handle(new TenantHourTickEvent());
@@ -56,11 +60,28 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		}
 
 		[Test]
+		public void ShouldNotPublishWhenTeamDoesNotChange()
+		{
+			var teamId = Guid.NewGuid();
+			Now.Is("2016-02-01 00:00");
+			Data.WithAgent("pierre")
+				.WithPeriod("2016-01-02", teamId)
+				.WithPeriod("2016-02-01", teamId);
+
+			Target.Handle(new TenantHourTickEvent());
+
+			Publisher.PublishedEvents.Should().Be.Empty();
+		}
+
+		[Test]
 		public void ShouldPublishWhenPeriodChangesInIstanbul()
 		{
+			var previousTeam = Guid.NewGuid();
+			var newTeam = Guid.NewGuid();
 			Now.Is("2016-02-01 22:00");
 			Data.WithAgent("pierre", TimeZoneInfoFactory.IstanbulTimeZoneInfo())
-				.WithPeriod("2016-02-02");
+				.WithPeriod("2016-01-02", previousTeam)
+				.WithPeriod("2016-02-02", newTeam);
 
 			Target.Handle(new TenantHourTickEvent());
 			

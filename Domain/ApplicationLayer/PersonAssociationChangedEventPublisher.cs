@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -40,7 +41,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 					var timeZone = person.PermissionInformation.DefaultTimeZone();
 					var agentDate = new DateOnly(TimeZoneInfo.ConvertTimeFromUtc(now, timeZone));
 					var currentPeriod = person.Period(agentDate);
-					
+					var previousPeriod = this.previousPeriod(person, currentPeriod);
+
 					var time = timeOfChange(person.TerminalDate, currentPeriod, timeZone);
 
 					if (time == null)
@@ -50,9 +52,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 					if (time < now.AddDays(-1))
 						return;
 
+					var previousTeam = previousPeriod?.Team.Id.Value;
 					var teamId = currentPeriod != null ? currentPeriod.Team.Id.Value : null as Guid?;
 					var siteId = currentPeriod != null ? currentPeriod.Team.Site.Id.Value : null as Guid?;
 					var businessUnitId = currentPeriod != null ? currentPeriod.Team.Site.BusinessUnit.Id.Value : null as Guid?;
+
+					if (previousTeam.HasValue &&
+						teamId.HasValue &&
+						previousTeam == teamId)
+						return;
 
 					_eventPublisher.Publish(new PersonAssociationChangedEvent
 					{
@@ -63,6 +71,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 						BusinessUnitId = businessUnitId
 					});
 				});
+		}
+
+		private IPersonPeriod previousPeriod(IPerson person, IPersonPeriod currentPeriod)
+		{
+			var currentPeriodIndex = person.PersonPeriodCollection.IndexOf(currentPeriod);
+			IPersonPeriod previousPeriod = null;
+			if (currentPeriodIndex > 0)
+				previousPeriod = person.PersonPeriodCollection.ElementAt(currentPeriodIndex - 1);
+			return previousPeriod;
 		}
 
 		public void Handle(PersonTerminalDateChangedEvent @event)
