@@ -1,8 +1,16 @@
 ﻿.wfm-reports {
     max-width: 100em;
 
+    #simple-people-search {
+        width: 316px;
+    }
+
     .report-filter {
         padding: 1em;
+    }
+
+    .report-filter input {
+        width: 316px;
     }
 
     .report-list {
@@ -38,11 +46,10 @@
     }
 
     .leader-board {
-        padding-bottom: 80px;
+        padding: 20px 10px 80px 10px;
         background: $white;
         max-height: 83vh;
         overflow: auto;
-
 
         table {
             width: 100%;
@@ -60,18 +67,6 @@
         table td.agent-badge-num {
             width: 10%;
             text-align: center;
-        }
-
-        td.gold {
-            background: url('../js/reports/images/gold.png') no-repeat center center;
-        }
-
-        td.silver {
-            background: url('../js/reports/images/silver.png') no-repeat center center;
-        }
-
-        td.bronze {
-            background: url('../js/reports/images/bronze.png') no-repeat center center;
         }
 
         .background-gray {

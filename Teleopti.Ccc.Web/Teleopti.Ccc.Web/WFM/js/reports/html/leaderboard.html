@@ -6,6 +6,20 @@
 	.wfm-reports.wfm-reports {
 		max-width: none;
 	}
+
+	#leftsidenav {
+		display: none;
+	}
+
+	@media print {
+		.layout-container, #materialcontainer {
+			display: block !important;
+		}
+
+		#leftsidenav, #lefttoogle, span.people-search-input {
+			display: none !important;
+		}
+	}
 </style>
 <div id="reports" class="wfm-reports">
 	<div class="view-header">
@@ -14,19 +28,21 @@
 		</div>
 	</div>
 
-	<span class="people-search-input">
-		<people-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged"></people-search-input>
-	</span>
 
 	<div class="leader-board material-depth-1 wfm-block">
+
+		<span class="people-search-input">
+			<people-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged"></people-search-input>
+		</span>
+
 		<table>
 			<thead>
 				<tr>
 					<td class="agent-badge-header">{{'Rank' | translate}}</td>
 					<td class="agent-badge-header">{{'AgentName' | translate}} </td>
-					<td class="agent-badge-num gold"></td>
-					<td class="agent-badge-num silver"></td>
-					<td class="agent-badge-num bronze"></td>
+					<td class="agent-badge-num gold"><img src="js/reports/images/gold.png" /></td>
+					<td class="agent-badge-num silver"><img src="js/reports/images/silver.png" /></td>
+					<td class="agent-badge-num bronze"><img src="js/reports/images/bronze.png" /></td>
 				</tr>
 			</thead>
 
