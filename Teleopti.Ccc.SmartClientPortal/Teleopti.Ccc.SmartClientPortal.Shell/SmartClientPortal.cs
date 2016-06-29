@@ -121,6 +121,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			cnt ++;
 			if (cnt < 300) return;
 			cnt = 0;
+			// to see if this will help on bug 39438
+			if (!wfmWebView.IsCreated) return;
+			// but maybe we will get a login instead of permissions after some time instead
 			JSObject window = wfmWebView.GetDOMWindow();
 			if (wfmWebView.CanEvalScript)
 			{
