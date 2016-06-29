@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			_stored = stored;
 			_mappedState = new Lazy<MappedState>(() => stateMapper.StateFor(mappings, businessUnitId, platformTypeId, stateCode, input.StateDescription));
-			_mappedRule = new Lazy<MappedRule>(() => stateMapper.RuleFor(mappings, businessUnitId, platformTypeId, stateCode, schedule.CurrentActivityId()) ?? new MappedRule());
+			_mappedRule = new Lazy<MappedRule>(() => stateMapper.RuleFor(mappings, businessUnitId, platformTypeId, stateCode, schedule.CurrentActivityId()));
 		}
 
 		public bool StateGroupChanged()
@@ -46,49 +46,49 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public bool RuleChanged()
 		{
-			return _mappedRule.Value.RuleId != _stored.Value?.RuleId;
+			return _mappedRule.Value?.RuleId != _stored.Value?.RuleId;
 		}
 
 		public Guid? RuleId()
 		{
-			return _mappedRule.Value.RuleId;
+			return _mappedRule.Value?.RuleId;
 		}
 
 		public string RuleName()
 		{
-			return _mappedRule.Value.RuleName;
+			return _mappedRule.Value?.RuleName;
 		}
 
 		public int? RuleDisplayColor()
 		{
-			return _mappedRule.Value.DisplayColor;
+			return _mappedRule.Value?.DisplayColor;
 		}
 
 		public double? StaffingEffect()
 		{
-			return _mappedRule.Value.StaffingEffect;
+			return _mappedRule.Value?.StaffingEffect;
 		}
 
 		public Adherence? Adherence()
 		{
-			return _mappedRule.Value.Adherence;
+			return _mappedRule.Value?.Adherence;
 		}
 
 
 
 		public bool IsAlarm()
 		{
-			return _mappedRule.Value.IsAlarm;
+			return _mappedRule.Value?.IsAlarm ?? false;
 		}
 
 		public long AlarmThresholdTime()
 		{
-			return _mappedRule.Value.ThresholdTime;
+			return _mappedRule.Value?.ThresholdTime ?? 0;
 		}
 
 		public int? AlarmColor()
 		{
-			return _mappedRule.Value.AlarmColor;
+			return _mappedRule.Value?.AlarmColor;
 		}
 
 

@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public DateTime? RuleStartTime
 	    {
-		    get { return State.RuleChanged() ? CurrentTime : Stored.RuleStartTime; }
+		    get { return State.RuleChanged() ? CurrentTime : Stored?.RuleStartTime; }
 	    }
 
 		public bool IsAlarm
