@@ -10,6 +10,14 @@
         vm.onAgentSearchTermChanged = onAgentSearchTermChanged;
 
         toggleService.togglesLoaded.then(init);
+
+        vm.dateRangeCustomValidators = [{
+        	key: 'max60Days',
+        	message: 'DateRangeIsAMaximumOfSixtyDays',
+        	validate: function (start, end) {
+        		return moment(end).diff(moment(start), 'days') <= 60;
+        	}
+        }];
 		
         function init() {
             monitorRunRequestWaitlist();
@@ -41,6 +49,8 @@
             vm.onCommandError = onCommandError;
             vm.onErrorMessages = onErrorMessages;
             vm.disableInteraction = false;
+
+           
 
 	        if (toggleService.Wfm_Requests_PrepareForRelease_38771) {
 		        var message = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink')

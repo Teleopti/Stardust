@@ -14630,4 +14630,8 @@ These options are activated:
     <value>Delete persons</value>
     <comment>Delete persons</comment>
   </data>
+  <data name="DateRangeIsAMaximumOfSixtyDays" xml:space="preserve">
+    <value>Date range can be a maximum of 60 days</value>
+    <comment>Used in the new Request module as a warning message when the user selects a date period of larger than 60 days.</comment>
+  </data>
 </root>

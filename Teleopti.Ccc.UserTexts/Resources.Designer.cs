@@ -7322,6 +7322,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Date range can be a maximum of 60 days.
+        /// </summary>
+        public static string DateRangeIsAMaximumOfSixtyDays {
+            get {
+                return ResourceManager.GetString("DateRangeIsAMaximumOfSixtyDays", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Date Selection.
         /// </summary>
         public static string DateSelection {
