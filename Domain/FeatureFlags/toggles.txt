@@ -62,7 +62,7 @@ RTA_AlarmContext_29357 = RC
 RTA_TotalOutOfAdherenceTime_38702 = RC
 RTA_PauseButton_39144 = true
 RTA_MonitorBySkills_39081 = RC
-RTA_RecentOutOfAdherences_39145 = RC
+RTA_RecentOutOfAdherences_39145 = false
 
 WfmPeople_AdjustSkill_34138 = true
 MyTimeWeb_KeepUrlAfterLogon_34762 = true
