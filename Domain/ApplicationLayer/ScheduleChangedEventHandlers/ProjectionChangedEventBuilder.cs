@@ -35,11 +35,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 					}
 
 					var eventScheduleDay = BuildEventScheduleDay(scheduleDay);
-
-					eventScheduleDay.Version = version;
-
-					if (eventScheduleDay!= null)
+					if (eventScheduleDay != null)
+					{
+						eventScheduleDay.Version = version;
 						scheduleDays.Add(eventScheduleDay);
+					}
 				}
 
 				yield return new T
