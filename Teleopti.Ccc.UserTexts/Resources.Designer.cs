@@ -3657,7 +3657,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Leaderboard.
+        ///   Looks up a localized string similar to Gamification Leaderboard.
         /// </summary>
         public static string BadgeLeaderBoardReport {
             get {
