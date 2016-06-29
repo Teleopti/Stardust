@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces")]
-	public class ScheduleDayReadModel
+	public class ScheduleDayReadModel : IEquatable<ScheduleDayReadModel>
 	{
 		private string _label;
 
@@ -38,5 +38,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		public TimeSpan WorkTime { get { return TimeSpan.FromTicks(WorkTimeTicks); } }
 		public long ContractTimeTicks { get; set; }
 		public TimeSpan ContractTime { get { return TimeSpan.FromTicks(ContractTimeTicks); } }
+
+		public bool Equals(ScheduleDayReadModel other)
+		{
+			return PersonId == other.PersonId
+				   && Date == other.Date
+				   && StartDateTime == other.StartDateTime
+				   && EndDateTime == other.EndDateTime
+				   && Workday == other.Workday
+				   && NotScheduled == other.NotScheduled
+				   && Label == other.Label;
+		}
 	}
 }

@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 				_scheduleProjectionReadOnlyPersister.BeginAddingSchedule(date, _currentScenario.Current().Id.GetValueOrDefault(),
 					record.PersonId, version ?? 0);
 
-				var readModels = _validator.BuildReadModel(record.PersonId, date);
+				var readModels = _validator.BuildReadModelScheduleProjectionReadOnly(record.PersonId, date);
 				readModels.ForEach(_scheduleProjectionReadOnlyPersister.AddActivity);
 			}
 		}

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 					BelongsToDate == other.BelongsToDate && Start == other.Start &&
 					End == other.End && IsDayOff == other.IsDayOff
 					&& Model == other.Model);
-		}
+		}		
 	}
 
 	public class Model

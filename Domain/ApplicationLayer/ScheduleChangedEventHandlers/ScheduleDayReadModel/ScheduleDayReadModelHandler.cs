@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 				_scheduleDayReadModelRepository.SaveReadModel(readModel);
 			}
 		}
-
+		
 		public void Handle(ProjectionChangedEventForScheduleDay @event)
 		{
 			createReadModel(@event);

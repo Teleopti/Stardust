@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -11,35 +12,41 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
-{
+{	
 	public class ReadModelValidator : IReadModelValidator
 	{
-		private readonly IScheduleProjectionReadOnlyPersister _persister;
+		private readonly IScheduleProjectionReadOnlyPersister _scheduleProjectionReadOnlyPersister;
 		private readonly IPersonRepository _personRepository;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IProjectionChangedEventBuilder _builder;
 		private readonly IPersonScheduleDayReadModelsCreator _personScheduleDayReadModelsCreator;
 		private readonly IPersonScheduleDayReadModelFinder _personScheduleDayReadModelFinder;
+		private readonly IScheduleDayReadModelsCreator _scheduleDayReadModelsCreator;
+		private readonly IScheduleDayReadModelRepository _scheduleDayReadModelRepository;
 		private IList<ValidateReadModelType> _targetTypes = new List<ValidateReadModelType>();
 
-		public ReadModelValidator(IScheduleProjectionReadOnlyPersister persister, IPersonRepository personRepository, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IProjectionChangedEventBuilder builder, IPersonScheduleDayReadModelsCreator personScheduleDayReadModelsCreator, IPersonScheduleDayReadModelFinder personScheduleDayReadModelFinder)
+		public ReadModelValidator(IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister, IPersonRepository personRepository,
+			IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IProjectionChangedEventBuilder builder,
+			IPersonScheduleDayReadModelsCreator personScheduleDayReadModelsCreator,
+			IPersonScheduleDayReadModelFinder personScheduleDayReadModelFinder,
+			IScheduleDayReadModelsCreator scheduleDayReadModelsCreator,
+			IScheduleDayReadModelRepository scheduleDayReadModelRepository)
 		{
-			_persister = persister;
+			_scheduleProjectionReadOnlyPersister = scheduleProjectionReadOnlyPersister;
 			_personRepository = personRepository;
 			_scheduleStorage = scheduleStorage;
 			_currentScenario = currentScenario;
 			_builder = builder;
 			_personScheduleDayReadModelsCreator = personScheduleDayReadModelsCreator;
 			_personScheduleDayReadModelFinder = personScheduleDayReadModelFinder;
+			_scheduleDayReadModelsCreator = scheduleDayReadModelsCreator;
+			_scheduleDayReadModelRepository = scheduleDayReadModelRepository;
 		}
 
-		public void SetTargetTypes(IList<ValidateReadModelType> types)
-		{
-			_targetTypes = types;
-		}
-
-		public void Validate(DateTime start, DateTime end, Action<ReadModelValidationResult> reportProgress, bool ignoreValid = false)
+		
+		public void Validate(DateTime start, DateTime end, Action<ReadModelValidationResult> reportProgress,
+			bool ignoreValid = false)
 		{
 
 			var people = _personRepository.LoadAllPeopleWithHierarchyDataSortByName(new DateOnly(start));
@@ -49,69 +56,119 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 			people.ForEach(person =>
 			{
 				var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
-				new ScheduleDictionaryLoadOptions(false, false),
-				dateOnlyPeriod.ToDateTimePeriod(TimeZoneInfo.Utc),
-				scenario);
+					new ScheduleDictionaryLoadOptions(false, false),
+					dateOnlyPeriod.ToDateTimePeriod(TimeZoneInfo.Utc),
+					scenario);
 				dateOnlyPeriod.DayCollection().ForEach(day =>
 				{
 					var scheduleDay = schedules.SchedulesForDay(day).SingleOrDefault();
-					if (scheduleDay == null)
-					{
-						return;
-					}
 					if (_targetTypes.Contains(ValidateReadModelType.ScheduleProjectionReadOnly))
 					{
-						var readModelLayers =
-							_persister.ForPerson(day, person.Id.GetValueOrDefault(), scenario.Id.GetValueOrDefault())
-								.ToList()
-								.OrderBy(l => l.StartDateTime);
-
-						var mappedLayers = BuildReadModel(person, scheduleDay);
-						var isInValid = mappedLayers.Count() != readModelLayers.Count()
-										|| mappedLayers.Zip(readModelLayers, IsReadModelDifferent).Any(x => x);
-
-						if (isInValid || !ignoreValid)
-							reportProgress(new ReadModelValidationResult
-							{
-								PersonId = person.Id.GetValueOrDefault(),
-								Date = day.Date,
-								IsValid = !isInValid,
-								Type = ValidateReadModelType.ScheduleProjectionReadOnly
-							});
+						var isInvalid = !ValidateReadModelScheduleProjectionReadOnly(person, day, scheduleDay);
+						if (isInvalid || !ignoreValid) reportProgress(makeResult(person,day,!isInvalid,ValidateReadModelType.ScheduleProjectionReadOnly));
 					}
 					if (_targetTypes.Contains(ValidateReadModelType.PersonScheduleDay))
 					{
-						var eventScheduleDay = _builder.BuildEventScheduleDay(scheduleDay);
-						var mappedReadModel = _personScheduleDayReadModelsCreator.MakePersonScheduleDayReadModel(person, eventScheduleDay);
-						var storedReadModel = _personScheduleDayReadModelFinder.ForPerson(day, person.Id.GetValueOrDefault());
-						if (storedReadModel != null && !mappedReadModel.Equals(storedReadModel))
+						var isInvalid = !ValidateReadModelPersonScheduleDay(person, day, scheduleDay);
+						if (isInvalid || !ignoreValid)
 						{
-							reportProgress(new ReadModelValidationResult
-							{
-								PersonId = person.Id.GetValueOrDefault(),
-								Date = day.Date,
-								IsValid = false,
-								Type = ValidateReadModelType.PersonScheduleDay
-							});
+							reportProgress(makeResult(person, day, !isInvalid, ValidateReadModelType.PersonScheduleDay));
+						}
+					}
+
+					if (_targetTypes.Contains(ValidateReadModelType.ScheduleDay))
+					{
+						var isInvalid = !ValidateReadModelScheduleDay(person, day, scheduleDay);
+						if (isInvalid || !ignoreValid)
+						{
+							reportProgress(makeResult(person, day, !isInvalid, ValidateReadModelType.ScheduleDay));
 						}
 					}
 				});
 			});
-
 		}
 
-
-		public static bool IsReadModelDifferent<T>(T a, T b)
+		public void SetTargetTypes(IList<ValidateReadModelType> types)
 		{
-			return  !a.Equals(b);
+			_targetTypes = types;
 		}
+	
+		#region ReadModel.PersonScheduleDay
 
-		public IEnumerable<ScheduleProjectionReadOnlyModel> BuildReadModel(Guid personId, DateOnly date)
+		public bool ValidateReadModelPersonScheduleDay(IPerson person, DateOnly date, IScheduleDay scheduleDay)
 		{
-			return BuildReadModel(_personRepository.Get(personId), date);
+			if (scheduleDay == null) return true;
+			var fetchedReadModel = FetchReadModelPersonScheduleDay(person, date);
+			var builtReadModel = BuildReadModelPersonScheduleDay(person, scheduleDay);
+			return fetchedReadModel != null && builtReadModel != null && fetchedReadModel.Equals(builtReadModel);
 		}
 
-		public IEnumerable<ScheduleProjectionReadOnlyModel> BuildReadModel(IPerson person, DateOnly date)
+		public PersonScheduleDayReadModel FetchReadModelPersonScheduleDay(IPerson person, DateOnly date)
+		{
+			return _personScheduleDayReadModelFinder.ForPerson(date, person.Id.GetValueOrDefault());
+		}
+
+		public PersonScheduleDayReadModel BuildReadModelPersonScheduleDay(IPerson person, IScheduleDay scheduleDay)
+		{
+			var eventScheduleDay = _builder.BuildEventScheduleDay(scheduleDay);
+			return _personScheduleDayReadModelsCreator.MakePersonScheduleDayReadModel(person, eventScheduleDay);
+		}
+
+		#endregion
+
+		#region ReadModel.ScheduleDay
+
+		public bool ValidateReadModelScheduleDay(IPerson person, DateOnly date, IScheduleDay scheduleDay)
+		{
+			if(scheduleDay == null) return true;
+
+			var fetchedReadModel = FetchReadModelScheduleDay(person, date);
+			var builtReadModel = BuildReadModelScheduleDay(person, scheduleDay);
+
+			return fetchedReadModel != null && builtReadModel != null && fetchedReadModel.Equals(builtReadModel);		
+		}
+
+		public ScheduleDayReadModel FetchReadModelScheduleDay(IPerson person, DateOnly date)
+		{
+			return _scheduleDayReadModelRepository.ReadModelsOnPerson(date, date, person.Id.Value).FirstOrDefault();
+		}
+
+		public ScheduleDayReadModel BuildReadModelScheduleDay(IPerson person, IScheduleDay scheduleDay)
+		{
+			var eventScheduleDay = _builder.BuildEventScheduleDay(scheduleDay);
+			return _scheduleDayReadModelsCreator.GetReadModel(eventScheduleDay, person);
+		}
+
+		#endregion
+
+		#region ScheduleProjectionReadOnly
+
+		public bool ValidateReadModelScheduleProjectionReadOnly(IPerson person, DateOnly date, IScheduleDay scheduleDay)
+		{
+			if(scheduleDay == null) return true;
+
+			var fetchedReadModels = FetchReadModelScheduleProjectionReadOnly(person, date);							
+			var mappedReadModels = BuildReadModelScheduleProjectionReadOnly(person,scheduleDay);
+
+			var isValid = mappedReadModels.Count() != fetchedReadModels.Count()
+							|| mappedReadModels.Zip(fetchedReadModels, (a, b) => a != null && b != null && a.Equals(b)).All(x => x);
+			return isValid;
+		}
+
+		public IEnumerable<ScheduleProjectionReadOnlyModel> FetchReadModelScheduleProjectionReadOnly(IPerson person,
+			DateOnly date)
+		{
+			return _scheduleProjectionReadOnlyPersister.ForPerson(date, person.Id.GetValueOrDefault(), _currentScenario.Current().Id.GetValueOrDefault())
+				.ToList()
+				.OrderBy(l => l.StartDateTime);
+		}
+
+		public IEnumerable<ScheduleProjectionReadOnlyModel> BuildReadModelScheduleProjectionReadOnly(Guid personId, DateOnly date)
+		{
+			return BuildReadModelScheduleProjectionReadOnly(_personRepository.Get(personId), date);
+		}
+
+		public IEnumerable<ScheduleProjectionReadOnlyModel> BuildReadModelScheduleProjectionReadOnly(IPerson person, DateOnly date)
 		{
 			var scenario = _currentScenario.Current();
 			var schedule = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
@@ -119,9 +176,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 				date.ToDateTimePeriod(TimeZoneInfo.Utc),
 				scenario);
 			var scheduleDay = schedule.SchedulesForDay(date).SingleOrDefault();
-			return BuildReadModel(person, scheduleDay);
+			return BuildReadModelScheduleProjectionReadOnly(person, scheduleDay);
 		}
-		public IEnumerable<ScheduleProjectionReadOnlyModel> BuildReadModel(IPerson person, IScheduleDay scheduleDay)
+
+		public IEnumerable<ScheduleProjectionReadOnlyModel> BuildReadModelScheduleProjectionReadOnly(IPerson person, IScheduleDay scheduleDay)
 		{
 			var scenario = _currentScenario.Current();
 			if (scheduleDay != null)
@@ -148,5 +206,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 			return new List<ScheduleProjectionReadOnlyModel>();
 		}
 
+		#endregion
+
+		private ReadModelValidationResult makeResult(IPerson person,DateOnly date,bool isValid,
+			ValidateReadModelType type)
+		{
+			return new ReadModelValidationResult
+			{
+				PersonId = person.Id.GetValueOrDefault(),
+				Date = date.Date,
+				IsValid = isValid,
+				Type = type
+			};
+		}
 	}
 }

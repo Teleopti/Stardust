@@ -165,7 +165,12 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 			{
 				targets.Add(ValidateReadModelType.PersonScheduleDay);
 			}
-			 
+
+			if (_toggleManager.IsEnabled(Toggles.HealthCheck_ValidateReadModelScheduleDay_39423))
+			{
+				targets.Add(ValidateReadModelType.ScheduleDay);
+			} 
+
 			var jobId = _stardustSender.Send(new ValidateReadModelsEvent
 			{
 				StartDate = start,
