@@ -231,6 +231,9 @@
 	.advanced-search-container {
 		top: 0;
 	}
+	.pagination li.disabled a{
+		cursor:not-allowed;
+	}
 }
 
 

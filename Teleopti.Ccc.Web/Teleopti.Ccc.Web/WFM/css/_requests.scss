@@ -354,4 +354,8 @@
 	.ng-cloak{
 		display: none !important;
 	}
+
+	.pagination li.disabled a{
+		cursor:not-allowed;
+	}
 }

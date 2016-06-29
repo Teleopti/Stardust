@@ -50,6 +50,10 @@
 .seatplan-paging-container {
 	height: 40px;
 	margin-right: -10px;
+
+	.pagination li.disabled a{
+		cursor:not-allowed;
+	}
 }
 
 .seatplan-paging-container .wfm-pagination li {
