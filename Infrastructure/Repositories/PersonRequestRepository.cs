@@ -267,10 +267,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private void filterRequestByShiftTradeStatus(ICriteria criteria, RequestFilter filter)
 		{
-			if (filter.ExcludeShiftTradeRequestOkByMe)
+			if (filter.ExcludeInvalidShiftTradeRequest)
 			{
 				criteria.Add(toRequestClassTypeConstraint(RequestType.ShiftTradeRequest));
 				criteria.Add(!Restrictions.Eq("req.shiftTradeStatus", ShiftTradeStatus.OkByMe));
+				criteria.Add(!Restrictions.Eq("req.shiftTradeStatus", ShiftTradeStatus.Referred));
 			}
 		}
 

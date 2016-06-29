@@ -37,6 +37,6 @@ namespace Teleopti.Interfaces.Domain
 		public IPaging Paging;
 		public bool ExcludeRequestsOnFilterPeriodEdge;
 		public bool OnlyIncludeRequestsStartingWithinPeriod;
-		public bool ExcludeShiftTradeRequestOkByMe;
+		public bool ExcludeInvalidShiftTradeRequest;
 	}
 }

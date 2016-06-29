@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 
 			var requestFilter = _requestFilterCreator.Create(input, new[] { RequestType.ShiftTradeRequest });
 			requestFilter.OnlyIncludeRequestsStartingWithinPeriod = true;
-			requestFilter.ExcludeShiftTradeRequestOkByMe = true;
+			requestFilter.ExcludeInvalidShiftTradeRequest = true;
 
 			var requests = _requestsProvider.RetrieveRequests(requestFilter, out totalCount).ToArray();
 

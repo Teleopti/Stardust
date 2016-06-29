@@ -110,11 +110,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				requests = requests.Where(request => filter.Persons.Contains(request.Person));
 			}
 
-			if (filter.ExcludeShiftTradeRequestOkByMe)
+			if (filter.ExcludeInvalidShiftTradeRequest)
 			{
-				requests = requests.Where(request => (request.Request is ShiftTradeRequest)
-													 && ((ShiftTradeRequest) request.Request)
-														 .GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()) != ShiftTradeStatus.OkByMe);
+				requests = requests.Where(request =>
+				{
+					if (!(request.Request is ShiftTradeRequest))
+					{
+						return true;
+					}
+					var shiftTradeStatus = ((ShiftTradeRequest) request.Request)
+						.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing());
+					return shiftTradeStatus != ShiftTradeStatus.OkByMe && shiftTradeStatus != ShiftTradeStatus.Referred;
+				});
 			}
 
 			count = requests.Count();
