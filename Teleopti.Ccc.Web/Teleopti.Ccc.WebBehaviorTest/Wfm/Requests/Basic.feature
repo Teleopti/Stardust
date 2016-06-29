@@ -41,12 +41,14 @@ Background:
 	| End Time    | 2015-10-03 14:00 |
 	| Update Time | 2015-09-01 14:00 |
 
+@ignore
 Scenario: Display requests	
 	When I view wfm requests
 	And I select to load requests from '2015-10-01' to '2015-10-04'
 	Then I should see a request from 'Ashley Andeen' in the list
 	And I should see a request from 'John Smith' in the list
 
+@ignore
 Scenario: Sort requests	
 	When I view wfm requests
 	And I select to load requests from '2015-10-01' to '2015-10-04'
@@ -199,6 +201,7 @@ Scenario: Can view different page
 	And I select to view the last page
 	Then I see the request from 'John Smith' in the list	
 
+@ignore
 @OnlyRunIfEnabled('Wfm_Requests_ApproveDeny_36297')
 Scenario: Can approve requests
 	Given 'Ashley Andeen' has an existing text request with
@@ -212,6 +215,7 @@ Scenario: Can approve requests
 	And I approve all requests that I see
 	Then I should see request for 'Ashley Andeen' approved
 
+@ignore
 @OnlyRunIfEnabled('Wfm_Requests_ApproveDeny_36297')
 Scenario: Can approve waitlisted requests
 	Given 'John Smith' has an open workflow control set with absence request waitlisting enabled
@@ -226,6 +230,7 @@ Scenario: Can approve waitlisted requests
 	And I approve all requests that I see
 	Then I should see request for 'John Smith' approved
 
+@ignore
 @OnlyRunIfEnabled('Wfm_Requests_ApproveDeny_36297')
 Scenario: Can deny waitlisted requests
 	Given 'John Smith' has an open workflow control set with absence request waitlisting enabled
