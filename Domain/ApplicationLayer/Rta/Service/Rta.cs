@@ -48,6 +48,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				_persister.Persist(new AgentState
 				{
 					PersonId = @event.PersonId,
+					BusinessUnitId = @event.CurrentBusinessUnitId.GetValueOrDefault(),
+					SiteId = @event.CurrentSiteId,
+					TeamId = @event.CurrentTeamId,
 					// if the current time is used, behavior tests regarding "details" view fail..
 					// .. because the current time later faked to an earlier time...
 					// .. and the rta service will see it as the activity starting in the past, since the previous state was later..
@@ -184,6 +187,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			if (!input.IsLoggedOn)
 				return LogOutStateCode;
+			if (input.StateCode == null)
+				return null;
 			var stateCode = input.StateCode.Trim();
 			const int stateCodeMaxLength = 25;
 			if (stateCode.Length > stateCodeMaxLength)

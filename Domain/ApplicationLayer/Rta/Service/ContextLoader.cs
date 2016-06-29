@@ -169,6 +169,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var mappings = new MappingsState(() => _mappingReader.Read());
 
 			_agentStatePersister.GetAll()
+				.Where(x => x.StateCode != null)
 				.ForEach(x =>
 				{
 					action.Invoke(new Context(

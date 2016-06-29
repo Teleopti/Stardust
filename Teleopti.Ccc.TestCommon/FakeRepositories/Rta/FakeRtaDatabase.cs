@@ -286,13 +286,19 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_rtaRule.ThresholdTime = threshold;
 			return this;
 		}
-		
+
 		public FakeRtaDatabase WithExistingAgentState(Guid personId, string stateCode)
+		{
+			return WithExistingAgentState(personId, null, stateCode);
+		}
+
+		public FakeRtaDatabase WithExistingAgentState(Guid personId, Guid? teamId, string stateCode)
 		{
 			_agentStates.Has(new AgentState
 			{
 				PersonId = personId,
 				BusinessUnitId = _businessUnitId,
+				TeamId = teamId,
 				PlatformTypeId = new Guid(_platformTypeId),
 				StateCode = stateCode,
 				StaffingEffect = 0,

@@ -3,7 +3,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
@@ -31,25 +30,25 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			var personIdB3 = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			var brejk = Guid.NewGuid();
-			
-			Database
-					.WithUser("A1", personIdA1, null, teamIdA, null)
-					.WithUser("A2", personIdA2, null, teamIdA, null)
-					.WithUser("A3", personIdA3, null, teamIdA, null)
-					.WithUser("B1", personIdB1, null, teamIdB, null)
-					.WithUser("B2", personIdB2, null, teamIdB, null)
-					.WithUser("B3", personIdB3, null, teamIdB, null)
-				
-					.WithSchedule(personIdA1, brejk, "2015-01-15 08:00", "2015-01-15 10:00")
-					.WithSchedule(personIdA2, brejk, "2015-01-15 08:00", "2015-01-15 10:00")
-					.WithSchedule(personIdA3, phone, "2015-01-15 08:00", "2015-01-15 10:00")
 
-					.WithSchedule(personIdB1, phone, "2015-01-15 08:00", "2015-01-15 10:00")
-					.WithSchedule(personIdB2, phone, "2015-01-15 08:00", "2015-01-15 10:00")
-					.WithSchedule(personIdB3, phone, "2015-01-15 08:00", "2015-01-15 10:00")
-				
-					.WithRule("phone", phone, 0)
-					.WithRule("phone", brejk, 1)
+			Database
+				.WithUser("A1", personIdA1, null, teamIdA, null)
+				.WithUser("A2", personIdA2, null, teamIdA, null)
+				.WithUser("A3", personIdA3, null, teamIdA, null)
+				.WithUser("B1", personIdB1, null, teamIdB, null)
+				.WithUser("B2", personIdB2, null, teamIdB, null)
+				.WithUser("B3", personIdB3, null, teamIdB, null)
+
+				.WithSchedule(personIdA1, brejk, "2015-01-15 08:00", "2015-01-15 10:00")
+				.WithSchedule(personIdA2, brejk, "2015-01-15 08:00", "2015-01-15 10:00")
+				.WithSchedule(personIdA3, phone, "2015-01-15 08:00", "2015-01-15 10:00")
+
+				.WithSchedule(personIdB1, phone, "2015-01-15 08:00", "2015-01-15 10:00")
+				.WithSchedule(personIdB2, phone, "2015-01-15 08:00", "2015-01-15 10:00")
+				.WithSchedule(personIdB3, phone, "2015-01-15 08:00", "2015-01-15 10:00")
+
+				.WithRule("phone", phone, 0)
+				.WithRule("phone", brejk, 1)
 				.WithRule("break", phone, -1)
 				;
 			Now.Is("2015-01-15 08:00");
@@ -97,6 +96,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			Model.Get(existingTeam).Count.Should().Be(3);
 			Model.Get(stateTeam).Should().Be.Null();
 		}
-		
+
 	}
 }
