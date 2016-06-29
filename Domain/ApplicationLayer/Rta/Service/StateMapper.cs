@@ -40,8 +40,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return match;
 		}
 
-		private MappedRule queryRule(MappingsState mappings, Guid businessUnitId, Guid platformTypeId, string stateCode,
-			Guid? activityId)
+		private MappedRule queryRule(MappingsState mappings, Guid businessUnitId, Guid platformTypeId, string stateCode, Guid? activityId)
 		{
 			return (from m in mappings.Use()
 				let illegal = m.StateCode == null && m.StateGroupId != Guid.Empty
@@ -68,13 +67,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public MappedState StateFor(MappingsState mappings, Guid businessUnitId, Guid platformTypeId, string stateCode, string stateDescription)
 		{
 			if (stateCode == null)
-				return new MappedState();
+				return null;
 			var match = queryState(mappings, businessUnitId, platformTypeId, stateCode);
 			if (match != null) return match;
 			_stateCodeAdder.AddUnknownStateCode(businessUnitId, platformTypeId, stateCode, stateDescription);
 			mappings.Invalidate();
-			match = queryState(mappings, businessUnitId, platformTypeId, stateCode);
-			return match ?? new MappedState();
+			return queryState(mappings, businessUnitId, platformTypeId, stateCode);
 		}
 
 		private MappedState queryState(MappingsState mappings, Guid businessUnitId, Guid platformTypeId, string stateCode)

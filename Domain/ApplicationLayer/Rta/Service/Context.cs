@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				Schedule.CurrentActivityId().Equals(Stored.ActivityId()) &&
 				Schedule.NextActivityId().Equals(Stored.NextActivityId()) &&
 				Schedule.NextActivityStartTime().Equals(Stored.NextActivityStartTime()) &&
-				State.StateGroupId().GetValueOrDefault().Equals(Stored.StateGroupId().GetValueOrDefault()) &&
+				State.StateGroupId().Equals(Stored.StateGroupId()) &&
 				Schedule.TimeWindowCheckSum().Equals(Stored.TimeWindowCheckSum().GetValueOrDefault())
 				;
 
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public DateTime? StateStartTime
 	    {
-	        get { return State.StateGroupChanged() ? CurrentTime : Stored.StateStartTime; }
+	        get { return State.StateGroupChanged() ? CurrentTime : Stored?.StateStartTime; }
 	    }
 
 		public DateTime? RuleStartTime

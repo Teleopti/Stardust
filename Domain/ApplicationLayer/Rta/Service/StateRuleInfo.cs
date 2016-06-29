@@ -27,17 +27,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public bool StateGroupChanged()
 		{
-			return _mappedState.Value.StateGroupId != _stored.Value.StateGroupId();
+			if (_stored.Value == null)
+				return true;
+			return _mappedState.Value?.StateGroupId != _stored.Value.StateGroupId();
 		}
 
 		public Guid? StateGroupId()
 		{
-			return _mappedState.Value.StateGroupId;
+			return _mappedState.Value?.StateGroupId;
 		}
 
 		public string StateGroupName()
 		{
-			return _mappedState.Value.StateGroupName;
+			return _mappedState.Value?.StateGroupName;
 		}
 
 
@@ -46,8 +48,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			return _mappedRule.Value.RuleId != _stored.Value.RuleId();
 		}
-
-
 
 		public Guid? RuleId()
 		{
