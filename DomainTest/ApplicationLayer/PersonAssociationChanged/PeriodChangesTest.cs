@@ -5,7 +5,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -34,74 +33,26 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 
 			Publisher.PublishedEvents.Single().Should().Be.OfType<PersonAssociationChangedEvent>();
 		}
-		
+
 		[Test]
-		public void ShouldPublishWithPersonId()
+		public void ShouldPublishWithProperties()
 		{
 			Now.Is("2016-02-01 00:00");
 			var personId = Guid.NewGuid();
-			Data.WithAgent(personId, "pierre")
-				.WithPeriod("2016-02-01");
-
-			Target.Handle(new TenantHourTickEvent());
-
-			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single().PersonId
-				.Should().Be(personId);
-		}
-
-		[Test]
-		public void ShouldPublishWithTimestamp()
-		{
-			Now.Is("2016-02-01 00:00");
-			Data.WithAgent("pierre")
-				.WithPeriod("2016-02-01");
-
-			Target.Handle(new TenantHourTickEvent());
-
-			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single().Timestamp
-				.Should().Be("2016-02-01 00:00".Utc());
-		}
-
-		[Test]
-		public void ShouldPublishWithTeamId()
-		{
-			Now.Is("2016-02-01 00:00");
 			var teamId = Guid.NewGuid();
-			Data.WithAgent("pierre")
-				.WithPeriod("2016-02-01", teamId);
-
-			Target.Handle(new TenantHourTickEvent());
-
-			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single().TeamId
-				.Should().Be(teamId);
-		}
-
-		[Test]
-		public void ShouldPublishWithSiteId()
-		{
-			Now.Is("2016-02-01 00:00");
 			var siteId = Guid.NewGuid();
-			Data.WithAgent("pierre")
-				.WithPeriod("2016-02-01", Guid.NewGuid(), siteId);
-
-			Target.Handle(new TenantHourTickEvent());
-
-			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single().SiteId
-				.Should().Be(siteId);
-		}
-
-		[Test]
-		public void ShouldPublishWithBusinessUnitId()
-		{
-			Now.Is("2016-02-01 00:00");
 			var businessUnitId = Guid.NewGuid();
-			Data.WithAgent("pierre")
-				.WithPeriod("2016-02-01", Guid.NewGuid(), Guid.NewGuid(), businessUnitId);
+			Data.WithAgent(personId, "pierre")
+				.WithPeriod("2016-02-01", teamId, siteId, businessUnitId);
 
 			Target.Handle(new TenantHourTickEvent());
 
-			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single().BusinessUnitId
-				.Should().Be(businessUnitId);
+			var @event = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();
+			@event.PersonId.Should().Be(personId);
+			@event.Timestamp.Should().Be("2016-02-01 00:00".Utc());
+			@event.TeamId.Should().Be(teamId);
+			@event.SiteId.Should().Be(siteId);
+			@event.BusinessUnitId.Should().Be(businessUnitId);
 		}
 
 		[Test]
