@@ -60,8 +60,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			});
 		}
 
-		public int TimeWindowCheckSum()
+		public int? TimeWindowCheckSum()
 		{
+			if (_timeWindowCheckSum.Value == 0)
+				return null;
 			return _timeWindowCheckSum.Value;
 		}
 

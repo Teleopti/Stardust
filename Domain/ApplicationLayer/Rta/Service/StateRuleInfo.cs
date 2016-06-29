@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 
 
-		public bool HasRuleChanged()
+		public bool RuleChanged()
 		{
 			return _mappedRule.Value.RuleId != _stored.Value?.RuleId;
 		}

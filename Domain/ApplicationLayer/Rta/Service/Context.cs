@@ -1,10 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -134,7 +129,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public DateTime? RuleStartTime
 	    {
-		    get { return State.HasRuleChanged() ? CurrentTime : Stored.RuleStartTime; }
+		    get { return State.RuleChanged() ? CurrentTime : Stored.RuleStartTime; }
 	    }
 
 		public bool IsAlarm
