@@ -12,13 +12,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 		IRunOnStardust
 	{
 		private readonly IReadModelValidator _validator;
-		private readonly IScheduleProjectionReadOnlyCheckResultPersister _persister;
+		private readonly IReadModelValidationResultPersister _persister;
 		private readonly IProjectionVersionPersister _projectionVersionPersister;
 		private readonly IScheduleProjectionReadOnlyPersister _scheduleProjectionReadOnlyPersister;
 		private readonly ICurrentScenario _currentScenario;
 
 		public FixScheduleProjectionReadOnlyEventHandler(IReadModelValidator validator,
-			IScheduleProjectionReadOnlyCheckResultPersister persister, IProjectionVersionPersister projectionVersionPersister,
+			IReadModelValidationResultPersister persister, IProjectionVersionPersister projectionVersionPersister,
 			IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister, ICurrentScenario currentScenario)
 		{
 			_validator = validator;

@@ -76,8 +76,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IAuditSettingRepository>()
 				.SingleInstance();
 
-			builder.RegisterType<ScheduleProjectionReadOnlyCheckResultPersister>()
-				.As<IScheduleProjectionReadOnlyCheckResultPersister>()
+			builder.RegisterType<ReadModelValidationResultPersister>()
+				.As<IReadModelValidationResultPersister>()
 				.SingleInstance();
 		}
 

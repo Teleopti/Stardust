@@ -55,6 +55,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 				dateOnlyPeriod.DayCollection().ForEach(day =>
 				{
 					var scheduleDay = schedules.SchedulesForDay(day).SingleOrDefault();
+					if (scheduleDay == null)
+					{
+						return;
+					}
 					if (_targetTypes.Contains(ValidateReadModelType.ScheduleProjectionReadOnly))
 					{
 						var readModelLayers =
@@ -80,7 +84,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 						var eventScheduleDay = _builder.BuildEventScheduleDay(scheduleDay);
 						var mappedReadModel = _personScheduleDayReadModelsCreator.MakePersonScheduleDayReadModel(person, eventScheduleDay);
 						var storedReadModel = _personScheduleDayReadModelFinder.ForPerson(day, person.Id.GetValueOrDefault());
-						if (!mappedReadModel.Equals(storedReadModel))
+						if (storedReadModel != null && !mappedReadModel.Equals(storedReadModel))
 						{
 							reportProgress(new ReadModelValidationResult
 							{

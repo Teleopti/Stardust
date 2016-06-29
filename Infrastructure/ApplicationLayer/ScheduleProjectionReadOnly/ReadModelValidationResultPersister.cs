@@ -6,16 +6,16 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnly
 {
-	public class ScheduleProjectionReadOnlyCheckResultPersister : IScheduleProjectionReadOnlyCheckResultPersister
+	public class ReadModelValidationResultPersister : IReadModelValidationResultPersister
 	{
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
-		public ScheduleProjectionReadOnlyCheckResultPersister(ICurrentUnitOfWork currentUnitOfWork)
+		public ReadModelValidationResultPersister(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			_currentUnitOfWork = currentUnitOfWork;
 		}
 
-		public void Save(ReadModelValidationResult input)
+		public void SaveScheduleProjectionReadOnly(ReadModelValidationResult input)
 		{
 			_currentUnitOfWork.Session().CreateSQLQuery(
 				@"INSERT INTO [ReadModel].[ScheduleProjectionReadOnly_check] (PersonId, BelongsToDate, IsValid, UpdateOn) VALUES (:PersonId, :BelongsToDate, :IsValid, :UpdateOn)")
@@ -23,6 +23,18 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 				.SetGuid("PersonId", input.PersonId)
 				.SetBoolean("IsValid", input.IsValid)
 				.SetDateTime("UpdateOn", DateTime.UtcNow)
+				.ExecuteUpdate();
+		}
+
+		public void SavePersonScheduleDay(ReadModelValidationResult input)
+		{
+			_currentUnitOfWork.Session()
+				.CreateSQLQuery(
+					@"INSERT INTO [ReadModel].[PersonScheduleDay_check] (PersonId, BelongsToDate, IsValid, UpdatedOn) VALUES (:PersonId, :BelongsToDate, :IsValid, :UpdatedOn)")
+				.SetDateTime("BelongsToDate", input.Date)
+				.SetGuid("PersonId", input.PersonId)
+				.SetBoolean("IsValid", input.IsValid)
+				.SetDateTime("UpdatedOn", DateTime.UtcNow)
 				.ExecuteUpdate();
 		}
 

@@ -8,12 +8,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 		IRunOnStardust
 	{
 		private readonly IReadModelValidator _validator;
-		private readonly IScheduleProjectionReadOnlyCheckResultPersister _scheduleProjectionReadOnlyCheckResultPersister;
+		private readonly IReadModelValidationResultPersister _readModelValidationResultPersister;
 
-		public ValidateReadModelsEventHandler(IReadModelValidator validator, IScheduleProjectionReadOnlyCheckResultPersister scheduleProjectionReadOnlyCheckResultPersister)
+		public ValidateReadModelsEventHandler(IReadModelValidator validator, IReadModelValidationResultPersister readModelValidationResultPersister)
 		{
 			_validator = validator;
-			_scheduleProjectionReadOnlyCheckResultPersister = scheduleProjectionReadOnlyCheckResultPersister;
+			_readModelValidationResultPersister = readModelValidationResultPersister;
 		}
 
 		public void Handle(ValidateReadModelsEvent @event)
@@ -23,11 +23,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 				switch (result.Type)
 				{
 					case ValidateReadModelType.ScheduleProjectionReadOnly:
-						_scheduleProjectionReadOnlyCheckResultPersister.Save(result);
+						_readModelValidationResultPersister.SaveScheduleProjectionReadOnly(result);
+						break;
+					case ValidateReadModelType.PersonScheduleDay:
+						_readModelValidationResultPersister.SavePersonScheduleDay(result);
 						break;
 				}
 			};
-			_scheduleProjectionReadOnlyCheckResultPersister.Reset();
+			_readModelValidationResultPersister.Reset();
 
 			_validator.SetTargetTypes(@event.Targets);
 			_validator.Validate(@event.StartDate, @event.EndDate, action, true);
