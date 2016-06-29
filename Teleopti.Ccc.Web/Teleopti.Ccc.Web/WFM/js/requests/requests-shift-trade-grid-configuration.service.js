@@ -197,13 +197,13 @@
 
 			}
 
-			function columnDefinitions(shiftTradeRequestDateSummary) {
+			function columnDefinitions(shiftTradeRequestDateSummary, requests) {
 
 				if (columns.length == 0) {
 					setupStandardColumns();
 				}
 
-				if (shiftTradeRequestDateSummary) {
+				if (shiftTradeRequestDateSummary && requests.length > 0) {
 					return columns.concat(getShiftTradeVisualisationDayColumns(shiftTradeRequestDateSummary));
 				}
 
@@ -288,7 +288,7 @@
 							categories.push({
 								name: $filter('date')(startOfWeekDay.toDate(), 'shortDate'),
 								visible: true,
-								suppressCategoryHeader : startOfWeekDay.isBefore(minimum)
+								suppressCategoryHeader: startOfWeekDay.isBefore(minimum)
 							});
 
 							startOfWeekDay.add(1, 'weeks');

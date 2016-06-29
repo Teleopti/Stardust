@@ -107,14 +107,14 @@
 			});
 		}
 
-		function setupColumnDefinitions() {
+		function setupColumnDefinitions(requests) {
 
 			if (!vm.gridConfigurationService) {
 				var configurationService = vm.shiftTradeView ? 'ShiftTradeGridConfiguration' : 'TextAndAbsenceGridConfiguration';
 				vm.gridConfigurationService = $injector.get(configurationService);
 			}
 
-			vm.gridOptions.columnDefs = vm.gridConfigurationService.columnDefinitions(vm.shiftTradeRequestDateSummary);
+			vm.gridOptions.columnDefs = vm.gridConfigurationService.columnDefinitions(vm.shiftTradeRequestDateSummary, requests);
 			vm.gridOptions.enablePinning = vm.shiftTradeView;
 			vm.gridOptions.category = vm.gridConfigurationService.categories(vm.shiftTradeRequestDateSummary);
 			vm.gridOptions.enableVerticalScrollbar = 0;
@@ -313,7 +313,7 @@
 				}
 			});
 
-			setupColumnDefinitions();
+			setupColumnDefinitions(requests);
 
 			vm.gridOptions.data = requests;
 			
