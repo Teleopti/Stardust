@@ -3,7 +3,6 @@ using System.Configuration;
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Forecast;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
@@ -81,7 +80,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 						Name = "Import forecast from file",
 						Serialized = ser,
 						Type = typeof(ImportForecastsFileToSkillEvent).ToString(),
-						UserName = person.Name.FirstName
+						CreatedBy = person.Id.GetValueOrDefault().ToString()
 					};
 					var mess = _jsonSerializer.SerializeObject(jobModel);
 					_postHttpRequest.Send<Guid>(ConfigurationManager.AppSettings["ManagerLocation"] + "job", mess);
@@ -92,11 +91,5 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			command.Result = new CommandResultDto { AffectedId = jobResultId, AffectedItems = 1 };
 		}
 	}
-	internal class JobRequestModel
-	{
-		public string Name { get; set; }
-		public string Serialized { get; set; }
-		public string Type { get; set; }
-		public string UserName { get; set; }
-	}
+	
 }

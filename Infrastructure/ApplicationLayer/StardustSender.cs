@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		}
 	}
 
-	internal class JobRequestModel
+	public class JobRequestModel
 	{
 		public string Name { get; set; }
 		public string Serialized { get; set; }
