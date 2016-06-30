@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 		public void WhenISelectToLoadRequestInStatus(string status)
 		{
 			Browser.Interactions.ClickUsingJQuery(".test-status-selector");
-			Browser.Interactions.ClickUsingJQuery("md-select-menu md-option:contains(\'" + status + "\'):visible");
+			Browser.Interactions.ClickUsingJQuery("md-select-menu md-option:contains(\'" + status + "\')");
 			Browser.Interactions.ClickUsingJQuery(".md-click-catcher");
 		}
 
