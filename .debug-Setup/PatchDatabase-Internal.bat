@@ -6,7 +6,7 @@
 ::=======================
 ::Get path to this batchfile
 SET ROOTDIR=%~dp0
-set MSBUILD="%windir%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
+set MSBUILD="%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe"
 SET /A CROSSDB=0
 SET /A ISCCC7=0
 SET TRUNK=-T

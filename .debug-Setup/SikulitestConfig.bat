@@ -6,7 +6,7 @@ SET masterSettings=%ROOTDIR%\.debug-setup\config\settingsSikuliTest.txt
 SET CCC7DB=%~1
 SET AnalyticsDB=%~2
 SET configuration=%3
-SET MSBUILD="%windir%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
+SET MSBUILD="%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe"
 SET logFile=%ROOTDIR%\.debug-setup\SikuliConfig.log
 
 SET MySettings=%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\settings.txt

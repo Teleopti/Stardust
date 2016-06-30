@@ -7,7 +7,7 @@ color A
 IF "%ROOTDIR%"=="" SET LocalDIR=%~dp0
 IF "%ROOTDIR%"=="" SET ROOTDIR=%LocalDIR%..
 
-set msbuild="%windir%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
+set msbuild="%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe"
 set OutputDir=C:\temp\servicebus
 Set ImagePath=
 set /a ERRORLEV=0

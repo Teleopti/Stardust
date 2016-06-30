@@ -10,7 +10,7 @@ SET SQL_AUTH_STRING=%~6
 SET ROOTDIR=%~dp0
 SET ROOTDIR=%ROOTDIR:~0,-1%
 
-set MSBUILD="%windir%\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe"
+set MSBUILD="%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe"
 SET MySettings=%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\settings.txt
 SET DATASOURCE_NAME=ETLTest
 SET PM_INSTALL=False
