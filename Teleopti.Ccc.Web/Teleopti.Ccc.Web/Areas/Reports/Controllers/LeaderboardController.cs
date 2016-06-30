@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Controllers
 			var result = new List<AgentBadgeOverview>();
 			if (string.IsNullOrEmpty(keyword) && myTeam == null)
 			{
+				result.AddRange(_agentBadgeProvider.GetAllAgentBadges(currentDate));
 				return Json(new LeaderboardViewModel
 				{
 					Keyword = "",

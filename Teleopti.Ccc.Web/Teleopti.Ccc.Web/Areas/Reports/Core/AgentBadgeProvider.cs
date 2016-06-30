@@ -31,5 +31,15 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Core
 
 			return results.ToArray();
 		}
+
+		public AgentBadgeOverview[] GetAllAgentBadges(DateOnly currentDate)
+		{
+			return _settingBasedBadgeProvider.PermittedAgentBadgeOverviewsForEveryoneOrMyOwn(
+				DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboardUnderReports, new LeaderboardQuery
+				{
+					Date = currentDate,
+					Type = LeadboardQueryType.Everyone
+				}).ToArray();
+		}
 	}
 }
