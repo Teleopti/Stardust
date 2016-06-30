@@ -93,11 +93,12 @@
 		}
 
 		function ahAhAhAhStayingAlive() {
-			$.get('../Start/Url/Index')
+			$.get('../api/Global/User/CurrentUser')
 				.success(function() {
 					return true;
 				}).error(function(xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+					errorStayingAlive();
 				});
 		}
 		window.onerror = function(errorMessage, url, line) {

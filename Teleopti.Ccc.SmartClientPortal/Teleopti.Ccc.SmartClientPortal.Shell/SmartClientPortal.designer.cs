@@ -242,13 +242,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.webView1.BeforeContextMenu += new EO.WebBrowser.BeforeContextMenuHandler(this.webView1_BeforeContextMenu);
 			this.webView1.Command += new EO.WebBrowser.CommandHandler(this.webView1_Command);
 			this.webView1.NewWindow += new EO.WebBrowser.NewWindowHandler(this.webView1NewWindow);
-			this.webView1.LoadFailed += new EO.WebBrowser.LoadFailedEventHandler(this.webView1LoadFailed);
 			this.webView1.CertificateError += new EO.WebBrowser.CertificateErrorHandler(this.handlingCertificateErrorsWebView1);
-			// 
-			// wfmWebView
-			//
-			this.wfmWebView.CertificateError += new EO.WebBrowser.CertificateErrorHandler(this.handlingCertificateErrorsWfmWebView);
-			this.wfmWebView.LoadFailed += new EO.WebBrowser.LoadFailedEventHandler(this.handlingLoadFailedError);
+			this.webView1.LoadFailed += new EO.WebBrowser.LoadFailedEventHandler(this.webView1LoadFailed);
 			// 
 			// wfmWebControl
 			// 
@@ -261,6 +256,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.wfmWebControl.TabStop = false;
 			this.wfmWebControl.Text = "webControl2";
 			this.wfmWebControl.WebView = this.wfmWebView;
+			// 
+			// wfmWebView
+			// 
+			this.wfmWebView.UrlChanged += new System.EventHandler(this.wfmWebView_UrlChanged);
+			this.wfmWebView.CertificateError += new EO.WebBrowser.CertificateErrorHandler(this.handlingCertificateErrorsWfmWebView);
+			this.wfmWebView.LoadFailed += new EO.WebBrowser.LoadFailedEventHandler(this.handlingLoadFailedError);
 			// 
 			// gridWorkspace
 			// 
@@ -416,7 +417,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStageButtonSignCustomerWeb.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButtonSignCustomerWeb.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButtonSignCustomerWeb.IsBackStageButton = false;
-			this.backStageButtonSignCustomerWeb.Location = new System.Drawing.Point(-194, 116);
+			this.backStageButtonSignCustomerWeb.Location = new System.Drawing.Point(-216, 116);
 			this.backStageButtonSignCustomerWeb.Name = "backStageButtonSignCustomerWeb";
 			this.backStageButtonSignCustomerWeb.Size = new System.Drawing.Size(126, 25);
 			this.backStageButtonSignCustomerWeb.TabIndex = 14;
@@ -452,7 +453,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStageButtonExitTELEOPTICCC.BackColor = System.Drawing.Color.Transparent;
 			this.backStageButtonExitTELEOPTICCC.BeforeTouchSize = new System.Drawing.Size(75, 23);
 			this.backStageButtonExitTELEOPTICCC.IsBackStageButton = false;
-			this.backStageButtonExitTELEOPTICCC.Location = new System.Drawing.Point(-194, 178);
+			this.backStageButtonExitTELEOPTICCC.Location = new System.Drawing.Point(-216, 178);
 			this.backStageButtonExitTELEOPTICCC.Name = "backStageButtonExitTELEOPTICCC";
 			this.backStageButtonExitTELEOPTICCC.Size = new System.Drawing.Size(120, 25);
 			this.backStageButtonExitTELEOPTICCC.TabIndex = 18;

@@ -62,6 +62,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 	public partial class SmartClientShellForm : BaseRibbonForm, IDummyInterface
 	{
 		private readonly ILog _logger = LogManager.GetLogger(typeof (SmartClientShellForm));
+		private readonly ILog _customLogger = LogManager.GetLogger("CustomEOLogger");
 		private readonly IComponentContext _container;
 		
 		private readonly SystemCheckerValidator _systemChecker;
@@ -73,6 +74,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private bool canAccessInternet = true;
 		private const string _permissionModule = "/permissions";
 		private WebUrlHolder _webUrlHolder;
+		private List<string> validUrls;
 
 		protected SmartClientShellForm()
 		{
@@ -91,7 +93,28 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			KeyDown += Form_KeyDown;
 			KeyPress += Form_KeyPress;
 
+			wfmWebView.RegisterJSExtensionFunction("errorStayingAlive",wfmWebView_JSerrorStayingAlive);
 			EO.Base.Runtime.Exception += handlingEoRuntimeErrors;
+		}
+		private void logInfo(string message)
+		{
+			_customLogger.Info("SmartClientPortal: EoBrowser: " + message);
+		}
+
+		private void wfmWebView_JSerrorStayingAlive(object sender, JSExtInvokeArgs e)
+		{
+			notifyIcon.Icon = Resources.NotifyWarning;
+			notifyIcon.Text = UserTexts.Resources.CheckSystemWarning;
+			notifyIcon.BalloonTipIcon = ToolTipIcon.Warning;
+			notifyIcon.BalloonTipTitle = UserTexts.Resources.CheckSystemWarning;
+			notifyIcon.BalloonTipText = "The web channel is disconnected." +
+										Environment.NewLine + 
+										"You may require to relogon to use permissions.";
+			showBalloon();
+			logInfo("Session dropped in StayingAlive");
+			wfmWebView.LoadUrl(webServer + "start/Url/RedirectToWebLogin");
+
+
 		}
 
 		private void setBusinessUnitInWebView()
@@ -122,22 +145,28 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			if (cnt < 300) return;
 			cnt = 0;
 			// to see if this will help on bug 39438
-			if (!wfmWebView.IsCreated) return;
+			if (!wfmWebView.IsCreated)
+			{
+				logInfo("keepWfmAlive: wfmWebView is not created");
+				return;
+			}
 			// but maybe we will get a login instead of permissions after some time instead
 			JSObject window = wfmWebView.GetDOMWindow();
 			if (wfmWebView.CanEvalScript)
 			{
 				try
 				{
+					logInfo("EvalScript(ahAhAhAhStayingAlive)");
 					var ahAhAhAhStayingAlive = (JSFunction)wfmWebView.EvalScript("ahAhAhAhStayingAlive");
 					if (ahAhAhAhStayingAlive != null)
 					{
+						logInfo("Invoke StayingAlive");
 						ahAhAhAhStayingAlive.Invoke(window, new object[] { });
 					}
 				}
 				catch (JSInvokeException)
 				{
-					
+					logInfo("JSInvokeException");
 				}
 			}
 		}
@@ -212,7 +241,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				wfmWebControl.Enabled = false;
 				wfmWebControl.Visible = false;
 			}
-			
+			validUrls = new List<string>()
+			{
+				"WFM/index_desktop_client.html#" + _permissionModule,
+				"start/Url/RedirectToWebLogin",
+				"SSO/",
+				"Authentication",
+				"/response?dnoa.userSuppliedIdentifier",
+				"/Start/Return/HandleReturn",
+				"sample-with-policyengine",
+				"authenticate?whr=urn:Windows",
+				"/OpenId/Provider?openid",
+				"/OpenId/TriggerWindowsAuthorization"
+			};
+
 			setBusinessUnitInWebView();
 
 			wfmWebView.BeforeContextMenu += wfmWebView_BeforeContextMenu;
@@ -350,7 +392,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			if (!wfmWebView.IsCreated)
 			{
+				logInfo("setWfmWebUrl: wfmWebViewwfmWebView is not created ");
 				wfmWebView = new WebView();
+				wfmWebView.UrlChanged += wfmWebView_UrlChanged;
 				wfmWebControl.WebView = wfmWebView;
 			}
 			wfmWebView.LoadUrl(string.Format("{0}WFM/index_desktop_client.html#{1}", webServer, _permissionModule));
@@ -946,6 +990,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			var wfmPath = _container.Resolve<IConfigReader>().AppConfig("FeatureToggle");
 			return new Uri($"{wfmPath}{relativePath}");
+		}
+
+		private void wfmWebView_UrlChanged(object sender, EventArgs e)
+		{
+			if (!((wfmWebView.Url == "" || wfmWebView.Url == webServer) ||
+				validUrls.Any(x => wfmWebView.Url.Contains(x))))
+			{
+				setWfmWebUrl(_permissionModule);
+			}
 		}
 	}
 }

@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Win.Main
 	{
 		private readonly LogonModel _model;
 		private readonly ILog _logger = LogManager.GetLogger(typeof(LoginWebView));
+		private readonly ILog _customLogger = LogManager.GetLogger("CustomEOLogger");
 
 		public LoginWebView(LogonModel model)
 		{
@@ -27,7 +28,12 @@ namespace Teleopti.Ccc.Win.Main
 			EO.Base.Runtime.Exception += handlingRuntimeErrors;
 		}
 
-		private void handlingRuntimeErrors(object sender, ExceptionEventArgs e)
+		private void logInfo(string message)
+        {
+            _customLogger.Info("LoginWebView: " + message);
+        }
+
+	private void handlingRuntimeErrors(object sender, ExceptionEventArgs e)
 		{
 			_logger.Error("Error in the EO browser", e.ErrorException);
 		}
@@ -62,11 +68,11 @@ namespace Teleopti.Ccc.Win.Main
 		public ILogonPresenter Presenter { get; set; }
 		public bool StartLogon()
 		{
-			_logger.Info("EO Browser: Stating the login process by loading the URL.");
+			logInfo("EO Browser: Starting the login process by loading the URL: " + ServerUrl + "start/Url/RedirectToWebLogin");
 			webView1.BeforeContextMenu += webView1_BeforeContextMenu;
 			webView1.RegisterJSExtensionFunction("fatClientWebLogin", WebView_JSFatClientWebLogin);
 			webView1.RegisterJSExtensionFunction("isTeleoptiProvider", WebView_JSIsTeleoptiProvider);
-			_logger.Info("EO Browser: Loading URL to show the login web view.");
+			logInfo("EO Browser: Loading URL to show the login web view.");
 			webView1.Url = ServerUrl + "start/Url/RedirectToWebLogin";
 			// some defensive coding to prevent bug 39408
 			if (Visible)
@@ -83,13 +89,13 @@ namespace Teleopti.Ccc.Win.Main
 
 		private void WebView_JSIsTeleoptiProvider(object sender, JSExtInvokeArgs e)
 		{
-			_logger.Info("EO Browser: Called from the JS to populate the application type");
+			logInfo("EO Browser: Called from the JS to populate the application type");
 			_model.AuthenticationType = AuthenticationTypeOption.Application;
 		}
 
 		private void WebView_JSFatClientWebLogin(object sender, JSExtInvokeArgs e)
 		{
-			_logger.Info("EO Browser: Called from the JS to start the login process for fat client");
+			logInfo("EO Browser: Called from the JS to start the login process for fat client");
 			var personId = Guid.Parse(e.Arguments[1].ToString());
 			var businessUnitId = Guid.Parse(e.Arguments[0].ToString());
 			_model.PersonId = personId;

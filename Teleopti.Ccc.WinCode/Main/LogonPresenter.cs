@@ -30,8 +30,9 @@ namespace Teleopti.Ccc.WinCode.Main
 		private readonly IWindowsUserProvider _windowsUserProvider;
 		private readonly IAvailableBusinessUnitsProvider _availableBusinessUnitsProvider;
         private static readonly ILog Logger = LogManager.GetLogger(typeof(LogonPresenter));
+		private readonly ILog _customLogger = LogManager.GetLogger("CustomEOLogger");
 
-        public LogonPresenter(ILogonView view, LogonModel model, ILoginInitializer initializer, ILogOnOff logOnOff,
+		public LogonPresenter(ILogonView view, LogonModel model, ILoginInitializer initializer, ILogOnOff logOnOff,
 			IMessageBrokerComposite messageBroker, ISharedSettingsQuerier sharedSettingsQuerier,
 			IAuthenticationQuerier authenticationQuerier, IWindowsUserProvider windowsUserProvider,
 			IAvailableBusinessUnitsProvider availableBusinessUnitsProvider)
@@ -50,11 +51,16 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		public LoginStep CurrentStep { get; set; }
 
+		private void logInfo(string message)
+		{
+			_customLogger.Info("LogonPresenter: " + message);
+		}
+
 		public bool Start(string serverUrl)
 		{
 			CurrentStep = LoginStep.SelectLogonType;
 			_view.ServerUrl = serverUrl;
-			Logger.Info("EO Browser: show the login screen.");
+			logInfo("EO Browser: show the login screen.");
 			return _view.StartLogon();
 			
 		}
@@ -216,7 +222,7 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		public bool webLogin(Guid businessunitId)
 		{
-			Logger.Info("EO Browser: Authenticating the user in web");
+			logInfo("EO Browser: Authenticating the user in web");
 			try
 		    {
                 var authenticationResult = _authenticationQuerier.TryLogon(new IdLogonClientModel { Id = _model.PersonId }, UserAgentConstant.UserAgentWin);
@@ -227,7 +233,7 @@ namespace Teleopti.Ccc.WinCode.Main
                 }
                 if (authenticationResult.Success)
                 {
-						  Logger.Info("EO Browser: Authentication was successful");
+					logInfo("EO Browser: Authentication was successful");
 						  _model.SelectedDataSourceContainer = new DataSourceContainer(authenticationResult.DataSource, authenticationResult.Person);
                     WinTenantCredentials.SetCredentials(authenticationResult.Person.Id.Value, authenticationResult.TenantPassword);
                     using (var uow = _model.SelectedDataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
@@ -239,7 +245,7 @@ namespace Teleopti.Ccc.WinCode.Main
                     initApplication();
                     return true;
                 }
-				Logger.Info("EO Browser: Authentication was unsuccessful");
+				logInfo("EO Browser: Authentication was unsuccessful");
 				_model.Warning = authenticationResult.FailReason;
                 _model.AuthenticationType = AuthenticationTypeOption.Application;
                 return false;
@@ -256,7 +262,7 @@ namespace Teleopti.Ccc.WinCode.Main
 		}
 		private void initApplication()
 		{
-			Logger.Info("EO Browser: Loading the main application");
+			logInfo("EO Browser: Loading the main application");
 			_view.ClearForm(Resources.InitializingTreeDots);
 			setBusinessUnit();
 			if (!_initializer.InitializeApplication(_model.SelectedDataSourceContainer))
@@ -264,7 +270,7 @@ namespace Teleopti.Ccc.WinCode.Main
 				_view.Exit(DialogResult.Cancel);
 				return;
 			}
-			Logger.Info("EO Browser: Loaded the main application disposing the login screen now.");
+			logInfo("EO Browser: Loaded the main application disposing the login screen now.");
 			_view.Exit(DialogResult.OK);
 		}
 
