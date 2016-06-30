@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
             _personFinderReadOnlyRepository = personFinderReadOnlyRepository;
         }
 
-        [AsSystem, UnitOfWork]
+        [ImpersonateSystem, UnitOfWork]
         public virtual void Handle(PersonCollectionChangedEvent @event)
         {
             _personFinderReadOnlyRepository.UpdateFindPerson(@event.PersonIdCollection);

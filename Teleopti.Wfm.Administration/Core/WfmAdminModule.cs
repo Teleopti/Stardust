@@ -25,8 +25,8 @@ namespace Teleopti.Wfm.Administration.Core
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			var iocConf = new IocConfiguration(new IocArgs(new ConfigReader()), new FalseToggleManager());
-
+			var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader()));
+			var iocConf = new IocConfiguration(new IocArgs(new ConfigReader()), toggleManager);
 			builder.RegisterModule(new TenantServerModule(iocConf));
 			builder.RegisterApiControllers(typeof(HomeController).Assembly).ApplyAspects();
 			builder.RegisterModule(new CommonModule(iocConf));
@@ -39,6 +39,7 @@ namespace Teleopti.Wfm.Administration.Core
 			builder.RegisterType<LoadAllTenants>().As<ILoadAllTenants>().SingleInstance();
 			builder.RegisterType<Import>().SingleInstance();
 			builder.RegisterType<SaveTenant>().SingleInstance();
+			builder.RegisterType<CreateBusinessUnit>().SingleInstance();
 			builder.RegisterType<DbPathProvider>().As<IDbPathProvider>().SingleInstance();
 			builder.RegisterType<CheckPasswordStrength>().As<ICheckPasswordStrength>().SingleInstance();
 			builder.RegisterType<DeleteTenant>().SingleInstance();
@@ -50,7 +51,6 @@ namespace Teleopti.Wfm.Administration.Core
 			builder.RegisterType<UpgradeRunner>().SingleInstance();
 			builder.RegisterType<UpgradeLogRetriever>().As<IUpgradeLogRetriever>().SingleInstance();
 			builder.RegisterType<HangfireCookie>().As<IHangfireCookie>().SingleInstance();
-			
 			builder.Register(c => new LoadPasswordPolicyService(ConfigurationManager.AppSettings["ConfigurationFilesPath"])).SingleInstance().As<ILoadPasswordPolicyService>();
 			builder.RegisterType<PasswordPolicy>().SingleInstance().As<IPasswordPolicy>();
 		

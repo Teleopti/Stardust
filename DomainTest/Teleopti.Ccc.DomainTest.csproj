@@ -191,6 +191,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceRequestHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandlerTest.cs" />
     <Compile Include="ApplicationLayer\BackoutScheduleChangeCommandHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\BusinessUnit\AnalyticsBusinessUnitUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\FakeMessageBrokerComposite.cs" />
     <Compile Include="ApplicationLayer\Availability\AnalyticsAvailabilityUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodTransformerTests.cs" />

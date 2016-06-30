@@ -1,51 +1,46 @@
 ﻿using System;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Analytics;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.TestData.Analytics;
-using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Interfaces.Infrastructure;
-using BusinessUnit = Teleopti.Ccc.TestCommon.TestData.Analytics.BusinessUnit;
+using Teleopti.Ccc.Domain.UnitOfWork;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 {
 
 	[TestFixture]
 	[Category("LongRunning")]
-	[AnalyticsUnitOfWorkTest]
+	[AnalyticsDatabaseTest]
 	public class AnalyticsBusinessUnitRepositoryTest
 	{
-		public ICurrentAnalyticsUnitOfWork UnitOfWork;
 		public IAnalyticsBusinessUnitRepository Target;
-		private BusinessUnit businessUnitInAnalytics;
-		private ExistingDatasources datasourceInAnalytics;
-
-		[SetUp]
-		public void SetUp()
-		{
-			var analyticsDataFactory = new AnalyticsDataFactory();
-			var timeZones = new UtcAndCetTimeZones();
-			datasourceInAnalytics = new ExistingDatasources(timeZones);
-			businessUnitInAnalytics = new BusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest, datasourceInAnalytics);
-
-			analyticsDataFactory.Setup(businessUnitInAnalytics);
-			analyticsDataFactory.Persist();
-		}
+		public WithAnalyticsUnitOfWork WithAnalyticsUnitOfWork;
 
 		[Test]
 		public void ShouldGetBusinessUnitByCode()
 		{
-			var result = Target.Get(BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault());
+			var expected = new AnalyticBusinessUnit
+			{
+				BusinessUnitCode = Guid.NewGuid(),
+				BusinessUnitName = "TestBu",
+				DatasourceUpdateDate = DateTime.UtcNow.Truncate(TimeSpan.FromMinutes(1))
+			};
+			WithAnalyticsUnitOfWork.Do(() => Target.AddOrUpdate(expected));
 
-			result.BusinessUnitId.Should().Be.EqualTo(businessUnitInAnalytics.BusinessUnitId);
-			result.DatasourceId.Should().Be.EqualTo(datasourceInAnalytics.RaptorDefaultDatasourceId);
+			var result = WithAnalyticsUnitOfWork.Get(() => Target.Get(expected.BusinessUnitCode));
+
+			result.BusinessUnitId.Should().Be.GreaterThan(0);
+			result.DatasourceId.Should().Be.EqualTo(1);
+			result.BusinessUnitCode.Should().Be.EqualTo(expected.BusinessUnitCode);
+			result.BusinessUnitName.Should().Be.EqualTo(expected.BusinessUnitName);
+			result.DatasourceUpdateDate.Should().Be.EqualTo(expected.DatasourceUpdateDate);
 		}
 
 		[Test]
 		public void ShouldReturnNullForNotExistingBusinessUnit()
 		{
-			var result = Target.Get(Guid.NewGuid());
+			var result = WithAnalyticsUnitOfWork.Get(() => Target.Get(Guid.NewGuid()));
 
 			result.Should().Be.Null();
 		}

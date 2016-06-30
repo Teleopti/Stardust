@@ -21,7 +21,7 @@ namespace Teleopti.Wfm.Administration.Core
 
 		public DbCheckResultModel Exists(string databaseConnectionString, DatabaseType databaseType)
 		{
-         var dbType = "Teleopti WFM application database";
+			var dbType = "Teleopti WFM application database";
 			if (databaseType.Equals(DatabaseType.TeleoptiAnalytics))
 				dbType = "Teleopti WFM analytics database";
 
@@ -36,9 +36,8 @@ namespace Teleopti.Wfm.Administration.Core
 				return new DbCheckResultModel
 				{
 					Exists = false,
-					Message = string.Format("The connection string for {0} is not in the correct format!", dbType)
+					Message = $"The connection string for {dbType} is not in the correct format!"
 				};
-
 			}
 
 			var connection = new SqlConnection(databaseConnectionString);
@@ -51,7 +50,7 @@ namespace Teleopti.Wfm.Administration.Core
 				return new DbCheckResultModel
 				{
 					Exists = false,
-					Message = string.Format("Can not connect to the {0}. " + e.Message, dbType)
+					Message = $"Can not connect to the {dbType}. {e.Message}"
 				};
 			}
 
@@ -61,10 +60,10 @@ namespace Teleopti.Wfm.Administration.Core
 			};
 
 			if (!helper.ConfigureSystem().IsCorrectDb(databaseType))
-				return new DbCheckResultModel {Exists = false, Message = string.Format("The database is not a {0}.", dbType)};
+				return new DbCheckResultModel { Exists = false, Message = $"The database is not a {dbType}."};
 
 			//later check so it is not used in other Tenants?
-			return new DbCheckResultModel {Exists = true, Message = string.Format("{0} exists.", dbType)};
+			return new DbCheckResultModel { Exists = true, Message = $"{dbType} exists."};
 
 		}
 
@@ -83,7 +82,7 @@ namespace Teleopti.Wfm.Administration.Core
 				//return new DbCheckResultModel { Exists = false, Message = string.Format("The connection string for {0} is not in the correct format!") };
 				//
 			}
-			var helper = new DatabaseHelper(connectionToNewDb, databaseType) {Logger = new TenantLogger(tenant, tenantId), DbManagerFolderPath = _dbPathProvider.GetDbPath() };
+			var helper = new DatabaseHelper(connectionToNewDb, databaseType) { Logger = new TenantLogger(tenant, tenantId), DbManagerFolderPath = _dbPathProvider.GetDbPath() };
 			if (helper.Tasks().Exists(helper.DatabaseName))
 				return;
 
@@ -98,7 +97,7 @@ namespace Teleopti.Wfm.Administration.Core
 
 		public void AddDatabaseUser(string connectionToNewDb, DatabaseType databaseType, string login, string pwd, SqlVersion sqlVersion)
 		{
-			var helper = new DatabaseHelper(connectionToNewDb, databaseType) {DbManagerFolderPath = _dbPathProvider.GetDbPath()};
+			var helper = new DatabaseHelper(connectionToNewDb, databaseType) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
 			helper.AddPermissions(login, pwd, sqlVersion);
 		}
 
@@ -117,8 +116,9 @@ namespace Teleopti.Wfm.Administration.Core
 		public void AddBusinessUnit(string connectionToNewDb, string name)
 		{
 			var helper = new DatabaseHandler(new Ccc.ApplicationConfig.Common.CommandLineArgument(new string[0]));
+			var sessionFactory = helper.GetSessionFactory(connectionToNewDb);
 			var defaultDataCreator = new DefaultDataCreator(name, CultureInfo.CurrentCulture, TimeZoneInfo.Local, "", "",
-				helper.GetSessionFactory(connectionToNewDb),
+				sessionFactory,
 				TenantUnitOfWorkManager.Create(connectionToNewDb));
 			DefaultAggregateRoot defaultAggregateRoot = defaultDataCreator.Create();
 			defaultDataCreator.Save(defaultAggregateRoot);
@@ -127,7 +127,7 @@ namespace Teleopti.Wfm.Administration.Core
 		public bool LoginExists(string connectionToNewDb, string login, SqlVersion isAzure)
 		{
 			var helper = new DatabaseHelper(connectionToNewDb, DatabaseType.TeleoptiCCC7) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
-			return (helper.LoginTasks().LoginExists(login, isAzure));
+			return helper.LoginTasks().LoginExists(login, isAzure);
 		}
 
 		public void CreateLogin(string connectionToNewDb, string login, string password, SqlVersion sqlVersion)

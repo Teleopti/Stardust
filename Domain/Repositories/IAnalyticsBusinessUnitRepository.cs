@@ -6,5 +6,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 	public interface IAnalyticsBusinessUnitRepository
 	{
 		AnalyticBusinessUnit Get(Guid businessUnitCode);
+		void AddOrUpdate(AnalyticBusinessUnit businessUnit);
 	}
 }

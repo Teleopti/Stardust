@@ -193,10 +193,12 @@
     <Compile Include="Aop\AllBusinessUnitsUnitOfWorkAttribute.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IRunRequestWaitlistEventMessage.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandler.cs" />
+    <Compile Include="ApplicationLayer\BusinessUnit\AnalyticsBusinessUnitUpdater.cs" />
     <Compile Include="ApplicationLayer\Commands\BackoutScheduleChangeCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\BackoutScheduleChangeCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Availability\AnalyticsAvailabilityUpdater.cs" />
     <Compile Include="ApplicationLayer\Events\AvailabilityChangedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\BusinessUnitChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonRequestChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\SkillDayChangedEvent.cs" />
     <Compile Include="ApplicationLayer\ReadModelValidator\FixReadModelsEvent.cs" />

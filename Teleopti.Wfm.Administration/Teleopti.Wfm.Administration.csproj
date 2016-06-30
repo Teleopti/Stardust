@@ -148,6 +148,7 @@
     </Reference>
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -286,6 +287,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Controllers\HangfireController.cs" />
+    <Compile Include="Core\CreateBusinessUnit.cs" />
     <Compile Include="Core\Hangfire\HangfireCookie.cs" />
     <Compile Include="Core\Hangfire\HangfireDashboardAuthorization.cs" />
     <Compile Include="Core\NoCacheFilter.cs" />

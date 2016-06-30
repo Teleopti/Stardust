@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		{
 			_analyticsUnitOfWork = analyticsUnitOfWork;
 		}
+
 		public AnalyticBusinessUnit Get(Guid businessUnitCode)
 		{
 			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery($@"
@@ -31,6 +32,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.SetGuid(nameof(businessUnitCode), businessUnitCode)
 				.SetResultTransformer(Transformers.AliasToBean<AnalyticBusinessUnit>())
 				.UniqueResult<AnalyticBusinessUnit>();
+		}
+
+		public void AddOrUpdate(AnalyticBusinessUnit businessUnit)
+		{
+			_analyticsUnitOfWork.Current().Session().CreateSQLQuery($@"
+				exec [mart].[etl_dim_business_unit_add_or_update]
+					@business_unit_code=:{nameof(businessUnit.BusinessUnitCode)}
+					,@business_unit_name=:{nameof(businessUnit.BusinessUnitName)}
+					,@datasource_update_date=:{nameof(businessUnit.DatasourceUpdateDate)}
+			")
+			.SetParameter(nameof(businessUnit.BusinessUnitCode), businessUnit.BusinessUnitCode)
+			.SetParameter(nameof(businessUnit.BusinessUnitName), businessUnit.BusinessUnitName)
+			.SetParameter(nameof(businessUnit.DatasourceUpdateDate), businessUnit.DatasourceUpdateDate)
+			.ExecuteUpdate();
 		}
 	}
 }

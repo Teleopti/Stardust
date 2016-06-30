@@ -26,6 +26,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly ICheckPasswordStrength _checkPasswordStrength;
 		private readonly PersistTenant _persistTenant;
 		private readonly IUpdateCrossDatabaseView _updateCrossDatabaseView;
+		private readonly CreateBusinessUnit _createBusinessUnit;
 
 		public DatabaseController(
 			IDatabaseHelperWrapper databaseHelperWrapper, 
@@ -34,7 +35,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 			ILoadAllTenants loadAllTenants,
 			ICheckPasswordStrength checkPasswordStrength,
 			PersistTenant persistTenant,
-			IUpdateCrossDatabaseView updateCrossDatabaseView)
+			IUpdateCrossDatabaseView updateCrossDatabaseView,
+			CreateBusinessUnit createBusinessUnit)
 		{
 			_databaseHelperWrapper = databaseHelperWrapper;
 			_currentTenantSession = currentTenantSession;
@@ -43,6 +45,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			_checkPasswordStrength = checkPasswordStrength;
 			_persistTenant = persistTenant;
 			_updateCrossDatabaseView = updateCrossDatabaseView;
+			_createBusinessUnit = createBusinessUnit;
 		}
 
 
@@ -82,16 +85,14 @@ namespace Teleopti.Wfm.Administration.Controllers
 			var version = _databaseHelperWrapper.Version(connectionToNewDb);
 			_databaseHelperWrapper.CreateLogin(connectionToNewDb, model.AppUser, model.AppPassword, version);
 			_databaseHelperWrapper.CreateDatabase(appDbConnectionString, DatabaseType.TeleoptiCCC7, model.AppUser, model.AppPassword, version, model.Tenant, newTenant.Id);
-			_databaseHelperWrapper.AddBusinessUnit(appDbConnectionString, model.BusinessUnit);
+			
 			_databaseHelperWrapper.CreateDatabase(analyticsDbConnectionString, DatabaseType.TeleoptiAnalytics, model.AppUser, model.AppPassword, version, model.Tenant, newTenant.Id);
 			_databaseHelperWrapper.CreateDatabase(createAggDbConnectionString(model), DatabaseType.TeleoptiCCCAgg, model.AppUser, model.AppPassword, version, model.Tenant, newTenant.Id);
 
-			if (version.IsAzure)
-				_updateCrossDatabaseView.Execute(analyticsDbConnectionString, model.Tenant + "_TeleoptiWfmAnalytics");
-			else
-				_updateCrossDatabaseView.Execute(analyticsDbConnectionString, model.Tenant + "_TeleoptiWfmAgg");
+			_createBusinessUnit.Create(newTenant, model.BusinessUnit);
 
-			
+			_updateCrossDatabaseView.Execute(analyticsDbConnectionString,
+				version.IsAzure ? $"{model.Tenant}_TeleoptiWfmAnalytics" : $"{model.Tenant}_TeleoptiWfmAgg");
 
 			addSystemUserToTenant(newTenant, "first", "user", model.FirstUser, model.FirstUserPassword);
 
@@ -106,7 +107,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return Json(checkCreateDbInternal(createLoginConnectionString(model)));
 		}
 
-		private string createLoginConnectionString(CreateTenantModel model)
+		private static string createLoginConnectionString(CreateTenantModel model)
 		{
 			return new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
 			{
@@ -117,29 +118,29 @@ namespace Teleopti.Wfm.Administration.Controllers
 			}.ConnectionString;
 		}
 
-		private string createAppDbConnectionString(CreateTenantModel model)
+		private static string createAppDbConnectionString(CreateTenantModel model)
 		{
 			return new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
 			{
 				UserID = model.CreateDbUser,
 				Password = model.CreateDbPassword,
-				InitialCatalog = model.Tenant + "_TeleoptiWfmApp",
+				InitialCatalog = $"{model.Tenant}_TeleoptiWfmApp",
 				IntegratedSecurity = false,
 			}.ConnectionString;
 		}
 
-		private string createAnalyticsDbConnectionString(CreateTenantModel model)
+		private static string createAnalyticsDbConnectionString(CreateTenantModel model)
 		{
 			return new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
 			{
 				UserID = model.CreateDbUser,
 				Password = model.CreateDbPassword,
-				InitialCatalog = model.Tenant + "_TeleoptiWfmAnalytics",
+				InitialCatalog = $"{model.Tenant}_TeleoptiWfmAnalytics",
 				IntegratedSecurity = false,
 			}.ConnectionString;
 		}
 
-		private string createAggDbConnectionString(CreateTenantModel model)
+		private static string createAggDbConnectionString(CreateTenantModel model)
 		{
 			return new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
 			{
@@ -150,35 +151,35 @@ namespace Teleopti.Wfm.Administration.Controllers
 			}.ConnectionString;
 		}
 
-		private string appConnectionString(CreateTenantModel model)
+		private static string appConnectionString(CreateTenantModel model)
 		{
 			return new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
 			{
 				UserID = model.AppUser,
 				Password = model.AppPassword,
-				InitialCatalog = model.Tenant + "_TeleoptiWfmApp",
+				InitialCatalog = $"{model.Tenant}_TeleoptiWfmApp",
 				IntegratedSecurity = false,
 			}.ConnectionString;
 		}
 
-		private string analyticsConnectionString(CreateTenantModel model)
+		private static string analyticsConnectionString(CreateTenantModel model)
 		{
 			return new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
 			{
 				UserID = model.AppUser,
 				Password = model.AppPassword,
-				InitialCatalog = model.Tenant + "_TeleoptiWfmAnalytics",
+				InitialCatalog = $"{model.Tenant}_TeleoptiWfmAnalytics",
 				IntegratedSecurity = false,
 			}.ConnectionString;
 		}
 
-		private string aggConnectionString(CreateTenantModel model)
+		private static string aggConnectionString(CreateTenantModel model)
 		{
 			return new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
 			{
 				UserID = model.AppUser,
 				Password = model.AppPassword,
-				InitialCatalog = model.Tenant + "_TeleoptiWfmAgg",
+				InitialCatalog = $"{model.Tenant}_TeleoptiWfmAgg",
 				IntegratedSecurity = false,
 			}.ConnectionString;
 		}
@@ -192,7 +193,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			}
 			catch (Exception e)
 			{
-				return new TenantResultModel { Success = false, Message = "Can not connect to the database. " + e.Message };
+				return new TenantResultModel { Success = false, Message = $"Can not connect to the database. {e.Message}"};
 			}
 
 			var version = _databaseHelperWrapper.Version(connectionString);
@@ -254,7 +255,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 					new TenantResultModel
 					{
 						Success = false,
-						Message = "Login can not be created. " + message
+						Message = $"Login can not be created. {message}"
 					};
 				}
 
@@ -271,11 +272,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 					new TenantResultModel
 					{
 						Success = false,
-						Message = "Login can not be created. " + exception.Message
+						Message = $"Login can not be created. {exception.Message}"
 					};
 			}
-			
-
 		}
 
 		[HttpPost]
@@ -285,7 +284,6 @@ namespace Teleopti.Wfm.Administration.Controllers
 		{
 			return Json(checkFirstUserInternal(model.FirstUser, model.FirstUserPassword));
 		}
-		//
 
 		[HttpPost]
 		[TenantUnitOfWork]
@@ -328,8 +326,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 			{
 				return Json(new TenantResultModel { Success = false, Message = "Can not find this Tenant in the database." });
 			}
-			_databaseHelperWrapper.AddBusinessUnit(tenant.DataSourceConfiguration.ApplicationConnectionString, model.BuName);
-			return Json(new TenantResultModel {Message = string.Format("Created new Business Unit wih name: {0}",model.BuName), Success = true});
+			_createBusinessUnit.Create(tenant, model.BuName);
+
+			return Json(new TenantResultModel {Message = $"Created new Business Unit wih name: {model.BuName}", Success = true});
 		}
 		private TenantResultModel checkFirstUserInternal(string name, string password)
 		{

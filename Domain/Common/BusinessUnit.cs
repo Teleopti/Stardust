@@ -1,13 +1,15 @@
-using System.Linq;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-    public class BusinessUnit : VersionedAggregateRoot, IBusinessUnit, IDeleteTag
+    public class BusinessUnit : VersionedAggregateRoot, IBusinessUnit, IDeleteTag, IAggregateRootWithEvents
     {
     	private Description _description;
         private readonly IList<ISite> _siteCollection;
@@ -113,5 +115,24 @@ namespace Teleopti.Ccc.Domain.Common
         {
             _isDeleted = true;
         }
+
+	    public override IEnumerable<IEvent> PopAllEvents(INow now, DomainUpdateType? operation = null)
+	    {
+		    var events = base.PopAllEvents(now, operation).ToList();
+		    switch (operation)
+		    {
+			    case DomainUpdateType.Insert:
+			    case DomainUpdateType.Update:
+			    case DomainUpdateType.Delete:
+					events.Add(new BusinessUnitChangedEvent
+					{
+						BusinessUnitId = Id.GetValueOrDefault(),
+						BusinessUnitName = Name,
+						UpdatedOn = UpdatedOn.GetValueOrDefault(DateTime.UtcNow)
+					});
+				    break;
+		    }
+		    return events;
+	    }
     }
 }

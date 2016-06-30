@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Scenario
 			});
 		}
 
-		[AsSystem]
+		[ImpersonateSystem]
 		[AnalyticsUnitOfWork]
 		[UnitOfWork]
 		public virtual void Handle(ScenarioChangeEvent @event)

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			currentCurrentBusinessUnit = new FakeCurrentBusinessUnit();
 			((FakeCurrentBusinessUnit) currentCurrentBusinessUnit)
-				.FakeBusinessUnit(new BusinessUnit("TestBu"));
+				.FakeBusinessUnit(new Domain.Common.BusinessUnit("TestBu"));
 			currentDataSource = new FakeCurrentDatasource("TestDataSource");
 			publisher = new FakeEventPublisher();
 			target = new RunWaitlistCommandHandler(currentCurrentBusinessUnit,

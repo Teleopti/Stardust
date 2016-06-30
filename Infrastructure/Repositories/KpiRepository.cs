@@ -23,5 +23,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 #pragma warning restore 618
         {
         }
-    }
+
+		public KpiRepository(ICurrentUnitOfWork currentUnitOfWork)
+				: base(currentUnitOfWork)
+	    {
+		}
+	}
 }
