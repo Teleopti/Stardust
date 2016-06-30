@@ -150,7 +150,7 @@
 					cellTemplate: shiftcelltemplate,
 					headerCellFilter: 'translate',
 					width: "42%",
-					headerCellClass: 'white-cell-header'
+					headerCellClass: 'white-cell-header',
 				};
 
 				var columnDefs = [];
