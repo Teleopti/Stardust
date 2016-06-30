@@ -1370,6 +1370,7 @@
     <Content Include="WFM\js\reports\images\bronze.png" />
     <Content Include="WFM\js\reports\images\gold.png" />
     <Content Include="WFM\js\reports\images\silver.png" />
+    <Content Include="WFM\js\reports\leaderboard.agentBadge.factory.js" />
     <Content Include="WFM\js\reports\leaderboard.service.js" />
     <Content Include="WFM\js\reports\html\reports.html" />
     <Content Include="WFM\js\reports\leaderboard.controller.js" />

@@ -3,15 +3,15 @@
 
 	angular.module('wfm.reports').controller('LeaderBoardController', LeaderBoardCtrl);
 
-	LeaderBoardCtrl.$inject = ['LeaderBoardService', 'Toggle'];
+	LeaderBoardCtrl.$inject = ['LeaderBoardService', 'Toggle', 'LeaderBoardViewModelFactory'];
 
-	function LeaderBoardCtrl(LeaderBoardSvc, ToggleSvc) {
+	function LeaderBoardCtrl(LeaderBoardSvc, ToggleSvc, VMFactory) {
 		var vm = this;
 
 		vm.onKeyWordInSearchInputChanged = function () {
 			LeaderBoardSvc.getLeaderBoardData(vm.searchOptions.keyword).then(function (data) {
 				vm.searchOptions.keyword = data.Keyword;
-				vm.leaderBoardTableList = data.AgentBadges;
+				vm.leaderBoardTableList = VMFactory.Create(data.AgentBadges);
 			});
 		};
 
@@ -25,7 +25,7 @@
 
 			LeaderBoardSvc.getLeaderBoardData(vm.searchOptions.keyword).then(function (data) {
 				vm.searchOptions.keyword = data.Keyword;
-				vm.leaderBoardTableList = data.AgentBadges;
+				vm.leaderBoardTableList = VMFactory.Create(data.AgentBadges);
 			});
 		};
 

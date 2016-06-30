@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
@@ -30,7 +31,11 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Controllers
 			var result = new List<AgentBadgeOverview>();
 			if (string.IsNullOrEmpty(keyword) && myTeam == null)
 			{
-				result.AddRange(_agentBadgeProvider.GetAllAgentBadges(currentDate));
+				result.AddRange(
+					_agentBadgeProvider.GetAllAgentBadges(currentDate)
+						.OrderByDescending(x => x.Gold)
+						.ThenByDescending(x => x.Silver)
+						.ThenByDescending(x => x.Bronze));
 				return Json(new LeaderboardViewModel
 				{
 					Keyword = "",
@@ -39,7 +44,11 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Controllers
 			}
 			keyword = _parser.Keyword(keyword, currentDate);
 			var criteriaDic = _parser.Parse(keyword, currentDate);
-			result.AddRange(_agentBadgeProvider.GetAgentBadge(criteriaDic, currentDate));
+			result.AddRange(
+				_agentBadgeProvider.GetAgentBadge(criteriaDic, currentDate)
+					.OrderByDescending(x => x.Gold)
+					.ThenByDescending(x => x.Silver)
+					.ThenByDescending(x => x.Bronze));
 			return Json(new LeaderboardViewModel
 			{
 				Keyword = keyword,
