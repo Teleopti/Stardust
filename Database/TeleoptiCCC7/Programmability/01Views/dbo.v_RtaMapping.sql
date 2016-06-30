@@ -7,14 +7,14 @@ WITH SCHEMABINDING
 AS
 
 SELECT
-	ISNULL(m.BusinessUnit, g.BusinessUnit) AS BusinessUnitId,
+	ISNULL(m.BusinessUnit, ag.StateGroupBU) AS BusinessUnitId,
 
 	s.StateCode AS StateCode,
 	s.PlatformTypeId AS PlatformTypeId,
-	g.Id AS StateGroupId,
-	g.Name AS StateGroupName,
+	ag.StateGroupId,
+	ag.StateGroupName,
 
-	m.Activity AS ActivityId,
+	ag.ActivityId,
 
 	r.Id AS RuleId,
 	r.Name AS RuleName,
@@ -26,13 +26,32 @@ SELECT
 	r.AlarmColor AS AlarmColor,
 	r.ThresholdTime AS ThresholdTime
 
-FROM 
-	dbo.RtaMap m
-FULL JOIN dbo.RtaStateGroup g ON
-	g.Id = m.StateGroup
-FULL JOIN dbo.RtaState s ON
-	s.Parent = g.Id
+FROM
+(
+	SELECT 
+		a.Id ActivityId, 
+		g.Id StateGroupId, 
+		g.Name StateGroupName, 
+		g.BusinessUnit StateGroupBU 
+	FROM
+		(
+			SELECT Id FROM dbo.Activity 
+			UNION 
+			SELECT NULL
+		) a,
+		(
+			SELECT Id, Name, BusinessUnit FROM dbo.RtaStateGroup 
+			UNION 
+			SELECT NULL, NULL, NULL
+		) g
+) ag
+LEFT JOIN dbo.RtaMap m ON
+	ISNULL(m.Activity, '00000000-0000-0000-0000-000000000000') = ISNULL(ag.ActivityId, '00000000-0000-0000-0000-000000000000') AND
+	ISNULL(m.StateGroup, '00000000-0000-0000-0000-000000000000') = ISNULL(ag.StateGroupId, '00000000-0000-0000-0000-000000000000')
 LEFT JOIN dbo.RtaRule r ON
 	r.Id = m.RtaRule
+LEFT JOIN dbo.RtaState s ON
+	s.Parent = ag.StateGroupId
+
 
 GO
