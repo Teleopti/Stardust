@@ -1,8 +1,5 @@
 ﻿.wfm-requests {
 	position: relative;
-	height: 87vh;
-	background-color: $white;
-	margin-right: 15px;
 
 	.inline-block, .wfm-date-range-picker-wrap {
 		display: inline-block;
@@ -80,7 +77,8 @@
 	}
 
 	.panel {
-		height: 0;
+		height: 78vh;
+		margin-top: 2rem;
 	}
 
 	.filter-switch {
@@ -89,8 +87,9 @@
 	}
 
 	.operation-container {
-		padding-top: 12px;
-		padding-bottom: 12px;
+		height: 50px;
+		background-color: $white;
+		padding: 0;
 		padding-left: 12px;
 	}
 
@@ -252,8 +251,8 @@
 			overflow: visible;
 		}
 
-		.ui-grid-menu-button {
-			right: -15px;
+		.ui-grid-menu-button.ui-grid-menu-button {
+			margin-right: -15px;
 		}
 	}
 
@@ -263,8 +262,6 @@
 		.ui-grid-render-container-body .ui-grid-viewport {
 			position: absolute;
 		}
-
-		margin-right: 15px;
 
 		.ui-grid-row .ui-grid-cell {
 			border-bottom-color: $gray054 !important;

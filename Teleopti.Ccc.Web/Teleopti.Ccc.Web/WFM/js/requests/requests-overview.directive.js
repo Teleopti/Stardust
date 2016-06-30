@@ -173,7 +173,7 @@
 
 		function validateDateParameters(startDate, endDate) {
 			if (endDate === null || startDate === null) return false;
-			return !(moment(endDate).isBefore(startDate, 'day'));
+			return !(moment(endDate).isBefore(startDate, 'day')) && moment(startDate).year() > 1969 && moment(endDate).year() > 1969;
 		}
 
 		function postlink(scope, elem, attrs, ctrl) {

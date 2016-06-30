@@ -14,32 +14,28 @@
     <i class="mdi mdi-dots-vertical"></i>
     <span class="context-menu-left">
         <ul class="wfm-list">
-            <li class="wfm-btn wfm-btn-invis-primary"
-                ng-click="requestsCommandsPane.approveRequests()"
+            <li ng-click="requestsCommandsPane.approveRequests()"
                 ng-class="{'wfm-btn-primary-disabled' : requestsCommandsPane.disableCommands()}">
                 <i class="mdi mdi-check"></i>
-                <label><span translate>Approve</span></label>
+                <span translate>Approve</span>
             </li>
-            <li class="wfm-btn wfm-btn-invis-primary"
-                ng-click="requestsCommandsPane.denyRequests()"
+            <li ng-click="requestsCommandsPane.denyRequests()"
                 ng-class="{'wfm-btn-primary-disabled' : requestsCommandsPane.disableCommands()}">
                 <i class="mdi mdi-block-helper"></i>
-                <label><span translate>Deny</span></label>
+                <span translate>Deny</span>
             </li>
-            <li class="wfm-btn wfm-btn-invis-primary"
-                ng-click="requestsCommandsPane.toggleCancelConfirmationModal()"
+            <li ng-click="requestsCommandsPane.toggleCancelConfirmationModal()"
                 ng-show="requestsCommandsPane.cancelToggleIsEnabled()"
                 ng-class="{'wfm-btn-primary-disabled' : !requestsCommandsPane.canCancelRequests()}"
 				ng-if="!requestsCommandsPane.isShiftTradeViewActive">
                 <i class="mdi mdi-close"></i>
-                <label><span translate>Cancel</span></label>
+                <span translate>Cancel</span>
             </li>
-            <li class="wfm-btn wfm-btn-invis-primary"
-                ng-show="requestsCommandsPane.runWaitlistToggleIsEnabled()"
+            <li ng-show="requestsCommandsPane.runWaitlistToggleIsEnabled()"
                 ng-click="requestsCommandsPane.toggleProcessWaitlistModal()"
 				ng-if="!requestsCommandsPane.isShiftTradeViewActive">
                 <i class="mdi mdi-check"></i>
-                <label><span translate>ProcessWaitlist</span></label>
+                <span translate>ProcessWaitlist</span>
             </li>
         </ul>
     </span>
