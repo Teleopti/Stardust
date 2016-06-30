@@ -13466,4 +13466,10 @@ Dessa val är aktiverade:
   <data name="UnselectAllPeopleInEveryPage" xml:space="preserve">
     <value>Avmarkera alla agenter på alla sidor</value>
   </data>
+  <data name="DeletePerson" xml:space="preserve">
+    <value>Ta bort personer</value>
+  </data>
+  <data name="DateRangeIsAMaximumOfSixtyDays" xml:space="preserve">
+    <value>Datumintervallet kan inte vara mer än 60 dagar</value>
+  </data>
 </root>
