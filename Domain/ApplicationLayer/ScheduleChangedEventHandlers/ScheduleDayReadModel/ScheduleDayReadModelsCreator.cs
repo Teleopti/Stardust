@@ -7,6 +7,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 	{
 		public ScheduleDayReadModel GetReadModel(ProjectionChangedEventScheduleDay schedule, IPerson person)
 		{
+			if (schedule == null) return null;
+
 			var ret = new ScheduleDayReadModel();
 			var tz = person.PermissionInformation.DefaultTimeZone();
 

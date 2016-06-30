@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 
 		public bool Equals(ScheduleDayReadModel other)
 		{
+			if (other == null) return false;
 			return PersonId == other.PersonId
 				   && Date == other.Date
 				   && StartDateTime == other.StartDateTime

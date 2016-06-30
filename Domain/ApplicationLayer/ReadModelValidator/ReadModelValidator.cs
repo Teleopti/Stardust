@@ -100,7 +100,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 			if (scheduleDay == null) return true;
 			var fetchedReadModel = FetchReadModelPersonScheduleDay(person, date);
 			var builtReadModel = BuildReadModelPersonScheduleDay(person, scheduleDay);
-			return fetchedReadModel != null && builtReadModel != null && fetchedReadModel.Equals(builtReadModel);
+			if(builtReadModel == null) return fetchedReadModel == null;
+			return builtReadModel.Equals(fetchedReadModel);
 		}
 
 		public PersonScheduleDayReadModel FetchReadModelPersonScheduleDay(IPerson person, DateOnly date)
@@ -125,7 +126,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 			var fetchedReadModel = FetchReadModelScheduleDay(person, date);
 			var builtReadModel = BuildReadModelScheduleDay(person, scheduleDay);
 
-			return fetchedReadModel != null && builtReadModel != null && fetchedReadModel.Equals(builtReadModel);		
+			if (builtReadModel == null) return fetchedReadModel == null;
+			return builtReadModel.Equals(fetchedReadModel);				
 		}
 
 		public ScheduleDayReadModel FetchReadModelScheduleDay(IPerson person, DateOnly date)
@@ -151,7 +153,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 			var mappedReadModels = BuildReadModelScheduleProjectionReadOnly(person,scheduleDay);
 
 			var isValid = mappedReadModels.Count() != fetchedReadModels.Count()
-							|| mappedReadModels.Zip(fetchedReadModels, (a, b) => a != null && b != null && a.Equals(b)).All(x => x);
+							|| mappedReadModels.Zip(fetchedReadModels, (a, b) =>
+							{
+								if (a == null) return b == null;
+								return a.Equals(b);								
+							}).All(x => x);
 			return isValid;
 		}
 

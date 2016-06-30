@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		public int DisplayColor { get; set; }
 		public bool Equals(ScheduleProjectionReadOnlyModel other)
 		{
+			if (other == null) return false; 
 			return (PersonId == other.PersonId && ScenarioId == other.ScenarioId && BelongsToDate == other.BelongsToDate
 				&& PayloadId == other.PayloadId && WorkTime == other.WorkTime
 				&& ContractTime == other.ContractTime

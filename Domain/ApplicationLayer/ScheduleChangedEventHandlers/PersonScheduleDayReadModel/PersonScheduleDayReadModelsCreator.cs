@@ -33,6 +33,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 
 		public PersonScheduleDayReadModel MakePersonScheduleDayReadModel(IPerson person, ProjectionChangedEventScheduleDay scheduleDay)
 		{
+			if (scheduleDay == null) return null;
+
 			var readModel = new PersonScheduleDayReadModel
 			{
 				PersonId = person.Id.GetValueOrDefault(),

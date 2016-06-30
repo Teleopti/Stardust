@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		public DateTime ScheduleLoadTimestamp { get; set; }
 		public bool Equals(PersonScheduleDayReadModel other)
 		{
+			if (other == null) return false;
 			return (PersonId == other.PersonId && TeamId == other.TeamId && SiteId == other.SiteId &&
 					BusinessUnitId == other.BusinessUnitId && Date == other.Date && 
 					BelongsToDate == other.BelongsToDate && Start == other.Start &&
