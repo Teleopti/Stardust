@@ -165,7 +165,7 @@
 			targetScope.$digest();
 
 			var vm = getInnerScope(targetElement).requestsOverview;
-			expect(vm.filters[0].Status).toEqual('0,5');
+			expect(vm.filters[0].Status).toEqual('0 5');
 		});
 
 		it('should show pending shift trade request only by default', function () {
@@ -374,7 +374,7 @@
 			var status0 = " 79";
 			var status1 = "86 ";
 			var status2 = " 93 ";
-			test.scope.filters = [{ "Status": status0 + "," + status1 + "," + status2 }];
+			test.scope.filters = [{ "Status": status0 + " " + status1 + " " + status2 }];
 			test.scope.$digest();
 
 			var selectedStatus = test.target.isolateScope().requestsTableContainer.SelectedRequestStatuses;

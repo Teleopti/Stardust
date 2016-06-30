@@ -33,8 +33,10 @@
 			if (vm.filters && vm.filters.length > 0) {
 				vm.SelectedRequestStatuses = [];
 				var defaultStatusFilter = vm.filters[0].Status;
-				angular.forEach(defaultStatusFilter.split(','), function (value) {
-					vm.SelectedRequestStatuses.push({ Id: value.trim() });
+				angular.forEach(defaultStatusFilter.split(' '), function (value) {
+					if (value.trim() !== '') {
+						vm.SelectedRequestStatuses.push({ Id: value.trim() });
+					}
 				});
 			}
 		}
