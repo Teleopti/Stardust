@@ -34,7 +34,7 @@
 		<span class="people-search-input">
 			<people-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged"></people-search-input>
 		</span>
-
+		<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
 		<table>
 			<thead>
 				<tr>
