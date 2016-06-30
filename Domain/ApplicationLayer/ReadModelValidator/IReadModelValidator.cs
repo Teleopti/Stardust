@@ -18,9 +18,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 		bool ValidateReadModelPersonScheduleDay(IPerson person,DateOnly date,IScheduleDay scheduleDay);
 		PersonScheduleDayReadModel FetchReadModelPersonScheduleDay(IPerson person,DateOnly date);
 		PersonScheduleDayReadModel BuildReadModelPersonScheduleDay(IPerson person,IScheduleDay scheduleDay);
+		PersonScheduleDayReadModel BuildReadModelPersonScheduleDay(Guid personId, DateOnly date);
+
+
 		bool ValidateReadModelScheduleDay(IPerson person,DateOnly date,IScheduleDay scheduleDay);
 		ScheduleDayReadModel FetchReadModelScheduleDay(IPerson person,DateOnly date);
 		ScheduleDayReadModel BuildReadModelScheduleDay(IPerson person,IScheduleDay scheduleDay);
+		ScheduleDayReadModel BuildReadModelScheduleDay(Guid personId, DateOnly date);
+
 		bool ValidateReadModelScheduleProjectionReadOnly(IPerson person,DateOnly date,IScheduleDay scheduleDay);
 
 		IEnumerable<ScheduleProjectionReadOnlyModel> FetchReadModelScheduleProjectionReadOnly(IPerson person,

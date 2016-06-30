@@ -18,5 +18,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			Updated = readModels;
 		}
+
+		public int SaveReadModel(PersonScheduleDayReadModel model, bool initialLoad)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

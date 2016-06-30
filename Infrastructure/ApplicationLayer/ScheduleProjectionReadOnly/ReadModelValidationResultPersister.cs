@@ -50,10 +50,28 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 				.ExecuteUpdate();
 		}
 
-		public IEnumerable<ReadModelValidationResult> LoadAllInvalid()
+		public IEnumerable<ReadModelValidationResult> LoadAllInvalidScheduleProjectionReadOnly()
 		{
 			var result = _currentUnitOfWork.Session().CreateSQLQuery(
 				@"SELECT PersonId, BelongsToDate as [Date], IsValid FROM [ReadModel].[ScheduleProjectionReadOnly_check] WHERE IsValid = 0")
+				.SetResultTransformer(Transformers.AliasToBean<ReadModelValidationResult>())
+				.List<ReadModelValidationResult>();
+			return result;
+		}
+
+		public IEnumerable<ReadModelValidationResult> LoadAllInvalidPersonScheduleDay()
+		{
+			var result = _currentUnitOfWork.Session().CreateSQLQuery(
+				@"SELECT PersonId, BelongsToDate as [Date], IsValid FROM [ReadModel].[PersonScheduleDay_check] WHERE IsValid = 0")
+				.SetResultTransformer(Transformers.AliasToBean<ReadModelValidationResult>())
+				.List<ReadModelValidationResult>();
+			return result;
+		}
+
+		public IEnumerable<ReadModelValidationResult> LoadAllInvalidScheduleDay()
+		{
+			var result = _currentUnitOfWork.Session().CreateSQLQuery(
+				@"SELECT PersonId, BelongsToDate as [Date], IsValid FROM [ReadModel].[ScheduleDay_check] WHERE IsValid = 0")
 				.SetResultTransformer(Transformers.AliasToBean<ReadModelValidationResult>())
 				.List<ReadModelValidationResult>();
 			return result;

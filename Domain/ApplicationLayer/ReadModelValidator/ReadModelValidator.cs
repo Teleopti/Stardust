@@ -111,6 +111,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 			return _personScheduleDayReadModelFinder.ForPerson(date, person.Id.GetValueOrDefault());
 		}
 
+		public PersonScheduleDayReadModel BuildReadModelPersonScheduleDay(Guid personId, DateOnly date)
+		{
+			var person = _personRepository.Get(personId);
+			var scenario = _currentScenario.Current();
+			var schedule = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
+				new ScheduleDictionaryLoadOptions(false,false),
+				date.ToDateTimePeriod(TimeZoneInfo.Utc),
+				scenario);
+			var scheduleDay = schedule.SchedulesForDay(date).SingleOrDefault();
+
+			return BuildReadModelPersonScheduleDay(person, scheduleDay);
+		}
+
 		public PersonScheduleDayReadModel BuildReadModelPersonScheduleDay(IPerson person, IScheduleDay scheduleDay)
 		{
 			var eventScheduleDay = _builder.BuildEventScheduleDay(scheduleDay);
@@ -141,6 +154,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 		{
 			var eventScheduleDay = _builder.BuildEventScheduleDay(scheduleDay);
 			return _scheduleDayReadModelsCreator.GetReadModel(eventScheduleDay, person);
+		}
+
+		public ScheduleDayReadModel BuildReadModelScheduleDay(Guid personId, DateOnly date)
+		{
+			var person = _personRepository.Get(personId);
+			var scenario = _currentScenario.Current();
+			var schedule = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
+				new ScheduleDictionaryLoadOptions(false,false),
+				date.ToDateTimePeriod(TimeZoneInfo.Utc),
+				scenario);
+			var scheduleDay = schedule.SchedulesForDay(date).SingleOrDefault();
+
+			return BuildReadModelScheduleDay(person,scheduleDay);
 		}
 
 		#endregion

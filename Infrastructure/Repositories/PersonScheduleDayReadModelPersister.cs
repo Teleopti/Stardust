@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					Logger.Debug("Saving model PersonScheduleDayReadModel");
 				readModels.ForEach(readModel =>
 				{
-					var count = saveReadModel(readModel, initialLoad);
+					var count = SaveReadModel(readModel, initialLoad);
 					if (count > 0)
 					{
 						changed = true;
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				});
 		}
 
-		private int saveReadModel(PersonScheduleDayReadModel model, bool initialLoad)
+		public int SaveReadModel(PersonScheduleDayReadModel model, bool initialLoad)
 		{
 			if (Logger.IsDebugEnabled)
 				Logger.DebugFormat(
