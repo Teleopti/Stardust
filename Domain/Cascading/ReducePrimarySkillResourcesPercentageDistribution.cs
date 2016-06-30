@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 			var overstaffedPrimarySkills = new List<ISkill>();
 			foreach (var primarySkill in primarySkills)
 			{
-				var absDiff = skillStaffPeriodHolder.SkillStaffPeriodOrDefault(primarySkill, interval, 0).AbsoluteDifference;
+				var absDiff = skillStaffPeriodHolder.SkillStaffPeriodOrDefault(primarySkill, interval).AbsoluteDifference;
 				if (absDiff.IsOverstaffed())
 				{
 					totalPrimarySkillOverstaff += absDiff;
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 			foreach (var primarySkill in overstaffedPrimarySkills)
 			{
-				var skillStaffPeriod = skillStaffPeriodHolder.SkillStaffPeriodOrDefault(primarySkill, interval, 0);
+				var skillStaffPeriod = skillStaffPeriodHolder.SkillStaffPeriodOrDefault(primarySkill, interval);
 				var overstaffForSkill = skillStaffPeriod.AbsoluteDifference;
 				var percentageOverstaff = overstaffForSkill / totalPrimarySkillOverstaff;
 				var resourceToSubtract = resourcesMoved * percentageOverstaff;

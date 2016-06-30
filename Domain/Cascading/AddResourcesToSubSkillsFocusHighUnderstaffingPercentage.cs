@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 				foreach (var subSkillsWithSameIndex in skillGroup.SubSkillsWithSameIndex)
 				{
 					var totalUnderstaffingPercent = subSkillsWithSameIndex
-						.Select(paralellSkill => skillStaffPeriodHolder.SkillStaffPeriodOrDefault(paralellSkill, interval, 0))
+						.Select(paralellSkill => skillStaffPeriodHolder.SkillStaffPeriodOrDefault(paralellSkill, interval))
 						.Where(x => x.AbsoluteDifference.IsUnderstaffed())
 						.Sum(x => -x.RelativeDifference);
 
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 					foreach (var skillToMoveTo in subSkillsWithSameIndex)
 					{
-						var skillStaffPeriodTo = skillStaffPeriodHolder.SkillStaffPeriodOrDefault(skillToMoveTo, interval, 0);
+						var skillStaffPeriodTo = skillStaffPeriodHolder.SkillStaffPeriodOrDefault(skillToMoveTo, interval);
 						var skillToMoveToAbsoluteDifference = skillStaffPeriodTo.AbsoluteDifference;
 						if (!skillToMoveToAbsoluteDifference.IsUnderstaffed())
 							continue;

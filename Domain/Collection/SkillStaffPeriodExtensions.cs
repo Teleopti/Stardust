@@ -11,25 +11,26 @@ namespace Teleopti.Ccc.Domain.Collection
 			return skillStaffPeriod.CalculatedResource - skillStaffPeriod.CalculatedLoggedOn;
 		}
 
-		public static ISkillStaffPeriod SkillStaffPeriodOrDefault(this ISkillStaffPeriodDictionary skillStaffPeriodDictionary, DateTimePeriod period, int absoluteDiffIfNoSkillStaffPeriod)
-		{
-			ISkillStaffPeriod skillStaffPeriod;
-			return skillStaffPeriodDictionary.TryGetValue(period, out skillStaffPeriod) ? 
-				skillStaffPeriod :
-				createNullObject(absoluteDiffIfNoSkillStaffPeriod);
-		}
-
-		public static ISkillStaffPeriod SkillStaffPeriodOrDefault(this ISkillSkillStaffPeriodExtendedDictionary skillSkillStaffPeriodExtendedDictionary, ISkill skill, DateTimePeriod period, int absoluteDiffIfNoSkillStaffPeriod)
+		public static bool TryGetSkillStaffPeriod(this ISkillStaffPeriodHolder skillStaffPeriodHolder, ISkill skill, DateTimePeriod period, out ISkillStaffPeriod skillStaffPeriod)
 		{
 			ISkillStaffPeriodDictionary skillStaffPeriodDictionary;
-			return skillSkillStaffPeriodExtendedDictionary.TryGetValue(skill, out skillStaffPeriodDictionary) ?
-				SkillStaffPeriodOrDefault(skillStaffPeriodDictionary, period, absoluteDiffIfNoSkillStaffPeriod) : 
-				createNullObject(absoluteDiffIfNoSkillStaffPeriod);
+			if(skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(skill, out skillStaffPeriodDictionary))
+			{
+				if(skillStaffPeriodDictionary.TryGetValue(period, out skillStaffPeriod))
+				{
+					return true;
+				}
+			}
+			skillStaffPeriod = null;
+			return false;
 		}
-
-		public static ISkillStaffPeriod SkillStaffPeriodOrDefault(this ISkillStaffPeriodHolder skillStaffPeriodHolder, ISkill skill, DateTimePeriod period, int absoluteDiffIfNoSkillStaffPeriod)
+		
+		public static ISkillStaffPeriod SkillStaffPeriodOrDefault(this ISkillStaffPeriodHolder skillStaffPeriodHolder, ISkill skill, DateTimePeriod period)
 		{
-			return SkillStaffPeriodOrDefault(skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, skill, period, absoluteDiffIfNoSkillStaffPeriod);
+			ISkillStaffPeriod skillStaffPeriod;
+			return TryGetSkillStaffPeriod(skillStaffPeriodHolder, skill, period, out skillStaffPeriod) ? 
+				skillStaffPeriod : 
+				new skillStaffPeriodNullObject();
 		}
 
 		public static void AddResources(this ISkillStaffPeriod skillStaffPeriod, double resourceToAdd)
@@ -37,20 +38,8 @@ namespace Teleopti.Ccc.Domain.Collection
 			skillStaffPeriod.SetCalculatedResource65(skillStaffPeriod.CalculatedResource + resourceToAdd);
 		}
 
-
-		//behövs period?
-		private static ISkillStaffPeriod createNullObject(int absoluteDiffIfNoSkillStaffPeriod)
-		{
-			return new skillStaffPeriodNullObject(absoluteDiffIfNoSkillStaffPeriod);
-		}
-
 		private class skillStaffPeriodNullObject : ISkillStaffPeriod
 		{
-			public skillStaffPeriodNullObject(double absoluteDifference)
-			{
-				AbsoluteDifference = absoluteDifference;
-			}
-
 			public DateTimePeriod Period { get; }
 			public ISkillStaff Payload { get; }
 			public object Clone()
