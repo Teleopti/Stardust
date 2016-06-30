@@ -47,8 +47,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			builder.RegisterType<ResourceCalculateReadModelUpdater>().As<IHandle<UpdateResourceCalculateReadModelEvent>>().SingleInstance();
 			builder.RegisterType<ValidateReadModelsHandler>()
 				.As<IHandle<ValidateReadModelsEvent>>().SingleInstance().ApplyAspects();
-			builder.RegisterType<FixScheduleProjectionReadOnlyReadModelHandler>()
-				.As<IHandle<FixScheduleProjectionReadOnlyEvent>>().SingleInstance().ApplyAspects();
+			builder.RegisterType<FixReadModelsHandler>()
+				.As<IHandle<FixReadModelsEvent>>().SingleInstance().ApplyAspects();
 		}
 	}
 }

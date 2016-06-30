@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 {
-	public class FixScheduleProjectionReadOnlyEventHandler : IHandleEvent<FixScheduleProjectionReadOnlyEvent>,
+	public class FixReadModelsEventHandler : IHandleEvent<FixReadModelsEvent>,
 		IRunOnStardust
 	{
 		private readonly IReadModelValidator _validator;
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 		private readonly IScheduleProjectionReadOnlyPersister _scheduleProjectionReadOnlyPersister;
 		private readonly ICurrentScenario _currentScenario;
 
-		public FixScheduleProjectionReadOnlyEventHandler(IReadModelValidator validator,
+		public FixReadModelsEventHandler(IReadModelValidator validator,
 			IReadModelValidationResultPersister persister, IProjectionVersionPersister projectionVersionPersister,
 			IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister, ICurrentScenario currentScenario)
 		{
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 			_currentScenario = currentScenario;
 		}
 
-		public void Handle(FixScheduleProjectionReadOnlyEvent @event)
+		public void Handle(FixReadModelsEvent @event)
 		{
 			if (@event.Targets.Contains(ValidateReadModelType.ScheduleProjectionReadOnly))
 			{

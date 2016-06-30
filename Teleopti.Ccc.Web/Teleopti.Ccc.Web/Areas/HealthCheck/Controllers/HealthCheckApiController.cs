@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 				targets.Add(ValidateReadModelType.ScheduleDay);
 			}
 
-			var jobId = _stardustSender.Send(new FixScheduleProjectionReadOnlyEvent
+			var jobId = _stardustSender.Send(new FixReadModelsEvent
 			{
 				Targets = targets
 			});

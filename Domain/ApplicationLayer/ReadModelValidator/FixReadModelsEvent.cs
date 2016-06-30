@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 {
-	public class FixScheduleProjectionReadOnlyEvent : EventWithInfrastructureContext
+	public class FixReadModelsEvent : EventWithInfrastructureContext
 	{
 		public IList<ValidateReadModelType> Targets { get; set; }
 	}
