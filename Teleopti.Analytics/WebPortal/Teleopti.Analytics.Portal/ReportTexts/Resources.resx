@@ -1377,4 +1377,12 @@ Schedule</value>
     <value>Include details:</value>
     <comment>Include details:</comment>
   </data>
+  <data name="ResRequestStatusCancelled" xml:space="preserve">
+    <value>Cancelled</value>
+    <comment>Cancelled</comment>
+  </data>
+  <data name="ResRequestStatusWaitlisted" xml:space="preserve">
+    <value>Waitlisted</value>
+    <comment>Waitlisted</comment>
+  </data>
 </root>
