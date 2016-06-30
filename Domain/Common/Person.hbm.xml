@@ -156,22 +156,21 @@
 	<query name="AgentSkillMatrix">
 		<![CDATA[
     select new PersonSkillPair(per.Id, ps.Skill.Id)
-                        from Person as per
+												from Person as per
                         inner join per.PersonPeriodCollection as pp
-                        inner join pp.Team t
-                        inner join t.Site s
                         inner join pp.PersonSkillCollection as ps
-                    where exists(
+												inner join ps.Skill as sdSkill
+                    where sdSkill.BusinessUnit = :bu
+												and per.IsDeleted=0
+                        and sdSkill.IsDeleted=0
+												and pp.StartDate < :EndDateTime
+                        and pp.internalEndDate >= :StartDateTime
+                        and exists(
                                 from SkillDay sd
-                                    inner join sd.Skill sdSkill
-                                 where sdSkill=ps.Skill
-                                    and sdSkill.IsDeleted=0
+                                 where sdSkill=sd.Skill
                                     and sd.Scenario = :scenario
                                     and sd.CurrentDate between :StartDateTime and :EndDateTime)
                         and (per.TerminalDate is null or per.TerminalDate >= :StartDateTime)
-                        and s.BusinessUnit = :bu
-                        and pp.StartDate < :EndDateTime
-                        and pp.internalEndDate >= :StartDateTime
     ]]>
 	</query>
   <query name="AgentSiteMatrix">
@@ -182,6 +181,7 @@
                         inner join pp.Team t
                         inner join t.Site s
                         where (per.TerminalDate is null or per.TerminalDate >= :StartDateTime)
+												and per.IsDeleted=0
                         and s.MaxSeats is not null
                         and s.BusinessUnit = :bu
                         and pp.StartDate < :EndDateTime
