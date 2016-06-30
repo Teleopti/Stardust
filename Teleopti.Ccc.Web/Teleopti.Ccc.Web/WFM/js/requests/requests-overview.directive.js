@@ -32,7 +32,7 @@
 		vm.init = init;
 		vm.onIsActiveChange = onIsActiveChange;
 		vm.showSelectedRequestsInfo = showSelectedRequestsInfo;
-		vm.shiftTradeView = $attrs.shiftTradeView;
+		vm.shiftTradeView = $attrs.shiftTradeView != undefined;
 
 		getSelectedRequestsInfoText();
 		
