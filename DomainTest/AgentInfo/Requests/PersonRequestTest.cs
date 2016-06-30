@@ -211,18 +211,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			Assert.AreEqual("DeniedDueToRain", _target.DenyReason);
 		}
 
-		[Test]
-		[ExpectedExceptionAttribute(ExpectedException = typeof(InvalidRequestStateTransitionException))]
-		public void ShouldNotDenyAlreadyDeniedRequest()
-		{
-			_target.Pending();
-			_target.Deny(null, "DeniedDueToRain", _authorization, true);
-			Assert.IsTrue(_target.IsDenied);
-			Assert.IsFalse(((PersonRequest)_target).CanDeny(false));
-
-			_target.Deny(null, null, _authorization);
-		}
-
 		/// <summary>
 		/// Verifies the approve.
 		/// </summary>

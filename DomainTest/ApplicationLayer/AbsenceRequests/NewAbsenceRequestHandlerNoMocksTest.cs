@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
@@ -68,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				new MultisiteDayRepository(new FakeUnitOfWork()));
 			_scenarioRepository = new FakeScenarioRepository(_currentScenario.Current());
 
-			_loadSchedulesForRequestWithoutResourceCalculation = new LoadSchedulesForRequestWithoutResourceCalculation( _personAbsenceAccountRepository, _scheduleRepository);
+			_loadSchedulesForRequestWithoutResourceCalculation = new LoadSchedulesForRequestWithoutResourceCalculation(_personAbsenceAccountRepository, _scheduleRepository);
 			_loadSchedulingStateHolderForResourceCalculation = new LoadSchedulingStateHolderForResourceCalculation(_personRepository, _personAbsenceAccountRepository, skillRepository,
 				workloadRepository, _scheduleRepository, peopleAndSkillLoaderDecider, skillDayLoadHelper);
 		}
@@ -93,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var request = simpleRequestStatusTest(new DenyAbsenceRequest());
 			Assert.IsTrue(request.IsAutoDenied);
 		}
-		
+
 		[Test]
 		public void ShouldUpdateExistingPersonalAccountDataWhenConsumingAbsenceRequest()
 		{
@@ -128,9 +129,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			newAbsenceRequestConsumer.Handle(new NewAbsenceRequestCreatedEvent() { PersonRequestId = newRequest.Id.Value });
 
 			Assert.IsTrue(existingDeniedRequest.IsApproved);
-			Assert.IsNullOrEmpty (existingDeniedRequest.DenyReason);
+			Assert.IsNullOrEmpty(existingDeniedRequest.DenyReason);
 			//new request should be denied as is a request for the same day as the accepted absence request
-            //now it is denied
+			//now it is denied
 			Assert.IsTrue(newRequest.IsDenied && !newRequest.IsWaitlisted);
 		}
 
@@ -178,28 +179,28 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				existingDeniedRequest.Deny(null, "Work Hard!", new PersonRequestAuthorizationCheckerForTest());
 				personRequests[i] = existingDeniedRequest;
 			}
-			
+
 			var personOne = createAndSetupPerson(startDateTime, endDateTime, workflowControlSet);
 
 			var newRequest = createAbsenceRequest(personOne, absence, requestDateTimePeriod);
 			var newAbsenceRequestConsumer = createNewAbsenceRequestHandler(true, false);
 
 			var stopwatch = Stopwatch.StartNew();
-			
+
 			newAbsenceRequestConsumer.Handle(new NewAbsenceRequestCreatedEvent() { PersonRequestId = newRequest.Id.Value });
-			
+
 			stopwatch.Stop();
 			Console.WriteLine(stopwatch.Elapsed);
 
-			foreach (var  request in personRequests)
+			foreach (var request in personRequests)
 			{
-				Assert.IsTrue(request.IsApproved);	
+				Assert.IsTrue(request.IsApproved);
 			}
-			
+
 			Assert.IsTrue(newRequest.IsApproved);
-			
+
 		}
-		
+
 		[Test]
 		public void ShouldNotProcessManuallyDeniedRequestForDifferentPerson()
 		{
@@ -213,8 +214,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var personTwo = createAndSetupPerson(startDateTime, endDateTime, workflowControlSet);
 
 			var existingDeniedRequest = createAbsenceRequest(personOne, absence, requestDateTimePeriod);
-			existingDeniedRequest.Pending(); 
+			existingDeniedRequest.Pending();
 			existingDeniedRequest.Deny(null, "Work Hard!", new PersonRequestAuthorizationCheckerForTest());  // waitlist
+			existingDeniedRequest.Deny(null, "Work Hard!", new PersonRequestAuthorizationCheckerForTest());  // deny
 
 			var newRequest = createAbsenceRequest(personTwo, absence, requestDateTimePeriod);
 			var newAbsenceRequestConsumer = createNewAbsenceRequestHandler(true, false);
@@ -223,6 +225,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			Assert.IsTrue(existingDeniedRequest.IsDenied);
 			Assert.IsFalse(existingDeniedRequest.IsAutoDenied);
+			Assert.IsFalse(existingDeniedRequest.IsWaitlisted);
 			Assert.IsTrue(newRequest.IsApproved);
 		}
 
@@ -296,31 +299,31 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Assert.IsTrue(newRequest.IsPending);
 		}
 
-        [Test]
-        public void DuplicatedAbsenceRequestShouldGoToDeny()
-        {
-            var startDateTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc);
-            var endDateTime = new DateTime(2016, 3, 1, 23, 59, 00, DateTimeKind.Utc);
-            var requestDateTimePeriod = new DateTimePeriod(startDateTime, endDateTime);
-            var absence = AbsenceFactory.CreateAbsence("Holiday");
+		[Test]
+		public void DuplicatedAbsenceRequestShouldGoToDeny()
+		{
+			var startDateTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc);
+			var endDateTime = new DateTime(2016, 3, 1, 23, 59, 00, DateTimeKind.Utc);
+			var requestDateTimePeriod = new DateTimePeriod(startDateTime, endDateTime);
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
 
-            var workflowControlSetOne = createWorkFlowControlSet(new DateTime(2016, 01, 01), new DateTime(2016, 12, 31), absence, new GrantAbsenceRequest(), true);
-            var personOne = createAndSetupPerson(startDateTime, endDateTime, workflowControlSetOne);
+			var workflowControlSetOne = createWorkFlowControlSet(new DateTime(2016, 01, 01), new DateTime(2016, 12, 31), absence, new GrantAbsenceRequest(), true);
+			var personOne = createAndSetupPerson(startDateTime, endDateTime, workflowControlSetOne);
 
-            var existingWaitlistedRequest = createAbsenceRequest(personOne, absence, requestDateTimePeriod);
-            existingWaitlistedRequest.Deny(null, "Work Hard!", new PersonRequestAuthorizationCheckerForTest());
+			var existingWaitlistedRequest = createAbsenceRequest(personOne, absence, requestDateTimePeriod);
+			existingWaitlistedRequest.Deny(null, "Work Hard!", new PersonRequestAuthorizationCheckerForTest());
 
-            var newRequest = createAbsenceRequest(personOne, absence, requestDateTimePeriod);
-            var newAbsenceRequestConsumer = createNewAbsenceRequestHandler(true, false);
+			var newRequest = createAbsenceRequest(personOne, absence, requestDateTimePeriod);
+			var newAbsenceRequestConsumer = createNewAbsenceRequestHandler(true, false);
 
-            newAbsenceRequestConsumer.Handle(new NewAbsenceRequestCreatedEvent() { PersonRequestId = newRequest.Id.Value });
+			newAbsenceRequestConsumer.Handle(new NewAbsenceRequestCreatedEvent() { PersonRequestId = newRequest.Id.Value });
 
-            Assert.IsTrue(existingWaitlistedRequest.IsApproved);
-            Assert.IsTrue(newRequest.IsDenied && !newRequest.IsWaitlisted);
+			Assert.IsTrue(existingWaitlistedRequest.IsApproved);
+			Assert.IsTrue(newRequest.IsDenied && !newRequest.IsWaitlisted);
 
-        }
+		}
 
-        [Test]
+		[Test]
 		public void ShouldNotUpdateWaitlistedRequestsFromDifferentWorkflowControlSets()
 		{
 			var startDateTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -397,13 +400,62 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 
+		[Test]
+		public void ShouldAllowDenyReasonToBeUpdatedForWaitlistedRequest()
+		{
+
+			var startDateTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc);
+			var endDateTime = new DateTime(2016, 3, 1, 23, 59, 00, DateTimeKind.Utc);
+			var requestDateTimePeriod = new DateTimePeriod(startDateTime, endDateTime);
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+
+			var workflowControlSetOne = createWorkFlowControlSet(new DateTime(2016, 01, 01), new DateTime(2016, 12, 31), absence, new GrantAbsenceRequest(), true);
+			var personOne = createAndSetupPerson(startDateTime, endDateTime, workflowControlSetOne);
+			var personTwo = createAndSetupPerson(startDateTime, endDateTime, workflowControlSetOne);
+
+			var originalWaitlistedReason = "Original waitlisted reason";
+
+			var existingWaitlistedRequest = createAbsenceRequest(personOne, absence, requestDateTimePeriod);
+			existingWaitlistedRequest.Deny(null, originalWaitlistedReason, new PersonRequestAuthorizationCheckerForTest()); //waitlisted request
+
+			var accountDay = new AccountDay(new DateOnly(2016, 3, 1))
+			{
+				BalanceIn = TimeSpan.FromDays(0),
+				Accrued = TimeSpan.FromDays(0),
+				Extra = TimeSpan.FromDays(0)
+			};
+
+			createPersonAbsenceAccount(personOne, absence, accountDay);
+
+			var accountDay2 = new AccountDay(new DateOnly(2016, 3, 1))
+			{
+				BalanceIn = TimeSpan.FromDays(0),
+				Accrued = TimeSpan.FromDays(1),
+				Extra = TimeSpan.FromDays(0)
+			};
+
+			createPersonAbsenceAccount(personTwo, absence, accountDay2);
+
+
+			var newRequest = createAbsenceRequest(personTwo, absence, requestDateTimePeriod);
+			var newAbsenceRequestConsumer = createNewAbsenceRequestHandler(true, true);
+
+			newAbsenceRequestConsumer.Handle(new NewAbsenceRequestCreatedEvent() { PersonRequestId = newRequest.Id.Value });
+
+			Assert.IsTrue(existingWaitlistedRequest.IsWaitlisted);
+			Assert.AreNotEqual(originalWaitlistedReason, existingWaitlistedRequest.DenyReason);
+			Assert.IsTrue(newRequest.IsApproved);
+
+
+		}
+
 		private void createPersonAbsenceAccount(IPerson person, IAbsence absence, IAccount accountDay)
 		{
 			var personAbsenceAccount = new PersonAbsenceAccount(person, absence);
 			personAbsenceAccount.Absence.Tracker = Tracker.CreateDayTracker();
 			personAbsenceAccount.Add(accountDay);
 
-			var personAccountCollection = new PersonAccountCollection(person) {personAbsenceAccount};
+			var personAccountCollection = new PersonAccountCollection(person) { personAbsenceAccount };
 			_schedulingResultStateHolder.AllPersonAccounts = new Dictionary<IPerson, IPersonAccountCollection>
 			{
 				{person, personAccountCollection}
@@ -416,7 +468,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			foreach (var day in requestDateTimePeriod.ToDateOnlyPeriod(personOne.PermissionInformation.DefaultTimeZone()).DayCollection())
 			{
-				var assignment = createAssignment(personOne, DateTime.SpecifyKind(day.Date.AddHours(8),DateTimeKind.Utc), DateTime.SpecifyKind(day.Date.AddHours(17),DateTimeKind.Utc), _currentScenario);
+				var assignment = createAssignment(personOne, DateTime.SpecifyKind(day.Date.AddHours(8), DateTimeKind.Utc), DateTime.SpecifyKind(day.Date.AddHours(17), DateTimeKind.Utc), _currentScenario);
 				_scheduleRepository.Set(new[] { assignment });
 			}
 		}
@@ -465,7 +517,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private static WorkflowControlSet createWorkFlowControlSet(DateTime startDate, DateTime endDate, IAbsence absence, IProcessAbsenceRequest processAbsenceRequest, bool waitlistingIsEnabled)
 		{
 			var workflowControlSet = new WorkflowControlSet { AbsenceRequestWaitlistEnabled = waitlistingIsEnabled };
-			workflowControlSet.SetId (Guid.NewGuid());
+			workflowControlSet.SetId(Guid.NewGuid());
 
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
 
@@ -473,6 +525,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				Absence = absence,
 				AbsenceRequestProcess = processAbsenceRequest,
+				PersonAccountValidator = new PersonAccountBalanceValidator(),
 				Period = dateOnlyPeriod,
 				OpenForRequestsPeriod = dateOnlyPeriod
 			};
@@ -520,11 +573,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				new FakeScheduleDifferenceSaver(_scheduleRepository),
 				_personAccountUpdaterDummy, toggleManager);
 
-			var absenceProcessor = new AbsenceRequestProcessor (absenceRequestStatusUpdater, () => _schedulingResultStateHolder);
-			var absenceRequestWaitlistProcessor = new AbsenceRequestWaitlistProcessor (absenceRequestStatusUpdater, () => _schedulingResultStateHolder, new AbsenceRequestWaitlistProvider (_personRequestRepository));
-			
+			var absenceProcessor = new AbsenceRequestProcessor(absenceRequestStatusUpdater, () => _schedulingResultStateHolder);
+			var absenceRequestWaitlistProcessor = new AbsenceRequestWaitlistProcessor(absenceRequestStatusUpdater, () => _schedulingResultStateHolder, new AbsenceRequestWaitlistProvider(_personRequestRepository));
+
 			var newAbsenceRequestConsumer = new NewAbsenceRequestHandler(
-				_unitOfWorkFactory, _currentScenario,_personRequestRepository, absenceRequestWaitlistProcessor,absenceProcessor);
+				_unitOfWorkFactory, _currentScenario, _personRequestRepository, absenceRequestWaitlistProcessor, absenceProcessor);
 			return newAbsenceRequestConsumer;
 		}
 
@@ -535,6 +588,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				person,
 				new DateTimePeriod(startDate, endDate));
 		}
-		
+
 	}
 }

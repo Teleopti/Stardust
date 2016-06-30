@@ -181,13 +181,11 @@ public virtual bool TrySetMessage(string message)
 		{
 			authorization.VerifyEditRequestPermission(this);
 			_alreadyAbsent = alreadyAbsence;
-			if (!CanDeny(isAutoDeny))
+			if (CanDeny(isAutoDeny))
 			{
-				throw new InvalidRequestStateTransitionException();
+				RequestState.Deny();
 			}
-
-			RequestState.Deny();
-
+			
 			var request = getRequest();
 			request?.Deny(denyPerson);
 
