@@ -42,9 +42,11 @@ define([
 		
 		if (self.trackReadModelCheckId()) {
 			pollJobStatus(self.trackReadModelCheckId(), function (data) {
-				var job = JSON.parse(data.Serialized);
-				self.readModelCheckStartDate(job.StartDate.substr(0, 10));
-				self.readModelCheckEndDate(job.EndDate.substr(0, 10));
+				if (data != null) {
+					var job = JSON.parse(data.Serialized);
+					self.readModelCheckStartDate(job.StartDate.substr(0, 10));
+					self.readModelCheckEndDate(job.EndDate.substr(0, 10));
+				}				
 				self.readmodelCheckIsRunning(false);
 			});
 		}		
@@ -55,8 +57,8 @@ define([
 			}
 			self.readmodelCheckIsRunning(true);
 			var polling = setInterval(function pollServer() {
-				http.get(self.getReadmodelCheckUrl(jobId)).done(function (data) {
-					if (data && data.Result) {
+				http.get(self.getReadmodelCheckUrl(jobId)).done(function (data) {					
+					if (data == null || data.Result) {
 						clearInterval(polling);
 						onComplete(data);
 					}
