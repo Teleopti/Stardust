@@ -183,8 +183,23 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		[HttpGet, Route("HealthCheck/FixScheduleProjectionReadOnly")]
 		public virtual IHttpActionResult FixScheduleProjectionReadOnly()
 		{
-			_publisher.Publish(new FixScheduleProjectionReadOnlyEvent());
-			return Ok();
+			var targets = new List<ValidateReadModelType>();
+			targets.Add(ValidateReadModelType.ScheduleProjectionReadOnly);
+			if(_toggleManager.IsEnabled(Toggles.HealthCheck_ValidateReadModelPersonScheduleDay_39421))
+			{
+				targets.Add(ValidateReadModelType.PersonScheduleDay);
+			}
+
+			if(_toggleManager.IsEnabled(Toggles.HealthCheck_ValidateReadModelScheduleDay_39423))
+			{
+				targets.Add(ValidateReadModelType.ScheduleDay);
+			}
+
+			var jobId = _stardustSender.Send(new FixScheduleProjectionReadOnlyEvent
+			{
+				Targets = targets
+			});
+			return Ok(jobId);
 		}
 	}
 }

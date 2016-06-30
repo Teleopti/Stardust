@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Collection;
@@ -30,20 +31,35 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 
 		public void Handle(FixScheduleProjectionReadOnlyEvent @event)
 		{
-			var invalidRecords = _persister.LoadAllInvalid();
-
-			foreach (var record in invalidRecords)
+			if (@event.Targets.Contains(ValidateReadModelType.ScheduleProjectionReadOnly))
 			{
-				var date = new DateOnly(record.Date);
-				var version =
-					_projectionVersionPersister.LockAndGetVersions(record.PersonId, date, date).FirstOrDefault()?.Version;
+				var invalidRecords = _persister.LoadAllInvalid();
 
-				_scheduleProjectionReadOnlyPersister.BeginAddingSchedule(date, _currentScenario.Current().Id.GetValueOrDefault(),
-					record.PersonId, version ?? 0);
+				foreach(var record in invalidRecords)
+				{
+					var date = new DateOnly(record.Date);
+					var version =
+						_projectionVersionPersister.LockAndGetVersions(record.PersonId,date,date).FirstOrDefault()?.Version;
 
-				var readModels = _validator.BuildReadModelScheduleProjectionReadOnly(record.PersonId, date);
-				readModels.ForEach(_scheduleProjectionReadOnlyPersister.AddActivity);
+					_scheduleProjectionReadOnlyPersister.BeginAddingSchedule(date,_currentScenario.Current().Id.GetValueOrDefault(),
+						record.PersonId,version ?? 0);
+
+					var readModels = _validator.BuildReadModelScheduleProjectionReadOnly(record.PersonId,date);
+					readModels.ForEach(_scheduleProjectionReadOnlyPersister.AddActivity);
+				}
 			}
+
+			if (@event.Targets.Contains(ValidateReadModelType.PersonScheduleDay))
+			{
+				throw new NotImplementedException();
+			}
+
+			if(@event.Targets.Contains(ValidateReadModelType.ScheduleDay))
+			{
+				throw new NotImplementedException();
+			}
+
+
 		}
 	}
 }
