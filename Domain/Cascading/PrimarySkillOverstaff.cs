@@ -10,24 +10,42 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 		public double Sum(ISkillStaffPeriodHolder skillStaffPeriodHolder, CascadingSkillGroup skillGroup, DateTimePeriod interval)
 		{
-			var overstaffSum = 0d;
+			var overstaffingOnOverstaffedSkills = 0d;
+			var resourcesOnSkillsOnCurrentSkillGroup = 0d;
 			var allPrimarySkillsClosed = true;
+			var forcastedForOverstaffedSkills = 0d;
 
 			foreach (var primarySkill in skillGroup.PrimarySkills)
 			{
-				var overStaff = skillStaffPeriodHolder.SkillStaffPeriodOrDefault(primarySkill, interval, highValueForClosedSkill).AbsoluteDifference;
-				if (skillIsClosed(overStaff))
+				var skillStaffPeriod = skillStaffPeriodHolder.SkillStaffPeriodOrDefault(primarySkill, interval, highValueForClosedSkill);
+				var absDiff = skillStaffPeriod.AbsoluteDifference;
+				
+				if (skillIsClosed(absDiff))
 					continue;
 
+				resourcesOnSkillsOnCurrentSkillGroup += skillStaffPeriod.CalculatedResource;
+				if (absDiff.IsOverstaffed())
+				{
+					forcastedForOverstaffedSkills += skillStaffPeriod.FStaff;
+					overstaffingOnOverstaffedSkills += absDiff;
+				}
 				allPrimarySkillsClosed = false;
-				overstaffSum += overStaff;
 			}
 
 			if (allPrimarySkillsClosed)
 			{
-				overstaffSum = highValueForClosedSkill;
+				return highValueForClosedSkill;
 			}
-			return overstaffSum;
+			var resourcesOnSkillsComingFromOtherSkillGroups = resourcesOnSkillsOnCurrentSkillGroup - skillGroup.Resources;
+			if (resourcesOnSkillsComingFromOtherSkillGroups > overstaffingOnOverstaffedSkills)
+			{
+				return overstaffingOnOverstaffedSkills;
+			}
+
+			var overstaffingToBeKeptForOtherSkillGroups = resourcesOnSkillsComingFromOtherSkillGroups - forcastedForOverstaffedSkills;
+			return overstaffingToBeKeptForOtherSkillGroups > 0
+				? overstaffingOnOverstaffedSkills - overstaffingToBeKeptForOtherSkillGroups
+				: overstaffingOnOverstaffedSkills;
 		}
 
 		private static bool skillIsClosed(double overStaff)

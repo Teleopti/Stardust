@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				.Should().Be.EqualTo(0.5);
 		}
 
-		[Test, Ignore("To be fixed")]
+		[Test]
 		public void ShouldMoveResourcesIfOnePrimarySkillIsOverstaffed()
 		{
 			var scenario = new Scenario("_");
