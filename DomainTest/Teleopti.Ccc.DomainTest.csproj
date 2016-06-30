@@ -269,7 +269,6 @@
     <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationContextTest.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationFocusHighUnderstaffingPercentageTest.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationOverstaffedParallellSkillsTest.cs" />
-    <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationShovelResourcesPercentageDistributionTest.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationTest.cs" />
     <Compile Include="Logon\ImpersonateSystemTest.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeRequestHandlerTest.cs" />

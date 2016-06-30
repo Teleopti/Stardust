@@ -5,13 +5,11 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -21,17 +19,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_CascadingSkills_38524)]
-	[TestFixture(typeof(ShovelResourcesPercentageDistribution))]
-	[TestFixture(typeof(ShovelResourcesFocusHighUnderstaffingPercentage))]
-	public class CascadingResourceCalculationOverstaffedParallellSkillsTest : ISetup
+	public class CascadingResourceCalculationOverstaffedParallellSkillsTest
 	{
-		private readonly Type _implTypeToTest;
 		public IResourceOptimizationHelper Target;
-
-		public CascadingResourceCalculationOverstaffedParallellSkillsTest(Type implTypeToTest)
-		{
-			_implTypeToTest = implTypeToTest;
-		}
 
 		[Test]
 		public void ShouldMoveResourceToTwoSkillsWithSameDemand()
@@ -400,11 +390,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				.Should().Be.EqualTo(0);
 			skillDayB2.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0);
-		}
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			system.UseTestDoubleForType(_implTypeToTest).For<IShovelResourcesPerActivityIntervalSkillGroup>();
 		}
 	}
 }

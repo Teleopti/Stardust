@@ -71,7 +71,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<ShovelResources>().SingleInstance();
-			builder.RegisterType<AddResourcesToSubSkillsPercentageDistribution>().SingleInstance();
 			builder.RegisterType<AddResourcesToSubSkillsFocusHighUnderstaffingPercentage>().SingleInstance();
 			builder.RegisterType<ShovelResourcesFocusHighUnderstaffingPercentage>().As<IShovelResourcesPerActivityIntervalSkillGroup>().SingleInstance();
 			builder.RegisterType<PrimarySkillOverstaff>().SingleInstance();

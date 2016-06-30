@@ -208,10 +208,8 @@
     <Compile Include="ApplicationLayer\Rta\ViewModels\SkillViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\SkillDay\AnalyticsForecastWorkloadUpdater.cs" />
     <Compile Include="Cascading\AddResourcesToSubSkillsFocusHighUnderstaffingPercentage.cs" />
-    <Compile Include="Cascading\AddResourcesToSubSkillsPercentageDistribution.cs" />
     <Compile Include="Cascading\IShovelResourcesPerActivityIntervalSkillGroup.cs" />
     <Compile Include="Cascading\ShovelResourcesFocusHighUnderstaffingPercentage.cs" />
-    <Compile Include="Cascading\ShovelResourcesPercentageDistribution.cs" />
     <Compile Include="Cascading\SubSkillsWithSameIndex.cs" />
     <Compile Include="Cascading\CascadingSkills.cs" />
     <Compile Include="Cascading\PrimarySkillOverstaff.cs" />
