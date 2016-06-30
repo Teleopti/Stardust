@@ -426,7 +426,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
-		public FakeDatabase WithActivty2(Guid? id)
+		public FakeDatabase WithActivity(Guid? id)
 		{
 			_activity = new Activity(RandomName.Make());
 			_activity.SetId(id ?? Guid.NewGuid());
@@ -434,9 +434,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
-		public FakeDatabase WithActivty(string startTime, string endTime)
+		public FakeDatabase WithAssignedActivity(string startTime, string endTime)
 		{
-			ensureExists(_activities, null, () => this.WithActivty2(null));
+			ensureExists(_activities, null, () => this.WithActivity(null));
 			_personAssignment.AddActivity(_activity, new DateTimePeriod(startTime.Utc(), endTime.Utc()));
 			return this;
 		}

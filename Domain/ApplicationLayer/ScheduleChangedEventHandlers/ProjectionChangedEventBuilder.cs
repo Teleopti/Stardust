@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			var layers = new List<ProjectionChangedEventLayer>();
 
-			foreach (var layer in ((VisualLayerCollection) projection).UnMergedCollection)
+			foreach (var layer in projection)
 			{
 				var isPayloadAbsence = (layer.Payload is IAbsence);
 				var description = isPayloadAbsence

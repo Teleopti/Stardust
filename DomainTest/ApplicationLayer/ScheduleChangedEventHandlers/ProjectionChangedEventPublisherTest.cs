@@ -34,7 +34,63 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		public MutableNow Now;
 
 		[Test]
-		public void ShouldPublishWithDayOffData3()
+		public void ShouldPublishWithActivity()
+		{
+			var person = Guid.NewGuid();
+			var scenario = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.WithAgent(person, "jågej")
+				.WithActivity(phone)
+				.WithScenario(scenario)
+				.WithAssignment("2016-06-30", person)
+				.WithAssignedActivity("2016-06-30 08:00", "2016-06-30 17:00")
+				;
+
+			Target.Handle(new ScheduleChangedEventForTest
+			{
+				StartDateTime = "2016-06-30 08:00".Utc(),
+				EndDateTime = "2016-06-30 17:00".Utc(),
+				PersonId = person,
+				ScenarioId = scenario
+			});
+
+			var scheduleDay = Publisher.PublishedEvents.OfType<ProjectionChangedEvent>().Single()
+				.ScheduleDays.Single(x => x.Date == "2016-06-30".Utc());
+			scheduleDay.Shift.Layers.Single().StartDateTime.Should().Be("2016-06-30 08:00".Utc());
+			scheduleDay.Shift.Layers.Single().EndDateTime.Should().Be("2016-06-30 17:00".Utc());
+			scheduleDay.Shift.Layers.Single().PayloadId.Should().Be(phone);
+		}
+		[Test]
+		public void ShouldPublishWithMergedActivities()
+		{
+			var person = Guid.NewGuid();
+			var scenario = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.WithAgent(person, "jågej")
+				.WithActivity(phone)
+				.WithScenario(scenario)
+				.WithAssignment("2016-06-30", person)
+				.WithAssignedActivity("2016-06-30 08:00", "2016-06-30 09:00")
+				.WithAssignedActivity("2016-06-30 08:45", "2016-06-30 10:00")
+				;
+
+			Target.Handle(new ScheduleChangedEventForTest
+			{
+				StartDateTime = "2016-06-30 08:00".Utc(),
+				EndDateTime = "2016-06-30 17:00".Utc(),
+				PersonId = person,
+				ScenarioId = scenario
+			});
+
+			var scheduleDay = Publisher.PublishedEvents.OfType<ProjectionChangedEvent>().Single()
+				.ScheduleDays.Single(x => x.Date == "2016-06-30".Utc());
+			scheduleDay.Shift.Layers.Single().PayloadId.Should().Be(phone);
+		}
+
+		[Test]
+		public void ShouldPublishWithDayOffData()
 		{
 			var person = Guid.NewGuid();
 			var scenario = Guid.NewGuid();
@@ -173,7 +229,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				.WithAgent(person, "jågej")
 				.WithScenario(scenario)
 				.WithAssignment("2016-10-07", person)
-				.WithActivty("2016-10-07 22:00", "2016-10-08 06:00")
+				.WithAssignedActivity("2016-10-07 22:00", "2016-10-08 06:00")
 				.WithAssignment("2016-10-08", person)
 				.WithDayOff()
 				;
@@ -203,7 +259,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				.WithAgent(person, "jågej")
 				.WithScenario(scenario)
 				.WithAssignment("2016-10-07", person)
-				.WithActivty("2016-10-07 22:00", "2016-10-08 06:00")
+				.WithAssignedActivity("2016-10-07 22:00", "2016-10-08 06:00")
 				;
 
 			Target.Handle(new ScheduleChangedEventForTest
@@ -228,7 +284,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				.WithAgent(person, "jågej")
 				.WithScenario(scenario)
 				.WithAssignment("2016-10-07", person)
-				.WithActivty("2016-10-07 08:00", "2016-10-07 17:00")
+				.WithAssignedActivity("2016-10-07 08:00", "2016-10-07 17:00")
 				;
 
 			Target.Handle(new ScheduleChangedEventForTest
@@ -297,5 +353,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				.ScheduleDays.Single(x => x.Date == "2016-10-07".Utc())
 				.Version.Should().Be(2);
 		}
+
 	}
 }
