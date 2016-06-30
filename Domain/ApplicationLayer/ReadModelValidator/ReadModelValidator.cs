@@ -55,9 +55,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 
 			people.ForEach(person =>
 			{
+				var extendedDateOnlyPeriod = new DateOnlyPeriod(dateOnlyPeriod.StartDate.AddDays(-1), dateOnlyPeriod.EndDate.AddDays(1));
+
 				var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
 					new ScheduleDictionaryLoadOptions(false, false),
-					dateOnlyPeriod.ToDateTimePeriod(TimeZoneInfo.Utc),
+					extendedDateOnlyPeriod.ToDateTimePeriod(TimeZoneInfo.Utc),
 					scenario);
 				dateOnlyPeriod.DayCollection().ForEach(day =>
 				{
