@@ -215,7 +215,6 @@ Scenario: Can approve requests
 	And I select to load requests in status 'Approved'
 	Then I should see request for 'Ashley Andeen' approved
 
-@ignore
 @OnlyRunIfEnabled('Wfm_Requests_ApproveDeny_36297')
 Scenario: Can approve waitlisted requests
 	Given 'John Smith' has an open workflow control set with absence request waitlisting enabled
@@ -228,9 +227,9 @@ Scenario: Can approve waitlisted requests
 	When I view wfm requests
 	And I select to load requests from '2015-03-01' to '2015-03-02'
 	And I approve all requests that I see
+	And I select to load requests in status 'Approved'
 	Then I should see request for 'John Smith' approved
 
-@ignore
 @OnlyRunIfEnabled('Wfm_Requests_ApproveDeny_36297')
 Scenario: Can deny waitlisted requests
 	Given 'John Smith' has an open workflow control set with absence request waitlisting enabled
@@ -243,6 +242,7 @@ Scenario: Can deny waitlisted requests
 	When I view wfm requests
 	And I select to load requests from '2015-03-01' to '2015-03-02'
 	And I deny all requests that I see
+	And I select to load requests in status 'Denied'
 	Then I should see request for 'John Smith' denied
 
 @ignore
