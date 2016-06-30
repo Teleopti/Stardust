@@ -36,6 +36,8 @@ namespace SdkTestWinGui
         private void drawSkillData(TabPage page)
         {
             _panel.Visible = false;
+			// no forecast today
+	        if (page == null) return;
             SkillDay skillDay = (SkillDay)page.Tag;
             _intradayGrid.Columns.Clear();
             _intradayGrid.Rows.Clear();
