@@ -9,17 +9,20 @@ namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class ShovelResources
 	{
-		private readonly IShovelResourcesPerActivityIntervalSkillGroup _shovelResourcesPerActivityIntervalSkillGroup;
+		private readonly AddResourcesToSubSkillsFocusHighUnderstaffingPercentage _addResourcesToSubSkillsFocusHighUnderstaffingPercentage;
+		private readonly ReducePrimarySkillResourcesPercentageDistribution _reducePrimarySkillResourcesPercentageDistribution;
 		private readonly SkillGroupPerActivityProvider _skillGroupPerActivityProvider;
 		private readonly PrimarySkillOverstaff _primarySkillOverstaff;
 		private readonly ITimeZoneGuard _timeZoneGuard;
 
-		public ShovelResources(IShovelResourcesPerActivityIntervalSkillGroup shovelResourcesPerActivityIntervalSkillGroup,
+		public ShovelResources(AddResourcesToSubSkillsFocusHighUnderstaffingPercentage addResourcesToSubSkillsFocusHighUnderstaffingPercentage,
+			ReducePrimarySkillResourcesPercentageDistribution reducePrimarySkillResourcesPercentageDistribution,
 			SkillGroupPerActivityProvider skillGroupPerActivityProvider,
 			PrimarySkillOverstaff primarySkillOverstaff,
 			ITimeZoneGuard timeZoneGuard)
 		{
-			_shovelResourcesPerActivityIntervalSkillGroup = shovelResourcesPerActivityIntervalSkillGroup;
+			_addResourcesToSubSkillsFocusHighUnderstaffingPercentage = addResourcesToSubSkillsFocusHighUnderstaffingPercentage;
+			_reducePrimarySkillResourcesPercentageDistribution = reducePrimarySkillResourcesPercentageDistribution;
 			_skillGroupPerActivityProvider = skillGroupPerActivityProvider;
 			_primarySkillOverstaff = primarySkillOverstaff;
 			_timeZoneGuard = timeZoneGuard;
@@ -47,8 +50,9 @@ namespace Teleopti.Ccc.Domain.Cascading
 								foreach (var skillGroup in _skillGroupPerActivityProvider.FetchOrdered(cascadingSkills, activity, interval))
 								{
 									var primarySkillOverstaff = _primarySkillOverstaff.Sum(skillStaffPeriodHolder, skillGroup, interval);
-									var shovelResourcesState = new ShovelResourcesState(skillGroup.Resources, primarySkillOverstaff);
-									_shovelResourcesPerActivityIntervalSkillGroup.Execute(shovelResourcesState, skillStaffPeriodHolder, activity, interval, skillGroup);
+									var state = new ShovelResourcesState(skillGroup.Resources, primarySkillOverstaff);
+									_addResourcesToSubSkillsFocusHighUnderstaffingPercentage.Execute(state, skillStaffPeriodHolder, skillGroup, interval);
+									_reducePrimarySkillResourcesPercentageDistribution.Execute(skillStaffPeriodHolder, skillGroup.PrimarySkills, interval, state.ResourcesMoved);
 								}
 							}
 						}

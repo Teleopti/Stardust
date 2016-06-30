@@ -5,13 +5,11 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -22,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 	//specific tests when ShovelResourcesFocusHighUnderstaffingPercentage is used for IShovelResourcesPerActivityIntervalSkillGroup
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_CascadingSkills_38524)]
-	public class CascadingResourceCalculationFocusHighUnderstaffingPercentageTest : ISetup
+	public class CascadingResourceCalculationFocusHighUnderstaffingPercentageTest
 	{
 		public IResourceOptimizationHelper Target;
 
@@ -71,11 +69,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 
 			b1AbsDiff.Should().Be.LessThan(19.3);
 			(b1AbsDiff + b2AbsDiff).Should().Be.IncludedIn(98.99, 99.01);
-		}
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			system.UseTestDouble<ShovelResourcesFocusHighUnderstaffingPercentage>().For<IShovelResourcesPerActivityIntervalSkillGroup>();
 		}
 	}
 }
