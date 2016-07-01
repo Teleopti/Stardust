@@ -346,7 +346,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 			if (!AccessToWfmMyTeamSchedule)
 				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.AngelMyTeamSchedules
+					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MyTeamSchedules
 					select f;
 
 			if (!AccessToIntraday)

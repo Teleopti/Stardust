@@ -24,8 +24,7 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 				DefinedRaptorApplicationFunctionPaths.WebCancelRequest,
 				DefinedRaptorApplicationFunctionPaths.WebModifySkill,
 				DefinedRaptorApplicationFunctionPaths.WebIntraday,
-				DefinedRaptorApplicationFunctionPaths.WebModifySkillArea,
-				DefinedRaptorApplicationFunctionPaths.AngelMyTeamSchedules
+				DefinedRaptorApplicationFunctionPaths.WebModifySkillArea
 			};
 
 			EnabledApplicationFunctions.Clear();

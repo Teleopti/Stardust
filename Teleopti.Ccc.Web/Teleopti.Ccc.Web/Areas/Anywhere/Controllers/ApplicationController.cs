@@ -188,8 +188,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 
 				MyTeam_MakeTeamScheduleConsistent_31897 = _toggles.IsEnabled(Toggles.MyTeam_MakeTeamScheduleConsistent_31897),
 				
-				RTA_AdherenceDetails_34267 = _toggles.IsEnabled(Toggles.RTA_AdherenceDetails_34267),
-				WfmTeamSchedule_PrepareForRelease_37752 = _toggles.IsEnabled(Toggles.WfmTeamSchedule_PrepareForRelease_37752)
+				RTA_AdherenceDetails_34267 = _toggles.IsEnabled(Toggles.RTA_AdherenceDetails_34267)
 
 			}, Formatting.Indented);
 

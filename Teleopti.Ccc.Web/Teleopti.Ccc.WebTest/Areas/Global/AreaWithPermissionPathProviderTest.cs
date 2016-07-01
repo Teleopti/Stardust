@@ -57,11 +57,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		{
 			PermissionProvider.Enable();
 			ToggleManager.Enable(Toggles.WfmTeamSchedule_AbsenceReporting_35995);
-			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.AngelMyTeamSchedules);
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
 			var areas = Target.GetWfmAreasWithPermissions();
 
-			areas.Single().Path.Should().Be(DefinedRaptorApplicationFunctionPaths.AngelMyTeamSchedules);
+			areas.Single().Path.Should().Be(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 			areas.Single().Name.Invoke().Should().Be(Resources.MyTeam);
 			areas.Single().InternalName.Should().Be("myTeamSchedule");
 		}
@@ -93,64 +93,49 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public void ShouldReturnMyTeamScheduleWhenWfmTeamScheduleIsReleased()
 		{
 			PermissionProvider.Enable();
-			ToggleManager.Enable(Toggles.WfmTeamSchedule_PrepareForRelease_37752);
 			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
-			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.AngelMyTeamSchedules);
 			var areas = Target.GetWfmAreasWithPermissions();
 
 			areas.Count().Should().Be(1);
 			areas.First().Path.Should().Be.EqualTo(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 		}
-
+		
 		[Test]
-		public void ShouldReturnAngelTeamScheduleWhenWfmTeamScheduleIsNotReleased()
+		public void ShouldHaveIntradayAreaWhenFeatureEnabledAndPermitted()
 		{
 			PermissionProvider.Enable();
-		
-			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
-			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.AngelMyTeamSchedules);
+			ToggleManager.Enable(Toggles.Wfm_Intraday_38074);
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.WebIntraday);
+
 			var areas = Target.GetWfmAreasWithPermissions();
 
-			areas.Count().Should().Be(1);
-			areas.First().Path.Should().Be.EqualTo(DefinedRaptorApplicationFunctionPaths.AngelMyTeamSchedules);
+			areas.Single().Path.Should().Be(DefinedRaptorApplicationFunctionPaths.WebIntraday);
+			areas.Single().Name.Invoke().Should().Be(Resources.Intraday);
+			areas.Single().InternalName.Should().Be("intraday");
 		}
-        
-        [Test]
-        public void ShouldHaveIntradayAreaWhenFeatureEnabledAndPermitted()
-        {
-            PermissionProvider.Enable();
-            ToggleManager.Enable(Toggles.Wfm_Intraday_38074);
-            PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.WebIntraday);
 
-            var areas = Target.GetWfmAreasWithPermissions();
+		[Test]
+		public void ShouldNotHaveIntradayAreaWhenFeatureIsDisabled()
+		{
+			PermissionProvider.Enable();
+			ToggleManager.Disable(Toggles.Wfm_Intraday_38074);
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.WebIntraday);
 
-            areas.Single().Path.Should().Be(DefinedRaptorApplicationFunctionPaths.WebIntraday);
-            areas.Single().Name.Invoke().Should().Be(Resources.Intraday);
-            areas.Single().InternalName.Should().Be("intraday");
-        }
+			var areas = Target.GetWfmAreasWithPermissions();
 
-        [Test]
-        public void ShouldNotHaveIntradayAreaWhenFeatureIsDisabled()
-        {
-            PermissionProvider.Enable();
-            ToggleManager.Disable(Toggles.Wfm_Intraday_38074);
-            PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.WebIntraday);
+			areas.Count().Should().Be(0);
+		}
 
-            var areas = Target.GetWfmAreasWithPermissions();
+		[Test]
+		public void ShouldNotHaveIntradayAreaWhenItIsNotPermitted()
+		{
+			PermissionProvider.Enable();
+			ToggleManager.Enable(Toggles.Wfm_Intraday_38074);
 
-            areas.Count().Should().Be(0);
-        }
+			var areas = Target.GetWfmAreasWithPermissions();
 
-        [Test]
-        public void ShouldNotHaveIntradayAreaWhenItIsNotPermitted()
-        {
-            PermissionProvider.Enable();
-            ToggleManager.Enable(Toggles.Wfm_Intraday_38074);
+			areas.Count().Should().Be(0);
+		}
 
-            var areas = Target.GetWfmAreasWithPermissions();
-
-            areas.Count().Should().Be(0);
-        }
-
-    }
+	}
 }

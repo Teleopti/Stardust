@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.SeatPlanner, () => Resources.SeatMap, "seatMap"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, () => Resources.RealTimeAdherence, "rta"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebIntraday, () => Resources.Intraday, "intraday"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.AngelMyTeamSchedules, () => Resources.MyTeam, "myTeamSchedule"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, () => Resources.MyTeam, "myTeamSchedule"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.AccessToReports, () => Resources.Reports, "reports")
 		};
@@ -109,15 +108,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			if (path.Equals(DefinedRaptorApplicationFunctionPaths.WebRequests))
 			{
 				return _toggleManager.IsEnabled(Toggles.Wfm_Requests_Basic_35986);
-			}
-			
-			if(path.Equals(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules))
-			{
-				return _toggleManager.IsEnabled(Toggles.WfmTeamSchedule_PrepareForRelease_37752);
-			}
-			if(path.Equals(DefinedRaptorApplicationFunctionPaths.AngelMyTeamSchedules))
-			{
-				return !_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_PrepareForRelease_37752);
 			}
 			if(path.Equals(DefinedRaptorApplicationFunctionPaths.WebIntraday))
 			{

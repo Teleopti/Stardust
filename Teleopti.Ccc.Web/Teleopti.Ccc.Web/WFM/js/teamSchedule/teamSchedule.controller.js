@@ -240,7 +240,7 @@
 				, 300);
 		}
 
-		vm.init = function () {
+		vm.init = function() {
 			vm.toggles = {
 				AddActivityEnabled: toggleSvc.WfmTeamSchedule_AddActivity_37541,
 				RemoveActivityEnabled: toggleSvc.WfmTeamSchedule_RemoveActivity_37743,
@@ -250,7 +250,6 @@
 				SeeScheduleChangesByOthers: toggleSvc.WfmTeamSchedule_SeeScheduleChangesByOthers_36303,
 				SelectAgentsPerPageEnabled: toggleSvc.WfmTeamSchedule_SetAgentsPerPage_36230,
 				SwapShiftEnabled: toggleSvc.WfmTeamSchedule_SwapShifts_36231,
-				PrepareToRelease: toggleSvc.WfmTeamSchedule_PrepareForRelease_37752,
 				MoveActivityEnabled: toggleSvc.WfmTeamSchedule_MoveActivity_37744,
 				AddPersonalActivityEnabled: toggleSvc.WfmTeamSchedule_AddPersonalActivity_37742,
 				BackoutPreviousScheduleEnabled: toggleSvc.WfmTeamSchedule_RevertToPreviousSchedule_39002
@@ -267,20 +266,18 @@
 			vm.permissionsAndTogglesLoaded = true;
 
 			vm.scheduleTableSelectMode = vm.toggles.AbsenceReportingEnabled
-										|| vm.toggles.AddActivityEnabled
-										|| vm.toggles.RemoveActivityEnabled
-										|| vm.toggles.RemoveAbsenceEnabled
-										|| vm.toggles.SwapShiftEnabled;
+				|| vm.toggles.AddActivityEnabled
+				|| vm.toggles.RemoveActivityEnabled
+				|| vm.toggles.RemoveAbsenceEnabled
+				|| vm.toggles.SwapShiftEnabled;
 
-			if (vm.toggles.PrepareToRelease) {
-				var template = $translate.instant('WFMReleaseNotification');
-				var moduleName = $translate.instant('MyTeam');
-				var message = template.replace('{0}', moduleName)
-					.replace('{1}', '<a href="http://www.teleopti.com/wfm/customer-feedback.aspx">')
-					.replace('{2}', '</a>')
-					.replace('{3}', '<a href="../Anywhere#teamschedule">' + moduleName + '</a>');
-				NoticeService.info(message, null, true);
-			}
+			var template = $translate.instant('WFMReleaseNotification');
+			var moduleName = $translate.instant('MyTeam');
+			var message = template.replace('{0}', moduleName)
+				.replace('{1}', '<a href="http://www.teleopti.com/wfm/customer-feedback.aspx">')
+				.replace('{2}', '</a>')
+				.replace('{3}', '<a href="../Anywhere#teamschedule">' + moduleName + '</a>');
+			NoticeService.info(message, null, true);
 		};
 		$q.all([
 			teamScheduleSvc.PromiseForloadedPermissions(function (result) {

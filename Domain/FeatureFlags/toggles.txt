@@ -78,7 +78,6 @@ WfmTeamSchedule_AddPersonalActivity_37742 = true
 WfmTeamSchedule_RemoveActivity_37743 = true
 WfmTeamSchedule_MoveActivity_37744 = true
 WfmTeamSchedule_ShowContractTime_38509 = true
-WfmTeamSchedule_PrepareForRelease_37752 = true
 WfmTeamSchedule_RevertToPreviousSchedule_39002 = RC
 
 WfmReportPortal_Basic_38825 = true

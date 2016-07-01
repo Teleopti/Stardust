@@ -27,7 +27,6 @@
 		public const string Anywhere = "Raptor/Anywhere";
 		public const string SeatPlanner = "Raptor/SeatPlanner";
 		public const string Outbound = "Raptor/Outbound";
-		public const string AngelMyTeamSchedules = "Raptor/AngelMyTeamSchedules";
 
 		// Global
 		public const string ModifyPersonAssignment = "Raptor/Global/ModifySchedule/ModifyAssignment";
