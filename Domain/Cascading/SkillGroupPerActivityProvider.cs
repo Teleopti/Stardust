@@ -15,8 +15,6 @@ namespace Teleopti.Ccc.Domain.Cascading
 			foreach (var skillGroup in affectedSkills)
 			{
 				var cascadingSkillsInSkillGroup = cascadingSkillsForActivity.Where(x => skillGroup.Skills.Contains(x)).ToArray();
-				if (cascadingSkillsInSkillGroup.Length <= 1)
-					continue;
 
 				var lowestCascadingIndex = cascadingSkillsInSkillGroup.Min(x => x.CascadingIndex.Value);
 				var primarySkills = cascadingSkillsInSkillGroup.Where(x => x.CascadingIndex.Value==lowestCascadingIndex);

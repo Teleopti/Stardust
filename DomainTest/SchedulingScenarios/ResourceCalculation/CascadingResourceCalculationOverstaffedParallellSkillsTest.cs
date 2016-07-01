@@ -392,7 +392,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				.Should().Be.EqualTo(0);
 		}
 
-		[Test, Ignore("#39587")]
+		[Test]
 		public void ShouldNotMoveGuysSingleSkilledOnPrimarySkill()
 		{
 			var scenario = new Scenario("_");
@@ -439,7 +439,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			skillDayA2.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0);
 			skillDayB.SkillStaffPeriodCollection.First().AbsoluteDifference
-				.Should().Be.EqualTo(-0.5);
+				.Should().Be.EqualTo(0);
 		}
 
 		[Test, Ignore("#39587")]

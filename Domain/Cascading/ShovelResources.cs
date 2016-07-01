@@ -47,12 +47,13 @@ namespace Teleopti.Ccc.Domain.Cascading
 						{
 							foreach (var interval in date.ToDateTimePeriod(_timeZoneGuard.CurrentTimeZone()).Intervals(defaultResolution))
 							{
-								foreach (var skillGroup in _skillGroupPerActivityProvider.FetchOrdered(cascadingSkills, activity, interval))
+								var skillGroups = _skillGroupPerActivityProvider.FetchOrdered(cascadingSkills, activity, interval);
+								foreach (var skillGroup in skillGroups)
 								{
-									var primarySkillOverstaff = _primarySkillOverstaff.Sum(skillStaffPeriodHolder, skillGroup, interval);
+									var primarySkillOverstaff = _primarySkillOverstaff.Sum(skillStaffPeriodHolder, skillGroups, skillGroup, interval);
 									var state = new ShovelResourcesState(skillGroup.Resources, primarySkillOverstaff);
 									_addResourcesToSubSkillsFocusHighUnderstaffingPercentage.Execute(state, skillStaffPeriodHolder, skillGroup, interval);
-									_reducePrimarySkillResourcesPercentageDistribution.Execute(skillStaffPeriodHolder, skillGroup.PrimarySkills, interval, state.ResourcesMoved);
+									_reducePrimarySkillResourcesPercentageDistribution.Execute(skillStaffPeriodHolder, skillGroup.PrimarySkills, interval, state);
 								}
 							}
 						}

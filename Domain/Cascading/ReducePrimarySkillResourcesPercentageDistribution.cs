@@ -6,26 +6,17 @@ namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class ReducePrimarySkillResourcesPercentageDistribution
 	{
-		public void Execute(ISkillStaffPeriodHolder skillStaffPeriodHolder, IEnumerable<ISkill> primarySkills, DateTimePeriod interval, double resourcesMoved)
+		public void Execute(ISkillStaffPeriodHolder skillStaffPeriodHolder, IEnumerable<ISkill> primarySkills, DateTimePeriod interval, ShovelResourcesState state)
 		{
-			var totalPrimarySkillOverstaff = 0d;
-			var overstaffedPrimarySkills = new List<ISkill>();
-			foreach (var primarySkill in primarySkills)
-			{
-				var absDiff = skillStaffPeriodHolder.SkillStaffPeriodOrDefault(primarySkill, interval).AbsoluteDifference;
-				if (absDiff.IsOverstaffed())
-				{
-					totalPrimarySkillOverstaff += absDiff;
-					overstaffedPrimarySkills.Add(primarySkill);
-				}
-			}
+			var totalPrimarySkillOverstaff = state.TotalResourcesAtStart;
 
-			foreach (var primarySkill in overstaffedPrimarySkills)
+			foreach (var keyValueForPrimarySkillAndResources in state.ResourcesAvailableForPrimarySkill())
 			{
+				var primarySkill = keyValueForPrimarySkillAndResources.Key;
 				var skillStaffPeriod = skillStaffPeriodHolder.SkillStaffPeriodOrDefault(primarySkill, interval);
-				var overstaffForSkill = skillStaffPeriod.AbsoluteDifference;
+				var overstaffForSkill = keyValueForPrimarySkillAndResources.Value;
 				var percentageOverstaff = overstaffForSkill / totalPrimarySkillOverstaff;
-				var resourceToSubtract = resourcesMoved * percentageOverstaff;
+				var resourceToSubtract = state.ResourcesMoved * percentageOverstaff;
 				skillStaffPeriod.AddResources(-resourceToSubtract);
 			}
 		}

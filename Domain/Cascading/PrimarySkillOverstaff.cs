@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
@@ -5,45 +8,47 @@ namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class PrimarySkillOverstaff
 	{
-		private const int highValueForClosedSkill = int.MaxValue;
-
-		public double Sum(ISkillStaffPeriodHolder skillStaffPeriodHolder, CascadingSkillGroup skillGroup, DateTimePeriod interval)
+		public AvailableResourcesToMoveOnSkill Sum(ISkillStaffPeriodHolder skillStaffPeriodHolder, IEnumerable<CascadingSkillGroup> allSkillGroups, CascadingSkillGroup skillGroup, DateTimePeriod interval)
 		{
-			var overstaffingOnOverstaffedSkills = 0d;
-			var resourcesOnSkillsOnCurrentSkillGroup = 0d;
 			var allPrimarySkillsClosed = true;
-			var forcastedForOverstaffedSkills = 0d;
-
+			var dic = new Dictionary<ISkill, double>();
 			foreach (var primarySkill in skillGroup.PrimarySkills)
 			{
 				ISkillStaffPeriod skillStaffPeriod;
 				if (!skillStaffPeriodHolder.TryGetSkillStaffPeriod(primarySkill, interval, out skillStaffPeriod))
+						continue; 
+				allPrimarySkillsClosed = false;
+
+				var resourcesOnOtherSkillGroups = 0d;
+				foreach (var otherSkillGroup in allSkillGroups)
+				{
+					if (otherSkillGroup.Equals(skillGroup))
+						continue;
+
+					if (!otherSkillGroup.PrimarySkills.Contains(primarySkill))
+						continue;
+
+					var resourcesOnOtherSkillGroup = otherSkillGroup.Resources;
+					foreach (var otherPrimarySkill in otherSkillGroup.PrimarySkills)
+					{
+						if (!otherPrimarySkill.Equals(primarySkill))
+						{
+							resourcesOnOtherSkillGroup -= skillStaffPeriodHolder.SkillStaffPeriodOrDefault(otherPrimarySkill, interval).CalculatedResource;
+						}
+					}
+					resourcesOnOtherSkillGroups += resourcesOnOtherSkillGroup;
+				}
+				var forecast = skillStaffPeriod.FStaff;
+				var overstaff = skillStaffPeriod.AbsoluteDifference;
+
+				if(!overstaff.IsOverstaffed())
 					continue;
 
-				var absDiff = skillStaffPeriod.AbsoluteDifference;
-				resourcesOnSkillsOnCurrentSkillGroup += skillStaffPeriod.CalculatedResource;
-				if (absDiff.IsOverstaffed())
-				{
-					forcastedForOverstaffedSkills += skillStaffPeriod.FStaff;
-					overstaffingOnOverstaffedSkills += absDiff;
-				}
-				allPrimarySkillsClosed = false;
+				var otherSkillGroupOverstaff = Math.Max(resourcesOnOtherSkillGroups - forecast, 0);
+				dic.Add(primarySkill, overstaff - otherSkillGroupOverstaff);
 			}
 
-			if (allPrimarySkillsClosed)
-			{
-				return highValueForClosedSkill;
-			}
-			var resourcesOnSkillsComingFromOtherSkillGroups = resourcesOnSkillsOnCurrentSkillGroup - skillGroup.Resources;
-			if (resourcesOnSkillsComingFromOtherSkillGroups > overstaffingOnOverstaffedSkills)
-			{
-				return overstaffingOnOverstaffedSkills;
-			}
-
-			var overstaffingToBeKeptForOtherSkillGroups = resourcesOnSkillsComingFromOtherSkillGroups - forcastedForOverstaffedSkills;
-			return overstaffingToBeKeptForOtherSkillGroups > 0
-				? overstaffingOnOverstaffedSkills - overstaffingToBeKeptForOtherSkillGroups
-				: overstaffingOnOverstaffedSkills;
+			return new AvailableResourcesToMoveOnSkill(dic, allPrimarySkillsClosed);
 		}
 	}
 }
