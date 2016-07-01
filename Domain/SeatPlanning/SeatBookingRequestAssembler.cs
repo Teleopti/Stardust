@@ -28,9 +28,11 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		{
 			_numberOfUnscheduledAgentDays = 0;
 			_bookingsWithDateAndTeam = new List<ITeamGroupedBooking>();
+			
 
 			var bookingPeriodWithSurroundingDays = new DateOnlyPeriod(period.StartDate.AddDays(-1), period.EndDate.AddDays(1));
 			_existingSeatBookings = _seatBookingRepository.LoadSeatBookingsForDateOnlyPeriod(bookingPeriodWithSurroundingDays);
+			
 
 			groupNewBookings(period, people);
 			
@@ -47,10 +49,24 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			var schedulesForPeople = getScheduleDaysForPeriod(period, people, _scenario.Current());
 			foreach (var person in people)
 			{
+				removeExistingBookings(period, person);
+
 				var scheduleDays = getScheduleDaysToPlanSeats(schedulesForPeople[person].ScheduledDayCollection(period)).ToArray();
+				
 				scheduleDays.ForEach (day => findOrCreateSeatBooking(day, person));
 				_numberOfUnscheduledAgentDays += period.DayCount() - scheduleDays.Count();
 			}
+		}
+
+		private void removeExistingBookings (DateOnlyPeriod period, IPerson person)
+		{
+			period.DayCollection().ForEach (day =>
+			{
+				//ROBTODO: perhaps it would be better to mark these for deletion, and only delete them
+				// when the agent has successfully been allocated a new seat for this day.  Otherwise we could
+				// remove the existing booking, but the new requested booking can fail.
+				removeExistingBookingForPersonOnThisDay (person, day);
+			});
 		}
 
 		private IEnumerable<IScheduleDay> getScheduleDaysToPlanSeats(IEnumerable<IScheduleDay> scheduleDays)
@@ -65,11 +81,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			var date = personAssignment.Date;
 			var team = person.MyTeam(date);
 
-			//ROBTODO: perhaps it would be better to mark these for deletion, and only delete them
-			// when the agent has successfully been allocated a new seat for this day.  Otherwise we could
-			// remove the existing booking, but the new requested booking can fail.
-			removeExistingBookingForPersonOnThisDay(person, date);
-
+			
 			addBooking(team, new SeatBooking(person, date, shiftPeriod.StartDateTime, shiftPeriod.EndDateTime));
 		}
 

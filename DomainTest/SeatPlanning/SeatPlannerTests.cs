@@ -6,6 +6,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -406,7 +407,9 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var people = new[]
 			{
 				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate), team),
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(endDate), team)
+				// by putting people[1] in a different team, they will not be included in the seat 
+				// planning process and should retain their existing booking.
+				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(endDate), addTeam("Team Other"))
 			};
 
 			var personAssignment = addAssignment(people[0], startDate, assignmentEndDateTime);
@@ -426,6 +429,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			_seatBookingRepository.LoadSeatBookingForPerson(new DateOnly(startDate), people[1])
 				.Seat.Should()
 				.Be(seatMapLocation.Seats.First());
+
 			Assert.IsTrue(_seatBookingRepository.LoadSeatBookingForPerson(new DateOnly(startDate), people[0]) == null);
 		}
 
@@ -441,7 +445,9 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 			var people = new[]
 			{
-				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate), team),
+				// by putting people[0] in a different team, they will not be included in the seat 
+				// planning process and should retain their existing booking (even though we havent created a schedule here).
+				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate),  addTeam("Team Other")),
 				PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(startDate), team)
 			};
 
@@ -1102,6 +1108,68 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			_seatBookingRepository.CountAllEntities().Should().Be(2);
 			var booking = _seatBookingRepository.LoadSeatBookingForPerson(new DateOnly(date), person);
 			booking.Seat.Should().Be(seatMapLocation.Seats[1]);
+		}
+
+
+		[Test]
+		public void ShouldNotAllocateASeatToAnAgentWithADayOff()
+		{
+			var date = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
+			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(date), new DateOnly(date));
+			var team = addTeam("Team");
+			var teams = new[] { team };
+			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(date), team);
+
+			var seatMapLocation = addLocation("Location", null, new[]
+			{
+				new Seat("Seat One",1)
+			});
+
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(_currentScenario.Current(), person, dateOnlyPeriod.StartDate, new DayOffTemplate(new Description("for", "test")));
+			var locations = new[] { seatMapLocation };
+			var seatPlanner = setupSeatPlanner(teams, new[] { person }, locations, assignment);
+
+			seatPlanner.Plan(
+				getLocationGuids(locations),
+				getTeamGuids(teams),
+				dateOnlyPeriod, null, null);
+
+			_seatBookingRepository.CountAllEntities().Should().Be(0);
+			var booking = _seatBookingRepository.LoadSeatBookingForPerson(new DateOnly(date), person);
+			booking.Should().Be.Null();
+		}
+
+
+		[Test]
+		public void ShouldRemoveExistingBookingForAgentWhenTheirScheduleChangesToDayOff()
+		{
+			var date = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
+			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(date), new DateOnly(date));
+			var team = addTeam("Team");
+			var teams = new[] { team };
+			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(date), team);
+
+			var seatMapLocation = addLocation("Location", null, new[]
+			{
+				new Seat("Seat One",1),
+				new Seat("Seat Two",2),
+			});
+
+			addSeatBooking(person, date, date, date.AddHours(10), seatMapLocation.Seats.Last());
+
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(_currentScenario.Current(), person, dateOnlyPeriod.StartDate, new DayOffTemplate(new Description("for", "test")));
+			var locations = new[] { seatMapLocation };
+			var seatPlanner = setupSeatPlanner(teams, new[] { person }, locations, assignment);
+
+			seatPlanner.Plan(
+				getLocationGuids(locations),
+				getTeamGuids(teams),
+				dateOnlyPeriod, null, null);
+
+			_seatBookingRepository.CountAllEntities().Should().Be(0);
+			var booking = _seatBookingRepository.LoadSeatBookingForPerson(new DateOnly(date), person);
+			booking.Should().Be.Null();
+			
 		}
 
 	}
