@@ -5,7 +5,7 @@ Feature: SeeWholeTeamSchedule
 
 Background: 
 	Given there is a team with
- 	| Field                      | Value            |
+ 	| Field                      | Value       |     
 	| Name  | My Team |
 	And there is a role with
 	| Field                       | Value      |
@@ -18,6 +18,7 @@ Background:
 	| Team       | My Team    |
 	| Start date | 2013-09-26 |
 
+@ignore
 Scenario: Can see page size dropdown box
 	Given I have the role 'TeamLeader'
 	When I view wfm team schedules
