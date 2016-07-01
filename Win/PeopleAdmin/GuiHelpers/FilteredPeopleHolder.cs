@@ -35,7 +35,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 		private readonly IDictionary<IPerson, IPersonAccountCollection> _allAccounts;
 		private readonly ITenantDataManager _tenantDataManager;
 		private readonly List<IPerson> _personCollection = new List<IPerson>();
+		public List<Guid> PersonIdCollection { get; }
 		private readonly List<IPerson> _filteredPersonCollection = new List<IPerson>();
+		public List<Guid> FilteredPersonIdCollection { get; }
 		private List<PersonGeneralModel> _filteredPeopleGridData = new List<PersonGeneralModel>();
 		private IList<PersonPeriodModel> _personPeriodGridViewCollection = new List<PersonPeriodModel>();
 		private readonly List<IPersonSkill> _personSkillCollection = new List<IPersonSkill>();
@@ -79,6 +81,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 			_refreshService = refreshService;
 			_allAccounts = allAccounts;
 			_tenantDataManager = tenantDataManager;
+			PersonIdCollection = new List<Guid>();
+			FilteredPersonIdCollection = new List<Guid>();
 		}
 
 		public ReadOnlyCollection<PersonGeneralModel> SelectedPeopleGeneralGridData
@@ -323,6 +327,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 			var foundPeople = rep.FindPeople(peopleId).ToList();
 
 			_filteredPersonCollection.AddRange(foundPeople);
+			FilteredPersonIdCollection.AddRange(foundPeople.Select(x=>x.Id.GetValueOrDefault()));
 			var today = DateOnly.Today;
 
 			LoadPersonRotations(foundPeople, today, personRotationRep);
@@ -350,7 +355,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 				clearCollections();
 
 				_filteredPersonCollection.AddRange(people);
+				FilteredPersonIdCollection.AddRange(people.Select(x => x.Id.GetValueOrDefault()));
 				_personCollection.AddRange(people);
+				PersonIdCollection.AddRange(people.Select(x=>x.Id.GetValueOrDefault()));
 				var today = DateOnly.Today;
 
 				LoadPersonRotations(people, today, personRotationRep);
@@ -374,6 +381,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 		private void clearCollections()
 		{
 			_filteredPersonCollection.Clear();
+			FilteredPersonIdCollection.Clear();
 			_filteredPeopleGridData.Clear();
 			_personPeriodGridViewCollection.Clear();
 			_schedulePeriodGridViewCollection.Clear();
@@ -947,7 +955,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 			InParameter.NotNull("Person p", person);
 			//Remove tobe deleted person from necessary collections.
 			_personCollection.Remove(person);
+			PersonIdCollection.Remove(person.Id.GetValueOrDefault());
 			_filteredPersonCollection.Remove(person);
+			FilteredPersonIdCollection.Remove(person.Id.GetValueOrDefault());
 			_validateUserCredentialsCollection.Remove(person);
 
 			MarkForRemove(person);

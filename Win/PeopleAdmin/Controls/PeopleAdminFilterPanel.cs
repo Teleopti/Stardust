@@ -50,8 +50,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 			var selectorView = _personSelectorPresenter.View;
 			selectorView.HideMenu = true;
 			selectorView.ShowCheckBoxes = true;
-			selectorView.PreselectedPersonIds = _filteredPeopleHolder.FilteredPersonCollection.Select(p => p.Id.GetValueOrDefault());
-			selectorView.VisiblePersonIds = _filteredPeopleHolder.PersonCollection.Select(p => p.Id.GetValueOrDefault());
+			selectorView.PreselectedPersonIds = _filteredPeopleHolder.FilteredPersonIdCollection;
+			selectorView.VisiblePersonIds = _filteredPeopleHolder.PersonIdCollection;
 
 			_personSelectorPresenter.LoadTabs();
 			_personSelectorPresenter.View.DoFilter += buttonAdvOkClick;
