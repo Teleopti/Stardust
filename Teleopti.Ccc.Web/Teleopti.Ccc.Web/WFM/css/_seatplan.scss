@@ -196,12 +196,15 @@
 }
 
 .seatplan-report-filter .alert-error {
-	width: 601px;
-	max-width: 100%;
-	margin: 15px 5px 5px;
+	
+    position: relative; 
+    width: 100%; 
+
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.seatplan-report-filter .panel .con-flex {
+.seatplan-report-filter .report-filter-panel {
 	min-height: 350px;
 }
 

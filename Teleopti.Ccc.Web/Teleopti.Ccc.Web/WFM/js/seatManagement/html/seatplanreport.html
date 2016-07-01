@@ -29,7 +29,7 @@
 												<date-range-picker ng-model="vm.selectedPeriod"></date-range-picker>
 											</div>
 										</div>
-										<div class="con-flex report-show-options">
+										<div class="con-flex report-show-options report-filter-panel">
 
 											<label>
 												{{'ReportOptions' | translate}}
@@ -62,7 +62,7 @@
 							<md-tab label="{{'Team' | translate}}">
 								<md-content class="md-padding">
 									<div class="con-row demo-outline">
-										<div class="con-flex">
+										<div class="con-flex report-filter-panel">
 											<div class="team-picker">
 												<team-picker selected-teams="vm.selectedTeams"></team-picker>
 											</div>
@@ -77,7 +77,7 @@
 							<md-tab label="{{'Location' | translate}}">
 								<md-content class="md-padding">
 									<div class="con-row demo-outline">
-										<div class="con-flex">
+										<div class="con-flex report-filter-panel">
 											<div class="location-picker">
 												<location-picker selected-locations="vm.selectedLocations"></location-picker>
 											</div>
