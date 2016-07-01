@@ -436,9 +436,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 
 			skillDayA1.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0.5);
-			skillDayA1.SkillStaffPeriodCollection.First().AbsoluteDifference
+			skillDayA2.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0);
-			skillDayA1.SkillStaffPeriodCollection.First().AbsoluteDifference
+			skillDayB.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(-0.5);
 		}
 	}
