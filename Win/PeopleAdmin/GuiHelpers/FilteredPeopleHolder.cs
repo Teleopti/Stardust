@@ -450,13 +450,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 				{
 					_allPersonRotationCollection.Add(rotation);
 				}
-
+				
+				var rotations = rotationCollection.GroupBy(x => x.Person).ToDictionary(x => x.Key, x => x.ToList());
 				//one more loop
 				foreach (var person in persons)
 				{
-					IPerson person1 = person;
-					var g = rotationCollection.Where(p => p.Person.Equals(person1)).ToList();
-					fillRotationAdapterCollection(person, g, selectedDateTime);
+					var rotation = rotations.ContainsKey(person) ? rotations[person] : new List<IPersonRotation>();
+					fillRotationAdapterCollection(person, rotation, selectedDateTime);
 				}
 			}
 		}
@@ -504,8 +504,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
 			if (_filteredPersonCollection != null && _availabilityCollection.Count > 0)
 			{
-
-				//todo: fix performance in here!!!!
 				var availabilityCollection = personAvailabilityRep.Find(persons, period);
 
 				var sorted = availabilityCollection.OrderByDescending(n2 => n2.StartDate);
@@ -516,13 +514,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 					_allPersonAvailabilityCollection.Add(avail);
 				}
 
-				IList<IPersonAvailability> availList = new List<IPersonAvailability>(availabilityCollection);
-
+				var availabilities = availabilityCollection.GroupBy(x => x.Person).ToDictionary(x => x.Key, x => x.ToList());
+				//one more loop
 				foreach (var person in persons)
 				{
-					IPerson person1 = person;
-					IList<IPersonAvailability> ava = availList.Where(p => p.Person.Equals(person1)).ToList();
-					fillAvailabilityAdapterCollection(person, ava);
+					var availability = availabilities.ContainsKey(person) ? availabilities[person] : new List<IPersonAvailability>();
+					fillAvailabilityAdapterCollection(person, availability);
 				}
 			}
 		}
