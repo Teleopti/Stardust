@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.Services;
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 			_personRepository = new FakePersonRepository();
 			_personRequestRepository = new FakePersonRequestRepository();
 			_absence = AbsenceFactory.CreateAbsence("Holiday");
-			_workflowControlSet = createWorkFlowControlSet(new DateTime(2016, 01, 01), new DateTime(2016, 12, 31), _absence);
+			_workflowControlSet = createWorkFlowControlSet(new DateTime(2016, 01, 01), new DateTime(2016, 12, 31), _absence).WithId();
 			_absenceRequestWaitlistProvider = new AbsenceRequestWaitlistProvider(_personRequestRepository);
 
 		}
@@ -125,12 +126,30 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 			Assert.AreEqual(3, waitlistProvider.GetPositionInWaitlist(absenceRequestThree));
 			Assert.AreEqual(3, waitlistProvider.GetPositionInWaitlist(absenceRequestFour));
 		}
+
+		[Test]
+		public void Bug39588_ShouldHandleRequestWithPersonThatHasNoWorkflowControlSet()
+		{
+			var absenceRequestOne = createNewAbsenceRequest(createAndSetupPerson(null), _absence, new DateTimePeriod(new DateTime(2016, 3, 1, 15, 0, 0, DateTimeKind.Utc), new DateTime(2016, 3, 1, 19, 00, 00, DateTimeKind.Utc)));
+			var absenceRequestTwo = createNewAbsenceRequest(createAndSetupPerson(_workflowControlSet), _absence, new DateTimePeriod(new DateTime(2016, 3, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2016, 3, 1, 16, 00, 00, DateTimeKind.Utc)));
+			
+			var property = typeof(PersonRequest).GetProperty("CreatedOn");
+			property.SetValue(absenceRequestOne.Parent, new DateTime(2016, 01, 01, 10, 00, 00));
+			property.SetValue(absenceRequestTwo.Parent, new DateTime(2016, 01, 01, 12, 00, 00));
+
+			
+			//absenceTwo intersects absenceOne
+			var waitlist = _absenceRequestWaitlistProvider.GetWaitlistedRequests(absenceRequestTwo.Period, _workflowControlSet).ToArray();
+
+			Assert.AreEqual(1, waitlist.Count());
+			Assert.IsTrue(waitlist[0].Request == absenceRequestTwo);
+		}
 		
 		private IPerson createAndSetupPerson(IWorkflowControlSet workflowControlSet)
 		{
 			var person = PersonFactory.CreatePersonWithId();
 			_personRepository.Add(person);
-
+			
 			person.WorkflowControlSet = workflowControlSet;
 
 			return person;

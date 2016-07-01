@@ -50,7 +50,20 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 		
 		private bool requestShouldBeProcessed(IPersonRequest request, IWorkflowControlSet workflowControlSet)
 		{
-			return ( request.IsWaitlisted || request.IsNew ) && request.Person.WorkflowControlSet.Id == workflowControlSet.Id;
+
+			if (workflowControlSet == null)
+			{
+				return false;
+			}
+			
+			if (request.IsWaitlisted || request.IsNew)
+			{
+				return request.Person.WorkflowControlSet?.Id == workflowControlSet.Id;
+
+			}
+
+			return false;
+			
 
 		}
 	}
