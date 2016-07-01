@@ -184,6 +184,7 @@
     <Compile Include="FakeRepositories\FakeAnalyticsWorkloadRepository.cs" />
     <Compile Include="FakeRepositories\FakeApplicationFunctionRepository.cs" />
     <Compile Include="FakeRepositories\FakeAvailableDataRepository.cs" />
+    <Compile Include="FakeRepositories\FakeKpiRepository.cs" />
     <Compile Include="FakeRepositories\FakePayrollExportRepository.cs" />
     <Compile Include="FakeRepositories\FakePayrollFormatRepository.cs" />
     <Compile Include="FakeRepositories\FakePayrollResultRepository.cs" />
@@ -194,6 +195,7 @@
     <Compile Include="FakeRepositories\FakeScheduleHistoryRepository.cs" />
     <Compile Include="FakeRepositories\FakeSkillDayRepositorySimulateNewUnitOfWork.cs" />
     <Compile Include="FakeRepositories\FakePersonalSettingDataRepository.cs" />
+    <Compile Include="FakeRepositories\FakeSkillTypeRepository.cs" />
     <Compile Include="FakeRepositories\PersonAssignmentRepositoryWithRandomLatency.cs" />
     <Compile Include="FakeRepositories\Rta\ExternalUserStateForSnapshot.cs" />
     <Compile Include="FakeRepositories\Rta\FakeAgentStatePersister.cs" />

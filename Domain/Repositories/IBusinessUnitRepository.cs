@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
-    /// <summary>
+	/// <summary>
     /// Interface for business units repository methods.
     /// </summary>
     public interface IBusinessUnitRepository : IRepository<IBusinessUnit>

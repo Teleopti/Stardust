@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IAvailableData> LoadAll()
 		{
-			throw new NotImplementedException();
+			return _roles;
 		}
 
 		public IAvailableData Load(Guid id)
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void AddRange(IEnumerable<IAvailableData> entityCollection)
 		{
-			throw new NotImplementedException();
+			_roles.AddRange(entityCollection);
 		}
 
 		public IUnitOfWork UnitOfWork { get; private set; }

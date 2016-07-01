@@ -9,18 +9,16 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 {
 	public class DefaultAnalyticsDataCreator
 	{
-		private static readonly Func<IList<IAnalyticsDataSetup>> oneTimeSetups = () =>
+		private static readonly Func<IList<IAnalyticsDataSetup>> oneTimeSetups = () => new IAnalyticsDataSetup[]
 		{
-			return new IAnalyticsDataSetup[]
-			{
-				new RequestStatus(0, "Pending", "ResRequestStatusPending"),
-				new RequestStatus(1, "Approved", "ResRequestStatusApproved"),
-				new RequestStatus(2, "Denied", "ResRequestStatusDenied"),
-				new RequestType(0, "Text", "ResRequestTypeText"),
-				new RequestType(1, "Absence", "ResRequestTypeAbsence"),
-				new RequestType(2, "Shift Trade", "ResRequestTypeShiftTrade"),
-			};
+			new RequestStatus(0, "Pending", "ResRequestStatusPending"),
+			new RequestStatus(1, "Approved", "ResRequestStatusApproved"),
+			new RequestStatus(2, "Denied", "ResRequestStatusDenied"),
+			new RequestType(0, "Text", "ResRequestTypeText"),
+			new RequestType(1, "Absence", "ResRequestTypeAbsence"),
+			new RequestType(2, "Shift Trade", "ResRequestTypeShiftTrade"),
 		};
+
 		private static readonly Func<IList<IAnalyticsDataSetup>> generateSetups = () =>
 		{
 			var utcAndCetTimeZones = new UtcAndCetTimeZones();

@@ -1,0 +1,46 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
+
+namespace Teleopti.Ccc.TestCommon.FakeRepositories
+{
+	public class FakeSkillTypeRepository : ISkillTypeRepository
+	{
+		private readonly List<ISkillType> _skillTypes = new List<ISkillType>();
+
+		public void Add(ISkillType root)
+		{
+			_skillTypes.Add(root);
+		}
+
+		public void Remove(ISkillType root)
+		{
+			_skillTypes.Remove(root);
+		}
+
+		public ISkillType Get(Guid id)
+		{
+			return _skillTypes.FirstOrDefault(x => x.Id.GetValueOrDefault() == id);
+		}
+
+		public IList<ISkillType> LoadAll()
+		{
+			return _skillTypes;
+		}
+
+		public ISkillType Load(Guid id)
+		{
+			return _skillTypes.First(x => x.Id.GetValueOrDefault() == id);
+		}
+
+		public void AddRange(IEnumerable<ISkillType> entityCollection)
+		{
+			_skillTypes.AddRange(entityCollection);
+		}
+
+		public IUnitOfWork UnitOfWork { get; }
+	}
+}

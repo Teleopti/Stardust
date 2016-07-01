@@ -1,4 +1,5 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
@@ -11,8 +12,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     ///  Created by: Ola
     ///  Created date: 2008-04-07    
     /// /// </remarks>
-    public class KpiRepository : Repository<IKeyPerformanceIndicator>
-    {
+    public class KpiRepository : Repository<IKeyPerformanceIndicator>, IKpiRepository
+	{
         /// <summary>
         /// Initializes a new instance of the <see cref="KpiRepository"/> class.
         /// </summary>

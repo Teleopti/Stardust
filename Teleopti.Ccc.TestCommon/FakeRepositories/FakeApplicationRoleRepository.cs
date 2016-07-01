@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void AddRange(IEnumerable<IApplicationRole> entityCollection)
 		{
-			throw new NotImplementedException();
+			_roles.AddRange(entityCollection);
 		}
 
 		public IUnitOfWork UnitOfWork { get; private set; }

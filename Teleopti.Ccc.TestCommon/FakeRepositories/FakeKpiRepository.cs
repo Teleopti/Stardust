@@ -1,0 +1,46 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
+
+namespace Teleopti.Ccc.TestCommon.FakeRepositories
+{
+	public class FakeKpiRepository : IKpiRepository
+	{
+		private readonly List<IKeyPerformanceIndicator> _kpis = new List<IKeyPerformanceIndicator>();
+
+		public void Add(IKeyPerformanceIndicator root)
+		{
+			_kpis.Add(root);
+		}
+
+		public void Remove(IKeyPerformanceIndicator root)
+		{
+			_kpis.Remove(root);
+		}
+
+		public IKeyPerformanceIndicator Get(Guid id)
+		{
+			return _kpis.FirstOrDefault(x => x.Id.GetValueOrDefault() == id);
+		}
+
+		public IList<IKeyPerformanceIndicator> LoadAll()
+		{
+			return _kpis;
+		}
+
+		public IKeyPerformanceIndicator Load(Guid id)
+		{
+			return _kpis.First(x => x.Id.GetValueOrDefault() == id);
+		}
+
+		public void AddRange(IEnumerable<IKeyPerformanceIndicator> entityCollection)
+		{
+			_kpis.AddRange(entityCollection);
+		}
+
+		public IUnitOfWork UnitOfWork { get; }
+	}
+}
