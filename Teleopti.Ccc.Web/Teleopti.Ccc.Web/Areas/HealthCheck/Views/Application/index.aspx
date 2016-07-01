@@ -109,13 +109,16 @@ var identity = (ITeleoptiIdentity) CurrentTeleoptiPrincipal.Make().Current().Ide
 					<!-- /ko -->
 					<h3>Check read model</h3>
 					<div>
-						<!-- ko if: trackReadModelCheckId() && readmodelCheckIsRunning() -->
+						<!-- ko if: trackReadModelCheckId() && !readModelCheckJobPollingResult() -->
+						<p>Could not retrieve status of last check. See <a target="_blank" data-bind="attr: { href: getReadmodelCheckUrl() }">details</a> or start a new check below. </p>
+						<!-- /ko -->
+						<!-- ko if: trackReadModelCheckId() && readModelCheckJobPollingResult() && readmodelCheckIsRunning() -->
 						<p>Last check is <b>running</b>. See <a target="_blank" data-bind="attr: { href: getReadmodelCheckUrl() }">details</a>.</p>
 						<!-- /ko -->
-						<!-- ko if: trackReadModelCheckId() && !readmodelCheckIsRunning() -->
+						<!-- ko if: trackReadModelCheckId() && readModelCheckJobPollingResult() && !readmodelCheckIsRunning() -->
 						<p>Last check has <b>finished</b>. See <a target="_blank" data-bind="attr: { href: getReadmodelCheckUrl() }">details</a>.</p>
 						<!-- /ko -->
-						<!-- ko if: !trackReadModelCheckId() || ( trackReadModelCheckId() && !readmodelCheckIsRunning() ) -->
+						<!-- ko if: !trackReadModelCheckId() || ( !readmodelCheckIsRunning() || !readModelCheckJobPollingResult() ) -->
 						<form class="form-inline">
 							<div class="form-group">
 								<label for="readmodelCheckStartDate">Start date</label>
@@ -129,11 +132,28 @@ var identity = (ITeleoptiIdentity) CurrentTeleoptiPrincipal.Make().Current().Ide
 						</form>
 						<!-- /ko -->
 					</div>
+					<hr/>
 					<h4>Fix read model</h4>
-                    <div>
-                        <p>Fix invalid records in table <b>ReadModel.ScheduleProjectionReadOnly_check</b></p>
+					<div>
+						<p>Fix invalid records in following tables: </p>
+						<ul>
+							<li>ReadModel.ScheduleProjectionReadOnly_check</li>
+							<li>ReadModel.PersonScheduleDay_check</li>
+							<li>ReadModel.ScheduleDay_check</li>
+						</ul>
+						<!-- ko if: trackReadModelFixId() && !readModelFixJobPollingResult() -->
+						<p>Could not retrieve status of last fix. See <a target="_blank" data-bind="attr: { href: getReadmodelFixUrl() }">details</a> or start a new fix below. </p>
+						<!-- /ko -->
+						<!-- ko if: trackReadModelFixId() && readModelFixJobPollingResult() && readModelsFixIsRunning() -->
+						<p>Fixing is <b>under way</b>. See <a target="_blank" data-bind="attr: { href: getReadmodelFixUrl() }">details</a>.</p>
+						<!-- /ko -->
+						<!-- ko if: trackReadModelFixId() && readModelFixJobPollingResult() && !readModelsFixIsRunning() -->
+						<p>Fixing has <b>finished</b>. See <a target="_blank" data-bind="attr: { href: getReadmodelFixUrl() }">details</a>.</p>
+						<!-- /ko -->
+						<!-- ko if: !trackReadModelFixId() || ( !readModelsFixIsRunning() || !readModelFixJobPollingResult() ) -->
 						<button class="btn btn-default" data-bind="click: fixReadModel">Fix</button>
-                    </div>
+						<!-- /ko -->
+					</div>
 					<h3>Configured URL:s</h3>
 					<ul class="list-group" data-bind="foreach: configuredUrls">
 						<li class="list-group-item configured-url" data-bind="css: { 'list-group-item-success': Reachable == true }">

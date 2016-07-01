@@ -20,6 +20,9 @@ define([
 		self.readModelCheckStartDate = ko.observable();
 		self.readModelCheckEndDate = ko.observable();
 		self.readmodelCheckIsRunning = ko.observable(false);
+		self.readModelsFixIsRunning = ko.observable(false);
+		self.readModelCheckJobPollingResult = ko.observable('anything');
+		self.readModelFixJobPollingResult = ko.observable('anything');
 		self.logObjects = ko.observable();
 		self.checkBusEnabled = ko.observable(true);
 		self.checkBusEnabled = ko.observable(true);
@@ -37,34 +40,71 @@ define([
 		}
 
 		self.getReadmodelCheckUrl = function (jobId) {
-			return 'StardustDashboard/job/' + (typeof(jobId) === 'string'?jobId : self.trackReadModelCheckId());
-		}
-		
-		if (self.trackReadModelCheckId()) {
-			pollJobStatus(self.trackReadModelCheckId(), function (data) {
-				if (data != null) {
-					var job = JSON.parse(data.Serialized);
-					self.readModelCheckStartDate(job.StartDate.substr(0, 10));
-					self.readModelCheckEndDate(job.EndDate.substr(0, 10));
-				}				
-				self.readmodelCheckIsRunning(false);
-			});
-		}		
+			if (typeof jobId !== 'string') {
+				jobId = self.trackReadModelCheckId();
+			}
+			return self.getJobUrl(jobId);
+		};
+
+		self.getReadmodelFixUrl = function (jobId) {
+			if (typeof jobId !== 'string') {
+				jobId = self.trackReadModelFixId();
+			}
+			return self.getJobUrl(jobId);
+		};
+
+		self.getJobUrl = function getJobUrl(jobId) {
+			if (!jobId) {
+				throw new Error('Job ID cannot be falsy');
+			}
+			return 'StardustDashboard/job/' + jobId;
+		};
 
 		function pollJobStatus(jobId, onComplete) {
 			if (!jobId) {
 				return;
 			}
-			self.readmodelCheckIsRunning(true);
 			var polling = setInterval(function pollServer() {
-				http.get(self.getReadmodelCheckUrl(jobId)).done(function (data) {					
-					if (data == null || data.Result) {
+				var jobUrl = self.getJobUrl(jobId);
+				http.get(jobUrl).done(function (data) {					
+					if (!data || data.Result) {
 						clearInterval(polling);
 						onComplete(data);
 					}
 				});
 				return pollServer;
 			}(), 5000);
+		}
+
+		function pollCheckJob(jobId) {
+			self.readmodelCheckIsRunning(true);
+			self.readModelCheckJobPollingResult('anything');
+			pollJobStatus(jobId, function checkJobPollingDone(data) {
+				self.readModelCheckJobPollingResult(data);
+				if (data && data.Result) {
+					var job = JSON.parse(data.Serialized);
+					self.readModelCheckStartDate(job.StartDate.substr(0, 10));
+					self.readModelCheckEndDate(job.EndDate.substr(0, 10));
+				}
+				self.readmodelCheckIsRunning(false);
+			});
+		}
+
+		function pollFixJob(jobId) {
+			self.readModelsFixIsRunning(true);
+			self.readModelFixJobPollingResult('anything');
+			pollJobStatus(jobId, function fixJobPollingDone(data) {
+				self.readModelFixJobPollingResult(data);
+				self.readModelsFixIsRunning(false);
+			});
+		}
+
+		if (self.trackReadModelCheckId()) {
+			pollCheckJob(self.trackReadModelCheckId());
+		}
+
+		if (self.trackReadModelFixId()) {
+			pollFixJob(self.trackReadModelFixId());
 		}
 
 		var subscribe = function (options) {
@@ -108,7 +148,7 @@ define([
 				if (typeof (Storage) !== 'undefined') {
 					localStorage.trackReadModelCheckId = id;
 				}
-				pollJobStatus(id, function () { self.readmodelCheckIsRunning(false); });
+				pollCheckJob(id);
 			};
 			checkReadModelFunc(cb);
 		};
@@ -120,7 +160,7 @@ define([
 				if (typeof (Storage) !== 'undefined') {
 					localStorage.trackReadModelFixId = id;
 				}
-				pollJobStatus(id, function () { self.readmodelCheckIsRunning(false); });
+				pollFixJob(id);
 			};
 			fixReadModelFunc(cb);
 		};
