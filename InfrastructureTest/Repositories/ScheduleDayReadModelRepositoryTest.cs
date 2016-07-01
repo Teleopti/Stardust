@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -34,6 +36,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			createAndSaveReadModel(guid);
 			var ret = _target.ReadModelsOnPerson(dateOnly.AddDays(-1), dateOnly.AddDays(5), guid);
 			Assert.That(ret.Count, Is.EqualTo(1));
+
+			var readmodel = ret.First();
+			readmodel.Workday.Should().Be.True();
+			readmodel.NotScheduled.Should().Be.False();
+
 			Assert.That(_target.IsInitialized(), Is.True);
 			_target.ClearPeriodForPerson(new DateOnlyPeriod(dateOnly,dateOnly.AddDays(2)), guid);
 			Assert.That(_target.IsInitialized(), Is.False);

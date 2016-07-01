@@ -36,6 +36,10 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<Domain.ApplicationLayer.ReadModelValidator.ReadModelValidator>().For<IReadModelValidator>();
+			system.UseTestDouble<ReadModelPersonScheduleDayValidator>().For<IReadModelPersonScheduleDayValidator>();
+			system.UseTestDouble<ReadModelScheduleProjectionReadOnlyValidator>().For<IReadModelScheduleProjectionReadOnlyValidator>();
+			system.UseTestDouble<ReadModelScheduleDayValidator>().For<IReadModelScheduleDayValidator>();
+
 			system.UseTestDouble<FakePersonAssignmentWriteSideRepository>().For<IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>>();
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
@@ -113,32 +117,6 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 
 
 			result.Count().Should().Be.EqualTo(0);
-		}
-
-		[Test]
-		public void CanBuildReadModelFromScheduleWithSimpleShift()
-		{
-			var scenario = CurrentScenario.Current();
-			var date = new DateOnly(2016, 01, 01);
-			var person = PersonFactory.CreatePersonWithGuid("Peter", "T");
-			PersonRepository.Has(person);
-
-			var dateTimePeriod = new DateTimePeriod(2016, 01, 01, 8, 2016, 01, 01, 17);
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, dateTimePeriod);
-
-			ScheduleStorage.Add(personAssignment);
-
-
-			var readmodels = Target.BuildReadModelScheduleProjectionReadOnly(person, date).ToList();
-
-			readmodels.Count().Should().Be.EqualTo(1);
-			var readmodel = readmodels.First();
-			readmodel.BelongsToDate.Should().Be.EqualTo(date);
-			readmodel.StartDateTime.Should().Be.EqualTo(dateTimePeriod.StartDateTime);
-			readmodel.EndDateTime.Should().Be.EqualTo(dateTimePeriod.EndDateTime);
-			readmodel.PersonId.Should().Be.EqualTo(person.Id.Value);
-
-
 		}
 
 		[Test]

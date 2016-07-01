@@ -18,16 +18,14 @@ WITH EXECUTE AS OWNER
 AS
 SET NOCOUNT ON
 
-IF NOT EXISTS (
-	SELECT * FROM ReadModel.ScheduleDay
-	WHERE PersonId = @PersonId
-		AND BelongsToDate = @BelongsToDate)
-BEGIN
-	INSERT INTO ReadModel.ScheduleDay 
-		(PersonId,BelongsToDate,StartDateTime,EndDateTime,Workday,WorkTime,ContractTime,Label,DisplayColor,NotScheduled) 
-	VALUES 
-		(@PersonId,@BelongsToDate,@StartDateTime,@EndDateTime,@Workday,@WorkTime,@ContractTime,@Label,@DisplayColor,@NotScheduled)
-	END
+DELETE FROM ReadModel.ScheduleDay 
+WHERE PersonId = @PersonId AND BelongsToDate = @BelongsToDate
+
+INSERT INTO ReadModel.ScheduleDay 
+	(PersonId,BelongsToDate,StartDateTime,EndDateTime,Workday,WorkTime,ContractTime,Label,DisplayColor,NotScheduled) 
+VALUES 
+	(@PersonId,@BelongsToDate,@StartDateTime,@EndDateTime,@Workday,@WorkTime,@ContractTime,@Label,@DisplayColor,@NotScheduled)
+
 RETURN
 
 GO
