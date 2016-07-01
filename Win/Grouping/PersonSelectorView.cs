@@ -425,7 +425,8 @@ namespace Teleopti.Ccc.Win.Grouping
 
 		private void treeViewAdvMainTabTreeAfterCheck(object sender, TreeNodeAdvEventArgs e)
 		{
-			_eventAggregator.GetEvent<GroupPageNodeCheckedChange>().Publish("");
+			if (e.Node.Level == 1)
+				_eventAggregator.GetEvent<GroupPageNodeCheckedChange>().Publish("");
 		}
 
 		private void contextMenuStripOpening(object sender, System.ComponentModel.CancelEventArgs e)
