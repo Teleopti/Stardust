@@ -4,6 +4,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.RealTimeAdherence
 {
     public class RtaMap : VersionedAggregateRootWithBusinessUnit, IRtaMap
+
 	{
         private readonly IRtaStateGroup _stateGroup;
         private readonly IActivity _activity;

@@ -43,10 +43,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				Maps.Add(new RtaMap(null, phone));
 			});
 
-			var result = WithUnitOfWork.Get(() => Target.Read())
-				.SingleOrDefault(x => x.ActivityId != phone.Id.Value);
-
-			result.Should().Not.Be.Null();
+			WithUnitOfWork.Get(() => Target.Read())
+				.Single().ActivityId
+				.Should().Be(phone.Id.Value);
 		}		
 
 		[Test]
@@ -60,13 +59,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				Maps.Add(new RtaMap(group, null));
 			});
 
-			var result = WithUnitOfWork.Get(() => Target.Read())
-				.First(x => x.StateGroupId == group.Id.Value);
+			var mapping = WithUnitOfWork.Get(() => Target.Read()).Single();
 
-			result.StateGroupId.Should().Be(group.Id.Value);
-			result.StateGroupName.Should().Be("Phone");
-			result.StateCode.Should().Be("phone");
-			result.PlatformTypeId.Should().Be(group.StateCollection.Single().PlatformTypeId);
+			mapping.StateGroupId.Should().Be(group.Id.Value);
+			mapping.StateGroupName.Should().Be("Phone");
+			mapping.StateCode.Should().Be("phone");
+			mapping.PlatformTypeId.Should().Be(group.StateCollection.Single().PlatformTypeId);
 		}
 
 		[Test]
@@ -79,28 +77,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				Groups.Add(group);
 			});
 
-			var result = WithUnitOfWork.Get(() => Target.Read())
-				.First(x => x.StateGroupId == group.Id.Value);
+			var mapping = WithUnitOfWork.Get(() => Target.Read()).Single();
 
-			result.StateGroupId.Should().Be(group.Id.Value);
-			result.StateGroupName.Should().Be("Phone");
-			result.StateCode.Should().Be("phone");
-			result.PlatformTypeId.Should().Be(group.StateCollection.Single().PlatformTypeId);
-		}
-
-		[Test]
-		public void ShouldIncludeStateGroupWithoutMapping()
-		{
-			var group = new RtaStateGroup("Phone", true, true);
-			WithUnitOfWork.Do(() =>
-			{
-				Groups.Add(group);
-			});
-
-			var result = WithUnitOfWork.Get(() => Target.Read())
-				.Single(x => x.StateGroupId == group.Id.Value);
-
-			result.StateGroupId.Should().Be(group.Id.Value);
+			mapping.StateGroupId.Should().Be(group.Id.Value);
+			mapping.StateGroupName.Should().Be("Phone");
+			mapping.StateCode.Should().Be("phone");
+			mapping.PlatformTypeId.Should().Be(group.StateCollection.Single().PlatformTypeId);
 		}
 
 		[Test]
@@ -120,14 +102,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				Maps.Add(new RtaMap(null, null) {RtaRule = rule});
 			});
 
-			var result = WithUnitOfWork.Get(() => Target.Read())
-				.Single(x => x.ActivityId == null && x.StateGroupId == null);
+			var mapping = WithUnitOfWork.Get(() => Target.Read()).Single();
 
-			result.RuleId.Should().Be(rule.Id.Value);
-			result.RuleName.Should().Be("InAdherence");
-			result.DisplayColor.Should().Be(Color.Blue.ToArgb());
-			result.StaffingEffect.Should().Be(1);
-			result.Adherence.Should().Be(Adherence.In);
+			mapping.RuleId.Should().Be(rule.Id.Value);
+			mapping.RuleName.Should().Be("InAdherence");
+			mapping.DisplayColor.Should().Be(Color.Blue.ToArgb());
+			mapping.StaffingEffect.Should().Be(1);
+			mapping.Adherence.Should().Be(Adherence.In);
 		}
 
 		[Test]
@@ -146,12 +127,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				Maps.Add(new RtaMap(null, null) { RtaRule = rule });
 			});
 
-			var result = WithUnitOfWork.Get(() => Target.Read())
-				.Single(x => x.ActivityId == null && x.StateGroupId == null);
+			var mapping = WithUnitOfWork.Get(() => Target.Read()).Single();
 
-			result.IsAlarm.Should().Be(true);
-			result.AlarmColor.Should().Be(Color.Red.ToArgb());
-			result.ThresholdTime.Should().Be(TimeSpan.FromSeconds(2).Ticks);
+			mapping.IsAlarm.Should().Be(true);
+			mapping.AlarmColor.Should().Be(Color.Red.ToArgb());
+			mapping.ThresholdTime.Should().Be(TimeSpan.FromSeconds(2).Ticks);
 		}
 
 		[Test]
@@ -160,10 +140,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var mapping = new RtaMap(null, null);
 			WithUnitOfWork.Do(() => Maps.Add(mapping));
 
-			var result = WithUnitOfWork.Get(() => Target.Read())
-				.Single(x => x.ActivityId == null && x.StateGroupId == null);
-
-			result.BusinessUnitId.Should().Be(mapping.BusinessUnit.Id.Value);
+			WithUnitOfWork.Get(() => Target.Read())
+				.Single().BusinessUnitId.Should().Be(mapping.BusinessUnit.Id.Value);
 		}
 
 		[Test]
@@ -175,60 +153,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				Groups.Add(group);
 			});
 
-			var result = WithUnitOfWork.Get(() => Target.Read())
-				.Single(x => x.StateGroupId == group.Id.Value);
-
-			result.BusinessUnitId.Should().Be(group.BusinessUnit.Id.Value);
-		}
-
-		[Test]
-		public void ShouldReadMappingWithoutStateGroup()
-		{
-			WithUnitOfWork.Do(() => Maps.Add(new RtaMap(null, null)));
-
 			WithUnitOfWork.Get(() => Target.Read())
-				.Single().StateGroupId.Should().Be(null);
-		}
-
-		[Test]
-		public void ShouldReadActivityWithoutMapping()
-		{
-			var phone = new Activity("Phone");
-			WithUnitOfWork.Do(() =>
-			{
-				Activities.Add(phone);
-			});
-
-			WithUnitOfWork.Get(() => Target.Read())
-				.Select(x => x.ActivityId).Should().Contain(phone.Id.Value);
-		}
-
-		[Test]
-		public void ShouldAlwaysReadMappingForNoActivityAndNoState()
-		{
-			var result = WithUnitOfWork.Get(() => Target.Read()).Single();
-
-			result.ActivityId.Should().Be(null);
-			result.StateGroupId.Should().Be(null);
-		}
-
-		[Test]
-		public void ShouldIncludeMissingMappingCombinations()
-		{
-			var group = new RtaStateGroup("Phone", true, true);
-			var activity = new Activity("Phone");
-			WithUnitOfWork.Do(() =>
-			{
-				Groups.Add(group);
-				Activities.Add(activity);
-			});
-
-			var result = WithUnitOfWork.Get(() => Target.Read());
-
-			result.Where(x => x.ActivityId == activity.Id.Value && x.StateGroupId == group.Id.Value).Should().Not.Be.Empty();
-			result.Where(x => x.ActivityId == activity.Id.Value && x.StateGroupId == null).Should().Not.Be.Empty();
-			result.Where(x => x.ActivityId == null && x.StateGroupId == group.Id.Value).Should().Not.Be.Empty();
-			result.Where(x => x.ActivityId == null && x.StateGroupId == null).Should().Not.Be.Empty();
+				.Single().BusinessUnitId.Should().Be(group.BusinessUnit.Id.Value);
 		}
 	}
 }

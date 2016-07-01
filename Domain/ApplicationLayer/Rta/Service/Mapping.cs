@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		
 		public string StateCode { get; set; }
 		public Guid PlatformTypeId { get; set; }
-		public Guid? StateGroupId { get; set; }
+		public Guid StateGroupId { get; set; }
 		public string StateGroupName { get; set; }
 
 		public Guid? ActivityId { get; set; }

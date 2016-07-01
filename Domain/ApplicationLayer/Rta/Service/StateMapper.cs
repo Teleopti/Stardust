@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					m.StateCode == stateCode
 				select new MappedState
 				{
-					StateGroupId = m.StateGroupId.Value,
+					StateGroupId = m.StateGroupId,
 					StateGroupName = m.StateGroupName
 				})
 				.FirstOrDefault();
