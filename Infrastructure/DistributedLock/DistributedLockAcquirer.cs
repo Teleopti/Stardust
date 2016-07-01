@@ -36,16 +36,23 @@ namespace Teleopti.Ccc.Infrastructure.DistributedLock
 
 		public void TryLockForTypeOf(object lockObject, Action action)
 		{
-			var connection = new SqlConnection(_connectionStrings.Application());
-			connection.Open();
-			var resource = ProxyUtil.GetUnproxiedType(lockObject).Name;
-			if (_monitor.TryEnter(resource, TimeSpan.Zero, connection))
+			using (var connection = new SqlConnection(_connectionStrings.Application()))
 			{
-				action();
-				_monitor.Exit(resource, TimeSpan.Zero, connection);
+				connection.Open();
+				var resource = ProxyUtil.GetUnproxiedType(lockObject).Name;
+				if (_monitor.TryEnter(resource, TimeSpan.Zero, connection))
+				{
+					try
+					{
+						action();
+					}
+					finally 
+					{
+						_monitor.Exit(resource, TimeSpan.Zero, connection);
+					}
+				}
+				connection.Close();
 			}
-			connection.Close();
-			connection.Dispose();
 		}
 
 		private TimeSpan timeout()

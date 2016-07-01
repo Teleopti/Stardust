@@ -258,7 +258,7 @@
     <Compile Include="Foundation\DatabaseCommand.cs" />
     <Compile Include="DistributedLock\DistributedLockAcquirer.cs" />
     <Compile Include="DistributedLock\DistributedLockException.cs" />
-    <Compile Include="DistributedLock\SqlServerDistributedLock.cs" />
+    <Compile Include="DistributedLock\SqlMonitor.cs" />
     <Compile Include="Forecasting\Angel\LinearRegressionTrendCalculator.cs" />
     <Compile Include="Forecasting\Angel\OutlierRemover.cs" />
     <Compile Include="Foundation\CouldNotCreateTransactionException.cs" />

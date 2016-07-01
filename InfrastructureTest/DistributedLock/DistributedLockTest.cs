@@ -191,7 +191,36 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 				successCount++;
 			});
 
-			successCount.Should().Be.EqualTo(2);
+			successCount.Should().Be(2);
+		}
+
+		[Test]
+		public void ShouldReleaseLockOnException()
+		{
+			var wasReleased = false;
+			var exceptionThrown = false;
+			try
+			{
+				Target.TryLockForTypeOf(new Lock1(), () =>
+				{
+					throw new TestException();
+				});
+			}
+			catch (TestException)
+			{
+				exceptionThrown = true;
+			}
+			Target.TryLockForTypeOf(new Lock1(), () =>
+			{
+				wasReleased = true;
+			});
+
+			wasReleased.Should().Be(true);
+			exceptionThrown.Should().Be(true);
+		}
+
+		public class TestException : Exception
+		{
 		}
 
 		public class Lock1
