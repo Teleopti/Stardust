@@ -412,18 +412,18 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var skillDayB = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var asses = new List<IPersonAssignment>();
 			// These shouldn't be moved//
-			var agentA = new Person().InTimeZone(TimeZoneInfo.Utc);
-			agentA.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }),
+			var agentA1 = new Person().InTimeZone(TimeZoneInfo.Utc);
+			agentA1.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }),
 				new[] { skillA1 });
-			var assA = new PersonAssignment(agentA, scenario, dateOnly);
-			assA.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
-			asses.Add(assA);
-			var agentB = new Person().InTimeZone(TimeZoneInfo.Utc);
-			agentB.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }),
+			var assA1 = new PersonAssignment(agentA1, scenario, dateOnly);
+			assA1.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
+			asses.Add(assA1);
+			var agentA2 = new Person().InTimeZone(TimeZoneInfo.Utc);
+			agentA2.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }),
 				new[] { skillA2 });
-			var assB = new PersonAssignment(agentB, scenario, dateOnly);
-			assB.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
-			asses.Add(assB);
+			var assA2 = new PersonAssignment(agentA2, scenario, dateOnly);
+			assA2.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
+			asses.Add(assA2);
 			//                         //
 			var multiskilledAgent = new Person().InTimeZone(TimeZoneInfo.Utc);
 			multiskilledAgent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }),
