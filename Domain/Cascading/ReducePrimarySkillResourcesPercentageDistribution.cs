@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class ReducePrimarySkillResourcesPercentageDistribution
 	{
-		public void Execute(ISkillStaffPeriodHolder skillStaffPeriodHolder, IEnumerable<ISkill> primarySkills, DateTimePeriod interval, ShovelResourcesState state)
+		public void Execute(ShovelResourcesState state, ISkillStaffPeriodHolder skillStaffPeriodHolder, IEnumerable<ISkill> primarySkills, DateTimePeriod interval)
 		{
 			if (jumpOutEarly(state))
 				return;
