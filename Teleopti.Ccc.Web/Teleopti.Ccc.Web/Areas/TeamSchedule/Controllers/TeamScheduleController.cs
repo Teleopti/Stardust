@@ -24,6 +24,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 {
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules)]
 	public class TeamScheduleController : ApiController
 	{
 		private readonly IAuthorization _authorization;
