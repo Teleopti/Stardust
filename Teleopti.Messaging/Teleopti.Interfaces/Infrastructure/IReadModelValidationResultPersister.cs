@@ -10,6 +10,6 @@ namespace Teleopti.Interfaces.Infrastructure
 		IEnumerable<ReadModelValidationResult> LoadAllInvalidScheduleProjectionReadOnly();
 		IEnumerable<ReadModelValidationResult> LoadAllInvalidPersonScheduleDay();
 		IEnumerable<ReadModelValidationResult> LoadAllInvalidScheduleDay();
-		void Reset(IList<ValidateReadModelType> types);
+		void Reset(ValidateReadModelType types);
 	}
 }

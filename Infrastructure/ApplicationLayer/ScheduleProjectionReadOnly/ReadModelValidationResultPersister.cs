@@ -77,21 +77,21 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 			return result;
 		}
 
-		public void Reset(IList<ValidateReadModelType> types)
+		public void Reset(ValidateReadModelType types)
 		{
-			if (types.Contains(ValidateReadModelType.ScheduleProjectionReadOnly))
+			if (types.HasFlag(ValidateReadModelType.ScheduleProjectionReadOnly))
 			{
 				_currentUnitOfWork.Session().CreateSQLQuery("TRUNCATE TABLE [ReadModel].[ScheduleProjectionReadOnly_check]")
 					.ExecuteUpdate();
 			}
 
-			if(types.Contains(ValidateReadModelType.PersonScheduleDay))
+			if(types.HasFlag(ValidateReadModelType.PersonScheduleDay))
 			{
 				_currentUnitOfWork.Session().CreateSQLQuery("TRUNCATE TABLE [ReadModel].[PersonScheduleDay_check]")
 					.ExecuteUpdate();
 			}
 
-			if(types.Contains(ValidateReadModelType.ScheduleDay))
+			if(types.HasFlag(ValidateReadModelType.ScheduleDay))
 			{
 				_currentUnitOfWork.Session().CreateSQLQuery("TRUNCATE TABLE [ReadModel].[ScheduleDay_check]")
 					.ExecuteUpdate();

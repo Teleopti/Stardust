@@ -73,10 +73,10 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 				result.Add(x);
 			};
 
-			Target.SetTargetTypes(new List<ValidateReadModelType> {ValidateReadModelType.ScheduleProjectionReadOnly});
+			Target.SetTargetTypes(ValidateReadModelType.ScheduleProjectionReadOnly);
 			Target.Validate(new DateTime(2016, 1, 1), new DateTime(2016, 1, 1), action, true);
 	
-			result.Count().Should().Be.EqualTo(1);
+			result.Count.Should().Be.EqualTo(1);
 			result.Single().PersonId.Should().Be.EqualTo(person.Id.Value);
 			result.Single().Date.Should().Be.EqualTo("2016-01-01".Date().Date);
 			result.Single().Type.Should().Be.EqualTo(ValidateReadModelType.ScheduleProjectionReadOnly);
@@ -114,9 +114,8 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 				result.Add(x);
 			};
 			Target.Validate(new DateTime(2016, 1, 1), new DateTime(2016, 1, 1), action, true);
-
-
-			result.Count().Should().Be.EqualTo(0);
+			
+			result.Count.Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -144,10 +143,10 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 				result.Add(x);
 			};
 
-			Target.SetTargetTypes(new List<ValidateReadModelType> {ValidateReadModelType.PersonScheduleDay});
+			Target.SetTargetTypes(ValidateReadModelType.PersonScheduleDay);
 			Target.Validate(new DateTime(2016, 1, 1), new DateTime(2016, 1, 1), action, true);
 
-			result.Count().Should().Be.EqualTo(1);
+			result.Count.Should().Be.EqualTo(1);
 			result.Single().PersonId.Should().Be.EqualTo(person.Id.Value);
 			result.Single().Date.Should().Be.EqualTo("2016-01-01".Date().Date);
 			result.Single().Type.Should().Be.EqualTo(ValidateReadModelType.PersonScheduleDay);
@@ -179,10 +178,10 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 				result.Add(x);
 			};
 
-			Target.SetTargetTypes(new List<ValidateReadModelType> { ValidateReadModelType.PersonScheduleDay });
+			Target.SetTargetTypes(ValidateReadModelType.PersonScheduleDay);
 			Target.Validate(new DateTime(2016, 1, 1), new DateTime(2016, 1, 1), action, true);
 
-			result.Count().Should().Be.EqualTo(0);
+			result.Count.Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -210,16 +209,15 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 				result.Add(x);
 			};
 
-			Target.SetTargetTypes(new List<ValidateReadModelType> { ValidateReadModelType.ScheduleDay });
+			Target.SetTargetTypes(ValidateReadModelType.ScheduleDay);
 			Target.Validate(new DateTime(2016,1,1),new DateTime(2016,1,1),action,true);
 
-			result.Count().Should().Be.EqualTo(1);
+			result.Count.Should().Be.EqualTo(1);
 			result.Single().PersonId.Should().Be.EqualTo(person.Id.Value);
 			result.Single().Date.Should().Be.EqualTo("2016-01-01".Date().Date);
 			result.Single().Type.Should().Be.EqualTo(ValidateReadModelType.ScheduleDay);
 		}
-
-
+		
 		[Test]
 		public void ShouldFindNoErrorInNormalScheduleDayReadModel()
 		{
@@ -257,10 +255,10 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 				result.Add(x);
 			};
 
-			Target.SetTargetTypes(new List<ValidateReadModelType> { ValidateReadModelType.ScheduleDay });
+			Target.SetTargetTypes(ValidateReadModelType.ScheduleDay);
 			Target.Validate(new DateTime(2016,1,1),new DateTime(2016,1,1),action,true);
 
-			result.Count().Should().Be.EqualTo(0);
+			result.Count.Should().Be.EqualTo(0);
 		}
 
 
@@ -286,10 +284,10 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 				result.Add(x);
 			};
 
-			Target.SetTargetTypes(new List<ValidateReadModelType> { ValidateReadModelType.ScheduleDay });
+			Target.SetTargetTypes(ValidateReadModelType.ScheduleDay);
 			Target.Validate(new DateTime(2016,1,1),new DateTime(2016,1,1),action,true);
 
-			result.Count().Should().Be.EqualTo(0);		
+			result.Count.Should().Be.EqualTo(0);		
 		}
 
 		[Test]
@@ -325,13 +323,10 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 				result.Add(x);
 			};
 
-			Target.SetTargetTypes(new List<ValidateReadModelType> { ValidateReadModelType.ScheduleDay });
+			Target.SetTargetTypes(ValidateReadModelType.ScheduleDay);
 			Target.Validate(new DateTime(2016,1,1),new DateTime(2016,1,1),action,true);
 
-			result.Count().Should().Be.EqualTo(1);
+			result.Count.Should().Be.EqualTo(1);
 		}
-
-
-
 	}
 }

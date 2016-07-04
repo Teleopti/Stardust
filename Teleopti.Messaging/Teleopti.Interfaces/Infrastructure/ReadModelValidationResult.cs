@@ -2,11 +2,12 @@ using System;
 
 namespace Teleopti.Interfaces.Infrastructure
 {
-	public enum ValidateReadModelType
+	[Flags]public enum ValidateReadModelType
 	{
+		None,
 		ScheduleProjectionReadOnly,
 		PersonScheduleDay,
-		ScheduleDay
+		ScheduleDay = 4
 	}
 
 	public class ReadModelValidationResult

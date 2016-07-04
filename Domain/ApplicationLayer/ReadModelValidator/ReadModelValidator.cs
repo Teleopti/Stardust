@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -19,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 		private readonly IReadModelScheduleProjectionReadOnlyValidator _readModelScheduleProjectionReadOnlyValidator;
 		private readonly IReadModelScheduleDayValidator _readModelScheduleDayValidator;
 
-		private IList<ValidateReadModelType> _targetTypes = new List<ValidateReadModelType>();
+		private ValidateReadModelType _targetTypes;
 
 		public ReadModelValidator(IPersonRepository personRepository, 
 								IScheduleStorage scheduleStorage, 
@@ -65,7 +64,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 			}
 		}
 
-		public void SetTargetTypes(IList<ValidateReadModelType> types)
+		public void SetTargetTypes(ValidateReadModelType types)
 		{
 			_targetTypes = types;
 		}
@@ -73,12 +72,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 		private void validate(IPerson person, IScheduleDay scheduleDay,
 			Action<ReadModelValidationResult> reportProgress, bool ignoreValid)
 		{
-			if(_targetTypes.Contains(ValidateReadModelType.ScheduleProjectionReadOnly))
+			if(_targetTypes.HasFlag(ValidateReadModelType.ScheduleProjectionReadOnly))
 			{
 				var isInvalid = !_readModelScheduleProjectionReadOnlyValidator.Validate(person,scheduleDay);
 				if(isInvalid || !ignoreValid) reportProgress(makeResult(person,scheduleDay.DateOnlyAsPeriod.DateOnly,!isInvalid,ValidateReadModelType.ScheduleProjectionReadOnly));
 			}
-			if(_targetTypes.Contains(ValidateReadModelType.PersonScheduleDay))
+			if(_targetTypes.HasFlag(ValidateReadModelType.PersonScheduleDay))
 			{
 				var isInvalid = !_readModelPersonScheduleDayValidator.Validate(person,scheduleDay);
 				if(isInvalid || !ignoreValid)
@@ -87,7 +86,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 				}
 			}
 
-			if(_targetTypes.Contains(ValidateReadModelType.ScheduleDay))
+			if(_targetTypes.HasFlag(ValidateReadModelType.ScheduleDay))
 			{
 				var isInvalid = !_readModelScheduleDayValidator.Validate(person,scheduleDay);
 				if(isInvalid || !ignoreValid)

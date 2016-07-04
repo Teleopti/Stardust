@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
@@ -43,7 +42,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 
 		public void Handle(FixReadModelsEvent @event)
 		{
-			if (@event.Targets.Contains(ValidateReadModelType.ScheduleProjectionReadOnly))
+			if (@event.Targets.HasFlag(ValidateReadModelType.ScheduleProjectionReadOnly))
 			{
 				var invalidRecords = _persister.LoadAllInvalidScheduleProjectionReadOnly();
 
@@ -61,7 +60,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 				}
 			}
 
-			if (@event.Targets.Contains(ValidateReadModelType.PersonScheduleDay))
+			if (@event.Targets.HasFlag(ValidateReadModelType.PersonScheduleDay))
 			{
 				var invalidRecords = _persister.LoadAllInvalidPersonScheduleDay();
 
@@ -74,7 +73,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 				}
 			}
 
-			if(@event.Targets.Contains(ValidateReadModelType.ScheduleDay))
+			if(@event.Targets.HasFlag(ValidateReadModelType.ScheduleDay))
 			{
 				var invalidRecords = _persister.LoadAllInvalidScheduleDay();
 
