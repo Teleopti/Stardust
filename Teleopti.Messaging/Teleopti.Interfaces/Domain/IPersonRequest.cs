@@ -43,6 +43,18 @@ namespace Teleopti.Interfaces.Domain
         string GetMessage(ITextFormatter formatter);
 
         /// <summary>
+        /// Tries the set broken business rules and returns the result.
+        /// </summary>
+        /// <returns></returns>
+        bool TrySetBrokenBusinessRule(int brokenRule);
+
+        /// <summary>
+        /// Gets broken business rule
+        /// </summary>
+        /// <returns></returns>
+        int GetBrokenBusinessRule();
+
+        /// <summary>
         /// Gets or sets the request.
         /// </summary>
         /// <value>The current request.</value>

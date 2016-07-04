@@ -51,6 +51,10 @@
         not-null="false"
         type="string"
         length="2000"/>
+    
+    <property name="BrokenBusinessRule"
+        not-null="false"
+        type="int"/>
 
 
     <bag name="PersonAbsences" inverse="true" lazy="false">
