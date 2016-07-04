@@ -2598,7 +2598,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (e.Error != null)
 			{
-				var dataSourceException = e.Error as CouldNotCreateTransactionException;
+				var dataSourceException = e.Error ; //as CouldNotCreateTransactionException;
 				if (dataSourceException == null)
 					return false;
 
