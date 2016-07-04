@@ -111,6 +111,57 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				select kp.Value).ToList();
 		}
 
+		public static BusinessRuleFlags GetFlagFromRules(INewBusinessRuleCollection rules)
+		{
+			var ruleAndFlagMapping = new Dictionary<Type, BusinessRuleFlags>
+			{
+				{
+					typeof (DataPartOfAgentDay), BusinessRuleFlags.DataPartOfAgentDay
+				},
+				{
+					typeof (MinWeeklyRestRule), BusinessRuleFlags.MinWeeklyRestRule
+				},
+				{
+					typeof (MinWeekWorkTimeRule), BusinessRuleFlags.MinWeekWorkTimeRule
+				},
+				{
+					typeof (NewDayOffRule), BusinessRuleFlags.NewDayOffRule
+				},
+				{
+					typeof (NewMaxWeekWorkTimeRule), BusinessRuleFlags.NewMaxWeekWorkTimeRule
+				},
+				{
+					typeof (NewNightlyRestRule), BusinessRuleFlags.NewNightlyRestRule
+				},
+				{
+					typeof (NewPersonAccountRule), BusinessRuleFlags.NewPersonAccountRule
+				},
+				{
+					typeof (NewShiftCategoryLimitationRule), BusinessRuleFlags.NewShiftCategoryLimitationRule
+				},
+				{
+					typeof (NonMainShiftActivityRule), BusinessRuleFlags.NonMainShiftActivityRule
+				},
+				{
+					typeof (OpenHoursRule), BusinessRuleFlags.OpenHoursRule
+				},
+				{
+					typeof (WeekShiftCategoryLimitationRule), BusinessRuleFlags.WeekShiftCategoryLimitationRule
+				}
+			};
+			var result = BusinessRuleFlags.None;
+			foreach (var rule in rules)
+			{
+				var ruleType = rule.GetType();
+				if (ruleAndFlagMapping.ContainsKey(ruleType))
+				{
+					result = result | ruleAndFlagMapping[ruleType];
+				}
+			}
+
+			return result;
+		}
+
 		public IEnumerable<IBusinessRuleResponse> CheckRules(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays)
 		{
 			var responseList = new List<IBusinessRuleResponse>();
@@ -131,13 +182,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			{
 				var bu = this[i];
 
-				if (businessRuleResponseToOverride.TypeOfRule.Equals(bu.GetType()))
-				{
-					if(!bu.IsMandatory)
-						bu.HaltModify = false;
+				if (businessRuleResponseToOverride.TypeOfRule != bu.GetType()) continue;
 
-					return;
-				}
+				if(!bu.IsMandatory)
+					bu.HaltModify = false;
+
+				return;
 			}
 		}
 

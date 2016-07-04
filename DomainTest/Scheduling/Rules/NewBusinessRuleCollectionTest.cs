@@ -46,6 +46,22 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			Assert.AreEqual(rules.IndexOf(typeof (NewShiftCategoryLimitationRule)), -1);
 		}
 
+		[Test]
+		public void ShouldGetCorrectFlagFromRules()
+		{
+			const BusinessRuleFlags expectedFlag = BusinessRuleFlags.MinWeekWorkTimeRule
+												   | BusinessRuleFlags.NewMaxWeekWorkTimeRule
+												   | BusinessRuleFlags.DataPartOfAgentDay;
+
+			var rules = NewBusinessRuleCollection.Minimum();
+			rules.Add(new MinWeekWorkTimeRule(null));
+			rules.Add(new NewMaxWeekWorkTimeRule(null));
+			rules.Add(new DataPartOfAgentDay());
+
+			var flag = NewBusinessRuleCollection.GetFlagFromRules(rules);
+			Assert.AreEqual(flag, expectedFlag);
+		}
+
 		[Test, SetUICulture("en-GB")]
 		public void ShouldSetCulture()
 		{
