@@ -16,7 +16,20 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Wfm.Administration.Core
 {
-	public class CreateBusinessUnit
+	public class CreateBusinessUnitFake : ICreateBusinessUnit
+	{
+		public void Create(Tenant tenant, string businessUnitName)
+		{
+			
+		}
+	}
+
+	public interface ICreateBusinessUnit
+	{
+		void Create(Tenant tenant, string businessUnitName);
+	}
+
+	public class CreateBusinessUnit : ICreateBusinessUnit
 	{
 		private readonly IDataSourcesFactory _dataSourcesFactory;
 		private readonly IRunWithUnitOfWork _runWithUnitOfWork;

@@ -43,7 +43,7 @@ namespace Teleopti.Wfm.Administration.Core
 			builder.RegisterType<LoadAllTenants>().As<ILoadAllTenants>().SingleInstance();
 			builder.RegisterType<Import>().SingleInstance();
 			builder.RegisterType<SaveTenant>().SingleInstance();
-			builder.RegisterType<CreateBusinessUnit>().InstancePerDependency();
+			builder.RegisterType<CreateBusinessUnit>().As<ICreateBusinessUnit>().InstancePerDependency();
 			builder.RegisterType<DbPathProvider>().As<IDbPathProvider>().SingleInstance();
 			builder.RegisterType<CheckPasswordStrength>().As<ICheckPasswordStrength>().SingleInstance();
 			builder.RegisterType<DeleteTenant>().SingleInstance();

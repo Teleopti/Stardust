@@ -26,7 +26,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly ICheckPasswordStrength _checkPasswordStrength;
 		private readonly PersistTenant _persistTenant;
 		private readonly IUpdateCrossDatabaseView _updateCrossDatabaseView;
-		private readonly CreateBusinessUnit _createBusinessUnit;
+		private readonly ICreateBusinessUnit _createBusinessUnit;
 
 		public DatabaseController(
 			IDatabaseHelperWrapper databaseHelperWrapper, 
@@ -36,7 +36,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			ICheckPasswordStrength checkPasswordStrength,
 			PersistTenant persistTenant,
 			IUpdateCrossDatabaseView updateCrossDatabaseView,
-			CreateBusinessUnit createBusinessUnit)
+			ICreateBusinessUnit createBusinessUnit)
 		{
 			_databaseHelperWrapper = databaseHelperWrapper;
 			_currentTenantSession = currentTenantSession;

@@ -11,7 +11,6 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Wfm.Administration.Controllers;
 using Teleopti.Wfm.Administration.Core;
-using Teleopti.Wfm.Administration.Models;
 
 namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 {
@@ -30,6 +29,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			system.UseTestDouble<CheckDatabaseVersionsFake>().For<ICheckDatabaseVersions>();
 			system.UseTestDouble<UpdateCrossDatabaseViewFake>().For<IUpdateCrossDatabaseView>();
 			system.UseTestDouble<GetImportUsersFake>().For<IGetImportUsers>();
+			system.UseTestDouble<CreateBusinessUnitFake>().For<ICreateBusinessUnit>();
 		}
 
 		[Test]
