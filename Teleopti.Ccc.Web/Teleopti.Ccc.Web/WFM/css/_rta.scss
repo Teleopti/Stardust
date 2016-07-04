@@ -117,6 +117,13 @@
 .rta-top-buttons-wrapper {
 	margin-left: 20px;
 }
+.rta-default-cursor{
+	cursor: default;
+	box-shadow: none;
+}
+.rta-default-cursor:hover{
+	box-shadow: none;
+}
 ///////////End of rta-skills///////////////////////
 ///////////rta-agents///////////////////////
 .agent-row {
