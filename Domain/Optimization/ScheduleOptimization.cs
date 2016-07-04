@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var period = planningPeriod.Range;
 			_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, null, period);
-			var schedules = schedulerStateHolder.Schedules.SchedulesForPeriod(period, schedulerStateHolder.AllPermittedPersons.FixedStaffPeople(period)).ToList();
+			var schedules = schedulerStateHolder.Schedules.SchedulesForPeriod(period, schedulerStateHolder.AllPermittedPersons.FixedStaffPeople(period)).ToArray();
 
 			var matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListForSelection(schedules);
 			var matrixOriginalStateContainerListForDayOffOptimization =

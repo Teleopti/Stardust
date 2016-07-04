@@ -387,7 +387,7 @@ namespace Teleopti.Ccc.Domain.Collection
             return new ReadOnlyCollection<IScheduleDay>(retList);
         }
 
-	    public IEnumerable<IScheduleDay> SchedulesForPeriod(DateOnlyPeriod period, IEnumerable<IPerson> agents)
+	    public IEnumerable<IScheduleDay> SchedulesForPeriod(DateOnlyPeriod period, params IPerson[] agents)
 	    {
 			var schedules = new List<IScheduleDay>();
 			foreach (var person in agents)

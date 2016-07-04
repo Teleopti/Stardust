@@ -39,24 +39,28 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 		public void Validate(DateTime start, DateTime end, Action<ReadModelValidationResult> reportProgress,
 			bool ignoreValid = false)
 		{
-			var people = _personRepository.LoadAllPeopleWithHierarchyDataSortByName(new DateOnly(start));
+			var startDate = new DateOnly(start);
+			var people = _personRepository.LoadAllPeopleWithHierarchyDataSortByName(startDate);
 			var scenario = _currentScenario.Current();
-			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(start), new DateOnly(end));
+			var dateOnlyPeriod = new DateOnlyPeriod(startDate, new DateOnly(end));
 
-			var dayCollections = dateOnlyPeriod.ChunkedDayCollections(30);
+			var dayCollections = dateOnlyPeriod.DayCollection().Batch(30);
 
 			foreach (var dayCollection in dayCollections)
 			{
-				if (dayCollection.Count == 0) continue;
-				var extendedDateOnlyPeriod = new DateOnlyPeriod(dayCollection.First().AddDays(-1), dayCollection.Last().AddDays(1));
+				var days = dayCollection.ToArray();
+				if (!days.Any()) continue;
+				var period = new DateOnlyPeriod(days[0], days[days.Length-1]);
+				var extendedDateOnlyPeriodBecauseWeDontWantToConvertToEachPersonsTimeZone = period.Inflate(1);
 				foreach (var person in people)
 				{
 					var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
 						new ScheduleDictionaryLoadOptions(false, false),
-						extendedDateOnlyPeriod.ToDateTimePeriod(TimeZoneInfo.Utc),
+						extendedDateOnlyPeriodBecauseWeDontWantToConvertToEachPersonsTimeZone.ToDateTimePeriod(TimeZoneInfo.Utc),
 						scenario);
+					var scheduleDays = schedules.SchedulesForPeriod(period, person).ToLookup(s => s.DateOnlyAsPeriod.DateOnly);
 
-					dayCollection.ForEach(day => validate(person, day, schedules, reportProgress, ignoreValid));
+					days.ForEach(day => validate(person, scheduleDays[day].First(), reportProgress, ignoreValid));
 				}
 			}
 		}
@@ -66,30 +70,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 			_targetTypes = types;
 		}
 
-		private void validate(IPerson person, DateOnly day, IScheduleDictionary schedules,
+		private void validate(IPerson person, IScheduleDay scheduleDay,
 			Action<ReadModelValidationResult> reportProgress, bool ignoreValid)
 		{
-			var scheduleDay = schedules.SchedulesForDay(day).SingleOrDefault();
 			if(_targetTypes.Contains(ValidateReadModelType.ScheduleProjectionReadOnly))
 			{
-				var isInvalid = !_readModelScheduleProjectionReadOnlyValidator.Validate(person,day,scheduleDay);
-				if(isInvalid || !ignoreValid) reportProgress(makeResult(person,day,!isInvalid,ValidateReadModelType.ScheduleProjectionReadOnly));
+				var isInvalid = !_readModelScheduleProjectionReadOnlyValidator.Validate(person,scheduleDay);
+				if(isInvalid || !ignoreValid) reportProgress(makeResult(person,scheduleDay.DateOnlyAsPeriod.DateOnly,!isInvalid,ValidateReadModelType.ScheduleProjectionReadOnly));
 			}
 			if(_targetTypes.Contains(ValidateReadModelType.PersonScheduleDay))
 			{
-				var isInvalid = !_readModelPersonScheduleDayValidator.Validate(person,day,scheduleDay);
+				var isInvalid = !_readModelPersonScheduleDayValidator.Validate(person,scheduleDay);
 				if(isInvalid || !ignoreValid)
 				{
-					reportProgress(makeResult(person,day,!isInvalid,ValidateReadModelType.PersonScheduleDay));
+					reportProgress(makeResult(person,scheduleDay.DateOnlyAsPeriod.DateOnly,!isInvalid,ValidateReadModelType.PersonScheduleDay));
 				}
 			}
 
 			if(_targetTypes.Contains(ValidateReadModelType.ScheduleDay))
 			{
-				var isInvalid = !_readModelScheduleDayValidator.Validate(person,day,scheduleDay);
+				var isInvalid = !_readModelScheduleDayValidator.Validate(person,scheduleDay);
 				if(isInvalid || !ignoreValid)
 				{
-					reportProgress(makeResult(person,day,!isInvalid,ValidateReadModelType.ScheduleDay));
+					reportProgress(makeResult(person,scheduleDay.DateOnlyAsPeriod.DateOnly,!isInvalid,ValidateReadModelType.ScheduleDay));
 				}
 			}
 		}

@@ -129,7 +129,7 @@ namespace Teleopti.Interfaces.Domain
 		/// </remarks>
 		IEnumerable<IScheduleDay> SchedulesForDay(DateOnly dateOnly);
 
-	    IEnumerable<IScheduleDay> SchedulesForPeriod(DateOnlyPeriod period, IEnumerable<IPerson> agents);
+	    IEnumerable<IScheduleDay> SchedulesForPeriod(DateOnlyPeriod period, params IPerson[] agents);
 
         /// <summary>
         /// Takes the snapshot for later use when checking what has been changed.

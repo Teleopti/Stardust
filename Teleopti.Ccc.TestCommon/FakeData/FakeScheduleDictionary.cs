@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			throw new NotImplementedException();
 		}
 
-		public IEnumerable<IScheduleDay> SchedulesForPeriod(DateOnlyPeriod period, IEnumerable<IPerson> agents)
+		public IEnumerable<IScheduleDay> SchedulesForPeriod(DateOnlyPeriod period, params IPerson[] agents)
 		{
 			throw new NotImplementedException();
 		}

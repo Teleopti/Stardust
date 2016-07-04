@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 {
 	public static class EnumerablePersonExtensions
 	{
-		public static IEnumerable<IPerson> FixedStaffPeople(this IEnumerable<IPerson> agents, DateOnlyPeriod period)
+		public static IPerson[] FixedStaffPeople(this IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
 			return agents.Where(
 				p =>
@@ -15,14 +15,14 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 						.Any(
 							pp =>
 								pp.PersonContract != null && pp.PersonContract.Contract != null &&
-								pp.PersonContract.Contract.EmploymentType != EmploymentType.HourlyStaff));
+								pp.PersonContract.Contract.EmploymentType != EmploymentType.HourlyStaff)).ToArray();
 		}
 
-		public static IEnumerable<IPerson> Filter(this IEnumerable<IPerson> agents, IEnumerable<Guid> agentIds)
+		public static IPerson[] Filter(this IEnumerable<IPerson> agents, IEnumerable<Guid> agentIds)
 		{
-			return agentIds == null ? 
+			return (agentIds == null ? 
 				agents : 
-				agents.Where(x => agentIds.Contains(x.Id.Value));
+				agents.Where(x => agentIds.Contains(x.Id.Value))).ToArray();
 		}
 	}
 }

@@ -87,13 +87,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		[UnitOfWork]
 		protected virtual void SetupAndSchedule(DateOnlyPeriod period)
 		{
-			_fillSchedulerStateHolder.Fill(_schedulerStateHolder(), null, null, null, period);
+			var stateHolder = _schedulerStateHolder();
+			_fillSchedulerStateHolder.Fill(stateHolder, null, null, null, period);
 
-			if (_schedulerStateHolder().Schedules.Any())
+			if (stateHolder.Schedules.Any())
 			{
 				_scheduleCommand().Execute(new OptimizerOriginalPreferences(_schedulingOptionsProvider.Fetch()), _schedulingProgress,
-					_schedulerStateHolder(),
-					_schedulerStateHolder().Schedules.SchedulesForPeriod(period, _schedulerStateHolder().SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period)).ToList(), 
+					stateHolder,
+					stateHolder.Schedules.SchedulesForPeriod(period, stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period)).ToArray(), 
 					_groupPagePerDateHolder(),
 					_requiredScheduleHelper(),
 					new OptimizationPreferences(), false, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));

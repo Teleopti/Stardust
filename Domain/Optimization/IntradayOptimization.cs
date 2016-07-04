@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		public void Execute(DateOnlyPeriod period, 
-												IList<IPerson> agents,
+												IPerson[] agents,
 												bool runResolveWeeklyRestRule)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();

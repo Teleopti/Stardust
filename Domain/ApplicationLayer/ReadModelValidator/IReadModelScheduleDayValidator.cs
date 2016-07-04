@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 {
 	public interface IReadModelScheduleDayValidator
 	{
-		bool Validate(IPerson person,DateOnly date,IScheduleDay scheduleDay);
+		bool Validate(IPerson person,IScheduleDay scheduleDay);
 		ScheduleDayReadModel FetchFromRepository(IPerson person,DateOnly date);
 		ScheduleDayReadModel Build(IPerson person,IScheduleDay scheduleDay);
 		ScheduleDayReadModel Build(Guid personId,DateOnly date);
