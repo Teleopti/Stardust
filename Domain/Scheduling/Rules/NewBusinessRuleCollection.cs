@@ -14,6 +14,84 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 {
 	public class NewBusinessRuleCollection : Collection<INewBusinessRule>, INewBusinessRuleCollection
 	{
+		#region Mapping between BusinessRule and BusinessRuleFlags
+		private static readonly Dictionary<Type, BusinessRuleFlags> ruleAndFlagMapping
+			= new Dictionary<Type, BusinessRuleFlags>
+			{
+				{
+					typeof (DataPartOfAgentDay), BusinessRuleFlags.DataPartOfAgentDay
+				},
+				{
+					typeof (MinWeeklyRestRule), BusinessRuleFlags.MinWeeklyRestRule
+				},
+				{
+					typeof (MinWeekWorkTimeRule), BusinessRuleFlags.MinWeekWorkTimeRule
+				},
+				{
+					typeof (NewDayOffRule), BusinessRuleFlags.NewDayOffRule
+				},
+				{
+					typeof (NewMaxWeekWorkTimeRule), BusinessRuleFlags.NewMaxWeekWorkTimeRule
+				},
+				{
+					typeof (NewNightlyRestRule), BusinessRuleFlags.NewNightlyRestRule
+				},
+				{
+					typeof (NewPersonAccountRule), BusinessRuleFlags.NewPersonAccountRule
+				},
+				{
+					typeof (NewShiftCategoryLimitationRule), BusinessRuleFlags.NewShiftCategoryLimitationRule
+				},
+				{
+					typeof (NonMainShiftActivityRule), BusinessRuleFlags.NonMainShiftActivityRule
+				},
+				{
+					typeof (OpenHoursRule), BusinessRuleFlags.OpenHoursRule
+				},
+				{
+					typeof (WeekShiftCategoryLimitationRule), BusinessRuleFlags.WeekShiftCategoryLimitationRule
+				}
+			};
+
+		private readonly static Dictionary<BusinessRuleFlags, Type> flagAndRuleMapping
+			= new Dictionary<BusinessRuleFlags, Type>
+			{
+				{
+					BusinessRuleFlags.DataPartOfAgentDay, typeof (DataPartOfAgentDay)
+				},
+				{
+					BusinessRuleFlags.MinWeeklyRestRule, typeof (MinWeeklyRestRule)
+				},
+				{
+					BusinessRuleFlags.MinWeekWorkTimeRule, typeof (MinWeekWorkTimeRule)
+				},
+				{
+					BusinessRuleFlags.NewDayOffRule, typeof (NewDayOffRule)
+				},
+				{
+					BusinessRuleFlags.NewMaxWeekWorkTimeRule, typeof (NewMaxWeekWorkTimeRule)
+				},
+				{
+					BusinessRuleFlags.NewNightlyRestRule, typeof (NewNightlyRestRule)
+				},
+				{
+					BusinessRuleFlags.NewPersonAccountRule, typeof (NewPersonAccountRule)
+				},
+				{
+					BusinessRuleFlags.NewShiftCategoryLimitationRule, typeof (NewShiftCategoryLimitationRule)
+				},
+				{
+					BusinessRuleFlags.NonMainShiftActivityRule, typeof (NonMainShiftActivityRule)
+				},
+				{
+					BusinessRuleFlags.OpenHoursRule, typeof (OpenHoursRule)
+				},
+				{
+					BusinessRuleFlags.WeekShiftCategoryLimitationRule, typeof (WeekShiftCategoryLimitationRule)
+				}
+			};
+		#endregion
+
 		private CultureInfo _culture = Thread.CurrentThread.CurrentUICulture;
 		private NewBusinessRuleCollection()
 		{
@@ -70,93 +148,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		public static IEnumerable<Type> GetRulesFromFlag(BusinessRuleFlags businessRuleFlags)
 		{
-			var flagAndRuleMapping = new Dictionary<BusinessRuleFlags, Type>
-			{
-				{
-					BusinessRuleFlags.DataPartOfAgentDay, typeof (DataPartOfAgentDay)
-				},
-				{
-					BusinessRuleFlags.MinWeeklyRestRule, typeof (MinWeeklyRestRule)
-				},
-				{
-					BusinessRuleFlags.MinWeekWorkTimeRule, typeof (MinWeekWorkTimeRule)
-				},
-				{
-					BusinessRuleFlags.NewDayOffRule, typeof (NewDayOffRule)
-				},
-				{
-					BusinessRuleFlags.NewMaxWeekWorkTimeRule, typeof (NewMaxWeekWorkTimeRule)
-				},
-				{
-					BusinessRuleFlags.NewNightlyRestRule, typeof (NewNightlyRestRule)
-				},
-				{
-					BusinessRuleFlags.NewPersonAccountRule, typeof (NewPersonAccountRule)
-				},
-				{
-					BusinessRuleFlags.NewShiftCategoryLimitationRule, typeof (NewShiftCategoryLimitationRule)
-				},
-				{
-					BusinessRuleFlags.NonMainShiftActivityRule, typeof (NonMainShiftActivityRule)
-				},
-				{
-					BusinessRuleFlags.OpenHoursRule, typeof (OpenHoursRule)
-				},
-				{
-					BusinessRuleFlags.WeekShiftCategoryLimitationRule, typeof (WeekShiftCategoryLimitationRule)
-				}
-			};
 			return (from kp in flagAndRuleMapping
 				where businessRuleFlags.HasFlag(kp.Key)
 				select kp.Value).ToList();
 		}
 
-		public static BusinessRuleFlags GetFlagFromRules(INewBusinessRuleCollection rules)
+		public static BusinessRuleFlags GetFlagFromRules(IEnumerable<Type> ruleTypes)
 		{
-			var ruleAndFlagMapping = new Dictionary<Type, BusinessRuleFlags>
-			{
-				{
-					typeof (DataPartOfAgentDay), BusinessRuleFlags.DataPartOfAgentDay
-				},
-				{
-					typeof (MinWeeklyRestRule), BusinessRuleFlags.MinWeeklyRestRule
-				},
-				{
-					typeof (MinWeekWorkTimeRule), BusinessRuleFlags.MinWeekWorkTimeRule
-				},
-				{
-					typeof (NewDayOffRule), BusinessRuleFlags.NewDayOffRule
-				},
-				{
-					typeof (NewMaxWeekWorkTimeRule), BusinessRuleFlags.NewMaxWeekWorkTimeRule
-				},
-				{
-					typeof (NewNightlyRestRule), BusinessRuleFlags.NewNightlyRestRule
-				},
-				{
-					typeof (NewPersonAccountRule), BusinessRuleFlags.NewPersonAccountRule
-				},
-				{
-					typeof (NewShiftCategoryLimitationRule), BusinessRuleFlags.NewShiftCategoryLimitationRule
-				},
-				{
-					typeof (NonMainShiftActivityRule), BusinessRuleFlags.NonMainShiftActivityRule
-				},
-				{
-					typeof (OpenHoursRule), BusinessRuleFlags.OpenHoursRule
-				},
-				{
-					typeof (WeekShiftCategoryLimitationRule), BusinessRuleFlags.WeekShiftCategoryLimitationRule
-				}
-			};
 			var result = BusinessRuleFlags.None;
-			foreach (var rule in rules)
+			foreach (var ruleType in ruleTypes)
 			{
-				var ruleType = rule.GetType();
-				if (ruleAndFlagMapping.ContainsKey(ruleType))
-				{
-					result = result | ruleAndFlagMapping[ruleType];
-				}
+				if (!ruleAndFlagMapping.ContainsKey(ruleType)) continue;
+				result = result | ruleAndFlagMapping[ruleType];
 			}
 
 			return result;

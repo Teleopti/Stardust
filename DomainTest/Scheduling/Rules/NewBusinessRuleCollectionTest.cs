@@ -53,10 +53,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 												   | BusinessRuleFlags.NewMaxWeekWorkTimeRule
 												   | BusinessRuleFlags.DataPartOfAgentDay;
 
-			var rules = NewBusinessRuleCollection.Minimum();
-			rules.Add(new MinWeekWorkTimeRule(null));
-			rules.Add(new NewMaxWeekWorkTimeRule(null));
-			rules.Add(new DataPartOfAgentDay());
+			var rules = new List<Type>
+			{
+				typeof (NewMaxWeekWorkTimeRule),
+				typeof (MinWeekWorkTimeRule),
+				typeof (DataPartOfAgentDay)
+			};
 
 			var flag = NewBusinessRuleCollection.GetFlagFromRules(rules);
 			Assert.AreEqual(flag, expectedFlag);
