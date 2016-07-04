@@ -126,6 +126,7 @@
     <Compile Include="Domain\BlockFinderType.cs" />
     <Compile Include="Domain\BlockSchedulingServiceEventArgs.cs" />
     <Compile Include="Domain\BudgetCalculationResult.cs" />
+    <Compile Include="Domain\BusinessRuleFlags.cs" />
     <Compile Include="Domain\ChartSeriesDisplayType.cs" />
     <Compile Include="Domain\ClipboardAction.cs" />
     <Compile Include="Domain\ClipboardItems.cs" />

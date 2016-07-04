@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Ccc.Domain.Scheduling.Rules
+namespace Teleopti.Interfaces.Domain
 {
 	[Flags]
 	public enum BusinessRuleFlags
