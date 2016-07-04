@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.BackToLegalShift;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -38,6 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 		private IScheduleDay _scheduleDay;
 		private IPersonAssignment _personAssignment;
 		private DateOnly _dateOnly;
+		private IScheduleRange _scheduleRange;
 
 		[SetUp]
 		public void Setup()
@@ -65,6 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
 			_personAssignment = _mocks.StrictMock<IPersonAssignment>();
 			_personAssignment = new PersonAssignment(_person, new Scenario("_"), _dateOnly );
+			_scheduleRange = _mocks.StrictMock<IScheduleRange>();
 		}
 
 		[Test]
@@ -88,13 +91,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 				Expect.Call(_firstShiftInTeamBlockFinder.FindFirst(_teamBlock, _person, _dateOnly, _schedulingResultStateHolder))
 					.Return(_shiftProjectionCache);
 				Expect.Call(_legalShiftDecider.IsLegalShift(_dateOnly, _person.PermissionInformation.DefaultTimeZone(),
-					_person.Period(new DateOnly()).RuleSetBag, _shiftProjectionCache)).Return(false);
+					_person.Period(new DateOnly()).RuleSetBag, _shiftProjectionCache, _scheduleDay)).Return(false);
 				int x;
 				IList<IScheduleDay> y;
 				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_person.VirtualSchedulePeriod(_dateOnly),
 					out x, out y)).Return(true).OutRef(1, y);
 				Expect.Call(_backToLegalShiftWorker.ReSchedule(_teamBlock, _schedulingOptions, _shiftProjectionCache,
 					_rollBackService, _resourceCalculateDelayer, _schedulingResultStateHolder)).Return(true);
+				Expect.Call(_schedulingResultStateHolder.Schedules[_person]).Return(_scheduleRange);
+				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
 			}
 			using (_mocks.Playback())
 			{
@@ -124,13 +129,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 				Expect.Call(_firstShiftInTeamBlockFinder.FindFirst(_teamBlock, _person, _dateOnly, _schedulingResultStateHolder))
 					.Return(_shiftProjectionCache);
 				Expect.Call(_legalShiftDecider.IsLegalShift(_dateOnly, _person.PermissionInformation.DefaultTimeZone(),
-					_person.Period(_dateOnly).RuleSetBag, _shiftProjectionCache)).Return(false);
+					_person.Period(_dateOnly).RuleSetBag, _shiftProjectionCache, _scheduleDay)).Return(false);
 				int x;
 				IList<IScheduleDay> y;
 				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_person.VirtualSchedulePeriod(_dateOnly),
 					out x, out y)).Return(true).OutRef(1, y);
 				Expect.Call(_backToLegalShiftWorker.ReSchedule(_teamBlock, _schedulingOptions, _shiftProjectionCache,
 					_rollBackService, _resourceCalculateDelayer, _schedulingResultStateHolder)).Return(false);
+				Expect.Call(_schedulingResultStateHolder.Schedules[_person]).Return(_scheduleRange);
+				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
 			}
 			using (_mocks.Playback())
 			{
@@ -157,11 +164,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 				Expect.Call(_firstShiftInTeamBlockFinder.FindFirst(_teamBlock, _person, _dateOnly, _schedulingResultStateHolder))
 					.Return(_shiftProjectionCache);
 				Expect.Call(_legalShiftDecider.IsLegalShift(_dateOnly, _person.PermissionInformation.DefaultTimeZone(),
-					_person.Period(_dateOnly).RuleSetBag, _shiftProjectionCache)).Return(false);
+					_person.Period(_dateOnly).RuleSetBag, _shiftProjectionCache, _scheduleDay)).Return(false);
 				int x;
 				IList<IScheduleDay> y;
 				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_person.VirtualSchedulePeriod(_dateOnly),
 					out x, out y)).Return(false).OutRef(1, new List<IScheduleDay>());
+				Expect.Call(_schedulingResultStateHolder.Schedules[_person]).Return(_scheduleRange);
+				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
 			}
 			using (_mocks.Playback())
 			{
@@ -188,7 +197,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 				Expect.Call(_firstShiftInTeamBlockFinder.FindFirst(_teamBlock, _person, _dateOnly, _schedulingResultStateHolder))
 					.Return(_shiftProjectionCache);
 				Expect.Call(_legalShiftDecider.IsLegalShift(_dateOnly, _person.PermissionInformation.DefaultTimeZone(),
-					_person.Period(_dateOnly).RuleSetBag, _shiftProjectionCache)).Return(true);
+					_person.Period(_dateOnly).RuleSetBag, _shiftProjectionCache, _scheduleDay)).Return(true);
+				Expect.Call(_schedulingResultStateHolder.Schedules[_person]).Return(_scheduleRange);
+				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
 			}
 			using (_mocks.Playback())
 			{
@@ -246,7 +257,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 				Expect.Call(_firstShiftInTeamBlockFinder.FindFirst(_teamBlock, _person, _dateOnly, _schedulingResultStateHolder))
 					.Return(_shiftProjectionCache);
 				Expect.Call(_legalShiftDecider.IsLegalShift(_dateOnly, _person.PermissionInformation.DefaultTimeZone(),
-					_person.Period(_dateOnly).RuleSetBag, _shiftProjectionCache)).Return(true);
+					_person.Period(_dateOnly).RuleSetBag, _shiftProjectionCache, _scheduleDay)).Return(true);
+				Expect.Call(_schedulingResultStateHolder.Schedules[_person]).Return(_scheduleRange);
+				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
 			}
 			using (_mocks.Playback())
 			{

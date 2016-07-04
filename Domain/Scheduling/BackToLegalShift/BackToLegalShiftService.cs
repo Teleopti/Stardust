@@ -70,7 +70,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 					continue;
 				}
 
-				if (_legalShiftDecider.IsLegalShift(date, timeZoneInfo, ruleSetBag, roleModel))
+				var scheduleDay = schedulingResultStateHolder.Schedules[person].ScheduledDay(date);
+
+				if (_legalShiftDecider.IsLegalShift(date, timeZoneInfo, ruleSetBag, roleModel, scheduleDay))
 				{
 					progressResult = onProgress(selectedTeamBlocks.Count, processedBlocks);
 					if (progressResult.ShouldCancel) return;

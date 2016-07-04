@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -20,6 +22,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 		private IRuleSetBag _ruleSetBag;
 		private IShiftProjectionCache _shiftProjectionCache;
 		private IWorkShift _workShift;
+		private IScheduleDay _scheduleDay;
+		private IPersonAssignment _personAssignment;
 
 		[SetUp]
 		public void Setup()
@@ -31,6 +35,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 			_ruleSetBag = _mocks.StrictMock<IRuleSetBag>();
 			_shiftProjectionCache = _mocks.StrictMock<IShiftProjectionCache>();
 			_workShift = _mocks.StrictMock<IWorkShift>();
+			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
+			_personAssignment = new PersonAssignment(new Person(), new Scenario("_"), new DateOnly());
 		}
 
 		[Test]
@@ -51,10 +57,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 					.IgnoreArguments()
 					.Return(editableShift);
 				Expect.Call(_scheduleDayEquator.MainShiftEquals(editableShift, editableShift)).Return(true);
+				Expect.Call(_scheduleDay.PersonAssignment(true)).Return(_personAssignment);
+				Expect.Call(_scheduleDay.PersonMeetingCollection())
+					.Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()));
 			}
 			using (_mocks.Playback())
 			{
-				Assert.IsTrue(_target.IsLegalShift(new DateOnly(), TimeZoneInfo.Utc, _ruleSetBag, _shiftProjectionCache));
+				Assert.IsTrue(_target.IsLegalShift(new DateOnly(), TimeZoneInfo.Utc, _ruleSetBag, _shiftProjectionCache, _scheduleDay));
 			}
 		}
 
@@ -76,10 +85,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 					.IgnoreArguments()
 					.Return(editableShift);
 				Expect.Call(_scheduleDayEquator.MainShiftEquals(editableShift, editableShift)).Return(false);
+				Expect.Call(_scheduleDay.PersonAssignment(true)).Return(_personAssignment);
+				Expect.Call(_scheduleDay.PersonMeetingCollection())
+					.Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()));
 			}
 			using (_mocks.Playback())
 			{
-				Assert.IsFalse(_target.IsLegalShift(new DateOnly(), TimeZoneInfo.Utc, _ruleSetBag, _shiftProjectionCache));
+				Assert.IsFalse(_target.IsLegalShift(new DateOnly(), TimeZoneInfo.Utc, _ruleSetBag, _shiftProjectionCache, _scheduleDay));
 			}
 		}
 	}
