@@ -27,6 +27,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 		public AuthenticatorResult LogonIdentityUser()
 		{
 			var token = _tokenIdentityProvider.RetrieveToken();
+			if(token == null)
+				return new AuthenticatorResult { Successful = false };
 			var personInfo = _findPersonInfoByIdentity.Find(token.UserIdentifier, token.IsTeleoptiApplicationLogon);
 			if (personInfo == null)
 				return new AuthenticatorResult { Successful = false };
