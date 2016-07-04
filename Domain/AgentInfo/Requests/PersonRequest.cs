@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
@@ -24,8 +23,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private const int messageTipLength = 255;
 		private readonly IPerson _person;
 		private string _message;
-	    private int _brokenBusinessRule;
-        private int requestStatus = (int)PersonRequestStatus.New;
+		private int _brokenBusinessRules;
+		private int requestStatus = (int)PersonRequestStatus.New;
 		private personRequestState _requestState;
 		private personRequestState _persistedState;
 		private bool _deserialized;
@@ -95,7 +94,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		    
 	    }
 
-public virtual bool TrySetMessage(string message)
+		public virtual bool TrySetMessage(string message)
 		{
 			checkIfEditable();
 			message = message ?? string.Empty;
@@ -114,7 +113,7 @@ public virtual bool TrySetMessage(string message)
 			return true;
 		}
 
-        public virtual string GetMessage(ITextFormatter formatter)
+		public virtual string GetMessage(ITextFormatter formatter)
 		{
 			if (formatter == null)
 				throw new ArgumentNullException("formatter");
@@ -127,26 +126,20 @@ public virtual bool TrySetMessage(string message)
 			get { return _message; }
 		}
 
-        public virtual bool TrySetBrokenBusinessRule(int brokenRule)
-        {
-            checkIfEditable();
-            _brokenBusinessRule = brokenRule;
-            return true;
-        }
+		public virtual bool TrySetBrokenBusinessRule(int brokenRules)
+		{
+			checkIfEditable();
+			_brokenBusinessRules = brokenRules;
+			return true;
+		}
 
-        public virtual int GetBrokenBusinessRule()
-        {
-            return _brokenBusinessRule;
-        }
-
-
-        private int BrokenBusinessRule
-	    {
-            get { return _brokenBusinessRule; }
-	    }
+		public virtual int BrokenBusinessRules
+		{
+			get { return _brokenBusinessRules; }
+		}
 
 
-        public virtual IRequest Request
+		public virtual IRequest Request
 		{
 			get { return getRequest(); }
 			set { setRequest(value); }

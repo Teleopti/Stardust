@@ -46,13 +46,13 @@ namespace Teleopti.Interfaces.Domain
         /// Tries the set broken business rules and returns the result.
         /// </summary>
         /// <returns></returns>
-        bool TrySetBrokenBusinessRule(int brokenRule);
+        bool TrySetBrokenBusinessRule(int brokenRules);
 
         /// <summary>
         /// Gets broken business rule
-        /// </summary>
-        /// <returns></returns>
-        int GetBrokenBusinessRule();
+		/// </summary>
+		/// <returns></returns>
+		int BrokenBusinessRules { get; }
 
         /// <summary>
         /// Gets or sets the request.

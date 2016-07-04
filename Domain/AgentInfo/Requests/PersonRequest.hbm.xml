@@ -52,7 +52,7 @@
         type="string"
         length="2000"/>
     
-    <property name="BrokenBusinessRule"
+    <property name="BrokenBusinessRules"
         not-null="false"
         type="int"/>
 

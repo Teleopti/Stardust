@@ -1691,24 +1691,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.IsTrue(foundRequests.Contains(request1));
 		}
 
-	    [Test]
-	    public void ShouldGetBrokenBusinessRules()
-	    {
-            var shiftTradeRequest1 = CreateShiftTradeRequest("Trade With Me");
-            shiftTradeRequest1.TrySetBrokenBusinessRule(2);
-            PersistAndRemoveFromUnitOfWork(shiftTradeRequest1);
-            var filter = new RequestFilter
-            {
-                Period = new DateTimePeriod(2008, 07, 09, 2008, 07, 20),
-            };
-            int count;
-            var foundRequests = new PersonRequestRepository(UnitOfWork)
-                .FindAllRequests(filter, out count).ToList();
-            Assert.AreEqual(1, foundRequests.Count);
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(foundRequests[0].Request));
-            Assert.IsTrue(foundRequests.Contains(shiftTradeRequest1));
-            Assert.AreEqual(foundRequests[0].GetBrokenBusinessRule(), 2);
-        }
+		[Test]
+		public void ShouldGetBrokenBusinessRules()
+		{
+			var shiftTradeRequest1 = CreateShiftTradeRequest("Trade With Me");
+			shiftTradeRequest1.TrySetBrokenBusinessRule(2);
+			PersistAndRemoveFromUnitOfWork(shiftTradeRequest1);
+			var filter = new RequestFilter
+			{
+				Period = new DateTimePeriod(2008, 07, 09, 2008, 07, 20),
+			};
+			int count;
+			var foundRequests = new PersonRequestRepository(UnitOfWork)
+				.FindAllRequests(filter, out count).ToList();
+			Assert.AreEqual(1, foundRequests.Count);
+			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundRequests[0].Request));
+			Assert.IsTrue(foundRequests.Contains(shiftTradeRequest1));
+			Assert.AreEqual(foundRequests[0].BrokenBusinessRules, 2);
+		}
 
 		[Test]
 		public void ShouldFilterRequestOnStatus()
