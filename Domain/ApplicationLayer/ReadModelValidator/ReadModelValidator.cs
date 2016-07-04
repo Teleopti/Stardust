@@ -21,7 +21,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 
 		private IList<ValidateReadModelType> _targetTypes = new List<ValidateReadModelType>();
 
-		public ReadModelValidator(IPersonRepository personRepository, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IReadModelPersonScheduleDayValidator readModelPersonScheduleDayValidator, IReadModelScheduleProjectionReadOnlyValidator readModelScheduleProjectionReadOnlyValidator, IReadModelScheduleDayValidator readModelScheduleDayValidator)
+		public ReadModelValidator(IPersonRepository personRepository, 
+								IScheduleStorage scheduleStorage, 
+								ICurrentScenario currentScenario, 
+								IReadModelPersonScheduleDayValidator readModelPersonScheduleDayValidator, 
+								IReadModelScheduleProjectionReadOnlyValidator readModelScheduleProjectionReadOnlyValidator, 
+								IReadModelScheduleDayValidator readModelScheduleDayValidator)
 		{
 			_personRepository = personRepository;
 			_scheduleStorage = scheduleStorage;
