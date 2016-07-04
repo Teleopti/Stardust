@@ -355,4 +355,8 @@
 	.pagination li.disabled a{
 		cursor:not-allowed;
 	}
+
+	input:-ms-input-placeholder{
+		color: $text-color-muted;
+	}
 }
