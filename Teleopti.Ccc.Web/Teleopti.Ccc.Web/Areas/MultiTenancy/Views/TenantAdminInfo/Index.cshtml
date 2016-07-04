@@ -1,4 +1,4 @@
-﻿
+﻿ @model Teleopti.Ccc.Web.Areas.MultiTenancy.Model.AdminSiteInfoModel
 @{
     Layout = null;
 }
@@ -18,7 +18,7 @@
 	All Tenants has been deactivated because of that and no one can log on to the system.
 	<br/>
 	Please browse there to add at least one Administrator.
-
+	<a href="@Model.UrlToAdminSite">The Administration site</a>
 	<br/>
 	Make sure you remember the credentials for the administrators you add. You will need them the next time you need to access that site.
 

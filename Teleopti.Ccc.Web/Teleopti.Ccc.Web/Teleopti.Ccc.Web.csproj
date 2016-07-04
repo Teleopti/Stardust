@@ -491,6 +491,7 @@
     <Compile Include="Areas\MultiTenancy\Core\IIdAuthentication.cs" />
     <Compile Include="Areas\MultiTenancy\Core\LogLogonAttemptFake.cs" />
     <Compile Include="Areas\MultiTenancy\Core\WebTenantAuthentication.cs" />
+    <Compile Include="Areas\MultiTenancy\Model\AdminSiteInfoModel.cs" />
     <Compile Include="Areas\MultiTenancy\Model\ChangePasswordModel.cs" />
     <Compile Include="Areas\MultiTenancy\Model\IdLogonModel.cs" />
     <Compile Include="Areas\MultiTenancy\Controllers\TenantAdminInfoController.cs" />
