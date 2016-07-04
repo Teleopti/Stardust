@@ -316,9 +316,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			{
 
 				_currentForecasterSettings = new PersonalSettingDataRepository(unitOfWork).FindValueByKey("Forecaster", new ForecasterSettings());
-				if (_currentForecasterSettings.NumericCellVariableDecimals > 9)
-					_currentForecasterSettings.NumericCellVariableDecimals = 9;
-
+				
 				unitOfWork.Reassociate(_skill);
 				if (isMultisiteSkill)
 				{
@@ -1455,10 +1453,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private void toolStripButtonIncreaseDecimalsClick(object sender, EventArgs e)
 		{
-			if (_currentForecasterSettings.NumericCellVariableDecimals >= 9)
-				return;
+			var before = _currentForecasterSettings.NumericCellVariableDecimals;
+			_currentForecasterSettings.NumericCellVariableDecimals = before + 1;
+			var after = _currentForecasterSettings.NumericCellVariableDecimals;
+			if (before==after) return;
 
-			_currentForecasterSettings.NumericCellVariableDecimals++;
 			foreach (KeyValuePair<string, TeleoptiGridControl> keyValuePair in _gridCollection)
 			{
 				keyValuePair.Value.ChangeNumberOfDecimals(1);
@@ -1467,10 +1466,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private void toolStripButtonDecreaseDecimalsClick(object sender, EventArgs e)
 		{
-			if (_currentForecasterSettings.NumericCellVariableDecimals < 1)
-				return;
-
-			_currentForecasterSettings.NumericCellVariableDecimals--;
+			var before = _currentForecasterSettings.NumericCellVariableDecimals;
+			_currentForecasterSettings.NumericCellVariableDecimals = before-1;
+			var after = _currentForecasterSettings.NumericCellVariableDecimals;
+			if (before == after) return;
+			
 			foreach (KeyValuePair<string, TeleoptiGridControl> keyValuePair in _gridCollection)
 			{
 				keyValuePair.Value.ChangeNumberOfDecimals(-1);

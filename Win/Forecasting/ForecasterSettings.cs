@@ -1,5 +1,6 @@
 using System;
 using Teleopti.Ccc.Domain.SystemSetting;
+using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Forecasting.Forms;
 using Teleopti.Interfaces.Domain;
 
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.Win.Forecasting
         public int NumericCellVariableDecimals
         {
             get { return _numericCellVariableDecimals; }
-            set { _numericCellVariableDecimals = value; }
+            set { _numericCellVariableDecimals = value.LimitRange(0,9); }
         }
 
         public WorkingInterval WorkingInterval

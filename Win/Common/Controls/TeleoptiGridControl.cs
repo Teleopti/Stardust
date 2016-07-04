@@ -123,8 +123,6 @@ namespace Teleopti.Ccc.Win.Common.Controls
 					{
 						_currentSettings = new PersonalSettingDataRepository(uow).FindValueByKey("Forecaster",
 																								 new ForecasterSettings());
-						if (_currentSettings.NumericCellVariableDecimals > 9)
-							_currentSettings.NumericCellVariableDecimals = 9;
 						return _currentSettings;
 					}
 				}
@@ -521,19 +519,14 @@ namespace Teleopti.Ccc.Win.Common.Controls
 					   };
 		}
 
-		public int ChangeNumberOfDecimals(int changeCount)
+		public void ChangeNumberOfDecimals(int changeCount)
 		{
-			int currentNumberOfDecimals = 0;
 			foreach (INumericCellModelWithDecimals numericCellModelWithDecimals in _numericCellModelWithDecimalses)
 			{
-				currentNumberOfDecimals = numericCellModelWithDecimals.NumberOfDecimals;
-				if (numericCellModelWithDecimals.NumberOfDecimals < 10)
-				{
-					numericCellModelWithDecimals.NumberOfDecimals += changeCount;
-				}
+				var currentNumberOfDecimals = numericCellModelWithDecimals.NumberOfDecimals;
+				numericCellModelWithDecimals.NumberOfDecimals = (currentNumberOfDecimals+changeCount).LimitRange(0,9);
 			}
 			Refresh(true);
-			return currentNumberOfDecimals;
 		}
 
 		protected int ColHeaderCount
