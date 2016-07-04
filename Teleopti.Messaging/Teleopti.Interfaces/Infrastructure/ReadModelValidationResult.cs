@@ -4,9 +4,8 @@ namespace Teleopti.Interfaces.Infrastructure
 {
 	[Flags]public enum ValidateReadModelType
 	{
-		None,
-		ScheduleProjectionReadOnly,
-		PersonScheduleDay,
+		ScheduleProjectionReadOnly = 1,
+		PersonScheduleDay = 2,
 		ScheduleDay = 4
 	}
 

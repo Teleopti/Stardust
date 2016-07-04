@@ -72,9 +72,8 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			{
 				result.Add(x);
 			};
-
-			Target.SetTargetTypes(ValidateReadModelType.ScheduleProjectionReadOnly);
-			Target.Validate(new DateTime(2016, 1, 1), new DateTime(2016, 1, 1), action, true);
+			
+			Target.Validate(ValidateReadModelType.ScheduleProjectionReadOnly,new DateTime(2016, 1, 1), new DateTime(2016, 1, 1), action, true);
 	
 			result.Count.Should().Be.EqualTo(1);
 			result.Single().PersonId.Should().Be.EqualTo(person.Id.Value);
@@ -113,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			{
 				result.Add(x);
 			};
-			Target.Validate(new DateTime(2016, 1, 1), new DateTime(2016, 1, 1), action, true);
+			Target.Validate(ValidateReadModelType.ScheduleProjectionReadOnly, new DateTime(2016, 1, 1), new DateTime(2016, 1, 1), action, true);
 			
 			result.Count.Should().Be.EqualTo(0);
 		}
@@ -142,9 +141,8 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			{
 				result.Add(x);
 			};
-
-			Target.SetTargetTypes(ValidateReadModelType.PersonScheduleDay);
-			Target.Validate(new DateTime(2016, 1, 1), new DateTime(2016, 1, 1), action, true);
+			
+			Target.Validate(ValidateReadModelType.PersonScheduleDay, new DateTime(2016, 1, 1), new DateTime(2016, 1, 1), action, true);
 
 			result.Count.Should().Be.EqualTo(1);
 			result.Single().PersonId.Should().Be.EqualTo(person.Id.Value);
@@ -177,9 +175,8 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			{
 				result.Add(x);
 			};
-
-			Target.SetTargetTypes(ValidateReadModelType.PersonScheduleDay);
-			Target.Validate(new DateTime(2016, 1, 1), new DateTime(2016, 1, 1), action, true);
+			
+			Target.Validate(ValidateReadModelType.PersonScheduleDay,new DateTime(2016, 1, 1), new DateTime(2016, 1, 1), action, true);
 
 			result.Count.Should().Be.EqualTo(0);
 		}
@@ -208,9 +205,8 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			{
 				result.Add(x);
 			};
-
-			Target.SetTargetTypes(ValidateReadModelType.ScheduleDay);
-			Target.Validate(new DateTime(2016,1,1),new DateTime(2016,1,1),action,true);
+			
+			Target.Validate(ValidateReadModelType.ScheduleDay,new DateTime(2016,1,1),new DateTime(2016,1,1),action,true);
 
 			result.Count.Should().Be.EqualTo(1);
 			result.Single().PersonId.Should().Be.EqualTo(person.Id.Value);
@@ -254,9 +250,8 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			{
 				result.Add(x);
 			};
-
-			Target.SetTargetTypes(ValidateReadModelType.ScheduleDay);
-			Target.Validate(new DateTime(2016,1,1),new DateTime(2016,1,1),action,true);
+			
+			Target.Validate(ValidateReadModelType.ScheduleDay,new DateTime(2016,1,1),new DateTime(2016,1,1),action,true);
 
 			result.Count.Should().Be.EqualTo(0);
 		}
@@ -283,9 +278,8 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			{
 				result.Add(x);
 			};
-
-			Target.SetTargetTypes(ValidateReadModelType.ScheduleDay);
-			Target.Validate(new DateTime(2016,1,1),new DateTime(2016,1,1),action,true);
+			
+			Target.Validate(ValidateReadModelType.ScheduleDay,new DateTime(2016,1,1),new DateTime(2016,1,1),action,true);
 
 			result.Count.Should().Be.EqualTo(0);		
 		}
@@ -322,9 +316,8 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			{
 				result.Add(x);
 			};
-
-			Target.SetTargetTypes(ValidateReadModelType.ScheduleDay);
-			Target.Validate(new DateTime(2016,1,1),new DateTime(2016,1,1),action,true);
+			
+			Target.Validate(ValidateReadModelType.ScheduleDay,new DateTime(2016,1,1),new DateTime(2016,1,1),action,true);
 
 			result.Count.Should().Be.EqualTo(1);
 		}
