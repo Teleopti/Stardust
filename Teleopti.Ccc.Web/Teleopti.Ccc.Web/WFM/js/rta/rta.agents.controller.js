@@ -1,11 +1,11 @@
-(function () {
+(function() {
 	'use strict';
 
 	angular
 		.module('wfm.rta')
 		.controller('RtaAgentsCtrl', [
 			'$scope', '$filter', '$state', '$stateParams', '$interval', '$sessionStorage', 'RtaService', 'RtaGridService', 'RtaFormatService', 'RtaRouteService', 'FakeTimeService', 'Toggle', 'NoticeService', '$translate',
-			function ($scope, $filter, $state, $stateParams, $interval, $sessionStorage, RtaService, RtaGridService, RtaFormatService, RtaRouteService, FakeTimeService, toggleService, NoticeService, $translate) {
+			function($scope, $filter, $state, $stateParams, $interval, $sessionStorage, RtaService, RtaGridService, RtaFormatService, RtaRouteService, FakeTimeService, toggleService, NoticeService, $translate) {
 				var polling = null;
 				var selectedPersonId;
 				var siteIds = $stateParams.siteIds || ($stateParams.siteId ? [$stateParams.siteId] : []);
@@ -41,7 +41,7 @@
 				$scope.showGrid = !$scope.showBreadcrumb;
 				$scope.skillName = "";
 
-				$scope.$watch('pause', function () {
+				$scope.$watch('pause', function() {
 					if ($scope.pause) {
 						$scope.pausedAt = moment(lastUpdate).format('YYYY-MM-DD HH:mm:ss');
 						var template = $translate.instant('RtaPauseEnabledNotice')
@@ -58,7 +58,7 @@
 					}
 				});
 
-				$scope.getTableHeight = function () {
+				$scope.getTableHeight = function() {
 					var rowHeight = 30;
 					var headerHeight = 30;
 					var agentMenuHeight = 45;
@@ -67,53 +67,58 @@
 					};
 				};
 
-				$scope.selectAgent = function (personId) {
+				$scope.selectAgent = function(personId) {
 					selectedPersonId = $scope.isSelected(personId) ? '' : personId;
 				};
-				$scope.isSelected = function (personId) {
+				$scope.isSelected = function(personId) {
 					return selectedPersonId === personId;
 				};
-				$scope.showAdherenceUpdates = function () {
+				$scope.showAdherenceUpdates = function() {
 					return $scope.adherencePercent !== null;
 				};
-				$scope.getAdherenceForAgent = function (personId) {
+				$scope.getAdherenceForAgent = function(personId) {
 					if (!$scope.isSelected(personId)) {
 						RtaService.forToday({
-							personId: personId
-						})
-							.then(function (data) {
+								personId: personId
+							})
+							.then(function(data) {
 								$scope.adherence = data;
 								$scope.adherencePercent = data.AdherencePercent;
 								$scope.timestamp = data.LastTimestamp;
 							});
 					}
 				};
-				$scope.changeScheduleUrl = function (teamId, personId) {
+				$scope.changeScheduleUrl = function(teamId, personId) {
 					return RtaRouteService.urlForChangingSchedule($sessionStorage.buid, teamId, personId);
 				};
-				$scope.agentDetailsUrl = function (personId) {
+				$scope.agentDetailsUrl = function(personId) {
 					return RtaRouteService.urlForAgentDetails(personId);
 				};
 
 				$scope.$watch('filterText', filterData);
-				$scope.$watch('agentsInAlarm', function (newValue, oldValue) {
+				$scope.$watch('agentsInAlarm', function(newValue, oldValue) {
 					if (newValue !== oldValue) {
 						updateStates();
 						filterData();
+						if (newValue && $scope.pause) {
+							$scope.agents.sort(function(a, b) {
+								return b.TimeInAlarm - a.TimeInAlarm;
+							});
+						}
 					}
 				});
 				$scope.$watch(
-					function () {
+					function() {
 						return $sessionStorage.buid;
 					},
-					function (newValue, oldValue) {
+					function(newValue, oldValue) {
 						if (oldValue !== undefined && newValue !== oldValue) {
 							RtaRouteService.goToSites();
 						}
 					}
 				);
 
-				var getAgents = (function () {
+				var getAgents = (function() {
 					if (skillId) {
 						return RtaService.getAgentsForSkill;
 					}
@@ -123,7 +128,7 @@
 					return RtaService.getAgentsForSites;
 				})();
 
-				var getStates = function (inAlarm) {
+				var getStates = function(inAlarm) {
 					if (skillId) {
 						if (inAlarm)
 							return RtaService.getAlarmStatesForSkill;
@@ -139,7 +144,7 @@
 					return RtaService.getStatesForSites;
 				};
 
-				var updateBreadCrumb = function (agentsInfo) {
+				var updateBreadCrumb = function(agentsInfo) {
 					if (agentsInfo.length > 0) {
 						$scope.siteName = agentsInfo[0].SiteName;
 						$scope.teamName = agentsInfo[0].TeamName;
@@ -147,29 +152,29 @@
 				};
 				if (siteIds.length > 1) {
 					$scope.multipleSitesName = "Multiple Sites";
-					updateBreadCrumb = function () { };
+					updateBreadCrumb = function() {};
 				} else if (teamIds.length > 1) {
 					$scope.multipleTeamsName = "Multiple Teams";
-					updateBreadCrumb = function () { };
-				} else if (siteIds.length === 1 && teamIds.length !== 1){
+					updateBreadCrumb = function() {};
+				} else if (siteIds.length === 1 && teamIds.length !== 1) {
 					$scope.multipleTeamsName = "Multiple Teams";
-					updateBreadCrumb = function () { };
+					updateBreadCrumb = function() {};
 				}
 
 				if (skillId) {
 					RtaService.getSkillName(skillId)
-						.then(function (skill) {
-							$scope.skillName = skill.Name || '?' ;
+						.then(function(skill) {
+							$scope.skillName = skill.Name || '?';
 						});
 				}
 
 				if (siteIds.length > 0 || teamIds.length > 0 || skillId) {
 					getAgents({
-						siteIds: siteIds,
-						teamIds: teamIds,
-						skillId: skillId
-					})
-						.then(function (agentsInfo) {
+							siteIds: siteIds,
+							teamIds: teamIds,
+							skillId: skillId
+						})
+						.then(function(agentsInfo) {
 							$scope.agentsInfo = agentsInfo;
 							$scope.agents = agentsInfo;
 							$scope.$watchCollection('agents', filterData);
@@ -178,12 +183,12 @@
 						.then(updateStates);
 				}
 
-				$scope.$on('$destroy', function () {
+				$scope.$on('$destroy', function() {
 					cancelPolling();
 				});
 
 				function setupPolling() {
-					polling = $interval(function () {
+					polling = $interval(function() {
 						updateStates();
 					}, 5000);
 				}
@@ -209,10 +214,10 @@
 					if ($scope.pause || !(siteIds.length > 0 || teamIds.length > 0 || skillId))
 						return;
 					getStates($scope.agentsInAlarm)({
-						siteIds: siteIds,
-						teamIds: teamIds,
-						skillId: skillId
-					})
+							siteIds: siteIds,
+							teamIds: teamIds,
+							skillId: skillId
+						})
 						.then(setStatesInAgents);
 				}
 
@@ -240,7 +245,7 @@
 				}
 
 				function buildTimeline(states) {
-					var timeline = function (time) {
+					var timeline = function(time) {
 						var percent = timeToPercent(states.Time, time);
 						if (percent <= 94)
 							return {
@@ -255,12 +260,14 @@
 						timeline(time.add(1, 'hour')),
 						timeline(time.add(1, 'hour')),
 						timeline(time.add(1, 'hour'))
-					].filter(function(tl) { return tl != null; });
+					].filter(function(tl) {
+						return tl != null;
+					});
 
 				}
 
 				function fillAgentsWithState(states) {
-					states.States.forEach(function (state, i) {
+					states.States.forEach(function(state, i) {
 						var agentInfo = $filter('filter')($scope.agentsInfo, {
 							PersonId: state.PersonId
 						});
@@ -289,7 +296,7 @@
 								TimeInAlarm: state.TimeInAlarm,
 								TimeInRule: state.TimeInAlarm ? state.TimeInRule : null,
 
-								TimeOutOfAdherence: function () {
+								TimeOutOfAdherence: function() {
 									if (state.OutOfAdherences.length > 0) {
 										var lastOOA = state.OutOfAdherences[state.OutOfAdherences.length - 1];
 										if (lastOOA.EndTime == null) {
@@ -315,8 +322,8 @@
 										});
 								}(),
 
-								ShiftTimeBar: function () {
-									var percentForTimeBar = function (seconds) {
+								ShiftTimeBar: function() {
+									var percentForTimeBar = function(seconds) {
 										return Math.min(secondsToPercent(seconds), 25);
 									}
 									if (toggleService.RTA_TotalOutOfAdherenceTime_38702)
@@ -325,12 +332,12 @@
 
 								}(),
 
-								Shift: function () {
+								Shift: function() {
 									return state.Shift
-										.filter(function (layer) {
+										.filter(function(layer) {
 											return windowStart < moment(layer.EndTime) && windowEnd > moment(layer.StartTime);
 										})
-										.map(function (s) {
+										.map(function(s) {
 											return {
 												Color: s.Color,
 												Offset: Math.max(timeToPercent(states.Time, s.StartTime), 0) + '%',
@@ -347,7 +354,7 @@
 				}
 
 				function fillAgentsWithoutState() {
-					$scope.agentsInfo.forEach(function (agentInfo) {
+					$scope.agentsInfo.forEach(function(agentInfo) {
 						var agentFilled = $filter('filter')($scope.agents, {
 							PersonId: agentInfo.PersonId
 						});
@@ -372,10 +379,10 @@
 						return 'previous-activity';
 					return 'current-activity';
 				}
-				$scope.goToOverview = function(){
+				$scope.goToOverview = function() {
 					$state.go('rta');
 				}
-				$scope.goToSelectItem = function(){
+				$scope.goToSelectItem = function() {
 					$state.go('rta.select-skill');
 				}
 
