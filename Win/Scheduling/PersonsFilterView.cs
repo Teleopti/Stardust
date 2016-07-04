@@ -46,7 +46,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_selectorView.PreselectedPersonIds = selectedPersons.Keys;
 			_selectorView.VisiblePersonIds = visiblePersonGuids;
 			_selectorView.ShowCheckBoxes = true;
-			_selectorView.KeepInteractiveOnDuringLoad = true;
 
 			_selectorView.ShowDateSelection = false;
 			_selectorView.HideMenu = true;
