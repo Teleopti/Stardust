@@ -93,6 +93,8 @@ Scenario: Display Gantt chart for showing the campaigns
 When I view outbound
 Then I should see the gantt chart
 
+
+@ignore
 Scenario: List campaigns in three months
 When I view outbound
 And I set the starting month for viewing period to '2015-08-01'
