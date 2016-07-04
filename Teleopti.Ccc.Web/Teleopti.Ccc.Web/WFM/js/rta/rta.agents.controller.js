@@ -101,7 +101,7 @@
 						updateStates();
 						filterData();
 						if (newValue && $scope.pause) {
-							$scope.agents.sort(function(a, b) {
+							$scope.filteredData.sort(function(a, b) {
 								return b.TimeInAlarm - a.TimeInAlarm;
 							});
 						}

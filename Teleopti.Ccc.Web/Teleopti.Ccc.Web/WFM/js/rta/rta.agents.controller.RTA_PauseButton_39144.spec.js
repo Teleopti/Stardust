@@ -228,8 +228,8 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 			.apply('pause = true')
 			.apply('agentsInAlarm = true');
 
-		expect(scope.agents[0].Name).toEqual("Dmitry Pavlov");
-		expect(scope.agents[1].Name).toEqual("Asley Andeen");
+		expect(scope.filteredData[0].Name).toEqual("Dmitry Pavlov");
+		expect(scope.filteredData[1].Name).toEqual("Asley Andeen");
 	});
 
 });
