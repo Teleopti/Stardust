@@ -36,58 +36,64 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 			_readModelScheduleDayValidator = readModelScheduleDayValidator;
 		}
 
-
 		public void Validate(DateTime start, DateTime end, Action<ReadModelValidationResult> reportProgress,
 			bool ignoreValid = false)
 		{
-
 			var people = _personRepository.LoadAllPeopleWithHierarchyDataSortByName(new DateOnly(start));
 			var scenario = _currentScenario.Current();
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(start), new DateOnly(end));
 
-			people.ForEach(person =>
+			var dayCollections = dateOnlyPeriod.ChunkedDayCollections(30);
+
+			foreach (var dayCollection in dayCollections)
 			{
-				var extendedDateOnlyPeriod = new DateOnlyPeriod(dateOnlyPeriod.StartDate.AddDays(-1), dateOnlyPeriod.EndDate.AddDays(1));
-
-				var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
-					new ScheduleDictionaryLoadOptions(false, false),
-					extendedDateOnlyPeriod.ToDateTimePeriod(TimeZoneInfo.Utc),
-					scenario);
-				dateOnlyPeriod.DayCollection().ForEach(day =>
+				if (dayCollection.Count == 0) continue;
+				var extendedDateOnlyPeriod = new DateOnlyPeriod(dayCollection.First().AddDays(-1), dayCollection.Last().AddDays(1));
+				foreach (var person in people)
 				{
-					var scheduleDay = schedules.SchedulesForDay(day).SingleOrDefault();
-					if (_targetTypes.Contains(ValidateReadModelType.ScheduleProjectionReadOnly))
-					{
-						var isInvalid = !_readModelScheduleProjectionReadOnlyValidator.Validate(person, day, scheduleDay);
-						if (isInvalid || !ignoreValid) reportProgress(makeResult(person,day,!isInvalid,ValidateReadModelType.ScheduleProjectionReadOnly));
-					}
-					if (_targetTypes.Contains(ValidateReadModelType.PersonScheduleDay))
-					{
-						var isInvalid = !_readModelPersonScheduleDayValidator.Validate(person, day, scheduleDay);
-						if (isInvalid || !ignoreValid)
-						{
-							reportProgress(makeResult(person, day, !isInvalid, ValidateReadModelType.PersonScheduleDay));
-						}
-					}
+					var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
+						new ScheduleDictionaryLoadOptions(false, false),
+						extendedDateOnlyPeriod.ToDateTimePeriod(TimeZoneInfo.Utc),
+						scenario);
 
-					if (_targetTypes.Contains(ValidateReadModelType.ScheduleDay))
-					{
-						var isInvalid = !_readModelScheduleDayValidator.Validate(person, day, scheduleDay);
-						if (isInvalid || !ignoreValid)
-						{
-							reportProgress(makeResult(person, day, !isInvalid, ValidateReadModelType.ScheduleDay));
-						}
-					}
-				});
-			});
+					dayCollection.ForEach(day => validate(person, day, schedules, reportProgress, ignoreValid));
+				}
+			}
 		}
 
 		public void SetTargetTypes(IList<ValidateReadModelType> types)
 		{
 			_targetTypes = types;
 		}
-		
 
+		private void validate(IPerson person, DateOnly day, IScheduleDictionary schedules,
+			Action<ReadModelValidationResult> reportProgress, bool ignoreValid)
+		{
+			var scheduleDay = schedules.SchedulesForDay(day).SingleOrDefault();
+			if(_targetTypes.Contains(ValidateReadModelType.ScheduleProjectionReadOnly))
+			{
+				var isInvalid = !_readModelScheduleProjectionReadOnlyValidator.Validate(person,day,scheduleDay);
+				if(isInvalid || !ignoreValid) reportProgress(makeResult(person,day,!isInvalid,ValidateReadModelType.ScheduleProjectionReadOnly));
+			}
+			if(_targetTypes.Contains(ValidateReadModelType.PersonScheduleDay))
+			{
+				var isInvalid = !_readModelPersonScheduleDayValidator.Validate(person,day,scheduleDay);
+				if(isInvalid || !ignoreValid)
+				{
+					reportProgress(makeResult(person,day,!isInvalid,ValidateReadModelType.PersonScheduleDay));
+				}
+			}
+
+			if(_targetTypes.Contains(ValidateReadModelType.ScheduleDay))
+			{
+				var isInvalid = !_readModelScheduleDayValidator.Validate(person,day,scheduleDay);
+				if(isInvalid || !ignoreValid)
+				{
+					reportProgress(makeResult(person,day,!isInvalid,ValidateReadModelType.ScheduleDay));
+				}
+			}
+		}
+		
 		private ReadModelValidationResult makeResult(IPerson person,DateOnly date,bool isValid,
 			ValidateReadModelType type)
 		{

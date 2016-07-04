@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -126,7 +127,20 @@ namespace Teleopti.Interfaces.Domain
             return collectionToReturn;
         }
 
-        /// <summary>
+	    public IList<List<DateOnly>> ChunkedDayCollections(int size)
+	    {
+		    var dayCollection = DayCollection().ToList();
+		    if (size <= 0) return new List<List<DateOnly>> {dayCollection};
+
+		    return dayCollection
+			    .Select((x, i) => new {Index = i, Value = x})
+			    .GroupBy(x => x.Index/size)
+			    .Select(x => x.Select(v => v.Value).ToList())
+			    .ToList();
+	    }
+
+
+	    /// <summary>
         /// Gets the date string.
         /// </summary>
         /// <value>The date string.</value>
