@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
@@ -11,48 +12,50 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Rules
 {
-    public class NewBusinessRuleCollection : Collection<INewBusinessRule>, INewBusinessRuleCollection
-    {
-        private CultureInfo _culture = Thread.CurrentThread.CurrentUICulture;
-        private NewBusinessRuleCollection()
-        {
-            //put mandatory here
-					Add(new DataPartOfAgentDay());
-        }
+	public class NewBusinessRuleCollection : Collection<INewBusinessRule>, INewBusinessRuleCollection
+	{
+		private CultureInfo _culture = Thread.CurrentThread.CurrentUICulture;
+		private NewBusinessRuleCollection()
+		{
+			//put mandatory here
+			Add(new DataPartOfAgentDay());
+		}
 
-        public static INewBusinessRuleCollection Minimum()
-        {
-        	return new NewBusinessRuleCollection();
-        }
+		public static INewBusinessRuleCollection Minimum()
+		{
+			return new NewBusinessRuleCollection();
+		}
 
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public static INewBusinessRuleCollection All(ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
-		    IWorkTimeStartEndExtractor workTimeStartEndExtractor = new WorkTimeStartEndExtractor();
-		    IDayOffMaxFlexCalculator dayOffMaxFlexCalculator = new DayOffMaxFlexCalculator(workTimeStartEndExtractor);
-		    var ensureWeeklyRestRule = new EnsureWeeklyRestRule(workTimeStartEndExtractor, dayOffMaxFlexCalculator);
-            var ret = new NewBusinessRuleCollection
-                          {
-								new NewShiftCategoryLimitationRule(
-								new ShiftCategoryLimitationChecker(()=>schedulingResultStateHolder),
-                                new VirtualSchedulePeriodExtractor()),
-								new WeekShiftCategoryLimitationRule(
-                                new ShiftCategoryLimitationChecker(()=>schedulingResultStateHolder),
-								new VirtualSchedulePeriodExtractor(), new WeeksFromScheduleDaysExtractor()),
-								new NewNightlyRestRule(new WorkTimeStartEndExtractor()),
-								new NewMaxWeekWorkTimeRule(
-								new WeeksFromScheduleDaysExtractor()),
-								new MinWeeklyRestRule(new WeeksFromScheduleDaysExtractor(), new PersonWeekViolatingWeeklyRestSpecification(new ExtractDayOffFromGivenWeek(),new VerifyWeeklyRestAroundDayOffSpecification(),ensureWeeklyRestRule )),
-								new NewDayOffRule(new WorkTimeStartEndExtractor()),
-								new NewPersonAccountRule(schedulingResultStateHolder, schedulingResultStateHolder.AllPersonAccounts)
-                             
-							  //This one takes to long time tu run first time when caches are empty, so put on hold for now
-							  //new NewLegalStateRule(
-							  //    new ScheduleMatrixListCreator(schedulingResultStateHolder),
-							  //    schedulingResultStateHolder.Schedules,
-							  //    new WorkShiftMinMaxLengthCalculatorFactory())
-                          };
+			IWorkTimeStartEndExtractor workTimeStartEndExtractor = new WorkTimeStartEndExtractor();
+			IDayOffMaxFlexCalculator dayOffMaxFlexCalculator = new DayOffMaxFlexCalculator(workTimeStartEndExtractor);
+			var ensureWeeklyRestRule = new EnsureWeeklyRestRule(workTimeStartEndExtractor, dayOffMaxFlexCalculator);
+			var ret = new NewBusinessRuleCollection
+			{
+				new NewShiftCategoryLimitationRule(
+					new ShiftCategoryLimitationChecker(() => schedulingResultStateHolder),
+					new VirtualSchedulePeriodExtractor()),
+				new WeekShiftCategoryLimitationRule(
+					new ShiftCategoryLimitationChecker(() => schedulingResultStateHolder),
+					new VirtualSchedulePeriodExtractor(), new WeeksFromScheduleDaysExtractor()),
+				new NewNightlyRestRule(new WorkTimeStartEndExtractor()),
+				new NewMaxWeekWorkTimeRule(
+					new WeeksFromScheduleDaysExtractor()),
+				new MinWeeklyRestRule(new WeeksFromScheduleDaysExtractor(),
+					new PersonWeekViolatingWeeklyRestSpecification(new ExtractDayOffFromGivenWeek(),
+						new VerifyWeeklyRestAroundDayOffSpecification(), ensureWeeklyRestRule)),
+				new NewDayOffRule(new WorkTimeStartEndExtractor()),
+				new NewPersonAccountRule(schedulingResultStateHolder, schedulingResultStateHolder.AllPersonAccounts)
+
+				//This one takes to long time tu run first time when caches are empty, so put on hold for now
+				//new NewLegalStateRule(
+				//    new ScheduleMatrixListCreator(schedulingResultStateHolder),
+				//    schedulingResultStateHolder.Schedules,
+				//    new WorkShiftMinMaxLengthCalculatorFactory())
+			};
 
 			if(schedulingResultStateHolder.UseMinWeekWorkTime)
 				ret.Add(new MinWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
@@ -62,94 +65,137 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			{
 				
 			}
-            return ret;
-        }
+			return ret;
+		}
 
-        public IEnumerable<IBusinessRuleResponse> CheckRules(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays)
-        {
-            var responseList = new List<IBusinessRuleResponse>();
-            using (new UICultureContext(_culture))
-            {
-                foreach (var rule in this)
-                {
-                    IEnumerable<IBusinessRuleResponse> retList = rule.Validate(rangeClones, scheduleDays);
-                    responseList.AddRange(retList);
-                }
-            }
-            return responseList;
-        }
+		public static IEnumerable<Type> GetRulesFromFlag(BusinessRuleFlags businessRuleFlags)
+		{
+			var flagAndRuleMapping = new Dictionary<BusinessRuleFlags, Type>
+			{
+				{
+					BusinessRuleFlags.DataPartOfAgentDay, typeof (DataPartOfAgentDay)
+				},
+				{
+					BusinessRuleFlags.MinWeeklyRestRule, typeof (MinWeeklyRestRule)
+				},
+				{
+					BusinessRuleFlags.MinWeekWorkTimeRule, typeof (MinWeekWorkTimeRule)
+				},
+				{
+					BusinessRuleFlags.NewDayOffRule, typeof (NewDayOffRule)
+				},
+				{
+					BusinessRuleFlags.NewMaxWeekWorkTimeRule, typeof (NewMaxWeekWorkTimeRule)
+				},
+				{
+					BusinessRuleFlags.NewNightlyRestRule, typeof (NewNightlyRestRule)
+				},
+				{
+					BusinessRuleFlags.NewPersonAccountRule, typeof (NewPersonAccountRule)
+				},
+				{
+					BusinessRuleFlags.NewShiftCategoryLimitationRule, typeof (NewShiftCategoryLimitationRule)
+				},
+				{
+					BusinessRuleFlags.NonMainShiftActivityRule, typeof (NonMainShiftActivityRule)
+				},
+				{
+					BusinessRuleFlags.OpenHoursRule, typeof (OpenHoursRule)
+				},
+				{
+					BusinessRuleFlags.WeekShiftCategoryLimitationRule, typeof (WeekShiftCategoryLimitationRule)
+				}
+			};
+			return (from kp in flagAndRuleMapping
+				where businessRuleFlags.HasFlag(kp.Key)
+				select kp.Value).ToList();
+		}
 
-        public void Remove(IBusinessRuleResponse businessRuleResponseToOverride)
-        {
-            for (var i = Count - 1; i >= 0; i--)
-            {
-                var bu = this[i];
+		public IEnumerable<IBusinessRuleResponse> CheckRules(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays)
+		{
+			var responseList = new List<IBusinessRuleResponse>();
+			using (new UICultureContext(_culture))
+			{
+				foreach (var rule in this)
+				{
+					IEnumerable<IBusinessRuleResponse> retList = rule.Validate(rangeClones, scheduleDays);
+					responseList.AddRange(retList);
+				}
+			}
+			return responseList;
+		}
 
-                if (businessRuleResponseToOverride.TypeOfRule.Equals(bu.GetType()))
-                {
-                    if(!bu.IsMandatory)
-                        bu.HaltModify = false;
+		public void Remove(IBusinessRuleResponse businessRuleResponseToOverride)
+		{
+			for (var i = Count - 1; i >= 0; i--)
+			{
+				var bu = this[i];
 
-                    return;
-                }
-            }
-        }
+				if (businessRuleResponseToOverride.TypeOfRule.Equals(bu.GetType()))
+				{
+					if(!bu.IsMandatory)
+						bu.HaltModify = false;
 
-        public void Remove(Type businessRuleType)
-        {
-            for (var i = Count - 1; i >= 0; i--)
-            {
-                var bu = this[i];
+					return;
+				}
+			}
+		}
 
-                if (businessRuleType.Equals(bu.GetType()))
-                {
-                    if (!bu.IsMandatory)
-                        bu.HaltModify = false;
+		public void Remove(Type businessRuleType)
+		{
+			for (var i = Count - 1; i >= 0; i--)
+			{
+				var bu = this[i];
 
-                    return;
-                }
-            }
-        }
+				if (businessRuleType.Equals(bu.GetType()))
+				{
+					if (!bu.IsMandatory)
+						bu.HaltModify = false;
 
-        public INewBusinessRule Item(Type businessRuleType)
-        {
-            for (var i = Count - 1; i >= 0; i--)
-            {
-                var bu = this[i];
+					return;
+				}
+			}
+		}
 
-                if (businessRuleType.Equals(bu.GetType()))
-                {
-                    return bu;
-                }
-            }
+		public INewBusinessRule Item(Type businessRuleType)
+		{
+			for (var i = Count - 1; i >= 0; i--)
+			{
+				var bu = this[i];
 
-            return null;
-        }
+				if (businessRuleType.Equals(bu.GetType()))
+				{
+					return bu;
+				}
+			}
 
-        public void SetUICulture(CultureInfo cultureInfo)
-        {
-            _culture = cultureInfo;
-        }
+			return null;
+		}
 
-        public CultureInfo UICulture
-        {
-            get { return _culture; }
-        }
+		public void SetUICulture(CultureInfo cultureInfo)
+		{
+			_culture = cultureInfo;
+		}
 
-        protected override void RemoveItem(int index)
-        {
-            var rule = this[index];
-            if (!rule.IsMandatory)
-                rule.HaltModify = false;
-        }
+		public CultureInfo UICulture
+		{
+			get { return _culture; }
+		}
 
-        protected override void ClearItems()
-        {
-            for (var i = Count - 1; i >= 0; i--)
-            {
-                RemoveItem(i);
-            }
-        }
+		protected override void RemoveItem(int index)
+		{
+			var rule = this[index];
+			if (!rule.IsMandatory)
+				rule.HaltModify = false;
+		}
+
+		protected override void ClearItems()
+		{
+			for (var i = Count - 1; i >= 0; i--)
+			{
+				RemoveItem(i);
+			}
+		}
 
 		public static INewBusinessRuleCollection AllForDelete(ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
@@ -164,16 +210,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return ret;
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public static INewBusinessRuleCollection AllForScheduling(ISchedulingResultStateHolder schedulingResultStateHolder)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public static INewBusinessRuleCollection AllForScheduling(ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
-            INewBusinessRuleCollection ret;
-            if(schedulingResultStateHolder.UseValidation)
-                ret = All(schedulingResultStateHolder);
-            else
-            {
-                ret = MinimumAndPersonAccount(schedulingResultStateHolder);
-            }
+			INewBusinessRuleCollection ret;
+			if(schedulingResultStateHolder.UseValidation)
+				ret = All(schedulingResultStateHolder);
+			else
+			{
+				ret = MinimumAndPersonAccount(schedulingResultStateHolder);
+			}
 			foreach (INewBusinessRule rule in ret)
 			{
 				rule.HaltModify = false;
@@ -186,10 +232,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			if (schedulingResultStateHolder == null)
 				return null;
 			var ret = new NewBusinessRuleCollection
-                          {
-                              new NewPersonAccountRule(schedulingResultStateHolder, schedulingResultStateHolder.AllPersonAccounts)
-                          };
+						  {
+							  new NewPersonAccountRule(schedulingResultStateHolder, schedulingResultStateHolder.AllPersonAccounts)
+						  };
 			return ret;
 		}
-    }
+	}
 }
