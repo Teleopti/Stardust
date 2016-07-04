@@ -21464,7 +21464,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to PROCESS WAITLIST.
+        ///   Looks up a localized string similar to Process Waitlist.
         /// </summary>
         public static string ProcessWaitlist {
             get {

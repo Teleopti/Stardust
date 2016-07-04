@@ -14493,7 +14493,7 @@ Check your internet connection or contact your administrator.</value>
     <comment>{0} startTime - endTime</comment>
   </data>
   <data name="ProcessWaitlist" xml:space="preserve">
-    <value>PROCESS WAITLIST</value>
+    <value>Process Waitlist</value>
     <comment>Process Waitlist</comment>
   </data>
   <data name="ProcessWaitlistRequestsReminder" xml:space="preserve">
