@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 {
 	public interface IReadModelScheduleProjectionReadOnlyValidator
 	{
-		bool Validate(IPerson person,IScheduleDay scheduleDay);
+		bool Validate(IPerson person,DateOnly day,IScheduleDay scheduleDay);
 
 		IEnumerable<ScheduleProjectionReadOnlyModel> FetchFromRepository(IPerson person,
 			DateOnly date);

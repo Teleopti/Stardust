@@ -57,22 +57,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 						scenario);
 					var scheduleDays = schedules.SchedulesForPeriod(period, person).ToLookup(s => s.DateOnlyAsPeriod.DateOnly);
 
-					days.ForEach(day => validate(types, person, scheduleDays[day].First(), reportProgress, ignoreValid));
+					days.ForEach(day => validate(types, person, day, scheduleDays[day].First(), reportProgress, ignoreValid));
 				}
 			}
 		}
 		
-		private void validate(ValidateReadModelType types,IPerson person, IScheduleDay scheduleDay,
+		private void validate(ValidateReadModelType types,IPerson person, DateOnly day, IScheduleDay scheduleDay,
 			Action<ReadModelValidationResult> reportProgress, bool ignoreValid)
 		{
 			if(types.HasFlag(ValidateReadModelType.ScheduleProjectionReadOnly))
 			{
-				var isInvalid = !_readModelScheduleProjectionReadOnlyValidator.Validate(person,scheduleDay);
-				if(isInvalid || !ignoreValid) reportProgress(makeResult(person,scheduleDay.DateOnlyAsPeriod.DateOnly,!isInvalid,ValidateReadModelType.ScheduleProjectionReadOnly));
+				var isInvalid = !_readModelScheduleProjectionReadOnlyValidator.Validate(person, day, scheduleDay);
+				if(isInvalid || !ignoreValid) reportProgress(makeResult(person, scheduleDay.DateOnlyAsPeriod.DateOnly,!isInvalid,ValidateReadModelType.ScheduleProjectionReadOnly));
 			}
 			if(types.HasFlag(ValidateReadModelType.PersonScheduleDay))
 			{
-				var isInvalid = !_readModelPersonScheduleDayValidator.Validate(person,scheduleDay);
+				var isInvalid = !_readModelPersonScheduleDayValidator.Validate(person, day,scheduleDay);
 				if(isInvalid || !ignoreValid)
 				{
 					reportProgress(makeResult(person,scheduleDay.DateOnlyAsPeriod.DateOnly,!isInvalid,ValidateReadModelType.PersonScheduleDay));
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 
 			if(types.HasFlag(ValidateReadModelType.ScheduleDay))
 			{
-				var isInvalid = !_readModelScheduleDayValidator.Validate(person,scheduleDay);
+				var isInvalid = !_readModelScheduleDayValidator.Validate(person, day,scheduleDay);
 				if(isInvalid || !ignoreValid)
 				{
 					reportProgress(makeResult(person,scheduleDay.DateOnlyAsPeriod.DateOnly,!isInvalid,ValidateReadModelType.ScheduleDay));
