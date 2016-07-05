@@ -14634,4 +14634,8 @@ These options are activated:
     <value>Date range can be a maximum of 60 days</value>
     <comment>Used in the new Request module as a warning message when the user selects a date period of larger than 60 days.</comment>
   </data>
+  <data name="OrganizeCascadingSkills" xml:space="preserve">
+    <value>Organize Cascading Skills</value>
+    <comment>Organize cascading skills</comment>
+  </data>
 </root>

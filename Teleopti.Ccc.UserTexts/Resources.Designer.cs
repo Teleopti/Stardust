@@ -19227,6 +19227,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Organize Cascading Skills.
+        /// </summary>
+        public static string OrganizeCascadingSkills {
+            get {
+                return ResourceManager.GetString("OrganizeCascadingSkills", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Original ACW.
         /// </summary>
         public static string OriginalACW {
