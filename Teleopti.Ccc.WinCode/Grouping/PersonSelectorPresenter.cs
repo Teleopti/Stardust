@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Repositories;
@@ -347,12 +348,38 @@ namespace Teleopti.Ccc.WinCode.Grouping
 			}
 		}
 
+		public static CheckState SetCheckStateForParentNodes(TreeNodeAdv currentNode)
+		{
+			var substates = currentNode.Nodes.Cast<TreeNodeAdv>().Select(SetCheckStateForParentNodes).ToList();
+
+			if (substates.Any())
+			{
+				var anyChecked = substates.Any(x => x == CheckState.Checked);
+				var anyUnchecked = substates.Any(x => x == CheckState.Unchecked);
+				var anyIndeterminate = substates.Any(x => x == CheckState.Indeterminate);
+				if ((anyUnchecked && anyChecked) || anyIndeterminate)
+					currentNode.CheckState = CheckState.Indeterminate;
+				else if (anyChecked)
+					currentNode.CheckState = CheckState.Checked;
+				else if (anyUnchecked)
+					currentNode.CheckState = CheckState.Unchecked;
+			}
+			return currentNode.CheckState;
+		}
+
 		public void SetSelectedPersonGuids(HashSet<Guid> guidsToCheck)
 		{
+			var treeViewAdv = _personSelectorView.AllNodes[0].TreeView;
+			treeViewAdv.BeginUpdate();
+			treeViewAdv.InteractiveCheckBoxes = false;
 			foreach (var node in _personSelectorView.AllNodes)
 			{
 				selectNodesRecursive(guidsToCheck, node);
 			}
+			if (treeViewAdv.ShowCheckBoxes)
+				treeViewAdv.InteractiveCheckBoxes = true;
+			SetCheckStateForParentNodes(treeViewAdv.Nodes[0]);
+			treeViewAdv.EndUpdate();
 		}
 
 		private void selectNodesRecursive(HashSet<Guid> guidsToCheck, TreeNodeAdv fromThisNode)

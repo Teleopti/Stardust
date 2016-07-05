@@ -166,30 +166,11 @@ namespace Teleopti.Ccc.Win.Grouping
 					treeViewAdvMainTabTree.InteractiveCheckBoxes = true;
 
 				if(CheckParentNodesOnResetTree && treeViewAdvMainTabTree.Nodes.Count > 0)
-					setCheckStateForParentNodes(treeViewAdvMainTabTree.Nodes[0]);
+					PersonSelectorPresenter.SetCheckStateForParentNodes(treeViewAdvMainTabTree.Nodes[0]);
 
 				treeViewAdvMainTabTree.EndUpdate();
 				treeViewAdvMainTabTree.AfterCheck += treeViewAdvMainTabTreeAfterCheck;
 			}
-		}
-
-		private static CheckState setCheckStateForParentNodes(TreeNodeAdv currentNode)
-		{
-			var substates = currentNode.Nodes.Cast<TreeNodeAdv>().Select(setCheckStateForParentNodes).ToList();
-
-			if (substates.Any())
-			{
-				var anyChecked = substates.Any(x => x == CheckState.Checked);
-				var anyUnchecked = substates.Any(x => x == CheckState.Unchecked);
-				var anyIndeterminate = substates.Any(x => x == CheckState.Indeterminate);
-				if ((anyUnchecked && anyChecked) || anyIndeterminate)
-					currentNode.CheckState = CheckState.Indeterminate;
-				else if (anyChecked)
-					currentNode.CheckState = CheckState.Checked;
-				else if(anyUnchecked)
-					currentNode.CheckState = CheckState.Unchecked;
-			}
-			return currentNode.CheckState;
 		}
 
 		public void ModifyGroupPage(Guid id)
