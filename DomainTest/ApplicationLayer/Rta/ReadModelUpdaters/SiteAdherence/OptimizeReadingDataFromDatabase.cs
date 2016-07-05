@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 {
 	[ReadModelUpdaterTest]
 	[TestFixture]
-	public class SiteChangesTest
+	public class OptimizeReadingDataFromDatabase
 	{
 		public FakeSiteOutOfAdherenceReadModelPersister Persister;
 		public SiteOutOfAdherenceReadModelUpdater Target;
@@ -17,36 +17,53 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 		[Test]
 		public void ShouldExcludePersonChangingSite()
 		{
+			var businessUnitId = Guid.NewGuid();
 			var originSite = Guid.NewGuid();
 			var destinationSite = Guid.NewGuid();
 			var movingPerson = Guid.NewGuid();
 
-			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = originSite, PersonId = movingPerson });
+			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = originSite, PersonId = movingPerson, BusinessUnitId = businessUnitId });
 			Target.Handle(new PersonAssociationChangedEvent
 			{
 				PersonId = movingPerson,
-				SiteId = destinationSite
+				SiteId = destinationSite,
+				PreviousSite = originSite,
+				BusinessUnitId = businessUnitId
 			});
 
 			Persister.Get(originSite).Count.Should().Be(0);
 		}
-
+		
 		[Test]
 		public void ShouldIncludeInDestinationSite()
 		{
+			var businessUnitId = Guid.NewGuid();
+			var originSite = Guid.NewGuid();
 			var destinationSite = Guid.NewGuid();
 			var movingPerson = Guid.NewGuid();
-			Target.Handle(new PersonInAdherenceEvent { SiteId = destinationSite, PersonId = Guid.NewGuid() });
+			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = originSite, PersonId = movingPerson, BusinessUnitId = businessUnitId });
 
 			Target.Handle(new PersonAssociationChangedEvent
 			{
 				PersonId = movingPerson,
-				SiteId = destinationSite
+				BusinessUnitId = businessUnitId,
+				SiteId = destinationSite,
+				PreviousSite = originSite
 			});
-			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = destinationSite, PersonId = movingPerson });
+			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = destinationSite, PersonId = movingPerson, BusinessUnitId = businessUnitId });
 
 			Persister.Get(destinationSite).Count.Should().Be(1);
+
+
+
+
+
+
+
+
+
+
+			Persister.Get(originSite).Count.Should().Be(0);
 		}
-		
 	}
 }

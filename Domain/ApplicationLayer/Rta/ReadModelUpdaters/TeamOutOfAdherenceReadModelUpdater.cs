@@ -74,14 +74,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		{
 			if (@event.TeamId != null)
 			{
-				updateAllModels(
-					@event.PersonId,
-					@event.Timestamp,
-					(m, p, t) =>
-						m.TeamId == @event.TeamId
-							? movePersonTo(m, p, t)
-							: movePersonFrom(m, p, t)
-					);
+				if (@event.PreviousTeam != null)
+				{
+					updateModel(@event.PersonId, @event.Timestamp, @event.PreviousSite.Value, @event.PreviousTeam.Value, movePersonFrom);
+					updateModel(@event.PersonId, @event.Timestamp, @event.SiteId.Value, @event.TeamId.Value, movePersonTo);
+				}
+				else
+					updateAllModels(
+						@event.PersonId,
+						@event.Timestamp,
+						(m, p, t) =>
+							m.TeamId == @event.TeamId
+								? movePersonTo(m, p, t)
+								: movePersonFrom(m, p, t)
+						);
 			}
 			else
 			{
