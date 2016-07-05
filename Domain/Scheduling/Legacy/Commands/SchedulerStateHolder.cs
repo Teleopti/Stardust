@@ -335,13 +335,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void FilterPersons(HashSet<Guid> selectedGuids)
 		{
-			var selectedPersons = new List<IPerson>();
+			var selectedPersons = new Dictionary<Guid, IPerson>();
 			foreach (var person in AllPermittedPersons)
 			{
-				if (selectedGuids.Contains(person.Id.Value) && !selectedPersons.Contains(person))
-					selectedPersons.Add(person);
+				if (selectedGuids.Contains(person.Id.Value) && !selectedPersons.ContainsKey(person.Id.Value))
+				{
+					selectedPersons.Add(person.Id.Value, person);
+				}
 			}
-			_filteredAgents = (from p in selectedPersons orderby CommonAgentName(p) select p).ToDictionary(p => p.Id.Value);
+			_filteredAgents = (from p in selectedPersons.Values orderby CommonAgentName(p) select p).ToDictionary(p => p.Id.Value);
 		}
 
 		public IPersonRequest RequestUpdateFromBroker(IPersonRequestRepository personRequestRepository, Guid personRequestId, IScheduleStorage scheduleStorage)

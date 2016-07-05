@@ -123,12 +123,12 @@ namespace Teleopti.Ccc.Win.Reporting
 
 			var builder = new StringBuilder();
 
-			builder.Append(_selectedPersonGuids.Count().ToString(currentCultureInfo));
+			builder.Append(_selectedPersonGuids.Count.ToString(currentCultureInfo));
 			builder.Append(":");
 			_stateHolder.FilterPersons(_selectedPersonGuids);
-			foreach (var person in _stateHolder.FilteredCombinedAgentsDictionary)
+			foreach (var person in _stateHolder.FilteredCombinedAgentsDictionary.Values)
 			{
-				builder.Append(person.Value.Name);
+				builder.Append(person.Name);
 				builder.Append(", ");
 			}
 

@@ -4418,6 +4418,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						string.Empty,
 						permittedPersons, true);
 			}
+			
 			_cachedPersonsFilterView.SetCurrentFilter(SchedulerState.FilteredCombinedAgentsDictionary);
 			return _cachedPersonsFilterView;
 		}

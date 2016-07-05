@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 e.Style.MergeCell = GridMergeCellDirection.None;
                 if (_schedulerState.FilteredCombinedAgentsDictionary.Count > 0)
                 {
-                    IPerson agent = _schedulerState.FilteredCombinedAgentsDictionary.ElementAt(e.RowIndex - (View.RowHeaders + 1)).Value;
+					var agent = View.TheGrid.Model[e.RowIndex, 1].Tag as IPerson;
                     IScheduleRange totalScheduleRange = _schedulerState.Schedules[agent];
                     IScheduleDay daySchedule = totalScheduleRange.ScheduledDay(_selectedDate);
 

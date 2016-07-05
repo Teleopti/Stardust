@@ -319,8 +319,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 e.Style.MergeCell = GridMergeCellDirection.None;
                 if (_schedulerState.FilteredCombinedAgentsDictionary.Count > 0)
                 {
-                    IPerson agent = _schedulerState.FilteredCombinedAgentsDictionary.ElementAt(e.RowIndex - (View.RowHeaders + 1)).Value;
-
+					var agent = View.TheGrid.Model[e.RowIndex, 1].Tag as IPerson;
 					var localDate = _schedulerState.RequestedPeriod.DateOnlyPeriod.StartDate;
                     localDate = localDate.AddDays(e.ColIndex - (int)ColumnType.StartScheduleColumns);
 
@@ -361,7 +360,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     //add person to tag and set text to name
                     if (_schedulerState.FilteredCombinedAgentsDictionary.Count > 0)
                     {
-                        e.Style.Tag = _schedulerState.FilteredCombinedAgentsDictionary.ElementAt(e.RowIndex - (View.RowHeaders + 1)).Value;
+                        e.Style.Tag = _schedulerState.FilteredCombinedAgentsDictionary.Values.ElementAt(e.RowIndex - (View.RowHeaders + 1));
                         e.Style.Text = _schedulerState.CommonAgentName((IPerson)e.Style.Tag);
                     }
                 }
@@ -547,10 +546,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     e.ColIndex < (int)ColumnType.StartScheduleColumns &&
                     e.RowIndex > View.ColHeaders &&
                     SchedulerState.FilteredCombinedAgentsDictionary.Count > 0 &&
-                    (e.RowIndex - (View.RowHeaders + 1)) >= 0)
+                    e.RowIndex - (View.RowHeaders + 1) >= 0)
                 {
-                    IPerson person = SchedulerState.FilteredCombinedAgentsDictionary.ElementAt(e.RowIndex - (View.RowHeaders + 1)).Value;
-                    QueryOverviewStyleInfo(e.Style, person, (ColumnType)e.ColIndex);
+	                var person = View.TheGrid.Model[e.RowIndex, 1].Tag as IPerson;
+					QueryOverviewStyleInfo(e.Style, person, (ColumnType)e.ColIndex);
                 }
             }
         }
