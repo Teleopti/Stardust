@@ -201,6 +201,7 @@
 						Wfm_Requests_Filtering_37748: true,
 						Wfm_Requests_ShiftTrade_More_Relevant_Information_38492: true,
 						Wfm_Requests_Default_Status_Filter_39472: true,
+						Wfm_Requests_Show_Deny_Reasons_39473: true,
 						togglesLoaded: {
 							then: function (cb) { cb(); }
 						}
@@ -382,6 +383,27 @@
 			expect(selectedStatus[0].Id).toEqual(status0.trim());
 			expect(selectedStatus[1].Id).toEqual(status1.trim());
 			expect(selectedStatus[2].Id).toEqual(status2.trim());
+		});
+
+		it("should get pending reasons column", function() {
+			var test = setUpTarget();
+			setUpShiftTradeRequestData(test);
+			var pendingReasons = "DataPartOfAgentDay,MinWeeklyRestRule";
+			test.scope.requests[0].PendingReasons = pendingReasons;
+			test.scope.$digest();
+
+			var vm = test.target.isolateScope().requestsTableContainer;
+			var columnDefs = vm.gridOptions.columnDefs;
+			var existsPendingReasonsColmun;
+			angular.forEach(columnDefs,
+				function(columnDef) {
+					if (columnDef.displayName === "Pending Reasons") {
+						existsPendingReasonsColmun = true;
+					}
+				});
+
+			expect(existsPendingReasonsColmun).toEqual(true);
+			expect(test.scope.requests[0].GetPendingReasons(), pendingReasons);
 		});
 
 		xit('should load schedules for shift trade request', function () {

@@ -313,6 +313,19 @@
 					}
 					return typeText;
 				}
+
+				row.GetPendingReasons = function() {
+					var translatedPendingReasons = new Array();
+					var pendingReaons = row.PendingReasons;
+					if (pendingReaons) {
+						angular.forEach(pendingReaons.split(','),
+							function(value) {
+								translatedPendingReasons.push($translate.instant(value));
+							});
+						return translatedPendingReasons.join(',');
+					}
+					return row.PendingReasons;
+				}
 			});
 
 			setupColumnDefinitions(requests);

@@ -3,7 +3,7 @@
 (function () {
 
 	angular.module('wfm.requests')
-		.factory('ShiftTradeGridConfiguration', ['$filter', function ($filter) {
+		.factory('ShiftTradeGridConfiguration', ['$filter', 'Toggle', function ($filter, toggleSvc) {
 
 			var columns = [];
 
@@ -141,7 +141,7 @@
 						visible: false,
 						pinnedRight: true,
 						enablePinning: false,
-						minWidth: 111,
+						minWidth: 111
 					},
 					{
 						displayName: 'Status',
@@ -169,7 +169,7 @@
 						headerCellClass: 'request-created-time-header',
 						pinnedRight: true,
 						enablePinning: false,
-						minWidth: 111,
+						minWidth: 111
 					},
 					{
 						displayName: 'Id',
@@ -180,7 +180,7 @@
 						headerCellClass: 'request-id-header',
 						pinnedRight: true,
 						enablePinning: false,
-						minWidth: 111,
+						minWidth: 111
 					},
 					{
 						displayName: 'UpdatedOn',
@@ -191,16 +191,29 @@
 						headerCellClass: 'request-updated-time-header',
 						pinnedRight: true,
 						enablePinning: false,
-						minWidth: 111,
+						minWidth: 111
 					}
 				];
-
 			}
 
 			function columnDefinitions(shiftTradeRequestDateSummary, requests) {
 
 				if (columns.length == 0) {
 					setupStandardColumns();
+
+					if (toggleSvc.Wfm_Requests_Show_Deny_Reasons_39473) {
+						var pendingReasonsColumn = {
+							displayName: 'Pending Reasons',
+							field: 'GetPendingReasons()',
+							headerCellFilter: 'translate',
+							visible: false,
+							pinnedRight: true,
+							enablePinning: false,
+							enableSorting: false,
+							minWidth: 111
+						};
+						columns.splice(10, 0, pendingReasonsColumn);
+					}
 				}
 
 				if (shiftTradeRequestDateSummary && requests.length > 0) {
