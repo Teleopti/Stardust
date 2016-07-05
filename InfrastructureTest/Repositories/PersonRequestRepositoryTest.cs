@@ -1695,7 +1695,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldGetBrokenBusinessRules()
 		{
 			var shiftTradeRequest1 = CreateShiftTradeRequest("Trade With Me");
-			shiftTradeRequest1.TrySetBrokenBusinessRule(2);
+			shiftTradeRequest1.TrySetBrokenBusinessRule(BusinessRuleFlags.DataPartOfAgentDay);
 			PersistAndRemoveFromUnitOfWork(shiftTradeRequest1);
 			var filter = new RequestFilter
 			{
@@ -1707,7 +1707,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(1, foundRequests.Count);
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundRequests[0].Request));
 			Assert.IsTrue(foundRequests.Contains(shiftTradeRequest1));
-			Assert.AreEqual(foundRequests[0].BrokenBusinessRules, 2);
+			Assert.AreEqual(foundRequests[0].BrokenBusinessRules, BusinessRuleFlags.DataPartOfAgentDay);
 		}
 
 		[Test]
