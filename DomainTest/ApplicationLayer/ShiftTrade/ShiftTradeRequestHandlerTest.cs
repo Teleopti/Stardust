@@ -261,6 +261,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			Assert.AreEqual(false, personRequest.IsNew);
 			Assert.AreEqual(false, personRequest.IsPending);
 			Assert.AreEqual(true, personRequest.IsApproved);
+			Assert.AreEqual(BusinessRuleFlags.None, personRequest.BrokenBusinessRules);
 			Assert.AreEqual(ShiftTradeStatus.OkByBothParts,
 				shiftTradeRequest.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
 			Assert.AreEqual(accept.Message, personRequest.GetMessage(new NoFormatting()));
@@ -295,6 +296,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			Assert.AreEqual(false, personRequest.IsNew);
 			Assert.AreEqual(false, personRequest.IsPending);
 			Assert.AreEqual(true, personRequest.IsApproved);
+			Assert.AreEqual(BusinessRuleFlags.None, personRequest.BrokenBusinessRules);
 			Assert.AreEqual(ShiftTradeStatus.OkByBothParts,
 				shiftTradeRequest.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
 			Assert.AreEqual(accept.Message, personRequest.GetMessage(new NoFormatting()));
@@ -304,32 +306,42 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		[Test]
 		public void ShouldKeepAsPendingWhenBusinessRulesFail()
 		{
+			const string ruleMessage1 = "aja baja!";
+			const string ruleMessage2 = "Another rule broken!";
 			var accept = getAcceptShiftTrade();
 
 			var approvalService = MockRepository.GenerateMock<IRequestApprovalService>();
 			var statusChecker = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();
-			var rule = MockRepository.GenerateMock<IBusinessRuleResponse>();
-			var shiftTradeRequest = (IShiftTradeRequest)personRequest.Request;
 
+			var rule1 = MockRepository.GenerateMock<IBusinessRuleResponse>();
+			rule1.Stub(x => x.Message).Return(ruleMessage1);
+			rule1.Stub(x => x.TypeOfRule).Return(typeof(NewMaxWeekWorkTimeRule));
+			var rule2 = MockRepository.GenerateMock<IBusinessRuleResponse>();
+			rule2.Stub(x => x.Message).Return(ruleMessage2);
+			rule2.Stub(x => x.TypeOfRule).Return(typeof(NewShiftCategoryLimitationRule));
+
+			var shiftTradeRequest = (IShiftTradeRequest)personRequest.Request;
 			validator.Stub(x => x.Validate(shiftTradeRequest)).Return(new ShiftTradeRequestValidationResult(true));
 			personRepository.Stub(x => x.Get(accept.AcceptingPersonId)).Return(toPerson);
 			approvalService.Stub(x => x.ApproveShiftTrade(shiftTradeRequest))
-				.Return(new List<IBusinessRuleResponse> { rule, rule });
+				.Return(new List<IBusinessRuleResponse> { rule1, rule1, rule2 });
 			requestFactory.Stub(x => x.GetRequestApprovalService(null, scenario, schedulingResultState))
 				.IgnoreArguments().Return(approvalService);
 			personRequestRepository.Stub(x => x.Get(accept.PersonRequestId)).Return(personRequest);
 			scenarioRepository.Stub(x => x.Current()).Return(scenario);
 			requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker(schedulingResultState)).Return(statusChecker);
-			rule.Stub(x => x.Message).Return("aja baja!");
 
 			target.Handle(accept);
 			Assert.AreEqual(false, personRequest.IsNew);
 			Assert.AreEqual(true, personRequest.IsPending);
 			Assert.AreEqual(false, personRequest.IsApproved);
+			Assert.AreEqual(BusinessRuleFlags.NewMaxWeekWorkTimeRule | BusinessRuleFlags.NewShiftCategoryLimitationRule,
+				personRequest.BrokenBusinessRules);
 			Assert.AreEqual(ShiftTradeStatus.OkByBothParts,
 				shiftTradeRequest.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
 			personRequest.GetMessage(new NoFormatting())
-				.Should().Be.EqualTo("I want to trade!\r\nViolation of a Business Rule:\r\naja baja!\r\n");
+				.Should().Be.EqualTo("I want to trade!\r\nViolation of a Business Rule:\r\n"
+									 + ruleMessage1 + "\r\n" + ruleMessage2 + "\r\n");
 		}
 
 		[Test]

@@ -165,8 +165,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 				clearStateHolder();
 				return;
 			}
+
 			logger.Debug("Loading Default Scenario");
 			var scenario  = loadDefaultScenario();
+
 			logger.Debug("Loading Schedules");
 			var shiftTradeRequest = getShiftTradeRequest(personRequest);
 			loadSchedules(shiftTradeRequest.Period, shiftTradeRequest.InvolvedPeople(), scenario);
@@ -242,17 +244,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			}
 		}
 
-		private void handleBrokenBusinessRules(IList<IBusinessRuleResponse> brokenBusinessRules, IPersonRequest personRequest)
+		private void handleBrokenBusinessRules(ICollection<IBusinessRuleResponse> brokenBusinessResponses,
+			IPersonRequest personRequest)
 		{
-			if (brokenBusinessRules.Count <= 0) return;
+			if (brokenBusinessResponses.Count <= 0) return;
+
+			var brokenRulesFlag = brokenBusinessResponses.Count > 0
+				? NewBusinessRuleCollection.GetFlagFromRules(brokenBusinessResponses.Select(x => x.TypeOfRule))
+				: BusinessRuleFlags.None;
+			personRequest.TrySetBrokenBusinessRule(brokenRulesFlag);
 
 			var culture = personRequest.Person.PermissionInformation.UICulture();
-
 			var sb = new StringBuilder(personRequest.GetMessage(new NormalizeText()));
 			sb.AppendLine();
 			sb.Append(UserTexts.Resources.ResourceManager.GetString("ViolationOfABusinessRule",
 				culture)).Append(":").AppendLine();
-			foreach (var brokenBusinessRuleMessage in brokenBusinessRules.Select(m => m.Message).Distinct())
+			foreach (var brokenBusinessRuleMessage in brokenBusinessResponses.Select(m => m.Message).Distinct())
 			{
 				sb.AppendLine(brokenBusinessRuleMessage);
 				if (logger.IsWarnEnabled)
