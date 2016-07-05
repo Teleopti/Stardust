@@ -52,10 +52,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 					if (time < now.AddDays(-1))
 						return;
 
-					var previousTeam = previousPeriod?.Team.Id.Value;
-					var teamId = currentPeriod != null ? currentPeriod.Team.Id.Value : null as Guid?;
-					var siteId = currentPeriod != null ? currentPeriod.Team.Site.Id.Value : null as Guid?;
-					var businessUnitId = currentPeriod != null ? currentPeriod.Team.Site.BusinessUnit.Id.Value : null as Guid?;
+					var previousTeam = previousPeriod?.Team.Id;
+					var previousSite = previousPeriod?.Team.Site.Id;
+					var teamId = currentPeriod?.Team.Id;
+					var siteId = currentPeriod?.Team.Site.Id;
+					var businessUnitId = currentPeriod?.Team.Site.BusinessUnit.Id;
 
 					if (previousTeam.HasValue &&
 						teamId.HasValue &&
@@ -68,7 +69,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 						Timestamp = now,
 						TeamId = teamId,
 						SiteId = siteId,
-						BusinessUnitId = businessUnitId
+						BusinessUnitId = businessUnitId,
+						PreviousTeam = previousTeam,
+						PreviousSite = previousSite
 					});
 				});
 		}
