@@ -166,30 +166,31 @@ namespace Teleopti.Ccc.Win.Grouping
 					treeViewAdvMainTabTree.InteractiveCheckBoxes = true;
 
 				if(CheckParentNodesOnResetTree && treeViewAdvMainTabTree.Nodes.Count > 0)
-					checkParents(treeViewAdvMainTabTree.Nodes[0]);
+					setCheckStateForParentNodes(treeViewAdvMainTabTree.Nodes[0]);
 
 				treeViewAdvMainTabTree.EndUpdate();
 				treeViewAdvMainTabTree.AfterCheck += treeViewAdvMainTabTreeAfterCheck;
 			}
-			
 		}
 
-
-		private void checkParents(TreeNodeAdv startNode)
+		private static CheckState setCheckStateForParentNodes(TreeNodeAdv currentNode)
 		{
-			foreach (TreeNodeAdv node in startNode.Nodes)
+			var substates = currentNode.Nodes.Cast<TreeNodeAdv>().Select(setCheckStateForParentNodes).ToList();
+
+			if (substates.Any())
 			{
-				if (node.Nodes.Count > 0) checkParents(node);
-				if (!node.Checked) continue;
-				if (node.Parent.CheckState == CheckState.Checked) continue;
-
-				var childCount = node.Parent.GetNodeCount(false);
-				var checkedChilds = node.Parent.Nodes.Cast<TreeNodeAdv>().Count(parentChildNode => parentChildNode.Checked);
-
-				node.Parent.CheckState = childCount == checkedChilds ? CheckState.Checked : CheckState.Indeterminate;
+				var anyChecked = substates.Any(x => x == CheckState.Checked);
+				var anyUnchecked = substates.Any(x => x == CheckState.Unchecked);
+				var anyIndeterminate = substates.Any(x => x == CheckState.Indeterminate);
+				if ((anyUnchecked && anyChecked) || anyIndeterminate)
+					currentNode.CheckState = CheckState.Indeterminate;
+				else if (anyChecked)
+					currentNode.CheckState = CheckState.Checked;
+				else if(anyUnchecked)
+					currentNode.CheckState = CheckState.Unchecked;
 			}
+			return currentNode.CheckState;
 		}
-
 
 		public void ModifyGroupPage(Guid id)
 		{
