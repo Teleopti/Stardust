@@ -79,8 +79,8 @@ namespace Teleopti.Ccc.WinCode.Common
 
                     foreach (var teamMember in teamMembers)
                     {
-						if (!peopleInTeam.ContainsKey(teamMember.Id.Value))
-							peopleInTeam.Add(teamMember.Id.Value, teamMember);
+						if (!peopleInTeam.ContainsKey(teamMember.Id.GetValueOrDefault()))
+							peopleInTeam.Add(teamMember.Id.GetValueOrDefault(), teamMember);
                     }
                 }
 	            peopleInOrg = peopleInTeam.Values.ToList();
