@@ -6287,9 +6287,6 @@ Plan</value>
   <data name="Optimisation" xml:space="preserve">
     <value>Optymalizacja</value>
   </data>
-  <data name="OverStaff" xml:space="preserve">
-    <value>Nadmiar załogi</value>
-  </data>
   <data name="PriorityColon" xml:space="preserve">
     <value>Priorytet:</value>
   </data>
@@ -9751,9 +9748,6 @@ Te opcje są aktywowane:
   <data name="DeleteCampaign" xml:space="preserve">
     <value>Usuń Kampanie</value>
   </data>
-  <data name="DISMISS" xml:space="preserve">
-    <value>ODRZUĆ</value>
-  </data>
   <data name="WorkingHours" xml:space="preserve">
     <value>Godziny Paracy</value>
   </data>
@@ -10296,9 +10290,6 @@ Te opcje są aktywowane:
   </data>
   <data name="CampaignNameInvalid" xml:space="preserve">
     <value>Podana nazwa kampanii jest nieprawidłowa. Może zawierać maksymalnie 255 znaków.</value>
-  </data>
-  <data name="OnGoing" xml:space="preserve">
-    <value>Trwający</value>
   </data>
   <data name="AddBacklog" xml:space="preserve">
     <value>dodaj zaległość</value>
