@@ -13,74 +13,104 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 	{
 		public FakeSiteOutOfAdherenceReadModelPersister Persister;
 		public SiteOutOfAdherenceReadModelUpdater Target;
-
-		[Test]
-		public void ShouldExcludePersonChangingSite_SiteChanged()
-		{
-			var businessUnitId = Guid.NewGuid();
-			var originSite = Guid.NewGuid();
-			var destinationSite = Guid.NewGuid();
-			var movingPerson = Guid.NewGuid();
-
-			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = originSite, PersonId = movingPerson, BusinessUnitId = businessUnitId });
-			Target.Handle(new PersonAssociationChangedEvent
-			{
-				PersonId = movingPerson,
-				SiteId = destinationSite,
-				PreviousSite = originSite,
-				BusinessUnitId = businessUnitId
-			});
-
-			Persister.Get(originSite).Count.Should().Be(0);
-		}
 		
 		[Test]
-		public void ShouldIncludeInDestinationSite_SiteChanged()
+		public void ShouldExcludePersonFromPreviousSites()
 		{
 			var businessUnitId = Guid.NewGuid();
-			var originSite = Guid.NewGuid();
+			var previousSite1 = Guid.NewGuid();
+			var previousSite2 = Guid.NewGuid();
 			var destinationSite = Guid.NewGuid();
 			var movingPerson = Guid.NewGuid();
-			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = originSite, PersonId = movingPerson, BusinessUnitId = businessUnitId });
-
-			Target.Handle(new PersonAssociationChangedEvent
+			Target.Handle(new PersonOutOfAdherenceEvent
 			{
 				PersonId = movingPerson,
 				BusinessUnitId = businessUnitId,
-				SiteId = destinationSite,
-				PreviousSite = originSite
+				SiteId = previousSite1,
 			});
-			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = destinationSite, PersonId = movingPerson, BusinessUnitId = businessUnitId });
-
-			Persister.Get(destinationSite).Count.Should().Be(1);
-			Persister.Get(originSite).Count.Should().Be(0);
-		}
-
-
-		[Test]
-		public void ShouldExludeFromAnyTeam_Terminated()
-		{
-			var siteId1 = Guid.NewGuid();
-			var siteId2 = Guid.NewGuid();
-			var personId = Guid.NewGuid();
-			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId1, PersonId = personId });
-			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId2, PersonId = personId });
+			Target.Handle(new PersonOutOfAdherenceEvent
+			{
+				PersonId = movingPerson,
+				BusinessUnitId = businessUnitId,
+				SiteId = previousSite2,
+			});
 
 			Target.Handle(new PersonAssociationChangedEvent
 			{
-				PersonId = personId,
-				TeamId = null,
-				PreviousSites = new[] { siteId1, siteId2 }
+				Version = 2,
+				PersonId = movingPerson,
+				BusinessUnitId = businessUnitId,
+				SiteId = destinationSite,
+				PreviousAssociation = new[]
+				{
+					new Association
+					{
+						BusinessUnitId = businessUnitId,
+						SiteId = previousSite1
+					},
+					new Association
+					{
+						BusinessUnitId = businessUnitId,
+						SiteId = previousSite2
+					}
+				}
 			});
 
-			Persister.Get(siteId1).Count.Should().Be(0);
-			Persister.Get(siteId2).Count.Should().Be(0);
+			Persister.Get(previousSite1).Count.Should().Be(0);
+			Persister.Get(previousSite2).Count.Should().Be(0);
+		}
+		
+		[Test]
+		public void ShouldIncludeInNewSite()
+		{
+			var businessUnitId = Guid.NewGuid();
+			var originSite = Guid.NewGuid();
+			var destinationSite = Guid.NewGuid();
+			var movingPerson = Guid.NewGuid();
+			Target.Handle(new PersonOutOfAdherenceEvent { PersonId = movingPerson, BusinessUnitId = businessUnitId, SiteId = originSite,  });
+
+			Target.Handle(new PersonAssociationChangedEvent
+			{
+				Version = 2,
+				PersonId = movingPerson,
+				BusinessUnitId = businessUnitId,
+				SiteId = destinationSite
+			});
+			Target.Handle(new PersonOutOfAdherenceEvent { PersonId = movingPerson, BusinessUnitId = businessUnitId, SiteId = destinationSite,  });
+
+			Persister.Get(destinationSite).Count.Should().Be(1);
 		}
 
+
 		[Test]
-		public void ShouldWorkWhenPreviousTeamDoesNotHaveAModel_Terminated()
+		public void ShouldExcludeWhenTerminated()
 		{
-			Target.Handle(new PersonAssociationChangedEvent { PersonId = Guid.NewGuid(), PreviousSites = new[] { Guid.NewGuid() } });
+			var businessUnitId = Guid.NewGuid();
+			var previousSite = Guid.NewGuid();
+			var movingPerson = Guid.NewGuid();
+			Target.Handle(new PersonOutOfAdherenceEvent
+			{
+				PersonId = movingPerson,
+				BusinessUnitId = businessUnitId,
+				SiteId = previousSite,
+			});
+
+			Target.Handle(new PersonAssociationChangedEvent
+			{
+				Version = 2,
+				PersonId = movingPerson,
+				PreviousAssociation = new[]
+				{
+					new Association
+					{
+						BusinessUnitId = businessUnitId,
+						SiteId = previousSite
+					}
+				}
+			});
+
+			Persister.Get(previousSite).Count.Should().Be(0);
 		}
+
 	}
 }

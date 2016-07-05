@@ -11,9 +11,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public Guid? BusinessUnitId { get; set; }
 		public Guid? SiteId { get; set; }
 		public Guid? TeamId { get; set; }
-		public Guid? PreviousTeam { get; set; }
-		public Guid? PreviousSite { get; set; }
-		public IEnumerable<Guid> PreviousTeams { get; set; }
-		public IEnumerable<Guid> PreviousSites { get; set; }
+
+		public int? Version { get; set; }
+
+		public IEnumerable<Association> PreviousAssociation { get; set; }
+	}
+
+	public class Association
+	{
+		public Guid BusinessUnitId { get; set; }
+		public Guid SiteId { get; set; }
+		public Guid TeamId { get; set; }
+
+		public override string ToString()
+		{
+			return "BU: " + BusinessUnitId + Environment.NewLine +" Site: " + SiteId + Environment.NewLine + " Team:" + TeamId + Environment.NewLine;
+		}
 	}
 }

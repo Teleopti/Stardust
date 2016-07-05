@@ -72,14 +72,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonAssociationChangedEvent @event)
 		{
-			if (@event.TeamId != null)
+			if (@event.Version == 2)
 			{
-				if (@event.PreviousTeam != null)
-				{
-					updateModel(@event.PersonId, @event.Timestamp, @event.PreviousSite.Value, @event.PreviousTeam.Value, movePersonFrom);
+				if (!@event.PreviousAssociation.IsNullOrEmpty())
+					@event.PreviousAssociation.ForEach(
+						a => updateModel(modelFor(a.SiteId, a.TeamId), @event.PersonId, @event.Timestamp, movePersonFrom));
+				if (@event.TeamId != null)
 					updateModel(@event.PersonId, @event.Timestamp, @event.SiteId.Value, @event.TeamId.Value, movePersonTo);
-				}
-				else
+			}
+			else
+			{
+				if (@event.TeamId != null)
+				{
 					updateAllModels(
 						@event.PersonId,
 						@event.Timestamp,
@@ -88,24 +92,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 								? movePersonTo(m, p, t)
 								: movePersonFrom(m, p, t)
 						);
-			}
-			else
-			{
-				if (!@event.PreviousTeams.IsNullOrEmpty())
-					@event.PreviousTeams.ForEach(
-						team =>
-						{
-							var model = _persister.Get(team);
-							if (model != null)
-								updateModel(model, @event.PersonId, @event.Timestamp, movePersonFrom);
-						});
+				}
 				else
+				{
 					updateAllModels(
 						@event.PersonId,
 						@event.Timestamp,
 						movePersonFrom);
+				}
 			}
 		}
+
 
 		private void updateModel(Guid personId, DateTime time, Guid siteId, Guid teamId, UpdateAction update)
 		{

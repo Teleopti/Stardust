@@ -15,72 +15,106 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 		public TeamOutOfAdherenceReadModelUpdater Target;
 
 		[Test]
-		public void ShouldExcludePersonChangingTeam_TeamChanged()
+		public void ShouldExcludePersonFromPreviousTeams()
+		{
+			var businessUnitId = Guid.NewGuid();
+			var previousSiteId = Guid.NewGuid();
+			var previousTeam1 = Guid.NewGuid();
+			var previousTeam2 = Guid.NewGuid();
+			var destinationSite = Guid.NewGuid();
+			var movingPerson = Guid.NewGuid();
+			Target.Handle(new PersonOutOfAdherenceEvent
+			{
+				PersonId = movingPerson,
+				BusinessUnitId = businessUnitId,
+				SiteId = previousSiteId,
+				TeamId = previousTeam1,
+			});
+			Target.Handle(new PersonOutOfAdherenceEvent
+			{
+				PersonId = movingPerson,
+				BusinessUnitId = businessUnitId,
+				SiteId = previousSiteId,
+				TeamId = previousTeam2,
+			});
+
+			Target.Handle(new PersonAssociationChangedEvent
+			{
+				Version = 2,
+				PersonId = movingPerson,
+				BusinessUnitId = businessUnitId,
+				SiteId = destinationSite,
+				PreviousAssociation = new[]
+				{
+					new Association
+					{
+						BusinessUnitId = businessUnitId,
+						SiteId = previousSiteId,
+						TeamId = previousTeam1
+					},
+					new Association
+					{
+						BusinessUnitId = businessUnitId,
+						SiteId = previousSiteId,
+						TeamId = previousTeam2
+					}
+				}
+			});
+
+			Persister.Get(previousTeam1).Count.Should().Be(0);
+			Persister.Get(previousTeam2).Count.Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldIncludeInNewTeam()
 		{
 			var siteId = Guid.NewGuid();
 			var originTeam = Guid.NewGuid();
 			var destinationTeam = Guid.NewGuid();
 			var movingPerson = Guid.NewGuid();
-			Target.Handle(new PersonOutOfAdherenceEvent {TeamId = originTeam, PersonId = movingPerson, SiteId = siteId});
+			Target.Handle(new PersonOutOfAdherenceEvent { PersonId = movingPerson, SiteId = siteId, TeamId = originTeam, });
 
 			Target.Handle(new PersonAssociationChangedEvent
 			{
+				Version = 2,
 				PersonId = movingPerson,
-				TeamId = destinationTeam,
 				SiteId = siteId,
-				PreviousTeam = originTeam,
-				PreviousSite = siteId
+				TeamId = destinationTeam
 			});
-
-			Persister.Get(originTeam).Count.Should().Be(0);
-		}
-		
-		[Test]
-		public void ShouldIncludeInDestinationTeam_TeamChanged()
-		{
-			var siteId = Guid.NewGuid();
-			var destinationTeam = Guid.NewGuid();
-			var movingPerson = Guid.NewGuid();
-			Target.Handle(new PersonInAdherenceEvent { TeamId = destinationTeam, PersonId = Guid.NewGuid(), SiteId = siteId});
-
-			Target.Handle(new PersonAssociationChangedEvent
-			{
-				PersonId = movingPerson,
-				TeamId = destinationTeam,
-				SiteId = siteId,
-				PreviousTeam = Guid.NewGuid(),
-				PreviousSite = siteId
-			});
-			Target.Handle(new PersonOutOfAdherenceEvent { TeamId = destinationTeam, PersonId = movingPerson });
+			Target.Handle(new PersonOutOfAdherenceEvent { PersonId = movingPerson, SiteId = siteId, TeamId = destinationTeam, });
 
 			Persister.Get(destinationTeam).Count.Should().Be(1);
 		}
 
 
 		[Test]
-		public void ShouldExludeFromAnyTeam_Terminated()
+		public void ShouldExcludeWhenTerminated()
 		{
-			var teamId1 = Guid.NewGuid();
-			var teamId2 = Guid.NewGuid();
-			var personId = Guid.NewGuid();
-			Target.Handle(new PersonOutOfAdherenceEvent { TeamId = teamId1, PersonId = personId });
-			Target.Handle(new PersonOutOfAdherenceEvent { TeamId = teamId2, PersonId = personId });
+			var previousSite = Guid.NewGuid();
+			var previousTeam = Guid.NewGuid();
+			var movingPerson = Guid.NewGuid();
+			Target.Handle(new PersonOutOfAdherenceEvent
+			{
+				PersonId = movingPerson,
+				SiteId = previousSite,
+				TeamId = previousTeam,
+			});
 
 			Target.Handle(new PersonAssociationChangedEvent
 			{
-				PersonId = personId,
-				TeamId = null,
-				PreviousTeams = new []{teamId1, teamId2}
+				Version = 2,
+				PersonId = movingPerson,
+				PreviousAssociation = new[]
+				{
+					new Association
+					{
+						SiteId = previousSite,
+						TeamId = previousTeam
+					}
+				}
 			});
 
-			Persister.Get(teamId1).Count.Should().Be(0);
-			Persister.Get(teamId2).Count.Should().Be(0);
-		}
-
-		[Test]
-		public void ShouldWorkWhenPreviousTeamDoesNotHaveAModel_Terminated()
-		{
-			Target.Handle(new PersonAssociationChangedEvent {PersonId = Guid.NewGuid(), PreviousTeams = new[] {Guid.NewGuid()}});
+			Persister.Get(previousTeam).Count.Should().Be(0);
 		}
 	}
 }

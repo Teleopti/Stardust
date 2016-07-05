@@ -69,14 +69,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonAssociationChangedEvent @event)
 		{
-			if (@event.SiteId != null)
+			if (@event.Version == 2)
 			{
-				if (@event.PreviousSite != null)
-				{
-					updateModel(@event.PersonId, @event.Timestamp, @event.BusinessUnitId.Value, @event.PreviousSite.Value, movePersonFrom);
+				if (!@event.PreviousAssociation.IsNullOrEmpty())
+					@event.PreviousAssociation.ForEach(
+						a => updateModel(modelFor(a.BusinessUnitId, a.SiteId), @event.PersonId, @event.Timestamp, movePersonFrom));
+				if (@event.SiteId != null)
 					updateModel(@event.PersonId, @event.Timestamp, @event.BusinessUnitId.Value, @event.SiteId.Value, movePersonTo);
-				}
-				else
+			}
+			else
+			{
+				if (@event.SiteId != null)
+				{
 					updateAllModels(
 						@event.PersonId,
 						@event.Timestamp,
@@ -85,22 +89,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 								? movePersonTo(m, p, t)
 								: movePersonFrom(m, p, t)
 						);
-			}
-			else
-			{
-				if (!@event.PreviousSites.IsNullOrEmpty())
-					@event.PreviousSites.ForEach(
-						site =>
-						{
-							var model = _persister.Get(site);
-							if (model != null)
-								updateModel(model, @event.PersonId, @event.Timestamp, movePersonFrom);
-						});
+				}
 				else
+				{
 					updateAllModels(
-					@event.PersonId,
-					@event.Timestamp,
-					movePersonFrom);
+						@event.PersonId,
+						@event.Timestamp,
+						movePersonFrom);
+				}
 			}
 		}
 

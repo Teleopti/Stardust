@@ -36,63 +36,68 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public static FakeDatabase WithAgent(this FakeDatabase database, string name)
 		{
-			return database.WithAgent(null, name, null, null, null, null);
+			return database.WithAgent(null, name, null, null, null, null, null);
 		}
 
 		public static FakeDatabase WithAgent(this FakeDatabase database, Guid id, string name)
 		{
-			return database.WithAgent(id, name, null, null, null, null);
+			return database.WithAgent(id, name, null, null, null, null, null);
 		}
 
 		public static FakeDatabase WithAgent(this FakeDatabase database, string name, Guid teamId)
 		{
-			return database.WithAgent(null, name, null, teamId, null, null);
+			return database.WithAgent(null, name, null, teamId, null, null, null);
 		}
 
 		public static FakeDatabase WithAgent(this FakeDatabase database, string name, Guid teamId, Guid siteId)
 		{
-			return database.WithAgent(null, name, null, teamId, siteId, null);
+			return database.WithAgent(null, name, null, teamId, siteId, null, null);
+		}
+
+		public static FakeDatabase WithAgent(this FakeDatabase database, string name, Guid teamId, Guid siteId, Guid businessUnitId)
+		{
+			return database.WithAgent(null, name, null, teamId, siteId, businessUnitId, null);
 		}
 
 		public static FakeDatabase WithAgent(this FakeDatabase database, string name, string terminalDate)
 		{
-			return database.WithAgent(null, name, terminalDate, null, null, null);
+			return database.WithAgent(null, name, terminalDate, null, null, null, null);
 		}
 
 		public static FakeDatabase WithAgent(this FakeDatabase database, string name, string terminalDate, Guid teamId)
 		{
-			return database.WithAgent(null, name, terminalDate, teamId, null, null);
+			return database.WithAgent(null, name, terminalDate, teamId, null, null, null);
 		}
 
 		public static FakeDatabase WithAgent(this FakeDatabase database, Guid id, string name, string terminalDate, Guid teamId)
 		{
-			return database.WithAgent(id, name, terminalDate, teamId, null, null);
+			return database.WithAgent(id, name, terminalDate, teamId, null, null, null);
 		}
 
 		public static FakeDatabase WithAgent(this FakeDatabase database, Guid id, string name, string terminalDate)
 		{
-			return database.WithAgent(id, name, terminalDate, null, null, null);
+			return database.WithAgent(id, name, terminalDate, null, null, null, null);
 		}
 
 		public static FakeDatabase WithAgent(this FakeDatabase database, string name, TimeZoneInfo timeZone)
 		{
-			return database.WithAgent(null, name, null, null, null, timeZone);
+			return database.WithAgent(null, name, null, null, null, null, timeZone);
 		}
 
 		public static FakeDatabase WithAgent(this FakeDatabase database, string name, string terminalDate, TimeZoneInfo timeZone)
 		{
-			return database.WithAgent(null, name, terminalDate, null, null, timeZone);
+			return database.WithAgent(null, name, terminalDate, null, null, null, timeZone);
 		}
 
 		public static FakeDatabase WithAgent(this FakeDatabase database, Guid id, string name, TimeZoneInfo timeZone)
 		{
-			return database.WithAgent(id, name, null, null, null, timeZone);
+			return database.WithAgent(id, name, null, null, null, null, timeZone);
 		}
 
-		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? id, string name, string terminalDate, Guid? teamId, Guid? siteId, TimeZoneInfo timeZone)
+		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? id, string name, string terminalDate, Guid? teamId, Guid? siteId, Guid? businessUnitId, TimeZoneInfo timeZone)
 		{
 			database.WithPerson(id, name, terminalDate, timeZone, null, null);
-			database.WithPeriod("2016-01-01", teamId, siteId);
+			database.WithPeriod("2016-01-01", teamId, siteId, businessUnitId);
 			return database;
 		}
 	}

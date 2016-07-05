@@ -53,27 +53,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 						return;
 
 					var previousTeam = previousPeriod?.Team.Id;
-					var previousSite = previousPeriod?.Team.Site.Id;
 					var teamId = currentPeriod?.Team.Id;
 					var siteId = currentPeriod?.Team.Site.Id;
 					var businessUnitId = currentPeriod?.Team.Site.BusinessUnit.Id;
-
-					var previousSitesAndTeams = person.PersonPeriodCollection
-						.Where(x => x.StartDate < agentDate)
-						.Select(x =>
-							new
-							{
-								TeamId = x.Team.Id.Value,
-								SiteId = x.Team.Site.Id.Value
-							})
-						.ToArray();
-					var previousTeams = previousSitesAndTeams.Select(x => x.TeamId);
-					var previousSites = previousSitesAndTeams.Select(x => x.SiteId);
 					
 					if (previousTeam.HasValue &&
 						teamId.HasValue &&
 						previousTeam == teamId)
 						return;
+
+					var previousAssociation = from p in person.PersonPeriodCollection
+						where p != null &&
+						p.StartDate < agentDate
+						select new Association
+						{
+							TeamId = p.Team.Id.Value,
+							SiteId = p.Team.Site.Id.Value,
+							BusinessUnitId = p.Team.Site.BusinessUnit.Id.Value
+						};
 
 					_eventPublisher.Publish(new PersonAssociationChangedEvent
 					{
@@ -82,10 +79,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 						TeamId = teamId,
 						SiteId = siteId,
 						BusinessUnitId = businessUnitId,
-						PreviousTeam = previousTeam,
-						PreviousSite = previousSite,
-						PreviousTeams = previousTeams,
-						PreviousSites = previousSites
+						PreviousAssociation = previousAssociation
 					});
 				});
 		}

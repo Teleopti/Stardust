@@ -100,74 +100,31 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		}
 
 		[Test]
-		public void ShouldPublishWithPreviousTeams()
+		public void ShouldPublishWithPreviousAssociation()
 		{
+			var businessUnit = Guid.NewGuid();
+			var previousSite1 = Guid.NewGuid();
+			var previousSite2 = Guid.NewGuid();
 			var previousTeam1 = Guid.NewGuid();
 			var previousTeam2 = Guid.NewGuid();
 			var newTeam = Guid.NewGuid();
 			Now.Is("2016-02-01 00:00");
-			Data.WithAgent("pierre", previousTeam1)
-				.WithPeriod("2016-01-15", previousTeam2)
+			Data.WithAgent("pierre", previousTeam1, previousSite1, businessUnit)
+				.WithPeriod("2016-01-15", previousTeam2, previousSite2, businessUnit)
 				.WithPeriod("2016-02-01", newTeam);
 
 			Target.Handle(new TenantHourTickEvent());
 
 			var @event = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();
-			@event.PreviousTeams.Should().Have.SameValuesAs(previousTeam1, previousTeam2);
-		}
-
-		[Test]
-		public void ShouldPublishWithPreviousSites()
-		{
-			var previousSite1 = Guid.NewGuid();
-			var previousSite2 = Guid.NewGuid();
-			var newSite = Guid.NewGuid();
-			Now.Is("2016-02-01 00:00");
-			Data.WithAgent("pierre", Guid.NewGuid(), previousSite1)
-				.WithPeriod("2016-01-15", Guid.NewGuid(), previousSite2)
-				.WithPeriod("2016-02-01", Guid.NewGuid(), newSite);
-
-			Target.Handle(new TenantHourTickEvent());
-
-			var @event = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();
-			@event.PreviousSites.Should().Have.SameValuesAs(previousSite1, previousSite2);
-		}
-
-
-
-
-
-
-		[Test]
-		public void ShouldPublishWithPreviousTeam()
-		{
-			var previousTeam = Guid.NewGuid();
-			var newTeam = Guid.NewGuid();
-			Now.Is("2016-02-01 00:00");
-			Data.WithAgent("pierre")
-				.WithPeriod("2016-01-02", previousTeam)
-				.WithPeriod("2016-02-01", newTeam);
-
-			Target.Handle(new TenantHourTickEvent());
-
-			var @event = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();
-			@event.PreviousTeam.Should().Be(previousTeam);
-		}
-
-		[Test]
-		public void ShouldPublishWithPreviousSite()
-		{
-			var previousSite = Guid.NewGuid();
-			var newSite = Guid.NewGuid();
-			Now.Is("2016-02-01 00:00");
-			Data.WithAgent("pierre")
-				.WithPeriod("2016-01-02", Guid.NewGuid(), previousSite)
-				.WithPeriod("2016-02-01", Guid.NewGuid(), newSite);
-
-			Target.Handle(new TenantHourTickEvent());
-
-			var @event = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();
-			@event.PreviousSite.Should().Be(previousSite);
+			@event.PreviousAssociation.Count().Should().Be(2);
+			@event.PreviousAssociation.Count(x =>
+				x.BusinessUnitId == businessUnit &&
+				x.SiteId == previousSite1 &&
+				x.TeamId == previousTeam1).Should().Be(1);
+			@event.PreviousAssociation.Count(x =>
+				x.BusinessUnitId == businessUnit &&
+				x.SiteId == previousSite2 &&
+				x.TeamId == previousTeam2).Should().Be(1);
 		}
 	}
 }

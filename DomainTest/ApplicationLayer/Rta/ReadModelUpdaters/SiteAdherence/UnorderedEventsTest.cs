@@ -62,6 +62,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 			Persister.Get(testCase.OriginSite).Count.Should().Be(0);
 		}
 
+
+		[Test]
+		[TestCaseSource(typeof(UnorderedEventsTest), "OutSiteChangeInOutV2")]
+		public void ShouldHandleSiteChangesV2(TestCase testCase)
+		{
+			testCase.Events.ForEach(e => Target.Handle((dynamic)e));
+			Persister.Get(testCase.OriginSite).Count.Should().Be(0);
+			Persister.Get(testCase.DestinationSite).Count.Should().Be(1);
+		}
+
 		public static IEnumerable OutInOut_OutIn
 		{
 			get
@@ -237,6 +247,85 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 					new PersonOutOfAdherenceEvent
 					{
 						PersonId = personId,
+						SiteId = destinationSiteId,
+						Timestamp = "2015-02-18 12:08".Utc()
+					}
+				};
+
+				return events
+					.Permutations()
+					.TestCases(setup, i =>
+					{
+						i.OriginSite = originSiteId;
+						i.DestinationSite = destinationSiteId;
+					});
+
+			}
+		}
+
+		public static IEnumerable OutSiteChangeInOutV2
+		{
+			get
+			{
+				var personId = Guid.NewGuid();
+				var originSiteId = Guid.NewGuid();
+				var destinationSiteId = Guid.NewGuid();
+				var businessUnitId = Guid.NewGuid();
+
+				var setup = new IEvent[]
+				{
+					new PersonInAdherenceEvent
+					{
+						PersonId = Guid.NewGuid(),
+						BusinessUnitId = businessUnitId,
+						SiteId = originSiteId,
+						Timestamp = "2015-02-18 12:02".Utc()
+					},
+					new PersonInAdherenceEvent
+					{
+						PersonId = Guid.NewGuid(),
+						BusinessUnitId = businessUnitId,
+						SiteId = destinationSiteId,
+						Timestamp = "2015-02-18 12:02".Utc()
+					},
+				};
+
+				var events = new IEvent[]
+				{
+					new PersonOutOfAdherenceEvent
+					{
+						PersonId = personId,
+						BusinessUnitId = businessUnitId,
+						SiteId = originSiteId,
+						Timestamp = "2015-02-18 12:02".Utc()
+					},
+					new PersonAssociationChangedEvent
+					{
+						Version = 2,
+						PersonId = personId,
+						Timestamp = "2015-02-18 12:04".Utc(),
+						BusinessUnitId = businessUnitId,
+						SiteId = destinationSiteId,
+						PreviousAssociation = new[]
+						{
+							new Association
+							{
+								BusinessUnitId = businessUnitId,
+								SiteId = originSiteId
+							},
+						}
+					},
+					new PersonInAdherenceEvent
+					{
+						PersonId = personId,
+						BusinessUnitId = businessUnitId,
+						SiteId = destinationSiteId,
+						Timestamp = "2015-02-18 12:06".Utc()
+					},
+					new PersonOutOfAdherenceEvent
+					{
+						PersonId = personId,
+						BusinessUnitId = businessUnitId,
 						SiteId = destinationSiteId,
 						Timestamp = "2015-02-18 12:08".Utc()
 					}
