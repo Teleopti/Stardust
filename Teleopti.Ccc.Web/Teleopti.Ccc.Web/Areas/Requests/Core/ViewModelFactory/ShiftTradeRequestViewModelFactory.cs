@@ -88,7 +88,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 				PersonIdTo = personTo.Id.GetValueOrDefault(),
 				PersonToTeam = personToTeam?.SiteAndTeam,
 				PersonToTimeZone = _ianaTimeZoneProvider.WindowsToIana(personTo.PermissionInformation.DefaultTimeZone().Id),
-				ShiftTradeDays = shiftTradeDays.ToList()
+				ShiftTradeDays = shiftTradeDays.ToList(),
+				PendingReasons = request.BrokenBusinessRules.ToString()
 			};
 		}
 

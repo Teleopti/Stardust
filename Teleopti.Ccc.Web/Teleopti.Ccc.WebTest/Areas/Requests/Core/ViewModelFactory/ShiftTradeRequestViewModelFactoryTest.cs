@@ -355,6 +355,30 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			requestListViewModel.Requests.Count().Should().Be(0);
 		}
 
+		[Test]
+		public void ShouldGetPendingReasons()
+		{
+			var personTo = PersonFactory.CreatePerson("Person", "To");
+			var personFrom = PersonFactory.CreatePerson("Person", "From");
+
+			var personrequest = createShiftTradeRequest(new DateOnly(2016, 3, 1), new DateOnly(2016, 3, 3), personFrom, personTo);
+			((ShiftTradeRequest) personrequest.Request).SetShiftTradeStatus(ShiftTradeStatus.OkByBothParts,
+				new PersonRequestAuthorizationCheckerConfigurable());
+			personrequest.Pending();
+
+			personrequest.TrySetBrokenBusinessRule(BusinessRuleFlags.DataPartOfAgentDay | BusinessRuleFlags.MinWeeklyRestRule);
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2016, 3, 1),
+				EndDate = new DateOnly(2016, 3, 3)
+			};
+
+			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
+			((ShiftTradeRequestViewModel) requestListViewModel.Requests.FirstOrDefault())
+				.PendingReasons.Should().Be((BusinessRuleFlags.DataPartOfAgentDay | BusinessRuleFlags.MinWeeklyRestRule).ToString());
+		}
+
 
 		[Test]
 		public void ShouldGetISO8601FirstDayOfWeek()
