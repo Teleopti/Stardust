@@ -64,6 +64,7 @@
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 		vm.toggleForSelectAgentsPerPageEnabled = false;
 		vm.onlyLoadScheduleWithAbsence = false;
+		vm.validateWarningToggle = false;
 		vm.lastCommandTrackId = "";
 		vm.permissionsAndTogglesLoaded = false;
 
@@ -157,6 +158,13 @@
 		vm.toggleShowAbsenceOnly = function () {
 			vm.paginationOptions.pageNumber = 1;
 			vm.loadSchedules();
+		};
+
+		vm.toggleValidateWarning = function(){
+			if(vm.validateWarningToggle)
+				$scope.$broadcast('teamSchedule.toggleOnValidate.command');
+			else
+				$scope.$broadcast('teamSchedule.toggleOffValidate.command');	
 		};
 
 		vm.updateSchedules = function (personIdList) {
@@ -253,6 +261,7 @@
 				MoveActivityEnabled: toggleSvc.WfmTeamSchedule_MoveActivity_37744,
 				AddPersonalActivityEnabled: toggleSvc.WfmTeamSchedule_AddPersonalActivity_37742,
 				BackoutPreviousScheduleEnabled: toggleSvc.WfmTeamSchedule_RevertToPreviousSchedule_39002
+				ShowNightlyRestWarningEnabled: toggleSvc.WfmTeamSchedule_ShowNightlyRestWarning_39619
 			};
 			vm.searchOptions.isAdvancedSearchEnabled = vm.toggles.AdvancedSearchEnabled;
 			vm.toggles.SeeScheduleChangesByOthers && monitorScheduleChanged();

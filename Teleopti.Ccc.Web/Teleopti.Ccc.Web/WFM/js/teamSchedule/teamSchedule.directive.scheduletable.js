@@ -45,6 +45,20 @@
 			vm.toggleAllInCurrentPage = newVal;
 		});
 
+		$scope.$on('teamSchedule.toggleOnValidate.command',function(){
+			vm.toggleWarningIconLoading = true;
+			setTimeout(function(){
+				vm.toggleWarningIcon = true;
+				vm.toggleWarningIconLoading = false;
+				$scope.$apply();
+			},3000);
+		});
+
+		$scope.$on('teamSchedule.toggleOffValidate.command',function(){
+			vm.toggleWarningIconLoading = false;
+			vm.toggleWarningIcon = false;
+		});
+
 		vm.totalSelectedProjections = function () {
 			return personSelectionSvc.getTotalSelectedPersonAndProjectionCount().CheckedPersonCount +
 				personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.ActivityCount +

@@ -14,6 +14,14 @@
 			<span class="datepicker-container">
 				<team-schedule-datepicker selected-date="vm.scheduleDate" on-date-change="vm.onScheduleDateChanged()"></team-schedule-datepicker>
 			</span>
+			
+			<div class="wfm-switch" ng-if="vm.toggles.ShowNightlyRestWarningEnabled">
+				<input type="checkbox" id="validateWarning" ng-model="vm.validateWarningToggle" ng-change="vm.toggleValidateWarning()" />
+				<label for="validateWarning">
+					<span class="wfm-switch-label" translate>ShowNightlyRestWarning</span>
+					<span class="wfm-switch-toggle"></span>
+				</label>
+			</div>
 
 			<div class="wfm-switch" ng-if="vm.toggles.RemoveAbsenceEnabled">
 				<input type="checkbox" id="switchAbsence" ng-model="vm.onlyLoadScheduleWithAbsence" ng-change="vm.toggleShowAbsenceOnly()" />

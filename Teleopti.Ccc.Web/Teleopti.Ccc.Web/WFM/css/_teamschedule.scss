@@ -132,6 +132,7 @@
             }
 
             .person-name {
+                padding-right: 5px;
                 padding-left: 5px;
                 min-width: 150px;
             }
@@ -261,7 +262,15 @@
         .wfm-checkbox {
             display: inline-block;
             padding: 0;
-            width: auto;
+            width: 100%;
+        }
+
+        .wfm-checkbox .validate-warning{
+            float: right;
+        }
+
+        .validate-warning md-progress-circular{
+            display: inline-block;
         }
     }
 
