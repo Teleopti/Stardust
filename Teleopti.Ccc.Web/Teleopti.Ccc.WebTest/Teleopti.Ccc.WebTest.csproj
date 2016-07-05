@@ -676,8 +676,7 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Teleopti.Ccc.WebTest.dll.Config">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
