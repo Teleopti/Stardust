@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.UserTexts;
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private const int messageTipLength = 255;
 		private readonly IPerson _person;
 		private string _message;
-		private int _brokenBusinessRules;
+		private BusinessRuleFlags _brokenBusinessRules;
 		private int requestStatus = (int)PersonRequestStatus.New;
 		private personRequestState _requestState;
 		private personRequestState _persistedState;
@@ -126,14 +127,14 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			get { return _message; }
 		}
 
-		public virtual bool TrySetBrokenBusinessRule(int brokenRules)
+		public virtual bool TrySetBrokenBusinessRule(BusinessRuleFlags brokenRules)
 		{
 			checkIfEditable();
 			_brokenBusinessRules = brokenRules;
 			return true;
 		}
 
-		public virtual int BrokenBusinessRules
+		public virtual BusinessRuleFlags BrokenBusinessRules
 		{
 			get { return _brokenBusinessRules; }
 		}
