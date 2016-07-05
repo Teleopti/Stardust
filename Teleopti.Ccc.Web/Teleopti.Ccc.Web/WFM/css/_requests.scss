@@ -359,4 +359,9 @@
 	input:-ms-input-placeholder{
 		color: $text-color-muted;
 	}
+
+	.request-pending-reasons div{
+		white-space:normal;
+		word-wrap:break-word;
+	}
 }

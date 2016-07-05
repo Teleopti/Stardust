@@ -206,6 +206,7 @@
 							displayName: 'Pending Reasons',
 							field: 'GetPendingReasons()',
 							headerCellFilter: 'translate',
+							cellClass: 'request-pending-reasons',
 							visible: false,
 							pinnedRight: true,
 							enablePinning: false,
