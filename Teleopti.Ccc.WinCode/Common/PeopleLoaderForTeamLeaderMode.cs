@@ -55,6 +55,7 @@ namespace Teleopti.Ccc.WinCode.Common
         private ICollection<IPerson> loadPeople()
         {
             var peopleInOrg = new List<IPerson>();
+            var peopleInTeam = new Dictionary<Guid, IPerson>();
 
             bool isTeam = false;
             bool isPerson = false;
@@ -78,10 +79,11 @@ namespace Teleopti.Ccc.WinCode.Common
 
                     foreach (var teamMember in teamMembers)
                     {
-						if (!peopleInOrg.Contains(teamMember)) 
-							peopleInOrg.Add(teamMember);
+						if (!peopleInTeam.ContainsKey(teamMember.Id.Value))
+							peopleInTeam.Add(teamMember.Id.Value, teamMember);
                     }
                 }
+	            peopleInOrg = peopleInTeam.Values.ToList();
             }
 
             if(isPerson)

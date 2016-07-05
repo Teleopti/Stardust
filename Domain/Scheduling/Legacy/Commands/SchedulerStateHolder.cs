@@ -294,7 +294,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
         public void ResetFilteredPersons()
         {
             _filteredAgents = (from p in SchedulingResultState.PersonsInOrganization
-                                where AllPermittedPersons.Contains(p)
+                                where AllPermittedPersons.Select(x => x.Id.Value).Contains(p.Id.Value)
                                 orderby CommonAgentName(p)
                                 select p).ToDictionary(p => p.Id.Value);
         }
