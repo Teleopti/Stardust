@@ -100,19 +100,37 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		}
 
 		[Test]
-		public void ShouldPublishWithPreviousTeam()
+		public void ShouldPublishWithPreviousTeams()
 		{
-			var previousTeam = Guid.NewGuid();
+			var previousTeam1 = Guid.NewGuid();
+			var previousTeam2 = Guid.NewGuid();
 			var newTeam = Guid.NewGuid();
 			Now.Is("2016-02-01 00:00");
-			Data.WithAgent("pierre")
-				.WithPeriod("2016-01-02", previousTeam)
+			Data.WithAgent("pierre", previousTeam1)
+				.WithPeriod("2016-01-15", previousTeam2)
 				.WithPeriod("2016-02-01", newTeam);
 
 			Target.Handle(new TenantHourTickEvent());
 
 			var @event = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();
-			@event.PreviousTeam.Should().Be(previousTeam);
+			@event.PreviousTeams.Should().Have.SameValuesAs(previousTeam1, previousTeam2);
+		}
+
+		[Test]
+		public void ShouldPublishWithPreviousSites()
+		{
+			var previousSite1 = Guid.NewGuid();
+			var previousSite2 = Guid.NewGuid();
+			var newSite = Guid.NewGuid();
+			Now.Is("2016-02-01 00:00");
+			Data.WithAgent("pierre", Guid.NewGuid(), previousSite1)
+				.WithPeriod("2016-01-15", Guid.NewGuid(), previousSite2)
+				.WithPeriod("2016-02-01", Guid.NewGuid(), newSite);
+
+			Target.Handle(new TenantHourTickEvent());
+
+			var @event = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();
+			@event.PreviousSites.Should().Have.SameValuesAs(previousSite1, previousSite2);
 		}
 
 		[Test]

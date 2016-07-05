@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
@@ -12,5 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public Guid? TeamId { get; set; }
 		public Guid? PreviousTeam { get; set; }
 		public Guid? PreviousSite { get; set; }
+		public IEnumerable<Guid> PreviousTeams { get; set; }
+		public IEnumerable<Guid> PreviousSites { get; set; }
 	}
 }

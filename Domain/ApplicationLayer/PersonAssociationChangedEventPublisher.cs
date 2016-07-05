@@ -58,6 +58,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 					var siteId = currentPeriod?.Team.Site.Id;
 					var businessUnitId = currentPeriod?.Team.Site.BusinessUnit.Id;
 
+					var previousSitesAndTeams = person.PersonPeriodCollection
+						.Where(x => x.StartDate < agentDate)
+						.Select(x =>
+							new
+							{
+								TeamId = x.Team.Id.Value,
+								SiteId = x.Team.Site.Id.Value
+							})
+						.ToArray();
+					var previousTeams = previousSitesAndTeams.Select(x => x.TeamId);
+					var previousSites = previousSitesAndTeams.Select(x => x.SiteId);
+					
 					if (previousTeam.HasValue &&
 						teamId.HasValue &&
 						previousTeam == teamId)
@@ -71,7 +83,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 						SiteId = siteId,
 						BusinessUnitId = businessUnitId,
 						PreviousTeam = previousTeam,
-						PreviousSite = previousSite
+						PreviousSite = previousSite,
+						PreviousTeams = previousTeams,
+						PreviousSites = previousSites
 					});
 				});
 		}
