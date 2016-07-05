@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -118,8 +119,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 e.Style.MergeCell = GridMergeCellDirection.None;
                 if (_schedulerState.FilteredCombinedAgentsDictionary.Count > 0)
                 {
-					var agent = View.TheGrid.Model[e.RowIndex, 1].Tag as IPerson;
-                    IScheduleRange totalScheduleRange = _schedulerState.Schedules[agent];
+					var agent = _schedulerState.FilteredCombinedAgentsDictionary.Values.ElementAt(e.RowIndex - (View.RowHeaders + 1));
+
+					IScheduleRange totalScheduleRange = _schedulerState.Schedules[agent];
                     IScheduleDay daySchedule = totalScheduleRange.ScheduledDay(_selectedDate);
 
                     if (!daySchedule.FullAccess)
