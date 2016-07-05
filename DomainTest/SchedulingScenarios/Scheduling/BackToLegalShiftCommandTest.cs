@@ -6,8 +6,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.DayOffPlanning;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -15,7 +13,6 @@ using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -160,34 +157,29 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public void ShouldFindLegalShiftWhenNotAllowPersonalActivityOverwriteActivity()
 		{
 			var firstDay = new DateOnly(2015, 10, 12);
+			var secondDay = firstDay.AddDays(1);
+			var thirdDay = firstDay.AddDays(2);
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
 			var phoneActivity = ActivityRepository.Has("_");
-			phoneActivity.SetId(Guid.NewGuid());
 			phoneActivity.AllowOverwrite = true;
 			var otherActivity = ActivityRepository.Has("other");
-			otherActivity.SetId(Guid.NewGuid());
 			otherActivity.RequiresSkill = false;
 			var personalActivity = ActivityRepository.Has("personal");
-			personalActivity.SetId(Guid.NewGuid());
 			personalActivity.RequiresSkill = false;
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var scenario = ScenarioRepository.Has("some name");
 			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
 			var site = new Site("site");
 			var team = new Team { Description = new Description("team") };
-			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
 			site.AddTeam(team);
 			businessUnit.AddSite(site);
 			BusinessUnitRepository.Has(businessUnit);
-			var contract = new Contract("_");
-			contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
-			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
-			var agent1 = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
+			var agent = PersonRepository.Has(new Contract("_"), ContractScheduleFactory.CreateWorkingWeekContractSchedule(), new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet =	new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(7, 0, 7, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), shiftCategory));
 			ruleSet.AddExtender(new ActivityRelativeStartExtender(otherActivity, new TimePeriodWithSegment(0, 15, 0, 15, 15), new TimePeriodWithSegment(0, 0, 0, 15, 15)));
 			var ruleSetBag = new RuleSetBag(ruleSet);
-			agent1.Period(firstDay).RuleSetBag = ruleSetBag;
+			agent.Period(firstDay).RuleSetBag = ruleSetBag;
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
 				TimeSpan.FromHours(10),
 				TimeSpan.FromHours(10),
@@ -199,24 +191,22 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				);
 			var dayOffTemplate = new DayOffTemplate(new Description("_default")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);
-			AssignmentRepository.Has(agent1, scenario, dayOffTemplate, firstDay);
-			AssignmentRepository.Has(agent1, scenario, dayOffTemplate, firstDay.AddDays(1));
-			AssignmentRepository.Has(agent1, scenario, phoneActivity, shiftCategory, firstDay.AddDays(2), new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(15)));
+			AssignmentRepository.Has(agent, scenario, dayOffTemplate, firstDay);
+			AssignmentRepository.Has(agent, scenario, dayOffTemplate, secondDay);
+			AssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, thirdDay, new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(15)));
 
-			var ass = AssignmentRepository.GetSingle(firstDay.AddDays(2), agent1);
+			var ass = AssignmentRepository.GetSingle(thirdDay, agent);
 			var dateTimePeriod = new DateTimePeriod(ass.Period.StartDateTime, ass.Period.StartDateTime.AddMinutes(15));
 			ass.AddActivity(otherActivity, dateTimePeriod);
 			ass.AddPersonalActivity(personalActivity,dateTimePeriod);
 
 			FillSchedulerStateHolder.Fill(SchedulerStateHolder(), null, null, null, period);
-			var scheduleDays = new List<IScheduleDay>
-			{
-				SchedulerStateHolder().Schedules[agent1].ScheduledDay(firstDay.AddDays(2))
-			};
+			var scheduleDay = SchedulerStateHolder().Schedules[agent].ScheduledDay(thirdDay);
+			var scheduleDays = new List<IScheduleDay> { scheduleDay };
 
 			Target.Execute(new NoSchedulingProgress(), scheduleDays, SchedulerStateHolder().SchedulingResultState);
 
-			SchedulerStateHolder().Schedules[agent1].ScheduledDay(firstDay.AddDays(2)).
+			SchedulerStateHolder().Schedules[agent].ScheduledDay(thirdDay).
 				PersonAssignment(true).
 				ShiftLayers.Single(x => x.Payload.Equals(otherActivity)).Period.StartDateTime.Minute.
 				Should().Be.EqualTo(15);
@@ -226,34 +216,29 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public void ShouldFindLegalShiftWhenNotAllowedMeetingOverwriteActivity()
 		{
 			var firstDay = new DateOnly(2015, 10, 12);
+			var secondDay = firstDay.AddDays(1);
+			var thirdDay = firstDay.AddDays(2);
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
 			var phoneActivity = ActivityRepository.Has("_");
-			phoneActivity.SetId(Guid.NewGuid());
 			phoneActivity.AllowOverwrite = true;
 			var otherActivity = ActivityRepository.Has("other");
-			otherActivity.SetId(Guid.NewGuid());
 			otherActivity.RequiresSkill = false;
 			var meetingActivity = ActivityRepository.Has("personal");
-			meetingActivity.SetId(Guid.NewGuid());
 			meetingActivity.RequiresSkill = false;
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var scenario = ScenarioRepository.Has("some name");
 			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
 			var site = new Site("site");
 			var team = new Team { Description = new Description("team") };
-			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
 			site.AddTeam(team);
 			businessUnit.AddSite(site);
 			BusinessUnitRepository.Has(businessUnit);
-			var contract = new Contract("_");
-			contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
-			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
-			var agent1 = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
+			var agent = PersonRepository.Has(new Contract("_"), ContractScheduleFactory.CreateWorkingWeekContractSchedule(), new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(7, 0, 7, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), shiftCategory));
 			ruleSet.AddExtender(new ActivityRelativeStartExtender(otherActivity, new TimePeriodWithSegment(0, 15, 0, 15, 15), new TimePeriodWithSegment(0, 0, 0, 15, 15)));
 			var ruleSetBag = new RuleSetBag(ruleSet);
-			agent1.Period(firstDay).RuleSetBag = ruleSetBag;
+			agent.Period(firstDay).RuleSetBag = ruleSetBag;
 			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
 				TimeSpan.FromHours(10),
 				TimeSpan.FromHours(10),
@@ -266,36 +251,34 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			var dayOffTemplate = new DayOffTemplate(new Description("_default")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);
-			AssignmentRepository.Has(agent1, scenario, dayOffTemplate, firstDay);
-			AssignmentRepository.Has(agent1, scenario, dayOffTemplate, firstDay.AddDays(1));
-			AssignmentRepository.Has(agent1, scenario, phoneActivity, shiftCategory, firstDay.AddDays(2), new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(15)));
+			AssignmentRepository.Has(agent, scenario, dayOffTemplate, firstDay);
+			AssignmentRepository.Has(agent, scenario, dayOffTemplate, secondDay);
+			AssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, thirdDay, new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(15)));
 
-			var ass1 = AssignmentRepository.GetSingle(firstDay, agent1);
-			var ass2 = AssignmentRepository.GetSingle(firstDay.AddDays(1), agent1);
-			var ass3 = AssignmentRepository.GetSingle(firstDay.AddDays(2), agent1);
+			var ass1 = AssignmentRepository.GetSingle(firstDay, agent);
+			var ass2 = AssignmentRepository.GetSingle(secondDay, agent);
+			var ass3 = AssignmentRepository.GetSingle(thirdDay, agent);
 			var dateTimePeriod = new DateTimePeriod(ass3.Period.StartDateTime, ass3.Period.StartDateTime.AddMinutes(15));
 			ass3.AddActivity(otherActivity, dateTimePeriod);
 			
-			var meetingPerson = new MeetingPerson(agent1, false);
+			var meetingPerson = new MeetingPerson(agent, false);
 			var meeting = new Meeting(PersonFactory.CreatePerson(), new List<IMeetingPerson>(), "subject", "location", "description", meetingActivity, scenario);
 			meeting.SetId(Guid.NewGuid());
 			var personMeeting = new PersonMeeting(meeting, meetingPerson, dateTimePeriod);
 			personMeeting.SetId(Guid.NewGuid());
 
-			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent1 }, new IScheduleData[] {ass1, ass2, ass3, personMeeting }, skillDays);
+			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, new IScheduleData[] {ass1, ass2, ass3, personMeeting }, skillDays);
 			stateHolder.SchedulingResultState.AllPersonAccounts = new ConcurrentDictionary<IPerson, IPersonAccountCollection>();
 			var skillDayDic = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
 			skillDayDic.Add(skill, skillDays);
 			stateHolder.SchedulingResultState.SkillDays = skillDayDic;
 
-			var scheduleDays = new List<IScheduleDay>
-			{
-				stateHolder.Schedules[agent1].ScheduledDay(firstDay.AddDays(2))
-			};
+			var scheduleDay = stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(2));
+			var scheduleDays = new List<IScheduleDay> {scheduleDay};
 
 			Target.Execute(new NoSchedulingProgress(), scheduleDays, stateHolder.SchedulingResultState);
 	
-			stateHolder.Schedules[agent1].ScheduledDay(firstDay.AddDays(2)).
+			stateHolder.Schedules[agent].ScheduledDay(thirdDay).
 				PersonAssignment(true).
 				ShiftLayers.Single(x => x.Payload.Equals(otherActivity)).Period.StartDateTime.Minute.
 				Should().Be.EqualTo(15);
