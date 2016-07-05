@@ -1,15 +1,16 @@
-﻿'use strict';
+'use strict';
 
 (function () {
 	angular.module('wfm.teamSchedule')
 		.directive('scheduleTable', scheduleTableDirective)
-		.controller('scheduleTableCtrl', ['Toggle', 'PersonSelection', '$scope', 'ScheduleManagement', scheduleTableController]);
+		.controller('scheduleTableCtrl', ['Toggle', 'PersonSelection', '$scope', 'ScheduleManagement', 'ValidateRulesService', scheduleTableController]);
 
 	function scheduleTableDirective() {
 		return {
 			scope: {
 				selectMode: '=',
-				selectedDate: '='
+				selectedDate: '=',
+				showWarnings: '=?'
 			},
 			restrict: 'E',
 			controllerAs: 'vm',
@@ -18,7 +19,7 @@
 			templateUrl: "js/teamSchedule/html/scheduletable.html"
 		};
 	};
-	function scheduleTableController(toggleSvc, personSelectionSvc, $scope, ScheduleMgmt) {
+	function scheduleTableController(toggleSvc, personSelectionSvc, $scope, ScheduleMgmt, ValidateRulesService) {
 		var vm = this;
 		vm.ShowContractTimeEnabled = toggleSvc.WfmTeamSchedule_ShowContractTime_38509;
 		vm.updateAllSelectionInCurrentPage = function (isAllSelected) {
@@ -43,20 +44,6 @@
 			return isAllInCurrentPageSelected();
 		}, function (newVal) {
 			vm.toggleAllInCurrentPage = newVal;
-		});
-
-		$scope.$on('teamSchedule.toggleOnValidate.command',function(){
-			vm.toggleWarningIconLoading = true;
-			setTimeout(function(){
-				vm.toggleWarningIcon = true;
-				vm.toggleWarningIconLoading = false;
-				$scope.$apply();
-			},3000);
-		});
-
-		$scope.$on('teamSchedule.toggleOffValidate.command',function(){
-			vm.toggleWarningIconLoading = false;
-			vm.toggleWarningIcon = false;
 		});
 
 		vm.totalSelectedProjections = function () {
@@ -95,7 +82,15 @@
 				personSchedule.IsSelected = !personSchedule.IsSelected;
 				vm.updatePersonSelection(personSchedule);
 			}
-		}
+		};
+
+		vm.checkNightRestWarningMessage = function(personId){
+			return ValidateRulesService.checkValidationForPerson(personId);
+		};
+
+		vm.validationIsDone = function () {
+			return ValidateRulesService.ValidationIsDone;
+		};
 
 		function isAllInCurrentPageSelected() {
 			var isAllSelected = true;

@@ -27,11 +27,12 @@
 						<span class="wfm-checkbox-toggle"></span>
 						<span class="wfm-checkbox-label person-name nowrap">{{personSchedule.Name}}</span>
 					</label>
-					<span class="validate-warning">
-						<span class="warning-icon" ng-if="vm.toggleWarningIcon && $index % 2 == 0"><i class="mdi mdi-account-alert"></i></span>
-						<md-tooltip md-direction="right" ng-if="vm.toggleWarningIcon">Warning1: message message message message message message message
-						</md-tooltip>
-						<md-progress-circular md-mode="indeterminate" md-diameter="15" ng-if="vm.toggleWarningIconLoading"></md-progress-circular>
+					<span class="validate-warning" ng-if="vm.showWarnings">					
+						<span ng-if="vm.validationIsDone() && vm.checkNightRestWarningMessage(personSchedule.PersonId).length > 0">
+							<span class="warning-icon"><i class="mdi mdi-account-alert"></i></span>
+							<md-tooltip md-direction="right">{{vm.checkNightRestWarningMessage(personSchedule.PersonId).join(" ")}}</md-tooltip>
+						</span>
+						<md-progress-circular md-mode="indeterminate" md-diameter="15" ng-if="!vm.validationIsDone()"></md-progress-circular>
 					</span>
 				</div>
 				<div class="person-name nowrap" ng-hide="vm.selectMode">{{personSchedule.Name}}</div>

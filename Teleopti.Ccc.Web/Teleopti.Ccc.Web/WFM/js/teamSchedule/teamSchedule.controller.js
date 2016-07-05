@@ -13,10 +13,11 @@
 		'Toggle',
 		'signalRSVC',
 		'NoticeService',
+		'ValidateRulesService',
 		TeamScheduleController]);
 
 	function TeamScheduleController($scope, $q, $translate, $mdSidenav, teamScheduleSvc, groupScheduleFactory, personSelectionSvc,
-		scheduleMgmtSvc, toggleSvc, signalRSVC, NoticeService) {
+		scheduleMgmtSvc, toggleSvc, signalRSVC, NoticeService, ValidateRulesService) {
 
 		var vm = this;
 		var commandContainerId = 'teamschedule-command-container';
@@ -161,10 +162,9 @@
 		};
 
 		vm.toggleValidateWarning = function(){
-			if(vm.validateWarningToggle)
-				$scope.$broadcast('teamSchedule.toggleOnValidate.command');
-			else
-				$scope.$broadcast('teamSchedule.toggleOffValidate.command');	
+			if (vm.validateWarningToggle) {
+				ValidateRulesService.getValidateRulesResult().then(function (data) {});
+			}
 		};
 
 		vm.updateSchedules = function (personIdList) {
