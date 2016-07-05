@@ -29,13 +29,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 
 		public bool Validate(IPerson person,IScheduleDay scheduleDay)
 		{
-			if(scheduleDay == null) return true;
-
 			var fetchedReadModels = FetchFromRepository(person,scheduleDay.DateOnlyAsPeriod.DateOnly).ToArray();
 			var mappedReadModels = Build(person,scheduleDay).ToArray();
 
-			var isValid = mappedReadModels.Length != fetchedReadModels.Length
-							|| mappedReadModels.Zip(fetchedReadModels,(a,b) =>
+			var isValid = mappedReadModels.Length == fetchedReadModels.Length
+							&& mappedReadModels.Zip(fetchedReadModels,(a,b) =>
 							{
 								if(a == null) return b == null;
 								return a.Equals(b);

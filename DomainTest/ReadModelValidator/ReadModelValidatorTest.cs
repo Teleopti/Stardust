@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 		}
 
 		[Test]
-		public void ShouldFindErrorInScheduleProjectionReadOnlyWhenProjectionLayerMismatchWithScheduleData()
+		public void ShouldFindErrorInScheduleProjectionReadOnlyWithEmptyProjectionLayer()
 		{
 			var scenario = CurrentScenario.Current();
 			var person = PersonFactory.CreatePersonWithGuid("Peter", "peter");
@@ -57,6 +57,31 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			var dateTimePeriod = new DateTimePeriod(2016, 1, 1, 8, 2016, 1, 1,  17);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, dateTimePeriod);
 			ScheduleStorage.Add(personAssignment);
+			
+			var result = new List<ReadModelValidationResult>();
+			Action<ReadModelValidationResult> action = x =>
+			{
+				result.Add(x);
+			};
+			
+			Target.Validate(ValidateReadModelType.ScheduleProjectionReadOnly,new DateTime(2016, 1, 1), new DateTime(2016, 1, 1), action, true);
+	
+			result.Count.Should().Be.EqualTo(1);
+			result.Single().PersonId.Should().Be.EqualTo(person.Id.Value);
+			result.Single().Date.Should().Be.EqualTo("2016-01-01".Date().Date);
+			result.Single().Type.Should().Be.EqualTo(ValidateReadModelType.ScheduleProjectionReadOnly);
+		}
+
+		[Test]
+		public void ShouldFindErrorInScheduleProjectionReadOnlyWithWrongProjectionLayer()
+		{
+			var scenario = CurrentScenario.Current();
+			var person = PersonFactory.CreatePersonWithGuid("Peter", "peter");
+			PersonRepository.Has(person);
+			var dateTimePeriod = new DateTimePeriod(2016, 1, 1, 8, 2016, 1, 1,  17);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, dateTimePeriod);
+			ScheduleStorage.Add(personAssignment);
+			personAssignment.ShiftLayers.Single().Payload.WithId();
 			Persister.AddActivity(
 				new ScheduleProjectionReadOnlyModel
 				{
@@ -64,7 +89,11 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 					ScenarioId = scenario.Id.Value,
 					PersonId = person.Id.Value,
 					StartDateTime = "2016-01-01 8:00".Utc(),
-					EndDateTime = "2016-01-01 15:00".Utc()
+					EndDateTime = "2016-01-01 15:00".Utc(),
+					PayloadId = personAssignment.ShiftLayers.Single().Payload.Id.Value,
+					ContractTime = new TimeSpan(9, 0, 0),
+					Name = personAssignment.ShiftLayers.Single().Payload.Name,
+					ShortName = ""
 				});
 
 			var result = new List<ReadModelValidationResult>();

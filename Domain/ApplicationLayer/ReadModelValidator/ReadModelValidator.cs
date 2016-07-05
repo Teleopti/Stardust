@@ -67,24 +67,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 		{
 			if(types.HasFlag(ValidateReadModelType.ScheduleProjectionReadOnly))
 			{
-				var isInvalid = !_readModelScheduleProjectionReadOnlyValidator.Validate(person,scheduleDay);
-				if(isInvalid || !ignoreValid) reportProgress(makeResult(person,scheduleDay.DateOnlyAsPeriod.DateOnly,!isInvalid,ValidateReadModelType.ScheduleProjectionReadOnly));
+				var isValid = _readModelScheduleProjectionReadOnlyValidator.Validate(person,scheduleDay);
+				if(!isValid || !ignoreValid) reportProgress(makeResult(person,scheduleDay.DateOnlyAsPeriod.DateOnly,isValid,ValidateReadModelType.ScheduleProjectionReadOnly));
 			}
 			if(types.HasFlag(ValidateReadModelType.PersonScheduleDay))
 			{
-				var isInvalid = !_readModelPersonScheduleDayValidator.Validate(person,scheduleDay);
-				if(isInvalid || !ignoreValid)
+				var isValid = _readModelPersonScheduleDayValidator.Validate(person,scheduleDay);
+				if(!isValid || !ignoreValid)
 				{
-					reportProgress(makeResult(person,scheduleDay.DateOnlyAsPeriod.DateOnly,!isInvalid,ValidateReadModelType.PersonScheduleDay));
+					reportProgress(makeResult(person,scheduleDay.DateOnlyAsPeriod.DateOnly,isValid,ValidateReadModelType.PersonScheduleDay));
 				}
 			}
 
 			if(types.HasFlag(ValidateReadModelType.ScheduleDay))
 			{
-				var isInvalid = !_readModelScheduleDayValidator.Validate(person,scheduleDay);
-				if(isInvalid || !ignoreValid)
+				var isValid = _readModelScheduleDayValidator.Validate(person,scheduleDay);
+				if(!isValid || !ignoreValid)
 				{
-					reportProgress(makeResult(person,scheduleDay.DateOnlyAsPeriod.DateOnly,!isInvalid,ValidateReadModelType.ScheduleDay));
+					reportProgress(makeResult(person,scheduleDay.DateOnlyAsPeriod.DateOnly,isValid,ValidateReadModelType.ScheduleDay));
 				}
 			}
 		}
