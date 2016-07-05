@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private const int messageTipLength = 255;
 		private readonly IPerson _person;
 		private string _message;
-		private int _brokenBusinessRules;
+		private BusinessRuleFlags _brokenBusinessRules;
 		private int requestStatus = (int)PersonRequestStatus.New;
 		private personRequestState _requestState;
 		private personRequestState _persistedState;
@@ -130,13 +130,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		public virtual bool TrySetBrokenBusinessRule(BusinessRuleFlags brokenRules)
 		{
 			checkIfEditable();
-			_brokenBusinessRules = (int)brokenRules;
+			_brokenBusinessRules = brokenRules;
 			return true;
 		}
 
 		public virtual BusinessRuleFlags BrokenBusinessRules
 		{
-			get { return (BusinessRuleFlags)_brokenBusinessRules; }
+			get { return _brokenBusinessRules; }
 		}
 
 
