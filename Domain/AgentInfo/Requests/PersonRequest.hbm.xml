@@ -53,15 +53,12 @@
         length="2000"/>
     
     <property name="BrokenBusinessRules"
-        not-null="false"
-        type="Teleopti.Interfaces.Domain.BusinessRuleFlags, Teleopti.Interfaces"/>
-
+        not-null="false" />
 
     <bag name="PersonAbsences" inverse="true" lazy="false">
            <key column="PersonRequest"></key>
            <one-to-many class="Teleopti.Ccc.Domain.Scheduling.PersonAbsence"/>
     </bag>
-    
 
     <property name="DenyReason"
 		not-null="false"
