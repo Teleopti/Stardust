@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 			};
 			_readModelValidationResultPersister.Reset(@event.Targets);
 			
-			_validator.Validate(@event.Targets,@event.StartDate, @event.EndDate, action, true);
+			_validator.Validate(@event.Targets,@event.StartDate, @event.EndDate, action);
 		}
 	}
 }

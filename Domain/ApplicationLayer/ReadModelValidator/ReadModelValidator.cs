@@ -33,8 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 			_readModelScheduleDayValidator = readModelScheduleDayValidator;
 		}
 
-		public void Validate(ValidateReadModelType types, DateTime start, DateTime end, Action<ReadModelValidationResult> reportProgress,
-			bool ignoreValid = false)
+		public void Validate(ValidateReadModelType types, DateTime start, DateTime end, Action<ReadModelValidationResult> reportProgress)
 		{
 			var startDate = new DateOnly(start);
 			var people = _personRepository.LoadAllPeopleWithHierarchyDataSortByName(startDate);
@@ -57,34 +56,34 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 						scenario);
 					var scheduleDays = schedules.SchedulesForPeriod(period, person).ToLookup(s => s.DateOnlyAsPeriod.DateOnly);
 
-					days.ForEach(day => validate(types, person, scheduleDays[day].First(), reportProgress, ignoreValid));
+					days.ForEach(day => validate(types, person, scheduleDays[day].First(), reportProgress));
 				}
 			}
 		}
 		
 		private void validate(ValidateReadModelType types,IPerson person, IScheduleDay scheduleDay,
-			Action<ReadModelValidationResult> reportProgress, bool ignoreValid)
+			Action<ReadModelValidationResult> reportProgress)
 		{
 			if(types.HasFlag(ValidateReadModelType.ScheduleProjectionReadOnly))
 			{
 				var isValid = _readModelScheduleProjectionReadOnlyValidator.Validate(person,scheduleDay);
-				if(!isValid || !ignoreValid) reportProgress(makeResult(person,scheduleDay.DateOnlyAsPeriod.DateOnly,isValid,ValidateReadModelType.ScheduleProjectionReadOnly));
+				if(!isValid) reportProgress(makeResult(person,scheduleDay.DateOnlyAsPeriod.DateOnly,false,ValidateReadModelType.ScheduleProjectionReadOnly));
 			}
 			if(types.HasFlag(ValidateReadModelType.PersonScheduleDay))
 			{
 				var isValid = _readModelPersonScheduleDayValidator.Validate(person,scheduleDay);
-				if(!isValid || !ignoreValid)
+				if(!isValid)
 				{
-					reportProgress(makeResult(person,scheduleDay.DateOnlyAsPeriod.DateOnly,isValid,ValidateReadModelType.PersonScheduleDay));
+					reportProgress(makeResult(person,scheduleDay.DateOnlyAsPeriod.DateOnly,false,ValidateReadModelType.PersonScheduleDay));
 				}
 			}
 
 			if(types.HasFlag(ValidateReadModelType.ScheduleDay))
 			{
 				var isValid = _readModelScheduleDayValidator.Validate(person,scheduleDay);
-				if(!isValid || !ignoreValid)
+				if(!isValid)
 				{
-					reportProgress(makeResult(person,scheduleDay.DateOnlyAsPeriod.DateOnly,isValid,ValidateReadModelType.ScheduleDay));
+					reportProgress(makeResult(person,scheduleDay.DateOnlyAsPeriod.DateOnly,false,ValidateReadModelType.ScheduleDay));
 				}
 			}
 		}
