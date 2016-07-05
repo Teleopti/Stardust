@@ -54,7 +54,7 @@
     
     <property name="BrokenBusinessRules"
         not-null="false"
-        type="int"/>
+        type="Teleopti.Interfaces.Domain.BusinessRuleFlags, Teleopti.Interfaces"/>
 
 
     <bag name="PersonAbsences" inverse="true" lazy="false">
