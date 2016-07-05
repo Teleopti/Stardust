@@ -28,11 +28,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 		}
 
 
-		public bool Validate(IPerson person, DateOnly day, IScheduleDay scheduleDay)
-		{			
-			var fetchedReadModel = FetchFromRepository(person, day);
-			if (scheduleDay == null) return fetchedReadModel == null;
-
+		public bool Validate(IPerson person,IScheduleDay scheduleDay)
+		{
+			if(scheduleDay == null) return true;
+			var fetchedReadModel = FetchFromRepository(person,scheduleDay.DateOnlyAsPeriod.DateOnly);
 			var builtReadModel = Build(person,scheduleDay);
 			if(builtReadModel == null) return fetchedReadModel == null;
 			return builtReadModel.Equals(fetchedReadModel);

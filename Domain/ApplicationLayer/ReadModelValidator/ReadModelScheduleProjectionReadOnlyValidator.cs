@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -28,15 +27,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 			_builder = builder;
 		}
 
-		public bool Validate(IPerson person, DateOnly day, IScheduleDay scheduleDay)
-		{			
-			var fetchedReadModels = FetchFromRepository(person, day).ToArray();
-			if (scheduleDay == null) return fetchedReadModels.IsEmpty();
-			
+		public bool Validate(IPerson person,IScheduleDay scheduleDay)
+		{
+			if(scheduleDay == null) return true;
+
+			var fetchedReadModels = FetchFromRepository(person,scheduleDay.DateOnlyAsPeriod.DateOnly).ToArray();
 			var mappedReadModels = Build(person,scheduleDay).ToArray();
 
-			var isValid = mappedReadModels.Length == fetchedReadModels.Length
-							&& mappedReadModels.Zip(fetchedReadModels,(a,b) =>
+			var isValid = mappedReadModels.Length != fetchedReadModels.Length
+							|| mappedReadModels.Zip(fetchedReadModels,(a,b) =>
 							{
 								if(a == null) return b == null;
 								return a.Equals(b);
