@@ -47,7 +47,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			ThePeriodThatWasUsedForFindingSchedules = dateTimePeriod;
 
-			var scheduleData = _data.Where(d => d.BelongsToScenario(scenario)).ToArray();
+			var scheduleData = _data
+				.Where(d => d.BelongsToScenario(scenario))
+				.Where(d => dateTimePeriod.Contains(d.Period.StartDateTime))
+				.ToArray();
 
 			if (scheduleData.IsEmpty())
 			{

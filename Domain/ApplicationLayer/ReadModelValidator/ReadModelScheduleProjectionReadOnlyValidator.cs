@@ -57,12 +57,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 		public IEnumerable<ScheduleProjectionReadOnlyModel> Build(IPerson person,DateOnly date)
 		{
 			var scenario = _currentScenario.Current();
-			var schedule = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
+			var period = new DateOnlyPeriod(date,date);
+			var extendedDateOnlyPeriodBecauseWeDontWantToConvertToEachPersonsTimeZone = period.Inflate(1);
+
+			var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
 				new ScheduleDictionaryLoadOptions(false,false),
-				date.ToDateTimePeriod(TimeZoneInfo.Utc),
+				extendedDateOnlyPeriodBecauseWeDontWantToConvertToEachPersonsTimeZone.ToDateTimePeriod(TimeZoneInfo.Utc),
 				scenario);
-			var scheduleDay = schedule.SchedulesForDay(date).SingleOrDefault();
-			return Build(person,scheduleDay);
+			var scheduleDays = schedules.SchedulesForPeriod(period,person).ToLookup(s => s.DateOnlyAsPeriod.DateOnly);
+
+			return Build(person,scheduleDays[date].First());
 		}
 
 		public IEnumerable<ScheduleProjectionReadOnlyModel> Build(IPerson person,IScheduleDay scheduleDay)

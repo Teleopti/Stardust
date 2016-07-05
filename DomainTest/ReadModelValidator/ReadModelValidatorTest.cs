@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeScheduleDayReadModelRepository ScheduleDayReadModelRepository;
 		public FakeScheduleStorage ScheduleStorage;
+		public ReadModelScheduleDayValidator ReadModelScheduleDayValidator;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -350,5 +351,48 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 
 			result.Count.Should().Be.EqualTo(1);
 		}
+
+
+		[Test]
+		public void ShouldBuildScheduleDayReadModelRegardlessOfUserTimezone()
+		{
+			var scenario = CurrentScenario.Current();
+			var site = SiteFactory.CreateSimpleSite("s");
+			site.WithId();
+			var team = TeamFactory.CreateTeamWithId("t");
+			team.Site = site;
+
+			var person = PersonFactory.CreatePerson(new Name("Peter", "peter"), TimeZoneInfoFactory.ChinaTimeZoneInfo());
+			person.WithId();
+
+			var personPeriod = new PersonPeriod(new DateOnly(2015, 1, 1),
+				PersonContractFactory.CreatePersonContract(ContractFactory.CreateContract("_")), team);
+			personPeriod.WithId();
+			person.AddPersonPeriod(personPeriod);
+			PersonRepository.Has(person);
+			var dateTimePeriod = new DateTimePeriod(2015, 12, 31, 22, 2016, 1, 1, 4);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, dateTimePeriod);
+			ScheduleStorage.Add(personAssignment);
+			PersonAssignmentRepository.Add(personAssignment);
+
+			var expecteReadModel = new ScheduleDayReadModel
+			{
+				PersonId = person.Id.Value,
+				Date = new DateTime(2016, 1, 1),
+				StartDateTime = new DateTime(2016, 1, 1, 6, 0, 0),
+				EndDateTime = new DateTime(2016, 1, 1, 12, 0, 0),
+				Workday = true,
+				NotScheduled = false,
+				Label = "sd"
+			};
+
+			var result = ReadModelScheduleDayValidator.Build(person.Id.Value, new DateOnly(2016, 1, 1));
+
+			result.Should().Not.Be.Null();
+			result.Date.Should().Be.EqualTo(expecteReadModel.Date);
+			result.StartDateTime.Should().Be.EqualTo(expecteReadModel.StartDateTime);
+			result.EndDateTime.Should().Be.EqualTo(expecteReadModel.EndDateTime);
+		}
+
 	}
 }

@@ -44,14 +44,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 		public PersonScheduleDayReadModel Build(Guid personId,DateOnly date)
 		{
 			var person = _personRepository.Get(personId);
-			var scenario = _currentScenario.Current();
-			var schedule = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
-				new ScheduleDictionaryLoadOptions(false,false),
-				date.ToDateTimePeriod(TimeZoneInfo.Utc),
-				scenario);
-			var scheduleDay = schedule.SchedulesForDay(date).SingleOrDefault();
+			var period = new DateOnlyPeriod(date,date);
+			var extendedDateOnlyPeriodBecauseWeDontWantToConvertToEachPersonsTimeZone = period.Inflate(1);
 
-			return Build(person,scheduleDay);
+			var scenario = _currentScenario.Current();
+			var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
+				new ScheduleDictionaryLoadOptions(false,false),
+				extendedDateOnlyPeriodBecauseWeDontWantToConvertToEachPersonsTimeZone.ToDateTimePeriod(TimeZoneInfo.Utc),
+				scenario);
+
+			var scheduleDays = schedules.SchedulesForPeriod(period,person).ToLookup(s => s.DateOnlyAsPeriod.DateOnly);
+
+			return Build(person,scheduleDays[date].First());		
 		}
 
 		public PersonScheduleDayReadModel Build(IPerson person,IScheduleDay scheduleDay)

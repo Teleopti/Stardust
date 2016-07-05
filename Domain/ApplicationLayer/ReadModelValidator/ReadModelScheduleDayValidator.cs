@@ -51,13 +51,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 		{
 			var person = _personRepository.Get(personId);
 			var scenario = _currentScenario.Current();
-			var schedule = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
-				new ScheduleDictionaryLoadOptions(false,false),
-				date.ToDateTimePeriod(TimeZoneInfo.Utc),
-				scenario);
-			var scheduleDay = schedule.SchedulesForDay(date).SingleOrDefault();
 
-			return Build(person,scheduleDay);
+			var period = new DateOnlyPeriod(date,date);
+			var extendedDateOnlyPeriodBecauseWeDontWantToConvertToEachPersonsTimeZone = period.Inflate(1);
+
+			var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
+				new ScheduleDictionaryLoadOptions(false,false),
+				extendedDateOnlyPeriodBecauseWeDontWantToConvertToEachPersonsTimeZone.ToDateTimePeriod(TimeZoneInfo.Utc),
+				scenario);
+
+			var scheduleDays = schedules.SchedulesForPeriod(period,person).ToLookup(s => s.DateOnlyAsPeriod.DateOnly);
+
+			return Build(person,scheduleDays[date].First());			
 		}
 	}
 }
