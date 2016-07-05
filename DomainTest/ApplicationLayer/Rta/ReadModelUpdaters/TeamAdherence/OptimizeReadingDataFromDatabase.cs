@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 		public TeamOutOfAdherenceReadModelUpdater Target;
 
 		[Test]
-		public void ShouldExcludePersonChangingTeam()
+		public void ShouldExcludePersonChangingTeam_TeamChanged()
 		{
 			var siteId = Guid.NewGuid();
 			var originTeam = Guid.NewGuid();
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 		}
 		
 		[Test]
-		public void ShouldIncludeInDestinationTeam()
+		public void ShouldIncludeInDestinationTeam_TeamChanged()
 		{
 			var siteId = Guid.NewGuid();
 			var destinationTeam = Guid.NewGuid();
@@ -54,6 +54,33 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 			Target.Handle(new PersonOutOfAdherenceEvent { TeamId = destinationTeam, PersonId = movingPerson });
 
 			Persister.Get(destinationTeam).Count.Should().Be(1);
+		}
+
+
+		[Test]
+		public void ShouldExludeFromAnyTeam_Terminated()
+		{
+			var teamId1 = Guid.NewGuid();
+			var teamId2 = Guid.NewGuid();
+			var personId = Guid.NewGuid();
+			Target.Handle(new PersonOutOfAdherenceEvent { TeamId = teamId1, PersonId = personId });
+			Target.Handle(new PersonOutOfAdherenceEvent { TeamId = teamId2, PersonId = personId });
+
+			Target.Handle(new PersonAssociationChangedEvent
+			{
+				PersonId = personId,
+				TeamId = null,
+				PreviousTeams = new []{teamId1, teamId2}
+			});
+
+			Persister.Get(teamId1).Count.Should().Be(0);
+			Persister.Get(teamId2).Count.Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldWorkWhenPreviousTeamDoesNotHaveAModel_Terminated()
+		{
+			Target.Handle(new PersonAssociationChangedEvent {PersonId = Guid.NewGuid(), PreviousTeams = new[] {Guid.NewGuid()}});
 		}
 	}
 }

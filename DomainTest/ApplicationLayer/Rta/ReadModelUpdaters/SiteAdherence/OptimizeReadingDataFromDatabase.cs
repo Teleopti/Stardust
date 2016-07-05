@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 		public SiteOutOfAdherenceReadModelUpdater Target;
 
 		[Test]
-		public void ShouldExcludePersonChangingSite()
+		public void ShouldExcludePersonChangingSite_SiteChanged()
 		{
 			var businessUnitId = Guid.NewGuid();
 			var originSite = Guid.NewGuid();
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 		}
 		
 		[Test]
-		public void ShouldIncludeInDestinationSite()
+		public void ShouldIncludeInDestinationSite_SiteChanged()
 		{
 			var businessUnitId = Guid.NewGuid();
 			var originSite = Guid.NewGuid();
@@ -53,17 +53,34 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = destinationSite, PersonId = movingPerson, BusinessUnitId = businessUnitId });
 
 			Persister.Get(destinationSite).Count.Should().Be(1);
-
-
-
-
-
-
-
-
-
-
 			Persister.Get(originSite).Count.Should().Be(0);
+		}
+
+
+		[Test]
+		public void ShouldExludeFromAnyTeam_Terminated()
+		{
+			var siteId1 = Guid.NewGuid();
+			var siteId2 = Guid.NewGuid();
+			var personId = Guid.NewGuid();
+			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId1, PersonId = personId });
+			Target.Handle(new PersonOutOfAdherenceEvent { SiteId = siteId2, PersonId = personId });
+
+			Target.Handle(new PersonAssociationChangedEvent
+			{
+				PersonId = personId,
+				TeamId = null,
+				PreviousSites = new[] { siteId1, siteId2 }
+			});
+
+			Persister.Get(siteId1).Count.Should().Be(0);
+			Persister.Get(siteId2).Count.Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldWorkWhenPreviousTeamDoesNotHaveAModel_Terminated()
+		{
+			Target.Handle(new PersonAssociationChangedEvent { PersonId = Guid.NewGuid(), PreviousSites = new[] { Guid.NewGuid() } });
 		}
 	}
 }

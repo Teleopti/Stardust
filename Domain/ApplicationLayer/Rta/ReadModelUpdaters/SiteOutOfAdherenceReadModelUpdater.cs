@@ -88,7 +88,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			}
 			else
 			{
-				updateAllModels(
+				if (!@event.PreviousSites.IsNullOrEmpty())
+					@event.PreviousSites.ForEach(
+						site =>
+						{
+							var model = _persister.Get(site);
+							if (model != null)
+								updateModel(model, @event.PersonId, @event.Timestamp, movePersonFrom);
+						});
+				else
+					updateAllModels(
 					@event.PersonId,
 					@event.Timestamp,
 					movePersonFrom);

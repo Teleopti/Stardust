@@ -91,10 +91,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			}
 			else
 			{
-				updateAllModels(
-					@event.PersonId,
-					@event.Timestamp,
-					movePersonFrom);
+				if (!@event.PreviousTeams.IsNullOrEmpty())
+					@event.PreviousTeams.ForEach(
+						team =>
+						{
+							var model = _persister.Get(team);
+							if (model != null)
+								updateModel(model, @event.PersonId, @event.Timestamp, movePersonFrom);
+						});
+				else
+					updateAllModels(
+						@event.PersonId,
+						@event.Timestamp,
+						movePersonFrom);
 			}
 		}
 

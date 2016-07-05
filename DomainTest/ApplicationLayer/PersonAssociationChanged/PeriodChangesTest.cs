@@ -133,6 +133,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			@event.PreviousSites.Should().Have.SameValuesAs(previousSite1, previousSite2);
 		}
 
+
+
+
+
+
+		[Test]
+		public void ShouldPublishWithPreviousTeam()
+		{
+			var previousTeam = Guid.NewGuid();
+			var newTeam = Guid.NewGuid();
+			Now.Is("2016-02-01 00:00");
+			Data.WithAgent("pierre")
+				.WithPeriod("2016-01-02", previousTeam)
+				.WithPeriod("2016-02-01", newTeam);
+
+			Target.Handle(new TenantHourTickEvent());
+
+			var @event = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();
+			@event.PreviousTeam.Should().Be(previousTeam);
+		}
+
 		[Test]
 		public void ShouldPublishWithPreviousSite()
 		{
