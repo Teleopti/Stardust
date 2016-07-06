@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 
 			Publisher.PublishedEvents.Should().Be.Empty();
 		}
-
+		
 		[Test]
 		public void ShouldPublishWithPreviousAssociation()
 		{

@@ -159,14 +159,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 		public void Handle(PersonPeriodChangedEvent @event)
 		{
-			_eventPublisher.Publish(new PersonAssociationChangedEvent
+			if (@event.CurrentPersonPeriodChanged)
+				_eventPublisher.Publish(new PersonAssociationChangedEvent
 			{
+				Version = 2,
 				PersonId = @event.PersonId,
 				Timestamp = @event.Timestamp,
 				BusinessUnitId = @event.CurrentBusinessUnitId,
 				SiteId = @event.CurrentSiteId,
-				TeamId = @event.CurrentTeamId
-			});
+				TeamId = @event.CurrentTeamId,
+				PreviousAssociation = @event.PreviousAssociation
+				});
 		}
 	}
 }

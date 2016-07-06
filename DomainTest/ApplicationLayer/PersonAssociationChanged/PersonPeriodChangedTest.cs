@@ -25,9 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		[Test]
 		public void ShouldPublishWhenTeamChanges()
 		{
-			Now.Is("2016-02-01 00:00");
-
-			Target.Handle(new PersonPeriodChangedEvent());
+			Target.Handle(new PersonPeriodChangedEvent {CurrentPersonPeriodChanged = true});
 
 			Publisher.PublishedEvents.Single().Should().Be.OfType<PersonAssociationChangedEvent>();
 		}
@@ -35,7 +33,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		[Test]
 		public void ShouldPublishWithPropertiesWhenTeamChanges()
 		{
-			Now.Is("2016-02-01 00:00:05");
 			var personId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
@@ -47,7 +44,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 				PersonId = personId,
 				CurrentBusinessUnitId = businessUnitId,
 				CurrentSiteId = siteId,
-				CurrentTeamId = teamId
+				CurrentTeamId = teamId,
+				CurrentPersonPeriodChanged = true
 			});
 
 			var result = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();
@@ -56,6 +54,48 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			result.BusinessUnitId.Should().Be(businessUnitId);
 			result.SiteId.Should().Be(siteId);
 			result.TeamId.Should().Be(teamId);
+		}
+
+		[Test]
+		public void ShouldNotPublishIfItsNotTheCurrentPersonPeriodThatChanged()
+		{
+			Target.Handle(new PersonPeriodChangedEvent { CurrentPersonPeriodChanged = false });
+
+			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Should().Be.Empty();
+		}
+
+
+		[Test]
+		public void ShouldPublishWithPreviousAssociation()
+		{
+			var personId = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+
+			Target.Handle(new PersonPeriodChangedEvent
+			{
+				Timestamp = "2016-02-01 00:00:01".Utc(),
+				PersonId = personId,
+				CurrentPersonPeriodChanged = true,
+				PreviousAssociation = new[]
+				{
+					new Association
+					{
+						BusinessUnitId = businessUnitId,
+						SiteId = siteId,
+						TeamId = teamId,
+					}
+				},
+
+			});
+
+			var @event = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();
+			@event.Version.Should().Be(2);
+			var previousAssociation = @event.PreviousAssociation.Single();
+			previousAssociation.BusinessUnitId.Should().Be(businessUnitId);
+			previousAssociation.SiteId.Should().Be(siteId);
+			previousAssociation.TeamId.Should().Be(teamId);
 		}
 	}
 }
