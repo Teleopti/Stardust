@@ -549,6 +549,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     e.RowIndex - (View.RowHeaders + 1) >= 0)
                 {
 	                var person = View.TheGrid.Model[e.RowIndex, 1].Tag as IPerson;
+	                if (person == null)
+	                {
+		                return;
+	                }
 					QueryOverviewStyleInfo(e.Style, person, (ColumnType)e.ColIndex);
                 }
             }
