@@ -314,17 +314,17 @@
 					return typeText;
 				}
 
-				row.GetPendingReasons = function() {
-					var translatedPendingReasons = new Array();
-					var pendingReaons = row.PendingReasons;
-					if (pendingReaons) {
-						angular.forEach(pendingReaons.split(','),
+				row.GetBrokenRules = function() {
+					var translatedBrokenRules = new Array();
+					var brokenRules = row.BrokenRules;
+					if (brokenRules) {
+						angular.forEach(brokenRules.split(','),
 							function(value) {
-								translatedPendingReasons.push($translate.instant(value));
+								translatedBrokenRules.push($translate.instant(value));
 							});
-						return translatedPendingReasons.join(',');
+						return translatedBrokenRules.join(',');
 					}
-					return row.PendingReasons;
+					return brokenRules;
 				}
 			});
 

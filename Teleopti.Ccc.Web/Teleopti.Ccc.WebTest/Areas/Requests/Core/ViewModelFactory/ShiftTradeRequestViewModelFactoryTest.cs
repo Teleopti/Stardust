@@ -356,7 +356,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		}
 
 		[Test]
-		public void ShouldGetPendingReasons()
+		public void ShouldGetBrokenRules()
 		{
 			var personTo = PersonFactory.CreatePerson("Person", "To");
 			var personFrom = PersonFactory.CreatePerson("Person", "From");
@@ -376,7 +376,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 
 			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
 			((ShiftTradeRequestViewModel) requestListViewModel.Requests.FirstOrDefault())
-				.PendingReasons.Should().Be((BusinessRuleFlags.DataPartOfAgentDay | BusinessRuleFlags.MinWeeklyRestRule).ToString());
+				.BrokenRules.Should().Be((BusinessRuleFlags.DataPartOfAgentDay | BusinessRuleFlags.MinWeeklyRestRule).ToString());
 		}
 
 

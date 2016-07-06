@@ -202,18 +202,18 @@
 					setupStandardColumns();
 
 					if (toggleSvc.Wfm_Requests_Show_Deny_Reasons_39473) {
-						var pendingReasonsColumn = {
-							displayName: 'Pending Reasons',
-							field: 'GetPendingReasons()',
+						var brokenRulesColumn = {
+							displayName: 'Broken Rules',
+							field: 'GetBrokenRules()',
 							headerCellFilter: 'translate',
-							cellClass: 'request-pending-reasons',
+							cellClass: 'request-broken-rules',
 							visible: false,
 							pinnedRight: true,
 							enablePinning: false,
 							enableSorting: false,
 							minWidth: 111
 						};
-						columns.splice(10, 0, pendingReasonsColumn);
+						columns.splice(10, 0, brokenRulesColumn);
 					}
 				}
 

@@ -385,25 +385,25 @@
 			expect(selectedStatus[2].Id).toEqual(status2.trim());
 		});
 
-		it("should get pending reasons column", function() {
+		it("should get broken rules column", function() {
 			var test = setUpTarget();
 			setUpShiftTradeRequestData(test);
-			var pendingReasons = "DataPartOfAgentDay,MinWeeklyRestRule";
-			test.scope.requests[0].PendingReasons = pendingReasons;
+			var brokenRules = "DataPartOfAgentDay,MinWeeklyRestRule";
+			test.scope.requests[0].BrokenRules = brokenRules;
 			test.scope.$digest();
 
 			var vm = test.target.isolateScope().requestsTableContainer;
 			var columnDefs = vm.gridOptions.columnDefs;
-			var existsPendingReasonsColmun;
+			var existsBrokenRulesColmun;
 			angular.forEach(columnDefs,
 				function(columnDef) {
-					if (columnDef.displayName === "Pending Reasons") {
-						existsPendingReasonsColmun = true;
+					if (columnDef.displayName === "Broken Rules") {
+						existsBrokenRulesColmun = true;
 					}
 				});
 
-			expect(existsPendingReasonsColmun).toEqual(true);
-			expect(test.scope.requests[0].GetPendingReasons(), pendingReasons);
+			expect(existsBrokenRulesColmun).toEqual(true);
+			expect(test.scope.requests[0].GetBrokenRules(), brokenRules);
 		});
 
 		xit('should load schedules for shift trade request', function () {
