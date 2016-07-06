@@ -17,7 +17,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void ClearPeriodForPerson(DateOnlyPeriod period, Guid personId)
 		{
-			throw new NotImplementedException();
+			_scheduleDayReadModels =
+				_scheduleDayReadModels.Where(
+					r => !(r.PersonId == personId && r.BelongsToDate >= period.StartDate && r.BelongsToDate <= period.EndDate)).ToList();
 		}
 
 		public void SaveReadModel(ScheduleDayReadModel model)

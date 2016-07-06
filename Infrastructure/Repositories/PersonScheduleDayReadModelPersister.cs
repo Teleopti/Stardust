@@ -83,6 +83,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return updatedCount;
 		}
 
+		public void DeleteReadModel(Guid personId, DateOnly date)
+		{
+			_currentUnitOfWork.Session().CreateSQLQuery(
+				"DELETE FROM ReadModel.PersonScheduleDay WHERE PersonId = :PersonId AND BelongsToDate =:BelongsToDate")
+				.SetGuid("PersonId", personId)
+				.SetDateOnly("BelongsToDate", date)
+				.ExecuteUpdate();
+		}
+
 		public bool IsInitialized()
 		{
 			var result = _currentUnitOfWork.Session().CreateSQLQuery(

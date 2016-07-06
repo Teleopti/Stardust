@@ -68,6 +68,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 				{
 					var date = new DateOnly(record.Date);
 					var readModel = _readModelPersonScheduleDayValidator.Build(record.PersonId, date);
+					if (readModel == null)
+					{
+						_personScheduleDayReadModelPersister.DeleteReadModel(record.PersonId, date);
+						continue;
+					}
 					readModel.ScheduleLoadTimestamp = _personAssignmentRepository.GetScheduleLoadedTime();
 					_personScheduleDayReadModelPersister.SaveReadModel(readModel, false);
 				}
@@ -81,6 +86,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 				{
 					var date = new DateOnly(record.Date);
 					var readModel = _readModelScheduleDayValidator.Build(record.PersonId, date);
+					if (readModel == null)
+					{
+						_scheduleDayReadModelRepository.ClearPeriodForPerson(new DateOnlyPeriod(date, date),record.PersonId);
+						continue;
+					}
 					_scheduleDayReadModelRepository.SaveReadModel(readModel);
 				}
 			}
