@@ -170,8 +170,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 				return 0;
 			if (personRequest.IsApproved)
 				return 1;
-			if (personRequest.IsDenied)
+			if (personRequest.IsDenied && !personRequest.IsWaitlisted)
 				return 2;
+			if(personRequest.IsCancelled)
+				return 3;
+			if (personRequest.IsWaitlisted)
+				return 4;
 
 			throw new ArgumentException("Unknown status of request");
 		}
