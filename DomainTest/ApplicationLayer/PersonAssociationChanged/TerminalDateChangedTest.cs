@@ -246,6 +246,41 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 
 			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Should().Be.Empty();
 		}
+
+		[Test]
+		public void ShouldPublishWithPreviousAssociation()
+		{
+			Now.Is("2016-01-18 00:00");
+			var personId = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			Data.WithAgent(personId, "pierre", "2016-12-31");
+
+			Target.Handle(new PersonTerminalDateChangedEvent
+			{
+				PersonId = personId,
+				PreviousTerminationDate = "2016-12-31".Utc(),
+				TerminationDate = "2016-01-01".Utc(),
+				PreviousAssociations = new[]
+				{
+					new Association
+					{
+						BusinessUnitId = businessUnitId,
+						SiteId = siteId,
+						TeamId = teamId
+					}
+				}
+			});
+
+			var @event = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();
+			@event
+				.PreviousAssociation.SingleOrDefault(x =>
+				x.BusinessUnitId == businessUnitId &&
+				x.SiteId == siteId &&
+				x.TeamId == teamId).Should().Not.Be.Null();
+			@event.Version.Should().Be(2);
+		}
 	}
 
 }
