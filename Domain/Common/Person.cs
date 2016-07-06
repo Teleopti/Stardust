@@ -80,7 +80,8 @@ namespace Teleopti.Ccc.Domain.Common
 			    var valueAfter = _terminalDate.HasValue ? _terminalDate.Value.Date : (DateTime?) null;
 
 			    AddEvent(now =>
-			    {
+				{
+					var previousAssociation = previousAssociations(now);
 					var info = currentAssociationInfo(now);
 					return new PersonTerminalDateChangedEvent
 					{
@@ -90,7 +91,8 @@ namespace Teleopti.Ccc.Domain.Common
 						TeamId = info.TeamId,
 						TimeZoneInfoId = PermissionInformation.DefaultTimeZone().Id,
 						PreviousTerminationDate = valueBefore,
-						TerminationDate = valueAfter
+						TerminationDate = valueAfter,
+						PreviousAssociations = previousAssociation
 					};
 			    });
 		    }
@@ -112,11 +114,26 @@ namespace Teleopti.Ccc.Domain.Common
 			});
 		}
 
+	    private IEnumerable<Association> previousAssociations(INow now)
+	    {
+		    var nowDateOnly = new DateOnly(now.UtcDateTime());
+		    var period = Period(nowDateOnly);
+		    var periodStart = period?.StartDate ?? nowDateOnly;
+			return InternalPersonPeriodCollection.OrderByDescending(p => p.StartDate.Date)
+			    .Where(p => p.StartDate < periodStart)
+			    .Select(x => new Association
+			    {
+				    TeamId = x.Team.Id.GetValueOrDefault(),
+				    SiteId = x.Team.Site.Id.GetValueOrDefault(),
+				    BusinessUnitId = x.Team.Site.BusinessUnit.Id.GetValueOrDefault()
+				});
+	    }
+
 		private personAssociationInfo currentAssociationInfo(INow now)
 		{
 			var period = Period(new DateOnly(now.UtcDateTime()));
 			var info = new personAssociationInfo();
-			if (period != null && period.Team != null)
+			if (period?.Team != null)
 			{
 				info.TeamId = period.Team.Id.GetValueOrDefault();
 				if (period.Team.Site != null)

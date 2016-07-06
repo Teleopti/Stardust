@@ -74,6 +74,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 					_eventPublisher.Publish(new PersonAssociationChangedEvent
 					{
+						Version = 2,
 						PersonId = person.Id.Value,
 						Timestamp = now,
 						TeamId = teamId,
@@ -93,6 +94,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			return previousPeriod;
 		}
 
+		private DateTime? timeOfChange(DateOnly? terminalDate, IPersonPeriod currentPeriod, TimeZoneInfo timeZone)
+		{
+			var terminatedAt = terminationTime(terminalDate, timeZone);
+			if (terminatedAt <= _now.UtcDateTime())
+				return terminatedAt;
+			if (currentPeriod == null)
+				return null;
+			return TimeZoneInfo.ConvertTimeToUtc(currentPeriod.StartDate.Date, timeZone);
+		}
+
 		public void Handle(PersonTerminalDateChangedEvent @event)
 		{
 			var timeZone = @event.TimeZoneInfoId != null ? TimeZoneInfo.FindSystemTimeZoneById(@event.TimeZoneInfoId) : TimeZoneInfo.Utc;
@@ -108,23 +119,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		
 			_eventPublisher.Publish(new PersonAssociationChangedEvent
 			{
+				Version = 2,
 				PersonId = @event.PersonId,
 				Timestamp = now,
 				TeamId = @event.TeamId,
 				SiteId = @event.SiteId,
-				BusinessUnitId = @event.BusinessUnitId
+				BusinessUnitId = @event.BusinessUnitId,
+				PreviousAssociation = @event.PreviousAssociations
 			});
 		}
 		
-		private DateTime? timeOfChange(DateOnly? terminalDate, IPersonPeriod currentPeriod, TimeZoneInfo timeZone)
-		{
-			var terminatedAt = terminationTime(terminalDate, timeZone);
-			if (terminatedAt <= _now.UtcDateTime())
-				return terminatedAt;
-			if (currentPeriod == null)
-				return null;
-			return TimeZoneInfo.ConvertTimeToUtc(currentPeriod.StartDate.Date, timeZone);
-		}
 
 		private static DateTime terminationTime(DateTime? terminationDate, TimeZoneInfo timeZone)
 		{
