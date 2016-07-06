@@ -193,13 +193,13 @@
     <value>اطلاعات پاسخگو</value>
   </data>
   <data name="AgentInfoThreeDots" xml:space="preserve">
-    <value>اطلاعات اپراتور ...</value>
+    <value>اطلاعات پاسخگو...</value>
   </data>
   <data name="Agents" xml:space="preserve">
-    <value>اپراتورها</value>
+    <value>پاسخگوها</value>
   </data>
   <data name="AgentSettings" xml:space="preserve">
-    <value>تنظیمات اپراتور</value>
+    <value>تنظیمات پاسخگو</value>
   </data>
   <data name="All" xml:space="preserve">
     <value>همه</value>
@@ -352,13 +352,13 @@
     <value>قرارداد</value>
   </data>
   <data name="ContractSchedule" xml:space="preserve">
-    <value>جدول قرارداد</value>
+    <value>زمانبندی قرارداد</value>
   </data>
   <data name="ContractScheduledTime" xml:space="preserve">
     <value>برنامه زمان بندی قرارداد</value>
   </data>
   <data name="Contractschedules" xml:space="preserve">
-    <value>جداول قرارداد</value>
+    <value>زمانبندیهای قرارداد</value>
   </data>
   <data name="ContractTargetTime" xml:space="preserve">
     <value>زمان هدف قرارداد</value>
@@ -541,10 +541,10 @@
     <value>ACW پیش بینی شده</value>
   </data>
   <data name="ForecastedAgents" xml:space="preserve">
-    <value>اپراتورهای پیش بینی شده </value>
+    <value>پاسخگوهای پیش بینی شده </value>
   </data>
   <data name="ForecastedAgentsWithShrinkage" xml:space="preserve">
-    <value>اپراتورهای پیش بینی شده با نقصان </value>
+    <value>پاسخگوهای پیش بینی شده با نقصان </value>
   </data>
   <data name="ForecastedAverageAfterCallWork" xml:space="preserve">
     <value>متوسط اپراتورهای پیش بینی شده بعد از تماس</value>
@@ -730,7 +730,7 @@
     <value>موضوع گزارش </value>
   </data>
   <data name="MainGrid" xml:space="preserve">
-    <value>جداول</value>
+    <value>زمانبندیها</value>
   </data>
   <data name="MainScreen" xml:space="preserve">
     <value>صفحه اصلی</value>
@@ -748,7 +748,7 @@
     <value>مدیریت کردن الگو</value>
   </data>
   <data name="MaximumAgents" xml:space="preserve">
-    <value>حداکثر اپراتورها</value>
+    <value>حداکثر پاسخگوها</value>
   </data>
   <data name="MaxTime" xml:space="preserve">
     <value>حداکثر اشغالی</value>
@@ -760,7 +760,7 @@
     <value>کوچک کردن نوار</value>
   </data>
   <data name="MinimumAgents" xml:space="preserve">
-    <value>حداقل اپراتورها</value>
+    <value>حداقل پاسخگوها</value>
   </data>
   <data name="MinTime" xml:space="preserve">
     <value>حداقل</value>
@@ -877,7 +877,7 @@
     <value>مردم</value>
   </data>
   <data name="OpenSchedulePage" xml:space="preserve">
-    <value>جداول</value>
+    <value>زمانبندیها</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>انتخاب ها</value>
@@ -970,7 +970,7 @@
     <value>مردم</value>
   </data>
   <data name="PersonalizeYourAgentPortal" xml:space="preserve">
-    <value>شخصی سازی زمان من</value>
+    <value>شخصی سازی برنامه من</value>
   </data>
   <data name="PersonalShift" xml:space="preserve">
     <value>فعالیت شخصی</value>
@@ -1072,7 +1072,7 @@
     <value>سناریو: </value>
   </data>
   <data name="Schedule" xml:space="preserve">
-    <value>جدول</value>
+    <value>زمانبندی</value>
   </data>
   <data name="ScoreCard" xml:space="preserve">
     <value>برگه امتیاز</value>
@@ -1459,7 +1459,7 @@
     <value>درخواست غیبت</value>
   </data>
   <data name="AgentName" xml:space="preserve">
-    <value>نام اپراتور</value>
+    <value>نام پاسخگو</value>
   </data>
   <data name="DateFrom" xml:space="preserve">
     <value>از</value>
@@ -2011,7 +2011,7 @@
     <value>جلسات</value>
   </data>
   <data name="RestoreAgentPortal" xml:space="preserve">
-    <value>به حالت اول برگرداندن زمان من</value>
+    <value>به حالت اول برگرداندن  برنامه من</value>
   </data>
   <data name="NewOptionalColumn" xml:space="preserve">
     <value>ستون اتنخابی جدید</value>
@@ -2029,16 +2029,16 @@
     <value>پیش بینی شده</value>
   </data>
   <data name="AgentsWithShrinkage" xml:space="preserve">
-    <value>اپراتورها با نقصان</value>
+    <value>پاسخگوها با نقصان</value>
   </data>
   <data name="ExternalLogOn" xml:space="preserve">
     <value>اتصال خارجی به سیستم</value>
   </data>
   <data name="AgentPortalOptions" xml:space="preserve">
-    <value>انتخابهای پرتال اپراتور</value>
+    <value>انتخابهای پرتال پاسخگو</value>
   </data>
   <data name="ExitAgentPortal" xml:space="preserve">
-    <value>خروج پرتال اپراتور</value>
+    <value>خروج پرتال پاسخگو</value>
   </data>
   <data name="BusinessRuleOverlappingErrorMessage2" xml:space="preserve">
     <value>دو شیفت همپوش وجود دارد</value>
@@ -2425,10 +2425,10 @@
     <value>زمانبندی شما تغییر کرده است. برای مشاهده زمانبندی به روز رسانی شده اینجا را کلیک کتید.  </value>
   </data>
   <data name="Agent" xml:space="preserve">
-    <value>اپراتور</value>
+    <value>پاسخگو</value>
   </data>
   <data name="OpenAgentPortal" xml:space="preserve">
-    <value>پرتال اپراتور</value>
+    <value>پرتال پاسخگو</value>
   </data>
   <data name="AutomaticUpdate" xml:space="preserve">
     <value>به روز رسانی اتوماتیک</value>
@@ -2461,7 +2461,7 @@
     <value>معاوضه شیفت</value>
   </data>
   <data name="ActualAgents" xml:space="preserve">
-    <value>اپرتورهای واقعی</value>
+    <value>پاسخگوهای واقعی</value>
   </data>
   <data name="ActualHandlingTime" xml:space="preserve">
     <value>زمان بررسی واقعی</value>
@@ -2614,7 +2614,7 @@
     <value>تبعیت زمان حقیقی</value>
   </data>
   <data name="StateGroupAvailableDescription" xml:space="preserve">
-    <value>(اپراتورها برای تماس گرفتن در دسترس هستند )</value>
+    <value>(پاسخگوها برای تماس گرفتن در دسترس هستند )</value>
   </data>
   <data name="Empty" xml:space="preserve">
     <value>&lt;خالی&gt;</value>
@@ -2972,7 +2972,7 @@
     <value>گزارش من</value>
   </data>
   <data name="InvalidRecepient" xml:space="preserve">
-    <value>گیرنده تامعتبر. یک اپراتور موجود را انتخاب کنید</value>
+    <value>گیرنده تامعتبر. یک پاسخگو موجود را انتخاب کنید</value>
   </data>
   <data name="KeyWord" xml:space="preserve">
     <value>نام مخفف</value>
@@ -3197,10 +3197,10 @@
     <value>شروع فعالیت جدید</value>
   </data>
   <data name="AgentState" xml:space="preserve">
-    <value>وضعیت اپراتور</value>
+    <value>وضعیت پاسخگو</value>
   </data>
   <data name="AgentTeam" xml:space="preserve">
-    <value>تیم اپراتور</value>
+    <value>تیم پاسخگو</value>
   </data>
   <data name="Alarm" xml:space="preserve">
     <value>اخطار</value>
@@ -3638,13 +3638,13 @@
     <value>واگذاری و سرعت تماس</value>
   </data>
   <data name="ResReportAgentQueueStatistics" xml:space="preserve">
-    <value>آمار صف اپراتورها</value>
+    <value>آمار صف پاسخگوها</value>
   </data>
   <data name="ResReportAgentScheduleResult" xml:space="preserve">
-    <value>سنجش اپراتورها</value>
+    <value>سنجش پاسخگوها</value>
   </data>
   <data name="ResReportAgentStatistics" xml:space="preserve">
-    <value>آمار اپراتورها</value>
+    <value>آمار پاسخگوها</value>
   </data>
   <data name="ResReportForecastvsActualWorkload" xml:space="preserve">
     <value>تراکم واقعی و پیش بینی شده</value>
@@ -3653,7 +3653,7 @@
     <value>ساعتهای زمانبندی شده و پیش بینی شده </value>
   </data>
   <data name="ResReportPreferencesPerAgent" xml:space="preserve">
-    <value>عملکرد هر اپراتور</value>
+    <value>عملکرد هر پاسخگو</value>
   </data>
   <data name="ResReportPreferencesPerDay" xml:space="preserve">
     <value>عملکرد هر روز</value>
@@ -3662,19 +3662,19 @@
     <value>آمار صف</value>
   </data>
   <data name="ResReportScheduledAgentsPerIntervalAndTeam" xml:space="preserve">
-    <value>اپراتورهای برنامه ریزی شده در هر مدت و تیم</value>
+    <value>پاسخگوهای زمانبندی شده در هر مدت و تیم</value>
   </data>
   <data name="ResReportScheduledTimePerActivity" xml:space="preserve">
-    <value>زمان برنامه ریزی شده برا ی هر فعالیت</value>
+    <value>زمان زمانبندی شده برا ی هر فعالیت</value>
   </data>
   <data name="ResReportScheduledTimePerAgent" xml:space="preserve">
-    <value>زمان برنامه ریزی شده برا ی هر اپراتور</value>
+    <value>زمان زمانبندی شده برا ی هر پاسخگو</value>
   </data>
   <data name="ResReportScheduledAndActualAgents" xml:space="preserve">
-    <value>اپراتور برنامه ریزی شده و واقعی</value>
+    <value>پاسخگو زمانبندی شده و واقعی</value>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
-    <value>دسته بندی شیفت و غیبت روز کامل برای هر اپراتور</value>
+    <value>دسته بندی شیفت و غیبت روز کامل برای هر پاسخگو</value>
   </data>
   <data name="ResReportShiftCategoryPerDay" xml:space="preserve">
     <value>دسته بندی شیفت در هر روز</value>
@@ -4100,7 +4100,7 @@
     <value>بهیته سازی</value>
   </data>
   <data name="ResReportAgentScorecard" xml:space="preserve">
-    <value>برگه امتیاز اپراتور</value>
+    <value>برگه امتیاز پاسخگو</value>
   </data>
   <data name="Excluded" xml:space="preserve">
     <value>مستثنی</value>
@@ -4172,7 +4172,7 @@
     <value>بارگذاری</value>
   </data>
   <data name="ResReportAbsenceTimePerAgent" xml:space="preserve">
-    <value>زمان غیبت برای هر اپراتور</value>
+    <value>زمان غیبت برای هر پاسخگو</value>
   </data>
   <data name="AllowTextReply" xml:space="preserve">
     <value>اجازه پاسخ متن</value>
@@ -4250,7 +4250,7 @@
     <value>&lt; انتخاب ستون انتخابی&gt;</value>
   </data>
   <data name="BuildInStandardAgentRole" xml:space="preserve">
-    <value>اپراتور</value>
+    <value>پاسخگو</value>
   </data>
   <data name="BuiltInAdministratorRole" xml:space="preserve">
     <value>مدیر</value>
@@ -4325,7 +4325,7 @@
     <value>زمان آماده به کار و زمان آماده به کار برنامه ریزی شده</value>
   </data>
   <data name="AdherenceReportSettingCalculationMethodReadyTimeVsScheduledTime" xml:space="preserve">
-    <value>زمان آماده به کار و زمان برنامه ریزی شده( شامل زمان قبل و بعد از شروع شیفت)</value>
+    <value>زمان آماده به کار و زمان زمانبندی شده( شامل زمان قبل و بعد از شروع شیفت)</value>
   </data>
   <data name="AnsweredContacts" xml:space="preserve">
     <value>تماسهای پاسخ داده شده</value>
@@ -4505,7 +4505,7 @@
     <value>نمایش نوار ابزار دسترسی سریع پایین نوار</value>
   </data>
   <data name="ExportNoOfAgentInfo" xml:space="preserve">
-    <value>ناحیه انتخاب شده برای {0} اپراتور</value>
+    <value>ناحیه انتخاب شده برای {0} پاسخگو</value>
   </data>
   <data name="CustomizeQuickAccessToolbar" xml:space="preserve">
     <value>تغییر نوار ابزار دسترسی سریع</value>
@@ -4544,7 +4544,7 @@
     <value>صدور به سناریوی دیگر</value>
   </data>
   <data name="FilterAgents" xml:space="preserve">
-    <value>فیلتر کردن اپراتورها</value>
+    <value>فیلتر کردن پاسخگو</value>
   </data>
   <data name="Info" xml:space="preserve">
     <value>اطلاعات</value>
@@ -5030,10 +5030,10 @@
     <value>گزارشات برخط</value>
   </data>
   <data name="ScheduledTimePerActivityReport" xml:space="preserve">
-    <value>زمان برنامه ریزی شده برای هر فعالیت</value>
+    <value>زمان زمانبندی شده برای هر فعالیت</value>
   </data>
   <data name="ScheduledTimePerActivity" xml:space="preserve">
-    <value>زمان برنامه ریزی شده برای هر فعالیت</value>
+    <value>زمان زمانبندی شده برای هر فعالیت</value>
   </data>
   <data name="AgentColon" xml:space="preserve">
     <value>پاسخگو:</value>
@@ -5341,7 +5341,7 @@
     <value>کارمند خالص</value>
   </data>
   <data name="AgentsColon" xml:space="preserve">
-    <value>اپراتورها:</value>
+    <value>پاسخگوها:</value>
   </data>
   <data name="ChangeDateFromUtcColon" xml:space="preserve">
     <value>تغییر تاریخ از (UTC): </value>
@@ -5560,13 +5560,13 @@
     <value>نمایش سناریوهای محدود </value>
   </data>
   <data name="PlanningTimeBankCaption" xml:space="preserve">
-    <value>طرح ریزی بانک زمان</value>
+    <value>برنامه ریزی بانک زمان</value>
   </data>
   <data name="PlanningTimeBankMax" xml:space="preserve">
-    <value>طرح ریزی بانک زمان حداکثر:</value>
+    <value>برنامه ریزی بانک زمان حداکثر:</value>
   </data>
   <data name="PlanningTimeBankMin" xml:space="preserve">
-    <value>طرح ریزی بانک زمان حداقل::</value>
+    <value>برنامه ریزی بانک زمان حداقل::</value>
   </data>
   <data name="PlanningTimeBankMinMaxInfo" xml:space="preserve">
     <value>({0} تا {1})</value>
@@ -5611,7 +5611,7 @@
     <value>ورودی یک مقدار زمانی معتبر نیست</value>
   </data>
   <data name="ScheduledTimeVsTarget" xml:space="preserve">
-    <value>زمان برنامه ریزی شده در مقایسه با هدف</value>
+    <value>زمان زمانبندی شده در مقایسه با هدف</value>
   </data>
   <data name="TheServiceLevelForSpecifiedIntervalLengthIsTooLongDot" xml:space="preserve">
     <value>سطح سرویس برای طول فاصله زمانی مشخص بسیار طولانی می باشد. </value>
@@ -5962,7 +5962,7 @@
     <value>علامت جدید</value>
   </data>
   <data name="ScheduleTagColon" xml:space="preserve">
-    <value>علامت برنامه ریزی:</value>
+    <value>علامت زمانبندی:</value>
   </data>
   <data name="TagChangesWithColon" xml:space="preserve">
     <value>تغییرات علامت با:</value>
@@ -6070,7 +6070,7 @@
     <value>صدور پیش بینی به واحدهای کسب و کار دیگر</value>
   </data>
   <data name="ResReportRequestsPerAgent" xml:space="preserve">
-    <value>درخواست ها برای هر اپراتور</value>
+    <value>درخواست ها برای هر پاسخگو</value>
   </data>
   <data name="TargetValue" xml:space="preserve">
     <value>ارزش هدف</value>
@@ -6082,7 +6082,7 @@
     <value>دامنه تغییرات + روز های تعطیل</value>
   </data>
   <data name="ExtendingAndReducingDaysoff" xml:space="preserve">
-    <value>توسعه و کاهش زمان برای اپراتورهای قابل تغییر</value>
+    <value>توسعه و کاهش زمان برای پاسخگوهای قابل تغییر</value>
   </data>
   <data name="ExtendReduceDaysoffForFlexibleAgents" xml:space="preserve">
     <value>تنظیم برای زمان کار قابل تغییر</value>
@@ -6322,7 +6322,7 @@
     <value>مدیریت کردن مجموعه قواعد</value>
   </data>
   <data name="ManualAgents" xml:space="preserve">
-    <value>اپراتورها (لغو دستی)</value>
+    <value>پاسخگوها (لغو دستی)</value>
   </data>
   <data name="RequestCannotUpdateDelete" xml:space="preserve">
     <value>وضعیت درخواست شما تغییر کرده است. شما نمیتوانید آن را به روز رسانی/ حذف کنید.</value>
@@ -6436,7 +6436,7 @@
     <value>مشتریان اصلی</value>
   </data>
   <data name="ScheduledEmployees" xml:space="preserve">
-    <value>کارمندان برنامه ریزی شده</value>
+    <value>کارمندان زمانبندی شده</value>
   </data>
   <data name="ServedCustomers" xml:space="preserve">
     <value>مشتریان خدمت رسانی شده</value>
@@ -6541,7 +6541,7 @@
     <value>دیگران</value>
   </data>
   <data name="MyTime" xml:space="preserve">
-    <value>Teleopti WFM My Time</value>
+    <value>Teleopti WFM  برنامه من</value>
   </data>
   <data name="ExtendedPreferencesWeb" xml:space="preserve">
     <value> الویتهای توسعه یافته</value>
@@ -6628,7 +6628,7 @@
     <value>تاریخ( شروع شیفتها(</value>
   </data>
   <data name="NoAgentsAvailableForShiftTrade" xml:space="preserve">
-    <value>هیچ اپراتوری برای معاوضه شیفت در دسترس نمی باشد</value>
+    <value>هیچ پاسخگوی برای معاوضه شیفت در دسترس نمی باشد</value>
   </data>
   <data name="ResShiftStartDateFromColon" xml:space="preserve">
     <value>تاریخ از ( شروع شیفتها(</value>
@@ -6751,7 +6751,7 @@
     <value>حداکثر وظایف همزمان</value>
   </data>
   <data name="ViewActiveAgents" xml:space="preserve">
-    <value>نمایش اپراتورهای فعال</value>
+    <value>نمایش پاسخگوهای فعال</value>
   </data>
   <data name="SkillTypeChat" xml:space="preserve">
     <value>چت</value>
@@ -7072,7 +7072,7 @@
     <value>زمان کار پس از تماس</value>
   </data>
   <data name="AgentPortal" xml:space="preserve">
-    <value>Classic My Time</value>
+    <value> برنامه من قدیمی</value>
   </data>
   <data name="ApplicationLogInName" xml:space="preserve">
     <value>نام کاربری برنامه کاربردی</value>
@@ -7312,10 +7312,10 @@
     <value>فرمت توضیح نام پاسخگو را اصلاح نمایید.</value>
   </data>
   <data name="MyTimeWeb" xml:space="preserve">
-    <value>My Time</value>
+    <value> برنامه من</value>
   </data>
   <data name="CommonAgentDescriptionForScheduleExports" xml:space="preserve">
-    <value>توضیح عمومی پاسخگو برای صدور برنامه ریزی</value>
+    <value>توضیح عمومی پاسخگو برای صدور زمانبندی</value>
   </data>
   <data name="JusticeValues" xml:space="preserve">
     <value>مقادیر بی طرف</value>
@@ -8068,7 +8068,7 @@
     <value>اجتناب</value>
   </data>
   <data name="ScheduleAuditTrailReport" xml:space="preserve">
-    <value>زمان بندی ممیزی </value>
+    <value>زمانبندی ممیزی </value>
   </data>
   <data name="NetStaffFCAdj" xml:space="preserve">
     <value>پیش بینی تنظیم شده کارمند</value>
@@ -8293,7 +8293,7 @@
     <value>فعال کردن پاسخگو های در حال کار</value>
   </data>
   <data name="WrongNumberOfDayOffsInSchedulePeriod" xml:space="preserve">
-    <value>روزهای تعطیل در دوره زمان بندی {0} است و {1} روز غیر قابل برنامه ریزی است</value>
+    <value>روزهای تعطیل در دوره زمان بندی {0} است و {1} روز غیر قابل زمانبندی است</value>
   </data>
   <data name="SelectActivitiesIncludedInMaster" xml:space="preserve">
     <value>فعالیت هایی را انتخاب کنید می توانند به عنوان فعالیت اصلی در نظر گرفته شوند</value>
@@ -8749,10 +8749,30 @@
     <value>زمان بندی تغییر کرده است. این درخواست مجددا باید پذیرفته شود</value>
   </data>
   <data name="UnhandledExceptionMessage" xml:space="preserve">
-    <value>Teleopti WFM با مشکلی مواجه شده است و برنامه باید بسته شود.برای مشکلی که پیش آمده است متاسفیم .اگر مابین برنامه ای بوده اید ،ممکن است اطلاعات شما از بین برود.                                                                                   خواهشمند است در مورد  این خطا اطلاعات درستی ارائه نمایید ،  با کلیک بر روی "ارسال گزارش با ایمیل "     برنامه پیش فرض ارسال ایمیل اجرا می شود لطفا خطا را طبق مراحل زیر گزارش نمایید .                                                                1- مراحل ایجاد خطا را مرحله به مرحله ثبت  کنید.                2-اطلاعات در مورد اینکه شما روی چه اطلاعاتی کار می کردید.                                                                                 3- تهیه تصویر از خطا با Teleopti WFM در پیش زمینه :                                                                                                                                                                                               شما همپنین میتوانید پیغام خطای مورد نظر را کپی و در صفحه اصلی  ایمیل الصاق کنید.                                                                                                                                                                     با تشکر                                                                           Teleoti R&amp;D         </value>
+    <value>برنامه با مشکلی مواجه شده است و باید بسته شود. از اینکه این اتفاق افتاد متاسف هستیم. اگر در میانه انجام کاری بودید، برخی از تغییرات احتمالاً از بین رفته است.
+
+برای اینکه بتوانیم بهتر به شما کمک کنیم از شما در خواست داریم که بر روی کلید  فرستادن  گزارش پستی کنید تا برنامه پیشفرض پستی الکترونیکی باز شود. حال لطفاً اطلاعات زیر را اضافه کنید:
+
+مراحل لازم برای ایجاد دوباره اشکال
+اینکه با چه داده های کار میکردید
+چند تصویر از محیط خطا
+
+شما میتوانید کپی از متن خطا را نیز در ایمیل قرار دهید
+
+سپاس
+Teleopti R&amp;D
+</value>
   </data>
   <data name="UnhandledExceptionEmailBody" xml:space="preserve">
-    <value>برای ارایه خدمات بهتر ، قابل تقدیر است که اطلاعات زیر را برای ما فراهم کنید:                                                            1- مراحل ایجاد خطا را مرحله به مرحله ثبت کنید.                  2-اطلاعات در مورد اینکه شما روی چه اطلاعاتی کار می کردید.                                                                                 3- تهیه تصویر از خطا با Teleopto WFM در پیش زمینه :                                                                                                                                                  با تشکر                                                                           Teleoti R&amp;D         </value>
+    <value>برای ارایه خدمات بهتر ، قابل تقدیر است که اطلاعات زیر را برای ما فراهم کنید: 
+
+مراحل لازم برای ایجاد دوباره اشکال
+اینکه با چه داده های کار میکردید
+چند تصویر از محیط خطا
+ 
+
+سپاس
+Teleopti R&amp;D</value>
   </data>
   <data name="MeetingLastAttendeeQuestionRemoveOneParameter" xml:space="preserve">
     <value>این آخرین زمان انتظار است برای این جلسه .مایل هستید این جلسه را حذف کنید "{0}" ؟</value>
@@ -8947,7 +8967,7 @@
     <value>خلاصه</value>
   </data>
   <data name="MonthSchedule" xml:space="preserve">
-    <value>برنامه ریزی ماهیانه</value>
+    <value>زمانبندی ماهیانه</value>
   </data>
   <data name="SecondShort" xml:space="preserve">
     <value>s</value>
@@ -9034,7 +9054,7 @@
     <value>شما به هیچ تیمی دسترسی ندارید</value>
   </data>
   <data name="ScheduleMustBeReloaded" xml:space="preserve">
-    <value>برنامه ریزی باید دوباره بارگذاری شود</value>
+    <value>زمانبندی باید دوباره بارگذاری شود</value>
   </data>
   <data name="SeniorityPoints" xml:space="preserve">
     <value>نکات مهمتر :</value>
@@ -9085,7 +9105,7 @@
     <value>دست کم یک روز نمی تواند زمان بندی شود</value>
   </data>
   <data name="AdherenceReportSettingCalculationMethodReadyTimeVsContractScheduleTime" xml:space="preserve">
-    <value>زمان آمادگی در مقابل زمان برنامه ریزی شده قراردادی.</value>
+    <value>زمان آمادگی در مقابل زمان زمانبندی شده قراردادی.</value>
   </data>
   <data name="QuestionSkillDoesNotContainWorkload" xml:space="preserve">
     <value>مهارت شما شامل هیچ حجم کاری نیست ، آیا مایل هستید یک حجم کاری جدید ایجاد کنید؟</value>
@@ -9169,7 +9189,7 @@
     <value>نمونه روز با تراکم  کاری</value>
   </data>
   <data name="BlockFinderTypeSchedulePeriod" xml:space="preserve">
-    <value>دوره برنامه ریزی</value>
+    <value>دوره زمانبندی</value>
   </data>
   <data name="YouShouldWorkParameterHDotYourPreferencesCanNowResultInParameterHToParameterHDot" xml:space="preserve">
     <value>شما باید {0} ساعت کار کنید.برتری  شما الان می تواند بین {1} ساعت تا {2} ساعت  نتیجه دهد.</value>
@@ -9544,31 +9564,31 @@
     <value>رتبه</value>
   </data>
   <data name="AbsenceReport" xml:space="preserve">
-    <value>گزارشگیری غیبت</value>
+    <value>گزارشگیری مرخصی </value>
   </data>
   <data name="AbsencesAvailableForReport" xml:space="preserve">
-    <value>غیبت های مجاز برای گزارش غیبت</value>
+    <value>مرخصی های مجاز برای گزارش مرخصی </value>
   </data>
   <data name="AbsenceCanNotBeReported" xml:space="preserve">
-    <value>غیبت نمی تواند گزارش داده شود.</value>
+    <value>مرخصی نمی تواند گزارش داده شود.</value>
   </data>
   <data name="Publish" xml:space="preserve">
     <value>انتشار...</value>
   </data>
   <data name="PublishSchedulesForColon" xml:space="preserve">
-    <value>انتشار برنامه ریزی برای:</value>
+    <value>انتشار زمانبندی برای:</value>
   </data>
   <data name="PublisSchedulesToDateColon" xml:space="preserve">
-    <value>انتشار برنامه ریزی به:</value>
+    <value>انتشار زمانبندی به:</value>
   </data>
   <data name="PublishSchedule" xml:space="preserve">
-    <value>انتشار برنامه ریزی</value>
+    <value>انتشار زمانبندی</value>
   </data>
   <data name="StartTimeShouldBeEarlierThanEndTime" xml:space="preserve">
     <value>زمان شروع باید از زمان پایان کوچکتر باشد</value>
   </data>
   <data name="ReportAbsenceFor" xml:space="preserve">
-    <value>گزارش غیبت برای</value>
+    <value>گزارش مرخصی برای</value>
   </data>
   <data name="NoAgentsAvailableForBulletinBoard" xml:space="preserve">
     <value>هیچ شیفتی که با شیفت شما برای مبادله منطبق باشد موجود نیست</value>
@@ -9586,13 +9606,13 @@
     <value>برنامه ریزی شده</value>
   </data>
   <data name="UpdatingAbsence" xml:space="preserve">
-    <value>به روز رسانی غیبت برای</value>
+    <value>به روز رسانی مرخصی برای</value>
   </data>
   <data name="BackToWorkCannotBeGreaterThanAbsenceEnd" xml:space="preserve">
-    <value>زمان برگشت به کار نمی تواند از زمان پایان غیبت بیشتر باشد</value>
+    <value>زمان برگشت به کار نمی تواند از زمان پایان مرخصی بیشتر باشد</value>
   </data>
   <data name="BackToWorkTextPrompt" xml:space="preserve">
-    <value>از غیبت بازگشته در:</value>
+    <value>از مرخصی بازگشته در:</value>
   </data>
   <data name="AnnounceShift" xml:space="preserve">
     <value>ارسال شفیفت برای مبادله</value>
@@ -9607,7 +9627,7 @@
     <value>تاریخ برای ارسال مبادله شیفت باید در دوره باز مبادله شیفت باشد</value>
   </data>
   <data name="PublishAnnouncementNoAbsence" xml:space="preserve">
-    <value>امکان ارسال برای مبادله شیفت در روز غیبت وجود ندارد!</value>
+    <value>امکان ارسال برای مبادله شیفت در روز مرخصی وجود ندارد!</value>
   </data>
   <data name="AllTeamMembersMustBeLoaded" xml:space="preserve">
     <value>همه اعضای تیم باید اضافه شوند</value>
@@ -9781,6 +9801,1228 @@
     <value>تاریخ مجاز باید بین امروز و تاریخ ارسال مبادله شیفت باشد!</value>
   </data>
   <data name="AnonymousBulletinBoardTrading" xml:space="preserve">
-    <value>مبادله تابلو اعلانات با نام مستعار</value>
+    <value>تابلوی تبادل شیفت به صورت ناشناس</value>
+  </data>
+  <data name="SearchHintForName" xml:space="preserve">
+    <value>جستجوی نام</value>
+  </data>
+  <data name="SureToMakeShiftTrade" xml:space="preserve">
+    <value>آیا مطمئن هستید که میخواهید این تبادل شیفت را انجام دهید؟</value>
+  </data>
+  <data name="LockBulletinBoardTrading" xml:space="preserve">
+    <value>تابلوی تبادل شیفت بر اساس ترتیب زمانی درخواست</value>
+  </data>
+  <data name="Bottom" xml:space="preserve">
+    <value>دکمه</value>
+  </data>
+  <data name="ManageSenioritySettings" xml:space="preserve">
+    <value>مدیریت تنظیمات ارشدیت </value>
+  </data>
+  <data name="RankShiftCategory" xml:space="preserve">
+    <value>رتبه دهی دسته بندی شیفت از بهتر به بدتر</value>
+  </data>
+  <data name="RankWorkingDays" xml:space="preserve">
+    <value>رتبه دهی  روزهای کاری از بهتر به بدتر</value>
+  </data>
+  <data name="Top" xml:space="preserve">
+    <value>بالا</value>
+  </data>
+  <data name="NoAbsenceToRemoveInCurrentShift" xml:space="preserve">
+    <value>هیچ مرخصی در شیفت حاضر برای حدف وجود ندارد</value>
+  </data>
+  <data name="AnnouncementTakenByOthers" xml:space="preserve">
+    <value>این شیفت توسط فرد دیگری برداشته شده است. لطفاً شیفت دیگری را از تبلوی تبادل شیفت انتخاب کنید</value>
+  </data>
+  <data name="ShowExcelReport" xml:space="preserve">
+    <value>نمایش گزارش اکسل</value>
+  </data>
+  <data name="ShowPDFReport" xml:space="preserve">
+    <value>نمایش گزارش پی دی اف</value>
+  </data>
+  <data name="ShowWordReport" xml:space="preserve">
+    <value>نمایش گزارش ورد</value>
+  </data>
+  <data name="DayOffValueColon" xml:space="preserve">
+    <value>تعداد روی های تعطیل:</value>
+  </data>
+  <data name="ShiftCategoryValueColon" xml:space="preserve">
+    <value>تعداد دسته های شیفت:</value>
+  </data>
+  <data name="InAdherence" xml:space="preserve">
+    <value>هم راستایی</value>
+  </data>
+  <data name="NeutralAdherence" xml:space="preserve">
+    <value>خنثی</value>
+  </data>
+  <data name="MaximumNumberOfReportRowsReached" xml:space="preserve">
+    <value>تعداد رکوردهای گرازش به حداکثر تعداد ممکن رسیده است</value>
+  </data>
+  <data name="NarrowToSeeAll" xml:space="preserve">
+    <value>برای دیدن همه داد ها معیارهای گزارش را تغییر دهیذ</value>
+  </data>
+  <data name="AddMustHave" xml:space="preserve">
+    <value>اضافه کردن روزهای الزامی</value>
+  </data>
+  <data name="RemoveMustHave" xml:space="preserve">
+    <value>حذف روزهای الزامی</value>
+  </data>
+  <data name="DoubleTextBoxGoldThresholdForAdherence" xml:space="preserve">
+    <value>مقدار سطح طلایی برای هم راستایی باید بیشتر از بقیه باشد</value>
+  </data>
+  <data name="DoubleTextBoxSilverThresholdForAdherence" xml:space="preserve">
+    <value>مقدار سطح نقره ای برای هم راستایی باید بیشتر ازسطح برنزی باشد</value>
+  </data>
+  <data name="GoldThresholdForAnsweredCallsValue" xml:space="preserve">
+    <value>مقدار سطح طلایی برای تماسهای پاسخ داده شده باید بیشتر از بقیه باشد</value>
+  </data>
+  <data name="SilverThresholdForAnsweredCallsValue" xml:space="preserve">
+    <value>مقدار سطح نقره ای برای تماسهای پاسخ داده شده باید بیشتر از سطح برنزی باشد</value>
+  </data>
+  <data name="TimeSpanTextBoxGoldThresholdForAHT" xml:space="preserve">
+    <value>مقدار سطح طلایی برای میانگین زمان  پاسخگویی باید کمتر از بقیه باشد</value>
+  </data>
+  <data name="TimeSpanTextBoxSilverThresholdsForAHT" xml:space="preserve">
+    <value>مقدار سطح نقره ای برای میانگین زمان  پاسخگویی باید کمتر از برنزی باشد</value>
+  </data>
+  <data name="CreateNewRole" xml:space="preserve">
+    <value>ایجاد نقش جدید</value>
+  </data>
+  <data name="DataFilterThreeDots" xml:space="preserve">
+    <value>فیلتر داده...</value>
+  </data>
+  <data name="Duplicate" xml:space="preserve">
+    <value>تکراری</value>
+  </data>
+  <data name="ManagePermissions" xml:space="preserve">
+    <value>مدیریت مجوزها</value>
+  </data>
+  <data name="ManagePermissionsIntro" xml:space="preserve">
+    <value>در اینجا تعیین میکنید که چه کسی به کدام بخش از سیستم دسترسی دارد</value>
+  </data>
+  <data name="NotSelectedItems" xml:space="preserve">
+    <value>موارد غیرفعال</value>
+  </data>
+  <data name="PermissionsFilterThreeDots" xml:space="preserve">
+    <value>فیلتر مجوزها...</value>
+  </data>
+  <data name="RoleFilterThreeDots" xml:space="preserve">
+    <value>فیلتر نقشها...</value>
+  </data>
+  <data name="SelectedItems" xml:space="preserve">
+    <value>موارد فعال</value>
+  </data>
+  <data name="PersonFinderFieldRole" xml:space="preserve">
+    <value>نقش</value>
+  </data>
+  <data name="NoGamificationSetting" xml:space="preserve">
+    <value>تنظیماتی برای بازی وجود ندارد</value>
+  </data>
+  <data name="SeatMap" xml:space="preserve">
+    <value>نفشه صندلیها</value>
+  </data>
+  <data name="SeatPlan" xml:space="preserve">
+    <value>برنامه ریزی صندلیها</value>
+  </data>
+  <data name="CheckingForecastingRequirements" xml:space="preserve">
+    <value>بازبینی الزامات پیش بینی</value>
+  </data>
+  <data name="IssuesText" xml:space="preserve">
+    <value>مشکلات</value>
+  </data>
+  <data name="MissingForecastFrom" xml:space="preserve">
+    <value>از این تاریخ پیش بینی وجود ندارد</value>
+  </data>
+  <data name="MissingSkills" xml:space="preserve">
+    <value>برای این مهارتها پیش بینی وجود ندارد</value>
+  </data>
+  <data name="NextPlanningPeriodMessage" xml:space="preserve">
+    <value>دوره برنامه ریزی بعدی از این تاریخ شروع میشود</value>
+  </data>
+  <data name="PlanningPeriodMissingMessage" xml:space="preserve">
+    <value>این الزامات برای زمان بندی دوره برنامه ریزی بعدی وجود ندارد:</value>
+  </data>
+  <data name="ToText" xml:space="preserve">
+    <value>به</value>
+  </data>
+  <data name="showMoreHeaderFields" xml:space="preserve">
+    <value>نشان دادن عنوانهای بیشتر</value>
+  </data>
+  <data name="AdherenceCannotBeEmpty" xml:space="preserve">
+    <value>هم راستایی نمیتواند خالی بماند</value>
+  </data>
+  <data name="NextPlanningPeriod" xml:space="preserve">
+    <value>دوره برنامه ریزی بعدی</value>
+  </data>
+  <data name="PlanningPeriod" xml:space="preserve">
+    <value>دوره برنامه ریزی</value>
+  </data>
+  <data name="DaysAreScheduled" xml:space="preserve">
+    <value>زمانبندی روزهای انجام شد</value>
+  </data>
+  <data name="ApplicationLogonExists" xml:space="preserve">
+    <value>نام کاربری {0} موجود است، لطفاً نام دیگری انتخاب کنید</value>
+  </data>
+  <data name="IdentityLogonExists" xml:space="preserve">
+    <value>نام {0} موجود است، لطفاً نام دیگری را انتخاب کنید</value>
+  </data>
+  <data name="AddGlobalAuthorizationLabel" xml:space="preserve">
+    <value>سطح جامع را برای دسترسی انتخاب کنید:</value>
+  </data>
+  <data name="AddSpecificAuthorizationLabel" xml:space="preserve">
+    <value>دسترسی مورد نظر را از فهرست زیر انتخاب کنید:</value>
+  </data>
+  <data name="Outbound" xml:space="preserve">
+    <value>خروجی</value>
+  </data>
+  <data name="ForecastAll" xml:space="preserve">
+    <value>پیش بینی همه</value>
+  </data>
+  <data name="Method" xml:space="preserve">
+    <value>روش </value>
+  </data>
+  <data name="GenerateForecastTip" xml:space="preserve">
+    <value>انجام پیش بینی</value>
+  </data>
+  <data name="PeriodSelectionTip" xml:space="preserve">
+    <value>انتخاب دوره زمانی</value>
+  </data>
+  <data name="ViewChartTip" xml:space="preserve">
+    <value>نمایش گراف روش</value>
+  </data>
+  <data name="SelectForecastPeriodIntro" xml:space="preserve">
+    <value>انتخاب دوره زمانی آینده برای پیش بینی</value>
+  </data>
+  <data name="ForecastPeriod" xml:space="preserve">
+    <value>دوره زمانی آینده</value>
+  </data>
+  <data name="ForecastPeriodLength" xml:space="preserve">
+    <value>دوره زمانی پیش بینی بیشتر از یک سال نمیتواند باشد</value>
+  </data>
+  <data name="ChangePlanningPeriodTo" xml:space="preserve">
+    <value>تغییر دوره زمانی به</value>
+  </data>
+  <data name="HavingRangeOf" xml:space="preserve">
+    <value>بازه زمانی</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteThisCampaign" xml:space="preserve">
+    <value>مطمئن هستید که میخواهید کمپین را حذف کنید؟</value>
+  </data>
+  <data name="CallListLength" xml:space="preserve">
+    <value>طول فهرست تماس</value>
+  </data>
+  <data name="Campaign" xml:space="preserve">
+    <value>کمپین</value>
+  </data>
+  <data name="CampaignName" xml:space="preserve">
+    <value>نام کمپین</value>
+  </data>
+  <data name="Campaigns" xml:space="preserve">
+    <value>کمپینها</value>
+  </data>
+  <data name="ConnectAHT" xml:space="preserve">
+    <value>اتصال میانگین زمان پاسخگویی ATH</value>
+  </data>
+  <data name="ConnectRate" xml:space="preserve">
+    <value>اتصال نرخ (%)</value>
+  </data>
+  <data name="DeleteCampaign" xml:space="preserve">
+    <value>حذف کمپین</value>
+  </data>
+  <data name="OutboundCampaigns" xml:space="preserve">
+    <value>کمپینهای خروجی</value>
+  </data>
+  <data name="Progress" xml:space="preserve">
+    <value>پیشرفت</value>
+  </data>
+  <data name="RPCAHT" xml:space="preserve">
+    <value>RPC AHT</value>
+  </data>
+  <data name="RPCR" xml:space="preserve">
+    <value>RPCR(%)</value>
+  </data>
+  <data name="TargetRate" xml:space="preserve">
+    <value>نزخ هدف (%)</value>
+  </data>
+  <data name="UnproductiveTime" xml:space="preserve">
+    <value>زمان غیر بهرور</value>
+  </data>
+  <data name="WorkingHours" xml:space="preserve">
+    <value>ساعتهای کاری</value>
+  </data>
+  <data name="PersonFinderFieldEmploymentNumber" xml:space="preserve">
+    <value>شماره استخدامی</value>
+  </data>
+  <data name="PersonFinderFieldFirstName" xml:space="preserve">
+    <value>نام</value>
+  </data>
+  <data name="PersonFinderFieldLastName" xml:space="preserve">
+    <value>نام خانوادگی</value>
+  </data>
+  <data name="PersonFinderFieldNote" xml:space="preserve">
+    <value>یادداشت</value>
+  </data>
+  <data name="SchedulePeriodNotInRange" xml:space="preserve">
+    <value>دوره زمانبندی در بازه دوره برنامه ریزی قرار ندارد</value>
+  </data>
+  <data name="TargetDayOffNotFulfilledMessage" xml:space="preserve">
+    <value>هدف {0} روز تعطیل  براورده نشده است</value>
+  </data>
+  <data name="UnsupportedTeamBlockOptimizationStep" xml:space="preserve">
+    <value>وقتی تیم یا بلاک انتخاب نشده است، مرحله بهینه سازی {0} انجام نمیشود</value>
+  </data>
+  <data name="ReportTimeoutMessage" xml:space="preserve">
+    <value>متاسفانه سیستم فعلاً مشغول است. سعی کنید معیارهای گزارش را محدود و دوباره امتحان کنید</value>
+  </data>
+  <data name="SeatPlanStatusError" xml:space="preserve">
+    <value>امروز به بعضی پاسخگوها نمیتوان صندلی اختصاص داد</value>
+  </data>
+  <data name="SeatPlanStatusInProgress" xml:space="preserve">
+    <value>برنامه ریزی صندلیها برای امروز در حال انجام است</value>
+  </data>
+  <data name="SeatPlanStatusNoSeatPlanned" xml:space="preserve">
+    <value>برای این تاریخ هیچ صندلی برنامه ریزی نشده است</value>
+  </data>
+  <data name="SeatPlanStatusOK" xml:space="preserve">
+    <value>به تمام پاسخگوها صندلی اختصاص داده شده است</value>
+  </data>
+  <data name="AgentCountTitle" xml:space="preserve">
+    <value>پاسخگو</value>
+  </data>
+  <data name="FilterLocations" xml:space="preserve">
+    <value>فیلتر مکانها</value>
+  </data>
+  <data name="LoadingSeatPlanStatus" xml:space="preserve">
+    <value>در حال بارگذاری</value>
+  </data>
+  <data name="NoLocationsAvailable" xml:space="preserve">
+    <value>هیچ مکانی موجود نیست</value>
+  </data>
+  <data name="PlanningPeriodsFor" xml:space="preserve">
+    <value>دوره برنامه ریزی برای</value>
+  </data>
+  <data name="PlanSeats" xml:space="preserve">
+    <value>برنامه ریزی صندلیها</value>
+  </data>
+  <data name="SeatCountTitle" xml:space="preserve">
+    <value>صندلیها</value>
+  </data>
+  <data name="SeatPlanSubmittedOK" xml:space="preserve">
+    <value>برنامه صندلیها با موفقیت ثبت شد</value>
+  </data>
+  <data name="TeamsOrLocationsAreUnselected" xml:space="preserve">
+    <value>تیمها یا مکانها انتخاب نشده اند</value>
+  </data>
+  <data name="CouldNotGetMessagesFromMessageBroker" xml:space="preserve">
+    <value>پیامی از واسط انتقال پیام نمیتوان دریافت کرد</value>
+  </data>
+  <data name="MyTeamSchedules" xml:space="preserve">
+    <value>زمانبندیهای تیم من</value>
+  </data>
+  <data name="CreateCampaign" xml:space="preserve">
+    <value>ایجاد کمپین</value>
+  </data>
+  <data name="EditCampaign" xml:space="preserve">
+    <value>ویرایش کمپین</value>
+  </data>
+  <data name="NeededPersonHours" xml:space="preserve">
+    <value>ساعتهای لازم</value>
+  </data>
+  <data name="StartTimeAndEndTimeMustBeSet" xml:space="preserve">
+    <value>زمان شروع و پایان باید مشخص باشد</value>
+  </data>
+  <data name="CampaignCreated" xml:space="preserve">
+    <value>کمپین {0} ایجاد شد</value>
+  </data>
+  <data name="CampaignFailedCreation" xml:space="preserve">
+    <value>موفق به ایجاد کمپین {0} نشد</value>
+  </data>
+  <data name="CampaignFailedLoading" xml:space="preserve">
+    <value>موفق به بارگذاری کمپین {0} نشد</value>
+  </data>
+  <data name="CampaignFailedUpdate" xml:space="preserve">
+    <value>موفق به بروزرسانی کمپین {0} نشد</value>
+  </data>
+  <data name="CampaignUpdated" xml:space="preserve">
+    <value>کمپین {0} بروزرسانی شد</value>
+  </data>
+  <data name="LargeValueRange" xml:space="preserve">
+    <value>0 ~ 1000000</value>
+  </data>
+  <data name="NewActivityName" xml:space="preserve">
+    <value>نام فعالیت جدید</value>
+  </data>
+  <data name="RateRange" xml:space="preserve">
+    <value>0 ~ 100</value>
+  </data>
+  <data name="UseExistingActivity" xml:space="preserve">
+    <value>از فعالیت موجود استفاده کنید</value>
+  </data>
+  <data name="ValueRange" xml:space="preserve">
+    <value>0 ~ 9999</value>
+  </data>
+  <data name="NewCampaignName" xml:space="preserve">
+    <value>نام کمپین جدید</value>
+  </data>
+  <data name="BothFirstnameAndLastnameAreEmptyErrorMsgSemicolon" xml:space="preserve">
+    <value>نام و نام خانوادگی هر دو خالی هستند</value>
+  </data>
+  <data name="CampaignNameInvalid" xml:space="preserve">
+    <value>نام کمپین مورد نظر نامعتبر است. حداکثر 255 حرف قابل قبول است</value>
+  </data>
+  <data name="EmptyPasswordErrorMsgSemicolon" xml:space="preserve">
+    <value>رمز عبور خالی:</value>
+  </data>
+  <data name="Ongoing" xml:space="preserve">
+    <value>در حال اجرا</value>
+  </data>
+  <data name="NoLogonAccountErrorMsgSemicolon" xml:space="preserve">
+    <value>نام کاربری موجود نیست:</value>
+  </data>
+  <data name="RoleXNotExistErrorMsgSemicolon" xml:space="preserve">
+    <value>نقش {0} موجود نیست:</value>
+  </data>
+  <data name="TooLongApplicationUserIdErrorMsgSemicolon" xml:space="preserve">
+    <value>نام کاربری برنامه بسیار بلند است:</value>
+  </data>
+  <data name="TooLongFirstnameErrorMsgSemicolon" xml:space="preserve">
+    <value>نام بسیار بلند است</value>
+  </data>
+  <data name="TooLongLastnameErrorMsgSemicolon" xml:space="preserve">
+    <value>نام خانوادگی بسیار بلند است:</value>
+  </data>
+  <data name="WindowsUserNameIsInvalidErrorMsgSemicolon" xml:space="preserve">
+    <value>نام کاربری ویندوز نامعتبر است:</value>
+  </data>
+  <data name="DuplicatedApplicationLogonErrorMsgSemicolon" xml:space="preserve">
+    <value>نام کاربری برنامه تکراری است: </value>
+  </data>
+  <data name="DuplicatedWindowsLogonErrorMsgSemicolon" xml:space="preserve">
+    <value>نام کاربری ویندوز تکراری است:</value>
+  </data>
+  <data name="PasswordPolicyErrorMsgSemicolon" xml:space="preserve">
+    <value>رمز عبور نامعتبر است:</value>
+  </data>
+  <data name="NoApplicationLogonAccountErrorMsgSemicolon" xml:space="preserve">
+    <value>نام کاربری موجود نیست:</value>
+  </data>
+  <data name="AddBacklog" xml:space="preserve">
+    <value>کارهای غیر خودکار</value>
+  </data>
+  <data name="CampaignOverstaff" xml:space="preserve">
+    <value>زود</value>
+  </data>
+  <data name="CampaignUnderSLA" xml:space="preserve">
+    <value>دیر وقت</value>
+  </data>
+  <data name="ManualPlan" xml:space="preserve">
+    <value>برنامه عیر خودکار</value>
+  </data>
+  <data name="Backlog" xml:space="preserve">
+    <value>کارها</value>
+  </data>
+  <data name="DragAndDropExcelFilesHereOrClickToUpload" xml:space="preserve">
+    <value>فایلهای اکسل را به اینجا بکشید یا برای بارگذاری کلیک کنید</value>
+  </data>
+  <data name="ImportUsers" xml:space="preserve">
+    <value>وارد کردن کاربرها</value>
+  </data>
+  <data name="Healthy" xml:space="preserve">
+    <value>به موقع</value>
+  </data>
+  <data name="ReferToFileTemplate" xml:space="preserve">
+    <value>لطفاً به الگوی فایل رجوع کنید</value>
+  </data>
+  <data name="RejectedFiles" xml:space="preserve">
+    <value>فایلهای رد شده:</value>
+  </data>
+  <data name="GenerateReport" xml:space="preserve">
+    <value>گزارشهای گرفته شده</value>
+  </data>
+  <data name="NoReportForCurrentConditions" xml:space="preserve">
+    <value>برای شرایط موجود گزارشی وجود ندارد</value>
+  </data>
+  <data name="SeatPlanReport" xml:space="preserve">
+    <value>گزارش برنامه ریزی صندلیها</value>
+  </data>
+  <data name="ManuallyPlanned" xml:space="preserve">
+    <value>برنامه ریزی شده غیرخودکار</value>
+  </data>
+  <data name="AllPeopleOnCurrentPageSelected" xml:space="preserve">
+    <value>تمامی افراد این صفحه انتخاب شده اند</value>
+  </data>
+  <data name="SelectAllMatchedPeople" xml:space="preserve">
+    <value>برای انتخاب تمامی افراد این صفحه کلیک کنید</value>
+  </data>
+  <data name="ProcessFailedErrorColon" xml:space="preserve">
+    <value>خطای فرایند:</value>
+  </data>
+  <data name="SuccessfullyUpdatedPeopleCountColon" xml:space="preserve">
+    <value>با موفقیت بروز شده:</value>
+  </data>
+  <data name="StartDateMustBeEqualToOrEarlierThanEndDate" xml:space="preserve">
+    <value>تاریخ شروع باید برابر یا زودتر از تاریخ پایان باشد</value>
+  </data>
+  <data name="StartDateAndEndDateMustBeSet" xml:space="preserve">
+    <value>زمانهای شروع و پایان باید مشخص باشد</value>
+  </data>
+  <data name="ViewSeatBookings" xml:space="preserve">
+    <value>نمایش رزرو صندلیها</value>
+  </data>
+  <data name="YouMightNeedToChangeTheShiftBagAccordingly" xml:space="preserve">
+    <value>شاید لازم باشد سبد شیفت را تغییر دهید</value>
+  </data>
+  <data name="ClosedDay" xml:space="preserve">
+    <value>روزهای غیرفعال</value>
+  </data>
+  <data name="ViewReport" xml:space="preserve">
+    <value>نمایش گزارش</value>
+  </data>
+  <data name="ManagePeople" xml:space="preserve">
+    <value>مدیریت افراد</value>
+  </data>
+  <data name="AdjustSkill" xml:space="preserve">
+    <value>تنظیم مهارت</value>
+  </data>
+  <data name="ChangeShiftBag" xml:space="preserve">
+    <value>تغییر سبد شیفت</value>
+  </data>
+  <data name="PickAShiftBag" xml:space="preserve">
+    <value>انتخاب سبد شیفت</value>
+  </data>
+  <data name="SeatHasNoBookings" xml:space="preserve">
+    <value>رزروی وجود ندارد</value>
+  </data>
+  <data name="ConfirmRemoveCampaign" xml:space="preserve">
+    <value>مطمئن هستید مه میخواهید کمپین را حذف کنید</value>
+  </data>
+  <data name="RemoveCampaign" xml:space="preserve">
+    <value>حذف کمپین</value>
+  </data>
+  <data name="CampaignFailedRemove" xml:space="preserve">
+    <value>حذف کمپین با مشکل مواجه شد: {0}</value>
+  </data>
+  <data name="SelectedPeople" xml:space="preserve">
+    <value>افراد انتخاب شده</value>
+  </data>
+  <data name="ResetSelection" xml:space="preserve">
+    <value>لغو انتخابها</value>
+  </data>
+  <data name="SelectDateInChart" xml:space="preserve">
+    <value>لطفاً تاریخ های نمودار را انتخاب کنید</value>
+  </data>
+  <data name="MissingColumnX" xml:space="preserve">
+    <value>ستونهایی که موجود نیستند: {0}</value>
+  </data>
+  <data name="TheSelectedFileCanNotBeAcceptedPleaseCheckTheFileType" xml:space="preserve">
+    <value>فایل انتخاب شده قابل قبول نیست. لطفاً فرمت فایل را بازبینی کنید</value>
+  </data>
+  <data name="SeatBookings" xml:space="preserve">
+    <value>رزرو صندلی</value>
+  </data>
+  <data name="FailedImportedCountColon" xml:space="preserve">
+    <value>عملیات وارد کردن با مشکل مواجه شد:</value>
+  </data>
+  <data name="InternalErrorXMsg" xml:space="preserve">
+    <value>خطای داخلی رخ داده است: {0}</value>
+  </data>
+  <data name="PleaseFindTheDownloadedExcelSheetToCheckTheError" xml:space="preserve">
+    <value>لطفاً برای جزئیات بیشتر خطا به فایل اکسل بارگذاری شده مراجعه کنید</value>
+  </data>
+  <data name="SuccessfullyImportedCountColon" xml:space="preserve">
+    <value> عملیات وارد کردن با موفقیت انجام شده:</value>
+  </data>
+  <data name="ApplicationUserIdShouldBeAValidEmailAddressErrorMsg" xml:space="preserve">
+    <value>نام کاربری باید آدرس ایمیل معتبری باشد:</value>
+  </data>
+  <data name="TooLongWindowsUserErrorMsgSemicolon" xml:space="preserve">
+    <value>نام کاربری ویندوز بسیار بلند است</value>
+  </data>
+  <data name="SeatBookingDeletedSuccessfully" xml:space="preserve">
+    <value>رزرو  صندلی {0} بخاطر {1} لغو شد</value>
+  </data>
+  <data name="CampaignFailedResetManual" xml:space="preserve">
+    <value>باید حداقل یک روز را انتخاب کنید</value>
+  </data>
+  <data name="CampaignThreshold" xml:space="preserve">
+    <value>آستانه کمپین</value>
+  </data>
+  <data name="RtaLoggedIn" xml:space="preserve">
+    <value>وارد شده</value>
+  </data>
+  <data name="RtaLoggedOut" xml:space="preserve">
+    <value>خارج شده</value>
+  </data>
+  <data name="ModifySkill" xml:space="preserve">
+    <value>تغییر مهارت</value>
+  </data>
+  <data name="SeatPlanResultDetailMessage" xml:space="preserve">
+    <value>از {0} درخواست رزرو صندلی {1} موفقیت آمیز و {2} ناموفق بود. {3} روز هم همچنان زمانبدی نشده است</value>
+  </data>
+  <data name="Seasonality" xml:space="preserve">
+    <value>فصلینگی</value>
+  </data>
+  <data name="ClearBackgroundImage" xml:space="preserve">
+    <value>حذف تصویر پس زمینه</value>
+  </data>
+  <data name="Image" xml:space="preserve">
+    <value>تصویر</value>
+  </data>
+  <data name="Seat" xml:space="preserve">
+    <value>صندلی</value>
+  </data>
+  <data name="SetBackgroundImage" xml:space="preserve">
+    <value>قرار دادن تصویر پس زمینه</value>
+  </data>
+  <data name="Text" xml:space="preserve">
+    <value>متن</value>
+  </data>
+  <data name="AlignBottom" xml:space="preserve">
+    <value>پایین چین</value>
+  </data>
+  <data name="AlignLeft" xml:space="preserve">
+    <value>چپ چین</value>
+  </data>
+  <data name="AlignRight" xml:space="preserve">
+    <value>راست چین</value>
+  </data>
+  <data name="AlignTop" xml:space="preserve">
+    <value>بالا چین</value>
+  </data>
+  <data name="BringToFront" xml:space="preserve">
+    <value>آوردن به جلو</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>ایجاد </value>
+  </data>
+  <data name="Dismiss" xml:space="preserve">
+    <value>حذف</value>
+  </data>
+  <data name="FlipItemHorizontally" xml:space="preserve">
+    <value>برعکس کردن افقی مورد انتخاب شده</value>
+  </data>
+  <data name="FlipItemVertically" xml:space="preserve">
+    <value>برعکس کردن عمودی مورد انتخاب شده</value>
+  </data>
+  <data name="GroupSelectedItems" xml:space="preserve">
+    <value>گروه کردن موارد انتخاب شده</value>
+  </data>
+  <data name="MoveBack" xml:space="preserve">
+    <value>بردن به عقب</value>
+  </data>
+  <data name="MoveForwards" xml:space="preserve">
+    <value>آوردن به جلو</value>
+  </data>
+  <data name="Rotate" xml:space="preserve">
+    <value>چرخش</value>
+  </data>
+  <data name="SendToBack" xml:space="preserve">
+    <value>فرستادن به عقب</value>
+  </data>
+  <data name="SpaceHorizontally" xml:space="preserve">
+    <value>انتخاب افقی موارد</value>
+  </data>
+  <data name="SpaceVertically" xml:space="preserve">
+    <value>انتخاب عمودی موارد</value>
+  </data>
+  <data name="RevertToLastSave" xml:space="preserve">
+    <value>بازگشت به آخرین وضعیت ذخیره شده</value>
+  </data>
+  <data name="UngroupItems" xml:space="preserve">
+    <value>لغو گروه کردن موارد</value>
+  </data>
+  <data name="NotAllowed" xml:space="preserve">
+    <value>مجاز نیست</value>
+  </data>
+  <data name="CreateAndManagePlanningPeriods" xml:space="preserve">
+    <value>ایجاد و مدیریت دوره های مختلف برنامه ریزی</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>پیش فرض</value>
+  </data>
+  <data name="PlanningPeriodIsScheduled" xml:space="preserve">
+    <value>دوره برنامه ریزی زمانبندی شد</value>
+  </data>
+  <data name="PlanningPeriods" xml:space="preserve">
+    <value>دوره های برنامه شده</value>
+  </data>
+  <data name="SelectedFiltersColon" xml:space="preserve">
+    <value>فیلترهای انتخاب شده:</value>
+  </data>
+  <data name="StartNext" xml:space="preserve">
+    <value>شروع بعدی</value>
+  </data>
+  <data name="DailyTotal" xml:space="preserve">
+    <value>مجموع روزانه</value>
+  </data>
+  <data name="SelectToModify" xml:space="preserve">
+    <value>انتخاب روزهای نمودار قبل از تغییر</value>
+  </data>
+  <data name="Modify" xml:space="preserve">
+    <value>تغییر</value>
+  </data>
+  <data name="AccessAllFunctions" xml:space="preserve">
+    <value>دسترسی به همه عملکردها:</value>
+  </data>
+  <data name="ChangesAreDisabled" xml:space="preserve">
+    <value>تغییرات برای نقشهای از پیش تعریف شده غیر فعال میباشد</value>
+  </data>
+  <data name="UnselectedItems" xml:space="preserve">
+    <value>موارد انتخاب نشده</value>
+  </data>
+  <data name="TooManyResultsForSearchKeywords" xml:space="preserve">
+    <value>نتیجه جستجو کلیدواژه (ها) از 500 مورد بیشتر میشود. لطفاً جستجوی خود را محدود کنید</value>
+  </data>
+  <data name="ValidationforFilter" xml:space="preserve">
+    <value>لطفاً یک فیلتر اضافه کنید</value>
+  </data>
+  <data name="BothOverrideAndCampaignAdded" xml:space="preserve">
+    <value>کمپین و لغو قبلی هر دو اضافه شد </value>
+  </data>
+  <data name="NameRequired" xml:space="preserve">
+    <value>نام الزامی است</value>
+  </data>
+  <data name="TotalAcwCaret" xml:space="preserve">
+    <value>مجموع ACW &gt;</value>
+  </data>
+  <data name="ScheduleIsRunning" xml:space="preserve">
+    <value>هشدار: سرور مشغول زمانبندی است. لطفاً بعداً دوباره امتحاب کنید</value>
+  </data>
+  <data name="TotalTalkTimeCaret" xml:space="preserve">
+    <value>مجموع زمان صحبت &gt;</value>
+  </data>
+  <data name="ChangePlanningPeriod" xml:space="preserve">
+    <value>تغییر دوره زمانی</value>
+  </data>
+  <data name="EditFilter" xml:space="preserve">
+    <value>تغییر فیلتر</value>
+  </data>
+  <data name="DeleteFilter" xml:space="preserve">
+    <value>حذف فیلتر</value>
+  </data>
+  <data name="PickAnAbsence" xml:space="preserve">
+    <value>انتخاب یک مرخصی </value>
+  </data>
+  <data name="ManageRules" xml:space="preserve">
+    <value>مدیریت قوانین</value>
+  </data>
+  <data name="AddLocation" xml:space="preserve">
+    <value>اضافه کردن مکان</value>
+  </data>
+  <data name="ManageMappings" xml:space="preserve">
+    <value>مدیریت نگاشت قوانین</value>
+  </data>
+  <data name="Mappings" xml:space="preserve">
+    <value>نگاشت قوانین</value>
+  </data>
+  <data name="Threshold" xml:space="preserve">
+    <value>آستانه</value>
+  </data>
+  <data name="IsAlarm" xml:space="preserve">
+    <value>هشدار</value>
+  </data>
+  <data name="createNewRuleset" xml:space="preserve">
+    <value>ایجاد موجوع قوانین جدید</value>
+  </data>
+  <data name="noSearchResults" xml:space="preserve">
+    <value>هیچ نتیجه ای پیدا نشد</value>
+  </data>
+  <data name="AlarmColor" xml:space="preserve">
+    <value>رنگ هشدار</value>
+  </data>
+  <data name="CannotBeDeletedBecauseItIsBeingUsedInMappings" xml:space="preserve">
+    <value>از آنجایی که در نگاشت استفاده شده است قابل حذف نیست</value>
+  </data>
+  <data name="SecondsSlashCalls" xml:space="preserve">
+    <value>ثانیه | تماس</value>
+  </data>
+  <data name="DaysAreSelectedFrom" xml:space="preserve">
+    <value>تعداد {0} روز از {1} تا {2} انتخاب شده است</value>
+  </data>
+  <data name="SelectedDayIs" xml:space="preserve">
+    <value>روز انتخاب شده {0} است</value>
+  </data>
+  <data name="OverrideCallsForCampaign" xml:space="preserve">
+    <value>تماسها و کمپین را برای سناریو بازنویسی کن</value>
+  </data>
+  <data name="NameCantBeMoreThan" xml:space="preserve">
+    <value>نام باید کمتر از 50 حرف باشد</value>
+  </data>
+  <data name="SecondsSpan" xml:space="preserve">
+    <value>ثانیه باید بین 1 تا 99 باشد</value>
+  </data>
+  <data name="ShrinkageSpan" xml:space="preserve">
+    <value>تعدیل نیرو باید بین 1 تا 99 باشد</value>
+  </data>
+  <data name="AllDaysAreClosed" xml:space="preserve">
+    <value>همه روزها بسته است</value>
+  </data>
+  <data name="LatestAcquiredTime" xml:space="preserve">
+    <value>آخرین زمان بدست آمده</value>
+  </data>
+  <data name="PageSize" xml:space="preserve">
+    <value>اندازه صفحه</value>
+  </data>
+  <data name="TotalRequestsCount" xml:space="preserve">
+    <value>مجموع تعداد درخواستها</value>
+  </data>
+  <data name="ClearOverride" xml:space="preserve">
+    <value>پاک کردن بازنویسی</value>
+  </data>
+  <data name="AddAbsenceSuccessedResult" xml:space="preserve">
+    <value>مرخصی ها با موفقیت به پاسخگوهای انتخاب شده اضافه شد</value>
+  </data>
+  <data name="CallsSlashDay" xml:space="preserve">
+    <value>تماس/روز</value>
+  </data>
+  <data name="NewSkill" xml:space="preserve">
+    <value>مهارت جدید</value>
+  </data>
+  <data name="Accuracy" xml:space="preserve">
+    <value>دقت</value>
+  </data>
+  <data name="ForecastMethodIDColon" xml:space="preserve">
+    <value> شناسه روش پیش بینی</value>
+  </data>
+  <data name="BestForecastMethod" xml:space="preserve">
+    <value>بهترین روش</value>
+  </data>
+  <data name="StaffingLevels" xml:space="preserve">
+    <value>سطح نیرو گیری</value>
+  </data>
+  <data name="WarningNoHistorícalData" xml:space="preserve">
+    <value>هشدار! هیچ داده تاریخی در دسترسی نیست</value>
+  </data>
+  <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
+    <value>دستور العمل:
+لیسانس را از این راه خریداری کنید: www.teleopti.com
+کلید فهالسازی را دریافت کنید
+کلید فعالسازی را بر روی دیسک ذخیره کنید
+اگر کار ناتمامی در سیستم دارید آن را قبل از اضافه کردن کلید ذخیره کنید
+کلید فعال سازی را از طریق برنامه از روی دیسک پیدا کنید
+کلید را اضافه کنید
+برنامه را ببندید
+زمانبندی من را برای فعالسازی امکانات جدید مجدداً راه اندازی کنید
+برنامه را دوباره اجرا کنید</value>
+  </data>
+  <data name="ProductActivationKeyV8" xml:space="preserve">
+    <value>سیستم حاضر بنا بر شرایط و تبصره های توافق لیسانس، تحت لیسانس {0} قرار دارد و کلید فعال سازی برنامه در تاریخ {1} منقضی خواهد شد.
+
+این کلید فعالسازی برای حداکثر {2} صندلی کافیست.
+
+نخسه اصلی: {5}
+
+ شمای کلید فعالسازی برنامه {3} است
+این موارد فعالسازی شده است
+{4}</value>
+  </data>
+  <data name="CreateSkill" xml:space="preserve">
+    <value>ایجاد مهارت</value>
+  </data>
+  <data name="AddCampaignIntro" xml:space="preserve">
+    <value>درصدی را برای افزایش یا کاهش تغریف کنید</value>
+  </data>
+  <data name="Overstaff" xml:space="preserve">
+    <value>مازاد نیرو</value>
+  </data>
+  <data name="SeatProductActivationKeyV8" xml:space="preserve">
+    <value>سیستم حاضر بنا بر شرایط و تبصره های توافق لیسانس، تحت لیسانس {0} قرار دارد و کلید فعال سازی برنامه در تاریخ {1} منقضی خواهد شد.
+
+این کلید فعالسازی برای حداکثر {2} صندلی کافیست.
+
+نخسه اصلی: {5}
+
+ شمای کلید فعالسازی برنامه {3} است
+این موارد فعالسازی شده است
+{4}</value>
+  </data>
+  <data name="TotalCallsCaret" xml:space="preserve">
+    <value>تمامی تماسها &lt;</value>
+  </data>
+  <data name="CallsCaret" xml:space="preserve">
+    <value>تماسها &lt;</value>
+  </data>
+  <data name="TalkTimeCaret" xml:space="preserve">
+    <value>زمان صحبت &lt;</value>
+  </data>
+  <data name="AcwCaret" xml:space="preserve">
+    <value>ACW &lt;</value>
+  </data>
+  <data name="ForecastValueOverride" xml:space="preserve">
+    <value>پیش بینیهای تغییر کرده</value>
+  </data>
+  <data name="CampaignAdded" xml:space="preserve">
+    <value>کمپین اضافه شده</value>
+  </data>
+  <data name="CouldNotApply" xml:space="preserve">
+    <value>تغییرات ثابل اعمال نیست. به خطاهای بالا مراجعه کنید</value>
+  </data>
+  <data name="Outliers" xml:space="preserve">
+    <value>دادهٔ پرت</value>
+  </data>
+  <data name="QueueStatWoOutliers" xml:space="preserve">
+    <value>آمار صف تماس بدون فیلتر</value>
+  </data>
+  <data name="Statistics" xml:space="preserve">
+    <value>آمار</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>پیامها</value>
+  </data>
+  <data name="Disable" xml:space="preserve">
+    <value>غیرفعال کردن</value>
+  </data>
+  <data name="Enable" xml:space="preserve">
+    <value>فعال کردن</value>
+  </data>
+  <data name="ForecastOverrideMsg" xml:space="preserve">
+    <value>تغییر و بازنویسی مقادیر پیش بینی شده</value>
+  </data>
+  <data name="With campaign" xml:space="preserve">
+    <value>همراه با کمپین</value>
+  </data>
+  <data name="SuccessTip" xml:space="preserve">
+    <value>موفق</value>
+  </data>
+  <data name="RunningForecast" xml:space="preserve">
+    <value>پیش بینی در حال انجام است</value>
+  </data>
+  <data name="ForecastWorkloadIntro" xml:space="preserve">
+    <value>این پیش بینی حاضر شماست. برای اینکه بتوانید تماسها را تغییر دهید، تعداد از روزها را در نمودار انتخاب کنید</value>
+  </data>
+  <data name="ClearForecastChart" xml:space="preserve">
+    <value>پاک کردن انتخاب ها روی نمودار</value>
+  </data>
+  <data name="ForecastDo" xml:space="preserve">
+    <value>پیش بینی</value>
+  </data>
+  <data name="AddAbsenceTotalResult" xml:space="preserve">
+    <value>تعداد {0} مرخصی با موفقیت اضافه شد و {1} مورد هم  ناموفق بود</value>
+  </data>
+  <data name="SwapShifts" xml:space="preserve">
+    <value>تبادل شیفتها</value>
+  </data>
+  <data name="ScheduleHasBeenChanged" xml:space="preserve">
+    <value>زمانبندی توسط دیگران تغییر کرده است. لطفاً زمانبندی را دوباره باز کنید</value>
+  </data>
+  <data name="CommandFailed" xml:space="preserve">
+    <value>عملیات مورد نظر با خطا مواجه شد. {0} </value>
+  </data>
+  <data name="RequestsHaveBeenApproved" xml:space="preserve">
+    <value>تعداد {0} تایید شد</value>
+  </data>
+  <data name="RequestsHaveBeenDenied" xml:space="preserve">
+    <value>تعداد {0} رد شد</value>
+  </data>
+  <data name="FailedToSwapShifts" xml:space="preserve">
+    <value>تبادل شیفت موفق نبود</value>
+  </data>
+  <data name="FinishedSwapShifts" xml:space="preserve">
+    <value>تبادل شیفت با موفقیت انجام شد</value>
+  </data>
+  <data name="RemoveAbsence" xml:space="preserve">
+    <value>حذف مرخصی </value>
+  </data>
+  <data name="AreYouSureToRemoveSelectedAbsence" xml:space="preserve">
+    <value>مطمئن هستید که میخواهید {0} مرخصی را از {1} حذف کنید؟</value>
+  </data>
+  <data name="FailedToRemoveAbsence" xml:space="preserve">
+    <value>حذف مرخصی های انتخاب شده نا موفق بود</value>
+  </data>
+  <data name="FinishedRemoveAbsence" xml:space="preserve">
+    <value>مرخصی با موفقیت حذف شد</value>
+  </data>
+  <data name="NoPermisionAddIntradayAbsenceForAgent" xml:space="preserve">
+    <value>شما مجوز لازم برای اضافه کردن مرخصی ساعتی برای {0} را ندارید</value>
+  </data>
+  <data name="NoPermissionAddFullDayAbsenceForAgent" xml:space="preserve">
+    <value>شما مجوز لازم برای اضافه کردن مرخصی روزانه برای {0} را ندارید</value>
+  </data>
+  <data name="NoPermissionToModifyPersonAbsence" xml:space="preserve">
+    <value>شما مجوز بازم برای تغییر مرخصی را ندارید</value>
+  </data>
+  <data name="ConnectionErrorMessage" xml:space="preserve">
+    <value>سرور قابل دسترس نیست. ارتباط اینترنت را چک کنید یا با مسئول فنی تماس بگیرید</value>
+  </data>
+  <data name="InternalErrorMessage" xml:space="preserve">
+    <value>خطایی در برنامه رخ داده است. با فرستادن گزارش خطا، ما را در بهبود برنامه یاری کنید</value>
+  </data>
+  <data name="LogonUserTimeZone" xml:space="preserve">
+    <value>منطقه زمانی شما</value>
+  </data>
+  <data name="RequestSubmitterTimeZone" xml:space="preserve">
+    <value>منطقه زمانی درخواست کننده</value>
+  </data>
+  <data name="FilterRoles" xml:space="preserve">
+    <value>فیلتر کردن نقشها</value>
+  </data>
+  <data name="InvalidDimensionsExpectingAnImageSmallerThan2000x4000" xml:space="preserve">
+    <value>اندازه تصویر معتبر نیست. اندازه باید کمتر از 2000 در 4000 باشد</value>
+  </data>
+  <data name="LoadImage" xml:space="preserve">
+    <value>باز کردن تصویر</value>
+  </data>
+  <data name="NotAJPEGSVGOrAPNG" xml:space="preserve">
+    <value>فرمت تصویر یکی از این سه مورد نیست: JPEG, SVG, PNG</value>
+  </data>
+  <data name="RequestsHaveNotBeenApproved" xml:space="preserve">
+    <value>تعداد {0} درخواست تایید شد</value>
+  </data>
+  <data name="RequestsHaveNotBeenDenied" xml:space="preserve">
+    <value>تعداد {0} درخواست رد شد</value>
+  </data>
+  <data name="PresentTenseSchedule" xml:space="preserve">
+    <value>زمانبندی</value>
+  </data>
+  <data name="SelectedRequestsInfo" xml:space="preserve">
+    <value>تعداد {0} از {1} درخواست انتخاب شد</value>
+  </data>
+  <data name="DayOffRules" xml:space="preserve">
+    <value>قوانین روز تعطیل</value>
+  </data>
+  <data name="NewDayOffRule" xml:space="preserve">
+    <value>قوانین روز تعطیل جدید</value>
+  </data>
+  <data name="AgentsSuccessfullyScheduled" xml:space="preserve">
+    <value>پاسخگو یا با موفقیت زمانبندی شدند</value>
+  </data>
+  <data name="CriticalUnderstaffingColon" xml:space="preserve">
+    <value>کمبود نیرو شدید:</value>
+  </data>
+  <data name="InvalidInput" xml:space="preserve">
+    <value>مقدار نامعتبر</value>
+  </data>
+  <data name="UnderstaffingColon" xml:space="preserve">
+    <value>کمبود نیرو:</value>
+  </data>
+  <data name="WeekendColon" xml:space="preserve">
+    <value>آخر هفته:</value>
+  </data>
+  <data name="OverstaffingColon" xml:space="preserve">
+    <value>مازاد نیرو:</value>
+  </data>
+  <data name="ClearCampaign" xml:space="preserve">
+    <value>حذف کمپین</value>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>من را بیاد داری؟</value>
+  </data>
+  <data name="MyTeam" xml:space="preserve">
+    <value>تیم من</value>
+  </data>
+  <data name="CurrentPlanningPeriodMessage" xml:space="preserve">
+    <value>این دوره برنامه ریزی از این تاریخ شروع خواهد شد</value>
+  </data>
+  <data name="AppliedFilters" xml:space="preserve">
+    <value>تنظیمات برای موارد زیر انجام شد:</value>
+  </data>
+  <data name="SeatBookingsList" xml:space="preserve">
+    <value>فهرست رزرو صندلیها</value>
+  </data>
+  <data name="SeatProperties" xml:space="preserve">
+    <value>مشخصات صندلیها</value>
+  </data>
+  <data name="IntraOptimize" xml:space="preserve">
+    <value>بهینه سازی روزانه</value>
+  </data>
+  <data name="ShowErrors" xml:space="preserve">
+    <value>نمایش خطاها</value>
+  </data>
+  <data name="Anonymous" xml:space="preserve">
+    <value>نامشخص</value>
+  </data>
+  <data name="InvalidNumber" xml:space="preserve">
+    <value>عدد نامعتبر</value>
+  </data>
+  <data name="ShowRightPanel" xml:space="preserve">
+    <value>نمایش پنل سمت راست</value>
+  </data>
+  <data name="ShowOnlyAbsence" xml:space="preserve">
+    <value>تنها مرخصیها را نمایش بده</value>
+  </data>
+  <data name="HidePanel" xml:space="preserve">
+    <value>پنهان کردن پنل</value>
+  </data>
+  <data name="DoubleClickHereToEditText" xml:space="preserve">
+    <value>برای تغییر متن دوبار کلیک کنید</value>
+  </data>
+  <data name="EnableWaitlisting" xml:space="preserve">
+    <value>صف انتظار را فعال کنید</value>
+  </data>
+  <data name="AbsenceRequestForOneDayHasBeenWaitlisted" xml:space="preserve">
+    <value>درخواست مرخصی برای {0} فعلا مورد تایید نسیت و در نتیجه به صف انتظار منتقل میشود</value>
+  </data>
+  <data name="AbsenceRequestHasBeenWaitlisted" xml:space="preserve">
+    <value>درخواست مرخصی برای {0} تا {1} فعلا مورد تایید نسیت و در نتیجه به صف انتظار منتقل میشود</value>
+  </data>
+  <data name="Waitlisted" xml:space="preserve">
+    <value>در صف انتظار</value>
+  </data>
+  <data name="AddEmptyPeriod" xml:space="preserve">
+    <value>اضافه کردن دوره خالی</value>
+  </data>
+  <data name="DeletePeriod" xml:space="preserve">
+    <value>حذف دوره</value>
+  </data>
+  <data name="AgentDetails" xml:space="preserve">
+    <value>جزئیات پاسخگو</value>
+  </data>
+  <data name="InAlarm" xml:space="preserve">
+    <value>در هشدار</value>
+  </data>
+  <data name="SelectSites" xml:space="preserve">
+    <value>سایتهای انتخاب شده</value>
+  </data>
+  <data name="SelectTeams" xml:space="preserve">
+    <value>تیمهای انتخاب شده</value>
+  </data>
+  <data name="Personalize" xml:space="preserve">
+    <value>شخصی سازی</value>
+  </data>
+  <data name="ToggleLowLightFilter" xml:space="preserve">
+    <value>فیلتر نور کم</value>
+  </data>
+  <data name="NoHierarchiesExist" xml:space="preserve">
+    <value>برای واحد کسب کار حاضر هیچ سایت و تیمی وجود ندارد</value>
+  </data>
+  <data name="ToggleAll" xml:space="preserve">
+    <value>فعال سازی همه</value>
+  </data>
+  <data name="WaitlistPosition" xml:space="preserve">
+    <value>نوبت در صف انتظار</value>
+  </data>
+  <data name="LoadedColon" xml:space="preserve">
+    <value>باز شده:</value>
+  </data>
+  <data name="RemoveEntireAbsenceForMultiDayPersonAbsence" xml:space="preserve">
+    <value>حذف تمامی مرخصی های چند روزه</value>
+  </data>
+  <data name="ToggleDarkTheme" xml:space="preserve">
+    <value>حالت تاریک</value>
+  </data>
+  <data name="CanNotModifyMyRole" xml:space="preserve">
+    <value>شما نمیتوانید نقش خود را تغییر دهید</value>
+  </data>
+  <data name="ProductActivationKeyMajorVersionWrong" xml:space="preserve">
+    <value>داشتن کلید فعال سازی نسخه 8 برنامه برای اجرای سیستم الزامیست. لطفاً با پشتیبانی تماس گرفته یا از مسئول مربوطه فایل لازم درخواست  کنید</value>
+  </data>
+  <data name="Replan" xml:space="preserve">
+    <value>برنامه ریزی دوباره</value>
+  </data>
+  <data name="ConfirmToggleAllPermissions" xml:space="preserve">
+    <value>این دکمه همه عملکرها را فعال میکند. از ادامه کار مطمئن هستید؟</value>
+  </data>
+  <data name="ConfirmToggleChildPermissions" xml:space="preserve">
+    <value>این دکمه همه عملکرها و زیر شاخه های آنها را غیر فعال میکند. از ادامه کار مطمئن هستید؟</value>
+  </data>
+  <data name="SameDay" xml:space="preserve">
+    <value>همان روز</value>
+  </data>
+  <data name="FailedMessageForAddingActivity" xml:space="preserve">
+    <value>هیچ فعالیتی را نمیتوان به پاسخگوهای انتخاب شده اختصاص داد</value>
+  </data>
+  <data name="SuccessfulMessageForAddingActivity" xml:space="preserve">
+    <value>فعالیتهای مورد نظر به پاسخگوهای انتخاب شده با موفقیت اضافه شد.</value>
+  </data>
+  <data name="SelectAnActivity" xml:space="preserve">
+    <value>فعالیتی را انتخاب کنید</value>
+  </data>
+  <data name="CouldNotRemoveAbsenceFromProtectedSchedule" xml:space="preserve">
+    <value>مرخصی را نمیتوان از زمانبندی حفاظت شده حذف کرد</value>
+  </data>
+  <data name="DenyReason" xml:space="preserve">
+    <value>علت رد درخواست</value>
+  </data>
+  <data name="ChangeWillAffectAgents" xml:space="preserve">
+    <value>این تغییر بر {0} اثر میگذارد</value>
+  </data>
+  <data name="RemoveActivity" xml:space="preserve">
+    <value>حذف فعالیت</value>
+  </data>
+  <data name="PersonsAreWriteProtected" xml:space="preserve">
+    <value>برای {0} پاسخگو زمانبندی تغییر ناپذیر وجود دارد</value>
+  </data>
+  <data name="MustSelectAtLeastOneAgent" xml:space="preserve">
+    <value>حداقل باید یک پاسخگو را انتخاب کنید</value>
+  </data>
+  <data name="MustSelectTwoAgentsToSwap" xml:space="preserve">
+    <value>برای تبادل باید دو پاسخگو را انتخاب کنید</value>
+  </data>
+  <data name="NoPermissionAddAgentActivity" xml:space="preserve">
+    <value>هیچ مجوزی برای اضافه کردن فعالیت به پاسخگوی {0} وجود ندارد</value>
+  </data>
+  <data name="NoPermissionRemoveAgentActivity" xml:space="preserve">
+    <value>هیچ مجوزی برای حذف فعالیت پاسخگوی {0} وجود ندارد</value>
+  </data>
+  <data name="AbsenceRequestForOneDayWasCancelled" xml:space="preserve">
+    <value>درخواست مرخصی {0} لغو شد و مرخصی از زمانبندی شما حذف میشود</value>
+  </data>
+  <data name="AbsenceRequestWasCancelled" xml:space="preserve">
+    <value>درخواست مرخصی {0} - {1} لغو شد و مرخصی از زمانبندی شما حذف میشود</value>
+  </data>
+  <data name="Cancelled" xml:space="preserve">
+    <value>لغو شده</value>
+  </data>
+  <data name="ModifySkillArea" xml:space="preserve">
+    <value>تغییر دسته مهارت</value>
+  </data>
+  <data name="CreateSkillArea" xml:space="preserve">
+    <value>ایجاد دسته مهارت</value>
+  </data>
+  <data name="ForecastedAverageHandleTime" xml:space="preserve">
+    <value>میانگین زمان پاسخگویی پیش بینی شده</value>
+  </data>
+  <data name="IncomingTraffic" xml:space="preserve">
+    <value>ترافیک ورودی</value>
+  </data>
+  <data name="IntradayIntroText" xml:space="preserve">
+    <value>اینجا میتوان ااطلاعات روزانه را مشاهده کرد با انتخاب یک مهارت یادسته شروع کنید.</value>
+  </data>
+  <data name="OfferedAverageHandleTime" xml:space="preserve">
+    <value>میانگین زمان پاسخگویی پیشنهادی</value>
+  </data>
+  <data name="SelectSkillArea" xml:space="preserve">
+    <value>انتخاب دسته مهارت</value>
+  </data>
+  <data name="ToggleIncludedSkills" xml:space="preserve">
+    <value>مهارتهای موجود را فعال کنید</value>
+  </data>
+  <data name="AreYouSureToRemoveSelectedActivity" xml:space="preserve">
+    <value>مطمئن هستید که میخواهید {0} فعالیت را از  {1} پاسخگو حذف کنید؟</value>
+  </data>
+  <data name="SuccessfulMessageForRemovingActivity" xml:space="preserve">
+    <value>فعالیتها از پاسخگوهای انتخاب شده حذف شد</value>
+  </data>
+  <data name="FailedMessageForRemovingActivity" xml:space="preserve">
+    <value>فعالیتها را نمیتوان از پاسخگوهای انتخاب شده برداشت</value>
+  </data>
+  <data name="CouldNotCancelRequestNoAbsence" xml:space="preserve">
+    <value>درخواست مرخصی برای {0} بر {1} را نمیتوان لغو کرد زیرا هیچ مرخصی مرتبطی پیدا نشد</value>
+  </data>
+  <data name="CouldNotCancelRequestNoAbsenceMultiDay" xml:space="preserve">
+    <value>درخواست مرخصی برای {0}  از {1} تا {2} را نمیتوان لغو کرد زیرا هیچ مرخصی مرتبطی پیدا نشد</value>
+  </data>
+  <data name="RequestsHaveBeenCancelled" xml:space="preserve">
+    <value>تعداد {0} درخواست لغو شد</value>
+  </data>
+  <data name="RequestsHaveNotBeenCancelled" xml:space="preserve">
+    <value>تعداد {0} درخواست لغو نشد</value>
+  </data>
+  <data name="CancelRequest" xml:space="preserve">
+    <value>لغو درخواست</value>
+  </data>
+  <data name="CanOnlyCancelApprovedAbsenceRequest" xml:space="preserve">
+    <value>درخواست مرخصی برای {0} بر {1} را نمیتوان لغو کرد زیرا تایید نشده است</value>
+  </data>
+  <data name="CanOnlyCancelApprovedAbsenceRequestMultiDay" xml:space="preserve">
+    <value>درخواست مرخصی برای {0} بر {1} تا {2} را نمیتوان لغو کرد زیرا تایید نشده است</value>
+  </data>
+  <data name="AreYouSureYouWishToCancelAbsence" xml:space="preserve">
+    <value>مطمئن هستید که میخواهید درخواست مرخصی را لغو کنید؟</value>
+  </data>
+  <data name="CancelAbsenceRequest" xml:space="preserve">
+    <value>لغو درخواست مرخصی تایید شده</value>
+  </data>
+  <data name="CancelAbsenceRequestDescription" xml:space="preserve">
+    <value>اگر این درخواست مرخصی تایید شده را لغو کنید آنگاه هر مرخصی ناشی از این درخواست نیز از زمانبندی پاسخگو حذف میشود</value>
   </data>
 </root>
