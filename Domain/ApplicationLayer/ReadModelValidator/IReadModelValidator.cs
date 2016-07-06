@@ -5,6 +5,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 {
 	public interface IReadModelValidator
 	{
-		void Validate(ValidateReadModelType types,DateTime start,DateTime end,Action<ReadModelValidationResult> reportProgress);	
+		void Validate(ValidateReadModelType types,DateTime start,DateTime end);
+		void ClearResult(ValidateReadModelType types);
 	}
 }

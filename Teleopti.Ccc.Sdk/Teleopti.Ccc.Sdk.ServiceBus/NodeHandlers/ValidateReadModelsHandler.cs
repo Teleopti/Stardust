@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			_componentContext = componentContext;
 
 		}
-		[AsSystem, UnitOfWork]
+		[AsSystem]
 		public virtual void Handle(ValidateReadModelsEvent parameters, CancellationTokenSource cancellationTokenSource,
 			Action<string> sendProgress)
 		{

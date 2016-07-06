@@ -31,11 +31,11 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		private readonly IStardustSender _stardustSender;
 		private readonly IToggleManager _toggleManager;
 		private readonly IHangfireUtilities _hangfireUtilities;
-		private readonly IEventPublisher _publisher;
+		private readonly IReadModelValidator _readModelValidator;
 
 		public HealthCheckApiController(IMessagePopulatingServiceBusSender populatingPublisher,
 												  IEtlJobStatusRepository etlJobStatusRepository, IEtlLogObjectRepository etlLogObjectRepository,
-												  IStardustSender stardustSender, IToggleManager toggleManager, IHangfireUtilities hangfireUtilities, IEventPublisher publisher)
+												  IStardustSender stardustSender, IToggleManager toggleManager, IHangfireUtilities hangfireUtilities, IReadModelValidator readModelValidator)
 		{
 			_populatingPublisher = populatingPublisher;
 			_etlJobStatusRepository = etlJobStatusRepository;
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 			_stardustSender = stardustSender;
 			_toggleManager = toggleManager;
 		    _hangfireUtilities = hangfireUtilities;
-			_publisher = publisher;
+			_readModelValidator = readModelValidator;
 		}
 
 		[HttpGet, UnitOfWork, Route("api/HealthCheck/CheckBus")]
@@ -178,6 +178,25 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 			});
 			return Ok(jobId);
 		}
+
+		[HttpGet, Route("HealthCheck/ClearCheckReadModelResult")]
+		public virtual IHttpActionResult ClearCheckReadModelResult()
+		{
+			var targets = ValidateReadModelType.ScheduleProjectionReadOnly;
+			if(_toggleManager.IsEnabled(Toggles.HealthCheck_ValidateReadModelPersonScheduleDay_39421))
+			{
+				targets |= ValidateReadModelType.PersonScheduleDay;
+			}
+
+			if(_toggleManager.IsEnabled(Toggles.HealthCheck_ValidateReadModelScheduleDay_39423))
+			{
+				targets |= ValidateReadModelType.ScheduleDay;
+			}
+			_readModelValidator.ClearResult(targets);
+			return Ok();
+		}
+
+
 
 		[HttpGet, Route("HealthCheck/FixScheduleProjectionReadOnly")]
 		public virtual IHttpActionResult FixScheduleProjectionReadOnly()

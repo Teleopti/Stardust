@@ -33,20 +33,24 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 		public FakeScheduleDayReadModelRepository ScheduleDayReadModelRepository;
 		public FakeScheduleStorage ScheduleStorage;
 		public ReadModelScheduleDayValidator ReadModelScheduleDayValidator;
+		public FakeReadModelValidationResultPersistor ReadModelValidationResultPersistor;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<Domain.ApplicationLayer.ReadModelValidator.ReadModelValidator>().For<IReadModelValidator>();
 			system.UseTestDouble<ReadModelPersonScheduleDayValidator>().For<IReadModelPersonScheduleDayValidator>();
-			system.UseTestDouble<ReadModelScheduleProjectionReadOnlyValidator>().For<IReadModelScheduleProjectionReadOnlyValidator>();
+			system.UseTestDouble<ReadModelScheduleProjectionReadOnlyValidator>()
+				.For<IReadModelScheduleProjectionReadOnlyValidator>();
 			system.UseTestDouble<ReadModelScheduleDayValidator>().For<IReadModelScheduleDayValidator>();
 
-			system.UseTestDouble<FakePersonAssignmentWriteSideRepository>().For<IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>>();
+			system.UseTestDouble<FakePersonAssignmentWriteSideRepository>()
+				.For<IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>>();
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
 			system.UseTestDouble<FakePersonScheduleDayReadModelFinder>().For<IPersonScheduleDayReadModelFinder>();
 			system.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
 			system.UseTestDouble<FakeScheduleDayReadModelRepository>().For<IScheduleDayReadModelRepository>();
+			system.UseTestDouble<FakeReadModelValidationResultPersistor>().For<IReadModelValidationResultPersister>();
 		}
 
 		[Test]
@@ -58,15 +62,9 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			var dateTimePeriod = new DateTimePeriod(2016, 1, 1, 8, 2016, 1, 1,  17);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, dateTimePeriod);
 			ScheduleStorage.Add(personAssignment);
-			
-			var result = new List<ReadModelValidationResult>();
-			Action<ReadModelValidationResult> action = x =>
-			{
-				result.Add(x);
-			};
-			
-			Target.Validate(ValidateReadModelType.ScheduleProjectionReadOnly,new DateTime(2016, 1, 1), new DateTime(2016, 1, 1), action);
-	
+						
+			Target.Validate(ValidateReadModelType.ScheduleProjectionReadOnly,new DateTime(2016, 1, 1), new DateTime(2016, 1, 1));
+			var result = ReadModelValidationResultPersistor.LoadAllInvalidScheduleProjectionReadOnly().ToList();
 			result.Count.Should().Be.EqualTo(1);
 			result.Single().PersonId.Should().Be.EqualTo(person.Id.Value);
 			result.Single().Date.Should().Be.EqualTo("2016-01-01".Date().Date);
@@ -97,14 +95,8 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 					ShortName = ""
 				});
 
-			var result = new List<ReadModelValidationResult>();
-			Action<ReadModelValidationResult> action = x =>
-			{
-				result.Add(x);
-			};
-			
-			Target.Validate(ValidateReadModelType.ScheduleProjectionReadOnly,new DateTime(2016, 1, 1), new DateTime(2016, 1, 1), action);
-	
+			Target.Validate(ValidateReadModelType.ScheduleProjectionReadOnly,new DateTime(2016, 1, 1), new DateTime(2016, 1, 1));
+			var result = ReadModelValidationResultPersistor.LoadAllInvalidScheduleProjectionReadOnly().ToList();
 			result.Count.Should().Be.EqualTo(1);
 			result.Single().PersonId.Should().Be.EqualTo(person.Id.Value);
 			result.Single().Date.Should().Be.EqualTo("2016-01-01".Date().Date);
@@ -137,13 +129,8 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 					ShortName = ""
 				});
 
-			var result = new List<ReadModelValidationResult>();
-			Action<ReadModelValidationResult> action = x =>
-			{
-				result.Add(x);
-			};
-			Target.Validate(ValidateReadModelType.ScheduleProjectionReadOnly, new DateTime(2016, 1, 1), new DateTime(2016, 1, 1), action);
-			
+			Target.Validate(ValidateReadModelType.ScheduleProjectionReadOnly, new DateTime(2016, 1, 1), new DateTime(2016, 1, 1));
+			var result = ReadModelValidationResultPersistor.LoadAllInvalidScheduleProjectionReadOnly().ToList();
 			result.Count.Should().Be.EqualTo(0);
 		}
 
@@ -165,15 +152,9 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			var dateTimePeriod = new DateTimePeriod(2016, 1, 1, 8, 2016, 1, 1, 17);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, dateTimePeriod);
 			ScheduleStorage.Add(personAssignment);
-
-			var result = new List<ReadModelValidationResult>();
-			Action<ReadModelValidationResult> action = x =>
-			{
-				result.Add(x);
-			};
-			
-			Target.Validate(ValidateReadModelType.PersonScheduleDay, new DateTime(2016, 1, 1), new DateTime(2016, 1, 1), action);
-
+						
+			Target.Validate(ValidateReadModelType.PersonScheduleDay, new DateTime(2016, 1, 1), new DateTime(2016, 1, 1));
+			var result = ReadModelValidationResultPersistor.LoadAllInvalidPersonScheduleDay().ToList();
 			result.Count.Should().Be.EqualTo(1);
 			result.Single().PersonId.Should().Be.EqualTo(person.Id.Value);
 			result.Single().Date.Should().Be.EqualTo("2016-01-01".Date().Date);
@@ -199,15 +180,9 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, dateTimePeriod);
 			ScheduleStorage.Add(personAssignment);
 			PersonAssignmentRepository.Add(personAssignment);
-
-			var result = new List<ReadModelValidationResult>();
-			Action<ReadModelValidationResult> action = x =>
-			{
-				result.Add(x);
-			};
-			
-			Target.Validate(ValidateReadModelType.PersonScheduleDay,new DateTime(2016, 1, 1), new DateTime(2016, 1, 1), action);
-
+				
+			Target.Validate(ValidateReadModelType.PersonScheduleDay,new DateTime(2016, 1, 1), new DateTime(2016, 1, 1));
+			var result = ReadModelValidationResultPersistor.LoadAllInvalidPersonScheduleDay().ToList();
 			result.Count.Should().Be.EqualTo(0);
 		}
 
@@ -230,14 +205,9 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person,dateTimePeriod);
 			ScheduleStorage.Add(personAssignment);
 
-			var result = new List<ReadModelValidationResult>();
-			Action<ReadModelValidationResult> action = x =>
-			{
-				result.Add(x);
-			};
-			
-			Target.Validate(ValidateReadModelType.ScheduleDay,new DateTime(2016,1,1),new DateTime(2016,1,1),action);
-
+		
+			Target.Validate(ValidateReadModelType.ScheduleDay,new DateTime(2016,1,1),new DateTime(2016,1,1));
+			var result = ReadModelValidationResultPersistor.LoadAllInvalidScheduleDay().ToList();
 			result.Count.Should().Be.EqualTo(1);
 			result.Single().PersonId.Should().Be.EqualTo(person.Id.Value);
 			result.Single().Date.Should().Be.EqualTo("2016-01-01".Date().Date);
@@ -275,14 +245,8 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 				Label = "sd"
 			});
 
-			var result = new List<ReadModelValidationResult>();
-			Action<ReadModelValidationResult> action = x =>
-			{
-				result.Add(x);
-			};
-			
-			Target.Validate(ValidateReadModelType.ScheduleDay,new DateTime(2016,1,1),new DateTime(2016,1,1),action);
-
+			Target.Validate(ValidateReadModelType.ScheduleDay,new DateTime(2016,1,1),new DateTime(2016,1,1));
+			var result = ReadModelValidationResultPersistor.LoadAllInvalidScheduleDay().ToList();
 			result.Count.Should().Be.EqualTo(0);
 		}
 
@@ -302,15 +266,9 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			var dateTimePeriod = new DateTimePeriod(2016,1,1,8,2016,1,1,17);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person,dateTimePeriod);
 			ScheduleStorage.Add(personAssignment);
-
-			var result = new List<ReadModelValidationResult>();
-			Action<ReadModelValidationResult> action = x =>
-			{
-				result.Add(x);
-			};
 			
-			Target.Validate(ValidateReadModelType.ScheduleDay,new DateTime(2016,1,1),new DateTime(2016,1,1),action);
-
+			Target.Validate(ValidateReadModelType.ScheduleDay,new DateTime(2016,1,1),new DateTime(2016,1,1));
+			var result = ReadModelValidationResultPersistor.LoadAllInvalidScheduleDay().ToList();
 			result.Count.Should().Be.EqualTo(0);		
 		}
 
@@ -341,14 +299,8 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 				Label = "sd"
 			});
 
-			var result = new List<ReadModelValidationResult>();
-			Action<ReadModelValidationResult> action = x =>
-			{
-				result.Add(x);
-			};
-			
-			Target.Validate(ValidateReadModelType.ScheduleDay,new DateTime(2016,1,1),new DateTime(2016,1,1),action);
-
+			Target.Validate(ValidateReadModelType.ScheduleDay,new DateTime(2016,1,1),new DateTime(2016,1,1));
+			var result = ReadModelValidationResultPersistor.LoadAllInvalidScheduleDay().ToList();
 			result.Count.Should().Be.EqualTo(1);
 		}
 

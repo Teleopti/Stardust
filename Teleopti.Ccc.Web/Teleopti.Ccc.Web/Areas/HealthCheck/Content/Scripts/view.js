@@ -28,8 +28,10 @@ define([
 	};
 
 	var requestReadModelCheck = function (cb) {
-		http.get('HealthCheck/CheckReadModels', { start: new Date(vm.readModelCheckStartDate()).toISOString(), end: new Date(vm.readModelCheckEndDate()).toISOString() })
-			.done(cb);
+		http.get('HealthCheck/ClearCheckReadModelResult').done(function() {
+			http.get('HealthCheck/CheckReadModels', { start: new Date(vm.readModelCheckStartDate()).toISOString(), end: new Date(vm.readModelCheckEndDate()).toISOString() })
+				.done(cb);
+		});
 	};
 
 	var requestReadModelFix = function(cb) {

@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			system.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
 			system.UseTestDouble<FakeScheduleDayReadModelRepository>().For<IScheduleDayReadModelRepository>();
 			system.UseTestDouble<FakePersonScheduleDayReadModelPersister>().For<IPersonScheduleDayReadModelPersister>();
-			system.UseTestDouble<FakeReadModelValidationResultPersister>().For<IReadModelValidationResultPersister>();
+			system.UseTestDouble<FakeReadModelValidationResultPersistor>().For<IReadModelValidationResultPersister>();
 		}
 
 
@@ -149,45 +149,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			readModels.Should().Be.Empty();
 		}
 	}
-
-	internal class FakeReadModelValidationResultPersister :IReadModelValidationResultPersister
-	{
-		private readonly IList<ReadModelValidationResult> _invalidResults = new List<ReadModelValidationResult>();
-
-		public void SaveScheduleProjectionReadOnly(ReadModelValidationResult input)
-		{
-			_invalidResults.Add(input);
-		}
-
-		public void SavePersonScheduleDay(ReadModelValidationResult input)
-		{
-			_invalidResults.Add(input);
-		}
-
-		public void SaveScheduleDay(ReadModelValidationResult input)
-		{
-			_invalidResults.Add(input);
-		}
-
-		public IEnumerable<ReadModelValidationResult> LoadAllInvalidScheduleProjectionReadOnly()
-		{
-			return _invalidResults;
-		}
-
-		public IEnumerable<ReadModelValidationResult> LoadAllInvalidPersonScheduleDay()
-		{
-			return _invalidResults;
-		}
-
-		public IEnumerable<ReadModelValidationResult> LoadAllInvalidScheduleDay()
-		{
-			return _invalidResults;
-		}
-
-		public void Reset(ValidateReadModelType types)
-		{
-			_invalidResults.Clear();
-		}
-	}
+	
 #pragma warning restore 0649
 }
