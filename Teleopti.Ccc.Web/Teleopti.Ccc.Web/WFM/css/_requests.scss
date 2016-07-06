@@ -360,7 +360,7 @@
 		color: $text-color-muted;
 	}
 
-	.request-pending-reasons div{
+	.request-pending-reasons .ui-grid-cell-contents{
 		white-space:normal;
 		word-wrap:break-word;
 	}
