@@ -449,11 +449,12 @@ namespace Teleopti.Ccc.Domain.Common
 		public virtual void RemoveAllPersonPeriods()
 		{
 			var previousAssociations = InternalPersonPeriodCollection
+				.Where(x => x.Team.Site?.BusinessUnit != null)
 				.Select(x => new Association
 				{
 					BusinessUnitId = x.Team.Site.BusinessUnit.Id.GetValueOrDefault(),
-					SiteId= x.Team.Site.Id.GetValueOrDefault(),
-					TeamId= x.Team.Id.GetValueOrDefault(),
+					SiteId = x.Team.Site.Id.GetValueOrDefault(),
+					TeamId = x.Team.Id.GetValueOrDefault(),
 				})
 				.ToArray();
 			var earliestPersonPeriodStartDate = InternalPersonPeriodCollection.Min(x => x.StartDate);
@@ -472,8 +473,8 @@ namespace Teleopti.Ccc.Domain.Common
 				};
 			});
 		}
-		
-		public virtual IPersonPeriod Period(DateOnly dateOnly)
+
+	    public virtual IPersonPeriod Period(DateOnly dateOnly)
         {
             IPersonPeriod period = null;
 
