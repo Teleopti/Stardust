@@ -40,10 +40,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 										   | BusinessRuleFlags.DataPartOfAgentDay;
 			var rules = NewBusinessRuleCollection.GetRuleDescriptionsFromFlag(flag).ToList();
 			Assert.AreEqual(rules.Count, 3);
-			Assert.Greater(rules.IndexOf("Min Weekly work time"), -1);
-			Assert.Greater(rules.IndexOf("Weekly work time"), -1);
-			Assert.Greater(rules.IndexOf("Not allowed change"), -1);
-			Assert.AreEqual(rules.IndexOf("Shift Category"), -1);
+			Assert.Greater(rules.IndexOf("MinWeeklyWorkTime"), -1);
+			Assert.Greater(rules.IndexOf("WeeklyWorkTime"), -1);
+			Assert.Greater(rules.IndexOf("NotAllowedChange"), -1);
+			Assert.AreEqual(rules.IndexOf("ShiftCategory"), -1);
 		}
 
 		[Test]

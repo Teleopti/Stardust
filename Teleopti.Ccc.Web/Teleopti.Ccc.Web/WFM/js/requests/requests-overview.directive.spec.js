@@ -397,7 +397,7 @@
 			var existsBrokenRulesColmun;
 			angular.forEach(columnDefs,
 				function(columnDef) {
-					if (columnDef.displayName === "Broken Rules") {
+					if (columnDef.displayName === "BrokenRules") {
 						existsBrokenRulesColmun = true;
 					}
 				});

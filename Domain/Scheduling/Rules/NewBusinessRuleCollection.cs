@@ -57,37 +57,37 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			= new Dictionary<BusinessRuleFlags, string>
 			{
 				{
-					BusinessRuleFlags.DataPartOfAgentDay, "Not allowed change"
+					BusinessRuleFlags.DataPartOfAgentDay, "NotAllowedChange"
 				},
 				{
-					BusinessRuleFlags.MinWeeklyRestRule, "Weekly rest time"
+					BusinessRuleFlags.MinWeeklyRestRule, "WeeklyRestTime"
 				},
 				{
-					BusinessRuleFlags.MinWeekWorkTimeRule, "Min Weekly work time"
+					BusinessRuleFlags.MinWeekWorkTimeRule, "MinWeeklyWorkTime"
 				},
 				{
-					BusinessRuleFlags.NewDayOffRule, "Day Off"
+					BusinessRuleFlags.NewDayOffRule, "DayOff"
 				},
 				{
-					BusinessRuleFlags.NewMaxWeekWorkTimeRule, "Weekly work time"
+					BusinessRuleFlags.NewMaxWeekWorkTimeRule, "WeeklyWorkTime"
 				},
 				{
-					BusinessRuleFlags.NewNightlyRestRule, "Night rest"
+					BusinessRuleFlags.NewNightlyRestRule, "NightRest"
 				},
 				{
-					BusinessRuleFlags.NewPersonAccountRule, "Person Account"
+					BusinessRuleFlags.NewPersonAccountRule, "PersonAccount"
 				},
 				{
-					BusinessRuleFlags.NewShiftCategoryLimitationRule, "Shift Category"
+					BusinessRuleFlags.NewShiftCategoryLimitationRule, "ShiftCategory"
 				},
 				{
-					BusinessRuleFlags.NonMainShiftActivityRule, "Shift Activity"
+					BusinessRuleFlags.NonMainShiftActivityRule, "ShiftActivity"
 				},
 				{
-					BusinessRuleFlags.OpenHoursRule, "Skill Opening hours"
+					BusinessRuleFlags.OpenHoursRule, "SkillOpeningHours"
 				},
 				{
-					BusinessRuleFlags.WeekShiftCategoryLimitationRule, "Shift Category"
+					BusinessRuleFlags.WeekShiftCategoryLimitationRule, "ShiftCategory"
 				}
 			};
 		#endregion

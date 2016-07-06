@@ -203,7 +203,7 @@
 
 					if (toggleSvc.Wfm_Requests_Show_Deny_Reasons_39473) {
 						var brokenRulesColumn = {
-							displayName: 'Broken Rules',
+							displayName: 'BrokenRules',
 							field: 'GetBrokenRules()',
 							headerCellFilter: 'translate',
 							cellClass: 'request-broken-rules',

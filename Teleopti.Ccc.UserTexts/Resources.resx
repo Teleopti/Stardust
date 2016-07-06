@@ -14638,4 +14638,40 @@ These options are activated:
     <value>Organize Cascading Skills</value>
     <comment>Organize cascading skills</comment>
   </data>
+  <data name="NotAllowedChange" xml:space="preserve">
+    <value>Not allowed change</value>
+    <comment>Not allowed change</comment>
+  </data>
+  <data name="NightRest" xml:space="preserve">
+    <value>Night rest</value>
+    <comment>Night rest</comment>
+  </data>
+  <data name="WeeklyWorkTime" xml:space="preserve">
+    <value>Weekly work time</value>
+    <comment>Weekly work time</comment>
+  </data>
+  <data name="WeeklyRestTime" xml:space="preserve">
+    <value>Weekly rest time</value>
+    <comment>Weekly rest time</comment>
+  </data>
+  <data name="PersonAccount" xml:space="preserve">
+    <value>Person Account</value>
+    <comment>Person Account</comment>
+  </data>
+  <data name="SkillOpeningHours" xml:space="preserve">
+    <value>Skill Opening hours</value>
+    <comment>Skill Opening hours</comment>
+  </data>
+  <data name="ShiftActivity" xml:space="preserve">
+    <value>Shift Activity</value>
+    <comment>Shift Activity</comment>
+  </data>
+  <data name="MinWeeklyWorkTime" xml:space="preserve">
+    <value>Min Weekly work time</value>
+    <comment>Min Weekly work time</comment>
+  </data>
+  <data name="BrokenRules" xml:space="preserve">
+    <value>Broken Rules</value>
+    <comment>Broken Rules</comment>
+  </data>
 </root>

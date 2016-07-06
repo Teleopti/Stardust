@@ -3963,6 +3963,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Broken Rules.
+        /// </summary>
+        public static string BrokenRules {
+            get {
+                return ResourceManager.GetString("BrokenRules", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &amp;Browse.
         /// </summary>
         public static string Browse {
@@ -15596,6 +15605,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Min Weekly work time.
+        /// </summary>
+        public static string MinWeeklyWorkTime {
+            get {
+                return ResourceManager.GetString("MinWeeklyWorkTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Min work time.
         /// </summary>
         public static string MinWorkTime {
@@ -17525,6 +17543,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Night rest.
+        /// </summary>
+        public static string NightRest {
+            get {
+                return ResourceManager.GetString("NightRest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
         public static string No {
@@ -18214,6 +18241,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NotAllowed {
             get {
                 return ResourceManager.GetString("NotAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not allowed change.
+        /// </summary>
+        public static string NotAllowedChange {
+            get {
+                return ResourceManager.GetString("NotAllowedChange", resourceCulture);
             }
         }
         
@@ -20430,6 +20466,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Person {
             get {
                 return ResourceManager.GetString("Person", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Person Account.
+        /// </summary>
+        public static string PersonAccount {
+            get {
+                return ResourceManager.GetString("PersonAccount", resourceCulture);
             }
         }
         
@@ -26546,6 +26591,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shift Activity.
+        /// </summary>
+        public static string ShiftActivity {
+            get {
+                return ResourceManager.GetString("ShiftActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shift as overtime.
         /// </summary>
         public static string ShiftAsOvertime {
@@ -27679,6 +27733,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SkillNameIsInvalid {
             get {
                 return ResourceManager.GetString("SkillNameIsInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skill Opening hours.
+        /// </summary>
+        public static string SkillOpeningHours {
+            get {
+                return ResourceManager.GetString("SkillOpeningHours", resourceCulture);
             }
         }
         
@@ -32109,6 +32172,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Weekly {
             get {
                 return ResourceManager.GetString("Weekly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Weekly rest time.
+        /// </summary>
+        public static string WeeklyRestTime {
+            get {
+                return ResourceManager.GetString("WeeklyRestTime", resourceCulture);
             }
         }
         
