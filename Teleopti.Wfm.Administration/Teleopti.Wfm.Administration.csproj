@@ -197,6 +197,9 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\RtaStates.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="menuitem.html" />
     <Content Include="Content\angular-material.min.css" />
     <Content Include="Content\bootstrap-theme.css" />
@@ -292,6 +295,7 @@
     <Compile Include="Core\Hangfire\HangfireDashboardAuthorization.cs" />
     <Compile Include="Core\IRunWithUnitOfWork.cs" />
     <Compile Include="Core\NoCacheFilter.cs" />
+    <Compile Include="Core\RtaStateGroupCreator.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\DatabaseController.cs" />
@@ -339,7 +343,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>

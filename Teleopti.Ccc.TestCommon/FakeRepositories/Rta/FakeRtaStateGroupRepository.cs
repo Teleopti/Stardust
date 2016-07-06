@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
 	public class FakeRtaStateGroupRepository : IRtaStateGroupRepository
 	{
-		private readonly IList<IRtaStateGroup> _data = new List<IRtaStateGroup>();
+		private readonly List<IRtaStateGroup> _data = new List<IRtaStateGroup>();
 		
 		public void Add(IRtaStateGroup entity)
 		{
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public void AddRange(IEnumerable<IRtaStateGroup> entityCollection)
 		{
-			throw new NotImplementedException();
+			_data.AddRange(entityCollection);
 		}
 
 		public IUnitOfWork UnitOfWork

@@ -40,6 +40,7 @@ namespace Teleopti.Wfm.Administration.Core
 		private readonly Func<ICurrentUnitOfWork, IAvailableDataRepository> _availableDataRepository;
 		private readonly Func<ICurrentUnitOfWork, IKpiRepository> _kpiRepository;
 		private readonly Func<ICurrentUnitOfWork, ISkillTypeRepository> _skillTypeRepository;
+		private readonly Func<ICurrentUnitOfWork, IRtaStateGroupRepository> _rtaStateGroupRepository;
 
 		public CreateBusinessUnit(IDataSourcesFactory dataSourcesFactory,
 			IRunWithUnitOfWork runWithUnitOfWork,
@@ -49,7 +50,8 @@ namespace Teleopti.Wfm.Administration.Core
 			Func<ICurrentUnitOfWork, IApplicationRoleRepository> applicationRoleRepository,
 			Func<ICurrentUnitOfWork, IAvailableDataRepository> availableDataRepository,
 			Func<ICurrentUnitOfWork, IKpiRepository> kpiRepository,
-			Func<ICurrentUnitOfWork, ISkillTypeRepository> skillTypeRepository)
+			Func<ICurrentUnitOfWork, ISkillTypeRepository> skillTypeRepository,
+			Func<ICurrentUnitOfWork, IRtaStateGroupRepository> rtaStateGroupRepository)
 		{
 			_dataSourcesFactory = dataSourcesFactory;
 			_runWithUnitOfWork = runWithUnitOfWork;
@@ -60,6 +62,7 @@ namespace Teleopti.Wfm.Administration.Core
 			_availableDataRepository = availableDataRepository;
 			_kpiRepository = kpiRepository;
 			_skillTypeRepository = skillTypeRepository;
+			_rtaStateGroupRepository = rtaStateGroupRepository;
 		}
 
 		public void Create(Tenant tenant, string businessUnitName)
@@ -100,6 +103,9 @@ namespace Teleopti.Wfm.Administration.Core
 					systemUser.PermissionInformation.AddApplicationRole(administratorRole);
 				}
 				_personRepository(uow).Add(systemUser);
+
+				var rtaStateGroupCreator = new RtaStateGroupCreator(@"RtaStates.xml");
+				_rtaStateGroupRepository(uow).AddRange(rtaStateGroupCreator.RtaGroupCollection);
 			});
 		}
 

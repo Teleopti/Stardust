@@ -6,6 +6,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Wfm.Administration.Core;
 
 namespace Teleopti.Wfm.AdministrationTest.Core
@@ -23,6 +24,7 @@ namespace Teleopti.Wfm.AdministrationTest.Core
 		private IAvailableDataRepository _availableDataRepository;
 		private IKpiRepository _kpiRepository;
 		private ISkillTypeRepository _skillTypeRepository;
+		private IRtaStateGroupRepository _rtaStateGroupRepository;
 
 		[SetUp]
 		public void Setup()
@@ -36,8 +38,19 @@ namespace Teleopti.Wfm.AdministrationTest.Core
 			_availableDataRepository = new FakeAvailableDataRepository();
 			_kpiRepository = new FakeKpiRepository();
 			_skillTypeRepository = new FakeSkillTypeRepository();
+			_rtaStateGroupRepository = new FakeRtaStateGroupRepository();
 
-			_target = new CreateBusinessUnit(_dataSourcesFactory, _runWithUnitOfWork, uow => _businessUnitRepository, uow => _personRepository, uow => _scenarioRepository, uow => _applicationRoleRepository, uow => _availableDataRepository, uow => _kpiRepository, uow => _skillTypeRepository);
+			_target = new CreateBusinessUnit(
+				_dataSourcesFactory,
+				_runWithUnitOfWork,
+				uow => _businessUnitRepository,
+				uow => _personRepository,
+				uow => _scenarioRepository,
+				uow => _applicationRoleRepository,
+				uow => _availableDataRepository,
+				uow => _kpiRepository,
+				uow => _skillTypeRepository,
+				uow => _rtaStateGroupRepository);
 		}
 
 		[Test]
@@ -72,6 +85,9 @@ namespace Teleopti.Wfm.AdministrationTest.Core
 
 			var skillTypes = _skillTypeRepository.LoadAll();
 			skillTypes.Count.Should().Be.EqualTo(6);
+
+			var stateGroup = _rtaStateGroupRepository.LoadAll();
+			stateGroup.Count.Should().Be.EqualTo(1);
 		}
 	}
 }

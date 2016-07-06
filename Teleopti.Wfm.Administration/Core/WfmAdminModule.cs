@@ -67,6 +67,7 @@ namespace Teleopti.Wfm.Administration.Core
 			builder.Register<Func<ICurrentUnitOfWork, IAvailableDataRepository>>(context => uow => new AvailableDataRepository(uow));
 			builder.Register<Func<ICurrentUnitOfWork, IKpiRepository>>(context => uow => new KpiRepository(uow));
 			builder.Register<Func<ICurrentUnitOfWork, ISkillTypeRepository>>(context => uow => new SkillTypeRepository(uow));
+			builder.Register<Func<ICurrentUnitOfWork, IRtaStateGroupRepository>>(context => uow => new RtaStateGroupRepository(uow));
 			// OPTIONAL: Enable property injection into action filters.
 			builder.RegisterFilterProvider();
 		}
