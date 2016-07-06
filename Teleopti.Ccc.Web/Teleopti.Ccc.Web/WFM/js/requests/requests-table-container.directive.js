@@ -322,7 +322,7 @@
 							function(value) {
 								translatedBrokenRules.push($translate.instant(value));
 							});
-						return translatedBrokenRules.join(',');
+						return translatedBrokenRules.join(', ');
 					}
 					return brokenRules;
 				}
