@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.Domain.Common
 		    var nowDateOnly = new DateOnly(now.UtcDateTime());
 		    var period = Period(nowDateOnly);
 		    var periodStart = period?.StartDate ?? nowDateOnly;
-			return InternalPersonPeriodCollection.OrderByDescending(p => p.StartDate.Date)
+			return InternalPersonPeriodCollection
 			    .Where(p => p.StartDate < periodStart)
 			    .Select(x => new Association
 			    {

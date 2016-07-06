@@ -76,9 +76,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			{
 				if (!@event.PreviousAssociation.IsNullOrEmpty())
 					@event.PreviousAssociation.ForEach(
-						a => updateModel(modelFor(a.SiteId, a.TeamId), @event.PersonId, @event.Timestamp, movePersonFrom));
+						a =>
+						{
+							var model = _persister.Get(a.TeamId);
+							if (model != null)
+								updateModel(model, @event.PersonId, @event.Timestamp, movePersonFrom);
+						});
 				if (@event.TeamId != null)
-					updateModel(@event.PersonId, @event.Timestamp, @event.SiteId.Value, @event.TeamId.Value, movePersonTo);
+				{
+					var model = _persister.Get(@event.TeamId.Value);
+					if (model != null)
+						updateModel(model, @event.PersonId, @event.Timestamp, movePersonTo);
+				}
 			}
 			else
 			{
