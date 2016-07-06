@@ -267,6 +267,7 @@
     <Compile Include="Areas\MyTime\Controllers\ScheduleApiControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceTimeProviderCacheTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PersonPreferenceDayOccupationFactoryTest.cs" />
+    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\ScheduleValidationProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamSchedulePersonsProviderTest.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\PerformanceToolApiControllerTest.cs" />
     <Compile Include="Areas\Permissions\FakeApplicationFunctionsToggleFilter.cs" />

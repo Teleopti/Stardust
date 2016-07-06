@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.IoC
 			builder.RegisterType<MoveShiftLayerCommandHelper>().As<IMoveShiftLayerCommandHelper>().SingleInstance();
 			builder.RegisterType<TeamScheduleCommandHandlingProvider>().As<ITeamScheduleCommandHandlingProvider>().SingleInstance();
 			builder.RegisterType<SearchTermParser>().As<ISearchTermParser>().SingleInstance();
+			builder.RegisterType<ScheduleValidationProvider>().As<IScheduleValidationProvider>().SingleInstance();
 
 
 		}
