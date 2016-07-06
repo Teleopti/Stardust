@@ -22,6 +22,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
+#pragma warning disable 0649
 	[TestFixture, DomainTest]
 	class FixReadModelsEventHandlerTest : ISetup
 	{
@@ -188,4 +189,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_invalidResults.Clear();
 		}
 	}
+#pragma warning restore 0649
 }
