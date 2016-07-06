@@ -145,30 +145,31 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 		public void Handle(PersonTeamChangedEvent @event)
 		{
-			_eventPublisher.Publish(new PersonAssociationChangedEvent
-			{
-				Version = 2,
-				PersonId = @event.PersonId,
-				Timestamp = @event.Timestamp,
-				BusinessUnitId = @event.CurrentBusinessUnitId,
-				SiteId = @event.CurrentSiteId,
-				TeamId = @event.CurrentTeamId,
-				PreviousAssociation = @event.PreviousAssociations
-			});
+			if (@event.CurrentTeamChanged)
+				_eventPublisher.Publish(new PersonAssociationChangedEvent
+				{
+					Version = 2,
+					PersonId = @event.PersonId,
+					Timestamp = @event.Timestamp,
+					BusinessUnitId = @event.CurrentBusinessUnitId,
+					SiteId = @event.CurrentSiteId,
+					TeamId = @event.CurrentTeamId,
+					PreviousAssociation = @event.PreviousAssociations
+				});
 		}
 
 		public void Handle(PersonPeriodChangedEvent @event)
 		{
 			if (@event.CurrentPersonPeriodChanged)
 				_eventPublisher.Publish(new PersonAssociationChangedEvent
-			{
-				Version = 2,
-				PersonId = @event.PersonId,
-				Timestamp = @event.Timestamp,
-				BusinessUnitId = @event.CurrentBusinessUnitId,
-				SiteId = @event.CurrentSiteId,
-				TeamId = @event.CurrentTeamId,
-				PreviousAssociation = @event.PreviousAssociation
+				{
+					Version = 2,
+					PersonId = @event.PersonId,
+					Timestamp = @event.Timestamp,
+					BusinessUnitId = @event.CurrentBusinessUnitId,
+					SiteId = @event.CurrentSiteId,
+					TeamId = @event.CurrentTeamId,
+					PreviousAssociation = @event.PreviousAssociation
 				});
 		}
 	}

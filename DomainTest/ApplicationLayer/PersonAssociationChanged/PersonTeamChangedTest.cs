@@ -23,11 +23,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 		public FakeDatabase Data;
 
 		[Test]
-		public void ShouldPublishWhenTeamChanges()
+		public void ShouldPublishWhenCurrentTeamChanges()
 		{
 			Now.Is("2016-02-01 00:00");
 			
-			Target.Handle(new PersonTeamChangedEvent());
+			Target.Handle(new PersonTeamChangedEvent {CurrentTeamChanged = true});
 
 			Publisher.PublishedEvents.Single().Should().Be.OfType<PersonAssociationChangedEvent>();
 		}
@@ -47,7 +47,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 				PersonId = personId,
 				CurrentBusinessUnitId = businessUnitId,
 				CurrentSiteId = siteId,
-				CurrentTeamId = teamId
+				CurrentTeamId = teamId,
+				CurrentTeamChanged = true
 			});
 
 			var result = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();
@@ -70,6 +71,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			{
 				Timestamp = "2016-02-01 00:00:01".Utc(),
 				PersonId = personId,
+				CurrentTeamChanged = true,
 				PreviousAssociations = new[]
 				{
 					new Association
@@ -87,6 +89,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			previousAssociation.BusinessUnitId.Should().Be(businessUnitId);
 			previousAssociation.SiteId.Should().Be(siteId);
 			previousAssociation.TeamId.Should().Be(teamId);
+		}
+
+		[Test]
+		public void ShouldNotPublishWhenItsNotCurrentTeamThatChanged()
+		{
+			Target.Handle(new PersonTeamChangedEvent { CurrentTeamChanged = false });
+
+			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Should().Be.Empty();
 		}
 	}
 }

@@ -109,6 +109,7 @@ namespace Teleopti.Ccc.Domain.Common
 			personPeriod.Team = team;
 			AddEvent(now =>
 			{
+				var currentTeamChanged = personPeriod.Period.Contains(new DateOnly(now.UtcDateTime()));
 				var info = currentAssociationInfo(now);
 				return new PersonTeamChangedEvent
 				{
@@ -116,6 +117,7 @@ namespace Teleopti.Ccc.Domain.Common
 					CurrentBusinessUnitId = info.BusinessUnitId,
 					CurrentSiteId = info.SiteId,
 					CurrentTeamId = info.TeamId,
+					CurrentTeamChanged = currentTeamChanged,
 					PreviousAssociations = new[] {previousAssociation}
 				};
 			});

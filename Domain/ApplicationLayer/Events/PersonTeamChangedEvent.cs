@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public Guid? CurrentBusinessUnitId { get; set; }
 		public Guid? CurrentSiteId { get; set; }
 		public Guid? CurrentTeamId { get; set; }
+		public bool CurrentTeamChanged { get; set; }
 		public IEnumerable<Association> PreviousAssociations { get; set; }
 	}
 }
