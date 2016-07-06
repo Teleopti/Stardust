@@ -100,12 +100,14 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public virtual void ChangeTeam(ITeam team, IPersonPeriod personPeriod)
 		{
-			var previousAssociation = new Association
-			{
-				BusinessUnitId = personPeriod.Team.Site.BusinessUnit.Id.GetValueOrDefault(),
-				SiteId = personPeriod.Team.Site.Id.GetValueOrDefault(),
-				TeamId = personPeriod.Team.Id.GetValueOrDefault(),
-			};
+			Association previousAssociation = null;
+			if (personPeriod.Team.Site?.BusinessUnit != null)
+				previousAssociation = new Association
+				{
+					BusinessUnitId = personPeriod.Team.Site.BusinessUnit.Id.GetValueOrDefault(),
+					SiteId = personPeriod.Team.Site.Id.GetValueOrDefault(),
+					TeamId = personPeriod.Team.Id.GetValueOrDefault(),
+				};
 			personPeriod.Team = team;
 			AddEvent(now =>
 			{
