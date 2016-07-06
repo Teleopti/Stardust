@@ -423,3 +423,7 @@
         outline: 1px dashed $gray054;
     }
 }
+
+.multiline-tooltip .md-content {
+    height: auto;
+}

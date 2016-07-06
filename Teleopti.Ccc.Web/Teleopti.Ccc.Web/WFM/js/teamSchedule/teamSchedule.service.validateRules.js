@@ -39,11 +39,11 @@
 			$timeout(function() {
 				fakeData = [{
 					PersonId:'4fd900ad-2b33-469c-87ac-9b5e015b2564',
-					WarningMessage: ["WarningMessage1"],
+					WarningMessage: ["Lorem ipsum dolor sit amet, consectetur adipiscing elit. ", "Quae cum dixisset paulumque institisset, Quid est? "],
 				},
 				{
 					PersonId:'10957ad5-5489-48e0-959a-9b5e015b2b5c',
-					WarningMessage: ["WarningMessage2"],
+					WarningMessage: ["Lorem ipsum dolor sit amet, consectetur adipiscing elit. ", "Quae cum dixisset paulumque institisset, Quid est? "],
 				}];
 
 				fakeData.forEach(function(warning){

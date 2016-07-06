@@ -30,7 +30,9 @@
 					<span class="validate-warning" ng-if="vm.showWarnings">					
 						<span ng-if="vm.validationIsDone() && vm.checkNightRestWarningMessage(personSchedule.PersonId).length > 0">
 							<span class="warning-icon"><i class="mdi mdi-account-alert"></i></span>
-							<md-tooltip md-direction="right">{{vm.checkNightRestWarningMessage(personSchedule.PersonId).join(" ")}}</md-tooltip>
+							<md-tooltip class="multiline-tooltip" md-direction="right">
+								<span ng-bind-html="vm.checkNightRestWarningMessage(personSchedule.PersonId) | br"></span>
+							</md-tooltip>
 						</span>
 						<md-progress-circular md-mode="indeterminate" md-diameter="15" ng-if="!vm.validationIsDone()"></md-progress-circular>
 					</span>
