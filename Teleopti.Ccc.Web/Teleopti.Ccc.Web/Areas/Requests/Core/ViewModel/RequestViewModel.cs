@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
 		public Guid PersonIdTo { get; set; }
 		public string PersonToTeam { get; set; }
 		public string PersonToTimeZone { get; set; }
-		public string BrokenRules { get; set; }
+		public IEnumerable<string> BrokenRules { get; set; }
 		public IEnumerable<ShiftTradeDayViewModel> ShiftTradeDays { get; set; }
 	}
 

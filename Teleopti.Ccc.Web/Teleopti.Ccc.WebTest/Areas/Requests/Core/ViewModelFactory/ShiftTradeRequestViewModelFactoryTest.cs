@@ -375,8 +375,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			};
 
 			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
-			((ShiftTradeRequestViewModel) requestListViewModel.Requests.FirstOrDefault())
-				.BrokenRules.Should().Be((BusinessRuleFlags.DataPartOfAgentDay | BusinessRuleFlags.MinWeeklyRestRule).ToString());
+			var brokenRules = ((ShiftTradeRequestViewModel)requestListViewModel.Requests.FirstOrDefault()).BrokenRules;
+			brokenRules.Count().Should().Be(2);
+			brokenRules.Contains("Not allowed change").Should().Be(true);
+			brokenRules.Contains("Weekly rest time").Should().Be(true);
 		}
 
 

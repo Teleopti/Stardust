@@ -38,12 +38,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			const BusinessRuleFlags flag = BusinessRuleFlags.MinWeekWorkTimeRule
 										   | BusinessRuleFlags.NewMaxWeekWorkTimeRule
 										   | BusinessRuleFlags.DataPartOfAgentDay;
-			var rules = NewBusinessRuleCollection.GetRulesFromFlag(flag).ToList();
+			var rules = NewBusinessRuleCollection.GetRuleDescriptionsFromFlag(flag).ToList();
 			Assert.AreEqual(rules.Count, 3);
-			Assert.Greater(rules.IndexOf(typeof (MinWeekWorkTimeRule)), -1);
-			Assert.Greater(rules.IndexOf(typeof (NewMaxWeekWorkTimeRule)), -1);
-			Assert.Greater(rules.IndexOf(typeof (DataPartOfAgentDay)), -1);
-			Assert.AreEqual(rules.IndexOf(typeof (NewShiftCategoryLimitationRule)), -1);
+			Assert.Greater(rules.IndexOf("Min Weekly work time"), -1);
+			Assert.Greater(rules.IndexOf("Weekly work time"), -1);
+			Assert.Greater(rules.IndexOf("Not allowed change"), -1);
+			Assert.AreEqual(rules.IndexOf("Shift Category"), -1);
 		}
 
 		[Test]

@@ -388,7 +388,7 @@
 		it("should get broken rules column", function() {
 			var test = setUpTarget();
 			setUpShiftTradeRequestData(test);
-			var brokenRules = "DataPartOfAgentDay,MinWeeklyRestRule";
+			var brokenRules = ["Not allowed change","Weekly rest time"];
 			test.scope.requests[0].BrokenRules = brokenRules;
 			test.scope.$digest();
 
@@ -403,7 +403,7 @@
 				});
 
 			expect(existsBrokenRulesColmun).toEqual(true);
-			expect(test.scope.requests[0].GetBrokenRules(), brokenRules);
+			expect(test.scope.requests[0].GetBrokenRules(), brokenRules.join(","));
 		});
 
 		xit('should load schedules for shift trade request', function () {

@@ -318,7 +318,7 @@
 					var translatedBrokenRules = new Array();
 					var brokenRules = row.BrokenRules;
 					if (brokenRules) {
-						angular.forEach(brokenRules.split(','),
+						angular.forEach(brokenRules,
 							function(value) {
 								translatedBrokenRules.push($translate.instant(value));
 							});

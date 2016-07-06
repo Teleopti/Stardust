@@ -53,41 +53,41 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				}
 			};
 
-		private readonly static Dictionary<BusinessRuleFlags, Type> flagAndRuleMapping
-			= new Dictionary<BusinessRuleFlags, Type>
+		private readonly static Dictionary<BusinessRuleFlags, string> flagAndRuleDescriptionMapping
+			= new Dictionary<BusinessRuleFlags, string>
 			{
 				{
-					BusinessRuleFlags.DataPartOfAgentDay, typeof (DataPartOfAgentDay)
+					BusinessRuleFlags.DataPartOfAgentDay, "Not allowed change"
 				},
 				{
-					BusinessRuleFlags.MinWeeklyRestRule, typeof (MinWeeklyRestRule)
+					BusinessRuleFlags.MinWeeklyRestRule, "Weekly rest time"
 				},
 				{
-					BusinessRuleFlags.MinWeekWorkTimeRule, typeof (MinWeekWorkTimeRule)
+					BusinessRuleFlags.MinWeekWorkTimeRule, "Min Weekly work time"
 				},
 				{
-					BusinessRuleFlags.NewDayOffRule, typeof (NewDayOffRule)
+					BusinessRuleFlags.NewDayOffRule, "Day Off"
 				},
 				{
-					BusinessRuleFlags.NewMaxWeekWorkTimeRule, typeof (NewMaxWeekWorkTimeRule)
+					BusinessRuleFlags.NewMaxWeekWorkTimeRule, "Weekly work time"
 				},
 				{
-					BusinessRuleFlags.NewNightlyRestRule, typeof (NewNightlyRestRule)
+					BusinessRuleFlags.NewNightlyRestRule, "Night rest"
 				},
 				{
-					BusinessRuleFlags.NewPersonAccountRule, typeof (NewPersonAccountRule)
+					BusinessRuleFlags.NewPersonAccountRule, "Person Account"
 				},
 				{
-					BusinessRuleFlags.NewShiftCategoryLimitationRule, typeof (NewShiftCategoryLimitationRule)
+					BusinessRuleFlags.NewShiftCategoryLimitationRule, "Shift Category"
 				},
 				{
-					BusinessRuleFlags.NonMainShiftActivityRule, typeof (NonMainShiftActivityRule)
+					BusinessRuleFlags.NonMainShiftActivityRule, "Shift Activity"
 				},
 				{
-					BusinessRuleFlags.OpenHoursRule, typeof (OpenHoursRule)
+					BusinessRuleFlags.OpenHoursRule, "Skill Opening hours"
 				},
 				{
-					BusinessRuleFlags.WeekShiftCategoryLimitationRule, typeof (WeekShiftCategoryLimitationRule)
+					BusinessRuleFlags.WeekShiftCategoryLimitationRule, "Shift Category"
 				}
 			};
 		#endregion
@@ -146,10 +146,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return ret;
 		}
 
-		public static IEnumerable<Type> GetRulesFromFlag(BusinessRuleFlags businessRuleFlags)
+		public static IEnumerable<string> GetRuleDescriptionsFromFlag(BusinessRuleFlags businessRuleFlags)
 		{
-			return (from kp in flagAndRuleMapping
-				where businessRuleFlags.HasFlag(kp.Key)
+			return (from kp in flagAndRuleDescriptionMapping
+					where businessRuleFlags.HasFlag(kp.Key)
 				select kp.Value).ToList();
 		}
 
