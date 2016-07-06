@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -48,7 +49,24 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			ThePeriodThatWasUsedForFindingSchedules = dateTimePeriod;
 
 			var scheduleData = _data
-				.Where(d => d.BelongsToScenario(scenario))			
+				.Where(d => d.BelongsToScenario(scenario))
+				.Where(d =>
+				{
+					var maybePersonAssignment = d as PersonAssignment;
+					var maybePersonAbsence = d as PersonAbsence;
+
+					if (maybePersonAssignment != null)
+					{
+						return dateTimePeriod.Contains(maybePersonAssignment.Period.StartDateTime);
+					}
+
+					if (maybePersonAbsence != null)
+					{
+						return maybePersonAbsence.Period.ContainsPart(dateTimePeriod);
+					}
+
+					return true;
+				})				
 				.ToArray();
 
 			if (scheduleData.IsEmpty())
