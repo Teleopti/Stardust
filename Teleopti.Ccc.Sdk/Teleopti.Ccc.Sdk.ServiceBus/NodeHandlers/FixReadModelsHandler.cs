@@ -2,7 +2,6 @@
 using System.Threading;
 using Autofac;
 using Stardust.Node.Interfaces;
-using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator;
 using Teleopti.Ccc.Domain.Logon;
@@ -18,7 +17,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			_componentContext = componentContext;
 		}
 
-		[AsSystem, UnitOfWork]
+		[AsSystem]
 		public virtual void Handle(FixReadModelsEvent parameters,
 			CancellationTokenSource cancellationTokenSource,
 			Action<string> sendProgress)
