@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -101,7 +103,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IScheduleDictionary FindSchedulesForPersons(IScheduleDateTimePeriod period, IScenario scenario, IPersonProvider personsProvider, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IEnumerable<IPerson> visiblePersons)
 		{
-			throw new NotImplementedException();
+			var dateTimePeriod = period.VisiblePeriod;
+			if(_personAssignment != null)
+				return ScheduleDictionaryForTest.WithPersonAssignment(scenario, dateTimePeriod, _personAssignment);
+			return new ScheduleDictionaryForTest(scenario, period.VisiblePeriod.StartDateTime, period.VisiblePeriod.EndDateTime);
 		}
 
 		public IPersistableScheduleData LoadScheduleDataAggregate(Type scheduleDataType, Guid id)

@@ -155,7 +155,9 @@
     <Compile Include="FakeData\AnalyticsScenarioFactory.cs" />
     <Compile Include="FakeData\AnalyticsWorkloadFactory.cs" />
     <Compile Include="FakeData\FakeAnalyticsUnitOfWorkFactory.cs" />
+    <Compile Include="FakeData\FakeBusinessRuleProvider.cs" />
     <Compile Include="FakeData\FakeIntervalLengthFetcher.cs" />
+    <Compile Include="FakeData\FakeNewBusinessRuleCollection.cs" />
     <Compile Include="FakeData\FakeSchedulingResultStateHolderProvider.cs" />
     <Compile Include="FakeData\FakeScheduleRangePersister.cs" />
     <Compile Include="FakeData\ConfigurablePermissions.cs" />
@@ -202,6 +204,7 @@
     <Compile Include="FakeRepositories\Rta\FakeAgentStatePersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeNumberOfAgentsInSiteReader.cs" />
     <Compile Include="FakeRepositories\Rta\FakeNumberOfAgentsInTeamReader.cs" />
+    <Compile Include="FakeData\FakeRequestFactory.cs" />
     <Compile Include="FakeUserUiCulture.cs" />
     <Compile Include="InfraTestConfigReader.cs" />
     <Compile Include="EncryptPassword.cs" />

@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IScheduleDay ScheduledDay(DateOnly day)
 		{
-			throw new NotImplementedException();
+			return ScheduleDayFactory.Create(day);
 		}
 
 		public bool Contains(IScheduleData scheduleData, bool includeNonPermitted)

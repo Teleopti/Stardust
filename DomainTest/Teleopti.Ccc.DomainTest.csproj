@@ -225,6 +225,7 @@
     <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\GroupingReadModelDataUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\RemovePartAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\UpdateFindPersonDataHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeRequestHandlerNoMockTest.cs" />
     <Compile Include="ApplicationLayer\SkillDay\AnalyticsForecastWorkloadUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\Workload\AnalyticsWorkloadUpdaterTest.cs" />
     <Compile Include="Common\ScheduleChangedEventDetector.cs" />

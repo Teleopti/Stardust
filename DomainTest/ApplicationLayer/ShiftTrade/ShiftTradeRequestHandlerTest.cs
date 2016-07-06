@@ -47,6 +47,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		private ILoadSchedulesForRequestWithoutResourceCalculation loader;
 		private IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService;
 		private IMessageBrokerComposite messageBroker;
+		private ISwapService swapService;
+		private IBusinessRuleProvider businessRuleProvider;
+		private INewBusinessRuleCollection newBusinessRuleCollection;
 
 		[SetUp]
 		public void Setup()
@@ -72,11 +75,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 					permissionChecker));
 			loader = MockRepository.GenerateMock<ILoadSchedulesForRequestWithoutResourceCalculation>();
 			messageBroker = new FakeMessageBrokerComposite();
-
+			swapService = new SwapService();
+			businessRuleProvider = MockRepository.GenerateMock<IBusinessRuleProvider>();
+			newBusinessRuleCollection = new FakeNewBusinessRuleCollection();
 			target = new ShiftTradeRequestHandler(schedulingResultState, validator, requestFactory,
 				scenarioRepository, personRequestRepository, scheduleStorage,
 				personRepository, personRequestCheckAuthorization, scheduleDictionarySaver,
-				loader, differenceCollectionService, messageBroker);
+				loader, differenceCollectionService, messageBroker, swapService, businessRuleProvider);
 		}
 
 		private void createRepositories()
@@ -193,7 +198,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			target = new ShiftTradeRequestHandler(schedulingResultState, validator, requestFactory,
 				scenarioRepository, personRequestRepository, scheduleStorage,
 				personRepository, personRequestCheckAuthorization, scheduleDictionarySaver,
-				loader, differenceCollectionService, messageBroker);
+				loader, differenceCollectionService, messageBroker, swapService, businessRuleProvider);
 
 			return target;
 		}
@@ -239,6 +244,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var approvalService = MockRepository.GenerateMock<IRequestApprovalService>();
 			var statusChecker = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();
 			var shiftTradeRequest = (IShiftTradeRequest)personRequest.Request;
+			var ruleResponse = new BusinessRuleResponse(typeof (NewPersonAccountRule), "no go", false, false,
+				new DateTimePeriod(), PersonFactory.CreatePersonWithId(), new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
+			var rules = new List<IBusinessRuleResponse> { ruleResponse };
+			((FakeNewBusinessRuleCollection)newBusinessRuleCollection).SetRuleResponse(rules);
+			newBusinessRuleCollection.Add(new NewPersonAccountRule(null, null));
 			INewBusinessRuleCollection ruleCollection = null;
 
 			personRequestRepository.Stub(x => x.Get(accept.PersonRequestId)).Return(personRequest);
@@ -247,16 +257,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			personRepository.Stub(x => x.Get(accept.AcceptingPersonId)).Return(toPerson);
 
 			requestFactory.Stub(x => x.GetRequestApprovalService(null, null, schedulingResultState))
-				.Constraints(Is.Matching<NewBusinessRuleCollection>(
+				.Constraints(Is.Matching<INewBusinessRuleCollection>(
 					b =>
 					{
-						ruleCollection = b;
+						ruleCollection = newBusinessRuleCollection;
 						return true;
 					}), Is.Equal(scenario), Is.Equal(schedulingResultState))
 				.Return(approvalService);
 			approvalService.Stub(x => x.ApproveShiftTrade(shiftTradeRequest)).Return(new List<IBusinessRuleResponse>());
 			requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker(schedulingResultState)).Return(statusChecker);
-
+			businessRuleProvider.Stub(x => x.GetAllBusinessRules(null))
+               .IgnoreArguments()
+               .Return(newBusinessRuleCollection);
 			target.Handle(accept);
 			Assert.AreEqual(false, personRequest.IsNew);
 			Assert.AreEqual(false, personRequest.IsPending);
@@ -291,7 +303,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			scenarioRepository.Stub(x => x.Current()).Return(scenario);
 			requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker(schedulingResultState)).Return(statusChecker);
 			scheduleDictionarySaver.Stub(x => x.SaveChanges(null, null)).IgnoreArguments().Throw(new ValidationException());
-
+			var ruleResponse = new BusinessRuleResponse(typeof (NewPersonAccountRule), "no go", false, false,
+				new DateTimePeriod(), PersonFactory.CreatePersonWithId(), new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
+			var rules = new List<IBusinessRuleResponse> { ruleResponse };
+			((FakeNewBusinessRuleCollection)newBusinessRuleCollection).SetRuleResponse(rules);
+			newBusinessRuleCollection.Add(new NewPersonAccountRule(null, null));
+			
+			businessRuleProvider.Stub(x => x.GetAllBusinessRules(null))
+			               .IgnoreArguments()
+			               .Return(newBusinessRuleCollection);
 			target.Handle(accept);
 			Assert.AreEqual(false, personRequest.IsNew);
 			Assert.AreEqual(false, personRequest.IsPending);
@@ -330,7 +350,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			personRequestRepository.Stub(x => x.Get(accept.PersonRequestId)).Return(personRequest);
 			scenarioRepository.Stub(x => x.Current()).Return(scenario);
 			requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker(schedulingResultState)).Return(statusChecker);
-
+			var ruleResponse = new BusinessRuleResponse(typeof (NewPersonAccountRule), "no go", false, false,
+				new DateTimePeriod(), PersonFactory.CreatePersonWithId(), new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
+			var rules = new List<IBusinessRuleResponse> { ruleResponse };
+			((FakeNewBusinessRuleCollection)newBusinessRuleCollection).SetRuleResponse(rules);
+			newBusinessRuleCollection.Add(new NewPersonAccountRule(null, null));
+			
+			businessRuleProvider.Stub(x => x.GetAllBusinessRules(null))
+			               .IgnoreArguments()
+			               .Return(newBusinessRuleCollection);
 			target.Handle(accept);
 			Assert.AreEqual(false, personRequest.IsNew);
 			Assert.AreEqual(true, personRequest.IsPending);

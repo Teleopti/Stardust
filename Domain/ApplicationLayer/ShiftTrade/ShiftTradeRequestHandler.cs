@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Specification;
@@ -38,6 +39,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
 		private readonly IPersonRequestCheckAuthorization _authorization;
 		private readonly IMessageBrokerComposite _messageBroker;
+		private readonly ISwapService _swapService;
+		private readonly IBusinessRuleProvider _businessRuleProvider;
 
 		private static readonly ISpecification<IShiftTradeRequest> shouldShiftTradeBeAutoGranted =
 			 new ShouldShiftTradeBeAutoGrantedSpecification();
@@ -55,7 +58,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			IScheduleDifferenceSaver scheduleDictionarySaver,
 			ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulingDataForRequestWithoutResourceCalculation,
 			IDifferenceCollectionService<IPersistableScheduleData> differenceService,
-			IMessageBrokerComposite messageBroker)
+			IMessageBrokerComposite messageBroker, ISwapService swapService, IBusinessRuleProvider businessRuleProvider)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_validator = validator;
@@ -69,6 +72,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			_loadSchedulingDataForRequestWithoutResourceCalculation = loadSchedulingDataForRequestWithoutResourceCalculation;
 			_differenceService = differenceService;
 			_messageBroker = messageBroker;
+			_swapService = swapService;
+			_businessRuleProvider = businessRuleProvider;
 
 			logger.Info("New instance of Shift Trade saga was created");
 		}
@@ -198,6 +203,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 						_schedulingResultStateHolder);
 
 					personRequest.Pending();
+					var ruleRepsonsesOnDay = getBusinessRuleResponses(shiftTradeRequest, allNewRules);
+					var ruleTypes = ruleRepsonsesOnDay.Select(r => r.TypeOfRule);
+					var rulesToSave = NewBusinessRuleCollection.GetFlagFromRules(ruleTypes);
+					personRequest.TrySetBrokenBusinessRule(rulesToSave);
 					if (shouldShiftTradeBeAutoGranted.IsSatisfiedBy(shiftTradeRequest))
 					{
 						logger.DebugFormat("Approving ShiftTrade: {0}", personRequest.GetSubject(new NormalizeText()));
@@ -233,6 +242,42 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 
 			clearStateHolder();
 		}
+
+		private List<IBusinessRuleResponse> getBusinessRuleResponses(IShiftTradeRequest shiftTradeRequest, INewBusinessRuleCollection allNewRules)
+	    {
+            var rangeClones = new Dictionary<IPerson, IScheduleRange>();
+            var modifiedParts = new List<IScheduleDay>();
+
+            foreach (var detail in shiftTradeRequest.ShiftTradeSwapDetails)
+            {
+                var part1 = _schedulingResultStateHolder.Schedules[detail.PersonFrom].ScheduledDay(detail.DateFrom);
+                var part2 = _schedulingResultStateHolder.Schedules[detail.PersonTo].ScheduledDay(detail.DateTo);
+                var selectedSchedules = new List<IScheduleDay> { part1, part2 };
+                modifiedParts.AddRange(swapParts(_schedulingResultStateHolder.Schedules, selectedSchedules));
+            }
+
+            var persList = new HashSet<IPerson>();
+            foreach (var part in modifiedParts)
+            {
+                persList.Add(part.Person);
+            }
+            foreach (var person in persList)
+            {
+                rangeClones.Add(person, (IScheduleRange)_schedulingResultStateHolder.Schedules[person].Clone());
+            }
+			
+            var brokenRules = allNewRules.CheckRules(rangeClones, modifiedParts);
+			
+            return new List<IBusinessRuleResponse>(brokenRules)
+        .FindAll(new BusinessRuleResponseContainsDateSpecification(shiftTradeRequest.ShiftTradeSwapDetails).IsSatisfiedBy).Where(r => !r.Overridden).ToList();
+
+        }
+
+        private IEnumerable<IScheduleDay> swapParts(IScheduleDictionary scheduleDictionary, IList<IScheduleDay> selectedSchedules)
+        {
+            _swapService.Init(selectedSchedules);
+            return _swapService.SwapAssignments(scheduleDictionary);
+        }
 
 		private void setUpdatedMessage(AcceptShiftTradeEvent @event, IPersonRequest personRequest)
 		{
@@ -283,7 +328,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 
 		private INewBusinessRuleCollection getAllNewBusinessRules(CultureInfo cultureInfo)
 		{
-			var rules = NewBusinessRuleCollection.All(_schedulingResultStateHolder);
+			var rules = _businessRuleProvider.GetAllBusinessRules(_schedulingResultStateHolder);
 			rules.Remove(typeof(NewPersonAccountRule));
 			rules.Remove(typeof(OpenHoursRule));
 			rules.Add(new NonMainShiftActivityRule());
@@ -369,10 +414,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			IScheduleStorage scheduleStorage, IPersonRepository personRepository,
 			IPersonRequestCheckAuthorization personRequestCheckAuthorization, IScheduleDifferenceSaver scheduleDictionarySaver,
 			ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulingDataForRequestWithoutResourceCalculation,
-			IDifferenceCollectionService<IPersistableScheduleData> differenceService, IMessageBrokerComposite messageBroker)
+			IDifferenceCollectionService<IPersistableScheduleData> differenceService, IMessageBrokerComposite messageBroker, ISwapService swapService, IBusinessRuleProvider businessRuleProvider)
 			: base(schedulingResultStateHolder, validator, requestFactory, scenarioRepository,
 				personRequestRepository, scheduleStorage, personRepository, personRequestCheckAuthorization, scheduleDictionarySaver,
-				loadSchedulingDataForRequestWithoutResourceCalculation, differenceService, messageBroker)
+				loadSchedulingDataForRequestWithoutResourceCalculation, differenceService, messageBroker, swapService, businessRuleProvider)
 		{ }
 
 		[AsSystem, UnitOfWork]
@@ -406,10 +451,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			IScheduleStorage scheduleStorage, IPersonRepository personRepository,
 			IPersonRequestCheckAuthorization personRequestCheckAuthorization, IScheduleDifferenceSaver scheduleDictionarySaver,
 			ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulingDataForRequestWithoutResourceCalculation,
-			IDifferenceCollectionService<IPersistableScheduleData> differenceService, IMessageBrokerComposite messageBroker)
+			IDifferenceCollectionService<IPersistableScheduleData> differenceService, IMessageBrokerComposite messageBroker, ISwapService swapService, IBusinessRuleProvider businessRuleProvider)
 			: base(schedulingResultStateHolder, validator, requestFactory, scenarioRepository,
 				personRequestRepository, scheduleStorage, personRepository, personRequestCheckAuthorization, scheduleDictionarySaver,
-				loadSchedulingDataForRequestWithoutResourceCalculation, differenceService, messageBroker)
+				loadSchedulingDataForRequestWithoutResourceCalculation, differenceService, messageBroker, swapService, businessRuleProvider)
 		{
 		}
 	}
