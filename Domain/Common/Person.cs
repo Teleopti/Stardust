@@ -367,21 +367,51 @@ namespace Teleopti.Ccc.Domain.Common
 			{
 				period.SetParent(this);
 				_personPeriodCollection.Add(period.StartDate, period);
-				addPersonPeriodChangedEvent();
+				AddEvent(now =>
+				{
+					var nowDateOnly = new DateOnly(now.UtcDateTime());
+					var currentChanged = period.Period.Contains(nowDateOnly);
+					var info = currentAssociationInfo(now);
+					var previousAssociation = previousAssociations(now);
+					return new PersonPeriodChangedEvent
+					{
+						PersonId = Id.GetValueOrDefault(),
+						CurrentBusinessUnitId = info.BusinessUnitId,
+						CurrentSiteId = info.SiteId,
+						CurrentTeamId = info.TeamId,
+						CurrentPersonPeriodChanged = currentChanged,
+						PreviousAssociation = previousAssociation
+					};
+				});
 			}
 		}
 
 	    public virtual void DeletePersonPeriod(IPersonPeriod period)
-		{
-			InParameter.NotNull("period", period);
-			_personPeriodCollection.Remove(period.StartDate);
-			addPersonPeriodChangedEvent();
-		}
+	    {
+		    InParameter.NotNull("period", period);
+		    _personPeriodCollection.Remove(period.StartDate);
+		    AddEvent(now =>
+		    {
+				var nowDateOnly = new DateOnly(now.UtcDateTime());
+				var currentChanged = period.Period.Contains(nowDateOnly);
+				var info = currentAssociationInfo(now);
+				var previousAssociation = previousAssociations(now);
+				return new PersonPeriodChangedEvent
+				{
+					PersonId = Id.GetValueOrDefault(),
+					CurrentBusinessUnitId = info.BusinessUnitId,
+					CurrentSiteId = info.SiteId,
+					CurrentTeamId = info.TeamId,
+					CurrentPersonPeriodChanged = currentChanged,
+					PreviousAssociation = previousAssociation
+				};
+		    });
+	    }
 
-		public virtual void ChangePersonPeriodStartDate(DateOnly startDate, IPersonPeriod personPeriod)
+	    public virtual void ChangePersonPeriodStartDate(DateOnly startDate, IPersonPeriod personPeriod)
 		{
 			InParameter.NotNull("personPeriod", personPeriod);
-
+			
 			var startDateBefore = personPeriod.StartDate;
 			_personPeriodCollection.Remove(startDateBefore);
 			while (_personPeriodCollection.ContainsKey(startDate))
@@ -390,17 +420,42 @@ namespace Teleopti.Ccc.Domain.Common
 			}
 			personPeriod.StartDate = startDate;
 			_personPeriodCollection.Add(startDate, personPeriod);
-			addPersonPeriodChangedEvent();
+			
+			AddEvent(now =>
+			{
+				var nowDateOnly = new DateOnly(now.UtcDateTime());
+				var currentChanged = true;
+				if (startDateBefore < nowDateOnly && startDate < nowDateOnly)
+					currentChanged = false;
+				if (startDateBefore > nowDateOnly && startDate > nowDateOnly)
+					currentChanged = false;
+				
+				var info = currentAssociationInfo(now);
+				var previousAssociation = previousAssociations(now);
+				return new PersonPeriodChangedEvent
+				{
+					PersonId = Id.GetValueOrDefault(),
+					CurrentBusinessUnitId = info.BusinessUnitId,
+					CurrentSiteId = info.SiteId,
+					CurrentTeamId = info.TeamId,
+					CurrentPersonPeriodChanged = currentChanged,
+					PreviousAssociation = previousAssociation
+				};
+			});
 		}
 
 		public virtual void RemoveAllPersonPeriods()
 		{
+			var previousAssociations = InternalPersonPeriodCollection
+				.Select(x => new Association
+				{
+					BusinessUnitId = x.Team.Site.BusinessUnit.Id.GetValueOrDefault(),
+					SiteId= x.Team.Site.Id.GetValueOrDefault(),
+					TeamId= x.Team.Id.GetValueOrDefault(),
+				})
+				.ToArray();
+			var earliestPersonPeriodStartDate = InternalPersonPeriodCollection.Min(x => x.StartDate);
 			_personPeriodCollection.Clear();
-			addPersonPeriodChangedEvent();
-		}
-
-		private void addPersonPeriodChangedEvent()
-		{
 			AddEvent(now =>
 			{
 				var info = currentAssociationInfo(now);
@@ -410,10 +465,12 @@ namespace Teleopti.Ccc.Domain.Common
 					CurrentBusinessUnitId = info.BusinessUnitId,
 					CurrentSiteId = info.SiteId,
 					CurrentTeamId = info.TeamId,
+					CurrentPersonPeriodChanged = earliestPersonPeriodStartDate.Date < now.UtcDateTime(),
+					PreviousAssociation = previousAssociations
 				};
 			});
 		}
-
+		
 		public virtual IPersonPeriod Period(DateOnly dateOnly)
         {
             IPersonPeriod period = null;
