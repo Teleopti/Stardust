@@ -73,13 +73,19 @@ namespace Teleopti.Wfm.Administration.Core
 
 		private CheckConflictResult checkConflict(IList<PersonInfo> allOldOnes, PersonInfo toImport, string tenant)
 		{
+
 			var logonName = toImport.ApplicationLogonInfo.LogonName;
+			logonName = logonName?.TrimStart();
+			if (logonName == "")
+				logonName = null;
 			var identity = toImport.Identity;
+			if (identity == "")
+				identity = null;
 			var id = toImport.Id;
 			PersonInfo conflictId = allOldOnes.FirstOrDefault(x => x.Id.Equals(id));
 			if (conflictId != null)
 				return null;
-			if (string.IsNullOrEmpty(toImport.Identity) && string.IsNullOrEmpty(toImport.ApplicationLogonInfo.LogonName))
+			if (string.IsNullOrEmpty(identity) && string.IsNullOrEmpty(logonName))
 				return null;
 
 			bool conflicting = false;

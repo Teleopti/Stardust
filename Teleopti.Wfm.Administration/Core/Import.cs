@@ -48,7 +48,9 @@ namespace Teleopti.Wfm.Administration.Core
 
 		private void saveToDb(IEnumerable<ImportUserModel> userModels, Tenant newTenant)
 		{
-			foreach (var userModel in userModels)
+			var models = userModels.ToList();
+
+			foreach (var userModel in models)
 			{
 				var personInfo = new PersonInfo(newTenant, userModel.PersonId);
 				personInfo.SetIdentity(userModel.Identity);
