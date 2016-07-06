@@ -262,7 +262,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 					changedDateRange = new moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate)).format('L') + ' - ' + new moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate)).format('L');
 				}
 				var notifyText = notifyOptions[notification.DomainType].notifyText.format(changedDateRange);
-				Teleopti.MyTimeWeb.Notifier.Notify(notifyOptions, notifyText);
+				Teleopti.MyTimeWeb.Notifier.Notify(notifyOptions[notification.DomainType], notifyText);
 			}
 		},
 		ReloadAsmViewModelListener: function (notification) {
