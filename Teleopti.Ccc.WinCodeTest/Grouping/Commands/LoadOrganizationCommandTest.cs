@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
                                                                     });
             
 			Expect.Call(_personSelectorView.VisiblePersonIds).Return(new List<Guid> { olaPersonId, mickePersonId, robinPersonId }).Repeat.AtLeastOnce();
-            Expect.Call(_personSelectorView.PreselectedPersonIds).Return(new List<Guid> { olaPersonId }).Repeat.Times(3);
+            Expect.Call(_personSelectorView.PreselectedPersonIds).Return(new HashSet<Guid> { olaPersonId }).Repeat.Times(3);
         	Expect.Call(_personSelectorView.ExpandSelected).Return(true).Repeat.AtLeastOnce();
             Expect.Call(() => _personSelectorView.ResetTreeView(new TreeNodeAdv[0])).IgnoreArguments();
             _mocks.ReplayAll();
@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
 			                                                               			}
 			                                                               	});
 
-			Expect.Call(_personSelectorView.PreselectedPersonIds).Return(new List<Guid> { personId }).Repeat.AtLeastOnce();
+			Expect.Call(_personSelectorView.PreselectedPersonIds).Return(new HashSet<Guid> { personId }).Repeat.AtLeastOnce();
 			Expect.Call(_personSelectorView.VisiblePersonIds).Return(null).Repeat.AtLeastOnce();
 			Expect.Call(_personSelectorView.ExpandSelected).Return(true).Repeat.AtLeastOnce();
 			Expect.Call(() => _personSelectorView.ResetTreeView(new TreeNodeAdv[0])).Constraints(

@@ -76,13 +76,15 @@ namespace Teleopti.Ccc.WinCode.Grouping
 			_eventAggregator.GetEvent<SelectedNodesChanged>().Subscribe(selectedNodesChanged);
 			_globalEventAggregator.GetEvent<PeopleSaved>().Subscribe(peopleSaved);
 			_eventAggregator.GetEvent<RefreshGroupPageClicked>().Subscribe(refreshGroupPage);
-			_eventAggregator.GetEvent<GroupPageNodeCheckedChange>().Subscribe(nodeCheckChanged);
+			_eventAggregator.GetEvent<GroupPageNodeCheckedChange>().Subscribe(updatePreselectedPersonIds);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "t")]
-		private void nodeCheckChanged(string obj)
+		private void updatePreselectedPersonIds(GroupPageNodeCheckData groupPageNodeCheckData)
 		{
-			var t = CheckedPersonGuids;
+			if (groupPageNodeCheckData.Node.Checked)
+				_personSelectorView.PreselectedPersonIds.Add(groupPageNodeCheckData.AgentId);
+			else
+				_personSelectorView.PreselectedPersonIds.Remove(groupPageNodeCheckData.AgentId);
 		}
 
 		private void refreshGroupPage(string obj)
@@ -445,7 +447,7 @@ namespace Teleopti.Ccc.WinCode.Grouping
 				_eventAggregator.GetEvent<SelectedNodesChanged>().Unsubscribe(selectedNodesChanged);
 				_globalEventAggregator.GetEvent<PeopleSaved>().Unsubscribe(peopleSaved);
 				_eventAggregator.GetEvent<RefreshGroupPageClicked>().Unsubscribe(refreshGroupPage);
-				_eventAggregator.GetEvent<GroupPageNodeCheckedChange>().Unsubscribe(nodeCheckChanged);
+				_eventAggregator.GetEvent<GroupPageNodeCheckedChange>().Unsubscribe(updatePreselectedPersonIds);
 
 				if (_personSelectorView != null)
 				{

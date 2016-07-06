@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WinCode.Grouping
         bool ShowCheckBoxes { get; set; }
         bool ShowDateSelection { get; set; }
         Cursor Cursor { get; set; }
-        IEnumerable<Guid> PreselectedPersonIds { get; set; }
+        HashSet<Guid> PreselectedPersonIds { get; set; }
 		IEnumerable<Guid> VisiblePersonIds { get; set; }
         bool HideMenu { get; set; }
         DateOnlyPeriod SelectedPeriod { get; set; }

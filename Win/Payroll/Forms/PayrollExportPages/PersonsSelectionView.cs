@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using Autofac;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -54,7 +56,7 @@ namespace Teleopti.Ccc.Win.Payroll.Forms.PayrollExportPages
             var payrollExport = (IPayrollExport)aggregateRoot;
             _presenter.PopulateModel(payrollExport);
             //_presenter.BuildTreeStructure();
-            _selectorView.PreselectedPersonIds = _model.SelectedPersons.Select(selectedPerson => selectedPerson.Id.Value).ToList();
+            _selectorView.PreselectedPersonIds = new HashSet<Guid>(_model.SelectedPersons.Select(selectedPerson => selectedPerson.Id.Value));
             _selectorView.SelectedPeriod = _model.SelectedPeriod;
             _personSelectorPresenter.LoadTabs();
         }

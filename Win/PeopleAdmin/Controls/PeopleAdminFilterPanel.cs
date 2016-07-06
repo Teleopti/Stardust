@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 			var selectorView = _personSelectorPresenter.View;
 			selectorView.HideMenu = true;
 			selectorView.ShowCheckBoxes = true;
-			selectorView.PreselectedPersonIds = _filteredPeopleHolder.FilteredPersonIdCollection;
+			selectorView.PreselectedPersonIds = new HashSet<Guid>(_filteredPeopleHolder.FilteredPersonIdCollection);
 			selectorView.VisiblePersonIds = _filteredPeopleHolder.PersonIdCollection;
 
 			_personSelectorPresenter.LoadTabs();

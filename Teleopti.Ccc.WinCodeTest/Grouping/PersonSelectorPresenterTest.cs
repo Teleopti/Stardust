@@ -290,7 +290,7 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
 			nextAgain.Nodes.Add(new TreeNodeAdv { Tag = new List<Guid> { Guid.NewGuid() } });
 
 			Expect.Call(_view.AllNodes).Return(nodes);
-			Expect.Call(_view.PreselectedPersonIds = new List<Guid>()).IgnoreArguments();
+			Expect.Call(_view.PreselectedPersonIds = new HashSet<Guid>()).IgnoreArguments();
 			_mocks.ReplayAll();
 			var guids = _target.CheckedPersonGuids;
 			Assert.That(guids.Count, Is.EqualTo(4));
@@ -308,14 +308,17 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
 			next.Nodes.Add(nextAgain);
 			root.Nodes.Add(next);
 
-			var nodes = new List<TreeNodeAdv> { root };
 			nextAgain.Nodes.Add(new TreeNodeAdv { Tag = new List<Guid> { Guid.NewGuid() } });
 			nextAgain.Nodes.Add(new TreeNodeAdv { Tag = new List<Guid> { Guid.NewGuid() } });
-
-			Expect.Call(_view.AllNodes).Return(nodes);
-			Expect.Call(_view.PreselectedPersonIds = new List<Guid>()).IgnoreArguments();
+			Expect.Call(_view.PreselectedPersonIds).Return(new HashSet<Guid>());
+			//Expect.Call(_view.PreselectedPersonIds.Add());
 			_mocks.ReplayAll();
-			_eventAggregator.GetEvent<GroupPageNodeCheckedChange>().Publish("");
+			
+			_eventAggregator.GetEvent<GroupPageNodeCheckedChange>().Publish(new GroupPageNodeCheckData
+			{
+				AgentId = Guid.NewGuid(),
+				Node = next
+			});
 			_mocks.VerifyAll();
 		}
 

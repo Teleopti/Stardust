@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
@@ -62,7 +63,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 			view.Dock = DockStyle.Fill;
 
 			var selectorView = _personSelectorPresenter.View;
-			selectorView.PreselectedPersonIds = _model.FilteredPersonsId;
+			selectorView.PreselectedPersonIds = new HashSet<Guid>(_model.FilteredPersonsId);
 			selectorView.ShowCheckBoxes = true;
 			selectorView.ShowDateSelection = false;
 			selectorView.HideMenu = true;
@@ -71,9 +72,15 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 			_treeloaded = true;
 		}
 
-		private void selectionChanged(string something)
+		private void selectionChanged(GroupPageNodeCheckData groupPageNodeCheckData)
 		{
-			_model.FilteredPersonsId = _personSelectorPresenter.CheckedPersonGuids;
+			var test = new HashSet<Guid>(_model.FilteredPersonsId);
+			if (groupPageNodeCheckData.Node.Checked)
+				test.Add(groupPageNodeCheckData.AgentId);
+			else
+				test.Remove(groupPageNodeCheckData.AgentId);
+
+			_model.FilteredPersonsId = test;
 			_selectionChanged = true;
 		}
 

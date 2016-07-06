@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Win.Grouping
 			xdtpDate.SetCultureInfoSafe(CultureInfo.CurrentCulture);			
 			SetTexts();
 			makeSureDropdownButtonWorksInRightToLeftCultures();
-			PreselectedPersonIds = new List<Guid>();
+			PreselectedPersonIds = new HashSet<Guid>();
 			treeViewAdvMainTabTree.SortWithChildNodes = true;
 			treeViewAdvMainTabTree.Root.SortType = TreeNodeAdvSortType.Text;
 			treeViewAdvMainTabTree.Root.SortOrder = SortOrder.Ascending;
@@ -328,7 +328,7 @@ namespace Teleopti.Ccc.Win.Grouping
 			set { xdtpDate.Visible = value; }
 		}
 
-		public IEnumerable<Guid> PreselectedPersonIds { get; set;  }
+		public HashSet<Guid> PreselectedPersonIds { get; set;  }
 
 		public IEnumerable<Guid> VisiblePersonIds { get; set; }
 
@@ -407,8 +407,15 @@ namespace Teleopti.Ccc.Win.Grouping
 
 		private void treeViewAdvMainTabTreeAfterCheck(object sender, TreeNodeAdvEventArgs e)
 		{
-			if (e.Node.Level == 1)
-				_eventAggregator.GetEvent<GroupPageNodeCheckedChange>().Publish("");
+			var agentIds = e.Node.Tag as IList<Guid>;
+			if (agentIds != null && agentIds.Count == 1)
+			{
+				_eventAggregator.GetEvent<GroupPageNodeCheckedChange>().Publish(new GroupPageNodeCheckData
+				{
+					AgentId = agentIds.First(),
+					Node = e.Node
+				});
+			}
 		}
 
 		private void contextMenuStripOpening(object sender, System.ComponentModel.CancelEventArgs e)

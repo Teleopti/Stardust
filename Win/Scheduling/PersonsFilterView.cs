@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_selectorView.SelectedPeriod = selectedPeriod;
 			_personSelectorPresenter.ShowPersons = true;
 			_personSelectorPresenter.ShowUsers = false;
-			_selectorView.PreselectedPersonIds = selectedPersons.Keys;
+			_selectorView.PreselectedPersonIds = new HashSet<Guid>(selectedPersons.Keys);
 			_selectorView.VisiblePersonIds = visiblePersonGuids;
 			_selectorView.ShowCheckBoxes = true;
 

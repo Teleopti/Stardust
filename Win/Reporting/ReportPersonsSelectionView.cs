@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Win.Reporting
 			selectorView.SelectedPeriod = dateOnlyPeriod;
 			_personSelectorPresenter.ShowPersons = true;
 			_personSelectorPresenter.ShowUsers = false;
-			selectorView.PreselectedPersonIds = selectedAgentGuids;
+			selectorView.PreselectedPersonIds = new HashSet<Guid>(selectedAgentGuids);
 			selectorView.ShowCheckBoxes = true;
 			
 			selectorView.ShowDateSelection = false;
