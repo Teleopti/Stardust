@@ -147,11 +147,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		{
 			_eventPublisher.Publish(new PersonAssociationChangedEvent
 			{
+				Version = 2,
 				PersonId = @event.PersonId,
 				Timestamp = @event.Timestamp,
 				BusinessUnitId = @event.CurrentBusinessUnitId,
 				SiteId = @event.CurrentSiteId,
-				TeamId = @event.CurrentTeamId
+				TeamId = @event.CurrentTeamId,
+				PreviousAssociation = @event.PreviousAssociations
 			});
 		}
 
