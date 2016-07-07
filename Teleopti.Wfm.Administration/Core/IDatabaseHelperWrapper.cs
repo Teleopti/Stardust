@@ -9,7 +9,6 @@ namespace Teleopti.Wfm.Administration.Core
 		DbCheckResultModel Exists(string databaseConnectionString, DatabaseType databaseType);
 		void CreateDatabase(string connectionToNewDb, DatabaseType databaseType, string login, string pwd, SqlVersion sqlVersion, string tenant, int tenantId);
 		void AddSystemUser(string connectionToNewDb, Guid personId, string firstName, string lastName);
-		void AddBusinessUnit(string connectionToNewDb, string name);
 		bool LoginExists(string connectionToNewDb, string login, SqlVersion sqlVersion);
 		void CreateLogin(string connectionToNewDb, string login, string password, SqlVersion sqlVersion);
 		bool HasCreateDbPermission(string connectionString, SqlVersion sqlVersion);
