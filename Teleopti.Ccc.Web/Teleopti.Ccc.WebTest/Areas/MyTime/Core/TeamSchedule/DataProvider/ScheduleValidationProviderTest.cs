@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			var personAssignmentYesterday = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person,dateTimePeriodYesterday);
 			ScheduleStorage.Add(personAssignmentToday);
 			ScheduleStorage.Add(personAssignmentYesterday);
-			var results = Target.GetBusineeRuleValidationResults(new FetchRuleValidationResultFormData
+			var results = Target.GetBusinessRuleValidationResults(new FetchRuleValidationResultFormData
 			{
 				Date = new DateTime(2016,1,2),
 				PersonIds = new List<Guid>

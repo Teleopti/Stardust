@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		[UnitOfWork, HttpPost, Route("api/TeamScheduleData/FetchRuleValidationResult")]
 		public virtual IList<BusinessRuleValidationResult> FetchRuleValidationResult(FetchRuleValidationResultFormData input)
 		{
-			return _validationProvider.GetBusineeRuleValidationResults(input);
+			return _validationProvider.GetBusinessRuleValidationResults(input);
 		}
 	}
 }

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		}
 
 
-		public IList<BusinessRuleValidationResult> GetBusineeRuleValidationResults(FetchRuleValidationResultFormData input)
+		public IList<BusinessRuleValidationResult> GetBusinessRuleValidationResults(FetchRuleValidationResultFormData input)
 		{
 			throw new NotImplementedException();
 		}
@@ -29,6 +29,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 	public interface IScheduleValidationProvider
 	{
-		IList<BusinessRuleValidationResult> GetBusineeRuleValidationResults(FetchRuleValidationResultFormData input);
+		IList<BusinessRuleValidationResult> GetBusinessRuleValidationResults(FetchRuleValidationResultFormData input);
 	}
 }
