@@ -5,133 +5,158 @@
 
 	requestsController.$inject = ["$scope", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "CurrentUserInfo", "signalRSVC", "NoticeService"];
 
-    function requestsController($scope, $translate, toggleService, requestsDefinitions, requestsNotificationService, CurrentUserInfo, signalRSVC, noticeSvc) {
-        var vm = this;
-        vm.onAgentSearchTermChanged = onAgentSearchTermChanged;
+	function requestsController($scope, $translate, toggleService, requestsDefinitions, requestsNotificationService, CurrentUserInfo, signalRSVC, noticeSvc) {
+		var vm = this;
+		vm.onAgentSearchTermChanged = onAgentSearchTermChanged;
 
-        toggleService.togglesLoaded.then(init);
+		var periodForAbsenceRequest, periodForShiftTradeRequest;
+		var absenceRequestTabIndex = 0;
+		var shiftTradeRequestTabIndex = 1;
 
-        vm.dateRangeCustomValidators = [{
-        	key: 'max60Days',
-        	message: 'DateRangeIsAMaximumOfSixtyDays',
-        	validate: function (start, end) {
-        		return moment(end).diff(moment(start), 'days') <= 60;
-        	}
-        }];
+		toggleService.togglesLoaded.then(init);
+
+		vm.dateRangeCustomValidators = [{
+			key: 'max60Days',
+			message: 'DateRangeIsAMaximumOfSixtyDays',
+			validate: function (start, end) {
+				return !vm.isShiftTradeViewActive() || moment(end).diff(moment(start), 'days') <= 60;
+			}
+		}];
 		
-        function init() {
-            monitorRunRequestWaitlist();
-            vm.isRequestsEnabled = toggleService.Wfm_Requests_Basic_35986;
-            vm.isPeopleSearchEnabled = toggleService.Wfm_Requests_People_Search_36294;
-            vm.canApproveOrDenyShiftTradeRequest = toggleService.Wfm_Requests_ApproveDeny_ShiftTrade_38494;
-            vm.isShiftTradeViewActive = isShiftTradeViewActive;
-            vm.canApproveOrDenyRequest = canApproveOrDenyRequest;
-            vm.isRequestsCommandsEnabled = toggleService.Wfm_Requests_ApproveDeny_36297;
+		function init() {
+			monitorRunRequestWaitlist();
+			vm.isRequestsEnabled = toggleService.Wfm_Requests_Basic_35986;
+			vm.isPeopleSearchEnabled = toggleService.Wfm_Requests_People_Search_36294;
+			vm.canApproveOrDenyShiftTradeRequest = toggleService.Wfm_Requests_ApproveDeny_ShiftTrade_38494;
+			vm.isShiftTradeViewActive = isShiftTradeViewActive;
+			vm.canApproveOrDenyRequest = canApproveOrDenyRequest;
+			vm.isRequestsCommandsEnabled = toggleService.Wfm_Requests_ApproveDeny_36297;
 			vm.isShiftTradeViewVisible = toggleService.Wfm_Requests_ShiftTrade_37751;
-            vm.forceRequestsReloadWithoutSelection = forceRequestsReloadWithoutSelection;
+			vm.forceRequestsReloadWithoutSelection = forceRequestsReloadWithoutSelection;
 		
 			vm.dateRangeTemplateType = 'popup';
 			
 			vm.filterToggleEnabled = toggleService.Wfm_Requests_Filtering_37748;
 			vm.filterEnabled = vm.filterToggleEnabled;
-			
-            vm.period = { startDate: new Date(), endDate: new Date() };
 
-            vm.agentSearchOptions = {
-                keyword: "",
-                isAdvancedSearchEnabled: true,
-                searchKeywordChanged: false
-            };
-            vm.agentSearchTerm = vm.agentSearchOptions.keyword;
+			var defaultDateRange = {
+				startDate: moment().add(-3, 'day').toDate(),
+				endDate: moment().add(+3, 'day').toDate()
+			};
+			vm.period = defaultDateRange;
+			periodForAbsenceRequest = defaultDateRange;
+			periodForShiftTradeRequest = defaultDateRange;
 
-            vm.onBeforeCommand = onBeforeCommand;
-            vm.onCommandSuccess = onCommandSuccess;
-            vm.onCommandError = onCommandError;
-            vm.onErrorMessages = onErrorMessages;
-            vm.disableInteraction = false;
+			vm.agentSearchOptions = {
+				keyword: "",
+				isAdvancedSearchEnabled: true,
+				searchKeywordChanged: false
+			};
+			vm.agentSearchTerm = vm.agentSearchOptions.keyword;
 
-           
+			vm.onBeforeCommand = onBeforeCommand;
+			vm.onCommandSuccess = onCommandSuccess;
+			vm.onCommandError = onCommandError;
+			vm.onErrorMessages = onErrorMessages;
+			vm.disableInteraction = false;
 
-	        if (toggleService.Wfm_Requests_PrepareForRelease_38771) {
-		        var message = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink')
-			        .replace('{0}', $translate.instant('Requests'))
-			        .replace('{1}', "<a href=' http://www.teleopti.com/wfm/customer-feedback.aspx' target='_blank'>")
-			        .replace('{2}', '</a>');
-		        noticeSvc.info(message, null, true);
-	        }
-        }
+			if (toggleService.Wfm_Requests_PrepareForRelease_38771) {
+				var message = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink')
+					.replace('{0}', $translate.instant('Requests'))
+					.replace('{1}', "<a href=' http://www.teleopti.com/wfm/customer-feedback.aspx' target='_blank'>")
+					.replace('{2}', '</a>');
+				noticeSvc.info(message, null, true);
+			}
+		}
 
-	    function isShiftTradeViewActive() {
-		    return vm.selectedTabIndex === 1;
-	    }
+		function isShiftTradeViewActive() {
+			return vm.selectedTabIndex === shiftTradeRequestTabIndex;
+		}
 
-	    function canApproveOrDenyRequest() {
-		    return (vm.selectedTabIndex === 0) || (vm.selectedTabIndex === 1 && vm.canApproveOrDenyShiftTradeRequest);
-        }
+		function canApproveOrDenyRequest() {
+			return (vm.selectedTabIndex === absenceRequestTabIndex) ||
+				(vm.selectedTabIndex === shiftTradeRequestTabIndex && vm.canApproveOrDenyShiftTradeRequest);
+		}
 		
-        function onAgentSearchTermChanged(agentSearchTerm) {
-            vm.agentSearchTerm = agentSearchTerm;
-        }
+		function onAgentSearchTermChanged(agentSearchTerm) {
+			vm.agentSearchTerm = agentSearchTerm;
+		}
 
-        function forceRequestsReloadWithoutSelection() {
-        	$scope.$broadcast('reload.requests.without.selection');
-        }
+		function forceRequestsReloadWithoutSelection() {
+			$scope.$broadcast('reload.requests.without.selection');
+		}
 
-        function onBeforeCommand() {
-            vm.disableInteraction = true;
-            return true;
-        }
+		function onBeforeCommand() {
+			vm.disableInteraction = true;
+			return true;
+		}
 
-        function onCommandSuccess(commandType, changedRequestsCount, requestsCount, commandId, waitlistPeriod) {
-            vm.disableInteraction = false;
-            forceRequestsReloadWithoutSelection();
-            if (commandId) vm.commandIdForMessage = commandId;
-            if (commandType === requestsDefinitions.REQUEST_COMMANDS.Approve) {
-                requestsNotificationService.notifyApproveRequestsSuccess(changedRequestsCount, requestsCount);
-            } else if (commandType === requestsDefinitions.REQUEST_COMMANDS.Deny) {
-                requestsNotificationService.notifyDenyRequestsSuccess(changedRequestsCount, requestsCount);
-            } else if (commandType === requestsDefinitions.REQUEST_COMMANDS.Cancel) {
-                requestsNotificationService.notifyCancelledRequestsSuccess(changedRequestsCount, requestsCount);
-            } else if (commandType === requestsDefinitions.REQUEST_COMMANDS.ProcessWaitlist) {
-                var period = moment(waitlistPeriod.startDate).format("L") + "-" + moment(waitlistPeriod.endDate).format("L");
-                requestsNotificationService.notifySubmitProcessWaitlistedRequestsSuccess(period);
-            }
-        }
+		function onCommandSuccess(commandType, changedRequestsCount, requestsCount, commandId, waitlistPeriod) {
+			vm.disableInteraction = false;
+			forceRequestsReloadWithoutSelection();
+			if (commandId) vm.commandIdForMessage = commandId;
+			if (commandType === requestsDefinitions.REQUEST_COMMANDS.Approve) {
+				requestsNotificationService.notifyApproveRequestsSuccess(changedRequestsCount, requestsCount);
+			} else if (commandType === requestsDefinitions.REQUEST_COMMANDS.Deny) {
+				requestsNotificationService.notifyDenyRequestsSuccess(changedRequestsCount, requestsCount);
+			} else if (commandType === requestsDefinitions.REQUEST_COMMANDS.Cancel) {
+				requestsNotificationService.notifyCancelledRequestsSuccess(changedRequestsCount, requestsCount);
+			} else if (commandType === requestsDefinitions.REQUEST_COMMANDS.ProcessWaitlist) {
+				var period = moment(waitlistPeriod.startDate).format("L") + "-" + moment(waitlistPeriod.endDate).format("L");
+				requestsNotificationService.notifySubmitProcessWaitlistedRequestsSuccess(period);
+			}
+		}
 
-        function monitorRunRequestWaitlist() {
-            signalRSVC.subscribe(
-				{ DomainType: 'IRunRequestWaitlistEventMessage' }
-				, RunRequestWaitlistEventHandler);
-        }
+		function monitorRunRequestWaitlist() {
+			signalRSVC.subscribe({ DomainType: 'IRunRequestWaitlistEventMessage' }, RunRequestWaitlistEventHandler);
+		}
 
-        function formatDatePeriod(message) {
-            vm.userTimeZone = CurrentUserInfo.CurrentUserInfo().DefaultTimeZone;
-            var startDate = moment(message.StartDate.substring(1, message.StartDate.length)).tz(vm.userTimeZone).format("L");
-            var endDate = moment(message.EndDate.substring(1, message.EndDate.length)).tz(vm.userTimeZone).format("L");
-            return startDate + "-" + endDate;
-        }
+		function formatDatePeriod(message) {
+			vm.userTimeZone = CurrentUserInfo.CurrentUserInfo().DefaultTimeZone;
+			var startDate = moment(message.StartDate.substring(1, message.StartDate.length)).tz(vm.userTimeZone).format("L");
+			var endDate = moment(message.EndDate.substring(1, message.EndDate.length)).tz(vm.userTimeZone).format("L");
+			return startDate + "-" + endDate;
+		}
 
-        function RunRequestWaitlistEventHandler(message) {
-            if (vm.commandIdForMessage === message.TrackId) {
-                var period = formatDatePeriod(message);
-                requestsNotificationService.notifyProcessWaitlistedRequestsFinished(period);
-            }
-        }
+		function RunRequestWaitlistEventHandler(message) {
+			if (vm.commandIdForMessage === message.TrackId) {
+				var period = formatDatePeriod(message);
+				requestsNotificationService.notifyProcessWaitlistedRequestsFinished(period);
+			}
+		}
 
-        function onErrorMessages(errorMessages) {
-            vm.disableInteraction = false;
-            forceRequestsReloadWithoutSelection();
+		function onErrorMessages(errorMessages) {
+			vm.disableInteraction = false;
+			forceRequestsReloadWithoutSelection();
 
-            errorMessages.forEach(function (errorMessage) {
-                requestsNotificationService.notifyCommandError(errorMessage);
-            });
-        }
+			errorMessages.forEach(function (errorMessage) {
+				requestsNotificationService.notifyCommandError(errorMessage);
+			});
+		}
 
-        //Todo: submit command failure doesn't give an error info, this parameter will be undefined.
-        function onCommandError(error) {
-            vm.disableInteraction = false;
-            forceRequestsReloadWithoutSelection();
-            requestsNotificationService.notifyCommandError(error);
-        }
-    }
+		//Todo: submit command failure doesn't give an error info, this parameter will be undefined.
+		function onCommandError(error) {
+			vm.disableInteraction = false;
+			forceRequestsReloadWithoutSelection();
+			requestsNotificationService.notifyCommandError(error);
+		}
+
+		$scope.$watch(function () {
+			return vm.selectedTabIndex;
+		}, function (currentTab, previousTab) {
+			if (vm.period != undefined) {
+				if (previousTab === absenceRequestTabIndex) {
+					periodForAbsenceRequest = vm.period;
+				} else if (previousTab === shiftTradeRequestTabIndex) {
+					periodForShiftTradeRequest = vm.period;
+				}
+			}
+
+			if (currentTab === absenceRequestTabIndex) {
+				vm.period = periodForAbsenceRequest;
+			} else if (currentTab === shiftTradeRequestTabIndex) {
+				vm.period = periodForShiftTradeRequest;
+			}
+		});
+	}
 })();

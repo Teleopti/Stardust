@@ -4,6 +4,9 @@ describe('RequestsControllerTests', function () {
 		$controller,
 		requestCommandParamsHolder;
 
+	var absenceRequestTabIndex = 0;
+	var shiftTradeRequestTabIndex = 1;
+
 	beforeEach(function () {
 		module('wfm.requests');
 
@@ -60,5 +63,72 @@ describe('RequestsControllerTests', function () {
 
 		test.target.selectedTabIndex = 1;
 		expect(test.target.canApproveOrDenyRequest()).toEqual(true);
+	});
+
+	it('should keep different date range', function () {
+		var test = setUpTarget();
+		test.scope.$digest();
+
+		var periodForAbsenceRequest = {
+			startDate: new Date(2016, 1 - 1, 1, 0, 0, 0, 0),
+			endDate: new Date(2016, 4 - 1, 1, 0, 0, 0, 0)
+		};
+
+		var periodForShiftTradeRequest = {
+			startDate: new Date(2016, 5 - 1, 1, 0, 0, 0, 0),
+			endDate: new Date(2016, 6 - 1, 1, 0, 0, 0, 0)
+		};
+
+		var controller = test.target;
+		controller.selectedTabIndex = absenceRequestTabIndex;
+		test.scope.$digest();
+		controller.period = periodForAbsenceRequest;
+
+		controller.selectedTabIndex = shiftTradeRequestTabIndex;
+		test.scope.$digest();
+		controller.period = periodForShiftTradeRequest;
+
+		controller.selectedTabIndex = absenceRequestTabIndex;
+		test.scope.$digest();
+		expect(controller.period).toEqual(periodForAbsenceRequest);
+
+		controller.selectedTabIndex = shiftTradeRequestTabIndex;
+		test.scope.$digest();
+		expect(controller.period).toEqual(periodForShiftTradeRequest);
+	});
+
+	it('not allow date range longer than 60 days for shift trade request', function () {
+		var test = setUpTarget();
+		test.scope.$digest();
+
+		var startDate = moment();
+		var defaultPeriod = {
+			startDate: startDate.toDate(),
+			endDate: startDate.add(90, 'day').toDate()
+		};
+
+		var periodLongerThen60Days = {
+			startDate: startDate.toDate(),
+			endDate: startDate.add(61, 'day').toDate()
+		};
+
+		var controller = test.target;
+		controller.selectedTabIndex = absenceRequestTabIndex;
+		controller.period = defaultPeriod;
+		test.scope.$digest();
+
+		controller.selectedTabIndex = shiftTradeRequestTabIndex;
+		controller.period = defaultPeriod;
+		test.scope.$digest();
+		
+		controller.selectedTabIndex = absenceRequestTabIndex;
+		controller.period = periodLongerThen60Days;
+		test.scope.$digest();
+		expect(controller.period).toEqual(periodLongerThen60Days);
+		
+		controller.selectedTabIndex = shiftTradeRequestTabIndex;
+		controller.period = periodLongerThen60Days;
+		test.scope.$digest();
+		expect(controller.period).toEqual(defaultPeriod);
 	});
 });
