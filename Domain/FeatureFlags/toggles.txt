@@ -101,7 +101,7 @@ Wfm_Requests_ShiftTrade_More_Relevant_Information_38492 = true
 Wfm_Requests_PrepareForRelease_38771 = true
 Wfm_Requests_ApproveDeny_ShiftTrade_38494 = true
 Wfm_Requests_Default_Status_Filter_39472 = RC
-Wfm_Requests_Show_Pending_Reasons_39473 = DEV
+Wfm_Requests_Show_Pending_Reasons_39473 = RC
 
 Wfm_Intraday_38074 = true
 
