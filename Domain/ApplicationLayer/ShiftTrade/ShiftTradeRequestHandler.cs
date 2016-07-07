@@ -294,11 +294,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 		{
 			if (brokenBusinessResponses.Count <= 0) return;
 
-			var brokenRulesFlag = brokenBusinessResponses.Count > 0
-				? NewBusinessRuleCollection.GetFlagFromRules(brokenBusinessResponses.Select(x => x.TypeOfRule))
-				: BusinessRuleFlags.None;
-			personRequest.TrySetBrokenBusinessRule(brokenRulesFlag);
-
 			var culture = personRequest.Person.PermissionInformation.UICulture();
 			var sb = new StringBuilder(personRequest.GetMessage(new NormalizeText()));
 			sb.AppendLine();
