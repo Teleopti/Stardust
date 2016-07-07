@@ -1,12 +1,9 @@
 ﻿using System;
-using Autofac;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
-using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Core.ServiceBus;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;

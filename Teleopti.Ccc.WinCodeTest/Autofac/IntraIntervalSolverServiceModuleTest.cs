@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.WinCode.Autofac;
 
 
 namespace Teleopti.Ccc.WinCodeTest.Autofac

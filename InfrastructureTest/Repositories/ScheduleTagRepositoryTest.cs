@@ -1,4 +1,3 @@
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;

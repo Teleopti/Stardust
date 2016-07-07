@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.InfrastructureTest.Helper

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.Globalization;
 
 namespace Teleopti.Interfaces.Domain
 {

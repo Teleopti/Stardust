@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Ccc.Domain.Common;
 
 namespace Teleopti.Ccc.DomainTest.Common
 {

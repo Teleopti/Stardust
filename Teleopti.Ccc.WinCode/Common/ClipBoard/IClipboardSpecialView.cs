@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Teleopti.Ccc.WinCode.Common.Clipboard
+﻿namespace Teleopti.Ccc.WinCode.Common.Clipboard
 {
     public interface IClipboardSpecialView
     {

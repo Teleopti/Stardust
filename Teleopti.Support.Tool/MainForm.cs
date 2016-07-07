@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using Microsoft.Win32;
 using Teleopti.Support.Tool.Controls;
 using Teleopti.Support.Tool.DataLayer;
 using Teleopti.Support.Tool.Properties;

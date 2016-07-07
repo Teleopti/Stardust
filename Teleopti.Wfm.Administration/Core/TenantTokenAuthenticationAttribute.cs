@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Net.Http.Headers;
 using System.Security.Claims;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http.Filters;

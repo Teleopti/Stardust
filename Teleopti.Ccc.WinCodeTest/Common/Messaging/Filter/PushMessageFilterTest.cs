@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.WinCode.Common.Messaging;
 using Teleopti.Ccc.WinCode.Common.Messaging.Filters;
 

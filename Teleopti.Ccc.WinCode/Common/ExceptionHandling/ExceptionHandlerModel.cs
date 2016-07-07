@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Data.SqlClient;
 using System.Drawing;
-using System.Reflection;
-using System.Text;
-using System.Windows.Forms;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces;

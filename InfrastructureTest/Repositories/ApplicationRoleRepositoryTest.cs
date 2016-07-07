@@ -1,5 +1,3 @@
-using System;
-using NHibernate.Linq.Clauses;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;

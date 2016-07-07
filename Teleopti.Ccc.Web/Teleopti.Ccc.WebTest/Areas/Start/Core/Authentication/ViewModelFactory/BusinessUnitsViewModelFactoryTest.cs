@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.ViewModelFactory;
-using Teleopti.Ccc.WebTest.Areas.Start.Controllers;
 
 namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Authentication.ViewModelFactory
 {

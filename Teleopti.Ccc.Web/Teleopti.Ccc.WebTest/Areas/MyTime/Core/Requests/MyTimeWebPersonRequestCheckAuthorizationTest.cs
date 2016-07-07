@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests

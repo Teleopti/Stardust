@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
 

@@ -1,4 +1,3 @@
-using System;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Specification;
 

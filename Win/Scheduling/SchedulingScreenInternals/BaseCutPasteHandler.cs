@@ -1,5 +1,3 @@
-using System;
-
 namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 {
     public abstract class BaseCutPasteHandler : ICutPasteHandler

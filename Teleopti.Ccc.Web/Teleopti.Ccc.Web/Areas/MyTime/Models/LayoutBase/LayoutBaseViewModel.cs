@@ -1,6 +1,5 @@
 ﻿using System;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.LayoutBase
 {

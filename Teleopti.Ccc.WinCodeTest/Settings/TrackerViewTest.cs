@@ -1,9 +1,6 @@
 #region Imports
 
-using System;
 using NUnit.Framework;
-using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.WinCode.Settings;
 using Teleopti.Interfaces.Domain;

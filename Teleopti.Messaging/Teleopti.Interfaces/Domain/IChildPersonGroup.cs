@@ -1,5 +1,3 @@
-using System.Collections.ObjectModel;
-
 namespace Teleopti.Interfaces.Domain
 {
     ///<summary>

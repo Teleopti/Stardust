@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Common.Chart

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Web.Mvc;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core

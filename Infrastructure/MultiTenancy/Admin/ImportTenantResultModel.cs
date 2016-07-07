@@ -1,6 +1,4 @@
-﻿using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-
-namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Admin
+﻿namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Admin
 {
 	public class ImportTenantResultModel
 	{

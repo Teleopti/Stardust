@@ -1,8 +1,5 @@
-using System;
 using System.Collections.Generic;
 using AutoMapper;
-using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;

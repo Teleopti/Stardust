@@ -3,7 +3,6 @@ using System.Reflection;
 using System.Windows;
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
-using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;

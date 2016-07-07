@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using NPOI.HPSF;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Interfaces.Domain;

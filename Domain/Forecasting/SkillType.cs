@@ -1,4 +1,3 @@
-using Teleopti.Ccc.Domain.Calculation;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;

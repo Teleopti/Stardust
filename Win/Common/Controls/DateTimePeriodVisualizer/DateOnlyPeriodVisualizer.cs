@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.WinCode.Scheduling.Panels;
 using Teleopti.Interfaces.Domain;
 

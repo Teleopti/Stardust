@@ -1,7 +1,4 @@
-using System;
-using System.Drawing;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Common;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Tracking;

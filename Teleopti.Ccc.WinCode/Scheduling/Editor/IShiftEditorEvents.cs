@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows.Input;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using NHibernate;
 using NHibernate.Impl;
-using NHibernate.Util;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork

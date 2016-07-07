@@ -1,5 +1,4 @@
-﻿using System.Windows;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Teleopti.Ccc.WinCode.Common.Interop;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.Interop

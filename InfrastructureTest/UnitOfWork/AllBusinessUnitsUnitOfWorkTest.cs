@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using Autofac;
 using NHibernate;
 using NUnit.Framework;
 using SharpTestsEx;

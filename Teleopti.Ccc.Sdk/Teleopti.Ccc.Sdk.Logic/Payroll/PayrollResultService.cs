@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Globalization;
 using System.IO;
-using System.Text.RegularExpressions;
 using System.Xml;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.PayrollFormatter;

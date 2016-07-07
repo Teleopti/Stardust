@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using log4net;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Repositories;

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Security.Cryptography.X509Certificates;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
-using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 

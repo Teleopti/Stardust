@@ -1,5 +1,4 @@
 using Autofac;
-using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
 
 namespace Teleopti.Ccc.Web.Broker

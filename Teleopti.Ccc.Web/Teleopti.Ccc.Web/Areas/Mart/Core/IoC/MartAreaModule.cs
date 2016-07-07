@@ -1,9 +1,6 @@
 ﻿using System;
 using Autofac;
-using MbCache.Core;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
 
 namespace Teleopti.Ccc.Web.Areas.Mart.Core.IoC
 {

@@ -1,7 +1,5 @@
 using System;
-using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Ccc.WinCode.Common.Chart;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Intraday
 {

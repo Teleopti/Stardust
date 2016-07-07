@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Configuration;
 using NUnit.Framework;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Areas.Mart.Core;
 using Teleopti.Ccc.Web.Areas.Mart.Models;
 using Teleopti.Interfaces.Domain;

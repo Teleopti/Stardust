@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Specialized;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Interfaces.Domain;
 

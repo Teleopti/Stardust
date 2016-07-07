@@ -1,11 +1,7 @@
-using System.Drawing;
 using NUnit.Framework;
 using SharpTestsEx;
 using System;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Intraday;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;

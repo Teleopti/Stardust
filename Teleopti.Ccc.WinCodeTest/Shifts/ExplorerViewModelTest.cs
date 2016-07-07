@@ -11,7 +11,6 @@ using Teleopti.Ccc.WinCode.Shifts;
 using Teleopti.Ccc.WinCode.Shifts.Interfaces;
 using Teleopti.Ccc.WinCode.Shifts.Models;
 using Teleopti.Interfaces.Domain;
-using Rhino.Mocks;
 
 namespace Teleopti.Ccc.WinCodeTest.Shifts
 {

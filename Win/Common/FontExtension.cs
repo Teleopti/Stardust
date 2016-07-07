@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
-
-namespace Teleopti.Ccc.Win.Common
+﻿namespace Teleopti.Ccc.Win.Common
 {
     /// <summary>
     /// Contains all the extension methods which belongs to Font.

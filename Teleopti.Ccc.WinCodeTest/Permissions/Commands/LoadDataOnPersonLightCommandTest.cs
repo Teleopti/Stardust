@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.WinCode.Permissions;
 using Teleopti.Ccc.WinCode.Permissions.Commands;
 using Teleopti.Interfaces.Infrastructure;

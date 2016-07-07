@@ -1,5 +1,4 @@
 ﻿using System.Reflection;
-using NHibernate;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Kpi;

@@ -1,7 +1,6 @@
 using System;
 using NUnit.Framework;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.ScheduleTagging
 {

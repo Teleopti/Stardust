@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Teleopti.Ccc.Web.Areas.Reports.Models
+﻿namespace Teleopti.Ccc.Web.Areas.Reports.Models
 {
 	public class ReportItem
 	{

@@ -1,8 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.WinCode.FileImport;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.FileImport
 {

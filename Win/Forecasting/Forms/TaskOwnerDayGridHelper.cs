@@ -1,6 +1,5 @@
 using System;
 using System.Globalization;
-using System.Text;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;

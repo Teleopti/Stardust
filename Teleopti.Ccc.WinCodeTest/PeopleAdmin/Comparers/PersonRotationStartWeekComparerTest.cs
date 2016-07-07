@@ -1,15 +1,10 @@
 ﻿#region Imports
 
-using System;
-using System.Windows.Media.Imaging;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Scheduling.Restriction;
-using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Comparers;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
-using Teleopti.Ccc.WinCodeTest.FakeData;
 using Teleopti.Interfaces.Domain;
 using Rotation=Teleopti.Ccc.Domain.Scheduling.Restriction.Rotation;
 

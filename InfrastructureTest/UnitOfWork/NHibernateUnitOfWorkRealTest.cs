@@ -1,5 +1,4 @@
 ﻿using System;
-using NHibernate;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;

@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
-using EO.Internal;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.ResourceCalculation;

@@ -1,6 +1,5 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.SystemSetting;
-using Teleopti.Ccc.WinCode.Budgeting.Models;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Budgeting

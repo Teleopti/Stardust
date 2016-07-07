@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Security;
-using System.Security.Permissions;
 using System.Windows.Forms;
 using Teleopti.Ccc.WinCode.Common;
 

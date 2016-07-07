@@ -1,7 +1,5 @@
 using System;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.DomainTest.Helper;
 using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.DomainTest.Common

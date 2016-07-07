@@ -1,7 +1,6 @@
 using AutoMapper;
 using System;
 using System.Globalization;
-using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;

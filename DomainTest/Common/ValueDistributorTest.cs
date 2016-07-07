@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Interfaces.Domain;
-using List = NHibernate.Mapping.List;
 
 namespace Teleopti.Ccc.DomainTest.Common
 {

@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using NHibernate;
 using NHibernate.Engine;
 using Teleopti.Ccc.Domain.Common;

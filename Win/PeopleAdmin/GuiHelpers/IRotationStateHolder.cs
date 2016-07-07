@@ -1,7 +1,4 @@
-﻿
-using System.Collections.Generic;
-using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Interfaces.Domain;
+﻿using Syncfusion.Windows.Forms.Grid;
 
 namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 {

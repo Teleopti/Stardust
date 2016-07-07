@@ -3,7 +3,6 @@ using System.Globalization;
 using System.Reflection;
 using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Tools;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 

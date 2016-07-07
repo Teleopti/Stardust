@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Interfaces.Domain;

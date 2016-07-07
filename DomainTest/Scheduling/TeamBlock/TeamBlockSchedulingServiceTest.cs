@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using List = NHibernate.Mapping.List;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 {

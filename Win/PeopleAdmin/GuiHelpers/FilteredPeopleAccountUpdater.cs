@@ -1,4 +1,3 @@
-using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 

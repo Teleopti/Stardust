@@ -1,4 +1,3 @@
-using System;
 using System.Web.Http.ExceptionHandling;
 using System.Web.Http.Filters;
 

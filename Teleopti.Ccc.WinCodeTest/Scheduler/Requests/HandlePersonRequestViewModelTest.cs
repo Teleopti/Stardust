@@ -4,7 +4,6 @@ using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;

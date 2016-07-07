@@ -1,6 +1,4 @@
 ﻿using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;

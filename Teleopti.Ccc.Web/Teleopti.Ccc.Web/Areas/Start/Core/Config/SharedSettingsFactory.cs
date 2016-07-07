@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;

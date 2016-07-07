@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using log4net;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;

@@ -2,7 +2,6 @@ using System;
 using System.Drawing;
 using System.IdentityModel.Claims;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;

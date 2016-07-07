@@ -1,7 +1,6 @@
 using System;
 using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {

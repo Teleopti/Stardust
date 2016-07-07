@@ -3,9 +3,7 @@ using System.Drawing;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using System.Collections.Generic;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling
 {

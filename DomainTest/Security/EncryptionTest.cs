@@ -1,7 +1,6 @@
 ﻿#region Imports
 
 using System;
-using System.Linq;
 using System.Security.Cryptography;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Security;

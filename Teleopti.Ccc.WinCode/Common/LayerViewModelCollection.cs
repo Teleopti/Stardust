@@ -6,7 +6,6 @@ using System.Linq;
 using System.Windows.Data;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.WinCode.Common.Collections;
 using Teleopti.Interfaces.Domain;
 

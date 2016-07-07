@@ -7,8 +7,6 @@ using System.Linq;
 using System.Security.Principal;
 using System.Threading;
 using System.Web;
-using System.Web.Http;
-using System.Web.Http.Controllers;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Rhino.Mocks;

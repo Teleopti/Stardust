@@ -1,10 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using NUnit.Framework;
-using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Interfaces.Domain;
+﻿using NUnit.Framework;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
 {

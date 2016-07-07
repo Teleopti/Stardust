@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.Time;
-using Teleopti.Ccc.DomainTest.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 

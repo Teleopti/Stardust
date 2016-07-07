@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Threading;
 using System.Web;
-using NHibernate;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration

@@ -1,5 +1,4 @@
 ﻿using System.Configuration;
-using System.Data.SqlClient;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;

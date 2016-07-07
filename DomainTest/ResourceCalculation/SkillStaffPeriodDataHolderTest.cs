@@ -1,7 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.DomainTest.Helper;
 using Teleopti.Ccc.Secrets.SkillStaffPeriodDataHolder;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;

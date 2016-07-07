@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Ccc.Domain.Time;
 
 namespace Teleopti.Ccc.Win.Reporting
 {

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Reporting;
+﻿using Teleopti.Ccc.WinCode.Reporting;
 
 namespace Teleopti.Ccc.WinCode.Presentation
 {

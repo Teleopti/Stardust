@@ -1,7 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Linq;
-using System.Collections.Generic;
 using Microsoft.Practices.Composite.Events;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.RealTimeAdherence;

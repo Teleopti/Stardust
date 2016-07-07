@@ -1,5 +1,3 @@
-using System;
-
 namespace Teleopti.Ccc.WinCode.Meetings.Interfaces
 {
 	 public interface IMeetingDetailView

@@ -1,6 +1,5 @@
 ﻿using System;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Interfaces.Domain;
 

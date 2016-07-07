@@ -2,12 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Hql.Ast.ANTLR;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Interfaces.Domain;
 
 
 namespace Teleopti.Ccc.DomainTest.Collection

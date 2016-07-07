@@ -1,6 +1,5 @@
 ﻿#region Imports
 
-using System;
 using NUnit.Framework;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Comparers;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;

@@ -1,5 +1,4 @@
 using System.Drawing;
-using System.Drawing.Imaging;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Win.Properties;
 using Teleopti.Interfaces.Domain;

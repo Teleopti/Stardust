@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using NHibernate.Exceptions;
 using NHibernate.Transform;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 

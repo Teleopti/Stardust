@@ -1,5 +1,4 @@
-﻿using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
-using Teleopti.Ccc.Win.Common;
+﻿using Teleopti.Ccc.Win.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Optimization

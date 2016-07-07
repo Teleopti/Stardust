@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 

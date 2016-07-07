@@ -1,5 +1,4 @@
 using System.Windows.Forms;
-using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.WinCode.Common
 {

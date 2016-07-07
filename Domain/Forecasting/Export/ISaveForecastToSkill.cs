@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Forecast;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.General;
 

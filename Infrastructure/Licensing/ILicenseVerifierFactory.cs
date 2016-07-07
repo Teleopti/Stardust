@@ -1,5 +1,4 @@
-﻿using System;
-using Teleopti.Interfaces.Infrastructure;
+﻿using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Licensing
 {

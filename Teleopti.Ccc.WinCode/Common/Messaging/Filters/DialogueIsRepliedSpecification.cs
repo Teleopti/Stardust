@@ -1,5 +1,4 @@
 ﻿using Teleopti.Ccc.Domain.Specification;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Common.Messaging.Filters
 {

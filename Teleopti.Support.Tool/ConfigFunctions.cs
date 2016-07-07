@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Teleopti.Support.Tool.DataLayer;
-
-namespace Teleopti.Support.Tool
+﻿namespace Teleopti.Support.Tool
 {
    public sealed class ConfigFunctions
     {

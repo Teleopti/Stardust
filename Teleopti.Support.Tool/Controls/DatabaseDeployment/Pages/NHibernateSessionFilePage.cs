@@ -1,13 +1,5 @@
 ﻿using System;
-using System.Data;
-using System.Data.SqlClient;
-using System.IO;
-using System.Linq;
-using System.Management;
-using System.Security.AccessControl;
-using System.Security.Principal;
 using System.Windows.Forms;
-using System.Xml.Linq;
 using Microsoft.Win32;
 
 namespace Teleopti.Support.Tool.Controls.DatabaseDeployment.Pages

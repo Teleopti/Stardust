@@ -2,7 +2,6 @@ using System;
 using System.ComponentModel;
 using Syncfusion.Styles;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Common.Controls.Tooltip
 {

@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using NHibernate.Criterion;
-using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 

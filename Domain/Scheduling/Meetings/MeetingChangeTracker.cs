@@ -2,7 +2,6 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 {

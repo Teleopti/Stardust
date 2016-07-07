@@ -4,8 +4,6 @@ using System.Text;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.Import;
-using Teleopti.Ccc.Domain.Time;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Import
 {

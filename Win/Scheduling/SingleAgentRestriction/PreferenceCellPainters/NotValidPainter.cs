@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using System.Text;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Win.Properties;
 using Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary;

@@ -1,5 +1,4 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.Forecasting;
 using Syncfusion.Windows.Forms.Grid;
 
 namespace Teleopti.Ccc.Win.Common.Controls

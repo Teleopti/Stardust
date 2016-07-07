@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Teleopti.Ccc.WinCode.Common.Filter;
 using Teleopti.Ccc.WinCode.Common.Messaging;

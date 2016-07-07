@@ -1,5 +1,4 @@
 using System.Windows.Forms;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.WinCode.Main;
 using Teleopti.Interfaces.Domain;
 

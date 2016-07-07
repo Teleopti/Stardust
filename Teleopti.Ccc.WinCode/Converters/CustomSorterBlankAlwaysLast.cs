@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.ComponentModel;
-using System.Windows.Forms;
 using Teleopti.Ccc.WinCode.Common;
 
 namespace Teleopti.Ccc.WinCode.Converters

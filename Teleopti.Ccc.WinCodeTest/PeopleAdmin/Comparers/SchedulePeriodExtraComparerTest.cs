@@ -5,7 +5,6 @@ using NUnit.Framework;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Comparers;
-using Teleopti.Ccc.WinCodeTest.FakeData;
 using Teleopti.Interfaces.Domain;
 
 #endregion

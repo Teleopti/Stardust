@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Syncfusion.Windows.Forms.Grid;
+﻿using Syncfusion.Windows.Forms.Grid;
 
 namespace Teleopti.Ccc.Win.Common
 {

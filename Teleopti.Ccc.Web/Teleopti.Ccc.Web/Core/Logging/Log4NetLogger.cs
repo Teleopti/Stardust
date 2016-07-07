@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Web;
-using System.Web.Configuration;
 using log4net;
 
 namespace Teleopti.Ccc.Web.Core.Logging

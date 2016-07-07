@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Globalization;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 

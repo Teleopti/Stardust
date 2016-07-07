@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Teleopti.Ccc.WinCode.Shifts.Interfaces;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Shifts
 {

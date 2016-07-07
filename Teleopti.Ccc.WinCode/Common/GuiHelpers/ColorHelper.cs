@@ -6,7 +6,6 @@ using System.Globalization;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Tools;
-using Syncfusion.Windows.Forms.Tools.Design;
 using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.WinCode.Common.GuiHelpers

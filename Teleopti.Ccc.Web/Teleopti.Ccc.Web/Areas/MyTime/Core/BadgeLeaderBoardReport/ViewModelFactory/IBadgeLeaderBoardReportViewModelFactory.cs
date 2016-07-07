@@ -1,7 +1,4 @@
-﻿using System;
-using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.BadgeLeaderBoardReport;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Web.Areas.MyTime.Models.BadgeLeaderBoardReport;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.BadgeLeaderBoardReport.ViewModelFactory
 {

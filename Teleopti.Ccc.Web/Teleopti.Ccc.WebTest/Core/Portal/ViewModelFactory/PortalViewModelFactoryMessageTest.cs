@@ -1,6 +1,5 @@
 using System.Globalization;
 using System.Linq;
-using System.Security.Principal;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;

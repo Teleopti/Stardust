@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using AutoMapper;
-using log4net.Config;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -17,7 +16,6 @@ using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
-using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;

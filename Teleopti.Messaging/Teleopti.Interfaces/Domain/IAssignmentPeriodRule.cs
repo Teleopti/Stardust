@@ -1,5 +1,3 @@
-using System;
-
 namespace Teleopti.Interfaces.Domain
 {
     /// <summary>

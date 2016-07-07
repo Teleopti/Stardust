@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Windows.Forms;
-using Autofac;
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;

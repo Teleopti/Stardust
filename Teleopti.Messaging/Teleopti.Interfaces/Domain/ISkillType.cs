@@ -1,6 +1,4 @@
-﻿using Teleopti.Ccc.Domain.Calculation;
-
-namespace Teleopti.Interfaces.Domain
+﻿namespace Teleopti.Interfaces.Domain
 {
     /// <summary>
     /// Abstract base for skill types

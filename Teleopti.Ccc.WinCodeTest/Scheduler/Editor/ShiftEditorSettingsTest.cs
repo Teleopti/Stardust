@@ -1,10 +1,6 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Windows.Data;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.Editor;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
 {

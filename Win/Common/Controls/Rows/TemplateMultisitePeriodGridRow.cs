@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Collections.Generic;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.WinCode.Common.Rows;

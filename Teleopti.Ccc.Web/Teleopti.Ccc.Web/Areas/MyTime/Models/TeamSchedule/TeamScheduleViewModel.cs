@@ -1,6 +1,5 @@
 using System;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule

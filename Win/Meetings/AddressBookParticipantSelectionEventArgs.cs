@@ -1,5 +1,4 @@
 ﻿using System;
-using Teleopti.Ccc.WinCode.Meetings;
 
 namespace Teleopti.Ccc.Win.Meetings
 {

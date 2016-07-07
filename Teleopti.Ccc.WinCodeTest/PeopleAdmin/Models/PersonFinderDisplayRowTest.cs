@@ -1,8 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using NUnit.Framework;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 {

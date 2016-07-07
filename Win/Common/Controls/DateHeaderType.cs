@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Teleopti.Ccc.Win.Common.Controls
+﻿namespace Teleopti.Ccc.Win.Common.Controls
 {
     /// <summary>
     /// Determines which type of date header to show

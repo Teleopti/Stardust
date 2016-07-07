@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Web.Mvc;
 using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests

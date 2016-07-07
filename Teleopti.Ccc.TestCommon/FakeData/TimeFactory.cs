@@ -1,6 +1,4 @@
-﻿using System;
-using Teleopti.Ccc.Domain.Time;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {

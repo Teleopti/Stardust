@@ -4,7 +4,6 @@ using System.Reflection;
 using System.Windows.Forms;
 using Autofac;
 using Microsoft.Practices.Composite.Events;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Infrastructure.Foundation;

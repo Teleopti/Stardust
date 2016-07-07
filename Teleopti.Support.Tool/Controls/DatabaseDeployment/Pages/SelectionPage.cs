@@ -1,7 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.Windows.Forms;
-using Teleopti.Support.Tool.Controls.General;
+﻿using System.Windows.Forms;
 
 namespace Teleopti.Support.Tool.Controls.DatabaseDeployment.Pages
 {

@@ -1,6 +1,5 @@
 using System;
 using System.Drawing;
-using System.Globalization;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 

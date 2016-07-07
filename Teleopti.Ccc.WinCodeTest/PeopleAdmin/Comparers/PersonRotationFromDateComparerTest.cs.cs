@@ -1,6 +1,5 @@
 ﻿#region Imports
 
-using System;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;

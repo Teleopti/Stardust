@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 {

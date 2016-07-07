@@ -1,6 +1,4 @@
-﻿using Teleopti.Interfaces.Domain;
-
-namespace Teleopti.Ccc.WinCode.Shifts.Interfaces
+﻿namespace Teleopti.Ccc.WinCode.Shifts.Interfaces
 {
     public interface IPresenterBase :  IValidate
     {

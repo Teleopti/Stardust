@@ -1,5 +1,3 @@
-using System;
-
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.MyReport
 {
     public class QueueMetricsViewModel

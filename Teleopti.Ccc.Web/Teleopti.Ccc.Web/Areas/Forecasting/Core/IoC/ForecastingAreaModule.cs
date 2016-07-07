@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Teleopti.Ccc.Web.Areas.Forecasting.Controllers;
 
 namespace Teleopti.Ccc.Web.Areas.Forecasting.Core.IoC
 {

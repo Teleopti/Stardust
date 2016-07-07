@@ -1,5 +1,4 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Interfaces.Domain;

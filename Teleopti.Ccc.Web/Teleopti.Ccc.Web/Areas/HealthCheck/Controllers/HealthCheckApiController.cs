@@ -7,7 +7,6 @@ using System.Web.Http;
 using System.Web.Http.ModelBinding;
 using Microsoft.VisualBasic.Devices;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator;
 using Teleopti.Ccc.Domain.FeatureFlags;

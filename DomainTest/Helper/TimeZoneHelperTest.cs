@@ -1,10 +1,7 @@
 using System;
 using System.Globalization;
-using System.Threading;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Time;
 using SharpTestsEx;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Helper

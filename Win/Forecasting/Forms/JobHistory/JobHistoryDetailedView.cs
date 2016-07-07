@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Forecasting;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory

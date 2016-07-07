@@ -1,5 +1,4 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 

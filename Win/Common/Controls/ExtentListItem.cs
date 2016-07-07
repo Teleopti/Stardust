@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 
 namespace Teleopti.Ccc.Win.Common.Controls
 {

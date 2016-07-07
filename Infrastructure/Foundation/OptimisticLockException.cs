@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using System.Security;
-using System.Security.Permissions;
 using NHibernate;
 using Teleopti.Interfaces.Domain;
 

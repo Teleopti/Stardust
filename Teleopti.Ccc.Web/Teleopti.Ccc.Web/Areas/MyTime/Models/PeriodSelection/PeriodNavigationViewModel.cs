@@ -1,6 +1,4 @@
-﻿using Teleopti.Interfaces.Domain;
-
-namespace Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection
+﻿namespace Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection
 {
 	public class PeriodNavigationViewModel
 	{

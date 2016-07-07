@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using log4net;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Infrastructure;

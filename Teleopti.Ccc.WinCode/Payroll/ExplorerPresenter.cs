@@ -1,5 +1,4 @@
-﻿using System;
-using Teleopti.Ccc.WinCode.Payroll.Interfaces;
+﻿using Teleopti.Ccc.WinCode.Payroll.Interfaces;
 
 namespace Teleopti.Ccc.WinCode.Payroll
 {

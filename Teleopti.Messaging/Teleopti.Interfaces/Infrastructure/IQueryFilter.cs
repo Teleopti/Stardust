@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Teleopti.Interfaces.Infrastructure
+﻿namespace Teleopti.Interfaces.Infrastructure
 {
     public interface IQueryFilter
     {

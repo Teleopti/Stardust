@@ -1,4 +1,3 @@
-using System;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;

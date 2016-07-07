@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Forms;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Scheduling;

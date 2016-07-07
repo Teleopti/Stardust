@@ -2,16 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.MessageBroker.Scheduling;
 using Teleopti.Ccc.Infrastructure.Persisters.Refresh;
-using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using log4net;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Repositories;

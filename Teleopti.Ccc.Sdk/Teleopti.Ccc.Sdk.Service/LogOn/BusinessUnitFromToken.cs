@@ -1,7 +1,5 @@
 ﻿using System.Globalization;
-using System.Linq;
 using System.ServiceModel;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;
 using Teleopti.Interfaces.Domain;

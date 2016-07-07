@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction

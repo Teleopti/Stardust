@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-using Teleopti.Ccc.Domain.Logon;
-using Teleopti.Ccc.Infrastructure.Foundation;
+﻿using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Ccc.Web.Core.RequestContext.Initialize
 {

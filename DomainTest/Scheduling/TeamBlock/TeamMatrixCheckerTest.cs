@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Hql.Ast;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
-using List = NHibernate.Mapping.List;
 
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock

@@ -1,6 +1,5 @@
 ﻿
 using System.Collections.Generic;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Reporting;
 using Teleopti.Interfaces.Domain;
 

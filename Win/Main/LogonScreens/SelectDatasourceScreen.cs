@@ -1,6 +1,5 @@
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.WinCode.Main;
 using Teleopti.Interfaces.Domain;
 

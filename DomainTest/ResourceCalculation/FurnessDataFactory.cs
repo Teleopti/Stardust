@@ -1,5 +1,4 @@
-﻿using System;
-using Teleopti.Ccc.Secrets.Furness;
+﻿using Teleopti.Ccc.Secrets.Furness;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {

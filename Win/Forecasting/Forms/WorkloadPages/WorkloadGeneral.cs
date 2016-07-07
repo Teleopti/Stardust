@@ -3,7 +3,6 @@ using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using System;
-using System.Windows.Forms;
 using System.Diagnostics;
 using Teleopti.Interfaces.Domain;
 

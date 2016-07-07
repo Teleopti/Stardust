@@ -1,8 +1,6 @@
 using System;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
-using Rhino.Mocks;
-using Teleopti.Ccc.DomainTest.Helper;
 
 namespace Teleopti.Ccc.DomainTest.Common
 {

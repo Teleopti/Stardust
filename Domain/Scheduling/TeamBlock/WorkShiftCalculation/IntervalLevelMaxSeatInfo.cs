@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
+﻿namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 {
 	public class IntervalLevelMaxSeatInfo
 	{

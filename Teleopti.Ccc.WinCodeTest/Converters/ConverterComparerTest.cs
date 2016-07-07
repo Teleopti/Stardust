@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
 using System.Windows.Data;
 using NUnit.Framework;
 using Rhino.Mocks;

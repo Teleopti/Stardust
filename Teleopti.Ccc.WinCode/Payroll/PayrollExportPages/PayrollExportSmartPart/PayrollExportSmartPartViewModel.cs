@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Windows.Data;
 using System.Windows.Input;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Commands;
 using Teleopti.Interfaces.Domain;
 

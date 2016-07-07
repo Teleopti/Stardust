@@ -1,6 +1,4 @@
-﻿using System.Runtime.Remoting.Channels;
-
-namespace Teleopti.Wfm.Administration.Models
+﻿namespace Teleopti.Wfm.Administration.Models
 {
 	public class DbCheckModel
 	{

@@ -1,5 +1,4 @@
-﻿using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Reporting;
+﻿using Teleopti.Ccc.WinCode.Reporting;
 
 namespace Teleopti.Ccc.WinCode.Presentation
 {

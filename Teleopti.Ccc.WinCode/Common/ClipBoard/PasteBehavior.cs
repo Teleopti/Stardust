@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.WinCode.Common.Clipboard;
-using Teleopti.Interfaces.Domain;
+﻿using Syncfusion.Windows.Forms.Grid;
 
 namespace Teleopti.Ccc.WinCode.Common.Clipboard
 {
