@@ -18,8 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Controllers
         public ActionResult Index()
         {
 	        string baseUrl = Request.Url.Scheme + "://" + Request.Url.Authority;
-			string app = Request.ApplicationPath.TrimEnd('/');
-			app =  app.RemoveFromEnd("Web") + "/Administration";
+			string app = Request.ApplicationPath.TrimEnd('/').RemoveFromEnd("/Web") + "/Administration";
 			//if we browse here directly we don't want to display it if we have admins
 			if (_loadAllTenantsUsers.TenantUsers().Any())
 				return Redirect(Url.Content("~/"));
