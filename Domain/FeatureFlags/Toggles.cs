@@ -93,7 +93,7 @@
 		Wfm_Requests_PrepareForRelease_38771,
 		Wfm_Requests_ApproveDeny_ShiftTrade_38494,
 		Wfm_Requests_Default_Status_Filter_39472,
-		Wfm_Requests_Show_Deny_Reasons_39473,
+		Wfm_Requests_Show_Pending_Reasons_39473,
 
 		Wfm_Intraday_38074,
 

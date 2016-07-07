@@ -201,7 +201,7 @@
 						Wfm_Requests_Filtering_37748: true,
 						Wfm_Requests_ShiftTrade_More_Relevant_Information_38492: true,
 						Wfm_Requests_Default_Status_Filter_39472: true,
-						Wfm_Requests_Show_Deny_Reasons_39473: true,
+						Wfm_Requests_Show_Pending_Reasons_39473: true,
 						togglesLoaded: {
 							then: function (cb) { cb(); }
 						}
