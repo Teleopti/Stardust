@@ -1,23 +1,25 @@
 ﻿<div id="shift-detail" ui-grid="requestsTableContainer.gridOptions" class="ui-grid height-auto" ui-grid-auto-resize ui-grid-selection ui-grid-resize-columns ui-grid-pinning></div>
 
-<div ng-show="!requestsTableContainer.shiftTradeView && requestsTableContainer.thereIsRequest()">
+<form ng-show="!requestsTableContainer.shiftTradeView">
 	<span class="wfm-radio">
-		<input type="radio" name="groupTimezoneSetting" id="radioUserTimezone" checked="requestsTableContainer.isUsingRequestSubmitterTimeZone == false"
-			    ng-click="requestsTableContainer.isUsingRequestSubmitterTimeZone = false" />
+		<input type="radio" name="groupTimezoneSetting" id="radioUserTimezone"
+			   checked="!requestsTableContainer.isUsingRequestSubmitterTimeZone"
+			   ng-click="requestsTableContainer.isUsingRequestSubmitterTimeZone = false" />
 		<label for="radioUserTimezone">
 			<span class="wfm-radio-toggle"></span>
 			<span class="wfm-radio-label" translate>LogonUserTimeZone</span>
 		</label>
 	</span>
 	<span class="wfm-radio">
-		<input type="radio" name="groupTimezoneSetting" id="radioRequestTimezone" checked="requestsTableContainer.isUsingRequestSubmitterTimeZone == true"
+		<input type="radio" name="groupTimezoneSetting" id="radioRequestTimezone"
+			   checked="requestsTableContainer.isUsingRequestSubmitterTimeZone"
 			   ng-click="requestsTableContainer.isUsingRequestSubmitterTimeZone = true" />
 		<label for="radioRequestTimezone">
 			<span class="wfm-radio-toggle"></span>
 			<span class="wfm-radio-label" translate>RequestSubmitterTimeZone</span>
 		</label>
 	</span>
-</div>
+</form>
 
 <i ng-show="requestsTableContainer.gridOptions.enableFiltering" ng-click="requestsTableContainer.clearFilters()" class="mdi mdi-block-helper pointer" style="cursor: pointer; position: absolute; top: 5rem; left: 2rem;"><md-tooltip>{{'Clear'|translate}}</md-tooltip></i>
 <div  ng-mouseleave="requestsTableContainer.hideShiftDetail()" ng-if="requestsTableContainer.displayShiftDetail" ng-style="requestsTableContainer.shiftDetailStyleJson()" class="schedule-container">
