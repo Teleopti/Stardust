@@ -12,13 +12,13 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {
 #pragma warning disable 618
-	[EnabledBy(Toggles.ETL_SpeedUpETL_30791)]
-	public class AnalyticsScheduleChangeUpdater :
+	[EnabledBy(Toggles.ETL_SpeedUpETL_30791), DisabledBy(Toggles.ETL_RobustAnalyticsScheduleChangeUpdater_39556)]
+	public class AnalyticsScheduleChangeUpdaterBus :
 		IHandleEvent<ProjectionChangedEvent>,
 		IRunOnServiceBus
 #pragma warning restore 618
 	{
-		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsScheduleChangeUpdater));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsScheduleChangeUpdaterBus));
 		private readonly IAnalyticsFactScheduleHandler _factScheduleHandler;
 		private readonly IAnalyticsFactSchedulePersonHandler _factSchedulePersonHandler;
 		private readonly IAnalyticsFactScheduleDateHandler _factScheduleDateHandler;
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		private readonly IAnalyticsScenarioRepository _analyticsScenarioRepository;
 		private readonly IAnalyticsShiftCategoryRepository _analyticsShiftCategoryRepository;
 
-		public AnalyticsScheduleChangeUpdater(
+		public AnalyticsScheduleChangeUpdaterBus(
 			IAnalyticsFactScheduleHandler factScheduleHandler,
 			IAnalyticsFactScheduleDateHandler factScheduleDateHandler,
 			IAnalyticsFactSchedulePersonHandler factSchedulePersonHandler,

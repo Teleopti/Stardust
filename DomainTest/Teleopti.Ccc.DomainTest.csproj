@@ -178,6 +178,7 @@
     <Compile Include="ApplicationLayer\Rta\ViewModels\SiteViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\SkillViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\TeamViewModelBuilderTest.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeUpdaterHangfireTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangedInDefaultScenarioNotificationTest.cs" />
     <Compile Include="ApplicationLayer\ShiftCategoryTests\AnalyticsShiftCategoryUpdaterTests.cs" />
     <Compile Include="ApplicationLayer\ActivityTests\ActivityChangedHandlerTests.cs" />
@@ -393,7 +394,7 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactSchedulePersonHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleTimeHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeUpdaterTest.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeUpdaterBusTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\FakePersonScheduleDayReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\FakePublishEventsFromEventHandlers.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModelUpdaterTest.cs" />

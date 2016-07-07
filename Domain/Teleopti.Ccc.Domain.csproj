@@ -181,6 +181,7 @@
     <Compile Include="ApplicationLayer\ReadModelValidator\ValidateReadModelsEvent.cs" />
     <Compile Include="ApplicationLayer\ReadModelValidator\ValidateReadModelsEventHandler.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\SkillViewModelBuilder.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeUpdaterHangfire.cs" />
     <Compile Include="ApplicationLayer\SkillDay\AnalyticsForecastWorkloadUpdater.cs" />
     <Compile Include="Cascading\AddResourcesToSubSkillsFocusHighUnderstaffingPercentage.cs" />
     <Compile Include="Cascading\AvailableResourcesToMoveOnSkill.cs" />
@@ -626,7 +627,7 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactSchedulePerson.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleHandler.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleTime.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeUpdater.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeUpdaterBus.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleDateHandler.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactSchedulePersonHandler.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleTimeHandler.cs" />

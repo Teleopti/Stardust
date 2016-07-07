@@ -163,7 +163,8 @@
 		HealthCheck_ValidateReadModelPersonScheduleDay_39421,
 		HealthCheck_ValidateReadModelScheduleDay_39423,
 		ETL_SpeedUpIntradayBusinessUnit_38932,
-		ETL_SpeedUpNightlyBusinessUnit_38932
+		ETL_SpeedUpNightlyBusinessUnit_38932,
+		ETL_RobustAnalyticsScheduleChangeUpdater_39556
 		// ReSharper restore InconsistentNaming
 	}
 }
