@@ -290,5 +290,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 						  };
 			return ret;
 		}
+
+		public static INewBusinessRuleCollection NightlyRestRule()
+		{
+			var ret = new NewBusinessRuleCollection
+			{
+				new NewNightlyRestRule(new WorkTimeStartEndExtractor())
+			};
+			return ret;
+		}
 	}
 }

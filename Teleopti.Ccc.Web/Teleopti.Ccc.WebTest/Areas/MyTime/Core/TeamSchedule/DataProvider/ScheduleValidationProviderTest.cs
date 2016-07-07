@@ -7,6 +7,9 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -32,10 +35,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
 			system.UseTestDouble<ScheduleValidationProvider>().For<IScheduleValidationProvider>();
+
+			var dataSource = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
+			var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
+			StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
 		}
 
-		[Test]
-		[Ignore("Ignore until finished.")]
+		[Test]		
 		public void ShouldGetResultForNightlyRestRuleCheckBetweenYesterdayAndToday()
 		{
 			var scenario = CurrentScenario.Current();
@@ -50,10 +56,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 
 			var dateTimePeriodToday = new DateTimePeriod(2016,1,2,1,2016,1,2,23);
 			var dateTimePeriodYesterday = new DateTimePeriod(2016,1,1,1,2016,1,1,23);
-			var personAssignmentToday = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person,dateTimePeriodToday);
-			var personAssignmentYesterday = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person,dateTimePeriodYesterday);
+			var activity = ActivityFactory.CreateActivity("Phone");
+			activity.InWorkTime = true;
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
+			var personAssignmentToday = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, dateTimePeriodToday, shiftCategory, scenario);
+			var personAssignmentYesterday = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, dateTimePeriodYesterday, shiftCategory, scenario);
 			ScheduleStorage.Add(personAssignmentToday);
 			ScheduleStorage.Add(personAssignmentYesterday);
+			
 			var results = Target.GetBusinessRuleValidationResults(new FetchRuleValidationResultFormData
 			{
 				Date = new DateTime(2016,1,2),
@@ -63,7 +74,45 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 				}
 			});
 			results.First().PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault());
-			results.First().Warnings.Contains(string.Format(Resources.BusinessRuleNightlyRestRuleErrorMessage,8,"2016-01-01","2016-01-02",2)).Should().Be.EqualTo(true);
+			results.First()
+				.Warnings.Single().Should().Be.EqualTo(string.Format(Resources.BusinessRuleNightlyRestRuleErrorMessage, "8:00", "2016/1/1", "2016/1/2", "2:00"));
+		}
+
+		[Test]
+		public void ShouldGetResultForNightlyRestRuleCheckBetweenTodayAndTomorrow()
+		{
+			var scenario = CurrentScenario.Current();
+			var team = TeamFactory.CreateSimpleTeam();
+
+			var contract = PersonContractFactory.CreatePersonContract();
+			contract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(0), TimeSpan.FromHours(40), TimeSpan.FromHours(8), TimeSpan.FromHours(40));
+
+			var person = PersonFactory.CreatePersonWithGuid("Peter", "peter");
+			person.AddPersonPeriod(new PersonPeriod(new DateOnly(2015, 12, 30), contract, team));
+			PersonRepository.Has(person);
+
+			var dateTimePeriodToday = new DateTimePeriod(2016, 1, 2, 1, 2016, 1, 2, 23);
+			var dateTimePeriodTomorrow = new DateTimePeriod(2016, 1, 3, 1, 2016, 1, 3, 23);
+			var activity = ActivityFactory.CreateActivity("Phone");
+			activity.InWorkTime = true;
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
+			var personAssignmentToday = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, dateTimePeriodToday, shiftCategory, scenario);
+			var personAssignmentTomorrow = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, dateTimePeriodTomorrow, shiftCategory, scenario);
+			ScheduleStorage.Add(personAssignmentToday);
+			ScheduleStorage.Add(personAssignmentTomorrow);
+
+			var results = Target.GetBusinessRuleValidationResults(new FetchRuleValidationResultFormData
+			{
+				Date = new DateTime(2016, 1, 2),
+				PersonIds = new List<Guid>
+				{
+					person.Id.GetValueOrDefault()
+				}
+			});
+			results.First().PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault());
+			results.First()
+				.Warnings.Single().Should().Be.EqualTo(string.Format(Resources.BusinessRuleNightlyRestRuleErrorMessage, "8:00", "2016/1/2", "2016/1/3", "2:00"));
 		}
 	}
 }
