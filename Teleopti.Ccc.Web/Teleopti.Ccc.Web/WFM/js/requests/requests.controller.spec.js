@@ -104,7 +104,7 @@ describe('RequestsControllerTests', function () {
 		var startDate = moment();
 		var defaultPeriod = {
 			startDate: startDate.toDate(),
-			endDate: startDate.add(90, 'day').toDate()
+			endDate: startDate.add(10, 'day').toDate()
 		};
 
 		var periodLongerThen60Days = {
