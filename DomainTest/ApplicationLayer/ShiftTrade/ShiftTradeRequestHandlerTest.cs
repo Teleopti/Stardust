@@ -350,9 +350,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			personRequestRepository.Stub(x => x.Get(accept.PersonRequestId)).Return(personRequest);
 			scenarioRepository.Stub(x => x.Current()).Return(scenario);
 			requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker(schedulingResultState)).Return(statusChecker);
-			var ruleResponse = new BusinessRuleResponse(typeof (NewPersonAccountRule), "no go", false, false,
-				new DateTimePeriod(), PersonFactory.CreatePersonWithId(), new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
-			var rules = new List<IBusinessRuleResponse> { ruleResponse };
+			var ruleResponse1 = new BusinessRuleResponse(typeof (NewMaxWeekWorkTimeRule), "no go", false, false,
+				new DateTimePeriod(), PersonFactory.CreatePersonWithId(), new DateOnlyPeriod(new DateOnly(2008, 12, 22), new DateOnly(2008, 12, 25)));
+			var ruleResponse2 = new BusinessRuleResponse(typeof(NewShiftCategoryLimitationRule), "no go", false, false,
+				new DateTimePeriod(), PersonFactory.CreatePersonWithId(), new DateOnlyPeriod(new DateOnly(2008, 12, 22), new DateOnly(2008, 12, 25)));
+			var rules = new List<IBusinessRuleResponse> { ruleResponse1, ruleResponse2 };
 			((FakeNewBusinessRuleCollection)newBusinessRuleCollection).SetRuleResponse(rules);
 			newBusinessRuleCollection.Add(new NewPersonAccountRule(null, null));
 			
