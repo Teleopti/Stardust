@@ -207,7 +207,7 @@
 							field: 'GetBrokenRules()',
 							headerCellFilter: 'translate',
 							cellClass: 'request-broken-rules',
-							visible: false,
+							visible: true,
 							pinnedRight: true,
 							enablePinning: false,
 							enableSorting: false,
