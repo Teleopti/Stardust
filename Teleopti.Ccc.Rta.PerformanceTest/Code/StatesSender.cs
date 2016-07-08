@@ -31,7 +31,8 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		[LogTime]
 		public virtual void Send()
 		{
-			states().ForEach(stateChange =>
+			stateChanges = states();
+			stateChanges.ForEach(stateChange =>
 			{
 				setTime(stateChange);
 				Enumerable.Range(0, _stateHolder.NumberOfAgents)
@@ -55,7 +56,8 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 
 		public void SendBatches()
 		{
-			states().ForEach(stateChange =>
+			stateChanges = states();
+			stateChanges.ForEach(stateChange =>
 			{
 				setTime(stateChange);
 				Enumerable.Range(0, _stateHolder.NumberOfAgents)
@@ -81,7 +83,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			_http.Get("/Test/SetCurrentTime?ticks=" + now.Ticks);
 		}
 
-		private static IEnumerable<StateChange> states()
+		private static StateChange[] states()
 		{
 			return new[]
 			{
