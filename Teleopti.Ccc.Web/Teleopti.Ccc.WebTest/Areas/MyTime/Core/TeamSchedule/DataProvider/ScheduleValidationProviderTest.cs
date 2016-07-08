@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -54,6 +55,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			person.AddPersonPeriod(new PersonPeriod(new DateOnly(2015,12,30), contract, team));
 			PersonRepository.Has(person);
 
+			var today = new DateTime(2016, 1, 2);
+			var yesterday = new DateTime(2016, 1, 1);
 			var dateTimePeriodToday = new DateTimePeriod(2016,1,2,1,2016,1,2,23);
 			var dateTimePeriodYesterday = new DateTimePeriod(2016,1,1,1,2016,1,1,23);
 			var activity = ActivityFactory.CreateActivity("Phone");
@@ -75,7 +78,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			});
 			results.First().PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault());
 			results.First()
-				.Warnings.Single().Should().Be.EqualTo(string.Format(Resources.BusinessRuleNightlyRestRuleErrorMessage, "8:00", "2016/1/1", "2016/1/2", "2:00"));
+				.Warnings.Single()
+				.Should()
+				.Be.EqualTo(string.Format(Resources.BusinessRuleNightlyRestRuleErrorMessage, "8:00",
+					yesterday.ToString("d", CultureInfo.CurrentCulture.DateTimeFormat),
+					today.ToString("d", CultureInfo.CurrentCulture.DateTimeFormat), "2:00"));
 		}
 
 		[Test]
@@ -91,6 +98,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			person.AddPersonPeriod(new PersonPeriod(new DateOnly(2015, 12, 30), contract, team));
 			PersonRepository.Has(person);
 
+			var today = new DateTime(2016, 1, 2);
+			var tomorrow = new DateTime(2016, 1, 3);
 			var dateTimePeriodToday = new DateTimePeriod(2016, 1, 2, 1, 2016, 1, 2, 23);
 			var dateTimePeriodTomorrow = new DateTimePeriod(2016, 1, 3, 1, 2016, 1, 3, 23);
 			var activity = ActivityFactory.CreateActivity("Phone");
@@ -112,7 +121,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			});
 			results.First().PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault());
 			results.First()
-				.Warnings.Single().Should().Be.EqualTo(string.Format(Resources.BusinessRuleNightlyRestRuleErrorMessage, "8:00", "2016/1/2", "2016/1/3", "2:00"));
+				.Warnings.Single()
+				.Should()
+				.Be.EqualTo(string.Format(Resources.BusinessRuleNightlyRestRuleErrorMessage, "8:00",
+					today.ToString("d", CultureInfo.CurrentCulture.DateTimeFormat),
+					tomorrow.ToString("d", CultureInfo.CurrentCulture.DateTimeFormat), "2:00"));
 		}
 	}
 }
