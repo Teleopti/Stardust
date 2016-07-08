@@ -61,7 +61,7 @@ RTA_ScheduleProjectionReadOnlyHangfire_35703 = true
 RTA_AlarmContext_29357 = true
 RTA_TotalOutOfAdherenceTime_38702 = true
 RTA_PauseButton_39144 = true
-RTA_MonitorBySkills_39081 = RC
+RTA_MonitorBySkills_39081 = true
 RTA_RecentOutOfAdherences_39145 = RC
 RTA_Optimize_39667 = DEV
 
