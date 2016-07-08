@@ -96,39 +96,4 @@ describe('RequestsControllerTests', function () {
 		test.scope.$digest();
 		expect(controller.period).toEqual(periodForShiftTradeRequest);
 	});
-
-	it('not allow date range longer than 60 days for shift trade request', function () {
-		var test = setUpTarget();
-		test.scope.$digest();
-
-		var startDate = moment();
-		var defaultPeriod = {
-			startDate: startDate.toDate(),
-			endDate: startDate.add(10, 'day').toDate()
-		};
-
-		var periodLongerThen60Days = {
-			startDate: startDate.toDate(),
-			endDate: startDate.add(61, 'day').toDate()
-		};
-
-		var controller = test.target;
-		controller.selectedTabIndex = absenceRequestTabIndex;
-		controller.period = defaultPeriod;
-		test.scope.$digest();
-
-		controller.selectedTabIndex = shiftTradeRequestTabIndex;
-		controller.period = defaultPeriod;
-		test.scope.$digest();
-		
-		controller.selectedTabIndex = absenceRequestTabIndex;
-		controller.period = periodLongerThen60Days;
-		test.scope.$digest();
-		expect(controller.period).toEqual(periodLongerThen60Days);
-		
-		controller.selectedTabIndex = shiftTradeRequestTabIndex;
-		controller.period = periodLongerThen60Days;
-		test.scope.$digest();
-		expect(controller.period).toEqual(defaultPeriod);
-	});
 });
