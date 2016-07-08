@@ -26,8 +26,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
 	    private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
 		private readonly IUserTimeZone _userTimeZone;
+		private readonly ICurrentScenario _scenarioRepository;
 
-		public PersonScheduleViewModelFactory(IPersonRepository personRepository, IPersonScheduleDayReadModelFinder personScheduleDayReadModelRepository, IAbsenceRepository absenceRepository, IActivityRepository activityRepository, IPersonScheduleViewModelMapper personScheduleViewModelMapper, IPersonAbsenceRepository personAbsenceRepository, IJsonDeserializer deserializer, IPermissionProvider permissionProvider, ICommonAgentNameProvider commonAgentNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider, IUserTimeZone userTimeZone)
+		public PersonScheduleViewModelFactory(IPersonRepository personRepository, IPersonScheduleDayReadModelFinder personScheduleDayReadModelRepository, IAbsenceRepository absenceRepository, IActivityRepository activityRepository, IPersonScheduleViewModelMapper personScheduleViewModelMapper, IPersonAbsenceRepository personAbsenceRepository, IJsonDeserializer deserializer, IPermissionProvider permissionProvider, ICommonAgentNameProvider commonAgentNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider, IUserTimeZone userTimeZone, ICurrentScenario scenarioRepository)
 		{
 			_personRepository = personRepository;
 			_personScheduleDayReadModelRepository = personScheduleDayReadModelRepository;
@@ -40,6 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			_commonAgentNameProvider = commonAgentNameProvider;
 		    _ianaTimeZoneProvider = ianaTimeZoneProvider;
 		    _userTimeZone = userTimeZone;
+			_scenarioRepository = scenarioRepository;
 		}
 
 		public PersonScheduleViewModel CreateViewModel(Guid personId, DateTime date)
@@ -88,7 +90,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				end = DateTime.SpecifyKind(personScheduleDayReadModel.End.Value, DateTimeKind.Utc);
 
 			var absencePeriod = new DateTimePeriod(start, end);
-			return _personAbsenceRepository.Find(new[] { person }, absencePeriod);
+			var scenario = _scenarioRepository.Current();
+			return _personAbsenceRepository.Find(new[] { person }, absencePeriod, scenario);
 		}
 	}
 }
