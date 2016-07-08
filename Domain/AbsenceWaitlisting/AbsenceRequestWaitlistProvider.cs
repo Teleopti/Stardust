@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 		private bool requestShouldBeProcessed(IPersonRequest request, IWorkflowControlSet workflowControlSet)
 		{
 
-			if (workflowControlSet == null)
+			if (workflowControlSet == null || ((Person)request.Person).IsDeleted)
 			{
 				return false;
 			}
