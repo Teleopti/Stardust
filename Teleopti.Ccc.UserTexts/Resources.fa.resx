@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Absence" xml:space="preserve">
-    <value>غیبت</value>
+    <value>مرخصی</value>
   </data>
   <data name="Absences" xml:space="preserve">
-    <value>غیبت</value>
+    <value>مرخصی</value>
   </data>
   <data name="AbsencesColon" xml:space="preserve">
-    <value>غیبت:</value>
+    <value>مرخصی:</value>
   </data>
   <data name="AbsolutePosition" xml:space="preserve">
     <value>وضعیت قطعی</value>
@@ -157,7 +157,7 @@
     <value>افزودن</value>
   </data>
   <data name="AddAbsence" xml:space="preserve">
-    <value>افزودن غیبت</value>
+    <value>افزودن مرخصی</value>
   </data>
   <data name="AddActivity" xml:space="preserve">
     <value>افزودن فعالیت</value>
@@ -448,7 +448,7 @@
     <value>حذف کردن</value>
   </data>
   <data name="DeleteAbsence" xml:space="preserve">
-    <value>حذف کردن غیبت ها</value>
+    <value>حذف کردن مرخصیها</value>
   </data>
   <data name="DeleteDayOff" xml:space="preserve">
     <value>حذف کردن روز تعطیل</value>
@@ -592,7 +592,7 @@
     <value>فعالیتهای شبکه ای</value>
   </data>
   <data name="GroupingAbsences" xml:space="preserve">
-    <value>گروه بتدی غیبت ها</value>
+    <value>گروه بتدی مرخصیها</value>
   </data>
   <data name="Header" xml:space="preserve">
     <value>سر صفحه</value>
@@ -646,16 +646,16 @@
     <value>تغییر ستون انتخابی </value>
   </data>
   <data name="IsFullDayAbsence" xml:space="preserve">
-    <value>غیبت کل روز</value>
+    <value>مرخصی روزانه</value>
   </data>
   <data name="ItemsSelectedParameter" xml:space="preserve">
     <value>{0} آیتم انتخاب شده </value>
   </data>
   <data name="KpiAbsenteeism" xml:space="preserve">
-    <value>غیبت از کار (%)</value>
+    <value>مرخصی از کار (%)</value>
   </data>
   <data name="KpiAdherence" xml:space="preserve">
-    <value>تبعیت (%)</value>
+    <value>هم راستایی (%)</value>
   </data>
   <data name="KpiAverageAfterCallWork" xml:space="preserve">
     <value>متوسط بعد از تماس ها</value>
@@ -700,10 +700,10 @@
     <value>قفل </value>
   </data>
   <data name="LockAbsence" xml:space="preserve">
-    <value>قفل کردن غیبت</value>
+    <value>قفل کردن مرخصی</value>
   </data>
   <data name="LockAbsences" xml:space="preserve">
-    <value>قفل کردن غیبت ها</value>
+    <value>قفل کردن مرخصیها</value>
   </data>
   <data name="LockAll" xml:space="preserve">
     <value>قفل کردن همه</value>
@@ -736,7 +736,7 @@
     <value>صفحه اصلی</value>
   </data>
   <data name="ManageAbsence" xml:space="preserve">
-    <value>مدیریت کردن غیبت</value>
+    <value>مدیریت کردن مرخصی</value>
   </data>
   <data name="ManageDayDistributionsThreeDots" xml:space="preserve">
     <value>مدیریت کردن توزیع روزانه</value>
@@ -925,7 +925,7 @@
     <value>الصاق</value>
   </data>
   <data name="PasteAbsence" xml:space="preserve">
-    <value>الصاق غیبت</value>
+    <value>الصاق مرخصی</value>
   </data>
   <data name="PasteAssignment" xml:space="preserve">
     <value>الصاق شیفت</value>
@@ -1129,7 +1129,7 @@
     <value>ویرایشگر شیفت</value>
   </data>
   <data name="ShowAbsence" xml:space="preserve">
-    <value>نمایش غیبت</value>
+    <value>نمایش مرخصی</value>
   </data>
   <data name="ShowDetails" xml:space="preserve">
     <value>نمایش جزئیات</value>
@@ -1456,7 +1456,7 @@
     <value>قادر به اتصال به خدمت از راه دور نمی باشد </value>
   </data>
   <data name="AbsenceRequest" xml:space="preserve">
-    <value>درخواست غیبت</value>
+    <value>درخواست مرخصی</value>
   </data>
   <data name="AgentName" xml:space="preserve">
     <value>نام پاسخگو</value>
@@ -1468,7 +1468,7 @@
     <value>تا</value>
   </data>
   <data name="NewAbsenceRequest" xml:space="preserve">
-    <value>درخواست غیبت جدید</value>
+    <value>درخواست مرخصی جدید</value>
   </data>
   <data name="Requests" xml:space="preserve">
     <value>درخواست ها</value>
@@ -1828,7 +1828,7 @@
     <value>توصیف اپراتور مشترک</value>
   </data>
   <data name="Main" xml:space="preserve">
-    <value>سلسله مراتب کسب و کار</value>
+    <value>سلسله مراتب </value>
   </data>
   <data name="Permissions" xml:space="preserve">
     <value>مجوزها</value>
@@ -2290,7 +2290,7 @@
     <value>زمانبندی اتوماتیک</value>
   </data>
   <data name="ModifyAbsence" xml:space="preserve">
-    <value>اصلاح کردن غیبت</value>
+    <value>اصلاح کردن مرخصی</value>
   </data>
   <data name="ModifyAssignment" xml:space="preserve">
     <value>اصلاح کردن تخصیص</value>
@@ -2449,7 +2449,7 @@
     <value>نوع درخواست</value>
   </data>
   <data name="RequestTypeAbsence" xml:space="preserve">
-    <value>غیبت</value>
+    <value>مرخصی</value>
   </data>
   <data name="Seniority" xml:space="preserve">
     <value>ارشدیت</value>
@@ -2611,7 +2611,7 @@
     <value>شروع وابسته</value>
   </data>
   <data name="RealTimeAdherence" xml:space="preserve">
-    <value>تبعیت زمان حقیقی</value>
+    <value>هم راستایی بهنگام</value>
   </data>
   <data name="StateGroupAvailableDescription" xml:space="preserve">
     <value>(پاسخگوها برای تماس گرفتن در دسترس هستند )</value>
@@ -2852,7 +2852,7 @@
 </value>
   </data>
   <data name="AddAbsenceThreeDots" xml:space="preserve">
-    <value>افزودن غیبت...</value>
+    <value>افزودن مرخصی </value>
   </data>
   <data name="AddActivityThreeDots" xml:space="preserve">
     <value>افزودن فعالیت...</value>
@@ -2963,7 +2963,7 @@
     <value>دسترس پذیری شخص جدید</value>
   </data>
   <data name="Adherence" xml:space="preserve">
-    <value>تبعیت</value>
+    <value>هم راستایی</value>
   </data>
   <data name="InvalidAgentName" xml:space="preserve">
     <value>نام نامعتبر</value>
@@ -3035,7 +3035,7 @@
     <value>حذف سناریو</value>
   </data>
   <data name="CreateAbsenceRequest" xml:space="preserve">
-    <value>درخواستهای غیبت</value>
+    <value>درخواستهای مرخصی</value>
   </data>
   <data name="CreateShiftTradeRequest" xml:space="preserve">
     <value>درخواست معاوضه شیفت</value>
@@ -3059,7 +3059,7 @@
     <value>بهینه سازی</value>
   </data>
   <data name="ManageRTA" xml:space="preserve">
-    <value>مدیریت کردن تبعیت سیستم بازده فوری </value>
+    <value>مدیریت کردن هم راستایی بهنگام </value>
   </data>
   <data name="SelectShiftCategory" xml:space="preserve">
     <value>انتخاب دسته بندی شیفت</value>
@@ -3104,7 +3104,7 @@
     <value>روز تعطیل جدید</value>
   </data>
   <data name="AbsenceRequestEmptyAbsenceTypeError" xml:space="preserve">
-    <value>غیبت انتخاب نشده است</value>
+    <value>مرخصی انتخاب نشده است</value>
   </data>
   <data name="SuggestedTimesColon" xml:space="preserve">
     <value>زمانهای پیشنهاد شده:</value>
@@ -3497,7 +3497,7 @@
     <value>مجموع:</value>
   </data>
   <data name="TotalOutOfAdherenceColon" xml:space="preserve">
-    <value>خارج از تبعیت:</value>
+    <value>عدم هم راستایی</value>
   </data>
   <data name="SaveAsScenario" xml:space="preserve">
     <value>ذخیره در سناریو</value>
@@ -3674,7 +3674,7 @@
     <value>پاسخگو زمانبندی شده و واقعی</value>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
-    <value>دسته بندی شیفت و غیبت روز کامل برای هر پاسخگو</value>
+    <value>دسته بندی شیفت و مرخصی روز کامل برای هر پاسخگو</value>
   </data>
   <data name="ResReportShiftCategoryPerDay" xml:space="preserve">
     <value>دسته بندی شیفت در هر روز</value>
@@ -4172,7 +4172,7 @@
     <value>بارگذاری</value>
   </data>
   <data name="ResReportAbsenceTimePerAgent" xml:space="preserve">
-    <value>زمان غیبت برای هر پاسخگو</value>
+    <value>زمان مرخصی برای هر پاسخگو</value>
   </data>
   <data name="AllowTextReply" xml:space="preserve">
     <value>اجازه پاسخ متن</value>
@@ -4334,7 +4334,7 @@
     <value>زمانبندی نشده</value>
   </data>
   <data name="AdherenceReportCalculation" xml:space="preserve">
-    <value>محاسبه تبعیت</value>
+    <value>محاسبه هم راستایی</value>
   </data>
   <data name="AddDays" xml:space="preserve">
     <value>افزودن روزها</value>
@@ -4556,10 +4556,10 @@
     <value>آیا شما مطمئن هستید که می خواهید این گردش را حذف کنید؟</value>
   </data>
   <data name="AbsenceRequestHasBeenApprovedDot" xml:space="preserve">
-    <value>درخواست غیبت{0} - {1} تایید شد.</value>
+    <value>درخواست مرخصی {0} - {1} تایید شد.</value>
   </data>
   <data name="AbsenceRequestHasBeenDeniedDot" xml:space="preserve">
-    <value>درخواست غیبت از{0} به {1} پذیرفته نشده است.</value>
+    <value>درخواست مرخصی از{0} به {1} پذیرفته نشده است.</value>
   </data>
   <data name="Details" xml:space="preserve">
     <value>جزئیات</value>
@@ -4790,7 +4790,7 @@
     <value>خطای ورودی</value>
   </data>
   <data name="NewAbsence" xml:space="preserve">
-    <value>غیبت جدید</value>
+    <value>مرخصی جدید</value>
   </data>
   <data name="TheNameIsTooLong" xml:space="preserve">
     <value>نام طولانی است</value>
@@ -4823,7 +4823,7 @@
     <value>درخواست معاوضه شیفت شما توسط گیرنده پذیرفته نشده است.   </value>
   </data>
   <data name="RequestDenyReasonPersonAccount" xml:space="preserve">
-    <value>درخواست غیبت شما بصورت اتوماتیک پذیرفته نشده است. شما زمان باقیمانده کافی در صورت وضعیت حساب شخصی خود ندارید. </value>
+    <value>درخواست مرخصی شما بصورت اتوماتیک پذیرفته نشده است. شما زمان باقیمانده کافی در صورت وضعیت حساب شخصی خود ندارید. </value>
   </data>
   <data name="RequestDenyReasonSupervisor" xml:space="preserve">
     <value>درخواست شما توسط مدیر پذیرفته نشده است.   </value>
@@ -4946,7 +4946,7 @@
     <value>هموارسازی</value>
   </data>
   <data name="AbsenceRequests" xml:space="preserve">
-    <value>درخواستهای غیبت</value>
+    <value>درخواستهای مرخصی</value>
   </data>
   <data name="CheckPersonAccount" xml:space="preserve">
     <value>چک کردن حساب شخصی</value>
@@ -4958,7 +4958,7 @@
     <value>مدیریت کردن مجموعه های کنترل جریان کار</value>
   </data>
   <data name="OpenForAbsenceRequests" xml:space="preserve">
-    <value>باز کردن برای درخواستهای غیبت</value>
+    <value>باز کردن برای درخواستهای مرخصی</value>
   </data>
   <data name="Viewpoint" xml:space="preserve">
     <value>دیدگاه</value>
@@ -5027,7 +5027,7 @@
     <value>نتیجه زمانبندی</value>
   </data>
   <data name="OnlineReports" xml:space="preserve">
-    <value>گزارشات برخط</value>
+    <value>گزارشات بهنگام</value>
   </data>
   <data name="ScheduledTimePerActivityReport" xml:space="preserve">
     <value>زمان زمانبندی شده برای هر فعالیت</value>
@@ -5048,7 +5048,7 @@
     <value>پایه</value>
   </data>
   <data name="RealTime" xml:space="preserve">
-    <value>گزارشهای برخط</value>
+    <value>گزارشهای بهنگام</value>
   </data>
   <data name="NotPublished" xml:space="preserve">
     <value>منتشر نشده است</value>
@@ -5201,7 +5201,7 @@
     <value>شما باید {0} روز تعطیل داشته باشید. در حال حاضر شما {1} روز تعطیل دارید.</value>
   </data>
   <data name="ResReportAbsenceTimePerAbsence" xml:space="preserve">
-    <value>زمان غیبت برای هر غیبت</value>
+    <value>زمان مرخصی برای هر مرخصی</value>
   </data>
   <data name="LoggedOnUserColon" xml:space="preserve">
     <value>کاربر وارد شده به سیستم</value>
@@ -5668,7 +5668,7 @@
     <value>تذکر حقوقی</value>
   </data>
   <data name="ShiftTradeAbsenceDenyReason" xml:space="preserve">
-    <value>معاوضه شیفت نمی تواند انجام شود به علت غیبت در یک شیفت.</value>
+    <value>معاوضه شیفت نمی تواند انجام شود به علت مرخصی در یک شیفت.</value>
   </data>
   <data name="ShiftTradePersonalActivityDenyReason" xml:space="preserve">
     <value>معاوضه شیفت پذیرفته نشد زیرا فعالیت شخصی خارج از شیفت تمام شده است .</value>
@@ -5782,10 +5782,10 @@
     <value>فرستادن پیام (ASM)</value>
   </data>
   <data name="AllAbsences" xml:space="preserve">
-    <value>همه غیبتها</value>
+    <value>همه مرخصیها</value>
   </data>
   <data name="AllFulFilledAbsences" xml:space="preserve">
-    <value>همه غیبتهای انجام شده</value>
+    <value>همه مرخصیهای انجام شده</value>
   </data>
   <data name="SignCustomerWeb" xml:space="preserve">
     <value>ورود به سیستم وبسایت مشتری</value>
@@ -5833,7 +5833,7 @@
     <value>شما حداقل باید یک مهارت را انتخاب کنید. </value>
   </data>
   <data name="AbsencesAvailableForExtendedPreference" xml:space="preserve">
-    <value>دسترسی غیبتها برای الویتها</value>
+    <value>دسترسی مرخصیها برای الویتها</value>
   </data>
   <data name="CannotDisplayAllMeetings" xml:space="preserve">
     <value>نمی تواند همه جلسات را در این زمان نمایش دهد!</value>
@@ -5842,7 +5842,7 @@
     <value>ارزش زمان نامعتبر {0}</value>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerDay" xml:space="preserve">
-    <value>دسبه بندی شیفت و غیبت روز کامل در هر روز</value>
+    <value>دسبه بندی شیفت و مرخصی روز کامل در هر روز</value>
   </data>
   <data name="UseSameDayOffs" xml:space="preserve">
     <value>استفاده روزهای تعطیل یکسان </value>
@@ -5854,7 +5854,7 @@
     <value>بازرسی</value>
   </data>
   <data name="AuditingReportAbsence" xml:space="preserve">
-    <value>غیبت</value>
+    <value>مرخصی</value>
   </data>
   <data name="AuditingReportDayOff" xml:space="preserve">
     <value>روز تعطیل</value>
@@ -5896,7 +5896,7 @@
     <value>برگرداندن به حالت اول</value>
   </data>
   <data name="NoRequestsFound" xml:space="preserve">
-    <value>هیچ درخواستی نمی تواند یافت شود</value>
+    <value>هیچ درخواستی یافت نمیشود</value>
   </data>
   <data name="AbsenceExtra" xml:space="preserve">
     <value>اضافی</value>
@@ -6052,7 +6052,7 @@
     <value>تنظیم برای زمان کار قابل تغییر</value>
   </data>
   <data name="RequestDenyReasonBudgetGroupAllowance" xml:space="preserve">
-    <value>درخواست غیبت شما بصورت اتوماتیک پذیرفته نشده است. مجوز مکفی برای این درخواست وجود ندارد</value>
+    <value>درخواست مرخصی شما بصورت اتوماتیک پذیرفته نشده است. مجوز مکفی برای این درخواست وجود ندارد</value>
   </data>
   <data name="MeetingActivityRequired" xml:space="preserve">
     <value>یک فعالیت انتخاب کنید!</value>
@@ -6244,13 +6244,13 @@
     <value>اجرای الویت</value>
   </data>
   <data name="AbsenceRequestForOneDayHasBeenApprovedDot" xml:space="preserve">
-    <value>درخواست غیبت {0} تایید شد.</value>
+    <value>درخواست مرخصی {0} تایید شد.</value>
   </data>
   <data name="RotationFulfillment" xml:space="preserve">
     <value>اجرای گردش</value>
   </data>
   <data name="AbsenceRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
-    <value>درخواست غیبت {0} پذیرفته نشد.</value>
+    <value>درخواست مرخصی {0} پذیرفته نشد.</value>
   </data>
   <data name="StudentAvailabilityFulfillment" xml:space="preserve">
     <value>اجرای دسترس پذیری ساعتی</value>
@@ -6277,16 +6277,16 @@
     <value>مجوز درخواست</value>
   </data>
   <data name="NoAbsenceDefined" xml:space="preserve">
-    <value>شما باید حداقل یک غیبت ایجاد کنید تا بتوانید این را انجام دهید.</value>
+    <value>شما باید حداقل یک مرخصی ایجاد کنید تا بتوانید این را انجام دهید.</value>
   </data>
   <data name="NoAbsenceDefinedCaption" xml:space="preserve">
-    <value>هیچ غیبتی تعریف نشده است</value>
+    <value>هیچ مرخصی تعریف نشده است</value>
   </data>
   <data name="AbsenceType" xml:space="preserve">
-    <value>نوع غیبت:</value>
+    <value>نوع مرخصی</value>
   </data>
   <data name="AbsenceRequestsWeb" xml:space="preserve">
-    <value>درخواستهای غیبت</value>
+    <value>درخواستهای مرخصی</value>
   </data>
   <data name="FullDay" xml:space="preserve">
     <value>روز کامل</value>
@@ -6301,7 +6301,7 @@
     <value>شما باید {0} تا {1} ساعت کار کنید.</value>
   </data>
   <data name="MissingAbsenceType" xml:space="preserve">
-    <value>نوع غیبت گمشده.</value>
+    <value>نوع مرخصی گمشده.</value>
   </data>
   <data name="SubmitRequest" xml:space="preserve">
     <value>ارائه کردن</value>
@@ -6490,7 +6490,7 @@
     <value>از دوره زمانبندی</value>
   </data>
   <data name="FullDayAbsence" xml:space="preserve">
-    <value>غیبت روزانه</value>
+    <value>مرخصی روزانه</value>
   </data>
   <data name="InsufficientPermissionForWeb" xml:space="preserve">
     <value>شما مجوز دسترسی به وب پرتال را ندارید.</value>
@@ -6520,10 +6520,10 @@
     <value>روز تعطیل یکسان</value>
   </data>
   <data name="ResReportAdherencePerAgent" xml:space="preserve">
-    <value>تبعیت برای هر پاسخگو</value>
+    <value>هم راستایی برای هر پاسخگو</value>
   </data>
   <data name="ResReportAdherencePerDay" xml:space="preserve">
-    <value>تبعیت در هر روز</value>
+    <value>هم راستایی در هر روز</value>
   </data>
   <data name="PleaseChooseSkillSet" xml:space="preserve">
     <value>لطفا مجموعه مهارت را انتخاب کنید.</value>
@@ -6559,7 +6559,7 @@
     <value>مجموع </value>
   </data>
   <data name="NoMessagesFound" xml:space="preserve">
-    <value>هیچ پیامی نمی تواند یافت شود.</value>
+    <value>هیچ پیامی یافت نمیشود.</value>
   </data>
   <data name="Sender" xml:space="preserve">
     <value>فرستنده</value>
@@ -6691,7 +6691,7 @@
     <value>ساخت پیش بینی برای</value>
   </data>
   <data name="SelectedAbsences" xml:space="preserve">
-    <value>غیبت های انتخاب شده </value>
+    <value>مرخصیهای انتخاب شده </value>
   </data>
   <data name="ProcessingDotDotDot" xml:space="preserve">
     <value>در حال پردازش</value>
@@ -6703,7 +6703,7 @@
     <value>اجازه مکفی برای روز وجود ندارد:</value>
   </data>
   <data name="AddFullDayAbsence" xml:space="preserve">
-    <value>افزودن غیبت روز کامل</value>
+    <value>افزودن مرخصی روز کامل</value>
   </data>
   <data name="InvalidEndDate" xml:space="preserve">
     <value>تاریخ پایان نامعتبر</value>
@@ -6859,7 +6859,7 @@
     <value>تاریخ تکراری مجاز نیست</value>
   </data>
   <data name="RestoreASM" xml:space="preserve">
-    <value>بازیابی پیغام آور برنامه  پاسخگو</value>
+    <value>بازیابی نمایه برنامه پاسخگو</value>
   </data>
   <data name="DefaultRuleSetBagName" xml:space="preserve">
     <value>&lt;نام بسته مجموعه قواعد &gt;</value>
@@ -6889,7 +6889,7 @@
     <value>یک زمان نامعتبر {0} بر خط پیدا شد{1}. لطفا همه موارد نا معتبر را پاک کنیدو دوباره سعی کنید.این خطا بیشتر در زمان انتقال به وضعیت تغییر زمان فصلی مربوط می شود.</value>
   </data>
   <data name="AgentScheduleMessengerPermission" xml:space="preserve">
-    <value>پیغام بر زمان بندی پاسخگو</value>
+    <value>نمایه برنامه پاسخگو</value>
   </data>
   <data name="KeepFreeWeekEndDays" xml:space="preserve">
     <value>تعداد روزهای تعطیل آخر هفته را نگه دارید</value>
@@ -7093,13 +7093,13 @@
     <value>مدیریت مقادیر پاره وقت</value>
   </data>
   <data name="ClipAbsence" xml:space="preserve">
-    <value>کلیپ غیبت</value>
+    <value>کلیپ مرخصی</value>
   </data>
   <data name="ChoosePartTimePercentageDefinitionToChange" xml:space="preserve">
     <value>انتخاب تعاریف مقادیر پاره وقت برای تغییر</value>
   </data>
   <data name="CutAbsence" xml:space="preserve">
-    <value>برش آیتم غیبت</value>
+    <value>برش آیتم مرخصی</value>
   </data>
   <data name="CutDayOff" xml:space="preserve">
     <value>برش روز تعطیل </value>
@@ -7252,7 +7252,7 @@
     <value>باید تکمیل شود</value>
   </data>
   <data name="AbsenceSaveWasInvalid" xml:space="preserve">
-    <value>یک غیبت  و یا بیشتر از آن ذخیره نشده است.شما مجاز به تغییر نوع  پیگیری کننده یک غیبت  وقتی که توسط  حساب یک شخص استفاده میشود نیستید.</value>
+    <value>یک مرخصی و یا بیشتر از آن ذخیره نشده است.شما مجاز به تغییر نوع  پیگیری کننده یک مرخصی وقتی که توسط  حساب یک شخص استفاده میشود نیستید.</value>
   </data>
   <data name="DuplicateDaysOffValidationError" xml:space="preserve">
     <value>روز تعطیلی تکراری روی {0}</value>
@@ -7267,7 +7267,7 @@
     <value>درصد زمان رسیدگی ایمیل های کمپین</value>
   </data>
   <data name="ANewShiftTradeForOneDayHasBeenCreatedDot" xml:space="preserve">
-    <value>درخواست مبادله شیفت جدید {0}،در لیست خود تایید و یا رد کنید.</value>
+    <value>درخواست معاوضه شیفت جدید {0}،در لیست خود تایید و یا رد کنید.</value>
   </data>
   <data name="ManageMasterActivities" xml:space="preserve">
     <value>مدیریت فعالیت های اصلی</value>
@@ -7345,7 +7345,7 @@
     <value>اختصاص بودجه....</value>
   </data>
   <data name="WorkingIntervalIntraday" xml:space="preserve">
-    <value>ما بین روز</value>
+    <value>روزانه</value>
   </data>
   <data name="AutoGrant" xml:space="preserve">
     <value>اعطای خودکار</value>
@@ -7366,7 +7366,7 @@
     <value>تنظیم قانون الصاق</value>
   </data>
   <data name="TeleoptiRaptorColonIntraday" xml:space="preserve">
-    <value>ما بین روز - Teleopti WFM</value>
+    <value>روزانه - Teleopti WFM</value>
   </data>
   <data name="DoNotColon" xml:space="preserve">
     <value>انجام ندهید :</value>
@@ -7474,7 +7474,7 @@
     <value>از مغایرت فاصله داخلی استفاده کنید</value>
   </data>
   <data name="EnterPropertyValuesForAbsences" xml:space="preserve">
-    <value>وارد کردن مقادیر مشخصه غیبت ها </value>
+    <value>وارد کردن مقادیر مشخصه مرخصیها </value>
   </data>
   <data name="HoursIncShrinkage" xml:space="preserve">
     <value>ساعات شامل کاهش</value>
@@ -7531,7 +7531,7 @@
     <value>برگشت روز تعطیل به وضعیت قانونی</value>
   </data>
   <data name="EnterPropertyValuesForGroupingAbsences" xml:space="preserve">
-    <value>وارد کردن مقادیر مشخصه برای گروه بندی غیبت ها</value>
+    <value>وارد کردن مقادیر مشخصه برای گروه بندی مرخصیها</value>
   </data>
   <data name="RollingBackSchedulesFor" xml:space="preserve">
     <value>برگرداندن برنامه ریزی به عقب برای</value>
@@ -7630,7 +7630,7 @@
     <value>انتقال یک شیفت کاری به روز دیگر  مجاز نیست  ، در عوض یک شیفت جدید ایجاد کنید</value>
   </data>
   <data name="ChanceOfGettingAbsenceRequestGranted" xml:space="preserve">
-    <value>تغییر در گرفتن درخواست غیبت موافقت شده:</value>
+    <value>تغییر در گرفتن درخواست مرخصی موافقت شده:</value>
   </data>
   <data name="Rulesetavailable" xml:space="preserve">
     <value>یک مجموعه قوانین در دسترس</value>
@@ -7807,7 +7807,7 @@
     <value>تنظیم کنترل جریان کاری گم شده</value>
   </data>
   <data name="NewSkillThreeDots" xml:space="preserve">
-    <value>... مهارت جدید</value>
+    <value>مهارت جدید</value>
   </data>
   <data name="EnterPropertyValuesForGroupingActivities" xml:space="preserve">
     <value>وارد کردن مقادیر مشخصه برای گروه بندی فعالیت ها</value>
@@ -7864,7 +7864,7 @@
     <value>روز در هفته تعاریف افزایش دهنده</value>
   </data>
   <data name="LoadingRealTimeAdherenceDataThreeDots" xml:space="preserve">
-    <value>در حال بارگذاری اطلاعات الصاقی</value>
+    <value>در حال بارگذاری هم راستایی بهنگام</value>
   </data>
   <data name="MultiplicatorDefinitionSetColon" xml:space="preserve">
     <value>تنظیم تعریف افزایشگر</value>
@@ -7948,7 +7948,7 @@
     <value>انتقال دوره به فاصله زمانی دیرتر</value>
   </data>
   <data name="Intraday" xml:space="preserve">
-    <value>ما بین روز</value>
+    <value>روزانه</value>
   </data>
   <data name="ForecastedAgentsIncoming" xml:space="preserve">
     <value>ورودی پیش بینی شده پاسخگو ها</value>
@@ -8062,7 +8062,7 @@
     <value>مسدود کردن و زمان بندی تیم </value>
   </data>
   <data name="IntradayAbsence" xml:space="preserve">
-    <value>غیبت ما بین روز</value>
+    <value>مرخصی روزانه</value>
   </data>
   <data name="AvoidColon" xml:space="preserve">
     <value>اجتناب</value>
@@ -8182,7 +8182,7 @@
     <value>ریشه توسعه یافته</value>
   </data>
   <data name="OutOfAdherence" xml:space="preserve">
-    <value>خارج از تبعیت</value>
+    <value>عدم هم راستایی</value>
   </data>
   <data name="NoDatasource" xml:space="preserve">
     <value>هیچ منبع اطلاعاتی در دسترس نیست</value>
@@ -8380,13 +8380,13 @@
     <value>Teleopti WFM</value>
   </data>
   <data name="RequestDenyReasonClosedPeriod" xml:space="preserve">
-    <value>درخواست غیبت شما قابل واگذاری نیست .بعضی از تاریخ ها  برای درخواست شما در این لحظه باز نیستند</value>
+    <value>درخواست مرخصی شما قابل واگذاری نیست .بعضی از تاریخ ها  برای درخواست شما در این لحظه باز نیستند</value>
   </data>
   <data name="RequestDenyReasonAutodeny" xml:space="preserve">
-    <value>درخواست غیبت شما در طی راه اندازی  یک قاعده توسط مدیر سیستم .بصورت خودکار رد شده است</value>
+    <value>درخواست مرخصی شما در طی راه اندازی  یک قاعده توسط مدیر سیستم .بصورت خودکار رد شده است</value>
   </data>
   <data name="AddGroupingAbsence" xml:space="preserve">
-    <value>افزودن گروه بندی غیبت</value>
+    <value>افزودن گروه بندی مرخصی</value>
   </data>
   <data name="ScheduleBlockDayWith" xml:space="preserve">
     <value>زمان بندی روز مسدود با</value>
@@ -8404,7 +8404,7 @@
     <value>شامل پاسخگوها . با کاهش</value>
   </data>
   <data name="OpenASM" xml:space="preserve">
-    <value>پیغام زمان بندی پاسخگو</value>
+    <value>نمایه برنامه پاسخگو</value>
   </data>
   <data name="RiLe" xml:space="preserve">
     <value>RiLe</value>
@@ -8497,7 +8497,7 @@
     <value>اولویت شما می تواند در {0} روز تعطیل نتیجه بدهد.</value>
   </data>
   <data name="RequestDenyReasonSkillThreshold" xml:space="preserve">
-    <value>درخواست غیبت شما بصورت خودکار  رد شده .از اینرو تعداد منابع مورد نیاز  را  بر اساس سقف درخواست شده خواهد آورد </value>
+    <value>درخواست مرخصی شما بصورت خودکار  رد شده .از اینرو تعداد منابع مورد نیاز  را  بر اساس سقف درخواست شده خواهد آورد </value>
   </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
     <value>معیار صف پاسخگو</value>
@@ -8596,7 +8596,7 @@
     <value>روند را بصورت دستی تنظیم کنید</value>
   </data>
   <data name="AbsenceCouldNotBeLoaded" xml:space="preserve">
-    <value>امکان بار گذاری حساب های کاربری شخص نیست.حداقل یک غیبت با یک پیگیری کننده باید در گزینه های تعریف شده باشد</value>
+    <value>امکان بار گذاری حساب های کاربری شخص نیست.حداقل یک مرخصی با یک پیگیری کننده باید در گزینه های تعریف شده باشد</value>
   </data>
   <data name="ScheduleViews" xml:space="preserve">
     <value>نمای زمان بندی</value>
@@ -8949,7 +8949,7 @@ Teleopti R&amp;D</value>
     <value>رویداد {0} {1} هر {2} ماه رخ می دهد اثر بخشی {3} تا {4} {7} {8} {6} </value>
   </data>
   <data name="ShiftTradeDifferentDateDenyReason" xml:space="preserve">
-    <value>مبادله شیفت مجاز نیست زیرا شیفت ها در تاریخ های مختلف هستند</value>
+    <value>معاوضه  شیفت مجاز نیست زیرا شیفت ها در تاریخ های مختلف هستند</value>
   </data>
   <data name="ShiftWithContractTimeBetweeen" xml:space="preserve">
     <value>شیفت با  زمان قرارداد مابین</value>
@@ -8982,7 +8982,7 @@ Teleopti R&amp;D</value>
     <value>نام مهارت وارد شده معتبر نیست ،نام باید خالی نباشد و تعداد حروف آن بیشتر از 50 حرف باشد.</value>
   </data>
   <data name="RequestDenyReasonAlreadyAbsent" xml:space="preserve">
-    <value>برای دوره زمانی ارائه شده در برنامه زمانبندی از قبل غیبت وجود دارد   </value>
+    <value>برای دوره زمانی ارائه شده در برنامه زمانبندی از قبل مرخصی وجود دارد   </value>
   </data>
   <data name="Multiplicator" xml:space="preserve">
     <value>افزایشگر</value>
@@ -9042,7 +9042,7 @@ Teleopti R&amp;D</value>
     <value>ورودی  ساعات زمان بندی شده</value>
   </data>
   <data name="AgentScheduleMessenger" xml:space="preserve">
-    <value>پیغام زمان بندی شده پاسخگوی Teleopti WFM</value>
+    <value> نمایه برنامه  پاسخگو Teleopti WFM</value>
   </data>
   <data name="ScheduledHeads" xml:space="preserve">
     <value>عناوین زمان بندی شده</value>
@@ -9078,10 +9078,10 @@ Teleopti R&amp;D</value>
     <value>کیف شیفت</value>
   </data>
   <data name="RealTimeAdherenceOverview" xml:space="preserve">
-    <value>مرور  تبعیت بلا درنگ </value>
+    <value>مرور  هم راستایی بهنگام </value>
   </data>
   <data name="ShowOnlyAvailableForShiftTrade" xml:space="preserve">
-    <value>برای مبادله شیفت فقط  موارد مقدور را نمایش بده</value>
+    <value>برای معاوضه شیفت فقط  موارد مقدور را نمایش بده</value>
   </data>
   <data name="ViewPersonalAccount" xml:space="preserve">
     <value>نمایش حساب شخصی </value>
@@ -9315,7 +9315,7 @@ Teleopti R&amp;D</value>
     <value>بکارگیری علامت برای میانگین زمان مکالمه</value>
   </data>
   <data name="UseBadgeforAdherence" xml:space="preserve">
-    <value>بکارگیری علامت برای تبعیت</value>
+    <value>بکارگیری علامت برای هم راستایی</value>
   </data>
   <data name="SetBadgeThresholdForAnsweredCalls" xml:space="preserve">
     <value>آستانه:</value>
@@ -9375,19 +9375,19 @@ Teleopti R&amp;D</value>
     <value>آستانه علامت برنز AHT باید کمتر از آستانه علامت طلا باشد</value>
   </data>
   <data name="AdherenceBronzeThresholdShouldGreaterThanSilverThreshold" xml:space="preserve">
-    <value>آستانه علامت برنز تبعیت باید کمتر از آستانه علامت نقره باشد</value>
+    <value>آستانه علامت برنز هم راستایی باید کمتر از آستانه علامت نقره باشد</value>
   </data>
   <data name="AdherenceSilverThresholdShouldGreaterThanGoldThreshold" xml:space="preserve">
-    <value>آستانه علامت نقره تبعیت باید کمتر از آستانه علامت طلا باشد</value>
+    <value>آستانه علامت نقره هم راستایی باید کمتر از آستانه علامت طلا باشد</value>
   </data>
   <data name="AddingActivityFor" xml:space="preserve">
     <value>اضافه کردن فعالیت برای</value>
   </data>
   <data name="AddingFulldayAbsenceFor" xml:space="preserve">
-    <value>اضافه کردن غیبت روزانه برای</value>
+    <value>اضافه کردن مرخصی روزانه برای</value>
   </data>
   <data name="AddingIntradayAbsenceFor" xml:space="preserve">
-    <value>اضافه کردن غیبت بین روزی برای</value>
+    <value>اضافه کردن مرخصی بین روزی برای</value>
   </data>
   <data name="FailedWithExclamation" xml:space="preserve">
     <value>موفقیت آمیز نبود!</value>
@@ -9396,7 +9396,7 @@ Teleopti R&amp;D</value>
     <value>جابجایی فعالیت برای</value>
   </data>
   <data name="RemovingAbsenceFor" xml:space="preserve">
-    <value>حذف غیبت برای</value>
+    <value>حذف مرخصی برای</value>
   </data>
   <data name="PleaseRefreshThePageWithExclamation" xml:space="preserve">
     <value>لطفا صفحه را کنید!</value>
@@ -9435,7 +9435,7 @@ Teleopti R&amp;D</value>
     <value>لطفا ایمیل خود را برای دسترسی به منابع Teleopti پیکربندی کنید. </value>
   </data>
   <data name="YouGotANewBronzeBadgeForAdherence" xml:space="preserve">
-    <value>شما یک علامت برنز جدید گرفتید! تبعیت شما در {1:yyyy-MM-dd} بالای {0} است.</value>
+    <value>شما یک علامت برنز جدید گرفتید! هم راستایی شما در {1:yyyy-MM-dd} بالای {0} است.</value>
   </data>
   <data name="YouGotANewBronzeBadgeForAHT" xml:space="preserve">
     <value>شما یک علامت برنز جدید دارید! میانگین زمان رسیدگی شما در {1:yyyy-MM-dd} کمتر از {0} ثانیه است.</value>
@@ -9444,7 +9444,7 @@ Teleopti R&amp;D</value>
     <value>شما یک علامت برنز جدید گرفتید! شما بیشتر از {0} تماس در {1:yyy-MM-dd} پاسخ داده اید</value>
   </data>
   <data name="YouGotANewGoldBadgeForAdherence" xml:space="preserve">
-    <value>شما یک علامت طلای جدید گرفتید! تبعیت شما بالای {0} در {1} روز متفاوت است.</value>
+    <value>شما یک علامت طلای جدید گرفتید! هم راستایی شما بالای {0} در {1} روز متفاوت است.</value>
   </data>
   <data name="YouGotANewGoldBadgeForAHT" xml:space="preserve">
     <value>شما یک علامت طلای جدید گرفتید! زمان رسیدگی شما زیر {0} ثانیه در {1} روز متفاوت است.</value>
@@ -9453,7 +9453,7 @@ Teleopti R&amp;D</value>
     <value>شما یک علامت طلای جدید گرفتید! شما {0} پاسخ داده اید یا  تماسهای بیشتری  هر روز در {1} روز متفاوت پاسخ داده اید.</value>
   </data>
   <data name="YouGotANewSilverBadgeForAdherence" xml:space="preserve">
-    <value>شما یک علامت نقره جدید گرفتید! تبعیت شما بالای {0} در {1} روز متفاوت است.</value>
+    <value>شما یک علامت نقره جدید گرفتید! هم راستایی شما بالای {0} در {1} روز متفاوت است.</value>
   </data>
   <data name="YouGotANewSilverBadgeForAHT" xml:space="preserve">
     <value>شما یک علامت نقره جدید گرفتید! زمان رسیدگی شما زیر {0} ثانیه در {1} روز متفاوت است.</value>
@@ -9534,7 +9534,7 @@ Teleopti R&amp;D</value>
     <value>زمان شروع</value>
   </data>
   <data name="FullDayAbsenceSettings" xml:space="preserve">
-    <value>تنظیمات غیبت روزانه</value>
+    <value>تنظیمات مرخصی روزانه</value>
   </data>
   <data name="EmailSettings" xml:space="preserve">
     <value>تنظیمات ایمیل</value>
@@ -9591,7 +9591,7 @@ Teleopti R&amp;D</value>
     <value>گزارش مرخصی برای</value>
   </data>
   <data name="NoAgentsAvailableForBulletinBoard" xml:space="preserve">
-    <value>هیچ شیفتی که با شیفت شما برای مبادله منطبق باشد موجود نیست</value>
+    <value>هیچ شیفتی که با شیفت شما برای معاوضه منطبق باشد موجود نیست</value>
   </data>
   <data name="FilterOnOpenHours" xml:space="preserve">
     <value>فیلتر روی ساعات باز</value>
@@ -9615,28 +9615,28 @@ Teleopti R&amp;D</value>
     <value>از مرخصی بازگشته در:</value>
   </data>
   <data name="AnnounceShift" xml:space="preserve">
-    <value>ارسال شفیفت برای مبادله</value>
+    <value>ارسال شیفت برای معاوضه </value>
   </data>
   <data name="ShiftExchangeOfferValidTo" xml:space="preserve">
-    <value>پیشنهاد مبادله شیفت معتبر به</value>
+    <value>پیشنهاد معاوضه شیفت معتبر به</value>
   </data>
   <data name="AnnounceShiftConditions" xml:space="preserve">
     <value>من یک شیفت مطابق با شرایط زیر می خواهم</value>
   </data>
   <data name="AnnounceShiftDateOutPeriod" xml:space="preserve">
-    <value>تاریخ برای ارسال مبادله شیفت باید در دوره باز مبادله شیفت باشد</value>
+    <value>تاریخ برای ارسال معاوضه شیفت باید در دوره باز معاوضه شیفت باشد</value>
   </data>
   <data name="PublishAnnouncementNoAbsence" xml:space="preserve">
-    <value>امکان ارسال برای مبادله شیفت در روز مرخصی وجود ندارد!</value>
+    <value>امکان ارسال برای معاوضه شیفت در روز مرخصی وجود ندارد!</value>
   </data>
   <data name="AllTeamMembersMustBeLoaded" xml:space="preserve">
     <value>همه اعضای تیم باید اضافه شوند</value>
   </data>
   <data name="AnnouncementInvalid" xml:space="preserve">
-    <value>ارسال مبادله شیفت نامعتبر است</value>
+    <value>ارسال معاوضه شیفت نامعتبر است</value>
   </data>
   <data name="AnnouncementInvalidMessage" xml:space="preserve">
-    <value>ارسال مبادله شیفت شما {0} نامعتبر است زیرا شیفت شما تغییر کرده است</value>
+    <value>معاوضه شیفت شما {0} نامعتبر است زیرا شیفت شما تغییر کرده است</value>
   </data>
   <data name="HasNonMainShiftActivityErrorMessage" xml:space="preserve">
     <value>فرد {0} فعالیت شخصی دارد. اضافه کار یا جلسه در تاریخ {1}</value>
@@ -9795,10 +9795,10 @@ Teleopti R&amp;D</value>
     <value>کمترین توازن فواصل داخلی</value>
   </data>
   <data name="ShiftTradeBulletinBoard" xml:space="preserve">
-    <value>تابلوی مبادله شیفت</value>
+    <value>تابلوی معاوضه شیفت</value>
   </data>
   <data name="AnnounceShiftValidToNotLegal" xml:space="preserve">
-    <value>تاریخ مجاز باید بین امروز و تاریخ ارسال مبادله شیفت باشد!</value>
+    <value>تاریخ مجاز باید بین امروز و تاریخ ارسال معاوضه شیفت باشد!</value>
   </data>
   <data name="AnonymousBulletinBoardTrading" xml:space="preserve">
     <value>تابلوی تبادل شیفت به صورت ناشناس</value>
