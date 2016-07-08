@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeAnalyticsTimeZoneRepository : IAnalyticsTimeZoneRepository
 	{
-		public AnalyticsTimeZone Get(string id)
+		public AnalyticsTimeZone Get(string timeZoneCode)
 		{
 			return new AnalyticsTimeZone {TimeZoneId = 1};
 		}

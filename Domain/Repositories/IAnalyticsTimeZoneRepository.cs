@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 {
 	public interface IAnalyticsTimeZoneRepository
 	{
-		AnalyticsTimeZone Get(string id);
+		AnalyticsTimeZone Get(string timeZoneCode);
 	}
 }

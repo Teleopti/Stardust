@@ -20,26 +20,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public IList<IAnalyticsDate> Dates()
 		{
 			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				"select date_id DateId, date_date DateDate from mart.dim_date WITH (NOLOCK) where date_date BETWEEN DATEADD(DAY,-365, GETDATE()) AND  DATEADD(DAY, 365, GETDATE())")
+				$@"select date_id {nameof(IAnalyticsDate.DateId)}, date_date {nameof(IAnalyticsDate.DateDate)} from mart.dim_date WITH (NOLOCK) where date_date BETWEEN DATEADD(DAY,-365, GETDATE()) AND  DATEADD(DAY, 365, GETDATE())")
 				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsDate)))
 				.SetReadOnly(true)
 				.List<IAnalyticsDate>();
 		}
 
-		//public KeyValuePair<DateOnly, int> Date(DateTime date)
-		//{
-		//	return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-		//		"select date_id, date_date from mart.dim_date WITH (NOLOCK) where date_date=:Date")
-		//		.SetDateTime("Date", date.Date)
-		//		.SetResultTransformer(new CustomDictionaryTransformer())
-		//		.UniqueResult<KeyValuePair<DateOnly, int>>();
-		//}
-
 		public IAnalyticsDate MaxDate()
 		{
 
 			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				"select max(date_id) DateId, max(date_date) DateDate FROM mart.dim_date WITH (NOLOCK) WHERE date_id>=0")
+				$@"select max(date_id) {nameof(IAnalyticsDate.DateId)}, max(date_date) {nameof(IAnalyticsDate.DateDate)} FROM mart.dim_date WITH (NOLOCK) WHERE date_id>=0")
 				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsDate)))
 				.SetReadOnly(true)
 				.UniqueResult<IAnalyticsDate>();
@@ -49,17 +40,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		{
 
 			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				"select min(date_id) DateId, min(date_date) DateDate FROM mart.dim_date WITH (NOLOCK) WHERE date_id>=0")
+				$@"select min(date_id) {nameof(IAnalyticsDate.DateId)}, min(date_date) {nameof(IAnalyticsDate.DateDate)} FROM mart.dim_date WITH (NOLOCK) WHERE date_id>=0")
 				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsDate)))
 				.SetReadOnly(true)
 				.UniqueResult<IAnalyticsDate>();
 		}
 
-		public IAnalyticsDate Date(DateTime date)
+		public IAnalyticsDate Date(DateTime dateDate)
 		{
 			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				"select date_id DateId, date_date DateDate FROM mart.dim_date WITH (NOLOCK) WHERE date_date=:dateDate")
-				.SetDateTime("dateDate", date.Date)
+				$@"select date_id {nameof(IAnalyticsDate.DateId)}, date_date {nameof(IAnalyticsDate.DateDate)} FROM mart.dim_date WITH (NOLOCK) WHERE date_date=:{nameof(dateDate)}")
+				.SetDateTime(nameof(dateDate), dateDate.Date)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsDate)))
 				.SetReadOnly(true)
 				.UniqueResult<IAnalyticsDate>();

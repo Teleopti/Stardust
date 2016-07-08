@@ -9,6 +9,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IList<IAnalyticsDate> Dates();
 		IAnalyticsDate MaxDate();
 		IAnalyticsDate MinDate();
-		IAnalyticsDate Date(DateTime date);
+		IAnalyticsDate Date(DateTime dateDate);
 	}
 }

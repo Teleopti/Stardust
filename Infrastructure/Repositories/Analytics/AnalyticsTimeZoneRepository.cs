@@ -14,13 +14,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			_analyticsUnitOfWork = analyticsUnitOfWork;
 		}
 
-		public AnalyticsTimeZone Get(string id)
+		public AnalyticsTimeZone Get(string timeZoneCode)
 		{
 			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				@"select 
-	                time_zone_id TimeZoneId
-				from mart.dim_time_zone WITH (NOLOCK) where time_zone_code=:TimeZoneCode")
-				.SetString("TimeZoneCode", id)
+				$@"select 
+	                time_zone_id {nameof(AnalyticsTimeZone.TimeZoneId)}
+				from mart.dim_time_zone WITH (NOLOCK) where time_zone_code=:{nameof(timeZoneCode)}")
+				.SetString(nameof(timeZoneCode), timeZoneCode)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsTimeZone)))
 				.UniqueResult<AnalyticsTimeZone>();
 		}

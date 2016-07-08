@@ -131,60 +131,60 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public void PersistFactScheduleDayCountRow(IAnalyticsFactScheduleDayCount dayCount)
 		{
 			_analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				@"exec mart.[etl_fact_schedule_day_count_insert] 
-						@shift_startdate_local_id=:LocalId,
-						@person_id=:PersonId, 
-						@business_unit_id=:BusinessUnitId,
-						@scenario_id=:ScenarioId,
-						@starttime=:Starttime, 
-						@shift_category_id=:ShiftCategoryId, 
-						@absence_id=:AbsenceId, 
-						@day_off_name=:DayOffName, 
-						@day_off_shortname=:DayOffShortName")
-				.SetInt32("LocalId", dayCount.ShiftStartDateLocalId)
-				.SetInt32("PersonId", dayCount.PersonId)
-				.SetInt32("BusinessUnitId", dayCount.BusinessUnitId)
-				.SetInt32("ScenarioId", dayCount.ScenarioId)
-				.SetDateTime("Starttime", dayCount.StartTime)
-				.SetInt32("ShiftCategoryId", dayCount.ShiftCategoryId)
-				.SetInt32("AbsenceId", dayCount.AbsenceId)
-				.SetString("DayOffName", dayCount.DayOffName)
-				.SetString("DayOffShortName", dayCount.DayOffShortName)
+				$@"exec mart.[etl_fact_schedule_day_count_insert] 
+						@shift_startdate_local_id=:{nameof(dayCount.ShiftStartDateLocalId)},
+						@person_id=:{nameof(dayCount.PersonId)}, 
+						@business_unit_id=:{nameof(dayCount.BusinessUnitId)},
+						@scenario_id=:{nameof(dayCount.ScenarioId)},
+						@starttime=:{nameof(dayCount.StartTime)}, 
+						@shift_category_id=:{nameof(dayCount.ShiftCategoryId)}, 
+						@absence_id=:{nameof(dayCount.AbsenceId)}, 
+						@day_off_name=:{nameof(dayCount.DayOffName)}, 
+						@day_off_shortname=:{nameof(dayCount.DayOffShortName)}")
+				.SetInt32(nameof(dayCount.ShiftStartDateLocalId), dayCount.ShiftStartDateLocalId)
+				.SetInt32(nameof(dayCount.PersonId), dayCount.PersonId)
+				.SetInt32(nameof(dayCount.BusinessUnitId), dayCount.BusinessUnitId)
+				.SetInt32(nameof(dayCount.ScenarioId), dayCount.ScenarioId)
+				.SetDateTime(nameof(dayCount.StartTime), dayCount.StartTime)
+				.SetInt32(nameof(dayCount.ShiftCategoryId), dayCount.ShiftCategoryId)
+				.SetInt32(nameof(dayCount.AbsenceId), dayCount.AbsenceId)
+				.SetString(nameof(dayCount.DayOffName), dayCount.DayOffName)
+				.SetString(nameof(dayCount.DayOffShortName), dayCount.DayOffShortName)
 
 				.ExecuteUpdate();
 		}
 
-		public void DeleteFactSchedule(int date, int personId, int scenarioId)
+		public void DeleteFactSchedule(int dateId, int personId, int scenarioId)
 		{
-			_analyticsUnitOfWork.Current().Session().CreateSQLQuery(@"mart.etl_fact_schedule_delete @shift_startdate_local_id=:DateId, @person_id=:PersonId, @scenario_id=:ScenarioId")
-				.SetInt32("DateId", date)
-				.SetInt32("PersonId", personId)
-				.SetInt32("ScenarioId", scenarioId)
+			_analyticsUnitOfWork.Current().Session().CreateSQLQuery($@"mart.etl_fact_schedule_delete @shift_startdate_local_id=:{nameof(dateId)}, @person_id=:{nameof(personId)}, @scenario_id=:{nameof(scenarioId)}")
+				.SetInt32(nameof(dateId), dateId)
+				.SetInt32(nameof(personId), personId)
+				.SetInt32(nameof(scenarioId), scenarioId)
 				.ExecuteUpdate();
 		}
 
 		public void InsertStageScheduleChangedServicebus(DateOnly date, Guid personId, Guid scenarioId, Guid businessUnitId, DateTime datasourceUpdateDate)
 		{
-			_analyticsUnitOfWork.Current().Session().CreateSQLQuery(@"exec mart.etl_stage_schedule_day_changed_servicebus_insert 
-												@schedule_date_local=:Date,
-												@person_code=:PersonId,
-												@scenario_id=:ScenarioId,
-												@business_unit_code=:BusinessUnitId,
-												@datasource_update_date=:DatasourceUpdateDate")
+			_analyticsUnitOfWork.Current().Session().CreateSQLQuery($@"exec mart.etl_stage_schedule_day_changed_servicebus_insert 
+												@schedule_date_local=:{nameof(date)},
+												@person_code=:{nameof(personId)},
+												@scenario_id=:{nameof(scenarioId)},
+												@business_unit_code=:{nameof(businessUnitId)},
+												@datasource_update_date=:{nameof(datasourceUpdateDate)}")
 
-				.SetDateTime("Date", date.Date)
-				.SetGuid("PersonId", personId)
-				.SetGuid("ScenarioId", scenarioId)
-				.SetGuid("BusinessUnitId", businessUnitId)
-				.SetDateTime("DatasourceUpdateDate", datasourceUpdateDate)
+				.SetDateTime(nameof(date), date.Date)
+				.SetGuid(nameof(personId), personId)
+				.SetGuid(nameof(scenarioId), scenarioId)
+				.SetGuid(nameof(businessUnitId), businessUnitId)
+				.SetDateTime(nameof(datasourceUpdateDate), datasourceUpdateDate)
 				.ExecuteUpdate();
 		}
 
 		public IAnalyticsPersonBusinessUnit PersonAndBusinessUnit(Guid personPeriodCode)
 		{
 			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				"select person_id PersonId, business_unit_id BusinessUnitId from mart.dim_person WITH (NOLOCK) WHERE person_period_code =:code ")
-				.SetGuid("code", personPeriodCode)
+				$@"select person_id {nameof(AnalyticsPersonBusinessUnit.PersonId)}, business_unit_id {nameof(AnalyticsPersonBusinessUnit.BusinessUnitId)} from mart.dim_person WITH (NOLOCK) WHERE person_period_code =:{nameof(personPeriodCode)} ")
+				.SetGuid(nameof(personPeriodCode), personPeriodCode)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsPersonBusinessUnit)))
 				.SetReadOnly(true)
 				//.SetTimeout(120)
@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public IList<IAnalyticsShiftLength> ShiftLengths()
 		{
 			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				"select shift_length_id Id, shift_length_m ShiftLength from mart.dim_shift_length WITH (NOLOCK)")
+				$@"select shift_length_id {nameof(AnalyticsShiftLength.Id)}, shift_length_m {nameof(AnalyticsShiftLength.ShiftLength)} from mart.dim_shift_length WITH (NOLOCK)")
 				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsShiftLength)))
 				.SetReadOnly(true)
 				.List<IAnalyticsShiftLength>();
@@ -202,8 +202,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public int ShiftLengthId(int shiftLength)
 		{
-			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(@"mart.etl_dim_shift_length_id_get @shift_length_m=:ShiftLength")
-				.SetInt32("ShiftLength", shiftLength)
+			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery($@"mart.etl_dim_shift_length_id_get @shift_length_m=:{nameof(shiftLength)}")
+				.SetInt32(nameof(shiftLength), shiftLength)
 				.UniqueResult<int>();
 		}
 	}

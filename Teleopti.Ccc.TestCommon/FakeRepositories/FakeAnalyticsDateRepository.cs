@@ -51,9 +51,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _fakeDates.First(a => a.DateId >= 0);
 		}
 
-		public IAnalyticsDate Date(DateTime date)
+		public IAnalyticsDate Date(DateTime dateDate)
 		{
-			return _fakeDates.FirstOrDefault(a => new DateOnly(a.DateDate) == new DateOnly(date));
+			return _fakeDates.FirstOrDefault(a => new DateOnly(a.DateDate) == new DateOnly(dateDate));
 		}
 	}
 }

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public void DeleteFactSchedule(int date, int personId, int scenarioId)
+		public void DeleteFactSchedule(int dateId, int personId, int scenarioId)
 		{
 			throw new NotImplementedException();
 		}

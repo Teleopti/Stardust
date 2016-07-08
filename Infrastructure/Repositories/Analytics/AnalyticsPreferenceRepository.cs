@@ -21,61 +21,61 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		{
 			var insertAndUpdateDateTime = DateTime.Now;
 			var query = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				@"exec mart.[etl_fact_schedule_preference_insert]
-					   @date_id=:DateId
-					  ,@interval_id=:IntervalId
-					  ,@person_id=:PersonId
-					  ,@scenario_id=:ScenarioId
-					  ,@preference_type_id=:PreferenceTypeId
-					  ,@shift_category_id=:ShiftCategoryId
-					  ,@day_off_id=:DayOffId
-					  ,@preferences_requested=:PreferencesRequested
-					  ,@preferences_fulfilled=:PreferencesFulfilled
-					  ,@preferences_unfulfilled=:PreferencesUnfulfilled
-					  ,@business_unit_id=:BusinessUnitId
-					  ,@datasource_id=:DatasourceId
-					  ,@insert_date=:InsertDate
-					  ,@update_date=:UpdateDate
-					  ,@datasource_update_date=:DatasourceUpdateDate
-					  ,@must_haves=:MustHaves
-					  ,@absence_id=:AbsenceId")
-				.SetInt32("DateId", analyticsFactSchedulePreference.DateId)
-				.SetInt32("IntervalId", analyticsFactSchedulePreference.IntervalId)
-				.SetInt32("PersonId", analyticsFactSchedulePreference.PersonId)
-				.SetInt32("ScenarioId", analyticsFactSchedulePreference.ScenarioId)
-				.SetInt32("PreferenceTypeId", analyticsFactSchedulePreference.PreferenceTypeId)
-				.SetInt32("ShiftCategoryId", analyticsFactSchedulePreference.ShiftCategoryId)
-				.SetInt32("DayOffId", analyticsFactSchedulePreference.DayOffId)
-				.SetInt32("PreferencesRequested", analyticsFactSchedulePreference.PreferencesRequested)
-				.SetInt32("PreferencesFulfilled", analyticsFactSchedulePreference.PreferencesFulfilled)
-				.SetInt32("PreferencesUnfulfilled", analyticsFactSchedulePreference.PreferencesUnfulfilled)
-				.SetInt32("BusinessUnitId", analyticsFactSchedulePreference.BusinessUnitId)
-				.SetInt32("DatasourceId", analyticsFactSchedulePreference.DatasourceId)
-				.SetDateTime("InsertDate", insertAndUpdateDateTime)
-				.SetDateTime("UpdateDate", insertAndUpdateDateTime)
-				.SetDateTime("DatasourceUpdateDate", analyticsFactSchedulePreference.DatasourceUpdateDate)
-				.SetInt32("MustHaves", analyticsFactSchedulePreference.MustHaves)
-				.SetInt32("AbsenceId", analyticsFactSchedulePreference.AbsenceId);
+				$@"exec mart.[etl_fact_schedule_preference_insert]
+					   @date_id=:{nameof(AnalyticsFactSchedulePreference.DateId)}
+					  ,@interval_id=:{nameof(AnalyticsFactSchedulePreference.IntervalId)}
+					  ,@person_id=:{nameof(AnalyticsFactSchedulePreference.PersonId)}
+					  ,@scenario_id=:{nameof(AnalyticsFactSchedulePreference.ScenarioId)}
+					  ,@preference_type_id=:{nameof(AnalyticsFactSchedulePreference.PreferenceTypeId)}
+					  ,@shift_category_id=:{nameof(AnalyticsFactSchedulePreference.ShiftCategoryId)}
+					  ,@day_off_id=:{nameof(AnalyticsFactSchedulePreference.DayOffId)}
+					  ,@preferences_requested=:{nameof(AnalyticsFactSchedulePreference.PreferencesRequested)}
+					  ,@preferences_fulfilled=:{nameof(AnalyticsFactSchedulePreference.PreferencesFulfilled)}
+					  ,@preferences_unfulfilled=:{nameof(AnalyticsFactSchedulePreference.PreferencesUnfulfilled)}
+					  ,@business_unit_id=:{nameof(AnalyticsFactSchedulePreference.BusinessUnitId)}
+					  ,@datasource_id=:{nameof(AnalyticsFactSchedulePreference.DatasourceId)}
+					  ,@insert_date=:{nameof(AnalyticsFactSchedulePreference.InsertDate)}
+					  ,@update_date=:{nameof(AnalyticsFactSchedulePreference.UpdateDate)}
+					  ,@datasource_update_date=:{nameof(AnalyticsFactSchedulePreference.DatasourceUpdateDate)}
+					  ,@must_haves=:{nameof(AnalyticsFactSchedulePreference.MustHaves)}
+					  ,@absence_id=:{nameof(AnalyticsFactSchedulePreference.AbsenceId)}")
+				.SetInt32(nameof(AnalyticsFactSchedulePreference.DateId), analyticsFactSchedulePreference.DateId)
+				.SetInt32(nameof(AnalyticsFactSchedulePreference.IntervalId), analyticsFactSchedulePreference.IntervalId)
+				.SetInt32(nameof(AnalyticsFactSchedulePreference.PersonId), analyticsFactSchedulePreference.PersonId)
+				.SetInt32(nameof(AnalyticsFactSchedulePreference.ScenarioId), analyticsFactSchedulePreference.ScenarioId)
+				.SetInt32(nameof(AnalyticsFactSchedulePreference.PreferenceTypeId), analyticsFactSchedulePreference.PreferenceTypeId)
+				.SetInt32(nameof(AnalyticsFactSchedulePreference.ShiftCategoryId), analyticsFactSchedulePreference.ShiftCategoryId)
+				.SetInt32(nameof(AnalyticsFactSchedulePreference.DayOffId), analyticsFactSchedulePreference.DayOffId)
+				.SetInt32(nameof(AnalyticsFactSchedulePreference.PreferencesRequested), analyticsFactSchedulePreference.PreferencesRequested)
+				.SetInt32(nameof(AnalyticsFactSchedulePreference.PreferencesFulfilled), analyticsFactSchedulePreference.PreferencesFulfilled)
+				.SetInt32(nameof(AnalyticsFactSchedulePreference.PreferencesUnfulfilled), analyticsFactSchedulePreference.PreferencesUnfulfilled)
+				.SetInt32(nameof(AnalyticsFactSchedulePreference.BusinessUnitId), analyticsFactSchedulePreference.BusinessUnitId)
+				.SetInt32(nameof(AnalyticsFactSchedulePreference.DatasourceId), analyticsFactSchedulePreference.DatasourceId)
+				.SetDateTime(nameof(AnalyticsFactSchedulePreference.InsertDate), insertAndUpdateDateTime)
+				.SetDateTime(nameof(AnalyticsFactSchedulePreference.UpdateDate), insertAndUpdateDateTime)
+				.SetDateTime(nameof(AnalyticsFactSchedulePreference.DatasourceUpdateDate), analyticsFactSchedulePreference.DatasourceUpdateDate)
+				.SetInt32(nameof(AnalyticsFactSchedulePreference.MustHaves), analyticsFactSchedulePreference.MustHaves)
+				.SetInt32(nameof(AnalyticsFactSchedulePreference.AbsenceId), analyticsFactSchedulePreference.AbsenceId);
 			query.ExecuteUpdate();
 		}
 
 		public void DeletePreferences(int dateId, int personId, int? scenarioId = null)
 		{
 			var query = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				@"exec mart.[etl_fact_schedule_preference_delete]
-					   @date_id=:DateId
-					  ,@person_id=:PersonId
-					  ,@scenario_id=:ScenarioId")
-				.SetInt32("DateId", dateId)
-				.SetInt32("PersonId", personId);
+				$@"exec mart.[etl_fact_schedule_preference_delete]
+					   @date_id=:{nameof(dateId)}
+					  ,@person_id=:{nameof(personId)}
+					  ,@scenario_id=:{nameof(scenarioId)}")
+				.SetInt32(nameof(dateId), dateId)
+				.SetInt32(nameof(personId), personId);
 
 			if (scenarioId.HasValue)
 			{
-				query.SetInt32("ScenarioId", scenarioId.Value);
+				query.SetInt32(nameof(scenarioId), scenarioId.Value);
 			}
 			else
 			{
-				query.SetParameter("ScenarioId", null, NHibernateUtil.Int32);
+				query.SetParameter(nameof(scenarioId), null, NHibernateUtil.Int32);
 			}
 			query.ExecuteUpdate();
 		}
@@ -83,25 +83,25 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public IList<AnalyticsFactSchedulePreference> PreferencesForPerson(int personId)
 		{
 			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				@"SELECT [date_id] DateId
-						  ,[interval_id] IntervalId
-						  ,[person_id] PersonId
-						  ,[scenario_id] ScenarioId
-						  ,[preference_type_id] PreferenceTypeId
-						  ,[shift_category_id] ShiftCategoryId
-						  ,[day_off_id] DayOffId
-						  ,[preferences_requested] PreferencesRequested
-						  ,[preferences_fulfilled] PreferencesFulfilled
-						  ,[preferences_unfulfilled] PreferencesUnfulfilled
-						  ,[business_unit_id] BusinessUnitId
-						  ,[datasource_id] DatasourceId
-						  ,[insert_date] InsertDate
-						  ,[update_date] UpdateDate
-						  ,[datasource_update_date] DatasourceUpdateDate
-						  ,[must_haves] MustHaves
-						  ,[absence_id] AbsenceId
-					  FROM [mart].[fact_schedule_preference] WITH (NOLOCK) WHERE person_id=:PersonId ")
-				.SetInt32("PersonId", personId)
+				$@"SELECT [date_id] {nameof(AnalyticsFactSchedulePreference.DateId)}
+						  ,[interval_id] {nameof(AnalyticsFactSchedulePreference.IntervalId)}
+						  ,[person_id] {nameof(AnalyticsFactSchedulePreference.PersonId)}
+						  ,[scenario_id] {nameof(AnalyticsFactSchedulePreference.ScenarioId)}
+						  ,[preference_type_id] {nameof(AnalyticsFactSchedulePreference.PreferenceTypeId)}
+						  ,[shift_category_id] {nameof(AnalyticsFactSchedulePreference.ShiftCategoryId)}
+						  ,[day_off_id] {nameof(AnalyticsFactSchedulePreference.DayOffId)}
+						  ,[preferences_requested] {nameof(AnalyticsFactSchedulePreference.PreferencesRequested)}
+						  ,[preferences_fulfilled] {nameof(AnalyticsFactSchedulePreference.PreferencesFulfilled)}
+						  ,[preferences_unfulfilled] {nameof(AnalyticsFactSchedulePreference.PreferencesUnfulfilled)}
+						  ,[business_unit_id] {nameof(AnalyticsFactSchedulePreference.BusinessUnitId)}
+						  ,[datasource_id] {nameof(AnalyticsFactSchedulePreference.DatasourceId)}
+						  ,[insert_date] {nameof(AnalyticsFactSchedulePreference.InsertDate)}
+						  ,[update_date] {nameof(AnalyticsFactSchedulePreference.UpdateDate)}
+						  ,[datasource_update_date] {nameof(AnalyticsFactSchedulePreference.DatasourceUpdateDate)}
+						  ,[must_haves] {nameof(AnalyticsFactSchedulePreference.MustHaves)}
+						  ,[absence_id] {nameof(AnalyticsFactSchedulePreference.AbsenceId)}
+					  FROM [mart].[fact_schedule_preference] WITH (NOLOCK) WHERE person_id=:{nameof(personId)} ")
+				.SetInt32(nameof(personId), personId)
 				.SetResultTransformer(Transformers.AliasToBean(typeof (AnalyticsFactSchedulePreference)))
 				.SetReadOnly(true)
 				.List<AnalyticsFactSchedulePreference>();

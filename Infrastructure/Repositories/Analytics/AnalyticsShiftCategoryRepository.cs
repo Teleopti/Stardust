@@ -18,17 +18,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public IList<AnalyticsShiftCategory> ShiftCategories()
 		{
 			return _currentAnalyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				@"select [shift_category_id] ShiftCategoryId
-					,[shift_category_code] ShiftCategoryCode
-					,[shift_category_name] ShiftCategoryName
-					,[shift_category_shortname] ShiftCategoryShortname
-					,[display_color] DisplayColor
-					,[business_unit_id] BusinessUnitId
-					,[datasource_id] DatasourceId
-					,[insert_date] InsertDate
-					,[update_date] UpdateDate
-					,[datasource_update_date] DatasourceUpdateDate
-					,[is_deleted] IsDeleted
+				$@"select [shift_category_id] {nameof(AnalyticsShiftCategory.ShiftCategoryId)}
+					,[shift_category_code] {nameof(AnalyticsShiftCategory.ShiftCategoryCode)}
+					,[shift_category_name] {nameof(AnalyticsShiftCategory.ShiftCategoryName)}
+					,[shift_category_shortname] {nameof(AnalyticsShiftCategory.ShiftCategoryShortname)}
+					,[display_color] {nameof(AnalyticsShiftCategory.DisplayColor)}
+					,[business_unit_id] {nameof(AnalyticsShiftCategory.BusinessUnitId)}
+					,[datasource_id] {nameof(AnalyticsShiftCategory.DatasourceId)}
+					,[insert_date] {nameof(AnalyticsShiftCategory.InsertDate)}
+					,[update_date] {nameof(AnalyticsShiftCategory.UpdateDate)}
+					,[datasource_update_date] {nameof(AnalyticsShiftCategory.DatasourceUpdateDate)}
+					,[is_deleted] {nameof(AnalyticsShiftCategory.IsDeleted)}
 					from [mart].[dim_shift_category] WITH (NOLOCK)")
 				.SetResultTransformer(Transformers.AliasToBean(typeof (AnalyticsShiftCategory)))
 				.SetReadOnly(true)
@@ -38,48 +38,48 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public void AddShiftCategory(AnalyticsShiftCategory analyticsShiftCategory)
 		{
 			var query = _currentAnalyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				@"exec mart.[etl_dim_shift_category_insert]
-						@shift_category_code=:ShiftCategoryCode, 
-						@shift_category_name=:ShiftCategoryName, 
-						@shift_category_shortname=:ShiftCategoryShortname, 
-						@display_color=:DisplayColor, 
-						@business_unit_id=:BusinessUnitId,
-						@datasource_id=:DatasourceId,
-						@datasource_update_date=:DatasourceUpdateDate,
-						@is_deleted=:IsDeleted
+				$@"exec mart.[etl_dim_shift_category_insert]
+						@shift_category_code=:{nameof(AnalyticsShiftCategory.ShiftCategoryCode)}, 
+						@shift_category_name=:{nameof(AnalyticsShiftCategory.ShiftCategoryName)}, 
+						@shift_category_shortname=:{nameof(AnalyticsShiftCategory.ShiftCategoryShortname)}, 
+						@display_color=:{nameof(AnalyticsShiftCategory.DisplayColor)}, 
+						@business_unit_id=:{nameof(AnalyticsShiftCategory.BusinessUnitId)},
+						@datasource_id=:{nameof(AnalyticsShiftCategory.DatasourceId)},
+						@datasource_update_date=:{nameof(AnalyticsShiftCategory.DatasourceUpdateDate)},
+						@is_deleted=:{nameof(AnalyticsShiftCategory.IsDeleted)}
 					  ")
-				.SetGuid("ShiftCategoryCode", analyticsShiftCategory.ShiftCategoryCode)
-				.SetString("ShiftCategoryName", analyticsShiftCategory.ShiftCategoryName)
-				.SetString("ShiftCategoryShortname", analyticsShiftCategory.ShiftCategoryShortname)
-				.SetInt32("DisplayColor", analyticsShiftCategory.DisplayColor)
-				.SetInt32("BusinessUnitId", analyticsShiftCategory.BusinessUnitId)
-				.SetInt32("DatasourceId", analyticsShiftCategory.DatasourceId)
-				.SetDateTime("DatasourceUpdateDate", analyticsShiftCategory.DatasourceUpdateDate)
-				.SetBoolean("IsDeleted", analyticsShiftCategory.IsDeleted);
+				.SetGuid(nameof(AnalyticsShiftCategory.ShiftCategoryCode), analyticsShiftCategory.ShiftCategoryCode)
+				.SetString(nameof(AnalyticsShiftCategory.ShiftCategoryName), analyticsShiftCategory.ShiftCategoryName)
+				.SetString(nameof(AnalyticsShiftCategory.ShiftCategoryShortname), analyticsShiftCategory.ShiftCategoryShortname)
+				.SetInt32(nameof(AnalyticsShiftCategory.DisplayColor), analyticsShiftCategory.DisplayColor)
+				.SetInt32(nameof(AnalyticsShiftCategory.BusinessUnitId), analyticsShiftCategory.BusinessUnitId)
+				.SetInt32(nameof(AnalyticsShiftCategory.DatasourceId), analyticsShiftCategory.DatasourceId)
+				.SetDateTime(nameof(AnalyticsShiftCategory.DatasourceUpdateDate), analyticsShiftCategory.DatasourceUpdateDate)
+				.SetBoolean(nameof(AnalyticsShiftCategory.IsDeleted), analyticsShiftCategory.IsDeleted);
 			query.ExecuteUpdate();
 		}
 
 		public void UpdateShiftCategory(AnalyticsShiftCategory analyticsShiftCategory)
 		{
 			var query = _currentAnalyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				@"exec mart.[etl_dim_shift_category_update]
-						@shift_category_code=:ShiftCategoryCode, 
-						@shift_category_name=:ShiftCategoryName, 
-						@shift_category_shortname=:ShiftCategoryShortname, 
-						@display_color=:DisplayColor, 
-						@business_unit_id=:BusinessUnitId,
-						@datasource_id=:DatasourceId,
-						@datasource_update_date=:DatasourceUpdateDate,
-						@is_deleted=:IsDeleted
+				$@"exec mart.[etl_dim_shift_category_update]
+						@shift_category_code=:{nameof(AnalyticsShiftCategory.ShiftCategoryCode)}, 
+						@shift_category_name=:{nameof(AnalyticsShiftCategory.ShiftCategoryName)}, 
+						@shift_category_shortname=:{nameof(AnalyticsShiftCategory.ShiftCategoryShortname)}, 
+						@display_color=:{nameof(AnalyticsShiftCategory.DisplayColor)}, 
+						@business_unit_id=:{nameof(AnalyticsShiftCategory.BusinessUnitId)},
+						@datasource_id=:{nameof(AnalyticsShiftCategory.DatasourceId)},
+						@datasource_update_date=:{nameof(AnalyticsShiftCategory.DatasourceUpdateDate)},
+						@is_deleted=:{nameof(AnalyticsShiftCategory.IsDeleted)}
 					  ")
-				.SetGuid("ShiftCategoryCode", analyticsShiftCategory.ShiftCategoryCode)
-				.SetString("ShiftCategoryName", analyticsShiftCategory.ShiftCategoryName)
-				.SetString("ShiftCategoryShortname", analyticsShiftCategory.ShiftCategoryShortname)
-				.SetInt32("DisplayColor", analyticsShiftCategory.DisplayColor)
-				.SetInt32("BusinessUnitId", analyticsShiftCategory.BusinessUnitId)
-				.SetInt32("DatasourceId", analyticsShiftCategory.DatasourceId)
-				.SetDateTime("DatasourceUpdateDate", analyticsShiftCategory.DatasourceUpdateDate)
-				.SetBoolean("IsDeleted", analyticsShiftCategory.IsDeleted);
+				.SetGuid(nameof(AnalyticsShiftCategory.ShiftCategoryCode), analyticsShiftCategory.ShiftCategoryCode)
+				.SetString(nameof(AnalyticsShiftCategory.ShiftCategoryName), analyticsShiftCategory.ShiftCategoryName)
+				.SetString(nameof(AnalyticsShiftCategory.ShiftCategoryShortname), analyticsShiftCategory.ShiftCategoryShortname)
+				.SetInt32(nameof(AnalyticsShiftCategory.DisplayColor), analyticsShiftCategory.DisplayColor)
+				.SetInt32(nameof(AnalyticsShiftCategory.BusinessUnitId), analyticsShiftCategory.BusinessUnitId)
+				.SetInt32(nameof(AnalyticsShiftCategory.DatasourceId), analyticsShiftCategory.DatasourceId)
+				.SetDateTime(nameof(AnalyticsShiftCategory.DatasourceUpdateDate), analyticsShiftCategory.DatasourceUpdateDate)
+				.SetBoolean(nameof(AnalyticsShiftCategory.IsDeleted), analyticsShiftCategory.IsDeleted);
 			query.ExecuteUpdate();
 		}
 	}
