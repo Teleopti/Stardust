@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -81,8 +76,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 				.Warnings.Single()
 				.Should()
 				.Be.EqualTo(string.Format(Resources.BusinessRuleNightlyRestRuleErrorMessage, "8:00",
-					yesterday.ToString("d", CultureInfo.CurrentCulture.DateTimeFormat),
-					today.ToString("d", CultureInfo.CurrentCulture.DateTimeFormat), "2:00"));
+					yesterday.ToShortDateString(),
+					today.ToShortDateString(), "2:00"));
 		}
 
 		[Test]
@@ -124,8 +119,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 				.Warnings.Single()
 				.Should()
 				.Be.EqualTo(string.Format(Resources.BusinessRuleNightlyRestRuleErrorMessage, "8:00",
-					today.ToString("d", CultureInfo.CurrentCulture.DateTimeFormat),
-					tomorrow.ToString("d", CultureInfo.CurrentCulture.DateTimeFormat), "2:00"));
+					today.ToShortDateString(),
+					tomorrow.ToShortDateString(), "2:00"));
 		}
 	}
 }
