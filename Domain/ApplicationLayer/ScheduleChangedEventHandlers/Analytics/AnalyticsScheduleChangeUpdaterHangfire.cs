@@ -65,7 +65,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				if (!_factScheduleDateHandler.MapDateId(new DateOnly(scheduleDay.Date), out dateId))
 				{
 					logger.Warn($"Date {scheduleDay.Date} could not be mapped to Analytics date_id. Schedule changes for agent {@event.PersonId} is not saved into Analytics database.");
-					throw new DateMissingInAnalyticsException(scheduleDay.Date);
+					
+					// Will inform Kunning for further investigation
+					//throw new DateMissingInAnalyticsException(scheduleDay.Date);
+					continue;
 				}
 
 				var personPart = _factSchedulePersonHandler.Handle(scheduleDay.PersonPeriodId);
