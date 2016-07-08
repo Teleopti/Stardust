@@ -18,24 +18,24 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public void AddOrUpdate(AnalyticsDayOff analyticsDayOff)
 		{
 			var query = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				@"exec mart.[etl_dim_day_off_insert_or_update]
-						@day_off_code=:DayOffCode, 
-						@day_off_name=:DayOffName, 
-						@display_color=:DisplayColor,
-						@business_unit_id=:BusinessUnitId,
-						@datasource_id=:DatasourceId,
-						@datasource_update_date=:DatasourceUpdateDate,
-						@display_color_html=:DisplayColorHtml,
-						@day_off_shortname=:DayOffShortName
+				$@"exec mart.[etl_dim_day_off_insert_or_update]
+						@day_off_code=:{nameof(AnalyticsDayOff.DayOffCode)}, 
+						@day_off_name=:{nameof(AnalyticsDayOff.DayOffName)}, 
+						@display_color=:{nameof(AnalyticsDayOff.DisplayColor)},
+						@business_unit_id=:{nameof(AnalyticsDayOff.BusinessUnitId)},
+						@datasource_id=:{nameof(AnalyticsDayOff.DatasourceId)},
+						@datasource_update_date=:{nameof(AnalyticsDayOff.DatasourceUpdateDate)},
+						@display_color_html=:{nameof(AnalyticsDayOff.DisplayColorHtml)},
+						@day_off_shortname=:{nameof(AnalyticsDayOff.DayOffShortname)}
 					  ")
-				.SetGuid("DayOffCode", analyticsDayOff.DayOffCode.GetValueOrDefault())
-				.SetString("DayOffName", analyticsDayOff.DayOffName)
-				.SetInt32("DisplayColor", analyticsDayOff.DisplayColor)
-				.SetInt32("BusinessUnitId", analyticsDayOff.BusinessUnitId)
-				.SetInt32("DatasourceId", analyticsDayOff.DatasourceId)
-				.SetDateTime("DatasourceUpdateDate", analyticsDayOff.DatasourceUpdateDate)
-				.SetString("DisplayColorHtml", analyticsDayOff.DisplayColorHtml)
-				.SetString("DayOffShortName", analyticsDayOff.DayOffShortname);
+				.SetGuid(nameof(AnalyticsDayOff.DayOffCode), analyticsDayOff.DayOffCode.GetValueOrDefault())
+				.SetString(nameof(AnalyticsDayOff.DayOffName), analyticsDayOff.DayOffName)
+				.SetInt32(nameof(AnalyticsDayOff.DisplayColor), analyticsDayOff.DisplayColor)
+				.SetInt32(nameof(AnalyticsDayOff.BusinessUnitId), analyticsDayOff.BusinessUnitId)
+				.SetInt32(nameof(AnalyticsDayOff.DatasourceId), analyticsDayOff.DatasourceId)
+				.SetDateTime(nameof(AnalyticsDayOff.DatasourceUpdateDate), analyticsDayOff.DatasourceUpdateDate)
+				.SetString(nameof(AnalyticsDayOff.DisplayColorHtml), analyticsDayOff.DisplayColorHtml)
+				.SetString(nameof(AnalyticsDayOff.DayOffShortname), analyticsDayOff.DayOffShortname);
 			query.ExecuteUpdate();
 		}
 
@@ -48,16 +48,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public IList<AnalyticsDayOff> DayOffs()
 		{
 			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				@"select 
-						  day_off_id DayOffId
-						, day_off_code DayOffCode
-						, day_off_name DayOffName
-						, business_unit_id BusinessUnitId
-						, datasource_id DatasourceId
-						, datasource_update_date DatasourceUpdateDate
-						, day_off_shortname DayOffShortname
-						, display_color DisplayColor
-						, display_color_html DisplayColorHtml
+				$@"select 
+						 day_off_id {nameof(AnalyticsDayOff.DayOffId)}
+						,day_off_code {nameof(AnalyticsDayOff.DayOffCode)}
+						,day_off_name {nameof(AnalyticsDayOff.DayOffName)}
+						,business_unit_id {nameof(AnalyticsDayOff.BusinessUnitId)}
+						,datasource_id {nameof(AnalyticsDayOff.DatasourceId)}
+						,datasource_update_date {nameof(AnalyticsDayOff.DatasourceUpdateDate)}
+						,day_off_shortname {nameof(AnalyticsDayOff.DayOffShortname)}
+						,display_color {nameof(AnalyticsDayOff.DisplayColor)}
+						,display_color_html {nameof(AnalyticsDayOff.DisplayColorHtml)}
 						from mart.dim_day_off WITH (NOLOCK)")
 				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsDayOff)))
 				.SetReadOnly(true)

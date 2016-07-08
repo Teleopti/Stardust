@@ -19,23 +19,23 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public IEnumerable<AnalyticsGroup> GetGroupPage(Guid groupPageCode)
 		{
 			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				@"select 
-	                [group_page_id] GroupPageId
-					,[group_page_code] GroupPageCode
-					,[group_page_name] GroupPageName
-					,[group_page_name_resource_key] GroupPageNameResourceKey
-					,[group_id] GroupId
-					,[group_code] GroupCode
-					,[group_name] GroupName
-					,[group_is_custom] GroupIsCustom
-					,[business_unit_id] BusinessUnitId
-					,[business_unit_code] BusinessUnitCode
-					,[business_unit_name] BusinessUnitName
-					,[datasource_id] DatasourceId
-					,[insert_date] InsertDate
-					,[datasource_update_date] DatasourceUpdateDate
-                from mart.[dim_group_page] WITH (NOLOCK) where group_page_code=:GroupPageCode")
-				.SetGuid("GroupPageCode", groupPageCode)
+				$@"select 
+	                [group_page_id] {nameof(AnalyticsGroup.GroupPageId)}
+					,[group_page_code] {nameof(AnalyticsGroup.GroupPageCode)}
+					,[group_page_name] {nameof(AnalyticsGroup.GroupPageName)}
+					,[group_page_name_resource_key] {nameof(AnalyticsGroup.GroupPageNameResourceKey)}
+					,[group_id] {nameof(AnalyticsGroup.GroupId)}
+					,[group_code] {nameof(AnalyticsGroup.GroupCode)}
+					,[group_name] {nameof(AnalyticsGroup.GroupName)}
+					,[group_is_custom] {nameof(AnalyticsGroup.GroupIsCustom)}
+					,[business_unit_id] {nameof(AnalyticsGroup.BusinessUnitId)}
+					,[business_unit_code] {nameof(AnalyticsGroup.BusinessUnitCode)}
+					,[business_unit_name] {nameof(AnalyticsGroup.BusinessUnitName)}
+					,[datasource_id] {nameof(AnalyticsGroup.DatasourceId)}
+					,[insert_date] {nameof(AnalyticsGroup.InsertDate)}
+					,[datasource_update_date] {nameof(AnalyticsGroup.DatasourceUpdateDate)}
+                from mart.[dim_group_page] WITH (NOLOCK) where group_page_code=:{nameof(groupPageCode)}")
+				.SetGuid(nameof(groupPageCode), groupPageCode)
 				.SetResultTransformer(Transformers.AliasToBean(typeof (AnalyticsGroup)))
 				.SetReadOnly(true)
 				.List<AnalyticsGroup>();
@@ -44,23 +44,23 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public AnalyticsGroup GetGroupPageByGroupCode(Guid groupCode)
 		{
 			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				@"select 
-	                [group_page_id] GroupPageId
-					,[group_page_code] GroupPageCode
-					,[group_page_name] GroupPageName
-					,[group_page_name_resource_key] GroupPageNameResourceKey
-					,[group_id] GroupId
-					,[group_code] GroupCode
-					,[group_name] GroupName
-					,[group_is_custom] GroupIsCustom
-					,[business_unit_id] BusinessUnitId
-					,[business_unit_code] BusinessUnitCode
-					,[business_unit_name] BusinessUnitName
-					,[datasource_id] DatasourceId
-					,[insert_date] InsertDate
-					,[datasource_update_date] DatasourceUpdateDate
-                from mart.[dim_group_page] WITH (NOLOCK) where group_code=:GroupCode")
-				.SetGuid("GroupCode", groupCode)
+				$@"select 
+	                [group_page_id] {nameof(AnalyticsGroup.GroupPageId)}
+					,[group_page_code] {nameof(AnalyticsGroup.GroupPageCode)}
+					,[group_page_name] {nameof(AnalyticsGroup.GroupPageName)}
+					,[group_page_name_resource_key] {nameof(AnalyticsGroup.GroupPageNameResourceKey)}
+					,[group_id] {nameof(AnalyticsGroup.GroupId)}
+					,[group_code] {nameof(AnalyticsGroup.GroupCode)}
+					,[group_name] {nameof(AnalyticsGroup.GroupName)}
+					,[group_is_custom] {nameof(AnalyticsGroup.GroupIsCustom)}
+					,[business_unit_id] {nameof(AnalyticsGroup.BusinessUnitId)}
+					,[business_unit_code] {nameof(AnalyticsGroup.BusinessUnitCode)}
+					,[business_unit_name] {nameof(AnalyticsGroup.BusinessUnitName)}
+					,[datasource_id] {nameof(AnalyticsGroup.DatasourceId)}
+					,[insert_date] {nameof(AnalyticsGroup.InsertDate)}
+					,[datasource_update_date] {nameof(AnalyticsGroup.DatasourceUpdateDate)}
+                from mart.[dim_group_page] WITH (NOLOCK) where group_code=:{nameof(groupCode)}")
+				.SetGuid(nameof(groupCode), groupCode)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsGroup)))
 				.SetReadOnly(true)
 				.UniqueResult<AnalyticsGroup>();
@@ -69,39 +69,39 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public void UpdateGroupPage(AnalyticsGroup analyticsGroup)
 		{
 			var query = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				@"exec mart.[etl_dim_group_page_update]
-                    @group_page_code=:GroupPageCode
-                ,@group_page_name=:GroupPageName
-                ,@group_page_name_resource_key=:GroupPageNameResourceKey
-                ,@group_code=:GroupCode
-                ,@group_name=:GroupName
-                ,@group_is_custom=:GroupIsCustom")
-				.SetGuid("GroupPageCode", analyticsGroup.GroupPageCode)
-				.SetString("GroupPageName", analyticsGroup.GroupPageName)
-				.SetString("GroupPageNameResourceKey", analyticsGroup.GroupPageNameResourceKey)
-				.SetGuid("GroupCode", analyticsGroup.GroupCode)
-				.SetString("GroupName", analyticsGroup.GroupName)
-				.SetBoolean("GroupIsCustom", analyticsGroup.GroupIsCustom);
+				$@"exec mart.[etl_dim_group_page_update]
+                    @group_page_code=:{nameof(AnalyticsGroup.GroupPageCode)}
+                ,@group_page_name=:{nameof(AnalyticsGroup.GroupPageName)}
+                ,@group_page_name_resource_key=:{nameof(AnalyticsGroup.GroupPageNameResourceKey)}
+                ,@group_code=:{nameof(AnalyticsGroup.GroupCode)}
+                ,@group_name=:{nameof(AnalyticsGroup.GroupName)}
+                ,@group_is_custom=:{nameof(AnalyticsGroup.GroupIsCustom)}")
+				.SetGuid(nameof(AnalyticsGroup.GroupPageCode), analyticsGroup.GroupPageCode)
+				.SetString(nameof(AnalyticsGroup.GroupPageName), analyticsGroup.GroupPageName)
+				.SetString(nameof(AnalyticsGroup.GroupPageNameResourceKey), analyticsGroup.GroupPageNameResourceKey)
+				.SetGuid(nameof(AnalyticsGroup.GroupCode), analyticsGroup.GroupCode)
+				.SetString(nameof(AnalyticsGroup.GroupName), analyticsGroup.GroupName)
+				.SetBoolean(nameof(AnalyticsGroup.GroupIsCustom), analyticsGroup.GroupIsCustom);
 			query.ExecuteUpdate();
 		}
 
 		public void DeleteGroupPagesByGroupCodes(IEnumerable<Guid> groupCodes)
 		{
 			var query = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				@"exec mart.[etl_dim_group_page_delete_by_group_codes]
-                    @group_codes=:GroupCodes")
-				.SetString("GroupCodes", string.Join(",", groupCodes));
+				$@"exec mart.[etl_dim_group_page_delete_by_group_codes]
+                    @group_codes=:{nameof(groupCodes)}")
+				.SetString(nameof(groupCodes), string.Join(",", groupCodes));
 			query.ExecuteUpdate();
 		}
 
 		public IEnumerable<AnalyticsGroupPage> GetBuildInGroupPageBase()
 		{
 			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				@"select distinct 
-					[group_page_id] GroupPageId
-					,[group_page_code] GroupPageCode
-					,[group_page_name_resource_key] GroupPageNameResourceKey
-					,[group_page_name] GroupPageName
+				$@"select distinct 
+					[group_page_id] {nameof(AnalyticsGroupPage.GroupPageId)}
+					,[group_page_code] {nameof(AnalyticsGroupPage.GroupPageCode)}
+					,[group_page_name_resource_key] {nameof(AnalyticsGroupPage.GroupPageNameResourceKey)}
+					,[group_page_name] {nameof(AnalyticsGroupPage.GroupPageName)}
 					from mart.[dim_group_page] WITH (NOLOCK)
 					where [group_page_name_resource_key] is not null")
 				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsGroupPage)))
@@ -112,30 +112,30 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public void AddGroupPageIfNotExisting(AnalyticsGroup analyticsGroup)
 		{
 			var query = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				@"exec mart.[etl_dim_group_page_insert]
-                    @group_page_code=:GroupPageCode
-                ,@group_page_name=:GroupPageName
-                ,@group_page_name_resource_key=:GroupPageNameResourceKey
-                ,@group_code=:GroupCode
-                ,@group_name=:GroupName
-                ,@group_is_custom=:GroupIsCustom
-				,@business_unit_code=:BusinessUnitCode")
-				.SetGuid("GroupPageCode", analyticsGroup.GroupPageCode)
-				.SetString("GroupPageName", analyticsGroup.GroupPageName)
-				.SetString("GroupPageNameResourceKey", analyticsGroup.GroupPageNameResourceKey)
-				.SetGuid("GroupCode", analyticsGroup.GroupCode)
-				.SetString("GroupName", analyticsGroup.GroupName)
-				.SetBoolean("GroupIsCustom", analyticsGroup.GroupIsCustom)
-				.SetGuid("BusinessUnitCode", analyticsGroup.BusinessUnitCode);
+				$@"exec mart.[etl_dim_group_page_insert]
+                    @group_page_code=:{nameof(AnalyticsGroup.GroupPageCode)}
+					,@group_page_name=:{nameof(AnalyticsGroup.GroupPageName)}
+					,@group_page_name_resource_key=:{nameof(AnalyticsGroup.GroupPageNameResourceKey)}
+					,@group_code=:{nameof(AnalyticsGroup.GroupCode)}
+					,@group_name=:{nameof(AnalyticsGroup.GroupName)}
+					,@group_is_custom=:{nameof(AnalyticsGroup.GroupIsCustom)}
+					,@business_unit_code=:{nameof(AnalyticsGroup.BusinessUnitCode)}")
+				.SetGuid(nameof(AnalyticsGroup.GroupPageCode), analyticsGroup.GroupPageCode)
+				.SetString(nameof(AnalyticsGroup.GroupPageName), analyticsGroup.GroupPageName)
+				.SetString(nameof(AnalyticsGroup.GroupPageNameResourceKey), analyticsGroup.GroupPageNameResourceKey)
+				.SetGuid(nameof(AnalyticsGroup.GroupCode), analyticsGroup.GroupCode)
+				.SetString(nameof(AnalyticsGroup.GroupName), analyticsGroup.GroupName)
+				.SetBoolean(nameof(AnalyticsGroup.GroupIsCustom), analyticsGroup.GroupIsCustom)
+				.SetGuid(nameof(AnalyticsGroup.BusinessUnitCode), analyticsGroup.BusinessUnitCode);
 			query.ExecuteUpdate();
 		}
 
 		public void DeleteGroupPages(IEnumerable<Guid> groupPageIds)
 		{
 			var query = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				@"exec mart.[etl_dim_group_page_delete]
-                    @group_page_codes=:GroupPageCodes")
-				.SetString("GroupPageCodes", string.Join(",", groupPageIds));
+				$@"exec mart.[etl_dim_group_page_delete]
+                    @group_page_codes=:{nameof(groupPageIds)}")
+				.SetString(nameof(groupPageIds), string.Join(",", groupPageIds));
 			query.ExecuteUpdate();
 		}
 	}

@@ -18,24 +18,24 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public IList<AnalyticsAbsence> Absences()
 		{
 			return _currentAnalyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				@"select [absence_id] AbsenceId
-					,[absence_code] AbsenceCode
-					,[absence_name] AbsenceName
-					,[display_color] DisplayColor
-					,[in_contract_time] InContractTime
-					,[in_contract_time_name] InContractTimeName
-					,[in_paid_time] InPaidTime
-					,[in_paid_time_name] InPaidTimeName
-					,[in_work_time] InWorkTime
-					,[in_work_time_name] InWorkTimeName
-					,[business_unit_id] BusinessUnitId
-					,[datasource_id] DatasourceId
-					,[insert_date] InsertDate
-					,[update_date] UpdateDate
-					,[datasource_update_date] DatasourceUpdateDate
-					,[is_deleted] IsDeleted
-					,[display_color_html] DisplayColorHtml
-					,[absence_shortname] AbsenceShortName
+				$@"select [absence_id] {nameof(AnalyticsAbsence.AbsenceId)}
+					,[absence_code] {nameof(AnalyticsAbsence.AbsenceCode)}
+					,[absence_name] {nameof(AnalyticsAbsence.AbsenceName)}
+					,[display_color] {nameof(AnalyticsAbsence.DisplayColor)}
+					,[in_contract_time] {nameof(AnalyticsAbsence.InContractTime)}
+					,[in_contract_time_name] {nameof(AnalyticsAbsence.InContractTimeName)}
+					,[in_paid_time] {nameof(AnalyticsAbsence.InPaidTime)}
+					,[in_paid_time_name] {nameof(AnalyticsAbsence.InPaidTimeName)}
+					,[in_work_time] {nameof(AnalyticsAbsence.InWorkTime)}
+					,[in_work_time_name] {nameof(AnalyticsAbsence.InWorkTimeName)}
+					,[business_unit_id] {nameof(AnalyticsAbsence.BusinessUnitId)}
+					,[datasource_id] {nameof(AnalyticsAbsence.DatasourceId)}
+					,[insert_date] {nameof(AnalyticsAbsence.InsertDate)}
+					,[update_date] {nameof(AnalyticsAbsence.UpdateDate)}
+					,[datasource_update_date] {nameof(AnalyticsAbsence.DatasourceUpdateDate)}
+					,[is_deleted] {nameof(AnalyticsAbsence.IsDeleted)}
+					,[display_color_html] {nameof(AnalyticsAbsence.DisplayColorHtml)}
+					,[absence_shortname] {nameof(AnalyticsAbsence.AbsenceShortName)}
 					from [mart].[dim_absence] WITH (NOLOCK)")
 				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsAbsence)))
 				.SetReadOnly(true)
@@ -45,76 +45,76 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public void AddAbsence(AnalyticsAbsence analyticsAbsence)
 		{
 			var query = _currentAnalyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				@"exec mart.[etl_dim_absence_insert]
-						@absence_code=:AbsenceCode, 
-						@absence_name=:AbsenceName, 
-						@display_color=:DisplayColor, 
-						@in_contract_time=:InContractTime, 
-						@in_contract_time_name=:InContractTimeName, 
-						@in_paid_time=:InPaidTime, 
-						@in_paid_time_name=:InPaidTimeName, 
-						@in_work_time=:InWorkTime, 
-						@in_work_time_name=:InWorkTimeName, 
-						@business_unit_id=:BusinessUnitId,
-						@datasource_id=:DatasourceId,
-						@datasource_update_date=:DatasourceUpdateDate,
-						@is_deleted=:IsDeleted,
-						@display_color_html=:DisplayColorHtml,
-						@absence_shortname=:AbsenceShortName
+				$@"exec mart.[etl_dim_absence_insert]
+						@absence_code=:{nameof(AnalyticsAbsence.AbsenceCode)}, 
+						@absence_name=:{nameof(AnalyticsAbsence.AbsenceName)}, 
+						@display_color=:{nameof(AnalyticsAbsence.DisplayColor)}, 
+						@in_contract_time=:{nameof(AnalyticsAbsence.InContractTime)}, 
+						@in_contract_time_name=:{nameof(AnalyticsAbsence.InContractTimeName)}, 
+						@in_paid_time=:{nameof(AnalyticsAbsence.InPaidTime)}, 
+						@in_paid_time_name=:{nameof(AnalyticsAbsence.InPaidTimeName)}, 
+						@in_work_time=:{nameof(AnalyticsAbsence.InWorkTime)}, 
+						@in_work_time_name=:{nameof(AnalyticsAbsence.InWorkTimeName)}, 
+						@business_unit_id=:{nameof(AnalyticsAbsence.BusinessUnitId)},
+						@datasource_id=:{nameof(AnalyticsAbsence.DatasourceId)},
+						@datasource_update_date=:{nameof(AnalyticsAbsence.DatasourceUpdateDate)},
+						@is_deleted=:{nameof(AnalyticsAbsence.IsDeleted)},
+						@display_color_html=:{nameof(AnalyticsAbsence.DisplayColorHtml)},
+						@absence_shortname=:{nameof(AnalyticsAbsence.AbsenceShortName)}
 					  ")
-				.SetGuid("AbsenceCode", analyticsAbsence.AbsenceCode)
-				.SetString("AbsenceName", analyticsAbsence.AbsenceName)
-				.SetInt32("DisplayColor", analyticsAbsence.DisplayColor)
-				.SetBoolean("InContractTime", analyticsAbsence.InContractTime)
-				.SetString("InContractTimeName", analyticsAbsence.InContractTimeName)
-				.SetBoolean("InPaidTime", analyticsAbsence.InPaidTime)
-				.SetString("InPaidTimeName", analyticsAbsence.InPaidTimeName)
-				.SetBoolean("InWorkTime", analyticsAbsence.InWorkTime)
-				.SetString("InWorkTimeName", analyticsAbsence.InWorkTimeName)
-				.SetInt32("BusinessUnitId", analyticsAbsence.BusinessUnitId)
-				.SetInt32("DatasourceId", analyticsAbsence.DatasourceId)
-				.SetDateTime("DatasourceUpdateDate", analyticsAbsence.DatasourceUpdateDate)
-				.SetBoolean("IsDeleted", analyticsAbsence.IsDeleted)
-				.SetString("DisplayColorHtml", analyticsAbsence.DisplayColorHtml)
-				.SetString("AbsenceShortName", analyticsAbsence.AbsenceShortName);
+				.SetGuid(nameof(AnalyticsAbsence.AbsenceCode), analyticsAbsence.AbsenceCode)
+				.SetString(nameof(AnalyticsAbsence.AbsenceName), analyticsAbsence.AbsenceName)
+				.SetInt32(nameof(AnalyticsAbsence.DisplayColor), analyticsAbsence.DisplayColor)
+				.SetBoolean(nameof(AnalyticsAbsence.InContractTime), analyticsAbsence.InContractTime)
+				.SetString(nameof(AnalyticsAbsence.InContractTimeName), analyticsAbsence.InContractTimeName)
+				.SetBoolean(nameof(AnalyticsAbsence.InPaidTime), analyticsAbsence.InPaidTime)
+				.SetString(nameof(AnalyticsAbsence.InPaidTimeName), analyticsAbsence.InPaidTimeName)
+				.SetBoolean(nameof(AnalyticsAbsence.InWorkTime), analyticsAbsence.InWorkTime)
+				.SetString(nameof(AnalyticsAbsence.InWorkTimeName), analyticsAbsence.InWorkTimeName)
+				.SetInt32(nameof(AnalyticsAbsence.BusinessUnitId), analyticsAbsence.BusinessUnitId)
+				.SetInt32(nameof(AnalyticsAbsence.DatasourceId), analyticsAbsence.DatasourceId)
+				.SetDateTime(nameof(AnalyticsAbsence.DatasourceUpdateDate), analyticsAbsence.DatasourceUpdateDate)
+				.SetBoolean(nameof(AnalyticsAbsence.IsDeleted), analyticsAbsence.IsDeleted)
+				.SetString(nameof(AnalyticsAbsence.DisplayColorHtml), analyticsAbsence.DisplayColorHtml)
+				.SetString(nameof(AnalyticsAbsence.AbsenceShortName), analyticsAbsence.AbsenceShortName);
 			query.ExecuteUpdate();
 		}
 
 		public void UpdateAbsence(AnalyticsAbsence analyticsAbsence)
 		{
 			var query = _currentAnalyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				@"exec mart.[etl_dim_absence_update]
-						@absence_code=:AbsenceCode, 
-						@absence_name=:AbsenceName, 
-						@display_color=:DisplayColor, 
-						@in_contract_time=:InContractTime, 
-						@in_contract_time_name=:InContractTimeName, 
-						@in_paid_time=:InPaidTime, 
-						@in_paid_time_name=:InPaidTimeName, 
-						@in_work_time=:InWorkTime, 
-						@in_work_time_name=:InWorkTimeName, 
-						@business_unit_id=:BusinessUnitId,
-						@datasource_id=:DatasourceId,
-						@datasource_update_date=:DatasourceUpdateDate,
-						@is_deleted=:IsDeleted,
-						@display_color_html=:DisplayColorHtml,
-						@absence_shortname=:AbsenceShortName
+				$@"exec mart.[etl_dim_absence_update]
+						@absence_code=:{nameof(AnalyticsAbsence.AbsenceCode)}, 
+						@absence_name=:{nameof(AnalyticsAbsence.AbsenceName)}, 
+						@display_color=:{nameof(AnalyticsAbsence.DisplayColor)}, 
+						@in_contract_time=:{nameof(AnalyticsAbsence.InContractTime)}, 
+						@in_contract_time_name=:{nameof(AnalyticsAbsence.InContractTimeName)}, 
+						@in_paid_time=:{nameof(AnalyticsAbsence.InPaidTime)}, 
+						@in_paid_time_name=:{nameof(AnalyticsAbsence.InPaidTimeName)}, 
+						@in_work_time=:{nameof(AnalyticsAbsence.InWorkTime)}, 
+						@in_work_time_name=:{nameof(AnalyticsAbsence.InWorkTimeName)}, 
+						@business_unit_id=:{nameof(AnalyticsAbsence.BusinessUnitId)},
+						@datasource_id=:{nameof(AnalyticsAbsence.DatasourceId)},
+						@datasource_update_date=:{nameof(AnalyticsAbsence.DatasourceUpdateDate)},
+						@is_deleted=:{nameof(AnalyticsAbsence.IsDeleted)},
+						@display_color_html=:{nameof(AnalyticsAbsence.DisplayColorHtml)},
+						@absence_shortname=:{nameof(AnalyticsAbsence.AbsenceShortName)}
 					  ")
-				.SetGuid("AbsenceCode", analyticsAbsence.AbsenceCode)
-				.SetString("AbsenceName", analyticsAbsence.AbsenceName)
-				.SetInt32("DisplayColor", analyticsAbsence.DisplayColor)
-				.SetBoolean("InContractTime", analyticsAbsence.InContractTime)
-				.SetString("InContractTimeName", analyticsAbsence.InContractTimeName)
-				.SetBoolean("InPaidTime", analyticsAbsence.InPaidTime)
-				.SetString("InPaidTimeName", analyticsAbsence.InPaidTimeName)
-				.SetBoolean("InWorkTime", analyticsAbsence.InWorkTime)
-				.SetString("InWorkTimeName", analyticsAbsence.InWorkTimeName)
-				.SetInt32("BusinessUnitId", analyticsAbsence.BusinessUnitId)
-				.SetInt32("DatasourceId", analyticsAbsence.DatasourceId)
-				.SetDateTime("DatasourceUpdateDate", analyticsAbsence.DatasourceUpdateDate)
-				.SetBoolean("IsDeleted", analyticsAbsence.IsDeleted)
-				.SetString("DisplayColorHtml", analyticsAbsence.DisplayColorHtml)
-				.SetString("AbsenceShortName", analyticsAbsence.AbsenceShortName);
+				.SetGuid(nameof(AnalyticsAbsence.AbsenceCode), analyticsAbsence.AbsenceCode)
+				.SetString(nameof(AnalyticsAbsence.AbsenceName), analyticsAbsence.AbsenceName)
+				.SetInt32(nameof(AnalyticsAbsence.DisplayColor), analyticsAbsence.DisplayColor)
+				.SetBoolean(nameof(AnalyticsAbsence.InContractTime), analyticsAbsence.InContractTime)
+				.SetString(nameof(AnalyticsAbsence.InContractTimeName), analyticsAbsence.InContractTimeName)
+				.SetBoolean(nameof(AnalyticsAbsence.InPaidTime), analyticsAbsence.InPaidTime)
+				.SetString(nameof(AnalyticsAbsence.InPaidTimeName), analyticsAbsence.InPaidTimeName)
+				.SetBoolean(nameof(AnalyticsAbsence.InWorkTime), analyticsAbsence.InWorkTime)
+				.SetString(nameof(AnalyticsAbsence.InWorkTimeName), analyticsAbsence.InWorkTimeName)
+				.SetInt32(nameof(AnalyticsAbsence.BusinessUnitId), analyticsAbsence.BusinessUnitId)
+				.SetInt32(nameof(AnalyticsAbsence.DatasourceId), analyticsAbsence.DatasourceId)
+				.SetDateTime(nameof(AnalyticsAbsence.DatasourceUpdateDate), analyticsAbsence.DatasourceUpdateDate)
+				.SetBoolean(nameof(AnalyticsAbsence.IsDeleted), analyticsAbsence.IsDeleted)
+				.SetString(nameof(AnalyticsAbsence.DisplayColorHtml), analyticsAbsence.DisplayColorHtml)
+				.SetString(nameof(AnalyticsAbsence.AbsenceShortName), analyticsAbsence.AbsenceShortName);
 			query.ExecuteUpdate();
 		}
 	}

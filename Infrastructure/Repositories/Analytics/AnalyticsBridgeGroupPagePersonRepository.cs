@@ -24,9 +24,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			foreach (var batch in groupPageIds.Batch(100))
 			{
 				var query = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				@"exec mart.[etl_bridge_group_page_person_delete_all]
-                    @group_page_codes=:GroupPageIds")
-				.SetString("GroupPageIds", string.Join(",", batch));
+				$@"exec mart.[etl_bridge_group_page_person_delete_all]
+                    @group_page_codes=:{nameof(groupPageIds)}")
+				.SetString(nameof(groupPageIds), string.Join(",", batch));
 				query.ExecuteUpdate();
 			}
 		}
@@ -38,11 +38,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			foreach (var batch in personIds.Batch(100))
 			{
 				var query = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-					@"exec mart.[etl_bridge_group_page_person_delete]
-						@person_codes=:PersonIds,
-						@group_page_code=:GroupId")
-					.SetString("PersonIds", string.Join(",", batch))
-					.SetGuid("GroupId", groupId);
+					$@"exec mart.[etl_bridge_group_page_person_delete]
+						@person_codes=:{nameof(personIds)},
+						@group_page_code=:{nameof(groupId)}")
+					.SetString(nameof(personIds), string.Join(",", batch))
+					.SetGuid(nameof(groupId), groupId);
 				query.ExecuteUpdate();
 			}
 		}
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public IEnumerable<Guid> GetBridgeGroupPagePerson(Guid groupId)
 		{
 			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				@"select p.person_code 
+				$@"select p.person_code 
 					from [mart].[bridge_group_page_person] bgpp 
 					WITH (NOLOCK) 
 					join [mart].[dim_person] p 
@@ -59,15 +59,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					join [mart].[dim_group_page] gp 
 					WITH (NOLOCK) 
 					on bgpp.group_page_id = gp.group_page_id 
-					where gp.group_code = :GroupId")
-				.SetGuid("GroupId", groupId)
+					where gp.group_code=:{nameof(groupId)}")
+				.SetGuid(nameof(groupId), groupId)
 				.List<Guid>();
 		}
 
 		public IEnumerable<Guid> GetGroupPagesForPersonPeriod(Guid personPeriodId)
 		{
 			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				@"select gp.group_code
+				$@"select gp.group_code
 					from [mart].[bridge_group_page_person] bgpp 
 					WITH (NOLOCK) 
 					join [mart].[dim_person] p 
@@ -76,8 +76,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					join [mart].[dim_group_page] gp 
 					WITH (NOLOCK) 
 					on bgpp.group_page_id = gp.group_page_id 
-					where p.person_period_code = :PersonPeriodId")
-				.SetGuid("PersonPeriodId", personPeriodId)
+					where p.person_period_code = :{nameof(personPeriodId)}")
+				.SetGuid(nameof(personPeriodId), personPeriodId)
 				.List<Guid>();
 		}
 
@@ -89,11 +89,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			foreach (var batch in groupIds.Batch(100))
 			{
 				var query = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-					@"exec mart.[etl_bridge_group_page_person_delete_for_person_period]
-					@person_period_code=:PersonPeriodId,
-					@group_codes=:GroupIds")
-					.SetGuid("PersonPeriodId", personPeriodId)
-					.SetString("GroupIds", string.Join(",", batch));
+					$@"exec mart.[etl_bridge_group_page_person_delete_for_person_period]
+						@person_period_code=:{nameof(personPeriodId)},
+						@group_codes=:{nameof(groupIds)}")
+					.SetGuid(nameof(personPeriodId), personPeriodId)
+					.SetString(nameof(groupIds), string.Join(",", batch));
 				query.ExecuteUpdate();
 			}
 		}
@@ -106,11 +106,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			foreach (var batch in groupIds.Batch(100))
 			{
 				var query = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				@"exec mart.[etl_bridge_group_page_person_insert_for_person_period]
-                @person_period_code=:PersonPeriodId,
-				@group_codes=:GroupIds")
-				.SetGuid("PersonPeriodId", personPeriodId)
-				.SetString("GroupIds", string.Join(",", batch));
+				$@"exec mart.[etl_bridge_group_page_person_insert_for_person_period]
+					@person_period_code=:{nameof(personPeriodId)},
+					@group_codes=:{nameof(groupIds)}")
+				.SetGuid(nameof(personPeriodId), personPeriodId)
+				.SetString(nameof(groupIds), string.Join(",", batch));
 				query.ExecuteUpdate();
 			}
 		}
@@ -118,11 +118,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public void DeleteBridgeGroupPagePersonExcludingPersonPeriods(Guid personId, IEnumerable<Guid> personPeriodIds)
 		{
 			var query = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				@"exec mart.[etl_bridge_group_page_person_delete_removed]
-				@person_code=:PersonId,
-				@person_period_codes=:PersonPeriodIds")
-				.SetGuid("PersonId", personId)
-				.SetString("PersonPeriodIds", string.Join(",", personPeriodIds));
+				$@"exec mart.[etl_bridge_group_page_person_delete_removed]
+					@person_code=:{nameof(personId)},
+					@person_period_codes=:{nameof(personPeriodIds)}")
+				.SetGuid(nameof(personId), personId)
+				.SetString(nameof(personPeriodIds), string.Join(",", personPeriodIds));
 			query.ExecuteUpdate();
 		}
 
@@ -133,11 +133,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			foreach (var batch in personIds.Batch(100))
 			{
 				var query = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				@"exec mart.[etl_bridge_group_page_person_insert]
-                @person_codes=:PersonIds,
-				@group_page_code=:GroupId")
-				.SetString("PersonIds", string.Join(",", batch))
-				.SetGuid("GroupId", groupId);
+				$@"exec mart.[etl_bridge_group_page_person_insert]
+					@person_codes=:{nameof(personIds)},
+					@group_page_code=:{nameof(groupId)}")
+				.SetString(nameof(personIds), string.Join(",", batch))
+				.SetGuid(nameof(groupId), groupId);
 				query.ExecuteUpdate();
 			}
 		}

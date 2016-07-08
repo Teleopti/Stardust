@@ -18,29 +18,29 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public void AddOrUpdate(AnalyticsOvertime analyticsOvertime)
 		{
 			var query = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				@"exec mart.[etl_dim_overtime_add_or_update]
-                    @overtime_code=:overtime_code
-					,@overtime_name=:overtime_name
-					,@business_unit_id=:business_unit_id
-					,@datasource_update_date=:datasource_update_date
-					,@is_deleted=:is_deleted")
-				.SetGuid("overtime_code", analyticsOvertime.OvertimeCode)
-				.SetString("overtime_name", analyticsOvertime.OvertimeName)
-				.SetInt32("business_unit_id", analyticsOvertime.BusinessUnitId)
-				.SetDateTime("datasource_update_date", analyticsOvertime.DatasourceUpdateDate)
-				.SetBoolean("is_deleted", analyticsOvertime.IsDeleted);
+				$@"exec mart.[etl_dim_overtime_add_or_update]
+                    @overtime_code=:{nameof(AnalyticsOvertime.OvertimeCode)}
+					,@overtime_name=:{nameof(AnalyticsOvertime.OvertimeName)}
+					,@business_unit_id=:{nameof(AnalyticsOvertime.BusinessUnitId)}
+					,@datasource_update_date=:{nameof(AnalyticsOvertime.DatasourceUpdateDate)}
+					,@is_deleted=:{nameof(AnalyticsOvertime.IsDeleted)}")
+				.SetGuid(nameof(AnalyticsOvertime.OvertimeCode), analyticsOvertime.OvertimeCode)
+				.SetString(nameof(AnalyticsOvertime.OvertimeName), analyticsOvertime.OvertimeName)
+				.SetInt32(nameof(AnalyticsOvertime.BusinessUnitId), analyticsOvertime.BusinessUnitId)
+				.SetDateTime(nameof(AnalyticsOvertime.DatasourceUpdateDate), analyticsOvertime.DatasourceUpdateDate)
+				.SetBoolean(nameof(AnalyticsOvertime.IsDeleted), analyticsOvertime.IsDeleted);
 			query.ExecuteUpdate();
 		}
 
 		public IList<AnalyticsOvertime> Overtimes()
 		{
 			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				@"select overtime_id OvertimeId, 
-						overtime_code OvertimeCode,
-						overtime_name OvertimeName,
-						datasource_update_date DatasourceUpdateDate,
-						is_deleted IsDeleted,
-						business_unit_id BusinessUnitId
+				$@"select overtime_id {nameof(AnalyticsOvertime.OvertimeId)}, 
+						overtime_code {nameof(AnalyticsOvertime.OvertimeCode)},
+						overtime_name {nameof(AnalyticsOvertime.OvertimeName)},
+						datasource_update_date {nameof(AnalyticsOvertime.DatasourceUpdateDate)},
+						is_deleted {nameof(AnalyticsOvertime.IsDeleted)},
+						business_unit_id {nameof(AnalyticsOvertime.BusinessUnitId)}
 					from mart.dim_overtime WITH (NOLOCK)")
 				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsOvertime)))
 				.SetReadOnly(true)
