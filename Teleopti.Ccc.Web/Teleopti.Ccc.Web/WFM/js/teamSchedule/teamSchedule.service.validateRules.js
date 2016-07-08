@@ -7,55 +7,29 @@
 	function ValidateRulesService($http, $q, $timeout){
 
 		var self = this;
-		var getValidateRulesResultUrl = "../api/TeamScheduleData/GetValidateRulesResult";
+		var getValidateRulesResultUrl = '../api/TeamScheduleData/FetchRuleValidationResult';
 		var warningDict = {};
-		
-		// this.getValidateRulesResult = getValidateRulesResult;
-		self.getValidateRulesResult = getValidateRulesResultFake;
+
+		self.getValidateRulesResult = getValidateRulesResult;
 		self.checkValidationForPerson = checkValidationForPerson;
 		self.ValidationIsDone = false;
 
-		function getValidateRulesResult() {
-			var deferred = $q.defer();
-			$http.get(getValidateRulesResultUrl).success(function (data) {
-				data.forEach(function(warning){
-					warningDict[warning.PersonId] = warning.WarningMessage;	
-				});
-
-				validating = false;
-				deferred.resolve(fakeData);
-			});
-
-			return deferred.promise;
-		}
-
-		function getValidateRulesResultFake() {
-			var fakeData;
-			var deferred = $q.defer();
+		function getValidateRulesResult(momentDate, personIds) {
+			var postData = {
+				Date: momentDate.format('YYYY-MM-DD'),
+				PersonIds: personIds
+			};
 
 			warningDict = {};
 			self.ValidationIsDone = false;
 
-			$timeout(function() {
-				fakeData = [{
-					PersonId:'4fd900ad-2b33-469c-87ac-9b5e015b2564',
-					WarningMessage: ["Lorem ipsum dolor sit amet, consectetur adipiscing elit. ", "Quae cum dixisset paulumque institisset, Quid est? "],
-				},
-				{
-					PersonId:'10957ad5-5489-48e0-959a-9b5e015b2b5c',
-					WarningMessage: ["Lorem ipsum dolor sit amet, consectetur adipiscing elit. ", "Quae cum dixisset paulumque institisset, Quid est? "],
-				}];
-
-				fakeData.forEach(function(warning){
-					warningDict[warning.PersonId] = warning.WarningMessage;	
+			$http.post(getValidateRulesResultUrl, postData).success(function (data) {
+				data.forEach(function(warning){
+					warningDict[warning.PersonId] = warning.Warnings;
 				});
 
 				self.ValidationIsDone = true;
-
-				deferred.resolve(fakeData);
-			}, 4000);
-
-			return deferred.promise;
+			});
 		}
 
 		function checkValidationForPerson(personId) {

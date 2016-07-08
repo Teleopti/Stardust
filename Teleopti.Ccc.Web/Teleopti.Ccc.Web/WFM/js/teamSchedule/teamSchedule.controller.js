@@ -9,7 +9,7 @@
 		'TeamSchedule',
 		'GroupScheduleFactory',
 		'PersonSelection',
-		'ScheduleManagement',				
+		'ScheduleManagement',
 		'Toggle',
 		'signalRSVC',
 		'NoticeService',
@@ -43,6 +43,7 @@
 			}
 			vm.lastCommandTrackId = trackId != null ? trackId : null;
 			personIds && vm.updateSchedules(personIds);
+			vm.checkValidationWarningForCommandTargets(personIds);
 		};
 
 		function openSidePanel() {
@@ -146,13 +147,14 @@
 
 		vm.loadSchedules = function() {
 			vm.isLoading = true;
-			
+
 			var params = getParamsForLoadingSchedules();
 			teamScheduleSvc.searchSchedules.query(params).$promise.then(function (result) {
 				scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment());
 				afterSchedulesLoaded(result);
 				personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
 				vm.isLoading = false;
+				vm.checkValidationWarningForCurrentPage();
 			});
 		};
 
@@ -161,9 +163,18 @@
 			vm.loadSchedules();
 		};
 
-		vm.toggleValidateWarning = function(){
+		vm.checkValidationWarningForCurrentPage = function(){
 			if (vm.validateWarningToggle) {
-				ValidateRulesService.getValidateRulesResult().then(function (data) {});
+				var currentPagePersonIds = scheduleMgmtSvc.groupScheduleVm.Schedules.map(function(schedule) {
+					return schedule.PersonId;
+				});
+				ValidateRulesService.getValidateRulesResult(vm.scheduleDateMoment(), currentPagePersonIds);
+			}
+		};
+
+		vm.checkValidationWarningForCommandTargets = function (personIds) {
+			if (vm.validateWarningToggle) {
+				ValidateRulesService.getValidateRulesResult(vm.scheduleDateMoment(), personIds);
 			}
 		};
 
@@ -211,7 +222,7 @@
 		vm.toggleErrorDetails = function() {
 			vm.showErrorDetails = !vm.showErrorDetails;
 		};
-	
+
 		function isMessageNeedToBeHandled() {
 			var personIds = scheduleMgmtSvc.groupScheduleVm.Schedules.map(function (schedule) { return schedule.PersonId; });
 			var scheduleDate = vm.scheduleDateMoment();

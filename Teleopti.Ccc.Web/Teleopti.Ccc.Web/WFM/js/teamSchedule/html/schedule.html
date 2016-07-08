@@ -16,7 +16,7 @@
 			</span>
 			
 			<div class="wfm-switch" ng-if="vm.toggles.ShowNightlyRestWarningEnabled">
-				<input type="checkbox" id="validateWarning" ng-model="vm.validateWarningToggle" ng-change="vm.toggleValidateWarning()" />
+				<input type="checkbox" id="validateWarning" ng-model="vm.validateWarningToggle" ng-change="vm.checkValidationWarningForCurrentPage()" />
 				<label for="validateWarning">
 					<span class="wfm-switch-label" translate>ShowNightlyRestWarning</span>
 					<span class="wfm-switch-toggle"></span>
