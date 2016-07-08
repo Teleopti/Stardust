@@ -2,25 +2,33 @@
 describe("PeopleStartCtrl", function() {
 	var $q,
 		$rootScope,
-		$httpBackend;
+		$httpBackend,
+		$translate;
 	var stateParams = { selectedPeopleIds: [], commandTag: "AdjustSkill", currentKeyword: '', paginationOptions: {} };
-	var mockNoticeService = {};
+	var sentMessage;
+	var mockNoticeService = {
+		info: function (message, timeout, flag) {
+			sentMessage = message;
+		}
+	};
 
 	beforeEach(function(){
 		module('wfm.people');
 		module('externalModules');
 	});
 
-	beforeEach(inject(function(_$httpBackend_, _$q_, _$rootScope_, _$controller_) {
+	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_, _$controller_, _$translate_) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
+		$translate = _$translate_;
 	}));
 
 	var mockToggleService = {
 		WfmPeople_AdvancedSearch_32973: true,
 		WfmPeople_ImportUsers_33665: true,
-		WfmPeople_AdjustSkill_34138: true
+		WfmPeople_AdjustSkill_34138: true,
+		Wfm_People_PrepareForRelease_39040: true
 	}
 
 	var mockPeopleService = {
@@ -77,4 +85,23 @@ describe("PeopleStartCtrl", function() {
 		expect(scope.searchOptions.keyword).toEqual("\"Paris\" \"Team 1\"");
 	}));
 
+	it("should show release notification only in people.start state", inject(function($controller) {
+		var scope = $rootScope.$new();
+		var state = {
+			current: {}
+		};
+		state.current.name = "people.start";
+		$controller("PeopleStartCtrl", { $state: state, $scope: scope, $stateParams: stateParams, Toggle: mockToggleService, People: mockPeopleService, NoticeService: mockNoticeService });
+
+		var message = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink')
+		.replace('{0}', $translate.instant('People'))
+		.replace('{1}', "<a href=' http://www.teleopti.com/wfm/customer-feedback.aspx' target='_blank' target='_blank'>")
+		.replace('{2}', '</a>');
+		expect(sentMessage).toEqual(message);
+
+		sentMessage = "";
+		state.current.name = "seatPlan";
+		$controller("PeopleStartCtrl", { $state: state, $scope: scope, $stateParams: stateParams, Toggle: mockToggleService, People: mockPeopleService, NoticeService: mockNoticeService });
+		expect(sentMessage).toEqual("");
+	}));
 });
