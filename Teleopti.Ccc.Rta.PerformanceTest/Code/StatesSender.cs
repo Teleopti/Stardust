@@ -31,7 +31,59 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		[LogTime]
 		public virtual void Send()
 		{
-			stateChanges = new[]
+			states().ForEach(stateChange =>
+			{
+				setTime(stateChange);
+				Enumerable.Range(0, _stateHolder.NumberOfAgents)
+					.ForEach(roger =>
+					{
+						_http.PostJson(
+							"Rta/State/Change",
+							new ExternalUserStateWebModel
+							{
+								AuthenticationKey = LegacyAuthenticationKey.TheKey,
+								UserCode = $"roger{roger}",
+								StateCode = stateChange.StateCode,
+								IsLoggedOn = true,
+								PlatformTypeId = Guid.Empty.ToString(),
+								SourceId = _stateHolder.SourceId,
+								IsSnapshot = false
+							});
+					});
+			});
+		}
+
+		public void SendBatches()
+		{
+			states().ForEach(stateChange =>
+			{
+				setTime(stateChange);
+				Enumerable.Range(0, _stateHolder.NumberOfAgents)
+					.Select(agent => new ExternalUserStateWebModel
+					{
+						AuthenticationKey = LegacyAuthenticationKey.TheKey,
+						UserCode = $"roger{agent}",
+						StateCode = stateChange.StateCode,
+						IsLoggedOn = true,
+						PlatformTypeId = Guid.Empty.ToString(),
+						SourceId = _stateHolder.SourceId,
+						IsSnapshot = false
+					})
+					.Batch(50)
+					.ForEach(state => _http.PostJson("Rta/State/Batch", state));
+			});
+		}
+
+		private void setTime(StateChange stateChange)
+		{
+			var now = stateChange.Time.Utc();
+			_now.Is(now);
+			_http.Get("/Test/SetCurrentTime?ticks=" + now.Ticks);
+		}
+
+		private static IEnumerable<StateChange> states()
+		{
+			return new[]
 			{
 				new StateChange {Time = "2016-02-26 07:00", StateCode = "LoggedOff"},
 				new StateChange {Time = "2016-02-26 07:05", StateCode = "Ready"},
@@ -79,34 +131,12 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 				new StateChange {Time = "2016-02-26 17:10", StateCode = "Ready"},
 				new StateChange {Time = "2016-02-26 17:11", StateCode = "LoggedOff"},
 			};
-
-			stateChanges.ForEach(stateChange =>
-			{
-				var now = stateChange.Time.Utc();
-				_now.Is(now);
-				_http.Get("/Test/SetCurrentTime?ticks=" + now.Ticks);
-				Enumerable.Range(0, _stateHolder.NumberOfAgents)
-					.ForEach(roger =>
-					{
-						_http.PostJson(
-							"Rta/State/Change",
-							new ExternalUserStateWebModel
-							{
-								AuthenticationKey = LegacyAuthenticationKey.TheKey,
-								UserCode = $"roger{roger}",
-								StateCode = stateChange.StateCode,
-								IsLoggedOn = true,
-								PlatformTypeId = Guid.Empty.ToString(),
-								SourceId = _stateHolder.SourceId,
-								IsSnapshot = false
-							});
-					});
-			});
 		}
-
+		
 		public IEnumerable<StateChange> SentSates()
 		{
 			return stateChanges;
 		}
+
 	}
 }

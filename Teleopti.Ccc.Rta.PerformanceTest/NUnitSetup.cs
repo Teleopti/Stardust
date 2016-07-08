@@ -1,14 +1,10 @@
-﻿using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using Autofac;
-using log4net;
 using log4net.Config;
-using log4net.Core;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;

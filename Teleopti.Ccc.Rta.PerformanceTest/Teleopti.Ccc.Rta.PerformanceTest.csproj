@@ -60,6 +60,7 @@
     </Compile>
     <Compile Include="ActualAgentStateUpdateTest.cs" />
     <Compile Include="BackgroundWorkTest.cs" />
+    <Compile Include="BatchSendTest.cs" />
     <Compile Include="Code\DataCreator.cs" />
     <Compile Include="Code\RtaPerformanceTestAttribute.cs" />
     <Compile Include="NUnitSetup.cs" />
