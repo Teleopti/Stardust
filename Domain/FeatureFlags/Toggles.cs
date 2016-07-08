@@ -24,6 +24,7 @@
 		RTA_PauseButton_39144,
 		RTA_MonitorBySkills_39081,
 		RTA_RecentOutOfAdherences_39145,
+		RTA_OptimizeDatabaseLoading_39667,
 
 		MessageBroker_SchedulingScreenMailbox_32733,
 

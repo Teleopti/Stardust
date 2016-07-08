@@ -252,6 +252,7 @@
     <Compile Include="Repositories\SkillAreaRepositoryTest.cs" />
     <Compile Include="Rta\AgentStateForTest.cs" />
     <Compile Include="Rta\DatabaseManager.cs" />
+    <Compile Include="Rta\DatabaseOptimizationTest.cs" />
     <Compile Include="Rta\DatabaseReaderLoadAllPersonOrganizationDataTest.cs" />
     <Compile Include="Rta\DatabaseReaderLoadPersonOrganizationDataTest.cs" />
     <Compile Include="Rta\MappingReaderSelectionTest.cs" />

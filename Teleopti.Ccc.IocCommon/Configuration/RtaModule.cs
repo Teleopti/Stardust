@@ -29,7 +29,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<StateCodeAdder>().As<IStateCodeAdder>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateStreamSynchronizer>().SingleInstance();
 			
-			builder.RegisterType<ContextLoader>().SingleInstance().ApplyAspects();
+			if (_config.Toggle(Toggles.RTA_OptimizeDatabaseLoading_39667))
+			{
+					builder.RegisterType<DatabaseOptimizer>().As<IDatabaseOptimizer>();
+					builder.RegisterType<OptimizedContextLoader>().As<IContextLoader>().SingleInstance().ApplyAspects();
+			}
+			else
+				builder.RegisterType<ContextLoader>().As<IContextLoader>().SingleInstance().ApplyAspects();
 			
 			_config.Cache().This<IDatabaseLoader>((c, b) => b
 				.CacheMethod(x => x.Datasources())
@@ -76,6 +82,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TeamViewModelBuilder>().SingleInstance();
 			builder.RegisterType<NumberOfAgentsInSiteReader>().As<INumberOfAgentsInSiteReader>().SingleInstance();
 			builder.RegisterType<NumberOfAgentsInTeamReader>().As<INumberOfAgentsInTeamReader>().SingleInstance();
+
 		}
 	}
 }
