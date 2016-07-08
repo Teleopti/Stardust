@@ -109,60 +109,83 @@
         }
     }
 
+    .con-row.teamschedule-body {
+        align-items: flex-start;
+        position: relative;
+        display: block !important;
+        overflow: hidden;
+    }
+
     .big-table-wrapper {
         position: relative;
         overflow: hidden;
         width: 100%;
-    }
+        height: 100%;
+  
+        table {
+            margin-bottom: 0;
 
-    .con-row.teamschedule-body {
-        align-items: flex-start;
-        position: relative;
-        min-height: 500px;
-        max-height: 62vh;
-        overflow: auto;
-        display: block !important;
-    }
+            thead, tbody, tfoot {
+                tr > th, td {
+                    padding: 5px 0 5px 0;
+                    border-bottom: rgba(204, 204, 204, 0.99) 1px solid;
+                }
 
-    .table {
-        thead, tbody, tfoot {
-            tr > th, td {
-                padding: 5px 0 5px 0;
-                border-bottom: rgba(204, 204, 204, 0.99) 1px solid;
-            }
+                .person-name {
+                    padding-right: 5px;
+                    padding-left: 5px;
+                    min-width: 150px;
+                }
 
-            .person-name {
-                padding-right: 5px;
-                padding-left: 5px;
-                min-width: 150px;
-            }
+                tr:hover {
+                    background: $gray012;
+                }
 
-            tr:hover {
-                background: $gray012;
-            }
-
-            .contract-time-column {
-                padding-left: 8px;
-                padding-right: 8px;
-                text-align: center;
+                .contract-time-column {
+                    padding-left: 8px;
+                    padding-right: 8px;
+                    text-align: center;
+                }
             }
         }
-    }
 
-    th.person-name-column {
-        width: 20%;
-    }
+        table tbody {
+            display: block;
+            height: 100%;
+            max-height: 62vh;
+            min-height: 500px;
+            overflow-y: scroll;
+        }
 
-    th.right-border-empty {
-        width: 2%;
-    }
+        table thead, tbody tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
 
-    th.contract-time-header {
-        font-weight: 400;
-        width: 5%;
-        white-space: nowrap;
-    }
+        table thead{
+            width: calc( 100% - 1.2em );
+        }
+        
+        .person-name label{
+            position: relative;
+        }
 
+        th.person-name-column, td.person-name-column {
+            width: 20%;
+        }
+
+        th.right-border-empty, td.right-border-empty {
+            width: 2%;
+        }
+
+        th.contract-time-header, td.contract-time-column {
+            font-weight: 400;
+            width: 10%;
+            min-width: 150px;
+            white-space: nowrap;
+        }
+    }
     .page-size-selector {
         display: inline-block;
         text-align: left;
