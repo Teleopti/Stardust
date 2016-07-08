@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			var results = Target.GetBusinessRuleValidationResults(new FetchRuleValidationResultFormData
 			{
 				Date = new DateTime(2016,1,2),
-				PersonIds = new List<Guid>
+				PersonIds = new []
 				{
 					person.Id.GetValueOrDefault()
 				}
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			var results = Target.GetBusinessRuleValidationResults(new FetchRuleValidationResultFormData
 			{
 				Date = new DateTime(2016, 1, 2),
-				PersonIds = new List<Guid>
+				PersonIds = new []
 				{
 					person.Id.GetValueOrDefault()
 				}

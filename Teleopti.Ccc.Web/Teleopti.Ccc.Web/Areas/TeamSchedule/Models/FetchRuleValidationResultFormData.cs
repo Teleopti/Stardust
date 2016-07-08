@@ -14,6 +14,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 	public class FetchRuleValidationResultFormData
 	{
 		public DateTime Date;
-		public IList<Guid> PersonIds;
+		public Guid[] PersonIds;
 	}
 }
