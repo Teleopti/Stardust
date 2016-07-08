@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
@@ -144,13 +145,33 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 			Assert.AreEqual(1, waitlist.Count());
 			Assert.IsTrue(waitlist[0].Request == absenceRequestTwo);
 		}
-		
-		private IPerson createAndSetupPerson(IWorkflowControlSet workflowControlSet)
+
+		[Test]
+		public void Bug39661_ShouldNotHandleRequestAfterPersonIsDeleted()
+		{
+			var absenceRequest1 = createNewAbsenceRequest(createAndSetupPerson(_workflowControlSet, true), _absence, new DateTimePeriod(new DateTime(2016, 7, 8, 15, 0, 0, DateTimeKind.Utc), new DateTime(2016, 7, 8, 19, 00, 00, DateTimeKind.Utc)));
+			var absenceRequest2 = createNewAbsenceRequest(createAndSetupPerson(_workflowControlSet), _absence, new DateTimePeriod(new DateTime(2016, 7, 8, 8, 0, 0, DateTimeKind.Utc), new DateTime(2016, 7, 8, 16, 00, 00, DateTimeKind.Utc)));
+
+			var property = typeof(PersonRequest).GetProperty("CreatedOn");
+			property.SetValue(absenceRequest1.Parent, new DateTime(2016, 01, 01, 10, 00, 00));
+			property.SetValue(absenceRequest2.Parent, new DateTime(2016, 01, 01, 12, 00, 00));
+
+
+			//absenceTwo intersects absenceOne
+			var waitlist = _absenceRequestWaitlistProvider.GetWaitlistedRequests(new DateTimePeriod(new DateTime(2016, 7, 7, 8, 0, 0, DateTimeKind.Utc), new DateTime(2016, 7, 9, 16, 00, 00, DateTimeKind.Utc)), _workflowControlSet).ToArray();
+
+			Assert.AreEqual(1, waitlist.Count());
+			Assert.IsTrue(waitlist[0].Request == absenceRequest2);
+		}
+
+		private IPerson createAndSetupPerson(IWorkflowControlSet workflowControlSet, bool isPersonDeleted = false)
 		{
 			var person = PersonFactory.CreatePersonWithId();
 			_personRepository.Add(person);
 			
 			person.WorkflowControlSet = workflowControlSet;
+
+			if(isPersonDeleted) ((Person) person).SetDeleted();
 
 			return person;
 		}
