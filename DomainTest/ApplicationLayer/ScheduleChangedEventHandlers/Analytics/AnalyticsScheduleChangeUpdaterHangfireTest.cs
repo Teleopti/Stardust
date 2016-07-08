@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				_analyticsShiftCategoryRepository);
 		}
 
-		[Test, ExpectedException(typeof(DateMissingInAnalyticsException))]
+		[Test]
 		public void ShouldNotTryToSaveScheduleChangeWhenDateIdMappingFails()
 		{
 			var scenario = new AnalyticsScenario { ScenarioCode = Guid.NewGuid() };
