@@ -168,13 +168,13 @@
 				var currentPagePersonIds = scheduleMgmtSvc.groupScheduleVm.Schedules.map(function(schedule) {
 					return schedule.PersonId;
 				});
-				ValidateRulesService.getValidateRulesResult(vm.scheduleDateMoment(), currentPagePersonIds);
+				ValidateRulesService.getValidateRulesResultForCurrentPage(vm.scheduleDateMoment(), currentPagePersonIds);
 			}
 		};
 
 		vm.checkValidationWarningForCommandTargets = function (personIds) {
 			if (vm.validateWarningToggle) {
-				ValidateRulesService.getValidateRulesResult(vm.scheduleDateMoment(), personIds);
+				ValidateRulesService.updateValidateRulesResultForPeople(vm.scheduleDateMoment(), personIds);
 			}
 		};
 

@@ -10,9 +10,36 @@
 		var getValidateRulesResultUrl = '../api/TeamScheduleData/FetchRuleValidationResult';
 		var warningDict = {};
 
-		self.getValidateRulesResult = getValidateRulesResult;
+		self.getValidateRulesResultForCurrentPage = getValidateRulesResultForCurrentPage;
+		self.updateValidateRulesResultForPeople = updateValidateRulesResultForPeople;
 		self.checkValidationForPerson = checkValidationForPerson;
-		self.ValidationIsDone = false;
+
+		function getValidateRulesResultForCurrentPage(momentDate, personIds) {
+			warningDict = {};
+			personIds.forEach(function(id) {
+				warningDict[id] = {
+					isLoaded: false,
+					warnings: ""
+				}
+			});
+			getValidateRulesResult(momentDate, personIds);
+		}
+
+		function updateValidateRulesResultForPeople(momentDate, personIds) {
+			var personIdOnCurrentPage = [];
+			personIds.forEach(function (id) {
+				if (warningDict[id]) {
+					warningDict[id] = {
+						isLoaded: false,
+						warnings: ""
+					}
+					personIdOnCurrentPage.push(id);
+				}
+				
+			});
+
+			getValidateRulesResult(momentDate, personIdOnCurrentPage);
+		}
 
 		function getValidateRulesResult(momentDate, personIds) {
 			var postData = {
@@ -20,15 +47,15 @@
 				PersonIds: personIds
 			};
 
-			warningDict = {};
-			self.ValidationIsDone = false;
-
 			$http.post(getValidateRulesResultUrl, postData).success(function (data) {
-				data.forEach(function(warning){
-					warningDict[warning.PersonId] = warning.Warnings;
+				for (var personId in warningDict) {
+					if (warningDict.hasOwnProperty(personId)) {
+						warningDict[personId].isLoaded = true;
+					}
+				}
+				data.forEach(function (warning) {
+					warningDict[warning.PersonId].warnings = warning.Warnings;
 				});
-
-				self.ValidationIsDone = true;
 			});
 		}
 

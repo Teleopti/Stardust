@@ -88,10 +88,6 @@
 			return ValidateRulesService.checkValidationForPerson(personId);
 		};
 
-		vm.validationIsDone = function () {
-			return ValidateRulesService.ValidationIsDone;
-		};
-
 		function isAllInCurrentPageSelected() {
 			var isAllSelected = true;
 			var selectedPeople = personSelectionSvc.personInfo;
