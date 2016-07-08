@@ -27413,6 +27413,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show warnings.
+        /// </summary>
+        public static string ShowWarnings {
+            get {
+                return ResourceManager.GetString("ShowWarnings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show Word Report.
         /// </summary>
         public static string ShowWordReport {

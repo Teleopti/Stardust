@@ -7928,7 +7928,7 @@ Weekday</value>
   </data>
   <data name="WeeklyWorkTime" xml:space="preserve">
     <value>Weekly work time</value>
-    <comment>Preference view</comment>
+    <comment>Weekly work time</comment>
   </data>
   <data name="Validate" xml:space="preserve">
     <value>Validate</value>
@@ -14646,10 +14646,6 @@ These options are activated:
     <value>Night rest</value>
     <comment>Night rest</comment>
   </data>
-  <data name="WeeklyWorkTime" xml:space="preserve">
-    <value>Weekly work time</value>
-    <comment>Weekly work time</comment>
-  </data>
   <data name="WeeklyRestTime" xml:space="preserve">
     <value>Weekly rest time</value>
     <comment>Weekly rest time</comment>
@@ -14673,5 +14669,9 @@ These options are activated:
   <data name="BrokenRules" xml:space="preserve">
     <value>Broken Rules</value>
     <comment>Broken Rules</comment>
+  </data>
+  <data name="ShowWarnings" xml:space="preserve">
+    <value>Show warnings</value>
+    <comment>Toggle name for displaying schedule validation warnings in WebWFM/TeamSchedule </comment>
   </data>
 </root>
