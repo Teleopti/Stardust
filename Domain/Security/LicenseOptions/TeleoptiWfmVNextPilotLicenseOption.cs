@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 			{
 				DefinedRaptorApplicationFunctionPaths.WebForecasts,
 				DefinedRaptorApplicationFunctionPaths.WebSchedules,
-				DefinedRaptorApplicationFunctionPaths.WebPeople,
 				DefinedRaptorApplicationFunctionPaths.WebCancelRequest,
 				DefinedRaptorApplicationFunctionPaths.WebModifySkill
 			};
