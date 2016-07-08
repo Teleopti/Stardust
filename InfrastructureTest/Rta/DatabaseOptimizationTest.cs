@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	[TestFixture]
 	[UnitOfWorkWithLoginTest]
-	[Toggle(Toggles.RTA_OptimizeDatabaseLoading_39667)]
+	[Toggle(Toggles.RTA_Optimize_39667)]
 	public class DatabaseOptimizationTest
 	{
 		public IDatabaseOptimizer Target;

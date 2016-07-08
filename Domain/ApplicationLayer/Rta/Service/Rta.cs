@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			}
 		}
 	}
-
+	
 	public class Rta
 	{
 		public static string LogOutStateCode = "LOGGED-OFF";
@@ -70,19 +70,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly RtaInitializor _initializor;
 		private readonly ActivityChangeProcessor _activityChangeProcessor;
 		private readonly IContextLoader _contextLoader;
+		private readonly IBatchExecuteStrategy _batchExecuteStrategy;
 
 		public Rta(
 			RtaProcessor processor,
 			TenantLoader tenantLoader,
 			RtaInitializor initializor,
 			ActivityChangeProcessor activityChangeProcessor,
-			IContextLoader contextLoader)
+			IContextLoader contextLoader,
+			IBatchExecuteStrategy batchExecuteStrategy)
 		{
 			_processor = processor;
 			_tenantLoader = tenantLoader;
 			_initializor = initializor;
 			_activityChangeProcessor = activityChangeProcessor;
 			_contextLoader = contextLoader;
+			_batchExecuteStrategy = batchExecuteStrategy;
 		}
 
 		[InfoLog]
@@ -119,7 +122,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				throw new BatchTooBigException("Incoming batch too large. Please lower the number of user states in a batch to below 50.");
 
 			var exceptions = new List<Exception>();
-			states.ForEach(s =>
+			_batchExecuteStrategy.Execute(states, s =>
 			{
 				try
 				{

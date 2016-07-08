@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 {
@@ -13,13 +14,14 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 	{
 		private readonly IAgentStatePersister _persister;
 		private readonly StatesSender _sender;
-		private readonly WithAnalyticsUnitOfWork _unitOfWork;
+		private readonly WithUnitOfWork _unitOfWork;
 		private readonly IDataSourceScope _dataSource;
+		public IDataSourceForTenant DataSourceForTenant;
 
 		public StatesArePersisted(
 			IAgentStatePersister persister,
 			StatesSender sender,
-			WithAnalyticsUnitOfWork unitOfWork,
+			WithUnitOfWork unitOfWork,
 			IDataSourceScope dataSource)
 		{
 			_persister = persister;
@@ -32,7 +34,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		public virtual void WaitForAll()
 		{
 			var timeWhenLastStateWasSent = _sender.SentSates().Max(x => x.Time);
-			using (_dataSource.OnThisThreadUse(DataSourceHelper.TestTenantName))
+			using (_dataSource.OnThisThreadUse(DataSourceHelper.CreateDataSource(null)))
 			{
 				_unitOfWork.Do(() =>
 				{

@@ -9,11 +9,13 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 	public class BatchSendTest
 	{
 		public StatesSender States;
+		public StatesArePersisted StatesArePersisted;
 
 		[Test]
 		public void MeasurePerformance()
 		{
 			States.SendBatches();
+			StatesArePersisted.WaitForAll();
 		}
 	}
 }

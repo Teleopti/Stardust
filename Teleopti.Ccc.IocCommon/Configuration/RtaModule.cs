@@ -28,15 +28,19 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<StateMapper>().SingleInstance();
 			builder.RegisterType<StateCodeAdder>().As<IStateCodeAdder>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateStreamSynchronizer>().SingleInstance();
-			
-			if (_config.Toggle(Toggles.RTA_OptimizeDatabaseLoading_39667))
+
+			if (_config.Toggle(Toggles.RTA_Optimize_39667))
 			{
-					builder.RegisterType<DatabaseOptimizer>().As<IDatabaseOptimizer>();
-					builder.RegisterType<OptimizedContextLoader>().As<IContextLoader>().SingleInstance().ApplyAspects();
+				builder.RegisterType<DatabaseOptimizer>().As<IDatabaseOptimizer>();
+				builder.RegisterType<OptimizedContextLoader>().As<IContextLoader>().SingleInstance().ApplyAspects();
+				builder.RegisterType<InParallel>().As<IBatchExecuteStrategy>().SingleInstance();
 			}
 			else
+			{
 				builder.RegisterType<ContextLoader>().As<IContextLoader>().SingleInstance().ApplyAspects();
-			
+				builder.RegisterType<InSequence>().As<IBatchExecuteStrategy>().SingleInstance();
+			}
+
 			_config.Cache().This<IDatabaseLoader>((c, b) => b
 				.CacheMethod(x => x.Datasources())
 				.CacheKey(c.Resolve<CachePerDataSource>())
