@@ -15,78 +15,84 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 
 		public override void EnableApplicationFunctions(IEnumerable<IApplicationFunction> allApplicationFunctions)
 		{
+			var appFunctionPaths = new List<string>
+			{
+				DefinedRaptorApplicationFunctionPaths.All,
+				DefinedRaptorApplicationFunctionPaths.OpenRaptorApplication,
+				DefinedRaptorApplicationFunctionPaths.RaptorGlobal,
+				DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence,
+				DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment,
+				DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction,
+				DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules,
+				DefinedRaptorApplicationFunctionPaths.OpenSchedulePage,
+				DefinedRaptorApplicationFunctionPaths.OpenForecasterPage,
+				DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage,
+				DefinedRaptorApplicationFunctionPaths.AccessToOnlineReports,
+				DefinedRaptorApplicationFunctionPaths.AccessToReports,
+				DefinedRaptorApplicationFunctionPaths.Shifts,
+				DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword,
+				DefinedRaptorApplicationFunctionPaths.OpenPermissionPage,
+				DefinedRaptorApplicationFunctionPaths.OpenOptionsPage,
+				DefinedRaptorApplicationFunctionPaths.AutomaticScheduling,
+				DefinedRaptorApplicationFunctionPaths.OpenIntradayPage,
+				DefinedRaptorApplicationFunctionPaths.IntradayEarlyWarning,
+				DefinedRaptorApplicationFunctionPaths.MyReportWeb,
+				DefinedRaptorApplicationFunctionPaths.RequestScheduler,
+				DefinedRaptorApplicationFunctionPaths.OpenBudgets,
+				DefinedRaptorApplicationFunctionPaths.ModifyGroupPage,
+				DefinedRaptorApplicationFunctionPaths.ModifyPeopleWithinGroupPage,
+				DefinedRaptorApplicationFunctionPaths.ModifyMeetings,
+				DefinedRaptorApplicationFunctionPaths.SetWriteProtection,
+				DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule,
+				DefinedRaptorApplicationFunctionPaths.ViewSchedules,
+				DefinedRaptorApplicationFunctionPaths.ViewConfidential,
+				DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport,
+				DefinedRaptorApplicationFunctionPaths.ModifySchedule,
+				DefinedRaptorApplicationFunctionPaths.RequestSchedulerApprove,
+				DefinedRaptorApplicationFunctionPaths.AuditTrailSettings,
+				DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailReport,
+				DefinedRaptorApplicationFunctionPaths.ViewRestrictedScenario,
+				DefinedRaptorApplicationFunctionPaths.ModifyRestrictedScenario,
+				DefinedRaptorApplicationFunctionPaths.ScheduleTimeVersusTargetTimeReport,
+				DefinedRaptorApplicationFunctionPaths.AllowPersonModifications,
+				DefinedRaptorApplicationFunctionPaths.DeletePerson,
+				DefinedRaptorApplicationFunctionPaths.AddPerson,
+				DefinedRaptorApplicationFunctionPaths.ExportForecastToOtherBusinessUnit,
+				DefinedRaptorApplicationFunctionPaths.ExportForecastFile,
+				DefinedRaptorApplicationFunctionPaths.ImportForecastFromFile,
+				DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb,
+				DefinedRaptorApplicationFunctionPaths.ViewActiveAgents,
+				DefinedRaptorApplicationFunctionPaths.MyTimeWeb,
+				DefinedRaptorApplicationFunctionPaths.StudentAvailability,
+				DefinedRaptorApplicationFunctionPaths.StandardPreferences,
+				DefinedRaptorApplicationFunctionPaths.TextRequests,
+				DefinedRaptorApplicationFunctionPaths.MyTimeCancelRequest,
+				DefinedRaptorApplicationFunctionPaths.TeamSchedule,
+				DefinedRaptorApplicationFunctionPaths.ViewAllGroupPages,
+				DefinedRaptorApplicationFunctionPaths.MyReportQueueMetrics,
+				DefinedRaptorApplicationFunctionPaths.Anywhere,
+				DefinedRaptorApplicationFunctionPaths.IntradayReForecasting,
+				DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities,
+				DefinedRaptorApplicationFunctionPaths.ViewBadge,
+				DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard,
+				DefinedRaptorApplicationFunctionPaths.AbsenceReport,
+				DefinedRaptorApplicationFunctionPaths.PublishSchedule,
+				DefinedRaptorApplicationFunctionPaths.RequestSchedulerViewAllowance,
+				DefinedRaptorApplicationFunctionPaths.OrganizeCascadingSkills,
+				DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboardUnderReports,
+
+				DefinedRaptorApplicationFunctionPaths.WebPermissions,
+				DefinedRaptorApplicationFunctionPaths.WebRequests,
+				DefinedRaptorApplicationFunctionPaths.WebIntraday,
+				DefinedRaptorApplicationFunctionPaths.WebModifySkillArea
+			};
+
 			var all = allApplicationFunctions.ToList();
 			EnabledApplicationFunctions.Clear();
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.All));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.OpenRaptorApplication));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.RaptorGlobal));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.OpenSchedulePage));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.OpenForecasterPage));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.AccessToOnlineReports));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.AccessToReports));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.Shifts));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.OpenPermissionPage));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.OpenOptionsPage));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.AutomaticScheduling));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.OpenIntradayPage));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.IntradayEarlyWarning));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.MyReportWeb));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.RequestScheduler));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.OpenBudgets));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.ModifyGroupPage));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.ModifyPeopleWithinGroupPage));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.ModifyMeetings));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.SetWriteProtection));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.ViewSchedules));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.ViewConfidential));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.ModifySchedule));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.RequestSchedulerApprove));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.AuditTrailSettings));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailReport));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.ViewRestrictedScenario));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.ModifyRestrictedScenario));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.ScheduleTimeVersusTargetTimeReport));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.AllowPersonModifications));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.DeletePerson));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.AddPerson));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.ExportForecastToOtherBusinessUnit));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.ExportForecastFile));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.ImportForecastFromFile));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.ViewActiveAgents));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.MyTimeWeb));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.StudentAvailability));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.StandardPreferences));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.TextRequests));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.MyTimeCancelRequest));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.TeamSchedule));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.ViewAllGroupPages));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.MyReportQueueMetrics));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.Anywhere));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.IntradayReForecasting));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.ViewBadge));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.AbsenceReport));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.PublishSchedule));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.RequestSchedulerViewAllowance));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.OrganizeCascadingSkills));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboardUnderReports));
-
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.WebPermissions));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.WebRequests));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.WebIntraday));
-			EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, DefinedRaptorApplicationFunctionPaths.WebModifySkillArea));
-
+			foreach (var appFunctionPath in appFunctionPaths)
+			{
+				EnabledApplicationFunctions.Add(ApplicationFunction.FindByPath(all, appFunctionPath));
+			}
 		}
-
 	}
 }

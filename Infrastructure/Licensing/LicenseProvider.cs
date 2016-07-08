@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Secrets.Licensing;
@@ -6,99 +8,149 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Licensing
 {
-    public static class LicenseProvider
-    {
+	public static class LicenseProvider
+	{
+		private const string majorVersion = "8";
 
 		public static ILicenseActivator GetLicenseActivator(ILicenseService licenseService)
-        {
-            if (licenseService == null) throw new ArgumentNullException("licenseService");
+		{
+			if (licenseService == null) throw new ArgumentNullException(nameof(licenseService));
+
+			var optionPaths = new Dictionary<string, bool>
+			{
+				{
+					DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersBase,
+					licenseService.TeleoptiCccPilotCustomersBaseEnabled
+				},
+				{
+					DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersForecasts,
+					licenseService.TeleoptiCccPilotCustomersForecastsEnabled
+				},
+				{
+					DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersShifts,
+					licenseService.TeleoptiCccPilotCustomersShiftsEnabled
+				},
+				{
+					DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersPeople,
+					licenseService.TeleoptiCccPilotCustomersPeopleEnabled
+				},
+				{
+					DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersAgentPortal,
+					licenseService.TeleoptiCccPilotCustomersAgentPortalEnabled
+				},
+				{
+					DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersOptions,
+					licenseService.TeleoptiCccPilotCustomersOptionsEnabled
+				},
+				{
+					DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersScheduler,
+					licenseService.TeleoptiCccPilotCustomersSchedulerEnabled
+				},
+				{
+					DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersIntraday,
+					licenseService.TeleoptiCccPilotCustomersIntradayEnabled
+				},
+				{
+					DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersPermissions,
+					licenseService.TeleoptiCccPilotCustomersPermissionsEnabled
+				},
+				{
+					DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersReports,
+					licenseService.TeleoptiCccPilotCustomersReportsEnabled
+				},
+				{
+					DefinedLicenseOptionPaths.TeleoptiCccBase,
+					licenseService.TeleoptiCccBaseEnabled
+				},
+				{
+					DefinedLicenseOptionPaths.TeleoptiCccLifestyle,
+					licenseService.TeleoptiCccAgentSelfServiceEnabled || licenseService.TeleoptiWFMLifestyleEnabled
+				},
+				{
+					DefinedLicenseOptionPaths.TeleoptiCccShiftTrader,
+					licenseService.TeleoptiCccShiftTradesEnabled || licenseService.TeleoptiWFMShiftTraderEnabled
+				},
+				{
+					DefinedLicenseOptionPaths.TeleoptiCccAgentScheduleMessenger,
+					licenseService.TeleoptiCccAgentScheduleMessengerEnabled
+				},
+				{
+					DefinedLicenseOptionPaths.TeleoptiCccVacationPlanner,
+					licenseService.TeleoptiCccHolidayPlannerEnabled || licenseService.TeleoptiWFMVacationPlannerEnabled
+				},
+				{
+					DefinedLicenseOptionPaths.TeleoptiCccMyTeam,
+					licenseService.TeleoptiWFMMyTeamEnabled
+				},
+				{
+					DefinedLicenseOptionPaths.TeleoptiCccNotify,
+					licenseService.TeleoptiWFMNotifyEnabled
+				},
+				{
+					DefinedLicenseOptionPaths.TeleoptiCccOvertimeAvailability,
+					licenseService.TeleoptiWFMOvertimeAvailabilityEnabled
+				},
+				{
+					DefinedLicenseOptionPaths.TeleoptiCccRealTimeAdherence,
+					licenseService.TeleoptiCccRealTimeAdherenceEnabled
+				},
+				{
+					DefinedLicenseOptionPaths.TeleoptiCccPerformanceManager,
+					licenseService.TeleoptiCccPerformanceManagerEnabled
+				},
+				{
+					DefinedLicenseOptionPaths.TeleoptiCccPayrollIntegration,
+					licenseService.TeleoptiCccPayrollIntegrationEnabled
+				},
+				{
+					DefinedLicenseOptionPaths.TeleoptiCccSmsLink,
+					licenseService.TeleoptiCccSmsLinkEnabled
+				},
+				{
+					DefinedLicenseOptionPaths.TeleoptiCccCalendarLink,
+					licenseService.TeleoptiCccCalendarLinkEnabled
+				},
+				{
+					DefinedLicenseOptionPaths.TeleoptiCccFreemiumForecasts,
+					licenseService.TeleoptiCccFreemiumForecastsEnabled
+				},
+				{
+					DefinedLicenseOptionPaths.TeleoptiWfmVNextPilot,
+					licenseService.TeleoptiWFMVNextEnabled
+				},
+				{
+					DefinedLicenseOptionPaths.TeleoptiWfmOutbound,
+					licenseService.TeleoptiWFMOutboundEnabled
+				},
+				{
+					DefinedLicenseOptionPaths.TeleoptiWfmSeatPlanner,
+					licenseService.TeleoptiWFMSeatPlannerEnabled
+				}
+			};
 
 			ILicenseActivator licenseActivator = new LicenseActivator(licenseService.CustomerName,
-																						 licenseService.ExpirationDate,
-																						 licenseService.Perpetual,
-																						 licenseService.MaxActiveAgents,
-																						 licenseService.MaxSeats,
-																						 licenseService.LicenseType,
-																						 new Percent(licenseService.MaxActiveAgentsGrace),
-																						 LicenseActivator.IsThisAlmostTooManyActiveAgents,
-																						 LicenseActivator.IsThisTooManyActiveAgents, "8"); // licenseService.MajorVersion);
+				licenseService.ExpirationDate,
+				licenseService.Perpetual,
+				licenseService.MaxActiveAgents,
+				licenseService.MaxSeats,
+				licenseService.LicenseType,
+				new Percent(licenseService.MaxActiveAgentsGrace),
+				LicenseActivator.IsThisAlmostTooManyActiveAgents,
+				LicenseActivator.IsThisTooManyActiveAgents, majorVersion);
 
-            if (licenseService.TeleoptiCccPilotCustomersBaseEnabled)
-                licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersBase);
-            if (licenseService.TeleoptiCccPilotCustomersForecastsEnabled)
-                licenseActivator.EnabledLicenseOptionPaths.Add(
-                    DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersForecasts);
-            if (licenseService.TeleoptiCccPilotCustomersShiftsEnabled)
-                licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersShifts);
-            if (licenseService.TeleoptiCccPilotCustomersPeopleEnabled)
-                licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersPeople);
-            if (licenseService.TeleoptiCccPilotCustomersAgentPortalEnabled)
-                licenseActivator.EnabledLicenseOptionPaths.Add(
-                    DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersAgentPortal);
-            if (licenseService.TeleoptiCccPilotCustomersOptionsEnabled)
-                licenseActivator.EnabledLicenseOptionPaths.Add(
-                    DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersOptions);
-            if (licenseService.TeleoptiCccPilotCustomersSchedulerEnabled)
-                licenseActivator.EnabledLicenseOptionPaths.Add(
-                    DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersScheduler);
-            if (licenseService.TeleoptiCccPilotCustomersIntradayEnabled)
-                licenseActivator.EnabledLicenseOptionPaths.Add(
-                    DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersIntraday);
-            if (licenseService.TeleoptiCccPilotCustomersPermissionsEnabled)
-                licenseActivator.EnabledLicenseOptionPaths.Add(
-                    DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersPermissions);
-            if (licenseService.TeleoptiCccPilotCustomersReportsEnabled)
-                licenseActivator.EnabledLicenseOptionPaths.Add(
-                    DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersReports);
+			foreach (var optionPath in optionPaths.Where(optionPath => optionPath.Value))
+			{
+				licenseActivator.EnabledLicenseOptionPaths.Add(optionPath.Key);
+			}
 
+			return licenseActivator;
+		}
 
-            if (licenseService.TeleoptiCccBaseEnabled)
-                licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccBase);
-            if (licenseService.TeleoptiCccAgentSelfServiceEnabled||licenseService.TeleoptiWFMLifestyleEnabled)
-                licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccLifestyle);
-            if (licenseService.TeleoptiCccShiftTradesEnabled||licenseService.TeleoptiWFMShiftTraderEnabled)
-                licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccShiftTrader);
-            if (licenseService.TeleoptiCccAgentScheduleMessengerEnabled)
-                licenseActivator.EnabledLicenseOptionPaths.Add(
-                    DefinedLicenseOptionPaths.TeleoptiCccAgentScheduleMessenger);
-            if (licenseService.TeleoptiCccHolidayPlannerEnabled||licenseService.TeleoptiWFMVacationPlannerEnabled)
-                licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccVacationPlanner);
-	        if (licenseService.TeleoptiWFMMyTeamEnabled)
-		        licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccMyTeam);
-	        if (licenseService.TeleoptiWFMNotifyEnabled)
-		        licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccNotify);
-			if (licenseService.TeleoptiWFMOvertimeAvailabilityEnabled)
-				licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccOvertimeAvailability);
-            if (licenseService.TeleoptiCccRealTimeAdherenceEnabled)
-                licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccRealTimeAdherence);
-            if (licenseService.TeleoptiCccPerformanceManagerEnabled)
-                licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccPerformanceManager);
-            if (licenseService.TeleoptiCccPayrollIntegrationEnabled)
-                licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccPayrollIntegration);
-			if (licenseService.TeleoptiCccSmsLinkEnabled)
-				licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccSmsLink);
-			if (licenseService.TeleoptiCccCalendarLinkEnabled)
-				licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccCalendarLink);
-			
-            if (licenseService.TeleoptiCccFreemiumForecastsEnabled)
-                licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccFreemiumForecasts);
+		public static void ProvideLicenseActivator(string dataSource, ILicenseService licenseService)
+		{
+			if (licenseService == null) throw new ArgumentNullException(nameof(licenseService));
 
-			if (licenseService.TeleoptiWFMVNextEnabled)
-				licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiWfmVNextPilot);
-
-			if (licenseService.TeleoptiWFMOutboundEnabled)
-				licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiWfmOutbound);			
-			if (licenseService.TeleoptiWFMSeatPlannerEnabled)
-				licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiWfmSeatPlanner);
-
-            return licenseActivator;
-        }
-
-        public static void ProvideLicenseActivator(string dataSource, ILicenseService licenseService)
-        {
-            if (licenseService == null) throw new ArgumentNullException("licenseService");
-
-            DefinedLicenseDataFactory.SetLicenseActivator(dataSource, GetLicenseActivator(licenseService));
-        }
-    }
+			DefinedLicenseDataFactory.SetLicenseActivator(dataSource, GetLicenseActivator(licenseService));
+		}
+	}
 }
