@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public MutableNow Now;
 		public InfrastructureTest.TheServiceImpl TheService;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
-		public ConcurrencyRunner Runner;
+
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddService<InfrastructureTest.TheServiceImpl>();
@@ -36,30 +36,30 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 
 		[Test]
-		public void ShouldAddMissingStateCodeToDefaultStateGroup()
+		public void ShouldNotAddDuplicateStateCodes()
 		{
 			Now.Is("2015-05-13 08:00");
 			TheService.DoesWhileLoggedIn(uow =>
 			{
 				var rtaStateGroup = new RtaStateGroup("Phone", true, true);
 				StateGroupRepository.Add(rtaStateGroup);
-				20.Times
-					(i => PersonCreator.CreatePersonWithExternalLogOn(Now, i.ToString()));
+				20.Times(i => PersonCreator.CreatePersonWithExternalLogOn(Now, i.ToString()));
 				uow.PersistAll();
 			});
 			Context.Logout();
-			var states = Enumerable.Range(0, 20).Select(i => new ExternalUserStateInputModel
-			{
-				AuthenticationKey = "!#¤atAbgT%",
-				PlatformTypeId = Guid.Empty.ToString(),
-				StateCode = "InCall",
-				StateDescription = "InCall",
-				UserCode = i.ToString(),
-				SourceId = "-1",
-				IsLoggedOn = true
-			});
 
-			Target.SaveStateBatch(states);
+			Target.SaveStateBatch(
+				Enumerable.Range(0, 20)
+					.Select(i => new ExternalUserStateInputModel
+					{
+						AuthenticationKey = "!#¤atAbgT%",
+						PlatformTypeId = Guid.Empty.ToString(),
+						StateCode = "InCall",
+						StateDescription = "InCall",
+						UserCode = i.ToString(),
+						SourceId = "-1",
+						IsLoggedOn = true
+					}));
 
 			TheService.DoesWhileNotLoggedIn(uow =>
 				StateGroupRepository.LoadAllCompleteGraph().Single().StateCollection.Should().Have.Count.EqualTo(1)

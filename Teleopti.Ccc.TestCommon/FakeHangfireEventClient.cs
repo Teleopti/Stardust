@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.TestCommon
 			public bool Minutely;
 		}
 
-		private readonly ConcurrentBag<JobInfo> _enqueuedJobs = new ConcurrentBag<JobInfo>();
+		private readonly List<JobInfo> _enqueuedJobs = new List<JobInfo>();
 		private readonly List<JobInfo> _recurringJobs = new List<JobInfo>();
 
 		public IEnumerable<string> DisplayNames { get { return _enqueuedJobs.Select(x => x.DisplayName); } }
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.TestCommon
 		public string HandlerType { get { return HandlerTypes.First(); } }
 
 		public bool WasEnqueued { get { return _enqueuedJobs.Any(); } }
-
+		
 		public void Enqueue(string displayName, string tenant, string queueName, string eventType, string serializedEvent, string handlerType)
 		{
 			_enqueuedJobs.Add(new JobInfo
