@@ -47,13 +47,13 @@
 				PersonIds: personIds
 			};
 
-			$http.post(getValidateRulesResultUrl, postData).success(function (data) {
+			$http.post(getValidateRulesResultUrl, postData).then(function (response) {
 				for (var personId in warningDict) {
 					if (warningDict.hasOwnProperty(personId)) {
 						warningDict[personId].isLoaded = true;
 					}
 				}
-				data.forEach(function (warning) {
+				response.data.forEach(function (warning) {
 					warningDict[warning.PersonId].warnings = warning.Warnings;
 				});
 			});
