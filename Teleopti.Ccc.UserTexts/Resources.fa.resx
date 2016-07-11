@@ -1072,7 +1072,7 @@
     <value>سناریو: </value>
   </data>
   <data name="Schedule" xml:space="preserve">
-    <value>زمانبندی</value>
+    <value>برنامه من</value>
   </data>
   <data name="ScoreCard" xml:space="preserve">
     <value>برگه امتیاز</value>
@@ -6001,7 +6001,7 @@
     <value>نمایش مزایا</value>
   </data>
   <data name="TeamSchedule" xml:space="preserve">
-    <value>زمانبندی تیم</value>
+    <value>برنامه تیم</value>
   </data>
   <data name="XRequests" xml:space="preserve">
     <value>{0} درخواست</value>
