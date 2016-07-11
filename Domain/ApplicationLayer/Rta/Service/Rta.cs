@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			TenantLoader tenantLoader,
 			RtaInitializor initializor,
 			ActivityChangeProcessor activityChangeProcessor,
-			ContextLoader contextLoader)
+			ContextLoader contextLoader,
 			IBatchExecuteStrategy batchExecuteStrategy)
 		{
 			_processor = processor;

@@ -27,11 +27,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RtaProcessor>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateMapper>().SingleInstance();
 			builder.RegisterType<StateStreamSynchronizer>().SingleInstance();
+			builder.RegisterType<ContextLoader>().SingleInstance();
 
 			if (_config.Toggle(Toggles.RTA_Optimize_39667))
 			{
 				builder.RegisterType<ScaleOutStateCodeAdder>().As<IStateCodeAdder>().SingleInstance();
 				builder.RegisterType<InParallel>().As<IBatchExecuteStrategy>().SingleInstance();
+			}
+			else
 			{
 				builder.RegisterType<StateCodeAdder>().As<IStateCodeAdder>().SingleInstance().ApplyAspects();
 				builder.RegisterType<InSequence>().As<IBatchExecuteStrategy>().SingleInstance();
