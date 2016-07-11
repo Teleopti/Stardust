@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
@@ -124,6 +125,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				});
 			}
 
+			requests = requests.Where(r => !((Person) r.Person).IsDeleted);
 			count = requests.Count();
 			return requests.ToList();
 		}

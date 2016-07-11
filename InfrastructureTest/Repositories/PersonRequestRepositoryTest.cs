@@ -1692,6 +1692,51 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
+		public void ShouldNotFilterDeletedPeople()
+		{
+			var personTo = PersonFactory.CreatePerson("person to");
+			personTo.TerminatePerson(new DateOnly(1900, 1, 1), MockRepository.GenerateMock<IPersonAccountUpdater>());
+			var personFrom = PersonFactory.CreatePerson("person from");
+			((Person)personFrom).SetDeleted();
+			PersistAndRemoveFromUnitOfWork(personTo);
+			PersistAndRemoveFromUnitOfWork(personFrom);
+			
+
+			var shiftTradeRequestOfDeletedPerson = new ShiftTradeRequest(
+					new List<IShiftTradeSwapDetail>
+				{
+					new ShiftTradeSwapDetail(personFrom, personTo, new DateOnly(2008, 7, 16),new DateOnly(2008, 7, 16))
+				});
+
+			var shiftTradeRequestOfUndeletedPerson = new ShiftTradeRequest(
+					new List<IShiftTradeSwapDetail>
+				{
+					new ShiftTradeSwapDetail(personTo, personFrom, new DateOnly(2008, 7, 16),new DateOnly(2008, 7, 16))
+				});
+
+			var shiftTradePersonRequestOfDeletedPerson = new PersonRequest(personFrom) { Request = shiftTradeRequestOfDeletedPerson };
+			var shiftTradePersonRequestOfUndeletedPerson = new PersonRequest(personTo) { Request = shiftTradeRequestOfUndeletedPerson };
+			shiftTradePersonRequestOfDeletedPerson.Pending();
+			shiftTradePersonRequestOfUndeletedPerson.Pending();
+			PersistAndRemoveFromUnitOfWork(shiftTradePersonRequestOfDeletedPerson);
+			PersistAndRemoveFromUnitOfWork(shiftTradePersonRequestOfUndeletedPerson);
+
+			int count;
+			var filter = new RequestFilter
+			{
+				Period = new DateTimePeriod(2008, 07, 09, 2008, 07, 20),
+
+			};
+			var foundRequests = new PersonRequestRepository(UnitOfWork)
+				.FindAllRequests(filter, out count).ToList();
+
+			Assert.AreEqual(1, foundRequests.Count);
+			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundRequests[0].Request));
+			Assert.IsTrue(foundRequests.Contains(shiftTradePersonRequestOfUndeletedPerson));
+
+		}
+
+		[Test]
 		public void ShouldGetBrokenBusinessRules()
 		{
 			var shiftTradeRequest1 = CreateShiftTradeRequest("Trade With Me");

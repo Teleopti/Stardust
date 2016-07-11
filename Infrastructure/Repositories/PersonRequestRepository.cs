@@ -139,6 +139,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			filterRequestByPeriod(criteria, filter);
 			filterRequestByPersons(criteria, filter.Persons);
+			filterRequestBelongsToUndeleted(criteria);
 			filterRequestByRequestType(criteria, filter.RequestTypes);
 			filterRequestByRequestFilters(criteria, filter.RequestFilters);
 			filterRequestByShiftTradeStatus(criteria, filter);
@@ -188,6 +189,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 
 			criteria.Add(Subqueries.PropertyIn("Id", requestForPeriod));
+		}
+
+		private void filterRequestBelongsToUndeleted(ICriteria criteria)
+		{
+			criteria.Add(Restrictions.Eq("p.IsDeleted", false));
 		}
 
 		private void filterRequestByPersons(ICriteria criteria, IEnumerable<IPerson> persons)
