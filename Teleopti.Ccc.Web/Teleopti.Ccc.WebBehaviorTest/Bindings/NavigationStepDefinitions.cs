@@ -644,7 +644,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
             Navigation.GoToWfmReports();
         }
 
-        [When(@"I view outbound")]
+		[When(@"I view wfm leader board report")]
+		public void WhenIViewWfmLeaderBoardReport()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GoToWfmLeaderBoardReports();
+		}
+
+		[When(@"I view outbound")]
 		public void WhenIViewOutbound()
 		{
 			TestControllerMethods.Logon();

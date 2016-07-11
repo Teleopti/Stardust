@@ -11,5 +11,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Reports
         {
             Browser.Interactions.AssertExists(".report-list");
         }
-    }
+
+		[Then(@"I should see leader board report table")]
+		public void ThenIShouldSeeLeaderBoardReportTable()
+		{
+			Browser.Interactions.AssertExists(".leader-board table");
+		}
+	}
 }

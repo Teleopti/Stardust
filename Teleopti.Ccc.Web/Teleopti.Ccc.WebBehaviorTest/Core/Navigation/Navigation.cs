@@ -511,9 +511,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		{
 			GoToPage("wfm/#/teamSchedule");
 		}
-        public static void GoToWfmReports()
+
+		public static void GoToWfmReports()
         {
             GoToPage("wfm/#/reports");
+        }
+
+		public static void GoToWfmLeaderBoardReports()
+        {
+            GoToPage("wfm/#/reports/leaderboard");
         }
 	}
 }

@@ -63,6 +63,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AccessToOutbound { get; set; }
 		public bool AccessToWfmRequests { get; set; }
 		public bool AccessToWfmMyTeamSchedule { get; set; }
+		public bool AccessToWfmLeaderboard { get; set; }
 
 		public bool AddFullDayAbsence { get; set; }
 		public bool AddIntradayAbsence { get; set; }
@@ -122,6 +123,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToWfmRequests = false;
 			AccessToWfmMyTeamSchedule = false;
 			AccessToPermissions = false;
+			AccessToWfmLeaderboard = true;
 		}
 
 		
@@ -359,6 +361,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 				applicationFunctions = from f in applicationFunctions
 											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.OpenPermissionPage
 													 & f.FunctionPath != DefinedRaptorApplicationFunctionPaths.WebPermissions
+											  select f;
+			if (!AccessToWfmLeaderboard)
+				applicationFunctions = from f in applicationFunctions
+											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboardUnderReports
 											  select f;
 
 			return applicationFunctions;
