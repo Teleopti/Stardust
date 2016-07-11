@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RtaProcessor>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateMapper>().SingleInstance();
 			builder.RegisterType<StateStreamSynchronizer>().SingleInstance();
-			builder.RegisterType<ContextLoader>().SingleInstance();
+			builder.RegisterType<ContextLoader>().ApplyAspects().SingleInstance();
 
 			if (_config.Toggle(Toggles.RTA_Optimize_39667))
 			{
