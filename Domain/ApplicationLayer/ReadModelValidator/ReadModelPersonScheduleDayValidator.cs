@@ -62,7 +62,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 		{
 			var eventScheduleDay = _builder.BuildEventScheduleDay(scheduleDay);
 			var readModel = _personScheduleDayReadModelsCreator.MakePersonScheduleDayReadModel(person, eventScheduleDay);
-			readModel.BusinessUnitId = _currentScenario.Current().BusinessUnit.Id.GetValueOrDefault();
+			if (readModel != null)
+				readModel.BusinessUnitId = _currentScenario.Current().BusinessUnit.Id.GetValueOrDefault();
 			return readModel;
 		}
 	}

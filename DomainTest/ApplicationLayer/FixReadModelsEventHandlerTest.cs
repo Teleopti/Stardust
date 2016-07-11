@@ -104,11 +104,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldRemovePersonScheduleDayReadModelWhenNoPersonPeriodIsFound()
 		{
 			var scenario = CurrentScenario.Current();
-			scenario.SetBusinessUnit(BusinessUnitFactory.CreateWithId("bu"));
 			var site = SiteFactory.CreateSimpleSite("s");
 			site.WithId();
 			var team = TeamFactory.CreateTeamWithId("t");
