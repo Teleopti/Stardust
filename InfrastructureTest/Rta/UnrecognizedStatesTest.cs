@@ -25,12 +25,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public PersonCreator PersonCreator;
 		public IPrincipalAndStateContext Context;
 		public MutableNow Now;
-		public InfrastructureTest.TheServiceImpl TheService;
+		public TheServiceImpl TheService;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.AddService<InfrastructureTest.TheServiceImpl>();
+			system.AddService<TheServiceImpl>();
 			system.AddService<PersonCreator>();
 		}
 
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldNotAddDuplicateStateCodes()
 		{
-			Now.Is("2015-05-13 08:00");
+			Now.Is("2016-07-11 08:00");
 			TheService.DoesWhileLoggedIn(uow =>
 			{
 				var rtaStateGroup = new RtaStateGroup("Phone", true, true);

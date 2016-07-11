@@ -1,7 +1,6 @@
 using System;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
@@ -20,10 +19,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public MutableNow Now;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 		public FakeAgentStateReadModelPersister Persister;
-
 		
 		[Test]
-		public void ShouldPersistStateWhenMultipleAgentsAreNotConfigured()
+		public void ShouldPersistStateWhenMultiplePersonsAreUnknown()
 		{
 			var personId = Guid.NewGuid();
 			Database
@@ -33,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			{
 				new ExternalUserStateForTest
 				{
-					UserCode = "userX",
+					UserCode = "unknown1",
 					StateCode = "phone"
 				},
 				new ExternalUserStateForTest
@@ -43,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				},
 				new ExternalUserStateForTest
 				{
-					UserCode = "userX",
+					UserCode = "unknown2",
 					StateCode = "phone"
 				}
 			}));
@@ -52,15 +50,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		public void ShouldCloseSnapshotLast()
+		public void ShouldUpdateAgentInSnapshotAndLogOutAgentNotInSnapshot()
 		{
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
 			Database
 				.WithUser("user1", personId1)
-				.WithUser("user2", personId2)
-				;
-
+				.WithUser("user2", personId2);
 			Target.SaveStateBatch(new[]
 			{
 				new ExternalUserStateForSnapshot("2016-07-11 08:00".Utc())
@@ -89,8 +85,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Persister.Get(personId2).StateCode.Should().Be("phone");
 		}
 
+
 		[Test]
-		public void ShouldNotAddDuplicatesInBatch()
+		public void ShouldNotAddDuplicateStateCodes()
 		{
 			Database
 				.WithUser("usercode1")
