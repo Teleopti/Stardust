@@ -50,8 +50,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				Color = ColorTranslator.ToHtml(Color.FromArgb(shiftLayer.Payload.DisplayColor.ToArgb())),
 				Minutes = (int)shiftLayer.Period.EndDateTime.Subtract(shiftLayer.Period.StartDateTime).TotalMinutes
 			}).ToList();
+			var readModel = PersonScheduleDayReadModelFactory.CreatePersonScheduleDayReadModelWithSimpleShift(assignment.Person,
+				date, simpleLayers);
+			readModel.BusinessUnitId = assignment.Scenario.BusinessUnit.Id.GetValueOrDefault();
 
-			return PersonScheduleDayReadModelFactory.CreatePersonScheduleDayReadModelWithSimpleShift(assignment.Person, date, simpleLayers);
+			return readModel;
 		}
 
 		public IEnumerable<PersonScheduleDayReadModel> ForPeople(DateTimePeriod period, IEnumerable<Guid> personIds)
