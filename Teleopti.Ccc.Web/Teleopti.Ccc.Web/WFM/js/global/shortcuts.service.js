@@ -112,7 +112,7 @@
 			service.keySequenceTable = {};
 
 			$document.on('keydown', function(event) {
-				if(event.target.tagName !== "INPUT")
+				// if(event.target.tagName !== "INPUT")
 						service.handleKeyEvent(event);
 			});
 
