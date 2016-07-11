@@ -167,8 +167,9 @@
 
 		vm.hasChanges = function () {
 			var seatPropertiesChanged = vm.parentVm.loadedSeatsData != JSON.stringify(vm.parentVm.seats);
-			return (vm.parentVm.loadedJsonData != JSON.stringify(canvas()) || seatPropertiesChanged)
-				&& (vm.parentVm.loadedJsonData == undefined ? canvas()._objects.length != 0 : true);
+			return ((vm.parentVm.loadedJsonData != JSON.stringify(canvas()) || seatPropertiesChanged)
+					&& (vm.parentVm.loadedJsonData == undefined ? canvas()._objects.length != 0 : true))
+				|| (vm.parentVm.prefixOrSuffixChanged);
 		};
 
 		vm.refreshSeatMap = function () {
@@ -286,11 +287,15 @@
 				SeatMapData: JSON.stringify(canvas()),
 				Id: vm.parentVm.seatMapId,
 				ChildLocations: utils.getLocations(canvas()),
-				Seats: vm.parentVm.seats
+				Seats: vm.parentVm.seats,
+				LocationPrefix: vm.parentVm.locationPrefix,
+				LocationSuffix: vm.parentVm.locationSuffix
 			};
 
 			editor.save(data, onSaveSuccess);
 			vm.parentVm.rightPanelOptions.panelState = false;
+			vm.parentVm.prefixSuffixPanelOptions.panelState = false;
+			vm.parentVm.prefixOrSuffixChanged = false;
 		};
 
 		function onSaveSuccess() {

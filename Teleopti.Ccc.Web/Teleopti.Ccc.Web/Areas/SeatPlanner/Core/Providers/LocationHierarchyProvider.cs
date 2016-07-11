@@ -44,6 +44,8 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 			{
 				Id = Guid.Parse(location.Id.ToString()),
 				Name = location.Name,
+				LocationPrefix = location.LocationPrefix,
+				LocationSuffix = location.LocationSuffix,
 				Seats = seatViewModels,
 				Children = childViewModels
 			};

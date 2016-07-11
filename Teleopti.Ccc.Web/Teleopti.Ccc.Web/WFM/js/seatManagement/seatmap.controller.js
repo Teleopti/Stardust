@@ -1,13 +1,13 @@
-﻿'use strict';
+'use strict';
 
 (function () {
 
 	angular.module('wfm.seatMap')
 		.controller('SeatMapCanvasCtrl', seatMapCanvasDirectiveController);
 
-	seatMapCanvasDirectiveController.$inject = ['$scope', '$document', '$window', 'seatMapCanvasUtilsService', 'PermissionsService', '$timeout'];
+	seatMapCanvasDirectiveController.$inject = ['$scope', '$document', '$window', 'seatMapCanvasUtilsService', 'seatMapCanvasEditService', 'PermissionsService', 'NoticeService', '$timeout'];
 
-	function seatMapCanvasDirectiveController($scope, $document, $window, canvasUtils, permissionsService, $timeout) {
+	function seatMapCanvasDirectiveController($scope, $document, $window, canvasUtils, editor, permissionsService, NoticeService, $timeout) {
 
 		var vm = this;
 		vm.isLoading = true;
@@ -17,6 +17,9 @@
 		vm.parentId = null;
 		vm.roles = [];
 		vm.seats = [];
+		vm.locationPrefix = [];
+		vm.locationSuffix = [];
+		vm.prefixOrSuffixChanged = false;
 		vm.activeSeats = [];
 		vm.otherActiveObjects = [];
 		vm.newLocationName = '';
@@ -32,6 +35,14 @@
 			showBackdrop: false,
 			showResizer: true,
 			showPopupButton: true
+		};
+		vm.prefixSuffixPanelOptions = {
+			panelState: false,
+			panelTitle: "LocationProperties",
+			showCloseButton: true,
+			showBackdrop: false,
+			showResizer: true,
+			showPopupButton: false
 		};
 
 		var canvas = new fabric.CanvasWithViewport('c');
@@ -100,9 +111,13 @@
 														canvasUtils.getActiveFabricObjectsByType(canvas, 'image'),
 														canvasUtils.getActiveFabricObjectsByType(canvas, 'i-text'));
 
+			vm.prefixSuffixPanelOptions.showPopupButton = false;
+			vm.prefixSuffixPanelOptions.panelState = false;
+
 			//TODO:currently we only support showing properties for seats
-			if (vm.activeSeats.length > 0 && vm.otherActiveObjects.length == 0)
+			if (vm.activeSeats.length > 0 && vm.otherActiveObjects.length == 0) {
 				vm.rightPanelOptions.panelState = true;
+			}
 
 			if (vm.otherActiveObjects.length > 0) {
 				vm.rightPanelOptions.showPopupButton = false;
@@ -125,6 +140,11 @@
 		vm.onChangeOfDate = function () {
 			vm.refreshSeatMap();
 			vm.isDatePickerOpened = false;
+		};
+
+		function onSaveSuccess() {
+			NoticeService.success('Seat map saved successfully.', 5000, false);
+			vm.refreshSeatMap();
 		};
 
 		function resize() {
@@ -168,7 +188,6 @@
 		function resetOnLoad(data) {
 
 			setupLocationDoubleClickHandler();
-
 			if (data.Id != undefined) {
 				vm.parentId = data.ParentId;
 				vm.seatMapId = data.Id;
@@ -176,6 +195,8 @@
 				vm.loadedJsonData = data.SeatMapJsonData;
 				vm.loadedSeatsData = JSON.stringify(data.Seats);
 				vm.seats = data.Seats;
+				vm.locationPrefix = data.LocationPrefix;
+				vm.locationSuffix = data.LocationSuffix;
 			}
 
 			//resetZoom();

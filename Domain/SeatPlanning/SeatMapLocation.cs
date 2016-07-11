@@ -25,6 +25,8 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		}
 
 		public virtual string Name { get; set; }
+		public virtual string LocationPrefix { get; set; }
+		public virtual string LocationSuffix { get; set; }
 		public virtual bool IncludeInSeatPlan { get; set; }
 		public virtual SeatMapLocation ParentLocation { get; set; }
 		public virtual string SeatMapJsonData { get; set; }

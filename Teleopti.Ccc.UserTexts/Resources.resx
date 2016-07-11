@@ -14638,6 +14638,22 @@ These options are activated:
     <value>Organize Cascading Skills</value>
     <comment>Organize cascading skills</comment>
   </data>
+  <data name="EditLocationProperty" xml:space="preserve">
+    <value>Edit Location Property</value>
+    <comment>Edit prefix and suffix for seat map locations</comment>
+  </data>
+  <data name="LocationProperties" xml:space="preserve">
+    <value>Location Properties</value>
+    <comment>Location property information title of seatmap right panel</comment>
+  </data>
+  <data name="Prefix" xml:space="preserve">
+    <value>Prefix</value>
+    <comment>prefix name of seat location</comment>
+  </data>
+  <data name="Suffix" xml:space="preserve">
+    <value>Suffix</value>
+    <comment>suffix name of seat location</comment>
+  </data>
   <data name="NotAllowedChange" xml:space="preserve">
     <value>Not allowed change</value>
     <comment>Not allowed change</comment>

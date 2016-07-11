@@ -44,8 +44,8 @@ Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function (scheduleDate, selected
 		var bookingText = '<tr><td>{0} - {1}</td><td>{2}</td></tr>';
 
 		var fullSeatName = seatBooking.LocationPath != '' ?
-			seatBooking.LocationPath + '/' + seatBooking.SeatName :
-			seatBooking.SeatName;
+			seatBooking.LocationPath + '/' + seatBooking.LocationPrefix + seatBooking.SeatName + seatBooking.LocationSuffix :
+			seatBooking.LocationPrefix + seatBooking.SeatName + seatBooking.LocationSuffix;
 
 		return bookingText.format(
 				Teleopti.MyTimeWeb.Common.FormatTime(seatBooking.StartDateTime),

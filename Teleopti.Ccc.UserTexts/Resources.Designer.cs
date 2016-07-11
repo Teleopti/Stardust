@@ -8996,6 +8996,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit Location Property.
+        /// </summary>
+        public static string EditLocationProperty {
+            get {
+                return ResourceManager.GetString("EditLocationProperty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit Meeting.
         /// </summary>
         public static string EditMeeting {
@@ -14097,6 +14106,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string LocationColon {
             get {
                 return ResourceManager.GetString("LocationColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Location Properties.
+        /// </summary>
+        public static string LocationProperties {
+            get {
+                return ResourceManager.GetString("LocationProperties", resourceCulture);
             }
         }
         
@@ -21342,6 +21360,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PreferenceViewCalculationInfo {
             get {
                 return ResourceManager.GetString("PreferenceViewCalculationInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefix.
+        /// </summary>
+        public static string Prefix {
+            get {
+                return ResourceManager.GetString("Prefix", resourceCulture);
             }
         }
         
@@ -28768,6 +28795,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SuccessWithExclamation {
             get {
                 return ResourceManager.GetString("SuccessWithExclamation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Suffix.
+        /// </summary>
+        public static string Suffix {
+            get {
+                return ResourceManager.GetString("Suffix", resourceCulture);
             }
         }
         

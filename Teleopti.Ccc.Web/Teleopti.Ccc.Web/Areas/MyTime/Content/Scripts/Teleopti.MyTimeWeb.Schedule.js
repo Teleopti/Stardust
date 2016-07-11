@@ -453,6 +453,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.hasNote = ko.observable(day.HasNote);
 		self.seatBookings = ko.observableArray(day.SeatBookings);
 
+		if (day.SeatBookings.length>0) {
+			self.locationPrefix = day.SeatBookings[0].LocationPrefix;
+			self.locationSuffix = day.SeatBookings[0].LocationSuffix;	
+		}
+		
 		self.seatBookingIconVisible = ko.computed(function () {
 			return self.seatBookings().length > 0;
 		});
@@ -463,8 +468,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			var bookingText = '<tr><td>{0} - {1}</td><td>{2}</td></tr>';
 
 			var fullSeatName = seatBooking.LocationPath != '' ?
-				seatBooking.LocationPath + '/' + seatBooking.SeatName :
-				seatBooking.SeatName;
+				seatBooking.LocationPath + '/' + self.locationPrefix + seatBooking.SeatName + self.locationSuffix :
+				self.locationPrefix + seatBooking.SeatName + self.locationSuffix;
 
 			return bookingText.format(
 					Teleopti.MyTimeWeb.Common.FormatTime(seatBooking.StartDateTime),

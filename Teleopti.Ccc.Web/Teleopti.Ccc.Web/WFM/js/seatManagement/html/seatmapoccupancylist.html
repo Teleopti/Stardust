@@ -19,7 +19,7 @@
 		<ul class="wfm-list" ng-repeat="detail in vm.occupancyDetails">
 
 			<li class="active" ng-repeat="booking in detail.Occupancies" ng-class="{'default-cursor':booking.IsEmpty}">
-				<span class="list-item-container seat-booking-seatname pull-left" ng-if="$index == 0">{{'Seat'|translate}} {{detail.SeatName}}:</span>
+				<span class="list-item-container seat-booking-seatname pull-left" ng-if="$index == 0">{{'Seat'|translate}} {{booking.LocationPrefix}}{{detail.SeatName}}{{booking.LocationSuffix}}:</span>
 				
 				<span class="list-item-container seat-booking-seatname pull-left" ng-if="$index !== 0"></span>
 

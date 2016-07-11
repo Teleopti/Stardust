@@ -18,6 +18,8 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels
 		public String SiteName { get; set; }
 		public Guid SeatId { get; set; }
 		public String SeatName { get; set; }
+		public string LocationPrefix { get; set; }
+		public string LocationSuffix { get; set; }
 		public int SeatPriority { get; set; }
 		public bool IsDayOff { get; set; }
 		public bool IsFullDayAbsence { get; set; }

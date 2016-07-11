@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 		public void Save(ISaveSeatMapCommand command)
 		{
 			var seatMap = command.Id.HasValue
-						? updateExistingSeatMap(command.Id.Value, command.SeatMapData)
+						? updateExistingSeatMap(command.Id.Value, command.SeatMapData, command.LocationPrefix, command.LocationSuffix)
 						: createNewRootSeatMap(command.SeatMapData);
 
 			deleteRemovedSeats(command.Seats, seatMap);
@@ -37,12 +37,14 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			updateSeats(command.Seats, seatMap);
 		}
 
-		private SeatMapLocation updateExistingSeatMap(Guid seatMapId, string seatMapJsonData)
+		private SeatMapLocation updateExistingSeatMap(Guid seatMapId, string seatMapJsonData, string locationPrefix, string locationSuffix)
 		{
 			var seatMap = _seatMapLocationRepository.LoadAggregate(seatMapId) as SeatMapLocation;
 			if (seatMap != null)
 			{
 				seatMap.SeatMapJsonData = seatMapJsonData;
+				seatMap.LocationPrefix = locationPrefix;
+				seatMap.LocationSuffix = locationSuffix;
 			}
 			return seatMap;
 		}

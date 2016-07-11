@@ -8,6 +8,8 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels
 		public Guid Id { get; set; }
 		public Guid ParentId;
 		public String Name { get; set; }
+		public string LocationPrefix { get; set; }
+		public string LocationSuffix { get; set; }
 		public List<LocationViewModel> Children{ get; set; }
 		public List<SeatViewModel> Seats { get; set; }
 		public String SeatMapJsonData;

@@ -15,5 +15,7 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels
 		public string SeatName { get; set; }
 		public DateOnly BelongsToDate { get; set; }
 		public string LocationPath { get; set; }
+		public string LocationPrefix { get; set; }
+		public string LocationSuffix { get; set; }
 	}
 }

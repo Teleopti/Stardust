@@ -9,6 +9,8 @@ namespace Teleopti.Interfaces.Domain
 		string SeatMapData { get; set; }
 		LocationInfo[] ChildLocations { get; set; }
 		SeatInfo[] Seats { get; set; }
+		string LocationPrefix { get; set; }
+		string LocationSuffix { get; set; }
 	}
 
 	public class LocationInfo

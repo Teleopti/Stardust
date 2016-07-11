@@ -165,6 +165,38 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		}
 
 		[Test]
+		public void ShouldSavePrefixAndSuffix()
+		{
+			const string dummyJsonData = @"{""objects"":[{""type"":""seat"",""originX"":""left"",""originY"":""top"",""left"":370,""top"":90.5,""width"":36,""height"":47,""fill"":""rgb(0,0,0)"",""stroke"":null,""strokeWidth"":1,""strokeDashArray"":null,""strokeLineCap"":""butt"",""strokeLineJoin"":""miter"",""strokeMiterLimit"":10,""scaleX"":1,""scaleY"":1,""angle"":0,""flipX"":false,""flipY"":false,""opacity"":1,""shadow"":null,""visible"":true,""clipTo"":null,""backgroundColor"":"""",""fillRule"":""nonzero"",""globalCompositeOperation"":""source-over"",""src"":""http://localhost:52858/Areas/SeatPlanner/Content/Images/seat.svg"",""filters"":[],""crossOrigin"":"""",""alignX"":""none"",""alignY"":""none"",""meetOrSlice"":""meet"",""guid"":""d9664f22-886b-f5bf-f799-7d59765c2604"",""name"":""Unnamed seat"",""priority"":1},{""type"":""seat"",""originX"":""left"",""originY"":""top"",""left"":565,""top"":90.5,""width"":36,""height"":47,""fill"":""rgb(0,0,0)"",""stroke"":null,""strokeWidth"":1,""strokeDashArray"":null,""strokeLineCap"":""butt"",""strokeLineJoin"":""miter"",""strokeMiterLimit"":10,""scaleX"":1,""scaleY"":1,""angle"":0,""flipX"":false,""flipY"":false,""opacity"":1,""shadow"":null,""visible"":true,""clipTo"":null,""backgroundColor"":"""",""fillRule"":""nonzero"",""globalCompositeOperation"":""source-over"",""src"":""http://localhost:52858/Areas/SeatPlanner/Content/Images/seat.svg"",""filters"":[],""crossOrigin"":"""",""alignX"":""none"",""alignY"":""none"",""meetOrSlice"":""meet"",""guid"":""8e48dd65-e68a-0834-fdc5-eae75f12065c"",""name"":""Unnamed seat"",""priority"":2}],""background"":""""}";
+			var seatMapLocation = new SeatMapLocation();
+			seatMapLocation.SetLocation(dummyJsonData, "rootLocation");
+			seatMapLocation.SetId(Guid.NewGuid());
+			_seatMapLocationRepository.Add(seatMapLocation);
+
+			var command = new SaveSeatMapCommand()
+			{
+				Id = seatMapLocation.Id,
+				SeatMapData = dummyJsonData,
+				Seats = new[]
+				{
+					new SeatInfo()
+					{
+						Id = Guid.NewGuid(),
+						IsNew = true,
+						Name = "New Seat"
+					}
+				},
+				LocationPrefix = "Prefix",
+				LocationSuffix = "Suffix"
+			};
+
+			_target.Save(command);
+			
+			seatMapLocation.LocationPrefix.Should().Be.EqualTo("Prefix");
+			seatMapLocation.LocationSuffix.Should().Be.EqualTo("Suffix");
+		}
+
+		[Test]
 		public void ShouldUpdateRolesForSeats()
 		{
 			var seatMapLocation = new SeatMapLocation();

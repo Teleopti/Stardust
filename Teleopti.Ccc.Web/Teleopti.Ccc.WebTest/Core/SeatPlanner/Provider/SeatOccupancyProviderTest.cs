@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 	{
 		private FakeSeatBookingRepository _seatBookingRepository;
 		private FakeSeatMapRepository _seatMapLocationRepository;
+		private SeatMapProvider _seatMapProvider;
 		private IUserTimeZone _userTimeZone;
 		private TimeZoneInfo _timeZone;
 		private IPerson _person;
@@ -35,6 +36,7 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 
 			_seatBookingRepository = new FakeSeatBookingRepository();
 			_seatMapLocationRepository = new FakeSeatMapRepository();
+			_seatMapProvider = new SeatMapProvider(_seatMapLocationRepository, _seatBookingRepository, _userTimeZone);
 		}
 
 		[Test]
@@ -68,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 			_seatBookingRepository.Add(booking);
 			_seatBookingRepository.Add(bookingSeat2);
 
-			var seatOccupancyProvider = new SeatOccupancyProvider(_seatBookingRepository, _seatMapLocationRepository, _userTimeZone);
+			var seatOccupancyProvider = new SeatOccupancyProvider(_seatBookingRepository, _seatMapLocationRepository, _userTimeZone, _seatMapProvider);
 			var occupancyInformation = seatOccupancyProvider.Get(new List<Guid>{ seat.Id.GetValueOrDefault()}, bookingDate);
 			var occupancyInfo = occupancyInformation.Single().Occupancies.Single();
 
@@ -123,7 +125,7 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 			booking.Book (seat);
 			_seatBookingRepository.Add (booking);
 
-			var seatOccupancyProvider = new SeatOccupancyProvider (_seatBookingRepository, _seatMapLocationRepository, _userTimeZone);
+			var seatOccupancyProvider = new SeatOccupancyProvider (_seatBookingRepository, _seatMapLocationRepository, _userTimeZone, _seatMapProvider);
 			var occupancyInformation = seatOccupancyProvider.Get (new List<Guid>{seat.Id.GetValueOrDefault()}, dateToGet);
 			return occupancyInformation;
 		}
@@ -169,7 +171,7 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 			_seatBookingRepository.Add(bookingSeat3);
 			_seatBookingRepository.Add(bookingPerson2);
 
-			var seatOccupancyProvider = new SeatOccupancyProvider(_seatBookingRepository, _seatMapLocationRepository, _userTimeZone);
+			var seatOccupancyProvider = new SeatOccupancyProvider(_seatBookingRepository, _seatMapLocationRepository, _userTimeZone, _seatMapProvider);
 			var occupancyGroupedBySeat = seatOccupancyProvider.Get(new Guid[]
 			{
 				seat.Id.GetValueOrDefault(), seat2.Id.GetValueOrDefault()
@@ -261,7 +263,7 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 			var scheduleDayTwoPerson1 = ScheduleDayFactory.Create(bookingDateEnd, _person, scenario);
 			scheduleDayTwoPerson1.Add(assignment2Person1);
 
-			var seatOccupancyProvider = new SeatOccupancyProvider(_seatBookingRepository, _seatMapLocationRepository, _userTimeZone);
+			var seatOccupancyProvider = new SeatOccupancyProvider(_seatBookingRepository, _seatMapLocationRepository, _userTimeZone, _seatMapProvider);
 			var occupancyInformation = seatOccupancyProvider.GetSeatBookingsForScheduleDays(new List<IScheduleDay>() { scheduleDayOnePerson1, scheduleDayOnePerson2 });
 
 			Assert.AreEqual(2, occupancyInformation.Count);
@@ -295,7 +297,7 @@ namespace Teleopti.Ccc.WebTest.Core.SeatPlanner.Provider
 
 			var scheduleDayOnePerson1 = ScheduleDayFactory.Create(bookingDateStart, _person, scenario);
 			
-			var seatOccupancyProvider = new SeatOccupancyProvider(_seatBookingRepository, _seatMapLocationRepository, _userTimeZone);
+			var seatOccupancyProvider = new SeatOccupancyProvider(_seatBookingRepository, _seatMapLocationRepository, _userTimeZone, _seatMapProvider);
 			var occupancyInformation = seatOccupancyProvider.GetSeatBookingsForScheduleDays(new List<IScheduleDay> { scheduleDayOnePerson1 });
 
 			Assert.AreEqual(0, occupancyInformation.Count);

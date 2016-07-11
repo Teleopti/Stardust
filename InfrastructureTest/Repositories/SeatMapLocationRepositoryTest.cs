@@ -65,6 +65,27 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
+		public void VerifySeatMapPrefixAndSuffix()
+		{
+			const string locationName = "Test Location";
+
+			var seatMapLocation = new SeatMapLocation();
+			seatMapLocation.LocationPrefix = "Prefix";
+			seatMapLocation.LocationSuffix = "Suffix";
+			seatMapLocation.SetLocation("{DummyData}", locationName);
+			PersistAndRemoveFromUnitOfWork(seatMapLocation);
+
+			var loaded = new SeatMapLocationRepository(UnitOfWork).LoadRootSeatMap() as SeatMapLocation;
+
+			Assert.AreEqual(seatMapLocation.Id, loaded.Id);
+			Assert.AreEqual(locationName, loaded.Name);
+			Assert.AreEqual(seatMapLocation.Id, loaded.Id);
+			Assert.AreEqual(seatMapLocation.SeatMapJsonData, loaded.SeatMapJsonData);
+			Assert.AreEqual(seatMapLocation.LocationPrefix, loaded.LocationPrefix);
+			Assert.AreEqual(seatMapLocation.LocationSuffix, loaded.LocationSuffix);
+		}
+
+		[Test]
 		public void VerifyLoadCorrectSeatObject()
 		{
 			var role = new ApplicationRole {Name = "RoleForSeat"};

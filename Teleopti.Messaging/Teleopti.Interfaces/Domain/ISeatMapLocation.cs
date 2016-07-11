@@ -11,6 +11,8 @@ namespace Teleopti.Interfaces.Domain
 		string Name { get; set; }
 		
 		IList<ISeat> Seats { get; }
+		string LocationPrefix { get; set; }
+		string LocationSuffix { get; set; }
 
 		void ClearBookingInformation();
 

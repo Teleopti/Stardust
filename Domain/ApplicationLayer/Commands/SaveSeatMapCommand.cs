@@ -9,5 +9,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public string SeatMapData { get; set; }
 		public LocationInfo[] ChildLocations { get; set; }
 		public SeatInfo[] Seats { get; set; }
+		public string LocationPrefix { get; set; }
+		public string LocationSuffix { get; set; }
 	}
 }

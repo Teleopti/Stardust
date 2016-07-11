@@ -52,6 +52,8 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 			{
 				Id = seatMapLocation.Id.Value,
 				Name = seatMapLocation.Name,
+				LocationPrefix = seatMapLocation.LocationPrefix,
+				LocationSuffix = seatMapLocation.LocationSuffix,
 				ParentId = parentId != null ? parentId.Value : Guid.Empty,
 				SeatMapJsonData = seatMapLocation.SeatMapJsonData,
 				Seats = buildSeatViewModels(seatMapLocation, bookings)

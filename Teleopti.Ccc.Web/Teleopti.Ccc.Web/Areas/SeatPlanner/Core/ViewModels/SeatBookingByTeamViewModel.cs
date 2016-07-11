@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using Teleopti.Analytics.Portal.Reports.Ccc;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -15,13 +16,15 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels
 	{
 		private readonly ISeatMapLocationRepository _locationRepository;
 		private readonly IUserTimeZone _userTimeZone;
+		private readonly ISeatMapProvider _seatMapProvider;
 		public String Name { get; set; }
 		public List<SeatBookingViewModel> SeatBookings { get; set; }
 
-		public SeatBookingByTeamViewModel(IGrouping<string, IPersonScheduleWithSeatBooking> seatBookingReportModels, ISeatMapLocationRepository locationRepository, IUserTimeZone userTimeZone)
+		public SeatBookingByTeamViewModel(IGrouping<string, IPersonScheduleWithSeatBooking> seatBookingReportModels, ISeatMapLocationRepository locationRepository, IUserTimeZone userTimeZone, ISeatMapProvider seatMapProvider)
 		{
 			_locationRepository = locationRepository;
 			_userTimeZone = userTimeZone;
+			_seatMapProvider = seatMapProvider;
 			Name = seatBookingReportModels.Key;
 			SeatBookings = new List<SeatBookingViewModel>();
 			
@@ -54,6 +57,9 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels
 				EndDateTime = convertTimeToLocal(personScheduleWithSeatBooking.SeatBookingEnd ?? personScheduleWithSeatBooking.PersonScheduleEnd),
 				SeatId = personScheduleWithSeatBooking.SeatId,
 				SeatName = personScheduleWithSeatBooking.SeatName,
+				LocationPrefix = _seatMapProvider.Get(personScheduleWithSeatBooking.LocationId, personScheduleWithSeatBooking.BelongsToDate).LocationPrefix,
+				LocationSuffix = _seatMapProvider.Get(personScheduleWithSeatBooking.LocationId, personScheduleWithSeatBooking.BelongsToDate).LocationSuffix,
+				
 				SiteId = personScheduleWithSeatBooking.SiteId,
 				SiteName = personScheduleWithSeatBooking.SiteName,
 				IsDayOff = personScheduleWithSeatBooking.IsDayOff,

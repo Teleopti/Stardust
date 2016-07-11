@@ -55,6 +55,8 @@ namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 			Assert.True(result.GetType() == typeof(LocationViewModel));
 			Assert.True(result.Id == seatMapLocation.Id);
 			Assert.True(result.Name == seatMapLocation.Name);
+			Assert.True(result.LocationPrefix == seatMapLocation.LocationPrefix);
+			Assert.True(result.LocationSuffix == seatMapLocation.LocationSuffix);
 		}
 	}
 }

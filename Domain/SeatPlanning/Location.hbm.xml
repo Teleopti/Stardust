@@ -20,6 +20,16 @@
 							type="string"
 							length="100"
 							not-null="true"/>
+	  <property name="LocationPrefix"
+							access="property"
+							type="string"
+							length="6"
+							not-null="false"/>
+	  <property name="LocationSuffix"
+							access="property"
+							type="string"
+							length="6"
+							not-null="false"/>
 
 		<property name="SeatMapJsonData"
 						not-null="false"

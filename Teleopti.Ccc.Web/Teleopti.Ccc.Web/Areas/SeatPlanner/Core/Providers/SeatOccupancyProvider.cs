@@ -12,12 +12,14 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 		private readonly ISeatBookingRepository _seatBookingRepository;
 		private readonly ISeatMapLocationRepository _locationRepository;
 		private readonly IUserTimeZone _userTimeZone;
+		private readonly ISeatMapProvider _seatMapProvider;
 
-		public SeatOccupancyProvider(ISeatBookingRepository seatBookingRepository, ISeatMapLocationRepository locationRepository, IUserTimeZone userTimeZone)
+		public SeatOccupancyProvider(ISeatBookingRepository seatBookingRepository, ISeatMapLocationRepository locationRepository, IUserTimeZone userTimeZone, ISeatMapProvider seatMapProvider)
 		{
 			_seatBookingRepository = seatBookingRepository;
 			_locationRepository = locationRepository;
 			_userTimeZone = userTimeZone;
+			_seatMapProvider = seatMapProvider;
 		}
 
 		public IList<GroupedOccupancyViewModel> Get(IList<Guid> seatIds, DateOnly date)
@@ -85,7 +87,9 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 				SeatId = booking.Seat.Id.GetValueOrDefault(),
 				SeatName = booking.Seat.Name,
 				BookingId = booking.Id.GetValueOrDefault(),
-				LocationPath = location != null ? SeatMapProvider.GetLocationPath(location, true) : null
+				LocationPath = location != null ? SeatMapProvider.GetLocationPath(location, true) : null,
+				LocationPrefix = location != null ? _seatMapProvider.Get(location.Id).LocationPrefix : null,
+				LocationSuffix = location != null ? _seatMapProvider.Get(location.Id).LocationSuffix : null
 			};
 		}
 
