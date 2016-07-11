@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.TestCommon
 			public bool Minutely;
 		}
 
-		private readonly List<JobInfo> _enqueuedJobs = new List<JobInfo>();
+		private readonly ConcurrentBag<JobInfo> _enqueuedJobs = new ConcurrentBag<JobInfo>();
 		private readonly List<JobInfo> _recurringJobs = new List<JobInfo>();
 
 		public IEnumerable<string> DisplayNames { get { return _enqueuedJobs.Select(x => x.DisplayName); } }

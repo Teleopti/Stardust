@@ -26,17 +26,19 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TenantsInitializedInRta>().SingleInstance();
 			builder.RegisterType<RtaProcessor>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateMapper>().SingleInstance();
-			builder.RegisterType<StateCodeAdder>().As<IStateCodeAdder>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateStreamSynchronizer>().SingleInstance();
 
 			if (_config.Toggle(Toggles.RTA_Optimize_39667))
 			{
-				builder.RegisterType<DatabaseOptimizer>().As<IDatabaseOptimizer>();
-				builder.RegisterType<OptimizedContextLoader>().As<IContextLoader>().SingleInstance().ApplyAspects();
+				//builder.RegisterType<DatabaseOptimizer>().As<IDatabaseOptimizer>();
+				//builder.RegisterType<OptimizedContextLoader>().As<IContextLoader>().SingleInstance().ApplyAspects();
+				builder.RegisterType<ScaleOutStateCodeAdder>().As<IStateCodeAdder>().SingleInstance();
 				builder.RegisterType<InParallel>().As<IBatchExecuteStrategy>().SingleInstance();
+				builder.RegisterType<ContextLoader>().As<IContextLoader>().SingleInstance().ApplyAspects();
 			}
 			else
 			{
+				builder.RegisterType<StateCodeAdder>().As<IStateCodeAdder>().SingleInstance().ApplyAspects();
 				builder.RegisterType<ContextLoader>().As<IContextLoader>().SingleInstance().ApplyAspects();
 				builder.RegisterType<InSequence>().As<IBatchExecuteStrategy>().SingleInstance();
 			}

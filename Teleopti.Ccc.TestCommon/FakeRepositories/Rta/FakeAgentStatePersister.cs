@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
@@ -7,7 +8,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
 	public class FakeAgentStatePersister : IAgentStatePersister
 	{
-		private readonly Dictionary<Guid, AgentState> _data = new Dictionary<Guid, AgentState>();
+		private readonly ConcurrentDictionary<Guid, AgentState> _data = new ConcurrentDictionary<Guid, AgentState>();
 
 		public void Has(AgentState model)
 		{
@@ -16,15 +17,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public void Persist(AgentState model)
 		{
-			var existing = _data.Values.SingleOrDefault(x => x.PersonId == model.PersonId);
-			if (existing != null)
-				_data.Remove(existing.PersonId);
-			_data.Add(model.PersonId, model);
+			_data.AddOrUpdate(model.PersonId, model, (k, v) => model);
 		}
 
 		void IAgentStatePersister.Delete(Guid personId)
 		{
-			_data.Remove(personId);
+			AgentState state;
+			_data.TryRemove(personId, out state);
 		}
 
 		public IEnumerable<AgentState> GetNotInSnapshot(DateTime batchId, string sourceId)
