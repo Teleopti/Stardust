@@ -306,6 +306,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			var intervalWidth = Math.Floor(minuteWidth * interval);
 			Assert.AreEqual(intervalWidth, Math.Floor(activityALeft - activityBLeft));
 		}
+
+		[When(@"I switch on show warnings toggle")]
+		public void WhenISwitchOnShowWarningsToggle()
+		{
+			Browser.Interactions.Click("#show-warnings .wfm-switch-toggle");
+		}
+
+		[Then(@"I should see business rule warning")]
+		public void ThenIShouldSeeBusinessRuleWarning()
+		{
+			Browser.Interactions.AssertExists(".warning-icon .mdi-account-alert");
+		}
 	}
 
 	public class AddActivityFormInfo

@@ -1007,6 +1007,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>BackoutScheduleChange.feature</DependentUpon>
     </Compile>
+    <Compile Include="Wfm\TeamSchedule\ShowBusinessRuleWarning.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ShowBusinessRuleWarning.feature</DependentUpon>
+    </Compile>
     <Compile Include="Wfm\TeamSchedule\ShowContractTime.feature.cs">
       <DependentUpon>ShowContractTime.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -1492,6 +1497,10 @@
     <None Include="Wfm\TeamSchedule\BackoutScheduleChange.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>BackoutScheduleChange.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\TeamSchedule\ShowBusinessRuleWarning.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ShowBusinessRuleWarning.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\TeamSchedule\ShowContractTime.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
