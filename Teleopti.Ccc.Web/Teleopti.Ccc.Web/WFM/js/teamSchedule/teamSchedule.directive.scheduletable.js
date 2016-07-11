@@ -78,7 +78,7 @@
 		};
 
 		vm.togglePerson = function (personSchedule, $event) {
-			if ($event.target instanceof HTMLTableCellElement) {
+			if ($event.target instanceof HTMLTableCellElement || $event.target.className.indexOf("wfm-checkbox") > -1) {
 				personSchedule.IsSelected = !personSchedule.IsSelected;
 				vm.updatePersonSelection(personSchedule);
 			}
