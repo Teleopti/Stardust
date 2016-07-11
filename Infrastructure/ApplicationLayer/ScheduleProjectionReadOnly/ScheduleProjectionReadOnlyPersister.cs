@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnly
 {
-	public class ScheduleProjectionReadOnlyPersister : IScheduleProjectionReadOnlyPersister
+    public class ScheduleProjectionReadOnlyPersister : IScheduleProjectionReadOnlyPersister
     {
 	    private readonly ICurrentUnitOfWork _currentUnitOfWork;
 

@@ -10,14 +10,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IEventPublisherScope _eventPublisherScope;
 		private readonly IEnumerable<IInitializeble> _initializebles;
 		private readonly ResolveEventHandlers _resolver;
-		private readonly IContextLoader _contextLoader;
+		private readonly ContextLoader _contextLoader;
 
 		public StateStreamSynchronizer(
 			RtaProcessor processor,
 			IEventPublisherScope eventPublisherScope,
 			IEnumerable<IInitializeble> initializebles,
 			ResolveEventHandlers resolver,
-			IContextLoader contextLoader
+			ContextLoader contextLoader
 			)
 		{
 			_processor = processor;

@@ -7,12 +7,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		IHandleEvent<TenantMinuteTickEvent>, 
 		IRunOnHangfire
 	{
-		private readonly IContextLoader _contextLoader;
+		private readonly ContextLoader _contextLoader;
 		private readonly RtaProcessor _processor;
 		private readonly IDistributedLockAcquirer _distributedLock;
 
 		public ActivityChangeProcessor(
-			IContextLoader contextLoader,
+			ContextLoader contextLoader,
 			RtaProcessor processor,
 			IDistributedLockAcquirer distributedLock
 			)

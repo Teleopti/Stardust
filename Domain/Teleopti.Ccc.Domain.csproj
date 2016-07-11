@@ -551,7 +551,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\BatchTooBigException.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\EventCollector.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\InvalidAuthenticationKeyException.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\IContextLoader.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\ContextLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IDatabaseLoader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\LegacyAuthenticationKeyException.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\LegacyAuthenticationKey.cs" />

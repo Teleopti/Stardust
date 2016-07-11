@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly TenantLoader _tenantLoader;
 		private readonly RtaInitializor _initializor;
 		private readonly ActivityChangeProcessor _activityChangeProcessor;
-		private readonly IContextLoader _contextLoader;
+		private readonly ContextLoader _contextLoader;
 		private readonly IBatchExecuteStrategy _batchExecuteStrategy;
 
 		public Rta(
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			TenantLoader tenantLoader,
 			RtaInitializor initializor,
 			ActivityChangeProcessor activityChangeProcessor,
-			IContextLoader contextLoader,
+			ContextLoader contextLoader)
 			IBatchExecuteStrategy batchExecuteStrategy)
 		{
 			_processor = processor;
