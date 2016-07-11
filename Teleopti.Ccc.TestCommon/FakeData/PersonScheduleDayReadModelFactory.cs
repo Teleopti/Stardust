@@ -22,12 +22,15 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 				FirstName = person.Name.FirstName,
 				LastName = person.Name.LastName,
 				Shift = shift  ,
-				Date = date.Date
+				Date = date.Date,
+				EmploymentNumber = ""
 			};
 			return new PersonScheduleDayReadModel
 			{
 				PersonId = person.Id.Value,
-				Start = date.Date,
+				Date = date.Date,
+				TeamId = (Guid) person.MyTeam(date)?.Id.GetValueOrDefault(),
+				SiteId = (Guid) person.MyTeam(date)?.Site.Id.GetValueOrDefault(),
 				Model = JsonConvert.SerializeObject(model),
 				FirstName = model.FirstName,
 				LastName = model.LastName

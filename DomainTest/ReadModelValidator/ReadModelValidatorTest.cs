@@ -186,6 +186,56 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 		}
 
 		[Test]
+		public void ShouldFindNoErrorWithNonScheduledDayAndEmptyPersonScheduleDayReadModel()
+		{
+			var scenario = CurrentScenario.Current();
+			var site = SiteFactory.CreateSimpleSite("s");
+			site.WithId();
+			var team = TeamFactory.CreateTeamWithId("t");
+			team.Site = site;
+
+			var person = PersonFactory.CreatePersonWithGuid("Peter", "peter");
+			var date = new DateOnly(2016, 1, 1);
+			var personPeriod = new PersonPeriod(date,
+				PersonContractFactory.CreatePersonContract(ContractFactory.CreateContract("_")), team);
+			personPeriod.WithId();
+			person.AddPersonPeriod(personPeriod);
+			PersonRepository.Has(person);
+			var dateTimePeriod = new DateTimePeriod(2016, 1, 1, 8, 2016, 1, 1, 17);
+			var personAssignment = PersonAssignmentFactory.CreateEmptyAssignment(scenario, person, dateTimePeriod);
+			ScheduleStorage.Add(personAssignment);
+			PersonAssignmentRepository.Add(personAssignment);
+				
+			Target.Validate(ValidateReadModelType.PersonScheduleDay,new DateTime(2016, 1, 1), new DateTime(2016, 1, 1));
+			var result = ReadModelValidationResultPersistor.LoadAllInvalidPersonScheduleDay().ToList();
+			result.Count.Should().Be.EqualTo(0);
+		}
+		[Test]
+		public void ShouldFindNoErrorWithNonScheduledDayAndNoPersonScheduleDayReadModelRecord()
+		{
+			var scenario = CurrentScenario.Current();
+			var site = SiteFactory.CreateSimpleSite("s");
+			site.WithId();
+			var team = TeamFactory.CreateTeamWithId("t");
+			team.Site = site;
+
+			var person = PersonFactory.CreatePersonWithGuid("Peter", "peter");
+			var date = new DateOnly(2016, 1, 1);
+			var personPeriod = new PersonPeriod(date,
+				PersonContractFactory.CreatePersonContract(ContractFactory.CreateContract("_")), team);
+			personPeriod.WithId();
+			person.AddPersonPeriod(personPeriod);
+			PersonRepository.Has(person);
+			var dateTimePeriod = new DateTimePeriod(2016, 1, 1, 8, 2016, 1, 1, 17);
+			var personAssignment = PersonAssignmentFactory.CreateEmptyAssignment(scenario, person, dateTimePeriod);
+			ScheduleStorage.Add(personAssignment);
+				
+			Target.Validate(ValidateReadModelType.PersonScheduleDay,new DateTime(2016, 1, 1), new DateTime(2016, 1, 1));
+			var result = ReadModelValidationResultPersistor.LoadAllInvalidPersonScheduleDay().ToList();
+			result.Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
 		public void ShouldFindErrorInScheduleDayReadModel()
 		{
 			var scenario = CurrentScenario.Current();

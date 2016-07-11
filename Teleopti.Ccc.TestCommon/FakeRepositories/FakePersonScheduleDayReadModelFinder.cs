@@ -30,28 +30,33 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public PersonScheduleDayReadModel ForPerson(DateOnly date, Guid personId)
 		{
 			var assignment = _personAssignmentRepository.LoadAll().SingleOrDefault(a => personId == a.Person.Id.Value && date == a.Date);
+			if (assignment == null)
+				return null;
 			var persons = _personRepository.LoadAll();
-			
-			if (assignment == default(object))
-			{
-				return PersonScheduleDayReadModelFactory.CreateSimplePersonScheduleDayReadModel(persons.First(p => p.Id.Value == personId), date);
-			}
 
 			if (assignment.DayOff() != null)
 			{
 				return PersonScheduleDayReadModelFactory.CreateDayOffPersonScheduleDayReadModel(assignment.Person, date);
 			}
-
-			var simpleLayers = assignment.ShiftLayers.Select(shiftLayer => new SimpleLayer
+			PersonScheduleDayReadModel readModel;
+			if (assignment.ShiftLayers.Any())
 			{
-				Start = shiftLayer.Period.StartDateTime,
-				End = shiftLayer.Period.EndDateTime,
-				Description = shiftLayer.Payload.Name,
-				Color = ColorTranslator.ToHtml(Color.FromArgb(shiftLayer.Payload.DisplayColor.ToArgb())),
-				Minutes = (int)shiftLayer.Period.EndDateTime.Subtract(shiftLayer.Period.StartDateTime).TotalMinutes
-			}).ToList();
-			var readModel = PersonScheduleDayReadModelFactory.CreatePersonScheduleDayReadModelWithSimpleShift(assignment.Person,
-				date, simpleLayers);
+				var simpleLayers = assignment.ShiftLayers.Select(shiftLayer => new SimpleLayer
+				{
+					Start = shiftLayer.Period.StartDateTime,
+					End = shiftLayer.Period.EndDateTime,
+					Description = shiftLayer.Payload.Name,
+					Color = ColorTranslator.ToHtml(Color.FromArgb(shiftLayer.Payload.DisplayColor.ToArgb())),
+					Minutes = (int) shiftLayer.Period.EndDateTime.Subtract(shiftLayer.Period.StartDateTime).TotalMinutes
+				}).ToList();
+				readModel = PersonScheduleDayReadModelFactory.CreatePersonScheduleDayReadModelWithSimpleShift(assignment.Person,
+					date, simpleLayers);
+			}
+			else
+			{
+				readModel = PersonScheduleDayReadModelFactory.CreateSimplePersonScheduleDayReadModel(persons.First(p => p.Id.Value == personId), date);
+			}
+			
 			readModel.BusinessUnitId = assignment.Scenario.BusinessUnit.Id.GetValueOrDefault();
 
 			return readModel;

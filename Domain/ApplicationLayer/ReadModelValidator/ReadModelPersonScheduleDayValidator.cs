@@ -33,6 +33,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 			var fetchedReadModel = FetchFromRepository(person,scheduleDay.DateOnlyAsPeriod.DateOnly);
 			var builtReadModel = Build(person,scheduleDay);
 			if(builtReadModel == null) return fetchedReadModel == null;
+			if (!scheduleDay.IsScheduled() && fetchedReadModel == null)
+				return true;
 			return builtReadModel.Equals(fetchedReadModel);
 		}
 
