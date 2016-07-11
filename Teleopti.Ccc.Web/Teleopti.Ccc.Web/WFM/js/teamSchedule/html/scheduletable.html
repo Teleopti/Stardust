@@ -27,17 +27,17 @@
 						<span class="wfm-checkbox-toggle"></span>
 						<span class="wfm-checkbox-label person-name nowrap">{{personSchedule.Name}}</span>
 					</label>
-					<span class="validate-warning" ng-if="vm.showWarnings">					
-						<span ng-if="vm.checkNightRestWarningMessage(personSchedule.PersonId).isLoaded && vm.checkNightRestWarningMessage(personSchedule.PersonId).warnings.length > 0">
-							<span class="warning-icon"><i class="mdi mdi-account-alert"></i></span>
-							<md-tooltip class="multiline-tooltip" md-direction="right">
-								<span ng-bind-html="vm.checkNightRestWarningMessage(personSchedule.PersonId).warnings | br"></span>
-							</md-tooltip>
-						</span>
-						<md-progress-circular md-mode="indeterminate" md-diameter="15" ng-if="!vm.checkNightRestWarningMessage(personSchedule.PersonId).isLoaded"></md-progress-circular>
-					</span>
 				</div>
 				<div class="person-name nowrap" ng-hide="vm.selectMode">{{personSchedule.Name}}</div>
+				<span class="validate-warning" ng-if="vm.showWarnings">
+					<span ng-if="vm.checkNightRestWarningMessage(personSchedule.PersonId).isLoaded && vm.checkNightRestWarningMessage(personSchedule.PersonId).warnings.length > 0">
+						<span class="warning-icon"><i class="mdi mdi-account-alert"></i></span>
+						<md-tooltip class="multiline-tooltip" md-direction="right">
+							<span ng-bind-html="vm.checkNightRestWarningMessage(personSchedule.PersonId).warnings | br"></span>
+						</md-tooltip>
+					</span>
+					<md-progress-circular md-mode="indeterminate" md-diameter="15" ng-if="!vm.checkNightRestWarningMessage(personSchedule.PersonId).isLoaded"></md-progress-circular>
+				</span>
 			</td>
 			<td class="schedule schedule-column">
 				<div class="relative time-line-for">
