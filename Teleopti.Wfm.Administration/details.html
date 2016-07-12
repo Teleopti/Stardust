@@ -1,7 +1,8 @@
 ﻿<div ng-controller="detailsController as detailsVm" style="margin-left: 50px;margin-right: 50px">
 	<div class="row">
 		<div class="col-md-12">
-			<a style="float: left; padding-top: 25px; padding-right: 50px" href="#"><img alt="back" title="Back to Start" src="Content/images/left_round.png" /></a>
+			
+			<a style="float: left; padding-top: 25px; padding-right: 50px" href="#/"><img alt="back" title="Back to Start" src="Content/images/left_round.png"/></a>
 			<h2>Details - {{detailsVm.OriginalName}}</h2>
 			<p>
 				Showing details of one Tenant.
@@ -9,14 +10,14 @@
 		</div>
 		<div class="col-md-12">
 		    <div class="col-md-6">
-                
-		        <div class="importCaption">Version: {{detailsVm.Version.ImportAppVersion}}</div>
-		        <div class="importCaption">Tenant name: {{detailsVm.Tenant}}</div>
-		        <div class="importCaption">User/ login: {{detailsVm.UserName}}</div>
-		        <div class="importCaption">Server: {{detailsVm.Server}}</div>
-		        <div class="importCaption">Application database: {{detailsVm.AppDatabase}}</div>
-		        <div class="importCaption">Analytics database: {{detailsVm.AnalyticsDatabase}}</div>
-		        <div class="importCaption">Aggregation database: {{detailsVm.AggregationDatabase}}</div>
+
+		  	<div class="importCaption">Version: <span class="detail"> {{detailsVm.Version.ImportAppVersion}}</span></div>
+		        <div class="importCaption">Tenant name:<span class="detail"> {{detailsVm.Tenant}}</span></div>
+		        <div class="importCaption">User/ login:<span class="detail"> {{detailsVm.UserName}}</span></div>
+		        <div class="importCaption">Server:<span class="detail"> {{detailsVm.Server}}</span></div>
+		        <div class="importCaption">Application database:<span class="detail"> {{detailsVm.AppDatabase}}</span></div>
+		        <div class="importCaption">Analytics database:<span class="detail"> {{detailsVm.AnalyticsDatabase}}</span></div>
+		        <div class="importCaption">Aggregation database:<span class="detail"> {{detailsVm.AggregationDatabase}}</span></div>
 		        <div>
 		            <div class="importCaption">Command timeout</div>
 		            <input class="form-control" type="number" min="30" max="600" required ng-model="detailsVm.CommandTimeout" placeholder="Command timeout">
@@ -26,7 +27,7 @@
 		        <div style="margin-top: 30px">
 		            <button class="btn btn-primary btn-default" ng-click="detailsVm.save()">Save</button>
 		            <div style="float: right" ng-show="detailsVm.AllowDelete">
-		                <button class="btn btn-danger btn-default" ng-click="detailsVm.Delete()">Delete this Tenant</button>
+		                <md-button class="md-button md-raised md-primary btn-danger" ng-click="detailsVm.showConfirm()"><md-icon md-svg-src="Content/images/ic_delete_black_24px.svg"></md-icon> Delete this Tenant</md-button>
 		            </div>
 		        </div>
 

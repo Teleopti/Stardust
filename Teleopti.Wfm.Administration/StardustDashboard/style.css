@@ -15,9 +15,9 @@ th {
 }
 td {
 	padding: 10px;
-	border-bottom: 1px;
+	/*border-bottom: 1px;
 	border-bottom-color: black;
-	border-bottom-style: solid
+	border-bottom-style: solid*/
 }
 .greenNode {
     color: green;

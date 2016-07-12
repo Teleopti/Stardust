@@ -26,22 +26,46 @@ textarea {
 	max-width: 280px;
 }
 
-thead {
-	font-weight: bold;
+table {
 	font-size: 16px;
 }
-
-td {
-	padding: 0 10px 0 10px;
+thead {
+	font-weight: bold;
+	
 }
 
-.oddRow {
-	background-color: oldlace;
+table tr {
+    background-color: #fff;
+    border-top: 1px solid #ccc;
 }
+
+table th {
+    border-bottom: 2px solid rgba(0,0,0,.06);
+    border-top: 0 none;
+    color: #888;
+    display: table-cell;
+    font-weight: 400;
+    text-align: left;
+	  padding: 5px;
+}
+
+table td {
+    color: #266d90;
+    font-size: 80%;
+	 padding: 5px;
+}
+
 
 .importCaption {
-	margin-top: 20px;
+	margin-top: 10px;
+	color: #888;
 	font-weight: bold;
+}
+
+.detail {
+	color: #888;
+	font-size: 14px;
+	font-weight:normal;
 }
 
 .dataIsOk {
@@ -68,9 +92,6 @@ td {
 	}
 }
 
-.paddingTenantList {
-	padding: 5px;
-}
 
 fieldset {
 	border: 1px solid silver;
@@ -89,4 +110,26 @@ legend {
 	font-weight: bold;
 	margin-bottom: 0;
 	width: initial;
+}
+a.md-button.md-primary.md-raised {
+	background-color: rgb(16,108,200);
+}
+
+.md-button.md-primary.md-raised.btn-danger {
+	background-color: #d9534f;
+}
+.md-button.md-primary.md-raised.btn-danger:hover {
+	background-color:firebrick;
+}
+
+table tr td a {
+	color: #266d90;
+    display:block;
+    height:100%;
+    width:100%;	 
+}
+table tr td a:hover {
+	text-decoration: none;
+	color:#266d99;
+	
 }

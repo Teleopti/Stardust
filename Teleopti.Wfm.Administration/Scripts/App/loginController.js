@@ -10,7 +10,7 @@
     
 	angular
 		 .module('adminApp')
-		 .controller('loginController', loginController, [])
+		 .controller('loginController', loginController, ['$scope', '$http', '$window', loginController])
 		 .directive('menuItem', function() {
 			return {
 				scope: {
@@ -51,7 +51,7 @@
 			{ text: "Stardust Dashboard", link: "#/StardustDashboard" },
 			{ text: "Hangfire Dashboard", link: "#/HangfireDashboard" }
 		];
-
+		$scope.message = "något som jag vill visa";
 		$http.get("./HasNoUser").success(function (data) {
 		    firstUser = data;
 		    if (firstUser) {
@@ -100,7 +100,8 @@
 				sessionStorage.setItem(userKey, data.UserName);
 				sessionStorage.setItem(emailKey, vm.loginEmail);
 				sessionStorage.setItem(idKey, data.Id);
-				document.location = "#";
+				document.location = "#/";
+				location.reload();
 				$('#modal-login').dialog('close');
 			}).error(showError);
 			
@@ -111,6 +112,8 @@
 			sessionStorage.removeItem(userKey);
 			$http.post('./Logout');
 			vm.user = null;
+			document.location = "#/";
+			location.reload();
 		}
 	}
 

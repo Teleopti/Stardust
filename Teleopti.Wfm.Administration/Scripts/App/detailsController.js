@@ -2,10 +2,10 @@
 	'use strict';
 
 	angular
-		 .module('adminApp')
-		 .controller('detailsController', detailsController, ['tokenHeaderService']);
+		 .module('adminApp').controller('detailsController',
+		 ['$http', '$routeParams', 'tokenHeaderService', '$mdDialog', detailsController]);
 
-	function detailsController($http, $routeParams, tokenHeaderService) {
+	function detailsController($http, $routeParams, tokenHeaderService, $mdDialog) {
 		var vm = this;
 
 		vm.Tenant = $routeParams.tenant;
@@ -40,6 +40,22 @@
 		vm.NewBusinessUnitMessage = '';
 		vm.NewBuOk = true;
 		vm.Log = null;
+
+		vm.showConfirm = function (ev) {
+			// Appending dialog to document.body to cover sidenav in docs app
+			var confirm = $mdDialog.confirm()
+					.title('Would you like to delete this Tenant?')
+					.textContent('No database will be removed. You can always import it again if you like.')
+					.targetEvent(ev)
+					.ok('Please do it!')
+					.cancel('No not now.');
+					
+			$mdDialog.show(confirm).then(function () {
+				vm.Delete();
+			}, function () {
+				//do nada;
+			});
+		};
 
 		vm.LoadTenant = function () {
 			$http.post('./GetOneTenant', '"' + vm.Tenant + '"', tokenHeaderService.getHeaders())

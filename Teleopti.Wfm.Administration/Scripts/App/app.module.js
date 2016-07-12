@@ -1,5 +1,5 @@
 ﻿angular
-	 .module('adminApp', ['ngRoute'])
+	 .module('adminApp', ['ngRoute', 'ngMaterial'])
 .config(function ($routeProvider) {
         $routeProvider
                 .when('/', {
