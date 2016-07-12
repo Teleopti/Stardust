@@ -79,6 +79,7 @@
 
 		WfmReportPortal_Basic_38825,
 		WfmReportPortal_LeaderBoard_39440,
+		WfmReportPortal_LeaderBoardByPeriod_39620,
 
 		Wfm_Requests_Basic_35986,
 		Wfm_Requests_People_Search_36294,
