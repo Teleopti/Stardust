@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 {
 	public class AbsenceRequestBudgetGroupValidationHelper
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(BudgetGroupAllowanceSpecification));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(AbsenceRequestBudgetGroupValidationHelper));
 
 		public static IValidatedRequest PersonPeriodOrBudgetGroupIsNull(CultureInfo langauage, Guid? personId)
 		{

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 {
 	public class Startup
 	{
-		private static readonly ILog log = LogManager.GetLogger(typeof(ApplicationStartModule));
+		private static readonly ILog log = LogManager.GetLogger(typeof(Startup));
 
 		private IBootstrapper _bootstrapper = new Bootstrapper();
 		private IContainerConfiguration _containerConfiguration = new ContainerConfiguration();

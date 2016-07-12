@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 {
 	public class ConfigFileDefaultHost : IApplicationHost
 	{
-		private readonly ILog logger = LogManager.GetLogger(typeof(DefaultHost));
+		private readonly ILog logger = LogManager.GetLogger(typeof(ConfigFileDefaultHost));
 		private string assemblyName;
 		private readonly AbstractBootStrapper _bootStrapper;
 		private IStartable startable;

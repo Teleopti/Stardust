@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Notification
 	{
 		private readonly IScheduleDayReadModelRepository _scheduleDayReadModelRepository;
 		private readonly IScheduleDayReadModelComparer _scheduleDayReadModelComparer;
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(ScheduleDayReadModelHandler));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(SignificantChangeChecker));
 
 		public SignificantChangeChecker(IScheduleDayReadModelRepository scheduleDayReadModelRepository, IScheduleDayReadModelComparer scheduleDayReadModelComparer)
 		{

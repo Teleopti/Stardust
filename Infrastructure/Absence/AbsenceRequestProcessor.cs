@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 {
 	public class AbsenceRequestProcessor : IAbsenceRequestProcessor
 	{
-		private static readonly ILog logger = LogManager.GetLogger(typeof(NewAbsenceRequestHandler));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(AbsenceRequestProcessor));
 		private readonly IAbsenceRequestUpdater _absenceRequestUpdater;
 		private readonly Func<ISchedulingResultStateHolder> _scheduleResultStateHolder;
 		

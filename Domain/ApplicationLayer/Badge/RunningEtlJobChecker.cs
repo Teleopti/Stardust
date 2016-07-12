@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 {
 	public class RunningEtlJobChecker : IRunningEtlJobChecker
 	{
-		private static readonly ILog logger = LogManager.GetLogger(typeof(AgentBadgeCalculator));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(RunningEtlJobChecker));
 		private readonly IStatisticRepository _statisticRepository;
 
 		public RunningEtlJobChecker(IStatisticRepository statisticRepository)

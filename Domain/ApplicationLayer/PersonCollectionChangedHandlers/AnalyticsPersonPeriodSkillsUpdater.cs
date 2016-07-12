@@ -31,10 +31,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 	    }
     }
 
-    public class AnalyticsPersonPeriodSkillsUpdater 
-	
+    public class AnalyticsPersonPeriodSkillsUpdater
 	{
-		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsPersonPeriodUpdater));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsPersonPeriodSkillsUpdater));
 		private readonly IAnalyticsSkillRepository _analyticsSkillRepository;
 
 		public AnalyticsPersonPeriodSkillsUpdater(IAnalyticsSkillRepository analyticsSkillRepository)

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonAbsences
 	public class RequestPersonAbsenceRemovedHandler : IHandleEvent<RequestPersonAbsenceRemovedEvent>, IRunOnStardust
 #pragma warning restore 618
 	{
-		private readonly static ILog logger = LogManager.GetLogger(typeof(RequestPersonAbsenceRemovedEvent));
+		private readonly static ILog logger = LogManager.GetLogger(typeof(RequestPersonAbsenceRemovedHandler));
 
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IAbsenceRequestWaitlistProcessor _waitlistProcessor;

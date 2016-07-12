@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Presenters
 {
     public class BudgetGroupTabPresenter
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(BudgetGroupDayPresenter));
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(BudgetGroupTabPresenter));
         private readonly IBudgetGroupTabView _view;
         private readonly IBudgetDayProvider _budgetDayProvider;
         private readonly IBudgetGroupDataService _budgetGroupDataService;

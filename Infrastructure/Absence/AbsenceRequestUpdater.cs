@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 {
 	public class AbsenceRequestUpdater : IAbsenceRequestUpdater
 	{
-		private static readonly ILog logger = LogManager.GetLogger(typeof(NewAbsenceRequestHandler));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(AbsenceRequestUpdater));
 
 		private readonly DenyAbsenceRequest _denyAbsenceRequest = new DenyAbsenceRequest();
 		private readonly PendingAbsenceRequest _pendingAbsenceRequest = new PendingAbsenceRequest();

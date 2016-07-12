@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 {
 	public class PayrollDllCopy
 	{
-		private static readonly ILog Log = LogManager.GetLogger(typeof(ServiceBusRunner));
+		private static readonly ILog Log = LogManager.GetLogger(typeof(PayrollDllCopy));
 		private readonly ISearchPath _searchPath;
 
 		public PayrollDllCopy(ISearchPath searchPath)
