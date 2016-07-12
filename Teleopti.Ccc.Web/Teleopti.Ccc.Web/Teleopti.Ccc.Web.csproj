@@ -1424,6 +1424,7 @@
     <Content Include="WFM\js\rta\rta-agents-RTA_MonitorBySkills_39081.html" />
     <Content Include="WFM\js\rta\rta-agents-RTA_PauseButton_39144.html" />
     <Content Include="WFM\js\rta\rta-agents.html" />
+    <Content Include="WFM\js\rta\rta-selectSkill_MonitorBySkillArea_39337.html" />
     <Content Include="WFM\js\rta\rta-selectSkill_MonitorBySkills_39081.html" />
     <Content Include="WFM\js\rta\rta-sites-RTA_MonitorBySkills_39081.html" />
     <Content Include="WFM\js\rta\rta.agentdetails.controller.js" />
