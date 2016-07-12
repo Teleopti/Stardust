@@ -40,16 +40,37 @@
         }
     }
 
-    span.people-search-input {
-        display: block;
-        margin-bottom: 10px;
+   .people-search-input {
+        display: inline-block;
     }
 
     .leader-board {
         padding: 20px 10px 80px 10px;
         background: $white;
         max-height: 83vh;
-        overflow: auto;
+        overflow-y: auto;
+
+        .daterange-picker{
+            margin: 0 20px;
+            display: inline-block;
+
+            .con-flex {
+                position: relative;
+                padding-top: 15px;
+            }
+
+            .con-flex input{
+                text-align: center;
+            }
+
+            .con-flex:nth-child(2) ul {
+                left: calc(-100% - 5px) !important;
+            }
+
+            .error-msg-container{
+                z-index: 1000;
+            }
+        }
 
         table {
             width: 100%;
@@ -73,5 +94,19 @@
             background: $gray-300!important;
             -webkit-print-color-adjust: exact;
         }
+    }
+}
+
+@media (max-width: 768px){
+    .wfm-reports .leader-board .daterange-picker{
+        display: block;
+    }
+
+    .wfm-reports .leader-board .daterange-picker .con-flex:nth-child(2) ul {
+        left: 5px!important;
+    }
+
+    .wfm-reports .leader-board .daterange-picker .con-flex:nth-child(3) ul {
+        top: 300px!important;
     }
 }

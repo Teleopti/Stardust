@@ -8,11 +8,30 @@
 	function LeaderBoardCtrl(LeaderBoardSvc, ToggleSvc, VMFactory) {
 		var vm = this;
 		vm.isLoading = false;
+		vm.showDatePicker = false;
+		vm.dateRangePickerTemplateType = "popup";
+		vm.selectedDate = new Date();
+		vm.isLeaderBoardEnabled = ToggleSvc.WfmReportPortal_LeaderBoard_39440;
+		vm.showDatePicker = ToggleSvc.WfmReportPortal_LeaderBoardByPeriod_39620;
+
+		vm.selectedPeriod = {
+			startDate: new Date(moment(vm.selectedDate).subtract(30,'days')),
+			endDate: new Date(moment(vm.selectedDate).subtract(1, 'days'))
+		};
+
+		vm.afterSelectedDateChange = function () {
+			if(vm.showDatePicker && vm.selectedPeriod){
+				vm.isLoading = true;
+				LeaderBoardSvc.getLeaderBoardDataByPeriod(vm.searchOptions.keyword, vm.selectedPeriod).then(function(data){
+					vm.leaderBoardTableList = VMFactory.Create(data.AgentBadges);
+					vm.isLoading = false;
+				});
+			}
+		};
 
 		vm.onKeyWordInSearchInputChanged = function () {
 			vm.isLoading = true;
-			LeaderBoardSvc.getLeaderBoardData(vm.searchOptions.keyword).then(function (data) {
-				vm.searchOptions.keyword = data.Keyword;
+			LeaderBoardSvc.getLeaderBoardDefaultData(vm.searchOptions.keyword).then(function (data) {
 				vm.leaderBoardTableList = VMFactory.Create(data.AgentBadges);
 				vm.isLoading = false;
 			});
@@ -25,14 +44,14 @@
 				isAdvancedSearchEnabled: ToggleSvc.WfmPeople_AdvancedSearch_32973,
 				searchKeywordChanged: false
 			};
-
-			LeaderBoardSvc.getLeaderBoardData(vm.searchOptions.keyword).then(function (data) {
+	
+			LeaderBoardSvc.getLeaderBoardDefaultData(vm.searchOptions.keyword).then(function (data) {
 				vm.searchOptions.keyword = data.Keyword;
 				vm.leaderBoardTableList = VMFactory.Create(data.AgentBadges);
 				vm.isLoading = false;
 			});
 		};
 
-		vm.init();
+		vm.isLeaderBoardEnabled && vm.init();
 	}
 })();
