@@ -856,8 +856,13 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\MonitorBySkills.feature.cs">
-      <DependentUpon>MonitorBySkills.feature</DependentUpon>
+    <Compile Include="Wfm\RealTimeAdherence\MonitorBySkillArea_39337.feature.cs">
+      <DependentUpon>MonitorBySkillArea_39337.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Wfm\RealTimeAdherence\MonitorBySkill.feature.cs">
+      <DependentUpon>MonitorBySkill.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -1387,9 +1392,13 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PlanningPeriod.feature.cs</LastGenOutput>
     </None>
-    <None Include="Wfm\RealTimeAdherence\MonitorBySkills.feature">
+    <None Include="Wfm\RealTimeAdherence\MonitorBySkillArea_39337.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>MonitorBySkills.feature.cs</LastGenOutput>
+      <LastGenOutput>MonitorBySkillArea_39337.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\RealTimeAdherence\MonitorBySkill.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>MonitorBySkill.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\RealTimeAdherence\RecentOutOfAdherences_39145.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

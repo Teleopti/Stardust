@@ -1,4 +1,4 @@
-﻿Feature: Monitor agents by skills
+﻿Feature: Monitor agents by skill
 	In order to easier find the agent to blame
 	As a real time analyst
 	I want to see what agents are doing by skills
@@ -39,7 +39,7 @@ Background:
 	| Is alarm    | true         |
 
 @OnlyRunIfEnabled('RTA_MonitorBySkills_39081')
-Scenario: Monitor agents by skills
+Scenario: Monitor agents by skill
 	Given the time is '2016-06-14 08:00:00'
 	And 'Pierre Baldi' sets his phone state to 'LoggedOut'
 	And 'John King' sets his phone state to 'LoggedOut'

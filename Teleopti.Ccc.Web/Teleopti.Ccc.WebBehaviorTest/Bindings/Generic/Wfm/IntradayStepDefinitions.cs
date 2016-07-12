@@ -108,5 +108,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 				Skill = skill 
 			});
 		}
+
+		[Given(@"there is a Skill Area called '(.*)' that monitors skills '(.*)'")]
+		public void GivenThereIsASkillAreaCalledThatMonitorsSkills(string skillArea, string skills)
+		{
+			DataMaker.Data().Apply(new SkillAreaConfigurable()
+			{
+				Name = skillArea,
+				Skills = skills
+			});
+		}
 	}
 }
