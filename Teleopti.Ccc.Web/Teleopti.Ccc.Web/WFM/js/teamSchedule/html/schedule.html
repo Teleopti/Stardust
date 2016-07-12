@@ -14,7 +14,9 @@
 			<span class="datepicker-container">
 				<team-schedule-datepicker selected-date="vm.scheduleDate" on-date-change="vm.onScheduleDateChanged()"></team-schedule-datepicker>
 			</span>
+		</div>
 
+		<div class="rightside-part">
 			<div id="show-warnings" class="wfm-switch" ng-if="vm.toggles.ShowNightlyRestWarningEnabled">
 				<input type="checkbox" id="validateWarning" ng-model="vm.validateWarningToggle" ng-change="vm.checkValidationWarningForCurrentPage()" />
 				<label for="validateWarning">
@@ -30,10 +32,9 @@
 					<span class="wfm-switch-toggle"></span>
 				</label>
 			</div>
-		</div>
 
-		<teamschedule-command-menu class="teamschedule-command" ng-if="vm.permissionsAndTogglesLoaded" configurations="vm.cmdConfigurations" trigger-command="vm.triggerCommand(label, needToOpenSidePanel)"></teamschedule-command-menu>
-		<div class="clearfix"></div>
+			<teamschedule-command-menu class="teamschedule-command" ng-if="vm.permissionsAndTogglesLoaded" configurations="vm.cmdConfigurations" trigger-command="vm.triggerCommand(label, needToOpenSidePanel)"></teamschedule-command-menu>
+		</div>
 	</div>
 	<div class="con-row teamschedule-body">
 		<div class="big-table-wrapper">

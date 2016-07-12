@@ -18,6 +18,20 @@
         padding: 5px;
         border-bottom: 1px solid $gray026;
 
+        display: -ms-flexbox;
+        display: flex;
+
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+
+        & > div {
+            -ms-flex: none;
+            flex: 0 0 auto;
+        }
+
         .leftside-part {
             display: flex;
             flex-direction: row;
@@ -59,7 +73,6 @@
         }
 
         .teamschedule-command {
-            float: right;
             text-align: right;
             margin-top: -45px;
         }
@@ -452,5 +465,5 @@
 }
 
 .warning-icon {
-    color: $orange-400;
+    color: $orange-600;
 }
