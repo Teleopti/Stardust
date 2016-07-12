@@ -14,8 +14,6 @@ namespace Teleopti.Interfaces.Infrastructure
 		DateTime BelongsToDateTime { get; set; }
 		Guid SeatId { get; set; }
 		String SeatName { get; set; }
-		string LocationPrefix { get; set; }
-		string LocationSuffix { get; set; }
 		Guid PersonId { get; set; }
 		String FirstName { get; set; }
 		String LastName { get; set; }

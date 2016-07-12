@@ -15,8 +15,6 @@ namespace Teleopti.Ccc.Infrastructure.SeatManagement
 		public DateOnly BelongsToDate { get; set; }
 		public Guid SeatId { get; set; }
 		public String SeatName { get; set; }
-		public string LocationPrefix { get; set; }
-		public string LocationSuffix { get; set; }
 		public Guid PersonId { get; set; }
 		public String FirstName { get; set; }
 		public String LastName { get; set; }

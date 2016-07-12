@@ -40,14 +40,14 @@ Scenario: Should be able to view the report
 	And I click SeatPlanReport button
 	Then I should be able to view the report content
 
-@Ignore
+
 Scenario: Should show paging bar when there is only one page
 	When I view Seat plan on "2015-01-01"
 	And I click SeatPlanReport button
 	Then I should be able to view the report content
 	And paging bar should be shown
 
-@Ignore
+
 Scenario: Should filter report by date when we enter report from planning period
 	Given I have a shift with
 		| Field          | Value            |

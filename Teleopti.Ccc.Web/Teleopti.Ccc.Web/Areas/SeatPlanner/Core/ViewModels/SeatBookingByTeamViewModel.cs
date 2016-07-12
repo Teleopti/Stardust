@@ -57,8 +57,8 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels
 				EndDateTime = convertTimeToLocal(personScheduleWithSeatBooking.SeatBookingEnd ?? personScheduleWithSeatBooking.PersonScheduleEnd),
 				SeatId = personScheduleWithSeatBooking.SeatId,
 				SeatName = personScheduleWithSeatBooking.SeatName,
-				LocationPrefix = _seatMapProvider.Get(personScheduleWithSeatBooking.LocationId, personScheduleWithSeatBooking.BelongsToDate).LocationPrefix,
-				LocationSuffix = _seatMapProvider.Get(personScheduleWithSeatBooking.LocationId, personScheduleWithSeatBooking.BelongsToDate).LocationSuffix,
+				LocationPrefix = personScheduleWithSeatBooking.SeatName != null ? _seatMapProvider.Get(personScheduleWithSeatBooking.LocationId, personScheduleWithSeatBooking.BelongsToDate).LocationPrefix: "",
+				LocationSuffix = personScheduleWithSeatBooking.SeatName != null ? _seatMapProvider.Get(personScheduleWithSeatBooking.LocationId, personScheduleWithSeatBooking.BelongsToDate).LocationSuffix: "",
 				
 				SiteId = personScheduleWithSeatBooking.SiteId,
 				SiteName = personScheduleWithSeatBooking.SiteName,
