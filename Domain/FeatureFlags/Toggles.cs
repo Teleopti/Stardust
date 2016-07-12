@@ -96,6 +96,7 @@
 		Wfm_Requests_ApproveDeny_ShiftTrade_38494,
 		Wfm_Requests_Default_Status_Filter_39472,
 		Wfm_Requests_Show_Pending_Reasons_39473,
+		Wfm_Requests_Approve_Based_On_Budget_Allotment_39626,
 
 		Wfm_Intraday_38074,
 
