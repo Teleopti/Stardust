@@ -1332,7 +1332,6 @@
     <Content Include="WFM\js\global\http.spec.js" />
     <Content Include="WFM\js\global\jalaali-calendar\jalaali.service.js" />
     <Content Include="WFM\js\global\notification.controller.spec.js" />
-    <Content Include="WFM\js\global\numeric-value\numeric-value.directive.js" />
     <Content Include="WFM\js\global\signalR.service.js" />
     <Content Include="WFM\js\global\wfm.main.controller.js" />
     <Content Include="WFM\js\global\shortcuts.service.js" />
@@ -1510,7 +1509,6 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.moveActivityValidator.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.notification.js" />
     <Content Include="WFM\js\global\wfm.i18n.service.js" />
-    <Content Include="WFM\js\global\timerangepicker\wfm-time-range-picker.directive.js" />
     <Content Include="WFM\js\global\currentuserinfo.service.js" />
     <Content Include="WFM\js\intraday\intraday.controller.js" />
     <Content Include="WFM\js\intraday\intraday.config.controller.js" />
