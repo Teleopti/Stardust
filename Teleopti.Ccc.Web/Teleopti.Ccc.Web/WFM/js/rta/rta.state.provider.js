@@ -107,6 +107,17 @@ angular.module('wfm.rta').provider('RtaState', function () {
 					}
 				}
 			})
+			.state('rta.agents-skill-area',
+			{
+				url: '/agents-skill-area/:skillAreaId',
+				templateUrl: rtaAgentsBySkillsTemplate,
+				controller: 'RtaAgentsCtrl',
+				params: {
+					skillAreaIds: {
+						 array: true
+					}
+				}
+			})
 			.state('rta.agents-skill',
 			{
 				url: '/agents-skill/:skillId',
@@ -118,6 +129,7 @@ angular.module('wfm.rta').provider('RtaState', function () {
 					}
 				}
 			})
+			
 			.state('rta.agent-details',
 			{
 				url: '/agent-details/:personId',

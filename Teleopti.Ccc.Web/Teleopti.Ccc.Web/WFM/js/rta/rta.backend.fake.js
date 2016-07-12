@@ -16,6 +16,7 @@
 			var teams = [];
 			var teamAdherences = [];
 			var skills = [];
+			var skillAreas = [];
 
 			var paramsOf = function(url) {
 				var result = {};
@@ -51,10 +52,16 @@
 				return [200, { Name: result[0] }];
 			});
 
+			fake(/\.\.\/api\/SkillAreas(.*)/,
+				function () {
+					return [200, skillAreas];
+				});
+
 			fake(/\.\.\/api\/Skills(.*)/,
 				function () {
 					return [200, skills];
 				});
+			
 
 			fake(/\.\.\/api\/Adherence\/ForToday(.*)/,
 				function(params) {
@@ -200,6 +207,7 @@
 				siteAdherences = [];
 				teams = [];
 				teamAdherences = [];
+				skillAreas = [];
 			}
 
 			this.withToggle = function(toggle) {
@@ -282,5 +290,10 @@
 				return this;
 			}
 
+			this.withSkillAreas = function (newSkillAreas) {
+				skillAreas = newSkillAreas;
+				return this;
+			}
+			
 		});
 })();
