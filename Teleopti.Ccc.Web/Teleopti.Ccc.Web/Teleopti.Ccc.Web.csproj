@@ -1407,12 +1407,10 @@
     <Content Include="WFM\js\resourceplanner\planningperiods.controller.spec.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner-filters.html" />
     <Content Include="WFM\js\resourceplanner\temp.html" />
-    <Content Include="WFM\js\resourceplanner\resourceplanner.controller.spec.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.filter.controller.spec.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.report.controller.spec.js" />
     <Content Include="WFM\js\rta\rta-agent-shiftcelltemplate-RTA_AlarmContext_29357.html" />
     <Content Include="WFM\js\rta\rta-agents-headershiftcelltemplate-RTA_AlarmContext_29357.html" />
-    <Content Include="WFM\js\rta\rta-agents-shiftcelltemplate-RTA_SeeRecentOutOfAdherenceOccurancesToday_39145.html" />
     <Content Include="WFM\js\rta\rta-agents-rowtemplate-RTA_AlarmContext_29357.html" />
     <Content Include="WFM\js\rta\rta-agents-RTA_AlarmContext_29357.html" />
     <Content Include="WFM\js\rta\rta-agents-headercelltemplate.html" />
@@ -1562,12 +1560,6 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.timeRangePicker.directive.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.timeRangePicker.directive.spec.js" />
     <Content Include="WFM\js\teamSchedule\_modules.js" />
-    <Content Include="WFM\vendor\MaterialDesignIcons\scss\materialdesignicons.css">
-      <DependentUpon>materialdesignicons.scss</DependentUpon>
-    </Content>
-    <Content Include="WFM\vendor\MaterialDesignIcons\scss\materialdesignicons.min.css">
-      <DependentUpon>materialdesignicons.css</DependentUpon>
-    </Content>
     <Content Include="WFM\vendor\uigrid.directive.ext.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-jalaali-ext.js" />
     <Content Include="WFM\js\forecasting\c3-fix-forecast.js" />
@@ -1664,7 +1656,6 @@
     <Content Include="WFM\js\seatManagement\html\teampicker.html" />
     <Content Include="WFM\js\seatManagement\seatmapoccupancydetail.directive.js" />
     <Content Include="WFM\js\seatManagement\locationpicker.directive.js" />
-    <Content Include="WFM\js\seatManagement\seatplantranslator.factory.js" />
     <Content Include="WFM\js\seatManagement\seatplanreport.controller.js" />
     <Content Include="WFM\js\seatManagement\html\seatplanreporttable.html" />
     <Content Include="WFM\js\seatManagement\seatplanreport.directive.js" />
