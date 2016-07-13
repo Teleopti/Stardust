@@ -44,18 +44,21 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public virtual IHttpActionResult TriggerResourceCalculate()
 		{
 			var period = getPublishedPeriod();
-			_publisher.Publish(new UpdateResourceCalculateReadModelEvent()
+			if (period.HasValue)
 			{
-				InitiatorId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault(),
-				JobName = "Resource Calculate",
-				UserName = _loggedOnUser.CurrentUser().Id.GetValueOrDefault().ToString(),
-				StartDateTime = period.StartDate.Date,
-				EndDateTime = period.EndDate.Date
-			});
+				_publisher.Publish(new UpdateResourceCalculateReadModelEvent()
+				{
+					InitiatorId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault(),
+					JobName = "Resource Calculate",
+					UserName = _loggedOnUser.CurrentUser().Id.GetValueOrDefault().ToString(),
+					StartDateTime = period.Value.StartDate.Date,
+					EndDateTime = period.Value.EndDate.Date
+				});
+			}
 			return Ok();
 		}
 
-		private DateOnlyPeriod getPublishedPeriod()
+		private DateOnlyPeriod? getPublishedPeriod()
 		{
 			var allPeople = _personRepository.LoadAll();
 			var maxPublishedDate =
@@ -63,6 +66,11 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 					.Select(y => y.WorkflowControlSet)
 					.Where(w => w.SchedulePublishedToDate != null)
 					.Max(u => u.SchedulePublishedToDate);
+			if (maxPublishedDate.HasValue)
+			{
+				if (maxPublishedDate.Value.Date < DateTime.Today)
+					return null;
+			}
 			var publishedPeriod = new DateOnlyPeriod(DateOnly.Today, new DateOnly(maxPublishedDate.Value));
 			return publishedPeriod;
 		}
