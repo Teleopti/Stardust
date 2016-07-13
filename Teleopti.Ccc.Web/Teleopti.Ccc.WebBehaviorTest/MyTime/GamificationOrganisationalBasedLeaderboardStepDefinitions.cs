@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.Generic;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
@@ -31,6 +32,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Select2Box.Open("Hierarchy-Picker");
 		}
 
+		[When(@"I select date from '(.*)' to '(.*)'")]
+		public void WhenISelectDateFromTo(string from,string to)
+		{
+			var newPeriodStr = "{" + "startDate : " + string.Format("new Date('{0}')", from) + ", " + " endDate: " +
+							   string.Format("new Date('{0}')", to) + "}";
+
+			Browser.Interactions.AssertScopeValue("#leaderboard-reports","vm.isLoading", false);
+			Browser.Interactions.SetScopeValues("#leaderboard-reports",new Dictionary<string,string>
+			{
+				{ "vm.selectedPeriod", newPeriodStr}				
+			}, false,"vm.afterSelectedDateChange");
+		}
+
+
 		[Then(@"I should see available business hierarchy")]
 		public void ThenIShouldSeeAvailableBusinessHierarchy(Table table)
 		{
@@ -47,6 +62,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			Select2Box.AssertSelectedOptionText("Hierarchy-Picker", option);
 		}
+
 
 		[Then(@"I should see the ranks are")]
 		public void ThenIShouldSeeTheRanksAre(Table table)

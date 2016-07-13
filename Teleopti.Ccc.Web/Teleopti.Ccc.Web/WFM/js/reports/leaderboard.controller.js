@@ -7,7 +7,7 @@
 
 	function LeaderBoardCtrl(LeaderBoardSvc, ToggleSvc, VMFactory) {
 		var vm = this;
-		vm.isLoading = false;
+		vm.isLoading = true;
 		vm.selectedDate = new Date();
 		vm.dateRangePickerTemplateType = "popup";
 		vm.isLeaderBoardEnabled = ToggleSvc.WfmReportPortal_LeaderBoard_39440;

@@ -84,7 +84,7 @@ WfmTeamSchedule_ShowNightlyRestWarning_39619 = RC
 
 WfmReportPortal_Basic_38825 = true
 WfmReportPortal_LeaderBoard_39440 = RC
-WfmReportPortal_LeaderBoardByPeriod_39620 = DEV
+WfmReportPortal_LeaderBoardByPeriod_39620 = RC
 
 WebByPassDefaultPermissionCheck_37984 = true
 

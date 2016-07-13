@@ -38,7 +38,7 @@ Background:
 		| Badge type          | Bronze | Silver | Gold | LastCalculatedDate |
 		| AnsweredCalls       | 4      | 1      | 2    | 2014-08-11         |
 		| AverageHandlingTime | 2      | 1      | 1    | 2014-08-11         |
-		| Adherence           | 3      | 0      | 3    | 2014-08-11         |
+		| Adherence           | 3      | 0      | 3    | 2014-08-11         |	
 	And Pierre Baldi has badges based on the specific setting with
 		| Badge type          | Bronze | Silver | Gold | LastCalculatedDate |
 		| AnsweredCalls       | 4      | 1      | 2    | 2014-08-11         |
@@ -48,7 +48,8 @@ Background:
 		| Badge type          | Bronze | Silver | Gold | LastCalculatedDate |
 		| AnsweredCalls       | 4      | 1      | 2    | 2014-08-11         |
 		| AverageHandlingTime | 2      | 1      | 1    | 2014-08-11         |
-		| Adherence           | 3      | 0      | 3    | 2014-08-11         |
+		| Adherence           | 3      | 0      | 2    | 2014-08-11         |
+		| Adherence           | 0      | 0      | 1    | 2014-08-13         |
 
 @OnlyRunIfDisabled('WfmReportPortal_LeaderBoardByPeriod_39620')
 Scenario: Should be able to see leader board report
@@ -58,3 +59,15 @@ Scenario: Should be able to see leader board report
 		| 1    | I             |
 		| 1    | Ashley Andeen |
 		| 3    | Pierre Baldi  |
+
+@OnlyRunIfEnabled('WfmReportPortal_LeaderBoardByPeriod_39620')
+Scenario: Should be able to see leader board in given date range
+	When I view wfm leader board report
+	And I select date from '2014-08-11' to '2014-08-11'
+	Then I should see the ranks are
+		| Rank | Agent         |
+		| 1    | I             |
+		| 2    | Ashley Andeen |
+		| 3    | Pierre Baldi  |
+
+

@@ -8,13 +8,15 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 {
 	public static class BrowserInteractionsAngularExtensions
 	{
-		public static void SetScopeValues(this IBrowserInteractions interactions, string selector, Dictionary<string, string> values, bool useIsolateScope = false)
+		public static void SetScopeValues(this IBrowserInteractions interactions, string selector, Dictionary<string, string> values, bool useIsolateScope = false, string actionName = null)
 		{			
 			var assignments = values.Select(kvp => "scope." + kvp.Key + " = " + kvp.Value + "; ").Aggregate((acc, v) => acc + v);
+			var runAction = actionName == null ? "" : " scope." + actionName + "(); ";
+
 			var script = scopeByQuerySelector(selector, useIsolateScope) +
 						 runnerByQuerySelector(selector) +
-						 "runner(function() {" + assignments + " });";
-
+						 "runner(function() {" + assignments +  runAction + " });";		
+		
 			interactions.Javascript(script);		
 		}
 

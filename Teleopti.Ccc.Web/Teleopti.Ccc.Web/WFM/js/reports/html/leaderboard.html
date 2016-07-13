@@ -1,68 +1,70 @@
-﻿<style type="text/css">
-	#materialcontainer.container.content {
-		overflow: visible;
-	}
-
-	.wfm-reports.wfm-reports {
-		max-width: none;
-	}
-
-	#leftsidenav {
-		display: none;
-	}
-
-	@media print {
-		.layout-container, #materialcontainer {
-			display: block !important;
+﻿<div id="leaderboard-reports" >
+	<style type="text/css">
+		#materialcontainer.container.content {
+			overflow: visible;
 		}
 
-		#leftsidenav, #lefttoogle, span.people-search-input {
-			display: none !important;
+		.wfm-reports.wfm-reports {
+			max-width: none;
 		}
-	}
-</style>
-<div id="reports" class="wfm-reports" ng-if="vm.isLeaderBoardEnabled">
-	<div class="view-header">
-		<div class="view-title">
-			<h1><i class="mdi mdi-chart-bar"></i> <span translate>{{'BadgeLeaderBoardReport' | translate}}</span></h1>
+
+		#leftsidenav {
+			display: none;
+		}
+
+		@media print {
+			.layout-container, #materialcontainer {
+				display: block !important;
+			}
+
+			#leftsidenav, #lefttoogle, span.people-search-input {
+				display: none !important;
+			}
+		}
+	</style>
+	<div class="wfm-reports leaderboard-container" ng-if="vm.isLeaderBoardEnabled">
+		<div class="view-header">
+			<div class="view-title">
+				<h1><i class="mdi mdi-chart-bar"></i> <span translate>{{'BadgeLeaderBoardReport' | translate}}</span></h1>
+			</div>
 		</div>
-	</div>
 
-	<div class="leader-board material-depth-1 wfm-block">
-		<div class="leader-board-header">
-			<span class="people-search-input">
-				<people-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged"></people-search-input>
-			</span>
+		<div class="leader-board material-depth-1 wfm-block">
+			<div class="leader-board-header">
+				<span class="people-search-input">
+					<people-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged"></people-search-input>
+				</span>
 
-			<span class="daterange-picker" ng-if="vm.showDatePicker">
-				<date-range-picker ng-model="vm.selectedPeriod" ng-change="vm.afterSelectedDateChange()" template-type="vm.dateRangePickerTemplateType"></date-range-picker>
-			</span>
-		</div>
+				<span class="daterange-picker" ng-if="vm.showDatePicker">
+					<date-range-picker ng-model="vm.selectedPeriod" ng-change="vm.afterSelectedDateChange()" template-type="vm.dateRangePickerTemplateType"></date-range-picker>
+				</span>
+			</div>
 
-		<div class="leader-board-body">
-			<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
+			<div class="leader-board-body">
+				<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
 
-			<table>
-				<thead>
-					<tr>
-						<td class="agent-badge-header">{{'Rank' | translate}}</td>
-						<td class="agent-badge-header">{{'AgentName' | translate}} </td>
-						<td class="agent-badge-num gold"><img src="js/reports/images/gold.png" /></td>
-						<td class="agent-badge-num silver"><img src="js/reports/images/silver.png" /></td>
-						<td class="agent-badge-num bronze"><img src="js/reports/images/bronze.png" /></td>
-					</tr>
-				</thead>
+				<table>
+					<thead>
+						<tr>
+							<td class="agent-badge-header">{{'Rank' | translate}}</td>
+							<td class="agent-badge-header">{{'AgentName' | translate}} </td>
+							<td class="agent-badge-num gold"><img src="js/reports/images/gold.png" /></td>
+							<td class="agent-badge-num silver"><img src="js/reports/images/silver.png" /></td>
+							<td class="agent-badge-num bronze"><img src="js/reports/images/bronze.png" /></td>
+						</tr>
+					</thead>
 
-				<tbody>
-					<tr class="agent-badge" ng-repeat="agent in vm.leaderBoardTableList" ng-class="[$index % 2== 0 ? 'background-gray':'']">
-						<td class="agent-rank">{{agent.rank}}</td>
-						<td class="agent-name">{{agent.name}}</td>
-						<td class="agent-badge-num">{{agent.gold}}</td>
-						<td class="agent-badge-num">{{agent.silver}}</td>
-						<td class="agent-badge-num">{{agent.bronze}}</td>
-					</tr>
-				</tbody>
-			</table>
+					<tbody>
+						<tr class="agent-badge" ng-repeat="agent in vm.leaderBoardTableList" ng-class="[$index % 2== 0 ? 'background-gray':'']">
+							<td class="agent-rank">{{agent.rank}}</td>
+							<td class="agent-name">{{agent.name}}</td>
+							<td class="agent-badge-num">{{agent.gold}}</td>
+							<td class="agent-badge-num">{{agent.silver}}</td>
+							<td class="agent-badge-num">{{agent.bronze}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
 </div>
