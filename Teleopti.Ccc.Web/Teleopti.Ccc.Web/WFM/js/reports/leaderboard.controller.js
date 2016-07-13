@@ -11,7 +11,7 @@
 		vm.selectedDate = new Date();
 		vm.dateRangePickerTemplateType = "popup";
 		vm.isLeaderBoardEnabled = ToggleSvc.WfmReportPortal_LeaderBoard_39440;
-		vm.showDatePicker = false;
+		vm.showDatePicker = ToggleSvc.WfmReportPortal_LeaderBoardByPeriod_39620;
 
 		vm.searchOptions = {
 			keyword: '',
