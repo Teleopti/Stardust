@@ -8,7 +8,8 @@
 				<button class="wfm-btn wfm-btn-default" ng-click="goToOverview()">Overview</button>
 				<button class="wfm-btn wfm-btn-default" ng-click="goToSelectItem()">Select skill</button>
 				<span class="wfm-chip">
-					<span class="chip-text">You are now viewing agents with skill: <b>{{skillName}}</b></span>
+					<span ng-if="skillName !=''" class="chip-text">You are now viewing agents with skill: <b>{{skillName}}</b></span>
+					<span ng-if="skillAreaName !=''" class="chip-text">You are now viewing agents with skill area: <b>{{skillAreaName}}</b></span>
 			</span>
 			</span>
 		</div>
