@@ -249,14 +249,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Reports
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Should be able to see leader board report")]
+        [NUnit.Framework.CategoryAttribute("OnlyRunIfDisabled(\'WfmReportPortal_LeaderBoardByPeriod_39620\')")]
         public virtual void ShouldBeAbleToSeeLeaderBoardReport()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Should be able to see leader board report", ((string[])(null)));
-#line 53
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Should be able to see leader board report", new string[] {
+                        "OnlyRunIfDisabled(\'WfmReportPortal_LeaderBoardByPeriod_39620\')"});
+#line 54
 this.ScenarioSetup(scenarioInfo);
 #line 4
 this.FeatureBackground();
-#line 54
+#line 55
  testRunner.When("I view wfm leader board report", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
             TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
@@ -271,7 +273,7 @@ this.FeatureBackground();
             table10.AddRow(new string[] {
                         "3",
                         "Pierre Baldi"});
-#line 55
+#line 56
  testRunner.Then("I should see the ranks are", ((string)(null)), table10, "Then ");
 #line hidden
             this.ScenarioCleanup();

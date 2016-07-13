@@ -50,6 +50,7 @@ Background:
 		| AverageHandlingTime | 2      | 1      | 1    | 2014-08-11         |
 		| Adherence           | 3      | 0      | 3    | 2014-08-11         |
 
+@OnlyRunIfDisabled('WfmReportPortal_LeaderBoardByPeriod_39620')
 Scenario: Should be able to see leader board report
 	When I view wfm leader board report
 	Then I should see the ranks are
