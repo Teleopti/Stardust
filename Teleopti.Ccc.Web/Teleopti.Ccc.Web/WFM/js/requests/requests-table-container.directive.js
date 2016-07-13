@@ -21,6 +21,7 @@
 		vm.shouldDisplayShiftTradeDayDetail = shouldDisplayShiftTradeDayDetail;
 		vm.showRelevantInfo = toggleSvc.Wfm_Requests_ShiftTrade_More_Relevant_Information_38492;
 		vm.showRequestsInDefaultStatus = toggleSvc.Wfm_Requests_Default_Status_Filter_39472;
+		vm.setFilterEnabled = setFilterEnabled;
 		vm.showShiftDetail = showShiftDetail;
 		vm.hideShiftDetail = hideShiftDetail;
 		vm.shiftDetailStyleJson = shiftDetailStyleJson;
@@ -88,12 +89,6 @@
 			return (shiftTradeDayDetail && (shiftTradeDayDetail.ShortName != null && shiftTradeDayDetail.ShortName.length !== 0));
 		}
 
-		$scope.$watch('requestsTableContainer.filterEnabled',
-			function handleFilterEnabledChanged(newValue, oldValue) {
-				vm.gridOptions.enableFiltering = newValue;
-				vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
-			});
-
 		function getShiftTradeHeaderClass() {
 			return vm.shiftTradeView || vm.filterEnabled ? 'request-header-full-height' : '';
 		}
@@ -105,15 +100,29 @@
 			});
 		}
 
+		function setFilterEnabled(enabled) {
+			vm.gridOptions.enableFiltering = enabled;
+			vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
+		}
+
+		function setupShiftTradeVisualisation(requests) {
+
+			if (vm.shiftTradeView && vm.shiftTradeRequestDateSummary) {
+				vm.shiftTradeDayViewModels = vm.gridConfigurationService.getDayViewModels(requests, vm.shiftTradeRequestDateSummary);
+				vm.shiftTradeScheduleViewModels = vm.gridConfigurationService.getShiftTradeScheduleViewModels(requests, vm.shiftTradeRequestDateSummary);
+			}
+		}
+
 		function setupColumnDefinitions(requests) {
 			if (!vm.gridConfigurationService) {
 				var configurationService = vm.shiftTradeView ? 'ShiftTradeGridConfiguration' : 'TextAndAbsenceGridConfiguration';
 				vm.gridConfigurationService = $injector.get(configurationService);
 			}
+			
+			setupShiftTradeVisualisation(requests);
 
 			vm.gridOptions.columnDefs = vm.gridConfigurationService.columnDefinitions(vm.shiftTradeRequestDateSummary, requests);
 			vm.gridOptions.enablePinning = vm.shiftTradeView;
-			vm.gridOptions.category = vm.gridConfigurationService.categories(vm.shiftTradeRequestDateSummary);
 			vm.gridOptions.enableVerticalScrollbar = 0;
 			applyColumnFilters(vm.gridOptions.columnDefs);
 
@@ -382,33 +391,34 @@
 
 			scope.requestsTableContainer.gridOptions = requestsTableContainerCtrl.getGridOptions([]);
 			scope.requestsTableContainer.isUsingRequestSubmitterTimeZone = true;
-
+			
 			scope.$watch(function() {
 				return {
-					requests: scope.requestsTableContainer.requests,
-					shiftTradeRequestDateSummmary: scope.requestsTableContainer.shiftTradeRequestDateSummary
+					requests: scope.requestsTableContainer.requests
 				}
-			}, function(requestWatch) {
+			}, function (requestWatch) {
+				
 				var requests = requestWatch.requests;
 				requestsTableContainerCtrl.prepareComputedColumns(requests);
 				requestsTableContainerCtrl.reselectRequests();
 
-				var shiftTradeDayView = '.shift-trade-view .ui-grid-render-container-body .ui-grid-viewport';
-				if ($(shiftTradeDayView).length && scope.requestsTableContainer.requests.length > 0) {
-					(function() {
-						function thereIsScrollBar() {
-							return $(shiftTradeDayView)[0].scrollWidth > $(shiftTradeDayView).width();
-						};
+				//ROBTODO: review - do we really need this??
+				//var shiftTradeDayView = '.shift-trade-view .ui-grid-render-container-body .ui-grid-viewport';
+				//if ($(shiftTradeDayView).length && scope.requestsTableContainer.requests.length > 0) {
+				//	(function() {
+				//		function thereIsScrollBar() {
+				//			return $(shiftTradeDayView)[0].scrollWidth > $(shiftTradeDayView).width();
+				//		};
 
-						scope.$watch(function() {
-							return $(shiftTradeDayView).width();
-						}, function() {
-							thereIsScrollBar() ?
-								$(shiftTradeDayView).css('height', requestsTableContainerCtrl.gridApi.grid.gridHeight - 65 + 18) :
-								$(shiftTradeDayView).css('height', requestsTableContainerCtrl.gridApi.grid.gridHeight - 65);
-						});
-					})();
-				}
+				//		scope.$watch(function() {
+				//			return $(shiftTradeDayView).width();
+				//		}, function() {
+				//			thereIsScrollBar() ?
+				//				$(shiftTradeDayView).css('height', requestsTableContainerCtrl.gridApi.grid.gridHeight - 65 + 18) :
+				//				$(shiftTradeDayView).css('height', requestsTableContainerCtrl.gridApi.grid.gridHeight - 65);
+				//		});
+				//	})();
+				//}
 			}, true);
 
 			scope.$on('reload.requests.without.selection', function() {
@@ -418,6 +428,12 @@
 			scope.$on('reload.requests.with.selection', function() {
 				requestsTableContainerCtrl.reselectRequests();
 			});
+
+			scope.$watch('requestsTableContainer.filterEnabled',
+				function handleFilterEnabledChanged(newValue, oldValue) {
+					requestsTableContainerCtrl.setFilterEnabled(newValue);
+			});
+
 
 		}
 	}

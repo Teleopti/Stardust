@@ -3,15 +3,101 @@
 (function () {
 
 	angular.module('wfm.requests')
-		.factory('ShiftTradeGridConfiguration', ['$filter', 'Toggle', function ($filter, toggleSvc) {
+		.factory('ShiftTradeGridConfiguration', ['$filter', 'Toggle', 'requestsDefinitions', function ($filter, toggleSvc, requestDefinitions) {
 
 			var columns = [];
 
 			var service = {
 				columnDefinitions: columnDefinitions,
-				categories: getCategories
+				getDayViewModels: getDayViewModels,
+				getShiftTradeScheduleViewModels: getShiftTradeScheduleViewModels
 			}
 
+			function getShiftTradeColumnLeftOffset(startMoment, currentMoment) {
+				return (currentMoment.diff(startMoment, 'days') * requestDefinitions.SHIFTTRADE_COLUMN_WIDTH) + "px";
+			}
+
+			function getDayViewModels(requests, shiftTradeRequestDateSummary) {
+				var day = moment(shiftTradeRequestDateSummary.Minimum);
+				var maxDay = moment(shiftTradeRequestDateSummary.Maximum);
+				var startOfWeekIsoDay = shiftTradeRequestDateSummary.FirstDayOfWeek;
+
+				var dayViewModels = [];
+				var dayIncrement = day.clone();
+				while (dayIncrement <= maxDay) {
+					var dayViewModel = createDayViewModel(dayIncrement, startOfWeekIsoDay);
+					dayViewModel.leftOffset = getShiftTradeColumnLeftOffset(day, dayIncrement);
+					dayViewModels.push(dayViewModel);
+					dayIncrement.add(1, 'days');
+
+				}
+
+				return dayViewModels;
+			}
+
+			function isStartOfWeek(day, startOfWeekIsoDayNumber) {
+				var difference = ((day.isoWeekday()) - startOfWeekIsoDayNumber);
+				return difference === 0;
+			};
+
+			function createDayViewModel(day, startOfWeekIsoDay) {
+				var isWeekend = (day.isoWeekday() === 6 || day.isoWeekday() === 7);
+
+				return {
+					date: day.toDate(),
+					shortDate: $filter('date')(day.toDate(), 'shortDate'),
+					dayNumber: $filter('date')(day.toDate(), 'dd'),
+					isWeekend: isWeekend,
+					isStartOfWeek: isStartOfWeek(day.clone(), startOfWeekIsoDay)
+				};
+			};
+
+			function isDayOff(scheduleDayDetail) {
+				return (scheduleDayDetail && (scheduleDayDetail.Type === requestDefinitions.SHIFT_OBJECT_TYPE.DayOff));
+			}
+
+
+			function createShiftTradeDayViewModel(shiftTradeDay, shiftTradeRequestDateSummary) {
+
+				var startDate = moment(shiftTradeRequestDateSummary.Minimum);
+				var startOfWeekIsoDay = shiftTradeRequestDateSummary.FirstDayOfWeek;
+				var shiftTradeDate = moment(shiftTradeDay.Date);
+
+				var viewModel = createDayViewModel(shiftTradeDate, startOfWeekIsoDay);
+
+				viewModel.FromScheduleDayDetail = {};
+				viewModel.ToScheduleDayDetail = {}
+
+				angular.copy(shiftTradeDay.FromScheduleDayDetail, viewModel.FromScheduleDayDetail);
+				angular.copy(shiftTradeDay.ToScheduleDayDetail, viewModel.ToScheduleDayDetail);
+
+				viewModel.FromScheduleDayDetail.IsDayOff = isDayOff(shiftTradeDay.FromScheduleDayDetail);
+				viewModel.ToScheduleDayDetail.IsDayOff = isDayOff(shiftTradeDay.ToScheduleDayDetail);
+				viewModel.LeftOffset = getShiftTradeColumnLeftOffset(startDate, shiftTradeDate);
+
+				return viewModel;
+
+			}
+
+			function getShiftTradeScheduleViewModels(requests, shiftTradeRequestDateSummary) {
+
+				var shiftTradeDataForDisplay = {};
+
+				angular.forEach(requests, function (request) {
+					var viewModelArray = [];
+
+					angular.forEach(request.ShiftTradeDays, function (shiftTradeDay) {
+						if (shiftTradeDay.FromScheduleDayDetail.ShortName != null && shiftTradeDay.ToScheduleDayDetail.ShortName != null) {
+							var viewModel = createShiftTradeDayViewModel(shiftTradeDay, shiftTradeRequestDateSummary);
+							viewModelArray.push(viewModel);
+						}
+					});
+
+					shiftTradeDataForDisplay[request.Id] = viewModelArray;
+				});
+
+				return shiftTradeDataForDisplay;
+			}
 
 			function setupStandardColumns() {
 				columns = [
@@ -196,9 +282,28 @@
 				];
 			}
 
-			function columnDefinitions(shiftTradeRequestDateSummary, requests) {
+			function setupShiftTradeVisualisationColumn(shiftTradeRequestDateSummary) {
 
-				if (columns.length == 0) {
+				var minimum = moment(shiftTradeRequestDateSummary.Minimum);
+				var maximum = moment(shiftTradeRequestDateSummary.Maximum);
+				var numberOfDays = maximum.diff(minimum, 'days') + 1;
+
+				return {
+					field: 'AgentName',
+					enablePinning: false,
+					enableColumnMenu: false,
+					enableHiding: false,
+					cellTemplate: 'shift-trade-day-template.html',
+					width: numberOfDays * 40,
+					enableSorting: false,
+					enableFiltering: false,
+					isShiftTradeDayColumn: true
+				};
+			}
+
+			function columnDefinitions(shiftTradeRequestDateSummary) {
+
+				if (columns.length === 0) {
 					setupStandardColumns();
 
 					if (toggleSvc.Wfm_Requests_Show_Pending_Reasons_39473) {
@@ -217,102 +322,12 @@
 					}
 				}
 
-				if (shiftTradeRequestDateSummary && requests.length > 0) {
-					return columns.concat(getShiftTradeVisualisationDayColumns(shiftTradeRequestDateSummary));
-				}
-
-				return columns;
-			}
-
-			function getStartOfWeek(day, startOfWeekIsoDayNumber) {
-
-				var difference = ((day.isoWeekday()) - startOfWeekIsoDayNumber);
-
-				if (difference < 0) {
-					difference = 7 + difference;
-				}
-
-				return day.subtract(difference, 'days');
-			};
-
-			function getColumnForDay(day, startOfWeekIsoDay) {
-				var isWeekend = (day.isoWeekday() === 6 || day.isoWeekday() === 7);
-				var startOfWeek = getStartOfWeek(day.clone(), startOfWeekIsoDay);
-
-				return {
-					displayName: $filter('date')(day.toDate(), 'dd'),
-					field: $filter('date')(day.toDate(), 'shortDate'),
-					headerCellFilter: 'translate',
-					enablePinning: false,
-					enableColumnMenu: false,
-					enableHiding: false,
-					enableColumnResizing: false,
-					category: $filter('date')(startOfWeek.toDate(), 'shortDate'),
-					cellTemplate: 'shift-trade-day-template.html',
-					headerCellClass: isWeekend ? 'shift-trade-header-weekend' : '',
-					width: 37,
-					enableSorting: false,
-					enableFiltering: false,
-					isShiftTradeDayColumn: true,
-					isWeekend: isWeekend,
-				}
-			}
-
-			function getShiftTradeVisualisationDayColumns(shiftTradeRequestDateSummary) {
-				var day = moment(shiftTradeRequestDateSummary.Minimum);
-				var maxDay = moment(shiftTradeRequestDateSummary.Maximum);
-				var startOfWeekIsoDay = shiftTradeRequestDateSummary.FirstDayOfWeek; //day.isoWeekday();
-
-				var columnArray = [];
-
-				columnArray.push(getColumnForDay(day.clone(), startOfWeekIsoDay));
-
-				while (day.add(1, 'days').diff(maxDay) <= 0) {
-					columnArray.push(getColumnForDay(day.clone(), startOfWeekIsoDay));
-				}
-
-
-				return columnArray;
-			}
-
-			function getCategories(shiftTradeRequestDateSummary) {
-
-				var categories = [];
 				if (shiftTradeRequestDateSummary) {
-
-					var maximum = shiftTradeRequestDateSummary.Maximum;
-					var minimum = shiftTradeRequestDateSummary.Minimum;
-
-					var day = moment(minimum);
-					var startOfWeekDay = null;
-
-					while (startOfWeekDay == null) {
-
-						if (day.isoWeekday() === shiftTradeRequestDateSummary.FirstDayOfWeek) {
-							startOfWeekDay = day;
-							break;
-						}
-						day.add(-1, 'days');
-					}
-
-					if (startOfWeekDay) {
-
-						while (!startOfWeekDay.isAfter(maximum)) {
-
-							categories.push({
-								name: $filter('date')(startOfWeekDay.toDate(), 'shortDate'),
-								visible: true,
-								suppressCategoryHeader: startOfWeekDay.isBefore(minimum)
-							});
-
-							startOfWeekDay.add(1, 'weeks');
-						}
-					}
-
+					var shifTradeVisualisationColumn = setupShiftTradeVisualisationColumn(shiftTradeRequestDateSummary);
+					return columns.concat([shifTradeVisualisationColumn]);
 				}
-
-				return categories;
-
+				
+				return columns;
 			}
 
 			return service;

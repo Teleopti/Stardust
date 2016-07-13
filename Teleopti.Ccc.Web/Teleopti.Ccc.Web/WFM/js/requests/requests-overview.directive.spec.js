@@ -160,7 +160,7 @@
 			expect(vm.showSelectedRequestsInfo()).toEqual('');
 		});
 
-		it('should show pending and waitlisted absence requests only by default', function() {
+		it('should show pending and waitlisted absence requests only by default', function () {
 			targetElement = $compile('<requests-overview></requests-overview>')(targetScope);
 			targetScope.$digest();
 
@@ -285,7 +285,7 @@
 			expect(test.scope.requests[0].FormatedPeriodStartTime()).toEqual(toDateString('2016-01-06T14:00:00'));
 		});
 
-		it("should be able to calculate column categorys for weeks using supplied period startofweek", function () {
+		it("should be able to calculate columns for weeks using supplied period startofweek", function () {
 			var test = setUpTarget();
 
 			setUpShiftTradeRequestData(test);
@@ -299,13 +299,16 @@
 			test.scope.$digest();
 			var vm = test.target.isolateScope().requestsTableContainer;
 
-			var categories = vm.gridOptions.category;
+			var dayViewModels = vm.shiftTradeDayViewModels;
 
-			expect(categories[0].name).toEqual(toShortDateString('2016-05-23T00:00:00'));
-			expect(categories[1].name).toEqual(toShortDateString('2016-05-30T00:00:00'));
+			expect(dayViewModels[0].shortDate).toEqual(toShortDateString('2016-05-25T00:00:00'));
+			expect(dayViewModels[dayViewModels.length - 1].shortDate).toEqual(toShortDateString('2016-06-02T00:00:00'));
+			expect(dayViewModels[3].isWeekend).toEqual(true);
+			expect(dayViewModels[4].isWeekend).toEqual(true);
+			expect(dayViewModels[5].isStartOfWeek).toEqual(true);
 		});
 
-		it("should get columns representing the days involved in the shift trade, category should start Monday", function () {
+		it("should generate view models for shift trade days", function () {
 			var test = setUpTarget();
 
 			setUpShiftTradeRequestData(test);
@@ -317,60 +320,24 @@
 			};
 
 			test.scope.$digest();
-
 			var vm = test.target.isolateScope().requestsTableContainer;
 
-			var columnDefs = vm.gridOptions.columnDefs;
+			var shiftTradeDaysViewModels = vm.shiftTradeScheduleViewModels[1]; // using request ID '1'.
 
-			var columns = [];
+			expect(shiftTradeDaysViewModels[0].FromScheduleDayDetail.Type).toEqual(requestsDefinitions.SHIFT_OBJECT_TYPE.PersonAssignment);
+			expect(shiftTradeDaysViewModels[1].ToScheduleDayDetail.Type).toEqual(requestsDefinitions.SHIFT_OBJECT_TYPE.DayOff);
+			expect(shiftTradeDaysViewModels[1].ToScheduleDayDetail.IsDayOff).toEqual(true);
 
-			for (var i = 0; i < columnDefs.length; i++) {
-				if (columnDefs[i].isShiftTradeDayColumn) {
-					columns.push(columnDefs[i]);
-				}
-			}
+			expect(shiftTradeDaysViewModels[0].ToScheduleDayDetail.Name).toEqual('name-to-1');
+			expect(shiftTradeDaysViewModels[1].FromScheduleDayDetail.Name).toEqual('name-from-2');
 
-			expect(columns.length).toEqual(9);
+			expect(shiftTradeDaysViewModels[0].LeftOffset).toEqual(requestsDefinitions.SHIFTTRADE_COLUMN_WIDTH * 2); // starts two days after start of period.
+			expect(shiftTradeDaysViewModels[1].LeftOffset).toEqual(requestsDefinitions.SHIFTTRADE_COLUMN_WIDTH * 3);
 
-			expect(columns[0].displayName).toEqual('25');
-			expect(columns[0].category).toEqual(toShortDateString('2016-05-23T00:00:00'));
-
-			expect(columns[8].displayName).toEqual('02');
-			expect(columns[8].category).toEqual(toShortDateString('2016-05-30T00:00:00'));
 		});
 
-		it("should get columns representing the days involved in the shift trade, category should start Sunday", function () {
-			var test = setUpTarget();
-
-			setUpShiftTradeRequestData(test);
-
-			test.scope.shiftTradeRequestDateSummary = {
-				Minimum: '2016-05-25T00:00:00',
-				Maximum: '2016-06-02T00:00:00',
-				FirstDayOfWeek: 7
-			};
-
-			test.scope.$digest();
-
-			var vm = test.target.isolateScope().requestsTableContainer;
-			var columnDefs = vm.gridOptions.columnDefs;
-			var columns = [];
-
-			for (var i = 0; i < columnDefs.length; i++) {
-				if (columnDefs[i].isShiftTradeDayColumn) {
-					columns.push(columnDefs[i]);
-				}
-			}
-
-			expect(columns.length).toEqual(9);
-			expect(columns[0].displayName).toEqual('25');
-			expect(columns[0].category).toEqual(toShortDateString('2016-05-22T00:00:00'));
-			expect(columns[1].category).toEqual(toShortDateString('2016-05-22T00:00:00'));
-			expect(columns[8].category).toEqual(toShortDateString('2016-05-29T00:00:00'));
-			expect(columns[8].displayName).toEqual('02');
-		});
-
-		it('should select default status filter', function() {
+		
+		it('should select default status filter', function () {
 			var test = setUpTarget();
 			var status0 = " 79";
 			var status1 = "86 ";
@@ -385,10 +352,10 @@
 			expect(selectedStatus[2].Id).toEqual(status2.trim());
 		});
 
-		it("should get broken rules column", function() {
+		it("should get broken rules column", function () {
 			var test = setUpTarget();
 			setUpShiftTradeRequestData(test);
-			var brokenRules = ["Not allowed change","Weekly rest time"];
+			var brokenRules = ["Not allowed change", "Weekly rest time"];
 			test.scope.requests[0].BrokenRules = brokenRules;
 			test.scope.$digest();
 
@@ -396,7 +363,7 @@
 			var columnDefs = vm.gridOptions.columnDefs;
 			var existsBrokenRulesColmun;
 			angular.forEach(columnDefs,
-				function(columnDef) {
+				function (columnDef) {
 					if (columnDef.displayName === "BrokenRules") {
 						existsBrokenRulesColmun = true;
 					}
@@ -429,11 +396,13 @@
 			var shiftTradeDays = [
 				{
 					Date: '2016-05-27T00:00:00',
-					FromScheduleDayDetail: { Name: "name1", ShortName: "shortname1", Color: "red" }
+					FromScheduleDayDetail: { Name: "name-from-1", ShortName: "shortname-from-1", Color: "red", Type: requestsDefinitions.SHIFT_OBJECT_TYPE.PersonAssignment },
+					ToScheduleDayDetail: { Name: "name-to-1", ShortName: "shortname-to-1", Color: "red", Type: requestsDefinitions.SHIFT_OBJECT_TYPE.PersonAssignment }
 				},
 				{
 					Date: '2016-05-28T00:00:00',
-					FromScheduleDayDetail: { Name: "name2", ShortName: "shortname2", Color: "yellow" }
+					FromScheduleDayDetail: { Name: "name-from-2", ShortName: "shortname-from-2", Color: "yellow", Type: requestsDefinitions.SHIFT_OBJECT_TYPE.PersonAssignment },
+					ToScheduleDayDetail: { Name: "name-to-2", ShortName: "shortname-to-2", Color: "yellow", Type: requestsDefinitions.SHIFT_OBJECT_TYPE.DayOff }
 				}
 			];
 
@@ -465,7 +434,7 @@
 			return { scope: scope, target: directiveElem };
 		}
 	});
-	
+
 	function FakeTeamSchedule() {
 		var searchScheduleCalledTimes = 0;
 		this.getSchedules = function (date, agents) {

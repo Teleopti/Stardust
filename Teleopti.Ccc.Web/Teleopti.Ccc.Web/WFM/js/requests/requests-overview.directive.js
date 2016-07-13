@@ -21,7 +21,6 @@
 
 		vm.filters = [];
 		vm.agentSearchTerm = "";
-		vm.period.endDate = moment().endOf('week')._d;
 		vm.reload = reload;
 		vm.sortingOrders = [];
 		
@@ -30,7 +29,6 @@
 		vm.pageSizeOptions = [20, 50, 100, 200];
 		vm.onPageSizeChanges = onPageSizeChanges;
 		vm.init = init;
-		vm.onIsActiveChange = onIsActiveChange;
 		vm.showSelectedRequestsInfo = showSelectedRequestsInfo;
 		vm.shiftTradeView = $attrs.shiftTradeView != undefined;
 
@@ -52,17 +50,14 @@
 				vm.filters = [{ "Status": vm.shiftTradeView ? "0" : "0 5" }];
 			}
 			vm.loaded = false;
+			
+			if (vm.isActive) {
+				reload();
+			}
+
 		}
 
 		toggleService.togglesLoaded.then(init);
-
-		function onIsActiveChange(isActive) {
-			if (isActive) {
-				if (vm.isDirty || !vm.loaded) {
-					vm.reload();
-				}
-			}
-		}
 
 		function forceRequestsReloadWithSelection() {
 			$scope.$broadcast('reload.requests.with.selection');
@@ -106,6 +101,7 @@
 		function getRequests(requestsFilter, sortingOrders, paging, done) {
 			
 			vm.requestsPromise(requestsFilter, sortingOrders, paging).then(function (requests) {
+
 				vm.requests = requests.data.Requests;
 				
 				if (vm.requests && vm.requests.length > 0) {
@@ -128,11 +124,11 @@
 		}
 
 		function reload(callback) {
+
 			if (!vm.isActive) {
-				vm.isDirty = true; // will cause a reload when is made active.
 				return;
 			}
-			
+
 			var requestsFilter = {
 				period: vm.period,
 				agentSearchTerm: vm.agentSearchTerm,
@@ -140,8 +136,7 @@
 			}
 
 			vm.loaded = false;
-			vm.isDirty = false;
-
+			
 			if (vm.isPaginationEnabled) {
 				getRequests(requestsFilter, vm.sortingOrders, vm.paging, callback);
 			} else {
@@ -193,23 +188,12 @@
 					return;
 				}
 				
-				scope.$broadcast('reload.requests.without.selection');				
+				scope.$broadcast('reload.requests.without.selection');
 				
 				if (!ctrl.loadRequestWatchersInitialised) {
 					listenToReload();
 				}				
 			}, true);
-
-			scope.$watch(function() {
-				return vm.isActive;
-			}, function(newValue) {
-				if (vm.period == null || !validateDateParameters(vm.period.startDate, vm.period.endDate)) {
-					vm.loaded = true;
-					return;
-				}
-
-				vm.onIsActiveChange(newValue);			
-			});
 
 			scope.$watch(function() {
 				return vm.sortingOrders;
@@ -222,11 +206,11 @@
 			function listenToReload() {
 				ctrl.loadRequestWatchersInitialised = true;
 				
-				scope.$on('reload.requests.with.selection', function(event) {
+				scope.$on('reload.requests.with.selection', function (event) {
 					reload();
 				});
 
-				scope.$on('reload.requests.without.selection', function(event) {
+				scope.$on('reload.requests.without.selection', function (event) {
 					reload();
 				});
 			}
@@ -234,6 +218,9 @@
 			function reload(callback) {
 				ctrl.reload(callback);
 			}
+
+			
+
 		}
 	}
 })();

@@ -12,6 +12,9 @@
 			ABSENCE: 1
 		};
 
+		this.SHIFTTRADE_COLUMN_WIDTH = 40;
+
+
 		this.REQUEST_SORTING_ORDERS = {
 			AgentNameAsc	: 0,
 			AgentNameDesc	: 1,
