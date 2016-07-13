@@ -5,15 +5,14 @@
 	LeaderBoardService.$inject = ['$http','$q'];
 
 	function LeaderBoardService($http, $q) {
-		var defaultUrl = '../api/Reports/SearchLeaderboard';
-		var searchByPeriodUrl = '../api/Reports/SearchLeaderboard';
+		var url = '../api/Reports/SearchLeaderboard';
 
 		this.getLeaderBoardDefaultData = getLeaderBoardDefaultData;
 		this.getLeaderBoardDataByPeriod = getLeaderBoardDataByPeriod;
 
 		function getLeaderBoardDefaultData(keyword) {
 			var deferred = $q.defer();
-			$http.get(defaultUrl,
+			$http.get(url,
 				{
 					params: {
 						keyword: keyword
@@ -26,7 +25,7 @@
 
 		function getLeaderBoardDataByPeriod(keyword, selectedPeriod) {
 			var deferred = $q.defer();
-			$http.get(searchByPeriodUrl,
+			$http.get(url,
 				{
 					params: {
 						keyword: keyword,

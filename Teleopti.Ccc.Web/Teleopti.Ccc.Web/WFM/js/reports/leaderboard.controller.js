@@ -43,12 +43,20 @@
 				isAdvancedSearchEnabled: ToggleSvc.WfmPeople_AdvancedSearch_32973,
 				searchKeywordChanged: false
 			};
-	
-			LeaderBoardSvc.getLeaderBoardDefaultData(vm.searchOptions.keyword).then(function (data) {
-				vm.searchOptions.keyword = data.Keyword;
-				vm.leaderBoardTableList = VMFactory.Create(data.AgentBadges);
-				vm.isLoading = false;
-			});
+
+			if(vm.showDatePicker){
+				LeaderBoardSvc.getLeaderBoardDefaultData(vm.searchOptions.keyword).then(function (data) {
+					vm.searchOptions.keyword = data.Keyword;
+					vm.leaderBoardTableList = VMFactory.Create(data.AgentBadges);
+					vm.isLoading = false;
+				});
+			}else{
+				LeaderBoardSvc.getLeaderBoardDataByPeriod(vm.searchOptions.keyword, vm.selectedPeriod).then(function (data) {
+					vm.searchOptions.keyword = data.Keyword;
+					vm.leaderBoardTableList = VMFactory.Create(data.AgentBadges);
+					vm.isLoading = false;
+				});
+			}
 		};
 
 		vm.isLeaderBoardEnabled && vm.init();
