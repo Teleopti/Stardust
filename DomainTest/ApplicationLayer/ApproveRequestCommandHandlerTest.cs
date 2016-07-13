@@ -77,8 +77,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift (_scenario.Current(), person, absenceDateTimePeriod); 
 			
 			_fakeScheduleStorage.Add(assignment);
-			
-			_approveRequestCommandHandler.Handle(new ApproveRequestCommand(){ PersonRequestId = personRequest.Id.Value });
+
+			_approveRequestCommandHandler.Handle(new ApproveRequestCommand
+			{
+				PersonRequestIds = new[] {personRequest.Id.GetValueOrDefault()}
+			});
 
 			Assert.IsTrue(personRequest.IsApproved);
 			Assert.AreEqual (24, accountDay.Remaining.TotalDays);
