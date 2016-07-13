@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 
@@ -6,6 +8,24 @@ namespace Teleopti.Ccc.Domain.Common
 {
 	public class AgentBadgeWithRank : SimpleAggregateRoot, IAgentBadgeWithRank
 	{
+		static public IList<IAgentBadgeWithRank> FromAgentBadgeWithRanksTransaction(
+			ICollection<IAgentBadgeWithRankTransaction> agentBadgeWithRankTransactions)
+		{
+			return agentBadgeWithRankTransactions.GroupBy(x => new
+			{
+				PersonId = x.Person.Id.GetValueOrDefault(),
+				x.BadgeType
+			}).Select(g => new AgentBadgeWithRank
+			{
+				Person = g.Key.PersonId,
+				BadgeType = g.Key.BadgeType,
+				BronzeBadgeAmount = g.Sum(x => x.BronzeBadgeAmount),
+				SilverBadgeAmount = g.Sum(x => x.SilverBadgeAmount),
+				GoldBadgeAmount = g.Sum(x => x.GoldBadgeAmount)
+			}).Cast<IAgentBadgeWithRank>().ToList();
+		}
+
+
 		private bool _bronzeBadgeInitialized;
 		private bool _silverBadgeInitialized;
 		private bool _goldBadgeInitialized;

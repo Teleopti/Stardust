@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Results;
@@ -24,15 +25,21 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Controllers
 			_agentBadgeProvider = agentBadgeProvider;
 		}
 		[UnitOfWork, HttpGet, Route("api/Reports/SearchLeaderboard")]
-		public virtual JsonResult<LeaderboardViewModel> SearchLeaderboard(string keyword)
+		public virtual JsonResult<LeaderboardViewModel> SearchLeaderboard(string keyword, DateTime? startDate = null, DateTime? endDate = null)
 		{
 			var currentDate = DateOnly.Today;
+
+			var period = (startDate.HasValue && endDate.HasValue)
+				? new DateOnlyPeriod(startDate.Value.Year, startDate.Value.Month, startDate.Value.Day,endDate.Value.Year,endDate.Value.Month,endDate.Value.Day)
+				: (DateOnlyPeriod?) null;
+
+
 			var myTeam = _loggonUser.CurrentUser().MyTeam(currentDate);
 			var result = new List<AgentBadgeOverview>();
 			if (string.IsNullOrEmpty(keyword) && myTeam == null)
 			{
 				result.AddRange(
-					_agentBadgeProvider.GetAllAgentBadges(currentDate)
+					_agentBadgeProvider.GetAllAgentBadges(currentDate, period)
 						.OrderByDescending(x => x.Gold)
 						.ThenByDescending(x => x.Silver)
 						.ThenByDescending(x => x.Bronze));
@@ -45,7 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Controllers
 			keyword = _parser.Keyword(keyword, currentDate);
 			var criteriaDic = _parser.Parse(keyword, currentDate);
 			result.AddRange(
-				_agentBadgeProvider.GetAgentBadge(criteriaDic, currentDate)
+				_agentBadgeProvider.GetAgentBadge(criteriaDic, currentDate,period)
 					.OrderByDescending(x => x.Gold)
 					.ThenByDescending(x => x.Silver)
 					.ThenByDescending(x => x.Bronze));

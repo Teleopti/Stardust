@@ -10,7 +10,9 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
@@ -29,6 +31,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		private IPermissionProvider permissionProvider;
 		private ISiteRepository siteRepository;
 		private ITeamRepository teamRepository;
+		private FakeAgentBadgeTransactionRepository agentBadgeTransactionRepository;
+		private FakeAgentBadgeWithRankTransactionRepository agentBadgeWithRankTransactionRepository;
 
 		private readonly ReadOnlyGroupDetail personDetail1 = new ReadOnlyGroupDetail
 		{
@@ -160,12 +164,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			siteRepository = MockRepository.GenerateMock<ISiteRepository>();
 			teamRepository = MockRepository.GenerateMock<ITeamRepository>();
 			groupingRepository = MockRepository.GenerateMock<IGroupingReadOnlyRepository>();
+			agentBadgeTransactionRepository = new FakeAgentBadgeTransactionRepository();
+			agentBadgeWithRankTransactionRepository = new FakeAgentBadgeWithRankTransactionRepository(); 
 
 			var nameProvider =
 				new PersonNameProvider(new FakeNameFormatSettingsPersisterAndProvider(new NameFormatSettings {NameFormatId = 0}));
 			target = new LeaderboardSettingBasedBadgeProvider(agentBadgeRepository, agentBadgeWithRankRepository,
 				permissionProvider, nameProvider, siteRepository, teamRepository, groupingRepository,
-				teamSettingRepository, personRepository, new FakeNameFormatSettingsPersisterAndProvider(new NameFormatSettings { NameFormatId = 0 }));
+				teamSettingRepository, personRepository, new FakeNameFormatSettingsPersisterAndProvider(new NameFormatSettings { NameFormatId = 0 }),agentBadgeTransactionRepository,agentBadgeWithRankTransactionRepository);
 		}
 
 		[Test]
@@ -201,12 +207,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		{
 			agentBadgeRepository.Stub(x => x.Find(new[] { personDetail1.PersonId }))
 				.Return(agentBadges.Where(b => b.Person == personDetail1.PersonId).ToArray());
-			agentBadgeWithRankRepository.Stub(x => x.Find(new[] { personDetail1.PersonId }))
-				.Return(new Collection<IAgentBadgeWithRank>());
-			permissionProvider.Stub(
-				x =>
-					x.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboardUnderReports, date, personDetail1))
-				.Return(true);
+			agentBadgeWithRankRepository.Stub(x => x.Find(new[] { personDetail1.PersonId, personDetail2.PersonId }))
+				.Return(new Collection<IAgentBadgeWithRank>());			
 
 			personRepository.Stub(x => x.FindPeople(new[] {person1.Id.Value, person2.Id.Value})).Return(new[] {person1, person2});
 
@@ -306,6 +308,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			};
 			agentBadgeRepository.Stub(x => x.Find(new[] {personDetail1.PersonId}))
 				.Return(agentBadges.Where(b => b.Person == personDetail1.PersonId).ToArray());
+			agentBadgeWithRankRepository.Stub(x => x.Find(new[] { personDetail1.PersonId,personDetail2.PersonId }))
+				.Return(new Collection<IAgentBadgeWithRank>());
 			teamRepository.Stub(x => x.Get(team0.Id.GetValueOrDefault())).Return(team0);
 			groupingRepository.Stub(x => x.DetailsForGroup(team0.Id.GetValueOrDefault(), date))
 				.Return(new[] {personDetail1, personDetail2});
@@ -409,6 +413,107 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			result.Single().Silver.Should().Be(5);
 			result.Single().Bronze.Should().Be(16);
 		}
+
+		[Test]
+		public void ShouldReturnTotalBadgeCountWithinPeriod()
+		{
+			var person1 = PersonFactory.CreatePerson("a");
+			person1.WithId(personDetail1.PersonId);
+		
+
+
+			var option = new LeaderboardQuery
+			{
+				Date = DateOnly.Today,
+				SelectedId = Guid.Empty,
+				Type = LeadboardQueryType.Everyone
+			};
+
+			var agentBadgeTransactions = new[]
+			{
+				new AgentBadgeTransaction
+				{
+					BadgeType = BadgeType.Adherence,
+					Amount = 7,
+					Person = person1,
+					CalculatedDate = new DateOnly(2014, 10, 1)
+				},
+				new AgentBadgeTransaction
+				{
+					BadgeType = BadgeType.Adherence,
+					Amount = 7,
+					Person = person1,
+					CalculatedDate = new DateOnly(2014, 10, 15)
+				},
+				new AgentBadgeTransaction
+				{
+					BadgeType = BadgeType.Adherence,
+					Amount = 7,
+					Person = person1,
+					CalculatedDate = new DateOnly(2014, 10, 20)
+				}
+			};
+
+			foreach (var agentBadgeTransaction in agentBadgeTransactions)
+			{
+				agentBadgeTransactionRepository.Add(agentBadgeTransaction);
+			}
+
+			var agentBadgeWithRankTransactions = new[]
+			{
+				new AgentBadgeWithRankTransaction
+				{
+					BadgeType = BadgeType.Adherence,					
+					Person = person1,
+					CalculatedDate = new DateOnly(2014, 10, 1),
+					GoldBadgeAmount = 1,
+					SilverBadgeAmount = 1,
+					BronzeBadgeAmount = 1
+				},
+				new AgentBadgeWithRankTransaction
+				{
+					BadgeType = BadgeType.Adherence,					
+					Person = person1,
+					CalculatedDate = new DateOnly(2014, 10, 15),
+					GoldBadgeAmount = 1,
+					SilverBadgeAmount = 1,
+					BronzeBadgeAmount = 1
+				},
+				new AgentBadgeWithRankTransaction
+				{
+					BadgeType = BadgeType.Adherence,
+					Person = person1,
+					CalculatedDate = new DateOnly(2014, 10, 20),
+					GoldBadgeAmount = 1,
+					SilverBadgeAmount = 1,
+					BronzeBadgeAmount = 1
+				}
+			};
+
+			foreach (var agentBadgeWithRankTransaction in agentBadgeWithRankTransactions)
+			{
+				agentBadgeWithRankTransactionRepository.Add(agentBadgeWithRankTransaction);
+			}
+
+			var teamGroupDetail = new ReadOnlyGroupDetail { GroupId = Guid.NewGuid() };
+			groupingRepository.Stub(x => x.AvailableGroups(new ReadOnlyGroupPage(),date))
+				.IgnoreArguments()
+				.Return(new[] { teamGroupDetail });
+			groupingRepository.Stub(x => x.DetailsForGroup(teamGroupDetail.GroupId,date)).Return(new[] { personDetail1 });
+			permissionProvider.Stub(
+				x =>
+					x.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard,DateOnly.Today,
+						personDetail1)).Return(true);
+
+			var result =
+				target.PermittedAgentBadgeOverviewsForEveryoneOrMyOwn(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard,
+					option, new DateOnlyPeriod(2014, 10, 1, 2014, 10, 15)).ToArray();
+
+			result.Single().Gold.Should().Be(2);
+			result.Single().Silver.Should().Be(4);
+			result.Single().Bronze.Should().Be(6);
+		}
+
 	}
 
 	public class FakeNameFormatSettingsPersisterAndProvider : ISettingsPersisterAndProvider<NameFormatSettings>

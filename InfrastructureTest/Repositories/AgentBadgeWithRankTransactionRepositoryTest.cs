@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
@@ -66,6 +67,30 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var result = target.Find(person,badgeTransaction.BadgeType,badgeTransaction.CalculatedDate);
 			result.Should().Be.Null();
+		}
+
+
+		[Test]
+		public void ShouldGetBadgeWithinGivenDatePeriod()
+		{
+			var badge1 = CreateAggregateWithCorrectBusinessUnit();
+			badge1.CalculatedDate = new DateOnly(2014,9,9);
+			PersistAndRemoveFromUnitOfWork(badge1);
+			var badge2 = CreateAggregateWithCorrectBusinessUnit();
+			badge2.CalculatedDate = new DateOnly(2014,9,15);
+			PersistAndRemoveFromUnitOfWork(badge2);
+
+			var target = new AgentBadgeWithRankTransactionRepository(UnitOfWork);
+
+
+			var badges = target.Find(new List<IPerson> { badge1.Person,badge2.Person },new DateOnlyPeriod(2014,9,8,2014,9,10));
+
+			badges.Count.Should().Be.EqualTo(1);
+
+			badges = target.Find(new List<IPerson> { badge1.Person,badge2.Person },new DateOnlyPeriod(2014,9,8,2014,9,16));
+
+			badges.Count.Should().Be.EqualTo(2);
+
 		}
 	}
 }

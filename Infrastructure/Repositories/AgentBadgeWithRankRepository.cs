@@ -1,7 +1,7 @@
-using NHibernate.Transform;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
@@ -14,6 +14,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public AgentBadgeWithRankRepository(ICurrentUnitOfWork currentUnitOfWork)
 			: base(currentUnitOfWork)
 		{
+		}
+
+#pragma warning disable 618
+		public AgentBadgeWithRankRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
+#pragma warning restore 618
+		{
+
 		}
 
 		public ICollection<IAgentBadgeWithRank> Find(IEnumerable<Guid> personIdList, BadgeType badgeType)
@@ -94,6 +101,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetReadOnly(true)
 					.UniqueResult<IAgentBadgeWithRank>();
 			return result;
-		}
+		}	
 	}
 }

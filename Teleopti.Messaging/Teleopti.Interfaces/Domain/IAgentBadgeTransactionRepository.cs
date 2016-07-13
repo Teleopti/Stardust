@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Teleopti.Interfaces.Domain
 {
 	public interface IAgentBadgeTransactionRepository : IRepository<IAgentBadgeTransaction>
@@ -11,9 +13,10 @@ namespace Teleopti.Interfaces.Domain
 		/// <returns></returns>
 		IAgentBadgeTransaction Find(IPerson person, BadgeType badgeType, DateOnly calculateDate);
 
+		IList<IAgentBadgeTransaction> Find(IEnumerable<IPerson> personCollection, DateOnlyPeriod period);
 		/// <summary>
- 		/// reset all badges for all agents
- 		/// </summary>
- 		void ResetAgentBadges();
+		/// reset all badges for all agents
+		/// </summary>
+		void ResetAgentBadges();
 	}
 }

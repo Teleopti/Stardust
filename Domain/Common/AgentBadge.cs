@@ -1,10 +1,25 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
 	public class AgentBadge
 	{
+		static public IList<AgentBadge> FromAgentBadgeTransaction(ICollection<IAgentBadgeTransaction> agentBadgeTransaction)
+		{
+			return agentBadgeTransaction.GroupBy(x => new
+			{
+				PersonId = x.Person.Id.GetValueOrDefault(), x.BadgeType
+			}).Select(g => new AgentBadge
+			{
+				Person = g.Key.PersonId,
+				BadgeType = g.Key.BadgeType,
+				TotalAmount = g.Sum(x => x.Amount)
+			}).ToList();		
+		}
+
 		private bool _initialized;
 		private int _lastAmount;
 		private bool _bronzeBadgeAdded;

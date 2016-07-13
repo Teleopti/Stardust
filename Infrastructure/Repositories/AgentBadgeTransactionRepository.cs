@@ -1,4 +1,7 @@
+using System;
+using System.Collections.Generic;
 using NHibernate.Criterion;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -29,6 +32,24 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.UniqueResult<IAgentBadgeTransaction>();
 			return result;
 		}
+
+		public IList<IAgentBadgeTransaction> Find(IEnumerable<IPerson> personCollection, DateOnlyPeriod period)
+		{
+			var retList = new List<IAgentBadgeTransaction>();
+
+			foreach (var personList in personCollection.Batch(400))
+			{
+				var result = Session.CreateCriteria(typeof (IAgentBadgeTransaction), "ab")
+					.Add(Restrictions.In("Person", new List<IPerson>(personList)))
+					.Add(Restrictions.Between("CalculatedDate", period.StartDate, period.EndDate))
+					.List<IAgentBadgeTransaction>();
+
+				retList.AddRange(result);
+			}
+
+			return retList;
+		}
+
 
 		public void ResetAgentBadges()
 		{
