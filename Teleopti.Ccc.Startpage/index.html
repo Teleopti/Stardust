@@ -61,6 +61,13 @@
 						document.getElementById("webwfm").style.visibility = "hidden";
 					}
 				});
+				loadToggle('WfmTeamSchedule_MakeNewMyTeamDefault_39744', function (value) {
+					if (value) {
+						document.getElementById("webteamschedule").href = "/TeleoptiWFM/Web/Wfm/#/teamSchedule";
+					} else {
+						document.getElementById("webteamschedule").href = "/TeleoptiWFM/Web/Anywhere";
+					}
+				});
 			};
 
 		</script>
@@ -74,7 +81,7 @@
 				</a>
 			</div>
 			<div class="col-md-3">
-				<a id="webteamschedule" class="block green" href="/TeleoptiWFM/Web/Anywhere">
+				<a id="webteamschedule" class="block green" href="">
 					<span>Team Leaders</span>
 				</a>
 			</div>
