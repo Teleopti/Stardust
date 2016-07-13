@@ -112,4 +112,42 @@ describe('RtaAgentsCtrlMonitorBySkills_39081', function () {
 		expect(scope.filteredData[0].State).toEqual("Break");
 	});
 
+	it('should show Name for skill area', function () {
+		stateParams.skillAreaId = "bb8d75b3-fdb4-484a-ae4c-9f0800e2f753";
+
+		$fakeBackend
+				.withSkillAreas([
+					{
+						Id: "bb8d75b3-fdb4-484a-ae4c-9f0800e2f753",
+						Name: "my skill area 2",
+						Skills: [{ Id: "5f15b334-22d1-4bc1-8e41-72359805d30f", Name: "skill x" }]
+					}
+				]);
+
+		$controllerBuilder.createController();
+
+		expect(scope.skillAreaName).toEqual("my skill area 2");
+	});
+
+	it('should get agent for skillArea', function () {
+
+		stateParams.skillAreaId = "f08d75b3-fdb4-484a-ae4c-9f0800e2f753";
+
+		$fakeBackend
+				.withAgent({
+					PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+					SkillId: "d08d75b3-fdb4-484a-ae4c-9f0800e2f753",
+					skillAreaId: "a08d75b3-fdb4-484a-ae4c-9f0800e2f753"
+				})
+				.withAgent({
+					PersonId: "22610fe4-0130-4568-97de-9b5e015b2564",
+					SkillId: "e08d75b3-fdb4-484a-ae4c-9f0800e2f753",
+					skillAreaId: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753"
+				});
+
+		$controllerBuilder.createController()
+			.apply('agentsInAlarm = false');
+		expect(scope.agents[0].PersonId).toEqual("22610fe4-0130-4568-97de-9b5e015b2564");
+	});
+
 });

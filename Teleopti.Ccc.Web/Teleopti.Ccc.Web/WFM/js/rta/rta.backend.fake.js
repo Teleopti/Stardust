@@ -52,6 +52,14 @@
 				return [200, { Name: result[0] }];
 			});
 
+			fake(/\.\.\/api\/SkillAreas\/NameFor(.*)/,
+			function (params) {
+				var result = skillAreas
+				.filter(function (s) { return params.skillAreaId === s.Id })
+				.map(function (s) { return s.Name; });
+				return [200, { Name: result[0] }];
+			});
+
 			fake(/\.\.\/api\/SkillAreas(.*)/,
 				function () {
 					return [200, skillAreas];
@@ -81,11 +89,16 @@
 					return [200, agents.filter(function(a) { return params.siteIds.indexOf(a.SiteId) >= 0; })];
 				});
 
+			fake(/\.\.\/api\/Agents\/ForSkillAreas(.*)/,
+				function (params) {
+					return [200, agents.filter(function (a) { return params.skillAreaId === a.skillAreaId; })];
+				});
+
 			fake(/\.\.\/api\/Agents\/ForSkill(.*)/,
 				function (params) {
 					return [200, agents.filter(function (a) { return params.skillId === a.SkillId; })];
 				});
-
+	
 			fake(/\.\.\/api\/Agents\/GetStatesForTeams(.*)/,
 				function (params) {
 					var result = states.filter(function(s) {

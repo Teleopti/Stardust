@@ -55,6 +55,17 @@
 				}).$promise;
 			};
 
+			this.getAgentsForSkillArea = function (data) {
+				return $resource('../api/Agents/ForSkillAreas', {}, {
+					query: {
+						method: 'GET',
+						isArray: true
+					}
+				}).query({
+					skillAreaId: data.skillAreaId
+				}).$promise;
+			};
+
 			this.getStatesForSkill = function (data) {
 				return $resource('../api/Agents/GetStatesForSkill', {}, {
 					query: {
@@ -160,6 +171,16 @@
 					}
 				}).query({
 					skillId: data
+				}).$promise;
+			};
+
+			this.getSkillAreaName = function (data) {
+				return $resource('../api/SkillAreas/NameFor', {}, {
+					query: {
+						method: 'GET'
+					}
+				}).query({
+					skillAreaId: data
 				}).$promise;
 			};
 
