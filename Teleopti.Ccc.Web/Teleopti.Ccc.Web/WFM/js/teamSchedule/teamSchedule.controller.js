@@ -249,7 +249,11 @@
 			personIds.forEach(function (personId) {
 				if (uniquePersonIds.indexOf(personId) === -1) uniquePersonIds.push(personId);
 			});
-			uniquePersonIds.length !== 0 && vm.updateSchedules(uniquePersonIds);
+			
+			if(uniquePersonIds.length !== 0){
+				vm.updateSchedules(uniquePersonIds);
+				vm.checkValidationWarningForCommandTargets(uniquePersonIds);
+			}
 		}
 
 		function monitorScheduleChanged() {
