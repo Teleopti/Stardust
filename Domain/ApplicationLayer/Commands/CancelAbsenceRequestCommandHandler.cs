@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		public void Handle(CancelAbsenceRequestCommand command)
 		{
-
 			command.ErrorMessages = new List<string>();
 
 			var personRequest = _personRequestRepository.Get(command.PersonRequestId);
@@ -40,8 +39,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				return;
 			}
 
-			if (!_writeProtectedScheduleCommandValidator.ValidateCommand(personRequest.RequestedDate, personRequest.Person, command))
+			string errorMessage;
+			if (!_writeProtectedScheduleCommandValidator.ValidateCommand(personRequest.RequestedDate, personRequest.Person, command, out errorMessage))
 			{
+				command.ErrorMessages.Add(errorMessage);
 				return;
 			}
 

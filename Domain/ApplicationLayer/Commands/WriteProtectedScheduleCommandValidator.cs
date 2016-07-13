@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -16,7 +15,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IUserCulture _userCulture;
 
-		public WriteProtectedScheduleCommandValidator(IAuthorization authorization, ICommonAgentNameProvider commonAgentNameProvider, ILoggedOnUser loggedOnUser, IUserCulture userCulture)
+		public WriteProtectedScheduleCommandValidator(IAuthorization authorization,
+			ICommonAgentNameProvider commonAgentNameProvider,
+			ILoggedOnUser loggedOnUser, IUserCulture userCulture)
 		{
 			_authorization = authorization;
 			_commonAgentNameProvider = commonAgentNameProvider;
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_userCulture = userCulture;
 		}
 
-		public bool ValidateCommand(DateTime date, IPerson agent, IErrorAttachedCommand command)
+		public bool ValidateCommand(DateTime date, IPerson agent, IErrorAttachedCommand command, out string errorMessage)
 		{
 			var timeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var culture = _userCulture.GetCulture();
@@ -32,10 +33,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var scheduleDate = TimeZoneHelper.ConvertFromUtc(date, timeZone);
 			if (agentScheduleIsWriteProtected(new DateOnly(scheduleDate), agent))
 			{
-				createWriteProtectedScheduleErrorMessage(command, agent, scheduleDate, culture);
+				errorMessage = createWriteProtectedScheduleErrorMessage(agent, scheduleDate, culture);
 				return false;
 			}
 
+			errorMessage = null;
 			return true;
 		}
 
@@ -45,14 +47,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				   && agent.PersonWriteProtection.IsWriteProtected(date);
 		}
 
-		private void createWriteProtectedScheduleErrorMessage(IErrorAttachedCommand command, IPerson person, DateTime date, CultureInfo cultureInfo)
+		private string createWriteProtectedScheduleErrorMessage(IPerson person, DateTime date, CultureInfo cultureInfo)
 		{
-			var writeProtectErrorMessage = string.Format(Resources.ScheduleIsWriteProtected,
+			return string.Format(Resources.ScheduleIsWriteProtected,
 				_commonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(person),
 				date.ToString(cultureInfo.DateTimeFormat.ShortDatePattern, cultureInfo));
-
-			command.ErrorMessages = new List<string> { writeProtectErrorMessage };
 		}
-
 	}
 }

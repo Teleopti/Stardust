@@ -55,13 +55,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 					continue;
 				}
 
+				string errorMessage;
 				if (!_writeProtectedScheduleCommandValidator.ValidateCommand(personRequest.RequestedDate,
-					personRequest.Person, command))
+					personRequest.Person, command, out errorMessage))
 				{
+					errorMessages.Add(errorMessage);
 					continue;
 				}
 
-				string errorMessage;
 				if (!approveRequest(personRequest, out errorMessage))
 				{
 					errorMessages.Add(errorMessage);
