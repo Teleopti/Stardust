@@ -11,7 +11,13 @@
 		vm.selectedDate = new Date();
 		vm.dateRangePickerTemplateType = "popup";
 		vm.isLeaderBoardEnabled = ToggleSvc.WfmReportPortal_LeaderBoard_39440;
-		vm.showDatePicker = ToggleSvc.WfmReportPortal_LeaderBoardByPeriod_39620;
+		vm.showDatePicker = false;
+
+		vm.searchOptions = {
+			keyword: '',
+			isAdvancedSearchEnabled: ToggleSvc.WfmPeople_AdvancedSearch_32973,
+			searchKeywordChanged: false
+		};
 
 		vm.selectedPeriod = {
 			startDate: new Date(moment(vm.selectedDate).subtract(30,'days')),
@@ -30,28 +36,31 @@
 
 		vm.onKeyWordInSearchInputChanged = function () {
 			vm.isLoading = true;
-			LeaderBoardSvc.getLeaderBoardDefaultData(vm.searchOptions.keyword).then(function (data) {
-				vm.leaderBoardTableList = VMFactory.Create(data.AgentBadges);
-				vm.isLoading = false;
-			});
-		};
-
-		vm.init = function () {
-			vm.isLoading = true;
-			vm.searchOptions = {
-				keyword: '',
-				isAdvancedSearchEnabled: ToggleSvc.WfmPeople_AdvancedSearch_32973,
-				searchKeywordChanged: false
-			};
-
 			if(vm.showDatePicker){
-				LeaderBoardSvc.getLeaderBoardDefaultData(vm.searchOptions.keyword).then(function (data) {
+				LeaderBoardSvc.getLeaderBoardDataByPeriod(vm.searchOptions.keyword, vm.selectedPeriod).then(function (data) {
 					vm.searchOptions.keyword = data.Keyword;
 					vm.leaderBoardTableList = VMFactory.Create(data.AgentBadges);
 					vm.isLoading = false;
 				});
 			}else{
+				LeaderBoardSvc.getLeaderBoardDefaultData(vm.searchOptions.keyword).then(function (data) {
+					vm.searchOptions.keyword = data.Keyword;
+					vm.leaderBoardTableList = VMFactory.Create(data.AgentBadges);
+					vm.isLoading = false;
+				});
+			}
+		};
+
+		vm.init = function () {
+			vm.isLoading = true;
+			if(vm.showDatePicker){
 				LeaderBoardSvc.getLeaderBoardDataByPeriod(vm.searchOptions.keyword, vm.selectedPeriod).then(function (data) {
+					vm.searchOptions.keyword = data.Keyword;
+					vm.leaderBoardTableList = VMFactory.Create(data.AgentBadges);
+					vm.isLoading = false;
+				});
+			}else{
+				LeaderBoardSvc.getLeaderBoardDefaultData(vm.searchOptions.keyword).then(function (data) {
 					vm.searchOptions.keyword = data.Keyword;
 					vm.leaderBoardTableList = VMFactory.Create(data.AgentBadges);
 					vm.isLoading = false;
