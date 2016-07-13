@@ -19,8 +19,9 @@ describe('RequestsControllerTests', function () {
 					Wfm_Requests_People_Search_36294: true,
 					Wfm_Requests_Performance_36295: true,
 					Wfm_Requests_ApproveDeny_36297: true,
+					Wfm_Requests_Approve_Based_On_Budget_Allotment_39626:true,
 					togglesLoaded: {
-						then: function (cb) { cb(); }
+						then: function(cb) { cb(); }
 					}
 				}
 			});
@@ -40,7 +41,7 @@ describe('RequestsControllerTests', function () {
 		requestCommandParamsHolder = _requestCommandParamsHolder_;
 	}));
 
-	it('processWaitlistedRequests command sunbmit scucess, should notify the result', function () {
+	it('processWaitlistedRequests command submit scucess, should notify the result', function () {
 		var test = setUpTarget();
 		var handleResult = {
 			Success: true,
@@ -171,6 +172,32 @@ describe('RequestsControllerTests', function () {
 		expect(test.requestCommandPaneScope.disableCommands()).toEqual(false);
 	});
 
+	it('should approve base on budget command enabled in absence tab', function() {
+		var test = setUpTarget(false);
+		expect(test.requestCommandPaneScope.isApproveBaseOnBudgetEnabled()).toEqual(true);
+	});
+
+	it('should approve base on budget command disabled in shift trade tab', function () {
+		var test = setUpTarget(true);
+		expect(test.requestCommandPaneScope.isApproveBaseOnBudgetEnabled()).toEqual(false);
+	});
+
+	it('approveRequestsBaseOnBudget command submit scucess, should notify the result', function () {
+		var test = setUpTarget();
+		var handleResult = {
+			Success: true,
+			AffectedRequestIds: [{ id: 1 }]
+		}
+		var requestIds = [{ id: 1 }, { id: 2 }];
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		requestsDataService.submitCommandIsASucess(true);
+		requestsDataService.setRequestCommandHandlingResult(handleResult);
+
+		test.requestCommandPaneScope.approveRequestsBaseOnBudget();
+
+		expect(_notificationResult).toEqual('SubmitApproveRequestsBaseOnBudgetSucess');
+	});
+
 	function FakeRequestsNotificationService() {
 		this.notifySubmitProcessWaitlistedRequestsSuccess = function () {
 			_notificationResult = "Submit process waitlisted requests command success";
@@ -196,6 +223,9 @@ describe('RequestsControllerTests', function () {
 				requestsCount: requestsCount
 			}
 		}
+		this.notifySubmitApproveRequestsBaseOnBudgetSucess = function () {
+			_notificationResult = "SubmitApproveRequestsBaseOnBudgetSucess";
+		}
 	}
 
 	function FakeRequestsDataService() {
@@ -207,6 +237,9 @@ describe('RequestsControllerTests', function () {
 		var errorCallback = function (callback) {
 			if (!_commandIsASucess)
 				callback(_handleResult);
+		}
+		this.approveRequestsBaseOnBudgetPromise = function () {
+			return { success: successCallback, error: errorCallback }
 		}
 		this.processWaitlistRequestsPromise = function () {
 			return { success: successCallback, error: errorCallback }

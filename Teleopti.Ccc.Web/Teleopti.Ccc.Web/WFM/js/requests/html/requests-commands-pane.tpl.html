@@ -19,6 +19,12 @@
 				<i class="mdi mdi-check"></i>
 				<span translate>Approve</span>
 			</li>
+			<li ng-click="requestsCommandsPane.approveRequestsBaseOnBudget()"
+				ng-class="{'wfm-btn-primary-disabled' : requestsCommandsPane.disableCommands()}"
+				ng-if="requestsCommandsPane.isApproveBaseOnBudgetEnabled()">
+				<i class="mdi mdi-check"></i>
+				<span translate>ApproveBaseOnBudget</span>
+			</li>
 			<li ng-click="requestsCommandsPane.denyRequests()"
 				ng-class="{'wfm-btn-primary-disabled' : requestsCommandsPane.disableCommands()}">
 				<i class="mdi mdi-close"></i>

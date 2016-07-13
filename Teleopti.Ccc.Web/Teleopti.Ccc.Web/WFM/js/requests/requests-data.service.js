@@ -12,6 +12,7 @@
 		var cancelRequestsUrl = '../api/Requests/cancelRequests';
 		var requestableAbsenceUrl = '../api/Absence/GetRequestableAbsences';
 		var processWaitlistRequests = '../api/Requests/runWaitlist';
+		var approveRequestsBaseOnBudgetUrl = '../api/Requests/approveRequestsBaseOnBudget';
 
 		this.getAllRequestsPromise_old = function(filter, sortingOrders) {
 			return $http.post(loadTextAndAbsenceRequestsUrl_old, requestsDefinitions.normalizeRequestsFilter_old(filter, sortingOrders));
@@ -37,13 +38,21 @@
 			return $http.post(cancelRequestsUrl, selectedRequestIds);
 		};
 
-		this.processWaitlistRequestsPromise = function (waitlistPeriod,commandId) {
+		this.processWaitlistRequestsPromise = function (waitlistPeriod, commandId) {
             var waitlistPeriodGet= {
                 startTime: waitlistPeriod.startDate,
                 endTime: waitlistPeriod.endDate,
                 commandId:commandId
             }
             return $http.get(processWaitlistRequests, { params: waitlistPeriodGet });
+		};
+
+		this.approveRequestsBaseOnBudgetPromise = function (selectedRequestIds, commandId) {
+			var approveRequestInput = {
+				PersonRequestIds: selectedRequestIds,
+				CommandId: commandId
+			};
+			return $http.post(approveRequestsBaseOnBudgetUrl, approveRequestInput);
 		};
 
 		this.denyRequestsPromise = function(selectedRequestIds) {
