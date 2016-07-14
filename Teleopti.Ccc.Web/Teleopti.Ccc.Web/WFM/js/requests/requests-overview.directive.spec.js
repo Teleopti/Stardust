@@ -61,6 +61,7 @@
 			targetScope.$digest();
 			var scope = getInnerScope(targetElement);
 			scope.requestsOverview.isActive = true;
+			scope.requestsOverview.init();
 			targetScope.$digest();
 			expect(scope.requestsOverview.requests.length).toEqual(1);
 			expect(scope.requestsOverview.requests[0]).toEqual(request);
@@ -77,6 +78,7 @@
 			targetScope.$digest();
 			var scope = getInnerScope(targetElement);
 			scope.requestsOverview.isActive = false;
+			scope.requestsOverview.init();
 			targetScope.$digest();
 			expect(scope.requestsOverview.requests.length).toEqual(0);
 		});
@@ -331,8 +333,8 @@
 			expect(shiftTradeDaysViewModels[0].ToScheduleDayDetail.Name).toEqual('name-to-1');
 			expect(shiftTradeDaysViewModels[1].FromScheduleDayDetail.Name).toEqual('name-from-2');
 
-			expect(shiftTradeDaysViewModels[0].LeftOffset).toEqual(requestsDefinitions.SHIFTTRADE_COLUMN_WIDTH * 2); // starts two days after start of period.
-			expect(shiftTradeDaysViewModels[1].LeftOffset).toEqual(requestsDefinitions.SHIFTTRADE_COLUMN_WIDTH * 3);
+			expect(shiftTradeDaysViewModels[0].LeftOffset).toEqual(requestsDefinitions.SHIFTTRADE_COLUMN_WIDTH * 2 +'px'); // starts two days after start of period.
+			expect(shiftTradeDaysViewModels[1].LeftOffset).toEqual(requestsDefinitions.SHIFTTRADE_COLUMN_WIDTH * 3 + 'px');
 
 		});
 
