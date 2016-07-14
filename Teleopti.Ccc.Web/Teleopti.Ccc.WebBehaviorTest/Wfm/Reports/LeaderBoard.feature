@@ -51,16 +51,6 @@ Background:
 		| Adherence           | 3      | 0      | 2    | 2014-08-11         |
 		| Adherence           | 0      | 0      | 1    | 2014-08-13         |
 
-@OnlyRunIfDisabled('WfmReportPortal_LeaderBoardByPeriod_39620')
-Scenario: Should be able to see leader board report
-	When I view wfm leader board report
-	Then I should see the ranks are
-		| Rank | Agent         |
-		| 1    | I             |
-		| 1    | Ashley Andeen |
-		| 3    | Pierre Baldi  |
-
-@OnlyRunIfEnabled('WfmReportPortal_LeaderBoardByPeriod_39620')
 Scenario: Should be able to see leader board in given date range
 	When I view wfm leader board report
 	And I select date from '2014-08-11' to '2014-08-11'
