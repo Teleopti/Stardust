@@ -1,7 +1,7 @@
 using System;
 using System.Configuration;
+using System.IdentityModel.Services;
 using System.Web.Mvc;
-using Microsoft.IdentityModel.Protocols.WSFederation;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Security;

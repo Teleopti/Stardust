@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IdentityModel.Services;
 using System.Linq;
+using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Microsoft.IdentityModel.Claims;
-using Microsoft.IdentityModel.Protocols.WSFederation;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Web.Filters
 				return;
 			}
 
-			if (filterContext.HttpContext.User.Identity is IClaimsIdentity &&
+			if (filterContext.HttpContext.User.Identity is ClaimsIdentity &&
 			    filterContext.HttpContext.User.Identity.IsAuthenticated)
 			{
 				var targetArea = filterContext.RouteData.DataTokens["area"] ?? "Start";

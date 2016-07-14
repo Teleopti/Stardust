@@ -1,5 +1,5 @@
-﻿using System.Web.Security;
-using Microsoft.IdentityModel.Web;
+﻿using System.IdentityModel;
+using System.Web.Security;
 
 namespace Teleopti.Ccc.Web.AuthenticationBridge.Controllers
 {

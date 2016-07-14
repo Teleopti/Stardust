@@ -1,7 +1,7 @@
 ﻿using System;
+using System.IdentityModel.Services;
 using System.Linq;
 using System.Web.Mvc;
-using Microsoft.IdentityModel.Protocols.WSFederation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Areas.Start.Core.Shared;

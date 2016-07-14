@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.IdentityModel.Web;
+using System.IdentityModel;
+using System.IdentityModel.Tokens;
 
 namespace Teleopti.Ccc.Web.Core
 {
@@ -12,8 +12,8 @@ namespace Teleopti.Ccc.Web.Core
 			: base(createTransforms())
 		{ }
 
-		public MachineKeySessionSecurityTokenHandler(SecurityTokenCache cache, TimeSpan tokenLifetime)
-			: base(createTransforms(), cache, tokenLifetime)
+		public MachineKeySessionSecurityTokenHandler(TimeSpan tokenLifetime)
+			: base(createTransforms(), tokenLifetime)
 		{ }
 
 		private static ReadOnlyCollection<CookieTransform> createTransforms()

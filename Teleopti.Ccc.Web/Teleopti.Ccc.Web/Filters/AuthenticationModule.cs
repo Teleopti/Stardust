@@ -1,7 +1,7 @@
 ﻿using System;
+using System.IdentityModel.Services;
 using System.Web;
 using System.Web.Mvc;
-using Microsoft.IdentityModel.Web;
 
 namespace Teleopti.Ccc.Web.Filters
 {

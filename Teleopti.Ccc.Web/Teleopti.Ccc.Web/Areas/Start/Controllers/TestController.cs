@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Web.Mvc;
-using Microsoft.IdentityModel.Claims;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				new Claim(ClaimTypes.NameIdentifier, userName + TokenIdentityProvider.ApplicationIdentifier)
 			};
 			var claimsIdentity = new ClaimsIdentity(claims, "IssuerForTest");
-			_httpContext.Current().User = new ClaimsPrincipal(new IClaimsIdentity[] { claimsIdentity });
+			_httpContext.Current().User = new ClaimsPrincipal(new[] { claimsIdentity });
 			_logon.LogOn(result.DataSource.DataSourceName, businessUnit.Id.Value, result.Person.Id.Value, tenantPassword, isPersistent, true);
 
 			return View("Message", new TestMessageViewModel

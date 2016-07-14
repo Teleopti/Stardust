@@ -1,11 +1,11 @@
+using System.IdentityModel.Services;
 using System.Web;
-using Microsoft.IdentityModel.Web;
 
 namespace Teleopti.Ccc.Web.Filters
 {
 	public class SessionAuthenticationModule : ISessionAuthenticationModule
 	{
-		private readonly Microsoft.IdentityModel.Web.SessionAuthenticationModule _sessionAuthenticationModule;
+		private readonly System.IdentityModel.Services.SessionAuthenticationModule _sessionAuthenticationModule;
 
 		public SessionAuthenticationModule()
 		{

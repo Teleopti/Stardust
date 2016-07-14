@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IdentityModel.Services;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -13,8 +14,6 @@ using Autofac.Integration.WebApi;
 using log4net;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
-using Microsoft.IdentityModel.Protocols.WSFederation;
-using Microsoft.IdentityModel.Web;
 using Owin;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Web.Broker;
@@ -83,7 +82,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 				SignalRConfiguration.Configure(SignalRSettings.Load(), () => application.MapSignalR(new HubConfiguration()));
 				FederatedAuthentication.WSFederationAuthenticationModule.SignedIn += WSFederationAuthenticationModule_SignedIn;
-				FederatedAuthentication.ServiceConfiguration.SecurityTokenHandlers.AddOrReplace(
+				FederatedAuthentication.FederationConfiguration.IdentityConfiguration.SecurityTokenHandlers.AddOrReplace(
 					new MachineKeySessionSecurityTokenHandler());
 
 				application.UseAutofacMiddleware(container);
@@ -120,7 +119,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 		void WSFederationAuthenticationModule_SignedIn(object sender, EventArgs e)
 		{
-			WSFederationMessage wsFederationMessage = WSFederationMessage.CreateFromFormPost(HttpContext.Current.Request);
+			WSFederationMessage wsFederationMessage = WSFederationMessage.CreateFromFormPost(new HttpRequestWrapper(HttpContext.Current.Request));
 			if (wsFederationMessage.Context != null)
 			{
 				var wctx = HttpUtility.ParseQueryString(wsFederationMessage.Context);

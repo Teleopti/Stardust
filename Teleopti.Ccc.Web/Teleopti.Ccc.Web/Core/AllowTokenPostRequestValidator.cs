@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.IdentityModel.Services;
 using System.Web;
 using System.Web.Util;
-using Microsoft.IdentityModel.Protocols.WSFederation;
+using Teleopti.Ccc.Web.Auth;
 
 namespace Teleopti.Ccc.Web.Core
 {

@@ -1,8 +1,8 @@
 using System;
+using System.IdentityModel.Services;
 using System.Security.Cryptography;
 using System.Web;
 using System.Web.Security;
-using Microsoft.IdentityModel.Web;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Interfaces.Domain;

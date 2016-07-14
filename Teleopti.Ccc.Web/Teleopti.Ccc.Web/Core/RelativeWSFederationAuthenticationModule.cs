@@ -2,12 +2,11 @@ using System;
 using System.Collections.Specialized;
 using System.Configuration;
 using System.Globalization;
+using System.IdentityModel.Services;
 using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Web;
-using Microsoft.IdentityModel.Protocols.WSFederation;
-using Microsoft.IdentityModel.Web;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Web.Filters;
 
@@ -15,9 +14,9 @@ namespace Teleopti.Ccc.Web.Core
 {
 	public class RelativeWSFederationAuthenticationModule : WSFederationAuthenticationModule
 	{
-		protected override void InitializePropertiesFromConfiguration(string serviceName)
+		protected override void InitializePropertiesFromConfiguration()
 		{
-			base.InitializePropertiesFromConfiguration(serviceName);
+			base.InitializePropertiesFromConfiguration();
 
 			if (!ConfigurationManager.AppSettings.ReadValue("UseRelativeConfiguration")) return;
 
