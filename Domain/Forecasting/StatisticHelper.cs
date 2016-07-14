@@ -17,20 +17,25 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	/// </remarks>
 	public class StatisticHelper : IStatisticHelper
 	{
+		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly ISkillDayRepository _skillDayRepository;
-		private readonly IStatisticRepository _statisticTaskRepository;
+		//private readonly IStatisticRepository _statisticTaskRepository;
 		private readonly IValidatedVolumeDayRepository _validatedVolumeDayRepository;
 		private readonly WorkloadDayHelper _workloadDayHelper = new WorkloadDayHelper();
 
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		public StatisticHelper(ISkillDayRepository skillDayRepository, IStatisticRepository statisticRepository, IValidatedVolumeDayRepository validatedVolumeDayRepository)
+		public StatisticHelper(IRepositoryFactory repositoryFactory, ISkillDayRepository skillDayRepository, IValidatedVolumeDayRepository validatedVolumeDayRepository)
 		{
-		   _skillDayRepository = skillDayRepository;
-		   _statisticTaskRepository = statisticRepository;
-		   _validatedVolumeDayRepository = validatedVolumeDayRepository;
+			_repositoryFactory = repositoryFactory;
+			_skillDayRepository = skillDayRepository;
+			_validatedVolumeDayRepository = validatedVolumeDayRepository;
 		}
+
+
+		//Needs to be a property for quick forecast not to use StatisticRepositoryEmpty. /Maria S 
+		public IStatisticRepository StatisticRepository { get { return _repositoryFactory.CreateStatisticRepository(); } }
 
 		/// <summary>
 		/// Occurs when [status changed].
@@ -67,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 					var volumeDayDate = validatedVolumeDay.VolumeDayDate;
 					IValidatedVolumeDay dayToRemoveFromCollection = validatedVolumeDays.
 						FirstOrDefault(v => v.VolumeDayDate == volumeDayDate);
-					if (dayToRemoveFromCollection!=null) validatedVolumeDays.Remove(dayToRemoveFromCollection);
+					if (dayToRemoveFromCollection != null) validatedVolumeDays.Remove(dayToRemoveFromCollection);
 				}
 				validatedVolumeDays = validatedVolumeDays.Concat(existingValidatedVolumeDays).ToList();
 			}
@@ -114,14 +119,14 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		{
 			IList<ISkillDay> skillDays = new List<ISkillDay>(_skillDayRepository.FindRange(period, skill, scenario));
 			OnStatusChanged(new StatusChangedEventArgs("xxLoadedSkillDaysFromDatasource"));
-			skillDays = (IList<ISkillDay>)_skillDayRepository.GetAllSkillDays(period, skillDays, skill, scenario, _ => {});
+			skillDays = (IList<ISkillDay>)_skillDayRepository.GetAllSkillDays(period, skillDays, skill, scenario, _ => { });
 			OnStatusChanged(new StatusChangedEventArgs("xxCreatedNewSkillDays"));
 			_workloadDayHelper.CreateLongtermWorkloadDays(skill, skillDays);
 			OnStatusChanged(new StatusChangedEventArgs("xxCreatedNewWorkloadDays"));
 			foreach (IWorkload workload in skill.WorkloadCollection)
 			{
 				IList<IWorkloadDayBase> workloadDays = _workloadDayHelper.GetWorkloadDaysFromSkillDays(skillDays, workload);
-				IList<IStatisticTask> tasks = (IList<IStatisticTask>)_statisticTaskRepository.LoadSpecificDates(workload.QueueSourceCollection, period.ToDateTimePeriod(skill.TimeZone));
+				IList<IStatisticTask> tasks = (IList<IStatisticTask>)StatisticRepository.LoadSpecificDates(workload.QueueSourceCollection, period.ToDateTimePeriod(skill.TimeZone));
 				OnStatusChanged(new StatusChangedEventArgs("xxLoadedStatistics"));
 				new Statistic(workload).Match(workloadDays, tasks);
 				OnStatusChanged(new StatusChangedEventArgs("xxMatchedStatisticsWithWorkloadDays"));
@@ -145,14 +150,14 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			IWorkload workload)
 		{
 			var timeZone = workload.Skill.TimeZone;
-			var statistics = _statisticTaskRepository.LoadSpecificDates(workload.QueueSourceCollection, period.ToDateTimePeriod(timeZone).ChangeEndTime(TimeSpan.FromHours(25)));
+			var statistics = StatisticRepository.LoadSpecificDates(workload.QueueSourceCollection, period.ToDateTimePeriod(timeZone).ChangeEndTime(TimeSpan.FromHours(25)));
 			var queueStatistics = new QueueStatisticsProvider(statistics, new QueueStatisticsCalculator(workload.QueueAdjustments));
 
 			IList<IWorkloadDayBase> returnList = new List<IWorkloadDayBase>();
 			foreach (var day in period.DayCollection())
 			{
 				var workloadDayForStatistics = new WorkloadDay();
-				workloadDayForStatistics.Create(day,workload,new List<TimePeriod>());
+				workloadDayForStatistics.Create(day, workload, new List<TimePeriod>());
 				workloadDayForStatistics.MakeOpen24Hours();
 				workloadDayForStatistics.SetQueueStatistics(queueStatistics);
 				returnList.Add(workloadDayForStatistics);

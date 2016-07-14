@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 
 		public WFTemplateTabs()
 		{
-			
+
 			InitializeComponent();
 			if (!DesignMode) SetTexts();
 			_detailViews = new List<WorkloadDayTemplatesDetailView>();
@@ -51,14 +51,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			IList<DayOfWeek> weekDays = DateHelper.GetDaysOfWeek(CultureInfo.CurrentCulture);
 
 			var current = new FromFactory(() => UnitOfWorkFactory.Current);
-			IStatisticHelper statisticsHelper = new StatisticHelper(new SkillDayRepository(current), StatisticRepositoryFactory.Create(),
+			IStatisticHelper statisticsHelper = new StatisticHelper(new RepositoryFactory(), new SkillDayRepository(current),
 				new ValidatedVolumeDayRepository(current));
 
 			for (int i = 0; i < weekDays.Count; i++)
 			{
 				TabPageAdv theTabPage = tabControlAdv1.TabPages[i];
 
-				
+
 				var detailView = new WorkloadDayTemplatesDetailView(Presenter.Model.Workload, weekDays[i], statisticsHelper);
 				detailView.DateRangeChanged += detailViewDateRangeChanged;
 				detailView.FilterDataViewClosed += detailView_FilterDataViewClosed;
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 
 		}
 
-		private void setSelectedDateFilter( object sender, IList<DateOnlyPeriod> selectedDates)
+		private void setSelectedDateFilter(object sender, IList<DateOnlyPeriod> selectedDates)
 		{
 			_detailViews.ForEach(dw =>
 			{
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 				}
 
 				dw.ReloadWorkloadDayTemplates();
-				
+
 				dw.EnableFilterData(false);
 				var selectedDatesHastSet = new HashSet<DateOnly>();
 				foreach (var dateOnlyPeriod in selectedDates)
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 		{
 
 			initializeDateSelections(e.SelectedDates);
-			setSelectedDateFilter(sender,e.SelectedDates);
+			setSelectedDateFilter(sender, e.SelectedDates);
 		}
 
 		private void initializeDateSelections(IList<DateOnlyPeriod> selectedDates)
@@ -169,18 +169,18 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 			}
 		}
 
-        public void ReloadTemplateView(int templateIndex)
-        {
-	        const int weekLength = 7;
+		public void ReloadTemplateView(int templateIndex)
+		{
+			const int weekLength = 7;
 
-	        for (var i = 0; i < weekLength; i++)
-	        {
-		        if (_detailViews[0].TemplateIndex == i)
-		        {
-			        templateIndex = (templateIndex + weekLength - i)%weekLength;
-		        }
-	        }
-	        _detailViews[templateIndex].ReloadWorkloadDayTemplates();
+			for (var i = 0; i < weekLength; i++)
+			{
+				if (_detailViews[0].TemplateIndex == i)
+				{
+					templateIndex = (templateIndex + weekLength - i) % weekLength;
+				}
+			}
+			_detailViews[templateIndex].ReloadWorkloadDayTemplates();
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 
 			initializeTabs();
 		}
-		
+
 		public override void PrepareSave()
 		{
 			_detailViews.ForEach(dw => dw.RefreshUpdatedDate());

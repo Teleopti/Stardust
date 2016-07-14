@@ -31,9 +31,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		{
 		}
 
-		public new void Handle(QuickForecastWorkloadsEvent @event)
+		public void Handle(QuickForecastWorkloadsEvent @event)
 		{
-			base.Handle(@event);
+			base.HandleBase(@event);
 		}
 	}
 
@@ -48,11 +48,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		{
 		}
 
-		[ImpersonateSystem]
+		[AsSystem]
 		[UnitOfWork]
-		public new virtual void Handle(QuickForecastWorkloadsEvent @event)
+		public virtual void Handle(QuickForecastWorkloadsEvent @event)
 		{
-			base.Handle(@event);
+			base.HandleBase(@event);
 		}
 	}
 
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			_currentUnitOfWork = currentUnitOfWork;
 		}
 
-		public void Handle(QuickForecastWorkloadsEvent @event)
+		public void HandleBase(QuickForecastWorkloadsEvent @event)
 		{
 			var targetPeriod = new DateOnlyPeriod(new DateOnly(@event.TargetPeriodStart), new DateOnly(@event.TargetPeriodEnd));
 			var staticticPeriod = new DateOnlyPeriod(new DateOnly(@event.StatisticPeriodStart), new DateOnly(@event.StatisticPeriodEnd));
