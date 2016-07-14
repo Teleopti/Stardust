@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		BudgetAllotmentValidator
 	}
 
-	public class ApproveBatchRequestsCommand : ITrackableCommand, IErrorAttachedCommand
+	public class ApproveBatchRequestsCommand : ITrackableCommand
 	{
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
 		public RequestValidatorsFlag Validator { get; set; }
