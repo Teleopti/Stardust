@@ -1,5 +1,5 @@
 ﻿@OnlyRunIfEnabled('WfmReportPortal_LeaderBoard_39440')
-Feature: GamificationLeaderBoard
+Feature: LeaderBoard
 
 Background:
 	Given I have a role with
