@@ -251,40 +251,28 @@
 			overflow: visible;
 		}
 
-		.ui-grid-menu-button.ui-grid-menu-button {
+		/*.ui-grid-menu-button.ui-grid-menu-button {
 			margin-right: -15px;
-		}
+		}*/
 	}
 
 	.shift-trade-view {
 		overflow: hidden !important;
+
 		/* show scroll bar outside of grid*/
 		.ui-grid-render-container-body .ui-grid-viewport {
-			position: static;
+			position: absolute;
 		}
 
 		.ui-grid-row .ui-grid-cell {
 			border-bottom-color: $gray054 !important;
 		}
 
-		.shift-trade-row {
-			border-style: solid;
-			border-color: #d4d4d4;
-		}
-
-		.shift-trade-row:nth-child(odd) {
-			border-width: 0px 1px 1px 0px;
-		}
-
-		.shift-trade-row:nth-child(even) {
-			border-width: 0px 1px 0px 0px;
-		}
-
 		.shift-trade-cell {
 			box-sizing: border-box;
 			width: 100% !important;
 			height: 30px !important;
-		}
+		}    
 
 		.ui-grid-menu-button.ui-grid-menu-button {
 			right: -20px;
@@ -351,7 +339,7 @@
 
 		.ui-grid-pinned-container-left .ui-grid-viewport,
 		.ui-grid-pinned-container-right .ui-grid-viewport {
-			overflow: hidden !important;
+			overflow-x: hidden !important;
 		}
 
 		.ui-grid-pinned-container-left .ui-grid-header-viewport,

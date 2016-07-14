@@ -123,7 +123,7 @@
 
 			vm.gridOptions.columnDefs = vm.gridConfigurationService.columnDefinitions(vm.shiftTradeRequestDateSummary, requests);
 			vm.gridOptions.enablePinning = vm.shiftTradeView;
-			vm.gridOptions.enableVerticalScrollbar = 0;
+
 			applyColumnFilters(vm.gridOptions.columnDefs);
 
 			var filteringEnabled = vm.filterEnabled;
@@ -187,7 +187,6 @@
 				appScopeProvider: vm,
 				enableGridMenu: true,
 				enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
-				enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
 				useExternalSorting: true,
 				headerTemplate: 'shift-trade-header-template.html',
 				gridMenuTitleFilter: $translate,
