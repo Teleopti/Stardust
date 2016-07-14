@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	{
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly ISkillDayRepository _skillDayRepository;
-		//private readonly IStatisticRepository _statisticTaskRepository;
 		private readonly IValidatedVolumeDayRepository _validatedVolumeDayRepository;
 		private readonly WorkloadDayHelper _workloadDayHelper = new WorkloadDayHelper();
 
