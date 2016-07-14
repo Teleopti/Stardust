@@ -6,7 +6,9 @@ namespace Teleopti.Ccc.TestCommon.Services
 {
 	public class ApprovalServiceForTest : IRequestApprovalService
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
+
+	    private IEnumerable<IBusinessRuleResponse> businessRuleResponse = new List<IBusinessRuleResponse>();
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1065:DoNotRaiseExceptionsInUnexpectedLocations")]
 		public IScenario Scenario
 		{
 			get { throw new NotImplementedException(); }
@@ -14,12 +16,19 @@ namespace Teleopti.Ccc.TestCommon.Services
 
 		public IEnumerable<IBusinessRuleResponse> ApproveAbsence (IAbsence absence, DateTimePeriod period, IPerson person, IPersonRequest personRequest = null)
 		{
-			return new List<IBusinessRuleResponse>();
+		    return businessRuleResponse;
+
 		}
 
 		public IEnumerable<IBusinessRuleResponse> ApproveShiftTrade(IShiftTradeRequest shiftTradeRequest)
 		{
-			return new List<IBusinessRuleResponse>();
+		    return businessRuleResponse;
+
 		}
+
+	    public void SetBusinessRuleResponse(params IBusinessRuleResponse[] brokenRule)
+	    {
+	        businessRuleResponse = brokenRule;
+	    }
 	}
 }

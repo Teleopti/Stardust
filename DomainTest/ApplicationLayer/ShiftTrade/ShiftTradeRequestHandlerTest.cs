@@ -47,7 +47,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		private ILoadSchedulesForRequestWithoutResourceCalculation loader;
 		private IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService;
 		private IMessageBrokerComposite messageBroker;
-		private ISwapService swapService;
 		private IBusinessRuleProvider businessRuleProvider;
 		private INewBusinessRuleCollection newBusinessRuleCollection;
 
@@ -75,13 +74,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 					permissionChecker));
 			loader = MockRepository.GenerateMock<ILoadSchedulesForRequestWithoutResourceCalculation>();
 			messageBroker = new FakeMessageBrokerComposite();
-			swapService = new SwapService();
 			businessRuleProvider = MockRepository.GenerateMock<IBusinessRuleProvider>();
 			newBusinessRuleCollection = new FakeNewBusinessRuleCollection();
 			target = new ShiftTradeRequestHandler(schedulingResultState, validator, requestFactory,
 				scenarioRepository, personRequestRepository, scheduleStorage,
 				personRepository, personRequestCheckAuthorization, scheduleDictionarySaver,
-				loader, differenceCollectionService, messageBroker, swapService, businessRuleProvider);
+				loader, differenceCollectionService, messageBroker, businessRuleProvider);
 		}
 
 		private void createRepositories()
@@ -198,7 +196,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			target = new ShiftTradeRequestHandler(schedulingResultState, validator, requestFactory,
 				scenarioRepository, personRequestRepository, scheduleStorage,
 				personRepository, personRequestCheckAuthorization, scheduleDictionarySaver,
-				loader, differenceCollectionService, messageBroker, swapService, businessRuleProvider);
+				loader, differenceCollectionService, messageBroker, businessRuleProvider);
 
 			return target;
 		}

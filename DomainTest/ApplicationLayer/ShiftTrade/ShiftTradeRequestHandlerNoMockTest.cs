@@ -15,6 +15,7 @@ using Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
@@ -31,7 +32,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		private IShiftTradeValidator _validator;
 		private IPersonRepository _personRepository;
 		private IScheduleStorage _scheduleStorage;
-		private ISwapService _swapService;
 		private IPersonAssignment _personAssignment;
 		private IBusinessRuleProvider _businessRuleProvider;
 		private INewBusinessRuleCollection _businessRuleCollection;
@@ -46,7 +46,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_personRepository = new FakePersonRepository();
 			_requestFactory = new FakeRequestFactory();
 			_scheduleStorage = new FakeScheduleStorage();
-			_swapService = new SwapService();
 			_businessRuleProvider = new FakeBusinessRuleProvider();
 			_businessRuleCollection = new FakeNewBusinessRuleCollection();
 			var shiftTradeSpecifications = new List<IShiftTradeSpecification>
@@ -73,11 +72,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			_personRepository.Add(personTo);
 			var personRequest = prepareAndGetPersonRequest(personFrom, personTo, acceptShiftTradeEvent.PersonRequestId);
-
-			_target = new ShiftTradeRequestHandler(_schedulingResultStateHolder, _validator, _requestFactory,
+		    var approvalService = new ApprovalServiceForTest();
+		    approvalService.SetBusinessRuleResponse(ruleResponse1, ruleResponse2);
+            ((FakeRequestFactory) _requestFactory).setRequestApprovalService(approvalService);
+            _target = new ShiftTradeRequestHandler(_schedulingResultStateHolder, _validator, _requestFactory,
 			 _scenarioRepository, _personRequestRepository, _scheduleStorage, _personRepository
 			  , null, null,
-			 _loadSchedulingDataForRequestWithoutResourceCalculation, null, null, _swapService, _businessRuleProvider);
+			 _loadSchedulingDataForRequestWithoutResourceCalculation, null, null, _businessRuleProvider);
 			_target.Handle(acceptShiftTradeEvent);
 			Assert.IsTrue((personRequest.BrokenBusinessRules.HasFlag(BusinessRuleFlags.MinWeeklyRestRule)));
 			Assert.IsTrue((personRequest.BrokenBusinessRules.HasFlag(BusinessRuleFlags.NewMaxWeekWorkTimeRule)));
