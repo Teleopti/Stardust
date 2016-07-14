@@ -69,5 +69,3 @@ Scenario: Should be able to see leader board in given date range
 		| 1    | I             |
 		| 2    | Ashley Andeen |
 		| 3    | Pierre Baldi  |
-
-

@@ -1,28 +1,29 @@
-﻿<div id="leaderboard-reports" >
-	<style type="text/css">
-		#materialcontainer.container.content {
-			overflow: visible;
+﻿<style type="text/css">
+	#materialcontainer.container.content {
+		overflow: visible;
+	}
+
+	.wfm-reports.wfm-reports {
+		max-width: none;
+	}
+
+	#leftsidenav {
+		display: none;
+	}
+
+	@media print {
+		.layout-container, #materialcontainer {
+			display: block !important;
 		}
 
-		.wfm-reports.wfm-reports {
-			max-width: none;
+		#leftsidenav, #lefttoogle, span.people-search-input {
+			display: none !important;
 		}
+	}
+</style>
 
-		#leftsidenav {
-			display: none;
-		}
-
-		@media print {
-			.layout-container, #materialcontainer {
-				display: block !important;
-			}
-
-			#leftsidenav, #lefttoogle, span.people-search-input {
-				display: none !important;
-			}
-		}
-	</style>
-	<div class="wfm-reports leaderboard-container" ng-if="vm.isLeaderBoardEnabled">
+<div class="leaderboard-container">
+	<div class="wfm-reports" ng-if="vm.isLeaderBoardEnabled">
 		<div class="view-header">
 			<div class="view-title">
 				<h1><i class="mdi mdi-chart-bar"></i> <span translate>{{'BadgeLeaderBoardReport' | translate}}</span></h1>
