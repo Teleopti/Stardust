@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -12,6 +10,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
 	public class ApproveRequestCommandHandler : IHandleCommand<ApproveRequestCommand>
 	{
+
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IRequestApprovalServiceFactory _requestApprovalServiceFactory;
 		private readonly IScheduleDifferenceSaver _scheduleDictionarySaver;
@@ -21,14 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IWriteProtectedScheduleCommandValidator _writeProtectedScheduleCommandValidator;
 		
-		public ApproveRequestCommandHandler(IScheduleStorage scheduleStorage,
-			IScheduleDifferenceSaver scheduleDictionarySaver,
-			IPersonRequestCheckAuthorization personRequestCheckAuthorization,
-			IDifferenceCollectionService<IPersistableScheduleData> differenceService,
-			IPersonRequestRepository personRequestRepository,
-			IRequestApprovalServiceFactory requestApprovalServiceFactory,
-			ICurrentScenario currentScenario,
-			IWriteProtectedScheduleCommandValidator writeProtectedScheduleCommandValidator)
+		public ApproveRequestCommandHandler(IScheduleStorage scheduleStorage, IScheduleDifferenceSaver scheduleDictionarySaver, IPersonRequestCheckAuthorization personRequestCheckAuthorization, IDifferenceCollectionService<IPersistableScheduleData> differenceService, IPersonRequestRepository personRequestRepository, IRequestApprovalServiceFactory requestApprovalServiceFactory, ICurrentScenario currentScenario, IWriteProtectedScheduleCommandValidator writeProtectedScheduleCommandValidator)
 		{
 			_scheduleStorage = scheduleStorage;
 			_scheduleDictionarySaver = scheduleDictionarySaver;
@@ -39,47 +31,36 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_requestApprovalServiceFactory = requestApprovalServiceFactory;
 			_currentScenario = currentScenario;
 			_writeProtectedScheduleCommandValidator = writeProtectedScheduleCommandValidator;
+
 		}
 
 		public void Handle(ApproveRequestCommand command)
 		{
-			var affectedRequestIds = new List<Guid>();
-			var errorMessages = new List<string>();
 
-			foreach (var personRequestId in command.PersonRequestIds)
+			command.ErrorMessages = new List<string>();
+
+			var personRequest = _personRequestRepository.Get(command.PersonRequestId);
+
+			if (personRequest == null)
 			{
-				var personRequest = _personRequestRepository.Get(personRequestId);
-
-				if (personRequest == null)
-				{
-					continue;
-				}
-
-				if (!_writeProtectedScheduleCommandValidator.ValidateCommand(personRequest.RequestedDate,
-					personRequest.Person, command))
-				{
-					continue;
-				}
-
-				string errorMessage;
-				if (!approveRequest(personRequest, out errorMessage))
-				{
-					errorMessages.Add(errorMessage);
-					continue;
-				}
-
-				affectedRequestIds.Add(personRequestId);
+				return;
 			}
 
-			command.AffectedRequestIds = affectedRequestIds;
-			command.ErrorMessages = errorMessages;
+			if (!_writeProtectedScheduleCommandValidator.ValidateCommand(personRequest.RequestedDate, personRequest.Person, command))
+			{
+				return;
+			}
+
+			if (approveRequest(personRequest, command))
+			{
+				command.AffectedRequestId = command.PersonRequestId;
+			}
 		}
 
-		private bool approveRequest(IPersonRequest personRequest, out string errorMessage)
+		private bool approveRequest(IPersonRequest personRequest, ApproveRequestCommand command)
 		{
 			var scheduleDictionary = getSchedules(personRequest);
-			var approvalService = _requestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(scheduleDictionary,
-				_currentScenario.Current(), personRequest.Person);
+			var approvalService = _requestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(scheduleDictionary, _currentScenario.Current(), personRequest.Person);
 
 			try
 			{
@@ -87,18 +68,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 			catch (InvalidRequestStateTransitionException)
 			{
-				errorMessage = string.Format(Resources.RequestInvalidStateTransition, personRequest.StatusText,
-					Resources.Approved);
+				command.ErrorMessages.Add(string.Format(UserTexts.Resources.RequestInvalidStateTransition, personRequest.StatusText, UserTexts.Resources.Approved));
 				return false;
 			}
 
 			foreach (var range in scheduleDictionary.Values)
 			{
+
 				var diff = range.DifferenceSinceSnapshot(_differenceService);
-				_scheduleDictionarySaver.SaveChanges(diff, (IUnvalidatedScheduleRangeUpdate) range);
+				_scheduleDictionarySaver.SaveChanges(diff, (IUnvalidatedScheduleRangeUpdate)range);
 			}
 
-			errorMessage = null;
 			return true;
 		}
 
@@ -134,5 +114,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			((IReadOnlyScheduleDictionary)scheduleDictionary).MakeEditable();
 			return scheduleDictionary;
 		}
+		
 	}
 }

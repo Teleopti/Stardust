@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Interfaces.Domain;
@@ -18,37 +17,41 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
             _loggedOnUser = loggedOnUser;
         }
 
-	    public RequestCommandHandlingResult ApproveRequests(IEnumerable<Guid> requestIds)
-	    {
-		    var trackInfo = createTrackedCommandInfo();
-		    var affectedRequestIds = new List<Guid>();
-		    var errorMessages = new List<string>();
-
-		    var command = new ApproveRequestCommand
-		    {
-			    TrackedCommandInfo = trackInfo,
-			    PersonRequestIds = requestIds
-		    };
-
-		    _commandDispatcher.Execute(command);
-
-		    if (command.ErrorMessages != null)
-		    {
-			    errorMessages.AddRange(command.ErrorMessages);
-		    }
-
-		    if (command.AffectedRequestIds.Any()) affectedRequestIds.AddRange(command.AffectedRequestIds);
-
-		    return new RequestCommandHandlingResult(affectedRequestIds, errorMessages);
-	    }
-
-	    public RequestCommandHandlingResult DenyRequests(IEnumerable<Guid> requestIds)
+        public RequestCommandHandlingResult ApproveRequests(IEnumerable<Guid> ids)
         {
             var trackInfo = createTrackedCommandInfo();
             var affectedRequestIds = new List<Guid>();
             var errorMessages = new List<string>();
 
-            foreach (var personRequestId in requestIds)
+            foreach (var personRequestId in ids)
+            {
+
+                var command = new ApproveRequestCommand
+                {
+                    TrackedCommandInfo = trackInfo,
+                    PersonRequestId = personRequestId
+                };
+
+                _commandDispatcher.Execute(command);
+
+                if (command.ErrorMessages != null)
+                {
+                    errorMessages.AddRange(command.ErrorMessages);
+                }
+
+                if (command.AffectedRequestId.HasValue) affectedRequestIds.Add(command.AffectedRequestId.Value);
+            }
+
+            return new RequestCommandHandlingResult(affectedRequestIds, errorMessages);
+        }
+
+        public RequestCommandHandlingResult DenyRequests(IEnumerable<Guid> ids)
+        {
+            var trackInfo = createTrackedCommandInfo();
+            var affectedRequestIds = new List<Guid>();
+            var errorMessages = new List<string>();
+
+            foreach (var personRequestId in ids)
             {
                 var command = new DenyRequestCommand
                 {
@@ -69,15 +72,16 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
             }
 
             return new RequestCommandHandlingResult(affectedRequestIds, errorMessages);
+
         }
 
-        public RequestCommandHandlingResult CancelRequests(IEnumerable<Guid> requestIds)
+        public RequestCommandHandlingResult CancelRequests(IEnumerable<Guid> ids)
         {
             var trackInfo = createTrackedCommandInfo();
             var affectedRequestIds = new List<Guid>();
             var errorMessages = new List<string>();
 
-            foreach (var personRequestId in requestIds)
+            foreach (var personRequestId in ids)
             {
                 var command = new CancelAbsenceRequestCommand
                 {

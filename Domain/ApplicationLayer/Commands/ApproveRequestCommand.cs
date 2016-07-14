@@ -7,8 +7,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 	public class ApproveRequestCommand : ITrackableCommand, IErrorAttachedCommand
 	{
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
-		public IEnumerable<Guid> PersonRequestIds { get; set; }
-		public IEnumerable<Guid> AffectedRequestIds { get; set; }
+		public Guid PersonRequestId { get; set; }
+		public Guid? AffectedRequestId { get; set; }
 		public IList<string> ErrorMessages { get; set; }
 	}
 }
