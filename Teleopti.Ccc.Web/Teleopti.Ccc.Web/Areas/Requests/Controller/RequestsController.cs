@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 		}
 
 		[HttpPost, Route("api/Requests/approveBasedOnBudget"), UnitOfWork]
-		public virtual TrackedCommandInfo ApproveRequestsBasedOnBudgetAllotment(IEnumerable<Guid> requestIds)
+		public virtual RequestCommandHandlingResult ApproveRequestsBasedOnBudgetAllotment(IEnumerable<Guid> requestIds)
 		{
 			return _commandHandlingProvider.ApproveRequestsBasedOnBudgetAllotment(requestIds);
 		}
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 		[HttpGet, Route("api/Requests/runWaitlist"), UnitOfWork]
 		public virtual RequestCommandHandlingResult RunRequestWaitlist(DateTime startTime, DateTime endTime)
 		{
-			 var timezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var timezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var startTimeUtc = timezone.SafeConvertTimeToUtc(startTime);
 			var endTimeUtc = timezone.SafeConvertTimeToUtc(endTime);
 			var period = new DateTimePeriod(startTimeUtc, endTimeUtc);

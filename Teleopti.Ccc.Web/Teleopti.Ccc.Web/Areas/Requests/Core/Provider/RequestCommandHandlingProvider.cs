@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
             return new RequestCommandHandlingResult(affectedRequestIds, errorMessages);
         }
 
-		public TrackedCommandInfo ApproveRequestsBasedOnBudgetAllotment(IEnumerable<Guid> requestIds)
+		public RequestCommandHandlingResult ApproveRequestsBasedOnBudgetAllotment(IEnumerable<Guid> requestIds)
 		{
 			var trackInfo = createTrackedCommandInfo();
 			var command = new ApproveBatchRequestsCommand
@@ -57,7 +57,13 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 
 			_commandDispatcher.Execute(command);
 
-			return trackInfo;
+			var errorMessages = new List<string>();
+			if (command.ErrorMessages != null)
+			{
+				errorMessages.AddRange(command.ErrorMessages);
+			}
+
+			return new RequestCommandHandlingResult(new Guid[] { }, errorMessages, trackInfo.TrackId);
 		}
 
         public RequestCommandHandlingResult DenyRequests(IEnumerable<Guid> requestIds)

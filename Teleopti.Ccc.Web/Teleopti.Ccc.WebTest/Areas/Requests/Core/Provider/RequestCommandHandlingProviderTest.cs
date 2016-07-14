@@ -142,7 +142,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 								&& (cmd.Validator == (RequestValidatorsFlag.WriteProtectedScheduleValidator
 													  | RequestValidatorsFlag.BudgetAllotmentValidator))))));
 
-			result.Should().Not.Be(null);
+			result.AffectedRequestIds.Count().Should().Be(0);
+			result.ErrorMessages.Count().Should().Be(0);
 		}
 
 		[Test]
