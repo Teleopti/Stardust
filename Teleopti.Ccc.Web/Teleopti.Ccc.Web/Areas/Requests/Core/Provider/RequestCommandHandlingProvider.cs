@@ -17,15 +17,14 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
             _loggedOnUser = loggedOnUser;
         }
 
-        public RequestCommandHandlingResult ApproveRequests(IEnumerable<Guid> ids)
+        public RequestCommandHandlingResult ApproveRequests(IEnumerable<Guid> requestIds)
         {
             var trackInfo = createTrackedCommandInfo();
             var affectedRequestIds = new List<Guid>();
             var errorMessages = new List<string>();
 
-            foreach (var personRequestId in ids)
+            foreach (var personRequestId in requestIds)
             {
-
                 var command = new ApproveRequestCommand
                 {
                     TrackedCommandInfo = trackInfo,
@@ -45,13 +44,29 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
             return new RequestCommandHandlingResult(affectedRequestIds, errorMessages);
         }
 
-        public RequestCommandHandlingResult DenyRequests(IEnumerable<Guid> ids)
+		public TrackedCommandInfo ApproveRequestsBasedOnBudgetAllotment(IEnumerable<Guid> requestIds)
+		{
+			var trackInfo = createTrackedCommandInfo();
+			var command = new ApproveBatchRequestsCommand
+			{
+				TrackedCommandInfo = trackInfo,
+				Validator = RequestValidatorsFlag.WriteProtectedScheduleValidator
+							| RequestValidatorsFlag.BudgetAllotmentValidator,
+				PersonRequestIdList = requestIds,
+			};
+
+			_commandDispatcher.Execute(command);
+
+			return trackInfo;
+		}
+
+        public RequestCommandHandlingResult DenyRequests(IEnumerable<Guid> requestIds)
         {
             var trackInfo = createTrackedCommandInfo();
             var affectedRequestIds = new List<Guid>();
             var errorMessages = new List<string>();
 
-            foreach (var personRequestId in ids)
+            foreach (var personRequestId in requestIds)
             {
                 var command = new DenyRequestCommand
                 {
@@ -72,16 +87,15 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
             }
 
             return new RequestCommandHandlingResult(affectedRequestIds, errorMessages);
-
         }
 
-        public RequestCommandHandlingResult CancelRequests(IEnumerable<Guid> ids)
+        public RequestCommandHandlingResult CancelRequests(IEnumerable<Guid> requestIds)
         {
             var trackInfo = createTrackedCommandInfo();
             var affectedRequestIds = new List<Guid>();
             var errorMessages = new List<string>();
 
-            foreach (var personRequestId in ids)
+            foreach (var personRequestId in requestIds)
             {
                 var command = new CancelAbsenceRequestCommand
                 {

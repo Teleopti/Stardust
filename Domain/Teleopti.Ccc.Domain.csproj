@@ -161,6 +161,8 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\IRunRequestWaitlistEventMessage.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandler.cs" />
     <Compile Include="ApplicationLayer\BusinessUnit\AnalyticsBusinessUnitUpdater.cs" />
+    <Compile Include="ApplicationLayer\Commands\ApproveBatchRequestsCommand.cs" />
+    <Compile Include="ApplicationLayer\Commands\ApproveBatchRequestsCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\BackoutScheduleChangeCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\BackoutScheduleChangeCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Availability\AnalyticsAvailabilityUpdater.cs" />

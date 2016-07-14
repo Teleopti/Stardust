@@ -5,6 +5,8 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -123,6 +125,25 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			result.AffectedRequestIds.ToList().Count.Should().Be.EqualTo(2);
 		}
 
+		[Test]
+		public void ShouldSendCommandForApproveRequestsBasedOnBudgetAllotment()
+		{
+			var requestIds = new List<Guid> {Guid.NewGuid(), Guid.NewGuid()};
+			var cmdDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(PersonFactory.CreatePersonWithId());
+
+			var target = new RequestCommandHandlingProvider(cmdDispatcher, loggedOnUser);
+			var result = target.ApproveRequestsBasedOnBudgetAllotment(requestIds);
+			cmdDispatcher.AssertWasCalled(
+				dispatcher => dispatcher.Execute(
+					Arg<ApproveBatchRequestsCommand>.Matches(
+						cmd => (cmd.PersonRequestIdList.Equals(requestIds)
+								&& (cmd.Validator == (RequestValidatorsFlag.WriteProtectedScheduleValidator
+													  | RequestValidatorsFlag.BudgetAllotmentValidator))))));
+
+			result.Should().Not.Be(null);
+		}
 
 		[Test]
 		public void ShouldNotHandleDenyCommandWithInvalidRequestId()
@@ -131,11 +152,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			result.AffectedRequestIds.ToList().Count.Should().Be.EqualTo(0);
 		}
 
-
 		[Test]
 		public void ShouldDenyAbsenceRequestWithPendingStatus()
 		{
-
 			var absence = AbsenceFactory.CreateAbsence("absence");
 			var person = PersonFactory.CreatePerson("tester");
 
@@ -150,8 +169,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		[Test]
 		public void ShouldDenyAllAbsenceRequestsWithPendingStatus()
 		{
-
-
 			var absence = AbsenceFactory.CreateAbsence("absence");
 			var person = PersonFactory.CreatePerson("tester");
 			var personRequest1 = createNewAbsenceRequest(person, absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
@@ -181,7 +198,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			waitlistedPersonRequest.IsWaitlisted.Should().Be.False();
 			waitlistedPersonRequest.IsDenied.Should().Be.True();
 		}
-
 
 		[Test]
 		public void ShouldManuallyApproveWaitlistedRequests()
@@ -275,7 +291,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			result.Success.Should().Be.False();
 			result.AffectedRequestIds.Should().Be.Empty();
 			personRequest.IsCancelled.Should().Be.False();
-
 		}
 
 		[Test]
@@ -334,7 +349,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 
 			Target.ApproveRequests(new List<Guid> { personRequest.Id.Value });
 
-
 			if (associatePersonAbsence)
 			{
 				var personAbsence =
@@ -368,7 +382,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 
 			var absence = AbsenceFactory.CreateAbsence("absence");
 			var personRequest = createNewAbsenceRequest(person, absence, dateTimePeriod);
-			var absenceRequest = personRequest.Request as AbsenceRequest;
 			personRequest.Pending();
 
 			requestApprovalService.Stub(x => x.ApproveAbsence(absence, dateTimePeriod, person, personRequest))
@@ -415,7 +428,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 
 			if (isAutoDenied)
 			{
-
 				personRequest.Deny(null, "Work Hard!", new PersonRequestAuthorizationCheckerForTest());
 			}
 

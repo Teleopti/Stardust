@@ -157,6 +157,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceRequestHandlerNoMocksTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceRequestHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\ApproveBatchRequestsCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\BackoutScheduleChangeCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\BusinessUnit\AnalyticsBusinessUnitUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\FakeMessageBrokerComposite.cs" />

@@ -51,21 +51,27 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 		}
 
 		[HttpPost, Route("api/Requests/approveRequests"), UnitOfWork]
-		public virtual RequestCommandHandlingResult ApproveRequests(IEnumerable<Guid> ids)
+		public virtual RequestCommandHandlingResult ApproveRequests(IEnumerable<Guid> requestIds)
 		{
-			return _commandHandlingProvider.ApproveRequests(ids);
+			return _commandHandlingProvider.ApproveRequests(requestIds);
+		}
+
+		[HttpPost, Route("api/Requests/approveBasedOnBudget"), UnitOfWork]
+		public virtual TrackedCommandInfo ApproveRequestsBasedOnBudgetAllotment(IEnumerable<Guid> requestIds)
+		{
+			return _commandHandlingProvider.ApproveRequestsBasedOnBudgetAllotment(requestIds);
 		}
 
 		[HttpPost, Route("api/Requests/denyRequests"), UnitOfWork]
-		public virtual RequestCommandHandlingResult DenyRequests(IEnumerable<Guid> ids)
+		public virtual RequestCommandHandlingResult DenyRequests(IEnumerable<Guid> requestIds)
 		{
-			return _commandHandlingProvider.DenyRequests(ids);
+			return _commandHandlingProvider.DenyRequests(requestIds);
 		}
 
 		[HttpPost, Route("api/Requests/cancelRequests"), UnitOfWork]
-		public virtual RequestCommandHandlingResult CancelRequests(IEnumerable<Guid> ids)
+		public virtual RequestCommandHandlingResult CancelRequests(IEnumerable<Guid> requestIds)
 		{
-			return _commandHandlingProvider.CancelRequests(ids);
+			return _commandHandlingProvider.CancelRequests(requestIds);
 		}
 
 		[HttpGet, Route("api/Requests/runWaitlist"), UnitOfWork]
