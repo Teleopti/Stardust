@@ -91,10 +91,10 @@
 			return true;
 		}
 
-		function onCommandSuccess(commandType, changedRequestsCount, requestsCount, commandId, waitlistPeriod) {
+		function onCommandSuccess(commandType, changedRequestsCount, requestsCount, commandTrackId, waitlistPeriod) {
 			vm.disableInteraction = false;
 			forceRequestsReloadWithoutSelection();
-			if (commandId) vm.commandIdForMessage = commandId;
+			if (commandTrackId) vm.commandTrackIdForMessage = commandTrackId;
 			if (commandType === requestsDefinitions.REQUEST_COMMANDS.Approve) {
 				requestsNotificationService.notifyApproveRequestsSuccess(changedRequestsCount, requestsCount);
 			} else if (commandType === requestsDefinitions.REQUEST_COMMANDS.Deny) {
@@ -121,7 +121,7 @@
 		}
 
 		function RunRequestWaitlistEventHandler(message) {
-			if (vm.commandIdForMessage === message.TrackId) {
+			if (vm.commandTrackIdForMessage === message.TrackId) {
 				var period = formatDatePeriod(message);
 				requestsNotificationService.notifyProcessWaitlistedRequestsFinished(period);
 			}

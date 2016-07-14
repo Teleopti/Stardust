@@ -47,12 +47,8 @@
             return $http.get(processWaitlistRequests, { params: waitlistPeriodGet });
 		};
 
-		this.approveRequestsBaseOnBudgetPromise = function (selectedRequestIds, commandId) {
-			var approveRequestInput = {
-				PersonRequestIds: selectedRequestIds,
-				CommandId: commandId
-			};
-			return $http.post(approveRequestsBaseOnBudgetUrl, approveRequestInput);
+		this.approveRequestsBaseOnBudgetPromise = function (selectedRequestIds) {
+			return $http.post(approveRequestsBaseOnBudgetUrl, selectedRequestIds);
 		};
 
 		this.denyRequestsPromise = function(selectedRequestIds) {

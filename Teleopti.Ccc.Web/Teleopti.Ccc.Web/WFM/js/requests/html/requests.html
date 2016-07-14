@@ -27,7 +27,7 @@
 	<requests-commands-pane ng-if="requests.isRequestsCommandsEnabled && requests.canApproveOrDenyRequest()"
 							before-command="requests.onBeforeCommand()"
 							is-shift-trade-view-active="requests.isShiftTradeViewActive()"
-							after-command-success="requests.onCommandSuccess(commandType, changedRequestsCount, requestsCount, commandId, waitlistPeriod)"
+							after-command-success="requests.onCommandSuccess(commandType, changedRequestsCount, requestsCount, commandTrackId, waitlistPeriod)"
 							on-error-messages="requests.onErrorMessages(errorMessages)"
 							after-command-error="requests.onCommandError(error)"
 							commands-disabled="requests.disableInteraction"></requests-commands-pane>

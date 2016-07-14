@@ -105,28 +105,28 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
             return new RequestCommandHandlingResult(affectedRequestIds, errorMessages);
         }
 
-        public RequestCommandHandlingResult RunWaitlist(DateTimePeriod period, Guid commandId)
-        {
-            var trackInfo = createTrackedCommandInfo();
-            var errorMessages = new List<string>();
-            var command = new RunWaitlistCommand
-            {
-                TrackedCommandInfo = trackInfo,
-                Period = period,
-                CommandId = commandId
-            };
+		public RequestCommandHandlingResult RunWaitlist(DateTimePeriod period)
+		{
+			var trackInfo = createTrackedCommandInfo();
+			var errorMessages = new List<string>();
+			var command = new RunWaitlistCommand
+			{
+				TrackedCommandInfo = trackInfo,
+				Period = period,
+				CommandId = trackInfo.TrackId
+			};
 
-            _commandDispatcher.Execute(command);
+			_commandDispatcher.Execute(command);
 
-            if (command.ErrorMessages != null)
-            {
-                errorMessages.AddRange(command.ErrorMessages);
-            }
+			if (command.ErrorMessages != null)
+			{
+				errorMessages.AddRange(command.ErrorMessages);
+			}
 
-            return new RequestCommandHandlingResult(new Guid[] { }, errorMessages);
-        }
+			return new RequestCommandHandlingResult(new Guid[] { }, errorMessages, trackInfo.TrackId);
+		}
 
-        private TrackedCommandInfo createTrackedCommandInfo()
+	    private TrackedCommandInfo createTrackedCommandInfo()
         {
             return new TrackedCommandInfo
             {

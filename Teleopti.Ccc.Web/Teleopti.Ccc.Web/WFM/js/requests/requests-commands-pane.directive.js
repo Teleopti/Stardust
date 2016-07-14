@@ -41,21 +41,20 @@
 			return requestCommandParamsHolder ? requestCommandParamsHolder.getSelectedRequestsIds(vm.isShiftTradeViewActive) : null;
 		}
 
-		function doProcessWaitlistCommandHandling(commandId, waitlistPeriod) {
+		function doProcessWaitlistCommandHandling(waitlistPeriod) {
 			var requestType = requestsDefinitions.REQUEST_COMMANDS.ProcessWaitlist;
 			var dataServicePromise = requestsDataService.processWaitlistRequestsPromise;
-			var commandInProgress = dataServicePromise(waitlistPeriod, commandId);
+			var commandInProgress = dataServicePromise(waitlistPeriod);
 			
 			if (vm.afterCommandSuccess) {
 				commandInProgress.success(function (requestCommandHandlingResult) {
 
 					if (requestCommandHandlingResult.Success || (requestCommandHandlingResult.AffectedRequestIds && requestCommandHandlingResult.AffectedRequestIds.length > 0)) {
-
 						vm.afterCommandSuccess({
 							commandType: requestType,
 							changedRequestsCount: requestCommandHandlingResult.AffectedRequestIds.length,
 							requestsCount: null,
-							commandId: commandId,
+							commandTrackId: requestCommandHandlingResult.CommandTrackId,
 							waitlistPeriod: waitlistPeriod
 						});
 					}
@@ -70,11 +69,11 @@
 			}
 		}
 
-		function doStandardCommandHandling(requestType, dataServicePromise, commandId) {
+		function doStandardCommandHandling(requestType, dataServicePromise) {
 			var selectedRequestIds = getSelectedRequestIds();
 			if (!selectedRequestIds || selectedRequestIds.length === 0) return;
 			if (vm.beforeCommand && !vm.beforeCommand()) return;
-			var commandInProgress = dataServicePromise(selectedRequestIds, commandId);
+			var commandInProgress = dataServicePromise(selectedRequestIds);
 			
 			if (vm.afterCommandSuccess) {
 				commandInProgress.success(function (requestCommandHandlingResult) {
@@ -85,7 +84,7 @@
 							commandType: requestType,
 							changedRequestsCount: requestCommandHandlingResult.AffectedRequestIds.length,
 							requestsCount: selectedRequestIds.length,
-							commandId: commandId
+							commandTrackId: requestCommandHandlingResult.CommandTrackId
 						});
 					}
 					if (requestCommandHandlingResult.ErrorMessages && requestCommandHandlingResult.ErrorMessages.length > 0) {
@@ -103,26 +102,14 @@
 			doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.Approve, requestsDataService.approveRequestsPromise);
 		}
 
-		function s4() {
-			return Math.floor((1 + Math.random()) * 0x10000)
-				.toString(16)
-				.substring(1);
-		}
-
-		var newGuid = function () {
-			return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
-		};
-
-		var commandId = newGuid();
-
 		function processWaitlistRequests() {
 			vm.toggleProcessWaitlistModal();
-			doProcessWaitlistCommandHandling(commandId, vm.waitlistPeriod);
+			doProcessWaitlistCommandHandling(vm.waitlistPeriod);
 			initWaitlistProcessPeriod();
 		}
 
 		function approveRequestsBaseOnBudget() {
-			doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.ApproveBaseOnBudget, requestsDataService.approveRequestsBaseOnBudgetPromise, commandId);
+			doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.ApproveBaseOnBudget, requestsDataService.approveRequestsBaseOnBudgetPromise);
 		}
 
 		function denyRequests() {

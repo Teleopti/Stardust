@@ -3,7 +3,7 @@ describe('RequestsControllerTests', function () {
 	var $compile,
 		$rootScope,
 		$controller;
-	var requestsDataService, requestsNotificationService, requestCommandParamsHolder, _notificationResult;
+	var requestsDataService, requestsNotificationService, requestCommandParamsHolder, _notificationResult, requestsController;
 
 	beforeEach(function () {
 		module('wfm.templates');
@@ -45,13 +45,15 @@ describe('RequestsControllerTests', function () {
 		var test = setUpTarget();
 		var handleResult = {
 			Success: true,
-			AffectedRequestIds: [{ id: 1 }]
+			AffectedRequestIds: [{ id: 1 }],
+			CommandTrackId: "12"
 		}
 		requestsDataService.submitCommandIsASucess(true);
 		requestsDataService.setRequestCommandHandlingResult(handleResult);
 
 		test.requestCommandPaneScope.processWaitlistRequests();
 
+		expect(handleResult.CommandTrackId).toEqual(requestsController.commandTrackIdForMessage);
 		expect(_notificationResult).toEqual('Submit process waitlisted requests command success');
 	});
 
@@ -186,7 +188,8 @@ describe('RequestsControllerTests', function () {
 		var test = setUpTarget();
 		var handleResult = {
 			Success: true,
-			AffectedRequestIds: [{ id: 1 }]
+			AffectedRequestIds: [{ id: 1 }],
+			CommandTrackId: "13"
 		}
 		var requestIds = [{ id: 1 }, { id: 2 }];
 		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
@@ -195,6 +198,7 @@ describe('RequestsControllerTests', function () {
 
 		test.requestCommandPaneScope.approveRequestsBaseOnBudget();
 
+		expect(handleResult.CommandTrackId).toEqual(requestsController.commandTrackIdForMessage);
 		expect(_notificationResult).toEqual('SubmitApproveRequestsBaseOnBudgetSucess');
 	});
 
@@ -266,16 +270,16 @@ describe('RequestsControllerTests', function () {
 			isShiftTradeViewActived = false;
 		}
 		var scope = $rootScope.$new();
-		var target = $controller('RequestsCtrl', {
+		requestsController = $controller('RequestsCtrl', {
 			$scope: scope
 		});
 		_notificationResult = '';
 		var targetScope = $rootScope.$new();
-		targetScope.onCommandSuccess = target.onCommandSuccess;
-		targetScope.onErrorMessages = target.onErrorMessages;
-		targetScope.onCommandError = target.onCommandError;
+		targetScope.onCommandSuccess = requestsController.onCommandSuccess;
+		targetScope.onErrorMessages = requestsController.onErrorMessages;
+		targetScope.onCommandError = requestsController.onCommandError;
 		var targetElement = $compile('<requests-commands-pane ' +
-			'after-command-success="onCommandSuccess(commandType, changedRequestsCount, requestsCount, commandId, waitlistPeriod) "' +
+			'after-command-success="onCommandSuccess(commandType, changedRequestsCount, requestsCount, commandTrackId, waitlistPeriod) "' +
 			'on-error-messages="onErrorMessages(errorMessages) "' +
 			'after-command-error="onCommandError(error)"' +
 			'is-shift-trade-view-active="' + isShiftTradeViewActived + '"' +

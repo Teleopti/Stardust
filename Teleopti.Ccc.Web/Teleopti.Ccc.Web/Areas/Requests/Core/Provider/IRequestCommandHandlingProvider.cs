@@ -9,6 +9,6 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 		RequestCommandHandlingResult ApproveRequests(IEnumerable<Guid> ids);
 		RequestCommandHandlingResult DenyRequests(IEnumerable<Guid> ids);
 		RequestCommandHandlingResult CancelRequests(IEnumerable<Guid> ids);
-		RequestCommandHandlingResult RunWaitlist(DateTimePeriod period,Guid commandId);
+		RequestCommandHandlingResult RunWaitlist(DateTimePeriod period);
 	}
 }

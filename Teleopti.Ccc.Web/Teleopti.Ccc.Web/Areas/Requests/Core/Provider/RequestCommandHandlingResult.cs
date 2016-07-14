@@ -22,7 +22,13 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			}
 
 			Success = success;
+		}
 
+		public RequestCommandHandlingResult(ICollection<Guid> affectedRequestIds, ICollection<string> errorMessages,
+			Guid commandTrackId)
+			: this(affectedRequestIds, errorMessages)
+		{
+			CommandTrackId = commandTrackId;
 		}
 
 		public bool Success { get; set; }
@@ -34,5 +40,6 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 		//used only in MyTimeWeb
 		public RequestViewModel RequestViewModel { get; set; }
 
+		public Guid CommandTrackId { get; set; }
 	}
 }
