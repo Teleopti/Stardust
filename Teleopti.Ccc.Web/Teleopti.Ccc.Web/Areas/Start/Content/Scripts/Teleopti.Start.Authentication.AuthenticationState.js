@@ -10,6 +10,7 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 	var gotoSignInView = Teleopti.Start.Authentication.Navigation.GotoSignIn;
 	var gotoBusinessUnitsView = Teleopti.Start.Authentication.Navigation.GotoBusinessUnits;
 	var gotoMenuView = Teleopti.Start.Authentication.Navigation.GotoMenu;
+	var toggleNewWeb = false;
 
 	this.AttemptGotoApplicationBySignIn = function (options) {
 		$.extend(options, {
@@ -32,13 +33,16 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 						}
 					});
 					self.AttemptGotoApplicationBySelectingBusinessUnit(options);
+
 					return;
 				}
 
 				options.errormessage("obscure amount of business units found");
 			}
 		});
+
 		businessUnitsAjax(options);
+		
 	};
 
 	this.CheckState = function () {
@@ -175,7 +179,8 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 
 		$.extend(options, {
 			success: function (logonData, textState, jqXHR) {
-
+				toggleNewWeb = logonData.WfmTeamSchedule_MakeNewMyTeamDefault_39744;
+				
 				if (logonData.MyTimeWeb_KeepUrlAfterLogon_34762 === true ) {
 					$.extend(options, {
 						success: function(applicationsData, textState, jqXHR) {
@@ -196,6 +201,9 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 							var anywhereApplication = ko.utils.arrayFirst(applicationsData, function (a) {
 								return a.Area === "Anywhere";
 							});
+							var wfmApplication = ko.utils.arrayFirst(applicationsData, function(a) {
+								return a.Area === "WFM";
+							});
 							var area;
 							if (areaToGo) {
 								area = areaToGo;
@@ -207,7 +215,10 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 									return;
 								}
 							} else {
-								if (anywhereApplication)
+								if (toggleNewWeb && wfmApplication) {
+									area = wfmApplication.Area;
+								}
+								else if (anywhereApplication)
 									area = anywhereApplication.Area;
 								else if (applicationsData.length == 1)
 									area = applicationsData[0].Area;
@@ -259,11 +270,16 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 
 		var areaToGo;
 		var returnHash = getCookie("returnHash");
-		
+
 		if (applicationsData.length > 1) {
 
 			tryToGoToHash(returnHash);
-			tryToGoToAnyWhere();
+			if (toggleNewWeb) {
+				tryToGoToWfm();
+			} else {
+				tryToGoToAnyWhere();
+			}
+
 			tryToGoToFirstApplication();
 
 		} else if (applicationsData.length == 1) {
@@ -287,7 +303,7 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 		function tryToGoToHash(hash) {
 			if (areaToGo && areaToGo.length > 0) return;
 
-			var hasPermissionToGoToHash = applicationsData.some(function (app) {
+			var hasPermissionToGoToHash = applicationsData.some(function(app) {
 				return hash.indexOf(app.Name) === 0;
 			});
 			if (hasPermissionToGoToHash) {
@@ -298,11 +314,22 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 		function tryToGoToAnyWhere() {
 			if (areaToGo && areaToGo.length > 0) return;
 
-			var anywhereApplication = ko.utils.arrayFirst(applicationsData, function (a) {
+			var anywhereApplication = ko.utils.arrayFirst(applicationsData, function(a) {
 				return a.Name === "Anywhere";
 			});
 			if (anywhereApplication) {
 				areaToGo = anywhereApplication.Name;
+			}
+		}
+
+		function tryToGoToWfm() {
+			if (areaToGo && areaToGo.length > 0) return;
+
+			var wfmApplication = ko.utils.arrayFirst(applicationsData, function(a) {
+				return a.Name === "WFM";
+			});
+			if (wfmApplication) {
+				areaToGo = wfmApplication.Name;
 			}
 		}
 

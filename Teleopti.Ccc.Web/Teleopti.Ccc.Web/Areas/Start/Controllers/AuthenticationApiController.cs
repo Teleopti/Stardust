@@ -71,7 +71,11 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			}
 
 			var isToggleOpen = _toggleManager.IsEnabled(Toggles.MyTimeWeb_KeepUrlAfterLogon_34762);
-			return Ok(new { MyTimeWeb_KeepUrlAfterLogon_34762 = isToggleOpen });
+			return Ok(new
+			{
+				MyTimeWeb_KeepUrlAfterLogon_34762 = isToggleOpen,
+				WfmTeamSchedule_MakeNewMyTeamDefault_39744 = _toggleManager.IsEnabled(Toggles.WfmTeamSchedule_MakeNewMyTeamDefault_39744)
+			});
 		}
 
 		private IHttpActionResult errorMessage(string message)
