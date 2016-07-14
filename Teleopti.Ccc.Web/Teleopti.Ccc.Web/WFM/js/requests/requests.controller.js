@@ -3,9 +3,9 @@
 
 	angular.module('wfm.requests').controller('RequestsCtrl', requestsController);
 
-	requestsController.$inject = ["$scope", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "CurrentUserInfo", "signalRSVC", "NoticeService"];
+	requestsController.$inject = ["$scope", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "NoticeService"];
 
-	function requestsController($scope, $translate, toggleService, requestsDefinitions, requestsNotificationService, CurrentUserInfo, signalRSVC, noticeSvc) {
+	function requestsController($scope, $translate, toggleService, requestsDefinitions, requestsNotificationService, noticeSvc) {
 		var vm = this;
 		vm.onAgentSearchTermChanged = onAgentSearchTermChanged;
 
@@ -24,7 +24,6 @@
 		}];
 		
 		function init() {
-			monitorRunRequestWaitlist();
 			vm.isRequestsEnabled = toggleService.Wfm_Requests_Basic_35986;
 			vm.isPeopleSearchEnabled = toggleService.Wfm_Requests_People_Search_36294;
 			vm.canApproveOrDenyShiftTradeRequest = toggleService.Wfm_Requests_ApproveDeny_ShiftTrade_38494;
@@ -91,10 +90,9 @@
 			return true;
 		}
 
-		function onCommandSuccess(commandType, changedRequestsCount, requestsCount, commandTrackId, waitlistPeriod) {
+		function onCommandSuccess(commandType, changedRequestsCount, requestsCount, waitlistPeriod) {
 			vm.disableInteraction = false;
 			forceRequestsReloadWithoutSelection();
-			if (commandTrackId) vm.commandTrackIdForMessage = commandTrackId;
 			if (commandType === requestsDefinitions.REQUEST_COMMANDS.Approve) {
 				requestsNotificationService.notifyApproveRequestsSuccess(changedRequestsCount, requestsCount);
 			} else if (commandType === requestsDefinitions.REQUEST_COMMANDS.Deny) {
@@ -106,24 +104,6 @@
 				requestsNotificationService.notifySubmitProcessWaitlistedRequestsSuccess(period);
 			}else if (commandType === requestsDefinitions.REQUEST_COMMANDS.ApproveBaseOnBudget) {
 				requestsNotificationService.notifySubmitApproveRequestsBaseOnBudgetSucess();
-			}
-		}
-
-		function monitorRunRequestWaitlist() {
-			signalRSVC.subscribe({ DomainType: 'IRunRequestWaitlistEventMessage' }, RunRequestWaitlistEventHandler);
-		}
-
-		function formatDatePeriod(message) {
-			vm.userTimeZone = CurrentUserInfo.CurrentUserInfo().DefaultTimeZone;
-			var startDate = moment(message.StartDate.substring(1, message.StartDate.length)).tz(vm.userTimeZone).format("L");
-			var endDate = moment(message.EndDate.substring(1, message.EndDate.length)).tz(vm.userTimeZone).format("L");
-			return startDate + "-" + endDate;
-		}
-
-		function RunRequestWaitlistEventHandler(message) {
-			if (vm.commandTrackIdForMessage === message.TrackId) {
-				var period = formatDatePeriod(message);
-				requestsNotificationService.notifyProcessWaitlistedRequestsFinished(period);
 			}
 		}
 

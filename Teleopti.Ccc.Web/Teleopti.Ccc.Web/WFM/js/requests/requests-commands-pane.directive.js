@@ -6,9 +6,9 @@
 		.directive('requestsCommandsPane', requestsCommandsPaneDirective)
 
 
-	requestsCommandsPaneCtrl.$inject = ['requestsDefinitions', 'requestsDataService', 'requestCommandParamsHolder', 'Toggle'];
+	requestsCommandsPaneCtrl.$inject = ['requestsDefinitions', 'requestsDataService', 'requestCommandParamsHolder', 'Toggle', 'signalRSVC', 'requestsNotificationService', 'CurrentUserInfo'];
 
-	function requestsCommandsPaneCtrl(requestsDefinitions, requestsDataService, requestCommandParamsHolder, toggleSvc) {
+	function requestsCommandsPaneCtrl(requestsDefinitions, requestsDataService, requestCommandParamsHolder, toggleSvc, signalRSVC, requestsNotificationService, CurrentUserInfo) {
 		var vm = this;
 
 		vm.approveRequests = approveRequests;
@@ -24,12 +24,12 @@
 		vm.approveRequestsBaseOnBudget = approveRequestsBaseOnBudget;
 		vm.isApproveBaseOnBudgetEnabled = isApproveBaseOnBudgetEnabled;
 		initWaitlistProcessPeriod();
+		subscribeSignalrMessage();
 
 		function handleErrorMessages(errorMessages) {
 			if (vm.onErrorMessages) {
 				vm.onErrorMessages({ errorMessages: errorMessages });
 			}
-
 		}
 
 		function initWaitlistProcessPeriod() {
@@ -50,11 +50,11 @@
 				commandInProgress.success(function (requestCommandHandlingResult) {
 
 					if (requestCommandHandlingResult.Success || (requestCommandHandlingResult.AffectedRequestIds && requestCommandHandlingResult.AffectedRequestIds.length > 0)) {
+						vm.commandTrackId = requestCommandHandlingResult.CommandTrackId;
 						vm.afterCommandSuccess({
 							commandType: requestType,
 							changedRequestsCount: requestCommandHandlingResult.AffectedRequestIds.length,
 							requestsCount: null,
-							commandTrackId: requestCommandHandlingResult.CommandTrackId,
 							waitlistPeriod: waitlistPeriod
 						});
 					}
@@ -79,12 +79,11 @@
 				commandInProgress.success(function (requestCommandHandlingResult) {
 
 					if (requestCommandHandlingResult.Success || (requestCommandHandlingResult.AffectedRequestIds && requestCommandHandlingResult.AffectedRequestIds.length > 0)) {
-						
+						vm.commandTrackId = requestCommandHandlingResult.CommandTrackId;
 						vm.afterCommandSuccess({
 							commandType: requestType,
 							changedRequestsCount: requestCommandHandlingResult.AffectedRequestIds.length,
-							requestsCount: selectedRequestIds.length,
-							commandTrackId: requestCommandHandlingResult.CommandTrackId
+							requestsCount: selectedRequestIds.length
 						});
 					}
 					if (requestCommandHandlingResult.ErrorMessages && requestCommandHandlingResult.ErrorMessages.length > 0) {
@@ -98,6 +97,10 @@
 
 		}
 
+		function subscribeSignalrMessage() {
+			signalRSVC.subscribe({ DomainType: 'IRunRequestWaitlistEventMessage' }, runRequestWaitlistEventHandler);
+		}
+
 		function approveRequests() {
 			doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.Approve, requestsDataService.approveRequestsPromise);
 		}
@@ -106,6 +109,13 @@
 			vm.toggleProcessWaitlistModal();
 			doProcessWaitlistCommandHandling(vm.waitlistPeriod);
 			initWaitlistProcessPeriod();
+		}
+
+		function runRequestWaitlistEventHandler(message) {
+			if (vm.commandTrackId === message.TrackId) {
+				var period = formatDatePeriod(message);
+				requestsNotificationService.notifyProcessWaitlistedRequestsFinished(period);
+			}
 		}
 
 		function approveRequestsBaseOnBudget() {
@@ -153,6 +163,13 @@
 
         function isApproveBaseOnBudgetEnabled() {
 			return toggleSvc.Wfm_Requests_Approve_Based_On_Budget_Allotment_39626 && !vm.isShiftTradeViewActive;
+        }
+
+		function formatDatePeriod(message) {
+			vm.userTimeZone = CurrentUserInfo.CurrentUserInfo().DefaultTimeZone;
+			var startDate = moment(message.StartDate.substring(1, message.StartDate.length)).tz(vm.userTimeZone).format("L");
+			var endDate = moment(message.EndDate.substring(1, message.EndDate.length)).tz(vm.userTimeZone).format("L");
+			return startDate + "-" + endDate;
 		}
 	}
 

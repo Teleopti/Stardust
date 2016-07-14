@@ -53,7 +53,7 @@ describe('RequestsControllerTests', function () {
 
 		test.requestCommandPaneScope.processWaitlistRequests();
 
-		expect(handleResult.CommandTrackId).toEqual(requestsController.commandTrackIdForMessage);
+		expect(handleResult.CommandTrackId).toEqual(test.requestCommandPaneScope.commandTrackId);
 		expect(_notificationResult).toEqual('Submit process waitlisted requests command success');
 	});
 
@@ -198,7 +198,7 @@ describe('RequestsControllerTests', function () {
 
 		test.requestCommandPaneScope.approveRequestsBaseOnBudget();
 
-		expect(handleResult.CommandTrackId).toEqual(requestsController.commandTrackIdForMessage);
+		expect(handleResult.CommandTrackId).toEqual(test.requestCommandPaneScope.commandTrackId);
 		expect(_notificationResult).toEqual('SubmitApproveRequestsBaseOnBudgetSucess');
 	});
 
@@ -279,7 +279,7 @@ describe('RequestsControllerTests', function () {
 		targetScope.onErrorMessages = requestsController.onErrorMessages;
 		targetScope.onCommandError = requestsController.onCommandError;
 		var targetElement = $compile('<requests-commands-pane ' +
-			'after-command-success="onCommandSuccess(commandType, changedRequestsCount, requestsCount, commandTrackId, waitlistPeriod) "' +
+			'after-command-success="onCommandSuccess(commandType, changedRequestsCount, requestsCount, waitlistPeriod) "' +
 			'on-error-messages="onErrorMessages(errorMessages) "' +
 			'after-command-error="onCommandError(error)"' +
 			'is-shift-trade-view-active="' + isShiftTradeViewActived + '"' +
