@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 			}
 		}
 
-		public void Validate(ValidateReadModelType types, DateTime start, DateTime end)
+		public void Validate(ValidateReadModelType types, DateTime start, DateTime end, bool directFix = false)
 		{
 			var startDate = new DateOnly(start);
 			IList<Guid> personIds;
@@ -69,24 +69,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 							scenario);
 						var scheduleDays = schedules.SchedulesForPeriod(dateOnlyPeriod,person).ToLookup(s => s.DateOnlyAsPeriod.DateOnly);
 
-						dateOnlyPeriod.DayCollection().ForEach(day => validate(types,person,scheduleDays[day].First()));
+						dateOnlyPeriod.DayCollection().ForEach(day => validate(types,person,scheduleDays[day].First(), directFix));
 					}
 					uow.PersistAll();
 				}
 			}			
 		}
 		
-		private void validate(ValidateReadModelType types,IPerson person, IScheduleDay scheduleDay)
+		private void validate(ValidateReadModelType types,IPerson person, IScheduleDay scheduleDay, bool directFix)
 		{
 			if(types.HasFlag(ValidateReadModelType.ScheduleProjectionReadOnly))
 			{
-				var isValid = _readModelScheduleProjectionReadOnlyValidator.Validate(person,scheduleDay);
+				var isValid = _readModelScheduleProjectionReadOnlyValidator.Validate(person,scheduleDay,directFix);
 				if(!isValid) _readModelValidationResultPersister.SaveScheduleProjectionReadOnly(
 					makeResult(person,scheduleDay.DateOnlyAsPeriod.DateOnly,false,ValidateReadModelType.ScheduleProjectionReadOnly));
 			}
+
 			if(types.HasFlag(ValidateReadModelType.PersonScheduleDay))
 			{
-				var isValid = _readModelPersonScheduleDayValidator.Validate(person,scheduleDay);
+				var isValid = _readModelPersonScheduleDayValidator.Validate(person,scheduleDay,directFix);
 				if(!isValid)
 				{
 					_readModelValidationResultPersister.SavePersonScheduleDay(
@@ -96,7 +97,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 
 			if(types.HasFlag(ValidateReadModelType.ScheduleDay))
 			{
-				var isValid = _readModelScheduleDayValidator.Validate(person,scheduleDay);
+				var isValid = _readModelScheduleDayValidator.Validate(person,scheduleDay,directFix);
 				if(!isValid)
 				{
 					_readModelValidationResultPersister.SaveScheduleDay(

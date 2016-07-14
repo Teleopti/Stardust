@@ -16,8 +16,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 		private readonly IProjectionChangedEventBuilder _builder;
 		private readonly IScheduleDayReadModelRepository _scheduleDayReadModelRepository;
 		private readonly IScheduleDayReadModelsCreator _scheduleDayReadModelsCreator;
+		private readonly IReadModelFixer _readModelFixer;
 
-		public ReadModelScheduleDayValidator(IPersonRepository personRepository, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IProjectionChangedEventBuilder builder, IScheduleDayReadModelRepository scheduleDayReadModelRepository, IScheduleDayReadModelsCreator scheduleDayReadModelsCreator)
+		public ReadModelScheduleDayValidator(IPersonRepository personRepository, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IProjectionChangedEventBuilder builder, IScheduleDayReadModelRepository scheduleDayReadModelRepository, IScheduleDayReadModelsCreator scheduleDayReadModelsCreator, IReadModelFixer readModelFixer)
 		{
 			_personRepository = personRepository;
 			_scheduleStorage = scheduleStorage;
@@ -25,17 +26,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 			_builder = builder;
 			_scheduleDayReadModelRepository = scheduleDayReadModelRepository;
 			_scheduleDayReadModelsCreator = scheduleDayReadModelsCreator;
+			_readModelFixer = readModelFixer;
 		}
 
-		public bool Validate(IPerson person,IScheduleDay scheduleDay)
+		public bool Validate(IPerson person,IScheduleDay scheduleDay, bool directFix)
 		{
 			var fetchedReadModel = FetchFromRepository(person,scheduleDay.DateOnlyAsPeriod.DateOnly);
 			var builtReadModel = Build(person,scheduleDay);
 
-			if(builtReadModel == null) return fetchedReadModel == null;
-			if (!scheduleDay.IsScheduled() && fetchedReadModel == null)
+			if(!scheduleDay.IsScheduled() && fetchedReadModel == null)
 				return true;
-			return builtReadModel.Equals(fetchedReadModel);
+
+			var isValid = builtReadModel?.Equals(fetchedReadModel) ?? fetchedReadModel == null;
+			if (directFix && !isValid)
+			{
+				_readModelFixer.FixScheduleDay(new ReadModelData
+				{
+					Date = scheduleDay.DateOnlyAsPeriod.DateOnly,
+					PersonId = person.Id.Value,
+					ScheduleDay = builtReadModel
+				});
+			}
+
+			return isValid;
 		}
 
 		public ScheduleDayReadModel FetchFromRepository(IPerson person,DateOnly date)

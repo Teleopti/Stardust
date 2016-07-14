@@ -172,10 +172,12 @@
     <Compile Include="ApplicationLayer\Events\SkillDayChangedEvent.cs" />
     <Compile Include="ApplicationLayer\ReadModelValidator\FixReadModelsEvent.cs" />
     <Compile Include="ApplicationLayer\ReadModelValidator\FixReadModelsEventHandler.cs" />
+    <Compile Include="ApplicationLayer\ReadModelValidator\IReadModelFixer.cs" />
     <Compile Include="ApplicationLayer\ReadModelValidator\IReadModelPersonScheduleDayValidator.cs" />
     <Compile Include="ApplicationLayer\ReadModelValidator\IReadModelScheduleDayValidator.cs" />
     <Compile Include="ApplicationLayer\ReadModelValidator\IReadModelScheduleProjectionReadOnlyValidator.cs" />
     <Compile Include="ApplicationLayer\ReadModelValidator\IReadModelValidator.cs" />
+    <Compile Include="ApplicationLayer\ReadModelValidator\ReadModelFixer.cs" />
     <Compile Include="ApplicationLayer\ReadModelValidator\ReadModelPersonScheduleDayValidator.cs" />
     <Compile Include="ApplicationLayer\ReadModelValidator\ReadModelScheduleDayValidator.cs" />
     <Compile Include="ApplicationLayer\ReadModelValidator\ReadModelScheduleProjectionReadOnlyValidator.cs" />

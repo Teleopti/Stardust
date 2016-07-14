@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
         protected override void Load(ContainerBuilder builder)
         {
 			builder.RegisterType<ReadModelValidator>().As<IReadModelValidator>().SingleInstance();
+	        builder.RegisterType<ReadModelFixer>().As<IReadModelFixer>().SingleInstance();
 			builder.RegisterType<ReadModelPersonScheduleDayValidator>().As<IReadModelPersonScheduleDayValidator>();
 			builder.RegisterType<ReadModelScheduleProjectionReadOnlyValidator>().As<IReadModelScheduleProjectionReadOnlyValidator>();
 			builder.RegisterType<ReadModelScheduleDayValidator>().As<IReadModelScheduleDayValidator>();

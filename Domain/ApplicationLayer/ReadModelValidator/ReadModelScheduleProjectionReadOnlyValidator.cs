@@ -16,18 +16,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IProjectionChangedEventBuilder _builder;
+		private readonly IReadModelFixer _readModelFixer;
 
 
-		public ReadModelScheduleProjectionReadOnlyValidator(IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister, IPersonRepository personRepository, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IProjectionChangedEventBuilder builder)
+		public ReadModelScheduleProjectionReadOnlyValidator(IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister, IPersonRepository personRepository, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IProjectionChangedEventBuilder builder, IReadModelFixer readModelFixer)
 		{
 			_scheduleProjectionReadOnlyPersister = scheduleProjectionReadOnlyPersister;
 			_personRepository = personRepository;
 			_scheduleStorage = scheduleStorage;
 			_currentScenario = currentScenario;
 			_builder = builder;
+			_readModelFixer = readModelFixer;
 		}
 
-		public bool Validate(IPerson person,IScheduleDay scheduleDay)
+		public bool Validate(IPerson person,IScheduleDay scheduleDay, bool directFix)
 		{
 			var fetchedReadModels = FetchFromRepository(person,scheduleDay.DateOnlyAsPeriod.DateOnly).ToArray();
 			var mappedReadModels = Build(person,scheduleDay).ToArray();
@@ -38,6 +40,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 								if(a == null) return b == null;
 								return a.Equals(b);
 							}).All(x => x);
+
+			if (directFix && !isValid)
+			{
+				_readModelFixer.FixScheduleProjectionReadOnly(new ReadModelData
+				{
+					Date = scheduleDay.DateOnlyAsPeriod.DateOnly,
+					PersonId = person.Id.Value,
+					ScheduleProjectionReadOnly = mappedReadModels
+				});
+			}
+
 			return isValid;
 		}
 

@@ -15,32 +15,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 		IRunOnStardust
 	{
 		private readonly IReadModelValidationResultPersister _persister;
-		private readonly IProjectionVersionPersister _projectionVersionPersister;
-		private readonly IScheduleProjectionReadOnlyPersister _scheduleProjectionReadOnlyPersister;
-		private readonly IPersonScheduleDayReadModelPersister _personScheduleDayReadModelPersister;
-		private readonly IPersonAssignmentRepository _personAssignmentRepository;
-		private readonly IScheduleDayReadModelRepository _scheduleDayReadModelRepository;
-		private readonly ICurrentScenario _currentScenario;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
-
 		private readonly IReadModelPersonScheduleDayValidator _readModelPersonScheduleDayValidator;
 		private readonly IReadModelScheduleProjectionReadOnlyValidator _readModelScheduleProjectionReadOnlyValidator;
 		private readonly IReadModelScheduleDayValidator _readModelScheduleDayValidator;
+		private readonly IReadModelFixer _readModelFixer;
 
-		public FixReadModelsEventHandler(IReadModelValidationResultPersister persister, IProjectionVersionPersister projectionVersionPersister,
-			IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister, ICurrentScenario currentScenario, IPersonScheduleDayReadModelPersister personScheduleDayReadModelPersister, IPersonAssignmentRepository personAssignmentRepository, IScheduleDayReadModelRepository scheduleDayReadModelRepository, IReadModelPersonScheduleDayValidator readModelPersonScheduleDayValidator, IReadModelScheduleProjectionReadOnlyValidator readModelScheduleProjectionReadOnlyValidator, IReadModelScheduleDayValidator readModelScheduleDayValidator, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
+		public FixReadModelsEventHandler(IReadModelValidationResultPersister persister, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IReadModelPersonScheduleDayValidator readModelPersonScheduleDayValidator, IReadModelScheduleProjectionReadOnlyValidator readModelScheduleProjectionReadOnlyValidator, IReadModelScheduleDayValidator readModelScheduleDayValidator, IReadModelFixer readModelFixer)
 		{
 			_persister = persister;
-			_projectionVersionPersister = projectionVersionPersister;
-			_scheduleProjectionReadOnlyPersister = scheduleProjectionReadOnlyPersister;
-			_currentScenario = currentScenario;
-			_personScheduleDayReadModelPersister = personScheduleDayReadModelPersister;
-			_personAssignmentRepository = personAssignmentRepository;
-			_scheduleDayReadModelRepository = scheduleDayReadModelRepository;
+			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_readModelPersonScheduleDayValidator = readModelPersonScheduleDayValidator;
 			_readModelScheduleProjectionReadOnlyValidator = readModelScheduleProjectionReadOnlyValidator;
 			_readModelScheduleDayValidator = readModelScheduleDayValidator;
-			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
+			_readModelFixer = readModelFixer;
 		}
 
 		public void Handle(FixReadModelsEvent @event)
@@ -60,14 +48,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 						foreach (var record in records)
 						{
 							var date = new DateOnly(record.Date);
-							var version =
-								_projectionVersionPersister.LockAndGetVersions(record.PersonId, date, date).FirstOrDefault()?.Version;
+							var readModels = _readModelScheduleProjectionReadOnlyValidator.Build(record.PersonId,date).ToList();
 
-							_scheduleProjectionReadOnlyPersister.BeginAddingSchedule(date, _currentScenario.Current().Id.GetValueOrDefault(),
-								record.PersonId, version ?? 0);
-
-							var readModels = _readModelScheduleProjectionReadOnlyValidator.Build(record.PersonId, date);
-							readModels.ForEach(_scheduleProjectionReadOnlyPersister.AddActivity);
+							_readModelFixer.FixScheduleProjectionReadOnly(new ReadModelData
+							{
+								Date = date,
+								PersonId = record.PersonId,
+								ScheduleProjectionReadOnly = readModels
+							});
 						}
 						uow.PersistAll();
 					}
@@ -90,13 +78,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 						{
 							var date = new DateOnly(record.Date);
 							var readModel = _readModelPersonScheduleDayValidator.Build(record.PersonId, date);
-							if (readModel == null)
+							
+							_readModelFixer.FixPersonScheduleDay(new ReadModelData
 							{
-								_personScheduleDayReadModelPersister.DeleteReadModel(record.PersonId, date);
-								continue;
-							}
-							readModel.ScheduleLoadTimestamp = _personAssignmentRepository.GetScheduleLoadedTime();
-							_personScheduleDayReadModelPersister.SaveReadModel(readModel, false);
+								Date = date,
+								PersonId = record.PersonId,
+								PersonScheduleDay = readModel
+							});
 						}
 						uow.PersistAll();
 					}
@@ -119,12 +107,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 						{
 							var date = new DateOnly(record.Date);
 							var readModel = _readModelScheduleDayValidator.Build(record.PersonId, date);
-							if (readModel == null)
+							
+							_readModelFixer.FixScheduleDay(new ReadModelData
 							{
-								_scheduleDayReadModelRepository.ClearPeriodForPerson(new DateOnlyPeriod(date, date), record.PersonId);
-								continue;
-							}
-							_scheduleDayReadModelRepository.SaveReadModel(readModel);
+								Date = date,
+								PersonId = record.PersonId,
+								ScheduleDay = readModel
+							});
 						}
 						uow.PersistAll();
 					}
