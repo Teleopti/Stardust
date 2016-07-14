@@ -12,7 +12,7 @@
 		var cancelRequestsUrl = '../api/Requests/cancelRequests';
 		var requestableAbsenceUrl = '../api/Absence/GetRequestableAbsences';
 		var processWaitlistRequests = '../api/Requests/runWaitlist';
-		var approveRequestsBaseOnBudgetUrl = '../api/Requests/approveRequestsBaseOnBudget';
+		var approveBaseOnBudgetUrl = '../api/Requests/approveBasedOnBudget';
 
 		this.getAllRequestsPromise_old = function(filter, sortingOrders) {
 			return $http.post(loadTextAndAbsenceRequestsUrl_old, requestsDefinitions.normalizeRequestsFilter_old(filter, sortingOrders));
@@ -48,7 +48,7 @@
 		};
 
 		this.approveRequestsBaseOnBudgetPromise = function (selectedRequestIds) {
-			return $http.post(approveRequestsBaseOnBudgetUrl, selectedRequestIds);
+			return $http.post(approveBaseOnBudgetUrl, selectedRequestIds);
 		};
 
 		this.denyRequestsPromise = function(selectedRequestIds) {
