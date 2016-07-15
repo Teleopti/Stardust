@@ -7,16 +7,13 @@ NOTE: Do NOT(!) run this on your PRODUCTION database, that will drop all users!
 --=====
 --manuell instructions
 --=====
-Run this script in _both_ your restored test databases:
+Run this script in your restored App database:
 e.g
-Bug28762_Acme_TeleoptiAnalytics
 Bug28762_Acme_TeleoptiApp
-
-See instruction for what to change below!
 
 This script will update the tenant info in your db copy to point to MySelf, (rather that poiting back to the production DB)
 
---Remove $ and () and replace with actuall name of Analytics _Test_ database between the single quots
+--Remove $ and () and replace with actuall name of your Analytics databases (between the single quots)
 --Same for Username and password
 --For Example:
 declare @DESTANALYTICS VARCHAR(100) = 'IkeaTest_TeleoptiAnalytics' -- NOTE: Should always be Anayltics, even when executing in App database
@@ -24,13 +21,11 @@ declare @DESTUSER VARCHAR(100) = 'SomeUser'
 declare @DESTPWD VARCHAR(100) = 'SomePassword'
 */
 
-
 declare @DESTANALYTICS VARCHAR(100) = '$(DESTANALYTICS)' -- <-- Edit me e.g: Bug28762_Acme_TeleoptiAnalytics.
 declare @DESTUSER VARCHAR(100) = '$(DESTUSER)'  -- < -- put your new debug SQL login here
 declare @DESTPWD VARCHAR(100) = '$(DESTPWD)' -- < -- put your new debug SQL password here
 --========================
 
-select * from tenant.tenant
 SET NOCOUNT ON
 print '---'
 declare @ApplicationConnectionString nVARCHAR(200)
@@ -44,4 +39,3 @@ set
 	ApplicationConnectionString=@ApplicationConnectionString,
 	AnalyticsConnectionString=@AnalyticsConnectionString
 where Name = 'Teleopti WFM'
-select * from tenant.tenant
