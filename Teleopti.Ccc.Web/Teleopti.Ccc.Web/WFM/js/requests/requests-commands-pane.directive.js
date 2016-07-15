@@ -24,7 +24,7 @@
 		vm.approveBasedOnBudget = approveBasedOnBudget;
 		vm.isApproveBasedOnBudgetEnabled = isApproveBasedOnBudgetEnabled;
 		initWaitlistProcessPeriod();
-		subscribeSignalrMessage();
+		subscribeSignalRMessage();
 
 		function handleErrorMessages(errorMessages) {
 			if (vm.onErrorMessages) {
@@ -97,8 +97,9 @@
 
 		}
 
-		function subscribeSignalrMessage() {
+		function subscribeSignalRMessage() {
 			signalRSVC.subscribe({ DomainType: 'IRunRequestWaitlistEventMessage' }, runRequestWaitlistEventHandler);
+			signalRSVC.subscribe({ DomainType: 'IApproveRequestsWithValidatorsEventMessage' }, approveWithValidatorsEventHandler);
 		}
 
 		function approveRequests() {
@@ -115,6 +116,12 @@
 			if (vm.commandTrackId === message.TrackId) {
 				var period = formatDatePeriod(message);
 				requestsNotificationService.notifyProcessWaitlistedRequestsFinished(period);
+			}
+		}
+
+		function approveWithValidatorsEventHandler(message) {
+			if (vm.commandTrackId === message.TrackId) {
+				requestsNotificationService.notifyApproveBasedOnBudgetFinished();
 			}
 		}
 
@@ -165,7 +172,7 @@
 			return toggleSvc.Wfm_Requests_Approve_Based_On_Budget_Allotment_39626 && !vm.isShiftTradeViewActive;
         }
 
-		function formatDatePeriod(message) {
+        function formatDatePeriod(message) {
 			vm.userTimeZone = CurrentUserInfo.CurrentUserInfo().DefaultTimeZone;
 			var startDate = moment(message.StartDate.substring(1, message.StartDate.length)).tz(vm.userTimeZone).format("L");
 			var endDate = moment(message.EndDate.substring(1, message.EndDate.length)).tz(vm.userTimeZone).format("L");

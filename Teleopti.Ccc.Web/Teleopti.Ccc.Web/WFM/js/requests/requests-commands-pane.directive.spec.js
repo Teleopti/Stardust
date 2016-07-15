@@ -3,7 +3,14 @@ describe('RequestsControllerTests', function () {
 	var $compile,
 		$rootScope,
 		$controller;
-	var requestsDataService, requestsNotificationService, requestCommandParamsHolder, _notificationResult, requestsController;
+	var requestsDataService,
+		requestsNotificationService,
+		requestCommandParamsHolder,
+		_notificationResult,
+		requestsController,
+		mockSignalRBackendServer = {},
+		signalRService,
+		currentUserInfo;
 
 	beforeEach(function () {
 		module('wfm.templates');
@@ -11,6 +18,8 @@ describe('RequestsControllerTests', function () {
 
 		requestsDataService = new FakeRequestsDataService();
 		requestsNotificationService = new FakeRequestsNotificationService();
+		signalRService = new FakeSingalRService();
+		currentUserInfo = new FakeCurrentUserInfo();
 		module(function ($provide) {
 
 			$provide.service('Toggle', function () {
@@ -30,6 +39,12 @@ describe('RequestsControllerTests', function () {
 			});
 			$provide.service('requestsNotificationService', function () {
 				return requestsNotificationService;
+			});
+			$provide.service('signalRSVC', function() {
+				return signalRService;
+			});
+			$provide.service('CurrentUserInfo', function() {
+				return currentUserInfo;
 			});
 		});
 	});
@@ -55,6 +70,14 @@ describe('RequestsControllerTests', function () {
 
 		expect(handleResult.CommandTrackId).toEqual(test.requestCommandPaneScope.commandTrackId);
 		expect(_notificationResult).toEqual('Submit process waitlisted requests command success');
+	});
+
+	it('should notify the result when processWaitlistedRequests command is finished', function () {
+		var test = setUpTarget();
+		test.requestCommandPaneScope.commandTrackId = "12";
+		mockSignalRBackendServer.notifyClients('IRunRequestWaitlistEventMessage'
+			, { TrackId: test.requestCommandPaneScope.commandTrackId, StartDate: "D2016-07-15T12:00:44.357", EndDate: "D2016-07-15T12:00:44.357" });
+		expect(_notificationResult).toEqual('ProcessWaitlistedRequestsFinished');
 	});
 
 	it('approve requests success, should notify the result', function () {
@@ -202,9 +225,20 @@ describe('RequestsControllerTests', function () {
 		expect(_notificationResult).toEqual('SubmitApproveBasedOnBudgetSuccess');
 	});
 
+	it('should notify the result when approveBasedOnBudget command is finished', function () {
+		var test = setUpTarget();
+		test.requestCommandPaneScope.commandTrackId = "13";
+		mockSignalRBackendServer.notifyClients('IApproveRequestsWithValidatorsEventMessage'
+			, { TrackId: test.requestCommandPaneScope.commandTrackId });
+		expect(_notificationResult).toEqual('ApproveBasedOnBudgetFinished');
+	});
+
 	function FakeRequestsNotificationService() {
 		this.notifySubmitProcessWaitlistedRequestsSuccess = function () {
 			_notificationResult = "Submit process waitlisted requests command success";
+		}
+		this.notifyProcessWaitlistedRequestsFinished = function() {
+			_notificationResult = "ProcessWaitlistedRequestsFinished";
 		}
 		this.notifyCommandError = function (error) {
 			_notificationResult = error == undefined ? 'submit error' : error;
@@ -229,6 +263,9 @@ describe('RequestsControllerTests', function () {
 		}
 		this.notifySubmitApproveBasedOnBudgetSuccess = function () {
 			_notificationResult = "SubmitApproveBasedOnBudgetSuccess";
+		}
+		this.notifyApproveBasedOnBudgetFinished = function() {
+			_notificationResult = "ApproveBasedOnBudgetFinished";
 		}
 	}
 
@@ -262,6 +299,25 @@ describe('RequestsControllerTests', function () {
 		}
 		this.setRequestCommandHandlingResult = function (handleResult) {
 			_handleResult = handleResult;
+		}
+	}
+
+	function FakeSingalRService() {
+		mockSignalRBackendServer.subscriptions = [];
+		mockSignalRBackendServer.notifyClients = function (domainType, message) {
+			var eventHandler = this.subscriptions[domainType];
+			eventHandler(message);
+		}
+		this.subscribe = function (options, eventHandler) {
+			mockSignalRBackendServer.subscriptions[options.DomainType] = eventHandler;
+		}
+	}
+
+	function FakeCurrentUserInfo() {
+		this.CurrentUserInfo = function() {
+			return {
+				DefaultTimeZone: "Europe/Berlin"
+			}
 		}
 	}
 
