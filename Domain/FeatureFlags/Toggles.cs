@@ -165,6 +165,7 @@
 		AddActivity_TriggerResourceCalculation_39346,
 		HealthCheck_ValidateReadModelPersonScheduleDay_39421,
 		HealthCheck_ValidateReadModelScheduleDay_39423,
+		HealthCheck_EasyValidateAndFixReadModels_39696,
 		ETL_SpeedUpIntradayBusinessUnit_38932,
 		ETL_SpeedUpNightlyBusinessUnit_38932,
 		ETL_RobustAnalyticsScheduleChangeUpdater_39556
