@@ -225,6 +225,33 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 		}
 
 		[Test]
+		public void ShouldAddNewFunctionsToMyRoleIfOtherRoleIsBuiltIn()
+		{
+			var person = PersonFactory.CreatePersonWithApplicationRolesAndFunctions();
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+			var role = person.PermissionInformation.ApplicationRoleCollection.First();
+
+			while (role.ApplicationFunctionCollection.Any())
+				role.RemoveApplicationFunction(role.ApplicationFunctionCollection.First());
+
+			var functionOneId = Guid.NewGuid();
+			var functionOne = new ApplicationFunction("FunctionOne");
+			ApplicationFunctionRepository.Add(functionOne);
+			ApplicationRoleRepository.Add(role);
+
+			var roleOneBuiltInId = Guid.NewGuid();
+			var agentBuiltInRole = new ApplicationRole { Name = "Super Agent", BuiltIn = true };
+
+			agentBuiltInRole.SetId(roleOneBuiltInId);
+			ApplicationRoleRepository.Add(agentBuiltInRole);
+			person.PermissionInformation.AddApplicationRole(agentBuiltInRole);
+
+			Target.AddFunctions(role.Id.Value, new FunctionsForRoleInput {Functions = new Collection<Guid> {functionOneId}});
+
+			role.ApplicationFunctionCollection.Should().Not.Be.Empty();
+		}
+
+		[Test]
 		public void ShouldRemoveFunctionsFromRole()
 		{
 			var functionOneId = Guid.NewGuid();
@@ -273,6 +300,32 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			Target.RemoveFunction(role.Id.Value, functionOne.Id.Value);
 
 			role.ApplicationFunctionCollection.Should().Contain(functionOne);
+		}
+		
+		[Test]
+		public void ShouldRemoveFunctionsFromMyRoleIfOtherRoleIsBuiltIn()
+		{
+			var person = PersonFactory.CreatePersonWithApplicationRolesAndFunctions();
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+			var role = person.PermissionInformation.ApplicationRoleCollection.First();
+
+			var functionOne = role.ApplicationFunctionCollection.First();
+			ApplicationFunctionRepository.Add(functionOne);
+			ApplicationRoleRepository.Add(role);
+
+			var functionBuiltInId = Guid.NewGuid();
+			var roleOneBuiltInId = Guid.NewGuid();
+			var functionBuiltIn = new ApplicationFunction("functionBuiltIn");
+			functionBuiltIn.SetId(functionBuiltInId);
+			ApplicationFunctionRepository.Add(functionBuiltIn);
+			var agentBuiltInRole = new ApplicationRole { Name = "Super Agent", BuiltIn = true };
+			agentBuiltInRole.SetId(roleOneBuiltInId);
+			agentBuiltInRole.AddApplicationFunction(functionOne);
+			person.PermissionInformation.AddApplicationRole(agentBuiltInRole);
+
+			Target.RemoveFunction(role.Id.Value, functionOne.Id.Value);
+
+			role.ApplicationFunctionCollection.Count.Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -345,6 +398,25 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			ApplicationRoleRepository.Add(role);
 			Target.Delete(role.Id.Value);
 			ApplicationRoleRepository.LoadAll().Should().Not.Be.Empty();
+		}
+
+		[Test]
+		public void ShouldDeleteMyRoleIfOtherRoleIsBuiltIn()
+		{
+			var person = PersonFactory.CreatePersonWithApplicationRolesAndFunctions();
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			var role = person.PermissionInformation.ApplicationRoleCollection.First();
+			ApplicationRoleRepository.Add(role);
+			
+			var roleOneBuiltInId = Guid.NewGuid();
+			var agentBuiltInRole = new ApplicationRole { Name = "Super Agent", BuiltIn = true };
+
+			agentBuiltInRole.SetId(roleOneBuiltInId);
+			ApplicationRoleRepository.Add(agentBuiltInRole);
+			person.PermissionInformation.AddApplicationRole(agentBuiltInRole);
+			Target.Delete(role.Id.Value);
+			ApplicationRoleRepository.LoadAll().Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -498,12 +570,35 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 			ApplicationRoleRepository.Add(myRole);
 			var theFunction = person.PermissionInformation.ApplicationRoleCollection.First().ApplicationFunctionCollection.First();
 			ApplicationFunctionRepository.Add(theFunction);
-
 			
 			Target.RemoveFunction(myRole.Id.Value, theFunction.Id.Value,
 				new FunctionsForRoleInput() { Functions = new Guid[0] });
 
 			myRole.ApplicationFunctionCollection.Count.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldRemoveAllFunctionsOfMyRoleIfOtherRoleIsBuiltIn()
+		{
+			var person = PersonFactory.CreatePersonWithApplicationRolesAndFunctions();
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+
+			var myRole = person.PermissionInformation.ApplicationRoleCollection.First();
+			ApplicationRoleRepository.Add(myRole);
+			var theFunction = person.PermissionInformation.ApplicationRoleCollection.First().ApplicationFunctionCollection.First();
+			ApplicationFunctionRepository.Add(theFunction);
+
+			var roleOneBuiltInId = Guid.NewGuid();
+			var agentBuiltInRole = new ApplicationRole { Name = "Super Agent", BuiltIn = true };
+
+			agentBuiltInRole.SetId(roleOneBuiltInId);
+			ApplicationRoleRepository.Add(agentBuiltInRole);
+			person.PermissionInformation.AddApplicationRole(agentBuiltInRole);
+
+			Target.RemoveFunction(myRole.Id.Value, theFunction.Id.Value,
+				new FunctionsForRoleInput() { Functions = new Guid[0] });
+
+			myRole.ApplicationFunctionCollection.Count.Should().Be.EqualTo(0);
 		}
 
 		[Test]

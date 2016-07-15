@@ -27,7 +27,7 @@
 						NoticeService.warning($translate.instant('ChangesAreDisabled'), 5000, true);
 					}
 
-					else if ($scope.selectedRole.IsMyRole && newSelectedRole !== oldSelectedRole) {
+					else if ($scope.selectedRole.IsMyRole && !$scope.selectedRole.IsAnyBuiltIn && newSelectedRole !== oldSelectedRole) {
 						NoticeService.warning($translate.instant('CanNotModifyMyRole'), 5000, true);
 					}
 
@@ -41,7 +41,7 @@
 			$scope.$watch(function () { return RolesFunctionsService.functionsDisplayed; },
 					function (rolesFunctionsData) {
 						$scope.functionsDisplayed = rolesFunctionsData;
-						openTopNode($scope.functionsDisplayed)
+						openTopNode($scope.functionsDisplayed);
 					}
 			);
 
@@ -147,13 +147,10 @@
 			}
 
 			$scope.disablePermissionForMe = function (node) {
-				if ( $scope.selectedRole.IsMyRole)
-				{
+				if ($scope.selectedRole.BuiltIn || ($scope.selectedRole.IsMyRole && !$scope.selectedRole.IsAnyBuiltIn)) {
 					return true;
 				}
 			}
-
 		}
 	]);
-
 })();
