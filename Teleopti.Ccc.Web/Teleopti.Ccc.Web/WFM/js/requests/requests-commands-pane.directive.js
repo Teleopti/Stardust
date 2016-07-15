@@ -150,8 +150,6 @@
 					+ requestsDefinitions.REQUEST_VALIDATORS.BudgetAllotmentValidator
 			};
 
-			console.log("parameter:", JSON.stringify(parameter));
-
 			doStandardCommandHandlingWithParameters(requestsDefinitions.REQUEST_COMMANDS.ApproveBasedOnBudget,
 				requestsDataService.approveWithValidatorsPromise, parameter);
 		}
