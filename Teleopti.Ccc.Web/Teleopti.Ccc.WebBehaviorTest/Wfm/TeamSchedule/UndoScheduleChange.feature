@@ -1,7 +1,7 @@
 ﻿@OnlyRunIfEnabled('WfmTeamSchedule_RevertToPreviousSchedule_39002')
-Feature: Backout Schedule Change
+Feature: Undo Schedule Change
 	As a team leader
-	I need to backout my last schedule change
+	I need to undo my last schedule change
 
 Background: 
 Given I am american
@@ -13,7 +13,6 @@ Given I am american
 	| Access to everyone            | True           |
 	| Access to Wfm MyTeam Schedule | true           |
 	| Add Activity                  | true           |
-	| Backout                       | true           |
 	And there is a shift category named 'Day'
 	And there are activities
 	| Name     | Color    |
@@ -50,7 +49,7 @@ Scenario: Should be able to see enable menu
 	Then I should see 'Backout' menu is enabled
 
 @OnlyRunIfEnabled('WfmTeamSchedule_AddActivity_37541')
-Scenario: Should be able to backout schedule change
+Scenario: Should be able to undo schedule change
 	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
 	And I selected agent 'John Smith'
@@ -81,6 +80,6 @@ Scenario: Should be able to backout schedule change
 	And I close the success notice
 	And I selected agent 'John Smith'
 	And I open menu in team schedule
-	And I click menu item 'Backout' in team schedule
+	And I click menu item 'Undo' in team schedule
 	Then I should see a successful notice
 	And I should not see activity 'Training' in schedule

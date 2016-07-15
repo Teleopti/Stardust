@@ -2800,15 +2800,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you wish to undo last schedule change for selected agents?.
-        /// </summary>
-        public static string AreYouSureToBackoutSelectedSchedule {
-            get {
-                return ResourceManager.GetString("AreYouSureToBackoutSelectedSchedule", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Are you sure you wish to remove {0} absences from {1} agents?.
         /// </summary>
         public static string AreYouSureToRemoveSelectedAbsence {
@@ -2823,6 +2814,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AreYouSureToRemoveSelectedActivity {
             get {
                 return ResourceManager.GetString("AreYouSureToRemoveSelectedActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you wish to undo last schedule change for selected agents?.
+        /// </summary>
+        public static string AreYouSureToUndoSelectedSchedule {
+            get {
+                return ResourceManager.GetString("AreYouSureToUndoSelectedSchedule", resourceCulture);
             }
         }
         
@@ -10310,20 +10310,20 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to undo schedule change for selected agents.
-        /// </summary>
-        public static string FailedMessageForBackoutSchedule {
-            get {
-                return ResourceManager.GetString("FailedMessageForBackoutSchedule", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Failed to remove activities for selected agents.
         /// </summary>
         public static string FailedMessageForRemovingActivity {
             get {
                 return ResourceManager.GetString("FailedMessageForRemovingActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to undo schedule change for selected agents.
+        /// </summary>
+        public static string FailedMessageForUndoSchedule {
+            get {
+                return ResourceManager.GetString("FailedMessageForUndoSchedule", resourceCulture);
             }
         }
         
@@ -19776,15 +19776,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Undo schedule change for {0} agent(s), {1} succeeded and {2} failed.
-        /// </summary>
-        public static string PartialSuccessMessageForBackoutSchedule {
-            get {
-                return ResourceManager.GetString("PartialSuccessMessageForBackoutSchedule", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Moving activities for {0} agent(s), {1} succeeded and {2} failed..
         /// </summary>
         public static string PartialSuccessMessageForMovingActivity {
@@ -19808,6 +19799,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PartialSuccessMessageForRemovingActivity {
             get {
                 return ResourceManager.GetString("PartialSuccessMessageForRemovingActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Undo schedule change for {0} agent(s), {1} succeeded and {2} failed.
+        /// </summary>
+        public static string PartialSuccessMessageForUndoSchedule {
+            get {
+                return ResourceManager.GetString("PartialSuccessMessageForUndoSchedule", resourceCulture);
             }
         }
         
@@ -28754,15 +28754,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Successfully undone last schedule change for selected agents.
-        /// </summary>
-        public static string SuccessfulMessageForBackoutSchedule {
-            get {
-                return ResourceManager.GetString("SuccessfulMessageForBackoutSchedule", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Successfully moved activities for selected agents	.
         /// </summary>
         public static string SuccessfulMessageForMovingActivity {
@@ -28777,6 +28768,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SuccessfulMessageForRemovingActivity {
             get {
                 return ResourceManager.GetString("SuccessfulMessageForRemovingActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully undone last schedule change for selected agents.
+        /// </summary>
+        public static string SuccessfulMessageForUndoSchedule {
+            get {
+                return ResourceManager.GetString("SuccessfulMessageForUndoSchedule", resourceCulture);
             }
         }
         

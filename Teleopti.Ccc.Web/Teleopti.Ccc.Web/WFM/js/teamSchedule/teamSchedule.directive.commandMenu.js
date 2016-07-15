@@ -88,21 +88,21 @@
 				visible: function () { return vm.canActiveRemoveActivity(); }
 			},
 			{
-				label: "Backout",
-				shortcut: "Alt+B",
-				keys: [[keyCodes.B], [keyCodes.ALT]],
-				action: buildAction("Backout", false),
-				clickable: function () { return vm.canBackout(); },
-				visible: function () { return vm.canActiveBackoutCmd(); }
+				label: "Undo",
+				shortcut: "Alt+U",
+				keys: [[keyCodes.U], [keyCodes.ALT]],
+				action: buildAction("UndoSchedule", false),
+				clickable: function () { return vm.canUndoSchedule(); },
+				visible: function () { return vm.canActiveUndoScheduleCmd(); }
 			}
 		];
 
-		vm.canBackout = function () {
+		vm.canUndoSchedule = function () {
 			return personSelectionSvc.anyAgentChecked();
 		};
 
-		vm.canActiveBackoutCmd = function () {
-			return vm.toggles.BackoutPreviousScheduleEnabled;
+		vm.canActiveUndoScheduleCmd = function () {
+			return vm.toggles.UndoScheduleEnabled;
 		}
 
 		vm.canActiveAddActivity = function () {
@@ -173,6 +173,7 @@
 					|| vm.canActiveRemoveActivity()
 					|| vm.canActiveMoveActivity()
 					|| vm.canActiveAddPersonalActivity()
+					|| vm.canActiveUndoScheduleCmd()
 				;
 			};
 			registerShortCuts();

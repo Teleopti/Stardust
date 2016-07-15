@@ -1,19 +1,19 @@
 (function () {
 	'use strict';
 
-	angular.module('wfm.teamSchedule').directive('backoutCmd', backoutDirective);
+	angular.module('wfm.teamSchedule').directive('undoSchedule', undoScheduleDirective);
 
-	backoutCtrl.$inject = ['PersonSelection', 'ActivityService', '$mdDialog', 'teamScheduleNotificationService', 'ScenarioTestUtil'];
+	undoScheduleCtrl.$inject = ['PersonSelection', 'ActivityService', '$mdDialog', 'teamScheduleNotificationService', 'ScenarioTestUtil'];
 
-	function backoutCtrl(PersonSelection, ActivityService, $mdDialog, notification, ScenarioTestUtil) {
+	function undoScheduleCtrl(PersonSelection, ActivityService, $mdDialog, notification, ScenarioTestUtil) {
 		var vm = this;
-		vm.label = 'Backout';
+		vm.label = 'Undo';
 
 		vm.selectedPersonInfo = PersonSelection.getCheckedPersonInfoList();
 
 		var personIds = vm.selectedPersonInfo.map(function (x) { return x.PersonId; });
 
-		vm.backoutSchedule = function () {
+		vm.undoSchedule = function () {
 
 			var requestData = {
 				PersonIds: personIds,
@@ -21,15 +21,15 @@
 				TrackedCommandInfo: { TrackId: vm.trackId }
 			}
 
-			ActivityService.backoutScheduleChange(requestData).then(function (reponse) {
+			ActivityService.undoScheduleChange(requestData).then(function (reponse) {
 				if (vm.getActionCb(vm.label)) {
 					vm.getActionCb(vm.label)(vm.trackId, personIds);
 				}
 
 				notification.reportActionResult({
-					'success': 'SuccessfulMessageForBackoutSchedule',
-					'warning': 'PartialSuccessMessageForBackoutSchedule',
-					'error': 'FailedMessageForBackoutSchedule'
+					'success': 'SuccessfulMessageForUndoSchedule',
+					'warning': 'PartialSuccessMessageForUndoSchedule',
+					'error': 'FailedMessageForUndoSchedule'
 				}, vm.selectedPersonInfo.map(function (agent) {
 					return {
 						PersonId: agent.PersonId,
@@ -53,10 +53,10 @@
 					commandTitle: vm.label,
 					fix: null,
 					getTargets: PersonSelection.getSelectedPersonIdList,
-					command: vm.backoutSchedule,
+					command: vm.undoSchedule,
 					require: null,
 					getCommandMessage: function () {
-						return notification.buildConfirmationMessage('AreYouSureToBackoutSelectedSchedule', PersonSelection.getTotalSelectedPersonAndProjectionCount.CheckedPersonCount, null, true);
+						return notification.buildConfirmationMessage('AreYouSureToUndoSelectedSchedule', PersonSelection.getTotalSelectedPersonAndProjectionCount.CheckedPersonCount, null, true);
 					}
 				}
 			});
@@ -66,19 +66,19 @@
 			if (!ScenarioTestUtil.isScenarioTest()) {
 				vm.popDialog();
 			} else {
-				vm.backoutSchedule();
+				vm.undoSchedule();
 			}
 		};
 	}
 
-	function backoutDirective() {
+	function undoScheduleDirective() {
 		return {
 			restrict: 'E',
 			scope: {},
-			controller: backoutCtrl,
+			controller: undoScheduleCtrl,
 			controllerAs: 'vm',
 			bindToController: true,
-			require: ['^teamscheduleCommandContainer', 'backoutCmd'],
+			require: ['^teamscheduleCommandContainer', 'undoSchedule'],
 			link: postlink
 		}
 
