@@ -178,6 +178,30 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 			return Ok(jobId);
 		}
 
+		[HttpGet, Route("HealthCheck/CheckAndFixReadModels")]
+		public virtual IHttpActionResult CheckAndFixReadModels(DateTime start, DateTime end)
+		{
+			var targets = ValidateReadModelType.ScheduleProjectionReadOnly;
+			if (_toggleManager.IsEnabled(Toggles.HealthCheck_ValidateReadModelPersonScheduleDay_39421))
+			{
+				targets |= ValidateReadModelType.PersonScheduleDay;
+			}
+
+			if (_toggleManager.IsEnabled(Toggles.HealthCheck_ValidateReadModelScheduleDay_39423))
+			{
+				targets |= ValidateReadModelType.ScheduleDay;
+			} 
+
+			var jobId = _stardustSender.Send(new ValidateReadModelsEvent
+			{
+				StartDate = start,
+				EndDate = end,
+				Targets = targets,
+				TriggerFix = true
+			});
+			return Ok(jobId);
+		}
+
 		[HttpGet, Route("HealthCheck/ClearCheckReadModelResult")]
 		public virtual IHttpActionResult ClearCheckReadModelResult()
 		{
