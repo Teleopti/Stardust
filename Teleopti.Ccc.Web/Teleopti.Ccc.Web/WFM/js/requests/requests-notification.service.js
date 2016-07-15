@@ -45,8 +45,8 @@
             });
         }
 
-		this.notifySubmitApproveRequestsBaseOnBudgetSucess = function() {
-			$translate("SubmitApproveRequestsBaseOnBudgetSucess").then(function (text) {
+		this.notifySubmitApproveWithValidatorsSucess = function() {
+			$translate("SubmitApproveWithValidatorsSucess").then(function (text) {
 				NoticeService.success(text, 10000, true);
 			});
 		}

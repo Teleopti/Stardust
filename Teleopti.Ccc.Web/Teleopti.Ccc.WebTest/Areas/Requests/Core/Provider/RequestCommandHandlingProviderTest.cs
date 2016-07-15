@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		}
 
 		[Test]
-		public void ShouldSendCommandForApproveRequestsBasedOnBudgetAllotment()
+		public void ShouldSendCommandForApproveWithValidators()
 		{
 			var requestIds = new List<Guid> {Guid.NewGuid(), Guid.NewGuid()};
 			var cmdDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(PersonFactory.CreatePersonWithId());
 
 			var target = new RequestCommandHandlingProvider(cmdDispatcher, loggedOnUser);
-			var result = target.ApproveRequestsBasedOnBudgetAllotment(requestIds);
+			var result = target.ApproveWithValidators(requestIds);
 			cmdDispatcher.AssertWasCalled(
 				dispatcher => dispatcher.Execute(
 					Arg<ApproveBatchRequestsCommand>.Matches(

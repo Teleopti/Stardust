@@ -56,10 +56,10 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 			return _commandHandlingProvider.ApproveRequests(requestIds);
 		}
 
-		[HttpPost, Route("api/Requests/approveBasedOnBudget"), UnitOfWork]
-		public virtual RequestCommandHandlingResult ApproveRequestsBasedOnBudgetAllotment(IEnumerable<Guid> requestIds)
+		[HttpPost, Route("api/Requests/approveWithValidators"), UnitOfWork]
+		public virtual RequestCommandHandlingResult ApproveWithValidators(IEnumerable<Guid> requestIds)
 		{
-			return _commandHandlingProvider.ApproveRequestsBasedOnBudgetAllotment(requestIds);
+			return _commandHandlingProvider.ApproveWithValidators(requestIds);
 		}
 
 		[HttpPost, Route("api/Requests/denyRequests"), UnitOfWork]

@@ -176,15 +176,15 @@ describe('RequestsControllerTests', function () {
 
 	it('should approve base on budget command enabled in absence tab', function() {
 		var test = setUpTarget(false);
-		expect(test.requestCommandPaneScope.isApproveBaseOnBudgetEnabled()).toEqual(true);
+		expect(test.requestCommandPaneScope.isApproveWithValidatorsEnabled()).toEqual(true);
 	});
 
 	it('should approve base on budget command disabled in shift trade tab', function () {
 		var test = setUpTarget(true);
-		expect(test.requestCommandPaneScope.isApproveBaseOnBudgetEnabled()).toEqual(false);
+		expect(test.requestCommandPaneScope.isApproveWithValidatorsEnabled()).toEqual(false);
 	});
 
-	it('approveRequestsBaseOnBudget command submit scucess, should notify the result', function () {
+	it('approveWithValidators command submit scucess, should notify the result', function () {
 		var test = setUpTarget();
 		var handleResult = {
 			Success: true,
@@ -196,10 +196,10 @@ describe('RequestsControllerTests', function () {
 		requestsDataService.submitCommandIsASucess(true);
 		requestsDataService.setRequestCommandHandlingResult(handleResult);
 
-		test.requestCommandPaneScope.approveRequestsBaseOnBudget();
+		test.requestCommandPaneScope.approveWithValidators();
 
 		expect(handleResult.CommandTrackId).toEqual(test.requestCommandPaneScope.commandTrackId);
-		expect(_notificationResult).toEqual('SubmitApproveRequestsBaseOnBudgetSucess');
+		expect(_notificationResult).toEqual('SubmitApproveWithValidatorsSuccess');
 	});
 
 	function FakeRequestsNotificationService() {
@@ -227,8 +227,8 @@ describe('RequestsControllerTests', function () {
 				requestsCount: requestsCount
 			}
 		}
-		this.notifySubmitApproveRequestsBaseOnBudgetSucess = function () {
-			_notificationResult = "SubmitApproveRequestsBaseOnBudgetSucess";
+		this.notifySubmitApproveWithValidatorsSucess = function () {
+			_notificationResult = "SubmitApproveWithValidatorsSucess";
 		}
 	}
 
@@ -242,7 +242,7 @@ describe('RequestsControllerTests', function () {
 			if (!_commandIsASucess)
 				callback(_handleResult);
 		}
-		this.approveRequestsBaseOnBudgetPromise = function () {
+		this.approveWithValidatorsPromise = function () {
 			return { success: successCallback, error: errorCallback }
 		}
 		this.processWaitlistRequestsPromise = function () {

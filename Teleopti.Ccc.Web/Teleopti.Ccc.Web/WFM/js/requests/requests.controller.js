@@ -102,8 +102,8 @@
 			} else if (commandType === requestsDefinitions.REQUEST_COMMANDS.ProcessWaitlist) {
 				var period = moment(waitlistPeriod.startDate).format("L") + "-" + moment(waitlistPeriod.endDate).format("L");
 				requestsNotificationService.notifySubmitProcessWaitlistedRequestsSuccess(period);
-			}else if (commandType === requestsDefinitions.REQUEST_COMMANDS.ApproveBaseOnBudget) {
-				requestsNotificationService.notifySubmitApproveRequestsBaseOnBudgetSucess();
+			}else if (commandType === requestsDefinitions.REQUEST_COMMANDS.ApproveWithValidators) {
+				requestsNotificationService.notifySubmitApproveWithValidatorsSucess();
 			}
 		}
 

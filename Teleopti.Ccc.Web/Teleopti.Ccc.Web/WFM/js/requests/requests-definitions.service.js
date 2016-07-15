@@ -48,7 +48,7 @@
 			Deny: 'deny',
 			Cancel: 'cancel',
 			ProcessWaitlist: 'processWaitlist',
-			ApproveBaseOnBudget: 'approveBaseOnBudget'
+			ApproveWithValidators: 'approveWithValidators'
 		};
 
 		this.normalizeRequestsFilter = function (filter, sortingOrders, paging) {		

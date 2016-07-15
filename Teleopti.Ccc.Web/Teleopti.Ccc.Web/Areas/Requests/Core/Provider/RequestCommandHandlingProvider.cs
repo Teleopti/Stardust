@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
             return new RequestCommandHandlingResult(affectedRequestIds, errorMessages);
         }
 
-		public RequestCommandHandlingResult ApproveRequestsBasedOnBudgetAllotment(IEnumerable<Guid> requestIds)
+		public RequestCommandHandlingResult ApproveWithValidators(IEnumerable<Guid> requestIds)
 		{
 			var trackInfo = createTrackedCommandInfo();
 			var command = new ApproveBatchRequestsCommand
