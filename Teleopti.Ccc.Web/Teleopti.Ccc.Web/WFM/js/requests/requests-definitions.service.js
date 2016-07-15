@@ -51,6 +51,12 @@
 			ApproveBasedOnBudget: 'approveBasedOnBudget'
 		};
 
+		this.REQUEST_VALIDATORS = {
+			None: 0,
+			WriteProtectedScheduleValidator: 1,
+			BudgetAllotmentValidator: 2
+		};
+
 		this.normalizeRequestsFilter = function (filter, sortingOrders, paging) {		
 			var target = {
 				StartDate: moment(filter.period.startDate).format('YYYY-MM-DD'),

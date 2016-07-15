@@ -47,8 +47,8 @@
             return $http.get(processWaitlistRequests, { params: waitlistPeriodGet });
 		};
 		
-		this.approveWithValidatorsPromise = function (selectedRequestIds) {
-			return $http.post(approveWithValidatorsUrl, selectedRequestIds);
+		this.approveWithValidatorsPromise = function (parameters) {
+			return $http.post(approveWithValidatorsUrl, parameters);
 		};
 
 		this.denyRequestsPromise = function(selectedRequestIds) {

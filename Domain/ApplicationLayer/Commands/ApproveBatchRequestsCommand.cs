@@ -7,9 +7,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 	[Flags]
 	public enum RequestValidatorsFlag
 	{
-		None,
-		WriteProtectedScheduleValidator,
-		BudgetAllotmentValidator
+		None = 0,
+		WriteProtectedScheduleValidator = 1 << 0,
+		BudgetAllotmentValidator = 1 << 1
 	}
 
 	public class ApproveBatchRequestsCommand : ITrackableCommand, IErrorAttachedCommand

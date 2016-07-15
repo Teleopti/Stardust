@@ -44,14 +44,14 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
             return new RequestCommandHandlingResult(affectedRequestIds, errorMessages);
         }
 
-		public RequestCommandHandlingResult ApproveWithValidators(IEnumerable<Guid> requestIds)
+		public RequestCommandHandlingResult ApproveWithValidators(IEnumerable<Guid> requestIds,
+			RequestValidatorsFlag validators)
 		{
 			var trackInfo = createTrackedCommandInfo();
 			var command = new ApproveBatchRequestsCommand
 			{
 				TrackedCommandInfo = trackInfo,
-				Validator = RequestValidatorsFlag.WriteProtectedScheduleValidator
-							| RequestValidatorsFlag.BudgetAllotmentValidator,
+				Validator = validators,
 				PersonRequestIdList = requestIds,
 			};
 

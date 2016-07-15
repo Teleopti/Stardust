@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Web.Http;
 using System.Web.Http.ModelBinding;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
 using Teleopti.Ccc.Web.Areas.Requests.Core.Provider;
@@ -45,7 +46,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 		}
 
 		[HttpGet, Route("api/Requests/shiftTradeRequests"), UnitOfWork]
-		public virtual RequestListViewModel GetShiftTradeRequests([ModelBinder(typeof(AllRequestsFormDataConverter))] AllRequestsFormData input)
+		public virtual RequestListViewModel GetShiftTradeRequests(
+			[ModelBinder(typeof (AllRequestsFormDataConverter))] AllRequestsFormData input)
 		{
 			return _shiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
 		}
@@ -57,9 +59,9 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 		}
 
 		[HttpPost, Route("api/Requests/approveWithValidators"), UnitOfWork]
-		public virtual RequestCommandHandlingResult ApproveWithValidators(IEnumerable<Guid> requestIds)
+		public virtual RequestCommandHandlingResult ApproveWithValidators(ApproveRequestsWithValidatorInput input)
 		{
-			return _commandHandlingProvider.ApproveWithValidators(requestIds);
+			return _commandHandlingProvider.ApproveWithValidators(input.RequestIds, input.Validators);
 		}
 
 		[HttpPost, Route("api/Requests/denyRequests"), UnitOfWork]
