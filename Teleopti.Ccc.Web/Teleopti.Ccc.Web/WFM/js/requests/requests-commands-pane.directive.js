@@ -21,8 +21,8 @@
 		vm.processWaitlistRequests = processWaitlistRequests;
 		vm.runWaitlistToggleIsEnabled = runWaitlistToggleIsEnabled;
 		vm.cancelRequests = cancelRequests;
-		vm.approveWithValidators = approveWithValidators;
-		vm.isApproveWithValidatorsEnabled = isApproveWithValidatorsEnabled;
+		vm.approveBasedOnBudget = approveBasedOnBudget;
+		vm.isApproveBasedOnBudgetEnabled = isApproveBasedOnBudgetEnabled;
 		initWaitlistProcessPeriod();
 		subscribeSignalrMessage();
 
@@ -118,8 +118,8 @@
 			}
 		}
 
-		function approveWithValidators() {
-			doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.ApproveWithValidators, requestsDataService.approveWithValidatorsPromise);
+		function approveBasedOnBudget() {
+			doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.ApproveBasedOnBudget, requestsDataService.approveWithValidatorsPromise);
 		}
 
 		function denyRequests() {
@@ -161,7 +161,7 @@
             vm.showProcessWaitlistModal = !vm.showProcessWaitlistModal;
         }
 
-        function isApproveWithValidatorsEnabled() {
+        function isApproveBasedOnBudgetEnabled() {
 			return toggleSvc.Wfm_Requests_Approve_Based_On_Budget_Allotment_39626 && !vm.isShiftTradeViewActive;
         }
 

@@ -176,15 +176,15 @@ describe('RequestsControllerTests', function () {
 
 	it('should approve base on budget command enabled in absence tab', function() {
 		var test = setUpTarget(false);
-		expect(test.requestCommandPaneScope.isApproveWithValidatorsEnabled()).toEqual(true);
+		expect(test.requestCommandPaneScope.isApproveBasedOnBudgetEnabled()).toEqual(true);
 	});
 
 	it('should approve base on budget command disabled in shift trade tab', function () {
 		var test = setUpTarget(true);
-		expect(test.requestCommandPaneScope.isApproveWithValidatorsEnabled()).toEqual(false);
+		expect(test.requestCommandPaneScope.isApproveBasedOnBudgetEnabled()).toEqual(false);
 	});
 
-	it('approveWithValidators command submit scucess, should notify the result', function () {
+	it('approveBasedOnBudget command submit scucess, should notify the result', function () {
 		var test = setUpTarget();
 		var handleResult = {
 			Success: true,
@@ -196,10 +196,10 @@ describe('RequestsControllerTests', function () {
 		requestsDataService.submitCommandIsASucess(true);
 		requestsDataService.setRequestCommandHandlingResult(handleResult);
 
-		test.requestCommandPaneScope.approveWithValidators();
+		test.requestCommandPaneScope.approveBasedOnBudget();
 
 		expect(handleResult.CommandTrackId).toEqual(test.requestCommandPaneScope.commandTrackId);
-		expect(_notificationResult).toEqual('SubmitApproveWithValidatorsSuccess');
+		expect(_notificationResult).toEqual('SubmitApproveBasedOnBudgetSuccess');
 	});
 
 	function FakeRequestsNotificationService() {
@@ -227,8 +227,8 @@ describe('RequestsControllerTests', function () {
 				requestsCount: requestsCount
 			}
 		}
-		this.notifySubmitApproveWithValidatorsSucess = function () {
-			_notificationResult = "SubmitApproveWithValidatorsSuccess";
+		this.notifySubmitApproveBasedOnBudgetSuccess = function () {
+			_notificationResult = "SubmitApproveBasedOnBudgetSuccess";
 		}
 	}
 
