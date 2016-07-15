@@ -951,10 +951,10 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Wfm\Reports\LeaderBoard.feature.cs">
+    <Compile Include="Wfm\Reports\Leaderboard.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>LeaderBoard.feature</DependentUpon>
+      <DependentUpon>Leaderboard.feature</DependentUpon>
     </Compile>
     <Compile Include="Wfm\Reports\ReportItems.feature.cs">
       <AutoGen>True</AutoGen>
@@ -1463,9 +1463,9 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>TimeZone.feature.cs</LastGenOutput>
     </None>
-    <None Include="Wfm\Reports\LeaderBoard.feature">
+    <None Include="Wfm\Reports\Leaderboard.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>LeaderBoard.feature.cs</LastGenOutput>
+      <LastGenOutput>Leaderboard.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\Reports\ReportItems.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

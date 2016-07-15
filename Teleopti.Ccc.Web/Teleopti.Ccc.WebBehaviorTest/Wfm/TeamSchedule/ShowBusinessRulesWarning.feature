@@ -1,5 +1,5 @@
 ﻿@OnlyRunIfEnabled('WfmTeamSchedule_ShowNightlyRestWarning_39619')
-Feature: ShowBusinessRulesWarning
+Feature: Show business rules warning
 	As a team leader
 	I want to see warnings on business rules
 

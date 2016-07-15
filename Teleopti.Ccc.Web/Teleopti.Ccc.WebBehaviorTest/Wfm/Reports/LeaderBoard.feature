@@ -1,5 +1,5 @@
 ﻿@OnlyRunIfEnabled('WfmReportPortal_LeaderBoard_39440')
-Feature: LeaderBoard
+Feature: Leaderboard
 
 Background:
 	Given I have a role with
