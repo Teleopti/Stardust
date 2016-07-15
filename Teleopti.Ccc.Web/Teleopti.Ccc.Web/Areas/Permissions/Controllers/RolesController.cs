@@ -116,11 +116,7 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 
 			var myRoles = _loggedOnUser.CurrentUser().PermissionInformation.ApplicationRoleCollection;
 			var isMyRole = myRoles.Any(myRole => myRole.Id == role.Id);
-			var isBuiltIn = false;
-			foreach (var myRole in myRoles)
-			{
-				if (myRole.BuiltIn) isBuiltIn = true;
-			}
+			var isBuiltIn = myRoles.Any(myRole => myRole.BuiltIn);
 			if (isMyRole && !isBuiltIn) return BadRequest(CannotModifyMyRoleErrorMessage);
 
 			foreach (var function in model.Functions)
@@ -138,11 +134,7 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 
 			var myRoles = _loggedOnUser.CurrentUser().PermissionInformation.ApplicationRoleCollection;
 			var isMyRole = myRoles.Any(myRole => myRole.Id == role.Id);
-			var isBuiltIn = false;
-			foreach (var myRole in myRoles)
-			{
-				if (myRole.BuiltIn) isBuiltIn = true;
-			}
+			var isBuiltIn = myRoles.Any(myRole => myRole.BuiltIn);
 			if (isMyRole && !isBuiltIn) return BadRequest(CannotModifyMyRoleErrorMessage);
 
 			_personToRoleAssociation.RemoveAssociation(role);
@@ -158,11 +150,7 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 
 			var myRoles = _loggedOnUser.CurrentUser().PermissionInformation.ApplicationRoleCollection;
 			var isMyRole = myRoles.Any(myRole => myRole.Id == role.Id);
-			var isBuiltIn = false;
-			foreach (var myRole in myRoles)
-			{
-				if (myRole.BuiltIn) isBuiltIn = true;
-			}
+			var isBuiltIn = myRoles.Any(myRole => myRole.BuiltIn);
 			if (isMyRole && !isBuiltIn) return BadRequest(CannotModifyMyRoleErrorMessage);
 
 			var children = _applicationFunctionRepository.GetChildFunctions(functionId);
@@ -181,11 +169,7 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 
 			var myRoles = _loggedOnUser.CurrentUser().PermissionInformation.ApplicationRoleCollection;
 			var isMyRole = myRoles.Any(myRole => myRole.Id == role.Id);
-			var isBuiltIn = false;
-			foreach (var myRole in myRoles)
-			{
-				if (myRole.BuiltIn) isBuiltIn = true;
-			}
+			var isBuiltIn = myRoles.Any(myRole => myRole.BuiltIn);
 			if (isMyRole && !isBuiltIn) return BadRequest(CannotModifyMyRoleErrorMessage);
 
 			var children = _applicationFunctionRepository.GetChildFunctions(functionId);
