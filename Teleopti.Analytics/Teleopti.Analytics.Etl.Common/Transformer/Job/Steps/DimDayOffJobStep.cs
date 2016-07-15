@@ -8,6 +8,7 @@ using Teleopti.Ccc.Infrastructure.Analytics;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
@@ -40,7 +41,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 				foreach (var dayOffTemplate in dayOffs)
 				{
 					if (analyticsDayOffs.Any(a => a.DayOffCode == dayOffTemplate.Id.GetValueOrDefault() &&
-												  a.DatasourceUpdateDate == dayOffTemplate.UpdatedOn.GetValueOrDefault() &&
+												  a.DatasourceUpdateDate == DateHelper.GetSmallDateTime(dayOffTemplate.UpdatedOn.GetValueOrDefault()) &&
 												  a.BusinessUnitId == analyticsCurrentBusinessUnit.DatasourceId))
 						continue;
 
