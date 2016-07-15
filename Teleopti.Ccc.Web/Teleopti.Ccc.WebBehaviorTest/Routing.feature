@@ -47,13 +47,13 @@ Scenario: Browse to descendent of MyTime, CiscoWidget in this case
 	When I navigate to CiscoWidget
 	And I sign in
 	Then I should see CiscoWidget
-
+@OnlyRunIfDisabled('WfmTeamSchedule_MakeNewMyTeamDefault_39744')
 Scenario: Browse to root and sign in to Anywhere
 	Given I have the role 'Access to anywhere only'
 	When I navigate to the site's root
 	And I sign in
 	Then I should see Anywhere
-
+@OnlyRunIfDisabled('WfmTeamSchedule_MakeNewMyTeamDefault_39744')
 Scenario: Browse to root and always sign in to Anywhere if have Anywhere permission
 	Given I have the role 'Access to all areas'
 	When I navigate to the site's root

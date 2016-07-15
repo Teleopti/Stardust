@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 		private void tryToAddWfmArea(List<object> areas)
 		{
 			var wfmAreas = GetWfmAreasWithPermissions().ToArray();
-			if (wfmAreas.Any())
+			if (wfmAreas.Any() && _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.Anywhere))
 			{
 				areas.Add(new
 				{
