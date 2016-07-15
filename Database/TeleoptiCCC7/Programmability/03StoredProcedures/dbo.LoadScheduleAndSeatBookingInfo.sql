@@ -47,6 +47,8 @@ SELECT SeatBooking.StartDateTime as SeatBookingStart
 	  ,person.LastName
 	  ,loc.Id As LocationId
 	  ,loc.Name As LocationName
+	  ,loc.LocationPrefix As LocationPrefix
+	  ,loc.LocationSuffix As LocationSuffix
 	  ,team.Id as TeamId
 	  ,team.Name as TeamName
 	  ,sit.Id as SiteId

@@ -16,15 +16,13 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels
 	{
 		private readonly ISeatMapLocationRepository _locationRepository;
 		private readonly IUserTimeZone _userTimeZone;
-		private readonly ISeatMapProvider _seatMapProvider;
 		public String Name { get; set; }
 		public List<SeatBookingViewModel> SeatBookings { get; set; }
 
-		public SeatBookingByTeamViewModel(IGrouping<string, IPersonScheduleWithSeatBooking> seatBookingReportModels, ISeatMapLocationRepository locationRepository, IUserTimeZone userTimeZone, ISeatMapProvider seatMapProvider)
+		public SeatBookingByTeamViewModel(IGrouping<string, IPersonScheduleWithSeatBooking> seatBookingReportModels, ISeatMapLocationRepository locationRepository, IUserTimeZone userTimeZone)
 		{
 			_locationRepository = locationRepository;
 			_userTimeZone = userTimeZone;
-			_seatMapProvider = seatMapProvider;
 			Name = seatBookingReportModels.Key;
 			SeatBookings = new List<SeatBookingViewModel>();
 			
@@ -57,8 +55,8 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels
 				EndDateTime = convertTimeToLocal(personScheduleWithSeatBooking.SeatBookingEnd ?? personScheduleWithSeatBooking.PersonScheduleEnd),
 				SeatId = personScheduleWithSeatBooking.SeatId,
 				SeatName = personScheduleWithSeatBooking.SeatName,
-				LocationPrefix = personScheduleWithSeatBooking.SeatName != null ? _seatMapProvider.Get(personScheduleWithSeatBooking.LocationId, personScheduleWithSeatBooking.BelongsToDate).LocationPrefix: "",
-				LocationSuffix = personScheduleWithSeatBooking.SeatName != null ? _seatMapProvider.Get(personScheduleWithSeatBooking.LocationId, personScheduleWithSeatBooking.BelongsToDate).LocationSuffix: "",
+				LocationPrefix = personScheduleWithSeatBooking.LocationPrefix,
+				LocationSuffix = personScheduleWithSeatBooking.LocationSuffix,
 				
 				SiteId = personScheduleWithSeatBooking.SiteId,
 				SiteName = personScheduleWithSeatBooking.SiteName,

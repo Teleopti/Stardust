@@ -39,14 +39,17 @@ Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function (scheduleDate, selected
 
 	this.seatBookings = scheduleDate.SeatBookings;
 
+	var getValueOrEmptyString = function (object) {
+		return object || '';
+	}
+	
 	var formatSeatBooking = function (seatBooking) {
 
 		var bookingText = '<tr><td>{0} - {1}</td><td>{2}</td></tr>';
 
-		var fullSeatName = seatBooking.LocationPath != '' ?
-			seatBooking.LocationPath + '/' + seatBooking.LocationPrefix + seatBooking.SeatName + seatBooking.LocationSuffix :
-			seatBooking.LocationPrefix + seatBooking.SeatName + seatBooking.LocationSuffix;
-
+		var fullSeatName = seatBooking.LocationPath != '' ? seatBooking.LocationPath + '/' : '';
+		fullSeatName += getValueOrEmptyString(seatBooking.LocationPrefix) + seatBooking.SeatName + getValueOrEmptyString(seatBooking.LocationSuffix);
+		
 		return bookingText.format(
 				Teleopti.MyTimeWeb.Common.FormatTime(seatBooking.StartDateTime),
 				Teleopti.MyTimeWeb.Common.FormatTime(seatBooking.EndDateTime),
@@ -73,6 +76,13 @@ Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function (scheduleDate, selected
 		return message;
 
 	});
+
+	self.seatName =function (seatBooking)
+	{
+		return getValueOrEmptyString(seatBooking.LocationPrefix) + seatBooking.SeatName + getValueOrEmptyString(seatBooking.LocationSuffix);
+		
+	};
+
 
 	this.isDayOff = scheduleDate.IsDayOff;
 

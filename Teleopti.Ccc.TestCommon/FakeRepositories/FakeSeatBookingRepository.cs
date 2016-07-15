@@ -159,6 +159,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				LastName = booking.Person.Name.LastName,
 				LocationId = booking.Seat.Parent.Id.GetValueOrDefault(),
 				LocationName = ((SeatMapLocation) booking.Seat.Parent).Name,
+				LocationPrefix = ((SeatMapLocation) booking.Seat.Parent).LocationPrefix,
+				LocationSuffix = ((SeatMapLocation) booking.Seat.Parent).LocationSuffix,
 				PersonId = booking.Person.Id.GetValueOrDefault(),
 				SeatBookingStart = booking.StartDateTime,
 				SeatBookingEnd = booking.EndDateTime,

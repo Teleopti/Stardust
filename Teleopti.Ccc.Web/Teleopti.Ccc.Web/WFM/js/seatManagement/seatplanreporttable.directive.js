@@ -24,6 +24,18 @@
 		vm.getDisplayDate = function (date) {
 			return moment(date).format('L');
 		};
+
+		var getValueOrEmptyString = function (object) {
+			return object || '';
+		}
+
+		vm.getSeatName = function (booking) {
+			if (booking.SeatName !== '' && booking.SeatName !== null) {
+				return getValueOrEmptyString(booking.LocationPrefix) + booking.SeatName + getValueOrEmptyString(booking.LocationSuffix);
+			}
+
+			return '';
+		}
 	};
 	
 })();

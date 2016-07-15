@@ -16,15 +16,13 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 		private readonly ISeatMapLocationRepository _locationRepository;
 		private readonly ITeamRepository _teamRepository;
 		private readonly IUserTimeZone _userTimeZone;
-		private readonly ISeatMapProvider _seatMapProvider;
 
-		public SeatBookingReportProvider (ISeatBookingRepository seatBookingRepository, ISeatMapLocationRepository locationRepository, ITeamRepository teamRepository, IUserTimeZone userTimeZone, ISeatMapProvider seatMapProvider)
+		public SeatBookingReportProvider (ISeatBookingRepository seatBookingRepository, ISeatMapLocationRepository locationRepository, ITeamRepository teamRepository, IUserTimeZone userTimeZone)
 		{
 			_seatBookingRepository = seatBookingRepository;
 			_locationRepository = locationRepository;
 			_teamRepository = teamRepository;
 			_userTimeZone = userTimeZone;
-			_seatMapProvider = seatMapProvider;
 		}
 
 		public SeatBookingReportViewModel Get (SeatBookingReportCommand command)
@@ -58,7 +56,7 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 				from seatBooking in seatBookingReportModel.SeatBookings
 				group seatBooking by seatBooking.BelongsToDate
 				into groupedSeatBookings
-				select new SeatBookingByDateViewModel(groupedSeatBookings, _locationRepository, _userTimeZone, _seatMapProvider);
+				select new SeatBookingByDateViewModel(groupedSeatBookings, _locationRepository, _userTimeZone);
 
 			return new SeatBookingReportViewModel (dateGroupedSeatBookings, seatBookingReportModel.RecordCount);
 		}

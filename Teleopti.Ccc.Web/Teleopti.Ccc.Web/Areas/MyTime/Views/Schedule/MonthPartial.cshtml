@@ -101,7 +101,7 @@
 										<div class="seatbooking-symbol" data-bind="tooltip: { title: $parent.seatBookingMessage, html: true }"></div>
 									</td>
 									<td>
-										<div data-bind="text: LocationPrefix + SeatName + LocationSuffix, tooltip: { title: $parent.seatBookingMessage, html: true }"></div>
+										<div data-bind="text: $parent.seatName($data), tooltip: { title: $parent.seatBookingMessage, html: true }"></div>
 									</td>
 								</tr>
 							</table>

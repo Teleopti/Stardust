@@ -20,6 +20,8 @@ namespace Teleopti.Ccc.Infrastructure.SeatManagement
 		public String LastName { get; set; }
 		public Guid LocationId { get; set; }
 		public String LocationName { get; set; }
+		public String LocationPrefix { get; set; }
+		public String LocationSuffix { get; set; }
 		public Guid TeamId { get; set; }
 		public String TeamName { get; set; }
 		public Guid SiteId { get; set; }

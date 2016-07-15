@@ -21,7 +21,7 @@
 		<td class="td-team">{{ $first ? booking.SiteName + '/' +team.Name : ''}}</td>
 		<td class="td-agent">{{ booking.FirstName }}&nbsp;{{ booking.LastName }}</td>
 		<td class="td-location">{{ booking.LocationPath }}</td>
-		<td class="td-seat">{{ booking.LocationPrefix + booking.SeatName + booking.LocationSuffix }}</td>
+		<td class="td-seat">{{ vm.getSeatName(booking) }}</td>
 		<td class="td-time">{{ vm.getDisplayTime(booking) }}</td>
 	</tr>
 

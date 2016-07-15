@@ -452,25 +452,22 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		self.hasNote = ko.observable(day.HasNote);
 		self.seatBookings = ko.observableArray(day.SeatBookings);
-
-		if (day.SeatBookings.length>0) {
-			self.locationPrefix = day.SeatBookings[0].LocationPrefix;
-			self.locationSuffix = day.SeatBookings[0].LocationSuffix;	
-		}
 		
 		self.seatBookingIconVisible = ko.computed(function () {
 			return self.seatBookings().length > 0;
 		});
 
+		var getValueOrEmptyString = function (object) {
+			return object || '';
+		}
 
 		var formatSeatBooking = function(seatBooking) {
 
 			var bookingText = '<tr><td>{0} - {1}</td><td>{2}</td></tr>';
 
-			var fullSeatName = seatBooking.LocationPath != '' ?
-				seatBooking.LocationPath + '/' + self.locationPrefix + seatBooking.SeatName + self.locationSuffix :
-				self.locationPrefix + seatBooking.SeatName + self.locationSuffix;
-
+			var fullSeatName = seatBooking.LocationPath != '' ? seatBooking.LocationPath + '/' : '';
+			fullSeatName += getValueOrEmptyString(seatBooking.LocationPrefix) + seatBooking.SeatName + getValueOrEmptyString(seatBooking.LocationSuffix);
+				
 			return bookingText.format(
 					Teleopti.MyTimeWeb.Common.FormatTime(seatBooking.StartDateTime),
 					Teleopti.MyTimeWeb.Common.FormatTime(seatBooking.EndDateTime),

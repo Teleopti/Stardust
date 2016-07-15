@@ -19,6 +19,8 @@ namespace Teleopti.Interfaces.Infrastructure
 		String LastName { get; set; }
 		Guid LocationId { get; set; }
 		String LocationName { get; set; }
+		String LocationPrefix { get; set; }
+		String LocationSuffix { get; set; }
 		Guid TeamId { get; set; }
 		String TeamName { get; set; }
 		Guid SiteId { get; set; }

@@ -165,6 +165,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.AddScalar("LastName", NHibernateUtil.String)
 				.AddScalar("LocationId", NHibernateUtil.Guid)
 				.AddScalar("LocationName", NHibernateUtil.String)
+				.AddScalar("LocationPrefix", NHibernateUtil.String)
+				.AddScalar("LocationSuffix", NHibernateUtil.String)
 				.AddScalar("TeamId", NHibernateUtil.Guid)
 				.AddScalar("TeamName", NHibernateUtil.String)
 				.AddScalar("SiteId", NHibernateUtil.Guid)
