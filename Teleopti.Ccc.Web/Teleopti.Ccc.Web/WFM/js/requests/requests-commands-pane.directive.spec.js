@@ -228,7 +228,7 @@ describe('RequestsControllerTests', function () {
 			}
 		}
 		this.notifySubmitApproveWithValidatorsSucess = function () {
-			_notificationResult = "SubmitApproveWithValidatorsSucess";
+			_notificationResult = "SubmitApproveWithValidatorsSuccess";
 		}
 	}
 
