@@ -41,15 +41,13 @@ Given I am american
 	| Contract schedule    | A contract schedule  |
 	| Part time percentage | Part time percentage |
 
-@ignore
 Scenario: Should be able to see enable menu
 	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
 	And I selected agent 'John Smith'
 	And I open menu in team schedule
-	Then I should see 'Backout' menu is enabled
+	Then I should see 'Undo' menu is enabled
 
-@ignore
 @OnlyRunIfEnabled('WfmTeamSchedule_AddActivity_37541')
 Scenario: Should be able to undo schedule change
 	When I view wfm team schedules
