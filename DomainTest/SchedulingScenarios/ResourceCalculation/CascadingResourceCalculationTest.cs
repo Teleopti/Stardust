@@ -342,5 +342,37 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			nonPrioritizedSkillDay.SkillStaffPeriodCollection.Last().AbsoluteDifference
 				.Should().Be.EqualTo(0);
 		}
+
+		[Test]
+		public void ShouldHandleSkillGroupOnlyContainingNoneCascadingSkills()
+		{
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var dateOnly = DateOnly.Today;
+			var prioritizedSkill = new Skill("_", "_", Color.Empty, 60, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			prioritizedSkill.SetCascadingIndex(1);
+			WorkloadFactory.CreateWorkloadWithOpenHours(prioritizedSkill, new TimePeriod(8, 0, 9, 0));
+			var prioritizedSkillDay = prioritizedSkill.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var nonCascadingSkill = new Skill("_", "_", Color.Empty, 60, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			WorkloadFactory.CreateWorkloadWithOpenHours(nonCascadingSkill, new TimePeriod(8, 0, 9, 0));
+			var nonCascadingSkillDay = nonCascadingSkill.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
+			agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }),
+				new[] { nonCascadingSkill });
+			var ass = new PersonAssignment(agent, scenario, dateOnly);
+			ass.AddActivity(activity, new TimePeriod(8, 0, 9, 0)); //will produce one skillgroup with only the nonCascadingSkill
+			var agent1 = new Person().InTimeZone(TimeZoneInfo.Utc);
+			agent1.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }),
+				new[] { prioritizedSkill });
+			var ass1 = new PersonAssignment(agent1, scenario, dateOnly);
+			ass1.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
+
+			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { ass, ass1 }, new[] { prioritizedSkillDay, nonCascadingSkillDay }, false, false));
+
+			prioritizedSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference
+				.Should().Be.EqualTo(0);
+			nonCascadingSkillDay.SkillStaffPeriodCollection.Last().AbsoluteDifference
+				.Should().Be.EqualTo(0);
+		}
 	}
 }
