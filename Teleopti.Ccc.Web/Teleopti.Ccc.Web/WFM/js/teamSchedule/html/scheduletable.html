@@ -25,10 +25,10 @@
 					<label>
 						<input type="checkbox" ng-model="personSchedule.IsSelected" ng-change="vm.updatePersonSelection(personSchedule)">
 						<span class="wfm-checkbox-toggle"></span>
-						<span class="wfm-checkbox-label person-name nowrap">{{personSchedule.Name}}</span>
+						<span class="wfm-checkbox-label person-name">{{personSchedule.Name}}</span>
 					</label>
 				</div>
-				<div class="person-name nowrap" ng-hide="vm.selectMode">{{personSchedule.Name}}</div>
+				<div class="person-name" ng-hide="vm.selectMode">{{personSchedule.Name}}</div>
 				<span class="validate-warning" ng-if="vm.showWarnings">
 					<span ng-if="vm.checkNightRestWarningMessage(personSchedule.PersonId).isLoaded && vm.checkNightRestWarningMessage(personSchedule.PersonId).warnings.length > 0">
 						<span class="warning-icon"><i class="mdi mdi-account-alert"></i></span>
