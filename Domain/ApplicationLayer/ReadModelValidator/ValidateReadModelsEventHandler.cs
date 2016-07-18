@@ -13,7 +13,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 
 		public void Handle(ValidateReadModelsEvent @event)
 		{
-			_validator.Validate(@event.Targets,@event.StartDate,@event.EndDate, @event.TriggerFix? ReadModelValidationMode.ValidateAndFix: ReadModelValidationMode.Validate);	
+			var mode = @event.Reinitialize
+				? ReadModelValidationMode.Reinitialize
+				: @event.TriggerFix ? ReadModelValidationMode.ValidateAndFix : ReadModelValidationMode.Validate;
+
+			_validator.Validate(@event.Targets,@event.StartDate,@event.EndDate, mode);	
 		}
 	}
 }

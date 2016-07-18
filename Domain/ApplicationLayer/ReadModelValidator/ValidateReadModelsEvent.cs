@@ -9,5 +9,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 		public DateTime EndDate { get; set; }
 		public ValidateReadModelType Targets { get; set; }
 		public bool TriggerFix { get; set; }
+		public bool Reinitialize { get; set; }
 	}
 }
