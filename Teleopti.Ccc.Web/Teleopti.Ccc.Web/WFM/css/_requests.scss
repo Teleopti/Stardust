@@ -129,6 +129,11 @@
 		height: 68vh;
 		margin: 15px;
 
+		.ui-grid-contents-wrapper{
+			overflow-y: auto;
+			height: 110%;
+		}
+
 		.ui-grid-cell-contents.ui-grid-cell-contents {
 			width: 85%;
 			text-align: left;
