@@ -266,7 +266,18 @@
 
 		.ui-grid-row .ui-grid-cell {
 			border-bottom-color: $gray054 !important;
+			height: 59px;
 		}
+
+		.ui-grid-row .ui-grid-cell:before {
+			content : "";
+			position: absolute;
+			left    : 0;
+			bottom  : 0;
+			height  : 1px;
+			width   : 106%;
+			border-bottom:1px solid $gray054 !important;
+  		}
 
 		.shift-trade-cell {
 			box-sizing: border-box;
