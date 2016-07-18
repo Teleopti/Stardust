@@ -42,6 +42,7 @@
 
    .people-search-input {
         display: inline-block;
+        vertical-align: bottom;
     }
 
     .leader-board {
@@ -54,6 +55,7 @@
         .daterange-picker{
             margin: 0 20px;
             display: inline-block;
+            vertical-align: bottom;
 
             .con-flex {
                 position: relative;
@@ -70,6 +72,30 @@
 
             .error-msg-container{
                 z-index: 1000;
+            }
+
+            // CSS hack for IE10, IE11 and edge
+            @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none), (-ms-accelerator:true) {
+                .con-row {
+                    display: -ms-flexbox;
+                }
+
+                .popup-control{
+                    width: 33px;
+                    height: 33px;
+                }
+
+                .con-flex > input{
+                    width: 200px;
+                }
+
+                .date-range-end-date{
+                    margin-left: 250px;
+                }
+
+                .con-flex:nth-child(2) ul {
+                    left: calc(-250% - 5px) !important;
+                }
             }
         }
 
@@ -101,13 +127,5 @@
 @media (max-width: 768px){
     .wfm-reports .leader-board .daterange-picker{
         display: block;
-    }
-
-    .wfm-reports .leader-board .daterange-picker .con-flex:nth-child(2) ul {
-        left: 5px!important;
-    }
-
-    .wfm-reports .leader-board .daterange-picker .con-flex:nth-child(3) ul {
-        top: 300px!important;
     }
 }
