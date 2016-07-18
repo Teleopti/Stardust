@@ -33,6 +33,10 @@
 	position: relative
 }
 
+.forecast-actions{
+	display: inline-flex;
+}
+
 .workload-spinner{
 	position: absolute;
 	right: 9%;
