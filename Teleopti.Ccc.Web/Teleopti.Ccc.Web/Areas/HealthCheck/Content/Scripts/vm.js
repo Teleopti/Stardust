@@ -23,9 +23,11 @@ define([
 		self.readmodelCheckIsRunning = ko.observable(false);
 		self.readModelsFixIsRunning = ko.observable(false);
 		self.readModelCheckAndFixJobIsRunning = ko.observable(false);
+		self.reinitReadModelsJobIsRunning = ko.observable(false);
 		self.readModelCheckJobPollingResult = ko.observable('anything');
 		self.readModelFixJobPollingResult = ko.observable('anything');
 		self.readModelCheckAndFixJobPollingResult = ko.observable('anything');
+		self.reinitReadModelsJobPollingResult = ko.observable('anything');
 		self.logObjects = ko.observable();
 		self.checkBusEnabled = ko.observable(true);
 		self.checkBusEnabled = ko.observable(true);
@@ -34,14 +36,18 @@ define([
 		self.HangfireFailCount = ko.observable(0);
 		self.TimesChecked = 0;
 
+		self.iHaveEmptiedTables = ko.observable(false);
+
 		if (localStorageIsSupported) {
 			self.trackReadModelCheckId = ko.observable(localStorage.trackReadModelCheckId);
 			self.trackReadModelFixId = ko.observable(localStorage.trackReadModelFixId);
 			self.readModelCheckAndFixJobId = ko.observable(localStorage.readModelCheckAndFixJobId);
+			self.reinitReadModelsJobId = ko.observable(localStorage.reinitReadModelsJobId);
 		} else {
 			self.trackReadModelCheckId = ko.observable();
 			self.trackReadModelFixId = ko.observable();
 			self.readModelCheckAndFixJobId = ko.observable();
+			self.reinitReadModelsJobId = ko.observable();
 		}
 
 		self.getReadmodelCheckUrl = function (jobId) {
@@ -61,6 +67,13 @@ define([
 		self.getCheckAndFixJobUrl = function(jobId) {
 			if (typeof jobId !== 'string') {
 				jobId = self.readModelCheckAndFixJobId();
+			}
+			return self.getJobUrl(jobId);
+		};
+
+		self.getReinitJobUrl = function(jobId) {
+			if (typeof jobId !== 'string') {
+				jobId = self.reinitReadModelsJobId();
 			}
 			return self.getJobUrl(jobId);
 		};
@@ -120,6 +133,15 @@ define([
 			});
 		}
 
+		function pollReinitReadModelsJob(jobId) {
+			self.reinitReadModelsJobIsRunning(true);
+			self.reinitReadModelsJobPollingResult('anything');
+			pollJobStatus(jobId, function(data) {
+				self.readModelCheckAndFixJobPollingResult('anything');
+				self.reinitReadModelsJobIsRunning(false);
+			});
+		}
+
 		if (self.trackReadModelCheckId()) {
 			pollCheckJob(self.trackReadModelCheckId());
 		}
@@ -130,6 +152,10 @@ define([
 
 		if (self.readModelCheckAndFixJobId()) {
 			pollCheckAndFixJob(self.readModelCheckAndFixJobId());
+		}
+
+		if (self.reinitReadModelsJobId()) {
+			pollReinitReadModelsJob(self.reinitReadModelsJobId());
 		}
 
 		var subscribe = function (options) {
@@ -205,6 +231,18 @@ define([
 		var toggleIsEnabled;
 		self.HealthCheck_EasyValidateAndFixReadModels_39696 = ko.observable(false);
 
+		var reinitReadModelsFunc;
+		self.reinitReadModels = function () {
+			var cb = function(id) {
+				self.reinitReadModelsJobId(id);
+				if (localStorageIsSupported) {
+					localStorage.reinitReadModelsJobId = id;
+				}
+				pollReinitReadModelsJob(id);
+			};
+			reinitReadModelsFunc(cb);
+		};
+
 		self.initialize = function(options) {
 			if (options) {
 				self.hub = options.messageBroker;
@@ -218,6 +256,7 @@ define([
 				fixReadModelFunc = options.requestReadModelFix;
 				checkAndFixReadModelsFunc = options.checkAndFixReadModels;
 				toggleIsEnabled = options.toggleIsEnabled;
+				reinitReadModelsFunc = options.requestReinitReadModels;
 			}
 			if (self.hub && self.hub.client) {
 				self.hub.client.onEventMessage = function(notification, route) {

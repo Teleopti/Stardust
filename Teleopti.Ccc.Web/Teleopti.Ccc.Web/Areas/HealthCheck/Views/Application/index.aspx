@@ -129,8 +129,10 @@ var identity = (ITeleoptiIdentity) CurrentTeleoptiPrincipal.Make().Current().Ide
 								<label for="readmodelCheckEndDate">End date</label>
 								<input id="readmodelCheckEndDate" class="datepicker" type="date" data-bind="value: readModelCheckEndDate"/>
 							</div>
-							<button class="btn btn-primary" data-bind="click: checkAndFixReadModels">Start</button>
 						</form>
+						<div style="margin: 1em 0;">
+							<button class="btn btn-primary" data-bind="click: checkAndFixReadModels">Validate & Fix</button>
+						</div>
 						<!-- /ko -->
 					</div>
 					<!-- /ko -->
@@ -183,6 +185,34 @@ var identity = (ITeleoptiIdentity) CurrentTeleoptiPrincipal.Make().Current().Ide
 						<!-- /ko -->
 					</div>
 					<!-- /ko -->
+					<details>
+						<summary>Re-initialize readmodels</summary>
+						<p>Before re-initializing readmodels, please make sure to empty the readmodel tables. Otherwise, it will cause a system error. </p>
+						<!-- ko if: reinitReadModelsJobId() && !reinitReadModelsJobPollingResult() -->
+						<p>Could not retrieve status of last attempt. See <a target="_blank" data-bind="attr: { href: getReinitJobUrl() }">details</a> or start again below. </p>
+						<!-- /ko -->
+						<!-- ko if: reinitReadModelsJobId() && reinitReadModelsJobPollingResult() && reinitReadModelsJobIsRunning() -->
+						<p>Last job is <b>running</b>. See <a target="_blank" data-bind="attr: { href: getReinitJobUrl() }">details</a>. </p>
+						<!-- /ko -->
+						<!-- ko if: reinitReadModelsJobId() && reinitReadModelsJobPollingResult() && !reinitReadModelsJobIsRunning() -->
+						<p>Last job is <b>done</b>. See <a target="_blank" data-bind="attr: { href: getReinitJobUrl() }">details</a>. </p>
+						<!-- /ko -->
+						<!-- ko if: !reinitReadModelsJobId() || ( !reinitReadModelsJobIsRunning() || !reinitReadModelsJobPollingResult() ) -->
+						<div>
+							<div>
+								<label>
+									<input type="checkbox" data-bind="checked: iHaveEmptiedTables"/>
+									I have emptied the readmodel tables
+								</label>
+							</div>
+						</div>
+						<div>
+							<button class="btn btn-default" data-bind="enable: iHaveEmptiedTables, click: reinitReadModels">Re-initialize</button>
+						</div>
+						<!-- /ko -->
+					</details>
+					
+					
 					<h3>Configured URL:s</h3>
 					<ul class="list-group" data-bind="foreach: configuredUrls">
 						<li class="list-group-item configured-url" data-bind="css: { 'list-group-item-success': Reachable == true }">

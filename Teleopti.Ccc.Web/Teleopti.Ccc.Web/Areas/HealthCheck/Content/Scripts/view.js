@@ -43,6 +43,20 @@ define([
 			.done(cb);
 	};
 
+	var reinitReadModels = function (cb) {
+		var period = {};
+		try {
+			period.start = new Date(vm.readModelCheckStartDate()).toISOString();
+			period.end = new Date(vm.readModelCheckEndDate()).toISOString();
+		} catch (e) {
+			alert(e + '\n(Make sure to select valid dates)');
+			console.error(e);
+			return;
+		}
+		http.get('HealthCheck/ReinitializeReadModels', period)
+			.done(cb);
+	};
+
 	var toggleIsEnabled = function(toggle, cb) {
 		http.get('ToggleHandler/IsEnabled', {toggle: toggle}).done(cb);
 	};
@@ -57,7 +71,8 @@ define([
 		requestReadModelCheck: requestReadModelCheck,
 		requestReadModelFix: requestReadModelFix,
 		checkAndFixReadModels: checkAndFixReadModels,
-		toggleIsEnabled: toggleIsEnabled
+		toggleIsEnabled: toggleIsEnabled,
+		requestReinitReadModels: reinitReadModels
     });
 
 	http.get('HealthCheck/CheckStardust').done(function (data) {
