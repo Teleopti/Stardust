@@ -26,9 +26,9 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		public void Start(string connectionString)
 		{
 			var retries = _config.ReadValue("HangfireAutomaticRetryAttempts", 10);
-			var jobExpiration = _config.ReadValue("HangfireJobExpirationSeconds", 60 * 60 * 24 * 2);
-			var pollInterval = _config.ReadValue("HangfireQueuePollIntervalSeconds", 2);
-			var jobExpirationCheck = _config.ReadValue("HangfireJobExpirationCheckIntervalSeconds", 60 * 15);
+			var jobExpiration = _config.ReadValue("HangfireJobExpirationSeconds", TimeSpan.FromHours(1).TotalSeconds);
+			var pollInterval = _config.ReadValue("HangfireQueuePollIntervalSeconds", TimeSpan.FromSeconds(2).TotalSeconds);
+			var jobExpirationCheck = _config.ReadValue("HangfireJobExpirationCheckIntervalSeconds", TimeSpan.FromMinutes(15).TotalSeconds);
 			var dashboardStatistics = _config.ReadValue("HangfireDashboardStatistics", false);
 			var dashboardCounters = _config.ReadValue("HangfireDashboardCounters", false);
 
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 				// because we dont have any counters any more
 				// well, today anyway...
 				// NOT FUTURE PROOF! DANGER DANGER!
-				defaultCountersAggregateInterval = 60 * 60 * 24;
+				defaultCountersAggregateInterval = (int) TimeSpan.FromDays(1).TotalSeconds;
 			}
 			var countersAggregateInterval = _config.ReadValue("HangfireCountersAggregateIntervalSeconds", defaultCountersAggregateInterval);
 
