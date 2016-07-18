@@ -84,10 +84,6 @@ a{
 	font-size:15px!important;
 }
 
-md-progress-circular .md-inner .md-half-circle {
-	border-top-color: $pink-500!important;
-}
-
 .wfm-card-unselected{
 	background: $white;
 }
@@ -134,8 +130,8 @@ wfm-notice{
 @media all and (-ms-high-contrast: none),
 (-ms-high-contrast: active),
 @-moz-document url-prefix() {
-	.navbar-search{
-		padding: 1px!important;
+	.navbar .navbar-search{
+		padding: 1px;
 	}
 }
 
