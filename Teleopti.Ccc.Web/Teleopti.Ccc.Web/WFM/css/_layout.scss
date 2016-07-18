@@ -128,11 +128,14 @@ wfm-notice{
 }
 
 @media all and (-ms-high-contrast: none),
-(-ms-high-contrast: active),
-@-moz-document url-prefix() {
+(-ms-high-contrast: active) {
 	.navbar .navbar-search{
 		padding: 1px;
 	}
+}
+
+.nav-item-wrap {
+	text-decoration: none!important;
 }
 
 md-select-menu md-option:focus:not([disabled]):not([selected]){
