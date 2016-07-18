@@ -41,8 +41,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 			}
 		}
 
-		public void Validate(ValidateReadModelType types, DateTime start, DateTime end, bool directFix = false)
-		{
+		public void Validate(ValidateReadModelType types, DateTime start, DateTime end, ReadModelValidationMode mode = ReadModelValidationMode.Validate)
+		{			
 			var startDate = new DateOnly(start);
 			IList<Guid> personIds;
 			IScenario scenario;
@@ -69,26 +69,26 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 							scenario);
 						var scheduleDays = schedules.SchedulesForPeriod(dateOnlyPeriod,person).ToLookup(s => s.DateOnlyAsPeriod.DateOnly);
 
-						dateOnlyPeriod.DayCollection().ForEach(day => validate(types,person,scheduleDays[day].First(), directFix));
+						dateOnlyPeriod.DayCollection().ForEach(day => validate(types,person,scheduleDays[day].First(), mode));
 					}
 					uow.PersistAll();
 				}
 			}			
 		}
 		
-		private void validate(ValidateReadModelType types,IPerson person, IScheduleDay scheduleDay, bool directFix)
+		private void validate(ValidateReadModelType types,IPerson person, IScheduleDay scheduleDay,ReadModelValidationMode mode )
 		{
 			if(types.HasFlag(ValidateReadModelType.ScheduleProjectionReadOnly))
 			{
-				var isValid = _readModelScheduleProjectionReadOnlyValidator.Validate(person,scheduleDay,directFix);
-				if(!isValid) _readModelValidationResultPersister.SaveScheduleProjectionReadOnly(
+				var isValid = _readModelScheduleProjectionReadOnlyValidator.Validate(person,scheduleDay,mode);
+				if(!isValid && mode != ReadModelValidationMode.Reinitialize) _readModelValidationResultPersister.SaveScheduleProjectionReadOnly(
 					makeResult(person,scheduleDay.DateOnlyAsPeriod.DateOnly,false,ValidateReadModelType.ScheduleProjectionReadOnly));
 			}
 
 			if(types.HasFlag(ValidateReadModelType.PersonScheduleDay))
 			{
-				var isValid = _readModelPersonScheduleDayValidator.Validate(person,scheduleDay,directFix);
-				if(!isValid)
+				var isValid = _readModelPersonScheduleDayValidator.Validate(person,scheduleDay,mode);
+				if(!isValid && mode != ReadModelValidationMode.Reinitialize)
 				{
 					_readModelValidationResultPersister.SavePersonScheduleDay(
 						makeResult(person,scheduleDay.DateOnlyAsPeriod.DateOnly,false,ValidateReadModelType.PersonScheduleDay));
@@ -97,8 +97,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 
 			if(types.HasFlag(ValidateReadModelType.ScheduleDay))
 			{
-				var isValid = _readModelScheduleDayValidator.Validate(person,scheduleDay,directFix);
-				if(!isValid)
+				var isValid = _readModelScheduleDayValidator.Validate(person,scheduleDay,mode);
+				if(!isValid && mode != ReadModelValidationMode.Reinitialize)
 				{
 					_readModelValidationResultPersister.SaveScheduleDay(
 						makeResult(person,scheduleDay.DateOnlyAsPeriod.DateOnly,false,ValidateReadModelType.ScheduleDay));

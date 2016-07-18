@@ -453,5 +453,63 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			result.EndDateTime.Should().Be.EqualTo(expecteReadModel.EndDateTime);
 		}
 
+		[Test]
+		public void ValidateAndFixReadModelShouldCorrectlyFixReadModel()
+		{
+			var scenario = CurrentScenario.Current();
+			var site = SiteFactory.CreateSimpleSite("s");
+			site.WithId();
+			var team = TeamFactory.CreateTeamWithId("t");
+			team.Site = site;
+
+			var person = PersonFactory.CreatePersonWithGuid("Peter","peter");
+			var personPeriod = new PersonPeriod(new DateOnly(2016,1,1),
+				PersonContractFactory.CreatePersonContract(ContractFactory.CreateContract("_")),team);
+			personPeriod.WithId();
+			person.AddPersonPeriod(personPeriod);
+			PersonRepository.Has(person);
+			var dateTimePeriod = new DateTimePeriod(2016,1,1,8,2016,1,1,17);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person,dateTimePeriod);
+			ScheduleStorage.Add(personAssignment);
+			PersonAssignmentRepository.Add(personAssignment);
+			
+
+			Target.Validate(ValidateReadModelType.ScheduleDay,new DateTime(2016,1,1),new DateTime(2016,1,1),ReadModelValidationMode.ValidateAndFix);
+		
+			var checkResult = ReadModelValidationResultPersistor.LoadAllInvalidScheduleDay().ToList();
+			checkResult.Count.Should().Be.EqualTo(1);
+
+			var readModels = ScheduleDayReadModelRepository.ReadModelsOnPerson(new DateOnly(2016,1,1),new DateOnly(2016,1,1),person.Id.Value);
+			readModels.Count.Should().Be.EqualTo(1);			
+		}
+
+		[Test]
+		public void ReinitilizeReadModelShouldWorkWithoutWritingToCheckResult()
+		{
+			var scenario = CurrentScenario.Current();
+			var site = SiteFactory.CreateSimpleSite("s");
+			site.WithId();
+			var team = TeamFactory.CreateTeamWithId("t");
+			team.Site = site;
+
+			var person = PersonFactory.CreatePersonWithGuid("Peter","peter");
+			var personPeriod = new PersonPeriod(new DateOnly(2016,1,1),
+				PersonContractFactory.CreatePersonContract(ContractFactory.CreateContract("_")),team);
+			personPeriod.WithId();
+			person.AddPersonPeriod(personPeriod);
+			PersonRepository.Has(person);
+			var dateTimePeriod = new DateTimePeriod(2016,1,1,8,2016,1,1,17);
+			var personAssignment = PersonAssignmentFactory.CreateEmptyAssignment(scenario,person,dateTimePeriod);
+			ScheduleStorage.Add(personAssignment);
+			PersonAssignmentRepository.Add(personAssignment);
+
+			Target.Validate(ValidateReadModelType.ScheduleDay,new DateTime(2016,1,1),new DateTime(2016,1,1), ReadModelValidationMode.Reinitialize);
+			var checkResult = ReadModelValidationResultPersistor.LoadAllInvalidScheduleDay().ToList();
+			checkResult.Count.Should().Be.EqualTo(0);
+
+			var readModels = ScheduleDayReadModelRepository.ReadModelsOnPerson(new DateOnly(2016, 1, 1), new DateOnly(2016, 1, 1), person.Id.Value);
+			readModels.Count.Should().Be.EqualTo(1);			
+		}
+
 	}
 }

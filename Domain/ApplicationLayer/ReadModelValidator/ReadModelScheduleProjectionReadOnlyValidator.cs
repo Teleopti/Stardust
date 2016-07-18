@@ -29,19 +29,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 			_readModelFixer = readModelFixer;
 		}
 
-		public bool Validate(IPerson person,IScheduleDay scheduleDay, bool directFix)
-		{
-			var fetchedReadModels = FetchFromRepository(person,scheduleDay.DateOnlyAsPeriod.DateOnly).ToArray();
+		public bool Validate(IPerson person,IScheduleDay scheduleDay,ReadModelValidationMode mode)
+		{			
 			var mappedReadModels = Build(person,scheduleDay).ToArray();
 
-			var isValid = mappedReadModels.Length == fetchedReadModels.Length
-							&& mappedReadModels.Zip(fetchedReadModels,(a,b) =>
-							{
-								if(a == null) return b == null;
-								return a.Equals(b);
-							}).All(x => x);
-
-			if (directFix && !isValid)
+			var isValid = false;
+			if (mode != ReadModelValidationMode.Reinitialize)
+			{
+				var fetchedReadModels = FetchFromRepository(person, scheduleDay.DateOnlyAsPeriod.DateOnly).ToArray();
+				isValid = mappedReadModels.Length == fetchedReadModels.Length
+						  && mappedReadModels.Zip(fetchedReadModels, (a, b) =>
+						  {
+							  if (a == null) return b == null;
+							  return a.Equals(b);
+						  }).All(x => x);
+			}
+			
+			if (!isValid && (mode == ReadModelValidationMode.ValidateAndFix || mode == ReadModelValidationMode.Reinitialize))
 			{
 				_readModelFixer.FixScheduleProjectionReadOnly(new ReadModelData
 				{
