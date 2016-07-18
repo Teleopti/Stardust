@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public bool IsInitialized()
 		{
-			throw new NotImplementedException();
+			return _data.Any();
 		}
 	}
 }

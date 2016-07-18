@@ -511,5 +511,36 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 			readModels.Count.Should().Be.EqualTo(1);			
 		}
 
+		[Test]
+		[ExpectedException(typeof (ValidationException))]
+		public void ShouldThrowWhenReinitializeReadModelWithResidualReadmodels()
+		{
+			var scenario = CurrentScenario.Current();
+			var site = SiteFactory.CreateSimpleSite("s");
+			site.WithId();
+			var team = TeamFactory.CreateTeamWithId("t");
+			team.Site = site;
+
+			var person = PersonFactory.CreatePersonWithGuid("Peter","peter");
+
+			PersonRepository.Has(person);
+			var dateTimePeriod = new DateTimePeriod(2016,1,1,8,2016,1,1,17);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person,dateTimePeriod);
+			ScheduleStorage.Add(personAssignment);
+
+			ScheduleDayReadModelRepository.SaveReadModel(new ScheduleDayReadModel
+			{
+				PersonId = person.Id.Value,
+				Date = new DateTime(2016,1,1),
+				StartDateTime = new DateTime(2016,1,1,8,0,0),
+				EndDateTime = new DateTime(2016,1,1,17,0,0),
+				Workday = true,
+				NotScheduled = false,
+				Label = "sd"
+			});
+
+			Target.Validate(ValidateReadModelType.ScheduleDay,new DateTime(2016,1,1),new DateTime(2016,1,1), ReadModelValidationMode.Reinitialize);
+		}
+
 	}
 }

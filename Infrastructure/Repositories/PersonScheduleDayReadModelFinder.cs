@@ -28,6 +28,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			_unitOfWork = unitOfWork;
 		}
 
+		public bool IsInitialized()
+		{
+			var result = _unitOfWork.Session().CreateSQLQuery(
+				"SELECT TOP 1 * FROM ReadModel.PersonScheduleDay")
+													 .List();
+			return result.Count > 0;
+		}
+
 		public IEnumerable<PersonScheduleDayReadModel> ForPerson(DateOnly startDate, DateOnly endDate, Guid personId)
 		{
 			const string sql

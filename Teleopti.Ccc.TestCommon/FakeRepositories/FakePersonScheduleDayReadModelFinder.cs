@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	{
 
 		private IPersonRepository _personRepository;
-
+		private bool _isInitilized;
 		private readonly IPersonAssignmentRepository _personAssignmentRepository;
 
 		public FakePersonScheduleDayReadModelFinder(IPersonAssignmentRepository personAssignmentRepository, IPersonRepository personRepository)
@@ -60,6 +60,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			readModel.BusinessUnitId = assignment.Scenario.BusinessUnit.Id.GetValueOrDefault();
 
 			return readModel;
+		}
+
+		public bool IsInitialized()
+		{
+			return _isInitilized;
+		}
+
+		public void SetIsInitialized(bool input)
+		{
+			_isInitilized = input;
 		}
 
 		public IEnumerable<PersonScheduleDayReadModel> ForPeople(DateTimePeriod period, IEnumerable<Guid> personIds)

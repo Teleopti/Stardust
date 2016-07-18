@@ -47,6 +47,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 			IList<Guid> personIds;
 			IScenario scenario;
 
+			if (mode == ReadModelValidationMode.Reinitialize)
+			{
+				using(var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+				{
+					if (_readModelPersonScheduleDayValidator.IsInitialized() ||
+						_readModelScheduleProjectionReadOnlyValidator.IsInitialized() || _readModelScheduleDayValidator.IsInitialized())
+					{
+						throw new ValidationException("Must cleanse read model records before re-initialization.");
+					}
+				}
+			}			
+
 			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				personIds = _personRepository.LoadAll().Select(x => x.Id.Value).ToList();

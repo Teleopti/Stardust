@@ -10,5 +10,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 		PersonScheduleDayReadModel FetchFromRepository(IPerson person,DateOnly date);
 		PersonScheduleDayReadModel Build(Guid personId,DateOnly date);
 		PersonScheduleDayReadModel Build(IPerson person,IScheduleDay scheduleDay);
+		bool IsInitialized();
 	}
 }

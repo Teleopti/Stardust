@@ -15,5 +15,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 		IEnumerable<ScheduleProjectionReadOnlyModel> Build(Guid personId,DateOnly date);
 		IEnumerable<ScheduleProjectionReadOnlyModel> Build(IPerson person,DateOnly date);
 		IEnumerable<ScheduleProjectionReadOnlyModel> Build(IPerson person,IScheduleDay scheduleDay);
+		bool IsInitialized();
 	}
 }

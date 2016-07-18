@@ -29,6 +29,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 			_readModelFixer = readModelFixer;
 		}
 
+		public bool IsInitialized()
+		{
+			return _personScheduleDayReadModelFinder.IsInitialized();
+		}
 
 		public bool Validate(IPerson person,IScheduleDay scheduleDay,ReadModelValidationMode mode)
 		{
