@@ -48,6 +48,8 @@ if not exists (select 1 from PurgeSetting where [key] = 'DenyPendingRequestsAfte
 	insert into PurgeSetting ([Key], [Value]) values ('DenyPendingRequestsAfterNDays', 14)
 if not exists (select 1 from PurgeSetting where [key] = 'YearsToKeepPersons')
 	insert into PurgeSetting ([Key], [Value]) values ('YearsToKeepPersons', 10)
+if not exists (select 1 from PurgeSetting where [Key] = 'DaysToKeepReadmodels')
+	insert into PurgeSetting ([Key], [Value]) values('DaysToKeepReadmodels', 30)
 
 --Persons who has left, i.e. with a since long past leaving date
 select @KeepUntil = dateadd(year,-1*(select isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepPersons'),getdate())
@@ -95,6 +97,10 @@ from Auditing.Revision r
 inner join Auditing.PersonAbsence_AUD pa on pa.REV = r.Id
 inner join person p on pa.Person = p.Id
 where p.IsDeleted = 1
+
+delete ReadModel.PersonScheduleDay
+from ReadModel.PersonScheduleDay ps
+inner join #Deleted d on d.Id = ps.PersonId
 
 if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
 	return
@@ -336,9 +342,27 @@ if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
 delete ReadModel.AdherenceDetails
 where BelongsToDate < dateadd(day,-3,getdate())
 
+--schedule related read models
+select @KeepUntil = DATEADD(day, -1*(select isnull(Value, 30) from PurgeSetting where [Key] = 'DaysToKeepReadmodels'), GETDATE())
+
 delete ReadModel.PersonScheduleDay
-from ReadModel.PersonScheduleDay ps
-inner join #Deleted d on d.Id = ps.PersonId
+where BelongsToDate < @KeepUntil
+
+delete ReadModel.ScheduleDay
+where BelongsToDate < @KeepUntil
+
+delete ReadModel.ScheduleProjectionReadOnly
+where BelongsToDate < @KeepUntil
+
+if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
+	return
+
+--delete empty schedule read model records
+delete ReadModel.ScheduleDay
+where NotScheduled = 1
+
+delete ReadModel.PersonScheduleDay
+where Start is NULL and [End] is NULL
 
 END
 
