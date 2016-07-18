@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 			// handles request from site
 			if (request.IsResponseReady)
 			{
-				return _openIdProvider.PrepareResponse(request).AsActionResult();
+				return _openIdProvider.PrepareResponse(request).AsActionResultMvc5();
 			}
 
 			// handles request from browser
