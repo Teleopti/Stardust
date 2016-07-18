@@ -70,6 +70,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			system.UseTestDouble<FakeMessageSender>().For<IMessageSender>();
 
 			system.AddService<Database>();
+			system.AddService<DatabaseManager>();
 			system.UseTestDouble<FakeTransactionHook>().For<ITransactionHook>(); // just adds one hook to the list
 			system.UseTestDouble<TestConnectionStrings>().For<IConnectionStrings>();
 			system.UseTestDouble<MutableFakeCurrentHttpContext>().For<ICurrentHttpContext>();

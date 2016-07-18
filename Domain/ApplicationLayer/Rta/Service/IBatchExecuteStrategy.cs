@@ -22,14 +22,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		public void Execute(IEnumerable<ExternalUserStateInputModel> source, Action<ExternalUserStateInputModel> action)
 		{
-			var closingSnapshot = source.Where(x => x.IsSnapshot && string.IsNullOrEmpty(x.UserCode));
-			if (closingSnapshot.Any())
-			{
-				source.Except(closingSnapshot).AsParallel().ForAll(action);
-				action(closingSnapshot.First());
-			}
-			else
-				source.AsParallel().ForAll(action);
+			var stuff = source.ToList();
+			if (!stuff.Any())
+				return;
+			stuff.Reverse();
+			var mightCloseSnapshot = stuff.First();
+			var runInParallel = stuff.Skip(1);
+			runInParallel.AsParallel().ForAll(action);
+			action.Invoke(mightCloseSnapshot);
 		}
 	}
 }

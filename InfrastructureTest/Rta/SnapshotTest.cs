@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	[TestFixture]
 	[MultiDatabaseTest]
-	public class SnapshotTest : ISetup
+	public class SnapshotTest
 	{
 		public DatabaseManager Database;
 		public WithAnalyticsUnitOfWork WithAnalyticsUnitOfWork;
@@ -22,11 +22,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public IPersonRepository Persons;
 		public Domain.ApplicationLayer.Rta.Service.Rta Rta;
 		public IAgentStateReadModelReader ReadModels;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			system.AddService<DatabaseManager>();
-		}
 
 		[Test]
 		public void ShouldLogOutAgentsNotInSnapshot()

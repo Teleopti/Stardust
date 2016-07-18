@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
@@ -121,7 +122,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			if (states.Count() > 50)
 				throw new BatchTooBigException("Incoming batch too large. Please lower the number of user states in a batch to below 50.");
 
-			var exceptions = new List<Exception>();
+			var exceptions = new ConcurrentBag<Exception>();
 			_batchExecuteStrategy.Execute(states, s =>
 			{
 				try

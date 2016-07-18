@@ -7,6 +7,8 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
@@ -124,5 +126,31 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database.StateCodes.Where(x => x.StateCode == Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
 				.Should().Have.Count.EqualTo(1);
 		}
+
+		[Test]
+		public void ShouldThrowForAllMissingPersons()
+		{
+			var users = (
+				from n in Enumerable.Range(0, 50)
+				select $"unknown{n}"
+				).ToArray();
+
+			var states = (
+				from u in users
+				select new ExternalUserStateForTest
+				{
+					UserCode = u,
+					StateCode = "phone"
+				}
+				).ToArray();
+
+			100.Times(() =>
+			{
+				var result = Assert.Throws<AggregateException>(() => Target.SaveStateBatch(states));
+				result.InnerExceptions.Count.Should().Be(50);
+				result.InnerExceptions.OfType<InvalidUserCodeException>().Count().Should().Be(50);
+			});
+		}
+
 	}
 }
