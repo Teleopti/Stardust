@@ -187,7 +187,6 @@
 				appScopeProvider: vm,
 				enableGridMenu: true,
 				enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
-				enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
 				useExternalSorting: true,
 				headerTemplate: 'shift-trade-header-template.html',
 				gridMenuTitleFilter: $translate,
