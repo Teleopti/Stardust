@@ -166,6 +166,8 @@
 		HealthCheck_ValidateReadModelPersonScheduleDay_39421,
 		HealthCheck_ValidateReadModelScheduleDay_39423,
 		HealthCheck_EasyValidateAndFixReadModels_39696,
+		HealthCheck_ReinitializeReadModels_39697,
+
 		ETL_SpeedUpIntradayBusinessUnit_38932,
 		ETL_SpeedUpNightlyBusinessUnit_38932,
 		ETL_RobustAnalyticsScheduleChangeUpdater_39556
