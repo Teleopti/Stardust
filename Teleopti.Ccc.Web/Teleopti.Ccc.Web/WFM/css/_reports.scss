@@ -42,7 +42,6 @@
 
    .people-search-input {
         display: inline-block;
-        vertical-align: bottom;
     }
 
     .leader-board {
@@ -52,10 +51,13 @@
         min-height: 400px;
         overflow-y: auto;
 
+        .leader-board-header{
+            border: 1px solid red;
+        }
+
         .daterange-picker{
             margin: 0 20px;
             display: inline-block;
-            vertical-align: bottom;
 
             .con-flex {
                 position: relative;
@@ -72,30 +74,6 @@
 
             .error-msg-container{
                 z-index: 1000;
-            }
-
-            // CSS hack for IE10, IE11 and edge
-            @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none), (-ms-accelerator:true) {
-                .con-row {
-                    display: -ms-flexbox;
-                }
-
-                .popup-control{
-                    width: 33px;
-                    height: 33px;
-                }
-
-                .con-flex > input{
-                    width: 200px;
-                }
-
-                .date-range-end-date{
-                    margin-left: 250px;
-                }
-
-                .con-flex:nth-child(2) ul {
-                    left: calc(-250% - 5px) !important;
-                }
             }
         }
 
@@ -123,6 +101,46 @@
         }
     }
 }
+
+ // CSS hack for IE10, IE11 and edge
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none), (-ms-accelerator:true) {
+    .wfm-reports {
+        .people-search-input {
+            vertical-align: middle;
+            padding-bottom: 8px;
+        }
+
+        .daterange-picker{
+            vertical-align: bottom;
+
+            .con-row {
+                display: -ms-flexbox;
+            }
+
+            .popup-control{
+                width: 33px;
+                height: 33px;
+            }
+
+            .con-flex{
+                padding-bottom: 0;
+            }
+
+            .con-flex > input{
+                width: 200px;
+            }
+
+            .date-range-end-date{
+                margin-left: 250px;
+            }
+
+            .con-flex:nth-child(2) ul {
+                left: calc(-250% - 5px) !important;
+            }
+        }
+    }
+}
+
 
 @media (max-width: 768px){
     .wfm-reports .leader-board .daterange-picker{
