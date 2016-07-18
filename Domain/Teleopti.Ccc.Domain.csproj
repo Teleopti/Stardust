@@ -158,6 +158,7 @@
     <Compile Include="Aop\ReadOnlyUnitOfWorkAttribute.cs" />
     <Compile Include="Aop\UnitOfWorkAttribute.cs" />
     <Compile Include="Aop\AllBusinessUnitsUnitOfWorkAttribute.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\ApproveRequestsWithValidatorsEventHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IRunRequestWaitlistEventMessage.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandler.cs" />
     <Compile Include="ApplicationLayer\BusinessUnit\AnalyticsBusinessUnitUpdater.cs" />
@@ -167,6 +168,7 @@
     <Compile Include="ApplicationLayer\Commands\BackoutScheduleChangeCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Availability\AnalyticsAvailabilityUpdater.cs" />
     <Compile Include="ApplicationLayer\Commands\RequestValidatorsFlag.cs" />
+    <Compile Include="ApplicationLayer\Events\ApproveRequestsWithValidatorsEvent.cs" />
     <Compile Include="ApplicationLayer\Events\AvailabilityChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\BusinessUnitChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonRequestChangedEvent.cs" />
@@ -2386,6 +2388,7 @@
     <Compile Include="WorkflowControl\AbsenceRequestOpenRollingPeriod.cs" />
     <Compile Include="WorkflowControl\AbsenceRequstAndSchedules.cs" />
     <Compile Include="WorkflowControl\AlreadyAbsentSpecification.cs" />
+    <Compile Include="WorkflowControl\ApproveAbsenceRequestWithValidators.cs" />
     <Compile Include="WorkflowControl\BudgetGroupAllowanceValidator.cs" />
     <Compile Include="WorkflowControl\BudgetGroupHeadCountValidator.cs" />
     <Compile Include="WorkflowControl\SchedulePublishedSpecificationForAbsence.cs" />

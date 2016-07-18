@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -7,10 +8,11 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon
 {
-	public class FakeScheduleRange : Schedule, IScheduleRange
-	{
+	public class FakeScheduleRange : Schedule, IScheduleRange, IUnvalidatedScheduleRangeUpdate
+    {
 		public FakeScheduleRange(IScheduleDictionary owner, IScheduleParameters parameters) : base(owner, parameters)
 		{
+		    Period = parameters.Period;
 		}
 
 		public IScheduleRange UpdateCalcValues(int scheduledDaysOff, TimeSpan contractTimeHolder)
@@ -118,12 +120,11 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IDifferenceCollection<IPersistableScheduleData> DifferenceSinceSnapshot(IDifferenceCollectionService<IPersistableScheduleData> differenceService)
 		{
-			throw new NotImplementedException();
+		    return new DifferenceCollection<IPersistableScheduleData>();
 		}
 
 		public void TakeSnapshot()
 		{
-			throw new NotImplementedException();
 		}
 
 		public DateTimePeriod VisiblePeriodMinusFourWeeksPeriod()
@@ -149,7 +150,22 @@ namespace Teleopti.Ccc.TestCommon
 		public void Reassociate(IUnitOfWork unitOfWork)
 		{
 		}
-	}
+
+	    public void SolveConflictBecauseOfExternalInsert(IScheduleData databaseVersion, bool discardMyChanges)
+	    {
+	        
+	    }
+
+	    public void SolveConflictBecauseOfExternalUpdate(IScheduleData databaseVersion, bool discardMyChanges)
+	    {
+	        
+	    }
+
+	    public IPersistableScheduleData SolveConflictBecauseOfExternalDeletion(Guid id, bool discardMyChanges)
+	    {
+	        return null;
+	    }
+    }
 }
 
 

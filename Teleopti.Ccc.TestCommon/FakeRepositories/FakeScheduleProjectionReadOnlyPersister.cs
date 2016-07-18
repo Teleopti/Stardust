@@ -10,8 +10,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class FakeScheduleProjectionReadOnlyPersister : IScheduleProjectionReadOnlyPersister
 	{
 		private readonly IList<ScheduleProjectionReadOnlyModel> _data = new List<ScheduleProjectionReadOnlyModel>();
-		
-		public IEnumerable<PayloadWorkTime> AbsenceTimePerBudgetGroup(DateOnlyPeriod period, IBudgetGroup budgetGroup, IScenario scenario)
+	    private int _numberOfHeadCounts;
+
+        public IEnumerable<PayloadWorkTime> AbsenceTimePerBudgetGroup(DateOnlyPeriod period, IBudgetGroup budgetGroup, IScenario scenario)
 		{
 			throw new NotImplementedException();
 		}
@@ -28,10 +29,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		
 		public int GetNumberOfAbsencesPerDayAndBudgetGroup(Guid budgetGroupId, DateOnly currentDate)
 		{
-			throw new NotImplementedException();
-		}
+			return _numberOfHeadCounts;
+        }
 
-		public IEnumerable<ScheduleProjectionReadOnlyModel> ForPerson(DateOnly date, Guid personId, Guid scenarioId)
+	    public void SetNumberOfAbsencesPerDayAndBudgetGroup(int numberOfHeadCounts)
+	    {
+	        _numberOfHeadCounts = numberOfHeadCounts;
+
+	    }
+
+
+        public IEnumerable<ScheduleProjectionReadOnlyModel> ForPerson(DateOnly date, Guid personId, Guid scenarioId)
 		{
 			return _data.Where(x => x.PersonId == personId).ToArray();
 		}

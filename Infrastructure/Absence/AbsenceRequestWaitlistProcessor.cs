@@ -53,7 +53,8 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private void processRequest(IUnitOfWork unitOfWork, IPersonRequest request)
 		{
 			var absenceRequest = request.Request as IAbsenceRequest;
-			_absenceRequestUpdater.UpdateAbsenceRequest(request, absenceRequest, unitOfWork, _schedulingResultStateHolder);
+			_absenceRequestUpdater.UpdateAbsenceRequest(request, absenceRequest, unitOfWork, _schedulingResultStateHolder, null, null);
+		    ;
 		}
 		
 	}

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -8,10 +9,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeBudgetDayRepository : IBudgetDayRepository
 	{
-		public void Add(IBudgetDay entity)
+	    private ICollection<IBudgetDay> _budgetDays =new List<IBudgetDay>();
+        public void Add(IBudgetDay entity)
 		{
-			throw new NotImplementedException();
-		}
+            _budgetDays.Add(entity);
+
+        }
 
 		public void Remove(IBudgetDay entity)
 		{
@@ -20,7 +23,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IBudgetDay Get(Guid id)
 		{
-			throw new NotImplementedException();
+		    return _budgetDays.FirstOrDefault(b => b.Id == id);
+
 		}
 
 		public IList<IBudgetDay> LoadAll()
@@ -51,7 +55,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IBudgetDay> Find(IScenario scenario, IBudgetGroup budgetGroup, DateOnlyPeriod dateOnlyPeriod)
 		{
-			throw new NotImplementedException();
+		    return _budgetDays.Where(b => b.Scenario == scenario
+            && b.BudgetGroup == budgetGroup
+            && b.Day >= dateOnlyPeriod.StartDate
+            && b.Day <= dateOnlyPeriod.EndDate
+            ).ToList();
 		}
 	}
 

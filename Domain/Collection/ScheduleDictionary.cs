@@ -407,7 +407,7 @@ namespace Teleopti.Ccc.Domain.Collection
         /// </remarks>
         public void TakeSnapshot()
         {
-            foreach (ScheduleRange range in _dictionary.Values)
+            foreach (IScheduleRange range in _dictionary.Values)
             {
                 range.TakeSnapshot();
             }

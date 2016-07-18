@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
@@ -73,7 +72,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		}
 
 		public bool UpdateAbsenceRequest(IPersonRequest personRequest, IAbsenceRequest absenceRequest, IUnitOfWork unitOfWork,
-													ISchedulingResultStateHolder schedulingResultStateHolder)
+													ISchedulingResultStateHolder schedulingResultStateHolder, IProcessAbsenceRequest process, IEnumerable<IAbsenceRequestValidator> validators)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 
@@ -102,8 +101,8 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				affectedPersonAbsenceAccount = allAccounts.Find(absenceRequest.Absence);
 
 				var mergedPeriod = workflowControlSet.GetMergedAbsenceRequestOpenPeriod(absenceRequest);
-				validatorList = mergedPeriod.GetSelectedValidatorList().ToArray();
-				_process = mergedPeriod.AbsenceRequestProcess;
+				validatorList = (validators ?? mergedPeriod.GetSelectedValidatorList()).ToArray();
+				_process = process?? mergedPeriod.AbsenceRequestProcess;
 
 				loadDataForResourceCalculation(absenceRequest, validatorList);
 
