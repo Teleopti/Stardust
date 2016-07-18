@@ -4,6 +4,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		{
 			var personId = Guid.NewGuid();
 			const int businessUnitId = 0;
-			var expectedDate = getSmallDateTime(DateTime.UtcNow);
+			var expectedDate = DateHelper.GetSmallDateTime(DateTime.UtcNow);
 			Now.Is(expectedDate);
 			WithAnalyticsUnitOfWork.Do(() =>
 			{
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			var personId = Guid.NewGuid();
 			const int businessUnitId = 0;
 			var firstDate = new DateTime(1986, 03, 07, 11, 15, 0);
-			var expectedDate = getSmallDateTime(DateTime.UtcNow);
+			var expectedDate = DateHelper.GetSmallDateTime(DateTime.UtcNow);
 			Now.Is(firstDate);
 			WithAnalyticsUnitOfWork.Do(() =>
 			{
@@ -67,11 +68,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 
 			result1.Should().Be.EqualTo(firstDate);
 			result.Should().Be.EqualTo(expectedDate);
-		}
-
-		private static DateTime getSmallDateTime(DateTime value)
-		{
-			return new DateTime(value.Year, value.Month, value.Day, value.Hour, value.Minute, 0);
 		}
 
 		[Test]
