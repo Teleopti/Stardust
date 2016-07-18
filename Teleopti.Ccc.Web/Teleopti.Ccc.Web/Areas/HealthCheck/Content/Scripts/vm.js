@@ -10,6 +10,7 @@ define([
 		var self = this;
 		var startPromise;
 		var loadEtlHistory;
+		var localStorageIsSupported = typeof (Storage) !== 'undefined';
 
 		self.hasPermission = ko.observable(false);
 		self.hub = undefined;
@@ -33,7 +34,7 @@ define([
 		self.HangfireFailCount = ko.observable(0);
 		self.TimesChecked = 0;
 
-		if (typeof (Storage) !== 'undefined') {
+		if (localStorageIsSupported) {
 			self.trackReadModelCheckId = ko.observable(localStorage.trackReadModelCheckId);
 			self.trackReadModelFixId = ko.observable(localStorage.trackReadModelFixId);
 			self.readModelCheckAndFixJobId = ko.observable(localStorage.readModelCheckAndFixJobId);
@@ -169,7 +170,7 @@ define([
 		self.checkReadModel = function () {
 			var cb = function(id) {
 				self.trackReadModelCheckId(id);
-				if (typeof (Storage) !== 'undefined') {
+				if (localStorageIsSupported) {
 					localStorage.trackReadModelCheckId = id;
 				}
 				pollCheckJob(id);
@@ -181,7 +182,7 @@ define([
 		self.fixReadModel = function () {
 			var cb = function(id) {
 				self.trackReadModelFixId(id);
-				if (typeof (Storage) !== 'undefined') {
+				if (localStorageIsSupported) {
 					localStorage.trackReadModelFixId = id;
 				}
 				pollFixJob(id);
@@ -193,7 +194,7 @@ define([
 		self.checkAndFixReadModels = function() {
 			var cb = function(id) {
 				self.readModelCheckAndFixJobId(id);
-				if (typeof (Storage) !== 'undefined') {
+				if (localStorageIsSupported) {
 					localStorage.readModelCheckAndFixJobId = id;
 				}
 				pollCheckAndFixJob(id);
