@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 			return Ok();
 		}
 
-		[UnitOfWork, HttpGet, Route("api/intraday/skillarea")]
+		[UnitOfWork, HttpGet, Route("api/intraday/skillarea"), Route("api/SkillAreas")]
 		public virtual IHttpActionResult GetSkillAreas()
 		{
 			return Ok(new SkillAreaInfo

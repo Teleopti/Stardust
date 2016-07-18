@@ -62,7 +62,7 @@
 
 			fake(/\.\.\/api\/SkillAreas(.*)/,
 				function () {
-					return [200, skillAreas];
+					return [200, {SkillAreas: skillAreas}];
 				});
 
 			fake(/\.\.\/api\/Skills(.*)/,

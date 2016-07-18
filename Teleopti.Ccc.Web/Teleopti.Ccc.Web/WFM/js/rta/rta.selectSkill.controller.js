@@ -14,7 +14,7 @@
 
 				RtaService.getSkillAreas()
 					.then(function (skillAreas) {
-						$scope.skillAreas = skillAreas;
+						$scope.skillAreas = skillAreas.SkillAreas;
 					});
 
 				$scope.querySearch = function (query, myArray) {

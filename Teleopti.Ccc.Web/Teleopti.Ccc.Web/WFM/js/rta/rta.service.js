@@ -27,8 +27,7 @@
 			this.getSkillAreas = function (data) {
 				return $resource('../api/SkillAreas', {}, {
 					query: {
-						method: 'GET',
-						isArray: true
+						method: 'GET'
 					}
 				}).query().$promise;
 			};
