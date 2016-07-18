@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			if(versions.Count != 2)
 			{
-				command.ErrorMessages.Add(Resources.CannotBackoutScheduleChange);
+				command.ErrorMessages.Add(Resources.CannotUndoScheduleChange);
 				return;
 			}
 
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			if (currentVersion.ModifiedBy.Id != _loggedOnUser.CurrentUser().Id)
 			{
-				command.ErrorMessages.Add(Resources.CannotBackoutScheduleChange);
+				command.ErrorMessages.Add(Resources.CannotUndoScheduleChange);
 				return;
 			}
 

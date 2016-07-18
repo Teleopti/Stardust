@@ -4881,15 +4881,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot backout schedule change.
-        /// </summary>
-        public static string CannotBackoutScheduleChange {
-            get {
-                return ResourceManager.GetString("CannotBackoutScheduleChange", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to {0} cannot be earlier than {1} .
         /// </summary>
         public static string CannotBeBeforeTime {
@@ -5095,6 +5086,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string CannotReadProductActivationKeyFile {
             get {
                 return ResourceManager.GetString("CannotReadProductActivationKeyFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot undo schedule change.
+        /// </summary>
+        public static string CannotUndoScheduleChange {
+            get {
+                return ResourceManager.GetString("CannotUndoScheduleChange", resourceCulture);
             }
         }
         

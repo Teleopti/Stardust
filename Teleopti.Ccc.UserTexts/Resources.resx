@@ -14547,9 +14547,9 @@ These options are activated:
     <value>Shift length exceeds 36 hours</value>
     <comment>warning message if activity moving to time makes shift length exceeds 36 hours.</comment>
   </data>
-  <data name="CannotBackoutScheduleChange" xml:space="preserve">
-    <value>Cannot backout schedule change</value>
-    <comment>Cannot backout schedule change, used when user want to backout previous change to schedule from wfm/teamschedule.</comment>
+  <data name="CannotUndoScheduleChange" xml:space="preserve">
+    <value>Cannot undo schedule change</value>
+    <comment>Cannot undo schedule change, used when user want to backout previous change to schedule from wfm/teamschedule.</comment>
   </data>
   <data name="PreviewTheNewRequestsModule" xml:space="preserve">
     <value>Preview the new Requests module!</value>

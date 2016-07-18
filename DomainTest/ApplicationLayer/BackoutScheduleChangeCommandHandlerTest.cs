@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			target.Handle(command);
 
 			command.ErrorMessages.Count.Should().Be.EqualTo(1);
-			command.ErrorMessages.First().Should().Be.EqualTo(Resources.CannotBackoutScheduleChange);
+			command.ErrorMessages.First().Should().Be.EqualTo(Resources.CannotUndoScheduleChange);
 		}
 
 		[Test]
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			target.Handle(command);
 
 			command.ErrorMessages.Count.Should().Be.EqualTo(1);
-			command.ErrorMessages.First().Should().Be.EqualTo(Resources.CannotBackoutScheduleChange);
+			command.ErrorMessages.First().Should().Be.EqualTo(Resources.CannotUndoScheduleChange);
 		}
 
 		[Test]
