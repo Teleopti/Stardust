@@ -41,7 +41,9 @@
 		}
 
 		function getSelectedRequestIds() {
-			return requestCommandParamsHolder ? requestCommandParamsHolder.getSelectedRequestsIds(vm.isShiftTradeViewActive) : null;
+			return requestCommandParamsHolder
+				? requestCommandParamsHolder.getSelectedRequestsIds(vm.isShiftTradeViewActive)
+				: null;
 		}
 
 		function doProcessWaitlistCommandHandling(waitlistPeriod) {
@@ -51,7 +53,8 @@
 
 			if (vm.afterCommandSuccess) {
 				commandInProgress.success(function(requestCommandHandlingResult) {
-					if (requestCommandHandlingResult.Success || (requestCommandHandlingResult.AffectedRequestIds && requestCommandHandlingResult.AffectedRequestIds.length > 0)) {
+					if (requestCommandHandlingResult.Success || (requestCommandHandlingResult.AffectedRequestIds
+						&& requestCommandHandlingResult.AffectedRequestIds.length > 0)) {
 						vm.commandTrackId = requestCommandHandlingResult.CommandTrackId;
 						vm.afterCommandSuccess({
 							commandType: requestType,
@@ -78,7 +81,7 @@
 
 			if (vm.afterCommandSuccess) {
 				var requestCount = 0;
-				if (parameters != undefined && parameters != null) {
+				if (parameters !== undefined && parameters !== null) {
 					if (Array.isArray(parameters)) {
 						requestCount = parameters.length;
 					} else if (Array.isArray(parameters.selectedRequestIds)) {
@@ -146,8 +149,7 @@
 
 			var parameter = {
 				RequestIds: selectedRequestIds,
-				Validators: requestsDefinitions.REQUEST_VALIDATORS.WriteProtectedScheduleValidator
-					+ requestsDefinitions.REQUEST_VALIDATORS.BudgetAllotmentValidator
+				Validators: requestsDefinitions.REQUEST_VALIDATORS.BudgetAllotmentValidator
 			};
 
 			doStandardCommandHandlingWithParameters(requestsDefinitions.REQUEST_COMMANDS.ApproveBasedOnBudget,

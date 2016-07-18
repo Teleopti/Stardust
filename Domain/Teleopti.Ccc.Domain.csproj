@@ -166,6 +166,7 @@
     <Compile Include="ApplicationLayer\Commands\BackoutScheduleChangeCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\BackoutScheduleChangeCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Availability\AnalyticsAvailabilityUpdater.cs" />
+    <Compile Include="ApplicationLayer\Commands\RequestValidatorsFlag.cs" />
     <Compile Include="ApplicationLayer\Events\AvailabilityChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\BusinessUnitChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonRequestChangedEvent.cs" />

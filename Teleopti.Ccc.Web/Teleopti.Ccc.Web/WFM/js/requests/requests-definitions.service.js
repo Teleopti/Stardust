@@ -53,8 +53,7 @@
 
 		this.REQUEST_VALIDATORS = {
 			None: 0,
-			WriteProtectedScheduleValidator: 1,
-			BudgetAllotmentValidator: 2
+			BudgetAllotmentValidator: 1
 		};
 
 		this.normalizeRequestsFilter = function (filter, sortingOrders, paging) {		
@@ -66,7 +65,7 @@
 				Filters: filter.filters
 			};
 
-			if (paging != null) {
+			if (paging !== null) {
 				target.Paging = {
 					Skip: Math.max((paging.pageNumber - 1), 0) * paging.pageSize,
 					Take: paging.pageSize
@@ -86,7 +85,7 @@
 				AgentSearchTerm: filter.agentSearchTerm
 			};
 
-			if (paging != null) {
+			if (paging !== null) {
 				target.Paging = {
 					Skip: Math.max((paging.pageNumber - 1), 0) * paging.pageSize,
 					Take: paging.pageSize

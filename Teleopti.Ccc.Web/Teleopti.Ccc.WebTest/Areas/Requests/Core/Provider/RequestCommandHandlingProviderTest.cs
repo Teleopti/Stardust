@@ -134,14 +134,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(PersonFactory.CreatePersonWithId());
 
 			var target = new RequestCommandHandlingProvider(cmdDispatcher, loggedOnUser);
-			var validators = RequestValidatorsFlag.WriteProtectedScheduleValidator
-							 | RequestValidatorsFlag.BudgetAllotmentValidator;
-			var result = target.ApproveWithValidators(requestIds, validators);
+			var result = target.ApproveWithValidators(requestIds, RequestValidatorsFlag.BudgetAllotmentValidator);
 			cmdDispatcher.AssertWasCalled(
 				dispatcher => dispatcher.Execute(
 					Arg<ApproveBatchRequestsCommand>.Matches(
 						cmd => (cmd.PersonRequestIdList.Equals(requestIds)
-								&& (cmd.Validator == validators)))));
+								&& (cmd.Validator == RequestValidatorsFlag.BudgetAllotmentValidator)))));
 
 			result.AffectedRequestIds.Count().Should().Be(0);
 			result.ErrorMessages.Count().Should().Be(0);
