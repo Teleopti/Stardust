@@ -131,6 +131,14 @@ wfm-notice{
 	.c3 svg { font: .6em sans-serif; }
 }
 
+@media all and (-ms-high-contrast: none),
+(-ms-high-contrast: active),
+@-moz-document url-prefix() {
+	.navbar-search{
+		padding: 1px!important;
+	}
+}
+
 md-select-menu md-option:focus:not([disabled]):not([selected]){
 	background-color: $gray012;
 }
