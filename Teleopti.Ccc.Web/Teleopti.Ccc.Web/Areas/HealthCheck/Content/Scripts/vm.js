@@ -21,8 +21,10 @@ define([
 		self.readModelCheckEndDate = ko.observable();
 		self.readmodelCheckIsRunning = ko.observable(false);
 		self.readModelsFixIsRunning = ko.observable(false);
+		self.readModelCheckAndFixJobIsRunning = ko.observable(false);
 		self.readModelCheckJobPollingResult = ko.observable('anything');
 		self.readModelFixJobPollingResult = ko.observable('anything');
+		self.readModelCheckAndFixJobPollingResult = ko.observable('anything');
 		self.logObjects = ko.observable();
 		self.checkBusEnabled = ko.observable(true);
 		self.checkBusEnabled = ko.observable(true);
@@ -34,9 +36,11 @@ define([
 		if (typeof (Storage) !== 'undefined') {
 			self.trackReadModelCheckId = ko.observable(localStorage.trackReadModelCheckId);
 			self.trackReadModelFixId = ko.observable(localStorage.trackReadModelFixId);
+			self.readModelCheckAndFixJobId = ko.observable(localStorage.readModelCheckAndFixJobId);
 		} else {
 			self.trackReadModelCheckId = ko.observable();
-			self.trackReadModelFixId = ko.Observable();
+			self.trackReadModelFixId = ko.observable();
+			self.readModelCheckAndFixJobId = ko.observable();
 		}
 
 		self.getReadmodelCheckUrl = function (jobId) {
@@ -49,6 +53,13 @@ define([
 		self.getReadmodelFixUrl = function (jobId) {
 			if (typeof jobId !== 'string') {
 				jobId = self.trackReadModelFixId();
+			}
+			return self.getJobUrl(jobId);
+		};
+
+		self.getCheckAndFixJobUrl = function(jobId) {
+			if (typeof jobId !== 'string') {
+				jobId = self.readModelCheckAndFixJobId();
 			}
 			return self.getJobUrl(jobId);
 		};
@@ -99,12 +110,25 @@ define([
 			});
 		}
 
+		function pollCheckAndFixJob(jobId) {
+			self.readModelCheckAndFixJobIsRunning(true);
+			self.readModelCheckAndFixJobPollingResult('anything');
+			pollJobStatus(jobId, function(data) {
+				self.readModelCheckAndFixJobPollingResult(data);
+				self.readModelCheckAndFixJobIsRunning(false);
+			});
+		}
+
 		if (self.trackReadModelCheckId()) {
 			pollCheckJob(self.trackReadModelCheckId());
 		}
 
 		if (self.trackReadModelFixId()) {
 			pollFixJob(self.trackReadModelFixId());
+		}
+
+		if (self.readModelCheckAndFixJobId()) {
+			pollCheckAndFixJob(self.readModelCheckAndFixJobId());
 		}
 
 		var subscribe = function (options) {
@@ -165,6 +189,21 @@ define([
 			fixReadModelFunc(cb);
 		};
 
+		var checkAndFixReadModelsFunc;
+		self.checkAndFixReadModels = function() {
+			var cb = function(id) {
+				self.readModelCheckAndFixJobId(id);
+				if (typeof (Storage) !== 'undefined') {
+					localStorage.readModelCheckAndFixJobId = id;
+				}
+				pollCheckAndFixJob(id);
+			};
+			checkAndFixReadModelsFunc(cb);
+		};
+
+		var toggleIsEnabled;
+		self.HealthCheck_EasyValidateAndFixReadModels_39696 = ko.observable(false);
+
 		self.initialize = function(options) {
 			if (options) {
 				self.hub = options.messageBroker;
@@ -176,6 +215,8 @@ define([
 				loadEtlHistory = options.loadEtlHistory;
 				checkReadModelFunc = options.requestReadModelCheck;
 				fixReadModelFunc = options.requestReadModelFix;
+				checkAndFixReadModelsFunc = options.checkAndFixReadModels;
+				toggleIsEnabled = options.toggleIsEnabled;
 			}
 			if (self.hub && self.hub.client) {
 				self.hub.client.onEventMessage = function(notification, route) {
@@ -186,7 +227,13 @@ define([
 			}
 			if (loadEtlHistory) {
 				loadEtlHistory(true);
-			}		
+			}
+			if (toggleIsEnabled) {
+				var toggleName = 'HealthCheck_EasyValidateAndFixReadModels_39696';
+				toggleIsEnabled(toggleName, function(toggleData) {
+					self.HealthCheck_EasyValidateAndFixReadModels_39696(toggleData.IsEnabled);
+				});
+			}
 		}
 
 		self.loadAllEtlJobHistory = function () {

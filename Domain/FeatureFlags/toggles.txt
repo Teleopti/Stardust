@@ -175,6 +175,7 @@ ETL_SpeedUpIntradayForecastWorkload_38929 = true
 ETL_SpeedUpNightlyForecastWorkload_38929 = RC
 HealthCheck_ValidateReadModelPersonScheduleDay_39421 = RC
 HealthCheck_ValidateReadModelScheduleDay_39423 = RC
+HealthCheck_EasyValidateAndFixReadModels_39696 = DEV
 Intraday_ResourceCalculateReadModel_39200 = RC
 ETL_SpeedUpIntradayBusinessUnit_38932 = RC
 ETL_SpeedUpNightlyBusinessUnit_38932 = RC

@@ -107,6 +107,34 @@ var identity = (ITeleoptiIdentity) CurrentTeleoptiPrincipal.Make().Current().Ide
 						<li class="list-group-item">Physical memory available: <span data-bind="text: (AvailablePhysicalMemory / (1024.0 * 1024 * 1024)).toFixed(2)"></span> GB</li>
 					</ul>
 					<!-- /ko -->
+					<!-- ko if: HealthCheck_EasyValidateAndFixReadModels_39696 -->
+					<h3>Validate &amp; fix readmodels</h3>
+					<div>
+						<!-- ko if: readModelCheckAndFixJobId() && !readModelCheckAndFixJobPollingResult() -->
+						<p>Could not retrieve status of last job. See details or start a new one below. </p>
+						<!-- /ko -->
+						<!-- ko if: readModelCheckAndFixJobId() && readModelCheckAndFixJobPollingResult() && readModelCheckAndFixJobIsRunning() -->
+						<p>Last job is <b>running</b>. See <a target="_blank" data-bind="attr: { href: getCheckAndFixJobUrl() }">details</a>. </p>
+						<!-- /ko -->
+						<!-- ko if: readModelCheckAndFixJobId() && readModelCheckAndFixJobPollingResult() && !readModelCheckAndFixJobIsRunning() -->
+						<p>Last job has <b>finished</b>. See <a target="_blank" data-bind="attr: { href: getCheckAndFixJobUrl() }">details</a>. </p>
+						<!-- /ko -->
+						<!-- ko if: !readModelCheckAndFixJobId() || ( !readModelCheckAndFixJobIsRunning() || !readModelCheckAndFixJobPollingResult() ) -->
+						<form class="form-inline">
+							<div class="form-group">
+								<label for="readmodelCheckStartDate">Start date</label>
+								<input id="readmodelCheckStartDate" class="datepicker" type="date" data-bind="value: readModelCheckStartDate"/>
+							</div>
+							<div class="form-group">
+								<label for="readmodelCheckEndDate">End date</label>
+								<input id="readmodelCheckEndDate" class="datepicker" type="date" data-bind="value: readModelCheckEndDate"/>
+							</div>
+							<button class="btn btn-primary" data-bind="click: checkAndFixReadModels">Start</button>
+						</form>
+						<!-- /ko -->
+					</div>
+					<!-- /ko -->
+					<!-- ko ifnot: HealthCheck_EasyValidateAndFixReadModels_39696 -->
 					<h3>Check read model</h3>
 					<div>
 						<!-- ko if: trackReadModelCheckId() && !readModelCheckJobPollingResult() -->
@@ -154,6 +182,7 @@ var identity = (ITeleoptiIdentity) CurrentTeleoptiPrincipal.Make().Current().Ide
 						<button class="btn btn-default" data-bind="click: fixReadModel">Fix</button>
 						<!-- /ko -->
 					</div>
+					<!-- /ko -->
 					<h3>Configured URL:s</h3>
 					<ul class="list-group" data-bind="foreach: configuredUrls">
 						<li class="list-group-item configured-url" data-bind="css: { 'list-group-item-success': Reachable == true }">

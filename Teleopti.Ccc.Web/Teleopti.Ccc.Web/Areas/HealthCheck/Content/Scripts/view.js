@@ -38,6 +38,15 @@ define([
 		http.get('HealthCheck/FixScheduleProjectionReadOnly').done(cb);
 	};
 
+	var checkAndFixReadModels = function(cb) {
+		http.get('HealthCheck/CheckAndFixReadModels', { start: new Date(vm.readModelCheckStartDate()).toISOString(), end: new Date(vm.readModelCheckEndDate()).toISOString() })
+			.done(cb);
+	};
+
+	var toggleIsEnabled = function(toggle, cb) {
+		http.get('ToggleHandler/IsEnabled', {toggle: toggle}).done(cb);
+	};
+
 	vm.initialize({
     	signalR: sigR,
     	messageBroker: $.connection.MessageBrokerHub,
@@ -46,7 +55,9 @@ define([
 		},
 		loadEtlHistory: loadEtlHistory,
 		requestReadModelCheck: requestReadModelCheck,
-		requestReadModelFix: requestReadModelFix
+		requestReadModelFix: requestReadModelFix,
+		checkAndFixReadModels: checkAndFixReadModels,
+		toggleIsEnabled: toggleIsEnabled
     });
 
 	http.get('HealthCheck/CheckStardust').done(function (data) {
