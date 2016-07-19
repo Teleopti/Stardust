@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 
@@ -27,6 +28,12 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 		public RtaStateGroup(string name) : this()
 		{
 			_name = name;
+		}
+
+		public override void NotifyTransactionComplete(DomainUpdateType operation)
+		{
+			base.NotifyTransactionComplete(operation);
+			AddEvent(new RtaStateGroupChangedEvent());
 		}
 
 		public virtual void SetBusinessUnit(IBusinessUnit businessUnit)

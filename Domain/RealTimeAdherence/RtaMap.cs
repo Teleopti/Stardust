@@ -1,10 +1,10 @@
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence
 {
     public class RtaMap : VersionedAggregateRootWithBusinessUnit, IRtaMap
-
 	{
         private readonly IRtaStateGroup _stateGroup;
         private readonly IActivity _activity;
@@ -19,7 +19,13 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
         protected RtaMap()
         {}
 
-        public virtual IActivity Activity
+		public override void NotifyTransactionComplete(DomainUpdateType operation)
+		{
+			base.NotifyTransactionComplete(operation);
+			AddEvent(new RtaMapChangedEvent());
+		}
+
+		public virtual IActivity Activity
         {
             get { return _activity; }
         }

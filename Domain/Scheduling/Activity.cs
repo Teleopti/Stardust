@@ -9,36 +9,35 @@ using System.Linq;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-    [Serializable]
-    public class Activity : Payload, IActivity, IAggregateRootWithEvents
-    {
-        private Description _description;
-        private Color _displayColor;
-        private bool _requiresSkill;
-        private bool _inReadyTime;
-        private string _payrollCode;
-        
-        private ReportLevelDetail _reportLevelDetail;
-    	private bool _requiresSeat;
+	[Serializable]
+	public class Activity : Payload, IActivity, IAggregateRootWithEvents
+	{
+		private Description _description;
+		private Color _displayColor;
+		private bool _requiresSkill;
+		private bool _inReadyTime;
+		private string _payrollCode;
+		
+		private ReportLevelDetail _reportLevelDetail;
+		private bool _requiresSeat;
 
-        [NonSerialized]
-        private readonly DeletedDescription _deletedDescription = new DeletedDescription();
+		[NonSerialized]
+		private readonly DeletedDescription _deletedDescription = new DeletedDescription();
 
-        private bool _allowOverwrite;
-	    private bool _isOutboundActivity;
+		private bool _allowOverwrite;
+		private bool _isOutboundActivity;
 
-        public Activity(string name)
-            : base(true)
-        {
-            _description = new Description(name);
-        }
+		public Activity(string name) : base(true)
+		{
+			_description = new Description(name);
+		}
 
-        protected Activity()
-        {
-        }
-
-	    public override void NotifyTransactionComplete(DomainUpdateType operation)
-	    {
+		protected Activity()
+		{
+		}
+		
+		public override void NotifyTransactionComplete(DomainUpdateType operation)
+		{
 		    base.NotifyTransactionComplete(operation);
 		    AddEvent(new ActivityChangedEvent
 		    {
@@ -48,15 +47,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 	    public virtual Description Description
 		{
-            get
-            {
-                if (IsDeleted)
-                {
-                    return _deletedDescription.AppendDeleted(_description);
-                }
-                return _description;
-            }
-            set { _description = value; }
+			get
+			{
+				if (IsDeleted)
+				{
+					return _deletedDescription.AppendDeleted(_description);
+				}
+				return _description;
+			}
+			set { _description = value; }
 		}
 
 		public virtual Color DisplayColor
@@ -71,7 +70,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			set { _inReadyTime = value; }
 		}
 
-	    public virtual bool RequiresSkill
+		public virtual bool RequiresSkill
 		{
 			get { return _requiresSkill; }
 			set { _requiresSkill = value; }
@@ -81,11 +80,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			get { return Description.Name; }
 		}
 
-        public virtual bool AllowOverwrite
-        {
-            get { return _allowOverwrite; }
-            set { _allowOverwrite = value; }
-        }
+		public virtual bool AllowOverwrite
+		{
+			get { return _allowOverwrite; }
+			set { _allowOverwrite = value; }
+		}
 
 		public virtual ReportLevelDetail ReportLevelDetail
 		{
@@ -99,32 +98,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			set{ _payrollCode = value; }
 		}
 
-    	public virtual bool RequiresSeat
-    	{
-    		get {
-    			return _requiresSeat;
-    		}
-    		set {
-    			if (_requiresSeat != value)
-    			{
-    				var valueBefore = _requiresSeat;
-    				_requiresSeat = value;
-    				var valueAfter = _requiresSeat;
-    				AddEvent(new ActivityChangedEvent
-    					{
-    						ActivityId = Id.GetValueOrDefault(),
-    						OldValue = XmlConvert.ToString(valueBefore),
-    						NewValue = XmlConvert.ToString(valueAfter),
-    						Property = "RequiresSeat"
-    					});
-    			}
-    		}
-    	}
+		public virtual bool RequiresSeat { get { return _requiresSeat; } set { _requiresSeat = value; } }
 
-    	public override string ToString()
-        {
-            return String.Concat(Description.Name, ", ", base.ToString());
-        }
+		public override string ToString()
+		{
+			return String.Concat(Description.Name, ", ", base.ToString());
+		}
 
 		public virtual Description ConfidentialDescription(IPerson assignedPerson)
 		{
@@ -136,15 +115,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return DisplayColor;
 		}
 
-        public override IPayload UnderlyingPayload
-        {
-            get { return this; }
-        }
+		public override IPayload UnderlyingPayload
+		{
+			get { return this; }
+		}
 
-	    public virtual bool IsOutboundActivity
-	    {
-		    get { return _isOutboundActivity; }
-		    set { _isOutboundActivity = value; }
-	    }
-    }
+		public virtual bool IsOutboundActivity
+		{
+			get { return _isOutboundActivity; }
+			set { _isOutboundActivity = value; }
+		}
+	}
 }

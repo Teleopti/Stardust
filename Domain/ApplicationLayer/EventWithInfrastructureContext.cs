@@ -13,4 +13,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		public string JobName { get; set; }
 		public string UserName { get; set; }
 	}
+
+	[Serializable]
+	public class EventWithLogOnContext : Event, ILogOnContext
+	{
+		public string LogOnDatasource { get; set; }
+		public Guid LogOnBusinessUnitId { get; set; }
+	}
+
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
@@ -15,6 +14,36 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 		IBelongsToBusinessUnit
 	{
 		private IBusinessUnit _businessUnit;
+
+		private readonly Events _events = new Events();
+
+		public virtual void NotifyCommandId(Guid commandId)
+		{
+			_events.NotifyCommandId(commandId);
+		}
+
+		public virtual void NotifyDelete()
+		{
+		}
+
+		public virtual void NotifyTransactionComplete(DomainUpdateType operation)
+		{
+		}
+
+		protected void AddEvent(Func<IEvent> @event)
+		{
+			_events.AddEvent(@event);
+		}
+
+		protected void AddEvent(IEvent @event)
+		{
+			_events.AddEvent(@event);
+		}
+
+		public virtual IEnumerable<IEvent> PopAllEvents()
+		{
+			return _events.PopAllEvents();
+		}
 
 		public virtual IBusinessUnit BusinessUnit
 		{
@@ -81,14 +110,13 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 	{
 		private IPerson _updatedBy;
 		private DateTime? _updatedOn;
-
 		private readonly LocalizedUpdateInfo _localizedUpdateInfo = new LocalizedUpdateInfo();
-		private readonly IList<Func<IEvent>> _events = new List<Func<IEvent>>();
-		private Guid? _commandId;
+
+		private readonly Events _events = new Events();
 
 		public virtual void NotifyCommandId(Guid commandId)
 		{
-			_commandId = commandId;
+			_events.NotifyCommandId(commandId);
 		}
 
 		public virtual void NotifyDelete()
@@ -101,28 +129,17 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 
 		protected void AddEvent(Func<IEvent> @event)
 		{
-			_events.Add(@event.Invoke);
+			_events.AddEvent(@event);
 		}
 		
 		protected void AddEvent(IEvent @event)
 		{
-			_events.Add(() => @event);
+			_events.AddEvent(@event);
 		}
 
 		public virtual IEnumerable<IEvent> PopAllEvents()
 		{
-			var allEvents = _events.Select(e => e.Invoke()).ToArray();
-			_events.Clear();
-			if (_commandId.HasValue)
-			allEvents.ForEach(e =>
-			{
-				var trackableE = e as ICommandIdentifier;
-				if (trackableE != null)
-				{
-					trackableE.CommandId = _commandId.Value;
-				}
-			});
-			return allEvents;
+			return _events.PopAllEvents();
 		}
 
 
@@ -156,4 +173,43 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 		}
 
 	}
+
+	public class Events
+	{
+		private readonly IList<Func<IEvent>> _events = new List<Func<IEvent>>();
+		private Guid? _commandId;
+
+		public void NotifyCommandId(Guid commandId)
+		{
+			_commandId = commandId;
+		}
+
+		public void AddEvent(Func<IEvent> @event)
+		{
+			_events.Add(@event.Invoke);
+		}
+
+		public void AddEvent(IEvent @event)
+		{
+			_events.Add(() => @event);
+		}
+
+		public IEnumerable<IEvent> PopAllEvents()
+		{
+			var allEvents = _events.Select(e => e.Invoke()).ToArray();
+			_events.Clear();
+			if (_commandId.HasValue)
+				allEvents.ForEach(e =>
+				{
+					var trackableE = e as ICommandIdentifier;
+					if (trackableE != null)
+					{
+						trackableE.CommandId = _commandId.Value;
+					}
+				});
+			return allEvents;
+		}
+
+	}
+
 }

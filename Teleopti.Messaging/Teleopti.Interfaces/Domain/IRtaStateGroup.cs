@@ -6,7 +6,7 @@ namespace Teleopti.Interfaces.Domain
 	public interface IRtaStateGroup : 
 		IBelongsToBusinessUnit, 
 		IVersioned, 
-		IAggregateRoot
+		IAggregateRootWithEvents
     {
         string Name { get; set; }
         bool DefaultStateGroup { get; set; }

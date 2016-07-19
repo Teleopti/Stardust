@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.UserTexts;
@@ -30,6 +31,12 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 
 		public RtaRule()
 		{
+		}
+
+		public override void NotifyTransactionComplete(DomainUpdateType operation)
+		{
+			base.NotifyTransactionComplete(operation);
+			AddEvent(new RtaRuleChangedEvent());
 		}
 
 		public virtual double StaffingEffect
