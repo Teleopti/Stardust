@@ -111,7 +111,7 @@ var identity = (ITeleoptiIdentity) CurrentTeleoptiPrincipal.Make().Current().Ide
 					<h3>Validate &amp; fix readmodels</h3>
 					<div>
 						<!-- ko if: readModelCheckAndFixJobId() && !readModelCheckAndFixJobPollingResult() -->
-						<p>Could not retrieve status of last job. See details or start a new one below. </p>
+						<p>Could not retrieve status of last job. See <a target="_blank" data-bind="attr: { href: getCheckAndFixJobUrl() }">details</a> or start a new one below. </p>
 						<!-- /ko -->
 						<!-- ko if: readModelCheckAndFixJobId() && readModelCheckAndFixJobPollingResult() && readModelCheckAndFixJobIsRunning() -->
 						<p>Last job is <b>running</b>. See <a target="_blank" data-bind="attr: { href: getCheckAndFixJobUrl() }">details</a>. </p>
