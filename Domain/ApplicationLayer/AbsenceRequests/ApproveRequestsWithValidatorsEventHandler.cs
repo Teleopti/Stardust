@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
                     if (!_writeProtectedScheduleCommandValidator.ValidateCommand(personRequest.RequestedDate,
                         personRequest.Person, new ApproveBatchRequestsCommand()))
                     {
-                        return;
+                        continue;
                     }
                     if (_beforeApproveActions.Any(action => action.Invoke(personRequest)))
                     {
