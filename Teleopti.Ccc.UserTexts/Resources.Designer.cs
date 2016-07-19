@@ -2791,6 +2791,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Approve based on budget allotment.
+        /// </summary>
+        public static string ApproveBasedOnBudget {
+            get {
+                return ResourceManager.GetString("ApproveBasedOnBudget", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Approve selected requests based on budget allotment have finished..
+        /// </summary>
+        public static string ApproveBasedOnBudgetFinished {
+            get {
+                return ResourceManager.GetString("ApproveBasedOnBudgetFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Approved.
         /// </summary>
         public static string Approved {
@@ -28633,6 +28651,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SubjectTooLong {
             get {
                 return ResourceManager.GetString("SubjectTooLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Begin to approve selected requests based on budget allotment..
+        /// </summary>
+        public static string SubmitApproveBasedOnBudgetSuccess {
+            get {
+                return ResourceManager.GetString("SubmitApproveBasedOnBudgetSuccess", resourceCulture);
             }
         }
         

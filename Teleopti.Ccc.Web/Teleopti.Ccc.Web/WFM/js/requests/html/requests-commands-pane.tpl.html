@@ -12,7 +12,7 @@
 </button>
 <div tabindex="0" class="context-menu card-context">
 	<i class="mdi mdi-dots-vertical"></i>
-	<span class="context-menu-left">
+	<div class="context-menu-left" style="width:280px;">
 		<ul class="wfm-list">
 			<li ng-click="requestsCommandsPane.approveRequests()"
 				ng-class="{'wfm-btn-primary-disabled' : requestsCommandsPane.disableCommands()}">
@@ -22,7 +22,7 @@
 			<li ng-click="requestsCommandsPane.approveBasedOnBudget()"
 				ng-class="{'wfm-btn-primary-disabled' : requestsCommandsPane.disableCommands()}"
 				ng-if="requestsCommandsPane.isApproveBasedOnBudgetEnabled()">
-				<i class="mdi mdi-check"></i>
+				<i class="mdi mdi-calendar-check"></i>
 				<span translate>ApproveBasedOnBudget</span>
 			</li>
 			<li ng-click="requestsCommandsPane.denyRequests()"
@@ -44,7 +44,7 @@
 				<span translate>ProcessWaitlist</span>
 			</li>
 		</ul>
-	</span>
+	</div>
 </div>
 <div ng-cloak class="modal-box">
 	<div ng-cloak ng-show="requestsCommandsPane.ShowCancelAbsenceConfirmationModal">

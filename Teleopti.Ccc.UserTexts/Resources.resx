@@ -14690,4 +14690,16 @@ These options are activated:
     <value>Show warnings</value>
     <comment>Toggle name for displaying schedule validation warnings in WebWFM/TeamSchedule </comment>
   </data>
+  <data name="ApproveBasedOnBudget" xml:space="preserve">
+    <value>Approve based on budget allotment</value>
+    <comment>Menu item in WFM requests module</comment>
+  </data>
+  <data name="SubmitApproveBasedOnBudgetSuccess" xml:space="preserve">
+    <value>Begin to approve selected requests based on budget allotment.</value>
+    <comment>Message in WFM requests module</comment>
+  </data>
+  <data name="ApproveBasedOnBudgetFinished" xml:space="preserve">
+    <value>Approve selected requests based on budget allotment have finished.</value>
+    <comment>Message in WFM requests module</comment>
+  </data>
 </root>
