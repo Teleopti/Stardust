@@ -3,9 +3,9 @@
 
 	angular.module('wfm.requests').controller('RequestsCtrl', requestsController);
 
-	requestsController.$inject = ["$scope", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "NoticeService"];
+	requestsController.$inject = ["$scope", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "NoticeService", "CurrentUserInfo"];
 
-	function requestsController($scope, $translate, toggleService, requestsDefinitions, requestsNotificationService, noticeSvc) {
+	function requestsController($scope, $translate, toggleService, requestsDefinitions, requestsNotificationService, noticeSvc, CurrentUserInfo) {
 		var vm = this;
 		vm.onAgentSearchTermChanged = onAgentSearchTermChanged;
 
@@ -58,6 +58,8 @@
 			vm.onCommandError = onCommandError;
 			vm.onErrorMessages = onErrorMessages;
 			vm.disableInteraction = false;
+			vm.onProcessWaitlistFinished = onProcessWaitlistFinished;
+			vm.onApproveBasedOnBudgetFinished = onApproveBasedOnBudgetFinished;
 
 			if (toggleService.Wfm_Requests_PrepareForRelease_38771) {
 				var message = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink')
@@ -107,6 +109,16 @@
 			}
 		}
 
+		function onProcessWaitlistFinished(message) {
+			var period = formatDatePeriod(message);
+			requestsNotificationService.notifyProcessWaitlistedRequestsFinished(period);
+		}
+
+		function onApproveBasedOnBudgetFinished(message) {
+			forceRequestsReloadWithoutSelection();
+			requestsNotificationService.notifyApproveBasedOnBudgetFinished();
+		}
+
 		function onErrorMessages(errorMessages) {
 			vm.disableInteraction = false;
 			forceRequestsReloadWithoutSelection();
@@ -114,6 +126,13 @@
 			errorMessages.forEach(function (errorMessage) {
 				requestsNotificationService.notifyCommandError(errorMessage);
 			});
+		}
+
+		function formatDatePeriod(message) {
+			var userTimeZone = CurrentUserInfo.CurrentUserInfo().DefaultTimeZone;
+			var startDate = moment(message.StartDate.substring(1, message.StartDate.length)).tz(userTimeZone).format("L");
+			var endDate = moment(message.EndDate.substring(1, message.EndDate.length)).tz(userTimeZone).format("L");
+			return startDate + "-" + endDate;
 		}
 
 		//Todo: submit command failure doesn't give an error info, this parameter will be undefined.

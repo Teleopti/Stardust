@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -45,6 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private PersonAccountUpdaterDummy _personAccountUpdaterDummy;
 		private IWriteProtectedScheduleCommandValidator _writeProtectedScheduleCommandValidator;
 		private readonly ISchedulingResultStateHolder _scheduleStateHolder = new FakeSchedulingResultStateHolder();
+		private IMessageBrokerComposite _messageBroker;
 
 		[SetUp]
 		public void SetUp()
@@ -70,6 +72,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var peopleAndSkillLoaderDecider = new PeopleAndSkillLoaderDecider(_personRepository, null);
 			_loadSchedulingStateHolderForResourceCalculation = new LoadSchedulingStateHolderForResourceCalculation(_personRepository, _personAbsenceAccountRepository, skillRepository,
 				workloadRepository, _scheduleRepository, peopleAndSkillLoaderDecider, skillDayLoadHelper);
+			_messageBroker = new FakeMessageBrokerComposite();
 		}
 
 		[Test]
@@ -89,12 +92,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var @event = new ApproveRequestsWithValidatorsEvent()
 			{
 				Validator = RequestValidatorsFlag.BudgetAllotmentValidator,
-				PersonRequestIdList = new Guid[] { personRequest.Id.GetValueOrDefault() }
+				PersonRequestIdList = new Guid[] { personRequest.Id.GetValueOrDefault() },
+				TrackedCommandInfo = new TrackedCommandInfo { TrackId = new Guid() }
 			};
-			var handler = new ApproveRequestsWithValidatorsEventHandler(_currentUnitOfWorkFactory, _absenceRequestProcessor, _personRequestRepository, _writeProtectedScheduleCommandValidator);
+			var handler = new ApproveRequestsWithValidatorsEventHandler(_currentUnitOfWorkFactory, _absenceRequestProcessor, _personRequestRepository, _writeProtectedScheduleCommandValidator, _messageBroker);
 			handler.Handle(@event);
 
 			personRequest.IsApproved.Should().Be.True();
+			((FakeMessageBrokerComposite) _messageBroker).SentCount().Should().Be(1);
 		}
 
 		[Test]
@@ -114,13 +119,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var @event = new ApproveRequestsWithValidatorsEvent()
 			{
 				Validator = RequestValidatorsFlag.BudgetAllotmentValidator,
-				PersonRequestIdList = new Guid[] { personRequest.Id.GetValueOrDefault() }
+				PersonRequestIdList = new Guid[] { personRequest.Id.GetValueOrDefault() },
+				TrackedCommandInfo = new TrackedCommandInfo { TrackId = new Guid() }
 			};
-			var handler = new ApproveRequestsWithValidatorsEventHandler(_currentUnitOfWorkFactory, _absenceRequestProcessor, _personRequestRepository, _writeProtectedScheduleCommandValidator);
+			var handler = new ApproveRequestsWithValidatorsEventHandler(_currentUnitOfWorkFactory, _absenceRequestProcessor, _personRequestRepository, _writeProtectedScheduleCommandValidator, _messageBroker);
 			handler.Handle(@event);
 
 			personRequest.IsApproved.Should().Be.False();
 			personRequest.IsPending.Should().Be.True();
+			((FakeMessageBrokerComposite)_messageBroker).SentCount().Should().Be(1);
 		}
 
 		private IAbsenceRequestProcessor GetAbsenceRequestProcessor(IPerson person, IPersonRequest personRequest)

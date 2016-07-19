@@ -231,6 +231,7 @@ describe('RequestsControllerTests', function () {
 		mockSignalRBackendServer.notifyClients('IApproveRequestsWithValidatorsEventMessage'
 			, { TrackId: test.requestCommandPaneScope.commandTrackId });
 		expect(_notificationResult).toEqual('ApproveBasedOnBudgetFinished');
+		expect(requestCommandParamsHolder.getSelectedRequestsIds(false).length).toEqual(0);
 	});
 
 	function FakeRequestsNotificationService() {
@@ -264,7 +265,7 @@ describe('RequestsControllerTests', function () {
 		this.notifySubmitApproveBasedOnBudgetSuccess = function () {
 			_notificationResult = "SubmitApproveBasedOnBudgetSuccess";
 		}
-		this.notifyApproveBasedOnBudgetFinished = function() {
+		this.notifyApproveBasedOnBudgetFinished = function () {
 			_notificationResult = "ApproveBasedOnBudgetFinished";
 		}
 	}
@@ -326,18 +327,25 @@ describe('RequestsControllerTests', function () {
 			isShiftTradeViewActived = false;
 		}
 		var scope = $rootScope.$new();
-		requestsController = $controller('RequestsCtrl', {
-			$scope: scope
+		requestsController = $controller('RequestsCtrl',
+		{
+			$scope: scope,
+			requestsNotificationService: requestsNotificationService,
+			CurrentUserInfo: currentUserInfo
 		});
 		_notificationResult = '';
 		var targetScope = $rootScope.$new();
 		targetScope.onCommandSuccess = requestsController.onCommandSuccess;
 		targetScope.onErrorMessages = requestsController.onErrorMessages;
 		targetScope.onCommandError = requestsController.onCommandError;
+		targetScope.onProcessWaitlistFinished = requestsController.onProcessWaitlistFinished;
+		targetScope.onApproveBasedOnBudgetFinished = requestsController.onApproveBasedOnBudgetFinished;
 		var targetElement = $compile('<requests-commands-pane ' +
 			'after-command-success="onCommandSuccess(commandType, changedRequestsCount, requestsCount, waitlistPeriod) "' +
 			'on-error-messages="onErrorMessages(errorMessages) "' +
 			'after-command-error="onCommandError(error)"' +
+			'on-process-waitlist-finished="onProcessWaitlistFinished(message)"' +
+			'on-approve-based-on-budget-finished="onApproveBasedOnBudgetFinished(message)"' +
 			'is-shift-trade-view-active="' + isShiftTradeViewActived + '"' +
 			'"></requests-commands-pane>')(targetScope);
 		targetScope.$digest();

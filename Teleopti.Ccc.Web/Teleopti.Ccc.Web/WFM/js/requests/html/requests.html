@@ -30,7 +30,10 @@
 							after-command-success="requests.onCommandSuccess(commandType, changedRequestsCount, requestsCount, waitlistPeriod)"
 							on-error-messages="requests.onErrorMessages(errorMessages)"
 							after-command-error="requests.onCommandError(error)"
-							commands-disabled="requests.disableInteraction"></requests-commands-pane>
+							commands-disabled="requests.disableInteraction"
+							on-process-waitlist-finished="requests.onProcessWaitlistFinished(message)"
+							on-approve-based-on-budget-finished="requests.onApproveBasedOnBudgetFinished(message)"
+							></requests-commands-pane>
 
 	<div class="panel material-depth-1">
 		<div class="wfm-slide-tabs tabbed-panel">

@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Logon;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
@@ -19,13 +21,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IList<BeforeApproveAction> _beforeApproveActions;
 		private readonly IWriteProtectedScheduleCommandValidator _writeProtectedScheduleCommandValidator;
+		private readonly IMessageBrokerComposite _messageBroker;
 
-		public ApproveRequestsWithValidatorsEventHandler(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IAbsenceRequestProcessor absenceRequestProcessor, IPersonRequestRepository personRequestRepository, IWriteProtectedScheduleCommandValidator writeProtectedScheduleCommandValidator)
+		public ApproveRequestsWithValidatorsEventHandler(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IAbsenceRequestProcessor absenceRequestProcessor, IPersonRequestRepository personRequestRepository, IWriteProtectedScheduleCommandValidator writeProtectedScheduleCommandValidator, IMessageBrokerComposite messageBroker)
 		{
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_absenceRequestProcessor = absenceRequestProcessor;
 			_personRequestRepository = personRequestRepository;
 			_writeProtectedScheduleCommandValidator = writeProtectedScheduleCommandValidator;
+			_messageBroker = messageBroker;
 			_beforeApproveActions = new List<BeforeApproveAction>
 			{
 				checkPersonRequest,
@@ -55,6 +59,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					_absenceRequestProcessor.ApproveAbsenceRequestWithValidators(personRequest, absenceRequest, unitOfWork, validators);
 				}
 			}
+
+			@event.EndTime = DateTime.Now;
+			sendMessage(@event);
 		}
 
 		private static bool checkPersonRequest(IPersonRequest personRequest)
@@ -77,5 +84,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		}
 
 		private delegate bool BeforeApproveAction(IPersonRequest personRequest);
+
+		private void sendMessage(ApproveRequestsWithValidatorsEvent @event)
+		{
+			_messageBroker.Send(
+				@event.LogOnDatasource,
+				@event.LogOnBusinessUnitId,
+				@event.StartTime,
+				@event.EndTime,
+				Guid.Empty,
+				@event.InitiatorId,
+				typeof(Person),
+				Guid.Empty,
+				typeof(IApproveRequestsWithValidatorsEventMessage),
+				DomainUpdateType.NotApplicable,
+				null,
+				@event.TrackedCommandInfo.TrackId);
+		}
 	}
 }

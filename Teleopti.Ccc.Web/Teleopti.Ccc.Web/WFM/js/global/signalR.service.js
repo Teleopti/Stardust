@@ -11,11 +11,13 @@
         var hub = $.connection.MessageBrokerHub;
         var pendingMessage = [];
         var messageHandlingTimeout = null;
+	    var messageHandlers = [];
 
-        service.subscribe = function (options, messsageHandler) {
-            hub.client.onEventMessage = function(message) {
-                messsageHandler(message);
-            }
+		service.subscribe = function (options, messsageHandler) {
+			messageHandlers[options.DomainType] = messsageHandler;
+			hub.client.onEventMessage = function (message) {
+				messageHandlers[message.DomainType](message);
+			}
 
             setNegotiationLocation();
 

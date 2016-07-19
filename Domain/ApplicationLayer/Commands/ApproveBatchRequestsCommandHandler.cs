@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
@@ -15,6 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		{
 			var @event = new ApproveRequestsWithValidatorsEvent
 			{
+				StartTime = DateTime.Now,
 				PersonRequestIdList = command.PersonRequestIdList,
 				TrackedCommandInfo = command.TrackedCommandInfo,
 				Validator = command.Validator

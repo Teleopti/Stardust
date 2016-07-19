@@ -3,16 +3,16 @@
 
 	angular.module('wfm.requests')
 		.controller('requestsCommandsPaneCtrl', requestsCommandsPaneCtrl)
-		.directive('requestsCommandsPane', requestsCommandsPaneDirective)
+		.directive('requestsCommandsPane', requestsCommandsPaneDirective);
 
 
 	requestsCommandsPaneCtrl.$inject = [
 		'requestsDefinitions', 'requestsDataService', 'requestCommandParamsHolder', 'Toggle',
-		'signalRSVC', 'requestsNotificationService', 'CurrentUserInfo'
+		'signalRSVC'
 	];
 
 	function requestsCommandsPaneCtrl(requestsDefinitions, requestsDataService, requestCommandParamsHolder, toggleSvc,
-		signalRSVC, requestsNotificationService, CurrentUserInfo) {
+		signalRSVC) {
 		var vm = this;
 
 		vm.approveRequests = approveRequests;
@@ -28,7 +28,8 @@
 		vm.approveBasedOnBudget = approveBasedOnBudget;
 		vm.isApproveBasedOnBudgetEnabled = isApproveBasedOnBudgetEnabled;
 		initWaitlistProcessPeriod();
-		subscribeSignalRMessage();
+		subscribeSignalRMessage('IRunRequestWaitlistEventMessage', vm.onProcessWaitlistFinished);
+		subscribeSignalRMessage('IApproveRequestsWithValidatorsEventMessage', vm.onApproveBasedOnBudgetFinished);
 
 		function handleErrorMessages(errorMessages) {
 			if (vm.onErrorMessages) {
@@ -115,9 +116,12 @@
 			doStandardCommandHandlingWithParameters(requestType, dataServicePromise, selectedRequestIds);
 		}
 
-		function subscribeSignalRMessage() {
-			signalRSVC.subscribe({ DomainType: 'IRunRequestWaitlistEventMessage' }, runRequestWaitlistEventHandler);
-			signalRSVC.subscribe({ DomainType: 'IApproveRequestsWithValidatorsEventMessage' }, approveWithValidatorsEventHandler);
+		function subscribeSignalRMessage(domainType, eventHandler) {
+			signalRSVC.subscribe({ DomainType: domainType }, function (message) {
+				if (message.TrackId == vm.commandTrackId) {
+					eventHandler({ message: message });
+				}
+			});
 		}
 
 		function approveRequests() {
@@ -128,19 +132,6 @@
 			vm.toggleProcessWaitlistModal();
 			doProcessWaitlistCommandHandling(vm.waitlistPeriod);
 			initWaitlistProcessPeriod();
-		}
-
-		function runRequestWaitlistEventHandler(message) {
-			if (vm.commandTrackId === message.TrackId) {
-				var period = formatDatePeriod(message);
-				requestsNotificationService.notifyProcessWaitlistedRequestsFinished(period);
-			}
-		}
-
-		function approveWithValidatorsEventHandler(message) {
-			if (vm.commandTrackId === message.TrackId) {
-				requestsNotificationService.notifyApproveBasedOnBudgetFinished();
-			}
 		}
 
 		function approveBasedOnBudget() {
@@ -196,13 +187,6 @@
 		function isApproveBasedOnBudgetEnabled() {
 			return toggleSvc.Wfm_Requests_Approve_Based_On_Budget_Allotment_39626 && !vm.isShiftTradeViewActive;
 		}
-
-        function formatDatePeriod(message) {
-			vm.userTimeZone = CurrentUserInfo.CurrentUserInfo().DefaultTimeZone;
-			var startDate = moment(message.StartDate.substring(1, message.StartDate.length)).tz(vm.userTimeZone).format("L");
-			var endDate = moment(message.EndDate.substring(1, message.EndDate.length)).tz(vm.userTimeZone).format("L");
-			return startDate + "-" + endDate;
-		}
 	}
 
 	function requestsCommandsPaneDirective() {
@@ -216,7 +200,9 @@
 				afterCommandError: '&?',
 				onErrorMessages: '&?',
 				commandsDisabled: '=?',
-				isShiftTradeViewActive: '='
+				isShiftTradeViewActive: '=',
+				onProcessWaitlistFinished: '&?',
+				onApproveBasedOnBudgetFinished: '&?'
 			},
 			restrict: 'E',
 			templateUrl: 'js/requests/html/requests-commands-pane.tpl.html'
