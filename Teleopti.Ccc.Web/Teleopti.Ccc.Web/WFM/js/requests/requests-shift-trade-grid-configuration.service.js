@@ -18,6 +18,10 @@
 			}
 
 			function getDayViewModels(requests, shiftTradeRequestDateSummary) {
+				if (requests == undefined || requests.length === 0) {
+					return [];
+				}
+
 				var day = moment(shiftTradeRequestDateSummary.Minimum);
 				var maxDay = moment(shiftTradeRequestDateSummary.Maximum);
 				var startOfWeekIsoDay = shiftTradeRequestDateSummary.FirstDayOfWeek;
@@ -29,7 +33,6 @@
 					dayViewModel.leftOffset = getShiftTradeColumnLeftOffset(day, dayIncrement);
 					dayViewModels.push(dayViewModel);
 					dayIncrement.add(1, 'days');
-
 				}
 
 				return dayViewModels;
@@ -56,15 +59,12 @@
 				return (scheduleDayDetail && (scheduleDayDetail.Type === requestDefinitions.SHIFT_OBJECT_TYPE.DayOff));
 			}
 
-
 			function createShiftTradeDayViewModel(shiftTradeDay, shiftTradeRequestDateSummary) {
-
 				var startDate = moment(shiftTradeRequestDateSummary.Minimum);
 				var startOfWeekIsoDay = shiftTradeRequestDateSummary.FirstDayOfWeek;
 				var shiftTradeDate = moment(shiftTradeDay.Date);
 
 				var viewModel = createDayViewModel(shiftTradeDate, startOfWeekIsoDay);
-
 				viewModel.FromScheduleDayDetail = {};
 				viewModel.ToScheduleDayDetail = {}
 
@@ -76,11 +76,9 @@
 				viewModel.LeftOffset = getShiftTradeColumnLeftOffset(startDate, shiftTradeDate);
 
 				return viewModel;
-
 			}
 
 			function getShiftTradeScheduleViewModels(requests, shiftTradeRequestDateSummary) {
-
 				var shiftTradeDataForDisplay = {};
 
 				angular.forEach(requests, function (request) {
@@ -283,7 +281,6 @@
 			}
 
 			function setupShiftTradeVisualisationColumn(shiftTradeRequestDateSummary) {
-
 				var minimum = moment(shiftTradeRequestDateSummary.Minimum);
 				var maximum = moment(shiftTradeRequestDateSummary.Maximum);
 				var numberOfDays = maximum.diff(minimum, 'days') + 1;
@@ -302,7 +299,6 @@
 			}
 
 			function columnDefinitions(shiftTradeRequestDateSummary) {
-
 				if (columns.length === 0) {
 					setupStandardColumns();
 
@@ -326,12 +322,10 @@
 					var shifTradeVisualisationColumn = setupShiftTradeVisualisationColumn(shiftTradeRequestDateSummary);
 					return columns.concat([shifTradeVisualisationColumn]);
 				}
-				
+
 				return columns;
 			}
 
 			return service;
-
 		}]);
-
 }());
