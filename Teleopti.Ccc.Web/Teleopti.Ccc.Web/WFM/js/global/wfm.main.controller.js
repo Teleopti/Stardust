@@ -3,8 +3,20 @@
 	var global = angular.module('wfm');
 
 	global.controller('mainController', [
-		'$scope', 'Toggle', '$rootScope', 'ThemeService', '$q',
-		function($scope, Toggle, $rootScope, ThemeService, $q) {
+		'$scope', 'Toggle', '$rootScope', 'ThemeService', '$q', '$document',
+		function($scope, Toggle, $rootScope, ThemeService, $q, $document) {
+
+			var targets = [];
+			$document.on('keyup', function(event){
+					if (event.keyCode == 9) {
+						targets.push(event.target);
+						if(targets.length > 1){
+							targets[0].style.outline = "";
+							targets[1].style.outline = "1px dotted #09F";
+							targets.splice(0, 1);
+						}
+					}
+			});
 
 			ThemeService.getTheme().then(function(result){
 				$scope.currentStyle = result.data.Name;
