@@ -69,10 +69,10 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return Ok(_agentViewModelBuilder.ForTeams(teamIds).ToArray());
 		}
 
-		[UnitOfWork, HttpGet, Route("api/Agents/ForSkill")]
-		public virtual IHttpActionResult ForSkill([FromUri] SkillQuery query)
+		[UnitOfWork, HttpGet, Route("api/Agents/ForSkills")]
+		public virtual IHttpActionResult ForSkills([FromUri] Guid[] skillIds)
 		{
-			return Ok(_agentViewModelBuilder.ForSkill(query.SkillId));
+			return Ok(_agentViewModelBuilder.ForSkill(skillIds));
 		}
 		
 		[UnitOfWork, HttpGet, Route("api/Agents/GetStates")]
@@ -105,13 +105,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return Ok(_agentStatesBuilder.ForSites(query.Ids, true));
 		}
 
-		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForSkill")]
+		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForSkills")]
 		public virtual IHttpActionResult GetStatesForSkill([FromUri] SkillQuery query)
 		{
 			return Ok(_agentStatesBuilder.ForSkill(query.SkillId));
 		}
 
-		[UnitOfWork, HttpGet, Route("api/Agents/GetAlarmStatesForSkill")]
+		[UnitOfWork, HttpGet, Route("api/Agents/GetAlarmStatesForSkills")]
 		public virtual IHttpActionResult GetAlarmStatesForSkill([FromUri] SkillQuery query)
 		{
 			return Ok(_agentStatesBuilder.InAlarmForSkill(query.SkillId));

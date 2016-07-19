@@ -10,9 +10,8 @@
 				var selectedPersonId;
 				var siteIds = $stateParams.siteIds || ($stateParams.siteId ? [$stateParams.siteId] : []);
 				var teamIds = $stateParams.teamIds || ($stateParams.teamId ? [$stateParams.teamId] : []);
-				var skillIds = [$stateParams.skillId] || [];
+				var skillIds = ($stateParams.skillId ? [$stateParams.skillId] : []);
 				var skillAreaId = $stateParams.skillAreaId || undefined;
-				var skillId = $stateParams.skillId || undefined;
 				var propertiesForFiltering = ["Name", "TeamName", "State", "Activity", "Alarm"];
 				$scope.adherence = {};
 				$scope.adherencePercent = null;
@@ -39,7 +38,7 @@
 
 				$scope.noSiteIds = siteIds.length == 0;
 				$scope.monitorBySkill = toggleService.RTA_MonitorBySkills_39081;
-				$scope.showBreadcrumb = skillIds !== [];
+				$scope.showBreadcrumb = siteIds.length > 0 || teamIds.length > 1 || (siteIds.length === 1 && teamIds.length === 1) || skillIds === [];
 				$scope.showGrid = !$scope.showBreadcrumb;
 				$scope.skillName = "";
 				$scope.skillAreaName = "";
@@ -121,11 +120,11 @@
 					}
 				);
 
-				var getSkillAreaInfo = function() {
+				var getSkillAreaInfo = function () {
 					return RtaService.getSkillArea(skillAreaId)
-						.then(function(skillArea) {
+						.then(function (skillArea) {
 							$scope.skillAreaName = skillArea.Name || '?';
-							skillIds = skillArea.Skills.map(function(skill) { return skill.Id; });
+							skillIds = skillArea.Skills.map(function (skill) { return skill.Id; });
 						});
 				}
 
@@ -133,7 +132,7 @@
 					var deferred = $q.defer();
 					if (skillAreaId) {
 						getSkillAreaInfo()
-							.then(function() {
+							.then(function () {
 								deferred.resolve(RtaService.getAgentsForSkills);
 							});
 					} else if (skillIds.length > 0) {
@@ -179,14 +178,14 @@
 					updateBreadCrumb = function() {};
 				}
 
-				if (skillId) {
-					RtaService.getSkillName(skillId)
+				if (skillIds.length === 1) {
+					RtaService.getSkillName(skillIds[0])
 						.then(function(skill) {
 							$scope.skillName = skill.Name || '?';
 						});
 				}
 
-				if (siteIds.length > 0 || teamIds.length > 0 || skillIds.length > 0) {
+				if (siteIds.length > 0 || teamIds.length > 0 || skillIds.length > 0 || skillAreaId) {
 					getAgents
 						.then(function (fn) {
 							return fn({
@@ -195,7 +194,7 @@
 								skillIds: skillIds
 							});
 						})
-						.then(function(agentsInfo) {
+						.then(function (agentsInfo) {
 							$scope.agentsInfo = agentsInfo;
 							$scope.agents = agentsInfo;
 							$scope.$watchCollection('agents', filterData);
@@ -232,7 +231,7 @@
 				}
 
 				function updateStates() {
-					if ($scope.pause || !(siteIds.length > 0 || teamIds.length > 0 || skillIds.length > 0))
+					if ($scope.pause || !(siteIds.length > 0 || teamIds.length > 0 || skillIds.length > 0 || skillAreaId))
 						return;
 					getStates($scope.agentsInAlarm)({
 							siteIds: siteIds,

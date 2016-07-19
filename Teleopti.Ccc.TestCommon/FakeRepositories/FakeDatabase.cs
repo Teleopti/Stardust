@@ -5,12 +5,15 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -29,6 +32,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return database.WithTeam(null, name);
 		}
+
+		public static FakeDatabase WithSite(this FakeDatabase database, Guid? id)
+		{
+			return database.WithSite(id, "s");
+		}
 	}
 
 	public static class FakeDatabaseAgentExtensions
@@ -42,6 +50,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public static FakeDatabase WithAgent(this FakeDatabase database, Guid id, string name)
 		{
 			return database.WithAgent(id, name, null, null, null, null, null);
+		}
+
+		public static FakeDatabase WithAgent(this FakeDatabase database, Guid personId, string name, Guid teamId, Guid siteid)
+		{
+			return database.WithAgent(personId, name, null, teamId, siteid, null, null);
 		}
 
 		public static FakeDatabase WithAgent(this FakeDatabase database, string name, Guid teamId)
@@ -97,7 +110,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? id, string name, string terminalDate, Guid? teamId, Guid? siteId, Guid? businessUnitId, TimeZoneInfo timeZone)
 		{
 			database.WithPerson(id, name, terminalDate, timeZone, null, null);
-			database.WithPeriod("2016-01-01", teamId, siteId, businessUnitId);
+			database.WithPeriod(FakeDatabase.DefaultPersonPeriodStartDate, teamId, siteId, businessUnitId);
 			return database;
 		}
 	}
@@ -171,6 +184,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly FakeAbsenceRepository _absences;
 		private readonly FakePersonAbsenceRepository _personAbsences;
 		private readonly FakeActivityRepository _activities;
+		private readonly FakeCommonAgentNameProvider _commonAgentNameProvider;
+		private readonly FakeSkillRepository _skills;
+		private readonly FakeGroupingReadOnlyRepository _groupings;
 
 		private BusinessUnit _businessUnit;
 		private Site _site;
@@ -185,9 +201,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private Absence _absence;
 		private PersonAbsence _personAbsence;
 		private Activity _activity;
+		private Skill _skill;
 
 		public static string DefaultTenantName = "default";
 		public static Guid DefaultBusinessUnitId = Guid.NewGuid();
+		public static string DefaultPersonPeriodStartDate = "2016-01-01";
 
 		public FakeDatabase(
 			FakeTenants tenants,
@@ -207,7 +225,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			IDefinedRaptorApplicationFunctionFactory allApplicationFunctions,
 			FakeAbsenceRepository absences,
 			FakePersonAbsenceRepository personAbsences,
-			FakeActivityRepository activities
+			FakeActivityRepository activities,
+			FakeCommonAgentNameProvider commonAgentNameProvider,
+			FakeSkillRepository skills,
+			FakeGroupingReadOnlyRepository groupings
 			)
 		{
 			_tenants = tenants;
@@ -228,6 +249,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_absences = absences;
 			_personAbsences = personAbsences;
 			_activities = activities;
+			_commonAgentNameProvider = commonAgentNameProvider;
+			_skills = skills;
+			_groupings = groupings;
 			createDefaultData();
 		}
 		
@@ -282,9 +306,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
-		public FakeDatabase WithSite(Guid? id)
+		public FakeDatabase WithSite(Guid? id, string name)
 		{
-			_site = new Site("s");
+			_site = new Site(name);
 			_site.SetBusinessUnit(_businessUnit);
 			_site.SetId(id ?? Guid.NewGuid());
 			_sites.Has(_site);
@@ -331,7 +355,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public FakeDatabase WithPerson(Guid? id, string name, string terminalDate, TimeZoneInfo timeZone, CultureInfo culture, CultureInfo uiCulture)
 		{
-			_person = new Person {Name = new Name(name, "")};
+			Name setName;
+			if (name.Contains(" "))
+			{
+				var fullName = name.Split(" ");
+				setName = new Name(fullName[0], fullName[1]);
+			}
+			else setName = new Name(name, string.Empty);
+
+			_person = new Person {Name = setName};
 			_person.SetId(id ?? Guid.NewGuid());
 			_persons.Has(_person);
 
@@ -351,7 +383,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public FakeDatabase WithPeriod(string startDate, Guid? teamId, Guid? siteId, Guid? businessUnitId)
 		{
 			ensureExists(_businessUnits, businessUnitId, () => WithBusinessUnit(businessUnitId));
-			ensureExists(_sites, siteId, () => WithSite(siteId));
+			ensureExists(_sites, siteId, () => this.WithSite(siteId));
 			ensureExists(_teams, teamId, () => this.WithTeam(teamId));
 
 			ensureExists(_contracts, null, () => WithContract(null));
@@ -361,6 +393,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			var personContract = new PersonContract(_contract, _partTimePercentage, _contractSchedule);
 			_person.AddPersonPeriod(new PersonPeriod(startDate.Date(), personContract, _team));
 
+			return this;
+		}
+
+		public FakeDatabase WithAgentNameDisplayedAs(string format)
+		{
+			_commonAgentNameProvider.Has(new CommonNameDescriptionSetting {AliasFormat = format});
 			return this;
 		}
 
@@ -456,6 +494,36 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
+		public FakeDatabase WithSkill(Guid skillId)
+		{
+			ensureExists(_skills, skillId, () => withSkill(skillId));
+			_person.AddSkill(_skill, DefaultPersonPeriodStartDate.Date());
+			
+			return this;
+		}
+
+		private void withSkill(Guid skillId)
+		{
+			var skill = new Skill();
+			skill.SetId(skillId);
+			_skills.Has(skill);
+			_skill = skill;
+		}
+
+		public FakeDatabase InSkillGroupPage()
+		{
+			_groupings
+				.Has(new ReadOnlyGroupDetail
+				{
+					GroupId = _skill.Id.Value,
+					PersonId = _person.Id.Value,
+					SiteId = _site.Id.Value,
+					TeamId = _team.Id.Value,
+					FirstName = _person.Name.FirstName,
+					LastName = _person.Name.LastName
+				});
+			return this;
+		}
 
 		private static void ensureExists<T>(IRepository<T> loadAggregates, Guid? id, Action createAction)
 			where T : IAggregateRoot

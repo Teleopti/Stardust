@@ -25,6 +25,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		public FakeTeamRepository TeamRepository;
 		public FakeGroupingReadOnlyRepository GroupingReadOnlyRepository;
 		public FakeCommonAgentNameProvider CommonAgentNameProvider;
+
+		public FakeDatabase Database;
         public MutableNow Now;
 		
 		[Test]
@@ -94,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					EmploymentNumber = "123"
 				});
 
-			var result = Target.ForSkill(skill).Single();
+			var result = Target.ForSkill(new[] { skill }).Single();
 
 			result.PersonId.Should().Be(person);
 			result.SiteId.Should().Be(site.Id.Value.ToString());
@@ -108,35 +110,36 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		public void ShouldGetAgentForSkillArea()
 		{
 			var skill = Guid.NewGuid();
-			var person = Guid.NewGuid();
-			var team = TeamFactory.CreateTeamWithId("angel");
-			var site = new Site("bla").WithId();
-			site.AddTeam(team);
-			SiteRepository.Has(site);
-			TeamRepository.Has(team);
-			CommonAgentNameProvider
-				.Has(new CommonNameDescriptionSetting { AliasFormat = "{EmployeeNumber} - {FirstName} {LastName}" });
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
 
-			GroupingReadOnlyRepository
-				.Has(new ReadOnlyGroupDetail
-				{
-					GroupId = skill,
-					PersonId = person,
-					SiteId = site.Id.Value,
-					TeamId = team.Id.Value,
-					FirstName = "John",
-					LastName = "Smith",
-					EmploymentNumber = "123"
-				});
+			Database
+				.WithAgentNameDisplayedAs("{FirstName} {LastName}")
+				.WithSite(siteId, "Paris")
+				.WithTeam(teamId, "Angel")
+				.WithAgent(personId1, "John Smith", teamId, siteId)
+				.WithSkill(skill)
+				.InSkillGroupPage()
+				.WithAgent(personId2, "Ashley Andeen", teamId, siteId)
+				.WithSkill(skill)
+				.InSkillGroupPage()
+				;
 
-			var result = Target.ForSkill(skill).Single();
-
-			result.PersonId.Should().Be(person);
-			result.SiteId.Should().Be(site.Id.Value.ToString());
-			result.SiteName.Should().Be("bla");
-			result.TeamId.Should().Be(team.Id.Value.ToString());
-			result.TeamName.Should().Be("angel");
-			result.Name.Should().Be("123 - John Smith");
+			var viewModel = Target.ForSkill(new[] { skill });
+			var person1 = viewModel.Single(p => p.PersonId == personId1);
+			person1.SiteId.Should().Be(siteId.ToString());
+			person1.SiteName.Should().Be("Paris");
+			person1.TeamId.Should().Be(teamId.ToString());
+			person1.TeamName.Should().Be("Angel");
+			person1.Name.Should().Be("John Smith");
+			var person2 = viewModel.Single(p => p.PersonId == personId2);
+			person2.SiteId.Should().Be(siteId.ToString());
+			person2.SiteName.Should().Be("Paris");
+			person2.TeamId.Should().Be(teamId.ToString());
+			person2.TeamName.Should().Be("Angel");
+			person2.Name.Should().Be("Ashley Andeen");
 		}
 	}
 }

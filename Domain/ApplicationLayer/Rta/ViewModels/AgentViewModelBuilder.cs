@@ -110,19 +110,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		}
 
 
-		public IEnumerable<AgentViewModel> ForSkill(Guid skill)
+		public IEnumerable<AgentViewModel> ForSkill(Guid[] skill)
 		{
 			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
-			return _groupingReadOnlyRepository.DetailsForGroup(skill, _now.LocalDateOnly())
-				.Select(x => new AgentViewModel
-				{
-					PersonId = x.PersonId,
-					Name = commonAgentNameSettings.BuildCommonNameDescription(x.FirstName, x.LastName, x.EmploymentNumber),
-					SiteId = x.SiteId.ToString(),
-					SiteName = _siteRepository.Load(x.SiteId.Value).Description.Name,
-					TeamId = x.TeamId.ToString(),
-					TeamName = _teamRepository.Load(x.TeamId.Value).Description.Name
-				}).ToArray();
+			return skill.SelectMany(s =>
+			{
+				return _groupingReadOnlyRepository.DetailsForGroup(s, _now.LocalDateOnly())
+					.Select(x => new AgentViewModel
+					{
+						PersonId = x.PersonId,
+						Name = commonAgentNameSettings.BuildCommonNameDescription(x.FirstName, x.LastName, x.EmploymentNumber),
+						SiteId = x.SiteId.ToString(),
+						SiteName = _siteRepository.Load(x.SiteId.Value).Description.Name,
+						TeamId = x.TeamId.ToString(),
+						TeamName = _teamRepository.Load(x.TeamId.Value).Description.Name
+					});
+			}).ToArray();
 		}
 	}
 }
