@@ -53,12 +53,14 @@ Background:
 	| DateTo   | 2016-05-19 |
 	| DateFrom | 2016-05-19 |
 	| Pending  | True       |
+	| Accepted | True       |
 	And I have created a shift trade request
 	| Field    | Value      |
 	| To       | Pence H    |
 	| DateTo   | 2016-05-27 |
 	| DateFrom | 2016-05-22 |
 	| Pending  | True       |
+	| Accepted | True       |
 	And I has a shift with
 	| Field            | Value            |
 	| Shift category   | Day              |
@@ -84,21 +86,20 @@ Background:
 	| StartTime        | 2016-05-23 15:30 |
 	| EndTime          | 2016-05-23 23:30 |
 
-@ignore
 Scenario: View shift trade requests 
 	When I view wfm requests
-	And I select to load requests from '2016-05-01' to '2016-06-01'
 	And I select to go to shift trade requests view
+	And I select to load requests from '2016-05-01' to '2016-05-30'
 	Then I should see a shift request from 'John Smith' in the list
 	And I should see a shift request from 'Pence H' in the list
 
 @ignore
 Scenario: View schedule detail
- When I view wfm requests
- And I select to load requests from '2016-05-17' to '2016-05-24'
- And I select to go to shift trade requests view
- When I click the shift trade schedule day
- Then I should see schedule detail
+	When I view wfm requests
+	And I select to go to shift trade requests view
+	And I select to load requests from '2016-05-17' to '2016-05-24'
+	When I click the shift trade schedule day
+	Then I should see schedule detail
 
  @ignore
 Scenario: Search for shift trade

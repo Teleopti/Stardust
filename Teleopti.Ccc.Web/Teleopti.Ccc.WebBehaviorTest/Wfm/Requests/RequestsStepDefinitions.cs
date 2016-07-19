@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 		[When(@"I click the shift trade schedule day")]
 		public void ClickShiftTradeScheduleDay()
 		{
-			Browser.Interactions.ClickUsingJQuery(".ui-grid-canvas table[style*='pointer']:first");
+			Browser.Interactions.ClickUsingJQuery(".ui-grid-canvas div[style*='pointer']:first");
 		}
 
 		[Then(@"I should see schedule detail")]

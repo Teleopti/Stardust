@@ -13,13 +13,13 @@
         	template += '<div style=\'position: relative\' ng-repeat=\"day in grid.appScope.shiftTradeScheduleViewModels[row.entity.Id]\">' +
 						'		<div ng-style="{\'display\': \'inline-block\', \'position\': \'absolute\', \'left\': day.LeftOffset}\" >' +
 						'			<div ng-click=\"grid.appScope.showShiftDetail($event,row.entity[\'PersonId\'],row.entity[\'PersonIdTo\'], day.date)\">' +
-						'				<div class=\"shift-trade-cell-text\" ng-class=\"day.FromScheduleDayDetail.IsDayOff ? \'is-day-off\':\'\'\" ng-style=\"{\'background-color\': day.FromScheduleDayDetail.Color}\">' +
+						'				<div class=\"shift-trade-cell-text\" ng-class=\"day.FromScheduleDayDetail.IsDayOff ? \'is-day-off\':\'\'\" ng-style=\"{\'background-color\': day.FromScheduleDayDetail.Color, \'cursor\': \'pointer\'}\">' +
 						'					{{::day.FromScheduleDayDetail.ShortName}}' +
 						'					<md-tooltip>' +
 						'						{{::day.FromScheduleDayDetail.Name}}' +
 						'					</md-tooltip>' +
 						'				</div> ' +
-						'				<div class=\"shift-trade-cell-text\" ng-class=\"day.ToScheduleDayDetail.IsDayOff ? \'is-day-off\':\'\'\" ng-style=\"{\'background-color\': day.ToScheduleDayDetail.Color}\" >' +
+						'				<div class=\"shift-trade-cell-text\" ng-class=\"day.ToScheduleDayDetail.IsDayOff ? \'is-day-off\':\'\'\" ng-style=\"{\'background-color\': day.ToScheduleDayDetail.Color, \'cursor\': \'pointer\'}\" >' +
 						'					{{::day.ToScheduleDayDetail.ShortName}}' +
 						'					<md-tooltip>' +
 						'						{{::day.ToScheduleDayDetail.Name}}' +

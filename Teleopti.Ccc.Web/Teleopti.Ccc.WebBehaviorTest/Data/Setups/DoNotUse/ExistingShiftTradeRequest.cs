@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 		public bool Approved { get; set; }
 		public bool AutoDenied { get; set; }
 		public bool HasBeenReferred { get; set; }
+		public bool Accepted { get; set; }
 
 		public void Apply(IPerson user, ICurrentUnitOfWork uow)
 		{
@@ -69,6 +70,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			if (HasBeenReferred)
 			{
 				shiftTradeRequest.Refer(new PersonRequestAuthorizationCheckerForTest());
+			}
+			if (Accepted)
+			{
+				PersonRequest.ForcePending();
+				shiftTradeRequest.Accept(reciever, new EmptyShiftTradeRequestSetChecksum(), new PersonRequestAuthorizationCheckerConfigurable());
 			}
 			requestRepository.Add(PersonRequest);
 
