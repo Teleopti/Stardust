@@ -2,7 +2,7 @@
 	'use strict';
 
 	describe('Requests overview directive', function () {
-		var $compile, $rootScope, requestsDataService, requestsDefinitions, $injector;
+		var $compile, $rootScope, requestsDataService, requestsDefinitions, $injector, requestsFilterService;
 
 		var targetElement, targetScope;
 
@@ -33,13 +33,14 @@
 			});
 		});
 
-		beforeEach(inject(function (_$compile_, _$rootScope_, _requestsDataService_, _requestsDefinitions_, _$injector_) {
+		beforeEach(inject(function (_$compile_, _$rootScope_, _requestsDataService_, _requestsDefinitions_, _$injector_, _RequestsFilter_) {
 			$compile = _$compile_;
 			$rootScope = _$rootScope_;
 			requestsDataService = _requestsDataService_;
 			requestsDefinitions = _requestsDefinitions_;
 			targetScope = $rootScope.$new();
 			$injector = _$injector_;
+			requestsFilterService = _RequestsFilter_;
 		}));
 
 		it("show requests table container", function () {
@@ -168,6 +169,7 @@
 
 			var vm = getInnerScope(targetElement).requestsOverview;
 			expect(vm.filters[0].Status).toEqual('0 5');
+			expect(getStatusFilter()['Status']).toEqual(vm.filters[0].Status);
 		});
 
 		it('should show pending shift trade request only by default', function () {
@@ -176,11 +178,18 @@
 
 			var vm = getInnerScope(targetElement).requestsOverview;
 			expect(vm.filters[0].Status).toEqual('0');
+			expect(getStatusFilter()['Status']).toEqual(vm.filters[0].Status);
 		});
 
 		function getInnerScope(element) {
 			var targets = element.find('requests-table-container');
 			return angular.element(targets[0]).scope();
+		}
+
+		function getStatusFilter() {
+			return requestsFilterService.Filters.find(function(filter) {
+				return filter['Status'] != undefined;
+			});
 		}
 	});
 

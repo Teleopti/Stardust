@@ -36,7 +36,7 @@
 					}
 				}
 
-				vm.SetFilter = function(name, filter) {
+				vm.SetFilter = function (name, filter) {
 					var nameInLowerCase = name.trim().toLowerCase();
 					var expectedFilterNames = ["status", "absence", "subject", "message"];
 
