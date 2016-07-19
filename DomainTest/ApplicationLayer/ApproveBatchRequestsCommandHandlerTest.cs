@@ -11,32 +11,28 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	[TestFixture]
 	public class ApproveBatchRequestsCommandHandlerTest
 	{
-	    [SetUp]
-	    public void SetUp()
-	    {
-	        
-	    }
+		[SetUp]
+		public void SetUp()
+		{
 
-	    [Test]
-        public void ShouldPublishApproveRequestsWithValidatorsEvent()
-	    {
-	        var personRequestIdList = new Guid[] {new Guid()};
+		}
 
-            var command = new ApproveBatchRequestsCommand()
-	        {
-                PersonRequestIdList = personRequestIdList
-            };
+		[Test]
+		public void ShouldPublishApproveRequestsWithValidatorsEvent()
+		{
+			var personRequestIdList = new Guid[] { new Guid() };
+			var command = new ApproveBatchRequestsCommand()
+			{
+				PersonRequestIdList = personRequestIdList
+			};
+			var publisher = new FakeEventPublisher();
+			var target = new ApproveBatchRequestsCommandHandler(publisher);
 
-            var publisher=new FakeEventPublisher();
+			target.Handle(command);
+			
+			var published = publisher.PublishedEvents.OfType<ApproveRequestsWithValidatorsEvent>().Single();
+			published.PersonRequestIdList.Should().Contain(personRequestIdList[0]);
+		}
 
-	        var target = new ApproveBatchRequestsCommandHandler(publisher);
-
-            target.Handle(command);
-
-
-            var published = publisher.PublishedEvents.OfType<ApproveRequestsWithValidatorsEvent>().Single();
-	        published.PersonRequestIdList.Should().Contain(personRequestIdList[0]);
-	    }
-
-    }
+	}
 }

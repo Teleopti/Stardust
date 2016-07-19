@@ -9,12 +9,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeBudgetDayRepository : IBudgetDayRepository
 	{
-	    private ICollection<IBudgetDay> _budgetDays =new List<IBudgetDay>();
-        public void Add(IBudgetDay entity)
+		private ICollection<IBudgetDay> _budgetDays = new List<IBudgetDay>();
+		public void Add(IBudgetDay entity)
 		{
-            _budgetDays.Add(entity);
+			_budgetDays.Add(entity);
 
-        }
+		}
 
 		public void Remove(IBudgetDay entity)
 		{
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IBudgetDay Get(Guid id)
 		{
-		    return _budgetDays.FirstOrDefault(b => b.Id == id);
+			return _budgetDays.FirstOrDefault(b => b.Id == id);
 
 		}
 
@@ -55,11 +55,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IBudgetDay> Find(IScenario scenario, IBudgetGroup budgetGroup, DateOnlyPeriod dateOnlyPeriod)
 		{
-		    return _budgetDays.Where(b => b.Scenario == scenario
-            && b.BudgetGroup == budgetGroup
-            && b.Day >= dateOnlyPeriod.StartDate
-            && b.Day <= dateOnlyPeriod.EndDate
-            ).ToList();
+			return _budgetDays.Where(b => b.Scenario == scenario
+			&& b.BudgetGroup == budgetGroup
+			&& b.Day >= dateOnlyPeriod.StartDate
+			&& b.Day <= dateOnlyPeriod.EndDate
+			).ToList();
 		}
 	}
 

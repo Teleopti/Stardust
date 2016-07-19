@@ -9,10 +9,10 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeScheduleRange : Schedule, IScheduleRange, IUnvalidatedScheduleRangeUpdate
-    {
+	{
 		public FakeScheduleRange(IScheduleDictionary owner, IScheduleParameters parameters) : base(owner, parameters)
 		{
-		    Period = parameters.Period;
+			Period = parameters.Period;
 		}
 
 		public IScheduleRange UpdateCalcValues(int scheduledDaysOff, TimeSpan contractTimeHolder)
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.TestCommon
 		public new IList<IBusinessRuleResponse> BusinessRuleResponseInternalCollection { get; private set; }
 		public void ExtractAllScheduleData(IScheduleExtractor extractor, DateTimePeriod period)
 		{
-			
+
 		}
 
 		public IScheduleDay ScheduledDay(DateOnly day)
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IDifferenceCollection<IPersistableScheduleData> DifferenceSinceSnapshot(IDifferenceCollectionService<IPersistableScheduleData> differenceService)
 		{
-		    return new DifferenceCollection<IPersistableScheduleData>();
+			return new DifferenceCollection<IPersistableScheduleData>();
 		}
 
 		public void TakeSnapshot()
@@ -151,21 +151,21 @@ namespace Teleopti.Ccc.TestCommon
 		{
 		}
 
-	    public void SolveConflictBecauseOfExternalInsert(IScheduleData databaseVersion, bool discardMyChanges)
-	    {
-	        
-	    }
+		public void SolveConflictBecauseOfExternalInsert(IScheduleData databaseVersion, bool discardMyChanges)
+		{
 
-	    public void SolveConflictBecauseOfExternalUpdate(IScheduleData databaseVersion, bool discardMyChanges)
-	    {
-	        
-	    }
+		}
 
-	    public IPersistableScheduleData SolveConflictBecauseOfExternalDeletion(Guid id, bool discardMyChanges)
-	    {
-	        return null;
-	    }
-    }
+		public void SolveConflictBecauseOfExternalUpdate(IScheduleData databaseVersion, bool discardMyChanges)
+		{
+
+		}
+
+		public IPersistableScheduleData SolveConflictBecauseOfExternalDeletion(Guid id, bool discardMyChanges)
+		{
+			return null;
+		}
+	}
 }
 
 

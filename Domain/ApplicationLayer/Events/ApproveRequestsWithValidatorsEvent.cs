@@ -5,10 +5,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
-    public class ApproveRequestsWithValidatorsEvent : EventWithInfrastructureContext
-    {
-        public TrackedCommandInfo TrackedCommandInfo { get; set; }
-        public IEnumerable<Guid> PersonRequestIdList { get; set; }
-        public RequestValidatorsFlag Validator { get; set; }
-    }
-} 
+	public class ApproveRequestsWithValidatorsEvent : EventWithInfrastructureContext
+	{
+		public TrackedCommandInfo TrackedCommandInfo { get; set; }
+		public IEnumerable<Guid> PersonRequestIdList { get; set; }
+		public RequestValidatorsFlag Validator { get; set; }
+	}
+}

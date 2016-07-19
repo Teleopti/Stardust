@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 				var mergedPeriod = workflowControlSet.GetMergedAbsenceRequestOpenPeriod(absenceRequest);
 				validatorList = (validators ?? mergedPeriod.GetSelectedValidatorList()).ToArray();
-				_process = process?? mergedPeriod.AbsenceRequestProcess;
+				_process = process ?? mergedPeriod.AbsenceRequestProcess;
 
 				loadDataForResourceCalculation(absenceRequest, validatorList);
 
@@ -257,7 +257,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			}
 		}
 
-		private void denyAbsenceRequest(string reasonResourceKey,bool alreadyAbsence = false)
+		private void denyAbsenceRequest(string reasonResourceKey, bool alreadyAbsence = false)
 		{
 			_denyAbsenceRequest.DenyReason = reasonResourceKey;
 			_denyAbsenceRequest.AlreadyAbsence = alreadyAbsence;
