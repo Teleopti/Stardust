@@ -19,7 +19,7 @@ If you are already registered, make sure you logged in with the right credential
 	</div>
 	<div ng-repeat="accordionTitle in areas">
 		<a class="nav-item-wrap" ui-sref={{accordionTitle.InternalName}} ui-sref-opts="{reload: true}" ui-sref-active="nav-item-active">
-			<div class="nav-item sidenav-header accordion-head" ng-click="accordionToggle = !accordionToggle">
+			<div tabindex="-1" class="nav-item sidenav-header accordion-head" ng-click="accordionToggle = !accordionToggle">
 				<i ng-if="accordionTitle.InternalName == 'forecasting'" class="mdi mdi-chart-line sidenav-icon">
 					<md-tooltip md-direction="right" >{{accordionTitle.Name | translate}}</md-tooltip>
 				</i>

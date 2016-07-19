@@ -117,14 +117,12 @@
 			});
 
 			$document.on('keyup', function(event){
-				specialKeys[keyCodes.SHIFT] = false;
-				specialKeys[keyCodes.CONTROL] = false;
-				specialKeys[keyCodes.ALT] = false;
+				service.checkSpecialKey(event, false)
 			});
 
 			service.handleKeyEvent = function(event) {
 				var arr = [];
-				if (service.checkSpecialKey(event) || !service.keySequenceTable[event.keyCode])
+				if (service.checkSpecialKey(event, true) || !service.keySequenceTable[event.keyCode])
 					return;
 
 				arr = service.keySequenceTable[event.keyCode];
@@ -151,9 +149,9 @@
 				service.keySequenceTable[keyCode] = [specialKeySequence, callback];
 			};
 
-			service.checkSpecialKey = function(event) {
+			service.checkSpecialKey = function(event, isPressed) {
 				if (specialKeys.hasOwnProperty(event.keyCode)) {
-					specialKeys[event.keyCode] = true;
+					specialKeys[event.keyCode] = isPressed;
 					return true;
 				} else {
 					return false;

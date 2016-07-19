@@ -134,8 +134,17 @@ wfm-notice{
 	}
 }
 
+.nav-item-wrap:focus > .sidenav-header{
+  background: $gray012;
+}
+
+.nav-item-active > .sidenav-header{
+		background: $green-100!important;
+}
+
 .nav-item-wrap {
 	text-decoration: none!important;
+
 }
 
 md-select-menu md-option:focus:not([disabled]):not([selected]){
