@@ -43,45 +43,24 @@
 					}).$promise;
 			};
 
-			this.getAgentsForSkill = function (data) {
-				return $resource('../api/Agents/ForSkill', {}, {
+			this.getAgentsForSkills = function (data) {
+				return $resource('../api/Agents/ForSkills', {}, {
 					query: {
 						method: 'GET',
 						isArray: true
 					}
 				}).query({
-					skillId: data.skillId,
+					skillIds: data.skillIds,
 				}).$promise;
 			};
 
-			this.getAgentsForSkillArea = function (data) {
-				return $resource('../api/Agents/ForSkillAreas', {}, {
-					query: {
-						method: 'GET',
-						isArray: true
-					}
-				}).query({
-					skillAreaId: data.skillAreaId
-				}).$promise;
-			};
-
-			this.getStatesForSkill = function (data) {
-				return $resource('../api/Agents/GetStatesForSkill', {}, {
+			this.getStatesForSkills = function (data) {
+				return $resource('../api/Agents/GetStatesForSkills', {}, {
 					query: {
 						method: 'GET'
 					}
 				}).query({
-					skillId: data.skillId
-				}).$promise;
-			};
-
-			this.getStatesForSkillArea = function (data) {
-				return $resource('../api/Agents/GetStatesForSkillArea', {}, {
-					query: {
-						method: 'GET'
-					}
-				}).query({
-					skillAreaId: data.skillAreaId
+					ids: data.skillIds
 				}).$promise;
 			};
 
@@ -105,24 +84,18 @@
 				}).$promise;
 			};
 
-			this.getAlarmStatesForSkill = function (data) {
-				return $resource('../api/Agents/GetAlarmStatesForSkill', {}, {
-					query: {
-						method: 'GET'
-					}
-				}).query({
-					skillId: data.skillId
-				}).$promise;
-			};
-
-			this.getAlarmStatesForSkillArea = function (data) {
-				return $resource('../api/Agents/GetAlarmStatesForSkillArea', {}, {
-					query: {
-						method: 'GET'
-					}
-				}).query({
-					skillAreaId: data.skillAreaId
-				}).$promise;
+			this.getAlarmStatesForSkills = function(data) {
+				return $resource('../api/Agents/GetAlarmStatesForSkills',
+					{},
+					{
+						query: {
+							method: 'GET'
+						}
+					})
+					.query({
+						ids: data.skillIds
+					})
+					.$promise;
 			};
 
 			this.getStatesForTeams = function (data) {
@@ -193,8 +166,8 @@
 				}).$promise;
 			};
 
-			this.getSkillAreaName = function (data) {
-				return $resource('../api/SkillAreas/NameFor', {}, {
+			this.getSkillArea = function (data) {
+				return $resource('../api/SkillArea/For', {}, {
 					query: {
 						method: 'GET'
 					}

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 
@@ -28,6 +29,23 @@ namespace Teleopti.Ccc.Domain.Intraday
 					IsDeleted = skill.IsDeleted
 				}).ToArray()
 			}).ToArray();
+		}
+
+		public SkillAreaViewModel Get(Guid skillAreaId)
+		{
+			var skillArea = _skillAreaRepository.Get(skillAreaId);
+
+			return new SkillAreaViewModel() 
+			{
+				Id = skillArea.Id.Value,
+				Name = skillArea.Name,
+				Skills = skillArea.Skills.Select(skill => new SkillInIntradayViewModel
+				{
+					Id = skill.Id,
+					Name = skill.Name,
+					IsDeleted = skill.IsDeleted
+				}).ToArray()
+			};
 		}
 	}
 }

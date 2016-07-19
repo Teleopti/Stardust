@@ -54,5 +54,29 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			mappedSkill.Name.Should().Be.EqualTo(skill.Name);
 			mappedSkill.IsDeleted.Should().Be.EqualTo(skill.IsDeleted);
 		}
+
+		[Test]
+		public void ShouldGetSingleViewModel()
+		{
+			var skillAreaId = Guid.NewGuid();
+			var skillId = Guid.NewGuid();
+			var existingSkillArea = new SkillArea
+			{
+				Name = "SkillAreaName",
+				Skills = new List<SkillInIntraday>
+				{
+					new SkillInIntraday { Id = skillId, Name = "Phone", IsDeleted = false }
+				}
+			}.WithId(skillAreaId);
+			SkillAreaRepository.Has(new SkillArea());
+			SkillAreaRepository.Has(existingSkillArea);
+
+			var result = Target.Get(skillAreaId);
+			
+			result.Name.Should().Be("SkillAreaName");
+			result.Skills.Single().Id.Should().Be(skillId);
+			result.Skills.Single().Name.Should().Be("Phone");
+			result.Skills.Single().IsDeleted.Should().Be(false);
+		}
 	}
 }

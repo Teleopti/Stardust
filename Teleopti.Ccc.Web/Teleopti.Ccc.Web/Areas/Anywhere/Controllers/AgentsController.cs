@@ -69,6 +69,12 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return Ok(_agentViewModelBuilder.ForTeams(teamIds).ToArray());
 		}
 
+		[UnitOfWork, HttpGet, Route("api/Agents/ForSkill")]
+		public virtual IHttpActionResult ForSkill([FromUri] SkillQuery query)
+		{
+			return Ok(_agentViewModelBuilder.ForSkill(query.SkillId));
+		}
+		
 		[UnitOfWork, HttpGet, Route("api/Agents/GetStates")]
 		public virtual IHttpActionResult GetStates(Guid teamId)
 		{
@@ -111,11 +117,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return Ok(_agentStatesBuilder.InAlarmForSkill(query.SkillId));
 		}
 
-		[UnitOfWork, HttpGet, Route("api/Agents/ForSkill")]
-		public virtual IHttpActionResult ForSkill([FromUri] SkillQuery query)
-		{
-			return Ok(_agentViewModelBuilder.ForSkill(query.SkillId));
-		}
 	}
 
 	public class StatesQuery

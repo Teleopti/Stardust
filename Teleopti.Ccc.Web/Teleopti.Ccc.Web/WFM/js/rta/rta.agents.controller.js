@@ -4,14 +4,15 @@
 	angular
 		.module('wfm.rta')
 		.controller('RtaAgentsCtrl', [
-			'$scope', '$filter', '$state', '$stateParams', '$interval', '$sessionStorage', 'RtaService', 'RtaGridService', 'RtaFormatService', 'RtaRouteService', 'FakeTimeService', 'Toggle', 'NoticeService', '$translate',
-			function($scope, $filter, $state, $stateParams, $interval, $sessionStorage, RtaService, RtaGridService, RtaFormatService, RtaRouteService, FakeTimeService, toggleService, NoticeService, $translate) {
+			'$scope', '$filter', '$state', '$stateParams', '$interval', '$sessionStorage', '$q', 'RtaService', 'RtaGridService', 'RtaFormatService', 'RtaRouteService', 'FakeTimeService', 'Toggle', 'NoticeService', '$translate',
+			function($scope, $filter, $state, $stateParams, $interval, $sessionStorage, $q, RtaService, RtaGridService, RtaFormatService, RtaRouteService, FakeTimeService, toggleService, NoticeService, $translate) {
 				var polling = null;
 				var selectedPersonId;
 				var siteIds = $stateParams.siteIds || ($stateParams.siteId ? [$stateParams.siteId] : []);
 				var teamIds = $stateParams.teamIds || ($stateParams.teamId ? [$stateParams.teamId] : []);
-				var skillId = $stateParams.skillId || undefined;
+				var skillIds = [$stateParams.skillId] || [];
 				var skillAreaId = $stateParams.skillAreaId || undefined;
+				var skillId = $stateParams.skillId || undefined;
 				var propertiesForFiltering = ["Name", "TeamName", "State", "Activity", "Alarm"];
 				$scope.adherence = {};
 				$scope.adherencePercent = null;
@@ -38,7 +39,7 @@
 
 				$scope.noSiteIds = siteIds.length == 0;
 				$scope.monitorBySkill = toggleService.RTA_MonitorBySkills_39081;
-				$scope.showBreadcrumb = skillId !== undefined ? false : true;
+				$scope.showBreadcrumb = skillIds !== [];
 				$scope.showGrid = !$scope.showBreadcrumb;
 				$scope.skillName = "";
 				$scope.skillAreaName = "";
@@ -120,29 +121,36 @@
 					}
 				);
 
-				var getAgents = (function () {
+				var getSkillAreaInfo = function() {
+					return RtaService.getSkillArea(skillAreaId)
+						.then(function(skillArea) {
+							$scope.skillAreaName = skillArea.Name || '?';
+							skillIds = skillArea.Skills.map(function(skill) { return skill.Id; });
+						});
+				}
+
+				var getAgents = (function() {
+					var deferred = $q.defer();
 					if (skillAreaId) {
-						return RtaService.getAgentsForSkillArea;
+						getSkillAreaInfo()
+							.then(function() {
+								deferred.resolve(RtaService.getAgentsForSkills);
+							});
+					} else if (skillIds.length > 0) {
+						deferred.resolve(RtaService.getAgentsForSkills);
+					} else if (teamIds.length > 0) {
+						deferred.resolve(RtaService.getAgentsForTeams);
+					} else {
+						deferred.resolve(RtaService.getAgentsForSites);
 					}
-					if (skillId) {
-						return RtaService.getAgentsForSkill;
-					}
-					if (teamIds.length > 0) {
-						return RtaService.getAgentsForTeams;
-					}
-					return RtaService.getAgentsForSites;
+					return deferred.promise;
 				})();
 
 				var getStates = function (inAlarm) {
-					if (skillAreaId) {
+					if (skillIds.length > 0) {
 						if (inAlarm)
-							return RtaService.getAlarmStatesForSkillArea;
-						return RtaService.getStatesForSkillArea;
-					}
-					if (skillId) {
-						if (inAlarm)
-							return RtaService.getAlarmStatesForSkill;
-						return RtaService.getStatesForSkill;
+							return RtaService.getAlarmStatesForSkills;
+						return RtaService.getStatesForSkills;
 					}
 					if (teamIds.length > 0) {
 						if (inAlarm)
@@ -178,19 +186,14 @@
 						});
 				}
 
-				if (skillAreaId) {
-					RtaService.getSkillAreaName(skillAreaId)
-						.then(function (skillArea) {
-							$scope.skillAreaName = skillArea.Name || '?';
-						});
-				}
-
-				if (siteIds.length > 0 || teamIds.length > 0 || skillId || skillAreaId) {
-					getAgents({
-							siteIds: siteIds,
-							teamIds: teamIds,
-							skillId: skillId,
-							skillAreaId: skillAreaId
+				if (siteIds.length > 0 || teamIds.length > 0 || skillIds.length > 0) {
+					getAgents
+						.then(function (fn) {
+							return fn({
+								siteIds: siteIds,
+								teamIds: teamIds,
+								skillIds: skillIds
+							});
 						})
 						.then(function(agentsInfo) {
 							$scope.agentsInfo = agentsInfo;
@@ -229,13 +232,12 @@
 				}
 
 				function updateStates() {
-					if ($scope.pause || !(siteIds.length > 0 || teamIds.length > 0 || skillId || skillAreaId))
+					if ($scope.pause || !(siteIds.length > 0 || teamIds.length > 0 || skillIds.length > 0))
 						return;
 					getStates($scope.agentsInAlarm)({
 							siteIds: siteIds,
 							teamIds: teamIds,
-							skillId: skillId,
-							skillAreaId: skillAreaId
+							skillIds: skillIds
 						})
 						.then(setStatesInAgents);
 				}

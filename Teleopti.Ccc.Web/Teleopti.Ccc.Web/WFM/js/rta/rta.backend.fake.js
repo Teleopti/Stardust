@@ -52,12 +52,11 @@
 				return [200, { Name: result[0] }];
 			});
 
-			fake(/\.\.\/api\/SkillAreas\/NameFor(.*)/,
+			fake(/\.\.\/api\/SkillArea\/For(.*)/,
 			function (params) {
 				var result = skillAreas
-				.filter(function (s) { return params.skillAreaId === s.Id })
-				.map(function (s) { return s.Name; });
-				return [200, { Name: result[0] }];
+				.filter(function (s) { return params.skillAreaId === s.Id });
+				return [200, result[0]];
 			});
 
 			fake(/\.\.\/api\/SkillAreas(.*)/,
@@ -89,14 +88,9 @@
 					return [200, agents.filter(function(a) { return params.siteIds.indexOf(a.SiteId) >= 0; })];
 				});
 
-			fake(/\.\.\/api\/Agents\/ForSkillAreas(.*)/,
+			fake(/\.\.\/api\/Agents\/ForSkills(.*)/,
 				function (params) {
-					return [200, agents.filter(function (a) { return params.skillAreaId === a.skillAreaId; })];
-				});
-
-			fake(/\.\.\/api\/Agents\/ForSkill(.*)/,
-				function (params) {
-					return [200, agents.filter(function (a) { return params.skillId === a.SkillId; })];
+					return [200, agents.filter(function (a) { return params.skillIds.indexOf(a.SkillId) >= 0; })];
 				});
 	
 			fake(/\.\.\/api\/Agents\/GetStatesForTeams(.*)/,
@@ -144,45 +138,23 @@
 						});
 					return [200, { Time: serverTime, States: result }];
 				});
-			fake(/\.\.\/api\/Agents\/GetStatesForSkillArea(.*)/,
-				function (params) {
-					var result = states.filter(function (s) {
-						var a = agents.find(function (a) { return a.PersonId === s.PersonId; });
-						return a != null && params.skillIdAreaId === a.skillIdAreaId ;
-					});
-					return [200, { Time: serverTime, States: result }];
-				});
 
-			fake(/\.\.\/api\/Agents\/GetStatesForSkill(.*)/,
+			fake(/\.\.\/api\/Agents\/GetStatesForSkills(.*)/,
 				function (params) {
 					var result = states.filter(function (s) {
 						var a = agents.find(function (a) { return a.PersonId === s.PersonId; });
-						return a != null && params.skillId === a.SkillId;
+						return a != null && params.ids.indexOf(a.SkillId) >= 0;
 					});
 					return [200, { Time: serverTime, States: result }];
 				});
 
 		
-			fake(/\.\.\/api\/Agents\/GetAlarmStatesForSkill(.*)/,
+			fake(/\.\.\/api\/Agents\/GetAlarmStatesForSkills(.*)/,
 				function (params) {
 					var result =
 						states.filter(function (s) {
 							var a = agents.find(function (a) { return a.PersonId === s.PersonId; });
-							return a != null && params.skillId === a.SkillId;
-						}).filter(function (s) {
-							return s.TimeInAlarm > 0;
-						}).sort(function (s1, s2) {
-							return s2.TimeInAlarm - s1.TimeInAlarm;
-						});
-					return [200, { Time: serverTime, States: result }];
-				});
-
-			fake(/\.\.\/api\/Agents\/GetAlarmStatesForSkillArea(.*)/,
-				function (params) {
-					var result =
-						states.filter(function (s) {
-							var a = agents.find(function (a) { return a.PersonId === s.PersonId; });
-							return a != null && params.skillIdAreaId === a.skillIdAreaId;
+							return a != null && params.ids.indexOf(a.SkillId) >= 0;
 						}).filter(function (s) {
 							return s.TimeInAlarm > 0;
 						}).sort(function (s1, s2) {

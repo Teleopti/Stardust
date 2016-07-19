@@ -21,7 +21,12 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 		private readonly IAuthorization _authorization;
 		private readonly MonitorSkillsProvider _monitorSkillsProvider;
 
-		public IntradaySkillAreaController(CreateSkillArea createSkillArea, FetchSkillArea fetchSkillArea, DeleteSkillArea deleteSkillArea, IAuthorization authorization, MonitorSkillsProvider monitorSkillsProvider, ISkillAreaRepository skillAreaRepository)
+		public IntradaySkillAreaController(CreateSkillArea createSkillArea, 
+			FetchSkillArea fetchSkillArea, 
+			DeleteSkillArea deleteSkillArea, 
+			IAuthorization authorization, 
+			MonitorSkillsProvider monitorSkillsProvider,
+			ISkillAreaRepository skillAreaRepository)
 		{
 			_createSkillArea = createSkillArea;
 			_fetchSkillArea = fetchSkillArea;
@@ -64,6 +69,13 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
             var skillIdList = skillArea.Skills.Select(skill => skill.Id).ToArray();
             return Ok(_monitorSkillsProvider.Load(skillIdList));
 		}
+
+		[UnitOfWork, HttpGet, Route("api/SkillArea/For")]
+		public virtual IHttpActionResult NameFor(Guid skillAreaId)
+		{
+			return Ok(_fetchSkillArea.Get(skillAreaId));
+		}
+
 	}
 
 	public class SkillAreaInfo

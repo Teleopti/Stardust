@@ -103,5 +103,40 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			result.TeamName.Should().Be("angel");
 			result.Name.Should().Be("123 - John Smith");
 		}
+
+		[Test]
+		public void ShouldGetAgentForSkillArea()
+		{
+			var skill = Guid.NewGuid();
+			var person = Guid.NewGuid();
+			var team = TeamFactory.CreateTeamWithId("angel");
+			var site = new Site("bla").WithId();
+			site.AddTeam(team);
+			SiteRepository.Has(site);
+			TeamRepository.Has(team);
+			CommonAgentNameProvider
+				.Has(new CommonNameDescriptionSetting { AliasFormat = "{EmployeeNumber} - {FirstName} {LastName}" });
+
+			GroupingReadOnlyRepository
+				.Has(new ReadOnlyGroupDetail
+				{
+					GroupId = skill,
+					PersonId = person,
+					SiteId = site.Id.Value,
+					TeamId = team.Id.Value,
+					FirstName = "John",
+					LastName = "Smith",
+					EmploymentNumber = "123"
+				});
+
+			var result = Target.ForSkill(skill).Single();
+
+			result.PersonId.Should().Be(person);
+			result.SiteId.Should().Be(site.Id.Value.ToString());
+			result.SiteName.Should().Be("bla");
+			result.TeamId.Should().Be(team.Id.Value.ToString());
+			result.TeamName.Should().Be("angel");
+			result.Name.Should().Be("123 - John Smith");
+		}
 	}
 }
