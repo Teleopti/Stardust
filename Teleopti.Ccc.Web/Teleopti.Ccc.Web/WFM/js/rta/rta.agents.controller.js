@@ -134,7 +134,11 @@
 				})();
 
 				var getStates = function (inAlarm) {
-					
+					if (skillAreaId) {
+						if (inAlarm)
+							return RtaService.getAlarmStatesForSkillArea;
+						return RtaService.getStatesForSkillArea;
+					}
 					if (skillId) {
 						if (inAlarm)
 							return RtaService.getAlarmStatesForSkill;
@@ -225,12 +229,13 @@
 				}
 
 				function updateStates() {
-					if ($scope.pause || !(siteIds.length > 0 || teamIds.length > 0 || skillId))
+					if ($scope.pause || !(siteIds.length > 0 || teamIds.length > 0 || skillId || skillAreaId))
 						return;
 					getStates($scope.agentsInAlarm)({
 							siteIds: siteIds,
 							teamIds: teamIds,
-							skillId: skillId
+							skillId: skillId,
+							skillAreaId: skillAreaId
 						})
 						.then(setStatesInAgents);
 				}

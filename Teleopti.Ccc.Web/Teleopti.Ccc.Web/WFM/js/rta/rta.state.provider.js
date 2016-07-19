@@ -112,24 +112,13 @@ angular.module('wfm.rta').provider('RtaState', function () {
 				url: '/agents-skill-area/:skillAreaId',
 				templateUrl: rtaAgentsBySkillsTemplate,
 				controller: 'RtaAgentsCtrl',
-				params: {
-					skillAreaIds: {
-						 array: true
-					}
-				}
 			})
 			.state('rta.agents-skill',
 			{
 				url: '/agents-skill/:skillId',
 				templateUrl: rtaAgentsBySkillsTemplate,
-				controller: 'RtaAgentsCtrl',
-				params: {
-					skillIds: {
-						 array: true
-					}
-				}
-			})
-			
+				controller: 'RtaAgentsCtrl'
+			})		
 			.state('rta.agent-details',
 			{
 				url: '/agent-details/:personId',

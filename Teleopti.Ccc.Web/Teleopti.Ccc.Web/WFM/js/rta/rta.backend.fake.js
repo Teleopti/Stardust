@@ -144,6 +144,14 @@
 						});
 					return [200, { Time: serverTime, States: result }];
 				});
+			fake(/\.\.\/api\/Agents\/GetStatesForSkillArea(.*)/,
+				function (params) {
+					var result = states.filter(function (s) {
+						var a = agents.find(function (a) { return a.PersonId === s.PersonId; });
+						return a != null && params.skillIdAreaId === a.skillIdAreaId ;
+					});
+					return [200, { Time: serverTime, States: result }];
+				});
 
 			fake(/\.\.\/api\/Agents\/GetStatesForSkill(.*)/,
 				function (params) {
@@ -154,6 +162,7 @@
 					return [200, { Time: serverTime, States: result }];
 				});
 
+		
 			fake(/\.\.\/api\/Agents\/GetAlarmStatesForSkill(.*)/,
 				function (params) {
 					var result =
@@ -168,6 +177,20 @@
 					return [200, { Time: serverTime, States: result }];
 				});
 
+			fake(/\.\.\/api\/Agents\/GetAlarmStatesForSkillArea(.*)/,
+				function (params) {
+					var result =
+						states.filter(function (s) {
+							var a = agents.find(function (a) { return a.PersonId === s.PersonId; });
+							return a != null && params.skillIdAreaId === a.skillIdAreaId;
+						}).filter(function (s) {
+							return s.TimeInAlarm > 0;
+						}).sort(function (s1, s2) {
+							return s2.TimeInAlarm - s1.TimeInAlarm;
+						});
+					return [200, { Time: serverTime, States: result }];
+				});
+			
 			fake(/ToggleHandler\/AllToggles(.*)/,
 				function (params) {
 					return [200, toggles];

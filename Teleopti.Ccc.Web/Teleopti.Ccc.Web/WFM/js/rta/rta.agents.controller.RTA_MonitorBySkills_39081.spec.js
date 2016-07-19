@@ -112,7 +112,7 @@ describe('RtaAgentsCtrlMonitorBySkills_39081', function () {
 		expect(scope.filteredData[0].State).toEqual("Break");
 	});
 
-	it('should show Name for skill area', function () {
+	it('should show name for skill area', function () {
 		stateParams.skillAreaId = "bb8d75b3-fdb4-484a-ae4c-9f0800e2f753";
 
 		$fakeBackend
@@ -129,7 +129,7 @@ describe('RtaAgentsCtrlMonitorBySkills_39081', function () {
 		expect(scope.skillAreaName).toEqual("my skill area 2");
 	});
 
-	it('should get agent for skillArea', function () {
+	it('should get agent for skill area', function () {
 
 		stateParams.skillAreaId = "f08d75b3-fdb4-484a-ae4c-9f0800e2f753";
 
@@ -150,4 +150,52 @@ describe('RtaAgentsCtrlMonitorBySkills_39081', function () {
 		expect(scope.agents[0].PersonId).toEqual("22610fe4-0130-4568-97de-9b5e015b2564");
 	});
 
+	it('should get state for skill area', function () {
+		stateParams.skillAreaId = "f08d75b3-fdb4-484a-ae4c-9f0800e2f753";
+		$fakeBackend
+				.withAgent({
+					PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+					SkillId: "d08d75b3-fdb4-484a-ae4c-9f0800e2f753",
+					skillAreaId: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753"
+				})
+				.withState({
+					PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+					State: "Ready"
+				});
+				
+		$controllerBuilder.createController()
+		.apply('agentsInAlarm = false');
+		expect(scope.agents[0].State).toEqual("Ready");
+	});
+
+	it('should state in alarm for skill area', function () {
+		stateParams.skillAreaId = "f08d75b3-fdb4-484a-ae4c-9f0800e2f753";
+		$fakeBackend.withAgent({
+				Name: "Ashley Andeen",
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				skillAreaId: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753"
+			})
+			.withState({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				State: "Break",
+				TimeInAlarm: 0
+			})
+			.withAgent({
+				Name: "Charley Caper",
+				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
+				skillAreaId: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753",
+			})
+			.withState({
+				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
+				State: "Break",
+				TimeInAlarm: 60
+			});
+
+		$controllerBuilder.createController()
+			.apply('agentsInAlarm = true');
+
+		expect(scope.filteredData.length).toEqual(1);
+		expect(scope.filteredData[0].Name).toEqual("Charley Caper");
+		expect(scope.filteredData[0].State).toEqual("Break");
+	});
 });
