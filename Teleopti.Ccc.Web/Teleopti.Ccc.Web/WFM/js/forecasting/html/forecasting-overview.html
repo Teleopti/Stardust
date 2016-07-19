@@ -63,36 +63,26 @@
 				<forecast-result-chart class="wfm-chart" chart-id="workload.ChartId" refresh-fn="workload.Refresh" selected-fn="workload.selectedDays" selected-day-count="workload.selectedDayCount"></forecast-result-chart>
 			</div>
 			<div class="con-footer">
-				<ul class="forecast-actions">
-					<li>
 						<button class="wfm-btn wfm-btn-invis-default" ng-click="nextStepAdvanced(workload)">
 							{{ 'Statistics' | translate }}
 							<md-tooltip>
 								{{ 'ViewChartTip' | translate }}
 							</md-tooltip>
 						</button>
-					</li>
-					<span>
-					<li>
-						<button class="wfm-btn forecast-modify-button wfm-btn-invis-disabled" ng-class="{'wfm-btn-invis-default': !disableModify(workload.selectedDayCount), 'wfm-btn-invis-disabled': disableModify(workload.selectedDayCount)}" ng-click="displayModifyModal(workload)" ng-disabled="disableModify(workload.selectedDayCount)">
-							{{ 'Modify' | translate }}
-							<span ng-bind="formatSelectedDayCount(workload.selectedDayCount)"></span>
+
+						<button class="wfm-btn forecast-modify-button" ng-class="{'wfm-btn-invis-primary': workload.selectedDayCount > 0,'wfm-btn-invis-disabled': workload.selectedDayCount < 1}"  ng-click="displayModifyModal(workload)" >
+							<md-tooltip ng-if="workload.selectedDayCount < 1">
+								{{ 'SelectToModify' | translate }}
+							</md-tooltip>
+								{{ 'Modify' | translate }} <span ng-bind="formatSelectedDayCount(workload.selectedDayCount)"></span>
 						</button>
-					</li>
-					<md-tooltip ng-if="disableModify(workload.selectedDayCount)">
-						{{ 'SelectToModify' | translate }}
-					</md-tooltip>
-				</span>
-					<li>
+
 						<button class="wfm-btn wfm-btn-invis-disabled forecast-workload" ng-click="displayForecastingModal(workload)" ng-class="{'wfm-btn-invis-default': workload.forecastResultLoaded && !disableDoForecast(), 'wfm-btn-invis-disabled': !workload.forecastResultLoaded || disableDoForecast()}" ng-disabled="!workload.forecastResultLoaded || disableDoForecast()">
 							{{ 'ForecastDo' | translate }}
 							<md-tooltip>
 								{{ 'GenerateForecastTip' | translate }}
 							</md-tooltip>
 						</button>
-					</li>
-				</ul>
-
 			</div>
 		</card-body>
 	</wfm-card>

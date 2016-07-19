@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
         [When(@"I select to modify the forecast")]
 		public void WhenISelectToModifyTheForecast()
 		{
-			Browser.Interactions.Click(".forecast-modify-button.wfm-btn-invis-default");
+			Browser.Interactions.Click(".forecast-modify-button");
 		}
 
 		[When(@"I select to override forecasted values")]
