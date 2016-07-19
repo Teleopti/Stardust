@@ -260,7 +260,7 @@ function SetDefaultSettings{
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(ETLPM_BINDING_NAME)" -content "`$(ETLPM_BINDING_NAME)|Etl_Pm_Https_Binding"	
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(URL)" -content "`$(URL)|https://$DataSourceName.teleopticloud.com/Web/"
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(STARDUST)" -content "`$(STARDUST)|http://$theHost"
-	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(UrlAuthenticationBridge)" -content "`$(UrlAuthenticationBridge)|https://$DataSourceName.teleopticloud.com/AuthenticationBridge/"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(UrlAuthenticationBridge)" -content "`$(UrlAuthenticationBridge)|https://$DataSourceName.teleopticloud.com/authenticationbridge/"
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(WEB_DEPLOY)" -content "`$(WEB_DEPLOY)|true"
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(DNS_ALIAS)" -content "`$(DNS_ALIAS)|https://$DataSourceName.teleopticloud.com/"
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(NEXT_ACTIVITY_TIME_TO_STAY)" -content "`$(NEXT_ACTIVITY_TIME_TO_STAY)|30"
