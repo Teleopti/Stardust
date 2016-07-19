@@ -53,24 +53,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
         {
         }
 
-		public override IEnumerable<IEvent> PopAllEvents(INow now, DomainUpdateType? operation = null)
-		{
-			var events = base.PopAllEvents(now, operation).ToList();
-			if (!operation.HasValue) return events;
-			switch (operation)
+	    public override void NotifyDelete()
+	    {
+		    base.NotifyDelete();
+			AddEvent(new ActivityChangedEvent
 			{
-				case DomainUpdateType.Insert:
-				case DomainUpdateType.Update:
-				case DomainUpdateType.Delete:
-					events.Add(new ActivityChangedEvent
-					{
-						ActivityId = Id.GetValueOrDefault()
-					});
-					break;
-			}
-			return events;
+				ActivityId = Id.GetValueOrDefault()
+			});
 		}
-
+		
 		public virtual Description Description
 		{
             get

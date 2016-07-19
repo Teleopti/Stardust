@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			target.Handle(command);
 
-			var @event = personAssignment.PopAllEvents(new Now()).OfType<PersonAssignmentLayerRemovedEvent>().Single();
+			var @event = personAssignment.PopAllEvents().OfType<PersonAssignmentLayerRemovedEvent>().Single();
 			@event.PersonId.Should().Be(personRepository.Single().Id.Value);
 			@event.Date.Should().Be(new DateTime(2013, 11, 14));
 			@event.StartDateTime.Should().Be(otherActivityLayer.Period.StartDateTime);

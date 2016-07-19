@@ -461,21 +461,20 @@ namespace Teleopti.Ccc.Domain.Forecasting
             _isDeleted = true;
         }
 
-	    public override IEnumerable<IEvent> PopAllEvents(INow now, DomainUpdateType? operation = null)
+	    public override void NotifyTransactionComplete(DomainUpdateType operation)
 	    {
-		    var events = base.PopAllEvents(now, operation).ToList();
-		    switch (operation)
-		    {
-			    case DomainUpdateType.Insert:
-			    case DomainUpdateType.Update:
-			    case DomainUpdateType.Delete:
-					events.Add(new WorkloadChangedEvent
+		    base.NotifyTransactionComplete(operation);
+			switch (operation)
+			{
+				case DomainUpdateType.Insert:
+				case DomainUpdateType.Update:
+				case DomainUpdateType.Delete:
+					AddEvent(new WorkloadChangedEvent
 					{
 						WorkloadId = Id.GetValueOrDefault()
 					});
-				    break;
-		    }
-		    return events;
-	    }
+					break;
+			}
+		}
     }
 }

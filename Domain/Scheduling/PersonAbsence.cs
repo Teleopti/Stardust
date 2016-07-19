@@ -154,35 +154,26 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			AddEvent(personAbsenceModifiedEvent);
 		}
 
-		public override IEnumerable<IEvent> PopAllEvents(INow now, DomainUpdateType? operation = null)
+		public override void NotifyDelete()
 		{
-			var events = base.PopAllEvents(now, operation).ToList();
-			if (!operation.HasValue) return events;
-			if (operation == DomainUpdateType.Delete)
+			base.NotifyDelete();
+			var requestPersonAbsenceRemovedEvent = new RequestPersonAbsenceRemovedEvent()
 			{
-				var requestPersonAbsenceRemovedEvent = new RequestPersonAbsenceRemovedEvent()
-				{
-					PersonId = Person.Id.GetValueOrDefault(),
-					ScenarioId = Scenario.Id.GetValueOrDefault(),
-					StartDateTime = Period.StartDateTime,
-					EndDateTime = Period.EndDateTime,
-					LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()					
-				};
+				PersonId = Person.Id.GetValueOrDefault(),
+				ScenarioId = Scenario.Id.GetValueOrDefault(),
+				StartDateTime = Period.StartDateTime,
+				EndDateTime = Period.EndDateTime,
+				LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+			};
 
-				if (PersonRequest != null)
-				{
-					requestPersonAbsenceRemovedEvent.PersonRequestId = PersonRequest.Id.GetValueOrDefault();
-				}
-
-				events.Add(requestPersonAbsenceRemovedEvent);
+			if (PersonRequest != null)
+			{
+				requestPersonAbsenceRemovedEvent.PersonRequestId = PersonRequest.Id.GetValueOrDefault();
 			}
-			return events;
+
+			AddEvent(requestPersonAbsenceRemovedEvent);
 		}
-
-
-		/// <summary>
-		/// Constructor for NHibernate
-		/// </summary>
+		
 		protected PersonAbsence()
 		{
 		}
