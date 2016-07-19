@@ -185,6 +185,8 @@ var identity = (ITeleoptiIdentity) CurrentTeleoptiPrincipal.Make().Current().Ide
 						<!-- /ko -->
 					</div>
 					<!-- /ko -->
+					
+					<!-- ko if: HealthCheck_ReinitializeReadModels_39697 -->
 					<details>
 						<summary>Re-initialize readmodels</summary>
 						<p>Before re-initializing readmodels, please make sure to empty the readmodel tables. Otherwise, it will cause a system error. </p>
@@ -211,7 +213,7 @@ var identity = (ITeleoptiIdentity) CurrentTeleoptiPrincipal.Make().Current().Ide
 						</div>
 						<!-- /ko -->
 					</details>
-					
+					<!-- /ko -->
 					
 					<h3>Configured URL:s</h3>
 					<ul class="list-group" data-bind="foreach: configuredUrls">

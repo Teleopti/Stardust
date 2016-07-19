@@ -230,6 +230,7 @@ define([
 
 		var toggleIsEnabled;
 		self.HealthCheck_EasyValidateAndFixReadModels_39696 = ko.observable(false);
+		self.HealthCheck_ReinitializeReadModels_39697 = ko.observable(false);
 
 		var reinitReadModelsFunc;
 		self.reinitReadModels = function () {
@@ -269,9 +270,13 @@ define([
 				loadEtlHistory(true);
 			}
 			if (toggleIsEnabled) {
-				var toggleName = 'HealthCheck_EasyValidateAndFixReadModels_39696';
-				toggleIsEnabled(toggleName, function(toggleData) {
+				var toggleNameFor39696 = 'HealthCheck_EasyValidateAndFixReadModels_39696';
+				var toggleNameFor39697 = 'HealthCheck_ReinitializeReadModels_39697';
+				toggleIsEnabled(toggleNameFor39696, function(toggleData) {
 					self.HealthCheck_EasyValidateAndFixReadModels_39696(toggleData.IsEnabled);
+				});
+				toggleIsEnabled(toggleNameFor39697, function (toggleData) {
+					self.HealthCheck_ReinitializeReadModels_39697(toggleData.IsEnabled);
 				});
 			}
 		}
