@@ -18,24 +18,32 @@
 				</div>
 				<div class="con-row demo-outline">
 								<div class="con-flex">
-												<div class="card-group">
-																<div class="wfm-card team rta-info-card" ng-if="team.NumberOfAgents > 0" ng-class="{good: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 33, warning: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 34 && getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 66, danger: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 67, 'rta-small-card': teams.length > 10}" ng-repeat="team in teams">
-																				<div class="wfm-checkbox">
-																								<label ng-attr-name="{{team.Name}}" style="width: 20px; height: 20px; display:block !important;">
-																												<input name="checkbox" ng-checked="selectedTeams.indexOf(team.Id) > -1" ng-click="toggleSelection(team.Id)" ng-model="selected" type="checkbox" value="value">
-																												<span class="wfm-checkbox-toggle"></span>
-																								</label>
-																				</div>
-																				<div class="rta-trigger-area" ng-click="onTeamSelect(team)">
-																								<p class="site-name" ng-attr-data-max="{{team.NumberOfAgents}}" ng-attr-data-value="{{team.OutOfAdherence}}">{{team.Name}}</p>
-																								<div class="site-data">
-																												<p>{{'OutOfAdherence'|translate}}:&nbsp;
-																																<p class="rta-adherence">{{team.OutOfAdherence}}</p>
-																												</p>
-																								</div>
+												<div class="wfm-grid">
+																<div class="grid-card team" ng-if="team.NumberOfAgents > 0" ng-repeat="team in teams" tabindex="0">
+																	<a ui-sref="rta.agents({siteId: siteId, teamId: team.Id})" class="rta-card-link">
+																				<div
+																								class="list-content"
+																								ng-class="{good: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 33, warning: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 34 && getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 66, danger: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 67}">
+																								<div class="wfm-checkbox">
+																												<label ng-attr-name="{{team.Name}}" ng-click="$event.stopPropagation()">
+																																<input type="checkbox" value="value" ng-checked="selectedSites.indexOf(team.Id) > -1" ng-click="toggleSelection(team.Id)" ng-model="selected"/>
+																																<span class="wfm-checkbox-toggle"></span>
+																																<b>
+																																				<span class="wfm-checkbox-label" ng-attr-data-max="{{team.NumberOfAgents}}" ng-attr-data-value="{{team.OutOfAdherence}}">
+																																								{{team.Name}}
+																																				</span>
+																																</b>
+																												</label>
+																								</br>
+																								<span class="full-padding">{{'OutOfAdherence'|translate}}:
+																												<b>{{team.OutOfAdherence}}</b>
+																								</span>
 																				</div>
 																</div>
+															</a>
 												</div>
 								</div>
+
 				</div>
+</div>
 </div>

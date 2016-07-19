@@ -8,25 +8,25 @@
 
 			$scope.getAdherencePercent = RtaFormatService.numberToPercent;
 			$scope.checkboxesChecked = 0;
-			var siteId = $stateParams.siteId;
+			$scope.siteId = $stateParams.siteId;
 			var selectedTeamIds = [];
 
-			RtaOrganizationService.getSiteName(siteId).then(function(name) {
+			RtaOrganizationService.getSiteName($scope.siteId).then(function(name) {
 				$scope.siteName = name;
 			});
 
 			var polling = $interval(function() {
 				RtaService.getAdherenceForTeamsOnSite({
-					siteId: siteId
+					siteId:	$scope.siteId
 				}).then(updateAdherence);
 			}, 5000);
 
 			RtaService.getTeams({
-				siteId: siteId
+				siteId: $scope.siteId
 			}).then(function(teams) {
 				$scope.teams = teams;
 				return RtaService.getAdherenceForTeamsOnSite({
-					siteId: siteId
+					siteId: $scope.siteId
 				});
 			}).then(function(teamAdherence) {
 				updateAdherence(teamAdherence);
@@ -57,7 +57,7 @@
 
 			$scope.onTeamSelect = function(team) {
 				$state.go('rta.agents', {
-					siteId: siteId,
+					siteId: $scope.siteId,
 					teamId: team.Id
 				});
 			};
