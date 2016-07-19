@@ -77,6 +77,7 @@
 		WfmTeamSchedule_ShowNightlyRestWarning_39619,
 		WebByPassDefaultPermissionCheck_37984,
 		WfmTeamSchedule_RevertToPreviousSchedule_39002,
+		WfmTeamSchedule_ModifyShiftCategory_39797,
 		WfmTeamSchedule_MakeNewMyTeamDefault_39744,
 
 		WfmReportPortal_Basic_38825,
