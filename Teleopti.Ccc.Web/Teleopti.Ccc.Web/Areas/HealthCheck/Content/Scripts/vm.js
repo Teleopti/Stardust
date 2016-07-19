@@ -137,7 +137,7 @@ define([
 			self.reinitReadModelsJobIsRunning(true);
 			self.reinitReadModelsJobPollingResult('anything');
 			pollJobStatus(jobId, function(data) {
-				self.readModelCheckAndFixJobPollingResult('anything');
+				self.reinitReadModelsJobPollingResult(data);
 				self.reinitReadModelsJobIsRunning(false);
 			});
 		}
