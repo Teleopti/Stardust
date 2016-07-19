@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
@@ -62,6 +63,13 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers
 			return _seatBookingReportProvider.Get(command);
 		}
 
+
+		[UnitOfWork, Route("api/SeatPlanner/SeatBookingSummaryForDay"), HttpGet]
+		public virtual SeatBookingSummary GetSeatBookingSummaryForDay(DateTime date)
+		{
+			return _seatBookingReportProvider.GetSummary(new DateOnly(date));
+		}
+		
 		[UnitOfWork, Route("api/SeatPlanner/Occupancy"), HttpPost]
 		public virtual ICollection<GroupedOccupancyViewModel> Get([FromBody]OccupancyListParameters occupancyListParameters)
 		{

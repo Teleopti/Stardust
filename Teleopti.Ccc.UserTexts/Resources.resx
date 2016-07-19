@@ -14710,4 +14710,28 @@ These options are activated:
     <value>Successfully changing shift categories for the selected agents</value>
     <comment>Succeed message for changing shift categories in wfm/teamschedule</comment>
   </data>
+  <data name="MultipleSeatsSelected" xml:space="preserve">
+  <value>(Multiple Seats Selected)</value>
+  <comment>Used in the properties panel within the seat map editor.  Gives a hint to the user that they cannot edit some seat properties as they have multiple seats selected.</comment>
+  </data>
+  <data name="SeatNumber" xml:space="preserve">
+    <value>Seat Number</value>
+    <comment>Used in the properties panel within the seat map editor.</comment>
+  </data>
+  <data name="AgentsDoNotRequireSeats" xml:space="preserve">
+    <value>Agents do not require seats</value>
+    <comment>Displayed on the Seat Plan page  in the Seat Booking Summary</comment>
+  </data>
+  <data name="AgentsWithoutBookings" xml:space="preserve">
+    <value>Agents without bookings</value>
+    <comment>Displayed on the Seat Plan page  in the Seat Booking Summary</comment>
+  </data>
+  <data name="SeatBookingSummary" xml:space="preserve">
+    <value>Seat booking summary</value>
+    <comment>Displayed on the Seat Plan page when selecting a day.</comment>
+  </data>
+  <data name="SuccessfulBookings" xml:space="preserve">
+    <value>Successful bookings</value>
+    <comment>Displayed on the Seat Plan page  in the Seat Booking Summary</comment>
+  </data>
 </root>

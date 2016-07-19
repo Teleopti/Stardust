@@ -53,38 +53,25 @@ angular.module('wfm.seatMap')
 
 		function remove(canvas) {
 			var activeObject = canvas.getActiveObject(),
-				activeGroup = canvas.getActiveGroup(),
-				removeObjectIds = [];
-
+				activeGroup = canvas.getActiveGroup();
 			if (activeGroup) {
 				canvas.discardActiveGroup();
-				removeObjectAndTidyReferences(canvas, activeGroup, removeObjectIds);
+				removeObjectAndTidyReferences(canvas, activeGroup);
 			}else if (activeObject) {
 				canvas.remove(activeObject);
-				removeObjectAndTidyReferences(canvas, activeObject, removeObjectIds);
-
-				if (!activeObject._objects) {
-					removeObjectIds.push(activeObject.id);
-				}
+				removeObjectAndTidyReferences(canvas, activeObject);
 			}
-
 			canvas.renderAll();
-
-			return removeObjectIds;
 		};
 
-		function removeObjectAndTidyReferences(canvas, obj, removeObjectIds) {
+		function removeObjectAndTidyReferences(canvas, obj) {
 			if (obj.get('type') == 'group') {
 				var objectsInGroup = obj.getObjects();
 				objectsInGroup.forEach(function (child) {
-					removeObjectAndTidyReferences(canvas, child, removeObjectIds);
-					
+					removeObjectAndTidyReferences(canvas, child);
 					canvas.remove(child);
-
-					if (child.get('type') == 'seat') {
-						removeObjectIds.push(child.id);
-					}
 				});
+				return;
 			}
 		};
 

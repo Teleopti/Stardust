@@ -69,11 +69,11 @@
 
 				<seatmap-occupancy-detail schedule-date="vm.selectedDate" refresh-seat-map="vm.refreshSeatMap()" ng-if="vm.showOccupancy"></seatmap-occupancy-detail>
 
-				<seatmap-object-property roles="vm.roles" seats="vm.activeSeats" ng-if="vm.showEditor"></seatmap-object-property>
+				<seatmap-object-property roles="vm.roles" seats="vm.activeSeats" update-seat-number="vm.updateSeatNumber(seat, newNumber)" ng-if="vm.showEditor"></seatmap-object-property>
 
 			</wfm-right-panel>
 
-			<wfm-right-panel panel-options="vm.prefixSuffixPanelOptions" on-open="vm.getRoles()">
+			<wfm-right-panel panel-options="vm.prefixSuffixPanelOptions">
 
 				<div class="con-row">
 					<div class="con-flex">

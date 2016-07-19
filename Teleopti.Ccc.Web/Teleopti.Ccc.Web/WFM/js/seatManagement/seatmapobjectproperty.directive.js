@@ -7,6 +7,8 @@
 	function seatmapObjectPropertyCtrl() {
 		var vm = this;
 
+		vm.seatNumber = 0;
+
 		vm.rolesStatus = function(role) {
 			var appliedRoleCount = 0;
 			role.Selected = false;
@@ -36,6 +38,12 @@
 				}
 			});
 		};
+
+		vm.onChangeOfSeatNumber = function () {
+			if (vm.seats.length === 1) {
+				vm.updateSeatNumber({ seat: vm.seats[0], newNumber: vm.seatNumber });
+			}
+		}
 	};
 
 	angular.module('wfm.seatMap').directive('seatmapObjectProperty', seatmapObjectProperty);
@@ -47,11 +55,30 @@
 			bindToController: true,
 			scope: {
 				roles: '=',
-				seats: '='
+				seats: '=',
+				updateSeatNumber: '&'
 			},
+			link: link,
 			templateUrl: 'js/seatManagement/html/objectproperty.html'
 		};
 	};
+
+
+	function link(scope, elem, attrs, vm) {
+		
+		scope.$watch(function() {
+			return scope.vm.seats;
+		}, function (seats) {
+			if (seats.length === 1) {
+				vm.seatNumber = parseInt(seats[0].Name);
+			} else {
+				vm.seatNumber = 0;
+			}
+
+		});
+
+	};
+
 })();
 
 

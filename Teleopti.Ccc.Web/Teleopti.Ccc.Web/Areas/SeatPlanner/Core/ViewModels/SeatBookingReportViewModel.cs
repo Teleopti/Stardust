@@ -13,4 +13,5 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels
 			TotalRecordCount = recordCount;
 		}
 	}
+	
 }

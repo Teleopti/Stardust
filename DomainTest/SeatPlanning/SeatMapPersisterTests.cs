@@ -249,6 +249,53 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		}
 
 		[Test]
+		public void ShouldUpdateNameAndPriorityForSeats()
+		{
+			var seatMapLocation = new SeatMapLocation();
+			const string seatMapData = @"{""objects"":[{""type"":""seat"",""originX"":""left"",""originY"":""top"",""left"":495,""top"":228.5,""width"":36,""height"":47,""fill"":""rgb(0,0,0)"",""stroke"":null,""strokeWidth"":1,""strokeDashArray"":null,""strokeLineCap"":""butt"",""strokeLineJoin"":""miter"",""strokeMiterLimit"":10,""scaleX"":1,""scaleY"":1,""angle"":0,""flipX"":false,""flipY"":false,""opacity"":1,""shadow"":null,""visible"":true,""clipTo"":null,""backgroundColor"":"""",""fillRule"":""nonzero"",""globalCompositeOperation"":""source-over"",""src"":""http://localhost:52858/Areas/SeatPlanner/Content/Images/seat.svg"",""filters"":[],""crossOrigin"":"""",""alignX"":""none"",""alignY"":""none"",""meetOrSlice"":""meet"",""id"":""f19f90e8-f629-237b-2493-f2ed39e5c13b"",""name"":""Unnamed seat"",""priority"":1}],""background"":""""}";
+
+			seatMapLocation.SetLocation(seatMapData, "rootLocation");
+			seatMapLocation.SetId(Guid.NewGuid());
+			var seat1 = seatMapLocation.AddSeat("1", 1);
+			var seat2 = seatMapLocation.AddSeat("2", 2);
+			_seatMapLocationRepository.Add(seatMapLocation);
+
+			var command = new SaveSeatMapCommand()
+			{
+				Id = seatMapLocation.Id,
+				SeatMapData = seatMapData,
+				Seats = new[]
+				{
+					new SeatInfo
+					{
+						Id = seat1.Id,
+						IsNew = false,
+						Name = "3",
+						Priority = 3
+					},
+					new SeatInfo
+					{
+						Id = seat2.Id,
+						IsNew = false,
+						Name = "4",
+						Priority = 4
+					}
+				}
+			};
+
+			_target.Save(command);
+
+			var loadedLocation = _seatMapLocationRepository.First() as SeatMapLocation;
+
+			loadedLocation.Seats[0].Name.Should().Be("3");
+			loadedLocation.Seats[0].Priority.Should().Be(3);
+			loadedLocation.Seats[1].Name.Should().Be("4");
+			loadedLocation.Seats[1].Priority.Should().Be(4);
+
+		}
+
+
+		[Test]
 		public void ShouldUpdateTemporaryLocationAndSeatMapIds()
 		{
 			const string dummyJsonData = @"{""objects"":[{""type"":""seat"",""originX"":""left"",""originY"":""top"",""left"":370,""top"":90.5,""width"":36,""height"":47,""fill"":""rgb(0,0,0)"",""stroke"":null,""strokeWidth"":1,""strokeDashArray"":null,""strokeLineCap"":""butt"",""strokeLineJoin"":""miter"",""strokeMiterLimit"":10,""scaleX"":1,""scaleY"":1,""angle"":0,""flipX"":false,""flipY"":false,""opacity"":1,""shadow"":null,""visible"":true,""clipTo"":null,""backgroundColor"":"""",""fillRule"":""nonzero"",""globalCompositeOperation"":""source-over"",""src"":""http://localhost:52858/Areas/SeatPlanner/Content/Images/seat.svg"",""filters"":[],""crossOrigin"":"""",""alignX"":""none"",""alignY"":""none"",""meetOrSlice"":""meet"",""guid"":""d9664f22-886b-f5bf-f799-7d59765c2604"",""name"":""Unnamed seat"",""priority"":1},{""type"":""seat"",""originX"":""left"",""originY"":""top"",""left"":565,""top"":90.5,""width"":36,""height"":47,""fill"":""rgb(0,0,0)"",""stroke"":null,""strokeWidth"":1,""strokeDashArray"":null,""strokeLineCap"":""butt"",""strokeLineJoin"":""miter"",""strokeMiterLimit"":10,""scaleX"":1,""scaleY"":1,""angle"":0,""flipX"":false,""flipY"":false,""opacity"":1,""shadow"":null,""visible"":true,""clipTo"":null,""backgroundColor"":"""",""fillRule"":""nonzero"",""globalCompositeOperation"":""source-over"",""src"":""http://localhost:52858/Areas/SeatPlanner/Content/Images/seat.svg"",""filters"":[],""crossOrigin"":"""",""alignX"":""none"",""alignY"":""none"",""meetOrSlice"":""meet"",""guid"":""8e48dd65-e68a-0834-fdc5-eae75f12065c"",""name"":""Unnamed seat"",""priority"":2}],""background"":""""}";

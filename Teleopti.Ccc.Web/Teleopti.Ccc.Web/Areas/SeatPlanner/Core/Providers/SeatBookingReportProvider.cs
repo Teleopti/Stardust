@@ -1,7 +1,9 @@
+using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.SeatPlanning;
 using Teleopti.Ccc.Infrastructure.SeatManagement;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
 using Teleopti.Interfaces.Domain;
@@ -42,6 +44,34 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 
 			return Get (crtieria);
 
+		}
+
+		public SeatBookingSummary GetSummary (DateOnly date)
+		{
+
+			var crtieria = new SeatBookingReportCriteria()
+			{
+				Teams = null,
+				Locations = null,
+				Period = new DateOnlyPeriod(date, date),
+				ShowOnlyUnseated = false
+			};
+
+			
+			var seatBookingSummary = new SeatBookingSummary();
+			var reportResult =  Get(crtieria);
+			if (reportResult == null || reportResult.SeatBookingsByDate.Count <= 0) return seatBookingSummary;
+			
+			var reportResultForDate = reportResult.SeatBookingsByDate[0];
+			foreach (var teamViewModel in reportResultForDate.Teams)
+			{
+				seatBookingSummary.NumberOfUnscheduledAgentDays += teamViewModel.SeatBookings.Count (model => model.IsDayOff || model.IsFullDayAbsence);
+				seatBookingSummary.NumberOfBookings += teamViewModel.SeatBookings.Count(model => model.SeatId != Guid.Empty);
+				seatBookingSummary.NumberOfScheduleDaysWithoutBookings +=teamViewModel.SeatBookings.Count (model => model.SeatId == Guid.Empty && !(model.IsDayOff || model.IsFullDayAbsence));
+			}
+
+			return seatBookingSummary;
+			
 		}
 
 		public SeatBookingReportViewModel Get (SeatBookingReportCriteria criteria, Paging paging = null)

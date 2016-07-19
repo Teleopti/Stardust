@@ -1844,6 +1844,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Agents do not require seats.
+        /// </summary>
+        public static string AgentsDoNotRequireSeats {
+            get {
+                return ResourceManager.GetString("AgentsDoNotRequireSeats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Agent Select.
         /// </summary>
         public static string AgentSelectDialog {
@@ -1894,6 +1903,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AgentState {
             get {
                 return ResourceManager.GetString("AgentState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Agents without bookings.
+        /// </summary>
+        public static string AgentsWithoutBookings {
+            get {
+                return ResourceManager.GetString("AgentsWithoutBookings", resourceCulture);
             }
         }
         
@@ -16289,6 +16307,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to (Multiple Seats Selected).
+        /// </summary>
+        public static string MultipleSeatsSelected {
+            get {
+                return ResourceManager.GetString("MultipleSeatsSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to (multiple values).
         /// </summary>
         public static string MultipleValuesParanteses {
@@ -25297,6 +25324,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Seat booking summary.
+        /// </summary>
+        public static string SeatBookingSummary {
+            get {
+                return ResourceManager.GetString("SeatBookingSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to seats.
         /// </summary>
         public static string SeatCountTitle {
@@ -25320,6 +25356,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SeatMap {
             get {
                 return ResourceManager.GetString("SeatMap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Seat Number.
+        /// </summary>
+        public static string SeatNumber {
+            get {
+                return ResourceManager.GetString("SeatNumber", resourceCulture);
             }
         }
         
@@ -28750,6 +28795,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Success {
             get {
                 return ResourceManager.GetString("Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successful bookings.
+        /// </summary>
+        public static string SuccessfulBookings {
+            get {
+                return ResourceManager.GetString("SuccessfulBookings", resourceCulture);
             }
         }
         

@@ -78,9 +78,10 @@
 
 		vm.addSeat = function () {
 			editor.addSeat(canvas(), false, afterAddSeat);
+
 		};
 
-		vm.addText = function() {
+		vm.addText = function () {
 			editor.addText(canvas(), $translate.instant('DoubleClickHereToEditText'));
 		};
 
@@ -95,7 +96,7 @@
 
 		vm.cut = function () {
 			editor.copy(canvas());
-			editor.remove(canvas());
+			vm.delete();
 		}
 
 		vm.group = function () {
@@ -151,17 +152,16 @@
 		};
 
 		vm.delete = function () {
-			var removeObjectIds = editor.remove(canvas());
-			vm.parentVm.seats = vm.parentVm.seats.filter(function (seat) {
-				return removeObjectIds.indexOf(seat.Id) == -1;
-			});
+			editor.remove(canvas());
+			updateSeatObjects();
 		};
+
 
 		vm.flip = function (horizontal) {
 			editor.flip(canvas(), horizontal);
 		}
 
-		vm.hasObjectSelected = function() {
+		vm.hasObjectSelected = function () {
 			return (canvas().getActiveObject() || canvas().getActiveGroup()) != null;
 		};
 
@@ -179,6 +179,19 @@
 		function canvas() {
 			return vm.parentVm.getCanvas();
 		};
+
+		function updateSeatObjects() {
+			var removedSeatIds = utils.getSeatsNotInArray(canvas(), vm.parentVm.seats);
+			
+			utils.updateSeatNumberOnDelete(canvas(), removedSeatIds, vm.parentVm.seats);
+
+			vm.parentVm.seats = vm.parentVm.seats.filter(function (seat) {
+				return removedSeatIds.indexOf(seat.Id) === -1;
+			});
+
+			
+		};
+
 
 		function afterAddSeat(newSeat) {
 			vm.parentVm.seats.push(newSeat);
@@ -281,7 +294,11 @@
 
 		function saveData() {
 			if (!vm.hasChanges()) return;
+
 			vm.parentVm.isLoading = true;
+
+			updateSeatObjects();
+
 
 			var data = {
 				SeatMapData: JSON.stringify(canvas()),

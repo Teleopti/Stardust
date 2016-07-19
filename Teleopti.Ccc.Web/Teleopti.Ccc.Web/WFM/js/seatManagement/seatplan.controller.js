@@ -44,7 +44,7 @@
 			return getServiceSafeDate(moment(dateMoment).add(1, 'months').endOf('month'));
 		};
 
-		vm.seatPlanStatusClass = ['seatplan-status-success', 'seatplan-status-inprogress', 'seatplan-status-error'];
+	//	vm.seatPlanStatusClass = ['seatplan-status-success', 'seatplan-status-inprogress', 'seatplan-status-error'];
 
 		vm.loadMonthDetails = function (date) {
 			var dateMoment = moment(date);
@@ -71,7 +71,8 @@
 				.$promise.then(function (data) {
 					vm.seatPlanDateStatuses = data;
 					vm.selectedDate = dateMoment.toDate();
-					vm.isLoadingCalendar = false;
+					//vm.isLoadingCalendar = false;
+					vm.loadSeatBookingInformation(moment(vm.selectedDate));
 				});
 		};
 
@@ -96,18 +97,37 @@
 		};
 
 		vm.onChangeOfDate = function () {
+
 			if (vm.currentMonth != moment(vm.selectedDate).month()) {
 				vm.loadMonthDetails(moment(vm.selectedDate));
+			} else {
+				vm.loadSeatBookingInformation(moment(vm.selectedDate));
 			}
+		
 		};
 
+		vm.loadSeatBookingInformation = function(date) {
+
+			vm.isLoadingCalendar = true;
+
+			var seatBookingParams = {
+				date: date.format('YYYY-MM-DD')
+			};
+
+			seatPlanService.seatBookingSummaryForDay.get(seatBookingParams).$promise.then(function (data) {
+				vm.seatBookingSummaryForDay = data;
+				vm.isLoadingCalendar = false;
+			});
+		};
+		
+
 		vm.onChangeOfMonth = function (date) {
+
 			if (vm.isLoadingCalendar) {
 				return;
 			}
 
 			vm.loadMonthDetails(date);
-
 		};
 
 		vm.onSeatPlanStart = function () {
@@ -151,6 +171,10 @@
 
 				if (moment(vm.selectedDate).isSame(dateEvent.Date, 'day')) {
 					dayInfoString = vm.seatPlanStatus[dateEvent.Status];
+					if (dayInfoString !== vm.seatPlanStatus[3]) {
+						dayInfoString = "SeatBookingSummary";
+					}
+
 				}
 			});
 
@@ -166,7 +190,7 @@
 				vm.seatPlanDateStatuses.forEach(function (status) {
 
 					if (dayToCheck.isSame(moment(status.Date), 'day')) {
-						dayClass = vm.seatPlanStatusClass[status.Status];
+						dayClass = 'seatplan-status-planned';
 					}
 				});
 			}
@@ -200,9 +224,14 @@
 		var date = (angular.isDefined(params.viewDate) && params.viewDate != "") ? params.viewDate : null;
 
 		if (date != null) {
-			vm.loadMonthDetails(moment(params.viewDate));
+
+			var paramDate = moment(params.viewDate);
+			vm.loadMonthDetails(paramDate);
+		
 		} else {
-			vm.loadMonthDetails(moment());
+			var paramDate = moment();
+			vm.loadMonthDetails(paramDate);
+		
 		}
 
 	}

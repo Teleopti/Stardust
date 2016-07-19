@@ -129,18 +129,22 @@ namespace Teleopti.Ccc.Domain.SeatPlanning
 			seatInfo.Id = seat.Id;
 		}
 
-		private void updateSeatProperties(SeatInfo[] seatsInfo, SeatMapLocation seatMapLocation)
+		private void updateSeatProperties (SeatInfo[] seatsInfo, SeatMapLocation seatMapLocation)
 		{
 			var roles = _roleRepository.LoadAll();
-			if (roles != null)
+
+			foreach (var seat in seatMapLocation.Seats)
 			{
-				foreach (var seat in seatMapLocation.Seats)
+				var matchedSeatInfo = seatsInfo.Single (seatInfo => seatInfo.Id == seat.Id);
+				if (roles != null)
 				{
-					var machedSeatInfo = seatsInfo.Single(seatInfo => seatInfo.Id == seat.Id);
-					var foundRoles = roles.Where(role => machedSeatInfo.RoleIdList.Contains(role.Id.Value)).ToList();
+					var foundRoles = roles.Where(role => matchedSeatInfo.RoleIdList.Contains(role.Id.Value)).ToList();
 					seat.SetRoles(foundRoles);
 				}
+				seat.Name = matchedSeatInfo.Name;
+				seat.Priority = matchedSeatInfo.Priority;
 			}
+
 		}
 
 		private void deleteRemovedSeats(SeatInfo[] seats, SeatMapLocation seatMapLocation)

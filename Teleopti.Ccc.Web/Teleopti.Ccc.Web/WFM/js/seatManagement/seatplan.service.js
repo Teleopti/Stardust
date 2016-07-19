@@ -35,6 +35,16 @@ angular.module('wfm.seatPlan')
 			}
 		);
 
+		seatPlanService.seatBookingSummaryForDay = $resource('../api/SeatPlanner/SeatBookingSummaryForDay?date=:date', {},
+			{
+				date: "@date"
+			},
+			{
+				get: { method: 'GET', params: {}, isArray: false }
+			}
+		);
+
+
 		return seatPlanService;
 
 	}]);

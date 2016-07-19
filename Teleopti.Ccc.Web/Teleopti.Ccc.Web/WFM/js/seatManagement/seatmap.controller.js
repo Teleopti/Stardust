@@ -142,6 +142,10 @@
 			vm.isDatePickerOpened = false;
 		};
 
+		vm.updateSeatNumber = function(seat, newNumber) {
+			canvasUtils.updateSeatNumber(canvas, seat, newNumber, vm.seats);
+		}
+
 		function onSaveSuccess() {
 			NoticeService.success('Seat map saved successfully.', 5000, false);
 			vm.refreshSeatMap();

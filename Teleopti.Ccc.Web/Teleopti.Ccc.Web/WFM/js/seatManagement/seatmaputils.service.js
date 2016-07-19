@@ -5,7 +5,6 @@
 		.factory('seatMapCanvasUtilsService', ['seatMapService', '$timeout', function (seatMapService, timeout) {
 
 			var utils = {
-
 				setupCanvas: setupCanvas,
 				resize: resize,
 				toggleMoveMode: toggleMoveMode,
@@ -22,6 +21,7 @@
 				getLocations: getLocations,
 				getActiveSeatObjects: getActiveSeatObjects,
 				getSeatBookingTimeDisplay: getSeatBookingTimeDisplay,
+				getSeatsNotInArray: getSeatsNotInArray,
 				getHighestSeatPriority: getHighestSeatPriority,
 				clearCanvas: clearCanvas,
 				loadSeatMap: loadSeatMap,
@@ -34,6 +34,8 @@
 				selectGroupOfObjects: selectGroupOfObjects,
 				ungroupObjectsSoTheyCanBeIndividuallySelected: ungroupObjectsSoTheyCanBeIndividuallySelected,
 				selectMultipleSeatsForScenarioTest: selectMultipleSeatsForScenarioTest,
+				updateSeatNumber: updateSeatNumber,
+				updateSeatNumberOnDelete : updateSeatNumberOnDelete
 			};
 
 			function matchFabricSeatToSeatObjects(fabricSeats, seatObjects, activeSeats) {
@@ -396,7 +398,7 @@
 				}
 
 				var seatsIdAndPriorityDic = {};
-				data.Seats.forEach(function(seatInfo) {
+				data.Seats.forEach(function (seatInfo) {
 					seatsIdAndPriorityDic[seatInfo.Id] = seatInfo.Priority;
 				});
 
@@ -436,12 +438,28 @@
 
 			}
 
+			function getSeatsNotInArray(canvas, seats) {
+				var seatDict = getObjectsByTypeDict(canvas, 'seat');
+
+				seats.sort(function (a, b) { return parseInt(b.Priority) - parseInt(a.Priority) });
+
+				var deletedSeats = [];
+				seats.forEach(function (seat) {
+					if (seatDict[seat.Id] == null) {
+						deletedSeats.push(seat.Id);
+					}
+				});
+
+				return deletedSeats;
+			}
+
+
 			function showSeatBooking(canvas, seatInfo) {
 				if (seatInfo == undefined)
 					return;
 				var occupiedSeatObjects = [];
 				var seatDict = getObjectsByTypeDict(canvas, 'seat');
-				
+
 				seatInfo.forEach(function (seat) {
 					if (seat.IsOccupied) {
 						var occupiedSeat = seatDict[seat.Id];
@@ -519,7 +537,7 @@
 				// translate the group-relative coordinates to canvas relative ones
 				group._restoreObjectsState();
 				canvas.remove(group);
-			
+
 				for (var i = 0; i < items.length; i++) {
 					canvas.add(items[i]);
 				}
@@ -544,7 +562,7 @@
 				getAllGroups(canvas).forEach(function (group) {
 					deepUnGroup(canvas, group);
 				});
-				
+
 				setSelectionMode(canvas, true);
 			};
 
@@ -563,6 +581,75 @@
 				canvas._activeObject = null;
 
 				canvas.setActiveGroup(group.setCoords()).renderAll();
+			}
+
+
+			function updateSeatInformation(canvas, seat, number) {
+				var fabricSeat = getSeatObjectById(canvas, seat.Id);
+				if (fabricSeat != null) {
+					seat.Name = seat.Priority = fabricSeat.name = fabricSeat.priority = number;
+
+					return true;
+				}
+
+				return false;
+			};
+
+			function updateSeatNumber(canvas, seat, newNumber, allSeats) {
+
+				if (!updateSeatInformation(canvas, seat, newNumber)) {
+					return false;
+				};
+
+				allSeats.sort(function (a, b) { return a.Name - b.Name });
+
+				allSeats.forEach(function (seatObj) {
+
+					//if there is a seat with that number, then increment
+					var seatNumber = parseInt(seatObj.Name);
+					if (seatNumber === newNumber && seatObj.Id !== seat.Id) {
+
+						updateSeatInformation(canvas, seatObj, seatNumber + 1);
+
+						
+						newNumber++;
+
+					}
+				});
+
+				canvas.renderAll();
+			};
+
+
+			function updateSeatNumberOnDelete(canvas, removedSeatIds, allSeats) {
+
+				allSeats.sort(function (a, b) { return parseInt(a.Priority) - parseInt(b.Priority) });
+
+				removedSeatIds.forEach(function (removedSeatId) {
+					var deletedSeatObj = null;
+					var previousSeatNumber = 0;
+
+					for (var i = 0; i < allSeats.length; i++) {
+						var seatObj = allSeats[i];
+
+						if (seatObj.Id === removedSeatId) {
+							deletedSeatObj = seatObj;
+							previousSeatNumber = parseInt(seatObj.Priority);
+							continue;
+						}
+
+						if (deletedSeatObj != null) {
+							var seatNumber = parseInt(seatObj.Priority);
+							// update seat number only when it's continuous
+							if (seatNumber === ++previousSeatNumber) {
+								updateSeatInformation(canvas, seatObj, seatNumber - 1);
+							}
+						}
+					};
+
+				});
+
+				canvas.renderAll();
 			}
 
 
