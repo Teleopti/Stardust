@@ -29,9 +29,7 @@
 					vm.updatePersonSelection(personSchedule);
 				});
 			});
-
 		};
-		vm.init = init;
 
 		$scope.$watch(function () {
 			return ScheduleMgmt.groupScheduleVm.Schedules;
@@ -70,7 +68,6 @@
 			return true;
 		};
 
-
 		vm.ToggleProjectionSelection = function (currentProjection, personSchedule, shift, viewDate) {
 			if (!vm.canToggleSelection(currentProjection, shift, viewDate)) return;
 			currentProjection.ToggleSelection();
@@ -105,9 +102,12 @@
 			return isAllSelected;
 		}
 
-		function init() {
+		vm.init = function () {
 			vm.toggleAllInCurrentPage = isAllInCurrentPageSelected();
 			vm.scheduleVm = ScheduleMgmt.groupScheduleVm;
-		}
+			vm.toggles = {
+				ModifyShiftCategoryEnabled: toggleSvc.WfmTeamSchedule_ModifyShiftCategory_39797
+			};
+		};
 	};
 }());

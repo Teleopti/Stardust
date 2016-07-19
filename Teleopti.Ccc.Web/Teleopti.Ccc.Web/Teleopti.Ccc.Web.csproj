@@ -1468,6 +1468,7 @@
     <Content Include="WFM\js\teamSchedule\html\addActivityTimeRangePicker.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\addPersonalActivity.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\commandConfirmDialog.tpl.html" />
+    <Content Include="WFM\js\teamSchedule\html\modifyShiftCategory.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\moveActivity.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\commandMenu.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\scheduletable.html" />
@@ -1482,6 +1483,7 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.cmd.addActivity.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.cmd.addPersonalActivity.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.cmd.addPersonalActivity.spec.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.directive.cmd.modifyShiftCategory.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.cmd.moveActivity.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.cmd.moveActivity.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.cmd.undoSchedule.js" />
@@ -1555,6 +1557,7 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.scenarioTestUtil.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.scheduleManagement.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.scheduleManagement.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.service.shiftCategory.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.swapShifts.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.validateRules.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.shiftHelpers.js" />

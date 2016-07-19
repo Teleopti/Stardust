@@ -88,6 +88,14 @@
 				visible: function () { return vm.canActiveRemoveActivity(); }
 			},
 			{
+				label: "EditShiftCategory",
+				shortcut: "Alt+C",
+				keys: [[keyCodes.C], [keyCodes.ALT]],
+				action: buildAction("EditShiftCategory", true),
+				clickable: function () { return vm.canModifyShiftCategory(); },
+				visible: function () { return vm.canActiveModifyShiftCategory(); }
+			},
+			{
 				label: "Undo",
 				shortcut: "Alt+U",
 				keys: [[keyCodes.U], [keyCodes.ALT]],
@@ -97,13 +105,6 @@
 			}
 		];
 
-		vm.canUndoSchedule = function () {
-			return personSelectionSvc.anyAgentChecked();
-		};
-
-		vm.canActiveUndoScheduleCmd = function () {
-			return vm.toggles.UndoScheduleEnabled;
-		}
 
 		vm.canActiveAddActivity = function () {
 			return vm.toggles.AddActivityEnabled && vm.permissions.HasAddingActivityPermission;
@@ -134,6 +135,14 @@
 			return vm.toggles.SwapShiftEnabled && vm.permissions.IsSwapShiftsAvailable;
 		};
 
+		vm.canActiveModifyShiftCategory = function(){
+			return vm.toggles.ModifyShiftCategoryEnabled;
+		};
+
+		vm.canActiveUndoScheduleCmd = function () {
+			return vm.toggles.UndoScheduleEnabled;
+		};
+
 		vm.canMoveActivity = function () {
 			return personSelectionSvc.isAnyAgentSelected() &&
 				!(personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedAbsenceInfo.AbsenceCount > 0) &&
@@ -148,6 +157,13 @@
 			return personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.ActivityCount > 0;
 		};
 
+		vm.canModifyShiftCategory = function (){
+			return personSelectionSvc.anyAgentChecked();
+		};
+
+		vm.canUndoSchedule = function () {
+			return personSelectionSvc.anyAgentChecked();
+		};
 
 		function registerShortCuts() {
 			vm.commands.forEach(function (cmd) {
@@ -173,6 +189,7 @@
 					|| vm.canActiveRemoveActivity()
 					|| vm.canActiveMoveActivity()
 					|| vm.canActiveAddPersonalActivity()
+					|| vm.canActiveEditShiftCategory()
 					|| vm.canActiveUndoScheduleCmd()
 				;
 			};
