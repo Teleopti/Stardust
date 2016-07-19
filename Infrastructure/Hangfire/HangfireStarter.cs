@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			});
 			GlobalJobFilters.Filters.Add(new JobExpirationTimeAttribute
 			{
-				JobExpirationTimeoutSeconds = jobExpiration
+				JobExpirationTimeoutSeconds = (int) jobExpiration
 			});
 
 
