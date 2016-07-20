@@ -65,6 +65,7 @@ RTA_MonitorBySkills_39081 = true
 RTA_RecentOutOfAdherences_39145 = RC
 RTA_Optimize_39667 = RC
 RTA_MonitorBySkillArea_39337 = DEV
+RTA_RuleMappingOptimization_39812 = false
 
 WfmPeople_AdjustSkill_34138 = true
 MyTimeWeb_KeepUrlAfterLogon_34762 = true

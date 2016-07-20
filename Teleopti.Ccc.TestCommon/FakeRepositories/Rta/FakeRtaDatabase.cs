@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 	public class FakeRtaDatabase : IDatabaseReader
 	{
 		private readonly INow _now;
+		private readonly FakeDatabase _database;
 		private readonly FakeAgentStateReadModelPersister _agentStateReadModels;
 		private readonly FakeAgentStatePersister _agentStates;
 		private readonly FakeRtaStateGroupRepository _rtaStateGroupRepository;
@@ -59,13 +60,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		}
 		private readonly List<scheduleLayer2> _schedules = new List<scheduleLayer2>();
 
-		private BusinessUnit _businessUnit;
-		private Guid _businessUnitId;
-		private string _platformTypeId;
-		private RtaRule _rtaRule;
-
 		public FakeRtaDatabase(
 			INow now,
+			FakeDatabase database,
 			FakeAgentStateReadModelPersister agentStateReadModels,
 			FakeAgentStatePersister agentStates,
 			FakeRtaStateGroupRepository rtaStateGroupRepository,
@@ -75,6 +72,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			)
 		{
 			_now = now;
+			_database = database;
 			_agentStateReadModels = agentStateReadModels;
 			_agentStates = agentStates;
 			_rtaStateGroupRepository = rtaStateGroupRepository;
@@ -85,7 +83,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			withTenant("default", LegacyAuthenticationKey.TheKey);
 			WithBusinessUnit(Guid.NewGuid());
 			WithSource(new ExternalUserStateForTest().SourceId);
-			withPlatform(new Guid(new ExternalUserStateForTest().PlatformTypeId));
+			WithPlatform(new Guid(new ExternalUserStateForTest().PlatformTypeId));
 		}
 
 		public AgentState StoredState => _agentStates.GetAll().SingleOrDefault();
@@ -95,16 +93,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		
 		public FakeRtaDatabase WithPlatform(Guid platformTypeId)
 		{
-			withPlatform(platformTypeId);
+			_database.WithPlatform(platformTypeId);
 			return this;
-		}
-		
-		private Guid withPlatform(Guid? platformTypeId)
-		{
-			if (!platformTypeId.HasValue)
-				return new Guid(_platformTypeId);
-			_platformTypeId = platformTypeId.Value.ToString();
-			return platformTypeId.Value;
 		}
 		
 		public FakeRtaDatabase WithTenant(string key)
@@ -141,9 +131,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public FakeRtaDatabase WithBusinessUnit(Guid businessUnitId)
 		{
-			_businessUnitId = businessUnitId;
-			_businessUnit = new BusinessUnit(".");
-			_businessUnit.SetId(_businessUnitId);
+			_database.WithBusinessUnit(businessUnitId);
 			return this;
 		}
 
@@ -166,7 +154,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				Data = new PersonOrganizationData
 				{
 					PersonId = personId,
-					BusinessUnitId = _businessUnitId,
+					BusinessUnitId = _database.CurrentBusinessUnitId(),
 					TeamId = teamId.Value,
 					SiteId = siteId.Value
 				}
@@ -204,67 +192,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public FakeRtaDatabase WithRule(Guid? ruleId, string stateCode, Guid? platformTypeId, Guid? activityId, int staffingEffect, string name, Adherence? adherence)
 		{
-			_rtaRule = null;
-			if (ruleId != null)
-			{
-				_rtaRule = new RtaRule();
-				if (name != null)
-					_rtaRule.Description = new Description(name);
-				_rtaRule.SetId(ruleId);
-				_rtaRule.SetBusinessUnit(_businessUnit);
-				_rtaRule.StaffingEffect = staffingEffect;
-				_rtaRule.Adherence = adherence;
-			}
-
-			IRtaStateGroup stateGroup = null;
-			if (stateCode != null)
-			{
-				stateGroup = (
-					from g in _rtaStateGroupRepository.LoadAll()
-					from s in g.StateCollection
-					where s.StateCode == stateCode &&
-						  s.PlatformTypeId == withPlatform(platformTypeId)
-					select g
-					).FirstOrDefault();
-				if (stateGroup == null)
-				{
-					var isDefaultStateGroup = _rtaStateGroupRepository.LoadAll().IsEmpty();
-					stateGroup = new RtaStateGroup(name, isDefaultStateGroup, true);
-					stateGroup.SetId(Guid.NewGuid());
-					stateGroup.SetBusinessUnit(_businessUnit);
-					stateGroup.AddState(null, stateCode, withPlatform(platformTypeId));
-					_rtaStateGroupRepository.Add(stateGroup);
-				}
-			}
-
-			IActivity activity = null;
-			if (activityId != null)
-			{
-				activity = new Activity(stateCode ?? "activity");
-				activity.SetId(activityId);
-				activity.SetBusinessUnit(_businessUnit);
-			}
-
-			var mapping = new RtaMap(stateGroup, activity) {RtaRule = _rtaRule};
-			mapping.SetId(Guid.NewGuid());
-			mapping.SetBusinessUnit(_businessUnit);
-			_rtaMapRepository.Add(mapping);
-
+			_database.WithRule(ruleId, stateCode, platformTypeId, activityId, staffingEffect, name, adherence);
 			return this;
 		}
 
 		public FakeRtaDatabase WithMapWithStateGroupWithoutStateCodes()
 		{
-			var stateGroup = new RtaStateGroup("Empty", false, true);
-			stateGroup.SetId(Guid.NewGuid());
-			stateGroup.SetBusinessUnit(_businessUnit);
-			_rtaStateGroupRepository.Add(stateGroup);
-
-			var mapping = new RtaMap(stateGroup, null) {RtaRule = _rtaRule};
-			mapping.SetId(Guid.NewGuid());
-			mapping.SetBusinessUnit(_businessUnit);
-			_rtaMapRepository.Add(mapping);
-
+			_database.WithMapWithStateGroupWithoutStateCodes();
 			return this;
 		}
 
@@ -282,8 +216,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public FakeRtaDatabase WithAlarm(TimeSpan threshold)
 		{
-			_rtaRule.IsAlarm = true;
-			_rtaRule.ThresholdTime = threshold;
+			_database.WithAlarm(threshold);
 			return this;
 		}
 
@@ -297,9 +230,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_agentStates.Has(new AgentState
 			{
 				PersonId = personId,
-				BusinessUnitId = _businessUnitId,
+				BusinessUnitId = _database.CurrentBusinessUnitId(),
 				TeamId = teamId,
-				PlatformTypeId = new Guid(_platformTypeId),
+				PlatformTypeId = _database.CurrentPlatform(),
 				StateCode = stateCode,
 				StaffingEffect = 0,
 				SourceId = new ExternalUserStateForTest().SourceId

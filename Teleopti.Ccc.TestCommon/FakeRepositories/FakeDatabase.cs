@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -15,6 +16,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
@@ -187,6 +189,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly FakeCommonAgentNameProvider _commonAgentNameProvider;
 		private readonly FakeSkillRepository _skills;
 		private readonly FakeGroupingReadOnlyRepository _groupings;
+		private readonly FakeRtaStateGroupRepository _stateGroups;
+		private readonly FakeRtaMapRepository _mappings;
 
 		private BusinessUnit _businessUnit;
 		private Site _site;
@@ -202,6 +206,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private PersonAbsence _personAbsence;
 		private Activity _activity;
 		private Skill _skill;
+		private Guid? _platform;
+		private RtaStateGroup _stateGroup;
+		private RtaRule _rtaRule;
 
 		public static string DefaultTenantName = "default";
 		public static Guid DefaultBusinessUnitId = Guid.NewGuid();
@@ -228,7 +235,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			FakeActivityRepository activities,
 			FakeCommonAgentNameProvider commonAgentNameProvider,
 			FakeSkillRepository skills,
-			FakeGroupingReadOnlyRepository groupings
+			FakeGroupingReadOnlyRepository groupings,
+			FakeRtaStateGroupRepository stateGroups,
+			FakeRtaMapRepository mappings
 			)
 		{
 			_tenants = tenants;
@@ -252,6 +261,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_commonAgentNameProvider = commonAgentNameProvider;
 			_skills = skills;
 			_groupings = groupings;
+			_stateGroups = stateGroups;
+			_mappings = mappings;
 			createDefaultData();
 		}
 		
@@ -284,6 +295,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 			WithTenant(DefaultTenantName, LegacyAuthenticationKey.TheKey);
 			WithBusinessUnit(DefaultBusinessUnitId);
+		}
+
+		public Guid CurrentBusinessUnitId()
+		{
+			ensureExists(_businessUnits, null, () => WithBusinessUnit(null));
+			return _businessUnit.Id.Value;
+		}
+
+		public Guid CurrentPlatform()
+		{
+			ensurePlatformExists(null);
+			return _platform.Value;
 		}
 
 		public FakeDatabase WithTenant(string tenant, string rtaKey)
@@ -498,7 +521,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			ensureExists(_skills, skillId, () => withSkill(skillId));
 			_person.AddSkill(_skill, DefaultPersonPeriodStartDate.Date());
-			
 			return this;
 		}
 
@@ -523,6 +545,116 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 					LastName = _person.Name.LastName
 				});
 			return this;
+		}
+
+		public FakeDatabase WithPlatform(Guid? platform)
+		{
+			_platform = platform ?? Guid.NewGuid();
+			return this;
+		}
+		
+		public FakeDatabase WithStateGroup(Guid? id)
+		{
+			_stateGroup = new RtaStateGroup(RandomName.Make());
+			_stateGroup.SetId(id ?? Guid.NewGuid());
+			_stateGroups.Has(_stateGroup);
+			return this;
+		}
+
+		public FakeDatabase WithStateCode(string stateCode)
+		{
+			ensureExists(_stateGroups, null, () => this.WithStateGroup(null));
+			_stateGroup.AddState(stateCode, stateCode, Guid.Empty);
+			return this;
+		}
+
+		public FakeDatabase WithRule(Guid? ruleId, string stateCode, Guid? platformTypeId, Guid? activityId, int staffingEffect, string name, Adherence? adherence)
+		{
+			ensurePlatformExists(platformTypeId);
+			ensureExists(_businessUnits, null, () => WithBusinessUnit(null));
+
+			_rtaRule = null;
+			if (ruleId != null)
+			{
+				_rtaRule = new RtaRule();
+				if (name != null)
+					_rtaRule.Description = new Description(name);
+				_rtaRule.SetId(ruleId);
+				_rtaRule.SetBusinessUnit(_businessUnit);
+				_rtaRule.StaffingEffect = staffingEffect;
+				_rtaRule.Adherence = adherence;
+			}
+
+			IRtaStateGroup stateGroup = null;
+			if (stateCode != null)
+			{
+				stateGroup = (
+					from g in _stateGroups.LoadAll()
+					from s in g.StateCollection
+					where s.StateCode == stateCode &&
+						  s.PlatformTypeId == _platform
+					select g
+					).FirstOrDefault();
+				if (stateGroup == null)
+				{
+					var isDefaultStateGroup = _stateGroups.LoadAll().IsEmpty();
+					stateGroup = new RtaStateGroup(name, isDefaultStateGroup, true);
+					stateGroup.SetId(Guid.NewGuid());
+					stateGroup.SetBusinessUnit(_businessUnit);
+					stateGroup.AddState(null, stateCode, _platform.Value);
+					_stateGroups.Add(stateGroup);
+				}
+			}
+
+			IActivity activity = null;
+			if (activityId != null)
+			{
+				activity = new Activity(stateCode ?? "activity");
+				activity.SetId(activityId);
+				activity.SetBusinessUnit(_businessUnit);
+				_activities.Add(activity);
+			}
+
+			var mapping = new RtaMap(stateGroup, activity) { RtaRule = _rtaRule };
+			mapping.SetId(Guid.NewGuid());
+			mapping.SetBusinessUnit(_businessUnit);
+			_mappings.Add(mapping);
+
+			return this;
+		}
+
+		public FakeDatabase WithMapWithStateGroupWithoutStateCodes()
+		{
+			var stateGroup = new RtaStateGroup("Empty", false, true);
+			stateGroup.SetId(Guid.NewGuid());
+			stateGroup.SetBusinessUnit(_businessUnit);
+			_stateGroups.Add(stateGroup);
+
+			var mapping = new RtaMap(stateGroup, null) { RtaRule = _rtaRule };
+			mapping.SetId(Guid.NewGuid());
+			mapping.SetBusinessUnit(_businessUnit);
+			_mappings.Add(mapping);
+
+			return this;
+		}
+
+		public FakeDatabase WithAlarm(TimeSpan threshold)
+		{
+			_rtaRule.IsAlarm = true;
+			_rtaRule.ThresholdTime = threshold;
+			return this;
+		}
+
+
+
+
+
+		private void ensurePlatformExists(Guid? platform)
+		{
+			if (platform != null)
+				WithPlatform(platform);
+			if (_platform == null)
+				WithPlatform(null);
 		}
 
 		private static void ensureExists<T>(IRepository<T> loadAggregates, Guid? id, Action createAction)

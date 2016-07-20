@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -9,7 +10,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 	public class FakeRtaStateGroupRepository : IRtaStateGroupRepository
 	{
 		private readonly List<IRtaStateGroup> _data = new List<IRtaStateGroup>();
-		
+
+		public void Has(IRtaStateGroup stateGroup)
+		{
+			Add(stateGroup);
+		}
+
 		public void Add(IRtaStateGroup entity)
 		{
 			_data.Add(entity);
@@ -59,5 +65,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			_data.Clear();
 		}
+
 	}
 }

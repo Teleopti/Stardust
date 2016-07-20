@@ -193,6 +193,8 @@
     <Compile Include="ApplicationLayer\ReadModelValidator\ReadModelValidator.cs" />
     <Compile Include="ApplicationLayer\ReadModelValidator\ValidateReadModelsEvent.cs" />
     <Compile Include="ApplicationLayer\ReadModelValidator\ValidateReadModelsEventHandler.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IMappingReadModelPersister.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\MappingReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IBatchExecuteStrategy.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\SkillViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeUpdaterHangfire.cs" />
