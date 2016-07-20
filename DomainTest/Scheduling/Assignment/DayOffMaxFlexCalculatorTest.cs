@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_projectionService = _mock.StrictMock<IProjectionService>();
 			_visualLayerCollection = _mock.StrictMock<IVisualLayerCollection>();
 			_anchor = new DateTime(2013, 1, 2, 12, 0, 0, 0, DateTimeKind.Utc);
-			_dayOff = new DayOff(_anchor, TimeSpan.FromHours(24), TimeSpan.FromHours(7),new Description("DayOff"), Color.Gray,"payrollColde");
+			_dayOff = new DayOff(_anchor, TimeSpan.FromHours(24), TimeSpan.FromHours(7),new Description("DayOff"), Color.Gray,"payrollColde", Guid.NewGuid());
 			_dateOnlyAsDateTimePeriod1 = _mock.StrictMock<IDateOnlyAsDateTimePeriod>();
 			_dateOnlyAsDateTimePeriod2 = _mock.StrictMock<IDateOnlyAsDateTimePeriod>();
 			_personAssignment = _mock.StrictMock<IPersonAssignment>();
