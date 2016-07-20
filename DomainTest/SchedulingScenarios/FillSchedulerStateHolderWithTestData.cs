@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
@@ -14,10 +15,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 				DateOnlyPeriod period,
 				IEnumerable<IPerson> agents,
 				IEnumerable<IScheduleData> persistableScheduleData,
-				IEnumerable<ISkillDay> skillDays)
+				IEnumerable<ISkillDay> skillDays,
+				TimeZoneInfo timeZone)
 		{
 			var stateHolder = stateHolderFunc();
-			var dateTimePeriod = period.ToDateTimePeriod(TimeZoneInfo.Utc);
+			var dateTimePeriod = period.ToDateTimePeriod(timeZone);
 			stateHolder.SchedulingResultState.Schedules = ScheduleDictionaryCreator.WithData(scenario, period, persistableScheduleData);
 			foreach (var agent in agents)
 			{
@@ -26,16 +28,36 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 			}
 			var uniqueSkills = new HashSet<ISkill>();
 			stateHolder.SchedulingResultState.SkillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
+
 			foreach (var skillDay in skillDays)
 			{
 				uniqueSkills.Add(skillDay.Skill);
-				stateHolder.SchedulingResultState.SkillDays[skillDay.Skill] = new List<ISkillDay> { skillDay };
 			}
 			stateHolder.SchedulingResultState.AddSkills(uniqueSkills.ToArray());
+			foreach (var uniqueSkill in uniqueSkills)
+			{
+				IList<ISkillDay> skillDaysForSkill = new List<ISkillDay>();
+				foreach (var skillDay in skillDays)
+				{
+					if(skillDay.Skill.Equals(uniqueSkill))
+						skillDaysForSkill.Add(skillDay);
+				}
+				stateHolder.SchedulingResultState.SkillDays[uniqueSkill] = skillDaysForSkill;
+			}
 
 			stateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(period, TimeZoneInfo.Utc);
 			((SchedulerStateHolder) stateHolder).SetLoadedPeriod_UseOnlyFromTest_ShouldProbablyBePutOnScheduleDictionaryInsteadIfNeededAtAll(dateTimePeriod);
 			return stateHolder;
+		}
+
+		public static ISchedulerStateHolder Fill(this Func<ISchedulerStateHolder> stateHolderFunc,
+			IScenario scenario,
+			DateOnlyPeriod period,
+			IEnumerable<IPerson> agents,
+			IEnumerable<IScheduleData> persistableScheduleData,
+			IEnumerable<ISkillDay> skillDays)
+		{
+			return Fill(stateHolderFunc,scenario,period,agents,persistableScheduleData,skillDays,TimeZoneInfo.Utc);
 		}
 
 		public static ISchedulerStateHolder Fill(this Func<ISchedulerStateHolder> stateHolderFunc,

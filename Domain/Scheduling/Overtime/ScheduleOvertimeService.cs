@@ -15,7 +15,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
 	public interface IScheduleOvertimeService
 	{
-		bool SchedulePersonOnDay(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences, IResourceCalculateDelayer resourceCalculateDelayer, DateOnly dateOnly, INewBusinessRuleCollection rules, IScheduleTagSetter scheduleTagSetter, TimeZoneInfo timeZoneInfo);
+		bool SchedulePersonOnDay(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences,
+			IResourceCalculateDelayer resourceCalculateDelayer, DateOnly dateOnly, INewBusinessRuleCollection rules,
+			IScheduleTagSetter scheduleTagSetter, TimeZoneInfo timeZoneInfo);
 	}
 
 	public class ScheduleOvertimeService : IScheduleOvertimeService
@@ -44,8 +46,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 			var overtimeDuration = new MinMax<TimeSpan>(overtimePreferences.SelectedTimePeriod.StartTime, overtimePreferences.SelectedTimePeriod.EndTime);
 			var overtimeSpecifiedPeriod = new MinMax<TimeSpan>(overtimePreferences.SelectedSpecificTimePeriod.StartTime, overtimePreferences.SelectedSpecificTimePeriod.EndTime);
-			var overtimeLayerLengthPeriods = _overtimeLengthDecider.Decide(person, dateOnly, scheduleDay, overtimePreferences.SkillActivity, overtimeDuration, overtimeSpecifiedPeriod, overtimePreferences.AvailableAgentsOnly);
-			
+			var overtimeLayerLengthPeriodsUtc = _overtimeLengthDecider.Decide(person, dateOnly, scheduleDay, overtimePreferences.SkillActivity, overtimeDuration, overtimeSpecifiedPeriod, overtimePreferences.AvailableAgentsOnly);
+
+			var overtimeLayerLengthPeriods = new List<DateTimePeriod>();
+			foreach (var dateTimePeriod in overtimeLayerLengthPeriodsUtc)
+			{
+				var periodStartMyViewPoint = dateTimePeriod.StartDateTimeLocal(timeZoneInfo);
+				var periodEndMyViewPoint = dateTimePeriod.EndDateTimeLocal(timeZoneInfo);
+				var overtimeSpecifiedPeriodStartDateTime = dateOnly.Date.Add(overtimeSpecifiedPeriod.Minimum);
+				var overtimeSpecifiedPeriodEndDateTime = dateOnly.Date.Add(overtimeSpecifiedPeriod.Maximum);
+				bool startOk = periodStartMyViewPoint >= overtimeSpecifiedPeriodStartDateTime &&
+					periodStartMyViewPoint < overtimeSpecifiedPeriodEndDateTime;
+				bool endOk = periodEndMyViewPoint <= overtimeSpecifiedPeriodEndDateTime &&
+							 periodEndMyViewPoint > overtimeSpecifiedPeriodStartDateTime;
+				if(startOk && endOk)
+					overtimeLayerLengthPeriods.Add(dateTimePeriod);
+			}
+
 			if (overtimeLayerLengthPeriods.Count == 0) return false;
 
 			var oldRmsValue = calculatePeriodValue(dateOnly, overtimePreferences.SkillActivity, person, timeZoneInfo);

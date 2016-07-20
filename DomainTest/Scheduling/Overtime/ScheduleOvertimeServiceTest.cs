@@ -2,18 +2,38 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.DomainTest.SchedulingScenarios;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 {
-	[TestFixture]
+	[DomainTest]
 	public class ScheduleOvertimeServiceTest
 	{
+		public IScheduleOvertimeService Target;
+		public IResourceOptimizationHelper ResourceOptimizationHelper;
+		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
+		public FakePersonAssignmentRepository PersonAssignmentRepository;
+		public FakePersonRepository PersonRepository;
+		public FakeSkillRepository SkillRepository;
+		public FakeSkillDayRepository SkillDayRepository;
+		public FakeScenarioRepository ScenarioRepository;
+
 		private ScheduleOvertimeService _target;
 		private MockRepository _mock;
 		private IScheduleDay _scheduleDay;
@@ -57,37 +77,48 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			_person.AddPersonPeriod(_personPeriod);
 			_dateTimePeriod = new DateTimePeriod(2014, 1, 1, 2014, 1, 2);
 			_overtimePreferences.SkillActivity = _activity;
+			_overtimePreferences.SelectedSpecificTimePeriod = new TimePeriod(TimeSpan.Zero, new TimeSpan(1, 6, 0, 0));
 			_skillStaffPeriodHolder = _mock.StrictMock<ISkillStaffPeriodHolder>();
 			_multiplicatorDefinitionSet = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
 			_personPeriod.PersonContract.Contract.AddMultiplicatorDefinitionSetCollection(_multiplicatorDefinitionSet);
 		}
 
-		[Test,]
+		[Test]
 		public void ShouldSchedulePersonOnDay()
 		{
-			var period = new DateTimePeriod(2014, 1, 1, 8, 2014, 1, 1, 10);
-			var skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(period, new Task(), new ServiceAgreement());
-			IList<ISkillStaffPeriod> skillStaffPeriods = new List<ISkillStaffPeriod>{skillStaffPeriod};
-
-			using (_mock.Record())
+			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
+			var phoneActivity = ActivityFactory.CreateActivity("phone");
+			var skill = SkillRepository.Has("skill", phoneActivity);
+			skill.TimeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
+			var dateOnly = new DateOnly(2016, 7, 12);
+			var scenario = ScenarioRepository.Has("some name");
+			var schedulePeriod = new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1);
+			var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
+			var contract = new Contract("contract") { WorkTimeDirective = worktimeDirective, PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9) };
+			contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
+			var agent = PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, skill);
+			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var skillDay = skill.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromHours(10));
+			SkillDayRepository.Has(new List<ISkillDay> { skillDay });
+			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, dateOnly, new TimePeriod(10, 0, 11, 0));
+			var ass = PersonAssignmentRepository.GetSingle(dateOnly);
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)), new[] { agent }, new[] { ass }, new[] { skillDay });
+			var overtimePreference = new OvertimePreferences
 			{
-				Expect.Call(_scheduleDay.Person).Return(_person);
-				Expect.Call(_overtimeLengthDecider.Decide(_person, _dateOnly, _scheduleDay, _activity, new MinMax<TimeSpan>(TimeSpan.Zero, TimeSpan.Zero), new MinMax<TimeSpan>(TimeSpan.Zero, TimeSpan.Zero), false)).Return(new List<DateTimePeriod> {_dateTimePeriod});
-				Expect.Call(() => _scheduleDay.CreateAndAddOvertime(_activity, _dateTimePeriod, null));
-				Expect.Call(_schedulePartModifyAndRollbackService.ClearModificationCollection);
-				Expect.Call((()=>_schedulePartModifyAndRollbackService.ModifyStrictly(_scheduleDay, _scheduleTagSetter, _rules)));
-				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly, null, false)).Return(true);
-				Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_dateOnly.AddDays(1), null, false)).Return(true);
-				Expect.Call(_schedulingResultStateHolder.SkillStaffPeriodHolder).Return(_skillStaffPeriodHolder).Repeat.AtLeastOnce();
-				Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skill, _dateTimePeriod)).Return(skillStaffPeriods).Repeat.AtLeastOnce().IgnoreArguments();
-			}
+				OvertimeType = definitionSet,
+				ScheduleTag = new ScheduleTag(),
+				SelectedSpecificTimePeriod = new TimePeriod(TimeSpan.Zero, new TimeSpan(1, 6, 0, 0)),
+				SelectedTimePeriod = new TimePeriod(1, 0, 1, 0),
+				SkillActivity = phoneActivity
+			};
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(ResourceOptimizationHelper, 1, true, stateHolder.SchedulingResultState);
+			var rules = NewBusinessRuleCollection.Minimum();
+			var scheduleTagSetter = new ScheduleTagSetter(overtimePreference.ScheduleTag);
+			Target.SchedulePersonOnDay(stateHolder.Schedules[agent].ScheduledDay(dateOnly), overtimePreference,
+				resourceCalculateDelayer, dateOnly, rules, scheduleTagSetter, TimeZoneInfoFactory.StockholmTimeZoneInfo());
 
-			using (_mock.Playback())
-			{
-				var result = _target.SchedulePersonOnDay(_scheduleDay, _overtimePreferences, _resourceCalculateDelayer, _dateOnly, _rules, _scheduleTagSetter, _timeZoneInfo);
-				Assert.IsTrue(result);
-				Assert.AreEqual(4, _rules.Count);
-			}
+			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -96,7 +127,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			using (_mock.Record())
 			{
 				Expect.Call(_scheduleDay.Person).Return(_person);
-				Expect.Call(_overtimeLengthDecider.Decide(_person, _dateOnly, _scheduleDay, _activity, new MinMax<TimeSpan>(TimeSpan.Zero, TimeSpan.Zero), new MinMax<TimeSpan>(TimeSpan.Zero, TimeSpan.Zero), false)).Return(new List<DateTimePeriod>());
+				Expect.Call(_overtimeLengthDecider.Decide(_person, _dateOnly, _scheduleDay, _activity,
+					new MinMax<TimeSpan>(TimeSpan.Zero, new TimeSpan(1, 6, 0, 0)), new MinMax<TimeSpan>(TimeSpan.Zero, TimeSpan.Zero),
+					false)).IgnoreArguments().Return(new List<DateTimePeriod>());
 			}
 
 			using (_mock.Playback())
@@ -170,7 +203,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			using (_mock.Record())
 			{
 				Expect.Call(_scheduleDay.Person).Return(_person);
-				Expect.Call(_overtimeLengthDecider.Decide(_person, _dateOnly, _scheduleDay, _activity, new MinMax<TimeSpan>(TimeSpan.Zero, TimeSpan.Zero), new MinMax<TimeSpan>(TimeSpan.Zero, TimeSpan.Zero), false)).Return(new List<DateTimePeriod> { _dateTimePeriod });
+				Expect.Call(_overtimeLengthDecider.Decide(_person, _dateOnly, _scheduleDay, _activity,
+					new MinMax<TimeSpan>(TimeSpan.Zero, new TimeSpan(23, 59, 0)), new MinMax<TimeSpan>(TimeSpan.Zero, TimeSpan.Zero),
+					false)).IgnoreArguments().Return(new List<DateTimePeriod> {_dateTimePeriod});
 				Expect.Call(() => _scheduleDay.CreateAndAddOvertime(_activity, _dateTimePeriod, null));
 				Expect.Call(_schedulePartModifyAndRollbackService.ClearModificationCollection);
 				Expect.Call((() => _schedulePartModifyAndRollbackService.ModifyStrictly(_scheduleDay, _scheduleTagSetter, _rules)));
@@ -187,6 +222,46 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				var result = _target.SchedulePersonOnDay(_scheduleDay, _overtimePreferences, _resourceCalculateDelayer, _dateOnly, _rules, _scheduleTagSetter, _timeZoneInfo);
 				Assert.IsFalse(result);
 			}	
+		}
+
+		[Test]
+		public void ShouldOnlyScheduleOverTimeOnSelectedTimePeriodInViewPointTimeZoneBug39740()
+		{
+			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
+			var phoneActivity = ActivityFactory.CreateActivity("phone");
+			var skill = SkillRepository.Has("skill", phoneActivity);
+			skill.TimeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
+			var dateOnly = new DateOnly(2016, 7, 12);
+			var scenario = ScenarioRepository.Has("some name");
+			var schedulePeriod = new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1);
+			var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
+			var contract = new Contract("contract") { WorkTimeDirective = worktimeDirective, PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9) };
+			contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
+			var agent = PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, skill);
+			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.TaipeiTimeZoneInfo());
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var skillDay = skill.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromHours(10));
+			var skillDay1 = skill.CreateSkillDayWithDemand(scenario, dateOnly.AddDays(1), TimeSpan.FromHours(10));
+			var skillDay2 = skill.CreateSkillDayWithDemand(scenario, dateOnly.AddDays(2), TimeSpan.FromHours(10));
+			SkillDayRepository.Has(new List<ISkillDay> { skillDay, skillDay1, skillDay2 });
+			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, dateOnly.AddDays(1), new TimePeriod(10, 0, 11, 0));
+			var ass = PersonAssignmentRepository.GetSingle(dateOnly.AddDays(1));
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)), new[] { agent }, new[] { ass }, new[] { skillDay, skillDay1, skillDay2 });
+			var overtimePreference = new OvertimePreferences
+			{
+				OvertimeType = definitionSet,
+				ScheduleTag = new ScheduleTag(),
+				SelectedSpecificTimePeriod = new TimePeriod(TimeSpan.Zero, new TimeSpan(1, 6, 0, 0)),
+				SelectedTimePeriod = new TimePeriod(1, 0, 1, 0),
+				SkillActivity = phoneActivity
+			};
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(ResourceOptimizationHelper, 1, true, stateHolder.SchedulingResultState);
+			var rules = NewBusinessRuleCollection.Minimum();
+			var scheduleTagSetter = new ScheduleTagSetter(overtimePreference.ScheduleTag);
+			Target.SchedulePersonOnDay(stateHolder.Schedules[agent].ScheduledDay(dateOnly.AddDays(1)), overtimePreference,
+				resourceCalculateDelayer, dateOnly.AddDays(1), rules, scheduleTagSetter, TimeZoneInfoFactory.DenverTimeZoneInfo());
+
+			stateHolder.Schedules[agent].ScheduledDay(dateOnly.AddDays(1)).PersonAssignment(true).OvertimeActivities().Should().Be.Empty();
 		}
 	}
 }

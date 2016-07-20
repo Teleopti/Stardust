@@ -45,6 +45,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
 		}
 
+	    public static TimeZoneInfo DenverTimeZoneInfo()
+	    {
+		    return TimeZoneInfo.FindSystemTimeZoneById("Mountain Standard Time");
+		}
+
         public static TimeZoneInfo HawaiiTimeZoneInfo()
         {
             return TimeZoneInfo.FindSystemTimeZoneById("Hawaiian Standard Time");
@@ -78,6 +83,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	    public static TimeZoneInfo RussiaTz7ZoneInfo()
 	    {
 			return TimeZoneInfo.FindSystemTimeZoneById("North Asia East Standard Time");
+		}
+
+	    public static TimeZoneInfo TaipeiTimeZoneInfo()
+	    {
+		    return TimeZoneInfo.FindSystemTimeZoneById("Taipei Standard Time");
 		}
 
 	}
