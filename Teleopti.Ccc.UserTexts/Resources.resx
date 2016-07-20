@@ -14705,6 +14705,9 @@ These options are activated:
   <data name="NoPermissionToModifyPersonAssignment" xml:space="preserve">
     <value>No permission to modify person assignment.</value>
     <comment>Error message for modifying person assignment without permission</comment>
+  <data name="StatisticsIntro" xml:space="preserve">
+    <value>More information about forecast methods and outlier detection </value>
+  </data>
   </data>
   <data name="PartialSuccessMessageForEditingShiftCategory" xml:space="preserve">
     <value>Changing shift categories for {0} agent(s), {1} succeeded and {2} failed.</value>

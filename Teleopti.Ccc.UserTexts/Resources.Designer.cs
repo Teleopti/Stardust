@@ -28574,6 +28574,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to More information about forecast methods and outlier detection .
+        /// </summary>
+        public static string StatisticsIntro {
+            get {
+                return ResourceManager.GetString("StatisticsIntro", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Status.
         /// </summary>
         public static string Status {
