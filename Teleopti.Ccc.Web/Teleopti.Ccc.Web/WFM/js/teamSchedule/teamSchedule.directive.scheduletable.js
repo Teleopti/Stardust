@@ -106,7 +106,7 @@
 			vm.toggleAllInCurrentPage = isAllInCurrentPageSelected();
 			vm.scheduleVm = ScheduleMgmt.groupScheduleVm;
 			vm.toggles = {
-				ModifyShiftCategoryEnabled: toggleSvc.WfmTeamSchedule_ModifyShiftCategory_39797
+				ViewShiftCategoryEnabled: toggleSvc.WfmTeamSchedule_ShowShiftCategory_39796
 			};
 		};
 	};

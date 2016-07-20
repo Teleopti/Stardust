@@ -294,7 +294,8 @@
 				|| vm.toggles.AddActivityEnabled
 				|| vm.toggles.RemoveActivityEnabled
 				|| vm.toggles.RemoveAbsenceEnabled
-				|| vm.toggles.SwapShiftEnabled;
+				|| vm.toggles.SwapShiftEnabled
+				|| vm.toggles.ModifyShiftCategoryEnabled;
 
 			var template = $translate.instant('WFMReleaseNotification');
 			var moduleName = $translate.instant('MyTeam');

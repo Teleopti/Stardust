@@ -189,7 +189,7 @@
 					|| vm.canActiveRemoveActivity()
 					|| vm.canActiveMoveActivity()
 					|| vm.canActiveAddPersonalActivity()
-					|| vm.canActiveEditShiftCategory()
+					|| vm.canActiveModifyShiftCategory()
 					|| vm.canActiveUndoScheduleCmd()
 				;
 			};
