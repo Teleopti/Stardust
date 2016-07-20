@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using log4net;
 using Teleopti.Interfaces.Domain;
 
@@ -6,45 +8,54 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 {
 	public class ApproveAbsenceRequestWithValidators : ProcessAbsenceRequest
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(ApproveAbsenceRequestWithValidators));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(ApproveAbsenceRequestWithValidators));
+
 		public override void Process(IPerson processingPerson, IAbsenceRequest absenceRequest,
 			RequiredForProcessingAbsenceRequest requiredForProcessingAbsenceRequest,
-			RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest, IEnumerable<IAbsenceRequestValidator> absenceRequestValidatorList)
+			RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest,
+			IEnumerable<IAbsenceRequestValidator> absenceRequestValidatorList)
 		{
 			foreach (var absenceRequestValidator in absenceRequestValidatorList)
 			{
-				IValidatedRequest validatedRequest = absenceRequestValidator.Validate(absenceRequest,
+				var validatedRequest = absenceRequestValidator.Validate(absenceRequest,
 					requiredForHandlingAbsenceRequest);
 
-				if (!validatedRequest.IsValid)
+				if (validatedRequest.IsValid) continue;
+
+				if (logger.IsDebugEnabled)
 				{
-					if (Logger.IsWarnEnabled)
-						Logger.WarnFormat("one validator {0} failed",
-							absenceRequestValidator);
-					return;
+					logger.DebugFormat("Validator {0} failed for request with Id=\"{1}\"",
+						absenceRequestValidator, absenceRequest.Id);
 				}
+				return;
 			}
 
 			UndoAll(requiredForProcessingAbsenceRequest);
 			requiredForProcessingAbsenceRequest.AfterUndoCallback();
 
-			IPersonRequest personRequest = (IPersonRequest)absenceRequest.Parent;
+			var personRequest = (IPersonRequest)absenceRequest.Parent;
 			personRequest.Pending();
+
 			var result = personRequest.Approve(requiredForProcessingAbsenceRequest.RequestApprovalService,
 				requiredForProcessingAbsenceRequest.Authorization);
-			foreach (IBusinessRuleResponse ruleResponse in result)
+
+			if (!result.Any()) return;
+
+			if (logger.IsDebugEnabled)
 			{
-				if (Logger.IsWarnEnabled)
-					Logger.WarnFormat("At least one validation rule failed, the schedule cannot be changed. The error was: {0}",
-						ruleResponse.Message);
+				var errorMessageBuilder = new StringBuilder();
+				foreach (var ruleResponse in result)
+				{
+					errorMessageBuilder.AppendLine(ruleResponse.Message);
+				}
+				logger.DebugFormat("{0} validation rule(s) failed on approving request with Id=\"{1}\", "
+								   + "the schedule cannot be changed. Below is the error messages: \r\n{2}",
+					result.Count, absenceRequest.Id, errorMessageBuilder);
 			}
-
 		}
 
-		public override string DisplayText
-		{
-			get { return UserTexts.Resources.Yes; }
-		}
+		public override string DisplayText => UserTexts.Resources.Yes;
+
 		public override IProcessAbsenceRequest CreateInstance()
 		{
 			return new ApproveAbsenceRequestWithValidators();

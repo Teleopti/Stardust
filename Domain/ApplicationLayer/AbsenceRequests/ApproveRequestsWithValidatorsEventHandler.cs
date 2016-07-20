@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
@@ -14,7 +13,8 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
-	public class ApproveRequestsWithValidatorsEventHandler : IHandleEvent<ApproveRequestsWithValidatorsEvent>, IRunOnStardust
+	public class ApproveRequestsWithValidatorsEventHandler : IHandleEvent<ApproveRequestsWithValidatorsEvent>,
+		IRunOnStardust
 	{
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly IAbsenceRequestProcessor _absenceRequestProcessor;
@@ -23,7 +23,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IWriteProtectedScheduleCommandValidator _writeProtectedScheduleCommandValidator;
 		private readonly IMessageBrokerComposite _messageBroker;
 
-		public ApproveRequestsWithValidatorsEventHandler(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IAbsenceRequestProcessor absenceRequestProcessor, IPersonRequestRepository personRequestRepository, IWriteProtectedScheduleCommandValidator writeProtectedScheduleCommandValidator, IMessageBrokerComposite messageBroker)
+		public ApproveRequestsWithValidatorsEventHandler(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
+			IAbsenceRequestProcessor absenceRequestProcessor, IPersonRequestRepository personRequestRepository,
+			IWriteProtectedScheduleCommandValidator writeProtectedScheduleCommandValidator,
+			IMessageBrokerComposite messageBroker)
 		{
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_absenceRequestProcessor = absenceRequestProcessor;
@@ -42,26 +45,36 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		{
 			using (var unitOfWork = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				var validators = GetAbsenceRequestValidators(@event.Validator);
+				var validators = getAbsenceRequestValidators(@event.Validator).ToArray();
 				foreach (var personRequestId in @event.PersonRequestIdList)
 				{
 					var personRequest = _personRequestRepository.Get(personRequestId);
-					if (!_writeProtectedScheduleCommandValidator.ValidateCommand(personRequest.RequestedDate,
-						personRequest.Person, new ApproveBatchRequestsCommand()))
+
+					if (!requestIsOkForBasicValidation(personRequest))
 					{
 						continue;
 					}
+
 					if (_beforeApproveActions.Any(action => action.Invoke(personRequest)))
 					{
 						continue;
 					}
+
 					var absenceRequest = personRequest.Request as IAbsenceRequest;
-					_absenceRequestProcessor.ApproveAbsenceRequestWithValidators(personRequest, absenceRequest, unitOfWork, validators);
+					_absenceRequestProcessor.ApproveAbsenceRequestWithValidators(personRequest, absenceRequest,
+						unitOfWork, validators);
 				}
 			}
 
 			@event.EndTime = DateTime.Now;
 			sendMessage(@event);
+		}
+
+		private bool requestIsOkForBasicValidation(IPersonRequest personRequest)
+		{
+			var result = _writeProtectedScheduleCommandValidator.ValidateCommand(personRequest.RequestedDate,
+				personRequest.Person, new ApproveBatchRequestsCommand());
+			return result;
 		}
 
 		private static bool checkPersonRequest(IPersonRequest personRequest)
@@ -72,10 +85,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private static bool checkAbsenceRequest(IPersonRequest personRequest)
 		{
 			return !(personRequest.Request is IAbsenceRequest);
-
 		}
 
-		private static IEnumerable<IAbsenceRequestValidator> GetAbsenceRequestValidators(RequestValidatorsFlag validator)
+		private static IEnumerable<IAbsenceRequestValidator> getAbsenceRequestValidators(RequestValidatorsFlag validator)
 		{
 			if (validator.HasFlag(RequestValidatorsFlag.BudgetAllotmentValidator))
 			{
