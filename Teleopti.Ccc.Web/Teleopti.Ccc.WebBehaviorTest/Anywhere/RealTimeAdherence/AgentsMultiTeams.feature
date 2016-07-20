@@ -6,6 +6,7 @@
 Background:
 	Given there is a switch
 
+@ignore
 Scenario: Should be able to see agents for multiple sites
 	Given there is a site named 'Paris'
 	And there is a team named 'Team Paris' on site 'Paris'
@@ -32,6 +33,7 @@ Scenario: Should be able to see agents for multiple sites
 	Then I should see agent status for 'Pierre Baldi'
 	And I should see agent status for 'Ashley Andeen'
 
+@ignore
 Scenario: Should be able to see agents for multiple teams
 	Given there is a site named 'Stockholm'
 	And there is a team named 'Täby' on site 'Stockholm'

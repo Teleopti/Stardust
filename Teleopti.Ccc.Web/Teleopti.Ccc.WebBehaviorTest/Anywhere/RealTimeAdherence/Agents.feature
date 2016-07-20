@@ -165,6 +165,7 @@ Scenario: Should be able to see state updates of all agents
 		| Alarm Time               | 0:15:00       |
 		| Alarm Color              | Green         |
 
+@ignore
 Scenario: Should be able to see all agents of the team with or without state updates
 	Given there is an activity named 'Phone'
 	And there is an activity named 'Lunch'
