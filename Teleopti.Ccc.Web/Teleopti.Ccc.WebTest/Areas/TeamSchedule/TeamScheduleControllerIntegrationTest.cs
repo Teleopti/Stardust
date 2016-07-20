@@ -93,6 +93,85 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		}
 
 		[Test]
+		public void ShouldReturnShiftCategoryDescriptionWhenThereIsMainShiftForScheduleSearch()
+		{
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
+			PeopleSearchProvider.Add(person);
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("testShift");
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), shiftCategory);
+			pa.AddActivity(ActivityFactory.CreateActivity("activity2", new Color()),
+				new DateTimePeriod(2020, 1, 1, 9, 2020, 1, 1, 11));
+			scheduleDay.Add(pa);
+
+			ScheduleProvider.AddScheduleDay(scheduleDay);
+
+			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+			result.Count.Should().Be.EqualTo(1);
+
+			var schedule = result.Single();
+			schedule.Name.Should().Be.EqualTo("Sherlock@Holmes");
+			schedule.IsFullDayAbsence.Should().Be.EqualTo(false);
+
+			schedule.ShiftCategory.GetValueOrDefault().Name.Should().Be.EqualTo(shiftCategory.Description.Name);
+		}
+
+		[Test]
+		public void ShouldReturnNullShiftCategoryWhenThereIsDayOffForScheduleSearch()
+		{
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
+			PeopleSearchProvider.Add(person);
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
+			var pa = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, new DateOnly(scheduleDate));
+			scheduleDay.CreateAndAddDayOff(DayOffFactory.CreateDayOff(new Description("test")));
+			pa.AddActivity(ActivityFactory.CreateActivity("activity1", new Color()),
+				new DateTimePeriod(2020, 1, 1, 9, 2020, 1, 1, 11));
+			scheduleDay.Add(pa);
+
+			ScheduleProvider.AddScheduleDay(scheduleDay);
+
+			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+			result.Count.Should().Be.EqualTo(1);
+
+			var schedule = result.Single();
+			schedule.Name.Should().Be.EqualTo("Sherlock@Holmes");
+			schedule.IsFullDayAbsence.Should().Be.EqualTo(false);
+			
+			schedule.ShiftCategory.HasValue.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldReturnNullShiftCategoryWhenThereIsFullDayAbsenceOnlyForScheduleSearch()
+		{
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(scheduleDate.AddDays(-1)));
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			PeopleSearchProvider.Add(person);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
+				new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 17));
+			scheduleDay.Add(personAbsence);
+			var pa = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, new DateOnly(2020, 1, 1));
+
+			scheduleDay.Add(pa);
+
+			ScheduleProvider.AddScheduleDay(scheduleDay);
+
+			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+			result.Count.Should().Be.EqualTo(1);
+
+			var schedule = result.Single();
+			schedule.IsFullDayAbsence.Should().Be.EqualTo(true);
+			schedule.ShiftCategory.HasValue.Should().Be.False();
+		}
+
+		[Test]
 		public void ShouldReturnCorrectProjectionWhenThereIsDayOffForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);

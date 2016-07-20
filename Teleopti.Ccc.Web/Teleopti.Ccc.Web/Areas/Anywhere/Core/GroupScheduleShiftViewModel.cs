@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
@@ -11,6 +12,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public double ContractTimeMinutes { get; set; }
 
 		public IEnumerable<GroupScheduleProjectionViewModel> Projection { get; set; }
+
+		public Description? ShiftCategory { get; set; }
 		public bool IsFullDayAbsence { get; set; }
 		public GroupScheduleDayOffViewModel DayOff { get; set; }
 	}

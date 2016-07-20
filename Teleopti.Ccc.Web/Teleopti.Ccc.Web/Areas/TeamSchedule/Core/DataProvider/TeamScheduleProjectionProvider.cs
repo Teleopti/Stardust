@@ -34,9 +34,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				PersonId = scheduleDay.Person.Id.GetValueOrDefault().ToString(),
 				Name = agentNameSetting.BuildCommonNameDescription(scheduleDay.Person),
 				Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToFixedDateFormat(),
-				IsFullDayAbsence = IsFullDayAbsence(scheduleDay)
+				IsFullDayAbsence = IsFullDayAbsence(scheduleDay),
+				ShiftCategory = getShiftCategoryDescription(scheduleDay)
 			};
-
 			var personAssignment = scheduleDay.PersonAssignment();
 
 			var overtimeActivities = personAssignment != null
@@ -97,6 +97,16 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			}
 			scheduleVm.Projection = projections;
 			return scheduleVm;
+		}
+
+		private Description? getShiftCategoryDescription(IScheduleDay scheduleDay)
+		{
+			var significantPart = scheduleDay.SignificantPart();
+			if (significantPart == SchedulePartView.MainShift)
+			{
+				return scheduleDay.PersonAssignment().ShiftCategory.Description;
+			}
+			return null;
 		}
 
 		public AgentInTeamScheduleViewModel MakeScheduleReadModel(IPerson person, IScheduleDay scheduleDay, bool isPermittedToViewConfidential)
