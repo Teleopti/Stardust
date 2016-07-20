@@ -79,6 +79,7 @@
 		WfmTeamSchedule_RevertToPreviousSchedule_39002,
 		WfmTeamSchedule_ModifyShiftCategory_39797,
 		WfmTeamSchedule_MakeNewMyTeamDefault_39744,
+		WfmTeamSchedule_ShowShiftCategory_39796,
 
 		WfmReportPortal_Basic_38825,
 		WfmReportPortal_LeaderBoard_39440,
