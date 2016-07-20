@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		public FakePersonAssignmentWriteSideRepository PersonAssignmentRepo;
 		public FakeCurrentScenario CurrentScenario;
 		public FakeLoggedOnUser LoggedOnUser;
+		public FakeShiftCategoryRepository ShiftCategoryRepository;
 
 		[Test]
 		public void ShouldInvokeAddActivityCommandHandleWithPermission()
@@ -618,6 +619,69 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			results.Count.Should().Be.EqualTo(0);		
 		}
 
+		[Test]
+		public void ShouldReturnErrorWhenChangingShiftCategoryWithoutMainShift()
+		{
+			PermissionProvider.Enable();
+			var person = PersonFactory.CreatePersonWithGuid("a", "b");
+			PersonRepository.Has(person);
+			var date = new DateOnly(2016, 4, 16);
+			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment, person, date);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
+				new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
+			PersonAssignmentRepo.Add(personAss);
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("sc").WithId();
+			ShiftCategoryRepository.Add(shiftCategory);
+
+			var input = new ChangeShiftCategoryFormData
+			{
+				TrackedCommandInfo = new TrackedCommandInfo(),
+				PersonIds = new List<Guid> { person.Id.Value},
+				Date = date,
+				ShiftCategoryId = shiftCategory.Id.Value
+			};
+			ActivityCommandHandler.ResetCalledCount();
+			var results = Target.ChangeShiftCategory(input);
+			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(1);
+			results.Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldNotChangeShiftCategoryOnWriteProtectedSchedule()
+		{			
+			
+			PermissionProvider.Enable();
+			var person = PersonFactory.CreatePersonWithGuid("a", "b");
+			PersonRepository.Has(person);
+			var date = new DateOnly(2016, 4, 16);
+			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment, person, date);
+			person.PersonWriteProtection.PersonWriteProtectedDate = new DateOnly(2016, 6, 1);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
+				new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
+			PersonAssignmentRepo.Add(personAss);
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("sc").WithId();
+			ShiftCategoryRepository.Add(shiftCategory);
+
+			var input = new ChangeShiftCategoryFormData
+			{
+				TrackedCommandInfo = new TrackedCommandInfo(),
+				PersonIds = new List<Guid> { person.Id.Value },
+				Date = date,
+				ShiftCategoryId = shiftCategory.Id.Value
+			};
+			ActivityCommandHandler.ResetCalledCount();
+			var results = Target.ChangeShiftCategory(input);
+			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
+			results.Count.Should().Be.EqualTo(1);
+		}
 	}
 
 	public class FakeActivityCommandHandler : 
@@ -625,7 +689,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		IHandleCommand<AddPersonalActivityCommand>, 
 		IHandleCommand<RemoveActivityCommand>, 
 		IHandleCommand<MoveShiftLayerCommand>,
-		IHandleCommand<BackoutScheduleChangeCommand>
+		IHandleCommand<BackoutScheduleChangeCommand>,
+		IHandleCommand<ChangeShiftCategoryCommand>
 	{
 		private int calledCount;
 		private IList<ITrackableCommand> commands = new List<ITrackableCommand>(); 
@@ -668,6 +733,12 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		}
 
 		public void Handle(BackoutScheduleChangeCommand command)
+		{
+			calledCount++;
+			commands.Add(command);
+		}
+
+		public void Handle(ChangeShiftCategoryCommand command)
 		{
 			calledCount++;
 			commands.Add(command);

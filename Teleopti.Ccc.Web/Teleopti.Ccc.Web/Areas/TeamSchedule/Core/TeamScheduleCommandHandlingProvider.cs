@@ -268,6 +268,49 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			return result;
 		}
 
+		public List<FailActionResult> ChangeShiftCategory(ChangeShiftCategoryFormData input)
+		{
+			var permissions = new Dictionary<string, string>
+			{
+				{ DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment, Resources.NoPermissionToModifyPersonAssignment }
+			};
+
+			var result = new List<FailActionResult>();
+
+			foreach (var personId in input.PersonIds)
+			{
+				var actionResult = new FailActionResult();
+				var person = _personRepository.Get(personId);
+				actionResult.PersonId = personId;
+				actionResult.Messages = new List<string>();
+
+				if (checkPermissionFn(permissions, input.Date, person, actionResult.Messages))
+				{
+					var command = new ChangeShiftCategoryCommand
+					{
+						PersonId = personId,
+						Date = input.Date,
+						ShiftCategoryId = input.ShiftCategoryId,
+						TrackedCommandInfo =
+							input.TrackedCommandInfo != null
+								? input.TrackedCommandInfo
+								: new TrackedCommandInfo {OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value}
+					};
+
+					_commandDispatcher.Execute(command);
+					if (command.ErrorMessages != null && command.ErrorMessages.Any())
+					{
+						actionResult.Messages.AddRange(command.ErrorMessages);
+					}
+				}
+
+				if (actionResult.Messages.Any())
+					result.Add(actionResult);
+			}
+
+			return result;
+		}
+
 		private bool agentScheduleIsWriteProtected(DateOnly date, IPerson agent)
 		{
 			return !_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule)
@@ -301,5 +344,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		List<FailActionResult> RemoveActivity(RemoveActivityFormData input);
 		List<FailActionResult> MoveActivity(MoveActivityFormData input);
 		List<FailActionResult> BackoutScheduleChange(BackoutScheduleChangeFormData input);
+		List<FailActionResult> ChangeShiftCategory(ChangeShiftCategoryFormData input);
 	}
 }

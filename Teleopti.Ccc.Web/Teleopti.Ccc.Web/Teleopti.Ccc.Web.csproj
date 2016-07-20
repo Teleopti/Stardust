@@ -663,6 +663,7 @@
     <Compile Include="Areas\People\Core\Providers\IPeopleSearchProvider.cs" />
     <Compile Include="Areas\Rta\Log4NetWcfLogger.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\ScheduleValidationProvider.cs" />
+    <Compile Include="Areas\TeamSchedule\Models\ChangeShiftCategoryFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Models\FetchRuleValidationResultFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Core\MoveShiftLayerCommandHelper.cs" />
     <Compile Include="Areas\TeamSchedule\Models\AddPersonalActivityFormData.cs" />

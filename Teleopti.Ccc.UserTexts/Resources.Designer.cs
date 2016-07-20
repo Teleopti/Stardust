@@ -18011,6 +18011,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No permission to modify person assignment..
+        /// </summary>
+        public static string NoPermissionToModifyPersonAssignment {
+            get {
+                return ResourceManager.GetString("NoPermissionToModifyPersonAssignment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have no permission to view restricted scenarios and all scenarios are restricted..
         /// </summary>
         public static string NoPermissionToViewRestrictedScenarios {

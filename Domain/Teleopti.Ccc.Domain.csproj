@@ -168,6 +168,8 @@
     <Compile Include="ApplicationLayer\Commands\BackoutScheduleChangeCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\BackoutScheduleChangeCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Availability\AnalyticsAvailabilityUpdater.cs" />
+    <Compile Include="ApplicationLayer\Commands\ChangeShiftCategoryCommand.cs" />
+    <Compile Include="ApplicationLayer\Commands\ChangeShiftCategoryCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\RequestValidatorsFlag.cs" />
     <Compile Include="ApplicationLayer\Events\ApproveRequestsWithValidatorsEvent.cs" />
     <Compile Include="ApplicationLayer\Events\AvailabilityChangedEvent.cs" />

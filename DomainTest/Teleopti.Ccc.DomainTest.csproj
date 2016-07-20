@@ -161,6 +161,7 @@
     <Compile Include="ApplicationLayer\ApproveBatchRequestsCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\BackoutScheduleChangeCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\BusinessUnit\AnalyticsBusinessUnitUpdaterTest.cs" />
+    <Compile Include="ApplicationLayer\ChangeShiftCategoryCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\FakeMessageBrokerComposite.cs" />
     <Compile Include="ApplicationLayer\Availability\AnalyticsAvailabilityUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\FixReadModelsEventHandlerTest.cs" />

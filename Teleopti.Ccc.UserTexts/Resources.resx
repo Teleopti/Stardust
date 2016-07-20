@@ -14702,4 +14702,8 @@ These options are activated:
     <value>The processing of requests based on business rules has been completed.</value>
     <comment>Message in WFM requests module</comment>
   </data>
+  <data name="NoPermissionToModifyPersonAssignment" xml:space="preserve">
+    <value>No permission to modify person assignment.</value>
+    <comment>Error message for modifying person assignment without permission</comment>
+  </data>
 </root>
