@@ -9,14 +9,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
 	public class FakeMappingReadModelPersister : IMappingReadModelPersister
 	{
-		private bool _invalido;
 		private readonly IList<Mapping> _data = new List<Mapping>();
 
 		public IEnumerable<Mapping> Data {get { return _data; }}
 
 		public void Invalidate()
 		{
-			_invalido = true;
 		}
 
 		public void Add(Mapping mapping)
