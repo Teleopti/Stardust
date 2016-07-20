@@ -134,7 +134,13 @@ wfm-notice{
 	}
 }
 
-@-moz-document url-prefix() {
+@-moz-document url-prefix(){
+	.navbar .navbar-search{
+		padding: 1px;
+	}
+}
+
+@supports (-ms-accelerator:true) {
 	.navbar .navbar-search{
 		padding: 1px;
 	}
