@@ -33,24 +33,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
 			    MultiplicatorType = MultiplicatorType
 		    };
 	    }
-
-	    public override void NotifyTransactionComplete(DomainUpdateType operation)
+		public override IEnumerable<IEvent> PopAllEvents(INow now, DomainUpdateType? operation = null)
 	    {
-		    base.NotifyTransactionComplete(operation);
-			switch (operation)
-			{
-				case DomainUpdateType.Insert:
-					AddEvent(createEvent<MultiplicatorDefinitionSetCreated>());
-					break;
-				case DomainUpdateType.Update:
-					AddEvent(createEvent<MultiplicatorDefinitionSetChanged>());
-					break;
-				case DomainUpdateType.Delete:
-					AddEvent(createEvent<MultiplicatorDefinitionSetDeleted>());
-					break;
-			}
-		}
-		
+		    var events = base.PopAllEvents(now, operation).ToList();
+		    if (operation != null)
+		    {
+			    switch (operation)
+			    {
+					case DomainUpdateType.Insert:
+						events.Add(createEvent<MultiplicatorDefinitionSetCreated>());
+					    break;
+					case DomainUpdateType.Update:
+						events.Add(createEvent<MultiplicatorDefinitionSetChanged>());
+						break;
+					case DomainUpdateType.Delete:
+						events.Add(createEvent<MultiplicatorDefinitionSetDeleted>());
+						break;
+				}
+		    }
+		    return events;
+	    }
+
 	    public virtual string Name
         {
             get { return _name; }

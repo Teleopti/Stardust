@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Interfaces.Domain;
@@ -26,41 +26,43 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restriction
         protected PreferenceDay()
         {}
 
-	    public override void NotifyTransactionComplete(DomainUpdateType operation)
-	    {
-		    base.NotifyTransactionComplete(operation);
-			switch (operation)
-			{
-				case DomainUpdateType.Delete:
-					AddEvent(new PreferenceDeletedEvent
-					{
-						PreferenceDayId = Id.GetValueOrDefault(),
-						PersonId = Person.Id.GetValueOrDefault(),
-						RestrictionDate = RestrictionDate.Date,
-						Timestamp = ServiceLocatorForEntity.Now.UtcDateTime()
-					});
-					break;
-				case DomainUpdateType.Insert:
-					AddEvent(new PreferenceCreatedEvent
-					{
-						PreferenceDayId = Id.GetValueOrDefault(),
-						PersonId = Person.Id.GetValueOrDefault(),
-						RestrictionDate = RestrictionDate.Date,
-						Timestamp = ServiceLocatorForEntity.Now.UtcDateTime()
-					});
-					break;
-				case DomainUpdateType.Update:
-					AddEvent(new PreferenceChangedEvent
-					{
-						PreferenceDayId = Id.GetValueOrDefault(),
-						PersonId = Person.Id.GetValueOrDefault(),
-						RestrictionDate = RestrictionDate.Date,
-						Timestamp = ServiceLocatorForEntity.Now.UtcDateTime()
-					});
-					break;
-			}
-		}
-		
+        public override IEnumerable<IEvent> PopAllEvents(INow now, DomainUpdateType? operation=null)
+        {
+            var events = base.PopAllEvents(now, operation).ToList();
+            if (!operation.HasValue) return events;
+            switch (operation)
+            {
+                case DomainUpdateType.Delete:
+                    events.Add(new PreferenceDeletedEvent
+                    {
+                        PreferenceDayId = Id.GetValueOrDefault(),
+                        PersonId = Person.Id.GetValueOrDefault(),
+                        RestrictionDate = RestrictionDate.Date,
+                        Timestamp = now.UtcDateTime()
+                    });
+                    break;
+                case DomainUpdateType.Insert:
+                    events.Add(new PreferenceCreatedEvent
+                    {
+                        PreferenceDayId = Id.GetValueOrDefault(),
+                        PersonId = Person.Id.GetValueOrDefault(),
+                        RestrictionDate = RestrictionDate.Date,
+                        Timestamp = now.UtcDateTime()
+                    });
+                    break;
+                case DomainUpdateType.Update:
+                    events.Add(new PreferenceChangedEvent
+                    {
+                        PreferenceDayId = Id.GetValueOrDefault(),
+                        PersonId = Person.Id.GetValueOrDefault(),
+                        RestrictionDate = RestrictionDate.Date,
+                        Timestamp = now.UtcDateTime()
+                    });
+                    break;
+            }
+            return events;
+        }
+
         public virtual IPreferenceRestriction Restriction
         {
             get { return _restriction; }

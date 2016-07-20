@@ -152,15 +152,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restriction
 			return GetHashCode().Equals(other.GetHashCode());
 		}
 
-		public override void NotifyTransactionComplete(DomainUpdateType operation)
+		public override IEnumerable<IEvent> PopAllEvents(INow now, DomainUpdateType? operation = null)
 		{
-			base.NotifyTransactionComplete(operation);
+			var events = base.PopAllEvents(now, operation).ToList();
 			switch (operation)
 			{
 				case DomainUpdateType.Insert:
 				case DomainUpdateType.Update:
 				case DomainUpdateType.Delete:
-					AddEvent(new AvailabilityChangedEvent
+					events.Add(new AvailabilityChangedEvent
 					{
 						Date = RestrictionDate,
 						PersonId = Person.Id.GetValueOrDefault(),
@@ -168,6 +168,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restriction
 					});
 					break;
 			}
+			return events;
 		}
 	}
 }

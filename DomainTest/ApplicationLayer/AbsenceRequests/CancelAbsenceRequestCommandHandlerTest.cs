@@ -206,9 +206,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			basicCancelAbsenceRequest(cancelRequestCommand);
 			var personAbsence = PersonAbsenceRepository.LoadAll().First();
 
-			personAbsence.NotifyTransactionComplete(DomainUpdateType.Delete);
-			personAbsence.NotifyDelete();
-			var events = personAbsence.PopAllEvents().ToArray();
+			var events = personAbsence.PopAllEvents(Now, DomainUpdateType.Delete).ToArray();
 
 			events.Length.Should().Be.EqualTo(2);
 			events[0].Should().Be.OfType<PersonAbsenceRemovedEvent>();
@@ -223,9 +221,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			basicCancelAbsenceRequest(cancelRequestCommand);
 			var personAbsence = PersonAbsenceRepository.LoadAll().First();
 
-			personAbsence.NotifyTransactionComplete(DomainUpdateType.Delete);
-			personAbsence.NotifyDelete();
-			var events = personAbsence.PopAllEvents().ToList();
+			var events = personAbsence.PopAllEvents(Now, DomainUpdateType.Delete).ToList();
 
 			EventPublisher.OverwriteHandler(typeof(ScheduleChangedEvent), typeof(ScheduleChangedEventDetector));
 			ScheduleChangedEventDetector.Reset();

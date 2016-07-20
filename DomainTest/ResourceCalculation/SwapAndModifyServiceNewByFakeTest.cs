@@ -69,12 +69,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var agent1Assignment = PersonAssignmentRepository.GetSingle(date,agent1) as PersonAssignment;
 			var scheduleDictionary = ScheduleDictionaryForTest.WithPersonAssignment(scenario,date.Date,agent1Assignment);
 
-			agent1Assignment.PopAllEvents();
+			agent1Assignment.PopAllEvents(Now);
 					
 			Target.Swap(agent1,agent2,
 				new List<DateOnly> { date },new List<DateOnly>(),scheduleDictionary,NewBusinessRuleCollection.Minimum(),new ScheduleTagSetter(NullScheduleTag.Instance));
 
-			var events = agent1Assignment.PopAllEvents().ToList();
+			var events = agent1Assignment.PopAllEvents(Now).ToList();
 			events.Any(e => e.GetType() == typeof(PersonAssignmentLayerRemovedEvent)).Should().Be.True();			
 		}
 
@@ -102,12 +102,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario,
 				(new DateOnlyPeriod(date,date)).ToDateTimePeriod(TimeZoneInfo.Local), new [] { agent1Assignment ,agent2Assignment } );
 			
-			agent1Assignment.PopAllEvents();
+			agent1Assignment.PopAllEvents(Now);
 
 			Target.Swap(agent1,agent2,
 				new List<DateOnly> { date },new List<DateOnly>(),scheduleDictionary,NewBusinessRuleCollection.Minimum(),new ScheduleTagSetter(NullScheduleTag.Instance));
 
-			var events = agent1Assignment.PopAllEvents().ToList();
+			var events = agent1Assignment.PopAllEvents(Now).ToList();
 			events.Any(e => e.GetType() == typeof(ActivityAddedEvent)).Should().Be.True();
 		}
 
@@ -132,14 +132,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var agent1Assignment = PersonAssignmentRepository.GetSingle(date, agent1) as PersonAssignment;
 			var scheduleDictionary = ScheduleDictionaryForTest.WithPersonAssignment(scenario, date.Date, agent1Assignment);
 
-			agent1Assignment.PopAllEvents();
+			agent1Assignment.PopAllEvents(Now);
 			EventPublisher.OverwriteHandler(typeof(ScheduleChangedEvent),typeof(ScheduleChangedEventDetector));
 			ScheduleChangedEventDetector.Reset();
 
 			Target.Swap( agent1, agent2,
 				new List<DateOnly> { date }, new List<DateOnly>(), scheduleDictionary,NewBusinessRuleCollection.Minimum(),new ScheduleTagSetter(NullScheduleTag.Instance));
 
-			var events = agent1Assignment.PopAllEvents().ToList();		
+			var events = agent1Assignment.PopAllEvents(Now).ToList();		
 			events.ForEach(e => EventPublisher.Publish(e));
 			ScheduleChangedEventDetector.GetEvents().Any(e => e.PersonId == agent1.Id).Should().Be.True();
 		}
@@ -172,8 +172,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			(scheduleDictionary as ScheduleDictionaryForTest).AddPersonAssignment((agent2Assignment));
 
 
-			agent1Assignment.PopAllEvents();
-			agent2Assignment.PopAllEvents();
+			agent1Assignment.PopAllEvents(Now);
+			agent2Assignment.PopAllEvents(Now);
 			EventPublisher.OverwriteHandler(typeof(ScheduleChangedEvent),typeof(ScheduleChangedEventDetector));
 			ScheduleChangedEventDetector.Reset();
 
@@ -186,8 +186,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Target.Swap(agent1,agent2,
 				new List<DateOnly> { date },new List<DateOnly>(),scheduleDictionary,NewBusinessRuleCollection.Minimum(),new ScheduleTagSetter(NullScheduleTag.Instance),trackedCommandInfo);
 
-			var eventsFromAgent1 = agent1Assignment.PopAllEvents().ToList();
-			var eventsFromAgent2 = agent2Assignment.PopAllEvents().ToList();
+			var eventsFromAgent1 = agent1Assignment.PopAllEvents(Now).ToList();
+			var eventsFromAgent2 = agent2Assignment.PopAllEvents(Now).ToList();
 
 			eventsFromAgent1.ForEach(e => EventPublisher.Publish(e));
 			eventsFromAgent2.ForEach(e => EventPublisher.Publish(e));

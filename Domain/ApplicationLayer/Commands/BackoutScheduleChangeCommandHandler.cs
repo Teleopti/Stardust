@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			diffs.ForEach(diff =>
 			{
 				var eventHolder = diff.CurrentItem as AggregateRoot;
-				eventHolder?.NotifyCommandId(command.TrackedCommandInfo.TrackId);
+				eventHolder?.AttachCommandTrackIdToEvents(command.TrackedCommandInfo.TrackId);
 			});
 
 			_scheduleDifferenceSaver.SaveChanges(diffs,(IUnvalidatedScheduleRangeUpdate)range);			

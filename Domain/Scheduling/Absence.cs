@@ -58,27 +58,29 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		#endregion
 
-	    public override void NotifyTransactionComplete(DomainUpdateType operation)
-	    {
-			base.NotifyTransactionComplete(operation);
+		public override IEnumerable<IEvent> PopAllEvents(INow now, DomainUpdateType? operation = null)
+		{
+			var events = base.PopAllEvents(now, operation).ToList();
+			if (!operation.HasValue) return events;
 			switch (operation)
 			{
 				case DomainUpdateType.Insert:
 				case DomainUpdateType.Update:
-					AddEvent(new AbsenceChangedEvent
+					events.Add(new AbsenceChangedEvent
 					{
 						AbsenceId = Id.GetValueOrDefault()
 					});
 					break;
 				case DomainUpdateType.Delete:
-					AddEvent(new AbsenceDeletedEvent
+					events.Add(new AbsenceDeletedEvent
 					{
 						AbsenceId = Id.GetValueOrDefault()
 					});
 					break;
 			}
+			return events;
 		}
-		
+
 		public Absence()
             : base(false)
         {

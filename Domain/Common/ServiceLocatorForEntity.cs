@@ -1,5 +1,4 @@
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -25,7 +24,6 @@ namespace Teleopti.Ccc.Domain.Common
 		private static ICurrentBusinessUnit _currentBusinessUnit;
 		private static ProperAlarm _appliedAlarm;
 		private static IUpdatedBy _updatedBy;
-		private static INow _now;
 
 		public static ICurrentBusinessUnit CurrentBusinessUnit
 		{
@@ -43,12 +41,6 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			get { return _updatedBy ?? Security.Principal.UpdatedBy.Make(); }
 			set { _updatedBy = value; }
-		}
-
-		public static INow Now
-		{
-			get { return _now ?? new Now(); }
-			set { _now = value; }
 		}
 	}
 }
