@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		private ICurrentScenario _scenarioRepository;
 		private ILoadSchedulesForRequestWithoutResourceCalculation _loadSchedulingDataForRequestWithoutResourceCalculation;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
-		private IRequestFactory _requestFactory;
+		private FakeRequestFactory _requestFactory;
 		private IShiftTradeValidator _validator;
 		private IPersonRepository _personRepository;
 		private IScheduleStorage _scheduleStorage;
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var approvalService = new ApprovalServiceForTest();
 			approvalService.SetBusinessRuleResponse(ruleResponse1, ruleResponse2);
 
-			((FakeRequestFactory)_requestFactory).setRequestApprovalService(approvalService);
+			_requestFactory.setRequestApprovalService(approvalService);
 
 			_target = new ShiftTradeRequestHandler(_schedulingResultStateHolder, _validator, _requestFactory,
 				_scenarioRepository, _personRequestRepository, _scheduleStorage, _personRepository
@@ -122,27 +122,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			personFrom.WorkflowControlSet = workflowControlSet;
 
 			prepareBusinessRuleProvider();
-
-			_personRepository.Add(personFrom);
 			_personRepository.Add(personTo);
 
 			var personRequest = prepareAndGetPersonRequest(personFrom, personTo);
-
 			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom }, null, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), _scenarioRepository.Current());
-			_schedulingResultStateHolder.Schedules = scheduleDictionary;
-			_schedulingResultStateHolder.Schedules.TakeSnapshot();
-
+			
 			var approvalService = new RequestApprovalServiceScheduler(scheduleDictionary, _scenarioRepository.Current(), 
 				new SwapAndModifyService (new SwapService(), new DoNothingScheduleDayChangeCallBack()), _businessRuleCollection, 
 				new DoNothingScheduleDayChangeCallBack(), new FakeGlobalSettingDataRepository() );
 			
-			((FakeRequestFactory)_requestFactory).setRequestApprovalService(approvalService);
+			_requestFactory.setRequestApprovalService(approvalService);
 
 			handleRequest(getAcceptShiftTradeEvent(personTo, personRequest.Id.Value));
 
 			var personToSchedule = scheduleDictionary[personTo].ScheduledDay(DateOnly.Today);
 			var personFromSchedule = scheduleDictionary[personFrom].ScheduledDay(DateOnly.Today);
-
+			
 			Assert.IsTrue(personRequest.IsApproved);
 			Assert.IsTrue(personToSchedule.PersonAssignment().ShiftLayers.Single().Payload.Id == activityPersonFrom.Id);
 			Assert.IsTrue(personFromSchedule.PersonAssignment().ShiftLayers.Single().Payload.Id == activityPersonTo.Id);
@@ -195,9 +190,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var ast = new AcceptShiftTradeEvent
 			{
 				LogOnDatasource = "V7Config",
-				LogOnBusinessUnitId = new Guid ("928DD0BC-BF40-412E-B970-9B5E015AADEA"),
+				LogOnBusinessUnitId = Guid.NewGuid(),
 				Timestamp = DateTime.UtcNow,
-				PersonRequestId = requestId, //new Guid ("9AC8476B-9B8F-4330-9561-9D7A00BAA585"),
+				PersonRequestId = requestId, 
 				Message = "I want to trade!",
 				AcceptingPersonId = personTo.Id.GetValueOrDefault()
 			};
