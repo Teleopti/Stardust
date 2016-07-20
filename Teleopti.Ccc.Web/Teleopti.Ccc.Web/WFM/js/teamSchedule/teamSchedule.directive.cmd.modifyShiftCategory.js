@@ -11,6 +11,10 @@
 		vm.label = 'EditShiftCategory';
 		vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
 
+		shiftCategorySvc.fetchShiftCategories().then(function(data){
+			vm.shiftCategoriesList = data.data;
+		});
+
 		vm.modifyShiftCategory = function(){
 			var requestData = {
 				PersonIds: vm.selectedAgents.map(function(agent) {return agent.PersonId}),
@@ -34,14 +38,6 @@
 				}), response.data);
 			});
 		};
-
-		vm.init = function(){
-			shiftCategorySvc.fetchShiftCategories().then(function(data){
-				vm.shiftCategoriesList = data.data;
-			});
-		};
-
-		vm.init();
 	}
 	
 	function modifyShiftCategoryDirective(){

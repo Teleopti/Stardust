@@ -3,7 +3,7 @@
 (function () {
 	angular.module('wfm.teamSchedule')
 		.directive('scheduleTable', scheduleTableDirective)
-		.controller('scheduleTableCtrl', ['Toggle', 'PersonSelection', '$scope', 'ScheduleManagement', 'ValidateRulesService', scheduleTableController]);
+		.controller('scheduleTableCtrl', ['$scope', 'Toggle', 'PersonSelection', 'ScheduleManagement', 'ValidateRulesService', scheduleTableController]);
 
 	function scheduleTableDirective() {
 		return {
@@ -19,7 +19,7 @@
 			templateUrl: "js/teamSchedule/html/scheduletable.html"
 		};
 	};
-	function scheduleTableController(toggleSvc, personSelectionSvc, $scope, ScheduleMgmt, ValidateRulesService) {
+	function scheduleTableController($scope, toggleSvc, personSelectionSvc, ScheduleMgmt, ValidateRulesService) {
 		var vm = this;
 		vm.ShowContractTimeEnabled = toggleSvc.WfmTeamSchedule_ShowContractTime_38509;
 		vm.updateAllSelectionInCurrentPage = function (isAllSelected) {
@@ -81,6 +81,21 @@
 			}
 		};
 
+		vm.modifyShiftCategoryForAgent = function($event, personSchedule){
+			$event.stopPropagation();
+
+			vm.togglePerson(personSchedule, $event);
+
+			if(personSchedule.IsSelected){
+				var activeCmdLabel = "EditShiftCategory";
+
+				$scope.$emit('teamSchedule.trigger.command', {
+					activeCmd: activeCmdLabel,
+					needToOpenSidePanel: true
+				});
+			}
+		};
+
 		vm.checkNightRestWarningMessage = function(personId){
 			return ValidateRulesService.checkValidationForPerson(personId);
 		};
@@ -106,7 +121,8 @@
 			vm.toggleAllInCurrentPage = isAllInCurrentPageSelected();
 			vm.scheduleVm = ScheduleMgmt.groupScheduleVm;
 			vm.toggles = {
-				ViewShiftCategoryEnabled: toggleSvc.WfmTeamSchedule_ShowShiftCategory_39796
+				ViewShiftCategoryEnabled: toggleSvc.WfmTeamSchedule_ShowShiftCategory_39796,
+				ModifyShiftCategoryEnabled: toggleSvc.WfmTeamSchedule_ModifyShiftCategory_39797
 			};
 		};
 	};

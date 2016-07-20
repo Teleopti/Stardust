@@ -46,6 +46,10 @@
 			vm.checkValidationWarningForCommandTargets(personIds);
 		};
 
+		$scope.$on('teamSchedule.trigger.command', function (e, d) {
+			vm.triggerCommand(d.activeCmd, d.needToOpenSidePanel);
+		});
+
 		function openSidePanel() {
 			if (!$mdSidenav(commandContainerId).isOpen()) {
 				$mdSidenav(commandContainerId).open().then(function () {

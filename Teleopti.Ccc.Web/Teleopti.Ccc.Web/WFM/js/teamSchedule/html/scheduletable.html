@@ -59,7 +59,7 @@
 				</div>
 			</td>
 			<td class="right-border-empty"></td>
-			<td class="shift-category-cell" ng-if="vm.toggles.ViewShiftCategoryEnabled">{{personSchedule.ShiftCategory.Name}}</td>
+			<td class="shift-category-cell" ng-if="vm.toggles.ViewShiftCategoryEnabled" ng-click=" vm.toggles.ModifyShiftCategoryEnabled && vm.modifyShiftCategoryForAgent($event, personSchedule)">{{personSchedule.ShiftCategory.Name}}</td>
 			<td class="contract-time contract-time-column" ng-if="vm.ShowContractTimeEnabled">{{personSchedule.ContractTime}}</td>
 		</tr>
 	</tbody>
