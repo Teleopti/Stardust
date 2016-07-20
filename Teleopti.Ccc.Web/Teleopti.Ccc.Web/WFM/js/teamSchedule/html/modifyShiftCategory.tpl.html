@@ -3,7 +3,7 @@
 	<md-content class="command-panel-content" layout-padding>
 		<form name="editShiftCategoryForm">
 			<div class="con-row">
-				<md-select ng-model="vm.shiftCategoriesList" placeholder="{{'SelectACategory' | translate}}">
+				<md-select ng-model="vm.selectedShiftCategoryId" placeholder="{{'SelectACategory' | translate}}">
 					<md-option ng-repeat="category in vm.shiftCategoriesList" ng-value="category.Name"><span ng-bind="category.Name"></span></md-option>
 				</md-select>
 			</div>
@@ -11,7 +11,7 @@
 
 		<button id="applyShiftCategory" class="wfm-btn form-submit"
 				ng-class="{'wfm-btn-primary': editShiftCategoryForm.$valid, 'wfm-btn-primary-disabled': !editShiftCategoryForm.$valid}"
-				ng-disabled="newActivityForm.$valid ?'':'disabled'"
+				ng-disabled="editShiftCategoryForm.$valid ?'':'disabled'"
 				ng-click="vm.modifyShiftCategory()">
 			{{'Apply' | translate}}
 		</button>

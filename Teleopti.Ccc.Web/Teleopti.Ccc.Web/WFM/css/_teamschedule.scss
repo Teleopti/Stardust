@@ -196,7 +196,7 @@
             }
 
             th.right-border-empty, td.right-border-empty {
-                width: 1%;
+                width: 2%;
             }
 
             th.contract-time-header, td.contract-time-column {
@@ -207,9 +207,13 @@
             }
 
             th.shift-category-cell, td.shift-category-cell{
-                width: 3%;
+                width: 4%;
                 text-align: center;
+            }
+            
+            td.shift-category-cell{
                 border-left: 1px solid $gray012;
+                border-right: 1px solid $gray012;
             }
         }
     }
@@ -359,41 +363,6 @@
         box-shadow: none;
     }
 
-    .absence-report {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-
-        md-content {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100%;
-        }
-
-        md-content > div {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-        }
-
-        .absence-selector {
-            padding: 0;
-            min-height: 20px;
-        }
-
-        .con-row > .teamschedule-datepicker {
-            padding-right: 0;
-            height: 48px;
-        }
-
-        .con-row > .uib-timepicker {
-            padding-left: 0;
-            margin-top: -4px;
-        }
-    }
-
     .teamschedule-command-container {
         height: 100%;
 
@@ -402,7 +371,7 @@
         }
     }
 
-    .add-absence, .add-activity, .move-activity, .edit-shift-category{
+    .add-absence, .add-activity, .move-activity, .edit-shift-category {
         height: 100%;
         display: flex;
         flex-direction: column;
@@ -416,7 +385,7 @@
         }
     }
 
-    .add-activity .activity-selector, .add-absence .absence-selector {
+    .teamschedule-command-container md-select {
         width: 100%;
         min-height: 20px;
     }

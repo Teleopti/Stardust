@@ -3,22 +3,41 @@
 
 	angular.module('wfm.teamSchedule').directive('modifyShiftCategory', modifyShiftCategoryDirective);
 
+	modifyShiftCategoryCtrl.$inject = ['ShiftCategoryService', 'PersonSelection', 'teamScheduleNotificationService'];
 
-	modifyShiftCategoryCtrl.$inject = ['ShiftCategoryService', 'PersonSelection'];
-
-	function modifyShiftCategoryCtrl(shiftCategorySvc, personSelectionSvc){
+	function modifyShiftCategoryCtrl(shiftCategorySvc, personSelectionSvc, teamScheduleNotificationService){
 		var vm = this;
 
 		vm.label = 'EditShiftCategory';
 		vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
 
 		vm.modifyShiftCategory = function(){
-			
+			var requestData = {
+				PersonIds: vm.selectedAgents.map(function(agent) {return agent.PersonId}),
+				Date: vm.selectedDate(),
+				SelectedShiftCategoryId: vm.SelectedShiftCategoryId
+			}
+
+			shiftCategorySvc.modifyShiftCategories(requestData).then(function(response){
+				if (vm.getActionCb(vm.label)) {
+					vm.getActionCb(vm.label)(vm.trackId, requestData.PersonIds);
+				}
+				
+				teamScheduleNotificationService.reportActionResult({
+					success: 'SuccessfulMessageForEditingShiftCategory',
+					warning: 'PartialSuccessMessageForEditingShiftCategory'
+				}, vm.selectedAgents.map(function (agent) {
+					return {
+						PersonId: agent.PersonId,
+						Name: agent.Name
+					}
+				}), response.data);
+			});
 		};
 
 		vm.init = function(){
-			shiftCategorySvc.modifyShiftCategories().then(function(data){
-				vm.shiftCategoriesList = data;
+			shiftCategorySvc.fetchShiftCategories().then(function(data){
+				vm.shiftCategoriesList = data.data;
 			});
 		};
 
@@ -42,6 +61,8 @@
 				selfCtrl = ctrls[1];
 
 		scope.vm.selectedDate = containerCtrl.getDate;
+		scope.vm.trackId = containerCtrl.getTrackId();
+		scope.vm.getActionCb = containerCtrl.getActionCb;
 	}
 
 })();

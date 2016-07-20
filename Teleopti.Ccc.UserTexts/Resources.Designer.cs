@@ -19803,6 +19803,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Changing shift categories for {0} agent(s), {1} succeeded and {2} failed..
+        /// </summary>
+        public static string PartialSuccessMessageForEditingShiftCategory {
+            get {
+                return ResourceManager.GetString("PartialSuccessMessageForEditingShiftCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Moving activities for {0} agent(s), {1} succeeded and {2} failed..
         /// </summary>
         public static string PartialSuccessMessageForMovingActivity {
@@ -28786,6 +28795,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SuccessfulMessageForAddingActivity {
             get {
                 return ResourceManager.GetString("SuccessfulMessageForAddingActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully changing shift categories for the selected agents.
+        /// </summary>
+        public static string SuccessfulMessageForEditingShiftCategory {
+            get {
+                return ResourceManager.GetString("SuccessfulMessageForEditingShiftCategory", resourceCulture);
             }
         }
         

@@ -11,11 +11,11 @@
 				</div>
 				<div ng-hide="vm.selectMode" class="wfm-checkbox-label person-name nowrap">{{'AgentName' | translate}}</div>
 			</th>
-			<th class="shift-category-cell" ng-if="vm.toggles.ViewShiftCategoryEnabled"></th>
 			<th id="time-line-container" class="schedule schedule-column">
 				<time-line ng-if="vm.scheduleVm.Schedules.length > 0" times="vm.scheduleVm.TimeLine.HourPoints" schedule-count="vm.scheduleVm.Schedules.length"></time-line>
 			</th>
 			<th class="right-border-empty"></th>
+			<th class="shift-category-cell" ng-if="vm.toggles.ViewShiftCategoryEnabled"></th>
 			<th class="contract-time-header contract-time-column" ng-if="vm.ShowContractTimeEnabled">{{'ContractTime' | translate}}</th>
 		</tr>
 	</thead>
@@ -40,7 +40,6 @@
 					<md-progress-circular md-mode="indeterminate" md-diameter="15" ng-if="!vm.checkNightRestWarningMessage(personSchedule.PersonId).isLoaded"></md-progress-circular>
 				</span>
 			</td>
-			<td class="shift-category-cell" ng-style="{color: personSchedule.ShiftCategory.Color}" ng-if="vm.toggles.ViewShiftCategoryEnabled">{{personSchedule.ShiftCategory.Name}}</td>
 			<td class="schedule schedule-column">
 				<div class="relative time-line-for">
 					<span class="dayoff absolute" ng-repeat="dayOff in personSchedule.DayOffs" ng-if="personSchedule.DayOffs.length > 0"
@@ -60,6 +59,7 @@
 				</div>
 			</td>
 			<td class="right-border-empty"></td>
+			<td class="shift-category-cell" ng-if="vm.toggles.ViewShiftCategoryEnabled">{{personSchedule.ShiftCategory.Name}}</td>
 			<td class="contract-time contract-time-column" ng-if="vm.ShowContractTimeEnabled">{{personSchedule.ContractTime}}</td>
 		</tr>
 	</tbody>

@@ -14706,4 +14706,12 @@ These options are activated:
     <value>No permission to modify person assignment.</value>
     <comment>Error message for modifying person assignment without permission</comment>
   </data>
+  <data name="PartialSuccessMessageForEditingShiftCategory" xml:space="preserve">
+    <value>Changing shift categories for {0} agent(s), {1} succeeded and {2} failed.</value>
+    <comment>Message for when changing shift categories is not totally successful</comment>
+  </data>
+  <data name="SuccessfulMessageForEditingShiftCategory" xml:space="preserve">
+    <value>Successfully changing shift categories for the selected agents</value>
+    <comment>Succeed message for changing shift categories in wfm/teamschedule</comment>
+  </data>
 </root>
