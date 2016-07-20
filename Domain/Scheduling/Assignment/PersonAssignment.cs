@@ -9,6 +9,7 @@ using Teleopti.Interfaces.Domain;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		protected PersonAssignment()
 		{
 		}
-
+		
 		public virtual void Clear()
 		{
 			ClearMainActivities();

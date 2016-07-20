@@ -4,6 +4,8 @@ namespace Teleopti.Interfaces.Domain
 {
 	public interface IAggregateRootWithEvents : IAggregateRoot
 	{
-		IEnumerable<IEvent> PopAllEvents(INow now, DomainUpdateType? operation=null);
+		void NotifyTransactionComplete(DomainUpdateType operation);
+		void NotifyDelete();
+		IEnumerable<IEvent> PopAllEvents();
 	}
 }

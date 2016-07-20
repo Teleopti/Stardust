@@ -1588,22 +1588,21 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
         }
 
-	    public override IEnumerable<IEvent> PopAllEvents(INow now, DomainUpdateType? operation = null)
+	    public override void NotifyTransactionComplete(DomainUpdateType operation)
 	    {
-		    var events = base.PopAllEvents(now, operation).ToList();
+		    base.NotifyTransactionComplete(operation);
+
 		    switch (operation)
 		    {
 			    case DomainUpdateType.Insert:
 			    case DomainUpdateType.Update:
 			    case DomainUpdateType.Delete:
-					events.Add(new SkillDayChangedEvent
-					{
-						SkillDayId = Id.GetValueOrDefault()
-					});
+				    AddEvent(new SkillDayChangedEvent
+				    {
+					    SkillDayId = Id.GetValueOrDefault()
+				    });
 				    break;
 		    }
-
-		    return events;
 	    }
     }
 }

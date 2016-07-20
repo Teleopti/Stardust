@@ -954,32 +954,31 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			return !(_persistedState.IsNew && _requestState.IsNew);
 		}
 
-		public override IEnumerable<IEvent> PopAllEvents(INow now, DomainUpdateType? operation = null)
+		public override void NotifyTransactionComplete(DomainUpdateType operation)
 		{
-			var events = base.PopAllEvents(now, operation).ToList();
-			if (!operation.HasValue) return events;
+			base.NotifyTransactionComplete(operation);
 			switch (operation)
 			{
 				case DomainUpdateType.Insert:
-					events.Add(new PersonRequestCreatedEvent
+					AddEvent(new PersonRequestCreatedEvent
 					{
 						PersonRequestId = Id.GetValueOrDefault()
 					});
 					break;
 				case DomainUpdateType.Update:
-					events.Add(new PersonRequestChangedEvent
+					AddEvent(new PersonRequestChangedEvent
 					{
 						PersonRequestId = Id.GetValueOrDefault()
 					});
 					break;
 				case DomainUpdateType.Delete:
-					events.Add(new PersonRequestDeletedEvent
+					AddEvent(new PersonRequestDeletedEvent
 					{
 						PersonRequestId = Id.GetValueOrDefault()
 					});
 					break;
 			}
-			return events;
 		}
+		
 	}
 }

@@ -26,32 +26,17 @@ namespace Teleopti.Ccc.Domain.Scheduling
         private bool _isDeleted;
     	private string _payrollCode;
 
-	    public override IEnumerable<IEvent> PopAllEvents(INow now, DomainUpdateType? operation = null)
+
+	    public override void NotifyTransactionComplete(DomainUpdateType operation)
 	    {
-		    var events = base.PopAllEvents(now, operation).ToList();
-		    if (operation.HasValue)
-		    {
-			    switch (operation.Value)
+		    base.NotifyTransactionComplete(operation);
+		    if (operation == DomainUpdateType.Update)
+			    AddEvent(new DayOffTemplateChangedEvent
 			    {
-				    case DomainUpdateType.Update:
-						events.Add(new DayOffTemplateChangedEvent
-						{
-							DayOffTemplateId = Id.GetValueOrDefault(),
-						});
-						break;
-			    }
-		    }
-
-		    return events;
+				    DayOffTemplateId = Id.GetValueOrDefault(),
+			    });
 	    }
-
-	    /// <summary>
-	    /// Gets or sets the description
-	    /// </summary>
-	    /// <remarks>
-	    /// Created by: shirang
-	    /// Created date: 2008-10-28
-	    /// </remarks>
+		
 	    public virtual Description Description
 	    {
 		    get { return _description; }

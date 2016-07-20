@@ -27,51 +27,26 @@ namespace Teleopti.Ccc.Domain.Scheduling
         private bool _allowOverwrite;
 	    private bool _isOutboundActivity;
 
-	    /// <summary>
-        /// Initializes a new instance of the <see cref="Activity"/> class.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-10-26
-        /// </remarks>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Activity(string name)
             : base(true)
         {
             _description = new Description(name);
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Activity"/> class for NHibernate.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-10-26
-        /// </remarks>
         protected Activity()
         {
         }
 
-		public override IEnumerable<IEvent> PopAllEvents(INow now, DomainUpdateType? operation = null)
-		{
-			var events = base.PopAllEvents(now, operation).ToList();
-			if (!operation.HasValue) return events;
-			switch (operation)
-			{
-				case DomainUpdateType.Insert:
-				case DomainUpdateType.Update:
-				case DomainUpdateType.Delete:
-					events.Add(new ActivityChangedEvent
-					{
-						ActivityId = Id.GetValueOrDefault()
-					});
-					break;
-			}
-			return events;
-		}
+	    public override void NotifyTransactionComplete(DomainUpdateType operation)
+	    {
+		    base.NotifyTransactionComplete(operation);
+		    AddEvent(new ActivityChangedEvent
+		    {
+			    ActivityId = Id.GetValueOrDefault()
+		    });
+	    }
 
-		public virtual Description Description
+	    public virtual Description Description
 		{
             get
             {

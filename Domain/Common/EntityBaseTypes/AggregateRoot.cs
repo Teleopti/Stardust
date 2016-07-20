@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
@@ -80,65 +81,53 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 	{
 		private IPerson _updatedBy;
 		private DateTime? _updatedOn;
+
 		private readonly LocalizedUpdateInfo _localizedUpdateInfo = new LocalizedUpdateInfo();
-		private readonly IList<Func<INow, IEvent>> _events = new List<Func<INow, IEvent>>();
+		private readonly IList<Func<IEvent>> _events = new List<Func<IEvent>>();
+		private Guid? _commandId;
 
-		public virtual IEnumerable<IEvent> PopAllEvents(INow now, DomainUpdateType? operation=null)
+		public virtual void NotifyCommandId(Guid commandId)
 		{
-			var allEvents = _events.Select(e => e.Invoke(now)).ToArray();
-			_events.Clear();
-			return filterScheduleMergeEventDuplicate(allEvents.ToList());
+			_commandId = commandId;
 		}
 
-		public virtual void AttachCommandTrackIdToEvents(Guid commandId)
+		public virtual void NotifyDelete()
 		{
-			var patched = _events.Select(ef =>
-			{
-				Func<INow,IEvent> f = now =>
-				{
-					var e = ef(now);
-					var trackableE = e as ICommandIdentifier;
-					if (trackableE != null)
-					{
-						trackableE.CommandId = commandId;
-					}
-					return e;
-				};
-				return f;
-			}).ToList();
-
-			_events.Clear();
-			patched.ForEach(ef => _events.Add(ef));			
 		}
 
-		private IEnumerable<IEvent> filterScheduleMergeEventDuplicate(IList<IEvent> allEvents)
+		public virtual void NotifyTransactionComplete(DomainUpdateType operation)
 		{
-			var mergeEvents = allEvents.Where(e => e.GetType() == typeof (MainShiftReplaceNotificationEvent)).ToList();
-			
-			foreach (var item in mergeEvents)
-			{
-				allEvents.Remove(item);
-			}
-			mergeEvents = mergeEvents.GroupBy(x => ((MainShiftReplaceNotificationEvent)x).PersonId).Select(g => g.First()).ToList();
-			return allEvents.Concat(mergeEvents) ;
-		}
-
-
-		protected void AddEvent(Func<INow, IEvent> @event)
-		{
-			_events.Add(@event.Invoke);
 		}
 
 		protected void AddEvent(Func<IEvent> @event)
 		{
-			_events.Add(n => @event.Invoke());
+			_events.Add(@event.Invoke);
 		}
-
-
+		
 		protected void AddEvent(IEvent @event)
 		{
-			_events.Add(n => @event);
+			_events.Add(() => @event);
 		}
+
+		public virtual IEnumerable<IEvent> PopAllEvents()
+		{
+			var allEvents = _events.Select(e => e.Invoke()).ToArray();
+			_events.Clear();
+			if (_commandId.HasValue)
+			allEvents.ForEach(e =>
+			{
+				var trackableE = e as ICommandIdentifier;
+				if (trackableE != null)
+				{
+					trackableE.CommandId = _commandId.Value;
+				}
+			});
+			return allEvents;
+		}
+
+
+
+
 
 		public virtual IPerson UpdatedBy
 		{

@@ -116,23 +116,16 @@ namespace Teleopti.Ccc.Domain.Common
             _isDeleted = true;
         }
 
-	    public override IEnumerable<IEvent> PopAllEvents(INow now, DomainUpdateType? operation = null)
+	    public override void NotifyTransactionComplete(DomainUpdateType operation)
 	    {
-		    var events = base.PopAllEvents(now, operation).ToList();
-		    switch (operation)
-		    {
-			    case DomainUpdateType.Insert:
-			    case DomainUpdateType.Update:
-			    case DomainUpdateType.Delete:
-					events.Add(new BusinessUnitChangedEvent
-					{
-						BusinessUnitId = Id.GetValueOrDefault(),
-						BusinessUnitName = Name,
-						UpdatedOn = UpdatedOn.GetValueOrDefault(DateTime.UtcNow)
-					});
-				    break;
-		    }
-		    return events;
-	    }
-    }
+		    base.NotifyTransactionComplete(operation);
+			AddEvent(new BusinessUnitChangedEvent
+			{
+				BusinessUnitId = Id.GetValueOrDefault(),
+				BusinessUnitName = Name,
+				UpdatedOn = UpdatedOn.GetValueOrDefault(DateTime.UtcNow)
+			});
+		}
+
+	}
 }

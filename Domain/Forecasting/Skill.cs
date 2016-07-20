@@ -76,19 +76,15 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
 		}
 
-	    public override IEnumerable<IEvent> PopAllEvents(INow now, DomainUpdateType? operation = null)
+	    public override void NotifyTransactionComplete(DomainUpdateType operation)
 	    {
-		    var events =  base.PopAllEvents(now, operation).ToList();
-		    if (operation.HasValue)
-		    {
-			    if (operation.Value == DomainUpdateType.Update)
-				    events.Add(new SkillChangedEvent {SkillId = Id.GetValueOrDefault()});
-				else if (operation.Value == DomainUpdateType.Insert)
-					events.Add(new SkillCreatedEvent { SkillId = Id.GetValueOrDefault() });
-			}
-		    return events;
-	    }
-
+		    base.NotifyTransactionComplete(operation);
+			if (operation == DomainUpdateType.Update)
+				AddEvent(new SkillChangedEvent { SkillId = Id.GetValueOrDefault() });
+			else if (operation == DomainUpdateType.Insert)
+				AddEvent(new SkillCreatedEvent { SkillId = Id.GetValueOrDefault() });
+		}
+		
 	    public virtual ISkillType SkillType
         {
             get { return _skillType; }

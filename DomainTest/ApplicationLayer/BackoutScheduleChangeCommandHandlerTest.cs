@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				person,new ScheduleDictionaryLoadOptions(true,true),dateOnlyPeriod,CurrentScenario.Current())[person].ScheduledDayCollection(dateOnlyPeriod).Single();
 
 
-			var events = schedule.PersonAssignment().PopAllEvents(new Now());
+			var events = schedule.PersonAssignment().PopAllEvents();
 
 			foreach (var e in events)
 			{
