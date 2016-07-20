@@ -7,6 +7,7 @@ using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Ccc.Web.Core;
+using Teleopti.Ccc.Web.Core.Data;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
@@ -99,12 +100,18 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			return scheduleVm;
 		}
 
-		private Description? getShiftCategoryDescription(IScheduleDay scheduleDay)
+		private ShiftCategoryViewModel getShiftCategoryDescription(IScheduleDay scheduleDay)
 		{
 			var significantPart = scheduleDay.SignificantPart();
 			if (significantPart == SchedulePartView.MainShift)
 			{
-				return scheduleDay.PersonAssignment().ShiftCategory.Description;
+				var shiftCategory = scheduleDay.PersonAssignment().ShiftCategory;
+				return new ShiftCategoryViewModel
+				{
+					Name = shiftCategory.Description.Name,
+					ShortName = shiftCategory.Description.ShortName,
+					DisplayColor = shiftCategory.DisplayColor.ToHtml()
+				};
 			}
 			return null;
 		}

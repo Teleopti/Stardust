@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			schedule.Name.Should().Be.EqualTo("Sherlock@Holmes");
 			schedule.IsFullDayAbsence.Should().Be.EqualTo(false);
 
-			schedule.ShiftCategory.GetValueOrDefault().Name.Should().Be.EqualTo(shiftCategory.Description.Name);
+			schedule.ShiftCategory.Name.Should().Be.EqualTo(shiftCategory.Description.Name);
 		}
 
 		[Test]
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			schedule.Name.Should().Be.EqualTo("Sherlock@Holmes");
 			schedule.IsFullDayAbsence.Should().Be.EqualTo(false);
 			
-			schedule.ShiftCategory.HasValue.Should().Be.False();
+			schedule.ShiftCategory.Should().Be.Null();
 		}
 
 		[Test]
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			var schedule = result.Single();
 			schedule.IsFullDayAbsence.Should().Be.EqualTo(true);
-			schedule.ShiftCategory.HasValue.Should().Be.False();
+			schedule.ShiftCategory.Should().Be.Null();
 		}
 
 		[Test]
