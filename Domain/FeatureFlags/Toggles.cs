@@ -80,6 +80,7 @@
 		WfmTeamSchedule_ModifyShiftCategory_39797,
 		WfmTeamSchedule_MakeNewMyTeamDefault_39744,
 		WfmTeamSchedule_ShowShiftCategory_39796,
+		Wfm_Requests_Reply_Message_39629,
 
 		WfmReportPortal_Basic_38825,
 		WfmReportPortal_LeaderBoard_39440,
