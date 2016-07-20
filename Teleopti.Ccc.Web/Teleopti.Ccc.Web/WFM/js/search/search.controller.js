@@ -1,18 +1,27 @@
 (function() {
 	'use strict';
-	angular.module('wfm.searching', ['restSearchService'])
+	angular.module('wfm.searching', ['restSearchService', 'shortcutsService'])
 	.controller('SearchCtrl', [
-		'$scope', '$filter', '$state', 'SearchSvrc','$timeout',
-		function($scope, $filter, $state, SearchSvrc, $timeout) {
+		'$scope', '$filter', '$state', 'SearchSvrc','$timeout', 'ShortCuts', 'keyCodes',
+		function($scope, $filter, $state, SearchSvrc, $timeout, ShortCuts, keyCodes) {
 			$scope.keyword = '';
 			$scope.searchmode = false;
 			var searchbar = document.getElementById("searchbar");
+
+			ShortCuts.registerKeySequence(keyCodes.F, [keyCodes.CONTROL, keyCodes.ALT], function(){
+				$scope.searchmode = true;
+				$scope.searchbarSetFocus();
+				$scope.delayFocus();
+			});
 
 			$scope.clickedItem = function(obj) {
 				$state.go(obj.Url, { id: obj.Id });
 			};
 			$scope.clearSearchbar = function () {
 				$scope.keyword = '';
+				if (searchbar) {
+					searchbar.blur();
+				}
 				search($scope.keyword);
 			};
 			$scope.resetSearch = function() {
