@@ -103,8 +103,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see agent status for '(.*)'")]
 		public void ThenIShouldSeeAgentStatusFor(string name)
 		{
-			var status = new RealTimeAdherenceAgentState() {Name = name};
-			assertAgentStatus(status);
+			var personId = DataMaker.Person(name).Person.Id.Value;
+			Browser.Interactions.AssertExists("[agentid='" + personId + "']");
 		}
 		
 		[Then(@"I should see the menu with option of change schedule")]
@@ -211,7 +211,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.Click("#business-unit-select");
 			Browser.Interactions.ClickContaining("md-option", businessUnitName);
 		}
-		
+
+		[When(@"I select skill area '(.*)'")]
+		public void WhenISelectSkillArea(string skillAreaName)
+		{
+			Browser.Interactions.Click("#skill-area-input");
+			Browser.Interactions.ClickContaining(".rta-skill-area-item", skillAreaName);
+		}
+
+		[When(@"I select skill '(.*)'")]
+		[Scope(Feature = "Monitor agents by skill")]
+		public void WhenISelectSkill(string skillName)
+		{
+			Browser.Interactions.Click("#skill-input");
+			Browser.Interactions.ClickContaining(".rta-skill-item", skillName);
+		}
+
+
 		private static void assertAgentStatus(RealTimeAdherenceAgentState state)
 		{
 			var personId = DataMaker.Person(state.Name).Person.Id.Value;

@@ -33,6 +33,12 @@ Background:
 	| Start time               | 2016-06-14 08:00 |
 	| End time                 | 2016-06-14 17:00 |
 	And there is a rule with 
+	| Field       | Value    |
+	| Activity    | Phone    |
+	| Phone state | Ready    |
+	| Name        | Adhering |
+	| Is alarm    | false    |
+	And there is a rule with 
 	| Field       | Value        |
 	| Activity    | Phone        |
 	| Phone state | LoggedOut    |
@@ -45,6 +51,12 @@ Scenario: Monitor agents by skill area
 	Given the time is '2016-06-14 08:00:00'
 	And 'Ashley Andeen' sets his phone state to 'LoggedOut'
 	And 'Pierre Baldi' sets his phone state to 'LoggedOut'
-	When I view real time adherence for agents for skill area 'Phone skills'
+	When I view Real time adherence sites
+	And I click 'select skill'
+	And I select skill area 'Phone skills'	
 	Then I should see agent status for 'Ashley Andeen'
 	And I should see agent status for 'Pierre Baldi'
+	When the time is '2016-06-14 08:10:00'
+	And 'Pierre Baldi' sets his phone state to 'Ready'
+	Then I should see agent status for 'Ashley Andeen'
+	And I should not see agent 'Pierre Baldi'

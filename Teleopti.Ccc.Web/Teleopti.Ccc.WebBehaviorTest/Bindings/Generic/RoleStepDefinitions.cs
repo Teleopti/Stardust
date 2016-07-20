@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			{
 				AccessToEveryone = true,
 				AccessToAnywhere = true,
+				AccessToIntraday = true
 				// put any that defaults to false to true here as needed
 			};
 			DataMaker.Data().Apply(role);

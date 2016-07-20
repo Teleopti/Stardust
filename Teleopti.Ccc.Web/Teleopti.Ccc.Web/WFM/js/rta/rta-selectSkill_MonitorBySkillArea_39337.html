@@ -23,6 +23,7 @@
 						<span class="con-flex">
 							<md-autocomplete id="skill-id"
 											 class="autocomplete-skill"
+											 md-input-id="skill-input"
 											 md-selected-item="selectedSkill"
 											 md-search-text="searchSkillText"
 											 md-selected-item-change="selectedSkillChange(skill)"
@@ -31,7 +32,7 @@
 											 md-min-length="0"
 											 placeholder="{{'SelectSkill'|translate}}">
 								<md-item-template>
-									<span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
+									<span class="rta-skill-item" md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
 								</md-item-template>
 								<md-not-found>
 									{{'RepViewerNoMoreMatches'|translate}}
@@ -50,7 +51,7 @@
 											md-min-length="0"
 											placeholder="{{'SelectSkillArea'|translate}}">
 								<md-item-template>
-									<span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skillArea.Name}}</span>
+									<span class="rta-skill-area-item" md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skillArea.Name}}</span>
 								</md-item-template>
 								<md-not-found>
 									{{'RepViewerNoMoreMatches'|translate}}

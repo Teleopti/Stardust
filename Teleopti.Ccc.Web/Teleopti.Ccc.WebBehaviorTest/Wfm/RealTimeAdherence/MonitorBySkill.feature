@@ -21,6 +21,11 @@ Background:
 	 | Team       | Red        |
 	 | Start Date | 2016-06-14 |
 	 | Skill      | Email      |
+	And Ashley Andeen has a person period with
+	 | Field      | Value      |
+	 | Team       | Red        |
+	 | Start Date | 2016-06-14 |
+	 | Skill      | Sales      |
 	And Pierre Baldi has a shift with
 	| Field                    | Value            |
 	| Activity                 | Phone            |
@@ -31,18 +36,38 @@ Background:
 	| Activity                 | Phone            |
 	| Start time               | 2016-06-14 08:00 |
 	| End time                 | 2016-06-14 17:00 |
+	And Ashley Andeen has a shift with
+	| Field                    | Value            |
+	| Activity                 | Phone            |
+	| Start time               | 2016-06-14 08:00 |
+	| End time                 | 2016-06-14 17:00 |
 	And there is a rule with 
 	| Field       | Value        |
 	| Activity    | Phone        |
 	| Phone state | LoggedOut    |
 	| Name        | Not adhering |
 	| Is alarm    | true         |
+	And there is a rule with 
+	| Field       | Value    |
+	| Activity    | Phone    |
+	| Phone state | Ready    |
+	| Name        | Adhering |
+	| Is alarm    | false    |
 
+@ignore
 @OnlyRunIfEnabled('RTA_MonitorBySkills_39081')
 Scenario: Monitor agents by skill
 	Given the time is '2016-06-14 08:00:00'
 	And 'Pierre Baldi' sets his phone state to 'LoggedOut'
 	And 'John King' sets his phone state to 'LoggedOut'
-	When I view real time adherence for agents with skills 'Sales'
+	And 'Ashley Andeen' sets his phone state to 'LoggedOut'
+	When I view Real time adherence sites
+	And I click 'select skill'
+	And I select skill 'Sales'
 	Then I should see agent status for 'Pierre Baldi'
+	And I should see agent status for 'Ashley Andeen'
 	And I should not see agent 'John King'
+	When the time is '2016-06-14 08:10:00'
+	And 'Pierre Baldi' sets his phone state to 'Ready'
+	Then I should see agent status for 'Ashley Andeen'
+	And I should not see agent 'Pierre Baldi'

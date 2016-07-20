@@ -384,7 +384,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestControllerMethods.Logon();
 			Navigation.GotoSeatPlan(date);
 		}
-		
+
 		[When(@"I view Real time adherence overview")]
 		public void WhenIViewRealTimeAdherenceOverview()
 		{
@@ -614,14 +614,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestControllerMethods.Logon();
 			Navigation.GotoRealTimeAdherenceAllAgentsWithSkill(IdForSkill(skill));
 		}
-
-		[When(@"I view real time adherence for agents for skill area '(.*)'")]
-		public void WhenIViewRealTimeAdherenceForAgentsForSkillArea(string skillArea)
-		{
-			TestControllerMethods.Logon();
-			Navigation.GotoRealTimeAdherenceAllAgentsWithSkillArea(IdForSkillArea(skillArea));
-		}	
-
+		
 		[When(@"I view real time adherence view for team '(.*)'")]
 		public void WhenIViewRealTimeAdherenceViewForTeam(string team)
 		{
