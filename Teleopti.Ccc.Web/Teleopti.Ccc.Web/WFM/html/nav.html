@@ -13,8 +13,8 @@
 			</span>
 		</div>
 	</div>
-	<div class="con-flex split-1-2">
-		<div ng-show="searchmode">
+	<div class="con-flex split-1-2" ng-show="searchmode">
+		<div >
 		  <input type="text" id="searchbar" ng-blur="delayFocus()" class="navbar-search" placeholder="{{'SearchThreeDots' | translate}}" ng-model="keyword" ng-change="searchKeyword()"/>
 		  <div class="search-results material-depth-2">
 		    <ul class="wfm-list">

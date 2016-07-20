@@ -134,6 +134,12 @@ wfm-notice{
 	}
 }
 
+@-moz-document url-prefix() {
+	.navbar .navbar-search{
+		padding: 1px;
+	}
+}
+
 .nav-item-wrap:focus > .sidenav-header{
   background: $gray012;
 }
