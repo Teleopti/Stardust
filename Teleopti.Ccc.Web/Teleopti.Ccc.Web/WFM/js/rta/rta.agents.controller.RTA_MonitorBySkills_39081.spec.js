@@ -1,5 +1,5 @@
 'use strict';
-fdescribe('RtaAgentsCtrlMonitorBySkills_39081', function () {
+describe('RtaAgentsCtrlMonitorBySkills_39081', function () {
 	var $interval,
 		$httpBackend,
 		$state,
