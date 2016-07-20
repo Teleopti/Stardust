@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
@@ -15,6 +13,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public void Invalidate()
 		{
+		}
+
+		public bool Invalid()
+		{
+			return _invalido || _data.IsEmpty();
+		}
+
+		public void Persist(IEnumerable<Mapping> mappings)
+		{
+			_data.Clear();
+			mappings.ForEach(_data.Add);
 		}
 
 		public void Add(Mapping mapping)

@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -553,22 +554,25 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 		
-		public FakeDatabase WithStateGroup(Guid? id)
+		public FakeDatabase WithStateGroup(Guid? id, string name)
 		{
-			_stateGroup = new RtaStateGroup(RandomName.Make());
+			ensureExists(_businessUnits, null, () => WithBusinessUnit(null));
+			_stateGroup = new RtaStateGroup(name ?? RandomName.Make());
 			_stateGroup.SetId(id ?? Guid.NewGuid());
+			_stateGroup.SetBusinessUnit(_businessUnit);
 			_stateGroups.Has(_stateGroup);
 			return this;
 		}
 
 		public FakeDatabase WithStateCode(string stateCode)
 		{
-			ensureExists(_stateGroups, null, () => this.WithStateGroup(null));
-			_stateGroup.AddState(stateCode, stateCode, Guid.Empty);
+			ensureExists(_stateGroups, null, () => this.WithStateGroup(null, null));
+			ensurePlatformExists(null);
+			_stateGroup.AddState(stateCode, stateCode, _platform.Value);
 			return this;
 		}
 
-		public FakeDatabase WithRule(Guid? ruleId, string stateCode, Guid? platformTypeId, Guid? activityId, int staffingEffect, string name, Adherence? adherence)
+		public FakeDatabase WithRule(Guid? ruleId, string stateCode, Guid? platformTypeId, Guid? activityId, int staffingEffect, string name, Adherence? adherence, Color? displayColor)
 		{
 			ensurePlatformExists(platformTypeId);
 			ensureExists(_businessUnits, null, () => WithBusinessUnit(null));
@@ -583,6 +587,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				_rtaRule.SetBusinessUnit(_businessUnit);
 				_rtaRule.StaffingEffect = staffingEffect;
 				_rtaRule.Adherence = adherence;
+				_rtaRule.DisplayColor = displayColor.GetValueOrDefault();
 			}
 
 			IRtaStateGroup stateGroup = null;
@@ -638,10 +643,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
-		public FakeDatabase WithAlarm(TimeSpan threshold)
+		public FakeDatabase WithAlarm(TimeSpan threshold, Color? color)
 		{
 			_rtaRule.IsAlarm = true;
 			_rtaRule.ThresholdTime = threshold;
+			_rtaRule.AlarmColor = color.GetValueOrDefault();
 			return this;
 		}
 

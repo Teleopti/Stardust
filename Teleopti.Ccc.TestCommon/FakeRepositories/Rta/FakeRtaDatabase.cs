@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public FakeRtaDatabase WithRule(Guid? ruleId, string stateCode, Guid? platformTypeId, Guid? activityId, int staffingEffect, string name, Adherence? adherence)
 		{
-			_database.WithRule(ruleId, stateCode, platformTypeId, activityId, staffingEffect, name, adherence);
+			_database.WithRule(ruleId, stateCode, platformTypeId, activityId, staffingEffect, name, adherence, null);
 			return this;
 		}
 
@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public FakeRtaDatabase WithAlarm(TimeSpan threshold)
 		{
-			_database.WithAlarm(threshold);
+			_database.WithAlarm(threshold, null);
 			return this;
 		}
 
