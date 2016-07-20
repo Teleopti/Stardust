@@ -106,15 +106,15 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForSkills")]
-		public virtual IHttpActionResult GetStatesForSkill([FromUri] SkillQuery query)
+		public virtual IHttpActionResult GetStatesForSkill([FromUri] StatesQuery skillIds)
 		{
-			return Ok(_agentStatesBuilder.ForSkill(query.SkillId));
+			return Ok(_agentStatesBuilder.ForSkill(skillIds.Ids.First()));
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/GetAlarmStatesForSkills")]
-		public virtual IHttpActionResult GetAlarmStatesForSkill([FromUri] SkillQuery query)
+		public virtual IHttpActionResult GetAlarmStatesForSkill([FromUri] StatesQuery skillIds)
 		{
-			return Ok(_agentStatesBuilder.InAlarmForSkill(query.SkillId));
+			return Ok(_agentStatesBuilder.InAlarmForSkill(skillIds.Ids.First()));
 		}
 
 	}

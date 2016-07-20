@@ -54,7 +54,6 @@ Background:
 	| Name        | Adhering |
 	| Is alarm    | false    |
 
-@ignore
 @OnlyRunIfEnabled('RTA_MonitorBySkills_39081')
 Scenario: Monitor agents by skill
 	Given the time is '2016-06-14 08:00:00'

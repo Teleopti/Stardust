@@ -199,6 +199,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.Click($"[name='{name}']");
 		}
 
+		[When(@"I click the toggle to see all agents")]
+		public void WhenIClickTheToggleToSeeAllAgents()
+		{
+			Browser.Interactions.Click(".rta-agents-in-alarm-switch");
+		}
+
+
 		[When(@"I choose business unit '(.*)'")]
 		public void WhenIChooseBusinessUnit(string businessUnitName)
 		{
