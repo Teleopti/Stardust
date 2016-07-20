@@ -1,61 +1,60 @@
-<div>
-				<div class="view-header with-fab with-desc">
-								<div class="view-title">
-												<div class="rta-title-wrapper">
-																<h1>
-																				<i class="mdi mdi-alarm"></i>
-																				{{'RTA'|translate}}</h1>
-												</div>
-												<div class="rta-top-buttons-wrapper" ng-show="monitorBySkill">
-																<span>
-																				<button class="wfm-btn wfm-btn-primary rta-default-cursor">Overview</button>
-																				<button class="wfm-btn wfm-btn-default" ng-click="goToSkillSelection()">Select skill</button>
-																</span>
-												</div>
-								</div>
-				</div>
-				<div class="panel material-depth-1">
+<div class="view-header with-fab with-desc">
+	<div class="view-title">
+		<div class="rta-title-wrapper">
+			<h1>
+				<i class="mdi mdi-alarm"></i>
+				{{'RTA'|translate}}</h1>
+			</div>
+			<div class="rta-top-buttons-wrapper" ng-show="monitorBySkill">
+				<span>
+					<button class="wfm-btn wfm-btn-primary rta-default-cursor">Overview</button>
+					<button class="wfm-btn wfm-btn-default" ng-click="goToSkillSelection()">Select skill</button>
+				</span>
+			</div>
+		</div>
+	</div>
+	<div class="panel material-depth-1">
 
-								<div class="con-row">
-												<div class="con-flex">
-																<div class="sub-header">
-																				<button class="wfm-btn open" ng-class="{'wfm-btn-invis-primary': checkboxesChecked > 0,'wfm-btn-invis-disabled': checkboxesChecked < 1}" ng-click="openSelectedSites(selectedSites)">
-																								<md-tooltip ng-if="checkboxesChecked < 1">
-																												{{'SelectSites'|translate}}</md-tooltip>
-																								{{'Open'|translate}}
-																				</button>
-																</div>
+		<div class="con-row">
+			<div class="con-flex">
+				<div class="sub-header">
+					<button class="wfm-btn open" ng-class="{'wfm-btn-invis-primary': checkboxesChecked > 0,'wfm-btn-invis-disabled': checkboxesChecked < 1}" ng-click="openSelectedSites(selectedSites)">
+						<md-tooltip ng-if="checkboxesChecked < 1">
+							{{'SelectSites'|translate}}</md-tooltip>
+							{{'Open'|translate}}
+						</button>
+					</div>
 
-																<div class="con-row demo-outline">
-																				<div class="con-flex">
-																								<div class="wfm-grid">
-																												<div class="grid-card site" ng-if="site.NumberOfAgents > 0" ng-repeat="site in sites" tabindex="0">
-																															<a ui-sref="rta.teams({siteId: site.Id})" class="rta-card-link">
-																																<div class="list-content"
-																																 ng-class="{good: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) <= 33, warning: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) >= 34 && getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) <= 66, danger: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) >= 67}">
-																																				<div class="wfm-checkbox">
-																																								<label ng-attr-name="{{site.Name}}" ng-click="$event.stopPropagation()">
-																																												<input type="checkbox" value="value" ng-checked="selectedSites.indexOf(site.Id) > -1" ng-click="toggleSelection(site.Id)" ng-model="selected"/>
-																																												<span class="wfm-checkbox-toggle"></span>
-																																												<b>
-																																																<span class="wfm-checkbox-label" ng-attr-data-max="{{site.NumberOfAgents}}" ng-attr-data-value="{{site.OutOfAdherence}}">
-																																																				{{site.Name}}
-																																																</span>
-																																												</b>
-																																								</label>
-																																				</br>
-																																				<span class="full-padding">{{'OutOfAdherence'|translate}}:
-																																								<b>{{site.OutOfAdherence}}</b>
-																																				</span>
-																																</div>
-																												</div>
-																											</a>
-																								</div>
-																				</div>
-																</div>
-												</div>
-												<div class="con-footer"></div>
+					<div class="con-row demo-outline">
+						<div class="con-flex">
+							<div class="wfm-grid">
+								<div class="grid-card site" ng-if="site.NumberOfAgents > 0" ng-repeat="site in sites">
+									<a ui-sref="rta.teams({siteId: site.Id})" class="rta-card-link">
+										<div class="list-content"
+										ng-class="{good: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) <= 33, warning: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) >= 34 && getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) <= 66, danger: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) >= 67}">
+										<div class="wfm-checkbox">
+											<label ng-attr-name="{{site.Name}}" ng-click="$event.stopPropagation()">
+												<input type="checkbox" value="value" ng-checked="selectedSites.indexOf(site.Id) > -1" ng-click="toggleSelection(site.Id)" ng-model="selected"/>
+												<span class="wfm-checkbox-toggle"></span>
+												<b>
+													<span class="wfm-checkbox-label" ng-attr-data-max="{{site.NumberOfAgents}}" ng-attr-data-value="{{site.OutOfAdherence}}">
+														{{site.Name}}
+													</span>
+												</b>
+											</label>
+										</br>
+										<span class="full-padding">{{'OutOfAdherence'|translate}}:
+											<b>{{site.OutOfAdherence}}</b>
+										</span>
+									</div>
 								</div>
+							</a>
+						</div>
+					</div>
 				</div>
+			</div>
+			<div class="con-footer"></div>
+		</div>
+	</div>
 
 </div>
