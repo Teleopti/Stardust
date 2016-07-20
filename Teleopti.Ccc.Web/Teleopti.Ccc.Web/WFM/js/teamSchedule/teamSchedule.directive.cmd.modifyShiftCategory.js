@@ -31,7 +31,7 @@
 			controller: modifyShiftCategoryCtrl,
 			controllerAs: 'vm',
 			bindToController: true,
-			templateUrl: 'js/teamschedule/html/modifyShiftCategory.tpl.html',
+			templateUrl: 'js/teamSchedule/html/modifyShiftCategory.tpl.html',
 			require: ['^teamscheduleCommandContainer', 'modifyShiftCategory'],
 			link: linkFn
 		};
