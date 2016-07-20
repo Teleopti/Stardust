@@ -70,7 +70,16 @@
 					headerCellTemplate: headerCellTemplate,
 					cellTemplate: coloredCellTemplate,
 					headerCellFilter: 'translate',
-					width: toggleService.RTA_AlarmContext_29357 ? "18%" : null,
+					width: toggleService.RTA_AlarmContext_29357 ? "9%" : null,
+				};
+				var site = {
+					displayName: 'Site',
+					field: 'SiteName',
+					enableColumnMenu: false,
+					headerCellTemplate: headerCellTemplate,
+					cellTemplate: coloredCellTemplate,
+					headerCellFilter: 'translate',
+					width: toggleService.RTA_AlarmContext_29357 ? "9%" : null,
 				};
 				var state = {
 					displayName: 'State',
@@ -162,10 +171,11 @@
 					rowTemplate = 'js/rta/rta-agents-rowtemplate-RTA_AlarmContext_29357.html';
 					columnDefs.push(name);
 					columnDefs.push(team);
+					columnDefs.push(site);
 					columnDefs.push(shift);
 					columnDefs.push(alarm);
 					if (toggleService.RTA_RecentOutOfAdherences_39145)
-						columnDefs.push(timeOutOfAdherence)
+						columnDefs.push(timeOutOfAdherence);
 					else if (toggleService.RTA_TotalOutOfAdherenceTime_38702)
 						columnDefs.push(timeInRule);
 					else
@@ -174,6 +184,7 @@
 				} else {
 					columnDefs.push(name);
 					columnDefs.push(team);
+					columnDefs.push(site);
 					columnDefs.push(state);
 					columnDefs.push(activity);
 					columnDefs.push(nextActivity);

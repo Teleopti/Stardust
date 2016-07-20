@@ -76,6 +76,8 @@ describe('RtaAgentsCtrl', function() {
 		$fakeBackend.withAgent({
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+			TeamName: "Team Preferences",
+			SiteName: "London"
 		})
 		.withState({
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
@@ -91,6 +93,8 @@ describe('RtaAgentsCtrl', function() {
 		$controllerBuilder.createController()
 			.apply('agentsInAlarm = false');
 
+		expect(scope.agents[0].TeamName).toEqual("Team Preferences");
+		expect(scope.agents[0].SiteName).toEqual("London");
 		expect(scope.agents[0].State).toEqual("Ready");
 		expect(scope.agents[0].Activity).toEqual("Phone");
 		expect(scope.agents[0].NextActivity).toEqual("Short break");
@@ -189,13 +193,17 @@ describe('RtaAgentsCtrl', function() {
 		$fakeBackend.withAgent({
 			Name: "Ashley Andeen",
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
+			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+			TeamName: "Team Preferences",
+			SiteName: "London"
 		});
 
 		$controllerBuilder.createController()
 			.apply('agentsInAlarm = false');
 
 		expect(scope.agents[0].Name).toEqual("Ashley Andeen");
+		expect(scope.agents[0].TeamName).toEqual("Team Preferences");
+		expect(scope.agents[0].SiteName).toEqual("London");
 		expect(scope.agents[0].PersonId).toEqual("11610fe4-0130-4568-97de-9b5e015b2564");
 		expect(scope.agents[0].TeamId).toEqual("34590a63-6331-4921-bc9f-9b5e015ab495");
 	});

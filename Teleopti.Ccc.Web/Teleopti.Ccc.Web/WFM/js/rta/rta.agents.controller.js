@@ -304,6 +304,7 @@
 							$scope.agents.push({
 								Name: agentInfo[0].Name,
 								TeamName: agentInfo[0].TeamName,
+								SiteName: agentInfo[0].SiteName,
 								PersonId: agentInfo[0].PersonId,
 								TeamId: agentInfo[0].TeamId,
 								State: state.State,
@@ -384,6 +385,7 @@
 								PersonId: agentInfo.PersonId,
 								TeamName: agentInfo.TeamName,
 								TeamId: agentInfo.TeamId,
+								SiteName: agentInfo.SiteName
 							});
 					});
 				}
