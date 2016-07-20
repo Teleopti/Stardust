@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IPersonRequest> LoadAll()
 		{
-			throw new NotImplementedException();
+			return _requestRepository;
 		}
 
 		public IPersonRequest Load(Guid id)
