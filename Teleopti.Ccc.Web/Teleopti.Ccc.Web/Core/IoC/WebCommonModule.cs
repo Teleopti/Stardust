@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<ActivityProvider>().As<IActivityProvider>().SingleInstance();
-
+			builder.RegisterType<ShiftCategoryProvider>().As<IShiftCategoryProvider>().SingleInstance();
 		}
 	}
 }

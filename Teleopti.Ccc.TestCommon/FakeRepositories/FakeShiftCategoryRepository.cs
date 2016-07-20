@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IShiftCategory> LoadAll()
 		{
-			throw new NotImplementedException();
+			return storage;
 		}
 
 		public IShiftCategory Load(Guid id)

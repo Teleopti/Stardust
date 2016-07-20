@@ -670,6 +670,8 @@
     <Compile Include="Areas\TeamSchedule\Models\GetSchedulesForPeopleFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Models\MoveActivityFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Models\RemoveActivityFormData.cs" />
+    <Compile Include="Core\Data\IShiftCategoryProvider.cs" />
+    <Compile Include="Core\Data\ShiftCategoryProvider.cs" />
     <Compile Include="Core\Startup\NoCacheFilter.cs" />
     <Compile Include="Core\Startup\OriginHandlerPipelineModule.cs" />
     <Compile Include="Core\Startup\TenantStartupTask.cs" />

@@ -11,11 +11,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
     {
 	    private readonly IActivityProvider _teamScheduleDataProvider;
 	    private readonly IScheduleValidationProvider _validationProvider;
+	    private readonly IShiftCategoryProvider _shiftCategoryProvider;
 
-		public TeamScheduleDataController(IActivityProvider teamScheduleDataProvider, IScheduleValidationProvider validationProvider)
+		public TeamScheduleDataController(IActivityProvider teamScheduleDataProvider, IScheduleValidationProvider validationProvider, IShiftCategoryProvider shiftCategoryProvider)
 		{
 			_teamScheduleDataProvider = teamScheduleDataProvider;
 			_validationProvider = validationProvider;
+			_shiftCategoryProvider = shiftCategoryProvider;
 		}
 
 	    [UnitOfWork, HttpGet, Route("api/TeamScheduleData/FetchActivities")]
@@ -29,5 +31,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		{
 			return _validationProvider.GetBusinessRuleValidationResults(input);
 		}
+
+	    [UnitOfWork, HttpGet, Route("api/TeamScheduleData/FetchShiftCategories")]
+	    public virtual IList<ShiftCategoryViewModel> FetchShiftCategories()
+	    {
+		    return _shiftCategoryProvider.GetAll();
+	    }
 	}
 }
