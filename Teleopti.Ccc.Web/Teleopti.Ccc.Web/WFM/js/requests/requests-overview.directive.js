@@ -118,16 +118,6 @@
 						vm.onTotalRequestsCountChanges(vm.totalRequestsCount);
 				}
 
-				if (vm.requests.length === 0) {
-					if (vm.shiftTradeView) {
-						$('.ui-grid-viewport')[4].style.height = 0;
-						$('.ui-grid-viewport')[4].style.minHeight = 0;
-					} else {
-						$('.ui-grid-viewport')[1].style.height = 0;
-						$('.ui-grid-viewport')[1].style.minHeight = 0;
-					}
-				}
-
 				vm.loaded = true;
 				if (done != null) done();
 			});
