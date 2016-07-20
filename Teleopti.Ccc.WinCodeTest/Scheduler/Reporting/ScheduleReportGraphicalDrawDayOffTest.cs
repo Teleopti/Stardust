@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
             var startDateTime = new DateTime(2011, 1, 10, 0, 0, 0, DateTimeKind.Utc);
             var endDateTime = startDateTime.AddHours(24);
             _scheduleDayPeriod = new DateTimePeriod(startDateTime, endDateTime);
-            _dayOff = new DayOff(startDateTime, TimeSpan.FromHours(36), TimeSpan.FromHours(0), new Description("day off", "do"), Color.Gray, "payrollCode", Guid.NewGuid());
+            _dayOff = new DayOff(startDateTime, TimeSpan.FromHours(36), TimeSpan.FromHours(0), new Description("day off", "do"), Color.Gray, "payrollCode");
             _personAssignment = _mock.StrictMock<IPersonAssignment>();
 	        _overtimeShifts = new[]
 		        {

@@ -60,7 +60,7 @@ FROM
 INNER JOIN [mart].[dim_business_unit] bu
 ON s.business_unit_code = bu.business_unit_code
 WHERE 
-	s.day_off_code = mart.dim_day_off.day_off_code
+	s.day_off_name = mart.dim_day_off.day_off_name
 AND
 	bu.business_unit_id = mart.dim_day_off.business_unit_id
 	
@@ -76,8 +76,8 @@ INSERT INTO mart.dim_day_off
 	day_off_shortname
 	)
 SELECT 
-	day_off_code		= s.day_off_code, --This is part of the PK
-	day_off_name		= s.day_off_name, --This is part of the PK
+	day_off_code		= s.day_off_code,
+	day_off_name		= s.day_off_name, --This is part of the PK 
 	display_color		= s.display_color,
 	business_unit_id	= bu.business_unit_id, --This is part of the PK
 	datasource_id		= 1, 
@@ -92,7 +92,7 @@ ON
 WHERE 
 	NOT EXISTS (SELECT day_off_id
 				FROM mart.dim_day_off d
-				WHERE d.day_off_code = s.day_off_code
+				WHERE d.day_off_name = s.day_off_name
 				AND d.business_unit_id = bu.business_unit_id
 				AND d.datasource_id=1)
 -------------------------------------------------

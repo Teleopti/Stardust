@@ -27,14 +27,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         {
             var duration = TimeSpan.FromHours(24);
 
-			var per = new DayOff(anchor, duration, flexibility, description, displayColor, payrollCode, Guid.NewGuid());
+			var per = new DayOff(anchor, duration, flexibility, description, displayColor, payrollCode);
             Assert.AreEqual(anchor, per.Anchor);
             Assert.AreEqual(duration, per.TargetLength);
             Assert.AreEqual(flexibility, per.Flexibility);
 			Assert.AreEqual(payrollCode, per.PayrollCode);
 			
             flexibility = TimeSpan.FromHours(12);
-			per = new DayOff(anchor, duration, TimeSpan.FromHours(20), description, displayColor, payrollCode, Guid.NewGuid());
+			per = new DayOff(anchor, duration, TimeSpan.FromHours(20), description, displayColor, payrollCode);
             Assert.AreEqual(flexibility, per.Flexibility);
 	        Assert.AreEqual(payrollCode, per.PayrollCode);
 
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         {
             TimeSpan duration = TimeSpan.FromHours(24);
             //Percent flexibility = new Percent(0.66d);
-            DayOff per = new DayOff(anchor, duration, flexibility, description, displayColor, payrollCode, Guid.NewGuid());
+            DayOff per = new DayOff(anchor, duration, flexibility, description, displayColor, payrollCode);
             //per.Anchor = anchor;
 
             Assert.AreEqual(anchor, per.Anchor);
@@ -67,12 +67,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             DateTime anchorDateTime = anchor;
             TimeSpan durationHours = new TimeSpan(24, 0, 0);
 
-			DayOff testAnchorPeriod = new DayOff(anchorDateTime, durationHours, flexibility, description, displayColor, payrollCode, Guid.NewGuid());
+			DayOff testAnchorPeriod = new DayOff(anchorDateTime, durationHours, flexibility, description, displayColor, payrollCode);
 
-			Assert.IsTrue(testAnchorPeriod.Equals(new DayOff(anchorDateTime, durationHours, flexibility, description, displayColor, payrollCode, Guid.NewGuid())));
+			Assert.IsTrue(testAnchorPeriod.Equals(new DayOff(anchorDateTime, durationHours, flexibility, description, displayColor, payrollCode)));
             Assert.IsFalse(
                 testAnchorPeriod.Equals(
-					new DayOff(anchorDateTime, durationHours.Add(TimeSpan.FromHours(1)), flexibility, description, displayColor, payrollCode, Guid.NewGuid())));
+					new DayOff(anchorDateTime, durationHours.Add(TimeSpan.FromHours(1)), flexibility, description, displayColor, payrollCode)));
 
             Assert.AreEqual(testAnchorPeriod, testAnchorPeriod);
         }
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         public void VerifyGetHashCodeWorks()
         {
             TimeSpan duration = TimeSpan.FromHours(4);
-			DayOff per = new DayOff(anchor, duration, flexibility, description, displayColor, payrollCode, Guid.NewGuid());
+			DayOff per = new DayOff(anchor, duration, flexibility, description, displayColor, payrollCode);
             IDictionary<DayOff, int> dic = new Dictionary<DayOff, int>();
             dic[per] = 5;
             Assert.AreEqual(5, dic[per]);
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             TimeSpan duration = TimeSpan.FromHours(4);
             //Percent flexibility = new Percent(0.66);
-			DayOff per = new DayOff(DateTime.SpecifyKind(anchor, DateTimeKind.Local), duration, flexibility, description, displayColor, payrollCode, Guid.NewGuid());
+			DayOff per = new DayOff(DateTime.SpecifyKind(anchor, DateTimeKind.Local), duration, flexibility, description, displayColor, payrollCode);
             Assert.AreEqual(per,per);
         }
 
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         {
             var duration = new TimeSpan(4, 0, 0);
             //Percent flexibility = new Percent(0.10d);
-			var per = new DayOff(anchor, duration, flexibility, description, displayColor, payrollCode, Guid.NewGuid());
+			var per = new DayOff(anchor, duration, flexibility, description, displayColor, payrollCode);
             var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
             var expectedLocalAnchor = TimeZoneInfo.ConvertTimeFromUtc(anchor, timeZoneInfo);
             // StateHolder.Instance.StateReader.SessionScopeData.TimeZone.ConvertTimeFromUtc(anchor, StateHolder.Instance.StateReader.SessionScopeData.TimeZone);
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         {
             TimeSpan duration = new TimeSpan(24, 0, 0);
             //Percent flexibility = new Percent(0.10d);
-			DayOff per = new DayOff(anchor, duration, TimeSpan.FromMinutes(12), description, displayColor, payrollCode, Guid.NewGuid());
+			DayOff per = new DayOff(anchor, duration, TimeSpan.FromMinutes(12), description, displayColor, payrollCode);
 
             DateTimePeriod expectedBoundary = new DateTimePeriod(
                 anchor.AddHours(-12).AddMinutes(-12),
@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         {
             TimeSpan duration = new TimeSpan(24, 0, 0);
             //Percent flexibility = new Percent(0.50d);
-			DayOff per = new DayOff(anchor, duration, TimeSpan.FromHours(8), description, displayColor, payrollCode, Guid.NewGuid());
+			DayOff per = new DayOff(anchor, duration, TimeSpan.FromHours(8), description, displayColor, payrollCode);
 
             DateTimePeriod expectedBoundary = new DateTimePeriod(
                 anchor.AddHours(-12).AddHours(8),
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         public void VerifyGetInnerBoundaryWorksWhenTooLongFlex()
         {
             TimeSpan duration = new TimeSpan(24, 0, 0);
-			DayOff per = new DayOff(anchor, duration, TimeSpan.FromHours(20), description, displayColor, payrollCode, Guid.NewGuid());
+			DayOff per = new DayOff(anchor, duration, TimeSpan.FromHours(20), description, displayColor, payrollCode);
 
             DateTimePeriod expectedBoundary = new DateTimePeriod(
                 anchor.AddHours(-12).AddHours(12),

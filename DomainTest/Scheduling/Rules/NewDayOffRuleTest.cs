@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             dayOff.SetTargetAndFlexibility(TimeSpan.FromHours(36), TimeSpan.FromHours(9));
             dayOff.Anchor = new TimeSpan(8, 30, 0);
 				
-				_dayOff1 = new DayOff(new DateTime(2007, 8, 3, 10, 30, 0, DateTimeKind.Utc), TimeSpan.FromHours(36), TimeSpan.FromHours(9), new Description(), Color.Beige, string.Empty, Guid.NewGuid());
+				_dayOff1 = new DayOff(new DateTime(2007, 8, 3, 10, 30, 0, DateTimeKind.Utc), TimeSpan.FromHours(36), TimeSpan.FromHours(9), new Description(), Color.Beige, string.Empty);
 
             // add this and the day off cannot be moved backwards
     		_personAssignmentJustBeforeDayOffPeriod = new DateTimePeriod(_start.AddHours(-3), _end.AddHours(-3));
@@ -225,7 +225,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             var assBeforePeriod = new DateTimePeriod(date, date.AddHours(13));
             var assAfterPeriod = new DateTimePeriod(date.AddDays(2), date.AddDays(2).AddHours(8));
 
-						var result = _target.DayOffDoesConflictWithActivity(new DayOff(new DateTime(2010, 9, 7, 12, 0, 0, DateTimeKind.Utc), TimeSpan.FromHours(36), TimeSpan.FromHours(2), new Description(), Color.Red, string.Empty, Guid.NewGuid()), assBeforePeriod, assAfterPeriod);
+						var result = _target.DayOffDoesConflictWithActivity(new DayOff(new DateTime(2010, 9, 7, 12, 0, 0, DateTimeKind.Utc), TimeSpan.FromHours(36), TimeSpan.FromHours(2), new Description(), Color.Red, string.Empty), assBeforePeriod, assAfterPeriod);
 
             Assert.That(result, Is.True);
             Assert.That(_target.ErrorMessage, Is.Not.Empty);
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             // and there is room for that
             var assAfterPeriod = new DateTimePeriod(date.AddDays(2).AddHours(2), date.AddDays(2).AddHours(10));
 
-						var result = _target.DayOffDoesConflictWithActivity(new DayOff(new DateTime(2010, 9, 7, 12, 0, 0, DateTimeKind.Utc), TimeSpan.FromHours(36), TimeSpan.FromHours(2), new Description(), Color.Red, string.Empty, Guid.NewGuid()), assBeforePeriod, assAfterPeriod);
+						var result = _target.DayOffDoesConflictWithActivity(new DayOff(new DateTime(2010, 9, 7, 12, 0, 0, DateTimeKind.Utc), TimeSpan.FromHours(36), TimeSpan.FromHours(2), new Description(), Color.Red, string.Empty), assBeforePeriod, assAfterPeriod);
 
             Assert.That(result, Is.False);
             Assert.That(_target.ErrorMessage, Is.Empty);
@@ -255,7 +255,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             // and there is room for that
             var assAfterPeriod = new DateTimePeriod(date.AddDays(2).AddHours(-1), date.AddDays(2).AddHours(10));
 
-						var result = _target.DayOffDoesConflictWithActivity(new DayOff(new DateTime(2010, 9, 7, 12, 0, 0, DateTimeKind.Utc), TimeSpan.FromHours(36), TimeSpan.FromHours(2), new Description(), Color.Red, string.Empty, Guid.NewGuid()), assBeforePeriod, assAfterPeriod);
+						var result = _target.DayOffDoesConflictWithActivity(new DayOff(new DateTime(2010, 9, 7, 12, 0, 0, DateTimeKind.Utc), TimeSpan.FromHours(36), TimeSpan.FromHours(2), new Description(), Color.Red, string.Empty), assBeforePeriod, assAfterPeriod);
 
             Assert.That(result, Is.False);
             Assert.That(_target.ErrorMessage, Is.Empty);
@@ -270,7 +270,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             // and there is room for that
             var assAfterPeriod = new DateTimePeriod(date.AddDays(2).AddHours(2), date.AddDays(2).AddHours(10));
 
-						var result = _target.DayOffDoesConflictWithActivity(new DayOff(new DateTime(2010, 9, 7, 12, 0, 0, DateTimeKind.Utc), TimeSpan.FromHours(36), TimeSpan.FromHours(0), new Description(), Color.Red, string.Empty, Guid.NewGuid()), assBeforePeriod, assAfterPeriod);
+						var result = _target.DayOffDoesConflictWithActivity(new DayOff(new DateTime(2010, 9, 7, 12, 0, 0, DateTimeKind.Utc), TimeSpan.FromHours(36), TimeSpan.FromHours(0), new Description(), Color.Red, string.Empty), assBeforePeriod, assAfterPeriod);
 
             Assert.That(result, Is.True);
             Assert.That(_target.ErrorMessage, Is.Not.Empty);
@@ -285,7 +285,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             // and there is room for that
             var assAfterPeriod = new DateTimePeriod(date.AddDays(2).AddHours(-1), date.AddDays(2).AddHours(10));
 
-						var result = _target.DayOffDoesConflictWithActivity(new DayOff(new DateTime(2010, 9, 7, 12, 0, 0, DateTimeKind.Utc), TimeSpan.FromHours(36), TimeSpan.FromHours(0), new Description(), Color.Red, string.Empty, Guid.NewGuid()), assBeforePeriod, assAfterPeriod);
+						var result = _target.DayOffDoesConflictWithActivity(new DayOff(new DateTime(2010, 9, 7, 12, 0, 0, DateTimeKind.Utc), TimeSpan.FromHours(36), TimeSpan.FromHours(0), new Description(), Color.Red, string.Empty), assBeforePeriod, assAfterPeriod);
 
             Assert.That(result, Is.True);
             Assert.That(_target.ErrorMessage, Is.Not.Empty);
