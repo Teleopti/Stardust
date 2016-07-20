@@ -98,6 +98,12 @@
 						return shiftsForCurrentDate[0].ActivityCount();
 					}
 					return 0;
+				},
+				ShiftCategory: {
+					Name: schedule.ShiftCategory ? schedule.ShiftCategory.Name : null,
+					ShortName: schedule.ShiftCategory ? schedule.ShiftCategory.ShortName : null,
+					DisplayColor: schedule.ShiftCategory ? schedule.ShiftCategory.DisplayColor : null,
+					UseLighterFont: schedule.ShiftCategory ? (getOppositeColor(schedule.ShiftCategory.DisplayColor)) : null
 				}
 			}
 
@@ -153,6 +159,21 @@
 			return dayOffVm;
 		};
 
+		function getOppositeColor (color) {
+			var getLumi = function(cstring) {
+				var matched = /#([\w\d]{2})([\w\d]{2})([\w\d]{2})/.exec(cstring);
+				if (!matched) return null;
+				return (299 * parseInt(matched[1], 16) + 587 * parseInt(matched[2], 16) + 114 * parseInt(matched[3], 16)) / 1000;
+			}
+
+			var lightColor = "#00ffff";
+			var darkColor = "#795548";
+
+			var lumi = getLumi(color);
+			if (!lumi) return false;
+			return Math.abs(lumi - getLumi(lightColor)) > Math.abs(lumi - getLumi(darkColor));
+		};
+
 		function createShiftProjectionViewModel(projection, timeLine) {
 			if (!projection) projection = {};
 
@@ -174,20 +195,7 @@
 			var lengthMinutes = startTimeMinutes < 0 ? projectionMinutes - (startTimeMinutes * -1) : projectionMinutes;
 			var length = lengthMinutes * timeLine.LengthPercentPerMinute;
 
-			var borderColorPicker = function (color) {
-				var getLumi = function(cstring) {
-					var matched = /#([\w\d]{2})([\w\d]{2})([\w\d]{2})/.exec(cstring);
-					if (!matched) return null;
-					return (299 * parseInt(matched[1], 16) + 587 * parseInt(matched[2], 16) + 114 * parseInt(matched[3], 16)) / 1000;
-				}
-
-				var lightColor = "#00ffff";
-				var darkColor = "#795548";
-
-				var lumi = getLumi(color);
-				if (!lumi) return false;
-				return Math.abs(lumi - getLumi(lightColor)) > Math.abs(lumi - getLumi(darkColor));
-			};
+		
 
 			var shiftProjectionVm = {
 				ParentPersonAbsences: projection.ParentPersonAbsences,
@@ -203,7 +211,7 @@
 					this.Selected = !this.Selected;
 				},
 				Minutes: projectionMinutes,
-				UseLighterBorder: borderColorPicker(projection.Color)
+				UseLighterBorder: getOppositeColor(projection.Color)
 			};
 
 			return shiftProjectionVm;

@@ -7,7 +7,7 @@
 
 	function shiftCategoryServiceCtrl($http, $q) {
 		var fetchShiftCategoriesUrl = "../api/TeamScheduleData/FetchShiftCategories";	
-		var modifyShiftCategoriesUrl = "../api/TeamScheduleData/ModifyShiftCategories";
+		var modifyShiftCategoriesUrl = "../api/TeamScheduleCommand/ChangeShiftCategory";
 
 		this.fetchShiftCategories = fetchShiftCategories;
 		this.modifyShiftCategories = modifyShiftCategories;

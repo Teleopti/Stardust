@@ -4,7 +4,7 @@
 		<form name="editShiftCategoryForm">
 			<div class="con-row">
 				<md-select ng-model="vm.selectedShiftCategoryId" placeholder="{{'SelectACategory' | translate}}">
-					<md-option ng-repeat="category in vm.shiftCategoriesList" ng-value="category.Name"><span ng-bind="category.Name"></span></md-option>
+					<md-option ng-repeat="category in vm.shiftCategoriesList" ng-value="category.Id"><span ng-bind="category.Name"></span></md-option>
 				</md-select>
 			</div>
 		</form>

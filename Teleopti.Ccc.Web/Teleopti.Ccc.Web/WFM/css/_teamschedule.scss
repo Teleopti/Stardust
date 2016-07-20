@@ -209,12 +209,13 @@
             th.shift-category-cell, td.shift-category-cell{
                 width: 4%;
                 text-align: center;
-            }
-            
-            td.shift-category-cell{
                 border-left: 1px solid $gray012;
-                border-right: 1px solid $gray012;
                 cursor: pointer;
+            }
+
+            td.shift-category-cell span{
+                display: inline-block;
+                width: 20px;
             }
         }
     }

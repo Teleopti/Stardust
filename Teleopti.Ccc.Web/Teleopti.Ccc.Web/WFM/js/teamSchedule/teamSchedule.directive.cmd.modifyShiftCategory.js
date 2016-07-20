@@ -19,7 +19,8 @@
 			var requestData = {
 				PersonIds: vm.selectedAgents.map(function(agent) {return agent.PersonId}),
 				Date: vm.selectedDate(),
-				SelectedShiftCategoryId: vm.SelectedShiftCategoryId
+				ShiftCategoryId: vm.selectedShiftCategoryId,
+				TrackedCommandInfo: vm.trackId
 			}
 
 			shiftCategorySvc.modifyShiftCategories(requestData).then(function(response){

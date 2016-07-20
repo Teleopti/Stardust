@@ -75,7 +75,11 @@
 		};
 
 		vm.togglePerson = function (personSchedule, $event) {
-			if ($event.target instanceof HTMLTableCellElement) {
+			if($event === null){
+				personSchedule.IsSelected = !personSchedule.IsSelected;
+				vm.updatePersonSelection(personSchedule);
+			}
+			else if ($event.target instanceof HTMLTableCellElement) {
 				personSchedule.IsSelected = !personSchedule.IsSelected;
 				vm.updatePersonSelection(personSchedule);
 			}
@@ -84,7 +88,7 @@
 		vm.modifyShiftCategoryForAgent = function($event, personSchedule){
 			$event.stopPropagation();
 
-			vm.togglePerson(personSchedule, $event);
+			vm.togglePerson(personSchedule, null);
 
 			if(personSchedule.IsSelected){
 				var activeCmdLabel = "EditShiftCategory";
