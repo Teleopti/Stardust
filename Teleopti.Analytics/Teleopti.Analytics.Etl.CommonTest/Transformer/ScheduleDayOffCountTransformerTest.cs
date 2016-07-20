@@ -48,14 +48,12 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			_schedulePart3 = ExtractedSchedule.CreateScheduleDay(_dic, _person, new DateOnly(2000, 1, 5));
 
 			var dayOff1 = new DayOffTemplate(new Description("test"));
-			dayOff1.SetId(Guid.NewGuid());
 			dayOff1.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(6));
 			dayOff1.Anchor = TimeSpan.Zero;
 
 			_schedulePart1.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person, _schedulePart1.DateOnlyAsPeriod.DateOnly, dayOff1));
 
 			var dayOff2 = new DayOffTemplate(new Description("test"));
-			dayOff2.SetId(Guid.NewGuid());
 			dayOff2.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(6));
 			dayOff2.Anchor = new TimeSpan(1, 15, 0);
 			_schedulePart2.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person, _schedulePart2.DateOnlyAsPeriod.DateOnly, dayOff2));
@@ -99,7 +97,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			Assert.AreEqual(dataRowCollection[0]["person_code"], _schedulePart1.Person.Id);
 			Assert.AreEqual(dataRowCollection[0]["scenario_code"], _schedulePart1.Scenario.Id);
 			Assert.AreEqual(dataRowCollection[1]["starttime"], _schedulePart2.PersonAssignment().DayOff().Anchor);
-			Assert.AreEqual(dataRowCollection[0]["day_off_code"], _schedulePart1.PersonAssignment().DayOff().DayOffTemplateId);
+			Assert.AreEqual(dataRowCollection[0]["day_off_code"], DBNull.Value);
 			Assert.AreEqual(dataRowCollection[0]["day_count"], 1);
 			Assert.AreEqual(dataRowCollection[0]["business_unit_code"], _schedulePart1.Scenario.BusinessUnit.Id);
 			Assert.AreEqual(dataRowCollection[1]["datasource_update_date"], _schedulePart2.PersonAssignment().UpdatedOn.Value);
