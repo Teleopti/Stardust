@@ -199,15 +199,15 @@ describe('RequestsControllerTests', function () {
 
 	it('should approve base on budget command enabled in absence tab', function() {
 		var test = setUpTarget(false);
-		expect(test.requestCommandPaneScope.isApproveBasedOnBudgetEnabled()).toEqual(true);
+		expect(test.requestCommandPaneScope.isApproveBasedOnBusinessRulesEnabled()).toEqual(true);
 	});
 
 	it('should approve base on budget command disabled in shift trade tab', function () {
 		var test = setUpTarget(true);
-		expect(test.requestCommandPaneScope.isApproveBasedOnBudgetEnabled()).toEqual(false);
+		expect(test.requestCommandPaneScope.isApproveBasedOnBusinessRulesEnabled()).toEqual(false);
 	});
 
-	it('approveBasedOnBudget command submit scucess, should notify the result', function () {
+	it('approveBasedOnBusinessRules command submit scucess, should notify the result', function () {
 		var test = setUpTarget();
 		var handleResult = {
 			Success: true,
@@ -219,18 +219,18 @@ describe('RequestsControllerTests', function () {
 		requestsDataService.submitCommandIsASucess(true);
 		requestsDataService.setRequestCommandHandlingResult(handleResult);
 
-		test.requestCommandPaneScope.approveBasedOnBudget();
+		test.requestCommandPaneScope.approveBasedOnBusinessRules();
 
 		expect(handleResult.CommandTrackId).toEqual(test.requestCommandPaneScope.commandTrackId);
-		expect(_notificationResult).toEqual('SubmitApproveBasedOnBudgetSuccess');
+		expect(_notificationResult).toEqual('SubmitApproveBasedOnBusinessRulesSuccess');
 	});
 
-	it('should notify the result when approveBasedOnBudget command is finished', function () {
+	it('should notify the result when approveBasedOnBusinessRules command is finished', function () {
 		var test = setUpTarget();
 		test.requestCommandPaneScope.commandTrackId = "13";
 		mockSignalRBackendServer.notifyClients('IApproveRequestsWithValidatorsEventMessage'
 			, { TrackId: test.requestCommandPaneScope.commandTrackId });
-		expect(_notificationResult).toEqual('ApproveBasedOnBudgetFinished');
+		expect(_notificationResult).toEqual('ApproveBasedOnBusinessRulesFinished');
 		expect(requestCommandParamsHolder.getSelectedRequestsIds(false).length).toEqual(0);
 	});
 
@@ -262,11 +262,11 @@ describe('RequestsControllerTests', function () {
 				requestsCount: requestsCount
 			}
 		}
-		this.notifySubmitApproveBasedOnBudgetSuccess = function () {
-			_notificationResult = "SubmitApproveBasedOnBudgetSuccess";
+		this.notifySubmitApproveBasedOnBusinessRulesSuccess = function () {
+			_notificationResult = "SubmitApproveBasedOnBusinessRulesSuccess";
 		}
-		this.notifyApproveBasedOnBudgetFinished = function () {
-			_notificationResult = "ApproveBasedOnBudgetFinished";
+		this.notifyApproveBasedOnBusinessRulesFinished = function () {
+			_notificationResult = "ApproveBasedOnBusinessRulesFinished";
 		}
 	}
 
@@ -339,13 +339,13 @@ describe('RequestsControllerTests', function () {
 		targetScope.onErrorMessages = requestsController.onErrorMessages;
 		targetScope.onCommandError = requestsController.onCommandError;
 		targetScope.onProcessWaitlistFinished = requestsController.onProcessWaitlistFinished;
-		targetScope.onApproveBasedOnBudgetFinished = requestsController.onApproveBasedOnBudgetFinished;
+		targetScope.onApproveBasedOnBusinessRulesFinished = requestsController.onApproveBasedOnBusinessRulesFinished;
 		var targetElement = $compile('<requests-commands-pane ' +
 			'after-command-success="onCommandSuccess(commandType, changedRequestsCount, requestsCount, waitlistPeriod) "' +
 			'on-error-messages="onErrorMessages(errorMessages) "' +
 			'after-command-error="onCommandError(error)"' +
 			'on-process-waitlist-finished="onProcessWaitlistFinished(message)"' +
-			'on-approve-based-on-budget-finished="onApproveBasedOnBudgetFinished(message)"' +
+			'on-approve-based-on-business-rules-finished="onApproveBasedOnBusinessRulesFinished(message)"' +
 			'is-shift-trade-view-active="' + isShiftTradeViewActived + '"' +
 			'"></requests-commands-pane>')(targetScope);
 		targetScope.$digest();

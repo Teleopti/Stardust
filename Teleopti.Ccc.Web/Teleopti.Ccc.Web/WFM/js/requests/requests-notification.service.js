@@ -45,14 +45,14 @@
             });
         }
 
-		this.notifySubmitApproveBasedOnBudgetSuccess = function() {
-			$translate("SubmitApproveBasedOnBudgetSuccess").then(function (text) {
+		this.notifySubmitApproveBasedOnBusinessRulesSuccess = function() {
+			$translate("SubmitApproveBasedOnBusinessRulesSuccess").then(function (text) {
 				NoticeService.success(text, 10000, true);
 			});
 		}
 
-		this.notifyApproveBasedOnBudgetFinished = function () {
-			$translate("ApproveBasedOnBudgetFinished").then(function (text) {
+		this.notifyApproveBasedOnBusinessRulesFinished = function () {
+			$translate("ApproveBasedOnBusinessRulesFinished").then(function (text) {
 				NoticeService.success(text, 10000, true);
 			});
 		}

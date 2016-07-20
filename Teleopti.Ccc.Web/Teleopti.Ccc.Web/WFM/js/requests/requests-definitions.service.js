@@ -48,7 +48,7 @@
 			Deny: 'deny',
 			Cancel: 'cancel',
 			ProcessWaitlist: 'processWaitlist',
-			ApproveBasedOnBudget: 'approveBasedOnBudget'
+			ApproveBasedOnBusinessRules: 'approveBasedOnBusinessRules'
 		};
 
 		this.REQUEST_VALIDATORS = {

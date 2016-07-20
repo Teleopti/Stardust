@@ -19,11 +19,11 @@
 				<i class="mdi mdi-check"></i>
 				<span translate>Approve</span>
 			</li>
-			<li ng-click="requestsCommandsPane.approveBasedOnBudget()"
+			<li ng-click="requestsCommandsPane.approveBasedOnBusinessRules()"
 				ng-class="{'wfm-btn-primary-disabled' : requestsCommandsPane.disableCommands()}"
-				ng-if="requestsCommandsPane.isApproveBasedOnBudgetEnabled()">
+				ng-if="requestsCommandsPane.isApproveBasedOnBusinessRulesEnabled()">
 				<i class="mdi mdi-calendar-check"></i>
-				<span translate>ApproveBasedOnBudget</span>
+				<span translate>ApproveBasedOnBusinessRules</span>
 			</li>
 			<li ng-click="requestsCommandsPane.denyRequests()"
 				ng-class="{'wfm-btn-primary-disabled' : requestsCommandsPane.disableCommands()}">

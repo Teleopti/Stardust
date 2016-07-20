@@ -2791,20 +2791,20 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Approve based on budget allotment.
+        ///   Looks up a localized string similar to Approve based on business rules.
         /// </summary>
-        public static string ApproveBasedOnBudget {
+        public static string ApproveBasedOnBusinessRules {
             get {
-                return ResourceManager.GetString("ApproveBasedOnBudget", resourceCulture);
+                return ResourceManager.GetString("ApproveBasedOnBusinessRules", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Approve selected requests based on budget allotment have finished..
+        ///   Looks up a localized string similar to The processing of requests based on business rules has been completed..
         /// </summary>
-        public static string ApproveBasedOnBudgetFinished {
+        public static string ApproveBasedOnBusinessRulesFinished {
             get {
-                return ResourceManager.GetString("ApproveBasedOnBudgetFinished", resourceCulture);
+                return ResourceManager.GetString("ApproveBasedOnBusinessRulesFinished", resourceCulture);
             }
         }
         
@@ -28655,11 +28655,11 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Begin to approve selected requests based on budget allotment..
+        ///   Looks up a localized string similar to The selected requests are being processed for approval based on business rules..
         /// </summary>
-        public static string SubmitApproveBasedOnBudgetSuccess {
+        public static string SubmitApproveBasedOnBusinessRulesSuccess {
             get {
-                return ResourceManager.GetString("SubmitApproveBasedOnBudgetSuccess", resourceCulture);
+                return ResourceManager.GetString("SubmitApproveBasedOnBusinessRulesSuccess", resourceCulture);
             }
         }
         

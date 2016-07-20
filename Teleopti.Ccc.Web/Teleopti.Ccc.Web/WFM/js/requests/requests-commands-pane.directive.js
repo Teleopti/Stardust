@@ -25,11 +25,11 @@
 		vm.processWaitlistRequests = processWaitlistRequests;
 		vm.runWaitlistToggleIsEnabled = runWaitlistToggleIsEnabled;
 		vm.cancelRequests = cancelRequests;
-		vm.approveBasedOnBudget = approveBasedOnBudget;
-		vm.isApproveBasedOnBudgetEnabled = isApproveBasedOnBudgetEnabled;
+		vm.approveBasedOnBusinessRules = approveBasedOnBusinessRules;
+		vm.isApproveBasedOnBusinessRulesEnabled = isApproveBasedOnBusinessRulesEnabled;
 		initWaitlistProcessPeriod();
 		subscribeSignalRMessage('IRunRequestWaitlistEventMessage', vm.onProcessWaitlistFinished);
-		subscribeSignalRMessage('IApproveRequestsWithValidatorsEventMessage', vm.onApproveBasedOnBudgetFinished);
+		subscribeSignalRMessage('IApproveRequestsWithValidatorsEventMessage', vm.onApproveBasedOnBusinessRulesFinished);
 
 		function handleErrorMessages(errorMessages) {
 			if (vm.onErrorMessages) {
@@ -134,7 +134,7 @@
 			initWaitlistProcessPeriod();
 		}
 
-		function approveBasedOnBudget() {
+		function approveBasedOnBusinessRules() {
 			var selectedRequestIds = getSelectedRequestIds();
 			if (!selectedRequestIds || selectedRequestIds.length === 0) return;
 
@@ -143,7 +143,7 @@
 				Validators: requestsDefinitions.REQUEST_VALIDATORS.BudgetAllotmentValidator
 			};
 
-			doStandardCommandHandlingWithParameters(requestsDefinitions.REQUEST_COMMANDS.ApproveBasedOnBudget,
+			doStandardCommandHandlingWithParameters(requestsDefinitions.REQUEST_COMMANDS.ApproveBasedOnBusinessRules,
 				requestsDataService.approveWithValidatorsPromise, parameter);
 		}
 
@@ -184,7 +184,7 @@
 			vm.showProcessWaitlistModal = !vm.showProcessWaitlistModal;
 		}
 
-		function isApproveBasedOnBudgetEnabled() {
+		function isApproveBasedOnBusinessRulesEnabled() {
 			return toggleSvc.Wfm_Requests_Approve_Based_On_Budget_Allotment_39626 && !vm.isShiftTradeViewActive;
 		}
 	}
@@ -202,7 +202,7 @@
 				commandsDisabled: '=?',
 				isShiftTradeViewActive: '=',
 				onProcessWaitlistFinished: '&?',
-				onApproveBasedOnBudgetFinished: '&?'
+				onApproveBasedOnBusinessRulesFinished: '&?'
 			},
 			restrict: 'E',
 			templateUrl: 'js/requests/html/requests-commands-pane.tpl.html'

@@ -59,7 +59,7 @@
 			vm.onErrorMessages = onErrorMessages;
 			vm.disableInteraction = false;
 			vm.onProcessWaitlistFinished = onProcessWaitlistFinished;
-			vm.onApproveBasedOnBudgetFinished = onApproveBasedOnBudgetFinished;
+			vm.onApproveBasedOnBusinessRulesFinished = onApproveBasedOnBusinessRulesFinished;
 
 			if (toggleService.Wfm_Requests_PrepareForRelease_38771) {
 				var message = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink')
@@ -104,8 +104,8 @@
 			} else if (commandType === requestsDefinitions.REQUEST_COMMANDS.ProcessWaitlist) {
 				var period = moment(waitlistPeriod.startDate).format("L") + "-" + moment(waitlistPeriod.endDate).format("L");
 				requestsNotificationService.notifySubmitProcessWaitlistedRequestsSuccess(period);
-			}else if (commandType === requestsDefinitions.REQUEST_COMMANDS.ApproveBasedOnBudget) {
-				requestsNotificationService.notifySubmitApproveBasedOnBudgetSuccess();
+			}else if (commandType === requestsDefinitions.REQUEST_COMMANDS.ApproveBasedOnBusinessRules) {
+				requestsNotificationService.notifySubmitApproveBasedOnBusinessRulesSuccess();
 			}
 		}
 
@@ -114,9 +114,9 @@
 			requestsNotificationService.notifyProcessWaitlistedRequestsFinished(period);
 		}
 
-		function onApproveBasedOnBudgetFinished(message) {
+		function onApproveBasedOnBusinessRulesFinished(message) {
 			forceRequestsReloadWithoutSelection();
-			requestsNotificationService.notifyApproveBasedOnBudgetFinished();
+			requestsNotificationService.notifyApproveBasedOnBusinessRulesFinished();
 		}
 
 		function onErrorMessages(errorMessages) {
