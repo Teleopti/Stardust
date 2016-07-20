@@ -52,5 +52,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		{
 			return _commandHandlingProvider.CheckWriteProtectedAgents(input.Date, input.AgentIds).ToList();
 		}
+
+		[UnitOfWork, HttpPost, Route("api/TeamScheduleCommand/ChangeShiftCategory")]
+		public virtual IList<FailActionResult> ChangeShiftCategoryCommand([FromBody] ChangeShiftCategoryFormData input)
+		{
+			return _commandHandlingProvider.ChangeShiftCategory(input);
+		}
 	}
 }
