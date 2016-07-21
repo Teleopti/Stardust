@@ -40,8 +40,8 @@
 					<md-progress-circular md-mode="indeterminate" md-diameter="15" ng-if="!vm.checkNightRestWarningMessage(personSchedule.PersonId).isLoaded"></md-progress-circular>
 				</span>
 			</td>
-			<td class="shift-category-cell" ng-if="vm.toggles.ViewShiftCategoryEnabled && personSchedule.ShiftCategory.Name" ng-click=" vm.toggles.ModifyShiftCategoryEnabled && vm.modifyShiftCategoryForAgent($event, personSchedule)">
-				<span ng-style="{background: personSchedule.ShiftCategory.DisplayColor, color: (personSchedule.ShiftCategory.UseLighterFont ? '#ffffff' :'#000000')}" >
+			<td class="shift-category-cell" ng-if="vm.toggles.ViewShiftCategoryEnabled" >
+				<span ng-if="personSchedule.ShiftCategory.Name" ng-style="{background: personSchedule.ShiftCategory.DisplayColor, color: (personSchedule.ShiftCategory.UseLighterFont ? '#ffffff' :'#000000')}" ng-click="vm.toggles.ModifyShiftCategoryEnabled && vm.modifyShiftCategoryForAgent($event, personSchedule)" >
 					{{personSchedule.ShiftCategory.ShortName}}
 				</span>
 				<md-tooltip md-direction="right" ng-if="personSchedule.ShiftCategory.Name">{{personSchedule.ShiftCategory.Name}}</md-tooltip>
