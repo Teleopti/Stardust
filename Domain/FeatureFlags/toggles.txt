@@ -85,7 +85,7 @@ WfmTeamSchedule_RevertToPreviousSchedule_39002 = true
 WfmTeamSchedule_ShowNightlyRestWarning_39619 = RC
 WfmTeamSchedule_ModifyShiftCategory_39797 = DEV
 WfmTeamSchedule_MakeNewMyTeamDefault_39744 = RC
-WfmTeamSchedule_ShowShiftCategory_39796 = DEV
+WfmTeamSchedule_ShowShiftCategory_39796 = RC
 
 WfmReportPortal_Basic_38825 = true
 WfmReportPortal_LeaderBoard_39440 = RC
