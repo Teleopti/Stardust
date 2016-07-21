@@ -319,12 +319,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.AssertExists(".warning-icon .mdi-account-alert");
 		}
 
-		[Then(@"I should see shift category")]
-		public void ThenIShouldSeeShiftCategory()
-		{
-			Browser.Interactions.AssertExists(".shift-category-cell #name");
-		}
-
 		[When(@"I click on a shift category label")]
 		public void WhenIClickOnAShiftCategoryLabel()
 		{
@@ -347,12 +341,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.Click("#applyShiftCategory");
 		}
 
-		[Then(@"I should see the shift category becomes '(.*)'")]
-		public void ThenIShouldSeeTheShiftCategoryBecomes(string p0)
+		[Then(@"I should see the shift category '(.*)'")]
+		public void ThenIShouldSeeTheShiftCategoryBecomes(string name)
 		{
 			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true, () =>
 			{
-				Browser.Interactions.AssertFirstContains("td.shift-category-cell", "Night");
+				Browser.Interactions.AssertFirstContains("td.shift-category-cell", name);
 			});
 		}
 

@@ -12,8 +12,16 @@ Background:
 	| Name                          | Wfm Team Green |
 	| Access to everyone            | True           |
 	| Access to Wfm MyTeam Schedule | true           |
-	And there is a shift category named 'Day'
-	And there is a shift category named 'Night'
+	And there is a shift category with
+    | Field      | Value |
+    | Name       | Day   |
+    | Short name | DY    |
+    | Color      | Green |
+	And there is a shift category with
+    | Field      | Value |
+    | Name       | Night   |
+    | Short name | NT    |
+    | Color      | Green |
 	And there is an activity with
 	| Field        | Value |
 	| Name         | Phone |
@@ -44,6 +52,6 @@ Scenario: Should be able to change shift category via label
 	And I click on a shift category label
 	And I set shift category as 'Night'
 	And I apply the new shift category
-	Then I should see the shift category becomes 'Night'
+	Then I should see the shift category 'NT'
 
 # Scenario: Should be able to change shift category via command menu
