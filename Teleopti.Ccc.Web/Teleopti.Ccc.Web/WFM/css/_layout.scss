@@ -156,7 +156,10 @@ wfm-notice{
 
 .nav-item-wrap {
 	text-decoration: none!important;
+}
 
+.wfm-card-title{
+	outline: 0 solid transparent!important;
 }
 
 md-select-menu md-option:focus:not([disabled]):not([selected]){
