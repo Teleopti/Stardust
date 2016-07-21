@@ -105,9 +105,9 @@ BEGIN
 		    AS 'RowNumber'
 
          FROM (SELECT DISTINCT p.Person as PersonId,
-			 sd.TeamId as TeamID, 
-			 sd.SiteId as SiteId, 
-			 sd.BusinessUnitId as BusinessUnitId, 
+			 team.Id as TeamID, 
+			 sit.Id as SiteId, 
+			 sit.BusinessUnit as BusinessUnitId, 
 			 person.FirstName as FirstName,
 			 person.LastName as LastName,
 			 isnull(sd.BelongsToDate, @scheduleDate) as BelongsToDate, 
@@ -121,7 +121,9 @@ BEGIN
 			 JOIN dbo.Person person ON p.Person = person.Id 
 			 LEFT JOIN ReadModel.PersonScheduleDay sd  ON sd.PersonId = p.Person and sd.BelongsToDate = @scheduleDate
 			 LEFT JOIN dbo.PersonAbsence pa ON p.Person = pa.Person AND sd.Start >= pa.Minimum AND sd.[End] <= pa.Maximum 
-			 
+			 LEFT JOIN PersonPeriod psp ON psp.Parent = person.Id AND psp.StartDate <= @scheduleDate AND @scheduleDate < psp.EndDate
+			 LEFT JOIN Team team ON psp.Team = team.Id
+			 LEFT JOIn [Site] sit ON team.[Site] = sit.Id			 
 			 WHERE 			
 			 -- The following enclosed conditions should be "Or"-ed such that the result is a union of each individual condition
 			 (
