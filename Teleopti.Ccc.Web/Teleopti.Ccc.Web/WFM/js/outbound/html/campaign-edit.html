@@ -10,6 +10,11 @@
 <div class="test-campaign-edit" ng-show="isCampaignLoaded()">
 
 	<div class="panel material-depth-1">
+		<button class="wfm-btn wfm-btn-invis-default back-to-overview" ng-click="backToList()" ng-disabled="isCreating">
+			<i class="mdi mdi-reply"></i>
+			<md-tooltip md-direction="right">{{'BackToList' | translate}}</md-tooltip>
+		</button>
+
 		<form name="form" class="wfm-form">
 			<div class="con-row">
 				<div class="con-flex">
@@ -142,12 +147,10 @@
 				</div>
 			</div>
 			<div class="con-footer">
-				<button class="wfm-btn wfm-btn-invis-primary" ng-click="backToList()" ng-disabled="isCreating"><span translate>Cancel</span></button>
 				<button class="wfm-btn test-campaign-edit-submit" ng-click="editCampaign()" ng-class="{'wfm-btn-invis-disabled': !isInputValid(), 'wfm-btn-invis-primary': isInputValid()}"><span translate>Save</span></button>
 				<button class="wfm-btn wfm-btn-invis-primary" ng-click="reset()"><span translate>Reset</span></button>
-				<button class="wfm-btn wfm-btn-invis-primary test-delete-campaign" ng-click="removeCampaign()"><span translate>Remove</span></button>
+				<button class="wfm-btn wfm-btn-invis-primary test-delete-campaign" ng-click="removeCampaign()"><span translate>Delete</span></button>
 			</div>
-
 		</form>
 	</div>
 
@@ -156,10 +159,10 @@
 			<div class="modalbg">
 				<div class="dialog">
 					<h1 class="modal-title" translate>
-						RemoveCampaign
+						DeleteCampaign
 					</h1>
 					<div class="modal-inner-content">
-						<div class="wfm-block"><span translate>ConfirmRemoveCampaign</span></div>
+						<div class="wfm-block"><span translate>ConfirmDeleteCampaign</span></div>
 					</div>
 					<div class="modal-actions">
 						<aside>

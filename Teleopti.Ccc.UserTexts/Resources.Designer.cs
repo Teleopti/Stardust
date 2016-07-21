@@ -6003,6 +6003,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete this campaign?.
+        /// </summary>
+        public static string ConfirmDeleteCampaign {
+            get {
+                return ResourceManager.GetString("ConfirmDeleteCampaign", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete this request?.
         /// </summary>
         public static string ConfirmDeleteRequest {
@@ -6053,15 +6062,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ConfirmRemoval {
             get {
                 return ResourceManager.GetString("ConfirmRemoval", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to delete this campaign?.
-        /// </summary>
-        public static string ConfirmRemoveCampaign {
-            get {
-                return ResourceManager.GetString("ConfirmRemoveCampaign", resourceCulture);
             }
         }
         
@@ -18011,7 +18011,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No permission to modify person assignment..
+        ///   Looks up a localized string similar to More information about forecast methods and outlier detection .
         /// </summary>
         public static string NoPermissionToModifyPersonAssignment {
             get {
@@ -22392,15 +22392,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string RemoveActivity {
             get {
                 return ResourceManager.GetString("RemoveActivity", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Remove Campaign.
-        /// </summary>
-        public static string RemoveCampaign {
-            get {
-                return ResourceManager.GetString("RemoveCampaign", resourceCulture);
             }
         }
         
@@ -28570,15 +28561,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Statistics {
             get {
                 return ResourceManager.GetString("Statistics", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to More information about forecast methods and outlier detection .
-        /// </summary>
-        public static string StatisticsIntro {
-            get {
-                return ResourceManager.GetString("StatisticsIntro", resourceCulture);
             }
         }
         

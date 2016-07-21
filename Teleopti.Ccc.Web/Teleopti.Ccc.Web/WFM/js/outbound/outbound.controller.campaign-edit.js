@@ -37,8 +37,8 @@
 			if (!$scope.isFormValidForPage || !$scope.isWorkingHoursValidForPage) return;
 			$scope.isEditing = true;
             outboundService.editCampaign($scope.campaign, function (campaign) {
-            	outboundNotificationService.notifyCampaignUpdateSuccess(angular.copy(campaign));	         
-                init();
+            	outboundNotificationService.notifyCampaignUpdateSuccess(angular.copy(campaign));
+                backToList();
             }, function (error) {
                 outboundNotificationService.notifyCampaignUpdateFailure(error);
             });

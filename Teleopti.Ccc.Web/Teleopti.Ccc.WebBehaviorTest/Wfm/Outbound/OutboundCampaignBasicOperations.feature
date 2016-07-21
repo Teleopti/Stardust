@@ -136,15 +136,15 @@ And I submit the campaign form with the campaign detail
 | Unproductive Time                 | 55          |
 | Opening Hour Start                | 08:00       |
 | Opening Hour End                  | 16:00       |
-And after the creation I goto the campaign list page
-And I set the starting month for viewing period to '2016-01-01'
+And after the creation I will redirect to the campaign list page
+And I set the starting month for viewing period to '2015-12-30'
 Then I should see 'NewCampaign' in campaign list
 
 Scenario: Delete a campaign
 When I view campaign 'Campaign4'
 And I confirm to delete the campaign
 And after that I am redirected to the campaign list page 
-And I set the starting month for viewing period to '2015-09-01'
+And I set the starting month for viewing period to '2015-10-01'
 Then I should not see 'Campaign4' in campaign list 
 
 
@@ -173,7 +173,7 @@ And I change the campaign period to
 | Field      | Value      |
 | Start Date | 2016-10-01 |
 | End Date   | 2016-10-01 |
-And after the update is done I goto the campaign list page
+And after the update is done I will redirect to the campaign list page
 And I set the starting month for viewing period to '2016-10-01'
 Then I should see 'NewCampaign' in campaign list 
 

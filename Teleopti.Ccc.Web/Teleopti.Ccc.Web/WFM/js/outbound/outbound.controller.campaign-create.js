@@ -10,9 +10,8 @@
     function createCtrl($scope, $state, outboundService, outboundNotificationService, viewUtilityService) {
 	   
 		outboundService.checkPermission($scope).then(init);
-		$scope.preventAutomaticRedirect = false;
-		$scope.addCampaign = addCampaign;
         $scope.init = init;
+        $scope.addCampaign = addCampaign;
         $scope.backToList = backToList;
 
         function addCampaign() {
@@ -24,8 +23,7 @@
             $scope.isCreating = true;
 	        outboundService.addCampaign($scope.campaign, function (campaign) {
 	            outboundNotificationService.notifyCampaignCreationSuccess(angular.copy(campaign));
-	            init();
-	            if (!$scope.preventAutomaticRedirect) show(campaign);
+                backToList();
 	        }, function (error) {
 	            outboundNotificationService.notifyCampaignCreationFailure(error);
 	        });
@@ -45,21 +43,14 @@
                 WorkingHours: []
             };
 	        $scope.isCreating = false;
+            $scope.campaignCreated = false;
 	        viewUtilityService.setupValidators($scope);
 	        viewUtilityService.registerPersonHourFeedback($scope, outboundService);
 	        $scope.checkIsWorkingHoursValid = checkIsWorkingHoursValid;
         }
 
-        function show(campaign) {
-            $state.go('outbound.edit', { Id: campaign.Id });
-        }
-
         function backToList() {
             $state.go('outbound.summary');
         }
-
     }
-
-
-
 })();

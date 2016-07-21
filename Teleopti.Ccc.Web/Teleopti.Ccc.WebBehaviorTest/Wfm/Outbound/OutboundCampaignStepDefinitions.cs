@@ -106,12 +106,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 			Browser.Interactions.ClickVisibleOnly(".test-campaign-create-submit");						
 		}
 
-		[When(@"after the creation I goto the campaign list page")]
-		public void WhenAfterTheCreationIGotoTheCampaignListPage()
-		{			
-			Browser.Interactions.AssertScopeValueEmpty(".test-campaign-create", "campaign.Name");		
-			Browser.Interactions.AssertScopeValue(".test-campaign-create", "isCreating", false);			
-			Navigation.GoToOutbound();
+		[When(@"after the creation I will redirect to the campaign list page")]
+		public void WhenAfterTheCreationIRedirectToTheCampaignListPage()
+		{
+			Browser.Interactions.AssertExists(".outbound-gantt-chart");
 		}		
 
 		[When(@"I confirm to delete the campaign")]
@@ -152,11 +150,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 			Browser.Interactions.Click("form.ng-valid .test-campaign-edit-submit");
 		}
 
-		[When(@"after the update is done I goto the campaign list page")]
-		public void WhenAfterTheUpdateIsDoneIGotoTheCampaignListPage()
+		[When(@"after the update is done I will redirect to the campaign list page")]
+		public void WhenAfterTheUpdateIsDoneIWillRedirectToTheCampaignListPage()
 		{
-			Browser.Interactions.AssertScopeValue(".test-campaign-edit", "isEditing", false);
-			Navigation.GoToOutbound();			
+			Browser.Interactions.AssertExists(".outbound-gantt-chart");
 		}
 
 		[Given(@"I have created a campaign with")]
@@ -180,7 +177,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 			Navigation.GoToOutboundCampaignCreation();
 			ThenIShouldSeeTheNewCampaignForm();
 			WhenISubmitTheCampaignFormWithTheCampaignDetail(table);
-			WhenAfterTheCreationIGotoTheCampaignListPage();
+			WhenAfterTheCreationIRedirectToTheCampaignListPage();
 		}
 
 		[When(@"I view the backlog chart of the campaign created with")]

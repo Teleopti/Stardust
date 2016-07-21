@@ -72,14 +72,6 @@ describe('OutboundCreateCtrl', function() {
 		expect(test.scope.estimatedWorkload).toEqual(1);
 	});
 
-	it('Should reset after valid submission', function() {
-		var test = setUpTarget();
-		test.scope.form = { $valid: true };
-		completeValidCampaign(test.scope.campaign);
-		test.scope.addCampaign();
-		expect(test.scope.campaign.WorkingHours.length).toEqual(0);
-	});
-
 	it('At least one working hour has been selected for any weekday for the campaign to be valid', function() {		
 		var test = setUpTarget();
 		test.scope.form = { $valid: true, $error: { required: [] } };
@@ -97,12 +89,12 @@ describe('OutboundCreateCtrl', function() {
 		expect(test.scope.isWorkingHoursValid()).not.toBeTruthy();
 	});
 
-	it('Should move to campaign edit upon successful submission', function() {
+	it('Should move to campaign summary upon successful submission', function() {
 		var test = setUpTarget();
 		test.scope.form = { $valid: true, $error: { required: [] } };
 		completeValidCampaign(test.scope.campaign);
 		test.scope.addCampaign();
-		expect(stateService.getWhere()).toEqual('outbound.edit');
+		expect(stateService.getWhere()).toEqual('outbound.summary');
 	});
 
 
