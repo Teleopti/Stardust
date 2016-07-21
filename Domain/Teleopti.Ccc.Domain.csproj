@@ -198,6 +198,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\IBatchExecuteStrategy.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\SkillViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeUpdaterHangfire.cs" />
+    <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradePendingReasonsService.cs" />
     <Compile Include="ApplicationLayer\SkillDay\AnalyticsForecastWorkloadUpdater.cs" />
     <Compile Include="Cascading\AddResourcesToSubSkillsFocusHighUnderstaffingPercentage.cs" />
     <Compile Include="Cascading\AvailableResourcesToMoveOnSkill.cs" />

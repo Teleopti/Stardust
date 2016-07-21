@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 		private readonly IPersonRequestCheckAuthorization _authorization;
 		private readonly IMessageBrokerComposite _messageBroker;
 		private readonly IBusinessRuleProvider _businessRuleProvider;
+		private readonly IShiftTradePendingReasonsService _shiftTradePendingReasonsService;
 
 		private static readonly ISpecification<IShiftTradeRequest> shouldShiftTradeBeAutoGranted =
 			 new ShouldShiftTradeBeAutoGrantedSpecification();
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			IScheduleDifferenceSaver scheduleDictionarySaver,
 			ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulingDataForRequestWithoutResourceCalculation,
 			IDifferenceCollectionService<IPersistableScheduleData> differenceService,
-			IMessageBrokerComposite messageBroker, IBusinessRuleProvider businessRuleProvider)
+			IMessageBrokerComposite messageBroker, IBusinessRuleProvider businessRuleProvider, IShiftTradePendingReasonsService shiftTradePendingReasonsService)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_validator = validator;
@@ -71,6 +72,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			_differenceService = differenceService;
 			_messageBroker = messageBroker;
 			_businessRuleProvider = businessRuleProvider;
+			_shiftTradePendingReasonsService = shiftTradePendingReasonsService;
 
 			logger.Info("New instance of Shift Trade saga was created");
 		}
@@ -199,13 +201,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 					var approvalService = _requestFactory.GetRequestApprovalService(allNewRules, scenario, _schedulingResultStateHolder);
 
 					personRequest.Pending();
+					
+					if (shouldShiftTradeBeAutoGranted.IsSatisfiedBy (shiftTradeRequest))
+					{
+						var brokenBusinessRules = autoApproveShiftTrade (personRequest, approvalService);
+						_shiftTradePendingReasonsService.SetBrokenBusinessRulesFieldOnPersonRequest(brokenBusinessRules, personRequest);
 
-					var brokenBusinessRules = shouldShiftTradeBeAutoGranted.IsSatisfiedBy (shiftTradeRequest) ? 
-						autoApproveShiftTrade(personRequest, approvalService) : 
-						getBusinessRuleResponses(shiftTradeRequest, allNewRules).ToList();
-					
-					setBrokenBusinessRulesFieldOnPersonRequest(brokenBusinessRules, personRequest);
-					
+					}
+					else
+					{
+						_shiftTradePendingReasonsService.SimulateApproveAndSetBusinessRuleResponsesOnFail(shiftTradeRequest, allNewRules, _schedulingResultStateHolder);
+					}
+
 				}
 				catch (ShiftTradeRequestStatusException exception)
 				{
@@ -245,23 +252,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			return brokenBusinessRules;
 		}
 
-		private static void setBrokenBusinessRulesFieldOnPersonRequest (IEnumerable<IBusinessRuleResponse> ruleRepsonses, IPersonRequest personRequest)
-		{
-			var ruleTypes = ruleRepsonses.Select (r => r.TypeOfRule);
-			var rulesToSave = NewBusinessRuleCollection.GetFlagFromRules (ruleTypes);
-			personRequest.TrySetBrokenBusinessRule (rulesToSave);
-		}
-
-		private IEnumerable<IBusinessRuleResponse> getBusinessRuleResponses(IShiftTradeRequest shiftTradeRequest, INewBusinessRuleCollection allNewRules)
-		{
-			IRequestApprovalService requestApprovalServiceScheduler = null;
-			requestApprovalServiceScheduler = _requestFactory.GetRequestApprovalService(allNewRules,
-					_scenarioRepository.Current(), _schedulingResultStateHolder);
-
-			var brokenBusinessRules = requestApprovalServiceScheduler.ApproveShiftTrade(shiftTradeRequest);
-			return brokenBusinessRules;
-		}
-
+		
 		private void setUpdatedMessage(AcceptShiftTradeEvent @event, IPersonRequest personRequest)
 		{
 			if (string.IsNullOrEmpty(@event.Message)) return;
@@ -392,10 +383,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			IScheduleStorage scheduleStorage, IPersonRepository personRepository,
 			IPersonRequestCheckAuthorization personRequestCheckAuthorization, IScheduleDifferenceSaver scheduleDictionarySaver,
 			ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulingDataForRequestWithoutResourceCalculation,
-			IDifferenceCollectionService<IPersistableScheduleData> differenceService, IMessageBrokerComposite messageBroker, IBusinessRuleProvider businessRuleProvider)
+			IDifferenceCollectionService<IPersistableScheduleData> differenceService, IMessageBrokerComposite messageBroker, IBusinessRuleProvider businessRuleProvider, IShiftTradePendingReasonsService shiftTradePendingReasonsService)
 			: base(schedulingResultStateHolder, validator, requestFactory, scenarioRepository,
 				personRequestRepository, scheduleStorage, personRepository, personRequestCheckAuthorization, scheduleDictionarySaver,
-				loadSchedulingDataForRequestWithoutResourceCalculation, differenceService, messageBroker, businessRuleProvider)
+				loadSchedulingDataForRequestWithoutResourceCalculation, differenceService, messageBroker, businessRuleProvider, shiftTradePendingReasonsService)
 		{ }
 
 		[AsSystem, UnitOfWork]
@@ -429,10 +420,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			IScheduleStorage scheduleStorage, IPersonRepository personRepository,
 			IPersonRequestCheckAuthorization personRequestCheckAuthorization, IScheduleDifferenceSaver scheduleDictionarySaver,
 			ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulingDataForRequestWithoutResourceCalculation,
-			IDifferenceCollectionService<IPersistableScheduleData> differenceService, IMessageBrokerComposite messageBroker, IBusinessRuleProvider businessRuleProvider)
+			IDifferenceCollectionService<IPersistableScheduleData> differenceService, IMessageBrokerComposite messageBroker, IBusinessRuleProvider businessRuleProvider, IShiftTradePendingReasonsService shiftTradePendingReasonsService)
 			: base(schedulingResultStateHolder, validator, requestFactory, scenarioRepository,
 				personRequestRepository, scheduleStorage, personRepository, personRequestCheckAuthorization, scheduleDictionarySaver,
-				loadSchedulingDataForRequestWithoutResourceCalculation, differenceService, messageBroker, businessRuleProvider)
+				loadSchedulingDataForRequestWithoutResourceCalculation, differenceService, messageBroker, businessRuleProvider, shiftTradePendingReasonsService)
 		{
 		}
 	}

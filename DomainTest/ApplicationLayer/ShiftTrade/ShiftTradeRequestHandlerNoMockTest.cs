@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade;
 using Teleopti.Ccc.Domain.Collection;
@@ -11,11 +10,11 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -41,6 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		private IBusinessRuleProvider _businessRuleProvider;
 		private INewBusinessRuleCollection _businessRuleCollection;
 		private IScheduleDifferenceSaver _scheduleDifferenceSaver;
+		private IShiftTradePendingReasonsService _shiftTradePendingReasonsService;
 
 
 		[SetUp]
@@ -55,7 +55,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_businessRuleProvider = new FakeBusinessRuleProvider();
 			_businessRuleCollection = new FakeNewBusinessRuleCollection();
 
-			_scheduleDifferenceSaver = new FakeScheduleDifferenceSaver(_scheduleStorage);
+			_scheduleDifferenceSaver = new ScheduleDifferenceSaver(_scheduleStorage);
+			_shiftTradePendingReasonsService = new ShiftTradePendingReasonsService(_requestFactory, _scenarioRepository);
 
 			var shiftTradeSpecifications = new List<IShiftTradeSpecification>
 			{
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			};
 			_validator = new ShiftTradeValidator(new FakeShiftTradeLightValidator(), shiftTradeSpecifications);
 			_loadSchedulingDataForRequestWithoutResourceCalculation = new LoadSchedulesForRequestWithoutResourceCalculation(new FakePersonAbsenceAccountRepository(), _scheduleStorage);
-			
+
 		}
 
 		[Test]
@@ -92,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_target = new ShiftTradeRequestHandler(_schedulingResultStateHolder, _validator, _requestFactory,
 				_scenarioRepository, _personRequestRepository, _scheduleStorage, _personRepository
 			  , null, null,
-			 _loadSchedulingDataForRequestWithoutResourceCalculation, null, null, _businessRuleProvider);
+			 _loadSchedulingDataForRequestWithoutResourceCalculation, null, null, _businessRuleProvider, _shiftTradePendingReasonsService);
 
 			_target.Handle(getAcceptShiftTradeEvent(personTo, personRequest.Id.Value));
 
@@ -101,12 +102,31 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 		}
 
-
 		[Test]
-		public void ShouldTradeShifts()
+		public void ShouldTradeShiftsOnAutoApproval()
 		{
 			var workflowControlSet = createWorkFlowControlSet(true);
+			var result = doBasicShiftTrade(workflowControlSet);
 
+			Assert.IsTrue(result.PersonRequest.IsApproved);
+			Assert.IsTrue(result.PersonToSchedule.PersonAssignment().ShiftLayers.Single().Payload.Id == result.ActivityFrom.Id);
+			Assert.IsTrue(result.PersonFromSchedule.PersonAssignment().ShiftLayers.Single().Payload.Id == result.ActivityTo.Id);
+		}
+
+		[Test]
+		public void ShouldNotTradeShiftsOGetBrokenBusinessRulesWhenToggle39473IsOff()
+		{
+			var workflowControlSet = createWorkFlowControlSet(false);
+
+			var result = doBasicShiftTrade(workflowControlSet, true, true);
+
+			Assert.IsFalse(result.PersonRequest.IsApproved);
+			Assert.IsTrue(result.PersonToSchedule.PersonAssignment().ShiftLayers.Single().Payload.Id == result.ActivityTo.Id);
+			Assert.IsTrue(result.PersonFromSchedule.PersonAssignment().ShiftLayers.Single().Payload.Id == result.ActivityFrom.Id);
+		}
+		
+		private basicShiftTradeTestResult doBasicShiftTrade(IWorkflowControlSet workflowControlSet, bool addBrokenBusinessRules = false, bool toggle39473IsOff = false)
+		{
 			var personTo = PersonFactory.CreatePerson("To").WithId();
 			var personFrom = PersonFactory.CreatePerson("With").WithId();
 
@@ -114,45 +134,62 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var activityPersonFrom = new Activity("Shift_PersonFrom").WithId();
 
 			var dateTimePeriod = new DateTimePeriod(DateTime.Today.AddHours(8).ToUniversalTime(), DateTime.Today.AddHours(8).ToUniversalTime());
-			
-			addPersonAssignment(personTo, dateTimePeriod, activityPersonTo); 
+
+			addPersonAssignment(personTo, dateTimePeriod, activityPersonTo);
 			addPersonAssignment(personFrom, dateTimePeriod, activityPersonFrom);
+
+			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom }, null, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), _scenarioRepository.Current());
 
 			personTo.WorkflowControlSet = workflowControlSet;
 			personFrom.WorkflowControlSet = workflowControlSet;
 
-			prepareBusinessRuleProvider();
+			if (addBrokenBusinessRules)
+			{
+				var ruleResponse1 = new BusinessRuleResponse(typeof(MinWeeklyRestRule), "no go", true, false, new DateTimePeriod(),
+					personTo, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
+				var ruleResponse2 = new BusinessRuleResponse(typeof(NewMaxWeekWorkTimeRule), "no go", true, false,
+					new DateTimePeriod(), personTo, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
+				prepareBusinessRuleProvider(ruleResponse1, ruleResponse2);
+			}
+			else
+			{
+				prepareBusinessRuleProvider();
+			}
+
+
 			_personRepository.Add(personTo);
 
 			var personRequest = prepareAndGetPersonRequest(personFrom, personTo);
-			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom }, null, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), _scenarioRepository.Current());
-			
-			var approvalService = new RequestApprovalServiceScheduler(scheduleDictionary, _scenarioRepository.Current(), 
-				new SwapAndModifyService (new SwapService(), new DoNothingScheduleDayChangeCallBack()), _businessRuleCollection, 
-				new DoNothingScheduleDayChangeCallBack(), new FakeGlobalSettingDataRepository() );
-			
+
+			var approvalService = new RequestApprovalServiceScheduler(scheduleDictionary, _scenarioRepository.Current(),
+				new SwapAndModifyService(new SwapService(), new DoNothingScheduleDayChangeCallBack()), _businessRuleCollection,
+				new DoNothingScheduleDayChangeCallBack(), new FakeGlobalSettingDataRepository());
+
 			_requestFactory.setRequestApprovalService(approvalService);
 
-			handleRequest(getAcceptShiftTradeEvent(personTo, personRequest.Id.Value));
+			handleRequest(getAcceptShiftTradeEvent(personTo, personRequest.Id.Value), toggle39473IsOff);
 
-			var personToSchedule = scheduleDictionary[personTo].ScheduledDay(DateOnly.Today);
-			var personFromSchedule = scheduleDictionary[personFrom].ScheduledDay(DateOnly.Today);
-			
-			Assert.IsTrue(personRequest.IsApproved);
-			Assert.IsTrue(personToSchedule.PersonAssignment().ShiftLayers.Single().Payload.Id == activityPersonFrom.Id);
-			Assert.IsTrue(personFromSchedule.PersonAssignment().ShiftLayers.Single().Payload.Id == activityPersonTo.Id);
-
+			return new basicShiftTradeTestResult()
+			{
+				ActivityTo = activityPersonTo,
+				ActivityFrom = activityPersonFrom,
+				PersonToSchedule = scheduleDictionary[personTo].ScheduledDay(DateOnly.Today),
+				PersonFromSchedule = scheduleDictionary[personFrom].ScheduledDay(DateOnly.Today),
+				PersonRequest = personRequest
+			};
 		}
 
-		private void handleRequest (AcceptShiftTradeEvent acceptShiftTradeEvent)
+
+		private void handleRequest(AcceptShiftTradeEvent acceptShiftTradeEvent, bool toggle39473IsOff = false)
 		{
 
-			_target = new ShiftTradeRequestHandler (_schedulingResultStateHolder, _validator, _requestFactory,
+			_target = new ShiftTradeRequestHandler(_schedulingResultStateHolder, _validator, _requestFactory,
 				_scenarioRepository, _personRequestRepository, _scheduleStorage, _personRepository
 				, new PersonRequestAuthorizationCheckerForTest(), _scheduleDifferenceSaver,
 				_loadSchedulingDataForRequestWithoutResourceCalculation,
-				new DifferenceEntityCollectionService<IPersistableScheduleData>(), null, _businessRuleProvider);
-			_target.Handle (acceptShiftTradeEvent);
+				new DifferenceEntityCollectionService<IPersistableScheduleData>(), null, _businessRuleProvider,
+				toggle39473IsOff ? new ShiftTradePendingReasonsService39473ToggleOff() : _shiftTradePendingReasonsService);
+			_target.Handle(acceptShiftTradeEvent);
 		}
 
 		private IPersonRequest prepareAndGetPersonRequest(IPerson personFrom, IPerson personTo)
@@ -169,10 +206,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		}
 		private IPersonAssignment addPersonAssignment(IPerson person, DateTimePeriod dateTimePeriod, IActivity activity = null)
 		{
-			_personAssignment = activity != null ? 
-				PersonAssignmentFactory.CreateAssignmentWithMainShift (activity, person, dateTimePeriod, new ShiftCategory ("AM"), _scenarioRepository.Current()).WithId() : 
-				PersonAssignmentFactory.CreateAssignmentWithMainShift (person, dateTimePeriod);
-				
+			_personAssignment = activity != null ?
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, dateTimePeriod, new ShiftCategory("AM"), _scenarioRepository.Current()).WithId() :
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person, dateTimePeriod);
+
 			_scheduleStorage.Add(_personAssignment);
 			return _personAssignment;
 		}
@@ -192,11 +229,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				LogOnDatasource = "V7Config",
 				LogOnBusinessUnitId = Guid.NewGuid(),
 				Timestamp = DateTime.UtcNow,
-				PersonRequestId = requestId, 
+				PersonRequestId = requestId,
 				Message = "I want to trade!",
 				AcceptingPersonId = personTo.Id.GetValueOrDefault()
 			};
 			return ast;
 		}
+
+
+		private class basicShiftTradeTestResult
+		{
+			public IScheduleDay PersonFromSchedule { get; set; }
+			public IScheduleDay PersonToSchedule { get; set; }
+			public IPersonRequest PersonRequest { get; set; }
+			public IActivity ActivityTo { get; set; }
+			public IActivity ActivityFrom { get; set; }
+		}
 	}
 }
+

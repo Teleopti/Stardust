@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		private IMessageBrokerComposite messageBroker;
 		private IBusinessRuleProvider businessRuleProvider;
 		private INewBusinessRuleCollection newBusinessRuleCollection;
+		private IShiftTradePendingReasonsService shiftTradePendingReasonsService;
 
 		[SetUp]
 		public void Setup()
@@ -76,10 +77,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			messageBroker = new FakeMessageBrokerComposite();
 			businessRuleProvider = MockRepository.GenerateMock<IBusinessRuleProvider>();
 			newBusinessRuleCollection = new FakeNewBusinessRuleCollection();
+			shiftTradePendingReasonsService = new ShiftTradePendingReasonsService (requestFactory, scenarioRepository);
+
 			target = new ShiftTradeRequestHandler(schedulingResultState, validator, requestFactory,
 				scenarioRepository, personRequestRepository, scheduleStorage,
 				personRepository, personRequestCheckAuthorization, scheduleDictionarySaver,
-				loader, differenceCollectionService, messageBroker, businessRuleProvider);
+				loader, differenceCollectionService, messageBroker, businessRuleProvider, shiftTradePendingReasonsService);
 		}
 
 		private void createRepositories()
@@ -196,7 +199,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			target = new ShiftTradeRequestHandler(schedulingResultState, validator, requestFactory,
 				scenarioRepository, personRequestRepository, scheduleStorage,
 				personRepository, personRequestCheckAuthorization, scheduleDictionarySaver,
-				loader, differenceCollectionService, messageBroker, businessRuleProvider);
+				loader, differenceCollectionService, messageBroker, businessRuleProvider, shiftTradePendingReasonsService);
 
 			return target;
 		}

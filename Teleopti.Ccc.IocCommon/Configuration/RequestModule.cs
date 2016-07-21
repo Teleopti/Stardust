@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -46,6 +47,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		    else
 		    {
 				builder.RegisterType<AbsenceRequestCancelServiceWfmRequestsCancel37741ToggleOff>().As<IAbsenceRequestCancelService>().SingleInstance();
+			}
+
+
+		    if (_configuration.Toggle (Toggles.Wfm_Requests_Show_Pending_Reasons_39473))
+		    {
+				builder.RegisterType<ShiftTradePendingReasonsService>().As<IShiftTradePendingReasonsService>().SingleInstance();
+			}
+		    else
+		    {
+				builder.RegisterType<ShiftTradePendingReasonsService39473ToggleOff>().As<IShiftTradePendingReasonsService>().SingleInstance();
 			}
 			
 		}
