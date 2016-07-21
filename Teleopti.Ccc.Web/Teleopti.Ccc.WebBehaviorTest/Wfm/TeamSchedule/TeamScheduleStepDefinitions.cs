@@ -325,6 +325,37 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.AssertExists(".shift-category-cell");
 		}
 
+		[When(@"I click on a shift category label")]
+		public void WhenIClickOnAShiftCategoryLabel()
+		{
+			Browser.Interactions.Click("td.shift-category-cell");
+		}
+
+		[When(@"I set shift category as '(.*)'")]
+		public void WhenISetShiftCategoryAs(string newShiftCat)
+		{
+			Browser.Interactions.WaitScopeCondition(".edit-shift-category", "vm.shiftCategoriesLoaded", true, () =>
+			{
+				Browser.Interactions.ClickVisibleOnly(".edit-shift-category .shift-category-selector");
+				Browser.Interactions.ClickContaining(".md-select-menu-container md-option .md-text", newShiftCat);
+			});
+		}
+
+		[When(@"I apply the new shift category")]
+		public void WhenIApplyTheNewShiftCategory()
+		{
+			Browser.Interactions.Click("#applyShiftCategory");
+		}
+
+		[Then(@"I should see the shift category becomes '(.*)'")]
+		public void ThenIShouldSeeTheShiftCategoryBecomes(string p0)
+		{
+			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true, () =>
+			{
+				Browser.Interactions.AssertFirstContains("td.shift-category-cell", "Night");
+			});
+		}
+
 	}
 
 	public class AddActivityFormInfo

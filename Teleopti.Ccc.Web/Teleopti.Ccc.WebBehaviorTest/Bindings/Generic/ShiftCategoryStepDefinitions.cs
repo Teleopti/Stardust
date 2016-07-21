@@ -19,7 +19,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"there is a shift category named '(.*)'")]
 		public void GivenThereIsAShiftCategoryNamed(string name)
 		{
-			var shiftCategory = new ShiftCategoryConfigurable {Name = name};
+			var shiftCategory = new ShiftCategoryConfigurable
+			{
+				Name = name,
+				ShortName = name,
+				Color = "aquamarine"
+			};
 			DataMaker.Data().Apply(shiftCategory);
 		}		
 

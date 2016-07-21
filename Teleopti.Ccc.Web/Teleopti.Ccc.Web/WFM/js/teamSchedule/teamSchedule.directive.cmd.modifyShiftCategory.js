@@ -10,9 +10,11 @@
 
 		vm.label = 'EditShiftCategory';
 		vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
+		vm.shiftCategoriesLoaded = false;
 
 		shiftCategorySvc.fetchShiftCategories().then(function(data){
 			vm.shiftCategoriesList = data.data;
+			vm.shiftCategoriesLoaded = true;
 		});
 
 		vm.modifyShiftCategory = function(){
