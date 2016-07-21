@@ -47,10 +47,21 @@ AS
 	  SELECT TOP (1000000)
 	         *,
 		     ROW_NUMBER() OVER (ORDER BY DayOffFlag, Start) AS 'RowNumber'
-        FROM (SELECT *,
+        FROM (SELECT PersonId,
+					 team.Id as TeamId,
+					 BelongsToDate,
+					 Start,
+					 [End],
+					 sit.Id as SiteId,
+					 sit.BusinessUnit as BusinessUnitId,
+					 InsertedOn,
+					 [Model],					
 		             sd.IsDayOff AS DayOffFlag
 		        FROM ReadModel.PersonScheduleDay sd
-		       INNER JOIN @TempList t ON t.Person = sd.PersonId
+				INNER JOIN @TempList t ON t.Person = sd.PersonId
+				LEFT JOIN PersonPeriod psp ON psp.Parent = sd.PersonId AND psp.StartDate <= sd.BelongsToDate AND sd.BelongsToDate < psp.EndDate 
+			    LEFT JOIN Team team ON psp.Team = team.Id                                                                               
+			    LEFT JOIn [Site] sit ON team.[Site] = sit.Id                                                                            
 		       WHERE [BelongsToDate] = @shiftTradeDate
 		         AND sd.Start IS NOT NULL) as s
 		ORDER BY DayOffFlag, Start
