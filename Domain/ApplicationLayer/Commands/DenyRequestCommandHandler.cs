@@ -2,7 +2,6 @@
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Ccc.Domain.Collection;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
