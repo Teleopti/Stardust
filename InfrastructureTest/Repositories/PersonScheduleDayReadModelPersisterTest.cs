@@ -27,14 +27,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				MockRepository.GenerateMock<IMessageBrokerComposite>(), null);
 			var personId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
-			var teamId = Guid.NewGuid();
-			
+		
 			var date = new DateTime(2012, 8, 29);
 			var model = new PersonScheduleDayReadModel
 			{
-				Date = date,
-				TeamId = teamId,
-				BusinessUnitId = businessUnitId,
+				Date = date,			
 				PersonId = personId,
 				Start = date.AddHours(10),
 				End = date.AddHours(18),
@@ -55,7 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var target = new PersonScheduleDayReadModelPersister(CurrentUnitOfWork.Make(), MockRepository.GenerateMock<IMessageBrokerComposite>(), MockRepository.GenerateMock<ICurrentDataSource>());
 			var personId = Guid.NewGuid();
-			var teamId = Guid.NewGuid();
+			
 			const string shift = @"{\'FirstName\':\'????????? ?????\',\'LastName\':\'7004202\',\'EmploymentNumber\':\'\',\'Id\':\'4b9853d6-4073-48d4-a9b0-9e3f0101ff55\',\'Date\':\'2012-01-12T00:00:00\',\'WorkTimeMinutes\':664,\'ContractTimeMinutes\':664,\'Projection\':[{\'Color\':\'#00FF00\',\'Start\':\'2012-01-12T09:45:00Z\',\'End\':\'2012-01-12T10:52:00Z\',\'Minutes\':67,\'Title\':\'??????? / ????? ???????\'},{\'Color\':\'#000000\',\'Start\':\'2012-01-12T10:52:00Z\',\'End\':\'2012-01-12T10:55:00Z\',\'Minutes\':3,\'Title\':\'????????? ????????? (??????) / Techn pause\'},{\'Color\':\'#00FF00\',\'Start\':\'2012-01-12T10:55:00Z\',\'End\':\'2012-01-12T11:00:00Z\',\'Minutes\':5,\'Title\':\'??????? / ????? ???????\'},{\'Color\':\'#FF0000\',\'Start\':\'2012-01-12T11:00:00Z\',\'End\':\'2012-01-12T11:15:00Z\',\'Minutes\':15,\'Title\':\'??????? / Personal\'},{\'Color\':\'#00FF00\',\'Start\':\'2012-01-12T11:15:00Z\',\'End\':\'2012-01-12T11:34:00Z\',\'Minutes\':19,\'Title\':\'??????? / ????? ???????\'},{\'Color\':\'#000000\',\'Start\':\'2012-01-12T11:34:
 00Z\',\'End\':\'2012-01-12T11:43:00Z\',\'Minutes\':9,\'Title\':\'????????? ??????\'},{\'Color\':\'#00FF00\',\'Start\':\'2012-01-12T11:43:00Z\',\'End\':\'2012-01-12T12:15:00Z\',\'Minutes\':32,\'Title\':\'??????? / ????? ???????\'},{\'Color\':\'#FF0000\',\'Start\':\'2012-01-12T12:15:00Z\',\'End\':\'2012-01-12T12:30:00Z\',\'Minutes\':15,\'Title\':\'??????? / Personal\'},{\'Color\':\'#00FF00\',\'Start\':\'2012-01-12T12:30:00Z\',\'End\':\'2012-01-12T13:45:00Z\',\'Minutes\':75,\'Title\':\'??????? / ????? ???????\'},{\'Color\':\'#FF0000\',\'Start\':\'2012-01-12T13:45:00Z\',\'End\':\'2012-01-12T14:00:00Z\',\'Minutes\':15,\'Title\':\'??????? / Personal\'},{\'Color\':\'#00FF00\',\'Start\':\'2012-01-12T14:00:00Z\',\'End\':\'2012-01-12T15:01:00Z\',\'Minutes\':61,\'Title\':\'??????? / ????? ???????\'},{\'Color\':\'#000000\',\'Start\':\'2012-01-12T15:01:00Z\',\'End\':\'2012-01-12T15:05:00Z\',\'Minutes\':4,\'Title\':\'????????? ????????? (??????) / Techn pause\'},{\'Color\':\'#00FF00\',\'Start\':\'2012-01-12T15:05:00Z\',\'En
 d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'},{\'Color\':\'#000000\',\'Start\':\'2012-01-12T15:14:00Z\',\'End\':\'2012-01-12T15:19:00Z\',\'Minutes\':5,\'Title\':\'????????? ??????\'},{\'Color\':\'#FFFF00\',\'Start\':\'2012-01-12T15:19:00Z\',\'End\':\'2012-01-12T16:15:00Z\',\'Minutes\':56,\'Title\':\'???? / Lunch\'},{\'Color\':\'#00FF00\',\'Start\':\'2012-01-12T16:15:00Z\',\'End\':\'2012-01-12T16:41:00Z\',\'Minutes\':26,\'Title\':\'??????? / ????? ???????\'},{\'Color\':\'#000000\',\'Start\':\'2012-01-12T16:41:00Z\',\'End\':\'2012-01-12T16:45:00Z\',\'Minutes\':4,\'Title\':\'????????? ??????\'},{\'Color\':\'#00FF00\',\'Start\':\'2012-01-12T16:45:00Z\',\'End\':\'2012-01-12T17:15:00Z\',\'Minutes\':30,\'Title\':\'??????? / ????? ???????\'},{\'Color\':\'#FF0000\',\'Start\':\'2012-01-12T17:15:00Z\',\'End\':\'2012-01-12T17:30:00Z\',\'Minutes\':15,\'Title\':\'??????? / Personal\'},{\'Color\':\'#00FF00\',\'Start\':\'2012-01-12T17:30:00Z\',\'End\':\'2012-01-12T17:45:00Z\',\'Minutes\':15
@@ -64,17 +61,15 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 
 			var model = new PersonScheduleDayReadModel
 				{
-					Date = new DateTime(2012, 8, 29),
-					TeamId = teamId,
-					PersonId = personId,
-					BusinessUnitId = Guid.NewGuid(),
+					Date = new DateTime(2012, 8, 29),				
+					PersonId = personId,				
 					Start = new DateTime(2012, 8, 29, 10, 0, 0, DateTimeKind.Utc),
 					End = new DateTime(2012, 8, 29, 18, 0, 0, DateTimeKind.Utc),
 					Model = shift,
 					ScheduleLoadTimestamp = DateTime.UtcNow
 				};
 
-			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(model.Date), new DateOnly(model.Date)), personId, model.BusinessUnitId, new[] { model }, false);
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(model.Date), new DateOnly(model.Date)), personId,Guid.NewGuid(), new[] { model }, false);
 		}
 
 		[Test]
@@ -86,9 +81,7 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 			var model = new PersonScheduleDayReadModel
 				{
 					Date = new DateTime(2012, 8, 29),
-					TeamId = Guid.NewGuid(),
 					PersonId = Guid.NewGuid(),
-					BusinessUnitId = Guid.NewGuid(),
 					IsDayOff = true,
 					Start = new DateTime(2012, 8, 29, 10, 0, 0, DateTimeKind.Utc),
 					End = new DateTime(2012, 8, 29, 18, 0, 0, DateTimeKind.Utc),
@@ -96,7 +89,7 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 					ScheduleLoadTimestamp = DateTime.UtcNow
 				};
 
-			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(model.Date), new DateOnly(model.Date)), model.PersonId, model.BusinessUnitId, new[] { model }, false);
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(model.Date), new DateOnly(model.Date)), model.PersonId,Guid.NewGuid(), new[] { model }, false);
 
 			new PersonScheduleDayReadModelFinder(uow)
 				.ForPerson(new DateOnly(model.Date), model.PersonId)
@@ -111,9 +104,7 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 			var date = new DateTime(2012, 8, 29);
 			var readModel = new PersonScheduleDayReadModel
 			{
-				Date = date,
-				TeamId = Guid.NewGuid(),
-				BusinessUnitId = Guid.NewGuid(),
+				Date = date,		
 				PersonId = Guid.NewGuid(),
 				Start = date.AddHours(10),
 				End = date.AddHours(18),
@@ -121,7 +112,7 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 				ScheduleLoadTimestamp = DateTime.UtcNow
 			};
 
-			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), readModel.PersonId, readModel.BusinessUnitId, new[] { readModel }, false);
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), readModel.PersonId, Guid.NewGuid(), new[] { readModel }, false);
 
 			new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make())
 				.ForPerson(new DateOnly(readModel.Date), readModel.PersonId)
@@ -132,15 +123,12 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 		public void ShouldPersistNewReadModels()
 		{
 			var target = new PersonScheduleDayReadModelPersister(CurrentUnitOfWork.Make(), MockRepository.GenerateMock<IMessageBrokerComposite>(), null);						
-			var date = new DateTime(2012, 8, 29);
-			var teamId = Guid.NewGuid();
+			var date = new DateTime(2012, 8, 29);			
 			var buId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
 			var readModel = new PersonScheduleDayReadModel
 			{
-				Date = date,
-				TeamId = teamId,
-				BusinessUnitId = buId,
+				Date = date,			
 				PersonId = personId,
 				Start = date.AddHours(10),
 				End = date.AddHours(18),
@@ -151,8 +139,6 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 			var anotherReadModel = new PersonScheduleDayReadModel
 			{
 				Date = date.AddDays(1),
-				TeamId = teamId,
-				BusinessUnitId = buId,
 				PersonId = personId,
 				Start = date.AddHours(10),
 				End = date.AddHours(18),
@@ -160,7 +146,7 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 				ScheduleLoadTimestamp = DateTime.UtcNow
 			};
 
-			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), readModel.PersonId, readModel.BusinessUnitId, new[] { readModel, anotherReadModel }, false);
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), readModel.PersonId, buId, new[] { readModel, anotherReadModel }, false);
 
 			new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make())
 				.ForPerson(new DateOnly(readModel.Date), personId)
@@ -181,9 +167,7 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 
 			var oldReadModel = new PersonScheduleDayReadModel
 			{
-				Date = date,
-				TeamId = Guid.NewGuid(),
-				BusinessUnitId = Guid.NewGuid(),
+				Date = date,				
 				PersonId = personId,
 				Start = date.AddHours(10),
 				End = date.AddHours(18),
@@ -193,9 +177,7 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 
 			var newerReadModel = new PersonScheduleDayReadModel
 			{
-				Date = date,
-				TeamId = Guid.NewGuid(),
-				BusinessUnitId = Guid.NewGuid(),
+				Date = date,				
 				PersonId = personId,
 				Start = date.AddHours(10),
 				End = date.AddHours(18),
@@ -204,13 +186,15 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 				ScheduleLoadTimestamp = oldTimestamp.AddHours(1)
 			};
 
-			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), oldReadModel.PersonId, oldReadModel.BusinessUnitId, new[] { oldReadModel }, false);
+			var buId = Guid.NewGuid();
+
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), oldReadModel.PersonId,buId, new[] { oldReadModel }, false);
 			new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make())
 				.ForPerson(new DateOnly(oldReadModel.Date), oldReadModel.PersonId)
 				.IsDayOff.Should()
 				.Be.False();
 			
-			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), newerReadModel.PersonId, newerReadModel.BusinessUnitId, new[] { newerReadModel }, false);
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), newerReadModel.PersonId,buId, new[] { newerReadModel }, false);
 			new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make())
 				.ForPerson(new DateOnly(newerReadModel.Date), newerReadModel.PersonId)
 				.IsDayOff.Should()
@@ -228,9 +212,7 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 
 			var oldTimestampReadModel = new PersonScheduleDayReadModel
 			{
-				Date = date,
-				TeamId = Guid.NewGuid(),
-				BusinessUnitId = Guid.NewGuid(),
+				Date = date,			
 				PersonId = personId,
 				Start = date.AddHours(10),
 				End = date.AddHours(18),
@@ -241,9 +223,7 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 
 			var newTimestampReadModel = new PersonScheduleDayReadModel
 			{
-				Date = date,
-				TeamId = Guid.NewGuid(),
-				BusinessUnitId = Guid.NewGuid(),
+				Date = date,				
 				PersonId = personId,
 				Start = date.AddHours(10),
 				End = date.AddHours(18),
@@ -252,9 +232,11 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 				ScheduleLoadTimestamp = oldTimestamp.AddHours(1)
 			};
 
-			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), newTimestampReadModel.PersonId, newTimestampReadModel.BusinessUnitId, new[] { newTimestampReadModel }, false);
+			var buId = Guid.NewGuid();
 
-			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), oldTimestampReadModel.PersonId, oldTimestampReadModel.BusinessUnitId, new[] { oldTimestampReadModel }, false);
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), newTimestampReadModel.PersonId, buId, new[] { newTimestampReadModel }, false);
+
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), oldTimestampReadModel.PersonId,buId, new[] { oldTimestampReadModel }, false);
 			new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make())
 				.ForPerson(new DateOnly(oldTimestampReadModel.Date), oldTimestampReadModel.PersonId)
 				.IsDayOff.Should()
@@ -279,8 +261,6 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 			var oldTimestampReadModel = new PersonScheduleDayReadModel
 			{
 				Date = date,
-				TeamId = Guid.NewGuid(),
-				BusinessUnitId = Guid.NewGuid(),
 				PersonId = personId,
 				Start = date.AddHours(10),
 				End = date.AddHours(18),
@@ -292,8 +272,6 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 			var newTimestampReadModel = new PersonScheduleDayReadModel
 			{
 				Date = date,
-				TeamId = Guid.NewGuid(),
-				BusinessUnitId = Guid.NewGuid(),
 				PersonId = personId,
 				Start = date.AddHours(10),
 				End = date.AddHours(18),
@@ -302,14 +280,16 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 				ScheduleLoadTimestamp = oldTimestamp.AddHours(1)
 			};
 
-			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), newTimestampReadModel.PersonId, newTimestampReadModel.BusinessUnitId, new[] { newTimestampReadModel }, false);
+			var buId = Guid.NewGuid();
+
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), newTimestampReadModel.PersonId, buId, new[] { newTimestampReadModel }, false);
 			uow.Current().PersistAll();
 
 			messageBroker.GetSendInvokedCount().Should().Be.EqualTo(1);
 			
 			messageBroker.ResetSendInvokedCount();
 
-			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), oldTimestampReadModel.PersonId, oldTimestampReadModel.BusinessUnitId, new[] { oldTimestampReadModel }, false);
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), oldTimestampReadModel.PersonId, buId, new[] { oldTimestampReadModel }, false);
 			uow.Current().PersistAll();
 			messageBroker.GetSendInvokedCount().Should().Be.EqualTo(0);
 			CleanUpAfterTest();
@@ -331,9 +311,7 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 
 			var oldReadModel = new PersonScheduleDayReadModel
 			{
-				Date = date,
-				TeamId = Guid.NewGuid(),
-				BusinessUnitId = Guid.NewGuid(),
+				Date = date,			
 				PersonId = personId,
 				Start = date.AddHours(10),
 				End = date.AddHours(18),
@@ -343,9 +321,7 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 
 			var newerReadModel = new PersonScheduleDayReadModel
 			{
-				Date = date,
-				TeamId = Guid.NewGuid(),
-				BusinessUnitId = Guid.NewGuid(),
+				Date = date,			
 				PersonId = personId,
 				Start = date.AddHours(10),
 				End = date.AddHours(18),
@@ -354,14 +330,16 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 				ScheduleLoadTimestamp = oldTimestamp.AddHours(1)
 			};
 
-			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), oldReadModel.PersonId, oldReadModel.BusinessUnitId, new[] { oldReadModel }, false);
+			var buId = Guid.NewGuid();
+
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), oldReadModel.PersonId, buId, new[] { oldReadModel }, false);
 			uow.Current().PersistAll();
 
 			messageBroker.GetSendInvokedCount().Should().Be.EqualTo(1);
 
 			messageBroker.ResetSendInvokedCount();
 
-			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), newerReadModel.PersonId, newerReadModel.BusinessUnitId, new[] { newerReadModel }, false);
+			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), newerReadModel.PersonId, buId, new[] { newerReadModel }, false);
 			uow.Current().PersistAll();
 			messageBroker.GetSendInvokedCount().Should().Be.EqualTo(1);
 			CleanUpAfterTest();

@@ -256,9 +256,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var model = new PersonScheduleDayReadModel
 			{
-				Date = date,
-				TeamId = teamId,
-				BusinessUnitId = businessUnitId,
+				Date = date,			
 				PersonId = personId,
 				Model = "{shift: blablabla}",
 				ScheduleLoadTimestamp = DateTime.UtcNow

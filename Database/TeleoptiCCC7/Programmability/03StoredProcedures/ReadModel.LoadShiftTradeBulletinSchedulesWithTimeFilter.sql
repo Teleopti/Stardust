@@ -120,7 +120,7 @@ AS
 			--Shifts
   			SELECT
 				sd.PersonId,
-				teamId as TeamId,
+				team.Id as TeamId,
 				sit.Id as SiteId,
 				sit.BusinessUnit as BusinessUnitId,
 				sd.BelongsToDate,

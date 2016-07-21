@@ -4,9 +4,6 @@ GO
 
 CREATE PROCEDURE [ReadModel].[UpdatePersonScheduleDay]
 @PersonId uniqueidentifier,
-@TeamId uniqueidentifier,
-@SiteId uniqueidentifier,
-@BusinessUnitId uniqueidentifier,
 @Start datetime,
 @End datetime,
 @BelongsToDate datetime,
@@ -31,8 +28,8 @@ BEGIN
 		WHERE PersonId = @PersonId
 			AND BelongsToDate = @BelongsToDate)
 	BEGIN
-		INSERT INTO ReadModel.PersonScheduleDay (PersonId,TeamId,SiteId,BusinessUnitId,Start,[End],BelongsToDate,IsDayOff,Model,ScheduleLoadedTime) 
-		VALUES (@PersonId,@TeamId,@SiteId,@BusinessUnitId,@Start,@End,@BelongsToDate,@IsDayOff,@Model,@ScheduleLoadedTime)
+		INSERT INTO ReadModel.PersonScheduleDay (PersonId, Start,[End],BelongsToDate,IsDayOff,Model,ScheduleLoadedTime) 
+		VALUES (@PersonId, @Start,@End,@BelongsToDate,@IsDayOff,@Model,@ScheduleLoadedTime)
 	END
 	SELECT 1 -- number of records changed
 	RETURN
@@ -47,8 +44,8 @@ AND BelongsToDate = @BelongsToDate
 
 IF (@existingScheduleLoadedTime IS NULL)
 BEGIN
-	INSERT INTO ReadModel.PersonScheduleDay (PersonId,TeamId,SiteId,BusinessUnitId,Start,[End],BelongsToDate,IsDayOff,Model,ScheduleLoadedTime) 
-	VALUES (@PersonId,@TeamId,@SiteId,@BusinessUnitId,@Start,@End,@BelongsToDate,@IsDayOff,@Model,@ScheduleLoadedTime)
+	INSERT INTO ReadModel.PersonScheduleDay (PersonId,Start,[End],BelongsToDate,IsDayOff,Model,ScheduleLoadedTime) 
+	VALUES (@PersonId,@Start,@End,@BelongsToDate,@IsDayOff,@Model,@ScheduleLoadedTime)
 	SELECT 1 -- number of records changed
 	RETURN
 END
@@ -59,8 +56,8 @@ BEGIN
 	WHERE PersonId = @PersonId
 	AND BelongsToDate = @BelongsToDate
 
-	INSERT INTO ReadModel.PersonScheduleDay (PersonId,TeamId,SiteId,BusinessUnitId,Start,[End],BelongsToDate,IsDayOff,Model,ScheduleLoadedTime) 
-	VALUES (@PersonId,@TeamId,@SiteId,@BusinessUnitId,@Start,@End,@BelongsToDate,@IsDayOff,@Model,@ScheduleLoadedTime)
+	INSERT INTO ReadModel.PersonScheduleDay (PersonId,Start,[End],BelongsToDate,IsDayOff,Model,ScheduleLoadedTime) 
+	VALUES (@PersonId,@Start,@End,@BelongsToDate,@IsDayOff,@Model,@ScheduleLoadedTime)
 	SELECT 1 -- number of records changed
 END
 

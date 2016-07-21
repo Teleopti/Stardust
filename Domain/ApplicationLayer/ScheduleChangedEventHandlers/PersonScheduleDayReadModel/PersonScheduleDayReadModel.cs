@@ -6,10 +6,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 {
 	public class PersonScheduleDayReadModel : IPersonScheduleDayReadModel, IEquatable<PersonScheduleDayReadModel>
 	{
-		public Guid PersonId { get; set; }
-		public Guid TeamId { get; set; }
-		public Guid SiteId { get; set; }
-		public Guid BusinessUnitId { get; set; }
+		public Guid PersonId { get; set; }	
 		public string FirstName { get; set; }
 		public string LastName { get; set; }
 		public DateTime Date { get; set; }
@@ -26,8 +23,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		public bool Equals(PersonScheduleDayReadModel other)
 		{
 			if (other == null) return false;
-			return (PersonId == other.PersonId && TeamId == other.TeamId && SiteId == other.SiteId &&
-					BusinessUnitId == other.BusinessUnitId && Date == other.Date && 
+			return (PersonId == other.PersonId && Date == other.Date && 
 					BelongsToDate == other.BelongsToDate && Start == other.Start &&
 					End == other.End && IsDayOff == other.IsDayOff
 					&& Model == other.Model);

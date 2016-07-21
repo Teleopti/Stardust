@@ -28,9 +28,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return new PersonScheduleDayReadModel
 			{
 				PersonId = person.Id.Value,
-				Date = date.Date,
-				TeamId = (Guid) person.MyTeam(date)?.Id.GetValueOrDefault(),
-				SiteId = (Guid) person.MyTeam(date)?.Site.Id.GetValueOrDefault(),
+				Date = date.Date,				
 				Model = JsonConvert.SerializeObject(model),
 				FirstName = model.FirstName,
 				LastName = model.LastName
@@ -63,8 +61,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			};
 			return new PersonScheduleDayReadModel
 			{
-				PersonId = person.Id.Value,
-				TeamId = person.MyTeam(date).Id.Value,
+				PersonId = person.Id.Value,			
 				Start = dayOff.Start.Date,
 				End = dayOff.End.Date,
 				Model = JsonConvert.SerializeObject(model),
@@ -96,9 +93,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			};
 			return new PersonScheduleDayReadModel
 			{
-				PersonId = person.Id.GetValueOrDefault(),
-				TeamId = person.MyTeam(date).Id.GetValueOrDefault(),
-				SiteId = person.MyTeam(date).Site.Id.GetValueOrDefault(),
+				PersonId = person.Id.GetValueOrDefault(),			
 				Start = simpleLayers.Any()? simpleLayers.Min( x => x.Start): date.Date,	
 				End = simpleLayers.Any()? simpleLayers.Max( x => x.End): date.Date.Add(new TimeSpan(23,59,59)),
 				Model = JsonConvert.SerializeObject(model),

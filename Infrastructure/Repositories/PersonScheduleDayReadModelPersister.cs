@@ -68,11 +68,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					model.BelongsToDate, model.PersonId, model.Start, model.End, model.ScheduleLoadTimestamp);
 
 			var updatedCount = _currentUnitOfWork.Session().CreateSQLQuery(
-				"EXEC ReadModel.UpdatePersonScheduleDay @PersonId=:PersonId,@TeamId=:TeamId,@SiteId=:SiteId,@BusinessUnitId=:BusinessUnitId,@Start=:Start,@End=:End,@BelongsToDate=:BelongsToDate,@IsDayOff=:IsDayOff,@Model=:Model,@ScheduleLoadedTime=:ScheduleLoadedTime,@IsInitialLoad=:IsInitialLoad")
-				.SetGuid("PersonId", model.PersonId)
-				.SetGuid("TeamId", model.TeamId)
-				.SetGuid("SiteId", model.SiteId)
-				.SetGuid("BusinessUnitId", model.BusinessUnitId)
+				"EXEC ReadModel.UpdatePersonScheduleDay @PersonId=:PersonId,@Start=:Start,@End=:End,@BelongsToDate=:BelongsToDate,@IsDayOff=:IsDayOff,@Model=:Model,@ScheduleLoadedTime=:ScheduleLoadedTime,@IsInitialLoad=:IsInitialLoad")
+				.SetGuid("PersonId", model.PersonId)				
 				.SetParameter("Start", model.Start)
 				.SetParameter("End", model.End)
 				.SetDateOnly("BelongsToDate", model.BelongsToDate)

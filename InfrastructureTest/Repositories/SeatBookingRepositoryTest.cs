@@ -514,10 +514,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var model = new PersonScheduleDayReadModel
 			{
-				Date = startDateTime,
-				TeamId = person.MyTeam(belongsToDate).Id.GetValueOrDefault(),
+				Date = startDateTime,			
 				PersonId = person.Id.GetValueOrDefault(),
-				BusinessUnitId = businessUnit.Id.GetValueOrDefault(),
 				IsDayOff = false,
 				Start = startDateTime,
 				End = endDateTime,
@@ -526,7 +524,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			};
 
 			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(model.Date), new DateOnly(model.Date)), model.PersonId,
-				model.BusinessUnitId, new[] { model }, false);
+				businessUnit.Id.GetValueOrDefault(), new[] { model }, false);
 		}
 
 

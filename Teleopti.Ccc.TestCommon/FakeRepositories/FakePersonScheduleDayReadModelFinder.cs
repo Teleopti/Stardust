@@ -57,8 +57,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				readModel = PersonScheduleDayReadModelFactory.CreateSimplePersonScheduleDayReadModel(persons.First(p => p.Id.Value == personId), date);
 			}
 			
-			readModel.BusinessUnitId = assignment.Scenario.BusinessUnit.Id.GetValueOrDefault();
-
 			return readModel;
 		}
 

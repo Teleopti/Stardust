@@ -14,18 +14,6 @@ namespace Teleopti.Interfaces.Domain
 		/// <summary>
 		/// Use your english skills and resharper to understand what I am
 		/// </summary>
-		Guid TeamId { get; set; }
-		/// <summary>
-		/// Use your english skills and resharper to understand what I am
-		/// </summary>
-		Guid SiteId { get; set; }
-		/// <summary>
-		/// Use your english skills and resharper to understand what I am
-		/// </summary>
-		Guid BusinessUnitId { get; set; }
-		/// <summary>
-		/// Use your english skills and resharper to understand what I am
-		/// </summary>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Date")]
 		DateTime Date { get; set; }
 		/// <summary>
