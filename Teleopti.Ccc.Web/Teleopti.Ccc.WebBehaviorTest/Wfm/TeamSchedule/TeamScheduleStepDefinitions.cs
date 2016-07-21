@@ -341,7 +341,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.Click("#applyShiftCategory");
 		}
 
-		[Then(@"I should see the shift category '(.*)'")]
+		[Then(@"I should see a shift category named '(.*)'")]
 		public void ThenIShouldSeeTheShiftCategoryBecomes(string name)
 		{
 			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true, () =>

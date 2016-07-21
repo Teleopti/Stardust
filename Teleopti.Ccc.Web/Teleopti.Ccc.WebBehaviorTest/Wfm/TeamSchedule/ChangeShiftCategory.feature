@@ -52,6 +52,6 @@ Scenario: Should be able to change shift category via label
 	And I click on a shift category label
 	And I set shift category as 'Night'
 	And I apply the new shift category
-	Then I should see the shift category 'NT'
+	Then I should see a shift category named 'NT'
 
 # Scenario: Should be able to change shift category via command menu
