@@ -27,6 +27,10 @@
 		vm.shortDateFormatStart = moment(vm.selectedPeriod.startDate).format('YYYY-MM-DD');
 		vm.shortDateFormatEnd = moment(vm.selectedPeriod.endDate).format('YYYY-MM-DD');
 
+		vm.toggleDateRangePickerFn = function($event){
+			$event.stopPropagation();
+			vm.toggleDateRangePicker = !vm.toggleDateRangePicker
+		};
 
 		vm.afterShortDateStringChange = function(){
 			vm.isInputDateValid = true;

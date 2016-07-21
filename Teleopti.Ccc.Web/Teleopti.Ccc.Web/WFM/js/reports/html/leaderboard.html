@@ -22,7 +22,7 @@
 	}
 </style>
 
-<div class="leaderboard-container">
+<div class="leaderboard-container" ng-click="vm.toggleDateRangePicker = false">
 	<div class="wfm-reports" ng-if="vm.isLeaderBoardEnabled">
 		<div class="view-header">
 			<div class="view-title">
@@ -36,16 +36,15 @@
 					<people-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged"></people-search-input>
 				</span>
 
-				<span class="daterange-picker">
-					<button class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="vm.toggleDateRangePicker = !vm.toggleDateRangePicker">
+				<span class="daterange-picker" ng-click="vm.toggleDateRangePickerFn($event)">
+					<button class="wfm-btn wfm-btn-invis-primary wfm-btn-sm">
 						<i class="mdi mdi-calendar"></i>
 					</button>
 
 					<input type="text" ng-model="vm.shortDateFormatStart" ng-change="vm.afterShortDateStringChange()"> 
 					<input type="text" ng-model="vm.shortDateFormatEnd" ng-change="vm.afterShortDateStringChange()"> 
 
-					<date-range-picker ng-model="vm.selectedPeriod" ng-change="vm.afterSelectedDateChange()" template-type="vm.dateRangePickerTemplateType" ng-show="vm.toggleDateRangePicker"></date-range-picker>
-
+					<date-range-picker ng-model="vm.selectedPeriod" ng-change="vm.afterSelectedDateChange()" template-type="vm.dateRangePickerTemplateType" ng-show="vm.toggleDateRangePicker" ng-click="$event.stopPropagation()"></date-range-picker>
 				</span>
 			</div>
 
