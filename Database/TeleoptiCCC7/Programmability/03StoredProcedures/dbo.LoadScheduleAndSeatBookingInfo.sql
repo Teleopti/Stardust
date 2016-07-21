@@ -60,19 +60,20 @@ SELECT SeatBooking.StartDateTime as SeatBookingStart
 	  
 FROM ReadModel.PersonScheduleDay as personSchedule
  
-  JOIN Person as person on personSchedule.PersonId = Person.Id
-  JOIN Team as team on personSchedule.TeamId = team.Id
+  JOIN Person as person on personSchedule.PersonId = Person.Id  
   LEFT JOIN SeatBooking as SeatBooking on ( personSchedule.PersonId = SeatBooking.Person 
 		and personSchedule.BelongsToDate = SeatBooking.BelongsToDate )
   LEFT JOIN Seat as seat on SeatBooking.Seat = seat.Id
-  LEFT JOIN SeatMapLocation as loc on loc.Id = seat.Parent
-  LEFT JOIN [Site] as sit on sit.id = personSchedule.SiteId 
+  LEFT JOIN SeatMapLocation as loc on loc.Id = seat.Parent 
+  LEFT JOIN PersonPeriod as psp on psp.Parent = person.Id AND psp.StartDate <= personSchedule.BelongsToDate AND personSchedule.BelongsToDate < psp.EndDate
+  LEFT JOIN Team team on psp.Team = team.Id
+  LEFT JOIN [Site] sit on team.[Site] = sit.Id
     
-WHERE personSchedule.BusinessUnitId = @businessUnitId and
+WHERE sit.BusinessUnit = @businessUnitId and
 	  personSchedule.Start IS NOT NULL and 
 	( personSchedule.BelongsToDate between @startDate and @endDate )
 	
-	AND (EXISTS (select Id from @teamids where personSchedule.TeamId = Id) or @teamIdList IS NULL)
+	AND (EXISTS (select Id from @teamids where team.Id = Id) or @teamIdList IS NULL)
 	AND (EXISTS (select Id from @locationids where loc.Id = Id) or @locationIdList IS NULL)
 	
 	AND (@unseatedOnly = 0 or (@unseatedOnly = 1 and SeatBooking.Seat IS NULL and personSchedule.IsDayOff = 0))
