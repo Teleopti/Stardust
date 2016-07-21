@@ -39,15 +39,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			new SkillDayRepository(SystemSetup.UnitOfWork).LoadAll().Any().Should().Be.False();
 		}
 		
-		[When(@"I select skill '(.*)'")]
-		public void WhenISelectSkill(string skill)
-		{
-			Browser.Interactions.ClickContaining(".skill", skill);
-			Browser.Interactions.AssertExistsUsingJQuery(".skill:contains('" + skill + "').selected");
-			Browser.Interactions.AssertExistsUsingJQuery(".workload:first.selected");
-			Browser.Interactions.AssertExistsUsingJQuery(".workload:last.selected");
-		}
-
 		[Given(@"I select workload '(.*)'")]
 		[When(@"I select workload '(.*)'")]
 		public void WhenISelectWorkload(string workload)

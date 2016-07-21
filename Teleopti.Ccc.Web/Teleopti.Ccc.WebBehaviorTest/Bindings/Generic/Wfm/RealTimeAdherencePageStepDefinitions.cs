@@ -234,7 +234,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		}
 
 		[When(@"I select skill '(.*)'")]
-		[Scope(Feature = "Monitor agents by skill")]
 		public void WhenISelectSkill(string skillName)
 		{
 			Browser.Interactions.Click("#skill-input");
