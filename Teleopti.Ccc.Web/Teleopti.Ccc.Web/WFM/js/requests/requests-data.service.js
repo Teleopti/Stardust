@@ -30,12 +30,12 @@
 			);
 		};
 
-		this.approveRequestsPromise = function(selectedRequestIds) {
-			return $http.post(approveRequestsUrl, selectedRequestIds);
+		this.approveRequestsPromise = function(selectedRequestIds, replyMessage) {
+			return $http.post(approveRequestsUrl, getRequestsCommandParameter(selectedRequestIds, replyMessage));
 		};
 
-		this.cancelRequestsPromise = function(selectedRequestIds) {
-			return $http.post(cancelRequestsUrl, selectedRequestIds);
+		this.cancelRequestsPromise = function (selectedRequestIds, replyMessage) {
+			return $http.post(cancelRequestsUrl, getRequestsCommandParameter(selectedRequestIds, replyMessage));
 		};
 
 		this.processWaitlistRequestsPromise = function (waitlistPeriod, commandId) {
@@ -51,8 +51,8 @@
 			return $http.post(approveWithValidatorsUrl, parameters);
 		};
 
-		this.denyRequestsPromise = function(selectedRequestIds) {
-			return $http.post(denyRequestsUrl, selectedRequestIds);
+		this.denyRequestsPromise = function (selectedRequestIds, replyMessage) {
+			return $http.post(denyRequestsUrl, getRequestsCommandParameter(selectedRequestIds, replyMessage));
 		}
 
 		this.getRequestableAbsences = function() {
@@ -75,6 +75,13 @@
 			}
 
 			return statuses;
+		}
+
+		function getRequestsCommandParameter(selectedRequestIds, replyMessage) {
+			return {
+				RequestIds: selectedRequestIds,
+				ReplyMessage: replyMessage
+			};
 		}
 	}
 })();

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
             _loggedOnUser = loggedOnUser;
         }
 
-        public RequestCommandHandlingResult ApproveRequests(IEnumerable<Guid> requestIds)
+        public RequestCommandHandlingResult ApproveRequests(IEnumerable<Guid> requestIds, string replyMessage)
         {
             var trackInfo = createTrackedCommandInfo();
             var affectedRequestIds = new List<Guid>();
@@ -28,8 +28,9 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
                 var command = new ApproveRequestCommand
                 {
                     TrackedCommandInfo = trackInfo,
-                    PersonRequestId = personRequestId
-                };
+                    PersonRequestId = personRequestId,
+					ReplyMessage = replyMessage
+				};
 
                 _commandDispatcher.Execute(command);
 
@@ -66,7 +67,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			return new RequestCommandHandlingResult(new Guid[] { }, errorMessages, trackInfo.TrackId);
 		}
 
-        public RequestCommandHandlingResult DenyRequests(IEnumerable<Guid> requestIds)
+        public RequestCommandHandlingResult DenyRequests(IEnumerable<Guid> requestIds, string replyMessage)
         {
             var trackInfo = createTrackedCommandInfo();
             var affectedRequestIds = new List<Guid>();
@@ -78,7 +79,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
                 {
                     TrackedCommandInfo = trackInfo,
                     PersonRequestId = personRequestId,
-                    IsManualDeny = true
+                    IsManualDeny = true,
+					ReplyMessage = replyMessage
                 };
 
                 _commandDispatcher.Execute(command);
@@ -95,7 +97,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
             return new RequestCommandHandlingResult(affectedRequestIds, errorMessages);
         }
 
-        public RequestCommandHandlingResult CancelRequests(IEnumerable<Guid> requestIds)
+        public RequestCommandHandlingResult CancelRequests(IEnumerable<Guid> requestIds, string replyMessage)
         {
             var trackInfo = createTrackedCommandInfo();
             var affectedRequestIds = new List<Guid>();
@@ -106,7 +108,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
                 var command = new CancelAbsenceRequestCommand
                 {
                     TrackedCommandInfo = trackInfo,
-                    PersonRequestId = personRequestId
+                    PersonRequestId = personRequestId,
+					ReplyMessage = replyMessage
                 };
 
                 _commandDispatcher.Execute(command);

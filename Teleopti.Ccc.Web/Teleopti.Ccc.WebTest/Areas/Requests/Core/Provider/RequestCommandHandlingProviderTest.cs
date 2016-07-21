@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		[Test]
 		public void ShouldNotHandleApproveCommandWithInvalidRequestId()
 		{
-			var result = Target.ApproveRequests(new List<Guid> {new Guid()});
+			var result = Target.ApproveRequests(new List<Guid> {new Guid()}, string.Empty);
 			result.AffectedRequestIds.ToList().Count.Should().Be.EqualTo(0);
 		}
 
@@ -69,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			requestApprovalService.Stub(
 				x => x.ApproveAbsence(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9), person, personRequest))
 				.Return(new List<IBusinessRuleResponse>());
-			Target.ApproveRequests(new List<Guid> {personRequest.Id.Value});
+			Target.ApproveRequests(new List<Guid> {personRequest.Id.Value}, string.Empty);
 			requestApprovalService.AssertWasCalled(
 				x => x.ApproveAbsence(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9), person, personRequest),
 				options => options.Repeat.AtLeastOnce());
@@ -91,9 +92,32 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			requestApprovalService.Stub(
 				x => x.ApproveAbsence(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9), person, personRequest))
 				.Return(new List<IBusinessRuleResponse>());
-			var result = Target.ApproveRequests(new List<Guid> {personRequest.Id.Value});
+			var result = Target.ApproveRequests(new List<Guid> {personRequest.Id.Value}, string.Empty);
 
 			result.AffectedRequestIds.ToList().Count.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldApproveAbsenceRequestWithReplyMessage()
+		{
+			var person = PersonFactory.CreatePerson("tester");
+			var scheduleDictionary = new FakeScheduleDictionary();
+
+			var requestApprovalService = RequestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(scheduleDictionary,
+				Scenario.Current(), person);
+
+			var absence = AbsenceFactory.CreateAbsence("absence");
+			var personRequest = createNewAbsenceRequest(person, absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
+			personRequest.Pending();
+
+			requestApprovalService.Stub(
+				x => x.ApproveAbsence(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9), person, personRequest))
+				.Return(new List<IBusinessRuleResponse>());
+			var result = Target.ApproveRequests(new List<Guid> { personRequest.Id.Value }, "test");
+
+			result.AffectedRequestIds.ToList().Count.Should().Be.EqualTo(1);
+			personRequest.IsApproved.Should().Be(true);
+			personRequest.GetMessage(new NoFormatting()).Should().Contain("test");
 		}
 
 		[Test]
@@ -120,7 +144,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 				x => x.ApproveAbsence(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9), person, personRequest2))
 				.Return(new List<IBusinessRuleResponse>());
 
-			var result = Target.ApproveRequests(new List<Guid> {personRequest1.Id.Value, personRequest2.Id.Value});
+			var result = Target.ApproveRequests(new List<Guid> {personRequest1.Id.Value, personRequest2.Id.Value}, string.Empty);
 
 			result.AffectedRequestIds.ToList().Count.Should().Be.EqualTo(2);
 		}
@@ -148,7 +172,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		[Test]
 		public void ShouldNotHandleDenyCommandWithInvalidRequestId()
 		{
-			var result = Target.DenyRequests(new List<Guid> {new Guid()});
+			var result = Target.DenyRequests(new List<Guid> {new Guid()}, string.Empty);
 			result.AffectedRequestIds.ToList().Count.Should().Be.EqualTo(0);
 		}
 
@@ -161,9 +185,25 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var personRequest = createNewAbsenceRequest(person, absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
 			personRequest.Pending();
 
-			var result = Target.DenyRequests(new List<Guid> {personRequest.Id.Value});
+			var result = Target.DenyRequests(new List<Guid> {personRequest.Id.Value}, string.Empty);
 
 			result.AffectedRequestIds.ToList().Count.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldDenyAbsenceRequestWithReplyMessage()
+		{
+			var absence = AbsenceFactory.CreateAbsence("absence");
+			var person = PersonFactory.CreatePerson("tester");
+
+			var personRequest = createNewAbsenceRequest(person, absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
+			personRequest.Pending();
+
+			var result = Target.DenyRequests(new List<Guid> { personRequest.Id.Value }, "test");
+
+			result.AffectedRequestIds.ToList().Count.Should().Be.EqualTo(1);
+			personRequest.IsDenied.Should().Be(true);
+			personRequest.GetMessage(new NoFormatting()).Should().Contain("test");
 		}
 
 		[Test]
@@ -176,7 +216,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			personRequest1.Pending();
 			personRequest2.Pending();
 
-			var result = Target.DenyRequests(new List<Guid> {personRequest1.Id.Value, personRequest2.Id.Value});
+			var result = Target.DenyRequests(new List<Guid> {personRequest1.Id.Value, personRequest2.Id.Value}, string.Empty);
 
 			result.AffectedRequestIds.ToList().Count.Should().Be.EqualTo(2);
 		}
@@ -194,7 +234,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
 					new DateTime(2016, 3, 1, 23, 00, 00, DateTimeKind.Utc)));
 
-			Target.DenyRequests(new List<Guid> {waitlistedPersonRequest.Id.Value});
+			Target.DenyRequests(new List<Guid> {waitlistedPersonRequest.Id.Value}, string.Empty);
 			waitlistedPersonRequest.IsWaitlisted.Should().Be.False();
 			waitlistedPersonRequest.IsDenied.Should().Be.True();
 		}
@@ -220,7 +260,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			requestApprovalService.Stub(x => x.ApproveAbsence(absence, dateTimePeriod, person))
 				.IgnoreArguments()
 				.Return(new List<IBusinessRuleResponse>());
-			Target.ApproveRequests(new List<Guid> {waitlistedPersonRequest.Id.Value});
+			Target.ApproveRequests(new List<Guid> {waitlistedPersonRequest.Id.Value}, string.Empty);
 
 			waitlistedPersonRequest.IsWaitlisted.Should().Be.False();
 			waitlistedPersonRequest.IsDenied.Should().Be.False();
@@ -286,7 +326,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var dateTimePeriod = new DateTimePeriod(2015, 10, 3, 2015, 10, 9);
 			var personRequest = createAcceptedRequest(person, dateTimePeriod, false);
 
-			var result = Target.CancelRequests(new List<Guid> { personRequest.Id.Value });
+			var result = Target.CancelRequests(new List<Guid> { personRequest.Id.Value }, string.Empty);
 
 			result.Success.Should().Be.False();
 			result.AffectedRequestIds.Should().Be.Empty();
@@ -302,11 +342,28 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var dateTimePeriod = new DateTimePeriod(2015, 10, 3, 2015, 10, 9);
 			var personRequest = createAcceptedRequest(person, dateTimePeriod, true);
 
-			var result = Target.CancelRequests(new List<Guid> { personRequest.Id.Value });
+			var result = Target.CancelRequests(new List<Guid> { personRequest.Id.Value }, string.Empty);
 
 			result.Success.Should().Be.True();
 			result.AffectedRequestIds.ToList().Contains(personRequest.Id.Value).Should().Be.True();
 			personRequest.IsCancelled.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldCancelPersonRequestWithReplyMessage()
+		{
+			setupStateHolderProxy();
+
+			var person = PersonFactory.CreatePerson("Yngwie", "Malmsteen");
+			var dateTimePeriod = new DateTimePeriod(2015, 10, 3, 2015, 10, 9);
+			var personRequest = createAcceptedRequest(person, dateTimePeriod, true);
+
+			var result = Target.CancelRequests(new List<Guid> { personRequest.Id.Value }, "test");
+
+			result.Success.Should().Be.True();
+			result.AffectedRequestIds.ToList().Contains(personRequest.Id.Value).Should().Be.True();
+			personRequest.IsCancelled.Should().Be.True();
+			personRequest.GetMessage(new NoFormatting()).Should().Contain("test");
 		}
 
 		[Test]
@@ -347,7 +404,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 				.IgnoreArguments()
 				.Return(new List<IBusinessRuleResponse>());
 
-			Target.ApproveRequests(new List<Guid> { personRequest.Id.Value });
+			Target.ApproveRequests(new List<Guid> { personRequest.Id.Value }, string.Empty);
 
 			if (associatePersonAbsence)
 			{
@@ -390,7 +447,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			person.PersonWriteProtection.PersonWriteProtectedDate = new DateOnly(dateTimePeriod.StartDateTime);
 			;
 
-			var result = Target.ApproveRequests(new List<Guid> {personRequest.Id.Value});
+			var result = Target.ApproveRequests(new List<Guid> {personRequest.Id.Value}, string.Empty);
 			return result;
 		}
 
@@ -405,7 +462,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 
 			person.PersonWriteProtection.PersonWriteProtectedDate = new DateOnly(dateTimePeriod.StartDateTime);
 
-			var result = Target.CancelRequests(new List<Guid> { personRequest.Id.Value });
+			var result = Target.CancelRequests(new List<Guid> { personRequest.Id.Value }, string.Empty);
 			return result;
 		}
 

@@ -530,6 +530,7 @@
     <Compile Include="Areas\Reports\Models\ReportsViewModel.cs" />
     <Compile Include="Areas\Requests\Core\FormData\AllRequestsFormData.cs" />
     <Compile Include="Areas\Requests\Core\FormData\ApproveRequestsWithValidatorInput.cs" />
+    <Compile Include="Areas\Requests\Core\FormData\RequestsCommandInput.cs" />
     <Compile Include="Areas\Requests\Core\Provider\RequestCommandHandlingProvider.cs" />
     <Compile Include="Areas\Requests\Core\Provider\IRequestCommandHandlingProvider.cs" />
     <Compile Include="Areas\Requests\Core\Provider\IRequestsProvider.cs" />
