@@ -322,7 +322,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[Then(@"I should see shift category")]
 		public void ThenIShouldSeeShiftCategory()
 		{
-			Browser.Interactions.AssertExists(".shift-category-cell");
+			Browser.Interactions.AssertExists(".shift-category-cell #name");
 		}
 
 		[When(@"I click on a shift category label")]
