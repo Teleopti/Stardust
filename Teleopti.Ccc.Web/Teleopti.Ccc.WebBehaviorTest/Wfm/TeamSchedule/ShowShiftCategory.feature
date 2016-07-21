@@ -38,5 +38,5 @@ Background:
 
 Scenario: Show shift category
 	When I view wfm team schedules
-	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
+	And I searched schedule with keyword 'Team green' and schedule date '2016-10-09'
 	Then I should see shift category
