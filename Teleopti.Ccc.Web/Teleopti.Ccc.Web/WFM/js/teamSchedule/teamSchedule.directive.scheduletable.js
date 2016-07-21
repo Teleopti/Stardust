@@ -88,7 +88,9 @@
 		vm.modifyShiftCategoryForAgent = function($event, personSchedule){
 			$event.stopPropagation();
 
-			vm.togglePerson(personSchedule, null);
+			if(!personSchedule.IsSelected){
+				vm.togglePerson(personSchedule, null);
+			}
 
 			if(personSchedule.IsSelected){
 				var activeCmdLabel = "EditShiftCategory";
