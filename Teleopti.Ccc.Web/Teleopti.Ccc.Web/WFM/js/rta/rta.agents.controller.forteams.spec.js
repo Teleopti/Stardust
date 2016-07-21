@@ -151,39 +151,6 @@ describe('RtaAgentsCtrl for teams', function() {
 		expect(scope.agents[1].TimeInState).toEqual(15473);
 	});
 
-	it('should filter agent state updates with agentFilter ', function() {
-		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495", "103afc66-2bfa-45f4-9823-9e06008d5062"];
-		$fakeBackend.withAgent({
-				Name: "Ashley Andeen",
-				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-			})
-			.withAgent({
-				Name: "Charley Caper",
-				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
-				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-			})
-			.withState({
-				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
-				State: "In Call",
-			});
-
-		$controllerBuilder.createController()
-			.apply("agentsInAlarm = false")
-			.apply("filterText = 'Caper'")
-			.apply(function() {
-				$fakeBackend.clearStates()
-					.withState({
-						PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
-						State: "Ready",
-					});
-			})
-			.wait(5000);
-
-		expect(scope.filteredData[0].Name).toEqual("Charley Caper");
-		expect(scope.filteredData[0].State).toEqual("Ready");
-	});
-
 	it('should go back to sites when business unit is changed', function() {
 		$sessionStorage.buid = "928dd0bc-bf40-412e-b970-9b5e015aadea";
 		spyOn($state, 'go');

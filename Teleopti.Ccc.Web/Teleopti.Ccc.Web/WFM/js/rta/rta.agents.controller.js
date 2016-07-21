@@ -12,7 +12,7 @@
 				var teamIds = $stateParams.teamIds || ($stateParams.teamId ? [$stateParams.teamId] : []);
 				var skillIds = ($stateParams.skillId ? [$stateParams.skillId] : []);
 				var skillAreaId = $stateParams.skillAreaId || undefined;
-				var propertiesForFiltering = ["Name", "TeamName", "State", "Activity", "Alarm"];
+				var propertiesForFiltering = ["Name","TeamName", "State", "Activity", "Alarm", "SiteName"];
 				$scope.adherence = {};
 				$scope.adherencePercent = null;
 				$scope.filterText = "";

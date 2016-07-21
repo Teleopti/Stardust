@@ -182,26 +182,6 @@ describe('RtaAgentsCtrl for sites', function() {
 		expect(scope.agents[1].TimeInState).toEqual(15473);
 	});
 
-	it('should filter agent name with agentFilter', function() {
-		stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c", "6a21c802-7a34-4917-8dfd-9b5e015ab461"];
-		$fakeBackend.withAgent({
-				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				Name: "Ashley Andeen",
-				SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c"
-			})
-			.withAgent({
-				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
-				Name: "Charlie Caper",
-				SiteId: "6a21c802-7a34-4917-8dfd-9b5e015ab461"
-			});
-
-		$controllerBuilder.createController()
-			.apply("agentsInAlarm = false")
-			.apply("filterText = 'Ashley'");
-
-		expect(scope.filteredData[0].Name).toEqual("Ashley Andeen");
-	});
-
 	it('should stop polling when page is about to destroy', function() {
 		stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c", "6a21c802-7a34-4917-8dfd-9b5e015ab461"];
 		$fakeBackend.withAgent({
