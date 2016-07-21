@@ -103,8 +103,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see agent status for '(.*)?'")]
 		public void ThenIShouldSeeAgentStatusFor(string name)
 		{
-			var personId = DataMaker.Person(name).Person.Id.Value;
-			Browser.Interactions.AssertExists("[agentid='" + personId + "']");
+			var status = new RealTimeAdherenceAgentState() { Name = name };
+			assertAgentStatus(status);
 		}
 
 		[Then(@"I should see agent '(.*)' with state '(.*)'")]
@@ -247,6 +247,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			var personId = DataMaker.Person(state.Name).Person.Id.Value;
 			var selector = "[agentid='" + personId + "']";
 
+			Browser.Interactions.AssertExists(selector);
 			if (state.State != null)
 				Browser.Interactions.AssertAnyContains(selector, state.State);
 			if (state.Alarm != null)
