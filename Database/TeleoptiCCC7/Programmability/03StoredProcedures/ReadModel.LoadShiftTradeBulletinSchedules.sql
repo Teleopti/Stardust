@@ -61,9 +61,9 @@ AS
 			--Shifts
   			SELECT
 				PersonId,
-				TeamId,
-				SiteId,
-				BusinessUnitId,
+				team.Id as TeamId,
+				sit.Id as SiteId,
+				sit.BusinessUnit as BusinessUnitId,
 				person.FirstName as FirstName,
 				person.LastName as LastName,
 				BelongsToDate,
@@ -76,7 +76,10 @@ AS
 			INNER JOIN dbo.ShiftExchangeOffer seo ON sd.PersonId = seo.Person AND sd.BelongsToDate = seo.Date
 			INNER JOIN @TempList t ON seo.Request = t.Request
 			INNER JOIN dbo.Request req ON seo.Request = req.Id
-			INNER JOIN dbo.PersonRequest pre ON pre.Id = req.Parent AND pre.IsDeleted = 0			
+			INNER JOIN dbo.PersonRequest pre ON pre.Id = req.Parent AND pre.IsDeleted = 0
+			INNER JOIN dbo.PersonPeriod psp ON psp.Parent = person.Id AND psp.StartDate <= sd.BelongsToDate AND sd.BelongsToDate < psp.EndDate
+			INNER JOIN Team team on team.Id = psp.Team
+			INNER JOIN [Site] sit on sit.Id = team.[Site]				
 			) a
 	)
 	INSERT INTO @output
