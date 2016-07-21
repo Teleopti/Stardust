@@ -244,6 +244,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Mapping
 		}
 
 		[Test]
+		public void ShouldNotUpdateWhenValidAgain()
+		{
+			var activity1 = Guid.NewGuid();
+			var activity2 = Guid.NewGuid();
+			Target.Handle(new TenantMinuteTickEvent());
+
+			Database.WithActivity(activity1);
+			Target.Handle(new ActivityChangedEvent());
+			Target.Handle(new TenantMinuteTickEvent());
+			Database.WithActivity(activity2);
+			Target.Handle(new TenantMinuteTickEvent());
+
+			Persister.Data.Select(x => x.ActivityId).Should().Not.Contain(activity2);
+		}
+
+		[Test]
 		public void ShouldUpdateOnActivityChanges()
 		{
 			var phone = Guid.NewGuid();
