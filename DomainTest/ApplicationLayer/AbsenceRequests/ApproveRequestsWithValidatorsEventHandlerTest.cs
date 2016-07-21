@@ -45,12 +45,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private PersonAccountUpdaterDummy _personAccountUpdaterDummy;
 		private IWriteProtectedScheduleCommandValidator _writeProtectedScheduleCommandValidator;
 		private readonly ISchedulingResultStateHolder _scheduleStateHolder = new FakeSchedulingResultStateHolder();
-		private IMessageBrokerComposite _messageBroker;
+		private FakeMessageBrokerComposite _messageBroker;
 
 		private IPerson _person;
 		private IPersonRequest _personRequest;
 		private ApproveRequestsWithValidatorsEvent _event;
 		private ApproveRequestsWithValidatorsEventHandler _target;
+		private IAbsence _absence;
+
+		private DateTime _startDateTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc);
+		private DateTime _endDateTime = new DateTime(2016, 3, 1, 23, 59, 00, DateTimeKind.Utc);
 
 		[SetUp]
 		public void SetUp()
@@ -89,14 +93,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		private void prepareTestData()
 		{
-			var startDateTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc);
-			var endDateTime = new DateTime(2016, 3, 1, 23, 59, 00, DateTimeKind.Utc);
-			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			_absence = AbsenceFactory.CreateAbsence("Holiday");
 			var processAbsenceRequest = new GrantAbsenceRequest();
 			var workflowControlSet = createWorkFlowControlSet(new DateTime(2016, 01, 01), new DateTime(2016, 12, 31),
-				absence, processAbsenceRequest, false);
-			_person = createAndSetupPerson(startDateTime, endDateTime, workflowControlSet);
-			_personRequest = createPendingAbsenceRequest(_person, absence, new DateTimePeriod(startDateTime, endDateTime));
+				_absence, processAbsenceRequest, true);
+			_person = createAndSetupPerson(_startDateTime, _endDateTime, workflowControlSet);
+			_personRequest = createPendingAbsenceRequest(_person, _absence, new DateTimePeriod(_startDateTime, _endDateTime), true);
 
 			_event = new ApproveRequestsWithValidatorsEvent
 			{
@@ -113,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_target.Handle(_event);
 
 			_personRequest.IsApproved.Should().Be.True();
-			((FakeMessageBrokerComposite)_messageBroker).SentCount().Should().Be(1);
+			_messageBroker.SentCount().Should().Be(1);
 		}
 
 		[Test]
@@ -124,7 +126,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			_personRequest.IsApproved.Should().Be.False();
 			_personRequest.IsPending.Should().Be.True();
-			((FakeMessageBrokerComposite)_messageBroker).SentCount().Should().Be(1);
+			_messageBroker.SentCount().Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldApproveAbsenceRequestInWaitlistedStatus()
+		{
+			_personRequest = createPendingAbsenceRequest(_person, _absence, new DateTimePeriod(_startDateTime, _endDateTime), false);
+			_personRequest.Deny(null, "test", new PersonRequestAuthorizationCheckerForTest(), true);
+			_event.PersonRequestIdList = new Guid[] { _personRequest.Id.GetValueOrDefault() };
+			setBudgetAndAllowance(_person, 1, 2);
+			_target.Handle(_event);
+			_personRequest.IsApproved.Should().Be.True();
+			_messageBroker.SentCount().Should().Be(1);
 		}
 
 		private IAbsenceRequestProcessor getAbsenceRequestProcessor(IPerson person, IPersonRequest personRequest)
@@ -232,12 +246,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 		private PersonRequest createPendingAbsenceRequest(IPerson person, IAbsence absence,
-			DateTimePeriod requestDateTimePeriod)
+			DateTimePeriod requestDateTimePeriod, bool isPending)
 		{
 			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, requestDateTimePeriod));
 
 			personRequest.SetId(Guid.NewGuid());
-			personRequest.ForcePending();
+			if (isPending)
+			{
+				personRequest.ForcePending();
+			}
 			_personRequestRepository.Add(personRequest);
 
 			return personRequest;

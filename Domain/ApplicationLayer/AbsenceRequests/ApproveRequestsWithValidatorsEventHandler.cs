@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 		private static bool checkPersonRequest(IPersonRequest personRequest)
 		{
-			return (personRequest == null || !personRequest.IsPending);
+			return (personRequest == null || !(personRequest.IsPending || personRequest.IsWaitlisted));
 		}
 
 		private static bool checkAbsenceRequest(IPersonRequest personRequest)
