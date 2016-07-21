@@ -395,7 +395,9 @@
 			
 			scope.$watch(function() {
 				return {
-					requests: scope.requestsTableContainer.requests
+					requests: scope.requestsTableContainer.requests,
+					shiftTradeRequestDateSummary: scope.requestsTableContainer.shiftTradeRequestDateSummary
+
 				}
 			}, function (requestWatch) {
 				
