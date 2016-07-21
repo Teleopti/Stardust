@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 		RequestCommandHandlingResult ApproveWithValidators(IEnumerable<Guid> requestIds, RequestValidatorsFlag validators);
 		RequestCommandHandlingResult DenyRequests(IEnumerable<Guid> requestIds, string replyMessage);
 		RequestCommandHandlingResult CancelRequests(IEnumerable<Guid> requestIds, string replyMessage);
+		RequestCommandHandlingResult ReplyRequests(IEnumerable<Guid> requestIds, string message);
 		RequestCommandHandlingResult RunWaitlist(DateTimePeriod period);
 	}
 }

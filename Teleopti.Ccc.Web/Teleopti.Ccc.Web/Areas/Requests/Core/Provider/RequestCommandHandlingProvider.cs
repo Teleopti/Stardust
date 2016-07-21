@@ -6,44 +6,44 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 {
-    public class RequestCommandHandlingProvider : IRequestCommandHandlingProvider
-    {
-        private readonly ICommandDispatcher _commandDispatcher;
-        private readonly ILoggedOnUser _loggedOnUser;
+	public class RequestCommandHandlingProvider : IRequestCommandHandlingProvider
+	{
+		private readonly ICommandDispatcher _commandDispatcher;
+		private readonly ILoggedOnUser _loggedOnUser;
 
-        public RequestCommandHandlingProvider(ICommandDispatcher commandDispatcher, ILoggedOnUser loggedOnUser)
-        {
-            _commandDispatcher = commandDispatcher;
-            _loggedOnUser = loggedOnUser;
-        }
+		public RequestCommandHandlingProvider(ICommandDispatcher commandDispatcher, ILoggedOnUser loggedOnUser)
+		{
+			_commandDispatcher = commandDispatcher;
+			_loggedOnUser = loggedOnUser;
+		}
 
-        public RequestCommandHandlingResult ApproveRequests(IEnumerable<Guid> requestIds, string replyMessage)
-        {
-            var trackInfo = createTrackedCommandInfo();
-            var affectedRequestIds = new List<Guid>();
-            var errorMessages = new List<string>();
+		public RequestCommandHandlingResult ApproveRequests(IEnumerable<Guid> requestIds, string replyMessage)
+		{
+			var trackInfo = createTrackedCommandInfo();
+			var affectedRequestIds = new List<Guid>();
+			var errorMessages = new List<string>();
 
-            foreach (var personRequestId in requestIds)
-            {
-                var command = new ApproveRequestCommand
-                {
-                    TrackedCommandInfo = trackInfo,
-                    PersonRequestId = personRequestId,
+			foreach (var personRequestId in requestIds)
+			{
+				var command = new ApproveRequestCommand
+				{
+					TrackedCommandInfo = trackInfo,
+					PersonRequestId = personRequestId,
 					ReplyMessage = replyMessage
 				};
 
-                _commandDispatcher.Execute(command);
+				_commandDispatcher.Execute(command);
 
-                if (command.ErrorMessages != null)
-                {
-                    errorMessages.AddRange(command.ErrorMessages);
-                }
+				if (command.ErrorMessages != null)
+				{
+					errorMessages.AddRange(command.ErrorMessages);
+				}
 
-                if (command.AffectedRequestId.HasValue) affectedRequestIds.Add(command.AffectedRequestId.Value);
-            }
+				if (command.AffectedRequestId.HasValue) affectedRequestIds.Add(command.AffectedRequestId.Value);
+			}
 
-            return new RequestCommandHandlingResult(affectedRequestIds, errorMessages);
-        }
+			return new RequestCommandHandlingResult(affectedRequestIds, errorMessages);
+		}
 
 		public RequestCommandHandlingResult ApproveWithValidators(IEnumerable<Guid> requestIds,
 			RequestValidatorsFlag validators)
@@ -67,66 +67,93 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			return new RequestCommandHandlingResult(new Guid[] { }, errorMessages, trackInfo.TrackId);
 		}
 
-        public RequestCommandHandlingResult DenyRequests(IEnumerable<Guid> requestIds, string replyMessage)
-        {
-            var trackInfo = createTrackedCommandInfo();
-            var affectedRequestIds = new List<Guid>();
-            var errorMessages = new List<string>();
+		public RequestCommandHandlingResult DenyRequests(IEnumerable<Guid> requestIds, string replyMessage)
+		{
+			var trackInfo = createTrackedCommandInfo();
+			var affectedRequestIds = new List<Guid>();
+			var errorMessages = new List<string>();
 
-            foreach (var personRequestId in requestIds)
-            {
-                var command = new DenyRequestCommand
-                {
-                    TrackedCommandInfo = trackInfo,
-                    PersonRequestId = personRequestId,
-                    IsManualDeny = true,
+			foreach (var personRequestId in requestIds)
+			{
+				var command = new DenyRequestCommand
+				{
+					TrackedCommandInfo = trackInfo,
+					PersonRequestId = personRequestId,
+					IsManualDeny = true,
 					ReplyMessage = replyMessage
-                };
+				};
 
-                _commandDispatcher.Execute(command);
+				_commandDispatcher.Execute(command);
 
-                if (command.AffectedRequestId.HasValue) affectedRequestIds.Add(command.AffectedRequestId.Value);
+				if (command.AffectedRequestId.HasValue) affectedRequestIds.Add(command.AffectedRequestId.Value);
 
-                if (command.ErrorMessages != null)
-                {
-                    errorMessages.AddRange(command.ErrorMessages);
-                }
+				if (command.ErrorMessages != null)
+				{
+					errorMessages.AddRange(command.ErrorMessages);
+				}
+			}
 
-            }
+			return new RequestCommandHandlingResult(affectedRequestIds, errorMessages);
+		}
 
-            return new RequestCommandHandlingResult(affectedRequestIds, errorMessages);
-        }
+		public RequestCommandHandlingResult CancelRequests(IEnumerable<Guid> requestIds, string replyMessage)
+		{
+			var trackInfo = createTrackedCommandInfo();
+			var affectedRequestIds = new List<Guid>();
+			var errorMessages = new List<string>();
 
-        public RequestCommandHandlingResult CancelRequests(IEnumerable<Guid> requestIds, string replyMessage)
-        {
-            var trackInfo = createTrackedCommandInfo();
-            var affectedRequestIds = new List<Guid>();
-            var errorMessages = new List<string>();
-
-            foreach (var personRequestId in requestIds)
-            {
-                var command = new CancelAbsenceRequestCommand
-                {
-                    TrackedCommandInfo = trackInfo,
-                    PersonRequestId = personRequestId,
+			foreach (var personRequestId in requestIds)
+			{
+				var command = new CancelAbsenceRequestCommand
+				{
+					TrackedCommandInfo = trackInfo,
+					PersonRequestId = personRequestId,
 					ReplyMessage = replyMessage
-                };
+				};
 
-                _commandDispatcher.Execute(command);
+				_commandDispatcher.Execute(command);
 
-                if (command.AffectedRequestId.HasValue)
-                {
-                    affectedRequestIds.Add(command.AffectedRequestId.Value);
-                }
+				if (command.AffectedRequestId.HasValue) affectedRequestIds.Add(command.AffectedRequestId.Value);
 
-                if (command.ErrorMessages != null)
-                {
-                    errorMessages.AddRange(command.ErrorMessages);
-                }
-            }
+				if (command.ErrorMessages != null)
+				{
+					errorMessages.AddRange(command.ErrorMessages);
+				}
+			}
 
-            return new RequestCommandHandlingResult(affectedRequestIds, errorMessages);
-        }
+			return new RequestCommandHandlingResult(affectedRequestIds, errorMessages);
+		}
+
+		public RequestCommandHandlingResult ReplyRequests(IEnumerable<Guid> requestIds, string message)
+		{
+			var trackInfo = createTrackedCommandInfo();
+			var affectedRequestIds = new List<Guid>();
+			var errorMessages = new List<string>();
+
+			foreach (var personRequestId in requestIds)
+			{
+				var command = new ReplyRequestCommand
+				{
+					TrackedCommandInfo = trackInfo,
+					PersonRequestId = personRequestId,
+					Message = message
+				};
+
+				_commandDispatcher.Execute(command);
+
+				if (command.AffectedRequestId.HasValue)
+				{
+					affectedRequestIds.Add(command.AffectedRequestId.Value);
+				}
+
+				if (command.ErrorMessages != null)
+				{
+					errorMessages.AddRange(command.ErrorMessages);
+				}
+			}
+
+			return new RequestCommandHandlingResult(affectedRequestIds, errorMessages);
+		}
 
 		public RequestCommandHandlingResult RunWaitlist(DateTimePeriod period)
 		{
@@ -149,13 +176,13 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			return new RequestCommandHandlingResult(new Guid[] { }, errorMessages, trackInfo.TrackId);
 		}
 
-	    private TrackedCommandInfo createTrackedCommandInfo()
-        {
-            return new TrackedCommandInfo
-            {
-                TrackId = Guid.NewGuid(),
-                OperatedPersonId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault()
-            };
-        }
-    }
+		private TrackedCommandInfo createTrackedCommandInfo()
+		{
+			return new TrackedCommandInfo
+			{
+				TrackId = Guid.NewGuid(),
+				OperatedPersonId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault()
+			};
+		}
+	}
 }

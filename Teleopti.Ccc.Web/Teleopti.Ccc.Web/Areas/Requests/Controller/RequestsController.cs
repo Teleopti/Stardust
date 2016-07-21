@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Web.Http;
 using System.Web.Http.ModelBinding;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
 using Teleopti.Ccc.Web.Areas.Requests.Core.Provider;
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 		{
 			return _requestsViewModelFactory.Create(input);
 		}
-		
+
 		[HttpGet, Route("api/Requests/requests"), UnitOfWork]
 		public virtual RequestListViewModel GetRequests([ModelBinder(typeof (AllRequestsFormDataConverter))] AllRequestsFormData input)
 		{
@@ -62,6 +61,12 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 		public virtual RequestCommandHandlingResult ApproveWithValidators(ApproveRequestsWithValidatorInput input)
 		{
 			return _commandHandlingProvider.ApproveWithValidators(input.RequestIds, input.Validators);
+		}
+
+		[HttpPost, Route("api/Requests/replyRequests"), UnitOfWork]
+		public virtual RequestCommandHandlingResult ReplyRequests(ReplyRequestsInput input)
+		{
+			return _commandHandlingProvider.ReplyRequests(input.RequestIds, input.Message);
 		}
 
 		[HttpPost, Route("api/Requests/denyRequests"), UnitOfWork]
