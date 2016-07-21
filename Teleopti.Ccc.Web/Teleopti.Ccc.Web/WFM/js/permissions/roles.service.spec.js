@@ -109,7 +109,7 @@ describe('Roles', function() {
 		});
 	});
 
-	it('should copy a role', function(done) {
+	xit('should copy a role', function(done) {
 		inject(function(Roles) {
 			var roleId = "1";
 			var roleName = 'role';
