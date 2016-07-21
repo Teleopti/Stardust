@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			if (approveRequest(personRequest, command))
 			{
 				command.AffectedRequestId = command.PersonRequestId;
+				personRequest.Reply(command.ReplyMessage);
 			}
 		}
 

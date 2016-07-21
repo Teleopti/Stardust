@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public Guid PersonRequestId { get; set; }
 		public Guid? AffectedRequestId { get; set; }
 		public IList<string> ErrorMessages { get; set; }
+		public string ReplyMessage { get; set; }
 	}
 
 	public interface ICancelAbsenceRequestCommandProvider

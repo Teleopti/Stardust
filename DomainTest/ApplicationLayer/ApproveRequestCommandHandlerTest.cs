@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
@@ -82,6 +83,40 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			Assert.IsTrue(personRequest.IsApproved);
 			Assert.AreEqual (24, accountDay.Remaining.TotalDays);
+		}
+
+		[Test]
+		public void ShouldUpdateMessageWhenThereIsAReplyMessage()
+		{
+			var accountDay = new AccountDay(new DateOnly(2015, 12, 1))
+			{
+				BalanceIn = TimeSpan.FromDays(5),
+				Accrued = TimeSpan.FromDays(20),
+				Extra = TimeSpan.FromDays(0)
+			};
+
+			var absenceDateTimePeriod = new DateTimePeriod(2016, 01, 01, 00, 2016, 01, 01, 23);
+
+			var person = PersonFactory.CreatePersonWithId();
+			var absence = new Absence();
+
+			createPersonAbsenceAccount(person, absence, accountDay);
+
+			var personRequest = createAbsenceRequest(person, absence, absenceDateTimePeriod);
+			var messagePropertyChanged = false;
+			personRequest.PropertyChanged += (sender, e) =>
+			{
+				if (e.PropertyName.Equals("Message", StringComparison.OrdinalIgnoreCase))
+				{
+					messagePropertyChanged = true;
+				}
+			};
+
+			_approveRequestCommandHandler.Handle(new ApproveRequestCommand() { PersonRequestId = personRequest.Id.Value, ReplyMessage = "test" });
+
+			Assert.IsTrue(personRequest.IsApproved);
+			Assert.IsTrue(personRequest.GetMessage(new NoFormatting()).Contains("test"));
+			Assert.IsTrue(messagePropertyChanged);
 		}
 
 		private PersonRequest createAbsenceRequest (IPerson person, IAbsence absence, DateTimePeriod dateTimePeriod)

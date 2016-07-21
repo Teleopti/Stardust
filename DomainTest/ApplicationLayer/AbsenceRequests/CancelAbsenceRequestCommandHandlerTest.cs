@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -9,6 +10,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
@@ -236,6 +238,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			scheduleChangedEvents.Count().Should().Be.EqualTo(1);
 		}
 
+		[Test]
+		public void ShouldUpdateMessageWhenThereIsAReplyMessage()
+		{
+			commonSetup();
+			var cancelRequestCommand = new CancelAbsenceRequestCommand { ReplyMessage = "test" };
+			var messagePropertyChanged = false;
+			PropertyChangedEventHandler propertyChanged = (sender, e) =>
+			{
+				if (e.PropertyName.Equals("Message", StringComparison.OrdinalIgnoreCase))
+				{
+					messagePropertyChanged = true;
+				}
+			};
+			var personRequest = basicCancelAbsenceRequest(cancelRequestCommand, propertyChanged);
+			Assert.IsTrue(personRequest.GetMessage(new NoFormatting()).Contains("test"));
+			Assert.IsTrue(messagePropertyChanged);
+		}
 
 		private PersonRequest cancelAbsenceRequestWithMultipleAbsences(CancelAbsenceRequestCommand cancelRequestCommand, bool checkPersonAccounts = false)
 		{
@@ -269,12 +288,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			PersonAbsenceAccountRepository.Add(personAbsenceAccount);
 		}
 
-		private PersonRequest basicCancelAbsenceRequest(CancelAbsenceRequestCommand cancelRequestCommand)
+		private PersonRequest basicCancelAbsenceRequest(CancelAbsenceRequestCommand cancelRequestCommand, PropertyChangedEventHandler propertyChanged = null)
 		{
 			var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(2016, 03, 01, 2016, 03, 03);
 
 			var absenceRequest = createApprovedAbsenceRequest(absence, dateTimePeriodOfAbsenceRequest, person);
 			var personRequest = absenceRequest.Parent as PersonRequest;
+			if (propertyChanged != null)
+				personRequest.PropertyChanged += propertyChanged;
 
 			createPersonAbsence(absence, dateTimePeriodOfAbsenceRequest, person, personRequest);
 			cancelRequestCommand.PersonRequestId = personRequest.Id.GetValueOrDefault();

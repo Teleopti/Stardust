@@ -33,6 +33,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
+using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -48,6 +49,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			//
 
 			system.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
+			system.UseTestDouble<PersonRequestAuthorizationCheckerForTest>().For<IPersonRequestCheckAuthorization>();
 
 			// Tenant (and datasource) stuff
 			system.AddModule(new TenantServerModule(configuration));
@@ -147,6 +149,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeLoadAllSkillInIntradays>().For<ILoadAllSkillInIntradays>();
 			system.UseTestDouble<FakeGroupingReadOnlyRepository>().For<IGroupingReadOnlyRepository>();
 			system.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
+			system.UseTestDouble<FakePersonRequestRepository>().For<IPersonRequestRepository>();
 
 			// schedule readmodels
 			system.UseTestDouble<FakeScheduleProjectionReadOnlyPersister>().For<IScheduleProjectionReadOnlyPersister>();

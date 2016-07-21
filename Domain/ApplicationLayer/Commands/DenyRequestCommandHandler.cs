@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.Collection;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
@@ -22,9 +23,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			command.ErrorMessages = new List<string>();
 
 			var personRequest = _personRequestRepository.Get(command.PersonRequestId);
+
 			if (personRequest != null && denyRequest(personRequest, command))
 			{
 				command.AffectedRequestId = command.PersonRequestId;
+				personRequest.Reply(command.ReplyMessage);
 			}
 		}
 

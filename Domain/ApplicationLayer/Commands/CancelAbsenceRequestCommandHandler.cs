@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.Collection;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
@@ -48,6 +49,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			if (cancelRequest(personRequest, command))
 			{
 				command.AffectedRequestId = command.PersonRequestId;
+				personRequest.Reply(command.ReplyMessage);
 			}
 		}
 		
