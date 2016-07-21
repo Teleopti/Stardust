@@ -37,7 +37,15 @@
 				</span>
 
 				<span class="daterange-picker">
-					<date-range-picker ng-model="vm.selectedPeriod" ng-change="vm.afterSelectedDateChange()" template-type="vm.dateRangePickerTemplateType"></date-range-picker>
+					<button class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="vm.toggleDateRangePicker = !vm.toggleDateRangePicker">
+						<i class="mdi mdi-calendar"></i>
+					</button>
+
+					<input type="text" ng-model="vm.shortDateFormatStart" ng-change="vm.afterShortDateStringChange()"> 
+					<input type="text" ng-model="vm.shortDateFormatEnd" ng-change="vm.afterShortDateStringChange()"> 
+
+					<date-range-picker ng-model="vm.selectedPeriod" ng-change="vm.afterSelectedDateChange()" template-type="vm.dateRangePickerTemplateType" ng-show="vm.toggleDateRangePicker"></date-range-picker>
+
 				</span>
 			</div>
 
