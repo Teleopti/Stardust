@@ -120,19 +120,22 @@ AS
 			--Shifts
   			SELECT
 				sd.PersonId,
-				sd.TeamId,
-				sd.SiteId,
-				sd.BusinessUnitId,
+				teamId as TeamId,
+				sit.Id as SiteId,
+				sit.BusinessUnit as BusinessUnitId,
 				sd.BelongsToDate,
 				sd.Start,
 				sd.[End],
 				sd.Model,
 				br.ShiftExchangeOffer
-			FROM ReadModel.PersonScheduleDay sd, @BulletinResult br, @filterStartTimeList fs, @filterEndTimeList fe
-			WHERE  br.Person = sd.PersonId
-			AND [BelongsToDate] = @shiftTradeDate
-			AND sd.Start between fs.startTimeStart and fs.startTimeEnd
-			AND sd.[End] between fe.endTimeStart and fe.endTimeEnd
+			FROM ReadModel.PersonScheduleDay sd 
+			INNER JOIn @BulletinResult br on  br.Person = sd.PersonId 
+			INNER JOIN @filterStartTimeList fs ON sd.Start between fs.startTimeStart and fs.startTimeEnd
+			INNER JOIN @filterEndTimeList fe ON sd.[End] between fe.endTimeStart and fe.endTimeEnd
+			INNER JOIn dbo.PersonPeriod psp ON psp.Parent = sd.PersonId AND psp.StartDate <= sd.BelongsToDate AND sd.BelongsToDate < psp.EndDate
+			INNER JOIN Team team on team.Id = psp.Team
+			INNER JOIN [Site] sit on sit.Id = team.[Site]			
+			WHERE [BelongsToDate] = @shiftTradeDate
 			AND IsDayOff = 0
 						
 			UNION ALL
@@ -140,17 +143,20 @@ AS
 			--DayOff
 			SELECT
 				PersonId,
-				TeamId,
-				SiteId,
-				BusinessUnitId,
+				team.Id as TeamId,
+				sit.Id as SiteId,
+				sit.BusinessUnit as BusinessUnitId,
 				BelongsToDate,
 				Start,
 				[End],
 				Model,
 				br.ShiftExchangeOffer
-			FROM ReadModel.PersonScheduleDay sd, @BulletinResult br
-			WHERE br.Person = sd.PersonId
-			AND [BelongsToDate] = @shiftTradeDate
+			FROM ReadModel.PersonScheduleDay sd
+			INNER JOIN @BulletinResult br ON sd.PersonId = br.Person
+			INNER JOIn dbo.PersonPeriod psp ON psp.Parent = sd.PersonId AND psp.StartDate <= sd.BelongsToDate AND sd.BelongsToDate < psp.EndDate
+			INNER JOIN Team team on team.Id = psp.Team
+			INNER JOIN [Site] sit on sit.Id = team.[Site]
+			WHERE [BelongsToDate] = @shiftTradeDate
 			AND IsDayOff = 1
 			AND IsDayOff = @isDayOff
 			) a
