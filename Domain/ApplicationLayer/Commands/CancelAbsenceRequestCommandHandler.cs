@@ -18,7 +18,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IWriteProtectedScheduleCommandValidator _writeProtectedScheduleCommandValidator;
 		private readonly ICancelAbsenceRequestCommandValidator _cancelAbsenceRequestCommandValidator;
 
-		public CancelAbsenceRequestCommandHandler(IPersonRequestRepository personRequestRepository, IPersonAbsenceRepository personAbsenceRepository, IPersonAbsenceRemover personAbsenceRemover, ILoggedOnUser loggedOnUser, IUserCulture userCulture, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IWriteProtectedScheduleCommandValidator writeProtectedScheduleCommandValidator, ICancelAbsenceRequestCommandValidator cancelAbsenceRequestCommandValidator )
+		public CancelAbsenceRequestCommandHandler(IPersonRequestRepository personRequestRepository,
+			IPersonAbsenceRepository personAbsenceRepository, IPersonAbsenceRemover personAbsenceRemover,
+			IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,
+			IWriteProtectedScheduleCommandValidator writeProtectedScheduleCommandValidator,
+			ICancelAbsenceRequestCommandValidator cancelAbsenceRequestCommandValidator)
 		{
 			_personRequestRepository = personRequestRepository;
 			_personAbsenceRepository = personAbsenceRepository;
@@ -31,7 +35,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		public void Handle(CancelAbsenceRequestCommand command)
 		{
-
 			command.ErrorMessages = new List<string>();
 
 			var personRequest = _personRequestRepository.Get(command.PersonRequestId);
@@ -45,16 +48,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				return;
 			}
 
-			if (cancelRequest(personRequest, command))
-			{
-				command.AffectedRequestId = command.PersonRequestId;
-				personRequest.Reply(command.ReplyMessage);
-			}
+			if (!cancelRequest(personRequest, command)) return;
+
+			command.AffectedRequestId = command.PersonRequestId;
+			personRequest.Reply(command.ReplyMessage);
 		}
-		
+
 		private bool cancelRequest(IPersonRequest personRequest, CancelAbsenceRequestCommand command)
 		{
-
 			var absenceRequest = personRequest.Request as IAbsenceRequest;
 
 			if (absenceRequest == null)
@@ -76,23 +77,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				var endDate = personAbsences.Max(pa => pa.Period.EndDateTime);
 				var scheduleRange = getScheduleRange(person, startDate, endDate);
 
-				IList<string> errorMessages = new List<string>();
-
 				foreach (var personAbsence in personAbsences)
 				{
-					errorMessages = _personAbsenceRemover.RemovePersonAbsence(new DateOnly(personAbsence.Period.LocalStartDateTime),
+					var startDateOnly = new DateOnly(personAbsence.Period.LocalStartDateTime);
+					var errorMessages = _personAbsenceRemover.RemovePersonAbsence(startDateOnly,
 						personRequest.Person, new[] { personAbsence }, scheduleRange).ToList();
 
-					if (errorMessages.Any())
-					{
-						command.ErrorMessages = command.ErrorMessages.Concat(errorMessages).ToList();
-						return false;
-					}
+					if (!errorMessages.Any()) continue;
+
+					command.ErrorMessages = command.ErrorMessages.Concat(errorMessages).ToList();
+					return false;
 				}
 
 				return true;
 			}
-
 			catch (InvalidRequestStateTransitionException)
 			{
 				command.ErrorMessages.Add(string.Format(UserTexts.Resources.RequestInvalidStateTransition, personRequest.StatusText, UserTexts.Resources.Cancelled));
@@ -101,16 +99,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			return false;
 		}
 
-		private IScheduleRange getScheduleRange (IPerson person, DateTime startDate, DateTime endDate)
+		private IScheduleRange getScheduleRange(IPerson person, DateTime startDate, DateTime endDate)
 		{
 			var scheduleDictionary =
-				_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod (person,
-					new ScheduleDictionaryLoadOptions (false, false),
-					new DateTimePeriod (startDate, endDate),
+				_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
+					new ScheduleDictionaryLoadOptions(false, false),
+					new DateTimePeriod(startDate, endDate),
 					_currentScenario.Current());
 
 			return scheduleDictionary[person];
 		}
 	}
-	
 }
