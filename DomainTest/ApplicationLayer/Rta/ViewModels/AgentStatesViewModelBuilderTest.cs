@@ -359,29 +359,57 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					PersonId = person,
 				});
 
-			var agentState = Target.ForSkill(skill).States.Single();
+			var agentState = Target.ForSkill(new [] { skill } ).States.Single();
 
 			agentState.PersonId.Should().Be(person);
+		}
+
+		[Test]
+		public void ShouldGetAgentStateModelForSkills()
+		{
+			var person1 = Guid.NewGuid();
+			var person2 = Guid.NewGuid();
+			var skill1 = Guid.NewGuid();
+			var skill2 = Guid.NewGuid();
+			Database
+				.WithPersonSkill(person1, skill1)
+				.Has(new AgentStateReadModel { PersonId = person1 })
+				.WithPersonSkill(person2, skill2)
+				.Has(new AgentStateReadModel { PersonId = person2 })
+				;
+
+			var agentState = Target.ForSkill(new [] {skill1,skill2}).States;
+
+			agentState.Select(x => x.PersonId).Should().Have.SameValuesAs(person1, person2);
 		}
 
 		[Test]
 		public void ShouldGetAgentStateInAlarmForSkill()
 		{
 			Now.Is("2016-06-21 08:30");
-			var person = Guid.NewGuid();
-			var skill = Guid.NewGuid();
+			var person1 = Guid.NewGuid();
+			var person2 = Guid.NewGuid();
+			var skill1 = Guid.NewGuid();
+			var skill2 = Guid.NewGuid();
 			Database
-				.WithPersonSkill(person, skill)
+				.WithPersonSkill(person1, skill1)
 				.Has(new AgentStateReadModel
 				{
-					PersonId = person,
+					PersonId = person1,
+					IsRuleAlarm = true,
+					AlarmStartTime = "2016-06-21 08:29".Utc()
+				})
+				.WithPersonSkill(person2, skill2)
+				.Has(new AgentStateReadModel
+				{
+					PersonId = person2,
 					IsRuleAlarm = true,
 					AlarmStartTime = "2016-06-21 08:29".Utc()
 				});
 
-			var agentState = Target.InAlarmForSkill(skill).States.Single();
+			var agentState = Target.InAlarmForSkill(new [] { skill1, skill2 }).States;
 
-			agentState.PersonId.Should().Be(person);
+			agentState.Select(x => x.PersonId).Should().Have.SameValuesAs(person1, person2);
 		}
 	}
 }

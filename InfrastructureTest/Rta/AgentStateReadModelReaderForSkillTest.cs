@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -35,7 +36,51 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				StatePersister.Persist(new AgentStateReadModelForTest { PersonId = personId });
 			});
 
-			WithUnitOfWork.Get(() => Target.LoadForSkill(currentSkillId))
+			WithUnitOfWork.Get(() => Target.LoadForSkill(new []{ currentSkillId }))
+				.Count().Should().Be(1);
+		}
+		[Test]
+		public void ShouldLoadForMultipleSkills()
+		{
+			Database
+				.WithAgent("agent1")
+				.WithSkill("phone")
+				.WithAgent("agent2")
+				.WithSkill("email");
+			var agent1 = Database.PersonIdFor("agent1");
+			var agent2 = Database.PersonIdFor("agent2");
+			var skill1 = Database.SkillIdFor("phone");
+			var skill2 = Database.SkillIdFor("email");
+			WithUnitOfWork.Do(() =>
+			{
+				Groupings.UpdateGroupingReadModel(new[] {agent1, agent2});
+				StatePersister.Persist(new AgentStateReadModelForTest {PersonId = agent1});
+				StatePersister.Persist(new AgentStateReadModelForTest {PersonId = agent2});
+			});
+
+
+			WithUnitOfWork.Get(() => Target.LoadForSkill(new []{ skill1, skill2 }))
+				.Count().Should().Be(2);
+		}	
+
+		[Test]
+		public void ShouldNotLoadDuplicatesForMultipleSkills()
+		{
+			Database
+				.WithAgent("agent1")
+				.WithSkill("phone")
+				.WithSkill("email");
+			var agent1 = Database.PersonIdFor("agent1");
+			var skill1 = Database.SkillIdFor("phone");
+			var skill2 = Database.SkillIdFor("email");
+			WithUnitOfWork.Do(() =>
+			{
+				Groupings.UpdateGroupingReadModel(new[] {agent1});
+				StatePersister.Persist(new AgentStateReadModelForTest {PersonId = agent1});
+			});
+
+
+			WithUnitOfWork.Get(() => Target.LoadForSkill(new []{ skill1, skill2 }))
 				.Count().Should().Be(1);
 		}
 
@@ -57,7 +102,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				StatePersister.Persist(new AgentStateReadModelForTest {PersonId = agent2});
 			});
 
-			WithUnitOfWork.Get(() => Target.LoadForSkill(currentSkillId))
+			WithUnitOfWork.Get(() => Target.LoadForSkill(new[] { currentSkillId }))
 				.Single().PersonId.Should().Be(agent1);
 		}
 
@@ -80,7 +125,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				StatePersister.Persist(new AgentStateReadModelForTest { PersonId = personId });
 			});
 
-			WithUnitOfWork.Get(() => Target.LoadForSkill(email))
+			WithUnitOfWork.Get(() => Target.LoadForSkill(new[] { email }))
 				.Should().Be.Empty();
 		}
 
@@ -104,7 +149,69 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.LoadAlarmsForSkill(currentSkillId))
+			WithUnitOfWork.Get(() => Target.LoadAlarmsForSkill(new Guid[] { currentSkillId } ))
+				.Count().Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldLoadStatesInAlarmForMultipleSkills()
+		{
+			Now.Is("2016-06-20 12:10");
+			Database
+				.WithAgent("agent1")
+				.WithSkill("phone")
+				.WithAgent("agent2")
+				.WithSkill("email");
+			var personId1 = Database.PersonIdFor("agent1");
+			var personId2 = Database.PersonIdFor("agent2");
+			var skill1 = Database.SkillIdFor("phone");
+			var skill2 = Database.SkillIdFor("email");
+			WithUnitOfWork.Do(() =>
+			{
+				Groupings.UpdateGroupingReadModel(new[] { personId1, personId2 });
+				StatePersister.Persist(new AgentStateReadModelForTest
+				{
+					PersonId = personId1,
+					AlarmStartTime = "2016-06-20 12:00".Utc(),
+					IsRuleAlarm = true
+				});
+				StatePersister.Persist(new AgentStateReadModelForTest
+				{
+					PersonId = personId2,
+					AlarmStartTime = "2016-06-20 12:00".Utc(),
+					IsRuleAlarm = true
+				});
+			});
+
+
+			WithUnitOfWork.Get(() => Target.LoadAlarmsForSkill(new [] { skill1, skill2 } ))
+				.Count().Should().Be(2);
+		}
+
+		[Test]
+		public void ShouldNotLoadDuplicateStatesInAlarmForMultipleSkills()
+		{
+			Now.Is("2016-06-20 12:10");
+			Database
+				.WithAgent("agent1")
+				.WithSkill("phone")
+				.WithSkill("email");
+			var personId1 = Database.PersonIdFor("agent1");
+			var skill1 = Database.SkillIdFor("phone");
+			var skill2 = Database.SkillIdFor("email");
+			WithUnitOfWork.Do(() =>
+			{
+				Groupings.UpdateGroupingReadModel(new[] { personId1 });
+				StatePersister.Persist(new AgentStateReadModelForTest
+				{
+					PersonId = personId1,
+					AlarmStartTime = "2016-06-20 12:00".Utc(),
+					IsRuleAlarm = true
+				});
+			});
+
+
+			WithUnitOfWork.Get(() => Target.LoadAlarmsForSkill(new [] { skill1, skill2 } ))
 				.Count().Should().Be(1);
 		}
 
@@ -135,7 +242,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.LoadAlarmsForSkill(currentSkillId))
+			WithUnitOfWork.Get(() => Target.LoadAlarmsForSkill(new [] { currentSkillId }))
 				.Count().Should().Be(1);
 		}
 
@@ -168,7 +275,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				});
 			});
 
-			var agents = WithUnitOfWork.Get(() => Target.LoadAlarmsForSkill(currentSkillId).ToArray());
+			var agents = WithUnitOfWork.Get(() => Target.LoadAlarmsForSkill(new Guid[] { currentSkillId }).ToArray());
 			agents.First().PersonId.Should().Be(personId1);
 			agents.Last().PersonId.Should().Be(personId2);
 		}
@@ -199,7 +306,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				});
 			});
 
-			var outOfAdherence = WithUnitOfWork.Get(() => Target.LoadForSkill(currentSkillId))
+			var outOfAdherence = WithUnitOfWork.Get(() => Target.LoadForSkill(new [] {currentSkillId}))
 				.Single().OutOfAdherences.Single();
 
 			outOfAdherence.StartTime.Should().Be("2016-06-16 08:00".Utc());

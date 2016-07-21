@@ -100,13 +100,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertXPathExists($@"//*[@agentid='{firstPersonId}']/following::*[@agentid='{secondPersonId}']");
 		}
 
-		[Then(@"I should see agent status for '(.*)'")]
+		[Then(@"I should see agent status for '(.*)?'")]
 		public void ThenIShouldSeeAgentStatusFor(string name)
 		{
 			var personId = DataMaker.Person(name).Person.Id.Value;
 			Browser.Interactions.AssertExists("[agentid='" + personId + "']");
 		}
-		
+
+		[Then(@"I should see agent '(.*)' with state '(.*)'")]
+		public void ThenIShouldSeeAgentStatusForWithState(string name, string stateCode)
+		{
+			var status = new RealTimeAdherenceAgentState() { Name = name, State = stateCode };
+			assertAgentStatus(status);
+		}
+
 		[Then(@"I should see the menu with option of change schedule")]
 		public void ThenIShouldSeeTheMenuWithOptionOfChangeSchedule()
 		{

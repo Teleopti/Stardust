@@ -63,10 +63,10 @@ Scenario: Monitor agents by skill
 	When I view Real time adherence sites
 	And I click 'select skill'
 	And I select skill 'Sales'
-	Then I should see agent status for 'Pierre Baldi'
-	And I should see agent status for 'Ashley Andeen'
+	Then I should see agent 'Pierre Baldi' with state 'LoggedOut'
+	And I should see agent 'Ashley Andeen' with state 'LoggedOut'
 	And I should not see agent 'John King'
 	When the time is '2016-06-14 08:10:00'
 	And 'Pierre Baldi' sets his phone state to 'Ready'
-	Then I should see agent status for 'Ashley Andeen'
+	Then I should see agent 'Ashley Andeen' with state 'LoggedOut'
 	And I should not see agent 'Pierre Baldi'

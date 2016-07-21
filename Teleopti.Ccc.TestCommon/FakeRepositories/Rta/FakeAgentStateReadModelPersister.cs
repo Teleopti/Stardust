@@ -102,19 +102,21 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				select m;
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadForSkill(Guid skill)
+		public IEnumerable<AgentStateReadModel> LoadForSkill(IEnumerable<Guid> skills)
 		{
 			return from s in _data.Values
 				from p in _personSkills
-				where s.PersonId == p.PersonId && p.SkillId == skill
+				from sk in skills
+				where s.PersonId == p.PersonId && p.SkillId == sk
 				select s;
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadAlarmsForSkill(Guid skill)
+		public IEnumerable<AgentStateReadModel> LoadAlarmsForSkill(IEnumerable<Guid> skills)
 		{
 			return from s in _data.Values
 				from p in _personSkills
-				where s.PersonId == p.PersonId && p.SkillId == skill
+				from sk in skills
+				where s.PersonId == p.PersonId && p.SkillId == sk
 					  && s.AlarmStartTime <= _now.UtcDateTime()
 				orderby s.AlarmStartTime
 				select s;
