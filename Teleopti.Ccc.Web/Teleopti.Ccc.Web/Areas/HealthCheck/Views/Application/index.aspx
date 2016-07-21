@@ -189,7 +189,12 @@ var identity = (ITeleoptiIdentity) CurrentTeleoptiPrincipal.Make().Current().Ide
 					<!-- ko if: HealthCheck_ReinitializeReadModels_39697 -->
 					<details>
 						<summary>Re-initialize readmodels</summary>
-						<p>Before re-initializing readmodels, please make sure to empty the readmodel tables. Otherwise, it will cause a system error. </p>
+						<p>Before re-initializing readmodels, please make sure to truncate following tables. Otherwise, it will cause a system error. </p>
+						<ul>
+							<li>ReadModel.ScheduleProjectionReadOnly</li>
+							<li>ReadModel.PersonScheduleDay</li>
+							<li>ReadModel.ScheduleDay</li>
+						</ul>
 						<!-- ko if: reinitReadModelsJobId() && !reinitReadModelsJobPollingResult() -->
 						<p>Could not retrieve status of last attempt. See <a target="_blank" data-bind="attr: { href: getReinitJobUrl() }">details</a> or start again below. </p>
 						<!-- /ko -->
