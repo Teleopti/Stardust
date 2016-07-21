@@ -318,6 +318,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		{
 			Browser.Interactions.AssertExists(".warning-icon .mdi-account-alert");
 		}
+
+		[Then(@"I should see shift category")]
+		public void ThenIShouldSeeShiftCategory()
+		{
+			Browser.Interactions.AssertExists(".shift-category-cell");
+		}
+
 	}
 
 	public class AddActivityFormInfo
