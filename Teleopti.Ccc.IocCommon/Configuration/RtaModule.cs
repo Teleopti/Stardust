@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Rta;
+using Teleopti.Ccc.Infrastructure.Rta.Persisters;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -46,7 +47,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				);
 			builder.CacheByInterfaceProxy<DatabaseLoader, IDatabaseLoader>().SingleInstance();
 			builder.RegisterType<DatabaseReader>().As<IDatabaseReader>().SingleInstance();
-			builder.RegisterType<MappingReader>().As<IMappingReader>().SingleInstance();
+			if (_config.Toggle(Toggles.RTA_RuleMappingOptimization_39812))
+				builder.RegisterType<MappingReadModelReader>().As<IMappingReader>().SingleInstance();
+			else
+				builder.RegisterType<MappingReader>().As<IMappingReader>().SingleInstance();
 
 			_config.Cache().This<TenantLoader>(b => b
 				.CacheMethod(x => x.TenantNameByKey(null))
@@ -58,6 +62,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<AgentStatePersister>().As<IAgentStatePersister>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStateReadModelPersister>().As<IAgentStateReadModelPersister>().SingleInstance().ApplyAspects();
+			builder.RegisterType<MappingReadModelPersister>().As<IMappingReadModelPersister>().SingleInstance().ApplyAspects();
 			if (_config.Toggle(Toggles.RTA_RecentOutOfAdherences_39145))
 				builder.RegisterType<AgentStateReadModelUpdaterWithOutOfAdherences>().As<IAgentStateReadModelUpdater>().SingleInstance().ApplyAspects();
 			else
