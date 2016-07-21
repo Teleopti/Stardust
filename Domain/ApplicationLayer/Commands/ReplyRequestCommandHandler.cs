@@ -16,6 +16,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		{
 			command.ErrorMessages = new List<string>();
 
+			if (string.IsNullOrEmpty(command.Message)) { return; }
+
 			var personRequest = _personRequestRepository.Get(command.PersonRequestId);
 
 			if (personRequest == null)
