@@ -57,10 +57,10 @@ Background:
 @OnlyRunIfEnabled('RTA_MonitorBySkills_39081')
 Scenario: Monitor agents by skill
 	Given the time is '2016-06-14 08:00:00'
+	When I view Real time adherence sites
 	And 'Pierre Baldi' sets his phone state to 'LoggedOut'
 	And 'John King' sets his phone state to 'LoggedOut'
 	And 'Ashley Andeen' sets his phone state to 'LoggedOut'
-	When I view Real time adherence sites
 	And I click 'select skill'
 	And I select skill 'Sales'
 	Then I should see agent 'Pierre Baldi' with state 'LoggedOut'
