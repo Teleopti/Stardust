@@ -52,6 +52,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public IUnitOfWork UnitOfWork { get; private set; }
+
+		public IEnumerable<IBusinessUnit> LoadAllWithDeleted()
+		{
+			return _businessUnits;
+		}
+
 		public IList<IBusinessUnit> LoadAllBusinessUnitSortedByName()
 		{
 			return _businessUnits.OrderBy(b => b.Name).ToArray();

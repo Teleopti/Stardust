@@ -7,7 +7,7 @@ namespace Teleopti.Interfaces.Domain
     /// Created by: robink
     /// Created date: 2008-11-14
     /// </remarks>
-	public interface IRtaMap : IAggregateRoot, ICloneableEntity<IRtaMap>
+	public interface IRtaMap : IAggregateRootWithEvents, ICloneableEntity<IRtaMap>
     {
         /// <summary>
         /// Gets the activity.

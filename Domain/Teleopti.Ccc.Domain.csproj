@@ -2385,6 +2385,7 @@
     <Compile Include="UndoRedo\UndoRedoContainer.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="UnitOfWork\WithReadModelUnitOfWork.cs" />
     <Compile Include="UnitOfWork\WithUnitOfWork.cs" />
     <Compile Include="DisabledBy.cs" />
     <Compile Include="EnabledBy.cs" />

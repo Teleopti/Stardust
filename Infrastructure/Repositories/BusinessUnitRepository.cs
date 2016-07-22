@@ -7,6 +7,7 @@ using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -29,7 +30,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		    
 	    }
 
-        /// <summary>
+	    public IEnumerable<IBusinessUnit> LoadAllWithDeleted()
+	    {
+		    using (UnitOfWork.DisableFilter(QueryFilter.Deleted))
+			    return LoadAll();
+	    }
+
+	    /// <summary>
         /// Finds all business units sorted by name.
         /// </summary>
         /// <returns></returns>

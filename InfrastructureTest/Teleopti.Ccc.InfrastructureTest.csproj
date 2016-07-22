@@ -254,7 +254,9 @@
     <Compile Include="Rta\DatabaseManager.cs" />
     <Compile Include="Rta\DatabaseReaderLoadAllPersonOrganizationDataTest.cs" />
     <Compile Include="Rta\DatabaseReaderLoadPersonOrganizationDataTest.cs" />
+    <Compile Include="Rta\MappingReadModelReaderSelectionTest.cs" />
     <Compile Include="Rta\MappingReaderSelectionTest.cs" />
+    <Compile Include="Rta\MappingReadModelReaderTest.cs" />
     <Compile Include="Rta\MappingReaderTest.cs" />
     <Compile Include="Rta\Persisters\AdherenceDetailsReadModelPersisterConcurrencyTest.cs" />
     <Compile Include="Rta\Persisters\AdherencePercentageReadModelReaderTest.cs" />
@@ -269,6 +271,7 @@
     <Compile Include="Rta\PublishRtaEventsToHangfireTest.cs" />
     <Compile Include="Rta\SnapshotTest.cs" />
     <Compile Include="Rta\UnrecognizedStatesTest.cs" />
+    <Compile Include="Rta\WithUnitOfWorkWithRecurringEvents.cs" />
     <Compile Include="UnitOfWorkTestAttribute.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkFactoryHasCurrentUnitOfWorkTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\FatClientOptimizationEventPublishingTest.cs" />

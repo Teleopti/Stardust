@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -65,6 +64,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			if (!_persister.Invalid())
 				return;
 
+			var businessUnits = _businessUnits.LoadAllWithDeleted();
+
 			var maps = _mappings.LoadAll();
 
 			var activities = _activities.LoadAll()
@@ -81,7 +82,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 					States = g.StateCollection.AsEnumerable()
 				})
 				.Concat(
-					from b in _businessUnits.LoadAll()
+					from b in businessUnits
 					select new
 					{
 						Id = Guid.Empty,

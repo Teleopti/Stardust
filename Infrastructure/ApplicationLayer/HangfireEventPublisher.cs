@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 			return handlerTypes.Select(handlerType => new jobInfo
 			{
-				DisplayName = $"{eventType.Name} to {handlerType.Name}",
+				DisplayName = $"{handlerType.Name} got {eventType.Name}",
 				Tenant = tenant,
 				EventTypeName = eventTypeName,
 				Event = serialized,

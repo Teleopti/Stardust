@@ -146,7 +146,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		}
 
 		[Test]
-		public void ShouldBeInvalidWhenInvalidated()
+		public void ShouldNotThrowWhenInvalidatingInvalid()
+		{
+			Target.Invalidate();
+			Target.Invalidate();
+			Target.Invalid().Should().Be(true);
+		}
+
+		[Test]
 		{
 			var businessUnit = Guid.NewGuid();
 			var platformType = Guid.NewGuid();

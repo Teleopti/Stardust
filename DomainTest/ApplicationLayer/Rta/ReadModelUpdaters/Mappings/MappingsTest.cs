@@ -126,6 +126,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Mapping
 		}
 
 		[Test]
+		public void ShouldContainMapWithoutRule()
+		{
+			Database.WithRule(null, "phone", null, null, 0, null, null, null);
+
+			Target.Handle(new TenantMinuteTickEvent());
+
+			Persister.Data.Select(x => x.StateCode).Should().Contain("phone");
+		}
+
+		[Test]
 		public void ShouldContainAlarm()
 		{
 			var rule = Guid.NewGuid();
