@@ -207,7 +207,10 @@
 			vm.isLoading = false;
 			canvas.fire('seatmaplocation:loaded', { data: data });
 
-			$timeout(function () { $scope.$apply(); });
+			$timeout(function () {
+				$scope.$apply();
+				resize();
+			});
 		};
 
 		function onLoadSeatMapSuccess(data) {
