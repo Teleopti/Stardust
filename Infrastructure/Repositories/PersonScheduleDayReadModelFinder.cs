@@ -39,14 +39,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IEnumerable<PersonScheduleDayReadModel> ForPerson(DateOnly startDate, DateOnly endDate, Guid personId)
 		{
 			const string sql
-				= "SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, Start, [End], IsDayOff, Model "
+				= "SELECT PersonId, BelongsToDate AS Date, Start, [End], IsDayOff, Model "
 				  + "FROM ReadModel.PersonScheduleDay "
 				  + "WHERE PersonId=:personid AND BelongsToDate Between :startdate AND :enddate";
 			return _unitOfWork.Session().CreateSQLQuery(sql)
-				.AddScalar("PersonId", NHibernateUtil.Guid)
-				.AddScalar("TeamId", NHibernateUtil.Guid)
-				.AddScalar("SiteId", NHibernateUtil.Guid)
-				.AddScalar("BusinessUnitId", NHibernateUtil.Guid)
+				.AddScalar("PersonId", NHibernateUtil.Guid)				
 				.AddScalar("Date", NHibernateUtil.DateTime)
 				.AddScalar("Start", NHibernateUtil.DateTime)
 				.AddScalar("End", NHibernateUtil.DateTime)
@@ -68,17 +65,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IEnumerable<PersonScheduleDayReadModel> ForPeople(DateTimePeriod period, IEnumerable<Guid> personIds)
 		{
 			const string sql
-				= "SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, Start, [End], Model "
+				= "SELECT PersonId, BelongsToDate AS Date, Start, [End], Model "
 				  + "FROM ReadModel.PersonScheduleDay "
 				  + "WHERE PersonId In (:PersonIds) AND Start IS NOT NULL AND Start < :DateEnd AND [End] > :DateStart";
 			var res = new List<PersonScheduleDayReadModel>();
 			foreach (var ids in personIds.Batch(2000))
 			{
 				res.AddRange(_unitOfWork.Session().CreateSQLQuery(sql)
-					.AddScalar("PersonId", NHibernateUtil.Guid)
-					.AddScalar("TeamId", NHibernateUtil.Guid)
-					.AddScalar("SiteId", NHibernateUtil.Guid)
-					.AddScalar("BusinessUnitId", NHibernateUtil.Guid)
+					.AddScalar("PersonId", NHibernateUtil.Guid)				
 					.AddScalar("Date", NHibernateUtil.DateTime)
 					.AddScalar("Start", NHibernateUtil.DateTime)
 					.AddScalar("End", NHibernateUtil.DateTime)
@@ -102,10 +96,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				+ "@take=:take";
 			var idlist = string.Join(",", shiftExchangeOfferIdList);
 			return _unitOfWork.Session().CreateSQLQuery(sql)
-				.AddScalar("PersonId", NHibernateUtil.Guid)
-				.AddScalar("TeamId", NHibernateUtil.Guid)
-				.AddScalar("SiteId", NHibernateUtil.Guid)
-				.AddScalar("BusinessUnitId", NHibernateUtil.Guid)
+				.AddScalar("PersonId", NHibernateUtil.Guid)		
 				.AddScalar("FirstName", NHibernateUtil.String)
 				.AddScalar("LastName", NHibernateUtil.String)
 				.AddScalar("Date", NHibernateUtil.DateTime)
@@ -141,10 +132,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var idlist = string.Join(",", personIdList);
 			var filterString = getTimeFilterString(filter);
 			return _unitOfWork.Session().CreateSQLQuery(sql)
-				.AddScalar("PersonId", NHibernateUtil.Guid)
-				.AddScalar("TeamId", NHibernateUtil.Guid)
-				.AddScalar("SiteId", NHibernateUtil.Guid)
-				.AddScalar("BusinessUnitId", NHibernateUtil.Guid)
+				.AddScalar("PersonId", NHibernateUtil.Guid)		
 				.AddScalar("FirstName", NHibernateUtil.String)
 				.AddScalar("LastName", NHibernateUtil.String)
 				.AddScalar("Date", NHibernateUtil.DateTime)
