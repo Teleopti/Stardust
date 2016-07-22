@@ -121,9 +121,23 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			var dateTimePeriod = period.VisiblePeriod;
 			var schedules = new ScheduleDictionaryForTest(scenario, dateTimePeriod);
-			var range = new FakeScheduleRange(schedules, new ScheduleParameters(scenario, visiblePersons.FirstOrDefault(), dateTimePeriod));
-			var updatedRange = range.UpdateCalcValues(0, new TimeSpan());
-			schedules.AddTestItem(visiblePersons.FirstOrDefault(), updatedRange);
+			if (_data == null || !_data.Any())
+			{
+				return schedules;
+			}
+
+			foreach (var visiblePerson in visiblePersons)
+			{
+				var range = new FakeScheduleRange(schedules, new ScheduleParameters(scenario, visiblePerson, dateTimePeriod));
+				foreach (var scheduleData in _data)
+				{
+					if (scheduleData.Person == null || !scheduleData.Person.Equals(range.Person))
+						continue;
+					range.Add(scheduleData);
+				}
+				var updatedRange = range.UpdateCalcValues(0, new TimeSpan());
+				schedules.AddTestItem(visiblePerson, updatedRange);
+			}
 			return schedules;
 		}
 

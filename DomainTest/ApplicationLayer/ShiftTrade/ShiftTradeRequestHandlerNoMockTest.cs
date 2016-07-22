@@ -64,7 +64,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			};
 			_validator = new ShiftTradeValidator(new FakeShiftTradeLightValidator(), shiftTradeSpecifications);
 			_loadSchedulingDataForRequestWithoutResourceCalculation = new LoadSchedulesForRequestWithoutResourceCalculation(new FakePersonAbsenceAccountRepository(), _scheduleStorage);
-
 		}
 
 		[Test]
@@ -206,10 +205,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		}
 		private IPersonAssignment addPersonAssignment(IPerson person, DateTimePeriod dateTimePeriod, IActivity activity = null)
 		{
+			var scenario = _scenarioRepository.Current();
 			_personAssignment = activity != null ?
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, dateTimePeriod, new ShiftCategory("AM"), _scenarioRepository.Current()).WithId() :
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(person, dateTimePeriod);
-
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, dateTimePeriod, new ShiftCategory("AM"), scenario).WithId() :
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, dateTimePeriod);
 			_scheduleStorage.Add(_personAssignment);
 			return _personAssignment;
 		}

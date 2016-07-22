@@ -43,10 +43,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		[AsSystem]
 		public virtual void Handle(ApproveRequestsWithValidatorsEvent @event)
 		{
-			using (var unitOfWork = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			var validators = getAbsenceRequestValidators(@event.Validator).ToArray();
+			foreach (var personRequestId in @event.PersonRequestIdList)
 			{
-				var validators = getAbsenceRequestValidators(@event.Validator).ToArray();
-				foreach (var personRequestId in @event.PersonRequestIdList)
+				using (var unitOfWork = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 				{
 					var personRequest = _personRequestRepository.Get(personRequestId);
 

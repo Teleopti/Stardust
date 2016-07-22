@@ -344,11 +344,13 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			return personAccountBalanceCalculator;
 		}
 
-		private void checkIfPersonIsAlreadyAbsentDuringRequestPeriod(IAbsenceRequest absenceRequest, IPersonRequest personRequest)
+		private void checkIfPersonIsAlreadyAbsentDuringRequestPeriod(IAbsenceRequest absenceRequest,
+			IPersonRequest personRequest)
 		{
 			var alreadyAbsent = personAlreadyAbsentDuringRequestPeriod(absenceRequest);
-
-			if (_process.GetType() == typeof(GrantAbsenceRequest) && alreadyAbsent)
+			var requiredCheckAlreadyAbsent = _process.GetType() == typeof(GrantAbsenceRequest) ||
+											 _process.GetType() == typeof(ApproveAbsenceRequestWithValidators);
+			if (requiredCheckAlreadyAbsent && alreadyAbsent)
 			{
 				denyAbsenceRequest(UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonAlreadyAbsent",
 					absenceRequest.Person.PermissionInformation.Culture()), true);

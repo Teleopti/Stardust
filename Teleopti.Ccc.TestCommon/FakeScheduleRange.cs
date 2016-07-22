@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -13,6 +14,8 @@ namespace Teleopti.Ccc.TestCommon
 		public FakeScheduleRange(IScheduleDictionary owner, IScheduleParameters parameters) : base(owner, parameters)
 		{
 			Period = parameters.Period;
+			Person = parameters.Person;
+			Scenario = owner.Scenario;
 		}
 
 		public IScheduleRange UpdateCalcValues(int scheduledDaysOff, TimeSpan contractTimeHolder)
@@ -27,7 +30,7 @@ namespace Teleopti.Ccc.TestCommon
 		public new IScenario Scenario { get; private set; }
 		protected override bool CheckPermission(IScheduleData persistableScheduleData)
 		{
-			throw new NotImplementedException();
+			return true;
 		}
 
 		public new object Clone()
@@ -59,7 +62,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IScheduleDay ScheduledDay(DateOnly day)
 		{
-			return ScheduleDayFactory.Create(day);
+			return ScheduleDayFactory.Create(day, Person, Scenario);
 		}
 
 		public bool Contains(IScheduleData scheduleData, bool includeNonPermitted)
@@ -99,8 +102,13 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IEnumerable<IScheduleDay> ScheduledDayCollection(DateOnlyPeriod dateOnlyPeriod)
 		{
-			var fac = new SchedulePartFactoryForDomain();
-			return new List<IScheduleDay> { fac.CreatePart() };
+			var scheduleDay = base.Owner.SchedulesForDay(dateOnlyPeriod.StartDate).FirstOrDefault();
+			var scheduleDatas = base.ScheduleDataInternalCollection();
+			foreach (var scheduleData in scheduleDatas)
+			{
+				scheduleDay.Add(scheduleData);
+			}
+			return new IScheduleDay[] { scheduleDay };
 		}
 
 		public IEnumerable<IScheduleDay> ScheduledDayCollectionForStudentAvailability(DateOnlyPeriod dateOnlyPeriod)

@@ -46,6 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private IWriteProtectedScheduleCommandValidator _writeProtectedScheduleCommandValidator;
 		private readonly ISchedulingResultStateHolder _scheduleStateHolder = new FakeSchedulingResultStateHolder();
 		private FakeMessageBrokerComposite _messageBroker;
+		private FakeScheduleStorage _scheduleStorage;
 
 		private IPerson _person;
 		private IPersonRequest _personRequest;
@@ -72,17 +73,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				new MultisiteDayRepository(new FakeUnitOfWork()));
 			_personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 			_scheduleRepository = new FakeScheduleDataReadScheduleStorage();
-			_loadSchedulesForRequestWithoutResourceCalculation =
-				new LoadSchedulesForRequestWithoutResourceCalculation(_personAbsenceAccountRepository, _scheduleRepository);
 			_scenarioRepository = new FakeScenarioRepository(_currentScenario.Current());
 
 			_personAccountUpdaterDummy = new PersonAccountUpdaterDummy();
-			_scheduleRepository = new FakeScheduleDataReadScheduleStorage();
 			var peopleAndSkillLoaderDecider = new PeopleAndSkillLoaderDecider(_personRepository, null);
 			_loadSchedulingStateHolderForResourceCalculation =
 				new LoadSchedulingStateHolderForResourceCalculation(_personRepository, _personAbsenceAccountRepository,
 					skillRepository, workloadRepository, _scheduleRepository, peopleAndSkillLoaderDecider, skillDayLoadHelper);
 			_messageBroker = new FakeMessageBrokerComposite();
+			_scheduleStorage = new FakeScheduleStorage();
+			_loadSchedulesForRequestWithoutResourceCalculation =
+				new LoadSchedulesForRequestWithoutResourceCalculation(_personAbsenceAccountRepository, _scheduleStorage);
 
 			prepareTestData();
 
@@ -141,10 +142,37 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_messageBroker.SentCount().Should().Be(1);
 		}
 
+		[Test]
+		public void ShouldDenyDuplicatedAbsenceRequest()
+		{
+			var personRequest1 = createPendingAbsenceRequest(_person, _absence, new DateTimePeriod(_startDateTime, _endDateTime),
+				true);
+			_event.PersonRequestIdList = new Guid[] {personRequest1.Id.GetValueOrDefault()};
+			setBudgetAndAllowance(_person, 1, 2);
+			_target.Handle(_event);
+			personRequest1.IsApproved.Should().Be.True();
+
+			var absenceLayer = new AbsenceLayer(_absence, new DateTimePeriod(_startDateTime, _endDateTime));
+			_scheduleStorage.Add(new PersonAbsence(_person, _currentScenario.Current(), absenceLayer, personRequest1));
+
+			_target = new ApproveRequestsWithValidatorsEventHandler(_currentUnitOfWorkFactory,
+				getAbsenceRequestProcessor(_person, _personRequest), _personRequestRepository,
+				_writeProtectedScheduleCommandValidator, _messageBroker);
+
+			var personRequest2 = createPendingAbsenceRequest(_person, _absence, new DateTimePeriod(_startDateTime, _endDateTime),
+				true);
+			_event.PersonRequestIdList = new Guid[] { personRequest2.Id.GetValueOrDefault() };
+			setBudgetAndAllowance(_person, 1, 2);
+			_target.Handle(_event);
+			personRequest2.IsDenied.Should().Be.True();
+
+			_messageBroker.SentCount().Should().Be(2);
+		}
+
 		private IAbsenceRequestProcessor getAbsenceRequestProcessor(IPerson person, IPersonRequest personRequest)
 		{
 			var period = personRequest.Request.Period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
-			_scheduleStateHolder.Schedules = new FakeScheduleStorage().FindSchedulesForPersonsOnlyInGivenPeriod(
+			_scheduleStateHolder.Schedules = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
 				new[] { person }, new ScheduleDictionaryLoadOptions(true, true), period, _currentScenario.Current());
 			return new AbsenceRequestProcessor(createAbsenceRequestUpdater(), () => _scheduleStateHolder);
 		}
