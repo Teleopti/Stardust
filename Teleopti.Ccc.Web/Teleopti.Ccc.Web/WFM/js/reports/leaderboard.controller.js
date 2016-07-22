@@ -32,11 +32,11 @@
 			vm.toggleDateRangePicker = !vm.toggleDateRangePicker
 		};
 
-		vm.afterShortDateStringChange = function(){
+		vm.afterShortDateStringChange = function() {
 			vm.isInputDateValid = true;
 			var currentDayStart = new Date(vm.shortDateFormatStart);
 			var currentDayEnd = new Date(vm.shortDateFormatEnd);
-			var newSelectedPeriod = {startDate: null, endDate: null};
+			var newSelectedPeriod = { startDate: null, endDate: null };
 
 			if (!isNaN(currentDayStart.getTime()) && currentDayStart.getTime() > 0) {
 				newSelectedPeriod.startDate = new Date(vm.shortDateFormatStart);
@@ -50,16 +50,16 @@
 				vm.isInputDateValid = false;
 			}
 
-			if(vm.isInputDateValid){
+			if (vm.isInputDateValid) {
 				vm.selectedPeriod = newSelectedPeriod;
 				vm.afterSelectedDateChange();
 			}
-		}
+		};
 
-		vm.afterSelectedDateChange = function (start, end) {
-			if(vm.selectedPeriod && vm.selectedPeriod.startDate < vm.selectedPeriod.endDate){
+		vm.afterSelectedDateChange = function() {
+			if (vm.selectedPeriod && vm.selectedPeriod.startDate <= vm.selectedPeriod.endDate) {
 				vm.isLoading = true;
-				LeaderBoardSvc.getLeaderBoardDataByPeriod(vm.searchOptions.keyword, vm.selectedPeriod).then(function(data){
+				LeaderBoardSvc.getLeaderBoardDataByPeriod(vm.searchOptions.keyword, vm.selectedPeriod).then(function(data) {
 					vm.leaderBoardTableList = VMFactory.Create(data.AgentBadges);
 					vm.isLoading = false;
 				});
