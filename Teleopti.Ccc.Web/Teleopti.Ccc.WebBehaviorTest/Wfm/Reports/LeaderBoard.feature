@@ -51,6 +51,7 @@ Background:
 		| Adherence           | 3      | 0      | 2    | 2014-08-11         |
 		| Adherence           | 0      | 0      | 1    | 2014-08-13         |
 
+@ignore
 Scenario: Should be able to see leader board in given date range
 	When I view wfm leader board report
 	And I select date from '2014-08-11' to '2014-08-11'
