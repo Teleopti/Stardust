@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.WinCode.Scheduling.Restriction;
 using Teleopti.Interfaces.Domain;
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 _schedules.AddRange(scheduleDays);
             }
             var filter = new OvertimeAvailabilityPersonFilter();
-			var filteredPersons = filter.GetFilterdPerson(_schedules, filterStartTime, filterEndTime, _schedulerStateHolder.TimeZoneInfo, value);
+			var filteredPersons = filter.GetFilterdPerson(_schedules, filterStartTime, filterEndTime, TimeZoneGuard.Instance.TimeZone, value);
 			_schedulerStateHolder.FilterPersonsOvertimeAvailability(filteredPersons);
 		}
 	}
