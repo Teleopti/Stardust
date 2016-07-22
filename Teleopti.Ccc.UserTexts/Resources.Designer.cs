@@ -9068,6 +9068,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit Shift Category.
+        /// </summary>
+        public static string EditShiftCategory {
+            get {
+                return ResourceManager.GetString("EditShiftCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit skill summary.
         /// </summary>
         public static string EditSkillSummery {
@@ -25534,6 +25543,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Select {
             get {
                 return ResourceManager.GetString("Select", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a category.
+        /// </summary>
+        public static string SelectACategory {
+            get {
+                return ResourceManager.GetString("SelectACategory", resourceCulture);
             }
         }
         

@@ -14734,4 +14734,12 @@ These options are activated:
     <value>Successful bookings</value>
     <comment>Displayed on the Seat Plan page  in the Seat Booking Summary</comment>
   </data>
+  <data name="EditShiftCategory" xml:space="preserve">
+    <value>Edit Shift Category</value>
+    <comment>Edit Shift Category title in wfm teamschedule</comment>
+  </data>
+  <data name="SelectACategory" xml:space="preserve">
+    <value>Select a category</value>
+    <comment>Select a category placeholder text in edit shift category command panel</comment>
+  </data>
 </root>
