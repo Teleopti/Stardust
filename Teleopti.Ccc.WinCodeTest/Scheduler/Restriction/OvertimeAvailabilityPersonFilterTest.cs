@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Scheduling.Restriction;
@@ -30,12 +31,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
         private IPerson _person1;
         private IPerson _person2;
         private IPerson _person3;
+	    private DateOnly _dateOnly;
 
         [SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
             _target = new OvertimeAvailabilityPersonFilter();
+	        _dateOnly = new DateOnly(2016, 7, 22);
             _scheduleDay1 = _mock.StrictMock<IScheduleDay>();
             _scheduleDay2 = _mock.StrictMock<IScheduleDay>();
             _scheduleDay3 = _mock.StrictMock<IScheduleDay>();
@@ -43,14 +46,17 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
             _filterStartTime = TimeSpan.FromHours(8);
             _filterEndTime = TimeSpan.FromHours(16);
             _person1 = PersonFactory.CreatePerson("p1");
+			_person1.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
             _person2 = PersonFactory.CreatePerson("p2");
-            _person3 = PersonFactory.CreatePerson("p3");
+			_person2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
+			_person3 = PersonFactory.CreatePerson("p3");
+			_person3.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 
-            _overtimeAvailability1 = new OvertimeAvailability(_person1, DateOnly.Today, TimeSpan.FromHours(5),
+			_overtimeAvailability1 = new OvertimeAvailability(_person1, _dateOnly, TimeSpan.FromHours(5),
                                                               TimeSpan.FromHours(7));
-            _overtimeAvailability2 = new OvertimeAvailability(_person2, DateOnly.Today, TimeSpan.FromHours(4),
+            _overtimeAvailability2 = new OvertimeAvailability(_person2, _dateOnly, TimeSpan.FromHours(4),
                                                               TimeSpan.FromHours(7));
-            _overtimeAvailability3 = new OvertimeAvailability(_person3, DateOnly.Today, TimeSpan.FromHours(4),
+            _overtimeAvailability3 = new OvertimeAvailability(_person3, _dateOnly, TimeSpan.FromHours(4),
                                                               TimeSpan.FromHours(6));
 
 			_persistableScheduleData1 = new List<IPersistableScheduleData> { _overtimeAvailability1 };
@@ -66,7 +72,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
             {
                 commonPersistableScheduleDataCollectionMocks();
             }
-            var personList = _target.GetFilterdPerson(_scheduleDaysList, _filterStartTime, _filterEndTime);
+            var personList = _target.GetFilterdPerson(_scheduleDaysList, _filterStartTime, _filterEndTime, TimeZoneInfoFactory.StockholmTimeZoneInfo(), _dateOnly);
             Assert.AreEqual(personList.Count(),0);
 
         }
@@ -80,7 +86,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
             {
                 commonPersistableScheduleDataCollectionMocks();
             }
-            var personList = _target.GetFilterdPerson(_scheduleDaysList, _filterStartTime , _filterEndTime );
+            var personList = _target.GetFilterdPerson(_scheduleDaysList, _filterStartTime , _filterEndTime, TimeZoneInfoFactory.StockholmTimeZoneInfo(), _dateOnly);
             Assert.AreEqual(personList.Count(),0);
 
         }
@@ -88,7 +94,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
         [Test]
         public void OnePersonFoundInFilterWithOvertimeAvailability()
         {
-            _overtimeAvailability3 = new OvertimeAvailability(_person3, DateOnly.Today, TimeSpan.FromHours(8),
+            _overtimeAvailability3 = new OvertimeAvailability(_person3, _dateOnly, TimeSpan.FromHours(8),
                                                               TimeSpan.FromHours(17));
 			_persistableScheduleData3 = new List<IPersistableScheduleData> { _overtimeAvailability3 };
 
@@ -96,7 +102,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
             {
                 commonPersistableScheduleDataCollectionMocks();
             }
-            var personList = _target.GetFilterdPerson(_scheduleDaysList, _filterStartTime , _filterEndTime );
+            var personList = _target.GetFilterdPerson(_scheduleDaysList, _filterStartTime , _filterEndTime, TimeZoneInfoFactory.StockholmTimeZoneInfo(), _dateOnly);
             Assert.AreEqual(personList.Count(),1);
             Assert.AreEqual(personList[0],_person3);
 
@@ -105,11 +111,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
        [Test]
         public void AllPersonFoundInFilterWithOvertimeAvailability()
         {
-            _overtimeAvailability1 = new OvertimeAvailability(_person1, DateOnly.Today, TimeSpan.FromHours(7),
+            _overtimeAvailability1 = new OvertimeAvailability(_person1, _dateOnly, TimeSpan.FromHours(7),
                                                               TimeSpan.FromHours(19));
-            _overtimeAvailability2 = new OvertimeAvailability(_person2, DateOnly.Today, TimeSpan.FromHours(7),
+            _overtimeAvailability2 = new OvertimeAvailability(_person2, _dateOnly, TimeSpan.FromHours(7),
                                                               TimeSpan.FromHours(17));
-            _overtimeAvailability3 = new OvertimeAvailability(_person3, DateOnly.Today, TimeSpan.FromHours(8),
+            _overtimeAvailability3 = new OvertimeAvailability(_person3, _dateOnly, TimeSpan.FromHours(8),
                                                               TimeSpan.FromHours(16));
 			_persistableScheduleData1 = new List<IPersistableScheduleData> { _overtimeAvailability1 };
 			_persistableScheduleData2 = new List<IPersistableScheduleData> { _overtimeAvailability2 };
@@ -119,8 +125,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
             {
                 commonPersistableScheduleDataCollectionMocks();
             }
-            var personList = _target.GetFilterdPerson(_scheduleDaysList, _filterStartTime , _filterEndTime );
-            Assert.AreEqual(personList.Count(),3);
+            var personList = _target.GetFilterdPerson(_scheduleDaysList, _filterStartTime , _filterEndTime, TimeZoneInfoFactory.StockholmTimeZoneInfo(), _dateOnly);
+            Assert.AreEqual(3, personList.Count());
             
         }
 
@@ -130,11 +136,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
            var time1 = TimeSpan.FromHours(8).Add(TimeSpan.FromDays(1));
            var time2 = TimeSpan.FromHours(5).Add(TimeSpan.FromDays(1));
            var time3 = TimeSpan.FromHours(15).Add(TimeSpan.FromDays(1));
-           _overtimeAvailability1 = new OvertimeAvailability(_person1, DateOnly.Today, TimeSpan.FromHours(22),
+           _overtimeAvailability1 = new OvertimeAvailability(_person1, _dateOnly, TimeSpan.FromHours(22),
                                                              time1);
-           _overtimeAvailability2 = new OvertimeAvailability(_person2, DateOnly.Today, TimeSpan.FromHours(18),
+           _overtimeAvailability2 = new OvertimeAvailability(_person2, _dateOnly, TimeSpan.FromHours(18),
                                                              time2);
-           _overtimeAvailability3 = new OvertimeAvailability(_person3, DateOnly.Today, TimeSpan.FromHours(8),
+           _overtimeAvailability3 = new OvertimeAvailability(_person3, _dateOnly, TimeSpan.FromHours(18),
                                                              time3);
 		   _persistableScheduleData1 = new List<IPersistableScheduleData> { _overtimeAvailability1 };
 		   _persistableScheduleData2 = new List<IPersistableScheduleData> { _overtimeAvailability2 };
@@ -144,8 +150,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
            {
                commonPersistableScheduleDataCollectionMocks();
            }
-           var personList = _target.GetFilterdPerson(_scheduleDaysList, TimeSpan.FromHours(14),TimeSpan.FromHours(16));
-           Assert.AreEqual(personList.Count(), 0);
+           var personList = _target.GetFilterdPerson(_scheduleDaysList, TimeSpan.FromHours(14),TimeSpan.FromHours(16), TimeZoneInfoFactory.StockholmTimeZoneInfo(), _dateOnly);
+           Assert.AreEqual(0, personList.Count());
 
        }
 
@@ -153,11 +159,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
        public void ShouldReturnOnePersonListWhenTwoOfTheThreeShiftsAreOnNextDay()
        {
            var time1 = TimeSpan.FromHours(8).Add(TimeSpan.FromDays(1));
-           _overtimeAvailability1 = new OvertimeAvailability(_person1, DateOnly.Today, TimeSpan.FromHours(22),
+           _overtimeAvailability1 = new OvertimeAvailability(_person1, _dateOnly, TimeSpan.FromHours(22),
                                                              time1);
-           _overtimeAvailability2 = new OvertimeAvailability(_person2, DateOnly.Today, TimeSpan.FromHours(18),
+           _overtimeAvailability2 = new OvertimeAvailability(_person2, _dateOnly, TimeSpan.FromHours(18),
                                                              TimeSpan.FromHours(5));
-           _overtimeAvailability3 = new OvertimeAvailability(_person3, DateOnly.Today, TimeSpan.FromHours(8),
+           _overtimeAvailability3 = new OvertimeAvailability(_person3, _dateOnly, TimeSpan.FromHours(8),
                                                              TimeSpan.FromHours(16));
 		   _persistableScheduleData1 = new List<IPersistableScheduleData> { _overtimeAvailability1 };
 		   _persistableScheduleData2 = new List<IPersistableScheduleData> { _overtimeAvailability2 };
@@ -167,7 +173,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
            {
                commonPersistableScheduleDataCollectionMocks();
            }
-           var personList = _target.GetFilterdPerson(_scheduleDaysList, TimeSpan.FromHours(14), TimeSpan.FromHours(16));
+           var personList = _target.GetFilterdPerson(_scheduleDaysList, TimeSpan.FromHours(14), TimeSpan.FromHours(16), TimeZoneInfoFactory.StockholmTimeZoneInfo(), _dateOnly);
            Assert.AreEqual(personList.Count(), 1);
 
        }
@@ -178,11 +184,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
            var time1 = TimeSpan.FromHours(8).Add(TimeSpan.FromDays(1));
            var time2 = TimeSpan.FromHours(5).Add(TimeSpan.FromDays(1));
            var filterEndDate = TimeSpan.FromHours(1).Add(TimeSpan.FromDays(1));
-           _overtimeAvailability1 = new OvertimeAvailability(_person1, DateOnly.Today, TimeSpan.FromHours(22),
+           _overtimeAvailability1 = new OvertimeAvailability(_person1, _dateOnly, TimeSpan.FromHours(22),
                                                              time1);
-           _overtimeAvailability2 = new OvertimeAvailability(_person2, DateOnly.Today, TimeSpan.FromHours(18),
+           _overtimeAvailability2 = new OvertimeAvailability(_person2, _dateOnly, TimeSpan.FromHours(18),
                                                              time2);
-           _overtimeAvailability3 = new OvertimeAvailability(_person3, DateOnly.Today, TimeSpan.FromHours(8),
+           _overtimeAvailability3 = new OvertimeAvailability(_person3, _dateOnly, TimeSpan.FromHours(8),
                                                              TimeSpan.FromHours(16));
 		   _persistableScheduleData1 = new List<IPersistableScheduleData> { _overtimeAvailability1 };
 		   _persistableScheduleData2 = new List<IPersistableScheduleData> { _overtimeAvailability2 };
@@ -192,18 +198,41 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
            {
                commonPersistableScheduleDataCollectionMocks();
            }
-           var personList = _target.GetFilterdPerson(_scheduleDaysList, TimeSpan.FromHours(23), filterEndDate);
+           var personList = _target.GetFilterdPerson(_scheduleDaysList, TimeSpan.FromHours(23), filterEndDate, TimeZoneInfoFactory.StockholmTimeZoneInfo(), _dateOnly);
            Assert.AreEqual(personList.Count(), 2);
 
        }
 
-       
-        private void commonPersistableScheduleDataCollectionMocks()
+		[Test]
+		public void ShouldHandleAgentsInOtherTimeZonThanMyViewPoint()
+		{		
+			_person1.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.GmtTimeZoneInfo());
+			_overtimeAvailability1 = new OvertimeAvailability(_person1, _dateOnly, TimeSpan.FromHours(12),
+															  TimeSpan.FromHours(13));
+			
+			_persistableScheduleData1 = new List<IPersistableScheduleData> { _overtimeAvailability1 };
+			_persistableScheduleData2 = new List<IPersistableScheduleData>();
+			_persistableScheduleData3 = new List<IPersistableScheduleData>();
+
+			using (_mock.Record())
+			{
+				commonPersistableScheduleDataCollectionMocks();
+			}
+			var personList = _target.GetFilterdPerson(_scheduleDaysList, TimeSpan.FromHours(12), TimeSpan.FromHours(13), TimeZoneInfoFactory.StockholmTimeZoneInfo(), _dateOnly);
+			personList.Count().Should().Be.EqualTo(0); //the agent is in another time zone and I only want OT on 12-13 my time zone
+
+		}
+
+
+		private void commonPersistableScheduleDataCollectionMocks()
         {
             Expect.Call(_scheduleDay1.PersistableScheduleDataCollection()).Return(_persistableScheduleData1);
             Expect.Call(_scheduleDay2.PersistableScheduleDataCollection()).Return(_persistableScheduleData2);
             Expect.Call(_scheduleDay3.PersistableScheduleDataCollection()).Return(_persistableScheduleData3);
-        }
+			Expect.Call(_scheduleDay1.Person).Return(_person1);
+			Expect.Call(_scheduleDay2.Person).Return(_person2);
+			Expect.Call(_scheduleDay3.Person).Return(_person3);
+		}
 
     }
 

@@ -7,11 +7,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
 {
     public class OvertimeAvailabilityPersonFilter
     {
-        public IList<IPerson> GetFilterdPerson(IList<IScheduleDay> scheduleDaysList, TimeSpan filterStartTime, TimeSpan filterEndTime)
+        public IList<IPerson> GetFilterdPerson(IList<IScheduleDay> scheduleDaysList, TimeSpan filterStartTime, TimeSpan filterEndTime, TimeZoneInfo myTimeZone, DateOnly date)
         {
             var personList = new List<IPerson>();
-            var overnightFilter = isPeriodOvernight(filterEndTime);
-            foreach (var scheduleDay in scheduleDaysList)
+			var filterStartDateTimeLocal = new DateTime(date.Year, date.Month, date.Day).Add(filterStartTime);
+			var filterEndDateTimeLocal = new DateTime(date.Year, date.Month, date.Day).Add(filterEndTime);
+	        var filterUtcPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(filterStartDateTimeLocal,
+		        filterEndDateTimeLocal, myTimeZone);
+
+			foreach (var scheduleDay in scheduleDaysList)
             {
                 var overtimeAvailability =
                     scheduleDay.PersistableScheduleDataCollection().OfType<IOvertimeAvailability>().FirstOrDefault();
@@ -19,22 +23,19 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
                 {
                     var startTime = overtimeAvailability.StartTime.GetValueOrDefault();
                     var endTime = overtimeAvailability.EndTime.GetValueOrDefault();
-                    var overnightShift = isPeriodOvernight(endTime);
-                    if ((overnightShift && overnightFilter) || (!overnightShift && !overnightFilter))
-                    {
-                        if (startTime <= filterStartTime && endTime >= filterEndTime)
-                            personList.Add(overtimeAvailability.Person);
-                    }
-                   
+					var availStartDateTimeLocal = new DateTime(date.Year, date.Month, date.Day).Add(startTime);
+					var availEndDateTimeLocal = new DateTime(date.Year, date.Month, date.Day).Add(endTime);
+	                if (startTime > endTime)
+		                availEndDateTimeLocal = availEndDateTimeLocal.AddDays(1);
+					var availUtcPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(availStartDateTimeLocal,
+		                availEndDateTimeLocal, scheduleDay.Person.PermissionInformation.DefaultTimeZone());
+
+	                if (availUtcPeriod.StartDateTime <= filterUtcPeriod.StartDateTime &&
+						availUtcPeriod.EndDateTime >= filterUtcPeriod.EndDateTime)
+		                personList.Add(overtimeAvailability.Person);
                 }
             }
             return personList;
         }
-
-        private bool isPeriodOvernight(TimeSpan filterEndTime)
-        {
-            return filterEndTime.Days > 0;
-        }
-
     }
 }

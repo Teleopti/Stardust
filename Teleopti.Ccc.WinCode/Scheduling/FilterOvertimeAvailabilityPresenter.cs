@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 _schedules.AddRange(scheduleDays);
             }
             var filter = new OvertimeAvailabilityPersonFilter();
-			var filteredPersons = filter.GetFilterdPerson(_schedules, filterStartTime, filterEndTime);
+			var filteredPersons = filter.GetFilterdPerson(_schedules, filterStartTime, filterEndTime, _schedulerStateHolder.TimeZoneInfo, value);
 			_schedulerStateHolder.FilterPersonsOvertimeAvailability(filteredPersons);
 		}
 	}
