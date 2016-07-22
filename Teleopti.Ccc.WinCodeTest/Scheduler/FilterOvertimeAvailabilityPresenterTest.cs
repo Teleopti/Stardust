@@ -50,9 +50,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
                 Expect.Call(_scheduleDictionary[person]).Return(_scheduleRange);
                 Expect.Call(_scheduleRange.ScheduledDayCollection(dateOnlyPeriod)).Return(new List<IScheduleDay> { _scheduleDay });
+				Expect.Call(_scheduleDay.Person).Return(person);
 
-                
-                Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(persistableCollection);
+				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(persistableCollection);
                 Expect.Call(() => _stateHolder.FilterPersonsOvertimeAvailability(new List<IPerson>())).IgnoreArguments();
             }
             using (_mocks.Playback())
