@@ -78,10 +78,9 @@
 		WfmTeamSchedule_ShowNightlyRestWarning_39619,
 		WebByPassDefaultPermissionCheck_37984,
 		WfmTeamSchedule_RevertToPreviousSchedule_39002,
+		WfmTeamSchedule_ShowShiftCategory_39796,
 		WfmTeamSchedule_ModifyShiftCategory_39797,
 		WfmTeamSchedule_MakeNewMyTeamDefault_39744,
-		WfmTeamSchedule_ShowShiftCategory_39796,
-		Wfm_Requests_Reply_Message_39629,
 
 		WfmReportPortal_Basic_38825,
 		WfmReportPortal_LeaderBoard_39440,
@@ -102,6 +101,7 @@
 		Wfm_Requests_Default_Status_Filter_39472,
 		Wfm_Requests_Show_Pending_Reasons_39473,
 		Wfm_Requests_Approve_Based_On_Budget_Allotment_39626,
+		Wfm_Requests_Reply_Message_39629,
 
 		Wfm_Intraday_38074,
 
