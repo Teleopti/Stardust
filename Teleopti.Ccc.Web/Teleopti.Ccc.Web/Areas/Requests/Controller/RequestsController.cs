@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 		private readonly ILoggedOnUser _loggedOnUser;
 
 		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory,
-
 			IRequestCommandHandlingProvider commandHandlingProvider,
 			ILoggedOnUser loggedOnUser, IShiftTradeRequestViewModelFactory shiftTradeRequestViewModelFactory)
 		{
@@ -39,14 +38,14 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 		}
 
 		[HttpGet, Route("api/Requests/requests"), UnitOfWork]
-		public virtual RequestListViewModel GetRequests([ModelBinder(typeof (AllRequestsFormDataConverter))] AllRequestsFormData input)
+		public virtual RequestListViewModel GetRequests([ModelBinder(typeof(AllRequestsFormDataConverter))] AllRequestsFormData input)
 		{
 			return _requestsViewModelFactory.CreateRequestListViewModel(input);
 		}
 
 		[HttpGet, Route("api/Requests/shiftTradeRequests"), UnitOfWork]
 		public virtual RequestListViewModel GetShiftTradeRequests(
-			[ModelBinder(typeof (AllRequestsFormDataConverter))] AllRequestsFormData input)
+			[ModelBinder(typeof(AllRequestsFormDataConverter))] AllRequestsFormData input)
 		{
 			return _shiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
 		}
@@ -64,9 +63,9 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 		}
 
 		[HttpPost, Route("api/Requests/replyRequests"), UnitOfWork]
-		public virtual RequestCommandHandlingResult ReplyRequests(ReplyRequestsInput input)
+		public virtual RequestCommandHandlingResult ReplyRequests(RequestsCommandInput input)
 		{
-			return _commandHandlingProvider.ReplyRequests(input.RequestIds, input.Message);
+			return _commandHandlingProvider.ReplyRequests(input.RequestIds, input.ReplyMessage);
 		}
 
 		[HttpPost, Route("api/Requests/denyRequests"), UnitOfWork]

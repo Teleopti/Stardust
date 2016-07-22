@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var context = new FakeHttpContext("/");
 			context.SetResponse(response);
 			target.ControllerContext = new ControllerContext(context, new RouteData(), target);
-			target.ModelState.AddModelError("Error", "Error");
+			target.ModelState.AddModelError("Error", @"Error");
 
 			absenceRequestPersister.Stub(x => x.Persist(form)).Throw(new InvalidOperationException());
 
@@ -172,12 +172,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			target.ModelState.AddModelError("Test", message);
 
 			var result = target.TextRequest(new TextRequestForm());
-			var data = result.Data as ModelStateResult;
+			var data = (ModelStateResult)result.Data;
 
 			target.Response.StatusCode.Should().Be(400);
 			target.Response.TrySkipIisCustomErrors.Should().Be.True();
 			data.Errors.Single().Should().Be(message);
-
 		}
 
 		[Test]
@@ -188,12 +187,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			target.ModelState.AddModelError("Test", message);
 
 			var result = target.ShiftTradeRequest(new ShiftTradeRequestForm());
-			var data = result.Data as ModelStateResult;
+			var data = (ModelStateResult)result.Data;
 
 			target.Response.StatusCode.Should().Be(400);
 			target.Response.TrySkipIisCustomErrors.Should().Be.True();
 			data.Errors.Single().Should().Be(message);
-
 		}
 
 		[Test]
@@ -285,7 +283,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			using (var target = new RequestsController(null, null, null, null, shiftTradePersister, new FakePermissionProvider(), null, null, null, null, null))
 			{
-				var result = target.ApproveShiftTrade(new ShiftTradeRequestReplyForm() { ID = id, Message = "" });
+				var result = target.ApproveShiftTrade(new ShiftTradeRequestReplyForm { ID = id, Message = "" });
 				var data = result.Data as RequestViewModel;
 				data.Should().Be.SameInstanceAs(resultData);
 			}
@@ -333,8 +331,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 					HasUnderlyingDayOff = false,
 					MinutesSinceTimeLineStart = 60,
 					Name = "yyy"
-				},
-
+				}
 			};
 
 			requestViewModelFactory.Expect(r => r.CreateShiftTradeRequestSwapDetails(id)).Return(new List<ShiftTradeSwapDetailsViewModel> { shiftTradeSwapDetails });
@@ -392,7 +389,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var result = target.GetShiftTradeRequestMiscSetting(Guid.Empty);
 			var data = (ShiftTradeRequestMiscSetting)result.Data;
-
 			data.AnonymousTrading.Should().Be.True();
 		}
 
@@ -412,9 +408,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldAllowCancelAbsenceRequest()
 		{
 			var person = PersonFactory.CreatePerson("Bill", "Bloggins").WithId();
-			
 			var data = doCancelAbsenceRequestMyTimeSpecificValidation(person, new DateTimePeriod(2016, 03, 02, 2016, 03, 03));
-
 			data.ErrorMessages.Should().Be.Empty();
 		}
 
@@ -423,16 +417,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldValidatePermissionForCancelAbsenceRequest()
 		{
 			var person = PersonFactory.CreatePerson("Bill", "Bloggins").WithId();
-			
 			var data = doCancelAbsenceRequestMyTimeSpecificValidation(person, new DateTimePeriod(2016, 03, 02, 2016, 03, 03), false);
-
 			data.ErrorMessages.Should().Contain(Resources.InsufficientPermission);
 		}
 
 		[Test]
 		public void ShouldValidateCancellationThresholdForCancelAbsenceRequest()
 		{
-
 			setupStateHolderProxy();
 
 			var person = PersonFactory.CreatePerson("Bill", "Bloggins").WithId();
@@ -443,32 +434,28 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			person.WorkflowControlSet = workflowControlSet;
 
 			var today = DateTime.Today.ToUniversalTime();
-			var data = doCancelAbsenceRequestMyTimeSpecificValidation(person, new DateTimePeriod(today, today.AddDays (1)));
+			var data = doCancelAbsenceRequestMyTimeSpecificValidation(person, new DateTimePeriod(today, today.AddDays(1)));
 
 			data.ErrorMessages.Should().Contain(string.Format(Resources.AbsenceRequestCancellationThresholdExceeded, workflowControlSet.AbsenceRequestCancellationThreshold));
 		}
 
-
-
-		private static RequestCommandHandlingResult doCancelAbsenceRequestMyTimeSpecificValidation(IPerson person,  DateTimePeriod period, bool hasPermission = true)
+		private static RequestCommandHandlingResult doCancelAbsenceRequestMyTimeSpecificValidation(IPerson person, DateTimePeriod period, bool hasPermission = true)
 		{
 			var fakePersonRequestRepository = new FakePersonRequestRepository();
 			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
 			var resultData = new RequestViewModel();
 			modelFactory.Stub(x => x.CreateRequestViewModel(Guid.Empty)).IgnoreArguments().Return(resultData);
 
-			var absenceRequest = new AbsenceRequest (AbsenceFactory.CreateAbsence ("Holiday").WithId(), period);
+			var absenceRequest = new AbsenceRequest(AbsenceFactory.CreateAbsence("Holiday").WithId(), period);
 			var personRequest = new PersonRequest(person, absenceRequest).WithId();
-			
-			fakePersonRequestRepository.Add(personRequest);
 
+			fakePersonRequestRepository.Add(personRequest);
 
 			var permissionProvider = new FakePermissionProvider();
 			if (hasPermission)
 			{
-				permissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.MyTimeCancelRequest,new DateOnly(personRequest.RequestedDate), person);
+				permissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.MyTimeCancelRequest, new DateOnly(personRequest.RequestedDate), person);
 			}
-			
 
 			var cancelAbsenceRequestCommandHandler = MockRepository.GenerateMock<IHandleCommand<CancelAbsenceRequestCommand>>();
 			cancelAbsenceRequestCommandHandler.Stub(x => x.Handle(null)).IgnoreArguments();
@@ -477,7 +464,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				null, null,
 				new CancelAbsenceRequestCommandProvider(cancelAbsenceRequestCommandHandler, fakePersonRequestRepository, permissionProvider));
 
-			var result = requestsController.CancelRequest(personRequest.Id.Value);
+			var result = requestsController.CancelRequest(personRequest.Id.GetValueOrDefault());
 			var data = (RequestCommandHandlingResult)result.Data;
 			return data;
 		}

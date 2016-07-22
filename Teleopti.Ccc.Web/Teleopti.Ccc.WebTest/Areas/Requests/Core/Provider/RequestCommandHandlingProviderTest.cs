@@ -61,8 +61,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var person = PersonFactory.CreatePerson("tester");
 			var scheduleDictionary = new FakeScheduleDictionary();
 
-			var requestApprovalService = RequestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(scheduleDictionary,
-				Scenario.Current(), person);
+			var requestApprovalService = RequestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(
+				scheduleDictionary, Scenario.Current(), person);
 
 			var absence = AbsenceFactory.CreateAbsence("absence");
 			var personRequest = createNewAbsenceRequest(person, absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
@@ -82,8 +82,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var person = PersonFactory.CreatePerson("tester");
 			var scheduleDictionary = new FakeScheduleDictionary();
 
-			var requestApprovalService = RequestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(scheduleDictionary,
-				Scenario.Current(), person);
+			var requestApprovalService = RequestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(
+				scheduleDictionary, Scenario.Current(), person);
 
 			var absence = AbsenceFactory.CreateAbsence("absence");
 			var personRequest = createNewAbsenceRequest(person, absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
@@ -103,8 +103,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var person = PersonFactory.CreatePerson("tester");
 			var scheduleDictionary = new FakeScheduleDictionary();
 
-			var requestApprovalService = RequestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(scheduleDictionary,
-				Scenario.Current(), person);
+			var requestApprovalService = RequestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(
+				scheduleDictionary, Scenario.Current(), person);
 
 			var absence = AbsenceFactory.CreateAbsence("absence");
 			var personRequest = createNewAbsenceRequest(person, absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
@@ -126,8 +126,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var person = PersonFactory.CreatePerson("tester");
 			var scheduleDictionary = new FakeScheduleDictionary();
 
-			var requestApprovalService = RequestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(scheduleDictionary,
-				Scenario.Current(), person);
+			var requestApprovalService = RequestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(
+				scheduleDictionary, Scenario.Current(), person);
 
 			var absence = AbsenceFactory.CreateAbsence("absence");
 
@@ -144,7 +144,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 				x => x.ApproveAbsence(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9), person, personRequest2))
 				.Return(new List<IBusinessRuleResponse>());
 
-			var result = Target.ApproveRequests(new List<Guid> { personRequest1.Id.GetValueOrDefault(), personRequest2.Id.GetValueOrDefault() }, string.Empty);
+			var result = Target.ApproveRequests(new List<Guid>
+			{
+				personRequest1.Id.GetValueOrDefault(),
+				personRequest2.Id.GetValueOrDefault()
+			}, string.Empty);
 
 			result.AffectedRequestIds.ToList().Count.Should().Be.EqualTo(2);
 		}
@@ -216,7 +220,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			personRequest1.Pending();
 			personRequest2.Pending();
 
-			var result = Target.DenyRequests(new List<Guid> { personRequest1.Id.GetValueOrDefault(), personRequest2.Id.GetValueOrDefault() }, string.Empty);
+			var result = Target.DenyRequests(new List<Guid>
+			{
+				personRequest1.Id.GetValueOrDefault(),
+				personRequest2.Id.GetValueOrDefault()
+			}, string.Empty);
 
 			result.AffectedRequestIds.ToList().Count.Should().Be.EqualTo(2);
 		}
@@ -248,8 +256,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 
 			person.WorkflowControlSet = createWorkFlowControlSet(new DateTime(2016, 2, 1, 10, 0, 0, DateTimeKind.Utc),
 				DateTime.Today, absence, true);
-			var requestApprovalService = RequestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(scheduleDictionary,
-				Scenario.Current(), person);
+			var requestApprovalService = RequestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(
+				scheduleDictionary, Scenario.Current(), person);
 
 			var dateTimePeriod = new DateTimePeriod(
 				new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
@@ -398,12 +406,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			result.AffectedRequestIds.ToList().Contains(requestId).Should().Be.True();
 
 			var newMessage = personRequest.GetMessage(new NoFormatting());
-			newMessage.Should().Contain(originalMessage);
-			newMessage.Should().Contain(replyMessage);
+			newMessage.Should().Be.EqualTo(originalMessage + "\r\n" + replyMessage);
 		}
 
 		[Test]
-		public void ShouldDoNothingWhenReplayRequestWithEmptyMessage()
+		public void ShouldDoNothingWhenReplyRequestWithEmptyMessage()
 		{
 			const string originalMessage = "Original message\r\nLine 1\r\nLine 2";
 
@@ -435,8 +442,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			bool associatePersonAbsence)
 		{
 			var scheduleDictionary = new FakeScheduleDictionary();
-			var requestApprovalService = RequestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(scheduleDictionary,
-				Scenario.Current(), person);
+			var requestApprovalService = RequestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(
+				scheduleDictionary, Scenario.Current(), person);
 
 			var absence = AbsenceFactory.CreateAbsence("absence");
 			var personRequest = createNewAbsenceRequest(person, absence, dateTimePeriod);
@@ -477,8 +484,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		{
 			var scheduleDictionary = new FakeScheduleDictionary();
 
-			var requestApprovalService = RequestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(scheduleDictionary,
-				Scenario.Current(), person);
+			var requestApprovalService = RequestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(
+				scheduleDictionary, Scenario.Current(), person);
 
 			var absence = AbsenceFactory.CreateAbsence("absence");
 			var personRequest = createNewAbsenceRequest(person, absence, dateTimePeriod);
@@ -499,7 +506,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 
 			var personRequest = createNewAbsenceRequest(person, absence, dateTimePeriod);
 
-			var personAbsence = new PersonAbsence(person, Scenario.Current(), new AbsenceLayer(absence, dateTimePeriod), personRequest);
+			var personAbsence = new PersonAbsence(person, Scenario.Current(),
+				new AbsenceLayer(absence, dateTimePeriod), personRequest);
 			((FakePersonAbsenceRepository)PersonAbsenceRepository).Add(personAbsence);
 
 			person.PersonWriteProtection.PersonWriteProtectedDate = new DateOnly(dateTimePeriod.StartDateTime);
@@ -538,7 +546,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		private static WorkflowControlSet createWorkFlowControlSet(DateTime startDate, DateTime endDate, IAbsence absence,
 			bool isWaitListEnabled)
 		{
-			var workflowControlSet = new WorkflowControlSet { AbsenceRequestWaitlistEnabled = isWaitListEnabled };
+			var workflowControlSet = new WorkflowControlSet
+			{
+				AbsenceRequestWaitlistEnabled = isWaitListEnabled
+			};
 
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
 
