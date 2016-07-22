@@ -387,7 +387,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		}
 
 		[Test]
-		public void ShouldReplayRequest()
+		public void ShouldReplyRequest()
 		{
 			const string originalMessage = "Original message\r\nLine 1\r\nLine 2";
 			const string replyMessage = "Reply message\r\nLine A\r\nLine B";
