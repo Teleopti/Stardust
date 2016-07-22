@@ -1012,15 +1012,10 @@
     </Compile>
     <Compile Include="Wfm\Seat Management\SeatPlanReportStepDefinitions.cs" />
     <Compile Include="Wfm\Seat Management\SeatPlanStepDefinitions.cs" />
-    <Compile Include="Wfm\TeamSchedule\ChangeShiftCategory.feature.cs">
+    <Compile Include="Wfm\TeamSchedule\ShiftCategory.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ChangeShiftCategory.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Wfm\TeamSchedule\ShowShiftCategory.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ShowShiftCategory.feature</DependentUpon>
+      <DependentUpon>ShiftCategory.feature</DependentUpon>
     </Compile>
     <Compile Include="Wfm\TeamSchedule\UndoScheduleChange.feature.cs">
       <AutoGen>True</AutoGen>
@@ -1522,13 +1517,9 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>SeatPlanReport.feature.cs</LastGenOutput>
     </None>
-    <None Include="Wfm\TeamSchedule\ChangeShiftCategory.feature">
+    <None Include="Wfm\TeamSchedule\ShiftCategory.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ChangeShiftCategory.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\TeamSchedule\ShowShiftCategory.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ShowShiftCategory.feature.cs</LastGenOutput>
+      <LastGenOutput>ShiftCategory.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\TeamSchedule\UndoScheduleChange.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

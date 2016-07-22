@@ -207,12 +207,12 @@
             }
 
             th.shift-category-cell-header, td.shift-category-cell{
-                width: 4%;
+                width: 30px;
             }
             
             td.shift-category-cell{
                 text-align: center;
-                cursor: pointer;
+                border-left: 1px solid $gray012;
             }
 
             td.shift-category-cell span{

@@ -322,7 +322,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[When(@"I click on a shift category label")]
 		public void WhenIClickOnAShiftCategoryLabel()
 		{
-			Browser.Interactions.Click("td.shift-category-cell #name");
+			Browser.Interactions.Click("td.shift-category-cell");
 		}
 
 		[When(@"I set shift category as '(.*)'")]

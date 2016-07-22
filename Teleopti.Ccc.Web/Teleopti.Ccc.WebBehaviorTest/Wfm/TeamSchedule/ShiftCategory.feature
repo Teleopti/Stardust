@@ -1,5 +1,5 @@
 ﻿@OnlyRunIfEnabled('WfmTeamSchedule_ShowShiftCategory_39796')
-Feature: ShowShiftCategory
+Feature: ShiftCategory
 	In order to find the mismatched shift
 	As a team leader
 	I want to see the shift category
@@ -44,3 +44,14 @@ Scenario: Show shift category
 	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green' and schedule date '2016-10-09'
 	Then I should see a shift category named 'DY'
+
+@OnlyRunIfEnabled('WfmTeamSchedule_ModifyShiftCategory_39797')
+Scenario: Should be able to change shift category via label
+	When I view wfm team schedules
+	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
+	And I click on a shift category label
+	And I set shift category as 'Night'
+	And I apply the new shift category
+	Then I should see a shift category named 'NT'
+
+# Scenario: Should be able to change shift category via command menu
