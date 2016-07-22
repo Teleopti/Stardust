@@ -67,7 +67,11 @@
 				vm.afterSelectedDateChange();
 			}
 
-			vm.showInputTimeErrorMessage = currentDayStart > currentDayEnd
+			if(vm.toggleDateRangePicker){
+				vm.showInputTimeErrorMessage = false;
+			}else{
+				vm.showInputTimeErrorMessage = currentDayStart > currentDayEnd
+			}
 		};
 
 		vm.afterSelectedDateChange = function() {
