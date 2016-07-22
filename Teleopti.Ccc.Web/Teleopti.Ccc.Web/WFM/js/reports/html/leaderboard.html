@@ -44,6 +44,10 @@
 					<input type="text" ng-model="vm.shortDateFormatStart" ng-change="vm.afterShortDateStringChange()"> 
 					<input type="text" ng-model="vm.shortDateFormatEnd" ng-change="vm.afterShortDateStringChange()"> 
 
+					<div ng-if="vm.showInputTimeErrorMessage" class="error-msg-container error-msg-popup-container alert-error notice-spacer">
+						<i class="mdi mdi-alert-octagon"></i><span>{{'StartDateMustBeEqualToOrEarlierThanEndDate' | translate}}</span>
+					</div>
+
 					<date-range-picker ng-model="vm.selectedPeriod" ng-change="vm.afterSelectedDateChange()" template-type="vm.dateRangePickerTemplateType" ng-show="vm.toggleDateRangePicker" ng-click="$event.stopPropagation()"></date-range-picker>
 				</span>
 			</div>

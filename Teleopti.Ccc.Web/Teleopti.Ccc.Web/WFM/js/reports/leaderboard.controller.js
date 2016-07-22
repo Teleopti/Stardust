@@ -11,6 +11,7 @@
 		vm.selectedDate = new Date();
 		vm.dateRangePickerTemplateType = "inline";
 		vm.toggleDateRangePicker = false;
+		vm.showInputTimeErrorMessage = false;
 		vm.isLeaderBoardEnabled = ToggleSvc.WfmReportPortal_LeaderBoard_39440;
 
 		vm.searchOptions = {
@@ -29,7 +30,18 @@
 
 		vm.toggleDateRangePickerFn = function($event){
 			$event.stopPropagation();
-			vm.toggleDateRangePicker = !vm.toggleDateRangePicker
+			vm.toggleDateRangePicker = !vm.toggleDateRangePicker;
+
+			if(vm.toggleDateRangePicker){
+				vm.showInputTimeErrorMessage = false;
+
+				if(!vm.selectedPeriod){
+					vm.selectedPeriod = {
+						startDate: new Date(vm.shortDateFormatStart), 
+						endDate: new Date(vm.shortDateFormatEnd) 
+					};
+				}
+			}
 		};
 
 		vm.afterShortDateStringChange = function() {
@@ -54,6 +66,8 @@
 				vm.selectedPeriod = newSelectedPeriod;
 				vm.afterSelectedDateChange();
 			}
+
+			vm.showInputTimeErrorMessage = currentDayStart > currentDayEnd
 		};
 
 		vm.afterSelectedDateChange = function() {
