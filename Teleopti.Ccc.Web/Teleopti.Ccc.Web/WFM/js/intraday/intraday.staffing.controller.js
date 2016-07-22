@@ -117,7 +117,9 @@
 				$scope.runIntradayFetch = function() {
 					initArrays();
 					var actualDate = moment($scope.intervalDate).format('YYYY-MM-DD');
-					var actualId = $scope.skillIsSelected ? $scope.selectedSkill.Id : $scope.selectedSkillArea.Id ;
+					if (($scope.selectedSkill === null || $scope.selectedSkill === undefined) && ($scope.selectedSkillArea === null || $scope.selectedSkillArea === undefined))
+						return;
+					var actualId = $scope.skillIsSelected ? $scope.selectedSkill.Id : $scope.selectedSkillArea.Id;
 					$scope.loading = true;
 					if (actualId) {
 						if ($scope.skillIsSelected) {
