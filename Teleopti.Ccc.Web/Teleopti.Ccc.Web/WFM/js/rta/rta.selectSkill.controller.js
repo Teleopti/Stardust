@@ -5,15 +5,19 @@
 			'$scope', '$state', 'RtaService', '$timeout',
 			function ($scope, $state, RtaService, $timeout) {
 				$scope.skills = [];
-				$scope.skillAreas = []
+				$scope.skillAreas = [];
+				$scope.skillsLoaded = false;
+				$scope.skillAreasLoaded = false;
 
 				RtaService.getSkills()
 					.then(function(skills) {
+						$scope.skillsLoaded = true;
 						$scope.skills = skills;
-					});
+					});			
 
 				RtaService.getSkillAreas()
 					.then(function (skillAreas) {
+						$scope.skillAreasLoaded = true;
 						$scope.skillAreas = skillAreas.SkillAreas;
 					});
 

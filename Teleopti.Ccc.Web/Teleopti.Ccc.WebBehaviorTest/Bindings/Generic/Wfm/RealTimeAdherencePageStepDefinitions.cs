@@ -229,6 +229,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[When(@"I select skill area '(.*)'")]
 		public void WhenISelectSkillArea(string skillAreaName)
 		{
+			Browser.Interactions.AssertExists("[skillAreasLoaded='true']");
 			Browser.Interactions.Click("#skill-area-input");
 			Browser.Interactions.ClickContaining(".rta-skill-area-item", skillAreaName);
 		}
@@ -236,6 +237,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[When(@"I select skill '(.*)'")]
 		public void WhenISelectSkill(string skillName)
 		{
+			Browser.Interactions.AssertExists("[skillsLoaded='true']");
 			Browser.Interactions.Click("#skill-input");
 			Browser.Interactions.ClickContaining(".rta-skill-item", skillName);
 		}

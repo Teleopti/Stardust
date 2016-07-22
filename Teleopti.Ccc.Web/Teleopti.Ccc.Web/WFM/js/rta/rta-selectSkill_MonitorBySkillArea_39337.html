@@ -22,6 +22,8 @@
 					<div class="con-row">
 						<span class="con-flex">
 							<md-autocomplete id="skill-id"
+											 ng-disabled="!skillsLoaded"
+											 ng-attr-skillsLoaded="{{skillsLoaded}}"
 											 class="autocomplete-skill"
 											 md-input-id="skill-input"
 											 md-selected-item="selectedSkill"
@@ -30,7 +32,7 @@
 											 md-items="skill in querySearch(searchSkillText, skills)"
 											 md-item-text="skill.Name"
 											 md-min-length="0"
-											 placeholder="{{'SelectSkill'|translate}}">
+											 placeholder="{{skillsLoaded ? 'SelectSkill' : 'LoadingSkills' | translate}}">
 								<md-item-template>
 									<span class="rta-skill-item" md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
 								</md-item-template>
@@ -41,6 +43,8 @@
 						</span>
 						<span class="con-flex">
 							<md-autocomplete id="skill-area-id"
+											ng-disabled="!skillAreasLoaded"
+											ng-attr-skillAreasLoaded="{{skillAreasLoaded}}"
 											class="autocomplete-skillarea"
 											md-input-id="skill-area-input"
 											md-selected-item="selectedSkillArea"
@@ -49,7 +53,7 @@
 											md-items="skillArea in querySearch(searchSkillAreaText, skillAreas)"
 											md-item-text="skillArea.Name"
 											md-min-length="0"
-											placeholder="{{'SelectSkillArea'|translate}}">
+											placeholder="{{skillAreasLoaded ? 'SelectSkillArea' : 'LoadingSkillAreas' | translate}}">
 								<md-item-template>
 									<span class="rta-skill-area-item" md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skillArea.Name}}</span>
 								</md-item-template>

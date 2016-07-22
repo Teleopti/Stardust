@@ -21,7 +21,10 @@
 				<div class="con-flex">
 					<div class="con-row">
 						<span class="con-flex">
-							<md-autocomplete id="skill-id"
+							<md-autocomplete
+											 id="skill-id"
+											 ng-disabled="!skillsLoaded"
+											 ng-attr-skillsLoaded="{{skillsLoaded}}"
 											 class="autocomplete-skill"
 											 md-selected-item="selectedSkill"
                                              md-input-id="skill-input"
@@ -30,7 +33,7 @@
 											 md-items="skill in querySearch(searchSkillText, skills)"
 											 md-item-text="skill.Name"
 											 md-min-length="0"
-											 placeholder="{{'SelectSkill'|translate}}">
+											 placeholder="{{skillsLoaded ? 'SelectSkill' : 'LoadingSkills' | translate}}">
 								<md-item-template>
 									<span class="rta-skill-item" md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
 								</md-item-template>

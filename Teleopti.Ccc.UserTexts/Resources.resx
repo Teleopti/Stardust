@@ -14711,8 +14711,8 @@ These options are activated:
     <comment>Succeed message for changing shift categories in wfm/teamschedule</comment>
   </data>
   <data name="MultipleSeatsSelected" xml:space="preserve">
-  <value>(Multiple Seats Selected)</value>
-  <comment>Used in the properties panel within the seat map editor.  Gives a hint to the user that they cannot edit some seat properties as they have multiple seats selected.</comment>
+    <value>(Multiple Seats Selected)</value>
+    <comment>Used in the properties panel within the seat map editor.  Gives a hint to the user that they cannot edit some seat properties as they have multiple seats selected.</comment>
   </data>
   <data name="SeatNumber" xml:space="preserve">
     <value>Seat Number</value>
@@ -14741,5 +14741,13 @@ These options are activated:
   <data name="SelectACategory" xml:space="preserve">
     <value>Select a category</value>
     <comment>Select a category placeholder text in edit shift category command panel</comment>
+  </data>
+  <data name="LoadingSkills" xml:space="preserve">
+    <value>Loading skills...</value>
+    <comment>Loading skills</comment>
+  </data>
+  <data name="LoadingSkillAreas" xml:space="preserve">
+    <value>Loading skill areas...</value>
+    <comment>Loading skill areas</comment>
   </data>
 </root>

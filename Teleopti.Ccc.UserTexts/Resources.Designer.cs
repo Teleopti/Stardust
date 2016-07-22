@@ -14074,11 +14074,29 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Loading skill areas....
+        /// </summary>
+        public static string LoadingSkillAreas {
+            get {
+                return ResourceManager.GetString("LoadingSkillAreas", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Loading Forecast Data....
         /// </summary>
         public static string LoadingSkillDataTreeDots {
             get {
                 return ResourceManager.GetString("LoadingSkillDataTreeDots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Loading skills....
+        /// </summary>
+        public static string LoadingSkills {
+            get {
+                return ResourceManager.GetString("LoadingSkills", resourceCulture);
             }
         }
         
