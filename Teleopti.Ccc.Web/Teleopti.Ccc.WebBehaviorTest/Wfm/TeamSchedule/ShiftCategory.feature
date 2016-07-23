@@ -13,6 +13,11 @@ Background:
 	| Access to Wfm MyTeam Schedule | true           |
 	And there is a shift category with
     | Field      | Value |
+    | Name       | Night |
+    | Short name | NT    |
+    | Color      | Blue  |
+And there is a shift category with
+    | Field      | Value |
     | Name       | Day   |
     | Short name | DY    |
     | Color      | Green |
@@ -24,10 +29,10 @@ Background:
 	And there is a contract named 'A contract'
 	And 'John Smith' has a workflow control set publishing schedules until '2016-12-01'
 	And 'John Smith' has a person period with
-	| Field                | Value                |
-	| Team                 | Team green           |
-	| Start date           | 2016-01-01           |
-	| Contract             | A contract           |
+	| Field      | Value      |
+	| Team       | Team green |
+	| Start date | 2016-01-01 |
+	| Contract   | A contract |
 	And John Smith has a schedule period with 
 	| Field      | Value      |
 	| Start date | 2016-01-01 |
@@ -48,7 +53,7 @@ Scenario: Show shift category
 @OnlyRunIfEnabled('WfmTeamSchedule_ModifyShiftCategory_39797')
 Scenario: Should be able to change shift category via label
 	When I view wfm team schedules
-	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
+	And I searched schedule with keyword 'Team green' and schedule date '2016-10-09'
 	And I click on a shift category label
 	And I set shift category as 'Night'
 	And I apply the new shift category
