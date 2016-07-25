@@ -113,14 +113,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		}
 
 		[Test]
-		public void ShouldBeInvalidWhenInvalidated()
-		{
-			Target.Invalid().Should().Be(false);
-			Target.Invalidate();
-			Target.Invalid().Should().Be(true);
-		}
-
-		[Test]
 		public void ShouldBeValidAfterPersist()
 		{
 			var businessUnit = Guid.NewGuid();
@@ -151,6 +143,46 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			});
 
 			Target.Invalid().Should().Be(false);
+		}
+
+		[Test]
+		public void ShouldBeInvalidWhenInvalidated()
+		{
+			var businessUnit = Guid.NewGuid();
+			var platformType = Guid.NewGuid();
+			var group = Guid.NewGuid();
+			var activity = Guid.NewGuid();
+			var rule = Guid.NewGuid();
+
+			Target.Invalidate();
+
+			Target.Persist(new[]
+			{
+				new Mapping
+				{
+					BusinessUnitId = businessUnit,
+					StateCode = "0",
+					PlatformTypeId = platformType,
+					StateGroupId = group,
+					ActivityId = activity,
+					RuleId = rule,
+					RuleName = "phone",
+					Adherence = Adherence.In,
+					StaffingEffect = 0,
+					DisplayColor = Color.Green.ToArgb(),
+					IsAlarm = false,
+					AlarmColor = Color.Red.ToArgb()
+				}
+			});
+
+			Target.Invalidate();
+			Target.Invalid().Should().Be(true);
+		}
+
+		[Test]
+		public void ShouldBeInvalidWithEmptyMapping()
+		{
+			Target.Invalid().Should().Be(true);
 		}
 	}
 }

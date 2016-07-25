@@ -25,8 +25,14 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 
 		public bool Invalid()
 		{
-			return 1 == _unitOfWork.Current()
+			var isInvalido = 1 == _unitOfWork.Current()
 				.CreateSqlQuery("SELECT COUNT(1) FROM [ReadModel].[KeyValueStore] WHERE [Key] = 'RuleMappingsInvalido'")
+				.UniqueResult<int>();
+			if (isInvalido)
+				return true;
+
+			return 0 == _unitOfWork.Current()
+				.CreateSqlQuery("SELECT COUNT(1) FROM [ReadModel].[RuleMappings]")
 				.UniqueResult<int>();
 		}
 
