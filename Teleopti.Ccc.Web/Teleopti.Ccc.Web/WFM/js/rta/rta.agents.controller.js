@@ -170,10 +170,7 @@
 				if (siteIds.length > 1) {
 					$scope.multipleSitesName = "Multiple Sites";
 					updateBreadCrumb = function() {};
-				} else if (teamIds.length > 1) {
-					$scope.multipleTeamsName = "Multiple Teams";
-					updateBreadCrumb = function() {};
-				} else if (siteIds.length === 1 && teamIds.length !== 1) {
+				} else if (teamIds.length > 1 || (siteIds.length === 1 && teamIds.length !== 1)) {
 					$scope.multipleTeamsName = "Multiple Teams";
 					updateBreadCrumb = function() {};
 				}
