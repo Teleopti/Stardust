@@ -7,7 +7,6 @@ describe('RtaAgentsCtrl', function() {
 		$fakeBackend,
 		$controllerBuilder,
 		scope;
-
 	var stateParams = {};
 
 	beforeEach(module('wfm.rta'));
@@ -85,7 +84,7 @@ describe('RtaAgentsCtrl', function() {
 		expect(scope.multipleSitesName).toEqual("Multiple Sites");
 	});
 
-		it('should set team and site name', function() {
+	it('should set team and site name', function() {
 			stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
 			stateParams.siteId = "d970a45a-90ff-4111-bfe1-9b5e015ab45c";
 			$fakeBackend.withAgent({
@@ -100,5 +99,23 @@ describe('RtaAgentsCtrl', function() {
 
 			expect(scope.teamName).toEqual("Team Preferences");
 			expect(scope.siteName).toEqual("London");
-		});
+	});
+
+	it('should hide Breadcrumb', function() {
+		stateParams.skillId = "3f15b334-22d1-4bc1-8e41-72359805d30c";
+		$fakeBackend.withSkills([
+			{
+				Id: "1f15b334-22d1-4bc1-8e41-72359805d30f",
+				Name: "skill a"
+			},
+			{
+				Id: "3f15b334-22d1-4bc1-8e41-72359805d30c",
+				Name: "skill b"
+			}
+		]);
+
+		$controllerBuilder.createController();
+		expect(scope.showBreadcrumb).toEqual(false);
+		expect(scope.skillName).toEqual("skill b");
+	});
 });
