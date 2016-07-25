@@ -13,9 +13,8 @@
 	</div>
 
 	<div data-bind="if: !missingWorkflowControlSet() && isReadyLoaded()">
-		<table class="table-condensed">
-			<tr>
-				<td>
+			<div class="row">
+				<div class="col-md-4">
 					<div style="margin-bottom: 10px" class="input-group">
 						<span class="input-group-btn">
 							<button class="bulletin-previous-date btn" data-bind="click: previousDate, clickable: previousDateValid, enable: previousDateValid">
@@ -33,8 +32,8 @@
 							</button>
 						</span>
 					</div>
-				</td>
-				<td data-bind="visible: !isDetailVisible()">
+				</div>
+				<div class="col-md-4" data-bind="visible: !isDetailVisible()">
 					<div class="dropdown filter-time-dropdown-button" data-bind="click: filterStartEndTimeClick">
 						<a class="dropdown-toggle btn" data-toggle="dropdown" href="#" style="color: black">
 							@Resources.StartTime
@@ -49,8 +48,8 @@
 							</li>
 						</ul>
 					</div>
-				</td>
-				<td data-bind="visible: !isDetailVisible()">
+				</div>
+				<div class="col-md-4" data-bind="visible: !isDetailVisible()">
 					<div class="dropdown filter-time-dropdown-button" data-bind="click: filterStartEndTimeClick">
 						<a class="dropdown-toggle btn" data-toggle="dropdown" href="#" style="color: black">
 							@Resources.EndTime
@@ -65,9 +64,8 @@
 							</li>
 						</ul>
 					</div>
-				</td>	  
-			</tr>
-		</table>
+				</div>
+			</div>
 	</div>
 	<div data-bind="visible: isReadyLoaded(), fadeInIf: !IsLoading(), fadeInDuration: 150, fadeOutDuration: 50">
 		<div class="shift-trade-add-schedule" data-bind="visible: !missingWorkflowControlSet()">
@@ -105,7 +103,7 @@
 								<!--/ko-->
 							</div>
 							<!--/ko-->
-							
+
 							<!--ko if:!mySchedule().isFullDayAbsence-->
 							<div data-bind="foreach: mySchedule().layers">
 								<div class="shift-trade-layer-container floatleft">
@@ -120,7 +118,7 @@
 							<!--/ko-->
 						</td>
 						<!--/ko-->
-						
+
 						<!--ko if: !Toggle36662Enabled()-->
 						<td class="shift-trade-my-schedule">
 							<div data-bind="foreach: mySchedule().layers">
@@ -203,7 +201,7 @@
 				<div class="error" data-bind="html: errorMessage"></div>
 			</div>
 		</div>
-		
+
 		<div class="shift-trade-no-possible-trades alert alert-info" data-bind="visible: noPossibleShiftTrades()">
 			@Resources.NoAgentsAvailableForBulletinBoard
 		</div>

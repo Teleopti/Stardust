@@ -2,10 +2,6 @@
 	outline: solid 1px rgba(0, 0, 0, 0.15);
 }
 
-.request {
-	min-width: 480px;
-}
-
 .request-body-inner ol {
 	list-style: none;
 	margin-left: 0em;

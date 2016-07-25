@@ -64,18 +64,18 @@
 					<a id="addShiftTradeRequest" href="#" class="shifttrade-request-add" data-bind="click: addShiftTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
 				</li>
 			}
-			
+
 			@if (Model.RequestPermission.ShiftTradeBulletinBoardPermission)
 			{
 				<li data-bind="css: { active: addShiftTradeBulletinBoardActive }" class="col-xs-12 col-sm-4">
 					<a id="addShiftTradeRequestFromBulletinBoard" href=" #" class="shifttradebulletinboard-request-add" data-bind="click: addShiftTradeBulletinBoardRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeBulletinBoard</a>
-				</li>				
-				
+				</li>
+
 				<li data-bind="css: { active: addPostShiftForTradeActive }" class="col-xs-12 col-sm-4">
 					<a id="addPostShiftForTrade" href=" #" class="postshiftfortrade-request-add" data-bind="click: addPostShiftForTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AnnounceShift</a>
 				</li>
 			}
-			
+
 		</ul>
 	</div>
 </div>
@@ -105,7 +105,7 @@
 			</div>
 			<div class="request-list" data-bind="foreach: ColumnRequests">
 				<div class="row" data-bind="foreach: Items">
-					<div class="request col-lg-6">
+					<div class="request col-md-6">
 						<div class="well well-small">
 							<div class="request-body" data-bind="click: ShowDetails" style="cursor: pointer">
 								<div data-bind="if: CanDelete">
@@ -135,7 +135,7 @@
 								</div>
 
 								<div class="alert alert-danger" role="alert" data-bind="visible: ErrorMessage()!=null">
-									
+
 									<span data-bind="text: ErrorMessage()"></span>
 									<span class="pull-right">
 										<a href="#" class="alert-link" data-bind="click: $root.SwitchErrorMessageVisibility, clickBubble: false">@Resources.Dismiss</a>
