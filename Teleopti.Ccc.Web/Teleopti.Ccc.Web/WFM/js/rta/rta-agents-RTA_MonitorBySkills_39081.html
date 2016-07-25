@@ -28,18 +28,13 @@
 </div>
 <div class="panel material-depth-1">
 	<div class="sub-header" ng-show="showBreadcrumb">
-		<div ng-if="siteName && teamName">
-			<a class="rta-nav-link" href="{{goBackToRootWithUrl()}}">{{'RealTimeAdherence'|translate}}</a> /
-			<a class="rta-nav-link" href="{{goBackToTeamsWithUrl}}">{{siteName}}</a> /
+		<div>
+			<a class="rta-nav-link" href="{{goBackToRootWithUrl()}}">{{'RealTimeAdherence'|translate}}</a>
+			/
+			<a class="rta-nav-link" ng-if="showPath" href="{{goBackToTeamsWithUrl}}">{{siteName}}</a>
+			<span ng-if="!showPath">{{siteName}}</span>
+			<span ng-if="showPath">/</span>
 			<span>{{teamName}}</span>
-		</div>
-		<div ng-if="multipleSitesName">
-			<a class="rta-nav-link" href="{{goBackToRootWithUrl()}}">{{'RealTimeAdherence'|translate}}</a> /
-			<span>{{multipleSitesName}}</span>
-		</div>
-		<div ng-if="multipleTeamsName">
-			<a class="rta-nav-link" href="{{goBackToRootWithUrl()}}">{{'RealTimeAdherence'|translate}}</a> /
-			<span>{{multipleTeamsName}}</span>
 		</div>
 	</div>
 	<div class="con-row" ng-show="showGrid" style="padding-top:10px">

@@ -35,6 +35,7 @@
 				$scope.pause = false;
 				$scope.pausedAt = null;
 				var lastUpdate, notice;
+				$scope.showPath = false;
 
 				$scope.noSiteIds = siteIds.length == 0;
 				$scope.monitorBySkill = toggleService.RTA_MonitorBySkills_39081;
@@ -162,18 +163,16 @@
 				};
 
 				var updateBreadCrumb = function(agentsInfo) {
-					if (agentsInfo.length > 0) {
+					if (siteIds.length > 1) {
+						$scope.siteName = "Multiple Sites";
+					} else if (teamIds.length > 1 || (siteIds.length === 1 && teamIds.length !== 1)) {
+						$scope.teamName = "Multiple Teams";
+					} else if (agentsInfo.length > 0) {
 						$scope.siteName = agentsInfo[0].SiteName;
 						$scope.teamName = agentsInfo[0].TeamName;
+						$scope.showPath = true;
 					}
 				};
-				if (siteIds.length > 1) {
-					$scope.multipleSitesName = "Multiple Sites";
-					updateBreadCrumb = function() {};
-				} else if (teamIds.length > 1 || (siteIds.length === 1 && teamIds.length !== 1)) {
-					$scope.multipleTeamsName = "Multiple Teams";
-					updateBreadCrumb = function() {};
-				}
 
 				if (skillIds.length === 1) {
 					RtaService.getSkillName(skillIds[0])

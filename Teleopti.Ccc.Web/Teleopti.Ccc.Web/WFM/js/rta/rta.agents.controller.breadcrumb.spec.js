@@ -52,7 +52,7 @@ describe('RtaAgentsCtrl', function() {
 
 		$controllerBuilder.createController();
 
-		expect(scope.multipleTeamsName).toEqual("Multiple Teams");
+		expect(scope.teamName).toEqual("Multiple Teams");
 	});
 
 	it('should set to multiple teams when selecting one site', function() {
@@ -60,7 +60,7 @@ describe('RtaAgentsCtrl', function() {
 
 		$controllerBuilder.createController();
 
-		expect(scope.multipleTeamsName).toEqual("Multiple Teams");
+		expect(scope.teamName).toEqual("Multiple Teams");
 	});
 
 	xit('should set site name when selecting one site', function() {
@@ -81,7 +81,7 @@ describe('RtaAgentsCtrl', function() {
 
 		$controllerBuilder.createController();
 
-		expect(scope.multipleSitesName).toEqual("Multiple Sites");
+		expect(scope.siteName).toEqual("Multiple Sites");
 	});
 
 	it('should set team and site name', function() {
