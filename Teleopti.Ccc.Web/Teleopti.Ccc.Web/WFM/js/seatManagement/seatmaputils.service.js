@@ -621,39 +621,38 @@
 			};
 
 
-			function updateSeatNumberOnDelete(canvas, removedSeatIds, allSeats) {
+	        function updateSeatNumberOnDelete(canvas, removedSeatIds, allSeats) {
+	            allSeats.sort(function(a, b) { return parseInt(a.Priority) - parseInt(b.Priority) });
 
-				allSeats.sort(function (a, b) { return parseInt(a.Priority) - parseInt(b.Priority) });
+	            removedSeatIds.forEach(function(removedSeatId) {
+	                var deletedSeatObj = null;
+	                var previousSeatNumber = 0;
 
-				removedSeatIds.forEach(function (removedSeatId) {
-					var deletedSeatObj = null;
-					var previousSeatNumber = 0;
+	                for (var i = 0; i < allSeats.length; i++) {
+	                    var seatObj = allSeats[i];
 
-					for (var i = 0; i < allSeats.length; i++) {
-						var seatObj = allSeats[i];
+	                    if (seatObj.Id === removedSeatId) {
+	                        deletedSeatObj = seatObj;
+	                        previousSeatNumber = parseInt(seatObj.Priority);
+	                        continue;
+	                    }
 
-						if (seatObj.Id === removedSeatId) {
-							deletedSeatObj = seatObj;
-							previousSeatNumber = parseInt(seatObj.Priority);
-							continue;
-						}
+	                    if (deletedSeatObj != null) {
+	                        var seatNumber = parseInt(seatObj.Priority);
+	                        // update seat number only when it's continuous
+	                        if (seatNumber === ++previousSeatNumber) {
+	                            updateSeatInformation(canvas, seatObj, seatNumber - removedSeatIds.length + removedSeatIds.indexOf(removedSeatId));
+	                        }
+	                    }
+	                };
 
-						if (deletedSeatObj != null) {
-							var seatNumber = parseInt(seatObj.Priority);
-							// update seat number only when it's continuous
-							if (seatNumber === ++previousSeatNumber) {
-								updateSeatInformation(canvas, seatObj, seatNumber - 1);
-							}
-						}
-					};
+	            });
 
-				});
-
-				canvas.renderAll();
-			}
+	            canvas.renderAll();
+	        }
 
 
-			function selectMultipleSeatsForScenarioTest(canvas, seatNumber) {
+	        function selectMultipleSeatsForScenarioTest(canvas, seatNumber) {
 				var seatmapOccupancyScope = angular.element(document.getElementsByClassName('seatmap-occupancy-detail')).scope();
 				seatmapOccupancyScope.vm.previousSelectedSeatIds = [];
 				getObjectsByType(canvas, 'seat').slice(0, seatNumber).forEach(function (seat) {
