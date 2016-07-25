@@ -32,10 +32,10 @@
 
 		Teleopti.MyTimeWeb.Asm.ListenForScheduleChanges(
             {
-                notifyText: '@Resources.ShiftTradeRequestScheduleChanged', 
+                notifyText: '@Resources.ShiftTradeRequestScheduleChanged',
                 originalDocumentTitle: document.title,
-                baseUrl: '@Url.Content("~/")', 
-                header: '@Resources.Teleopti' 
+                baseUrl: '@Url.Content("~/")',
+                header: '@Resources.Teleopti'
             },
             function (notification) {
                 Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification, true);
@@ -67,7 +67,9 @@
 		</div>
 		<div class="asm-sliding-schedules" data-bind="style: { left : canvasPosition }">
 			<span data-bind="foreach: layers">
-				<span class="asm-layer ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}"></span>
+				<span class="asm-layer tabindex="0" ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}">
+          <span class="tip" data-bind="text: title"></span>
+        </span>
 			</span>
 			<span data-bind="foreach: hours">
 				<span class="asm-timeline-line">
