@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
@@ -77,11 +78,11 @@ INSERT INTO [ReadModel].[RuleMappings] (
 			{
 				query
 					.SetParameter("BusinessUnitId", mapping.BusinessUnitId)
-					.SetParameter("StateCode", mapping.StateCode)
+					.SetParameter("StateCode", mapping.StateCode ?? MappingReadModelReader.MagicString)
 					.SetParameter("PlatformTypeId", mapping.PlatformTypeId)
 					.SetParameter("StateGroupId", mapping.StateGroupId)
 					.SetParameter("StateGroupName", mapping.StateGroupName)
-					.SetParameter("ActivityId", mapping.ActivityId)
+					.SetParameter("ActivityId", mapping.ActivityId ?? Guid.Empty)
 					.SetParameter("RuleId", mapping.RuleId)
 					.SetParameter("RuleName", mapping.RuleName)
 					.SetParameter("Adherence", mapping.Adherence)

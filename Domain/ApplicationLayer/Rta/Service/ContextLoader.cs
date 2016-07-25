@@ -51,6 +51,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return dataSourceId;
 		}
 
+		[ReadModelUnitOfWork]
+		protected virtual T WithReadModelUnitOfWork<T>(Func<T> action)
+		{
+			return action.Invoke();
+		}
+
 		[AllBusinessUnitsUnitOfWork]
 		protected virtual void WithUnitOfWork(Action action)
 		{
@@ -87,7 +93,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 										new[] {s.Schedule.CurrentActivityId(), s.Schedule.PreviousActivityId(), s.Schedule.NextActivityId()}
 											.Distinct()
 											.ToArray();
-									return _mappingReader.ReadFor(stateCodes, activities);
+									return WithReadModelUnitOfWork(() => _mappingReader.ReadFor(stateCodes, activities));
 								});
 							},
 							c => _agentStatePersister.Persist(c.MakeAgentState()),

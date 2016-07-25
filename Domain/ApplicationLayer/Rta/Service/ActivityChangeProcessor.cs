@@ -1,3 +1,4 @@
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.DistributedLock;
 
@@ -23,7 +24,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[RecurringJob]
-		public void Handle(TenantMinuteTickEvent @event)
+		[ReadModelUnitOfWork]
+		public virtual void Handle(TenantMinuteTickEvent @event)
 		{
 			_distributedLock.TryLockForTypeOf(this, CheckForActivityChanges);
 		}

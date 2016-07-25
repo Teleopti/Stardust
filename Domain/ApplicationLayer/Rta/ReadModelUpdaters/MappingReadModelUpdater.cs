@@ -116,21 +116,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 
 					return activitiesMatch && statesMatch;
 				})
+				let businessUnitId = (mapping as RtaMap)?.BusinessUnit.Id ?? s.BusinessUnitId
+				let ruleId = mapping?.RtaRule.Id ?? Guid.Empty
+				let ruleName = mapping?.RtaRule?.Description.Name
+				let staffingEffect = mapping?.RtaRule?.StaffingEffect
+				let adherence = mapping?.RtaRule?.Adherence
+				let displayColor = mapping?.RtaRule?.DisplayColor.ToArgb() ?? 0
+				let isAlarm = mapping?.RtaRule?.IsAlarm ?? false
+				let thresholdTime = (long)(mapping?.RtaRule?.ThresholdTime.Ticks ?? 0)
+				let alarmColor = mapping?.RtaRule?.AlarmColor.ToArgb() ?? 0
 				select new Mapping
 				{
-					BusinessUnitId = (mapping as RtaMap)?.BusinessUnit.Id ?? s.BusinessUnitId,
+					BusinessUnitId = businessUnitId,
 					ActivityId = a,
 					StateCode = s.StateCode,
 					StateGroupId = s.StateGroupId,
 					StateGroupName = s.StateGroupName,
-					RuleId = mapping?.RtaRule.Id ?? Guid.Empty,
-					RuleName = mapping?.RtaRule.Description.Name,
-					StaffingEffect = mapping?.RtaRule.StaffingEffect,
-					Adherence = mapping?.RtaRule.Adherence,
-					DisplayColor = mapping?.RtaRule.DisplayColor.ToArgb() ?? 0,
-					IsAlarm = mapping?.RtaRule.IsAlarm ?? false,
-					ThresholdTime = (long) (mapping?.RtaRule.ThresholdTime.TotalSeconds ?? 0),
-					AlarmColor = mapping?.RtaRule.AlarmColor.ToArgb() ?? 0,
+					RuleId = ruleId,
+					RuleName = ruleName,
+					StaffingEffect = staffingEffect,
+					Adherence = adherence,
+					DisplayColor = displayColor,
+					IsAlarm = isAlarm,
+					ThresholdTime = thresholdTime,
+					AlarmColor = alarmColor,
 					PlatformTypeId = s.PlatformTypeId
 				};
 
