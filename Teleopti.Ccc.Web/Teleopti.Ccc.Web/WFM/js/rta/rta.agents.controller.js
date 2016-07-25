@@ -38,7 +38,7 @@
 
 				$scope.noSiteIds = siteIds.length == 0;
 				$scope.monitorBySkill = toggleService.RTA_MonitorBySkills_39081;
-				$scope.showBreadcrumb = siteIds.length > 0 || teamIds.length > 1 || (siteIds.length === 1 && teamIds.length === 1) || skillIds === [];
+				$scope.showBreadcrumb = siteIds.length > 0 || teamIds.length > 0 || (siteIds.length === 1 && teamIds.length === 1) || skillIds === [];
 				$scope.showGrid = !$scope.showBreadcrumb;
 				$scope.skillName = "";
 				$scope.skillAreaName = "";
