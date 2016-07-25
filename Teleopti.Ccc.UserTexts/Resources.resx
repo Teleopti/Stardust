@@ -14750,4 +14750,8 @@ These options are activated:
     <value>Loading skill areas...</value>
     <comment>Loading skill areas</comment>
   </data>
+  <data name="BackToList" xml:space="preserve">
+    <value>Back To List</value>
+    <comment>Back to overview list button name in outboud campain create and edit page</comment>
+  </data>
 </root>

@@ -3675,6 +3675,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Back To List.
+        /// </summary>
+        public static string BackToList {
+            get {
+                return ResourceManager.GetString("BackToList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back to work time cannot be greater than the absence end time.
         /// </summary>
         public static string BackToWorkCannotBeGreaterThanAbsenceEnd {
