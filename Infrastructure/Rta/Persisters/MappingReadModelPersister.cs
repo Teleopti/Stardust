@@ -18,6 +18,9 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 
 		public void Invalidate()
 		{
+			if (Invalid())
+				return;
+
 			_unitOfWork.Current()
 				.CreateSqlQuery("INSERT INTO [ReadModel].[KeyValueStore] ([Key]) VALUES ('RuleMappingsInvalido')")
 				.ExecuteUpdate();
