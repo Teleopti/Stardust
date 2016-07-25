@@ -145,6 +145,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldDenyDuplicatedAbsenceRequest()
 		{
+			_startDateTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc);
+			_endDateTime = new DateTime(2016, 3, 1, 23, 59, 00, DateTimeKind.Utc);
+
 			var personRequest1 = createPendingAbsenceRequest(_person, _absence, new DateTimePeriod(_startDateTime, _endDateTime),
 				true);
 			_event.PersonRequestIdList = new Guid[] {personRequest1.Id.GetValueOrDefault()};
@@ -153,6 +156,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			personRequest1.IsApproved.Should().Be.True();
 
 			var absenceLayer = new AbsenceLayer(_absence, new DateTimePeriod(_startDateTime, _endDateTime));
+			_scheduleStorage.Clear();
 			_scheduleStorage.Add(new PersonAbsence(_person, _currentScenario.Current(), absenceLayer, personRequest1));
 
 			_target = new ApproveRequestsWithValidatorsEventHandler(_currentUnitOfWorkFactory,
@@ -161,10 +165,37 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var personRequest2 = createPendingAbsenceRequest(_person, _absence, new DateTimePeriod(_startDateTime, _endDateTime),
 				true);
-			_event.PersonRequestIdList = new Guid[] { personRequest2.Id.GetValueOrDefault() };
+			_event.PersonRequestIdList = new Guid[] {personRequest2.Id.GetValueOrDefault()};
 			setBudgetAndAllowance(_person, 1, 2);
 			_target.Handle(_event);
 			personRequest2.IsDenied.Should().Be.True();
+
+			_messageBroker.SentCount().Should().Be(2);
+		}
+
+		[Test]
+		public void ShouldApproveMultipleAbsenceRequestsInTheSameDayWithDifferentHours()
+		{
+			setBudgetAndAllowance(_person, 1, 2);
+			_startDateTime = new DateTime(2016, 3, 1, 8, 0, 0, DateTimeKind.Utc);
+			_endDateTime = new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc);
+			var personRequest1 = createPendingAbsenceRequest(_person, _absence, new DateTimePeriod(_startDateTime, _endDateTime),
+				true);
+			_event.PersonRequestIdList = new Guid[] {personRequest1.Id.GetValueOrDefault()};
+			_target.Handle(_event);
+			personRequest1.IsApproved.Should().Be.True();
+
+			var absenceLayer = new AbsenceLayer(_absence, new DateTimePeriod(_startDateTime, _endDateTime));
+			_scheduleStorage.Clear();
+			_scheduleStorage.Add(new PersonAbsence(_person, _currentScenario.Current(), absenceLayer, personRequest1));
+
+			_startDateTime = new DateTime(2016, 3, 1, 12, 0, 0, DateTimeKind.Utc);
+			_endDateTime = new DateTime(2016, 3, 1, 14, 0, 0, DateTimeKind.Utc);
+			var personRequest2 = createPendingAbsenceRequest(_person, _absence, new DateTimePeriod(_startDateTime, _endDateTime),
+				true);
+			_event.PersonRequestIdList = new Guid[] {personRequest2.Id.GetValueOrDefault()};
+			_target.Handle(_event);
+			personRequest2.IsApproved.Should().Be.True();
 
 			_messageBroker.SentCount().Should().Be(2);
 		}

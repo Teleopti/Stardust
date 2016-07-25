@@ -26,6 +26,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_data.Remove (entity);
 		}
 
+		public void Clear()
+		{
+			_data.Clear();
+		}
+
 		public IList<IPersistableScheduleData> LoadAll()
 		{
 			return _data;
