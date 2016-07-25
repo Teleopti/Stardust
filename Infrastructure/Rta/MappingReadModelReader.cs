@@ -41,6 +41,7 @@ WHERE StateCode IN (:stateCodes)
 AND ActivityId IN (:activities)")
 				.SetParameterList("stateCodes", stateCodes.Select(stateCode => stateCode ?? MagicString))
 				.SetParameterList("activities", activities.Select(x => x ?? Guid.Empty))
+				.SetResultTransformer(Transformers.AliasToBean(typeof (internalModel)))
 				.List<internalModel>();
 		}
 
