@@ -33,7 +33,7 @@
 
 <wfm-card-list>
 	<wfm-card ng-repeat="workload in workloads" preselected="workload.preselected">
-		<card-header tabindex="-1">
+		<card-header>
 			<div ng-click="getForecastResult(workload)" tabindex="0" ng-keypress="($event.charCode==13)?getForecastResult(workload):return">
 				<span><b>{{workload.Name}}</b></span>
 				<md-progress-circular class="workload-spinner" md-mode="indeterminate" ng-if="workload.ShowProgress"></md-progress-circular>
