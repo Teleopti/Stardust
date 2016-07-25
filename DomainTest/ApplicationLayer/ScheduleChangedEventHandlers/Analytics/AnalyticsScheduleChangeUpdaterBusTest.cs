@@ -126,10 +126,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				ShiftCategoryId = Guid.NewGuid(),
 				PersonPeriodId = Guid.NewGuid()
 			};
+			var scenarioId = Guid.NewGuid();
+			var personId = Guid.NewGuid();
 			var @event = new ProjectionChangedEvent
 			{
 				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> { scheduleDay },
-				ScenarioId = Guid.NewGuid()
+				ScenarioId = scenarioId,
+				PersonId = personId
 			};
 			var cat = new AnalyticsShiftCategory { ShiftCategoryId = 55, ShiftCategoryCode = scheduleDay.ShiftCategoryId };
 			var scenario = new AnalyticsScenario { ScenarioCode = @event.ScenarioId, ScenarioId = 66 };
@@ -150,7 +153,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			_factScheduleHandler.Stub(
 				x =>
 					x.AgentDaySchedule(Arg<ProjectionChangedEventScheduleDay>.Is.Anything, Arg<IAnalyticsFactSchedulePerson>.Is.Anything, 
-						Arg<DateTime>.Is.Anything, Arg<int>.Is.Anything, Arg<int>.Is.Anything))
+						Arg<DateTime>.Is.Anything, Arg<int>.Is.Anything, Arg<int>.Is.Anything, Arg<Guid>.Is.Anything, Arg<Guid>.Is.Anything))
 						.Return(factScheduleRows);
 			_scheduleDayCountHandler.Stub(
 				x =>
@@ -206,10 +209,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				PersonPeriodId = Guid.NewGuid()
 			};
 
+			var scenarioId = Guid.NewGuid();
+			var personId = Guid.NewGuid();
 			var @event = new ProjectionChangedEvent
 			{
 				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> { scheduleDay },
-				ScenarioId = Guid.NewGuid()
+				ScenarioId = scenarioId,
+				PersonId = personId
 			};
 			var cat = new AnalyticsShiftCategory { ShiftCategoryId = 55, ShiftCategoryCode = scheduleDay.ShiftCategoryId };
 			var scenario = new AnalyticsScenario { ScenarioCode = @event.ScenarioId, ScenarioId = 66 };
@@ -224,7 +230,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			_factScheduleHandler.Stub(
 				x =>
 					x.AgentDaySchedule(Arg<ProjectionChangedEventScheduleDay>.Is.Anything, Arg<IAnalyticsFactSchedulePerson>.Is.Anything,
-						Arg<DateTime>.Is.Anything, Arg<int>.Is.Anything, Arg<int>.Is.Anything))
+						Arg<DateTime>.Is.Anything, Arg<int>.Is.Anything, Arg<int>.Is.Anything, Arg<Guid>.Is.Anything, Arg<Guid>.Is.Anything))
 						.Return(null);
 			_scheduleDayCountHandler.Stub(
 				x =>

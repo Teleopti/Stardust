@@ -61,8 +61,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 
 			foreach (var scheduleDay in @event.ScheduleDays)
 			{
+				var dateOnly = new DateOnly(scheduleDay.Date);
+
 				int dateId;
-				if (!_factScheduleDateHandler.MapDateId(new DateOnly(scheduleDay.Date), out dateId))
+				if (!_factScheduleDateHandler.MapDateId(dateOnly, out dateId))
 				{
 					logger.Warn($"Date {scheduleDay.Date} could not be mapped to Analytics date_id. Schedule changes for agent {@event.PersonId} is not saved into Analytics database.");
 					//throw new DateMissingInAnalyticsException(scheduleDay.Date);
@@ -88,8 +90,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 					if (dayCount != null)
 						_analyticsScheduleRepository.PersistFactScheduleDayCountRow(dayCount);
 
-					var agentDaySchedule = _factScheduleHandler.AgentDaySchedule(scheduleDay, personPart, @event.Timestamp,
-						shiftCategoryId, scenarioId);
+					var agentDaySchedule = _factScheduleHandler.AgentDaySchedule(scheduleDay, personPart, @event.Timestamp, shiftCategoryId, scenarioId, @event.ScenarioId, @event.PersonId);
 					if (agentDaySchedule == null)
 					{
 						_analyticsScheduleRepository.DeleteFactSchedule(dateId, personPart.PersonId, scenarioId);
@@ -102,7 +103,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				{
 					if (scheduleDay.Date < DateTime.Now.AddDays(1))
 					{
-						_analyticsScheduleRepository.InsertStageScheduleChangedServicebus(new DateOnly(scheduleDay.Date), @event.PersonId, @event.ScenarioId, @event.LogOnBusinessUnitId, DateTime.Now);
+						_analyticsScheduleRepository.InsertStageScheduleChangedServicebus(dateOnly, @event.PersonId, @event.ScenarioId, @event.LogOnBusinessUnitId, DateTime.Now);
 					}
 				}
 			}

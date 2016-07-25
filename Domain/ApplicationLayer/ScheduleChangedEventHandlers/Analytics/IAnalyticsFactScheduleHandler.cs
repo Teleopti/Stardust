@@ -6,11 +6,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 {
 	public interface IAnalyticsFactScheduleHandler
 	{
-		List<IFactScheduleRow> AgentDaySchedule(
-			ProjectionChangedEventScheduleDay scheduleDay,
-			IAnalyticsFactSchedulePerson personPart,
-			DateTime scheduleChangeTime,
-			int shiftCategoryId,
-			int scenarioId);
+		List<IFactScheduleRow> AgentDaySchedule(ProjectionChangedEventScheduleDay scheduleDay, IAnalyticsFactSchedulePerson personPart, DateTime scheduleChangeTime, int shiftCategoryId, int scenarioId, Guid scenarioCode, Guid personCode);
 	}
 }
