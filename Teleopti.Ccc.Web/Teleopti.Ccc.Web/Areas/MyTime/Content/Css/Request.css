@@ -210,7 +210,9 @@
 .shift-trade-timeline {
 	height: 100%;
 	position: absolute;
-	left: 220px; /* This change(220) is accounding to width of .shift-trade-agent-name. Original data was 150 +8 +8 =166 */
+	left: 114px;
+	/*Changed to 114 as part of #39846*/
+	/* This change(220) is accounding to width of .shift-trade-agent-name. Original data was 150 +8 +8 =166 */
 }
 
 .rtl .shift-trade-timeline {
@@ -285,7 +287,7 @@
 }
 
 .add-shift-trade-detail-section .col-md-6 {
-	margin-bottom: 0;	
+	margin-bottom: 0;
 }
 
 .add-shift-trade-detail-section textarea {
@@ -300,7 +302,7 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-	width: 220px;
+	width: 114px;
 }
 
 .shift-trade-button-cell {
