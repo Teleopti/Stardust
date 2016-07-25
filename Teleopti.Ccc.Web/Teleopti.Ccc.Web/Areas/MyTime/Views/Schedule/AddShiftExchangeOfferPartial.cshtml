@@ -20,8 +20,8 @@
 				<div class="row">
 					<div class="col-sm-12">
 						<div class="row">
-							<div class="col-xs-6 announce-shift-matching-date">
-								<div class="input-group">
+							<div class="col-sm-6 announce-shift-matching-date">
+								<div class="col-xs-12 input-group">
 									<input class="form-control" data-bind="enable: IsEditable(), datepicker: DateToForPublish, datepickerOptions: {autoHide: true, format: DateFormat(), weekStart: WeekStart() }" />
 									<span class="input-group-addon">
 										<button class="btn-datepicker" data-bind="datepicker: DateToForPublish, datepickerOptions: {autoHide: true, format: DateFormat(), weekStart: WeekStart()}, enable: IsEditable">
@@ -31,7 +31,7 @@
 								</div>
 							</div>
 
-							<div class="col-xs-6 btn-group">
+							<div class="col-xs-12 col-sm-6 btn-group">
 								<select id="wish-list" class="form-control" data-bind="enable: IsEditable(),options: AllShiftTypes, optionsText: 'Description', value: WishShiftTypeOption "></select>
 							</div>
 						</div>
@@ -84,8 +84,8 @@
 				<div class="row">
 					<div class="col-sm-12">
 						<div class="row">
-							<div class="col-xs-6">
-								<div class="input-group">
+							<div class="col-sm-6">
+								<div class="col-xs-12 input-group">
 									<input id="validto-datepicker" class="shift-exchange-offer-end-date form-control" data-bind="enable: IsEditable(), datepicker: OfferValidTo, datepickerOptions: {autoHide: true, format: DateFormat(), weekStart: WeekStart() }" />
 									<span class="input-group-addon">
 										<button class="btn-datepicker" data-bind="datepicker: OfferValidTo, datepickerOptions: {autoHide: true, format: DateFormat(), weekStart: WeekStart()}, enable: IsEditable">

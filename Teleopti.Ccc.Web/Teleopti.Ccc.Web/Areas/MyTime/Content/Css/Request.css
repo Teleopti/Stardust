@@ -149,6 +149,18 @@
 	padding: 10px;
 }
 
+#absence-personal-account > div {
+	display: inline-block;
+	float: left;
+	margin-right: 5px;
+	margin-top: 2px;
+	
+}
+
+.fix-margin {
+	margin: 4px 0;
+}
+
 .shift-trade-layer-container {
 	position: relative;
 	padding-left: 0;
@@ -424,13 +436,11 @@
 }
 
 .request-date {
-	width: 140px;
-	padding-left: 15px;
+	max-width: 270px;	
 }
 
 .request-time {
-	width: 130px;
-	padding-left: 15px;
+	max-width: 130px;	
 }
 
 .shift-trade-dayoff{

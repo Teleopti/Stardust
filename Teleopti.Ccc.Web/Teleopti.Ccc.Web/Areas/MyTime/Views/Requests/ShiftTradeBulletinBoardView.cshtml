@@ -1,71 +1,68 @@
 ﻿@using Teleopti.Ccc.UserTexts
 
 
-<div id="Request-shift-trade-bulletin-board" class="well well-sm displaynone fixed-non-responsive">
+<div id="Request-shift-trade-bulletin-board" class="well well-sm displaynone">
 	<span class="bulletin-ready-loading-flag displaynone" data-bind="css: { 'is-ready-loaded': isReadyLoaded }"></span>
 	<div class="shift-trade-missing-wcs-message alert alert-warning" data-bind="visible: missingWorkflowControlSet">
 		@Resources.MissingWorkflowControlSet
 	</div>
 
-
 	<div id="loadingRequestIndicator" class="loading-gradient" data-bind="if: !isReadyLoaded()">
 		<div class="loading"></div>
 	</div>
 
-	<div data-bind="if: !missingWorkflowControlSet() && isReadyLoaded()">
-			<div class="row">
-				<div class="col-md-4">
-					<div style="margin-bottom: 10px" class="input-group">
-						<span class="input-group-btn">
-							<button class="bulletin-previous-date btn" data-bind="click: previousDate, clickable: previousDateValid, enable: previousDateValid">
-								<i class="glyphicon glyphicon-chevron-left" data-bind="enable: !IsLoading()"></i>
-							</button>
-						</span>
-						<input type="text" class="col-xs-2 form-control add-shifttrade-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { format: DatePickerFormat(), startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()" />
+	<div class="datepicker-container row clearfix" data-bind="if: !missingWorkflowControlSet() && isReadyLoaded()">
+		<div class="col-sm-6 col-lg-4 fix-margin">
+			<div class="input-group">
+				<span class="input-group-btn">
+					<button class="bulletin-previous-date btn" data-bind="click: previousDate, clickable: previousDateValid, enable: previousDateValid">
+						<i class="glyphicon glyphicon-chevron-left" data-bind="enable: !IsLoading()"></i>
+					</button>
+				</span>
+				<input type="text" class="col-xs-2 form-control add-shifttrade-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { format: DatePickerFormat(), startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()" />
 
-						<span class="input-group-btn">
-							<button class="btn" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
-								<i class="glyphicon glyphicon-calendar"></i>
-							</button>
-							<button class="next-date btn" data-bind="click: nextDate, clickable: nextDateValid, enable: nextDateValid">
-								<i class="glyphicon glyphicon-chevron-right" data-bind="enable: !IsLoading()"></i>
-							</button>
-						</span>
-					</div>
-				</div>
-				<div class="col-md-4" data-bind="visible: !isDetailVisible()">
-					<div class="dropdown filter-time-dropdown-button" data-bind="click: filterStartEndTimeClick">
-						<a class="dropdown-toggle btn" data-toggle="dropdown" href="#" style="color: black">
-							@Resources.StartTime
-							<b class="caret"></b>
-						</a>
-						<ul class="dropdown-menu filter-time-dropdown-form" role="menu" data-bind="foreach: filterStartTimeList">
-							<li>
-								<label class="checkbox filter-time-text">
-									<input type="checkbox" data-bind="checked: isChecked">
-									<span data-bind="text: text"></span>
-								</label>
-							</li>
-						</ul>
-					</div>
-				</div>
-				<div class="col-md-4" data-bind="visible: !isDetailVisible()">
-					<div class="dropdown filter-time-dropdown-button" data-bind="click: filterStartEndTimeClick">
-						<a class="dropdown-toggle btn" data-toggle="dropdown" href="#" style="color: black">
-							@Resources.EndTime
-							<b class="caret"></b>
-						</a>
-						<ul class="dropdown-menu filter-time-dropdown-form" role="menu" data-bind="foreach: filterEndTimeList">
-							<li>
-								<label class="checkbox filter-time-text">
-									<input type="checkbox" data-bind="checked: isChecked">
-									<span data-bind="text: text"></span>
-								</label>
-							</li>
-						</ul>
-					</div>
-				</div>
+				<span class="input-group-btn">
+					<button class="btn" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
+						<i class="glyphicon glyphicon-calendar"></i>
+					</button>
+					<button class="next-date btn" data-bind="click: nextDate, clickable: nextDateValid, enable: nextDateValid">
+						<i class="glyphicon glyphicon-chevron-right" data-bind="enable: !IsLoading()"></i>
+					</button>
+				</span>
 			</div>
+		</div>
+		<div class="col-xs-6 col-sm-3 col-lg-2 fix-margin" data-bind="visible: !isDetailVisible()">
+			<div class="dropdown filter-time-dropdown-button" data-bind="click: filterStartEndTimeClick">
+				<a class="dropdown-toggle btn" data-toggle="dropdown" href="#" style="color: black">
+					@Resources.StartTime
+					<b class="caret"></b>
+				</a>
+				<ul class="dropdown-menu filter-time-dropdown-form" role="menu" data-bind="foreach: filterStartTimeList">
+					<li>
+						<label class="checkbox filter-time-text">
+							<input type="checkbox" data-bind="checked: isChecked">
+							<span data-bind="text: text"></span>
+						</label>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="col-xs-6 col-sm-3 col-lg-2 fix-margin" data-bind="visible: !isDetailVisible()">
+			<div class="dropdown filter-time-dropdown-button" data-bind="click: filterStartEndTimeClick">
+				<a class="dropdown-toggle btn" data-toggle="dropdown" href="#" style="color: black">
+					@Resources.EndTime
+					<b class="caret"></b>
+				</a>
+				<ul class="dropdown-menu filter-time-dropdown-form" role="menu" data-bind="foreach: filterEndTimeList">
+					<li>
+						<label class="checkbox filter-time-text">
+							<input type="checkbox" data-bind="checked: isChecked">
+							<span data-bind="text: text"></span>
+						</label>
+					</li>
+				</ul>
+			</div>
+		</div>
 	</div>
 	<div data-bind="visible: isReadyLoaded(), fadeInIf: !IsLoading(), fadeInDuration: 150, fadeOutDuration: 50">
 		<div class="shift-trade-add-schedule" data-bind="visible: !missingWorkflowControlSet()">
@@ -103,7 +100,6 @@
 								<!--/ko-->
 							</div>
 							<!--/ko-->
-
 							<!--ko if:!mySchedule().isFullDayAbsence-->
 							<div data-bind="foreach: mySchedule().layers">
 								<div class="shift-trade-layer-container floatleft">
@@ -118,7 +114,6 @@
 							<!--/ko-->
 						</td>
 						<!--/ko-->
-
 						<!--ko if: !Toggle36662Enabled()-->
 						<td class="shift-trade-my-schedule">
 							<div data-bind="foreach: mySchedule().layers">
@@ -157,7 +152,6 @@
 								<div class="dayoff" data-bind="text: dayOffName"></div>
 							</div>
 							<!--/ko-->
-
 							<!--ko if:!isDayOff && $data.layers.length == 0 -->
 							<div class="shift-trade-layer-container floatleft shift-trade-empty">
 								<div class="empty" data-bind="tooltip: { title: '@Resources.OptionEmptyDay', html: true, container: '.tooltipContainer'}"></div>
