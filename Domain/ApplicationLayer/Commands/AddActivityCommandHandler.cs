@@ -85,6 +85,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			else
 			{
 				_addActivity.AddActivity(personAssignment, activity, period, command.TrackedCommandInfo);
+				if (personAssignment.ShiftCategory == null)
+				{
+					var shiftCategories = _shiftCategoryRepository.FindAll().ToList();
+					shiftCategories.Sort(new ShiftCategorySorter());
+					var shiftCategory = shiftCategories.FirstOrDefault();
+					if (shiftCategory != null)
+						personAssignment.SetShiftCategory(shiftCategory);
+				}
 			}
 		}
 	}
