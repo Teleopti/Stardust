@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
@@ -6,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
@@ -224,7 +226,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Mapping
 			actual.Should().Have.SameSequenceAs(expected);
 		}
 
+		[Test]
+		public void ShouldContainNoDuplicatesForBusinessUnitsWithMapping()
+		{
+			var phone = Guid.NewGuid();
+			Database
+				.WithBusinessUnit(Guid.NewGuid())
+				.WithRule(null, null, null, phone, 0, null, null, null);
 
+			Target.Handle(new TenantMinuteTickEvent());
+			
+			var actual = Persister.Data.Select(x => x.StateCode + x.ActivityId.GetValueOrDefault() + x.BusinessUnitId).ToArray();
+			var expected = actual.Distinct().ToArray();
+			actual.Should().Have.SameSequenceAs(expected);
+		}
 
 		[Test]
 		public void ShouldRegenerateOnUpdate()
@@ -307,6 +322,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Mapping
 
 			Persister.Data.Select(x => x.StateGroupId).Should().Contain(ready);
 		}
-
 	}
 }

@@ -54,9 +54,9 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 		protected IEnumerable<T> QueryAllAttributes<T>()
 		{
-			var fromFixture = _fixtureType.GetCustomAttributes(typeof (T), false).Cast<T>();
-			var fromTest = _method.GetCustomAttributes(typeof (T), false).Cast<T>();
-			var fromAttribute = GetType().GetCustomAttributes(typeof (T), false).Cast<T>();
+			var fromFixture = _fixtureType.GetCustomAttributes(typeof (T), true).Cast<T>();
+			var fromTest = _method.GetCustomAttributes(typeof (T), true).Cast<T>();
+			var fromAttribute = GetType().GetCustomAttributes(typeof (T), true).Cast<T>();
 			return fromFixture
 				.Union(fromTest)
 				.Union(fromAttribute)

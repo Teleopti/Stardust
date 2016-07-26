@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		private readonly FakeRtaMapRepository _rtaMapRepository;
 		private readonly FakeTenants _tenants;
 		private readonly FakeDataSourceForTenant _dataSourceForTenant;
+		private readonly FakeBusinessUnitRepository _businessUnits;
 
 		private readonly List<KeyValuePair<string, int>> _datasources = new List<KeyValuePair<string, int>>();
 
@@ -68,7 +69,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			FakeRtaStateGroupRepository rtaStateGroupRepository,
 			FakeRtaMapRepository rtaMapRepository,
 			FakeTenants tenants,
-			FakeDataSourceForTenant dataSourceForTenant
+			FakeDataSourceForTenant dataSourceForTenant,
+			FakeBusinessUnitRepository businessUnits
 			)
 		{
 			_now = now;
@@ -79,9 +81,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_rtaMapRepository = rtaMapRepository;
 			_tenants = tenants;
 			_dataSourceForTenant = dataSourceForTenant;
+			_businessUnits = businessUnits;
 
 			withTenant("default", LegacyAuthenticationKey.TheKey);
-			WithBusinessUnit(Guid.NewGuid());
 			WithSource(new ExternalUserStateForTest().SourceId);
 			WithPlatform(new Guid(new ExternalUserStateForTest().PlatformTypeId));
 		}
@@ -131,6 +133,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public FakeRtaDatabase WithBusinessUnit(Guid businessUnitId)
 		{
+			if (_businessUnits.LoadAll().Any(x => x.Id.Equals(businessUnitId)))
+				return this;
 			_database.WithBusinessUnit(businessUnitId);
 			return this;
 		}

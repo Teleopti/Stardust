@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -64,16 +66,28 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			if (!_persister.Invalid())
 				return;
 
-			var businessUnits = _businessUnits.LoadAllWithDeleted();
+			var mappings = MakeMappings(_businessUnits, _activities, _stateGroups, _mappings);
 
-			var maps = _mappings.LoadAll();
+			_persister.Persist(mappings);
+		}
 
-			var activities = _activities.LoadAll()
+		public static IEnumerable<Mapping> MakeMappings(
+			IBusinessUnitRepository businessUnitsRepository,
+			IActivityRepository activityRepository,
+			IRtaStateGroupRepository stateGroupRepository,
+			IRtaMapRepository mapRepository
+			)
+		{
+			var businessUnits = businessUnitsRepository.LoadAllWithDeleted();
+
+			var maps = mapRepository.LoadAll();
+
+			var activities = activityRepository.LoadAll()
 				.Select(a => a.Id)
 				.Concat(new[] {(Guid?) null});
 
 			var stateGroups = (
-				from g in _stateGroups.LoadAllCompleteGraph()
+				from g in stateGroupRepository.LoadAllCompleteGraph()
 				select new
 				{
 					Id = g.Id.Value,
@@ -93,39 +107,83 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 
 			var stateCodes =
 				from g in stateGroups
-				let codes = g == null || g.States.IsEmpty()
-					? new IRtaState[] {null}
-					: g.States
-				from s in codes
+				let legalStateCodes =
+					from c in g.States
+					let legal = c.StateCode != null
+					where legal
+					select new
+					{
+						c.StateCode,
+						c.PlatformTypeId
+					}
+				let codes = legalStateCodes.IsEmpty()
+					? legalStateCodes.Append(
+						new
+						{
+							StateCode = null as string,
+							PlatformTypeId = Guid.Empty
+						})
+					: legalStateCodes
+				from c in codes
 				select new
 				{
-					s?.StateCode,
-					StateGroupId = g?.Id ?? Guid.Empty,
-					StateGroupName = g?.Name,
-					PlatformTypeId = s?.PlatformTypeId ?? Guid.Empty,
-					BusinessUnitId = g?.BusinessUnitId ?? Guid.Empty
+					c.StateCode,
+					StateGroupId = g.Id,
+					StateGroupName = g.Name,
+					PlatformTypeId = c.PlatformTypeId,
+					BusinessUnitId = g.BusinessUnitId
+				};
+
+			var configuredMappings =
+				from m in maps.Cast<RtaMap>()
+				let legalStateCodes =
+					from c in (m.StateGroup?.StateCollection).EmptyIfNull()
+					let legal = c.StateCode != null
+					where legal
+					select new
+					{
+						c.StateCode,
+						c.PlatformTypeId
+					}
+				let codes = m.StateGroup == null
+					? legalStateCodes.Append(
+						new
+						{
+							StateCode = null as string,
+							PlatformTypeId = Guid.Empty
+						})
+					: legalStateCodes
+				from c in codes
+				select new
+				{
+					BusinessUnitId = m.BusinessUnit.Id.Value,
+					ActivityId = m.Activity?.Id,
+					StateCode = c.StateCode,
+					PlatformTypeId = c.PlatformTypeId,
+					Rule = m.RtaRule
 				};
 
 			var mappings =
 				from a in activities
 				from s in stateCodes
-				let mapping = maps.SingleOrDefault(m =>
-				{
-					var activitiesMatch = a == m.Activity?.Id;
-					var statesMatch = m.StateGroup?.StateCollection.Any(x => x.StateCode == s.StateCode) ??
-									  s.StateCode == null;
-
-					return activitiesMatch && statesMatch;
-				})
-				let businessUnitId = (mapping as RtaMap)?.BusinessUnit.Id ?? s.BusinessUnitId
-				let ruleId = mapping?.RtaRule.Id ?? Guid.Empty
-				let ruleName = mapping?.RtaRule?.Description.Name
-				let staffingEffect = mapping?.RtaRule?.StaffingEffect
-				let adherence = mapping?.RtaRule?.Adherence
-				let displayColor = mapping?.RtaRule?.DisplayColor.ToArgb() ?? 0
-				let isAlarm = mapping?.RtaRule?.IsAlarm ?? false
-				let thresholdTime = (long)(mapping?.RtaRule?.ThresholdTime.Ticks ?? 0)
-				let alarmColor = mapping?.RtaRule?.AlarmColor.ToArgb() ?? 0
+				let mapping = (
+					from m in configuredMappings
+					where
+						m.BusinessUnitId == s.BusinessUnitId &&
+						m.ActivityId == a &&
+						m.StateCode == s.StateCode &&
+						m.PlatformTypeId == s.PlatformTypeId
+					select m
+					).SingleOrDefault()
+				let businessUnitId = mapping?.BusinessUnitId ?? s.BusinessUnitId
+				let ruleId = mapping?.Rule?.Id ?? Guid.Empty
+				let ruleName = mapping?.Rule?.Description.Name
+				let staffingEffect = mapping?.Rule?.StaffingEffect
+				let adherence = mapping?.Rule?.Adherence
+				let displayColor = mapping?.Rule?.DisplayColor.ToArgb() ?? 0
+				let isAlarm = mapping?.Rule?.IsAlarm ?? false
+				let thresholdTime = mapping?.Rule?.ThresholdTime.Ticks ?? 0
+				let alarmColor = mapping?.Rule?.AlarmColor.ToArgb() ?? 0
 				select new Mapping
 				{
 					BusinessUnitId = businessUnitId,
@@ -143,9 +201,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 					AlarmColor = alarmColor,
 					PlatformTypeId = s.PlatformTypeId
 				};
-
-			_persister.Persist(mappings);
+			return mappings;
 		}
-
 	}
 }

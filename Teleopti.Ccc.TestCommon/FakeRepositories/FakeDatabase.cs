@@ -324,7 +324,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public FakeDatabase WithBusinessUnit(Guid? id)
 		{
-			_businessUnit = new BusinessUnit("b");
+			_businessUnit = new BusinessUnit(RandomName.Make());
 			_businessUnit.SetId(id ?? Guid.NewGuid());
 			_businessUnits.Has(_businessUnit);
 			return this;
@@ -507,6 +507,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			_activity = new Activity(RandomName.Make());
 			_activity.SetId(id ?? Guid.NewGuid());
+			_activity.SetBusinessUnit(_businessUnit);
 			_activities.Has(_activity);
 			return this;
 		}
@@ -614,10 +615,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			IActivity activity = null;
 			if (activityId != null)
 			{
-				activity = new Activity(stateCode ?? "activity");
-				activity.SetId(activityId);
-				activity.SetBusinessUnit(_businessUnit);
-				_activities.Add(activity);
+				ensureExists(_activities, activityId, () => WithActivity(activityId));
+				_activity = _activities.LoadAll().Single(x => x.Id == activityId) as Activity;
+				activity = _activity;
 			}
 
 			var mapping = new RtaMap(stateGroup, activity) { RtaRule = _rtaRule };

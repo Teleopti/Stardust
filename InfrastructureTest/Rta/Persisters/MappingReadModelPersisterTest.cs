@@ -154,6 +154,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		}
 
 		[Test]
+		public void ShouldBeInvalidWhenInvalidated()
 		{
 			var businessUnit = Guid.NewGuid();
 			var platformType = Guid.NewGuid();

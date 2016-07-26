@@ -159,6 +159,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			fakePrincipal(system);
 		}
+
 		private void fakePrincipal(ISystem system)
 		{
 			var context = QueryAllAttributes<ShareLogonOnThreadsAttribute>().Any() ? 

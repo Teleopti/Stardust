@@ -6,15 +6,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class AppliedAdherence
 	{
-		public Adherence ForRule(IRtaRule rule)
-		{
-			if (rule == null)
-				return Adherence.Neutral;
-			return rule.Adherence.HasValue
-				? rule.Adherence.Value
-				: forStaffingEffect(rule.StaffingEffect);
-		}
-
 		public EventAdherence ForEvent(Adherence? adherence, double? staffingEffect)
 		{
 			if (!adherence.HasValue)

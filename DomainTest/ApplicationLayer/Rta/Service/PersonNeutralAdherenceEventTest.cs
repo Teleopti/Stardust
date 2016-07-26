@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
@@ -254,7 +255,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithSchedule(personId, admin, "2015-03-10 8:00", "2015-03-10 10:00")
 				.WithRule("admin", admin, 0, Adherence.Neutral);
 			Now.Is("2015-03-10 8:30");
-
+			
 			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
