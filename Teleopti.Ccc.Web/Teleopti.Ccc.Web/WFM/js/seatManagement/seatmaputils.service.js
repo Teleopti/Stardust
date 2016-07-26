@@ -585,10 +585,12 @@
 
 
 			function updateSeatInformation(canvas, seat, number) {
+
+				seat.Name = seat.Priority = number;
+
 				var fabricSeat = getSeatObjectById(canvas, seat.Id);
 				if (fabricSeat != null) {
-					seat.Name = seat.Priority = fabricSeat.name = fabricSeat.priority = number;
-
+					fabricSeat.name = fabricSeat.priority = number;
 					return true;
 				}
 
@@ -608,12 +610,8 @@
 					//if there is a seat with that number, then increment
 					var seatNumber = parseInt(seatObj.Name);
 					if (seatNumber === newNumber && seatObj.Id !== seat.Id) {
-
 						updateSeatInformation(canvas, seatObj, seatNumber + 1);
-
-						
 						newNumber++;
-
 					}
 				});
 
@@ -624,7 +622,7 @@
 	        function updateSeatNumberOnDelete(canvas, removedSeatIds, allSeats) {
 	            allSeats.sort(function(a, b) { return parseInt(a.Priority) - parseInt(b.Priority) });
 
-	            removedSeatIds.forEach(function(removedSeatId) {
+	            removedSeatIds.reverse().forEach(function(removedSeatId) {
 	                var deletedSeatObj = null;
 	                var previousSeatNumber = 0;
 
@@ -634,14 +632,14 @@
 	                    if (seatObj.Id === removedSeatId) {
 	                        deletedSeatObj = seatObj;
 	                        previousSeatNumber = parseInt(seatObj.Priority);
-	                        continue;
+		                    continue;
 	                    }
 
 	                    if (deletedSeatObj != null) {
 	                        var seatNumber = parseInt(seatObj.Priority);
 	                        // update seat number only when it's continuous
 	                        if (seatNumber === ++previousSeatNumber) {
-	                            updateSeatInformation(canvas, seatObj, seatNumber - removedSeatIds.length + removedSeatIds.indexOf(removedSeatId));
+								updateSeatInformation(canvas, seatObj, seatNumber - 1);
 	                        }
 	                    }
 	                };
