@@ -223,7 +223,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	function _setWeeklyWorkTimeWidth() {
 		var isShow = $('#showweeklyworktime').val();
 		if (isShow == 'True') {
-			$("#preferencebody").addClass("preference-body-width");
+			$("#Preference-body-inner").addClass("preference-body-width");
 		}
 	}
 

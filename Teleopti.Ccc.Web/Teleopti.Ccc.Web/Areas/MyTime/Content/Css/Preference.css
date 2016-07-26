@@ -169,8 +169,12 @@
 
 #Preference-add-extended-form {
 	min-width: 268px;
-	padding-bottom: 0;
 	margin-bottom: 10px;
+	padding: 0;
+}
+
+#Preference-add-extended-form > div {
+	padding: 0 5px;
 }
 
 .ie9 .preference-ui-tooltip {
@@ -259,6 +263,14 @@ color: #333333;
 	width: 1024px !important;
 }
 
+#Preference-body{
+	overflow: auto;
+}
+
+#Preference-body-inner {
+	margin: auto;
+}
+
 .min-hours-per-week {
 	padding-top: 12px;
 	font-size: 11px;
@@ -274,4 +286,22 @@ color: #333333;
 
 .date-input-style {
 	padding: 10px 1px;
+}
+
+.preference-input-footer > button {
+	margin: 10px 5px;
+}
+
+@media(min-width: 768px) {
+	.preference-input-left {
+		border-right: 1px solid white;
+	}
+}
+
+@media(max-width: 768px) {
+	.preference-input-left {
+		border-bottom: 1px solid white;
+		margin-bottom: 10px;
+		padding-bottom: 10px;
+	}
 }
