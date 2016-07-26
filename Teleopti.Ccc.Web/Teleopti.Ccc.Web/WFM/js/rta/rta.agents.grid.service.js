@@ -63,16 +63,16 @@
 						direction: 'asc'
 					}
 				};
-				var team = {
-					displayName: 'Team',
-					field: 'TeamName',
+				var siteAndTeam = {
+					displayName: 'SiteAndTeam',
+					field: 'SiteAndTeamName',
 					enableColumnMenu: false,
 					headerCellTemplate: headerCellTemplate,
 					cellTemplate: coloredCellTemplate,
 					headerCellFilter: 'translate',
-					width: toggleService.RTA_AlarmContext_29357 ? "9%" : null,
+					width: toggleService.RTA_AlarmContext_29357 ? "18%" : null,
 				};
-				var site = {
+				/*var site = {
 					displayName: 'Site',
 					field: 'SiteName',
 					enableColumnMenu: false,
@@ -80,7 +80,7 @@
 					cellTemplate: coloredCellTemplate,
 					headerCellFilter: 'translate',
 					width: toggleService.RTA_AlarmContext_29357 ? "9%" : null,
-				};
+				};*/
 				var state = {
 					displayName: 'State',
 					field: 'State',
@@ -170,8 +170,8 @@
 				if (toggleService.RTA_AlarmContext_29357) {
 					rowTemplate = 'js/rta/rta-agents-rowtemplate-RTA_AlarmContext_29357.html';
 					columnDefs.push(name);
-					columnDefs.push(team);
-					columnDefs.push(site);
+					columnDefs.push(siteAndTeam);
+					//columnDefs.push(site);
 					columnDefs.push(shift);
 					columnDefs.push(alarm);
 					if (toggleService.RTA_RecentOutOfAdherences_39145)
@@ -183,8 +183,8 @@
 					columnDefs.push(state);
 				} else {
 					columnDefs.push(name);
-					columnDefs.push(team);
-					columnDefs.push(site);
+					columnDefs.push(siteAndTeam);
+					//columnDefs.push(site);
 					columnDefs.push(state);
 					columnDefs.push(activity);
 					columnDefs.push(nextActivity);

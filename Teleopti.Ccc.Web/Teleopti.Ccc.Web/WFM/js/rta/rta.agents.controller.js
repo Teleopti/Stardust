@@ -12,7 +12,7 @@
 				var teamIds = $stateParams.teamIds || ($stateParams.teamId ? [$stateParams.teamId] : []);
 				var skillIds = ($stateParams.skillId ? [$stateParams.skillId] : []);
 				var skillAreaId = $stateParams.skillAreaId || undefined;
-				var propertiesForFiltering = ["Name","TeamName", "State", "Activity", "Alarm", "SiteName"];
+				var propertiesForFiltering = ["Name", "State", "Activity", "Alarm", "SiteAndTeamName"];
 				$scope.adherence = {};
 				$scope.adherencePercent = null;
 				$scope.filterText = "";
@@ -296,9 +296,11 @@
 						var windowEnd = now.clone().add(3, 'hours');
 
 						if (agentInfo.length > 0) {
+						
 
 							$scope.agents.push({
 								Name: agentInfo[0].Name,
+								SiteAndTeamName: agentInfo[0].SiteName + '/' + agentInfo[0].TeamName,
 								TeamName: agentInfo[0].TeamName,
 								SiteName: agentInfo[0].SiteName,
 								PersonId: agentInfo[0].PersonId,
@@ -379,6 +381,7 @@
 							$scope.agents.push({
 								Name: agentInfo.Name,
 								PersonId: agentInfo.PersonId,
+								SiteAndTeamName: agentInfo.SiteName + '/' + agentInfo.TeamName,
 								TeamName: agentInfo.TeamName,
 								TeamId: agentInfo.TeamId,
 								SiteName: agentInfo.SiteName

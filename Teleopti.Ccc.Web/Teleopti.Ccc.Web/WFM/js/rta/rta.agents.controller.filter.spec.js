@@ -55,7 +55,6 @@ describe('RtaAgentsCtrl', function() {
 		expect(scope.filteredData[0].Name).toEqual("Charley Caper");
 	});
 
-
 	it('should filter agent on state', function () {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
 		$fakeBackend
@@ -86,8 +85,6 @@ describe('RtaAgentsCtrl', function() {
 		expect(scope.filteredData[0].Name).toEqual("Charley Caper");
 	});
 
-
-
 	it('should filter agent on site name', function () {
 		stateParams.siteIds = ["34590a63-6331-4921-bc9f-9b5e015ab495", "84590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend
@@ -95,46 +92,53 @@ describe('RtaAgentsCtrl', function() {
 				Name: "Ashley Andeen",
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				SiteId: "34590a63-6331-4921-bc9f-9b5e015ab495",
-				SiteName: "London"
+				TeamId: "45612a63-6331-4921-bc9f-9b5e015ab495",
+				SiteName: "London",
+				TeamName: "Green"
 			})
 
 			.withAgent({
 				Name: "Charley Caper",
 				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
 				SiteId: "84590a63-6331-4921-bc9f-9b5e015ab495",
-				SiteName: "Paris"
+				TeamId: "85321a63-6331-4921-bc9f-9b5e015ab495",
+				SiteName: "Paris",
+				TeamName: "Red"
 			});
 
 		$controllerBuilder.createController()
 			.apply("agentsInAlarm = false")
 			.apply('filterText = "Paris"');
-
-		expect(scope.filteredData[0].SiteName).toEqual("Paris");
+		expect(scope.filteredData[0].SiteAndTeamName).toEqual("Paris/Red");
 		expect(scope.filteredData[0].Name).toEqual("Charley Caper");
 	});
 
+
 	it('should filter agent on team name', function () {
-		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495","84590a63-6331-4921-bc9f-9b5e015ab495"];
+		stateParams.teamIds = ["45612a63-6331-4921-bc9f-9b5e015ab495", "85321a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend
 			.withAgent({
 				Name: "Ashley Andeen",
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+				SiteId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+				TeamId: "45612a63-6331-4921-bc9f-9b5e015ab495",
+				SiteName: "London",
 				TeamName: "Green"
 			})
-			
+
 			.withAgent({
 				Name: "Charley Caper",
 				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
-				TeamId: "84590a63-6331-4921-bc9f-9b5e015ab495",
+				SiteId: "84590a63-6331-4921-bc9f-9b5e015ab495",
+				TeamId: "85321a63-6331-4921-bc9f-9b5e015ab495",
+				SiteName: "Paris",
 				TeamName: "Red"
 			});
 
 		$controllerBuilder.createController()
 			.apply("agentsInAlarm = false")
 			.apply('filterText = "Red"');
-
-		expect(scope.filteredData[0].TeamName).toEqual("Red");
+		expect(scope.filteredData[0].SiteAndTeamName).toEqual("Paris/Red");
 		expect(scope.filteredData[0].Name).toEqual("Charley Caper");
 	});
 
