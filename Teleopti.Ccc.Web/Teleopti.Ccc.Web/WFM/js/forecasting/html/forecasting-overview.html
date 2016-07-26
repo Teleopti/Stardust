@@ -34,7 +34,7 @@
 <wfm-card-list>
 	<wfm-card ng-repeat="workload in workloads" preselected="workload.preselected">
 		<card-header>
-			<div ng-click="getForecastResult(workload)" tabindex="0" ng-keypress="($event.charCode==13)?getForecastResult(workload):return">
+			<div ng-click="getForecastResult(workload)" tabindex="0">
 				<span><b>{{workload.Name}}</b></span>
 				<md-progress-circular class="workload-spinner" md-mode="indeterminate" ng-if="workload.ShowProgress"></md-progress-circular>
 				<span class="workload-indicator" ng-if="workload.IsSuccess"><md-tooltip>{{'SuccessTip' | translate}}</md-tooltip><i class="mdi mdi-check"></i></span>
