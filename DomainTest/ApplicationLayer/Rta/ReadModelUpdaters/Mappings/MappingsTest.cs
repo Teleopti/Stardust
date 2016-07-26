@@ -322,5 +322,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Mapping
 
 			Persister.Data.Select(x => x.StateGroupId).Should().Contain(ready);
 		}
+
+		[Test]
+		public void ShouldUpdateOnBusinessUnitChanges()
+		{
+			var ready = Guid.NewGuid();
+			Target.Handle(new TenantMinuteTickEvent());
+
+			Database.WithStateGroup(ready, null);
+			Target.Handle(new BusinessUnitChangedEvent());
+			Target.Handle(new TenantMinuteTickEvent());
+
+			Persister.Data.Select(x => x.StateGroupId).Should().Contain(ready);
+		}
 	}
 }

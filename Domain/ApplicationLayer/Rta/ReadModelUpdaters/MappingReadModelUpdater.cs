@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		IHandleEvent<ActivityChangedEvent>,
 		IHandleEvent<RtaStateGroupChangedEvent>,
 		IHandleEvent<RtaMapChangedEvent>,
+		IHandleEvent<BusinessUnitChangedEvent>,
 		IRunOnHangfire
 	{
 		private readonly IActivityRepository _activities;
@@ -39,6 +40,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			_mappings = mappings;
 			_businessUnits = businessUnits;
 			_persister = persister;
+		}
+
+		[ReadModelUnitOfWork]
+		public virtual void Handle(BusinessUnitChangedEvent @event)
+		{
+			_persister.Invalidate();
 		}
 
 		[ReadModelUnitOfWork]
@@ -203,5 +210,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				};
 			return mappings;
 		}
+
 	}
 }
