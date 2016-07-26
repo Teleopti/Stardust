@@ -1,4 +1,43 @@
-﻿
+﻿#Student-availability-edit-form {
+	max-width: 965px;
+	margin: auto;
+}
+
+.student-availability-time-input > div{
+	margin: 5px;
+	max-width: 276px;
+}
+
+.student-availability-time-input > div:nth-child(2) {
+	display: inline-block;
+	vertical-align: bottom;
+}
+
+.student-availability-time-input > span{
+	margin: 5px;
+	display: inline-block;
+	vertical-align: bottom;
+}
+
+.student-availability-time-input > input{
+	margin: 5px;
+}
+
+
+#StudentAvailability-period {
+	max-width: 965px;
+	margin: 10px auto;
+}
+
+.student-availability-body-container {
+	overflow: auto;
+}
+
+#StudentAvailability-body {
+	width: 965px;
+	margin: auto;
+}
+
 .student-availability-next-day-checkbox {
 	width: 17px;
 	padding: 0 0 0 0;
