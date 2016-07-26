@@ -233,7 +233,12 @@
 		function onSelectionChanged() {
 			var visibleRequestsIds = vm.gridOptions.data.map(function(row) { return row.Id; });
 			var visibleSelectedRequestsIds = vm.gridApi.selection.getSelectedRows().map(function(row) { return row.Id; });
-			var visibleNotSelectedRequestsIds = visibleRequestsIds.filter(function(id) {
+			if (visibleSelectedRequestsIds.length === 1) {
+				var message = vm.gridApi.selection.getSelectedRows().map(function(row) { return row.Message; });
+				requestCommandParamsHolder.setSelectedIdAndMessage(visibleSelectedRequestsIds, message);
+			}
+
+			var visibleNotSelectedRequestsIds = visibleRequestsIds.filter(function (id) {
 				return visibleSelectedRequestsIds.indexOf(id) < 0;
 			});
 

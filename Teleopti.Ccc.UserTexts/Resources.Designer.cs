@@ -22658,6 +22658,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reply and cancel.
+        /// </summary>
+        public static string ReplyAndCancel {
+            get {
+                return ResourceManager.GetString("ReplyAndCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reply and
         ///deny.
         /// </summary>
@@ -22673,6 +22682,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ReplyColon {
             get {
                 return ResourceManager.GetString("ReplyColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your Reply has been saved.
+        /// </summary>
+        public static string ReplySuccess {
+            get {
+                return ResourceManager.GetString("ReplySuccess", resourceCulture);
             }
         }
         
@@ -23150,6 +23168,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string RequestHistory {
             get {
                 return ResourceManager.GetString("RequestHistory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot save this reply as the complete message exceeds the 2000 character limit.
+        /// </summary>
+        public static string RequestInvalidMessageLength {
+            get {
+                return ResourceManager.GetString("RequestInvalidMessageLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot save your reply to this request as it has been {0}.
+        /// </summary>
+        public static string RequestInvalidMessageModification {
+            get {
+                return ResourceManager.GetString("RequestInvalidMessageModification", resourceCulture);
             }
         }
         

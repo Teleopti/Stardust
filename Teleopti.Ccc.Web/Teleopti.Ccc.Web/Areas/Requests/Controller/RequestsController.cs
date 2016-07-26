@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 		[HttpPost, Route("api/Requests/approveRequests"), UnitOfWork]
 		public virtual RequestCommandHandlingResult ApproveRequests(RequestsCommandInput input)
 		{
-			return _commandHandlingProvider.ApproveRequests(input.RequestIds, input.ReplyMessage);
+			return _commandHandlingProvider.ApproveRequests(input.SelectedRequestIds, input.ReplyMessage);
 		}
 
 		[HttpPost, Route("api/Requests/approveWithValidators"), UnitOfWork]
@@ -65,19 +65,19 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 		[HttpPost, Route("api/Requests/replyRequests"), UnitOfWork]
 		public virtual RequestCommandHandlingResult ReplyRequests(RequestsCommandInput input)
 		{
-			return _commandHandlingProvider.ReplyRequests(input.RequestIds, input.ReplyMessage);
+			return _commandHandlingProvider.ReplyRequests(input.SelectedRequestIds, input.ReplyMessage);
 		}
 
 		[HttpPost, Route("api/Requests/denyRequests"), UnitOfWork]
 		public virtual RequestCommandHandlingResult DenyRequests(RequestsCommandInput input)
 		{
-			return _commandHandlingProvider.DenyRequests(input.RequestIds, input.ReplyMessage);
+			return _commandHandlingProvider.DenyRequests(input.SelectedRequestIds, input.ReplyMessage);
 		}
 
 		[HttpPost, Route("api/Requests/cancelRequests"), UnitOfWork]
 		public virtual RequestCommandHandlingResult CancelRequests(RequestsCommandInput input)
 		{
-			return _commandHandlingProvider.CancelRequests(input.RequestIds, input.ReplyMessage);
+			return _commandHandlingProvider.CancelRequests(input.SelectedRequestIds, input.ReplyMessage);
 		}
 
 		[HttpGet, Route("api/Requests/runWaitlist"), UnitOfWork]

@@ -1373,7 +1373,9 @@
     <Content Include="WFM\js\reports\reports.service.js" />
     <Content Include="WFM\js\reports\_modules.js" />
     <Content Include="WFM\js\requests\html\requests-commands-pane.tpl.html" />
+    <Content Include="WFM\js\requests\html\requests-reply-message.html" />
     <Content Include="WFM\js\requests\ngEnter.js" />
+    <Content Include="WFM\js\requests\request-command-parameters.service.js" />
     <Content Include="WFM\js\requests\requests-absence-text-grid-configuration.service.js" />
     <Content Include="WFM\js\requests\requests-commands-pane.directive.js" />
     <Content Include="WFM\js\requests\requests-commands-pane.directive.spec.js" />
@@ -1400,6 +1402,8 @@
     <Content Include="WFM\js\requests\html\requests.html" />
     <Content Include="WFM\js\requests\requests-data.service.js" />
     <Content Include="WFM\js\requests\requests-overview.directive.js" />
+    <Content Include="WFM\js\requests\requests-reply-message.directive.js" />
+    <Content Include="WFM\js\requests\requests-reply-message.directive.spec.js" />
     <Content Include="WFM\js\requests\requests-shift-trade-grid-configuration.service.js" />
     <Content Include="WFM\js\requests\requests-table-container.directive.js" />
     <Content Include="WFM\js\requests\requests-definitions.service.js" />

@@ -10,7 +10,8 @@ describe('RequestsControllerTests', function () {
 		requestsController,
 		mockSignalRBackendServer = {},
 		signalRService,
-		currentUserInfo;
+		currentUserInfo,
+		replyMessage;
 
 	beforeEach(function () {
 		module('wfm.templates');
@@ -28,9 +29,9 @@ describe('RequestsControllerTests', function () {
 					Wfm_Requests_People_Search_36294: true,
 					Wfm_Requests_Performance_36295: true,
 					Wfm_Requests_ApproveDeny_36297: true,
-					Wfm_Requests_Approve_Based_On_Budget_Allotment_39626:true,
+					Wfm_Requests_Approve_Based_On_Budget_Allotment_39626: true,
 					togglesLoaded: {
-						then: function(cb) { cb(); }
+						then: function (cb) { cb(); }
 					}
 				}
 			});
@@ -40,10 +41,10 @@ describe('RequestsControllerTests', function () {
 			$provide.service('requestsNotificationService', function () {
 				return requestsNotificationService;
 			});
-			$provide.service('signalRSVC', function() {
+			$provide.service('signalRSVC', function () {
 				return signalRService;
 			});
-			$provide.service('CurrentUserInfo', function() {
+			$provide.service('CurrentUserInfo', function () {
 				return currentUserInfo;
 			});
 		});
@@ -69,7 +70,7 @@ describe('RequestsControllerTests', function () {
 		test.requestCommandPaneScope.processWaitlistRequests();
 
 		expect(handleResult.CommandTrackId).toEqual(test.requestCommandPaneScope.commandTrackId);
-		expect(_notificationResult).toEqual('Submit process waitlisted requests command success');
+		expect(_notificationResult[0]).toEqual('Submit process waitlisted requests command success');
 	});
 
 	it('should notify the result when processWaitlistedRequests command is finished', function () {
@@ -77,7 +78,7 @@ describe('RequestsControllerTests', function () {
 		test.requestCommandPaneScope.commandTrackId = "12";
 		mockSignalRBackendServer.notifyClients('IRunRequestWaitlistEventMessage'
 			, { TrackId: test.requestCommandPaneScope.commandTrackId, StartDate: "D2016-07-15T12:00:44.357", EndDate: "D2016-07-15T12:00:44.357" });
-		expect(_notificationResult).toEqual('ProcessWaitlistedRequestsFinished');
+		expect(_notificationResult[0]).toEqual('ProcessWaitlistedRequestsFinished');
 	});
 
 	it('approve requests success, should notify the result', function () {
@@ -93,8 +94,104 @@ describe('RequestsControllerTests', function () {
 
 		test.requestCommandPaneScope.approveRequests();
 
-		expect(_notificationResult.changedRequestsCount).toEqual(1);
-		expect(_notificationResult.requestsCount).toEqual(2);
+		expect(_notificationResult[0].changedRequestsCount).toEqual(1);
+		expect(_notificationResult[0].requestsCount).toEqual(2);
+	});
+
+	it('approve requests, should handle message if there is one', function () {
+		var test = setUpTarget();
+		requestsDataService.submitCommandIsASucess(true);
+		var requestIds = [{ id: 1 }];
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		var handleResult = {
+			Success: true,
+			AffectedRequestIds: [{ id: 1 }]
+		}
+		requestsDataService.setRequestCommandHandlingResult(handleResult);
+		var message = 'message for approve';
+
+		test.requestCommandPaneScope.approveRequests(message);
+
+		expect(replyMessage).toEqual(message);
+
+	});
+
+	it('deny requests, should handle message if there is one', function () {
+		var test = setUpTarget();
+		requestsDataService.submitCommandIsASucess(true);
+		var requestIds = [{ id: 1 }];
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		var handleResult = {
+			Success: true,
+			AffectedRequestIds: [{ id: 1 }]
+		}
+		requestsDataService.setRequestCommandHandlingResult(handleResult);
+		var message = 'message for deny';
+
+		test.requestCommandPaneScope.denyRequests(message);
+
+		expect(replyMessage).toEqual(message);
+
+	});
+
+	it('cancel requests, should handle message if there is one', function () {
+		var test = setUpTarget();
+		requestsDataService.submitCommandIsASucess(true);
+		var requestIds = [{ id: 1 }];
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		var handleResult = {
+			Success: true,
+			AffectedRequestIds: [{ id: 1 }]
+		}
+		requestsDataService.setRequestCommandHandlingResult(handleResult);
+		var message = 'message for cancel';
+
+		test.requestCommandPaneScope.cancelRequests(message);
+
+		expect(replyMessage).toEqual(message);
+
+	});
+
+	it('reply requests, should handle message', function () {
+		var test = setUpTarget();
+		requestsDataService.submitCommandIsASucess(true);
+		var requestIds = [{ id: 1 }];
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		var handleResult = {
+			Success: true,
+			AffectedRequestIds: [{ id: 1 }]
+		}
+		requestsDataService.setRequestCommandHandlingResult(handleResult);
+		var message = 'message for reply';
+
+		test.requestCommandPaneScope.replyRequests(message);
+
+		expect(replyMessage).toEqual(message);
+
+	});
+
+	it('should not get message when there is more than one request selected', function () {
+		var test = setUpTarget();
+		var selectedRequestId = '1';
+		var message = ['message for id 1'];
+		var requestIds = ['1', '2'];
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		requestCommandParamsHolder.setSelectedIdAndMessage(selectedRequestId, message);
+
+		test.requestCommandPaneScope.displayReplyDialog();
+		expect(test.requestCommandPaneScope.selectedRequestMessage).toEqual('');
+	});
+
+	it('should get message for selected request when there is only one request selected', function () {
+		var test = setUpTarget();
+		var selectedRequestId = ['1'];
+		var message = '  message for id 1';
+		requestCommandParamsHolder.setSelectedRequestIds(selectedRequestId);
+		requestCommandParamsHolder.setSelectedIdAndMessage(selectedRequestId, [message]);
+
+		test.requestCommandPaneScope.displayReplyDialog();
+
+		expect(test.requestCommandPaneScope.selectedRequestMessage).toEqual(message.substr(2));
 	});
 
 	it('approve requests fail, should notify the result', function () {
@@ -110,7 +207,7 @@ describe('RequestsControllerTests', function () {
 
 		test.requestCommandPaneScope.approveRequests();
 
-		expect(_notificationResult).toEqual("A request that is New cannot be Approved.");
+		expect(_notificationResult[0]).toEqual("A request that is New cannot be Approved.");
 	});
 
 	it('deny requests success, should notify the result', function () {
@@ -126,8 +223,8 @@ describe('RequestsControllerTests', function () {
 
 		test.requestCommandPaneScope.denyRequests();
 
-		expect(_notificationResult.changedRequestsCount).toEqual(1);
-		expect(_notificationResult.requestsCount).toEqual(2);
+		expect(_notificationResult[0].changedRequestsCount).toEqual(1);
+		expect(_notificationResult[0].requestsCount).toEqual(2);
 	});
 
 	it('deny requests fail, should notify the result', function () {
@@ -143,7 +240,7 @@ describe('RequestsControllerTests', function () {
 
 		test.requestCommandPaneScope.denyRequests();
 
-		expect(_notificationResult).toEqual("something is wrong with this deny");
+		expect(_notificationResult[0]).toEqual("something is wrong with this deny");
 	});
 
 	it('cancel requests success, should notify the result', function () {
@@ -159,8 +256,8 @@ describe('RequestsControllerTests', function () {
 
 		test.requestCommandPaneScope.cancelRequests();
 
-		expect(_notificationResult.changedRequestsCount).toEqual(1);
-		expect(_notificationResult.requestsCount).toEqual(2);
+		expect(_notificationResult[0].changedRequestsCount).toEqual(1);
+		expect(_notificationResult[0].requestsCount).toEqual(2);
 	});
 
 	it('cancel requests fail, should notify the result', function () {
@@ -176,7 +273,7 @@ describe('RequestsControllerTests', function () {
 
 		test.requestCommandPaneScope.denyRequests();
 
-		expect(_notificationResult).toEqual("something is wrong with this cancel");
+		expect(_notificationResult[0]).toEqual("something is wrong with this cancel");
 	});
 
 	it('submit any command is a fail, should notify the result', function () {
@@ -187,17 +284,17 @@ describe('RequestsControllerTests', function () {
 
 		test.requestCommandPaneScope.denyRequests();
 
-		expect(_notificationResult).toEqual('submit error');
+		expect(_notificationResult[0]).toEqual('submit error');
 	});
 
-	it('should command enabled in shift trade tab', function() {
+	it('should command enabled in shift trade tab', function () {
 		var test = setUpTarget(true);
 		var requestIds = [{ id: 1 }, { id: 2 }];
 		requestCommandParamsHolder.setSelectedRequestIds(requestIds, true);
 		expect(test.requestCommandPaneScope.disableCommands()).toEqual(false);
 	});
 
-	it('should approve base on budget command enabled in absence tab', function() {
+	it('should approve base on budget command enabled in absence tab', function () {
 		var test = setUpTarget(false);
 		expect(test.requestCommandPaneScope.isApproveBasedOnBusinessRulesEnabled()).toEqual(true);
 	});
@@ -222,7 +319,7 @@ describe('RequestsControllerTests', function () {
 		test.requestCommandPaneScope.approveBasedOnBusinessRules();
 
 		expect(handleResult.CommandTrackId).toEqual(test.requestCommandPaneScope.commandTrackId);
-		expect(_notificationResult).toEqual('SubmitApproveBasedOnBusinessRulesSuccess');
+		expect(_notificationResult[0]).toEqual('SubmitApproveBasedOnBusinessRulesSuccess');
 	});
 
 	it('should notify the result when approveBasedOnBusinessRules command is finished', function () {
@@ -230,43 +327,135 @@ describe('RequestsControllerTests', function () {
 		test.requestCommandPaneScope.commandTrackId = "13";
 		mockSignalRBackendServer.notifyClients('IApproveRequestsWithValidatorsEventMessage'
 			, { TrackId: test.requestCommandPaneScope.commandTrackId });
-		expect(_notificationResult).toEqual('ApproveBasedOnBusinessRulesFinished');
+		expect(_notificationResult[0]).toEqual('ApproveBasedOnBusinessRulesFinished');
 		expect(requestCommandParamsHolder.getSelectedRequestsIds(false).length).toEqual(0);
+	});
+	
+	it('reply requests success, should notify the result', function () {
+		var test = setUpTarget();
+		requestsDataService.submitCommandIsASucess(true);
+		var requestIds = [{ id: 1 }, { id: 2 }];
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		var handleResult = {
+			Success: true,
+			AffectedRequestIds: [{ id: 1 }]
+		}
+		requestsDataService.setRequestCommandHandlingResult(handleResult);
+
+		test.requestCommandPaneScope.replyRequests();
+
+		expect(_notificationResult[0]).toEqual('ReplySuccess');
+	});
+
+	it('reply requests fail, should notify the result', function () {
+		var test = setUpTarget();
+		requestsDataService.submitCommandIsASucess(true);
+		var requestIds = [{ id: 1 }, { id: 2 }];
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		var handleResult = {
+			Success: false,
+			ErrorMessages: ['something is wrong with this reply']
+		}
+		requestsDataService.setRequestCommandHandlingResult(handleResult);
+
+		test.requestCommandPaneScope.denyRequests();
+
+		expect(_notificationResult[0]).toEqual(handleResult.ErrorMessages[0]);
+	});
+
+	it('reply and approve success, should notify both results', function () {
+		var test = setUpTarget();
+		requestsDataService.submitCommandIsASucess(true);
+		var requestIds = [{ id: 1 }, { id: 2 }];
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		var handleResult = {
+			Success: true,
+			AffectedRequestIds: [{ id: 1 }]
+		}
+		requestsDataService.setRequestCommandHandlingResult(handleResult);
+		var message = 'message for reply and approve';
+
+		test.requestCommandPaneScope.approveRequests(message);
+
+		expect(_notificationResult[0]).toEqual('ReplySuccess');
+		expect(_notificationResult[1].changedRequestsCount).toEqual(1);
+		expect(_notificationResult[1].requestsCount).toEqual(2);
+	});
+
+	it('reply and deny success, should notify both results', function () {
+		var test = setUpTarget();
+		requestsDataService.submitCommandIsASucess(true);
+		var requestIds = [{ id: 1 }, { id: 2 }];
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		var handleResult = {
+			Success: true,
+			AffectedRequestIds: [{ id: 1 }]
+		}
+		requestsDataService.setRequestCommandHandlingResult(handleResult);
+		var message = 'message for reply and deny';
+
+		test.requestCommandPaneScope.denyRequests(message);
+
+		expect(_notificationResult[0]).toEqual('ReplySuccess');
+		expect(_notificationResult[1].changedRequestsCount).toEqual(1);
+		expect(_notificationResult[1].requestsCount).toEqual(2);
+	});
+
+	it('reply and cancel success, should notify both results', function () {
+		var test = setUpTarget();
+		requestsDataService.submitCommandIsASucess(true);
+		var requestIds = [{ id: 1 }, { id: 2 }];
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		var handleResult = {
+			Success: true,
+			AffectedRequestIds: [{ id: 1 }]
+		}
+		requestsDataService.setRequestCommandHandlingResult(handleResult);
+		var message = 'message for reply and cancel';
+
+		test.requestCommandPaneScope.cancelRequests(message);
+
+		expect(_notificationResult[0]).toEqual('ReplySuccess');
+		expect(_notificationResult[1].changedRequestsCount).toEqual(1);
+		expect(_notificationResult[1].requestsCount).toEqual(2);
 	});
 
 	function FakeRequestsNotificationService() {
 		this.notifySubmitProcessWaitlistedRequestsSuccess = function () {
-			_notificationResult = "Submit process waitlisted requests command success";
+			_notificationResult.push("Submit process waitlisted requests command success");
 		}
-		this.notifyProcessWaitlistedRequestsFinished = function() {
-			_notificationResult = "ProcessWaitlistedRequestsFinished";
+		this.notifyProcessWaitlistedRequestsFinished = function () {
+			_notificationResult.push("ProcessWaitlistedRequestsFinished");
 		}
 		this.notifyCommandError = function (error) {
-			_notificationResult = error == undefined ? 'submit error' : error;
+			_notificationResult.push(error == undefined ? 'submit error' : error);
 		}
 		this.notifyApproveRequestsSuccess = function (changedRequestsCount, requestsCount) {
-			_notificationResult = {
+			_notificationResult.push({
 				changedRequestsCount: changedRequestsCount,
 				requestsCount: requestsCount
-			}
+			});
 		}
 		this.notifyDenyRequestsSuccess = function (changedRequestsCount, requestsCount) {
-			_notificationResult = {
+			_notificationResult.push({
 				changedRequestsCount: changedRequestsCount,
 				requestsCount: requestsCount
-			}
+			});
 		}
 		this.notifyCancelledRequestsSuccess = function (changedRequestsCount, requestsCount) {
-			_notificationResult = {
+			_notificationResult.push({
 				changedRequestsCount: changedRequestsCount,
 				requestsCount: requestsCount
-			}
+			});
+		}
+		this.notifyReplySuccess = function () {
+			_notificationResult.push('ReplySuccess');
 		}
 		this.notifySubmitApproveBasedOnBusinessRulesSuccess = function () {
-			_notificationResult = "SubmitApproveBasedOnBusinessRulesSuccess";
+			_notificationResult.push("SubmitApproveBasedOnBusinessRulesSuccess");
 		}
 		this.notifyApproveBasedOnBusinessRulesFinished = function () {
-			_notificationResult = "ApproveBasedOnBusinessRulesFinished";
+			_notificationResult.push("ApproveBasedOnBusinessRulesFinished");
 		}
 	}
 
@@ -276,6 +465,10 @@ describe('RequestsControllerTests', function () {
 			if (_commandIsASucess)
 				callback(_handleResult);
 		};
+
+		var getMessageCallback = function (selectedRequestIdsAndMessage) {
+			replyMessage = selectedRequestIdsAndMessage.ReplyMessage;
+		}
 		var errorCallback = function (callback) {
 			if (!_commandIsASucess)
 				callback(_handleResult);
@@ -286,13 +479,20 @@ describe('RequestsControllerTests', function () {
 		this.processWaitlistRequestsPromise = function () {
 			return { success: successCallback, error: errorCallback }
 		}
-		this.approveRequestsPromise = function () {
+		this.approveRequestsPromise = function (selectedRequestIdsAndMessage) {
+			getMessageCallback(selectedRequestIdsAndMessage);
 			return { success: successCallback, error: errorCallback }
 		}
-		this.denyRequestsPromise = function () {
+		this.denyRequestsPromise = function (selectedRequestIdsAndMessage) {
+			getMessageCallback(selectedRequestIdsAndMessage);
 			return { success: successCallback, error: errorCallback }
 		}
-		this.cancelRequestsPromise = function () {
+		this.cancelRequestsPromise = function (selectedRequestIdsAndMessage) {
+			getMessageCallback(selectedRequestIdsAndMessage);
+			return { success: successCallback, error: errorCallback }
+		}
+		this.replyRequestsPromise = function (selectedRequestIdsAndMessage) {
+			getMessageCallback(selectedRequestIdsAndMessage);
 			return { success: successCallback, error: errorCallback }
 		}
 		this.submitCommandIsASucess = function (result) {
@@ -315,7 +515,7 @@ describe('RequestsControllerTests', function () {
 	}
 
 	function FakeCurrentUserInfo() {
-		this.CurrentUserInfo = function() {
+		this.CurrentUserInfo = function () {
 			return {
 				DefaultTimeZone: "Europe/Berlin"
 			}
@@ -333,7 +533,7 @@ describe('RequestsControllerTests', function () {
 			requestsNotificationService: requestsNotificationService,
 			CurrentUserInfo: currentUserInfo
 		});
-		_notificationResult = '';
+		_notificationResult = [];
 		var targetScope = $rootScope.$new();
 		targetScope.onCommandSuccess = requestsController.onCommandSuccess;
 		targetScope.onErrorMessages = requestsController.onErrorMessages;
@@ -353,6 +553,6 @@ describe('RequestsControllerTests', function () {
 	}
 
 	function getRequestCommandPaneScope(targetElement) {
-		return angular.element(targetElement).scope().$$childTail.$$childTail.requestsCommandsPane;
+		return targetElement.isolateScope().requestsCommandsPane;
 	}
 });

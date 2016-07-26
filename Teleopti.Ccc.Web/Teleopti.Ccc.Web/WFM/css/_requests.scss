@@ -18,6 +18,14 @@
         position: absolute;
     }
 
+        min-height: 150px;
+        width: 50%;
+        margin-bottom:10px;
+    }
+    .message-reply-container-last textarea{
+        min-height: 50px;
+        width: 50%;
+    }
     schedule-table .wfm-checkbox-toggle {
         display: none;
     }

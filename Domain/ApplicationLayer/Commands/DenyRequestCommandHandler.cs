@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -26,7 +27,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			if (personRequest != null && denyRequest(personRequest, command))
 			{
 				command.AffectedRequestId = command.PersonRequestId;
-				personRequest.Reply(command.ReplyMessage);
+				try
+				{
+					personRequest.Reply(command.ReplyMessage);
+				}
+				catch (InvalidOperationException)
+				{
+					command.ErrorMessages.Add(string.Format(UserTexts.Resources.RequestInvalidMessageModification, personRequest.StatusText));
+				}
 			}
 		}
 

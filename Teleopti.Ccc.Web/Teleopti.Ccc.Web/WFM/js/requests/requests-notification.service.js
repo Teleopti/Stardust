@@ -57,6 +57,12 @@
 			});
 		}
 
+		this.notifyReplySuccess = function () {
+			$translate("ReplySuccess").then(function (text) {
+				NoticeService.success(text, 10000, true);
+			});
+		};
+
         this.notifyCommandError = function (error) {
             $translate("CommandFailed").then(function (text) {
                 NoticeService.error(text.replace('{0}', error), 5000, true);

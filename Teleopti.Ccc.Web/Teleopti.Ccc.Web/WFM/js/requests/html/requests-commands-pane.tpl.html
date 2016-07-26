@@ -43,6 +43,13 @@
 				<i class="mdi mdi-check-all"></i>
 				<span translate>ProcessWaitlist</span>
 			</li>
+			<li ng-show="requestsCommandsPane.isRequestsReplyMessageEnabled()"
+				ng-click="requestsCommandsPane.displayReplyDialog()"
+				ng-class="{'wfm-btn-primary-disabled' : requestsCommandsPane.disableCommands()}"
+				ng-if="!requestsCommandsPane.isShiftTradeViewActive">
+				<i class=""></i>
+				<span translate>Reply</span>
+			</li>
 		</ul>
 	</div>
 </div>
@@ -66,6 +73,13 @@
 		</div>
 	</div>
 </div>
+<requests-reply-message approve="requestsCommandsPane.approveRequests(message)"
+						deny="requestsCommandsPane.denyRequests(message)"
+						cancel="requestsCommandsPane.cancelRequests(message)"
+						reply="requestsCommandsPane.replyRequests(message)"
+						original-message="requestsCommandsPane.selectedRequestMessage"
+						show-reply-dialog="requestsCommandsPane.showReplyDialog"
+						show-original-message="requestsCommandsPane.showOriginalMessage"></requests-reply-message>
 
 <modal-dialog show="requestsCommandsPane.showProcessWaitlistModal" ng-cloak>
 	<h1 class="modal-title">{{'WaitlistPeriod' | translate}}</h1>
@@ -82,7 +96,9 @@
 	<div class="modal-actions">
 		<aside>
 			<button class="wfm-btn wfm-btn-invis-default" ng-click="requestsCommandsPane.toggleProcessWaitlistModal()">{{ 'Cancel' | translate }}</button>
-			<button class="wfm-btn wfm-btn-invis-primary do-forecast" ng-disabled="form.WaitlistRange.$invalid" ng-class="{'wfm-btn-invis-disabled':form.WaitlistRange.$invalid }" ng-click="requestsCommandsPane.processWaitlistRequests()">{{ 'Run' | translate }}</button>
+			<button class="wfm-btn wfm-btn-invis-primary" ng-disabled="form.WaitlistRange.$invalid" ng-class="{'wfm-btn-invis-disabled':form.WaitlistRange.$invalid }" ng-click="requestsCommandsPane.processWaitlistRequests()">{{ 'Run' | translate }}</button>
 		</aside>
 	</div>
 </modal-dialog>
+
+

@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		public virtual bool TrySetMessage(string message)
 		{
-			checkIfEditable();
+			if(!checkIfCanSetMessage()) return false;
 			message = message ?? string.Empty;
 			if (message.Length > messageLength)
 				return false;
@@ -264,6 +264,26 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			get { return _updatedOnServerUtc; }
 		}
 
+		private bool checkIfCanSetMessage()
+		{
+			if (PersistedRequestState.IsPending)
+			{
+				return true;
+			}
+			if (PersistedRequestState.IsNew)
+			{
+				return true;
+			}
+			if (PersistedRequestState.IsWaitlisted)
+			{
+				return true;
+			}
+			if (PersistedRequestState.IsApproved)
+			{
+				return true;
+			}
+			throw new InvalidOperationException();
+		}
 
 		private void checkIfEditable()
 		{

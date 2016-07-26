@@ -10,8 +10,18 @@
 
 		this._state = {
 			selectedTextAndAbsenceRequestIds: [],
-			selectedShiftTradeRequestIds: []
+			selectedShiftTradeRequestIds: [],
+			selectedIdAndMessage: {}
 		};
+
+		this.setSelectedIdAndMessage = function (selectedRequestId, message) {
+			message[0] = message[0].substr(2);
+			self._state.selectedIdAndMessage[selectedRequestId] = message[0];
+		}
+
+		this.getSelectedIdAndMessage = function (selectedRequestId) {
+			return self._state.selectedIdAndMessage[selectedRequestId];
+		}
 
 		this.setSelectedRequestIds = function (selectedRequestIds, isShiftTrade) {
 			if (isShiftTrade) {
@@ -22,7 +32,6 @@
 		};
 
 		this.resetSelectedRequestIds = function (isShiftTrade) {
-
 			if (isShiftTrade) {
 				self._state.selectedShiftTradeRequestIds = [];
 			} else {
@@ -31,7 +40,6 @@
 		};
 
 		this.getSelectedRequestsIds = function (isShiftTrade) {
-
 			if (isShiftTrade) {
 				return self._state.selectedShiftTradeRequestIds;
 			} else {

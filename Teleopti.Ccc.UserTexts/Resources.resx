@@ -14762,4 +14762,12 @@ These options are activated:
     <value>Account</value>
     <comment>Shortened form of Person Account, used in the column heading of the Account column on the Absence Request table.</comment>
   </data>
+  <data name="RequestInvalidMessageLength" xml:space="preserve">
+    <value>Cannot save this reply as the complete message exceeds the 2000 character limit</value>
+    <comment>pretty self-explained</comment>
+  </data>
+  <data name="RequestInvalidMessageModification" xml:space="preserve">
+    <value>Cannot save your reply to this request as it has been {0}</value>
+    <comment>Cannot reply message because request has been handled</comment>
+  </data>
 </root>

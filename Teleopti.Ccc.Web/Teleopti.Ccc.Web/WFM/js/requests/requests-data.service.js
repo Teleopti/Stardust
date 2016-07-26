@@ -1,4 +1,4 @@
-﻿(function() {
+﻿(function () {
 	'use strict';
 
 	angular.module('wfm.requests').service('requestsDataService', ['$http', '$translate', 'requestsDefinitions', requestsDataService]);
@@ -13,12 +13,13 @@
 		var requestableAbsenceUrl = '../api/Absence/GetRequestableAbsences';
 		var processWaitlistRequests = '../api/Requests/runWaitlist';
 		var approveWithValidatorsUrl = '../api/Requests/approveWithValidators';
+		var replyRequestsUrl = '../api/Requests/replyRequests';
 
-		this.getAllRequestsPromise_old = function(filter, sortingOrders) {
+		this.getAllRequestsPromise_old = function (filter, sortingOrders) {
 			return $http.post(loadTextAndAbsenceRequestsUrl_old, requestsDefinitions.normalizeRequestsFilter_old(filter, sortingOrders));
 		};
 
-		this.getAllRequestsPromise = function(filter, sortingOrders, paging) {
+		this.getAllRequestsPromise = function (filter, sortingOrders, paging) {
 			return $http.get(listRequestsUrl,
 				{ params: requestsDefinitions.normalizeRequestsFilter(filter, sortingOrders, paging) }
 			);
@@ -30,39 +31,44 @@
 			);
 		};
 
-		this.approveRequestsPromise = function(selectedRequestIds, replyMessage) {
-			return $http.post(approveRequestsUrl, getRequestsCommandParameter(selectedRequestIds, replyMessage));
+		this.replyRequestsPromise = function (selectedRequestIdsAndMessage) {
+			return $http.post(replyRequestsUrl, selectedRequestIdsAndMessage);
+		}
+
+		this.approveRequestsPromise = function (selectedRequestIdsAndMessage) {
+			return $http.post(approveRequestsUrl, selectedRequestIdsAndMessage);
 		};
 
-		this.cancelRequestsPromise = function (selectedRequestIds, replyMessage) {
-			return $http.post(cancelRequestsUrl, getRequestsCommandParameter(selectedRequestIds, replyMessage));
+		this.cancelRequestsPromise = function (selectedRequestIdsAndMessage) {
+
+			return $http.post(cancelRequestsUrl, selectedRequestIdsAndMessage);
 		};
 
 		this.processWaitlistRequestsPromise = function (waitlistPeriod, commandId) {
-            var waitlistPeriodGet= {
-                startTime: waitlistPeriod.startDate,
-                endTime: waitlistPeriod.endDate,
-                commandId:commandId
-            }
-            return $http.get(processWaitlistRequests, { params: waitlistPeriodGet });
+			var waitlistPeriodGet = {
+				startTime: waitlistPeriod.startDate,
+				endTime: waitlistPeriod.endDate,
+				commandId: commandId
+			}
+			return $http.get(processWaitlistRequests, { params: waitlistPeriodGet });
 		};
-		
+
 		this.approveWithValidatorsPromise = function (parameters) {
 			return $http.post(approveWithValidatorsUrl, parameters);
 		};
 
-		this.denyRequestsPromise = function (selectedRequestIds, replyMessage) {
-			return $http.post(denyRequestsUrl, getRequestsCommandParameter(selectedRequestIds, replyMessage));
+		this.denyRequestsPromise = function (selectedRequestIdsAndMessage) {
+			return $http.post(denyRequestsUrl, selectedRequestIdsAndMessage);
 		}
 
-		this.getRequestableAbsences = function() {
+		this.getRequestableAbsences = function () {
 			return $http.get(requestableAbsenceUrl);
 		}
 
-		this.getAllRequestStatuses = function(isShiftTradeView) {
+		this.getAllRequestStatuses = function (isShiftTradeView) {
 			// TODO: Should get this list in a better way
 			// Refer to definition of Teleopti.Ccc.Domain.AgentInfo.Requests.PersonRequest.personRequestState.CreateFromId()
-			var statuses =  [
+			var statuses = [
 				{ Id: 0, Name: $translate.instant("Pending") },
 				{ Id: 1, Name: $translate.instant("Denied") },
 				{ Id: 2, Name: $translate.instant("Approved") }
@@ -75,13 +81,6 @@
 			}
 
 			return statuses;
-		}
-
-		function getRequestsCommandParameter(selectedRequestIds, replyMessage) {
-			return {
-				RequestIds: selectedRequestIds,
-				ReplyMessage: replyMessage
-			};
 		}
 	}
 })();

@@ -1,4 +1,4 @@
-﻿(function() {
+﻿(function () {
 	'use strict';
 
 	angular.module('wfm.requests')
@@ -14,8 +14,10 @@
 	function requestsCommandsPaneCtrl(requestsDefinitions, requestsDataService, requestCommandParamsHolder, toggleSvc,
 		signalRSVC) {
 		var vm = this;
-
 		vm.approveRequests = approveRequests;
+		vm.replyRequests = replyRequests;
+		vm.displayReplyDialog = displayReplyDialog;
+		vm.isRequestsReplyMessageEnabled = isRequestsReplyMessageEnabled;
 		vm.denyRequests = denyRequests;
 		vm.disableCommands = disableCommands;
 		vm.canCancelRequests = canCancelRequests;
@@ -41,6 +43,15 @@
 			vm.waitlistPeriod = { startDate: new Date(), endDate: new Date() };
 		}
 
+		function getSelectedRequestMessage() {
+			var selectedRequestIds = getSelectedRequestIds();
+			if (selectedRequestIds.length === 1) {
+				vm.selectedRequestMessage = requestCommandParamsHolder.getSelectedIdAndMessage(selectedRequestIds[0]);
+			} else {
+				vm.selectedRequestMessage = '';
+			}
+		}
+
 		function getSelectedRequestIds() {
 			return requestCommandParamsHolder
 				? requestCommandParamsHolder.getSelectedRequestsIds(vm.isShiftTradeViewActive)
@@ -53,7 +64,7 @@
 			var commandInProgress = dataServicePromise(waitlistPeriod);
 
 			if (vm.afterCommandSuccess) {
-				commandInProgress.success(function(requestCommandHandlingResult) {
+				commandInProgress.success(function (requestCommandHandlingResult) {
 					if (requestCommandHandlingResult.Success || (requestCommandHandlingResult.AffectedRequestIds
 						&& requestCommandHandlingResult.AffectedRequestIds.length > 0)) {
 						vm.commandTrackId = requestCommandHandlingResult.CommandTrackId;
@@ -85,12 +96,12 @@
 				if (parameters !== undefined && parameters !== null) {
 					if (Array.isArray(parameters)) {
 						requestCount = parameters.length;
-					} else if (Array.isArray(parameters.selectedRequestIds)) {
-						requestCount = parameters.selectedRequestIds.length;
+					} else if (Array.isArray(parameters.SelectedRequestIds)) {
+						requestCount = parameters.SelectedRequestIds.length;
 					}
 				}
 
-				commandInProgress.success(function(requestCommandHandlingResult) {
+				commandInProgress.success(function (requestCommandHandlingResult) {
 					if (requestCommandHandlingResult.Success || (requestCommandHandlingResult.AffectedRequestIds
 						&& requestCommandHandlingResult.AffectedRequestIds.length > 0)) {
 						vm.commandTrackId = requestCommandHandlingResult.CommandTrackId;
@@ -110,10 +121,14 @@
 			}
 		}
 
-		function doStandardCommandHandling(requestType, dataServicePromise) {
+		function doStandardCommandHandling(requestType, dataServicePromise, replyMessage) {
 			var selectedRequestIds = getSelectedRequestIds();
 			if (!selectedRequestIds || selectedRequestIds.length === 0) return;
-			doStandardCommandHandlingWithParameters(requestType, dataServicePromise, selectedRequestIds);
+			var selectedRequestIdsAndMessage = {
+				ReplyMessage: replyMessage,
+				SelectedRequestIds: selectedRequestIds
+			}
+			doStandardCommandHandlingWithParameters(requestType, dataServicePromise, selectedRequestIdsAndMessage);
 		}
 
 		function subscribeSignalRMessage(domainType, eventHandler) {
@@ -124,8 +139,13 @@
 			});
 		}
 
-		function approveRequests() {
-			doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.Approve, requestsDataService.approveRequestsPromise);
+		function replyRequests(message) {
+			doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.Reply, requestsDataService.replyRequestsPromise, message);
+		}
+
+		function approveRequests(replyMessage) {
+			var commandType = replyMessage ? requestsDefinitions.REQUEST_COMMANDS.ReplyAndApprove : requestsDefinitions.REQUEST_COMMANDS.Approve;
+			doStandardCommandHandling(commandType, requestsDataService.approveRequestsPromise, replyMessage);
 		}
 
 		function processWaitlistRequests() {
@@ -147,8 +167,9 @@
 				requestsDataService.approveWithValidatorsPromise, parameter);
 		}
 
-		function denyRequests() {
-			doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.Deny, requestsDataService.denyRequestsPromise);
+		function denyRequests(replyMessage) {
+			var commandType = replyMessage ? requestsDefinitions.REQUEST_COMMANDS.ReplyAndDeny : requestsDefinitions.REQUEST_COMMANDS.Deny;
+			doStandardCommandHandling(commandType, requestsDataService.denyRequestsPromise, replyMessage);
 		}
 
 		function disableCommands() {
@@ -168,10 +189,11 @@
 		function canCancelRequests() {
 			return !disableCommands();
 		}
-		
-		function cancelRequests() {
-			vm.toggleCancelConfirmationModal();
-			doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.Cancel, requestsDataService.cancelRequestsPromise);
+
+		function cancelRequests(replyMessage) {
+			vm.ShowCancelAbsenceConfirmationModal = false;
+			var commandType = replyMessage ? requestsDefinitions.REQUEST_COMMANDS.ReplyAndCancel : requestsDefinitions.REQUEST_COMMANDS.Cancel;
+			doStandardCommandHandling(commandType, requestsDataService.cancelRequestsPromise, replyMessage);
 		}
 
 		function toggleCancelConfirmationModal() {
@@ -184,8 +206,20 @@
 			vm.showProcessWaitlistModal = !vm.showProcessWaitlistModal;
 		}
 
+		function displayReplyDialog() {
+			getSelectedRequestMessage();
+			if (!disableCommands()) {
+				vm.showReplyDialog = true;
+				vm.showOriginalMessage = getSelectedRequestIds().length == 1 ? true : false;
+			}
+		}
+
 		function isApproveBasedOnBusinessRulesEnabled() {
 			return toggleSvc.Wfm_Requests_Approve_Based_On_Budget_Allotment_39626 && !vm.isShiftTradeViewActive;
+		}
+
+		function isRequestsReplyMessageEnabled() {
+			return toggleSvc.Wfm_Requests_Reply_Message_39629 && !vm.isShiftTradeViewActive;
 		}
 	}
 
