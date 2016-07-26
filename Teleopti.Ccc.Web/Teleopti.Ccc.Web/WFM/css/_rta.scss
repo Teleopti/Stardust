@@ -87,11 +87,9 @@
 
 .cell-header {
 	height:6px;
-}
-
-.white-cell-header {
-	height: 24px;
-	background-color: $white;
+	padding-top:2px;
+	padding-left:5px;
+	text-align: left;
 }
 
 .shift-timeline-wraper {

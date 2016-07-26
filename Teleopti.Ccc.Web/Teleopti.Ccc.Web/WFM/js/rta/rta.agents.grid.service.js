@@ -37,13 +37,7 @@
 				var alarmDurationCellTemplate = '<div ng-if="row.entity.TimeInAlarm" class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>';
 
 				var headerCellTemplate = 'js/rta/rta-agents-headercelltemplate.html';
-				if (alarmOnly) {
-					if (toggleService.RTA_AlarmContext_29357) {
-						headerCellTemplate = '<div class="white-cell-header"></div>';
-					} else {
-						headerCellTemplate = '<div></div>';
-					}
-				}
+		
 				var timeInRuleTemplate = "";
 				if (toggleService.RTA_TotalOutOfAdherenceTime_38702) {
 					timeInRuleTemplate = '<div class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>';
@@ -64,7 +58,7 @@
 					}
 				};
 				var siteAndTeam = {
-					displayName: 'SiteAndTeam',
+					displayName: 'Site/Team',
 					field: 'SiteAndTeamName',
 					enableColumnMenu: false,
 					headerCellTemplate: headerCellTemplate,
@@ -99,7 +93,7 @@
 					headerCellFilter: 'translate'
 				};
 				var nextActivity = {
-					displayName: 'NextActivity',
+					displayName: 'Next activity',
 					field: 'NextActivity',
 					enableColumnMenu: false,
 					headerCellTemplate: headerCellTemplate,
@@ -113,11 +107,11 @@
 					headerCellTemplate: headerCellTemplate,
 					cellTemplate: alarmCellTemplate,
 					headerCellFilter: 'translate',
-					width: toggleService.RTA_AlarmContext_29357 ? "10%" : null,
-					sortingAlgorithm: alarmOnly ? null : sortingAlgorithm
+					width: toggleService.RTA_AlarmContext_29357 ? "10%" : null
+					//,sortingAlgorithm: alarmOnly ? null : sortingAlgorithm
 				};
 				var timeInAlarm = {
-					displayName: 'TimeInAlarm',
+					displayName: 'Time in alarm',
 					field: 'TimeInAlarm',
 					enableColumnMenu: false,
 					headerCellTemplate: headerCellTemplate,
@@ -126,7 +120,7 @@
 					width: toggleService.RTA_AlarmContext_29357 ? "7%" : null,
 				};
 				var timeInRule = {
-					displayName: 'TimeInRule',
+					displayName: 'Time in rule',
 					field: 'TimeInRule',
 					enableColumnMenu: false,
 					headerCellTemplate: headerCellTemplate,
@@ -135,7 +129,7 @@
 					width: toggleService.RTA_AlarmContext_29357 ? "7%" : null,
 				};
 				var timeOutOfAdherence = {
-					displayName: 'TimeOutOfAdherence',
+					displayName: 'Time OOA',
 					field: 'TimeOutOfAdherence',
 					enableColumnMenu: false,
 					headerCellTemplate: headerCellTemplate,
