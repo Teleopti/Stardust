@@ -141,7 +141,7 @@
         overflow: hidden;
         width: 100%;
         height: 100%;
-  
+
         table {
             margin-bottom: 0;
 
@@ -209,7 +209,7 @@
             th.shift-category-cell-header, td.shift-category-cell{
                 width: 30px;
             }
-            
+
             td.shift-category-cell{
                 text-align: center;
                 border-left: 1px solid $gray012;
@@ -458,4 +458,20 @@
 
 .warning-icon {
     color: $orange-600;
+}
+
+.shiftcat-shortname, .shiftcat-fullname {
+    display: table-cell;
+}
+
+.shiftcat-shortname {
+    width: 2em;
+    white-space: nowrap;
+    padding: 0 2px;
+    text-align: center;
+    border-radius: 2px;
+}
+
+.shiftcat-fullname {
+    padding-left: 0.5em;
 }

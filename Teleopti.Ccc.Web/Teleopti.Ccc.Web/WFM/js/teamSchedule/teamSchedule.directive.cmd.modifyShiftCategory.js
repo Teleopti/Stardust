@@ -1,5 +1,5 @@
 ﻿(function(){
-	"use strict";
+	'use strict';
 
 	angular.module('wfm.teamSchedule').directive('modifyShiftCategory', modifyShiftCategoryDirective);
 
@@ -12,8 +12,27 @@
 		vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
 		vm.shiftCategoriesLoaded = false;
 
-		shiftCategorySvc.fetchShiftCategories().then(function(data){
-			vm.shiftCategoriesList = data.data;
+		function getContrast50(hexcolor) {
+			return (parseInt(hexcolor, 16) > 0xffffff/2) ? 'black' : 'white';
+		}
+
+		function getContrastYIQ(hexcolor) {
+			var r = parseInt(hexcolor.substr(0, 2), 16);
+			var g = parseInt(hexcolor.substr(2, 2), 16);
+			var b = parseInt(hexcolor.substr(4, 2), 16);
+			var yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+			return (yiq >= 128) ? 'black' : 'white';
+		}
+
+		shiftCategorySvc.fetchShiftCategories().then(function(response){
+			vm.shiftCategoriesList = response.data;
+			if (Array.isArray(response.data)) {
+				response.data.forEach(function (shiftCat) {
+					var displayColorHex = shiftCat.DisplayColor.substring(1);
+					//shiftCat.ContrastColor = getContrast50(displayColorHex);
+					shiftCat.ContrastColor = getContrastYIQ(displayColorHex);
+				});
+			}
 			vm.shiftCategoriesLoaded = true;
 		});
 
@@ -29,7 +48,7 @@
 				if (vm.getActionCb(vm.label)) {
 					vm.getActionCb(vm.label)(vm.trackId, requestData.PersonIds);
 				}
-				
+
 				teamScheduleNotificationService.reportActionResult({
 					success: 'SuccessfulMessageForEditingShiftCategory',
 					warning: 'PartialSuccessMessageForEditingShiftCategory'
@@ -42,7 +61,7 @@
 			});
 		};
 	}
-	
+
 	function modifyShiftCategoryDirective(){
 		return{
 			restrict: 'E',
@@ -51,7 +70,21 @@
 			bindToController: true,
 			templateUrl: 'js/teamSchedule/html/modifyShiftCategory.tpl.html',
 			require: ['^teamscheduleCommandContainer', 'modifyShiftCategory'],
-			link: linkFn
+			compile: function (tElement, tAttrs) {
+				var tabindex = angular.isDefined(tAttrs.tabindex) ? tAttrs.tabindex : '0';
+				function addTabindexTo() {
+					angular.forEach(arguments, function (elements) {
+						angular.forEach(elements, function (element) {
+							element.setAttribute('tabIndex', tabindex);
+						});
+					});
+				}
+				addTabindexTo(
+					tElement[0].querySelectorAll('.shift-category-selector'),
+					tElement[0].querySelectorAll('#applyShiftCategory')
+				);
+				return linkFn;
+			}
 		};
 	}
 
@@ -62,6 +95,13 @@
 		scope.vm.selectedDate = containerCtrl.getDate;
 		scope.vm.trackId = containerCtrl.getTrackId();
 		scope.vm.getActionCb = containerCtrl.getActionCb;
+
+		scope.$on('teamSchedule.command.focus.default', function () {
+			var focusTarget = elem[0].querySelector('.focus-default');
+			if (focusTarget) angular.element(focusTarget).focus();
+		});
+
+		elem.removeAttr('tabindex');
 	}
 
 })();

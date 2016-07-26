@@ -3,8 +3,11 @@
 	<md-content class="command-panel-content" layout-padding>
 		<form name="editShiftCategoryForm">
 			<div class="con-row">
-				<md-select class="shift-category-selector" ng-model="vm.selectedShiftCategoryId" placeholder="{{'SelectACategory' | translate}}">
-					<md-option ng-repeat="category in vm.shiftCategoriesList" ng-value="category.Id"><span ng-bind="category.Name"></span></md-option>
+				<md-select class="shift-category-selector focus-default" ng-model="vm.selectedShiftCategoryId" placeholder="{{'SelectACategory' | translate}}">
+					<md-option ng-repeat="category in vm.shiftCategoriesList" ng-value="category.Id">
+							<span class="shiftcat-shortname" ng-bind="category.ShortName" ng-style="{backgroundColor: category.DisplayColor, color: category.ContrastColor}"></span>
+							<span class="shiftcat-fullname" ng-bind="category.Name"></span>
+					</md-option>
 				</md-select>
 			</div>
 		</form>
