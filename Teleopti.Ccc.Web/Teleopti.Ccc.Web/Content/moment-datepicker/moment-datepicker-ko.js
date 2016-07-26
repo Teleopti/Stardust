@@ -27,7 +27,7 @@
         "isDate": "date"
     };
     
-    var elBinder = function($el) {
+    var elBinder = function ($el) {
         return {
             set: function (value) {
                 var funcs = elBinder.functions[$el.data(elBinder.DATATYPE_KEY)] || elBinder.functions['_default'];
@@ -82,10 +82,15 @@
     //#endregion
 
     ko.bindingHandlers.datepicker = {
-        init: function (element, valueAccessor, allBindingsAccessor) {
-            var options = allBindingsAccessor().datepickerOptions || {};
+    	init: function (element, valueAccessor, allBindingsAccessor) {
+    		var options = allBindingsAccessor().datepickerOptions || {};
+		    if ($(element).is('button')) {
+			    options.calendarPlacement = 'left';
+		    }
+            
             var dataType = options.dataType || detectDataType(ko.utils.unwrapObservable(valueAccessor()));
             dataType = !dataType || dataType == 'string' ? 'iso' : dataType;
+
             var $el = $(element).datepicker(options);
 
             elBinder($el).register(dataType);
