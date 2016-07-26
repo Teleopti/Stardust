@@ -6,11 +6,13 @@ using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Service;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Messaging.Client;
 
 namespace Teleopti.Analytics.Etl.Common
 {
@@ -36,6 +38,10 @@ namespace Teleopti.Analytics.Etl.Common
 
 			builder.RegisterType<FindTenantLogonInfoUnsecured>().As<IFindLogonInfo>().SingleInstance();
 			builder.RegisterType<TenantLogonInfoLoader>().As<ITenantLogonInfoLoader>().SingleInstance();
+
+			var url = new MutableUrl();
+			url.Configure(_configuration.Args().MessageBrokerUrl);
+			builder.RegisterInstance(url).As<IMessageBrokerUrl>();
 		}
 
 		public class TenantLogonInfoLoader : ITenantLogonInfoLoader

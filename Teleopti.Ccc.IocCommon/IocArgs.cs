@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.IocCommon
 		public bool DisableWebSocketCors { get; set; }
 		public int MessagesPerSecond { get; set; }
 		public bool OptimizeScheduleChangedEvents_DontUseFromWeb { get; set; }
+		public string MessageBrokerUrl { get; set; }
 
 		public bool MessageBrokerListeningEnabled { get; set; }
 		public IContainer SharedContainer { get; set; }
@@ -44,6 +45,7 @@ namespace Teleopti.Ccc.IocCommon
 			OptimizeScheduleChangedEvents_DontUseFromWeb = configReader.ReadValue("OptimizeScheduleChangedEvents_DontUseFromWeb", false);
 			DataSourceConfigurationSetter = Infrastructure.NHibernateConfiguration.DataSourceConfigurationSetter.ForDesktop();
 			ImplementationTypeForCurrentUnitOfWork = typeof(CurrentUnitOfWork);
+			MessageBrokerUrl = configReader.AppConfig("MessageBroker");
 		}
 
 	}

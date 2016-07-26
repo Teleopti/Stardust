@@ -32,16 +32,14 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 		private List<IBusinessUnit> _buList;
 		private DataSourceContainer _choosenDb;
 
-		public JobHelper(IAvailableBusinessUnitsProvider availableBusinessUnitsProvider, Tenants tenants, IIndexMaintenanceRepository indexMaintenanceRepository)
+		public JobHelper(IAvailableBusinessUnitsProvider availableBusinessUnitsProvider, Tenants tenants, IIndexMaintenanceRepository indexMaintenanceRepository,IMessageSender messageSender)
 		{
 			_availableBusinessUnitsProvider = availableBusinessUnitsProvider;
 			_tenants = tenants;
 			_indexMaintenanceRepository = indexMaintenanceRepository;
 
-			var url = new MutableUrl();
-			url.Configure(ConfigurationManager.AppSettings["MessageBroker"]);
-			_messageSender = new HttpSender(new HttpClientM(new HttpServer(new NewtonsoftJsonSerializer()), url));
-
+			_messageSender = messageSender;
+					
 			var application = new InitializeApplication(null);
 			application.Start(new State(), null, ConfigurationManager.AppSettings.ToDictionary());
 			var logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()), new ThreadPrincipalContext()), new TeleoptiPrincipalFactory(), null);

@@ -8,9 +8,16 @@ namespace Teleopti.Analytics.Etl.Common
 {
 	public class EtlAppModule : Module
 	{
+		private IConfigReader _configReader = new ConfigReader();
+
+		public void SetConfigReader(IConfigReader configReader)
+		{
+			_configReader = configReader;
+		}
+
 		protected override void Load(ContainerBuilder builder)
 		{
-			var iocArgs = new IocArgs(new ConfigReader())
+			var iocArgs = new IocArgs(_configReader)
 			{
 				DataSourceConfigurationSetter = DataSourceConfigurationSetter.ForEtl()
 			};

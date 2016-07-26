@@ -10,6 +10,7 @@ using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs;
 using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
@@ -42,7 +43,9 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 
 				_baseConfiguration.JobHelper = new JobHelper(
 					App.Container.Resolve<IAvailableBusinessUnitsProvider>(),
-					App.Container.Resolve<Tenants>(), App.Container.Resolve<IIndexMaintenanceRepository>());
+					App.Container.Resolve<Tenants>(), 
+					App.Container.Resolve<IIndexMaintenanceRepository>(),
+					App.Container.Resolve<IMessageSender>());
 
 				jobParameters.Helper = _baseConfiguration.JobHelper;
 
