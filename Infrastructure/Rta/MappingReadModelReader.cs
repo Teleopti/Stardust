@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 using Teleopti.Interfaces.Domain;
 
@@ -14,6 +13,9 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		public const string MagicString = "magic.string";
 		private readonly ICurrentReadModelUnitOfWork _unitOfWork;
 
+		private int _version;
+		private IEnumerable<Mapping> _cache = Enumerable.Empty<Mapping>();
+
 		public MappingReadModelReader(ICurrentReadModelUnitOfWork unitOfWork)
 		{
 			_unitOfWork = unitOfWork;
@@ -21,28 +23,31 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public IEnumerable<Mapping> Read()
 		{
-			return _unitOfWork.Current()
+			var version = _unitOfWork.Current()
+				.CreateSqlQuery("SELECT CONVERT(INT, [Value]) FROM [ReadModel].[KeyValueStore] WHERE [Key] = 'RuleMappingsVersion'")
+				.UniqueResult<int>();
+
+			if (version == _version && _cache.Any())
+				return _cache;
+
+			_version = version;
+			_cache = _unitOfWork.Current()
 				.CreateSqlQuery("SELECT * FROM [ReadModel].[RuleMappings]")
 				.SetResultTransformer(Transformers.AliasToBean(typeof (internalModel)))
 				.List<Mapping>();
+
+			return _cache;
 		}
 
 		public IEnumerable<Mapping> ReadFor(IEnumerable<string> stateCodes, IEnumerable<Guid?> activities)
 		{
-			if (stateCodes.IsEmpty())
-				stateCodes = new string[] {null};
-			if (activities.IsEmpty())
-				activities = new Guid?[] {null};
-
-			return _unitOfWork.Current()
-				.CreateSqlQuery(@"
-SELECT * FROM [ReadModel].[RuleMappings]
-WHERE StateCode IN (:stateCodes) 
-AND ActivityId IN (:activities)")
-				.SetParameterList("stateCodes", stateCodes.Select(stateCode => stateCode ?? MagicString))
-				.SetParameterList("activities", activities.Select(x => x ?? Guid.Empty))
-				.SetResultTransformer(Transformers.AliasToBean(typeof (internalModel)))
-				.List<internalModel>();
+			return (
+				from m in Read()
+				where
+					stateCodes.Contains(m.StateCode) &&
+					activities.Contains(m.ActivityId)
+				select m
+				).ToArray();
 		}
 
 		private class internalModel : Mapping
