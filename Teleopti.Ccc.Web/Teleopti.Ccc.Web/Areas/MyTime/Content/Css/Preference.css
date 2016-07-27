@@ -269,6 +269,12 @@ color: #333333;
 
 #Preference-body-inner {
 	margin: auto;
+	text-align: center;
+	padding: 10px 0;
+}
+
+#Preference-body-inner ul.weekdays {
+	padding: 0;
 }
 
 .min-hours-per-week {
