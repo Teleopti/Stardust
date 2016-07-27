@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			if (response.StatusCode != HttpStatusCode.OK)
 			{
 				var responseContent = response.Content.ReadAsStringAsync().Result;
-				throw new Exception("Posting json returned http code " + response.StatusCode + ", Content: " + responseContent);
+				throw new Exception($"Posting json returned http code {response.StatusCode}, Sent: {json}, Response: {responseContent}");
 			}
 		}
 
