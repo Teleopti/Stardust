@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly IShiftTradeRequestSetChecksum _shiftTradeSetChecksum;
 		private readonly IShiftTradeRequestProvider _shiftTradeRequestprovider;
+		private readonly IToggleManager _toggleManager;
 
 		public ShiftTradeRequestPersister(IPersonRequestRepository personRequestRepository,
 			IShiftTradeRequestMapper shiftTradeRequestMapper,
@@ -33,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			ICurrentDataSource dataSourceProvider,
 			ICurrentBusinessUnit businessUnitProvider,
 			ICurrentUnitOfWork currentUnitOfWork,
-			IShiftTradeRequestSetChecksum shiftTradeSetChecksum, IShiftTradeRequestProvider shiftTradeRequestprovider)
+			IShiftTradeRequestSetChecksum shiftTradeSetChecksum, IShiftTradeRequestProvider shiftTradeRequestprovider, IToggleManager toggleManager)
 		{
 			_personRequestRepository = personRequestRepository;
 			_shiftTradeRequestMapper = shiftTradeRequestMapper;
@@ -45,6 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_currentUnitOfWork = currentUnitOfWork;;
 			_shiftTradeSetChecksum = shiftTradeSetChecksum;
 			_shiftTradeRequestprovider = shiftTradeRequestprovider;
+			_toggleManager = toggleManager;
 		}
 
 		public RequestViewModel Persist(ShiftTradeRequestForm form)
@@ -91,7 +94,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 						LogOnBusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault(Guid.Empty),
 						LogOnDatasource = _dataSourceProvider.Current().DataSourceName,
 						PersonRequestId = personRequest.Id.GetValueOrDefault(),
-						AcceptingPersonId = shiftTrade.PersonTo.Id.GetValueOrDefault()
+						AcceptingPersonId = shiftTrade.PersonTo.Id.GetValueOrDefault(),
+						UseMinWeekWorkTime =
+							_toggleManager.IsEnabled(Domain.FeatureFlags.Toggles.Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635)
 					};
 				}
 			}

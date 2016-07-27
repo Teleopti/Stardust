@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
 
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly ICurrentBusinessUnit _businessUnitProvider;
 	    private readonly IEventSyncronization _eventSyncronization;
 	    private readonly IShiftTradeRequestSetChecksum _shiftTradeRequestSetChecksum;
+		private readonly IToggleManager _toggleManager;
 
         public RespondToShiftTrade(IPersonRequestRepository personRequestRepository,
 			IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum,
@@ -33,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			INow nu,
 			ICurrentDataSource dataSourceProvider,
 			ICurrentBusinessUnit businessUnitProvider,
-            IEventSyncronization eventSyncronization)
+            IEventSyncronization eventSyncronization, IToggleManager toggleManager)
 		{
 			_personRequestRepository = personRequestRepository;
 			_personRequestCheckAuthorization = personRequestCheckAuthorization;
@@ -44,7 +46,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_dataSourceProvider = dataSourceProvider;
 			_businessUnitProvider = businessUnitProvider;
             _eventSyncronization = eventSyncronization;
-            _shiftTradeRequestSetChecksum = shiftTradeRequestSetChecksum;
+	        _toggleManager = toggleManager;
+	        _shiftTradeRequestSetChecksum = shiftTradeRequestSetChecksum;
 		}
 
 		public RequestViewModel OkByMe(Guid requestId, string message)
@@ -101,7 +104,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				LogOnDatasource = _dataSourceProvider.CurrentName(),
 				PersonRequestId = personRequest.Id.GetValueOrDefault(),
 				AcceptingPersonId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault(),
-				Message = personRequest.GetMessage(new NoFormatting())
+				Message = personRequest.GetMessage(new NoFormatting()),
+				UseMinWeekWorkTime =
+					_toggleManager.IsEnabled(Domain.FeatureFlags.Toggles.Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635)
 			});
 		}
 

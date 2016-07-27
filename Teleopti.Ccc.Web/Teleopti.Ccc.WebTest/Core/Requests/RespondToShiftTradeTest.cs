@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 		    var eventSync = MockRepository.GenerateMock<IEventSyncronization>();
 			var target = new RespondToShiftTrade(personRequestRepository, shiftTradeRequestCheckSum,
 				personRequestCheckAuthorization, loggedOnUser, mapper, eventPublisher, MockRepository.GenerateMock<INow>(),
-				dataSource, currentBu, eventSync);
+				dataSource, currentBu, eventSync, null);
 			var requestViewModel = new RequestViewModel();
 
 			currentBu.Stub(x => x.Current()).Return(new BusinessUnit("new"));
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
             var eventSync = MockRepository.GenerateMock<IEventSyncronization>();
             var target = new RespondToShiftTrade(personRequestRepository, null, personRequestCheckAuthorization, loggedOnUser,
 				mapper, null, null, MockRepository.GenerateMock<ICurrentDataSource>(),
-				MockRepository.GenerateMock<ICurrentBusinessUnit>(), eventSync);
+				MockRepository.GenerateMock<ICurrentBusinessUnit>(), eventSync, null);
 			var requestViewModel = new RequestViewModel();
 
 			personRequestRepository.Expect(p => p.Find(shiftTradeId)).Return(personRequest);
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			personRequestRepository.Expect(p => p.Find(id)).Return(null);
 			var target = new RespondToShiftTrade(personRequestRepository, null, null, null, null, null, null,
-				MockRepository.GenerateMock<ICurrentDataSource>(), MockRepository.GenerateMock<ICurrentBusinessUnit>(), MockRepository.GenerateMock<IEventSyncronization>());
+				MockRepository.GenerateMock<ICurrentDataSource>(), MockRepository.GenerateMock<ICurrentBusinessUnit>(), MockRepository.GenerateMock<IEventSyncronization>(), null);
 			Assert.That(target.OkByMe(id, ""),Is.Not.Null);
 		}
 
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			personRequestRepository.Expect(p => p.Find(id)).Return(null);
 			var target = new RespondToShiftTrade(personRequestRepository, null, null, null, null, null, null,
-				MockRepository.GenerateMock<ICurrentDataSource>(), MockRepository.GenerateMock<ICurrentBusinessUnit>(), MockRepository.GenerateMock<IEventSyncronization>());
+				MockRepository.GenerateMock<ICurrentDataSource>(), MockRepository.GenerateMock<ICurrentBusinessUnit>(), MockRepository.GenerateMock<IEventSyncronization>(), null);
 			Assert.That(target.Deny(id, ""), Is.Not.Null);
 		}
 	}

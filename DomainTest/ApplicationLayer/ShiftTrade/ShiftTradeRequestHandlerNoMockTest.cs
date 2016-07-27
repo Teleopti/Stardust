@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade;
@@ -10,7 +11,9 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades;
@@ -41,7 +44,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		private INewBusinessRuleCollection _businessRuleCollection;
 		private IScheduleDifferenceSaver _scheduleDifferenceSaver;
 		private IShiftTradePendingReasonsService _shiftTradePendingReasonsService;
-
 
 		[SetUp]
 		public void Setup()
@@ -123,7 +125,49 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			Assert.IsTrue(result.PersonToSchedule.PersonAssignment().ShiftLayers.Single().Payload.Id == result.ActivityTo.Id);
 			Assert.IsTrue(result.PersonFromSchedule.PersonAssignment().ShiftLayers.Single().Payload.Id == result.ActivityFrom.Id);
 		}
-		
+
+		[Test]
+		public void ShouldSetMinWeeklyWorkTimeBrokenRuleWhenUseMinWeekWorkTimeIsOn()
+		{
+			var scheduleDate = new DateTime(2016, 7, 25);
+			var scheduleDateOnly = new DateOnly(scheduleDate);
+
+			var personTo = createPersonWithMinTimePerWeek(scheduleDateOnly);
+			var activityPersonTo = new Activity("Shift_PersonTo").WithId();
+
+			var personFrom = createPersonWithMinTimePerWeek(scheduleDateOnly);
+			var activityPersonFrom = new Activity("Shift_PersonFrom").WithId();
+
+			for (var i = 0; i < 7; i++)
+			{
+				var dateTimePeriod = new DateTimePeriod(scheduleDate.AddDays(i).AddHours(8).ToUniversalTime(),
+				scheduleDate.AddDays(i).AddHours(10).ToUniversalTime());
+				addPersonAssignment(personTo, dateTimePeriod, activityPersonTo);
+				addPersonAssignment(personFrom, dateTimePeriod, activityPersonFrom);
+			}
+
+			var personRequest = prepareAndGetPersonRequest(personFrom, personTo);
+
+			_schedulingResultStateHolder.AllPersonAccounts = new Dictionary<IPerson, IPersonAccountCollection>
+			{
+				{personTo, new PersonAccountCollection(personTo) {createPersonAbsenceAccount(personTo, scheduleDateOnly)}},
+				{personFrom, new PersonAccountCollection(personFrom) {createPersonAbsenceAccount(personFrom, scheduleDateOnly)}}
+			};
+
+			var @event = getAcceptShiftTradeEvent(personTo, personRequest.Id.GetValueOrDefault());
+			@event.UseMinWeekWorkTime = true;
+			_schedulingResultStateHolder.UseMinWeekWorkTime = @event.UseMinWeekWorkTime;
+
+			var businessRuleProvider = new BusinessRuleProvider();
+			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] {personTo, personFrom}, null,
+				new DateOnlyPeriod(new DateOnly(scheduleDate), new DateOnly(scheduleDate.AddDays(7))), _scenarioRepository.Current());
+			setApprovalService(scheduleDictionary, businessRuleProvider.GetAllBusinessRules(_schedulingResultStateHolder));
+
+			handleRequest(@event, false, businessRuleProvider);
+
+			Assert.IsTrue(personRequest.BrokenBusinessRules.HasFlag(BusinessRuleFlags.MinWeekWorkTimeRule));
+		}
+
 		private basicShiftTradeTestResult doBasicShiftTrade(IWorkflowControlSet workflowControlSet, bool addBrokenBusinessRules = false, bool toggle39473IsOff = false)
 		{
 			var personTo = PersonFactory.CreatePerson("To").WithId();
@@ -160,11 +204,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			var personRequest = prepareAndGetPersonRequest(personFrom, personTo);
 
-			var approvalService = new RequestApprovalServiceScheduler(scheduleDictionary, _scenarioRepository.Current(),
-				new SwapAndModifyService(new SwapService(), new DoNothingScheduleDayChangeCallBack()), _businessRuleCollection,
-				new DoNothingScheduleDayChangeCallBack(), new FakeGlobalSettingDataRepository());
-
-			_requestFactory.setRequestApprovalService(approvalService);
+			setApprovalService(scheduleDictionary);
 
 			handleRequest(getAcceptShiftTradeEvent(personTo, personRequest.Id.Value), toggle39473IsOff);
 
@@ -178,15 +218,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			};
 		}
 
+		private void setApprovalService(IScheduleDictionary scheduleDictionary, INewBusinessRuleCollection newBusinessRules = null)
+		{
+			var approvalService = new RequestApprovalServiceScheduler(scheduleDictionary, _scenarioRepository.Current(),
+				new SwapAndModifyService(new SwapService(), new DoNothingScheduleDayChangeCallBack()), newBusinessRules ?? _businessRuleCollection,
+				new DoNothingScheduleDayChangeCallBack(), new FakeGlobalSettingDataRepository());
 
-		private void handleRequest(AcceptShiftTradeEvent acceptShiftTradeEvent, bool toggle39473IsOff = false)
+			_requestFactory.setRequestApprovalService(approvalService);
+		}
+
+		private void handleRequest(AcceptShiftTradeEvent acceptShiftTradeEvent, bool toggle39473IsOff = false, IBusinessRuleProvider businessRuleProvider = null)
 		{
 
 			_target = new ShiftTradeRequestHandler(_schedulingResultStateHolder, _validator, _requestFactory,
 				_scenarioRepository, _personRequestRepository, _scheduleStorage, _personRepository
 				, new PersonRequestAuthorizationCheckerForTest(), _scheduleDifferenceSaver,
 				_loadSchedulingDataForRequestWithoutResourceCalculation,
-				new DifferenceEntityCollectionService<IPersistableScheduleData>(), null, _businessRuleProvider,
+				new DifferenceEntityCollectionService<IPersistableScheduleData>(), null,
+				businessRuleProvider ?? _businessRuleProvider,
 				toggle39473IsOff ? new ShiftTradePendingReasonsService39473ToggleOff() : _shiftTradePendingReasonsService);
 			_target.Handle(acceptShiftTradeEvent);
 		}
@@ -197,12 +246,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_personRequestRepository.Add(personRequest);
 			return personRequest;
 		}
+
 		private void prepareBusinessRuleProvider(params IBusinessRuleResponse[] ruleResponses)
 		{
 			((FakeNewBusinessRuleCollection)_businessRuleCollection).SetRuleResponse(ruleResponses);
 			((FakeBusinessRuleProvider)_businessRuleProvider).SetBusinessRules(_businessRuleCollection);
 
 		}
+
 		private IPersonAssignment addPersonAssignment(IPerson person, DateTimePeriod dateTimePeriod, IActivity activity = null)
 		{
 			var scenario = _scenarioRepository.Current();
@@ -212,7 +263,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_scheduleStorage.Add(_personAssignment);
 			return _personAssignment;
 		}
-
 
 		private static WorkflowControlSet createWorkFlowControlSet(bool autoGrantShiftTrade)
 		{
@@ -235,6 +285,37 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			return ast;
 		}
 
+		private IPerson createPersonWithMinTimePerWeek(DateOnly scheduleDateOnly)
+		{
+			var workControlSet = createWorkFlowControlSet(true);
+			var minTimePerWeek = TimeSpan.FromHours(40);
+			var startDate = new DateOnly(2016, 1, 1);
+			var team = TeamFactory.CreateSimpleTeam();
+
+			var person = PersonFactory.CreatePerson("Person").WithId();
+			person.WorkflowControlSet = workControlSet;
+			var personToContract = PersonContractFactory.CreatePersonContract();
+			person.AddPersonPeriod(new PersonPeriod(startDate, personToContract, team));
+			person.Period(scheduleDateOnly).PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(minTimePerWeek,
+				TimeSpan.Zero, TimeSpan.Zero, TimeSpan.Zero);
+			_personRepository.Add(person);
+
+			return person;
+		}
+
+		private PersonAbsenceAccount createPersonAbsenceAccount(IPerson person, DateOnly scheduleDateOnly)
+		{
+			var accountDay = new AccountDay(scheduleDateOnly)
+			{
+				BalanceIn = TimeSpan.FromDays(0),
+				Accrued = TimeSpan.FromDays(0),
+				Extra = TimeSpan.FromDays(0)
+			};
+			var personFromAbsenceAccount = new PersonAbsenceAccount(person, AbsenceFactory.CreateAbsence("Holiday"));
+			personFromAbsenceAccount.Absence.Tracker = Tracker.CreateDayTracker();
+			personFromAbsenceAccount.Add(accountDay);
+			return personFromAbsenceAccount;
+		}
 
 		private class basicShiftTradeTestResult
 		{

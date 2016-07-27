@@ -9,5 +9,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public Guid PersonRequestId { get; set; }
 
 		public string Message { get; set; }
+
+		public bool UseMinWeekWorkTime { get; set; }
 	}
 }

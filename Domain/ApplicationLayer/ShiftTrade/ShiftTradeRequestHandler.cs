@@ -197,6 +197,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 					personRequest.Request.Accept(acceptingPerson, checkSum, _authorization);
 					setUpdatedMessage(@event, personRequest);
 
+					_schedulingResultStateHolder.UseMinWeekWorkTime = @event.UseMinWeekWorkTime;
 					var allNewRules = getAllNewBusinessRules(personRequest.Person.PermissionInformation.UICulture());
 					var approvalService = _requestFactory.GetRequestApprovalService(allNewRules, scenario, _schedulingResultStateHolder);
 
