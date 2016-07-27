@@ -33,6 +33,9 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (ajax, reloadData) {
 	self.absenceReportPermission = ko.observable();
 	self.overtimeAvailabilityPermission = ko.observable();
 
+	self.maxDate = ko.observable();
+	self.minDate = ko.observable();
+
 	self.setCurrentDate = function (date) {
 		if (self.selectedDateSubscription)
 			self.selectedDateSubscription.dispose();
@@ -78,6 +81,10 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (ajax, reloadData) {
 			self.showAddAbsenceReportForm();	
 	};
 	
+	self.isWithinSelected = function (startDate, endDate) {
+		return (startDate <= self.maxDate() && endDate >= self.minDate());
+	};
+
 	function _fillFormData(data) {
 		var requestViewModel = self.requestViewModel().model;
 		requestViewModel.DateFormat(self.datePickerFormat());
@@ -151,10 +158,16 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (ajax, reloadData) {
 		self.absenceReportPermission(hasAbsenceReportPermission);
 		self.overtimeAvailabilityPermission(hasOvertimeAvailabilityPermission);
 
-		ko.utils.arrayForEach(data.Days, function(scheduleDay) {
-			var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, hasAbsenceReportPermission, hasOvertimeAvailabilityPermission);
-			self.dayViewModels.push(vm);
+
+		var dayViewModels = data.Days.map(function(scheduleDay) {
+			return new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, hasAbsenceReportPermission, hasOvertimeAvailabilityPermission);
 		});
+
+		self.dayViewModels(dayViewModels);
+	
+		self.minDate(moment(data.Days[0].FixedDate).add('day', -1));
+		self.maxDate(moment(data.Days[ data.Days.length -1  ].FixedDate).add('day', 1));
+		
 		self.displayDate(data.PeriodSelection.Display);
 	};
 };

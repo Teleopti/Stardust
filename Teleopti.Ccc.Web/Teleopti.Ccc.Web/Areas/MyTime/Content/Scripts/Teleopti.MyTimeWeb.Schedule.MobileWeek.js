@@ -19,10 +19,11 @@ if (typeof (Teleopti.MyTimeWeb.Schedule) === 'undefined') {
 Teleopti.MyTimeWeb.Schedule.MobileWeek = (function ($) {
     var ajax = new Teleopti.MyTimeWeb.Ajax();
     var vm;
-	var completelyLoaded;
-    
-    var _fetchData = function()
-    {
+    var completelyLoaded;
+    var currentPage = 'Teleopti.MyTimeWeb.Schedule';
+    var _subscribed = false;
+
+    var _fetchData = function() {
         ajax.Ajax({
             url: '../api/Schedule/FetchData',
             dataType: "json",
@@ -35,7 +36,8 @@ Teleopti.MyTimeWeb.Schedule.MobileWeek = (function ($) {
             	vm.setCurrentDate(moment(data.PeriodSelection.Date));
             	vm.nextWeekDate(moment(data.PeriodSelection.PeriodNavigation.NextPeriod));
             	vm.previousWeekDate(moment(data.PeriodSelection.PeriodNavigation.PrevPeriod));
-	            completelyLoaded();
+            	completelyLoaded();
+	            if (!_subscribed) _subscribeForChanges();
             }
         });
     };
@@ -45,6 +47,15 @@ Teleopti.MyTimeWeb.Schedule.MobileWeek = (function ($) {
 			vm.dayViewModels([]);
 			vm = null;
 		}
+	}
+
+	function _subscribeForChanges() {		
+		Teleopti.MyTimeWeb.Common.SubscribeToMessageBroker({
+			successCallback: Teleopti.MyTimeWeb.Schedule.MobileWeek.ReloadScheduleListener,
+			domainType: 'IScheduleChangedInDefaultScenario',
+			page: currentPage
+		});
+		_subscribed = true;
 	}
 
     return {
@@ -62,6 +73,16 @@ Teleopti.MyTimeWeb.Schedule.MobileWeek = (function ($) {
 	        	readyForInteractionCallback();
 	        }
         },
+        ReloadScheduleListener: function (notification) {
+
+        	var messageStartDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate);
+        	var messageEndDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate);
+
+        	if (vm.isWithinSelected(messageStartDate, messageEndDate)) {
+        		_fetchData();
+        	};
+        },
+
         PartialDispose: function () {
 	        _cleanBinding();
         }
