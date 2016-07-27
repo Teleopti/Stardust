@@ -3,6 +3,11 @@ a{
   text-decoration: underline;
 }
 
+
+.wfm-grid a:focus{
+	outline: rgb(0, 153, 255) solid 1px!important;
+}
+
 .layout-fill {
 	width: 100%;
 	min-height: 100%;
