@@ -1,10 +1,8 @@
 using System;
-using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
@@ -16,13 +14,11 @@ using Team = Teleopti.Ccc.Domain.AgentInfo.Team;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
-	/// <summary>
-	/// ;-)
-	/// </summary>
-	public class DatabaseManager
+	public class DatabaseLegacy
 	{
 		private const int datasourceId = 9;
 
+		private readonly Database _database;
 		private readonly IPersonRepository _persons;
 		private readonly IContractRepository _contracts;
 		private readonly IPartTimePercentageRepository _partTimePercentages;
@@ -31,11 +27,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		private readonly ITeamRepository _teams;
 		private readonly ISiteRepository _sites;
 		private readonly IBusinessUnitRepository _businessUnits;
-		private readonly IRtaStateGroupRepository _stateGroups;
-		private readonly IRtaRuleRepository _rules;
-		private readonly IRtaMapRepository _mappings;
 
-		public DatabaseManager(
+		public DatabaseLegacy(
+			Database database,
 			IPersonRepository persons,
 			IContractRepository contracts,
 			IPartTimePercentageRepository partTimePercentages,
@@ -43,11 +37,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			IExternalLogOnRepository externalLogOns,
 			ITeamRepository teams,
 			ISiteRepository sites,
-			IBusinessUnitRepository businessUnits,
-			IRtaStateGroupRepository stateGroups,
-			IRtaRuleRepository rules,
-			IRtaMapRepository mappings)
+			IBusinessUnitRepository businessUnits)
 		{
+			_database = database;
 			_persons = persons;
 			_contracts = contracts;
 			_partTimePercentages = partTimePercentages;
@@ -56,22 +48,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			_teams = teams;
 			_sites = sites;
 			_businessUnits = businessUnits;
-			_stateGroups = stateGroups;
-			_rules = rules;
-			_mappings = mappings;
 		}
 
 		[UnitOfWork]
-		public virtual DatabaseManager WithStateGroup(string name)
+		public virtual DatabaseLegacy WithStateGroup(string name)
 		{
-			var stateGroup = new RtaStateGroup(name, true, true);
-			stateGroup.AddState(name, Guid.Empty);
-			_stateGroups.Add(stateGroup);
+			_database.WithStateGroup(name);
+			_database.WithStateCode(name);
 			return this;
 		}
 		
 		[UnitOfWork]
-		public virtual DatabaseManager WithAgent(string externalLogOn)
+		public virtual DatabaseLegacy WithAgent(string externalLogOn)
 		{
 			var site = _sites.LoadAll().SingleOrDefault(x => x.Description.Name == "site");
 			if (site == null)
@@ -158,27 +146,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		}
 
 		[UnitOfWork]
-		public virtual DatabaseManager WithRule(string name, Adherence adherence)
+		public virtual DatabaseLegacy WithRule(string name, Adherence adherence)
 		{
-			var rule = new RtaRule(new Description(name), Color.Brown, TimeSpan.Zero, 0.0);
-			_rules.Add(rule);
+			_database.WithRule(name, null, adherence);
 			return this;
 		}
 
 		[UnitOfWork]
-		public virtual DatabaseManager WithMapping(string stateGroupName, string ruleName)
+		public virtual DatabaseLegacy WithMapping(string stateGroupName, string ruleName)
 		{
-			var stateGroup = _stateGroups.LoadAll().Single(x => x.Name == stateGroupName);
-			var rule = _rules.LoadAll().Single(x => x.Description.Name == ruleName);
-			var mapping = new RtaMap(stateGroup, null)
-			{
-				RtaRule = rule
-			};
-			_mappings.Add(mapping);
+			_database.WithMapping(stateGroupName, ruleName);
 			return this;
 		}
 
-		public DatabaseManager WithDataSource(string dataSourceId)
+		public DatabaseLegacy WithDataSource(string dataSourceId)
 		{
 			var datasource = new Datasources(datasourceId, " ", -1, " ", -1, " ", " ", 1, false, dataSourceId, false);
 			new AnalyticsDataFactory().Apply(datasource);

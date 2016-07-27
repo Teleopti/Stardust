@@ -251,7 +251,7 @@
     <Compile Include="Repositories\ProjectionVersionPersisterTest.cs" />
     <Compile Include="Repositories\SkillAreaRepositoryTest.cs" />
     <Compile Include="Rta\AgentStateForTest.cs" />
-    <Compile Include="Rta\DatabaseManager.cs" />
+    <Compile Include="Rta\DatabaseLegacy.cs" />
     <Compile Include="Rta\DatabaseReaderLoadAllPersonOrganizationDataTest.cs" />
     <Compile Include="Rta\DatabaseReaderLoadPersonOrganizationDataTest.cs" />
     <Compile Include="Rta\MappingReadModelReaderSelectionTest.cs" />
@@ -266,6 +266,7 @@
     <Compile Include="Rta\Persisters\AgentStateReadModelPersisterTest.cs" />
     <Compile Include="Rta\AgentStateReadModelReaderForSkillTest.cs" />
     <Compile Include="Rta\Persisters\MappingReadModelPersisterTest.cs" />
+    <Compile Include="Rta\Persisters\MappingReadModelUpdaterTest.cs" />
     <Compile Include="Rta\Persisters\SiteOutOfAdherenceReadModelPersisterConcurrencyTest.cs" />
     <Compile Include="Rta\Persisters\TeamOutOfAdherenceReadModelPersisterConcurrencyTest.cs" />
     <Compile Include="Rta\PublishRtaEventsToHangfireTest.cs" />

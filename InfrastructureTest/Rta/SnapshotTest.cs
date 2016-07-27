@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 	[MultiDatabaseTest]
 	public class SnapshotTest
 	{
-		public DatabaseManager Database;
+		public DatabaseLegacy Database;
 		public WithAnalyticsUnitOfWork WithAnalyticsUnitOfWork;
 		public WithUnitOfWork WithUnitOfWork;
 		public IPersonRepository Persons;

@@ -16,8 +16,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 	[ReadModelUnitOfWorkTest]
 	public class MappingReadModelPersisterTest
 	{
-		public IMappingReadModelPersister Target { get; set; }
-		public IMappingReader Reader { get; set; }
+		public IMappingReadModelPersister Target;
+		public IMappingReader Reader;
 
 		[Test]
 		public void ShouldPersist()
