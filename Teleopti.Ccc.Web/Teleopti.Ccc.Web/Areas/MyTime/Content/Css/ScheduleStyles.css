@@ -1,4 +1,12 @@
-﻿.weekview-day li.dayoff div
+﻿.schedule-table-container{
+	overflow: auto;
+}
+
+.schedule-table-container > .container{
+	padding: 0;
+}
+
+.weekview-day li.dayoff div
 {
 	border-left-color: beige;
 	border-right-color: beige;
