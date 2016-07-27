@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 					StaffingEffect = 0,
 					DisplayColor = Color.Green.ToArgb(),
 					IsAlarm = false,
+					ThresholdTime = 100,
 					AlarmColor = Color.Red.ToArgb()
 				}
 			});
@@ -59,89 +60,60 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			model.StaffingEffect.Should().Be(0);
 			model.DisplayColor.Should().Be(Color.Green.ToArgb());
 			model.IsAlarm.Should().Be(false);
+			model.ThresholdTime.Should().Be(100);
 			model.AlarmColor.Should().Be(Color.Red.ToArgb());
+		}
+
+		[Test]
+		public void ShouldPersistWithNullValues()
+		{
+			Target.Persist(new[] { new Mapping() });
+
+			var model = Reader.Read().Single();
+			model.BusinessUnitId.Should().Be(Guid.Empty);
+			model.StateCode.Should().Be.Null();
+			model.PlatformTypeId.Should().Be(Guid.Empty);
+			model.StateGroupId.Should().Be(Guid.Empty);
+			model.ActivityId.Should().Be(null);
+			model.RuleId.Should().Be(Guid.Empty);
+			model.RuleName.Should().Be(null);
+			model.Adherence.Should().Be(null);
+			model.StaffingEffect.Should().Be(null);
+			model.DisplayColor.Should().Be(0);
+			model.IsAlarm.Should().Be(false);
+			model.ThresholdTime.Should().Be(0);
+			model.AlarmColor.Should().Be(0);
 		}
 
 		[Test]
 		public void ShouldReplaceOnPersist()
 		{
 			var businessUnit = Guid.NewGuid();
-			var platformType = Guid.NewGuid();
-			var group = Guid.NewGuid();
-			var activity = Guid.NewGuid();
-			var rule = Guid.NewGuid();
 
 			Target.Persist(new[]
 			{
 				new Mapping
 				{
-					BusinessUnitId = businessUnit,
-					StateCode = "0",
-					PlatformTypeId = platformType,
-					StateGroupId = group,
-					ActivityId = activity,
-					RuleId = rule,
-					RuleName = "phone",
-					Adherence = Adherence.In,
-					StaffingEffect = 0,
-					DisplayColor = Color.Green.ToArgb(),
-					IsAlarm = false,
-					AlarmColor = Color.Red.ToArgb()
+					BusinessUnitId = Guid.NewGuid()
 				}
 			});
-
+			Target.Invalidate();
 			Target.Persist(new[]
 			{
 				new Mapping
 				{
 					BusinessUnitId = businessUnit,
-					StateCode = "0",
-					PlatformTypeId = platformType,
-					StateGroupId = group,
-					ActivityId = activity,
-					RuleId = rule,
-					RuleName = "phone",
-					Adherence = Adherence.In,
-					StaffingEffect = 0,
-					DisplayColor = Color.Green.ToArgb(),
-					IsAlarm = false,
-					AlarmColor = Color.Red.ToArgb()
 				}
 			});
 
-			Reader.Read().Should().Have.Count.EqualTo(1);
+			Reader.Read().Single().BusinessUnitId.Should().Be(businessUnit);
 		}
 
 		[Test]
 		public void ShouldBeValidAfterPersist()
 		{
-			var businessUnit = Guid.NewGuid();
-			var platformType = Guid.NewGuid();
-			var group = Guid.NewGuid();
-			var activity = Guid.NewGuid();
-			var rule = Guid.NewGuid();
-
 			Target.Invalidate();
-
-			Target.Persist(new[]
-			{
-				new Mapping
-				{
-					BusinessUnitId = businessUnit,
-					StateCode = "0",
-					PlatformTypeId = platformType,
-					StateGroupId = group,
-					ActivityId = activity,
-					RuleId = rule,
-					RuleName = "phone",
-					Adherence = Adherence.In,
-					StaffingEffect = 0,
-					DisplayColor = Color.Green.ToArgb(),
-					IsAlarm = false,
-					AlarmColor = Color.Red.ToArgb()
-				}
-			});
-
+			Target.Persist(new[] {new Mapping() });
 			Target.Invalid().Should().Be(false);
 		}
 
@@ -154,35 +126,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		}
 
 		[Test]
-		public void ShouldBeInvalidWhenInvalidated()
+		public void ShouldBeInvalidWhenReinvalidated()
 		{
-			var businessUnit = Guid.NewGuid();
-			var platformType = Guid.NewGuid();
-			var group = Guid.NewGuid();
-			var activity = Guid.NewGuid();
-			var rule = Guid.NewGuid();
-
 			Target.Invalidate();
-
-			Target.Persist(new[]
-			{
-				new Mapping
-				{
-					BusinessUnitId = businessUnit,
-					StateCode = "0",
-					PlatformTypeId = platformType,
-					StateGroupId = group,
-					ActivityId = activity,
-					RuleId = rule,
-					RuleName = "phone",
-					Adherence = Adherence.In,
-					StaffingEffect = 0,
-					DisplayColor = Color.Green.ToArgb(),
-					IsAlarm = false,
-					AlarmColor = Color.Red.ToArgb()
-				}
-			});
-
+			Target.Persist(new[] { new Mapping { } });
 			Target.Invalidate();
 			Target.Invalid().Should().Be(true);
 		}

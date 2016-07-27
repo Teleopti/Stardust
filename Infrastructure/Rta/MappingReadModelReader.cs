@@ -55,9 +55,9 @@ AND ActivityId IN (:activities)")
 			{
 				set { base.StateCode = value == MagicString ? null : value; }
 			}
-			public new int Adherence
+			public new int? Adherence
 			{
-				set { base.Adherence = (Adherence) value; }
+				set { base.Adherence = (Adherence?) value; }
 			}
 		}
 	}

@@ -26,11 +26,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			var datasource = new Datasources(DataSourceId, " ", -1, " ", -1, " ", " ", 1, false, SourceId, false);
 			DataMaker.Analytics().Apply(datasource);
 		}
-		
+
+		[When(@"at '(.*)' '(.*)' sets (?:his|her) phone state to '(.*)'")]
+		[Given(@"at '(.*)' '(.*)' sets (?:his|her) phone state to '(.*)'")]
+		public void GivenAtSetsHisPhoneStateTo(DateTime time, string personName, string stateCode)
+		{
+			CurrentTime.Set(time);
+			WhenSetsHisPhoneStateToOnDatasource(personName, stateCode);
+		}
+
 		[When(@"'(.*)' sets (?:his|her) phone state to '(.*)'")]
 		[Given(@"'(.*)' sets (?:his|her) phone state to '(.*)'")]
 		public void WhenSetsHisPhoneStateToOnDatasource(string personName, string stateCode)
 		{
+			waitForRuleMappings();
 			using (var h = new Http())
 				h.PostJson(
 					"Rta/State/Change",
@@ -47,12 +56,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 					});
 		}
 
-		[When(@"at '(.*)' '(.*)' sets (?:his|her) phone state to '(.*)'")]
-		[Given(@"at '(.*)' '(.*)' sets (?:his|her) phone state to '(.*)'")]
-		public void GivenAtSetsHisPhoneStateTo(DateTime time, string personName, string stateCode)
+		private void waitForRuleMappings()
 		{
-			CurrentTime.Set(time);
-			WhenSetsHisPhoneStateToOnDatasource(personName, stateCode);
+			// or we wait for RuleMappingsReadModelPersister.Invalid() to be false, but requires toggle check
+			// or better yet, run all hangfire events from data setup on the server,
+			// adding recurring to the mix, and wait for queue to finish before opening the site
+			SystemSetup.Hangfire.WaitForQueue();
 		}
 
 	}
