@@ -50,14 +50,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				throw new InvalidSourceException(string.Format("Source id not found {0}", input.SourceId));
 			return dataSourceId;
 		}
-
-		[ReadModelUnitOfWork]
-		protected virtual T WithReadModelUnitOfWork<T>(Func<T> action)
-		{
-			return action.Invoke();
-		}
-
+		
 		[AllBusinessUnitsUnitOfWork]
+		[ReadModelUnitOfWork]
 		protected virtual void WithUnitOfWork(Action action)
 		{
 			action.Invoke();
@@ -93,7 +88,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 										new[] {s.Schedule.CurrentActivityId(), s.Schedule.PreviousActivityId(), s.Schedule.NextActivityId()}
 											.Distinct()
 											.ToArray();
-									return WithReadModelUnitOfWork(() => _mappingReader.ReadFor(stateCodes, activities));
+									return _mappingReader.ReadFor(stateCodes, activities);
 								});
 							},
 							c => _agentStatePersister.Persist(c.MakeAgentState()),
@@ -140,6 +135,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[AllBusinessUnitsUnitOfWork]
+		[ReadModelUnitOfWork]
 		public virtual void ForClosingSnapshot(ExternalUserStateInputModel input, Action<Context> action)
 		{
 			var missingAgents = _agentStatePersister.GetNotInSnapshot(input.BatchId, input.SourceId);
@@ -170,6 +166,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[AllBusinessUnitsUnitOfWork]
+		[ReadModelUnitOfWork]
 		public virtual void ForSynchronize(Action<Context> action)
 		{
 			var mappings = new MappingsState(() => _mappingReader.Read());
