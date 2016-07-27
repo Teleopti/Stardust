@@ -66,7 +66,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 		[When(@"I click cancel button after open people search list")]
 		public void WhenIClickCancelButtonAfterOpenPeopleSearchList()
 		{
-			Browser.Interactions.Click(".seatbooking-operations-cancel .cancel-operation");
+            Browser.Interactions.AssertExists(".seatbooking-operations-cancel .cancel-operation");
+            Browser.Interactions.Click(".seatbooking-operations-cancel .cancel-operation");
 		}
 
 		[Then(@"I should not see people search list")]
