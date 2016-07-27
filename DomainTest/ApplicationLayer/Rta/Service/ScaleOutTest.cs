@@ -7,12 +7,14 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
 	[TestFixture]
 	[RtaTest]
+	[ToggleOff(Domain.FeatureFlags.Toggles.RTA_RuleMappingOptimization_39812)]
 	public class ScaleOutTest
 	{
 		public FakeRtaDatabase Database;

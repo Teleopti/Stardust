@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
@@ -33,39 +34,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		public void ShouldUpdateReadModelWithDefaultState()
-		{
-			Database
-				.WithUser("usercode")
-				.WithRule(Guid.NewGuid(), "loggedout", null, "Logged Out");
-
-			Target.SaveState(new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "unrecognized-loggedout"
-			});
-
-			Database.StoredState.StateGroupId.Should().Be(StateGroups.LoadAll().Single(x => x.DefaultStateGroup).Id.Value);
-			Database.PersistedReadModel.StateName.Should().Be("Logged Out");
-		}
-		
-		[Test]
-		public void ShouldUpdateReadModelWithDefaultRule()
-		{	
-			Database
-				.WithUser("usercode")
-				.WithRule(Guid.NewGuid(), "loggedout", null, "adhering");
-			
-			Target.SaveState(new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "unrecognized-loggedout"
-			});
-
-			Database.PersistedReadModel.RuleName.Should().Be("adhering");
-		}
-		
-		[Test]
 		public void ShouldAddStateCodeWithDescription()
 		{
 			Database
@@ -83,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		public void ShouldNotAddStateCodeIfNotStateReceived()
+		public void ShouldNotAddStateCodeUnlessStateReceived()
 		{
 			var personId = Guid.NewGuid();
 			Database
@@ -133,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 					BatchId = "2016-05-18 08:00".Utc()
 				}
 			});
-			
+
 			Target.SaveStateSnapshot(new[]
 			{
 				new ExternalUserStateForTest
@@ -147,5 +115,52 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database.StateCodes.Where(x => x.StateCode == Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
 				.Should().Have.Count.EqualTo(1);
 		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+		[Test]
+		public void ShouldUpdateReadModelWithDefaultState()
+		{
+			Database
+				.WithUser("usercode")
+				.WithRule(Guid.NewGuid(), "loggedout", null, "Logged Out");
+
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "unrecognized-loggedout"
+			});
+
+			Database.StoredState.StateGroupId.Should().Be(StateGroups.LoadAll().Single(x => x.DefaultStateGroup).Id.Value);
+			Database.PersistedReadModel.StateName.Should().Be("Logged Out");
+		}
+
+		[Test]
+		[ToggleOff(Domain.FeatureFlags.Toggles.RTA_RuleMappingOptimization_39812)]
+		public void ShouldUpdateReadModelWithRuleForDefaultState3()
+		{
+			Database
+				.WithUser("usercode")
+				.WithRule(Guid.NewGuid(), "loggedout", null, "adhering");
+
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "unrecognized-loggedout"
+			});
+
+			Database.PersistedReadModel.RuleName.Should().Be("adhering");
+		}
+
 	}
 }

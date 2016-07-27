@@ -601,7 +601,6 @@
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IAdherenceDetailsReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IAdherenceEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AppliedAdherence.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\IStateCodeAdder.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IInitializeble.cs" />
     <Compile Include="UnitOfWork\IReadModelTransactionSyncronization.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\INotificationCreator.cs" />

@@ -70,9 +70,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				return null;
 			var match = queryState(mappings, businessUnitId, platformTypeId, stateCode);
 			if (match != null) return match;
-			_stateCodeAdder.AddUnknownStateCode(businessUnitId, platformTypeId, stateCode, stateDescription);
-			mappings.Invalidate();
-			return queryState(mappings, businessUnitId, platformTypeId, stateCode);
+			return _stateCodeAdder.AddUnknownStateCode(mappings, businessUnitId, platformTypeId, stateCode, stateDescription);
 		}
 
 		private MappedState queryState(MappingsState mappings, Guid businessUnitId, Guid platformTypeId, string stateCode)
