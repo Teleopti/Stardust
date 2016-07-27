@@ -158,8 +158,10 @@
 	margin: 4px 0;
 }
 
-.bootstrap-timepicker.request-time {
-	margin-top: 5px;	
+@media(max-width: 768px){
+	.bootstrap-timepicker.request-time {
+		margin-top: 5px;	
+	}
 }
 
 .shift-trade-layer-container {
