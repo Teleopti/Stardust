@@ -6,7 +6,8 @@ namespace Teleopti.Ccc.WinCodeTest.FakeData
 {
     class SchedulePeriodComparerTestHelper
     {
-        public ISchedulePeriod _schedulePeriod1, _schedulePeriod2,
+
+		public ISchedulePeriod _schedulePeriod1, _schedulePeriod2,
             _schedulePeriod4, _schedulePeriod5;
         public IPersonPeriod _personPeriod1, _personPeriod2, _personPeriod3,
             _personPeriod4, _personPeriod5, _personPeriod6;
