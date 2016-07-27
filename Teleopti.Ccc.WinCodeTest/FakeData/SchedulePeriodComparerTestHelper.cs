@@ -31,9 +31,9 @@ namespace Teleopti.Ccc.WinCodeTest.FakeData
             _skill2 = SkillFactory.CreateSkill("_skill2");
             _skill3 = SkillFactory.CreateSkill("_skill3");
 
-            _personPeriod1 = PersonPeriodFactory.CreatePersonPeriodWithSkills(universalTime1, _skill1);
-            _personPeriod2 = PersonPeriodFactory.CreatePersonPeriodWithSkills(universalTime2, _skill2);
-            _personPeriod3 = PersonPeriodFactory.CreatePersonPeriodWithSkills(universalTime3, _skill3);
+            _personPeriod1 = PersonPeriodFactory.CreatePersonPeriodWithSkillsWithSite(universalTime1, _skill1);
+            _personPeriod2 = PersonPeriodFactory.CreatePersonPeriodWithSkillsWithSite(universalTime2, _skill2);
+            _personPeriod3 = PersonPeriodFactory.CreatePersonPeriodWithSkillsWithSite(universalTime3, _skill3);
 
             _personPeriod1.RuleSetBag = new RuleSetBag();
             _personPeriod2.RuleSetBag = new RuleSetBag();
@@ -59,9 +59,9 @@ namespace Teleopti.Ccc.WinCodeTest.FakeData
             _skill5 = SkillFactory.CreateSkill("_skill5");
             _skill6 = SkillFactory.CreateSkill("_skill6");
 
-            _personPeriod4 = PersonPeriodFactory.CreatePersonPeriodWithSkills(universalTime1, _skill4);
-            _personPeriod5 = PersonPeriodFactory.CreatePersonPeriodWithSkills(universalTime2, _skill5);
-            _personPeriod6 = PersonPeriodFactory.CreatePersonPeriodWithSkills(universalTime3, _skill6);
+            _personPeriod4 = PersonPeriodFactory.CreatePersonPeriodWithSkillsWithSite(universalTime1, _skill4);
+            _personPeriod5 = PersonPeriodFactory.CreatePersonPeriodWithSkillsWithSite(universalTime2, _skill5);
+            _personPeriod6 = PersonPeriodFactory.CreatePersonPeriodWithSkillsWithSite(universalTime3, _skill6);
 
             _personPeriod4.RuleSetBag = new RuleSetBag();
             _personPeriod5.RuleSetBag = new RuleSetBag();

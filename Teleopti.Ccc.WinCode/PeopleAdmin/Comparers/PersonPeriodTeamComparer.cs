@@ -34,7 +34,9 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Comparers
             else
             {
                 // compares the teminal date of the y with the teminal date of y
-                result = string.Compare(x.SiteTeam.Team.Description.Name, y.SiteTeam.Team.Description.Name, StringComparison.CurrentCulture);
+	            var siteTeam1 = x.SiteTeam.Site.Description.Name + x.SiteTeam.Team.Description.Name;
+	            var siteTeam2 = y.SiteTeam.Site.Description.Name + y.SiteTeam.Team.Description.Name;
+	            result = string.Compare(siteTeam1, siteTeam2, StringComparison.CurrentCulture);
             }
 
             return result;

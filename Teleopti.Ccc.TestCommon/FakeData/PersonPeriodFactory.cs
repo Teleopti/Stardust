@@ -40,7 +40,29 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return personPeriod;
         }
 
-        public static IPersonPeriod CreatePersonPeriodWithSkills(DateOnly startDate, IRuleSetBag ruleSetBag,
+		public static IPersonPeriod CreatePersonPeriodWithSkillsWithSite(DateOnly startDate, params ISkill[] skills)
+		{
+			IPersonContract personContract =
+				 new PersonContract(new Contract("my contract"), new PartTimePercentage("Testing"),
+										  new ContractSchedule("Test1"));
+
+			ITeam team = new Team();
+			team.Site = new Site("Site1");
+			IPersonPeriod personPeriod = new PersonPeriod(startDate, personContract, team);
+
+			IActivity activity = new Activity("dummy activity");
+
+			foreach (Skill skill in skills)
+			{
+				Percent percent = new Percent(1);
+				IPersonSkill personSkill = new PersonSkill(skill, percent);
+				((IPersonPeriodModifySkills)personPeriod).AddPersonSkill(personSkill);
+			}
+
+			return personPeriod;
+		}
+
+		public static IPersonPeriod CreatePersonPeriodWithSkills(DateOnly startDate, IRuleSetBag ruleSetBag,
                                                                  params ISkill[] skills)
         {
             IPersonPeriod personPeriod = CreatePersonPeriodWithSkills(startDate, skills);
