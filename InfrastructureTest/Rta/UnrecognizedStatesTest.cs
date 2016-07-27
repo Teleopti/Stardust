@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 	[TestFixture]
 	[PrincipalAndStateTest]
 	[Toggle(Toggles.RTA_Optimize_39667)]
+	[Toggle(Toggles.RTA_RuleMappingOptimization_39812)]
 	public class UnrecognizedStatesTest: ISetup
 	{
 		public IRtaStateGroupRepository StateGroupRepository;
@@ -33,7 +34,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			system.AddService<TheServiceImpl>();
 			system.AddService<PersonCreator>();
 		}
-
 
 		[Test]
 		public void ShouldNotAddDuplicateStateCodes()

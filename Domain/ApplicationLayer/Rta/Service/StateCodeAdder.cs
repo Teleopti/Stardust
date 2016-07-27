@@ -116,44 +116,44 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_stateGroupRepository = stateGroupRepository;
 		}
 
-		public MappedState AddUnknownStateCode(MappingsState mappings, Guid businessUnitId, Guid platformTypeId, string stateCode, string stateDescription)
+		public MappedState AddUnknownStateCode(MappingsState mappings, Guid businessUnitId, Guid platformTypeId,
+			string stateCode, string stateDescription)
 		{
-			lock (this)
-			{
-				var existingStateGroup = (
-					from g in _stateGroupRepository.LoadAll()
-					from s in g.StateCollection
-					where g.BusinessUnit.Id.Value == businessUnitId
-						  && s.StateCode == stateCode
-					select g
-					).SingleOrDefault();
+			var stateGroups = _stateGroupRepository.LoadAllExclusive();
 
-				if (existingStateGroup != null)
-					return new MappedState
-					{
-						StateGroupId = existingStateGroup.Id.Value,
-						StateGroupName = existingStateGroup.Name
-					};
+			var existingStateGroup = (
+				from g in stateGroups
+				from s in g.StateCollection
+				where g.BusinessUnit.Id.Value == businessUnitId
+					  && s.StateCode == stateCode
+				select g
+				).SingleOrDefault();
 
-				var defaultStateGroup = (
-					from g in _stateGroupRepository.LoadAll()
-					where g.BusinessUnit.Id.Value == businessUnitId &&
-						  g.DefaultStateGroup
-					select g
-					).SingleOrDefault();
-
-				if (defaultStateGroup != null)
+			if (existingStateGroup != null)
+				return new MappedState
 				{
-					defaultStateGroup.AddState(stateDescription ?? stateCode, stateCode, platformTypeId);
-					return new MappedState
-					{
-						StateGroupId = defaultStateGroup.Id.Value,
-						StateGroupName = defaultStateGroup.Name
-					};
-				}
+					StateGroupId = existingStateGroup.Id.Value,
+					StateGroupName = existingStateGroup.Name
+				};
 
-				return null;
+			var defaultStateGroup = (
+				from g in stateGroups
+				where g.BusinessUnit.Id.Value == businessUnitId &&
+					  g.DefaultStateGroup
+				select g
+				).SingleOrDefault();
+
+			if (defaultStateGroup != null)
+			{
+				defaultStateGroup.AddState(stateDescription ?? stateCode, stateCode, platformTypeId);
+				return new MappedState
+				{
+					StateGroupId = defaultStateGroup.Id.Value,
+					StateGroupName = defaultStateGroup.Name
+				};
 			}
+
+			return null;
 		}
 	}
 }
