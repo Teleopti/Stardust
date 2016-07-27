@@ -27,7 +27,7 @@
 }
 
 .weekview-mobile .day .panel-body {
-	height: 40px;
+	min-height: 40px;
 	padding: 0;
 	text-align: center;
 }
@@ -46,5 +46,11 @@
 
 .mobile-foot {
 	text-align: center;
+}
+
+.overtime-availability-content {
+	background-color: #f0f8ff;
+	text-align: center;
+	color: #333333;
 }
 

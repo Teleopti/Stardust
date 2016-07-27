@@ -31,6 +31,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (ajax, reloadData) {
 	self.requestViewModel = ko.observable();
 	self.datePickerFormat = ko.observable();
 	self.absenceReportPermission = ko.observable();
+	self.overtimeAvailabilityPermission = ko.observable();
 
 	self.setCurrentDate = function (date) {
 		if (self.selectedDateSubscription)
@@ -58,17 +59,12 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (ajax, reloadData) {
 		return (self.requestViewModel() || '') != '';
 	});
 
-	self.showAddRequestForm = function (day) {
-
+	self.showAddRequestForm = function (day) {		
 		self.showAddRequestFormWithData(day.fixedDate());
 	};
-	var defaultRequestFunction = function () {
-		if (self.absenceReportPermission())
-			return self.showAddAbsenceReportForm;
-	}
+
 	self.showAddRequestFormWithData = function (date) {
 		self.initialRequestDay(date);
-
 		if ((self.requestViewModel() != undefined) && (self.requestViewModel().type() == 'absenceReport')) {
 			self.requestViewModel(null);
 		}
@@ -78,17 +74,36 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (ajax, reloadData) {
 			return;
 		}
 
-		defaultRequestFunction()();
+		if (self.absenceReportPermission())
+			self.showAddAbsenceReportForm();	
 	};
-
-
-	function _fillFormData() {
+	
+	function _fillFormData(data) {
 		var requestViewModel = self.requestViewModel().model;
 		requestViewModel.DateFormat(self.datePickerFormat());
 		var requestDay = moment(self.initialRequestDay(), Teleopti.MyTimeWeb.Common.ServiceDateFormat);
 		requestViewModel.DateFrom(requestDay);
 		requestViewModel.DateTo(requestDay);
+
+		if (requestViewModel.LoadRequestData) {		
+			if (data && data.StartTime) {
+				requestViewModel.LoadRequestData(data);
+			} else {
+				var day = ko.utils.arrayFirst(self.dayViewModels(), function (item) {
+					return item.fixedDate() == self.initialRequestDay();
+				});
+				var oaData = day.overtimeAvailability();
+				requestViewModel.LoadRequestData(oaData);
+			}
+		}
 	}
+
+	var addOvertimeModel = {
+		model: new Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel(ajax, reloadSchedule),
+		type: function () { return 'overtime'; },
+		CancelAddingNewRequest: function () { self.CancelAddingNewRequest(); }
+	};
+
 
 	var addAbsenceReportModel = {
 		model: new Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel(ajax, reloadSchedule),
@@ -104,6 +119,16 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (ajax, reloadData) {
 		_fillFormData(data);
 	};
 
+	self.showAddOvertimeAvailabilityForm = function (data) {		
+		if (self.overtimeAvailabilityPermission() !== true) {
+			return;
+		}
+		self.initialRequestDay(data.fixedDate());
+		self.requestViewModel(addOvertimeModel);
+		_fillFormData(data);
+	}
+
+
 	self.CancelAddingNewRequest = function () {
 		self.requestViewModel(undefined);
 	};
@@ -114,22 +139,27 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (ajax, reloadData) {
 		reloadData();
 	}
 	self.readData = function (data) {
+
 		if (data.DatePickerFormat != undefined && data.DatePickerFormat != null) {
 			self.datePickerFormat(data.DatePickerFormat.toUpperCase());
 		} else {
 			self.datePickerFormat("");
 		}
 		var hasAbsenceReportPermission = data.RequestPermission != null ? data.RequestPermission.AbsenceReportPermission : false;
+		var hasOvertimeAvailabilityPermission = data.RequestPermission != null ? data.RequestPermission.OvertimeAvailabilityPermission : false;
+
 		self.absenceReportPermission(hasAbsenceReportPermission);
+		self.overtimeAvailabilityPermission(hasOvertimeAvailabilityPermission);
+
 		ko.utils.arrayForEach(data.Days, function(scheduleDay) {
-			var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, hasAbsenceReportPermission);
+			var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, hasAbsenceReportPermission, hasOvertimeAvailabilityPermission);
 			self.dayViewModels.push(vm);
 		});
 		self.displayDate(data.PeriodSelection.Display);
 	};
 };
 
-Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function(scheduleDay, absenceReportPermission) {
+Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, absenceReportPermission, overtimeAvailabilityPermission) {
 	var self = this;
 	self.summaryName = ko.observable(scheduleDay.Summary ? scheduleDay.Summary.Title : null);
 	self.summaryTimeSpan = ko.observable(scheduleDay.Summary ? scheduleDay.Summary.TimeSpan : null);
@@ -146,6 +176,7 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function(scheduleDay, absenceRe
 		}
 		return false;
 	};
+
 	self.hasOvertime = scheduleDay.HasOvertime && !scheduleDay.IsFullDayAbsence;
 
 	if (self.summaryColor() == null && self.hasOvertime) {
@@ -164,6 +195,13 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function(scheduleDay, absenceRe
     self.summaryTextColor = ko.observable(self.backgroundColor ? Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(self.backgroundColor) : 'black');
 
     self.absenceReportPermission = ko.observable(absenceReportPermission != undefined ? absenceReportPermission : false);
+    self.overtimeAvailabilityPermission = ko.observable(overtimeAvailabilityPermission != undefined ? overtimeAvailabilityPermission : false);
+    self.overtimeAvailability = ko.observable(scheduleDay.OvertimeAvailabililty);
+
+    self.hasOvertimeAvailability = ko.observable(scheduleDay.OvertimeAvailabililty.HasOvertimeAvailability);
+    self.overtimeAvailabilityStart = ko.observable(scheduleDay.OvertimeAvailabililty.StartTime);
+    self.overtimeAvailabilityEnd = ko.observable(scheduleDay.OvertimeAvailabililty.EndTime);
+
 	self.isPermittedToReportAbsence = ko.computed(function () {
 		var momentToday = (new Date().getTeleoptiTime == undefined)
 			? moment().startOf('day')
@@ -176,6 +214,6 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function(scheduleDay, absenceRe
 		var isPermittedDate = (dateDiff == 0 || dateDiff == 1);
 		var result = self.absenceReportPermission() && isPermittedDate;
 		return result;
-	});
+	});	
 };
 
