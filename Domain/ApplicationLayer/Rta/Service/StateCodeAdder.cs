@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 				if (defaultStateGroup != null)
 				{
-					var exists = defaultStateGroup.StateCollection.All(x => x.StateCode != stateCode);
+					var exists = defaultStateGroup.StateCollection.Any(x => x.StateCode == stateCode);
 					if (!exists)
 						defaultStateGroup.AddState(stateDescription ?? stateCode, stateCode, platformTypeId);
 
