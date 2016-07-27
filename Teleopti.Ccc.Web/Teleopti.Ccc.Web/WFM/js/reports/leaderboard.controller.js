@@ -87,12 +87,14 @@
 		};
 
 		vm.onKeyWordInSearchInputChanged = function () {
-			vm.isLoading = true;
-			LeaderBoardSvc.getLeaderBoardDataByPeriod(vm.searchOptions.keyword, vm.selectedPeriod).then(function (data) {
-				vm.searchOptions.keyword = data.Keyword;
-				vm.leaderBoardTableList = VMFactory.Create(data.AgentBadges);
-				vm.isLoading = false;
-			});
+			if (vm.selectedPeriod && vm.selectedPeriod.startDate <= vm.selectedPeriod.endDate) {
+				vm.isLoading = true;
+				LeaderBoardSvc.getLeaderBoardDataByPeriod(vm.searchOptions.keyword, vm.selectedPeriod).then(function(data) {
+					vm.searchOptions.keyword = data.Keyword;
+					vm.leaderBoardTableList = VMFactory.Create(data.AgentBadges);
+					vm.isLoading = false;
+				});
+			}
 		};
 
 		vm.init = function () {
