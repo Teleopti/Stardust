@@ -24,6 +24,18 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 			logger.Info(invocation.Method.Name + "(" + string.Join(", ", getParametersAndArguments(invocation)) + ")");
 		}
 
+		public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
+		{
+			var type = invocation.TargetType;
+			var logger = _logManagerWrapper.GetLogger(type.ToString());
+			if (!logger.IsInfoEnabled)
+				return;
+			if (invocation.Method.ReturnType == typeof(void))
+				logger.Info("/" + invocation.Method.Name);
+			else
+				logger.Info("/" + invocation.Method.Name + " resulted with " + formatValue(invocation.ReturnValue));
+		}
+
 		private static IEnumerable<string> getParametersAndArguments(IInvocationInfo invocation)
 		{
 			return 
@@ -47,13 +59,5 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 			return argument;
 		}
 
-		public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
-		{
-			var type = invocation.TargetType;
-			var logger = _logManagerWrapper.GetLogger(type.ToString());
-			if (!logger.IsInfoEnabled || invocation.Method.ReturnType == typeof(void))
-				return;
-			logger.Info("Result : " + formatValue(invocation.ReturnValue));
-		}
 	}
 }
