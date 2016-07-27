@@ -103,7 +103,7 @@
 					Name: schedule.ShiftCategory ? schedule.ShiftCategory.Name : null,
 					ShortName: schedule.ShiftCategory ? schedule.ShiftCategory.ShortName : null,
 					DisplayColor: schedule.ShiftCategory ? schedule.ShiftCategory.DisplayColor : null,
-					UseLighterFont: schedule.ShiftCategory ? (getOppositeColor(schedule.ShiftCategory.DisplayColor)) : null
+					ContrastColor: schedule.ShiftCategory ? (getContrastColor(schedule.ShiftCategory.DisplayColor)) : null
 				}
 			}
 
@@ -157,22 +157,31 @@
 			};
 
 			return dayOffVm;
-		};
+		}
 
-		function getOppositeColor (color) {
-			var getLumi = function(cstring) {
+		function useLightColor(color) {
+			var getLumi = function (cstring) {
 				var matched = /#([\w\d]{2})([\w\d]{2})([\w\d]{2})/.exec(cstring);
 				if (!matched) return null;
 				return (299 * parseInt(matched[1], 16) + 587 * parseInt(matched[2], 16) + 114 * parseInt(matched[3], 16)) / 1000;
-			}
-
-			var lightColor = "#00ffff";
-			var darkColor = "#795548";
-
+			};
+			var lightColor = '#00ffff';
+			var darkColor = '#795548';
 			var lumi = getLumi(color);
 			if (!lumi) return false;
 			return Math.abs(lumi - getLumi(lightColor)) > Math.abs(lumi - getLumi(darkColor));
-		};
+		}
+
+		function getContrastColor(hexcolor) {
+			if (hexcolor[0] === '#') {
+				hexcolor = hexcolor.substring(1);
+			}
+			var r = parseInt(hexcolor.substr(0, 2), 16);
+			var g = parseInt(hexcolor.substr(2, 2), 16);
+			var b = parseInt(hexcolor.substr(4, 2), 16);
+			var yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+			return (yiq >= 128) ? 'black' : 'white';
+		}
 
 		function createShiftProjectionViewModel(projection, timeLine) {
 			if (!projection) projection = {};
@@ -211,7 +220,7 @@
 					this.Selected = !this.Selected;
 				},
 				Minutes: projectionMinutes,
-				UseLighterBorder: getOppositeColor(projection.Color)
+				UseLighterBorder: useLightColor(projection.Color)
 			};
 
 			return shiftProjectionVm;
@@ -238,7 +247,7 @@
 		}
 
 		function formatContractTimeMinutes(minutes) {
-			return Math.floor(minutes / 60) + ":" + (minutes % 60 === 0 ? "00":minutes%60);
+			return Math.floor(minutes / 60) + ':' + (minutes % 60 === 0 ? '00':minutes%60);
 		}
 
 		return personScheduleFactory;

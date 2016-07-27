@@ -41,7 +41,7 @@
 				</span>
 			</td>
 			<td class="shift-category-cell" ng-if="vm.toggles.ViewShiftCategoryEnabled" ng-click="personSchedule.ShiftCategory.Name && vm.modifyShiftCategoryForAgent($event, personSchedule)" ng-style="{cursor: (personSchedule.ShiftCategory.Name ? 'pointer' : 'default')}">
-				<span id="name" ng-if="personSchedule.ShiftCategory.Name" ng-style="{background: personSchedule.ShiftCategory.DisplayColor, color: (personSchedule.ShiftCategory.UseLighterFont ? '#ffffff' :'#000000')}">
+				<span id="name" ng-if="personSchedule.ShiftCategory.Name" ng-style="{background: personSchedule.ShiftCategory.DisplayColor, color: personSchedule.ShiftCategory.ContrastColor}">
 					{{personSchedule.ShiftCategory.ShortName}}
 				</span>
 				<md-tooltip md-direction="right" ng-if="personSchedule.ShiftCategory.Name">{{personSchedule.ShiftCategory.Name}}</md-tooltip>
