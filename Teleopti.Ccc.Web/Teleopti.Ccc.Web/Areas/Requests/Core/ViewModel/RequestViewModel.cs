@@ -25,6 +25,10 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
 		public string Team { get; set; }
 		public bool IsFullDay { get; set; }
 		public string DenyReason { get; set; }
+
+		public PersonAccountApprovalSummary PersonAccountApprovalSummary { get; set; }
+
+
 	}
 
 	public class ShiftTradeRequestViewModel : RequestViewModel
@@ -76,4 +80,13 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
 		public int FirstDayOfWeek { get; set; }
 	}
 
+
+	public class PersonAccountApprovalSummary
+	{
+		public string Color { get; set; }
+		public string Description { get; set; }
+	}
+
 }
+
+

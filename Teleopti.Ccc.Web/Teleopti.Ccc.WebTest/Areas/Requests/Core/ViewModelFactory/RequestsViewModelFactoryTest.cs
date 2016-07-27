@@ -1,17 +1,22 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Tracking;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.People.Core.Providers;
 using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
+using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory;
 using Teleopti.Ccc.WebTest.Areas.Global;
 using Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC;
@@ -26,11 +31,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		public IPersonRequestRepository PersonRequestRepository;
 		public IPermissionProvider PermissionProvider;
 		public IPeopleSearchProvider PeopleSearchProvider;
+		public IPersonAbsenceAccountRepository PersonAbsenceAccountRepository;
 
-		private Guid testPersonId1;
-		private Guid testPersonId2;
-		private Guid testPersonId3;
-
+		private List<IPerson> people;
+		private readonly IAbsence absence = AbsenceFactory.CreateAbsence ("absence1").WithId();
+		
 		[Test]
 		public void ShouldGetRequests()
 		{
@@ -85,19 +90,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			{
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 9),
-				SortingOrders = new List<RequestsSortingOrder> {RequestsSortingOrder.AgentNameAsc}
+				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.AgentNameAsc }
 			};
 
 			var result = Target.Create(input).ToList();
-			result.First().AgentName.Should().Be.EqualTo("test1 test1");
-			result.First().PersonId.Should().Be.EqualTo(testPersonId1);
 
-			result.Second().AgentName.Should().Be.EqualTo("test2 test2");
-			result.Second().PersonId.Should().Be.EqualTo(testPersonId2);
-
-			result.Last().AgentName.Should().Be.EqualTo("test3 test3");
-			result.Last().PersonId.Should().Be.EqualTo(testPersonId3);
+			Assert.IsTrue(referencesPerson(result.First(), people[0]));
+			Assert.IsTrue(referencesPerson(result.Second(), people[1]));
+			Assert.IsTrue(referencesPerson(result.Last(), people[2]));
 		}
+
 
 		[Test]
 		public void ShouldNotSeeRequestWithoutPermission()
@@ -153,8 +155,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 
 			var result = Target.Create(input).ToList();
 			result.Count.Should().Be.EqualTo(1);
-			result.First().AgentName.Should().Be.EqualTo("test1 test1");
-			result.First().PersonId.Should().Be.EqualTo(testPersonId1);
+
+			Assert.IsTrue(referencesPerson(result.First(), people[0]));
 		}
 
 		[Test]
@@ -221,45 +223,147 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var result = Target.CreateRequestListViewModel(input);
 			result.TotalCount.Should().Be.EqualTo(1);
 
-			var firstRequest = result.Requests.First();
-			firstRequest.AgentName.Should().Be.EqualTo("test1 test1");
-			firstRequest.PersonId.Should().Be.EqualTo(testPersonId1);
+			Assert.IsTrue(referencesPerson(result.Requests.First(), people[0]));
+
+		}
+		
+		[Test]
+		public void ShouldReturnGreenOkPersonAccountApprovalSummaryStatus()
+		{
+			// needs 2 days
+			var accountDay = new AccountDay(new DateOnly(2015, 1, 1))
+			{
+				BalanceIn = TimeSpan.FromDays(0),
+				Accrued = TimeSpan.FromDays (2),
+				Extra = TimeSpan.FromDays(0)
+			};
+
+
+			// needs 4 days
+			var accountDay2 = new AccountDay(new DateOnly(2015, 10, 5))
+			{
+				BalanceIn = TimeSpan.FromDays(0),
+				Accrued = TimeSpan.FromDays(4),
+				Extra = TimeSpan.FromDays(0)
+			};
+
+			var absenceRequest = doPersonalAccountApprovalTest(accountDay, accountDay2);
+			Assert.IsTrue(absenceRequest.PersonAccountApprovalSummary.Color == Color.Green.ToHtml());
+		}
+
+		[Test]
+		public void ShouldReturnNegativePersonAccountApprovalSummaryStatusWhenNoTimeInFirstPeriod()
+		{
+			// needs 2 days
+			var accountDay = new AccountDay(new DateOnly(2015, 1, 1))
+			{
+				BalanceIn = TimeSpan.FromDays(0),
+				Accrued = TimeSpan.FromDays(1),
+				Extra = TimeSpan.FromDays(0)
+			};
+
+
+			// needs 4 days
+			var accountDay2 = new AccountDay(new DateOnly(2015, 10, 5))
+			{
+				BalanceIn = TimeSpan.FromDays(0),
+				Accrued = TimeSpan.FromDays(10),
+				Extra = TimeSpan.FromDays(0)
+			};
+
+			var absenceRequest = doPersonalAccountApprovalTest(accountDay, accountDay2);
+			Assert.IsTrue(absenceRequest.PersonAccountApprovalSummary.Color == Color.Red.ToHtml());
+		}
+
+		[Test]
+		public void ShouldReturnNegativePersonAccountApprovalSummaryStatusWhenNoTimeInSecondPeriod()
+		{
+			// needs 2 days
+			var accountDay = new AccountDay(new DateOnly(2015, 1, 1))
+			{
+				BalanceIn = TimeSpan.FromDays(0),
+				Accrued = TimeSpan.FromDays(10),
+				Extra = TimeSpan.FromDays(0)
+			};
+
+			// needs 4 days
+			var accountDay2 = new AccountDay(new DateOnly(2015, 10, 5))
+			{
+				BalanceIn = TimeSpan.FromDays(0),
+				Accrued = TimeSpan.FromDays(2),
+				Extra = TimeSpan.FromDays(0)
+			};
+
+			var absenceRequest = doPersonalAccountApprovalTest(accountDay, accountDay2);
+			Assert.IsTrue(absenceRequest.PersonAccountApprovalSummary.Color == Color.Red.ToHtml());
+		}
+
+
+		private RequestViewModel doPersonalAccountApprovalTest(params AccountDay[] accountDays )
+		{
+			setUpRequests();
+
+			var personAbsenceAccount = createPersonAbsenceAccount(people[1], absence);
+
+			accountDays.ForEach ((accountDay) =>
+			{
+				personAbsenceAccount.Add (accountDay);
+			});
+			
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly (2015, 10, 3),
+				EndDate = new DateOnly (2015, 10, 9)
+			};
+
+			var result = Target.CreateRequestListViewModel (input);
+			var absenceRequest = result.Requests.Single (model => model.Type == RequestType.AbsenceRequest);
+			return absenceRequest;
+		}
+
+
+		private static bool referencesPerson(RequestViewModel requestViewModel, IPerson person)
+		{
+			return requestViewModel.AgentName == person.Name.ToString() && requestViewModel.PersonId == person.Id;
+		}
+
+
+		private PersonAbsenceAccount createPersonAbsenceAccount(IPerson person, IAbsence absence)
+		{
+			var personAbsenceAccount = new PersonAbsenceAccount(person, absence);
+			personAbsenceAccount.Absence.Tracker = Tracker.CreateDayTracker();
+			
+			PersonAbsenceAccountRepository.Add(personAbsenceAccount);
+
+			return personAbsenceAccount;
 		}
 
 		private IEnumerable<IPersonRequest> setUpRequests()
 		{
 			var textRequest1 = new TextRequest(new DateTimePeriod(2015, 10, 1, 2015, 10, 6));
-			var absenceRequest = new AbsenceRequest(AbsenceFactory.CreateAbsence("absence1"),
-				new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
+			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
 			var textRequest2 = new TextRequest(new DateTimePeriod(2015, 10, 2, 2015, 10, 7));
 
-			testPersonId1 = Guid.NewGuid();
-			var testPerson1 = PersonFactory.CreatePerson("test1");
-			testPerson1.SetId(testPersonId1);
-			
-			testPersonId2 = Guid.NewGuid();
-			var testPerson2 = PersonFactory.CreatePerson("test2");
-			testPerson2.SetId(testPersonId2);
+			people = new[]
+			{
+				PersonFactory.CreatePerson ("test1").WithId(),
+				PersonFactory.CreatePerson ("test2").WithId(),
+				PersonFactory.CreatePerson ("test3").WithId()
+			}
+			.ToList();
 
-			testPersonId3 = Guid.NewGuid();
-			var testPerson3 = PersonFactory.CreatePerson("test3");
-			testPerson3.SetId(testPersonId3);
+			var personRequests = new[]
+			{
+				 new PersonRequest(people[0], textRequest1).WithId(),
+				 new PersonRequest(people[1], absenceRequest).WithId(),
+				 new PersonRequest (people[2], textRequest2).WithId()
+			};
 
-			var personRequest1 = new PersonRequest(testPerson1, textRequest1);
-			personRequest1.SetId(Guid.NewGuid());
+			PersonRequestRepository.AddRange(personRequests);
 
-			var personRequest2 = new PersonRequest(testPerson2, absenceRequest);
-			personRequest2.SetId(Guid.NewGuid());
-			
-			var personRequest3 = new PersonRequest(testPerson3, textRequest2);
-			personRequest3.SetId(Guid.NewGuid());
-
-			var personRequestRepository = PersonRequestRepository as FakePersonRequestRepository;
-			personRequestRepository.Add(personRequest1);
-			personRequestRepository.Add(personRequest2);
-			personRequestRepository.Add(personRequest3);
-
-			return new List<IPersonRequest> { personRequest1, personRequest2, personRequest3 };
+			return personRequests.ToList();
 		}
 	}
 }
+

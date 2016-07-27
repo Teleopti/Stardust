@@ -1,5 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Drawing;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Tracking;
+using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
@@ -11,17 +16,18 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 
 		private readonly IPersonNameProvider _personNameProvider;
 		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
+		private readonly IPersonAbsenceAccountProvider _personAbsenceAccountProvider;
 
-		public RequestViewModelMapper(IPersonNameProvider personNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider)
+		public RequestViewModelMapper(IPersonNameProvider personNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider, IPersonAbsenceAccountProvider personAbsenceAccountProvider)
 		{
 			_personNameProvider = personNameProvider;
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
+			_personAbsenceAccountProvider = personAbsenceAccountProvider;
 		}
 
 		public RequestViewModel Map(RequestViewModel requestViewModel, IPersonRequest request)
 		{
 			var team = request.Person.MyTeam(new DateOnly(request.Request.Period.StartDateTime));
-
 			requestViewModel.Id = request.Id.GetValueOrDefault();
 			requestViewModel.Subject = request.GetSubject(new NoFormatting());
 			requestViewModel.Message = request.GetMessage(new NoFormatting());
@@ -46,7 +52,62 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			requestViewModel.Team = team?.SiteAndTeam;
 			requestViewModel.IsFullDay = isFullDay(request);
 
+			var absenceRequest = request.Request as IAbsenceRequest;
+
+			if (absenceRequest != null )
+			{
+				requestViewModel.PersonAccountApprovalSummary = getPersonalAccountApprovalSummary (absenceRequest);
+			}
+
+
 			return requestViewModel;
+		}
+
+
+		private PersonAccountApprovalSummary getPersonalAccountApprovalSummary(IAbsenceRequest absenceRequest)
+		{
+			var canApprove = false;
+			var personAbsenceAccount = _personAbsenceAccountProvider.Find(absenceRequest.Person);
+			if (personAbsenceAccount != null)
+			{
+				var accountForPersonAbsence = personAbsenceAccount.Find (absenceRequest.Absence);
+				var affectedAccounts = accountForPersonAbsence?.Find (new DateOnlyPeriod (new DateOnly (absenceRequest.Period.StartDateTime),
+						DateOnly.MaxValue));
+
+				if (affectedAccounts != null)
+				{
+					canApprove = checkApprovalStatus(absenceRequest, affectedAccounts, canApprove);
+				}
+			}
+			return new PersonAccountApprovalSummary
+			{
+				Color = (canApprove ? Color.Green : Color.Red).ToHtml()
+
+			};
+
+		}
+
+		private static bool checkApprovalStatus (IAbsenceRequest absenceRequest, IEnumerable<IAccount> affectedAccounts)
+		{
+
+			var canApprove = true;
+
+			foreach (var account in affectedAccounts)
+			{
+				//get timespan within account period and compare to remaining timespan.
+				var timeSpanOfAbsenceRequest = absenceRequest.Period.Intersection (account.Period().ToDateTimePeriod (TimeZoneInfo.Utc));
+				if (timeSpanOfAbsenceRequest.HasValue)
+				{
+					var timeSpanOfIntersection = timeSpanOfAbsenceRequest.Value.EndDateTime -
+												 timeSpanOfAbsenceRequest.Value.StartDateTime;
+
+					if (account.Remaining < timeSpanOfIntersection)
+					{
+						canApprove = false;
+					}
+				}
+			}
+			return canApprove;
 		}
 
 		private static RequestStatus getRequestStatus(IPersonRequest request)
