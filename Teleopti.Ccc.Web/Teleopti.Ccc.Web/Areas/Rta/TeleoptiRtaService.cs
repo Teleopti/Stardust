@@ -93,10 +93,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			{
 				throw new FaultException<LegacyAuthenticationKeyException>(e);
 			}
-			catch (BatchTooBigException e)
-			{
-				throw new FaultException<BatchTooBigException>(e);
-			}
 			catch (InvalidSourceException e)
 			{
 				Log.Error("Source id was invalid.", e);

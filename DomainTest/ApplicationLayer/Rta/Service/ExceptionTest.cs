@@ -44,18 +44,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				})
 				);
 		}
-
-		[Test]
-		public void ShouldThrowIfTooManyExternalUserStatesInBatch()
-		{
-			const int tooManyStates = 200;
-			var externalStates = new Collection<ExternalUserStateForTest>();
-			for (var i = 0; i < tooManyStates; i++)
-				externalStates.Add(new ExternalUserStateForTest());
-			Database
-				.WithUser(new ExternalUserStateForTest().UserCode);
-
-			Assert.Throws(typeof(BatchTooBigException), () => Target.SaveStateBatch(externalStates));
-		}
+		
 	}
 }

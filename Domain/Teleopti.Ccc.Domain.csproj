@@ -566,7 +566,6 @@
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentViewModel.cs" />
     <Compile Include="ApplicationLayer\TestHandlers.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ActivityChangeProcessor.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\BatchTooBigException.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\EventCollector.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\InvalidAuthenticationKeyException.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ContextLoader.cs" />
