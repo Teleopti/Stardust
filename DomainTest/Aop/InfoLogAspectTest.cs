@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.Aop
 		{
 			Service.ReturnsInt();
 
-			Logger.InfoMessage.Should().Contain("Result : 1");
+			Logger.InfoMessage.Should().Contain("1");
 		}
 
 		[Test]
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.Aop
 		{
 			Service.ReturnsNullString();
 
-			Logger.InfoMessage.Should().Contain("Result : null");
+			Logger.InfoMessage.Should().Contain("null");
 		}
 
 		[Test]
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.DomainTest.Aop
 		{
 			Service.ReturnsArrayAsIEnumerable();
 
-			Logger.InfoMessage.Should().Contain("Result : Count = 1");
+			Logger.InfoMessage.Should().Contain("Count = 1");
 		}
 
 
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.DomainTest.Aop
 		{
 			Service.ReturnsIEnumerable();
 
-			Logger.InfoMessage.Should().Contain("Result : Enumerable");
+			Logger.InfoMessage.Should().Contain("Enumerable");
 		}
 		
 		[Test]
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.Aop
 		{
 			Service.ReturnsListAsIEnumerable();
 
-			Logger.InfoMessage.Should().Contain("Result : Count = 3");
+			Logger.InfoMessage.Should().Contain("Count = 3");
 		}
 	}
 
