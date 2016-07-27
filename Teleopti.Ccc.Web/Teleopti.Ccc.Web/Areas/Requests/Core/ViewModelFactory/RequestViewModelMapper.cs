@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 
 				if (affectedAccounts != null)
 				{
-					canApprove = checkApprovalStatus(absenceRequest, affectedAccounts, canApprove);
+					canApprove = checkApprovalStatus(absenceRequest, affectedAccounts);
 				}
 			}
 			return new PersonAccountApprovalSummary
