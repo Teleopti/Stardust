@@ -16,10 +16,10 @@ Scenario: See adherence percentage from agent state overview
 	 | Team           | Red          |
 	 | Start Date     | 2014-10-06   |
 	And Pierre Baldi has a shift with
-	| Field                    | Value            |
-	| Start time               | 2014-10-06 08:00 |
-	| End time                 | 2014-10-06 10:00 |
-	| Activity                 | Phone            |
+	| Field      | Value            |
+	| Start time | 2014-10-06 08:00 |
+	| End time   | 2014-10-06 10:00 |
+	| Activity   | Phone            |
 	And there is a rule with 
 	| Field           | Value        |
 	| Activity        | Phone        |
