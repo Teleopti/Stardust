@@ -62,23 +62,13 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (ajax, reloadData) {
 		return (self.requestViewModel() || '') != '';
 	});
 
-	self.showAddRequestForm = function (day) {		
-		self.showAddRequestFormWithData(day.fixedDate());
-	};
-
-	self.showAddRequestFormWithData = function (date) {
-		self.initialRequestDay(date);
-		if ((self.requestViewModel() != undefined) && (self.requestViewModel().type() == 'absenceReport')) {
-			self.requestViewModel(null);
-		}
-
-		if ((self.requestViewModel() || '') != '') {
-			_fillFormData();
+	self.showAddAbsenceReportFormWithData = function (data) {
+		if (!self.absenceReportPermission())
 			return;
-		}
 
-		if (self.absenceReportPermission())
-			self.showAddAbsenceReportForm();	
+		self.initialRequestDay(data.fixedDate());
+		self.requestViewModel(addAbsenceReportModel);
+		_fillFormData();
 	};
 	
 	self.isWithinSelected = function (startDate, endDate) {
@@ -118,22 +108,14 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (ajax, reloadData) {
 		CancelAddingNewRequest: function() { self.CancelAddingNewRequest(); }
 	};
 
-	self.showAddAbsenceReportForm = function (data) {
-		if (self.absenceReportPermission() !== true) {
-			return;
-		}
-		self.requestViewModel(addAbsenceReportModel);
-		_fillFormData(data);
-	};
-
-	self.showAddOvertimeAvailabilityForm = function (data) {		
+	self.showAddOvertimeAvailabilityForm = function (data) {
 		if (self.overtimeAvailabilityPermission() !== true) {
 			return;
 		}
 		self.initialRequestDay(data.fixedDate());
 		self.requestViewModel(addOvertimeModel);
 		_fillFormData(data);
-	}
+	};
 
 
 	self.CancelAddingNewRequest = function () {
@@ -145,6 +127,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (ajax, reloadData) {
 		self.dayViewModels([]);
 		reloadData();
 	}
+	
 	self.readData = function (data) {
 
 		if (data.DatePickerFormat != undefined && data.DatePickerFormat != null) {

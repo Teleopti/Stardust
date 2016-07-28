@@ -48,6 +48,10 @@
 	display: inline-block;
 }
 
+.shift-category-content.noFloatLeft{
+	float: none;
+}
+
 .overtime-availability-content {
 	background-color: #f0f8ff;
 	text-align: center;

@@ -44,7 +44,7 @@
 			</div>
 
 			<div id="mobileWeek-day-view-body" data-bind="style: { backgroundColor: summaryColor, color: summaryTextColor }, css: {'dayoff': isDayoff(),  'overtime-panel-body': hasOvertime, 'panel-body': !hasOvertime }">
-				<div class="shift-category-content col-xs-6 col-sm-6">
+				<div class="shift-category-content col-xs-6 col-sm-6" data-bind="css: {'noFloatLeft': !hasOvertimeAvailability()}">
 					<div>
 						<strong data-bind="text: summaryName"></strong>
 					</div>
@@ -102,7 +102,7 @@
 				<!-- /ko -->
 				<!-- ko if: isPermittedToReportAbsence() -->
 				<li data-bind="css: { active: $parent.requestViewModel()!=undefined && $parent.requestViewModel().type() == 'absenceReport' && formattedFixedDate() === $parent.formattedRequestDate() }">
-					<a id="addAbsenceReport" class="addAbsenceReport" href="#" data-bind="click: $parent.showAddRequestForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceReport</a>
+					<a id="addAbsenceReport" class="addAbsenceReport" href="#" data-bind="click: $parent.showAddAbsenceReportFormWithData"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceReport</a>
 				</li>
 				<!-- /ko -->
 			</ul>
