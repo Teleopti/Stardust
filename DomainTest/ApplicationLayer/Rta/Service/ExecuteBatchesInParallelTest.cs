@@ -87,8 +87,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Persister.Get(personId2).StateCode.Should().Be("phone");
 		}
 
-
 		[Test]
+		[ToggleOff(Toggles.RTA_RuleMappingOptimization_39812)]
+		// this works for real with RTA_RuleMappingOptimization_39812, see infra test
 		public void ShouldNotAddDuplicateStateCodes()
 		{
 			Database
