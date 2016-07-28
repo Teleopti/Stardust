@@ -372,40 +372,42 @@ Teleopti.MyTimeWeb.Request.CloneLayerAddShiftTradeViewModel = function (layer, m
 };
 
 Teleopti.MyTimeWeb.Request.PersonScheduleEditShiftTradeViewModel = function(layers, scheduleObject) {
-    var self = this;
-    var minutesSinceTimeLineStart = 0;
-    var agentName = '';
-    var dayOffText = '';
-    var hasUnderlyingDayOff = false;
-    var isMySchedule = false;
-    if (scheduleObject) {
-        agentName = scheduleObject.Name;
-        minutesSinceTimeLineStart = scheduleObject.MinutesSinceTimeLineStart;
-        dayOffText = scheduleObject.DayOffText;
-        hasUnderlyingDayOff = scheduleObject.HasUnderlyingDayOff;
-        isMySchedule = scheduleObject.IsMySchedule;
-    }
+	var self = this;
+	var minutesSinceTimeLineStart = 0;
+	var agentName = '';
+	var dayOffText = '';
+	var hasUnderlyingDayOff = false;
+	var isMySchedule = false;
+	if (scheduleObject) {
+		agentName = scheduleObject.Name;
+		minutesSinceTimeLineStart = scheduleObject.MinutesSinceTimeLineStart;
+		dayOffText = scheduleObject.DayOffText;
+		hasUnderlyingDayOff = scheduleObject.HasUnderlyingDayOff;
+		isMySchedule = scheduleObject.IsMySchedule;
+	}
 
-    self.agentName = agentName;
-    self.layers = layers;
-    self.minutesSinceTimeLineStart = minutesSinceTimeLineStart;
-    self.dayOffText = dayOffText;
-    self.hasUnderlyingDayOff = ko.observable(hasUnderlyingDayOff);
-    self.showDayOffStyle = function() {
-        if (self.hasUnderlyingDayOff() == true | self.dayOffText.length > 0) {
-            return true;
-        }
-        return false;
-    };
-    self.isMySchedule = isMySchedule;
-    self.myScheduleStyleJson = ko.computed(function () {
-    	var left = 0;
-    	var width = 0;
-    	if (layers != undefined) {
-    		var lastLayer = layers[layers.length - 1];
-    		left = parseFloat(lastLayer.leftPx());
-    		width = parseFloat(lastLayer.widthPx());
-    	}
+	self.agentName = agentName;
+	self.layers = layers;
+	self.minutesSinceTimeLineStart = minutesSinceTimeLineStart;
+	self.dayOffText = dayOffText;
+	self.hasUnderlyingDayOff = ko.observable(hasUnderlyingDayOff);
+	self.showDayOffStyle = function() {
+		if (self.hasUnderlyingDayOff() == true | self.dayOffText.length > 0) {
+			return true;
+		}
+		return false;
+	};
+	self.isMySchedule = isMySchedule;
+	self.myScheduleStyleJson = ko.computed(function() {
+		var left = 0;
+		var width = 0;
+		if (layers != undefined) {
+			var lastLayer = layers[layers.length - 1];
+			if (lastLayer) {
+				left = parseFloat(lastLayer.leftPx());
+				width = parseFloat(lastLayer.widthPx());
+			}
+		}
 		var marginLeft = left + width + 10;
 		return { 'margin-left': marginLeft + 'px' };
 	});
