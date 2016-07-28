@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
@@ -46,26 +47,34 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				.CreateSqlQuery("DELETE FROM [ReadModel].[KeyValueStore] WHERE [Key] = 'RuleMappingsInvalido'")
 				.ExecuteUpdate();
 
-			var query = _unitOfWork.Current()
-				.CreateSqlQuery(@"
+			mappings.Batch(100).ForEach(batch =>
+			{
+
+				var sqlValues = batch.Select((m, i) =>
+						$@"
+(
+:BusinessUnitId{i},
+:StateCode{i},
+:PlatformTypeId{i},
+:StateGroupId{i},
+:StateGroupName{i},
+:ActivityId{i},
+:RuleId{i},
+:RuleName{i},
+:Adherence{i},
+:StaffingEffect{i},
+:DisplayColor{i},
+:IsAlarm{i},
+:ThresholdTime{i},
+:AlarmColor{i}
+)").Aggregate((current, next) => current + ", " + next);
+				
+				var query = _unitOfWork.Current()
+				.CreateSqlQuery($@"
 MERGE INTO [ReadModel].[RuleMappings] AS T
-USING (
-	VALUES (
-		:BusinessUnitId,
-		:StateCode,
-		:PlatformTypeId,
-		:StateGroupId,
-		:StateGroupName,
-		:ActivityId,
-		:RuleId,
-		:RuleName,
-		:Adherence,
-		:StaffingEffect,
-		:DisplayColor,
-		:IsAlarm,
-		:ThresholdTime,
-		:AlarmColor
-	)
+USING
+(
+	VALUES {sqlValues}
 ) AS S (
 	BusinessUnitId,
 	StateCode,
@@ -135,28 +144,34 @@ UPDATE SET
 	ThresholdTime = S.ThresholdTime,
 	AlarmColor = S.AlarmColor,
 	Updated = 1
-			;");
+;");
 
-			mappings.ForEach(mapping =>
-			{
-				query
-					.SetParameter("BusinessUnitId", mapping.BusinessUnitId)
-					.SetParameter("StateCode", mapping.StateCode ?? MappingReadModelReader.MagicString)
-					.SetParameter("PlatformTypeId", mapping.PlatformTypeId)
-					.SetParameter("StateGroupId", mapping.StateGroupId)
-					.SetParameter("StateGroupName", mapping.StateGroupName)
-					.SetParameter("ActivityId", mapping.ActivityId ?? Guid.Empty)
-					.SetParameter("RuleId", mapping.RuleId)
-					.SetParameter("RuleName", mapping.RuleName)
-					.SetParameter("Adherence", mapping.Adherence)
-					.SetParameter("StaffingEffect", mapping.StaffingEffect)
-					.SetParameter("DisplayColor", mapping.DisplayColor)
-					.SetParameter("IsAlarm", mapping.IsAlarm)
-					.SetParameter("ThresholdTime", mapping.ThresholdTime)
-					.SetParameter("AlarmColor", mapping.AlarmColor)
-					.ExecuteUpdate();
+				batch.Select((m, i) => new {m, i})
+					.ForEach(x =>
+					{
+						var i = x.i;
+						var mapping = x.m;
+						query
+							.SetParameter("BusinessUnitId" + i, mapping.BusinessUnitId)
+							.SetParameter("StateCode" + i, mapping.StateCode ?? MappingReadModelReader.MagicString)
+							.SetParameter("PlatformTypeId" + i, mapping.PlatformTypeId)
+							.SetParameter("StateGroupId" + i, mapping.StateGroupId)
+							.SetParameter("StateGroupName" + i, mapping.StateGroupName)
+							.SetParameter("ActivityId" + i, mapping.ActivityId ?? Guid.Empty)
+							.SetParameter("RuleId" + i, mapping.RuleId)
+							.SetParameter("RuleName" + i, mapping.RuleName)
+							.SetParameter("Adherence" + i, mapping.Adherence)
+							.SetParameter("StaffingEffect" + i, mapping.StaffingEffect)
+							.SetParameter("DisplayColor" + i, mapping.DisplayColor)
+							.SetParameter("IsAlarm" + i, mapping.IsAlarm)
+							.SetParameter("ThresholdTime" + i, mapping.ThresholdTime)
+							.SetParameter("AlarmColor" + i, mapping.AlarmColor);
+					});
+
+				query.ExecuteUpdate();
 			});
 
+			
 			_unitOfWork.Current()
 				.CreateSqlQuery("DELETE FROM [ReadModel].[RuleMappings] WHERE Updated = 0")
 				.ExecuteUpdate();

@@ -65,6 +65,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		}
 
 		[Test]
+		public void ShouldPersistMany()
+		{
+			Target.Persist(
+				Enumerable.Range(0, 237)
+				.Select(i => new Mapping {BusinessUnitId = Guid.NewGuid()})
+				);
+
+			Reader.Read().Should().Have.Count.EqualTo(237);
+		}
+
+		[Test]
 		public void ShouldPersistWithNullValues()
 		{
 			Target.Persist(new[] { new Mapping() });
