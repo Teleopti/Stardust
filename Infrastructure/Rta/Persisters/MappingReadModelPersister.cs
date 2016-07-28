@@ -46,13 +46,27 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				.CreateSqlQuery("DELETE FROM [ReadModel].[KeyValueStore] WHERE [Key] = 'RuleMappingsInvalido'")
 				.ExecuteUpdate();
 
-			_unitOfWork.Current()
-				.CreateSqlQuery("DELETE FROM [ReadModel].[RuleMappings]")
-				.ExecuteUpdate();
-
 			var query = _unitOfWork.Current()
 				.CreateSqlQuery(@"
-INSERT INTO [ReadModel].[RuleMappings] (
+MERGE INTO [ReadModel].[RuleMappings] AS T
+USING (
+	VALUES (
+		:BusinessUnitId,
+		:StateCode,
+		:PlatformTypeId,
+		:StateGroupId,
+		:StateGroupName,
+		:ActivityId,
+		:RuleId,
+		:RuleName,
+		:Adherence,
+		:StaffingEffect,
+		:DisplayColor,
+		:IsAlarm,
+		:ThresholdTime,
+		:AlarmColor
+	)
+) AS S (
 	BusinessUnitId,
 	StateCode,
 	PlatformTypeId,
@@ -67,22 +81,61 @@ INSERT INTO [ReadModel].[RuleMappings] (
 	IsAlarm,
 	ThresholdTime,
 	AlarmColor
-) VALUES (
-	:BusinessUnitId,
-	:StateCode,
-	:PlatformTypeId,
-	:StateGroupId,
-	:StateGroupName,
-	:ActivityId,
-	:RuleId,
-	:RuleName,
-	:Adherence,
-	:StaffingEffect,
-	:DisplayColor,
-	:IsAlarm,
-	:ThresholdTime,
-	:AlarmColor
-)");
+) ON
+	T.BusinessUnitId = S.BusinessUnitId
+	AND T.StateCode = S.StateCode
+	AND T.PlatformTypeId = S.PlatformTypeId
+	AND T.ActivityId = S.ActivityId
+WHEN NOT MATCHED THEN
+INSERT
+(
+	BusinessUnitId,
+	StateCode,
+	PlatformTypeId,
+	StateGroupId,
+	StateGroupName,
+	ActivityId,
+	RuleId,
+	RuleName,
+	Adherence,
+	StaffingEffect,
+	DisplayColor,
+	IsAlarm,
+	ThresholdTime,
+	AlarmColor,
+	Updated
+)
+VALUES (
+	S.BusinessUnitId,
+	S.StateCode,
+	S.PlatformTypeId,
+	S.StateGroupId,
+	S.StateGroupName,
+	S.ActivityId,
+	S.RuleId,
+	S.RuleName,
+	S.Adherence,
+	S.StaffingEffect,
+	S.DisplayColor,
+	S.IsAlarm,
+	S.ThresholdTime,
+	S.AlarmColor,
+	1
+)
+WHEN MATCHED THEN
+UPDATE SET
+	StateGroupId = S.StateGroupId,
+	StateGroupName = S.StateGroupName,
+	RuleId = S.RuleId,
+	RuleName = S.RuleName,
+	Adherence = S.Adherence,
+	StaffingEffect = S.StaffingEffect,
+	DisplayColor = S.DisplayColor,
+	IsAlarm = S.IsAlarm,
+	ThresholdTime = S.ThresholdTime,
+	AlarmColor = S.AlarmColor,
+	Updated = 1
+			;");
 
 			mappings.ForEach(mapping =>
 			{
@@ -103,7 +156,14 @@ INSERT INTO [ReadModel].[RuleMappings] (
 					.SetParameter("AlarmColor", mapping.AlarmColor)
 					.ExecuteUpdate();
 			});
-			
+
+			_unitOfWork.Current()
+				.CreateSqlQuery("DELETE FROM [ReadModel].[RuleMappings] WHERE Updated = 0")
+				.ExecuteUpdate();
+			_unitOfWork.Current()
+				.CreateSqlQuery("UPDATE [ReadModel].[RuleMappings] SET Updated = 0")
+				.ExecuteUpdate();
+
 			var updated = _unitOfWork.Current()
 				.CreateSqlQuery("UPDATE [ReadModel].[KeyValueStore] SET [Value] = [Value] + 1 WHERE [Key] = 'RuleMappingsVersion'")
 				.ExecuteUpdate();

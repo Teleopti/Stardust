@@ -95,6 +95,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 
 			var stateGroups = (
 				from g in stateGroupRepository.LoadAllCompleteGraph()
+				where g.StateCollection.Any()
 				select new
 				{
 					Id = g.Id.Value,

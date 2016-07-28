@@ -64,6 +64,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			{
 				set { base.Adherence = (Adherence?) value; }
 			}
+			public bool Updated { get; set; }
 		}
 	}
 }

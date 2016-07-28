@@ -159,6 +159,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public void ShouldReadBusinessUnitFromState()
 		{
 			var group = new RtaStateGroup("Phone", true, true);
+			group.AddState("Phone", Guid.Empty);
 			WithUnitOfWork.Do(() =>
 			{
 				Groups.Add(group);

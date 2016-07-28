@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
@@ -157,7 +154,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Mapping
 		public void ShouldContainStateGroup()
 		{
 			var phone = Guid.NewGuid();
-			Database.WithStateGroup(phone, "phone");
+			Database
+				.WithStateGroup(phone, "phone")
+				.WithStateCode("phone");
 
 			Target.Handle(new TenantMinuteTickEvent());
 
@@ -242,6 +241,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Mapping
 		}
 
 		[Test]
+		public void ShouldContainNoDuplicatesForEmptyStateGroup()
+		{
+			Database
+				.WithStateGroup(null, null)
+				;
+
+			Target.Handle(new TenantMinuteTickEvent());
+
+			var actual = Persister.Data.Select(x => x.StateCode + x.ActivityId.GetValueOrDefault() + x.BusinessUnitId).ToArray();
+			var expected = actual.Distinct().ToArray();
+			actual.Should().Have.SameSequenceAs(expected);
+		}
+
+		[Test]
 		public void ShouldRegenerateOnUpdate()
 		{
 			var phone = Guid.NewGuid();
@@ -303,8 +316,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Mapping
 			var ready = Guid.NewGuid();
 			Target.Handle(new TenantMinuteTickEvent());
 
-			Database.WithStateGroup(ready, null);
-			Target.Handle(new ActivityChangedEvent());
+			Database
+				.WithStateGroup(ready, null)
+				.WithStateCode("ready");
+			Target.Handle(new RtaStateGroupChangedEvent());
 			Target.Handle(new TenantMinuteTickEvent());
 
 			Persister.Data.Select(x => x.StateGroupId).Should().Contain(ready);
@@ -313,27 +328,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Mapping
 		[Test]
 		public void ShouldUpdateOnMappingChanges()
 		{
-			var ready = Guid.NewGuid();
+			var rule = Guid.NewGuid();
 			Target.Handle(new TenantMinuteTickEvent());
 
-			Database.WithStateGroup(ready, null);
+			Database.WithRule(rule, null, null, null, 0, null, null, null);
 			Target.Handle(new RtaMapChangedEvent());
 			Target.Handle(new TenantMinuteTickEvent());
 
-			Persister.Data.Select(x => x.StateGroupId).Should().Contain(ready);
+			Persister.Data.Select(x => x.RuleId).Should().Contain(rule);
 		}
 
 		[Test]
 		public void ShouldUpdateOnBusinessUnitChanges()
 		{
-			var ready = Guid.NewGuid();
+			var businessUnit = Guid.NewGuid();
 			Target.Handle(new TenantMinuteTickEvent());
 
-			Database.WithStateGroup(ready, null);
+			Database.WithBusinessUnit(businessUnit);
 			Target.Handle(new BusinessUnitChangedEvent());
 			Target.Handle(new TenantMinuteTickEvent());
 
-			Persister.Data.Select(x => x.StateGroupId).Should().Contain(ready);
+			Persister.Data.Select(x => x.BusinessUnitId).Should().Contain(businessUnit);
 		}
 	}
 }
