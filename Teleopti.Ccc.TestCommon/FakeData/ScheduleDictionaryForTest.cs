@@ -114,10 +114,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 					BaseDictionary.Add(scheduleData.Person, scheduleRange);
 				}
 
-				if (scheduleData.BelongsToPeriod(Period.VisiblePeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc)))
-				{
-					((ScheduleRange)scheduleRange).Add(scheduleData);
-				}
+				((ScheduleRange)scheduleRange).Add(scheduleData);
 			}
 			
 			TakeSnapshot();
