@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			prepareBusinessRuleProvider(ruleResponse1, ruleResponse2);
 
 			_personRepository.Add(personTo);
-			var personRequest = prepareAndGetPersonRequest(personFrom, personTo);
+			var personRequest = prepareAndGetPersonRequest(personFrom, personTo, DateOnly.Today);
 			var approvalService = new ApprovalServiceForTest();
 			approvalService.SetBusinessRuleResponse(ruleResponse1, ruleResponse2);
 
@@ -126,6 +126,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			Assert.IsTrue(result.PersonFromSchedule.PersonAssignment().ShiftLayers.Single().Payload.Id == result.ActivityFrom.Id);
 		}
 
+		[Test]
 		public void ShouldSetMinWeeklyWorkTimeBrokenRuleWhenUseMinWeekWorkTimeIsOn()
 		{
 			var scheduleDate = new DateTime(2016, 7, 25);
@@ -145,7 +146,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				addPersonAssignment(personFrom, dateTimePeriod, activityPersonFrom);
 			}
 
-			var personRequest = prepareAndGetPersonRequest(personFrom, personTo);
+			var personRequest = prepareAndGetPersonRequest(personFrom, personTo, scheduleDateOnly);
 
 			_schedulingResultStateHolder.AllPersonAccounts = new Dictionary<IPerson, IPersonAccountCollection>
 			{
@@ -201,7 +202,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			_personRepository.Add(personTo);
 
-			var personRequest = prepareAndGetPersonRequest(personFrom, personTo);
+			var personRequest = prepareAndGetPersonRequest(personFrom, personTo, DateOnly.Today);
 
 			setApprovalService(scheduleDictionary);
 
@@ -239,9 +240,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_target.Handle(acceptShiftTradeEvent);
 		}
 
-		private IPersonRequest prepareAndGetPersonRequest(IPerson personFrom, IPerson personTo)
+		private IPersonRequest prepareAndGetPersonRequest(IPerson personFrom, IPerson personTo, DateOnly shiftTradeDate)
 		{
-			var personRequest = new PersonRequestFactory().CreatePersonShiftTradeRequest(personFrom, personTo, DateOnly.Today).WithId();
+			var personRequest = new PersonRequestFactory().CreatePersonShiftTradeRequest(personFrom, personTo, shiftTradeDate).WithId();
 			_personRequestRepository.Add(personRequest);
 			return personRequest;
 		}

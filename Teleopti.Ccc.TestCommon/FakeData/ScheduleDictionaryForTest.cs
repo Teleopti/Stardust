@@ -114,7 +114,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 					BaseDictionary.Add(scheduleData.Person, scheduleRange);
 				}
 
-				((ScheduleRange)scheduleRange).Add(scheduleData);
+				var timezone = scheduleData.Person.PermissionInformation.DefaultTimeZone();
+				if (scheduleData.BelongsToPeriod(Period.VisiblePeriod.ToDateOnlyPeriod(timezone)))
+				{
+					((ScheduleRange)scheduleRange).Add(scheduleData);
+				}
 			}
 			
 			TakeSnapshot();
