@@ -94,6 +94,15 @@
 					vm.leaderBoardTableList = VMFactory.Create(data.AgentBadges);
 					vm.isLoading = false;
 				});
+			}else{
+				vm.selectedPeriod = {
+					startDate: new Date(vm.shortDateFormatStart),
+					endDate: new Date(vm.shortDateFormatEnd)
+				};
+				LeaderBoardSvc.getLeaderBoardDataByPeriod(vm.searchOptions.keyword, vm.selectedPeriod).then(function(data) {
+					vm.leaderBoardTableList = VMFactory.Create(data.AgentBadges);
+					vm.isLoading = false;
+				});
 			}
 		};
 
