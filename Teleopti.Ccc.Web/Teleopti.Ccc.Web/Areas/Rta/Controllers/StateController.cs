@@ -11,12 +11,10 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 	public class StateController : ApiController
 	{
 		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
-		private readonly ILog _logger;
 
-		public StateController(Domain.ApplicationLayer.Rta.Service.Rta rta, ILog logger)
+		public StateController(Domain.ApplicationLayer.Rta.Service.Rta rta)
 		{
 			_rta = rta;
-			_logger = logger;
 		}
 
 		[HttpPost, Route("Rta/State/Change")]
