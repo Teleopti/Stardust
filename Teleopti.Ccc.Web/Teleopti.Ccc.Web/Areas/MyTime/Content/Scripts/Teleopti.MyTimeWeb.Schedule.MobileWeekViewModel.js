@@ -227,6 +227,135 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, absenceR
 		var isPermittedDate = (dateDiff == 0 || dateDiff == 1);
 		var result = self.absenceReportPermission() && isPermittedDate;
 		return result;
-	});	
+	});
+
+	self.layers = ko.utils.arrayMap(scheduleDay.Periods, function (item) {
+		return new MobileWeekLayerViewModel(item, parent);
+	});
 };
 
+var MobileWeekLayerViewModel = function (layer, parent) {
+	var scheduleHeight = 668;
+	var pixelToDisplayAll = 38;
+	var pixelToDisplayTitle = 16;
+	var self = this;
+
+	self.title = ko.observable(layer.Title);
+	self.hasMeeting = ko.computed(function () {
+		return layer.Meeting != null;
+	});
+	self.meetingTitle = ko.computed(function () {
+		if (self.hasMeeting()) {
+			return layer.Meeting.Title;
+		}
+		return null;
+	});
+	self.meetingLocation = ko.computed(function () {
+		if (self.hasMeeting()) {
+			return layer.Meeting.Location;
+		}
+		return null;
+	});
+	self.meetingDescription = ko.computed(function () {
+		if (self.hasMeeting()) {
+			if (layer.Meeting.Description.length > 300) {
+				return layer.Meeting.Description.substring(0, 300) + '...';
+			}
+			return layer.Meeting.Description;
+		}
+		return null;
+	});
+
+	self.timeSpan = ko.computed(function () {
+		var originalTimespan = layer.TimeSpan;
+		// Remove extra space for extreme long timespan (For example: "10:00 PM - 12:00 AM +1")
+		var realTimespan = originalTimespan.length >= 22 ? originalTimespan.replace(" - ", "-").replace(" +1", "+1") : originalTimespan;
+		return realTimespan;
+	});
+
+	self.tooltipText = ko.computed(function () {
+		//not nice! rewrite tooltips in the future!
+		var text = '';
+		if (self.hasMeeting()) {
+			text = ('<div>{0}</div><div style="text-align: left">' +
+				'<div class="tooltip-wordwrap" style="overflow: hidden"><i>{1}</i> {2}</div>' +
+				'<div class="tooltip-wordwrap" style="overflow: hidden"><i>{3}</i> {4}</div>' +
+				'<div class="tooltip-wordwrap" style="white-space: normal"><i>{5}</i> {6}</div>' +
+				'</div>')
+				.format(self.timeSpan(),
+						parent.userTexts.subjectColon,
+						$('<div/>').text(self.meetingTitle()).html(),
+						parent.userTexts.locationColon,
+						$('<div/>').text(self.meetingLocation()).html(),
+						parent.userTexts.descriptionColon,
+						$('<div/>').text(self.meetingDescription()).html());
+		} else {
+			text = self.timeSpan();
+		}
+
+		return '<div>{0}</div>{1}'.format(self.title(), text);
+	});
+
+	self.backgroundColor = ko.observable('rgb(' + layer.Color + ')');
+	self.textColor = ko.computed(function () {
+		if (layer.Color != null && layer.Color != 'undefined') {
+			var backgroundColor = 'rgb(' + layer.Color + ')';
+			return Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(backgroundColor);
+		}
+		return 'black';
+	});
+
+	self.startPositionPercentage = ko.observable(layer.StartPositionPercentage);
+	self.endPositionPercentage = ko.observable(layer.EndPositionPercentage);
+	self.overtimeAvailabilityYesterday = layer.OvertimeAvailabilityYesterday;
+	self.isOvertimeAvailability = ko.observable(layer.IsOvertimeAvailability);
+	self.isOvertime = layer.IsOvertime;
+	self.left = ko.computed(function () {
+		return self.startPositionPercentage();
+	});
+	self.widthPer = ko.computed(function () {
+		return 100 * (self.endPositionPercentage() - self.startPositionPercentage()) + '%';
+	});
+	self.leftPer = ko.computed(function () {
+		return self.left() * 100 + '%';
+	});
+	self.overTimeLighterBackgroundStyle = ko.computed(function () {
+		var rgbTohex = function (rgb) {
+			if (rgb.charAt(0) === '#')
+				return rgb;
+			var ds = rgb.split(/\D+/);
+			var decimal = Number(ds[1]) * 65536 + Number(ds[2]) * 256 + Number(ds[3]);
+			var digits = 6;
+			var hexString = decimal.toString(16);
+			while (hexString.length < digits)
+				hexString += "0";
+
+			return "#" + hexString;
+		}
+
+		var getLumi = function (cstring) {
+			var matched = /#([\w\d]{2})([\w\d]{2})([\w\d]{2})/.exec(cstring);
+			if (!matched) return null;
+			return (299 * parseInt(matched[1], 16) + 587 * parseInt(matched[2], 16) + 114 * parseInt(matched[3], 16)) / 1000;
+		}
+
+		var lightColor = "#00ffff";
+		var darkColor = "#795548";
+		var backgroundColor = rgbTohex(self.backgroundColor());
+		var useLighterStyle = Math.abs(getLumi(backgroundColor) - getLumi(lightColor)) > Math.abs(getLumi(backgroundColor) - getLumi(darkColor));
+
+		return useLighterStyle;
+	});
+
+	self.overTimeDarkerBackgroundStyle = ko.computed(function () { return !self.overTimeLighterBackgroundStyle(); });
+
+	self.styleJson = ko.computed(function () {
+		return {
+			'left': self.leftPer,
+			'width': self.widthPer,
+			'color': self.textColor,
+			'background-size': self.isOvertime ? '11px 11px' : 'initial',
+			'background-color': self.backgroundColor
+		};
+	});
+};
