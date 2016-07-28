@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.Analytics;
@@ -94,31 +95,38 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 			if (shiftTradeRequest != null)
 				dayCollection = shiftTradeRequest.ShiftTradeSwapDetails.Select(x => x.DateFrom).ToList();
 
-			var dayIdCollection = dayCollection.Select(x => _analyticsDateRepository.Date(x.Date).DateId).ToList();
+			var dayIdCollection = dayCollection.SelectMany(x =>
+			{
+				var d = _analyticsDateRepository.Date(x.Date);
+				return d != null ? new List<int> {d.DateId} : new List<int>();
+			}).ToList();
 
 			var absenceId = getAbsence(personRequest);
 			var requestTypeId = getRequestType(personRequest);
 			var requestStatusId = getRequestStatus(personRequest);
 
-			_analyticsRequestRepository.AddOrUpdate(new AnalyticsRequest
+			if (dayIdCollection.Any())
 			{
-				AbsenceId = absenceId,
-				RequestTypeId = requestTypeId,
-				RequestDayCount = dayIdCollection.Count,
-				ApplicationDatetime = TimeZoneInfo.ConvertTimeFromUtc(personRequest.CreatedOn.GetValueOrDefault(), personTimeZone),
-				BusinessUnitId = analyticsBusinessUnit.BusinessUnitId,
-				DatasourceUpdateDate = personRequest.UpdatedOn.GetValueOrDefault(DateTime.UtcNow),
-				PersonId = personPeriod.PersonId,
-				RequestCode = @event.PersonRequestId,
-				RequestEndDate = numOfDays.EndDate.Date,
-				RequestEndTime = requestPeriod.EndDateTimeLocal(personTimeZone),
-				RequestStartDate = numOfDays.StartDate.Date,
-				RequestStartDateCount = 1,
-				RequestStartDateId = dayIdCollection.Min(),
-				RequestStartTime = requestPeriod.StartDateTimeLocal(personTimeZone),
-				RequestStatusId = requestStatusId,
-				RequestedTimeMinutes = (int)(requestPeriod.EndDateTimeLocal(personTimeZone) - requestPeriod.StartDateTimeLocal(personTimeZone)).TotalMinutes
-			});
+				_analyticsRequestRepository.AddOrUpdate(new AnalyticsRequest
+				{
+					AbsenceId = absenceId,
+					RequestTypeId = requestTypeId,
+					RequestDayCount = dayIdCollection.Count,
+					ApplicationDatetime = TimeZoneInfo.ConvertTimeFromUtc(personRequest.CreatedOn.GetValueOrDefault(),personTimeZone),
+					BusinessUnitId = analyticsBusinessUnit.BusinessUnitId,
+					DatasourceUpdateDate = personRequest.UpdatedOn.GetValueOrDefault(DateTime.UtcNow),
+					PersonId = personPeriod.PersonId,
+					RequestCode = @event.PersonRequestId,
+					RequestEndDate = numOfDays.EndDate.Date,
+					RequestEndTime = requestPeriod.EndDateTimeLocal(personTimeZone),
+					RequestStartDate = numOfDays.StartDate.Date,
+					RequestStartDateCount = 1,
+					RequestStartDateId = dayIdCollection.Min(),
+					RequestStartTime = requestPeriod.StartDateTimeLocal(personTimeZone),
+					RequestStatusId = requestStatusId,
+					RequestedTimeMinutes = (int)(requestPeriod.EndDateTimeLocal(personTimeZone) - requestPeriod.StartDateTimeLocal(personTimeZone)).TotalMinutes
+				});
+			}
 
 			var toBeRemoved =
 				_analyticsRequestRepository.GetAnalyticsRequestedDays(@event.PersonRequestId)
