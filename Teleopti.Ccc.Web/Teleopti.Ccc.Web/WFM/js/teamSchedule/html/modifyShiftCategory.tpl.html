@@ -6,7 +6,7 @@
 				<md-select class="shift-category-selector focus-default" ng-model="vm.selectedShiftCategoryId" placeholder="{{'SelectACategory' | translate}}">
 					<md-option ng-repeat="category in vm.shiftCategoriesList" ng-value="category.Id">
 							<span class="shiftcat-shortname" ng-bind="category.ShortName" ng-style="{backgroundColor: category.DisplayColor, color: category.ContrastColor}"></span>
-							<span class="shiftcat-fullname" ng-bind="category.Name"></span>
+							<span class="shiftcat-fullname" ng-bind="category.Name" title="{{category.Name}}"></span>
 					</md-option>
 				</md-select>
 			</div>
