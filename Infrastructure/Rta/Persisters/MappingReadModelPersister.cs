@@ -165,11 +165,11 @@ UPDATE SET
 				.ExecuteUpdate();
 
 			var updated = _unitOfWork.Current()
-				.CreateSqlQuery("UPDATE [ReadModel].[KeyValueStore] SET [Value] = [Value] + 1 WHERE [Key] = 'RuleMappingsVersion'")
+				.CreateSqlQuery("UPDATE [ReadModel].[KeyValueStore] SET [Value] = NEWID() WHERE [Key] = 'RuleMappingsVersion'")
 				.ExecuteUpdate();
 			if (updated == 0)
 				_unitOfWork.Current()
-					.CreateSqlQuery("INSERT INTO [ReadModel].[KeyValueStore] ([Key], [Value]) VALUES ('RuleMappingsVersion', 1)")
+					.CreateSqlQuery("INSERT INTO [ReadModel].[KeyValueStore] ([Key], [Value]) VALUES ('RuleMappingsVersion', NEWID())")
 					.ExecuteUpdate();
 		}
 	}

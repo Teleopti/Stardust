@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		public const string MagicString = "magic.string";
 		private readonly ICurrentReadModelUnitOfWork _unitOfWork;
 
-		private int _version;
+		private string _version;
 		private IEnumerable<Mapping> _cache = Enumerable.Empty<Mapping>();
 
 		public MappingReadModelReader(ICurrentReadModelUnitOfWork unitOfWork)
@@ -24,8 +24,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		public IEnumerable<Mapping> Read()
 		{
 			var version = _unitOfWork.Current()
-				.CreateSqlQuery("SELECT CONVERT(INT, [Value]) FROM [ReadModel].[KeyValueStore] WHERE [Key] = 'RuleMappingsVersion'")
-				.UniqueResult<int>();
+				.CreateSqlQuery("SELECT [Value] FROM [ReadModel].[KeyValueStore] WHERE [Key] = 'RuleMappingsVersion'")
+				.UniqueResult<string>();
 
 			if (version == _version && _cache.Any())
 				return _cache;
