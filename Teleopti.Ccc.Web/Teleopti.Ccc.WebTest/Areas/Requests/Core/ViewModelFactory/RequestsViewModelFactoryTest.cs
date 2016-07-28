@@ -6,12 +6,16 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Tracking;
+using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.People.Core.Providers;
@@ -32,10 +36,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		public IPermissionProvider PermissionProvider;
 		public IPeopleSearchProvider PeopleSearchProvider;
 		public IPersonAbsenceAccountRepository PersonAbsenceAccountRepository;
+		public IToggleManager ToggleManager;
+		public IUserCulture UserCulture;
 
 		private List<IPerson> people;
-		private readonly IAbsence absence = AbsenceFactory.CreateAbsence ("absence1").WithId();
-		
+		private readonly IAbsence absence = AbsenceFactory.CreateAbsence("absence1").WithId();
+
 		[Test]
 		public void ShouldGetRequests()
 		{
@@ -226,20 +232,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			Assert.IsTrue(referencesPerson(result.Requests.First(), people[0]));
 
 		}
-		
+
 		[Test]
-		public void ShouldReturnGreenOkPersonAccountApprovalSummaryStatus()
+		public void ShouldReturnPersonAccountApprovalSummary()
 		{
-			// needs 2 days
 			var accountDay = new AccountDay(new DateOnly(2015, 1, 1))
 			{
 				BalanceIn = TimeSpan.FromDays(0),
-				Accrued = TimeSpan.FromDays (2),
+				Accrued = TimeSpan.FromDays(2),
 				Extra = TimeSpan.FromDays(0)
 			};
-
-
-			// needs 4 days
+			
 			var accountDay2 = new AccountDay(new DateOnly(2015, 10, 5))
 			{
 				BalanceIn = TimeSpan.FromDays(0),
@@ -247,78 +250,43 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				Extra = TimeSpan.FromDays(0)
 			};
 
-			var absenceRequest = doPersonalAccountApprovalTest(accountDay, accountDay2);
-			Assert.IsTrue(absenceRequest.PersonAccountApprovalSummary.Color == Color.Green.ToHtml());
-		}
+			var absenceRequest = doPersonalAccountSummaryTest(accountDay, accountDay2);
 
-		[Test]
-		public void ShouldReturnNegativePersonAccountApprovalSummaryStatusWhenNoTimeInFirstPeriod()
-		{
-			// needs 2 days
-			var accountDay = new AccountDay(new DateOnly(2015, 1, 1))
-			{
-				BalanceIn = TimeSpan.FromDays(0),
-				Accrued = TimeSpan.FromDays(1),
-				Extra = TimeSpan.FromDays(0)
-			};
+			var firstSummaryDetail = absenceRequest.PersonAccountSummary.PersonAccountSummaryDetails.First();
+			var secondSummaryDetail = absenceRequest.PersonAccountSummary.PersonAccountSummaryDetails.Second();
 
-
-			// needs 4 days
-			var accountDay2 = new AccountDay(new DateOnly(2015, 10, 5))
-			{
-				BalanceIn = TimeSpan.FromDays(0),
-				Accrued = TimeSpan.FromDays(10),
-				Extra = TimeSpan.FromDays(0)
-			};
-
-			var absenceRequest = doPersonalAccountApprovalTest(accountDay, accountDay2);
-			Assert.IsTrue(absenceRequest.PersonAccountApprovalSummary.Color == Color.Red.ToHtml());
-		}
-
-		[Test]
-		public void ShouldReturnNegativePersonAccountApprovalSummaryStatusWhenNoTimeInSecondPeriod()
-		{
-			// needs 2 days
-			var accountDay = new AccountDay(new DateOnly(2015, 1, 1))
-			{
-				BalanceIn = TimeSpan.FromDays(0),
-				Accrued = TimeSpan.FromDays(10),
-				Extra = TimeSpan.FromDays(0)
-			};
-
-			// needs 4 days
-			var accountDay2 = new AccountDay(new DateOnly(2015, 10, 5))
-			{
-				BalanceIn = TimeSpan.FromDays(0),
-				Accrued = TimeSpan.FromDays(2),
-				Extra = TimeSpan.FromDays(0)
-			};
-
-			var absenceRequest = doPersonalAccountApprovalTest(accountDay, accountDay2);
-			Assert.IsTrue(absenceRequest.PersonAccountApprovalSummary.Color == Color.Red.ToHtml());
+			Assert.AreEqual(accountDay.StartDate.Date, firstSummaryDetail.StartDate);
+			Assert.AreEqual(accountDay.Remaining.TotalDays.ToString(UserCulture.GetCulture()), firstSummaryDetail.RemainingDescription);
+			Assert.AreEqual(Resources.Days, firstSummaryDetail.TrackingTypeDescription);
+			Assert.AreEqual(accountDay2.StartDate.Date, secondSummaryDetail.StartDate);
+			Assert.AreEqual(accountDay2.Remaining.TotalDays.ToString(UserCulture.GetCulture()), secondSummaryDetail.RemainingDescription);
+			Assert.AreEqual(Resources.Days, secondSummaryDetail.TrackingTypeDescription);
 		}
 
 
-		private RequestViewModel doPersonalAccountApprovalTest(params AccountDay[] accountDays )
+		private RequestViewModel doPersonalAccountSummaryTest(params AccountDay[] accountDays)
 		{
+
+			((FakeToggleManager)ToggleManager).Enable(Toggles.Wfm_Requests_Show_Personal_Account_39628);
+
 			setUpRequests();
 
 			var personAbsenceAccount = createPersonAbsenceAccount(people[1], absence);
 
-			accountDays.ForEach ((accountDay) =>
-			{
-				personAbsenceAccount.Add (accountDay);
-			});
-			
+			accountDays.ForEach((accountDay) =>
+		   {
+			   personAbsenceAccount.Add(accountDay);
+		   });
+
 
 			var input = new AllRequestsFormData
 			{
-				StartDate = new DateOnly (2015, 10, 3),
-				EndDate = new DateOnly (2015, 10, 9)
+				StartDate = new DateOnly(2015, 10, 3),
+				EndDate = new DateOnly(2015, 10, 9)
 			};
 
-			var result = Target.CreateRequestListViewModel (input);
-			var absenceRequest = result.Requests.Single (model => model.Type == RequestType.AbsenceRequest);
+			var result = Target.CreateRequestListViewModel(input);
+			var absenceRequest = result.Requests.Single(model => model.Type == RequestType.AbsenceRequest);
 			return absenceRequest;
 		}
 
@@ -333,7 +301,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		{
 			var personAbsenceAccount = new PersonAbsenceAccount(person, absence);
 			personAbsenceAccount.Absence.Tracker = Tracker.CreateDayTracker();
-			
+
 			PersonAbsenceAccountRepository.Add(personAbsenceAccount);
 
 			return personAbsenceAccount;

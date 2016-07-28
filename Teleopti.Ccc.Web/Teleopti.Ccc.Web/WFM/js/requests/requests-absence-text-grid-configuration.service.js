@@ -3,7 +3,7 @@
 (function () {
 
 	angular.module('wfm.requests')
-		.factory('TextAndAbsenceGridConfiguration', function () {
+		.factory('TextAndAbsenceGridConfiguration', ['Toggle', function (toggleSvc) {
 
 			var columns = [];
 
@@ -88,6 +88,19 @@
 				{ displayName: 'UpdatedOn', field: 'FormatedUpdatedTime()', headerCellFilter: 'translate', cellClass: 'request-updated-time', visible: false, headerCellClass: 'request-updated-time-header' }
 				];
 
+				if (toggleSvc.Wfm_Requests_Show_Personal_Account_39628) {
+					var accountColumn = {
+						displayName: 'Account',
+						field: 'PersonAccountSummary',
+						headerCellFilter: 'translate',
+						cellTemplate: 'requests-absence-person-account-overview.html'
+					};
+
+					columns.splice(11, 0, accountColumn);
+
+				}
+
+
 			}
 
 			function columnDefinitions() {
@@ -101,6 +114,6 @@
 
 			return service;
 
-		});
+		}]);
 
 }());

@@ -1406,6 +1406,7 @@
     <Content Include="WFM\js\requests\requests.controller.js" />
     <Content Include="WFM\js\requests\requests.controller.spec.js" />
     <Content Include="WFM\js\requests\requests-schedule-table.directive.js" />
+    <Content Include="WFM\js\requests\templates\requests-absence-person-account-overview.js" />
     <Content Include="WFM\js\requests\templates\requests-shift-trade-header-template.js" />
     <Content Include="WFM\js\requests\templates\requests-shift-trade-day-template.js" />
     <Content Include="WFM\js\requests\templates\schedule-table-template.js" />

@@ -115,8 +115,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 				var businessRules = NewBusinessRuleCollection.Minimum();
 
-				requestApprovalServiceScheduler = _requestFactory.GetRequestApprovalService(businessRules,
-					_scenarioRepository.Current(), schedulingResultStateHolder);
+				requestApprovalServiceScheduler = _requestFactory.GetRequestApprovalService(businessRules, _scenarioRepository.Current(), schedulingResultStateHolder);
 				simulateApproveAbsence(absenceRequest, requestApprovalServiceScheduler);
 
 				//Will issue a rollback for simulated schedule data

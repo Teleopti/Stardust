@@ -484,6 +484,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Account.
+        /// </summary>
+        public static string Account {
+            get {
+                return ResourceManager.GetString("Account", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Accrued.
         /// </summary>
         public static string Accrued {
@@ -18484,6 +18493,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NotInHierarchy {
             get {
                 return ResourceManager.GetString("NotInHierarchy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not OK.
+        /// </summary>
+        public static string NotOk {
+            get {
+                return ResourceManager.GetString("NotOk", resourceCulture);
             }
         }
         

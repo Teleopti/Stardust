@@ -1,27 +1,37 @@
-﻿.wfm-requests {
-	position: relative;
+﻿
+.account-tooltip .md-content {
+    height: auto;
+}
 
-	.inline-block, .wfm-date-range-picker-wrap {
-		display: inline-block;
-	}
-    .relative{
-        position:relative;
+.wfm-requests {
+    position: relative;
+
+    .inline-block, .wfm-date-range-picker-wrap {
+        display: inline-block;
     }
-    .absolute{
-        position:absolute;
+
+    .relative {
+        position: relative;
     }
-   schedule-table .wfm-checkbox-toggle{
-       display:none;
+
+    .absolute {
+        position: absolute;
     }
-    .schedule-container{
-        border:1px solid #A3A3A3;
-        background-color:#fff;
-        padding:5px;
-        width:710px;
-        height:145px;
-        z-index:1000;
+
+    schedule-table .wfm-checkbox-toggle {
+        display: none;
     }
-   .time-line {
+
+    .schedule-container {
+        border: 1px solid #A3A3A3;
+        background-color: #fff;
+        padding: 5px;
+        width: 710px;
+        height: 145px;
+        z-index: 1000;
+    }
+
+    .time-line {
         min-width: 300px;
         z-index: 10;
 
@@ -39,7 +49,8 @@
             transform: translateX(-50%);
         }
     }
-   .shift {
+
+    .shift {
         .layer {
             z-index: 10;
             height: 22px;
@@ -49,6 +60,7 @@
         .layer.noneSelected {
             opacity: 1;
         }
+
         .layer.lighterBorder {
             border-color: #00ffff;
         }
@@ -72,307 +84,355 @@
         }
     }
 
-	[id="time-zone-switch"] {
-		position: relative;
-	}
+    [id="time-zone-switch"] {
+        position: relative;
+    }
 
-	.panel {
-		height: 78vh;
-		margin-top: 2rem;
-	}
+    .panel {
+        height: 78vh;
+        margin-top: 2rem;
+    }
 
-	.filter-switch {
-		display: inline-block;
-		padding-left: 3px;
-	}
+    .filter-switch {
+        display: inline-block;
+        padding-left: 3px;
+    }
 
-	.operation-container {
-		height: 50px;
-		background-color: $white;
-		padding: 0;
-		padding-left: 12px;
-	}
+    .operation-container {
+        height: 50px;
+        background-color: $white;
+        padding: 0;
+        padding-left: 12px;
+    }
 
-	requests-commands-pane {
-		position: absolute;
-		top: 0;
-		right: 1em;
-	}
+    requests-commands-pane {
+        position: absolute;
+        top: 0;
+        right: 1em;
+    }
 
-	.request-filter {
-		.input-prepend {
-			width: 300px;
-		}
+    .request-filter {
+        .input-prepend {
+            width: 300px;
+        }
 
-		input {
-			width: 316px;
-		}
-	}
+        input {
+            width: 316px;
+        }
+    }
 
-	.wfm-date-range-picker-wrap {
-		width: 260px;
+    .wfm-date-range-picker-wrap {
+        width: 260px;
 
-		.con-row {
-			display: inline-flex;
+        .con-row {
+            display: inline-flex;
 
-			.con-flex {
-				flex: 1 1 auto;
-			}
-		}
+            .con-flex {
+                flex: 1 1 auto;
+            }
+        }
 
-		input {
-			width: 100px !important;
-		}
-	}
+        input {
+            width: 100px !important;
+        }
+    }
 
-	.ui-grid {
-		height: 68vh;
-		margin: 15px;
+    .ui-grid {
+        height: 68vh;
+        margin: 15px;
 
-		.ui-grid-cell-contents.ui-grid-cell-contents {
-			width: 85%;
-			text-align: left;
-			text-overflow: clip;
-		}
+        .ui-grid-cell-contents.ui-grid-cell-contents {
+            width: 85%;
+            text-align: left;
+            text-overflow: clip;
+        }
 
-		.ui-grid-column-menu-button-last-col {
-			margin-right: 0;
-		}
-	}
+        .ui-grid-column-menu-button-last-col {
+            margin-right: 0;
+        }
+    }
 
-	.request-header-full-height {
-		height: 60px;
-	}
+    .request-header-full-height {
+        height: 60px;
+    }
 
-	.paging {
-		position: relative;
-		top: -24px;
+    .paging {
+        position: relative;
+        top: -24px;
 
-		.total-requests-count {
-			margin-top: 5px;
-			margin-right: 20px;
-		}
+        .total-requests-count {
+            margin-top: 5px;
+            margin-right: 20px;
+        }
 
-		.page-size-selector {
-			margin-top: -2px;
-			margin-right: 10px;
-		}
+        .page-size-selector {
+            margin-top: -2px;
+            margin-right: 10px;
+        }
 
-		.pagination {
-			margin-top: 0;
-			margin-bottom: 0;
-			margin-left: 20px;
-		}
-	}
+        .pagination {
+            margin-top: 0;
+            margin-bottom: 0;
+            margin-left: 20px;
+        }
+    }
 
-	requests-overview[shift-trade-view] .paging {
-		position: relative;
-		top: 8px;
-	}
+    requests-overview[shift-trade-view] .paging {
+        position: relative;
+        top: 8px;
+    }
 
-	requests-commands-pane .wfm-btn-primary-disabled {
-		background-color: transparent;
-	}
+    requests-commands-pane .wfm-btn-primary-disabled {
+        background-color: transparent;
+    }
 
-	input.ui-grid-filter-input {
-		text-overflow: ellipsis;
-	}
+    input.ui-grid-filter-input {
+        text-overflow: ellipsis;
+    }
 
-	.ui-grid-filter-container > input[type="text"] {
-		margin-top: 2px;
-	}
+    .ui-grid-filter-container > input[type="text"] {
+        margin-top: 2px;
+    }
 
-	.multiSelect {
-		overflow: hidden;
-		display: block;
+    .multiSelect {
+        overflow: hidden;
+        display: block;
 
-		> button {
-			width: 100%;
-			max-height: 22px;
-			font-weight: 400;
-			min-height: 20px !important;
-			background-image: none;
-			background-color: #fff;
-			border-radius: 0px;
-			margin-top: 0;
-			white-space: nowrap;
-		}
+        > button {
+            width: 100%;
+            max-height: 22px;
+            font-weight: 400;
+            min-height: 20px !important;
+            background-image: none;
+            background-color: #fff;
+            border-radius: 0px;
+            margin-top: 0;
+            white-space: nowrap;
+        }
 
-		.buttonLabel {
-			padding: 0;
-		}
+        .buttonLabel {
+            padding: 0;
+        }
 
-		.checkboxLayer {
-			width: 90%;
-			min-width: 150px;
-			margin-left: 5px;
-		}
+        .checkboxLayer {
+            width: 90%;
+            min-width: 150px;
+            margin-left: 5px;
+        }
 
-		.checkBoxContainer {
-			text-align: left;
-		}
+        .checkBoxContainer {
+            text-align: left;
+        }
 
-		.multiSelectItem {
-			min-width: 120px;
-		}
+        .multiSelectItem {
+            min-width: 120px;
+        }
 
-		.multiSelectGroup:hover,
-		.multiSelectItem:hover {
-			background-image: none;
-			background: #E0E0E0 !important;
-			color: #000000 !important;
-		}
-	}
+        .multiSelectGroup:hover,
+        .multiSelectItem:hover {
+            background-image: none;
+            background: #E0E0E0 !important;
+            color: #000000 !important;
+        }
+    }
 
-	[role="tabpanel"], md-tabs {
-		transition: none;
-	}
+    [role="tabpanel"], md-tabs {
+        transition: none;
+    }
 
-	.ui-grid-canvas .ui-grid-cell {
-		display: flex;
-		flex-flow: column nowrap;
-		text-overflow: ellipsis;
-		border-bottom-width: 1px !important;
+    .ui-grid-canvas .ui-grid-cell {
+        display: flex;
+        flex-flow: column nowrap;
+        text-overflow: ellipsis;
+        border-bottom-width: 1px !important;
 
-		td {
-			overflow: hidden;
-			max-width: 10px;
-			white-space: nowrap;
-			text-overflow: ellipsis;
-		}
-	}
+        td {
+            overflow: hidden;
+            max-width: 10px;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+    }
 
-	.text-absence-view {
-		.ui-grid-top-panel {
-			overflow: visible;
-		}
 
-		.ui-grid-header-viewport {
-			overflow: visible;
-		}
+    .text-absence-view {
+        .ui-grid-top-panel {
+            overflow: visible;
+        }
 
-		/*.ui-grid-menu-button.ui-grid-menu-button {
+        .ui-grid-header-viewport {
+            overflow: visible;
+        }
+        /*.ui-grid-menu-button.ui-grid-menu-button {
 			margin-right: -15px;
 		}*/
-	}
+        .absence-account-cell {
+            float: left;
+        }
 
-	.shift-trade-view {
-		overflow: hidden !important;
+        .absence-account-date {
+            font-size: small;
+            //top: -5px;
+            position: relative;
+            margin-right: 5px;
+            margin-left: 5px;
+        }
 
-		/* show scroll bar outside of grid*/
-		.ui-grid-render-container-body .ui-grid-viewport {
-			position: absolute;
-		}
+        .absence-account-cell-content {
+            // top: 7px;
+            //position: relative;
+            text-align: center;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
 
-		.ui-grid-row .ui-grid-cell {
-			border-bottom-color: $gray054 !important;
-		}
 
-		.shift-trade-cell {
-			box-sizing: border-box;
-			width: 100% !important;
-			height: 30px !important;
-		}    
+        .arrow_box {
+            position: relative;
+            background: $green-100;
+            border: 1px solid #c2e1f5;
+        }
 
-		.ui-grid-menu-button.ui-grid-menu-button {
-			right: -20px;
-		}
+        .arrow_box:after, .arrow_box:before {
+            left: 100%;
+            top: 50%;
+            border: solid transparent;
+            content: " ";
+            height: 0;
+            width: 0;
+            position: absolute;
+            pointer-events: none;
+        }
 
-		.ui-grid-header-cell:last-child .ui-grid-column-resizer.right {
-			border-right-style: hidden;
-		}
+        .arrow_box:after {
+            border-color: rgba(205, 242, 203, 0);
+            border-left-color: $green-100;
+            border-width: 5px;
+            margin-top: -5px;
+        }
 
-		.isWeekend {
-		    width: 40px;
+        .arrow_box:before {
+            border-color: rgba(194, 225, 245, 0);
+            border-left-color: #c2e1f5;
+            border-width: 6px;
+            margin-top: -6px;
+        }
+    }
+
+
+    .shift-trade-view {
+        overflow: hidden !important;
+        /* show scroll bar outside of grid*/
+        .ui-grid-render-container-body .ui-grid-viewport {
+            position: absolute;
+        }
+
+        .ui-grid-row .ui-grid-cell {
+            border-bottom-color: $gray054 !important;
+        }
+
+        .shift-trade-cell {
+            box-sizing: border-box;
+            width: 100% !important;
+            height: 30px !important;
+        }
+
+        .ui-grid-menu-button.ui-grid-menu-button {
+            right: -20px;
+        }
+
+        .ui-grid-header-cell:last-child .ui-grid-column-resizer.right {
+            border-right-style: hidden;
+        }
+
+        .isWeekend {
+            width: 40px;
             height: 100%;
-            position : absolute;
-			background-color: $orange-400;
+            position: absolute;
+            background-color: $orange-400;
             opacity: 0.8;
-		}
+        }
 
-		.is-day-off {
-			background-image: linear-gradient(135deg, transparent, transparent 7px, rgba(0, 0, 0, 0.2) 8px, transparent 8px, transparent);
-			background-size: 11px 11px;
-		}
+        .is-day-off {
+            background-image: linear-gradient(135deg, transparent, transparent 7px, rgba(0, 0, 0, 0.2) 8px, transparent 8px, transparent);
+            background-size: 11px 11px;
+        }
 
 
-        .shift-trade-header-container{
+        .shift-trade-header-container {
             position: relative;
         }
 
-		.shift-trade-header{
+        .shift-trade-header {
             padding-top: 5px;
-            width: 40px; 
-            max-width: 40px; 
-            min-width: 40px; 
+            width: 40px;
+            max-width: 40px;
+            min-width: 40px;
             min-height: 60px;
             position: absolute;
         }
 
-        .shift-trade-header-day-number{
+        .shift-trade-header-day-number {
             padding-top: 10px;
         }
 
-        .shift-trade-header-start-of-week{
+        .shift-trade-header-start-of-week {
             padding-left: 12px;
         }
 
 
-		.shift-trade-cell-text {
-		    margin-right: 5px;
-			margin-left: 5px;
-			text-align: center;
-			border: 1px solid #000;
-			border-radius: 2px;
-
+        .shift-trade-cell-text {
+            margin-right: 5px;
+            margin-left: 5px;
+            text-align: center;
+            border: 1px solid #000;
+            border-radius: 2px;
             margin-top: 5px;
             margin-bottom: 5px;
-
             width: 30px;
-            
-		}
+        }
 
-		.ui-grid-pinned-container-left .ui-grid-top-panel,
-		.ui-grid-pinned-container-right .ui-grid-top-panel {
-			overflow: visible;
-		}
+        .ui-grid-pinned-container-left .ui-grid-top-panel,
+        .ui-grid-pinned-container-right .ui-grid-top-panel {
+            overflow: visible;
+        }
 
-		.ui-grid-pinned-container-left .ui-grid-viewport,
-		.ui-grid-pinned-container-right .ui-grid-viewport {
-			overflow-x: hidden !important;
-		}
+        .ui-grid-pinned-container-left .ui-grid-viewport,
+        .ui-grid-pinned-container-right .ui-grid-viewport {
+            overflow-x: hidden !important;
+        }
 
-		.ui-grid-pinned-container-left .ui-grid-header-viewport,
-		.ui-grid-pinned-container-right .ui-grid-header-viewport {
-			overflow: visible;
-		}
-	}
+        .ui-grid-pinned-container-left .ui-grid-header-viewport,
+        .ui-grid-pinned-container-right .ui-grid-header-viewport {
+            overflow: visible;
+        }
+    }
 
-	.request-date-range-picker {
-		.date-range-start-date,
-		.date-range-end-date {
-			margin-top: 10px;
-		}
-		/*TODO: Fix the problem that error message was hidden; should be removed when it's fixed in StyleGuide*/
-		.error-msg-container {
-			z-index: 999;
-		}
-	}
+    .request-date-range-picker {
+        .date-range-start-date,
+        .date-range-end-date {
+            margin-top: 10px;
+        }
+        /*TODO: Fix the problem that error message was hidden; should be removed when it's fixed in StyleGuide*/
+        .error-msg-container {
+            z-index: 999;
+        }
+    }
 
-	.ng-cloak{
-		display: none !important;
-	}
+    .ng-cloak {
+        display: none !important;
+    }
 
-	.pagination li.disabled a{
-		cursor:not-allowed;
-	}
+    .pagination li.disabled a {
+        cursor: not-allowed;
+    }
 
-	input:-ms-input-placeholder{
-		color: $text-color-muted;
-	}
+    input:-ms-input-placeholder {
+        color: $text-color-muted;
+    }
 
-	.request-broken-rules .ui-grid-cell-contents{
-		white-space:normal;
-		word-wrap:break-word;
-	}
+    .request-broken-rules .ui-grid-cell-contents {
+        white-space: normal;
+        word-wrap: break-word;
+    }
 }

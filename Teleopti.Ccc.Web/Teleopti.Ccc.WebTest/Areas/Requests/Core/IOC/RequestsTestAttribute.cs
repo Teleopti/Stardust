@@ -7,7 +7,9 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -57,8 +59,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC
 			system.UseTestDouble(new FakeLoggedOnUser()).For<ILoggedOnUser>();
 			system.UseTestDouble(new FakeUserCulture(CultureInfo.GetCultureInfo("en-US"))).For<IUserCulture>();
 			system.UseTestDouble(new FakeEventPublisher()).For<IEventPublisher>();
-			
 
+			system.UseTestDouble (new FakeToggleManager()).For<IToggleManager>();
 		}
 	}
 }

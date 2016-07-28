@@ -1,9 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Tracking;
+using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
 using Teleopti.Ccc.Web.Core;
@@ -17,12 +22,14 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 		private readonly IPersonNameProvider _personNameProvider;
 		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
 		private readonly IPersonAbsenceAccountProvider _personAbsenceAccountProvider;
+		private readonly IToggleManager _toggleManager;
 
-		public RequestViewModelMapper(IPersonNameProvider personNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider, IPersonAbsenceAccountProvider personAbsenceAccountProvider)
+		public RequestViewModelMapper(IPersonNameProvider personNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider, IPersonAbsenceAccountProvider personAbsenceAccountProvider, IToggleManager toggleManager)
 		{
 			_personNameProvider = personNameProvider;
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
 			_personAbsenceAccountProvider = personAbsenceAccountProvider;
+			_toggleManager = toggleManager;
 		}
 
 		public RequestViewModel Map(RequestViewModel requestViewModel, IPersonRequest request)
@@ -52,21 +59,29 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			requestViewModel.Team = team?.SiteAndTeam;
 			requestViewModel.IsFullDay = isFullDay(request);
 
-			var absenceRequest = request.Request as IAbsenceRequest;
-
-			if (absenceRequest != null )
-			{
-				requestViewModel.PersonAccountApprovalSummary = getPersonalAccountApprovalSummary (absenceRequest);
-			}
+			mapAbsenceRequestSpecificFields(requestViewModel, request);
 
 
 			return requestViewModel;
 		}
 
-
-		private PersonAccountApprovalSummary getPersonalAccountApprovalSummary(IAbsenceRequest absenceRequest)
+		private void mapAbsenceRequestSpecificFields (RequestViewModel requestViewModel, IPersonRequest request)
 		{
-			var canApprove = false;
+			var absenceRequest = request.Request as IAbsenceRequest;
+
+			if (absenceRequest != null)
+			{
+				if (_toggleManager.IsEnabled (Toggles.Wfm_Requests_Show_Personal_Account_39628))
+				{
+					requestViewModel.PersonAccountSummary = getPersonalAccountApprovalSummary(absenceRequest);
+				}
+			}
+		}
+
+		private PersonAccountSummary getPersonalAccountApprovalSummary(IAbsenceRequest absenceRequest)
+		{
+			var personAccountSummaryDetails = new List<PersonAccountSummaryDetail>();
+
 			var personAbsenceAccount = _personAbsenceAccountProvider.Find(absenceRequest.Person);
 			if (personAbsenceAccount != null)
 			{
@@ -76,38 +91,64 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 
 				if (affectedAccounts != null)
 				{
-					canApprove = checkApprovalStatus(absenceRequest, affectedAccounts);
+
+					var sortedAccounts = affectedAccounts.OrderBy (account => account.StartDate);
+
+					personAccountSummaryDetails.AddRange (
+						sortedAccounts.Select (account => getPersonalAccountPeriodViewModelsForRequest (absenceRequest, account)));
 				}
 			}
-			return new PersonAccountApprovalSummary
+			return new PersonAccountSummary
 			{
-				Color = (canApprove ? Color.Green : Color.Red).ToHtml()
-
+				PersonAccountSummaryDetails =  personAccountSummaryDetails
 			};
 
 		}
 
-		private static bool checkApprovalStatus (IAbsenceRequest absenceRequest, IEnumerable<IAccount> affectedAccounts)
+		private static PersonAccountSummaryDetail getPersonalAccountPeriodViewModelsForRequest (IAbsenceRequest absenceRequest, IAccount account)
 		{
-
-			var canApprove = true;
-
-			foreach (var account in affectedAccounts)
+			return  new PersonAccountSummaryDetail()
 			{
-				//get timespan within account period and compare to remaining timespan.
-				var timeSpanOfAbsenceRequest = absenceRequest.Period.Intersection (account.Period().ToDateTimePeriod (TimeZoneInfo.Utc));
-				if (timeSpanOfAbsenceRequest.HasValue)
-				{
-					var timeSpanOfIntersection = timeSpanOfAbsenceRequest.Value.EndDateTime -
-												 timeSpanOfAbsenceRequest.Value.StartDateTime;
+				StartDate = TimeZoneHelper.ConvertFromUtc(account.StartDate.Date, absenceRequest.Person.PermissionInformation.DefaultTimeZone()),
+				RemainingDescription = convertTimeSpanToString(account.Remaining, absenceRequest.Absence.Tracker),
+				TrackingTypeDescription = getDescriptionOfTrackerTimeSpan(absenceRequest.Absence.Tracker.GetType())
+			};
+		}
 
-					if (account.Remaining < timeSpanOfIntersection)
-					{
-						canApprove = false;
-					}
-				}
+
+		private static string convertTimeSpanToString(TimeSpan ts, ITracker tracker)
+		{
+			var result = string.Empty;
+
+			
+			var classTypeOfTracker = tracker.GetType();
+			if (classTypeOfTracker == Tracker.CreateDayTracker().GetType())
+			{
+				result = ts.TotalDays.ToString(CultureInfo.CurrentCulture);
 			}
-			return canApprove;
+			else if (classTypeOfTracker == Tracker.CreateTimeTracker().GetType())
+			{
+				result = TimeHelper.GetLongHourMinuteTimeString(ts, CultureInfo.CurrentCulture);
+			}
+
+			return result;
+		}
+
+		//ROBTODO: this something like this needed?
+		private static string getDescriptionOfTrackerTimeSpan(Type trackerClassType)
+		{
+			var trackerType = "";
+
+			if (trackerClassType == Tracker.CreateDayTracker().GetType())
+			{
+				trackerType = Resources.Days;
+			}
+			else if (trackerClassType == Tracker.CreateTimeTracker().GetType())
+			{
+				trackerType = Resources.Hours;
+			}
+			return trackerType;
+
 		}
 
 		private static RequestStatus getRequestStatus(IPersonRequest request)

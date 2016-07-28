@@ -14754,4 +14754,12 @@ These options are activated:
     <value>Back To List</value>
     <comment>Back to overview list button name in outboud campain create and edit page</comment>
   </data>
+  <data name="NotOk" xml:space="preserve">
+    <value>Not OK</value>
+    <comment>Used in the Account Column in the Absence Request table to show a brief description if the request can be accepted according to personal account.</comment>
+  </data>
+  <data name="Account" xml:space="preserve">
+    <value>Account</value>
+    <comment>Shortened form of Person Account, used in the column heading of the Account column on the Absence Request table.</comment>
+  </data>
 </root>

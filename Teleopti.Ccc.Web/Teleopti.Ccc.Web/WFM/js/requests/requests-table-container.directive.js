@@ -193,7 +193,7 @@
 				headerTemplate: 'shift-trade-header-template.html',
 				gridMenuTitleFilter: $translate,
 				columnVirtualizationThreshold: 200,
-				rowHeight: vm.shiftTradeView ? 60 : 30,
+				rowHeight: vm.shiftTradeView ? 60 : 35,
 
 				onRegisterApi: function(gridApi) {
 
