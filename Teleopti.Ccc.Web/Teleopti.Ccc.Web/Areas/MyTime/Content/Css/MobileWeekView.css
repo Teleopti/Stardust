@@ -84,6 +84,12 @@
 	.weekview-mobile .navbar-weekview .glyphicon {
 		display: none;
 	}
+
+	.weekview-mobile .nav > li > a.overtime-availability-add, 
+	.weekview-mobile .nav > li > a.addAbsenceReport{
+		padding-left: 5px;
+		padding-right: 5px;
+	}
 }
 
 .mobile-foot {
