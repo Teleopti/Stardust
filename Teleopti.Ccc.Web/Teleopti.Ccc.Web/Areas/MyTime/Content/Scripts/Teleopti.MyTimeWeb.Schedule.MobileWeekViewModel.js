@@ -211,9 +211,9 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, absenceR
     self.overtimeAvailabilityPermission = ko.observable(overtimeAvailabilityPermission != undefined ? overtimeAvailabilityPermission : false);
     self.overtimeAvailability = ko.observable(scheduleDay.OvertimeAvailabililty);
 
-    self.hasOvertimeAvailability = ko.observable(scheduleDay.OvertimeAvailabililty.HasOvertimeAvailability);
-    self.overtimeAvailabilityStart = ko.observable(scheduleDay.OvertimeAvailabililty.StartTime);
-    self.overtimeAvailabilityEnd = ko.observable(scheduleDay.OvertimeAvailabililty.EndTime);
+    self.hasOvertimeAvailability = ko.observable(scheduleDay.OvertimeAvailabililty? scheduleDay.OvertimeAvailabililty.HasOvertimeAvailability : false);
+    self.overtimeAvailabilityStart = ko.observable(scheduleDay.OvertimeAvailabililty? scheduleDay.OvertimeAvailabililty.StartTime : null);
+    self.overtimeAvailabilityEnd = ko.observable(scheduleDay.OvertimeAvailabililty? scheduleDay.OvertimeAvailabililty.EndTime : null);
 
 	self.isPermittedToReportAbsence = ko.computed(function () {
 		var momentToday = (new Date().getTeleoptiTime == undefined)
