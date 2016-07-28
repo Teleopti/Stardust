@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Logon.Aspects;
@@ -115,16 +114,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		[InfoLog]
 		[TenantScope]
-		public virtual void SaveStateBatch(IEnumerable<ExternalUserStateInputModel> states)
+		public virtual void SaveStateBatch(IEnumerable<ExternalUserStateInputModel> inputs)
 		{
+			var rootInput = inputs.First();
+			validateAuthenticationKey(rootInput);
 			_initializor.EnsureTenantInitialized();
+			validatePlatformId(rootInput);
 
 			var exceptions = new ConcurrentBag<Exception>();
-			_batchExecuteStrategy.Execute(states, s =>
+			_batchExecuteStrategy.Execute(inputs, input =>
 			{
 				try
 				{
-					SaveState(s);
+					SaveStateBatchSingle(input);
 				}
 				catch (Exception e)
 				{
@@ -133,6 +135,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			});
 			if (exceptions.Any())
 				throw new AggregateException(exceptions);
+		}
+
+		[InfoLog]
+		[TenantScope]
+		protected virtual void SaveStateBatchSingle(ExternalUserStateInputModel input)
+		{
+			ProcessInput(input);
 		}
 
 		[InfoLog]
