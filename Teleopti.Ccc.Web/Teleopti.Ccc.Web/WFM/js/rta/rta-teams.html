@@ -1,25 +1,26 @@
-<div class="view-header">
-				<div class="view-title">
-								<h1>
+<div class="view-header with-fab">
+	<div class="view-title">
+		<h1>
 												<i class="mdi mdi-alarm"></i>
 												{{'Teams'|translate}}</h1>
-				</div>
 	</div>
+	<div class="fab-wrapper">
+		<button class="wfm-fab  material-depth-1 open" ng-cloak ng-class="{'hidden-visibility': checkboxesChecked < 1, 'grow-out': checkboxesChecked > 0}" ng-click="openSelectedTeams(selectedTeams)">
+			<i class="mdi mdi-arrow-right"></i>
+			<md-tooltip>{{'Open'|translate}}</md-tooltip>
+		</button>
+	</div>
+</div>
 <div class="panel material-depth-1">
-				<div class="sub-header">
-								<button class="wfm-btn open" ng-class="{'wfm-btn-invis-primary': checkboxesChecked > 0,'wfm-btn-invis-disabled': checkboxesChecked < 1}" ng-click="openSelectedTeams()">
-												<md-tooltip ng-if="checkboxesChecked < 1">{{'SelectTeams'|translate}}</md-tooltip>
-												{{'Open'|translate}}
-								</button>
-								<a class="rta-nav-link" href="{{goBackWithUrl()}}">{{'RealTimeAdherence'|translate}}</a>
-								/
-								<span>{{siteName}}</span>
-				</div>
-				<div class="con-row demo-outline">
-								<div class="con-flex">
-												<div class="wfm-grid">
-																<div class="grid-card team" ng-if="team.NumberOfAgents > 0" ng-repeat="team in teams">
-																	<a ui-sref="rta.agents({siteId: siteId, teamId: team.Id})" class="rta-card-link">
+	<div class="sub-header">
+		<a class="rta-nav-link" href="{{goBackWithUrl()}}">{{'RealTimeAdherence'|translate}}</a> /
+		<span>{{siteName}}</span>
+	</div>
+	<div class="con-row demo-outline">
+		<div class="con-flex">
+			<div class="wfm-grid">
+				<div class="grid-card team" ng-if="team.NumberOfAgents > 0" ng-repeat="team in teams">
+					<a ui-sref="rta.agents({siteId: siteId, teamId: team.Id})" class="rta-card-link">
 																				<div
 																								class="list-content"
 																								ng-class="{good: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 33, warning: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 34 && getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 66, danger: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 67}" tabindex="-1">
@@ -40,9 +41,9 @@
 																				</div>
 																</div>
 															</a>
-												</div>
-								</div>
-
 				</div>
-</div>
+			</div>
+
+		</div>
+	</div>
 </div>

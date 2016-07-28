@@ -4,33 +4,30 @@
 			<h1>
 				<i class="mdi mdi-alarm"></i>
 				{{'RTA'|translate}}</h1>
-			</div>
-			<div class="rta-top-buttons-wrapper" ng-show="monitorBySkill">
-				<span>
+		</div>
+		<div class="rta-top-buttons-wrapper" ng-show="monitorBySkill">
+			<span>
 					<button class="wfm-btn wfm-btn-primary rta-default-cursor">Overview</button>
 					<button class="wfm-btn wfm-btn-default select-skill" ng-click="goToSkillSelection()">Select skill</button>
 				</span>
-			</div>
 		</div>
-		</div>
+	</div>
+	<div class="fab-wrapper">
+		<button class="wfm-fab  material-depth-1 open" ng-cloak ng-class="{'hidden-visibility': checkboxesChecked < 1, 'grow-out': checkboxesChecked > 0}" ng-click="openSelectedSites(selectedSites)">
+			<i class="mdi mdi-arrow-right"></i>
+			<md-tooltip>{{'Open'|translate}}</md-tooltip>
+		</button>
+	</div>
 </div>
+
 <div class="panel material-depth-1">
-
-		<div class="con-row">
-			<div class="con-flex">
-				<div class="sub-header">
-					<button class="wfm-btn open" ng-class="{'wfm-btn-invis-primary': checkboxesChecked > 0,'wfm-btn-invis-disabled': checkboxesChecked < 1}" ng-click="openSelectedSites()">
-						<md-tooltip ng-if="checkboxesChecked < 1">
-							{{'SelectSites'|translate}}</md-tooltip>
-							{{'Open'|translate}}
-						</button>
-					</div>
-
-					<div class="con-row demo-outline">
-						<div class="con-flex">
-							<div class="wfm-grid">
-								<div class="grid-card site" ng-if="site.NumberOfAgents > 0" ng-repeat="site in sites">
-									<a ui-sref="rta.teams({siteId: site.Id})" class="rta-card-link">
+	<div class="con-row">
+		<div class="con-flex">
+			<div class="con-row demo-outline">
+				<div class="con-flex">
+					<div class="wfm-grid">
+						<div class="grid-card site" ng-if="site.NumberOfAgents > 0" ng-repeat="site in sites">
+							<a ui-sref="rta.teams({siteId: site.Id})" class="rta-card-link">
 										<div class="list-content"
 										ng-class="{good: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) <= 33, warning: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) >= 34 && getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) <= 66, danger: getAdherencePercent(site.OutOfAdherence, site.NumberOfAgents) >= 67}" tabindex="-1">
 										<div class="wfm-checkbox">

@@ -170,3 +170,7 @@ wfm-notice{
 md-select-menu md-option:focus:not([disabled]):not([selected]){
 	background-color: $gray012;
 }
+
+.hidden-visibility {
+	visibility: hidden;
+}
