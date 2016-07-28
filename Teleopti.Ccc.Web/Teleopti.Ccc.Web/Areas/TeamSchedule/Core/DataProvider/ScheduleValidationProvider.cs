@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		}
 
 
-		public IList<BusinessRuleValidationResult> GetBusinessRuleValidationResults(FetchRuleValidationResultFormData input)
+		public IList<BusinessRuleValidationResult> GetBusinessRuleValidationResults(FetchRuleValidationResultFormData input, BusinessRuleFlags ruleFlags)
 		{
 			var personIds = input.PersonIds;
 			var people = _personRepository.FindPeople(personIds);
@@ -43,8 +43,24 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			{
 				return schedules.SchedulesForPeriod(dateOnlyPeriod, person).Where(s => s.DateOnlyAsPeriod.DateOnly == date);
 			});
-			var rules = NewBusinessRuleCollection.NightlyRestRule();
+
+			var rules = NewBusinessRuleCollection.New();
+
+			if ((ruleFlags & BusinessRuleFlags.NewNightlyRestRule) == BusinessRuleFlags.NewNightlyRestRule)
+			{
+				rules.Add(new NewNightlyRestRule(new WorkTimeStartEndExtractor()));
+			}
+			if ((ruleFlags & BusinessRuleFlags.MinWeekWorkTimeRule) == BusinessRuleFlags.MinWeekWorkTimeRule)
+			{
+				rules.Add(new MinWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
+			}
+			if ((ruleFlags & BusinessRuleFlags.NewMaxWeekWorkTimeRule) == BusinessRuleFlags.NewMaxWeekWorkTimeRule)
+			{
+				rules.Add(new NewMaxWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
+			}
+
 			var ruleResponse = rules.CheckRules(schedules, scheduleDays);
+
 			var businessRuleValidationResults =
 				ruleResponse.Where(
 					r => dateOnlyPeriod.ToDateTimePeriod(r.Person.PermissionInformation.DefaultTimeZone()).Equals(r.Period)
@@ -65,6 +81,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 	public interface IScheduleValidationProvider
 	{
-		IList<BusinessRuleValidationResult> GetBusinessRuleValidationResults(FetchRuleValidationResultFormData input);
+		IList<BusinessRuleValidationResult> GetBusinessRuleValidationResults(FetchRuleValidationResultFormData input, BusinessRuleFlags ruleFlags);
 	}
 }

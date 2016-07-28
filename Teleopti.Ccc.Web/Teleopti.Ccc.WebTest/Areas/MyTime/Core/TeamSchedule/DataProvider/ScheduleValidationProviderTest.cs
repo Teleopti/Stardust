@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 				{
 					person.Id.GetValueOrDefault()
 				}
-			});
+			}, BusinessRuleFlags.NewNightlyRestRule);
 			results.First().PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault());
 			results.First()
 				.Warnings.Single()
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 				{
 					person.Id.GetValueOrDefault()
 				}
-			});
+			}, BusinessRuleFlags.NewNightlyRestRule);
 			results.First().PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault());
 			results.First()
 				.Warnings.Single()
@@ -121,6 +121,86 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 				.Be.EqualTo(string.Format(Resources.BusinessRuleNightlyRestRuleErrorMessage, "8:00",
 					today.ToShortDateString(),
 					tomorrow.ToShortDateString(), "2:00"));
+		}
+
+		[Test]
+		public void ShouldGetWarningForExceedingMaxWeeklyWorkTime()
+		{
+			var scenario = CurrentScenario.Current();
+			var team = TeamFactory.CreateSimpleTeam();
+			var contract = PersonContractFactory.CreatePersonContract();
+			contract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(0), TimeSpan.FromHours(2), TimeSpan.FromHours(8), TimeSpan.FromHours(40));
+
+			var person = PersonFactory.CreatePersonWithGuid("John", "Watson");
+			person.AddPersonPeriod(new PersonPeriod(new DateOnly(2016, 1, 1), contract, team));
+			PersonRepository.Has(person);
+
+			var dateTimePeriod = new DateTimePeriod(2016, 7, 27, 9, 2016, 7, 27, 12);
+			var activity = ActivityFactory.CreateActivity("Phone");
+			activity.InWorkTime = true;
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, dateTimePeriod, shiftCategory, scenario);
+			ScheduleStorage.Add(personAssignment);
+
+			var result = Target.GetBusinessRuleValidationResults(new FetchRuleValidationResultFormData
+			{
+				Date = new DateTime(2016, 7, 27),
+				PersonIds = new []{person.Id.GetValueOrDefault()}
+			}, BusinessRuleFlags.NewMaxWeekWorkTimeRule);
+
+			result.Count.Should().Be.EqualTo(1);
+			result.First().PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault());
+			result.First()
+				.Warnings.Single()
+				.Should()
+				.Be.EqualTo(string.Format(Resources.BusinessRuleMaxWeekWorkTimeErrorMessage, "03:00", "02:00"));
+		}
+
+		[Test]
+		[Ignore]
+		public void ShouldGetWarningForNotMeetingMinWeeklyWorkTime()
+		{
+			var scenario = CurrentScenario.Current();
+			var team = TeamFactory.CreateSimpleTeam();
+			var contract = PersonContractFactory.CreatePersonContract();
+			contract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(40), TimeSpan.FromHours(40), TimeSpan.FromHours(8), TimeSpan.FromHours(40));
+
+			var person = PersonFactory.CreatePersonWithGuid("John", "Watson");
+			person.AddPersonPeriod(new PersonPeriod(new DateOnly(2016, 1, 1), contract, team));
+			PersonRepository.Has(person);
+
+			var activity = ActivityFactory.CreateActivity("Phone");
+			//activity.InWorkTime = true;
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
+			var personAssignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 18, 9, 2016, 7, 18, 10), shiftCategory, scenario);
+			var personAssignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 19, 9, 2016, 7, 19, 10), shiftCategory, scenario);
+			var personAssignment3 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 20, 9, 2016, 7, 20, 10), shiftCategory, scenario);
+			var personAssignment4 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 21, 9, 2016, 7, 21, 10), shiftCategory, scenario);
+			var personAssignment5 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 22, 9, 2016, 7, 22, 10), shiftCategory, scenario);
+			var personAssignment6 = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person,
+				new DateOnly(2016, 7, 23), new DayOffTemplate());
+			var personAssignment7 = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person,
+				new DateOnly(2016, 7, 24), new DayOffTemplate());
+			ScheduleStorage.Add(personAssignment1);
+			ScheduleStorage.Add(personAssignment2);
+			ScheduleStorage.Add(personAssignment3);
+			ScheduleStorage.Add(personAssignment4);
+			ScheduleStorage.Add(personAssignment5);
+			ScheduleStorage.Add(personAssignment6);
+			ScheduleStorage.Add(personAssignment7);
+
+			var result = Target.GetBusinessRuleValidationResults(new FetchRuleValidationResultFormData
+			{
+				Date = new DateTime(2016, 7, 18),
+				PersonIds = new[] { person.Id.GetValueOrDefault() }
+			}, BusinessRuleFlags.MinWeekWorkTimeRule);
+
+			result.Count.Should().Be.EqualTo(1);
+			result.First().PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault());
+			result.First()
+				.Warnings.Single()
+				.Should()
+				.Be.EqualTo(string.Format(Resources.BusinessRuleMaxWeekWorkTimeErrorMessage, "03:00", "02:00"));
 		}
 	}
 }

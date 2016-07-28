@@ -299,5 +299,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			};
 			return ret;
 		}
+
+		public static INewBusinessRuleCollection New()
+		{
+			return new NewBusinessRuleCollection();
+		}
 	}
 }
