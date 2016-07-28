@@ -59,6 +59,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			personRequest.GetMessage(new NoFormatting()).Should().Contain("test");
 			messagePropertyChanged.Should().Be(true);
 			personRequest.DenyReason.Should().Be("RequestDenyReasonSupervisor");
+			command.IsReplySuccess.Should().Be(true);
 		}
 
 		private IPersonRequest createPersonRequest()

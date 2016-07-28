@@ -338,7 +338,8 @@ describe('RequestsControllerTests', function () {
 		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
 		var handleResult = {
 			Success: true,
-			AffectedRequestIds: [{ id: 1 }]
+			AffectedRequestIds: [{ id: 1 }],
+			ReplySuccess:[true]
 		}
 		requestsDataService.setRequestCommandHandlingResult(handleResult);
 
@@ -370,16 +371,17 @@ describe('RequestsControllerTests', function () {
 		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
 		var handleResult = {
 			Success: true,
-			AffectedRequestIds: [{ id: 1 }]
+			AffectedRequestIds: [{ id: 1 }],
+			ReplySuccess:[true]
 		}
 		requestsDataService.setRequestCommandHandlingResult(handleResult);
 		var message = 'message for reply and approve';
 
 		test.requestCommandPaneScope.approveRequests(message);
 
-		expect(_notificationResult[0]).toEqual('ReplySuccess');
-		expect(_notificationResult[1].changedRequestsCount).toEqual(1);
-		expect(_notificationResult[1].requestsCount).toEqual(2);
+		expect(_notificationResult[0].changedRequestsCount).toEqual(1);
+		expect(_notificationResult[0].requestsCount).toEqual(2);
+		expect(_notificationResult[1]).toEqual('ReplySuccess');
 	});
 
 	it('reply and deny success, should notify both results', function () {
@@ -389,16 +391,17 @@ describe('RequestsControllerTests', function () {
 		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
 		var handleResult = {
 			Success: true,
-			AffectedRequestIds: [{ id: 1 }]
+			AffectedRequestIds: [{ id: 1 }],
+			ReplySuccess: [true]
 		}
 		requestsDataService.setRequestCommandHandlingResult(handleResult);
 		var message = 'message for reply and deny';
 
 		test.requestCommandPaneScope.denyRequests(message);
 
-		expect(_notificationResult[0]).toEqual('ReplySuccess');
-		expect(_notificationResult[1].changedRequestsCount).toEqual(1);
-		expect(_notificationResult[1].requestsCount).toEqual(2);
+		expect(_notificationResult[0].changedRequestsCount).toEqual(1);
+		expect(_notificationResult[0].requestsCount).toEqual(2);
+		expect(_notificationResult[1]).toEqual('ReplySuccess');
 	});
 
 	it('reply and cancel success, should notify both results', function () {
@@ -408,16 +411,17 @@ describe('RequestsControllerTests', function () {
 		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
 		var handleResult = {
 			Success: true,
-			AffectedRequestIds: [{ id: 1 }]
+			AffectedRequestIds: [{ id: 1 }],
+			ReplySuccess: [true]
 		}
 		requestsDataService.setRequestCommandHandlingResult(handleResult);
 		var message = 'message for reply and cancel';
 
 		test.requestCommandPaneScope.cancelRequests(message);
 
-		expect(_notificationResult[0]).toEqual('ReplySuccess');
-		expect(_notificationResult[1].changedRequestsCount).toEqual(1);
-		expect(_notificationResult[1].requestsCount).toEqual(2);
+		expect(_notificationResult[0].changedRequestsCount).toEqual(1);
+		expect(_notificationResult[0].requestsCount).toEqual(2);
+		expect(_notificationResult[1]).toEqual('ReplySuccess');
 	});
 
 	function FakeRequestsNotificationService() {

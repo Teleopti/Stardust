@@ -350,7 +350,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			var builder = new StringBuilder();
 			builder.AppendLine(Message);
 			builder.Append(answerMessage);
-			checkIfEditable();
+			checkIfCanSetMessage();
 			return builder.Length <= messageLength;
 		}
 

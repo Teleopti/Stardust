@@ -106,17 +106,8 @@
 				requestsNotificationService.notifySubmitProcessWaitlistedRequestsSuccess(period);
 			} else if (commandType === requestsDefinitions.REQUEST_COMMANDS.ApproveBasedOnBusinessRules) {
 				requestsNotificationService.notifySubmitApproveBasedOnBusinessRulesSuccess();
-			} else if (commandType === requestsDefinitions.REQUEST_COMMANDS.ReplyAndApprove) {
-				requestsNotificationService.notifyReplySuccess();
-				requestsNotificationService.notifyApproveRequestsSuccess(changedRequestsCount, requestsCount);
-			} else if (commandType === requestsDefinitions.REQUEST_COMMANDS.ReplyAndDeny) {
-				requestsNotificationService.notifyReplySuccess();
-				requestsNotificationService.notifyDenyRequestsSuccess(changedRequestsCount, requestsCount);
-			} else if (commandType === requestsDefinitions.REQUEST_COMMANDS.ReplyAndCancel) {
-				requestsNotificationService.notifyReplySuccess();
-				requestsNotificationService.notifyCancelledRequestsSuccess(changedRequestsCount, requestsCount);
 			} else if (commandType === requestsDefinitions.REQUEST_COMMANDS.Reply) {
-				requestsNotificationService.notifyReplySuccess();
+				requestsNotificationService.notifyReplySuccess(changedRequestsCount);
 			}
 		}
 

@@ -49,9 +49,6 @@
 			Cancel: 'cancel',
 			ProcessWaitlist: 'processWaitlist',
 			ApproveBasedOnBusinessRules: 'approveBasedOnBusinessRules',
-			ReplyAndApprove: 'replyAndApprove',
-			ReplyAndDeny: 'replyAndDeny',
-			ReplyAndCancel:'replyAndCancel',
 			Reply: 'reply'
 
 		};

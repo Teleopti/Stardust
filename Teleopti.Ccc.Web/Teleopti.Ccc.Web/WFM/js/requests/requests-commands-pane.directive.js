@@ -111,6 +111,12 @@
 							requestsCount: requestCount
 						});
 					}
+					if (requestCommandHandlingResult.ReplySuccess && requestCommandHandlingResult.ReplySuccess.length > 0) {
+						vm.afterCommandSuccess({
+							commandType: requestsDefinitions.REQUEST_COMMANDS.Reply,
+							changedRequestsCount: requestCommandHandlingResult.ReplySuccess.length
+						});
+					}
 					if (requestCommandHandlingResult.ErrorMessages && requestCommandHandlingResult.ErrorMessages.length > 0) {
 						handleErrorMessages(requestCommandHandlingResult.ErrorMessages);
 					}
@@ -140,12 +146,11 @@
 		}
 
 		function replyRequests(message) {
-			doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.Reply, requestsDataService.replyRequestsPromise, message);
+			doStandardCommandHandling(null, requestsDataService.replyRequestsPromise, message);
 		}
 
 		function approveRequests(replyMessage) {
-			var commandType = replyMessage ? requestsDefinitions.REQUEST_COMMANDS.ReplyAndApprove : requestsDefinitions.REQUEST_COMMANDS.Approve;
-			doStandardCommandHandling(commandType, requestsDataService.approveRequestsPromise, replyMessage);
+			doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.Approve, requestsDataService.approveRequestsPromise, replyMessage);
 		}
 
 		function processWaitlistRequests() {
@@ -168,8 +173,7 @@
 		}
 
 		function denyRequests(replyMessage) {
-			var commandType = replyMessage ? requestsDefinitions.REQUEST_COMMANDS.ReplyAndDeny : requestsDefinitions.REQUEST_COMMANDS.Deny;
-			doStandardCommandHandling(commandType, requestsDataService.denyRequestsPromise, replyMessage);
+			doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.Deny, requestsDataService.denyRequestsPromise, replyMessage);
 		}
 
 		function disableCommands() {
@@ -192,8 +196,7 @@
 
 		function cancelRequests(replyMessage) {
 			vm.ShowCancelAbsenceConfirmationModal = false;
-			var commandType = replyMessage ? requestsDefinitions.REQUEST_COMMANDS.ReplyAndCancel : requestsDefinitions.REQUEST_COMMANDS.Cancel;
-			doStandardCommandHandling(commandType, requestsDataService.cancelRequestsPromise, replyMessage);
+			doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.Cancel, requestsDataService.cancelRequestsPromise, replyMessage);
 		}
 
 		function toggleCancelConfirmationModal() {

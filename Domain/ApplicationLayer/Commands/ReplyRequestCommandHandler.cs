@@ -28,38 +28,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			{
 				return;
 			}
-			if (tryReplyMessage(personRequest,command))
+			if (!command.Message.IsNullOrEmpty())
 			{
-				command.AffectedRequestId = command.PersonRequestId;
+				if (tryReplyMessage(personRequest, command))
+				{
+					command.AffectedRequestId = command.PersonRequestId;
+					command.IsReplySuccess = true;
+				}
 			}
 		}
 
 		private bool tryReplyMessage(IPersonRequest personRequest,ReplyRequestCommand command)
 		{
-			if (!checkMessageLength(personRequest, command))
-			{
-				return false;
-			}
 			try
 			{
+				if (!personRequest.CheckReplyTextLength(command.Message))
+				{
+					command.ErrorMessages.Add(UserTexts.Resources.RequestInvalidMessageLength);
+					return false;
+				}
 				personRequest.Reply(command.Message);
 			}
 			catch (InvalidOperationException)
 			{
 				command.ErrorMessages.Add(string.Format(UserTexts.Resources.RequestInvalidMessageModification, personRequest.StatusText));
-				return false;
-			}
-			return true;
-		}
-
-		private bool checkMessageLength(IPersonRequest personRequest, ReplyRequestCommand command)
-		{
-			var orignalMessageLength = personRequest.GetMessage(new NoFormatting()).IsNullOrEmpty()
-				? 0
-				: personRequest.GetMessage(new NoFormatting()).Length;
-			if ((orignalMessageLength + command.Message.Length) > 2000)
-			{
-				command.ErrorMessages.Add(UserTexts.Resources.RequestInvalidMessageLength);
 				return false;
 			}
 			return true;

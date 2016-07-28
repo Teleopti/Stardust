@@ -22658,7 +22658,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reply and cancel.
+        ///   Looks up a localized string similar to Reply and Cancel.
         /// </summary>
         public static string ReplyAndCancel {
             get {
@@ -22686,7 +22686,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your Reply has been saved.
+        ///   Looks up a localized string similar to Your message to {0} request(s) has been saved.
         /// </summary>
         public static string ReplySuccess {
             get {

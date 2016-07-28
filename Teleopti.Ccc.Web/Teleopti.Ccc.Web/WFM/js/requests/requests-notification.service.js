@@ -57,9 +57,9 @@
 			});
 		}
 
-		this.notifyReplySuccess = function () {
+		this.notifyReplySuccess = function (replySuccessCount) {
 			$translate("ReplySuccess").then(function (text) {
-				NoticeService.success(text, 10000, true);
+				NoticeService.success(text.replace('{0}', replySuccessCount), 10000, true);
 			});
 		};
 

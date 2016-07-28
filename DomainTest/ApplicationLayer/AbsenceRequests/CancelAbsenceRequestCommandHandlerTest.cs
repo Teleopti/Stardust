@@ -254,6 +254,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var personRequest = basicCancelAbsenceRequest(cancelRequestCommand, propertyChanged);
 			Assert.IsTrue(personRequest.GetMessage(new NoFormatting()).Contains("test"));
 			Assert.IsTrue(messagePropertyChanged);
+			Assert.IsTrue(cancelRequestCommand.IsReplySuccess);
 		}
 
 		private PersonRequest cancelAbsenceRequestWithMultipleAbsences(CancelAbsenceRequestCommand cancelRequestCommand, bool checkPersonAccounts = false)

@@ -7,31 +7,35 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 {
 	public class RequestCommandHandlingResult
 	{
-		public RequestCommandHandlingResult(ICollection<Guid> affectedRequestIds, ICollection<string> errorMessages)
+		public RequestCommandHandlingResult(ICollection<Guid> affectedRequestIds, ICollection<string> errorMessages, IEnumerable<bool> replySuccess)
 		{
 			var success = false;
-			if (affectedRequestIds != null)
-			{
-				AffectedRequestIds = affectedRequestIds.ToArray();
-				success = affectedRequestIds.Count > 0;
-			}
+			
 			if (errorMessages != null)
 			{
 				success = errorMessages.Count == 0;
 				ErrorMessages = errorMessages.ToArray();
 			}
+			if (affectedRequestIds != null)
+			{
+				AffectedRequestIds = affectedRequestIds.ToArray();
+				success = affectedRequestIds.Count > 0;
+			}
 
 			Success = success;
+			ReplySuccess = replySuccess;
 		}
 
 		public RequestCommandHandlingResult(ICollection<Guid> affectedRequestIds, ICollection<string> errorMessages,
-			Guid commandTrackId)
-			: this(affectedRequestIds, errorMessages)
+			Guid commandTrackId, IEnumerable<bool> replySuccess)
+			: this(affectedRequestIds, errorMessages, replySuccess)
 		{
 			CommandTrackId = commandTrackId;
 		}
 
 		public bool Success { get; set; }
+
+		public IEnumerable<bool> ReplySuccess { get; set; }
 
 		public IEnumerable<Guid> AffectedRequestIds { get; set; }
 

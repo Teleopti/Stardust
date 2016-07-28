@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			
 			var result = new RequestCommandHandlingResult(
 				commandResult.AffectedRequestId.HasValue ? new List<Guid>() { commandResult.AffectedRequestId.Value } : null, 
-				commandResult.ErrorMessages);
+				commandResult.ErrorMessages, new List<bool>());
 			
 			if (result.Success)
 			{

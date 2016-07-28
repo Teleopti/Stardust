@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -27,17 +29,33 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			if (personRequest != null && denyRequest(personRequest, command))
 			{
 				command.AffectedRequestId = command.PersonRequestId;
-				try
+				if (!command.ReplyMessage.IsNullOrEmpty())
 				{
-					personRequest.Reply(command.ReplyMessage);
-				}
-				catch (InvalidOperationException)
-				{
-					command.ErrorMessages.Add(string.Format(UserTexts.Resources.RequestInvalidMessageModification, personRequest.StatusText));
+					if (tryReplyMessage(personRequest, command))
+					{
+						command.IsReplySuccess = true;
+					}
 				}
 			}
 		}
-
+		private bool tryReplyMessage(IPersonRequest personRequest, DenyRequestCommand command)
+		{
+			try
+			{
+				if (!personRequest.CheckReplyTextLength(command.ReplyMessage))
+				{
+					command.ErrorMessages.Add(UserTexts.Resources.RequestInvalidMessageLength);
+					return false;
+				}
+				personRequest.Reply(command.ReplyMessage);
+			}
+			catch (InvalidOperationException)
+			{
+				command.ErrorMessages.Add(string.Format(UserTexts.Resources.RequestInvalidMessageModification, personRequest.StatusText));
+				return false;
+			}
+			return true;
+		}
 		private bool denyRequest(IPersonRequest personRequest, DenyRequestCommand command)
 		{
 			try

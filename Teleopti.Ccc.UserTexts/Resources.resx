@@ -14770,4 +14770,10 @@ These options are activated:
     <value>Cannot save your reply to this request as it has been {0}</value>
     <comment>Cannot reply message because request has been handled</comment>
   </data>
+  <data name="ReplyAndCancel" xml:space="preserve">
+    <value>Reply and Cancel</value>
+  </data>
+  <data name="ReplySuccess" xml:space="preserve">
+    <value>Your message to {0} request(s) has been saved</value>
+  </data>
 </root>

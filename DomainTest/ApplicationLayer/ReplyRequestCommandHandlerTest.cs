@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		{
 			var request = _mock.StrictMock<IPersonRequest>();
 			request.Stub(r => r.GetMessage(new NoFormatting())).IgnoreArguments().Return(replyMessage);
+			request.Stub(r => r.CheckReplyTextLength("")).IgnoreArguments().Return(true);
 			using (_mock.Record())
 			{
 				Expect.Call(_personRequestRepository.Get(requestId)).Return(request);
@@ -149,6 +150,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			commandHandler.Handle(command);
 
 			Assert.IsTrue(personRequest.GetMessage(new NoFormatting())== "\r\nwee");
+			Assert.IsTrue(command.IsReplySuccess);
 		}
 	}
 }

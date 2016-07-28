@@ -11,5 +11,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public Guid? AffectedRequestId { get; set; }
 		public IList<string> ErrorMessages { get; set; }
 		public string ReplyMessage { get; set; }
+		public bool IsReplySuccess { get; set; }
 	}
 }

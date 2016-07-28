@@ -159,7 +159,6 @@
     <Compile Include="CommandHandler\ClearMainShiftCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\EndPersonEmploymentCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\GrantPersonRoleCommandHandlerTest.cs" />
-    <Compile Include="CommandHandler\ReplyRequestCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\RevokePersonRoleCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\RevokeScheduleChangesListenerCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\ScheduleSaveHandlerTest.cs" />

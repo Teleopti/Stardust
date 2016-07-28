@@ -111,12 +111,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 					messagePropertyChanged = true;
 				}
 			};
+			var command = new ApproveRequestCommand() {PersonRequestId = personRequest.Id.Value, ReplyMessage = "test"};
 
-			_approveRequestCommandHandler.Handle(new ApproveRequestCommand() { PersonRequestId = personRequest.Id.Value, ReplyMessage = "test" });
+			_approveRequestCommandHandler.Handle(command);
 
 			Assert.IsTrue(personRequest.IsApproved);
 			Assert.IsTrue(personRequest.GetMessage(new NoFormatting()).Contains("test"));
 			Assert.IsTrue(messagePropertyChanged);
+			Assert.IsTrue(command.IsReplySuccess);
 		}
 
 		private PersonRequest createAbsenceRequest (IPerson person, IAbsence absence, DateTimePeriod dateTimePeriod)

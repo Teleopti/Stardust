@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			var trackInfo = createTrackedCommandInfo();
 			var affectedRequestIds = new List<Guid>();
 			var errorMessages = new List<string>();
+			var replySuccess = new List<bool>();
 
 			foreach (var personRequestId in requestIds)
 			{
@@ -40,9 +41,11 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				}
 
 				if (command.AffectedRequestId.HasValue) affectedRequestIds.Add(command.AffectedRequestId.Value);
+				if (command.IsReplySuccess) replySuccess.Add(command.IsReplySuccess);
+
 			}
 
-			return new RequestCommandHandlingResult(affectedRequestIds, errorMessages);
+			return new RequestCommandHandlingResult(affectedRequestIds, errorMessages, replySuccess);
 		}
 
 		public RequestCommandHandlingResult ApproveWithValidators(IEnumerable<Guid> requestIds,
@@ -64,7 +67,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				errorMessages.AddRange(command.ErrorMessages);
 			}
 
-			return new RequestCommandHandlingResult(new Guid[] { }, errorMessages, trackInfo.TrackId);
+			return new RequestCommandHandlingResult(new Guid[] { }, errorMessages, trackInfo.TrackId, new List<bool>());
 		}
 
 		public RequestCommandHandlingResult DenyRequests(IEnumerable<Guid> requestIds, string replyMessage)
@@ -72,6 +75,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			var trackInfo = createTrackedCommandInfo();
 			var affectedRequestIds = new List<Guid>();
 			var errorMessages = new List<string>();
+			var replySuccess = new List<bool>();
 
 			foreach (var personRequestId in requestIds)
 			{
@@ -91,9 +95,10 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				{
 					errorMessages.AddRange(command.ErrorMessages);
 				}
+				if (command.IsReplySuccess) replySuccess.Add(command.IsReplySuccess);
 			}
 
-			return new RequestCommandHandlingResult(affectedRequestIds, errorMessages);
+			return new RequestCommandHandlingResult(affectedRequestIds, errorMessages, replySuccess);
 		}
 
 		public RequestCommandHandlingResult CancelRequests(IEnumerable<Guid> requestIds, string replyMessage)
@@ -101,6 +106,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			var trackInfo = createTrackedCommandInfo();
 			var affectedRequestIds = new List<Guid>();
 			var errorMessages = new List<string>();
+			var replySuccess = new List<bool>();
 
 			foreach (var personRequestId in requestIds)
 			{
@@ -119,9 +125,10 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				{
 					errorMessages.AddRange(command.ErrorMessages);
 				}
+				if (command.IsReplySuccess) replySuccess.Add(command.IsReplySuccess);
 			}
 
-			return new RequestCommandHandlingResult(affectedRequestIds, errorMessages);
+			return new RequestCommandHandlingResult(affectedRequestIds, errorMessages, replySuccess);
 		}
 
 		public RequestCommandHandlingResult ReplyRequests(IEnumerable<Guid> requestIds, string message)
@@ -129,6 +136,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			var trackInfo = createTrackedCommandInfo();
 			var affectedRequestIds = new List<Guid>();
 			var errorMessages = new List<string>();
+			var replySuccess = new List<bool>();
 
 			foreach (var personRequestId in requestIds)
 			{
@@ -150,9 +158,10 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				{
 					errorMessages.AddRange(command.ErrorMessages);
 				}
+				if (command.IsReplySuccess) replySuccess.Add(command.IsReplySuccess);
 			}
 
-			return new RequestCommandHandlingResult(affectedRequestIds, errorMessages);
+			return new RequestCommandHandlingResult(affectedRequestIds, errorMessages, replySuccess);
 		}
 
 		public RequestCommandHandlingResult RunWaitlist(DateTimePeriod period)
@@ -173,7 +182,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				errorMessages.AddRange(command.ErrorMessages);
 			}
 
-			return new RequestCommandHandlingResult(new Guid[] { }, errorMessages, trackInfo.TrackId);
+			return new RequestCommandHandlingResult(new Guid[] { }, errorMessages, trackInfo.TrackId, new List<bool>());
 		}
 
 		private TrackedCommandInfo createTrackedCommandInfo()
