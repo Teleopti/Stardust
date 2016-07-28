@@ -48,21 +48,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 					UserCode = "user1",
 					StateCode = "phone",
 					IsSnapshot = true,
-					BatchId = "2016-04-07 08:00".Utc()
+					SnapshotId = "2016-04-07 08:00".Utc()
 				}, 
 				new ExternalUserStateForTest
 				{
 					UserCode = "user2",
 					StateCode = "phone",
 					IsSnapshot = true,
-					BatchId = "2016-04-07 08:00".Utc()
+					SnapshotId = "2016-04-07 08:00".Utc()
 				},
 				new ExternalUserStateForTest
 				{
 					UserCode = "",
 					StateCode = "",
 					IsSnapshot = true,
-					BatchId = "2016-04-07 08:00".Utc()
+					SnapshotId = "2016-04-07 08:00".Utc()
 				}
 			});
 
@@ -73,14 +73,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 					UserCode = "user1",
 					StateCode = "phone",
 					IsSnapshot = true,
-					BatchId = "2016-04-07 08:10".Utc()
+					SnapshotId = "2016-04-07 08:10".Utc()
 				},
 				new ExternalUserStateForTest
 				{
 					UserCode = "",
 					StateCode = "",
 					IsSnapshot = true,
-					BatchId = "2016-04-07 08:10".Utc()
+					SnapshotId = "2016-04-07 08:10".Utc()
 				}
 			});
 

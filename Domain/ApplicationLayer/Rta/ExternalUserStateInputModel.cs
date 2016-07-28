@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public string StateCode { get; set; }
 		public string StateDescription { get; set; }
 		public bool IsLoggedOn { get; set; }
-		public DateTime BatchId { get; set; }
+		public DateTime SnapshotId { get; set; }
 		public bool IsSnapshot { get; set; }
 
 		// for logging
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		{
 			return string.Format(
 				"AuthenticationKey: {8}, UserCode: {0}, StateCode: {1}, StateDescription: {2}, IsLoggedOn: {3}, PlatformTypeId: {4}, SourceId: {5}, BatchId: {6}, IsSnapshot: {7}.",
-				UserCode, StateCode, StateDescription, IsLoggedOn, PlatformTypeId, SourceId, BatchId, IsSnapshot, AuthenticationKey);
+				UserCode, StateCode, StateDescription, IsLoggedOn, PlatformTypeId, SourceId, SnapshotId, IsSnapshot, AuthenticationKey);
 		}
 	}
 

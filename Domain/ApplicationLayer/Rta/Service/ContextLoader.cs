@@ -136,19 +136,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		[AllBusinessUnitsUnitOfWork]
 		[ReadModelUnitOfWork]
-		public virtual void ForClosingSnapshot(ExternalUserStateInputModel input, Action<Context> action)
+		public virtual void ForClosingSnapshot(DateTime snapshotId, string sourceId, Action<Context> action)
 		{
-			var missingAgents = _agentStatePersister.GetNotInSnapshot(input.BatchId, input.SourceId);
+			var stateCode = Rta.LogOutBySnapshot;
+
+			var missingAgents = _agentStatePersister.GetNotInSnapshot(snapshotId, sourceId);
 			var agentsNotAlreadyLoggedOut =
 				from a in missingAgents
-				where a.StateCode != input.StateCode
+				where a.StateCode != stateCode
 				select a;
+
 			var mappings = new MappingsState(() => _mappingReader.Read());
 
 			agentsNotAlreadyLoggedOut.ForEach(x =>
 			{
 				action.Invoke(new Context(
-					input,
+					new ExternalUserStateInputModel
+					{
+						StateCode = stateCode,
+						PlatformTypeId = Guid.Empty.ToString(),
+						UserCode = "",
+						IsSnapshot = true,
+						SnapshotId = snapshotId
+					}, 
 					x.PersonId,
 					x.BusinessUnitId,
 					x.TeamId.GetValueOrDefault(),

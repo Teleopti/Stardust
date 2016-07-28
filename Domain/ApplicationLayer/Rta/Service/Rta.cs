@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							SourceId = state.SourceId,
 							UserCode = "",
 							IsSnapshot = true,
-							BatchId = state.BatchId
+							SnapshotId = state.SnapshotId
 						}
 					})
 				);
@@ -174,7 +174,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			input.StateCode = FixStateCode(input);
 
 			if (input.IsSnapshot && string.IsNullOrEmpty(input.UserCode))
-				CloseSnapshot(input);
+			{
+				_contextLoader.ForClosingSnapshot(input.SnapshotId, input.SourceId, context =>
+				{
+					_processor.Process(context);
+				});
+			}
 			else
 			{
 				var found = false;
@@ -204,18 +209,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			if (stateCode.Length > stateCodeMaxLength)
 				return stateCode.Substring(0, stateCodeMaxLength);
 			return stateCode;
-		}
-
-		[InfoLog]
-		protected virtual void CloseSnapshot(ExternalUserStateInputModel input)
-		{
-			input.StateCode = LogOutBySnapshot;
-			input.PlatformTypeId = Guid.Empty.ToString();
-
-			_contextLoader.ForClosingSnapshot(input, agent =>
-			{
-				_processor.Process(agent);
-			});
 		}
 		
 		[InfoLog]

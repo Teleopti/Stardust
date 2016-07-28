@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public DateTime? BatchId
 		{
-			get { return Input.IsSnapshot ? Input.BatchId : Stored?.BatchId; }
+			get { return Input.IsSnapshot ? Input.SnapshotId : Stored?.BatchId; }
 		}
 
 		public Guid PlatformTypeId

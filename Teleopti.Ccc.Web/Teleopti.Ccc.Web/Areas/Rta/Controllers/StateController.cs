@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 						StateCode = input.StateCode,
 						StateDescription = input.StateDescription,
 						IsLoggedOn = input.IsLoggedOn,
-						BatchId = batchId,
+						SnapshotId = batchId,
 						IsSnapshot = input.IsSnapshot,
 					});
 			}
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 						StateCode = i.StateCode,
 						StateDescription = i.StateDescription,
 						IsLoggedOn = i.IsLoggedOn,
-						BatchId = batchId,
+						SnapshotId = batchId,
 						IsSnapshot = i.IsSnapshot,
 					};
 				});

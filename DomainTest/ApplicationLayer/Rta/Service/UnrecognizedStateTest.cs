@@ -92,13 +92,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				{
 					UserCode = "usercode1",
 					StateCode = "phone",
-					BatchId = "2016-05-18 08:00".Utc()
+					SnapshotId = "2016-05-18 08:00".Utc()
 				},
 				new ExternalUserStateForTest
 				{
 					UserCode = "usercode2",
 					StateCode = "phone",
-					BatchId = "2016-05-18 08:00".Utc()
+					SnapshotId = "2016-05-18 08:00".Utc()
 				}
 			});
 
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				{
 					UserCode = "usercode3",
 					StateCode = "phone",
-					BatchId = "2016-05-18 08:05".Utc()
+					SnapshotId = "2016-05-18 08:05".Utc()
 				}
 			});
 

@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 	{
 		public ExternalUserStateForSnapshot(DateTime time)
 		{
-			BatchId = time;
+			SnapshotId = time;
 			IsSnapshot = true;
 		}
 	}
