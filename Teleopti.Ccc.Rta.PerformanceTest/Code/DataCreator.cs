@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
@@ -19,16 +21,19 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		private readonly MutableNow _now;
 		private readonly TestConfiguration _testConfiguration;
 		private readonly ICurrentUnitOfWork _unitOfWork;
+		private readonly IEventPublisher _eventPublisher;
 
 		public DataCreator(
 			MutableNow now,
 			TestConfiguration testConfiguration,
-			ICurrentUnitOfWork unitOfWork
+			ICurrentUnitOfWork unitOfWork,
+			IEventPublisher eventPublisher
 			)
 		{
 			_now = now;
 			_testConfiguration = testConfiguration;
 			_unitOfWork = unitOfWork;
+			_eventPublisher = eventPublisher;
 		}
 
 		[LogTime]
@@ -143,6 +148,11 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 						.AddActivity("Break", "2016-02-27 15:00".Utc(), "2016-02-27 15:15".Utc())
 						);
 				});
+
+			// to create/update any data that is periodically kept up to date
+			// like the rule mappings
+			_eventPublisher.Publish(new TenantMinuteTickEvent());
+			_eventPublisher.Publish(new TenantHourTickEvent());
 		}
 	}
 }

@@ -4,6 +4,7 @@ using log4net.Config;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			{
 				AllEventPublishingsAsSync = true,
 			};
-			var configuration = new IocConfiguration(args, new FakeToggleManager());
+			var configuration = new IocConfiguration(args, new FakeToggleManager(Toggles.RTA_RuleMappingOptimization_39812));
 			builder.RegisterModule(new CommonModule(configuration));
 			builder.RegisterType<MutableNow>().AsSelf().As<INow>().SingleInstance();
 			builder.RegisterType<DefaultDataCreator>().SingleInstance();
