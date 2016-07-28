@@ -153,6 +153,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			// like the rule mappings
 			_eventPublisher.Publish(new TenantMinuteTickEvent());
 			_eventPublisher.Publish(new TenantHourTickEvent());
+
 		}
 	}
 }
