@@ -90,9 +90,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private static IEnumerable<IAbsenceRequestValidator> getAbsenceRequestValidators(RequestValidatorsFlag validator)
 		{
 			if (validator.HasFlag(RequestValidatorsFlag.BudgetAllotmentValidator))
-			{
 				yield return new BudgetGroupHeadCountValidator();
-			}
+			if (validator.HasFlag(RequestValidatorsFlag.IntradayValidator))
+				yield return new StaffingThresholdValidator();
 		}
 
 		private delegate bool BeforeApproveAction(IPersonRequest personRequest);

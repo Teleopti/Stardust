@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
@@ -26,7 +27,17 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			throw new NotImplementedException();
 		}
 
-		public ISkillStaffPeriodHolder SkillStaffPeriodHolder { get; private set; }
+		private ISkillStaffPeriodHolder _skillStaffPeriodHolder;
+		public ISkillStaffPeriodHolder SkillStaffPeriodHolder
+		{
+			get { return _skillStaffPeriodHolder; }
+		}
+
+		public void SetSkillStaffPeriodHolder(ISkillStaffPeriodHolder skillStaffPeriodHolder)
+		{
+			_skillStaffPeriodHolder = skillStaffPeriodHolder;
+		}
+
 		public IEnumerable<IShiftCategory> ShiftCategories { get; set; }
 		public bool TeamLeaderMode { get; set; }
 		public bool UseValidation { get; set; }
@@ -65,7 +76,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IResourceCalculationData ToResourceOptimizationData(bool considerShortBreaks, bool doIntraIntervalCalculation)
 		{
-			throw new NotImplementedException();
+			return new ResourceCalculationData(this, considerShortBreaks, doIntraIntervalCalculation);
 		}
 	}
 }

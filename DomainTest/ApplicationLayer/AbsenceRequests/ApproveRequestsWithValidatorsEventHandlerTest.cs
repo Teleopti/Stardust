@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
@@ -13,7 +15,10 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
+using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Absence;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -44,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private FakeScheduleProjectionReadOnlyPersister _scheduleProjectionReadOnlyPersister;
 		private PersonAccountUpdaterDummy _personAccountUpdaterDummy;
 		private IWriteProtectedScheduleCommandValidator _writeProtectedScheduleCommandValidator;
-		private readonly ISchedulingResultStateHolder _scheduleStateHolder = new FakeSchedulingResultStateHolder();
+		private FakeSchedulingResultStateHolder _scheduleStateHolder;
 		private FakeMessageBrokerComposite _messageBroker;
 		private FakeScheduleStorage _scheduleStorage;
 
@@ -76,7 +81,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_scenarioRepository = new FakeScenarioRepository(_currentScenario.Current());
 
 			_personAccountUpdaterDummy = new PersonAccountUpdaterDummy();
-			var peopleAndSkillLoaderDecider = new PeopleAndSkillLoaderDecider(_personRepository, null);
+
+			var pairDictionaryFactory = new PairDictionaryFactory<Guid>();
+			var pairMatrixService = new PairMatrixService<Guid>(pairDictionaryFactory);
+
+			var peopleAndSkillLoaderDecider = new PeopleAndSkillLoaderDecider(_personRepository, pairMatrixService);
 			_loadSchedulingStateHolderForResourceCalculation =
 				new LoadSchedulingStateHolderForResourceCalculation(_personRepository, _personAbsenceAccountRepository,
 					skillRepository, workloadRepository, _scheduleRepository, peopleAndSkillLoaderDecider, skillDayLoadHelper);
@@ -84,6 +93,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_scheduleStorage = new FakeScheduleStorage();
 			_loadSchedulesForRequestWithoutResourceCalculation =
 				new LoadSchedulesForRequestWithoutResourceCalculation(_personAbsenceAccountRepository, _scheduleStorage);
+
+			_scheduleStateHolder = new FakeSchedulingResultStateHolder();
 
 			prepareTestData();
 
@@ -200,6 +211,34 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_messageBroker.SentCount().Should().Be(2);
 		}
 
+		[Test]
+		public void ShouldApproveAbsenceRequestCheckByIntradayWithEnoughStaffing()
+		{
+			var skill = createSkillWithOpenHours();
+			setPersonPeriodWithSkill(skill);
+			setSkillStaffPeriodHolder(skill, -0.05d);
+
+			_event.Validator = RequestValidatorsFlag.IntradayValidator;
+			_target.Handle(_event);
+
+			_personRequest.IsApproved.Should().Be.True();
+			_messageBroker.SentCount().Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldDoNothingToAbsenceRequestWithUnderStaffing()
+		{
+			var skill = createSkillWithOpenHours();
+			setPersonPeriodWithSkill(skill);
+			setSkillStaffPeriodHolder(skill, -0.5d);
+
+			_event.Validator = RequestValidatorsFlag.IntradayValidator;
+			_target.Handle(_event);
+
+			_personRequest.IsApproved.Should().Be.False();
+			_messageBroker.SentCount().Should().Be(1);
+		}
+
 		private IAbsenceRequestProcessor getAbsenceRequestProcessor(IPerson person, IPersonRequest personRequest)
 		{
 			var period = personRequest.Request.Period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
@@ -242,6 +281,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				_fakeBudgetDayRepository, _scheduleProjectionReadOnlyPersister);
 			var budgetGroupAllowanceSpecification = new BudgetGroupAllowanceSpecification(_currentScenario,
 				_fakeBudgetDayRepository, _scheduleProjectionReadOnlyPersister);
+
+			var resourceOptimizationHelper = createResourceOptimizationHelper();
+
 			var absenceRequestStatusUpdater =
 				new AbsenceRequestUpdater(new PersonAbsenceAccountProvider(_personAbsenceAccountRepository),
 					resourceCalculator,
@@ -253,7 +295,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 					new ScheduleIsInvalidSpecification(),
 					new PersonRequestCheckAuthorization(),
 					budgetGroupHeadCountSpecification,
-					null,
+					resourceOptimizationHelper,
 					budgetGroupAllowanceSpecification,
 					new FakeScheduleDifferenceSaver(_scheduleRepository),
 					_personAccountUpdaterDummy, toggleManager);
@@ -317,6 +359,67 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_personRequestRepository.Add(personRequest);
 
 			return personRequest;
+		}
+
+		private IResourceOptimizationHelper createResourceOptimizationHelper()
+		{
+			return new ResourceOptimizationHelper(
+				new OccupiedSeatCalculator(),
+				new NonBlendSkillCalculator(),
+				() => new PersonSkillProvider(),
+				new PeriodDistributionService(),
+				new IntraIntervalFinderService(
+					new SkillDayIntraIntervalFinder(
+						new IntraIntervalFinder(),
+						new SkillActivityCountCollector(
+							new SkillActivityCounter()
+							),
+						new FullIntervalFinder()
+						)
+					), new TimeZoneGuardWrapper(),
+				new ResourceCalculationContextFactory(() => new PersonSkillProvider(), new TimeZoneGuardWrapper())
+				);
+		}
+
+		private void setPersonPeriodWithSkill(ISkill skill)
+		{
+			var periodDateOnly = new DateOnly(2016, 1, 1);
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriodWithSkillsWithSite(periodDateOnly, skill);
+			_person.AddPersonPeriod(personPeriod);
+		}
+
+		private static ISkill createSkillWithOpenHours()
+		{
+			var skill = SkillFactory.CreateSkillWithWorkloadAndSources();
+			skill.SetId(new Guid());
+			foreach (var workload in skill.WorkloadCollection)
+			{
+				foreach (var templateWeek in workload.TemplateWeekCollection)
+				{
+					templateWeek.Value.ChangeOpenHours(new List<TimePeriod>
+					{
+						new TimePeriod(8, 0, 17, 0)
+					});
+				}
+			}
+			return skill;
+		}
+
+		private void setSkillStaffPeriodHolder(ISkill skill, double relativeDifference)
+		{
+			var skillDateTimePeriod = new DateTimePeriod(2016, 1, 1, 2016, 12, 31);
+			var skillStaffPeriod = MockRepository.GenerateMock<ISkillStaffPeriod>();
+			skillStaffPeriod.Stub(x => x.RelativeDifference).Return(relativeDifference);
+			skillStaffPeriod.Stub(x => x.Period).Return(skillDateTimePeriod);
+
+			var skillStaffPeriodHolder = MockRepository.GenerateMock<ISkillStaffPeriodHolder>();
+			skillStaffPeriodHolder.Stub(
+				x => x.SkillStaffPeriodList(new List<ISkill> { skill }, skillDateTimePeriod)).IgnoreArguments()
+				.Return(new List<ISkillStaffPeriod>
+				{
+					skillStaffPeriod
+				});
+			_scheduleStateHolder.SetSkillStaffPeriodHolder(skillStaffPeriodHolder);
 		}
 	}
 }

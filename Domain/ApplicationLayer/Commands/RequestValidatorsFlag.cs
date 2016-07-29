@@ -6,6 +6,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 	public enum RequestValidatorsFlag
 	{
 		None = 0,
-		BudgetAllotmentValidator = 1 << 0
+		BudgetAllotmentValidator = 1 << 0,
+		IntradayValidator = 1 << 1,
 	}
 }

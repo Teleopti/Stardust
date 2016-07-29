@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IList<IWorkload> LoadAll()
 		{
-			throw new NotImplementedException();
+			return _workloads;
 		}
 
 		public IWorkload Load(Guid id)
