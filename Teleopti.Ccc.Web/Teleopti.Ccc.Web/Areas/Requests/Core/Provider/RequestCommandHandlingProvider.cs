@@ -182,7 +182,10 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				errorMessages.AddRange(command.ErrorMessages);
 			}
 
-			return new RequestCommandHandlingResult(new Guid[] { }, errorMessages, trackInfo.TrackId, new List<bool>());
+			var handlingResult = new RequestCommandHandlingResult(new Guid[] {}, errorMessages, trackInfo.TrackId,
+				new List<bool>());
+			handlingResult.Success = true;
+			return handlingResult;
 		}
 
 		private TrackedCommandInfo createTrackedCommandInfo()

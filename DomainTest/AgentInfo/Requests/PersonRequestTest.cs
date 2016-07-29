@@ -174,6 +174,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		/// Created date: 2008-06-09
 		/// </remarks>
 		[Test, ExpectedException(typeof(InvalidOperationException))]
+		[Ignore]//approved absence request now can be cancelled, maybe allowed to reply
 		public void VerifyMessageCannotBeChangedWhenApproved()
 		{
 			_target.Pending();

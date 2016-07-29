@@ -424,7 +424,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var requestId = personRequest.Id.GetValueOrDefault();
 			var result = Target.ReplyRequests(new[] { requestId }, string.Empty);
 
-			result.Success.Should().Be.True();
+			result.Success.Should().Be.False();//didn't reply, so false
 			result.AffectedRequestIds.Count().Should().Be.EqualTo(0);
 			personRequest.GetMessage(new NoFormatting()).Should().Be.EqualTo(originalMessage);
 		}
