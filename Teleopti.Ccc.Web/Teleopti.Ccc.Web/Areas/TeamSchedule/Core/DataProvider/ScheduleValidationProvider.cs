@@ -46,15 +46,15 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 			var rules = NewBusinessRuleCollection.New();
 
-			if ((ruleFlags & BusinessRuleFlags.NewNightlyRestRule) == BusinessRuleFlags.NewNightlyRestRule)
+			if (ruleFlags.HasFlag(BusinessRuleFlags.NewNightlyRestRule))
 			{
 				rules.Add(new NewNightlyRestRule(new WorkTimeStartEndExtractor()));
 			}
-			if ((ruleFlags & BusinessRuleFlags.MinWeekWorkTimeRule) == BusinessRuleFlags.MinWeekWorkTimeRule)
+			if (ruleFlags.HasFlag(BusinessRuleFlags.MinWeekWorkTimeRule))
 			{
 				rules.Add(new MinWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
 			}
-			if ((ruleFlags & BusinessRuleFlags.NewMaxWeekWorkTimeRule) == BusinessRuleFlags.NewMaxWeekWorkTimeRule)
+			if (ruleFlags.HasFlag(BusinessRuleFlags.NewMaxWeekWorkTimeRule))
 			{
 				rules.Add(new NewMaxWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
 			}
