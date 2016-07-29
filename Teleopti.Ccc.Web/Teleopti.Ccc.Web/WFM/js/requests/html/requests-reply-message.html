@@ -1,5 +1,5 @@
 ﻿<modal-dialog show="requestsReplyMessage.showReplyDialog" ng-cloak>
-	<form name="form" class="wfm-form" novalidate>
+	<form name="replyDialogForm" class="wfm-form" novalidate>
 		<div class="modal-inner-content">
 			<div class="modal-inner-content">
 				<div class="text-center">
@@ -14,8 +14,8 @@
 							<span>{{'Reply' | translate }}:</span>
 						</label>
 						<textarea required="" ng-model="requestsReplyMessage.replyMessage" id="replyMessage" name="replyMessage"></textarea>
-						<div ng-cloak class="animate-input-message" ng-show="form.replyMessage.$error.required && form.replyMessage.$touched">
-							<div class="form-input-message text-align-left" ng-class="{'formInvalidInput':form.replyMessage.$error.required}">{{ 'required' | translate }}</div>
+						<div ng-cloak class="animate-input-message" ng-show="replyDialogForm.replyMessage.$error.required && replyDialogForm.replyMessage.$touched">
+							<div class="form-input-message text-align-left" ng-class="{'formInvalidInput':replyDialogForm.replyMessage.$error.required}">{{ 'required' | translate }}</div>
 						</div>
 					</div>
 				</div>
@@ -24,10 +24,10 @@
 		</div>
 		<div class="modal-actions">
 			<aside>
-				<button class="wfm-btn wfm-btn-invis-primary" ng-class="{'wfm-btn-invis-disabled':!form.$valid}" ng-disabled="!form.$valid" ng-click="requestsReplyMessage.replyOnly()">{{ 'Reply' | translate }}</button>
-				<button class="wfm-btn wfm-btn-invis-primary" ng-class="{'wfm-btn-invis-disabled':!form.$valid}" ng-disabled="!form.$valid" ng-click="requestsReplyMessage.replyAndApprove()">{{ 'ReplyAndApprove' | translate }}</button>
-				<button class="wfm-btn wfm-btn-invis-primary" ng-class="{'wfm-btn-invis-disabled':!form.$valid}" ng-disabled="!form.$valid" ng-click="requestsReplyMessage.replyAndDeny()">{{ 'ReplyAndDeny' | translate }}</button>
-				<button class="wfm-btn wfm-btn-invis-primary" ng-class="{'wfm-btn-invis-disabled':!form.$valid}" ng-disabled="!form.$valid" ng-click="requestsReplyMessage.replyAndCancel()">{{ 'ReplyAndCancel' | translate }}</button>
+				<button class="wfm-btn wfm-btn-invis-primary" ng-class="{'wfm-btn-invis-disabled':!replyDialogForm.$valid}" ng-disabled="!replyDialogForm.$valid" ng-click="requestsReplyMessage.replyOnly()">{{ 'Reply' | translate }}</button>
+				<button class="wfm-btn wfm-btn-invis-primary" ng-class="{'wfm-btn-invis-disabled':!replyDialogForm.$valid}" ng-disabled="!replyDialogForm.$valid" ng-click="requestsReplyMessage.replyAndApprove()">{{ 'ReplyAndApprove' | translate }}</button>
+				<button class="wfm-btn wfm-btn-invis-primary" ng-class="{'wfm-btn-invis-disabled':!replyDialogForm.$valid}" ng-disabled="!replyDialogForm.$valid" ng-click="requestsReplyMessage.replyAndDeny()">{{ 'ReplyAndDeny' | translate }}</button>
+				<button class="wfm-btn wfm-btn-invis-primary" ng-class="{'wfm-btn-invis-disabled':!replyDialogForm.$valid}" ng-disabled="!replyDialogForm.$valid" ng-click="requestsReplyMessage.replyAndCancel()">{{ 'ReplyAndCancel' | translate }}</button>
 			</aside>
 		</div>
 	</form>

@@ -77,6 +77,18 @@ describe('requestsRepltMessagedirectiveTest', function () {
 		expect(test.targetScope.replyMessage).toEqual('');
 	});
 
+	it('should reset form when show reply dialog is true', function() {
+		var test = setUpTarget(cb);
+		var innerScope = angular.element(test.targetElem.find('form')).scope();
+		var form = innerScope.replyDialogForm;
+		form.$setDirty();
+
+		test.targetScope.showReplyDialog = true;
+		test.rootScope.$apply();
+
+		expect(form.$dirty).toEqual(false);
+	});
+
 	function setUpTarget(cb) {
 		var rootScope = $rootScope.$new();
 		rootScope.requestsCommandsPane = {};
@@ -88,6 +100,7 @@ describe('requestsRepltMessagedirectiveTest', function () {
 		rootScope.requestsCommandsPane.denyRequests = callback;
 		rootScope.requestsCommandsPane.cancelRequests = callback;
 		rootScope.requestsCommandsPane.replyRequests = callback;
+		rootScope.requestsCommandsPane.showReplyDialog = false;
 
 		var targetElement = $compile('<requests-reply-message' +
         ' approve="requestsCommandsPane.approveRequests(message)"' +
@@ -101,7 +114,8 @@ describe('requestsRepltMessagedirectiveTest', function () {
 
 		return {
 			targetScope: target.requestsReplyMessage,
-			targetElem: targetElement
+			targetElem: targetElement,
+			rootScope: rootScope
 		}
 	}
 });
