@@ -252,8 +252,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 
 			var absenceRequest = doPersonalAccountSummaryTest(accountDay, accountDay2);
 
-			var firstSummaryDetail = absenceRequest.PersonAccountSummary.PersonAccountSummaryDetails.First();
-			var secondSummaryDetail = absenceRequest.PersonAccountSummary.PersonAccountSummaryDetails.Second();
+			var firstSummaryDetail = absenceRequest.PersonAccountSummaryViewModel.PersonAccountSummaryDetails.First();
+			var secondSummaryDetail = absenceRequest.PersonAccountSummaryViewModel.PersonAccountSummaryDetails.Second();
 
 			Assert.AreEqual(accountDay.StartDate.Date, firstSummaryDetail.StartDate);
 			Assert.AreEqual(accountDay.Remaining.TotalDays.ToString(UserCulture.GetCulture()), firstSummaryDetail.RemainingDescription);
@@ -262,6 +262,35 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			Assert.AreEqual(accountDay2.Remaining.TotalDays.ToString(UserCulture.GetCulture()), secondSummaryDetail.RemainingDescription);
 			Assert.AreEqual(Resources.Days, secondSummaryDetail.TrackingTypeDescription);
 		}
+
+
+		[Test]
+		public void ShouldNotReturnPersonAccountOutsideOfRequestPeriodInApprovalSummary()
+		{
+			var accountDay = new AccountDay(new DateOnly(2015, 1, 1))
+			{
+				BalanceIn = TimeSpan.FromDays(0),
+				Accrued = TimeSpan.FromDays(2),
+				Extra = TimeSpan.FromDays(0)
+			};
+
+			var accountDay2 = new AccountDay(new DateOnly(2016, 10, 5))
+			{
+				BalanceIn = TimeSpan.FromDays(0),
+				Accrued = TimeSpan.FromDays(4),
+				Extra = TimeSpan.FromDays(0)
+			};
+
+			var absenceRequest = doPersonalAccountSummaryTest(accountDay, accountDay2);
+
+			var summaryDetails = absenceRequest.PersonAccountSummaryViewModel.PersonAccountSummaryDetails;
+			var firstSummaryDetail = summaryDetails.First();
+			Assert.AreEqual(1, summaryDetails.Count());
+			Assert.AreEqual(accountDay.StartDate.Date, firstSummaryDetail.StartDate);
+
+
+		}
+
 
 
 		private RequestViewModel doPersonalAccountSummaryTest(params AccountDay[] accountDays)

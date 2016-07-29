@@ -281,30 +281,22 @@
             float: left;
         }
 
-        .absence-account-date {
-            font-size: small;
-            //top: -5px;
-            position: relative;
-            margin-right: 5px;
-            margin-left: 5px;
-        }
-
         .absence-account-cell-content {
-            // top: 7px;
-            //position: relative;
             text-align: center;
             margin-top: 5px;
             margin-bottom: 5px;
         }
 
-
-        .arrow_box {
+        .arrow-box {
             position: relative;
             background: $green-100;
-            border: 1px solid #c2e1f5;
+            border: 1px solid #000000;
+            padding-left: 3px;
+            margin-right: 12px;
+            padding-right: 3px;
         }
 
-        .arrow_box:after, .arrow_box:before {
+        .arrow-box:after, .arrow-box:before {
             left: 100%;
             top: 50%;
             border: solid transparent;
@@ -315,21 +307,28 @@
             pointer-events: none;
         }
 
-        .arrow_box:after {
-            border-color: rgba(205, 242, 203, 0);
-            border-left-color: $green-100;
-            border-width: 5px;
-            margin-top: -5px;
+        .arrow-box:after {
+            border-color: rgba(136, 183, 213, 0);
+            border-left-color:$green-100;
+            border-width: 10px;
+            margin-top: -10px;
         }
 
-        .arrow_box:before {
-            border-color: rgba(194, 225, 245, 0);
-            border-left-color: #c2e1f5;
-            border-width: 6px;
-            margin-top: -6px;
+        .arrow-box:before {
+            border-color: rgba(0, 0, 0, 0);
+            border-left-color: #000000;
+            border-width: 11px;
+            margin-top: -11px;
+        }
+       
+        .arrow-box-no-border {
+            margin-right: 2px !important;
+        }
+
+        .arrow-box-no-border:after, .arrow-box-no-border:before {
+            border: none !important;
         }
     }
-
 
     .shift-trade-view {
         overflow: hidden !important;

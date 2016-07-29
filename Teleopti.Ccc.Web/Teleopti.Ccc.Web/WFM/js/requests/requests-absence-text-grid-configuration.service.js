@@ -91,12 +91,12 @@
 				if (toggleSvc.Wfm_Requests_Show_Personal_Account_39628) {
 					var accountColumn = {
 						displayName: 'Account',
-						field: 'PersonAccountSummary',
+						field: 'PersonAccountSummaryViewModel',
 						headerCellFilter: 'translate',
 						cellTemplate: 'requests-absence-person-account-overview.html'
 					};
 
-					columns.splice(11, 0, accountColumn);
+					columns.splice(12, 0, accountColumn);
 
 				}
 

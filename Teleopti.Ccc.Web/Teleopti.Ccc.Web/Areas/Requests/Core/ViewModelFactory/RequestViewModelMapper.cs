@@ -73,21 +73,20 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			{
 				if (_toggleManager.IsEnabled (Toggles.Wfm_Requests_Show_Personal_Account_39628))
 				{
-					requestViewModel.PersonAccountSummary = getPersonalAccountApprovalSummary(absenceRequest);
+					requestViewModel.PersonAccountSummaryViewModel = getPersonalAccountApprovalSummary(absenceRequest);
 				}
 			}
 		}
 
-		private PersonAccountSummary getPersonalAccountApprovalSummary(IAbsenceRequest absenceRequest)
+		private PersonAccountSummaryViewModel getPersonalAccountApprovalSummary(IAbsenceRequest absenceRequest)
 		{
-			var personAccountSummaryDetails = new List<PersonAccountSummaryDetail>();
+			var personAccountSummaryDetails = new List<PersonAccountSummaryDetailViewModel>();
 
 			var personAbsenceAccount = _personAbsenceAccountProvider.Find(absenceRequest.Person);
 			if (personAbsenceAccount != null)
 			{
 				var accountForPersonAbsence = personAbsenceAccount.Find (absenceRequest.Absence);
-				var affectedAccounts = accountForPersonAbsence?.Find (new DateOnlyPeriod (new DateOnly (absenceRequest.Period.StartDateTime),
-						DateOnly.MaxValue));
+				var affectedAccounts = accountForPersonAbsence?.Find (new DateOnlyPeriod (new DateOnly (absenceRequest.Period.StartDateTime), new DateOnly(absenceRequest.Period.EndDateTime)));
 
 				if (affectedAccounts != null)
 				{
@@ -98,16 +97,16 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 						sortedAccounts.Select (account => getPersonalAccountPeriodViewModelsForRequest (absenceRequest, account)));
 				}
 			}
-			return new PersonAccountSummary
+			return new PersonAccountSummaryViewModel
 			{
 				PersonAccountSummaryDetails =  personAccountSummaryDetails
 			};
 
 		}
 
-		private static PersonAccountSummaryDetail getPersonalAccountPeriodViewModelsForRequest (IAbsenceRequest absenceRequest, IAccount account)
+		private static PersonAccountSummaryDetailViewModel getPersonalAccountPeriodViewModelsForRequest (IAbsenceRequest absenceRequest, IAccount account)
 		{
-			return  new PersonAccountSummaryDetail()
+			return  new PersonAccountSummaryDetailViewModel()
 			{
 				StartDate = TimeZoneHelper.ConvertFromUtc(account.StartDate.Date, absenceRequest.Person.PermissionInformation.DefaultTimeZone()),
 				RemainingDescription = convertTimeSpanToString(account.Remaining, absenceRequest.Absence.Tracker),

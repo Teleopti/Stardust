@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
 		public bool IsFullDay { get; set; }
 		public string DenyReason { get; set; }
 
-		public PersonAccountSummary PersonAccountSummary { get; set; }
+		public PersonAccountSummaryViewModel PersonAccountSummaryViewModel { get; set; }
 
 
 	}
@@ -81,12 +81,12 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
 	}
 
 
-	public class PersonAccountSummary
+	public class PersonAccountSummaryViewModel
 	{
-		public IEnumerable<PersonAccountSummaryDetail> PersonAccountSummaryDetails;
+		public IEnumerable<PersonAccountSummaryDetailViewModel> PersonAccountSummaryDetails;
 	}
 	
-	public class PersonAccountSummaryDetail
+	public class PersonAccountSummaryDetailViewModel
 	{
 		public DateTime StartDate { get; set; }
 		public string RemainingDescription { get; set; }

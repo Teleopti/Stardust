@@ -172,7 +172,7 @@
 
 			vm.filters = requestFilterSvc.Filters;
 		};
-
+		
 		vm.statusFilterClose = function() {
 			var filters = '';
 			angular.forEach(vm.SelectedRequestStatuses, function(status) {
