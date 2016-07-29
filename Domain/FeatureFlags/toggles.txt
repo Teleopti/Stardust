@@ -84,6 +84,7 @@ WfmTeamSchedule_ShowContractTime_38509 = true
 WfmTeamSchedule_RevertToPreviousSchedule_39002 = true
 WfmTeamSchedule_ShowNightlyRestWarning_39619 = true
 WfmTeamSchedule_ShowWeeklyWorktimeWarning_39799 = DEV
+WfmTeamSchedule_ShowWeeklyRestTimeWarning_39880 = DEV
 WfmTeamSchedule_ShowDayOffWarning_39801 = true
 
 WfmTeamSchedule_ShowShiftCategory_39796 = RC
