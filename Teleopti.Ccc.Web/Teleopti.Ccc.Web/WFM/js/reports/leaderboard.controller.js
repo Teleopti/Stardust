@@ -28,49 +28,49 @@
 		vm.shortDateFormatStart = moment(vm.selectedPeriod.startDate).format('YYYY-MM-DD');
 		vm.shortDateFormatEnd = moment(vm.selectedPeriod.endDate).format('YYYY-MM-DD');
 
-		vm.toggleDateRangePickerFn = function($event){
+		vm.toggleDateRangePickerFn = function($event, status){
 			$event.stopPropagation();
-			vm.toggleDateRangePicker = !vm.toggleDateRangePicker;
-
-			if(vm.toggleDateRangePicker){
-				vm.showInputTimeErrorMessage = false;
-
-				if(!vm.selectedPeriod){
-					vm.selectedPeriod = {
-						startDate: new Date(vm.shortDateFormatStart), 
-						endDate: new Date(vm.shortDateFormatEnd) 
-					};
-				}
+			vm.toggleDateRangePicker = !vm.toggleDateRangePicker;		
+			if(vm.toggleDateRangePicker && !vm.selectedPeriod){
+				vm.selectedPeriod = {
+					startDate: new Date(vm.shortDateFormatStart), 
+					endDate: new Date(vm.shortDateFormatEnd) 
+				};
 			}
+
+			checkInputTimeErrorMessageStatus();
+		};
+
+		vm.toggleOffDateRangePickerFn = function(){
+			vm.toggleDateRangePicker = false;
+			checkInputTimeErrorMessageStatus();
 		};
 
 		vm.afterShortDateStringChange = function() {
-			vm.isInputDateValid = true;
-			var currentDayStart = new Date(vm.shortDateFormatStart);
-			var currentDayEnd = new Date(vm.shortDateFormatEnd);
-			var newSelectedPeriod = { startDate: null, endDate: null };
+			var start = new Date(vm.shortDateFormatStart);
+			var end = new Date(vm.shortDateFormatEnd);
 
-			if (!isNaN(currentDayStart.getTime()) && currentDayStart.getTime() > 0) {
-				newSelectedPeriod.startDate = new Date(vm.shortDateFormatStart);
-			} else {
-				vm.isInputDateValid = false;
-			}
-
-			if (!isNaN(currentDayEnd.getTime()) && currentDayEnd.getTime() > 0) {
-				newSelectedPeriod.endDate = new Date(vm.shortDateFormatEnd);
-			} else {
-				vm.isInputDateValid = false;
-			}
-
-			if (vm.isInputDateValid) {
-				vm.selectedPeriod = newSelectedPeriod;
+			if((!isNaN(start.getTime()) && start.getTime() > 0) && (!isNaN(end.getTime()) && end.getTime() > 0)){
+				vm.selectedPeriod = {
+					startDate: start,
+					endDate: end
+				};
 				vm.afterSelectedDateChange();
 			}
 
+			checkInputTimeErrorMessageStatus();
+		};
+
+		function checkInputTimeErrorMessageStatus(){
+			var start = new Date(vm.shortDateFormatStart);
+			var end = new Date(vm.shortDateFormatEnd);
+
 			if(vm.toggleDateRangePicker){
-				vm.showInputTimeErrorMessage = false;
+				vm.showInputTimeInvalidErrorMessage = false;
+				vm.showInputTimeFormatErrorMessage = false;
 			}else{
-				vm.showInputTimeErrorMessage = currentDayStart > currentDayEnd
+				vm.showInputTimeInvalidErrorMessage = start > end
+				vm.showInputTimeFormatErrorMessage = (isNaN(start.getTime()) || start.getTime() <= 0) || (isNaN(end.getTime()) || end.getTime() <= 0);
 			}
 		};
 

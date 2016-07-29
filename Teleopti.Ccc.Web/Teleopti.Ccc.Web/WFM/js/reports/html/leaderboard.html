@@ -22,7 +22,7 @@
 	}
 </style>
 
-<div class="leaderboard-container" ng-click="vm.toggleDateRangePicker = false">
+<div class="leaderboard-container" ng-click="vm.toggleOffDateRangePickerFn()">
 	<div class="wfm-reports" ng-if="vm.isLeaderBoardEnabled">
 		<div class="view-header">
 			<div class="view-title">
@@ -36,16 +36,20 @@
 					<people-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged"></people-search-input>
 				</span>
 
-				<span class="daterange-picker" ng-click="vm.toggleDateRangePickerFn($event)">
-					<button class="wfm-btn wfm-btn-invis-primary wfm-btn-sm">
+				<span class="daterange-picker">
+					<button class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="vm.toggleDateRangePickerFn($event)">
 						<i class="mdi mdi-calendar"></i>
 					</button>
 
 					<input type="text" ng-model="vm.shortDateFormatStart" ng-change="vm.afterShortDateStringChange()"> 
 					<input type="text" ng-model="vm.shortDateFormatEnd" ng-change="vm.afterShortDateStringChange()"> 
 
-					<div ng-if="vm.showInputTimeErrorMessage" class="error-msg-container error-msg-popup-container alert-error notice-spacer">
+					<div ng-if="vm.showInputTimeInvalidErrorMessage" class="error-msg-container error-msg-popup-container alert-error notice-spacer">
 						<i class="mdi mdi-alert-octagon"></i><span>{{'StartDateMustBeEqualToOrEarlierThanEndDate' | translate}}</span>
+					</div>
+					
+					<div ng-if="vm.showInputTimeFormatErrorMessage" class="error-msg-container error-msg-popup-container alert-error notice-spacer">
+						<i class="mdi mdi-alert-octagon"></i><span>{{'StartDateAndEndDateMustBeSet' | translate}}</span>
 					</div>
 
 					<date-range-picker ng-model="vm.selectedPeriod" ng-change="vm.afterSelectedDateChange()" template-type="vm.dateRangePickerTemplateType" ng-show="vm.toggleDateRangePicker" ng-click="$event.stopPropagation()"></date-range-picker>
