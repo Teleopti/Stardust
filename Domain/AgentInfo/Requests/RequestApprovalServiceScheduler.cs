@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -16,6 +17,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private readonly INewBusinessRuleCollection _newBusinessRules;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly IGlobalSettingDataRepository _globalSettingsDataRepository;
+
+		private IPersonAbsence _approvedPersonAbsence;
 
 		public RequestApprovalServiceScheduler(IScheduleDictionary scheduleDictionary,
 													IScenario scenario,
@@ -69,6 +72,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 					if (!response.Overridden)
 						ret.Add(response);
 				}
+
+				if (ret.Count == 0)
+				{
+					_approvedPersonAbsence = personAbsence;
+				}
+
 				return ret;
 			}
 			// this can probably not happen
@@ -80,6 +89,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			return _swapAndModifyService.SwapShiftTradeSwapDetails(shiftTradeRequest.ShiftTradeSwapDetails,
 																  _scheduleDictionary,
 																   _newBusinessRules, new ScheduleTagSetter(NullScheduleTag.Instance));
+		}
+
+		public IPersonAbsence GetApprovedPersonAbsence()
+		{
+			return _approvedPersonAbsence;
 		}
 	}
 }

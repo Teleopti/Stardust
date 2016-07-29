@@ -26,7 +26,12 @@ namespace Teleopti.Ccc.TestCommon.Services
 
 		}
 
-	    public void SetBusinessRuleResponse(params IBusinessRuleResponse[] brokenRule)
+		public IPersonAbsence GetApprovedPersonAbsence()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void SetBusinessRuleResponse(params IBusinessRuleResponse[] brokenRule)
 	    {
 	        businessRuleResponse = brokenRule;
 	    }

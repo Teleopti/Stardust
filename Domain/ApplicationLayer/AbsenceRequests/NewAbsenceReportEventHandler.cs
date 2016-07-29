@@ -139,6 +139,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						Logger.Debug("Simulated approving absence successfully");
 					}
 
+					if (brokenBusinessRules != null)
+					{
+						var approvedPersonAbsence = requestApprovalServiceScheduler.GetApprovedPersonAbsence();
+						approvedPersonAbsence.FullDayAbsence(person, new TrackedCommandInfo
+						{
+							OperatedPersonId = person.Id.Value,
+							TrackId = Guid.NewGuid()
+						});
+					}
+
 					try
 					{
 						persistScheduleChanges(person);

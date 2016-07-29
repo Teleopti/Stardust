@@ -45,8 +45,12 @@ namespace Teleopti.Interfaces.Domain
 	    void RemovePersonAbsence (TrackedCommandInfo trackedCommandInfo);
 
 	    IPersonRequest PersonRequest { get; set; }
-		
 
-	}
+	    void FullDayAbsence(IPerson person, TrackedCommandInfo trackedCommandInfo);
+
+	    void IntradayAbsence(IPerson person, TrackedCommandInfo trackedCommandInfo);
+
+
+    }
 
 }

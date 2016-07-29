@@ -123,8 +123,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (ajax, reloadData) {
 	};
 
 	function reloadSchedule() {
-		self.CancelAddingNewRequest();
-		self.dayViewModels([]);
+		self.CancelAddingNewRequest();	
 		reloadData();
 	}
 	

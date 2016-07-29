@@ -24,5 +24,7 @@ namespace Teleopti.Interfaces.Domain
 		/// Created date: 2008-11-04
 		/// </remarks>
 		IEnumerable<IBusinessRuleResponse> ApproveShiftTrade(IShiftTradeRequest shiftTradeRequest);
+
+		IPersonAbsence GetApprovedPersonAbsence();
 	}
 }

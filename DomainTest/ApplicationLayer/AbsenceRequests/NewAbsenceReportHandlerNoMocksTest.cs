@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -70,6 +71,42 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var personAbsence = scheduleDay.PersonAbsenceCollection().SingleOrDefault(abs => abs.Layer.Payload == absence && abs.Person == person);
 
 			Assert.IsNotNull(personAbsence);
+		}
+
+		[Test]
+		public void VerifyFullDayAbsenceAddedEventIsPopulatedWhenAbsenceIsCreatedForAbsenceReport()
+		{
+			var absence = AbsenceFactory.CreateAbsenceWithId();
+
+			var startDate = new DateTime(2016,02,17,0,0,0,DateTimeKind.Utc);
+			var endDate = new DateTime(2016,02,17,23,59,0,DateTimeKind.Utc);
+
+			var person = setupPerson(startDate,endDate,absence);
+
+			var absenceReportConsumer = setupAbsenceReportConsumer();
+
+			var absenceReport = new NewAbsenceReportCreatedEvent()
+			{
+				RequestedDate = startDate,
+				PersonId = person.Id.GetValueOrDefault(),
+				AbsenceId = absence.Id.GetValueOrDefault()
+			};
+
+			absenceReportConsumer.Handle(absenceReport);
+
+			var scheduleLoadOptions = new ScheduleDictionaryLoadOptions(false,false);
+			var schedules = _scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(person,scheduleLoadOptions,new DateTimePeriod(startDate,startDate.AddDays(1)),_currentScenario.Current());
+			var scheduleDay = schedules.SchedulesForDay(new DateOnly(startDate)).FirstOrDefault();
+			var personAbsence = scheduleDay.PersonAbsenceCollection().SingleOrDefault(abs => abs.Layer.Payload == absence && abs.Person == person);
+
+
+			var @event = personAbsence.PopAllEvents().Single() as FullDayAbsenceAddedEvent;
+
+			@event.Should().Not.Be.Null();
+			@event.StartDateTime.Should().Be.EqualTo(personAbsence.Layer.Period.StartDateTime);
+			@event.EndDateTime.Should().Be.EqualTo(personAbsence.Layer.Period.EndDateTime);
+			@event.AbsenceId.Should().Be.EqualTo(absenceReport.AbsenceId);
+			@event.PersonId.Should().Be.EqualTo(absenceReport.PersonId);
 		}
 
 
