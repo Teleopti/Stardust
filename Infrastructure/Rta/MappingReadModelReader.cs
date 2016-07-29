@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 			_version = version;
 			_cache = _unitOfWork.Current()
-				.CreateSqlQuery("SELECT * FROM [ReadModel].[RuleMappings]")
+				.CreateSqlQuery("SELECT * FROM [ReadModel].[RuleMappings] WITH (NOLOCK)")
 				.SetResultTransformer(Transformers.AliasToBean(typeof (internalModel)))
 				.List<Mapping>();
 
