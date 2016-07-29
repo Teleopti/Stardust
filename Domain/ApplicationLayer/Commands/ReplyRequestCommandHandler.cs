@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			{
 				return;
 			}
+			command.AffectedRequestId = personRequest.Id;
 			command.IsReplySuccess = command.TryReplyMessage(personRequest);
 		}
 	}

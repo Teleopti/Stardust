@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 					command.ErrorMessages.Add(UserTexts.Resources.RequestInvalidMessageLength);
 					return false;
 				}
-				personRequest.Reply(command.ReplyMessage);
+				return personRequest.Reply(command.ReplyMessage);
 			}
 			catch (InvalidOperationException)
 			{
@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 					personRequest.StatusText));
 				return false;
 			}
-			return true;
 		}
 	}
 }
