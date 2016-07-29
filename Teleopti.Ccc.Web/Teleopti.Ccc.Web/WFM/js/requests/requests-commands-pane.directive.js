@@ -111,10 +111,10 @@
 							requestsCount: requestCount
 						});
 					}
-					if (requestCommandHandlingResult.ReplySuccess && requestCommandHandlingResult.ReplySuccess.length > 0) {
+					if (requestCommandHandlingResult.ReplySuccessCount > 0) {
 						vm.afterCommandSuccess({
 							commandType: requestsDefinitions.REQUEST_COMMANDS.Reply,
-							changedRequestsCount: requestCommandHandlingResult.ReplySuccess.length
+							changedRequestsCount: requestCommandHandlingResult.ReplySuccessCount
 						});
 					}
 					if (requestCommandHandlingResult.ErrorMessages && requestCommandHandlingResult.ErrorMessages.length > 0) {
@@ -213,7 +213,7 @@
 			getSelectedRequestMessage();
 			if (!disableCommands()) {
 				vm.showReplyDialog = true;
-				vm.showOriginalMessage = getSelectedRequestIds().length == 1 ? true : false;
+				vm.showOriginalMessage = getSelectedRequestIds().length === 1 ? true : false;
 			}
 		}
 

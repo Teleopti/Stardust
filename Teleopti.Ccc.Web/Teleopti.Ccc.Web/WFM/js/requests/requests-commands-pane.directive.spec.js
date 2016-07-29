@@ -339,7 +339,7 @@ describe('RequestsControllerTests', function () {
 		var handleResult = {
 			Success: true,
 			AffectedRequestIds: [{ id: 1 }],
-			ReplySuccess:[true]
+			ReplySuccessCount:1
 		}
 		requestsDataService.setRequestCommandHandlingResult(handleResult);
 
@@ -372,7 +372,7 @@ describe('RequestsControllerTests', function () {
 		var handleResult = {
 			Success: true,
 			AffectedRequestIds: [{ id: 1 }],
-			ReplySuccess:[true]
+			ReplySuccessCount:1
 		}
 		requestsDataService.setRequestCommandHandlingResult(handleResult);
 		var message = 'message for reply and approve';
@@ -392,7 +392,7 @@ describe('RequestsControllerTests', function () {
 		var handleResult = {
 			Success: true,
 			AffectedRequestIds: [{ id: 1 }],
-			ReplySuccess: [true]
+			ReplySuccessCount: 1
 		}
 		requestsDataService.setRequestCommandHandlingResult(handleResult);
 		var message = 'message for reply and deny';
@@ -412,7 +412,7 @@ describe('RequestsControllerTests', function () {
 		var handleResult = {
 			Success: true,
 			AffectedRequestIds: [{ id: 1 }],
-			ReplySuccess: [true]
+			ReplySuccessCount: 1
 		}
 		requestsDataService.setRequestCommandHandlingResult(handleResult);
 		var message = 'message for reply and cancel';

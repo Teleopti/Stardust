@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			var trackInfo = createTrackedCommandInfo();
 			var affectedRequestIds = new List<Guid>();
 			var errorMessages = new List<string>();
-			var replySuccess = new List<bool>();
+			var replySuccessCount = 0;
 
 			foreach (var personRequestId in requestIds)
 			{
@@ -42,11 +42,11 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				}
 
 				if (command.AffectedRequestId.HasValue) affectedRequestIds.Add(command.AffectedRequestId.Value);
-				if (command.IsReplySuccess) replySuccess.Add(command.IsReplySuccess);
+				if (command.IsReplySuccess) replySuccessCount++;
 
 			}
 
-			return new RequestCommandHandlingResult(affectedRequestIds, errorMessages, replySuccess);
+			return new RequestCommandHandlingResult(affectedRequestIds, errorMessages, replySuccessCount);
 		}
 
 		public RequestCommandHandlingResult ApproveWithValidators(IEnumerable<Guid> requestIds,
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				errorMessages.AddRange(command.ErrorMessages);
 			}
 
-			return new RequestCommandHandlingResult(new Guid[] {}, errorMessages, trackInfo.TrackId, new List<bool>())
+			return new RequestCommandHandlingResult(new Guid[] {}, errorMessages, trackInfo.TrackId)
 			{
 				Success = !errorMessages.Any()
 			};
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			var trackInfo = createTrackedCommandInfo();
 			var affectedRequestIds = new List<Guid>();
 			var errorMessages = new List<string>();
-			var replySuccess = new List<bool>();
+			var replySuccessCount = 0;
 
 			foreach (var personRequestId in requestIds)
 			{
@@ -99,10 +99,10 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				{
 					errorMessages.AddRange(command.ErrorMessages);
 				}
-				if (command.IsReplySuccess) replySuccess.Add(command.IsReplySuccess);
+				if (command.IsReplySuccess) replySuccessCount++;
 			}
 
-			return new RequestCommandHandlingResult(affectedRequestIds, errorMessages, replySuccess);
+			return new RequestCommandHandlingResult(affectedRequestIds, errorMessages, replySuccessCount);
 		}
 
 		public RequestCommandHandlingResult CancelRequests(IEnumerable<Guid> requestIds, string replyMessage)
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			var trackInfo = createTrackedCommandInfo();
 			var affectedRequestIds = new List<Guid>();
 			var errorMessages = new List<string>();
-			var replySuccess = new List<bool>();
+			var replySuccessCount = 0;
 
 			foreach (var personRequestId in requestIds)
 			{
@@ -129,10 +129,10 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				{
 					errorMessages.AddRange(command.ErrorMessages);
 				}
-				if (command.IsReplySuccess) replySuccess.Add(command.IsReplySuccess);
+				if (command.IsReplySuccess) replySuccessCount++;
 			}
 
-			return new RequestCommandHandlingResult(affectedRequestIds, errorMessages, replySuccess);
+			return new RequestCommandHandlingResult(affectedRequestIds, errorMessages, replySuccessCount);
 		}
 
 		public RequestCommandHandlingResult ReplyRequests(IEnumerable<Guid> requestIds, string message)
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			var trackInfo = createTrackedCommandInfo();
 			var affectedRequestIds = new List<Guid>();
 			var errorMessages = new List<string>();
-			var replySuccess = new List<bool>();
+			var replySuccessCount = 0;
 
 			foreach (var personRequestId in requestIds)
 			{
@@ -162,10 +162,10 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				{
 					errorMessages.AddRange(command.ErrorMessages);
 				}
-				if (command.IsReplySuccess) replySuccess.Add(command.IsReplySuccess);
+				if (command.IsReplySuccess) replySuccessCount++;
 			}
 
-			return new RequestCommandHandlingResult(affectedRequestIds, errorMessages, replySuccess);
+			return new RequestCommandHandlingResult(affectedRequestIds, errorMessages, replySuccessCount);
 		}
 
 		public RequestCommandHandlingResult RunWaitlist(DateTimePeriod period)
@@ -186,8 +186,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				errorMessages.AddRange(command.ErrorMessages);
 			}
 
-			return new RequestCommandHandlingResult(new Guid[] {}, errorMessages, trackInfo.TrackId,
-				new List<bool>())
+			return new RequestCommandHandlingResult(new Guid[] {}, errorMessages, trackInfo.TrackId)
 			{
 				Success = !errorMessages.Any()
 			};
