@@ -37,7 +37,7 @@
 				var alarmDurationCellTemplate = '<div ng-if="row.entity.TimeInAlarm" class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>';
 
 				var headerCellTemplate = 'js/rta/rta-agents-headercelltemplate.html';
-		
+
 				var timeInRuleTemplate = "";
 				if (toggleService.RTA_TotalOutOfAdherenceTime_38702) {
 					timeInRuleTemplate = '<div class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>';
@@ -48,7 +48,6 @@
 				var name = {
 					displayName: 'Name',
 					field: 'Name',
-					enableColumnMenu: false,
 					headerCellTemplate: headerCellTemplate,
 					cellTemplate: coloredCellTemplate,
 					headerCellFilter: 'translate',
@@ -60,7 +59,6 @@
 				var siteAndTeam = {
 					displayName: 'Site/Team',
 					field: 'SiteAndTeamName',
-					enableColumnMenu: false,
 					headerCellTemplate: headerCellTemplate,
 					cellTemplate: coloredCellTemplate,
 					headerCellFilter: 'translate',
@@ -78,7 +76,6 @@
 				var state = {
 					displayName: 'State',
 					field: 'State',
-					enableColumnMenu: false,
 					headerCellTemplate: headerCellTemplate,
 					cellTemplate: coloredCellTemplate,
 					headerCellFilter: 'translate',
@@ -87,7 +84,6 @@
 				var activity = {
 					displayName: 'Activity',
 					field: 'Activity',
-					enableColumnMenu: false,
 					headerCellTemplate: headerCellTemplate,
 					cellTemplate: coloredCellTemplate,
 					headerCellFilter: 'translate'
@@ -95,7 +91,6 @@
 				var nextActivity = {
 					displayName: 'Next activity',
 					field: 'NextActivity',
-					enableColumnMenu: false,
 					headerCellTemplate: headerCellTemplate,
 					cellTemplate: nextActivityCellTemplate,
 					headerCellFilter: 'translate'
@@ -103,7 +98,6 @@
 				var alarm = {
 					displayName: 'Alarm',
 					field: 'Alarm',
-					enableColumnMenu: false,
 					headerCellTemplate: headerCellTemplate,
 					cellTemplate: alarmCellTemplate,
 					headerCellFilter: 'translate',
@@ -113,7 +107,6 @@
 				var timeInAlarm = {
 					displayName: 'Time in alarm',
 					field: 'TimeInAlarm',
-					enableColumnMenu: false,
 					headerCellTemplate: headerCellTemplate,
 					cellTemplate: alarmDurationCellTemplate,
 					headerCellFilter: 'translate',
@@ -122,7 +115,6 @@
 				var timeInRule = {
 					displayName: 'Time in rule',
 					field: 'TimeInRule',
-					enableColumnMenu: false,
 					headerCellTemplate: headerCellTemplate,
 					cellTemplate: timeInRuleTemplate,
 					headerCellFilter: 'translate',
@@ -131,7 +123,6 @@
 				var timeOutOfAdherence = {
 					displayName: 'Time OOA',
 					field: 'TimeOutOfAdherence',
-					enableColumnMenu: false,
 					headerCellTemplate: headerCellTemplate,
 					cellTemplate: coloredCellTemplate,
 					headerCellFilter: 'translate',
@@ -190,7 +181,9 @@
 					rowTemplate: rowTemplate,
 					columnDefs: columnDefs,
 					enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
-					enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER
+					enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
+					enableGridMenu: true,
+					enableColumnMenus: true
 				};
 			};
 		}
