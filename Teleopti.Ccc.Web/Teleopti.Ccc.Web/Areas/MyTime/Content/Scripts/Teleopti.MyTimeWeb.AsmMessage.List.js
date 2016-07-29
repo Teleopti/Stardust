@@ -34,8 +34,11 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 	        });
 	        return list;
 	    });
+
+		self.isLoading = ko.observable(true);
+
 		self.shouldShowMessage = ko.computed(function() {
-		    return self.asmMessageList().length == 0;
+		    return self.asmMessageList().length == 0 && !self.isLoading();
 		});
 		self.CreateAsmMessageList = function (dataList) {
 			var asmMessageItems = new Array();
@@ -44,6 +47,8 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 			});
 
 			self.asmMessageList($.merge(self.asmMessageList(), asmMessageItems));
+
+			self.isLoading(false);
 		};
 
 		self.isBadgeFeatureEnabled = ko.observable(false);
