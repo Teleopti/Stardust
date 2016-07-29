@@ -109,6 +109,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			return  new PersonAccountSummaryDetailViewModel()
 			{
 				StartDate = TimeZoneHelper.ConvertFromUtc(account.StartDate.Date, absenceRequest.Person.PermissionInformation.DefaultTimeZone()),
+				EndDate = TimeZoneHelper.ConvertFromUtc(account.Period().EndDate.Date, absenceRequest.Person.PermissionInformation.DefaultTimeZone()),
 				RemainingDescription = convertTimeSpanToString(account.Remaining, absenceRequest.Absence.Tracker),
 				TrackingTypeDescription = getDescriptionOfTrackerTimeSpan(absenceRequest.Absence.Tracker.GetType())
 			};
@@ -133,7 +134,6 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			return result;
 		}
 
-		//ROBTODO: this something like this needed?
 		private static string getDescriptionOfTrackerTimeSpan(Type trackerClassType)
 		{
 			var trackerType = "";

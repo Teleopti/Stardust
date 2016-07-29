@@ -91,6 +91,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
 		public DateTime StartDate { get; set; }
 		public string RemainingDescription { get; set; }
 		public string TrackingTypeDescription { get; set; }
+		public DateTime EndDate { get; set; }
 	}
 
 
