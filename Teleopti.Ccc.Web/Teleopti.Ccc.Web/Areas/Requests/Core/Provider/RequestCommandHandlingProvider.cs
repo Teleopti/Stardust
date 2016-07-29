@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				{
 					TrackedCommandInfo = trackInfo,
 					PersonRequestId = personRequestId,
-					Message = message
+					ReplyMessage = message
 				};
 
 				_commandDispatcher.Execute(command);
