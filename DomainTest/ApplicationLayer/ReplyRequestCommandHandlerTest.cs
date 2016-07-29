@@ -43,9 +43,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			_personRequestRepositoryNoMock = new FakePersonRequestRepository();
 		}
 		
+		[Test]
 		public void ShouldReplyRequestSuccessfully()
 		{
 			var request = _mock.StrictMock<IPersonRequest>();
+			request.Stub(r => r.Id).Return(new Guid());
 			request.Stub(r => r.GetMessage(new NoFormatting())).IgnoreArguments().Return(replyMessage);
 			request.Stub(r => r.CheckReplyTextLength("")).IgnoreArguments().Return(true);
 			using (_mock.Record())
@@ -57,8 +59,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			{
 				_target.Handle(_replyRequestCommand);
 			}
-
-			_target.Handle(_replyRequestCommand);
 		}
 		[Test]
 		public void ShouldAddToErrorMessageAfterMessageLengthExceed()
