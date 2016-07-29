@@ -56,8 +56,8 @@
 	</div>
 	<div class="con-row" ng-show="showGrid">
 		<div class="con-flex agent-table-wrapper">
-			<div class="grid" ng-style="getTableHeight()" ng-if="allGrid && !agentsInAlarm" ui-grid-auto-resize ui-grid="allGrid"></div>
-			<div class="grid" ng-style="getTableHeight()" ng-if="inAlarmGrid && agentsInAlarm" ui-grid-auto-resize ui-grid="inAlarmGrid"></div>
+			<div class="grid" ng-style="getTableHeight()" ng-if="allGrid && !agentsInAlarm" ui-grid-auto-resize ui-grid-auto-resize ui-grid-resize-columns ui-grid="allGrid"></div>
+			<div class="grid" ng-style="getTableHeight()" ng-if="inAlarmGrid && agentsInAlarm" ui-grid-auto-resize ui-grid-auto-resize ui-grid-resize-columns ui-grid="inAlarmGrid"></div>
 		</div>
 	</div>
 </div>

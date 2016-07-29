@@ -2,6 +2,7 @@
 	var rta = angular.module('wfm.rta', [
 		'ui.grid',
 		'ui.grid.autoResize',
+		'ui.grid.resizeColumns',
 		'ui.grid.selection',
 		'ngResource', 'ui.router', 'ngStorage', 'toggleService', 'wfm.notice', 'pascalprecht.translate']);
 
