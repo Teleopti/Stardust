@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Interfaces.Domain;
@@ -67,7 +68,10 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				errorMessages.AddRange(command.ErrorMessages);
 			}
 
-			return new RequestCommandHandlingResult(new Guid[] { }, errorMessages, trackInfo.TrackId, new List<bool>());
+			return new RequestCommandHandlingResult(new Guid[] {}, errorMessages, trackInfo.TrackId, new List<bool>())
+			{
+				Success = !errorMessages.Any()
+			};
 		}
 
 		public RequestCommandHandlingResult DenyRequests(IEnumerable<Guid> requestIds, string replyMessage)
@@ -182,10 +186,11 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				errorMessages.AddRange(command.ErrorMessages);
 			}
 
-			var handlingResult = new RequestCommandHandlingResult(new Guid[] {}, errorMessages, trackInfo.TrackId,
-				new List<bool>());
-			handlingResult.Success = true;
-			return handlingResult;
+			return new RequestCommandHandlingResult(new Guid[] {}, errorMessages, trackInfo.TrackId,
+				new List<bool>())
+			{
+				Success = !errorMessages.Any()
+			};
 		}
 
 		private TrackedCommandInfo createTrackedCommandInfo()

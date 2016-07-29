@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			_replyRequestCommand = new ReplyRequestCommand
 			{
 				PersonRequestId = requestId,
-				Message = replyMessage
+				ReplyMessage = replyMessage
 			};
 			
 			_personRequestRepositoryNoMock = new FakePersonRequestRepository();
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var command = new ReplyRequestCommand
 			{
 				PersonRequestId = personRequest.Id.GetValueOrDefault(),
-				Message = veryLong
+				ReplyMessage = veryLong
 			};
 			var commandHandler = new ReplyRequestCommandHandler(_personRequestRepositoryNoMock);
 
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var command = new ReplyRequestCommand
 			{
 				PersonRequestId = autoDeniedPersonRequest.Id.GetValueOrDefault(),
-				Message = "wee"
+				ReplyMessage = "wee"
 			};
 			var commandHandler = new ReplyRequestCommandHandler(_personRequestRepositoryNoMock);
 
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var command = new ReplyRequestCommand
 			{
 				PersonRequestId = deniedPersonRequest.Id.GetValueOrDefault(),
-				Message = "wee"
+				ReplyMessage = "wee"
 			};
 			var commandHandler = new ReplyRequestCommandHandler(_personRequestRepositoryNoMock);
 
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var command = new ReplyRequestCommand
 			{
 				PersonRequestId = personRequest.Id.GetValueOrDefault(),
-				Message = "wee"
+				ReplyMessage = "wee"
 			};
 			var commandHandler = new ReplyRequestCommandHandler(_personRequestRepositoryNoMock);
 
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var command = new ReplyRequestCommand
 			{
 				PersonRequestId = personRequest.Id.GetValueOrDefault(),
-				Message = "wee"
+				ReplyMessage = "wee"
 			};
 			var commandHandler = new ReplyRequestCommandHandler(_personRequestRepositoryNoMock);
 
