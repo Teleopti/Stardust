@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			
 			_personRequestRepositoryNoMock = new FakePersonRequestRepository();
 		}
-		[Test]
+		
 		public void ShouldReplyRequestSuccessfully()
 		{
 			var request = _mock.StrictMock<IPersonRequest>();
@@ -57,6 +57,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			{
 				_target.Handle(_replyRequestCommand);
 			}
+
+			_target.Handle(_replyRequestCommand);
 		}
 		[Test]
 		public void ShouldAddToErrorMessageAfterMessageLengthExceed()
