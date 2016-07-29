@@ -1,4 +1,5 @@
 using Autofac;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
@@ -26,6 +27,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static DefaultAnalyticsDataCreator DefaultAnalyticsDataCreator;
 		public static IHangfireUtilities Hangfire;
 		public static MutableNow Now;
+		public static IEventPublisher EventPublisher;
 
 		public static void Setup()
 		{
@@ -47,6 +49,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			TransactionHooks = _container.Resolve<ICurrentTransactionHooks>();
 			UnitOfWorkFactory = _container.Resolve<ICurrentUnitOfWorkFactory>();
 			UnitOfWork = _container.Resolve<ICurrentUnitOfWork>();
+			EventPublisher = _container.Resolve<IEventPublisher>();
 			DefaultDataCreator = _container.Resolve<DefaultDataCreator>();
 			DefaultAnalyticsDataCreator = new DefaultAnalyticsDataCreator();
 		}

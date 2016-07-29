@@ -1,5 +1,6 @@
 ﻿using System;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
@@ -39,7 +40,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"'(.*)' sets (?:his|her) phone state to '(.*)'")]
 		public void WhenSetsHisPhoneStateToOnDatasource(string personName, string stateCode)
 		{
-			waitForRuleMappings();
+			// to create/update any data that is periodically kept up to date
+			// like the rule mappings
+			SystemSetup.EventPublisher.Publish(new TenantMinuteTickEvent(), new TenantHourTickEvent());
+
 			using (var h = new Http())
 				h.PostJson(
 					"Rta/State/Change",
@@ -54,14 +58,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 						BatchId = CurrentTime.Value().ToString("yyyy-MM-dd HH:mm:ss"),
 						IsSnapshot = false
 					});
-		}
-
-		private void waitForRuleMappings()
-		{
-			// or we wait for RuleMappingsReadModelPersister.Invalid() to be false, but requires toggle check
-			// or better yet, run all hangfire events from data setup on the server,
-			// adding recurring to the mix, and wait for queue to finish before opening the site
-			SystemSetup.Hangfire.WaitForQueue();
 		}
 
 	}
