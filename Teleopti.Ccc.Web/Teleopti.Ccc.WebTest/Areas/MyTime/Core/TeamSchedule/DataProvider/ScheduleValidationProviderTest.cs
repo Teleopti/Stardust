@@ -157,7 +157,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 		}
 
 		[Test]
-		[Ignore]
 		public void ShouldGetWarningForNotMeetingMinWeeklyWorkTime()
 		{
 			var scenario = CurrentScenario.Current();
@@ -200,7 +199,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			result.First()
 				.Warnings.Single()
 				.Should()
-				.Be.EqualTo(string.Format(Resources.BusinessRuleMaxWeekWorkTimeErrorMessage, "03:00", "02:00"));
+				.Be.EqualTo(string.Format(Resources.BusinessRuleMinWeekWorktimeErrorMessage, "05:00", "40:00"));
 		}
 	}
 }

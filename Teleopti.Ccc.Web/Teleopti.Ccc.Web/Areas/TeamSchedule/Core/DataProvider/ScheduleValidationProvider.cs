@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using Castle.Core.Internal;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Interfaces.Domain;
@@ -33,7 +29,31 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var date = new DateOnly(input.Date);
 			var dateOnlyPeriod = new DateOnlyPeriod(date, date);
 			var scenario = _currentScenario.Current();
-			var extendedPeriod = dateOnlyPeriod.Inflate(1);
+
+			var extendedPeriod = new DateOnlyPeriod(date, date);
+
+			foreach (var person in people)
+			{
+				var period = DateHelper.GetWeekPeriod(date, person.FirstDayOfWeek);
+				if (period.StartDate == date)
+					period = new DateOnlyPeriod(period.StartDate.AddDays(-1), period.EndDate);
+				if (period.EndDate == date)
+					period = new DateOnlyPeriod(period.StartDate, period.EndDate.AddDays(1));
+				if (extendedPeriod.Contains(period))
+					continue;
+				if (period.Contains(extendedPeriod))
+				{
+					extendedPeriod = period;
+					continue;
+				}
+				if (extendedPeriod.StartDate > period.StartDate)
+				{
+					extendedPeriod = new DateOnlyPeriod(period.StartDate, extendedPeriod.EndDate);
+					continue;
+				}
+				extendedPeriod = new DateOnlyPeriod(extendedPeriod.StartDate, period.EndDate);
+			}
+
 			var schedules = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(people,
 				new ScheduleDictionaryLoadOptions(false, false),
 				extendedPeriod,
