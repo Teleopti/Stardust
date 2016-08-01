@@ -10,6 +10,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
@@ -378,7 +379,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					var activityAddedEvent = new UpdateResourceCalculateReadModelEvent()
 					{
 						JobName = "Resource Calculate",
+						InitiatorId = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Id.Value,
 						StartDateTime = period.StartDateTime.Date,
+						UserName = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Id.GetValueOrDefault().ToString(),
 						EndDateTime = period.EndDateTime.Date
 					};
 					
