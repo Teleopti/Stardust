@@ -39,6 +39,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return Ok(_stardustRepository.GetJobByJobId(jobId));
 		}
 
+		[HttpGet, Route("Stardust/QueuedJobs")]
+		public IHttpActionResult JobQueueList()
+		{
+			return Ok(_stardustRepository.GetAllQueuedJobs());
+		}
+
 		[HttpGet, Route("Stardust/WorkerNodes")]
 		public IHttpActionResult WorkerNodes()
 		{

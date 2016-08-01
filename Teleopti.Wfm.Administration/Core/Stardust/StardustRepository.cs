@@ -234,6 +234,35 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			return listToReturn;
 		}
 
+		public List<Job> GetAllQueuedJobs()
+		{
+			var jobs = new List<Job>();
+
+			using (var sqlConnection = new SqlConnection(_connectionString))
+			{
+				sqlConnection.OpenWithRetry(_retryPolicy);
+				var selectCommandText = @"SELECT  [JobId]
+											  ,[Name]
+											  ,[Created]
+											  ,[CreatedBy]
+										  FROM [Stardust].[JobQueue] order by Created desc";
+				using (var getAllQueuedJobsCommand = new SqlCommand(selectCommandText, sqlConnection))
+				{
+					using (var sqlDataReader = getAllQueuedJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
+					{
+						if (sqlDataReader.HasRows)
+						{
+							while (sqlDataReader.Read())
+							{
+								var job = createQueuedJobFromSqlDataReader(sqlDataReader);
+								jobs.Add(job);
+							}
+						}
+					}
+				}
+			}
+			return jobs;
+		}
 
 		private T getDBNullSafeValue<T>(object value) where T : class
 		{
@@ -255,6 +284,18 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 				Serialized = sqlDataReader.GetString(sqlDataReader.GetOrdinal("Serialized")),
 				Started = sqlDataReader.GetNullableDateTime(sqlDataReader.GetOrdinal("Started")),
 				Ended = sqlDataReader.GetNullableDateTime(sqlDataReader.GetOrdinal("Ended"))
+			};
+			return job;
+		}
+
+		private Job createQueuedJobFromSqlDataReader(SqlDataReader sqlDataReader)
+		{
+			var job = new Job
+			{
+				JobId = sqlDataReader.GetGuid(sqlDataReader.GetOrdinal("JobId")),
+				Name = sqlDataReader.GetString(sqlDataReader.GetOrdinal("Name")),
+				CreatedBy = sqlDataReader.GetString(sqlDataReader.GetOrdinal("CreatedBy")),
+				Created = sqlDataReader.GetDateTime(sqlDataReader.GetOrdinal("Created"))
 			};
 			return job;
 		}

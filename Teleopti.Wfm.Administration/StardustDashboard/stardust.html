@@ -1,33 +1,55 @@
 ﻿<div ng-controller="stardustController as vm" style="margin-left: 50px;margin-right: 50px">
     <h2>Stardust Dashboard</h2>
 
-    <div class="row">
-        <div class="col-md-12">
-            <h3>Nodes</h3>
-            <div style="font-size: 14p; font-weight: bold;color: red">{{vm.NodeError}}</div>
-            <div>
-                <table>
-                    <thead>
-                        <tr>
-							<th>Url</th>
-							<th>Latest Heartbeat (UTC)</th>
-							<th>Working</th>
-							<th>Alive</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-class="{'greenNode': node.Alive === true, 'redNode': node.Alive === false}" ng-repeat="node in vm.WorkerNodes">
-
-                            <td><a href="#nodedetails\{{node.Id}}">{{node.Url}}</a></td>
-                            <td>{{node.Heartbeat | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-                            <td>{{node.Running}}</td>
-                            <td>{{node.Alive}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Nodes</h3>
+			<div style="font-size: 14p; font-weight: bold; color: red">{{vm.NodeError}}</div>
+			<div>
+				<table>
+					<thead>
+					<tr>
+						<th>Url</th>
+						<th>Latest Heartbeat (UTC)</th>
+						<th>Working</th>
+						<th>Alive</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr ng-class="{'greenNode': node.Alive === true, 'redNode': node.Alive === false}" ng-repeat="node in vm.WorkerNodes">
+						<td><a href="#nodedetails\{{node.Id}}">{{node.Url}}</a></td>
+						<td>{{node.Heartbeat | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+						<td>{{node.Running}}</td>
+						<td>{{node.Alive}}</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<h3>Job Queue</h3>
+			<div>
+				<table>
+					<thead>
+						<tr>
+							<th>Type</th>
+							<th>Created By</th>
+							<th>Created At </th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="job in vm.QueuedJobs">
+							<td>{{job.Name}}</td>
+							<td>{{job.CreatedBy}}</td>
+							<td>{{job.Created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
     <div class="row">
         <div class="col-md-12">
             <h3>Job History</h3>
@@ -36,7 +58,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Name</th>
+                            <th>Type</th>
                             <th>Created By</th>
                             <th>Created At </th>
                             <th>Started</th>
@@ -58,7 +80,6 @@
                     </tbody>
                 </table>
             </div>
-
         </div>
     </div>
 </div>
