@@ -19,14 +19,14 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 {
 	[TestFixture, DomainTest]
-	public class ScheduleValidationProviderTest:ISetup
+	public class ScheduleValidationProviderTest : ISetup
 	{
 		public FakeCurrentScenario CurrentScenario;
 		public FakeScheduleStorage ScheduleStorage;
 		public FakePersonRepository PersonRepository;
 		public ScheduleValidationProvider Target;
 
-		public void Setup(ISystem system,IIocConfiguration configuration)
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
@@ -37,23 +37,23 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
 		}
 
-		[Test]		
+		[Test]
 		public void ShouldGetResultForNightlyRestRuleCheckBetweenYesterdayAndToday()
 		{
 			var scenario = CurrentScenario.Current();
 			var team = TeamFactory.CreateSimpleTeam();
 
 			var contract = PersonContractFactory.CreatePersonContract();
-			contract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(0),TimeSpan.FromHours(40),TimeSpan.FromHours(8),TimeSpan.FromHours(40));
+			contract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(0), TimeSpan.FromHours(40), TimeSpan.FromHours(8), TimeSpan.FromHours(40));
 
-			var person = PersonFactory.CreatePersonWithGuid("Peter","peter");
-			person.AddPersonPeriod(new PersonPeriod(new DateOnly(2015,12,30), contract, team));
+			var person = PersonFactory.CreatePersonWithGuid("Peter", "peter");
+			person.AddPersonPeriod(new PersonPeriod(new DateOnly(2015, 12, 30), contract, team));
 			PersonRepository.Has(person);
 
 			var today = new DateTime(2016, 1, 2);
 			var yesterday = new DateTime(2016, 1, 1);
-			var dateTimePeriodToday = new DateTimePeriod(2016,1,2,1,2016,1,2,23);
-			var dateTimePeriodYesterday = new DateTimePeriod(2016,1,1,1,2016,1,1,23);
+			var dateTimePeriodToday = new DateTimePeriod(2016, 1, 2, 1, 2016, 1, 2, 23);
+			var dateTimePeriodYesterday = new DateTimePeriod(2016, 1, 1, 1, 2016, 1, 1, 23);
 			var activity = ActivityFactory.CreateActivity("Phone");
 			activity.InWorkTime = true;
 
@@ -62,11 +62,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			var personAssignmentYesterday = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, dateTimePeriodYesterday, shiftCategory, scenario);
 			ScheduleStorage.Add(personAssignmentToday);
 			ScheduleStorage.Add(personAssignmentYesterday);
-			
+
 			var results = Target.GetBusinessRuleValidationResults(new FetchRuleValidationResultFormData
 			{
-				Date = new DateTime(2016,1,2),
-				PersonIds = new []
+				Date = new DateTime(2016, 1, 2),
+				PersonIds = new[]
 				{
 					person.Id.GetValueOrDefault()
 				}
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			var results = Target.GetBusinessRuleValidationResults(new FetchRuleValidationResultFormData
 			{
 				Date = new DateTime(2016, 1, 2),
-				PersonIds = new []
+				PersonIds = new[]
 				{
 					person.Id.GetValueOrDefault()
 				}
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			var result = Target.GetBusinessRuleValidationResults(new FetchRuleValidationResultFormData
 			{
 				Date = new DateTime(2016, 7, 27),
-				PersonIds = new []{person.Id.GetValueOrDefault()}
+				PersonIds = new[] { person.Id.GetValueOrDefault() }
 			}, BusinessRuleFlags.NewMaxWeekWorkTimeRule);
 
 			result.Count.Should().Be.EqualTo(1);
@@ -206,30 +206,134 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 		public void ShouldGetWarningForViolatingDayOffRule()
 		{
 			var scenario = CurrentScenario.Current();
-			var person = PersonFactory.CreatePersonWithGuid("John","Watson");
+			var person = PersonFactory.CreatePersonWithGuid("John", "Watson");
 			var team = TeamFactory.CreateSimpleTeam();
 			var contract = PersonContractFactory.CreatePersonContract();
-			person.AddPersonPeriod(new PersonPeriod(new DateOnly(2016,1,1),contract,team));
+			person.AddPersonPeriod(new PersonPeriod(new DateOnly(2016, 1, 1), contract, team));
 			PersonRepository.Has(person);
 
-			var personAssignmentWithDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario,person,new DateOnly(2016, 7, 19),TimeSpan.FromHours(24),TimeSpan.FromHours(0),TimeSpan.FromHours(12));
+			var personAssignmentWithDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person, new DateOnly(2016, 7, 19), TimeSpan.FromHours(24), TimeSpan.FromHours(0), TimeSpan.FromHours(12));
 			var activity = ActivityFactory.CreateActivity("Phone");
 
 			activity.InWorkTime = true;
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
-			var personAssignmentWithShift = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity,person,new DateTimePeriod(2016,7,18,20,2016,7,19,4),shiftCategory,scenario);
+			var personAssignmentWithShift = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 18, 20, 2016, 7, 19, 4), shiftCategory, scenario);
 			ScheduleStorage.Add(personAssignmentWithDayOff);
 			ScheduleStorage.Add(personAssignmentWithShift);
 
 			var result = Target.GetBusinessRuleValidationResults(new FetchRuleValidationResultFormData
 			{
-				Date = new DateTime(2016,7,18),
+				Date = new DateTime(2016, 7, 18),
 				PersonIds = new[] { person.Id.GetValueOrDefault() }
-			},BusinessRuleFlags.NewDayOffRule).Single();
+			}, BusinessRuleFlags.NewDayOffRule).Single();
 
 			result.Warnings.Single()
 				.Should()
 				.Be.EqualTo(string.Format(Resources.BusinessRuleDayOffErrorMessage2, new DateOnly(2016, 7, 19).ToShortDateString()));
+		}
+
+		[Test]
+		public void ShouldGetWarningForNotMeetingMinWeeklyRestTimeWithDayOff()
+		{
+			var scenario = CurrentScenario.Current();
+			var team = TeamFactory.CreateSimpleTeam();
+			var contract = PersonContractFactory.CreatePersonContract();
+			contract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(40), TimeSpan.FromHours(40), TimeSpan.FromHours(8), TimeSpan.FromHours(36));
+
+			var person = PersonFactory.CreatePersonWithGuid("John", "Watson");
+			person.AddPersonPeriod(new PersonPeriod(new DateOnly(2016, 1, 1), contract, team));
+			PersonRepository.Has(person);
+
+			var activity = ActivityFactory.CreateActivity("Phone");
+			activity.InWorkTime = true;
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
+			var personAssignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 18, 9, 2016, 7, 18, 23), shiftCategory, scenario);
+			var personAssignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 19, 9, 2016, 7, 19, 23), shiftCategory, scenario);
+			var personAssignment3 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 20, 9, 2016, 7, 20, 23), shiftCategory, scenario);
+			var personAssignment4 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 21, 9, 2016, 7, 21, 23), shiftCategory, scenario);
+			var personAssignment5 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 22, 9, 2016, 7, 22, 23), shiftCategory, scenario);
+			var personAssignment6 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 23, 9, 2016, 7, 23, 22), shiftCategory, scenario);
+
+			var personAssignment7 = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person,
+				new DateOnly(2016, 7, 24), new DayOffTemplate());
+
+			var personAssignment8 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 25, 9, 2016, 7, 25, 23), shiftCategory, scenario);
+
+			ScheduleStorage.Add(personAssignment1);
+			ScheduleStorage.Add(personAssignment2);
+			ScheduleStorage.Add(personAssignment3);
+			ScheduleStorage.Add(personAssignment4);
+			ScheduleStorage.Add(personAssignment5);
+			ScheduleStorage.Add(personAssignment6);
+			ScheduleStorage.Add(personAssignment7);
+			ScheduleStorage.Add(personAssignment8);
+
+			var result = Target.GetBusinessRuleValidationResults(new FetchRuleValidationResultFormData
+			{
+				Date = new DateTime(2016, 7, 18),
+				PersonIds = new[] { person.Id.GetValueOrDefault() }
+			}, BusinessRuleFlags.MinWeeklyRestRule);
+
+			result.Count.Should().Be.EqualTo(1);
+			result.First().PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault());
+			result.First()
+				.Warnings.Single()
+				.Should()
+				.Be.EqualTo(string.Format(Resources.BusinessRuleWeeklyRestErrorMessage, "36:00"));
+		}
+
+		[Test]
+		public void ShouldGetWarningForNotMeetingMinWeeklyRestTimeWithoutDayOff()
+		{
+			var scenario = CurrentScenario.Current();
+			var team = TeamFactory.CreateSimpleTeam();
+			var contract = PersonContractFactory.CreatePersonContract();
+			contract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(40), TimeSpan.FromHours(40), TimeSpan.FromHours(8), TimeSpan.FromHours(11));
+
+			var person = PersonFactory.CreatePersonWithGuid("John", "Watson");
+			person.AddPersonPeriod(new PersonPeriod(new DateOnly(2016, 1, 1), contract, team));
+			PersonRepository.Has(person);
+
+			var activity = ActivityFactory.CreateActivity("Phone");
+			activity.InWorkTime = true;
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
+
+			var personAssignmentLastSunday = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 17, 9, 2016, 7, 17, 23), shiftCategory, scenario);
+
+			var personAssignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 18, 9, 2016, 7, 18, 23), shiftCategory, scenario);
+			var personAssignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 19, 9, 2016, 7, 19, 23), shiftCategory, scenario);
+			var personAssignment3 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 20, 9, 2016, 7, 20, 23), shiftCategory, scenario);
+			var personAssignment4 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 21, 9, 2016, 7, 21, 23), shiftCategory, scenario);
+			var personAssignment5 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 22, 9, 2016, 7, 22, 23), shiftCategory, scenario);
+			var personAssignment6 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 23, 9, 2016, 7, 23, 23), shiftCategory, scenario);
+			var personAssignment7 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 24, 9, 2016, 7, 24, 23), shiftCategory, scenario);
+
+			var personAssignmentNextMonday = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, new DateTimePeriod(2016, 7, 25, 9, 2016, 7, 25, 23), shiftCategory, scenario);
+
+			ScheduleStorage.Add(personAssignmentLastSunday);
+			ScheduleStorage.Add(personAssignment1);
+			ScheduleStorage.Add(personAssignment2);
+			ScheduleStorage.Add(personAssignment3);
+			ScheduleStorage.Add(personAssignment4);
+			ScheduleStorage.Add(personAssignment5);
+			ScheduleStorage.Add(personAssignment6);
+			ScheduleStorage.Add(personAssignment7);
+			ScheduleStorage.Add(personAssignmentNextMonday);
+
+			var result = Target.GetBusinessRuleValidationResults(new FetchRuleValidationResultFormData
+			{
+				Date = new DateTime(2016, 7, 18),
+				PersonIds = new[] { person.Id.GetValueOrDefault() }
+			}, BusinessRuleFlags.MinWeeklyRestRule);
+
+			result.Count.Should().Be.EqualTo(1);
+			result.First().PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault());
+			result.First()
+				.Warnings.Single()
+				.Should()
+				.Be.EqualTo(string.Format(Resources.BusinessRuleWeeklyRestErrorMessage, "11:00"));
 		}
 	}
 }

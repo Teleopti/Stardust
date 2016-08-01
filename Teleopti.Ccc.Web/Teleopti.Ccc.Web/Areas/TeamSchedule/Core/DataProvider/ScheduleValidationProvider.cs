@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
@@ -14,12 +15,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IPersonRepository _personRepository;
+		private readonly IPersonWeekViolatingWeeklyRestSpecification _personWeekViolating;
 
-		public ScheduleValidationProvider(IScheduleStorage scheduleStorage,ICurrentScenario currentScenario,IPersonRepository personRepository)
+		public ScheduleValidationProvider(IScheduleStorage scheduleStorage,ICurrentScenario currentScenario,IPersonRepository personRepository, IPersonWeekViolatingWeeklyRestSpecification personWeekViolating)
 		{
 			_scheduleStorage = scheduleStorage;
 			_currentScenario = currentScenario;
 			_personRepository = personRepository;
+			_personWeekViolating = personWeekViolating;
 		}
 
 
@@ -31,21 +34,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var dateOnlyPeriod = new DateOnlyPeriod(date, date);
 			var scenario = _currentScenario.Current();
 			var inflatedPeriod = dateOnlyPeriod.Inflate(1);
-
-			var personPeriods = people.Select(person => GetWeekPeriod(date,person.FirstDayOfWeek)).ToList();
-			personPeriods.Add(inflatedPeriod); 
-			
-			var extendedPeriod = new DateOnlyPeriod( personPeriods.Min(p => p.StartDate), personPeriods.Max(p => p.EndDate));			
-
-			var schedules = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(people,
-				new ScheduleDictionaryLoadOptions(false, false),
-				extendedPeriod,
-				scenario);
-
-			var scheduleDays = people.SelectMany(person =>
-			{
-				return schedules.SchedulesForPeriod(dateOnlyPeriod, person).Where(s => s.DateOnlyAsPeriod.DateOnly == date);
-			});
+			var personPeriods = people.Select(person => GetWeekPeriod(date, person.FirstDayOfWeek)).ToList();
+			personPeriods.Add(inflatedPeriod);
+			var extendedPeriod = new DateOnlyPeriod(personPeriods.Min(p => p.StartDate), personPeriods.Max(p => p.EndDate));
 
 			var rules = NewBusinessRuleCollection.New();
 
@@ -60,7 +51,22 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			if (ruleFlags.HasFlag(BusinessRuleFlags.NewMaxWeekWorkTimeRule))
 			{
 				rules.Add(new NewMaxWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
-			}			
+			}
+			if (ruleFlags.HasFlag(BusinessRuleFlags.MinWeeklyRestRule))
+			{
+				rules.Add(new MinWeeklyRestRule(new WeeksFromScheduleDaysExtractor(), _personWeekViolating));
+				extendedPeriod = extendedPeriod.Inflate(1);
+			}
+
+			var schedules = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(people,
+				new ScheduleDictionaryLoadOptions(false, false),
+				extendedPeriod,
+				scenario);
+
+			var scheduleDays = people.SelectMany(person =>
+			{
+				return schedules.SchedulesForPeriod(dateOnlyPeriod, person).Where(s => s.DateOnlyAsPeriod.DateOnly == date);
+			});
 
 			var ruleResponse = rules.CheckRules(schedules, scheduleDays).ToList();
 
