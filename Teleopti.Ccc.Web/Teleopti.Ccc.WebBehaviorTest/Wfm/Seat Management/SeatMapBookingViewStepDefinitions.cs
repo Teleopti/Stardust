@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 		public void WhenIClickCancelButtonAfterOpenPeopleSearchList()
 		{
             Browser.Interactions.AssertExists(".seatbooking-operations-cancel .cancel-operation");
-            Browser.Interactions.Click(".seatbooking-operations-cancel .cancel-operation");
+            Browser.Interactions.ClickUsingJQuery(".seatbooking-operations-cancel .cancel-operation");
 		}
 
 		[Then(@"I should not see people search list")]
