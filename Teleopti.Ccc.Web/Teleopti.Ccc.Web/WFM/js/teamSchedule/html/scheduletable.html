@@ -31,13 +31,13 @@
 				</div>
 				<div class="person-name" ng-hide="vm.selectMode">{{personSchedule.Name}}</div>
 				<span class="validate-warning" ng-if="vm.showWarnings">
-					<span ng-if="vm.checkNightRestWarningMessage(personSchedule.PersonId).isLoaded && vm.checkNightRestWarningMessage(personSchedule.PersonId).warnings.length > 0">
+					<span ng-if="vm.checkBusinessRulesWarningMessage(personSchedule.PersonId).isLoaded && vm.checkBusinessRulesWarningMessage(personSchedule.PersonId).warnings.length > 0">
 						<span class="warning-icon"><i class="mdi mdi-account-alert"></i></span>
 						<md-tooltip class="multiline-tooltip" md-direction="right">
-							<span ng-bind-html="vm.checkNightRestWarningMessage(personSchedule.PersonId).warnings | br"></span>
+							<span ng-bind-html="vm.checkBusinessRulesWarningMessage(personSchedule.PersonId).warnings | br"></span>
 						</md-tooltip>
 					</span>
-					<md-progress-circular md-mode="indeterminate" md-diameter="15" ng-if="!vm.checkNightRestWarningMessage(personSchedule.PersonId).isLoaded"></md-progress-circular>
+					<md-progress-circular md-mode="indeterminate" md-diameter="15" ng-if="!vm.checkBusinessRulesWarningMessage(personSchedule.PersonId).isLoaded"></md-progress-circular>
 				</span>
 			</td>
 			<td class="shift-category-cell" ng-if="vm.toggles.ViewShiftCategoryEnabled" ng-click="personSchedule.ShiftCategory.Name && vm.modifyShiftCategoryForAgent($event, personSchedule)" ng-style="{cursor: (personSchedule.ShiftCategory.Name ? 'pointer' : 'default')}">

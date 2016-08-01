@@ -102,7 +102,7 @@
 			}
 		};
 
-		vm.checkNightRestWarningMessage = function(personId){
+		vm.checkBusinessRulesWarningMessage = function(personId){
 			return ValidateRulesService.checkValidationForPerson(personId);
 		};
 
