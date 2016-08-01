@@ -77,6 +77,8 @@
 		WfmTeamSchedule_AddPersonalActivity_37742,
 		WfmTeamSchedule_ShowNightlyRestWarning_39619,
 		WfmTeamSchedule_ShowWeeklyWorktimeWarning_39799,
+		WfmTeamSchedule_ShowDayOffWarning_39801,
+
 		WebByPassDefaultPermissionCheck_37984,
 		WfmTeamSchedule_RevertToPreviousSchedule_39002,
 		WfmTeamSchedule_ShowShiftCategory_39796,

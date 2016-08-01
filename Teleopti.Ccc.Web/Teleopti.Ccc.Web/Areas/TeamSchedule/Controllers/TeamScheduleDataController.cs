@@ -44,6 +44,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 				ruleFlags |= BusinessRuleFlags.MinWeekWorkTimeRule;
 				ruleFlags |= BusinessRuleFlags.NewMaxWeekWorkTimeRule;
 			}
+			if (_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_ShowDayOffWarning_39801))
+			{
+				ruleFlags |= BusinessRuleFlags.NewDayOffRule;
+			}
+
 			return _validationProvider.GetBusinessRuleValidationResults(input, ruleFlags);
 		}
 

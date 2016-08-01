@@ -30,9 +30,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var date = new DateOnly(input.Date);
 			var dateOnlyPeriod = new DateOnlyPeriod(date, date);
 			var scenario = _currentScenario.Current();
-		
+			var inflatedPeriod = dateOnlyPeriod.Inflate(1);
+
 			var personPeriods = people.Select(person => GetWeekPeriod(date,person.FirstDayOfWeek)).ToList();
-			personPeriods.Add(dateOnlyPeriod.Inflate(1)); 
+			personPeriods.Add(inflatedPeriod); 
 			
 			var extendedPeriod = new DateOnlyPeriod( personPeriods.Min(p => p.StartDate), personPeriods.Max(p => p.EndDate));			
 
@@ -59,9 +60,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			if (ruleFlags.HasFlag(BusinessRuleFlags.NewMaxWeekWorkTimeRule))
 			{
 				rules.Add(new NewMaxWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
-			}
+			}			
 
-			var ruleResponse = rules.CheckRules(schedules, scheduleDays);
+			var ruleResponse = rules.CheckRules(schedules, scheduleDays).ToList();
+
+			if (ruleFlags.HasFlag(BusinessRuleFlags.NewDayOffRule))
+			{
+				ruleResponse.AddRange(checkDayOff(date, people));
+			}
 
 			var businessRuleValidationResults =
 				ruleResponse.Where(
@@ -78,6 +84,30 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					})
 					.ToList();
 			return businessRuleValidationResults;
+		}
+
+		private IEnumerable<IBusinessRuleResponse> checkDayOff(DateOnly date, IEnumerable<IPerson> people )
+		{
+			var dateOnlyPeriod = new DateOnlyPeriod(date,date);
+			var scenario = _currentScenario.Current();
+			var inflatedPeriod = dateOnlyPeriod.Inflate(1);
+
+			var schedules = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(people,
+				new ScheduleDictionaryLoadOptions(false,false),
+				inflatedPeriod,
+				scenario);
+
+			var scheduleDays = people.SelectMany(person =>
+			{
+				return schedules.SchedulesForPeriod(inflatedPeriod,person).Where(s => inflatedPeriod.Contains(s.DateOnlyAsPeriod.DateOnly) );
+			});
+
+			var rule = new NewDayOffRule(new WorkTimeStartEndExtractor());
+
+			var ruleResponse = rule.Validate(schedules, scheduleDays).Select(r => new BusinessRuleResponse(r.TypeOfRule, r.Message, r.Error, r.Mandatory,
+				dateOnlyPeriod.ToDateTimePeriod(r.Person.PermissionInformation.DefaultTimeZone()), r.Person, r.DateOnlyPeriod));
+
+			return ruleResponse;
 		}
 	}
 

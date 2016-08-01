@@ -201,5 +201,35 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 				.Should()
 				.Be.EqualTo(string.Format(Resources.BusinessRuleMinWeekWorktimeErrorMessage, "05:00", "40:00"));
 		}
+
+		[Test]
+		public void ShouldGetWarningForViolatingDayOffRule()
+		{
+			var scenario = CurrentScenario.Current();
+			var person = PersonFactory.CreatePersonWithGuid("John","Watson");
+			var team = TeamFactory.CreateSimpleTeam();
+			var contract = PersonContractFactory.CreatePersonContract();
+			person.AddPersonPeriod(new PersonPeriod(new DateOnly(2016,1,1),contract,team));
+			PersonRepository.Has(person);
+
+			var personAssignmentWithDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario,person,new DateOnly(2016, 7, 19),TimeSpan.FromHours(24),TimeSpan.FromHours(0),TimeSpan.FromHours(12));
+			var activity = ActivityFactory.CreateActivity("Phone");
+
+			activity.InWorkTime = true;
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
+			var personAssignmentWithShift = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity,person,new DateTimePeriod(2016,7,18,20,2016,7,19,4),shiftCategory,scenario);
+			ScheduleStorage.Add(personAssignmentWithDayOff);
+			ScheduleStorage.Add(personAssignmentWithShift);
+
+			var result = Target.GetBusinessRuleValidationResults(new FetchRuleValidationResultFormData
+			{
+				Date = new DateTime(2016,7,18),
+				PersonIds = new[] { person.Id.GetValueOrDefault() }
+			},BusinessRuleFlags.NewDayOffRule).Single();
+
+			result.Warnings.Single()
+				.Should()
+				.Be.EqualTo(string.Format(Resources.BusinessRuleDayOffErrorMessage2, new DateOnly(2016, 7, 19).ToShortDateString()));
+		}
 	}
 }

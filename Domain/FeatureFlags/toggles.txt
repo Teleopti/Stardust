@@ -82,8 +82,10 @@ WfmTeamSchedule_RemoveActivity_37743 = true
 WfmTeamSchedule_MoveActivity_37744 = true
 WfmTeamSchedule_ShowContractTime_38509 = true
 WfmTeamSchedule_RevertToPreviousSchedule_39002 = true
-WfmTeamSchedule_ShowNightlyRestWarning_39619 = RC
+WfmTeamSchedule_ShowNightlyRestWarning_39619 = true
 WfmTeamSchedule_ShowWeeklyWorktimeWarning_39799 = DEV
+WfmTeamSchedule_ShowDayOffWarning_39801 = true
+
 WfmTeamSchedule_ShowShiftCategory_39796 = RC
 WfmTeamSchedule_ModifyShiftCategory_39797 = RC
 WfmTeamSchedule_MakeNewMyTeamDefault_39744 = RC
