@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				{
 					InitiatorId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault(),
 					JobName = "Resource Calculate",
-					UserName = _loggedOnUser.CurrentUser().Id.GetValueOrDefault().ToString(),
+					UserName = _loggedOnUser.CurrentUser().Name.ToString(),
 					StartDateTime = period.Value.StartDate.Date,
 					EndDateTime = period.Value.EndDate.Date
 				});
