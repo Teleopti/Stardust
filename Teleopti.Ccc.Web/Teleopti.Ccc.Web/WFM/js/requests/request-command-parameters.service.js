@@ -15,7 +15,7 @@
 		};
 
 		this.setSelectedIdAndMessage = function (selectedRequestId, message) {
-			message[0] = message[0].substr(2);
+			message[0] = message[0].trim();
 			self._state.selectedIdAndMessage[selectedRequestId] = message[0];
 		}
 
