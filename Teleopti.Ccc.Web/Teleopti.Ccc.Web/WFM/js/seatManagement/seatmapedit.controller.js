@@ -230,8 +230,10 @@
 					suspendDocumentListeners();
 					vm.addSeat();
 					break;
-				case 46: // delete
-					vm.delete();
+			    case 46: // delete
+			        if (event.target.nodeName.toLowerCase() !== 'input') {
+			            vm.delete();
+			        }
 					break;
 				case 67: // Ctrl+C
 					if (event.ctrlKey) {
@@ -280,13 +282,16 @@
 					}
 					break;
 
-				case 88: //X
-					if (event.ctrlKey) {
-						preventDefaultEvent(event);
-						vm.cut();
-					}
+			    case 88: //X
+			        if (event.target.nodeName.toLowerCase() !== 'input') {
+			            if (event.ctrlKey) {
+			                preventDefaultEvent(event);
 
-					break;
+			                vm.cut();
+			            }
+			        }
+
+			        break;
 				default:
 					break;
 			}
