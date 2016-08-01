@@ -59,4 +59,13 @@ Scenario: Should be able to change shift category via label
 	And I apply the new shift category
 	Then I should see a shift category named 'NT'
 
-# Scenario: Should be able to change shift category via command menu
+@OnlyRunIfEnabled('WfmTeamSchedule_ModifyShiftCategory_39797')
+Scenario: Should be able to change shift category via command menu
+	When I view wfm team schedules
+	And I searched schedule with keyword 'Team green' and schedule date '2016-10-09'
+	And I selected agent 'John Smith'
+	And I open menu in team schedule
+	And I click menu item 'EditShiftCategory' in team schedule
+	And I set shift category as 'Night'
+	And I apply the new shift category
+	Then I should see a shift category named 'NT'
