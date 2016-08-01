@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 		}
 
 		[When(@"I select to load requests in status '(.*)'")]
+		[Then(@"I select to load requests in status '(.*)'")]
 		public void WhenISelectToLoadRequestInStatus(string status)
 		{
 			Browser.Interactions.ClickUsingJQuery(".test-status-selector");
@@ -95,7 +96,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 			Browser.Interactions.ClickUsingJQuery("requests-commands-pane .deny-requests");
 		}
 
-
 		[Then(@"I should see request for '(.*)' approved")]
 		public void ThenIShouldSeeRequestForApproved(string agentName)
 		{
@@ -106,6 +106,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 		public void ThenIShouldSeeRequestForDenied(string agentName)
 		{
 			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".ui-grid-row:contains('{0}') .request-status:contains('{1}')", agentName, "Denied"));
+		}
+
+		[Then(@"I should see request for '(.*)' cancelled")]
+		public void ThenIShouldSeeRequestForCanceled(string agentName)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".ui-grid-row:contains('{0}') .request-status:contains('{1}')", agentName, "Cancelled"));
 		}
 
 
@@ -131,6 +137,63 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 		public void ShouldSeeScheduleDetail()
 		{
 			Browser.Interactions.AssertExistsUsingJQuery(".schedule-container:visible");
+		}
+
+		[Then(@"I reply message '(.*)'")]
+		public void ThenIReplyMessage(string message)
+		{
+			fillMessage(message);
+			Browser.Interactions.ClickUsingJQuery("requests-reply-message #btnReply");
+		}
+
+		[Then(@"I reply and approve with message '(.*)'")]
+		public void ThenIReplyAndApproveWithMessage(string message)
+		{
+			fillMessage(message);
+			Browser.Interactions.ClickUsingJQuery("requests-reply-message #btnReplyAndApprove");
+		}
+
+		[Then(@"I reply and deny with message '(.*)'")]
+		public void ThenIReplyAndDenyWithMessage(string message)
+		{
+			fillMessage(message);
+			Browser.Interactions.ClickUsingJQuery("requests-reply-message #btnReplyAndDeny");
+		}
+
+		[Then(@"I reply and cancel with message '(.*)'")]
+		public void ThenIReplyAndCancelWithMessage(string message)
+		{
+			fillMessage(message);
+			Browser.Interactions.ClickUsingJQuery("requests-reply-message #btnReplyAndCancel");
+		}
+
+
+		[Then(@"I should see replied messge '(.*)' in message column")]
+		public void ThenIShouldSeeRepliedMessgeInMessageColumn(string message)
+		{
+			Browser.Interactions.ClickUsingJQuery(".ui-grid-icon-menu");
+			Browser.Interactions.ClickUsingJQuery(".ui-grid-menu-button button:contains('Message'):first");
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".request-message:contains('{0}')", message));
+			Browser.Interactions.ClickUsingJQuery(".ui-grid-icon-menu");
+		}
+
+		private void fillMessage(string message)
+		{
+			displayReplyDialog();
+
+			Browser.Interactions.FillWith("requests-reply-message #replyMessage", message);
+			Browser.Interactions.SetScopeValues("requests-reply-message", new Dictionary<string, string>
+			{
+				{"requestsReplyMessage.replyMessage", message}
+			});
+		}
+
+		private void displayReplyDialog()
+		{
+			Browser.Interactions.AssertScopeValue("requests-table-container", "requestsOverview.loaded", true);
+			Browser.Interactions.ClickUsingJQuery(".ui-grid-row .ui-grid-selection-row-header-buttons");
+			Browser.Interactions.ClickUsingJQuery("requests-commands-pane .reply-requests");
+			Browser.Interactions.AssertExistsUsingJQuery(".request-reply-dialog:visible");
 		}
 	}
 }

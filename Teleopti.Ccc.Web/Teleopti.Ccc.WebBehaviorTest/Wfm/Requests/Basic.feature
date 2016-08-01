@@ -341,3 +341,61 @@ Scenario: View request details
 	When I expand the request from 'Ashley Andeen'
 	Then I should see detailed text request from 'Ashley Andeen'
 
+@OnlyRunIfEnabled('Wfm_Requests_Reply_Message_39629')
+Scenario: Can reply pending request
+	Given 'Ashley Andeen' has an existing text request with
+	| Field       | Value            |
+	| StartTime   | 2016-01-03 10:00 |
+	| End Time    | 2016-01-03 14:00 |
+	| Update Time | 2016-01-01 1:00  |
+	| Status      | Pending          |
+	When I view wfm requests
+	And I select to load requests from '2016-01-01' to '2016-01-07'
+	Then I reply message 'test'
+	And I should see replied messge 'test' in message column
+
+@OnlyRunIfEnabled('Wfm_Requests_Reply_Message_39629')
+Scenario: Can reply and appove pending request
+	Given 'Ashley Andeen' has an existing text request with
+	| Field       | Value            |
+	| StartTime   | 2016-01-03 10:00 |
+	| End Time    | 2016-01-03 14:00 |
+	| Update Time | 2016-01-01 1:00  |
+	| Status      | Pending          |
+	When I view wfm requests
+	And I select to load requests from '2016-01-01' to '2016-01-07'
+	Then I reply and approve with message 'test'
+	And I select to load requests in status 'Approved'
+	Then I should see replied messge 'test' in message column
+	And I should see request for 'Ashley Andeen' approved
+
+@OnlyRunIfEnabled('Wfm_Requests_Reply_Message_39629')
+Scenario: Can reply and deny pending request
+	Given 'Ashley Andeen' has an existing text request with
+	| Field       | Value            |
+	| StartTime   | 2016-01-03 10:00 |
+	| End Time    | 2016-01-03 14:00 |
+	| Update Time | 2016-01-01 1:00  |
+	| Status      | Pending          |
+	When I view wfm requests
+	And I select to load requests from '2016-01-01' to '2016-01-07'
+	Then I reply and deny with message 'test'
+	And I select to load requests in status 'Denied'
+	Then I should see replied messge 'test' in message column
+	And I should see request for 'Ashley Andeen' denied
+
+@ignore
+Scenario: Can reply and cancel approved absence request
+	And 'Ashley Andeen' has an existing absence request with
+	| Field       | Value            |
+	| StartTime   | 2016-08-02 10:00 |
+	| End Time    | 2016-08-02 14:00 |
+	| Update Time | 2016-08-02 14:00 |
+	| Status      | Approved         |
+	When I view wfm requests
+	And I select to load requests from '2016-08-01' to '2016-08-07'
+	And I select to load requests in status 'Approved'
+	Then I reply and cancel with message 'test'
+	And I select to load requests in status 'Cancelled'
+	Then I should see replied messge 'test' in message column
+	And I should see request for 'Ashley Andeen' cancelled

@@ -3,6 +3,8 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
@@ -41,6 +43,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			personRequest.TrySetMessage("This is some text that is just here to fill a space and demonstrate how this will behave when we have lots and lots of character is a long long text that doesnt really mean anything at all.");
 
 			var requestRepository = new PersonRequestRepository(currentUnitOfWork);
+			var personAbsenceRepository = new PersonAbsenceRepository(currentUnitOfWork);
+			IPersonAbsence personAbsence = null;
 
 			if (Status == "AutoDenied")
 			{
@@ -51,8 +55,28 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			{
 				personRequest.ForcePending();
 			}
-			
+
+			if (Status == "Approved")
+			{
+				personRequest.ForcePending();
+				personRequest.Approve(new ApprovalServiceForTest(), new PersonRequestAuthorizationCheckerForTest(), true);
+				var scenarioRepository = new ScenarioRepository(currentUnitOfWork);
+				var scenario = scenarioRepository.LoadDefaultScenario();
+				personAbsence = createPersonAbsence(absence, personRequest, scenario);
+			}
+
 			requestRepository.Add(personRequest);
+			if (personAbsence != null)
+			{
+				personAbsenceRepository.Add(personAbsence);
+			}
+		}
+
+		private PersonAbsence createPersonAbsence(IAbsence absence, IPersonRequest personRequest, IScenario scenario)
+		{
+			var absenceLayer = new AbsenceLayer(absence, personRequest.Request.Period);
+			var personAbsence = new PersonAbsence(personRequest.Person, scenario, absenceLayer, personRequest).WithId();
+			return personAbsence;
 		}
 	}
 }

@@ -46,7 +46,8 @@
 			<li ng-show="requestsCommandsPane.isRequestsReplyMessageEnabled()"
 				ng-click="requestsCommandsPane.displayReplyDialog()"
 				ng-class="{'wfm-btn-primary-disabled' : requestsCommandsPane.disableCommands()}"
-				ng-if="!requestsCommandsPane.isShiftTradeViewActive">
+				ng-if="!requestsCommandsPane.isShiftTradeViewActive"
+				class="reply-requests">
 				<i class="mdi mdi-arrow-left"></i>
 				<span translate>Reply</span>
 			</li>
