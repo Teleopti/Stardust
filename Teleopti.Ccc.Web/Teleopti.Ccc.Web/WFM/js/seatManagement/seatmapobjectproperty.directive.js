@@ -39,11 +39,11 @@
 			});
 		};
 
-		vm.onChangeOfSeatNumber = function () {
-			if (vm.seats.length === 1) {
-				vm.updateSeatNumber({ seat: vm.seats[0], newNumber: vm.seatNumber });
-			}
-		}
+		vm.onChangeOfSeatNumber = function() {
+	        if (vm.seatNumber > 0 && vm.seatNumber < 10000 && vm.seats.length === 1) {
+	            vm.updateSeatNumber({ seat: vm.seats[0], newNumber: vm.seatNumber });
+	        }
+	    }
 	};
 
 	angular.module('wfm.seatMap').directive('seatmapObjectProperty', seatmapObjectProperty);
