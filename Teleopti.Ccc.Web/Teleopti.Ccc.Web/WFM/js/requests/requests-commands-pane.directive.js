@@ -5,7 +5,6 @@
 		.controller('requestsCommandsPaneCtrl', requestsCommandsPaneCtrl)
 		.directive('requestsCommandsPane', requestsCommandsPaneDirective);
 
-
 	requestsCommandsPaneCtrl.$inject = [
 		'requestsDefinitions', 'requestsDataService', 'requestCommandParamsHolder', 'Toggle',
 		'signalRSVC'
@@ -27,9 +26,14 @@
 		vm.processWaitlistRequests = processWaitlistRequests;
 		vm.runWaitlistToggleIsEnabled = runWaitlistToggleIsEnabled;
 		vm.cancelRequests = cancelRequests;
+		vm.showApproveBasedOnRulesPanel = false;
+		vm.toggleApproveBasedOnRulesPanel = toggleApproveBasedOnRulesPanel;
 		vm.approveBasedOnBusinessRules = approveBasedOnBusinessRules;
 		vm.isApproveBasedOnBusinessRulesEnabled = isApproveBasedOnBusinessRulesEnabled;
+		vm.allBusinessRulesForApproving = requestsDataService.getAllBusinessRulesForApproving();
+		vm.anyRuleSelected = anyRuleSelected;
 		initWaitlistProcessPeriod();
+
 		subscribeSignalRMessage('IRunRequestWaitlistEventMessage', vm.onProcessWaitlistFinished);
 		subscribeSignalRMessage('IApproveRequestsWithValidatorsEventMessage', vm.onApproveBasedOnBusinessRulesFinished);
 
@@ -139,7 +143,7 @@
 
 		function subscribeSignalRMessage(domainType, eventHandler) {
 			signalRSVC.subscribe({ DomainType: domainType }, function (message) {
-				if (message.TrackId == vm.commandTrackId) {
+				if (message.TrackId === vm.commandTrackId) {
 					eventHandler({ message: message });
 				}
 			});
@@ -159,17 +163,40 @@
 			initWaitlistProcessPeriod();
 		}
 
+		function toggleApproveBasedOnRulesPanel() {
+			vm.showApproveBasedOnRulesPanel = !vm.showApproveBasedOnRulesPanel;
+		}
+
+		function getSelectedRulesFlag() {
+			var selectedRulesFlag = requestsDefinitions.REQUEST_VALIDATORS.None;
+
+			angular.forEach(vm.allBusinessRulesForApproving, function (rule) {
+				selectedRulesFlag += rule.Checked ? rule.Id : 0;
+			});
+
+			return selectedRulesFlag;
+		}
+
+		function anyRuleSelected() {
+			return getSelectedRulesFlag() > requestsDefinitions.REQUEST_VALIDATORS.None;
+		}
+
 		function approveBasedOnBusinessRules() {
+			var selectedRulesFlag = getSelectedRulesFlag();
+			if (selectedRulesFlag <= 0) return;
+
 			var selectedRequestIds = getSelectedRequestIds();
 			if (!selectedRequestIds || selectedRequestIds.length === 0) return;
 
 			var parameter = {
 				RequestIds: selectedRequestIds,
-				Validators: requestsDefinitions.REQUEST_VALIDATORS.BudgetAllotmentValidator
+				Validators: selectedRulesFlag
 			};
 
 			doStandardCommandHandlingWithParameters(requestsDefinitions.REQUEST_COMMANDS.ApproveBasedOnBusinessRules,
 				requestsDataService.approveWithValidatorsPromise, parameter);
+
+			vm.showApproveBasedOnRulesPanel = false;
 		}
 
 		function denyRequests(replyMessage) {
@@ -218,7 +245,9 @@
 		}
 
 		function isApproveBasedOnBusinessRulesEnabled() {
-			return toggleSvc.Wfm_Requests_Approve_Based_On_Budget_Allotment_39626 && !vm.isShiftTradeViewActive;
+			return (toggleSvc.Wfm_Requests_Approve_Based_On_Budget_Allotment_39626
+				|| toggleSvc.Wfm_Requests_Approve_Based_On_Intraday_39868)
+				&& !vm.isShiftTradeViewActive;
 		}
 
 		function isRequestsReplyMessageEnabled() {

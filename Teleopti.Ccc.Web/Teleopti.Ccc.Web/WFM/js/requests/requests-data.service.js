@@ -82,5 +82,21 @@
 
 			return statuses;
 		}
+
+		this.getAllBusinessRulesForApproving = function () {
+			return [
+				{
+					Id: requestsDefinitions.REQUEST_VALIDATORS.BudgetAllotmentValidator,
+					Checked: false,
+					Name: "BudgetAllotmentValidator",
+					Description: $translate.instant("ValidateRequestsBasedOnBudgetAllotment")
+				}, {
+					Id: requestsDefinitions.REQUEST_VALIDATORS.IntradayValidator,
+					Checked: false,
+					Name: "IntradayValidator",
+					Description: $translate.instant("ValidateRequestsBasedOnIntraday")
+				}
+			];
+		}
 	}
 })();

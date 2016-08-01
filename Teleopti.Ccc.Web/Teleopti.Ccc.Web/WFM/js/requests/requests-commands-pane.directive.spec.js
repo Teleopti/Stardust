@@ -1,5 +1,5 @@
 ﻿'use strict';
-describe('RequestsControllerTests', function () {
+describe('[RequestsCommandPaneDirectiveTests]', function () {
 	var $compile,
 		$rootScope,
 		$controller;
@@ -22,7 +22,6 @@ describe('RequestsControllerTests', function () {
 		signalRService = new FakeSingalRService();
 		currentUserInfo = new FakeCurrentUserInfo();
 		module(function ($provide) {
-
 			$provide.service('Toggle', function () {
 				return {
 					Wfm_Requests_Basic_35986: true,
@@ -113,7 +112,6 @@ describe('RequestsControllerTests', function () {
 		test.requestCommandPaneScope.approveRequests(message);
 
 		expect(replyMessage).toEqual(message);
-
 	});
 
 	it('deny requests, should handle message if there is one', function () {
@@ -131,7 +129,6 @@ describe('RequestsControllerTests', function () {
 		test.requestCommandPaneScope.denyRequests(message);
 
 		expect(replyMessage).toEqual(message);
-
 	});
 
 	it('cancel requests, should handle message if there is one', function () {
@@ -149,7 +146,6 @@ describe('RequestsControllerTests', function () {
 		test.requestCommandPaneScope.cancelRequests(message);
 
 		expect(replyMessage).toEqual(message);
-
 	});
 
 	it('reply requests, should handle message', function () {
@@ -167,7 +163,6 @@ describe('RequestsControllerTests', function () {
 		test.requestCommandPaneScope.replyRequests(message);
 
 		expect(replyMessage).toEqual(message);
-
 	});
 
 	it('should not get message when there is more than one request selected', function () {
@@ -330,7 +325,7 @@ describe('RequestsControllerTests', function () {
 		expect(_notificationResult[0]).toEqual('ApproveBasedOnBusinessRulesFinished');
 		expect(requestCommandParamsHolder.getSelectedRequestsIds(false).length).toEqual(0);
 	});
-	
+
 	it('reply requests success, should notify the result', function () {
 		var test = setUpTarget();
 		requestsDataService.submitCommandIsASucess(true);
@@ -339,7 +334,7 @@ describe('RequestsControllerTests', function () {
 		var handleResult = {
 			Success: true,
 			AffectedRequestIds: [{ id: 1 }],
-			ReplySuccessCount:1
+			ReplySuccessCount: 1
 		}
 		requestsDataService.setRequestCommandHandlingResult(handleResult);
 
@@ -372,7 +367,7 @@ describe('RequestsControllerTests', function () {
 		var handleResult = {
 			Success: true,
 			AffectedRequestIds: [{ id: 1 }],
-			ReplySuccessCount:1
+			ReplySuccessCount: 1
 		}
 		requestsDataService.setRequestCommandHandlingResult(handleResult);
 		var message = 'message for reply and approve';
@@ -504,6 +499,21 @@ describe('RequestsControllerTests', function () {
 		}
 		this.setRequestCommandHandlingResult = function (handleResult) {
 			_handleResult = handleResult;
+		}
+		this.getAllBusinessRulesForApproving = function () {
+			return [
+				{
+					Id: 1,
+					Checked: true,
+					Name: "BudgetAllotmentValidator",
+					Description: "ValidateRequestsBasedOnBudgetAllotment"
+				}, {
+					Id: 2,
+					Checked: false,
+					Name: "IntradayValidator",
+					Description: "ValidateRequestsBasedOnIntraday"
+				}
+			];
 		}
 	}
 

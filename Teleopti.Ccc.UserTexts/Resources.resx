@@ -14776,4 +14776,16 @@ These options are activated:
   <data name="ReplySuccess" xml:space="preserve">
     <value>Your message to {0} request(s) has been saved</value>
   </data>
+  <data name="SelectBusinessRulesWithColon" xml:space="preserve">
+    <value>Select business rules:</value>
+    <comment>Tip for dialog in request module</comment>
+  </data>
+  <data name="ValidateRequestsBasedOnBudgetAllotment" xml:space="preserve">
+    <value>Validate requests based on budget allotment</value>
+    <comment>Business rule description in request module</comment>
+  </data>
+  <data name="ValidateRequestsBasedOnIntraday" xml:space="preserve">
+    <value>Validate requests based on intraday</value>
+    <comment>Business rule description in request module</comment>
+  </data>
 </root>

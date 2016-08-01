@@ -25772,6 +25772,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select business rules:.
+        /// </summary>
+        public static string SelectBusinessRulesWithColon {
+            get {
+                return ResourceManager.GetString("SelectBusinessRulesWithColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select color .
         /// </summary>
         public static string SelectColor {
@@ -31848,6 +31857,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ValidatedTasks {
             get {
                 return ResourceManager.GetString("ValidatedTasks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validate requests based on budget allotment.
+        /// </summary>
+        public static string ValidateRequestsBasedOnBudgetAllotment {
+            get {
+                return ResourceManager.GetString("ValidateRequestsBasedOnBudgetAllotment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validate requests based on intraday.
+        /// </summary>
+        public static string ValidateRequestsBasedOnIntraday {
+            get {
+                return ResourceManager.GetString("ValidateRequestsBasedOnIntraday", resourceCulture);
             }
         }
         

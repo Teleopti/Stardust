@@ -1,5 +1,4 @@
 ﻿(function() {
-
 	'use strict';
 
 	angular.module('wfm.requests').service('requestsDefinitions', requestsDefinitionsService);
@@ -14,7 +13,6 @@
 
 		this.SHIFTTRADE_COLUMN_WIDTH = 40;
 
-
 		this.REQUEST_SORTING_ORDERS = {
 			AgentNameAsc	: 0,
 			AgentNameDesc	: 1,
@@ -25,7 +23,7 @@
 			MessageAsc		: 6,
 			MessageDesc		: 7,
 			PeriodStartAsc	: 8,
-			PeriodStartDesc	: 9,
+			PeriodStartDesc: 9,
 			PeriodEndAsc	: 10,
 			PeriodEndDesc	: 11,
 			SeniorityAsc	: 12,
@@ -33,14 +31,14 @@
 			SubjectAsc		: 14,
 			SubjectDesc		: 15,
 			TeamAsc			: 16,
-			TeamDesc		: 17,
+			TeamDesc	      : 17,
 			UpdatedOnAsc	: 18,
 			UpdatedOnDesc	: 19
 		};
 
 		this.SHIFT_OBJECT_TYPE = {
 			PersonAssignment: 1,
-			DayOff : 2
+			DayOff: 2
 		}
 
 		this.REQUEST_COMMANDS = {
@@ -50,15 +48,16 @@
 			ProcessWaitlist: 'processWaitlist',
 			ApproveBasedOnBusinessRules: 'approveBasedOnBusinessRules',
 			Reply: 'reply'
-
 		};
 
+		// Refer to Teleopti.Ccc.Domain.ApplicationLayer.Commands.RequestValidatorsFlag
 		this.REQUEST_VALIDATORS = {
 			None: 0,
-			BudgetAllotmentValidator: 1
+			BudgetAllotmentValidator: 1,
+			IntradayValidator: 2
 		};
 
-		this.normalizeRequestsFilter = function (filter, sortingOrders, paging) {		
+		this.normalizeRequestsFilter = function (filter, sortingOrders, paging) {
 			var target = {
 				StartDate: moment(filter.period.startDate).format('YYYY-MM-DD'),
 				EndDate: moment(filter.period.endDate).format('YYYY-MM-DD'),
@@ -75,7 +74,7 @@
 				target.Skip = target.Paging.Skip;
 				target.Take = target.Paging.Take;
 			}
-		
+
 			return target;
 		};
 
@@ -99,8 +98,7 @@
 			return target;
 		};
 
-		this.translateSingleSortingOrder = function(sortColumn) {
-			
+		this.translateSingleSortingOrder = function (sortColumn) {
 			var Orders = self.REQUEST_SORTING_ORDERS;
 
 			if (sortColumn.displayName === 'AgentName') {
@@ -116,7 +114,7 @@
 			} else if (sortColumn.displayName === 'DenyReason') {
 				return sortColumn.sort.direction === 'asc' ? Orders.DenyReasonAsc : Orders.DenyReasonDesc;
 			} else if (sortColumn.displayName === 'Message') {
-				return sortColumn.sort.direction === 'asc' ? Orders.MessageAsc: Orders.MessageDesc;
+				return sortColumn.sort.direction === 'asc' ? Orders.MessageAsc : Orders.MessageDesc;
 			} else if (sortColumn.displayName === 'Subject') {
 				return sortColumn.sort.direction === 'asc' ? Orders.SubjectAsc : Orders.SubjectDesc;
 			} else if (sortColumn.displayName === 'Seniority') {
@@ -128,5 +126,4 @@
 			}
 		};
 	}
-
 })();

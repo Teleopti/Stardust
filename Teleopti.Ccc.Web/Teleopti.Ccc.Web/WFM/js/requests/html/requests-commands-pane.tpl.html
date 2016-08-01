@@ -19,7 +19,7 @@
 				<i class="mdi mdi-check"></i>
 				<span translate>Approve</span>
 			</li>
-			<li ng-click="requestsCommandsPane.approveBasedOnBusinessRules()"
+			<li ng-click="requestsCommandsPane.toggleApproveBasedOnRulesPanel()"
 				ng-class="{'wfm-btn-primary-disabled' : requestsCommandsPane.disableCommands()}"
 				ng-if="requestsCommandsPane.isApproveBasedOnBusinessRulesEnabled()">
 				<i class="mdi mdi-calendar-check"></i>
@@ -102,4 +102,37 @@
 	</div>
 </modal-dialog>
 
-
+<modal-dialog show="requestsCommandsPane.showApproveBasedOnRulesPanel" ng-cloak>
+	<div class="modalbg">
+		<div class="dialog">
+			<h1 class="modal-title">
+				{{'SelectBusinessRulesWithColon'|translate}}
+			</h1>
+			<div class="modal-inner-content">
+				<div ng-repeat="rule in requestsCommandsPane.allBusinessRulesForApproving">
+					<div class="wfm-checkbox">
+						<input type="checkbox" id="{{'checkbox-' + rule.Name}}" ng-model="rule.Checked" />
+						<label for="{{'checkbox-' + rule.Name}}">
+							<span class="wfm-checkbox-toggle"></span>
+							<span class="wfm-checkbox-label">{{rule.Description}}</span>
+						</label>
+					</div>
+				</div>
+			</div>
+			<div class="modal-actions">
+				<aside>
+					<button ng-click="requestsCommandsPane.toggleApproveBasedOnRulesPanel()"
+							class="wfm-btn wfm-btn-invis-default">
+						{{'Back'|translate}}
+					</button>
+					<button ng-disabled="!requestsCommandsPane.anyRuleSelected()"
+							ng-click="requestsCommandsPane.approveBasedOnBusinessRules()"
+							ng-class="requestsCommandsPane.anyRuleSelected() ? 'wfm-btn-invis-default' : 'wfm-btn-invis-disabled'"
+							class="wfm-btn">
+						{{'Approve'|translate}}
+					</button>
+				</aside>
+			</div>
+		</div>
+	</div>
+</modal-dialog>
