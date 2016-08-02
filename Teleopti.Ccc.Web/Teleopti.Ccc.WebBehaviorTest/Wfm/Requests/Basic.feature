@@ -311,6 +311,33 @@ Scenario: Cannot approve or deny obsolete request
 	Then I should see the request from 'Ashley Andeen' with status 'Pending'
 
 @ignore
+@OnlyRunIfEnabled('Wfm_Requests_Approve_Based_On_Budget_Allotment_39626')
+@OnlyRunIfEnabled('Wfm_Requests_Approve_Based_On_Intraday_39868')
+Scenario: Can approve absence requests based on business rules
+	Given 'Ashley Andeen' has an existing text request with
+	| Field       | Value            |
+	| StartTime   | 2015-10-03 10:00 |
+	| End Time    | 2015-10-03 14:00 |
+	| Update Time | 2015-09-05 1:00  |
+	| Status      | Pending          |
+	And 'John Smith' has an existing absence request with
+	| Field       | Value            |
+	| StartTime   | 2015-10-03 10:00 |
+	| End Time    | 2015-10-03 14:00 |
+	| Update Time | 2015-09-02 14:00 |
+	| Status      | Pending          |
+	When I view wfm requests
+	And I select to load requests from '2015-10-01' to '2015-10-10'
+	And I approve requests from 'Ashley Andeen' and 'John Smith' at the same time based on business rules
+	Then I should see a business rules list for selection
+	And No rules selected and "Approve" button is disabled by default
+	When I select any business rule in the list
+	Then The "Approve" button will be enabled
+	When I approve selected requests with selected business rules
+	Then I should see the request from 'Ashley Andeen' with status 'Approved'
+	And I should see the request from 'John Smith' with status 'Approved'
+
+@ignore
 @OnlyRunIfEnabled('Wfm_Requests_ApproveReject_36297')
 Scenario: Refresh the request list with status filter after approving or denying request
 	Given 'Ashley Andeen' has an existing text request with
