@@ -61,6 +61,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		private bool approveRequest(IPersonRequest personRequest, ApproveRequestCommand command)
 		{
+			if (personRequest.IsDenied || personRequest.IsCancelled)
+			{
+				return invalidRequestState(personRequest, command);
+			}
+
 			var scheduleDictionary = getSchedules(personRequest);
 			var approvalService = _requestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(scheduleDictionary, _currentScenario.Current(), personRequest.Person);
 
@@ -70,8 +75,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 			catch (InvalidRequestStateTransitionException)
 			{
-				command.ErrorMessages.Add(string.Format(UserTexts.Resources.RequestInvalidStateTransition, personRequest.StatusText, UserTexts.Resources.Approved));
-				return false;
+				return invalidRequestState(personRequest, command);
 			}
 
 			foreach (var range in scheduleDictionary.Values)
@@ -82,6 +86,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 
 			return true;
+		}
+
+		private static bool invalidRequestState(IPersonRequest personRequest, ApproveRequestCommand command)
+		{
+			command.ErrorMessages.Add(string.Format(UserTexts.Resources.RequestInvalidStateTransition, personRequest.StatusText,
+				UserTexts.Resources.Approved));
+			return false;
 		}
 
 		private IScheduleDictionary getSchedules(IPersonRequest personRequest)

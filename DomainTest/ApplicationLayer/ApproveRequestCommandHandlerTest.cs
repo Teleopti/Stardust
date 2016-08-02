@@ -60,25 +60,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldUpdatePersonalAccountWhenRequestIsGranted()
 		{
-			var accountDay = new AccountDay(new DateOnly(2015, 12, 1))
-			{
-				BalanceIn = TimeSpan.FromDays(5),
-				Accrued = TimeSpan.FromDays(20),
-				Extra = TimeSpan.FromDays(0)
-			};
-
 			var absenceDateTimePeriod = new DateTimePeriod (2016, 01, 01, 00, 2016, 01, 01, 23);
 
 			var person = PersonFactory.CreatePersonWithId();
 			var absence = new Absence();
 
-			createPersonAbsenceAccount(person, absence, accountDay);
+			var accountDay = createAccountDay(person, absence, new DateOnly(2015, 12, 1));
 
+			addAssignment(person, absenceDateTimePeriod);
 			var personRequest = createAbsenceRequest(person, absence, absenceDateTimePeriod);
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift (_scenario.Current(), person, absenceDateTimePeriod); 
-			
-			_fakeScheduleStorage.Add(assignment);
-			
+
 			_approveRequestCommandHandler.Handle(new ApproveRequestCommand(){ PersonRequestId = personRequest.Id.Value });
 
 			Assert.IsTrue(personRequest.IsApproved);
@@ -88,19 +79,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldUpdateMessageWhenThereIsAReplyMessage()
 		{
-			var accountDay = new AccountDay(new DateOnly(2015, 12, 1))
-			{
-				BalanceIn = TimeSpan.FromDays(5),
-				Accrued = TimeSpan.FromDays(20),
-				Extra = TimeSpan.FromDays(0)
-			};
-
 			var absenceDateTimePeriod = new DateTimePeriod(2016, 01, 01, 00, 2016, 01, 01, 23);
 
 			var person = PersonFactory.CreatePersonWithId();
 			var absence = new Absence();
 
-			createPersonAbsenceAccount(person, absence, accountDay);
+			createAccountDay(person, absence, new DateOnly(2015, 12, 1));
 
 			var personRequest = createAbsenceRequest(person, absence, absenceDateTimePeriod);
 			var messagePropertyChanged = false;
@@ -121,6 +105,54 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			Assert.IsTrue(command.IsReplySuccess);
 		}
 
+		[Test]
+		public void ApproveDeniedRequestShouldNotUpdatePersonalAccount()
+		{
+			var person = PersonFactory.CreatePersonWithId();
+			var absence = AbsenceFactory.CreateAbsenceWithId();
+
+			var balance = TimeSpan.FromDays(7);
+			var accountDay = createAccountDay(person, absence, new DateOnly(2015, 12, 1), balance);
+
+			var absenceDateTimePeriod = new DateTimePeriod(2016, 01, 01, 00, 2016, 01, 01, 23);
+			addAssignment(person, absenceDateTimePeriod);
+
+			var personRequest = createAbsenceRequest(person, absence, absenceDateTimePeriod);
+			personRequest.Deny(null, "test", new PersonRequestAuthorizationCheckerConfigurable());
+
+			var command = new ApproveRequestCommand() { PersonRequestId = personRequest.Id.Value };
+			_approveRequestCommandHandler.Handle(command);
+
+			Assert.IsTrue(command.ErrorMessages.Contains("A request that is Denied cannot be Approved."));
+			Assert.IsTrue(personRequest.IsDenied);
+			Assert.IsTrue(accountDay.LatestCalculatedBalance.Equals(balance));
+		}
+
+		[Test]
+		public void ApproveCancelledRequestShouldNotUpdatePersonalAccount()
+		{
+			var person = PersonFactory.CreatePersonWithId();
+			var absence = AbsenceFactory.CreateAbsenceWithId();
+
+			var balance = TimeSpan.FromDays(7);
+			var accountDay = createAccountDay(person, absence, new DateOnly(2015, 12, 1), balance);
+			
+			var absenceDateTimePeriod = new DateTimePeriod(2016, 01, 01, 00, 2016, 01, 01, 23);
+			addAssignment(person, absenceDateTimePeriod);
+
+			var personRequest = createAbsenceRequest(person, absence, absenceDateTimePeriod);
+			var personRequestCheckAuthorization = new PersonRequestAuthorizationCheckerConfigurable();
+			personRequest.Approve(new ApprovalServiceForTest(), personRequestCheckAuthorization);
+			personRequest.Cancel(personRequestCheckAuthorization);
+
+			var command = new ApproveRequestCommand() { PersonRequestId = personRequest.Id.Value };
+			_approveRequestCommandHandler.Handle(command);
+
+			Assert.IsTrue(command.ErrorMessages.Contains("A request that is Cancelled cannot be Approved."));
+			Assert.IsTrue(personRequest.IsCancelled);
+			Assert.IsTrue(accountDay.LatestCalculatedBalance.Equals(balance));
+		}
+
 		private PersonRequest createAbsenceRequest (IPerson person, IAbsence absence, DateTimePeriod dateTimePeriod)
 		{
 			var personRequestFactory = new PersonRequestFactory() {Person = person};
@@ -133,13 +165,29 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			return personRequest;
 		}
 
-		private void createPersonAbsenceAccount(IPerson person, IAbsence absence, IAccount accountDay)
+		private AccountDay createAccountDay(IPerson person, IAbsence absence, DateOnly startDate, TimeSpan? balance = null)
 		{
+			var accountDay = new AccountDay(startDate)
+			{
+				BalanceIn = TimeSpan.FromDays(5),
+				Accrued = TimeSpan.FromDays(20),
+				Extra = TimeSpan.FromDays(0),
+				LatestCalculatedBalance = balance.GetValueOrDefault(TimeSpan.Zero)
+			};
+
 			var personAbsenceAccount = new PersonAbsenceAccount(person, absence);
 			personAbsenceAccount.Absence.Tracker = Tracker.CreateDayTracker();
 			personAbsenceAccount.Add(accountDay);
 
 			_personAbsenceAccountRepository.Add(personAbsenceAccount);
+			return accountDay;
+		}
+
+		private void addAssignment(IPerson person, DateTimePeriod absenceDateTimePeriod)
+		{
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario.Current(), person,
+				absenceDateTimePeriod);
+			_fakeScheduleStorage.Add(assignment);
 		}
 	}
 }
