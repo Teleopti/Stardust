@@ -14,15 +14,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[Then(@"I should see planning period from '(.*)'to '(.*)'"), SetCulture("sv-SE")]
 		public void ThenIShouldSeePlanningPeriodFromTo(DateTime fromDate, DateTime toDate)
 		{
-			Browser.Interactions.AssertAnyContains(".wfm-card", fromDate.ToString("yyyy-MM-dd"));
-			Browser.Interactions.AssertAnyContains(".wfm-card", toDate.ToString("yyyy-MM-dd"));
+			Browser.Interactions.AssertAnyContains(".planingperiod-container", fromDate.ToString("yyyy-MM-dd"));
+			Browser.Interactions.AssertAnyContains(".planingperiod-container", toDate.ToString("yyyy-MM-dd"));
 		}
 
 		[Then(@"I should see updated period from '(.*)'to '(.*)'"), SetCulture("sv-SE")]
 		public void ThenIShouldSeeUpdatedPeriodFromTo(DateTime fromDate, DateTime toDate)
 		{
-			Browser.Interactions.AssertAnyContains(".wfm-card", fromDate.ToString("yyyy-MM-dd"));
-			Browser.Interactions.AssertAnyContains(".wfm-card", toDate.ToString("yyyy-MM-dd"));
+			Browser.Interactions.AssertAnyContains(".planingperiod-container", fromDate.ToString("yyyy-MM-dd"));
+			Browser.Interactions.AssertAnyContains(".planingperiod-container", toDate.ToString("yyyy-MM-dd"));
 		}
 
 		[Then(@"Planning period should have been scheduled")]
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[When(@"I open planning period")]
 		public void WhenIOpenPlanningPeriod()
 		{
-			Browser.Interactions.Click(".wfm-card");
+			Browser.Interactions.Click(".planingperiod-container");
 		}
 
 
