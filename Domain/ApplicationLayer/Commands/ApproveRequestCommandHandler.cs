@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		private bool approveRequest(IPersonRequest personRequest, ApproveRequestCommand command)
 		{
-			if (personRequest.IsDenied || personRequest.IsCancelled)
+			if ((personRequest.IsDenied && !personRequest.IsWaitlisted) || personRequest.IsCancelled)
 			{
 				return invalidRequestState(personRequest, command);
 			}
