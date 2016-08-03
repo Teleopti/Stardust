@@ -363,7 +363,7 @@
 			expect(selectedStatus[2].Id).toEqual(status2.trim());
 		});
 
-		it("should get broken rules column", function () {
+		it('should get broken rules column', function () {
 			var test = setUpTarget();
 			setUpShiftTradeRequestData(test);
 			var brokenRules = ["Not allowed change", "Weekly rest time"];
@@ -382,6 +382,45 @@
 
 			expect(existsBrokenRulesColmun).toEqual(true);
 			expect(test.scope.requests[0].GetBrokenRules(), brokenRules.join(","));
+		});
+
+		it('should get shift trade schedule view with one of schedule day is empty', function () {
+			var test = setUpTarget();
+			setUpShiftTradeRequestData(test);
+
+			var shiftTradeDay = test.scope.requests[0].ShiftTradeDays[0];
+			shiftTradeDay.ToScheduleDayDetail = { Color: null, Name: null, ShortName: null, Type: 0 };
+
+			test.scope.shiftTradeRequestDateSummary = {
+				Minimum: '2016-05-25T00:00:00',
+				Maximum: '2016-06-02T00:00:00',
+				FirstDayOfWeek: 1
+			};
+
+			test.scope.$apply();
+
+			var vm = test.target.isolateScope().requestsTableContainer;
+			expect(vm.shiftTradeScheduleViewModels[1].length).toEqual(2);
+		});
+
+		it('should not get shift trade schedule view with both schedule days are empty', function () {
+			var test = setUpTarget();
+			setUpShiftTradeRequestData(test);
+
+			var shiftTradeDay = test.scope.requests[0].ShiftTradeDays[0];
+			shiftTradeDay.ToScheduleDayDetail = { Color: null, Name: null, ShortName: null, Type: 0 };
+			shiftTradeDay.FromScheduleDayDetail = { Color: null, Name: null, ShortName: null, Type: 0 };
+
+			test.scope.shiftTradeRequestDateSummary = {
+				Minimum: '2016-05-25T00:00:00',
+				Maximum: '2016-06-02T00:00:00',
+				FirstDayOfWeek: 1
+			};
+
+			test.scope.$apply();
+
+			var vm = test.target.isolateScope().requestsTableContainer;
+			expect(vm.shiftTradeScheduleViewModels[1].length).toEqual(1);
 		});
 
 		xit('should load schedules for shift trade request', function () {

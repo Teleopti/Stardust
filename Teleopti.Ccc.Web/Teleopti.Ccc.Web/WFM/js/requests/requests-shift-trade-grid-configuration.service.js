@@ -85,7 +85,7 @@
 					var viewModelArray = [];
 
 					angular.forEach(request.ShiftTradeDays, function (shiftTradeDay) {
-						if (shiftTradeDay.FromScheduleDayDetail.ShortName != null && shiftTradeDay.ToScheduleDayDetail.ShortName != null) {
+						if (shiftTradeDay.FromScheduleDayDetail.ShortName != null || shiftTradeDay.ToScheduleDayDetail.ShortName != null) {
 							var viewModel = createShiftTradeDayViewModel(shiftTradeDay, shiftTradeRequestDateSummary);
 							viewModelArray.push(viewModel);
 						}
