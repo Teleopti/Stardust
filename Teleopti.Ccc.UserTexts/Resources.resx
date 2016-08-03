@@ -14788,4 +14788,8 @@ These options are activated:
     <value>Validate requests based on intraday</value>
     <comment>Business rule description in request module</comment>
   </data>
+  <data name="NoPermissionToEditShiftCategory" xml:space="preserve">
+    <value>Not permitted to edit shift category for agent(s)</value>
+    <comment>Error message for modifying shift category without permission.</comment>
+  </data>
 </root>

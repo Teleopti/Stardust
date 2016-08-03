@@ -18083,6 +18083,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not permitted to edit shift category for agent(s).
+        /// </summary>
+        public static string NoPermissionToEditShiftCategory {
+            get {
+                return ResourceManager.GetString("NoPermissionToEditShiftCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to More information about forecast methods and outlier detection .
         /// </summary>
         public static string NoPermissionToModifyPersonAssignment {

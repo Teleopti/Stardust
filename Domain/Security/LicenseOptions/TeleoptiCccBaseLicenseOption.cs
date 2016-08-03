@@ -68,6 +68,7 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 				DefinedRaptorApplicationFunctionPaths.TextRequests,
 				DefinedRaptorApplicationFunctionPaths.MyTimeCancelRequest,
 				DefinedRaptorApplicationFunctionPaths.TeamSchedule,
+				DefinedRaptorApplicationFunctionPaths.EditShiftCategory,
 				DefinedRaptorApplicationFunctionPaths.ViewAllGroupPages,
 				DefinedRaptorApplicationFunctionPaths.MyReportQueueMetrics,
 				DefinedRaptorApplicationFunctionPaths.Anywhere,

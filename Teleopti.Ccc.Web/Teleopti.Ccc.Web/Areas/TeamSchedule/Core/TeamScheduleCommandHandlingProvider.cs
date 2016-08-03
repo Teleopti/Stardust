@@ -272,7 +272,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		{
 			var permissions = new Dictionary<string, string>
 			{
-				{ DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment, Resources.NoPermissionToModifyPersonAssignment }
+				{ DefinedRaptorApplicationFunctionPaths.EditShiftCategory, Resources.NoPermissionToEditShiftCategory }
 			};
 
 			var result = new List<FailActionResult>();
