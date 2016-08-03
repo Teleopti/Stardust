@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.RootValidators
 	{
 		public OptimizeBlockTeamSameShiftCategoryBetweenDaysValidator()
 		{
-			AtomicValidators.Add(new DurationValidator(TimeSpan.FromMinutes(8).Add(TimeSpan.FromSeconds(10))));
+			AtomicValidators.Add(new DurationValidator(TimeSpan.FromMinutes(3).Add(TimeSpan.FromSeconds(59))));
 		}
 
 		protected override SikuliValidationResult Validate(SchedulerTestData data)
