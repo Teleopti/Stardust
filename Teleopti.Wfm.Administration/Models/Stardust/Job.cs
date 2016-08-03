@@ -23,5 +23,7 @@ namespace Teleopti.Wfm.Administration.Models.Stardust
 		public string Type { get; set; }
 
 		public string Serialized { get; set; }
+
+		public string TotalDuration { get; set; }
 	}
 }

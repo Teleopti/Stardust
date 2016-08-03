@@ -42,6 +42,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 							while (reader.Read())
 							{
 								var job = createJobFromSqlDataReader(reader);
+								setTotalDuration(job);
 								returnList.Add(job);
 							}
 						}
@@ -50,6 +51,14 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 				connection.Close();
 			}
 			return returnList;
+		}
+
+		private void setTotalDuration(Job job)
+		{
+			if (string.IsNullOrEmpty(job.Ended.ToString()))
+				return;
+			string totalDuration = (job.Ended - job.Started).ToString();
+			job.TotalDuration = totalDuration.Substring(0, 8);
 		}
 
 
@@ -80,6 +89,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 								while (sqlDataReader.Read())
 								{
 									var job = createJobFromSqlDataReader(sqlDataReader);
+									setTotalDuration(job);
 									jobs.Add(job);
 								}
 							}
@@ -117,6 +127,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 							sqlDataReader.Read();
 
 							job = createJobFromSqlDataReader(sqlDataReader);
+							setTotalDuration(job);
 						}
 					}
 				}

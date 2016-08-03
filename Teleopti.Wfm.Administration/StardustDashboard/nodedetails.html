@@ -28,31 +28,28 @@
 
     <div class="row">
         <div class="col-md-12">
-            <h3>Latest Jobs</h3>
+	        <h3>Latest Jobs</h3>
+			<h5>Click the Type of a job to see details.</h5>
             <div>
                 <table>
-                    <thead>
+					<thead>
 						<tr>
-							<th>Name</th>
-							<th>Created By</th>
-							<th>Created At </th>
-							<th>Started</th>
-							<th>Ended</th>
+							<th>Type</th>
+							<th>Finished</th>
+							<th>Total Duration</th>
 							<th>Sent to</th>
 							<th>Result</th>
 						</tr>
-                    </thead>
-                    <tbody>
-                        <tr ng-repeat="job in vm.Jobs">
-                            <td><a href="#jobdetails\{{job.JobId}}">{{job.Name}}</a></td>
-                            <td>{{job.CreatedBy}}</td>
-                            <td>{{job.Created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-                            <td>{{job.Started | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-                            <td>{{job.Ended | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-                            <td>{{job.SentToWorkerNodeUri}}</td>
-                            <td>{{job.Result}}</td>
-                        </tr>
-                    </tbody>
+					</thead>
+					<tbody>
+						<tr ng-repeat="job in vm.Jobs">
+							<td><a href="#jobdetails\{{job.JobId}}">{{job.Name}}</a></td>
+							<td>{{job.Ended | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+							<td>{{job.TotalDuration}}</td>
+							<td>{{job.SentToWorkerNodeUri}}</td>
+							<td>{{job.Result}}</td>
+						</tr>
+					</tbody>
                 </table>
             </div>
         </div>

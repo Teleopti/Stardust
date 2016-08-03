@@ -13,6 +13,7 @@
 							<th>Created At </th>
 							<th>Started</th>
 							<th>Ended</th>
+							<th>Total Duration</th>
 							<th>Sent to</th>
 							<th>Result</th>
 						</tr>
@@ -24,6 +25,7 @@
 							<td>{{vm.Job.Created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 							<td>{{vm.Job.Started | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 							<td>{{vm.Job.Ended | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+							<td>{{vm.Job.TotalDuration}}</td>
 							<td>{{vm.Job.SentToWorkerNodeUri}}</td>
 							<td>{{vm.Job.Result}}</td>
 						</tr>

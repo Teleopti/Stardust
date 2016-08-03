@@ -12,8 +12,8 @@
         vm.NodeError = '';
         vm.JobError = '';
         $http.get("./Stardust/Jobs", tokenHeaderService.getHeaders()).success(function (data) {
-        		vm.Jobs = data;
-        	}).error(function (xhr, ajaxOptions, thrownError) {
+        	vm.Jobs = data;
+        }).error(function (xhr, ajaxOptions, thrownError) {
         	    console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
             vm.JobError = ajaxOptions;
         	    if (xhr !== "") {
