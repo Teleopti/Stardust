@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 				ruleFlags |= BusinessRuleFlags.MinWeekWorkTimeRule;
 				ruleFlags |= BusinessRuleFlags.NewMaxWeekWorkTimeRule;
 			}
-			if (_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_ShowWeeklyRestTimeWarning_39880))
+			if (_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_ShowWeeklyRestTimeWarning_39800))
 			{
 				ruleFlags |= BusinessRuleFlags.MinWeeklyRestRule;
 			}
