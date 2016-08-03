@@ -626,7 +626,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			var person = PersonFactory.CreatePersonWithGuid("a", "b");
 			PersonRepository.Has(person);
 			var date = new DateOnly(2016, 4, 16);
-			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment, person, date);
+			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.EditShiftCategory, person, date);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
