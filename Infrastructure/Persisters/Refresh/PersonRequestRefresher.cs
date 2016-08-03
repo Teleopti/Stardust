@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Refresh
 
     public interface IPersonRequestRefresher {
         void Refresh(IEnumerable<IEventMessage> meetingMessages);
+	    void RemoveWithoutRefresh(IEnumerable<IEventMessage> personRequestMessages);
     }
 
     public class PersonRequestRefresher : IPersonRequestRefresher
@@ -36,5 +37,13 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Refresh
 						_messageQueueRemoval.Remove(requestMessage);
 	        }
         }
+
+	    public void RemoveWithoutRefresh(IEnumerable<IEventMessage> requestMessages)
+	    {
+			foreach (var requestMessage in requestMessages)
+			{
+				_messageQueueRemoval.Remove(requestMessage);
+			}
+		}
     }
 }

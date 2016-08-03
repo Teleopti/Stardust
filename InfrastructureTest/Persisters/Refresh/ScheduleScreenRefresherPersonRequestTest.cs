@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
         private IPersonRequest _personRequestEntity;
         private IUpdatePersonRequestsFromMessages _personRequestUpdater;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 
             _mocks.ReplayAll();
 
-			_target.Refresh(_scheduleDictionary, _messages, new List<IPersistableScheduleData>(), new List<PersistConflict>(), _ => true);
+			_target.Refresh(_scheduleDictionary, _messages, new List<IPersistableScheduleData>(), new List<PersistConflict>(), _ => true, true);
 
             _mocks.VerifyAll();
         }
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
         {
             _mocks.ReplayAll();
 
-			_target.Refresh(_scheduleDictionary, _messages, new List<IPersistableScheduleData>(), new List<PersistConflict>(), _ => true);
+			_target.Refresh(_scheduleDictionary, _messages, new List<IPersistableScheduleData>(), new List<PersistConflict>(), _ => true, true);
 
             _mocks.VerifyAll();
 

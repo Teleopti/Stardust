@@ -117,9 +117,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			       message.InterfaceType.IsAssignableFrom(typeof (IPersonRequest));
 		}
 
-		public void Refresh(ICollection<IPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflict> conflictsBuffer)
+		public void Refresh(ICollection<IPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflict> conflictsBuffer, bool loadRequests)
 		{
-			_scheduleScreenRefresher.Refresh(_owner.SchedulerState.Schedules, _messageQueue, refreshedEntitiesBuffer, conflictsBuffer, isRelevantPerson);
+			_scheduleScreenRefresher.Refresh(_owner.SchedulerState.Schedules, _messageQueue, refreshedEntitiesBuffer, conflictsBuffer, isRelevantPerson, loadRequests);
 		}
 
 		private bool isRelevantPerson(Guid personId)

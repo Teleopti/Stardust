@@ -21,14 +21,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
         private IScheduleDictionary _scheduleDictionary;
         private IUpdateScheduleDataFromMessages _scheduleDataUpdater;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
 
             _scheduleStorage = _mocks.DynamicMock<IScheduleStorage>();
             _messageQueueUpdater = _mocks.DynamicMock<IReassociateDataForSchedules>();
-            _scheduleDataUpdater = _mocks.DynamicMock<IUpdateScheduleDataFromMessages>();
+			_scheduleDataUpdater = _mocks.DynamicMock<IUpdateScheduleDataFromMessages>();
 
             _scheduleDictionary = _mocks.DynamicMock<IScheduleDictionary>();
 
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 
             _mocks.ReplayAll();
 
-			_target.Refresh(_scheduleDictionary, new List<IEventMessage>(), new List<IPersistableScheduleData>(), new List<PersistConflict>(), _ => true);
+			_target.Refresh(_scheduleDictionary, new List<IEventMessage>(), new List<IPersistableScheduleData>(), new List<PersistConflict>(), _ => true, true);
 
             _mocks.VerifyAll();
         }

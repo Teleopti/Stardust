@@ -6038,7 +6038,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				_schedulerMessageBrokerHandler.Refresh(refreshedEntitiesBuffer, conflictsBuffer);
+				_schedulerMessageBrokerHandler.Refresh(refreshedEntitiesBuffer, conflictsBuffer, _loadRequsts);
 			}
 		}
 
