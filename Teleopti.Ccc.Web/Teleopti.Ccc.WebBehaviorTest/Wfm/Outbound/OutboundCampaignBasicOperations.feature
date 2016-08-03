@@ -93,7 +93,6 @@ Scenario: Display Gantt chart for showing the campaigns
 When I view outbound
 Then I should see the gantt chart
 
-
 @ignore
 Scenario: List campaigns in three months
 When I view outbound
@@ -104,6 +103,7 @@ And I should see 'Campaign4' in campaign list
 And I should not see 'Campaign1' in campaign list
 And I should not see 'Campaign5' in campaign list
 
+@ignore
 Scenario: Navigate in gantt chart by month
 When I view outbound
 And I set the starting month for viewing period to '2015-09-01'
@@ -112,6 +112,7 @@ And I set the starting month for viewing period to '2015-07-01'
 Then I should see 'Campaign1' in campaign list
 And I should not see 'Campaign4' in campaign list
 
+@ignore
 Scenario: Visualize campaign backlog
 When I view outbound
 And I set the starting month for viewing period to '2015-09-01'
