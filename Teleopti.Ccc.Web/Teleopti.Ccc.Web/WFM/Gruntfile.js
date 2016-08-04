@@ -230,9 +230,9 @@ module.exports = function(grunt) {
 		uglify: {
 			dist: {
 				files: {
-					'dist/main.min.js': ['js/**/*.js', '!js/**/*.spec.js', '!js/**/*.fake.js', '!js/**/*.fortest.js', '!js/app_desktop_client.js'],
-					'dist/modules.min.js': ['dist/modules.js'],
-					'dist/templates.min.js':['dist/templates.js']
+					'dist/main.min.js': ['js/**/*.js', '!js/**/*.spec.js', '!js/**/*.fake.js', '!js/**/*.fortest.js', '!js/app_desktop_client.js']
+					//'dist/modules.min.js': ['dist/modules.js'],
+					//'dist/templates.min.js':['dist/templates.js']
 				}
 			},
 			distForDesktop: {
@@ -350,7 +350,7 @@ module.exports = function(grunt) {
 	grunt.registerTask('devTest', ['ngtemplates', 'karma:dev']);
 	grunt.registerTask('devDist', ['ngtemplates', 'sass', 'concat:distJs', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'copy', 'uglify:dev', 'generateIndex']);
 	grunt.registerTask('test:continuous', ['ngtemplates', 'karma:continuous']);
-	grunt.registerTask('dist', ['ngtemplates', 'sass', 'concat:distJs', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'copy', 'generateIndex','clean:dist']); // this task should only be used by the build. It's kind of packaging for production.
+	grunt.registerTask('dist', ['ngtemplates', 'sass', 'concat:distJs', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'copy', 'generateIndex']); // this task should only be used by the build. It's kind of packaging for production.
 	grunt.registerTask('nova', ['devDist', 'iisexpress:authBridge', 'iisexpress:web', 'watch:dev']); // this task run the main task and then watch for file changes
 	grunt.registerTask('build', ['msbuild:build']); // build the solution
 	grunt.registerTask('generateIndex', ['processhtml:dist', 'cacheBust:dist']);
