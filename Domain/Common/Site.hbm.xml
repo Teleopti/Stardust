@@ -3,8 +3,9 @@
                    assembly="Teleopti.Ccc.Domain"
                    namespace="Teleopti.Ccc.Domain.Common"
                    default-access="field.camelcase-underscore">
-	<class name="Site">
-	<cache usage ="read-write"/><!--Use readonly cache instead?-->
+  <class name="Site">
+    <cache usage ="read-write"/>
+    <!--Use readonly cache instead?-->
     <!--IEntity-->
     <id name="Id" access="nosetter.camelcase-underscore"
             type="guid"
@@ -13,10 +14,10 @@
     </id>
     <version name="Version"
              unsaved-value ="null"/>
-	<many-to-one name="UpdatedBy"
-                 class="Teleopti.Ccc.Domain.Common.Person"
-                 not-null="true"
-                 foreign-key="FK_Site_Person_UpdatedBy"/>
+    <many-to-one name="UpdatedBy"
+                   class="Teleopti.Ccc.Domain.Common.Person"
+                   not-null="true"
+                   foreign-key="FK_Site_Person_UpdatedBy"/>
     <property name="UpdatedOn"
               type="UtcDateTime"
               not-null="true"/>
@@ -28,15 +29,15 @@
       <one-to-many class="Teleopti.Ccc.Domain.AgentInfo.Team"/>
     </bag>
     <component name="Description" class="Teleopti.Interfaces.Domain.Description, Teleopti.Interfaces">
-		  <property name="Name"
+      <property name="Name"
 					not-null="true"
 					type="string"
 					length="50"/>
-		  <property name="ShortName"
+      <property name="ShortName"
 					not-null="false"
 					type="string"
 					length="25"/>
-	  </component>
+    </component>
     <many-to-one name="BusinessUnit"
       class="Teleopti.Ccc.Domain.Common.BusinessUnit"
       access="nosetter.camelcase-underscore"
@@ -46,6 +47,26 @@
           not-null="true"/>
     <property name="MaxSeats"
 						not-null="false" />
+    <map name="OpenHours"
+                table="SiteOpenHours"
+                cascade="all-delete-orphan"
+                lazy="false">
+      <key column="Parent" foreign-key="FK_SiteOpenHours_Site"/>
+      <index type="System.DayOfWeek" column="Weekday"/>
+      <composite-element class="Teleopti.Interfaces.Domain.TimePeriod, Teleopti.Interfaces" >
+        <nested-composite-element class="Teleopti.Interfaces.Domain.MinMax`1[System.TimeSpan], Teleopti.Interfaces"
+										  name="period" access="field">
+          <property name="Minimum"
+							column="StartTime"
+							not-null="true"
+							type="TimeSpan"/>
+          <property name="Maximum"
+							column="EndTime"
+							not-null="true"
+							type="TimeSpan"/>
+        </nested-composite-element>
+      </composite-element>
+    </map>
     <filter name="businessUnitFilter"
         condition=":businessUnitParameter = BusinessUnit" />
     <filter name="deletedFlagFilter"

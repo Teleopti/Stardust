@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -18,11 +19,12 @@ namespace Teleopti.Ccc.Domain.Common
         private bool _isDeleted;
     	private int? _maxSeats;
     	private ISkill _maxSeatSkill;
-    	
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Site"/> class.
-        /// </summary>
-        protected Site()
+		private IDictionary<DayOfWeek, TimePeriod> _openHours = new Dictionary<DayOfWeek, TimePeriod>();
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Site"/> class.
+		/// </summary>
+		protected Site()
         {
             _teamCollection = new List<ITeam>();
         }
@@ -115,7 +117,13 @@ namespace Teleopti.Ccc.Domain.Common
 
         }
 
-        public virtual void SetDeleted()
+	    public virtual IDictionary<DayOfWeek, TimePeriod> OpenHours
+	    {
+			get { return _openHours; }
+			set { _openHours = value; }
+	    }
+
+	    public virtual void SetDeleted()
         {
             _isDeleted = true;
         }

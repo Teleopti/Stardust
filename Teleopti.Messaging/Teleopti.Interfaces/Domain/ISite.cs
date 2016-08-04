@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -50,5 +52,7 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <param name="team">The team.</param>
         void RemoveTeam(ITeam team);
-    }
+
+		IDictionary<DayOfWeek, TimePeriod> OpenHours { get; set; }
+	}
 }
