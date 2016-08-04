@@ -3,17 +3,12 @@ a{
   text-decoration: underline;
 }
 
-
-.wfm-grid a:focus{
-	outline: rgb(0, 153, 255) solid 1px!important;
-}
-
 .layout-fill {
 	width: 100%;
 	min-height: 100%;
 	height: 100%;
 }
- 
+
 .select-toggle {
 	opacity: 0;
 }
@@ -157,14 +152,6 @@ wfm-notice{
 
 .nav-item-active > .sidenav-header{
 		background: $green-100!important;
-}
-
-.nav-item-wrap {
-	text-decoration: none!important;
-}
-
-.wfm-card-title{
-	outline: 0 solid transparent!important;
 }
 
 md-select-menu md-option:focus:not([disabled]):not([selected]){
