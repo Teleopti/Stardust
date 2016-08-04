@@ -381,7 +381,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 						JobName = "Resource Calculate",
 						InitiatorId = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Id.Value,
 						StartDateTime = period.StartDateTime.Date,
-						UserName = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Id.GetValueOrDefault().ToString(),
+						UserName = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Name.ToString(),
 						EndDateTime = period.EndDateTime.Date
 					};
 					
