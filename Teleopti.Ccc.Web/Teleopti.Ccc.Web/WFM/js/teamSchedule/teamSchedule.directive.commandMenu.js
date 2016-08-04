@@ -191,7 +191,6 @@
 					|| vm.canActiveAddPersonalActivity()
 					|| vm.canActiveModifyShiftCategory()
 					|| vm.canActiveUndoScheduleCmd()
-					|| vm.canModifyShiftCategory()
 				;
 			};
 			registerShortCuts();
