@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 	{
 		private MockRepository _mocks;
 		private StatisticLoader _target;
-		private IStatisticRepository _statisticRepository;
+		private IRepositoryFactory _repositoryFactory;
 		private IWorkloadDay _workloadDay;
 		private IWorkload _workload;
 		private IStatistic _statistic;
@@ -25,9 +25,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_statisticRepository = _mocks.DynamicMock<IStatisticRepository>();
+			_repositoryFactory = _mocks.DynamicMock<IRepositoryFactory>();
 			_statistic = _mocks.DynamicMock<IStatistic>();
-			_target = new StatisticLoader(_statisticRepository,_statistic);
+			_target = new StatisticLoader(_repositoryFactory, _statistic);
 
 			_workloadDay = _mocks.DynamicMock<IWorkloadDay>();
 			_workload = _mocks.DynamicMock<IWorkload>();
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			var skillStaffPeriod = new SkillStaffPeriod(new DateTimePeriod(date, date.AddMinutes(15)), task, serviceAgreement, null){StatisticTask = statTask};
 			Expect.Call(_workloadDay.Workload).Return(_workload);
 			Expect.Call(_workload.QueueSourceCollection).Return(new ReadOnlyCollection<IQueueSource>(new List<IQueueSource>()));
-			Expect.Call(_statisticRepository.LoadSpecificDates(new Collection<IQueueSource>(), new DateTimePeriod())).
+			Expect.Call(_repositoryFactory.CreateStatisticRepository().LoadSpecificDates(new Collection<IQueueSource>(), new DateTimePeriod())).
 				IgnoreArguments().Return(new Collection<IStatisticTask> { statTask });
 			Expect.Call(_workloadDay.OpenTaskPeriodList).Return(
 				new ReadOnlyCollection<ITemplateTaskPeriod>(new List<ITemplateTaskPeriod> { taskPeriod }));
@@ -52,8 +52,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_target.Execute(new DateTimePeriod(), _workloadDay, new List<ISkillStaffPeriod> { skillStaffPeriod });
 			_mocks.VerifyAll();
 		}
-
 	}
-
-	
 }

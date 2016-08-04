@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
         {
         }
 
-        public new void Handle(RecalculateForecastOnSkillCollectionEvent @event)
+        public void Handle(RecalculateForecastOnSkillCollectionEvent @event)
         {
-            base.Handle(@event);
+            HandleBase(@event);
         }
     }
 
@@ -37,10 +37,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
                                                                 : base(scenarioRepository, skillDayRepository, skillRepository,  statisticLoader, reforecastPercentCalculator)
         {
         }
-        [ImpersonateSystem ,UnitOfWork]
-        public new virtual void Handle(RecalculateForecastOnSkillCollectionEvent @event)
+
+        [AsSystem]
+				[UnitOfWork]
+        public virtual void Handle(RecalculateForecastOnSkillCollectionEvent @event)
         {
-            base.Handle(@event);
+            HandleBase(@event);
         }
     }
 
@@ -62,7 +64,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
             _reforecastPercentCalculator = reforecastPercentCalculator;
         }
         
-        public void Handle(RecalculateForecastOnSkillCollectionEvent @event)
+        public void HandleBase(RecalculateForecastOnSkillCollectionEvent @event)
         {
 
                 var scenario = _scenarioRepository.Get(@event.ScenarioId);

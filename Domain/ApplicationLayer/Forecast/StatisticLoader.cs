@@ -14,14 +14,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 
 	public class StatisticLoader : IStatisticLoader
 	{
-		private readonly IStatisticRepository _statisticRepository;
+		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IStatistic _statistic;
 
-		public StatisticLoader(IStatisticRepository statisticRepository, IStatistic statistic)
+		public StatisticLoader(IRepositoryFactory repositoryFactory, IStatistic statistic)
 		{
-			_statisticRepository = statisticRepository;
+			_repositoryFactory = repositoryFactory;
 			_statistic = statistic;
 		}
+
+		//Needs to be a property for reforecast not to use StatisticRepositoryEmpty. /Maria S 
+		public IStatisticRepository StatisticRepository { get { return _repositoryFactory.CreateStatisticRepository(); } }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public DateTime Execute(DateTimePeriod period, IWorkloadDay workloadDay, IList<ISkillStaffPeriod> skillStaffPeriods)
@@ -30,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			var statisticTasks = new List<IStatisticTask>();
 			
 			// we return the latest interval from these to know how long we have statistics
-			var tasks = _statisticRepository.LoadSpecificDates(workloadDay.Workload.QueueSourceCollection, period).ToList();
+			var tasks = StatisticRepository.LoadSpecificDates(workloadDay.Workload.QueueSourceCollection, period).ToList();
 			if(tasks.Any())
 			{ // is the interval the startime or the endtime of the interval, I guess start
 				ret = (from t in tasks select t.Interval).Max();

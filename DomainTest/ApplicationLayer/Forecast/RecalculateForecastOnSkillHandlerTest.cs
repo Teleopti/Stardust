@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			var message = new RecalculateForecastOnSkillCollectionEvent {ScenarioId = scenarioId};
 			_scenarioRepository.Stub(x => x.Get(scenarioId)).Return(_scenario);
 			_scenario.Stub(x => x.DefaultScenario).Return(false);
-			_target.Handle(message);
+			_target.HandleBase(message);
 		}
 
 		[Test]
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_scenario.Stub(x => x.DefaultScenario).Return(true);
 			_skillRepository.Stub(x => x.Get(Guid.Empty)).Return(null);
 
-			_target.Handle(message);
+			_target.HandleBase(message);
 
 		}
 
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 				.Return(new ReadOnlyCollection<IWorkloadDay>(new List<IWorkloadDay> {workloadDay}));
 			workloadDay.Stub(x => x.Workload).Return(workload);
 			workload.Stub(x => x.Id).Return(Guid.NewGuid());
-			_target.Handle(message);
+			_target.HandleBase(message);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"),
@@ -138,9 +138,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			workloadDay.Stub(x => x.Tasks).Return(100);
 			workloadDay.Stub(x => x.Tasks).SetPropertyWithArgument(100*1.1);
 			workloadDay.Stub(x => x.CampaignTasks).SetPropertyWithArgument(new Percent(0));
-			_target.Handle(message);
+			_target.HandleBase(message);
 		}
 	}
-
-
 }
