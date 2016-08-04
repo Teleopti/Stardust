@@ -963,7 +963,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		[Ignore]
 		public void VerifyFindPersonInOrganizationLight()
 		{
 			ITeam team = TeamFactory.CreateSimpleTeam("Team1");
@@ -1031,7 +1030,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 
 		[Test]
-		[Ignore]
 		public void VerifyFindPersonInOrganizationWithContractIncludedNoYesRuleSetBagInfo()
 		{
 			ITeam team = TeamFactory.CreateSimpleTeam("hola");

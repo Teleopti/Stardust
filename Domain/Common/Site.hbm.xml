@@ -49,8 +49,7 @@
 						not-null="false" />
     <map name="OpenHours"
                 table="SiteOpenHours"
-                cascade="all-delete-orphan"
-                lazy="false">
+                cascade="all-delete-orphan">
       <key column="Parent" foreign-key="FK_SiteOpenHours_Site"/>
       <index type="System.DayOfWeek" column="Weekday"/>
       <composite-element class="Teleopti.Interfaces.Domain.TimePeriod, Teleopti.Interfaces" >
