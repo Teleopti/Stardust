@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				var message = new NewAbsenceRequestCreatedEvent
 					{
 						PersonRequestId = result.Id.GetValueOrDefault(Guid.Empty),
-						UserName = result.Person.Name.ToString()
+						UserName = "SDK"
 					};
 				_publisher.Publish(message);
 			}
