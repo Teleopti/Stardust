@@ -117,6 +117,7 @@ Wfm_Requests_Approve_Based_On_Budget_Allotment_39626 = RC
 Wfm_Requests_Reply_Message_39629 = RC
 Wfm_Requests_Show_Personal_Account_39628 = DEV
 Wfm_Requests_Approve_Based_On_Intraday_39868 = RC
+Wfm_Requests_Site_Open_Hours_39936 = DEV
 
 Wfm_Intraday_38074 = true
 
