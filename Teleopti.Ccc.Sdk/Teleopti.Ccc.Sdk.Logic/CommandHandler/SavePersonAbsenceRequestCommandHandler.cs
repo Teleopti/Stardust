@@ -43,7 +43,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				//Call RSB!
 				var message = new NewAbsenceRequestCreatedEvent
 					{
-						PersonRequestId = result.Id.GetValueOrDefault(Guid.Empty)
+						PersonRequestId = result.Id.GetValueOrDefault(Guid.Empty),
+						UserName = result.Person.Name.ToString()
 					};
 				_publisher.Publish(message);
 			}
