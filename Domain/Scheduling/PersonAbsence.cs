@@ -163,7 +163,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				ScenarioId = Scenario.Id.GetValueOrDefault(),
 				StartDateTime = Period.StartDateTime,
 				EndDateTime = Period.EndDateTime,
-				LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault(),
+				JobName = "RequestPersonAbsenceRemovedEvent"
 			};
 
 			if (PersonRequest != null)

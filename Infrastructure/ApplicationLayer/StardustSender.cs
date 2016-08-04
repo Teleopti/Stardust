@@ -33,9 +33,6 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			_eventInfrastructureInfoPopulator.PopulateEventContext(@event);
 
 			var userName = "Stardust";
-			var init = @event as IInitiatorContext;
-			if (init != null)
-				userName = init.InitiatorId.ToString();
 			var jobName = @event.GetType().ToString();
 			var type = @event.GetType().ToString();
 			var job = @event as IStardustJobInfo;
