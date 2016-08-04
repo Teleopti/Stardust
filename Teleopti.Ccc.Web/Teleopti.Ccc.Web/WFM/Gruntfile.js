@@ -1,4 +1,3 @@
-﻿
 module.exports = function(grunt) {
 	// Project configuration.
 	grunt.initConfig({
@@ -231,12 +230,14 @@ module.exports = function(grunt) {
 		uglify: {
 			dist: {
 				files: {
-					'dist/main.min.js': ['js/**/*.js', '!js/**/*.spec.js', '!js/**/*.fake.js', '!js/**/*.fortest.js', '!js/app_desktop_client.js']
+					'dist/main.min.js': ['js/**/*.js', '!js/**/*.spec.js', '!js/**/*.fake.js', '!js/**/*.fortest.js', '!js/app_desktop_client.js'],
+					'dist/modules.min.js': ['dist/modules.js'],
+					'dist/templates.min.js':['dist/templates.js']
 				}
 			},
 			distForDesktop: {
 				files: {
-					'dist/mainForDesktop.min.js': ['js/**/*.js', '!js/**/*.spec.js', '!js/**/*.fake.js', '!js/**/*.fortest.js','!js/app.js']
+					'dist/mainForDesktop.min.js': ['js/**/*.js', '!js/**/*.spec.js', '!js/**/*.fake.js', '!js/**/*.fortest.js', '!js/app.js']
 				}
 			},
 			dev: {
@@ -304,10 +305,15 @@ module.exports = function(grunt) {
 				files: [{
 					expand: true,
 					cwd: 'node_modules/angular-ui-grid',
-					src: ['*.ttf','*.woff','*.eot'],
+					src: ['*.ttf', '*.woff', '*.eot'],
 					dest: 'dist/',
 					filter: 'isFile'
 				}]
+			}
+		},
+		clean: {
+			dist: {
+				src: ['dist/*.js','dist/*.css', '!dist/*.min.js','!dist/*.min.css']
 			}
 		},
 
@@ -327,6 +333,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
 	grunt.loadNpmTasks('grunt-contrib-concat');
+	grunt.loadNpmTasks('grunt-contrib-clean');
 	grunt.loadNpmTasks('grunt-sass');
 	grunt.loadNpmTasks('grunt-karma');
 	grunt.loadNpmTasks('grunt-iisexpress');
@@ -336,13 +343,14 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-processhtml');
 
 
+
 	// Default task(s).
 	grunt.registerTask('default', ['devDist', 'test', 'watch:dev']); // this task run the main task and then watch for file changes
 	grunt.registerTask('test', ['ngtemplates', 'karma:unit']);
 	grunt.registerTask('devTest', ['ngtemplates', 'karma:dev']);
 	grunt.registerTask('devDist', ['ngtemplates', 'sass', 'concat:distJs', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'copy', 'uglify:dev', 'generateIndex']);
 	grunt.registerTask('test:continuous', ['ngtemplates', 'karma:continuous']);
-	grunt.registerTask('dist', ['ngtemplates', 'sass', 'concat:distJs', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'copy', 'generateIndex']); // this task should only be used by the build. It's kind of packaging for production.
+	grunt.registerTask('dist', ['ngtemplates', 'sass', 'concat:distJs', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'copy', 'generateIndex','clean:dist']); // this task should only be used by the build. It's kind of packaging for production.
 	grunt.registerTask('nova', ['devDist', 'iisexpress:authBridge', 'iisexpress:web', 'watch:dev']); // this task run the main task and then watch for file changes
 	grunt.registerTask('build', ['msbuild:build']); // build the solution
 	grunt.registerTask('generateIndex', ['processhtml:dist', 'cacheBust:dist']);
