@@ -52,6 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration.Cache
 		}
 
 		[Test]
+		[Ignore]
 		public void AvailableSitesShouldBeCached()
 		{
 			var sessionFactory = ((NHibernateUnitOfWorkFactory)dataSource.Application).SessionFactory;
