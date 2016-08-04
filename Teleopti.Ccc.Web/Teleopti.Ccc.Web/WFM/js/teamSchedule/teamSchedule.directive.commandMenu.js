@@ -136,7 +136,7 @@
 		};
 
 		vm.canActiveModifyShiftCategory = function(){
-			return vm.toggles.ModifyShiftCategoryEnabled;
+			return vm.toggles.ModifyShiftCategoryEnabled && vm.permissions.HasEditShiftCategoryPermission;
 		};
 
 		vm.canActiveUndoScheduleCmd = function () {
@@ -158,7 +158,7 @@
 		};
 
 		vm.canModifyShiftCategory = function (){
-			return personSelectionSvc.anyAgentChecked();
+			return vm.toggles.ModifyShiftCategoryEnabled && vm.permissions.HasEditShiftCategoryPermission && personSelectionSvc.anyAgentChecked();
 		};
 
 		vm.canUndoSchedule = function () {
@@ -191,6 +191,7 @@
 					|| vm.canActiveAddPersonalActivity()
 					|| vm.canActiveModifyShiftCategory()
 					|| vm.canActiveUndoScheduleCmd()
+					|| vm.canModifyShiftCategory()
 				;
 			};
 			registerShortCuts();

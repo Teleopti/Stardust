@@ -1,6 +1,5 @@
-'use strict';
-
 (function () {
+	'use strict';
 	angular.module('wfm.teamSchedule')
 		.directive('scheduleTable', scheduleTableDirective)
 		.controller('scheduleTableCtrl', ['$scope', 'Toggle', 'PersonSelection', 'ScheduleManagement', 'ValidateRulesService', scheduleTableController]);
@@ -10,15 +9,17 @@
 			scope: {
 				selectMode: '=',
 				selectedDate: '=',
-				showWarnings: '=?'
+				showWarnings: '=?',
+				cmdConfigurations: '='
 			},
 			restrict: 'E',
 			controllerAs: 'vm',
 			bindToController: true,
 			controller: 'scheduleTableCtrl',
-			templateUrl: "js/teamSchedule/html/scheduletable.html"
+			templateUrl: 'js/teamSchedule/html/scheduletable.html'
 		};
-	};
+	}
+
 	function scheduleTableController($scope, toggleSvc, personSelectionSvc, ScheduleMgmt, ValidateRulesService) {
 		var vm = this;
 		vm.ShowContractTimeEnabled = toggleSvc.WfmTeamSchedule_ShowContractTime_38509;
@@ -59,7 +60,7 @@
 			if (!toggleSvc.WfmTeamSchedule_RemoveAbsence_36705 && !toggleSvc.WfmTeamSchedule_RemoveActivity_37743)
 				return false;
 
-			var isSameDay = shift.Date.format("YYYY-MM-DD") === moment(viewDate).format("YYYY-MM-DD");
+			var isSameDay = shift.Date.format('YYYY-MM-DD') === moment(viewDate).format('YYYY-MM-DD');
 
 			if (!isSameDay || currentProjection.IsOvertime || (currentProjection.ParentPersonAbsences == null && currentProjection.ShiftLayerIds == null)) {
 				return false;
@@ -86,6 +87,10 @@
 		};
 
 		vm.modifyShiftCategoryForAgent = function($event, personSchedule){
+			if (!(vm.cmdConfigurations.toggles.ModifyShiftCategoryEnabled && vm.cmdConfigurations.permissions.HasEditShiftCategoryPermission)) {
+				return;
+			}
+
 			$event.stopPropagation();
 
 			if(!personSchedule.IsSelected){
