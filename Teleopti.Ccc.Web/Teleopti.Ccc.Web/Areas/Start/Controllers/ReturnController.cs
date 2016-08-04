@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			{
 				return new RedirectResult(returnUrl);
 			}
-			return new EmptyResult();
+			return new RedirectResult("~/Mytime");
 		}
 
 		private string getWSFederationMessageReturnUrl()
