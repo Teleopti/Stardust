@@ -1,53 +1,57 @@
-﻿<div ng-controller="jobDetailsController as vm" style="margin-left: 50px;margin-right: 50px">
-	<div class="row">
-		<div class="col-md-12">
-			<a style="float: left; padding-top: 25px; padding-right: 50px" href="#StardustDashboard"><img alt="back" title="Back to List Jobs" src="Content/images/left_round.png"/></a>
-			<h2>Job Details</h2>
-			<div style="font-size: 14p; font-weight: bold;color: red">{{vm.JobError}}</div>
-			<div>
+﻿<div ng-controller="jobDetailsController as vm" style="margin-left: 50px; margin-right: 50px">
+	<div class="col-md-12">
+		<a style="float: left; padding-top: 25px; padding-right: 50px" href="#StardustDashboard"><img alt="back" title="Back to List Jobs" src="Content/images/left_round.png"/></a>
+		<h2>Job Details</h2>
+		<h5>Note! All timestamps are in UTC!</h5>
+		<div>
+			<div class="row">
+				<div style="font-size: 14p; font-weight: bold; color: red">{{vm.JobError}}</div>
 				<table>
 					<thead>
-						<tr>
-							<th>Type</th>
-							<th>Created By</th>
-							<th>Created At </th>
-							<th>Started</th>
-							<th>Ended</th>
-							<th>Total Duration</th>
-							<th>Sent to</th>
-							<th>Result</th>
-						</tr>
+					<tr>
+						<th>Type</th>
+						<th>Created By</th>
+						<th>Created At </th>
+						<th>Started</th>
+						<th>Ended</th>
+						<th>Total Duration</th>
+						<th>Sent to</th>
+						<th>Result</th>
+					</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td>{{vm.Job.Name}}</td>
-							<td>{{vm.Job.CreatedBy}}</td>
-							<td>{{vm.Job.Created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-							<td>{{vm.Job.Started | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-							<td>{{vm.Job.Ended | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
-							<td>{{vm.Job.TotalDuration}}</td>
-							<td>{{vm.Job.SentToWorkerNodeUri}}</td>
-							<td>{{vm.Job.Result}}</td>
-						</tr>
+					<tr>
+						<td>{{vm.Job.Name}}</td>
+						<td>{{vm.Job.CreatedBy}}</td>
+						<td>{{vm.Job.Created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+						<td>{{vm.Job.Started | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+						<td>{{vm.Job.Ended | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
+						<td>{{vm.Job.TotalDuration}}</td>
+						<td>{{vm.Job.SentToWorkerNodeUri}}</td>
+						<td>{{vm.Job.Result}}</td>
+					</tr>
 					</tbody>
 				</table>
 			</div>
-			<h3>Additional Job details</h3>
-			<div>
-				<table>
-					<thead>
+
+			<div class="row">
+				<h3>Additional Job details</h3>
+				<div>
+					<table>
+						<thead>
 						<tr>
 							<th>Detail Created</th>
 							<th>Detail</th>
 						</tr>
-					</thead>
-					<tbody>
+						</thead>
+						<tbody>
 						<tr ng-repeat="detail in vm.JobDetails">
 							<td>{{detail.Created | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
 							<td>{{detail.Detail}}</td>
 						</tr>
-					</tbody>
-				</table>
+						</tbody>
+					</table>
+				</div>
 			</div>
 		</div>
 	</div>
