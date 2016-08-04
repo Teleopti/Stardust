@@ -9,6 +9,7 @@
 				$scope.skills;
 				$scope.selectedSkill = null;
 				$scope.viewCal = true;
+				$scope.isLoading = false;
 
 				if ($stateParams.date) {
 					$scope.intervalDate = $stateParams.date;
@@ -58,7 +59,11 @@
 				};
 
 				$scope.TriggerResourceCalculate = function() {
-					intradayStaffingService.TriggerResourceCalculate.query().$promise.then(function(response) {})
+					$scope.isLoading = true;
+					intradayStaffingService.TriggerResourceCalculate.query().$promise.then(function(response) {
+						$scope.isLoading = false;
+						NoticeService.success('Resource calculation successfully triggered ', 5000, true);
+					})
 				};
 
 				$scope.updateSelectedSkill = function(skill) {

@@ -10,8 +10,6 @@
 			<div class="wfm-btn-invis-primary" style="cursor:pointer; text-align:center;" ng-click=" regenerateChart()">
 				<h1><i class="mdi mdi-calendar"></i>{{intervalDate | amDateFormat:"L"}}</h1>
 			</div>
-
-
 		</div>
 		<div class="con-flex" ng-if="isVisible">
 			<md-autocomplete ng-disabled="areaIsSelected" id="skill-id" class="autocomplete-skill" md-no-cache="true" md-selected-item="selectedSkill" md-select-on-match="true" md-search-text="searchSkillText" md-selected-item-change="updateSelectedSkill(selectedSkill)" md-items="skill in querySearch(searchSkillText)" md-item-text="skill.Name" md-min-length="0" placeholder="{{'SelectSkill'|translate}}">
@@ -65,7 +63,7 @@
 		</div>
 	</div>
 	<div class="con-footer">
-		<button class="wfm-btn wfm-btn-invis-default" ng-click="TriggerResourceCalculate()" ng-if="isVisible">Trigger new resource calculation</button>
+		<button class="wfm-btn wfm-btn-invis-default" ng-disabled="isLoading" ng-click="TriggerResourceCalculate()" ng-if="isVisible">Trigger new resource calculation</button>
 		<div class="loadWrapper" ng-if="loading">
 			<md-progress-linear md-mode="indeterminate" ng-show="loading"></md-progress-linear>
 		</div>
