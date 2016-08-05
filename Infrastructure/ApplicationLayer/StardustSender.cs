@@ -4,6 +4,7 @@ using System.Globalization;
 using log4net;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -33,6 +34,10 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			_eventInfrastructureInfoPopulator.PopulateEventContext(@event);
 
 			var userName = "Stardust";
+			string loggedOnUser = ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person.Name.ToString();
+			if (!string.IsNullOrEmpty(loggedOnUser))
+				userName = loggedOnUser;
+
 			var jobName = @event.GetType().ToString();
 			var type = @event.GetType().ToString();
 			var job = @event as IStardustJobInfo;
