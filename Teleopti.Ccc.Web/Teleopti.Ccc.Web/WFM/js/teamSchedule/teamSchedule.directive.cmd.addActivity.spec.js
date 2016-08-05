@@ -2,9 +2,10 @@
 
 	var $compile,
 		$rootScope,
-		fakeActivityService,
 		WFMDate,
+		fakeActivityService,
 		fakeScheduleManagementSvc,
+		fakeCommandCheckService,
 		PersonSelection;
 
 	beforeEach(module('wfm.templates'));
@@ -13,6 +14,7 @@
 	beforeEach(function () {
 		fakeActivityService = new FakeActivityService();
 		fakeScheduleManagementSvc = new FakeScheduleManagementService();
+		fakeCommandCheckService = new FakeCommandCheckService();
 
 		module(function ($provide) {
 			$provide.service('ActivityService', function () {
@@ -21,6 +23,10 @@
 			$provide.service('ScheduleManagement', function () {
 				return fakeScheduleManagementSvc;
 			});
+			$provide.service('CommandCheckService', function () {
+				return fakeCommandCheckService;
+			});
+
 
 		});
 	});
@@ -320,6 +326,17 @@
 
 		this.getLatestStartOfSelectedSchedule = function () {
 			return latestStartTime;
+		}
+	}
+
+	function FakeCommandCheckService(){
+		var fakeResponse = {data: []};
+		this.checkOverlappingCertainActivities = function(){
+			return {
+				then: function(cb){
+					cb(fakeResponse);
+				}
+			}
 		}
 	}
 

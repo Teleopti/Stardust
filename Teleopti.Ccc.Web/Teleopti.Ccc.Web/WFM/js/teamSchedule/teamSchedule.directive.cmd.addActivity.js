@@ -3,9 +3,9 @@
 
 	angular.module('wfm.teamSchedule').directive('addActivity', addActivityDirective);
 
-	addActivityCtrl.$inject = ['ActivityService', 'PersonSelection', 'WFMDate', 'ScheduleManagement', 'teamScheduleNotificationService'];
+	addActivityCtrl.$inject = ['$scope', 'ActivityService', 'PersonSelection', 'WFMDate', 'ScheduleManagement', 'teamScheduleNotificationService', 'CommandCheckService'];
 
-	function addActivityCtrl(activityService, personSelectionSvc, wFMDateSvc, scheduleManagementSvc, teamScheduleNotificationService) {
+	function addActivityCtrl($scope, activityService, personSelectionSvc, wFMDateSvc, scheduleManagementSvc, teamScheduleNotificationService, CommandCheckService) {
 		var vm = this;
 
 		vm.label = 'AddActivity';
@@ -47,7 +47,8 @@
 			}
 		};
 
-		vm.addActivity = function () {
+		var addActivity = function () {
+            vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
 			var requestData = {
 				PersonIds: vm.selectedAgents.map(function (agent) { return agent.PersonId; }),
 				Date: vm.selectedDate(),
@@ -72,6 +73,26 @@
 				}), response.data);
 			});
 		};
+
+         vm.addActivity = function() {
+            vm.requestData = {
+                PersonIds: vm.selectedAgents.map(function(agent) {
+                    return agent.PersonId;
+                }),
+                Date: vm.selectedDate(),
+                StartTime: moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm"),
+                EndTime: moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm"),
+                ActivityId: vm.selectedActivityId,
+                TrackedCommandInfo: {
+                    TrackId: vm.trackId
+                }
+            };
+            CommandCheckService.checkOverlappingCertainActivities(vm.requestData).then(addActivity);
+
+            $scope.$on('teamSchedule.overlappingCheckComplete', function(event) {
+                vm.setActiveCmd('CommandCheck');
+            });
+        };
 
 		vm.getDefaultActvityStartTime =  function () {
 			var curDateMoment = moment(vm.selectedDate());

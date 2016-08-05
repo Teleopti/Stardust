@@ -27,7 +27,7 @@
 		vm.scheduleFullyLoaded = false;
 		vm.hasSelectedAllPeopleInEveryPage = false;
 
-		vm.triggerCommand = function(label, needToOpenSidePanel) {
+		vm.triggerCommand = function (label, needToOpenSidePanel) {
 			$mdSidenav(commandContainerId).close().then(function () {
 				needToOpenSidePanel && openSidePanel();
 
@@ -281,7 +281,8 @@
 				AddPersonalActivityEnabled: toggleSvc.WfmTeamSchedule_AddPersonalActivity_37742,
 				ShowNightlyRestWarningEnabled: toggleSvc.WfmTeamSchedule_ShowNightlyRestWarning_39619,
 				ModifyShiftCategoryEnabled: toggleSvc.WfmTeamSchedule_ModifyShiftCategory_39797,
-				UndoScheduleEnabled: toggleSvc.WfmTeamSchedule_RevertToPreviousSchedule_39002
+				UndoScheduleEnabled: toggleSvc.WfmTeamSchedule_RevertToPreviousSchedule_39002,
+				CheckOverlappingCertainActivitiesEnabled: toggleSvc.WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938
 			};
 			vm.searchOptions.isAdvancedSearchEnabled = vm.toggles.AdvancedSearchEnabled;
 			vm.toggles.SeeScheduleChangesByOthers && monitorScheduleChanged();

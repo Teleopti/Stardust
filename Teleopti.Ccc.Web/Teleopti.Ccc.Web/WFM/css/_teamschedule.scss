@@ -375,7 +375,7 @@
         }
     }
 
-    .add-absence, .add-activity, .move-activity, .edit-shift-category {
+    .add-absence, .add-activity, .move-activity, .edit-shift-category, .command-check{
         height: 100%;
         display: flex;
         flex-direction: column;
@@ -386,6 +386,16 @@
             flex-direction: column;
             justify-content: space-between;
             height: 100%;
+        }
+    }
+
+    .command-check .selected-agent-list{
+        position: relative;
+        overflow: auto;
+
+        .wfm-btn-default{
+            padding: 5px;
+            min-height: 20px;
         }
     }
 

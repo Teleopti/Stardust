@@ -1,0 +1,15 @@
+<div class="command-check">
+    <div class="sidenav-header">{{'CheckOverlap'|translate}}</div>
+    <md-content class="command-panel-content" layout-padding>
+        <div class="selected-agent-list">
+        	{{'ThoseAgentGotOverlappedWillBeExcluded' | translate}}
+			<div class="wfm-checkbox" ng-repeat="agent in vm.overlappingAgents">
+				{{agent.Name}}
+			</div>
+		</div>
+        
+        <button id="applyCommandFix" class="wfm-btn wfm-btn-primary form-submit" ng-click="vm.applyCommandFix()">
+            {{'Apply' | translate}}
+        </button>  
+    </md-content>
+</div>

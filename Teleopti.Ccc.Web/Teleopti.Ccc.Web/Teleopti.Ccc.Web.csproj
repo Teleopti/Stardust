@@ -1478,6 +1478,7 @@
     <Content Include="WFM\js\teamSchedule\html\addActivity.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\addActivityTimeRangePicker.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\addPersonalActivity.tpl.html" />
+    <Content Include="WFM\js\teamSchedule\html\commandCheck.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\commandConfirmDialog.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\modifyShiftCategory.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\moveActivity.tpl.html" />
@@ -1494,6 +1495,7 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.cmd.addActivity.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.cmd.addPersonalActivity.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.cmd.addPersonalActivity.spec.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.directive.cmd.commandCheck.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.cmd.modifyShiftCategory.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.cmd.moveActivity.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.cmd.moveActivity.spec.js" />
@@ -1516,6 +1518,7 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.factory.timeline.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.factory.timeLine.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.activity.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.service.CommandCheckService.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.guidgenerator.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.moveActivityValidator.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.moveActivityValidator.js" />
