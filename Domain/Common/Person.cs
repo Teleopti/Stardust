@@ -887,5 +887,16 @@ namespace Teleopti.Ccc.Domain.Common
 			}
 			AddPersonPeriod(period);
 		}
-	}
+
+	    public virtual TimePeriod? SiteOpenHourPeriod(DateOnly dateOnly)
+	    {
+		    var siteOpenHours = MyTeam(dateOnly).Site.OpenHours;
+		    TimePeriod weekDayOpenHourPeriod;
+		    if (!siteOpenHours.TryGetValue(dateOnly.DayOfWeek, out weekDayOpenHourPeriod))
+		    {
+			    return null;
+		    }
+		    return weekDayOpenHourPeriod;
+	    }
+    }
 }

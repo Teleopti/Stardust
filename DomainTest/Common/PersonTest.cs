@@ -800,5 +800,16 @@ namespace Teleopti.Ccc.DomainTest.Common
 			schedulePeriods[0].DateFrom.Should().Be.EqualTo(new DateOnly(2011, 2, 7));
 			schedulePeriods[1].DateFrom.Should().Be.EqualTo(new DateOnly(2013, 2, 4));
 		}
+
+	    [Test]
+	    public void ShouldGetSiteOpenHour()
+	    {
+		    var site = new Site("site1");
+		    var timePeriod = new TimePeriod(8, 10, 17, 0);
+			site.OpenHours.Add(DateOnly.Today.DayOfWeek, timePeriod);
+		    var team = new Team() {Site = site};
+		    var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(DateOnly.Today, team);
+		    person.SiteOpenHourPeriod(DateOnly.Today).Should().Be.EqualTo(timePeriod);
+	    }
     }
 }
