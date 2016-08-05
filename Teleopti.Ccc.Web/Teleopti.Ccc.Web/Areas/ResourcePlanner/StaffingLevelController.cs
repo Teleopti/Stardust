@@ -49,8 +49,6 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				_publisher.Publish(new UpdateResourceCalculateReadModelEvent()
 				{
 					InitiatorId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault(),
-					JobName = "Resource Calculate",
-					UserName = _loggedOnUser.CurrentUser().Name.ToString(),
 					StartDateTime = period.Value.StartDate.Date,
 					EndDateTime = period.Value.EndDate.Date
 				});
