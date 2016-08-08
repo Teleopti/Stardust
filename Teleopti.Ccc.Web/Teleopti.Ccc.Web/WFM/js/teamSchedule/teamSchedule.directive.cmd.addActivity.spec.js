@@ -2,6 +2,7 @@
 
 	var $compile,
 		$rootScope,
+		$httpBackend,
 		WFMDate,
 		fakeActivityService,
 		fakeScheduleManagementSvc,

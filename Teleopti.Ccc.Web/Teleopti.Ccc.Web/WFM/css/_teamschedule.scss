@@ -389,19 +389,39 @@
         }
     }
 
-    .command-check .selected-agent-list{
-        position: relative;
-        overflow: auto;
+    .command-check {
+        .warning-header{
+            background: $orange-500;
+        }
 
-        .wfm-btn-default{
-            padding: 5px;
-            min-height: 20px;
+        .command-info .mdi-alert{
+            color: $orange-500;
+        }
+
+        md-select{
+            margin: 10px 0;
+        }
+
+        .agent-list{
+            position: relative;
+            overflow: auto;
+            flex-grow: 2;
+
+            .wfm-checkbox-toggle.warning-checkbox:after{
+                background: #ffa726;
+            }
+
+            ul {
+                margin-left: 20px;
+                list-style-type: disc;
+            }
         }
     }
 
+
     .teamschedule-command-container md-select {
         width: 100%;
-        min-height: 20px;
+        min-height: 40px;
     }
 
     md-content button.wfm-btn {

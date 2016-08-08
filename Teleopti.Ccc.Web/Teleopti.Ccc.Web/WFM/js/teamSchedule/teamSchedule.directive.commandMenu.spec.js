@@ -1,6 +1,7 @@
 ﻿describe("team schedule command menu directive test", function () {
 	var $compile,
-		$rootScope;
+		$rootScope,
+		$httpBackend;
 
 	beforeEach(module('wfm.templates'));
 	beforeEach(module('wfm.teamSchedule'));
@@ -19,10 +20,12 @@
 
 	});
 
-	beforeEach(inject(function (_$rootScope_, _$compile_) {
+	beforeEach(inject(function (_$rootScope_, _$compile_, _$httpBackend_) {
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
+		$httpBackend = _$httpBackend_;
 
+		$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
 	}));
 
 	it('should view menu when adding activity is permitted', function () {

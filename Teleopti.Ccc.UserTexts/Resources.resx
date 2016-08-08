@@ -14792,4 +14792,20 @@ These options are activated:
     <value>Not permitted to edit shift category for agent(s)</value>
     <comment>Error message for modifying shift category without permission.</comment>
   </data>
+  <data name="ActivityWillOverlapWithExistingStickyActivities" xml:space="preserve">
+    <value>Activity will overlap with existing sticky activities</value>
+    <comment>Activity overlapping information text when add activities on top of Not Allow Meeting activities.</comment>
+  </data>
+  <data name="KeepWarnedAgents" xml:space="preserve">
+    <value>Keep Warned Agents</value>
+    <comment>Keep Warned Agents option of fixing activity overlapping issue when adding activities on top of Not Allow Meeting activities.</comment>
+  </data>
+  <data name="ModifyWarnedAgentsSelection" xml:space="preserve">
+    <value>Modify Warned Agents Selection</value>
+    <comment>Modify Warned Agents Selection option text  of fixing activity overlapping issue when adding activities on top of Not Allow Meeting activities.</comment>
+  </data>
+  <data name="UnselectWarnedAgents" xml:space="preserve">
+    <value>Unselect Warned Agents</value>
+    <comment>Unselect Warned Agents option text of fixing activity overlapping issue when adding activities on top of Not Allow Meeting activities.</comment>
+  </data>
 </root>

@@ -2,16 +2,23 @@
 
 	var $compile,
 		$rootScope,
-		fakeCommandCheckService;
+		$httpBackend,
+		fakeCommandCheckService,
+		fakeScheduleManagementSvc;
 
 	beforeEach(module('wfm.templates'));
 	beforeEach(module('wfm.teamSchedule'));
 
 	beforeEach(module('wfm.teamSchedule', function($provide) {
 		fakeCommandCheckService = new FakeCommandCheckService();
+		fakeScheduleManagementSvc = new FakeScheduleManagementService();
 
 		$provide.factory('addPersonalActivityDirective', function() {
 			return {};
+		});
+
+		$provide.service('ScheduleManagement', function() {
+			return fakeScheduleManagementSvc;
 		});
 
 		$provide.service('CommandCheckService', function() {
@@ -19,9 +26,12 @@
 		});
 	}));
 
-	beforeEach(inject(function(_$rootScope_, _$compile_) {
+	beforeEach(inject(function(_$rootScope_, _$compile_,  _$httpBackend_) {
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
+		$httpBackend = _$httpBackend_;
+
+		$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
 	}));
 
 	it('container should render correctly', function() {
@@ -75,6 +85,31 @@
 		var result = target[0].querySelector('.command-check');
 		expect(result).not.toBeNull();
 	});
+
+	function FakeScheduleManagementService() {
+		var latestEndTime = null;
+		var latestStartTime = null;
+
+		this.groupScheduleVm = {
+			Schedules: []
+		}
+
+		this.setLatestEndTime = function(date) {
+			latestEndTime = date;
+		}
+
+		this.setLatestStartTime = function(date) {
+			latestStartTime = date;
+		}
+
+		this.getLatestPreviousDayOvernightShiftEnd = function() {
+			return latestEndTime;
+		}
+
+		this.getLatestStartOfSelectedSchedule = function() {
+			return latestStartTime;
+		}
+	}
 
 	function FakeCommandCheckService() {
 		var fakeResponse = {

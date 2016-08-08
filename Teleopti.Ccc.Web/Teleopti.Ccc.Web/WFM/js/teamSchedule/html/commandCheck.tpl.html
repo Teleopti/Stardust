@@ -1,15 +1,36 @@
 <div class="command-check">
-    <div class="sidenav-header">{{'CheckOverlap'|translate}}</div>
+    <div class="sidenav-header warning-header">{{vm.currentCommandLabel | translate}}</div>
     <md-content class="command-panel-content" layout-padding>
-        <div class="selected-agent-list">
-        	{{'ThoseAgentGotOverlappedWillBeExcluded' | translate}}
-			<div class="wfm-checkbox" ng-repeat="agent in vm.overlappingAgents">
-				{{agent.Name}}
-			</div>
-		</div>
-        
+        <div class="command-info">
+            {{'ActivityWillOverlapWithExistingStickyActivities' | translate}}
+            <span><i class="mdi mdi-alert"></i></span>
+        </div>
+
+        <md-select ng-model="vm.currentActionOption" placeholder="{{'SelectAnOption' | translate}}" ng-change="vm.onActionChange()">
+            <md-option ng-repeat="action in vm.actionOptions" ng-value="action.Name">
+                <span> {{action.Name | translate}}</span>
+            </md-option>
+        </md-select>
+
+        <div class="agent-list">
+            <div ng-if="vm.showCheckbox">
+    			<div class="wfm-checkbox" ng-repeat="agent in vm.overlappingAgents">
+                    <label ng-click="vm.updatePersonSelection(agent)">
+                        <input type="checkbox" ng-if="vm.showCheckbox" ng-model="agent.IsSelected" value="true">
+                        <span class="wfm-checkbox-toggle" ng-class="{'warning-checkbox': agent.IsSelected}"></span>
+                        <span class="wfm-checkbox-label">{{agent.Name}}</span>
+                    </label>
+                </div>
+            </div>
+            <ul ng-if="!vm.showCheckbox">
+                <li ng-repeat="agent in vm.overlappingAgents">
+                    {{agent.Name}}
+                </li>
+            </ul>
+        </div>
+
         <button id="applyCommandFix" class="wfm-btn wfm-btn-primary form-submit" ng-click="vm.applyCommandFix()">
-            {{'Apply' | translate}}
+            {{'Continue' | translate}}
         </button>  
     </md-content>
 </div>

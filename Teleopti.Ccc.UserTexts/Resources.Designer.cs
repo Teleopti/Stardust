@@ -682,6 +682,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Activity will overlap with existing sticky activities.
+        /// </summary>
+        public static string ActivityWillOverlapWithExistingStickyActivities {
+            get {
+                return ResourceManager.GetString("ActivityWillOverlapWithExistingStickyActivities", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Actual.
         /// </summary>
         public static string Actual {
@@ -13543,6 +13552,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Keep Warned Agents.
+        /// </summary>
+        public static string KeepWarnedAgents {
+            get {
+                return ResourceManager.GetString("KeepWarnedAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Keep Weekends Together.
         /// </summary>
         public static string KeepWeekEndsTogether {
@@ -16015,6 +16033,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ModifySkillArea {
             get {
                 return ResourceManager.GetString("ModifySkillArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modify Warned Agents Selection.
+        /// </summary>
+        public static string ModifyWarnedAgentsSelection {
+            get {
+                return ResourceManager.GetString("ModifyWarnedAgentsSelection", resourceCulture);
             }
         }
         
@@ -31109,6 +31136,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string UnselectedItems {
             get {
                 return ResourceManager.GetString("UnselectedItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unselect Warned Agents.
+        /// </summary>
+        public static string UnselectWarnedAgents {
+            get {
+                return ResourceManager.GetString("UnselectWarnedAgents", resourceCulture);
             }
         }
         
