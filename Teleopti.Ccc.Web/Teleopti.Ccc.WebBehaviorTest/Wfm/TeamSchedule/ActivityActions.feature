@@ -44,6 +44,7 @@ Background:
 	| Part time percentage | Part time percentage |
 
 @OnlyRunIfEnabled('WfmTeamSchedule_AddActivity_37541')
+@OnlyRUnIfDisabled('WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938')
 Scenario: Should be able to add activity
 	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'

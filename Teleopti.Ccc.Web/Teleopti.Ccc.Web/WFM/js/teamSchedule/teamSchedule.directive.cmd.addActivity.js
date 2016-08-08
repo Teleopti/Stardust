@@ -81,9 +81,13 @@
 			};
 		}
 
-		vm.addActivity = vm.checkCommandActivityLayerOrders? function () {
-         	CommandCheckService.checkOverlappingCertainActivities(getRequestData()).then(addActivity);
-        } : addActivity ;
+		
+		vm.addActivity = function () {			
+			if (vm.checkCommandActivityLayerOrders)
+				CommandCheckService.checkOverlappingCertainActivities(getRequestData()).then(addActivity);
+			else
+				addActivity();
+		};
 
 		vm.getDefaultActvityStartTime =  function () {
 			var curDateMoment = moment(vm.selectedDate());
@@ -151,7 +155,7 @@
 			scope.vm.selectedDate = containerCtrl.getDate;
 			scope.vm.trackId = containerCtrl.getTrackId();
 			scope.vm.getActionCb = containerCtrl.getActionCb;
-			scope.vm.checkCommandActivityLayerOrders = containerCtrl.hasToggle('WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938');
+			scope.vm.checkCommandActivityLayerOrders = containerCtrl.hasToggle('CheckOverlappingCertainActivitiesEnabled');
 
 			scope.vm.timeRange = {
 				startTime: selfCtrl.getDefaultActvityStartTime(),

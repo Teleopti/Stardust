@@ -18,13 +18,13 @@
         	commandCheckDeferred = $q.defer();
 
 	        $http.post(checkOverlappingUrl, requestData)
-		        .then(function(data) {		        	
-		        	if (data.length === 0) {
+		        .then(function(resp) {		        	
+		        	if (resp.data.length === 0) {
 		        		commandCheckDeferred.resolve();
 			        }
 			        else {
 		        		commandCheckedStatus = true;
-		        		overlappingPeopleList = data;
+		        		overlappingPeopleList = resp.data;				      
 			        }
 		        })
 		        .catch(function(e) {
