@@ -52,10 +52,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">
       <Project>{add1bcdc-cfbb-4632-8fb5-4ff3bd04f666}</Project>
       <Name>Teleopti.Ccc.Domain</Name>
