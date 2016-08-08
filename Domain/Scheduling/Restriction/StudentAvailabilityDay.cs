@@ -141,6 +141,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restriction
 			return ret;
 		}
 
+		public override int GetHashCode()
+		{
+			return Person.GetHashCode() ^ RestrictionDate.GetHashCode();
+		}
+
+		public override bool Equals(IEntity other)
+		{
+			if (other == null) return false;
+			return GetHashCode().Equals(other.GetHashCode());
+		}
+
 		public override void NotifyTransactionComplete(DomainUpdateType operation)
 		{
 			base.NotifyTransactionComplete(operation);
