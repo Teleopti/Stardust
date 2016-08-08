@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class PersonSkillProvider : IPersonSkillProvider
 	{
+		//TODO: Remove this -> lots of components could be singleinstance.
 		private readonly ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>> _personCombination = new ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>>();
 
 		public SkillCombination SkillsOnPersonDate(IPerson person, DateOnly date)
