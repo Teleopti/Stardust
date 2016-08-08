@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
@@ -26,9 +25,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 				stateHolder.AllPermittedPersons.Add(agent);
 				stateHolder.SchedulingResultState.PersonsInOrganization.Add(agent);
 			}
-			var uniqueSkills = new HashSet<ISkill>();
 			stateHolder.SchedulingResultState.SkillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
-
+			var uniqueSkills = new HashSet<ISkill>();
 			foreach (var skillDay in skillDays)
 			{
 				uniqueSkills.Add(skillDay.Skill);
@@ -36,16 +34,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 			stateHolder.SchedulingResultState.AddSkills(uniqueSkills.ToArray());
 			foreach (var uniqueSkill in uniqueSkills)
 			{
-				IList<ISkillDay> skillDaysForSkill = new List<ISkillDay>();
-				foreach (var skillDay in skillDays)
-				{
-					if(skillDay.Skill.Equals(uniqueSkill))
-						skillDaysForSkill.Add(skillDay);
-				}
-				stateHolder.SchedulingResultState.SkillDays[uniqueSkill] = skillDaysForSkill;
+				stateHolder.SchedulingResultState.SkillDays[uniqueSkill] = skillDays.Where(skillDay => skillDay.Skill.Equals(uniqueSkill));
 			}
 
-			stateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(period, TimeZoneInfo.Utc);
+			stateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(period, timeZone);
 			((SchedulerStateHolder) stateHolder).SetLoadedPeriod_UseOnlyFromTest_ShouldProbablyBePutOnScheduleDictionaryInsteadIfNeededAtAll(dateTimePeriod);
 			return stateHolder;
 		}
@@ -57,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 			IEnumerable<IScheduleData> persistableScheduleData,
 			IEnumerable<ISkillDay> skillDays)
 		{
-			return Fill(stateHolderFunc,scenario,period,agents,persistableScheduleData,skillDays,TimeZoneInfo.Utc);
+			return Fill(stateHolderFunc, scenario, period, agents, persistableScheduleData, skillDays, TimeZoneInfo.Utc);
 		}
 
 		public static ISchedulerStateHolder Fill(this Func<ISchedulerStateHolder> stateHolderFunc,
