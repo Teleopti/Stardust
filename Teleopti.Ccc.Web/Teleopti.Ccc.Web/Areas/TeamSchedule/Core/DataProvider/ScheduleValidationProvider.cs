@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 using static Teleopti.Interfaces.Domain.DateHelper;
 
@@ -19,17 +20,19 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IPersonRepository _personRepository;
 		private readonly IPersonWeekViolatingWeeklyRestSpecification _personWeekViolating;
+		private readonly IPersonNameProvider _personNameProvider;
 		private readonly IUserTimeZone _timeZone;
 
 		public ScheduleValidationProvider(IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,
 			IPersonRepository personRepository, IPersonWeekViolatingWeeklyRestSpecification personWeekViolating,
-			IUserTimeZone timeZone)
+			IUserTimeZone timeZone, IPersonNameProvider personNameProvider)
 		{
 			_scheduleStorage = scheduleStorage;
 			_currentScenario = currentScenario;
 			_personRepository = personRepository;
 			_personWeekViolating = personWeekViolating;
 			_timeZone = timeZone;
+			_personNameProvider = personNameProvider;
 		}
 
 		public IList<ActivityLayerOverlapCheckingResult> GetActivityLayerOverlapCheckingResult(
@@ -72,6 +75,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				results.Add(new ActivityLayerOverlapCheckingResult
 				{
 					PersonId = person.Id.GetValueOrDefault(),
+					PersonName = _personNameProvider.BuildNameFromSetting(person.Name),
 					OverlappedLayers = overlapLayers
 				});
 
@@ -196,6 +200,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 	public class ActivityLayerOverlapCheckingResult
 	{
 		public Guid PersonId { get; set; }
+		public string PersonName { get; set; }
 		public List<OverlappedLayer> OverlappedLayers { get; set; }
 	}
 
