@@ -1,7 +1,7 @@
-﻿using System;
+﻿using NHibernate.Util;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Util;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -11,7 +11,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-
 	public class FakePersonRequestRepository : IPersonRequestRepository
 	{
 		private readonly IList<IPersonRequest> _requestRepository = new List<IPersonRequest>();
@@ -41,14 +40,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return Get(id);
 		}
 
-		public long CountAllEntities()
-		{
-			throw new NotImplementedException();
-		}
-
 		public void AddRange(IEnumerable<IPersonRequest> entityCollection)
 		{
-			entityCollection.ForEach (Add);
+			entityCollection.ForEach(Add);
 		}
 
 		public IUnitOfWork UnitOfWork { get; private set; }
@@ -70,7 +64,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, DateTimePeriod period)
 		{
-			return new List<IPersonRequest>();
+			return _requestRepository;
 		}
 
 		public IEnumerable<IPersonRequest> FindAllRequests(RequestFilter filter)
@@ -78,7 +72,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			int count;
 			return FindAllRequests(filter, out count, true);
 		}
-
 
 		public IEnumerable<IPersonRequest> FindAllRequests(RequestFilter filter, out int count, bool ignoreCount = false)
 		{
@@ -88,7 +81,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			{
 				requests = (from request in _requestRepository
 							where request.Request.Period.EndDateTime > filter.Period.StartDateTime &&
-									request.Request.Period.StartDateTime < filter.Period.EndDateTime
+								  request.Request.Period.StartDateTime < filter.Period.EndDateTime
 							select request);
 			}
 			else
@@ -96,10 +89,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				requests = _requestRepository.Where(request => filter.Period.ContainsPart(request.Request.Period));
 			}
 
-
 			if (filter.OnlyIncludeRequestsStartingWithinPeriod)
 			{
-				requests = requests.Where (request => request.Request.Period.StartDateTime >= filter.Period.StartDateTime);
+				requests = requests.Where(request => request.Request.Period.StartDateTime >= filter.Period.StartDateTime);
 			}
 
 			if (filter.RequestTypes != null)
@@ -120,13 +112,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 					{
 						return true;
 					}
-					var shiftTradeStatus = ((ShiftTradeRequest) request.Request)
+					var shiftTradeStatus = ((ShiftTradeRequest)request.Request)
 						.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing());
 					return shiftTradeStatus != ShiftTradeStatus.OkByMe && shiftTradeStatus != ShiftTradeStatus.Referred;
 				});
 			}
 
-			requests = requests.Where(r => !((Person) r.Person).IsDeleted);
+			requests = requests.Where(r => !((Person)r.Person).IsDeleted);
 			count = requests.Count();
 			return requests.ToList();
 		}
@@ -168,13 +160,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _requestRepository.FirstOrDefault(x => x.Request.Id.GetValueOrDefault() == value);
 		}
 
-		public IList<IPersonRequest> FindAllRequestsExceptOffer(IPerson person, Paging paging)
-		{
-			return _requestRepository.Where(request => request.Request.RequestType != RequestType.ShiftExchangeOffer
-														&& request.Person.Id.GetValueOrDefault() == person.Id.GetValueOrDefault())
-				.ToList();
-		}
-
 		public IList<IShiftExchangeOffer> FindOfferByStatus(IPerson person, DateOnly date, ShiftExchangeOfferStatus status)
 		{
 			throw new NotImplementedException();
@@ -184,11 +169,23 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			DateOnly shiftTradeDate)
 		{
 			var result = _requestRepository.Where(request => request.Request.RequestType == RequestType.ShiftExchangeOffer
-															  && request.RequestedDate.Date == shiftTradeDate.Date
-															  && personList.Contains(request.Person) && request.IsPending)
+															 && request.RequestedDate.Date == shiftTradeDate.Date
+															 && personList.Contains(request.Person) && request.IsPending)
 				.Select(pr => (IShiftExchangeOffer)pr.Request)
 				.ToList();
 			return result;
+		}
+
+		public long CountAllEntities()
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<IPersonRequest> FindAllRequestsExceptOffer(IPerson person, Paging paging)
+		{
+			return _requestRepository.Where(request => request.Request.RequestType != RequestType.ShiftExchangeOffer
+													   && request.Person.Id.GetValueOrDefault() == person.Id.GetValueOrDefault())
+				.ToList();
 		}
 	}
 }

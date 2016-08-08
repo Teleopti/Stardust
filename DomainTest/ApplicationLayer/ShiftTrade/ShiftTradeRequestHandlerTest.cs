@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -30,27 +30,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 	[TestFixture]
 	public class ShiftTradeRequestHandlerTest
 	{
-		private ShiftTradeRequestHandler target;
-		private IShiftTradeValidator validator;
-		private IPersonRequestRepository personRequestRepository;
-		private IPersonRepository personRepository;
-		private IPersonRequest personRequest;
-		private Person fromPerson;
-		private Person toPerson;
-		private ICurrentScenario scenarioRepository;
-		private IScheduleStorage scheduleStorage;
-		private ISchedulingResultStateHolder schedulingResultState;
-		private IScenario scenario;
-		private IRequestFactory requestFactory;
-		private IScheduleDifferenceSaver scheduleDictionarySaver;
-		private IPersonRequestCheckAuthorization personRequestCheckAuthorization;
-		private ILoadSchedulesForRequestWithoutResourceCalculation loader;
-		private IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService;
-		private IMessageBrokerComposite messageBroker;
-		private IBusinessRuleProvider businessRuleProvider;
-		private INewBusinessRuleCollection newBusinessRuleCollection;
-		private IShiftTradePendingReasonsService shiftTradePendingReasonsService;
-
 		[SetUp]
 		public void Setup()
 		{
@@ -77,13 +56,34 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			messageBroker = new FakeMessageBrokerComposite();
 			businessRuleProvider = MockRepository.GenerateMock<IBusinessRuleProvider>();
 			newBusinessRuleCollection = new FakeNewBusinessRuleCollection();
-			shiftTradePendingReasonsService = new ShiftTradePendingReasonsService (requestFactory, scenarioRepository);
+			shiftTradePendingReasonsService = new ShiftTradePendingReasonsService(requestFactory, scenarioRepository);
 
 			target = new ShiftTradeRequestHandler(schedulingResultState, validator, requestFactory,
 				scenarioRepository, personRequestRepository, scheduleStorage,
 				personRepository, personRequestCheckAuthorization, scheduleDictionarySaver,
 				loader, differenceCollectionService, messageBroker, businessRuleProvider, shiftTradePendingReasonsService);
 		}
+
+		private ShiftTradeRequestHandler target;
+		private IShiftTradeValidator validator;
+		private IPersonRequestRepository personRequestRepository;
+		private IPersonRepository personRepository;
+		private IPersonRequest personRequest;
+		private Person fromPerson;
+		private Person toPerson;
+		private ICurrentScenario scenarioRepository;
+		private IScheduleStorage scheduleStorage;
+		private ISchedulingResultStateHolder schedulingResultState;
+		private IScenario scenario;
+		private IRequestFactory requestFactory;
+		private IScheduleDifferenceSaver scheduleDictionarySaver;
+		private IPersonRequestCheckAuthorization personRequestCheckAuthorization;
+		private ILoadSchedulesForRequestWithoutResourceCalculation loader;
+		private IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService;
+		private IMessageBrokerComposite messageBroker;
+		private IBusinessRuleProvider businessRuleProvider;
+		private INewBusinessRuleCollection newBusinessRuleCollection;
+		private IShiftTradePendingReasonsService shiftTradePendingReasonsService;
 
 		private void createRepositories()
 		{
@@ -112,80 +112,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 		private void createPersonAndScenario()
 		{
-			fromPerson = new Person { Name = new Name("Janne", "Schaffer") };
-			toPerson = new Person { Name = new Name("Staffan", "Ling") };
-			var wfcl = new WorkflowControlSet("Mutex") { AutoGrantShiftTradeRequest = true };
+			fromPerson = new Person {Name = new Name("Janne", "Schaffer")};
+			toPerson = new Person {Name = new Name("Staffan", "Ling")};
+			var wfcl = new WorkflowControlSet("Mutex") {AutoGrantShiftTradeRequest = true};
 			fromPerson.WorkflowControlSet = wfcl;
 			toPerson.WorkflowControlSet = wfcl;
 			scenario = new Scenario("Default");
-		}
-
-		[Test]
-		public void CanConsumeNewValidateIsTrue()
-		{
-			var created = getNewShiftTradeRequestCreated();
-			var statusChecker = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();
-
-			validator.Stub(x => x.Validate((IShiftTradeRequest)personRequest.Request))
-				.Return(new ShiftTradeRequestValidationResult(true));
-			personRequestRepository.Stub(x => x.Get(created.PersonRequestId)).Return(personRequest);
-			scenarioRepository.Stub(x => x.Current()).Return(scenario);
-			requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker(schedulingResultState)).Return(statusChecker);
-
-			target.Handle(created);
-			Assert.AreEqual(false, personRequest.IsNew);
-			Assert.AreEqual(true, personRequest.IsPending);
-		}
-
-		[Test]
-		public void ShouldBeReferedAfterScheduleChanged()
-		{
-			personRequest = creatPersonRequest();
-
-			var scheduleChangedEvent = new ProjectionChangedEvent
-			{
-				PersonId = personRequest.Person.Id.GetValueOrDefault(),
-				ScheduleDays = new[]
-				{
-					new ProjectionChangedEventScheduleDay {Date = DateTime.Now},
-					new ProjectionChangedEventScheduleDay {Date = DateTime.Now}
-				}
-			};
-
-			target = getTargetWithAlwaysReferedChecker();
-
-			target.Handle(scheduleChangedEvent);
-			var shiftTrafeRequest = (IShiftTradeRequest)personRequest.Request;
-
-			var mockRequestStatusChecker = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();
-			Assert.AreEqual(ShiftTradeStatus.Referred, shiftTrafeRequest.GetShiftTradeStatus(mockRequestStatusChecker));
-		}
-
-		[Test]
-		public void ShouldSendNotificationToAnotherPerson()
-		{
-			personRequest = creatPersonRequest();
-
-			var scheduleChangedEvent = new ProjectionChangedEvent
-			{
-				PersonId = personRequest.Request.PersonFrom.Id.GetValueOrDefault(),
-				ScheduleDays = new[]
-				{
-					new ProjectionChangedEventScheduleDay {Date = DateTime.Now},
-					new ProjectionChangedEventScheduleDay {Date = DateTime.Now}
-				}
-			};
-
-			target = getTargetWithAlwaysReferedChecker();
-
-			target.Handle(scheduleChangedEvent);
-
-			var shiftTradeRequest = (IShiftTradeRequest)personRequest.Request;
-			var fakeMessageBroker = (FakeMessageBrokerComposite)messageBroker;
-			fakeMessageBroker.ReferenceObjectId().Should()
-				.Be(shiftTradeRequest.PersonTo.Id.GetValueOrDefault());
-			fakeMessageBroker.SentCount().Should().Be(1);
-			fakeMessageBroker.SentMessageType().Should().Be(typeof(IShiftTradeScheduleChangedInDefaultScenario));
 		}
 
 		private ShiftTradeRequestHandler getTargetWithAlwaysReferedChecker()
@@ -212,6 +144,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var personTo = PersonFactory.CreatePersonWithId();
 			var personFrom = PersonFactory.CreatePersonWithId();
 			var newPersonRequest = new PersonRequestFactory().CreatePersonShiftTradeRequest(personFrom, personTo, DateOnly.Today);
+			newPersonRequest.SetId(Guid.NewGuid());
 			var shiftTradeRequest = newPersonRequest.Request as IShiftTradeRequest;
 			shiftTradeRequest.SetShiftTradeStatus(ShiftTradeStatus.OkByBothParts, new PersonRequestAuthorizationCheckerForTest());
 			personRequestRepository.Add(newPersonRequest);
@@ -221,20 +154,29 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			return newPersonRequest;
 		}
 
-		[Test]
-		public void CanConsumeNewValidateIsFalse()
+		private static NewShiftTradeRequestCreatedEvent getNewShiftTradeRequestCreated()
 		{
-			var created = getNewShiftTradeRequestCreated();
-			var statusChecker = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();
+			var nstrc = new NewShiftTradeRequestCreatedEvent
+			{
+				LogOnDatasource = "V7Config",
+				LogOnBusinessUnitId = new Guid("928DD0BC-BF40-412E-B970-9B5E015AADEA"),
+				Timestamp = DateTime.UtcNow,
+				PersonRequestId = new Guid("9AC8476B-9B8F-4330-9561-9D7A00BAA585")
+			};
+			return nstrc;
+		}
 
-			validator.Stub(x => x.Validate((IShiftTradeRequest)personRequest.Request))
-				.Return(new ShiftTradeRequestValidationResult(false));
-			personRequestRepository.Stub(x => x.Get(created.PersonRequestId)).Return(personRequest);
-			scenarioRepository.Stub(x => x.Current()).Return(scenario);
-			requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker(schedulingResultState)).Return(statusChecker);
-
-			target.Handle(created);
-			Assert.AreEqual(true, personRequest.IsDenied);
+		private static AcceptShiftTradeEvent getAcceptShiftTrade()
+		{
+			var ast = new AcceptShiftTradeEvent
+			{
+				LogOnDatasource = "V7Config",
+				LogOnBusinessUnitId = new Guid("928DD0BC-BF40-412E-B970-9B5E015AADEA"),
+				Timestamp = DateTime.UtcNow,
+				PersonRequestId = new Guid("9AC8476B-9B8F-4330-9561-9D7A00BAA585"),
+				Message = "I want to trade!"
+			};
+			return ast;
 		}
 
 		[Test]
@@ -244,11 +186,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			var approvalService = MockRepository.GenerateMock<IRequestApprovalService>();
 			var statusChecker = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();
-			var shiftTradeRequest = (IShiftTradeRequest)personRequest.Request;
+			var shiftTradeRequest = (IShiftTradeRequest) personRequest.Request;
 			var ruleResponse = new BusinessRuleResponse(typeof (NewPersonAccountRule), "no go", false, false,
 				new DateTimePeriod(), PersonFactory.CreatePersonWithId(), new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
-			var rules = new List<IBusinessRuleResponse> { ruleResponse };
-			((FakeNewBusinessRuleCollection)newBusinessRuleCollection).SetRuleResponse(rules);
+			var rules = new List<IBusinessRuleResponse> {ruleResponse};
+			((FakeNewBusinessRuleCollection) newBusinessRuleCollection).SetRuleResponse(rules);
 			newBusinessRuleCollection.Add(new NewPersonAccountRule(null, null));
 			INewBusinessRuleCollection ruleCollection = null;
 
@@ -268,8 +210,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			approvalService.Stub(x => x.ApproveShiftTrade(shiftTradeRequest)).Return(new List<IBusinessRuleResponse>());
 			requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker(schedulingResultState)).Return(statusChecker);
 			businessRuleProvider.Stub(x => x.GetAllBusinessRules(null))
-               .IgnoreArguments()
-               .Return(newBusinessRuleCollection);
+				.IgnoreArguments()
+				.Return(newBusinessRuleCollection);
 			target.Handle(accept);
 			Assert.AreEqual(false, personRequest.IsNew);
 			Assert.AreEqual(false, personRequest.IsPending);
@@ -278,7 +220,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			Assert.AreEqual(ShiftTradeStatus.OkByBothParts,
 				shiftTradeRequest.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
 			Assert.AreEqual(accept.Message, personRequest.GetMessage(new NoFormatting()));
-			ruleCollection.Item(typeof(NewPersonAccountRule)).HaltModify.Should().Be.False();
+			ruleCollection.Item(typeof (NewPersonAccountRule)).HaltModify.Should().Be.False();
 			statusChecker.AssertWasCalled(x => x.Check(shiftTradeRequest), o => o.Repeat.Twice());
 			scheduleDictionarySaver.AssertWasCalled(x => x.SaveChanges(null, null), o => o.IgnoreArguments());
 			loader.AssertWasCalled(x => x.Execute(scenario, new DateTimePeriod(), null, schedulingResultState),
@@ -292,7 +234,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			var approvalService = MockRepository.GenerateMock<IRequestApprovalService>();
 			var statusChecker = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();
-			var shiftTradeRequest = (IShiftTradeRequest)personRequest.Request;
+			var shiftTradeRequest = (IShiftTradeRequest) personRequest.Request;
 
 			validator.Stub(x => x.Validate(shiftTradeRequest)).Return(new ShiftTradeRequestValidationResult(true));
 			personRepository.Stub(x => x.Get(accept.AcceptingPersonId)).Return(toPerson);
@@ -306,13 +248,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			scheduleDictionarySaver.Stub(x => x.SaveChanges(null, null)).IgnoreArguments().Throw(new ValidationException());
 			var ruleResponse = new BusinessRuleResponse(typeof (NewPersonAccountRule), "no go", false, false,
 				new DateTimePeriod(), PersonFactory.CreatePersonWithId(), new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
-			var rules = new List<IBusinessRuleResponse> { ruleResponse };
-			((FakeNewBusinessRuleCollection)newBusinessRuleCollection).SetRuleResponse(rules);
+			var rules = new List<IBusinessRuleResponse> {ruleResponse};
+			((FakeNewBusinessRuleCollection) newBusinessRuleCollection).SetRuleResponse(rules);
 			newBusinessRuleCollection.Add(new NewPersonAccountRule(null, null));
-			
+
 			businessRuleProvider.Stub(x => x.GetAllBusinessRules(null))
-			               .IgnoreArguments()
-			               .Return(newBusinessRuleCollection);
+				.IgnoreArguments()
+				.Return(newBusinessRuleCollection);
 			target.Handle(accept);
 			Assert.AreEqual(false, personRequest.IsNew);
 			Assert.AreEqual(false, personRequest.IsPending);
@@ -325,54 +267,36 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		}
 
 		[Test]
-		public void ShouldKeepAsPendingWhenBusinessRulesFail()
+		public void CanConsumeNewValidateIsFalse()
 		{
-			const string ruleMessage1 = "aja baja!";
-			const string ruleMessage2 = "Another rule broken!";
-			var accept = getAcceptShiftTrade();
-
-			var approvalService = MockRepository.GenerateMock<IRequestApprovalService>();
+			var created = getNewShiftTradeRequestCreated();
 			var statusChecker = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();
 
-			var rule1 = MockRepository.GenerateMock<IBusinessRuleResponse>();
-			rule1.Stub(x => x.Message).Return(ruleMessage1);
-			rule1.Stub(x => x.TypeOfRule).Return(typeof(NewMaxWeekWorkTimeRule));
-			var rule2 = MockRepository.GenerateMock<IBusinessRuleResponse>();
-			rule2.Stub(x => x.Message).Return(ruleMessage2);
-			rule2.Stub(x => x.TypeOfRule).Return(typeof(NewShiftCategoryLimitationRule));
-
-			var shiftTradeRequest = (IShiftTradeRequest)personRequest.Request;
-			validator.Stub(x => x.Validate(shiftTradeRequest)).Return(new ShiftTradeRequestValidationResult(true));
-			personRepository.Stub(x => x.Get(accept.AcceptingPersonId)).Return(toPerson);
-			approvalService.Stub(x => x.ApproveShiftTrade(shiftTradeRequest))
-				.Return(new List<IBusinessRuleResponse> { rule1, rule1, rule2 });
-			requestFactory.Stub(x => x.GetRequestApprovalService(null, scenario, schedulingResultState))
-				.IgnoreArguments().Return(approvalService);
-			personRequestRepository.Stub(x => x.Get(accept.PersonRequestId)).Return(personRequest);
+			validator.Stub(x => x.Validate((IShiftTradeRequest) personRequest.Request))
+				.Return(new ShiftTradeRequestValidationResult(false));
+			personRequestRepository.Stub(x => x.Get(created.PersonRequestId)).Return(personRequest);
 			scenarioRepository.Stub(x => x.Current()).Return(scenario);
 			requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker(schedulingResultState)).Return(statusChecker);
-			var ruleResponse1 = new BusinessRuleResponse(typeof (NewMaxWeekWorkTimeRule), "no go", false, false,
-				new DateTimePeriod(), PersonFactory.CreatePersonWithId(), new DateOnlyPeriod(new DateOnly(2008, 12, 22), new DateOnly(2008, 12, 25)));
-			var ruleResponse2 = new BusinessRuleResponse(typeof(NewShiftCategoryLimitationRule), "no go", false, false,
-				new DateTimePeriod(), PersonFactory.CreatePersonWithId(), new DateOnlyPeriod(new DateOnly(2008, 12, 22), new DateOnly(2008, 12, 25)));
-			var rules = new List<IBusinessRuleResponse> { ruleResponse1, ruleResponse2 };
-			((FakeNewBusinessRuleCollection)newBusinessRuleCollection).SetRuleResponse(rules);
-			newBusinessRuleCollection.Add(new NewPersonAccountRule(null, null));
-			
-			businessRuleProvider.Stub(x => x.GetAllBusinessRules(null))
-			               .IgnoreArguments()
-			               .Return(newBusinessRuleCollection);
-			target.Handle(accept);
+
+			target.Handle(created);
+			Assert.AreEqual(true, personRequest.IsDenied);
+		}
+
+		[Test]
+		public void CanConsumeNewValidateIsTrue()
+		{
+			var created = getNewShiftTradeRequestCreated();
+			var statusChecker = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();
+
+			validator.Stub(x => x.Validate((IShiftTradeRequest) personRequest.Request))
+				.Return(new ShiftTradeRequestValidationResult(true));
+			personRequestRepository.Stub(x => x.Get(created.PersonRequestId)).Return(personRequest);
+			scenarioRepository.Stub(x => x.Current()).Return(scenario);
+			requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker(schedulingResultState)).Return(statusChecker);
+
+			target.Handle(created);
 			Assert.AreEqual(false, personRequest.IsNew);
 			Assert.AreEqual(true, personRequest.IsPending);
-			Assert.AreEqual(false, personRequest.IsApproved);
-			Assert.AreEqual(BusinessRuleFlags.NewMaxWeekWorkTimeRule | BusinessRuleFlags.NewShiftCategoryLimitationRule,
-				personRequest.BrokenBusinessRules);
-			Assert.AreEqual(ShiftTradeStatus.OkByBothParts,
-				shiftTradeRequest.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
-			personRequest.GetMessage(new NoFormatting())
-				.Should().Be.EqualTo("I want to trade!\r\nViolation of a Business Rule:\r\n"
-									 + ruleMessage1 + "\r\n" + ruleMessage2 + "\r\n");
 		}
 
 		[Test]
@@ -402,29 +326,110 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			requestFactory.AssertWasNotCalled(x => x.GetShiftTradeRequestStatusChecker(schedulingResultState));
 		}
 
-		private static NewShiftTradeRequestCreatedEvent getNewShiftTradeRequestCreated()
+		[Test]
+		public void ShouldBeReferedAfterScheduleChanged()
 		{
-			var nstrc = new NewShiftTradeRequestCreatedEvent
+			personRequest = creatPersonRequest();
+
+			var now = DateTime.Now;
+			var scheduleChangedEvent = new ProjectionChangedEvent
 			{
-				LogOnDatasource = "V7Config",
-				LogOnBusinessUnitId = new Guid("928DD0BC-BF40-412E-B970-9B5E015AADEA"),
-				Timestamp = DateTime.UtcNow,
-				PersonRequestId = new Guid("9AC8476B-9B8F-4330-9561-9D7A00BAA585")
+				PersonId = personRequest.Person.Id.GetValueOrDefault(),
+				ScheduleDays = new[]
+				{
+					new ProjectionChangedEventScheduleDay {Date = now},
+					new ProjectionChangedEventScheduleDay {Date = now}
+				}
 			};
-			return nstrc;
+
+			target = getTargetWithAlwaysReferedChecker();
+
+			target.Handle(scheduleChangedEvent);
+			var shiftTrafeRequest = (IShiftTradeRequest) personRequest.Request;
+
+			var mockRequestStatusChecker = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();
+			Assert.AreEqual(ShiftTradeStatus.Referred, shiftTrafeRequest.GetShiftTradeStatus(mockRequestStatusChecker));
 		}
 
-		private static AcceptShiftTradeEvent getAcceptShiftTrade()
+		[Test]
+		public void ShouldKeepAsPendingWhenBusinessRulesFail()
 		{
-			var ast = new AcceptShiftTradeEvent
+			const string ruleMessage1 = "aja baja!";
+			const string ruleMessage2 = "Another rule broken!";
+			var accept = getAcceptShiftTrade();
+
+			var approvalService = MockRepository.GenerateMock<IRequestApprovalService>();
+			var statusChecker = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();
+
+			var rule1 = MockRepository.GenerateMock<IBusinessRuleResponse>();
+			rule1.Stub(x => x.Message).Return(ruleMessage1);
+			rule1.Stub(x => x.TypeOfRule).Return(typeof (NewMaxWeekWorkTimeRule));
+			var rule2 = MockRepository.GenerateMock<IBusinessRuleResponse>();
+			rule2.Stub(x => x.Message).Return(ruleMessage2);
+			rule2.Stub(x => x.TypeOfRule).Return(typeof (NewShiftCategoryLimitationRule));
+
+			var shiftTradeRequest = (IShiftTradeRequest) personRequest.Request;
+			validator.Stub(x => x.Validate(shiftTradeRequest)).Return(new ShiftTradeRequestValidationResult(true));
+			personRepository.Stub(x => x.Get(accept.AcceptingPersonId)).Return(toPerson);
+			approvalService.Stub(x => x.ApproveShiftTrade(shiftTradeRequest))
+				.Return(new List<IBusinessRuleResponse> {rule1, rule1, rule2});
+			requestFactory.Stub(x => x.GetRequestApprovalService(null, scenario, schedulingResultState))
+				.IgnoreArguments().Return(approvalService);
+			personRequestRepository.Stub(x => x.Get(accept.PersonRequestId)).Return(personRequest);
+			scenarioRepository.Stub(x => x.Current()).Return(scenario);
+			requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker(schedulingResultState)).Return(statusChecker);
+			var ruleResponse1 = new BusinessRuleResponse(typeof (NewMaxWeekWorkTimeRule), "no go", false, false,
+				new DateTimePeriod(), PersonFactory.CreatePersonWithId(),
+				new DateOnlyPeriod(new DateOnly(2008, 12, 22), new DateOnly(2008, 12, 25)));
+			var ruleResponse2 = new BusinessRuleResponse(typeof (NewShiftCategoryLimitationRule), "no go", false, false,
+				new DateTimePeriod(), PersonFactory.CreatePersonWithId(),
+				new DateOnlyPeriod(new DateOnly(2008, 12, 22), new DateOnly(2008, 12, 25)));
+			var rules = new List<IBusinessRuleResponse> {ruleResponse1, ruleResponse2};
+			((FakeNewBusinessRuleCollection) newBusinessRuleCollection).SetRuleResponse(rules);
+			newBusinessRuleCollection.Add(new NewPersonAccountRule(null, null));
+
+			businessRuleProvider.Stub(x => x.GetAllBusinessRules(null))
+				.IgnoreArguments()
+				.Return(newBusinessRuleCollection);
+			target.Handle(accept);
+			Assert.AreEqual(false, personRequest.IsNew);
+			Assert.AreEqual(true, personRequest.IsPending);
+			Assert.AreEqual(false, personRequest.IsApproved);
+			Assert.AreEqual(BusinessRuleFlags.NewMaxWeekWorkTimeRule | BusinessRuleFlags.NewShiftCategoryLimitationRule,
+				personRequest.BrokenBusinessRules);
+			Assert.AreEqual(ShiftTradeStatus.OkByBothParts,
+				shiftTradeRequest.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
+			personRequest.GetMessage(new NoFormatting())
+				.Should().Be.EqualTo("I want to trade!\r\nViolation of a Business Rule:\r\n"
+									 + ruleMessage1 + "\r\n" + ruleMessage2 + "\r\n");
+		}
+
+		[Test]
+		public void ShouldSendNotificationToAnotherPerson()
+		{
+			personRequest = creatPersonRequest();
+
+			var now = DateTime.Now;
+			var scheduleChangedEvent = new ProjectionChangedEvent
 			{
-				LogOnDatasource = "V7Config",
-				LogOnBusinessUnitId = new Guid("928DD0BC-BF40-412E-B970-9B5E015AADEA"),
-				Timestamp = DateTime.UtcNow,
-				PersonRequestId = new Guid("9AC8476B-9B8F-4330-9561-9D7A00BAA585"),
-				Message = "I want to trade!"
+				PersonId = personRequest.Request.PersonFrom.Id.GetValueOrDefault(),
+				ScheduleDays = new[]
+				{
+					new ProjectionChangedEventScheduleDay {Date = now},
+					new ProjectionChangedEventScheduleDay {Date = now}
+				}
 			};
-			return ast;
+
+			target = getTargetWithAlwaysReferedChecker();
+
+			target.Handle(scheduleChangedEvent);
+
+			var shiftTradeRequest = (IShiftTradeRequest) personRequest.Request;
+			var fakeMessageBroker = (FakeMessageBrokerComposite) messageBroker;
+			fakeMessageBroker.ReferenceObjectId().Should()
+				.Be(shiftTradeRequest.PersonTo.Id.GetValueOrDefault());
+			fakeMessageBroker.SentCount().Should().Be(1);
+			fakeMessageBroker.SentMessageType().Should().Be(typeof (IShiftTradeScheduleChangedInDefaultScenario));
 		}
 	}
 }
