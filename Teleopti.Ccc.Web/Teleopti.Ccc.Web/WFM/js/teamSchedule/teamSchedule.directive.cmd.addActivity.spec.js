@@ -331,7 +331,8 @@
 		var fakeResponse = {
 			data: []
 		};
-		var checkStatus = false;
+		var checkStatus = false,
+		fakeOverlappingList = [];
 
 		this.checkOverlappingCertainActivities = function() {
 			return {
@@ -348,6 +349,10 @@
 
 		this.resetCommandCheckStatus = function() {
 			checkStatus = false;
+		}
+
+		this.getOverlappingAgentList = function() {
+			return fakeOverlappingList;
 		}
 	}
 
