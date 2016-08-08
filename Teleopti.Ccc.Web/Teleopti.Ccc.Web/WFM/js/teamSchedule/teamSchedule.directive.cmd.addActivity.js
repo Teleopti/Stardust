@@ -48,16 +48,7 @@
 		};
 
 		var addActivity = function () {
-            vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
-			var requestData = {
-				PersonIds: vm.selectedAgents.map(function (agent) { return agent.PersonId; }),
-				Date: vm.selectedDate(),
-				StartTime: moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm"),
-				EndTime: moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm"),
-				ActivityId: vm.selectedActivityId,
-				TrackedCommandInfo: { TrackId: vm.trackId }
-			};
-
+			var requestData = getRequestData();
 			activityService.addActivity(requestData).then(function (response) {
 				if (vm.getActionCb(vm.label)) {
 					vm.getActionCb(vm.label)(vm.trackId, requestData.PersonIds);
@@ -74,21 +65,25 @@
 			});
 		};
 
-         vm.addActivity = function() {
-            vm.requestData = {
-                PersonIds: vm.selectedAgents.map(function(agent) {
-                    return agent.PersonId;
-                }),
-                Date: vm.selectedDate(),
-                StartTime: moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm"),
-                EndTime: moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm"),
-                ActivityId: vm.selectedActivityId,
-                TrackedCommandInfo: {
-                    TrackId: vm.trackId
-                }
-            };
-            CommandCheckService.checkOverlappingCertainActivities(vm.requestData).then(addActivity);
-        };
+		function getRequestData() {
+			vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
+			return {
+				PersonIds: vm.selectedAgents.map(function (agent) {
+					return agent.PersonId;
+				}),
+				Date: vm.selectedDate(),
+				StartTime: moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm"),
+				EndTime: moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm"),
+				ActivityId: vm.selectedActivityId,
+				TrackedCommandInfo: {
+					TrackId: vm.trackId
+				}
+			};
+		}
+
+		vm.addActivity = vm.checkCommandActivityLayerOrders? function () {
+         	CommandCheckService.checkOverlappingCertainActivities(getRequestData()).then(addActivity);
+        } : addActivity ;
 
 		vm.getDefaultActvityStartTime =  function () {
 			var curDateMoment = moment(vm.selectedDate());
@@ -156,6 +151,7 @@
 			scope.vm.selectedDate = containerCtrl.getDate;
 			scope.vm.trackId = containerCtrl.getTrackId();
 			scope.vm.getActionCb = containerCtrl.getActionCb;
+			scope.vm.checkCommandActivityLayerOrders = containerCtrl.hasToggle('WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938');
 
 			scope.vm.timeRange = {
 				startTime: selfCtrl.getDefaultActvityStartTime(),
