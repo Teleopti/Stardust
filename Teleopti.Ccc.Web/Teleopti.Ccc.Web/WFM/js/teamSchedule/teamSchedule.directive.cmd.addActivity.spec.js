@@ -26,8 +26,6 @@
 			$provide.service('CommandCheckService', function () {
 				return fakeCommandCheckService;
 			});
-
-
 		});
 	});
 
@@ -329,14 +327,27 @@
 		}
 	}
 
-	function FakeCommandCheckService(){
-		var fakeResponse = {data: []};
-		this.checkOverlappingCertainActivities = function(){
+	function FakeCommandCheckService() {
+		var fakeResponse = {
+			data: []
+		};
+		var checkStatus = false;
+
+		this.checkOverlappingCertainActivities = function() {
 			return {
-				then: function(cb){
+				then: function(cb) {
+					checkStatus = true;
 					cb(fakeResponse);
 				}
 			}
+		}
+
+		this.getCommandCheckStatus = function() {
+			return checkStatus;
+		}
+
+		this.resetCommandCheckStatus = function() {
+			checkStatus = false;
 		}
 	}
 

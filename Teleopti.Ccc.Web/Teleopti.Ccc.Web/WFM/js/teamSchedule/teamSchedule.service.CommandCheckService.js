@@ -1,15 +1,17 @@
 ﻿(function() {
     angular.module('wfm.teamSchedule').service('CommandCheckService', CommandCheckService);
 
-    CommandCheckService.$inject = ['$http', '$q', '$rootScope'];
+    CommandCheckService.$inject = ['$http', '$q'];
 
-    function CommandCheckService($http, $q, $rootScope) {
+    function CommandCheckService($http, $q) {
         var checkOverlappingUrl = "../api/TeamScheduleCommand/CheckOverlapppingCertainActivities";
         var overlappingPeopleList = [];
-        var globalDeferred, globalResolveData;
+        var globalDeferred, globalResolveData, commandCheckedStatus = false;
 
         this.checkOverlappingCertainActivities = checkOverlappingCertainActivities;
         this.getOverlappingAgentList = getOverlappingAgentList;
+        this.getCommandCheckStatus = getCommandCheckStatus;
+        this.resetCommandCheckStatus = resetCommandCheckStatus;
         this.resolvePromise = resolvePromise;
 
         var fakeData = [{
@@ -26,28 +28,36 @@
         function checkOverlappingCertainActivities(requestData) {
             globalDeferred = $q.defer();
 
+            //Temporarily fake backend checking activity overlap rules(trigger when start hour is 14 and end hour is 15).
             var overlapped = moment(requestData.StartTime).hours() == 14 && moment(requestData.EndTime).hours() == 15;
 
             if (overlapped) {
                 $http.post(checkOverlappingUrl, requestData).then(function(data) {
                     globalResolveData = data;
                     overlappingPeopleList = fakeData;
-                    $rootScope.$broadcast('teamSchedule.overlappingCheckComplete');
+                    commandCheckedStatus = true;
                 }, function(error) {
                     globalResolveData = data;
                     overlappingPeopleList = fakeData;
-                    $rootScope.$broadcast('teamSchedule.overlappingCheckComplete');
+                    commandCheckedStatus = true;
                 });
-
             } else {
                 $http.post(checkOverlappingUrl, requestData).then(function(data) {
                     overlappingPeopleList = [];
+                    globalDeferred.resolve(data);
                 }, function(error) {
                     globalDeferred.reject(error);
                 });
-
             }
             return globalDeferred.promise;
+        }
+
+        function getCommandCheckStatus(){
+            return commandCheckedStatus;
+        }
+
+        function resetCommandCheckStatus(){
+            commandCheckedStatus = false;
         }
 
         function resolvePromise() {

@@ -20,13 +20,13 @@
         var vm = this;
 
         vm.overlappingAgents = CommandCheckService.getOverlappingAgentList();
+        var unselectedPersonIds = vm.overlappingAgents.map(function(agent) {
+            return agent.PersonId;
+        });
+        
+        personSelectionSvc.unselectPersonsWithIds(unselectedPersonIds);
 
         vm.applyCommandFix = function() {
-            var unselectedPersonIds = vm.overlappingAgents.map(function(agent) {
-                return agent.PersonId;
-            });
-            personSelectionSvc.unselectPersonsWithIds(unselectedPersonIds);
-
             CommandCheckService.resolvePromise();
         };
     }

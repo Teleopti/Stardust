@@ -14,10 +14,11 @@
 		'signalRSVC',
 		'NoticeService',
 		'ValidateRulesService',
+		'CommandCheckService',
 		TeamScheduleController]);
 
 	function TeamScheduleController($scope, $q, $translate, $mdSidenav, teamScheduleSvc, groupScheduleFactory, personSelectionSvc,
-		scheduleMgmtSvc, toggleSvc, signalRSVC, NoticeService, ValidateRulesService) {
+		scheduleMgmtSvc, toggleSvc, signalRSVC, NoticeService, ValidateRulesService, CommandCheckService) {
 
 		var vm = this;
 		var commandContainerId = 'teamschedule-command-container';
@@ -29,6 +30,9 @@
 
 		vm.triggerCommand = function (label, needToOpenSidePanel) {
 			$mdSidenav(commandContainerId).close().then(function () {
+				if(CommandCheckService.getCommandCheckStatus())
+					CommandCheckService.resetCommandCheckStatus();
+				
 				needToOpenSidePanel && openSidePanel();
 
 				$scope.$broadcast('teamSchedule.init.command', {

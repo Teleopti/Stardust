@@ -1,9 +1,9 @@
 ﻿(function () {
 	angular.module('wfm.teamSchedule').directive('teamscheduleCommandContainer', teamscheduleCommandContainer);
 
-	teamscheduleCommandContainerCtrl.$inject = ['guidgenerator'];
+	teamscheduleCommandContainerCtrl.$inject = ['guidgenerator', 'CommandCheckService'];
 
-	function teamscheduleCommandContainerCtrl(guidgenerator) {
+	function teamscheduleCommandContainerCtrl(guidgenerator, CommandCheckService) {
 		var vm = this;
 
 		vm.getDate = function () { return vm.date; };
@@ -42,6 +42,10 @@
 		vm.hasToggle = function (toggle) {
 			if (!vm.configurations || !vm.configurations.toggles) return false;
 			return vm.configurations.toggles[toggle];
+		};
+
+		vm.activeCommandCheck = function(){
+			return CommandCheckService.getCommandCheckStatus();
 		};
 	}
 

@@ -3,9 +3,9 @@
 
 	angular.module('wfm.teamSchedule').directive('addActivity', addActivityDirective);
 
-	addActivityCtrl.$inject = ['$scope', 'ActivityService', 'PersonSelection', 'WFMDate', 'ScheduleManagement', 'teamScheduleNotificationService', 'CommandCheckService'];
+	addActivityCtrl.$inject = ['ActivityService', 'PersonSelection', 'WFMDate', 'ScheduleManagement', 'teamScheduleNotificationService', 'CommandCheckService'];
 
-	function addActivityCtrl($scope, activityService, personSelectionSvc, wFMDateSvc, scheduleManagementSvc, teamScheduleNotificationService, CommandCheckService) {
+	function addActivityCtrl(activityService, personSelectionSvc, wFMDateSvc, scheduleManagementSvc, teamScheduleNotificationService, CommandCheckService) {
 		var vm = this;
 
 		vm.label = 'AddActivity';
@@ -88,10 +88,6 @@
                 }
             };
             CommandCheckService.checkOverlappingCertainActivities(vm.requestData).then(addActivity);
-
-            $scope.$on('teamSchedule.overlappingCheckComplete', function(event) {
-                vm.setActiveCmd('CommandCheck');
-            });
         };
 
 		vm.getDefaultActvityStartTime =  function () {
