@@ -17,7 +17,7 @@
 						'		<div class=\"absence-account-cell\" ng-repeat=\"accountDetail in row.entity[\'PersonAccountSummaryViewModel\'].PersonAccountSummaryDetails | filter:query as personAccountSummaryDetails\">' +
 						'			<div class=\"absence-account-cell-content arrow-box\" ng-class=\" personAccountSummaryDetails.length <= $index+1 ? \'absence-account-cell-content arrow-box arrow-box-no-border\' : \'\' \">' +
 						'					{{::accountDetail.RemainingDescription}}' +
-						'					{{::accountDetail.TrackingTypeDescription}}' +
+						'					<span ng-if=\"personAccountSummaryDetails.length <= $index+1\">{{::accountDetail.TrackingTypeDescription}}</span>' +
         			    '			</div>' +
 						'		</div>' +
 						'<div>';

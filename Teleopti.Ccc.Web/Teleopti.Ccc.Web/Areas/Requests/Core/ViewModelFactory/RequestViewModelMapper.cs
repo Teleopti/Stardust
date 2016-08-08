@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			if (personAbsenceAccount != null)
 			{
 				var accountForPersonAbsence = personAbsenceAccount.Find (absenceRequest.Absence);
-				var affectedAccounts = accountForPersonAbsence?.Find (new DateOnlyPeriod (new DateOnly (absenceRequest.Period.StartDateTime), new DateOnly(absenceRequest.Period.EndDateTime)));
+				var affectedAccounts = accountForPersonAbsence?.Find (new DateOnlyPeriod (new DateOnly (absenceRequest.Period.LocalStartDateTime), new DateOnly(absenceRequest.Period.LocalEndDateTime)));
 
 				if (affectedAccounts != null)
 				{

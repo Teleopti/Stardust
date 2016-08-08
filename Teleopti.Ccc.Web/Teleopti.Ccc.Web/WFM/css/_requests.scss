@@ -289,7 +289,7 @@
 
         .arrow-box {
             position: relative;
-            background: $green-100;
+            background: $teal-100;
             border: 1px solid #000000;
             padding-left: 3px;
             margin-right: 12px;
@@ -309,7 +309,7 @@
 
         .arrow-box:after {
             border-color: rgba(136, 183, 213, 0);
-            border-left-color:$green-100;
+            border-left-color:$teal-100;
             border-width: 10px;
             margin-top: -10px;
         }

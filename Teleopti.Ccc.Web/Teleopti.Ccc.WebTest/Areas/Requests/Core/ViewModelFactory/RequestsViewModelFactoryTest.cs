@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -12,11 +11,11 @@ using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.People.Core.Providers;
 using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
@@ -263,7 +262,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			Assert.AreEqual(Resources.Days, secondSummaryDetail.TrackingTypeDescription);
 		}
 
-
 		[Test]
 		public void ShouldNotReturnPersonAccountOutsideOfRequestPeriodInApprovalSummary()
 		{
@@ -287,14 +285,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var firstSummaryDetail = summaryDetails.First();
 			Assert.AreEqual(1, summaryDetails.Count());
 			Assert.AreEqual(accountDay.StartDate.Date, firstSummaryDetail.StartDate);
-
-
 		}
-
-
 
 		private RequestViewModel doPersonalAccountSummaryTest(params AccountDay[] accountDays)
 		{
+
+			setupStateHolderProxy();
 
 			((FakeToggleManager)ToggleManager).Enable(Toggles.Wfm_Requests_Show_Personal_Account_39628);
 
@@ -318,7 +314,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var absenceRequest = result.Requests.Single(model => model.Type == RequestType.AbsenceRequest);
 			return absenceRequest;
 		}
-
 
 		private static bool referencesPerson(RequestViewModel requestViewModel, IPerson person)
 		{
@@ -360,6 +355,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			PersonRequestRepository.AddRange(personRequests);
 
 			return personRequests.ToList();
+		}
+
+		private static void setupStateHolderProxy()
+		{
+			var stateMock = new FakeState();
+			var dataSource = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
+			var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
+			StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
+			StateHolderProxyHelper.ClearAndSetStateHolder(stateMock);
 		}
 	}
 }
