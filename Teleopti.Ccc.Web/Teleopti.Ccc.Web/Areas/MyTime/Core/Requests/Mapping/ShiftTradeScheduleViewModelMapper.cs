@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IScheduleProvider _scheduleProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly IShiftTradeScheduleSiteOpenHourFilter _shiftTradeScheduleSiteOpenHourFilter;
 
 		public ShiftTradeScheduleViewModelMapper(IShiftTradeRequestProvider shiftTradeRequestProvider,
 			IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider,
@@ -26,8 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			IShiftTradeTimeLineHoursViewModelMapper shiftTradeTimeLineHoursViewModelMapper,
 			IPersonRequestRepository personRequestRepository,
 			IScheduleProvider scheduleProvider,
-			ILoggedOnUser loggedOnUser
-			)
+			ILoggedOnUser loggedOnUser, IShiftTradeScheduleSiteOpenHourFilter shiftTradeScheduleSiteOpenHourFilter)
 		{
 			_shiftTradeRequestProvider = shiftTradeRequestProvider;
 			_possibleShiftTradePersonsProvider = possibleShiftTradePersonsProvider;
@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			_personRequestRepository = personRequestRepository;
 			_scheduleProvider = scheduleProvider;
 			_loggedOnUser = loggedOnUser;
+			_shiftTradeScheduleSiteOpenHourFilter = shiftTradeScheduleSiteOpenHourFilter;
 		}
 
 		public ShiftTradeScheduleViewModel Map(ShiftTradeScheduleViewModelData data)
@@ -163,7 +164,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				? getPossibleTradeSchedules(possibleTradePersons, paging, timeSortOrder).ToList()
 				: getFilteredTimesPossibleTradeSchedules(possibleTradePersons, paging, timeFilter, timeSortOrder).ToList();
 			}
-			
+
+			possibleTradeSchedule =
+				_shiftTradeScheduleSiteOpenHourFilter.Filter(possibleTradeSchedule, possibleTradePersons).ToList();
+
 			var possibleTradeScheduleNum = possibleTradeSchedule.Any()
 				? possibleTradeSchedule.First().Total
 				: 0;
@@ -217,6 +221,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			}
 
 			return new List<ShiftTradeAddPersonScheduleViewModel>();
-		}		
+		}
 	}
 }

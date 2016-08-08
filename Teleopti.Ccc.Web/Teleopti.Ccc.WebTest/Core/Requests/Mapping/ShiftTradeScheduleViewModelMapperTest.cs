@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
@@ -42,9 +43,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			_target = new ShiftTradeScheduleViewModelMapper(_shiftTradeRequestProvider, _possibleShiftTradePersonsProvider,
 				_shiftTradePersonScheduleViewModelMapper, _shiftTradeTimeLineHoursViewModelMapper, _personRequestRepository,
-				_scheduleProvider, _loggedOnUser);
+				_scheduleProvider, _loggedOnUser,
+				new ShiftTradeScheduleSiteOpenHourFilter(_loggedOnUser, new FakeToggleManager()));
 		}
-		
+
 		[Test]
 		public void ShouldMapMyScheduleFromReadModel()
 		{
@@ -145,8 +147,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				Start = myScheduleStart,
 				End = myScheduleEnd
 			};
-
-			var person = PersonFactory.CreatePersonWithGuid("", "");
 			
 			var shiftTradeAddPersonScheduleViewModel = new ShiftTradeAddPersonScheduleViewModel
 			{
@@ -159,10 +159,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_shiftTradePersonScheduleViewModelMapper.Stub(x => x.Map(myScheduleDayReadModel, true))
 				.Return(shiftTradeAddPersonScheduleViewModel);
 			_possibleShiftTradePersonsProvider.Stub(x => x.RetrievePersons(data)).Return(persons);
-			_loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			_scheduleProvider.Stub(x => x.GetScheduleForPersons(new DateOnly(DateTime.Now), persons.Persons))
 				.Return(new List<IScheduleDay>());
-			_scheduleProvider.Stub(x => x.GetScheduleForPersons(new DateOnly(DateTime.Now), new List<IPerson> {person}))
+			_scheduleProvider.Stub(x => x.GetScheduleForPersons(new DateOnly(DateTime.Now), new List<IPerson> { _loggedOnUser.CurrentUser()}))
 				.Return(new List<IScheduleDay>());
 			_shiftTradeRequestProvider.Stub(x => x.RetrieveBulletinTradeSchedules(new List<string>(), data.Paging))
 				.Return(scheduleReadModels);
@@ -301,6 +300,40 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var result = _target.Map(data);
 			result.PossibleTradeSchedules.Count().Should().Be.EqualTo(0);
 		}
-		
+
+		[Test]
+		public void ShouldMapWithSiteOpenHourFilter()
+		{
+			var shiftTradeScheduleSiteOpenHourFilter = MockRepository.GenerateMock<IShiftTradeScheduleSiteOpenHourFilter>();
+
+			_target = new ShiftTradeScheduleViewModelMapper(_shiftTradeRequestProvider, _possibleShiftTradePersonsProvider,
+				_shiftTradePersonScheduleViewModelMapper, _shiftTradeTimeLineHoursViewModelMapper, _personRequestRepository,
+				_scheduleProvider, _loggedOnUser, shiftTradeScheduleSiteOpenHourFilter);
+
+			var teamId = Guid.NewGuid();
+			var data = new ShiftTradeScheduleViewModelData
+			{
+				ShiftTradeDate = DateOnly.Today,
+				TeamIdList = new List<Guid>() { teamId },
+				Paging = new Paging { Take = 1 }
+			};
+			var persons = new DatePersons
+			{
+				Date = data.ShiftTradeDate,
+				Persons = new[] { new Person() }
+			};
+			var possibleTradeScheduleViewModels = new List<ShiftTradeAddPersonScheduleViewModel>();
+			var scheduleReadModels = new List<IPersonScheduleDayReadModel>();
+
+			_possibleShiftTradePersonsProvider.Stub(x => x.RetrievePersons(data)).Return(persons);
+			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradeSchedules(persons.Date, persons.Persons, data.Paging, null))
+				.Return(scheduleReadModels);
+			shiftTradeScheduleSiteOpenHourFilter.Stub(x => x.Filter(possibleTradeScheduleViewModels, persons))
+				.Return(possibleTradeScheduleViewModels);
+			_shiftTradePersonScheduleViewModelMapper.Stub(x => x.Map(scheduleReadModels)).Return(possibleTradeScheduleViewModels);
+
+			var result = _target.Map(data);
+			result.PossibleTradeSchedules.Should().Not.Be.Null();
+		}
 	}
 }
