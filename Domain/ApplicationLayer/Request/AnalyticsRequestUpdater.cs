@@ -95,10 +95,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 			if (shiftTradeRequest != null)
 				dayCollection = shiftTradeRequest.ShiftTradeSwapDetails.Select(x => x.DateFrom).ToList();
 
-			var dayIdCollection = dayCollection.SelectMany(x =>
+			var dayIdCollection = dayCollection.Select(x =>
 			{
 				var d = _analyticsDateRepository.Date(x.Date);
-				return d != null ? new List<int> {d.DateId} : new List<int>();
+				if (d == null)
+					throw new DateMissingInAnalyticsException(x.Date);
+				return d.DateId;
 			}).ToList();
 
 			var absenceId = getAbsence(personRequest);
