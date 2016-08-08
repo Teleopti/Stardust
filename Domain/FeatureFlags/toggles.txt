@@ -63,7 +63,7 @@ RTA_TotalOutOfAdherenceTime_38702 = true
 RTA_PauseButton_39144 = true
 RTA_MonitorBySkills_39081 = true
 RTA_RecentOutOfAdherences_39145 = RC
-RTA_Optimize_39667 = RC
+RTA_Optimize_39667 = true
 RTA_MonitorBySkillArea_39337 = RC
 RTA_RuleMappingOptimization_39812 = true
 
@@ -93,7 +93,7 @@ WfmTeamSchedule_ModifyShiftCategory_39797 = RC
 WfmTeamSchedule_MakeNewMyTeamDefault_39744 = RC
 
 WfmReportPortal_Basic_38825 = true
-WfmReportPortal_LeaderBoard_39440 = RC
+WfmReportPortal_LeaderBoard_39440 = true
 
 WebByPassDefaultPermissionCheck_37984 = true
 
@@ -186,8 +186,8 @@ ETL_SpeedUpNightlyWorkload_38928 = RC
 ETL_SpeedUpIntradayDate_38934 = true
 ETL_SpeedUpIntradayForecastWorkload_38929 = true
 ETL_SpeedUpNightlyForecastWorkload_38929 = RC
-HealthCheck_ValidateReadModelPersonScheduleDay_39421 = RC
-HealthCheck_ValidateReadModelScheduleDay_39423 = RC
+HealthCheck_ValidateReadModelPersonScheduleDay_39421 = true
+HealthCheck_ValidateReadModelScheduleDay_39423 = true
 HealthCheck_EasyValidateAndFixReadModels_39696 = RC
 HealthCheck_ReinitializeReadModels_39697 = RC
 Intraday_ResourceCalculateReadModel_39200 = RC
