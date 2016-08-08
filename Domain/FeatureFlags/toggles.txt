@@ -138,7 +138,8 @@ WfmGlobalLayout_personalOptions_37114 = true
 
 ResourcePlanner_TeamBlockDayOffForIndividuals_37998 = false # needs to be false until we get further....
 ResourcePlanner_ScheduleOvertimeOnNonWorkingDays_38025 = true
-ResourcePlanner_CascadingSkills_38524 = RC # Should not be set to true yet
+ResourcePlanner_CascadingSkills_38524 = RC
+ResourcePlanner_CascadingSkillsGUI_40018 = RC
 
 Wfm_DisplayOnlineHelp_39402 = RC
 

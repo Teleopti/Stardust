@@ -128,8 +128,10 @@
 		ResourcePlanner_TeamBlockDayOffForIndividuals_37998,
 		ResourcePlanner_ScheduleOvertimeOnNonWorkingDays_38025,
 		ResourcePlanner_CascadingSkills_38524,
+		ResourcePlanner_CascadingSkillsGUI_40018,
 
-        Wfm_DisplayOnlineHelp_39402,
+
+				Wfm_DisplayOnlineHelp_39402,
 
         Wfm_QuickForecastOnHangfire_35845,
 		ETL_SpeedUpPermissionReport_33584,

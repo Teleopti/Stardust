@@ -363,7 +363,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void enableOrganizeCascadingSkills()
 		{
 			var toggleManager = _container.Resolve<IToggleManager>();
-			var toggled = toggleManager.IsEnabled(Toggles.ResourcePlanner_CascadingSkills_38524);
+			var toggled = toggleManager.IsEnabled(Toggles.ResourcePlanner_CascadingSkillsGUI_40018);
 			var permitted = PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.OrganizeCascadingSkills);
 
 			toolStripButtonOrganizeCascadingSkills.Visible = toggled && permitted;
