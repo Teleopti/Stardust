@@ -27,7 +27,7 @@
         personSelectionSvc.unselectPersonsWithIds(unselectedPersonIds);
 
         vm.applyCommandFix = function() {
-            CommandCheckService.resolvePromise();
+        	CommandCheckService.completeCommandCheck();
         };
     }
 })();

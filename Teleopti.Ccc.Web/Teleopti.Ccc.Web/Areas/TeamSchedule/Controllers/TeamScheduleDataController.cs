@@ -61,5 +61,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 	    {
 		    return _shiftCategoryProvider.GetAll();
 	    }
+
+		[UnitOfWork, HttpPost, Route("api/TeamScheduleData/CheckOverlapppingCertainActivities")]
+		public virtual IList<ActivityLayerOverlapCheckingResult> CheckOverlapppingCertainActivities(CheckActivityLayerOverlapFormData input)
+		{
+			return _validationProvider.GetActivityLayerOverlapCheckingResult(input);
+		}
+
 	}
 }

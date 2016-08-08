@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				results.Add(new ActivityLayerOverlapCheckingResult
 				{
 					PersonId = person.Id.GetValueOrDefault(),
-					PersonName = _personNameProvider.BuildNameFromSetting(person.Name),
+					Name = _personNameProvider.BuildNameFromSetting(person.Name),
 					OverlappedLayers = overlapLayers
 				});
 
@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 	public class ActivityLayerOverlapCheckingResult
 	{
 		public Guid PersonId { get; set; }
-		public string PersonName { get; set; }
+		public string Name { get; set; }
 		public List<OverlappedLayer> OverlappedLayers { get; set; }
 	}
 
