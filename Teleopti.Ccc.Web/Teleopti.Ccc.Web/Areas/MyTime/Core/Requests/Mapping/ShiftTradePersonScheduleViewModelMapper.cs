@@ -19,9 +19,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private readonly ITeamScheduleProjectionProvider _projectionProvider;
 		private readonly IPossibleShiftTradePersonsProvider _possibleShiftTradePersonsProvider;
 		private readonly IPersonRequestRepository _personRequestRepository;
+		private readonly IShiftTradeSiteOpenHourFilter _shiftTradeSiteOpenHourFilter;
 
 
-		public ShiftTradePersonScheduleViewModelMapper(IPermissionProvider permissionProvider, ILoggedOnUser loggedOnUser, IShiftTradePersonScheduleProvider personScheduleProvider, ITeamScheduleProjectionProvider projectionProvider, IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider, IPersonRequestRepository personRequestRepository)
+		public ShiftTradePersonScheduleViewModelMapper(IPermissionProvider permissionProvider, ILoggedOnUser loggedOnUser, IShiftTradePersonScheduleProvider personScheduleProvider, ITeamScheduleProjectionProvider projectionProvider, IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider, IPersonRequestRepository personRequestRepository, IShiftTradeSiteOpenHourFilter shiftTradeSiteOpenHourFilter)
 		{
 			_permissionProvider = permissionProvider;
 			_loggedOnUser = loggedOnUser;
@@ -29,6 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			_projectionProvider = projectionProvider;
 			_possibleShiftTradePersonsProvider = possibleShiftTradePersonsProvider;
 			_personRequestRepository = personRequestRepository;
+			_shiftTradeSiteOpenHourFilter = shiftTradeSiteOpenHourFilter;
 		}
 
 		public ShiftTradeAddPersonScheduleViewModel MakeMyScheduleViewModel(ShiftTradeScheduleViewModelData inputData)
@@ -66,6 +68,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 						};
 
 				}).Where(vm => vm != null);
+			possibleExchangedSchedules = _shiftTradeSiteOpenHourFilter.FilterScheduleView(possibleExchangedSchedules, persons);
 			pageCount = (int)Math.Ceiling((double)possibleExchangedSchedules.Count()/inputData.Paging.Take);
 
 			return possibleExchangedSchedules.OrderBy(vm => vm.StartTimeUtc).Skip(inputData.Paging.Skip).Take(inputData.Paging.Take).ToList();

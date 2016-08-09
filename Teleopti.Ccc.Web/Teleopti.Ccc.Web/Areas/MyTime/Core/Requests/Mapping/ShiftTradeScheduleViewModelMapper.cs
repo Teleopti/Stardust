@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IScheduleProvider _scheduleProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
-		private readonly IShiftTradeScheduleSiteOpenHourFilter _shiftTradeScheduleSiteOpenHourFilter;
+		private readonly IShiftTradeSiteOpenHourFilter _shiftTradeSiteOpenHourFilter;
 
 		public ShiftTradeScheduleViewModelMapper(IShiftTradeRequestProvider shiftTradeRequestProvider,
 			IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider,
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			IShiftTradeTimeLineHoursViewModelMapper shiftTradeTimeLineHoursViewModelMapper,
 			IPersonRequestRepository personRequestRepository,
 			IScheduleProvider scheduleProvider,
-			ILoggedOnUser loggedOnUser, IShiftTradeScheduleSiteOpenHourFilter shiftTradeScheduleSiteOpenHourFilter)
+			ILoggedOnUser loggedOnUser, IShiftTradeSiteOpenHourFilter shiftTradeSiteOpenHourFilter)
 		{
 			_shiftTradeRequestProvider = shiftTradeRequestProvider;
 			_possibleShiftTradePersonsProvider = possibleShiftTradePersonsProvider;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			_personRequestRepository = personRequestRepository;
 			_scheduleProvider = scheduleProvider;
 			_loggedOnUser = loggedOnUser;
-			_shiftTradeScheduleSiteOpenHourFilter = shiftTradeScheduleSiteOpenHourFilter;
+			_shiftTradeSiteOpenHourFilter = shiftTradeSiteOpenHourFilter;
 		}
 
 		public ShiftTradeScheduleViewModel Map(ShiftTradeScheduleViewModelData data)
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			{
 				return new ShiftTradeScheduleViewModel();
 			}
-			var possibleTradePersons = _possibleShiftTradePersonsProvider.RetrievePersons(data);					
+			var possibleTradePersons = _possibleShiftTradePersonsProvider.RetrievePersons(data);
 			var myScheduleDayReadModel = _shiftTradeRequestProvider.RetrieveMySchedule(data.ShiftTradeDate);
 
 			var filteredShiftExchangeOffers = getMatchShiftExchangeOffers(possibleTradePersons.Persons, data.ShiftTradeDate);
@@ -121,7 +121,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			{
 				filteredShiftExchangeOffers = getMatchShiftExchangeOffers(filteredShiftExchangeOffers, data.TimeFilter);
 			}
-			
+
+			filteredShiftExchangeOffers =
+				_shiftTradeSiteOpenHourFilter.FilterShiftExchangeOffer(filteredShiftExchangeOffers, data.ShiftTradeDate);
+
 			var possibleTradeSchedule = getBulletinSchedules(filteredShiftExchangeOffers, data.Paging);
 
 			return getShiftTradeScheduleViewModel(data.Paging, myScheduleDayReadModel, possibleTradeSchedule, data.ShiftTradeDate);
@@ -166,7 +169,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			}
 
 			possibleTradeSchedule =
-				_shiftTradeScheduleSiteOpenHourFilter.Filter(possibleTradeSchedule, possibleTradePersons).ToList();
+				_shiftTradeSiteOpenHourFilter.FilterScheduleView(possibleTradeSchedule, possibleTradePersons).ToList();
 
 			var possibleTradeScheduleNum = possibleTradeSchedule.Any()
 				? possibleTradeSchedule.First().Total

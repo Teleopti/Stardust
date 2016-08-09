@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		private readonly IShiftTradeTimeLineHoursViewModelMapper _shiftTradeTimeLineHoursViewModelMapper;
 		private readonly IShiftTradePersonScheduleProvider _personScheduleProvider;
 		private readonly IShiftTradePersonScheduleViewModelMapper _personScheduleViewModelMapper;
-		private readonly IShiftTradeScheduleSiteOpenHourFilter _shiftTradeScheduleSiteOpenHourFilter;
+		private readonly IShiftTradeSiteOpenHourFilter _shiftTradeSiteOpenHourFilter;
 
 		public RequestsShiftTradeScheduleViewModelFactory(ITeamScheduleProjectionProvider projectionProvider,
 			IPermissionProvider permissionProvider,
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			IShiftTradeTimeLineHoursViewModelMapper shiftTradeTimeLineHoursViewModelMapper,
 			IShiftTradePersonScheduleProvider personScheduleProvider,
 			IShiftTradePersonScheduleViewModelMapper personScheduleViewModelMapper,
-			IShiftTradeScheduleSiteOpenHourFilter shiftTradeScheduleSiteOpenHourFilter)
+			IShiftTradeSiteOpenHourFilter shiftTradeSiteOpenHourFilter)
 		{
 			_projectionProvider = projectionProvider;
 			_permissionProvider = permissionProvider;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			_shiftTradeTimeLineHoursViewModelMapper = shiftTradeTimeLineHoursViewModelMapper;
 			_personScheduleProvider = personScheduleProvider;
 			_personScheduleViewModelMapper = personScheduleViewModelMapper;
-			_shiftTradeScheduleSiteOpenHourFilter = shiftTradeScheduleSiteOpenHourFilter;
+			_shiftTradeSiteOpenHourFilter = shiftTradeSiteOpenHourFilter;
 		}
 
 		public ShiftTradeScheduleViewModel CreateViewModel(ShiftTradeScheduleViewModelData inputData)
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 						return new ShiftTradeAddPersonScheduleViewModel(scheduleReadModel);
 					}).ToList();
 				allSortedPossibleSchedules =
-					_shiftTradeScheduleSiteOpenHourFilter.Filter(allSortedPossibleSchedules, new DatePersons { Date = inputData.ShiftTradeDate, Persons = personList }).ToList();
+					_shiftTradeSiteOpenHourFilter.FilterScheduleView(allSortedPossibleSchedules, new DatePersons { Date = inputData.ShiftTradeDate, Persons = personList }).ToList();
 				ret.PageCount = (int)Math.Ceiling((double)allSortedPossibleSchedules.Count() / inputData.Paging.Take);
 				ret.PossibleTradeSchedules = allSortedPossibleSchedules.Skip(inputData.Paging.Skip).Take(inputData.Paging.Take);
 			}

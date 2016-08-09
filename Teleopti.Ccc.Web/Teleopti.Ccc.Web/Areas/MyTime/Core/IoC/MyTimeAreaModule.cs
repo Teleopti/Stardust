@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<AbsenceRequestWaitlistProvider>().As<IAbsenceRequestWaitlistProvider>();
 			builder.RegisterType<CancelAbsenceRequestCommandProvider>().As<ICancelAbsenceRequestCommandProvider>();
 			builder.RegisterType<AbsenceRequestDetailViewModelFactory>().As<IAbsenceRequestDetailViewModelFactory>();
-			builder.RegisterType<ShiftTradeScheduleSiteOpenHourFilter>().As<IShiftTradeScheduleSiteOpenHourFilter>();
+			builder.RegisterType<ShiftTradeSiteOpenHourFilter>().As<IShiftTradeSiteOpenHourFilter>();
 		}
 
 		private void registerAutoMapperTypes(ContainerBuilder builder)

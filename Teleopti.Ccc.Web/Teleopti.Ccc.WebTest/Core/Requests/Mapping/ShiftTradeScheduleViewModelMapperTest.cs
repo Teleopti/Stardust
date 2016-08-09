@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_target = new ShiftTradeScheduleViewModelMapper(_shiftTradeRequestProvider, _possibleShiftTradePersonsProvider,
 				_shiftTradePersonScheduleViewModelMapper, _shiftTradeTimeLineHoursViewModelMapper, _personRequestRepository,
 				_scheduleProvider, _loggedOnUser,
-				new ShiftTradeScheduleSiteOpenHourFilter(_loggedOnUser, new FakeToggleManager()));
+				new ShiftTradeSiteOpenHourFilter(_loggedOnUser, new FakeToggleManager()));
 		}
 
 		[Test]
@@ -304,11 +304,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapWithSiteOpenHourFilter()
 		{
-			var shiftTradeScheduleSiteOpenHourFilter = MockRepository.GenerateMock<IShiftTradeScheduleSiteOpenHourFilter>();
+			var shiftTradeSiteOpenHourFilter = MockRepository.GenerateMock<IShiftTradeSiteOpenHourFilter>();
 
 			_target = new ShiftTradeScheduleViewModelMapper(_shiftTradeRequestProvider, _possibleShiftTradePersonsProvider,
 				_shiftTradePersonScheduleViewModelMapper, _shiftTradeTimeLineHoursViewModelMapper, _personRequestRepository,
-				_scheduleProvider, _loggedOnUser, shiftTradeScheduleSiteOpenHourFilter);
+				_scheduleProvider, _loggedOnUser, shiftTradeSiteOpenHourFilter);
 
 			var teamId = Guid.NewGuid();
 			var data = new ShiftTradeScheduleViewModelData
@@ -328,7 +328,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_possibleShiftTradePersonsProvider.Stub(x => x.RetrievePersons(data)).Return(persons);
 			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradeSchedules(persons.Date, persons.Persons, data.Paging, null))
 				.Return(scheduleReadModels);
-			shiftTradeScheduleSiteOpenHourFilter.Stub(x => x.Filter(possibleTradeScheduleViewModels, persons))
+			shiftTradeSiteOpenHourFilter.Stub(x => x.FilterScheduleView(possibleTradeScheduleViewModels, persons))
 				.Return(possibleTradeScheduleViewModels);
 			_shiftTradePersonScheduleViewModelMapper.Stub(x => x.Map(scheduleReadModels)).Return(possibleTradeScheduleViewModels);
 
