@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>WFM</title>
-	<link rel="stylesheet" href="node_modules/mdi/css/materialdesignicons.min.css">
+	<link rel="stylesheet" href="vendor/MaterialDesignIcons/css/materialdesignicons.min.css">
 	<link id="themeModules" rel="stylesheet" href="">
 	<link id="themeStyle" rel="stylesheet" href="">
 	<style>.loader{display:inline-block;font-size:120px;animation:2s rotate infinite linear;width:1em;height:1em}.loader circle{fill:transparent;stroke:#09f;stroke-width:.07em;stroke-dasharray:2.3525em .4705em;animation:1.3s strokeDashArray infinite linear,24s infinite linear}@keyframes rotate{from{transform:rotate(0)}to{transform:rotate(360deg)}}@keyframes strokeDashArray{10%,from{stroke-dasharray:2.3525em .4705em;stroke-dashoffset:0}50%{stroke-dasharray:.001em 2.825em;stroke-dashoffset:-2.826em}60%{stroke-dasharray:.001em 2.825em}to{stroke-dasharray:2.3525em .4705em;stroke-dashoffset:-2.826em}}.pulse{z-index:9999991;margin:35vh auto 0;text-align:center}.backdrop{position:fixed;z-index:999999;width:100%;height:100%;background:#fff}
@@ -27,7 +27,7 @@
 		<div class="sidenav-wrapper left">
 			<input type="checkbox" id="nav-left" ng-model="toggleLeftSide"/>
 			<label for="nav-left">
-				<i class="mdi" ng-class=" {'mdi-menu':toggleLeftSide, 'mdi-backburger':!toggleLeftSide}"></i>
+				<i class="mdi" ng-class=" {'mdi-menu':toggleLeftSide, 'mdi-close':!toggleLeftSide}"></i>
 			</label>
 		</div>
 	</div>
