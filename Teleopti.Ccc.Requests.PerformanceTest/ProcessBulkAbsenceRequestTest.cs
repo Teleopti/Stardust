@@ -3,7 +3,14 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Logon;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.Requests.PerformanceTest
@@ -13,9 +20,21 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 	public class ProcessBulkAbsenceRequestTest : ISetup
 	{
 		public IProcessMultipleAbsenceRequest Target;
+		public WithUnitOfWork WithUnitOfWork;
+		public IDataSourceScope DataSource;
+		public IBusinessUnitRepository BusinessUnits;
+		public AsSystem AsSystem;
+		public MutableNow Now;
+
 		[Test, Ignore]
 		public void ShouldProcessMultipleAbsenceRequests()
 		{
+			//Guid businessUnitId;
+			using (DataSource.OnThisThreadUse("Telia"))
+			//businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.Value;
+			AsSystem.Logon("Telia",new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
+
+
 			var absenceRequests = new List<NewAbsenceRequestCreatedEvent>() { new NewAbsenceRequestCreatedEvent()
 			{
 				PersonRequestId = new Guid("96f18da3-c29d-49dc-9763-a65c00d7e27e"),
@@ -26,7 +45,11 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 				Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z"),
 				UserName = "KALA21 Lampinen, Kalle"
 			} };
-			Target.Process(absenceRequests);
+			WithUnitOfWork.Do(() =>
+			{
+				Target.Process(absenceRequests);
+			});
+			
 
 		}
 
@@ -35,6 +58,10 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			system.AddModule(new CommonModule(configuration));
 			system.UseTestDouble<NewAbsenceRequestHandler>().For<NewAbsenceRequestHandler>();
 			system.UseTestDouble<ProcessMultipleAbsenceRequest>().For<IProcessMultipleAbsenceRequest>();
+
+			system.AddService<Database>();
+			system.AddModule(new TenantServerModule(configuration));
+			
 		}
 	}
 
@@ -50,10 +77,13 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 
 		public void Process(List<NewAbsenceRequestCreatedEvent> absenceRequests)
 		{
-			foreach (var req in absenceRequests)
-			{
-				_newAbsenceRequestHandler.Handle(req);
-			}
+
+				foreach (var req in absenceRequests)
+				{
+					_newAbsenceRequestHandler.Handle(req);
+				}
+			
+			
 		}
 	}
 
