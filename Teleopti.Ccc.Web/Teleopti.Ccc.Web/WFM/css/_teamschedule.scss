@@ -1,520 +1,523 @@
 ﻿.team-schedule {
-    background-color: $white;
-    max-height: 85vh;
-    min-height: 350px;
-    min-width: 590px;
-    overflow: hidden;
-    padding: 0;
-
-    input {
-        background-color: transparent;
-    }
-
-    .relative {
-        position: relative;
-    }
-
-    .teamschedule-header {
-        padding: 5px;
-        min-height: 44px;
-        border-bottom: 1px solid $gray026;
-
-        display: -ms-flexbox;
-        display: flex;
-        flex-direction: row;
-
-        -ms-flex-wrap: wrap;
-        flex-wrap: wrap;
-
-        -ms-flex-pack: justify;
-        justify-content: space-between;
-
-        & > div {
-            -ms-flex: none;
-            flex: 0 0 auto;
-        }
-
-        .leftside-part {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            justify-content: flex-start;
-        }
-
-        .people-search-container {
-            display: inline-block;
-            margin: 10px 10px 10px 0;
-
-            #simple-people-search {
-                width: 316px;
-            }
-
-            .advanced-search-container {
-                min-width: 316px;
-                // CSS hack for IE10, IE11 and edge
-                @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none), (-ms-accelerator:true) {
-                    .con-row {
-                        min-width: 316px;
-                    }
-                }
-            }
-        }
-
-        .rightside-part{
-            display: flex;
-            flex-wrap: wrap;
-            flex-direction: row;
-            justify-content: flex-start;
-        }
-
-        .wfm-switch {
-            display: inline-block;
-            margin: 10px;
-            padding: 0 60px 0 0;
-            min-width: 200px;
-            flex-grow: 1;
-            text-align: right;
-
-            .wfm-switch-toggle {
-                right: 0;
-            }
-        }
-
-        .teamschedule-command {
-            text-align: right;
-        }
-
-        .context-menu .context-menu-left {
-            z-index: 1000;
-            text-transform: none;
-        }
-    }
-
-    team-schedule-datepicker {
-        display: inline-block;
-        vertical-align: top;
-        white-space: nowrap;
-        text-align: center;
-        width: auto;
-
-        > span {
-            display: inline-block;
-            position: relative;
-
-            #teamschedule-datepicker-input {
-                text-align: center;
-                width: 90px;
-            }
-
-            .wfm-datepicker-wrap {
-                position: absolute;
-                top: 40px;
-                left: 0;
-                z-index: 100;
-            }
-
-            > button.toggle-datepicker {
-                margin-left: 10px;
-            }
-
-            > button.wfm-btn-invis-primary:focus {
-                background-color: transparent;
-            }
-
-            > button.wfm-btn-invis-primary:focus {
-                i {
-                    color: $green-300;
-                }
-            }
-        }
-    }
-
-    .con-row.teamschedule-body {
-        align-items: flex-start;
-        position: relative;
-        display: block !important;
-        overflow: hidden;
-    }
-
-    .big-table-wrapper {
-        position: relative;
-        overflow: hidden;
-        width: 100%;
-        height: 100%;
-
-        table {
-            margin-bottom: 0;
-
-            thead, tbody, tfoot {
-                tr > th, td {
-                    padding: 5px 0 5px 0;
-                    border-bottom: 1px solid $gray012;
-                }
-
-                .person-name {
-                    padding-right: 5px;
-                    padding-left: 5px;
-                    min-width: 150px;
-                }
-
-                tr:hover {
-                    background: $gray012;
-                }
-
-                .contract-time-column {
-                    padding-left: 8px;
-                    padding-right: 8px;
-                    text-align: center;
-                }
-            }
-
-            tbody {
-                display: block;
-                height: 100%;
-                max-height: 62vh;
-                min-height: 500px;
-                overflow-y: scroll;
-            }
-
-            thead, tbody tr {
-                display: table;
-                width: 100%;
-                table-layout: fixed;
-            }
-
-            thead{
-                width: calc( 100% - 1.2em );
-            }
-
-            .person-name label{
-                position: relative;
-            }
-
-            th.person-name-column, td.person-name-column {
-                width: 20%;
-                white-space: nowrap;
-            }
-
-            th.right-border-empty, td.right-border-empty {
-                width: 2%;
-            }
-
-            th.contract-time-header, td.contract-time-column {
-                width: 10%;
-                font-weight: 400;
-                min-width: 150px;
-                white-space: nowrap;
-            }
-
-            th.shift-category-cell-header, td.shift-category-cell{
-                width: 30px;
-            }
-
-            td.shift-category-cell{
-                text-align: center;
-                border-left: 1px solid $gray012;
-            }
-
-            td.shift-category-cell span{
-                display: inline-block;
-                width: 20px;
-            }
-        }
-    }
-
-    .page-size-selector {
-        display: inline-block;
-        text-align: left;
-        margin: .8rem 2rem .8rem 0;
-    }
-
-    .time-line {
-        min-width: 300px;
-
-        .ruler {
-            height: 100%;
-            width: 1px;
-            background-color: $gray012;
-        }
-
-        .label {
-            font-size: xx-small;
-            height: 1.32em;
-            z-index: 11;
-            transform: translateX(-50%);
-        }
-
-        & > .relative > span{
-            padding: 10px;
-        }
-    }
-
-    .shift {
-        .layer {
-            height: 22px;
-            text-align: center;
-        }
-
-        .layer.hasSelected {
-            opacity: 0.4;
-        }
-
-        .layer.noneSelected {
-            opacity: 1;
-        }
-
-        .layer.selected {
-            opacity: 1;
-            border: 1px dashed #795548;
-        }
-
-        .layer.lighterBorder {
-            border-color: #00ffff;
-        }
-
-        .layer:first-of-type {
-            -webkit-border-radius: 4px 0px 0px 4px;
-            -moz-border-radius: 4px 0px 0px 4px;
-            border-radius: 4px 0px 0px 4px;
-        }
-
-        .layer:last-of-type {
-            -webkit-border-radius: 0px 4px 4px 0px;
-            -moz-border-radius: 0px 4px 4px 0px;
-            border-radius: 0px 4px 4px 0px;
-        }
-
-        .layer:only-child {
-            -webkit-border-radius: 4px 4px 4px 4px;
-            -moz-border-radius: 4px 4px 4px 4px;
-            border-radius: 4px 4px 4px 4px;
-        }
-    }
-
-    .overtimeLight {
-        background-size: 11px 11px;
-        background-image: linear-gradient(45deg,transparent,transparent 4px,rgba(255,255,255,.8) 6px,transparent 10px,transparent);
-    }
-
-    .overtimeDark {
-        background-size: 11px 11px;
-        background-image: linear-gradient(45deg,transparent,transparent 4px,rgba(0,0,0,.5) 6px,transparent 10px,transparent);
-    }
-
-    .dayoff {
-        text-align: center;
-        top: -5px;
-        height: 30px;
-        padding: 7px;
-        background-size: 11px 11px;
-        background-image: linear-gradient(135deg, transparent, transparent 7px, rgba(0,0,0,0.2) 8px, transparent 8px, transparent );
-    }
-
-    .absolute {
-        position: absolute;
-    }
-
-    .person-name-column {
-
-        .wfm-checkbox-toggle:after {
-            width: 15px;
-            height: 15px;
-            font-size: 11px;
-        }
-
-        .wfm-checkbox {
-            display: inline-block;
-            padding: 0;
-            width: auto;
-        }
-
-        .validate-warning {
-            float: right;
-        }
-
-        .validate-warning md-progress-circular{
-            display: inline-block;
-        }
-    }
-
-    .timepicker {
-        height: 48px;
-
-        input[type=text] {
-            width: 22px;
-            padding-bottom: 2px;
-            text-align: center;
-        }
-
-        button {
-            min-width: 30px;
-        }
-    }
-
-    ul li.item[disabled] {
-        opacity: .4;
-        cursor: not-allowed;
-    }
-
-    .wfm-btn-sm {
-        padding: 5px;
-        margin-left: 0;
-        margin-right: 0;
-    }
-
-    md-sidenav {
-        min-width: 360px;
-        box-shadow: none;
-    }
-
-    .teamschedule-command-container {
-        height: 100%;
-
-        .command-panel-content .con-row {
-            flex-direction: row !important;
-        }
-    }
-
-    .add-absence, .add-activity, .move-activity, .edit-shift-category, .command-check{
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-
-        md-content {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100%;
-        }
-    }
-
-    .command-check {
-        .warning-header{
-            background: $orange-500;
-        }
-
-        .command-info .mdi-alert{
-            color: $orange-500;
-        }
-
-        md-select{
-            margin: 10px 0;
-        }
-
-        .agent-list{
-            position: relative;
-            overflow: auto;
-            flex-grow: 2;
-
-            .wfm-checkbox-toggle.warning-checkbox:after{
-                background: #ffa726;
-            }
-
-            ul {
-                margin-left: 20px;
-                list-style-type: disc;
-            }
-
-            ul li, .wfm-checkbox-label{
-                white-space: normal;
-                cursor: pointer;
-            }
-        }
-    }
-
-
-    .teamschedule-command-container md-select {
-        width: 100%;
-        min-height: 40px;
-    }
-
-    md-content button.wfm-btn {
-        min-height: 40px;
-
-        &:focus {
-            background-color: #007ACC;
-        }
-    }
-
-    .modal-box .wfm-simple-list {
-        max-height: 430px;
-    }
-
-    .con-footer.teamschedule-footer {
-        border-top: 1px solid $gray026;
-
-        .notice-spacer {
-            float: left;
-            margin-bottom: 0;
-            padding: 5px;
-            width: auto;
-            display: inline-block;
-        }
-    }
-
-    .con-row {
-        align-items: center;
-
-        .wfm-time-range-picker-wrap button {
-            line-height: 25px;
-        }
-    }
-
-    .hidden-for-test {
-        display: none;
-    }
-
-    .selectable {
-        cursor: pointer;
-    }
-
-    .unselectable {
-        cursor: not-allowed !important;
-    }
+	background-color: $white;
+	max-height: 85vh;
+	min-height: 350px;
+	min-width: 590px;
+	overflow: hidden;
+	padding: 0;
+
+	input {
+		background-color: transparent;
+	}
+
+	.relative {
+		position: relative;
+	}
+
+	.teamschedule-header {
+		padding: 5px;
+		min-height: 44px;
+		border-bottom: 1px solid $gray026;
+
+		display: -ms-flexbox;
+		display: flex;
+		flex-direction: row;
+
+		-ms-flex-wrap: wrap;
+		flex-wrap: wrap;
+
+		-ms-flex-pack: justify;
+		justify-content: space-between;
+
+		& > div {
+			-ms-flex: none;
+			flex: 0 0 auto;
+		}
+
+		.leftside-part {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			justify-content: flex-start;
+		}
+
+		.people-search-container {
+			display: inline-block;
+			margin: 10px 10px 10px 0;
+
+			#simple-people-search {
+				width: 316px;
+			}
+
+			.advanced-search-container {
+				min-width: 316px;
+				// CSS hack for IE10, IE11 and edge
+				@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none), (-ms-accelerator:true) {
+					.con-row {
+						min-width: 316px;
+					}
+				}
+			}
+		}
+
+		.rightside-part{
+			display: flex;
+			flex-wrap: wrap;
+			flex-direction: row;
+			justify-content: flex-start;
+		}
+
+		.wfm-switch {
+			display: inline-block;
+			margin: 10px;
+			padding: 0 60px 0 0;
+			min-width: 200px;
+			flex-grow: 1;
+			text-align: right;
+
+			.wfm-switch-toggle {
+				right: 0;
+			}
+		}
+
+		.teamschedule-command {
+			text-align: right;
+		}
+
+		.context-menu .context-menu-left {
+			z-index: 1000;
+			text-transform: none;
+		}
+	}
+
+	team-schedule-datepicker {
+		display: inline-block;
+		vertical-align: top;
+		white-space: nowrap;
+		text-align: center;
+		width: auto;
+
+		> span {
+			display: inline-block;
+			position: relative;
+
+			#teamschedule-datepicker-input {
+				text-align: center;
+				width: 90px;
+			}
+
+			.wfm-datepicker-wrap {
+				position: absolute;
+				top: 40px;
+				left: 0;
+				z-index: 100;
+			}
+
+			> button.toggle-datepicker {
+				margin-left: 10px;
+			}
+
+			> button.wfm-btn-invis-primary:focus {
+				background-color: transparent;
+			}
+
+			> button.wfm-btn-invis-primary:focus {
+				i {
+					color: $green-300;
+				}
+			}
+		}
+	}
+
+	.con-row.teamschedule-body {
+		align-items: flex-start;
+		position: relative;
+		display: block !important;
+		overflow: hidden;
+	}
+
+	.big-table-wrapper {
+		position: relative;
+		overflow: hidden;
+		width: 100%;
+		height: 100%;
+
+		table {
+			margin-bottom: 0;
+
+			thead, tbody, tfoot {
+				tr > th, td {
+					padding: 5px 0 5px 0;
+					border-bottom: 1px solid $gray012;
+				}
+
+				.person-name {
+					padding-right: 5px;
+					padding-left: 5px;
+					min-width: 150px;
+				}
+
+				tr:hover {
+					background: $gray012;
+				}
+
+				.contract-time-column {
+					padding-left: 8px;
+					padding-right: 8px;
+					text-align: center;
+				}
+			}
+
+			tbody {
+				display: block;
+				height: 100%;
+				max-height: 62vh;
+				min-height: 500px;
+				overflow-y: scroll;
+			}
+
+			thead, tbody tr {
+				display: table;
+				width: 100%;
+				table-layout: fixed;
+			}
+
+			thead{
+				width: calc( 100% - 1.2em );
+			}
+
+			.person-name label{
+				position: relative;
+			}
+
+			th.person-name-column, td.person-name-column {
+				width: 20%;
+				white-space: nowrap;
+			}
+
+			th.right-border-empty, td.right-border-empty {
+				width: 2%;
+			}
+
+			th.contract-time-header, td.contract-time-column {
+				width: 10%;
+				font-weight: 400;
+				min-width: 150px;
+				white-space: nowrap;
+			}
+
+			th.shift-category-cell-header, td.shift-category-cell{
+				width: 30px;
+			}
+
+			td.shift-category-cell{
+				text-align: center;
+				border-left: 1px solid $gray012;
+			}
+
+			td.shift-category-cell span{
+				display: inline-block;
+				width: 20px;
+			}
+		}
+	}
+
+	.page-size-selector {
+		display: inline-block;
+		text-align: left;
+		margin: .8rem 2rem .8rem 0;
+	}
+
+	.time-line {
+		min-width: 300px;
+
+		.ruler {
+			height: 100%;
+			width: 1px;
+			background-color: $gray012;
+		}
+
+		.label {
+			font-size: xx-small;
+			height: 1.32em;
+			z-index: 11;
+			transform: translateX(-50%);
+		}
+
+		& > .relative > span{
+			padding: 10px;
+		}
+	}
+
+	.shift {
+		.layer {
+			height: 22px;
+			text-align: center;
+		}
+
+		.layer.hasSelected {
+			opacity: 0.4;
+		}
+
+		.layer.noneSelected {
+			opacity: 1;
+		}
+
+		.layer.selected {
+			opacity: 1;
+			border: 1px dashed #795548;
+		}
+
+		.layer.lighterBorder {
+			border-color: #00ffff;
+		}
+
+		.layer:first-of-type {
+			-webkit-border-radius: 4px 0px 0px 4px;
+			-moz-border-radius: 4px 0px 0px 4px;
+			border-radius: 4px 0px 0px 4px;
+		}
+
+		.layer:last-of-type {
+			-webkit-border-radius: 0px 4px 4px 0px;
+			-moz-border-radius: 0px 4px 4px 0px;
+			border-radius: 0px 4px 4px 0px;
+		}
+
+		.layer:only-child {
+			-webkit-border-radius: 4px 4px 4px 4px;
+			-moz-border-radius: 4px 4px 4px 4px;
+			border-radius: 4px 4px 4px 4px;
+		}
+	}
+
+	.overtimeLight {
+		background-size: 11px 11px;
+		background-image: linear-gradient(45deg,transparent,transparent 4px,rgba(255,255,255,.8) 6px,transparent 10px,transparent);
+	}
+
+	.overtimeDark {
+		background-size: 11px 11px;
+		background-image: linear-gradient(45deg,transparent,transparent 4px,rgba(0,0,0,.5) 6px,transparent 10px,transparent);
+	}
+
+	.dayoff {
+		text-align: center;
+		top: -5px;
+		height: 30px;
+		padding: 7px;
+		background-size: 11px 11px;
+		background-image: linear-gradient(135deg, transparent, transparent 7px, rgba(0,0,0,0.2) 8px, transparent 8px, transparent );
+	}
+
+	.absolute {
+		position: absolute;
+	}
+
+	.person-name-column {
+
+		.wfm-checkbox-toggle:after {
+			width: 15px;
+			height: 15px;
+			font-size: 11px;
+		}
+
+		.wfm-checkbox {
+			display: inline-block;
+			padding: 0;
+			width: auto;
+		}
+
+		.validate-warning {
+			float: right;
+		}
+
+		.validate-warning md-progress-circular{
+			display: inline-block;
+		}
+	}
+
+	.timepicker {
+		height: 48px;
+
+		input[type=text] {
+			width: 22px;
+			padding-bottom: 2px;
+			text-align: center;
+		}
+
+		button {
+			min-width: 30px;
+		}
+	}
+
+	ul li.item[disabled] {
+		opacity: .4;
+		cursor: not-allowed;
+	}
+
+	.wfm-btn-sm {
+		padding: 5px;
+		margin-left: 0;
+		margin-right: 0;
+	}
+
+	md-sidenav {
+		min-width: 360px;
+		box-shadow: none;
+	}
+
+	.teamschedule-command-container {
+		height: 100%;
+
+		.command-panel-content .con-row {
+			flex-direction: row !important;
+		}
+	}
+
+	.add-absence, .add-activity, .move-activity, .edit-shift-category, .command-check{
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+
+		md-content {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			height: 100%;
+		}
+	}
+
+	.command-check {
+		.warning-header{
+			background: $orange-500;
+		}
+
+		.command-info .mdi-alert{
+			color: $orange-500;
+		}
+
+		md-select{
+			margin: 10px 0;
+		}
+
+		.agent-list{
+			position: relative;
+			overflow: auto;
+			flex-grow: 2;
+
+			.wfm-checkbox-toggle.warning-checkbox:after{
+				background: #ffa726;
+				width: 15px;
+				height: 15px;
+				font-size: 11px;
+			}
+
+			ul {
+				margin-left: 20px;
+				list-style-type: disc;
+			}
+
+			ul li, .wfm-checkbox-label{
+				white-space: normal;
+				cursor: pointer;
+			}
+		}
+	}
+
+
+	.teamschedule-command-container md-select {
+		width: 100%;
+		min-height: 40px;
+	}
+
+	md-content button.wfm-btn {
+		min-height: 40px;
+
+		&:focus {
+			background-color: #007ACC;
+		}
+	}
+
+	.modal-box .wfm-simple-list {
+		max-height: 430px;
+	}
+
+	.con-footer.teamschedule-footer {
+		border-top: 1px solid $gray026;
+
+		.notice-spacer {
+			float: left;
+			margin-bottom: 0;
+			padding: 5px;
+			width: auto;
+			display: inline-block;
+		}
+	}
+
+	.con-row {
+		align-items: center;
+
+		.wfm-time-range-picker-wrap button {
+			line-height: 25px;
+		}
+	}
+
+	.hidden-for-test {
+		display: none;
+	}
+
+	.selectable {
+		cursor: pointer;
+	}
+
+	.unselectable {
+		cursor: not-allowed !important;
+	}
 }
 
 .team-schedule-command-confirm-dialog {
 
-    .row {
-        .wfm-btn-default {
-            margin-right: 20px;
-        }
-    }
+	.row {
+		.wfm-btn-default {
+			margin-right: 20px;
+		}
+	}
 
-    button:focus {
-        outline: 1px dashed $gray054;
-    }
+	button:focus {
+		outline: 1px dashed $gray054;
+	}
 }
 
 .multiline-tooltip .md-content {
-    height: auto;
+	height: auto;
 }
 
 .multiline-tooltip.margin-top-22{
-    margin-top: -22px;
+	margin-top: -22px;
 }
 
 .warning-icon {
-    color: $orange-600;
+	color: $orange-600;
 }
 
 .shiftcat-shortname, .shiftcat-fullname {
-    display: table-cell;
+	display: table-cell;
 }
 
 .shiftcat-shortname {
-    width: 2em;
-    white-space: nowrap;
-    padding: 0 2px;
-    text-align: center;
-    border-radius: 2px;
+	width: 2em;
+	white-space: nowrap;
+	padding: 0 2px;
+	text-align: center;
+	border-radius: 2px;
 }
 
 .shiftcat-fullname {
-    padding-left: 0.5em;
-    max-width: 18em;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+	padding-left: 0.5em;
+	max-width: 18em;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 }
