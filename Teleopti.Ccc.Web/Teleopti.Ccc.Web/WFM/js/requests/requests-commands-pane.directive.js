@@ -164,6 +164,7 @@
 		}
 
 		function toggleApproveBasedOnRulesPanel() {
+			if (!vm.isApproveBasedOnBusinessRulesEnabled() || vm.disableCommands()) return;
 			vm.showApproveBasedOnRulesPanel = !vm.showApproveBasedOnRulesPanel;
 		}
 
