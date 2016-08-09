@@ -151,10 +151,10 @@ describe('requestsSiteOpenHoursDirectiveTests', function () {
 
 		test.targetScope.showSites();
 
-		expect(test.targetScope.sites[0].OpenHours[0].EndTime.getHours()).toEqual(new Date(deFormatResult[0].OpenHours[0].EndTime).getHours());
-		expect(test.targetScope.sites[0].OpenHours[0].EndTime.getMinutes()).toEqual(new Date(deFormatResult[0].OpenHours[0].EndTime).getMinutes());
-		expect(test.targetScope.sites[0].OpenHours[0].StartTime.getHours()).toEqual(new Date(deFormatResult[0].OpenHours[0].StartTime).getHours());
-		expect(test.targetScope.sites[0].OpenHours[0].StartTime.getMinutes()).toEqual(new Date(deFormatResult[0].OpenHours[0].StartTime).getMinutes());
+		expect(test.targetScope.sites[0].OpenHours[0].EndTime.getHours()).toEqual(17); 
+		expect(test.targetScope.sites[0].OpenHours[0].EndTime.getMinutes()).toEqual(0);
+		expect(test.targetScope.sites[0].OpenHours[0].StartTime.getHours()).toEqual(8);
+		expect(test.targetScope.sites[0].OpenHours[0].StartTime.getMinutes()).toEqual(0);
 		expect(test.targetScope.sites[0].OpenHours.length).toEqual(1);
 	});
 
