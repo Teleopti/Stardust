@@ -415,6 +415,11 @@
                 margin-left: 20px;
                 list-style-type: disc;
             }
+
+            ul li, .wfm-checkbox-label{
+                white-space: normal;
+                cursor: pointer;
+            }
         }
     }
 
@@ -484,6 +489,10 @@
 
 .multiline-tooltip .md-content {
     height: auto;
+}
+
+.multiline-tooltip.margin-top-22{
+    margin-top: -22px;
 }
 
 .warning-icon {

@@ -24,7 +24,8 @@
 	function commandCheckCtrl($scope, CommandCheckService, personSelectionSvc, ScheduleManagementSvc) {
 		var vm = this;
 		vm.showCheckbox = false;
-		vm.overlappingAgents = [];
+		vm.overlappedAgents = [];
+		vm.overlappedLayers = [];
 
 		vm.actionOptions = [{
 			Name: 'KeepWarnedAgents',
@@ -63,7 +64,7 @@
 		};
 
 		vm.toggleAllPersonSelection = function(isSelected) {
-			vm.overlappingAgents.forEach(function(agent) {
+			vm.overlappedAgents.forEach(function(agent) {
 				agent.IsSelected = isSelected;
 				personSelectionSvc.updatePersonSelection(agent);
 			});
@@ -78,12 +79,34 @@
 			CommandCheckService.completeCommandCheck();
 		};
 
-		vm.init = function() {
-			var personIds = CommandCheckService.getOverlappingAgentList().map(function(agent) {
-				return agent.PersonId;
+		vm.getOverlappedLayersForAgent = function(personId) {
+			var overlappedLayers, result= [];
+			
+            vm.overlappedLayers.forEach(function(agent) {
+				if(agent.PersonId == personId )
+                    overlappedLayers = agent.OverlappedLayers;
 			});
 
-			vm.overlappingAgents = ScheduleManagementSvc.groupScheduleVm.Schedules.filter(function(personSchedule) {
+            overlappedLayers.forEach(function(overlappedLayer){
+                result.push(overlappedLayer.Name);
+                result.push(moment(overlappedLayer.StartTime).format('YYYY-MM-DD HH:mm'));
+                result.push(moment(overlappedLayer.EndTime).format('YYYY-MM-DD HH:mm'));
+            });
+			return result;
+		};
+
+		vm.init = function() {
+			var personIds = [];
+
+			CommandCheckService.getOverlappingAgentList().forEach(function(agent) {
+				personIds.push(agent.PersonId);
+				vm.overlappedLayers.push({
+					PersonId: agent.PersonId,
+					OverlappedLayers: agent.OverlappedLayers
+				});
+			});
+
+			vm.overlappedAgents = ScheduleManagementSvc.groupScheduleVm.Schedules.filter(function(personSchedule) {
 				return personIds.indexOf(personSchedule.PersonId) > -1;
 			});
 		};
