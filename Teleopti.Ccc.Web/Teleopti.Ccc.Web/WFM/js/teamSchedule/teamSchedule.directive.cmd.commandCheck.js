@@ -17,6 +17,11 @@
 
 	function linkFn(scope, elem, attrs, ctrls) {
 		scope.vm.currentCommandLabel = ctrls[0].activeCmd;
+		scope.vm.getDate = ctrls[0].getDate;
+
+		if (scope.vm.currentCommandLabel == 'MoveActivity') {
+			scope.vm.actionOptions.pop();
+		}
 	}
 
 	commandCheckCtrl.$inject = ['$scope', 'CommandCheckService', 'PersonSelection', 'ScheduleManagement'];
@@ -61,6 +66,7 @@
 
 		vm.updatePersonSelection = function(agent) {
 			personSelectionSvc.updatePersonSelection(agent);
+			personSelectionSvc.toggleAllPersonProjections(agent, vm.getDate());
 		};
 
 		vm.toggleAllPersonSelection = function(isSelected) {
@@ -80,18 +86,18 @@
 		};
 
 		vm.getOverlappedLayersForAgent = function(personId) {
-			var overlappedLayers, result= [];
-			
-            vm.overlappedLayers.forEach(function(agent) {
-				if(agent.PersonId == personId )
-                    overlappedLayers = agent.OverlappedLayers;
+			var overlappedLayers, result = [];
+
+			vm.overlappedLayers.forEach(function(agent) {
+				if (agent.PersonId == personId)
+					overlappedLayers = agent.OverlappedLayers;
 			});
 
-            overlappedLayers.forEach(function(overlappedLayer){
-                result.push(overlappedLayer.Name);
-                result.push(moment(overlappedLayer.StartTime).format('YYYY-MM-DD HH:mm'));
-                result.push(moment(overlappedLayer.EndTime).format('YYYY-MM-DD HH:mm'));
-            });
+			overlappedLayers.forEach(function(overlappedLayer) {
+				result.push(overlappedLayer.Name);
+				result.push(moment(overlappedLayer.StartTime).format('YYYY-MM-DD HH:mm'));
+				result.push(moment(overlappedLayer.EndTime).format('YYYY-MM-DD HH:mm'));
+			});
 			return result;
 		};
 
