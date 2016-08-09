@@ -86,6 +86,7 @@ Scenario: Should see enabled add personal activity button
 	Then I should see 'AddPersonalActivity' menu is enabled
 
 @OnlyRunIfEnabled('WfmTeamSchedule_AddPersonalActivity_37742')
+@OnlyRUnIfDisabled('WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938')
 Scenario: Should be able to add personal activity
 	Given 'John Smith' has a shift with
 	| Field            | Value            |
@@ -177,6 +178,7 @@ Scenario: Should not be able to remove basic activity
 	Then I should see an error notice
 
 @OnlyRunIfEnabled('WfmTeamSchedule_MoveActivity_37744')
+@OnlyRUnIfDisabled('WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938')
 Scenario: Should be able to move activity
 	Given 'John Smith' has a shift with
     | Field            | Value            |
@@ -194,6 +196,7 @@ Scenario: Should be able to move activity
 	Then I should see a successful notice
 
 @OnlyRunIfEnabled('WfmTeamSchedule_MoveActivity_37744')
+@OnlyRUnIfDisabled('WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938')
 Scenario: Should be able to move activity in overnight shift from next day to current day
 	Given 'John Smith' has a shift with
     | Field                         | Value            |
@@ -212,6 +215,7 @@ Scenario: Should be able to move activity in overnight shift from next day to cu
 	And the start of 'Sales' is '125' mins later than the start of 'Phone'
 
 @OnlyRunIfEnabled('WfmTeamSchedule_MoveActivity_37744')
+@OnlyRUnIfDisabled('WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938')
 Scenario: Should be able to move basic activity
 	Given 'John Smith' has a shift with
     | Field            | Value            |

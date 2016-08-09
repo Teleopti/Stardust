@@ -519,5 +519,52 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 
 			result.Should().Be.Empty();
 		}
+
+
+		[Test]
+		public void ShouldNotReportStickyOverlappedActivityWhenMoveStickyActivityNormally()
+		{
+			var person = PersonFactory.CreatePersonWithGuid("John","Watson");
+			PersonRepository.Has(person);
+
+			var mainActivity = ActivityFactory.CreateActivity("Phone");
+			var stickyActivity = ActivityFactory.CreateActivity("Short Break");
+
+			mainActivity.AllowOverwrite = true;
+			stickyActivity.AllowOverwrite = false;
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
+			var scenario = CurrentScenario.Current();
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				mainActivity,person,
+				new DateTimePeriod(2013,11,14,8,2013,11,14,16),
+				shiftCategory,scenario);
+
+
+			pa.AddActivity(stickyActivity,new DateTimePeriod(2013,11,14,12,2013,11,14,13));			
+			pa.ShiftLayers.ForEach(x => x.WithId());
+
+			var targetLayer = pa.ShiftLayers.First(layer => layer.Period.StartDateTime == new DateTime(2013,11,14,12,0,0));
+
+			ScheduleStorage.Add(pa);
+			var input = new CheckMoveActivityLayerOverlapFormData
+			{
+				PersonActivities = new List<PersonActivityItem>
+				{
+					new PersonActivityItem
+					{
+						PersonId = person.Id.Value,
+						ShiftLayerIds = new List<Guid> { targetLayer.Id.Value }
+					}
+				},
+				Date = new DateOnly(2013,11,14),
+				StartTime = new DateTime(2013,11,14,14,0,0),
+			};
+
+			var result = Target.GetMoveActivityLayerOverlapCheckingResult(input);
+
+			result.Should().Be.Empty();
+		}
 	}
 }

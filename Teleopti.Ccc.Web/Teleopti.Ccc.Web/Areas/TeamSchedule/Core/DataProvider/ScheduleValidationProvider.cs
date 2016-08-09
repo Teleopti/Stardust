@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				Func<IVisualLayer, bool> stickyLayerPredicate = layer =>
 				{
 					var activityLayer = layer.Payload as IActivity;
-					return activityLayer != null && !activityLayer.AllowOverwrite;
+					return activityLayer != null && layer.Period != targetLayer.Period && !activityLayer.AllowOverwrite;
 				};
 
 				var stickyLayersInNewProjection =
