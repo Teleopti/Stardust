@@ -17,5 +17,5 @@
 c:\nhib\NotificationConfig.xml.notinuse,..\..\..\BuildArtifacts\NotificationConfig.xml.notinuse
 ..\..\..\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\Release\Teleopti.Analytics.Etl.ServiceConsoleHost.exe.config,..\..\..\BuildArtifacts\AppETLService.config
 ..\..\..\Teleopti.Analytics.Etl.ServiceConsoleHost\bin\Debug\Teleopti.Analytics.Etl.ServiceConsoleHost.exe.config,..\..\..\BuildArtifacts\AppETLService.config
-..\..\..\Teleopti.Ccc.Requests.PerformanceTest\app.config,..\..\..\BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
+..\..\..\Teleopti.Ccc.Requests.PerformanceTest\app.config,..\..\..\BuildArtifacts\Teleopti.Ccc.TestCommon\App.config
 
