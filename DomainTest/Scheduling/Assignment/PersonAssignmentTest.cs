@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -778,6 +779,54 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			target.PersonalActivities().Should().Be.Empty();
 			target.OvertimeActivities().Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldRaiseMainShiftCategoryReplaceEvent()
+		{
+			var agent = new Person().WithId();
+			var layerPeriod = new DateTimePeriod(2016, 8, 9, 2016, 8, 10);
+			var assignment =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(ScenarioFactory.CreateScenarioWithId("_", true), agent,
+					layerPeriod, ShiftCategoryFactory.CreateShiftCategory("current"));
+
+			var operatedPersonId = Guid.NewGuid();
+			var trackId = Guid.NewGuid();
+			assignment.SetShiftCategory(ShiftCategoryFactory.CreateShiftCategory("newOne"), false, new TrackedCommandInfo
+			{
+				OperatedPersonId = operatedPersonId,
+				TrackId = trackId
+			});
+
+			var theEvent = assignment.PopAllEvents().OfType<MainShiftCategoryReplaceEvent>().Single();
+			theEvent.PersonId.Should().Be(agent.Id.Value);
+			theEvent.Date.Should().Be(new DateTime(2016, 8, 9));
+			theEvent.ScenarioId.Should().Be(assignment.Scenario.Id.Value);
+			theEvent.InitiatorId.Should().Be(operatedPersonId);
+			theEvent.CommandId.Should().Be(trackId);
+		}
+
+		[Test]
+		public void ShouldOnlyRaiseMainShiftCategoryReplaceEvent()
+		{
+			var agent = new Person().WithId();
+			var layerPeriod = new DateTimePeriod(2016, 8, 9, 2016, 8, 10);
+			var assignment =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(ScenarioFactory.CreateScenarioWithId("_", true), agent,
+					layerPeriod, ShiftCategoryFactory.CreateShiftCategory("current"));
+
+			assignment.PopAllEvents();
+
+			var operatedPersonId = Guid.NewGuid();
+			var trackId = Guid.NewGuid();
+			assignment.SetShiftCategory(ShiftCategoryFactory.CreateShiftCategory("newOne"), false, new TrackedCommandInfo
+			{
+				OperatedPersonId = operatedPersonId,
+				TrackId = trackId
+			});
+
+			assignment.PopAllEvents().Count()
+				.Should().Be.EqualTo(1);
 		}
 	}
 }

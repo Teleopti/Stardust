@@ -67,5 +67,31 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			published.StartDateTime.Should().Be(theEvent.StartDateTime);
 			published.EndDateTime.Should().Be(theEvent.EndDateTime);
 		}
+
+		[Test]
+		public void ShouldPublishScheduleChangedEventWhenMainShiftCategoryReplaceEventHasFired()
+		{
+			var theEvent = new MainShiftCategoryReplaceEvent
+			{
+				Timestamp = DateTime.Now,
+				LogOnDatasource = "datasource",
+				LogOnBusinessUnitId = Guid.NewGuid(),
+				PersonId = Guid.NewGuid(),
+				ScenarioId = Guid.NewGuid(),
+				Date = DateTime.Today,
+				CommandId = Guid.NewGuid()
+			};
+			Target.Handle(theEvent);
+
+			var published = Publisher.PublishedEvents.OfType<ScheduleChangedEvent>().Single();
+			published.Timestamp.Should().Be(theEvent.Timestamp);
+			published.LogOnDatasource.Should().Be(theEvent.LogOnDatasource);
+			published.LogOnBusinessUnitId.Should().Be(theEvent.LogOnBusinessUnitId);
+			published.PersonId.Should().Be(theEvent.PersonId);
+			published.ScenarioId.Should().Be(theEvent.ScenarioId);
+			published.StartDateTime.Should().Be(theEvent.Date.AddDays(-1));
+			published.EndDateTime.Should().Be(theEvent.Date.AddDays(2));
+			published.CommandId.Should().Be(theEvent.CommandId);
+		}
 	}
 }

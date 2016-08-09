@@ -59,7 +59,7 @@ namespace Teleopti.Interfaces.Domain
 		void FillWithDataFrom(IPersonAssignment newAss);
 		void AddActivity(IActivity activity, DateTimePeriod period);
 		void AddActivity(IActivity activity, DateTimePeriod period, TrackedCommandInfo trackedCommandInfo, bool triggerResourceCalcualtion = false);
-		void SetShiftCategory(IShiftCategory shiftCategory);
+		void SetShiftCategory(IShiftCategory shiftCategory, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null);
 		void SetActivitiesAndShiftCategoryFrom(IPersonAssignment assignment);
 		void InsertActivity(IActivity activity, DateTimePeriod period, int index);
 

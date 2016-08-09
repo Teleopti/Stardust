@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				return;
 			}
 
-			personAssignment.SetShiftCategory(shiftCategory);
+			personAssignment.SetShiftCategory(shiftCategory, false, command.TrackedCommandInfo);
 		}
 	}
 }

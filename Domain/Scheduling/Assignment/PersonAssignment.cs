@@ -358,11 +358,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				var activityAddedEvent = new ActivityAddedEvent
 				{
 					Date = Date.Date,
-					PersonId = Person.Id.Value,
-					ActivityId = activity.Id.Value,
+					PersonId = Person.Id.GetValueOrDefault(),
+					ActivityId = activity.Id.GetValueOrDefault(),
 					StartDateTime = period.StartDateTime,
 					EndDateTime = period.EndDateTime,
-					ScenarioId = Scenario.Id.Value,
+					ScenarioId = Scenario.Id.GetValueOrDefault(),
 					LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
 				};
 				if (trackedCommandInfo != null)
@@ -396,9 +396,28 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			SetDayOff(null, true);
 		}
 
-		public virtual void SetShiftCategory(IShiftCategory shiftCategory)
+		public virtual void SetShiftCategory(IShiftCategory shiftCategory, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null)
 		{
 			_shiftCategory = shiftCategory;
+			if (!muteEvent)
+			{
+				AddEvent(() =>
+				{
+					var @event = new MainShiftCategoryReplaceEvent
+					{
+						Date = Date.Date,
+						PersonId = Person.Id.Value,
+						ScenarioId = Scenario.Id.Value,
+						LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+					};
+					if (trackedCommandInfo != null)
+					{
+						@event.InitiatorId = trackedCommandInfo.OperatedPersonId;
+						@event.CommandId = trackedCommandInfo.TrackId;
+					}
+					return @event;
+				});
+			}
 		}
 
 		public virtual void SetActivitiesAndShiftCategoryFrom(IPersonAssignment assignment)

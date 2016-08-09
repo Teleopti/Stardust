@@ -178,6 +178,7 @@
     <Compile Include="ApplicationLayer\Events\ApproveRequestsWithValidatorsEvent.cs" />
     <Compile Include="ApplicationLayer\Events\AvailabilityChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\BusinessUnitChangedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\MainShiftCategoryReplaceEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonRequestChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\RtaMapChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\RtaRuleChangedEvent.cs" />
