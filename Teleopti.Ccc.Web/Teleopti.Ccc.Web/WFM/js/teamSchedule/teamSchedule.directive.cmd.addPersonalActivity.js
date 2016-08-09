@@ -3,9 +3,9 @@
 
 	angular.module('wfm.teamSchedule').directive('addPersonalActivity', addPersonalActivity);
 
-	addPersonalActivityCtrl.$inject = ['$scope', 'ActivityService', 'PersonSelection', 'WFMDate', 'ScheduleManagement', 'teamScheduleNotificationService'];
+	addPersonalActivityCtrl.$inject = ['$scope', 'ActivityService', 'PersonSelection', 'WFMDate', 'ScheduleManagement', 'teamScheduleNotificationService', 'CommandCheckService'];
 
-	function addPersonalActivityCtrl($scope, activityService, personSelectionSvc, wFMDateSvc, scheduleManagementSvc, teamScheduleNotificationService) {
+	function addPersonalActivityCtrl($scope, activityService, personSelectionSvc, wFMDateSvc, scheduleManagementSvc, teamScheduleNotificationService, CommandCheckService) {
 		var vm = this;
 
 		vm.label = 'AddPersonalActivity';
@@ -47,16 +47,8 @@
 			}
 		};
 
-		vm.addPersonalActivity = function () {
-			var requestData = {
-				PersonIds: vm.selectedAgents.map(function(agent) { return agent.PersonId; }),
-				Date: vm.selectedDate(),
-				StartTime: moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm"),
-				EndTime: moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm"),
-				PersonalActivityId: vm.selectedActivityId,
-				TrackedCommandInfo: { TrackId: vm.trackId }
-			};
-
+		function addPersonalActivity() {
+			var requestData = getRequestData();
 			activityService.addPersonalActivity(requestData).then(function (response) {
 				if (vm.getActionCb(vm.label)) {
 					vm.getActionCb(vm.label)(vm.trackId, requestData.PersonIds);
@@ -72,6 +64,29 @@
 				}), response.data);
 			});
 		};
+
+		function getRequestData() {
+			vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
+			return {
+				PersonIds: vm.selectedAgents.map(function (agent) {
+					return agent.PersonId;
+				}),
+				Date: vm.selectedDate(),
+				StartTime: moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm"),
+				EndTime: moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm"),
+				PersonalActivityId: vm.selectedActivityId,
+				TrackedCommandInfo: {
+					TrackId: vm.trackId
+				}
+			};
+		}
+
+		vm.addPersonalActivity = function() {
+			if (vm.checkCommandActivityLayerOrders)
+				CommandCheckService.checkOverlappingCertainActivities(getRequestData()).then(addPersonalActivity);
+			else
+				addPersonalActivity();
+		}; 
 
 		vm.getDefaultActvityStartTime = function() {
 			var curDateMoment = moment(vm.selectedDate());
@@ -135,6 +150,7 @@
 					scope.vm.selectedDate = containerCtrl.getDate;
 					scope.vm.trackId = containerCtrl.getTrackId();
 					scope.vm.getActionCb = containerCtrl.getActionCb;
+					scope.vm.checkCommandActivityLayerOrders = containerCtrl.hasToggle('CheckOverlappingCertainActivitiesEnabled');
 
 					scope.vm.timeRange = {
 						startTime: selfCtrl.getDefaultActvityStartTime(),

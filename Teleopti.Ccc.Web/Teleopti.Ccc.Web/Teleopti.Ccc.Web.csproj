@@ -668,6 +668,7 @@
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\ScheduleValidationProvider.cs" />
     <Compile Include="Areas\TeamSchedule\Models\ChangeShiftCategoryFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Models\CheckActivityLayerOverlapFormData.cs" />
+    <Compile Include="Areas\TeamSchedule\Models\CheckMoveActivityLayerOverlapFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Models\FetchRuleValidationResultFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Core\MoveShiftLayerCommandHelper.cs" />
     <Compile Include="Areas\TeamSchedule\Models\AddPersonalActivityFormData.cs" />

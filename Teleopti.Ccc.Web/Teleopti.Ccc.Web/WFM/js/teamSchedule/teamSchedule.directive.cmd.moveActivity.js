@@ -3,9 +3,9 @@
 
 	angular.module('wfm.teamSchedule').directive('moveActivity', moveActivityDirective);
 
-	moveActivityCtrl.$inject = ['$attrs', '$locale', '$translate', 'ActivityService', 'PersonSelection', 'WFMDate', 'ScheduleManagement', 'teamScheduleNotificationService', 'MoveActivityValidator'];
+	moveActivityCtrl.$inject = ['$attrs', '$locale', '$translate', 'ActivityService', 'PersonSelection', 'WFMDate', 'ScheduleManagement', 'teamScheduleNotificationService', 'MoveActivityValidator', 'CommandCheckService'];
 
-	function moveActivityCtrl($attrs, $locale, $translate, activityService, personSelectionSvc, wFMDateSvc, scheduleManagementSvc, teamScheduleNotificationService, validator) {
+	function moveActivityCtrl($attrs, $locale, $translate, activityService, personSelectionSvc, wFMDateSvc, scheduleManagementSvc, teamScheduleNotificationService, validator, CommandCheckService) {
 		var vm = this;
 
 		vm.label = 'MoveActivity';
@@ -43,36 +43,11 @@
 			return dateStr + 'T' + timeStr;
 		};
 
-		vm.moveActivity = function () {
-			var isMultiAcitvitiesSelectForOneAgent = false;
-			var multiActivitiesSelectedAgentsList = [];
-			var personProjectionsWithSelectedActivities = vm.selectedAgents.filter(function (x) {
-				if (x.SelectedActivities.length > 1) {
-					isMultiAcitvitiesSelectForOneAgent = true;
-					multiActivitiesSelectedAgentsList.push(x.Name);
-				}
-				return (Array.isArray(x.SelectedActivities) && x.SelectedActivities.length === 1);
-			});
+	    function moveActivity() {								
+			activityService.moveActivity(getRequestData()).then(function (response) {
 
-			if (isMultiAcitvitiesSelectForOneAgent) {
-				var errorMessage = $translate.instant('CanNotMoveMultipleActivitiesForSelectedAgents') + " " + multiActivitiesSelectedAgentsList.join(", ") + ".";
-				teamScheduleNotificationService.notify('error', errorMessage);
-				vm.getActionCb(vm.label) && vm.getActionCb(vm.label)(null, null);
-				return;
-			}
+				var personIds = vm.selectedAgents.map(function (agent) { return agent.PersonId; });
 
-			var personIds = vm.selectedAgents.map(function (agent) { return agent.PersonId; });
-
-			var requestData = {
-				Date: vm.selectedDate(),
-				PersonActivities: personProjectionsWithSelectedActivities.map(function (x) {
-					return { PersonId: x.PersonId, ShiftLayerIds: x.SelectedActivities };
-				}),
-				StartTime: vm.getMoveToStartTimeStr(),
-				TrackedCommandInfo: { TrackId: vm.trackId }
-			};
-
-			activityService.moveActivity(requestData).then(function (response) {
 				if (vm.getActionCb(vm.label)) {
 					vm.getActionCb(vm.label)(vm.trackId, personIds);
 				}
@@ -87,7 +62,44 @@
 				}), response.data);
 
 			});
-		};
+	    };
+
+	    function getRequestData() {
+	    	vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
+
+	    	var personProjectionsWithSelectedActivities = vm.selectedAgents.filter(function (x) {	    		
+	    		return (Array.isArray(x.SelectedActivities) && x.SelectedActivities.length === 1);
+	    	});
+
+			var requestData = {
+				Date: vm.selectedDate(),
+				PersonActivities: personProjectionsWithSelectedActivities.map(function (x) {
+					return { PersonId: x.PersonId, ShiftLayerIds: x.SelectedActivities };
+				}),				
+				StartTime: vm.getMoveToStartTimeStr(),
+				TrackedCommandInfo: { TrackId: vm.trackId }
+			};
+
+		    return requestData;
+	    }
+
+	    vm.moveActivity = function () {	     
+	    	var multiActivitiesSelectedAgentsList = vm.selectedAgents.filter(function (x) {	    		
+	    		return (Array.isArray(x.SelectedActivities) && x.SelectedActivities.length > 1);
+	    	});
+
+	    	if (multiActivitiesSelectedAgentsList.length > 0) {
+	    		var errorMessage = $translate.instant('CanNotMoveMultipleActivitiesForSelectedAgents') + " " + multiActivitiesSelectedAgentsList.join(", ") + ".";
+	    		teamScheduleNotificationService.notify('error', errorMessage);
+	    		vm.getActionCb(vm.label) && vm.getActionCb(vm.label)(null, null);
+	    		return;
+	    	}
+
+			if (vm.checkCommandActivityLayerOrders)
+				CommandCheckService.checkMoveActivityOverlappingCertainActivities(getRequestData()).then(moveActivity);
+			else
+				moveActivity();
+		}
 	}
 
 	function moveActivityDirective() {
@@ -127,6 +139,7 @@
 
 			scope.vm.moveToTime = selfCtrl.getDefaultMoveToStartTime();
 			scope.vm.nextDay = moment(selfCtrl.getDefaultMoveToStartTime()).format('YYYY-MM-DD') !== moment(scope.vm.selectedDate()).format('YYYY-MM-DD');
+			scope.vm.checkCommandActivityLayerOrders = containerCtrl.hasToggle('CheckOverlappingCertainActivitiesEnabled');
 
 			scope.$on('teamSchedule.command.focus.default', function () {
 				var focusTarget = elem[0].querySelector('.focus-default input');
