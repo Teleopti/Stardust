@@ -17,11 +17,11 @@ Background:
 	| Move Activity                 | true           |
 	And there is a shift category named 'Day'
 	And there are activities
-	| Name     | Color    |
-	| Phone    | Green    |
-	| Lunch    | Yellow   |
-	| Sales    | Red      |
-	| Training | Training |
+	| Name     | Color    | Allow meeting |
+	| Phone    | Green    | true          |
+	| Lunch    | Yellow   | false         |
+	| Sales    | Red      | true          |
+	| Training | Training | true          |
 	And there is a contract named 'A contract'
 	And there is a contract schedule named 'A contract schedule'
 	And there is a part time percentage named 'Part time percentage'
