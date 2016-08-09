@@ -233,6 +233,11 @@ module.exports = function(grunt) {
 					'dist/main.min.js': ['js/**/*.js', '!js/**/*.spec.js', '!js/**/*.fake.js', '!js/**/*.fortest.js', '!js/app_desktop_client.js'],
 					'dist/modules.min.js': ['dist/modules.js'],
 					'dist/templates.min.js': ['dist/templates.js']
+				},
+				options: {
+					sourceMap: false,
+					beautify: false,
+					mangle: false
 				}
 			},
 			distForDesktop: {
