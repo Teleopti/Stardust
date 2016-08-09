@@ -1,0 +1,30 @@
+﻿<button class="wfm-btn wfm-btn-invis-default" ng-click="requestsSiteOpenHours.showSites()">{{ 'ManageOpenHours' | translate }}</button>
+<modal-dialog show="requestsSiteOpenHours.shouldShowSites" ng-cloak>
+	<h1 class="modal-title">{{'ManageOpenHours' | translate}}</h1>
+	<div class="modal-inner-content">
+		<div class="con-row">
+			<div class="con-flex">
+				<div ng-repeat="site in requestsSiteOpenHours.sites">
+					<div class="wfm-radio">
+						<label>
+							<input type="radio" name="radio" ng-value="site.Id" ng-model="requestsSiteOpenHours.sitesChecked" ng-click="requestsSiteOpenHours.getOpenHours()">
+							<span class="wfm-radio-toggle"></span>
+							<span class="wfm-radio-label">{{site.Name}}</span>
+						</label>
+					</div>
+				</div>
+			</div>
+			<div class="con-flex split-3-1">
+				<div ng-repeat="site in requestsSiteOpenHours.sites">
+					<working-hours-picker ng-if="requestsSiteOpenHours.sitesChecked==site.Id" class="working-hours-picker" working-hours="site.OpenHours" ng-disabled="" ng-click="requestsSiteOpenHours.isWorkingHoursValid()"></working-hours-picker>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-actions">
+		<aside>
+			<button class="wfm-btn wfm-btn-invis-default" ng-click="requestsSiteOpenHours.cancel()">{{ 'Cancel' | translate }}</button>
+			<button class="wfm-btn wfm-btn-invis-primary" ng-class="{'wfm-btn-invis-disabled':form.WaitlistRange.$invalid }" ng-click="requestsSiteOpenHours.save()">{{ 'Save' | translate }}</button>
+		</aside>
+	</div>
+</modal-dialog>

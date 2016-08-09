@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
@@ -11,21 +13,30 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		private readonly ISiteRepository _siteRepository;
 		private readonly IGetSiteAdherence _getAdherence;
 		private readonly SiteViewModelBuilder _siteViewModelBuilder;
+		private readonly ISiteOpenHoursPersister _siteOpenHoursPersister;
 
 		public SitesController(
 			ISiteRepository siteRepository,
 			IGetSiteAdherence getAdherence,
-			SiteViewModelBuilder siteViewModelBuilder)
+			SiteViewModelBuilder siteViewModelBuilder, ISiteOpenHoursPersister siteOpenHoursPersister)
 		{
 			_siteRepository = siteRepository;
 			_getAdherence = getAdherence;
 			_siteViewModelBuilder = siteViewModelBuilder;
+			_siteOpenHoursPersister = siteOpenHoursPersister;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Sites")]
 		public virtual IHttpActionResult Index()
 		{
 			return Ok(_siteViewModelBuilder.Build());
+		}
+
+		[UnitOfWork, HttpPost, Route("api/Sites/MaintainOpenHours")]
+		public virtual IHttpActionResult MaintainOpenHours(IEnumerable<SiteViewModel> sites)
+		{
+			var persistedSitesCount = _siteOpenHoursPersister.Persist(sites);
+			return Ok(persistedSitesCount);
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Sites/Get")]

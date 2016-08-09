@@ -14758,6 +14758,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Manage open hours.
+        /// </summary>
+        public static string ManageOpenHours {
+            get {
+                return ResourceManager.GetString("ManageOpenHours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manage Optional Columns.
         /// </summary>
         public static string ManageOptionalColumns {
@@ -24617,6 +24626,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SaveOrCancel {
             get {
                 return ResourceManager.GetString("SaveOrCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open hours have been updated.
+        /// </summary>
+        public static string SaveSiteOpenHoursSuccess {
+            get {
+                return ResourceManager.GetString("SaveSiteOpenHoursSuccess", resourceCulture);
             }
         }
         

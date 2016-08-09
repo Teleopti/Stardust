@@ -39,6 +39,12 @@
             });
         }
 
+        this.notifySaveSiteOpenHoursSuccess = function (persistedSites) {
+        	$translate("SaveSiteOpenHoursSuccess").then(function (text) {
+        		NoticeService.success(text.replace('{0}', persistedSites), 10000, true);
+        	});
+		}
+
         this.notifyProcessWaitlistedRequestsFinished = function (period) {
             $translate("ProcessWaitlistedRequestsFinished").then(function (text) {
                 NoticeService.success(text.replace('{0}', period), 10000, true);

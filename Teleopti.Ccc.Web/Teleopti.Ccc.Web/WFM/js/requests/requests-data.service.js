@@ -14,6 +14,8 @@
 		var processWaitlistRequests = '../api/Requests/runWaitlist';
 		var approveWithValidatorsUrl = '../api/Requests/approveWithValidators';
 		var replyRequestsUrl = '../api/Requests/replyRequests';
+		var getSitesUrl = '../api/sites';
+		var maintainOpenHoursUrl = '../api/Sites/MaintainOpenHours';
 
 		this.getAllRequestsPromise_old = function (filter, sortingOrders) {
 			return $http.post(loadTextAndAbsenceRequestsUrl_old, requestsDefinitions.normalizeRequestsFilter_old(filter, sortingOrders));
@@ -23,6 +25,14 @@
 			return $http.get(listRequestsUrl,
 				{ params: requestsDefinitions.normalizeRequestsFilter(filter, sortingOrders, paging) }
 			);
+		};
+
+		this.getSitesPromise = function() {
+			return $http.get(getSitesUrl);
+		};
+
+		this.maintainOpenHoursPromise = function (sites) {
+			return $http.post(maintainOpenHoursUrl, sites);
 		};
 
 		this.getShiftTradeRequestsPromise = function (filter, sortingOrders, paging) {

@@ -47,13 +47,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			return sites.Select(site =>
 			{
 				var valueOrDefault = site.Id.GetValueOrDefault();
+				var openHours =
+					site.OpenHours.Select(
+						openHour =>
+							new SiteOpenHour()
+							{
+								WeekDay = openHour.Key,
+								StartTime = openHour.Value.StartTime,
+								EndTime = openHour.Value.EndTime
+							}).ToList();
 				return new SiteViewModel
 				{
 					Id = valueOrDefault,
 					Name = site.Description.Name,
-					NumberOfAgents = numberOfAgents[valueOrDefault]
+					NumberOfAgents = numberOfAgents[valueOrDefault],
+					OpenHours = openHours
 				};
-			});
+			}).ToList();
 		}
 	}
 }

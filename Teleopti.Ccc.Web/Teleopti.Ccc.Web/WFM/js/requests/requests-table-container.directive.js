@@ -21,6 +21,7 @@
 		vm.shouldDisplayShiftTradeDayDetail = shouldDisplayShiftTradeDayDetail;
 		vm.showRelevantInfo = toggleSvc.Wfm_Requests_ShiftTrade_More_Relevant_Information_38492;
 		vm.showRequestsInDefaultStatus = toggleSvc.Wfm_Requests_Default_Status_Filter_39472;
+		vm.isUpdateSiteOpenHoursEnabled = toggleSvc.Wfm_Requests_Site_Open_Hours_39936;
 		vm.setFilterEnabled = setFilterEnabled;
 		vm.showShiftDetail = showShiftDetail;
 		vm.hideShiftDetail = hideShiftDetail;
