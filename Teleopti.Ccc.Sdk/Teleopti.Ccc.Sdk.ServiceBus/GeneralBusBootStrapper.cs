@@ -1,10 +1,10 @@
-using System.Threading.Tasks;
 using Autofac;
 using log4net;
 using Rhino.ServiceBus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 {
 	public class GeneralBusBootStrapper : BusBootStrapper
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(GeneralBusBootStrapper));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (GeneralBusBootStrapper));
 
 		public GeneralBusBootStrapper(IContainer container) : base(container)
 		{
@@ -27,9 +27,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			var bus = Container.Resolve<IServiceBus>();
 			var toggleManager = Container.Resolve<IToggleManager>();
 			if (toggleManager.IsEnabled(Toggles.ETL_MoveBadgeCalculationToETL_38421))
-				return;
-
-			if (!toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))
 				return;
 
 			Task.Run(() => Container.Resolve<DataSourceForTenantWrapper>().DataSource()().DoOnAllTenants_AvoidUsingThis(tenant =>

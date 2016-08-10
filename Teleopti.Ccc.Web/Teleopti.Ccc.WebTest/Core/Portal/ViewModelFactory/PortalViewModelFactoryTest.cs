@@ -1,15 +1,14 @@
-﻿using System.Globalization;
-using System.Linq;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
@@ -55,11 +54,13 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Is.Anything)).Return(true);
 			_reportsNavProvider.Stub(x => x.GetNavigationItems())
 				.Return(new[] { new ReportNavigationItem { Action = "Index", Controller = "MyReport", IsWebReport = true } });
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
+			var target = new PortalViewModelFactory(permissionProvider,
+				MockRepository.GenerateMock<ILicenseActivatorProvider>(),
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				_reportsNavProvider, MockRepository.GenerateMock<IBadgeProvider>(),
-				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
-				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(),
+				_personNameProvider,
+				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
+				MockRepository.GenerateStub<ICurrentTenantUser>(),
 				_userCulture, _currentTeleoptiPrincipal);
 
 			var result = target.CreatePortalViewModel();
@@ -85,11 +86,13 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		public void ShouldHaveCustomerName()
 		{
 			var licenseActivatorProvider = MockRepository.GenerateMock<ILicenseActivatorProvider>();
-			var target = new PortalViewModelFactory(MockRepository.GenerateMock<IPermissionProvider>(), licenseActivatorProvider,
+			var target = new PortalViewModelFactory(MockRepository.GenerateMock<IPermissionProvider>(),
+				licenseActivatorProvider,
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				_reportsNavProvider, MockRepository.GenerateMock<IBadgeProvider>(),
-				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
-				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(),
+				_personNameProvider,
+				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
+				MockRepository.GenerateStub<ICurrentTenantUser>(),
 				_userCulture, _currentTeleoptiPrincipal);
 
 			var licenseActivator = MockRepository.GenerateMock<ILicenseActivator>();
@@ -108,8 +111,9 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 				MockRepository.GenerateMock<ILicenseActivatorProvider>(),
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				_reportsNavProvider, MockRepository.GenerateMock<IBadgeProvider>(),
-				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
-				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(),
+				_personNameProvider,
+				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
+				MockRepository.GenerateStub<ICurrentTenantUser>(),
 				_userCulture, _currentTeleoptiPrincipal);
 
 			var result = target.CreatePortalViewModel();
@@ -124,16 +128,16 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var loggedOnUser = MockRepository.GenerateMock<ICurrentTenantUser>();
 			loggedOnUser.Expect(m => m.CurrentUser()).Return(agent);
 			var target = new PortalViewModelFactory(MockRepository.GenerateStub<IPermissionProvider>(),
-				MockRepository.GenerateStub<ILicenseActivatorProvider>(), MockRepository.GenerateMock<IPushMessageProvider>(),
+				MockRepository.GenerateStub<ILicenseActivatorProvider>(),
+				MockRepository.GenerateMock<IPushMessageProvider>(),
 				_loggedOnUser, _reportsNavProvider, MockRepository.GenerateMock<IBadgeProvider>(),
-				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
-				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), loggedOnUser, _userCulture, _currentTeleoptiPrincipal);
+				_personNameProvider,
+				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
+				loggedOnUser, _userCulture, _currentTeleoptiPrincipal);
 
 			var res = target.CreatePortalViewModel();
 			res.ShowChangePassword.Should().Be.False();
 		}
-
-
 
 		[Test]
 		public void ShouldShowChangePasswordIfApplicationLogonExists()
@@ -143,10 +147,12 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var loggedOnUser = MockRepository.GenerateMock<ICurrentTenantUser>();
 			loggedOnUser.Expect(m => m.CurrentUser()).Return(agent);
 			var target = new PortalViewModelFactory(MockRepository.GenerateStub<IPermissionProvider>(),
-				MockRepository.GenerateStub<ILicenseActivatorProvider>(), MockRepository.GenerateMock<IPushMessageProvider>(),
+				MockRepository.GenerateStub<ILicenseActivatorProvider>(),
+				MockRepository.GenerateMock<IPushMessageProvider>(),
 				_loggedOnUser, _reportsNavProvider, MockRepository.GenerateMock<IBadgeProvider>(),
-				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
-				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), loggedOnUser, _userCulture, _currentTeleoptiPrincipal);
+				_personNameProvider,
+				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
+				loggedOnUser, _userCulture, _currentTeleoptiPrincipal);
 
 			var res = target.CreatePortalViewModel();
 			res.ShowChangePassword.Should().Be.True();
@@ -159,7 +165,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			permissionProvider.Expect(
 				p => p.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)).Return(true);
 
-			var target = CreateTarget(permissionProvider);
+			var target = createTarget(permissionProvider);
 
 			Assert.That(target.CreatePortalViewModel().HasAsmPermission, Is.True);
 		}
@@ -171,7 +177,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			permissionProvider.Expect(
 				p => p.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)).Return(false);
 
-			var target = CreateTarget(permissionProvider);
+			var target = createTarget(permissionProvider);
 
 			Assert.That(target.CreatePortalViewModel().HasAsmPermission, Is.False);
 		}
@@ -183,7 +189,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			permissionProvider.Expect(p => p.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewBadge))
 				.Return(false);
 
-			var target = CreateTarget(permissionProvider);
+			var target = createTarget(permissionProvider);
 
 			Assert.That(target.CreatePortalViewModel().ShowBadge, Is.False);
 		}
@@ -191,7 +197,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		[Test, SetCulture("en-US")]
 		public void ShouldShowMeridianWhenUsCulture()
 		{
-			var target = CreateTarget(MockRepository.GenerateMock<IPermissionProvider>());
+			var target = createTarget(MockRepository.GenerateMock<IPermissionProvider>());
 
 			target.CreatePortalViewModel().ShowMeridian.Should().Be.True();
 		}
@@ -199,7 +205,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		[Test, SetCulture("sv-SE")]
 		public void ShouldShowMeridianWhenSwedishCulture()
 		{
-			var target = CreateTarget(MockRepository.GenerateMock<IPermissionProvider>());
+			var target = createTarget(MockRepository.GenerateMock<IPermissionProvider>());
 
 			target.CreatePortalViewModel().ShowMeridian.Should().Be.False();
 		}
@@ -207,20 +213,22 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		[Test, SetCulture("en-GB")]
 		public void ShouldShowMeridianWhenBritishCulture()
 		{
-			var target = CreateTarget(MockRepository.GenerateMock<IPermissionProvider>());
+			var target = createTarget(MockRepository.GenerateMock<IPermissionProvider>());
 
 			target.CreatePortalViewModel().ShowMeridian.Should().Be.False();
 		}
 
-		private PortalViewModelFactory CreateTarget(IPermissionProvider permissionProvider)
+		private PortalViewModelFactory createTarget(IPermissionProvider permissionProvider)
 		{
-			return new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
+			return new PortalViewModelFactory(permissionProvider,
+				MockRepository.GenerateMock<ILicenseActivatorProvider>(),
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
-				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
-				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
-				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(),
+				MockRepository.GenerateMock<IReportsNavigationProvider>(),
+				MockRepository.GenerateMock<IBadgeProvider>(),
+				_personNameProvider,
+				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
+				MockRepository.GenerateStub<ICurrentTenantUser>(),
 				_userCulture, _currentTeleoptiPrincipal);
 		}
 	}
-
 }

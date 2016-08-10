@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
@@ -27,7 +25,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IReportsNavigationProvider _reportsNavigationProvider;
 		private readonly IBadgeProvider _badgeProvider;
-		private readonly IToggleManager _toggleManager;
 		private readonly IPersonNameProvider _personNameProvider;
 		private readonly ITeamGamificationSettingRepository _teamGamificationSettingRepo;
 		private readonly ICurrentTenantUser _currentTenantUser;
@@ -39,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			IPushMessageProvider pushMessageProvider, ILoggedOnUser loggedOnUser,
 			IReportsNavigationProvider reportsNavigationProvider,
 			IBadgeProvider badgeProvider,
-			IToggleManager toggleManager, IPersonNameProvider personNameProvider,
+			IPersonNameProvider personNameProvider,
 			ITeamGamificationSettingRepository teamGamificationSettingReop,
 			ICurrentTenantUser currentTenantUser,
 			IUserCulture userCulture,
@@ -51,7 +48,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			_loggedOnUser = loggedOnUser;
 			_reportsNavigationProvider = reportsNavigationProvider;
 			_badgeProvider = badgeProvider;
-			_toggleManager = toggleManager;
 			_personNameProvider = personNameProvider;
 			_teamGamificationSettingRepo = teamGamificationSettingReop;
 			_currentTenantUser = currentTenantUser;
@@ -65,11 +61,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 
 			var culture = _userCulture == null ? CultureInfo.InvariantCulture : _userCulture.GetCulture();
 			var useJalaaliCalendar = culture.IetfLanguageTag == "fa-IR";
-			
+
 			if (useJalaaliCalendar)
 			{
 				_currentIdentity.Current().Regional.ForceUseGregorianCalendar = true;
-				culture = _userCulture.GetCulture(); // overwrite culture before useJalaali flag was set.	
+				culture = _userCulture.GetCulture(); // overwrite culture before useJalaali flag was set.
 			}
 
 			var reportsList = setupNavigationItems(navigationItems, useJalaaliCalendar);
@@ -77,26 +73,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			var licenseActivator = _licenseActivatorProvider.Current();
 			var customerName = licenseActivator == null ? string.Empty : licenseActivator.CustomerName;
 
-			var badgeToggleEnabled = _toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318);
 			var hasBadgePermission =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewBadge);
 
-			bool badgeFeatureEnabled = false;
-			if (_toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))
+			ITeamGamificationSetting teamSetting = null;
+			if (_loggedOnUser.CurrentUser().MyTeam(DateOnly.Today) != null)
 			{
-				ITeamGamificationSetting teamSetting = null;
-				if (_loggedOnUser.CurrentUser().MyTeam(DateOnly.Today) != null)
-				{
-					teamSetting =
-						_teamGamificationSettingRepo.FindTeamGamificationSettingsByTeam(_loggedOnUser.CurrentUser().MyTeam(DateOnly.Today));
-				}
-				badgeFeatureEnabled = (teamSetting != null);
+				teamSetting =
+					_teamGamificationSettingRepo.FindTeamGamificationSettingsByTeam(_loggedOnUser.CurrentUser().MyTeam(DateOnly.Today));
 			}
 
-			var showBadge = badgeToggleEnabled && badgeFeatureEnabled && hasBadgePermission;
-			
+			var badgeFeatureEnabled = (teamSetting != null);
+			var showBadge = badgeFeatureEnabled && hasBadgePermission;
 
-			
 			return new PortalViewModel
 			{
 				ReportNavigationItems = reportsList,
@@ -119,55 +108,57 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			};
 		}
 
-		private List<ReportNavigationItem> setupNavigationItems (List<NavigationItem> navigationItems, bool useJalaaliCalendar)
+		private IEnumerable<ReportNavigationItem> setupNavigationItems(ICollection<NavigationItem> navigationItems,
+			bool useJalaaliCalendar)
 		{
 			var reportsItems = _reportsNavigationProvider.GetNavigationItems();
-			if (_permissionProvider.HasApplicationFunctionPermission (DefinedRaptorApplicationFunctionPaths.TeamSchedule))
+			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TeamSchedule))
 			{
-				navigationItems.Add (createTeamScheduleNavigationItem());
+				navigationItems.Add(createTeamScheduleNavigationItem());
 			}
-			if (_permissionProvider.HasApplicationFunctionPermission (DefinedRaptorApplicationFunctionPaths.StudentAvailability) &&
+			if (
+				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StudentAvailability) &&
 				!useJalaaliCalendar)
 			{
-				navigationItems.Add (createStudentAvailabilityNavigationItem());
+				navigationItems.Add(createStudentAvailabilityNavigationItem());
 			}
 			if (
 				!useJalaaliCalendar &&
-				(_permissionProvider.HasApplicationFunctionPermission (DefinedRaptorApplicationFunctionPaths.StandardPreferences) ||
-				 _permissionProvider.HasApplicationFunctionPermission (DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb)))
+				(_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StandardPreferences) ||
+				 _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb)))
 			{
-				navigationItems.Add (createPreferenceNavigationItem());
+				navigationItems.Add(createPreferenceNavigationItem());
 			}
-			if (_permissionProvider.HasApplicationFunctionPermission (DefinedRaptorApplicationFunctionPaths.TextRequests) ||
-				_permissionProvider.HasApplicationFunctionPermission (DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb) ||
-				_permissionProvider.HasApplicationFunctionPermission (DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb))
+			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests) ||
+				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb) ||
+				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb))
 			{
-				navigationItems.Add (createRequestsNavigationItem());
+				navigationItems.Add(createRequestsNavigationItem());
 			}
-			if (_permissionProvider.HasApplicationFunctionPermission (DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger))
+			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger))
 			{
-				navigationItems.Add (createMessageNavigationItem (_pushMessageProvider.UnreadMessageCount));
+				navigationItems.Add(createMessageNavigationItem(_pushMessageProvider.UnreadMessageCount));
 			}
 			var reportsList = new List<ReportNavigationItem>();
-			if (reportsItems != null && (reportsItems.Count.Equals (1) && reportsItems.First().IsWebReport))
+			if (reportsItems != null && (reportsItems.Count.Equals(1) && reportsItems.First().IsWebReport))
 			{
-				navigationItems.Add (reportsItems.First());
+				navigationItems.Add(reportsItems.First());
 			}
-			else if (reportsItems != null) reportsList.AddRange (reportsItems);
+			else if (reportsItems != null) reportsList.AddRange(reportsItems);
 			return reportsList;
 		}
 
 		private DateTimeDefaultValues getDateTimeDefaultValues(CultureInfo culture)
 		{
-			return new DateTimeDefaultValues()
+			return new DateTimeDefaultValues
 			{
-					StartTime= TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0)),
-					EndTime =  TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0)),
-					FullDayStartTime = @TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(0, 0, 0)),
-					FullDayEndTime = @TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(23, 59, 0)),
-					TodayYear = culture.Calendar.GetYear(DateTime.Today),
-					TodayMonth = culture.Calendar.GetMonth(DateTime.Today),
-					TodayDay =  culture.Calendar.GetDayOfMonth(DateTime.Today)
+				StartTime = TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0)),
+				EndTime = TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0)),
+				FullDayStartTime = @TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(0, 0, 0)),
+				FullDayEndTime = @TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(23, 59, 0)),
+				TodayYear = culture.Calendar.GetYear(DateTime.Today),
+				TodayMonth = culture.Calendar.GetMonth(DateTime.Today),
+				TodayDay = culture.Calendar.GetDayOfMonth(DateTime.Today)
 			};
 		}
 
@@ -175,7 +166,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		{
 			var currentPersonInfo = _currentTenantUser.CurrentUser();
 			return currentPersonInfo != null &&
-			       !string.IsNullOrEmpty(_currentTenantUser.CurrentUser().ApplicationLogonInfo.LogonName);
+				   !string.IsNullOrEmpty(_currentTenantUser.CurrentUser().ApplicationLogonInfo.LogonName);
 		}
 
 		private static NavigationItem createTeamScheduleNavigationItem()

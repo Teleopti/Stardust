@@ -3,9 +3,7 @@ using Rhino.Mocks;
 using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Interfaces.Domain;
 
@@ -18,7 +16,6 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 		private ILoggedOnUser loggedOnUser;
 		private IAgentBadgeRepository badgeRepository;
 		private IAgentBadgeWithRankRepository badgeWithRankRepository;
-		private IToggleManager toggleManager;
 
 		private readonly Guid currentUserId = Guid.NewGuid();
 		private ITeamGamificationSettingRepository teamSettingRepository;
@@ -38,7 +35,6 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 			mockAgentBadgeWithRankRepository(currentUser);
 
 			teamSettingRepository = MockRepository.GenerateMock<ITeamGamificationSettingRepository>();
-			toggleManager = MockRepository.GenerateMock<IToggleManager>();
 		}
 
 		#region Mock badge repositories
@@ -115,9 +111,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 				}
 			});
 
-			toggleManager.Stub(x => x.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318)).Return(true);
-
-			target = new BadgeProvider(loggedOnUser, badgeRepository, badgeWithRankRepository, teamSettingRepository, toggleManager);
+			target = new BadgeProvider(loggedOnUser, badgeRepository, badgeWithRankRepository, teamSettingRepository);
 
 			var result = target.GetBadges().ToList();
 

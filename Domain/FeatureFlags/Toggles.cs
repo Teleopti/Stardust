@@ -8,6 +8,7 @@
 		TestToggle,
 		TestToggle2,
 		TestToggle3,
+
 		//////
 		// ReSharper disable InconsistentNaming
 		Forecast_CopySettingsToWorkflow_11112,
@@ -20,7 +21,7 @@
 		RTA_AdherenceDetails_34267,
 		RTA_ScheduleProjectionReadOnlyHangfire_35703,
 		RTA_AlarmContext_29357,
-        RTA_TotalOutOfAdherenceTime_38702,
+		RTA_TotalOutOfAdherenceTime_38702,
 		RTA_PauseButton_39144,
 		RTA_MonitorBySkills_39081,
 		RTA_RecentOutOfAdherences_39145,
@@ -46,7 +47,6 @@
 		ETL_SpeedUpETL_30791,
 		ETL_OnlyLatestQueueAgentStatistics_30787,
 		Gamification_NewBadgeCalculation_31185,
-		Portal_DifferentiateBadgeSettingForAgents_31318,
 
 		SeatPlanner_Logon_32003,
 		Wfm_SeatPlan_SeatMapBookingView_32814,
@@ -130,10 +130,9 @@
 		ResourcePlanner_CascadingSkills_38524,
 		ResourcePlanner_CascadingSkillsGUI_40018,
 
+		Wfm_DisplayOnlineHelp_39402,
 
-				Wfm_DisplayOnlineHelp_39402,
-
-        Wfm_QuickForecastOnHangfire_35845,
+		Wfm_QuickForecastOnHangfire_35845,
 		ETL_SpeedUpPermissionReport_33584,
 		Wfm_RecalculateForecastOnHangfire_37971,
 		ETL_SpeedUpFactScheduleNightly_38019,
@@ -163,10 +162,10 @@
 		ETL_SpeedUpIntradayShiftCategory_38718,
 		ETL_MoveBadgeCalculationToETL_38421,
 		ETL_SpeedUpNightlyShiftCategory_38718,
-        ETL_SpeedUpNightlyPreference_38283,
+		ETL_SpeedUpNightlyPreference_38283,
 		ETL_SpeedUpIntradayRequest_38914,
 		ETL_FasterIndexMaintenance_38847,
-        ETL_SpeedUpIntradayScorecard_38933,
+		ETL_SpeedUpIntradayScorecard_38933,
 		ETL_SpeedUpIntradayAvailability_38926,
 		ETL_SpeedUpNightlyAvailability_38926,
 		ETL_SpeedUpNightlyRequest_38914,

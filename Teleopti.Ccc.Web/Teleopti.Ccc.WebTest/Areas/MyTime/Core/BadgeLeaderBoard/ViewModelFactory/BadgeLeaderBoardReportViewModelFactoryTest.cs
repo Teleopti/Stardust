@@ -1,11 +1,10 @@
-﻿using System;
-using System.Linq;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.FeatureFlags;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.BadgeLeaderBoardReport.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.BadgeLeaderBoardReport;
@@ -19,10 +18,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.BadgeLeaderBoard.ViewModelFacto
 		[Test]
 		public void ShouldReturnBadgeLeaderBoardViewModel()
 		{
-			var toggleManager = MockRepository.GenerateMock<IToggleManager>();
-			var leaderboardSettingBasedBadgeProvider =MockRepository.GenerateMock<ILeaderboardSettingBasedBadgeProvider>();
-
-			var target = new BadgeLeaderBoardReportViewModelFactory(toggleManager,leaderboardSettingBasedBadgeProvider);
 			var option = new LeaderboardQuery
 			{
 				Date = DateOnly.Today,
@@ -30,17 +25,20 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.BadgeLeaderBoard.ViewModelFacto
 				Type = LeadboardQueryType.Team
 			};
 
-			var result = target.CreateBadgeLeaderBoardReportViewModel(option);
+			var leaderboardSettingBasedBadgeProvider = MockRepository.GenerateMock<ILeaderboardSettingBasedBadgeProvider>();
+			leaderboardSettingBasedBadgeProvider.Stub(
+				x => x.PermittedAgentBadgeOverviewsForTeam(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, option))
+				.Return(new List<AgentBadgeOverview>());
 
+			var target = new BadgeLeaderBoardReportViewModelFactory(leaderboardSettingBasedBadgeProvider);
+
+			var result = target.CreateBadgeLeaderBoardReportViewModel(option);
 			result.GetType().Should().Be<BadgeLeaderBoardReportViewModel>();
 		}
 
 		[Test]
 		public void ShouldReturnSortedAgents()
 		{
-			var toggleManager = MockRepository.GenerateMock<IToggleManager>();
-			toggleManager.Stub(x => x.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318)).Return(true);
-
 			var overviewOriginal = new[]
 			{
 				new AgentBadgeOverview
@@ -92,7 +90,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.BadgeLeaderBoard.ViewModelFacto
 				x => x.PermittedAgentBadgeOverviewsForSite(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard, option))
 				.Return(overviewOriginal);
 
-			var target = new BadgeLeaderBoardReportViewModelFactory(toggleManager, leaderboardSettingBasedBadgeProvider);
+			var target = new BadgeLeaderBoardReportViewModelFactory(leaderboardSettingBasedBadgeProvider);
 			var agentBadges = target.CreateBadgeLeaderBoardReportViewModel(option).Agents.ToList();
 
 			agentBadges.ElementAt(0).AgentName.Should().Be("cc");
@@ -101,8 +99,5 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.BadgeLeaderBoard.ViewModelFacto
 			agentBadges.ElementAt(3).AgentName.Should().Be("ee");
 			agentBadges.ElementAt(4).AgentName.Should().Be("dd");
 		}
-
 	}
-
-	
 }

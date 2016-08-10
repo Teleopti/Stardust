@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Interfaces.Domain;
 
@@ -14,37 +12,29 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IAgentBadgeRepository _badgeRepository;
 		private readonly IAgentBadgeWithRankRepository _badgeWithRankRepository;
-		private readonly IToggleManager _toggleManager;
 		private ITeamGamificationSetting _teamGamificationSetting;
 		private readonly ITeamGamificationSettingRepository _teamGamificationSettingRepo;
-		private readonly bool teamBasedGamificationSettingEnabled;
 
 		public BadgeProvider(ILoggedOnUser loggedOnUser, IAgentBadgeRepository badgeRepository,
 			IAgentBadgeWithRankRepository badgeWithRankRepository,
-			ITeamGamificationSettingRepository teamGamificationSettingRepo,
-			IToggleManager toggleManager)
+			ITeamGamificationSettingRepository teamGamificationSettingRepo)
 		{
 			_loggedOnUser = loggedOnUser;
 			_badgeRepository = badgeRepository;
 			_badgeWithRankRepository = badgeWithRankRepository;
-			_toggleManager = toggleManager;
 			_teamGamificationSettingRepo = teamGamificationSettingRepo;
-
-			teamBasedGamificationSettingEnabled =
-				_toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318);
 		}
 
 		public IEnumerable<BadgeViewModel> GetBadges()
 		{
-			var badgeVmList = new List<BadgeViewModel>();
 			var currentUser = _loggedOnUser.CurrentUser();
-			if (currentUser == null) return badgeVmList;
+			if (currentUser == null) return new List<BadgeViewModel>();
+
 			_teamGamificationSetting =
 				_teamGamificationSettingRepo.FindTeamGamificationSettingsByTeam(currentUser.MyTeam(DateOnly.Today));
-		
+
 			var allBadges = getBadgesWithoutRank(currentUser);
 			var allBadgesWithRank = getBadgesWithRank(currentUser);
-				
 
 			return mergeBadges(allBadges, allBadgesWithRank);
 		}
@@ -56,38 +46,37 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 				return new List<BadgeViewModel>();
 			}
 
-			var badges = !teamBasedGamificationSettingEnabled
-				? new List<IAgentBadgeWithRank>()
-				: new List<IAgentBadgeWithRank>
+			var personId = person.Id.GetValueOrDefault();
+			var badges = new List<IAgentBadgeWithRank>
+			{
+				_badgeWithRankRepository.Find(person, BadgeType.Adherence) ??
+				new AgentBadgeWithRank
 				{
-					_badgeWithRankRepository.Find(person, BadgeType.Adherence) ??
-					new AgentBadgeWithRank
-					{
-						BadgeType = BadgeType.Adherence,
-						Person = person.Id.Value,
-						BronzeBadgeAmount = 0,
-						SilverBadgeAmount = 0,
-						GoldBadgeAmount = 0
-					},
-					_badgeWithRankRepository.Find(person, BadgeType.AverageHandlingTime) ??
-					new AgentBadgeWithRank
-					{
-						BadgeType = BadgeType.Adherence,
-						Person = person.Id.Value,
-						BronzeBadgeAmount = 0,
-						SilverBadgeAmount = 0,
-						GoldBadgeAmount = 0
-					},
-					_badgeWithRankRepository.Find(person, BadgeType.AnsweredCalls) ??
-					new AgentBadgeWithRank
-					{
-						BadgeType = BadgeType.Adherence,
-						Person = person.Id.Value,
-						BronzeBadgeAmount = 0,
-						SilverBadgeAmount = 0,
-						GoldBadgeAmount = 0
-					}
-				};
+					BadgeType = BadgeType.Adherence,
+					Person = personId,
+					BronzeBadgeAmount = 0,
+					SilverBadgeAmount = 0,
+					GoldBadgeAmount = 0
+				},
+				_badgeWithRankRepository.Find(person, BadgeType.AverageHandlingTime) ??
+				new AgentBadgeWithRank
+				{
+					BadgeType = BadgeType.Adherence,
+					Person = personId,
+					BronzeBadgeAmount = 0,
+					SilverBadgeAmount = 0,
+					GoldBadgeAmount = 0
+				},
+				_badgeWithRankRepository.Find(person, BadgeType.AnsweredCalls) ??
+				new AgentBadgeWithRank
+				{
+					BadgeType = BadgeType.Adherence,
+					Person = personId,
+					BronzeBadgeAmount = 0,
+					SilverBadgeAmount = 0,
+					GoldBadgeAmount = 0
+				}
+			};
 
 			var badgeVmList = badges.Select(x => new BadgeViewModel
 			{
@@ -96,24 +85,41 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 				SilverBadge = x.SilverBadgeAmount,
 				GoldBadge = x.GoldBadgeAmount
 			});
+
 			return badgeVmList;
 		}
 
 		private IEnumerable<BadgeViewModel> getBadgesWithoutRank(IPerson person)
 		{
-			if (!teamBasedGamificationSettingEnabled || person == null || _teamGamificationSetting == null)
+			if (person == null || _teamGamificationSetting == null)
 			{
 				return new List<BadgeViewModel>();
 			}
 
+			var personId = person.Id.GetValueOrDefault();
 			var badges = new List<AgentBadge>
 			{
 				_badgeRepository.Find(person, BadgeType.Adherence) ??
-				new AgentBadge {BadgeType = BadgeType.Adherence, Person = person.Id.Value, TotalAmount = 0},
+				new AgentBadge
+				{
+					BadgeType = BadgeType.Adherence,
+					Person = personId,
+					TotalAmount = 0
+				},
 				_badgeRepository.Find(person, BadgeType.AverageHandlingTime) ??
-				new AgentBadge {BadgeType = BadgeType.AverageHandlingTime, Person = person.Id.Value, TotalAmount = 0},
+				new AgentBadge
+				{
+					BadgeType = BadgeType.AverageHandlingTime,
+					Person = personId,
+					TotalAmount = 0
+				},
 				_badgeRepository.Find(person, BadgeType.AnsweredCalls) ??
-				new AgentBadge {BadgeType = BadgeType.AnsweredCalls, Person = person.Id.Value, TotalAmount = 0}
+				new AgentBadge
+				{
+					BadgeType = BadgeType.AnsweredCalls,
+					Person = personId,
+					TotalAmount = 0
+				}
 			};
 
 			var setting = _teamGamificationSetting.GamificationSetting;
@@ -131,7 +137,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 
 		/// <summary>
 		/// Merge total amount of badges.
-		/// To handle the scenario that switch from old badge calculation 
+		/// To handle the scenario that switch from old badge calculation
 		/// </summary>
 		/// <param name="badgeVmList1"></param>
 		/// <param name="badgeVmList2"></param>

@@ -1,8 +1,7 @@
-using System;
 using Rhino.ServiceBus;
+using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Badge;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -12,15 +11,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 {
 	public class BadgeCalculationInitConsumer : ConsumerOf<BadgeCalculationInitMessage>
 	{
+		private readonly IIsTeamGamificationSettingsAvailable _isTeamGamificationSettingsAvailable;
+		private readonly INow _now;
 		private readonly IPerformBadgeCalculation _performBadgeCalculation;
 		private readonly IRunningEtlJobChecker _runningEtlJobChecker;
 		private readonly IServiceBus _serviceBus;
-		private readonly INow _now;
 		private readonly IToggleManager _toggleManager;
-		private readonly IIsTeamGamificationSettingsAvailable _isTeamGamificationSettingsAvailable;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
-		public BadgeCalculationInitConsumer(IPerformBadgeCalculation performBadgeCalculation, IRunningEtlJobChecker runningEtlJobChecker, IServiceBus serviceBus, INow now, IToggleManager toggleManager, IIsTeamGamificationSettingsAvailable isTeamGamificationSettingsAvailable, ICurrentUnitOfWorkFactory unitOfWorkFactory)
+		public BadgeCalculationInitConsumer(IPerformBadgeCalculation performBadgeCalculation,
+			IRunningEtlJobChecker runningEtlJobChecker, IServiceBus serviceBus, INow now, IToggleManager toggleManager,
+			IIsTeamGamificationSettingsAvailable isTeamGamificationSettingsAvailable, ICurrentUnitOfWorkFactory unitOfWorkFactory)
 		{
 			_performBadgeCalculation = performBadgeCalculation;
 			_runningEtlJobChecker = runningEtlJobChecker;
@@ -33,14 +34,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 		public void Consume(BadgeCalculationInitMessage message)
 		{
-			using (var uow= _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			using (var uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				if (_toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))
-					if (!_isTeamGamificationSettingsAvailable.Satisfy())
-					{
-						resendMessage(message);
-						return;
-					}
+				if (!_isTeamGamificationSettingsAvailable.Satisfy())
+				{
+					resendMessage(message);
+					return;
+				}
 
 				if (checkIfNightlyIsRunning(message)) return;
 
@@ -49,7 +49,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				resendMessage(message);
 				uow.PersistAll();
 			}
-			
 		}
 
 		private bool checkIfNightlyIsRunning(BadgeCalculationInitMessage message)

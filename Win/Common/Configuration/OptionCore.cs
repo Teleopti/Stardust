@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Autofac;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Autofac;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		public ICollection<ISettingPage> AllSelectedPages { get; private set; }
 		public IUnitOfWork UnitOfWork { get; private set; }
 		public ISettingPage LastPage { get; private set; }
+
 		public bool HasLastPage
 		{
 			get { return LastPage != null; }
@@ -44,7 +45,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public bool MarkAsSelected(ISettingPage page, SelectedEntity<IAggregateRoot> item)
 		{
-			if (UnitOfWork == null) throw new InvalidOperationException("The unit of work must be set through SetUnitOfWork before this operation is called");
+			if (UnitOfWork == null)
+				throw new InvalidOperationException(
+					"The unit of work must be set through SetUnitOfWork before this operation is called");
 
 			var pageSupported = AllSupportedPages.Contains(page);
 			if (pageSupported) LastPage = page;
@@ -73,34 +76,34 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			return ready;
 		}
 
-	    public void SaveChanges()
-	    {
-	        var invalidModules = new StringBuilder();
+		public void SaveChanges()
+		{
+			var invalidModules = new StringBuilder();
 
-	        foreach (var page in AllSelectedPages)
-	        {
-	            try
-	            {
-	                page.SaveChanges();
-	            }
-	            catch (ValidationException ex)
-	            {
-	                invalidModules.Append(ex.Message + ", ");
-	            }
-	        }
-	        if (invalidModules.Length > 0)
-	        {
-	            throw new ValidationException(invalidModules.ToString().Substring(0, invalidModules.Length - 2));
-	        }
+			foreach (var page in AllSelectedPages)
+			{
+				try
+				{
+					page.SaveChanges();
+				}
+				catch (ValidationException ex)
+				{
+					invalidModules.Append(ex.Message + ", ");
+				}
+			}
+			if (invalidModules.Length > 0)
+			{
+				throw new ValidationException(invalidModules.ToString().Substring(0, invalidModules.Length - 2));
+			}
 
-	        using (var runSql = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-	        {
-	            UnitOfWork.PersistAll();
-	            runSql.PersistAll();
-	        }
-	    }
+			using (var runSql = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				UnitOfWork.PersistAll();
+				runSql.PersistAll();
+			}
+		}
 
-	    public void UnloadPages()
+		public void UnloadPages()
 		{
 			foreach (var page in AllSelectedPages)
 			{
@@ -156,49 +159,42 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public IList<ISettingPage> CreateSettingPages()
 		{
-
 			var allSupportedPages = new List<ISettingPage>
-										{
-											new KpiSettings(),
-											new ScorecardSettings(),
-											new SetScorecardView(),
-											new ContractControl(_toggleManager),
-											new ContractScheduleControl(),
-											new PartTimePercentageControl(),
-											new ActivityControl(),
-											new MasterActivitiesControl(),
-											new AbsenceControl(),
-											new ScenarioPage(),
-											new CommonAgentNameDescriptionControl(CommonAgentNameDescriptionType.Common),
-											new CommonAgentNameDescriptionControl(CommonAgentNameDescriptionType.ScheduleExport),
-											new OptionalColumnsControl(),
-											new OrganizationTreeControl(),
-											new SiteControl(),
-											new StateGroupControl(),
-											new ShiftCategorySettingsControl(),
-											new AvailabilityPage(),
-											new SystemSettingControl(_toggleManager),
-											new RotationPage(),
-											new DaysOffControl(),
-											new AlarmControl(alarmControlPresenterDecorators()),
-											new ManageAlarmSituations(),
-											new DefinitionSetSettings(),
-											new WorkflowControlSetView(_toggleManager),
-											new AuditingPage(),
-											new ScheduleTagControl()
-										};
-
-			if (_toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))
 			{
-				allSupportedPages.Add(new GamificationSettingControl(_toggleManager));
-				allSupportedPages.Add(new SetGamificationSettingTargetsControl());
-			}
-			
-			allSupportedPages.Add(new SeniorityControl());
-			
+				new KpiSettings(),
+				new ScorecardSettings(),
+				new SetScorecardView(),
+				new ContractControl(_toggleManager),
+				new ContractScheduleControl(),
+				new PartTimePercentageControl(),
+				new ActivityControl(),
+				new MasterActivitiesControl(),
+				new AbsenceControl(),
+				new ScenarioPage(),
+				new CommonAgentNameDescriptionControl(CommonAgentNameDescriptionType.Common),
+				new CommonAgentNameDescriptionControl(CommonAgentNameDescriptionType.ScheduleExport),
+				new OptionalColumnsControl(),
+				new OrganizationTreeControl(),
+				new SiteControl(),
+				new StateGroupControl(),
+				new ShiftCategorySettingsControl(),
+				new AvailabilityPage(),
+				new SystemSettingControl(_toggleManager),
+				new RotationPage(),
+				new DaysOffControl(),
+				new AlarmControl(alarmControlPresenterDecorators()),
+				new ManageAlarmSituations(),
+				new DefinitionSetSettings(),
+				new WorkflowControlSetView(_toggleManager),
+				new AuditingPage(),
+				new ScheduleTagControl(),
+				new GamificationSettingControl(_toggleManager),
+				new SetGamificationSettingTargetsControl(),
+				new SeniorityControl()
+			};
+
 			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))
 				allSupportedPages.Add(new MultiplicatorControlView());
-
 
 			if (DefinedLicenseDataFactory.GetLicenseActivator(UnitOfWorkFactory.Current.Name)
 				.EnabledLicenseOptionPaths.Contains(DefinedLicenseOptionPaths.TeleoptiCccSmsLink))
@@ -211,7 +207,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			return allSupportedPages;
 		}
-		
+
 		private IEnumerable<IAlarmControlPresenterDecorator> alarmControlPresenterDecorators()
 		{
 			yield return new AdherenceColumn();

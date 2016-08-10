@@ -1,8 +1,8 @@
-using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.Mocks.Constraints;
 using SharpTestsEx;
+using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -33,17 +33,17 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		public void Setup()
 		{
 			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			_loggedOnUser.Stub(x => x.CurrentUser()).Return(new Person {Name = new Name()});
+			_loggedOnUser.Stub(x => x.CurrentUser()).Return(new Person { Name = new Name() });
 
 			var culture = CultureInfo.GetCultureInfo("sv-SE");
 			_userCulture = MockRepository.GenerateMock<IUserCulture>();
 			_userCulture.Expect(x => x.GetCulture()).Return(culture);
 
 			var principal = MockRepository.GenerateMock<ITeleoptiPrincipal>();
-			principal.Expect (x => x.Regional);
+			principal.Expect(x => x.Regional);
 			_currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
-			_currentTeleoptiPrincipal.Expect (x => x.Current()).Return (principal);
-			
+			_currentTeleoptiPrincipal.Expect(x => x.Current()).Return(principal);
+
 			_personNameProvider = MockRepository.GenerateMock<IPersonNameProvider>();
 			_personNameProvider.Stub(x => x.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name)).Return("A B");
 		}
@@ -55,9 +55,8 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
-				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
-				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(),
-				_userCulture, _currentTeleoptiPrincipal);
+				_personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
+				MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture, _currentTeleoptiPrincipal);
 
 			var result = target.CreatePortalViewModel();
 
@@ -71,9 +70,8 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
-				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
-				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(),
-				_userCulture, _currentTeleoptiPrincipal);
+				_personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
+				MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture, _currentTeleoptiPrincipal);
 
 			var result = target.CreatePortalViewModel();
 
@@ -87,10 +85,8 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
-				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
-				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(),
-				_userCulture, _currentTeleoptiPrincipal);
-
+				_personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
+				MockRepository.GenerateStub<ICurrentTenantUser>(), _userCulture, _currentTeleoptiPrincipal);
 
 			var result = target.CreatePortalViewModel();
 
@@ -106,9 +102,8 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
-				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
-				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(),
-				userCulture, _currentTeleoptiPrincipal);
+				_personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
+				MockRepository.GenerateStub<ICurrentTenantUser>(), userCulture, _currentTeleoptiPrincipal);
 
 			var result = target.CreatePortalViewModel();
 
@@ -124,9 +119,8 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
-				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
-				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(),
-				userCulture, _currentTeleoptiPrincipal);
+				_personNameProvider, MockRepository.GenerateMock<ITeamGamificationSettingRepository>(),
+				MockRepository.GenerateStub<ICurrentTenantUser>(), userCulture, _currentTeleoptiPrincipal);
 
 			var result = target.CreatePortalViewModel();
 
@@ -141,7 +135,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 					x.HasApplicationFunctionPermission(
 						Arg<string>.Matches(
 							new PredicateConstraint<string>(s => s != DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb &&
-							                                     s != DefinedRaptorApplicationFunctionPaths.StandardPreferences))))
+																 s != DefinedRaptorApplicationFunctionPaths.StandardPreferences))))
 				.Return(true);
 			permissionProvider.Stub(
 				x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb)).Return(false);

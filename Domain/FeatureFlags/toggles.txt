@@ -37,7 +37,6 @@ ETL_SpeedUpETL_30791 = true
 RTA_AdherenceDetails_34267 = RC
 Gamification_NewBadgeCalculation_31185 = true
 ETL_OnlyLatestQueueAgentStatistics_30787 = true
-Portal_DifferentiateBadgeSettingForAgents_31318 = true
 Backlog_Module_23980 = DEV
 MyTeam_MakeTeamScheduleConsistent_31897 = true
 MyTimeWeb_SortSchedule_32092 = true

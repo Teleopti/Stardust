@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using Autofac;
+using System.Collections.Generic;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Badge;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -25,10 +25,9 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 			var isTeamGamificationSettingsAvailable = _jobParameters.ContainerHolder.IocContainer.Resolve<IIsTeamGamificationSettingsAvailable>();
 			using (var uow = UnitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				if (_jobParameters.ToggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))
 				if (isTeamGamificationSettingsAvailable.Satisfy())
 				{
-						performBadgeCalculation.Calculate(RaptorTransformerHelper.CurrentBusinessUnit.Id.Value);
+					performBadgeCalculation.Calculate(RaptorTransformerHelper.CurrentBusinessUnit.Id.Value);
 				}
 				uow.PersistAll();
 			}

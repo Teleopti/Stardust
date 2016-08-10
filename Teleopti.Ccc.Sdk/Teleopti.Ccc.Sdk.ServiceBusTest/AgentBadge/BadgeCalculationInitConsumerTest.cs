@@ -1,10 +1,9 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
+using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Badge;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Sdk.ServiceBus.AgentBadge;
 using Teleopti.Interfaces.Domain;
@@ -16,7 +15,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 	[TestFixture]
 	public class BadgeCalculationInitConsumerTest
 	{
-
 		private IServiceBus serviceBus;
 		private BadgeCalculationInitConsumer target;
 		private ICurrentUnitOfWorkFactory currentUnitOfWorkFactory;
@@ -32,7 +30,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		[SetUp]
 		public void Setup()
 		{
-
 			_mock = new MockRepository();
 			_performBadgeCalculation = _mock.StrictMock<IPerformBadgeCalculation>();
 			toggleManager = _mock.StrictMock<IToggleManager>();
@@ -51,16 +48,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		[Test]
 		public void ShouldResendMessageIfNoSettingIsAvailable()
 		{
-
 			using (_mock.Record())
 			{
 				Expect.Call(currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
 				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_uow);
-				Expect.Call(toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318)).Return(true);
 				Expect.Call(_isTeamGamificationSettingsAvailable.Satisfy()).Return(false);
 				Expect.Call(() => serviceBus.DelaySend(DateTime.Now, null)).IgnoreArguments();
 				Expect.Call(() => _uow.Dispose());
-
 			}
 
 			using (_mock.Playback())
@@ -72,17 +66,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		[Test]
 		public void ShouldResendMessageIfNightlyIsRunning()
 		{
-
 			using (_mock.Record())
 			{
 				Expect.Call(currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
 				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_uow);
-				Expect.Call(toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318)).Return(true);
 				Expect.Call(_isTeamGamificationSettingsAvailable.Satisfy()).Return(true);
 				Expect.Call(_runningEtlJobChecker.NightlyEtlJobStillRunning()).Return(true);
 				Expect.Call(() => serviceBus.DelaySend(DateTime.Now, null)).IgnoreArguments();
 				Expect.Call(() => _uow.Dispose());
-
 			}
 
 			using (_mock.Playback())
@@ -94,19 +85,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		[Test]
 		public void ShouldPerformBadgeCalculations()
 		{
-
 			using (_mock.Record())
 			{
 				Expect.Call(currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
 				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_uow);
-				Expect.Call(toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318)).Return(true);
 				Expect.Call(_isTeamGamificationSettingsAvailable.Satisfy()).Return(true);
 				Expect.Call(_runningEtlJobChecker.NightlyEtlJobStillRunning()).Return(false);
 				Expect.Call(() => _performBadgeCalculation.Calculate(Guid.NewGuid())).IgnoreArguments();
 				Expect.Call(() => serviceBus.DelaySend(DateTime.Now, null)).IgnoreArguments();
 				Expect.Call(() => _uow.PersistAll());
 				Expect.Call(() => _uow.Dispose());
-
 			}
 
 			using (_mock.Playback())
