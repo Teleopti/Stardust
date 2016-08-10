@@ -362,6 +362,7 @@
     <Compile Include="Infrastructure\Events\CleanFailedQueue.cs" />
     <Compile Include="Infrastructure\IIndexMaintenanceRepository.cs" />
     <Compile Include="Infrastructure\IndexMaintenanceStardustHandler.cs" />
+    <Compile Include="Intraday\ForecastedStaffingLab.cs" />
     <Compile Include="Intraday\IScheduleForecastSkillReadModelRepository.cs" />
     <Compile Include="Intraday\ScheduleForecastSkillProvider.cs" />
     <Compile Include="Logon\ImpersonateSystem.cs" />
