@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
@@ -30,6 +31,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 		public IPersonRepository PersonRepository;
 		public IPersonRequestRepository PersonRequestRepository;
 		public IAbsenceRepository AbsenceRepository;
+		public IWorkflowControlSetRepository WorkflowControlSetRepository;
 		public AsSystem AsSystem;
 		public MutableNow Now;
 
@@ -57,12 +59,25 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 				//businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.Value;
 				AsSystem.Logon("Telia", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 
+			
 
 			var personReqs = new List<IPersonRequest>();
 
 			var absenceRequests = new List<NewAbsenceRequestCreatedEvent>();
 			WithUnitOfWork.Do(() =>
 			{
+				var wfcs = WorkflowControlSetRepository.Get(new Guid("E97BC114-8939-4A70-AE37-A338010FFF19"));
+				foreach (var period in wfcs.AbsenceRequestOpenPeriods)
+				{
+					period.OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(2016, 5, 30), new DateOnly(2099, 5, 30));
+					period.StaffingThresholdValidator = new StaffingThresholdValidator();
+					period.AbsenceRequestProcess = new GrantAbsenceRequest();
+					var datePeriod = period as AbsenceRequestOpenDatePeriod;
+					if(datePeriod != null)
+						datePeriod.Period = period.OpenForRequestsPeriod;
+				}
+				WorkflowControlSetRepository.UnitOfWork.PersistAll();
+
 				// load some persons
 				var persons = PersonRepository.FindPeople(personIds);
 				IAbsence absence = AbsenceRepository.Get(new Guid("3A5F20AE-7C18-4CA5-A02B-A11C00F0F27F"));
