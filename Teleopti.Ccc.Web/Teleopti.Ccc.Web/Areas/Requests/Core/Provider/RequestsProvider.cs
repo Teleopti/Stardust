@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
@@ -30,8 +31,10 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			return setupShiftTradeRequestStatus(requests);
 		}
 
-		private IEnumerable<IPersonRequest> setupShiftTradeRequestStatus(IEnumerable<IPersonRequest> requests)
+		private IEnumerable<IPersonRequest> setupShiftTradeRequestStatus (IEnumerable<IPersonRequest> requests)
 		{
+			var emptyShiftTradeRequestChecker = new EmptyShiftTradeRequestChecker();
+			var referredRequests = new List<IPersonRequest>();
 			foreach (var request in requests
 				.Where (request => request.Request is IShiftTradeRequest)
 				.Select (request => request))
@@ -39,16 +42,24 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				var shiftTradeRequest = (IShiftTradeRequest) request.Request;
 				if (request.IsPending || request.IsNew)
 				{
-					_shiftTradeRequestStatusChecker.Check (shiftTradeRequest);
+					var shiftTradeRequestStatus = shiftTradeRequest.GetShiftTradeStatus (emptyShiftTradeRequestChecker);
+					_shiftTradeRequestStatusChecker.Check(shiftTradeRequest);
+					if (shiftTradeRequestStatus != ShiftTradeStatus.Referred)
+					{
+						if (shiftTradeRequest.GetShiftTradeStatus (emptyShiftTradeRequestChecker) == ShiftTradeStatus.Referred)
+						{
+							referredRequests.Add (request);
+						}
+					}
 				}
 				else
 				{
-					_shiftTradeSwapScheduleDetailsMapper.Map(shiftTradeRequest);
+					_shiftTradeSwapScheduleDetailsMapper.Map (shiftTradeRequest);
 				}
-				
+
 			}
 
-			return requests;
+			return requests.Where (request => !referredRequests.Contains (request));
 		}
 
 
