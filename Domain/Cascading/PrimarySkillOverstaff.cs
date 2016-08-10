@@ -14,13 +14,12 @@ namespace Teleopti.Ccc.Domain.Cascading
 			var dic = new Dictionary<ISkill, double>();
 			foreach (var primarySkill in skillGroup.PrimarySkills)
 			{
-				ISkillStaffPeriod skillStaffPeriod;
-				if (!skillStaffPeriodHolder.TryGetSkillStaffPeriod(primarySkill, interval, out skillStaffPeriod))
+				ISkillStaffPeriod primarySkillStaffPeriod;
+				if (!skillStaffPeriodHolder.TryGetSkillStaffPeriod(primarySkill, interval, out primarySkillStaffPeriod))
 						continue; 
 				primarySkillsExistsButTheyAreAllClosed = false;
-				var forecast = skillStaffPeriod.FStaff;
-				var overstaff = skillStaffPeriod.AbsoluteDifference;
-				if (!overstaff.IsOverstaffed())
+				var primarySkillOverstaff = primarySkillStaffPeriod.AbsoluteDifference;
+				if (!primarySkillOverstaff.IsOverstaffed())
 					continue;
 
 				var resourcesOnOtherSkillGroups = 0d;
@@ -34,8 +33,8 @@ namespace Teleopti.Ccc.Domain.Cascading
 					resourcesOnOtherSkillGroups += resourcesOnOtherSkillGroup;
 				}
 
-				var otherSkillGroupOverstaff = Math.Max(resourcesOnOtherSkillGroups - forecast, 0);
-				dic.Add(primarySkill, overstaff - otherSkillGroupOverstaff);
+				var otherSkillGroupOverstaff = Math.Max(resourcesOnOtherSkillGroups - primarySkillStaffPeriod.FStaff, 0);
+				dic.Add(primarySkill, primarySkillOverstaff - otherSkillGroupOverstaff);
 			}
 
 			return new ShovelResourcesState(dic, primarySkillsExistsButTheyAreAllClosed);
