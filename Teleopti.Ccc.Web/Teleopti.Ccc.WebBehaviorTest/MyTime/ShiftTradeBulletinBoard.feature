@@ -166,7 +166,6 @@ Scenario: Should possibly make my empty day trade with main shift day in Bulleti
 	Then Shift trade bulletin board view should not be visible
 	And I should see a shift trade request in the list with subject 'A nice subject'
 
-@ignore
 Scenario: Should possible make shift trade with empty day in Bulletin board
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -193,7 +192,6 @@ Scenario: Should possible make shift trade with empty day in Bulletin board
 	Then Shift trade bulletin board view should not be visible
 	And I should see a shift trade request in the list with subject 'A nice subject'
 	
-@ignore
 Scenario: Should see the anonymous name when viewing empty day in Bulletin board
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Anonymous trade 30 days forward'
