@@ -38,6 +38,7 @@ TeleOpti.Messaging.Bin/
 *.jtconfig
 *.sln
 Logs/
+.vs
 
 # VS 2012 on old branches
 Backup/
