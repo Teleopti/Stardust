@@ -251,19 +251,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.Click($".projection-layer[projection-name={description}]");				
 		}
 
-		[When(@"I apply move activity")]
-		public void WhenIApplyMoveActivity()
-		{
-			Browser.Interactions.ClickUsingJQuery("#scheduleContextMenuButton");
-			Browser.Interactions.ClickUsingJQuery("#menuItemMoveActivity");
-			var newStartTime = new Dictionary<string, string>
-			{
-				{"vm.newStartTime", "{'startTime':'2016-10-10T10:00:00.000Z','nextDay':false}"}
-			};
-			Browser.Interactions.SetScopeValues(".move-activity", newStartTime);
-			Browser.Interactions.ClickUsingJQuery("#applyMoveActivity");
-		}
-
 		[When(@"I apply remove activity")]
 		public void WhenIApplyRemoveActivity()
 		{
@@ -353,6 +340,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			});
 		}
 
+		[Then(@"I should be able to see command check")]
+		public void ThenIShouldBeAbleToSeeCommandCheck()
+		{
+			Browser.Interactions.AssertExists(".teamschedule-command-container .command-check");
+		}
 	}
 
 	public class AddActivityFormInfo

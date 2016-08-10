@@ -43,8 +43,17 @@ Background:
 	| Contract schedule    | A contract schedule  |
 	| Part time percentage | Part time percentage |
 
+
 @OnlyRunIfEnabled('WfmTeamSchedule_AddActivity_37541')
-@OnlyRUnIfDisabled('WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938')
+Scenario: Default activity start time range should be 08:00-09:00 when agent's schedule is empty
+	When I view wfm team schedules
+	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
+	And I selected agent 'John Smith'
+	And I open menu in team schedule
+	And I click menu item 'AddActivity' in team schedule
+	Then I should see the add activity time starts '08:00' and ends '09:00'
+
+@OnlyRunIfEnabled('WfmTeamSchedule_AddActivity_37541')
 Scenario: Should be able to add activity
 	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
@@ -62,15 +71,6 @@ Scenario: Should be able to add activity
 	When I apply my new activity
 	Then I should see a successful notice
 
-@ignore
-@OnlyRunIfEnabled('WfmTeamSchedule_AddActivity_37541')
-Scenario: Default activity start time range should be 08:00-09:00 when agent's schedule is empty
-	When I view wfm team schedules
-	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
-	And I selected agent 'John Smith'
-	And I click menu item 'AddActivity' in team schedule
-	Then I should see the add activity time starts '08:00' and ends '09:00'
-
 @OnlyRunIfEnabled('WfmTeamSchedule_AddPersonalActivity_37742')
 Scenario: Should see enabled add personal activity button
 	Given 'John Smith' has a shift with
@@ -86,7 +86,6 @@ Scenario: Should see enabled add personal activity button
 	Then I should see 'AddPersonalActivity' menu is enabled
 
 @OnlyRunIfEnabled('WfmTeamSchedule_AddPersonalActivity_37742')
-@OnlyRUnIfDisabled('WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938')
 Scenario: Should be able to add personal activity
 	Given 'John Smith' has a shift with
 	| Field            | Value            |
@@ -178,7 +177,6 @@ Scenario: Should not be able to remove basic activity
 	Then I should see an error notice
 
 @OnlyRunIfEnabled('WfmTeamSchedule_MoveActivity_37744')
-@OnlyRUnIfDisabled('WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938')
 Scenario: Should be able to move activity
 	Given 'John Smith' has a shift with
     | Field            | Value            |
@@ -192,11 +190,10 @@ Scenario: Should be able to move activity
 	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
 	And I selected activity 'Lunch'
-	And I apply move activity
+	And I move activity to '2016-10-10 14:00' with next day being 'false'
 	Then I should see a successful notice
 
 @OnlyRunIfEnabled('WfmTeamSchedule_MoveActivity_37744')
-@OnlyRUnIfDisabled('WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938')
 Scenario: Should be able to move activity in overnight shift from next day to current day
 	Given 'John Smith' has a shift with
     | Field                         | Value            |
@@ -215,7 +212,6 @@ Scenario: Should be able to move activity in overnight shift from next day to cu
 	And the start of 'Sales' is '125' mins later than the start of 'Phone'
 
 @OnlyRunIfEnabled('WfmTeamSchedule_MoveActivity_37744')
-@OnlyRUnIfDisabled('WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938')
 Scenario: Should be able to move basic activity
 	Given 'John Smith' has a shift with
     | Field            | Value            |
@@ -226,5 +222,5 @@ Scenario: Should be able to move basic activity
 	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
 	And I selected activity 'Phone'
-	And I apply move activity
+	And I move activity to '2016-10-10 10:00' with next day being 'false'
 	Then I should see a successful notice

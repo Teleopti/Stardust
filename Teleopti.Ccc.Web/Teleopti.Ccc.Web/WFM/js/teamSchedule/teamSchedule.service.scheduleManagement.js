@@ -111,12 +111,7 @@
 					}
 				});
 
-				if (!startUpdated) {
-					// Set to 08:00 for empty schedule or day off
-					latestStart = scheduleDateMoment.startOf('day').add(8, 'hour');
-				}
-
-				return latestStart.toDate();
+				return startUpdated ? latestStart.toDate() : null;
 			};
 
 			svc.getLatestPreviousDayOvernightShiftEnd = function (scheduleDateMoment, selectedPersonIds) {

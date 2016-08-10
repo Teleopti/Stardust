@@ -95,7 +95,9 @@
 			var overnightEnds = scheduleManagementSvc.getLatestPreviousDayOvernightShiftEnd(curDateMoment, personIds);
 			var latestShiftStart = scheduleManagementSvc.getLatestStartOfSelectedSchedule(curDateMoment, personIds);
 
+			// Set to 08:00 for empty schedule or day off
 			var defaultStart = curDateMoment.clone().hour(8).minute(0).second(0).toDate();
+
 			if (overnightEnds !== null) {
 				defaultStart = moment(overnightEnds).add(1, 'hour').toDate();
 			}
