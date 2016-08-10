@@ -50,8 +50,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 								var skillGroups = _skillGroupPerActivityProvider.FetchOrdered(cascadingSkills, activity, interval);
 								foreach (var skillGroup in skillGroups)
 								{
-									var primarySkillOverstaff = _primarySkillOverstaff.AvailableSum(skillStaffPeriodHolder, skillGroups, skillGroup, interval);
-									var state = new ShovelResourcesState(skillGroup.Resources, primarySkillOverstaff);
+									var state = _primarySkillOverstaff.AvailableSum(skillStaffPeriodHolder, skillGroups, skillGroup, interval);
 									_addResourcesToSubSkillsFocusHighUnderstaffingPercentage.Execute(state, skillStaffPeriodHolder, skillGroup, interval);
 									_reducePrimarySkillResourcesPercentageDistribution.Execute(state, skillStaffPeriodHolder, skillGroup.PrimarySkills, interval);
 								}

@@ -7,9 +7,11 @@ namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class AddResourcesToSubSkillsFocusHighUnderstaffingPercentage
 	{
+		private const double minPrimaryOverstaffToContinue = 0.1;
+
 		public void Execute(ShovelResourcesState shovelResourcesState, ISkillStaffPeriodHolder skillStaffPeriodHolder, CascadingSkillGroup skillGroup, DateTimePeriod interval)
 		{
-			while (!shovelResourcesState.NoMoreResourcesToMove())
+			while (shovelResourcesState.RemainingOverstaffing > minPrimaryOverstaffToContinue)
 			{
 				var anySubSkillIsUnderstaffed = false;
 
@@ -20,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 						.Where(x => x.AbsoluteDifference.IsUnderstaffed())
 						.Sum(x => -x.RelativeDifference);
 
-					var remainingOverstaff = shovelResourcesState.RemaingOverstaff();
+					var remainingResourcesToShovel = shovelResourcesState.RemainingOverstaffing;
 
 					foreach (var skillToMoveTo in subSkillsWithSameIndex)
 					{
@@ -31,12 +33,10 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 						anySubSkillIsUnderstaffed = true;
 						var understaffingPercent = -skillStaffPeriodTo.RelativeDifference;
-						var proportionalResourcesToMove = understaffingPercent/totalUnderstaffingPercent*remainingOverstaff;
+						var proportionalResourcesToMove = understaffingPercent/totalUnderstaffingPercent*remainingResourcesToShovel;
 
 						var resourceToMove = Math.Min(-skillToMoveToAbsoluteDifference, proportionalResourcesToMove);
 						shovelResourcesState.AddResourcesTo(skillStaffPeriodTo, resourceToMove);
-						if (shovelResourcesState.NoMoreResourcesToMove())
-							return;
 					}
 				}
 

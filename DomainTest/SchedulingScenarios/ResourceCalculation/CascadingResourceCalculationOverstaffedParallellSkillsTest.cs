@@ -127,41 +127,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		public void ShouldMoveResourcesIfOnePrimarySkillIsOverstaffed()
-		{
-			var scenario = new Scenario("_");
-			var activity = new Activity("_");
-			var dateOnly = DateOnly.Today;
-			var skillA1 = new Skill("skillA1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillA1.SetCascadingIndex(1);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillA1, new TimePeriod(8, 0, 9, 0));
-			var skillDayA1 = skillA1.CreateSkillDayWithDemand(scenario, dateOnly, 0); //-> overstaffed with one fixed agent and a small rest from multi skill guy
-			var skillA2 = new Skill("skillA2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillA2.SetCascadingIndex(1);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillA2, new TimePeriod(8, 0, 9, 0));
-			var skillDayA2 = skillA2.CreateSkillDayWithDemand(scenario, dateOnly, 3); //makes total primary skills understaffed
-			var skillB = new Skill("skillB", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillB.SetCascadingIndex(2);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(8, 0, 9, 0));
-			var skillDayB = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var multiSkilledAgent = new Person().InTimeZone(TimeZoneInfo.Utc);
-			multiSkilledAgent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA1, skillA2, skillB });
-			var multiSkilledAss = new PersonAssignment(multiSkilledAgent, scenario, dateOnly);
-			multiSkilledAss.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
-			var agentA1 = new Person().InTimeZone(TimeZoneInfo.Utc);
-			agentA1.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA1 });
-			var a1Ass = new PersonAssignment(agentA1, scenario, dateOnly);
-			a1Ass.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
-
-			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { multiSkilledAss, a1Ass }, new[] { skillDayA1, skillDayA2, skillDayB }, false, false));
-
-			skillDayA1.SkillStaffPeriodCollection.First().AbsoluteDifference
-				.Should().Be.EqualTo(1);
-			skillDayB.SkillStaffPeriodCollection.First().AbsoluteDifference
-					.Should().Be.GreaterThan(-1); 
-		}
-
-		[Test]
 		public void ShouldNotMoveResourcesFromUnderstaffedPrimarySkill()
 		{
 			var scenario = new Scenario("_");

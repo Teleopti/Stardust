@@ -206,7 +206,6 @@
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradePendingReasonsService.cs" />
     <Compile Include="ApplicationLayer\SkillDay\AnalyticsForecastWorkloadUpdater.cs" />
     <Compile Include="Cascading\AddResourcesToSubSkillsFocusHighUnderstaffingPercentage.cs" />
-    <Compile Include="Cascading\AvailableResourcesToMoveOnSkill.cs" />
     <Compile Include="Cascading\SubSkillsWithSameIndex.cs" />
     <Compile Include="Cascading\CascadingSkills.cs" />
     <Compile Include="Cascading\PrimarySkillOverstaff.cs" />

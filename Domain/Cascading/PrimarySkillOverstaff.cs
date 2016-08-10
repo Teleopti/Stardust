@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class PrimarySkillOverstaff
 	{
-		public AvailableResourcesToMoveOnSkill AvailableSum(ISkillStaffPeriodHolder skillStaffPeriodHolder, IEnumerable<CascadingSkillGroup> allSkillGroups, CascadingSkillGroup skillGroup, DateTimePeriod interval)
+		public ShovelResourcesState AvailableSum(ISkillStaffPeriodHolder skillStaffPeriodHolder, IEnumerable<CascadingSkillGroup> allSkillGroups, CascadingSkillGroup skillGroup, DateTimePeriod interval)
 		{
 			var primarySkillsExistsButTheyAreAllClosed = true;
 			var dic = new Dictionary<ISkill, double>();
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 				dic.Add(primarySkill, overstaff - otherSkillGroupOverstaff);
 			}
 
-			return new AvailableResourcesToMoveOnSkill(dic, primarySkillsExistsButTheyAreAllClosed);
+			return new ShovelResourcesState(dic, primarySkillsExistsButTheyAreAllClosed);
 		}
 	}
 }
