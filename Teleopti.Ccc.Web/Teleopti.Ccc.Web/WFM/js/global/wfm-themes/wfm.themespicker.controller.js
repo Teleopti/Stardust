@@ -3,8 +3,8 @@
 	var themespicker = angular.module('wfm.themes');
 
 	themespicker.controller('themesPickerController', [
-		'$scope', 'Toggle','$rootScope', 'ThemeService', '$q',
-		function($scope, Toggle,$rootScope, ThemeService, $q) {
+		'$scope', 'Toggle', '$rootScope', 'ThemeService', '$q',
+		function($scope, Toggle, $rootScope, ThemeService, $q) {
 
 			Toggle.togglesLoaded.then(function() {
 				$scope.personalizeToggle = Toggle.WfmGlobalLayout_personalOptions_37114;
@@ -72,10 +72,9 @@
 					toggleActiveTheme();
 					focusMenu();
 				}
-
-
 				$scope.darkTheme = !$scope.darkTheme;
 			};
+
 		}
 	]);
 })();

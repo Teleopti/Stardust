@@ -26,10 +26,12 @@
 		};
 
 		service.saveTheme = function(name, overlay) {
-			$http.post("../api/Theme/Change", {
-				Name: name,
-				Overlay: overlay
-			});
+			if (name === 'classic' || name === 'dark') {
+				$http.post("../api/Theme/Change", {
+					Name: name,
+					Overlay: overlay
+				});
+			}
 		};
 
 		return service;
