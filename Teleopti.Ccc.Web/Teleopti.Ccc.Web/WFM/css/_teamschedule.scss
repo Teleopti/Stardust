@@ -407,11 +407,14 @@
 			overflow: auto;
 			flex-grow: 2;
 
-			.wfm-checkbox-toggle.warning-checkbox:after{
-				background: #ffa726;
+			.wfm-checkbox-toggle:after {
 				width: 15px;
 				height: 15px;
 				font-size: 11px;
+			}
+
+			.wfm-checkbox input[type=checkbox]:checked ~ .wfm-checkbox-toggle:after, {
+				background-color: $orange-500;
 			}
 
 			ul {
