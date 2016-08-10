@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				{
 					if (!shiftExchangeOffer.MyShiftPeriod.HasValue)
 					{
-						return false;
+						return true;
 					}
 
 					var otherAgentSiteOpenHourPeriod = getPersonSiteOpenHourPeriod(shiftExchangeOffer.Person, shiftTradeDate);
