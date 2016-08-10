@@ -49,13 +49,13 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 				new Guid("E4C7A7A7-8D2C-4591-ACA4-A53D00F82C88"),
 				new Guid("6069902E-5760-4DF4-B733-A5E00105B099"),
 				new Guid("BF50C741-A780-4930-A64B-A5E00105F325")
-				
+
 			};
 
 			//Guid businessUnitId;
 			using (DataSource.OnThisThreadUse("Telia"))
-			//businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.Value;
-			AsSystem.Logon("Telia",new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
+				//businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.Value;
+				AsSystem.Logon("Telia", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 
 
 			var personReqs = new List<IPersonRequest>();
@@ -63,43 +63,49 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			var absenceRequests = new List<NewAbsenceRequestCreatedEvent>();
 			WithUnitOfWork.Do(() =>
 			{
-			// load some persons
-			var	persons = PersonRepository.FindPeople(personIds);
-			IAbsence absence = AbsenceRepository.Get(new Guid("3A5F20AE-7C18-4CA5-A02B-A11C00F0F27F"));
+				// load some persons
+				var persons = PersonRepository.FindPeople(personIds);
+				IAbsence absence = AbsenceRepository.Get(new Guid("3A5F20AE-7C18-4CA5-A02B-A11C00F0F27F"));
 
-			//load vacation
+				//load vacation
 
-			foreach (var person in persons)
-			{
-				//var person = PersonRepository.Get(personId);
-				personReqs.Add(createAbsenceRequest(person, absence));
-			}
-			
-
-			foreach (var pReq in personReqs)
-			{
-				absenceRequests.Add(
-				new NewAbsenceRequestCreatedEvent()
+				foreach (var person in persons)
 				{
-					PersonRequestId = pReq.Id.Value,
-					InitiatorId = new Guid("00000000-0000-0000-0000-000000000000"),
-					JobName = "Absence Request",
-					LogOnBusinessUnitId = new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"),
-					LogOnDatasource = "Telia",
-					Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z"),
-					UserName = "KALA21 Lampinen, Kalle"
+					//var person = PersonRepository.Get(personId);
+					personReqs.Add(createAbsenceRequest(person, absence));
 				}
-				);
-			}
 
-			
+
+
+				foreach (var pReq in personReqs)
+				{
+					PersonRequestRepository.Add(pReq);
+					PersonRequestRepository.UnitOfWork.PersistAll();
+
+					absenceRequests.Add(
+						new NewAbsenceRequestCreatedEvent()
+						{
+							PersonRequestId = pReq.Id.Value,
+							InitiatorId = new Guid("00000000-0000-0000-0000-000000000000"),
+							JobName = "Absence Request",
+							LogOnBusinessUnitId = new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"),
+							LogOnDatasource = "Telia",
+							Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z"),
+							UserName = "KALA21 Lampinen, Kalle"
+						}
+						);
+				}
+
+
 				Target.Process(absenceRequests);
 			});
 
 		}
+
+
 		private IPersonRequest createAbsenceRequest(IPerson person, IAbsence absence)
 		{
-			var req = new AbsenceRequest(absence, new DateTimePeriod(new DateTime(2016, 6, 30, 8, 0, 0), new DateTime(2016, 6, 30, 18, 0, 0)));
+			var req = new AbsenceRequest(absence, new DateTimePeriod(new DateTime(2016, 6, 30, 8, 0, 0,DateTimeKind.Utc), new DateTime(2016, 6, 30, 18, 0, 0, DateTimeKind.Utc)));
 			return new PersonRequest(person) { Request = req };
 		}
 
