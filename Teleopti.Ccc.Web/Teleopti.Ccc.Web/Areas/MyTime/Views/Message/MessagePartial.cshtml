@@ -20,7 +20,6 @@
 							</div>
 							<div>
 								<div>
-									<!-- ko if: $root.isBadgeFeatureEnabled-->
 									<span data-bind="visible: isAdherenceBronzeBadgeMessage">
 										<img src="~/Areas/MyTime/Content/Images/adherenceBronzeBadge.png" />
 									</span>
@@ -48,7 +47,6 @@
 									<span data-bind="visible: isAnsweredCallsGoldBadgeMessage">
 										<img src="~/Areas/MyTime/Content/Images/answeredCallsGoldBadge.png" />
 									</span>
-									<!-- /ko -->
 									<span>@Resources.Sender: </span>
 									<span class="sender" data-bind="text: sender, visible: !isNotShowSenderName()"></span>
 									<span>@Resources.Sent: </span>

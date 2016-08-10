@@ -1,5 +1,4 @@
-﻿@OnlyRunIfEnabled('Portal_DifferentiateBadgeSettingForAgents_31318')
-Feature: GamificationOrganisationalBasedLeaderboard
+﻿Feature: GamificationOrganisationalBasedLeaderboard
 	The leaderboard can be based on site/team/everyone
 	As an agent
 	I want to view the leaderboard based on my data hierarchy

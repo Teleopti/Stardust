@@ -1,5 +1,4 @@
-﻿@OnlyRunIfEnabled('Portal_DifferentiateBadgeSettingForAgents_31318')
-Feature: AgentBadge
+﻿Feature: AgentBadge
 	As an agent I want to get motivated
 	by getting badges for my performance
 

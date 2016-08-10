@@ -4,14 +4,13 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.AsmMessageDetail.js"/>
 
 if (typeof (Teleopti) === 'undefined') {
-    Teleopti = {};
-    if (typeof (Teleopti.MyTimeWeb) === 'undefined') {
-        Teleopti.MyTimeWeb = {};
-    }
+	Teleopti = {};
+	if (typeof (Teleopti.MyTimeWeb) === 'undefined') {
+		Teleopti.MyTimeWeb = {};
+	}
 }
 
 Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
-
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var vm;
 
@@ -20,25 +19,25 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 
 		self.isAnonymous = ko.observable(false);
 		self.asmMessageList = ko.observableArray();
-	    self.asmMessageColumnList = ko.computed(function() {
-	        var list = [];
-	        var items = self.asmMessageList();
-	        var index = 0;
-	        ko.utils.arrayForEach(items, function (i) {
-	            if (index % 2 == 0) {
-	                list.push({ Items: [i] });
-	            } else {
-	                list[list.length-1].Items.push(i);
-	            }
-	            index++;
-	        });
-	        return list;
-	    });
+		self.asmMessageColumnList = ko.computed(function () {
+			var list = [];
+			var items = self.asmMessageList();
+			var index = 0;
+			ko.utils.arrayForEach(items, function (i) {
+				if (index % 2 === 0) {
+					list.push({ Items: [i] });
+				} else {
+					list[list.length - 1].Items.push(i);
+				}
+				index++;
+			});
+			return list;
+		});
 
 		self.isLoading = ko.observable(true);
 
-		self.shouldShowMessage = ko.computed(function() {
-		    return self.asmMessageList().length == 0 && !self.isLoading();
+		self.shouldShowMessage = ko.computed(function () {
+			return self.asmMessageList().length === 0 && !self.isLoading();
 		});
 		self.CreateAsmMessageList = function (dataList) {
 			var asmMessageItems = new Array();
@@ -50,22 +49,20 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 
 			self.isLoading(false);
 		};
-
-		self.isBadgeFeatureEnabled = ko.observable(false);
 	}
 
 	function asmMessageItemViewModel(item, isAnonymous) {
 		var self = this;
 		self.messageType = ko.observable(item.MessageType);
-		self.isAdherenceBronzeBadgeMessage = ko.observable(self.messageType() == 1);
-		self.isAdherenceSilverBadgeMessage = ko.observable(self.messageType() == 2);
-		self.isAdherenceGoldBadgeMessage = ko.observable(self.messageType() == 3);
-		self.isAHTBronzeBadgeMessage = ko.observable(self.messageType() == 4);
-		self.isAHTSilverBadgeMessage = ko.observable(self.messageType() == 5);
-		self.isAHTGoldBadgeMessage = ko.observable(self.messageType() == 6);
-		self.isAnsweredCallsBronzeBadgeMessage = ko.observable(self.messageType() == 7);
-		self.isAnsweredCallsSilverBadgeMessage = ko.observable(self.messageType() == 8);
-		self.isAnsweredCallsGoldBadgeMessage = ko.observable(self.messageType() == 9);
+		self.isAdherenceBronzeBadgeMessage = ko.observable(self.messageType() === 1);
+		self.isAdherenceSilverBadgeMessage = ko.observable(self.messageType() === 2);
+		self.isAdherenceGoldBadgeMessage = ko.observable(self.messageType() === 3);
+		self.isAHTBronzeBadgeMessage = ko.observable(self.messageType() === 4);
+		self.isAHTSilverBadgeMessage = ko.observable(self.messageType() === 5);
+		self.isAHTGoldBadgeMessage = ko.observable(self.messageType() === 6);
+		self.isAnsweredCallsBronzeBadgeMessage = ko.observable(self.messageType() === 7);
+		self.isAnsweredCallsSilverBadgeMessage = ko.observable(self.messageType() === 8);
+		self.isAnsweredCallsGoldBadgeMessage = ko.observable(self.messageType() === 9);
 		self.title = ko.observable(item.Title);
 		self.message = ko.observable(item.Message);
 		self.errorMessage = ko.observable();
@@ -80,7 +77,7 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		self.reply = ko.observable('');
 		self.selectedReply = ko.observable();
 		self.isNotShowSenderName = ko.computed(function () {
-			return self.messageType() == 10 && isAnonymous;
+			return self.messageType() === 10 && isAnonymous;
 		});
 
 		self.replyOptions = ko.utils.arrayMap(item.ReplyOptions, function (data) {
@@ -94,9 +91,9 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 			vm.asmMessageList.remove(self);
 		});
 		self.confirmReadMessage = function (data, event) {
-		    if (self.selectedReply() == undefined && self.replyOptions.length > 0)
-		        self.selectedReply(self.replyOptions[0].text());
-		    
+			if (self.selectedReply() === undefined && self.replyOptions.length > 0)
+				self.selectedReply(self.replyOptions[0].text());
+
 			self.isSending(true);
 			_replyToMessage(self);
 		};
@@ -104,9 +101,9 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 			return self.replyOptions.length > 1;
 		});
 
-		self.canConfirm = ko.computed(function() {
+		self.canConfirm = ko.computed(function () {
 			return !self.isSending() && (!self.userMustSelectReplyOption() // No reply option selection needed
-					|| (self.userMustSelectReplyOption() && self.selectedReply() != undefined) // No reply option selected but it's necessary
+					|| (self.userMustSelectReplyOption() && self.selectedReply() !== undefined) // No reply option selected but it's necessary
 			);
 		});
 
@@ -120,9 +117,9 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 			self.dialogueMessages(dialogueMessageArray);
 		};
 
-	    self.toggleSelected = function() {
-	        self.isSelected(!self.isSelected());
-	    };
+		self.toggleSelected = function () {
+			self.isSelected(!self.isSelected());
+		};
 	}
 
 	var dialogueMessageViewModel = function (dialogueMessage) {
@@ -143,9 +140,9 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 	function _addNewMessageAtTop(messageItem) {
 		if (typeof vm !== 'undefined') {
 			var result = $.grep(vm.asmMessageList(), function (list) {
-				return list.messageId() == messageItem.MessageId;
+				return list.messageId() === messageItem.MessageId;
 			});
-			if (result.length == 1) {
+			if (result.length === 1) {
 				var messageIndex = $.inArray(result[0], vm.asmMessageList());
 				vm.asmMessageList.splice(messageIndex, 1);
 				vm.asmMessageList.unshift(result[0]);
@@ -177,7 +174,7 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				_noMoreToLoad();
-				if (jqXHR.status == 400) {
+				if (jqXHR.status === 400) {
 					alert(jqXHR.responseText);
 					var data = $.parseJSON(jqXHR.responseText);
 					_displayValidationError(data, messageItem);
@@ -222,9 +219,9 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 
 	function _deleteMessage(messageId) {
 		var result = $.grep(vm.asmMessageList(), function (list) {
-			return list.messageId() == messageId;
+			return list.messageId() === messageId;
 		});
-		if (result.length == 1) {
+		if (result.length === 1) {
 			var messageIndex = $.inArray(result[0], vm.asmMessageList());
 			vm.asmMessageList.splice(messageIndex, 1);
 		}
@@ -245,7 +242,7 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 			success: function (data, textStatus, jqXHR) {
 				vm.CreateAsmMessageList(data);
 
-				if (data.length == 0 || data.length < take) {
+				if (data.length === 0 || data.length < take) {
 					_noMoreToLoad();
 				} else {
 					_moreToLoad();
@@ -254,9 +251,6 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 			error: function () {
 			}
 		});
-
-		var toggleEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("Portal_DifferentiateBadgeSettingForAgents_31318");
-		vm.isBadgeFeatureEnabled(toggleEnabled);
 	}
 
 	function _getAnonymousInfo() {
@@ -264,12 +258,12 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 			url: "Requests/ShiftTradeRequestPeriod",
 			dataType: "json",
 			type: 'GET',
-			success: function(data, textStatus, jqXHR) {
+			success: function (data, textStatus, jqXHR) {
 				if (data.HasWorkflowControlSet) {
 					vm.isAnonymous(data.MiscSetting.AnonymousTrading);
 				}
 			},
-			error: function(jqXHR, textStatus, errorThrown) {
+			error: function (jqXHR, textStatus, errorThrown) {
 			}
 		});
 	}
@@ -310,5 +304,4 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 			_deleteMessage(messageId);
 		}
 	};
-
 })(jQuery);
