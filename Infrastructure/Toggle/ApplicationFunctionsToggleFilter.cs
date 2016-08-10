@@ -18,10 +18,6 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 		public AllFunctions FilteredFunctions()
 		{
 			var functions = _applicationFunctionsProvider.AllFunctions();
-			if (!_toggleManager.IsEnabled(Toggles.SeatPlanner_Logon_32003))
-			{
-				hideSeatPlanner(functions);
-			}
 			if (!_toggleManager.IsEnabled(Toggles.Wfm_Outbound_Campaign_32696))
 			{
 				hideOutbound(functions);
@@ -32,15 +28,6 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 			}
 
 			return functions;
-		}
-
-		private static void hideSeatPlanner (AllFunctions functions)
-		{
-			var foundFunction = functions.FindByForeignId(DefinedRaptorApplicationFunctionForeignIds.SeatPlanner);
-			if (foundFunction != null)
-			{
-				foundFunction.SetHidden();
-			}
 		}
 		
 		private static void hideOutbound (AllFunctions functions)

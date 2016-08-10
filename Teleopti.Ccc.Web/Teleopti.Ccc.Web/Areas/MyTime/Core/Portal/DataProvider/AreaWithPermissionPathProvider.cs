@@ -101,10 +101,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			{
 				return _toggleManager.IsEnabled(Toggles.WfmIntraday_MonitorActualvsForecasted_35176);
 			}
-			if (path.Equals(DefinedRaptorApplicationFunctionPaths.SeatPlanner))
-			{
-				return _toggleManager.IsEnabled(Toggles.SeatPlanner_Logon_32003);
-			}
 			if (path.Equals(DefinedRaptorApplicationFunctionPaths.WebRequests))
 			{
 				return _toggleManager.IsEnabled(Toggles.Wfm_Requests_Basic_35986);
