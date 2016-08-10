@@ -35,7 +35,8 @@ namespace Teleopti.Ccc.Domain.Collection
 
 		public static void AddResources(this ISkillStaffPeriod skillStaffPeriod, double resourceToAdd)
 		{
-			skillStaffPeriod.SetCalculatedResource65(skillStaffPeriod.CalculatedResource + resourceToAdd);
+			var newValue = Math.Max(0, skillStaffPeriod.CalculatedResource + resourceToAdd);
+			skillStaffPeriod.SetCalculatedResource65(newValue);
 		}
 
 		private class skillStaffPeriodNullObject : ISkillStaffPeriod
