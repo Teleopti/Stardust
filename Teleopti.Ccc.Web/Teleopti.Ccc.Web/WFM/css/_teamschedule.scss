@@ -408,13 +408,19 @@
 			flex-grow: 2;
 
 			.wfm-checkbox-toggle:after {
-				width: 15px;
-				height: 15px;
-				font-size: 11px;
+				width: 16px;
+				height: 16px;
+				font-size: 12px;
+				top: 50%;
+				transform: translateY(-50%);
 			}
 
 			.wfm-checkbox input[type=checkbox]:checked ~ .wfm-checkbox-toggle:after, {
 				background-color: $orange-500;
+			}
+
+			.wfm-checkbox label {
+				position: relative;
 			}
 
 			ul {
