@@ -7,15 +7,15 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Logon;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Messaging.Client;
 
 namespace Teleopti.Ccc.Requests.PerformanceTest
 {
@@ -105,8 +105,10 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 
 		private IPersonRequest createAbsenceRequest(IPerson person, IAbsence absence)
 		{
-			var req = new AbsenceRequest(absence, new DateTimePeriod(new DateTime(2016, 6, 30, 8, 0, 0,DateTimeKind.Utc), new DateTime(2016, 6, 30, 18, 0, 0, DateTimeKind.Utc)));
-			return new PersonRequest(person) { Request = req };
+			var req = new AbsenceRequest(absence,
+				new DateTimePeriod(new DateTime(2016, 6, 30, 8, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 6, 30, 18, 0, 0, DateTimeKind.Utc)));
+			return new PersonRequest(person) {Request = req};
 		}
 
 
@@ -115,10 +117,10 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			system.AddModule(new CommonModule(configuration));
 			system.UseTestDouble<NewAbsenceRequestHandler>().For<NewAbsenceRequestHandler>();
 			system.UseTestDouble<ProcessMultipleAbsenceRequest>().For<IProcessMultipleAbsenceRequest>();
-
+			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
 			system.AddService<Database>();
 			system.AddModule(new TenantServerModule(configuration));
-			
+
 		}
 	}
 
@@ -135,12 +137,12 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 		public void Process(List<NewAbsenceRequestCreatedEvent> absenceRequests)
 		{
 
-				foreach (var req in absenceRequests)
-				{
-					_newAbsenceRequestHandler.Handle(req);
-				}
-			
-			
+			foreach (var req in absenceRequests)
+			{
+				_newAbsenceRequestHandler.Handle(req);
+			}
+
+
 		}
 	}
 
