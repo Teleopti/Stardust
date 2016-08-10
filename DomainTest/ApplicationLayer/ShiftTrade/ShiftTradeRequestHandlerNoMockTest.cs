@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_target = new ShiftTradeRequestHandler(_schedulingResultStateHolder, _validator, _requestFactory,
 				_scenarioRepository, _personRequestRepository, _scheduleStorage, _personRepository
 			  , null, null,
-			 _loadSchedulingDataForRequestWithoutResourceCalculation, null, null, _businessRuleProvider, _shiftTradePendingReasonsService);
+			 _loadSchedulingDataForRequestWithoutResourceCalculation, null, _businessRuleProvider, _shiftTradePendingReasonsService);
 
 			_target.Handle(getAcceptShiftTradeEvent(personTo, personRequest.Id.Value));
 
@@ -234,7 +234,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				_scenarioRepository, _personRequestRepository, _scheduleStorage, _personRepository
 				, new PersonRequestAuthorizationCheckerForTest(), _scheduleDifferenceSaver,
 				_loadSchedulingDataForRequestWithoutResourceCalculation,
-				new DifferenceEntityCollectionService<IPersistableScheduleData>(), null,
+				new DifferenceEntityCollectionService<IPersistableScheduleData>(),
 				businessRuleProvider ?? _businessRuleProvider,
 				toggle39473IsOff ? new ShiftTradePendingReasonsService39473ToggleOff() : _shiftTradePendingReasonsService);
 			_target.Handle(acceptShiftTradeEvent);

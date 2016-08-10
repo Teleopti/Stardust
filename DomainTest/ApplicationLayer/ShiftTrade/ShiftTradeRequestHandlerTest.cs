@@ -6,11 +6,9 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -19,7 +17,6 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -53,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				new ScheduleRange(schedulingResultState.Schedules, new ScheduleParameters(scenario, toPerson, new DateTimePeriod()),
 					permissionChecker));
 			loader = MockRepository.GenerateMock<ILoadSchedulesForRequestWithoutResourceCalculation>();
-			messageBroker = new FakeMessageBrokerComposite();
+			new FakeMessageBrokerComposite();
 			businessRuleProvider = MockRepository.GenerateMock<IBusinessRuleProvider>();
 			newBusinessRuleCollection = new FakeNewBusinessRuleCollection();
 			shiftTradePendingReasonsService = new ShiftTradePendingReasonsService(requestFactory, scenarioRepository);
@@ -61,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			target = new ShiftTradeRequestHandler(schedulingResultState, validator, requestFactory,
 				scenarioRepository, personRequestRepository, scheduleStorage,
 				personRepository, personRequestCheckAuthorization, scheduleDictionarySaver,
-				loader, differenceCollectionService, messageBroker, businessRuleProvider, shiftTradePendingReasonsService);
+				loader, differenceCollectionService, businessRuleProvider, shiftTradePendingReasonsService);
 		}
 
 		private ShiftTradeRequestHandler target;
@@ -80,7 +77,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		private IPersonRequestCheckAuthorization personRequestCheckAuthorization;
 		private ILoadSchedulesForRequestWithoutResourceCalculation loader;
 		private IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService;
-		private IMessageBrokerComposite messageBroker;
 		private IBusinessRuleProvider businessRuleProvider;
 		private INewBusinessRuleCollection newBusinessRuleCollection;
 		private IShiftTradePendingReasonsService shiftTradePendingReasonsService;
@@ -120,40 +116,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			scenario = new Scenario("Default");
 		}
 
-		private ShiftTradeRequestHandler getTargetWithAlwaysReferedChecker()
-		{
-			scenarioRepository.Stub(x => x.Current()).Return(scenario);
-
-			var statusChecker = new ShiftTradeRequestStatusCheckerForTestAlwaysRefer();
-
-			requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker(schedulingResultState)).Return(statusChecker);
-
-			target = new ShiftTradeRequestHandler(schedulingResultState, validator, requestFactory,
-				scenarioRepository, personRequestRepository, scheduleStorage,
-				personRepository, personRequestCheckAuthorization, scheduleDictionarySaver,
-				loader, differenceCollectionService, messageBroker, businessRuleProvider, shiftTradePendingReasonsService);
-
-			return target;
-		}
-
-		private IPersonRequest creatPersonRequest()
-		{
-			personRepository = new FakePersonRepository();
-			personRequestRepository = new FakePersonRequestRepository();
-
-			var personTo = PersonFactory.CreatePersonWithId();
-			var personFrom = PersonFactory.CreatePersonWithId();
-			var newPersonRequest = new PersonRequestFactory().CreatePersonShiftTradeRequest(personFrom, personTo, DateOnly.Today);
-			newPersonRequest.SetId(Guid.NewGuid());
-			var shiftTradeRequest = newPersonRequest.Request as IShiftTradeRequest;
-			shiftTradeRequest.SetShiftTradeStatus(ShiftTradeStatus.OkByBothParts, new PersonRequestAuthorizationCheckerForTest());
-			personRequestRepository.Add(newPersonRequest);
-			personRepository.Add(shiftTradeRequest.PersonFrom);
-			personRepository.Add(shiftTradeRequest.PersonTo);
-
-			return newPersonRequest;
-		}
-
+		
 		private static NewShiftTradeRequestCreatedEvent getNewShiftTradeRequestCreated()
 		{
 			var nstrc = new NewShiftTradeRequestCreatedEvent
@@ -327,31 +290,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		}
 
 		[Test]
-		public void ShouldBeReferedAfterScheduleChanged()
-		{
-			personRequest = creatPersonRequest();
-
-			var now = DateTime.Now;
-			var scheduleChangedEvent = new ProjectionChangedEvent
-			{
-				PersonId = personRequest.Person.Id.GetValueOrDefault(),
-				ScheduleDays = new[]
-				{
-					new ProjectionChangedEventScheduleDay {Date = now},
-					new ProjectionChangedEventScheduleDay {Date = now}
-				}
-			};
-
-			target = getTargetWithAlwaysReferedChecker();
-
-			target.Handle(scheduleChangedEvent);
-			var shiftTrafeRequest = (IShiftTradeRequest) personRequest.Request;
-
-			var mockRequestStatusChecker = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();
-			Assert.AreEqual(ShiftTradeStatus.Referred, shiftTrafeRequest.GetShiftTradeStatus(mockRequestStatusChecker));
-		}
-
-		[Test]
 		public void ShouldKeepAsPendingWhenBusinessRulesFail()
 		{
 			const string ruleMessage1 = "aja baja!";
@@ -403,33 +341,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				.Should().Be.EqualTo("I want to trade!\r\nViolation of a Business Rule:\r\n"
 									 + ruleMessage1 + "\r\n" + ruleMessage2 + "\r\n");
 		}
-
-		[Test]
-		public void ShouldSendNotificationToAnotherPerson()
-		{
-			personRequest = creatPersonRequest();
-
-			var now = DateTime.Now;
-			var scheduleChangedEvent = new ProjectionChangedEvent
-			{
-				PersonId = personRequest.Request.PersonFrom.Id.GetValueOrDefault(),
-				ScheduleDays = new[]
-				{
-					new ProjectionChangedEventScheduleDay {Date = now},
-					new ProjectionChangedEventScheduleDay {Date = now}
-				}
-			};
-
-			target = getTargetWithAlwaysReferedChecker();
-
-			target.Handle(scheduleChangedEvent);
-
-			var shiftTradeRequest = (IShiftTradeRequest) personRequest.Request;
-			var fakeMessageBroker = (FakeMessageBrokerComposite) messageBroker;
-			fakeMessageBroker.ReferenceObjectId().Should()
-				.Be(shiftTradeRequest.PersonTo.Id.GetValueOrDefault());
-			fakeMessageBroker.SentCount().Should().Be(1);
-			fakeMessageBroker.SentMessageType().Should().Be(typeof (IShiftTradeScheduleChangedInDefaultScenario));
-		}
+		
 	}
 }
