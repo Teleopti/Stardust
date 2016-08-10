@@ -34,7 +34,10 @@
 
 		vm.actionOptions = [{
 			Name: 'KeepWarnedAgents',
-			OnSelected: disableCheckbox
+			OnSelected: disableCheckbox,
+			BeforeAction: function () {
+				vm.toggleAllPersonSelection(true);
+			}
 		}, {
 			Name: 'UnselectWarnedAgents',
 			OnSelected: disableCheckbox,
