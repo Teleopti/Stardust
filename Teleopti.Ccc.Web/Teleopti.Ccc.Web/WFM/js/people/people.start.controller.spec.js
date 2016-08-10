@@ -26,7 +26,6 @@ describe("PeopleStartCtrl", function() {
 
 	var mockToggleService = {
 		WfmPeople_AdvancedSearch_32973: true,
-		WfmPeople_ImportUsers_33665: true,
 		WfmPeople_AdjustSkill_34138: true,
 		Wfm_People_PrepareForRelease_39040: true
 	}

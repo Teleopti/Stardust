@@ -6,6 +6,7 @@
 	{
 		//Don't remove this one - used in tests
 		TestToggle,
+
 		TestToggle2,
 		TestToggle3,
 
@@ -59,7 +60,6 @@
 		Wfm_ResourcePlanner_32892,
 		Wfm_ChangePlanningPeriod_33043,
 		WfmPeople_AdvancedSearch_32973,
-		WfmPeople_ImportUsers_33665,
 		WfmPeople_AdjustSkill_34138,
 		Wfm_Outbound_Campaign_32696,
 		Wfm_Outbound_Campaign_GanttChart_Navigation_34924,

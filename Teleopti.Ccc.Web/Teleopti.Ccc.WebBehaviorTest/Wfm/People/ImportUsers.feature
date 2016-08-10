@@ -1,5 +1,4 @@
-﻿@OnlyRunIfEnabled('WfmPeople_ImportUsers_33665')
-Feature: ImportUsers
+﻿Feature: ImportUsers
 	In order to easily create large amount of users
 	As a IT administrator
 	I want to add users by importing a file which includes all users I want to add

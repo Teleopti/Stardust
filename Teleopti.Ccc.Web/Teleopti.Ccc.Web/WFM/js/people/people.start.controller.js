@@ -12,17 +12,16 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 	$scope.searchResult = [];
 	$scope.pageSize = 20;
 	$scope.searchOptions = {
-		keyword: $stateParams.currentKeyword != undefined ? $stateParams.currentKeyword : "",
+		keyword: $stateParams.currentKeyword !== undefined ? $stateParams.currentKeyword : "",
 		searchKeywordChanged: false,
 		isAdvancedSearchEnabled: false
-	}
+	};
 	$scope.lang = i18nService.getCurrentLang();
-	$scope.isImportUsersEnabled = false;
 	$scope.isAdjustSkillEnabled = false;
 	$scope.showImportPanel = false;
 	$scope.getCurrentPageSelectedRowsLength = function () {
 		return $scope.gridOptions.data.length;
-	}
+	};
 	$scope.selectedCount = function () {
 		return $scope.selectedPeopleList.length;
 	};
@@ -36,7 +35,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 				$scope.toggleImportPeople();
 			},
 			active: function () {
-				return $scope.isImportUsersEnabled;
+				return true;
 			}
 		}, {
 			label: 'AdjustSkill',
@@ -45,7 +44,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 				$scope.gotoCartView('AdjustSkill');
 			},
 			active: function () {
-				return $scope.isAdjustSkillEnabled && ($scope.selectedCount() > 0);
+				return $scope.isAdjustSkillEnabled && $scope.selectedCount() > 0;
 			}
 		}, {
 			label: "ChangeShiftBag",
@@ -54,7 +53,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 				$scope.gotoCartView('ChangeShiftBag');
 			},
 			active: function () {
-				return $scope.isAdjustSkillEnabled && ($scope.selectedCount() > 0);
+				return $scope.isAdjustSkillEnabled && $scope.selectedCount() > 0;
 			}
 		}
 	];
@@ -69,13 +68,13 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 
 	$scope.dynamicColumnLoaded = false;
 
-	var stateParamsPagination = $stateParams.paginationOptions != undefined ? $stateParams.paginationOptions : {};
+	var stateParamsPagination = $stateParams.paginationOptions !== undefined ? $stateParams.paginationOptions : {};
 
 	$scope.paginationOptions = {
-		pageNumber: stateParamsPagination.pageNumber != undefined ? stateParamsPagination.pageNumber : 1,
-		pageSize: stateParamsPagination.pageSize != undefined ? stateParamsPagination.pageSize : 20,
-		totalPages:0,
-		sortColumns: stateParamsPagination.sortColumns != undefined ? stateParamsPagination.sortColumns : [
+		pageNumber: stateParamsPagination.pageNumber !== undefined ? stateParamsPagination.pageNumber : 1,
+		pageSize: stateParamsPagination.pageSize !== undefined ? stateParamsPagination.pageSize : 20,
+		totalPages: 0,
+		sortColumns: stateParamsPagination.sortColumns !== undefined ? stateParamsPagination.sortColumns : [
 			{
 				ColumnName: "LastName",
 				SortASC: true
@@ -96,7 +95,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 		enableGridMenu: true,
 		useExternalSorting: true,
 		enableColumnResizing: true,
-		enableHorizontalScrollbar: function() {
+		enableHorizontalScrollbar: function () {
 			return columnDefs.length + $scope.optionalColumns > 8 ? true : false;
 		},
 		columnDefs: [
@@ -216,12 +215,11 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 			});
 			setPeopleSelectionStatus();
 			$scope.selectAllVisible = false;
-
 		});
 	};
 
 	function setPeopleSelectionStatus() {
-		for (var i = 0; i < $scope.getCurrentPageSelectedRowsLength() ; i++) {
+		for (var i = 0; i < $scope.getCurrentPageSelectedRowsLength(); i++) {
 			var personId = $scope.gridOptions.data[i].PersonId;
 			if ($scope.selectedPeopleList.indexOf(personId) > -1) {
 				$scope.gridApi.grid.modifyRows($scope.gridOptions.data);
@@ -231,7 +229,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 				}
 			}
 		}
-	};
+	}
 
 	$scope.clearCart = function () {
 		$scope.selectedPeopleList = [];
@@ -261,9 +259,11 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 
 		getPage(1);
 	};
+
 	$scope.getPageData = function (pageIndex) {
 		$scope.gridApi.pagination.seek(pageIndex);
-	} 
+	};
+
 	function getPage(pageIndex) {
 		$scope.paginationOptions.pageNumber = $scope.searchOptions.searchKeywordChanged ? 1 : pageIndex;
 
@@ -290,7 +290,6 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 				angular.forEach(person.OptionalColumnValues, function (val) {
 					person[val.Key] = val.Value;
 				});
-
 			});
 
 			if (!$scope.dynamicColumnLoaded) {
@@ -311,7 +310,6 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 							minWidth: 100
 						});
 					}
-
 				});
 
 				$scope.dynamicColumnLoaded = true;
@@ -363,7 +361,6 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 	};
 
 	$scope.searchOptions.isAdvancedSearchEnabled = toggleSvc.WfmPeople_AdvancedSearch_32973;
-	$scope.isImportUsersEnabled = toggleSvc.WfmPeople_ImportUsers_33665;
 	$scope.isAdjustSkillEnabled = toggleSvc.WfmPeople_AdjustSkill_34138;
 
 	$scope.toggleRowSelectable();
@@ -378,4 +375,3 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 		NoticeService.info(message, null, true);
 	}
 }
-
