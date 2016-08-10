@@ -41,7 +41,7 @@
 				PersonIds: vm.selectedAgents.map(function(agent) {return agent.PersonId}),
 				Date: vm.selectedDate(),
 				ShiftCategoryId: vm.selectedShiftCategoryId,
-				TrackedCommandInfo: vm.trackId
+				TrackedCommandInfo: { TrackId: vm.trackId }
 			}
 
 			shiftCategorySvc.modifyShiftCategories(requestData).then(function(response){
