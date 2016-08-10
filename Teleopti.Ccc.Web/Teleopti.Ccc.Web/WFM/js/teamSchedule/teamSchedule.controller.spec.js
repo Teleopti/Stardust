@@ -243,7 +243,6 @@ describe("teamschedule controller tests", function() {
 		return {
 			WfmTeamSchedule_SetAgentsPerPage_36230: true,
 			WfmTeamSchedule_AbsenceReporting_35995: true,
-			WfmPeople_AdvancedSearch_32973: true,
 			WfmTeamSchedule_SwapShifts_36231: true,
 			WfmTeamSchedule_SeeScheduleChangesByOthers_36303: true
 		};

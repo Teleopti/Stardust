@@ -10,7 +10,7 @@
 					'<input id="simple-people-search" type="text" placeholder="{{\'Search\'|translate}}..." '+
 						'ng-model="vm.searchOptions.keyword" ng-keydown="$event.which === 13 && vm.searchCallback(vm.searchOptions.keyword) || vm.turnOffAdvancedSearch()" ng-change="vm.validateSearchKeywordChanged()" ' +
 						'ng-click="vm.toggleAdvancedSearchOption($event)" />'+
-					'<advance-search class="dropdown" ng-cloak ng-if="vm.searchOptions.isAdvancedSearchEnabled && vm.showAdvancedSearchOption" outside-click="vm.turnOffAdvancedSearch()"></advance-search>' +
+					'<advance-search class="dropdown" ng-cloak ng-if="vm.showAdvancedSearchOption" outside-click="vm.turnOffAdvancedSearch()"></advance-search>' +
 				'</label>'
 			);
 		}]);

@@ -25,7 +25,6 @@ describe("PeopleStartCtrl", function() {
 	}));
 
 	var mockToggleService = {
-		WfmPeople_AdvancedSearch_32973: true,
 		Wfm_People_PrepareForRelease_39040: true
 	}
 

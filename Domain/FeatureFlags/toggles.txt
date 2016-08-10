@@ -46,7 +46,6 @@ MyTimeWeb_JalaaliCalendar_32997 = true
 Wfm_MinimumScaffolding_32659 = RC
 Wfm_ResourcePlanner_32892 = true
 Wfm_ChangePlanningPeriod_33043 = true
-WfmPeople_AdvancedSearch_32973 = true
 Wfm_Outbound_Campaign_32696 = true
 Wfm_Outbound_Campaign_GanttChart_Navigation_34924 = true
 SeatPlanner_Logon_32003 = true

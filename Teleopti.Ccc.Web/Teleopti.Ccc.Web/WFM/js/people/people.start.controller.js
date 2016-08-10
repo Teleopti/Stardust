@@ -13,8 +13,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 	$scope.pageSize = 20;
 	$scope.searchOptions = {
 		keyword: $stateParams.currentKeyword !== undefined ? $stateParams.currentKeyword : "",
-		searchKeywordChanged: false,
-		isAdvancedSearchEnabled: false
+		searchKeywordChanged: false
 	};
 	$scope.lang = i18nService.getCurrentLang();
 	$scope.showImportPanel = false;
@@ -349,8 +348,6 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 		}
 		return $scope.searchOptions.keyword;
 	};
-
-	$scope.searchOptions.isAdvancedSearchEnabled = toggleSvc.WfmPeople_AdvancedSearch_32973;
 
 	$scope.dataInitialized = true;
 	$scope.searchKeyword();

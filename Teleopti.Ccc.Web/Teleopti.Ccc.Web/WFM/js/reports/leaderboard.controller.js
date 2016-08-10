@@ -16,7 +16,6 @@
 
 		vm.searchOptions = {
 			keyword: '',
-			isAdvancedSearchEnabled: ToggleSvc.WfmPeople_AdvancedSearch_32973,
 			searchKeywordChanged: false
 		};
 

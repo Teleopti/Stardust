@@ -80,7 +80,6 @@
 
 		vm.searchOptions = {
 			keyword: '',
-			isAdvancedSearchEnabled: false,
 			searchKeywordChanged: false
 		};
 
@@ -276,7 +275,6 @@
 				AddActivityEnabled: toggleSvc.WfmTeamSchedule_AddActivity_37541,
 				RemoveActivityEnabled: toggleSvc.WfmTeamSchedule_RemoveActivity_37743,
 				AbsenceReportingEnabled: toggleSvc.WfmTeamSchedule_AbsenceReporting_35995,
-				AdvancedSearchEnabled: toggleSvc.WfmPeople_AdvancedSearch_32973,
 				RemoveAbsenceEnabled: toggleSvc.WfmTeamSchedule_RemoveAbsence_36705,
 				SeeScheduleChangesByOthers: toggleSvc.WfmTeamSchedule_SeeScheduleChangesByOthers_36303,
 				SelectAgentsPerPageEnabled: toggleSvc.WfmTeamSchedule_SetAgentsPerPage_36230,
@@ -288,7 +286,6 @@
 				UndoScheduleEnabled: toggleSvc.WfmTeamSchedule_RevertToPreviousSchedule_39002,
 				CheckOverlappingCertainActivitiesEnabled: toggleSvc.WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938
 			};
-			vm.searchOptions.isAdvancedSearchEnabled = vm.toggles.AdvancedSearchEnabled;
 			vm.toggles.SeeScheduleChangesByOthers && monitorScheduleChanged();
 			vm.resetSchedulePage();
 
