@@ -58,6 +58,10 @@
       <Project>{ADD1BCDC-CFBB-4632-8FB5-4FF3BD04F666}</Project>
       <Name>Teleopti.Ccc.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
+      <Project>{aa4a5374-77af-44f0-85c1-6cabc6701352}</Project>
+      <Name>Teleopti.Ccc.Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
       <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
       <Name>Teleopti.Ccc.IocCommon</Name>
