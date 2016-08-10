@@ -1,37 +1,32 @@
-﻿
-'use strict';
+﻿'use strict';
 
-describe("PeopleCartCtrl", function() {
+describe("PeopleCartCtrl", function () {
 	var $q,
 		$rootScope,
 		$httpBackend,
 		controller,
 		$state;
 
-	beforeEach(function() {
+	beforeEach(function () {
 		module('wfm.people');
 	});
 
-	beforeEach(inject(function(_$httpBackend_, _$q_, _$rootScope_, _$controller_,_$state_) {
+	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_, _$controller_, _$state_) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
 		$state = _$state_;
 		controller = setUpController(_$controller_);
-		$httpBackend.whenGET(/ToggleHandler\/(.*)/).respond(function() {
+		$httpBackend.whenGET(/ToggleHandler\/(.*)/).respond(function () {
 			return [200, {
 				IsEnabled: false
 			}];
 		});
 	}));
 
-	var mockToggleService = {
-		WfmPeople_AdjustSkill_34138:true
-	}
-
 	var mockPeopleService = {
 		loadAllSkills: {
-			get: function() {
+			get: function () {
 				var queryDeferred = $q.defer();
 				queryDeferred.resolve(
 					[{
@@ -54,7 +49,7 @@ describe("PeopleCartCtrl", function() {
 			}
 		},
 		loadAllShiftBags: {
-			get: function() {
+			get: function () {
 				var queryDeferred = $q.defer();
 				queryDeferred.resolve(
 					[{
@@ -74,7 +69,7 @@ describe("PeopleCartCtrl", function() {
 			}
 		},
 		fetchPeople: {
-			post: function() {
+			post: function () {
 				var queryDeferred = $q.defer();
 				queryDeferred.resolve(
 					[{
@@ -107,7 +102,7 @@ describe("PeopleCartCtrl", function() {
 		}
 	};
 
-	it("should show skill selected status according to people skill list", inject(function() {
+	it("should show skill selected status according to people skill list", inject(function () {
 		var scope = $rootScope.$new();
 		scope.$digest(); // this is needed to resolve the promise
 		var availableSkills = controller.availableSkills;
@@ -123,7 +118,7 @@ describe("PeopleCartCtrl", function() {
 		expect(availableSkills[3].Status).toEqual('none');
 	}));
 
-	it("should construct person skills according to available skills", inject(function() {
+	it("should construct person skills according to available skills", inject(function () {
 		var scope = $rootScope.$new();
 		scope.$digest(); // this is needed to resolve the promise
 		var availablePeople = controller.availablePeople;
@@ -133,7 +128,7 @@ describe("PeopleCartCtrl", function() {
 		expect(availablePeople[1].Skills()).toEqual("Direct Sales, Email");
 		expect(availablePeople[2].Skills()).toEqual("Direct Sales");
 	}));
-	it("should construct person shift bag according to available shift bags", inject(function() {
+	it("should construct person shift bag according to available shift bags", inject(function () {
 		var scope = $rootScope.$new();
 		scope.$digest(); // this is needed to resolve the promise
 		var availablePeople = controller.availablePeople;
@@ -144,7 +139,7 @@ describe("PeopleCartCtrl", function() {
 		expect(availablePeople[2].ShiftBag()).toEqual("Paris Full Time");
 	}));
 
-	it("should remove skill from person skills when skill is deselected", inject(function() {
+	it("should remove skill from person skills when skill is deselected", inject(function () {
 		var scope = $rootScope.$new();
 		scope.$digest(); // this is needed to resolve the promise
 		var skill = {
@@ -160,7 +155,7 @@ describe("PeopleCartCtrl", function() {
 		expect(availablePeople[2].Skills()).toEqual("Direct Sales");
 	}));
 
-	it("should add skill to person skills for who does not have the skill when skill is selected", inject(function() {
+	it("should add skill to person skills for who does not have the skill when skill is selected", inject(function () {
 		var scope = $rootScope.$new();
 		scope.$digest(); // this is needed to resolve the promise
 		var skill = {
@@ -176,7 +171,7 @@ describe("PeopleCartCtrl", function() {
 		expect(availablePeople[2].Skills()).toEqual("Channel Sales, Direct Sales");
 	}));
 
-	it("should change shift bag correctly", inject(function() {
+	it("should change shift bag correctly", inject(function () {
 		var scope = $rootScope.$new();
 		scope.$digest(); // this is needed to resolve the promise
 		var shiftBag = {
@@ -190,11 +185,11 @@ describe("PeopleCartCtrl", function() {
 		expect(availablePeople[2].ShiftBag()).toEqual("London Part Time 75%");
 	}));
 
-	it("should remove person correctly", inject(function() {
+	it("should remove person correctly", inject(function () {
 		var scope = $rootScope.$new();
 		scope.$digest(); // this is needed to resolve the promise
 		var person = {
-			"PersonId": "3833e4a7-dbf4-4130-9027-9b5e015b2580",
+			"PersonId": "3833e4a7-dbf4-4130-9027-9b5e015b2580"
 		};
 		controller.removePerson(person);
 
@@ -204,7 +199,7 @@ describe("PeopleCartCtrl", function() {
 		expect(availablePeople[1].PersonId).toEqual("1a714f36-ee87-4a06-88d6-9b5e015b2585");
 	}));
 
-	it("should empty the cart when clearing cart", inject(function() {
+	it("should empty the cart when clearing cart", inject(function () {
 		var scope = $rootScope.$new();
 		scope.$digest(); // this is needed to resolve the promise
 		spyOn($state, 'go');
@@ -220,12 +215,11 @@ describe("PeopleCartCtrl", function() {
 		var stateParams = {
 			selectedPeopleIds: [],
 			commandTag: "AdjustSkill"
-		}
+		};
 		return $controller("PeopleCartCtrl", {
 			$scope: scope,
 			$stateParams: stateParams,
-			Toggle: mockToggleService,
 			People: mockPeopleService
 		});
-	};
+	}
 });

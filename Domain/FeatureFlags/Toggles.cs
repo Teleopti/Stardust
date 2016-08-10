@@ -60,7 +60,6 @@
 		Wfm_ResourcePlanner_32892,
 		Wfm_ChangePlanningPeriod_33043,
 		WfmPeople_AdvancedSearch_32973,
-		WfmPeople_AdjustSkill_34138,
 		Wfm_Outbound_Campaign_32696,
 		Wfm_Outbound_Campaign_GanttChart_Navigation_34924,
 		WfmPermission_ReplaceOldPermission_34671,

@@ -3,11 +3,11 @@
 (function () {
 	angular.module('wfm.people')
 		.controller('PeopleCartCtrl', [
-			'$scope', '$q', '$translate', '$stateParams', 'uiGridConstants', 'People', 'Toggle', '$mdSidenav',
+			'$scope', '$q', '$translate', '$stateParams', 'uiGridConstants', 'People', '$mdSidenav',
 			'$mdUtil', '$state', '$interval', '$mdComponentRegistry', '$locale', PeopleCartController
 		]);
 
-	function PeopleCartController($scope, $q, $translate, $stateParams, uiGridConstants, peopleSvc, toggleSvc,
+	function PeopleCartController($scope, $q, $translate, $stateParams, uiGridConstants, peopleSvc,
 		$mdSidenav, $mdUtil, $state, $interval, $mdComponentRegistry, $locale) {
 		var vm = this;
 		vm.selectedPeopleIds = $stateParams.selectedPeopleIds;
@@ -35,7 +35,7 @@
 			if (newVal)
 				vm.paginationOptions.totalPages = newVal;
 		});
-		
+
 		vm.datePickerStatus = {
 			opened: false
 		};
@@ -52,7 +52,8 @@
 			} else {
 				vm.menuState = 'closed';
 			}
-		}
+		};
+
 		vm.isOpen = function () { return false; };
 
 		$scope.$watch("vm.isOpen()", function (newValue, oldValue) {
@@ -69,7 +70,7 @@
 					vm.setCurrentCommand("AdjustSkill")();
 				},
 				active: function () {
-					return vm.isAdjustSkillEnabled;
+					return true;
 				},
 				columns: [
 					{ displayName: 'PersonSkill', field: 'Skills()', headerCellFilter: 'translate', minWidth: 100 },
@@ -85,7 +86,7 @@
 					vm.setCurrentCommand("ChangeShiftBag")();
 				},
 				active: function () {
-					return vm.isAdjustSkillEnabled;
+					return true;
 				},
 				columns: [
 					{ displayName: 'PersonFinderFieldShiftBag', field: 'ShiftBag()', headerCellFilter: 'translate', minWidth: 100 },
@@ -97,11 +98,13 @@
 
 		vm.back = function () {
 			$state.go('people.start', $stateParams);
-		}
+		};
+
 		vm.clearCart = function () {
 			vm.selectedPeopleIds = [];
 			$state.go('people.start', { selectedPeopleIds: [], currentKeyword: $stateParams.currentKeyword, paginationOptions: $stateParams.paginationOptions });
-		}
+		};
+
 		function buildToggler(navID) {
 			var debounceFn = $mdUtil.debounce(function () {
 				$mdSidenav(navID).toggle().then(function () { });
@@ -129,8 +132,8 @@
 			paginationPageSize: 20,
 			columnDefs: basicColumnDefs,
 			data: 'vm.availablePeople'
-
 		};
+
 		vm.gridOptions.onRegisterApi = function (gridApi) {
 			vm.gridApi = gridApi;
 			var cellTemplate = '<div>' +
@@ -138,7 +141,7 @@
 				'<i ng-click="grid.appScope.vm.removePerson(row.entity)" style="position: relative;top: 0.5rem;left: 0.5rem;" class="mdi mdi-account-remove">' +
 				'</div>';
 			vm.gridApi.core.addRowHeaderColumn({ name: 'rowHeaderCol', displayName: '', width: 30, cellTemplate: cellTemplate });
-		}
+		};
 
 		vm.removePerson = function (person) {
 			var personIndex = vm.selectedPeopleIds.indexOf(person.PersonId);
@@ -151,7 +154,7 @@
 					break;
 				}
 			}
-		}
+		};
 
 		vm.updateResult = { Success: false };
 		vm.updatePeopleWithSkills = function () {
@@ -165,10 +168,10 @@
 					$interval(function () {
 						vm.isConfirmCloseNoticeBar = false;
 					}, 10000, 1);
-
 				}
 			);
 		};
+
 		vm.updatePeopleWithShiftBag = function () {
 			vm.processing = true;
 			peopleSvc.updatePeopleWithShiftBag.post({ Date: moment(vm.selectedDate).format('YYYY-MM-DD'), People: vm.availablePeople }).$promise.then(
@@ -180,26 +183,25 @@
 					$interval(function () {
 						vm.isConfirmCloseNoticeBar = false;
 					}, 10000, 1);
-
 				}
 			);
 		};
 
 		vm.currentCommand = function () {
-			if (vm.commandName != undefined) {
+			if (vm.commandName !== undefined) {
 				for (var i = 0; i < vm.commands.length; i++) {
 					var cmd = vm.commands[i];
 					if (cmd.label.toLowerCase() === vm.commandName.toLowerCase()) {
 						return cmd;
 					}
-				};
+				}
 			}
 			return undefined;
 		};
 
 		vm.setCurrentCommand = function (cmdName) {
 			var currentCmd = vm.currentCommand();
-			if (currentCmd != undefined && currentCmd.panelName != undefined && currentCmd.panelName.length > 0) {
+			if (currentCmd !== undefined && currentCmd.panelName !== undefined && currentCmd.panelName.length > 0) {
 				$mdComponentRegistry.when(currentCmd.panelName).then(function (sideNav) {
 					if (sideNav.isOpen()) {
 						sideNav.toggle();
@@ -216,7 +218,7 @@
 				vm.isOpen = angular.bind(sideNav, sideNav.isOpen);
 			});
 			return buildToggler(cmd.panelName);
-		}
+		};
 
 		function initialize() {
 			vm.dateFormat = $locale.DATETIME_FORMATS.shortDate;
@@ -238,7 +240,6 @@
 			loadShiftBagPromise.then(function (result) {
 				vm.availableShiftBags = result;
 			});
-			vm.isAdjustSkillEnabled = toggleSvc.WfmPeople_AdjustSkill_34138;
 
 			$q.all([loadSkillPromise, fetchPeoplePromise, loadShiftBagPromise]).then(function () {
 				updateSkillStatus();
@@ -260,14 +261,14 @@
 					person.SkillIdList.splice(skillIndex, 1);
 				}
 			});
-		}
+		};
 
 		vm.selectedShiftBagChanged = function (selectedShiftBagId) {
 			vm.dataChanged = true;
 			angular.forEach(vm.availablePeople, function (person) {
 				person.ShiftBagId = selectedShiftBagId;
 			});
-		}
+		};
 
 		vm.selectedDateChanged = function () {
 			peopleSvc.fetchPeople.post({ Date: moment(vm.selectedDate).format('YYYY-MM-DD'), PersonIdList: vm.selectedPeopleIds }).$promise.then(function (result) {
@@ -276,7 +277,7 @@
 				updateSkillStatus();
 				updatePersonInfo();
 			});
-		}
+		};
 
 		function updateSkillStatus() {
 			angular.forEach(vm.availableSkills, function (skill) {
@@ -307,7 +308,7 @@
 						}
 					});
 					return ownSkills.length > 0 ? ownSkills.join(", ") : "";
-				}
+				};
 				person.ShiftBag = function () {
 					for (var i = 0; i < vm.availableShiftBags.length; i++) {
 						if (vm.availableShiftBags[i].ShiftBagId === person.ShiftBagId) {
@@ -315,10 +316,10 @@
 						}
 					}
 					return '';
-				}
+				};
 			});
 		}
 
 		initialize();
-	};
+	}
 }());

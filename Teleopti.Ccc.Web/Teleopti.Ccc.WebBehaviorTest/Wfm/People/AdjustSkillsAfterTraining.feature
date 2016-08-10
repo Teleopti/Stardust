@@ -1,5 +1,4 @@
-﻿@OnlyRunIfEnabled('WfmPeople_AdjustSkill_34138')
-Feature: AdjustSkillsAfterTraining
+﻿Feature: AdjustSkillsAfterTraining
 	In order to let new employed agents work with new skills after training
 	As a resource planner
 	I want to assign new skills to the agents

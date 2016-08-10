@@ -17,7 +17,6 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 		isAdvancedSearchEnabled: false
 	};
 	$scope.lang = i18nService.getCurrentLang();
-	$scope.isAdjustSkillEnabled = false;
 	$scope.showImportPanel = false;
 	$scope.getCurrentPageSelectedRowsLength = function () {
 		return $scope.gridOptions.data.length;
@@ -44,7 +43,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 				$scope.gotoCartView('AdjustSkill');
 			},
 			active: function () {
-				return $scope.isAdjustSkillEnabled && $scope.selectedCount() > 0;
+				return $scope.selectedCount() > 0;
 			}
 		}, {
 			label: "ChangeShiftBag",
@@ -53,17 +52,13 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 				$scope.gotoCartView('ChangeShiftBag');
 			},
 			active: function () {
-				return $scope.isAdjustSkillEnabled && $scope.selectedCount() > 0;
+				return $scope.selectedCount() > 0;
 			}
 		}
 	];
 
 	$scope.toggleImportPeople = function () {
 		$scope.showImportPanel = !$scope.showImportPanel;
-	};
-
-	$scope.rowSelectionEnabled = function () {
-		return $scope.isAdjustSkillEnabled;
 	};
 
 	$scope.dynamicColumnLoaded = false;
@@ -85,8 +80,8 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 	$scope.selectedPeopleList = $stateParams.selectedPeopleIds !== undefined ? $stateParams.selectedPeopleIds : [];
 
 	$scope.gridOptions = {
-		enableFullRowSelection: false,
-		enableRowHeaderSelection: false,
+		enableFullRowSelection: true,
+		enableRowHeaderSelection: true,
 		exporterMenuCsv: true,
 		exporterCsvFilename: 'peoples.csv',
 		exporterOlderExcelCompatibility: true,
@@ -236,11 +231,6 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 		$scope.gridApi.selection.clearSelectedRows();
 	};
 
-	$scope.toggleRowSelectable = function () {
-		$scope.gridOptions.enableFullRowSelection = $scope.rowSelectionEnabled();
-		$scope.gridOptions.enableRowHeaderSelection = $scope.rowSelectionEnabled();
-	};
-
 	$scope.sortChanged = function (grid, sortColumns) {
 		$scope.paginationOptions.sortColumns = [];
 
@@ -361,9 +351,7 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 	};
 
 	$scope.searchOptions.isAdvancedSearchEnabled = toggleSvc.WfmPeople_AdvancedSearch_32973;
-	$scope.isAdjustSkillEnabled = toggleSvc.WfmPeople_AdjustSkill_34138;
 
-	$scope.toggleRowSelectable();
 	$scope.dataInitialized = true;
 	$scope.searchKeyword();
 

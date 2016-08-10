@@ -14,12 +14,12 @@
 		</div>
 
 		<div class="con-flex split-3-1">
-			<div ng-if="dataInitialized && isAdjustSkillEnabled && !isSelectionMode">
+			<div ng-if="dataInitialized && !isSelectionMode">
 				<div tabindex=0 class="context-menu card-context pull-right">
 					<i class="mdi mdi-dots-vertical" style="color: #000000"></i>
 					<span class="context-menu-left" style="z-index: 1000; text-transform: none;">
 						<ul class="wfm-list">
-							<li class="item" ng-if="rowSelectionEnabled && selectedCount() > 0" ng-click="clearCart()">
+							<li class="item" ng-if="selectedCount() > 0" ng-click="clearCart()">
 								<div>
 									<span class="pull-left">{{"ResetSelection" | translate}}</span>
 								</div>
@@ -31,7 +31,7 @@
 							</li>
 						</ul>
 					</span>
-					<span ng-show="rowSelectionEnabled && selectedCount() > 0" class="wfm-panel selection-cart-indicator">
+					<span ng-show="selectedCount() > 0" class="wfm-panel selection-cart-indicator">
 						{{selectedCount()}}
 					</span>
 				</div>
