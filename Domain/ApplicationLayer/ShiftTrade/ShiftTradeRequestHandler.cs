@@ -142,7 +142,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 					if (personRequest.Id == null) continue;
 					if (!allAffectedRequests.ContainsKey(personRequest))
 					{
-						allAffectedRequests.Add(personRequest, new List<DateTime>());
+						allAffectedRequests.Add(personRequest, new List<DateTime>
+						{
+							scheduleDay.Date
+						});
 					}
 					else
 					{
