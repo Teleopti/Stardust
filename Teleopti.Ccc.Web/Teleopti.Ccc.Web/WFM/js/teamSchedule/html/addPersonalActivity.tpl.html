@@ -2,6 +2,7 @@
 	<div class="sidenav-header">{{'AddPersonalActivity'|translate}}</div>
 	<md-content class="command-panel-content" layout-padding>
 		<form name="newPersonalActivityForm">
+			<md-progress-linear ng-if="vm.checkingCommand" md-mode="indeterminate"></md-progress-linear>
 			<h3>{{'PersonalActivity'|translate}}: </h3>
 			<div class="con-row">
 				<md-select class="activity-selector focus-default" ng-model="vm.selectedActivityId" required placeholder="{{'SelectAnActivity'|translate}}">
@@ -16,8 +17,8 @@
 			<span>{{'TheNewTimeIsNotAllowedFor'|translate}} {{vm.notAllowedNameListString}}.</span>
 		</div>
 		<button id="applyPersonalActivity" class="wfm-btn form-submit"
-				ng-class="{'wfm-btn-primary': newPersonalActivityForm.$valid && vm.isInputValid(), 'wfm-btn-primary-disabled': !(newPersonalActivityForm.$valid) || !vm.isInputValid()}"
-				ng-disabled="newPersonalActivityForm.$valid && vm.isInputValid() ?'':'disabled'"
+				ng-class="{'wfm-btn-primary': newPersonalActivityForm.$valid && vm.isInputValid() && !vm.checkingCommand, 'wfm-btn-primary-disabled': !newPersonalActivityForm.$valid || !vm.isInputValid() || vm.checkingCommand}"
+				ng-disabled="vm.checkingCommand || !newPersonalActivityForm.$valid || !vm.isInputValid()"
 				ng-click="vm.addPersonalActivity()">
 			{{'Apply' | translate}}
 		</button>

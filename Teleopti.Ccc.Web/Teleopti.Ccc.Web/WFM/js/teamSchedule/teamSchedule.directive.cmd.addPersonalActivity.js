@@ -14,6 +14,7 @@
 		vm.disableNextDay = false;
 		vm.notAllowedNameListString = '';
 		vm.availableActivitiesLoaded = false;
+		vm.checkingCommand = true;
 		vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
 
 		activityService.fetchAvailableActivities().then(function (activities) {
@@ -62,6 +63,7 @@
 						Name: x.Name
 					}
 				}), response.data);
+				vm.checkingCommand = false;
 			});
 		};
 
@@ -82,8 +84,10 @@
 		}
 
 		vm.addPersonalActivity = function() {
-			if (vm.checkCommandActivityLayerOrders)
+			if (vm.checkCommandActivityLayerOrders){
+				vm.checkingCommand = true;
 				CommandCheckService.checkOverlappingCertainActivities(getRequestData()).then(addPersonalActivity);
+			}
 			else
 				addPersonalActivity();
 		}; 
@@ -94,6 +98,7 @@
 			var overnightEnds = scheduleManagementSvc.getLatestPreviousDayOvernightShiftEnd(curDateMoment, personIds);
 			var latestShiftStart = scheduleManagementSvc.getLatestStartOfSelectedSchedule(curDateMoment, personIds);
 
+			// Set to 08:00 for empty schedule or day off
 			var defaultStart = curDateMoment.clone().hour(8).minute(0).second(0).toDate();
 			if (overnightEnds !== null) {
 				defaultStart = moment(overnightEnds).add(1, 'hour').toDate();

@@ -12,7 +12,7 @@
 		vm.showMeridian = /h:/.test($locale.DATETIME_FORMATS.shortTime);
 		vm.meridians = vm.showMeridian ? $locale.DATETIME_FORMATS.AMPMS : [];
 		vm.tabindex = angular.isDefined($attrs.tabindex) ? $attrs.tabindex : 0;
-
+		vm.checkingCommand = false;
 		vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
 
 		vm.getDefaultMoveToStartTime = function() {
@@ -61,6 +61,7 @@
 					}
 				}), response.data);
 
+				vm.checkingCommand = false;
 			});
 	    };
 
@@ -95,8 +96,10 @@
 	    		return;
 	    	}
 
-			if (vm.checkCommandActivityLayerOrders)
+			if (vm.checkCommandActivityLayerOrders){
+				vm.checkingCommand = true;
 				CommandCheckService.checkMoveActivityOverlappingCertainActivities(getRequestData()).then(moveActivity);
+			}
 			else
 				moveActivity();
 		}

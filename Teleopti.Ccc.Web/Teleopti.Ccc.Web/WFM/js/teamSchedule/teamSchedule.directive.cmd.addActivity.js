@@ -14,6 +14,7 @@
 		vm.disableNextDay = false;
 		vm.notAllowedNameListString = "";
 		vm.availableActivitiesLoaded = false;
+		vm.checkingCommand = false;
 		vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
 
 		activityService.fetchAvailableActivities().then(function (activities) {
@@ -62,6 +63,7 @@
 						Name: x.Name
 					}
 				}), response.data);
+				vm.checkingCommand = false;
 			});
 		};
 
@@ -80,11 +82,12 @@
 				}
 			};
 		}
-
 		
-		vm.addActivity = function () {			
-			if (vm.checkCommandActivityLayerOrders)
+		vm.addActivity = function () {
+			if (vm.checkCommandActivityLayerOrders){
+				vm.checkingCommand = true;
 				CommandCheckService.checkOverlappingCertainActivities(getRequestData()).then(addActivity);
+			}
 			else
 				addActivity();
 		};

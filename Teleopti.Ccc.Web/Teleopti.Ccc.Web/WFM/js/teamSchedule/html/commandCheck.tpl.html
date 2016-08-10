@@ -2,8 +2,8 @@
     <div class="sidenav-header warning-header">{{vm.currentCommandLabel | translate}}</div>
     <md-content class="command-panel-content" layout-padding>
         <div class="command-info">
-            {{'ActivityWillOverlapWithExistingStickyActivities' | translate}}
             <span><i class="mdi mdi-alert"></i></span>
+            {{'ActivityWillOverlapWithExistingStickyActivities' | translate}}
         </div>
 
         <md-select ng-model="vm.currentActionOption" placeholder="{{'SelectAnOption' | translate}}" ng-change="vm.onActionChange()">

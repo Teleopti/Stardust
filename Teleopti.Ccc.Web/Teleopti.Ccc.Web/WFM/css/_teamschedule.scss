@@ -387,6 +387,11 @@
 			justify-content: space-between;
 			height: 100%;
 		}
+
+		md-progress-linear{
+			width: auto;
+			margin: -16px;
+		}
 	}
 
 	.command-check {
@@ -400,6 +405,10 @@
 
 		md-select{
 			margin: 10px 0;
+		}
+
+		span.md-select-icon{
+			margin-right: -7px;
 		}
 
 		.agent-list{
@@ -431,6 +440,10 @@
 			ul li, .wfm-checkbox-label{
 				white-space: normal;
 				cursor: pointer;
+			}
+
+			ul li{
+				padding: 5px 0;
 			}
 		}
 	}

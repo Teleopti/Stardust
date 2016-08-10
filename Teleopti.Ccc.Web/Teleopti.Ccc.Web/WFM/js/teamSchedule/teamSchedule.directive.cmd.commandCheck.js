@@ -33,16 +33,16 @@
 		vm.overlappedLayers = [];
 
 		vm.actionOptions = [{
-			Name: 'KeepWarnedAgents',
-			OnSelected: disableCheckbox,
-			BeforeAction: function () {
-				vm.toggleAllPersonSelection(true);
-			}
-		}, {
 			Name: 'UnselectWarnedAgents',
 			OnSelected: disableCheckbox,
 			BeforeAction: function() {
 				vm.toggleAllPersonSelection(false);
+			}
+		}, {
+			Name: 'KeepWarnedAgents',
+			OnSelected: disableCheckbox,
+			BeforeAction: function() {
+				vm.toggleAllPersonSelection(true);
 			}
 		}, {
 			Name: 'ModifyWarnedAgentsSelection',
