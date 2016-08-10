@@ -63,8 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			var personRequests = _personRequestProvider.RetrieveRequestsForLoggedOnUser(week);
 			var requestProbability = _absenceRequestProbabilityProvider.GetAbsenceRequestProbabilityForPeriod(week);
 
-			var showSeatBookings = _toggleManager.IsEnabled(Toggles.MyTimeWeb_ShowSeatBooking_34799);
-			var seatBookings = showSeatBookings ? _seatBookingProvider.GetSeatBookingsForScheduleDays(scheduleDays) : null;
+			var seatBookings = _seatBookingProvider.GetSeatBookingsForScheduleDays(scheduleDays);
 
 			var scheduleDaysAndProjections = scheduleDays.ToDictionary(day => day.DateOnlyAsPeriod.DateOnly, day => new ScheduleDaysAndProjection
 			{
