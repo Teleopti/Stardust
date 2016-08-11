@@ -21,11 +21,11 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly IToggleManager _toggleManager;
 
 		public AuthenticationApiController(IBusinessUnitsViewModelFactory businessUnitViewModelFactory,
-																					IIdentityLogon identityLogon,
-																					ILogLogonAttempt logLogonAttempt,
-																					IWebLogOn webLogon,
-																					IDataSourceForTenant dataSourceForTenant,
-																					IToggleManager toggleManager)
+			IIdentityLogon identityLogon,
+			ILogLogonAttempt logLogonAttempt,
+			IWebLogOn webLogon,
+			IDataSourceForTenant dataSourceForTenant,
+			IToggleManager toggleManager)
 		{
 			_businessUnitViewModelFactory = businessUnitViewModelFactory;
 			_identityLogon = identityLogon;
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_toggleManager = toggleManager;
 		}
 
-		[HttpGet,Route("start/authenticationapi/businessunits")]
+		[HttpGet, Route("start/authenticationapi/businessunits")]
 		[TenantUnitOfWork]
 		[NoTenantAuthentication]
 		public virtual IHttpActionResult BusinessUnits()
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		[HttpPost, Route("start/authenticationapi/logon")]
 		[TenantUnitOfWork]
 		[NoTenantAuthentication]
-		public virtual IHttpActionResult Logon([FromBody]ApiLogonInputModel model)
+		public virtual IHttpActionResult Logon([FromBody] ApiLogonInputModel model)
 		{
 			var result = _identityLogon.LogonIdentityUser();
 			_logLogonAttempt.SaveAuthenticateResult(string.Empty, result.PersonId(), result.Successful);
@@ -58,7 +58,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				return errorMessage(Resources.LogOnFailedInvalidUserNameOrPassword);
 			try
 			{
-				_webLogon.LogOn(result.DataSource.DataSourceName, model.BusinessUnitId, result.Person.Id.Value, result.TenantPassword, result.IsPersistent, model.IsLogonFromBrowser);
+				_webLogon.LogOn(result.DataSource.DataSourceName, model.BusinessUnitId, result.Person.Id.Value,
+					result.TenantPassword, result.IsPersistent, model.IsLogonFromBrowser);
 			}
 			catch (PermissionException)
 			{
@@ -70,11 +71,10 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				return errorMessage(Resources.TeleoptiProductActivationKeyException);
 			}
 
-			var isToggleOpen = _toggleManager.IsEnabled(Toggles.MyTimeWeb_KeepUrlAfterLogon_34762);
 			return Ok(new
 			{
-				MyTimeWeb_KeepUrlAfterLogon_34762 = isToggleOpen,
-				WfmTeamSchedule_MakeNewMyTeamDefault_39744 = _toggleManager.IsEnabled(Toggles.WfmTeamSchedule_MakeNewMyTeamDefault_39744)
+				WfmTeamSchedule_MakeNewMyTeamDefault_39744 =
+					_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_MakeNewMyTeamDefault_39744)
 			});
 		}
 

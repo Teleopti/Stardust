@@ -59,8 +59,6 @@ Scenario: Send message
 	 | Ashley Andeen |
 
 @ignore
-#It will be redirected to Anywhere with toggle 'MyTimeWeb_KeepUrlAfterLogon_34762' off
-@OnlyRunIfEnabled('MyTimeWeb_KeepUrlAfterLogon_34762')
 Scenario: Send message after application sign in
 	Given there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
@@ -89,8 +87,6 @@ Scenario: Send message after application sign in
 	 | Ashley Andeen |
 
 @ignore
-#It will be redirected to Anywhere with toggle 'MyTimeWeb_KeepUrlAfterLogon_34762' off
-@OnlyRunIfEnabled('MyTimeWeb_KeepUrlAfterLogon_34762')
 @WindowsAsDefaultIdentityProviderLogon
 Scenario: Send message after windows sign in
 	Given there is a site named 'Paris'

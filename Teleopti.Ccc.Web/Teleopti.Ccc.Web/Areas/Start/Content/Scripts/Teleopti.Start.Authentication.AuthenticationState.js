@@ -90,7 +90,6 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 	};
 
 	var applicationsAjax = function (options) {
-
 		var success = options.success;
 
 		$.extend(options, {
@@ -140,7 +139,6 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 		document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 	};
 
-
 	this.TryToSignIn = function (options) {
 		authenticationModel = options.data;
 
@@ -181,65 +179,12 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 			success: function (logonData, textState, jqXHR) {
 				toggleNewWeb = logonData.WfmTeamSchedule_MakeNewMyTeamDefault_39744;
 				
-				if (logonData.MyTimeWeb_KeepUrlAfterLogon_34762 === true ) {
-					$.extend(options, {
-						success: function(applicationsData, textState, jqXHR) {
-							keepUrlAfterLogon(applicationsData, textState, jqXHR);
-						}
-					});
-					globalAreasAjax(options);
-
-				} else {
-					$.extend(options, {
-						success: function (applicationsData, textState, jqXHR) {
-
-							var areas = ["MyTime", "Anywhere", "SeatPlanner", "Messages", "Reporting", "WFM"];
-							var areaToGo = ko.utils.arrayFirst(areas, function (a) {
-								var url = "/" + a + "/";
-								return window.location.href.toUpperCase().indexOf(url.toUpperCase()) !== -1;
-							});
-							var anywhereApplication = ko.utils.arrayFirst(applicationsData, function (a) {
-								return a.Area === "Anywhere";
-							});
-							var wfmApplication = ko.utils.arrayFirst(applicationsData, function(a) {
-								return a.Area === "WFM";
-							});
-							var area;
-							if (areaToGo) {
-								area = areaToGo;
-								var returnHash = getCookie("returnHash");
-								if (returnHash && returnHash.indexOf("#") !==-1) {
-									returnHash = returnHash.substring(returnHash.indexOf("#"), returnHash.length);
-									deleteCookie("returnHash");
-									window.location.href = data.baseUrl + area + returnHash;
-									return;
-								}
-							} else {
-								if (toggleNewWeb && wfmApplication) {
-									area = wfmApplication.Area;
-								}
-								else if (anywhereApplication)
-									area = anywhereApplication.Area;
-								else if (applicationsData.length == 1)
-									area = applicationsData[0].Area;
-								else {
-									if (applicationsData.length > 1) {
-										gotoMenuView();
-									} else {
-										errormessage($('#Signin-error').data('nopermissiontext'));
-									}
-									return;
-								}
-
-							}
-
-							window.location.href = data.baseUrl + area;
-
-						}
-					});
-					applicationsAjax(options);
-				}
-				
+				$.extend(options, {
+					success: function(applicationsData, textState, jqXHR) {
+						keepUrlAfterLogon(applicationsData, textState, jqXHR);
+					}
+				});
+				globalAreasAjax(options);
 			},
 			error: error,
 			errormessage: errormessage
@@ -254,13 +199,11 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 				error: function (jqXHR, textStatus, errorThrown) {
 					if (jqXHR.status == 400) {
 						var json = JSON.parse(jqXHR.responseText);
-							options.businessUnitSelectionError(json.ModelState.Error[0]);
+						options.businessUnitSelectionError(json.ModelState.Error[0]);
 					}
 				}
 			});
 		}
-		
-
 
 		logonAjax(options);
 	};

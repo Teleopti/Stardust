@@ -62,7 +62,6 @@ RTA_Optimize_39667 = true
 RTA_MonitorBySkillArea_39337 = RC
 RTA_RuleMappingOptimization_39812 = true
 
-MyTimeWeb_KeepUrlAfterLogon_34762 = true
 WfmPermission_ReplaceOldPermission_34671 = true
 
 WfmTeamSchedule_AbsenceReporting_35995 = true

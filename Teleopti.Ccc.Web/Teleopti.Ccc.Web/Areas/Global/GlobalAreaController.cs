@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.Web.Http;
-using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 
 namespace Teleopti.Ccc.Web.Areas.Global
@@ -9,20 +7,16 @@ namespace Teleopti.Ccc.Web.Areas.Global
 	public class GlobalAreaController : ApiController
 	{
 		private readonly IAreaWithPermissionPathProvider _areaWithPermissionPathProvider;
-		private readonly IToggleManager _toggleManager;
 
-		public GlobalAreaController(IAreaWithPermissionPathProvider areaWithPermissionPathProvider, IToggleManager toggleManager)
+		public GlobalAreaController(IAreaWithPermissionPathProvider areaWithPermissionPathProvider)
 		{
 			_areaWithPermissionPathProvider = areaWithPermissionPathProvider;
-			_toggleManager = toggleManager;
 		}
 
 		[HttpGet, Route("Global/Application/Areas")]
 		public IEnumerable<object> GetApplicationAreas()
 		{
-			return _toggleManager.IsEnabled(Toggles.MyTimeWeb_KeepUrlAfterLogon_34762)
-				? _areaWithPermissionPathProvider.GetAreasWithPermissions()
-				: new List<object>();
+			return _areaWithPermissionPathProvider.GetAreasWithPermissions();
 		}
 	}
 }

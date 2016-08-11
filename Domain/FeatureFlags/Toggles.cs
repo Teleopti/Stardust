@@ -36,7 +36,6 @@
 		Show_StaticPageOnNoInternet_29415,
 		MyTimeWeb_PreferenceShowNightViolation_33152,
 		MyTimeWeb_JalaaliCalendar_32997,
-		MyTimeWeb_KeepUrlAfterLogon_34762,
 		MyTimeWeb_TeamScheduleNoReadModel_36210,
 		MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211,
 		MyTimeWeb_ShiftTradeBoardNoReadModel_36662,
