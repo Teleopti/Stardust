@@ -682,15 +682,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Activity will overlap with existing sticky activities.
-        /// </summary>
-        public static string ActivityWillOverlapWithExistingStickyActivities {
-            get {
-                return ResourceManager.GetString("ActivityWillOverlapWithExistingStickyActivities", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Actual.
         /// </summary>
         public static string Actual {
@@ -29844,6 +29835,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The activity will intersect existing activities that do not allow overlapping..
+        /// </summary>
+        public static string TheActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping {
+            get {
+                return ResourceManager.GetString("TheActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The attached Pdf-file contains your schedule for {0} to {1}..
         /// </summary>
         public static string TheAttachedFileContainsScheduleForDateParameters {
@@ -29921,6 +29921,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string TheFileIsLockedByAnotherProgram {
             get {
                 return ResourceManager.GetString("TheFileIsLockedByAnotherProgram", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The following agents have affected activities:.
+        /// </summary>
+        public static string TheFollowingAgentsHaveAffectedActivities {
+            get {
+                return ResourceManager.GetString("TheFollowingAgentsHaveAffectedActivities", resourceCulture);
             }
         }
         

@@ -14792,9 +14792,9 @@ These options are activated:
     <value>Not permitted to edit shift category for agent(s)</value>
     <comment>Error message for modifying shift category without permission.</comment>
   </data>
-  <data name="ActivityWillOverlapWithExistingStickyActivities" xml:space="preserve">
-    <value>Activity will overlap with existing sticky activities</value>
-    <comment>Activity overlapping information text when add activities on top of Not Allow Meeting activities.</comment>
+  <data name="TheActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping" xml:space="preserve">
+    <value>The activity will intersect existing activities that do not allow overlapping.</value>
+    <comment>Command check info text afeter adding activity, adding personal activity and move activity in wfm teamschedule.</comment>
   </data>
   <data name="DoNotModifyForTheseAgents" xml:space="preserve">
     <value>Do not {0} for these agents</value>
@@ -14814,5 +14814,9 @@ These options are activated:
   <data name="SaveSiteOpenHoursSuccess" xml:space="preserve">
     <value>Open hours have been updated</value>
     <comment>notification for update open hours of sites</comment>
+  </data>
+  <data name="TheFollowingAgentsHaveAffectedActivities" xml:space="preserve">
+    <value>The following agents have affected activities:</value>
+    <comment>Command check text info after adding activity, adding personal activity and move activity in wfm teamschedule.</comment>
   </data>
 </root>

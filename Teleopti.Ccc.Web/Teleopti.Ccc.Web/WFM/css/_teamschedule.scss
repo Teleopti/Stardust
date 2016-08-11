@@ -399,8 +399,17 @@
 			background: $orange-500;
 		}
 
-		.command-info .mdi-alert{
-			color: $orange-500;
+		.command-info {
+			padding-bottom:0;
+			padding-top:0;
+
+			.mdi-alert{
+				color: $orange-500;
+			}
+
+			& > p{
+				margin: 0;
+			}
 		}
 
 		md-select{
