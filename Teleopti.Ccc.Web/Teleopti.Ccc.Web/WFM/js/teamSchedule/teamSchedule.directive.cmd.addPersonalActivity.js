@@ -14,7 +14,7 @@
 		vm.disableNextDay = false;
 		vm.notAllowedNameListString = '';
 		vm.availableActivitiesLoaded = false;
-		vm.checkingCommand = true;
+		vm.checkingCommand = false;
 		vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
 
 		activityService.fetchAvailableActivities().then(function (activities) {

@@ -282,18 +282,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.ClickUsingJQuery("#applyMoveActivity");
 		}
 
-		[Then(@"the start of '(.*)' is '(.*)' mins later than the start of '(.*)'")]
-		public void ThenTheStartOfIsMinsLaterThanTheStartOf(string activityA, int interval, string activityB)
-		{
-			var hours = Convert.ToSingle(Browser.Interactions.Javascript("return (document.querySelectorAll('.ruler').length - 1)"));
-			var scheduleTableWidth = Convert.ToSingle(Browser.Interactions.Javascript("return document.querySelector('td.schedule.schedule-column').clientWidth"));
-			var minuteWidth = scheduleTableWidth / hours / 60;
-			var activityALeft = Convert.ToSingle(Browser.Interactions.Javascript($"return parseFloat(getComputedStyle(document.querySelector('[projection-name=\"{activityA}\"]')).left);"));
-			var activityBLeft = Convert.ToSingle(Browser.Interactions.Javascript($"return parseFloat(getComputedStyle(document.querySelector('[projection-name=\"{activityB}\"]')).left);"));
-			var intervalWidth = Math.Floor(minuteWidth * interval);
-			Assert.AreEqual(intervalWidth, Math.Floor(activityALeft - activityBLeft));
-		}
-
 		[When(@"I switch on show warnings toggle")]
 		public void WhenISwitchOnShowWarningsToggle()
 		{

@@ -209,7 +209,6 @@ Scenario: Should be able to move activity in overnight shift from next day to cu
 	And I selected activity 'Sales'
 	And I move activity to '2016-10-10 23:05' with next day being 'false'
 	Then I should see a successful notice
-	And the start of 'Sales' is '125' mins later than the start of 'Phone'
 
 @OnlyRunIfEnabled('WfmTeamSchedule_MoveActivity_37744')
 Scenario: Should be able to move basic activity
