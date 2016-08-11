@@ -15,10 +15,11 @@
 		'NoticeService',
 		'ValidateRulesService',
 		'CommandCheckService',
+		'$state',
 		TeamScheduleController]);
 
 	function TeamScheduleController($scope, $q, $translate, $mdSidenav, teamScheduleSvc, groupScheduleFactory, personSelectionSvc,
-		scheduleMgmtSvc, toggleSvc, signalRSVC, NoticeService, ValidateRulesService, CommandCheckService) {
+		scheduleMgmtSvc, toggleSvc, signalRSVC, NoticeService, ValidateRulesService, CommandCheckService, $state) {
 
 		var vm = this;
 		var commandContainerId = 'teamschedule-command-container';
@@ -230,6 +231,13 @@
 			vm.showErrorDetails = !vm.showErrorDetails;
 		};
 
+		vm.goToWeekView = function () {
+			$state.go('myTeamSchedule.weekView', {
+				keyword: vm.searchOptions.keyword,
+				selectedDate: vm.scheduleDate
+			});
+		}
+
 		function isMessageNeedToBeHandled() {
 			var personIds = scheduleMgmtSvc.groupScheduleVm.Schedules.map(function (schedule) { return schedule.PersonId; });
 			var scheduleDate = vm.scheduleDateMoment();
@@ -284,7 +292,8 @@
 				ShowNightlyRestWarningEnabled: toggleSvc.WfmTeamSchedule_ShowNightlyRestWarning_39619,
 				ModifyShiftCategoryEnabled: toggleSvc.WfmTeamSchedule_ModifyShiftCategory_39797,
 				UndoScheduleEnabled: toggleSvc.WfmTeamSchedule_RevertToPreviousSchedule_39002,
-				CheckOverlappingCertainActivitiesEnabled: toggleSvc.WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938
+				CheckOverlappingCertainActivitiesEnabled: toggleSvc.WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938,
+				WeekViewEnabled: toggleSvc.WfmTeamSchedule_WeekView_39870
 			};
 			vm.toggles.SeeScheduleChangesByOthers && monitorScheduleChanged();
 			vm.resetSchedulePage();

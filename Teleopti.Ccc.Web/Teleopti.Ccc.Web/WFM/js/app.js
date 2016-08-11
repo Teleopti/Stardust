@@ -177,8 +177,19 @@ wfm.config([
 			templateUrl: 'js/seatManagement/html/seatmap.html'
 		}).state('myTeamSchedule', {
 			url: '/teamSchedule',
+			templateUrl: 'js/teamSchedule/html/default.html',
+			controller: 'TeamScheduleDefaultCtrl as vm'
+		}).state('myTeamSchedule.start', {
 			templateUrl: 'js/teamSchedule/html/schedule.html',
 			controller: 'TeamScheduleCtrl as vm'
+		}).state('myTeamSchedule.weekView', {
+			url: '/week',
+			params: {
+				keyword: '',
+				selectedDate: null
+			},
+			templateUrl: 'js/teamSchedule/html/weeklySchedule.html',
+			controller: 'TeamScheduleWeeklyCtrl as vm'
 		}).state('requests', {
 			url: '/requests',
 			templateUrl: 'js/requests/html/requests.html',

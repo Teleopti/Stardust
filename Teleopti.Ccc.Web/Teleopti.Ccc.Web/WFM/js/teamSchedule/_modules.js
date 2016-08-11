@@ -1,7 +1,7 @@
 ﻿'use strict';
 (function () {
-	angular.module('wfm.teamSchedule', [
-			'currentUserInfoService', 'wfm.pagination', 'toggleService', 'ngResource', 'wfmDate', 'wfm.notice', 'ngMaterial', 'ui.bootstrap', 'wfm.signalR'
+	var myteam = angular.module('wfm.teamSchedule', [
+			'currentUserInfoService', 'wfm.pagination', 'toggleService', 'ngResource', 'wfmDate', 'wfm.notice', 'ngMaterial', 'ui.bootstrap', 'wfm.signalR', 'ui.router'
 		])
 		.config([
 			'$mdThemingProvider', function($mdThemingProvider) {
@@ -24,4 +24,15 @@
 					});
 			}
 		]);
+
+	myteam.run([
+		'$rootScope', '$state', '$location', function($rootScope, $state, $location) {
+
+			$rootScope.$on('$stateChangeSuccess',
+				function(event, toState) {
+					if ($location.url() == $state.current.url && toState.name == 'myTeamSchedule') $state.go('myTeamSchedule.start');
+				});
+
+		}
+	]);
 })();

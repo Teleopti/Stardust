@@ -1,0 +1,46 @@
+﻿<div class="view-header">
+	<div class="view-title">
+		<h1><i class="mdi mdi-account-multiple"></i> 
+		<span translate>TeamSchedule</span>/<span translate>WeekView</span>
+		</h1>
+	</div>
+</div>
+
+<div class="team-schedule panel wfm-block material-depth-1">
+	<div class="teamschedule-header">
+		<div class="leftside-part">
+			<span class="people-search-container">
+				<people-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged"></people-search-input>
+			</span>
+
+			<span class="datepicker-container">
+				<team-schedule-datepicker selected-date="vm.scheduleDate" on-date-change="vm.onScheduleDateChanged()"></team-schedule-datepicker>
+			</span>
+		</div>
+	</div>
+	<!--<div class="con-row teamschedule-body">
+		<div class="big-table-wrapper">
+			<div class="alert-warning notice-spacer" ng-if="vm.total > 500">
+				<i class='mdi mdi-alert'></i>{{'TooManyResultsForSearchKeywords'|translate}}
+			</div>
+			<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
+			<schedule-table select-mode="vm.scheduleTableSelectMode" selected-date="vm.scheduleDate" show-warnings="vm.validateWarningToggle" cmd-configurations="vm.cmdConfigurations" />
+		</div>
+
+	</div>-->
+
+	<!--<div class="con-footer teamschedule-footer" ng-if="vm.paginationOptions.totalPages > 0">
+		<div class="notice-spacer" ng-show="vm.selectAllVisible()" ng-click="vm.selectAllForAllPages()">
+			<a href="javascript: void(0);"> {{'SelectAllPeopleInEveryPage' | translate}}</a>
+		</div>
+		<div class="notice-spacer" ng-show="vm.hasSelectedAllPeople()" ng-click="vm.unselectAllForAllPages()">
+			<a href="javascript: void(0);"> {{'UnselectAllPeopleInEveryPage' | translate}}</a>
+		</div>
+
+		<md-select class="page-size-selector" ng-if="vm.toggles.SelectAgentsPerPageEnabled" ng-model="vm.paginationOptions.pageSize" ng-change="vm.selectorChanged()" aria-label="page size">
+			<md-option ng-repeat="option in vm.agentsPerPageSelection" ng-value="option">{{option}}</md-option>
+		</md-select>
+		<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.loadSchedules"></wfm-pagination>
+	</div>-->
+</div>
+
