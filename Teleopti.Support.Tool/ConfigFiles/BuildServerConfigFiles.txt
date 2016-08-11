@@ -11,4 +11,6 @@
 ..\..\..\Teleopti.Ccc.ReadModel.PerformanceTest\App.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
 ..\..\..\Teleopti.Ccc.ReadModel.PerformanceTest\bin\Debug\Teleopti.Ccc.ReadModel.PerformanceTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
 ..\..\..\Teleopti.Ccc.ReadModel.PerformanceTest\bin\Release\Teleopti.Ccc.ReadModel.PerformanceTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
+..\..\..\Teleopti.Ccc.Requests.PerformanceTest\App.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
+..\..\..\Teleopti.Ccc.Requests.PerformanceTest\bin\Debug\Teleopti.Ccc.Requests.PerformanceTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
 ..\..\..\Teleopti.Ccc.Requests.PerformanceTest\bin\Release\Teleopti.Ccc.Requests.PerformanceTest.dll.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
