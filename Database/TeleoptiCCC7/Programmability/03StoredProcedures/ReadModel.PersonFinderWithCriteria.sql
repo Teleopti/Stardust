@@ -221,7 +221,7 @@ BEGIN
 
 	IF @valueClause <> '()'
 	BEGIN
-		SELECT @dynamicSQL = @dynamicSQL + 'SELECT PersonId FROM ReadModel.FindPerson WHERE '
+		SELECT @dynamicSQL = @dynamicSQL + 'SELECT PersonId FROM ReadModel.FindPerson WITH (NOLOCK) WHERE '
 			+ 'ISNULL(TerminalDate, ''2100-01-01'') >= ''' + @leave_after_ISO + ''' ' 
 			+ ' AND ( (StartDateTime IS NULL OR StartDateTime <=  ''' + @belongs_to_date_ISO + ''' ) AND ( EndDateTime IS NULL OR EndDateTime >= ''' + @belongs_to_date_ISO + ''' ))'
 			+ ' AND ' + @valueClause
