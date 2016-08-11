@@ -23,14 +23,14 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_userTimeZone = userTimeZone;
 		}
 
-		public MonitorDataViewModel Load(Guid[] skillIdList)
+		public IntradayStatisticsViewModel Load(Guid[] skillIdList)
 		{
 			var intervals = _intradayMonitorDataLoader.Load(skillIdList, 
 				TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone,
 				new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _userTimeZone.TimeZone())));
 			var intervalLength = _intervalLengthFetcher.IntervalLength;
 
-			var summary = new MonitorIntradaySummary();
+			var summary = new IntradayStatisticsSummary();
 			var timeSeries = new List<DateTime>();
 			var forecastedCallsSeries = new List<double>();
 			var forecastedAverageHandleTimeSeries = new List<double>();
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 					? -99
 					: summary.AbandonedCalls / summary.OfferedCalls;
 
-			return new MonitorDataViewModel()
+			return new IntradayStatisticsViewModel()
 			{
 				LatestActualIntervalStart = latestQueueStatsIntervalId == -1
 		? null
@@ -106,8 +106,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 				LatestActualIntervalEnd = latestQueueStatsIntervalId == -1
 		? null
 		: (DateTime?)DateTime.MinValue.AddMinutes(latestQueueStatsIntervalId * intervalLength + intervalLength),
-				Summary = summary,
-				DataSeries = new MonitorIntradayDataSeries
+				StatisticsSummary = summary,
+				StatisticsDataSeries = new IntradayStatisticsDataSeries
 				{
 					Time = timeSeries.ToArray(),
 					ForecastedCalls = forecastedCallsSeries.ToArray(),

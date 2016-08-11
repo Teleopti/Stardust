@@ -10,14 +10,13 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 	{
 		private readonly FetchSkillInIntraday _fetchSkillInIntraday;
 		private readonly MonitorSkillsProvider _monitorSkillsProvider;
-		//private readonly ForecastedStaffingLab _forecastedStaffingLab;
+		private readonly ForecastedStaffingProvider _forecastedStaffingProvider;
 
-		//public IntradaySkillController(FetchSkillInIntraday fetchSkillInIntraday, MonitorSkillsProvider monitorSkillsProvider, ForecastedStaffingLab forecastedStaffingLab)
-		public IntradaySkillController(FetchSkillInIntraday fetchSkillInIntraday, MonitorSkillsProvider monitorSkillsProvider)
+		public IntradaySkillController(FetchSkillInIntraday fetchSkillInIntraday, MonitorSkillsProvider monitorSkillsProvider, ForecastedStaffingProvider forecastedStaffingProvider)
 		{
 			_fetchSkillInIntraday = fetchSkillInIntraday;
 			_monitorSkillsProvider = monitorSkillsProvider;
-			//_forecastedStaffingLab = forecastedStaffingLab;
+			_forecastedStaffingProvider = forecastedStaffingProvider;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/intraday/skills")]
@@ -26,11 +25,16 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 			return Ok(_fetchSkillInIntraday.GetAll().Select(x => new { x.Id, x.Name }).ToArray());
 		}
 
-		[UnitOfWork, HttpGet, Route("api/intraday/monitorskill/{id}")]
-		public virtual IHttpActionResult MonitorSkill(Guid Id)
+		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillstatistics/{id}")]
+		public virtual IHttpActionResult MonitorSkillStatistics(Guid Id)
 		{
-			//_forecastedStaffingLab.DoIt(Id);
 			return Ok(_monitorSkillsProvider.Load(new[] { Id }));
+		}
+
+		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillstaffing/{id}")]
+		public virtual IHttpActionResult MonitorSkillStaffing(Guid Id)
+		{
+			return Ok(_forecastedStaffingProvider.Load(new[] { Id }));
 		}
 	}
 }

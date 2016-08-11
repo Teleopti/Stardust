@@ -88,7 +88,7 @@ describe('IntradayAreaCtrl', function () {
 				return [200, monitorData];
 			});
 
-		$httpBackend.whenGET("../api/intraday/monitorskill/5f15b334-22d1-4bc1-8e41-72359805d30f")
+		$httpBackend.whenGET("../api/intraday/monitorskillstatistics/5f15b334-22d1-4bc1-8e41-72359805d30f")
 			.respond(function () {
 				return [200, monitorData];
 			});
