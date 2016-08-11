@@ -16,40 +16,37 @@
 	}
 
 	function linkFn(scope, elem, attrs, ctrls) {
-		scope.vm.currentCommandLabel = ctrls[0].activeCmd;
-		scope.vm.getDate = ctrls[0].getDate;
+		var containerCtrl = ctrls[0];
 
-		if (scope.vm.currentCommandLabel == 'MoveActivity') {
-			scope.vm.actionOptions.pop();
-		}
+		scope.vm.currentCommandLabel = containerCtrl.activeCmd;
+		scope.vm.getDate = containerCtrl.getDate;
+		scope.vm.updateActionOptionsText();
 	}
 
-	commandCheckCtrl.$inject = ['$scope', 'CommandCheckService', 'PersonSelection', 'ScheduleManagement'];
+	commandCheckCtrl.$inject = ['$scope', '$translate', 'CommandCheckService', 'PersonSelection', 'ScheduleManagement'];
 
-	function commandCheckCtrl($scope, CommandCheckService, personSelectionSvc, ScheduleManagementSvc) {
+	function commandCheckCtrl($scope, $translate, CommandCheckService, personSelectionSvc, ScheduleManagementSvc) {
 		var vm = this;
 		vm.showCheckbox = false;
 		vm.overlappedAgents = [];
 		vm.overlappedLayers = [];
 
 		vm.actionOptions = [{
-			Name: 'UnselectWarnedAgents',
+			Name: $translate.instant('DoNotModifyForTheseAgents'),
 			OnSelected: disableCheckbox,
 			BeforeAction: function() {
 				vm.toggleAllPersonSelection(false);
 			}
 		}, {
-			Name: 'KeepWarnedAgents',
+			Name: $translate.instant('OverrideForTheseAgents'),
 			OnSelected: disableCheckbox,
 			BeforeAction: function() {
 				vm.toggleAllPersonSelection(true);
 			}
 		}, {
-			Name: 'ModifyWarnedAgentsSelection',
+			Name: $translate.instant('OverrideForSelectedAgents'),
 			OnSelected: enableCheckbox
 		}];
-
-		vm.currentActionOption = vm.actionOptions[0].Name;
 
 		vm.onActionChange = function() {
 			vm.actionOptions.forEach(function(option) {
@@ -66,6 +63,23 @@
 		function enableCheckbox() {
 			vm.showCheckbox = true;
 		}
+
+		vm.updateActionOptionsText = function() {
+			if (vm.currentCommandLabel == 'AddActivity') {
+				vm.actionOptions[0].Name = vm.actionOptions[0].Name.replace('{0}', $translate.instant('AddActivity'));
+			}
+
+			if (vm.currentCommandLabel == 'MoveActivity') {
+				vm.actionOptions[0].Name = vm.actionOptions[0].Name.replace('{0}', $translate.instant('MoveActivity'));
+				vm.actionOptions.pop();
+			}
+
+			if (vm.currentCommandLabel == 'AddPersonalActivity') {
+				vm.actionOptions[0].Name = vm.actionOptions[0].Name.replace('{0}', $translate.instant('AddPersonalActivity'));
+			}
+
+			vm.currentActionOption = vm.actionOptions[0].Name;
+		};
 
 		vm.updatePersonSelection = function(agent) {
 			personSelectionSvc.updatePersonSelection(agent);

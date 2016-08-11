@@ -14796,17 +14796,17 @@ These options are activated:
     <value>Activity will overlap with existing sticky activities</value>
     <comment>Activity overlapping information text when add activities on top of Not Allow Meeting activities.</comment>
   </data>
-  <data name="KeepWarnedAgents" xml:space="preserve">
-    <value>Keep Warned Agents</value>
-    <comment>Keep Warned Agents option of fixing activity overlapping issue when adding activities on top of Not Allow Meeting activities.</comment>
+  <data name="DoNotModifyForTheseAgents" xml:space="preserve">
+    <value>Do not {0} for these agents</value>
+    <comment>Do not modify schedule change for these agents option of fixing activity overlapping issue when adding activities on top of Not Allow Meeting activities.</comment>
   </data>
-  <data name="ModifyWarnedAgentsSelection" xml:space="preserve">
-    <value>Modify Warned Agents Selection</value>
-    <comment>Modify Warned Agents Selection option text  of fixing activity overlapping issue when adding activities on top of Not Allow Meeting activities.</comment>
+  <data name="OverrideForSelectedAgents" xml:space="preserve">
+    <value>Override for selected agents</value>
+    <comment>Override for selected agents option text  of fixing activity overlapping issue when adding activities on top of Not Allow Meeting activities.</comment>
   </data>
-  <data name="UnselectWarnedAgents" xml:space="preserve">
-    <value>Unselect Warned Agents</value>
-    <comment>Unselect Warned Agents option text of fixing activity overlapping issue when adding activities on top of Not Allow Meeting activities.</comment>
+  <data name="OverrideForTheseAgents" xml:space="preserve">
+    <value>Override for these agents</value>
+    <comment>Override for these agents option text of fixing activity overlapping issue when adding activities on top of Not Allow Meeting activities.</comment>
   </data>
   <data name="ManageOpenHours" xml:space="preserve">
     <value>Manage open hours</value>

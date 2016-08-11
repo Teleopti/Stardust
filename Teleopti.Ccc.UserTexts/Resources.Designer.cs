@@ -8735,6 +8735,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do not {0} for these agents.
+        /// </summary>
+        public static string DoNotModifyForTheseAgents {
+            get {
+                return ResourceManager.GetString("DoNotModifyForTheseAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do not move.
         /// </summary>
         public static string DoNotMove {
@@ -13552,15 +13561,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Keep Warned Agents.
-        /// </summary>
-        public static string KeepWarnedAgents {
-            get {
-                return ResourceManager.GetString("KeepWarnedAgents", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Keep Weekends Together.
         /// </summary>
         public static string KeepWeekEndsTogether {
@@ -16042,15 +16042,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ModifySkillArea {
             get {
                 return ResourceManager.GetString("ModifySkillArea", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Modify Warned Agents Selection.
-        /// </summary>
-        public static string ModifyWarnedAgentsSelection {
-            get {
-                return ResourceManager.GetString("ModifyWarnedAgentsSelection", resourceCulture);
             }
         }
         
@@ -19745,6 +19736,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string OverrideDaysOff {
             get {
                 return ResourceManager.GetString("OverrideDaysOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Override for selected agents.
+        /// </summary>
+        public static string OverrideForSelectedAgents {
+            get {
+                return ResourceManager.GetString("OverrideForSelectedAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Override for these agents.
+        /// </summary>
+        public static string OverrideForTheseAgents {
+            get {
+                return ResourceManager.GetString("OverrideForTheseAgents", resourceCulture);
             }
         }
         
@@ -31154,15 +31163,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string UnselectedItems {
             get {
                 return ResourceManager.GetString("UnselectedItems", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unselect Warned Agents.
-        /// </summary>
-        public static string UnselectWarnedAgents {
-            get {
-                return ResourceManager.GetString("UnselectWarnedAgents", resourceCulture);
             }
         }
         
