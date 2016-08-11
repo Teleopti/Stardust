@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 		public IProcessMultipleAbsenceRequest Target;
 		public WithUnitOfWork WithUnitOfWork;
 		public IDataSourceScope DataSource;
-		//public IBusinessUnitRepository BusinessUnits;
 		public IPersonRepository PersonRepository;
 		public IPersonRequestRepository PersonRequestRepository;
 		public IAbsenceRepository AbsenceRepository;
@@ -42,22 +41,20 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			IEnumerable<Guid> personIds = new List<Guid>
 			{
 				new Guid("391DB822-3936-4C4D-9634-A1410113C47D"),
-				new Guid("C922055A-B4D0-4C06-B9AD-A1410113C47D"),
-				new Guid("47721DE4-A0CB-45EE-A123-A1410113C47D"),
-				new Guid("CADD42C6-5419-48DD-8514-A25B009AD59D"),
-				new Guid("DCF2EA04-3031-4436-A229-A1410113C47D"),
-				new Guid("AE476FA3-7A6C-4948-89C2-A3BF00D0577C"),
-				new Guid("4886AEDD-E30F-416C-B5E8-A1410113C47D"),
-				new Guid("E4C7A7A7-8D2C-4591-ACA4-A53D00F82C88"),
-				new Guid("6069902E-5760-4DF4-B733-A5E00105B099"),
-				new Guid("BF50C741-A780-4930-A64B-A5E00105F325")
-
+				//new Guid("C922055A-B4D0-4C06-B9AD-A1410113C47D"),
+				//new Guid("47721DE4-A0CB-45EE-A123-A1410113C47D"),
+				//new Guid("CADD42C6-5419-48DD-8514-A25B009AD59D"),
+				//new Guid("DCF2EA04-3031-4436-A229-A1410113C47D"),
+				//new Guid("AE476FA3-7A6C-4948-89C2-A3BF00D0577C"),
+				//new Guid("4886AEDD-E30F-416C-B5E8-A1410113C47D"),
+				//new Guid("E4C7A7A7-8D2C-4591-ACA4-A53D00F82C88"),
+				//new Guid("6069902E-5760-4DF4-B733-A5E00105B099"),
+				//new Guid("BF50C741-A780-4930-A64B-A5E00105F325")
 			};
 
 			//Guid businessUnitId;
-			using (DataSource.OnThisThreadUse("Telia"))
-				//businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.Value;
-				AsSystem.Logon("Telia", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
+			using (DataSource.OnThisThreadUse("Teleopti WFM"))
+			AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 
 			
 
