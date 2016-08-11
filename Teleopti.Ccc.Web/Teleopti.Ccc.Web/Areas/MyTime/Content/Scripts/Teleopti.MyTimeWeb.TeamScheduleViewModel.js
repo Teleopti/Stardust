@@ -1,7 +1,6 @@
 Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 	var self = this;
 
-	self.isTeamScheduleSortingFeatureEnabled = ko.observable(false);
 	self.isTeamScheduleNoReadModelEnable = ko.observable(false);
 
 	self.isLoading = ko.observable(true);
@@ -11,9 +10,7 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 	self.errorMessage = ko.observable();
 
 	self.featureCheck = function () {
-		self.isTeamScheduleSortingFeatureEnabled(Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_SortSchedule_32092"));
 		self.isTeamScheduleNoReadModelEnable(Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_TeamScheduleNoReadModel_36210"));
-
 	};
 
 	self.initializeShiftTrade = function () {
@@ -53,12 +50,12 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 		self.loadSchedule(
 			Teleopti.MyTimeWeb.Common.FormatServiceDate(self.requestedDate()),
 			self.requestedFilter(),
-			(self.requestedPaging != null) ? self.requestedPaging() : null,
+			(self.requestedPaging !== null) ? self.requestedPaging() : null,
 			function () {
 				self.isLoading(true);
 			},
 			function (data) {
-				if (data.AgentSchedules.length > 0 || data.MySchedule != null) {
+				if (data.AgentSchedules.length > 0 || data.MySchedule !== null) {
 					self.createTimeLine(data.TimeLine);
 				} else {
 					self.CleanTimeHourLine();
@@ -72,7 +69,7 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 			null,
 			function () {
 				self.isLoading(false);
-				if (self.refocusToNameSearch.callable != null) {
+				if (self.refocusToNameSearch.callable !== null) {
 					self.refocusToNameSearch.callable();
 					self.refocusToNameSearch.callable = null;
 				}
@@ -117,14 +114,13 @@ Teleopti.MyTimeWeb.TeamScheduleViewModel = function () {
 
 	self.loadFilterTimes(function (data) {
 		self.suspendFilterMixinChangeHandler();
-		if (data != null) self.setTimeFilters(data);
+		if (data !== null) self.setTimeFilters(data);
 		self.activateFilterMixinChangeHandler();
 	});
 
 	self.isLocked(self.isLoading());
 	self.isLoading.subscribe(function (newValue) { self.isLocked(newValue); });
 };
-
 
 Teleopti.MyTimeWeb.TeamScheduleViewModelFactory = {
 	createViewModel: function (endpoints, ajax) {

@@ -1,21 +1,16 @@
 ﻿@using Teleopti.Ccc.UserTexts
 
-<input id="Request-all-permitted-teams" type="hidden" value="@Resources.AllPermittedTeamsToMakeShiftTradeWith"/>
-
+<input id="Request-all-permitted-teams" type="hidden" value="@Resources.AllPermittedTeamsToMakeShiftTradeWith" />
 
 <div id="Request-add-shift-trade" class="well well-sm displaynone fixed-non-responsive">
-
-
 	<span class="ready-loading-flag displaynone" data-bind="css: { 'is-ready-loaded': isReadyLoaded }"></span>
 	<div class="shift-trade-missing-wcs-message alert alert-warning" data-bind="visible: missingWorkflowControlSet">
 		@Resources.MissingWorkflowControlSet
 	</div>
 
-
 	<div id="loadingRequestIndicator" class="loading-gradient" data-bind="if: !isReadyLoaded()">
 		<div class="loading"></div>
 	</div>
-
 
 	<div class="row" data-bind="if: !missingWorkflowControlSet() && isReadyLoaded()">
 		<div class="col-sm-6 col-md-6 col-lg-3">
@@ -52,17 +47,15 @@
 			</div>
 		</div>
 
-		
 		<div class="col-sm-7 col-md-6 col-lg-4">
 			<div class="row">
 				<div class="col-xs-6" data-bind="visible: !isDetailVisible()">
-					<div class=" dropdown filter-time-dropdown-button schedule-filter-component" data-bind="click: filterStartEndTimeClick, css:{'filteractived':isStartTimeFilterActived()}">
+					<div class="dropdown filter-time-dropdown-button schedule-filter-component" data-bind="click: filterStartEndTimeClick, css:{'filteractived':isStartTimeFilterActived()}">
 						<a class="dropdown-toggle btn" data-toggle="dropdown" href="#" style="color: black">
 							@Resources.StartTime
 							<b class="caret"></b>
 						</a>
 						<ul class="dropdown-menu filter-time-dropdown-form" role="menu">
-							<!-- ko if: isTeamScheduleSortingFeatureEnabled-->
 							<li>
 								<div class="input-group start-time-sort-order">
 									<div class="btn-group" role="group">
@@ -74,7 +67,6 @@
 									</div>
 								</div>
 							</li>
-							<!--/ko-->
 							<!-- ko foreach: filterStartTimeList -->
 							<li>
 								<label class="checkbox filter-time-text">
@@ -93,7 +85,6 @@
 							<b class="caret"></b>
 						</a>
 						<ul class="dropdown-menu filter-time-dropdown-form" role="menu">
-							<!-- ko if: isTeamScheduleSortingFeatureEnabled-->
 							<li>
 								<div class="input-group end-time-sort-order">
 									<div class="btn-group" role="group">
@@ -105,7 +96,6 @@
 									</div>
 								</div>
 							</li>
-							<!--/ko-->
 							<!-- ko foreach: filterEndTimeList -->
 							<li>
 								<label class="checkbox filter-time-text">
@@ -119,14 +109,13 @@
 				</div>
 			</div>
 		</div>
-	
-		<!-- ko if: isTeamScheduleSortingFeatureEnabled-->
+
 		<div class="col-sm-5 col-md-6 col-lg-2">
 			<div class="input-group name-search schedule-filter-component">
 				<input type="search" class="form-control" placeholder='@Resources.SearchHintForName' data-bind="value: searchNameText, disable: IsLoading, event: { change: changeInSearchBox} " />
 				<span class="input-group-addon input-group-addon-narrow">
 					<!-- ko if: IsLoading -->
-					<span class=" glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+					<span class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
 					<!-- /ko -->
 					<!-- ko ifnot: IsLoading -->
 					<span class="glyphicon  glyphicon-search clickable" data-bind="click: changeInSearchBox"></span>
@@ -134,7 +123,6 @@
 				</span>
 			</div>
 		</div>
-		<!--/ko-->
 	</div>
 	<div data-bind="visible: isReadyLoaded(), fadeInIf: !IsLoading() , fadeInDuration: 150, fadeOutDuration: 50">
 		<div class="shift-trade-missing-team-message alert alert-warning" data-bind="visible: missingMyTeam">
@@ -153,8 +141,8 @@
 				<thead>
 					<tr>
 						<td>&nbsp;</td>
-						<td></td>						
-						<td></td>						
+						<td></td>
+						<td></td>
 					</tr>
 				</thead>
 				<tbody>
@@ -190,7 +178,6 @@
 							<!--/ko-->
 						</td>
 						<!--/ko-->
-
 						<!--ko if: !isShiftTradeScheduleNoReadModelEnabled()-->
 						<td class="shift-trade-my-schedule">
 							<div data-bind="foreach: mySchedule().layers">
@@ -205,10 +192,9 @@
 							<!--/ko-->
 						</td>
 						<!--/ko-->
-						
+
 						<td class="shift-trade-button-cell"></td>
 					</tr>
-
 				</tbody>
 				<tbody data-bind="foreach: possibleTradeSchedules">
 					<tr class="shift-trade-person-schedule-row agent" data-bind="visible: isVisible, click: $parent.chooseAgent, hoverToggle: 'hoverBorder', hoverIf: !$parent.isDetailVisible()">
@@ -233,7 +219,7 @@
 							</div>
 							<!--/ko-->
 						</td>
-						
+
 						<td class="shift-trade-button-cell">
 							<!-- ko if: $root.isAddVisible-->
 							<button id="shift-trade-add" type="button" class="btn btn-primary btn-xs" data-bind="click: $root.add">
@@ -241,7 +227,6 @@
 							</button>
 							<!-- /ko -->
 						</td>
-						
 					</tr>
 				</tbody>
 			</table>
@@ -375,10 +360,10 @@
 		<div class="row add-shift-trade-detail-section">
 			<div id="Request-add-shift-trade-detail-section" data-bind="visible: isDetailVisible" class="well well-sm col-xs-12 col-md-6">
 				<div class="form-group">
-					<input id="Request-add-shift-trade-subject-input" class="form-control" type="text" data-bind="value: subject" class="input-block-level" placeholder="@Resources.Subject" maxlength="80" />
+					<input id="Request-add-shift-trade-subject-input" class="form-control input-block-level" type="text" data-bind="value: subject" placeholder="@Resources.Subject" maxlength="80" />
 				</div>
 				<div class="form-group">
-					<textarea id="Request-add-shift-trade-message-input" class="form-control" data-bind="value: message, valueUpdate: 'afterkeydown', event:{change : checkMessageLength}" rows="4" class="input-block-level" placeholder="@Resources.Message" />
+					<textarea id="Request-add-shift-trade-message-input" class="form-control input-block-level" data-bind="value: message, valueUpdate: 'afterkeydown', event:{change : checkMessageLength}" rows="4" placeholder="@Resources.Message" />
 				</div>
 				<div class="pull-right">
 					<button class="btn cancel-button" data-bind="click: cancelRequest">@Resources.Cancel</button>

@@ -34,7 +34,6 @@
 
 		Portal_NewLandingpage_29415,
 		Show_StaticPageOnNoInternet_29415,
-		MyTimeWeb_SortSchedule_32092,
 		MyTimeWeb_EnhanceTeamSchedule_32580,
 		MyTimeWeb_PreferenceShowNightViolation_33152,
 		MyTimeWeb_JalaaliCalendar_32997,

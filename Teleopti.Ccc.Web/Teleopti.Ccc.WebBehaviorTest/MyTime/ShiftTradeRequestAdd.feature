@@ -446,7 +446,6 @@ Scenario: Sort possible shift trades by starttime for default
 	Then I should see 'OtherAgent2' first in the list
 	And I should see 'OtherAgent' last in the list
 
-@OnlyRunIfEnabled('MyTimeWeb_SortSchedule_32092')
 Scenario: Can sort possible shift trades by starttime\endtime and asc or desc
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -753,7 +752,6 @@ Scenario: Show possible shift trades from All
 	Then I should see a possible schedule trade with 'OtherAgent'
 	And I should see a possible schedule trade with 'OtherAgentNotInMyTeam' 
 
-@OnlyRunIfEnabled('MyTimeWeb_SortSchedule_32092')
 Scenario: Show possible shift trades with name filter
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'

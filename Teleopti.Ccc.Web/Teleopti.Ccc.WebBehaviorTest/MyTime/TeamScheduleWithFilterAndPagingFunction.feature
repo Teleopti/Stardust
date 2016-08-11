@@ -190,7 +190,6 @@ Scenario: Sort late shifts after early shifts
 	When I view group schedule for '2014-05-02'
 	Then I should see my colleague before myself
 
-@OnlyRunIfEnabled('MyTimeWeb_SortSchedule_32092')
 @ignore
 Scenario: Sort shifts by time sorting filter
 	Given I am an agent in a team
