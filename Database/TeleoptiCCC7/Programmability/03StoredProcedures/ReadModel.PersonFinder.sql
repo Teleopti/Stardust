@@ -92,7 +92,7 @@ FETCH NEXT FROM SearchWordCursor INTO @cursorString, @cursorCount
 WHILE @@FETCH_STATUS = 0
  BEGIN
 	
-	SELECT @dynamicSQL = @dynamicSQL + 'SELECT DISTINCT PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, TeamId, SiteId, BusinessUnitId FROM ReadModel.FindPerson WITH (NOLOCK) WHERE ISNULL(TerminalDate, ''2100-01-01'') >= '''+ @leave_after_ISO + ''' AND SearchValue like N''%' + @cursorString + '%'''
+	SELECT @dynamicSQL = @dynamicSQL + 'SELECT DISTINCT PersonId, FirstName, LastName, EmploymentNumber, Note, TerminalDate, TeamId, SiteId, BusinessUnitId FROM ReadModel.FindPerson WHERE ISNULL(TerminalDate, ''2100-01-01'') >= '''+ @leave_after_ISO + ''' AND SearchValue like N''%' + @cursorString + '%'''
 
 	--If 'All' set searchtype as a separate AND condition
 	IF @search_type <> 'All'
