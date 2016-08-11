@@ -6,8 +6,8 @@ Set RepoRoot=%THIS:~0,-19%
 set destinationCC7BakFile=%repoRoot%\app.bak
 set destinationAnalyticsBakFile=%repoRoot%\analytics.bak
 set appDb=Telia_perfTest_TeleoptiCCC7
-set analDb=Telia_perfTest_TeleoptiAnalytics
-set aggDb=Telia_perfTest_TeleoptiCCCAgg
+set analDb=PerfAnal
+set aggDb=PerfAgg
 set dbServer=%1
 set sourceFolder=%2
 set securityExe=%RepoRoot%\Teleopti.Support.Security\bin\release\Teleopti.Support.Security.exe
@@ -20,31 +20,22 @@ if not exist "%dbmanagerExe%" goto missingAssemblies
 
 ::copy bak file
 COPY "%sourceFolder%\Telia_perfTest_TeleoptiCCC7.bak" "%destinationCC7BakFile%" /Y
-COPY "%sourceFolder%\Telia_perfTest_TeleoptiAnalytics.bak" "%destinationAnalyticsBakFile%" /Y
-
 
 ::restore app db
 SQLCMD -S%dbServer% -E -dmaster -i"%RepoRoot%\.debug-Setup\database\tsql\DemoDatabase\RestoreDatabase.sql" -v BAKFILE="%destinationCC7BakFile%" DATAFOLDER="%RepoRoot%" -v DATABASENAME="%appDb%"
 IF %ERRORLEVEL% NEQ 0 GOTO :restoreAppDbError
 
 
-::restore analytics db
-SQLCMD -S%dbServer% -E -dmaster -i"%RepoRoot%\.debug-Setup\database\tsql\DemoDatabase\RestoreAnalytics.sql" -v BAKFILE="%destinationAnalyticsBakFile%" DATAFOLDER="%RepoRoot%" -v DATABASENAME="%analDb%"
-IF %ERRORLEVEL% NEQ 0 GOTO :restoreAnalyticsDbError
+::Skapa agg + analytics
+SQLCMD -S%dbServer% -E -Q "alter database [%analDb%] set single_user with rollback immediate"
+SQLCMD -S%dbServer% -E -Q "if exists(select 1 from sys.databases where name=""%analDb%"") drop database [%analDb%]"
+SQLCMD -S%dbServer% -E -Q "alter database [%aggDb%] set single_user with rollback immediate"
+SQLCMD -S%dbServer% -E -Q "if exists(select 1 from sys.databases where name=""%aggDb%"") drop database [%aggDb%]"
+%dbmanagerExe% -S%dbServer% -D%analDb% -E -OTeleoptiAnalytics -F"%RepoRoot%\Database" -C
+%dbmanagerExe% -S%dbServer% -D%aggDb% -E -OTeleoptiCCCAgg -F"%RepoRoot%\Database" -C
 
-SQLCMD -S%dbServer% -E -Q  "UPDATE [Telia].[Tenant].[Tenant] set ApplicationConnectionString = 'Data Source=%dbServer%;Initial Catalog=%appDb%;User ID=sa;Password=cadadi', AnalyticsConnectionString = 'Data Source=%dbServer%;Initial Catalog=%analDb%;User ID=sa;Password=cadadi'"
-
-
-::Create agg
-
-:: we don't need an agg, i think
-::SQLCMD -S%dbServer% -E -Q "alter database [%aggDb%] set single_user with rollback immediate"
-::SQLCMD -S%dbServer% -E -Q "if exists(select 1 from sys.databases where name=""%aggDb%"") drop database [%aggDb%]"
-::%dbmanagerExe% -S%dbServer% -D%aggDb% -E -OTeleoptiCCCAgg -F"%RepoRoot%\Database" -C
-
-::upgrade db 
+::upgrade appdb
 %dbmanagerExe% -S%dbServer% -D"%appDb%" -E -OTeleoptiCCC7 -F"%RepoRoot%\Database" -T
-%dbmanagerExe% -S%dbServer% -D"%analDb%" -E -OTeleoptiAnalytics -F"%RepoRoot%\Database" -T
 %securityExe% -DS%dbServer% -AP"%appDb%" -AN"%analDb%" -CD"%aggDb%" -EE 
 
 exit

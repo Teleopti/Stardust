@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 		public AsSystem AsSystem;
 		public MutableNow Now;
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldProcessMultipleAbsenceRequests()
 		{
 
