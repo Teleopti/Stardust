@@ -13472,4 +13472,145 @@ Dessa val är aktiverade:
   <data name="DateRangeIsAMaximumOfSixtyDays" xml:space="preserve">
     <value>Datumintervallet kan inte vara mer än 60 dagar</value>
   </data>
+  <data name="CannotUndoScheduleChange" xml:space="preserve">
+    <value>Kan inte ångra schemaändring</value>
+  </data>
+  <data name="WFMReleaseNotificationWithoutOldModuleLink" xml:space="preserve">
+    <value>{0} har förbättrats! Vi uppskattar er {1}feedback. {2}</value>
+  </data>
+  <data name="AreYouSureToUndoSelectedSchedule" xml:space="preserve">
+    <value>Är du säker på att du vill ångra senaste schemaändring för valda agenter?</value>
+  </data>
+  <data name="FailedMessageForUndoSchedule" xml:space="preserve">
+    <value>Misslyckades att ångra schemaändring för valda agenter</value>
+  </data>
+  <data name="PartialSuccessMessageForUndoSchedule" xml:space="preserve">
+    <value>Ångrar schemaändring för {0} agent(er), {1} lyckades och {2} misslyckades</value>
+  </data>
+  <data name="SuccessfulMessageForUndoSchedule" xml:space="preserve">
+    <value>Ångrat senaste schemaändring för valda agenter</value>
+  </data>
+  <data name="Backout" xml:space="preserve">
+    <value>Ångra</value>
+  </data>
+  <data name="Prefix" xml:space="preserve">
+    <value>Prefix</value>
+  </data>
+  <data name="Suffix" xml:space="preserve">
+    <value>Suffix</value>
+  </data>
+  <data name="NotAllowedChange" xml:space="preserve">
+    <value>Ändring inte tillåten</value>
+  </data>
+  <data name="NightRest" xml:space="preserve">
+    <value>Nattvila</value>
+  </data>
+  <data name="WeeklyRestTime" xml:space="preserve">
+    <value>Veckovila</value>
+  </data>
+  <data name="PersonAccount" xml:space="preserve">
+    <value>Tidsuppföljning</value>
+  </data>
+  <data name="SkillOpeningHours" xml:space="preserve">
+    <value>Kompetensens öppettider</value>
+  </data>
+  <data name="ShiftActivity" xml:space="preserve">
+    <value>Skiftaktivitet</value>
+  </data>
+  <data name="MinWeeklyWorkTime" xml:space="preserve">
+    <value>Minsta arbetstid per vecka</value>
+  </data>
+  <data name="BrokenRules" xml:space="preserve">
+    <value>Brutna regler</value>
+  </data>
+  <data name="ShowWarnings" xml:space="preserve">
+    <value>Visa varningar</value>
+  </data>
+  <data name="ApproveBasedOnBusinessRules" xml:space="preserve">
+    <value>Godkänn enligt affärsregler</value>
+  </data>
+  <data name="SubmitApproveBasedOnBusinessRulesSuccess" xml:space="preserve">
+    <value>De valda förfrågningarna gås igenom för godkännande baserat på affärsreglerna. </value>
+  </data>
+  <data name="ApproveBasedOnBusinessRulesFinished" xml:space="preserve">
+    <value>Genomgången av förfrågningarna baserat på affärsreglerna har avslutats. </value>
+  </data>
+  <data name="PartialSuccessMessageForEditingShiftCategory" xml:space="preserve">
+    <value>Ändra skiftkategorier för {0} agent(er), {1} lyckades och {2} misslyckades. </value>
+  </data>
+  <data name="SuccessfulMessageForEditingShiftCategory" xml:space="preserve">
+    <value>Ändrade skiftkategorier för valda agenter</value>
+  </data>
+  <data name="MultipleSeatsSelected" xml:space="preserve">
+    <value>(Flera sittplatser valda)</value>
+  </data>
+  <data name="SeatNumber" xml:space="preserve">
+    <value>Sittplatsnummer</value>
+  </data>
+  <data name="EditShiftCategory" xml:space="preserve">
+    <value>Ändra skiftkategori</value>
+  </data>
+  <data name="SelectACategory" xml:space="preserve">
+    <value>Välj en kategori</value>
+  </data>
+  <data name="LoadingSkills" xml:space="preserve">
+    <value>Laddar kompetenser...</value>
+  </data>
+  <data name="LoadingSkillAreas" xml:space="preserve">
+    <value>Laddar kompetensareor...</value>
+  </data>
+  <data name="NotOk" xml:space="preserve">
+    <value>Inte OK</value>
+  </data>
+  <data name="Account" xml:space="preserve">
+    <value>Saldo</value>
+  </data>
+  <data name="RequestInvalidMessageLength" xml:space="preserve">
+    <value>Kan inte spara det här svaret eftersom hela meddelandet överstiger 2000 tecken. </value>
+  </data>
+  <data name="RequestInvalidMessageModification" xml:space="preserve">
+    <value>Kan inte spara ditt svar på den här förfrågan eftersom den redan är {0}</value>
+  </data>
+  <data name="ReplyAndCancel" xml:space="preserve">
+    <value>Svara och avbryt</value>
+  </data>
+  <data name="ReplySuccess" xml:space="preserve">
+    <value>Ditt meddelande till {0} förfrågningar har sparats</value>
+  </data>
+  <data name="SelectBusinessRulesWithColon" xml:space="preserve">
+    <value>Välj affärsregler:</value>
+  </data>
+  <data name="NoPermissionToEditShiftCategory" xml:space="preserve">
+    <value>Rättigheter att ändra skiftkategori för agenterna saknas</value>
+  </data>
+  <data name="ManageOpenHours" xml:space="preserve">
+    <value>Hantera öppettider</value>
+  </data>
+  <data name="SaveSiteOpenHoursSuccess" xml:space="preserve">
+    <value>Öppettiderna har uppdaterats</value>
+  </data>
+  <data name="TheFollowingAgentsHaveAffectedActivities" xml:space="preserve">
+    <value>Aktiviteter för följande agenter har påverkats: </value>
+  </data>
+  <data name="AgentsDoNotRequireSeats" xml:space="preserve">
+    <value>agenter behöver inte sittplatser</value>
+  </data>
+  <data name="AgentsWithoutBookings" xml:space="preserve">
+    <value>agenter är utan sittplatsbokningar</value>
+  </data>
+  <data name="SeatBookingSummary" xml:space="preserve">
+    <value>Sittplatsbokningar</value>
+  </data>
+  <data name="SuccessfulBookings" xml:space="preserve">
+    <value>lyckade bokningar</value>
+  </data>
+  <data name="BackToList" xml:space="preserve">
+    <value>Tillbaka till översikten</value>
+  </data>
+  <data name="OverrideForSelectedAgents" xml:space="preserve">
+    <value>Ignorera för valda agenter</value>
+  </data>
+  <data name="OverrideForTheseAgents" xml:space="preserve">
+    <value>Ignorera för dessa agenter</value>
+  </data>
 </root>

@@ -1347,4 +1347,10 @@
     <value>Visa detaljer:</value>
     <comment>Visa detaljer:</comment>
   </data>
+  <data name="ResRequestStatusCancelled" xml:space="preserve">
+    <value>Avbruten</value>
+  </data>
+  <data name="ResRequestStatusWaitlisted" xml:space="preserve">
+    <value>Väntelistad</value>
+  </data>
 </root>
