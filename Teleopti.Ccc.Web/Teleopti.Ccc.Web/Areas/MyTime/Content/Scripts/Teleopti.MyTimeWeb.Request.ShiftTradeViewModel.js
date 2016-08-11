@@ -120,10 +120,10 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 				} else if (!self.mySchedule().isDayOff && schedule.isDayOff) {
 					scheduleStartTime = self.mySchedule().scheduleStartTime();
 				} else {
-					var myScheduleFormatedStartTime = self.mySchedule().scheduleStartTime() !== undefined ? self.mySchedule().scheduleStartTime().format('MMMM Do YYYY, h:mm') : null;
-					var myScheduleFormatedEndTime = self.mySchedule().scheduleEndTime() !== undefined ? self.mySchedule().scheduleEndTime().format('MMMM Do YYYY, h:mm') : null;
-					var tradedScheduleFormatedStartTime = schedule.scheduleStartTime() !== undefined ? schedule.scheduleStartTime().format('MMMM Do YYYY, h:mm') : null;
-					var tradedScheduleFormatedEndTime = schedule.scheduleEndTime() !== undefined ? schedule.scheduleEndTime().format('MMMM Do YYYY, h:mm') : null;
+					var myScheduleFormatedStartTime = self.mySchedule().scheduleStartTime() !== undefined ? self.mySchedule().scheduleStartTime().format('MMMM Do YYYY, HH:mm') : null;
+					var myScheduleFormatedEndTime = self.mySchedule().scheduleEndTime() !== undefined ? self.mySchedule().scheduleEndTime().format('MMMM Do YYYY, HH:mm') : null;
+					var tradedScheduleFormatedStartTime = schedule.scheduleStartTime() !== undefined ? schedule.scheduleStartTime().format('MMMM Do YYYY, HH:mm') : null;
+					var tradedScheduleFormatedEndTime = schedule.scheduleEndTime() !== undefined ? schedule.scheduleEndTime().format('MMMM Do YYYY, HH:mm') : null;
 					if ((myScheduleFormatedStartTime === null || myScheduleFormatedStartTime === myScheduleFormatedEndTime) && tradedScheduleFormatedStartTime !== tradedScheduleFormatedEndTime) {
 						scheduleStartTime = schedule.scheduleStartTime();
 					}

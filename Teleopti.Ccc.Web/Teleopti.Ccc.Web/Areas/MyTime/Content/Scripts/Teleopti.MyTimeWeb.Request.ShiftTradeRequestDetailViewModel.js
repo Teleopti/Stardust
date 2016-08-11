@@ -464,6 +464,36 @@ ShiftTradeRequestDetailedDayViewModel = function(data) {
 	self.createOtherSchedule(data.To);
 };
 
+Teleopti.MyTimeWeb.Request.ChooseHistoryViewModelUtil = {
+	
+	findScheduleTimeRange: function (mySchedule, selectedSchedule) {
+		var scheduleStartTime;
+		var scheduleEndTime;
+
+		var myScheduleFormatedStartTime = mySchedule.scheduleStartTime() != undefined ? mySchedule.scheduleStartTime().format('MMMM Do YYYY, HH:mm') : null;
+		var myScheduleFormatedEndTime = mySchedule.scheduleEndTime() != undefined ? mySchedule.scheduleEndTime().format('MMMM Do YYYY, HH:mm') : null;
+		var selectedScheduleFormatedStartTime = selectedSchedule.scheduleStartTime() != undefined ? selectedSchedule.scheduleStartTime().format('MMMM Do YYYY, HH:mm') : null;
+		var selectedScheduleFormatedEndTime = selectedSchedule.scheduleEndTime() != undefined ? selectedSchedule.scheduleEndTime().format('MMMM Do YYYY, HH:mm') : null;
+		if (((myScheduleFormatedStartTime == null) || (myScheduleFormatedStartTime == myScheduleFormatedEndTime)) && (selectedScheduleFormatedStartTime != selectedScheduleFormatedEndTime)) {
+			scheduleStartTime = selectedSchedule.scheduleStartTime();
+			scheduleEndTime = selectedSchedule.scheduleEndTime();
+		} else if (((selectedScheduleFormatedStartTime == null) || (selectedScheduleFormatedStartTime == selectedScheduleFormatedEndTime)) && (myScheduleFormatedStartTime != myScheduleFormatedEndTime)) {
+			scheduleStartTime = mySchedule.scheduleStartTime();
+			scheduleEndTime = mySchedule.scheduleEndTime();
+		} else {
+
+			scheduleStartTime = mySchedule.scheduleStartTime() < selectedSchedule.scheduleStartTime() ? mySchedule.scheduleStartTime() : selectedSchedule.scheduleStartTime();
+			scheduleEndTime = selectedSchedule.scheduleEndTime() > mySchedule.scheduleEndTime() ? selectedSchedule.scheduleEndTime() : mySchedule.scheduleEndTime();
+		}
+
+		return {
+			scheduleStartTime: scheduleStartTime,
+			scheduleEndTime: scheduleEndTime
+		};
+	}
+
+}
+
 Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel = function(chooseHistory, canvasPixelWidth) {
 	var self = this;	
 	self.agentName = chooseHistory.tradedSchedule? chooseHistory.tradedSchedule.agentName: '';
@@ -516,21 +546,10 @@ Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel = function(chooseHistory, canv
 			} else if ((mySchedule.isDayOff || mySchedule.layers == null || mySchedule.layers.length == 0) && (selectedSchedule.isDayOff || selectedSchedule.layers == null || selectedSchedule.layers.length == 0)) {
 				return allHours;
 			} else {
-				var myScheduleFormatedStartTime = mySchedule.scheduleStartTime() != undefined ? mySchedule.scheduleStartTime().format('MMMM Do YYYY, h:mm') : null;
-				var myScheduleFormatedEndTime = mySchedule.scheduleEndTime() != undefined ? mySchedule.scheduleEndTime().format('MMMM Do YYYY, h:mm') : null;
-				var selectedScheduleFormatedStartTime = selectedSchedule.scheduleStartTime() != undefined ? selectedSchedule.scheduleStartTime().format('MMMM Do YYYY, h:mm') : null;
-				var selectedScheduleFormatedEndTime = selectedSchedule.scheduleEndTime() != undefined ? selectedSchedule.scheduleEndTime().format('MMMM Do YYYY, h:mm') : null;
-				if (((myScheduleFormatedStartTime == null)||(myScheduleFormatedStartTime == myScheduleFormatedEndTime)) && (selectedScheduleFormatedStartTime != selectedScheduleFormatedEndTime)) {
-					scheduleStartTime = selectedSchedule.scheduleStartTime();
-					scheduleEndTime = selectedSchedule.scheduleEndTime();
-				} else if (((selectedScheduleFormatedStartTime == null)||(selectedScheduleFormatedStartTime == selectedScheduleFormatedEndTime)) && (myScheduleFormatedStartTime != myScheduleFormatedEndTime)) {
-					scheduleStartTime = mySchedule.scheduleStartTime();
-					scheduleEndTime = mySchedule.scheduleEndTime();
-				} else {
+				var timeRange = Teleopti.MyTimeWeb.Request.ChooseHistoryViewModelUtil.findScheduleTimeRange(mySchedule, selectedSchedule);
 
-					scheduleStartTime = mySchedule.scheduleStartTime() < selectedSchedule.scheduleStartTime() ? mySchedule.scheduleStartTime() : selectedSchedule.scheduleStartTime();
-					scheduleEndTime = selectedSchedule.scheduleEndTime() > mySchedule.scheduleEndTime() ? selectedSchedule.scheduleEndTime() : mySchedule.scheduleEndTime();
-				}
+				scheduleStartTime = timeRange.scheduleStartTime;
+				scheduleEndTime = timeRange.scheduleEndTime;
 			}
 
 			var mins = (chooseHistory.hours.length - 1) * 60 + (moment(chooseHistory.hours[chooseHistory.hours.length - 1].EndTime).get('minutes') - moment(chooseHistory.hours[1].StartTime).get('minutes'));
