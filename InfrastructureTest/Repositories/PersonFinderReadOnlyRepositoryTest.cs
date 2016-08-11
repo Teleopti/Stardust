@@ -125,92 +125,92 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	    {
 		    var buid = CurrentBusinessUnit.Make().Current().Id.GetValueOrDefault();
 		    Session.CreateSQLQuery(
-				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
-			    " Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Pierre','Baldi','137567','',NULL,'Pierre','FirstName',:businessUnitId, :startDateTime, :endDateTime)")
+				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue, SearchValueId,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
+				 " Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Pierre','Baldi','137567','',NULL,'Pierre', 'B0E35119-4661-4A1B-8772-9B5E015B2564','FirstName',:businessUnitId, :startDateTime, :endDateTime)")
 				.SetDateTime("startDateTime", new DateTime(2011, 1, 1))
 				.SetDateTime("endDateTime", new DateTime(2045, 1, 1))
 				.SetGuid("businessUnitId",buid)
 			    .ExecuteUpdate();
 		    Session.CreateSQLQuery(
-				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
-				" Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Pierre','Baldi','137567','',NULL,'Baldi','LastName',:businessUnitId, :startDateTime, :endDateTime)")
+				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue, SearchValueId,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
+				" Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Pierre','Baldi','137567','',NULL,'Baldi','B0E35119-4661-4A1B-8772-9B5E015B2564','LastName',:businessUnitId, :startDateTime, :endDateTime)")
 				.SetGuid("businessUnitId", buid)
 				.SetDateTime("startDateTime", new DateTime(2011, 1, 1))
 				.SetDateTime("endDateTime", new DateTime(2045, 1, 1))
 			    .ExecuteUpdate();
 		    Session.CreateSQLQuery(
-				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
-				" Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Pierre','Baldi','137567','',NULL,'Team Preferences London','Organization',:businessUnitId, :startDateTime, :endDateTime)")
+				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue, SearchValueId,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
+				" Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Pierre','Baldi','137567','',NULL,'Team Preferences London','B0E35119-4661-4A1B-8772-9B5E015B2564','Organization',:businessUnitId, :startDateTime, :endDateTime)")
 				.SetGuid("businessUnitId", buid)
 				.SetDateTime("startDateTime", new DateTime(2011, 1, 1))
 				.SetDateTime("endDateTime", new DateTime(2045, 1, 1))
 			    .ExecuteUpdate();
 		    Session.CreateSQLQuery(
-				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
-				" Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Pierre','Baldi','137567','',NULL,'Agent','Role',:businessUnitId, :startDateTime, :endDateTime)")
+				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue, SearchValueId,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
+				" Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Pierre','Baldi','137567','',NULL,'Agent','B0E35119-4661-4A1B-8772-9B5E015B2564','Role',:businessUnitId, :startDateTime, :endDateTime)")
 				.SetDateTime("startDateTime", new DateTime(2011, 1, 1))
 				.SetDateTime("endDateTime", new DateTime(2045, 1, 1))
 				.SetGuid("businessUnitId", buid)
 			    .ExecuteUpdate();
 		    Session.CreateSQLQuery(
-				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
-				" Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Pierre','Baldi','137567','',NULL,'Email','Skill',:businessUnitId, :startDateTime, :endDateTime)")
+				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue, SearchValueId,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
+				" Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Pierre','Baldi','137567','',NULL,'Email','B0E35119-4661-4A1B-8772-9B5E015B2564','Skill',:businessUnitId, :startDateTime, :endDateTime)")
 				.SetDateTime("startDateTime", new DateTime(2011, 1, 1))
 				.SetDateTime("endDateTime", new DateTime(2045, 1, 1))
 				.SetGuid("businessUnitId", buid)
 			    .ExecuteUpdate();
 		    Session.CreateSQLQuery(
-				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
-				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'137545','EmploymentNumber',:businessUnitId, :startDateTime, :endDateTime)")
+				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue, SearchValueId,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
+				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'137545','11610FE4-0130-4568-97DE-9B5E015B2564','EmploymentNumber',:businessUnitId, :startDateTime, :endDateTime)")
 				.SetDateTime("startDateTime", new DateTime(2011, 1, 1))
 				.SetDateTime("endDateTime", new DateTime(2045, 1, 1))
 				.SetGuid("businessUnitId", buid)
 			    .ExecuteUpdate();
 		    Session.CreateSQLQuery(
-				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
-				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'Ashley','FirstName',:businessUnitId, :startDateTime, :endDateTime)")
+				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue, SearchValueId,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
+				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'Ashley','11610FE4-0130-4568-97DE-9B5E015B2564','FirstName',:businessUnitId, :startDateTime, :endDateTime)")
 				.SetDateTime("startDateTime", new DateTime(2011, 1, 1))
 				.SetDateTime("endDateTime", new DateTime(2045, 1, 1))
 				.SetGuid("businessUnitId", buid)
 			    .ExecuteUpdate();
 		    Session.CreateSQLQuery(
-				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
-				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'Andeen','LastName',:businessUnitId, :startDateTime, :endDateTime)")
+				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue, SearchValueId,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
+				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'Andeen','11610FE4-0130-4568-97DE-9B5E015B2564','LastName',:businessUnitId, :startDateTime, :endDateTime)")
 				.SetDateTime("startDateTime", new DateTime(2011, 1, 1))
 				.SetDateTime("endDateTime", new DateTime(2045, 1, 1))
 				.SetGuid("businessUnitId", buid)
 			    .ExecuteUpdate();
 		    Session.CreateSQLQuery(
-				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
-				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'Team Preferences London','Organization',:businessUnitId, :startDateTime, :endDateTime)")
+				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue, SearchValueId,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
+				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'Team Preferences London','11610FE4-0130-4568-97DE-9B5E015B2564','Organization',:businessUnitId, :startDateTime, :endDateTime)")
 				.SetDateTime("startDateTime", new DateTime(2011, 1, 1))
 				.SetDateTime("endDateTime", new DateTime(2045, 1, 1))
 				.SetGuid("businessUnitId", buid)
 			    .ExecuteUpdate();
 		    Session.CreateSQLQuery(
-				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
-				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'Agent','Role',:businessUnitId, :startDateTime, :endDateTime)")
+				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue, SearchValueId,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
+				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'Agent','11610FE4-0130-4568-97DE-9B5E015B2564','Role',:businessUnitId, :startDateTime, :endDateTime)")
 				.SetDateTime("startDateTime", new DateTime(2011, 1, 1))
 				.SetDateTime("endDateTime", new DateTime(2045, 1, 1))
 				.SetGuid("businessUnitId", buid)
 			    .ExecuteUpdate();
 		    Session.CreateSQLQuery(
-				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
-				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'Direct Sales','Skill',:businessUnitId, :startDateTime, :endDateTime)")
+				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue, SearchValueId,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
+				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'Direct Sales','11610FE4-0130-4568-97DE-9B5E015B2564','Skill',:businessUnitId, :startDateTime, :endDateTime)")
 				.SetDateTime("startDateTime", new DateTime(2011, 1, 1))
 				.SetDateTime("endDateTime", new DateTime(2045, 1, 1))
 				.SetGuid("businessUnitId", buid)
 			    .ExecuteUpdate();
 			Session.CreateSQLQuery(
-				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
-				" Values ('11610FE4-0130-4568-97DE-9B5E05412741','Ashley Pierre','Andeen','137545','',NULL,'Direct Sales','Skill',:businessUnitId, :startDateTime, :endDateTime)")
+				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue, SearchValueId,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
+				" Values ('11610FE4-0130-4568-97DE-9B5E05412741','Ashley Pierre','Andeen','137545','',NULL,'Direct Sales','11610FE4-0130-4568-97DE-9B5E05412741','Skill',:businessUnitId, :startDateTime, :endDateTime)")
 				.SetDateTime("startDateTime", new DateTime(2011, 1, 1))
 				.SetDateTime("endDateTime", new DateTime(2045, 1, 1))
 				.SetGuid("businessUnitId", buid)
 				.ExecuteUpdate();
 			Session.CreateSQLQuery(
-				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
-				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'OldSkill','Skill',:businessUnitId, :startDateTime, :endDateTime)")
+				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue, SearchValueId,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
+				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'OldSkill','11610FE4-0130-4568-97DE-9B5E015B2564','Skill',:businessUnitId, :startDateTime, :endDateTime)")
 				.SetDateTime("startDateTime", new DateTime(2010, 1, 1))
 				.SetDateTime("endDateTime", new DateTime(2010, 12, 31))
 				.SetGuid("businessUnitId", buid)
