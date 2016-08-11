@@ -182,11 +182,10 @@ WHERE p.TeamId is null
 AND t.IsDeleted = 0 AND s.IsDeleted = 0
 
 GO
-/*
+
 --=================
 --Finally, when DBManager applies this SP also execute the SP
 --=================
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].[UpdateFindPerson]') AND type in (N'P', N'PC')) 
 	EXEC [ReadModel].[UpdateFindPerson] '00000000-0000-0000-0000-000000000000'
 GO
-*/
