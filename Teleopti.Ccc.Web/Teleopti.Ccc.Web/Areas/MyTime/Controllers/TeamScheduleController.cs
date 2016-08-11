@@ -14,13 +14,12 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
-	[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.TeamSchedule)]	
+	[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.TeamSchedule)]
 	public class TeamScheduleController : Controller
 	{
 		private readonly INow _now;
@@ -32,12 +31,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly ILoggedOnUser _loggedOnUser;
 
 		public TeamScheduleController(
-			INow now, 
-			ITeamScheduleViewModelFactory teamScheduleViewModelFactory, 
-			IDefaultTeamProvider defaultTeamProvider,  
-			ITimeFilterHelper timeFilterHelper, 
+			INow now,
+			ITeamScheduleViewModelFactory teamScheduleViewModelFactory,
+			IDefaultTeamProvider defaultTeamProvider,
+			ITimeFilterHelper timeFilterHelper,
 			IToggleManager toggleManager,
-			ILoggedOnUser loggedOnUser, 
+			ILoggedOnUser loggedOnUser,
 			ITeamScheduleViewModelReworkedFactory teamScheduleViewModelReworkedFactory)
 		{
 			_now = now;
@@ -53,8 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[UnitOfWork]
 		public virtual ViewResult Index(DateOnly? date, Guid? id)
 		{
-
-			if (_toggleManager.IsEnabled(Toggles.MyTimeWeb_EnhanceTeamSchedule_32580) || _toggleManager.IsEnabled(Toggles.MyTimeWeb_TeamScheduleNoReadModel_36210))
+			if (_toggleManager.IsEnabled(Toggles.MyTimeWeb_TeamScheduleNoReadModel_36210))
 			{
 				return View("TeamSchedulePartial", _teamScheduleViewModelFactory.CreateViewModel());
 			}
@@ -65,25 +63,23 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			if (!id.HasValue)
 			{
 				var defaultTeam = _defaultTeamProvider.DefaultTeam(date.Value);
-				if (defaultTeam == null || !defaultTeam.Id.HasValue)
+				if (defaultTeam?.Id == null)
 				{
 					return View("NoTeamsPartial", model: date.Value.Date.ToString("yyyyMMdd"));
 				}
-				else
-				{
-					id = defaultTeam.Id;
-				}
+
+				id = defaultTeam.Id;
 			}
-			
+
 			return View("TeamSchedulePartialOriginal", _teamScheduleViewModelFactory.CreateViewModel(date.Value, id.Value));
 		}
 
 		[UnitOfWork]
 		[HttpGet]
 		public virtual JsonResult TeamScheduleCurrentDate()
-		{			 
+		{
 			var calendar = CultureInfo.CurrentCulture.Calendar;
-		
+
 			return Json(
 				new
 				{
@@ -105,12 +101,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				ScheduleDate = selectedDate,
 				TeamIdList = allTeamIds,
 				Paging = paging,
-				TimeFilter = _timeFilterHelper.GetFilter(selectedDate, filter.FilteredStartTimes, filter.FilteredEndTimes, filter.IsDayOff, filter.IsEmptyDay),
+				TimeFilter = _timeFilterHelper.GetFilter(selectedDate, filter.FilteredStartTimes, filter.FilteredEndTimes,
+					filter.IsDayOff, filter.IsEmptyDay),
 				SearchNameText = filter.SearchNameText,
 				TimeSortOrder = filter.TimeSortOrder
 			};
-			TeamScheduleViewModelReworked result;
-			result = _toggleManager.IsEnabled(Toggles.MyTimeWeb_TeamScheduleNoReadModel_36210)
+			var result = _toggleManager.IsEnabled(Toggles.MyTimeWeb_TeamScheduleNoReadModel_36210)
 				? _teamScheduleViewModelReworkedFactory.GetViewModelNoReadModel(data)
 				: _teamScheduleViewModelReworkedFactory.GetViewModel(data);
 			return Json(result);
@@ -124,12 +120,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				date = _now.LocalDateOnly();
 			var defaultTeam = _defaultTeamProvider.DefaultTeam(date.Value);
 
-			if (defaultTeam == null || !defaultTeam.Id.HasValue)
+			if (defaultTeam?.Id != null)
 			{
-				Response.StatusCode = (int) HttpStatusCode.BadRequest;
-				return Json(new { Message = UserTexts.Resources.NoTeamsAvailable }, JsonRequestBehavior.AllowGet);
+				return Json(new {DefaultTeam = defaultTeam.Id.Value}, JsonRequestBehavior.AllowGet);
 			}
-			return Json(new { DefaultTeam = defaultTeam.Id.Value }, JsonRequestBehavior.AllowGet);
+
+			Response.StatusCode = (int) HttpStatusCode.BadRequest;
+			return Json(new {Message = UserTexts.Resources.NoTeamsAvailable}, JsonRequestBehavior.AllowGet);
 		}
 	}
 }

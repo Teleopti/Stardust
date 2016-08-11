@@ -22,7 +22,7 @@ using Table = TechTalk.SpecFlow.Table;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 {
-	[Scope(Feature = "Team schedule With Paging And Filter Feature")]
+	[Scope(Feature = "Team Schedule with filter and paging function")]
 	[Binding]
 	public class TeamscheduleWithPagingAndFilterFeatureStepDefinition
 	{

@@ -341,7 +341,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="MyTime\TeamScheduleForGroupsStepDefinition.cs" />
     <Compile Include="MyTime\22851_FindShiftTradePageFromTeamScheduleStepDefinition.cs" />
     <Compile Include="MyTime\WeekScheduleOnMobileStepDefinitions.cs" />
     <Compile Include="MyTime\WeekScheduleOnMobile.feature.cs">
@@ -538,11 +537,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Session.feature</DependentUpon>
     </Compile>
-    <Compile Include="MyTime\TeamScheduleForGroups.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TeamScheduleForGroups.feature</DependentUpon>
-    </Compile>
     <Compile Include="Bindings\Generic\BudgetStepDefinitions.cs" />
     <Compile Include="Data\Setups\DoNotUse\AbsenceTimeConfigurable.cs" />
     <Compile Include="Bindings\Generic\UIStepDefinitions.cs" />
@@ -726,12 +720,6 @@
       <DependentUpon>QUnitTests.feature</DependentUpon>
     </Compile>
     <Compile Include="Bindings\Generic\CookieStepDefinitions.cs" />
-    <Compile Include="MyTime\TeamSchedule.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TeamSchedule.feature</DependentUpon>
-    </Compile>
-    <Compile Include="MyTime\TeamScheduleStepDefinition.cs" />
     <Compile Include="MyTime\TextRequestFromRequests.feature.cs">
       <DependentUpon>TextRequestFromRequests.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -1332,10 +1320,6 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ViewTeamSchedule.feature.cs</LastGenOutput>
     </None>
-    <None Include="MyTime\TeamScheduleForGroups.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>TeamScheduleForGroups.feature.cs</LastGenOutput>
-    </None>
     <None Include="MyTime\PreferencesExtendedTemplate.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesExtendedTemplate.feature.cs</LastGenOutput>
@@ -1640,10 +1624,6 @@
     <None Include="Session.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Session.feature.cs</LastGenOutput>
-    </None>
-    <None Include="MyTime\TeamSchedule.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>TeamSchedule.feature.cs</LastGenOutput>
     </None>
     <None Include="Testing\TestRun.Console.bat" />
     <None Include="MyTime\TextRequestFromRequests.feature">

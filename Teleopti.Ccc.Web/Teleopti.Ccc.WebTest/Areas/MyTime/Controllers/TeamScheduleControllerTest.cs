@@ -1,10 +1,9 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using System;
+using System.Diagnostics.CodeAnalysis;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -28,12 +27,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var id = Guid.NewGuid();
 			var toggleManager = MockRepository.GenerateMock<IToggleManager>();
 			var target = new TeamScheduleController(now, viewModelFactory, MockRepository.GenerateMock<IDefaultTeamProvider>(),
-				 MockRepository.GenerateMock<ITimeFilterHelper>(), toggleManager, 
-				 MockRepository.GenerateMock<ILoggedOnUser>(),
-				 MockRepository.GenerateMock<ITeamScheduleViewModelReworkedFactory>());
+				MockRepository.GenerateMock<ITimeFilterHelper>(), toggleManager,
+				MockRepository.GenerateMock<ILoggedOnUser>(),
+				MockRepository.GenerateMock<ITeamScheduleViewModelReworkedFactory>());
 
 			viewModelFactory.Stub(x => x.CreateViewModel(date, id)).Return(new TeamScheduleViewModel());
-			toggleManager.Stub(x => x.IsEnabled(Toggles.MyTimeWeb_EnhanceTeamSchedule_32580)).Return(false);
 			var result = target.Index(date, id);
 
 			result.ViewName.Should().Be.EqualTo("TeamSchedulePartialOriginal");
@@ -45,12 +43,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var viewModelFactory = MockRepository.GenerateMock<ITeamScheduleViewModelFactory>();
 			var now = MockRepository.GenerateMock<INow>();
-			now.Stub(x => x.UtcDateTime()).Return(DateTime.UtcNow); 
+			now.Stub(x => x.UtcDateTime()).Return(DateTime.UtcNow);
 
 			var target = new TeamScheduleController(now, viewModelFactory, MockRepository.GenerateMock<IDefaultTeamProvider>(),
-				 MockRepository.GenerateMock<ITimeFilterHelper>(), MockRepository.GenerateMock<IToggleManager>(),
-				 MockRepository.GenerateMock<ILoggedOnUser>(),
-				 MockRepository.GenerateMock<ITeamScheduleViewModelReworkedFactory>());
+				MockRepository.GenerateMock<ITimeFilterHelper>(), MockRepository.GenerateMock<IToggleManager>(),
+				MockRepository.GenerateMock<ILoggedOnUser>(),
+				MockRepository.GenerateMock<ITeamScheduleViewModelReworkedFactory>());
 
 			target.Index(null, Guid.Empty);
 
@@ -68,13 +66,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			team.SetId(Guid.NewGuid());
 			defaultTeamCalculator.Stub(x => x.DefaultTeam(DateOnly.Today)).Return(team);
 
-			var target = new TeamScheduleController(now,viewModelFactory, defaultTeamCalculator,
-				 MockRepository.GenerateMock<ITimeFilterHelper>(), MockRepository.GenerateMock<IToggleManager>(), MockRepository.GenerateMock<ILoggedOnUser>(),
-				 MockRepository.GenerateMock<ITeamScheduleViewModelReworkedFactory>());
+			var target = new TeamScheduleController(now, viewModelFactory, defaultTeamCalculator,
+				MockRepository.GenerateMock<ITimeFilterHelper>(), MockRepository.GenerateMock<IToggleManager>(),
+				MockRepository.GenerateMock<ILoggedOnUser>(),
+				MockRepository.GenerateMock<ITeamScheduleViewModelReworkedFactory>());
 
 			target.Index(DateOnly.Today, null);
 
 			viewModelFactory.AssertWasCalled(x => x.CreateViewModel(DateOnly.Today, team.Id.Value));
-		}	
+		}
 	}
 }

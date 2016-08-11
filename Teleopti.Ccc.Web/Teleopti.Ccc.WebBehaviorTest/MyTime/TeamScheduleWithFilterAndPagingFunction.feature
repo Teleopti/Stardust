@@ -1,5 +1,4 @@
-﻿@OnlyRunIfEnabled('MyTimeWeb_EnhanceTeamSchedule_32580')
-Feature: Team schedule With Paging And Filter Feature
+﻿Feature: Team Schedule with filter and paging function
 In order to know when my colleagues work
 As an agent
 I want to see my team mates' schedules
@@ -12,7 +11,6 @@ Background:
 	And there is a dayoff with
 	| Field | Value  |
 	| Name  | DayOff |
-
 
 Scenario: Team schedule tab
 	Given I am an agent
