@@ -1251,4 +1251,7 @@
   <data name="ResStateGroupColon" xml:space="preserve">
     <value>Stavové skupiny:</value>
   </data>
+  <data name="ResIncludeDetails" xml:space="preserve">
+    <value>Zahrnout podrobnosti:</value>
+  </data>
 </root>
