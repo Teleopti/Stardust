@@ -168,7 +168,11 @@
 				width: calc( 100% - 1.2em );
 			}
 
-			tr:hover {
+			tbody tr:last-child{
+				border-bottom: 1px solid #DDDDDD;
+			}
+
+			tbody tr:hover {
 				background: $gray012;
 			}
 			

@@ -8,9 +8,9 @@
 			return vm.scheduleCount;
 		}, function (newValue) {
 			if (newValue > 0) {
-				var headerHeight = 23; //angular.element($("#time-line-container"))[0].offsetHeight
+				var headerHeight = 25; //angular.element($("#time-line-container"))[0].offsetHeight
 				var labelHeight = 12; //angular.element($(".label-info"))[0].offsetHeight;
-				var rowHeight = 32;
+				var rowHeight = 31;
 
 				vm.height = rowHeight * (vm.scheduleCount) + headerHeight + labelHeight;
 			}
