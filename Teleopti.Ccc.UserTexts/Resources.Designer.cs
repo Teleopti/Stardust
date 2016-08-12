@@ -4278,6 +4278,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No open hour for {0} in site {1} found at: {2} - {3}.
+        /// </summary>
+        public static string BusinessRuleNoSiteOpenHourErrorMessage {
+            get {
+                return ResourceManager.GetString("BusinessRuleNoSiteOpenHourErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No Skill with open hours connected to activity: {0} found at: {1} - {2}.
         /// </summary>
         public static string BusinessRuleNoSkillsOpenErrorMessage {
@@ -15722,7 +15731,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Min Weekly work time.
+        ///   Looks up a localized string similar to Min weekly work time.
         /// </summary>
         public static string MinWeeklyWorkTime {
             get {
@@ -17669,7 +17678,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Night rest.
+        ///   Looks up a localized string similar to Nightly rest.
         /// </summary>
         public static string NightRest {
             get {
@@ -24045,7 +24054,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Restriction violates night rest.
+        ///   Looks up a localized string similar to Restriction violates nightly rest.
         /// </summary>
         public static string RestrictionViolatesNightRest {
             get {
@@ -27836,6 +27845,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Site open hours.
+        /// </summary>
+        public static string SiteOpeningHours {
+            get {
+                return ResourceManager.GetString("SiteOpeningHours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sites.
         /// </summary>
         public static string Sites {
@@ -28007,7 +28025,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Skill Opening hours.
+        ///   Looks up a localized string similar to Skill open hours.
         /// </summary>
         public static string SkillOpeningHours {
             get {

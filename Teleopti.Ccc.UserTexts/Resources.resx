@@ -14819,4 +14819,12 @@ These options are activated:
     <value>The following agents have affected activities:</value>
     <comment>Command check text info after adding activity, adding personal activity and move activity in wfm teamschedule.</comment>
   </data>
+  <data name="BusinessRuleNoSiteOpenHourErrorMessage" xml:space="preserve">
+    <value>No open hour for {0} in site {1} found at: {2} - {3}</value>
+    <comment>Error message for no open hour found for site in specified weekDay {0} is weekDay name,{1} is site name, {2} - {3} is checking period</comment>
+  </data>
+  <data name="SiteOpeningHours" xml:space="preserve">
+    <value>Site open hours</value>
+    <comment>Site open hours</comment>
+  </data>
 </root>

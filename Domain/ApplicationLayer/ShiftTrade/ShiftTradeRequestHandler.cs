@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 					setUpdatedMessage(@event, personRequest);
 
 					_schedulingResultStateHolder.UseMinWeekWorkTime = @event.UseMinWeekWorkTime;
-					var allNewRules = getAllNewBusinessRules(personRequest.Person.PermissionInformation.UICulture());
+					var allNewRules = getAllNewBusinessRules(personRequest.Person.PermissionInformation.UICulture(), @event);
 					var approvalService = _requestFactory.GetRequestApprovalService(allNewRules, scenario, _schedulingResultStateHolder);
 
 					personRequest.Pending();
@@ -252,12 +252,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			_schedulingResultStateHolder.PersonsInOrganization = null;
 		}
 
-		private INewBusinessRuleCollection getAllNewBusinessRules(CultureInfo cultureInfo)
+		private INewBusinessRuleCollection getAllNewBusinessRules(CultureInfo cultureInfo, AcceptShiftTradeEvent @event)
 		{
 			var rules = _businessRuleProvider.GetAllBusinessRules(_schedulingResultStateHolder);
 			rules.Remove(typeof(NewPersonAccountRule));
 			rules.Remove(typeof(OpenHoursRule));
 			rules.Add(new NonMainShiftActivityRule());
+			if (@event.UseSiteOpenHoursRule)
+				rules.Add(new SiteOpenHoursRule());
 			rules.SetUICulture(cultureInfo);
 			return rules;
 		}

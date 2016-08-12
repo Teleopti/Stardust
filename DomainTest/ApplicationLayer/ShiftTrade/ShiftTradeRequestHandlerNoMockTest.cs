@@ -98,8 +98,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			_target.Handle(getAcceptShiftTradeEvent(personTo, personRequest.Id.Value));
 
-			Assert.IsTrue((personRequest.BrokenBusinessRules.HasFlag(BusinessRuleFlags.MinWeeklyRestRule)));
-			Assert.IsTrue((personRequest.BrokenBusinessRules.HasFlag(BusinessRuleFlags.NewMaxWeekWorkTimeRule)));
+			Assert.IsTrue(personRequest.BrokenBusinessRules.HasFlag(BusinessRuleFlags.MinWeeklyRestRule));
+			Assert.IsTrue(personRequest.BrokenBusinessRules.HasFlag(BusinessRuleFlags.NewMaxWeekWorkTimeRule));
 
 		}
 
@@ -148,11 +148,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			var personRequest = prepareAndGetPersonRequest(personFrom, personTo, scheduleDateOnly);
 
-			_schedulingResultStateHolder.AllPersonAccounts = new Dictionary<IPerson, IPersonAccountCollection>
-			{
-				{personTo, new PersonAccountCollection(personTo) {createPersonAbsenceAccount(personTo, scheduleDateOnly)}},
-				{personFrom, new PersonAccountCollection(personFrom) {createPersonAbsenceAccount(personFrom, scheduleDateOnly)}}
-			};
+			setPersonAccounts(personTo, personFrom, scheduleDateOnly);
 
 			var @event = getAcceptShiftTradeEvent(personTo, personRequest.Id.GetValueOrDefault());
 			@event.UseMinWeekWorkTime = true;
@@ -166,6 +162,42 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			handleRequest(@event, false, businessRuleProvider);
 
 			Assert.IsTrue(personRequest.BrokenBusinessRules.HasFlag(BusinessRuleFlags.MinWeekWorkTimeRule));
+		}
+
+		[Test]
+		public void ShouldSetSiteOpenHoursBrokenRule()
+		{
+			var scheduleDate = new DateTime(2016, 7, 25);
+			var scheduleDateOnly = new DateOnly(scheduleDate);
+
+			var personTo = createPersonWithSiteOpenHours(8, 17);
+			var activityPersonTo = new Activity("Shift_PersonTo").WithId();
+
+			var personFrom = createPersonWithSiteOpenHours(8, 17);
+			var activityPersonFrom = new Activity("Shift_PersonFrom").WithId();
+
+			var dateTimePeriod = scheduleDateOnly.ToDateTimePeriod(new TimePeriod(8, 0, 18, 0),
+				personTo.PermissionInformation.DefaultTimeZone());
+			addPersonAssignment(personTo, dateTimePeriod, activityPersonTo);
+			addPersonAssignment(personFrom, dateTimePeriod, activityPersonFrom);
+
+			var personRequest = prepareAndGetPersonRequest(personFrom, personTo, scheduleDateOnly);
+
+			setPersonAccounts(personTo, personFrom, scheduleDateOnly);
+
+			var @event = getAcceptShiftTradeEvent(personTo, personRequest.Id.GetValueOrDefault());
+			@event.UseSiteOpenHoursRule = true;
+
+			var businessRuleProvider = new BusinessRuleProvider();
+			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom }, null,
+				new DateOnlyPeriod(new DateOnly(scheduleDate), new DateOnly(scheduleDate.AddDays(7))), _scenarioRepository.Current());
+			var businessRules = businessRuleProvider.GetAllBusinessRules(_schedulingResultStateHolder);
+			businessRules.Add(new SiteOpenHoursRule());
+			setApprovalService(scheduleDictionary, businessRules);
+
+			handleRequest(@event, false, businessRuleProvider);
+
+			Assert.IsTrue(personRequest.BrokenBusinessRules.HasFlag(BusinessRuleFlags.SiteOpenHoursRule));
 		}
 
 		private basicShiftTradeTestResult doBasicShiftTrade(IWorkflowControlSet workflowControlSet, bool addBrokenBusinessRules = false, bool toggle39473IsOff = false)
@@ -254,14 +286,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 		}
 
-		private IPersonAssignment addPersonAssignment(IPerson person, DateTimePeriod dateTimePeriod, IActivity activity = null)
+		private void addPersonAssignment(IPerson person, DateTimePeriod dateTimePeriod, IActivity activity = null)
 		{
 			var scenario = _scenarioRepository.Current();
 			_personAssignment = activity != null ?
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person, dateTimePeriod, new ShiftCategory("AM"), scenario).WithId() :
 				PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, dateTimePeriod);
 			_scheduleStorage.Add(_personAssignment);
-			return _personAssignment;
 		}
 
 		private static WorkflowControlSet createWorkFlowControlSet(bool autoGrantShiftTrade)
@@ -301,6 +332,29 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_personRepository.Add(person);
 
 			return person;
+		}
+
+		private IPerson createPersonWithSiteOpenHours(int startHour, int endHour)
+		{
+			var workControlSet = createWorkFlowControlSet(true);
+			var startDate = new DateOnly(2016, 1, 1);
+			var team = TeamFactory.CreateTeam("team", "site");
+			team.Site.OpenHours.Add(DayOfWeek.Monday, new TimePeriod(startHour, 0, endHour, 0));
+
+			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(startDate, team);
+			person.WorkflowControlSet = workControlSet;
+			_personRepository.Add(person);
+
+			return person;
+		}
+
+		private void setPersonAccounts(IPerson personTo, IPerson personFrom, DateOnly scheduleDateOnly)
+		{
+			_schedulingResultStateHolder.AllPersonAccounts = new Dictionary<IPerson, IPersonAccountCollection>
+			{
+				{personTo, new PersonAccountCollection(personTo) {createPersonAbsenceAccount(personTo, scheduleDateOnly)}},
+				{personFrom, new PersonAccountCollection(personFrom) {createPersonAbsenceAccount(personFrom, scheduleDateOnly)}}
+			};
 		}
 
 		private PersonAbsenceAccount createPersonAbsenceAccount(IPerson person, DateOnly scheduleDateOnly)

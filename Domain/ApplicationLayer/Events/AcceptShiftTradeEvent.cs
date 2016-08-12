@@ -11,5 +11,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public string Message { get; set; }
 
 		public bool UseMinWeekWorkTime { get; set; }
+
+		public bool UseSiteOpenHoursRule { get; set; }
 	}
 }

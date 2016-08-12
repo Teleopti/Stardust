@@ -16,6 +16,7 @@ namespace Teleopti.Interfaces.Domain
 		NewShiftCategoryLimitationRule = 1 << 7,
 		NonMainShiftActivityRule = 1 << 8,
 		OpenHoursRule = 1 << 9,
-		WeekShiftCategoryLimitationRule = 1 << 10
+		WeekShiftCategoryLimitationRule = 1 << 10,
+		SiteOpenHoursRule = 1 << 11
 	}
 }

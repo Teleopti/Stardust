@@ -50,6 +50,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				},
 				{
 					typeof (WeekShiftCategoryLimitationRule), BusinessRuleFlags.WeekShiftCategoryLimitationRule
+				},
+				{
+					typeof (SiteOpenHoursRule), BusinessRuleFlags.SiteOpenHoursRule
 				}
 			};
 
@@ -88,6 +91,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				},
 				{
 					BusinessRuleFlags.WeekShiftCategoryLimitationRule, "ShiftCategory"
+				},
+				{
+					BusinessRuleFlags.SiteOpenHoursRule, "SiteOpeningHours"
 				}
 			};
 		#endregion
