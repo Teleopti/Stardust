@@ -12,7 +12,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly ConcurrentDictionary<DateTimePeriod, PeriodResource> _dictionary = new ConcurrentDictionary<DateTimePeriod, PeriodResource>();
 		private readonly ConcurrentDictionary<string, IEnumerable<ISkill>> _skills = new ConcurrentDictionary<string, IEnumerable<ISkill>>();
 		private readonly ConcurrentDictionary<Guid, bool> _activityRequiresSeat = new ConcurrentDictionary<Guid,bool>();
-		
+		private readonly ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>> _personCombination = new ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>>();
+
 		private readonly int _minSkillResolution;
 
 		public ResourceCalculationDataContainer(IPersonSkillProvider personSkillProvider, int minSkillResolution)
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			PeriodResource resources = _dictionary.GetOrAdd(resourceLayer.Period, new PeriodResource());
 			
-			var skills = _personSkillProvider.SkillsOnPersonDate(person, personDate);
+			var skills = fetchSkills(person, personDate);
 			var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills);
 			_skills.TryAdd(skills.Key,skills.Skills);
 			if (resourceLayer.RequiresSeat)
@@ -59,7 +60,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				return;
 			}
 
-			var skills = _personSkillProvider.SkillsOnPersonDate(person, personDate);
+			var skills = fetchSkills(person, personDate);
 			var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills);
 
 			resources.RemoveResource(key, skills, resourceLayer.Resource, resourceLayer.FractionPeriod);
@@ -169,6 +170,19 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				}
 			}
 			return result;
+		}
+
+		private SkillCombination fetchSkills(IPerson person, DateOnly personDate)
+		{
+			var foundCombinations = _personCombination.GetOrAdd(person, _ => new ConcurrentBag<SkillCombination>());
+			foreach (var foundCombination in foundCombinations.Where(foundCombination => foundCombination.IsValidForDate(personDate)))
+			{
+				return foundCombination;
+			}
+
+			var skillCombination = _personSkillProvider.SkillsOnPersonDate(person, personDate);
+			foundCombinations.Add(skillCombination);
+			return skillCombination;
 		}
 
 		private static void addEfficienciesFromSkillCombination(IDictionary<Guid, double> skillEfficienciesForSkillCombination,

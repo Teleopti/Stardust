@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			var personSkillProvider = new PersonSkillProvider();
 			var optimizationHelperWin = new ResourceOptimizationHelper(new OccupiedSeatCalculator(),
 																	   new NonBlendSkillCalculator(),
-																	   ()=>personSkillProvider, new PeriodDistributionService(), 
+																	   personSkillProvider, new PeriodDistributionService(), 
 																		intraIntervalFinderService, new TimeZoneGuardWrapper(), _resourceCalculationContextFactory);
 			var decider = new PeopleAndSkillLoaderDecider(new PersonRepository(new FromFactory(() =>UnitOfWorkFactory.Current)), new PairMatrixService<Guid>(new PairDictionaryFactory<Guid>()));
 			var gridHandler = new MeetingImpactSkillGridHandler(this, meetingViewModel, schedulerStateHolder,

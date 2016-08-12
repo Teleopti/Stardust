@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	{
 		private readonly IOccupiedSeatCalculator _occupiedSeatCalculator;
 		private readonly INonBlendSkillCalculator _nonBlendSkillCalculator;
-		private readonly Func<IPersonSkillProvider> _personSkillProvider;
+		private readonly IPersonSkillProvider _personSkillProvider;
 		private readonly IPeriodDistributionService _periodDistributionService;
 		private readonly IIntraIntervalFinderService _intraIntervalFinderService;
 		private readonly ITimeZoneGuard _timeZoneGuard;
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public ResourceOptimizationHelper(IOccupiedSeatCalculator occupiedSeatCalculator,
 			INonBlendSkillCalculator nonBlendSkillCalculator,
-			Func<IPersonSkillProvider> personSkillProvider,
+			IPersonSkillProvider personSkillProvider,
 			IPeriodDistributionService periodDistributionService,
 			IIntraIntervalFinderService intraIntervalFinderService,
 			ITimeZoneGuard timeZoneGuard,
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			var schedulingResultService = new SchedulingResultService(relevantSkillStaffPeriods,
 				resourceCalculationData.Skills,
-				relevantProjections, _personSkillProvider());
+				relevantProjections, _personSkillProvider);
 
 			schedulingResultService.SchedulingResult(timePeriod);
 

@@ -366,7 +366,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			return new ResourceOptimizationHelper(
 				new OccupiedSeatCalculator(),
 				new NonBlendSkillCalculator(),
-				() => new PersonSkillProvider(),
+				new PersonSkillProvider(),
 				new PeriodDistributionService(),
 				new IntraIntervalFinderService(
 					new SkillDayIntraIntervalFinder(

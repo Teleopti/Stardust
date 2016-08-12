@@ -361,7 +361,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 					new ResourceOptimizationHelper(
 						new OccupiedSeatCalculator(),
 						new NonBlendSkillCalculator(),
-						() => new PersonSkillProvider(),
+						new PersonSkillProvider(),
 						new PeriodDistributionService(),
 						new IntraIntervalFinderService(
 							new SkillDayIntraIntervalFinder(
@@ -532,7 +532,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 					new ResourceOptimizationHelper(
 						new OccupiedSeatCalculator(),
 						new NonBlendSkillCalculator(),
-						() => new PersonSkillProvider(),
+						new PersonSkillProvider(),
 						new PeriodDistributionService(),
 						new IntraIntervalFinderService(
 							new SkillDayIntraIntervalFinder(

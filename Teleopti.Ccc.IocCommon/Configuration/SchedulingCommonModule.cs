@@ -78,17 +78,17 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_configuration.Toggle(Toggles.ResourcePlanner_CascadingSkills_38524))
 			{
 				builder.RegisterType<FullResourceCalculationWithCascading>().As<IFullResourceCalculation>().InstancePerLifetimeScope();
-				builder.RegisterType<ResourceOptimizationHelper>().InstancePerLifetimeScope();
-				builder.RegisterType<CascadingResourceCalculation>().As<IResourceOptimizationHelper>().AsSelf().InstancePerLifetimeScope();
-				builder.RegisterType<CascadingResourceCalculationContextFactory>().As<IResourceCalculationContextFactory>().InstancePerLifetimeScope();
-				builder.RegisterType<CascadingPersonSkillProvider>().InstancePerLifetimeScope();
+				builder.RegisterType<ResourceOptimizationHelper>().SingleInstance();
+				builder.RegisterType<CascadingResourceCalculation>().As<IResourceOptimizationHelper>().AsSelf().SingleInstance();
+				builder.RegisterType<CascadingResourceCalculationContextFactory>().As<IResourceCalculationContextFactory>().SingleInstance();
+				builder.RegisterType<CascadingPersonSkillProvider>().SingleInstance();
 				builder.RegisterType<PersonalSkillsProvider>().As<IPersonalSkillsProvider>().SingleInstance();
 			}
 			else
 			{
 				builder.RegisterType<FullResourceCalculationWithoutCascading>().As<IFullResourceCalculation>().InstancePerLifetimeScope();
-				builder.RegisterType<ResourceOptimizationHelper>().As<IResourceOptimizationHelper>().InstancePerLifetimeScope();
-				builder.RegisterType<ResourceCalculationContextFactory>().As<IResourceCalculationContextFactory>().InstancePerLifetimeScope();
+				builder.RegisterType<ResourceOptimizationHelper>().As<IResourceOptimizationHelper>().SingleInstance();
+				builder.RegisterType<ResourceCalculationContextFactory>().As<IResourceCalculationContextFactory>().SingleInstance();
 				builder.RegisterType<PersonalSkillsProviderNoCascading>().As<IPersonalSkillsProvider>().SingleInstance();
 			}
 
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WorkShiftFinderService>().As<IWorkShiftFinderService>().InstancePerLifetimeScope();
 
 			builder.RegisterType<OccupiedSeatCalculator>().As<IOccupiedSeatCalculator>().SingleInstance();
-			builder.RegisterType<PersonSkillProvider>().As<IPersonSkillProvider>().InstancePerLifetimeScope();
+			builder.RegisterType<PersonSkillProvider>().As<IPersonSkillProvider>().SingleInstance();
 			builder.RegisterType<PeriodDistributionService>().As<IPeriodDistributionService>().SingleInstance();
 
 			builder.RegisterType<NonBlendSkillCalculator>().As<INonBlendSkillCalculator>().SingleInstance();
