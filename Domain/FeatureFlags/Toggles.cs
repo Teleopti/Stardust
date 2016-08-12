@@ -105,6 +105,7 @@
 		Wfm_Requests_Show_Personal_Account_39628,
 		Wfm_Requests_Approve_Based_On_Intraday_39868,
 		Wfm_Requests_Site_Open_Hours_39936,
+		Wfm_Requests_Waitlist_Process_Order_39869,
 
 		Wfm_Intraday_38074,
 
