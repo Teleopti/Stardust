@@ -117,15 +117,15 @@
 				z-index: 100;
 			}
 
-			> button.toggle-datepicker {
+			& > button.toggle-datepicker {
 				margin-left: 10px;
 			}
 
-			> button.wfm-btn-invis-primary:focus {
+			& > button.wfm-btn-invis-primary:focus {
 				background-color: transparent;
 			}
 
-			> button.wfm-btn-invis-primary:focus {
+			& > button.wfm-btn-invis-primary:focus {
 				i {
 					color: $green-300;
 				}
@@ -149,35 +149,13 @@
 		table {
 			margin-bottom: 0;
 
-			thead, tbody, tfoot {
-				tr > th, td {
-					padding: 5px 0 5px 0;
-					border-bottom: 1px solid $gray012;
-				}
-
-				.person-name {
-					padding-right: 5px;
-					padding-left: 5px;
-					min-width: 150px;
-				}
-
-				tr:hover {
-					background: $gray012;
-				}
-
-				.contract-time-column {
-					padding-left: 8px;
-					padding-right: 8px;
-					text-align: center;
-				}
-			}
-
 			tbody {
-				display: block;
 				height: 100%;
+				display: block;
 				max-height: 62vh;
 				min-height: 500px;
 				overflow-y: scroll;
+				border-top: 1px solid $gray012;
 			}
 
 			thead, tbody tr {
@@ -190,13 +168,21 @@
 				width: calc( 100% - 1.2em );
 			}
 
-			.person-name label{
-				position: relative;
+			tr:hover {
+				background: $gray012;
 			}
-
+			
+			th, td {
+				padding: 5px 0 5px 0;
+				border-bottom: none;
+			}
+		
 			th.person-name-column, td.person-name-column {
 				width: 20%;
 				white-space: nowrap;
+				padding-right: 5px;
+				padding-left: 5px;
+				min-width: 150px;
 			}
 
 			th.right-border-empty, td.right-border-empty {
@@ -205,8 +191,10 @@
 
 			th.contract-time-header, td.contract-time-column {
 				width: 10%;
-				font-weight: 400;
+				padding: 5px;
 				min-width: 150px;
+				font-weight: 400;
+				text-align: center;
 				white-space: nowrap;
 			}
 
@@ -217,19 +205,13 @@
 			td.shift-category-cell{
 				text-align: center;
 				border-left: 1px solid $gray012;
-			}
 
-			td.shift-category-cell span{
-				display: inline-block;
-				width: 20px;
-			}
+				& > span{
+					display: inline-block;
+					width: 20px;
+				}
+			} 
 		}
-	}
-
-	.page-size-selector {
-		display: inline-block;
-		text-align: left;
-		margin: .8rem 2rem .8rem 0;
 	}
 
 	.time-line {
@@ -250,6 +232,34 @@
 
 		& > .relative > span{
 			padding: 10px;
+		}
+	}
+
+	.person-name-column {
+
+		label{
+			position: relative;
+		}
+
+		.wfm-checkbox-toggle:after {
+			width: 15px;
+			height: 15px;
+			font-size: 11px;
+			top: 1px;
+		}
+
+		.wfm-checkbox {
+			display: inline-block;
+			padding: 0;
+			width: auto;
+		}
+
+		.validate-warning {
+			float: right;
+		}
+
+		.validate-warning md-progress-circular{
+			display: inline-block;
 		}
 	}
 
@@ -318,29 +328,6 @@
 		position: absolute;
 	}
 
-	.person-name-column {
-
-		.wfm-checkbox-toggle:after {
-			width: 15px;
-			height: 15px;
-			font-size: 11px;
-		}
-
-		.wfm-checkbox {
-			display: inline-block;
-			padding: 0;
-			width: auto;
-		}
-
-		.validate-warning {
-			float: right;
-		}
-
-		.validate-warning md-progress-circular{
-			display: inline-block;
-		}
-	}
-
 	.timepicker {
 		height: 48px;
 
@@ -364,6 +351,12 @@
 		padding: 5px;
 		margin-left: 0;
 		margin-right: 0;
+	}
+
+	.page-size-selector {
+		display: inline-block;
+		text-align: left;
+		margin: .8rem 2rem .8rem 0;
 	}
 
 	md-sidenav {
