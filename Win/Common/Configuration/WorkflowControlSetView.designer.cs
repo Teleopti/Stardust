@@ -20,10 +20,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			if (disposing)
 			{
 				if (components != null)
-				components.Dispose();
+					components.Dispose();
 				releaseMangedResources();
 
-				if (_gridHelper!=null)
+				if (_gridHelper != null)
 					_gridHelper.Dispose();
 			}
 			base.Dispose(disposing);
@@ -115,7 +115,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.radioButtonAdvSeniority = new Syncfusion.Windows.Forms.Tools.RadioButtonAdv();
 			this.tabPageAdvAbsenceRequests = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.tableLayoutPanelAbsenceRequestPeriods = new System.Windows.Forms.TableLayoutPanel();
+			this.tableLayoutPanelWaitlist = new System.Windows.Forms.TableLayoutPanel();
 			this.checkBoxEnableAbsenceRequestWaitlisting = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
+			this.radioButtonWaitlistFirstComeFirstServed = new System.Windows.Forms.RadioButton();
+			this.radioButtonWaitlistBySeniority = new System.Windows.Forms.RadioButton();
 			this.tableLayoutPanelAbsenceRequestMiscellaneous = new System.Windows.Forms.TableLayoutPanel();
 			this.labelAbsenceRequestMiscellaneous = new System.Windows.Forms.Label();
 			this.tableLayoutPanelOpenForAbsenceRequests = new System.Windows.Forms.TableLayoutPanel();
@@ -195,6 +198,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			((System.ComponentModel.ISupportInitialize)(this.radioButtonAdvSeniority)).BeginInit();
 			this.tabPageAdvAbsenceRequests.SuspendLayout();
 			this.tableLayoutPanelAbsenceRequestPeriods.SuspendLayout();
+			this.tableLayoutPanelWaitlist.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxEnableAbsenceRequestWaitlisting)).BeginInit();
 			this.tableLayoutPanelAbsenceRequestMiscellaneous.SuspendLayout();
 			this.tableLayoutPanelOpenForAbsenceRequests.SuspendLayout();
@@ -700,6 +704,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.dateSelectionFromToStudentAvailability.Size = new System.Drawing.Size(187, 116);
 			this.dateSelectionFromToStudentAvailability.TabIndex = 7;
 			this.dateSelectionFromToStudentAvailability.TodayButtonText = "xxToday";
+			this.dateSelectionFromToStudentAvailability.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToStudentAvailability.WorkPeriodEnd")));
+			this.dateSelectionFromToStudentAvailability.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToStudentAvailability.WorkPeriodStart")));
 			this.dateSelectionFromToStudentAvailability.Validating += new System.ComponentModel.CancelEventHandler(this.dateSelectionFromToStudentAvailability_Validating);
 			this.dateSelectionFromToStudentAvailability.Validated += new System.EventHandler(this.dateSelectionFromToStudentAvailability_Validated);
 			// 
@@ -720,6 +726,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.dateSelectionFromToIsOpenStudentAvailability.Size = new System.Drawing.Size(187, 116);
 			this.dateSelectionFromToIsOpenStudentAvailability.TabIndex = 8;
 			this.dateSelectionFromToIsOpenStudentAvailability.TodayButtonText = "xxToday";
+			this.dateSelectionFromToIsOpenStudentAvailability.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToIsOpenStudentAvailability.WorkPeriodEnd")));
+			this.dateSelectionFromToIsOpenStudentAvailability.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToIsOpenStudentAvailability.WorkPeriodStart")));
 			this.dateSelectionFromToIsOpenStudentAvailability.Validating += new System.ComponentModel.CancelEventHandler(this.dateSelectionFromToIsOpenStudentAvailability_Validating);
 			this.dateSelectionFromToIsOpenStudentAvailability.Validated += new System.EventHandler(this.dateSelectionFromToIsOpenStudentAvailability_Validated);
 			// 
@@ -838,6 +846,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// 
 			this.dateOnlyPeriodsVisualizer1.BackColor = System.Drawing.SystemColors.ControlLightLight;
 			this.tableLayoutPanelBasic.SetColumnSpan(this.dateOnlyPeriodsVisualizer1, 2);
+			this.dateOnlyPeriodsVisualizer1.ContainedPeriod = ((Teleopti.Interfaces.Domain.DateOnlyPeriod)(resources.GetObject("dateOnlyPeriodsVisualizer1.ContainedPeriod")));
 			this.dateOnlyPeriodsVisualizer1.Culture = new System.Globalization.CultureInfo("sv-SE");
 			this.dateOnlyPeriodsVisualizer1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dateOnlyPeriodsVisualizer1.Location = new System.Drawing.Point(0, 0);
@@ -1015,7 +1024,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.labelPublishSchedules.AutoSize = true;
 			this.labelPublishSchedules.Location = new System.Drawing.Point(3, 45);
 			this.labelPublishSchedules.Name = "labelPublishSchedules";
-			this.labelPublishSchedules.Size = new System.Drawing.Size(154, 15);
+			this.labelPublishSchedules.Size = new System.Drawing.Size(155, 15);
 			this.labelPublishSchedules.TabIndex = 2;
 			this.labelPublishSchedules.Text = "xxPublishSchedulesToColon";
 			// 
@@ -1164,6 +1173,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.dateSelectionFromToPreferencePeriod.Size = new System.Drawing.Size(187, 115);
 			this.dateSelectionFromToPreferencePeriod.TabIndex = 7;
 			this.dateSelectionFromToPreferencePeriod.TodayButtonText = "xxToday";
+			this.dateSelectionFromToPreferencePeriod.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToPreferencePeriod.WorkPeriodEnd")));
+			this.dateSelectionFromToPreferencePeriod.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToPreferencePeriod.WorkPeriodStart")));
 			this.dateSelectionFromToPreferencePeriod.Validating += new System.ComponentModel.CancelEventHandler(this.dateSelectionFromToPreferencePeriod_Validating);
 			this.dateSelectionFromToPreferencePeriod.Validated += new System.EventHandler(this.dateSelectionFromToPreferencePeriod_Validated);
 			// 
@@ -1184,6 +1195,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.dateSelectionFromToIsOpen.Size = new System.Drawing.Size(187, 115);
 			this.dateSelectionFromToIsOpen.TabIndex = 8;
 			this.dateSelectionFromToIsOpen.TodayButtonText = "xxToday";
+			this.dateSelectionFromToIsOpen.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToIsOpen.WorkPeriodEnd")));
+			this.dateSelectionFromToIsOpen.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("dateSelectionFromToIsOpen.WorkPeriodStart")));
 			this.dateSelectionFromToIsOpen.Validating += new System.ComponentModel.CancelEventHandler(this.dateSelectionFromToIsOpen_Validating);
 			this.dateSelectionFromToIsOpen.Validated += new System.EventHandler(this.dateSelectionFromToIsOpen_Validated);
 			// 
@@ -1309,7 +1322,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// 
 			this.tableLayoutPanelAbsenceRequestPeriods.ColumnCount = 1;
 			this.tableLayoutPanelAbsenceRequestPeriods.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanelAbsenceRequestPeriods.Controls.Add(this.checkBoxEnableAbsenceRequestWaitlisting, 0, 4);
+			this.tableLayoutPanelAbsenceRequestPeriods.Controls.Add(this.tableLayoutPanelWaitlist, 0, 4);
 			this.tableLayoutPanelAbsenceRequestPeriods.Controls.Add(this.tableLayoutPanelAbsenceRequestMiscellaneous, 0, 3);
 			this.tableLayoutPanelAbsenceRequestPeriods.Controls.Add(this.tableLayoutPanelOpenForAbsenceRequests, 0, 6);
 			this.tableLayoutPanelAbsenceRequestPeriods.Controls.Add(this.gridControlAbsenceRequestOpenPeriods, 0, 7);
@@ -1329,21 +1342,63 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.tableLayoutPanelAbsenceRequestPeriods.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanelAbsenceRequestPeriods.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanelAbsenceRequestPeriods.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.tableLayoutPanelAbsenceRequestPeriods.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanelAbsenceRequestPeriods.Size = new System.Drawing.Size(965, 429);
 			this.tableLayoutPanelAbsenceRequestPeriods.TabIndex = 0;
+			// 
+			// tableLayoutPanelWaitlist
+			// 
+			this.tableLayoutPanelWaitlist.ColumnCount = 3;
+			this.tableLayoutPanelWaitlist.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanelWaitlist.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanelWaitlist.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanelWaitlist.Controls.Add(this.checkBoxEnableAbsenceRequestWaitlisting, 0, 0);
+			this.tableLayoutPanelWaitlist.Controls.Add(this.radioButtonWaitlistFirstComeFirstServed, 1, 0);
+			this.tableLayoutPanelWaitlist.Controls.Add(this.radioButtonWaitlistBySeniority, 2, 0);
+			this.tableLayoutPanelWaitlist.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanelWaitlist.Location = new System.Drawing.Point(3, 220);
+			this.tableLayoutPanelWaitlist.Name = "tableLayoutPanelWaitlist";
+			this.tableLayoutPanelWaitlist.RowCount = 1;
+			this.tableLayoutPanelWaitlist.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanelWaitlist.Size = new System.Drawing.Size(959, 29);
+			this.tableLayoutPanelWaitlist.TabIndex = 29;
 			// 
 			// checkBoxEnableAbsenceRequestWaitlisting
 			// 
 			this.checkBoxEnableAbsenceRequestWaitlisting.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.checkBoxEnableAbsenceRequestWaitlisting.BeforeTouchSize = new System.Drawing.Size(349, 24);
-			this.checkBoxEnableAbsenceRequestWaitlisting.Location = new System.Drawing.Point(3, 222);
+			this.checkBoxEnableAbsenceRequestWaitlisting.BeforeTouchSize = new System.Drawing.Size(181, 23);
+			this.checkBoxEnableAbsenceRequestWaitlisting.Location = new System.Drawing.Point(3, 3);
 			this.checkBoxEnableAbsenceRequestWaitlisting.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxEnableAbsenceRequestWaitlisting.Name = "checkBoxEnableAbsenceRequestWaitlisting";
-			this.checkBoxEnableAbsenceRequestWaitlisting.Size = new System.Drawing.Size(349, 24);
+			this.checkBoxEnableAbsenceRequestWaitlisting.Size = new System.Drawing.Size(181, 23);
 			this.checkBoxEnableAbsenceRequestWaitlisting.TabIndex = 28;
 			this.checkBoxEnableAbsenceRequestWaitlisting.Text = "xxEnableWaitlisting";
 			this.checkBoxEnableAbsenceRequestWaitlisting.ThemesEnabled = false;
 			this.checkBoxEnableAbsenceRequestWaitlisting.CheckStateChanged += new System.EventHandler(this.checkBoxEnableAbsenceRequestWaitlisting_CheckStateChanged);
+			// 
+			// radioButtonWaitlistFirstComeFirstServed
+			// 
+			this.radioButtonWaitlistFirstComeFirstServed.AutoSize = true;
+			this.radioButtonWaitlistFirstComeFirstServed.Location = new System.Drawing.Point(190, 3);
+			this.radioButtonWaitlistFirstComeFirstServed.Name = "radioButtonWaitlistFirstComeFirstServed";
+			this.radioButtonWaitlistFirstComeFirstServed.Size = new System.Drawing.Size(146, 19);
+			this.radioButtonWaitlistFirstComeFirstServed.TabIndex = 29;
+			this.radioButtonWaitlistFirstComeFirstServed.TabStop = true;
+			this.radioButtonWaitlistFirstComeFirstServed.Text = "xxFirstComeFirstServed";
+			this.radioButtonWaitlistFirstComeFirstServed.UseVisualStyleBackColor = true;
+			this.radioButtonWaitlistFirstComeFirstServed.Click += new System.EventHandler(this.radioButtonWaitlistFirstComeFirstServed_Click);
+			// 
+			// radioButtonWaitlistBySeniority
+			// 
+			this.radioButtonWaitlistBySeniority.AutoSize = true;
+			this.radioButtonWaitlistBySeniority.Location = new System.Drawing.Point(342, 3);
+			this.radioButtonWaitlistBySeniority.Name = "radioButtonWaitlistBySeniority";
+			this.radioButtonWaitlistBySeniority.Size = new System.Drawing.Size(94, 19);
+			this.radioButtonWaitlistBySeniority.TabIndex = 30;
+			this.radioButtonWaitlistBySeniority.TabStop = true;
+			this.radioButtonWaitlistBySeniority.Text = "xxBySeniority";
+			this.radioButtonWaitlistBySeniority.UseVisualStyleBackColor = true;
+			this.radioButtonWaitlistBySeniority.Click += new System.EventHandler(this.radioButtonWaitlistBySeniority_Click);
 			// 
 			// tableLayoutPanelAbsenceRequestMiscellaneous
 			// 
@@ -1515,45 +1570,45 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.toolStripMenuItemMoveDown});
 			this.contextMenuStripOpenPeriodsGrid.Name = "contextMenuStripOpenPeriodsGrid";
 			this.contextMenuStripOpenPeriodsGrid.ShowImageMargin = false;
-			this.contextMenuStripOpenPeriodsGrid.Size = new System.Drawing.Size(157, 120);
+			this.contextMenuStripOpenPeriodsGrid.Size = new System.Drawing.Size(158, 120);
 			// 
 			// toolStripMenuItemFromToPeriod
 			// 
 			this.toolStripMenuItemFromToPeriod.Name = "toolStripMenuItemFromToPeriod";
-			this.toolStripMenuItemFromToPeriod.Size = new System.Drawing.Size(156, 22);
+			this.toolStripMenuItemFromToPeriod.Size = new System.Drawing.Size(157, 22);
 			this.toolStripMenuItemFromToPeriod.Text = "xxAddFromToPeriod";
 			this.toolStripMenuItemFromToPeriod.Click += new System.EventHandler(this.toolStripMenuItemFromToPeriod_Click);
 			// 
 			// toolStripMenuItemRollingPeriod
 			// 
 			this.toolStripMenuItemRollingPeriod.Name = "toolStripMenuItemRollingPeriod";
-			this.toolStripMenuItemRollingPeriod.Size = new System.Drawing.Size(156, 22);
+			this.toolStripMenuItemRollingPeriod.Size = new System.Drawing.Size(157, 22);
 			this.toolStripMenuItemRollingPeriod.Text = "xxAddRollingPeriod";
 			this.toolStripMenuItemRollingPeriod.Click += new System.EventHandler(this.toolStripMenuItemRollingPeriod_Click);
 			// 
 			// toolStripMenuItemDelete
 			// 
 			this.toolStripMenuItemDelete.Name = "toolStripMenuItemDelete";
-			this.toolStripMenuItemDelete.Size = new System.Drawing.Size(156, 22);
+			this.toolStripMenuItemDelete.Size = new System.Drawing.Size(157, 22);
 			this.toolStripMenuItemDelete.Text = "xxDelete";
 			this.toolStripMenuItemDelete.Click += new System.EventHandler(this.toolStripMenuItemDelete_Click);
 			// 
 			// toolStripSeparator2
 			// 
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(153, 6);
+			this.toolStripSeparator2.Size = new System.Drawing.Size(154, 6);
 			// 
 			// toolStripMenuItemMoveUp
 			// 
 			this.toolStripMenuItemMoveUp.Name = "toolStripMenuItemMoveUp";
-			this.toolStripMenuItemMoveUp.Size = new System.Drawing.Size(156, 22);
+			this.toolStripMenuItemMoveUp.Size = new System.Drawing.Size(157, 22);
 			this.toolStripMenuItemMoveUp.Text = "xxMoveUp";
 			this.toolStripMenuItemMoveUp.Click += new System.EventHandler(this.toolStripMenuItemMoveUp_Click);
 			// 
 			// toolStripMenuItemMoveDown
 			// 
 			this.toolStripMenuItemMoveDown.Name = "toolStripMenuItemMoveDown";
-			this.toolStripMenuItemMoveDown.Size = new System.Drawing.Size(156, 22);
+			this.toolStripMenuItemMoveDown.Size = new System.Drawing.Size(157, 22);
 			this.toolStripMenuItemMoveDown.Text = "xxMoveDown";
 			this.toolStripMenuItemMoveDown.Click += new System.EventHandler(this.toolStripMenuItemMoveDown_Click);
 			// 
@@ -1580,7 +1635,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.dateTimePickerAdvViewpoint.Calendar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.dateTimePickerAdvViewpoint.Calendar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.dateTimePickerAdvViewpoint.Calendar.BottomHeight = 25;
-			this.dateTimePickerAdvViewpoint.Calendar.Culture = new System.Globalization.CultureInfo("sv-SE");
+			this.dateTimePickerAdvViewpoint.Calendar.Culture = new System.Globalization.CultureInfo("zh-CN");
 			this.dateTimePickerAdvViewpoint.Calendar.DayNamesColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdvViewpoint.Calendar.DayNamesFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.dateTimePickerAdvViewpoint.Calendar.DaysFont = new System.Drawing.Font("Segoe UI", 9F);
@@ -1783,8 +1838,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// tableLayoutPanelAbsenceRequestCancellation
 			// 
 			this.tableLayoutPanelAbsenceRequestCancellation.ColumnCount = 2;
-			this.tableLayoutPanelAbsenceRequestCancellation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.AutoSize, 36.48972F));
-			this.tableLayoutPanelAbsenceRequestCancellation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.AutoSize, 63.51027F));
+			this.tableLayoutPanelAbsenceRequestCancellation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanelAbsenceRequestCancellation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanelAbsenceRequestCancellation.Controls.Add(this.txtAbsenceRequestCancellationThreshold, 0, 0);
 			this.tableLayoutPanelAbsenceRequestCancellation.Controls.Add(this.labelAbsenceRequestCancellationThreshold, 0, 0);
 			this.tableLayoutPanelAbsenceRequestCancellation.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -1797,7 +1852,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// 
 			// txtAbsenceRequestCancellationThreshold
 			// 
-			this.txtAbsenceRequestCancellationThreshold.Location = new System.Drawing.Point(448, 3);
+			this.txtAbsenceRequestCancellationThreshold.Location = new System.Drawing.Point(232, 3);
 			this.txtAbsenceRequestCancellationThreshold.MaxLength = 3;
 			this.txtAbsenceRequestCancellationThreshold.Name = "txtAbsenceRequestCancellationThreshold";
 			this.txtAbsenceRequestCancellationThreshold.Size = new System.Drawing.Size(70, 23);
@@ -2020,7 +2075,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.timeSpanTextBox1.TabIndex = 9;
 			this.timeSpanTextBox1.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
 			this.timeSpanTextBox1.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBox1.TimeSpanBoxWidth = 9977;
+			this.timeSpanTextBox1.TimeSpanBoxWidth = 11639;
 			this.timeSpanTextBox1.Leave += new System.EventHandler(this.timeSpanTextBox1_Leave);
 			// 
 			// labelTolerancePosNeg
@@ -2152,6 +2207,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			((System.ComponentModel.ISupportInitialize)(this.radioButtonAdvSeniority)).EndInit();
 			this.tabPageAdvAbsenceRequests.ResumeLayout(false);
 			this.tableLayoutPanelAbsenceRequestPeriods.ResumeLayout(false);
+			this.tableLayoutPanelWaitlist.ResumeLayout(false);
+			this.tableLayoutPanelWaitlist.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxEnableAbsenceRequestWaitlisting)).EndInit();
 			this.tableLayoutPanelAbsenceRequestMiscellaneous.ResumeLayout(false);
 			this.tableLayoutPanelAbsenceRequestMiscellaneous.PerformLayout();
@@ -2291,17 +2348,20 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private Panel panel8;
 		private Label labelAbsencesAvailableForExtendedPreference;
 		private TwoListSelector twoListSelectorAbsences;
-        private Panel panel9;
-        private Label labelAllowedAbsencesForReport;
-        private TwoListSelector twoListSelectorAbsencesForReport;
+		private Panel panel9;
+		private Label labelAllowedAbsencesForReport;
+		private TwoListSelector twoListSelectorAbsencesForReport;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvAnonymousTrading;
 		private Syncfusion.Windows.Forms.Tools.RadioButtonAdv radioButtonAdvSeniority;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvLockTrading;
 		private TableLayoutPanel tableLayoutPanelAbsenceRequestMiscellaneous;
 		private Label labelAbsenceRequestMiscellaneous;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxEnableAbsenceRequestWaitlisting;
+		private TableLayoutPanel tableLayoutPanelWaitlist;
 		private TableLayoutPanel tableLayoutPanelAbsenceRequestCancellation;
 		private NullableIntegerTextBox txtAbsenceRequestCancellationThreshold;
 		private Label labelAbsenceRequestCancellationThreshold;
+		private RadioButton radioButtonWaitlistFirstComeFirstServed;
+		private RadioButton radioButtonWaitlistBySeniority;
 	}
 }

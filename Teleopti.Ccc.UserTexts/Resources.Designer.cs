@@ -4386,6 +4386,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to By seniority.
+        /// </summary>
+        public static string BySeniority {
+            get {
+                return ResourceManager.GetString("BySeniority", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Calculate badge with rank.
         /// </summary>
         public static string CalculateBadgeWithRank {
@@ -10964,6 +10973,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string FinishedSwapShifts {
             get {
                 return ResourceManager.GetString("FinishedSwapShifts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to First come first served.
+        /// </summary>
+        public static string FirstComeFirstServed {
+            get {
+                return ResourceManager.GetString("FirstComeFirstServed", resourceCulture);
             }
         }
         
