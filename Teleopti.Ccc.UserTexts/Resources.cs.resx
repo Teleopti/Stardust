@@ -4074,7 +4074,7 @@ Sloupce</value>
     <value>Přejmenovat funkci</value>
   </data>
   <data name="Used" xml:space="preserve">
-    <value>Použitý</value>
+    <value>Použité</value>
   </data>
   <data name="MaximumOccupancyPercentSignColon" xml:space="preserve">
     <value>Maximální obsazenost %:</value>
@@ -9460,7 +9460,7 @@ Chybová zpráva: {0}</value>
     <value>Štítky plánu</value>
   </data>
   <data name="TeamSchedule" xml:space="preserve">
-    <value>Rozvr týmu</value>
+    <value>Rozvrh týmu</value>
   </data>
   <data name="HavePermissionToRestrictedScenariosButNotForSelectedTeams" xml:space="preserve">
     <value>Máte obecné oprávnění pro zobrazení nepřístupných scénářů, ale ne pro zvolený tým a datum.</value>
