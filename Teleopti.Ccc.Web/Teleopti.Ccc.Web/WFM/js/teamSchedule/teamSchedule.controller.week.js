@@ -9,13 +9,23 @@
 		vm.searchOptions = {
 			keyword: angular.isDefined(params.keyword) && params.keyword !== '' ? params.keyword : '',
 			searchKeywordChanged: false
-		}
+		};
 
 		vm.onKeyWordInSearchInputChanged = function() {
 			vm.loadSchedules();
-		}
+		};
 		vm.isLoading = false;
-		vm.scheduleDate = angular.isDefined(params.selectedDate) ? moment(params.selectedDate).startOf('week').toDate() : moment().startOf('week').toDate();
+		
+		vm.scheduleDate = params.selectedDate ? moment(params.selectedDate).startOf('week').toDate() : moment().startOf('week').toDate();
+
+		vm.gotoPreviousWeek = function () { };
+		vm.gotoNextWeek = function () { };
+
+		vm.onScheduleDateChanged = function () { 
+			if (vm.scheduleDate != moment(vm.scheduleDate).startOf('week').toDate()) {
+				vm.scheduleDate = moment(vm.scheduleDate).startOf('week').toDate();
+			}
+		};
 
 		vm.loadSchedules = function () {
 			console.log("fake data");
@@ -31,17 +41,17 @@
 							Date: "2016-08-08",
 							SummeryTitle: "Early",
 							SummeryTimeSpan: "08:00-17:00",
-							Color: '#FFFFFF'
+							Color: 'grey'
 						}, {
 							Date: "2016-08-09",
 							SummeryTitle: "Early",
 							SummeryTimeSpan: "08:00-17:00",
-							Color: '#FFFFFF'
+							Color: '#ffffff'
 						}, {
 							Date: "2016-08-10",
 							SummeryTitle: "Early",
 							SummeryTimeSpan: "08:00-17:00",
-							Color: '#FFFFFF'
+							Color: 'grey'
 						}, {
 							Date: "2016-08-11",
 							SummeryTitle: "Early",
@@ -70,5 +80,6 @@
 
 		};
 		vm.loadSchedules();
+
 	}
 })()

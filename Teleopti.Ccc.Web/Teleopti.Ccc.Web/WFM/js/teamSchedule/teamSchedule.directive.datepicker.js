@@ -8,6 +8,7 @@
 			templateUrl: 'js/teamSchedule/html/teamscheduledatepicker.html',
 			scope: {
 				selectedDate: '=',
+				step: '@?',
 				onDateChange: '&'
 			},
 			controller: ['$timeout', teamScheduleDatePickerCtrl],
@@ -45,6 +46,7 @@
 		vm.shortDateFormat = moment(vm.selectedDate).format('YYYY-MM-DD');
 
 		vm.currentDateString = vm.shortDateFormat;
+		vm.step = parseInt(vm.step) || 1;
 
 		vm.afterDateChangeDatePicker = function () {
 			vm.toggleCalendar();
@@ -66,12 +68,12 @@
 		};
 
 		vm.gotoPreviousDate = function () {
-			var currentDate = moment(vm.selectedDate).add(-1, "day").toDate();
+			var currentDate = moment(vm.selectedDate).add(-(vm.step), "day").toDate();
 			vm.afterDateChangeInput(currentDate);
 		};
 
 		vm.gotoNextDate = function () {
-			var currentDate = moment(vm.selectedDate).add(1, "day").toDate();
+			var currentDate = moment(vm.selectedDate).add(vm.step, "day").toDate();
 			vm.afterDateChangeInput(currentDate);
 		};
 

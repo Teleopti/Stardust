@@ -14,7 +14,7 @@
 			</span>
 
 			<span class="datepicker-container">
-				<team-schedule-datepicker selected-date="vm.scheduleDate" on-date-change="vm.onScheduleDateChanged()"></team-schedule-datepicker>
+				<team-schedule-datepicker selected-date="vm.scheduleDate" on-date-change="vm.onScheduleDateChanged()" step="7"></team-schedule-datepicker>
 			</span>
 		</div>
 	</div>
@@ -28,13 +28,13 @@
 			<table>
 				<thead>
 				<td class="agent-name-colomn"></td>
-				<td ng-repeat="dayName in vm.weekDayNames">{{dayName}}</td>
+				<td ng-repeat="dayName in vm.weekDayNames">{{dayName}}
+					<span>8</span></td>
 				</thead>
 				<tbody>
 				<tr ng-repeat="person in vm.groupWeeks">
 					<td>{{person.name}}</td>
 					<td ng-repeat="day in person.days">
-						<div>{{day.date}}</div>
 						<div ng-style="{background: day.color}">
 							<div>{{day.summeryTitle}}</div>
 							<div>{{day.summeryTimeSpan}}</div>
@@ -48,13 +48,6 @@
 	</div>
 
 	<!--<div class="con-footer teamschedule-footer" ng-if="vm.paginationOptions.totalPages > 0">
-		<div class="notice-spacer" ng-show="vm.selectAllVisible()" ng-click="vm.selectAllForAllPages()">
-			<a href="javascript: void(0);"> {{'SelectAllPeopleInEveryPage' | translate}}</a>
-		</div>
-		<div class="notice-spacer" ng-show="vm.hasSelectedAllPeople()" ng-click="vm.unselectAllForAllPages()">
-			<a href="javascript: void(0);"> {{'UnselectAllPeopleInEveryPage' | translate}}</a>
-		</div>
-
 		<md-select class="page-size-selector" ng-if="vm.toggles.SelectAgentsPerPageEnabled" ng-model="vm.paginationOptions.pageSize" ng-change="vm.selectorChanged()" aria-label="page size">
 			<md-option ng-repeat="option in vm.agentsPerPageSelection" ng-value="option">{{option}}</md-option>
 		</md-select>
