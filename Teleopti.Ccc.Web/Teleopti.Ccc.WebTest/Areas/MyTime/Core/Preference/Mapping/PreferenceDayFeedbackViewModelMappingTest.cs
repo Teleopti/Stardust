@@ -1,15 +1,13 @@
-using System;
 using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using System;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
@@ -37,9 +35,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			var person = PersonFactory.CreatePersonWithGuid("a", "a");
 			system.AddService(person);
-
-			var toggleManager = new FakeToggleManager(Domain.FeatureFlags.Toggles.MyTimeWeb_PreferenceShowNightViolation_33152);
-			system.AddService(toggleManager);
 		}
 	}
 
@@ -64,7 +59,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		private IScheduleDay buildPersonSchedule(DateOnly date, TimeSpan startTime, TimeSpan endTime)
 		{
 			var schedule = ScheduleDayFactory.Create(date, Person);
-			var start = DateTime.SpecifyKind(date.Date.Add(startTime),DateTimeKind.Utc);
+			var start = DateTime.SpecifyKind(date.Date.Add(startTime), DateTimeKind.Utc);
 			var end = DateTime.SpecifyKind(date.Date.Add(endTime), DateTimeKind.Utc);
 
 			var assignmentPeriod = new DateTimePeriod(start, end);
@@ -77,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		private IScheduleDay buildPersonScheduleDayOff(DateOnly date)
 		{
 			var schedule = ScheduleDayFactory.Create(date, Person);
-			schedule.CreateAndAddDayOff(DayOffFactory.CreateDayOff());		
+			schedule.CreateAndAddDayOff(DayOffFactory.CreateDayOff());
 			return schedule;
 		}
 
@@ -112,16 +107,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var schedule1 = buildPersonSchedule(date1, new TimeSpan(8, 0, 0), new TimeSpan(18, 30, 0));
 			var schedule3 = buildPersonSchedule(date3, new TimeSpan(6, 0, 0), new TimeSpan(18, 30, 0));
 			var schedule9 = buildPersonScheduleDayOff(date9);
-			
+
 			var scheduleProvider = ScheduleProvider as FakeScheduleProvider;
 			if (scheduleProvider != null)
 			{
 				scheduleProvider.AddScheduleDay(schedule1);
 				scheduleProvider.AddScheduleDay(schedule3);
 				scheduleProvider.AddScheduleDay(schedule9);
-			}		
+			}
 
-			var preferenceDay2 = new PreferenceDay(Person, date2,  new PreferenceRestriction
+			var preferenceDay2 = new PreferenceDay(Person, date2, new PreferenceRestriction
 			{
 				StartTimeLimitation = new StartTimeLimitation(new TimeSpan(5, 0, 0), new TimeSpan(6, 0, 0)),
 				EndTimeLimitation = new EndTimeLimitation(new TimeSpan(19, 0, 0), new TimeSpan(19, 30, 0))
@@ -264,28 +259,21 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var targetReturn2 = Mapper.Map<DateOnly, PreferenceDayFeedbackViewModel>(testDate2);
 			targetReturn2.HasNightRestViolationToPreviousDay.Should().Be.True();
 		}
-
 	}
-	
-	
-	
-	
-	[TestFixture,SetCulture("sv-SE")]
+
+	[TestFixture, SetCulture("sv-SE")]
 	public class PreferenceDayFeedbackViewModelMappingTest
 	{
 		private IPreferenceFeedbackProvider preferenceFeedbackProvider;
-		private IToggleManager toggleManager;
 
 		[SetUp]
 		public void Setup()
 		{
-			toggleManager = new FakeToggleManager();
-
 			preferenceFeedbackProvider = MockRepository.GenerateMock<IPreferenceFeedbackProvider>();
 			preferenceFeedbackProvider.Stub(x => x.CheckNightRestViolation(DateOnly.Today)).Return(new PreferenceNightRestCheckResult());
 
 			Mapper.Reset();
-			Mapper.Initialize(x => x.AddProfile(new PreferenceDayFeedbackViewModelMappingProfile(preferenceFeedbackProvider, new Lazy<IMappingEngine>(() => Mapper.Engine), toggleManager)));
+			Mapper.Initialize(x => x.AddProfile(new PreferenceDayFeedbackViewModelMappingProfile(preferenceFeedbackProvider)));
 		}
 
 		[Test]
@@ -295,7 +283,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		public void ShouldMapDate()
 		{
 			var result = Mapper.Map<DateOnly, PreferenceDayFeedbackViewModel>(DateOnly.Today);
-
 			result.Date.Should().Be.EqualTo(DateOnly.Today.ToFixedClientDateOnlyFormat());
 		}
 
@@ -303,10 +290,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		public void ShouldMapPossibleStartTimes()
 		{
 			var workTimeMinMax = new WorkTimeMinMax
-			                     	{
-			                     		StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(6), TimeSpan.FromHours(10))
-			                     	};
-			preferenceFeedbackProvider.Stub(x => x.WorkTimeMinMaxForDate(DateOnly.Today)).Return(new WorkTimeMinMaxCalculationResult {WorkTimeMinMax = workTimeMinMax});
+			{
+				StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(6), TimeSpan.FromHours(10))
+			};
+			preferenceFeedbackProvider.Stub(x => x.WorkTimeMinMaxForDate(DateOnly.Today)).Return(new WorkTimeMinMaxCalculationResult { WorkTimeMinMax = workTimeMinMax });
 
 			var result = Mapper.Map<DateOnly, PreferenceDayFeedbackViewModel>(DateOnly.Today);
 
@@ -317,14 +304,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		public void ShouldMapPossibleEndTimes()
 		{
 			var workTimeMinMax = new WorkTimeMinMax
-			                     	{
-			                     		EndTimeLimitation = new EndTimeLimitation(TimeSpan.FromHours(15), TimeSpan.FromHours(19))
-			                     	};
+			{
+				EndTimeLimitation = new EndTimeLimitation(TimeSpan.FromHours(15), TimeSpan.FromHours(19))
+			};
 
 			preferenceFeedbackProvider.Stub(x => x.WorkTimeMinMaxForDate(DateOnly.Today)).Return(new WorkTimeMinMaxCalculationResult { WorkTimeMinMax = workTimeMinMax });
 
 			var result = Mapper.Map<DateOnly, PreferenceDayFeedbackViewModel>(DateOnly.Today);
-
 			result.PossibleEndTimes.Should().Be(workTimeMinMax.EndTimeLimitation.StartTimeString + "-" + workTimeMinMax.EndTimeLimitation.EndTimeString);
 		}
 

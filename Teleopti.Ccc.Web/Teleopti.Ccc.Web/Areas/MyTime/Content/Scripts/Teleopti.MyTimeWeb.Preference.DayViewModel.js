@@ -220,26 +220,21 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 				self.PossibleContractTimeMinutesLower(data.PossibleContractTimeMinutesLower);
 				self.PossibleContractTimeMinutesUpper(data.PossibleContractTimeMinutesUpper);
 
-				if (toggleShowNightViolation) {
-					self.RawDate(data.DateInternal);
-					self.HasNightRestViolationToPreviousDay(data.HasNightRestViolationToPreviousDay);
-					self.HasNightRestViolationToNextDay(data.HasNightRestViolationToNextDay);
-					self.RestTimeToNextDay(data.RestTimeToNextDay == null ? null : data.RestTimeToNextDay.Hours + ':' + (data.RestTimeToNextDay.Minutes < 10 ? '0' : '') + data.RestTimeToNextDay.Minutes);
-					self.RestTimeToPreviousDay(data.RestTimeToPreviousDay == null ? null : data.RestTimeToPreviousDay.Hours + ':' + (data.RestTimeToPreviousDay.Minutes < 10 ? '0' : '') + data.RestTimeToPreviousDay.Minutes);
-					self.ExpectedNightRest(data.ExpectedNightRest == null ? null : data.ExpectedNightRest.Hours + ':' + (data.ExpectedNightRest.Minutes < 10 ? '0' : '') + data.ExpectedNightRest.Minutes);				    
-				}					
+				self.RawDate(data.DateInternal);
+				self.HasNightRestViolationToPreviousDay(data.HasNightRestViolationToPreviousDay);
+				self.HasNightRestViolationToNextDay(data.HasNightRestViolationToNextDay);
+				self.RestTimeToNextDay(data.RestTimeToNextDay == null ? null : data.RestTimeToNextDay.Hours + ':' + (data.RestTimeToNextDay.Minutes < 10 ? '0' : '') + data.RestTimeToNextDay.Minutes);
+				self.RestTimeToPreviousDay(data.RestTimeToPreviousDay == null ? null : data.RestTimeToPreviousDay.Hours + ':' + (data.RestTimeToPreviousDay.Minutes < 10 ? '0' : '') + data.RestTimeToPreviousDay.Minutes);
+				self.ExpectedNightRest(data.ExpectedNightRest == null ? null : data.ExpectedNightRest.Hours + ':' + (data.ExpectedNightRest.Minutes < 10 ? '0' : '') + data.ExpectedNightRest.Minutes);				    
 			}
 		});
 	};
 	
-	var toggleShowNightViolation =	Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferenceShowNightViolation_33152");
-
-	this.NightRestViolationSwitch = toggleShowNightViolation
-		? ko.computed(function () { return self.HasNightRestViolationToPreviousDay() || self.HasNightRestViolationToNextDay(); })
-		: ko.observable(false);
+	this.NightRestViolationSwitch = ko.computed(function () {
+		return self.HasNightRestViolationToPreviousDay() || self.HasNightRestViolationToNextDay();
+	});
 	
 	this.MakeNightRestViolationObjs = function () {
-		if (!toggleShowNightViolation) return [];
 		var nightRestViolationObjs = [];
 		if (self.NightRestViolationSwitch()) {
 			if (self.HasNightRestViolationToPreviousDay()) {

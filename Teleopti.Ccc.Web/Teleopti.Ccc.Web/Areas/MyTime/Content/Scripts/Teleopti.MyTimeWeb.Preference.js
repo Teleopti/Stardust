@@ -88,11 +88,9 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				statusCode404: function () { },
 			});
 		}
-
 	}
 
 	function _onSuccessDeletePeriod(dates) {
-
 		dates.forEach(function(date) {
 			var dayViewModel = preferencesAndScheduleViewModel.DayViewModels[date];
 			dayViewModel.ClearPreference();
@@ -101,10 +99,8 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 		periodFeedbackViewModel.LoadFeedback();
 		
-		if (toggleShowNightViolation()) {
-			loadNeighborFeedback();
-			periodFeedbackViewModel.PossibleNightRestViolations();
-		}
+		loadNeighborFeedback();
+		periodFeedbackViewModel.PossibleNightRestViolations();
 	}
 
 	function _deletePreferenceTemplate(templateId) {
@@ -150,9 +146,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			}
 		});
 	}
-	var toggleShowNightViolation = function () {
-		return Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferenceShowNightViolation_33152");
-	};
 
 	function _setPreference(preference) {
 		var promises = [];
@@ -177,10 +170,8 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		if (promises.length !== 0) {
 			$.when.apply(null, promises).done(function() {
 				periodFeedbackViewModel.LoadFeedback();
-				if (toggleShowNightViolation()) {
-					loadNeighborFeedback();
-					periodFeedbackViewModel.PossibleNightRestViolations();
-				}
+				loadNeighborFeedback();
+				periodFeedbackViewModel.PossibleNightRestViolations();
 			});
 		}
 	}

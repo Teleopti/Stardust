@@ -84,12 +84,7 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 
 	}
 
-	var toggleShowNightViolation = Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_PreferenceShowNightViolation_33152");
-
 	this.PossibleNightRestViolations = function () {
-
-		if (!toggleShowNightViolation) return possibleNightRestViolationsArray;
-
 		possibleNightRestViolationsArray.removeAll();
 		$.each(self.DayViewModels, function (index, day) {
 			
