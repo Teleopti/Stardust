@@ -30457,6 +30457,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Toggle close.
+        /// </summary>
+        public static string ToggleClose {
+            get {
+                return ResourceManager.GetString("ToggleClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Toggle dark theme.
         /// </summary>
         public static string ToggleDarkTheme {

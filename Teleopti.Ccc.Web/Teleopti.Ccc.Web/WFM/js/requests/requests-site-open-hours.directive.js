@@ -9,18 +9,16 @@
 		var vm = this;
 		vm.openHours = [];
 		vm.sites = [];
-		vm.showSites = showSites;
 		vm.save = save;
 		vm.cancel = cancel;
-
-		function showSites() {
+		init();
+		function init() {
 			var getSiteProgress = requestsDataService.getSitesPromise();
 			getSiteProgress.success(function (sites) {
 				vm.sites = [];
 				angular.forEach(sites, function(site) {
 					vm.sites.push(denormalizeSite(site));
 				});
-				vm.shouldShowSites = true;
 			});
 		}
 
@@ -42,7 +40,7 @@
 
 		function cleanUp() {
 			vm.sites = [];
-			vm.shouldShowSites = false;
+			vm.showSite = false;
 		}
 
 		// these utilities have nothing to do with requests, so I keep everything contained in this directive
@@ -59,7 +57,9 @@
 						formattedWorkingHours.push({
 							WeekDay: e.WeekDay,
 							StartTime: timespan.StartTime,
-							EndTime: timespan.EndTime
+							EndTime: timespan.EndTime,
+							IsClosed: e.IsClosed
+
 						});
 					}
 				});
@@ -84,13 +84,19 @@
 				if (workingHourRows.length == 0) {
 					workingHourRow = createEmptyWorkingPeriod(startTime, endTime);
 					angular.forEach(workingHourRow.WeekDaySelections, function (e) {
-						if (e.WeekDay == a.WeekDay) e.Checked = true;
+						if (e.WeekDay == a.WeekDay) {
+							e.Checked = true;
+							e.IsClosed = a.IsClosed;
+						}
 					});
 					reformattedWorkingHours.push(workingHourRow);
 				} else {
 					workingHourRow = workingHourRows[0];
 					angular.forEach(workingHourRow.WeekDaySelections, function (e) {
-						if (e.WeekDay == a.WeekDay) e.Checked = true;
+						if (e.WeekDay == a.WeekDay) {
+							e.Checked = true;
+							e.IsClosed = a.IsClosed;
+						}
 					});
 				}
 			});
@@ -143,11 +149,11 @@
 	function requestsSiteOpenHoursDirective() {
 		return {
 			scope: {
-
+				showSite: '='
 			},
 			restrict: 'E',
 			controller: 'requestsSiteOpenHoursCtrl',
-			controllerAs:'requestsSiteOpenHours',
+			controllerAs: 'requestsSiteOpenHours',
 			bindToController: true,
 			templateUrl: 'js/requests/html/requests-open-hours.html'
 		}

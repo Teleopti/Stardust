@@ -8,12 +8,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public Guid Id { get; set; }
 		public string Name { get; set; }
 		public int NumberOfAgents { get; set; }
-		public IEnumerable<SiteOpenHour> OpenHours { get; set; }
+		public IEnumerable<SiteOpenHourViewModel> OpenHours { get; set; }
 	}
-	public class SiteOpenHour
+	public class SiteOpenHourViewModel
 	{
 		public DayOfWeek WeekDay;
 		public TimeSpan StartTime;
 		public TimeSpan EndTime;
+		public bool IsClosed;
 	}
 }

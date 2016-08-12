@@ -14835,4 +14835,8 @@ These options are activated:
     <value>First come first served</value>
     <comment>Radio button in workflow controlset</comment>
   </data>
+  <data name="ToggleClose" xml:space="preserve">
+    <value>Toggle close</value>
+    <comment>indicate to toggle close day of site open hour</comment>
+  </data>
 </root>

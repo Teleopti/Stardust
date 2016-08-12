@@ -1,5 +1,4 @@
-﻿<button class="wfm-btn wfm-btn-invis-default" ng-click="requestsSiteOpenHours.showSites()">{{ 'ManageOpenHours' | translate }}</button>
-<modal-dialog show="requestsSiteOpenHours.shouldShowSites" ng-cloak>
+﻿<modal-dialog show="requestsSiteOpenHours.showSite" ng-cloak>
 	<h1 class="modal-title">{{'ManageOpenHours' | translate}}</h1>
 	<div class="modal-inner-content">
 		<div class="con-row">
@@ -16,7 +15,7 @@
 			</div>
 			<div class="con-flex split-3-1">
 				<div ng-repeat="site in requestsSiteOpenHours.sites">
-					<working-hours-picker ng-if="requestsSiteOpenHours.sitesChecked==site.Id" class="working-hours-picker" working-hours="site.OpenHours" ng-disabled="" ng-click="requestsSiteOpenHours.isWorkingHoursValid()"></working-hours-picker>
+					<working-hours-picker-with-close-day ng-if="requestsSiteOpenHours.sitesChecked==site.Id" working-hours="site.OpenHours" class="working-hours-picker"></working-hours-picker-with-close-day>
 				</div>
 			</div>
 		</div>

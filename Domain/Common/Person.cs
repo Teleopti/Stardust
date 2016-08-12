@@ -890,13 +890,13 @@ namespace Teleopti.Ccc.Domain.Common
 
 	    public virtual TimePeriod? SiteOpenHourPeriod(DateOnly dateOnly)
 	    {
-		    var siteOpenHours = MyTeam(dateOnly).Site.OpenHours;
-		    TimePeriod weekDayOpenHourPeriod;
-		    if (!siteOpenHours.TryGetValue(dateOnly.DayOfWeek, out weekDayOpenHourPeriod))
-		    {
-			    return null;
-		    }
-		    return weekDayOpenHourPeriod;
-	    }
+			var siteOpenHours = MyTeam(dateOnly).Site.OpenHourCollection;
+			foreach (var siteOpenHour in siteOpenHours)
+			{
+				if (siteOpenHour.WeekDay == dateOnly.DayOfWeek)
+					return siteOpenHour.TimePeriod;
+			}
+			return null;
+		}
     }
 }

@@ -158,6 +158,7 @@
     <Compile Include="Domain\ISeatMapPersister.cs" />
     <Compile Include="Domain\ISeatOccupancyFrequency.cs" />
     <Compile Include="Domain\IShiftTradePendingReasonsService.cs" />
+    <Compile Include="Domain\ISiteOpenHour.cs" />
     <Compile Include="Domain\IUserUICulture.cs" />
     <Compile Include="Domain\ShiftTradeScheduleChangedInDefaultScenario.cs" />
     <Compile Include="Domain\IShiftTradeSwapScheduleDetailsMapper.cs" />

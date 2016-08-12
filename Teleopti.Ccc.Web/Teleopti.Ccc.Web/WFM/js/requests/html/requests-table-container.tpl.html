@@ -1,6 +1,6 @@
 ﻿<div id="shift-detail" ui-grid="requestsTableContainer.gridOptions" class="ui-grid height-auto" ui-grid-auto-resize ui-grid-selection ui-grid-resize-columns ui-grid-pinning></div>
 
-<form ng-show="!requestsTableContainer.shiftTradeView" class="pull-left" style="margin-top: 15px;">
+<form ng-show="!requestsTableContainer.shiftTradeView">
 	<span class="wfm-radio">
 		<input type="radio" name="groupTimezoneSetting" id="radioUserTimezone"
 			   checked="!requestsTableContainer.isUsingRequestSubmitterTimeZone"
@@ -20,7 +20,6 @@
 		</label>
 	</span>
 </form>
-<requests-site-open-hours ng-if='requestsTableContainer.isUpdateSiteOpenHoursEnabled' class="pull-left" style="margin-left: 10px;"></requests-site-open-hours>
 
 <i ng-show="requestsTableContainer.gridOptions.enableFiltering" ng-click="requestsTableContainer.clearFilters()" class="mdi mdi-block-helper pointer" style="cursor: pointer; position: absolute; top: 5rem; left: 2rem;"><md-tooltip>{{'Clear'|translate}}</md-tooltip></i>
 <div  ng-mouseleave="requestsTableContainer.hideShiftDetail()" ng-if="requestsTableContainer.displayShiftDetail" ng-style="requestsTableContainer.shiftDetailStyleJson()" class="schedule-container">

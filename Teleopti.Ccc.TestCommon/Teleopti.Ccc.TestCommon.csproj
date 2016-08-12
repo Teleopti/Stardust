@@ -198,6 +198,7 @@
     <Compile Include="FakeRepositories\FakeReadModelValidationResultPersistor.cs" />
     <Compile Include="FakeRepositories\FakeScheduleDayReadModelRepository.cs" />
     <Compile Include="FakeRepositories\FakeScheduleHistoryRepository.cs" />
+    <Compile Include="FakeRepositories\FakeSiteOpenHourRepository.cs" />
     <Compile Include="FakeRepositories\FakeSkillDayRepositorySimulateNewUnitOfWork.cs" />
     <Compile Include="FakeRepositories\FakePersonalSettingDataRepository.cs" />
     <Compile Include="FakeRepositories\FakeSkillTypeRepository.cs" />

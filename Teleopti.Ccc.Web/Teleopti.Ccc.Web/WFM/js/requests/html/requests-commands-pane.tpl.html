@@ -51,6 +51,11 @@
 				<i class="mdi mdi-arrow-left"></i>
 				<span translate>Reply</span>
 			</li>
+			<li ng-click="requestsCommandsPane.showSiteOpenHour()"
+				ng-if="requestsCommandsPane.isUpdateSiteOpenHoursEnabled">
+				<i class=""></i>
+				<span>{{ 'ManageOpenHours' | translate }}</span>
+			</li>
 		</ul>
 	</div>
 </div>
@@ -81,6 +86,8 @@
 						original-message="requestsCommandsPane.selectedRequestMessage"
 						show-reply-dialog="requestsCommandsPane.showReplyDialog"
 						show-original-message="requestsCommandsPane.showOriginalMessage"></requests-reply-message>
+
+<requests-site-open-hours show-site="requestsCommandsPane.shouldShowSiteOpenHour" ng-if="requestsCommandsPane.shouldShowSiteOpenHour"></requests-site-open-hours>
 
 <modal-dialog show="requestsCommandsPane.showProcessWaitlistModal" ng-cloak>
 	<h1 class="modal-title">{{'WaitlistPeriod' | translate}}</h1>

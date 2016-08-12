@@ -33,6 +33,10 @@
         display: none;
     }
 
+    .is-close-day input[type=checkbox]:checked~.wfm-checkbox-toggle:after, .is-close-day input[type=checkbox]:checked~label .wfm-checkbox-toggle:after{
+        content:'X';
+    }
+
     .schedule-container {
         border: 1px solid #A3A3A3;
         background-color: #fff;

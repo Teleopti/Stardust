@@ -51,8 +51,9 @@ namespace Teleopti.Interfaces.Domain
         /// Removes the team.
         /// </summary>
         /// <param name="team">The team.</param>
-        void RemoveTeam(ITeam team);
-
-		IDictionary<DayOfWeek, TimePeriod> OpenHours { get; set; }
-	}
+		void RemoveTeam(ITeam team);
+		IEnumerable<ISiteOpenHour> OpenHourCollection { get; }
+		void ClearOpenHourCollection();
+		bool AddOpenHour(ISiteOpenHour siteOpenHour);
+    }
 }

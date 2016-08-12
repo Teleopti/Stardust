@@ -414,6 +414,7 @@
     <Compile Include="Repositories\ProjectionVersionPersister.cs" />
     <Compile Include="Repositories\PersonInRoleQuerier.cs" />
     <Compile Include="Repositories\LoadSkillInIntradays.cs" />
+    <Compile Include="Repositories\SiteOpenHourRepository.cs" />
     <Compile Include="Repositories\SkillAreaRepository.cs" />
     <Compile Include="Analytics\AnalyticsUnitOfWorkAspect.cs" />
     <Compile Include="Analytics\CurrentAnalyticsUnitOfWork.cs" />

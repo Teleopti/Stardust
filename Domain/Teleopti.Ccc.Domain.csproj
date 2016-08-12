@@ -213,6 +213,7 @@
     <Compile Include="Cascading\PrimarySkillOverstaff.cs" />
     <Compile Include="Cascading\ReducePrimarySkillResourcesPercentageDistribution.cs" />
     <Compile Include="Cascading\ShovelResourcesState.cs" />
+    <Compile Include="Common\SiteOpenHour.cs" />
     <Compile Include="Exceptions\AbsenceMissingInAnalyticsException.cs" />
     <Compile Include="Exceptions\BusinessUnitMissingInAnalyticsException.cs" />
     <Compile Include="Exceptions\DataMissingInAnalyticsException.cs" />
@@ -377,6 +378,7 @@
     <Compile Include="Repositories\IAnalyticsShiftCategoryRepository.cs" />
     <Compile Include="Repositories\IAnalyticsWorkloadRepository.cs" />
     <Compile Include="Repositories\IKpiRepository.cs" />
+    <Compile Include="Repositories\ISiteOpenHourRepository.cs" />
     <Compile Include="ResourceCalculation\CalculateForReadModel.cs" />
     <Compile Include="ResourceCalculation\CascadingPersonalSkills.cs" />
     <Compile Include="ResourceCalculation\CascadingPersonSkillProvider.cs" />
@@ -2480,7 +2482,9 @@
     <EmbeddedResource Include="Forecasting\Workload.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Common\Site.hbm.xml" />
+    <EmbeddedResource Include="Common\Site.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scheduling\Absence.hbm.xml" />
@@ -2956,6 +2960,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Analytics\AnalyticsPermission.analytics.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\SiteOpenHour.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Content Include="FeatureFlags\toggles.txt" />

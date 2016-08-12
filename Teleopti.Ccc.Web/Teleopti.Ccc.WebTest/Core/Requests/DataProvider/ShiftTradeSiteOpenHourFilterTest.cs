@@ -13,6 +13,7 @@ using Teleopti.Ccc.WebTest.Core.IoC;
 using Teleopti.Interfaces.Domain;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
@@ -246,7 +247,14 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		private IPerson createPersonWithSiteOpenHours(int startHour, int endHour)
 		{
 			var team = TeamFactory.CreateTeam("team", "site");
-			team.Site.OpenHours.Add(System.DayOfWeek.Monday, new TimePeriod(startHour, 0, endHour, 0));
+			var siteOpenHour = new SiteOpenHour()
+			{
+				IsClosed = true,
+				Parent = team.Site,
+				TimePeriod = new TimePeriod(startHour, 0, endHour, 0),
+				WeekDay = DayOfWeek.Monday
+			};
+			team.Site.AddOpenHour(siteOpenHour);
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(_periodStartDate, team);
 			return person;
 		}

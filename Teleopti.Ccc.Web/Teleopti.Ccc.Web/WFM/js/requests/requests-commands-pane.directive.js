@@ -32,6 +32,9 @@
 		vm.isApproveBasedOnBusinessRulesEnabled = isApproveBasedOnBusinessRulesEnabled;
 		vm.allBusinessRulesForApproving = requestsDataService.getAllBusinessRulesForApproving();
 		vm.anyRuleSelected = anyRuleSelected;
+		vm.isUpdateSiteOpenHoursEnabled = toggleSvc.Wfm_Requests_Site_Open_Hours_39936;
+		vm.showSiteOpenHour = showSiteOpenHour;
+		vm.shouldShowSiteOpenHour = false;
 		initWaitlistProcessPeriod();
 
 		subscribeSignalRMessage('IRunRequestWaitlistEventMessage', vm.onProcessWaitlistFinished);
@@ -41,6 +44,9 @@
 			if (vm.onErrorMessages) {
 				vm.onErrorMessages({ errorMessages: errorMessages });
 			}
+		}
+		function showSiteOpenHour() {
+			vm.shouldShowSiteOpenHour = true;
 		}
 
 		function initWaitlistProcessPeriod() {

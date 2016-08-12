@@ -28,6 +28,10 @@
       <key column="Site" />
       <one-to-many class="Teleopti.Ccc.Domain.AgentInfo.Team"/>
     </bag>
+    <bag name="OpenHourCollection" inverse ="true">
+      <key column="Parent" />      
+      <one-to-many class="Teleopti.Ccc.Domain.Common.SiteOpenHour"/>
+    </bag>
     <component name="Description" class="Teleopti.Interfaces.Domain.Description, Teleopti.Interfaces">
       <property name="Name"
 					not-null="true"
@@ -47,25 +51,6 @@
           not-null="true"/>
     <property name="MaxSeats"
 						not-null="false" />
-    <map name="OpenHours"
-                table="SiteOpenHours"
-                cascade="all-delete-orphan">
-      <key column="Parent" foreign-key="FK_SiteOpenHours_Site"/>
-      <index type="System.DayOfWeek" column="Weekday"/>
-      <composite-element class="Teleopti.Interfaces.Domain.TimePeriod, Teleopti.Interfaces" >
-        <nested-composite-element class="Teleopti.Interfaces.Domain.MinMax`1[System.TimeSpan], Teleopti.Interfaces"
-										  name="period" access="field">
-          <property name="Minimum"
-							column="StartTime"
-							not-null="true"
-							type="TimeSpan"/>
-          <property name="Maximum"
-							column="EndTime"
-							not-null="true"
-							type="TimeSpan"/>
-        </nested-composite-element>
-      </composite-element>
-    </map>
     <filter name="businessUnitFilter"
         condition=":businessUnitParameter = BusinessUnit" />
     <filter name="deletedFlagFilter"

@@ -18,8 +18,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private readonly IUserUiCulture _uiCulture;
 
 		public SiteViewModelBuilder(
-			INow now, 
-			ISiteRepository siteRepository, 
+			INow now,
+			ISiteRepository siteRepository,
 			INumberOfAgentsInSiteReader numberOfAgentsInSiteReader,
 			ICurrentAuthorization authorization,
 			IUserUiCulture uiCulture)
@@ -48,13 +48,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			{
 				var valueOrDefault = site.Id.GetValueOrDefault();
 				var openHours =
-					site.OpenHours.Select(
+					site.OpenHourCollection.Select(
 						openHour =>
-							new SiteOpenHour()
+							new SiteOpenHourViewModel()
 							{
-								WeekDay = openHour.Key,
-								StartTime = openHour.Value.StartTime,
-								EndTime = openHour.Value.EndTime
+								WeekDay = openHour.WeekDay,
+								StartTime = openHour.TimePeriod.StartTime,
+								EndTime = openHour.TimePeriod.EndTime,
+								IsClosed = openHour.IsClosed
 							}).ToList();
 				return new SiteViewModel
 				{

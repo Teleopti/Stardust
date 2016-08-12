@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Common
         private bool _isDeleted;
     	private int? _maxSeats;
     	private ISkill _maxSeatSkill;
-		private IDictionary<DayOfWeek, TimePeriod> _openHours = new Dictionary<DayOfWeek, TimePeriod>();
+		private IList<ISiteOpenHour> _openHourCollection;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Site"/> class.
@@ -27,7 +27,8 @@ namespace Teleopti.Ccc.Domain.Common
 		protected Site()
         {
             _teamCollection = new List<ITeam>();
-        }
+			_openHourCollection = new List<ISiteOpenHour>();
+		}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Site"/> class.
@@ -117,13 +118,28 @@ namespace Teleopti.Ccc.Domain.Common
 
         }
 
-	    public virtual IDictionary<DayOfWeek, TimePeriod> OpenHours
+		public virtual IEnumerable<ISiteOpenHour> OpenHourCollection
 	    {
-			get { return _openHours; }
-			set { _openHours = value; }
+			get { return new ReadOnlyCollection<ISiteOpenHour>(_openHourCollection); }
 	    }
 
-	    public virtual void SetDeleted()
+		public virtual void ClearOpenHourCollection()
+		{
+			_openHourCollection.Clear();
+		}
+
+		public virtual bool AddOpenHour(ISiteOpenHour siteOpenHour)
+		{
+			if (_openHourCollection.All(openHour => openHour.WeekDay != siteOpenHour.WeekDay))
+			{
+				_openHourCollection.Add(siteOpenHour);
+				siteOpenHour.Parent = this;
+				return true;
+			}
+			return false;
+		}
+
+		public virtual void SetDeleted()
         {
             _isDeleted = true;
         }

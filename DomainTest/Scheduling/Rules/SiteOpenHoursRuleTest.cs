@@ -100,7 +100,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		private IPerson createPersonWithSiteOpenHours(int startHour, int endHour)
 		{
 			var team = TeamFactory.CreateTeam("team", "site");
-			team.Site.OpenHours.Add(DayOfWeek.Monday, new TimePeriod(startHour, 0, endHour, 0));
+			var siteOpenHour = new SiteOpenHour()
+			{
+				IsClosed = true,
+				Parent = team.Site,
+				TimePeriod = new TimePeriod(startHour, 0, endHour, 0),
+				WeekDay = DayOfWeek.Monday
+			};
+			team.Site.AddOpenHour(siteOpenHour);
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(_periodStartDate, team);
 			return person;
 		}
