@@ -7,7 +7,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 {
-	
 	public class AbsenceRequestWaitlistProvider : IAbsenceRequestWaitlistProvider
 	{
 		private readonly IPersonRequestRepository _personRequestRepository;
@@ -17,54 +16,45 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 			_personRequestRepository = personRequestRepository;
 		}
 
-		public int GetPositionInWaitlist (IAbsenceRequest absenceRequest)
+		public int GetPositionInWaitlist(IAbsenceRequest absenceRequest)
 		{
 			var personRequest = absenceRequest.Parent as PersonRequest;
 
-			if (personRequest != null && personRequest.IsWaitlisted)
-			{
-				var queryAbsenceRequestsPeriod = absenceRequest.Period.ChangeEndTime (TimeSpan.FromSeconds (-1));
-				var waitlistedRequests = GetWaitlistedRequests(queryAbsenceRequestsPeriod, absenceRequest.Person.WorkflowControlSet).ToList();
-				var index = waitlistedRequests.FindIndex(perRequest => perRequest.Id == personRequest.Id);
-				if (index > -1)
-				{
-					return index +1;
-				}	
-			}
+			if (personRequest == null || !personRequest.IsWaitlisted) return 0;
 
-			return 0;
+			var queryAbsenceRequestsPeriod = absenceRequest.Period.ChangeEndTime(TimeSpan.FromSeconds(-1));
+			var waitlistedRequests =
+				GetWaitlistedRequests(queryAbsenceRequestsPeriod, absenceRequest.Person.WorkflowControlSet).ToList();
+			var index = waitlistedRequests.FindIndex(perRequest => perRequest.Id == personRequest.Id);
+			return index > -1 ? index + 1 : 0;
 		}
 
-		public IEnumerable<IPersonRequest> GetWaitlistedRequests(DateTimePeriod period, IWorkflowControlSet workflowControlSet)
+		public IEnumerable<IPersonRequest> GetWaitlistedRequests(DateTimePeriod period,
+			IWorkflowControlSet workflowControlSet)
 		{
 			var requestTypes = new[] { RequestType.AbsenceRequest };
-			var requestFilter = new RequestFilter() { Period = period, RequestTypes = requestTypes, ExcludeRequestsOnFilterPeriodEdge = true };
-			
-			var waitlistedRequests = from request in _personRequestRepository.FindAllRequests (requestFilter)
-				where requestShouldBeProcessed (request, workflowControlSet)
-				orderby request.CreatedOn ascending
+			var requestFilter = new RequestFilter
+			{
+				Period = period,
+				RequestTypes = requestTypes,
+				ExcludeRequestsOnFilterPeriodEdge = true
+			};
+
+			var waitlistedRequests = from request in _personRequestRepository.FindAllRequests(requestFilter)
+				where requestShouldBeProcessed(request, workflowControlSet)
 				select request;
 
-			return waitlistedRequests.ToList();
+			var processOrder = workflowControlSet.AbsenceRequestWaitlistProcessOrder;
+			return processOrder == WaitlistProcessOrder.BySeniority
+				? waitlistedRequests.OrderByDescending(x => x.Person.Seniority)
+				: waitlistedRequests.OrderBy(x => x.CreatedOn);
 		}
-		
+
 		private bool requestShouldBeProcessed(IPersonRequest request, IWorkflowControlSet workflowControlSet)
 		{
-
-			if (workflowControlSet == null)
-			{
-				return false;
-			}
-			
-			if (request.IsWaitlisted || request.IsNew)
-			{
-				return request.Person.WorkflowControlSet?.Id == workflowControlSet.Id;
-
-			}
-
-			return false;
-			
-
+			return (request.IsWaitlisted || request.IsNew) &&
+				   workflowControlSet != null &&
+				   request.Person.WorkflowControlSet?.Id == workflowControlSet.Id;
 		}
 	}
 }
