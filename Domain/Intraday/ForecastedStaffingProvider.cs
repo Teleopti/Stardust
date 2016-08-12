@@ -48,18 +48,12 @@ namespace Teleopti.Ccc.Domain.Intraday
 		{
 			var forecastedStaffingIntervals = _forecastedStaffingLoader.Load(skillIdList);
 
-			var timeSeries = new List<DateTime>();
-
-			foreach (var interval in forecastedStaffingIntervals)
-			{
-				timeSeries.Add(interval.StartTime);
-			}
-
 			return new IntradayStaffingViewModel()
 			{
 				DataSeries = new StaffingDataSeries()
 				{
-					Time = timeSeries.ToArray()
+					Time = forecastedStaffingIntervals.Select(interval => interval.StartTime).ToArray(),
+					ForecastedStaffing = forecastedStaffingIntervals.Select(interval => interval.ForecastedStaffing).ToArray()
 				}
 			};
 		}
