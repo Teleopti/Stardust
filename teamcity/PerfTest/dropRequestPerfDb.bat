@@ -1,6 +1,6 @@
 @ECHO off
 
-set appDb=Telia_perfTest_TeleoptiCCC7
+set appDb=PerfA
 set analDb=PerfAnal
 set aggDb=PerfAgg
 set dbServer=%1
