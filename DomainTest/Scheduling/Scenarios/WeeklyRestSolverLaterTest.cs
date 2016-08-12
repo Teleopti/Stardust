@@ -371,7 +371,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 									),
 								new FullIntervalFinder()
 								)
-							), new TimeZoneGuardWrapper(), new ResourceCalculationContextFactory(() => new PersonSkillProvider(), new TimeZoneGuardWrapper())
+							), new TimeZoneGuardWrapper(), new ResourceCalculationContextFactory(new PersonSkillProvider(), new TimeZoneGuardWrapper())
 						),
 					1,
 					true,
@@ -542,7 +542,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 									),
 								new FullIntervalFinder()
 								)
-							), new TimeZoneGuardWrapper(), new ResourceCalculationContextFactory(() => new PersonSkillProvider(), new TimeZoneGuardWrapper())
+							), new TimeZoneGuardWrapper(), new ResourceCalculationContextFactory(new PersonSkillProvider(), new TimeZoneGuardWrapper())
 						),
 					1,
 					true,

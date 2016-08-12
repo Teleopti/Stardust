@@ -8,11 +8,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class ResourceCalculationContextFactory : IResourceCalculationContextFactory
 	{
-		private readonly Func<IPersonSkillProvider> _personSkillProvider;
+		private readonly IPersonSkillProvider _personSkillProvider;
 		private readonly ITimeZoneGuard _timeZoneGuard;
 
-		//TODO: why is func needed? remove?
-		public ResourceCalculationContextFactory(Func<IPersonSkillProvider> personSkillProvider, ITimeZoneGuard timeZoneGuard)
+		public ResourceCalculationContextFactory(IPersonSkillProvider personSkillProvider, ITimeZoneGuard timeZoneGuard)
 		{
 			_personSkillProvider = personSkillProvider;
 			_timeZoneGuard = timeZoneGuard;
@@ -35,7 +34,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				var minutesPerInterval = allSkills.Any() ?
 					allSkills.Min(s => s.DefaultResolution) 
 					: 15;
-				var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), minutesPerInterval);
+				var extractor = new ScheduleProjectionExtractor(_personSkillProvider, minutesPerInterval);
 				return period.HasValue ? 
 					extractor.CreateRelevantProjectionList(scheduleDictionary, period.Value.ToDateTimePeriod(_timeZoneGuard.CurrentTimeZone())) : 
 					extractor.CreateRelevantProjectionList(scheduleDictionary);

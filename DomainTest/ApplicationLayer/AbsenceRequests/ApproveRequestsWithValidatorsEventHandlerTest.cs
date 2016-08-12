@@ -377,7 +377,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 						new FullIntervalFinder()
 						)
 					), new TimeZoneGuardWrapper(),
-				new ResourceCalculationContextFactory(() => new PersonSkillProvider(), new TimeZoneGuardWrapper())
+				new ResourceCalculationContextFactory(new PersonSkillProvider(), new TimeZoneGuardWrapper())
 				);
 		}
 

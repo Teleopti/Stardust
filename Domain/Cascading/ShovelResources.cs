@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 			using (ResourceCalculationCurrent.PreserveContext())
 			{
-				using (new ResourceCalculationContextFactory(() => new PersonSkillProvider(), _timeZoneGuard).Create(scheduleDictionary, allSkills, period))
+				using (new ResourceCalculationContextFactory(new PersonSkillProvider(), _timeZoneGuard).Create(scheduleDictionary, allSkills, period))
 				{
 					foreach (var date in period.DayCollection())
 					{
