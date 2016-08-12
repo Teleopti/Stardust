@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     	private IResourceOptimizationHelper _resourceOptimizationHelper;
     	private IResourceCalculateDelayer _resourceCalculateDelayer;
     	private ISchedulePartModifyAndRollbackService _rollbackService;
-	    private IPersonSkillProvider _personSkillProvider;
 	    private ISkill _skill1;
 	    private ISkill _skill2;
 
@@ -43,9 +42,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
 			_skill1 = SkillFactory.CreateSkill("Skill 1");
 			_skill2 = SkillFactory.CreateSkill("Skill 2");
-			_personSkillProvider = new PersonSkillProvider();
 			_studentSchedulingService = new StudentSchedulingService( _schedulingResultStateHolder,
-				_effectiveRestrictionCreator, _scheduleService, _resourceOptimizationHelper, _personSkillProvider);
+				_effectiveRestrictionCreator, _scheduleService, _resourceOptimizationHelper);
         	_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
             _effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
 																				  new EndTimeLimitation(),
@@ -159,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
            }
 
             _studentSchedulingService = new StudentSchedulingService(_schedulingResultStateHolder,
-							_effectiveRestrictionCreator, _scheduleService, _resourceOptimizationHelper, _personSkillProvider);
+							_effectiveRestrictionCreator, _scheduleService, _resourceOptimizationHelper);
             
             using (_mocks.Playback())
             {
@@ -224,7 +222,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
 
             _studentSchedulingService = new StudentSchedulingService(_schedulingResultStateHolder,
-										_effectiveRestrictionCreator, _scheduleService, _resourceOptimizationHelper, _personSkillProvider);
+										_effectiveRestrictionCreator, _scheduleService, _resourceOptimizationHelper);
 
             using (_mocks.Playback())
             {
@@ -314,7 +312,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
 
             _studentSchedulingService = new StudentSchedulingService(_schedulingResultStateHolder,
-												_effectiveRestrictionCreator, _scheduleService, _resourceOptimizationHelper, _personSkillProvider);
+												_effectiveRestrictionCreator, _scheduleService, _resourceOptimizationHelper);
 
             using (_mocks.Playback())
             {
@@ -350,7 +348,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(part1.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date1, _timeZoneInfo)).Repeat.AtLeastOnce();
                 Expect.Call(person.Equals(person)).Return(true).Repeat.AtLeastOnce();
             }
-			_studentSchedulingService = new StudentSchedulingService(_schedulingResultStateHolder, _effectiveRestrictionCreator, _scheduleService, _resourceOptimizationHelper, _personSkillProvider);
+			_studentSchedulingService = new StudentSchedulingService(_schedulingResultStateHolder, _effectiveRestrictionCreator, _scheduleService, _resourceOptimizationHelper);
 
             using (_mocks.Playback())
             {
@@ -371,7 +369,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var part3 = _mocks.StrictMock<IScheduleDay>();
             var part4 = _mocks.StrictMock<IScheduleDay>();
             IList<IScheduleDay> parts = new List<IScheduleDay> {part1, part2, part3, part4};
-			_studentSchedulingService = new StudentSchedulingService(_schedulingResultStateHolder, _effectiveRestrictionCreator, _scheduleService, _resourceOptimizationHelper, _personSkillProvider);
+			_studentSchedulingService = new StudentSchedulingService(_schedulingResultStateHolder, _effectiveRestrictionCreator, _scheduleService, _resourceOptimizationHelper);
 
             using (_mocks.Record())
             {
@@ -402,7 +400,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             IList<ISkillDay> lst = new List<ISkillDay> { skillDay1, skillDay2 };
 
-			_studentSchedulingService = new StudentSchedulingService(_schedulingResultStateHolder, _effectiveRestrictionCreator, _scheduleService, _resourceOptimizationHelper, _personSkillProvider);
+			_studentSchedulingService = new StudentSchedulingService(_schedulingResultStateHolder, _effectiveRestrictionCreator, _scheduleService, _resourceOptimizationHelper);
 
             IList<ISkillDay> lstToExclude = new List<ISkillDay>();
 
@@ -495,7 +493,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
 
             _studentSchedulingService = new StudentSchedulingService(_schedulingResultStateHolder,
-                _effectiveRestrictionCreator, _scheduleService, _resourceOptimizationHelper, _personSkillProvider);
+                _effectiveRestrictionCreator, _scheduleService, _resourceOptimizationHelper);
 
             using (_mocks.Playback())
             {

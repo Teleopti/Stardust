@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 	    private readonly IScheduleService _scheduleService;
     	private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
-	    private readonly IPersonSkillProvider _personSkillProvider;
 
 	    private readonly Random _random = new Random((int)DateTime.Now.TimeOfDay.Ticks);
         private readonly HashSet<IWorkShiftFinderResult> _finderResults = new HashSet<IWorkShiftFinderResult>();
@@ -39,13 +38,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public StudentSchedulingService( ISchedulingResultStateHolder schedulingResultStateHolder,
             IEffectiveRestrictionCreator effectiveRestrictionCreator, IScheduleService scheduleService,
-			IResourceOptimizationHelper resourceOptimizationHelper, IPersonSkillProvider personSkillProvider)
+			IResourceOptimizationHelper resourceOptimizationHelper)
 		{
 		    _schedulingResultStateHolder = schedulingResultStateHolder;
 		    _effectiveRestrictionCreator = effectiveRestrictionCreator;
 		    _scheduleService = scheduleService;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
-			_personSkillProvider = personSkillProvider;
 		}
 
 	    public bool DoTheScheduling(IList<IScheduleDay> selectedParts, ISchedulingOptions schedulingOptions,
