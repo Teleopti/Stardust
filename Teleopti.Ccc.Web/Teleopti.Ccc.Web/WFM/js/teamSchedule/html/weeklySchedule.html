@@ -18,16 +18,34 @@
 			</span>
 		</div>
 	</div>
-	<!--<div class="con-row teamschedule-body">
+	<div class="con-row teamschedule-body">
 		<div class="big-table-wrapper">
 			<div class="alert-warning notice-spacer" ng-if="vm.total > 500">
 				<i class='mdi mdi-alert'></i>{{'TooManyResultsForSearchKeywords'|translate}}
 			</div>
 			<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
-			<schedule-table select-mode="vm.scheduleTableSelectMode" selected-date="vm.scheduleDate" show-warnings="vm.validateWarningToggle" cmd-configurations="vm.cmdConfigurations" />
+
+			<table>
+				<thead>
+				<td class="agent-name-colomn"></td>
+				<td ng-repeat="dayName in vm.weekDayNames">{{dayName}}</td>
+				</thead>
+				<tbody>
+				<tr ng-repeat="person in vm.groupWeeks">
+					<td>{{person.name}}</td>
+					<td ng-repeat="day in person.days">
+						<div>{{day.date}}</div>
+						<div ng-style="{background: day.color}">
+							<div>{{day.summeryTitle}}</div>
+							<div>{{day.summeryTimeSpan}}</div>
+						</div>
+					</td>
+				</tr>
+				</tbody>
+			</table>
 		</div>
 
-	</div>-->
+	</div>
 
 	<!--<div class="con-footer teamschedule-footer" ng-if="vm.paginationOptions.totalPages > 0">
 		<div class="notice-spacer" ng-show="vm.selectAllVisible()" ng-click="vm.selectAllForAllPages()">

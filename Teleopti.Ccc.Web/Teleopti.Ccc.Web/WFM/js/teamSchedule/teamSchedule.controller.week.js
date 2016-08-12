@@ -3,8 +3,8 @@
 
 	angular.module('wfm.teamSchedule').controller('TeamScheduleWeeklyCtrl', TeamScheduleWeeklyCtrl);
 
-	TeamScheduleWeeklyCtrl.$inject = ['$stateParams'];
-	function TeamScheduleWeeklyCtrl(params) {
+	TeamScheduleWeeklyCtrl.$inject = ['$stateParams', 'PersonScheduleWeekViewCreator'];
+	function TeamScheduleWeeklyCtrl(params, WeekViewCreator) {
 		var vm = this;
 		vm.searchOptions = {
 			keyword: angular.isDefined(params.keyword) && params.keyword !== '' ? params.keyword : '',
@@ -14,12 +14,61 @@
 		vm.onKeyWordInSearchInputChanged = function() {
 			vm.loadSchedules();
 		}
-
-		vm.scheduleDate = angular.isDefined(params.selectedDate) ? params.selectedDate : new Date();
+		vm.isLoading = false;
+		vm.scheduleDate = angular.isDefined(params.selectedDate) ? moment(params.selectedDate).startOf('week').toDate() : moment().startOf('week').toDate();
 
 		vm.loadSchedules = function () {
+			console.log("fake data");
 			vm.isLoading = true;
-//TODO : load week schedule 
+			//TODO : load week schedule 
+			vm.weekDayNames = ["Monday", "Tuesday", "Wendesday", "Thursday", "Friday", "Saturday", "Sunday"];
+			var fakeData = [
+				{
+					PersonId: "ashley",
+					Name: "ashley",
+					Days: [
+						{
+							Date: "2016-08-08",
+							SummeryTitle: "Early",
+							SummeryTimeSpan: "08:00-17:00",
+							Color: '#FFFFFF'
+						}, {
+							Date: "2016-08-09",
+							SummeryTitle: "Early",
+							SummeryTimeSpan: "08:00-17:00",
+							Color: '#FFFFFF'
+						}, {
+							Date: "2016-08-10",
+							SummeryTitle: "Early",
+							SummeryTimeSpan: "08:00-17:00",
+							Color: '#FFFFFF'
+						}, {
+							Date: "2016-08-11",
+							SummeryTitle: "Early",
+							SummeryTimeSpan: "08:00-17:00",
+							Color: '#FFFFFF'
+						}, {
+							Date: "2016-08-12",
+							SummeryTitle: "Early",
+							SummeryTimeSpan: "08:00-17:00",
+							Color: '#FFFFFF'
+						}, {
+							Date: "2016-08-13",
+							SummeryTitle: "Early",
+							SummeryTimeSpan: "08:00-17:00",
+							Color: '#FFFFFF'
+						}, {
+							Date: "2016-08-14",
+							SummeryTitle: "Early",
+							SummeryTimeSpan: "08:00-17:00",
+							Color: '#FFFFFF'
+						}
+					]
+				}
+			];
+			vm.groupWeeks = WeekViewCreator.Create(fakeData);
+
 		};
+		vm.loadSchedules();
 	}
 })()
