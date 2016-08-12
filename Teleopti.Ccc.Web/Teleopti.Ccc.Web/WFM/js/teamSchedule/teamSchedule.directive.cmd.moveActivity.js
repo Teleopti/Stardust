@@ -90,7 +90,7 @@
 	    	});
 
 	    	if (multiActivitiesSelectedAgentsList.length > 0) {
-	    		var errorMessage = $translate.instant('CanNotMoveMultipleActivitiesForSelectedAgents') + " " + multiActivitiesSelectedAgentsList.join(", ") + ".";
+	    		var errorMessage = $translate.instant('CanNotMoveMultipleActivitiesForSelectedAgents') + ": " + multiActivitiesSelectedAgentsList.map(function(agent){return agent.Name;}).join(", ") + ".";
 	    		teamScheduleNotificationService.notify('error', errorMessage);
 	    		vm.getActionCb(vm.label) && vm.getActionCb(vm.label)(null, null);
 	    		return;
