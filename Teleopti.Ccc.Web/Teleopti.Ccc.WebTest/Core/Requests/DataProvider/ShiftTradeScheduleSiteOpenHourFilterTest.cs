@@ -173,6 +173,22 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			filteredShiftExchangeOffers.Count.Should().Be(2);
 		}
 
+		[Test]
+		public void ShouldReturnShiftExchangeOffersWithEmptyDay()
+		{
+			prepareData(createPersonWithSiteOpenHours(8, 15));
+
+			var person1 = createPersonWithSiteOpenHours(8, 19);
+
+			var shiftExchangeOffers = new[]
+			{
+				createEmptyDayShiftExchangeOffer(person1, _shiftTradeDate),
+			};
+
+			var filteredShiftExchangeOffers = Target.FilterShiftExchangeOffer(shiftExchangeOffers, _shiftTradeDate).ToList();
+			filteredShiftExchangeOffers.Count.Should().Be(1);
+		}
+
 		private void prepareData(IPerson person)
 		{
 			ToggleManager.Enable(Toggles.Wfm_Requests_Site_Open_Hours_39936);
@@ -232,6 +248,16 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var personRequest = new PersonRequest(person);
 			personRequest.Request = shiftExchangeOffer;
 
+			return shiftExchangeOffer;
+		}
+
+		private IShiftExchangeOffer createEmptyDayShiftExchangeOffer(IPerson person, DateOnly date)
+		{
+			var scenario = CurrentScenario.Current();
+			var scheduleDay = ScheduleDayFactory.Create(date, person, scenario);
+			var shiftExchangeOffer = new ShiftExchangeOffer(scheduleDay,
+				new ShiftExchangeCriteria() {DayType = ShiftExchangeLookingForDay.EmptyDay},
+				ShiftExchangeOfferStatus.Pending);
 			return shiftExchangeOffer;
 		}
 	}

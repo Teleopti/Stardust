@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using log4net;
-using Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
@@ -81,9 +78,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 					var otherAgentSiteOpenHourPeriod = getPersonSiteOpenHourPeriod(shiftExchangeOffer.Person, shiftTradeDate);
 
 					var timezone = shiftExchangeOffer.Person.PermissionInformation.DefaultTimeZone();
-					var maxEndTime = shiftExchangeOffer.MyShiftPeriod.Value.EndDateTimeLocal(timezone);
-					var minStartTime = shiftExchangeOffer.MyShiftPeriod.Value.StartDateTimeLocal(timezone);
-					var scheduleTimePeriod = new TimePeriod(minStartTime.TimeOfDay, maxEndTime.TimeOfDay);
+					var scheduleTimePeriod = shiftExchangeOffer.MyShiftPeriod.Value.TimePeriod(timezone);
 
 					return
 						currentUserSiteOpenHourPeriod.Contains(scheduleTimePeriod)
