@@ -9,9 +9,28 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 {
 	public class IntradayHourlyAvailabilityTransformer : IIntradayAvailabilityTransformer
 	{
+		// copied old entity impl to be used in list here in ETL to keep old behavior
+		private class uniqueStudentAvailabilityDayPerDateAndPerson : IEqualityComparer<IStudentAvailabilityDay>
+		{
+			public bool Equals(IStudentAvailabilityDay x, IStudentAvailabilityDay y)
+			{
+				return x.Person.Equals(y.Person) && x.RestrictionDate == y.RestrictionDate;
+			}
+
+			public int GetHashCode(IStudentAvailabilityDay obj)
+			{
+				return obj.Person.GetHashCode() ^ obj.RestrictionDate.GetHashCode();
+			}
+		}
+
+		public HashSet<IStudentAvailabilityDay> CreateStudentAvailabilityDaySetWithPersonDateEqualitity()
+		{
+			return new HashSet<IStudentAvailabilityDay>(new uniqueStudentAvailabilityDayPerDateAndPerson());
+		}
+
 		public void Transform(IEnumerable<IStudentAvailabilityDay> rootList, DataTable table, ICommonStateHolder stateHolder, IScenario scenario)
 		{
-			var uniqueDays = new HashSet<IStudentAvailabilityDay>();
+			var uniqueDays = CreateStudentAvailabilityDaySetWithPersonDateEqualitity();
 			uniqueDays.UnionWith(rootList);
 
 			var dictionary = stateHolder.GetSchedules(uniqueDays, scenario);

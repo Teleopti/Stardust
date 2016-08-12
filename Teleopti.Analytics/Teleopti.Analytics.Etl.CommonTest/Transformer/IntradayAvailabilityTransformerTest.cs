@@ -16,7 +16,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 	[TestFixture]
 	public class IntradayAvailabilityTransformerTest
 	{
-		private IIntradayAvailabilityTransformer _target;
+		private IntradayHourlyAvailabilityTransformer _target;
 		private IScenario _scenario;
 		private ICommonStateHolder _stateHolder;
 
@@ -74,7 +74,9 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 
 			var studDay1 = new StudentAvailabilityDay(person, new DateOnly(2013, 5, 15), new List<IStudentAvailabilityRestriction>());
 			var studDay2 = new StudentAvailabilityDay(person, new DateOnly(2013, 5, 15), new List<IStudentAvailabilityRestriction>());
-			var uniqueDays = new HashSet<IStudentAvailabilityDay> { studDay1, studDay2 };
+			var uniqueDays = _target.CreateStudentAvailabilityDaySetWithPersonDateEqualitity();
+			uniqueDays.Add(studDay1);
+			uniqueDays.Add(studDay2);
 			uniqueDays.Count.Should().Be.EqualTo(1);
 		}
 	}

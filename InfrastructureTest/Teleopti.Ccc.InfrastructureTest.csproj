@@ -216,6 +216,7 @@
     <Compile Include="MultiTenancy\Client\TenantClientTestAttribute.cs" />
     <Compile Include="MultiTenancy\SessionExtension.cs" />
     <Compile Include="NHibernateConfiguration\SqlServerTransientErrorTest.cs" />
+    <Compile Include="Persisters\Schedules\Bug39612.cs" />
     <Compile Include="Persisters\Schedules\CurrentUnitOfWorkModifyNoConflictShouldEmptyEventsCollectionTest.cs" />
     <Compile Include="Persisters\Schedules\FakeTransactionHook.cs" />
     <Compile Include="Persisters\Schedules\MessageSenderInvokationTest.cs" />
