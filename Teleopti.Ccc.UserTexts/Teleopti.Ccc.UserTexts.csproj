@@ -149,6 +149,7 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources.zh-HK.resx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
