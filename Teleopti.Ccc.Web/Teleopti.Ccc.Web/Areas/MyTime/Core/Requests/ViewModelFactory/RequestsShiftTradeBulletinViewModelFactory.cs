@@ -27,11 +27,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		public ShiftTradeScheduleViewModel CreateShiftTradeBulletinViewModelFromRawData(ShiftTradeScheduleViewModelData data)
 		{
 			int pageCount;
+			var mySchedule = _personScheduleViewModelMapper.MakeMyScheduleViewModel(data);
 			var ret = new ShiftTradeScheduleViewModel
 			{
-				MySchedule = _personScheduleViewModelMapper.MakeMyScheduleViewModel(data),
+				MySchedule = mySchedule,
 				PossibleTradeSchedules =
-					_personScheduleViewModelMapper.MakePossibleShiftTradeAddPersonScheduleViewModels(data, out pageCount),
+					_personScheduleViewModelMapper.MakePossibleShiftTradeAddPersonScheduleViewModels(data, mySchedule, out pageCount),
 				PageCount = pageCount
 			};
 			ret.TimeLineHours = _shiftTradeTimeLineHoursViewModelMapper.Map(ret.MySchedule, ret.PossibleTradeSchedules,

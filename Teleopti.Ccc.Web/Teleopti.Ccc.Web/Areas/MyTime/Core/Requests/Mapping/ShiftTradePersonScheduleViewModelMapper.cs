@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			return new ShiftTradeAddPersonScheduleViewModel(myScheduleViewModel);
 		}
 
-		public IList<ShiftTradeAddPersonScheduleViewModel> MakePossibleShiftTradeAddPersonScheduleViewModels(ShiftTradeScheduleViewModelData inputData, out int pageCount)
+		public IList<ShiftTradeAddPersonScheduleViewModel> MakePossibleShiftTradeAddPersonScheduleViewModels(ShiftTradeScheduleViewModelData inputData, ShiftTradeAddPersonScheduleViewModel myScheduleView, out int pageCount)
 		{
 			var myScheduleDay =
 				_personScheduleProvider.GetScheduleForPersons(inputData.ShiftTradeDate, new List<IPerson> { _loggedOnUser.CurrentUser() })
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 						};
 
 				}).Where(vm => vm != null);
-			possibleExchangedSchedules = _shiftTradeSiteOpenHourFilter.FilterScheduleView(possibleExchangedSchedules, persons);
+			possibleExchangedSchedules = _shiftTradeSiteOpenHourFilter.FilterScheduleView(possibleExchangedSchedules, myScheduleView, persons);
 			pageCount = (int)Math.Ceiling((double)possibleExchangedSchedules.Count()/inputData.Paging.Take);
 
 			return possibleExchangedSchedules.OrderBy(vm => vm.StartTimeUtc).Skip(inputData.Paging.Skip).Take(inputData.Paging.Take).ToList();
@@ -80,6 +80,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		ShiftTradeAddPersonScheduleViewModel MakeMyScheduleViewModel(ShiftTradeScheduleViewModelData inputData);
 
 		IList<ShiftTradeAddPersonScheduleViewModel> MakePossibleShiftTradeAddPersonScheduleViewModels(
-			ShiftTradeScheduleViewModelData inputData, out int pageCount);
+			ShiftTradeScheduleViewModelData inputData, ShiftTradeAddPersonScheduleViewModel myScheduleView, out int pageCount);
 	}
 }

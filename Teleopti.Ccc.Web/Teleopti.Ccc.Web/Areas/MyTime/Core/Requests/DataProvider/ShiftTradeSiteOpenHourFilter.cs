@@ -21,22 +21,29 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		}
 
 		public IEnumerable<ShiftTradeAddPersonScheduleViewModel> FilterScheduleView(
-			IEnumerable<ShiftTradeAddPersonScheduleViewModel> shiftTradeAddPersonScheduleViews, DatePersons datePersons)
+			IEnumerable<ShiftTradeAddPersonScheduleViewModel> personToScheduleViews,
+			ShiftTradeAddPersonScheduleViewModel personFromScheduleView, DatePersons datePersons)
 		{
 			if (!isFilterEnabled())
 			{
-				return shiftTradeAddPersonScheduleViews;
+				return personToScheduleViews;
+			}
+
+			if (personFromScheduleView.ScheduleLayers == null || !personFromScheduleView.ScheduleLayers.Any())
+			{
+				return personToScheduleViews;
 			}
 
 			var shiftTradeDate = datePersons.Date;
-			var otherAgentDictionary = datePersons.Persons.ToDictionary(p => p.Id.GetValueOrDefault(Guid.NewGuid()));
-			var currentUserSiteOpenHourPeriod = getPersonSiteOpenHourPeriod(_loggedOnUser.CurrentUser(), shiftTradeDate);
+			var personDictionary = datePersons.Persons.ToDictionary(p => p.Id.GetValueOrDefault(Guid.NewGuid()));
+			var personFromSiteOpenHourPeriod = getPersonSiteOpenHourPeriod(_loggedOnUser.CurrentUser(), shiftTradeDate);
+			var personFromSchedulePeriod = getSchedulePeriod(personFromScheduleView);
 
-			return shiftTradeAddPersonScheduleViews.Where(
+			return personToScheduleViews.Where(
 				shiftTradeAddPersonScheduleView =>
 				{
-					IPerson otherAgent;
-					if (!otherAgentDictionary.TryGetValue(shiftTradeAddPersonScheduleView.PersonId, out otherAgent))
+					IPerson personTo;
+					if (!personDictionary.TryGetValue(shiftTradeAddPersonScheduleView.PersonId, out personTo))
 					{
 						return true;
 					}
@@ -46,26 +53,23 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 						return true;
 					}
 
-					var otherAgentSiteOpenHourPeriod = getPersonSiteOpenHourPeriod(otherAgent, shiftTradeDate);
+					var personToSiteOpenHourPeriod = getPersonSiteOpenHourPeriod(personTo, shiftTradeDate);
+					var personToScheduleTimePeriod = getSchedulePeriod(shiftTradeAddPersonScheduleView);
 
-					var maxEndTime = shiftTradeAddPersonScheduleView.ScheduleLayers.Max(scheduleLayer => scheduleLayer.End);
-					var minStartTime = shiftTradeAddPersonScheduleView.ScheduleLayers.Min(scheduleLayer => scheduleLayer.Start);
-					var scheduleTimePeriod = new TimePeriod(minStartTime.TimeOfDay, maxEndTime.TimeOfDay);
-
-					return
-						currentUserSiteOpenHourPeriod.Contains(scheduleTimePeriod)
-						&& otherAgentSiteOpenHourPeriod.Contains(scheduleTimePeriod);
+					return personFromSiteOpenHourPeriod.Contains(personToScheduleTimePeriod)
+						   && personToSiteOpenHourPeriod.Contains(personFromSchedulePeriod);
 				});
 		}
 
-		public IEnumerable<IShiftExchangeOffer> FilterShiftExchangeOffer(IEnumerable<IShiftExchangeOffer> shiftExchangeOffers, DateOnly shiftTradeDate)
+		public IEnumerable<IShiftExchangeOffer> FilterShiftExchangeOffer(IEnumerable<IShiftExchangeOffer> shiftExchangeOffers,
+			TimePeriod personFromSchedulePeriod, DateOnly shiftTradeDate)
 		{
 			if (!isFilterEnabled())
 			{
 				return shiftExchangeOffers;
 			}
 
-			var currentUserSiteOpenHourPeriod = getPersonSiteOpenHourPeriod(_loggedOnUser.CurrentUser(), shiftTradeDate);
+			var personFromSiteOpenHourPeriod = getPersonSiteOpenHourPeriod(_loggedOnUser.CurrentUser(), shiftTradeDate);
 
 			return shiftExchangeOffers.Where(
 				shiftExchangeOffer =>
@@ -75,14 +79,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 						return true;
 					}
 
-					var otherAgentSiteOpenHourPeriod = getPersonSiteOpenHourPeriod(shiftExchangeOffer.Person, shiftTradeDate);
+					var personToSiteOpenHourPeriod = getPersonSiteOpenHourPeriod(shiftExchangeOffer.Person, shiftTradeDate);
 
 					var timezone = shiftExchangeOffer.Person.PermissionInformation.DefaultTimeZone();
-					var scheduleTimePeriod = shiftExchangeOffer.MyShiftPeriod.Value.TimePeriod(timezone);
+					var personToScheduleTimePeriod = shiftExchangeOffer.MyShiftPeriod.Value.TimePeriod(timezone);
 
 					return
-						currentUserSiteOpenHourPeriod.Contains(scheduleTimePeriod)
-						&& otherAgentSiteOpenHourPeriod.Contains(scheduleTimePeriod);
+						personFromSiteOpenHourPeriod.Contains(personToScheduleTimePeriod)
+						&& personToSiteOpenHourPeriod.Contains(personFromSchedulePeriod);
 				});
 		}
 
@@ -99,6 +103,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private bool isFilterEnabled()
 		{
 			return _toggleManager.IsEnabled(Toggles.Wfm_Requests_Site_Open_Hours_39936);
+		}
+
+		private TimePeriod getSchedulePeriod(ShiftTradeAddPersonScheduleViewModel shiftTradeAddPersonScheduleView)
+		{
+			var maxEndTime = shiftTradeAddPersonScheduleView.ScheduleLayers.Max(scheduleLayer => scheduleLayer.End);
+			var minStartTime = shiftTradeAddPersonScheduleView.ScheduleLayers.Min(scheduleLayer => scheduleLayer.Start);
+			var scheduleTimePeriod = new TimePeriod(minStartTime.TimeOfDay, maxEndTime.TimeOfDay);
+			return scheduleTimePeriod;
 		}
 	}
 }

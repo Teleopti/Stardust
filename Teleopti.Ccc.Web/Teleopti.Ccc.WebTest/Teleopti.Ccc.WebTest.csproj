@@ -397,7 +397,7 @@
     <Compile Include="Core\RequestContext\UserUICultureTest.cs" />
     <Compile Include="Core\RequestContext\SessionSpecificForIdentityProviderDataProviderTest.cs" />
     <Compile Include="Core\Requests\DataProvider\AbsenceAccountProviderTest.cs" />
-    <Compile Include="Core\Requests\DataProvider\ShiftTradeScheduleSiteOpenHourFilterTest.cs" />
+    <Compile Include="Core\Requests\DataProvider\ShiftTradeSiteOpenHourFilterTest.cs" />
     <Compile Include="Core\Requests\Mapping\AbsenceAccountMappingProfileTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeEditScheduleLayerViewModelMapperTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftExchangeOfferMapperTest.cs" />

@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 						return new ShiftTradeAddPersonScheduleViewModel(scheduleReadModel);
 					}).ToList();
 				allSortedPossibleSchedules =
-					_shiftTradeSiteOpenHourFilter.FilterScheduleView(allSortedPossibleSchedules, new DatePersons { Date = inputData.ShiftTradeDate, Persons = personList }).ToList();
+					_shiftTradeSiteOpenHourFilter.FilterScheduleView(allSortedPossibleSchedules, ret.MySchedule, new DatePersons { Date = inputData.ShiftTradeDate, Persons = personList }).ToList();
 				ret.PageCount = (int)Math.Ceiling((double)allSortedPossibleSchedules.Count() / inputData.Paging.Take);
 				ret.PossibleTradeSchedules = allSortedPossibleSchedules.Skip(inputData.Paging.Skip).Take(inputData.Paging.Take);
 			}

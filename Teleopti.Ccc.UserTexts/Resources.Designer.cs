@@ -4278,7 +4278,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No open hour for {0} in site {1} found at: {2} - {3}.
+        ///   Looks up a localized string similar to No open hours for {0} found at site {1} between {2} - {3}.
         /// </summary>
         public static string BusinessRuleNoSiteOpenHourErrorMessage {
             get {

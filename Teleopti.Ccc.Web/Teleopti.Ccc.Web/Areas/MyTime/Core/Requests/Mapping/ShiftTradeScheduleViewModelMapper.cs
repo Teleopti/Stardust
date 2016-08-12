@@ -122,8 +122,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				filteredShiftExchangeOffers = getMatchShiftExchangeOffers(filteredShiftExchangeOffers, data.TimeFilter);
 			}
 
-			filteredShiftExchangeOffers =
-				_shiftTradeSiteOpenHourFilter.FilterShiftExchangeOffer(filteredShiftExchangeOffers, data.ShiftTradeDate);
+			if (myScheduleDayReadModel != null
+				&& myScheduleDayReadModel.Start.HasValue
+				&& myScheduleDayReadModel.End.HasValue)
+			{
+				var myScheduleTimePeriod = new TimePeriod(myScheduleDayReadModel.Start.Value.TimeOfDay,
+					myScheduleDayReadModel.End.Value.TimeOfDay);
+				filteredShiftExchangeOffers =
+					_shiftTradeSiteOpenHourFilter.FilterShiftExchangeOffer(filteredShiftExchangeOffers, myScheduleTimePeriod,
+						data.ShiftTradeDate);
+			}
 
 			var possibleTradeSchedule = getBulletinSchedules(filteredShiftExchangeOffers, data.Paging);
 
@@ -169,7 +177,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			}
 
 			possibleTradeSchedule =
-				_shiftTradeSiteOpenHourFilter.FilterScheduleView(possibleTradeSchedule, possibleTradePersons).ToList();
+				_shiftTradeSiteOpenHourFilter.FilterScheduleView(possibleTradeSchedule, mySchedule, possibleTradePersons).ToList();
 
 			var possibleTradeScheduleNum = possibleTradeSchedule.Any()
 				? possibleTradeSchedule.First().Total

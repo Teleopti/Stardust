@@ -328,7 +328,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_possibleShiftTradePersonsProvider.Stub(x => x.RetrievePersons(data)).Return(persons);
 			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradeSchedules(persons.Date, persons.Persons, data.Paging, null))
 				.Return(scheduleReadModels);
-			shiftTradeSiteOpenHourFilter.Stub(x => x.FilterScheduleView(possibleTradeScheduleViewModels, persons))
+
+			var fromPersonScheduleViewModel = new ShiftTradeAddPersonScheduleViewModel();
+			shiftTradeSiteOpenHourFilter.Stub(x => x.FilterScheduleView(possibleTradeScheduleViewModels, fromPersonScheduleViewModel, persons))
 				.Return(possibleTradeScheduleViewModels);
 			_shiftTradePersonScheduleViewModelMapper.Stub(x => x.Map(scheduleReadModels)).Return(possibleTradeScheduleViewModels);
 

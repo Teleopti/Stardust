@@ -8,9 +8,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 	public interface IShiftTradeSiteOpenHourFilter
 	{
 		IEnumerable<ShiftTradeAddPersonScheduleViewModel> FilterScheduleView(
-			IEnumerable<ShiftTradeAddPersonScheduleViewModel> shiftTradeAddPersonScheduleViews, DatePersons datePersons);
+			IEnumerable<ShiftTradeAddPersonScheduleViewModel> shiftTradeAddPersonScheduleViews,
+			ShiftTradeAddPersonScheduleViewModel fromPersonScheduleView, DatePersons datePersons);
 
 		IEnumerable<IShiftExchangeOffer> FilterShiftExchangeOffer(IEnumerable<IShiftExchangeOffer> shiftExchangeOffers,
-			DateOnly shiftTradeDate);
+			TimePeriod personFromSchedulePeriod, DateOnly shiftTradeDate);
 	}
 }
