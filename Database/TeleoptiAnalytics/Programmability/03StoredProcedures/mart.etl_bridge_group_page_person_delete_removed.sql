@@ -10,12 +10,15 @@ CREATE PROCEDURE [mart].[etl_bridge_group_page_person_delete_removed]
 @person_period_codes nvarchar(max)
 AS
 BEGIN
+
 	delete bgpp from [mart].[bridge_group_page_person] bgpp
-	where bgpp.person_id in (
-		select person_id from [mart].[dim_person] 
-		where person_code = @person_code 
-		and person_period_code not in (
-			select id from mart.SplitStringGuid(@person_period_codes)))
+	inner join mart.dim_person p
+		on bgpp.person_id = p.person_id
+	left outer join mart.SplitStringGuid(@person_period_codes) pp
+		on pp.id = p.person_period_code
+	where p.person_code=@person_code
+	and pp.id is null
+
 END
 
 GO
