@@ -76,6 +76,8 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		public bool UpdateAbsenceRequest(List<IPersonRequest> personRequests, IUnitOfWork unitOfWork,
 										 ISchedulingResultStateHolder schedulingResultStateHolder, IProcessAbsenceRequest process, IEnumerable<IAbsenceRequestValidator> validators)
 		{
+			_schedulingResultStateHolder = schedulingResultStateHolder;
+
 			var aggregatedValidatorList = new HashSet<IAbsenceRequestValidator>();
 
 			foreach (var personRequest in personRequests)
@@ -93,8 +95,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			foreach (var personRequest in personRequests)
 			{
 				var absenceRequest = personRequest.Request as IAbsenceRequest;
-
-				_schedulingResultStateHolder = schedulingResultStateHolder;
 
 				IAbsenceRequestValidator[] validatorList = null;
 				IPersonAccountBalanceCalculator personAccountBalanceCalculator = null;
