@@ -66,6 +66,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 			_persister.Invalidate();
 		}
 
+		[ReadModelUnitOfWork]
+		public virtual void Handle(RtaRuleChangedEvent @event)
+		{
+			_persister.Invalidate();
+		}
+
 		[AllBusinessUnitsUnitOfWork]
 		[ReadModelUnitOfWork]
 		public virtual void Handle(TenantMinuteTickEvent @event)
@@ -211,6 +217,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				};
 			return mappings;
 		}
-
 	}
 }

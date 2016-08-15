@@ -350,5 +350,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Mapping
 
 			Persister.Data.Select(x => x.BusinessUnitId).Should().Contain(businessUnit);
 		}
+
+		[Test]
+		public void ShouldUpdateOnRuleChanges()
+		{
+			var rule = Guid.NewGuid();
+			Target.Handle(new TenantMinuteTickEvent());
+
+			Database.WithRule(rule, null, null, null, 0, null, null, null);
+			Target.Handle(new RtaRuleChangedEvent());
+			Target.Handle(new TenantMinuteTickEvent());
+
+			Persister.Data.Select(x => x.RuleId).Should().Contain(rule);
+		}
 	}
 }
