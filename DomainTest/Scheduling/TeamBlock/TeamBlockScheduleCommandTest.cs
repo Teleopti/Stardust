@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		public IResourceOptimizationHelper ResourceOptimizationHelper;
 		public Func<IScheduleDayChangeCallback> ScheduleDayChangeCallback;
 		public IGroupPersonBuilderForOptimizationFactory GroupPersonBuilderForOptimizationFactory;
-		public FakeGroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
 
 		[Test]
 		public void ShouldBeAbleToScheduleTeamWithAllMembersLoadedButOneMemberFilteredOut()
@@ -53,12 +52,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				TimeSpan.FromHours(10),
 				TimeSpan.FromHours(10));
 
-			var businessUnit = new BusinessUnit("_");
+			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
 			var site = new Site("site");
 			var team1 = new Team {Description = new Description("team1")};
 			site.AddTeam(team1);
 			businessUnit.AddSite(site);
-			GroupScheduleGroupPageDataProvider.SetBusinessUnit(businessUnit);
 
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var normalRuleSet =
