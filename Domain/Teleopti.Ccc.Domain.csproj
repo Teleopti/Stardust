@@ -791,7 +791,6 @@
     <Compile Include="ApplicationLayer\IHandleCommand.cs" />
     <Compile Include="Config\ConfigReaderExtensions.cs" />
     <Compile Include="Config\WebConfigReader.cs" />
-    <Compile Include="CurrentApplicationData.cs" />
     <Compile Include="DayOffPlanning\CMSBCaseSolver.cs" />
     <Compile Include="DayOffPlanning\CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker.cs" />
     <Compile Include="DayOffPlanning\ConsecutiveDayOffValidator.cs" />
@@ -914,7 +913,6 @@
     <Compile Include="GenericDisposable.cs" />
     <Compile Include="Helper\DateExtensions.cs" />
     <Compile Include="Helper\ISchedulingProgress.cs" />
-    <Compile Include="ICurrentApplicationData.cs" />
     <Compile Include="Intraday\DeleteSkillArea.cs" />
     <Compile Include="Intraday\SkillAreaViewModel.cs" />
     <Compile Include="Intraday\SkillInIntradayViewModel.cs" />
@@ -2153,7 +2151,6 @@
     <Compile Include="SystemSetting\PersonalSettingData.cs" />
     <Compile Include="SystemSetting\SettingData.cs" />
     <Compile Include="SystemSetting\SettingValue.cs" />
-    <Compile Include="ThisApplicationData.cs" />
     <Compile Include="Time\ISetupDateTimePeriod.cs" />
     <Compile Include="Time\SetupDateTimePeriodDefaultLocalHoursForAbsence.cs" />
     <Compile Include="Time\SetupDateTimePeriodDefaultLocalHoursForActivities.cs" />
