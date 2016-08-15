@@ -217,6 +217,6 @@ function global:CopyFilesToOutput {
 
     #Create lastchangeset.txt file for Output directory
    
-       New-Item $OutDir\lastchangeset.txt -type file -force -value "$BuildVCSNumber" | Out-Null
+       New-Item $OutDir\lastchangeset.txt -type file -force -value "$env:BUILD_VCS_NUMBER" | Out-Null
 
 }
