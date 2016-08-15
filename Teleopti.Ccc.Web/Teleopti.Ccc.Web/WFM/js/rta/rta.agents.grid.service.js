@@ -1,18 +1,8 @@
 (function() {
 	'use strict';
-	angular.module('wfm.rta').service('RtaGridService', ['Toggle', 'uiGridConstants',
-		function(toggleService, uiGridConstants) {
-			var findLocaleLanguage = function(){
-				var l_lang;
-					  if (navigator.userLanguage) // IE
-					    l_lang = navigator.userLanguage;
-					  else if (navigator.language) // FF && CHROME
-					    l_lang = navigator.languages[0];
-					  else
-					    l_lang = "en";
-				return l_lang;
-
-			}();
+	angular.module('wfm.rta').service('RtaGridService', ['Toggle', 'uiGridConstants', 'RtaLocaleLanguageSortingService',
+		function(toggleService, uiGridConstants, RtaLocaleLanguageSortingService) {
+			
 			this.makeAllGrid = function() {
 				return makeGridOptions(false);
 			};
@@ -33,16 +23,6 @@
 				if (a < b)
 					return -1;
 				return 0;
-			}
-			
-			var localeLanguageSortingAlgorithm = function(a,b){
-				if (a == null && b == null)
-					return 0;
-				if (a == null)
-					return -1;
-				if (b == null)
-					return 1;
-				return a.localeCompare(b,findLocaleLanguage);
 			}
 
 			function makeGridOptions(alarmOnly) {
@@ -75,7 +55,7 @@
 					sort: alarmOnly ? null : {
 						direction: 'asc'
 					},
-					sortingAlgorithm: localeLanguageSortingAlgorithm
+					sortingAlgorithm: RtaLocaleLanguageSortingService.sort
 					//sort: { direction: 'asc' }
 				};
 				var siteAndTeam = {
@@ -84,7 +64,7 @@
 					headerCellTemplate: headerCellTemplate,
 					cellTemplate: coloredCellTemplate,
 					headerCellFilter: 'translate',
-					sortingAlgorithm: localeLanguageSortingAlgorithm
+					sortingAlgorithm: RtaLocaleLanguageSortingService.sort
 				};
 
 				var state = {
