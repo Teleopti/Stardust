@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using log4net;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -75,6 +76,20 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		public bool UpdateAbsenceRequest(List<IPersonRequest> personRequests, IUnitOfWork unitOfWork,
 										 ISchedulingResultStateHolder schedulingResultStateHolder, IProcessAbsenceRequest process, IEnumerable<IAbsenceRequestValidator> validators)
 		{
+			var aggregatedValidatorList = new HashSet<IAbsenceRequestValidator>();
+
+			foreach (var personRequest in personRequests)
+			{
+				var person = personRequest.Person;
+				if (person.WorkflowControlSet != null)
+				{
+					var mergedPeriod = person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((AbsenceRequest)personRequest.Request);
+					aggregatedValidatorList.UnionWith(validators ?? mergedPeriod.GetSelectedValidatorList());
+				}
+			}
+
+			loadDataForResourceCalculation(personRequests, aggregatedValidatorList);
+
 			foreach (var personRequest in personRequests)
 			{
 				var absenceRequest = personRequest.Request as IAbsenceRequest;
@@ -109,8 +124,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 					validatorList = (validators ?? mergedPeriod.GetSelectedValidatorList()).ToArray();
 					_process = process ?? mergedPeriod.AbsenceRequestProcess;
 
-					loadDataForResourceCalculation(absenceRequest, validatorList);
-
+				
 					personAccountBalanceCalculator = getPersonAccountBalanceCalculator(affectedPersonAbsenceAccount, absenceRequest,
 																					   personRequest, dateOnlyPeriod);
 
@@ -282,32 +296,48 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		}
 
 
-		private void loadDataForResourceCalculation(IAbsenceRequest absenceRequest, IEnumerable<IAbsenceRequestValidator> validatorList)
+		private void loadDataForResourceCalculation(List<IPersonRequest> personRequests, IEnumerable<IAbsenceRequestValidator> validatorList)
 		{
 			var shouldLoadDataForResourceCalculation = validatorList != null && validatorList.Any(v => typeof(StaffingThresholdValidator) == v.GetType());
+
+			var totalPeriod = personRequests.First().Request.Period;
+			var persons = new List<IPerson>();
+
+			foreach (var personRequest in personRequests)
+			{
+				if (totalPeriod.StartDateTime > personRequest.Request.Period.StartDateTime)
+				{
+					totalPeriod = new DateTimePeriod(personRequest.Request.Period.StartDateTime, totalPeriod.EndDateTime);
+				}
+				if (totalPeriod.EndDateTime < personRequest.Request.Period.EndDateTime)
+				{
+					totalPeriod = new DateTimePeriod(totalPeriod.StartDateTime, personRequest.Request.Period.EndDateTime);
+				}
+				persons.Add(personRequest.Person);
+			}
+			totalPeriod.ChangeStartTime(TimeSpan.FromDays(-1));
+
 			if (shouldLoadDataForResourceCalculation)
 			{
-				var periodForResourceCalc = absenceRequest.Period.ChangeStartTime(TimeSpan.FromDays(-1));
 				_prereqLoader.Execute();
 				_loadSchedulingStateHolderForResourceCalculation.Execute(_scenarioRepository.Current(),
-																		 periodForResourceCalc,
-																		 new List<IPerson> { absenceRequest.Person }, _schedulingResultStateHolder);
+																		 totalPeriod,
+																		 persons, _schedulingResultStateHolder);
 				if (logger.IsDebugEnabled)
 				{
 					logger.DebugFormat("Loaded schedules and data needed for resource calculation. (Period = {0})",
-										periodForResourceCalc);
+										totalPeriod);
 				}
 			}
 			else
 			{
-				var periodForResourceCalc = absenceRequest.Period.ChangeStartTime(TimeSpan.FromDays(-1));
 				_loadSchedulesForRequestWithoutResourceCalculation.Execute(_scenarioRepository.Current(),
-																		 periodForResourceCalc,
-																		 new List<IPerson> { absenceRequest.Person }, _schedulingResultStateHolder);
+																		 totalPeriod,
+																		 persons, _schedulingResultStateHolder);
 				if (logger.IsDebugEnabled)
 				{
 					logger.DebugFormat("Loaded schedules and data needed for absence request handling. (Period = {0})",
-										periodForResourceCalc);
+										totalPeriod);
 				}
 			}
 		}
