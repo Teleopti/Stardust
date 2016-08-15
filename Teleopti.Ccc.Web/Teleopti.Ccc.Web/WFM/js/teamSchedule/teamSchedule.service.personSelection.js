@@ -9,7 +9,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 			svc.personInfo = {};
 		};
 
-		svc.updatePersonSelection = function (personSchedule) {
+		svc.updatePersonSelection = function (personSchedule, shiftLayerIds) {
 			if (personSchedule.IsSelected) {
 				var absences = [], activities = [];
 				var shiftsForCurrentDate = personSchedule.Shifts.filter(function (shift) {
@@ -25,11 +25,18 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 								}
 							});
 						} else if (projection.ShiftLayerIds && !projection.IsOvertime) {
-							angular.forEach(projection.ShiftLayerIds, function (shiftLayer) {
-								if (activities.indexOf(shiftLayer) === -1) {
-									activities.push(shiftLayer);
-								}
-							});
+							if(shiftLayerIds && shiftLayerIds.length > 0){
+								shiftLayerIds.forEach(function(shiftLayerId){
+									if(activities.indexOf(shiftLayerId) === -1)
+										activities.push(shiftLayerId);
+								});
+							}else{
+								angular.forEach(projection.ShiftLayerIds, function (shiftLayer) {
+									if (activities.indexOf(shiftLayer) === -1) {
+										activities.push(shiftLayer);
+									}
+								});
+							}
 						}
 					});
 				}

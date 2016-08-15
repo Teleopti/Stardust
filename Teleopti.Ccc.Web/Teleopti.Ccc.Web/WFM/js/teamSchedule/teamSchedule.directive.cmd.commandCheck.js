@@ -87,10 +87,22 @@
 		};
 
 		vm.toggleAllPersonSelection = function(isSelected) {
-			vm.overlappedAgents.forEach(function(agent) {
-				agent.IsSelected = isSelected;
-				personSelectionSvc.updatePersonSelection(agent);
-			});
+			if (vm.currentCommandLabel == 'MoveActivity'){
+				var personActivities = CommandCheckService.getRequestData().PersonActivities;
+				vm.overlappedAgents.forEach(function(agent) {
+					agent.IsSelected = isSelected;
+					personActivities.forEach(function(personActivity){
+						if(personActivity.PersonId == agent.PersonId){
+							personSelectionSvc.updatePersonSelection(agent, personActivity.ShiftLayerIds);
+						}
+					});
+				});
+			}else{
+				vm.overlappedAgents.forEach(function(agent) {
+					agent.IsSelected = isSelected;
+					personSelectionSvc.updatePersonSelection(agent);
+				});
+			}
 		};
 
 		vm.applyCommandFix = function() {

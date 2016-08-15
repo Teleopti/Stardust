@@ -6,7 +6,7 @@
     function CommandCheckService($http, $q) {
     	var checkOverlappingUrl = "../api/TeamScheduleData/CheckOverlapppingCertainActivities";
 	    var checkOverlappingMoveActivityUrl = "../api/TeamScheduleData/CheckMoveActivityOverlapppingCertainActivities";
-        var overlappingPeopleList = [];
+        var overlappingPeopleList = [], commandRquestData;
         var commandCheckDeferred, commandCheckedStatus = false;
 
         this.checkOverlappingCertainActivities = checkOverlappingCertainActivities;
@@ -16,12 +16,14 @@
         this.getCommandCheckStatus = getCommandCheckStatus;
         this.resetCommandCheckStatus = resetCommandCheckStatus;
         this.completeCommandCheck = completeCommandCheck;
+        this.getRequestData = getRequestData;
 
         function checkOverlappingCertainActivities(requestData) {
 	        return getCheck(checkOverlappingUrl)(requestData);
         }
 
         function checkMoveActivityOverlappingCertainActivities(requestData) {
+            commandRquestData = requestData;
         	return getCheck(checkOverlappingMoveActivityUrl)(requestData);
         }
 
@@ -45,6 +47,10 @@
 			    return commandCheckDeferred.promise;
 		    };
 	    }
+
+        function getRequestData(){
+            return commandRquestData;
+        }
 
 	    function getCommandCheckStatus(){
             return commandCheckedStatus;
