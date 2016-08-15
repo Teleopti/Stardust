@@ -109,7 +109,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		{
 			var maxEndTime = shiftTradeAddPersonScheduleView.ScheduleLayers.Max(scheduleLayer => scheduleLayer.End);
 			var minStartTime = shiftTradeAddPersonScheduleView.ScheduleLayers.Min(scheduleLayer => scheduleLayer.Start);
-			var scheduleTimePeriod = new TimePeriod(minStartTime.TimeOfDay, maxEndTime.TimeOfDay);
+
+			var scheduleTimePeriod = new TimePeriod(minStartTime.TimeOfDay,
+				(minStartTime.Day != maxEndTime.Day)
+					? maxEndTime.TimeOfDay.Add(TimeSpan.FromDays(1))
+					: maxEndTime.TimeOfDay);
+
 			return scheduleTimePeriod;
 		}
 	}
