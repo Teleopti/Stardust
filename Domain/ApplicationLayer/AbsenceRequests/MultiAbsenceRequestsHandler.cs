@@ -42,8 +42,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_loadDataActions = new List<LoadDataAction>
 			{
 				checkPersonRequest,
-				checkAbsenceRequest,
-				loadDefaultScenario
+				checkAbsenceRequest
 			};
 
 			if (logger.IsInfoEnabled)
@@ -56,12 +55,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		{
 			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
+				_scenarioRepository.Current();
+
 				foreach (var personRequestId in @event.Identities)
 				{
 
 					if (_loadDataActions.Any(action => !action.Invoke(personRequestId)))
 					{
-						return;
+						continue;
 					}
 
 					if (shouldUseWaitlisting())
@@ -81,17 +82,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		{
 			var workflowControlSet = _absenceRequest.Person.WorkflowControlSet;
 			return workflowControlSet != null && workflowControlSet.WaitlistingIsEnabled(_absenceRequest);
-		}
-
-		private bool loadDefaultScenario(Guid personRequestId)
-		{
-			var defaultScenario = _scenarioRepository.Current();
-			if (logger.IsDebugEnabled)
-			{
-				logger.DebugFormat("Using the default scenario named {0}. (Id = {1})", defaultScenario.Description,
-									defaultScenario.Id);
-			}
-			return true;
 		}
 
 		private bool checkAbsenceRequest(Guid personRequestId)
