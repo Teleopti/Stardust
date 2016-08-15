@@ -138,7 +138,7 @@
 
         <property name="AbsenceRequestWaitlistEnabled" type="bool" not-null="true" />
 
-        <property name="AbsenceRequestWaitlistProcessOrder" type="int" not-null="true" />
+        <property name="AbsenceRequestWaitlistProcessOrder" not-null="true" />
 
         <property name="AbsenceRequestCancellationThreshold" type="int" not-null="false" />
 
