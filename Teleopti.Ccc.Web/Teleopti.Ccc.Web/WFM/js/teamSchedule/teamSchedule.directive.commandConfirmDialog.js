@@ -7,7 +7,7 @@
 
 	function commandConfirmDialog($scope, $mdDialog, $translate) {
 
-		var ctrl = this;		
+		var ctrl = $scope;
 
 		init();
 		
@@ -38,8 +38,8 @@
 			}
 			
 			$scope.apply = getApply(ctrl.command);
-			$scope.hide = function () { $mdDialog.hide(); };
-			$scope.cancel = function () { $mdDialog.cancel(); };
+			$scope.hide = function () { $scope.showModal = false; };
+			$scope.cancel = function () { $scope.showModal = false; };
 
 		}
 
@@ -62,8 +62,8 @@
 				} else {
 					action();
 				}
-				
-				$mdDialog.hide();
+
+				$scope.showModal = false;
 			};
 		}
 

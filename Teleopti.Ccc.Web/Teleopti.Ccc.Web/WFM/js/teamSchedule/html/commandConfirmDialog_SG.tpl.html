@@ -1,0 +1,38 @@
+﻿<div aria-label="{{commandTitle}}" class="team-schedule-command-confirm-dialog">
+	<h1 class="modal-title" translate>{{commandTitle}}</h1>
+	<div class="modal-inner-content">
+		<div ng-if="false && isRemoveAbsence" class='wfm-checkbox'>
+			<input type='checkbox' id='checkRemoveEntireAbsence' ng-checked='removeFullDayAbsence' ng-click='toggleRemoveFullDayAbsence()'
+			/>
+			<label for='checkRemoveEntireAbsence'>
+					<span class='wfm-checkbox-toggle'></span>
+					<span class='wfm-checkbox-label'>{{'RemoveEntireAbsenceForMultiDayPersonAbsence' | translate}}</span>
+				</label>
+		</div>
+
+		<p>{{getCommandMessage()}}</p>
+
+		<p ng-if="needFix" class="text-warning">
+			<span>{{ translatedWarningMessage }}</span>&nbsp;
+			<button ng-click="fix()" class="wfm-btn wfm-btn-default">
+					{{'Unselect' | translate}}
+				</button>
+		</p>
+
+		<p ng-if="hasError" class="text-danger">
+			<span>{{ translatedErrorMessage }}</span>
+		</p>
+
+	</div>
+	<div class="modal-actions">
+		<aside>
+			<button ng-click="cancel()" class="wfm-btn wfm-btn-invis-default">
+				{{'Cancel' | translate}}
+			</button>
+			<button ng-click="apply()" class="wfm-btn" ng-class="{'wfm-btn-invis-primary': !(needFix || hasError) , 'wfm-btn-primary-disabled': needFix || hasError}"
+				ng-disabled="(needFix || hasError) ?'disabled':''" autofocus>
+				{{'Apply' | translate}}
+			</button>
+		</aside>
+	</div>
+</div>
