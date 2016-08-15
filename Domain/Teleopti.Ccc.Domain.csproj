@@ -363,14 +363,12 @@
     <Compile Include="Infrastructure\IIndexMaintenanceRepository.cs" />
     <Compile Include="Infrastructure\IndexMaintenanceStardustHandler.cs" />
     <Compile Include="Intraday\ForecastedStaffingProvider.cs" />
-    <Compile Include="Intraday\IForecastedStaffingLoader.cs" />
     <Compile Include="Intraday\IntradayStaffingViewModel.cs" />
     <Compile Include="Intraday\IntradayStatisticsDataSeries.cs" />
     <Compile Include="Intraday\IntradayStatisticsSummary.cs" />
     <Compile Include="Intraday\IScheduleForecastSkillReadModelRepository.cs" />
     <Compile Include="Intraday\ScheduleForecastSkillProvider.cs" />
     <Compile Include="Intraday\StaffingDataSeries.cs" />
-    <Compile Include="Intraday\StaffingIntervalModel.cs" />
     <Compile Include="Logon\ImpersonateSystem.cs" />
     <Compile Include="Logon\ImpersonateSystemAspect.cs" />
     <Compile Include="Logon\ImpersonateSystemAttribute.cs" />
