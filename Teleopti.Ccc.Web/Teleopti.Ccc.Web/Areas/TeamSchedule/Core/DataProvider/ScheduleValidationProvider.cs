@@ -115,27 +115,29 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				Func<IVisualLayer, bool> stickyLayerPredicate = layer =>
 				{
 					var activityLayer = layer.Payload as IActivity;
-					return activityLayer != null && layer.Period != targetLayer.Period && !activityLayer.AllowOverwrite;
+
+					return activityLayer != null && !(activityLayer.Id == targetLayer.Payload.Id && targetLayer.Period.Contains(layer.Period)) 
+							&& !activityLayer.AllowOverwrite;
 				};
 
 				var stickyLayersInNewProjection =
 					personAssignment.ProjectionService().CreateProjection().Where(stickyLayerPredicate).ToList();
 
 				var stickyLayersInOldProjection = scheduleDay.ProjectionService().CreateProjection().Where(stickyLayerPredicate).ToList();
-				
+
 				var overlapLayers = stickyLayersInOldProjection.Where(layer =>
 				{
-					return stickyLayersInNewProjection.All(l => l.Payload.Id != layer.Payload.Id || l.Period != layer.Period);
+					return !stickyLayersInNewProjection.Any(l => l.Payload.Id == layer.Payload.Id && l.Period.Contains(layer.Period));
 				})
 				.Select(layer => new OverlappedLayer
 				{
 					Name = ((IActivity)layer.Payload).Name,
-					StartTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime,_timeZone.TimeZone()),
-					EndTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.EndDateTime,_timeZone.TimeZone())
+					StartTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime, _timeZone.TimeZone()),
+					EndTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.EndDateTime, _timeZone.TimeZone())
 				})
 				.ToList();
 
-				if(overlapLayers.IsEmpty()) continue;
+				if (overlapLayers.IsEmpty()) continue;
 
 				results.Add(new ActivityLayerOverlapCheckingResult
 				{
