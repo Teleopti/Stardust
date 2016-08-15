@@ -32,6 +32,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 		public string Keyword { get; set; }
 	}
 
+	public class GroupWeekScheduleViewModel
+	{
+		public List<PersonWeekScheduleViewModel> PersonWeekSchedules { get; set; } 
+		public int Total { get; set; }
+		public string Keyword { get; set; }
+	}
+
 	public class FullDayAbsenceForm
 	{
 		public IEnumerable<Guid> PersonIds { get; set; }

@@ -37,6 +37,11 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			});			
 		}
 
+		public IEnumerable<IScheduleDay> GetScheduleForPersonsInPeriod(DateOnlyPeriod period, IEnumerable<IPerson> persons)
+		{
+			throw new System.NotImplementedException();
+		}
+
 		public void AddScheduleDay(IScheduleDay sd)
 		{
 			_scheduleDays.Add(sd);

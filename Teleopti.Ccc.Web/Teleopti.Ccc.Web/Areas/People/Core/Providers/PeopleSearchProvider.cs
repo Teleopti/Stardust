@@ -18,13 +18,15 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 		private readonly IOptionalColumnRepository _optionalColumnRepository;
 		private readonly IPersonAbsenceRepository _personAbsenceRepository;
 		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly IUserCulture _culture;
+		private readonly ICurrentBusinessUnit _businessUnitProvider;
 
 		public PeopleSearchProvider(
 			IPersonFinderReadOnlyRepository searchRepository,
 			IPersonRepository personRepository,
 			IPermissionProvider permissionProvider,
 			IOptionalColumnRepository optionalColumnRepository, IPersonAbsenceRepository personAbsenceRepository,
-			ILoggedOnUser loggedOnUser)
+			ILoggedOnUser loggedOnUser, IUserCulture culture, ICurrentBusinessUnit businessUnitProvider)
 		{
 			_searchRepository = searchRepository;
 			_personRepository = personRepository;
@@ -32,6 +34,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 			_optionalColumnRepository = optionalColumnRepository;
 			_personAbsenceRepository = personAbsenceRepository;
 			_loggedOnUser = loggedOnUser;
+			_culture = culture;
+			_businessUnitProvider = businessUnitProvider;
 		}
 
 		public PeopleSummaryModel SearchPermittedPeopleSummary(IDictionary<PersonFinderField, string> criteriaDictionary,
@@ -83,6 +87,37 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 				searchCriteria.DisplayRows.Where(
 					r => r.RowNumber > 0 && _permissionProvider.HasOrganisationDetailPermission(function, currentDate, r));
 			return permittedPersonList.Select(x => x.PersonId);
+		}
+
+		public IEnumerable<Guid> GetPermittedPersonIdList(IEnumerable<IPerson> people ,DateOnly currentDate,
+			string function)
+		{
+			var entities = people.Select(p =>
+				new PersonFinderDisplayRow
+				{
+					PersonId = p.Id.GetValueOrDefault(),
+					TeamId = p.MyTeam(currentDate)?.Id,
+					SiteId = p.MyTeam(currentDate)?.Site.Id,
+					BusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault()
+				});
+
+			return
+				entities.Where(e => _permissionProvider.HasOrganisationDetailPermission(function, currentDate, e))
+					.Select(x => x.PersonId);		
+		}
+
+		public IEnumerable<Guid> GetPermittedPersonIdListInWeek(PersonFinderSearchCriteria searchCriteria,DateOnly currentDate, string function)
+		{
+			var firstDayOfWeek = DateHelper.GetFirstDateInWeek(currentDate, _culture.GetCulture().DateTimeFormat.FirstDayOfWeek);
+			var week = new DateOnlyPeriod(firstDayOfWeek,firstDayOfWeek.AddDays(6));
+
+			return week.DayCollection().SelectMany(d =>
+			{
+				return searchCriteria.DisplayRows
+					.Where(
+						r => r.RowNumber > 0 && _permissionProvider.HasOrganisationDetailPermission(function, currentDate, r))
+					.Select(x => x.PersonId);
+			}).Distinct().ToList();			
 		}
 
 		public PersonFinderSearchCriteria CreatePersonFinderSearchCriteria(IDictionary<PersonFinderField, string> criteriaDictionary,

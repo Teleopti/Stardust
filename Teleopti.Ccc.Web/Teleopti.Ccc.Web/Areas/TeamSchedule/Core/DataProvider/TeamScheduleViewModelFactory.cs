@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -22,11 +23,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
 		private readonly IPeopleSearchProvider _searchProvider;
 		private readonly IPersonRepository _personRepository;
+		private readonly IUserCulture _userCulture;
 
 		public TeamScheduleViewModelFactory(IPermissionProvider permissionProvider, IScheduleProvider scheduleProvider, 
 			ITeamScheduleProjectionProvider projectionProvider, ILoggedOnUser loggedOnUser,
 			ICommonAgentNameProvider commonAgentNameProvider, IPeopleSearchProvider searchProvider,
-			IPersonRepository personRepository)
+			IPersonRepository personRepository, IUserCulture userCulture)
 		{
 			_permissionProvider = permissionProvider;
 			_scheduleProvider = scheduleProvider;
@@ -35,6 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			_commonAgentNameProvider = commonAgentNameProvider;
 			_searchProvider = searchProvider;
 			_personRepository = personRepository;
+			_userCulture = userCulture;
 		}
 
 		public GroupScheduleViewModel CreateViewModel(IDictionary<PersonFinderField, string> criteriaDictionary,
@@ -69,6 +72,34 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			return new GroupScheduleViewModel
 			{
 				Schedules = list,
+				Total = people.Length
+			};
+		}
+
+		public GroupWeekScheduleViewModel CreateWeekScheduleViewModel(
+			IDictionary<PersonFinderField, string> criteriaDictionary,
+			DateOnly dateInUserTimeZone, int pageSize, int currentPageIndex)
+		{
+			var searchCriteria = _searchProvider.CreatePersonFinderSearchCriteria(criteriaDictionary,9999,1,dateInUserTimeZone,
+				null);
+			var people = _searchProvider.SearchPermittedPeople(searchCriteria,dateInUserTimeZone,
+				DefinedRaptorApplicationFunctionPaths.ViewSchedules).ToArray();
+
+
+			if(people.Length > 500)
+			{
+				return new GroupWeekScheduleViewModel
+				{
+					PersonWeekSchedules = new List<PersonWeekScheduleViewModel>(),
+					Total = people.Length,
+				};
+			}
+
+			var list = constructPeopleWeekScheduleViewModel(dateInUserTimeZone, people, pageSize, currentPageIndex).ToList();
+
+			return new GroupWeekScheduleViewModel
+			{
+				PersonWeekSchedules = list,
 				Total = people.Length
 			};
 		}
@@ -119,6 +150,74 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			}
 			return ret.ToArray();
 		}
+
+		private IEnumerable<PersonWeekScheduleViewModel> constructPeopleWeekScheduleViewModel(DateOnly dateInUserTimeZone,
+			ICollection<IPerson> people, int pageSize, int currentPageIndex)
+		{
+			var firstDayOfWeek = DateHelper.GetFirstDateInWeek(dateInUserTimeZone, _userCulture.GetCulture().DateTimeFormat.FirstDayOfWeek);
+			var week = new DateOnlyPeriod(firstDayOfWeek,firstDayOfWeek.AddDays(6));
+			var weekDays = week.DayCollection();
+
+			var canSeeUnpublishedSchedules =
+				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
+
+			var nameDescriptionSetting = _commonAgentNameProvider.CommonAgentNameSettings;
+
+			var pagedPeople = pageSize > 0
+				? people.OrderBy(p => nameDescriptionSetting.BuildCommonNameDescription(p)).Skip(pageSize*(currentPageIndex - 1)).Take(pageSize).ToList()
+				: people.ToList();
+
+			var scheduleDays = _scheduleProvider.GetScheduleForPersonsInPeriod(week.Inflate(1), pagedPeople)
+				.ToDictionary(sd => new PersonDate
+				{
+					PersonId = sd.Person.Id.GetValueOrDefault(),
+					Date = sd.DateOnlyAsPeriod.DateOnly
+				});
+
+			var viewableConfidentialAbsenceAgents =
+				weekDays.ToDictionary(d => d, d => _searchProvider.GetPermittedPersonIdList(pagedPeople, dateInUserTimeZone,
+					DefinedRaptorApplicationFunctionPaths.ViewConfidential));
+
+			var result = new List<PersonWeekScheduleViewModel>();
+
+			foreach (var person in pagedPeople)
+			{
+				var daySchedules = weekDays
+					.Select(d =>
+					{
+						var pd = new PersonDate
+						{
+							PersonId = person.Id.GetValueOrDefault(),
+							Date = d
+						};
+						
+						var scheduleDay = scheduleDays[pd];
+						var canViewConfidentialAbsence = viewableConfidentialAbsenceAgents[pd.Date].Contains(pd.PersonId);
+
+						var dayScheduleViewModel = new PersonDayScheduleSummayViewModel
+						{
+							IsTerminated = person.TerminalDate.HasValue && person.TerminalDate.Value <= weekDays.Last(),
+							Date = d,
+							DayOfWeek = (int) d.DayOfWeek
+						};
+
+						if (dayScheduleViewModel.IsTerminated) return dayScheduleViewModel;
+
+						completeScheduleDaySummary(dayScheduleViewModel, scheduleDay, canViewConfidentialAbsence, canSeeUnpublishedSchedules);
+
+						return dayScheduleViewModel;
+					}).ToList();
+
+				result.Add(new PersonWeekScheduleViewModel
+				{
+					PersonId = person.Id.GetValueOrDefault(),
+					Name = nameDescriptionSetting.BuildCommonNameDescription(person),					
+					DaySchedules = daySchedules
+				});
+			}
+
+			return result;
+		}	
 
 		private IEnumerable<GroupScheduleShiftViewModel> constructGroupScheduleShiftViewModels(DateOnly dateInUserTimeZone,
 			ICollection<IPerson> people, Guid[] peopleCanSeeConfidentialAbsencesFor, int pageSize, int currentPageIndex)
@@ -177,23 +276,80 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 						Projection = new List<GroupScheduleProjectionViewModel>()
 					});
 				}
-				
-				foreach (var scheduleDay in schedules)
-				{
-					var isPublished = isSchedulePublished(scheduleDay.DateOnlyAsPeriod.DateOnly, person);
-					list.Add(isPublished || canSeeUnpublishedSchedules
-						? _projectionProvider.Projection(scheduleDay, canViewConfidential, nameDescriptionSetting)
-						: new GroupScheduleShiftViewModel
-						{
-							PersonId = person.Id.GetValueOrDefault().ToString(),
-							Name = nameDescriptionSetting.BuildCommonNameDescription(person),
-							Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToFixedDateFormat(),
-							Projection = new List<GroupScheduleProjectionViewModel>()
-						});
-				}
+
+				list = schedules.Select(s => toGroupScheduleShiftViewModel(s,canViewConfidential,canSeeUnpublishedSchedules)).ToList();			
 			}
 			return list;
 		}
+
+		private void completeScheduleDaySummary(PersonDayScheduleSummayViewModel vm, IScheduleDay scheduleDay,
+			bool canViewConfidentialAbsence,
+			bool canViewUnpublishedSchedules)
+		{
+			var isSchedulePublished = TeamScheduleViewModelFactory.isSchedulePublished(scheduleDay.DateOnlyAsPeriod.DateOnly, scheduleDay.Person);
+			if (!isSchedulePublished && !canViewUnpublishedSchedules) return;
+
+			var significantPart = scheduleDay.SignificantPartForDisplay();
+			var personAssignment = scheduleDay.PersonAssignment(false);
+			var projection = scheduleDay.ProjectionService().CreateProjection();
+			var absenceCollection = scheduleDay.PersonAbsenceCollection();
+
+			if (significantPart == SchedulePartView.DayOff)
+			{
+				vm.Title = personAssignment.DayOff().Description.Name;			
+			}
+			else if (significantPart == SchedulePartView.MainShift)
+			{
+				vm.Title = personAssignment.ShiftCategory.Description.Name;
+				vm.Summary = TimeHelper.GetLongHourMinuteTimeString(projection.ContractTime(), _userCulture.GetCulture());
+				vm.TimeSpan = personAssignment.PeriodExcludingPersonalActivity()
+							.TimePeriod(scheduleDay.TimeZone)
+							.ToShortTimeString();
+
+				if (personAssignment.ShiftCategory != null)
+				{
+					vm.Color =
+						$"rgb({personAssignment.ShiftCategory.DisplayColor.R},{personAssignment.ShiftCategory.DisplayColor.G},{personAssignment.ShiftCategory.DisplayColor.B})";
+				}				 
+			}
+			else if (significantPart == SchedulePartView.FullDayAbsence || significantPart == SchedulePartView.ContractDayOff)
+			{			
+				var absence = absenceCollection.OrderBy(a => a.Layer.Payload.Priority)
+					.ThenByDescending(a => absenceCollection.IndexOf(a)).First().Layer.Payload;
+
+				if (absence.Confidential && !canViewConfidentialAbsence)
+				{
+					vm.Title = absence.Description.Name;
+					vm.Color = $"rgb({absence.DisplayColor.R},{absence.DisplayColor.G},{absence.DisplayColor.B})";
+				}
+				else
+				{
+					vm.Title = ConfidentialPayloadValues.Description.Name;
+					vm.Color = ConfidentialPayloadValues.DisplayColorHex;
+				}
+				
+				vm.Summary = TimeHelper.GetLongHourMinuteTimeString(projection.ContractTime(), _userCulture.GetCulture());										
+			}
+		}
+
+		private GroupScheduleShiftViewModel toGroupScheduleShiftViewModel(IScheduleDay scheduleDay, bool canViewConfidentialAbsence, bool canViewUnpublishedSchedules)
+		{
+			var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
+			var nameDescriptionSetting = _commonAgentNameProvider.CommonAgentNameSettings;
+			var person = scheduleDay.Person;
+			var isPublished = isSchedulePublished(date,person);
+			return isPublished || canViewUnpublishedSchedules
+				? _projectionProvider.Projection(scheduleDay,canViewConfidentialAbsence,nameDescriptionSetting)
+				: new GroupScheduleShiftViewModel
+				{
+					PersonId = person.Id.GetValueOrDefault().ToString(),
+					Name = nameDescriptionSetting.BuildCommonNameDescription(person),
+					Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToFixedDateFormat(),
+					Projection = new List<GroupScheduleProjectionViewModel>()
+				};
+		}
+
+
 		private static bool isSchedulePublished(DateOnly date, IPerson person)
 		{
 			var workflowControlSet = person.WorkflowControlSet;
@@ -202,5 +358,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			return workflowControlSet.SchedulePublishedToDate.HasValue &&
 				   workflowControlSet.SchedulePublishedToDate.Value >= date.Date;
 		}
+
+		private struct PersonDate
+		{
+			public Guid PersonId { get; set; }
+			public DateOnly Date { get; set; }
+		}
 	}
+
+	
 }

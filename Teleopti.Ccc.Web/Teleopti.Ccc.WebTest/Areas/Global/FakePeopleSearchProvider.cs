@@ -34,6 +34,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			throw new NotImplementedException();
 		}
 
+		public IEnumerable<Guid> GetPermittedPersonIdListInWeek(PersonFinderSearchCriteria searchCriteria, DateOnly currentDate,
+			string function)
+		{
+			throw new NotImplementedException();
+		}
+
 		public IEnumerable<IPerson> SearchPermittedPeopleWithAbsence(IEnumerable<IPerson> permittedPeople, DateOnly dateInUserTimeZone)
 		{
 			throw new NotImplementedException();
@@ -41,6 +47,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 		public PersonFinderSearchCriteria CreatePersonFinderSearchCriteria(IDictionary<PersonFinderField, string> criteriaDictionary, int pageSize,
 			int currentPageIndex, DateOnly currentDate, IDictionary<string, bool> sortedColumns)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IEnumerable<Guid> GetPermittedPersonIdList(IEnumerable<IPerson> people, DateOnly currentDate, string function)
 		{
 			throw new NotImplementedException();
 		}

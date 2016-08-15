@@ -20,9 +20,15 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 		IEnumerable<Guid> GetPermittedPersonIdList(PersonFinderSearchCriteria searchCriteria, DateOnly currentDate,
 			string function);
 
+		IEnumerable<Guid> GetPermittedPersonIdListInWeek(PersonFinderSearchCriteria searchCriteria, DateOnly currentDate,
+			string function);
+
 		IEnumerable<IPerson> SearchPermittedPeopleWithAbsence(IEnumerable<IPerson> permittedPeople, DateOnly dateInUserTimeZone);
 
 		PersonFinderSearchCriteria CreatePersonFinderSearchCriteria(IDictionary<PersonFinderField, string> criteriaDictionary,
 			int pageSize, int currentPageIndex, DateOnly currentDate, IDictionary<string, bool> sortedColumns);
+
+		IEnumerable<Guid> GetPermittedPersonIdList(IEnumerable<IPerson> people, DateOnly currentDate,
+			string function);
 	}
 }
