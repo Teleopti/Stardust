@@ -41,23 +41,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 	    }
 
 
-	    private TimePeriod getTimePeriodForTeam(DateOnly dateOnly, IEnumerable<IScheduleMatrixPro> matrixList)
-        {
-            TimeSpan startTime = TimeSpan.MinValue;
-            TimeSpan endTime = TimeSpan.MaxValue;
-            foreach (var matrix in matrixList)
-            {
-                var timePeriod = accessNightlyRestForEachMatrix(matrix, dateOnly);
-                if (timePeriod.StartTime > startTime)
-                    startTime = timePeriod.StartTime;
-                if (timePeriod.EndTime < endTime)
-                    endTime = timePeriod.EndTime;
-            }
+		private TimePeriod getTimePeriodForTeam(DateOnly dateOnly, IEnumerable<IScheduleMatrixPro> matrixList)
+		{
+			var startTime = TimeSpan.MinValue;
+			var endTime = TimeSpan.MaxValue;
+			foreach (var matrix in matrixList)
+			{
+				var timePeriod = accessNightlyRestForEachMatrix(matrix, dateOnly);
+				if (timePeriod.StartTime > startTime)
+					startTime = timePeriod.StartTime;
+				if (timePeriod.EndTime < endTime)
+					endTime = timePeriod.EndTime;
+			}
 
-            return new TimePeriod(startTime, endTime);
-        }
+			return startTime > endTime ? 
+				new TimePeriod() : 
+				new TimePeriod(startTime, endTime);
+		}
 
-        private TimePeriod accessNightlyRestForEachMatrix(IScheduleMatrixPro matrix, DateOnly dateOnly)
+		private TimePeriod accessNightlyRestForEachMatrix(IScheduleMatrixPro matrix, DateOnly dateOnly)
         {
             var range = matrix.ActiveScheduleRange;
             var scheduleDay = range.ScheduledDay(dateOnly);
