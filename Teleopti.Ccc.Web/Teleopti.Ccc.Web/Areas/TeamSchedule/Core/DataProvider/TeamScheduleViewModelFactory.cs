@@ -82,9 +82,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		{
 			var searchCriteria = _searchProvider.CreatePersonFinderSearchCriteria(criteriaDictionary,9999,1,dateInUserTimeZone,
 				null);
-			var people = _searchProvider.SearchPermittedPeople(searchCriteria,dateInUserTimeZone,
+
+			var personIds = _searchProvider.GetPermittedPersonIdListInWeek(searchCriteria,dateInUserTimeZone,
 				DefinedRaptorApplicationFunctionPaths.ViewSchedules).ToArray();
 
+			var people = _personRepository.FindPeople(personIds).ToArray();
 
 			if(people.Length > 500)
 			{
@@ -290,18 +292,17 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			if (!isSchedulePublished && !canViewUnpublishedSchedules) return;
 
 			var significantPart = scheduleDay.SignificantPartForDisplay();
-			var personAssignment = scheduleDay.PersonAssignment(false);
-			var projection = scheduleDay.ProjectionService().CreateProjection();
+			var personAssignment = scheduleDay.PersonAssignment(false);			
 			var absenceCollection = scheduleDay.PersonAbsenceCollection();
 
 			if (significantPart == SchedulePartView.DayOff)
 			{
-				vm.Title = personAssignment.DayOff().Description.Name;			
+				vm.Title = personAssignment.DayOff().Description.Name;
+				vm.IsDayOff = true;
 			}
 			else if (significantPart == SchedulePartView.MainShift)
 			{
 				vm.Title = personAssignment.ShiftCategory.Description.Name;
-				vm.Summary = TimeHelper.GetLongHourMinuteTimeString(projection.ContractTime(), _userCulture.GetCulture());
 				vm.TimeSpan = personAssignment.PeriodExcludingPersonalActivity()
 							.TimePeriod(scheduleDay.TimeZone)
 							.ToShortTimeString();
@@ -317,18 +318,18 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				var absence = absenceCollection.OrderBy(a => a.Layer.Payload.Priority)
 					.ThenByDescending(a => absenceCollection.IndexOf(a)).First().Layer.Payload;
 
+				vm.IsDayOff = significantPart == SchedulePartView.ContractDayOff;
+
 				if (absence.Confidential && !canViewConfidentialAbsence)
 				{
-					vm.Title = absence.Description.Name;
-					vm.Color = $"rgb({absence.DisplayColor.R},{absence.DisplayColor.G},{absence.DisplayColor.B})";
+					vm.Title = ConfidentialPayloadValues.Description.Name;
+					vm.Color = ConfidentialPayloadValues.DisplayColorHex;					
 				}
 				else
 				{
-					vm.Title = ConfidentialPayloadValues.Description.Name;
-					vm.Color = ConfidentialPayloadValues.DisplayColorHex;
-				}
-				
-				vm.Summary = TimeHelper.GetLongHourMinuteTimeString(projection.ContractTime(), _userCulture.GetCulture());										
+					vm.Title = absence.Description.Name;
+					vm.Color = $"rgb({absence.DisplayColor.R},{absence.DisplayColor.G},{absence.DisplayColor.B})";
+				}				
 			}
 		}
 

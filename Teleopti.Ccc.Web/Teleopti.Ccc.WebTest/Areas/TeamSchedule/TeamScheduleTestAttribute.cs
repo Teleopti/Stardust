@@ -15,6 +15,7 @@ using Teleopti.Ccc.Web.Areas.People.Core.Providers;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.IoC;
 using Teleopti.Ccc.Web.Core.IoC;
+using Teleopti.Ccc.WebTest.Areas.Global;
 using Teleopti.Ccc.WebTest.Areas.Search;
 using Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core;
 using Teleopti.Ccc.WebTest.Core.Common.DataProvider;
@@ -31,7 +32,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			system.AddModule(new TeamScheduleAreaModule());
 
 			system.UseTestDouble<FakeSchedulePersonProvider>().For<ISchedulePersonProvider>();
-			system.UseTestDouble<FakeScheduleProvider>().For<IScheduleProvider>();
+			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
+			system.UseTestDouble<FakeUserCulture>().For<IUserCulture>();
 			system.UseTestDouble<Global.FakePermissionProvider>().For<IPermissionProvider>();
 			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();

@@ -16,13 +16,13 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
-using Teleopti.Ccc.WebTest.Areas.Search;
+using Teleopti.Ccc.WebTest.Areas.Global;
 using Teleopti.Ccc.WebTest.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 {
-	[TeamScheduleTest]
+	[TestFixture, TeamScheduleTest]
 	public class TeamScheduleControllerIntegrationTest
 	{
 		public TeamScheduleController Target;

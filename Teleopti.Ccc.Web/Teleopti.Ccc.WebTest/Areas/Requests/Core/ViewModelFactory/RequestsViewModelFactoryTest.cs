@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var personSearchProvider = PeopleSearchProvider as FakePeopleSearchProvider;
 			var requests = setUpRequests();
 
-			personSearchProvider.PresetReturnPeople(new List<IPerson> { requests.First().Person });
+			personSearchProvider.Add(requests.First().Person );
 
 			var input = new AllRequestsFormData
 			{
@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var personSearchProvider = PeopleSearchProvider as FakePeopleSearchProvider;
 			var requests = setUpRequests();
 
-			personSearchProvider.PresetReturnPeople(new List<IPerson> { requests.First().Person });
+			personSearchProvider.Add(requests.First().Person);
 
 			var input = new AllRequestsFormData
 			{

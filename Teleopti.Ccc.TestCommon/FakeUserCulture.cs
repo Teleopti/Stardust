@@ -13,6 +13,11 @@ namespace Teleopti.Ccc.TestCommon
 			_culture = culture;
 		}
 
+		public FakeUserCulture()
+		{
+			
+		}
+
 		public CultureInfo GetCulture()
 		{
 			return _culture;
