@@ -28,8 +28,10 @@
 			<table>
 				<thead>
 				<td class="agent-name-colomn"></td>
-				<td ng-repeat="dayName in vm.weekDayNames">{{dayName}}
-					<span>8</span></td>
+				<td ng-repeat="day in vm.weekDays">
+					<span>{{day.name}}</span>
+					<span style="float: right; padding-right: 5px">{{day.date}}</span>
+				</td>
 				</thead>
 				<tbody>
 				<tr ng-repeat="person in vm.groupWeeks">
