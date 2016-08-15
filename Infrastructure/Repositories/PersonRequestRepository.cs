@@ -114,6 +114,28 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return returnPersonRequest;
 		}
 
+		public IList<IPersonRequest> Find(List<Guid> ids)
+		{
+			var returnPersonRequests = Session.CreateCriteria(typeof(PersonRequest), "req")
+				.Add(Restrictions.In("Id", ids))
+				.SetFetchMode("requests", FetchMode.Join)
+				.SetFetchMode("Person", FetchMode.Join)
+				.List<IPersonRequest>();
+			if (returnPersonRequests != null)
+			{
+				foreach (var returnPersonRequest in returnPersonRequests)
+				{
+					var shiftTrade = returnPersonRequest.Request as IShiftTradeRequest;
+					if (shiftTrade != null)
+					{
+						LazyLoadingManager.Initialize(shiftTrade.ShiftTradeSwapDetails);
+					}
+				}
+			}
+
+			return returnPersonRequests;
+		}
+
 		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, Paging paging)
 		{
 			var personRequests = getAllRequests(person);

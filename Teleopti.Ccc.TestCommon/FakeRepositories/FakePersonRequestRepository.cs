@@ -52,6 +52,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
+		public IList<IPersonRequest> Find(List<Guid> id)
+		{
+			throw new NotImplementedException();
+		}
+
 		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person)
 		{
 			throw new NotImplementedException();

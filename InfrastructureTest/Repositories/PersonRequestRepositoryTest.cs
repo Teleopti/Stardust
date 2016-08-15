@@ -306,6 +306,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
+		public void VerifyCanFindRequestWithCertainGuids()
+		{
+			IPersonRequest requestAccepted = CreateShiftTradeRequest("Trade with me");
+			IPersonRequest requestAbsence = CreateAggregateWithCorrectBusinessUnit();
+
+			PersistAndRemoveFromUnitOfWork(requestAccepted);
+			PersistAndRemoveFromUnitOfWork(requestAbsence);
+
+			Assert.IsNotNull(requestAccepted.Id);
+			Guid acceptedId = requestAccepted.Id.GetValueOrDefault();
+			Guid absenceId = requestAbsence.Id.GetValueOrDefault();
+
+			var requestIds = new List<Guid>() {acceptedId, absenceId};
+
+			var loadedPersonRequest = new PersonRequestRepository(UnitOfWork).Find(requestIds);
+
+			loadedPersonRequest.Count.Should().Be.EqualTo(2);
+		}
+
+		[Test]
 		public void ShouldFindAllRequestsForAgent()
 		{
 			IPersonRequest personRequestWithAbsenceRequest = CreateAggregateWithCorrectBusinessUnit();

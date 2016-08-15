@@ -11,15 +11,16 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Absence
 {
-	public class MultiAbsenceRequestsUpdater : IAbsenceRequestUpdater
+	public class MultiAbsenceRequestsUpdater
 	{
-		private static readonly ILog logger = LogManager.GetLogger(typeof(AbsenceRequestUpdater));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(MultiAbsenceRequestsUpdater));
 
 		private readonly DenyAbsenceRequest _denyAbsenceRequest = new DenyAbsenceRequest();
 		private readonly PendingAbsenceRequest _pendingAbsenceRequest = new PendingAbsenceRequest();
@@ -71,91 +72,108 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			_toggleManager = toggleManager;
 		}
 
-		public bool UpdateAbsenceRequest(IPersonRequest personRequest, IAbsenceRequest absenceRequest, IUnitOfWork unitOfWork,
-													ISchedulingResultStateHolder schedulingResultStateHolder, IProcessAbsenceRequest process, IEnumerable<IAbsenceRequestValidator> validators)
+		public bool UpdateAbsenceRequest(List<IPersonRequest> personRequests, IUnitOfWork unitOfWork,
+										 ISchedulingResultStateHolder schedulingResultStateHolder, IProcessAbsenceRequest process, IEnumerable<IAbsenceRequestValidator> validators)
 		{
-			_schedulingResultStateHolder = schedulingResultStateHolder;
-
-			IAbsenceRequestValidator[] validatorList = null;
-			IPersonAccountBalanceCalculator personAccountBalanceCalculator = null;
-			IRequestApprovalService requestApprovalServiceScheduler = null;
-			IPersonAbsenceAccount affectedPersonAbsenceAccount = null;
-			var agentTimeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
-			var dateOnlyPeriod = absenceRequest.Period.ToDateOnlyPeriod(agentTimeZone);
-
-			var undoRedoContainer = new UndoRedoContainer(400);
-
-			var workflowControlSet = absenceRequest.Person.WorkflowControlSet;
-			if (workflowControlSet == null)
+			foreach (var personRequest in personRequests)
 			{
-				handleNoWorkflowControlSet(absenceRequest, personRequest);
-			}
-			else
-			{
-				if (_toggleManager.IsEnabled(Toggles.Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850))
+				var absenceRequest = personRequest.Request as IAbsenceRequest;
+
+				_schedulingResultStateHolder = schedulingResultStateHolder;
+
+				IAbsenceRequestValidator[] validatorList = null;
+				IPersonAccountBalanceCalculator personAccountBalanceCalculator = null;
+				IRequestApprovalService requestApprovalServiceScheduler = null;
+				IPersonAbsenceAccount affectedPersonAbsenceAccount = null;
+				var agentTimeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
+				var dateOnlyPeriod = absenceRequest.Period.ToDateOnlyPeriod(agentTimeZone);
+
+				var undoRedoContainer = new UndoRedoContainer(400);
+
+				var workflowControlSet = absenceRequest.Person.WorkflowControlSet;
+				if (workflowControlSet == null)
 				{
-					updatePersonAccountBalancesForAbsence(unitOfWork, absenceRequest);
+					handleNoWorkflowControlSet(absenceRequest, personRequest);
+				}
+				else
+				{
+					if (_toggleManager.IsEnabled(Toggles.Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850))
+					{
+						updatePersonAccountBalancesForAbsence(unitOfWork, absenceRequest);
+					}
+
+					var allAccounts = _personAbsenceAccountProvider.Find(absenceRequest.Person);
+					affectedPersonAbsenceAccount = allAccounts.Find(absenceRequest.Absence);
+
+					var mergedPeriod = workflowControlSet.GetMergedAbsenceRequestOpenPeriod(absenceRequest);
+					validatorList = (validators ?? mergedPeriod.GetSelectedValidatorList()).ToArray();
+					_process = process ?? mergedPeriod.AbsenceRequestProcess;
+
+					loadDataForResourceCalculation(absenceRequest, validatorList);
+
+					personAccountBalanceCalculator = getPersonAccountBalanceCalculator(affectedPersonAbsenceAccount, absenceRequest,
+																					   personRequest, dateOnlyPeriod);
+
+					setupUndoContainersAndTakeSnapshot(undoRedoContainer, allAccounts);
+
+					checkIfPersonIsAlreadyAbsentDuringRequestPeriod(absenceRequest, personRequest);
+
+					var businessRules = NewBusinessRuleCollection.Minimum();
+
+					requestApprovalServiceScheduler = _requestFactory.GetRequestApprovalService(businessRules, _scenarioRepository.Current(), schedulingResultStateHolder);
+					simulateApproveAbsence(absenceRequest, requestApprovalServiceScheduler);
+
+					//Will issue a rollback for simulated schedule data
+					handleInvalidSchedule();
 				}
 
-				var allAccounts = _personAbsenceAccountProvider.Find(absenceRequest.Person);
-				affectedPersonAbsenceAccount = allAccounts.Find(absenceRequest.Absence);
+				var requiredForProcessingAbsenceRequest = new RequiredForProcessingAbsenceRequest(
+					undoRedoContainer,
+					requestApprovalServiceScheduler,
+					_authorization,
+					()
+						=>
+					{
+						if (affectedPersonAbsenceAccount != null)
+							trackAccounts(affectedPersonAbsenceAccount, dateOnlyPeriod, absenceRequest);
+					});
 
-				var mergedPeriod = workflowControlSet.GetMergedAbsenceRequestOpenPeriod(absenceRequest);
-				validatorList = (validators ?? mergedPeriod.GetSelectedValidatorList()).ToArray();
-				_process = process ?? mergedPeriod.AbsenceRequestProcess;
+				var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(
+					_schedulingResultStateHolder,
+					personAccountBalanceCalculator,
+					_resourceOptimizationHelper,
+					_budgetGroupAllowanceSpecification,
+					_budgetGroupHeadCountSpecification);
 
-				loadDataForResourceCalculation(absenceRequest, validatorList);
 
-				personAccountBalanceCalculator = getPersonAccountBalanceCalculator(affectedPersonAbsenceAccount, absenceRequest,
-																										 personRequest, dateOnlyPeriod);
+				processRequest(personRequest, absenceRequest, requiredForProcessingAbsenceRequest,
+							   requiredForHandlingAbsenceRequest, validatorList);
 
-				setupUndoContainersAndTakeSnapshot(undoRedoContainer, allAccounts);
-
-				checkIfPersonIsAlreadyAbsentDuringRequestPeriod(absenceRequest, personRequest);
-
-				var businessRules = NewBusinessRuleCollection.Minimum();
-
-				requestApprovalServiceScheduler = _requestFactory.GetRequestApprovalService(businessRules, _scenarioRepository.Current(), schedulingResultStateHolder);
-				simulateApproveAbsence(absenceRequest, requestApprovalServiceScheduler);
-
-				//Will issue a rollback for simulated schedule data
-				handleInvalidSchedule();
-			}
-
-			var requiredForProcessingAbsenceRequest = new RequiredForProcessingAbsenceRequest(
-				undoRedoContainer,
-				requestApprovalServiceScheduler,
-				_authorization,
-				()
-					=>
+				//Ugly fix to get the number updated for person account. Don't try this at home!
+				if (personRequest.IsApproved)
 				{
 					if (affectedPersonAbsenceAccount != null)
+					{
 						trackAccounts(affectedPersonAbsenceAccount, dateOnlyPeriod, absenceRequest);
-				});
-
-			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(
-				_schedulingResultStateHolder,
-				personAccountBalanceCalculator,
-				_resourceOptimizationHelper,
-				_budgetGroupAllowanceSpecification,
-				_budgetGroupHeadCountSpecification);
-
-
-			var returnValue = processRequest(personRequest, absenceRequest, requiredForProcessingAbsenceRequest,
-														requiredForHandlingAbsenceRequest, validatorList);
-
-			//Ugly fix to get the number updated for person account. Don't try this at home!
-			if (personRequest.IsApproved)
-			{
-				if (affectedPersonAbsenceAccount != null)
+						unitOfWork.Merge(affectedPersonAbsenceAccount);
+					}
+				}
+				try
 				{
-					trackAccounts(affectedPersonAbsenceAccount, dateOnlyPeriod, absenceRequest);
-					unitOfWork.Merge(affectedPersonAbsenceAccount);
+					unitOfWork.PersistAll();
+				}
+				catch (OptimisticLockException ex)
+				{
+					logger.Error("A optimistic locking error occurred. Review the error log. Processing cannot continue this time.", ex);
+				}
+				catch (Exception ex)
+				{
+					logger.Error("Error when persisting Absence Request", ex);
 				}
 			}
 
-			return returnValue;
-
+			//TODO should return true or false
+			return true;
 		}
 
 		private void trackAccounts(IPersonAbsenceAccount personAbsenceAccount, DateOnlyPeriod period, IAbsenceRequest absenceRequest)

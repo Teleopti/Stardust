@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Specification;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -13,37 +14,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
 	public class MultiAbsenceRequestsHandler
 	{
-		private static readonly ILog logger = LogManager.GetLogger(typeof(NewAbsenceRequestHandler));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(MultiAbsenceRequestsHandler));
 
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly ICurrentScenario _scenarioRepository;
 		private readonly IPersonRequestRepository _personRequestRepository;
 
-		private IPersonRequest _personRequest;
-		private IAbsenceRequest _absenceRequest;
-		private readonly IAbsenceRequestWaitlistProcessor _waitlistProcessor;
-		private readonly IAbsenceRequestProcessor _absenceRequestProcessor;
+		private List<IPersonRequest> _personRequests;
+		private readonly IMultiAbsenceRequestProcessor _absenceRequestProcessor;
 
 		private static readonly isNullOrNotNewSpecification personRequestSpecification = new isNullOrNotNewSpecification();
 		private static readonly isNullSpecification absenceRequestSpecification = new isNullSpecification();
-
-		private readonly IList<LoadDataAction> _loadDataActions;
+		
 
 		public MultiAbsenceRequestsHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, ICurrentScenario scenarioRepository,
-			IPersonRequestRepository personRequestRepository, IAbsenceRequestWaitlistProcessor waitlistProcessor,
-			IAbsenceRequestProcessor absenceRequestProcessor)
+			IPersonRequestRepository personRequestRepository,
+			IMultiAbsenceRequestProcessor absenceRequestProcessor)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_scenarioRepository = scenarioRepository;
 			_personRequestRepository = personRequestRepository;
-			_waitlistProcessor = waitlistProcessor;
 			_absenceRequestProcessor = absenceRequestProcessor;
-
-			_loadDataActions = new List<LoadDataAction>
-			{
-				checkPersonRequest,
-				checkAbsenceRequest
-			};
 
 			if (logger.IsInfoEnabled)
 			{
@@ -56,64 +47,38 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				_scenarioRepository.Current();
-
-				foreach (var personRequestId in @event.Identities)
-				{
-
-					if (_loadDataActions.Any(action => !action.Invoke(personRequestId)))
-					{
-						continue;
-					}
-
-					if (shouldUseWaitlisting())
-					{
-						_waitlistProcessor.ProcessAbsenceRequestWaitlist(unitOfWork, _absenceRequest.Period,
-																		 _absenceRequest.Person.WorkflowControlSet);
-					}
-					else
-					{
-						_absenceRequestProcessor.ProcessAbsenceRequest(unitOfWork, _absenceRequest, _personRequest);
-					}
-				}
+				checkPersonRequest(@event.PersonRequestIds);
+				_absenceRequestProcessor.ProcessAbsenceRequest(unitOfWork, _personRequests);
 			}
 		}
 
-		private bool shouldUseWaitlisting()
+		private void checkPersonRequest(List<Guid> personRequestIds)
 		{
-			var workflowControlSet = _absenceRequest.Person.WorkflowControlSet;
-			return workflowControlSet != null && workflowControlSet.WaitlistingIsEnabled(_absenceRequest);
-		}
+			_personRequests = new List<IPersonRequest>();
 
-		private bool checkAbsenceRequest(Guid personRequestId)
-		{
-			_absenceRequest = _personRequest.Request as IAbsenceRequest;
-			if (absenceRequestSpecification.IsSatisfiedBy(_absenceRequest))
+			var personRequests = _personRequestRepository.Find(personRequestIds);
+			foreach (var personRequest in personRequests)
 			{
-				if (logger.IsWarnEnabled)
+				if (personRequestSpecification.IsSatisfiedBy(personRequest))
 				{
-					logger.WarnFormat("The found person request is not of type absence request. (Id = {0})",
-									  personRequestId);
+					if (logger.IsWarnEnabled)
+					{
+						logger.WarnFormat(
+							"No person request found with the supplied Id, or the request is not in New status mode. (Id = {0})",
+							personRequest.Id);
+					}
 				}
-				return false;
-			}
-			return true;
-		}
-
-		private bool checkPersonRequest(Guid personRequestId)
-		{
-
-			_personRequest = _personRequestRepository.Get(personRequestId);
-			if (personRequestSpecification.IsSatisfiedBy(_personRequest))
-			{
-				if (logger.IsWarnEnabled)
+				else if (absenceRequestSpecification.IsSatisfiedBy((IAbsenceRequest) personRequest.Request))
 				{
-					logger.WarnFormat(
-						"No person request found with the supplied Id, or the request is not in New status mode. (Id = {0})",
-						personRequestId);
+					if (logger.IsWarnEnabled)
+					{
+						logger.WarnFormat("The found person request is not of type absence request. (Id = {0})",
+										  personRequest.Id);
+					}
 				}
-				return false;
+				else
+					_personRequests.Add(personRequest);
 			}
-			return true;
 		}
 
 		private class isNullOrNotNewSpecification : Specification<IPersonRequest>
