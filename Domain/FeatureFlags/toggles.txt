@@ -43,7 +43,6 @@ MyTeam_MakeTeamScheduleConsistent_31897 = true
 Wfm_MinimumScaffolding_32659 = RC
 Wfm_ResourcePlanner_32892 = true
 Wfm_ChangePlanningPeriod_33043 = true
-Wfm_Outbound_Campaign_32696 = true
 Wfm_Outbound_Campaign_GanttChart_Navigation_34924 = true
 MyTimeWeb_ShowSeatBookingMonthView_39068 = true
 MessageBroker_SchedulingScreenMailbox_32733 = true

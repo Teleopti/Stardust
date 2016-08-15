@@ -1,5 +1,4 @@
-﻿@OnlyRunIfEnabled('Wfm_Outbound_Campaign_32696')
-@OnlyRunIfEnabled('Wfm_Outbound_Campaign_GanttChart_Navigation_34924')
+﻿@OnlyRunIfEnabled('Wfm_Outbound_Campaign_GanttChart_Navigation_34924')
 Feature: OutboundCampaignBasicOperations
 	In order to plan outbound campaigns
 	As a resource planner

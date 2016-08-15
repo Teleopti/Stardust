@@ -4,9 +4,9 @@
 
 	angular.module('wfm.seatPlan').controller('SeatPlanCtrl', seatPlanDirectiveController);
 
-	seatPlanDirectiveController.$inject = ['ResourcePlannerSvrc', 'seatPlanService', '$stateParams', 'Toggle', '$timeout'];
+	seatPlanDirectiveController.$inject = ['ResourcePlannerSvrc', 'seatPlanService', '$stateParams', '$timeout'];
 
-	function seatPlanDirectiveController(resourcePlannerService, seatPlanService, params, toggleService, $timeout) {
+	function seatPlanDirectiveController(resourcePlannerService, seatPlanService, params, $timeout) {
 
 		var vm = this;
 
