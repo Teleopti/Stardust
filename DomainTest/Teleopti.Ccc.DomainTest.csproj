@@ -330,6 +330,7 @@
     <Compile Include="Scheduling\Rules\SiteOpenHoursRuleTest.cs" />
     <Compile Include="Scheduling\Scenarios\WeeklyRestSolverTest.cs" />
     <Compile Include="Scheduling\SeatLimitations\MaxSeatSkillCreatorTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\Bug39939.cs" />
     <Compile Include="Scheduling\TeamBlock\DayOff\MissingDayOffBestSpotDeciderTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduleCommandTest.cs" />
     <Compile Include="SeatPlanning\CommonSeatAllocatorTests.cs" />
