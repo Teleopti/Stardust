@@ -26,7 +26,7 @@
 					   ng-model="settings.threshold"
 					   ng-disabled="isRefreshingGantt"></md-slider>
 		</div>
-		<div class="relative pull-left" ng-show="isNavigationEnabled">
+		<div class="relative pull-left">
 			<button class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="viewOneMonthBefore()"><i class="mdi mdi-chevron-double-left middle"></i></button>
 			<div class="gantt-datepicker-container inline-block" ng-init="showDatePicker=false">
 				<input class="pointer text-center" type="text" ng-click="showDatePicker=!showDatePicker" value="{{settings.periodStart | monthview }}" readonly />

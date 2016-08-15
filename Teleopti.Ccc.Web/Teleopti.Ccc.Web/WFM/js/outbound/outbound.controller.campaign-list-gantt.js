@@ -20,7 +20,6 @@
 
 		$scope.isInitFinished = false;
 		$scope.isLoadFinished = false;
-		$scope.isNavigationEnabled = false;
 		$scope.month = "month";
 		$scope.$storage = $sessionStorage;
 
@@ -38,7 +37,6 @@
 
 		function init() {
 			$scope.settings = { threshold: null, periodStart: new Date() };
-			$scope.isNavigationEnabled = toggleSvc.Wfm_Outbound_Campaign_GanttChart_Navigation_34924;
 			if ($scope.$storage.visualizationPeriodStart) $scope.settings.periodStart = $scope.$storage.visualizationPeriodStart;
 			$scope.isRefreshingGantt = true;
 			$scope.ganttOptions = setGanttOptions();

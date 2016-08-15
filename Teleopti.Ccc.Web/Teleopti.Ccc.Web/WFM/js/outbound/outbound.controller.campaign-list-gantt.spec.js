@@ -18,7 +18,6 @@ describe('OutboundSummaryCtrl', function() {
 		outboundChartService = new fakeOutboundChartService();
 
 		toggleSvc = {
-			Wfm_Outbound_Campaign_GanttChart_Navigation_34924: true,
 			togglesLoaded: {
 				then: function (cb) { cb(); }
 			}
