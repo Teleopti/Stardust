@@ -1,6 +1,4 @@
-﻿@OnlyRunIfEnabled('Wfm_SeatPlan_SeatMapBookingView_32814')
-
-Feature: SeatMapBookingView
+﻿Feature: SeatMapBookingView
 	I want to view the seat bookings and assign agents to seat
 
 Background: 

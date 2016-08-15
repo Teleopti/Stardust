@@ -46,7 +46,6 @@
 		ETL_OnlyLatestQueueAgentStatistics_30787,
 		Gamification_NewBadgeCalculation_31185,
 
-		Wfm_SeatPlan_SeatMapBookingView_32814,
 		MyTimeWeb_ShowSeatBookingMonthView_39068,
 
 		MyTeam_MakeTeamScheduleConsistent_31897,

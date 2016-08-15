@@ -26,10 +26,6 @@
 			vm.seatPlanStatus[3] = 'SeatPlanStatusNoSeatPlanned';
 		};
 
-		vm.setupToggles = function () {
-			vm.showOccupancyView = toggleService.Wfm_SeatPlan_SeatMapBookingView_32814;
-		};
-
 		var getServiceSafeDate = function (dateMoment) {
 
 			return dateMoment.locale('en').format("YYYY-MM-DD");
@@ -216,7 +212,6 @@
 
 		vm.init = function () {
 			vm.setupSeatPlanStatusStrings();
-			vm.setupToggles();
 		};
 
 		vm.init();
