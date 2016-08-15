@@ -112,7 +112,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 			timeFormat = _updateMeridiem(options.TimeFormat);
 		}
 
-		var isJalaali = (options.UseJalaaliCalendar && Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_JalaaliCalendar_32997'));
+		var isJalaali = options.UseJalaaliCalendar;
 		Teleopti.MyTimeWeb.Common.UseJalaaliCalendar = isJalaali;
 		Teleopti.MyTimeWeb.Common.DateFormat = isJalaali ? "jYYYY/jMM/jDD" : options.DateFormat;
 		Teleopti.MyTimeWeb.Common.TimeFormat = timeFormat;

@@ -1,5 +1,4 @@
-﻿@OnlyRunIfEnabled('MyTimeWeb_JalaaliCalendar_32997')
-Feature: JalaaliCalendar
+﻿Feature: JalaaliCalendar
 	In order to improve usability for Iranian Customers
 	As an Agent
 	I want to see dates displayed according to the Jalaali calendar
