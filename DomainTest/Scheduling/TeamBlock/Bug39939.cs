@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public SchedulingOptionsProvider SchedulingOptionsProvider;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
+		public FakeGroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
 
 		[Test]
 		public void ShouldHandleStrangeSchedules()
@@ -39,12 +40,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
 			var team = new Team { Description = new Description("team") };
-			//remove this - must currently be here due to GroupPageCreator reads businessunit.sitecollection, fix that!
-			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
+			var businessUnit = new BusinessUnit("_");
 			var site = new Site("site");
 			site.AddTeam(team);
 			businessUnit.AddSite(site);
-			//
+			GroupScheduleGroupPageDataProvider.SetBusinessUnit(businessUnit);
 			var contract = new Contract("_");
 			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
 			var agent1 = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill).InTimeZone(TimeZoneInfoFactory.TaipeiTimeZoneInfo());

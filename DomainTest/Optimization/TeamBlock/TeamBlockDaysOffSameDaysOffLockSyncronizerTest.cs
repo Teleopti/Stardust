@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		public IMatrixListFactory MatrixListFactory;
 		public SchedulerStateHolder SchedulerStateHolder;
 		public IGroupPersonBuilderForOptimizationFactory GroupPersonBuilderForOptimizationFactory;
+		public FakeGroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
 
 		[Test]
 		public void ShouldLockAllIfOneIsLockedAndUseSameDaysOff()
@@ -32,10 +33,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			var scenario = new Scenario("scenario");
 			var schedulePeriod1 = new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1);
 			var schedulePeriod2 = new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1);
-			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
+			var businessUnit = new BusinessUnit("_");
 			var sameSite = SiteFactory.CreateSiteWithOneTeam("team");
 			businessUnit.AddSite(sameSite);
 			var sameTeam = businessUnit.SiteCollection[0].TeamCollection[0];
+			GroupScheduleGroupPageDataProvider.SetBusinessUnit(businessUnit);
 			var agent1 = PersonFactory.CreatePersonWithPersonPeriodFromTeam(dateOnly, sameTeam).WithId();
 			agent1.PermissionInformation.SetDefaultTimeZone(TimeZoneGuard.Instance.TimeZone);
 			agent1.AddSchedulePeriod(schedulePeriod1);
@@ -92,10 +94,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			var scenario = new Scenario("scenario1");
 			var schedulePeriod1 = new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1);
 			var schedulePeriod2 = new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1);
-			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
+			var businessUnit = new BusinessUnit("_");
 			var sameSite = SiteFactory.CreateSiteWithOneTeam("team");
 			businessUnit.AddSite(sameSite);
 			var sameTeam = businessUnit.SiteCollection[0].TeamCollection[0];
+			GroupScheduleGroupPageDataProvider.SetBusinessUnit(businessUnit);
 			var agent1 = PersonFactory.CreatePersonWithPersonPeriodFromTeam(dateOnly, sameTeam).WithId();
 			agent1.PermissionInformation.SetDefaultTimeZone(TimeZoneGuard.Instance.TimeZone);
 			agent1.AddSchedulePeriod(schedulePeriod1);
