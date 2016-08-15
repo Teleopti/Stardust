@@ -3,8 +3,8 @@
 
 	angular.module('wfm.teamSchedule').controller('TeamScheduleWeeklyCtrl', TeamScheduleWeeklyCtrl);
 
-	TeamScheduleWeeklyCtrl.$inject = ['$stateParams', 'PersonScheduleWeekViewCreator'];
-	function TeamScheduleWeeklyCtrl(params, WeekViewCreator) {
+	TeamScheduleWeeklyCtrl.$inject = ['$stateParams', '$locale', 'PersonScheduleWeekViewCreator', 'UtilityService'];
+	function TeamScheduleWeeklyCtrl(params, $locale, WeekViewCreator, Util) {
 		var vm = this;
 		vm.searchOptions = {
 			keyword: angular.isDefined(params.keyword) && params.keyword !== '' ? params.keyword : '',
@@ -27,11 +27,14 @@
 			}
 		};
 
+		vm.weekDayNames = Util.getWeekdayNames();
+
 		vm.loadSchedules = function () {
 			console.log("fake data");
 			vm.isLoading = true;
-			//TODO : load week schedule 
-			vm.weekDayNames = ["Monday", "Tuesday", "Wendesday", "Thursday", "Friday", "Saturday", "Sunday"];
+		    //TODO : load week schedule 
+		    console.log('locale', $locale);
+
 			var fakeData = [
 				{
 					PersonId: "ashley",

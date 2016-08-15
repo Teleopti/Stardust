@@ -1529,6 +1529,7 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.factory.groupSchedule.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.factory.personSchedule.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.factory.personSchedule.spec.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.factory.personWeekView.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.factory.timeline.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.factory.timeLine.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.activity.js" />
@@ -1587,6 +1588,8 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.scheduleManagement.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.shiftCategory.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.swapShifts.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.service.utilities.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.service.utilities.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.validateRules.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.shiftHelpers.js" />
     <Content Include="WFM\js\teamSchedule\html\timeline.html" />
