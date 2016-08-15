@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.Infrastructure.Absence;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
@@ -38,6 +39,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddModule(new CommonModule(configuration));
+			system.UseTestDouble<MultiAbsenceRequestsUpdater>().For<IAbsenceRequestUpdater>();
 			system.UseTestDouble<MultiAbsenceRequestsHandler>().For<MultiAbsenceRequestsHandler>();
 			system.UseTestDouble<ProcessMultipleAbsenceRequests>().For<IProcessMultipleAbsenceRequest>();
 			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
