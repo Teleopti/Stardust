@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Syncfusion.Windows.Forms;
+using Syncfusion.Windows.Forms.Grid;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -6,8 +8,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
-using Syncfusion.Windows.Forms;
-using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -33,8 +33,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 	{
 		private readonly WorkflowControlSetPresenter _presenter;
 		private SFGridColumnGridHelper<AbsenceRequestPeriodModel> _gridHelper;
+
 		private IDictionary<IAbsence, MonthlyProjectionVisualiser> _projectionCache =
 			new Dictionary<IAbsence, MonthlyProjectionVisualiser>();
+
 		private Point _gridPoint;
 
 		public WorkflowControlSetView()
@@ -42,10 +44,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			InitializeComponent();
 		}
 
-		public WorkflowControlSetView(IToggleManager toggleManager):this()
+		public WorkflowControlSetView(IToggleManager toggleManager) : this()
 		{
 			if (DesignMode) return;
-			_presenter = new WorkflowControlSetPresenter(this, UnitOfWorkFactory.Current, new RepositoryFactory(), toggleManager);
+			_presenter = new WorkflowControlSetPresenter(this, UnitOfWorkFactory.Current, new RepositoryFactory());
 			GridStyleInfoStore.CellValueProperty.IsCloneable = false;
 			dateTimePickerAdvPublishedTo.NullString = Resources.NotPublished;
 			dateOnlyPeriodsVisualizer1.Culture = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
@@ -54,11 +56,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			setAbsenceRequestVisibilityOptions(toggleManager);
 		}
 
-		private void setAbsenceRequestVisibilityOptions (IToggleManager toggleManager)
+		private void setAbsenceRequestVisibilityOptions(IToggleManager toggleManager)
 		{
 			var allAbsenceRequestMiscOptionsAreHidden = true;
 
-			if (!toggleManager.IsEnabled (Toggles.Wfm_Requests_Waitlist_36232))
+			if (!toggleManager.IsEnabled(Toggles.Wfm_Requests_Waitlist_36232))
 			{
 				hideAbsenceRequestWaitlistingOptions();
 			}
@@ -67,7 +69,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				allAbsenceRequestMiscOptionsAreHidden = false;
 			}
 
-			if (!toggleManager.IsEnabled (Toggles.Wfm_Requests_Cancel_Agent_38055))
+			if (!toggleManager.IsEnabled(Toggles.Wfm_Requests_Cancel_Agent_38055))
 			{
 				hideAbsenceCancellationOptions();
 			}
@@ -80,13 +82,19 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			{
 				hideMiscAbsenceRequestOptions();
 			}
+
+			if (!toggleManager.IsEnabled(Toggles.Wfm_Requests_Waitlist_Process_Order_39869))
+			{
+				radioButtonWaitlistFirstComeFirstServed.Visible = false;
+				radioButtonWaitlistBySeniority.Visible = false;
+			}
 		}
 
 		private void hideAbsenceRequestWaitlistingOptions()
 		{
 			checkBoxEnableAbsenceRequestWaitlisting.Hide();
 
-			var rowIndex = tableLayoutPanelBasic.GetRow (checkBoxEnableAbsenceRequestWaitlisting);
+			var rowIndex = tableLayoutPanelBasic.GetRow(checkBoxEnableAbsenceRequestWaitlisting);
 			tableLayoutPanelAbsenceRequestPeriods.RowStyles[rowIndex].Height = 0;
 		}
 
@@ -107,11 +115,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void configureAbsenceRequestPeriodGrid()
 		{
-			IList<SFGridColumnBase<AbsenceRequestPeriodModel>> columnList = new List<SFGridColumnBase<AbsenceRequestPeriodModel>>
-																				{
-																					new SFGridRowHeaderColumn
-																						<AbsenceRequestPeriodModel>(string.Empty)
-																				};
+			var columnList = new List<SFGridColumnBase<AbsenceRequestPeriodModel>>
+			{
+				new SFGridRowHeaderColumn<AbsenceRequestPeriodModel>(string.Empty)
+			};
 
 			// Add cellmodels
 			gridControlAbsenceRequestOpenPeriods.CellModels.Add("IgnoreCell", new IgnoreCellModel(gridControlAbsenceRequestOpenPeriods.Model));
@@ -120,15 +127,15 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			cellModel.HideTodayButton();
 			gridControlAbsenceRequestOpenPeriods.CellModels.Add(GridCellModelConstants.CellTypeDatePickerCell, cellModel);
 			var cell = new NullableIntegerCellModel(gridControlAbsenceRequestOpenPeriods.Model)
-						{
-							MinValue = 0,
-							MaxValue = 999
-						};
+			{
+				MinValue = 0,
+				MaxValue = 999
+			};
 			gridControlAbsenceRequestOpenPeriods.CellModels.Add("IntegerCellModel", cell);
 
 			var periodTypeDropDownColumn = new SFGridDropDownColumn
 				<AbsenceRequestPeriodModel, AbsenceRequestPeriodTypeModel>(
-				"PeriodType", Resources.Type, " ", WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters, "DisplayText",null);
+				"PeriodType", Resources.Type, " ", WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters, "DisplayText", null);
 
 			columnList.Add(periodTypeDropDownColumn);
 
@@ -174,7 +181,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			_gridHelper = new SFGridColumnGridHelper<AbsenceRequestPeriodModel>(gridControlAbsenceRequestOpenPeriods,
 																						gridColumns, new List<AbsenceRequestPeriodModel>());
 			//_gridHelper.UnbindClipboardPasteEvent();
-			
+
 			gridControlAbsenceRequestOpenPeriods.Model.Options.SelectCellsMouseButtonsMask = MouseButtons.Left;
 			gridControlAbsenceRequestOpenPeriods.Model.Options.ExcelLikeCurrentCell = true;
 
@@ -198,28 +205,28 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			twoListSelectorMatchingSkills.SelectedRemoved += twoListSelectorMatchingSkills_SelectedRemoved;
 		}
 
-		void twoListSelectorAbsencesSelectedRemoved(object sender, Controls.SelectedChangedEventArgs e)
+		private void twoListSelectorAbsencesSelectedRemoved(object sender, Controls.SelectedChangedEventArgs e)
 		{
 			var item = e.MovedItem as IAbsence;
 			if (item != null)
 				_presenter.RemoveAllowedPreferenceAbsence(item);
 		}
 
-		void twoListSelectorAbsencesSelectedAdded(object sender, Controls.SelectedChangedEventArgs e)
+		private void twoListSelectorAbsencesSelectedAdded(object sender, Controls.SelectedChangedEventArgs e)
 		{
 			var item = e.MovedItem as IAbsence;
 			if (item != null)
 				_presenter.AddAllowedPreferenceAbsence(item);
 		}
 
-		void twoListSelectorAbsencesForReportSelectedRemoved(object sender, Controls.SelectedChangedEventArgs e)
+		private void twoListSelectorAbsencesForReportSelectedRemoved(object sender, Controls.SelectedChangedEventArgs e)
 		{
 			var item = e.MovedItem as IAbsence;
 			if (item != null)
 				_presenter.RemoveAllowedAbsenceForReport(item);
 		}
 
-		void twoListSelectorAbsencesForReportSelectedAdded(object sender, Controls.SelectedChangedEventArgs e)
+		private void twoListSelectorAbsencesForReportSelectedAdded(object sender, Controls.SelectedChangedEventArgs e)
 		{
 			var item = e.MovedItem as IAbsence;
 			if (item != null)
@@ -247,61 +254,60 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			gridControlAbsenceRequestOpenPeriods.SaveCellInfo -= gridControlAbsenceRequestOpenPeriods_SaveCellInfo;
 			gridControlAbsenceRequestOpenPeriods.KeyDown -= gridControlAbsenceRequestOpenPeriods_KeyDown;
 
-			if(_gridHelper!= null)
-				_gridHelper.Dispose();
+			_gridHelper?.Dispose();
 			_gridHelper = null;
 			_projectionCache = null;
 		}
 
-		void twoListSelectorCategories_SelectedRemoved(object sender, Controls.SelectedChangedEventArgs e)
+		private void twoListSelectorCategories_SelectedRemoved(object sender, Controls.SelectedChangedEventArgs e)
 		{
 			var item = e.MovedItem as IShiftCategory;
 			if (item != null)
 				_presenter.RemoveAllowedPreferenceShiftCategory(item);
 		}
 
-		void twoListSelectorCategories_SelectedAdded(object sender, Controls.SelectedChangedEventArgs e)
+		private void twoListSelectorCategories_SelectedAdded(object sender, Controls.SelectedChangedEventArgs e)
 		{
 			var item = e.MovedItem as IShiftCategory;
 			if (item != null)
 				_presenter.AddAllowedPreferenceShiftCategory(item);
 		}
 
-		void twoListSelectorDayOffs_SelectedRemoved(object sender, Controls.SelectedChangedEventArgs e)
+		private void twoListSelectorDayOffs_SelectedRemoved(object sender, Controls.SelectedChangedEventArgs e)
 		{
 			var item = e.MovedItem as IDayOffTemplate;
 			if (item != null)
-			   _presenter.RemoveAllowedPreferenceDayOff(item);
+				_presenter.RemoveAllowedPreferenceDayOff(item);
 		}
 
-		void twoListSelectorDayOffs_SelectedAdded(object sender, Controls.SelectedChangedEventArgs e)
+		private void twoListSelectorDayOffs_SelectedAdded(object sender, Controls.SelectedChangedEventArgs e)
 		{
 			var item = e.MovedItem as IDayOffTemplate;
 			if (item != null)
 				_presenter.AddAllowedPreferenceDayOff(item);
 		}
 
-		void twoListSelectorMatchingSkills_SelectedRemoved(object sender, Controls.SelectedChangedEventArgs e)
+		private void twoListSelectorMatchingSkills_SelectedRemoved(object sender, Controls.SelectedChangedEventArgs e)
 		{
 			var item = e.MovedItem as ISkill;
 			if (item != null)
 				_presenter.RemoveSkillFromMatchList(item);
 		}
 
-		void twoListSelectorMatchingSkills_SelectedAdded(object sender, Controls.SelectedChangedEventArgs e)
+		private void twoListSelectorMatchingSkills_SelectedAdded(object sender, Controls.SelectedChangedEventArgs e)
 		{
 			var item = e.MovedItem as ISkill;
 			if (item != null)
 				_presenter.AddSkillToMatchList(item);
 		}
 
-		void gridControlAbsenceRequestOpenPeriods_KeyDown(object sender, KeyEventArgs e)
+		private void gridControlAbsenceRequestOpenPeriods_KeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.KeyCode != Keys.Delete) return;
 			deleteSelected();
 			e.Handled = true;
 		}
-		
+
 		private void gridControlAbsenceRequestOpenPeriods_SaveCellInfo(object sender, GridSaveCellInfoEventArgs e)
 		{
 			refreshProjectionGrid();
@@ -323,7 +329,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			gridControlAbsenceRequestOpenPeriods.Invalidate();
 		}
 
-		void comboBoxAdvWorkflowControlSet_SelectedIndexChanged(object sender, EventArgs e)
+		private void comboBoxAdvWorkflowControlSet_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if (comboBoxAdvWorkflowControlSet.SelectedItem == null) return;
 			var selectedItem = (WorkflowControlSetModel)comboBoxAdvWorkflowControlSet.SelectedItem;
@@ -332,10 +338,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			_gridHelper.SetSourceList(selectedItem.AbsenceRequestPeriodModels);
 			gridControlAbsenceRequestOpenPeriods.EndUpdate();
 			refreshProjectionGrid();
-				
+
 			comboBoxAdvAllowedPreferenceActivity.SelectedIndexChanged -= comboBoxAdvAllowedPreferenceActivity_SelectedIndexChanged;
 			dateTimePickerAdvPublishedTo.ValueChanged -= dateTimePickerAdvPublishedTo_ValueChanged;
-				
+
 			comboBoxAdvAllowedPreferenceActivity.SelectedItem = selectedItem.AllowedPreferenceActivity;
 			if (selectedItem.SchedulePublishedToDate.HasValue)
 				dateTimePickerAdvPublishedTo.Value = selectedItem.SchedulePublishedToDate.Value;
@@ -344,7 +350,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				dateTimePickerAdvPublishedTo.Value = DateTime.Today;
 				dateTimePickerAdvPublishedTo.IsNullDate = true;
 			}
-				
+
 			dateTimePickerAdvPublishedTo.ValueChanged += dateTimePickerAdvPublishedTo_ValueChanged;
 			comboBoxAdvAllowedPreferenceActivity.SelectedIndexChanged += comboBoxAdvAllowedPreferenceActivity_SelectedIndexChanged;
 
@@ -356,7 +362,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			SetMatchingSkills(selectedItem);
 		}
 
-		void buttonNew_Click(object sender, EventArgs e)
+		private void buttonNew_Click(object sender, EventArgs e)
 		{
 			_presenter.AddWorkflowControlSet();
 			_presenter.DefaultPreferencePeriods(_presenter.SelectedModel, DateTime.Today);
@@ -421,9 +427,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			base.SetCommonTexts();
 			toolTip1.SetToolTip(buttonDelete, Resources.Delete);
 			toolTip1.SetToolTip(buttonNew, Resources.New);
-			toolTip1.SetToolTip(dateTimePickerAdvViewpoint,Resources.Viewpoint);
+			toolTip1.SetToolTip(dateTimePickerAdvViewpoint, Resources.Viewpoint);
 			dateTimePickerAdvViewpoint.RightToLeft = RightToLeft.No; //This is to avoid having drop down button hiding the date
-			toolTip1.SetToolTip(buttonAdvNextProjectionPeriod,Resources.NextPeriod);
+			toolTip1.SetToolTip(buttonAdvNextProjectionPeriod, Resources.NextPeriod);
 			toolTip1.SetToolTip(buttonAdvPreviousProjectionPeriod, Resources.PreviousPeriod);
 		}
 
@@ -447,7 +453,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void updateSourceList()
 		{
-			if(comboBoxAdvWorkflowControlSet.SelectedItem == null)
+			if (comboBoxAdvWorkflowControlSet.SelectedItem == null)
 				return;
 
 			var selectedItem = (WorkflowControlSetModel)comboBoxAdvWorkflowControlSet.SelectedItem;
@@ -557,8 +563,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 						gridControlVisualisation.CreateGraphics().MeasureString(
 							"".PadRight(longestAbsenceNameLength, 'm'), gridControlVisualisation.Font);
 				}
-				
-				e.Size = (int) (size.Width + 4);
+
+				e.Size = (int)(size.Width + 4);
 				e.Handled = true;
 			}
 		}
@@ -598,26 +604,26 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			extractor.ViewpointDate = new DateOnly(dateTimePickerAdvViewpoint.Value);
 			e.Style.CellType = "Control";
 
-			var layers = extractor.Projection.GetProjectedPeriods(_presenter.ProjectionPeriod,CultureInfo.InvariantCulture, CultureInfo.InvariantCulture).OfType<AbsenceRequestOpenDatePeriod>();
+			var layers = extractor.Projection.GetProjectedPeriods(_presenter.ProjectionPeriod, CultureInfo.InvariantCulture, CultureInfo.InvariantCulture).OfType<AbsenceRequestOpenDatePeriod>();
 			MonthlyProjectionVisualiser visualiser;
 			if (!_projectionCache.TryGetValue(absence, out visualiser))
 			{
-				visualiser = new MonthlyProjectionVisualiser {Dock = DockStyle.Fill};
+				visualiser = new MonthlyProjectionVisualiser { Dock = DockStyle.Fill };
 				_projectionCache.Add(absence, visualiser);
 			}
 			visualiser.SetControlDatePeriod(_presenter.ProjectionPeriod);
 			visualiser.SetLayerCollection(layers.Select(p => new DateOnlyProjectionItem
-																{
-																	DisplayColor = p.Absence == null ? Color.Empty : p.Absence.DisplayColor,
-																	Period = new DateOnlyPeriod(p.Period.StartDate,p.Period.EndDate.AddDays(1)),
-																	ToolTipText =
+			{
+				DisplayColor = p.Absence == null ? Color.Empty : p.Absence.DisplayColor,
+				Period = new DateOnlyPeriod(p.Period.StartDate, p.Period.EndDate.AddDays(1)),
+				ToolTipText =
 																		string.Format(CultureInfo.CurrentUICulture,
 																					  Resources.WorkflowControlSetToolTip,
 																					  p.PersonAccountValidator.DisplayText,
 																					  p.StaffingThresholdValidator.DisplayText,
 																					  p.AbsenceRequestProcess.DisplayText,
 																					  p.Period.DateString)
-																}).ToList());
+			}).ToList());
 			e.Style.Control = visualiser;
 		}
 
@@ -661,14 +667,15 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			integerTextBoxWriteProtect.Text = writeProtection.ToString();
 		}
+
 		public void SetCalendarCultureInfo(CultureInfo cultureInfo)
 		{
 			dateTimePickerAdvPublishedTo.SetCultureInfoSafe(cultureInfo);
 
-			var minPeriod = new DateOnlyPeriod(new DateOnly(DateHelper.MinSmallDateTime), 
+			var minPeriod = new DateOnlyPeriod(new DateOnly(DateHelper.MinSmallDateTime),
 											   new DateOnly(DateHelper.MaxSmallDateTime));
 			dateTimePickerAdvPublishedTo.SetAvailableTimeSpan(minPeriod);
-			
+
 			dateSelectionFromToIsOpen.SetCulture(cultureInfo);
 			dateSelectionFromToPreferencePeriod.SetCulture(cultureInfo);
 			dateSelectionFromToIsOpenStudentAvailability.SetCulture(cultureInfo);
@@ -735,16 +742,36 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			checkBoxAdvAnonymousTrading.CheckStateChanged += checkBoxAdvAnonymousTrading_CheckStateChanged;
 		}
 
-		public void SetAbsenceRequestWaitlisting (bool absenceRequestWaitlistingEnabled)
+		public void SetAbsenceRequestWaitlisting(bool absenceRequestWaitlistingEnabled, WaitlistProcessOrder processOrder)
 		{
-			checkBoxEnableAbsenceRequestWaitlisting.CheckStateChanged -=checkBoxEnableAbsenceRequestWaitlisting_CheckStateChanged;
+			checkBoxEnableAbsenceRequestWaitlisting.CheckStateChanged -= checkBoxEnableAbsenceRequestWaitlisting_CheckStateChanged;
 			checkBoxEnableAbsenceRequestWaitlisting.Checked = absenceRequestWaitlistingEnabled;
 			checkBoxEnableAbsenceRequestWaitlisting.CheckStateChanged += checkBoxEnableAbsenceRequestWaitlisting_CheckStateChanged;
+
+			updateWaitlistControlsStatus(absenceRequestWaitlistingEnabled, processOrder);
 		}
 
-		public void SetAbsenceRequestCancellation (IWorkflowControlSetModel selectedModel)
+		private void updateWaitlistControlsStatus(bool absenceRequestWaitlistingEnabled, WaitlistProcessOrder processOrder)
 		{
+			radioButtonWaitlistBySeniority.Enabled = absenceRequestWaitlistingEnabled;
+			radioButtonWaitlistFirstComeFirstServed.Enabled = absenceRequestWaitlistingEnabled;
 
+			radioButtonWaitlistBySeniority.Checked = processOrder == WaitlistProcessOrder.BySeniority;
+			radioButtonWaitlistFirstComeFirstServed.Checked = processOrder == WaitlistProcessOrder.FirstComeFirstServed;
+		}
+
+		private void setWaitlistOptions()
+		{
+			var waitlistEnabled = checkBoxEnableAbsenceRequestWaitlisting.Checked;
+			var waitlistingProcessOrder = radioButtonWaitlistBySeniority.Checked
+				? WaitlistProcessOrder.BySeniority
+				: WaitlistProcessOrder.FirstComeFirstServed;
+
+			_presenter.SetAbsenceRequestWaitlisting(waitlistEnabled, waitlistingProcessOrder);
+		}
+
+		public void SetAbsenceRequestCancellation(IWorkflowControlSetModel selectedModel)
+		{
 			txtAbsenceRequestCancellationThreshold.Leave -= txtAbsenceRequestCancellationThreshold_Leave;
 			txtAbsenceRequestCancellationThreshold.Text = selectedModel.AbsenceRequestCancellationThreshold.ToString();
 			txtAbsenceRequestCancellationThreshold.Leave += txtAbsenceRequestCancellationThreshold_Leave;
@@ -777,6 +804,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		}
 
 		private bool _loading;
+
 		public void LoadDateOnlyVisualizer()
 		{
 			if (_loading) return;
@@ -814,7 +842,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			_projectionCache.Clear();
 			gridControlVisualisation.RowCount = 0;
 			gridControlVisualisation.RowCount = _presenter.DoRequestableAbsencesExist ? _presenter.RequestableAbsenceCollection.Count : 0;
-			
+
 			gridControlVisualisation.Invalidate();
 		}
 
@@ -853,7 +881,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			_presenter.AddOpenDatePeriod();
 		}
 
-		void buttonAdvDeleteAbsenceRequestPeriod_Click(object sender, EventArgs e)
+		private void buttonAdvDeleteAbsenceRequestPeriod_Click(object sender, EventArgs e)
 		{
 			gridControlAbsenceRequestOpenPeriods.BeginUpdate();
 			deleteSelected();
@@ -1008,12 +1036,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			string error = null;
 			var dateSelection = sender as DateSelectionFromTo;
 
-
 			if (dateSelection != null && !dateSelection.IsWorkPeriodValid)
 			{
 				error = Resources.StartDateMustBeSmallerThanEndDate;
 				e.Cancel = true;
-
 			}
 			errorProvider1.SetError((Control)sender, error);
 		}
@@ -1026,7 +1052,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			{
 				error = Resources.FromDaysMustBeLessThanToDays;
 				e.Cancel = true;
-
 			}
 			errorProvider1.SetError((Control)sender, error);
 		}
@@ -1081,7 +1106,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			radioButtonAdvFairnessEqual.Checked = false;
 
-			if(value == FairnessType.EqualNumberOfShiftCategory)
+			if (value == FairnessType.EqualNumberOfShiftCategory)
 				radioButtonAdvFairnessEqual.Checked = true;
 			else if (value == FairnessType.Seniority)
 				radioButtonAdvSeniority.Checked = true;
@@ -1132,7 +1157,21 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void checkBoxEnableAbsenceRequestWaitlisting_CheckStateChanged(object sender, EventArgs e)
 		{
-			_presenter.SetAbsenceRequestWaitlisting(checkBoxEnableAbsenceRequestWaitlisting.Checked);
+			var waitlistEnabled = checkBoxEnableAbsenceRequestWaitlisting.Checked;
+			radioButtonWaitlistFirstComeFirstServed.Enabled = waitlistEnabled;
+			radioButtonWaitlistBySeniority.Enabled = waitlistEnabled;
+
+			setWaitlistOptions();
+		}
+
+		private void radioButtonWaitlistFirstComeFirstServed_Click(object sender, EventArgs e)
+		{
+			setWaitlistOptions();
+		}
+
+		private void radioButtonWaitlistBySeniority_Click(object sender, EventArgs e)
+		{
+			setWaitlistOptions();
 		}
 
 		private void txtAbsenceRequestCancellationThreshold_Leave(object sender, EventArgs e)

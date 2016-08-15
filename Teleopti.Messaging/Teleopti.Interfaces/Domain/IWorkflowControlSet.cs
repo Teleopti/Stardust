@@ -4,6 +4,12 @@ using System.Collections.ObjectModel;
 
 namespace Teleopti.Interfaces.Domain
 {
+	public enum WaitlistProcessOrder
+	{
+		FirstComeFirstServed = 0,
+		BySeniority = 1
+	}
+
 	/// <summary>
 	/// Holder of Workflow Control Set information.
 	/// </summary>
@@ -12,9 +18,9 @@ namespace Teleopti.Interfaces.Domain
 	/// Created date: 2010-04-15
 	/// </remarks>
 	public interface IWorkflowControlSet : IAggregateRoot,
-										   IChangeInfo,
-										   IBelongsToBusinessUnit,
-										   ICloneableEntity<IWorkflowControlSet>
+		IChangeInfo,
+		IBelongsToBusinessUnit,
+		ICloneableEntity<IWorkflowControlSet>
 	{
 		/// <summary>
 		/// Gets or sets the name.
@@ -263,6 +269,9 @@ namespace Teleopti.Interfaces.Domain
 		bool LockTrading { get; set; }
 
 		bool AbsenceRequestWaitlistEnabled { get; set; }
+
+		WaitlistProcessOrder AbsenceRequestWaitlistProcessOrder { get; set; }
+
 		int? AbsenceRequestCancellationThreshold { get; set; }
 
 		/// <summary>
@@ -282,7 +291,7 @@ namespace Teleopti.Interfaces.Domain
 		void SetFairnessType(FairnessType fairnessType);
 
 		bool WaitlistingIsEnabled(IAbsenceRequest absenceRequest);
+
 		IAbsenceRequestOpenPeriod GetMergedAbsenceRequestOpenPeriod(IAbsenceRequest absenceRequest);
-		
 	}
 }
