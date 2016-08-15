@@ -3,9 +3,9 @@
 
 	angular.module('wfm.teamSchedule').directive('undoSchedule', undoScheduleDirective);
 
-	undoScheduleCtrl.$inject = ['PersonSelection', 'ActivityService', '$mdDialog', 'teamScheduleNotificationService', 'ScenarioTestUtil'];
+	undoScheduleCtrl.$inject = ['PersonSelection', 'ActivityService', '$wfmModal', 'teamScheduleNotificationService', 'ScenarioTestUtil'];
 
-	function undoScheduleCtrl(PersonSelection, ActivityService, $mdDialog, notification, ScenarioTestUtil) {
+	function undoScheduleCtrl(PersonSelection, ActivityService, $wfmModal, notification, ScenarioTestUtil) {
 		var vm = this;
 		vm.label = 'Undo';
 
@@ -40,12 +40,7 @@
 		};
 
 		vm.popDialog = function() {
-			return $mdDialog.show({
-				controller: 'commandConfirmDialog',
-				templateUrl: 'js/teamSchedule/html/commandConfirmDialog.tpl.html',
-				parent: angular.element(document.body),
-				clickOutsideToClose: true,
-				bindToController: true,
+			return $wfmModal.show({
 				onRemoving: function() {
 					vm.resetActiveCmd();
 				},

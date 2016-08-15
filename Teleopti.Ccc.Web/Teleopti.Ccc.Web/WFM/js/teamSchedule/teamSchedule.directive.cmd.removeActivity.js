@@ -4,9 +4,9 @@
 
 	angular.module('wfm.teamSchedule').directive('removeActivity', removeActivityDirective);
 
-	removeActivityCtrl.$inject = ['ActivityService', 'PersonSelection', 'teamScheduleNotificationService', '$mdDialog', '$wfmModal', 'ScenarioTestUtil'];
+	removeActivityCtrl.$inject = ['ActivityService', 'PersonSelection', 'teamScheduleNotificationService', '$wfmModal', 'ScenarioTestUtil'];
 
-	function removeActivityCtrl(ActivityService, PersonSelection, notification, $mdDialog, $wfmModal, ScenarioTestUtil) {
+	function removeActivityCtrl(ActivityService, PersonSelection, notification, $wfmModal, ScenarioTestUtil) {
 		var vm = this;
 		vm.label = 'RemoveActivity';
 
@@ -47,9 +47,6 @@
 
 		vm.popDialog = function () {
 			return $wfmModal.show({
-				controller: 'commandConfirmDialog',
-				templateUrl: 'js/teamSchedule/html/commandConfirmDialog_SG.tpl.html',
-				parent: angular.element(document.body),
 				onRemoving: function () {
 					vm.resetActiveCmd();
 				},

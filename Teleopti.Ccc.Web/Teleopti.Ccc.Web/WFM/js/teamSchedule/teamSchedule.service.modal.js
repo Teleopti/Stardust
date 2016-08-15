@@ -9,11 +9,14 @@
 
     function wfmModalService($rootScope, $compile, $controller, $templateRequest) {
 
+        var defaultTemplate = 'js/teamSchedule/html/commandConfirmDialog_SG.tpl.html';
+        var defaultController = 'commandConfirmDialog';
+
         function show(options) {
 
-            if (!options.template && !options.templateUrl) {
-                return;
-            }
+            options.templateUrl = options.templateUrl || defaultTemplate;
+            options.controller = options.controller || defaultController;
+            options.parent = options.parent || angular.element(document.body);
 
             if (options.template) {
                 makeModal(options.template);
@@ -26,7 +29,7 @@
 
                 var modalString = '<modal-dialog show="showModal" on-close="onClose()" ng-cloak>' + template + '</modal-dialog>';
                 var scope = $rootScope.$new();
-                var parent = options.parent || angular.element(document.body);
+                var parent = options.parent;
 
                 if (typeof options.locals === 'object') {
                     for (var key in options.locals) {

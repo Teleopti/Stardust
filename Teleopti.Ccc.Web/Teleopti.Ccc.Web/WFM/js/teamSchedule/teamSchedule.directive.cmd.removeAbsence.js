@@ -4,9 +4,9 @@
 
 	angular.module('wfm.teamSchedule').directive('removeAbsence', removeAbsenceDirective);
 
-	removeAbsenceCtrl.$inject = ['PersonAbsence', 'PersonSelection', 'teamScheduleNotificationService', '$mdDialog', 'ScenarioTestUtil'];
+	removeAbsenceCtrl.$inject = ['PersonAbsence', 'PersonSelection', 'teamScheduleNotificationService', '$wfmModal', 'ScenarioTestUtil'];
 
-	function removeAbsenceCtrl(PersonAbsenceSvc, PersonSelection, notification, $mdDialog, ScenarioTestUtil) {
+	function removeAbsenceCtrl(PersonAbsenceSvc, PersonSelection, notification, $wfmModal, ScenarioTestUtil) {
 		var vm = this;
 		vm.label = 'RemoveAbsence';
 
@@ -44,12 +44,7 @@
 
 		// ToDo[Yanyi] refactor write protection into commandContainer.
 		vm.popDialog = function () {
-			return $mdDialog.show({
-				controller: 'commandConfirmDialog',
-				templateUrl: 'js/teamSchedule/html/commandConfirmDialog.tpl.html',
-				parent: angular.element(document.body),
-				clickOutsideToClose: true,
-				bindToController: true,
+			return $wfmModal.show({
 				onRemoving: function () {
 					vm.resetActiveCmd();
 				},
