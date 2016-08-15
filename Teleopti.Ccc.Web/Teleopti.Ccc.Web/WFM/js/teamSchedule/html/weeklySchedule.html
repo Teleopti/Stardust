@@ -24,13 +24,12 @@
 				<i class='mdi mdi-alert'></i>{{'TooManyResultsForSearchKeywords'|translate}}
 			</div>
 			<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
-
 			<table>
 				<thead>
 				<td class="agent-name-colomn"></td>
 				<td ng-repeat="day in vm.weekDays">
 					<span>{{day.name}}</span>
-					<span style="float: right; padding-right: 5px">{{day.date}}</span>
+					<span style="float: right; padding-right: 5px">{{day.date | date : 'dd'}}</span>
 				</td>
 				</thead>
 				<tbody>
@@ -49,11 +48,11 @@
 
 	</div>
 
-	<!--<div class="con-footer teamschedule-footer" ng-if="vm.paginationOptions.totalPages > 0">
+	<div class="con-footer teamschedule-footer" ng-if="vm.paginationOptions.totalPages > 0">
 		<md-select class="page-size-selector" ng-if="vm.toggles.SelectAgentsPerPageEnabled" ng-model="vm.paginationOptions.pageSize" ng-change="vm.selectorChanged()" aria-label="page size">
 			<md-option ng-repeat="option in vm.agentsPerPageSelection" ng-value="option">{{option}}</md-option>
 		</md-select>
 		<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.loadSchedules"></wfm-pagination>
-	</div>-->
+	</div>
 </div>
 

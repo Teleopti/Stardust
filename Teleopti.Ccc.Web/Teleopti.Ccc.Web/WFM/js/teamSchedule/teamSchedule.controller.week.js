@@ -3,8 +3,8 @@
 
 	angular.module('wfm.teamSchedule').controller('TeamScheduleWeeklyCtrl', TeamScheduleWeeklyCtrl);
 
-	TeamScheduleWeeklyCtrl.$inject = ['$stateParams', '$locale', '$filter', 'PersonScheduleWeekViewCreator', 'UtilityService'];
-	function TeamScheduleWeeklyCtrl(params, $locale,$filter, WeekViewCreator, Util) {
+	TeamScheduleWeeklyCtrl.$inject = ['$stateParams', '$locale', '$filter', 'PersonScheduleWeekViewCreator', 'UtilityService', 'weekViewScheduleSvc'];
+	function TeamScheduleWeeklyCtrl(params, $locale, $filter, WeekViewCreator, Util, weekViewScheduleSvc) {
 		var vm = this;
 		vm.searchOptions = {
 			keyword: angular.isDefined(params.keyword) && params.keyword !== '' ? params.keyword : '',
@@ -22,83 +22,50 @@
 		vm.gotoNextWeek = function () { };
 
 		vm.onScheduleDateChanged = function () { 
-			if (vm.scheduleDate != moment(vm.scheduleDate).startOf('week').toDate()) {
+			if (!moment(vm.scheduleDate).startOf('week').isSame(vm.scheduleDate, 'day')) {
 				vm.scheduleDate = moment(vm.scheduleDate).startOf('week').toDate();
+			} else {
+				vm.loadSchedules();
 			}
 		};
 
 		vm.weekDayNames = Util.getWeekdayNames();
-		vm.weekDays = [];
-
-
-		vm.loadSchedules = function () {
-			console.log("fake data");
-			vm.isLoading = true;
-		    //TODO : load week schedule 
-			vm.weekDays = getWeekDays();
-			var fakeData = [
-				{
-					PersonId: "ashley",
-					Name: "ashley",
-					Days: [
-						{
-							Date: "2016-08-08",
-							SummeryTitle: "Early",
-							SummeryTimeSpan: "08:00-17:00",
-							Color: 'grey'
-						}, {
-							Date: "2016-08-09",
-							SummeryTitle: "Early",
-							SummeryTimeSpan: "08:00-17:00",
-							Color: '#ffffff'
-						}, {
-							Date: "2016-08-10",
-							SummeryTitle: "Early",
-							SummeryTimeSpan: "08:00-17:00",
-							Color: 'grey'
-						}, {
-							Date: "2016-08-11",
-							SummeryTitle: "Early",
-							SummeryTimeSpan: "08:00-17:00",
-							Color: '#FFFFFF'
-						}, {
-							Date: "2016-08-12",
-							SummeryTitle: "Early",
-							SummeryTimeSpan: "08:00-17:00",
-							Color: '#FFFFFF'
-						}, {
-							Date: "2016-08-13",
-							SummeryTitle: "Early",
-							SummeryTimeSpan: "08:00-17:00",
-							Color: '#FFFFFF'
-						}, {
-							Date: "2016-08-14",
-							SummeryTitle: "Early",
-							SummeryTimeSpan: "08:00-17:00",
-							Color: '#FFFFFF'
-						}
-					]
-				}
-			];
-			vm.groupWeeks = WeekViewCreator.Create(fakeData);
-
+		vm.paginationOptions = {
+			pageSize: 20,
+			pageNumber: 1,
+			totalPages: 0
 		};
 
-		function getWeekDays() {
-			if (vm.scheduleDate) {
-				var dates = [];
-				for (var i = 0; i < 7; i++) {
-					dates.push({
-						name: vm.weekDayNames[i],
-						date: $filter('date')(moment(vm.scheduleDate).add(i, 'days').toDate(), 'shortDate')
-					});
-				}
-				return dates;
-			}
-			return [];
+		vm.loadSchedules = function () {		
+			vm.isLoading = true;
+			//TODO: replace fake with real		
+			var inputForm = getParamsForLoadingSchedules();
+			weekViewScheduleSvc.getFakeSchedules(inputForm).then(function(schedulesData) {
+				vm.groupWeeks = WeekViewCreator.Create(schedulesData);
+				vm.isLoading = false;
+			}).catch(function() {
+				vm.isLoading = false;
+			});
+		};
+
+		init();
+
+		function init() {
+			vm.weekDays = Util.getWeekdays();
+			vm.paginationOptions.totalPages = 1;
+			vm.loadSchedules();
 		}
 
-		vm.loadSchedules();
+		function getParamsForLoadingSchedules(options) {
+			if (options == undefined) options = {};
+			var params = {
+				keyword: options.keyword != undefined ? options.keyword : vm.searchOptions.keyword,
+				date: options.date != undefined ? options.date : moment(vm.scheduleDate).format("YYYY-MM-DD"),
+				pageSize: options.pageSize != undefined ? options.pageSize : vm.paginationOptions.pageSize,
+				currentPageIndex: options.currentPageIndex != undefined ? options.currentPageIndex : vm.paginationOptions.pageNumber,
+			};
+			return params;
+		}
 
 	}
 })()

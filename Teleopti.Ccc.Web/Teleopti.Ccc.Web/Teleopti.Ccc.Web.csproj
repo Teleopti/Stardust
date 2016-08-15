@@ -1591,6 +1591,7 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.utilities.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.utilities.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.validateRules.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.service.weekViewSchedule.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.shiftHelpers.js" />
     <Content Include="WFM\js\teamSchedule\html\timeline.html" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.timeRangePicker.directive.js" />
