@@ -25,23 +25,21 @@
 			</div>
 			<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
 			<table>
-				<thead>
-				<td class="agent-name-colomn"></td>
-				<td ng-repeat="day in vm.weekDays">
-					<span>{{day.name}}</span>
-					<span style="float: right; padding-right: 5px">{{day.date | date : 'dd'}}</span>
-				</td>
+				<thead class="weekview-thead">
+					<td class="agent-name-colomn"></td>
+					<td ng-repeat="day in vm.weekDays">
+						<span>{{day.name}}</span>
+						<span class="pull-right">{{day.date | date : 'dd'}}</span>
+					</td>
 				</thead>
 				<tbody>
-				<tr ng-repeat="person in vm.groupWeeks">
-					<td>{{person.name}}</td>
-					<td ng-repeat="day in person.days">
-						<div ng-style="{background: day.color}">
+					<tr class="weekview-tr" ng-repeat="person in vm.groupWeeks">
+						<td class="weekview-td weekview-person-name">{{person.name}}</td>
+						<td class="weekview-td" ng-repeat="day in person.days" ng-style="{background: day.color}">
 							<div>{{day.summeryTitle}}</div>
 							<div>{{day.summeryTimeSpan}}</div>
-						</div>
-					</td>
-				</tr>
+						</td>
+					</tr>
 				</tbody>
 			</table>
 		</div>
