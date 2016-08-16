@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			if (personAssignment == null)
 			{
-				command.ErrorMessages.Add(Resources.CanNotAddPersonalActivityToAgentWithoutShift);
+				command.ErrorMessages.Add(Resources.FailedMessageForAddingActivity);
 			}
 			else
 			{
