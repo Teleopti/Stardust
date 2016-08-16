@@ -228,19 +228,29 @@
 			}
 
 			tr.weekview-tr{
-				min-height: 60px;
+				height: 60px;
+				border-bottom: 1px solid #DDDDDD;
 			}
 
 			td.weekview-td{
 				padding: 0;
 				border-left: 1px solid $gray012;
 				border-right: 1px solid $gray012;
-				border-bottom: 1px solid #DDDDDD;
 				text-align: center;
+				cursor: default;
+			}
+
+			td.weekview-td.dayoff{
+				//background-color: beige;
+			}
+
+			td.weekview-td.terminated{
+				opacity: 0.3;
+				text-decoration: line-through;
 			}
 
 			td.weekview-td:hover{
-				border-bottom-color: $blue-500;
+				border-bottom: 1px solid $blue-500;
 			}
 		
 			td.weekview-person-name{

@@ -13,6 +13,7 @@
 					summeryTitle: day.Title,
 					summeryTimeSpan: day.TimeSpan,
 					isDayOff: day.IsDayOff,
+					isTerminated: day.IsTerminated,
 					color: day.Color
 				};
 				days.push(dayViewModel);

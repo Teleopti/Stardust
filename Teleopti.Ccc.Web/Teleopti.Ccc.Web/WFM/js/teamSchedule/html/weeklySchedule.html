@@ -18,6 +18,7 @@
 			</span>
 		</div>
 	</div>
+
 	<div class="con-row teamschedule-body">
 		<div class="big-table-wrapper">
 			<div class="alert-warning notice-spacer" ng-if="vm.total > 500">
@@ -35,7 +36,7 @@
 				<tbody>
 					<tr class="weekview-tr" ng-repeat="person in vm.groupWeeks">
 						<td class="weekview-td weekview-person-name">{{person.name}}</td>
-						<td class="weekview-td" ng-repeat="day in person.days" ng-style="{background: day.color}">
+						<td class="weekview-td" ng-repeat="day in person.days" ng-style="{background: day.color}" ng-class="{'dayoff': day.isDayOff, 'terminated': day.isTerminated}">
 							<div>{{day.summeryTitle}}</div>
 							<div>{{day.summeryTimeSpan}}</div>
 						</td>
@@ -43,7 +44,6 @@
 				</tbody>
 			</table>
 		</div>
-
 	</div>
 
 	<div class="con-footer teamschedule-footer" ng-if="vm.paginationOptions.totalPages > 0">
