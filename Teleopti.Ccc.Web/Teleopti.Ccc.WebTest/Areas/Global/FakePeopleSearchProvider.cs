@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		private readonly PeopleSummaryModel _model;
 		private readonly IList<IPerson> _permittedPeople;
 		private readonly IList<IPerson> _peopleWithConfidentialAbsencePermission;
-		private readonly IList<Tuple<IPerson,DateOnly>> _personUnavailableSince;
 
 		public FakePeopleSearchProvider(IEnumerable<IPerson> peopleList,IEnumerable<IOptionalColumn> optionalColumns)
 		{
