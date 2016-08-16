@@ -15,7 +15,8 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 	public class IntradaySkillAreaController : ApiController
 	{
         private readonly ISkillAreaRepository _skillAreaRepository;
-        private readonly CreateSkillArea _createSkillArea;
+		private readonly ForecastedStaffingProvider _forecastedStaffingProvider;
+		private readonly CreateSkillArea _createSkillArea;
 		private readonly FetchSkillArea _fetchSkillArea;
 		private readonly DeleteSkillArea _deleteSkillArea;
 		private readonly IAuthorization _authorization;
@@ -26,7 +27,8 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 			DeleteSkillArea deleteSkillArea, 
 			IAuthorization authorization, 
 			MonitorSkillsProvider monitorSkillsProvider,
-			ISkillAreaRepository skillAreaRepository)
+			ISkillAreaRepository skillAreaRepository,
+			ForecastedStaffingProvider forecastedStaffingProvider)
 		{
 			_createSkillArea = createSkillArea;
 			_fetchSkillArea = fetchSkillArea;
@@ -34,6 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 			_authorization = authorization;
 			_monitorSkillsProvider = monitorSkillsProvider;
 		    _skillAreaRepository = skillAreaRepository;
+			_forecastedStaffingProvider = forecastedStaffingProvider;
 		}
 
 		[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebModifySkillArea)]
@@ -76,6 +79,13 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 			return Ok(_fetchSkillArea.Get(skillAreaId));
 		}
 
+		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillareastaffing/{id}")]
+		public virtual IHttpActionResult MonitorSkillAreaStaffing(Guid Id)
+		{
+			var skillArea = _skillAreaRepository.Get(Id);
+			var skillIdList = skillArea.Skills.Select(skill => skill.Id).ToArray();
+			return Ok(_forecastedStaffingProvider.Load(skillIdList));
+		}
 	}
 
 	public class SkillAreaInfo
