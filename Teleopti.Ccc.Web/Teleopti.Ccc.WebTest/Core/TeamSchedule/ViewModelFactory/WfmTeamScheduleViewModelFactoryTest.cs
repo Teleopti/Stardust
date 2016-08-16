@@ -68,7 +68,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			first.DaySchedules[2].Date.Should().Be(new DateOnly(2020, 1, 1));
 			first.DaySchedules[2].Title.Should().Be("Day");
 			first.DaySchedules[2].Color.Should().Be("rgb(0,0,255)");
-			first.DaySchedules[2].TimeSpan.Should().Be("8:00 AM - 5:00 PM");
+			first.DaySchedules[2].TimeSpan.Should()
+				.Be(new TimePeriod(new TimeSpan(8, 0, 0), new TimeSpan(17, 0, 0)).ToShortTimeString());    
 		}
 	}
 }
