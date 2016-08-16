@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -48,13 +49,19 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			{
 				return;
 			}
+			
+			Site.ClearOpenHourCollection();
 
-			Site.OpenHours.Clear();
 			if (OpenHours != null)
 			{
 				foreach (var openHour in OpenHours)
 				{
-					Site.OpenHours.Add(openHour);
+					var siteOpenHour = new SiteOpenHour()
+					{
+						WeekDay = openHour.Key,
+						TimePeriod = openHour.Value
+					};
+					Site.AddOpenHour(siteOpenHour);
 				}
 			}
 		}
