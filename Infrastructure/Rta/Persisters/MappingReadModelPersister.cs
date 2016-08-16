@@ -22,30 +22,32 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 			if (Invalid())
 				return;
 
-			_unitOfWork.Current()
-				.CreateSqlQuery("INSERT INTO [ReadModel].[KeyValueStore] ([Key]) VALUES ('RuleMappingsInvalido')")
+			setInvalido(true);
+		}
+
+		private void setInvalido(bool value)
+		{
+			var updated = _unitOfWork.Current()
+				.CreateSqlQuery($"UPDATE [ReadModel].[KeyValueStore] SET [Value] = '{value}' WHERE [Key] = 'RuleMappingsInvalido'")
 				.ExecuteUpdate();
+			if (updated == 0)
+				_unitOfWork.Current()
+					.CreateSqlQuery($"INSERT INTO [ReadModel].[KeyValueStore] ([Key], [Value]) VALUES ('RuleMappingsInvalido', '{value}')")
+					.ExecuteUpdate();
 		}
 
 		public bool Invalid()
 		{
-			var isInvalido = 1 == _unitOfWork.Current()
-				.CreateSqlQuery("SELECT COUNT(1) FROM [ReadModel].[KeyValueStore] WITH (ROWLOCK, XLOCK) WHERE [Key] = 'RuleMappingsInvalido'")
-				.UniqueResult<int>();
+			var value = _unitOfWork.Current()
+				.CreateSqlQuery("SELECT [Value] FROM [ReadModel].[KeyValueStore] WITH (ROWLOCK, XLOCK) WHERE [Key] = 'RuleMappingsInvalido'")
+				.UniqueResult<string>() ?? bool.TrueString;
 
-			if (isInvalido)
-				return true;
-
-			return 0 == _unitOfWork.Current()
-				.CreateSqlQuery("SELECT COUNT(1) FROM [ReadModel].[RuleMappings] WITH (TABLOCKX)")
-				.UniqueResult<int>();
+			return bool.Parse(value);
 		}
 
 		public void Persist(IEnumerable<Mapping> mappings)
 		{
-			_unitOfWork.Current()
-				.CreateSqlQuery("DELETE FROM [ReadModel].[KeyValueStore] WHERE [Key] = 'RuleMappingsInvalido'")
-				.ExecuteUpdate();
+			setInvalido(false);
 
 			mappings.Batch(100).ForEach(batch =>
 			{
