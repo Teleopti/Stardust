@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 		public IntradayStatisticsViewModel Load(Guid[] skillIdList)
 		{
-			var intervals = _intradayMonitorDataLoader.Load(skillIdList, 
+			var intervals = _intradayMonitorDataLoader.Load(skillIdList,
 				TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone,
 				new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _userTimeZone.TimeZone())));
 			var intervalLength = _intervalLengthFetcher.IntervalLength;
@@ -101,11 +101,11 @@ namespace Teleopti.Ccc.Domain.Intraday
 			return new IntradayStatisticsViewModel()
 			{
 				LatestActualIntervalStart = latestQueueStatsIntervalId == -1
-		? null
-		: (DateTime?)DateTime.MinValue.AddMinutes(latestQueueStatsIntervalId * intervalLength),
+					? null
+					: (DateTime?) DateTime.MinValue.AddMinutes(latestQueueStatsIntervalId*intervalLength),
 				LatestActualIntervalEnd = latestQueueStatsIntervalId == -1
-		? null
-		: (DateTime?)DateTime.MinValue.AddMinutes(latestQueueStatsIntervalId * intervalLength + intervalLength),
+					? null
+					: (DateTime?) DateTime.MinValue.AddMinutes(latestQueueStatsIntervalId*intervalLength + intervalLength),
 				StatisticsSummary = summary,
 				StatisticsDataSeries = new IntradayStatisticsDataSeries
 				{

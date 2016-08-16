@@ -65,8 +65,8 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 			return Ok();
 		}
 
-		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillarea/{id}")]
-		public virtual IHttpActionResult MonitorSkillArea(Guid Id)
+		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillareastatistics/{id}")]
+		public virtual IHttpActionResult MonitorSkillAreaStatistics(Guid Id)
 		{
             var skillArea = _skillAreaRepository.Get(Id);
             var skillIdList = skillArea.Skills.Select(skill => skill.Id).ToArray();
