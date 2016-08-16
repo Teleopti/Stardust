@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -52,9 +53,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IList<IPersonRequest> Find(List<Guid> id)
+		public IList<IPersonRequest> Find(List<Guid> ids)
 		{
-			throw new NotImplementedException();
+			return _requestRepository.Where(p => ids.Any(x => x == p.Id)).ToList();
 		}
 
 		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person)
