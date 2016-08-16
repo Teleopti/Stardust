@@ -5,9 +5,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta
@@ -56,14 +54,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 					StateCode = "phone",
 					IsSnapshot = true,
 					SnapshotId = "2016-04-07 08:00".Utc()
-				},
-				new ExternalUserStateForTest
-				{
-					UserCode = "",
-					StateCode = "",
-					IsSnapshot = true,
-					SnapshotId = "2016-04-07 08:00".Utc()
 				}
+			});
+			Rta.CloseSnapshot(new CloseSnapshotForTest
+			{
+				SnapshotId = "2016-04-07 08:00".Utc()
 			});
 
 			Rta.SaveStateBatch(new[]
@@ -74,15 +69,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 					StateCode = "phone",
 					IsSnapshot = true,
 					SnapshotId = "2016-04-07 08:10".Utc()
-				},
-				new ExternalUserStateForTest
-				{
-					UserCode = "",
-					StateCode = "",
-					IsSnapshot = true,
-					SnapshotId = "2016-04-07 08:10".Utc()
 				}
 			});
+			Rta.CloseSnapshot(new CloseSnapshotForTest
+			{
+				SnapshotId = "2016-04-07 08:10".Utc()
+			});
+
 
 			WithUnitOfWork.Get(() => ReadModels.Load(new[] { person.Id.Value }))
 				.SingleOrDefault()

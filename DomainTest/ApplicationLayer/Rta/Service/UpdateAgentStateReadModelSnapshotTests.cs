@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 
 			Now.Is("2014-10-20 10:00");
-			Target.SaveStateSnapshot(new[]
+			Target.SaveStateBatch(new[]
 			{
 				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
 				{
@@ -42,14 +42,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 					StateCode = "statecode"
 				}
 			});
+			Target.CloseSnapshot(new CloseSnapshotForTest
+			{
+				SnapshotId = "2014-10-20 10:00".Utc()
+			});
 
-			Target.SaveStateSnapshot(new[]
+			Target.SaveStateBatch(new[]
 			{
 				new ExternalUserStateForSnapshot("2014-10-20 10:05".Utc())
 				{
 					UserCode = "usercode1",
 					StateCode = "statecode"
-				},
+				}
+			});
+			Target.CloseSnapshot(new CloseSnapshotForTest
+			{
+				SnapshotId = "2014-10-20 10:05".Utc()
 			});
 
 			Persister.Models
@@ -70,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
 				;
 			Now.Is("2014-10-20 10:00");
-			Target.SaveStateSnapshot(new[]
+			Target.SaveStateBatch(new[]
 			{
 				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
 				{
@@ -79,7 +87,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 					SourceId = "source1",
 				}
 			});
-			Target.SaveStateSnapshot(new[]
+			Target.CloseSnapshot(new CloseSnapshotForTest
+			{
+				SnapshotId = "2014-10-20 10:00".Utc(),
+				SourceId = "source1"
+			});
+
+			Target.SaveStateBatch(new[]
 			{
 				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
 				{
@@ -88,8 +102,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 					SourceId = "source2",
 				}
 			});
+			Target.CloseSnapshot(new CloseSnapshotForTest
+			{
+				SnapshotId = "2014-10-20 10:00".Utc(),
+				SourceId = "source2"
+			});
 
-			Target.SaveStateSnapshot(new[]
+			Target.SaveStateBatch(new[]
 			{
 				new ExternalUserStateForSnapshot("2014-10-20 10:05".Utc())
 				{
@@ -97,6 +116,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 					StateCode = "statecode",
 					SourceId = "source1",
 				}
+			});
+			Target.CloseSnapshot(new CloseSnapshotForTest
+			{
+				SnapshotId = "2014-10-20 10:05".Utc(),
+				SourceId = "source1"
 			});
 
 			Persister.Models
@@ -131,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "statecode1",
 			});
 
-			Target.SaveStateSnapshot(new[]
+			Target.SaveStateBatch(new[]
 			{
 				new ExternalUserStateForSnapshot("2014-10-20 10:05".Utc())
 				{
@@ -139,6 +163,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 					SourceId = "source1",
 					StateCode = "statecode1"
 				}
+			});
+			Target.CloseSnapshot(new CloseSnapshotForTest
+			{
+				SourceId = "source1",
+				SnapshotId = "2014-10-20 10:05".Utc()
 			});
 
 			Persister.Models
@@ -174,7 +203,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "statecode1",
 			});
 
-			Target.SaveStateSnapshot(new[]
+			Target.SaveStateBatch(new[]
 			{
 				new ExternalUserStateForSnapshot("2014-10-20 10:05".Utc())
 				{
@@ -182,6 +211,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 					SourceId = "source1",
 					StateCode = "statecode1"
 				}
+			});
+			Target.CloseSnapshot(new CloseSnapshotForTest
+			{
+				SourceId = "source1",
+				SnapshotId = "2014-10-20 10:05".Utc()
 			});
 
 			Persister.Models
@@ -200,7 +234,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty);
 
 			Now.Is("2014-10-20 10:00");
-			Target.SaveStateSnapshot(new[]
+			Target.SaveStateBatch(new[]
 			{
 				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
 				{
@@ -213,15 +247,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 					StateCode = Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot
 				}
 			});
+			Target.CloseSnapshot(new CloseSnapshotForTest
+			{
+				SnapshotId = "2014-10-20 10:00".Utc()
+			});
 
 			Now.Is("2014-10-20 10:05");
-			Target.SaveStateSnapshot(new[]
+			Target.SaveStateBatch(new[]
 			{
 				new ExternalUserStateForSnapshot("2014-10-20 10:05".Utc())
 				{
 					UserCode = "usercode1",
 					StateCode = "statecode"
 				},
+			});
+			Target.CloseSnapshot(new CloseSnapshotForTest
+			{
+				SnapshotId = "2014-10-20 10:05".Utc()
 			});
 
 			Persister.Models

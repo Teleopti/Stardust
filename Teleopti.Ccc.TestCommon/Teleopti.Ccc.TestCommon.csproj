@@ -203,7 +203,6 @@
     <Compile Include="FakeRepositories\FakePersonalSettingDataRepository.cs" />
     <Compile Include="FakeRepositories\FakeSkillTypeRepository.cs" />
     <Compile Include="FakeRepositories\PersonAssignmentRepositoryWithRandomLatency.cs" />
-    <Compile Include="FakeRepositories\Rta\ExternalUserStateForSnapshot.cs" />
     <Compile Include="FakeRepositories\Rta\FakeAgentStatePersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeMappingReadModelPersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeNumberOfAgentsInSiteReader.cs" />

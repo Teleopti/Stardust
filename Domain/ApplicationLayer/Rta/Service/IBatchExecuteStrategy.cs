@@ -22,12 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		public void Execute(IEnumerable<ExternalUserStateInputModel> source, Action<ExternalUserStateInputModel> action)
 		{
-			var reversedList = source.ToList();
-			reversedList.Reverse();
-			var mightCloseSnapshot = reversedList.First();
-			var runInParallel = reversedList.Skip(1);
-			runInParallel.AsParallel().ForAll(action);
-			action.Invoke(mightCloseSnapshot);
+			source.AsParallel().ForAll(action);
 		}
 	}
 }

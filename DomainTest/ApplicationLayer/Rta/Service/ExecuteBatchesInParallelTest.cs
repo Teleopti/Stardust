@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.TestCommon;
 
@@ -74,13 +75,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			});
 
 
-			Target.SaveStateSnapshot(new[]
+			Target.SaveStateBatch(new[]
 			{
 				new ExternalUserStateForSnapshot("2016-07-11 08:10".Utc())
 				{
 					UserCode = "user2",
 					StateCode = "phone"
 				}
+			});
+			Target.CloseSnapshot(new CloseSnapshotForTest
+			{
+				SnapshotId = "2016-07-11 08:10".Utc()
 			});
 
 			Persister.Get(personId1).StateCode.Should().Be(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot);
@@ -98,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithUser("usercode3")
 				.WithRule();
 
-			Target.SaveStateSnapshot(new[]
+			Target.SaveStateBatch(new[]
 			{
 				new ExternalUserStateForTest
 				{
@@ -113,8 +118,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 					SnapshotId = "2016-05-18 08:00".Utc()
 				}
 			});
+			Target.CloseSnapshot(new CloseSnapshotForTest
+			{
+				SnapshotId = "2016-05-18 08:00".Utc()
+			});
 
-			Target.SaveStateSnapshot(new[]
+			Target.SaveStateBatch(new[]
 			{
 				new ExternalUserStateForTest
 				{
@@ -123,6 +132,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 					SnapshotId = "2016-05-18 08:05".Utc()
 				}
 			});
+			Target.CloseSnapshot(new CloseSnapshotForTest
+			{
+				SnapshotId = "2016-05-18 08:05".Utc()
+			});
+
 
 			Database.StateCodes.Where(x => x.StateCode == Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
 				.Should().Have.Count.EqualTo(1);

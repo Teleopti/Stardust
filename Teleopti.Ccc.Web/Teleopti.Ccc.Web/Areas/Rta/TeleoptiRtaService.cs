@@ -38,18 +38,30 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 		{
 			return handleRtaExceptions(() =>
 			{
-				_rta.SaveState(new ExternalUserStateInputModel
+				if (isClosingSnapshot(userCode, isSnapshot))
 				{
-					AuthenticationKey = authenticationKey,
-					UserCode = userCode,
-					StateCode = stateCode,
-					StateDescription = stateDescription,
-					IsLoggedOn = isLoggedOn,
-					PlatformTypeId = platformTypeId,
-					SourceId = sourceId,
-					SnapshotId = batchId,
-					IsSnapshot = isSnapshot
-				});
+					_rta.CloseSnapshot(new CloseSnapshotInputModel
+					{
+						AuthenticationKey = authenticationKey,
+						SnapshotId = batchId,
+						SourceId = sourceId
+					});
+				}
+				else
+				{
+					_rta.SaveState(new ExternalUserStateInputModel
+					{
+						AuthenticationKey = authenticationKey,
+						UserCode = userCode,
+						StateCode = stateCode,
+						StateDescription = stateDescription,
+						IsLoggedOn = isLoggedOn,
+						PlatformTypeId = platformTypeId,
+						SourceId = sourceId,
+						SnapshotId = batchId,
+						IsSnapshot = isSnapshot
+					});
+				}
 			});
 		}
 
@@ -57,7 +69,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 		{
 			return handleRtaExceptions(() =>
 			{
-				var states = from s in externalUserStateBatch
+				IEnumerable<ExternalUserStateInputModel> states = (
+					from s in externalUserStateBatch
 					select new ExternalUserStateInputModel
 					{
 						AuthenticationKey = authenticationKey,
@@ -69,9 +82,29 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 						SourceId = sourceId,
 						SnapshotId = s.BatchId,
 						IsSnapshot = s.IsSnapshot
-					};
-				_rta.SaveStateBatch(states.ToArray());
+					})
+					.ToArray();
+
+				var mayCloseSnapshot = externalUserStateBatch.Last();
+				var closeSnapshot = isClosingSnapshot(mayCloseSnapshot.UserCode, mayCloseSnapshot.IsSnapshot);
+				if (closeSnapshot)
+					states = states.Take(externalUserStateBatch.Count - 1);
+				
+				_rta.SaveStateBatch(states);
+
+				if (closeSnapshot)
+					_rta.CloseSnapshot(new CloseSnapshotInputModel
+					{
+						AuthenticationKey = authenticationKey,
+						SnapshotId = mayCloseSnapshot.BatchId,
+						SourceId = sourceId
+					});
 			});
+		}
+
+		private bool isClosingSnapshot(string userCode, bool isSnapshot)
+		{
+			return isSnapshot && string.IsNullOrEmpty(userCode);
 		}
 
 		public void GetUpdatedScheduleChange(Guid personId, Guid businessUnitId, DateTime timestamp, string tenant)

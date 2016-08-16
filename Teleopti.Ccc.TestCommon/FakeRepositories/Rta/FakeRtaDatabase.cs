@@ -6,19 +6,32 @@ using System.Linq;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.RealTimeAdherence;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
-using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
+	public class CloseSnapshotForTest : CloseSnapshotInputModel
+	{
+		public CloseSnapshotForTest()
+		{
+			AuthenticationKey = LegacyAuthenticationKey.TheKey;
+			SourceId = "sourceId";
+		}
+	}
+
+	public class ExternalUserStateForSnapshot : ExternalUserStateForTest
+	{
+		public ExternalUserStateForSnapshot(DateTime time)
+		{
+			SnapshotId = time;
+			IsSnapshot = true;
+		}
+	}
+
 	public class ExternalUserStateForTest : ExternalUserStateInputModel
 	{
 		public ExternalUserStateForTest()

@@ -3,6 +3,13 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
+	public class CloseSnapshotInputModel
+	{
+		public string AuthenticationKey { get; set; }
+		public string SourceId { get; set; }
+		public DateTime SnapshotId { get; set; }
+	}
+
 	public class ExternalUserStateInputModel
 	{
 		public string AuthenticationKey { get; set; }

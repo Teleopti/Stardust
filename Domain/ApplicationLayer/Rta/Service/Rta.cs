@@ -87,31 +87,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_contextLoader = contextLoader;
 			_batchExecuteStrategy = batchExecuteStrategy;
 		}
-
-		[InfoLog]
-		[TenantScope]
-		public virtual void SaveStateSnapshot(IEnumerable<ExternalUserStateInputModel> states)
-		{
-			_initializor.EnsureTenantInitialized();
-
-			var state = states.First();
-			SaveStateBatch(
-				states
-					.Concat(new[]
-					{
-						new ExternalUserStateInputModel
-						{
-							AuthenticationKey = state.AuthenticationKey,
-							PlatformTypeId = state.PlatformTypeId,
-							SourceId = state.SourceId,
-							UserCode = "",
-							IsSnapshot = true,
-							SnapshotId = state.SnapshotId
-						}
-					})
-				);
-		}
-
+		
 		[InfoLog]
 		[TenantScope]
 		public virtual void SaveStateBatch(IEnumerable<ExternalUserStateInputModel> inputs)
@@ -154,6 +130,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			ProcessInput(input);
 		}
 
+		[InfoLog]
+		[TenantScope]
+		public virtual void CloseSnapshot(CloseSnapshotInputModel input)
+		{
+			_contextLoader.ForClosingSnapshot(input.SnapshotId, input.SourceId, context =>
+			{
+				_processor.Process(context);
+			});
+		}
+
 		private void validateAuthenticationKey(ExternalUserStateInputModel input)
 		{
 			input.MakeLegacyKeyEncodingSafe();
@@ -173,26 +159,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			input.UserCode = FixUserCode(input);
 			input.StateCode = FixStateCode(input);
 
-			if (input.IsSnapshot && string.IsNullOrEmpty(input.UserCode))
+			var found = false;
+			_contextLoader.For(input, person =>
 			{
-				_contextLoader.ForClosingSnapshot(input.SnapshotId, input.SourceId, context =>
-				{
-					_processor.Process(context);
-				});
-			}
-			else
-			{
-				var found = false;
-				_contextLoader.For(input, person =>
-				{
-					found = true;
-					_processor.Process(person);
-				});
-				if (!found)
-					throw new InvalidUserCodeException(string.Format("No person found for SourceId {0} and UserCode {1}", input.SourceId, input.UserCode));
-			}
+				found = true;
+				_processor.Process(person);
+			});
+			if (!found)
+				throw new InvalidUserCodeException(string.Format("No person found for SourceId {0} and UserCode {1}", input.SourceId, input.UserCode));
 		}
-		
+
 		protected virtual string FixUserCode(ExternalUserStateInputModel input)
 		{
 			return input.UserCode.Trim();
