@@ -38,10 +38,11 @@
 
 		vm.loadSchedules = function () {		
 			vm.isLoading = true;
-			//TODO: replace fake with real		
+			
 			var inputForm = getParamsForLoadingSchedules();
-			weekViewScheduleSvc.getFakeSchedules(inputForm).then(function(schedulesData) {
-				vm.groupWeeks = WeekViewCreator.Create(schedulesData);
+			weekViewScheduleSvc.getSchedules(inputForm).then(function (data) {				
+				vm.groupWeeks = WeekViewCreator.Create(data.PersonWeekSchedules);
+				vm.paginationOptions.totalPages = vm.paginationOptions.pageSize > 0? Math.ceil(data.Total / (vm.paginationOptions.pageSize + 0.01) ) : 0;
 				vm.isLoading = false;
 			}).catch(function() {
 				vm.isLoading = false;
@@ -59,10 +60,10 @@
 		function getParamsForLoadingSchedules(options) {
 			if (options == undefined) options = {};
 			var params = {
-				keyword: options.keyword != undefined ? options.keyword : vm.searchOptions.keyword,
-				date: options.date != undefined ? options.date : moment(vm.scheduleDate).format("YYYY-MM-DD"),
-				pageSize: options.pageSize != undefined ? options.pageSize : vm.paginationOptions.pageSize,
-				currentPageIndex: options.currentPageIndex != undefined ? options.currentPageIndex : vm.paginationOptions.pageNumber,
+				Keyword: options.keyword != undefined ? options.keyword : vm.searchOptions.keyword,
+				Date: options.date != undefined ? options.date : moment(vm.scheduleDate).format("YYYY-MM-DD"),
+				PageSize: options.pageSize != undefined ? options.pageSize : vm.paginationOptions.pageSize,
+				CurrentPageIndex: options.currentPageIndex != undefined ? options.currentPageIndex : vm.paginationOptions.pageNumber,
 			};
 			return params;
 		}
