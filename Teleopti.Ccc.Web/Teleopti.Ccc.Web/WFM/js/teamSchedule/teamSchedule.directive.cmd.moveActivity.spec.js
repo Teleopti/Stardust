@@ -8,8 +8,8 @@ describe("teamschedule move activity directive tests", function () {
 		$httpBackend,
 		WFMDate,
 		fakeScheduleManagementSvc,
-		fakeMoveActivityValidator,
-		PersonSelection;
+		fakePersonSelectionService,
+		fakeMoveActivityValidator;
 
 	beforeEach(module('wfm.templates'));
 	beforeEach(module('wfm.teamSchedule'));
@@ -17,6 +17,7 @@ describe("teamschedule move activity directive tests", function () {
 	beforeEach(function () {
 		fakeActivityService = new FakeActivityService();
 		fakeScheduleManagementSvc = new FakeScheduleManagementService();
+		fakePersonSelectionService = new FakePersonSelectionService();
 		fakeMoveActivityValidator = new FakeMoveActivityValidator();
 
 		module(function ($provide) {
@@ -26,20 +27,21 @@ describe("teamschedule move activity directive tests", function () {
 			$provide.service('ScheduleManagement', function () {
 				return fakeScheduleManagementSvc;
 			});
+			$provide.service('PersonSelection', function () {
+				return fakePersonSelectionService;
+			});
 			$provide.service('MoveActivityValidator', function () {
 				return fakeMoveActivityValidator;
 			});
 		});
 	});
 
-	beforeEach(inject(function (_$rootScope_, _$compile_, _$httpBackend_, _WFMDate_, _PersonSelection_) {
+	beforeEach(inject(function (_$rootScope_, _$compile_, _$httpBackend_, _WFMDate_) {
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
 		WFMDate = _WFMDate_;
 
-		PersonSelection = _PersonSelection_;
-		PersonSelection.clearPersonInfo();
 		$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
 	}));
 
@@ -149,9 +151,11 @@ describe("teamschedule move activity directive tests", function () {
 				SelectedActivities: selectedActivities
 			}];
 
+		fakePersonSelectionService.setFakeSelectedPersonInfoList(vm.selectedAgents);
+
 		var applyButton = angular.element(result.container[0].querySelector(".move-activity .form-submit"));
 		applyButton.triggerHandler('click');
-
+		
 		result.scope.$apply();
 
 		var activityData = fakeActivityService.getMoveActivityCalledWith();
@@ -274,7 +278,9 @@ describe("teamschedule move activity directive tests", function () {
 	}
 
 	function FakeActivityService() {
-		var targetActivity = null;
+		var targetActivity = {
+
+		};
 		var fakeResponse = { data: [] };
 
 		this.moveActivity = function (input) {
@@ -289,6 +295,18 @@ describe("teamschedule move activity directive tests", function () {
 		this.getMoveActivityCalledWith = function () {
 			return targetActivity;
 		};
+	}
+
+	function FakePersonSelectionService(){
+		var fakePersonList = [];
+
+		this.setFakeSelectedPersonInfoList = function(input){
+			fakePersonList = input;
+		}
+
+		this.getSelectedPersonInfoList = function(){
+			return fakePersonList;
+		}
 	}
 
 	function FakeMoveActivityValidator() {

@@ -50,21 +50,28 @@
 
 		var addActivity = function () {
 			var requestData = getRequestData();
-			activityService.addActivity(requestData).then(function (response) {
+			if(requestData.PersonIds.length > 0){
+				activityService.addActivity(requestData).then(function (response) {
+					if (vm.getActionCb(vm.label)) {
+						vm.getActionCb(vm.label)(vm.trackId, requestData.PersonIds);
+					}
+					teamScheduleNotificationService.reportActionResult({
+						success: 'SuccessfulMessageForAddingActivity',
+						warning: 'PartialSuccessMessageForAddingActivity'
+					}, vm.selectedAgents.map(function (x) {
+						return {
+							PersonId: x.PersonId,
+							Name: x.Name
+						}
+					}), response.data);
+					vm.checkingCommand = false;
+				});
+			}else{
 				if (vm.getActionCb(vm.label)) {
 					vm.getActionCb(vm.label)(vm.trackId, requestData.PersonIds);
 				}
-				teamScheduleNotificationService.reportActionResult({
-					success: 'SuccessfulMessageForAddingActivity',
-					warning: 'PartialSuccessMessageForAddingActivity'
-				}, vm.selectedAgents.map(function (x) {
-					return {
-						PersonId: x.PersonId,
-						Name: x.Name
-					}
-				}), response.data);
 				vm.checkingCommand = false;
-			});
+			}
 		};
 
 		function getRequestData() {

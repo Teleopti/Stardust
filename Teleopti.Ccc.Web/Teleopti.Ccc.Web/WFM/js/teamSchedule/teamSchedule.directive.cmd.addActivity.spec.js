@@ -6,8 +6,8 @@
 		WFMDate,
 		fakeActivityService,
 		fakeScheduleManagementSvc,
-		fakeCommandCheckService,
-		PersonSelection;
+		fakePersonSelectionService,
+		fakeCommandCheckService;
 
 	beforeEach(module('wfm.templates'));
 	beforeEach(module('wfm.teamSchedule'));
@@ -15,6 +15,7 @@
 	beforeEach(function () {
 		fakeActivityService = new FakeActivityService();
 		fakeScheduleManagementSvc = new FakeScheduleManagementService();
+		fakePersonSelectionService = new FakePersonSelectionService();
 		fakeCommandCheckService = new FakeCommandCheckService();
 
 		module(function ($provide) {
@@ -24,20 +25,21 @@
 			$provide.service('ScheduleManagement', function () {
 				return fakeScheduleManagementSvc;
 			});
+			$provide.service('PersonSelection', function () {
+				return fakePersonSelectionService;
+			});
 			$provide.service('CommandCheckService', function () {
 				return fakeCommandCheckService;
 			});
 		});
 	});
 
-	beforeEach(inject(function (_$rootScope_, _$compile_, _$httpBackend_, _WFMDate_, _PersonSelection_) {
+	beforeEach(inject(function (_$rootScope_, _$compile_, _$httpBackend_, _WFMDate_) {
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
 		WFMDate = _WFMDate_;
 
-		PersonSelection = _PersonSelection_;
-		PersonSelection.clearPersonInfo();
 		$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
 	}));
 
@@ -186,7 +188,7 @@
 
 		vm.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
 
-		result.scope.$apply();
+		fakePersonSelectionService.setFakeSelectedPersonInfoList(vm.selectedAgents);
 
 		var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));
 		applyButton.triggerHandler('click');
@@ -354,6 +356,18 @@
 
 		this.getOverlappingAgentList = function() {
 			return fakeOverlappingList;
+		}
+	}
+
+	function FakePersonSelectionService(){
+		var fakePersonList = [];
+
+		this.setFakeSelectedPersonInfoList = function(input){
+			fakePersonList = input;
+		}
+
+		this.getSelectedPersonInfoList = function(){
+			return fakePersonList;
 		}
 	}
 

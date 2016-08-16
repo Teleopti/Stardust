@@ -43,26 +43,32 @@
 			return dateStr + 'T' + timeStr;
 		};
 
-	    function moveActivity() {								
-			activityService.moveActivity(getRequestData()).then(function (response) {
-
-				var personIds = vm.selectedAgents.map(function (agent) { return agent.PersonId; });
-
-				if (vm.getActionCb(vm.label)) {
-					vm.getActionCb(vm.label)(vm.trackId, personIds);
-				}
-				teamScheduleNotificationService.reportActionResult({
-					success: 'SuccessfulMessageForMovingActivity',
-					warning: 'PartialSuccessMessageForMovingActivity'
-				}, vm.selectedAgents.map(function (x) {
-					return {
-						PersonId: x.PersonId,
-						Name: x.Name
+	    function moveActivity() {
+	    	var requestData = getRequestData();
+	    	if(requestData.PersonActivities.length > 0){
+				activityService.moveActivity(requestData).then(function (response) {
+					var personIds = requestData.PersonActivities.map(function (agent) { return agent.PersonId; });
+					if (vm.getActionCb(vm.label)) {
+						vm.getActionCb(vm.label)(vm.trackId, personIds);
 					}
-				}), response.data);
+					teamScheduleNotificationService.reportActionResult({
+						success: 'SuccessfulMessageForMovingActivity',
+						warning: 'PartialSuccessMessageForMovingActivity'
+					}, vm.selectedAgents.map(function (x) {
+						return {
+							PersonId: x.PersonId,
+							Name: x.Name
+						}
+					}), response.data);
 
+					vm.checkingCommand = false;
+				});
+			}else{
+				if (vm.getActionCb(vm.label)) {
+					vm.getActionCb(vm.label)(vm.trackId, []);
+				}
 				vm.checkingCommand = false;
-			});
+			}
 	    };
 
 	    function getRequestData() {
