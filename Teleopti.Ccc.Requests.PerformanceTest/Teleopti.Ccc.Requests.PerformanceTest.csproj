@@ -52,6 +52,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="IProcessMultipleAbsenceRequest.cs" />
+    <Compile Include="MultiAbsenceRequestsTest.cs" />
     <Compile Include="MultiAbsenceRequestHandlerTest.cs" />
     <Compile Include="ProcessMultipleAbsenceRequests.cs" />
   </ItemGroup>
