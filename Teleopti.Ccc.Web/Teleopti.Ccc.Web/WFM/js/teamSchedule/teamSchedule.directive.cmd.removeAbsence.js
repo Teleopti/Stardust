@@ -42,7 +42,6 @@
 			});
 		};
 
-		// ToDo[Yanyi] refactor write protection into commandContainer.
 		vm.popDialog = function () {
 			return $wfmModal.show({
 				onRemoving: function () {
