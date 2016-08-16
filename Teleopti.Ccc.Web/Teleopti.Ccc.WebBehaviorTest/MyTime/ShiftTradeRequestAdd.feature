@@ -778,6 +778,7 @@ Scenario: Show possible shift trades with name filter
 	Then I should see a possible schedule trade with 'OtherAgent2'
 	And I should not see a possible schedule trade with 'OtherAgent1' 
 
+@ignore
 Scenario: Show possible shift trades filtered by site open hours
 Given I have the role 'Full access to mytime'
 	And There are open hours '08:00-17:00' for 'Monday,Tuesday,Wednesday,Thursday,Friday', in site 'The site'
