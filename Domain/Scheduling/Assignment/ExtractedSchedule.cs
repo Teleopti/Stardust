@@ -268,7 +268,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					if (isDelete) DeleteMainShift(source); else mergeMainShift(source, ignoreTimeZoneChanges, true); break;
 
 				case SchedulePartView.PersonalShift:
-					if (isDelete) DeletePersonalStuff(); else mergePersonalStuff(source); break;
+					if (isDelete) DeletePersonalStuff(); else mergePersonalStuff(source, ignoreTimeZoneChanges); break;
 
 				case SchedulePartView.PreferenceRestriction:
 					if (isDelete) DeletePreferenceRestriction(); else MergePreferenceRestriction(source); break;
@@ -622,7 +622,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				ass.ClearPersonalActivities();
 		}
 
-		private void mergePersonalStuff(IScheduleDay source)
+		private void mergePersonalStuff(IScheduleDay source, bool ignoreTimeZoneChanges)
 		{
 			var sourceAss = source.PersonAssignment();
 			if (sourceAss == null) return;
@@ -632,7 +632,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				
 			foreach (var personalLayer in sourceAss.PersonalActivities())
 			{
-				var periodOffset = periodOffsetCalculator.CalculatePeriodOffsetConsiderDaylightSavings(source, this, sourceAss.Period);	
+				var periodOffset = periodOffsetCalculator.CalculatePeriodOffset(source, this, ignoreTimeZoneChanges, sourceAss.Period);
 				destAss.AddPersonalActivity(personalLayer.Payload, personalLayer.Period.MovePeriod(periodOffset));
 			}
 		}

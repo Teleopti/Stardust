@@ -985,7 +985,30 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			source.Add(personAssignment);
 
 			destination.Merge(source, false);
-			destination.PersonAssignment().Period.Should().Be.EqualTo(shiftSourcePeriod.MovePeriod(TimeSpan.FromHours(23)));
+			destination.PersonAssignment().Period.StartDateTime.Hour.Should().Be.EqualTo(shiftSourcePeriod.StartDateTime.Hour);
+		}
+
+		[Test]
+		public void ShouldHandleDaylightSavingsAutumnWhenMergePersonalStuff()
+		{
+			var person1 = PersonFactory.CreatePerson();
+			var scenario = ScenarioFactory.CreateScenarioAggregate();
+			var underlyingDictionary = new Dictionary<IPerson, IScheduleRange>();
+			var dic = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(rangePeriod), underlyingDictionary);
+
+			var sourcePeriod = new DateTimePeriod(2016, 10, 24, 22, 2016, 10, 25, 22);
+			var destinationPeriod = new DateTimePeriod(2016, 10, 31, 22, 2016, 11, 01, 22);
+			var shiftSourcePeriod = new DateTimePeriod(2016, 10, 25, 9, 2016, 10, 25, 10);
+
+			var source = ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(sourcePeriod.StartDateTime));
+			var destination = ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(destinationPeriod.StartDateTime));
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person1, scenario);
+
+			personAssignment.AddPersonalActivity(ActivityFactory.CreateActivity("activity"), shiftSourcePeriod);
+			source.Add(personAssignment);
+
+			destination.Merge(source, false);
+			destination.PersonAssignment().Period.StartDateTime.Hour.Should().Be.EqualTo(shiftSourcePeriod.StartDateTime.Hour);
 		}
 
 		[Test]
