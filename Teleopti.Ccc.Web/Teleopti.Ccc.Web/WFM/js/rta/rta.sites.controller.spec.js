@@ -102,26 +102,6 @@ describe('RtaSitesCtrl', function() {
 		$httpBackend.verifyNoOutstandingRequest();
 	});
 
-	it('should go to teams', function() {
-		$fakeBackend.withSite({
-			Id: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
-			NumberOfAgents: 1
-		});
-		spyOn($state, 'go');
-
-		$controllerBuilder.createController()
-			.apply(function() {
-				scope.onSiteSelect({
-					Id: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
-					NumberOfAgents: 1
-				});
-			});
-
-		expect($state.go).toHaveBeenCalledWith('rta.teams', {
-			siteId: 'd970a45a-90ff-4111-bfe1-9b5e015ab45c'
-		});
-	});
-
 	it('should go to agents for multiple sites', function() {
 		$fakeBackend.withSite({
 				Id: "d970a45a-90ff-4111-bfe1-9b5e015ab45c"

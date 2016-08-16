@@ -55,13 +55,6 @@
 				}
 			};
 
-			$scope.onTeamSelect = function(team) {
-				$state.go('rta.agents', {
-					siteId: $scope.siteId,
-					teamId: team.Id
-				});
-			};
-
 			$scope.openSelectedTeams = function() {
 				if (selectedTeamIds.length === 0) return;
 				$state.go('rta.agents-teams', {
