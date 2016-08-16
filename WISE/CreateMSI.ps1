@@ -7,8 +7,8 @@ properties {
     #$source_dir = "$base_dir\src"
     
     #TC Properties
-    $BuildVCSNumber = "$env:BUILD_VCS_NUMBER"
-    $DEPENDENCIESSRC = "$env:DEPENDENCIESSRC"
+    $BuildVCSNumber = "$env:dep.TeleoptiWFM_WfmMain_build_vcs_number_TeleoptiWFM_TeleoptiWFM"
+	$DEPENDENCIESSRC = "$env:DEPENDENCIESSRC"
     $MountKDirectory = "$env:MountKDirectory"
     $ProductVersion = "$env:CccVersion"
     $SourceDir = "$MountKDirectory\src"
@@ -217,6 +217,6 @@ function global:CopyFilesToOutput {
 
     #Create lastchangeset.txt file for Output directory
    
-       New-Item $OutDir\lastchangeset.txt -type file -force -value "$env:BUILD_VCS_NUMBER" | Out-Null
+       New-Item $OutDir\lastchangeset.txt -type file -force -value "$BuildVCSNumber" | Out-Null
 
 }
