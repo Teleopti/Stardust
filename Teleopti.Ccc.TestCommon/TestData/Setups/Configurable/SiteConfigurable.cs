@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			if (OpenHours != null)
 			{
+				var siteOpenHourRepository = new SiteOpenHourRepository(currentUnitOfWork);
 				foreach (var openHour in OpenHours)
 				{
 					var siteOpenHour = new SiteOpenHour()
@@ -61,7 +62,10 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 						WeekDay = openHour.Key,
 						TimePeriod = openHour.Value
 					};
-					Site.AddOpenHour(siteOpenHour);
+					if (Site.AddOpenHour(siteOpenHour))
+					{
+						siteOpenHourRepository.Add(siteOpenHour);
+					}
 				}
 			}
 		}
