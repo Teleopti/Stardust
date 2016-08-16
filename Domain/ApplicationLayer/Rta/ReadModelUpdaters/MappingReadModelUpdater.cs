@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		IHandleEvent<ActivityChangedEvent>,
 		IHandleEvent<RtaStateGroupChangedEvent>,
 		IHandleEvent<RtaMapChangedEvent>,
+		IHandleEvent<RtaRuleChangedEvent>,
 		IHandleEvent<BusinessUnitChangedEvent>,
 		IRunOnHangfire
 	{
