@@ -172,18 +172,18 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 						unitOfWork.Merge(affectedPersonAbsenceAccount);
 					}
 				}
-				try
-				{
-					unitOfWork.PersistAll();
-				}
-				catch (OptimisticLockException ex)
-				{
-					logger.Error("A optimistic locking error occurred. Review the error log. Processing cannot continue this time.", ex);
-				}
-				catch (Exception ex)
-				{
-					logger.Error("Error when persisting Absence Request", ex);
-				}
+				//try
+				//{
+				//	unitOfWork.PersistAll();
+				//}
+				//catch (OptimisticLockException ex)
+				//{
+				//	logger.Error("A optimistic locking error occurred. Review the error log. Processing cannot continue this time.", ex);
+				//}
+				//catch (Exception ex)
+				//{
+				//	logger.Error("Error when persisting Absence Request", ex);
+				//}
 			}
 
 			//TODO should return true or false
