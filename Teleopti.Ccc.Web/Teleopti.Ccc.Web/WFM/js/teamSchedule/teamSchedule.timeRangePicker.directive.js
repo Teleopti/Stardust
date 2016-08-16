@@ -138,10 +138,9 @@
 					scope.isNextDay = nextDay;
 				}
 
-
 				timeRangeCtrl.mutateMoment(viewValue.startTime, startTime);
 				timeRangeCtrl.mutateMoment(viewValue.endTime, endTime);
-				if (viewValue.startTime > viewValue.endTime) {
+				if (viewValue.startTime >= viewValue.endTime) {
 					viewValue.endTime = viewValue.endTime.add(1, 'day');
 				}
 				if (nextDay) {
@@ -162,7 +161,7 @@
 
 				}
 
-				scope.disableNextDay = scope.startTime > scope.endTime;
+				scope.disableNextDay = scope.startTime >= scope.endTime;
 				ngModel.$setViewValue(
                     makeViewValue(scope.startTime, scope.endTime, scope.isNextDay));
 			}
