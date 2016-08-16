@@ -540,7 +540,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			RemoveActivity(shiftLayer);
 
 			var newLayerPeriod = new DateTimePeriod(newStartTimeInUtc, newStartTimeInUtc.Add(shiftLayer.Period.EndDateTime.Subtract(shiftLayer.Period.StartDateTime)));
-			InsertActivity(shiftLayer.Payload, newLayerPeriod, originalOrderIndex);
+			if ((shiftLayer as MainShiftLayer) != null)
+			{
+				InsertActivity(shiftLayer.Payload, newLayerPeriod, originalOrderIndex);
+			}
+			else if ((shiftLayer as PersonalShiftLayer) != null)
+			{
+				InsertPersonalLayer(shiftLayer.Payload, newLayerPeriod, originalOrderIndex);
+			}
 
 			var affectedPeriod = shiftLayer.Period.MaximumPeriod(newLayerPeriod);
 			

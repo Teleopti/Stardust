@@ -473,6 +473,59 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 		}
 
 		[Test]
+		public void ShouldReturnOverlappedActivitiesWhenMovePersonalShiftLayerToStickyPersonalActivity()
+		{
+			var person = PersonFactory.CreatePersonWithGuid("John","Watson");
+			PersonRepository.Has(person);
+
+			var mainActivity = ActivityFactory.CreateActivity("Phone");
+			var anotherActivity = ActivityFactory.CreateActivity("Administration");
+			var stickyActivity = ActivityFactory.CreateActivity("Short Break");
+
+			mainActivity.AllowOverwrite = true;
+			stickyActivity.AllowOverwrite = false;
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
+			var scenario = CurrentScenario.Current();
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				mainActivity,person,
+				new DateTimePeriod(2013,11,14,8,2013,11,14,16),
+				shiftCategory,scenario);
+
+
+			pa.AddPersonalActivity(stickyActivity,new DateTimePeriod(2013,11,14,12,2013,11,14,13));
+			pa.AddPersonalActivity(anotherActivity,new DateTimePeriod(2013,11,14, 9,2013,11,14,11));
+			pa.ShiftLayers.ForEach(x => x.WithId());
+
+			var targetLayer = pa.ShiftLayers.First(layer => layer.Period.StartDateTime == new DateTime(2013, 11, 14, 9, 0, 0));
+
+			ScheduleStorage.Add(pa);
+			var input = new CheckMoveActivityLayerOverlapFormData
+			{
+				PersonActivities = new List<PersonActivityItem>
+				{
+					new PersonActivityItem
+					{
+						PersonId = person.Id.Value,
+						ShiftLayerIds = new List<Guid> { targetLayer.Id.Value }
+					} 
+				},
+				Date = new DateOnly(2013,11,14),
+				StartTime = new DateTime(2013,11,14,11,0,0),			
+			};
+
+			var result = Target.GetMoveActivityLayerOverlapCheckingResult(input);
+
+			result.Single().PersonId.Should().Be.EqualTo(person.Id.Value);
+
+			var overlappedLayer = result.Single().OverlappedLayers.Single();
+			overlappedLayer.Name.Should().Be.EqualTo(stickyActivity.Name);
+			overlappedLayer.StartTime.Should().Be.EqualTo(new DateTime(2013,11,14,12,0,0));
+			overlappedLayer.EndTime.Should().Be.EqualTo(new DateTime(2013,11,14,13,0,0));
+		}
+
+		[Test]
 		public void ShouldNotReturnUnderlyingStickyOverlappedActivityWhenMoveActivity()
 		{
 			var person = PersonFactory.CreatePersonWithGuid("John","Watson");
