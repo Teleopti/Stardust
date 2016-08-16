@@ -50,11 +50,8 @@ namespace Teleopti.Wfm.Administration
 			Hangfire.GlobalConfiguration.Configuration.UseSqlServerStorage(config.ConnectionString("Hangfire"));
 			var options = new DashboardOptions
 			{
-				AuthorizationFilters = new Hangfire.Dashboard.IAuthorizationFilter[]
-				{
-					new HangfireDashboardAuthorization()
-				},
-				AppPath = null
+				Authorization = new[] { new HangfireDashboardAuthorization() },
+				AppPath = null,
 			};
 
 			if (config.ReadValue("HangfireDashboard", true))

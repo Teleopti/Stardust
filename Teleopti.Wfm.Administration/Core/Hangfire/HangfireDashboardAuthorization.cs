@@ -4,14 +4,8 @@ using Microsoft.Owin;
 
 namespace Teleopti.Wfm.Administration.Core.Hangfire
 {
-	public class HangfireDashboardAuthorization : IAuthorizationFilter
+	public class HangfireDashboardAuthorization : IDashboardAuthorizationFilter
 	{
-		public bool Authorize(IDictionary<string, object> owinEnvironment)
-		{
-			var context = new OwinContext(owinEnvironment);
-			return isAuthenticated(context) && isTenantAdmin(context);
-		}
-
 		private static bool isTenantAdmin(IOwinContext context)
 		{
 			if (context.Authentication.User == null)
@@ -23,6 +17,12 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 		private static bool isAuthenticated(IOwinContext context)
 		{
 			return context.Authentication.User.Identity.IsAuthenticated;
+		}
+
+		public bool Authorize(DashboardContext context)
+		{
+			var owinContext = new OwinContext(context.GetOwinEnvironment());
+			return isAuthenticated(owinContext) && isTenantAdmin(owinContext);
 		}
 	}
 }
