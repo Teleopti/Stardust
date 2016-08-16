@@ -22,9 +22,8 @@ using Teleopti.Messaging.Client;
 
 namespace Teleopti.Ccc.Requests.PerformanceTest
 {
-	[System.ComponentModel.Category("ProcessBulkAbsenceRequest")]
 	[DomainTest]
-	public class ProcessBulkAbsenceRequestTest : ISetup
+	public class MultiAbsenceRequestHandlerTest : ISetup
 	{
 		public IAbsenceRepository AbsenceRepository;
 		public AsSystem AsSystem;
@@ -180,26 +179,5 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 															new DateTime(2016, 3, 10, 18, 0, 0, DateTimeKind.Utc)));
 			return new PersonRequest(person) {Request = req};
 		}
-	}
-
-
-	public class ProcessMultipleAbsenceRequests : IProcessMultipleAbsenceRequest
-	{
-		private readonly MultiAbsenceRequestsHandler _multiAbsenceRequestsHandler;
-
-		public ProcessMultipleAbsenceRequests(MultiAbsenceRequestsHandler multiAbsenceRequestHandler)
-		{
-			_multiAbsenceRequestsHandler = multiAbsenceRequestHandler;
-		}
-
-		public void Process(NewMultiAbsenceRequestsCreatedEvent absenceRequests)
-		{
-			_multiAbsenceRequestsHandler.Handle(absenceRequests);
-		}
-	}
-
-	public interface IProcessMultipleAbsenceRequest
-	{
-		void Process(NewMultiAbsenceRequestsCreatedEvent absenceRequests);
 	}
 }

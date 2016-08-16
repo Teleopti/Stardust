@@ -51,7 +51,9 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ProcessBulkAbsenceRequestTest.cs" />
+    <Compile Include="IProcessMultipleAbsenceRequest.cs" />
+    <Compile Include="MultiAbsenceRequestHandlerTest.cs" />
+    <Compile Include="ProcessMultipleAbsenceRequests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">
