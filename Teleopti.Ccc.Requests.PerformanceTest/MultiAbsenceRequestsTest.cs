@@ -3,57 +3,92 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.Infrastructure.Absence;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Messaging.Client;
 
 namespace Teleopti.Ccc.Requests.PerformanceTest
 {
-	[DomainTest]
+	[DomainTest, Ignore]
 	public class MultiAbsenceRequestsTest : ISetup
 	{
 		public IAbsenceRepository AbsenceRepository;
 		public AsSystem AsSystem;
 		public IDataSourceScope DataSource;
-		public MutableNow Now;
 		public IPersonRepository PersonRepository;
 		public IPersonRequestRepository PersonRequestRepository;
-		public IProcessMultipleAbsenceRequest Target;
+		public NewAbsenceRequestHandler Target;
 		public WithUnitOfWork WithUnitOfWork;
 		public IWorkflowControlSetRepository WorkflowControlSetRepository;
-		public IEnumerable<Guid> PersonIds;
-		public List<IPersonRequest> PersonRequests;
-		public List<Guid> AbsenceRequestIds;
+		private IEnumerable<Guid> _personIds;
+		private List<IPersonRequest> _personRequests;
 
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddModule(new CommonModule(configuration));
 			system.UseTestDouble<NewAbsenceRequestHandler>().For<NewAbsenceRequestHandler>();
-			system.UseTestDouble<ProcessMultipleAbsenceRequests>().For<IProcessMultipleAbsenceRequest>();
 			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
 			system.AddService<Database>();
 			system.AddModule(new TenantServerModule(configuration));
+		}
 
-			PersonRequests = new List<IPersonRequest>();
-			AbsenceRequestIds = new List<Guid>();
-			PersonIds = new List<Guid>
+
+		[Test]
+		public void ShouldProcessMultipleAbsenceRequests5()
+		{
+			setupRequests();
+			publishRequests();
+		}
+
+		[Test]
+		public void ShouldProcessMultipleAbsenceRequests10()
+		{
+			setupRequests();
+			publishRequests();
+		}
+
+		[Test]
+		public void ShouldProcessMultipleAbsenceRequests20()
+		{
+			setupRequests();
+			publishRequests();
+		}
+
+		private void publishRequests()
+		{
+			foreach (var personRequest in _personRequests)
+			{
+				Target.Handle(new NewAbsenceRequestCreatedEvent() { PersonRequestId = personRequest.Id.Value });
+			}
+		}
+
+		private IPersonRequest createAbsenceRequest(IPerson person, IAbsence absence)
+		{
+			var req = new AbsenceRequest(absence,
+										 new DateTimePeriod(new DateTime(2016, 5, 27, 8, 0, 0, DateTimeKind.Utc),
+															new DateTime(2016, 5, 27, 18, 0, 0, DateTimeKind.Utc)));
+			return new PersonRequest(person) {Request = req};
+		}
+
+		private void setupRequests()
+		{
+			_personRequests = new List<IPersonRequest>();
+			_personIds = new List<Guid>
 			{
 				//DO NOT CHANGE THE ORDER OF THE GUIDS!
 				new Guid("92121FA5-FB40-4458-800E-A1410113C461"),
-				new Guid("8CFBDBF3-4A3F-47D5-AB6D-A1410113C474"),
+				new Guid("69A04DAE-9DA7-409B-BDA5-A2E500D0FBB9"),
 				new Guid("61165F06-671C-407E-9F4B-A1410113C479"),
 				new Guid("0C3B6CCA-6520-44D4-B668-A1410113C479"),
 				new Guid("F2A4339F-810D-49FE-96C1-A38F00D0D6C1"),
@@ -75,6 +110,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 
 			};
 
+
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 
@@ -93,7 +129,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 				WorkflowControlSetRepository.UnitOfWork.PersistAll();
 
 				// load some persons
-				var persons = PersonRepository.FindPeople(PersonIds);
+				var persons = PersonRepository.FindPeople(_personIds);
 
 				//load vacation
 				var absence = AbsenceRepository.Get(new Guid("3A5F20AE-7C18-4CA5-A02B-A11C00F0F27F"));
@@ -101,44 +137,16 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 
 				foreach (var person in persons)
 				{
-					PersonRequests.Add(createAbsenceRequest(person, absence));
+					_personRequests.Add(createAbsenceRequest(person, absence));
 				}
 
 
-				foreach (var pReq in PersonRequests)
+				foreach (var pReq in _personRequests)
 				{
 					PersonRequestRepository.Add(pReq);
 					PersonRequestRepository.UnitOfWork.PersistAll();
-
-					AbsenceRequestIds.Add(pReq.Id.Value);
 				}
 			});
-		}
-
-
-		[Test]
-		public void ShouldProcessMultipleAbsenceRequests5()
-		{
-		}
-
-		[Test]
-		public void ShouldProcessMultipleAbsenceRequests10()
-		{
-		}
-
-		[Test]
-		public void ShouldProcessMultipleAbsenceRequests20()
-		{
-			
-		}
-
-
-		private IPersonRequest createAbsenceRequest(IPerson person, IAbsence absence)
-		{
-			var req = new AbsenceRequest(absence,
-										 new DateTimePeriod(new DateTime(2016, 5, 27, 8, 0, 0, DateTimeKind.Utc),
-															new DateTime(2016, 5, 27, 18, 0, 0, DateTimeKind.Utc)));
-			return new PersonRequest(person) {Request = req};
 		}
 	}
 }

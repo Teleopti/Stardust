@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 		public IAbsenceRepository AbsenceRepository;
 		public AsSystem AsSystem;
 		public IDataSourceScope DataSource;
-		public MutableNow Now;
 		public IPersonRepository PersonRepository;
 		public IPersonRequestRepository PersonRequestRepository;
 		public IProcessMultipleAbsenceRequest Target;
