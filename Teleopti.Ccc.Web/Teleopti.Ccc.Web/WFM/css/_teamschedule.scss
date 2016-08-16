@@ -235,11 +235,12 @@
 				padding: 0;
 				border-left: 1px solid $gray012;
 				border-right: 1px solid $gray012;
+				border-bottom: 1px solid #DDDDDD;
 				text-align: center;
 			}
 
 			td.weekview-td:hover{
-				border-bottom: 1px solid $blue-500;
+				border-bottom-color: $blue-500;
 			}
 		
 			td.weekview-person-name{
