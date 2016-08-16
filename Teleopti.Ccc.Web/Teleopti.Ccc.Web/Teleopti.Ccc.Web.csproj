@@ -1543,6 +1543,10 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.moveActivityValidator.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.moveActivityValidator.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.notification.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.service.modal.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.filter.br.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.service.actionnoticeservice.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.service.actionnoticeservice.spec.js" />
     <Content Include="WFM\js\global\wfm.i18n.service.js" />
     <Content Include="WFM\js\global\currentuserinfo.service.js" />
     <Content Include="WFM\js\intraday\intraday.controller.js" />
