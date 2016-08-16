@@ -22,9 +22,9 @@
 		vm.onScheduleDateChanged = function () { 
 			if (!moment(vm.scheduleDate).startOf('week').isSame(vm.scheduleDate, 'day')) {
 				vm.scheduleDate = moment(vm.scheduleDate).startOf('week').toDate();
-			} else {
-				vm.loadSchedules();
 			}
+			vm.weekDays = Util.getWeekdays(vm.scheduleDate);
+			vm.loadSchedules();			
 		};
 	
 		vm.paginationOptions = {
