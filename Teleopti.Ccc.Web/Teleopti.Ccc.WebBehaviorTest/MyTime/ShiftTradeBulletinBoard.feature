@@ -378,3 +378,31 @@ Scenario: Should not show agent name in shift trade request detail view
 	And I am viewing requests
 	When I click on the existing request in the list
 	Then I should not see the agent name in detail view
+
+Scenario: Should show my shift and other shifts filtered by site open hours in bulletin board
+	Given I have the role 'Full access to mytime'
+	And There are open hours '08:00-17:00' for 'Monday,Tuesday,Wednesday,Thursday,Friday', in site 'The site'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field          | Value            |
+	| StartTime      | 2030-01-01 08:00 |
+	| EndTime        | 2030-01-01 17:00 |
+	| Shift category | Day              |
+	And OtherAgent has a shift with
+	| Field          | Value            |
+	| StartTime      | 2030-01-01 08:00 |
+	| EndTime        | 2030-01-01 16:00 |
+	| Shift category | Day              |
+	And OtherAgent has a shift exchange for bulletin
+	| Field     | Value            |
+	| Valid To  | 2029-12-31       |
+	| StartTime | 2030-01-01 08:00 |
+	| EndTime   | 2030-01-01 17:00 |
+	And the time is '2029-12-27'
+	When I view Shift Trade Bulletin Board for date '2030-01-01'
+	Then I should see my schedule with
+	| Field			| Value |
+	| Start time	| 08:00 |
+	| End time		| 17:00 |
+	And I should see a possible schedule trade with 'OtherAgent'

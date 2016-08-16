@@ -1,6 +1,9 @@
+using System;
+using System.Collections.Generic;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {
@@ -18,5 +21,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			DataMaker.Data().Apply(new SiteConfigurable { Name = site, BusinessUnit = bu});
 		}
+
+		[Given(@"There are open hours '(.*)' for '(.*)', in site '(.*)'")]
+		public void GivenThereAreOpenHoursForInSite(string period, string weedDayNames, string site)
+		{
+			var openHours = new Dictionary<DayOfWeek, TimePeriod>();
+			foreach (var weedDayName in weedDayNames.Split(','))
+			{
+				DayOfWeek dayOfWeek;
+				if (Enum.TryParse(weedDayName, out dayOfWeek))
+				{
+					openHours.Add(dayOfWeek, new TimePeriod(period));
+				}
+			}
+			DataMaker.Data().Apply(new SiteConfigurable {Name = site, CreateSite = false, OpenHours = openHours});
+		}
+
 	}
 }
