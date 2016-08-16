@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		public ExternalUserStateForSnapshot(DateTime time)
 		{
 			SnapshotId = time;
-			IsSnapshot = true;
 		}
 	}
 
@@ -41,7 +40,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			SourceId = "sourceId";
 			UserCode = "8808";
 			StateCode = "AUX2";
-			IsLoggedOn = true;
 		}
 	}
 

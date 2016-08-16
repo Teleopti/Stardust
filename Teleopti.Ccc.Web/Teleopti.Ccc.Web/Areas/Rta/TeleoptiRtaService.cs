@@ -38,6 +38,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 		{
 			return handleRtaExceptions(() =>
 			{
+				userCode = fixUserCode(userCode);
+				stateCode = fixStateCode(stateCode, isLoggedOn);
 				if (isClosingSnapshot(userCode, isSnapshot))
 				{
 					_rta.CloseSnapshot(new CloseSnapshotInputModel
@@ -55,11 +57,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 						UserCode = userCode,
 						StateCode = stateCode,
 						StateDescription = stateDescription,
-						IsLoggedOn = isLoggedOn,
 						PlatformTypeId = platformTypeId,
 						SourceId = sourceId,
-						SnapshotId = batchId,
-						IsSnapshot = isSnapshot
+						SnapshotId = fixSnapshotId(batchId)
 					});
 				}
 			});
@@ -74,14 +74,12 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 					select new ExternalUserStateInputModel
 					{
 						AuthenticationKey = authenticationKey,
-						UserCode = s.UserCode,
-						StateCode = s.StateCode,
+						UserCode = fixUserCode(s.UserCode),
+						StateCode = fixStateCode(s.StateCode, s.IsLoggedOn),
 						StateDescription = s.StateDescription,
-						IsLoggedOn = s.IsLoggedOn,
 						PlatformTypeId = platformTypeId,
 						SourceId = sourceId,
-						SnapshotId = s.BatchId,
-						IsSnapshot = s.IsSnapshot
+						SnapshotId = fixSnapshotId(s.BatchId)
 					})
 					.ToArray();
 
@@ -102,9 +100,32 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			});
 		}
 
-		private bool isClosingSnapshot(string userCode, bool isSnapshot)
+		private static bool isClosingSnapshot(string userCode, bool isSnapshot)
 		{
 			return isSnapshot && string.IsNullOrEmpty(userCode);
+		}
+
+		private static string fixUserCode(string userCode)
+		{
+			return userCode.Trim();
+		}
+
+		private static string fixStateCode(string stateCode, bool isLoggedOn)
+		{
+			if (!isLoggedOn)
+				return Domain.ApplicationLayer.Rta.Service.Rta.LogOutStateCode;
+			if (stateCode == null)
+				return null;
+			stateCode = stateCode.Trim();
+			const int stateCodeMaxLength = 25;
+			if (stateCode.Length > stateCodeMaxLength)
+				return stateCode.Substring(0, stateCodeMaxLength);
+			return stateCode;
+		}
+
+		private static DateTime? fixSnapshotId(DateTime batchId)
+		{
+			return batchId == DateTime.MinValue ? (DateTime?)null : batchId;
 		}
 
 		public void GetUpdatedScheduleChange(Guid personId, Guid businessUnitId, DateTime timestamp, string tenant)

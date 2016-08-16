@@ -156,7 +156,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						StateCode = stateCode,
 						PlatformTypeId = Guid.Empty.ToString(),
 						UserCode = "",
-						IsSnapshot = true,
 						SnapshotId = snapshotId
 					}, 
 					x.PersonId,

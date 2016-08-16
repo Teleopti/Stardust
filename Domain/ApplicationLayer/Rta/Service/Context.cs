@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				return true;
 			
 			var isSameState =
-				BatchId.Equals(Stored?.BatchId) &&
+				SnapshotId.Equals(Stored?.BatchId) &&
 				Schedule.CurrentActivityId().Equals(Stored?.ActivityId) &&
 				Schedule.NextActivityId().Equals(Stored?.NextActivityId) &&
 				Schedule.NextActivityStartTime().Equals(Stored?.NextActivityStartTime) &&
@@ -107,9 +107,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				PersonId, BusinessUnitId, TeamId, SiteId);
 		}
 
-		public DateTime? BatchId
+		public DateTime? SnapshotId
 		{
-			get { return Input.IsSnapshot ? Input.SnapshotId : Stored?.BatchId; }
+			get { return Input.SnapshotId ?? Stored?.BatchId; }
 		}
 
 		public Guid PlatformTypeId
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				BusinessUnitId = BusinessUnitId,
 				SiteId = SiteId,
 				TeamId = TeamId,
-				BatchId = BatchId,
+				BatchId = SnapshotId,
 
 				PlatformTypeId = PlatformTypeId,
 				SourceId = Input.SourceId ?? Stored.SourceId(),

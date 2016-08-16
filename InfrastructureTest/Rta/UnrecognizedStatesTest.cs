@@ -57,8 +57,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				StateCode = "InCall",
 				StateDescription = "InCall",
 				UserCode = "usercode",
-				SourceId = "-1",
-				IsLoggedOn = true
+				SourceId = "-1"
 			});
 
 			TheService.DoesWhileNotLoggedIn(uow =>
@@ -91,8 +90,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 						StateCode = "InCall",
 						StateDescription = "InCall",
 						UserCode = i.ToString(),
-						SourceId = "-1",
-						IsLoggedOn = true
+						SourceId = "-1"
 					}));
 
 			TheService.DoesWhileNotLoggedIn(uow =>

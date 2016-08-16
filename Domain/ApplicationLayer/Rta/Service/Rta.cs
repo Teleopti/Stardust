@@ -156,9 +156,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[InfoLog]
 		protected virtual void ProcessInput(ExternalUserStateInputModel input)
 		{
-			input.UserCode = FixUserCode(input);
-			input.StateCode = FixStateCode(input);
-
 			var found = false;
 			_contextLoader.For(input, person =>
 			{
@@ -167,24 +164,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			});
 			if (!found)
 				throw new InvalidUserCodeException(string.Format("No person found for SourceId {0} and UserCode {1}", input.SourceId, input.UserCode));
-		}
-
-		protected virtual string FixUserCode(ExternalUserStateInputModel input)
-		{
-			return input.UserCode.Trim();
-		}
-		
-		protected virtual string FixStateCode(ExternalUserStateInputModel input)
-		{
-			if (!input.IsLoggedOn)
-				return LogOutStateCode;
-			if (input.StateCode == null)
-				return null;
-			var stateCode = input.StateCode.Trim();
-			const int stateCodeMaxLength = 25;
-			if (stateCode.Length > stateCodeMaxLength)
-				return stateCode.Substring(0, stateCodeMaxLength);
-			return stateCode;
 		}
 		
 		[InfoLog]

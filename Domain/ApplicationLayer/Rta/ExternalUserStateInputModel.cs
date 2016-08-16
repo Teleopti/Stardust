@@ -18,16 +18,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public string UserCode { get; set; }
 		public string StateCode { get; set; }
 		public string StateDescription { get; set; }
-		public bool IsLoggedOn { get; set; }
-		public DateTime SnapshotId { get; set; }
-		public bool IsSnapshot { get; set; }
+		public DateTime? SnapshotId { get; set; }
 
 		// for logging
 		public override string ToString()
 		{
-			return string.Format(
-				"AuthenticationKey: {8}, UserCode: {0}, StateCode: {1}, StateDescription: {2}, IsLoggedOn: {3}, PlatformTypeId: {4}, SourceId: {5}, BatchId: {6}, IsSnapshot: {7}.",
-				UserCode, StateCode, StateDescription, IsLoggedOn, PlatformTypeId, SourceId, SnapshotId, IsSnapshot, AuthenticationKey);
+			return $"AuthenticationKey: {AuthenticationKey}, UserCode: {UserCode}, StateCode: {StateCode}, StateDescription: {StateDescription}, PlatformTypeId: {PlatformTypeId}, SourceId: {SourceId}, SnapshotId: {SnapshotId}";
 		}
 	}
 
