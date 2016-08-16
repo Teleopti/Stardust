@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			return Json(result);
 		}
 
-		[UnitOfWork, HttpGet, Route("api/TeamSchedule/SearchSchedules")]
+		[UnitOfWork, HttpGet, Route("api/TeamSchedule/SearchWeekSchedules")]
 		public virtual JsonResult<GroupWeekScheduleViewModel> SearchWeekSchedules(string keyword,DateTime date,int pageSize,int currentPageIndex,bool isOnlyAbsences)
 		{
 			var currentDate = new DateOnly(date);

@@ -279,7 +279,20 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					});
 				}
 
-				list = schedules.Select(s => toGroupScheduleShiftViewModel(s,canViewConfidential,canSeeUnpublishedSchedules)).ToList();			
+				foreach(var scheduleDay in schedules)
+				{
+					var isPublished = isSchedulePublished(scheduleDay.DateOnlyAsPeriod.DateOnly,person);
+					list.Add(isPublished || canSeeUnpublishedSchedules
+						? _projectionProvider.Projection(scheduleDay,canViewConfidential,nameDescriptionSetting)
+						: new GroupScheduleShiftViewModel
+						{
+							PersonId = person.Id.GetValueOrDefault().ToString(),
+							Name = nameDescriptionSetting.BuildCommonNameDescription(person),
+							Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToFixedDateFormat(),
+							Projection = new List<GroupScheduleProjectionViewModel>()
+						});
+				}
+
 			}
 			return list;
 		}
@@ -333,24 +346,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			}
 		}
 
-		private GroupScheduleShiftViewModel toGroupScheduleShiftViewModel(IScheduleDay scheduleDay, bool canViewConfidentialAbsence, bool canViewUnpublishedSchedules)
-		{
-			var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
-			var nameDescriptionSetting = _commonAgentNameProvider.CommonAgentNameSettings;
-			var person = scheduleDay.Person;
-			var isPublished = isSchedulePublished(date,person);
-			return isPublished || canViewUnpublishedSchedules
-				? _projectionProvider.Projection(scheduleDay,canViewConfidentialAbsence,nameDescriptionSetting)
-				: new GroupScheduleShiftViewModel
-				{
-					PersonId = person.Id.GetValueOrDefault().ToString(),
-					Name = nameDescriptionSetting.BuildCommonNameDescription(person),
-					Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToFixedDateFormat(),
-					Projection = new List<GroupScheduleProjectionViewModel>()
-				};
-		}
-
-
 		private static bool isSchedulePublished(DateOnly date, IPerson person)
 		{
 			var workflowControlSet = person.WorkflowControlSet;
@@ -367,5 +362,4 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		}
 	}
 
-	
 }

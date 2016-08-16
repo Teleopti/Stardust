@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -10,10 +11,13 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Ccc.WebTest.Areas.Global;
@@ -23,7 +27,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 {
 	[TestFixture, TeamScheduleTest]
-	public class TeamScheduleControllerIntegrationTest
+	public class TeamScheduleControllerIntegrationTest : ISetup
 	{
 		public TeamScheduleController Target;
 		public FakeSchedulePersonProvider PersonProvider;
@@ -862,6 +866,11 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			result.Schedules.Second().PersonId.Should().Be(person2.Id.Value.ToString());
 			result.Schedules.First().Projection.First().Description.Should().Be("activity1");
 			result.Schedules.Second().Projection.First().Description.Should().Be("activity2");
+		}
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<FakeScheduleProvider>().For<IScheduleProvider>();
 		}
 	}
 }
