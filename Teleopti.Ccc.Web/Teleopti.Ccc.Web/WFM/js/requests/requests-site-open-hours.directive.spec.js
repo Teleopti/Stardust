@@ -20,6 +20,12 @@ describe('requestsSiteOpenHoursDirectiveTests', function () {
 			$provide.service('requestsDataService', function () {
 				return requestsDataService;
 			});
+			$provide.service('workingHoursPickerDirective', function () {
+				return null;
+			});
+			$provide.service('showWeekdaysFilter', function () {
+				return null;
+			});
 		});
 	});
 
@@ -29,17 +35,12 @@ describe('requestsSiteOpenHoursDirectiveTests', function () {
 	}));
 
 	it('should get open hours and open modal', function () {
-		var test = setUpTarget();
 		var openHoursHandleResult = [{ Id: '1', OpenHours: [] }, { Id: '2', OpenHours: [] }];
 		requestsDataService.setOpenHoursHandleResult(openHoursHandleResult);
 
-		expect(test.targetScope.sites).toEqual([]);
-		expect(test.targetScope.shouldShowSites).not.toBeDefined();
-
-		test.targetScope.showSites();
+		var test = setUpTarget();
 
 		expect(test.targetScope.sites.length).toEqual(2);
-		expect(test.targetScope.shouldShowSites).toBeTruthy();
 	});
 
 	it('should save open hours and close modal', function () {
@@ -122,7 +123,6 @@ describe('requestsSiteOpenHoursDirectiveTests', function () {
 	});
 
 	it('should deformat data after get open hours', function () {
-		var test = setUpTarget();
 		var openHoursHandleResult = [{
 			OpenHours: [
 			{
@@ -131,25 +131,9 @@ describe('requestsSiteOpenHoursDirectiveTests', function () {
 				WeekDay: 1
 			}]
 		}];
-		var deFormatResult = [{
-			OpenHours: [
-			{
-				EndTime: 'Tue Aug 09 2016 17:00:00 GMT+0800 (China Standard Time)',
-				StartTime: 'Tue Aug 09 2016 08:00:00 GMT+0800 (China Standard Time)',
-				WeekDaySelections: [
-					{ Checked: true, WeekDay: 1 },
-					{ Checked: false, WeekDay: 2 },
-					{ Checked: false, WeekDay: 3 },
-					{ Checked: false, WeekDay: 4 },
-					{ Checked: false, WeekDay: 5 },
-					{ Checked: false, WeekDay: 6 },
-					{ Checked: false, WeekDay: 7 }
-				]
-			}]
-		}];
 		requestsDataService.setOpenHoursHandleResult(openHoursHandleResult);
 
-		test.targetScope.showSites();
+		var test = setUpTarget();
 
 		expect(test.targetScope.sites[0].OpenHours[0].EndTime.getHours()).toEqual(17); 
 		expect(test.targetScope.sites[0].OpenHours[0].EndTime.getMinutes()).toEqual(0);

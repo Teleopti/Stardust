@@ -46,6 +46,12 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 			$provide.service('CurrentUserInfo', function () {
 				return currentUserInfo;
 			});
+			$provide.service('workingHoursPickerDirective', function() {
+				return null;
+			});
+			$provide.service('showWeekdaysFilter', function() {
+				return null;
+			});
 		});
 	});
 
