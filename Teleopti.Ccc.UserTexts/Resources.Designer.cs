@@ -29871,15 +29871,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The activity will intersect existing activities that do not allow overlapping..
-        /// </summary>
-        public static string TheActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping {
-            get {
-                return ResourceManager.GetString("TheActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The attached Pdf-file contains your schedule for {0} to {1}..
         /// </summary>
         public static string TheAttachedFileContainsScheduleForDateParameters {
@@ -30147,6 +30138,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ThirtyMinutes {
             get {
                 return ResourceManager.GetString("ThirtyMinutes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This activity will intersect existing activities that do not allow overlapping..
+        /// </summary>
+        public static string ThisActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping {
+            get {
+                return ResourceManager.GetString("ThisActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping", resourceCulture);
             }
         }
         
