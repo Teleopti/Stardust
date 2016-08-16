@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
@@ -14,8 +12,6 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
-using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Absence;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -259,26 +255,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				new FakeScheduleDifferenceSaver(_scheduleRepository),
 				_personAccountUpdaterDummy, toggleManager);
 
-			var absenceRequestStatusUpdater = new AbsenceRequestUpdater(new PersonAbsenceAccountProvider(_personAbsenceAccountRepository),
-				resourceCalculator,
-				new DefaultScenarioFromRepository(_scenarioRepository),
-				_loadSchedulingStateHolderForResourceCalculation,
-				_loadSchedulesForRequestWithoutResourceCalculation,
-				requestFactory,
-				new AlreadyAbsentSpecification(),
-				new ScheduleIsInvalidSpecification(),
-				new PersonRequestCheckAuthorization(),
-				new BudgetGroupHeadCountSpecification(_scenarioRepository, _fakeBudgetDayRepository,
-					_scheduleProjectionReadOnlyPersister),
-				null,
-				new BudgetGroupAllowanceSpecification(_currentScenario, _fakeBudgetDayRepository,
-					_scheduleProjectionReadOnlyPersister),
-				new FakeScheduleDifferenceSaver(_scheduleRepository),
-				_personAccountUpdaterDummy, toggleManager);
-
 			var absenceProcessor = new MultiAbsenceRequestProcessor(multiAbsenceRequestStatusUpdater, () => _schedulingResultStateHolder);
-			var absenceRequestWaitlistProcessor = new AbsenceRequestWaitlistProcessor(absenceRequestStatusUpdater, () => _schedulingResultStateHolder, new AbsenceRequestWaitlistProvider(_personRequestRepository));
-
+			
 			var newAbsenceRequestConsumer = new MultiAbsenceRequestsHandler(
 				_unitOfWorkFactory, _currentScenario, _personRequestRepository, absenceProcessor);
 

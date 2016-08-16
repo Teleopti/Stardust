@@ -96,7 +96,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				return (obj == null);
 			}
 		}
-
-		private delegate bool LoadDataAction(Guid personRequestId);
 	}
 }
