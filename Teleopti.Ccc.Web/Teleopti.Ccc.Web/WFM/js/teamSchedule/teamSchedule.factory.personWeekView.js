@@ -5,9 +5,9 @@
 	PersonScheduleWeekViewCreator.$inject = [];
 
 	function PersonScheduleWeekViewCreator() {
-		function createPersonWeekViewModel(personWeek) {
+		function createPersonWeekViewModel(personWeek) {			
 			var days = [];
-			angular.forEach(personWeek.Days, function(day) {
+			angular.forEach(personWeek.DaySchedules, function(day) {
 				var dayViewModel = {
 					date: day.Date,
 					summeryTitle: day.Title,
@@ -26,6 +26,7 @@
 		}
 
 		function createGroupWeeks(personWeeks) {
+			
 			var groupWeeks = [];
 			angular.forEach(personWeeks, function(personWeek) {
 				var personWeekViewModel = createPersonWeekViewModel(personWeek);

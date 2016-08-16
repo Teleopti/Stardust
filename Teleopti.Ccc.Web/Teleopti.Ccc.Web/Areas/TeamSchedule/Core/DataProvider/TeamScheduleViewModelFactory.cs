@@ -192,18 +192,21 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 							PersonId = person.Id.GetValueOrDefault(),
 							Date = d
 						};
-						
-						var scheduleDay = scheduleDays[pd];
-						var canViewConfidentialAbsence = viewableConfidentialAbsenceAgents[pd.Date].Contains(pd.PersonId);
 
 						var dayScheduleViewModel = new PersonDayScheduleSummayViewModel
 						{
-							IsTerminated = person.TerminalDate.HasValue && person.TerminalDate.Value <= weekDays.Last(),
+							IsTerminated = person.TerminalDate.HasValue && person.TerminalDate.Value <= d,
 							Date = d,
-							DayOfWeek = (int) d.DayOfWeek
+							DayOfWeek = (int)d.DayOfWeek
 						};
 
-						if (dayScheduleViewModel.IsTerminated) return dayScheduleViewModel;
+						if (!scheduleDays.ContainsKey(pd) || dayScheduleViewModel.IsTerminated)
+						{
+							return dayScheduleViewModel;
+						}
+
+						var scheduleDay = scheduleDays[pd];
+						var canViewConfidentialAbsence = viewableConfidentialAbsenceAgents[pd.Date].Contains(pd.PersonId);
 
 						completeScheduleDaySummary(dayScheduleViewModel, scheduleDay, canViewConfidentialAbsence, canSeeUnpublishedSchedules);
 

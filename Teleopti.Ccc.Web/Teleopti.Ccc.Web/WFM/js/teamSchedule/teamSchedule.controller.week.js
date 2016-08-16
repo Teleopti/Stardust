@@ -11,16 +11,14 @@
 			searchKeywordChanged: false
 		};
 
+		vm.isLoading = false;
+
 		vm.onKeyWordInSearchInputChanged = function() {
 			vm.loadSchedules();
 		};
-		vm.isLoading = false;
 		
 		vm.scheduleDate = params.selectedDate ? moment(params.selectedDate).startOf('week').toDate() : moment().startOf('week').toDate();
-
-		vm.gotoPreviousWeek = function () { };
-		vm.gotoNextWeek = function () { };
-
+	
 		vm.onScheduleDateChanged = function () { 
 			if (!moment(vm.scheduleDate).startOf('week').isSame(vm.scheduleDate, 'day')) {
 				vm.scheduleDate = moment(vm.scheduleDate).startOf('week').toDate();
@@ -28,8 +26,7 @@
 				vm.loadSchedules();
 			}
 		};
-
-		vm.weekDayNames = Util.getWeekdayNames();
+	
 		vm.paginationOptions = {
 			pageSize: 20,
 			pageNumber: 1,
@@ -37,8 +34,7 @@
 		};
 
 		vm.loadSchedules = function () {		
-			vm.isLoading = true;
-			
+			vm.isLoading = true;			
 			var inputForm = getParamsForLoadingSchedules();
 			weekViewScheduleSvc.getSchedules(inputForm).then(function (data) {				
 				vm.groupWeeks = WeekViewCreator.Create(data.PersonWeekSchedules);
@@ -54,7 +50,7 @@
 		function init() {
 			vm.weekDays = Util.getWeekdays();
 			vm.paginationOptions.totalPages = 1;
-			vm.loadSchedules();
+			vm.loadSchedules();			
 		}
 
 		function getParamsForLoadingSchedules(options) {
