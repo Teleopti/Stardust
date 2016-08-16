@@ -133,7 +133,7 @@ INSERT INTO [mart].[dim_day_off]
 		,[day_off_shortname])
 	SELECT
 		-1
-		,null
+		,'00000000-0000-0000-0000-000000000000'
 		,'Not Defined'
 		,-1
 		,-1

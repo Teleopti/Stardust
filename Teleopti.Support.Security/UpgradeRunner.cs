@@ -21,6 +21,7 @@ namespace Teleopti.Support.Security
 		private static readonly ICommandLineCommand CrossDatabaseViewUpdate = new CrossDatabaseViewUpdate(new UpdateCrossDatabaseView());
 		private static readonly ICommandLineCommand DelayedDataConvert = new DelayedDataConvert();
 		private static readonly ICommandLineCommand reportTextCommand = new ReportTextsCommand();
+		private static readonly ICommandLineCommand DayOffCodeFixer = new DayOffCodeFixer();
 		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
 		public IUpgradeLog Logger = new NullLog();
 
@@ -63,6 +64,7 @@ namespace Teleopti.Support.Security
 				reportTextCommand.Execute(databaseArguments);
 				CrossDatabaseViewUpdate.Execute(databaseArguments);
 				DelayedDataConvert.Execute(databaseArguments);
+				DayOffCodeFixer.Execute(databaseArguments);
 			}
 			setPersonAssignmentDate(databaseArguments);
 			removeDuplicateAssignments(databaseArguments);

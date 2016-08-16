@@ -65,6 +65,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="DayOffCodeFixer.cs" />
     <Compile Include="DelayedDataConvert.cs" />
     <Compile Include="IDatabaseArguments.cs" />
     <Compile Include="UpdateCrossDatabaseView.cs" />
