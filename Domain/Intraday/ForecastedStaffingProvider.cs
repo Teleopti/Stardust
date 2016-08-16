@@ -34,9 +34,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 		public IntradayStaffingViewModel Load(Guid[] skillIdList)
 		{
-			//var date = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()));
+			var date = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()));
 			var minutesPerInterval = _intervalLengthFetcher.IntervalLength;
-			var date = DateOnly.Today;
 			var scenario = _scenarioRepository.LoadDefaultScenario();
 			var staffingIntervals = new Dictionary<DateTime, double>();
 			foreach (var skillId in skillIdList)

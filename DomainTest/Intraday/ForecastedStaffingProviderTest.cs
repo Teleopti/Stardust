@@ -3,10 +3,11 @@ using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -16,16 +17,24 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Intraday
 {
 	[DomainTest]
-	public class ForecastedStaffingProviderTest
+	public class ForecastedStaffingProviderTest : ISetup
 	{
 		public ForecastedStaffingProvider Target;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
+		public MutableNow Now;
+		public FakeUserTimeZone TimeZone;
 
 		private const int minutesPerInterval = 15;
-		
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
+			system.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture())).For<IUserCulture>();
+		}
+
 		[Test]
 		public void ShouldReturnStaffingForTwoIntervals()
 		{
@@ -36,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skill = createSkill(minutesPerInterval, "skill");
 			SkillRepository.Has(skill);
 
-			var skillDay = skill.CreateSkillDayWithDemand(scenario, DateOnly.Today, TimeSpan.FromMinutes(60));
+			var skillDay = skill.CreateSkillDayWithDemand(scenario, new DateOnly(Now.UtcDateTime()), TimeSpan.FromMinutes(60));
 			SkillDayRepository.Add(skillDay);
 
 			var vm = Target.Load(new[] { skill.Id.Value });
@@ -60,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skill = createSkill(30, "skill");
 			SkillRepository.Has(skill);
 
-			var skillDay = skill.CreateSkillDayWithDemand(scenario, DateOnly.Today, TimeSpan.FromMinutes(60));
+			var skillDay = skill.CreateSkillDayWithDemand(scenario, new DateOnly(Now.UtcDateTime()), TimeSpan.FromMinutes(60));
 			SkillDayRepository.Add(skillDay);
 
 			var vm = Target.Load(new[] { skill.Id.Value });
@@ -82,8 +91,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			SkillRepository.Has(skill1);
 			SkillRepository.Has(skill2);
 
-			var skillDay1 = skill1.CreateSkillDayWithDemand(scenario, DateOnly.Today, TimeSpan.FromMinutes(60));
-			var skillDay2 = skill2.CreateSkillDayWithDemand(scenario, DateOnly.Today, TimeSpan.FromMinutes(30));
+			var skillDay1 = skill1.CreateSkillDayWithDemand(scenario, new DateOnly(Now.UtcDateTime()), TimeSpan.FromMinutes(60));
+			var skillDay2 = skill2.CreateSkillDayWithDemand(scenario, new DateOnly(Now.UtcDateTime()), TimeSpan.FromMinutes(30));
 			SkillDayRepository.Add(skillDay1);
 			SkillDayRepository.Add(skillDay2);
 
@@ -94,6 +103,27 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			vm.DataSeries.ForecastedStaffing.First().Should().Be.EqualTo(staffingIntervals1.First().FStaff + staffingIntervals2.First().FStaff);
 			vm.DataSeries.ForecastedStaffing.Last().Should().Be.EqualTo(staffingIntervals1.Last().FStaff + staffingIntervals2.Last().FStaff);
+		}
+
+		[Test]
+		public void ShouldGetStaffingForCorrectUserDate()
+		{
+			TimeZone.IsSweden();
+			Now.Is(new DateTime(2016,8,16,22,0,0));
+			IntervalLengthFetcher.Has(minutesPerInterval);
+			var scenario = ScenarioFactory.CreateScenario("scenariorita", true, true).WithId();
+			ScenarioRepository.Has(scenario);
+
+			var skill = createSkill(minutesPerInterval, "skill");
+			SkillRepository.Has(skill);
+
+			var userDate = new DateOnly(TimeZoneHelper.ConvertFromUtc(Now.UtcDateTime(), TimeZone.TimeZone()));
+			var skillDay = skill.CreateSkillDayWithDemand(scenario, userDate, TimeSpan.FromMinutes(60));
+			SkillDayRepository.Add(skillDay);
+
+			var vm = Target.Load(new[] { skill.Id.Value });
+
+			new DateOnly(vm.DataSeries.Time.First()).Should().Be.EqualTo(new DateOnly(2016, 8, 17));
 		}
 
 		private ISkill createSkill(int intervalLength, string skillName)
