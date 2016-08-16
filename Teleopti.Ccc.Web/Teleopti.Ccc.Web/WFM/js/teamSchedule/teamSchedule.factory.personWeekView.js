@@ -10,8 +10,8 @@
 			angular.forEach(personWeek.Days, function(day) {
 				var dayViewModel = {
 					date: day.Date,
-					summeryTitle: day.SummeryTitle,
-					summeryTimeSpan: day.SummeryTimeSpan,
+					summeryTitle: day.Title,
+					summeryTimeSpan: day.TimeSpan,
 					isDayOff: day.IsDayOff,
 					color: day.Color
 				};

@@ -80,9 +80,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			return new PersonFinderSearchCriteria(criteriaDictionary,pageSize,currentDate,sortedColumns,currentDate);
 		}
 
-		public IEnumerable<Guid> GetPermittedPersonIdList(IEnumerable<IPerson> people,DateOnly currentDate,string function)
+		public IEnumerable<Guid> GetPermittedPersonIdList(IEnumerable<IPerson> people, DateOnly currentDate, string function)
 		{
-			return _permittedPeople.Select(p => p.Id.GetValueOrDefault()).ToList();
+			return function == DefinedRaptorApplicationFunctionPaths.ViewConfidential
+				? _peopleWithConfidentialAbsencePermission.Select(p => p.Id.GetValueOrDefault())
+				: _permittedPeople.Select(p => p.Id.GetValueOrDefault()).ToList();
 		}
 
 		public void Add(IPerson person)

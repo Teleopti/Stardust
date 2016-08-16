@@ -305,7 +305,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			if (!isSchedulePublished && !canViewUnpublishedSchedules) return;
 
 			var significantPart = scheduleDay.SignificantPartForDisplay();
-			var personAssignment = scheduleDay.PersonAssignment(false);			
+			var personAssignment = scheduleDay.PersonAssignment();			
 			var absenceCollection = scheduleDay.PersonAbsenceCollection();
 
 			if (significantPart == SchedulePartView.DayOff)
