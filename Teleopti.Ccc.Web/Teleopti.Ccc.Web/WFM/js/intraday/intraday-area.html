@@ -145,15 +145,15 @@
 												<tbody>
 													<tr>
 														<td>{{'Calls'|translate}}</td>
-														<td class="number-cell">{{summaryForecastedCalls}}</td>
-														<td class="number-cell offered-calls">{{summaryOfferedCalls}}</td>
-														<td class="number-cell">{{forecastActualCallsDifference}}%</td>
+														<td class="number-cell">{{trafficData.summary.summaryForecastedCalls}}</td>
+														<td class="number-cell offered-calls">{{trafficData.summary.summaryOfferedCalls}}</td>
+														<td class="number-cell">{{trafficData.summary.forecastActualCallsDifference}}%</td>
 													</tr>
 													<tr>
 														<td>{{'AverageHandlingTime'|translate}}</td>
-														<td class="number-cell">{{summaryForecastedAverageHandleTime}}</td>
-														<td class="number-cell">{{summaryAverageHandleTime}}</td>
-														<td class="number-cell">{{forecastActualAverageHandleTimeDifference}}%</td>
+														<td class="number-cell">{{trafficData.summary.summaryForecastedAverageHandleTime}}</td>
+														<td class="number-cell">{{trafficData.summary.summaryAverageHandleTime}}</td>
+														<td class="number-cell">{{trafficData.summary.forecastActualAverageHandleTimeDifference}}%</td>
 													</tr>
 												</tbody>
 											</table>
@@ -184,15 +184,15 @@
 												<tbody>
 													<tr>
 														<td>{{'ServiceLevelPercentSign'|translate}}</td>
-														<td class="number-cell">{{summaryServiceLevel}} %</td>
+														<td class="number-cell">{{performanceData.summary.summaryServiceLevel}} %</td>
 													</tr>
 													<tr>
 														<td>{{'AbandonedRate'|translate}}</td>
-														<td class="number-cell">{{summaryAbandonedRate}} %</td>
+														<td class="number-cell">{{performanceData.summary.summaryAbandonedRate}} %</td>
 													</tr>
 													<tr>
 														<td>{{'AverageSpeedOfAnswer'|translate}}</td>
-														<td class="number-cell">{{summaryAsa}} {{'SecondShort'|translate}}</td>
+														<td class="number-cell">{{performanceData.summary.summaryAsa}} {{'SecondShort'|translate}}</td>
 													</tr>
 												</tbody>
 											</table>

@@ -171,12 +171,12 @@ describe('IntradayAreaCtrl', function () {
 	    scope.skillSelected(scope.skills[0]);
 	    $httpBackend.flush();
 
-	    expect(scope.summaryForecastedCalls).toEqual(monitorData.Summary.ForecastedCalls);
-	    expect(scope.summaryForecastedAverageHandleTime).toEqual(monitorData.Summary.ForecastedAverageHandleTime);
-	    expect(scope.summaryOfferedCalls).toEqual(monitorData.Summary.OfferedCalls);
-	    expect(scope.summaryAverageHandleTime).toEqual(monitorData.Summary.AverageHandleTime);
-	    expect(scope.forecastActualCallsDifference).toEqual(monitorData.Summary.ForecastedActualCallsDiff);
-	    expect(scope.forecastActualAverageHandleTimeDifference).toEqual(monitorData.Summary.ForecastedActualHandleTimeDiff);
+	    expect(scope.trafficData.summary.summaryForecastedCalls).toEqual(monitorData.Summary.ForecastedCalls);
+	    expect(scope.trafficData.summary.summaryForecastedAverageHandleTime).toEqual(monitorData.Summary.ForecastedAverageHandleTime);
+	    expect(scope.trafficData.summary.summaryOfferedCalls).toEqual(monitorData.Summary.OfferedCalls);
+	    expect(scope.trafficData.summary.summaryAverageHandleTime).toEqual(monitorData.Summary.AverageHandleTime);
+	    expect(scope.trafficData.summary.forecastActualCallsDifference).toEqual(monitorData.Summary.ForecastedActualCallsDiff);
+	    expect(scope.trafficData.summary.forecastActualAverageHandleTimeDifference).toEqual(monitorData.Summary.ForecastedActualHandleTimeDiff);
 	    expect(scope.HasMonitorData).toEqual(true);
 	});
 
@@ -188,13 +188,10 @@ describe('IntradayAreaCtrl', function () {
 	    $httpBackend.flush();
 
 	    expect(scope.timeSeries[0]).toEqual('x');
-	    expect(scope.forecastedCallsObj.Series[0]).toEqual('Forecasted_calls');
-	    expect(scope.actualCallsObj.Series[0]).toEqual('Calls');
-	    expect(scope.forecastedAverageHandleTimeObj.Series[0]).toEqual('Forecasted_AHT');
-	    expect(scope.actualAverageHandleTimeObj.Series[0]).toEqual('AHT');
-	    expect(scope.averageSpeedOfAnswerObj.Series[0]).toEqual('ASA');
-	    expect(scope.abandonedRateObj.Series[0]).toEqual('Abandoned_rate');
-	    expect(scope.serviceLevelObj.Series[0]).toEqual('Service_level');
+	    expect(scope.trafficData.forecastedCallsObj.Series[0]).toEqual('Forecasted_calls');
+	    expect(scope.trafficData.actualCallsObj.Series[0]).toEqual('Calls');
+	    expect(scope.trafficData.forecastedAverageHandleTimeObj.Series[0]).toEqual('Forecasted_AHT');
+	    expect(scope.trafficData.actualAverageHandleTimeObj.Series[0]).toEqual('AHT');
 	});
 
 
