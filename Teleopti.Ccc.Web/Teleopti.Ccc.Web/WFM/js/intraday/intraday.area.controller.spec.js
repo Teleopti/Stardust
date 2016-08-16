@@ -48,7 +48,7 @@ describe('IntradayAreaCtrl', function () {
 				ForecastedActualCallsDiff: "50.0",
 				ForecastedActualHandleTimeDiff: "55.0"
 			},
-			DataSeries: {
+			StatisticsDataSeries: {
 				Time: [],
 				ForecastedCalls: [],
 				ForecastedAverageHandleTime: [],
@@ -171,12 +171,12 @@ describe('IntradayAreaCtrl', function () {
 	    scope.skillSelected(scope.skills[0]);
 	    $httpBackend.flush();
 
-	    expect(scope.trafficData.summary.summaryForecastedCalls).toEqual(monitorData.Summary.ForecastedCalls);
-	    expect(scope.trafficData.summary.summaryForecastedAverageHandleTime).toEqual(monitorData.Summary.ForecastedAverageHandleTime);
-	    expect(scope.trafficData.summary.summaryOfferedCalls).toEqual(monitorData.Summary.OfferedCalls);
-	    expect(scope.trafficData.summary.summaryAverageHandleTime).toEqual(monitorData.Summary.AverageHandleTime);
-	    expect(scope.trafficData.summary.forecastActualCallsDifference).toEqual(monitorData.Summary.ForecastedActualCallsDiff);
-	    expect(scope.trafficData.summary.forecastActualAverageHandleTimeDifference).toEqual(monitorData.Summary.ForecastedActualHandleTimeDiff);
+	    expect(scope.trafficData.summary.summaryForecastedCalls).toEqual(monitorData.StatisticsSummary.ForecastedCalls);
+	    expect(scope.trafficData.summary.summaryForecastedAverageHandleTime).toEqual(monitorData.StatisticsSummary.ForecastedAverageHandleTime);
+	    expect(scope.trafficData.summary.summaryOfferedCalls).toEqual(monitorData.StatisticsSummary.OfferedCalls);
+	    expect(scope.trafficData.summary.summaryAverageHandleTime).toEqual(monitorData.StatisticsSummary.AverageHandleTime);
+	    expect(scope.trafficData.summary.forecastActualCallsDifference).toEqual(monitorData.StatisticsSummary.ForecastedActualCallsDiff);
+	    expect(scope.trafficData.summary.forecastActualAverageHandleTimeDifference).toEqual(monitorData.StatisticsSummary.ForecastedActualHandleTimeDiff);
 	    expect(scope.HasMonitorData).toEqual(true);
 	});
 
@@ -214,13 +214,13 @@ describe('IntradayAreaCtrl', function () {
     xit('should find max value of data series to apply to latest actual data chart bar', function() {
         createController(false);
 
-        monitorData.DataSeries.Time = [
+        monitorData.StatisticsDataSeries.Time = [
             new Date(2016, 1, 1, 12, 30, 0, 0),
             monitorData.LatestActualIntervalStart,
             monitorData.LatestActualIntervalEnd,
             new Date(2016, 1, 1, 13, 15, 0, 0)];
-        monitorData.DataSeries.ForecastedCalls = [15, 30, 65, 60];
-        monitorData.DataSeries.OfferedCalls = [12, 70, 60, null];
+        monitorData.StatisticsDataSeries.ForecastedCalls = [15, 30, 65, 60];
+        monitorData.StatisticsDataSeries.OfferedCalls = [12, 70, 60, null];
 
         scope.skillSelected(scope.skills[0]);
         $httpBackend.flush();

@@ -8,13 +8,13 @@
         service.setPerformanceData = function (result) {
           var performanceData = {
             averageSpeedOfAnswerObj: {
-              Series: result.DataSeries.AverageSpeedOfAnswer
+            	Series: result.StatisticsDataSeries.AverageSpeedOfAnswer
             },
             abandonedRateObj: {
-              Series: result.DataSeries.AbandonedRate
+            	Series: result.StatisticsDataSeries.AbandonedRate
             },
             serviceLevelObj: {
-              Series: result.DataSeries.ServiceLevel
+            	Series: result.StatisticsDataSeries.ServiceLevel
             },
             summary: setPerformanceSummary(result)
           };
@@ -32,9 +32,9 @@
 
         function setPerformanceSummary(result) {
           var summary = {
-            summaryAbandonedRate: $filter('number')(result.Summary.AbandonRate * 100, 1),
-            summaryServiceLevel: $filter('number')(result.Summary.ServiceLevel * 100, 1),
-            summaryAsa: $filter('number')(result.Summary.AverageSpeedOfAnswer, 1)
+          	summaryAbandonedRate: $filter('number')(result.StatisticsSummary.AbandonRate * 100, 1),
+          	summaryServiceLevel: $filter('number')(result.StatisticsSummary.ServiceLevel * 100, 1),
+          	summaryAsa: $filter('number')(result.StatisticsSummary.AverageSpeedOfAnswer, 1)
           };
           return summary;
         }

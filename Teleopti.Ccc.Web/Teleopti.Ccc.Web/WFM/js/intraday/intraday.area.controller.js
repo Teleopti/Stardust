@@ -173,7 +173,7 @@
 						$scope.latestActualInterval = $filter('date')(result.LatestActualIntervalStart, 'shortTime') + ' - ' + $filter('date')(result.LatestActualIntervalEnd, 'shortTime');
 
 						$scope.timeSeries = [];
-						angular.forEach(result.DataSeries.Time, function (value, key) {
+						angular.forEach(result.StatisticsDataSeries.Time, function (value, key) {
 							this.push($filter('date')(value, 'shortTime'));
 						}, $scope.timeSeries);
 						$scope.timeSeries.splice(0, 0, 'x');

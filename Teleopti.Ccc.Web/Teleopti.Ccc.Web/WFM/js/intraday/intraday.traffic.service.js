@@ -8,16 +8,16 @@
         service.setTrafficData = function (result) {
           var trafficData = {
             forecastedCallsObj: {
-              Series: result.DataSeries.ForecastedCalls
+              Series: result.StatisticsDataSeries.ForecastedCalls
             },
             actualCallsObj: {
-              Series: result.DataSeries.OfferedCalls
+            	Series: result.StatisticsDataSeries.OfferedCalls
             },
             forecastedAverageHandleTimeObj: {
-              Series: result.DataSeries.ForecastedAverageHandleTime
+            	Series: result.StatisticsDataSeries.ForecastedAverageHandleTime
             },
             actualAverageHandleTimeObj: {
-              Series: result.DataSeries.AverageHandleTime
+            	Series: result.StatisticsDataSeries.AverageHandleTime
             },
             summary: setTrafficSummary(result)
           };
@@ -38,12 +38,12 @@
 
         function setTrafficSummary(result) {
           var summary = {
-            summaryForecastedCalls: $filter('number')(result.Summary.ForecastedCalls, 1),
-            summaryForecastedAverageHandleTime: $filter('number')(result.Summary.ForecastedAverageHandleTime, 1),
-            summaryOfferedCalls:  $filter('number')(result.Summary.OfferedCalls, 1),
-            summaryAverageHandleTime:  $filter('number')(result.Summary.AverageHandleTime, 1),
-            forecastActualCallsDifference:  $filter('number')(result.Summary.ForecastedActualCallsDiff, 1),
-            forecastActualAverageHandleTimeDifference: $filter('number')(result.Summary.ForecastedActualHandleTimeDiff, 1)
+            summaryForecastedCalls: $filter('number')(result.StatisticsSummary.ForecastedCalls, 1),
+            summaryForecastedAverageHandleTime: $filter('number')(result.StatisticsSummary.ForecastedAverageHandleTime, 1),
+            summaryOfferedCalls: $filter('number')(result.StatisticsSummary.OfferedCalls, 1),
+            summaryAverageHandleTime: $filter('number')(result.StatisticsSummary.AverageHandleTime, 1),
+            forecastActualCallsDifference: $filter('number')(result.StatisticsSummary.ForecastedActualCallsDiff, 1),
+            forecastActualAverageHandleTimeDifference: $filter('number')(result.StatisticsSummary.ForecastedActualHandleTimeDiff, 1)
           };
           return summary;
         }
