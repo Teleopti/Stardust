@@ -64,6 +64,9 @@ namespace Teleopti.Support.Security
 				reportTextCommand.Execute(databaseArguments);
 				CrossDatabaseViewUpdate.Execute(databaseArguments);
 				DelayedDataConvert.Execute(databaseArguments);
+			}
+			if (!string.IsNullOrEmpty(databaseArguments.AnalyticsDbConnectionString))
+			{
 				DayOffCodeFixer.Execute(databaseArguments);
 			}
 			setPersonAssignmentDate(databaseArguments);
