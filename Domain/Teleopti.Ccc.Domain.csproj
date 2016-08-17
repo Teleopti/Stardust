@@ -163,6 +163,8 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\INewAbsenceRequestHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IRunRequestWaitlistEventMessage.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\MultiAbsenceRequestsHandler.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceRequestUseMultiHandler.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\QueuedAbsenceRequest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandler.cs" />
     <Compile Include="ApplicationLayer\BusinessUnit\AnalyticsBusinessUnitUpdater.cs" />
     <Compile Include="ApplicationLayer\Commands\ApproveBatchRequestsCommand.cs" />
@@ -383,6 +385,7 @@
     <Compile Include="Repositories\IAnalyticsShiftCategoryRepository.cs" />
     <Compile Include="Repositories\IAnalyticsWorkloadRepository.cs" />
     <Compile Include="Repositories\IKpiRepository.cs" />
+    <Compile Include="Repositories\IQueuedAbsenceRequestRepository.cs" />
     <Compile Include="Repositories\ISiteOpenHourRepository.cs" />
     <Compile Include="ResourceCalculation\CalculateForReadModel.cs" />
     <Compile Include="ResourceCalculation\CascadingPersonalSkills.cs" />
