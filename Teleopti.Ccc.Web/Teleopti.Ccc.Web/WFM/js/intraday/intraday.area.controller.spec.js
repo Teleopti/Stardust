@@ -40,7 +40,7 @@ describe('IntradayAreaCtrl', function () {
 		};
 
 		monitorData = {
-			Summary: {
+			StatisticsSummary: {
 				ForecastedCalls: "100.0",
 				ForecastedAverageHandleTime: "60.0",
 				OfferedCalls: "50.0",
