@@ -13,8 +13,8 @@
 				});
 			};
 
-			this.urlForChangingSchedule = function(businessUnitId, teamId, personId) {
-				return "../Anywhere#teamschedule/" + businessUnitId + "/" + teamId + "/" + personId + "/" + moment().format("YYYYMMDD");
+			this.urlForChangingSchedule = function(siteName, teamName, personId) {
+				return "#/teamSchedule/" + siteName + "/" + teamName + "/" + '?personIds=' + personId;
 			};
 
 			this.urlForAgentDetails = function(personId) {

@@ -33,7 +33,7 @@
 			$mdSidenav(commandContainerId).close().then(function () {
 				if(CommandCheckService.getCommandCheckStatus())
 					CommandCheckService.resetCommandCheckStatus();
-				
+
 				needToOpenSidePanel && openSidePanel();
 
 				$scope.$broadcast('teamSchedule.init.command', {
@@ -79,8 +79,12 @@
 		vm.lastCommandTrackId = "";
 		vm.permissionsAndTogglesLoaded = false;
 
+		function keyword(){
+			if ($stateParams.site && $stateParams.team)
+				return $stateParams.site + '"' + $stateParams.team + '"';
+		}
 		vm.searchOptions = {
-			keyword: $stateParams.keyword ? $stateParams.keyword : '',
+			keyword: keyword() || '',
 			searchKeywordChanged: false
 		};
 
@@ -161,10 +165,10 @@
 				scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment());
 				afterSchedulesLoaded(result);
 
-				if ($stateParams.selectedPersonIds) {
-					personSelectionSvc.preSelectPeople($stateParams.selectedPersonIds, scheduleMgmtSvc.groupScheduleVm.Schedules, vm.scheduleDate);
+				if ($stateParams.personIds) {
+					personSelectionSvc.preSelectPeople($stateParams.personIds, scheduleMgmtSvc.groupScheduleVm.Schedules, vm.scheduleDate);
 				}
-				
+
 				personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
 				vm.isLoading = false;
 				vm.checkValidationWarningForCurrentPage();
@@ -262,7 +266,7 @@
 			personIds.forEach(function (personId) {
 				if (uniquePersonIds.indexOf(personId) === -1) uniquePersonIds.push(personId);
 			});
-			
+
 			if(uniquePersonIds.length !== 0){
 				vm.updateSchedules(uniquePersonIds);
 				vm.checkValidationWarningForCommandTargets(uniquePersonIds);

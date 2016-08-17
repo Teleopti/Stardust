@@ -91,8 +91,8 @@
 							});
 					}
 				};
-				$scope.changeScheduleUrl = function(teamId, personId) {
-					return RtaRouteService.urlForChangingSchedule($sessionStorage.buid, teamId, personId);
+				$scope.changeScheduleUrl = function(siteName, teamName, personId) {
+					return RtaRouteService.urlForChangingSchedule(siteName, teamName, personId);
 				};
 				$scope.agentDetailsUrl = function(personId) {
 					return RtaRouteService.urlForAgentDetails(personId);
@@ -297,7 +297,6 @@
 						var windowEnd = now.clone().add(3, 'hours');
 
 						if (agentInfo.length > 0) {
-						
 
 							$scope.agents.push({
 								Name: agentInfo[0].Name,
