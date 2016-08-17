@@ -21,6 +21,10 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 	[TestFixture]
 	[PerformanceTest]
 	[Toggle(Toggles.RTA_ScheduleProjectionReadOnlyHangfire_35703)]
+	[Toggle(Toggles.ETL_SpeedUpIntradayBusinessUnit_38932)]
+	[Toggle(Toggles.ETL_SpeedUpScenario_38300)]
+	[Toggle(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439)]
+	[Toggle(Toggles.PersonCollectionChanged_ToHangfire_38420)]
 	[Category("SaveSchedulesTest")]
 	public class SaveSchedulesTest
 	{
@@ -42,22 +46,24 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 		public void MeasurePerformance()
 		{
 			Guid businessUnitId;
-			using (DataSource.OnThisThreadUse("TestData"))
+			const string logOnDatasource = "TestData";
+			using (DataSource.OnThisThreadUse(logOnDatasource))
 				businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.Value;
-			Impersonate.Impersonate("TestData", businessUnitId);
+			Impersonate.Impersonate(logOnDatasource, businessUnitId);
 
 			Now.Is("2016-06-01".Utc());
-			Http.Get("/Test/SetCurrentTime?ticks=" + Now.UtcDateTime().Ticks);
+			Http.Get($"/Test/SetCurrentTime?ticks={Now.UtcDateTime().Ticks}");
 			var dates = Enumerable.Range(1, Configuration.NumberOfDays)
 				.Select(i => new DateOnly(Now.UtcDateTime().AddDays(i)));
 
 			WithUnitOfWork.Do(() =>
 			{
 				var scenario = Scenarios.LoadDefaultScenario();
-				var phone = Activities.LoadAll().Single(x => x.Name == "Phone");
 				var persons = Persons.LoadAll()
 					.Where(p => p.Period(new DateOnly(Now.UtcDateTime())) != null) // UserThatCreatesTestData has no period
 					.ToList();
+
+				var phone = Activities.LoadAll().Single(x => x.Name == "Phone");
 				persons.ForEach(person =>
 				{
 					dates.ForEach(date =>

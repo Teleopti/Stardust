@@ -22,6 +22,10 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 	[TestFixture]
 	[PerformanceTest]
 	[Toggle(Toggles.RTA_ScheduleProjectionReadOnlyHangfire_35703)]
+	[Toggle(Toggles.ETL_SpeedUpIntradayBusinessUnit_38932)]
+	[Toggle(Toggles.ETL_SpeedUpScenario_38300)]
+	[Toggle(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439)]
+	[Toggle(Toggles.PersonCollectionChanged_ToHangfire_38420)]
 	[Setting("OptimizeScheduleChangedEvents_DontUseFromWeb", true)]
 	[Category("SaveSchedulesOptimizedEventsTest")]
 	public class SaveSchedulesOptimizedEventsTest
@@ -45,12 +49,13 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 		public void MeasurePerformance()
 		{
 			Guid businessUnitId;
-			using (DataSource.OnThisThreadUse("TestData"))
+			const string logOnDatasource = "TestData";
+			using (DataSource.OnThisThreadUse(logOnDatasource))
 				businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.Value;
-			AsSystem.Logon("TestData", businessUnitId);
+			AsSystem.Logon(logOnDatasource, businessUnitId);
 
 			Now.Is("2016-06-01".Utc());
-			Http.Get("/Test/SetCurrentTime?ticks=" + Now.UtcDateTime().Ticks);
+			Http.Get($"/Test/SetCurrentTime?ticks={Now.UtcDateTime().Ticks}");
 			var dates = Enumerable.Range(1, Configuration.NumberOfDays)
 				.Select(i => new DateOnly(Now.UtcDateTime().AddDays(i)))
 				.ToArray();
@@ -62,6 +67,7 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 				var persons = Persons.LoadAll()
 					.Where(p => p.Period(new DateOnly(Now.UtcDateTime())) != null) // UserThatCreatesTestData has no period
 					.ToList();
+
 				schedules = Schedules.FindSchedulesForPersons(
 					new DateTimePeriod(dates.Min().Utc(), dates.Max().AddDays(1).Utc()),
 					scenario,

@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.TestCommon
 		[UnitOfWork]
 		public virtual Database WithDefaultScenario(string name)
 		{
-			var scenario = new Scenario(name) {DefaultScenario = true};
+			var scenario = new Scenario(name) {DefaultScenario = true, EnableReporting = true};
 			_scenario = scenario.Description.Name;
 			_scenarios.Add(scenario);
 			return this;
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.TestCommon
 			if (_scenario != null)
 				return _scenarios.LoadAll().Single(x => x.Description.Name == _scenario);
 			_scenario = RandomName.Make();
-			var s = new Scenario(_scenario) { DefaultScenario = true };
+			var s = new Scenario(_scenario) { DefaultScenario = true, EnableReporting = true };
 			_scenarios.Add(s);
 			return s;
 		}
