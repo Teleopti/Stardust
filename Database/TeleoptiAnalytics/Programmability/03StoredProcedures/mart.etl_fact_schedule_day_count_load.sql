@@ -168,7 +168,7 @@ JOIN mart.dim_person dp
 	ON stg.person_code = dp.person_code
 	AND stg.schedule_date_local BETWEEN dp.valid_from_date_local AND dp.valid_to_date_local  --Is person valid in this range	
 JOIN mart.dim_day_off dd
-	ON stg.day_off_name		= dd.day_off_name
+	ON stg.day_off_code		= dd.day_off_code
 	AND dd.business_unit_id = dp.business_unit_id
 	AND dd.business_unit_id = @business_unit_id
 LEFT JOIN mart.dim_date dsd

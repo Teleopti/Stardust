@@ -32,7 +32,7 @@ BEGIN
 		[day_off_name]			= s.day_off_name,
 		[day_off_shortname]		= s.day_off_shortname,
 		[business_unit_code]	= s.business_unit_code,
-		[day_off_code]			= NULL,
+		[day_off_code]			= s.day_off_code,
 		[display_color]			= -8355712,
 		[display_color_html]	= '#808080',
 		[datasource_id]			= min(s.datasource_id),
@@ -41,7 +41,7 @@ BEGIN
 		[datasource_update_date]= GETDATE()
 	FROM stage.stg_schedule_preference s
 	WHERE day_off_name IS NOT NULL
-	GROUP BY s.day_off_name,s.day_off_shortname,s.business_unit_code
+	GROUP BY s.day_off_name, s.day_off_code,s.day_off_shortname,s.business_unit_code
 END
 
 GO

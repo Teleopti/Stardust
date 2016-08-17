@@ -56,6 +56,9 @@ namespace Teleopti.Interfaces.Domain
 		///</summary>
 		string PayrollCode { get; }
 
+
+		Guid DayOffTemplateId { get; }
+
 		/// <summary>
 		/// Gets the anchor with current time zone applied.
 		/// </summary>

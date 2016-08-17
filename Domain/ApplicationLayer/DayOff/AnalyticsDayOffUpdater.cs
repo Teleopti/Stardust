@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.DayOff
 {
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.DayOff
 				DayOffShortname = dayOffTemplate.Description.ShortName,
 				DisplayColor = dayOffTemplate.DisplayColor.ToArgb(),
 				DisplayColorHtml = ColorTranslator.ToHtml(dayOffTemplate.DisplayColor),
-				DatasourceUpdateDate = dayOffTemplate.UpdatedOn ?? DateTime.UtcNow,
+				DatasourceUpdateDate = DateHelper.GetSmallDateTime(dayOffTemplate.UpdatedOn ?? DateTime.UtcNow),
 				DatasourceId = 1
 			};
 

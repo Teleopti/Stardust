@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         private Color _displayColor;
 		private readonly string _payrollCode;
 
-    	#endregion
+		#endregion
 
         #region Properties
 
@@ -72,7 +72,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             get { return _displayColor; }
         }
 
-        #endregion
+
+		public Guid DayOffTemplateId { get; }
+
+		#endregion
 
 		protected DayOff()
 		{
@@ -80,7 +83,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		}
 
 
-    	public DayOff(DateTime anchor, TimeSpan targetLength, TimeSpan flexibility, Description description, Color displayColor,  string payrollCode)
+    	public DayOff(DateTime anchor, TimeSpan targetLength, TimeSpan flexibility, Description description, Color displayColor, string payrollCode, Guid dayOffTemplateId)
         {
             InParameter.VerifyDateIsUtc("anchor", anchor);
 
@@ -92,6 +95,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             _description = description;
             _displayColor = displayColor;
 			_payrollCode = payrollCode;
+    		DayOffTemplateId = dayOffTemplateId;
         }
 
         /// <summary>
