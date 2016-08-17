@@ -139,8 +139,12 @@ namespace Teleopti.Support.Security
 
 		private static void updateTable(SqlConnection connection, SqlTransaction transaction)
 		{
+			
 			executeNonQuery(connection, transaction, "ALTER TABLE [mart].[dim_day_off] ALTER COLUMN [day_off_code] UNIQUEIDENTIFIER NOT NULL");
-			executeNonQuery(connection, transaction, "ALTER TABLE [mart].[dim_day_off] ADD CONSTRAINT AK_day_off_code UNIQUE (day_off_code)");
+			executeNonQuery(connection, transaction, @"IF NOT EXISTS(SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_NAME ='AK_day_off_code')
+				BEGIN
+					ALTER TABLE [mart].[dim_day_off] ADD CONSTRAINT AK_day_off_code UNIQUE (day_off_code)
+				END");
 		}
 
 		private static void deleteAndReconnect(SqlConnection connection, SqlTransaction transaction, AnalyticsDayOff dayOffToRemove, int dayOffIdToReconnectTo)
