@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 		}
 
 		[Test]
-		public void CanReturnWaitlistByCreateTime()
+		public void ShouldReturnWaitlistByCreateTime()
 		{
 			var baseTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc);
 			var baseCreatedOn = new DateTime(2016, 01, 01);
@@ -70,9 +70,11 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 		}
 
 		[Test]
-		public void CanReturnWaitlistByPersonSeniority()
+		public void ShouldReturnWaitlistByPersonSeniorityThenCreateTime()
 		{
 			var baseTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc);
+			var baseCreatedOn = new DateTime(2016, 01, 01);
+
 			var workflowControlSetProcessWaitlistBySeniority = createWorkFlowControlSet(
 				new DateTime(2016, 01, 01), new DateTime(2016, 12, 31), _absence,
 				WaitlistProcessOrder.BySeniority).WithId();
@@ -82,10 +84,12 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 			var person1 = createAndSetupPerson(workflowControlSetProcessWaitlistBySeniority);
 			var person2 = createAndSetupPerson(workflowControlSetProcessWaitlistBySeniority);
 			var person3 = createAndSetupPerson(workflowControlSetProcessWaitlistBySeniority);
+			var person4 = createAndSetupPerson(workflowControlSetProcessWaitlistBySeniority);
 
 			person1.AddPersonPeriod(new PersonPeriod(new DateOnly(2016, 03, 01), personContract, team));
 			person2.AddPersonPeriod(new PersonPeriod(new DateOnly(2016, 04, 01), personContract, team));
-			person3.AddPersonPeriod(new PersonPeriod(new DateOnly(2016, 02, 01), personContract, team));
+			person3.AddPersonPeriod(new PersonPeriod(new DateOnly(2016, 04, 01), personContract, team));
+			person4.AddPersonPeriod(new PersonPeriod(new DateOnly(2016, 02, 01), personContract, team));
 
 			var absenceRequest1 = createAutoDeniedAbsenceRequest(person1, _absence,
 				new DateTimePeriod(baseTime.AddHours(15), baseTime.AddHours(19)));
@@ -93,16 +97,25 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 				new DateTimePeriod(baseTime.AddHours(08), baseTime.AddHours(16)));
 			var absenceRequest3 = createAutoDeniedAbsenceRequest(person3, _absence,
 				new DateTimePeriod(baseTime.AddHours(10), baseTime.AddHours(18)));
+			var absenceRequest4 = createAutoDeniedAbsenceRequest(person4, _absence,
+				new DateTimePeriod(baseTime.AddHours(10), baseTime.AddHours(18)));
+
+			var property = typeof(PersonRequest).GetProperty("CreatedOn");
+			property.SetValue(absenceRequest1.Parent, baseCreatedOn.AddHours(10));
+			property.SetValue(absenceRequest2.Parent, baseCreatedOn.AddHours(12));
+			property.SetValue(absenceRequest3.Parent, baseCreatedOn.AddHours(08));
+			property.SetValue(absenceRequest4.Parent, baseCreatedOn.AddHours(11));
 
 			var waitlist =
 				_absenceRequestWaitlistProvider.GetWaitlistedRequests(absenceRequest2.Period,
 				workflowControlSetProcessWaitlistBySeniority).ToArray();
 
-			Assert.AreEqual(3, waitlist.Length);
+			Assert.AreEqual(4, waitlist.Length);
 
-			Assert.IsTrue(waitlist[0].Request == absenceRequest3);
+			Assert.IsTrue(waitlist[0].Request == absenceRequest4);
 			Assert.IsTrue(waitlist[1].Request == absenceRequest1);
-			Assert.IsTrue(waitlist[2].Request == absenceRequest2);
+			Assert.IsTrue(waitlist[2].Request == absenceRequest3);
+			Assert.IsTrue(waitlist[3].Request == absenceRequest2);
 		}
 
 		[Test]

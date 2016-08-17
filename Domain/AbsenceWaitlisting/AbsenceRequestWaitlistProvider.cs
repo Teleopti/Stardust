@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 
 			var processOrder = workflowControlSet.AbsenceRequestWaitlistProcessOrder;
 			return processOrder == WaitlistProcessOrder.BySeniority
-				? waitlistedRequests.OrderByDescending(x => x.Person.Seniority)
+				? waitlistedRequests.OrderByDescending(x => x.Person.Seniority).ThenBy(x => x.CreatedOn)
 				: waitlistedRequests.OrderBy(x => x.CreatedOn);
 		}
 
