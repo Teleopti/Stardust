@@ -426,5 +426,10 @@ namespace Teleopti.Interfaces.Domain
 			var dateTime = TimeZoneHelper.ConvertToUtc(Date, timeZoneInfo);
 			return new DateTimePeriod(dateTime.Add(period.StartTime), dateTime.Add(period.EndTime));
 		}
+
+		public DateOnlyPeriod ToDateOnlyPeriod()
+		{
+			return new DateOnlyPeriod(this, this);
+		}
 	}
 }
