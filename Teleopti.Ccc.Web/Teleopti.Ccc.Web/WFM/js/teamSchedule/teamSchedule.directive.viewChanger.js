@@ -12,7 +12,8 @@
             replace: true,
             controllerAs: 'vc',
             scope: {
-                scheduleDate: '=?'
+                selectedDate: '=?',
+                keyword: '=?'
             },
             bindToController: true,
             controller: viewChangerController,
@@ -32,11 +33,12 @@
         };
 
         vc.changeView = function (viewState) {
-            if (vc.scheduleDate) {
-                $state.go(viewState, {selectedDate: vc.scheduleDate});
-                return;
-            }
-            $state.go(viewState);
+            var params = {};
+
+            if (vc.keyword) params.keyword = vc.keyword;
+            if (vc.selectedDate) params.selectedDate = vc.selectedDate;
+
+            $state.go(viewState, params);
         };
     }
 
