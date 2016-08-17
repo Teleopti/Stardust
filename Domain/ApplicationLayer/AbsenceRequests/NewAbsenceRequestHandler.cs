@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
-	public class NewAbsenceRequestHandler
+	public class NewAbsenceRequestHandler : INewAbsenceRequestHandler
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(NewAbsenceRequestHandler));
 
