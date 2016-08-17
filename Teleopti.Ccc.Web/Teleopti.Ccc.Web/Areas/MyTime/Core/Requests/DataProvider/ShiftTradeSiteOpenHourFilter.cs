@@ -61,14 +61,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		}
 
 		public IEnumerable<IShiftExchangeOffer> FilterShiftExchangeOffer(IEnumerable<IShiftExchangeOffer> shiftExchangeOffers,
-			TimePeriod personFromSchedulePeriod, DateOnly shiftTradeDate)
+			ShiftTradeAddPersonScheduleViewModel personFromScheduleView)
 		{
 			if (!isFilterEnabled())
 			{
 				return shiftExchangeOffers;
 			}
 
-			var personFromSiteOpenHourPeriod = getPersonSiteOpenHourPeriod(_loggedOnUser.CurrentUser(), shiftTradeDate);
+			if (personFromScheduleView.ScheduleLayers == null || !personFromScheduleView.ScheduleLayers.Any())
+			{
+				return shiftExchangeOffers;
+			}
+
+			var personFrom = _loggedOnUser.CurrentUser();
+			var personFromSchedulePeriods = getSchedulePeriods(personFromScheduleView);
 
 			return shiftExchangeOffers.Where(
 				shiftExchangeOffer =>
@@ -78,14 +84,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 						return true;
 					}
 
-					var personToSiteOpenHourPeriod = getPersonSiteOpenHourPeriod(shiftExchangeOffer.Person, shiftTradeDate);
-
+					var personTo = shiftExchangeOffer.Person;
 					var timezone = shiftExchangeOffer.Person.PermissionInformation.DefaultTimeZone();
-					var personToScheduleTimePeriod = shiftExchangeOffer.MyShiftPeriod.Value.TimePeriod(timezone);
+					var personToScheduleDateTimePeriod = shiftExchangeOffer.MyShiftPeriod.Value;
+					var personToScheduleTimePeriods = getSchedulePeriods(personToScheduleDateTimePeriod.StartDateTimeLocal(timezone)
+						, personToScheduleDateTimePeriod.EndDateTimeLocal(timezone));
+					var isSatisfiedPersonFromSiteOpenHours = isSatisfiedSiteOpenHours(personToScheduleTimePeriods, personFrom);
+					var isSatisfiedPersonToSiteOpenHours = isSatisfiedSiteOpenHours(personFromSchedulePeriods, personTo);
 
-					return
-						personFromSiteOpenHourPeriod.Contains(personToScheduleTimePeriod)
-						&& personToSiteOpenHourPeriod.Contains(personFromSchedulePeriod);
+					return isSatisfiedPersonFromSiteOpenHours && isSatisfiedPersonToSiteOpenHours;
 				});
 		}
 

@@ -217,7 +217,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				createShiftExchangeOffer(person2, _shiftTradeDate, 8, 16),
 			};
 
-			var filteredShiftExchangeOffers = Target.FilterShiftExchangeOffer(shiftExchangeOffers, new TimePeriod(8, 0, 17, 0), _shiftTradeDate).ToList();
+			var filteredShiftExchangeOffers =
+				Target.FilterShiftExchangeOffer(shiftExchangeOffers,
+					createShiftTradeAddPersonScheduleViewModel(person1, _shiftTradeDate, new[]
+					{
+						new TimePeriod(8, 0, 17, 0),
+					})).ToList();
 			filteredShiftExchangeOffers.Count.Should().Be(1);
 			filteredShiftExchangeOffers.FirstOrDefault().Person.Should().Be(person1);
 		}
@@ -236,7 +241,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				createShiftExchangeOffer(person2, _shiftTradeDate, 8, 15),
 			};
 
-			var filteredShiftExchangeOffers = Target.FilterShiftExchangeOffer(shiftExchangeOffers, new TimePeriod(8, 0, 17, 0), _shiftTradeDate).ToList();
+			var filteredShiftExchangeOffers =
+				Target.FilterShiftExchangeOffer(shiftExchangeOffers,
+					createShiftTradeAddPersonScheduleViewModel(person1, _shiftTradeDate, new[]
+					{
+						new TimePeriod(8, 0, 17, 0),
+					})).ToList();
 			filteredShiftExchangeOffers.Count.Should().Be(1);
 			filteredShiftExchangeOffers.FirstOrDefault().Person.Should().Be(person1);
 		}
@@ -255,7 +265,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				createShiftExchangeOffer(person2, _shiftTradeDate, 8, 15),
 			};
 
-			var filteredShiftExchangeOffers = Target.FilterShiftExchangeOffer(shiftExchangeOffers, new TimePeriod(), _shiftTradeDate).ToList();
+			var filteredShiftExchangeOffers =
+				Target.FilterShiftExchangeOffer(shiftExchangeOffers,
+					createShiftTradeAddPersonScheduleViewModel(person1, _shiftTradeDate, new TimePeriod[] {})).ToList();
 			filteredShiftExchangeOffers.Count.Should().Be(2);
 		}
 
@@ -271,8 +283,39 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				createEmptyDayShiftExchangeOffer(person1, _shiftTradeDate),
 			};
 
-			var filteredShiftExchangeOffers = Target.FilterShiftExchangeOffer(shiftExchangeOffers, new TimePeriod(), _shiftTradeDate).ToList();
+			var filteredShiftExchangeOffers =
+				Target.FilterShiftExchangeOffer(shiftExchangeOffers,
+					createShiftTradeAddPersonScheduleViewModel(person1, _shiftTradeDate, new TimePeriod[] {})).ToList();
 			filteredShiftExchangeOffers.Count.Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldFilterShiftExchangeOfferWithNightShiftSchedule()
+		{
+			var personFrom = createPersonWithSiteOpenHours(new Dictionary<DayOfWeek, TimePeriod>
+			{
+				{ DayOfWeek.Monday, new TimePeriod(TimeSpan.FromHours(9), TimeSpan.FromHours(24).Subtract(new TimeSpan(1))) },
+				{ DayOfWeek.Tuesday, new TimePeriod(TimeSpan.Zero, TimeSpan.FromHours(9)) },
+			});
+			prepareData(personFrom);
+
+			var person1 = createPersonWithSiteOpenHours(8, 17);
+			var person2 = createPersonWithSiteOpenHours(8, 19);
+
+			var shiftExchangeOffers = new[]
+			{
+				createShiftExchangeOffer(person1, _shiftTradeDate, new TimePeriod(TimeSpan.FromHours(22), TimeSpan.FromDays(1).Add(TimeSpan.FromHours(5)))),
+				createShiftExchangeOffer(person2, _shiftTradeDate, 8, 16)
+			};
+
+			var filteredShiftExchangeOffers =
+				Target.FilterShiftExchangeOffer(shiftExchangeOffers,
+					createShiftTradeAddPersonScheduleViewModel(person1, _shiftTradeDate, new[]
+					{
+						new TimePeriod(8, 0, 17, 0),
+					})).ToList();
+			filteredShiftExchangeOffers.Count.Should().Be(1);
+			filteredShiftExchangeOffers.FirstOrDefault().Person.Should().Be(person1);
 		}
 
 		private void prepareData(IPerson person)
@@ -345,9 +388,14 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 		private IShiftExchangeOffer createShiftExchangeOffer(IPerson person, DateOnly date, int startHour, int endHour)
 		{
+			return createShiftExchangeOffer(person, date, new TimePeriod(startHour, 0, endHour, 0));
+		}
+
+		private IShiftExchangeOffer createShiftExchangeOffer(IPerson person, DateOnly date, TimePeriod timePeriod)
+		{
 			var scenario = CurrentScenario.Current();
 			var dateTimePeriod =
-				date.ToDateTimePeriod(new TimePeriod(startHour, 0, endHour, 0), person.PermissionInformation.DefaultTimeZone());
+				date.ToDateTimePeriod(timePeriod, person.PermissionInformation.DefaultTimeZone());
 			var scheduleDay = ScheduleDayFactory.Create(date, person, scenario);
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
 				dateTimePeriod);

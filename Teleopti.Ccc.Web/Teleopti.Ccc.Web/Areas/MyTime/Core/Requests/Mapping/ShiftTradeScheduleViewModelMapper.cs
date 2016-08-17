@@ -115,6 +115,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			}
 			var possibleTradePersons = _possibleShiftTradePersonsProvider.RetrievePersons(data);
 			var myScheduleDayReadModel = _shiftTradeRequestProvider.RetrieveMySchedule(data.ShiftTradeDate);
+			var myScheduleViewModel = _shiftTradePersonScheduleViewModelMapper.Map(myScheduleDayReadModel, true);
 
 			var filteredShiftExchangeOffers = getMatchShiftExchangeOffers(possibleTradePersons.Persons, data.ShiftTradeDate);
 			if (data.TimeFilter != null)
@@ -122,26 +123,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				filteredShiftExchangeOffers = getMatchShiftExchangeOffers(filteredShiftExchangeOffers, data.TimeFilter);
 			}
 
-			if (myScheduleDayReadModel != null
-				&& myScheduleDayReadModel.Start.HasValue
-				&& myScheduleDayReadModel.End.HasValue)
+			if (myScheduleViewModel != null)
 			{
-				var myScheduleTimePeriod = new TimePeriod(myScheduleDayReadModel.Start.Value.TimeOfDay,
-					myScheduleDayReadModel.End.Value.TimeOfDay);
 				filteredShiftExchangeOffers =
-					_shiftTradeSiteOpenHourFilter.FilterShiftExchangeOffer(filteredShiftExchangeOffers, myScheduleTimePeriod,
-						data.ShiftTradeDate);
+					_shiftTradeSiteOpenHourFilter.FilterShiftExchangeOffer(filteredShiftExchangeOffers, myScheduleViewModel);
 			}
 
 			var possibleTradeSchedule = getBulletinSchedules(filteredShiftExchangeOffers, data.Paging);
 
-			return getShiftTradeScheduleViewModel(data.Paging, myScheduleDayReadModel, possibleTradeSchedule, data.ShiftTradeDate);
+			return getShiftTradeScheduleViewModel(data.Paging, myScheduleViewModel, possibleTradeSchedule, data.ShiftTradeDate);
 		}
 
 		private ShiftTradeScheduleViewModel getShiftTradeScheduleViewModel(Paging paging,
-			IPersonScheduleDayReadModel myScheduleDayReadModel, IEnumerable<ShiftTradeAddPersonScheduleViewModel> possibleTradeSchedule, DateOnly shiftTradeDate)
+			ShiftTradeAddPersonScheduleViewModel mySchedule, IEnumerable<ShiftTradeAddPersonScheduleViewModel> possibleTradeSchedule, DateOnly shiftTradeDate)
 		{
-			var mySchedule = _shiftTradePersonScheduleViewModelMapper.Map(myScheduleDayReadModel, true);
 			var possibleTradeScheduleNum = possibleTradeSchedule.Any()
 				? possibleTradeSchedule.First().Total
 				: 0;
