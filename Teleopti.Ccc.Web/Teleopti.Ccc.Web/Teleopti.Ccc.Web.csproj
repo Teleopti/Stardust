@@ -1507,6 +1507,7 @@
     <Content Include="WFM\js\teamSchedule\html\teamscheduledatepicker.html" />
     <Content Include="WFM\js\teamSchedule\html\default.html" />
     <Content Include="WFM\js\teamSchedule\html\time-range-picker.tpl.html" />
+    <Content Include="WFM\js\teamSchedule\html\view-changer.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\weeklySchedule.html" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.controller.default.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.controller.week.js" />
@@ -1535,6 +1536,7 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.scheduletable.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.cmd.swapShifts.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.timeline.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.directive.viewChanger.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.factory.groupSchedule.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.factory.personSchedule.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.factory.personSchedule.spec.js" />
