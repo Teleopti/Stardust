@@ -3,6 +3,8 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.Rta.Persisters;
@@ -89,13 +91,24 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<BelongsToDateDecorator>().As<IRtaEventDecorator>().SingleInstance();
 			builder.RegisterType<CurrentBelongsToDate>().SingleInstance();
 			builder.RegisterType<AppliedAdherence>().SingleInstance();
-			
+
 			builder.RegisterType<ProperAlarm>().SingleInstance();
 
 			builder.RegisterType<SiteViewModelBuilder>().SingleInstance();
 			builder.RegisterType<TeamViewModelBuilder>().SingleInstance();
 			builder.RegisterType<NumberOfAgentsInSiteReader>().As<INumberOfAgentsInSiteReader>().SingleInstance();
 			builder.RegisterType<NumberOfAgentsInTeamReader>().As<INumberOfAgentsInTeamReader>().SingleInstance();
+
+		    builder.RegisterType<ActivityChangeChecker>();
+			builder.Register(c => hasRtaLicense(c) ? c.Resolve<ActivityChangeChecker>() as IActivityChangeChecker : new EmptyActivityChangeChecker())
+				.As<IActivityChangeChecker>()
+				.SingleInstance();
+		}
+
+		private static bool hasRtaLicense(IComponentContext c)
+		{
+			return c.Resolve<ILicenseActivatorProvider>().Current()
+				.EnabledLicenseOptionPaths.Contains(DefinedLicenseOptionPaths.TeleoptiCccRealTimeAdherence);
 		}
 	}
 }
