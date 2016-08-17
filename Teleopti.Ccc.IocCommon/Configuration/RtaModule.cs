@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RtaProcessor>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateMapper>().SingleInstance();
 			builder.RegisterType<StateStreamSynchronizer>().SingleInstance();
-			builder.RegisterType<ContextLoader>().ApplyAspects().SingleInstance();
 
 			if (_config.Toggle(Toggles.RTA_Optimize_39667))
 			{
@@ -36,7 +35,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					builder.RegisterType<EventualStateCodeAdder>().As<IStateCodeAdder>().SingleInstance();
 				else
 					builder.RegisterType<ScaleOutStateCodeAdder>().As<IStateCodeAdder>().SingleInstance();
-				builder.RegisterType<InParallel>().As<IBatchExecuteStrategy>().ApplyAspects().SingleInstance();
+				builder.RegisterType<ContextLoaderWithParalellBatch>().As<IContextLoader>().ApplyAspects().SingleInstance();
 			}
 			else
 			{
@@ -44,7 +43,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					builder.RegisterType<EventualStateCodeAdder>().As<IStateCodeAdder>().SingleInstance();
 				else
 					builder.RegisterType<StateCodeAdder>().As<IStateCodeAdder>().SingleInstance().ApplyAspects();
-				builder.RegisterType<InSequence>().As<IBatchExecuteStrategy>().SingleInstance();
+				builder.RegisterType<ContextLoader>().As<IContextLoader>().ApplyAspects().SingleInstance();
 			}
 
 			_config.Cache().This<IDatabaseLoader>((c, b) => b

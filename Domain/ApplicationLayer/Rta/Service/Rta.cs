@@ -69,14 +69,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly TenantLoader _tenantLoader;
 		private readonly RtaInitializor _initializor;
 		private readonly ActivityChangeProcessor _activityChangeProcessor;
-		private readonly ContextLoader _contextLoader;
+		private readonly IContextLoader _contextLoader;
 
 		public Rta(
 			RtaProcessor processor,
 			TenantLoader tenantLoader,
 			RtaInitializor initializor,
 			ActivityChangeProcessor activityChangeProcessor,
-			ContextLoader contextLoader)
+			IContextLoader contextLoader)
 		{
 			_processor = processor;
 			_tenantLoader = tenantLoader;

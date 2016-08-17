@@ -10,7 +10,67 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	public class ContextLoader
+	public interface IContextLoader
+	{
+		void For(ExternalUserStateInputModel input, Action<Context> action);
+		void ForBatch(IEnumerable<ExternalUserStateInputModel> inputs, Action<Context> action);
+		void ForAll(Action<Context> action);
+		void ForClosingSnapshot(DateTime snapshotId, string sourceId, Action<Context> action);
+		void ForSynchronize(Action<Context> action);
+	}
+
+	public class ContextLoaderWithParalellBatch : ContextLoader
+	{
+		public ContextLoaderWithParalellBatch(
+			IDatabaseLoader databaseLoader, 
+			INow now, 
+			StateMapper stateMapper, 
+			IAgentStatePersister agentStatePersister, 
+			IMappingReader mappingReader, 
+			IDatabaseReader databaseReader, 
+			AppliedAdherence appliedAdherence, 
+			ProperAlarm appliedAlarm) : base(
+				databaseLoader, 
+				now, 
+				stateMapper, 
+				agentStatePersister, 
+				mappingReader, 
+				databaseReader, 
+				appliedAdherence, 
+				appliedAlarm
+				)
+		{
+		}
+
+		public override void ForBatch(IEnumerable<ExternalUserStateInputModel> inputs, Action<Context> action)
+		{
+			var exceptions = new ConcurrentBag<Exception>();
+			inputs
+				.AsParallel()
+				.ForAll(input =>
+				{
+					try
+					{
+						ForBatchSingle(input, action);
+					}
+					catch (Exception e)
+					{
+						exceptions.Add(e);
+					}
+				});
+			if (exceptions.Any())
+				throw new AggregateException(exceptions);
+		}
+
+		[TenantScope]
+		protected virtual void ForBatchSingle(ExternalUserStateInputModel input, Action<Context> action)
+		{
+			For(input, action);
+		}
+
+	}
+
+	public class ContextLoader : IContextLoader
 	{
 		private readonly DataSourceResolver _dataSourceResolver;
 		private readonly INow _now;
@@ -20,7 +80,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IDatabaseReader _databaseReader;
 		private readonly AppliedAdherence _appliedAdherence;
 		private readonly ProperAlarm _appliedAlarm;
-		private readonly IBatchExecuteStrategy _batchExecuteStrategy;
 
 		public ContextLoader(
 			IDatabaseLoader databaseLoader,
@@ -30,8 +89,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IMappingReader mappingReader,
 			IDatabaseReader databaseReader,
 			AppliedAdherence appliedAdherence,
-			ProperAlarm appliedAlarm,
-			IBatchExecuteStrategy batchExecuteStrategy
+			ProperAlarm appliedAlarm
 			)
 		{
 			_dataSourceResolver = new DataSourceResolver(databaseLoader);
@@ -42,7 +100,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_databaseReader = databaseReader;
 			_appliedAdherence = appliedAdherence;
 			_appliedAlarm = appliedAlarm;
-			_batchExecuteStrategy = batchExecuteStrategy;
 		}
 
 		protected int validateSourceId(ExternalUserStateInputModel input)
@@ -113,11 +170,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		}
 
-		public void ForBatch(IEnumerable<ExternalUserStateInputModel> inputs, Action<Context> action)
+		public virtual void ForBatch(IEnumerable<ExternalUserStateInputModel> inputs, Action<Context> action)
 		{
-			var exceptions = new ConcurrentBag<Exception>();
-
-			_batchExecuteStrategy.Execute(inputs, input =>
+			var exceptions = new List<Exception>();
+			inputs.ForEach(input =>
 			{
 				try
 				{
@@ -128,7 +184,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					exceptions.Add(e);
 				}
 			});
-
 			if (exceptions.Any())
 				throw new AggregateException(exceptions);
 		}
