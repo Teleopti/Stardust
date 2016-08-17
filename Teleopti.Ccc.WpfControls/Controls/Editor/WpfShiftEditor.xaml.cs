@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Editor
         public event EventHandler<CustomEventArgs<IPersonMeeting>> RemoveParticipant;
         public event EventHandler<CustomEventArgs<IPersonMeeting>> CreateMeeting;
         public event EventHandler<EventArgs> Undo;
+	    public event EventHandler<EventArgs> ShowLayers;
         #endregion
 		
         private ShiftEditorViewModel _model;
@@ -333,7 +334,17 @@ namespace Teleopti.Ccc.WpfControls.Controls.Editor
             }
         }
 
-        public void OnUndo(EventArgs e)
+	    public void EditorShowLayersExecuted()
+	    {
+			var handler = ShowLayers;
+			if (handler != null)
+			{
+				handler(this, new EventArgs());
+			}
+		}
+
+
+	    public void OnUndo(EventArgs e)
         {
             var handler = Undo;
             if (handler != null) handler(this, e);

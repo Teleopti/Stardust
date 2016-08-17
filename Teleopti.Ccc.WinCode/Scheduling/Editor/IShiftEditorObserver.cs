@@ -71,5 +71,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
         /// Occurs when create-meeting executed.
         /// </summary>
         void EditorCreateMeetingExecuted(IPersonMeeting personMeeting);
+
+	    void EditorShowLayersExecuted();
     }
 }

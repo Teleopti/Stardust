@@ -672,7 +672,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				}
 				_scheduleView.Presenter.ClipHandlerSchedule.Clear();
 				RecalculateResources();
-				updateShiftEditor();
+				RunActionWithDelay(updateShiftEditor, 50);
 			}
 		}
 
@@ -2296,7 +2296,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 					disableButtonsIfTeamLeaderMode();
 					_scheduleView.Presenter.UpdateFromEditor();
 					if (_showEditor)
+					{
 						updateShiftEditor();
+						RunActionWithDelay(updateShiftEditor, 50);
+					}
 					var currentCell = _scheduleView.ViewGrid.CurrentCell;
 					var selectedCols = _scheduleView.ViewGrid.Model.Selections.Ranges.ActiveRange.Width;
 					if (!(_scheduleView is AgentRestrictionsDetailView) && currentCell.RowIndex == 0 && selectedCols == 1 &&
@@ -2335,6 +2338,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_skillWeekGridControl.SaveSetting();
 			_skillMonthGridControl.SaveSetting();
 			_skillFullPeriodGridControl.SaveSetting();
+		}
+
+		public async void RunActionWithDelay(System.Action action, int milliseconds)
+		{
+			await System.Threading.Tasks.Task.Delay(milliseconds);
+			action();
 		}
 
 		private void updateShiftEditor()
@@ -5088,6 +5097,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			wpfShiftEditor1.AddOvertime += wpfShiftEditor_AddOvertime;
 			wpfShiftEditor1.AddPersonalShift += wpfShiftEditor_AddPersonalShift;
 			wpfShiftEditor1.Undo += wpfShiftEditor_Undo;
+			wpfShiftEditor1.ShowLayers += wpfShiftEditor1ShowLayers;
 
 			notesEditor.NotesChanged += notesEditor_NotesChanged;
 			notesEditor.PublicNotesChanged += notesEditor_PublicNotesChanged;
@@ -5127,6 +5137,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 				.Subscribe(replyAndDenyRequestFromRequestDetailsView);
 
 			#endregion
+		}
+
+		private void wpfShiftEditor1ShowLayers(object sender, EventArgs e)
+		{
+			RunActionWithDelay(updateShiftEditor, 50);
 		}
 
 		private void _skillResultHighlightGridControl_GoToDate(object sender, GoToDateEventArgs e)
@@ -5400,6 +5415,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				wpfShiftEditor1.AddActivity -= wpfShiftEditor_AddActivity;
 				wpfShiftEditor1.AddOvertime -= wpfShiftEditor_AddOvertime;
 				wpfShiftEditor1.AddPersonalShift -= wpfShiftEditor_AddPersonalShift;
+				wpfShiftEditor1.ShowLayers -= wpfShiftEditor1ShowLayers;
 			}
 
 			if (notesEditor != null)

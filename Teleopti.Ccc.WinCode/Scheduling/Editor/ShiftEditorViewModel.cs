@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Data;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
 		private IEventAggregator _eventAggregator;
 		private readonly IEditableShiftMapper _editableShiftMapper;
 
-        #region properties
+		#region properties
 		public TimeSpan SurroundingTime { get; private set; }
         public TimelineControlViewModel Timeline { get; private set; }
         public LayerViewModelCollection Layers { get; private set; }
@@ -100,8 +101,17 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
 			EditLayer = new EditLayerViewModel();
             EditLayer.LayerUpdated += EditLayer_LayerUpdated;
             Settings=new ShiftEditorSettings(this);
+			AllLayers.PropertyChanged += allLayersPropertyChanged;
             SetUpCommandModels();
         }
+
+		private void allLayersPropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName.Equals("ShowLayers") && AllLayers.ShowLayers == Visibility.Visible)
+			{
+				_observers.ForEach(o => o.EditorShowLayersExecuted());
+			}	
+		}
 
 		public ShiftEditorViewModel(IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, bool showMeetingsInContextMenu, IEditableShiftMapper editableShiftMapper)
 			: this(new LayerViewModelCollection(eventAggregator, createLayerViewModelService, new RemoveLayerFromSchedule(), new ReplaceLayerInSchedule()), eventAggregator, createLayerViewModelService, showMeetingsInContextMenu, editableShiftMapper)

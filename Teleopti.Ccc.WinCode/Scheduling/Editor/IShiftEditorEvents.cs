@@ -81,5 +81,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
         /// </summary>
         event EventHandler<EventArgs> Undo;
 
+	    event EventHandler<EventArgs> ShowLayers;
+
     }
 }
