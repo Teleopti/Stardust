@@ -15,6 +15,7 @@ GO
 ALTER TABLE [ReadModel].[ScheduleProjectionReadOnly]
 ADD CONSTRAINT [PK_ScheduleProjectionReadOnly] PRIMARY KEY CLUSTERED (
 	[PersonId] ASC,
-	[BelongsToDate] ASC
-);  
+	[BelongsToDate] ASC,
+	[StartDateTime] ASC
+);
 GO  
