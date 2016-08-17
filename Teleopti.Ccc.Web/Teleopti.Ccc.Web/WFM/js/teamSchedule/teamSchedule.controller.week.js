@@ -28,15 +28,18 @@
 			vm.paginationOptions.pageNumber = 1;			
 			vm.loadSchedules();
 		};
-		
-		vm.scheduleDate = params.selectedDate ? moment(params.selectedDate).startOf('week').toDate() : moment().startOf('week').toDate();
-	
-		vm.onScheduleDateChanged = function () { 
-			if (!moment(vm.scheduleDate).startOf('week').isSame(vm.scheduleDate, 'day')) {
-				vm.scheduleDate = moment(vm.scheduleDate).startOf('week').toDate();
+
+		vm.scheduleDate = params.selectedDate || new Date();
+
+		vm.startOfWeek = moment(vm.scheduleDate).startOf('week').toDate();
+
+		vm.onStartOfWeekChanged = function () {
+			vm.scheduleDate = new Date(vm.startOfWeek.getTime());
+			if (!moment(vm.startOfWeek).startOf('week').isSame(vm.startOfWeek, 'day')) {
+				vm.startOfWeek = moment(vm.startOfWeek).startOf('week').toDate();
 			}
-			vm.weekDays = Util.getWeekdays(vm.scheduleDate);
-			vm.loadSchedules();			
+			vm.weekDays = Util.getWeekdays(vm.startOfWeek);
+			vm.loadSchedules();
 		};
 	
 		vm.paginationOptions = {
@@ -86,7 +89,7 @@
 			if (options == undefined) options = {};
 			var params = {
 				Keyword: options.keyword != undefined ? options.keyword : vm.searchOptions.keyword,
-				Date: options.date != undefined ? options.date : moment(vm.scheduleDate).format("YYYY-MM-DD"),
+				Date: options.date != undefined ? options.date : moment(vm.startOfWeek).format("YYYY-MM-DD"),
 				PageSize: options.pageSize != undefined ? options.pageSize : vm.paginationOptions.pageSize,
 				CurrentPageIndex: options.currentPageIndex != undefined ? options.currentPageIndex : vm.paginationOptions.pageNumber,
 			};

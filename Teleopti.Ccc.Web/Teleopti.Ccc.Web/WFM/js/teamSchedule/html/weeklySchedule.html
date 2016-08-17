@@ -15,12 +15,12 @@
 			</span>
 
 			<span class="datepicker-container">
-				<team-schedule-datepicker selected-date="vm.scheduleDate" on-date-change="vm.onScheduleDateChanged()" step="7"></team-schedule-datepicker>
+				<team-schedule-datepicker selected-date="vm.startOfWeek" on-date-change="vm.onStartOfWeekChanged()" step="7"></team-schedule-datepicker>
 			</span>
 		</div>
 
 		<div class="rightside-part">
-			<view-changer></view-changer>
+			<view-changer schedule-date="vm.scheduleDate"></view-changer>
 		</div>
 	</div>
 

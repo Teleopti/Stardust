@@ -11,6 +11,10 @@
             templateUrl: 'js/teamSchedule/html/view-changer.tpl.html',
             replace: true,
             controllerAs: 'vc',
+            scope: {
+                scheduleDate: '=?'
+            },
+            bindToController: true,
             controller: viewChangerController,
         };
     }
@@ -28,6 +32,10 @@
         };
 
         vc.changeView = function (viewState) {
+            if (vc.scheduleDate) {
+                $state.go(viewState, {selectedDate: vc.scheduleDate});
+                return;
+            }
             $state.go(viewState);
         };
     }

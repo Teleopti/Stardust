@@ -20,7 +20,7 @@
 		</div>
 
 		<div class="rightside-part">
-			<view-changer ng-if="vm.toggles.WeekViewEnabled"></view-changer>
+			<view-changer ng-if="vm.toggles.WeekViewEnabled" schedule-date="vm.scheduleDate"></view-changer>
 			<div id="show-warnings" class="wfm-switch" ng-if="vm.toggles.ShowNightlyRestWarningEnabled">
 				<input type="checkbox" id="validateWarning" ng-model="vm.validateWarningToggle" ng-change="vm.checkValidationWarningForCurrentPage()" />
 				<label for="validateWarning">
