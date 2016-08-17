@@ -56,6 +56,18 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 			}
 		};
 
+		svc.preSelectPeople = function (preSelectedPersonIds, schedules, viewDate) {
+			if (preSelectedPersonIds.length == 0) return;
+			angular.forEach(schedules, function(personSchedule) {
+				var personId = personSchedule.PersonId;
+				if (preSelectedPersonIds.indexOf(personId) > -1) {
+					personSchedule.IsSelected = true;
+					svc.updatePersonSelection(personSchedule);
+					svc.toggleAllPersonProjections(personSchedule, viewDate);
+				}
+			});
+		}
+
 		svc.updatePersonInfo = function (schedules) {
 			angular.forEach(schedules, function (personSchedule) {
 				var personId = personSchedule.PersonId;

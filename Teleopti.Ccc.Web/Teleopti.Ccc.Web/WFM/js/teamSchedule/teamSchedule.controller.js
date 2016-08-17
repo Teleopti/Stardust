@@ -16,16 +16,17 @@
 		'ValidateRulesService',
 		'CommandCheckService',
 		'$state',
+		'$stateParams',
 		TeamScheduleController]);
 
 	function TeamScheduleController($scope, $q, $translate, $mdSidenav, teamScheduleSvc, groupScheduleFactory, personSelectionSvc,
-		scheduleMgmtSvc, toggleSvc, signalRSVC, NoticeService, ValidateRulesService, CommandCheckService, $state) {
+		scheduleMgmtSvc, toggleSvc, signalRSVC, NoticeService, ValidateRulesService, CommandCheckService, $state, $stateParams) {
 
 		var vm = this;
 		var commandContainerId = 'teamschedule-command-container';
 
 		vm.isLoading = false;
-		vm.scheduleDate = new Date();
+		vm.scheduleDate = $stateParams.selectedDate ? $stateParams.selectedDate : new Date();
 		vm.scheduleFullyLoaded = false;
 		vm.hasSelectedAllPeopleInEveryPage = false;
 
@@ -80,7 +81,7 @@
 		vm.permissionsAndTogglesLoaded = false;
 
 		vm.searchOptions = {
-			keyword: '',
+			keyword: $stateParams.keyword ? $stateParams.keyword : '',
 			searchKeywordChanged: false
 		};
 
@@ -160,6 +161,11 @@
 			teamScheduleSvc.searchSchedules.query(params).$promise.then(function (result) {
 				scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment());
 				afterSchedulesLoaded(result);
+
+				if ($stateParams.selectedPersonIds) {
+					personSelectionSvc.preSelectPeople($stateParams.selectedPersonIds, scheduleMgmtSvc.groupScheduleVm.Schedules, vm.scheduleDate);
+				}
+				
 				personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
 				vm.isLoading = false;
 				vm.checkValidationWarningForCurrentPage();
