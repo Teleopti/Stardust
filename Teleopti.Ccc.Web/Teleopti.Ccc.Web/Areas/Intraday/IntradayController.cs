@@ -13,8 +13,8 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 			_latestStatisticsTimeProvider = latestStatisticsTimeProvider;
 		}
 
-		[UnitOfWork, HttpGet, Route("api/intraday/skills")]
-		public virtual IHttpActionResult GetAllSkills()
+		[UnitOfWork, HttpGet, Route("api/intraday/latestStatisticsTime")]
+		public virtual IHttpActionResult GetLatestStatisticsTime()
 		{
 			return Ok(_latestStatisticsTimeProvider.Get());
 		}

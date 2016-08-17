@@ -113,7 +113,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<OutboundAreaModule>();
 			builder.RegisterModule<PeopleAreaModule>();
 			builder.RegisterModule<TeamScheduleAreaModule>();
-			builder.RegisterModule<IntradayAreaModule>();
 			builder.RegisterModule<RequestsAreaModule>();
 			builder.RegisterModule<ReportsAreaModule>();
 

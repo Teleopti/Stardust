@@ -14,29 +14,20 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebIntraday)]
 	public class IntradaySkillAreaController : ApiController
 	{
-        private readonly ISkillAreaRepository _skillAreaRepository;
-		private readonly ForecastedStaffingProvider _forecastedStaffingProvider;
 		private readonly CreateSkillArea _createSkillArea;
 		private readonly FetchSkillArea _fetchSkillArea;
 		private readonly DeleteSkillArea _deleteSkillArea;
 		private readonly IAuthorization _authorization;
-		private readonly MonitorSkillsProvider _monitorSkillsProvider;
 
 		public IntradaySkillAreaController(CreateSkillArea createSkillArea, 
 			FetchSkillArea fetchSkillArea, 
 			DeleteSkillArea deleteSkillArea, 
-			IAuthorization authorization, 
-			MonitorSkillsProvider monitorSkillsProvider,
-			ISkillAreaRepository skillAreaRepository,
-			ForecastedStaffingProvider forecastedStaffingProvider)
+			IAuthorization authorization)
 		{
 			_createSkillArea = createSkillArea;
 			_fetchSkillArea = fetchSkillArea;
 			_deleteSkillArea = deleteSkillArea;
 			_authorization = authorization;
-			_monitorSkillsProvider = monitorSkillsProvider;
-		    _skillAreaRepository = skillAreaRepository;
-			_forecastedStaffingProvider = forecastedStaffingProvider;
 		}
 
 		[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebModifySkillArea)]
@@ -65,26 +56,10 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 			return Ok();
 		}
 
-		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillareastatistics/{id}")]
-		public virtual IHttpActionResult MonitorSkillAreaStatistics(Guid Id)
-		{
-            var skillArea = _skillAreaRepository.Get(Id);
-            var skillIdList = skillArea.Skills.Select(skill => skill.Id).ToArray();
-            return Ok(_monitorSkillsProvider.Load(skillIdList));
-		}
-
 		[UnitOfWork, HttpGet, Route("api/SkillArea/For")]
 		public virtual IHttpActionResult NameFor(Guid skillAreaId)
 		{
 			return Ok(_fetchSkillArea.Get(skillAreaId));
-		}
-
-		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillareastaffing/{id}")]
-		public virtual IHttpActionResult MonitorSkillAreaStaffing(Guid Id)
-		{
-			var skillArea = _skillAreaRepository.Get(Id);
-			var skillIdList = skillArea.Skills.Select(skill => skill.Id).ToArray();
-			return Ok(_forecastedStaffingProvider.Load(skillIdList));
 		}
 	}
 
