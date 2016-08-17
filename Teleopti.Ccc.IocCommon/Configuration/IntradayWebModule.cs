@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<LoadSkillInIntradays>().As<ILoadAllSkillInIntradays>().SingleInstance();
 			builder.RegisterType<IntradayMonitorDataLoader>().As<IIntradayMonitorDataLoader>().SingleInstance();
 			builder.RegisterType<MonitorSkillsProvider>().SingleInstance();
+			builder.RegisterType<LatestStatisticsTimeProvider>().SingleInstance();
 			builder.RegisterType<ScheduleForecastSkillReadModelRepository>().As<IScheduleForecastSkillReadModelRepository>().SingleInstance();
 			builder.RegisterType<ScheduleForecastSkillProvider>().As<IScheduleForecastSkillProvider>().SingleInstance();
 			if (_configuration.Toggle(Toggles.AddActivity_TriggerResourceCalculation_39346))

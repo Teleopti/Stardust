@@ -159,6 +159,7 @@
     <Compile Include="FakeData\FakeAnalyticsUnitOfWorkFactory.cs" />
     <Compile Include="FakeData\FakeBusinessRuleProvider.cs" />
     <Compile Include="FakeData\FakeIntervalLengthFetcher.cs" />
+    <Compile Include="FakeData\FakeLatestStatisticsIntervalIdLoader.cs" />
     <Compile Include="FakeData\FakeNewBusinessRuleCollection.cs" />
     <Compile Include="FakeData\FakeSchedulingResultStateHolderProvider.cs" />
     <Compile Include="FakeData\FakeScheduleRangePersister.cs" />

@@ -245,6 +245,7 @@
     <Compile Include="Common\ScheduleChangedEventDetector.cs" />
     <Compile Include="ApplicationLayer\Skill\AnalyticsSkillUpdaterTest.cs" />
     <Compile Include="Intraday\ForecastedStaffingProviderTest.cs" />
+    <Compile Include="Intraday\LatestStatisticsTimeProviderTest.cs" />
     <Compile Include="ReadModelValidator\ReadModelValidatorTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationCascadingDesktopTest.cs" />

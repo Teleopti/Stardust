@@ -245,6 +245,7 @@
     <Compile Include="Repositories\Analytics\AnalyticsBridgeGroupPagePersonRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsGroupPageRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsTeamRepositoryTest.cs" />
+    <Compile Include="Repositories\Analytics\LatestStatisticsIntervalIdLoaderTest.cs" />
     <Compile Include="Repositories\DayOffRulesRepositoryTest.cs" />
     <Compile Include="Repositories\IndexMaintenanceRepositoryTest.cs" />
     <Compile Include="Repositories\LoadSkillInIntradaysTest.cs" />

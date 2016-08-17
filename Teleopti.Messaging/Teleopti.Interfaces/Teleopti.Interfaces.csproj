@@ -730,6 +730,7 @@
     <Compile Include="Infrastructure\IHangfireUtilities.cs" />
     <Compile Include="Infrastructure\IHttpServer.cs" />
     <Compile Include="Infrastructure\IIntervalLengthFetcher.cs" />
+    <Compile Include="Infrastructure\ILatestStatisticsIntervalIdLoader.cs" />
     <Compile Include="Infrastructure\ILicenseStatusXml.cs" />
     <Compile Include="Infrastructure\ILoadPasswordPolicyService.cs" />
     <Compile Include="Infrastructure\IScheduleDifferenceSaver.cs" />
