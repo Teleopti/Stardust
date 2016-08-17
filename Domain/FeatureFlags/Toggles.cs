@@ -29,6 +29,7 @@
 		RTA_Optimize_39667,
 		RTA_MonitorBySkillArea_39337,
 		RTA_RuleMappingOptimization_39812,
+		RTA_BatchConnectionOptimization_40116,
 
 		MessageBroker_SchedulingScreenMailbox_32733,
 

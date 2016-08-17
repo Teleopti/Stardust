@@ -18,6 +18,106 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		void ForSynchronize(Action<Context> action);
 	}
 
+	public class ContextLoaderWithSingleTransaction : ContextLoader
+	{
+		public ContextLoaderWithSingleTransaction(
+			IDatabaseLoader databaseLoader,
+			INow now,
+			StateMapper stateMapper,
+			IAgentStatePersister agentStatePersister,
+			IMappingReader mappingReader,
+			IDatabaseReader databaseReader,
+			AppliedAdherence appliedAdherence,
+			ProperAlarm appliedAlarm) : base(
+				databaseLoader,
+				now,
+				stateMapper,
+				agentStatePersister,
+				mappingReader,
+				databaseReader,
+				appliedAdherence,
+				appliedAlarm
+				)
+		{
+		}
+
+		public override void ForBatch(BatchInputModel batch, Action<Context> action)
+		{
+			var exceptions = new List<Exception>();
+
+			WithUnitOfWork(() =>
+			{
+				var dataSourceId = ValidateSourceId(batch);
+
+				batch.States.ForEach(input =>
+				{
+					try
+					{
+						var found = false;
+
+						_databaseReader.LoadPersonOrganizationData(dataSourceId, input.UserCode)
+							.ForEach(x =>
+							{
+								found = true;
+
+								action.Invoke(new Context(
+									new InputInfo
+									{
+										PlatformTypeId = batch.PlatformTypeId,
+										SourceId = batch.SourceId,
+										SnapshotId = batch.SnapshotId,
+										StateCode = input.StateCode,
+										StateDescription = input.StateDescription
+									},
+									x.PersonId,
+									x.BusinessUnitId,
+									x.TeamId,
+									x.SiteId,
+									() => _agentStatePersister.Get(x.PersonId),
+									() => _databaseReader.GetCurrentSchedule(x.PersonId),
+									s =>
+									{
+										return new MappingsState(() =>
+										{
+											var stateCodes =
+												new[] {s.Stored?.StateCode, s.Input.StateCode}
+													.Distinct()
+													.ToArray();
+											var activities =
+												new[] {s.Schedule.CurrentActivityId(), s.Schedule.PreviousActivityId(), s.Schedule.NextActivityId()}
+													.Distinct()
+													.ToArray();
+											return _mappingReader.ReadFor(stateCodes, activities);
+										});
+									},
+									c => _agentStatePersister.Persist(c.MakeAgentState()),
+									_now,
+									_stateMapper,
+									_appliedAdherence,
+									_appliedAlarm
+									));
+							});
+
+						if (!found)
+							throw new InvalidUserCodeException(string.Format("No person found for SourceId {0} and UserCode {1}",
+								batch.SourceId, input.UserCode));
+
+					}
+					catch (Exception e)
+					{
+						exceptions.Add(e);
+					}
+
+				});
+
+			});
+
+			if (exceptions.Any())
+				throw new AggregateException(exceptions);
+
+		}
+	}
+
 	public class ContextLoaderWithParalellBatch : ContextLoader
 	{
 		public ContextLoaderWithParalellBatch(
@@ -83,13 +183,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class ContextLoader : IContextLoader
 	{
 		private readonly IDatabaseLoader _databaseLoader;
-		private readonly INow _now;
-		private readonly StateMapper _stateMapper;
-		private readonly IAgentStatePersister _agentStatePersister;
-		private readonly IMappingReader _mappingReader;
-		private readonly IDatabaseReader _databaseReader;
-		private readonly AppliedAdherence _appliedAdherence;
-		private readonly ProperAlarm _appliedAlarm;
+		protected readonly INow _now;
+		protected readonly StateMapper _stateMapper;
+		protected readonly IAgentStatePersister _agentStatePersister;
+		protected readonly IMappingReader _mappingReader;
+		protected readonly IDatabaseReader _databaseReader;
+		protected readonly AppliedAdherence _appliedAdherence;
+		protected readonly ProperAlarm _appliedAlarm;
 
 		public ContextLoader(
 			IDatabaseLoader databaseLoader,
@@ -112,7 +212,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_appliedAlarm = appliedAlarm;
 		}
 
-		protected int validateSourceId(StateInputModel input)
+		protected int ValidateSourceId(IValidatable input)
 		{
 			if (string.IsNullOrEmpty(input.SourceId))
 				throw new InvalidSourceException("Source id is required");
@@ -136,7 +236,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			WithUnitOfWork(() =>
 			{
-				var dataSourceId = validateSourceId(input);
+				var dataSourceId = ValidateSourceId(input);
 				var userCode = input.UserCode;
 
 				_databaseReader.LoadPersonOrganizationData(dataSourceId, userCode)
@@ -145,7 +245,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						found = true;
 
 						action.Invoke(new Context(
-							input,
+							new InputInfo
+							{
+								PlatformTypeId = input.PlatformTypeId,
+								SourceId = input.SourceId,
+								SnapshotId = input.SnapshotId,
+								StateCode = input.StateCode,
+								StateDescription = input.StateDescription
+							}, 
 							x.PersonId,
 							x.BusinessUnitId,
 							x.TeamId,
@@ -260,11 +367,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			agentsNotAlreadyLoggedOut.ForEach(x =>
 			{
 				action.Invoke(new Context(
-					new StateInputModel
+					new InputInfo
 					{
 						StateCode = stateCode,
 						PlatformTypeId = Guid.Empty.ToString(),
-						UserCode = "",
 						SnapshotId = snapshotId
 					}, 
 					x.PersonId,
@@ -294,7 +400,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				.ForEach(x =>
 				{
 					action.Invoke(new Context(
-						new StateInputModel
+						new InputInfo
 						{
 							StateCode = x.StateCode,
 							PlatformTypeId = x.PlatformTypeId.ToString()

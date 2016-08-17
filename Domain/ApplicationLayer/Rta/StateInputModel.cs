@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 	{
 		string AuthenticationKey { get; set; }
 		string PlatformTypeId { get; set; }
+		string SourceId { get; set; }
 	}
 
 	public class CloseSnapshotInputModel
@@ -73,12 +74,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 			return $"AuthenticationKey: {AuthenticationKey}, UserCode: {UserCode}, StateCode: {StateCode}, StateDescription: {StateDescription}, PlatformTypeId: {PlatformTypeId}, SourceId: {SourceId}, SnapshotId: {SnapshotId}";
 		}
 	}
-
-	public static class ExternalUserStateInputModelExtensions
-	{
-		public static Guid ParsedPlatformTypeId(this StateInputModel input)
-		{
-			return input.PlatformTypeId != null ? Guid.Parse(input.PlatformTypeId) : Guid.Empty;
-		}
-	}
+	
 }

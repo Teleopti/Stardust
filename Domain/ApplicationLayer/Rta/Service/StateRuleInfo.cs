@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			string stateCode,
 			Guid platformTypeId,
 			Guid businessUnitId,
-			StateInputModel input,
+			InputInfo input,
 			ScheduleInfo schedule,
 			StateMapper stateMapper
 			)

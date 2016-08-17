@@ -40,7 +40,9 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
+	[Toggle(Domain.FeatureFlags.Toggles.RTA_Optimize_39667)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_RuleMappingOptimization_39812)]
+	[Toggle(Domain.FeatureFlags.Toggles.RTA_BatchConnectionOptimization_40116)]
 	public class DomainTestAttribute : IoCTestAttribute
 	{
 		protected override void Setup(ISystem system, IIocConfiguration configuration)

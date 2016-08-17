@@ -4,7 +4,6 @@ using log4net.Config;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
