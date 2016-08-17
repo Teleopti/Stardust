@@ -86,7 +86,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			_personRequests = new List<IPersonRequest>();
 			_personIds = new List<Guid>
 			{
-				//DO NOT CHANGE THE ORDER OF THE GUIDS!
 				new Guid("92121FA5-FB40-4458-800E-A1410113C461"),
 				new Guid("69A04DAE-9DA7-409B-BDA5-A2E500D0FBB9"),
 				new Guid("61165F06-671C-407E-9F4B-A1410113C479"),
@@ -107,7 +106,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 				new Guid("EE0AD86B-EA5A-447E-8EBB-A5E00102398D"),
 				new Guid("12728761-0ED6-422B-B2B5-A5E001051F1E"),
 				new Guid("BF50C741-A780-4930-A64B-A5E00105F325")
-
 			};
 
 

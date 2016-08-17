@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
@@ -23,7 +22,7 @@ using Teleopti.Messaging.Client;
 namespace Teleopti.Ccc.Requests.PerformanceTest
 {
 	[DomainTest]
-	public class MultiAbsenceRequestHandlerTest : ISetup
+	public class ProcessBulkAbsenceRequests : ISetup
 	{
 		public IAbsenceRepository AbsenceRepository;
 		public AsSystem AsSystem;

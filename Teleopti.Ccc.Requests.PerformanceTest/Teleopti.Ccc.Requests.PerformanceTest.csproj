@@ -53,7 +53,7 @@
     </Compile>
     <Compile Include="IProcessMultipleAbsenceRequest.cs" />
     <Compile Include="MultiAbsenceRequestsTest.cs" />
-    <Compile Include="MultiAbsenceRequestHandlerTest.cs" />
+    <Compile Include="ProcessBulkAbsenceRequests.cs" />
     <Compile Include="ProcessMultipleAbsenceRequests.cs" />
   </ItemGroup>
   <ItemGroup>
