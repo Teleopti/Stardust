@@ -14809,7 +14809,7 @@ These options are activated:
     <comment>Override for these agents option text of fixing activity overlapping issue when adding activities on top of Not Allow Meeting activities.</comment>
   </data>
   <data name="ManageOpenHours" xml:space="preserve">
-    <value>Manage open hours</value>
+    <value>Site open hours</value>
   </data>
   <data name="SaveSiteOpenHoursSuccess" xml:space="preserve">
     <value>Open hours have been updated</value>

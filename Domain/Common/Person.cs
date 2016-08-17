@@ -888,13 +888,13 @@ namespace Teleopti.Ccc.Domain.Common
 			AddPersonPeriod(period);
 		}
 
-	    public virtual TimePeriod? SiteOpenHourPeriod(DateOnly dateOnly)
+	    public virtual ISiteOpenHour SiteOpenHour(DateOnly dateOnly)
 	    {
 			var siteOpenHours = MyTeam(dateOnly).Site.OpenHourCollection;
 			foreach (var siteOpenHour in siteOpenHours)
 			{
 				if (siteOpenHour.WeekDay == dateOnly.DayOfWeek)
-					return siteOpenHour.TimePeriod;
+					return siteOpenHour;
 			}
 			return null;
 		}

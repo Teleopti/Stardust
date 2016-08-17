@@ -92,12 +92,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 		private static TimePeriod getPersonSiteOpenHourPeriod(IPerson person, DateOnly shiftTradeDate)
 		{
-			var siteOpenHourPeriod = person.SiteOpenHourPeriod(shiftTradeDate);
-			if (!siteOpenHourPeriod.HasValue)
+			var siteOpenHour = person.SiteOpenHour(shiftTradeDate);
+			if (siteOpenHour == null)
 			{
-				siteOpenHourPeriod = new TimePeriod(0, 0, 23, 59);
+				return new TimePeriod(0, 0, 23, 59);
 			}
-			return siteOpenHourPeriod.Value;
+			if (siteOpenHour.IsClosed)
+			{
+				return new TimePeriod();
+			}
+			return siteOpenHour.TimePeriod;
 		}
 
 		private bool isFilterEnabled()

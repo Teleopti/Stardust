@@ -14776,7 +14776,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manage open hours.
+        ///   Looks up a localized string similar to Site open hours.
         /// </summary>
         public static string ManageOpenHours {
             get {

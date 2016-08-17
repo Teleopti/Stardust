@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -10,7 +9,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
@@ -67,6 +65,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			result.Count().Should().Be(0);
 		}
 
+		[Test]
+		public void ShouldReturnResponseWhenSiteOpenHoursIsClosed()
+		{
+			var person = createPersonWithSiteOpenHours(8, 17, true);
+			var result = executeValidate(person, 7, 16);
+			result.Count().Should().Be(1);
+			var response = result.FirstOrDefault();
+			response.Person.Equals(person);
+		}
+
 		private IEnumerable<IBusinessRuleResponse> executeValidate(IPerson person, int startHour, int endHour)
 		{
 			var schedulDate = new DateOnly(2016, 8, 8);
@@ -97,15 +105,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			return personSchedule;
 		}
 
-		private IPerson createPersonWithSiteOpenHours(int startHour, int endHour)
+		private IPerson createPersonWithSiteOpenHours(int startHour, int endHour, bool isOpenHoursClosed = false)
 		{
 			var team = TeamFactory.CreateTeam("team", "site");
 			var siteOpenHour = new SiteOpenHour()
 			{
-				IsClosed = true,
 				Parent = team.Site,
 				TimePeriod = new TimePeriod(startHour, 0, endHour, 0),
-				WeekDay = DayOfWeek.Monday
+				WeekDay = DayOfWeek.Monday,
+				IsClosed = isOpenHoursClosed
 			};
 			team.Site.AddOpenHour(siteOpenHour);
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(_periodStartDate, team);

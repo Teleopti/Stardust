@@ -103,6 +103,41 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		[Test]
+		public void ShouldFilterScheduleViewWhenSiteOpenHoursIsClosed()
+		{
+			var personFrom = createPersonWithSiteOpenHours(8, 15, true);
+			prepareData(personFrom);
+			var personFromScheduleView = createShiftTradeAddPersonScheduleViewModel(personFrom, _shiftTradeDate, new[]
+			{
+				new TimePeriod(8, 30, 10, 30),
+				new TimePeriod(11, 30, 14, 30),
+			});
+
+			var person1 = createPersonWithSiteOpenHours(8, 15);
+			var person2 = createPersonWithSiteOpenHours(8, 11);
+
+			var shiftTradeAddPersonScheduleViews = new[]
+			{
+				createShiftTradeAddPersonScheduleViewModel(person1, _shiftTradeDate, new[]
+				{
+					new TimePeriod(8, 30, 10, 30),
+					new TimePeriod(11, 30, 14, 30),
+				}),
+				createShiftTradeAddPersonScheduleViewModel(person2, _shiftTradeDate, new[]
+				{
+					new TimePeriod(8, 30, 10, 30),
+					new TimePeriod(11, 30, 14, 30),
+				})
+			};
+
+			var datePersons = new DatePersons { Date = _shiftTradeDate, Persons = new[] { person1, person2 } };
+			var filteredShiftTradeAddPersonScheduleViews =
+				Target.FilterScheduleView(shiftTradeAddPersonScheduleViews, personFromScheduleView, datePersons).ToList();
+
+			filteredShiftTradeAddPersonScheduleViews.Count.Should().Be(0);
+		}
+
+		[Test]
 		public void ShouldReturnScheduleViewsWithoutSiteOpenHourSetting()
 		{
 			var personFrom = PersonFactory.CreatePersonWithPersonPeriodTeamSite(_periodStartDate);
@@ -244,12 +279,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			};
 		}
 
-		private IPerson createPersonWithSiteOpenHours(int startHour, int endHour)
+		private IPerson createPersonWithSiteOpenHours(int startHour, int endHour, bool isOpenHoursClosed = false)
 		{
 			var team = TeamFactory.CreateTeam("team", "site");
 			var siteOpenHour = new SiteOpenHour()
 			{
-				IsClosed = true,
+				IsClosed = isOpenHoursClosed,
 				Parent = team.Site,
 				TimePeriod = new TimePeriod(startHour, 0, endHour, 0),
 				WeekDay = DayOfWeek.Monday

@@ -270,6 +270,6 @@ namespace Teleopti.Interfaces.Domain
 		 void RemoveExternalLogOn(IExternalLogOn externalLogOn, IPersonPeriod personPeriod);
 	    bool IsTerminated();
 	    PersonWorkDay[] AverageWorkTimes(DateOnlyPeriod period);
-	    TimePeriod? SiteOpenHourPeriod(DateOnly dateOnly);
+	    ISiteOpenHour SiteOpenHour(DateOnly dateOnly);
     }
 }

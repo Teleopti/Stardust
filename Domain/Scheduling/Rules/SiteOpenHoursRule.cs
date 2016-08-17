@@ -71,12 +71,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		private static TimePeriod getPersonSiteOpenHourPeriod(IPerson person, DateOnly scheduleDate)
 		{
-			var siteOpenHourPeriod = person.SiteOpenHourPeriod(scheduleDate);
-			if (!siteOpenHourPeriod.HasValue)
+			var siteOpenHour = person.SiteOpenHour(scheduleDate);
+			if (siteOpenHour == null)
 			{
-				siteOpenHourPeriod = new TimePeriod(0, 0, 23, 59);
+				return new TimePeriod(0, 0, 23, 59);
 			}
-			return siteOpenHourPeriod.Value;
+			if (siteOpenHour.IsClosed)
+			{
+				return new TimePeriod();
+			}
+			return siteOpenHour.TimePeriod;
 		}
 
 		private IBusinessRuleResponse createResponse(IPerson person, DateOnly scheduleDate, string message)
