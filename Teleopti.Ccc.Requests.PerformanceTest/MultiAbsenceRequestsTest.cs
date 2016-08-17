@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 		public IDataSourceScope DataSource;
 		public IPersonRepository PersonRepository;
 		public IPersonRequestRepository PersonRequestRepository;
-		public NewAbsenceRequestHandler Target;
+		public INewAbsenceRequestHandler Target;
 		public WithUnitOfWork WithUnitOfWork;
 		public IWorkflowControlSetRepository WorkflowControlSetRepository;
 		private IEnumerable<Guid> _personIds;
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddModule(new CommonModule(configuration));
-			system.UseTestDouble<NewAbsenceRequestHandler>().For<NewAbsenceRequestHandler>();
+			system.UseTestDouble<NewAbsenceRequestHandler>().For<INewAbsenceRequestHandler>();
 			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
 			system.AddService<Database>();
 			system.AddModule(new TenantServerModule(configuration));
