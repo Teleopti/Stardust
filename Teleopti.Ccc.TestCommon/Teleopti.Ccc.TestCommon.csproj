@@ -205,11 +205,7 @@
     <Compile Include="FakeRepositories\FakeSkillTypeRepository.cs" />
     <Compile Include="FakeRepositories\PersonAssignmentRepositoryWithRandomLatency.cs" />
     <Compile Include="FakeRepositories\Rta\FakeAgentStatePersister.cs" />
-    <Compile Include="FakeRepositories\Rta\FakeAllLicenseActivator.cs" />
-    <Compile Include="FakeRepositories\Rta\FakeAllLicenseActivatorProvider.cs" />
-    <Compile Include="FakeRepositories\Rta\FakeNoRtaLicenseActivator.cs" />
     <Compile Include="FakeRepositories\Rta\FakeMappingReadModelPersister.cs" />
-    <Compile Include="FakeRepositories\Rta\FakeNoRtaLicenseActivatorProvider.cs" />
     <Compile Include="FakeRepositories\Rta\FakeNumberOfAgentsInSiteReader.cs" />
     <Compile Include="FakeRepositories\Rta\FakeNumberOfAgentsInTeamReader.cs" />
     <Compile Include="FakeData\FakeRequestFactory.cs" />

@@ -175,7 +175,6 @@
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteAdherence\OptimizeReadingDataFromDatabase.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TeamAdherence\OptimizeReadingDataFromDatabase.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ExecuteBatchesInParallelTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\NoRtaLicenseTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelOutOfAdherencesTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\EmptyExistingStateTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStatesViewModelBuilderTest.cs" />
