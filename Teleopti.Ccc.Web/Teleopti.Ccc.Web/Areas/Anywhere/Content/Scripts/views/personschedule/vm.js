@@ -108,21 +108,20 @@ define([
 		}
 
 		var layers = function () {
-			return getLayerArray(lazy(self.Persons())
-				.filter(function(x) {
-					return self.Resources.MyTeam_MakeTeamScheduleConsistent_31897
-						? x.Id == self.PersonId()
-						: true;
+            return getLayerArray(lazy(self.Persons())
+				.filter(function (x) {
+                    return x.Id === self.PersonId();
 				}));
 		};
+
+	    // layers only belonging to the chosen agent
 		this.Layers = layers;
 
-		var allLayers = function () {
-			return self.Resources.MyTeam_MakeTeamScheduleConsistent_31897
-				? getLayerArray(lazy(self.Persons()))
-				: layers();
+	    // allLayers is all of the layers displayed in the timeline, for all agents belonging to this group
+		this.allLayers = function () {
+			return getLayerArray(lazy(self.Persons()));
 		};
-		this.TimeLine = new timeLineViewModel(ko.computed(function () { return allLayers().toArray(); }));
+		this.TimeLine = new timeLineViewModel(ko.computed(function () { return self.allLayers().toArray(); }));
 		
 		this.WorkingShift = ko.computed(function () {
 			var person = self.SelectedPerson();
@@ -170,17 +169,12 @@ define([
 			return self.AddingActivity() || self.AddingFullDayAbsence() || self.AddingIntradayAbsence() || self.MovingActivity();
 		});
 
-		this.DisplayGroupMates = ko.computed(function () {
-			return self.Resources.MyTeam_MakeTeamScheduleConsistent_31897
-				? true
-				: self.AddingActivity();
-		});
-
 		this.SetViewOptions = function (options) {
 			self.ScheduleDate(timezoneDisplay.FromDate(moment(options.date, 'YYYYMMDD'), timezoneCurrent.IanaTimeZone()));
 			self.BusinessUnitId(options.buid);
 			self.PersonId(options.personid || options.id);
 			self.GroupId(options.groupid);
+
 			self.SelectedStartMinutes(Number(options.minutes));
 			self.initMoveActivityForm();
 		};
@@ -233,13 +227,6 @@ define([
 		this.UpdateSchedules = function (data) {
 			var schedules = data.Schedules;
 
-			// if we dont display group mates, then filter out their data
-			if (!self.DisplayGroupMates()) {
-				schedules = lazy(schedules)
-					.filter(function (x) {return x.PersonId == self.PersonId(); })
-					.toArray();
-			}
-
 			// data might include the same person more than once, with schedule for more than one day
 			self.Persons([]);
 			var people = [];
@@ -276,8 +263,7 @@ define([
 			}
 
 			var activeLayer;
-			if (self.Resources.MyTeam_MakeTeamScheduleConsistent_31897 &&
-					(isNaN(self.MoveActivityForm.SelectedStartMinutes()) || self.MoveActivityForm.SelectedStartMinutes() == 0)) {
+			if ((isNaN(self.MoveActivityForm.SelectedStartMinutes()) || self.MoveActivityForm.SelectedStartMinutes() == 0)) {
 				activeLayer = layers().first();
 				if (activeLayer != undefined) {
 					self.MoveActivityForm.SelectedStartMinutes(activeLayer.StartMinutes());
@@ -302,7 +288,7 @@ define([
 
 		this.SelectLayer = function (layer, parents) {
 			if (parents[1].hasOwnProperty('Id')) return; //Only activity for selected agent can be selected.
-			if (!self.Resources.MyTeam_MakeTeamScheduleConsistent_31897 || !self.MovingActivity()) return;
+			if (!self.MovingActivity()) return;
 			self.MoveActivityForm.reset();
 			self.MoveActivityForm.IsChangingLayer(true);
 			deselectAllLayersExcept();

@@ -157,7 +157,6 @@ Scenario: Remove absence starting from day 2 on night shift
 	| End time   | 03:00 |
 	| Color      | Red   |
 
-@OnlyRunIfEnabled('MyTeam_MakeTeamScheduleConsistent_31897')
 Scenario: Back to viewing schedule after cancel remove absence
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has an absence with

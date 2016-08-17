@@ -167,8 +167,6 @@
 			"should be able to preselect person and layer": function () {
 				var vm = new viewModel();
 
-				vm.Resources = { MyTeam_MakeTeamScheduleConsistent_31897: true };
-
 				vm.SetViewOptions({
 					date: "20150214",
 					personid: "1",

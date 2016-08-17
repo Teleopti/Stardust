@@ -82,7 +82,6 @@ Scenario: The team leader should be able to move an activity by drag and drop
 	| Start time | 13:00 |
 	| End time   | 14:00 |
 
-	@OnlyRunIfEnabled('MyTeam_MakeTeamScheduleConsistent_31897')
 Scenario: The team leader should be able to change the current selected activity
 	Given 'John King' has a person period with
 	| Field      | Value      |
@@ -139,7 +138,6 @@ Scenario: Back to viewing schedule after moving an activity
 	And I save the shift
 	Then I should be viewing schedules for '2013-11-18'
 
-@OnlyRunIfEnabled('MyTeam_MakeTeamScheduleConsistent_31897')
 Scenario: Back to viewing schedule after cancel move activity
 	Given 'John King' has a person period with
 	| Field      | Value      |

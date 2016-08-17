@@ -237,7 +237,6 @@ Scenario: Back to viewing schedule after adding a full day absence
 	And I click 'apply'
 	Then I should be viewing schedules for '2013-04-08'
 
-@OnlyRunIfEnabled('MyTeam_MakeTeamScheduleConsistent_31897')
 Scenario: Back to viewing schedule after cancel add full day absence
 	Given I have the role 'Anywhere Team Green'
 	When I view person schedules add full day absence form for 'Pierre Baldi' in 'Team green' on '2013-04-08'

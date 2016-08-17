@@ -47,8 +47,6 @@
 
 		MyTimeWeb_ShowSeatBookingMonthView_39068,
 
-		MyTeam_MakeTeamScheduleConsistent_31897,
-
 		Wfm_MinimumScaffolding_32659,
 		Wfm_ResourcePlanner_32892,
 		Wfm_ChangePlanningPeriod_33043,

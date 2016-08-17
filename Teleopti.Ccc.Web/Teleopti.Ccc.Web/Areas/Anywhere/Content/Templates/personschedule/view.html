@@ -1,6 +1,5 @@
 <div class="person-schedule container">
 	<div class="row">
-		<!-- ko if: $root.Resources.MyTeam_MakeTeamScheduleConsistent_31897 -->
 		<div class="col-md-3 input-group date pull-right" style="padding-right: 15px">
 			<input type="text" data-bind="value: FormattedScheduleDate" readonly="readonly" class="start-date form-control" />
 			<span class="input-group-btn">
@@ -9,7 +8,6 @@
 				</span>
 			</span>
 		</div>
-		<!-- /ko -->
 		<div class="col-md-12">
 			<div class="relative">
 
@@ -131,9 +129,7 @@
 															</div>
 															<!-- /ko -->
 															<div>
-																<!-- ko if: $root.Resources.MyTeam_MakeTeamScheduleConsistent_31897 -->
 																<button class="btn btn-default cancel" data-bind="text: $root.Resources.Cancel, click: $root.backToTeamSchedule"></button>
-																<!-- /ko -->
 																<button class="btn btn-primary apply" data-bind="disable: $root.Loading() || ErrorMessage(), text: $root.Resources.AddIntradayAbsence, click: Apply"></button>
 															</div>
 														</td>
@@ -199,9 +195,7 @@
 															</div>
 															<!-- /ko -->
 															<div>
-																<!-- ko if: $root.Resources.MyTeam_MakeTeamScheduleConsistent_31897 -->
 																<button class="btn btn-default cancel" data-bind="text: $root.Resources.Cancel, click: $root.backToTeamSchedule"></button>
-																<!-- /ko -->
 																<button class="btn btn-primary apply" data-bind="disable: $root.Loading() || ErrorMessage(), text: $root.Resources.AddActivity, click: Apply"></button>
 															</div>
 														</td>
@@ -303,9 +297,7 @@
 															</div>
 															<!-- /ko -->
 															<div>
-																<!-- ko if: $root.Resources.MyTeam_MakeTeamScheduleConsistent_31897 -->
                                                                 <button class="btn btn-default cancel" data-bind="disable: $root.Loading, text: $root.Resources.Cancel, click: $root.backToTeamSchedule"></button>
-																<!-- /ko -->
 																<button class="btn btn-primary apply" data-bind="disable: InvalidEndDate() || $root.Loading(), text: $root.Resources.AddFullDayAbsence, click: Apply"></button>
 															</div>
 														</td>
@@ -431,9 +423,7 @@
 											</tbody>
 										</table>
 										<div>
-											<!-- ko if: $root.Resources.MyTeam_MakeTeamScheduleConsistent_31897 -->
 											<button class="btn btn-default cancel" data-bind="text: $root.Resources.Cancel, click: $root.backToTeamSchedule"></button>
-											<!-- /ko -->
 										</div>
 									</div>
 									<div class="col-md-4"></div>

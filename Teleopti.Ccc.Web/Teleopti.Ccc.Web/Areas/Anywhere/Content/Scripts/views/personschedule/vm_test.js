@@ -383,14 +383,15 @@
 					var vm = new viewModel();
 
 					vm.SetViewOptions({
-						id: 1,
+					    id: 1,
+                        groupid: 1,
 						date: '20140616'
 					});
 					var data = {
 						Schedules: [
 							{
-								Date: '2014-06-16',
-								PersonId: 1,
+							    Date: '2014-06-16',
+							    PersonId: 1,
 								Projection: [
 									{
 										Start: '2014-06-16 8:00',
@@ -412,12 +413,12 @@
 					};
 					vm.setTimelineWidth(600);
 					vm.AddingActivity(true);
-					vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Berlin' });
+					vm.UpdateData({ PersonId: 1, GroupId: 1, IanaTimeZoneOther: 'Europe/Berlin' });
 					vm.UpdateSchedules(data);
+				    var layers = vm.allLayers();
+					assert.equals(layers.size(), 2);
 
-					assert.equals(vm.Layers().size(), 2);
-
-					vm.Layers().forEach(function (layer) {
+					layers.forEach(function (layer) {
 						var startPX = layer.StartPixels();
 						var lengthPX = layer.LengthPixels();
 						assert.isTrue(vm.TimeLine.WidthPixels() >= (startPX + lengthPX));
@@ -468,7 +469,7 @@
 					});
 					
 					vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Istanbul', PersonAbsences: [{ StartTime: '2014-06-16 08:00', EndTime: '2014-06-16 10:00' }] });
-					vm.UpdateSchedules([]);
+					vm.UpdateSchedules({ Schedules: [] });
 
 					assert.equals(vm.Absences().length, 1);
 
@@ -667,49 +668,6 @@
 				    result = vm.MoveActivityForm.isMovingToAnotherDay();
 				    assert.equals(result, true);
 
-				},
-				"should select layer starts at midnight in move activity form": function () {
-				    var vm = new viewModel();
-
-					vm.Resources = { MyTeam_MakeTeamScheduleConsistent_31897: false };
-
-				    vm.SetViewOptions({
-				        id: 1,
-				        date: '20131118',
-				        groupid: 2,
-				        minutes: 0
-				    });
-
-					var data = {
-						Schedules: [
-							{
-								Date: '2013-11-18',
-								PersonId: 1,
-								Projection: [
-									{
-										Start: '2013-11-18 23:00',
-										Minutes: 60
-									},
-									{
-										Start: '2013-11-19 00:00',
-										Minutes: 60
-									},
-									{
-										Start: '2013-11-19 01:00',
-										Minutes: 60
-									}
-								]
-							}
-						]
-					};
-				    vm.MovingActivity(true);
-				    vm.UpdateData({ PersonId: 1, IanaTimeZoneOther: 'Europe/Berlin' });
-				    vm.UpdateSchedules(data);
-
-				    var selectedLayer = vm.SelectedLayer();
-				    var momentExpected = moment('2013-11-19 00:00', 'YYYY-MM-DD HH:mm');
-
-				    assert.equals(selectedLayer.StartTime(), momentExpected.format('HH:mm'));
 				},
 
 				"should show timeline correct for daylight saving time begin boundary day": function (done) {

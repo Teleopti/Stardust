@@ -34,9 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[When(@"I choose to '(.*)' from (.*) menu")]
 		public void WhenIChooseActionFromMenu(CssClass cssClass, string menuName)
 		{
-			var className = ToggleStepDefinition.CheckToggleEnabled(Toggles.MyTeam_MakeTeamScheduleConsistent_31897)
-				? string.Format(".schedule-menu a.{0}", cssClass.Name)
-				: string.Format(".{0}-menu a.{1}", menuName, cssClass.Name);
+			var className = string.Format(".schedule-menu a.{0}", cssClass.Name);
 
 			Browser.Interactions.Click(className);
 		}
@@ -62,8 +60,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should not see '(.*)' option in (.*) menu")]
 		public void ThenIShouldNotSeeOptionInActionMenu(CssClass cssClass, string menuName)
 		{
-			var toggle31897Enabled = ToggleStepDefinition.CheckToggleEnabled(Toggles.MyTeam_MakeTeamScheduleConsistent_31897);
-			var existingItemClass = toggle31897Enabled ? ".schedule-menu a" : string.Format(".{0}-menu a", menuName);
+			var existingItemClass =".schedule-menu a";
 			var notExistClass = string.Format(existingItemClass + ".{0}", cssClass.Name);
 			Browser.Interactions.AssertNotExists(existingItemClass, notExistClass);
 		}

@@ -97,7 +97,7 @@ define([
 			if (!id)
 				return undefined;
 			var personvm = lazy(personArray)
-				.filter(function(x) { return x.Id == id; })
+				.filter(function(x) { return x.Id === id; })
 				.first();
 			if (!personvm) {
 				personvm = new personViewModel({ Id: id });
@@ -180,24 +180,19 @@ define([
 			person.Selected(!person.Selected());
 		};
 
-		this.SelectLayer = function (layer, shift) {
-			if (self.Resources.MyTeam_MakeTeamScheduleConsistent_31897) {
-				var selectedDate = shift.ShiftMenu.Date;
-				var personId = shift.ShiftMenu.PersonId;
-				var person = personForId(personId, self.Persons());
+	    this.SelectLayer = function(layer, shift) {
+	        var selectedDate = shift.ShiftMenu.Date;
+	        var personId = shift.ShiftMenu.PersonId;
+	        var person = personForId(personId, self.Persons());
 
-				deselectAllPersonsExcept(person);
-				person.Selected(!layer.Selected());
-				person.SelectedStartMinutes(layer.StartMinutes());
-				person.Menu.Date(selectedDate);
-			}
-			else {
-				deselectAllPersonsExcept();
-			}
+	        deselectAllPersonsExcept(person);
+	        person.Selected(!layer.Selected());
+	        person.SelectedStartMinutes(layer.StartMinutes());
+	        person.Menu.Date(selectedDate);
 
-			deselectAllLayersExcept(layer);
-			layer.Selected(!layer.Selected());
-		};
+	        deselectAllLayersExcept(layer);
+	        layer.Selected(!layer.Selected());
+	    };
 
 		var deselectAllPersonsExcept = function(person) {
 			var selectedPersons = lazy(self.Persons())

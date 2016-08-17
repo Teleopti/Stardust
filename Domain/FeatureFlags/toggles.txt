@@ -38,7 +38,6 @@ RTA_AdherenceDetails_34267 = RC
 Gamification_NewBadgeCalculation_31185 = true
 ETL_OnlyLatestQueueAgentStatistics_30787 = true
 Backlog_Module_23980 = DEV
-MyTeam_MakeTeamScheduleConsistent_31897 = true
 # Set this to true to enable first page link to the new WFM web #
 Wfm_MinimumScaffolding_32659 = RC
 Wfm_ResourcePlanner_32892 = true
