@@ -22,8 +22,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public Person Has(IContract contract, IContractSchedule contractSchedule, IPartTimePercentage partTimePercentage, ITeam team, ISchedulePeriod schedulePeriod, params ISkill[] skills)
 		{
 			var ppDate = new DateOnly(1950, 1, 1);
-			var agent = new Person();
-			agent.SetId(Guid.NewGuid());
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPersonPeriod(new PersonPeriod(ppDate, new PersonContract(contract, partTimePercentage, contractSchedule), team));
 			if(schedulePeriod != null)
 				agent.AddSchedulePeriod(schedulePeriod);
