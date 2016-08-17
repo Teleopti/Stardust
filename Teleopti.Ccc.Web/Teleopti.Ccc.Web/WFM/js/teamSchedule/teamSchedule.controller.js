@@ -15,12 +15,11 @@
 		'NoticeService',
 		'ValidateRulesService',
 		'CommandCheckService',
-		'$state',
 		'$stateParams',
 		TeamScheduleController]);
 
 	function TeamScheduleController($scope, $q, $translate, $mdSidenav, teamScheduleSvc, groupScheduleFactory, personSelectionSvc,
-		scheduleMgmtSvc, toggleSvc, signalRSVC, NoticeService, ValidateRulesService, CommandCheckService, $state, $stateParams) {
+		scheduleMgmtSvc, toggleSvc, signalRSVC, NoticeService, ValidateRulesService, CommandCheckService, $stateParams) {
 
 		var vm = this;
 		var commandContainerId = 'teamschedule-command-container';
@@ -236,13 +235,6 @@
 		vm.toggleErrorDetails = function() {
 			vm.showErrorDetails = !vm.showErrorDetails;
 		};
-
-		vm.goToWeekView = function () {
-			$state.go('myTeamSchedule.weekView', {
-				keyword: vm.searchOptions.keyword,
-				selectedDate: vm.scheduleDate
-			});
-		}
 
 		function isMessageNeedToBeHandled() {
 			var personIds = scheduleMgmtSvc.groupScheduleVm.Schedules.map(function (schedule) { return schedule.PersonId; });

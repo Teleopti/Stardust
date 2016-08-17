@@ -17,12 +17,10 @@
 			<span class="datepicker-container">
 				<team-schedule-datepicker selected-date="vm.scheduleDate" on-date-change="vm.onScheduleDateChanged()"></team-schedule-datepicker>
 			</span>
-			<span class="view-navigator-container" ng-if="vm.toggles.WeekViewEnabled">
-				<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.goToWeekView()" translate>Week</button>
-			</span>
 		</div>
 
 		<div class="rightside-part">
+			<view-changer ng-if="vm.toggles.WeekViewEnabled"></view-changer>
 			<div id="show-warnings" class="wfm-switch" ng-if="vm.toggles.ShowNightlyRestWarningEnabled">
 				<input type="checkbox" id="validateWarning" ng-model="vm.validateWarningToggle" ng-change="vm.checkValidationWarningForCurrentPage()" />
 				<label for="validateWarning">

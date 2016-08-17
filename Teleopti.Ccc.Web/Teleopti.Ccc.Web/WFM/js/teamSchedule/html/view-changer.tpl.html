@@ -1,0 +1,16 @@
+<div class="view-changer-wrapper">
+    <div class="view-changer">
+        <div class="view-option">
+            <label>
+				<input type="radio" name="schedule-view" class="view-option-radio" ng-value="vc.viewStateMap['day']" ng-model="vc.viewState" ng-change="vc.changeView(vc.viewState)"/>
+				<div class="view-name"><div translate>Day</div></div>
+			</label>
+        </div>
+        <div class="view-option">
+            <label>
+				<input type="radio" name="schedule-view" class="view-option-radio" ng-value="vc.viewStateMap['week']" ng-model="vc.viewState" ng-change="vc.changeView(vc.viewState)"/>
+				<div class="view-name"><div translate>Week</div></div>
+			</label>
+        </div>
+    </div>
+</div>
