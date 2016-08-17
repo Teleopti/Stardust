@@ -162,6 +162,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\IApproveRequestsWithValidatorsEventMessage.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IRunRequestWaitlistEventMessage.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\MultiAbsenceRequestsHandler.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceRequestUseMultiHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandler.cs" />
     <Compile Include="ApplicationLayer\BusinessUnit\AnalyticsBusinessUnitUpdater.cs" />
     <Compile Include="ApplicationLayer\Commands\ApproveBatchRequestsCommand.cs" />
@@ -202,6 +203,7 @@
     <Compile Include="ApplicationLayer\ReadModelValidator\ValidateReadModelsEventHandler.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IMappingReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\MappingReadModelUpdater.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\IBatchExecuteStrategy.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\SkillViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeUpdaterHangfire.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradePendingReasonsService.cs" />
