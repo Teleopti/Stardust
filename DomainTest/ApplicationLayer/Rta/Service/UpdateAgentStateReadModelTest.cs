@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithUser("usercode");
 
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone"
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithUser("user", Guid.NewGuid(), Guid.NewGuid(), teamId, null);
 
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "user",
 				StateCode = "state"
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithUser("user", Guid.NewGuid(), Guid.NewGuid(), null, siteId);
 
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "user",
 				StateCode = "state",

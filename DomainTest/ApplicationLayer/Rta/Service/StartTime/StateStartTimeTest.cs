@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 				.WithUser("usercode", personId);
 
 			Now.Is("2015-12-10 8:00");
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone"
@@ -43,13 +43,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 				.WithRule("stateone", Guid.NewGuid());
 
 			Now.Is("2015-12-10 8:00");
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "stateone"
 			});
 			Now.Is("2015-12-10 8:30");
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "stateone"
@@ -69,13 +69,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 				.WithRule("statetwo", Guid.NewGuid());
 
 			Now.Is("2015-12-10 8:00");
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "stateone"
 			});
 			Now.Is("2015-12-10 8:30");
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "statetwo"

@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithRule("break", brejk, 0)
 				.WithRule("break", phone, 1);
 			Now.Is("2014-10-20 9:00");
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone"
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Publisher.Clear();
 
 			Now.Is("2014-10-20 10:02");
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "break"
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithRule("admin", phone, 1)
 				.WithRule("admin", admin, 0);
 			Now.Is("2014-10-20 9:15");
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "admin"

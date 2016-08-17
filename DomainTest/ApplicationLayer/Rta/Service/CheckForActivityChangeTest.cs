@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithUser("usercode", personId);
 			Now.Is("2014-10-20 10:00");
 			
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone"
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithRule("phone", activityId, "alarm")
 				;
 			
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone"

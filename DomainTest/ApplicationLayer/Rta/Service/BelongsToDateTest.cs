@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 			Now.Is("2015-02-20 2:00");
 
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone",
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 			Now.Is("2015-02-20 18:00");
 
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone",
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 			Now.Is("2015-02-20 7:00");
 
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone",
@@ -101,13 +101,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 
 			Now.Is("2015-02-20 18:01");
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone",
 			});
 			Now.Is("2015-02-20 18:59");
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone",
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithUser("usercode", personId)
 				.WithRule("phone", null, 0);
 			Now.Is("2015-02-20 18:01");
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone",
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 			Now.Is("2015-02-20 2:00");
 
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone",
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 			Now.Is("2015-02-20 2:00");
 
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "admin",
@@ -250,7 +250,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Now.Is("2015-02-20 2:00");
 			Target.CheckForActivityChanges(Database.TenantName(), personId);
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "admin",
@@ -272,7 +272,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 			Now.Is("2015-02-20 2:00");
 
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone",

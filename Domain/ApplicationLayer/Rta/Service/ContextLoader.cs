@@ -5,15 +5,14 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Logon.Aspects;
-using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public interface IContextLoader
 	{
-		void For(ExternalUserStateInputModel input, Action<Context> action);
-		void ForBatch(IEnumerable<ExternalUserStateInputModel> inputs, Action<Context> action);
+		void For(StateInputModel input, Action<Context> action);
+		void ForBatch(BatchInputModel batch, Action<Context> action);
 		void ForAll(Action<Context> action);
 		void ForClosingSnapshot(DateTime snapshotId, string sourceId, Action<Context> action);
 		void ForSynchronize(Action<Context> action);
@@ -42,9 +41,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 		}
 
-		public override void ForBatch(IEnumerable<ExternalUserStateInputModel> inputs, Action<Context> action)
+		public override void ForBatch(BatchInputModel batch, Action<Context> action)
 		{
 			var exceptions = new ConcurrentBag<Exception>();
+			var inputs = from s in batch.States
+				select new StateInputModel
+				{
+					AuthenticationKey = batch.AuthenticationKey,
+					PlatformTypeId = batch.PlatformTypeId,
+					SourceId = batch.SourceId,
+					SnapshotId = batch.SnapshotId,
+					UserCode = s.UserCode,
+					StateCode = s.StateCode,
+					StateDescription = s.StateDescription
+				};
 			inputs
 				.AsParallel()
 				.ForAll(input =>
@@ -63,7 +73,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[TenantScope]
-		protected virtual void ForBatchSingle(ExternalUserStateInputModel input, Action<Context> action)
+		protected virtual void ForBatchSingle(StateInputModel input, Action<Context> action)
 		{
 			For(input, action);
 		}
@@ -102,7 +112,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_appliedAlarm = appliedAlarm;
 		}
 
-		protected int validateSourceId(ExternalUserStateInputModel input)
+		protected int validateSourceId(StateInputModel input)
 		{
 			if (string.IsNullOrEmpty(input.SourceId))
 				throw new InvalidSourceException("Source id is required");
@@ -120,7 +130,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			action.Invoke();
 		}
 
-		public virtual void For(ExternalUserStateInputModel input, Action<Context> action)
+		public virtual void For(StateInputModel input, Action<Context> action)
 		{
 			var found = false;
 
@@ -171,9 +181,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		}
 
-		public virtual void ForBatch(IEnumerable<ExternalUserStateInputModel> inputs, Action<Context> action)
+		public virtual void ForBatch(BatchInputModel batch, Action<Context> action)
 		{
 			var exceptions = new List<Exception>();
+			var inputs = from s in batch.States
+				select new StateInputModel
+				{
+					AuthenticationKey = batch.AuthenticationKey,
+					PlatformTypeId = batch.PlatformTypeId,
+					SourceId = batch.SourceId,
+					SnapshotId = batch.SnapshotId,
+					UserCode = s.UserCode,
+					StateCode = s.StateCode,
+					StateDescription = s.StateDescription
+				};
 			inputs.ForEach(input =>
 			{
 				try
@@ -239,7 +260,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			agentsNotAlreadyLoggedOut.ForEach(x =>
 			{
 				action.Invoke(new Context(
-					new ExternalUserStateInputModel
+					new StateInputModel
 					{
 						StateCode = stateCode,
 						PlatformTypeId = Guid.Empty.ToString(),
@@ -273,7 +294,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				.ForEach(x =>
 				{
 					action.Invoke(new Context(
-						new ExternalUserStateInputModel
+						new StateInputModel
 						{
 							StateCode = x.StateCode,
 							PlatformTypeId = x.PlatformTypeId.ToString()

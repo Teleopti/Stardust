@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			});
 			Context.Logout();
 
-			Target.SaveState(new ExternalUserStateInputModel
+			Target.SaveState(new StateInputModel
 			{
 				AuthenticationKey = "!#¤atAbgT%",
 				PlatformTypeId = Guid.Empty.ToString(),
@@ -81,17 +81,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			});
 			Context.Logout();
 
-			Target.SaveStateBatch(
-				Enumerable.Range(0, 20)
-					.Select(i => new ExternalUserStateInputModel
+			Target.SaveStateBatch(new BatchInputModel
+			{
+				AuthenticationKey = "!#¤atAbgT%",
+				PlatformTypeId = Guid.Empty.ToString(),
+				SourceId = "-1",
+				States = Enumerable.Range(0, 20)
+					.Select(i => new BatchStateInputModel
 					{
-						AuthenticationKey = "!#¤atAbgT%",
-						PlatformTypeId = Guid.Empty.ToString(),
 						StateCode = "InCall",
 						StateDescription = "InCall",
-						UserCode = i.ToString(),
-						SourceId = "-1"
-					}));
+						UserCode = i.ToString()
+					})
+			});
 
 			TheService.DoesWhileNotLoggedIn(uow =>
 				StateGroupRepository.LoadAllCompleteGraph().Single().StateCollection.Should().Have.Count.EqualTo(1)

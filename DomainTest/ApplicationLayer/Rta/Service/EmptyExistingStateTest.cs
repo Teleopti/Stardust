@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				PersonId = person,
 				CurrentTeamId = team
 			});
-			Rta.SaveState(new ExternalUserStateForTest
+			Rta.SaveState(new StateForTest
 			{
 				UserCode = "user",
 				StateCode = null,

@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithUser("usercode")
 				.WithRule();
 
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "newStateCode"
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithUser("usercode")
 				.WithRule();
 
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "newStateCode",
@@ -86,19 +86,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithUser("usercode3")
 				.WithRule();
 
-			Target.SaveStateBatch(new[]
+			Target.SaveStateBatch(new BatchForTest
 			{
-				new ExternalUserStateForTest
+				SnapshotId = "2016-05-18 08:00".Utc(),
+				States = new[]
 				{
-					UserCode = "usercode1",
-					StateCode = "phone",
-					SnapshotId = "2016-05-18 08:00".Utc()
-				},
-				new ExternalUserStateForTest
-				{
-					UserCode = "usercode2",
-					StateCode = "phone",
-					SnapshotId = "2016-05-18 08:00".Utc()
+					new BatchStateForTest
+					{
+						UserCode = "usercode1",
+						StateCode = "phone"
+					},
+					new BatchStateForTest
+					{
+						UserCode = "usercode2",
+						StateCode = "phone"
+					}
 				}
 			});
 			Target.CloseSnapshot(new CloseSnapshotForTest
@@ -106,13 +108,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				SnapshotId = "2016-05-18 08:00".Utc()
 			});
 
-			Target.SaveStateBatch(new[]
+			Target.SaveStateBatch(new BatchForTest
 			{
-				new ExternalUserStateForTest
+				SnapshotId = "2016-05-18 08:05".Utc(),
+				States = new[]
 				{
-					UserCode = "usercode3",
-					StateCode = "phone",
-					SnapshotId = "2016-05-18 08:05".Utc()
+					new BatchStateForTest
+					{
+						UserCode = "usercode3",
+						StateCode = "phone"
+					}
 				}
 			});
 			Target.CloseSnapshot(new CloseSnapshotForTest
@@ -143,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithUser("usercode")
 				.WithRule(Guid.NewGuid(), "loggedout", null, "Logged Out");
 
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "unrecognized-loggedout"
@@ -161,7 +166,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithUser("usercode")
 				.WithRule(Guid.NewGuid(), "loggedout", null, "adhering");
 
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "unrecognized-loggedout"

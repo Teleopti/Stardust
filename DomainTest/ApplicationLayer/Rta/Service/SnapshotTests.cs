@@ -27,17 +27,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 
 			Now.Is("2014-10-20 10:00");
-			Target.SaveStateBatch(new[]
+			Target.SaveStateBatch(new BatchForTest
 			{
-				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
+				SnapshotId = "2014-10-20 10:00".Utc(),
+				States = new[]
 				{
-					UserCode = "usercode1",
-					StateCode = "statecode"
-				},
-				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
-				{
-					UserCode = "usercode2",
-					StateCode = "statecode"
+					new BatchStateForTest
+					{
+						UserCode = "usercode1",
+						StateCode = "statecode"
+					},
+					new BatchStateForTest
+					{
+						UserCode = "usercode2",
+						StateCode = "statecode"
+					}
 				}
 			});
 			Target.CloseSnapshot(new CloseSnapshotForTest
@@ -45,13 +49,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				SnapshotId = "2014-10-20 10:00".Utc()
 			});
 
-			Target.SaveStateBatch(new[]
+			Target.SaveStateBatch(new BatchForTest
 			{
-				new ExternalUserStateForSnapshot("2014-10-20 10:05".Utc())
+				SnapshotId = "2014-10-20 10:05".Utc(),
+				States = new[]
 				{
-					UserCode = "usercode1",
-					StateCode = "statecode"
-				},
+					new BatchStateForTest
+					{
+						UserCode = "usercode1",
+						StateCode = "statecode"
+					},
+				}
 			});
 			Target.CloseSnapshot(new CloseSnapshotForTest
 			{
@@ -74,13 +82,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithRule("statecode", Guid.Empty)
 				;
 			Now.Is("2014-10-20 10:00");
-			Target.SaveStateBatch(new[]
+			Target.SaveStateBatch(new BatchForTest
 			{
-				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
+				SnapshotId = "2014-10-20 10:00".Utc(),
+				SourceId = "source1",
+				States = new[]
 				{
-					UserCode = "usercode1",
-					StateCode = "statecode",
-					SourceId = "source1",
+					new BatchStateForTest
+					{
+						UserCode = "usercode1",
+						StateCode = "statecode"
+					}
 				}
 			});
 			Target.CloseSnapshot(new CloseSnapshotForTest
@@ -88,13 +100,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				SourceId = "source1",
 				SnapshotId = "2014-10-20 10:00".Utc()
 			});
-			Target.SaveStateBatch(new[]
+			Target.SaveStateBatch(new BatchForTest
 			{
-				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
+				SnapshotId = "2014-10-20 10:00".Utc(),
+				SourceId = "source2",
+				States = new[]
 				{
-					UserCode = "usercode2",
-					StateCode = "statecode",
-					SourceId = "source2",
+					new BatchStateForTest
+					{
+						UserCode = "usercode2",
+						StateCode = "statecode",
+					}
 				}
 			});
 			Target.CloseSnapshot(new CloseSnapshotForTest
@@ -103,13 +119,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				SnapshotId = "2014-10-20 10:00".Utc()
 			});
 
-			Target.SaveStateBatch(new[]
+			Target.SaveStateBatch(new BatchForTest
 			{
-				new ExternalUserStateForSnapshot("2014-10-20 10:05".Utc())
+				SnapshotId = "2014-10-20 10:05".Utc(),
+				SourceId = "source1",
+				States = new[]
 				{
-					UserCode = "usercode1",
-					StateCode = "statecode",
-					SourceId = "source1",
+					new BatchStateForTest
+					{
+						UserCode = "usercode1",
+						StateCode = "statecode",
+					}
 				}
 			});
 			Target.CloseSnapshot(new CloseSnapshotForTest
@@ -134,27 +154,31 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 			Now.Is("2014-10-20 10:00");
 
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode1",
 				SourceId = "source1",
 				StateCode = "statecode1"
 			});
 
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode2",
 				SourceId = "source1",
 				StateCode = "statecode1",
 			});
 
-			Target.SaveStateBatch(new[]
+			Target.SaveStateBatch(new BatchForTest
 			{
-				new ExternalUserStateForSnapshot("2014-10-20 10:05".Utc())
+				SnapshotId = "2014-10-20 10:00".Utc(),
+				SourceId = "source1",
+				States = new[]
 				{
-					UserCode = "usercode1",
-					SourceId = "source1",
-					StateCode = "statecode1"
+					new BatchStateForTest
+					{
+						UserCode = "usercode1",
+						StateCode = "statecode",
+					}
 				}
 			});
 			Target.CloseSnapshot(new CloseSnapshotForTest
@@ -180,27 +204,31 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 			Now.Is("2014-10-20 10:00");
 
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode1",
 				SourceId = "source1",
 				StateCode = "statecode1"
 			});
 
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode2",
 				SourceId = "source2",
 				StateCode = "statecode1",
 			});
 
-			Target.SaveStateBatch(new[]
+			Target.SaveStateBatch(new BatchForTest
 			{
-				new ExternalUserStateForSnapshot("2014-10-20 10:05".Utc())
+				SnapshotId = "2014-10-20 10:05".Utc(),
+				SourceId = "source1",
+				States = new[]
 				{
-					UserCode = "usercode1",
-					SourceId = "source1",
-					StateCode = "statecode1"
+					new BatchStateForTest
+					{
+						UserCode = "usercode1",
+						StateCode = "statecode",
+					}
 				}
 			});
 			Target.CloseSnapshot(new CloseSnapshotForTest
@@ -224,17 +252,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty);
 
 			Now.Is("2014-10-20 10:00");
-			Target.SaveStateBatch(new[]
+			Target.SaveStateBatch(new BatchForTest
 			{
-				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
+				SnapshotId = "2014-10-20 10:00".Utc(),
+				States = new[]
 				{
-					UserCode = "usercode1",
-					StateCode = "statecode"
-				},
-				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
-				{
-					UserCode = "usercode2",
-					StateCode = Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot
+					new BatchStateForTest
+					{
+						UserCode = "usercode1",
+						StateCode = "statecode"
+					},
+					new BatchStateForTest
+					{
+						UserCode = "usercode2",
+						StateCode = Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot
+					}
 				}
 			});
 			Target.CloseSnapshot(new CloseSnapshotForTest
@@ -243,13 +275,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			});
 
 			Now.Is("2014-10-20 10:05");
-			Target.SaveStateBatch(new[]
+			Target.SaveStateBatch(new BatchForTest
 			{
-				new ExternalUserStateForSnapshot("2014-10-20 10:05".Utc())
+				SnapshotId = "2014-10-20 10:05".Utc(),
+				States = new[]
 				{
-					UserCode = "usercode1",
-					StateCode = "statecode"
-				},
+					new BatchStateForTest
+					{
+						UserCode = "usercode1",
+						StateCode = "statecode"
+					}
+				}
 			});
 			Target.CloseSnapshot(new CloseSnapshotForTest
 			{
@@ -272,19 +308,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithRule("statecode", Guid.Empty)
 				;
 			Now.Is("2014-10-20 10:00");
-			Target.SaveStateBatch(new[]
+			Target.SaveStateBatch(new BatchForTest
 			{
-				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
+				SnapshotId = "2014-10-20 10:00".Utc(),
+				PlatformTypeId = platformTypeId.ToString(),
+				States = new[]
 				{
-					UserCode = "usercode1",
-					StateCode = "statecode",
-					PlatformTypeId = platformTypeId.ToString()
-				},
-				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
-				{
-					UserCode = "usercode2",
-					StateCode = "statecode",
-					PlatformTypeId = platformTypeId.ToString()
+					new BatchStateForTest
+					{
+						UserCode = "usercode1",
+						StateCode = "statecode"
+					},
+					new BatchStateForTest
+					{
+						UserCode = "usercode2",
+						StateCode = "statecode"
+					}
 				}
 			});
 			Target.CloseSnapshot(new CloseSnapshotForTest
@@ -292,14 +331,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				SnapshotId = "2014-10-20 10:00".Utc()
 			});
 
-			Target.SaveStateBatch(new[]
+			Target.SaveStateBatch(new BatchForTest
 			{
-				new ExternalUserStateForSnapshot("2014-10-20 10:05".Utc())
+				SnapshotId = "2014-10-20 10:05".Utc(),
+				PlatformTypeId = platformTypeId.ToString(),
+				States = new[]
 				{
-					UserCode = "usercode1",
-					StateCode = "statecode",
-					PlatformTypeId = platformTypeId.ToString()
-				},
+					new BatchStateForTest
+					{
+						UserCode = "usercode1",
+						StateCode = "statecode"
+					}
+				}
 			});
 			Target.CloseSnapshot(new CloseSnapshotForTest
 			{

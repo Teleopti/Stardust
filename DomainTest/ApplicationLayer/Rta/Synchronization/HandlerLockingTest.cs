@@ -38,14 +38,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			var personId = Guid.NewGuid();
 			Database.WithUser("user", personId);
 			Now.Is("2015-01-15 08:00");
-			Rta.SaveState(new ExternalUserStateForTest
+			Rta.SaveState(new StateForTest
 			{
 				UserCode = "user",
 				StateCode = "state"
 			});
 
 			Context.SimulateRestart();
-			var initializeTask = Execute.OnAnotherThread(() => Rta.SaveState(new ExternalUserStateForTest()));
+			var initializeTask = Execute.OnAnotherThread(() => Rta.SaveState(new StateForTest()));
 
 			Handler.EnteredHandler.Wait(TimeSpan.FromSeconds(1));
 			var hangfireTask = Task.Factory.StartNew(() =>

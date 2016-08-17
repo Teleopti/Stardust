@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			try
 			{
 				_rta.SaveState(
-					new ExternalUserStateInputModel
+					new StateInputModel
 					{
 						AuthenticationKey = input.AuthenticationKey,
 						PlatformTypeId = input.PlatformTypeId,
@@ -67,22 +67,26 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 
 			try
 			{
-				var batch = input.Select(i =>
+				var states = input.Select(i => new BatchStateInputModel
 				{
-					DateTime batchId;
-					DateTime.TryParse(i.SnapshotId, out batchId);
-					return new ExternalUserStateInputModel
-					{
-						AuthenticationKey = i.AuthenticationKey,
-						PlatformTypeId = i.PlatformTypeId,
-						SourceId = i.SourceId,
-						UserCode = i.UserCode,
-						StateCode = i.StateCode,
-						StateDescription = i.StateDescription,
-						SnapshotId = batchId,
-					};
+					UserCode = i.UserCode,
+					StateCode = i.StateCode,
+					StateDescription = i.StateDescription,
+				}).ToArray();
+
+				var root = input.First();
+				DateTime snapshotId;
+				DateTime.TryParse(root.SnapshotId, out snapshotId);
+
+				_rta.SaveStateBatch(new BatchInputModel
+				{
+					AuthenticationKey = root.AuthenticationKey,
+					PlatformTypeId = root.PlatformTypeId,
+					SourceId = root.SourceId,
+					SnapshotId = snapshotId,
+					States = states
 				});
-				_rta.SaveStateBatch(batch);
+
 			}
 			catch (InvalidAuthenticationKeyException e)
 			{

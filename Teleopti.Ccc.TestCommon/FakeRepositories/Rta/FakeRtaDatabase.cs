@@ -22,18 +22,29 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			SourceId = "sourceId";
 		}
 	}
-
-	public class ExternalUserStateForSnapshot : ExternalUserStateForTest
+	
+	public class BatchForTest : BatchInputModel
 	{
-		public ExternalUserStateForSnapshot(DateTime time)
+		public BatchForTest()
 		{
-			SnapshotId = time;
+			AuthenticationKey = LegacyAuthenticationKey.TheKey;
+			PlatformTypeId = Guid.Empty.ToString();
+			SourceId = "sourceId";
 		}
 	}
 
-	public class ExternalUserStateForTest : ExternalUserStateInputModel
+	public class BatchStateForTest : BatchStateInputModel
 	{
-		public ExternalUserStateForTest()
+		public BatchStateForTest()
+		{
+			UserCode = "8808";
+			StateCode = "AUX2";
+		}
+	}
+
+	public class StateForTest : StateInputModel
+	{
+		public StateForTest()
 		{
 			AuthenticationKey = LegacyAuthenticationKey.TheKey;
 			PlatformTypeId = Guid.Empty.ToString();
@@ -95,8 +106,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_businessUnits = businessUnits;
 
 			withTenant("default", LegacyAuthenticationKey.TheKey);
-			WithSource(new ExternalUserStateForTest().SourceId);
-			WithPlatform(new Guid(new ExternalUserStateForTest().PlatformTypeId));
+			WithSource(new StateForTest().SourceId);
+			WithPlatform(new Guid(new StateForTest().PlatformTypeId));
 		}
 
 		public AgentState StoredState => _agentStates.GetAll().SingleOrDefault();
@@ -250,7 +261,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				PlatformTypeId = _database.CurrentPlatform(),
 				StateCode = stateCode,
 				StaffingEffect = 0,
-				SourceId = new ExternalUserStateForTest().SourceId
+				SourceId = new StateForTest().SourceId
 			});
 			return this;
 		}

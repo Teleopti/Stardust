@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldThrowIfNoSourceId()
 		{
 			Assert.Throws<InvalidSourceException>(() =>
-				Target.SaveState(new ExternalUserStateForTest
+				Target.SaveState(new StateForTest
 				{
 					SourceId = string.Empty
 				})
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldThrowIfNoPlatformId()
 		{
 			Assert.Throws<InvalidPlatformException>(() =>
-				Target.SaveState(new ExternalUserStateForTest
+				Target.SaveState(new StateForTest
 				{
 					PlatformTypeId = string.Empty
 				})
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldThrowIfNoPerson()
 		{
 			Assert.Throws<InvalidUserCodeException>(() =>
-				Target.SaveState(new ExternalUserStateForTest
+				Target.SaveState(new StateForTest
 				{
 					UserCode = "unknown"
 				})

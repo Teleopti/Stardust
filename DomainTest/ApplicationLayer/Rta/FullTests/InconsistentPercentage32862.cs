@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 				;
 
 			Now.Is("2015-03-31 4:44:55");
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "user",
 				StateCode = "ready"
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 			Now.Is("2015-03-31 4:45:10");
 			Target.CheckForActivityChanges(Database.TenantName(), personId);
 			Now.Is("2015-03-31 5:00:15");
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "user",
 				StateCode = "ready"
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 				;
 
 			Now.Is("2015-03-31 4:44:55");
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "user",
 				StateCode = "ready"
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 			Now.Is("2015-03-31 4:45:10");
 			Target.CheckForActivityChanges(Database.TenantName(), personId);
 			Now.Is("2015-03-31 5:00:15");
-			Target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new StateForTest
 			{
 				UserCode = "user",
 				StateCode = "ready"

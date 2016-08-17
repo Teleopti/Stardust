@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				.WithSchedule(personId, phone, "2015-01-15 8:00", "2015-01-15 10:00")
 				.WithRule("break", phone, 1);
 			Now.Is("2015-01-15 08:00");
-			Rta.SaveState(new ExternalUserStateForTest
+			Rta.SaveState(new StateForTest
 			{
 				UserCode = "user", 
 				StateCode = "break"
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				.WithSchedule(personId, phone, "2015-01-15 8:00", "2015-01-15 10:00")
 				.WithRule("break", phone, 1);
 			Now.Is("2015-01-15 08:00");
-			Rta.SaveState(new ExternalUserStateForTest
+			Rta.SaveState(new StateForTest
 			{
 				UserCode = "user", 
 				StateCode = "break"

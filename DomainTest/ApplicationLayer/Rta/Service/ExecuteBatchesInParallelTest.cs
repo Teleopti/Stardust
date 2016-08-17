@@ -29,23 +29,26 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var personId = Guid.NewGuid();
 			Database
 				.WithUser("user1", personId);
-
-			Assert.Throws<AggregateException>(() => Target.SaveStateBatch(new[]
+			
+			Assert.Throws<AggregateException>(() => Target.SaveStateBatch(new BatchForTest
 			{
-				new ExternalUserStateForTest
+				States = new[]
 				{
-					UserCode = "unknown1",
-					StateCode = "phone"
-				},
-				new ExternalUserStateForTest
-				{
-					UserCode = "user1",
-					StateCode = "phone"
-				},
-				new ExternalUserStateForTest
-				{
-					UserCode = "unknown2",
-					StateCode = "phone"
+					new BatchStateForTest
+					{
+						UserCode = "unknown1",
+						StateCode = "phone"
+					},
+					new BatchStateForTest
+					{
+						UserCode = "user1",
+						StateCode = "phone"
+					},
+					new BatchStateForTest
+					{
+						UserCode = "unknown2",
+						StateCode = "phone"
+					}
 				}
 			}));
 
@@ -60,27 +63,34 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithUser("user1", personId1)
 				.WithUser("user2", personId2);
-			Target.SaveStateBatch(new[]
+			Target.SaveStateBatch(new BatchForTest
 			{
-				new ExternalUserStateForSnapshot("2016-07-11 08:00".Utc())
+				SnapshotId = "2016-07-11 08:00".Utc(),
+				States = new[]
 				{
-					UserCode = "user1",
-					StateCode = "ready"
-				},
-				new ExternalUserStateForSnapshot("2016-07-11 08:00".Utc())
-				{
-					UserCode = "user2",
-					StateCode = "ready"
+					new BatchStateForTest
+					{
+						UserCode = "user1",
+						StateCode = "ready"
+					},
+					new BatchStateForTest
+					{
+						UserCode = "user2",
+						StateCode = "ready"
+					}
 				}
 			});
 
-
-			Target.SaveStateBatch(new[]
+			Target.SaveStateBatch(new BatchForTest
 			{
-				new ExternalUserStateForSnapshot("2016-07-11 08:10".Utc())
+				SnapshotId = "2016-07-11 08:10".Utc(),
+				States = new[]
 				{
-					UserCode = "user2",
-					StateCode = "phone"
+					new BatchStateForTest
+					{
+						UserCode = "user2",
+						StateCode = "phone"
+					}
 				}
 			});
 			Target.CloseSnapshot(new CloseSnapshotForTest
@@ -103,19 +113,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithUser("usercode3")
 				.WithRule();
 
-			Target.SaveStateBatch(new[]
+			Target.SaveStateBatch(new BatchForTest
 			{
-				new ExternalUserStateForTest
+				SnapshotId = "2016-05-18 08:00".Utc(),
+				States = new[]
 				{
-					UserCode = "usercode1",
-					StateCode = "phone",
-					SnapshotId = "2016-05-18 08:00".Utc()
-				},
-				new ExternalUserStateForTest
-				{
-					UserCode = "usercode2",
-					StateCode = "phone",
-					SnapshotId = "2016-05-18 08:00".Utc()
+					new BatchStateForTest
+					{
+						UserCode = "usercode1",
+						StateCode = "phone"
+					},
+					new BatchStateForTest
+					{
+						UserCode = "usercode2",
+						StateCode = "phone"
+					}
 				}
 			});
 			Target.CloseSnapshot(new CloseSnapshotForTest
@@ -123,13 +135,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				SnapshotId = "2016-05-18 08:00".Utc()
 			});
 
-			Target.SaveStateBatch(new[]
+			Target.SaveStateBatch(new BatchForTest
 			{
-				new ExternalUserStateForTest
+				SnapshotId = "2016-05-18 08:05".Utc(),
+				States = new[]
 				{
-					UserCode = "usercode3",
-					StateCode = "phone",
-					SnapshotId = "2016-05-18 08:05".Utc()
+					new BatchStateForTest
+					{
+						UserCode = "usercode3",
+						StateCode = "phone"
+					}
 				}
 			});
 			Target.CloseSnapshot(new CloseSnapshotForTest
@@ -152,7 +167,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			var states = (
 				from u in users
-				select new ExternalUserStateForTest
+				select new BatchStateForTest
 				{
 					UserCode = u,
 					StateCode = "phone"
@@ -161,7 +176,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			100.Times(() =>
 			{
-				var result = Assert.Throws<AggregateException>(() => Target.SaveStateBatch(states));
+				var result = Assert.Throws<AggregateException>(() => Target.SaveStateBatch(new BatchForTest
+				{
+					States = states
+				}));
 				result.InnerExceptions.Count.Should().Be(50);
 				result.InnerExceptions.OfType<InvalidUserCodeException>().Count().Should().Be(50);
 			});

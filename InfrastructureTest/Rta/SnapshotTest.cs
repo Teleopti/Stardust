@@ -39,19 +39,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				.WithMapping(logOutBySnapshot, "OutAdherence")
 				;
 			var person = WithUnitOfWork.Get(() => Persons.LoadAll().Single(x => x.Name.FirstName == "user2"));
-			Rta.SaveStateBatch(new[]
+			Rta.SaveStateBatch(new BatchForTest
 			{
-				new ExternalUserStateForTest
+				SnapshotId = "2016-04-07 08:00".Utc(),
+				States = new[]
 				{
-					UserCode = "user1",
-					StateCode = "phone",
-					SnapshotId = "2016-04-07 08:00".Utc()
-				}, 
-				new ExternalUserStateForTest
-				{
-					UserCode = "user2",
-					StateCode = "phone",
-					SnapshotId = "2016-04-07 08:00".Utc()
+					new BatchStateForTest
+					{
+						UserCode = "user1",
+						StateCode = "phone"
+					},
+					new BatchStateForTest
+					{
+						UserCode = "user2",
+						StateCode = "phone"
+					}
 				}
 			});
 			Rta.CloseSnapshot(new CloseSnapshotForTest
@@ -59,13 +61,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				SnapshotId = "2016-04-07 08:00".Utc()
 			});
 
-			Rta.SaveStateBatch(new[]
+			Rta.SaveStateBatch(new BatchForTest
 			{
-				new ExternalUserStateForTest
+				SnapshotId = "2016-04-07 08:10".Utc(),
+				States = new[]
 				{
-					UserCode = "user1",
-					StateCode = "phone",
-					SnapshotId = "2016-04-07 08:10".Utc()
+					new BatchStateForTest
+					{
+						UserCode = "user1",
+						StateCode = "phone"
+					}
 				}
 			});
 			Rta.CloseSnapshot(new CloseSnapshotForTest

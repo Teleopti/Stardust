@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				.WithRule("phone", phone, 0)
 				.WithUser("user", personId)
 				;
-			Rta.SaveState(new ExternalUserStateForTest
+			Rta.SaveState(new StateForTest
 			{
 				UserCode = "user",
 				StateCode = "phone"

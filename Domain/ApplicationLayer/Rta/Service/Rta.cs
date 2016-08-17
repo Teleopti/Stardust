@@ -85,14 +85,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		
 		[InfoLog]
 		[TenantScope]
-		public virtual void SaveStateBatch(IEnumerable<ExternalUserStateInputModel> inputs)
+		public virtual void SaveStateBatch(BatchInputModel batch)
 		{
-			var rootInput = inputs.First();
-			validateAuthenticationKey(rootInput);
+			validateAuthenticationKey(batch);
 			_initializor.EnsureTenantInitialized();
-			validatePlatformId(rootInput);
+			validatePlatformId(batch);
 
-			_contextLoader.ForBatch(inputs, person =>
+			_contextLoader.ForBatch(batch, person =>
 			{
 				_processor.Process(person);
 			});
@@ -100,7 +99,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		[InfoLog]
 		[TenantScope]
-		public virtual void SaveState(ExternalUserStateInputModel input)
+		public virtual void SaveState(StateInputModel input)
 		{
 			validateAuthenticationKey(input);
 			_initializor.EnsureTenantInitialized();
@@ -122,14 +121,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			});
 		}
 
-		private void validateAuthenticationKey(ExternalUserStateInputModel input)
+		private void validateAuthenticationKey(IValidatable input)
 		{
-			input.MakeLegacyKeyEncodingSafe();
+			input.AuthenticationKey = LegacyAuthenticationKey.MakeEncodingSafe(input.AuthenticationKey);
 			if (!_tenantLoader.Authenticate(input.AuthenticationKey))
 				throw new InvalidAuthenticationKeyException("You supplied an invalid authentication key. Please verify the key and try again.");
 		}
 
-		private static void validatePlatformId(ExternalUserStateInputModel input)
+		private static void validatePlatformId(IValidatable input)
 		{
 			if (string.IsNullOrEmpty(input.PlatformTypeId))
 				throw new InvalidPlatformException("Platform id is required");

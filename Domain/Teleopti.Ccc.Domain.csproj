@@ -639,7 +639,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\ScheduleInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ShiftEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AdherencePercentageViewModelBuilder.cs" />
-    <Compile Include="ApplicationLayer\Rta\ExternalUserStateInputModel.cs" />
+    <Compile Include="ApplicationLayer\Rta\StateInputModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteOutOfAdherenceReadModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteOutOfAdherenceReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StateCodeAdder.cs" />

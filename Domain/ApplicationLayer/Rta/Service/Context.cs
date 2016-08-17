@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly Lazy<AgentState> _stored;
 
 		public Context(
-			ExternalUserStateInputModel input, 
+			StateInputModel input, 
 			Guid personId, 
 			Guid businessUnitId, 
 			Guid teamId, 
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_stored = new Lazy<AgentState>(() => dontDeferForNow);
 			var scheduleLazy = new Lazy<IEnumerable<ScheduledActivity>>(schedule);
 			var mappingsState = mappings.Invoke(this);
-			Input = input ?? new ExternalUserStateInputModel();
+			Input = input ?? new StateInputModel();
 			CurrentTime = now.UtcDateTime();
 			PersonId = personId;
 			BusinessUnitId = businessUnitId;
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public Guid TeamId { get; private set; }
 		public Guid SiteId { get; private set; }
 
-		public ExternalUserStateInputModel Input { get; set; }
+		public StateInputModel Input { get; set; }
 		public AgentState Stored { get { return _stored.Value; } }
 		public StateRuleInfo State { get; private set; }
 		public ScheduleInfo Schedule { get; private set; }

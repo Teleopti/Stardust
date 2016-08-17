@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 				}
 				else
 				{
-					_rta.SaveState(new ExternalUserStateInputModel
+					_rta.SaveState(new StateInputModel
 					{
 						AuthenticationKey = authenticationKey,
 						UserCode = userCode,
@@ -69,17 +69,13 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 		{
 			return handleRtaExceptions(() =>
 			{
-				IEnumerable<ExternalUserStateInputModel> states = (
+				IEnumerable<BatchStateInputModel> states = (
 					from s in externalUserStateBatch
-					select new ExternalUserStateInputModel
+					select new BatchStateInputModel
 					{
-						AuthenticationKey = authenticationKey,
 						UserCode = fixUserCode(s.UserCode),
 						StateCode = fixStateCode(s.StateCode, s.IsLoggedOn),
 						StateDescription = s.StateDescription,
-						PlatformTypeId = platformTypeId,
-						SourceId = sourceId,
-						SnapshotId = fixSnapshotId(s.BatchId)
 					})
 					.ToArray();
 
@@ -87,8 +83,15 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 				var closeSnapshot = isClosingSnapshot(mayCloseSnapshot.UserCode, mayCloseSnapshot.IsSnapshot);
 				if (closeSnapshot)
 					states = states.Take(externalUserStateBatch.Count - 1);
-				
-				_rta.SaveStateBatch(states);
+
+				_rta.SaveStateBatch(new BatchInputModel
+				{
+					AuthenticationKey = authenticationKey,
+					PlatformTypeId = platformTypeId,
+					SourceId = sourceId,
+					SnapshotId = fixSnapshotId(externalUserStateBatch.First().BatchId),
+					States = states
+				});
 
 				if (closeSnapshot)
 					_rta.CloseSnapshot(new CloseSnapshotInputModel

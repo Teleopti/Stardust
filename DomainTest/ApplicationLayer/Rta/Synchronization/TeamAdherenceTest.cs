@@ -52,13 +52,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				.WithRule("break", phone, -1)
 				;
 			Now.Is("2015-01-15 08:00");
-			Rta.SaveState(new ExternalUserStateForTest {UserCode = "A1", StateCode = "phone"});
-			Rta.SaveState(new ExternalUserStateForTest {UserCode = "A2", StateCode = "phone"});
-			Rta.SaveState(new ExternalUserStateForTest {UserCode = "A3", StateCode = "phone"});
+			Rta.SaveState(new StateForTest {UserCode = "A1", StateCode = "phone"});
+			Rta.SaveState(new StateForTest {UserCode = "A2", StateCode = "phone"});
+			Rta.SaveState(new StateForTest {UserCode = "A3", StateCode = "phone"});
 
-			Rta.SaveState(new ExternalUserStateForTest {UserCode = "B1", StateCode = "break"});
-			Rta.SaveState(new ExternalUserStateForTest {UserCode = "B2", StateCode = "phone"});
-			Rta.SaveState(new ExternalUserStateForTest {UserCode = "B3", StateCode = "phone"});
+			Rta.SaveState(new StateForTest {UserCode = "B1", StateCode = "break"});
+			Rta.SaveState(new StateForTest {UserCode = "B2", StateCode = "phone"});
+			Rta.SaveState(new StateForTest {UserCode = "B3", StateCode = "phone"});
 
 			Context.SimulateRestart();
 			Rta.Touch(Database.TenantName());
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				.WithSchedule(personId, phone, "2015-01-15 08:00", "2015-01-15 10:00")
 				.WithRule("break", phone, 1);
 			Now.Is("2015-01-15 08:00");
-			Rta.SaveState(new ExternalUserStateForTest
+			Rta.SaveState(new StateForTest
 			{
 				UserCode = "user", 
 				StateCode = "break"

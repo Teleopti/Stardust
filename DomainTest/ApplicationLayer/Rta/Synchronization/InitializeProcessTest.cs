@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 				.WithRule("state", Guid.NewGuid())
 				.WithRule("anotherstate", Guid.NewGuid());
 			Now.Is("2015-01-15 08:00");
-			Rta.SaveState(new ExternalUserStateForTest
+			Rta.SaveState(new StateForTest
 			{
 				UserCode = "user",
 				StateCode = "state"
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 
 			Context.SimulateRestart();
 			Rta.Touch(Database.TenantName());
-			Rta.SaveState(new ExternalUserStateForTest
+			Rta.SaveState(new StateForTest
 			{
 				UserCode = "user",
 				StateCode = "anotherstate"
