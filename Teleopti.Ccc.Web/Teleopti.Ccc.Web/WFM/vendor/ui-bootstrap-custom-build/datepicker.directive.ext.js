@@ -5,7 +5,11 @@
 
 
 	angular.module('ui.bootstrap.datepicker').config(function ($provide) {
-		$provide.decorator('datepickerDirective', ['$delegate', '$timeout', function ($delegate, $timeout) {
+		$provide.decorator('datepickerDirective', datepickerDecorator);
+		$provide.decorator('uibDatepickerDirective', datepickerDecorator);
+
+		datepickerDecorator.$inject = ['$delegate', '$timeout', '$locale'];
+		function datepickerDecorator($delegate, $timeout, $locale) {
 			var directive = $delegate[0];
 			var link = directive.link;
 
@@ -19,7 +23,8 @@
 				return function (scope, element, attrs, ctrl) {
 
 					// set start of week based on locale.
-					ctrl[0].startingDay = moment.localeData()._week.dow;
+					ctrl[0].startingDay = ($locale.DATETIME_FORMATS.FIRSTDAYOFWEEK + 1) % 7;
+				
 					link.apply(this, arguments);
 
 					scope.$watch(function () {
@@ -36,9 +41,8 @@
 					});
 				}
 			};
-
 			return $delegate;
-		}]);
+		}
 	})
 	.run(['$templateCache', function ($templateCache) {
 		// Apply customized style to datepicker popup
