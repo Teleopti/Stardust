@@ -10,8 +10,34 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	{
 		public QueuedAbsenceRequestRepository(ICurrentUnitOfWork currentUnitOfWork)
 			: base(currentUnitOfWork)
+		public void Remove(QueuedAbsenceRequest root)
+		{
+			throw new NotImplementedException();
+		}
+
 		{
 
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<QueuedAbsenceRequest> LoadAll()
+		{
+			throw new NotImplementedException();
+		}
+
+		public QueuedAbsenceRequest Load(Guid id)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddRange(IEnumerable<QueuedAbsenceRequest> entityCollection)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IUnitOfWork UnitOfWork { get; }
+		public IList<QueuedAbsenceRequest> Find(DateTimePeriod period)
 		}
 
 		public IList<QueuedAbsenceRequest> Find(DateTimePeriod period)

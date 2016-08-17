@@ -17,9 +17,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_queuedAbsenceRequestRepository.Add(entity);
 		}
 
-		public void Remove(Guid personRequestId)
+		public void Remove(QueuedAbsenceRequest entity)
 		{
-			throw new NotImplementedException();
+			_queuedAbsenceRequestRepository.Remove(entity);
 		}
 
 		public void Add(IQueuedAbsenceRequest root)
@@ -63,9 +63,35 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _queuedAbsenceRequestRepository.FirstOrDefault(x => x.PersonRequestId == personRequestId);
 		}
 
-		public IList<QueuedAbsenceRequest> Find(Guid businessUnit, DateTimePeriod period)
+		public IList<QueuedAbsenceRequest> LoadAll()
 		{
 			throw new NotImplementedException();
+		}
+
+		public QueuedAbsenceRequest Load(Guid id)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddRange(IEnumerable<QueuedAbsenceRequest> entityCollection)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IUnitOfWork UnitOfWork { get; }
+
+		public IList<QueuedAbsenceRequest> Find(DateTimePeriod period)
+		{
+			IList<QueuedAbsenceRequest> overlappingRequests = new List<QueuedAbsenceRequest>();
+			foreach (var request in _queuedAbsenceRequestRepository)
+			{
+				if ((request.StarDateTime < period.StartDateTime && request.EndDateTime > period.StartDateTime) ||
+					(request.StarDateTime < period.EndDateTime && request.EndDateTime > period.EndDateTime))
+				{
+					overlappingRequests.Add(request);
+				}
+			}
+			return overlappingRequests;
 		}
 	}
 }
