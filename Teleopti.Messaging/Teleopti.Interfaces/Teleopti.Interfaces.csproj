@@ -113,7 +113,6 @@
     <Compile Include="Domain\DomainUpdateType.cs" />
     <Compile Include="Domain\GamificationSettingRuleSet.cs" />
     <Compile Include="Domain\FairnessType.cs" />
-    <Compile Include="Domain\HourSlot.cs" />
     <Compile Include="Domain\IAbsenceRequestCancelService.cs" />
     <Compile Include="Domain\IAbsenceRequestDetailViewModel.cs" />
     <Compile Include="Domain\IAbsenceRequestDetailViewModelFactory.cs" />
