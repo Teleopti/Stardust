@@ -320,8 +320,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			{
 				vm.Title = personAssignment.ShiftCategory.Description.Name;
 				vm.TimeSpan = personAssignment.PeriodExcludingPersonalActivity()
-							.TimePeriod(scheduleDay.TimeZone)
-							.ToShortTimeString();
+					.TimePeriod(scheduleDay.TimeZone);							
 
 				if (personAssignment.ShiftCategory != null)
 				{

@@ -1541,6 +1541,7 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.factory.personWeekView.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.factory.timeline.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.factory.timeLine.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.filter.timerange.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.activity.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.CommandCheckService.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.guidgenerator.js" />
