@@ -5,11 +5,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
-	public interface IQueuedAbsenceRequestRepository
+	public interface IQueuedAbsenceRequestRepository: IRepository<IQueuedAbsenceRequest>
 	{
-		void Add(QueuedAbsenceRequest entity);
-		void Remove(Guid personRequestId);
-		QueuedAbsenceRequest Get(Guid personRequestId);
-		IList<QueuedAbsenceRequest> Find(Guid businessUnit, DateTimePeriod period);
+		IList<QueuedAbsenceRequest> Find( DateTimePeriod period);
 	}
 }

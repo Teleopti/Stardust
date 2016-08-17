@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories 
 {
@@ -17,6 +18,42 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public void Remove(Guid personRequestId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Add(IQueuedAbsenceRequest root)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Remove(IQueuedAbsenceRequest root)
+		{
+			throw new NotImplementedException();
+		}
+
+		IQueuedAbsenceRequest IRepository<IQueuedAbsenceRequest>.Get(Guid id)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<IQueuedAbsenceRequest> LoadAll()
+		{
+			throw new NotImplementedException();
+		}
+
+		public IQueuedAbsenceRequest Load(Guid id)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddRange(IEnumerable<IQueuedAbsenceRequest> entityCollection)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IUnitOfWork UnitOfWork { get; }
+		public IList<QueuedAbsenceRequest> Find(DateTimePeriod period)
 		{
 			throw new NotImplementedException();
 		}

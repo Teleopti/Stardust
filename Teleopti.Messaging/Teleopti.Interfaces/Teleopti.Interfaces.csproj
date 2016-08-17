@@ -134,6 +134,7 @@
     <Compile Include="Domain\IOverrideTask.cs" />
     <Compile Include="Domain\IPaging.cs" />
     <Compile Include="Domain\IProjectionVersionPersister.cs" />
+    <Compile Include="Domain\IQueuedAbsenceRequest .cs" />
     <Compile Include="Domain\IResourceCalculationData.cs" />
     <Compile Include="Domain\IRootChangeInfo.cs" />
     <Compile Include="Domain\ISaveSeatMapCommand.cs" />
