@@ -20,8 +20,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		[HttpPost, Route("Rta/State/Change")]
 		public IHttpActionResult Change([FromBody]ExternalUserStateWebModel input)
 		{
-			DateTime batchId;
-			DateTime.TryParse(input.BatchId, out batchId);
+			DateTime snapshotId;
+			DateTime.TryParse(input.SnapshotId, out snapshotId);
 
 			try
 			{
@@ -34,9 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 						UserCode = input.UserCode,
 						StateCode = input.StateCode,
 						StateDescription = input.StateDescription,
-						IsLoggedOn = input.IsLoggedOn,
-						SnapshotId = batchId,
-						IsSnapshot = input.IsSnapshot,
+						SnapshotId = snapshotId,
 					});
 			}
 			catch (InvalidAuthenticationKeyException e)
@@ -72,7 +70,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 				var batch = input.Select(i =>
 				{
 					DateTime batchId;
-					DateTime.TryParse(i.BatchId, out batchId);
+					DateTime.TryParse(i.SnapshotId, out batchId);
 					return new ExternalUserStateInputModel
 					{
 						AuthenticationKey = i.AuthenticationKey,
@@ -81,9 +79,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 						UserCode = i.UserCode,
 						StateCode = i.StateCode,
 						StateDescription = i.StateDescription,
-						IsLoggedOn = i.IsLoggedOn,
 						SnapshotId = batchId,
-						IsSnapshot = i.IsSnapshot,
 					};
 				});
 				_rta.SaveStateBatch(batch);

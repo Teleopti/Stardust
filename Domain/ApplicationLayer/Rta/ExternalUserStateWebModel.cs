@@ -9,8 +9,6 @@
 		public string UserCode { get; set; }
 		public string StateCode { get; set; }
 		public string StateDescription { get; set; }
-		public bool IsLoggedOn { get; set; }
-		public string BatchId { get; set; }
-		public bool IsSnapshot { get; set; }
+		public string SnapshotId { get; set; }
 	}
 }

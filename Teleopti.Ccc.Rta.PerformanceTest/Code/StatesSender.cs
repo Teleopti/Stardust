@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		private readonly MutableNow _now;
 		private readonly TestConfiguration _stateHolder;
 		private readonly Http _http;
-		private StateChange[] stateChanges;
 
 		public StatesSender(
 			MutableNow now, 
@@ -31,8 +30,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		[LogTime]
 		public virtual void Send()
 		{
-			stateChanges = states();
-			stateChanges.ForEach(stateChange =>
+			states().ForEach(stateChange =>
 			{
 				setTime(stateChange);
 				Enumerable.Range(0, _stateHolder.NumberOfAgents)
@@ -45,10 +43,8 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 								AuthenticationKey = LegacyAuthenticationKey.TheKey,
 								UserCode = $"roger{roger}",
 								StateCode = stateChange.StateCode,
-								IsLoggedOn = true,
 								PlatformTypeId = Guid.Empty.ToString(),
 								SourceId = _stateHolder.SourceId,
-								IsSnapshot = false
 							});
 					});
 			});
@@ -56,8 +52,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 
 		public void SendBatches()
 		{
-			stateChanges = states();
-			stateChanges.ForEach(stateChange =>
+			states().ForEach(stateChange =>
 			{
 				setTime(stateChange);
 				Enumerable.Range(0, _stateHolder.NumberOfAgents)
@@ -66,10 +61,8 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 						AuthenticationKey = LegacyAuthenticationKey.TheKey,
 						UserCode = $"roger{agent}",
 						StateCode = stateChange.StateCode,
-						IsLoggedOn = true,
 						PlatformTypeId = Guid.Empty.ToString(),
 						SourceId = _stateHolder.SourceId,
-						IsSnapshot = false
 					})
 					.Batch(50)
 					.ForEach(state => _http.PostJson("Rta/State/Batch", state));
@@ -137,7 +130,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		
 		public IEnumerable<StateChange> SentSates()
 		{
-			return stateChanges;
+			return states();
 		}
 
 	}

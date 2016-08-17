@@ -52,11 +52,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 						AuthenticationKey = "!#¤atAbgT%",
 						UserCode = personName,
 						StateCode = stateCode,
-						IsLoggedOn = true,
 						PlatformTypeId = Guid.Empty.ToString(),
 						SourceId = SourceId,
-						BatchId = CurrentTime.Value().ToString("yyyy-MM-dd HH:mm:ss"),
-						IsSnapshot = false
+						SnapshotId = CurrentTime.Value().ToString("yyyy-MM-dd HH:mm:ss"),
 					});
 		}
 
