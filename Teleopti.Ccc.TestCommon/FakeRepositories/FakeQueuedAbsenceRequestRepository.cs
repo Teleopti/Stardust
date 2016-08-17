@@ -53,32 +53,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public IUnitOfWork UnitOfWork { get; }
-		public IList<QueuedAbsenceRequest> Find(DateTimePeriod period)
-		{
-			throw new NotImplementedException();
-		}
 
 		public QueuedAbsenceRequest Get(Guid personRequestId)
 		{
 			return _queuedAbsenceRequestRepository.FirstOrDefault(x => x.PersonRequestId == personRequestId);
 		}
-
-		public IList<QueuedAbsenceRequest> LoadAll()
-		{
-			throw new NotImplementedException();
-		}
-
-		public QueuedAbsenceRequest Load(Guid id)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AddRange(IEnumerable<QueuedAbsenceRequest> entityCollection)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IUnitOfWork UnitOfWork { get; }
 
 		public IList<QueuedAbsenceRequest> Find(DateTimePeriod period)
 		{
