@@ -14134,7 +14134,7 @@ Check your internet connection or contact your administrator.</value>
     <comment>Used for the status of a denied absence request when waitlisting is enabled on the related workflow control set.</comment>
   </data>
   <data name="AddEmptyPeriod" xml:space="preserve">
-    <value>Add empty period</value>
+    <value>Add open hours</value>
     <comment>Add empty period text in outbound campaign edit.</comment>
   </data>
   <data name="DeletePeriod" xml:space="preserve">

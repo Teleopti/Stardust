@@ -952,7 +952,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add empty period.
+        ///   Looks up a localized string similar to Add open hours.
         /// </summary>
         public static string AddEmptyPeriod {
             get {
