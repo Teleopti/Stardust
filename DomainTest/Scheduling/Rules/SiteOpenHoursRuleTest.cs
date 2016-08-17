@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var person = createPersonWithSiteOpenHours(8, 17);
 			var personScheduleRangeDictionary = new Dictionary<IPerson, IScheduleRange>
 			{
-				{person, createScheduleRange(person, schedulDate, 8, 17)}
+				{person, createScheduleRange(person, schedulDate, new TimePeriod(8, 0, 17, 0))}
 			};
 			var scheduleDays = new List<IScheduleDay>
 			{
@@ -75,11 +75,29 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			response.Person.Equals(person);
 		}
 
+		[Test]
+		public void ShouldValidateWithNightShift()
+		{
+			var person = createPersonWithSiteOpenHours(new Dictionary<DayOfWeek, TimePeriod>
+			{
+				{DayOfWeek.Monday, new TimePeriod(TimeSpan.FromHours(9), TimeSpan.FromHours(24).Subtract(new TimeSpan(1)))},
+				{DayOfWeek.Tuesday, new TimePeriod(TimeSpan.Zero, TimeSpan.FromHours(9))},
+			});
+			var result = executeValidate(person,
+				new TimePeriod(TimeSpan.FromHours(22), TimeSpan.FromDays(1).Add(TimeSpan.FromHours(5))));
+			result.Count().Should().Be(0);
+		}
+
 		private IEnumerable<IBusinessRuleResponse> executeValidate(IPerson person, int startHour, int endHour)
+		{
+			return executeValidate(person, new TimePeriod(startHour, 0, endHour, 0));
+		}
+
+		private IEnumerable<IBusinessRuleResponse> executeValidate(IPerson person, TimePeriod timePeriod)
 		{
 			var schedulDate = new DateOnly(2016, 8, 8);
 
-			var person1ScheduleRange = createScheduleRange(person, schedulDate, startHour, endHour);
+			var person1ScheduleRange = createScheduleRange(person, schedulDate, timePeriod);
 
 			var personScheduleRangeDictionary = new Dictionary<IPerson, IScheduleRange>
 			{
@@ -92,9 +110,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			return _target.Validate(personScheduleRangeDictionary, scheduleDays);
 		}
 
-		private IScheduleRange createScheduleRange(IPerson person, DateOnly schedulDate, int startHour, int endHour)
+		private IScheduleRange createScheduleRange(IPerson person, DateOnly schedulDate, TimePeriod timePeriod)
 		{
-			var timePeriod = new TimePeriod(startHour, 0, endHour, 0);
 			var period = schedulDate.ToDateTimePeriod(timePeriod, person.PermissionInformation.DefaultTimeZone());
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, _scenario, schedulDate);
 			personAssignment.AddActivity(new Activity("activity"), period);
@@ -116,6 +133,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 				IsClosed = isOpenHoursClosed
 			};
 			team.Site.AddOpenHour(siteOpenHour);
+			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(_periodStartDate, team);
+			return person;
+		}
+
+		private IPerson createPersonWithSiteOpenHours(Dictionary<DayOfWeek, TimePeriod> openHours)
+		{
+			var team = TeamFactory.CreateTeam("team", "site");
+			foreach (var openHour in openHours)
+			{
+				var siteOpenHour = new SiteOpenHour()
+				{
+					Parent = team.Site,
+					TimePeriod = openHour.Value,
+					WeekDay = openHour.Key
+				};
+				team.Site.AddOpenHour(siteOpenHour);
+			}
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(_periodStartDate, team);
 			return person;
 		}

@@ -172,6 +172,38 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		[Test]
+		public void ShouldFilterScheduleViewWithNightShiftSchedule()
+		{
+			var personFrom = createPersonWithSiteOpenHours(new Dictionary<DayOfWeek, TimePeriod>
+			{
+				{ DayOfWeek.Monday, new TimePeriod(TimeSpan.FromHours(9), TimeSpan.FromHours(24).Subtract(new TimeSpan(1))) },
+				{ DayOfWeek.Tuesday, new TimePeriod(TimeSpan.Zero, TimeSpan.FromHours(9)) },
+			});
+			prepareData(personFrom);
+			var personFromScheduleView = createShiftTradeAddPersonScheduleViewModel(personFrom, _shiftTradeDate, new[]
+			{
+				new TimePeriod(8, 30, 14, 30)
+			});
+
+			var person1 = createPersonWithSiteOpenHours(8, 15);
+
+			var shiftTradeAddPersonScheduleViews = new[]
+			{
+				createShiftTradeAddPersonScheduleViewModel(person1, _shiftTradeDate, new[]
+				{
+					new TimePeriod(TimeSpan.FromHours(22), TimeSpan.FromDays(1).Add(TimeSpan.FromHours(5)))
+				})
+			};
+
+			var datePersons = new DatePersons { Date = _shiftTradeDate, Persons = new[] { person1 } };
+			var filteredShiftTradeAddPersonScheduleViews =
+				Target.FilterScheduleView(shiftTradeAddPersonScheduleViews, personFromScheduleView, datePersons).ToList();
+
+			filteredShiftTradeAddPersonScheduleViews.Count.Should().Be(1);
+			filteredShiftTradeAddPersonScheduleViews.FirstOrDefault().PersonId.Should().Be(person1.Id.GetValueOrDefault());
+		}
+
+		[Test]
 		public void ShouldFilterShiftExchangeOfferByCurrentUserSiteOpenHour()
 		{
 			prepareData(createPersonWithSiteOpenHours(8, 15));
@@ -290,6 +322,23 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				WeekDay = DayOfWeek.Monday
 			};
 			team.Site.AddOpenHour(siteOpenHour);
+			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(_periodStartDate, team);
+			return person;
+		}
+
+		private IPerson createPersonWithSiteOpenHours(Dictionary<DayOfWeek, TimePeriod> openHours)
+		{
+			var team = TeamFactory.CreateTeam("team", "site");
+			foreach (var openHour in openHours)
+			{
+				var siteOpenHour = new SiteOpenHour()
+				{
+					Parent = team.Site,
+					TimePeriod = openHour.Value,
+					WeekDay = openHour.Key
+				};
+				team.Site.AddOpenHour(siteOpenHour);
+			}
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(_periodStartDate, team);
 			return person;
 		}

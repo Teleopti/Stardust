@@ -34,10 +34,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				return personToScheduleViews;
 			}
 
-			var shiftTradeDate = datePersons.Date;
 			var personDictionary = datePersons.Persons.ToDictionary(p => p.Id.GetValueOrDefault(Guid.NewGuid()));
-			var personFromSiteOpenHourPeriod = getPersonSiteOpenHourPeriod(_loggedOnUser.CurrentUser(), shiftTradeDate);
-			var personFromSchedulePeriod = getSchedulePeriod(personFromScheduleView);
+			var personFrom = _loggedOnUser.CurrentUser();
+			var personFromSchedulePeriods = getSchedulePeriods(personFromScheduleView);
 
 			return personToScheduleViews.Where(
 				shiftTradeAddPersonScheduleView =>
@@ -53,11 +52,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 						return true;
 					}
 
-					var personToSiteOpenHourPeriod = getPersonSiteOpenHourPeriod(personTo, shiftTradeDate);
-					var personToScheduleTimePeriod = getSchedulePeriod(shiftTradeAddPersonScheduleView);
+					var personToScheduleTimePeriods = getSchedulePeriods(shiftTradeAddPersonScheduleView);
+					var isSatisfiedPersonFromSiteOpenHours = isSatisfiedSiteOpenHours(personToScheduleTimePeriods, personFrom);
+					var isSatisfiedPersonToSiteOpenHours = isSatisfiedSiteOpenHours(personFromSchedulePeriods, personTo);
 
-					return personFromSiteOpenHourPeriod.Contains(personToScheduleTimePeriod)
-						   && personToSiteOpenHourPeriod.Contains(personFromSchedulePeriod);
+					return isSatisfiedPersonFromSiteOpenHours && isSatisfiedPersonToSiteOpenHours;
 				});
 		}
 
@@ -90,12 +89,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				});
 		}
 
+
+		private static bool isSatisfiedSiteOpenHours(Dictionary<DateOnly, TimePeriod> personScheduleTimePeriods, IPerson person)
+		{
+			var isSatisfied = true;
+			foreach (var personToScheduleTimePeriod in personScheduleTimePeriods)
+			{
+				var personSiteOpenHourPeriod = getPersonSiteOpenHourPeriod(person, personToScheduleTimePeriod.Key);
+				isSatisfied = isSatisfied && personSiteOpenHourPeriod.Contains(personToScheduleTimePeriod.Value);
+			}
+			return isSatisfied;
+		}
+
 		private static TimePeriod getPersonSiteOpenHourPeriod(IPerson person, DateOnly shiftTradeDate)
 		{
 			var siteOpenHour = person.SiteOpenHour(shiftTradeDate);
 			if (siteOpenHour == null)
 			{
-				return new TimePeriod(0, 0, 23, 59);
+				return new TimePeriod(TimeSpan.Zero, TimeSpan.FromHours(24).Subtract(new TimeSpan(1)));
 			}
 			if (siteOpenHour.IsClosed)
 			{
@@ -109,17 +120,30 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			return _toggleManager.IsEnabled(Toggles.Wfm_Requests_Site_Open_Hours_39936);
 		}
 
-		private TimePeriod getSchedulePeriod(ShiftTradeAddPersonScheduleViewModel shiftTradeAddPersonScheduleView)
+		private Dictionary<DateOnly, TimePeriod> getSchedulePeriods(
+			ShiftTradeAddPersonScheduleViewModel shiftTradeAddPersonScheduleView)
 		{
 			var maxEndTime = shiftTradeAddPersonScheduleView.ScheduleLayers.Max(scheduleLayer => scheduleLayer.End);
 			var minStartTime = shiftTradeAddPersonScheduleView.ScheduleLayers.Min(scheduleLayer => scheduleLayer.Start);
+			return getSchedulePeriods(minStartTime, maxEndTime);
+		}
 
-			var scheduleTimePeriod = new TimePeriod(minStartTime.TimeOfDay,
-				(minStartTime.Day != maxEndTime.Day)
-					? maxEndTime.TimeOfDay.Add(TimeSpan.FromDays(1))
-					: maxEndTime.TimeOfDay);
+		private Dictionary<DateOnly, TimePeriod> getSchedulePeriods(DateTime startTime, DateTime endTime)
+		{
+			var dateTimePeriodDictionary = new Dictionary<DateOnly, TimePeriod>();
+			if (startTime.Day == endTime.Day)
+			{
+				dateTimePeriodDictionary.Add(new DateOnly(startTime),
+					new TimePeriod(startTime.TimeOfDay, endTime.TimeOfDay));
+			}
+			else
+			{
+				dateTimePeriodDictionary.Add(new DateOnly(startTime),
+					new TimePeriod(startTime.TimeOfDay, TimeSpan.FromHours(24).Subtract(new TimeSpan(1))));
+				dateTimePeriodDictionary.Add(new DateOnly(endTime), new TimePeriod(TimeSpan.Zero, endTime.TimeOfDay));
+			}
 
-			return scheduleTimePeriod;
+			return dateTimePeriodDictionary;
 		}
 	}
 }
