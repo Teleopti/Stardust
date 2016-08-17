@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using log4net;
 using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -17,17 +14,16 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 {
 	public class DatabaseReader : IDatabaseReader
 	{
-		private readonly IConnectionStrings _connectionStrings;
+		private readonly ICurrentAnalyticsUnitOfWork _analyticsUnitOfWork;
 		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly INow _now;
-		private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof(IDatabaseReader));
 
 		public DatabaseReader(
-			IConnectionStrings connectionStrings,
+			ICurrentAnalyticsUnitOfWork analyticsUnitOfWork,
 			ICurrentUnitOfWork unitOfWork,
 			INow now)
 		{
-			_connectionStrings = connectionStrings;
+			_analyticsUnitOfWork = analyticsUnitOfWork;
 			_unitOfWork = unitOfWork;
 			_now = now;
 		}
@@ -65,37 +61,22 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public ConcurrentDictionary<string, int> Datasources()
 		{
-			var dictionary = new ConcurrentDictionary<string, int>();
-			using (var connection = new SqlConnection(_connectionStrings.Analytics()))
-			{
-				var command = connection.CreateCommand();
-				command.CommandType = CommandType.StoredProcedure;
-				command.CommandText = "RTA.rta_load_datasources";
-				connection.Open();
-				var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
-				while (reader.Read())
-				{
-					var loadedSourceId = reader["source_id"];
-					int loadedDataSourceId = reader.GetInt16(reader.GetOrdinal("datasource_id")); //This one cannot be null as it's the PK of the table
-					if (loadedSourceId == DBNull.Value)
-					{
-						LoggingSvc.WarnFormat("No source id is defined for data source = {0}", loadedDataSourceId);
-						continue;
-					}
-					var loadedSourceIdAsString = (string)loadedSourceId;
-					if (dictionary.ContainsKey(loadedSourceIdAsString))
-					{
-						LoggingSvc.DebugFormat("There is already a source defined with the id = {0}",
-												 loadedSourceIdAsString);
-						continue;
-					}
-					dictionary.AddOrUpdate(loadedSourceIdAsString, loadedDataSourceId, (s, i) => loadedDataSourceId);
-				}
-				reader.Close();
-			}
-			return dictionary;
+			var datasources = _analyticsUnitOfWork.Current().Session()
+				.CreateSQLQuery("SELECT datasource_id, source_id FROM mart.sys_datasource")
+				.SetResultTransformer(Transformers.AliasToBean(typeof (datasource)))
+				.List<datasource>()
+				.GroupBy(x => x.source_id, (key, g) => g.First());
+
+			return new ConcurrentDictionary<string, int>(datasources
+				.ToDictionary(datasource => datasource.source_id, datasource => datasource.datasource_id));
 		}
-		
+
+		private class datasource
+		{
+			public int datasource_id { get; set; }
+			public string source_id { get; set; }
+		}
+
 		public IEnumerable<PersonOrganizationData> LoadPersonOrganizationData(int dataSourceId, string externalLogOn)
 		{
 			return readPersonOrganizationDatas(_unitOfWork.Current()
@@ -136,5 +117,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			public string TimeZone { get; set; }
 			public DateTime EndDate { get; set; }
 		}
+
 	}
 }

@@ -3,9 +3,9 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Resolvers;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Logon.Aspects;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	public class ContextLoader : IContextLoader
 	{
-		private readonly DataSourceResolver _dataSourceResolver;
+		private readonly IDatabaseLoader _databaseLoader;
 		private readonly INow _now;
 		private readonly StateMapper _stateMapper;
 		private readonly IAgentStatePersister _agentStatePersister;
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			ProperAlarm appliedAlarm
 			)
 		{
-			_dataSourceResolver = new DataSourceResolver(databaseLoader);
+			_databaseLoader = databaseLoader;
 			_now = now;
 			_stateMapper = stateMapper;
 			_agentStatePersister = agentStatePersister;
@@ -107,13 +107,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			if (string.IsNullOrEmpty(input.SourceId))
 				throw new InvalidSourceException("Source id is required");
 			int dataSourceId;
-			if (!_dataSourceResolver.TryResolveId(input.SourceId, out dataSourceId))
+			if (!_databaseLoader.Datasources().TryGetValue(input.SourceId, out dataSourceId))
 				throw new InvalidSourceException(string.Format("Source id not found {0}", input.SourceId));
 			return dataSourceId;
 		}
-		
+
 		[AllBusinessUnitsUnitOfWork]
 		[ReadModelUnitOfWork]
+		[AnalyticsUnitOfWork]
 		protected virtual void WithUnitOfWork(Action action)
 		{
 			action.Invoke();
@@ -123,11 +124,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			var found = false;
 
-			var dataSourceId = validateSourceId(input);
-			var userCode = input.UserCode;
-
 			WithUnitOfWork(() =>
 			{
+				var dataSourceId = validateSourceId(input);
+				var userCode = input.UserCode;
+
 				_databaseReader.LoadPersonOrganizationData(dataSourceId, userCode)
 					.ForEach(x =>
 					{
