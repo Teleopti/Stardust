@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					builder.RegisterType<EventualStateCodeAdder>().As<IStateCodeAdder>().SingleInstance();
 				else
 					builder.RegisterType<ScaleOutStateCodeAdder>().As<IStateCodeAdder>().SingleInstance();
-				builder.RegisterType<InParallel>().As<IBatchExecuteStrategy>().SingleInstance();
+				builder.RegisterType<InParallel>().As<IBatchExecuteStrategy>().ApplyAspects().SingleInstance();
 			}
 			else
 			{

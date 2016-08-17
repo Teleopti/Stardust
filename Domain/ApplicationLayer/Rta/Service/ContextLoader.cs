@@ -1,10 +1,11 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Resolvers;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Interfaces;
+using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -19,6 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IDatabaseReader _databaseReader;
 		private readonly AppliedAdherence _appliedAdherence;
 		private readonly ProperAlarm _appliedAlarm;
+		private readonly IBatchExecuteStrategy _batchExecuteStrategy;
 
 		public ContextLoader(
 			IDatabaseLoader databaseLoader,
@@ -28,7 +30,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IMappingReader mappingReader,
 			IDatabaseReader databaseReader,
 			AppliedAdherence appliedAdherence,
-			ProperAlarm appliedAlarm
+			ProperAlarm appliedAlarm,
+			IBatchExecuteStrategy batchExecuteStrategy
 			)
 		{
 			_dataSourceResolver = new DataSourceResolver(databaseLoader);
@@ -39,6 +42,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_databaseReader = databaseReader;
 			_appliedAdherence = appliedAdherence;
 			_appliedAlarm = appliedAlarm;
+			_batchExecuteStrategy = batchExecuteStrategy;
 		}
 
 		protected int validateSourceId(ExternalUserStateInputModel input)
@@ -60,6 +64,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public virtual void For(ExternalUserStateInputModel input, Action<Context> action)
 		{
+			var found = false;
+
 			var dataSourceId = validateSourceId(input);
 			var userCode = input.UserCode;
 
@@ -68,6 +74,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				_databaseReader.LoadPersonOrganizationData(dataSourceId, userCode)
 					.ForEach(x =>
 					{
+						found = true;
+
 						action.Invoke(new Context(
 							input,
 							x.PersonId,
@@ -99,6 +107,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							));
 					});
 			});
+
+			if (!found)
+				throw new InvalidUserCodeException(string.Format("No person found for SourceId {0} and UserCode {1}", input.SourceId, input.UserCode));
+
+		}
+
+		public void ForBatch(IEnumerable<ExternalUserStateInputModel> inputs, Action<Context> action)
+		{
+			var exceptions = new ConcurrentBag<Exception>();
+
+			_batchExecuteStrategy.Execute(inputs, input =>
+			{
+				try
+				{
+					For(input, action);
+				}
+				catch (Exception e)
+				{
+					exceptions.Add(e);
+				}
+			});
+
+			if (exceptions.Any())
+				throw new AggregateException(exceptions);
 		}
 
 		public virtual void ForAll(Action<Context> action)
@@ -205,7 +237,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						));
 				});
 		}
-
 	}
 
 }

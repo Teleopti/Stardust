@@ -70,22 +70,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly RtaInitializor _initializor;
 		private readonly ActivityChangeProcessor _activityChangeProcessor;
 		private readonly ContextLoader _contextLoader;
-		private readonly IBatchExecuteStrategy _batchExecuteStrategy;
 
 		public Rta(
 			RtaProcessor processor,
 			TenantLoader tenantLoader,
 			RtaInitializor initializor,
 			ActivityChangeProcessor activityChangeProcessor,
-			ContextLoader contextLoader,
-			IBatchExecuteStrategy batchExecuteStrategy)
+			ContextLoader contextLoader)
 		{
 			_processor = processor;
 			_tenantLoader = tenantLoader;
 			_initializor = initializor;
 			_activityChangeProcessor = activityChangeProcessor;
 			_contextLoader = contextLoader;
-			_batchExecuteStrategy = batchExecuteStrategy;
 		}
 		
 		[InfoLog]
@@ -97,27 +94,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_initializor.EnsureTenantInitialized();
 			validatePlatformId(rootInput);
 
-			var exceptions = new ConcurrentBag<Exception>();
-			_batchExecuteStrategy.Execute(inputs, input =>
+			_contextLoader.ForBatch(inputs, person =>
 			{
-				try
-				{
-					SaveStateBatchSingle(input);
-				}
-				catch (Exception e)
-				{
-					exceptions.Add(e);
-				}
+				_processor.Process(person);
 			});
-			if (exceptions.Any())
-				throw new AggregateException(exceptions);
-		}
-
-		[InfoLog]
-		[TenantScope]
-		protected virtual void SaveStateBatchSingle(ExternalUserStateInputModel input)
-		{
-			ProcessInput(input);
 		}
 
 		[InfoLog]
@@ -127,9 +107,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			validateAuthenticationKey(input);
 			_initializor.EnsureTenantInitialized();
 			validatePlatformId(input);
-			ProcessInput(input);
-		}
 
+			_contextLoader.For(input, person =>
+			{
+				_processor.Process(person);
+			});
+		}
+		
 		[InfoLog]
 		[TenantScope]
 		public virtual void CloseSnapshot(CloseSnapshotInputModel input)
@@ -151,19 +135,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			if (string.IsNullOrEmpty(input.PlatformTypeId))
 				throw new InvalidPlatformException("Platform id is required");
-		}
-		
-		[InfoLog]
-		protected virtual void ProcessInput(ExternalUserStateInputModel input)
-		{
-			var found = false;
-			_contextLoader.For(input, person =>
-			{
-				found = true;
-				_processor.Process(person);
-			});
-			if (!found)
-				throw new InvalidUserCodeException(string.Format("No person found for SourceId {0} and UserCode {1}", input.SourceId, input.UserCode));
 		}
 		
 		[InfoLog]
