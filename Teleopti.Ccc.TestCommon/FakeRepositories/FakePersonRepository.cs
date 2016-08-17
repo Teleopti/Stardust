@@ -5,6 +5,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -19,13 +20,20 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_persons.Add(person);
 		}
 
-		public Person Has(IContract contract, IContractSchedule contractSchedule, IPartTimePercentage partTimePercentage, ITeam team, ISchedulePeriod schedulePeriod, params ISkill[] skills)
+		public Person Has(IContract contract, IContractSchedule contractSchedule, IPartTimePercentage partTimePercentage, ITeam team, ISchedulePeriod schedulePeriod, IWorkShiftRuleSet ruleSet, params ISkill[] skills)
 		{
 			var ppDate = new DateOnly(1950, 1, 1);
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
-			agent.AddPersonPeriod(new PersonPeriod(ppDate, new PersonContract(contract, partTimePercentage, contractSchedule), team));
-			if(schedulePeriod != null)
+			var period = new PersonPeriod(ppDate, new PersonContract(contract, partTimePercentage, contractSchedule), team);
+			if (ruleSet != null)
+			{
+				period.RuleSetBag = new RuleSetBag(ruleSet);
+			}
+			agent.AddPersonPeriod(period);
+			if (schedulePeriod != null)
+			{
 				agent.AddSchedulePeriod(schedulePeriod);
+			}
 			foreach (var skill in skills)
 			{
 				agent.AddSkill(skill, ppDate);
@@ -34,9 +42,20 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return agent;
 		}
 
+
+		public Person Has(IContract contract, IContractSchedule contractSchedule, IPartTimePercentage partTimePercentage, ITeam team, ISchedulePeriod schedulePeriod, params ISkill[] skills)
+		{
+			return Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, null, skills);
+		}
+
 		public Person Has(IContract contract, ISchedulePeriod schedulePeriod, params ISkill[] skills)
 		{
 			return Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("_") }, schedulePeriod, skills);
+		}
+
+		public Person Has(IContract contract, ISchedulePeriod schedulePeriod, IWorkShiftRuleSet ruleSet, params ISkill[] skills)
+		{
+			return Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("_") }, schedulePeriod, ruleSet, skills);
 		}
 
 		public IPerson Has(IPerson person, ITeam team, DateOnly startDate)

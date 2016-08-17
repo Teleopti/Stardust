@@ -47,13 +47,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			//
 			var contract = new Contract("_");
 			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
-			var agent1 = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill).InTimeZone(TimeZoneInfoFactory.TaipeiTimeZoneInfo());
-			var agent2 = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill).InTimeZone(TimeZoneInfoFactory.TaipeiTimeZoneInfo());
 			var shiftCategory = new ShiftCategory("_").WithId();
-			var normalRuleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(12, 0, 12, 0, 15), new TimePeriodWithSegment(20, 0, 20, 0, 15), shiftCategory));
-			var ruleSetBag = new RuleSetBag(normalRuleSet);
-			agent1.Period(firstDay).RuleSetBag = ruleSetBag;
-			agent2.Period(firstDay).RuleSetBag = ruleSetBag;
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(12, 0, 12, 0, 15), new TimePeriodWithSegment(20, 0, 20, 0, 15), shiftCategory));
+			var agent1 = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill).InTimeZone(TimeZoneInfoFactory.TaipeiTimeZoneInfo());
+			var agent2 = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill).InTimeZone(TimeZoneInfoFactory.TaipeiTimeZoneInfo());
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnlyPeriod(firstDay, firstDay.AddDays(6)), TimeSpan.FromHours(10)));
 			var dayOffTemplate = new DayOffTemplate(new Description("_default")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);

@@ -48,8 +48,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var skillA = SkillRepository.Has("skillA", activity, 1);
 			var skillB = SkillRepository.Has("skillB", activity, 2);
 
-			var agentA = PersonRepository.Has(contract, schedulePeriod, skillA, skillB);
-			agentA.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
+			var agentA = PersonRepository.Has(contract, schedulePeriod, ruleSet, skillA, skillB);
 
 			SkillDayRepository.Has(new List<ISkillDay>
 							 {
@@ -83,8 +82,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var skillA = SkillRepository.Has("skillA", activity, 1);
 			var skillB = SkillRepository.Has("skillB", activity, 2);
 
-			var agentA = PersonRepository.Has(contract, schedulePeriod, skillA, skillB);
-			agentA.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
+			var agentA = PersonRepository.Has(contract, schedulePeriod, ruleSet, skillA, skillB);
 
 			SkillDayRepository.Has(new List<ISkillDay>
 							 {
