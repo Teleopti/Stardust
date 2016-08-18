@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			system.UseTestDouble<FakeScheduleDataReadScheduleStorage>().For<FakeScheduleDataReadScheduleStorage>();
 			system.UseTestDouble<FakeCurrentScenario>().For<FakeCurrentScenario>();
 			system.UseTestDouble<NewAbsenceRequestUseMultiHandler>().For<NewAbsenceRequestUseMultiHandler>();
+			system.UseTestDouble(new FakeConfigReader("NumberOfAbsenceRequestsToBulkProcess", "2")).For<IConfigReader>();
 		}
 
 

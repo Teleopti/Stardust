@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
@@ -19,6 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
 		private readonly IEventPublisher _eventPublisher;
+		private readonly IConfigReader _configReader;
 
 		private readonly IList<LoadDataAction> _loadDataActions;
 		private IPersonRequest _personRequest;
@@ -29,11 +31,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private delegate bool LoadDataAction(NewAbsenceRequestCreatedEvent @event);
 
 		public NewAbsenceRequestUseMultiHandler(IPersonRequestRepository personRequestRepository, IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, 
-			IEventPublisher eventPublisher)
+			IEventPublisher eventPublisher, IConfigReader configReader)
 		{
 			_personRequestRepository = personRequestRepository;
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
 			_eventPublisher = eventPublisher;
+			_configReader = configReader;
 
 			_loadDataActions = new List<LoadDataAction>
 			{
@@ -60,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_queuedAbsenceRequestRepository.Add(queuedAbsenceRequest);
 			var requestWithOverlappingPeriod = _queuedAbsenceRequestRepository.Find(_personRequest.Request.Period);
 
-			if (requestWithOverlappingPeriod.Count >= 2)
+			if (requestWithOverlappingPeriod.Count >= int.Parse(_configReader.AppConfig("NumberOfAbsenceRequestsToBulkProcess")))
 			{
 				var Ids = new List<Guid>();
 				foreach (var req in requestWithOverlappingPeriod)
