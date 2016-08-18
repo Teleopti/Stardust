@@ -12,6 +12,13 @@
 .ui-dialog-titlebar-close {
     visibility: hidden;
 }
+.text-white{
+	color:white;
+}
+.text-container{
+	min-height: 100px
+}
+
 
 /* Override the default bootstrap behavior where horizontal description lists
    will truncate terms that are too long to fit in the left column

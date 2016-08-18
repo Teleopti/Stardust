@@ -1,24 +1,42 @@
-﻿<div class="container body-content" ng-controller="listController">
+<div class="container body-content" ng-controller="listController">
 	<h2>Manage Tenants</h2>
 
 	<div class="row">
-		<div class="col-md-4">
-			<h2>Import existing</h2>
-			<p>
-				if you already have databases (one Application and one Analytics) that you want to include in the multi tenant administration you can import it here.
-			</p>
-			<p><a class="md-raised md-primary md-button" md-svg-icon="alarm" href="#import"><md-icon style="padding-right: 5px" md-svg-src="Content/images/ic_forward_black_24px.svg"></md-icon> Start import &raquo;</a></p>
+		<div class="col-md-4 panel panel-default">
+			<div class="panel-heading">Import existing</div>
+			<div class="panel-body text-container">
+				If you already have databases (one Application and one Analytics) that you want to include in the multi tenant administration you can import it here.
+			</div>
+			<div class="panel-footer">
+				<button class="btn btn-primary" md-svg-icon="alarm">
+					<md-icon style="padding-right: 5px" md-svg-src="Content/images/ic_forward_black_24px.svg"></md-icon>
+					<a class="text-white" href="#import">Start import &raquo;</a>
+				</button>
+			</div>
 		</div>
-		<div class="col-md-4">
-			<h2>Create new Tenant</h2>
-			<p>Lets you create new databases to hold Teleopti WFM data and connect them to a new Tenant.</p>
-
-			<p><a class="md-raised md-primary md-button btn-info" href="#create"><md-icon style="padding-right: 5px" md-svg-src="Content/images/ic_group_add_black_24px.svg"></md-icon>  Create new &raquo;</a></p>
+		<div class="col-md-4 panel panel-default">
+			<div class="panel-heading">Create new Tenant</div>
+			<div class="panel-body text-container">
+				Lets you create new databases to hold Teleopti WFM data and connect them to a new Tenant.
+			</div>
+			<div class="panel-footer">
+				<button class="btn btn-primary">
+					<md-icon style="padding-right: 5px" md-svg-src="Content/images/ic_group_add_black_24px.svg"></md-icon>
+					<a class="text-white" href="#create">Create new &raquo;</a>
+				</button>
+			</div>
 		</div>
-		<div class="col-md-4">
-			<h2>Manage Users</h2>
-			<p>Handle users that have access to this web site.</p>
-			<p><a class="md-raised md-primary md-button btn-success" href="#users"><md-icon style="padding-right: 5px" md-svg-src="Content/images/ic_account_circle_black_24px.svg"></md-icon>Users &raquo;</a></p>
+		<div class="col-md-4 panel panel-default">
+			<div class="panel-heading">Manage Users</div>
+			<div class="panel-body text-container">
+				Handle users that have access to this web site.
+			</div>
+			<div class="panel-footer">
+				<button class="btn btn-primary">
+					<md-icon style="padding-right: 5px" md-svg-src="Content/images/ic_account_circle_black_24px.svg"></md-icon>
+					<a class="text-white" href="#users">Users &raquo;</a>
+				</button>
+			</div>
 		</div>
 	</div>
 	<br />
@@ -40,10 +58,13 @@
 				</thead>
 				<tbody>
 					<tr ng-repeat="tenant in Tenants">
-						<td><a href="#details\{{tenant.Name}}"><md-icon style="padding-right: 5px" md-svg-src="Content/images/ic_group_black_24px.svg"></md-icon>{{tenant.Name}}</a>   </td>
-						<td><a href="#details\{{tenant.Name}}">{{tenant.AppDatabase}}</a>   </td>
-						<td><a href="#details\{{tenant.Name}}">{{tenant.AnalyticsDatabase}}</a>   </td>
-						<td><a href="#details\{{tenant.Name}}">&nbsp;{{tenant.AggregationDatabase}}</a>   </td>
+						<td>
+							<a href="#details\{{tenant.Name}}">
+								<md-icon style="padding-right: 5px" md-svg-src="Content/images/ic_group_black_24px.svg"></md-icon>{{tenant.Name}}</a>
+						</td>
+						<td><a href="#details\{{tenant.Name}}">{{tenant.AppDatabase}}</a> </td>
+						<td><a href="#details\{{tenant.Name}}">{{tenant.AnalyticsDatabase}}</a> </td>
+						<td><a href="#details\{{tenant.Name}}">&nbsp;{{tenant.AggregationDatabase}}</a> </td>
 						<td><a href="#details\{{tenant.Name}}">{{tenant.Version.ImportAppVersion}}</a> </td>
 						<td>{{tenant.Active}}</td>
 					</tr>
