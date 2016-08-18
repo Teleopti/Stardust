@@ -249,6 +249,7 @@
     <Compile Include="Repositories\IndexMaintenanceRepositoryTest.cs" />
     <Compile Include="Repositories\LoadSkillInIntradaysTest.cs" />
     <Compile Include="Repositories\PersonInRoleQuerierTest.cs" />
+    <Compile Include="Repositories\QueuedAbsenceRequestRepositoryTest.cs" />
     <Compile Include="Repositories\ProjectionVersionPersisterTest.cs" />
     <Compile Include="Repositories\SkillAreaRepositoryTest.cs" />
     <Compile Include="Rta\AgentStateForTest.cs" />

@@ -2975,6 +2975,9 @@
     <EmbeddedResource Include="Common\SiteOpenHour.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="AbsenceWaitlisting\QueuedAbsenceRequest.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <Content Include="FeatureFlags\toggles.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

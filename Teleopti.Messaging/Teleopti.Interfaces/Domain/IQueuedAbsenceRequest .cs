@@ -10,7 +10,5 @@ namespace Teleopti.Interfaces.Domain
 		DateTime StartDateTime { get; set; }
 
 		DateTime EndDateTime { get; set; }
-
-		IBusinessUnit BusinessUnit { get; set; }
 	}
 }
