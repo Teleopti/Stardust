@@ -5,11 +5,12 @@
     angular.module('wfm.teamSchedule')
         .factory('$wfmModal', wfmModalService);
 
-    wfmModalService.$inject = ['$rootScope', '$compile', '$controller', '$templateRequest'];
+    wfmModalService.$inject = ['$rootScope', '$compile', '$controller', '$templateRequest', '$q'];
 
-    function wfmModalService($rootScope, $compile, $controller, $templateRequest) {
+    function wfmModalService($rootScope, $compile, $controller, $templateRequest, $q) {
 
         var defaultTemplate = 'js/teamSchedule/html/commandConfirmDialog.tpl.html';
+        var confirmModalTemplate = 'js/teamSchedule/html/miniConfirmModal.tpl.html';
         var defaultController = 'commandConfirmDialog';
 
         function show(options) {
@@ -62,8 +63,38 @@
 
         }
 
+        function confirm(message, title) {
+            var deferred = $q.defer();
+
+            message = message || '';
+            title = title || 'Confirm';
+
+            $templateRequest(confirmModalTemplate).then(makeConfirmModal);
+
+            function makeConfirmModal(template) {
+                var scope = $rootScope.$new();
+                var parent = angular.element(document.body);
+
+                scope.message = message;
+                scope.title = title;
+                scope.close = function closeModal(result) {
+                    scope.$evalAsync(function (scope) {
+                        scope.$destroy();
+                        compiledConfirmModal.remove();
+                        deferred.resolve(result);
+                    });
+                };
+
+                var compiledConfirmModal = $compile(template)(scope);
+                parent.append(compiledConfirmModal);
+            }
+
+            return deferred.promise;
+        }
+
         return {
-            show: show
+            show: show,
+            confirm: confirm
         };
 
     }

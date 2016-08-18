@@ -1497,6 +1497,7 @@
     <Content Include="WFM\js\teamSchedule\html\addPersonalActivity.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\commandCheck.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\commandConfirmDialog.tpl.html" />
+    <Content Include="WFM\js\teamSchedule\html\miniConfirmModal.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\modifyShiftCategory.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\moveActivity.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\commandMenu.tpl.html" />
@@ -1507,6 +1508,7 @@
     <Content Include="WFM\js\teamSchedule\html\time-range-picker.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\view-changer.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\weeklySchedule.html" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.controller.commandConfirmDialog.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.controller.default.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.controller.week.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.controller.spec.js" />
@@ -1524,7 +1526,6 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.cmd.undoSchedule.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.commandMenu.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.commandMenu.js" />
-    <Content Include="WFM\js\teamSchedule\teamSchedule.directive.commandConfirmDialog.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.commandContainer.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.commandContainer.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.datepicker.js" />

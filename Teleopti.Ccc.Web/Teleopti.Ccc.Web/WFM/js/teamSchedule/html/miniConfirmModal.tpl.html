@@ -1,0 +1,18 @@
+<div class="modal-box">
+    <div>
+        <div class="modalbg">
+            <div class="dialog-mini">
+                <div class="modal-inner-content">
+                    <h3>{{title | translate}}</h3>
+                    {{::message}}
+                </div>
+                <div class="modal-actions">
+                    <aside>
+                        <button ng-click="close(false)" class="wfm-btn wfm-btn-invis-default">{{"Cancel" | translate}}</button>
+                        <button ng-click="close(true)" class="wfm-btn wfm-btn-invis-primary">{{"Apply" | translate}}</button>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
