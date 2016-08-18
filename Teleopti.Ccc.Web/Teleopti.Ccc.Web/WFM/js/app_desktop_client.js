@@ -176,11 +176,15 @@ wfm.config([
 			controller: 'TeamScheduleDefaultCtrl as vm'
 		}).state('myTeamSchedule.start', {
 			templateUrl: 'js/teamSchedule/html/schedule.html',
+			controller: 'TeamScheduleCtrl as vm'
+		}).state('myTeamSchedule.for', {
+			url: '/:site/:team/?personIds',
+			templateUrl: 'js/teamSchedule/html/schedule.html',
 			controller: 'TeamScheduleCtrl as vm',
 			params: {
-				keyword: '',
-				selectedDate: null,
-				selectedPersonIds: []
+				site: '',
+				team: '',
+				personIds: {array: true}
 			}
 		}).state('myTeamSchedule.weekView', {
 			url: '/week',

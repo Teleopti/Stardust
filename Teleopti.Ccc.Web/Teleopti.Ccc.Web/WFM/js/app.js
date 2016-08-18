@@ -180,6 +180,9 @@ wfm.config([
 			templateUrl: 'js/teamSchedule/html/default.html',
 			controller: 'TeamScheduleDefaultCtrl as vm'
 		}).state('myTeamSchedule.start', {
+			templateUrl: 'js/teamSchedule/html/schedule.html',
+			controller: 'TeamScheduleCtrl as vm'
+		}).state('myTeamSchedule.for', {
 			url: '/:site/:team/?personIds',
 			templateUrl: 'js/teamSchedule/html/schedule.html',
 			controller: 'TeamScheduleCtrl as vm',
