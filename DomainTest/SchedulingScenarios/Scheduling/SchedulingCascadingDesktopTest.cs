@@ -41,15 +41,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var earlyInterval = new TimePeriod(7, 45, 8, 0);
 			var lateInterval = new TimePeriod(15, 45, 16, 0);
 			var date = DateOnly.Today;
-			var activity = new Activity("_")
-			{
-				InWorkTime = true,
-				InContractTime = true,
-				RequiresSkill = true	
-			};
-			activity.SetId(Guid.NewGuid());
+			var activity = new Activity("_").WithId();
 			var scenario = new Scenario("_");
-			var shiftCategory = new ShiftCategory("_").WithId();
 			var skillA = new Skill("A", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
 			skillA.SetCascadingIndex(1);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(7, 45, 16, 0));
@@ -58,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			skillB.SetCascadingIndex(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(7, 45, 16, 0));
 			var skillDayB = skillB.CreateSkillDayWithDemandOnInterval(scenario, date, 1, new Tuple<TimePeriod, double>(lateInterval, 1000)); //should not shovel resources here when deciding what shift to choose		
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(earlyInterval, TimeSpan.FromMinutes(15)), new TimePeriodWithSegment(lateInterval, TimeSpan.FromMinutes(15)), shiftCategory));
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(earlyInterval, TimeSpan.FromMinutes(15)), new TimePeriodWithSegment(lateInterval, TimeSpan.FromMinutes(15)), new ShiftCategory("_").WithId()));
 			var agents = new List<IPerson>();
 			for (var i = 0; i < numberOfAgents; i++)
 			{
