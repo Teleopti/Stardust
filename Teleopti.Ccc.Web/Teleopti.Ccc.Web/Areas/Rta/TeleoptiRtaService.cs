@@ -11,7 +11,7 @@ using Teleopti.Ccc.Rta.WebService;
 
 namespace Teleopti.Ccc.Web.Areas.Rta
 {
-	[ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Single)]
+	[ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, ConcurrencyMode = ConcurrencyMode.Multiple)]
 	[AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
 	public class TeleoptiRtaService : ITeleoptiRtaService
 	{
