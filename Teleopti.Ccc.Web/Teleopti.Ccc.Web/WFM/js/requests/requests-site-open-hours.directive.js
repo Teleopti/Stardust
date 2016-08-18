@@ -11,14 +11,18 @@
 		vm.sites = [];
 		vm.save = save;
 		vm.cancel = cancel;
+		vm.selectedSite = null;
 		init();
 		function init() {
 			var getSiteProgress = requestsDataService.getSitesPromise();
-			getSiteProgress.success(function (sites) {
+			getSiteProgress.success(function(sites) {
 				vm.sites = [];
-				angular.forEach(sites, function(site) {
-					vm.sites.push(denormalizeSite(site));
-				});
+				angular.forEach(sites,
+					function(site) {
+						vm.sites.push(denormalizeSite(site));
+					});
+				if (vm.sites.length > 0)
+					vm.selectedSite = vm.sites[0].Id;
 			});
 		}
 
@@ -71,33 +75,37 @@
 			var siteCopy = angular.copy(site);
 			var reformattedWorkingHours = [];
 			siteCopy.OpenHours.forEach(function (a) {
-				var startTime = parseTimespanString(a.StartTime),
-					endTime = parseTimespanString(a.EndTime),
-					timespan = {
-						StartTime: startTime,
-						EndTime: endTime
-					};
-				var workingHourRows = reformattedWorkingHours.filter(function (wh) {
-					return sameTimespan(timespan, wh);
-				});
-				var workingHourRow;
-				if (workingHourRows.length == 0) {
-					workingHourRow = createEmptyWorkingPeriod(startTime, endTime);
-					angular.forEach(workingHourRow.WeekDaySelections, function (e) {
-						if (e.WeekDay == a.WeekDay) {
-							e.Checked = true;
-							e.IsClosed = a.IsClosed;
-						}
+				if (!a.IsClosed) {
+					var startTime = parseTimespanString(a.StartTime),
+						endTime = parseTimespanString(a.EndTime),
+						timespan = {
+							StartTime: startTime,
+							EndTime: endTime
+						};
+					var workingHourRows = reformattedWorkingHours.filter(function(wh) {
+						return sameTimespan(timespan, wh);
 					});
-					reformattedWorkingHours.push(workingHourRow);
-				} else {
-					workingHourRow = workingHourRows[0];
-					angular.forEach(workingHourRow.WeekDaySelections, function (e) {
-						if (e.WeekDay == a.WeekDay) {
-							e.Checked = true;
-							e.IsClosed = a.IsClosed;
-						}
-					});
+					var workingHourRow;
+					if (workingHourRows.length == 0) {
+						workingHourRow = createEmptyWorkingPeriod(startTime, endTime);
+						angular.forEach(workingHourRow.WeekDaySelections,
+							function(e) {
+								if (e.WeekDay == a.WeekDay) {
+									e.Checked = true;
+									e.IsClosed = a.IsClosed;
+								}
+							});
+						reformattedWorkingHours.push(workingHourRow);
+					} else {
+						workingHourRow = workingHourRows[0];
+						angular.forEach(workingHourRow.WeekDaySelections,
+							function(e) {
+								if (e.WeekDay == a.WeekDay) {
+									e.Checked = true;
+									e.IsClosed = a.IsClosed;
+								}
+							});
+					}
 				}
 			});
 			siteCopy.OpenHours = reformattedWorkingHours;

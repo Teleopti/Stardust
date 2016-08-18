@@ -17,57 +17,95 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 	{
 		private ISiteRepository _siteRepository;
 		private ISiteOpenHourRepository _siteOpenHourRepository;
+		private ISite _site;
+
 		[SetUp]
 		public void SetUp()
 		{
 			_siteRepository = new FakeSiteRepository();
 			_siteOpenHourRepository = new FakeSiteOpenHourRepository();
+
+			prepareData();
 		}
+
 		[Test]
-		public void shouldPersistOpenHours()
+		public void ShouldPersistOpenHours()
 		{
-			var siteToBeUpdated = new Site("Site to be updated").WithId();
+			var weekDay = DayOfWeek.Friday;
+			var timePeriod = new TimePeriod(new TimeSpan(1, 0, 0), new TimeSpan(10, 0, 0));
+			var sites = createSiteViewModels(new Dictionary<DayOfWeek, TimePeriod>
+			{
+				{weekDay, timePeriod}
+			});
+
+			var target = new SiteOpenHoursPersister(_siteRepository, _siteOpenHourRepository);
+			var count = target.Persist(sites);
+
+			Assert.IsTrue(count > 0);
+			Assert.IsTrue(
+				_site.OpenHourCollection.Any(
+					openHour =>
+						openHour.WeekDay == weekDay && openHour.TimePeriod == timePeriod &&
+						openHour.IsClosed == false));
+		}
+
+		[Test]
+		public void ShouldPersistLackWeekDaysAsClosed()
+		{
+			var weekDayTimePeriods = new Dictionary<DayOfWeek, TimePeriod>
+			{
+				{DayOfWeek.Monday, new TimePeriod(new TimeSpan(1, 0, 0), new TimeSpan(10, 0, 0))}
+			};
+			var sites = createSiteViewModels(weekDayTimePeriods);
+
+			var target = new SiteOpenHoursPersister(_siteRepository, _siteOpenHourRepository);
+			var count = target.Persist(sites);
+
+			Assert.IsTrue(count > 0);
+			Assert.IsTrue(
+				_site.OpenHourCollection.Any(
+					openHour =>
+						openHour.WeekDay == DayOfWeek.Monday && openHour.TimePeriod == weekDayTimePeriods[DayOfWeek.Monday] &&
+						openHour.IsClosed == false));
+			Assert.IsTrue(
+				_site.OpenHourCollection.Any(
+					openHour =>
+						openHour.WeekDay == DayOfWeek.Tuesday && openHour.IsClosed));
+		}
+
+		private void prepareData()
+		{
+			_site = new Site("Site to be updated").WithId();
 			var siteOpenHour = new SiteOpenHour()
 			{
 				TimePeriod = new TimePeriod(new TimeSpan(10, 0, 0), new TimeSpan(17, 0, 0)),
 				IsClosed = true,
 				WeekDay = DayOfWeek.Friday
 			};
-			siteToBeUpdated.AddOpenHour(siteOpenHour);
+			_site.AddOpenHour(siteOpenHour);
 			_siteOpenHourRepository.Add(siteOpenHour);
-			_siteRepository.Add(siteToBeUpdated);
-			var siteViewModel = new SiteViewModel();
-			siteViewModel.Id = siteToBeUpdated.Id.GetValueOrDefault();
-			var startTime = new TimeSpan(1, 0, 0);
-			var endTime = new TimeSpan(10, 0, 0);
-			var expectedSiteOpenHour = new SiteOpenHour()
+			_siteRepository.Add(_site);
+		}
+
+		private List<SiteViewModel> createSiteViewModels(Dictionary<DayOfWeek, TimePeriod> weekDayTimePeriods)
+		{
+			var siteViewModel = new SiteViewModel {Id = _site.Id.GetValueOrDefault()};
+			var openHourList = new List<SiteOpenHourViewModel>();
+			foreach (var weekDayTimePeriod in weekDayTimePeriods)
 			{
-				Parent = siteToBeUpdated,
-				WeekDay = DayOfWeek.Friday,
-				TimePeriod = new TimePeriod(startTime, endTime),
-				IsClosed = false
-			};
-			var siteOpenHours = new SiteOpenHourViewModel()
-			{
-				WeekDay = DayOfWeek.Friday,
-				StartTime = startTime,
-				EndTime = endTime,
-				IsClosed = false
-			};
-			siteViewModel.OpenHours = new List<SiteOpenHourViewModel>()
-			{
-				siteOpenHours
-			};
-			var sites = new List<SiteViewModel>()
+				openHourList.Add(new SiteOpenHourViewModel()
+				{
+					WeekDay = weekDayTimePeriod.Key,
+					StartTime = weekDayTimePeriod.Value.StartTime,
+					EndTime = weekDayTimePeriod.Value.EndTime,
+					IsClosed = false
+				});
+			}
+			siteViewModel.OpenHours = openHourList;
+			return new List<SiteViewModel>()
 			{
 				siteViewModel
 			};
-			var target = new SiteOpenHoursPersister(_siteRepository, _siteOpenHourRepository);
-
-			target.Persist(sites);
-			
-			Assert.IsTrue(siteToBeUpdated.OpenHourCollection.Any(openHour=>openHour.WeekDay== expectedSiteOpenHour.WeekDay&& openHour.TimePeriod== expectedSiteOpenHour.TimePeriod&& openHour.IsClosed== expectedSiteOpenHour.IsClosed));
-			Assert.IsTrue(siteToBeUpdated.OpenHourCollection.Count()==1);
 		}
 	}
 }

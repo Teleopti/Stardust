@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			else
 			{
 				dateTimePeriodDictionary.Add(new DateOnly(startTime),
-					new TimePeriod(startTime.TimeOfDay, TimeSpan.FromHours(24).Subtract(new TimeSpan(1))));
+					new TimePeriod(startTime.TimeOfDay, TimeSpan.FromHours(24).Subtract(TimeSpan.FromSeconds(60))));
 				dateTimePeriodDictionary.Add(new DateOnly(endTime),
 					new TimePeriod(TimeSpan.Zero, endTime.TimeOfDay));
 			}

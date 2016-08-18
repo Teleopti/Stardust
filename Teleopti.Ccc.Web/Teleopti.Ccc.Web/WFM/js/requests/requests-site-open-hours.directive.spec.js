@@ -142,6 +142,26 @@ describe('requestsSiteOpenHoursDirectiveTests', function () {
 		expect(test.targetScope.sites[0].OpenHours.length).toEqual(1);
 	});
 
+	it('should not deformat closed week day',
+		function() {
+			var openHoursHandleResult = [
+				{
+					OpenHours: [
+						{
+							EndTime: '17:00:00',
+							StartTime: '08:00:00',
+							WeekDay: 1,
+							IsClosed: true
+						}
+					]
+				}
+			];
+			requestsDataService.setOpenHoursHandleResult(openHoursHandleResult);
+
+			var test = setUpTarget();
+			expect(test.targetScope.sites[0].OpenHours.length).toEqual(0);
+		});
+
 	function setUpTarget() {
 		var targetScope = $rootScope.$new();
 		var targetElem = $compile('<requests-site-open-hours></requests-site-open-hours>')(targetScope);

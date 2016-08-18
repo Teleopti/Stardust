@@ -1388,7 +1388,6 @@
     <Content Include="WFM\js\requests\html\requests-commands-pane.tpl.html" />
     <Content Include="WFM\js\requests\html\requests-open-hours.html" />
     <Content Include="WFM\js\requests\html\requests-reply-message.html" />
-    <Content Include="WFM\js\requests\html\working-hours-picker-extend.tpl.html" />
     <Content Include="WFM\js\requests\ngEnter.js" />
     <Content Include="WFM\js\requests\request-command-parameters.service.js" />
     <Content Include="WFM\js\requests\requests-absence-text-grid-configuration.service.js" />
@@ -1431,7 +1430,6 @@
     <Content Include="WFM\js\requests\templates\requests-shift-trade-header-template.js" />
     <Content Include="WFM\js\requests\templates\requests-shift-trade-day-template.js" />
     <Content Include="WFM\js\requests\templates\schedule-table-template.js" />
-    <Content Include="WFM\js\requests\working-hours-picker-extend.directive.js" />
     <Content Include="WFM\js\requests\_module.js" />
     <Content Include="WFM\js\resourceplanner\planningperiods.controller.spec.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner-filters.html" />

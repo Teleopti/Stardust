@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Common;
@@ -20,32 +21,37 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 		public int Persist(IEnumerable<SiteViewModel> sites)
 		{
-			int updatedSitesCount = 0;
-			if (!sites.Any()) return updatedSitesCount;
+			var updatedSitesCount = 0;
+			if (!sites.Any())
+				return updatedSitesCount;
+
 			foreach (var site in sites)
 			{
-				var sitePersisted = _siteRepository.Get(site.Id);
-				if (site.OpenHours != null)
+				if (site.OpenHours == null)
 				{
-					foreach (var persistedOpenHour in sitePersisted.OpenHourCollection)
-					{
-						_siteOpenHourRepository.Remove(persistedOpenHour);
-					}
-					sitePersisted.ClearOpenHourCollection();
-
-					foreach (SiteOpenHourViewModel openHour in site.OpenHours)
-					{
-						var siteOpenHour = new SiteOpenHour()
-						{
-							TimePeriod = new TimePeriod(openHour.StartTime, openHour.EndTime),
-							WeekDay = openHour.WeekDay,
-							IsClosed = openHour.IsClosed
-						};
-						if (sitePersisted.AddOpenHour(siteOpenHour))
-							_siteOpenHourRepository.Add(siteOpenHour);
-					}
-					updatedSitesCount++;
+					continue;
 				}
+				var sitePersisted = _siteRepository.Get(site.Id);
+				foreach (var persistedOpenHour in sitePersisted.OpenHourCollection)
+				{
+					_siteOpenHourRepository.Remove(persistedOpenHour);
+				}
+				sitePersisted.ClearOpenHourCollection();
+
+				foreach (var dayOfWeek in Enum.GetValues(typeof(DayOfWeek)))
+				{
+					var openHour = site.OpenHours.FirstOrDefault(o => o.WeekDay == (DayOfWeek) dayOfWeek)
+								   ?? new SiteOpenHourViewModel {WeekDay = (DayOfWeek) dayOfWeek, IsClosed = true};
+					var siteOpenHour = new SiteOpenHour()
+					{
+						TimePeriod = new TimePeriod(openHour.StartTime, openHour.EndTime),
+						WeekDay = openHour.WeekDay,
+						IsClosed = openHour.IsClosed
+					};
+					if (sitePersisted.AddOpenHour(siteOpenHour))
+						_siteOpenHourRepository.Add(siteOpenHour);
+				}
+				updatedSitesCount++;
 			}
 			return updatedSitesCount;
 		}

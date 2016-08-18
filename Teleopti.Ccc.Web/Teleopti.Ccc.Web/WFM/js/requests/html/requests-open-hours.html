@@ -6,7 +6,7 @@
 				<div ng-repeat="site in requestsSiteOpenHours.sites">
 					<div class="wfm-radio">
 						<label>
-							<input type="radio" name="radio" ng-value="site.Id" ng-model="requestsSiteOpenHours.sitesChecked" ng-click="requestsSiteOpenHours.getOpenHours()">
+							<input type="radio" name="radio" ng-value="site.Id" ng-model="requestsSiteOpenHours.selectedSite">
 							<span class="wfm-radio-toggle"></span>
 							<span class="wfm-radio-label">{{site.Name}}</span>
 						</label>
@@ -15,7 +15,7 @@
 			</div>
 			<div class="con-flex split-3-1">
 				<div ng-repeat="site in requestsSiteOpenHours.sites">
-					<working-hours-picker-with-close-day ng-if="requestsSiteOpenHours.sitesChecked==site.Id" working-hours="site.OpenHours" class="working-hours-picker"></working-hours-picker-with-close-day>
+					<working-hours-picker ng-if="requestsSiteOpenHours.selectedSite == site.Id" working-hours="site.OpenHours" class="working-hours-picker"></working-hours-picker>
 				</div>
 			</div>
 		</div>
