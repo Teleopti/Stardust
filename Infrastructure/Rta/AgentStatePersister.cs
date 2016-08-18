@@ -173,6 +173,18 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		}
 
 		[InfoLog]
+		public virtual IEnumerable<AgentState> Get(IEnumerable<Guid> personIds)
+		{
+			var sql = SelectAgentState + "WITH (UPDLOCK) WHERE PersonId IN (:PersonIds)";
+			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
+				.SetParameterList("PersonIds", personIds)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalState)))
+				.SetReadOnly(true)
+				.List<AgentState>()
+				;
+		}
+
+		[InfoLog]
 		public virtual IEnumerable<AgentState> GetNotInSnapshot(DateTime batchId, string sourceId)
 		{
 			var sql = SelectAgentState +

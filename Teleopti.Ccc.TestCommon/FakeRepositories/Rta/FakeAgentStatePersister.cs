@@ -41,6 +41,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return _data.Values.SingleOrDefault(x => x.PersonId == personId);
 		}
 
+		public IEnumerable<AgentState> Get(IEnumerable<Guid> personIds)
+		{
+			return _data.Values.Where(x => personIds.Contains(x.PersonId));
+		}
+
 		public IEnumerable<AgentState> GetAll()
 		{
 			return _data.Values.ToArray();

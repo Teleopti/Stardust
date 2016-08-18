@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		public MutableNow Now;
 
 		[Test]
-		public void ShouldGetCurrentActualAgentState()
+		public void ShouldGetByPersonId()
 		{
 			var state = new AgentStateForTest { PersonId = Guid.NewGuid() };
 			Persister.Persist(state);
@@ -27,6 +27,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var result = Persister.Get(state.PersonId);
 
 			result.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldGetByPersonIds()
+		{
+			var state1 = new AgentStateForTest { PersonId = Guid.NewGuid() };
+			var state2 = new AgentStateForTest { PersonId = Guid.NewGuid() };
+			var state3 = new AgentStateForTest { PersonId = Guid.NewGuid() };
+			Persister.Persist(state1);
+			Persister.Persist(state2);
+			Persister.Persist(state3);
+
+			var result = Persister.Get(new[] {state1.PersonId, state3.PersonId});
+			
+			result.Select(x => x.PersonId).Should().Have.SameValuesAs(state1.PersonId, state3.PersonId);
 		}
 
 		[Test]

@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		void Persist(AgentState model);
 		void Delete(Guid personId);
 		AgentState Get(Guid personId);
+		IEnumerable<AgentState> Get(IEnumerable<Guid> personIds);
 		IEnumerable<AgentState> GetAll();
 		IEnumerable<AgentState> GetNotInSnapshot(DateTime batchId, string sourceId);
 	}
