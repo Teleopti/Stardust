@@ -7,7 +7,7 @@ properties {
     #$source_dir = "$base_dir\src"
     
     #TC Properties
-    $BuildVCSNumber = %dep.TeleoptiWFM_WfmMain.build.vcs.number.TeleoptiWFM_TeleoptiWFM%
+    $BuildVCSNumber = "%dep.TeleoptiWFM_WfmMain.build.vcs.number.TeleoptiWFM_TeleoptiWFM%"
 	$DEPENDENCIESSRC = "$env:DEPENDENCIESSRC"
     $MountKDirectory = "$env:MountKDirectory"
     $ProductVersion = "$env:CccVersion"
