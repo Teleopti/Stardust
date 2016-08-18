@@ -9,11 +9,12 @@
 	padding-left: 15px;
 	padding-right: 15px;
 }
+.ui-dialog-titlebar-close {
+    visibility: hidden;
+}
 
-
-
-/* Override the default bootstrap behavior where horizontal description lists 
-   will truncate terms that are too long to fit in the left column 
+/* Override the default bootstrap behavior where horizontal description lists
+   will truncate terms that are too long to fit in the left column
 */
 .dl-horizontal dt {
 	white-space: normal;
@@ -31,7 +32,7 @@ table {
 }
 thead {
 	font-weight: bold;
-	
+
 }
 
 table tr {
@@ -92,7 +93,6 @@ table td {
 	}
 }
 
-
 fieldset {
 	border: 1px solid silver;
 	-moz-border-radius: 5px;
@@ -126,10 +126,10 @@ table tr td a {
 	color: #266d90;
     display:block;
     height:100%;
-    width:100%;	 
+    width:100%;
 }
+
 table tr td a:hover {
 	text-decoration: none;
 	color:#266d99;
-	
 }

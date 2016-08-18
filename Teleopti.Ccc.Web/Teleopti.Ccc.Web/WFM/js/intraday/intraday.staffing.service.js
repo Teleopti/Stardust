@@ -47,7 +47,6 @@
 						response.forEach(function(skill) {
 							if (skill.Id === id) {
 								matched = skill
-								console.log('from the service',matched);
 							}
 						})
 						deferred.resolve(matched);

@@ -1,28 +1,20 @@
-﻿(function ($http) {
+(function() {
 	'use strict';
-	var tokenKey = 'accessToken';
-	var userKey = 'userToken';
-	var emailKey = 'lastEmail';
-	var idKey = 'idToken';
-	var firstUser = false;
-
-	var token = sessionStorage.getItem(tokenKey);
-    
 	angular
-		 .module('adminApp')
-		 .controller('loginController', loginController, ['$scope', '$http', '$window', loginController])
-		 .directive('menuItem', function() {
+		.module('adminApp')
+		.controller('loginController', loginController, ['$scope', '$http', '$window', loginController])
+		.directive('menuItem', function() {
 			return {
 				scope: {
 					text: "@",
 					link: "@",
 					index: "@",
-					state:"="
+					state: "="
 				},
 				templateUrl: 'menuitem.html',
 				replace: true,
 				bindToController: true,
-				controller: function ($scope, $window) {
+				controller: function($scope, $window) {
 					this.isSelected = function() {
 						return this.state.selected === this.index;
 					};
@@ -38,43 +30,60 @@
 		});
 
 	function loginController($scope, $http) {
+		var tokenKey = 'accessToken';
+		var userKey = 'userToken';
+		var emailKey = 'lastEmail';
+		var idKey = 'idToken';
+		var firstUser = false;
+		var token = sessionStorage.getItem(tokenKey);
+
 		var vm = this;
 		vm.loginEmail = sessionStorage.getItem(emailKey);
 		vm.loginPassword = "";
 		vm.Message = '';
 		vm.Id = sessionStorage.getItem(idKey);
 
+
 		vm.user = sessionStorage.getItem(userKey);
-		$scope.state = {selected: 1};
-		$scope.menuItems = [
-			{ text: "Tenant administration", link: "#/" },
-			{ text: "Stardust Dashboard", link: "#/StardustDashboard" },
-			{ text: "Hangfire Dashboard", link: "#/HangfireDashboard" }
-		];
-		$scope.message = "något som jag vill visa";
-		$http.get("./HasNoUser").success(function (data) {
-		    firstUser = data;
-		    if (firstUser) {
-		        vm.user = 'xxfirstxx';
-		        window.location = "#adduser";
-		    } else {
-		        if (token === null) {
-		            $("#modal-login").dialog({
-		                modal: true,
-		                title: "Log in to access the admin site"
-		            }
-                    );
-		        }
-		    }
-		}).error(function (xhr, ajaxOptions, thrownError) {
-		    console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+		$scope.state = {
+			selected: 1
+		};
+		$scope.menuItems = [{
+			text: "Tenant administration",
+			link: "#/"
+		}, {
+			text: "Stardust Dashboard",
+			link: "#/StardustDashboard"
+		}, {
+			text: "Hangfire Dashboard",
+			link: "#/HangfireDashboard"
+		}];
+		$scope.message = "något som jag vill visa"; //?
+		$http.get("./HasNoUser").success(function(data) {
+			firstUser = data;
+			if (firstUser) {
+				vm.user = 'xxfirstxx';
+				window.location = "#adduser";
+			} else {
+				if (!token) {
+					$("#modal-login").dialog({
+						modal: true,
+						title: "Log in to access the admin site",
+						closeOnEscape: false,
+						draggable: false,
+						resizable: false
+					});
+				}
+			}
+		}).error(function(xhr, ajaxOptions, thrownError) {
+			console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 		});
 
 		function showError(jqXHR) {
 			vm.Message = jqXHR.Message + ': ' + jqXHR.ExceptionMessage;
 		}
 
-		vm.login = function () {
+		vm.login = function() {
 			vm.Id = 0;
 			$("#modal-login").toggleClass("wait");
 			var loginData = {
@@ -84,8 +93,8 @@
 			};
 
 			$http.post('./Login',
-				 loginData
-			).success(function (data) {
+				loginData
+			).success(function(data) {
 				$("#modal-login").toggleClass("wait");
 				if (data.Success === false) {
 					//alert(data.Message);
@@ -104,10 +113,9 @@
 				location.reload();
 				$('#modal-login').dialog('close');
 			}).error(showError);
-			
 		}
 
-		vm.logout = function () {
+		vm.logout = function() {
 			sessionStorage.removeItem(tokenKey);
 			sessionStorage.removeItem(userKey);
 			$http.post('./Logout');
