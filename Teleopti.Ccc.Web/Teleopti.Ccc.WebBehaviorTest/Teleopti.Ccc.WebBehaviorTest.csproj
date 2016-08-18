@@ -1047,6 +1047,11 @@
       <DependentUpon>SwapShiftsForTwoAgents.feature</DependentUpon>
     </Compile>
     <Compile Include="Wfm\TeamSchedule\TeamScheduleStepDefinitions.cs" />
+    <Compile Include="Wfm\TeamSchedule\WeekView.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WeekView.feature</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\LicenseFiles\Teleopti_RD.xml">
@@ -1541,6 +1546,10 @@
     <None Include="Wfm\TeamSchedule\SwapShiftsForTwoAgents.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>SwapShiftsForTwoAgents.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\TeamSchedule\WeekView.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>WeekView.feature.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -333,6 +333,42 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		{
 			Browser.Interactions.AssertExists(".teamschedule-command-container .command-check");
 		}
+
+		[Then(@"I should be able to see week view toggle button")]
+		public void ThenIShouldBeAbleToSeeWeekViewToggleButton()
+		{
+			Browser.Interactions.AssertAnyContains(".team-schedule .view-changer-wrapper .view-option", "WEEK");
+		}
+
+		[Then(@"I should be able to see day view toggle button")]
+		public void ThenIShouldBeAbleToSeeDayViewToggleButton()
+		{
+			Browser.Interactions.AssertAnyContains(".team-schedule .view-changer-wrapper .view-option", "DAY");
+		}
+
+		[When(@"I toggle ""(.*)"" view")]
+		public void WhenIToggleView(string view)
+		{
+			Browser.Interactions.ClickContaining(".team-schedule .view-changer-wrapper .view-option", view);
+		}
+
+		[Then(@"I should see week view schedule table")]
+		public void ThenIShouldSeeWeekViewScheduleTable()
+		{
+			Browser.Interactions.AssertExists(".weekview-td");
+		}
+		
+		[When(@"I navigate to next week in week view")]
+		public void WhenINavigateToNextWeekInWeekView()
+		{
+			Browser.Interactions.ClickVisibleOnly(".teamschedule-datepicker .mdi-chevron-double-right");
+		}
+
+		[Then(@"The dispaly date should be ""(.*)""")]
+		public void ThenTheDispalyDateShouldBe(string date)
+		{
+			Browser.Interactions.AssertInputValue("#teamschedule-datepicker-input", date);
+		}
 	}
 
 	public class AddActivityFormInfo
