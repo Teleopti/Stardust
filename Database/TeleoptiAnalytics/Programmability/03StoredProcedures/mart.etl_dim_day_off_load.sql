@@ -29,6 +29,7 @@ SET IDENTITY_INSERT mart.dim_day_off ON
 INSERT INTO mart.dim_day_off
 	(
 	day_off_id,
+	day_off_code,
 	day_off_name, 
 	display_color,
 	business_unit_id,
@@ -38,6 +39,7 @@ INSERT INTO mart.dim_day_off
 	)
 SELECT 
 	day_off_id			=-1, 
+	day_off_code		='00000000-0000-0000-0000-000000000000',
 	day_off_name		='Not Defined', 
 	display_color		= -1,
 	business_unit_id	=-1,
