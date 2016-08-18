@@ -34,7 +34,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				else
 					builder.RegisterType<ScaleOutStateCodeAdder>().As<IStateCodeAdder>().SingleInstance();
 				if (_config.Toggle(Toggles.RTA_BatchConnectionOptimization_40116))
-					builder.RegisterType<ContextLoaderWithSingleTransaction>().As<IContextLoader>().ApplyAspects().SingleInstance();
+				{
+					if (_config.Toggle(Toggles.RTA_BatchQueryOptimization_40169))
+						builder.RegisterType<ContextLoaderWithBatchQueryOptimization>().As<IContextLoader>().ApplyAspects().SingleInstance();
+					else
+						builder.RegisterType<ContextLoaderWithBatchConnectionOptimization>().As<IContextLoader>().ApplyAspects().SingleInstance();
+				}
 				else
 					builder.RegisterType<ContextLoaderWithParalellBatch>().As<IContextLoader>().ApplyAspects().SingleInstance();
 			}

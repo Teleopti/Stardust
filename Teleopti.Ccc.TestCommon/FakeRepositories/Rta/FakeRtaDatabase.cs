@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Helper;
@@ -71,9 +70,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		private class userData
 		{
 			public int DataSourceId;
-			public string ExternalLogOn;
 			public PersonOrganizationData Data;
 		}
+
 		private readonly List<userData> _userInfos = new List<userData>();
 
 		private class scheduleLayer2
@@ -175,10 +174,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			
 			_userInfos.Add(new userData
 			{
-				ExternalLogOn = userCode,
 				DataSourceId = dataSource,
 				Data = new PersonOrganizationData
 				{
+					UserCode = userCode,
 					PersonId = personId,
 					BusinessUnitId = _database.CurrentBusinessUnitId(),
 					TeamId = teamId.Value,
@@ -287,16 +286,26 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			return _userInfos
 				.Where(x =>
-					x.ExternalLogOn == externalLogOn &&
+					x.Data.UserCode == externalLogOn &&
 					x.DataSourceId == dataSourceId)
-				.Select(m => JsonConvert.DeserializeObject<PersonOrganizationData>(JsonConvert.SerializeObject(m.Data)))
+				.Select(m => m.Data.CopyBySerialization())
+				.ToArray();
+		}
+
+		public IEnumerable<PersonOrganizationData> LoadPersonOrganizationDatas(int dataSourceId, IEnumerable<string> externalLogOns)
+		{
+			return _userInfos
+				.Where(x =>
+					externalLogOns.Contains(x.Data.UserCode) &&
+					x.DataSourceId == dataSourceId)
+				.Select(m => m.Data.CopyBySerialization())
 				.ToArray();
 		}
 
 		public IEnumerable<PersonOrganizationData> LoadAllPersonOrganizationData()
 		{
 			return _userInfos
-				.Select(m => JsonConvert.DeserializeObject<PersonOrganizationData>(JsonConvert.SerializeObject(m.Data)))
+				.Select(m => m.Data.CopyBySerialization())
 				.ToArray();
 		}
 

@@ -110,6 +110,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		}
 
 		[Test]
+		public void ShouldFindByExternalLogons()
+		{
+			var person1 = addPerson("user1", 1);
+			var person2 = addPerson("user2", 1);
+			var person3 = addPerson("user3", 1);
+
+			var result = WithUnitOfWork.Get(() => Reader.LoadPersonOrganizationDatas(1, new[] {"user1", "user3"}));
+
+			result.Select(x => x.PersonId).Should().Have.SameValuesAs(person1.Id.Value, person3.Id.Value);
+		}
+
+		[Test]
 		public void ShouldFindNothing()
 		{
 			addPerson("user", 1);
@@ -162,6 +174,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 			var result = WithUnitOfWork.Get(() => Reader.LoadPersonOrganizationData(1, "user"));
 
+			result.Single().UserCode.Should().Be("user");
 			result.Single().TeamId.Should().Be(person.PersonPeriodCollection.Single().Team.Id);
 			result.Single().SiteId.Should().Be(person.PersonPeriodCollection.Single().Team.Site.Id);
 			result.Single().BusinessUnitId.Should().Be(person.PersonPeriodCollection.Single().Team.Site.BusinessUnit.Id);

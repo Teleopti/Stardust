@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Schedule
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DistributedLock;
-using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
 using Teleopti.Ccc.Domain.MultiTenancy;
@@ -43,6 +42,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_Optimize_39667)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_RuleMappingOptimization_39812)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_BatchConnectionOptimization_40116)]
+	[Toggle(Domain.FeatureFlags.Toggles.RTA_BatchQueryOptimization_40169)]
 	public class DomainTestAttribute : IoCTestAttribute
 	{
 		protected override void Setup(ISystem system, IIocConfiguration configuration)

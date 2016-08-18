@@ -10,11 +10,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		IList<ScheduledActivity> GetCurrentSchedule(Guid personId);
 
 		IEnumerable<PersonOrganizationData> LoadPersonOrganizationData(int dataSourceId, string externalLogOn);
+		IEnumerable<PersonOrganizationData> LoadPersonOrganizationDatas(int dataSourceId, IEnumerable<string> externalLogOns);
 		IEnumerable<PersonOrganizationData> LoadAllPersonOrganizationData();
 	}
 	
 	public class PersonOrganizationData
 	{
+		public string UserCode { get; set; }
 		public Guid PersonId { get; set; }
 		public Guid BusinessUnitId { get; set; }
 		public Guid TeamId { get; set; }

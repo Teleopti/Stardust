@@ -18,9 +18,112 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		void ForSynchronize(Action<Context> action);
 	}
 
-	public class ContextLoaderWithSingleTransaction : ContextLoader
+	public class ContextLoaderWithBatchQueryOptimization : ContextLoader
 	{
-		public ContextLoaderWithSingleTransaction(
+		public ContextLoaderWithBatchQueryOptimization(
+			IDatabaseLoader databaseLoader,
+			INow now,
+			StateMapper stateMapper,
+			IAgentStatePersister agentStatePersister,
+			IMappingReader mappingReader,
+			IDatabaseReader databaseReader,
+			AppliedAdherence appliedAdherence,
+			ProperAlarm appliedAlarm) : base(
+				databaseLoader,
+				now,
+				stateMapper,
+				agentStatePersister,
+				mappingReader,
+				databaseReader,
+				appliedAdherence,
+				appliedAlarm
+				)
+		{
+		}
+
+		public override void ForBatch(BatchInputModel batch, Action<Context> action)
+		{
+			var exceptions = new List<Exception>();
+
+			WithUnitOfWork(() =>
+			{
+				var dataSourceId = ValidateSourceId(batch);
+
+				var userCodes = batch.States.Select(x => x.UserCode);
+				var persons = _databaseReader.LoadPersonOrganizationDatas(dataSourceId, userCodes);
+
+				batch.States.ForEach(input =>
+				{
+					try
+					{
+						var found = false;
+						
+						persons.Where(x => x.UserCode == input.UserCode)
+							.ForEach(x =>
+							{
+								found = true;
+
+								action.Invoke(new Context(
+									new InputInfo
+									{
+										PlatformTypeId = batch.PlatformTypeId,
+										SourceId = batch.SourceId,
+										SnapshotId = batch.SnapshotId,
+										StateCode = input.StateCode,
+										StateDescription = input.StateDescription
+									},
+									x.PersonId,
+									x.BusinessUnitId,
+									x.TeamId,
+									x.SiteId,
+									() => _agentStatePersister.Get(x.PersonId),
+									() => _databaseReader.GetCurrentSchedule(x.PersonId),
+									s =>
+									{
+										return new MappingsState(() =>
+										{
+											var stateCodes =
+												new[] { s.Stored?.StateCode, s.Input.StateCode }
+													.Distinct()
+													.ToArray();
+											var activities =
+												new[] { s.Schedule.CurrentActivityId(), s.Schedule.PreviousActivityId(), s.Schedule.NextActivityId() }
+													.Distinct()
+													.ToArray();
+											return _mappingReader.ReadFor(stateCodes, activities);
+										});
+									},
+									c => _agentStatePersister.Persist(c.MakeAgentState()),
+									_now,
+									_stateMapper,
+									_appliedAdherence,
+									_appliedAlarm
+									));
+							});
+
+						if (!found)
+							throw new InvalidUserCodeException(string.Format("No person found for SourceId {0} and UserCode {1}",
+								batch.SourceId, input.UserCode));
+
+					}
+					catch (Exception e)
+					{
+						exceptions.Add(e);
+					}
+
+				});
+
+			});
+
+			if (exceptions.Any())
+				throw new AggregateException(exceptions);
+
+		}
+	}
+
+	public class ContextLoaderWithBatchConnectionOptimization : ContextLoader
+	{
+		public ContextLoaderWithBatchConnectionOptimization(
 			IDatabaseLoader databaseLoader,
 			INow now,
 			StateMapper stateMapper,

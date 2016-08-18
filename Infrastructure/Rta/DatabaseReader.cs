@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using log4net;
 using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
@@ -48,11 +47,11 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.SetParameter("PersonId", personId)
 				.SetParameter("StartDate", utcDate.AddDays(-1))
 				.SetParameter("EndDate", utcDate.AddDays(1))
-				.SetResultTransformer(Transformers.AliasToBean(typeof (internalModel)))
+				.SetResultTransformer(Transformers.AliasToBean(typeof (internalScheduledActivity)))
 				.List<ScheduledActivity>();
 		}
 
-		private class internalModel : ScheduledActivity
+		private class internalScheduledActivity : ScheduledActivity
 		{
 			public new DateTime BelongsToDate { set { base.BelongsToDate = new DateOnly(value); } }
 			public new DateTime StartDateTime {  set { base.StartDateTime = DateTime.SpecifyKind(value, DateTimeKind.Utc); } }
@@ -81,24 +80,40 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		{
 			return readPersonOrganizationDatas(_unitOfWork.Current()
 				.Session()
-				.CreateSQLQuery("exec[dbo].[LoadPersonOrganizationData] :now, :dataSourceId, :externalLogOn")
+				.CreateSQLQuery($@"
+{personOrganizationDataQuery}
+AND v.AcdLogOnOriginalId = :externalLogOn
+AND v.DataSourceId = :dataSourceId")
 				.SetParameter("now", _now.UtcDateTime())
 				.SetParameter("dataSourceId", dataSourceId)
 				.SetParameter("externalLogOn", externalLogOn));
 		}
-		
+
+		public IEnumerable<PersonOrganizationData> LoadPersonOrganizationDatas(int dataSourceId, IEnumerable<string> externalLogOns)
+		{
+			return readPersonOrganizationDatas(_unitOfWork.Current()
+				.Session()
+				.CreateSQLQuery($@"
+{personOrganizationDataQuery}
+AND v.AcdLogOnOriginalId IN (:externalLogOns)
+AND v.DataSourceId = :dataSourceId")
+				.SetParameter("now", _now.UtcDateTime())
+				.SetParameter("dataSourceId", dataSourceId)
+				.SetParameterList("externalLogOns", externalLogOns));
+		}
+
 		public IEnumerable<PersonOrganizationData> LoadAllPersonOrganizationData()
 		{
 			return readPersonOrganizationDatas(_unitOfWork.Current()
 				.Session()
-				.CreateSQLQuery("exec [dbo].[LoadAllPersonOrganizationData] :now")
+				.CreateSQLQuery(personOrganizationDataQuery)
 				.SetParameter("now", _now.UtcDateTime()));
 		}
 
 		private IEnumerable<PersonOrganizationData> readPersonOrganizationDatas(IQuery query)
 		{
-			return query.SetResultTransformer(Transformers.AliasToBean(typeof (internalModel2)))
-				.List<internalModel2>()
+			return query.SetResultTransformer(Transformers.AliasToBean(typeof (internalPersonOrganizationData)))
+				.List<internalPersonOrganizationData>()
 				.Where(x =>
 				{
 					var timeZoneValue = x.TimeZone;
@@ -112,11 +127,25 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				}).ToList();
 		}
 
-		private class internalModel2 : PersonOrganizationData
+		private class internalPersonOrganizationData : PersonOrganizationData
 		{
 			public string TimeZone { get; set; }
 			public DateTime EndDate { get; set; }
 		}
 
+		private string personOrganizationDataQuery = @"
+SELECT
+	v.AcdLogOnOriginalId AS UserCode,
+	v.PersonId,
+	v.TeamId,
+	v.SiteId,
+	v.BusinessUnitId,
+	v.TimeZone,
+	v.EndDate
+FROM
+	dbo.v_PersonOrganizationData v WITH (NOEXPAND)
+WHERE
+	:now >= v.StartDate AND
+	DATEADD(DAY, -2, :now) <= v.EndDate";
 	}
 }
