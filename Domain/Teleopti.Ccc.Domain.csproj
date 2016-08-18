@@ -165,7 +165,6 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\IRunRequestWaitlistEventMessage.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\MultiAbsenceRequestsHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceRequestUseMultiHandler.cs" />
-    <Compile Include="ApplicationLayer\AbsenceRequests\QueuedAbsenceRequest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandler.cs" />
     <Compile Include="ApplicationLayer\BusinessUnit\AnalyticsBusinessUnitUpdater.cs" />
     <Compile Include="ApplicationLayer\Commands\ApproveBatchRequestsCommand.cs" />
