@@ -1,64 +1,82 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
+	[DomainTest]
 	[TestFixture]
-	class NewAbsenceRequestUseMultiHandlerTest
+	class NewAbsenceRequestUseMultiHandlerTest : ISetup
 	{
-		private NewAbsenceRequestUseMultiHandler _target;
+		public NewAbsenceRequestUseMultiHandler Target;
 
-		private IPersonRequestRepository _personRequestRepository;
-		private IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
-		private IPersonRepository _personRepository;
-		private FakeScheduleDataReadScheduleStorage _scheduleRepository;
+		public FakePersonRequestRepository PersonRequestRepository;
+		public FakeQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
+		public FakePersonRepository PersonRepository;
+		public FakeScheduleDataReadScheduleStorage ScheduleRepository;
 
-		private readonly ICurrentScenario _currentScenario = new FakeCurrentScenario();
-		
+		public FakeCurrentScenario CurrentScenario;
+		public FakeEventPublisher EventPublisher;
 
-		[SetUp]
-		public void Setup()
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			_personRequestRepository = new FakePersonRequestRepository();
-			_queuedAbsenceRequestRepository = new FakeQueuedAbsenceRequestRepository();
-			_personRepository = new FakePersonRepository();
-			_scheduleRepository = new FakeScheduleDataReadScheduleStorage();
-
-			_target = new NewAbsenceRequestUseMultiHandler(_personRequestRepository, _queuedAbsenceRequestRepository);
+			system.UseTestDouble<FakeScheduleDataReadScheduleStorage>().For<FakeScheduleDataReadScheduleStorage>();
+			system.UseTestDouble<FakeCurrentScenario>().For<FakeCurrentScenario>();
+			system.UseTestDouble<NewAbsenceRequestUseMultiHandler>().For<NewAbsenceRequestUseMultiHandler>();
 		}
+
 
 		[Test]
 		public void ShouldPersistNewRequestInQueue()
 		{
 			var reqEvent = createNewRequestEvent();
-			_target.Handle(reqEvent);
+			Target.Handle(reqEvent);
 
-			_queuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(1);
+			QueuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(1);
 		}
 
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldPickJobsFromQueueAndSendMultiRequestEvent()
 		{
 			var requestEvent1 = createNewRequestEvent();
 			var requestEvent2 = createNewRequestEvent();
-			
-			_target.Handle(requestEvent1);
-			_target.Handle(requestEvent2);
 
-			_queuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(1);
+			Target.Handle(requestEvent1);
+			Target.Handle(requestEvent2);
+
+			EventPublisher.PublishedEvents.Count().Should().Be.EqualTo(1);
+			Assert.IsInstanceOf<NewMultiAbsenceRequestsCreatedEvent>(EventPublisher.PublishedEvents.FirstOrDefault());
 		}
+
+
+		[Test]
+		public void ShouldRemoveJobsFromQueueWhenSentAsMultiRequestEvent()
+		{
+			var requestEvent1 = createNewRequestEvent();
+			var requestEvent2 = createNewRequestEvent();
+
+			Target.Handle(requestEvent1);
+			Target.Handle(requestEvent2);
+
+			QueuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(0);
+		}
+
+
+		
 
 
 
@@ -83,10 +101,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private IPerson createAndSetupPerson(DateTime startDateTime, DateTime endDateTime, IWorkflowControlSet workflowControlSet)
 		{
 			var person = PersonFactory.CreatePersonWithId();
-			_personRepository.Add(person);
+			PersonRepository.Add(person);
 
-			var assignmentOne = createAssignment(person, startDateTime, endDateTime, _currentScenario);
-			_scheduleRepository.Set(new IScheduleData[] {assignmentOne});
+			var assignmentOne = createAssignment(person, startDateTime, endDateTime, CurrentScenario);
+			ScheduleRepository.Set(new IScheduleData[] {assignmentOne});
 
 			person.WorkflowControlSet = workflowControlSet;
 
@@ -128,10 +146,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			
 			personRequest.SetId(Guid.NewGuid());
 			personRequest.SetCreated(new DateTime(2016, 2, 20, 0, 0, 0, DateTimeKind.Utc));
-			_personRequestRepository.Add(personRequest);
+			PersonRequestRepository.Add(personRequest);
 
 			return personRequest;
 		}
+
+		
 	}
 
 	public class FakePersonRequest : PersonRequest

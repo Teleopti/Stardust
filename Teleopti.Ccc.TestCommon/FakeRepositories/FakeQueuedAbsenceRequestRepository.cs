@@ -54,8 +54,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			IList<IQueuedAbsenceRequest> overlappingRequests = new List<IQueuedAbsenceRequest>();
 			foreach (var request in _queuedAbsenceRequestRepository)
 			{
-				if ((request.StartDateTime < period.StartDateTime && request.EndDateTime > period.StartDateTime) ||
-					(request.StartDateTime < period.EndDateTime && request.EndDateTime > period.EndDateTime))
+				if ((request.StartDateTime <= period.StartDateTime && request.EndDateTime >= period.StartDateTime) ||
+					(request.StartDateTime <= period.EndDateTime && request.EndDateTime >= period.EndDateTime))
 				{
 					overlappingRequests.Add(request);
 				}

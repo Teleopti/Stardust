@@ -16,6 +16,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
+		private readonly IEventPublisher _eventPublisher;
+
 		private readonly IList<LoadDataAction> _loadDataActions;
 		private IPersonRequest _personRequest;
 
@@ -24,10 +26,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 		private delegate bool LoadDataAction(NewAbsenceRequestCreatedEvent @event);
 
-		public NewAbsenceRequestUseMultiHandler(IPersonRequestRepository personRequestRepository, IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository)
+		public NewAbsenceRequestUseMultiHandler(IPersonRequestRepository personRequestRepository, IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, 
+			IEventPublisher eventPublisher)
 		{
 			_personRequestRepository = personRequestRepository;
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
+			_eventPublisher = eventPublisher;
 
 			_loadDataActions = new List<LoadDataAction>
 			{
@@ -52,6 +56,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				EndDateTime = _personRequest.Request.Period.EndDateTime,
 			};
 			_queuedAbsenceRequestRepository.Add(queuedAbsenceRequest);
+			var requestWithOverlappingPeriod = _queuedAbsenceRequestRepository.Find(_personRequest.Request.Period);
+
+			if (requestWithOverlappingPeriod.Count >= 2)
+			{
+				var Ids = new List<Guid>();
+				foreach (var req in requestWithOverlappingPeriod)
+				{
+					if (req.PersonRequest.Id != null)
+						Ids.Add(req.PersonRequest.Id.Value);
+
+					_queuedAbsenceRequestRepository.Remove(req);
+				}
+				var multiRequestEvent = new NewMultiAbsenceRequestsCreatedEvent()
+				{
+					PersonRequestIds = Ids
+				};
+				_eventPublisher.Publish(multiRequestEvent);
+				
+			}
 		}
 
 		private bool checkAbsenceRequest(NewAbsenceRequestCreatedEvent @event)
