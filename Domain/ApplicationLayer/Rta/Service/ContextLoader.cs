@@ -51,6 +51,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 				var userCodes = batch.States.Select(x => x.UserCode);
 				var persons = _databaseReader.LoadPersonOrganizationDatas(dataSourceId, userCodes);
+				var personIds = persons.Select(x => x.PersonId);
+				var schedules = _databaseReader.GetCurrentSchedules(personIds);
 
 				batch.States.ForEach(input =>
 				{
@@ -77,7 +79,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 									x.TeamId,
 									x.SiteId,
 									() => _agentStatePersister.Get(x.PersonId),
-									() => _databaseReader.GetCurrentSchedule(x.PersonId),
+									() => schedules.Where(s => s.PersonId == x.PersonId).ToArray(),
 									s =>
 									{
 										return new MappingsState(() =>

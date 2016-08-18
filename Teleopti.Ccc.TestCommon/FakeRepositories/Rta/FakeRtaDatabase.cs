@@ -277,6 +277,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				).ToList();
 		}
 
+		public IEnumerable<ScheduledActivity> GetCurrentSchedules(IEnumerable<Guid> personIds)
+		{
+			return (
+				from l in _schedules
+				where
+					personIds.Contains(l.PersonId) &&
+					l.ScheduledActivity.BelongsToDate.Date >= _now.UtcDateTime().Date.AddDays(-1) &&
+					l.ScheduledActivity.BelongsToDate.Date <= _now.UtcDateTime().Date.AddDays(1)
+				select l.ScheduledActivity.CopyBySerialization()
+				).ToList();
+		}
+
 		public ConcurrentDictionary<string, int> Datasources()
 		{
 			return new ConcurrentDictionary<string, int>(_datasources);

@@ -32,23 +32,44 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			var utcDate = _now.UtcDateTime().Date;
 			return _unitOfWork.Current()
 				.Session()
-				.CreateSQLQuery(@"SELECT 
-					PayloadId,
-					StartDateTime,
-					EndDateTime,
-					Name,
-					ShortName,
-					DisplayColor, 
-					BelongsToDate 
-					FROM ReadModel.ScheduleProjectionReadOnly
-					WHERE PersonId = :PersonId
-					AND BelongsToDate BETWEEN :StartDate AND :EndDate
-					ORDER BY EndDateTime ASC")
+				.CreateSQLQuery(scheduleQuery("PersonId = :PersonId"))
 				.SetParameter("PersonId", personId)
 				.SetParameter("StartDate", utcDate.AddDays(-1))
 				.SetParameter("EndDate", utcDate.AddDays(1))
 				.SetResultTransformer(Transformers.AliasToBean(typeof (internalScheduledActivity)))
 				.List<ScheduledActivity>();
+		}
+
+		public IEnumerable<ScheduledActivity> GetCurrentSchedules(IEnumerable<Guid> personIds)
+		{
+			var utcDate = _now.UtcDateTime().Date;
+			return _unitOfWork.Current()
+				.Session()
+				.CreateSQLQuery(scheduleQuery("PersonId IN (:PersonIds)"))
+				.SetParameterList("PersonIds", personIds)
+				.SetParameter("StartDate", utcDate.AddDays(-1))
+				.SetParameter("EndDate", utcDate.AddDays(1))
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalScheduledActivity)))
+				.List<ScheduledActivity>();
+		}
+
+		private static string scheduleQuery(string constraint)
+		{
+			return $@"
+SELECT
+	PersonId,
+	PayloadId,
+	StartDateTime,
+	EndDateTime,
+	Name,
+	ShortName,
+	DisplayColor, 
+	BelongsToDate 
+FROM ReadModel.ScheduleProjectionReadOnly
+WHERE 
+	{constraint} AND
+	BelongsToDate BETWEEN :StartDate AND :EndDate
+ORDER BY EndDateTime ASC";
 		}
 
 		private class internalScheduledActivity : ScheduledActivity

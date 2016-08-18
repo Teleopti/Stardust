@@ -20,6 +20,40 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public IScheduleProjectionReadOnlyPersister Persister;
 
 		[Test]
+		public void ShouldFindByPersons()
+		{
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var personId3 = Guid.NewGuid();
+			Now.Is("2014-11-07 06:00");
+			Persister.AddActivity(new ScheduleProjectionReadOnlyModel
+			{
+				BelongsToDate = "2014-11-07".Date(),
+				PersonId = personId1,
+				StartDateTime = "2014-11-07 10:00".Utc(),
+				EndDateTime = "2014-11-07 10:00".Utc()
+			});
+			Persister.AddActivity(new ScheduleProjectionReadOnlyModel
+			{
+				BelongsToDate = "2014-11-07".Date(),
+				PersonId = personId2,
+				StartDateTime = "2014-11-07 10:00".Utc(),
+				EndDateTime = "2014-11-07 10:00".Utc()
+			});
+			Persister.AddActivity(new ScheduleProjectionReadOnlyModel
+			{
+				BelongsToDate = "2014-11-07".Date(),
+				PersonId = personId3,
+				StartDateTime = "2014-11-07 10:00".Utc(),
+				EndDateTime = "2014-11-07 10:00".Utc()
+			});
+
+			var result = Reader.GetCurrentSchedules(new[] {personId1, personId3});
+
+			result.Select(x => x.PersonId).Should().Have.SameValuesAs(personId1, personId3);
+		}
+
+		[Test]
 		public void ShouldReadBelongsToDate()
 		{
 			var personId = Guid.NewGuid();

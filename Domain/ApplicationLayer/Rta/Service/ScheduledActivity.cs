@@ -19,7 +19,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	public class ScheduledActivity
     {
-        public Guid PayloadId { get; set; }
+		public Guid PersonId { get; set; }
+		public Guid PayloadId { get; set; }
 		public DateOnly BelongsToDate { get; set; }
 		public DateTime StartDateTime { get; set; }
         public DateTime EndDateTime { get; set; }
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
         public string ShortName { get; set; }
         public int DisplayColor { get; set; }
 
-	    public Color TheColor()
+		public Color TheColor()
         {
             return Color.FromArgb(DisplayColor);
         }
