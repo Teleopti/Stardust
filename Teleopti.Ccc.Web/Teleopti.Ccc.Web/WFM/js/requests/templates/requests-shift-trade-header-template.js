@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular.module('wfm.requests').run([
-        '$templateCache', function ($templateCache) {
+		'$templateCache', function ($templateCache) {
 
 			var template =
 				"<div role=\"rowgroup\" class=\"ui-grid-header\"><!-- theader -->" +
@@ -22,8 +22,8 @@
 					"						ng-repeat=\"col in colContainer.renderedColumns track by col.uid\" " +
 					"						> " +
 					"						<div class='shift-trade-header' ng-repeat=\"day in grid.appScope.shiftTradeDayViewModels\" ng-style=\"{\'left\': day.leftOffset}\" >" +
-					"								<div class='shift-trade-header-start-of-week' ng-show=\"day.isStartOfWeek\">{{day.shortDate}}</div>" +
-					"								<div ng-show=\"!day.isStartOfWeek\"> &nbsp;</div>" +
+					"								<div class='shift-trade-header-start-of-week' ng-show=\"day.isStartOfWeek && !day.isLatestDayOfPeriod\">{{day.shortDate}}</div>" +
+					"								<div ng-show=\"!day.isStartOfWeek || day.isLatestDayOfPeriod\"> &nbsp;</div>" +
 					"								<div class='shift-trade-header-day-number'>{{day.dayNumber}}</div>" +
 					"						</div>" +
 					"					</div>" +
@@ -34,7 +34,7 @@
 					"</div>" +
 					"</div>";
 
-        	$templateCache.put("shift-trade-header-template.html", template);
-        }
+			$templateCache.put("shift-trade-header-template.html", template);
+		}
 	]);
 })();

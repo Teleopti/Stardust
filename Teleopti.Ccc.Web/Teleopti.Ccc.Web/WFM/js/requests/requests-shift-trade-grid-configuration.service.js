@@ -11,14 +11,14 @@
 				columnDefinitions: columnDefinitions,
 				getDayViewModels: getDayViewModels,
 				getShiftTradeScheduleViewModels: getShiftTradeScheduleViewModels
-			}
+			};
 
 			function getShiftTradeColumnLeftOffset(startMoment, currentMoment) {
 				return (currentMoment.diff(startMoment, 'days') * requestDefinitions.SHIFTTRADE_COLUMN_WIDTH) + "px";
 			}
 
 			function getDayViewModels(requests, shiftTradeRequestDateSummary) {
-				if (requests == undefined || requests.length === 0) {
+				if (requests === undefined || requests.length === 0) {
 					return [];
 				}
 
@@ -35,13 +35,16 @@
 					dayIncrement.add(1, 'days');
 				}
 
+				// Do not display date if the last day is start of week (To fix bug #39874)
+				dayViewModels[dayViewModels.length - 1].isLatestDayOfPeriod = true;
+
 				return dayViewModels;
 			}
 
 			function isStartOfWeek(day, startOfWeekIsoDayNumber) {
 				var difference = ((day.isoWeekday()) - startOfWeekIsoDayNumber);
 				return difference === 0;
-			};
+			}
 
 			function createDayViewModel(day, startOfWeekIsoDay) {
 				var isWeekend = (day.isoWeekday() === 6 || day.isoWeekday() === 7);
@@ -51,9 +54,10 @@
 					shortDate: $filter('date')(day.toDate(), 'shortDate'),
 					dayNumber: $filter('date')(day.toDate(), 'dd'),
 					isWeekend: isWeekend,
-					isStartOfWeek: isStartOfWeek(day.clone(), startOfWeekIsoDay)
+					isStartOfWeek: isStartOfWeek(day.clone(), startOfWeekIsoDay),
+					isLatestDayOfPeriod: false
 				};
-			};
+			}
 
 			function isDayOff(scheduleDayDetail) {
 				return (scheduleDayDetail && (scheduleDayDetail.Type === requestDefinitions.SHIFT_OBJECT_TYPE.DayOff));
@@ -66,7 +70,7 @@
 
 				var viewModel = createDayViewModel(shiftTradeDate, startOfWeekIsoDay);
 				viewModel.FromScheduleDayDetail = {};
-				viewModel.ToScheduleDayDetail = {}
+				viewModel.ToScheduleDayDetail = {};
 
 				angular.copy(shiftTradeDay.FromScheduleDayDetail, viewModel.FromScheduleDayDetail);
 				angular.copy(shiftTradeDay.ToScheduleDayDetail, viewModel.ToScheduleDayDetail);
@@ -85,7 +89,7 @@
 					var viewModelArray = [];
 
 					angular.forEach(request.ShiftTradeDays, function (shiftTradeDay) {
-						if (shiftTradeDay.FromScheduleDayDetail.ShortName != null || shiftTradeDay.ToScheduleDayDetail.ShortName != null) {
+						if (shiftTradeDay.FromScheduleDayDetail.ShortName !== null || shiftTradeDay.ToScheduleDayDetail.ShortName !== null) {
 							var viewModel = createShiftTradeDayViewModel(shiftTradeDay, shiftTradeRequestDateSummary);
 							viewModelArray.push(viewModel);
 						}
