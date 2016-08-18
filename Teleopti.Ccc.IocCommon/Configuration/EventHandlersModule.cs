@@ -149,12 +149,21 @@ namespace Teleopti.Ccc.IocCommon.Configuration
                 .As<ITeamOutOfAdherenceReadModelPersister>()
                 .As<ITeamOutOfAdherenceReadModelReader>()
                 .SingleInstance();
-            builder.RegisterType<SiteOutOfAdherenceReadModelPersister>()
-                .As<ISiteOutOfAdherenceReadModelPersister>()
+			
+	        builder.RegisterType<SiteOutOfAdherenceReadModelPersister>()
+		        .As<ISiteOutOfAdherenceReadModelPersister>()
+		        .SingleInstance();
+
+			if (_config.Toggle(Toggles.RTA_RemoveSiteTeamOutOfAdherenceReadModels_40069))
+				builder.RegisterType<SiteInAlarmFromAgentStatesReadModelReader>()
+				.As<ISiteOutOfAdherenceReadModelReader>()
+				.SingleInstance();
+			else
+				 builder.RegisterType<SiteOutOfAdherenceReadModelPersister>()
                 .As<ISiteOutOfAdherenceReadModelReader>()
                 .SingleInstance();
 
-            builder.RegisterType<IntervalLengthFetcher>().As<IIntervalLengthFetcher>().SingleInstance();
+			builder.RegisterType<IntervalLengthFetcher>().As<IIntervalLengthFetcher>().SingleInstance();
             builder.RegisterType<AnalyticsFactScheduleTimeHandler>().As<IAnalyticsFactScheduleTimeHandler>().SingleInstance();
             builder.RegisterType<AnalyticsFactScheduleDateHandler>().As<IAnalyticsFactScheduleDateHandler>().SingleInstance();
             builder.RegisterType<AnalyticsFactSchedulePersonHandler>().As<IAnalyticsFactSchedulePersonHandler>().SingleInstance();
