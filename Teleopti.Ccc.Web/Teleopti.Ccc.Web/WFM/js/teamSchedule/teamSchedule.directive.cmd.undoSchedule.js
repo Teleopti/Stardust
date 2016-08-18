@@ -40,19 +40,18 @@
 		};
 
 		vm.popDialog = function() {
-			return $wfmModal.show({
-				onRemoving: function() {
-					vm.resetActiveCmd();
-				},
-				locals: {
-					commandTitle: vm.label,
-					fix: null,
-					getTargets: PersonSelection.getSelectedPersonIdList,
-					command: vm.undoSchedule,
-					require: null,
-					getCommandMessage: function () {
-						return notification.buildConfirmationMessage('AreYouSureToUndoSelectedSchedule', PersonSelection.getTotalSelectedPersonAndProjectionCount.CheckedPersonCount, null, true);
-					}
+			var title = vm.label;
+			var message = notification.buildConfirmationMessage(
+				'AreYouSureToUndoSelectedSchedule',
+				PersonSelection.getTotalSelectedPersonAndProjectionCount.CheckedPersonCount,
+				null,
+				true
+			);
+			$wfmModal.confirm(message, title).then(function (result) {
+				vm.resetActiveCmd();
+
+				if (result) {
+					vm.undoSchedule();
 				}
 			});
 		};

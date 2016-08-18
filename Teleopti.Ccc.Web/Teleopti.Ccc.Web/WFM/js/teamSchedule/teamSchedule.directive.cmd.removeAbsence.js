@@ -43,23 +43,18 @@
 		};
 
 		vm.popDialog = function () {
-			return $wfmModal.show({
-				onRemoving: function () {
-					vm.resetActiveCmd();
-				},
-				locals: {
-					commandTitle: vm.label,
-					fix: null,
-					getTargets: PersonSelection.getSelectedPersonIdList,
-					command: vm.removeAbsence,
-					require: null,
-					getCommandMessage: function () {
-						return notification.buildConfirmationMessage(
-							'AreYouSureToRemoveSelectedAbsence',
-							PersonSelection.getTotalSelectedPersonAndProjectionCount().SelectedAbsenceInfo.PersonCount,
-							PersonSelection.getTotalSelectedPersonAndProjectionCount().SelectedAbsenceInfo.AbsenceCount,
-							true);
-					}
+			var title = vm.label;
+			var message = notification.buildConfirmationMessage(
+				'AreYouSureToRemoveSelectedAbsence',
+				PersonSelection.getTotalSelectedPersonAndProjectionCount().SelectedAbsenceInfo.PersonCount,
+				PersonSelection.getTotalSelectedPersonAndProjectionCount().SelectedAbsenceInfo.AbsenceCount,
+				true
+			);
+			$wfmModal.confirm(message, title).then(function (result) {
+				vm.resetActiveCmd();
+
+				if (result) {
+					vm.removeAbsence();
 				}
 			});
 		};

@@ -46,23 +46,18 @@
 		};
 
 		vm.popDialog = function () {
-			return $wfmModal.show({
-				onRemoving: function () {
-					vm.resetActiveCmd();
-				},
-				locals: {
-					commandTitle: vm.label,
-					fix: null,
-					getTargets: PersonSelection.getSelectedPersonIdList,
-					command: vm.removeActivity,
-					require: null,
-					getCommandMessage: function () {
-						return notification.buildConfirmationMessage(
-							'AreYouSureToRemoveSelectedActivity',
-							PersonSelection.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.PersonCount,
-							PersonSelection.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.ActivityCount,
-							true);
-					}
+			var title = vm.label;
+			var message = notification.buildConfirmationMessage(
+				'AreYouSureToRemoveSelectedActivity',
+				PersonSelection.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.PersonCount,
+				PersonSelection.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.ActivityCount,
+				true
+			);
+			$wfmModal.confirm(message, title).then(function (result) {
+				vm.resetActiveCmd();
+
+				if (result) {
+					vm.removeActivity();
 				}
 			});
 		};
