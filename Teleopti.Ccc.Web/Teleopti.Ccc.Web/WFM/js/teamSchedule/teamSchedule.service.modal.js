@@ -64,32 +64,30 @@
         }
 
         function confirm(message, title) {
-            var deferred = $q.defer();
+            return $q(function (resolve, reject) {
+                message = message || '';
+                title = title || 'Confirm';
 
-            message = message || '';
-            title = title || 'Confirm';
+                $templateRequest(confirmModalTemplate).then(makeConfirmModal);
 
-            $templateRequest(confirmModalTemplate).then(makeConfirmModal);
+                function makeConfirmModal(template) {
+                    var scope = $rootScope.$new();
+                    var parent = angular.element(document.body);
 
-            function makeConfirmModal(template) {
-                var scope = $rootScope.$new();
-                var parent = angular.element(document.body);
+                    scope.message = message;
+                    scope.title = title;
+                    scope.close = function closeModal(result) {
+                        scope.$evalAsync(function (scope) {
+                            scope.$destroy();
+                            compiledConfirmModal.remove();
+                            resolve(result);
+                        });
+                    };
 
-                scope.message = message;
-                scope.title = title;
-                scope.close = function closeModal(result) {
-                    scope.$evalAsync(function (scope) {
-                        scope.$destroy();
-                        compiledConfirmModal.remove();
-                        deferred.resolve(result);
-                    });
-                };
-
-                var compiledConfirmModal = $compile(template)(scope);
-                parent.append(compiledConfirmModal);
-            }
-
-            return deferred.promise;
+                    var compiledConfirmModal = $compile(template)(scope);
+                    parent.append(compiledConfirmModal);
+                }
+            });
         }
 
         return {
