@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 
@@ -20,9 +19,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		[HttpPost, Route("Rta/State/Change")]
 		public IHttpActionResult Change([FromBody]ExternalUserStateWebModel input)
 		{
-			DateTime snapshotId;
-			DateTime.TryParse(input.SnapshotId, out snapshotId);
-
 			try
 			{
 				_rta.SaveState(
@@ -34,7 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 						UserCode = input.UserCode,
 						StateCode = input.StateCode,
 						StateDescription = input.StateDescription,
-						SnapshotId = snapshotId,
+						SnapshotId = parseSnapshotId(input.SnapshotId),
 					});
 			}
 			catch (InvalidAuthenticationKeyException e)
@@ -75,15 +71,13 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 				}).ToArray();
 
 				var root = input.First();
-				DateTime snapshotId;
-				DateTime.TryParse(root.SnapshotId, out snapshotId);
 
 				_rta.SaveStateBatch(new BatchInputModel
 				{
 					AuthenticationKey = root.AuthenticationKey,
 					PlatformTypeId = root.PlatformTypeId,
 					SourceId = root.SourceId,
-					SnapshotId = snapshotId,
+					SnapshotId = parseSnapshotId(root.SnapshotId),
 					States = states
 				});
 
@@ -111,5 +105,13 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 
 			return Ok();
 		}
+
+		private static DateTime? parseSnapshotId(string snapshotId)
+		{
+			DateTime parsed;
+			DateTime.TryParse(snapshotId, out parsed);
+			return parsed == DateTime.MinValue ? (DateTime?)null : parsed;
+		}
+
 	}
 }
