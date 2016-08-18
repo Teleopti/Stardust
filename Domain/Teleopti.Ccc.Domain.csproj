@@ -407,6 +407,7 @@
     <Compile Include="Scheduling\Assignment\IIsDayScheduled.cs" />
     <Compile Include="Scheduling\Assignment\IsDayScheduled.cs" />
     <Compile Include="Scheduling\Assignment\IsDayScheduledExcludeDayOff.cs" />
+    <Compile Include="Scheduling\DesktopScheduling.cs" />
     <Compile Include="Scheduling\Legacy\Commands\DoFullResourceOptimizationOneTime.cs" />
     <Compile Include="Scheduling\Legacy\Commands\LockInfo.cs" />
     <Compile Include="Scheduling\Restrictions\MustHaveRestrictionProvider.cs" />

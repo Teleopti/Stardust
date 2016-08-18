@@ -3202,13 +3202,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			else
 			{
-				var scheduleCommand = _container.Resolve<IScheduleCommand>();
-				var dayOffOptimizePreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(_daysOffPreferences);
-
-				scheduleCommand.Execute(_optimizerOriginalPreferences, new BackgroundWorkerWrapper(_backgroundWorkerScheduling),
-					_schedulerState,
-					argument.SelectedScheduleDays, _groupPagePerDateHolder, _requiredScheduleHelper,
-					_optimizationPreferences, true, dayOffOptimizePreferenceProvider);
+				var desktopScheduling = _container.Resolve<DesktopScheduling>();
+				desktopScheduling.Execute(_optimizerOriginalPreferences, new BackgroundWorkerWrapper(_backgroundWorkerScheduling),
+					_schedulerState, argument.SelectedScheduleDays, _groupPagePerDateHolder, _requiredScheduleHelper,
+					_optimizationPreferences, _daysOffPreferences);
 			}
 
 		}
