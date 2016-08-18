@@ -158,6 +158,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\MultiAbsenceRequestHandlerNoMocksTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceRequestHandlerNoMocksTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceRequestHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceRequestUseMultiHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ApproveBatchRequestsCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\BackoutScheduleChangeCommandHandlerTest.cs" />

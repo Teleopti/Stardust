@@ -1,39 +1,105 @@
-﻿using log4net;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
 	public class NewAbsenceRequestUseMultiHandler : INewAbsenceRequestHandler, IHandleEvent<NewAbsenceRequestCreatedEvent>, IRunOnStardust
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(NewAbsenceRequestUseMultiHandler));
-
-		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
-		private readonly ICurrentScenario _scenarioRepository;
+		
 		private readonly IPersonRequestRepository _personRequestRepository;
-		private readonly IAbsenceRequestWaitlistProcessor _waitlistProcessor;
-		private readonly IAbsenceRequestProcessor _absenceRequestProcessor;
+		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
+		private readonly IList<LoadDataAction> _loadDataActions;
+		private IPersonRequest _personRequest;
 
+		private static readonly isNullOrNotNewSpecification personRequestSpecification = new isNullOrNotNewSpecification();
+		private static readonly isNullSpecification absenceRequestSpecification = new isNullSpecification();
 
-		public NewAbsenceRequestUseMultiHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, ICurrentScenario scenarioRepository,
-			IPersonRequestRepository personRequestRepository, IAbsenceRequestWaitlistProcessor waitlistProcessor,
-			IAbsenceRequestProcessor absenceRequestProcessor)
+		private delegate bool LoadDataAction(NewAbsenceRequestCreatedEvent @event);
+
+		public NewAbsenceRequestUseMultiHandler(IPersonRequestRepository personRequestRepository, IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
-			_scenarioRepository = scenarioRepository;
 			_personRequestRepository = personRequestRepository;
-			_waitlistProcessor = waitlistProcessor;
-			_absenceRequestProcessor = absenceRequestProcessor;
+			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
+
+			_loadDataActions = new List<LoadDataAction>
+			{
+				checkPersonRequest,
+				checkAbsenceRequest
+			};
 		}
 
 		[AsSystem]
 		public void Handle(NewAbsenceRequestCreatedEvent @event)
 		{
-			
+			if (_loadDataActions.Any(action => !action.Invoke(@event)))
+			{
+				return;
+			}
+
+			var queuedAbsenceRequest = new QueuedAbsenceRequest()
+			{
+				PersonRequest = _personRequest,
+				Created = _personRequest.CreatedOn.Value,
+				StartDateTime = _personRequest.Request.Period.StartDateTime,
+				EndDateTime = _personRequest.Request.Period.EndDateTime,
+			};
+			_queuedAbsenceRequestRepository.Add(queuedAbsenceRequest);
+		}
+
+		private bool checkAbsenceRequest(NewAbsenceRequestCreatedEvent @event)
+		{
+			var req  = _personRequest.Request as IAbsenceRequest;
+			if (absenceRequestSpecification.IsSatisfiedBy(req))
+			{
+				if (logger.IsWarnEnabled)
+				{
+					logger.WarnFormat("The found person request is not of type absence request. (Id = {0})",
+									  @event.PersonRequestId);
+				}
+				return false;
+			}
+			return true;
+		}
+
+		private bool checkPersonRequest(NewAbsenceRequestCreatedEvent @event)
+		{
+
+			_personRequest = _personRequestRepository.Get(@event.PersonRequestId);
+			if (personRequestSpecification.IsSatisfiedBy(_personRequest))
+			{
+				if (logger.IsWarnEnabled)
+				{
+					logger.WarnFormat(
+						"No person request found with the supplied Id, or the request is not in New status mode. (Id = {0})",
+						@event.PersonRequestId);
+				}
+				return false;
+			}
+			return true;
+		}
+
+		private class isNullOrNotNewSpecification : Specification<IPersonRequest>
+		{
+			public override bool IsSatisfiedBy(IPersonRequest obj)
+			{
+				return (obj == null || !obj.IsNew);
+			}
+		}
+
+		private class isNullSpecification : Specification<IAbsenceRequest>
+		{
+			public override bool IsSatisfiedBy(IAbsenceRequest obj)
+			{
+				return (obj == null);
+			}
 		}
 
 	}

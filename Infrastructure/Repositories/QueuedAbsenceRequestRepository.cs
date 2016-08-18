@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -14,7 +13,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		}
 
-		public IList<QueuedAbsenceRequest> Find(DateTimePeriod period)
+		public IList<IQueuedAbsenceRequest> Find(DateTimePeriod period)
 		{
 			throw new System.NotImplementedException();
 		}

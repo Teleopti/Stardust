@@ -10,28 +10,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeQueuedAbsenceRequestRepository : IQueuedAbsenceRequestRepository
 	{
-		private readonly IList<QueuedAbsenceRequest> _queuedAbsenceRequestRepository = new List<QueuedAbsenceRequest>();
+		private readonly IList<IQueuedAbsenceRequest> _queuedAbsenceRequestRepository = new List<IQueuedAbsenceRequest>();
 
-		public void Add(QueuedAbsenceRequest entity)
+		public void Add(IQueuedAbsenceRequest entity)
 		{
 			_queuedAbsenceRequestRepository.Add(entity);
 		}
 
-		public void Remove(QueuedAbsenceRequest entity)
+		public void Remove(IQueuedAbsenceRequest entity)
 		{
 			_queuedAbsenceRequestRepository.Remove(entity);
 		}
-
-		public void Add(IQueuedAbsenceRequest root)
-		{
-			throw new NotImplementedException();
-		}
-
-		public void Remove(IQueuedAbsenceRequest root)
-		{
-			throw new NotImplementedException();
-		}
-
+	
 		IQueuedAbsenceRequest IRepository<IQueuedAbsenceRequest>.Get(Guid id)
 		{
 			throw new NotImplementedException();
@@ -39,7 +29,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IQueuedAbsenceRequest> LoadAll()
 		{
-			throw new NotImplementedException();
+			return _queuedAbsenceRequestRepository;
 		}
 
 		public IQueuedAbsenceRequest Load(Guid id)
@@ -54,18 +44,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IUnitOfWork UnitOfWork { get; }
 
-		public QueuedAbsenceRequest Get(Guid personRequestId)
+		public IQueuedAbsenceRequest Get(Guid personRequestId)
 		{
-			return _queuedAbsenceRequestRepository.FirstOrDefault(x => x.PersonRequestId == personRequestId);
+			return _queuedAbsenceRequestRepository.FirstOrDefault(x => x.PersonRequest.Id.Value == personRequestId);
 		}
 
-		public IList<QueuedAbsenceRequest> Find(DateTimePeriod period)
+		public IList<IQueuedAbsenceRequest> Find(DateTimePeriod period)
 		{
-			IList<QueuedAbsenceRequest> overlappingRequests = new List<QueuedAbsenceRequest>();
+			IList<IQueuedAbsenceRequest> overlappingRequests = new List<IQueuedAbsenceRequest>();
 			foreach (var request in _queuedAbsenceRequestRepository)
 			{
-				if ((request.StarDateTime < period.StartDateTime && request.EndDateTime > period.StartDateTime) ||
-					(request.StarDateTime < period.EndDateTime && request.EndDateTime > period.EndDateTime))
+				if ((request.StartDateTime < period.StartDateTime && request.EndDateTime > period.StartDateTime) ||
+					(request.StartDateTime < period.EndDateTime && request.EndDateTime > period.EndDateTime))
 				{
 					overlappingRequests.Add(request);
 				}

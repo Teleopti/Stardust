@@ -1,26 +1,31 @@
 using System;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
-	public class QueuedAbsenceRequest
+	public class QueuedAbsenceRequest : IQueuedAbsenceRequest
 	{
-		public QueuedAbsenceRequest(Guid personRequestId, DateTime created, DateTime starDateTime, DateTime endDateTime, Guid businessUnitId)
+
+		public bool Equals(IEntity other)
 		{
-			PersonRequestId = personRequestId;
-			Created = created;
-			StarDateTime = starDateTime;
-			EndDateTime = endDateTime;
-			BusinessUnitId = businessUnitId;
+			throw new NotImplementedException();
+		}
+		
+		public void SetId(Guid? newId)
+		{
+			throw new NotImplementedException();
 		}
 
-		public Guid PersonRequestId { get; }
+		public void ClearId()
+		{
+			throw new NotImplementedException();
+		}
 
-		public DateTime Created { get; }
-
-		public DateTime StarDateTime { get; }
-
-		public DateTime EndDateTime { get; }
-
-		public Guid BusinessUnitId { get; }
+		public Guid? Id { get; }
+		public IPersonRequest PersonRequest { get; set; }
+		public DateTime Created { get; set; }
+		public DateTime StartDateTime { get; set; }
+		public DateTime EndDateTime { get; set; }
+		public IBusinessUnit BusinessUnit { get; set; }
 	}
 }
