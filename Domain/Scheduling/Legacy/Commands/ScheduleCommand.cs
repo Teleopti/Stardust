@@ -12,14 +12,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
-	public interface IScheduleCommand
-	{
-		void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, ISchedulingProgress backgroundWorker,
-			IList<IScheduleDay> selectedScheduleDays,  IOptimizationPreferences optimizationPreferences, 
-			bool runWeeklyRestSolver, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
-	}
-
-	public class ScheduleCommand : IScheduleCommand
+	public class ScheduleCommand
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IRequiredScheduleHelper _requiredScheduleOptimizerHelper;

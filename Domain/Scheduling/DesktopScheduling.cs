@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
@@ -9,9 +8,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class DesktopScheduling
 	{
-		private readonly IScheduleCommand _scheduleCommand;
+		private readonly ScheduleCommand _scheduleCommand;
 
-		public DesktopScheduling(IScheduleCommand scheduleCommand)
+		public DesktopScheduling(ScheduleCommand scheduleCommand)
 		{
 			_scheduleCommand = scheduleCommand;
 		}

@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterModule<ScheduleOvertimeModule>();
 
 			builder.RegisterType<ClassicScheduleCommand>().As<IClassicScheduleCommand>().InstancePerLifetimeScope();
-			builder.RegisterType<ScheduleCommand>().As<IScheduleCommand>().InstancePerLifetimeScope().ApplyAspects();
+			builder.RegisterType<ScheduleCommand>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<DesktopScheduling>().InstancePerLifetimeScope();
 			builder.RegisterType<OptimizationCommand>().As<IOptimizationCommand>().InstancePerLifetimeScope();
 			builder.RegisterType<ClassicDaysOffOptimizationCommand>().InstancePerLifetimeScope();
