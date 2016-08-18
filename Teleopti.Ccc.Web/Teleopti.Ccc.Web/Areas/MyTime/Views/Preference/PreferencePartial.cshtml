@@ -169,7 +169,11 @@
 
 	</div>
 
-	<div id="Preference-body" class="clearfix pagebody" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)' data-mytime-maxmusthave="@Model.MaxMustHave">
+<div id="Preference-body"
+     class="clearfix pagebody"
+     data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'
+     data-mytime-maxmusthave="@Model.MaxMustHave"
+	 data-mytime-currentmusthave="@Model.CurrentMustHave">
 
 		<div id="Preference-body-inner" class="well clearfix pd0 body-inner">
 			<ul class="weekdays">

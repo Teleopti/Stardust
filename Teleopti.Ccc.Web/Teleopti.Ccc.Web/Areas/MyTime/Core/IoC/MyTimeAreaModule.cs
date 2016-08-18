@@ -174,6 +174,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<PreferenceOptionsProvider>().As<IPreferenceOptionsProvider>();
 			builder.RegisterType<PreferencePersister>().As<IPreferencePersister>();
 			builder.RegisterType<MustHaveRestrictionSetter>().As<IMustHaveRestrictionSetter>();
+			builder.RegisterType<MustHaveRestrictionProvider>().As<IMustHaveRestrictionProvider>();
 			builder.RegisterType<PreferenceFeedbackProvider>().As<IPreferenceFeedbackProvider>().SingleInstance();
 			builder.RegisterType<PreferencePeriodFeedbackProvider>().As<IPreferencePeriodFeedbackProvider>().SingleInstance();
 			builder.RegisterType<WorkTimeMinMaxRestrictionCreator>().As<IWorkTimeMinMaxRestrictionCreator>();

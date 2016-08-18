@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IPreferenceDay> Find(DateOnlyPeriod period, IPerson person)
 		{
-			throw new NotImplementedException();
+			return _preferensDays;
 		}
 
 		public IList<IPreferenceDay> FindNewerThan(DateTime newerThan)

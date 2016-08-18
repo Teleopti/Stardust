@@ -203,11 +203,11 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		});
 	}
 
-	function _setMustHave(mustHave) {
+	function _setMustHave(mustHave, successCb) {
 		$('#Preference-body-inner .ui-selected')
 			.each(function (index, cell) {
 				var date = $(cell).data('mytime-date');
-				preferencesAndScheduleViewModel.DayViewModels[date].SetMustHave(mustHave);
+				preferencesAndScheduleViewModel.DayViewModels[date].SetMustHave(mustHave, successCb);
 			});
 	}
 
@@ -369,7 +369,13 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		var to = $('li[data-mytime-date]').last().data('mytime-date');
 
 		preferencesAndScheduleViewModel = new Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel(ajax, dayViewModels);
-		selectionViewModel = new Teleopti.MyTimeWeb.Preference.SelectionViewModel(dayViewModelsInPeriod, $('#Preference-body').data('mytime-maxmusthave'), _setMustHave, _setPreference, _deletePreference);
+		selectionViewModel = new Teleopti.MyTimeWeb.Preference.SelectionViewModel(
+			dayViewModelsInPeriod,
+			$('#Preference-body').data('mytime-maxmusthave'),
+			_setMustHave,
+			_setPreference,
+			_deletePreference,
+			$('#Preference-body').data('mytime-currentmusthave'));
 		periodFeedbackViewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(ajax, dayViewModelsInPeriod, date, weekViewModels);
 
 

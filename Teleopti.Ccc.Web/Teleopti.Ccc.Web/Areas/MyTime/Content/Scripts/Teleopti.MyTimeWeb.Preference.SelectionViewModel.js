@@ -15,7 +15,7 @@ if (typeof (Teleopti) === 'undefined') {
 	}
 }
 
-Teleopti.MyTimeWeb.Preference.SelectionViewModel = function (dayViewModels, maxMustHave, setMustHaveMethod, setPreferenceMethod, deletePreferenceMethod) {
+Teleopti.MyTimeWeb.Preference.SelectionViewModel = function (dayViewModels, maxMustHave, setMustHaveMethod, setPreferenceMethod, deletePreferenceMethod, currentMustHave) {
     var self = this;
     this.MaxMustHaves = ko.observable(0);
     self.minDate = ko.observable(moment());
@@ -24,7 +24,7 @@ Teleopti.MyTimeWeb.Preference.SelectionViewModel = function (dayViewModels, maxM
     self.displayDate = ko.observable();
     self.nextPeriodDate = ko.observable(moment());
     self.previousPeriodDate = ko.observable(moment());
-
+	self.currentMustHaves = ko.observable(currentMustHave);
     self.selectedDate = ko.observable(moment().startOf('day'));
 
     self.setCurrentDate = function (date) {
@@ -39,12 +39,16 @@ Teleopti.MyTimeWeb.Preference.SelectionViewModel = function (dayViewModels, maxM
         self.selectedDate(self.previousPeriodDate());
     };
 
+    function updateMustHave(mustHave) {
+	    self.currentMustHaves(self.currentMustHaves() + (mustHave ? 1 : -1 ));
+    }
+
     self.addMustHave = function() {
-	    setMustHaveMethod(true);
+    	setMustHaveMethod(true, updateMustHave);
     };
 
 	self.removeMustHave = function() {
-		setMustHaveMethod(false);
+		setMustHaveMethod(false, updateMustHave);
 	}
 
     self.mustHaveEnabled = function() {
@@ -52,14 +56,7 @@ Teleopti.MyTimeWeb.Preference.SelectionViewModel = function (dayViewModels, maxM
     };
     
     self.maxMustHave = ko.observable(maxMustHave);
-    self.currentMustHaves = ko.computed(function() {
-        var total = 0;
-        $.each(dayViewModels, function (index, day) {
-            if (day.MustHave())
-                total += 1;
-        });
-        return total;
-    });
+
 
 	self.selectedPreference = ko.observable();
     self.availablePreferences = ko.observableArray();

@@ -292,7 +292,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 		return deferred.promise();
 	};
 
-	this.SetMustHave = function (value) {
+	this.SetMustHave = function (value, successCb) {
 		value = {
 			Date: self.Date,
 			MustHave: value
@@ -306,6 +306,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 			date: self.Date,
 			success: function (data) {
 				self.MustHave(data);
+				if (successCb) successCb(data);
 			},
 			complete: function () {
 				deferred.resolve();

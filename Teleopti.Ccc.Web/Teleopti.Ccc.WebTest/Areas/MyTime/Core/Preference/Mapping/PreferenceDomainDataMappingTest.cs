@@ -5,7 +5,10 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Interfaces.Domain;
@@ -16,6 +19,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 	public class PreferenceDomainDataMappingTest
 	{
 		private IVirtualSchedulePeriodProvider virtualScheduleProvider;
+		private FakePreferenceDayRepository preferenceDayRepository;
 		private IPerson person;
 
 		[SetUp]
@@ -31,11 +35,15 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			         		                     		PreferenceInputPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today),
 			         		                     	}
 			         	};
+
+			preferenceDayRepository = new FakePreferenceDayRepository();
+			var mustHaveRestrictionProvider = new MustHaveRestrictionProvider(preferenceDayRepository);
+
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 
 			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(new PreferenceDomainDataMappingProfile(virtualScheduleProvider, loggedOnUser)));
+			Mapper.Initialize(c => c.AddProfile(new PreferenceDomainDataMappingProfile(virtualScheduleProvider, loggedOnUser,mustHaveRestrictionProvider)));
 		}
 
 		[Test]
@@ -92,6 +100,27 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var result = Mapper.Map<DateOnly, PreferenceDomainData>(DateOnly.Today);
 
 			result.MaxMustHave.Should().Be.EqualTo(maxMustHave);
+		}
+
+		[Test]
+		public void ShouldReturnCorrectCurrentMustHave()
+		{
+			preferenceDayRepository.Add(new PreferenceDay(person, DateOnly.Today, new PreferenceRestriction
+			{
+				MustHave = true
+			}));
+			preferenceDayRepository.Add(new PreferenceDay(person,DateOnly.Today.AddDays(1),new PreferenceRestriction
+			{
+				MustHave = false
+			}));
+
+			const int maxMustHave = 8;
+			var virtualSchedulePeriod = MockRepository.GenerateMock<IVirtualSchedulePeriod>();
+			virtualSchedulePeriod.Stub(x => x.MustHavePreference).Return(maxMustHave);
+			virtualScheduleProvider.Stub(x => x.VirtualSchedulePeriodForDate(DateOnly.Today)).Return(virtualSchedulePeriod);
+
+			var result = Mapper.Map<DateOnly,PreferenceDomainData>(DateOnly.Today);
+			result.CurrentMustHave.Should().Be.EqualTo(1);
 		}
 	}
 }
