@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -30,6 +31,12 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var intervals = _scheduleForecastSkillReadModelRepository.GetBySkill(skillId, date.Subtract(timezoneOffset),
 				date.Add(TimeSpan.FromDays(1)).Subtract(timezoneOffset).AddSeconds(-1));
 			convertIntervalToLoggedOnTimezone(intervals, timezoneOffset);
+			//this is to make the chart work in EDGE as it requires the datetime kind
+			foreach (var skillStaffingInterval in intervals)
+			{
+				skillStaffingInterval.StartDateTime = TimeZoneInfo.ConvertTimeToUtc(skillStaffingInterval.StartDateTime,TimeZoneInfo.Utc);
+				skillStaffingInterval.EndDateTime = TimeZoneInfo.ConvertTimeToUtc(skillStaffingInterval.EndDateTime,TimeZoneInfo.Utc);
+			}
 			return intervals;
 		}
 
