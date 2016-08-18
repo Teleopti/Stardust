@@ -64,7 +64,7 @@ Scenario: Should be able to toggle week view
 	And I toggle "WEEK" view
 	Then I should see week view schedule table
 
-Scenario: Should be able to navigate to next week week view
+Scenario: Should be able to navigate to next week in week view
 	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
 	And I toggle "WEEK" view
