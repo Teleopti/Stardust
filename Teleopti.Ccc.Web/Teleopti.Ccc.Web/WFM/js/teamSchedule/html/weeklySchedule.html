@@ -41,7 +41,7 @@
 				<tbody>
 					<tr class="weekview-tr" ng-repeat="person in vm.groupWeeks">
 						<td class="weekview-td weekview-person-name">{{person.name}}</td>
-						<td class="weekview-td" ng-repeat="day in person.days" ng-style="{background: day.color}" ng-class="{'dayoff': day.isDayOff, 'terminated': day.isTerminated}">
+						<td class="weekview-td" ng-repeat="day in person.days" ng-style="{background: day.color, color: day.contrastFontColor}" ng-class="{'dayoff': day.isDayOff, 'terminated': day.isTerminated}">
 							<div>{{day.summeryTitle}}</div>
 							<div>{{day.summeryTimeSpan | timerange }}</div>
 						</td>
