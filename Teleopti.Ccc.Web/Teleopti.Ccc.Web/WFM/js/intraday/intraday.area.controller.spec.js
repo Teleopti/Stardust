@@ -83,7 +83,7 @@ describe('IntradayAreaCtrl', function () {
 		$httpBackend.whenDELETE("../api/intraday/skillarea/836cebb6-cee8-41a1-bb62-729f4b3a63f4")
 			.respond(200, {});
 
-		$httpBackend.whenGET("../api/intraday/monitorskillarea/fa9b5393-ef48-40d1-b7cc-09e797589f81")
+		$httpBackend.whenGET("../api/intraday/monitorskillareastatistics/fa9b5393-ef48-40d1-b7cc-09e797589f81")
 			.respond(function () {
 				return [200, monitorData];
 			});
