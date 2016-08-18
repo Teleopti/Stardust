@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
@@ -11,10 +12,12 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 	public class MappingReadModelPersister : IMappingReadModelPersister
 	{
 		private readonly ICurrentReadModelUnitOfWork _unitOfWork;
+		private readonly IConfigReader _config;
 
-		public MappingReadModelPersister(ICurrentReadModelUnitOfWork unitOfWork)
+		public MappingReadModelPersister(ICurrentReadModelUnitOfWork unitOfWork, IConfigReader config)
 		{
 			_unitOfWork = unitOfWork;
+			_config = config;
 		}
 
 		public void Invalidate()
@@ -49,7 +52,9 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 		{
 			setInvalido(false);
 
-			mappings.Batch(100).ForEach(batch =>
+			var batchSize = _config.ReadValue("MappingReadModelPersisterBatchSize", 20);
+
+			mappings.Batch(batchSize).ForEach(batch =>
 			{
 
 				var sqlValues = batch.Select((m, i) =>
