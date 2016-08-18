@@ -16,7 +16,10 @@ namespace Teleopti.Ccc.TestCommon
 
 		public void TryLockForTypeOf(object lockObject, Action action)
 		{
-			throw new NotImplementedException();
+			var type = lockObject.GetType();
+			if (!Monitor.TryEnter(type)) return;
+			action.Invoke();
+			Monitor.Exit(type);
 		}
 	}
 }

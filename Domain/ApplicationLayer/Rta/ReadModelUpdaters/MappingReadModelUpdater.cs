@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
@@ -28,19 +29,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		private readonly IRtaMapRepository _mappings;
 		private readonly IBusinessUnitRepository _businessUnits;
 		private readonly IMappingReadModelPersister _persister;
+		private readonly IDistributedLockAcquirer _distributedLock;
 
 		public MappingReadModelUpdater(
 			IActivityRepository activities, 
 			IRtaStateGroupRepository stateGroups, 
 			IRtaMapRepository mappings, 
 			IBusinessUnitRepository businessUnits, 
-			IMappingReadModelPersister persister)
+			IMappingReadModelPersister persister,
+			IDistributedLockAcquirer distributedLock)
 		{
 			_activities = activities;
 			_stateGroups = stateGroups;
 			_mappings = mappings;
 			_businessUnits = businessUnits;
 			_persister = persister;
+			_distributedLock = distributedLock;
 		}
 
 		[ReadModelUnitOfWork]
@@ -77,12 +81,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		[ReadModelUnitOfWork]
 		public virtual void Handle(TenantMinuteTickEvent @event)
 		{
-			if (!_persister.Invalid())
-				return;
+			_distributedLock.TryLockForTypeOf(this, () =>
+			{
+				if (!_persister.Invalid())
+					return;
 
-			var mappings = MakeMappings(_businessUnits, _activities, _stateGroups, _mappings);
+				var mappings = MakeMappings(_businessUnits, _activities, _stateGroups, _mappings);
 
-			_persister.Persist(mappings);
+				_persister.Persist(mappings);
+			});
 		}
 
 		public static IEnumerable<Mapping> MakeMappings(

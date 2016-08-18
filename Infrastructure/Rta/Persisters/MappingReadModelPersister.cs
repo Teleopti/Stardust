@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 		public bool Invalid()
 		{
 			var value = _unitOfWork.Current()
-				.CreateSqlQuery("SELECT [Value] FROM [ReadModel].[KeyValueStore] WITH (ROWLOCK, XLOCK) WHERE [Key] = 'RuleMappingsInvalido'")
+				.CreateSqlQuery("SELECT [Value] FROM [ReadModel].[KeyValueStore] WHERE [Key] = 'RuleMappingsInvalido'")
 				.UniqueResult<string>() ?? bool.TrueString;
 
 			return bool.Parse(value);
