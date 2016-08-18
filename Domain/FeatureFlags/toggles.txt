@@ -53,7 +53,7 @@ RTA_RecentOutOfAdherences_39145 = RC
 RTA_Optimize_39667 = true
 RTA_MonitorBySkillArea_39337 = RC
 RTA_RuleMappingOptimization_39812 = true
-RTA_BatchConnectionOptimization_40116 = RC
+RTA_BatchConnectionOptimization_40116 = true
 
 WfmPermission_ReplaceOldPermission_34671 = true
 
