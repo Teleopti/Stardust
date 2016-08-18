@@ -185,6 +185,7 @@
     <Compile Include="ApplicationLayer\Events\MainShiftCategoryReplaceEvent.cs" />
     <Compile Include="ApplicationLayer\Events\NewMultiAbsenceRequestsCreatedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonRequestChangedEvent.cs" />
+    <Compile Include="FeatureFlags\RemoveMeWithToggleAttribute.cs" />
     <Compile Include="ApplicationLayer\Events\RtaMapChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\RtaRuleChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\RtaStateGroupChangedEvent.cs" />
