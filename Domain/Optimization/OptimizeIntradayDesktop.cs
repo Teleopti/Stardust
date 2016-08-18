@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				_intradayOptimizationCommandHandler.Execute(command);
 			}
 
+			//TODO: (probably) enough to shovel resources here (if cascading is turned on) - no need to do res calc
 			var resCalcData =_currentSchedulerStateHolder().SchedulingResultState.ToResourceOptimizationData(_currentSchedulerStateHolder().ConsiderShortBreaks, false);
 			selectedPeriod.DayCollection().ForEach(x => _resourceOptimizationHelper.ResourceCalculate(x, resCalcData));
 		}	

@@ -81,6 +81,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills))
 			{
+				ResourceCalculationContext.Fetch().PrimarySkillMode = true;
 				if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff)
 				{
 					schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
