@@ -46,6 +46,7 @@ CREATE PROCEDURE [mart].[etl_dim_acd_login_load]
 @datasource_id smallint
 AS
 DECLARE @internal bit
+DECLARE @inactive nvarchar(20)
 DECLARE @sqlstring nvarchar(4000)
 SET @sqlstring = ''
 
@@ -104,6 +105,43 @@ BEGIN
 	--Exec
 	EXEC sp_executesql @sqlstring
 	
+	--update logins that doesnt exist anymore in agg
+	--prepare
+	set @inactive = ' (inactive)'
+	SELECT @sqlstring = '
+	UPDATE mart.dim_acd_login 
+	SET is_active=0
+	,acd_login_name = acd_login_name + '''+ @inactive +
+	'''
+	,acd_login_original_id = acd_login_original_id + '''+ @inactive +
+	'''
+	FROM mart.dim_acd_login d
+	INNER JOIN 
+		mart.sys_datasource sys
+		ON
+		d.datasource_id=sys.datasource_id
+	WHERE NOT EXISTS(
+		SELECT  agg.agent_id
+		FROM'
+	+ CASE @internal
+		WHEN 0 THEN '	mart.v_agent_info agg'
+		WHEN 1 THEN '	dbo.agent_info agg'
+		ELSE NULL --Fail fast
+	  END
+	+ ' 
+		WHERE acd_login_agg_id = agg.agent_id
+		AND agg.log_object_id = sys.log_object_id
+		AND agg.Agent_name = d.acd_login_name
+		)
+		AND d.acd_login_id>=0
+		AND d.is_active = 1'
+
+	
+			
+	--Exec
+	EXEC sp_executesql @sqlstring
+
+
 	-------------
 	-- Insert new
 	-------------
