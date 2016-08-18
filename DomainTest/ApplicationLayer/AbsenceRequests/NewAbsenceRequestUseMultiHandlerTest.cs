@@ -41,19 +41,28 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldPersistNewRequestInQueue()
 		{
-			var req = createRequest();
-
-			var newAbsenceCreatedEvent = new NewAbsenceRequestCreatedEvent()
-			{
-				PersonRequestId = req.Id.Value
-			};
-
-			_target.Handle(newAbsenceCreatedEvent);
+			var reqEvent = createNewRequestEvent();
+			_target.Handle(reqEvent);
 
 			_queuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(1);
 		}
 
-		private PersonRequest createRequest()
+
+		[Test, Ignore]
+		public void ShouldPickJobsFromQueueAndSendMultiRequestEvent()
+		{
+			var requestEvent1 = createNewRequestEvent();
+			var requestEvent2 = createNewRequestEvent();
+			
+			_target.Handle(requestEvent1);
+			_target.Handle(requestEvent2);
+
+			_queuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(1);
+		}
+
+
+
+		private NewAbsenceRequestCreatedEvent createNewRequestEvent()
 		{
 			var startDateTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc);
 			var endDateTime = new DateTime(2016, 3, 1, 23, 59, 00, DateTimeKind.Utc);
@@ -63,7 +72,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var person = createAndSetupPerson(startDateTime, endDateTime, workflowControlSet);
 
 			var request = createAbsenceRequest(person, absence, new DateTimePeriod(startDateTime, endDateTime));
-			return request;
+
+			var newAbsenceCreatedEvent = new NewAbsenceRequestCreatedEvent()
+			{
+				PersonRequestId = request.Id.Value
+			};
+			return newAbsenceCreatedEvent;
 		}
 
 		private IPerson createAndSetupPerson(DateTime startDateTime, DateTime endDateTime, IWorkflowControlSet workflowControlSet)
