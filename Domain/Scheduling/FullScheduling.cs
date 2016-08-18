@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Interfaces.Domain;
@@ -21,8 +20,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly IFillSchedulerStateHolder _fillSchedulerStateHolder;
 		private readonly Func<IScheduleCommand> _scheduleCommand;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-		private readonly Func<IRequiredScheduleHelper> _requiredScheduleHelper;
-		private readonly Func<IGroupPagePerDateHolder> _groupPagePerDateHolder;
 		private readonly IScheduleDictionaryPersister _persister;
 		private readonly ViolatedSchedulePeriodBusinessRule _violatedSchedulePeriodBusinessRule;
 		private readonly DayOffBusinessRuleValidation _dayOffBusinessRuleValidation;
@@ -32,7 +29,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public FullScheduling(IFillSchedulerStateHolder fillSchedulerStateHolder,
 			Func<IScheduleCommand> scheduleCommand, Func<ISchedulerStateHolder> schedulerStateHolder,
-			Func<IRequiredScheduleHelper> requiredScheduleHelper, Func<IGroupPagePerDateHolder> groupPagePerDateHolder,
 			IScheduleDictionaryPersister persister, ViolatedSchedulePeriodBusinessRule violatedSchedulePeriodBusinessRule,
 			DayOffBusinessRuleValidation dayOffBusinessRuleValidation, ICurrentUnitOfWork currentUnitOfWork, 
 			ISchedulingProgress schedulingProgress, ISchedulingOptionsProvider schedulingOptionsProvider)
@@ -40,8 +36,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 			_scheduleCommand = scheduleCommand;
 			_schedulerStateHolder = schedulerStateHolder;
-			_requiredScheduleHelper = requiredScheduleHelper;
-			_groupPagePerDateHolder = groupPagePerDateHolder;
 			_persister = persister;
 			_violatedSchedulePeriodBusinessRule = violatedSchedulePeriodBusinessRule;
 			_dayOffBusinessRuleValidation = dayOffBusinessRuleValidation;
@@ -93,10 +87,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			if (stateHolder.Schedules.Any())
 			{
 				_scheduleCommand().Execute(new OptimizerOriginalPreferences(_schedulingOptionsProvider.Fetch()), _schedulingProgress,
-					stateHolder,
 					stateHolder.Schedules.SchedulesForPeriod(period, stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period)).ToArray(), 
-					_groupPagePerDateHolder(),
-					_requiredScheduleHelper(),
 					new OptimizationPreferences(), false, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 			}
 		}

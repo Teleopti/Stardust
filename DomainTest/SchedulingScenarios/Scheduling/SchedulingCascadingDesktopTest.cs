@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -28,11 +27,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 	{
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
-
-		//remove me
-		public Func<IGroupPagePerDateHolder> GroupPagePerDateHolder;
-		public Func<IRequiredScheduleHelper> RequiredScheduleHelper;
-		//
 
 		[Test, Ignore]
 		public void ShouldBaseBestShiftOnNonShoveledResourceCalculation()
@@ -65,10 +59,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			
 			Target.Execute(new OptimizerOriginalPreferences(new SchedulingOptions()),
 				new NoSchedulingProgress(),
-				schedulerStateHolder,
 				schedulerStateHolder.Schedules.SchedulesForPeriod(date.ToDateOnlyPeriod(), schedulerStateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(date.ToDateOnlyPeriod())).ToArray(),
-				GroupPagePerDateHolder(),
-				RequiredScheduleHelper(),
 				new OptimizationPreferences(),
 				new DaysOffPreferences()
 				);

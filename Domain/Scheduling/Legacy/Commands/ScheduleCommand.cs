@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -16,13 +15,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	public interface IScheduleCommand
 	{
 		void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, ISchedulingProgress backgroundWorker,
-			ISchedulerStateHolder schedulerStateHolder, IList<IScheduleDay> selectedScheduleDays,
-			IGroupPagePerDateHolder groupPagePerDateHolder, IRequiredScheduleHelper requiredScheduleOptimizerHelper,
-			IOptimizationPreferences optimizationPreferences, bool runWeeklyRestSolver, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
+			IList<IScheduleDay> selectedScheduleDays,  IOptimizationPreferences optimizationPreferences, 
+			bool runWeeklyRestSolver, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 	}
 
 	public class ScheduleCommand : IScheduleCommand
 	{
+		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
+		private readonly IRequiredScheduleHelper _requiredScheduleOptimizerHelper;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 		private readonly ITeamBlockScheduleCommand _teamBlockScheduleCommand;
@@ -34,7 +34,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
 		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
 
-		public ScheduleCommand(IResourceOptimizationHelper resourceOptimizationHelper,
+		public ScheduleCommand(Func<ISchedulerStateHolder> schedulerStateHolder,
+			IRequiredScheduleHelper requiredScheduleOptimizerHelper,
+			IResourceOptimizationHelper resourceOptimizationHelper,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 			ITeamBlockScheduleCommand teamBlockScheduleCommand,
 			IClassicScheduleCommand classicScheduleCommand,
@@ -46,6 +48,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IResourceCalculationContextFactory resourceCalculationContextFactory
 			)
 		{
+			_schedulerStateHolder = schedulerStateHolder;
+			_requiredScheduleOptimizerHelper = requiredScheduleOptimizerHelper;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_teamBlockScheduleCommand = teamBlockScheduleCommand;
@@ -61,11 +65,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		[LogTime]
 		public virtual void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences,
 			ISchedulingProgress backgroundWorker,
-			ISchedulerStateHolder schedulerStateHolder, IList<IScheduleDay> selectedScheduleDays,
-			IGroupPagePerDateHolder groupPagePerDateHolder, IRequiredScheduleHelper requiredScheduleOptimizerHelper,
+			IList<IScheduleDay> selectedScheduleDays,
 			IOptimizationPreferences optimizationPreferences, bool runWeeklyRestSolver,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
+			var schedulerStateHolder = _schedulerStateHolder();
 			setThreadCulture();
 			var schedulingOptions = optimizerOriginalPreferences.SchedulingOptions;
 			schedulingOptions.DayOffTemplate = schedulerStateHolder.CommonStateHolder.DefaultDayOffTemplate;
@@ -105,13 +109,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					}
 					else
 					{
-						_classicScheduleCommand.Execute(schedulingOptions, backgroundWorker, requiredScheduleOptimizerHelper,
+						_classicScheduleCommand.Execute(schedulingOptions, backgroundWorker, _requiredScheduleOptimizerHelper,
 							selectedScheduleDays, runWeeklyRestSolver, dayOffOptimizationPreferenceProvider);
 					}
 				}
 				else
 				{
-					requiredScheduleOptimizerHelper.ScheduleSelectedStudents(selectedScheduleDays, backgroundWorker, schedulingOptions);
+					_requiredScheduleOptimizerHelper.ScheduleSelectedStudents(selectedScheduleDays, backgroundWorker, schedulingOptions);
 				}
 
 				//shiftcategorylimitations
@@ -135,13 +139,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 							return;
 
 
-						requiredScheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixesOfSelectedScheduleDays,
+						_requiredScheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixesOfSelectedScheduleDays,
 							backgroundWorker,
 							optimizationPreferences,
 							schedulingOptions,
 							selectedPeriod.Value, allMatrixes);
 						
-						ExecuteWeeklyRestSolverCommand(schedulerStateHolder, schedulingOptions, optimizationPreferences, selectedPersons,
+						ExecuteWeeklyRestSolverCommand(schedulingOptions, optimizationPreferences, selectedPersons,
 							selectedPeriod.Value, matrixesOfSelectedScheduleDays, backgroundWorker, dayOffOptimizationPreferenceProvider);
 					}
 				}
@@ -152,12 +156,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 
 		[LogTime]
-		protected virtual void ExecuteWeeklyRestSolverCommand(ISchedulerStateHolder schedulerStateHolder, ISchedulingOptions schedulingOptions,
+		protected virtual void ExecuteWeeklyRestSolverCommand(ISchedulingOptions schedulingOptions,
 															IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons,
 															DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays,
 															ISchedulingProgress backgroundWorker, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
-			ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState, _scheduleDayChangeCallback(), new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+			var schedulerStateHolder = _schedulerStateHolder();
+			var rollbackService = new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState, _scheduleDayChangeCallback(), new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, schedulerStateHolder.SchedulingResultState);
 			_weeklyRestSolverCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons, rollbackService, resourceCalculateDelayer, selectedPeriod,
 											matrixesOfSelectedScheduleDays, backgroundWorker, dayOffOptimizationPreferenceProvider);

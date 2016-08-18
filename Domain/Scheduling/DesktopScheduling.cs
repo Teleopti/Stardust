@@ -17,14 +17,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		}
 
 		public void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences,
-			ISchedulingProgress backgroundWorker,
-			ISchedulerStateHolder schedulerStateHolder, IList<IScheduleDay> selectedScheduleDays,
-			IGroupPagePerDateHolder groupPagePerDateHolder, IRequiredScheduleHelper requiredScheduleOptimizerHelper,
+			ISchedulingProgress backgroundWorker, IList<IScheduleDay> selectedScheduleDays,
 			IOptimizationPreferences optimizationPreferences,
 			IDaysOffPreferences dayOffsPreferences)
 		{
-			_scheduleCommand.Execute(optimizerOriginalPreferences, backgroundWorker, schedulerStateHolder, selectedScheduleDays,
-				groupPagePerDateHolder, requiredScheduleOptimizerHelper, optimizationPreferences, true,
+			_scheduleCommand.Execute(optimizerOriginalPreferences, backgroundWorker, selectedScheduleDays,
+				optimizationPreferences, true,
 				new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences));
 		}
 	}

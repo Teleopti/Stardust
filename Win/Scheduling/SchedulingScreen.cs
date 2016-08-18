@@ -3204,10 +3204,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				var desktopScheduling = _container.Resolve<DesktopScheduling>();
 				desktopScheduling.Execute(_optimizerOriginalPreferences, new BackgroundWorkerWrapper(_backgroundWorkerScheduling),
-					_schedulerState, argument.SelectedScheduleDays, _groupPagePerDateHolder, _requiredScheduleHelper,
-					_optimizationPreferences, _daysOffPreferences);
+					argument.SelectedScheduleDays, _optimizationPreferences, _daysOffPreferences);
 			}
-
 		}
 
 		private void turnOffCalculateMinMaxCacheIfNeeded(ISchedulingOptions schedulingOptions)
