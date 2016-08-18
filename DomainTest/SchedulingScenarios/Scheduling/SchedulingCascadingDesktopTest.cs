@@ -8,6 +8,9 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -23,8 +26,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 	[Toggle(Toggles.ResourcePlanner_CascadingSkills_38524)]
 	public class SchedulingCascadingDesktopTest
 	{
-		public FullScheduling Target;
+		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
+
+		//remove me
+		public Func<IGroupPagePerDateHolder> GroupPagePerDateHolder;
+		public Func<IRequiredScheduleHelper> RequiredScheduleHelper;
+		//
 
 		[Test, Ignore]
 		public void ShouldBaseBestShiftOnNonShoveledResourceCalculation()
@@ -33,14 +41,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var earlyInterval = new TimePeriod(7, 45, 8, 0);
 			var lateInterval = new TimePeriod(15, 45, 16, 0);
 			var date = DateOnly.Today;
-
 			var activity = new Activity("_")
 			{
 				InWorkTime = true,
 				InContractTime = true,
 				RequiresSkill = true	
 			};
-
 			activity.SetId(Guid.NewGuid());
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
@@ -54,7 +60,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var skillDayB = skillB.CreateSkillDayWithDemandOnInterval(scenario, date, 1, new Tuple<TimePeriod, double>(lateInterval, 1000)); //should not shovel resources here when deciding what shift to choose		
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(earlyInterval, TimeSpan.FromMinutes(15)), new TimePeriodWithSegment(lateInterval, TimeSpan.FromMinutes(15)), shiftCategory));
 			var agents = new List<IPerson>();
-		
 			for (var i = 0; i < numberOfAgents; i++)
 			{
 				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
@@ -63,12 +68,19 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				agent.Period(date).RuleSetBag = new RuleSetBag(ruleSet);
 				agents.Add(agent);
 			}
-
-			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date), agents, Enumerable.Empty<IPersonAssignment>(), new[] { skillDayA, skillDayB });
+			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date), agents, Enumerable.Empty<IPersonAssignment>(), new[] { skillDayA, skillDayB });
 			
-			Target.DoScheduling(date.ToDateOnlyPeriod());
+			Target.Execute(new OptimizerOriginalPreferences(new SchedulingOptions()),
+				new NoSchedulingProgress(),
+				schedulerStateHolder,
+				schedulerStateHolder.Schedules.SchedulesForPeriod(date.ToDateOnlyPeriod(), schedulerStateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(date.ToDateOnlyPeriod())).ToArray(),
+				GroupPagePerDateHolder(),
+				RequiredScheduleHelper(),
+				new OptimizationPreferences(),
+				new DaysOffPreferences()
+				);
 		
-			var allAssignmentsStartTime = schedulerStateHolderFrom.Schedules.Select(keyValuePair => keyValuePair.Value).
+			var allAssignmentsStartTime = schedulerStateHolder.Schedules.Select(keyValuePair => keyValuePair.Value).
 				Select(range => range.ScheduledDay(date).PersonAssignment()).
 				Select(x => x.Period.StartDateTime.TimeOfDay);
 
