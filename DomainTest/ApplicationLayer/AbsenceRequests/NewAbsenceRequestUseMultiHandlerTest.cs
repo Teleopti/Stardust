@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
 	[TestFixture]
-	class NewAbsenceRequestUseMultiHandlerTest : ISetup
+	public class NewAbsenceRequestUseMultiHandlerTest : ISetup
 	{
 		public NewAbsenceRequestUseMultiHandler Target;
 
