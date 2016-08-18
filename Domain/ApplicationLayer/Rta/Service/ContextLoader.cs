@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				var persons = _databaseReader.LoadPersonOrganizationDatas(dataSourceId, userCodes);
 				var personIds = persons.Select(x => x.PersonId);
 				var schedules = _databaseReader.GetCurrentSchedules(personIds);
+				var mappings = new MappingsState(() => _mappingReader.Read());
 
 				batch.States.ForEach(input =>
 				{
@@ -80,21 +81,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 									x.SiteId,
 									() => _agentStatePersister.Get(x.PersonId),
 									() => schedules.Where(s => s.PersonId == x.PersonId).ToArray(),
-									s =>
-									{
-										return new MappingsState(() =>
-										{
-											var stateCodes =
-												new[] { s.Stored?.StateCode, s.Input.StateCode }
-													.Distinct()
-													.ToArray();
-											var activities =
-												new[] { s.Schedule.CurrentActivityId(), s.Schedule.PreviousActivityId(), s.Schedule.NextActivityId() }
-													.Distinct()
-													.ToArray();
-											return _mappingReader.ReadFor(stateCodes, activities);
-										});
-									},
+									s => mappings,
 									c => _agentStatePersister.Persist(c.MakeAgentState()),
 									_now,
 									_stateMapper,
