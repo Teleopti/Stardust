@@ -32,10 +32,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 		[Then(@"I should see site '(.*)' with (.*) of (.*) employees out of adherence")]
 		[Then(@"I should see site '(.*)' with (.*) of (.*) agents in alarm")]
-		public void ThenIShouldSeeSiteWithOfEmployeesOutOfAdherence(string name, int number, int total)
+		public void ThenIShouldSeeSiteWithOfEmployeesOutOfAdherence(string site, int number, int total)
 		{
-			Browser.Interactions.AssertAnyContains($".site [data-value='{number}']", name);
-			Browser.Interactions.AssertAnyContains($".site [data-max='{total}']", name);
+			Browser.Interactions.AssertAnyContains($".site [data-value='{number}']", site);
+			Browser.Interactions.AssertAnyContains($".site [data-max='{total}']", site);
 		}
 
 		[Then(@"I should see site '(.*)' with (.*) employees out of adherence")]
@@ -45,9 +45,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		}
 
 		[Then(@"I should see team '(.*)' with (.*) of (.*) employees out of adherence")]
-		public void ThenIShouldSeeTeamWithOfEmployeesOutOfAdherence(string team, int numberOfOutAdherence, int total)
+		[Then(@"I should see team '(.*)' with (.*) of (.*) agents in alarm")]
+		public void ThenIShouldSeeTeamWithOfEmployeesOutOfAdherence(string team, int number, int total)
 		{
-			Browser.Interactions.AssertAnyContains($".team [data-value='{numberOfOutAdherence}']", team);
+			Browser.Interactions.AssertAnyContains($".team [data-value='{number}']", team);
 			Browser.Interactions.AssertAnyContains($".team [data-max='{total}']", team);
 		}
 
