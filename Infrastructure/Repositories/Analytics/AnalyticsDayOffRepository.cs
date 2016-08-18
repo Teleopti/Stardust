@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 						@display_color_html=:{nameof(AnalyticsDayOff.DisplayColorHtml)},
 						@day_off_shortname=:{nameof(AnalyticsDayOff.DayOffShortname)}
 					  ")
-				.SetGuid(nameof(AnalyticsDayOff.DayOffCode), analyticsDayOff.DayOffCode.GetValueOrDefault())
+				.SetGuid(nameof(AnalyticsDayOff.DayOffCode), analyticsDayOff.DayOffCode)
 				.SetString(nameof(AnalyticsDayOff.DayOffName), analyticsDayOff.DayOffName)
 				.SetInt32(nameof(AnalyticsDayOff.DisplayColor), analyticsDayOff.DisplayColor)
 				.SetInt32(nameof(AnalyticsDayOff.BusinessUnitId), analyticsDayOff.BusinessUnitId)

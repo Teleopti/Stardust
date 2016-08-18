@@ -103,7 +103,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			var analyticsDataFactory = new AnalyticsDataFactory();
 			analyticsDataFactory.Setup(new BusinessUnit(TestState.BusinessUnit, _datasource));
-			analyticsDataFactory.Setup(new DimDayOff(-1, null, "Not Defined", _datasource, 1));
+			analyticsDataFactory.Setup(new DimDayOff(-1, Guid.Empty, "Not Defined", _datasource, 1));
 			analyticsDataFactory.Persist();
 
 			var step = new DimDayOffJobStep(jobParameters);
@@ -134,43 +134,14 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			{
 				var analyticsDayOffs = _analyticsDayOffRepository.DayOffs();
 				analyticsDayOffs.Count.Should().Be.EqualTo(1);
-				var analyticsDayOff = analyticsDayOffs.First(a => a.DayOffId == -1);
-				analyticsDayOff.DayOffCode.HasValue.Should().Be.False();
-				analyticsDayOff.BusinessUnitId.Should().Be.EqualTo(-1);
-				analyticsDayOff.DayOffName.Should().Be.EqualTo("Not Defined");
-				analyticsDayOff.DayOffShortname.Should().Be.EqualTo("Not Defined");
-				analyticsDayOff.DatasourceId.Should().Be.EqualTo(-1);
-				analyticsDayOff.DisplayColor.Should().Be.EqualTo(-1);
-				analyticsDayOff.DisplayColorHtml.Should().Be.EqualTo("#FFFFFF");
-			}
-		}
-
-		[Test]
-		public void JobStepRunAndUpdateDayOffWithNullCodeInAnalytics()
-		{
-			var dayOff1 = new DayOffTemplateConfigurable { Name = "Normal Day Off" };
-			Data.Apply(dayOff1);
-
-			var analyticsDataFactory = new AnalyticsDataFactory();
-			analyticsDataFactory.Setup(new BusinessUnit(TestState.BusinessUnit, _datasource));
-			analyticsDataFactory.Setup(new DimDayOff(123, null, "Normal Day Off", _datasource, 0));
-			analyticsDataFactory.Persist();
-
-			var step = new DimDayOffJobStep(jobParameters);
-			var result = step.Run(new List<IJobStep>(), TestState.BusinessUnit, null, false);
-			result.HasError.Should().Be.False();
-
-			using (var auow = SetupFixtureForAssembly.DataSource.Analytics.CreateAndOpenUnitOfWork())
-			{
-				var analyticsDayOffs = _analyticsDayOffRepository.DayOffs();
-				analyticsDayOffs.Count.Should().Be.EqualTo(2);
-				var analyticsDayOff = analyticsDayOffs.First(a => a.DayOffName == dayOff1.Name);
-				analyticsDayOff.BusinessUnitId.Should().Be.EqualTo(0);
-				analyticsDayOff.DayOffName.Should().Be.EqualTo(dayOff1.Name);
-				analyticsDayOff.DayOffShortname.Should().Be.EqualTo("");
-				analyticsDayOff.DisplayColor.Should().Be.EqualTo(-8355712);
-				analyticsDayOff.DisplayColorHtml.Should().Be.EqualTo("#808080");
-				analyticsDayOff.DayOffCode.GetValueOrDefault().Should().Not.Be.Null();
+				var notDefinedRow = analyticsDayOffs.First(a => a.DayOffId == -1);
+				notDefinedRow.DayOffCode.Should().Be.EqualTo(Guid.Empty);
+				notDefinedRow.BusinessUnitId.Should().Be.EqualTo(-1);
+				notDefinedRow.DayOffName.Should().Be.EqualTo("Not Defined");
+				notDefinedRow.DayOffShortname.Should().Be.EqualTo("Not Defined");
+				notDefinedRow.DatasourceId.Should().Be.EqualTo(-1);
+				notDefinedRow.DisplayColor.Should().Be.EqualTo(-1);
+				notDefinedRow.DisplayColorHtml.Should().Be.EqualTo("#FFFFFF");
 			}
 		}
 
@@ -209,7 +180,6 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				analyticsDayOff.DayOffShortname.Should().Be.EqualTo("DO");
 				analyticsDayOff.DisplayColor.Should().Be.EqualTo(-8355712);
 				analyticsDayOff.DisplayColorHtml.Should().Be.EqualTo("#808080");
-				analyticsDayOff.DayOffCode.GetValueOrDefault().Should().Not.Be.Null();
 			}
 		}
 
@@ -239,14 +209,14 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			{
 				var analyticsDayOffs = _analyticsDayOffRepository.DayOffs();
 				analyticsDayOffs.Count.Should().Be.EqualTo(2);
-				var analyticsDayOff = analyticsDayOffs.First(a => a.DayOffId == -1);
-				analyticsDayOff.DayOffCode.HasValue.Should().Be.False();
-				analyticsDayOff.BusinessUnitId.Should().Be.EqualTo(-1);
-				analyticsDayOff.DayOffName.Should().Be.EqualTo("Not Defined");
-				analyticsDayOff.DayOffShortname.Should().Be.EqualTo("Not Defined");
-				analyticsDayOff.DatasourceId.Should().Be.EqualTo(-1);
-				analyticsDayOff.DisplayColor.Should().Be.EqualTo(-1);
-				analyticsDayOff.DisplayColorHtml.Should().Be.EqualTo("#FFFFFF");
+				var notDefinedRow = analyticsDayOffs.First(a => a.DayOffId == -1);
+				notDefinedRow.DayOffCode.Should().Be.EqualTo(Guid.Empty);
+				notDefinedRow.BusinessUnitId.Should().Be.EqualTo(-1);
+				notDefinedRow.DayOffName.Should().Be.EqualTo("Not Defined");
+				notDefinedRow.DayOffShortname.Should().Be.EqualTo("Not Defined");
+				notDefinedRow.DatasourceId.Should().Be.EqualTo(-1);
+				notDefinedRow.DisplayColor.Should().Be.EqualTo(-1);
+				notDefinedRow.DisplayColorHtml.Should().Be.EqualTo("#FFFFFF");
 			}
 		}
 	}

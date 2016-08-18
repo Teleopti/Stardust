@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			{
 				DayOffId = -1,
 				DatasourceId = -1,
-				DayOffCode = null,
+				DayOffCode = Guid.Empty,
 				DatasourceUpdateDate = DateTime.Today,
 				BusinessUnitId = -1,
 				DayOffName = "Not Defined",
