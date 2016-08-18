@@ -98,38 +98,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				itemToCompare.DisplayColorHtml.Should().Be.EqualTo(item.DisplayColorHtml);
 			});
 		}
-
-		[Test]
-		public void ShouldUpdateDayOffWithCodeNull()
-		{
-			var analyticsDataFactory = new AnalyticsDataFactory();
-			var dayOffCode = Guid.NewGuid();
-			analyticsDataFactory.Setup(new DimDayOff(1, null, "DayOff", _datasource, businessUnitId));
-			analyticsDataFactory.Persist();
-
-			WithAnalyticsUnitOfWork.Do(() =>
-			{
-				Target.DayOffs().Count.Should().Be.EqualTo(2);
-				var item = new AnalyticsDayOff
-				{
-					DayOffCode = dayOffCode,
-					BusinessUnitId = businessUnitId,
-					DayOffName = "DayOff",
-					DayOffShortname = "DO",
-					DatasourceUpdateDate = DateTime.Today,
-					DisplayColor = -1,
-					DisplayColorHtml = "#808080"
-				};
-				Target.AddOrUpdate(item);
-				Target.DayOffs().Count.Should().Be.EqualTo(2);
-				var itemToCompare = Target.DayOffs().First(a => a.DayOffCode == dayOffCode);
-				itemToCompare.BusinessUnitId.Should().Be.EqualTo(item.BusinessUnitId);
-				itemToCompare.DayOffName.Should().Be.EqualTo(item.DayOffName);
-				itemToCompare.DayOffShortname.Should().Be.EqualTo(item.DayOffShortname);
-				itemToCompare.DatasourceUpdateDate.Should().Be.EqualTo(item.DatasourceUpdateDate);
-				itemToCompare.DisplayColor.Should().Be.EqualTo(item.DisplayColor);
-				itemToCompare.DisplayColorHtml.Should().Be.EqualTo(item.DisplayColorHtml);
-			});
-		}
 	}
 }
