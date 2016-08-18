@@ -19,7 +19,7 @@ using Teleopti.Messaging.Client;
 
 namespace Teleopti.Ccc.Requests.PerformanceTest
 {
-	[DomainTest, Ignore]
+	[DomainTest]
 	public class MultiAbsenceRequestsTest : ISetup
 	{
 		public IAbsenceRepository AbsenceRepository;
