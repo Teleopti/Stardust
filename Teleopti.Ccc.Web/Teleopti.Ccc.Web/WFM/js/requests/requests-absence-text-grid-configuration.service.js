@@ -93,7 +93,8 @@
 						displayName: 'Account',
 						field: 'PersonAccountSummaryViewModel',
 						headerCellFilter: 'translate',
-						cellTemplate: 'requests-absence-person-account-overview.html'
+						cellTemplate: 'requests-absence-person-account-overview.html',
+						enableSorting: false
 					};
 
 					columns.splice(12, 0, accountColumn);
