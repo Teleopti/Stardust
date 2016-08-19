@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[SetUp]
 		public void Setup()
 		{
-			_target = new GroupPersonSkillAggregator();
+			_target = new GroupPersonSkillAggregator(new PersonalSkillsProvider());
 			_skill1 = SkillFactory.CreateSkill("1");
 			_skill2 = SkillFactory.CreateSkill("2");
 			_skill3 = SkillFactory.CreateSkill("3");

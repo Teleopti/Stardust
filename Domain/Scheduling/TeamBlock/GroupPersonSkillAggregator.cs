@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using System.Linq;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
@@ -12,6 +11,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 	public class GroupPersonSkillAggregator : IGroupPersonSkillAggregator
 	{
+		private readonly IPersonalSkillsProvider _personalSkillsProvider;
+
+		public GroupPersonSkillAggregator(IPersonalSkillsProvider personalSkillsProvider)
+		{
+			_personalSkillsProvider = personalSkillsProvider;
+		}
+
 		public IEnumerable<ISkill> AggregatedSkills(IEnumerable<IPerson> groupMembers, DateOnlyPeriod dateOnlyPeriod)
 		{
 			var ret = new HashSet<ISkill>();
@@ -21,9 +27,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				var personPeriods = person.PersonPeriods(dateOnlyPeriod);
 				foreach (var personPeriod in personPeriods)
 				{
-					foreach (var personSkill in personPeriod.PersonSkillCollection.Where(s => s.Active && !((IDeleteTag)s.Skill).IsDeleted))
+					foreach (var personSkill in _personalSkillsProvider.PersonSkillsBasedOnPrimarySkill(personPeriod))
 					{
-						ret.Add(personSkill.Skill );
+						ret.Add(personSkill.Skill);
 					}
 				}
 			}
