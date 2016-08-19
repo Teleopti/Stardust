@@ -379,6 +379,7 @@
     <Compile Include="Logon\ImpersonateSystemAspect.cs" />
     <Compile Include="Logon\ImpersonateSystemAttribute.cs" />
     <Compile Include="Optimization\OptimizerHelperHelper.cs" />
+    <Compile Include="Optimization\DayOffOptimizationDesktop.cs" />
     <Compile Include="Optimization\SmartDayOffBackToLegalStateSolverContainer.cs" />
     <Compile Include="Repositories\IAnalyticsAbsenceRepository.cs" />
     <Compile Include="Repositories\IAnalyticsForecastWorkloadRepository.cs" />

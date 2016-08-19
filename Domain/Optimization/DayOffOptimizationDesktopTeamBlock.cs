@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class DayOffOptimizationDesktopTeamBlock : IDayOffOptimizationDesktop
+	public class DayOffOptimizationDesktopTeamBlock : DayOffOptimizationDesktop
 	{
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 		}
 
-		public void Execute(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization,
+		protected override void Optimize(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization,
 													DateOnlyPeriod selectedPeriod,
 													ISchedulingProgress backgroundWorker,
 													IOptimizationPreferences optimizationPreferences,

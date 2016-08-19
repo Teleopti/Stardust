@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class DayOffOptimizationDesktopClassic : IDayOffOptimizationDesktop
+	public class DayOffOptimizationDesktopClassic : DayOffOptimizationDesktop
 	{
 		private readonly ClassicDaysOffOptimizationCommand _classicDaysOffOptimizationCommand;
 
@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_classicDaysOffOptimizationCommand = classicDaysOffOptimizationCommand;
 		}
 
-		public void Execute(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization, DateOnlyPeriod selectedPeriod,
+		protected override void Optimize(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization, DateOnlyPeriod selectedPeriod,
 			ISchedulingProgress backgroundWorker, IOptimizationPreferences optimizationPreferences,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
