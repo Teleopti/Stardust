@@ -82,6 +82,8 @@
 		function keyword(){
 			if ($stateParams.site && $stateParams.team)
 				return $stateParams.site + '"' + $stateParams.team + '"';
+			else if ($stateParams.keyword)
+				return $stateParams.keyword;
 		}
 		vm.searchOptions = {
 			keyword: keyword() || '',
