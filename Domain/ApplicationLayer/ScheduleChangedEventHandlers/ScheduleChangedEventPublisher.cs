@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		IHandleEvent<DayUnscheduledEvent>,
 		IHandleEvent<PersonAssignmentLayerRemovedEvent>,
 		IHandleEvent<MainShiftCategoryReplaceEvent>,
+		IHandleEvent<PersonalActivityAddedEvent>,
 	IRunOnHangfire
 	{
 		private readonly IEventPublisher _publisher;
@@ -22,6 +23,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		public ScheduleChangedEventPublisher(IEventPublisher publisher)
 		{
 			_publisher = publisher;
+		}
+
+		public void Handle(PersonalActivityAddedEvent @event)
+		{
+			_publisher.Publish(new ScheduleChangedEvent
+			{
+				Timestamp = @event.Timestamp,
+				LogOnBusinessUnitId = @event.LogOnBusinessUnitId,
+				LogOnDatasource = @event.LogOnDatasource,
+				PersonId = @event.PersonId,
+				ScenarioId = @event.ScenarioId,
+				StartDateTime = @event.StartDateTime,
+				EndDateTime = @event.EndDateTime,
+				InitiatorId = @event.InitiatorId,
+				CommandId = @event.CommandId
+			});
 		}
 
 		public void Handle(PersonAbsenceRemovedEvent @event)
