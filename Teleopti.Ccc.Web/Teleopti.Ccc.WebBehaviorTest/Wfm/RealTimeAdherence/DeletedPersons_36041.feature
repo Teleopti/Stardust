@@ -23,6 +23,7 @@ Background:
 	| Activity        | Phone        |
 	| Phone state     | Pause        |
 	| Name            | Not adhering |
+	| Is alarm        | true         |
 	| Staffing effect | -1           |
 
 Scenario: Exclude deleted agents
