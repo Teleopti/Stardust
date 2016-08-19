@@ -161,6 +161,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					return;
 
 				existing.TeamId = @event.TeamId;
+				existing.SiteId = @event.SiteId;
 				_persister.Persist(existing);
 			}
 			else

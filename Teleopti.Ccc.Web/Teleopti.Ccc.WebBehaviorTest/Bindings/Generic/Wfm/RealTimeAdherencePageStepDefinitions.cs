@@ -39,9 +39,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		}
 
 		[Then(@"I should see site '(.*)' with (.*) employees out of adherence")]
-		public void ThenIShouldSeeSiteWithOfEmployeesOutOfAdherence2(string site, int numberOfOutAdherence)
+		[Then(@"I should see site '(.*)' with (.*) agents in alarm")]
+		public void ThenIShouldSeeSiteWithOfEmployeesOutOfAdherence2(string site, int number)
 		{
-			Browser.Interactions.AssertAnyContains($".site [data-value='{numberOfOutAdherence}']", site);
+			Browser.Interactions.AssertAnyContains($".site [data-value='{number}']", site);
 		}
 
 		[Then(@"I should see team '(.*)' with (.*) of (.*) employees out of adherence")]
