@@ -44,38 +44,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 
 			Persister.Models.Single().PersonId.Should().Be(personId);
 		}
-
-		[Test]
-		public void ShouldMovePersonToNewTeam()
-		{
-			var personId = Guid.NewGuid();
-			var teamId = Guid.NewGuid();
-			Persister.Persist(new AgentStateReadModel {PersonId = personId});
-
-			Target.Handle(new PersonAssociationChangedEvent
-			{
-				PersonId = personId,
-				TeamId = teamId
-			});
-
-			Persister.Models.Single().TeamId.Should().Be(teamId);
-		}
-
-		[Test]
-		public void ShouldMovePersonToNewTeamOnDifferentSite()
-		{
-			var personId = Guid.NewGuid();
-			var siteId = Guid.NewGuid();
-			Persister.Persist(new AgentStateReadModel { PersonId = personId });
-
-			Target.Handle(new PersonAssociationChangedEvent
-			{
-				PersonId = personId,
-				TeamId = Guid.NewGuid(),
-				SiteId = siteId
-			});
-
-			Persister.Models.Single().SiteId.Should().Be(siteId);
-		}
 	}
 }

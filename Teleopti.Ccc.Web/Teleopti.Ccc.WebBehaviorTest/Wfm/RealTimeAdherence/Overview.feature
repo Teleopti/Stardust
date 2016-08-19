@@ -5,8 +5,7 @@
 
 Background:
 	Given there is a switch
-	
-@OnlyRunIfDisabled('RTA_RemoveSiteTeamOutOfAdherenceReadModels_40069')
+
 Scenario: See updates of sum of employees not adhering to schedule for each site
 	Given I have a role with full access
 	And there is an activity named 'Phone'
@@ -50,8 +49,7 @@ Scenario: See updates of sum of employees not adhering to schedule for each site
 	 And 'Ashley Andeen' sets her phone state to 'Ready'
 	 Then I should see site 'Paris' with 1 of 1 employees out of adherence
 	 And I should see site 'London' with 0 of 1 employees out of adherence
-	 
-@OnlyRunIfDisabled('RTA_RemoveSiteTeamOutOfAdherenceReadModels_40069')
+
 Scenario: See updates of sum of employees not adhering to schedule for each team within a site
 	Given I have a role with full access
 	And there is an activity named 'Phone'
@@ -95,7 +93,6 @@ Scenario: See updates of sum of employees not adhering to schedule for each team
 	 Then I should see team 'Green' with 1 of 1 employees out of adherence
 	 And I should see team 'Red' with 0 of 1 employees out of adherence
 
-@OnlyRunIfDisabled('RTA_RemoveSiteTeamOutOfAdherenceReadModels_40069')
 Scenario: See current state of sum of employees not adhering to schedule for each site
 	Given I have a role with full access
 	And there is an activity named 'Phone'
@@ -139,8 +136,7 @@ Scenario: See current state of sum of employees not adhering to schedule for eac
 	When I view Real time adherence sites
 	Then I should see site 'Paris' with 1 of 1 employees out of adherence
 	And I should see site 'London' with 0 of 1 employees out of adherence
-	
-@OnlyRunIfDisabled('RTA_RemoveSiteTeamOutOfAdherenceReadModels_40069')
+
 Scenario: See current state of sum of employees not adhering to schedule for each team within a site
 	Given I have a role with full access
 	And there is an activity named 'Phone'
