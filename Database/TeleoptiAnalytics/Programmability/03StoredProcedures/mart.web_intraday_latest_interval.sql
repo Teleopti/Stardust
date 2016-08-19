@@ -21,6 +21,7 @@ BEGIN
 	DECLARE @time_zone_id as int
 	DECLARE @default_scenario_id int
 	DECLARE @bu_id int
+	DECLARE @return_value int
 	
 	CREATE TABLE #skills(id uniqueidentifier)	
 	CREATE TABLE #queues(queue_id int)	
@@ -64,7 +65,7 @@ BEGIN
 		AND offered_calls > 0
 	
 	SELECT
-		MAX(i.interval_id)
+		@return_value = MAX(i.interval_id)
 	FROM
 		#queue_stats qs
 		INNER JOIN mart.bridge_time_zone bz ON qs.date_id = bz.date_id AND qs.utc_interval_id = bz.interval_id
@@ -73,6 +74,11 @@ BEGIN
 	WHERE
 		bz.time_zone_id = @time_zone_id 
 		AND d.date_date = @today
+
+	IF(@return_value IS NULL)
+		SET @return_value = -1
+
+	SELECT @return_value
 END
 
 GO

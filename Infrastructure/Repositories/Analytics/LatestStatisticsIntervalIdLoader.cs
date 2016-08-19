@@ -1,12 +1,38 @@
-﻿using Teleopti.Interfaces.Infrastructure;
+﻿using System;
+using System.Globalization;
+using System.Linq;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
 	public class LatestStatisticsIntervalIdLoader : ILatestStatisticsIntervalIdLoader
 	{
-		public int? Load()
+		public int? Load(Guid[] skillIdList, DateOnly today, TimeZoneInfo timeZone)
 		{
-			throw new System.NotImplementedException();
+			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{
+				var skillListString = String.Join(",", skillIdList.Select(id => id.ToString()).ToArray());
+
+				var intervalId = uow.Session().CreateSQLQuery(@"mart.web_intraday_latest_interval @time_zone_code=:TimeZone, @today=:Today, @skill_list=:SkillList")
+					.SetString("TimeZone", timeZone.Id)
+					.SetString("Today", today.ToShortDateString(CultureInfo.InvariantCulture))
+					.SetString("SkillList", skillListString)
+					.UniqueResult<int>();
+				if (intervalId == -1)
+				{
+					return null;
+				}
+				return intervalId;
+			}
+		}
+
+		private IAnalyticsUnitOfWorkFactory statisticUnitOfWorkFactory()
+		{
+			var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
+			return identity.DataSource.Analytics;
 		}
 	}
 }

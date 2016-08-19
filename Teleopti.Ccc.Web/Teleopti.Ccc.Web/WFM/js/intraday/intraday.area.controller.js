@@ -530,11 +530,11 @@
 						})
 						.$promise.then(function (result) {
 							if (timeoutPromise)
-							return;
+								return;
 							timeoutPromise = $timeout(pollSkillMonitorData, pollingTimeout);
 							setResult(result);
 						},
-						function (error) {
+						function(error) {
 							timeoutPromise = $timeout(pollSkillMonitorData, pollingTimeout);
 							$scope.HasMonitorData = false;
 						});

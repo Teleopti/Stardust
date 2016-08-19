@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			LatestStatisticsIntervalIdLoader.Has(95);
 
 			var expectedTime = DateTime.MinValue.AddMinutes(95*15);
-			Target.Get().Should().Be.EqualTo(expectedTime);
+			Target.Get(new [] {Guid.NewGuid()}).Should().Be.EqualTo(expectedTime);
 		}
 
 		[Test]
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			IntervalLengthFetcher.Has(15);
 			LatestStatisticsIntervalIdLoader.Has(null);
 
-			Target.Get().Should().Be.EqualTo(null);
+			Target.Get(new[] { Guid.NewGuid() }).Should().Be.EqualTo(null);
 		}
 	}
 }

@@ -3,9 +3,12 @@ using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Intraday
 {
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebIntraday)]
 	public class IntradaySkillController : ApiController
 	{
 		private readonly FetchSkillInIntraday _fetchSkillInIntraday;

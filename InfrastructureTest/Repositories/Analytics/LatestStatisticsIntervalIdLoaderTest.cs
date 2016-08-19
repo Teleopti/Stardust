@@ -11,13 +11,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 	[AnalyticsDatabaseTest]
 	public class LatestStatisticsIntervalIdLoaderTest
 	{
-		//[Test]
-		//public void ShouldCallLoadWithNoRowsReturned()
-		//{
-		//	var target = new IntradayMonitorDataLoader();
-		//	var data = target.Load();
+		[Test]
+		public void ShouldCheckThatStoredProcedureExists()
+		{
+			var target = new LatestStatisticsIntervalIdLoader();
+			var intervalId = target.Load(new Guid[] {Guid.NewGuid()}, DateOnly.Today, TimeZoneInfo.Utc);
 
-		//	data.Count.Should().Be.EqualTo(0);
-		//}
+			intervalId.HasValue.Should().Be.False();
+		}
 	}
 }

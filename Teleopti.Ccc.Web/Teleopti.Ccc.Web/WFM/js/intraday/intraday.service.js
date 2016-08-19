@@ -67,6 +67,15 @@
 						isArray: false
 					}
 				});
+				
+				this.getLatestStatisticsTimeForSkillArea = $resource('../api/intraday/lateststatisticstimeforskillarea/:id', { id: '@id' }, {
+					query: {
+						method: 'GET',
+						params: {},
+						isArray: false
+					}
+				});
+
 			}
 		]);
 })();
