@@ -84,6 +84,7 @@
 				StartTime: moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm"),
 				EndTime: moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm"),
 				ActivityId: vm.selectedActivityId,
+				ActivityType: 1,  
 				TrackedCommandInfo: {
 					TrackId: vm.trackId
 				}

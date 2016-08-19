@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			var input = new AddPersonalActivityFormData
 			{
 				PersonIds = new[] { person1.Id.Value, person2.Id.Value },
-				PersonalActivityId = Guid.NewGuid(),
+				ActivityId = Guid.NewGuid(),
 				Date = date,
 				StartTime = new DateTime(2016, 4, 16, 8, 0, 0),
 				EndTime = new DateTime(2016, 4, 16, 17, 0, 0),
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			var input = new AddPersonalActivityFormData
 			{
 				PersonIds = new[] { person1.Id.Value, person2.Id.Value },
-				PersonalActivityId = Guid.NewGuid(),
+				ActivityId = Guid.NewGuid(),
 				Date = date,
 				StartTime = new DateTime(2016, 4, 16, 8, 0, 0),
 				EndTime = new DateTime(2016, 4, 16, 17, 0, 0),

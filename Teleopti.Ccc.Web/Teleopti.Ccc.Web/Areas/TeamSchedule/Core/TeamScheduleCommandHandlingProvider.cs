@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 					var command = new AddPersonalActivityCommand
 					{
 						PersonId = personId,
-						PersonalActivityId = input.PersonalActivityId,
+						PersonalActivityId = input.ActivityId,
 						Date = input.Date,
 						StartTime = input.StartTime,
 						EndTime = input.EndTime,

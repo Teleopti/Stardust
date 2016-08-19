@@ -20,7 +20,7 @@ using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.WebTest.Core.Common;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
+namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 {
 	[TestFixture, DomainTest]
 	public class ScheduleValidationProviderTest : ISetup
@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 		public FakeScheduleStorage ScheduleStorage;
 		public FakePersonRepository PersonRepository;
 		public ScheduleValidationProvider Target;
+		public FakeWriteSideRepository<IActivity> ActivityForId; 
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
 			system.UseTestDouble<ScheduleValidationProvider>().For<IScheduleValidationProvider>();
 			system.UseTestDouble<FakePersonNameProvider>().For<IPersonNameProvider>();
+			system.UseTestDouble<FakeWriteSideRepository<IActivity>>().For<IProxyForId<IActivity>>();
 
 			var dataSource = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
 			var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
@@ -347,11 +349,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			var person = PersonFactory.CreatePersonWithGuid("John","Watson");
 			PersonRepository.Has(person);
 
-			var mainActivity = ActivityFactory.CreateActivity("Phone");
-			var stickyActivity = ActivityFactory.CreateActivity("Short Break");
+			var mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
+			var stickyActivity = ActivityFactory.CreateActivity("Short Break").WithId();
 
 			mainActivity.AllowOverwrite = true;
 			stickyActivity.AllowOverwrite = false;
+			ActivityForId.Add(mainActivity);
+			ActivityForId.Add(stickyActivity);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
 			var scenario = CurrentScenario.Current();
@@ -370,7 +374,54 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 				PersonIds = new Guid[] { person.Id.Value },
 				Date = new DateOnly(2013, 11, 14),
 				StartTime = new DateTime(2013, 11, 14, 10, 0, 0),
-				EndTime = new DateTime(2013, 11, 14, 14, 0, 0)
+				EndTime = new DateTime(2013, 11, 14, 14, 0, 0),
+				ActivityId = mainActivity.Id.GetValueOrDefault(),
+				ActivityType =ActivityType.RegularActivity
+			};
+
+			var result = Target.GetActivityLayerOverlapCheckingResult(input);
+
+			result.Single().PersonId.Should().Be.EqualTo(person.Id.Value);
+
+			var overlappedLayer = result.Single().OverlappedLayers.Single();
+			overlappedLayer.Name.Should().Be.EqualTo(stickyActivity.Name);
+			overlappedLayer.StartTime.Should().Be.EqualTo(new DateTime(2013, 11, 14, 12, 0, 0));
+			overlappedLayer.EndTime.Should().Be.EqualTo(new DateTime(2013,11,14,13,0,0));
+		}
+		[Test]
+		public void ShouldReturnOverlappedActivitiesWhenAddPersonalActivity()
+		{
+			var person = PersonFactory.CreatePersonWithGuid("John","Watson");
+			PersonRepository.Has(person);
+
+			var mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
+			var stickyActivity = ActivityFactory.CreateActivity("Short Break").WithId();
+
+			mainActivity.AllowOverwrite = true;
+			stickyActivity.AllowOverwrite = false;
+			ActivityForId.Add(mainActivity);
+			ActivityForId.Add(stickyActivity);
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
+			var scenario = CurrentScenario.Current();
+		
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				mainActivity,person,
+				new DateTimePeriod(2013,11,14,8,2013,11,14,16),
+				shiftCategory,scenario);
+
+		
+			pa.AddActivity(stickyActivity, new DateTimePeriod(2013,11,14,12,2013,11,14,13));
+
+			ScheduleStorage.Add(pa);
+			var input = new CheckActivityLayerOverlapFormData
+			{
+				PersonIds = new Guid[] { person.Id.Value },
+				Date = new DateOnly(2013, 11, 14),
+				StartTime = new DateTime(2013, 11, 14, 10, 0, 0),
+				EndTime = new DateTime(2013, 11, 14, 14, 0, 0),
+				ActivityId = mainActivity.Id.GetValueOrDefault(),
+				ActivityType =ActivityType.PersonalActivity
 			};
 
 			var result = Target.GetActivityLayerOverlapCheckingResult(input);
@@ -389,11 +440,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 			var person = PersonFactory.CreatePersonWithGuid("John","Watson");
 			PersonRepository.Has(person);
 
-			var mainActivity = ActivityFactory.CreateActivity("Phone");
-			var stickyActivity = ActivityFactory.CreateActivity("Short Break");
+			var mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
+			var stickyActivity = ActivityFactory.CreateActivity("Short Break").WithId();
 
 			mainActivity.AllowOverwrite = true;
 			stickyActivity.AllowOverwrite = false;
+			ActivityForId.Add(stickyActivity);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
 			var scenario = CurrentScenario.Current();
@@ -412,7 +464,191 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.TeamSchedule.DataProvider
 				PersonIds = new Guid[] { person.Id.Value },
 				Date = new DateOnly(2013, 11, 14),
 				StartTime = new DateTime(2013, 11, 14, 10, 0, 0),
-				EndTime = new DateTime(2013, 11, 14, 14, 0, 0)
+				EndTime = new DateTime(2013, 11, 14, 14, 0, 0),
+				ActivityId = stickyActivity.Id.Value,
+				ActivityType = ActivityType.RegularActivity
+			};
+
+			var result = Target.GetActivityLayerOverlapCheckingResult(input);
+
+			result.Should().Be.Empty();
+		}
+		[Test]
+		public void ShouldNotReturnUnderlyingStickyOverlappedActivityWhenAddpersonalActivity()
+		{
+			var person = PersonFactory.CreatePersonWithGuid("John","Watson");
+			PersonRepository.Has(person);
+
+			var mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
+			var stickyActivity = ActivityFactory.CreateActivity("Short Break").WithId();
+
+			mainActivity.AllowOverwrite = true;
+			stickyActivity.AllowOverwrite = false;
+			ActivityForId.Add(stickyActivity);
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
+			var scenario = CurrentScenario.Current();
+		
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				stickyActivity,person,
+				new DateTimePeriod(2013,11,14,12,2013,11,14,13),
+				shiftCategory,scenario);
+
+		
+			pa.AddActivity(mainActivity,new DateTimePeriod(2013,11,14,8,2013,11,14,16));
+
+			ScheduleStorage.Add(pa);
+			var input = new CheckActivityLayerOverlapFormData
+			{
+				PersonIds = new Guid[] { person.Id.Value },
+				Date = new DateOnly(2013, 11, 14),
+				StartTime = new DateTime(2013, 11, 14, 10, 0, 0),
+				EndTime = new DateTime(2013, 11, 14, 14, 0, 0),
+				ActivityId = stickyActivity.Id.Value,
+				ActivityType = ActivityType.PersonalActivity
+			};
+
+			var result = Target.GetActivityLayerOverlapCheckingResult(input);
+
+			result.Should().Be.Empty();
+		}
+		[Test]
+		public void ShouldNotReturnOverlappedActivityWhenAddActivityOnFullDayAbsence()
+		{
+			var person = PersonFactory.CreatePersonWithGuid("John", "Watson");
+			PersonRepository.Has(person);
+
+			var mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
+			var stickyActivity = ActivityFactory.CreateActivity("Short Break").WithId();
+
+			mainActivity.AllowOverwrite = true;
+			stickyActivity.AllowOverwrite = false;
+			ActivityForId.Add(stickyActivity);
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
+			var scenario = CurrentScenario.Current();
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				mainActivity, person,
+				new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 17),
+				shiftCategory, scenario);
+
+
+			pa.AddActivity(stickyActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16));
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
+				new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 17));
+
+			ScheduleStorage.Add(pa);
+			ScheduleStorage.Add(personAbsence);
+			var input = new CheckActivityLayerOverlapFormData
+			{
+				PersonIds = new Guid[] { person.Id.Value },
+				Date = new DateOnly(2013, 11, 14),
+				StartTime = new DateTime(2013, 11, 14, 10, 0, 0),
+				EndTime = new DateTime(2013, 11, 14, 14, 0, 0),
+				ActivityId = stickyActivity.Id.Value,
+				ActivityType = ActivityType.RegularActivity
+			};
+
+			var result = Target.GetActivityLayerOverlapCheckingResult(input);
+
+			result.Should().Be.Empty();
+		}
+		[Test]
+		public void ShouldNotReturnOverlappedActivityWhenAddingActivityForDayOffDay()
+		{
+			var person = PersonFactory.CreatePersonWithGuid("John","Watson");
+			PersonRepository.Has(person);
+
+			var stickyActivity = ActivityFactory.CreateActivity("Short Break").WithId();
+
+			stickyActivity.AllowOverwrite = false;
+			ActivityForId.Add(stickyActivity);
+
+			var scenario = CurrentScenario.Current();
+		
+			var pa = PersonAssignmentFactory.CreateAssignmentWithDayOff(
+				scenario,person,
+				new DateOnly(2013,11,14),
+				DayOffFactory.CreateDayOff(new Description("Do")));
+
+		
+			ScheduleStorage.Add(pa);
+			var input = new CheckActivityLayerOverlapFormData
+			{
+				PersonIds = new Guid[] { person.Id.Value },
+				Date = new DateOnly(2013, 11, 14),
+				StartTime = new DateTime(2013, 11, 14, 10, 0, 0),
+				EndTime = new DateTime(2013, 11, 14, 14, 0, 0),
+				ActivityId = stickyActivity.Id.Value,
+				ActivityType = ActivityType.RegularActivity
+			};
+
+			var result = Target.GetActivityLayerOverlapCheckingResult(input);
+
+			result.Should().Be.Empty();
+		}
+		[Test]
+		public void ShouldNotReturnOverlappedActivityWhenAddingActivityForEmptyDay()
+		{
+			var person = PersonFactory.CreatePersonWithGuid("John","Watson");
+			PersonRepository.Has(person);
+
+			var mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
+
+			mainActivity.AllowOverwrite = true;
+			ActivityForId.Add(mainActivity);
+
+			var input = new CheckActivityLayerOverlapFormData
+			{
+				PersonIds = new Guid[] { person.Id.Value },
+				Date = new DateOnly(2013, 11, 14),
+				StartTime = new DateTime(2013, 11, 14, 10, 0, 0),
+				EndTime = new DateTime(2013, 11, 14, 14, 0, 0),
+				ActivityId = mainActivity.Id.Value,
+				ActivityType = ActivityType.RegularActivity
+			};
+
+			var result = Target.GetActivityLayerOverlapCheckingResult(input);
+
+			result.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldNotReturnStickyOverlappedActivityWhenAddActivityToStickyPersonalActivity()
+		{
+			var person = PersonFactory.CreatePersonWithGuid("John","Watson");
+			PersonRepository.Has(person);
+
+			var mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
+			var stickyActivity = ActivityFactory.CreateActivity("Short Break").WithId();
+	
+
+			mainActivity.AllowOverwrite = true;
+			stickyActivity.AllowOverwrite = false;
+			ActivityForId.Add(mainActivity);
+			ActivityForId.Add(stickyActivity);
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
+			var scenario = CurrentScenario.Current();
+		
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				mainActivity,person,
+				new DateTimePeriod(2013,11,14,8,2013,11,14,17),
+				shiftCategory,scenario);
+
+		
+			pa.AddPersonalActivity(stickyActivity,new DateTimePeriod(2013,11,14,8,2013,11,14,16));
+
+			ScheduleStorage.Add(pa);
+			var input = new CheckActivityLayerOverlapFormData
+			{
+				PersonIds = new Guid[] { person.Id.Value },
+				Date = new DateOnly(2013, 11, 14),
+				StartTime = new DateTime(2013, 11, 14, 10, 0, 0),
+				EndTime = new DateTime(2013, 11, 14, 14, 0, 0),
+				ActivityId = mainActivity.Id.GetValueOrDefault(),
+				ActivityType = ActivityType.RegularActivity
 			};
 
 			var result = Target.GetActivityLayerOverlapCheckingResult(input);

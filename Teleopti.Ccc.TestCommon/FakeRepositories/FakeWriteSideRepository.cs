@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer
+namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakeWriteSideRepository<T> : 
-		IEnumerable<T>, 
+	public class FakeWriteSideRepository<T> :
+		IEnumerable<T>,
 		IWriteSideRepository<T>,
 		IProxyForId<T> where T : IAggregateRoot
 	{

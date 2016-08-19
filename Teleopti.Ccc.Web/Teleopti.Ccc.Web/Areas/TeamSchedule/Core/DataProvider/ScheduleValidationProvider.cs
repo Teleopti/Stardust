@@ -22,10 +22,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly IPersonWeekViolatingWeeklyRestSpecification _personWeekViolating;
 		private readonly IPersonNameProvider _personNameProvider;
 		private readonly IUserTimeZone _timeZone;
+		private readonly IProxyForId<IActivity> _activityForId;
 
 		public ScheduleValidationProvider(IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,
 			IPersonRepository personRepository, IPersonWeekViolatingWeeklyRestSpecification personWeekViolating,
-			IUserTimeZone timeZone, IPersonNameProvider personNameProvider)
+			IUserTimeZone timeZone, IPersonNameProvider personNameProvider, IProxyForId<IActivity> activityForId)
 		{
 			_scheduleStorage = scheduleStorage;
 			_currentScenario = currentScenario;
@@ -33,12 +34,15 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			_personWeekViolating = personWeekViolating;
 			_timeZone = timeZone;
 			_personNameProvider = personNameProvider;
+			_activityForId = activityForId;
 		}
 
 		public IList<ActivityLayerOverlapCheckingResult> GetActivityLayerOverlapCheckingResult(
 			CheckActivityLayerOverlapFormData input)
 		{
 			var results = new List<ActivityLayerOverlapCheckingResult>();
+
+			var activity = _activityForId.Load(input.ActivityId);
 
 			var people = _personRepository.FindPeople(input.PersonIds);
 			var scenario = _currentScenario.Current();
@@ -54,21 +58,46 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					scenario);
 
 				var scheduleDay = schedules[person].ScheduledDay(input.Date);
-				var projection = scheduleDay.ProjectionService().CreateProjection();
 
-				var overlapLayers = projection
-					.Where(layer =>
-					{
-						var activityLayer = layer.Payload as IActivity;
-						return activityLayer != null && layer.Period.Intersect(activityPeriod) && !activityLayer.AllowOverwrite;
-					})
-					.Select(layer => new OverlappedLayer
-					{
-						Name = ((IActivity) layer.Payload).Name,
-						StartTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime, _timeZone.TimeZone()),
-						EndTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.EndDateTime,_timeZone.TimeZone())
-					})
-					.ToList();
+
+				var personAssignment = scheduleDay.PersonAssignment();
+				if(personAssignment == null||!personAssignment.ShiftLayers.Any()) continue;
+				var AssForChecking = personAssignment.EntityClone();
+
+				if (input.ActivityType == ActivityType.RegularActivity)
+				{
+					AssForChecking.AddActivity(activity, activityPeriod);
+				}
+				else if (input.ActivityType == ActivityType.PersonalActivity)
+				{
+					AssForChecking.AddPersonalActivity(activity, activityPeriod);
+				}
+
+				var originalProjection = scheduleDay.ProjectionService().CreateProjection();
+				var projectionAfterAdding = AssForChecking.ProjectionService().CreateProjection();
+
+				var originalStickyLayers = originalProjection.Where(layer =>
+				{
+					var activityLayer = layer.Payload as IActivity;
+					return activityLayer != null && !activityLayer.AllowOverwrite;
+				});
+				var newStickyLayers = projectionAfterAdding.Where(layer =>
+				{
+					var activityLayer = layer.Payload as IActivity;
+					return activityLayer != null && !activityLayer.AllowOverwrite;
+				});
+
+				var overlapLayers = originalStickyLayers.Where(layer =>
+				{
+					return !newStickyLayers.Any(l => l.Payload.Id == layer.Payload.Id && l.Period.Contains(layer.Period));
+				})
+				.Select(layer => new OverlappedLayer
+				{
+					Name = ((IActivity)layer.Payload).Name,
+					StartTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime, _timeZone.TimeZone()),
+					EndTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.EndDateTime, _timeZone.TimeZone())
+				})
+				.ToList();
 
 				if(overlapLayers.IsEmpty()) continue;
 
