@@ -18,7 +18,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
-	[TestFixture]
+	[TestFixture, Ignore]
 	public class NewAbsenceRequestUseMultiHandlerTest : ISetup
 	{
 		public NewAbsenceRequestUseMultiHandler Target;
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakeQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
 		public FakePersonRepository PersonRepository;
 		public FakeScheduleDataReadScheduleStorage ScheduleRepository;
-
+		
 		public FakeCurrentScenario CurrentScenario;
 		public FakeEventPublisher EventPublisher;
 
