@@ -119,20 +119,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 
 			var errorMessages = new List<string>();
-			if (periodToRemove.HasValue)
+			foreach (var personAbsence in personAbsences)
 			{
-				foreach (var personAbsence in personAbsences)
+				// Remove entire absence, then cancel the request
+				if (!periodToRemove.HasValue)
 				{
-					var newAbsencePeriods = getPeriodsForNewAbsence(personAbsence.Period, periodToRemove.Value);
-					if (!newAbsencePeriods.Any())
-					{
-						_absenceRequestCancelService.CancelAbsenceRequestsFromPersonAbsence(personAbsence);
-						continue;
-					}
-
-					errorMessages.AddRange(createNewAbsencesForSplitAbsence(person, personAbsence,
-						newAbsencePeriods, commandInfo, scheduleDay, scheduleRange).ToList());
+					_absenceRequestCancelService.CancelAbsenceRequestsFromPersonAbsence(personAbsence);
+					continue;
 				}
+
+				// Remove part absence, but now new absence need created, then cancel the request
+				var newAbsencePeriods = getPeriodsForNewAbsence(personAbsence.Period, periodToRemove.Value);
+				if (!newAbsencePeriods.Any())
+				{
+					_absenceRequestCancelService.CancelAbsenceRequestsFromPersonAbsence(personAbsence);
+					continue;
+				}
+				errorMessages.AddRange(createNewAbsencesForSplitAbsence(person, personAbsence,
+					newAbsencePeriods, commandInfo, scheduleDay, scheduleRange).ToList());
 			}
 
 			return errorMessages;
