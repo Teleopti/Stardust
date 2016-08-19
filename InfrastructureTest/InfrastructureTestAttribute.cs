@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			return config;
 		}
 
+
 		//
 		// Should fake:
 		// Config
@@ -71,6 +72,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 			system.AddService<Database>();
 			system.AddService<DatabaseLegacy>();
+			system.AddService<AnalyticsDatabase>();
 			system.UseTestDouble<FakeTransactionHook>().For<ITransactionHook>(); // just adds one hook to the list
 			system.UseTestDouble<TestConnectionStrings>().For<IConnectionStrings>();
 			system.UseTestDouble<MutableFakeCurrentHttpContext>().For<ICurrentHttpContext>();

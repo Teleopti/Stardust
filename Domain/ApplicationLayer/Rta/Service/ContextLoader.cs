@@ -2,8 +2,10 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Interfaces.Domain;
 
@@ -20,7 +22,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	public class ContextLoaderWithBatchQueryOptimization : ContextLoader
 	{
+		private readonly IConfigReader _config;
+
 		public ContextLoaderWithBatchQueryOptimization(
+			IConfigReader config,
 			IDatabaseLoader databaseLoader,
 			INow now,
 			StateMapper stateMapper,
@@ -39,13 +44,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				appliedAlarm
 				)
 		{
+			_config = config;
+		}
+
+		public class batchData
+		{
+			public IEnumerable<PersonOrganizationData> persons;
+			public IEnumerable<ScheduledActivity> schedules;
+			public MappingsState mappings;
+			public IEnumerable<AgentState> agentStates;
 		}
 
 		public override void ForBatch(BatchInputModel batch, Action<Context> action)
 		{
-			var exceptions = new List<Exception>();
+			var exceptions = new ConcurrentBag<Exception>();
 
-			WithUnitOfWork(() =>
+			var batchData = new Lazy<batchData>(() =>
 			{
 				var dataSourceId = ValidateSourceId(batch);
 
@@ -56,13 +70,49 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				var mappings = new MappingsState(() => _mappingReader.Read());
 				var agentStates = _agentStatePersister.Get(personIds);
 
-				batch.States.ForEach(input =>
+				return new batchData
+				{
+					persons = persons,
+					schedules = schedules,
+					mappings = mappings,
+					agentStates = agentStates
+				};
+			});
+
+			// 7 transactions seems like a sweet spot when unit testing
+			var transactionCount = (int) Math.Ceiling(batch.States.Count() / _config.ReadValue("RtaBatchTransactions", 7d));
+			var transactions = batch.States.Batch(transactionCount);
+			Parallel.ForEach(transactions, states =>
+			{
+				ForBatchSingle(batch, action, batchData, states)
+					.ForEach(exceptions.Add);
+			});
+
+			if (exceptions.Any())
+				throw new AggregateException(exceptions);
+
+		}
+
+		[TenantScope]
+		protected virtual IEnumerable<Exception> ForBatchSingle(
+			BatchInputModel batch, 
+			Action<Context> action, 
+			Lazy<batchData> batchData, 
+			IEnumerable<BatchStateInputModel> states)
+		{
+			var exceptions = new List<Exception>();
+
+			WithUnitOfWork(() =>
+			{
+				var data = batchData.Value;
+
+				states.ForEach(input =>
 				{
 					try
 					{
 						var found = false;
-						
-						persons.Where(x => x.UserCode == input.UserCode)
+
+						data.persons.Where(x => x.UserCode == input.UserCode)
 							.ForEach(x =>
 							{
 								found = true;
@@ -80,9 +130,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 									x.BusinessUnitId,
 									x.TeamId,
 									x.SiteId,
-									() => agentStates.FirstOrDefault(s => s.PersonId == x.PersonId),
-									() => schedules.Where(s => s.PersonId == x.PersonId).ToArray(),
-									s => mappings,
+									() => data.agentStates.FirstOrDefault(s => s.PersonId == x.PersonId),
+									() => data.schedules.Where(s => s.PersonId == x.PersonId).ToArray(),
+									s => data.mappings,
 									c => _agentStatePersister.Persist(c.MakeAgentState()),
 									_now,
 									_stateMapper,
@@ -94,26 +144,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						if (!found)
 							throw new InvalidUserCodeException(string.Format("No person found for SourceId {0} and UserCode {1}",
 								batch.SourceId, input.UserCode));
-
 					}
 					catch (Exception e)
 					{
 						exceptions.Add(e);
 					}
-
 				});
-
 			});
 
-			if (exceptions.Any())
-				throw new AggregateException(exceptions);
-
+			return exceptions;
 		}
 	}
 
 	public class ContextLoaderWithBatchConnectionOptimization : ContextLoader
 	{
+		private readonly IConfigReader _config;
+
 		public ContextLoaderWithBatchConnectionOptimization(
+			IConfigReader config,
 			IDatabaseLoader databaseLoader,
 			INow now,
 			StateMapper stateMapper,
@@ -132,9 +180,32 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				appliedAlarm
 				)
 		{
+			_config = config;
 		}
 
 		public override void ForBatch(BatchInputModel batch, Action<Context> action)
+		{
+			var exceptions = new ConcurrentBag<Exception>();
+
+			// 7 transactions seems like a sweet spot when unit testing
+			var transactionCount = (int) Math.Ceiling(batch.States.Count() / _config.ReadValue("RtaBatchTransactions", 7d));
+			var transactions = batch.States.Batch(transactionCount);
+			Parallel.ForEach(transactions, states =>
+			{
+				ForBatchSingle(batch, action, states)
+					.ForEach(exceptions.Add);
+			});
+			
+			if (exceptions.Any())
+				throw new AggregateException(exceptions);
+
+		}
+
+		[TenantScope]
+		protected virtual IEnumerable<Exception> ForBatchSingle(
+			BatchInputModel batch,
+			Action<Context> action,
+			IEnumerable<BatchStateInputModel> states)
 		{
 			var exceptions = new List<Exception>();
 
@@ -142,7 +213,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			{
 				var dataSourceId = ValidateSourceId(batch);
 
-				batch.States.ForEach(input =>
+				states.ForEach(input =>
 				{
 					try
 					{
@@ -194,20 +265,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						if (!found)
 							throw new InvalidUserCodeException(string.Format("No person found for SourceId {0} and UserCode {1}",
 								batch.SourceId, input.UserCode));
-
 					}
 					catch (Exception e)
 					{
 						exceptions.Add(e);
 					}
-
 				});
-
 			});
 
-			if (exceptions.Any())
-				throw new AggregateException(exceptions);
-
+			return exceptions;
 		}
 	}
 
@@ -321,6 +387,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		protected virtual void WithUnitOfWork(Action action)
 		{
 			action.Invoke();
+		}
+
+		[AllBusinessUnitsUnitOfWork]
+		[ReadModelUnitOfWork]
+		[AnalyticsUnitOfWork]
+		protected virtual T WithUnitOfWork<T>(Func<T> func)
+		{
+			return func.Invoke();
 		}
 
 		public virtual void For(StateInputModel input, Action<Context> action)

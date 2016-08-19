@@ -16,9 +16,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
 	public class DatabaseLegacy
 	{
-		private const int datasourceId = 9;
-
 		private readonly Database _database;
+		private readonly AnalyticsDatabase _analyticsDatabase;
 		private readonly IPersonRepository _persons;
 		private readonly IContractRepository _contracts;
 		private readonly IPartTimePercentageRepository _partTimePercentages;
@@ -30,6 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 		public DatabaseLegacy(
 			Database database,
+			AnalyticsDatabase analyticsDatabase,
 			IPersonRepository persons,
 			IContractRepository contracts,
 			IPartTimePercentageRepository partTimePercentages,
@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			IBusinessUnitRepository businessUnits)
 		{
 			_database = database;
+			_analyticsDatabase = analyticsDatabase;
 			_persons = persons;
 			_contracts = contracts;
 			_partTimePercentages = partTimePercentages;
@@ -59,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		}
 		
 		[UnitOfWork]
-		public virtual DatabaseLegacy WithAgent(string externalLogOn)
+		public virtual DatabaseLegacy WithAgent(string name)
 		{
 			var site = _sites.LoadAll().SingleOrDefault(x => x.Description.Name == "site");
 			if (site == null)
@@ -118,14 +119,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 			var person = new Person();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			person.Name = new Name(externalLogOn, externalLogOn);
+			person.Name = new Name(name, name);
 			person.AddPersonPeriod(personPeriod);
 
 			var exteralLogOn = new ExternalLogOn
 			{
-				AcdLogOnName = externalLogOn, // is not used?
-				DataSourceId = datasourceId,
-				AcdLogOnOriginalId = externalLogOn // this is what the rta receives
+				AcdLogOnName = name, // is not used?
+				DataSourceId = _analyticsDatabase.CurrentDataSourceId,	
+				AcdLogOnOriginalId = name // this is what the rta receives
 			};
 			_externalLogOns.Add(exteralLogOn);
 			person.AddExternalLogOn(exteralLogOn, personPeriod);
@@ -145,24 +146,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			return existing;
 		}
 
-		[UnitOfWork]
-		public virtual DatabaseLegacy WithRule(string name, Adherence adherence)
+		public DatabaseLegacy WithRule(string name, Adherence adherence)
 		{
 			_database.WithRule(name, null, adherence);
 			return this;
 		}
 
-		[UnitOfWork]
-		public virtual DatabaseLegacy WithMapping(string stateGroupName, string ruleName)
+		public DatabaseLegacy WithMapping(string stateGroupName, string ruleName)
 		{
 			_database.WithMapping(stateGroupName, ruleName);
 			return this;
 		}
 
-		public DatabaseLegacy WithDataSource(string dataSourceId)
+		public DatabaseLegacy WithDataSource(string sourceId)
 		{
-			var datasource = new Datasources(datasourceId, " ", -1, " ", -1, " ", " ", 1, false, dataSourceId, false);
-			new AnalyticsDataFactory().Apply(datasource);
+			_analyticsDatabase.WithDataSource(9, sourceId);
 			return this;
 		}
 

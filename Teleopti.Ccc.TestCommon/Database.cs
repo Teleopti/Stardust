@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class Database
 	{
+		private readonly AnalyticsDatabase _analytics;
 		private readonly IPersonAssignmentRepository _assignments;
 		private readonly IPersonRepository _persons;
 		private readonly ISiteRepository _sites;
@@ -29,6 +30,7 @@ namespace Teleopti.Ccc.TestCommon
 		private readonly IRtaStateGroupRepository _stateGroups;
 		private readonly IRtaRuleRepository _rules;
 		private readonly IRtaMapRepository _mappings;
+		private readonly IExternalLogOnRepository _externalLogOns;
 
 		private DateOnly _date;
 		private string _person;
@@ -43,6 +45,7 @@ namespace Teleopti.Ccc.TestCommon
 		private string _rule;
 
 		public Database(
+			AnalyticsDatabase analytics,
 			IPersonAssignmentRepository assignments,
 			IPersonRepository persons,
 			ISiteRepository sites,
@@ -56,8 +59,10 @@ namespace Teleopti.Ccc.TestCommon
 			ISkillTypeRepository skillTypes,
 			IRtaStateGroupRepository stateGroups,
 			IRtaRuleRepository rules,
-			IRtaMapRepository mappings)
+			IRtaMapRepository mappings,
+			IExternalLogOnRepository externalLogOns)
 		{
+			_analytics = analytics;
 			_assignments = assignments;
 			_persons = persons;
 			_sites = sites;
@@ -72,6 +77,7 @@ namespace Teleopti.Ccc.TestCommon
 			_stateGroups = stateGroups;
 			_rules = rules;
 			_mappings = mappings;
+			_externalLogOns = externalLogOns;
 		}
 
 		[UnitOfWork]
@@ -234,10 +240,18 @@ namespace Teleopti.Ccc.TestCommon
 				partTimePercentage(),
 				contractSchedule());
 
-			person.AddPersonPeriod(
-				new PersonPeriod("2001-01-01".Date(),
-				personContract,
-				team()));
+			var personPeriod = new PersonPeriod("2001-01-01".Date(), personContract, team());
+			person.AddPersonPeriod(personPeriod);
+
+			var exteralLogOn = new ExternalLogOn
+			{
+				AcdLogOnName = name, // is not used?
+				DataSourceId = _analytics.CurrentDataSourceId,
+				AcdLogOnOriginalId = name // this is what the rta receives
+			};
+			_externalLogOns.Add(exteralLogOn);
+			person.AddExternalLogOn(exteralLogOn, personPeriod);
+
 			_persons.Add(person);
 
 			return this;
@@ -332,7 +346,6 @@ namespace Teleopti.Ccc.TestCommon
 			var pa = _assignments.LoadAll().Single(x => x.Date == _date && x.Person == person());
 			return _assignments.LoadAggregate(pa.Id.Value);
 		}
-
 
 
 

@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 {
 	public static class sys_datasource
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public static DataTable CreateTable()
 		{
 			var table = new DataTable("mart.sys_datasource");
