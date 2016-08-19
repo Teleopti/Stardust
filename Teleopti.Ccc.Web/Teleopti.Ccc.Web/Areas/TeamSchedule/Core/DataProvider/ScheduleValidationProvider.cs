@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Ccc.Web.Core;
@@ -54,7 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					scenario);
 
 				var scheduleDay = schedules[person].ScheduledDay(input.Date);
-				var overlapLayers = getOverlappedLayersForScheduleDay(input, scheduleDay);
+				var overlapLayers = getOverlappedLayersForScheduleDayWhenAdding(input, scheduleDay);
 
 				if(overlapLayers.IsEmpty()) continue;
 
@@ -87,7 +86,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 				var scheduleDay = schedules[person].ScheduledDay(input.Date);
 
-				var overlapLayers = getOverlappedLayersForMovingActivity(input, scheduleDay, personActivity);
+				var overlapLayers = getOverlappedLayersForScheduleDayWhenMoving(input, scheduleDay, personActivity);
 
 				if (overlapLayers.IsEmpty()) continue;
 
@@ -103,7 +102,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			return results;
 		}
 
-		private IList<OverlappedLayer> getOverlappedLayersForScheduleDay(CheckActivityLayerOverlapFormData input, IScheduleDay scheduleDay)
+		private IList<OverlappedLayer> getOverlappedLayersForScheduleDayWhenAdding(CheckActivityLayerOverlapFormData input, IScheduleDay scheduleDay)
 		{
 			var overlappedLayers = new List<OverlappedLayer>();
 
@@ -142,7 +141,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		}
 
 
-		private IList<OverlappedLayer> getOverlappedLayersForMovingActivity(CheckMoveActivityLayerOverlapFormData input, IScheduleDay scheduleDay,
+		private IList<OverlappedLayer> getOverlappedLayersForScheduleDayWhenMoving(CheckMoveActivityLayerOverlapFormData input, IScheduleDay scheduleDay,
 			PersonActivityItem personActivity)
 		{
 			var overlapLayers = new List<OverlappedLayer>();
