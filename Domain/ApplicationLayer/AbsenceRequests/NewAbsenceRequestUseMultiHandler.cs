@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 					var queuedAbsenceRequest = new QueuedAbsenceRequest()
 					{
-						PersonRequest = _personRequest,
+						PersonRequest = _personRequest.Id.Value,
 						Created = _personRequest.CreatedOn.Value,
 						StartDateTime = _personRequest.Request.Period.StartDateTime,
 						EndDateTime = _personRequest.Request.Period.EndDateTime,
@@ -85,8 +85,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						var Ids = new List<Guid>();
 						foreach (var req in requestWithOverlappingPeriod)
 						{
-							if (req.PersonRequest.Id != null)
-								Ids.Add(req.PersonRequest.Id.Value);
+							Ids.Add(req.PersonRequest);
 
 							_queuedAbsenceRequestRepository.Remove(req);
 							uow.PersistAll();

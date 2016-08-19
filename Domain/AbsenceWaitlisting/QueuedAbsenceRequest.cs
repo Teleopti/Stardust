@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 {
 	public class QueuedAbsenceRequest : NonversionedAggregateRootWithBusinessUnit, IQueuedAbsenceRequest
 	{
-		public virtual IPersonRequest PersonRequest { get; set; }
+		public virtual Guid PersonRequest { get; set; }
 
 		public virtual DateTime Created { get; set; }
 

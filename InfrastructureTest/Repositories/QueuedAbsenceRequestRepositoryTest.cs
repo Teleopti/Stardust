@@ -2,9 +2,7 @@ using System;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -49,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		private IQueuedAbsenceRequest createAbsenceRequestAndBusinessUnit(IAbsence absence = null)
 		{
-			return  new QueuedAbsenceRequest {PersonRequest = _personRequest, StartDateTime = _absenceRequest.Period.StartDateTime, EndDateTime = _absenceRequest.Period.EndDateTime, Created = _personRequest.CreatedOn.Value};
+			return  new QueuedAbsenceRequest {PersonRequest = _personRequest.Id.Value, StartDateTime = _absenceRequest.Period.StartDateTime, EndDateTime = _absenceRequest.Period.EndDateTime, Created = _personRequest.CreatedOn.Value};
 		}
 
 		
@@ -69,6 +67,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldFindAllQueuedWithSomePartInsidePeriod()
 		{
 			createQueduedRequest(new DateTime(2008, 7, 10, 8, 0, 0), new DateTime(2008, 7, 10, 9, 0, 0));
+			System.Threading.Thread.Sleep(1000);
 			createQueduedRequest(new DateTime(2008, 7, 10, 10, 0, 0), new DateTime(2008, 7, 14, 9, 0, 0));
 			createQueduedRequest(new DateTime(2008, 7, 10, 18, 0, 0), new DateTime(2008, 7, 10, 20, 0, 0));
 			createQueduedRequest(new DateTime(2008, 7, 11, 8, 0, 0), new DateTime(2008, 7, 11, 9, 0, 0));
@@ -96,7 +95,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			PersistAndRemoveFromUnitOfWork(personRequest);
 
-			var queued = new QueuedAbsenceRequest { PersonRequest = personRequest, StartDateTime = absenceRequest.Period.StartDateTime, EndDateTime = absenceRequest.Period.EndDateTime, Created = personRequest.CreatedOn.Value };
+			var queued = new QueuedAbsenceRequest { PersonRequest = personRequest.Id.Value, StartDateTime = absenceRequest.Period.StartDateTime, EndDateTime = absenceRequest.Period.EndDateTime, Created = personRequest.CreatedOn.Value };
 			PersistAndRemoveFromUnitOfWork(queued);
 		}
 	}

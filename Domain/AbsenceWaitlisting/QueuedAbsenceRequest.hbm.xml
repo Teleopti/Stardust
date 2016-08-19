@@ -26,8 +26,8 @@
 						type="DateTime"
 						not-null="true"/>
 
-		<many-to-one name="PersonRequest"
-			 class="Teleopti.Ccc.Domain.AgentInfo.Requests.PersonRequest"
+		<property name="PersonRequest"
+			 type="guid"
 			 not-null="true" />
 
 		<many-to-one name="BusinessUnit"

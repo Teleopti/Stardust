@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -46,7 +45,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IQueuedAbsenceRequest Get(Guid personRequestId)
 		{
-			return _queuedAbsenceRequestRepository.FirstOrDefault(x => x.PersonRequest.Id.Value == personRequestId);
+			return _queuedAbsenceRequestRepository.FirstOrDefault(x => x.PersonRequest == personRequestId);
 		}
 
 		public IList<IQueuedAbsenceRequest> Find(DateTimePeriod period)

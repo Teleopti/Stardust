@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return Session.CreateCriteria(typeof(QueuedAbsenceRequest))
 				.Add(Restrictions.Or(startCriteria, endCriteria))
 				.AddOrder(Order.Asc("Created"))
-				.SetFetchMode("PersonRequest", FetchMode.Join)
 				.List<IQueuedAbsenceRequest>();
 		}
 	}
