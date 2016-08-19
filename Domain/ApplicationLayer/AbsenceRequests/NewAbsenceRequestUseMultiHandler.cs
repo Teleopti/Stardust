@@ -5,25 +5,23 @@ using log4net;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
 	[EnabledBy(Toggles.AbsenceRequests_UseMultiRequestProcessing_39960)]
-	public class NewAbsenceRequestUseMultiHandler : INewAbsenceRequestHandler, IHandleEvent<NewAbsenceRequestCreatedEvent>, IRunOnStardust
+	public class NewAbsenceRequestUseMultiHandler : INewAbsenceRequestHandler, IHandleEvent<NewAbsenceRequestCreatedEvent>, IRunOnHangfire
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(NewAbsenceRequestUseMultiHandler));
 		
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
-		private readonly IEventPublisher _eventPublisher;
-		private readonly IConfigReader _configReader;
-		private readonly DataSourceState _dataSourceState;
 		private readonly IDataSourceScope _dataSourceScope;
+		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
 		private readonly IList<LoadDataAction> _loadDataActions;
 		private IPersonRequest _personRequest;
@@ -33,16 +31,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 		private delegate bool LoadDataAction(NewAbsenceRequestCreatedEvent @event);
 
-		public NewAbsenceRequestUseMultiHandler(IPersonRequestRepository personRequestRepository, IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, 
-			IEventPublisher eventPublisher, IConfigReader configReader, DataSourceState dataSourceState,
-			IDataSourceScope dataSourceScope )
+		public NewAbsenceRequestUseMultiHandler(IPersonRequestRepository personRequestRepository, IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository,
+			IDataSourceScope dataSourceScope, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory )
 		{
 			_personRequestRepository = personRequestRepository;
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
-			_eventPublisher = eventPublisher;
-			_configReader = configReader;
-			_dataSourceState = dataSourceState;
 			_dataSourceScope = dataSourceScope;
+			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 
 			_loadDataActions = new List<LoadDataAction>
 			{
@@ -56,8 +51,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		{
 			using (_dataSourceScope.OnThisThreadUse(@event.LogOnDatasource))
 			{
-				// before call we need to set up a person as it is logged on
-				using (var uow =_dataSourceState.Get().Application.CreateAndOpenUnitOfWork())
+				using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 				{
 					if (_loadDataActions.Any(action => !action.Invoke(@event)))
 					{
@@ -73,28 +67,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					};
 					_queuedAbsenceRequestRepository.Add(queuedAbsenceRequest);
 					uow.PersistAll();
-					var requestWithOverlappingPeriod = _queuedAbsenceRequestRepository.Find(_personRequest.Request.Period);
-
-					int numberOfAbsenceRequestsToBulkProcess;
-					int.TryParse(_configReader.AppConfig("NumberOfAbsenceRequestsToBulkProcess"), out numberOfAbsenceRequestsToBulkProcess);
-
-					if (requestWithOverlappingPeriod.Count >= numberOfAbsenceRequestsToBulkProcess)
-					{
-						var Ids = new List<Guid>();
-						foreach (var req in requestWithOverlappingPeriod)
-						{
-							Ids.Add(req.PersonRequest);
-
-							_queuedAbsenceRequestRepository.Remove(req);
-							uow.PersistAll();
-						}
-						var multiRequestEvent = new NewMultiAbsenceRequestsCreatedEvent()
-						{
-							PersonRequestIds = Ids
-						};
-						_eventPublisher.Publish(multiRequestEvent);
-
-					}
 				}
 			}
 
