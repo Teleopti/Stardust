@@ -33,18 +33,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public IEnumerable<string> RemovePersonAbsence(DateOnly scheduleDate, IPerson person,
 			IEnumerable<IPersonAbsence> personAbsences, IScheduleRange scheduleRange, TrackedCommandInfo commandInfo = null)
 		{
-			var errors =  removePersonAbsenceFromScheduleDay(scheduleDate, person,personAbsences.ToList(), commandInfo, scheduleRange);
+			var errors = removePersonAbsenceFromScheduleDay(scheduleDate, person, personAbsences.ToList(), commandInfo,
+				scheduleRange);
 			return errors ?? new List<string>();
 		}
 
 		public IEnumerable<string> RemovePartPersonAbsence(DateOnly scheduleDate, IPerson person,
-			IEnumerable<IPersonAbsence> personAbsences, DateTimePeriod periodToRemove, IScheduleRange scheduleRange, TrackedCommandInfo commandInfo = null)
+			IEnumerable<IPersonAbsence> personAbsences, DateTimePeriod periodToRemove, IScheduleRange scheduleRange,
+			TrackedCommandInfo commandInfo = null)
 		{
-			var errors = removePersonAbsenceFromScheduleDay(scheduleDate, person, personAbsences.ToList(), commandInfo, scheduleRange, periodToRemove);
+			var errors = removePersonAbsenceFromScheduleDay(scheduleDate, person, personAbsences.ToList(), commandInfo,
+				scheduleRange, periodToRemove);
 			return errors ?? new List<string>();
 		}
-		
-		
+
 		private bool canRemovePersonAbsence(IPerson person, DateOnly startDate)
 		{
 			var factory = new DefinedRaptorApplicationFunctionFactory();
@@ -65,7 +67,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var periods = new List<DateTimePeriod>();
 
 			if (!originalAbsencePeriod.Intersect(periodToRemove)
-				// Entire absence will be removed 
+				// Entire absence will be removed
 				|| periodToRemove.Contains(originalAbsencePeriod))
 			{
 				return periods;
@@ -83,81 +85,86 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			return periods;
 		}
-		
-		private IEnumerable<string> removePersonAbsenceFromScheduleDay (
+
+		private IEnumerable<string> removePersonAbsenceFromScheduleDay(
 			DateOnly scheduleDate, IPerson person, IList<IPersonAbsence> personAbsences,
-			TrackedCommandInfo commandInfo, IScheduleRange scheduleRange,  DateTimePeriod? periodToRemove = null )
+			TrackedCommandInfo commandInfo, IScheduleRange scheduleRange,
+			DateTimePeriod? periodToRemove = null)
 		{
-			foreach (var personAbsence in personAbsences)
-			{
-				personAbsence.RemovePersonAbsence (commandInfo);
-			}
-
-			var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange (scheduleRange);
-			var scheduleDay = scheduleRange.ScheduledDay (scheduleDate) as ExtractedSchedule;
-
-			if (!canRemovePersonAbsence (person, scheduleDate))
+			if (!canRemovePersonAbsence(person, scheduleDate))
 			{
 				return new[] {Resources.CouldNotRemoveAbsenceFromProtectedSchedule};
 			}
 
+			foreach (var personAbsence in personAbsences)
+			{
+				personAbsence.RemovePersonAbsence(commandInfo);
+			}
+
+			var scheduleDay = scheduleRange.ScheduledDay(scheduleDate) as ExtractedSchedule;
 			if (scheduleDay != null)
 			{
 				foreach (var personAbsence in personAbsences)
 				{
-					scheduleDay.Remove (personAbsence);
+					scheduleDay.Remove(personAbsence);
+				}
+
+				var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
+				var errors = _saveSchedulePartService.Save(scheduleDay, rules, KeepOriginalScheduleTag.Instance);
+
+				if (errors != null && errors.Any())
+				{
+					return errors;
 				}
 			}
 
-			var errorMessages = _saveSchedulePartService.Save (scheduleDay, rules, KeepOriginalScheduleTag.Instance);
-			if (errorMessages != null && errorMessages.Any())
-			{
-				return errorMessages;
-			}
-
+			var errorMessages = new List<string>();
 			if (periodToRemove.HasValue)
 			{
-				errorMessages = createNewAbsencesForSplitAbsence(person, personAbsences, periodToRemove.Value, commandInfo, scheduleDay, scheduleRange);
-			}
-
-			
-			_absenceRequestCancelService.CancelAbsenceRequestsFromPersonAbsences(personAbsences);
-
-			return errorMessages;
-		}
-
-		private IList<string> createNewAbsencesForSplitAbsence (IPerson person, IEnumerable<IPersonAbsence> personAbsences,
-			DateTimePeriod periodToRemove, TrackedCommandInfo commandInfo, IScheduleDay scheduleDay,
-			IScheduleRange scheduleRange)
-		{
-			IList<string> errorMessages = new List<string>();
-			foreach (var personAbsence in personAbsences)
-			{
-				var newAbsencePeriods = getPeriodsForNewAbsence (personAbsence.Period, periodToRemove);
-				if (!newAbsencePeriods.Any()) return errorMessages;
-
-				foreach (var period in newAbsencePeriods)
+				foreach (var personAbsence in personAbsences)
 				{
-					// xinfli: The second parameter "isFullDayAbsence" doesn't matter, since it just raise different event
-					// and all the events will be converted to "ScheduleChangedEvent" (Refer to ScheduleChangedEventPublisher class)
-					var errors = _personAbsenceCreator.Create (new AbsenceCreatorInfo
+					var newAbsencePeriods = getPeriodsForNewAbsence(personAbsence.Period, periodToRemove.Value);
+					if (!newAbsencePeriods.Any())
 					{
-						Person = person,
-						Absence = personAbsence.Layer.Payload,
-						ScheduleDay = scheduleDay,
-						ScheduleRange = scheduleRange,
-						AbsenceTimePeriod = period,
-						TrackedCommandInfo = commandInfo
-					}, false);
+						_absenceRequestCancelService.CancelAbsenceRequestsFromPersonAbsence(personAbsence);
+						continue;
+					}
 
-					if (errors == null || !errors.Any()) continue;
-
-					errorMessages = errorMessages.Concat (errors).ToList();
+					errorMessages.AddRange(createNewAbsencesForSplitAbsence(person, personAbsence,
+						newAbsencePeriods, commandInfo, scheduleDay, scheduleRange).ToList());
 				}
 			}
 
 			return errorMessages;
 		}
-		
+
+		private IEnumerable<string> createNewAbsencesForSplitAbsence(IPerson person,
+			IPersonAbsence personAbsence, IEnumerable<DateTimePeriod> newAbsencePeriods,
+			TrackedCommandInfo commandInfo, IScheduleDay scheduleDay, IScheduleRange scheduleRange)
+		{
+			var errorMessages = new List<string>();
+
+			foreach (var period in newAbsencePeriods)
+			{
+				// xinfli: The second parameter "isFullDayAbsence" doesn't matter, since it just raise different event
+				// and all the events will be converted to "ScheduleChangedEvent" (Refer to ScheduleChangedEventPublisher class)
+				var errors = _personAbsenceCreator.Create(new AbsenceCreatorInfo
+				{
+					Person = person,
+					Absence = personAbsence.Layer.Payload,
+					ScheduleDay = scheduleDay,
+					ScheduleRange = scheduleRange,
+					AbsenceTimePeriod = period,
+					PersonRequest = personAbsence.PersonRequest,
+					TrackedCommandInfo = commandInfo
+				}, false);
+
+				if (errors == null || !errors.Any()) continue;
+
+				errorMessages.AddRange(errors);
+			}
+
+			return errorMessages;
+		}
 	}
 }

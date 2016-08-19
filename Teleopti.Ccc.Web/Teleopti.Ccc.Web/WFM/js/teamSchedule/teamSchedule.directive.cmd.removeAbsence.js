@@ -37,7 +37,7 @@
 					return {
 						PersonId: x.PersonId,
 						Name: x.Name
-					}
+					};
 				}), response.data);
 			});
 		};
@@ -76,7 +76,7 @@
 			bindToController: true,
 			require: ['^teamscheduleCommandContainer', 'removeAbsence'],
 			link: postlink
-		}
+		};
 
 		function postlink(scope, elem, attrs, ctrls) {
 			var containerCtrl = ctrls[0],

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
@@ -7,7 +6,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
 	public class AbsenceRequestCancelService : IAbsenceRequestCancelService
 	{
-
 		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
 		private readonly ICurrentScenario _currentScenario;
 
@@ -20,40 +18,36 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		public void CancelAbsenceRequest(IAbsenceRequest absenceRequest)
 		{
 			// only allow cancel if this is the default scenario.
-			if (!_currentScenario.Current().DefaultScenario)
+			var currentScenario = _currentScenario.Current();
+			if (!currentScenario.DefaultScenario)
 			{
 				return;
 			}
 
 			var personRequest = absenceRequest.Parent as IPersonRequest;
-
 			if (personRequest == null || !personRequest.IsApproved)
 			{
 				return;
 			}
 
-			var scenario = _currentScenario.Current();
-			var personAbsenceInCurrentScenarioExists = personRequest.PersonAbsences.Any (absence => absence.Scenario == scenario);
-
+			var personAbsenceInCurrentScenarioExists =
+				personRequest.PersonAbsences.Any(absence => absence.Scenario == currentScenario);
 			if (!personAbsenceInCurrentScenarioExists)
 			{
-				personRequest?.Cancel(_personRequestCheckAuthorization);
+				personRequest.Cancel(_personRequestCheckAuthorization);
 			}
 		}
 
-		public void CancelAbsenceRequestsFromPersonAbsences (IEnumerable<IPersonAbsence> personAbsences)
+		public void CancelAbsenceRequestsFromPersonAbsence(IPersonAbsence personAbsence)
 		{
+			if (personAbsence.PersonRequest == null) return;
+			var personRequest = personAbsence.PersonRequest;
+			personRequest.PersonAbsences.Remove(personAbsence);
 
-			foreach (var personAbsence in personAbsences.Where(perAbs => perAbs.PersonRequest != null))
+			var absenceRequest = personRequest.Request as IAbsenceRequest;
+			if (absenceRequest != null)
 			{
-				var personRequest= personAbsence.PersonRequest;
-				personRequest.PersonAbsences.Remove(personAbsence);
-
-				var absenceRequest = personRequest.Request as IAbsenceRequest;
-				if (absenceRequest != null)
-				{
-					CancelAbsenceRequest(absenceRequest);
-				}
+				CancelAbsenceRequest(absenceRequest);
 			}
 		}
 	}
@@ -65,9 +59,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		{
 		}
 
-		public void CancelAbsenceRequestsFromPersonAbsences (IEnumerable<IPersonAbsence> personAbsences)
+		public void CancelAbsenceRequestsFromPersonAbsence(IPersonAbsence personAbsence)
 		{
 		}
 	}
-
 }

@@ -5,6 +5,7 @@ namespace Teleopti.Interfaces.Domain
 	public interface IAbsenceRequestCancelService
 	{
 		void CancelAbsenceRequest(IAbsenceRequest absenceRequest);
-		void CancelAbsenceRequestsFromPersonAbsences(IEnumerable<IPersonAbsence> personAbsences);
+
+		void CancelAbsenceRequestsFromPersonAbsence(IPersonAbsence personAbsence);
 	}
 }
