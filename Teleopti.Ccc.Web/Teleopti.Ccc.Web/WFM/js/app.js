@@ -176,11 +176,11 @@ wfm.config([
 			url: '/seatMap',
 			templateUrl: 'js/seatManagement/html/seatmap.html'
 		}).state('myTeamSchedule', {
-			url: '/teamSchedule',
-			templateUrl: 'js/teamSchedule/html/default.html',
-			controller: 'TeamScheduleDefaultCtrl as vm'
-		}).state('myTeamSchedule.start', {
+			url: '/myTeam',
 			templateUrl: 'js/teamSchedule/html/schedule.html',
+			controller: 'TeamScheduleDefaultCtrl as vm'
+		}).state('myTeamSchedule.dayView', {
+			templateUrl: 'js/teamSchedule/html/dayViewSchedule.html',
 			controller: 'TeamScheduleCtrl as vm',
 			params: {
 				keyword: '',
@@ -201,7 +201,7 @@ wfm.config([
 				keyword: '',
 				selectedDate: new Date()
 			},
-			templateUrl: 'js/teamSchedule/html/weeklySchedule.html',
+			templateUrl: 'js/teamSchedule/html/weekViewSchedule.html',
 			controller: 'TeamScheduleWeeklyCtrl as vm'
 		}).state('requests', {
 			url: '/requests',

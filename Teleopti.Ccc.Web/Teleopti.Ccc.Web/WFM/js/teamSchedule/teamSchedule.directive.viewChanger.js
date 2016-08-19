@@ -28,7 +28,7 @@
         vc.viewState = $state.current.name;
 
         vc.viewStateMap = {
-            'day': 'myTeamSchedule.start',
+            'day': 'myTeamSchedule.dayView',
             'week': 'myTeamSchedule.weekView'
         };
 

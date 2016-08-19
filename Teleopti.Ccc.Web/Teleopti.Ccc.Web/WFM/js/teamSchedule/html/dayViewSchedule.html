@@ -1,0 +1,74 @@
+﻿<div class="view-header">
+	<div class="view-title">
+		<h1>
+			<i class="mdi mdi-account-multiple"></i>
+			<span translate>DayView</span>
+		</h1>
+	</div>
+</div>
+
+<div class="team-schedule panel wfm-block material-depth-1">
+	<div class="teamschedule-header">
+		<div class="leftside-part">
+			<span class="people-search-container">
+				<people-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged"></people-search-input>
+			</span>
+
+			<span class="datepicker-container">
+				<team-schedule-datepicker selected-date="vm.scheduleDate" on-date-change="vm.onScheduleDateChanged()"></team-schedule-datepicker>
+			</span>
+		</div>
+
+		<div class="rightside-part">
+			<view-changer ng-if="vm.toggles.WeekViewEnabled" selected-date="vm.scheduleDate" keyword="vm.searchOptions.keyword"></view-changer>
+			<div id="show-warnings" class="wfm-switch" ng-if="vm.toggles.ShowNightlyRestWarningEnabled">
+				<input type="checkbox" id="validateWarning" ng-model="vm.validateWarningToggle" ng-change="vm.checkValidationWarningForCurrentPage()" />
+				<label for="validateWarning">
+					<span class="wfm-switch-label" translate>ShowWarnings</span>
+					<span class="wfm-switch-toggle"></span>
+				</label>
+			</div>
+
+			<div class="wfm-switch" ng-if="vm.toggles.RemoveAbsenceEnabled">
+				<input type="checkbox" id="switchAbsence" ng-model="vm.onlyLoadScheduleWithAbsence" ng-change="vm.toggleShowAbsenceOnly()" />
+				<label for="switchAbsence">
+					<span class="wfm-switch-label" translate>ShowOnlyAbsence</span>
+					<span class="wfm-switch-toggle"></span>
+				</label>
+			</div>
+
+			<teamschedule-command-menu class="teamschedule-command" ng-if="vm.permissionsAndTogglesLoaded" configurations="vm.cmdConfigurations" trigger-command="vm.triggerCommand(label, needToOpenSidePanel)"></teamschedule-command-menu>
+		</div>
+	</div>
+	<div class="con-row teamschedule-body">
+		<div class="big-table-wrapper">
+			<div class="alert-warning notice-spacer" ng-if="vm.total > 500">
+				<i class='mdi mdi-alert'></i>{{'TooManyResultsForSearchKeywords'|translate}}
+			</div>
+			<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
+			<schedule-table select-mode="vm.scheduleTableSelectMode" selected-date="vm.scheduleDate" show-warnings="vm.validateWarningToggle" cmd-configurations="vm.cmdConfigurations"/>
+		</div>
+
+		<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="teamschedule-command-container">
+			<teamschedule-command-container date="vm.scheduleDate"
+											action-callback="vm.commonCommandCallback(trackId, personIds)"
+											configurations="vm.cmdConfigurations"
+											md-sidenav-focus tabindex="100"></teamschedule-command-container>
+		</md-sidenav>
+
+	</div>
+
+	<div class="con-footer teamschedule-footer" ng-if="vm.paginationOptions.totalPages > 0">
+		<div class="notice-spacer" ng-show="vm.selectAllVisible()" ng-click="vm.selectAllForAllPages()">
+			<a href="javascript: void(0);"> {{'SelectAllPeopleInEveryPage' | translate}}</a>
+		</div>
+		<div class="notice-spacer" ng-show="vm.hasSelectedAllPeople()" ng-click="vm.unselectAllForAllPages()">
+			<a href="javascript: void(0);"> {{'UnselectAllPeopleInEveryPage' | translate}}</a>
+		</div>
+
+		<md-select class="page-size-selector" ng-if="vm.toggles.SelectAgentsPerPageEnabled" ng-model="vm.paginationOptions.pageSize" ng-change="vm.selectorChanged()" aria-label="page size">
+			<md-option ng-repeat="option in vm.agentsPerPageSelection" ng-value="option">{{option}}</md-option>
+		</md-select>
+		<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.loadSchedules"></wfm-pagination>
+	</div>
+</div>

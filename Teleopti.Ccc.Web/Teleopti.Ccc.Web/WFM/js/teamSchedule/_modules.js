@@ -30,7 +30,7 @@
 
 			$rootScope.$on('$stateChangeSuccess',
 				function(event, toState) {
-					if ($location.url() == $state.current.url && toState.name == 'myTeamSchedule') $state.go('myTeamSchedule.start');
+					if ($location.url() == $state.current.url && toState.name == 'myTeamSchedule') $state.go('myTeamSchedule.dayView');
 				});
 
 		}
