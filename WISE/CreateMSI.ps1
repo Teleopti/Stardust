@@ -216,7 +216,23 @@ function global:CopyFilesToOutput {
 	Copy-Item -Path "$MountKDirectory\PreReqsCheck\CheckPreRequisites.exe.config" -Destination "$OutDir\CheckPreRequisites.exe.config" -Force -ErrorAction stop
 
     #Create lastchangeset.txt file for Output directory
-   
-       New-Item $OutDir\lastchangeset.txt -type file -force -value "$BuildVCSNumber" | Out-Null
+		# Testing
+		$TCVariable1 = "$env:dep.TeleoptiWFM_WfmMain.build.vcs.number.TeleoptiWFM_TeleoptiWFM"
+		$Message = "Variable: " + $TCVariable1
+		write-host $( '##teamcity[message text=''{0}'']' -f $Message ) 
+
+		$TCVariable2 = "$env:dep.TeleoptiWFM_WfmMain.build_vcs_number.TeleoptiWFM_TeleoptiWFM"
+		$Message = "Variable: " + $TCVariable2
+		write-host $( '##teamcity[message text=''{0}'']' -f $Message ) 
+
+		$TCVariable3 = "$env:build_vcs_number"
+		$Message = "Variable: " + $TCVariable3
+		write-host $( '##teamcity[message text=''{0}'']' -f $Message ) 
+
+		$TCVariable4 = "$env:dep_TeleoptiWFM_WfmMain_build_vcs_number_TeleoptiWFM_TeleoptiWFM"
+		$Message = "Variable: " + $TCVariable4
+		write-host $( '##teamcity[message text=''{0}'']' -f $Message ) 
+		
+		New-Item $OutDir\lastchangeset.txt -type file -force -value "$BuildVCSNumber" | Out-Null
 
 }
