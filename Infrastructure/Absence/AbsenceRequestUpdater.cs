@@ -152,6 +152,13 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 					trackAccounts(affectedPersonAbsenceAccount, dateOnlyPeriod, absenceRequest);
 					unitOfWork.Merge(affectedPersonAbsenceAccount);
 				}
+
+				var approvedPersonAbsence = requestApprovalServiceScheduler.GetApprovedPersonAbsence();
+				approvedPersonAbsence.IntradayAbsence(personRequest.Person, new TrackedCommandInfo
+				{
+					OperatedPersonId = personRequest.Person.Id.GetValueOrDefault(),
+					TrackId = Guid.NewGuid()
+				});
 			}
 
 			return returnValue;

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -296,6 +298,34 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			Assert.IsTrue(existingRequest.IsNew);
 			Assert.IsTrue(newRequest.IsPending);
+		}
+
+
+		[Test]
+		public void ShouldHaveAbsenceAddedEventWhenAbsenceRequestIsGranted()
+		{
+			var startDateTime = new DateTime(2016,3,1,0,0,0,DateTimeKind.Utc);
+			var endDateTime = new DateTime(2016,3,1,23,59,00,DateTimeKind.Utc);
+			var requestDateTimePeriod = new DateTimePeriod(startDateTime,endDateTime);
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+
+			var workflowControlSet = createWorkFlowControlSet(new DateTime(2016,01,01),new DateTime(2016,12,31),absence,new GrantAbsenceRequest(),false);			
+
+			var person = createAndSetupPerson(startDateTime,endDateTime,workflowControlSet);		
+			var newRequest = createAbsenceRequest(person,absence,requestDateTimePeriod);
+
+			var newAbsenceRequestHandler = createNewAbsenceRequestHandler(true,false);
+			newAbsenceRequestHandler.Handle(new NewAbsenceRequestCreatedEvent() { PersonRequestId = newRequest.Id.Value });
+			
+			var scheduleLoadOptions = new ScheduleDictionaryLoadOptions(false,false);
+			var schedules = _scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(person,scheduleLoadOptions,new DateTimePeriod(startDateTime,endDateTime),_currentScenario.Current());
+			var scheduleDay = schedules.SchedulesForDay(new DateOnly(startDateTime)).FirstOrDefault();
+			var personAbsence = scheduleDay.PersonAbsenceCollection().SingleOrDefault(abs => abs.Layer.Payload == absence && abs.Person == person);
+
+			var @event = personAbsence.PopAllEvents().Single() as PersonAbsenceAddedEvent;
+			@event.Should().Not.Be.Null();
+			@event.StartDateTime.Should().Be.EqualTo(startDateTime);
+			@event.EndDateTime.Should().Be.EqualTo(endDateTime);
 		}
 
 		[Test]
