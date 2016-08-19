@@ -234,5 +234,10 @@ function global:CopyFilesToOutput {
 		write-host $( '##teamcity[message text=''{0}'']' -f $Message ) 
 		
 		New-Item $OutDir\lastchangeset.txt -type file -force -value "$BuildVCSNumber" | Out-Null
+		
+		New-Item $OutDir\lastchangeset1.txt -type file -force -value "$TCVariable1" | Out-Null
+		New-Item $OutDir\lastchangeset2.txt -type file -force -value "$TCVariable2" | Out-Null
+		New-Item $OutDir\lastchangeset3.txt -type file -force -value "$TCVariable3" | Out-Null
+		New-Item $OutDir\lastchangeset4.txt -type file -force -value "$TCVariable4" | Out-Null
 
 }
