@@ -39,12 +39,18 @@ Teleopti.MyTimeWeb.Preference.SelectionViewModel = function (dayViewModels, maxM
         self.selectedDate(self.previousPeriodDate());
     };
 
-    function updateMustHave(mustHave) {
-	    self.currentMustHaves(self.currentMustHaves() + (mustHave ? 1 : -1 ));
-    }
 
-    self.addMustHave = function() {
-    	setMustHaveMethod(true, updateMustHave);
+    function updateMustHave(newMustHave, originalMustHave) {	   
+	    if (originalMustHave) {
+		    if (!newMustHave) self.currentMustHaves(self.currentMustHaves() - 1);
+	    } else {
+	    	if (newMustHave) self.currentMustHaves(self.currentMustHaves() + 1);
+	    }
+	}
+	
+
+	self.addMustHave = function() {
+		setMustHaveMethod(true, updateMustHave);
     };
 
 	self.removeMustHave = function() {
