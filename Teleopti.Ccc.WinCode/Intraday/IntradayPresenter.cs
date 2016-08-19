@@ -12,17 +12,20 @@ using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters.Account;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
@@ -470,8 +473,8 @@ namespace Teleopti.Ccc.WinCode.Intraday
 		{
 			var adapters = _rtaStateHolder.RtaStateGroups.Select(rtaStateGroup => new AgentStateViewAdapter(rtaStateGroup, model)).ToList();
 
-			adapters.Add(new AgentStateViewAdapter((IRtaStateGroup) new RtaStateGroup("OLAANDASADSSECRETNAME", false, false), model));
-			adapters.Add(new AgentStateViewAdapter((IRtaStateGroup) new RtaStateGroup("OLAANDASADSSECRETNAMETWO", false, false), model));
+			adapters.Add(new AgentStateViewAdapter(new RtaStateGroup("OLAANDASADSSECRETNAME", false, false), model, _rtaStateHolder.RtaStateGroups));
+			adapters.Add(new AgentStateViewAdapter(new RtaStateGroup("OLAANDASADSSECRETNAMETWO", false, false), model, _rtaStateHolder.RtaStateGroups));
 
 			return adapters;
 		}

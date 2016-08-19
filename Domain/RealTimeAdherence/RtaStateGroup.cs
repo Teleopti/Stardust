@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
         private bool _available;
         private bool _defaultStateGroup;
         private string _name;
+        private bool _isLogOutState;
 
         protected RtaStateGroup()
         {
@@ -64,7 +65,13 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
         {
             get { return new List<IRtaState>(_stateCollection.ToList()); }
         }
-		
+
+        public virtual bool IsLogOutState
+        {
+            get { return _isLogOutState; }
+            set { _isLogOutState = value; }
+        }
+
 		public virtual IRtaStateGroup AddState(string stateCode, Guid platformTypeId)
 		{
 			IRtaState state = new RtaState(stateCode, platformTypeId);

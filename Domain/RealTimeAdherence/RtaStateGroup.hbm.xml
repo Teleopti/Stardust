@@ -11,6 +11,7 @@
 		<version name="Version" unsaved-value="null"/>
 		<property name="Name" />
 		<property name="DefaultStateGroup" />
+		<property name="IsLogOutState" />
 		<property name="Available" />
 		<bag name="StateCollection" cascade="all-delete-orphan" inverse="true">
 			<key column="Parent" />
