@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Autofac;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator;
@@ -190,7 +191,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			  builder.RegisterType<ScheduleForecastSkillReadModelRepository>()
 				  .As<IScheduleForecastSkillReadModelRepository>()
 				  .SingleInstance();
-		}
+
+	        builder.RegisterType<RequestStrategySettingsReader>().As<IRequestStrategySettingsReader>().SingleInstance();
+        }
 	}
 
 }

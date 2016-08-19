@@ -251,6 +251,7 @@
     <Compile Include="Repositories\PersonInRoleQuerierTest.cs" />
     <Compile Include="Repositories\QueuedAbsenceRequestRepositoryTest.cs" />
     <Compile Include="Repositories\ProjectionVersionPersisterTest.cs" />
+    <Compile Include="Repositories\RequestStrategySettingsReaderTest.cs" />
     <Compile Include="Repositories\SkillAreaRepositoryTest.cs" />
     <Compile Include="Rta\AgentStateForTest.cs" />
     <Compile Include="Rta\BatchPerformanceTest.cs" />

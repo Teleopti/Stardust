@@ -115,6 +115,7 @@
     <Compile Include="AgentInfo\Requests\FullDayAbsenceRequestPeriodUtil.cs" />
     <Compile Include="AgentInfo\Requests\IBatchShiftTradeRequestStatusChecker.cs" />
     <Compile Include="AgentInfo\Requests\IRequestApprovalServiceFactory.cs" />
+    <Compile Include="AgentInfo\Requests\IRequestStrategySettingsReader.cs" />
     <Compile Include="AgentInfo\Requests\PersonRequestStatus.cs" />
     <Compile Include="AgentInfo\Requests\RequestApprovalServiceFactory.cs" />
     <Compile Include="AgentInfo\Requests\ScheduleDayFilterCriteria.cs" />

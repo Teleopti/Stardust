@@ -415,6 +415,7 @@
     <Compile Include="Repositories\PersonInRoleQuerier.cs" />
     <Compile Include="Repositories\LoadSkillInIntradays.cs" />
     <Compile Include="Repositories\QueuedAbsenceRequestRepository.cs" />
+    <Compile Include="Repositories\RequestStrategySettingsReader.cs" />
     <Compile Include="Repositories\SiteOpenHourRepository.cs" />
     <Compile Include="Repositories\SkillAreaRepository.cs" />
     <Compile Include="Analytics\AnalyticsUnitOfWorkAspect.cs" />
