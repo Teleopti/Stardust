@@ -1,25 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.Infrastructure.Absence;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Messaging.Client;
 
 namespace Teleopti.Ccc.Requests.PerformanceTest
 {
-	[DomainTest, Ignore]
+	[DomainTest]
 	public class MultiAbsenceRequestsTest : ISetup
 	{
 		public IAbsenceRepository AbsenceRepository;
@@ -32,21 +37,44 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 		public IWorkflowControlSetRepository WorkflowControlSetRepository;
 		private IEnumerable<Guid> _personIds;
 		private List<IPersonRequest> _personRequests;
+		private FakeConfigReader _configReader;
+		public FakeEventPublisherWithOverwritingHandlers EventPublisher;
 
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddModule(new CommonModule(configuration));
-			system.UseTestDouble<NewAbsenceRequestHandler>().For<INewAbsenceRequestHandler>();
+			system.UseTestDouble<NewAbsenceRequestUseMultiHandler>().For<INewAbsenceRequestHandler>();
+			system.UseTestDouble<MultiAbsenceRequestsHandler>().For<MultiAbsenceRequestsHandler>();
+			system.UseTestDouble<MultiAbsenceRequestsUpdater>().For<MultiAbsenceRequestsUpdater>();
+			system.UseTestDouble<MultiAbsenceRequestProcessor>().For<IMultiAbsenceRequestProcessor>();
 			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
+			system.UseTestDouble<DefaultScenarioFromRepository>().For<ICurrentScenario>();
 			system.AddService<Database>();
 			system.AddModule(new TenantServerModule(configuration));
-		}
 
+			_configReader = new FakeConfigReader();
+			var conString = ConfigurationManager.ConnectionStrings["Tenancy"].ToString();
+			system.UseTestDouble<FakeEventPublisherWithOverwritingHandlers>().For<IEventPublisher>();
+			_configReader.FakeConnectionString("Tenancy",conString );
+			system.UseTestDouble(_configReader).For<IConfigReader>();
+		}
+		
+
+		[Test]
+		public void ShouldProcessMultipleAbsenceRequests1()
+		{
+			EventPublisher.OverwriteHandler(typeof(NewMultiAbsenceRequestsCreatedEvent), typeof(MultiAbsenceRequestsHandler));
+			_configReader.FakeSetting("NumberOfAbsenceRequestsToBulkProcess", "1");
+			setupRequests();
+			publishRequests();
+		}
 
 		[Test]
 		public void ShouldProcessMultipleAbsenceRequests5()
 		{
+			EventPublisher.OverwriteHandler(typeof(NewMultiAbsenceRequestsCreatedEvent), typeof(MultiAbsenceRequestsHandler));
+			_configReader.FakeSetting("NumberOfAbsenceRequestsToBulkProcess", "5");
 			setupRequests();
 			publishRequests();
 		}
@@ -54,6 +82,8 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 		[Test]
 		public void ShouldProcessMultipleAbsenceRequests10()
 		{
+			EventPublisher.OverwriteHandler(typeof(NewMultiAbsenceRequestsCreatedEvent), typeof(MultiAbsenceRequestsHandler));
+			_configReader.FakeSetting("NumberOfAbsenceRequestsToBulkProcess", "10");
 			setupRequests();
 			publishRequests();
 		}
@@ -61,6 +91,8 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 		[Test]
 		public void ShouldProcessMultipleAbsenceRequests20()
 		{
+			EventPublisher.OverwriteHandler(typeof(NewMultiAbsenceRequestsCreatedEvent), typeof(MultiAbsenceRequestsHandler));
+			_configReader.FakeSetting("NumberOfAbsenceRequestsToBulkProcess", "20");
 			setupRequests();
 			publishRequests();
 		}
@@ -69,7 +101,9 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 		{
 			foreach (var personRequest in _personRequests)
 			{
-				Target.Handle(new NewAbsenceRequestCreatedEvent() { PersonRequestId = personRequest.Id.Value });
+				Target.Handle(new NewAbsenceRequestCreatedEvent() { PersonRequestId = personRequest.Id.Value,
+					LogOnDatasource = "Teleopti WFM" , LogOnBusinessUnitId = new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b") 
+				});
 			}
 		}
 

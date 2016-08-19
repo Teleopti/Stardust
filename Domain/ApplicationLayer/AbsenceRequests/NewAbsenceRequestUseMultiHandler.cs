@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
@@ -22,6 +24,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
 		private readonly IEventPublisher _eventPublisher;
 		private readonly IConfigReader _configReader;
+		private readonly DataSourceState _dataSourceState;
+		private readonly IDataSourceScope _dataSourceScope;
 
 		private readonly IList<LoadDataAction> _loadDataActions;
 		private IPersonRequest _personRequest;
@@ -32,12 +36,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private delegate bool LoadDataAction(NewAbsenceRequestCreatedEvent @event);
 
 		public NewAbsenceRequestUseMultiHandler(IPersonRequestRepository personRequestRepository, IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, 
-			IEventPublisher eventPublisher, IConfigReader configReader)
+			IEventPublisher eventPublisher, IConfigReader configReader, DataSourceState dataSourceState,
+			IDataSourceScope dataSourceScope )
 		{
 			_personRequestRepository = personRequestRepository;
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
 			_eventPublisher = eventPublisher;
 			_configReader = configReader;
+			_dataSourceState = dataSourceState;
+			_dataSourceScope = dataSourceScope;
 
 			_loadDataActions = new List<LoadDataAction>
 			{
@@ -46,41 +53,54 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			};
 		}
 
-		[AsSystem]
+
 		public void Handle(NewAbsenceRequestCreatedEvent @event)
 		{
-			if (_loadDataActions.Any(action => !action.Invoke(@event)))
+			using (_dataSourceScope.OnThisThreadUse(@event.LogOnDatasource))
 			{
-				return;
-			}
-
-			var queuedAbsenceRequest = new QueuedAbsenceRequest()
-			{
-				PersonRequest = _personRequest,
-				Created = _personRequest.CreatedOn.Value,
-				StartDateTime = _personRequest.Request.Period.StartDateTime,
-				EndDateTime = _personRequest.Request.Period.EndDateTime,
-			};
-			_queuedAbsenceRequestRepository.Add(queuedAbsenceRequest);
-			var requestWithOverlappingPeriod = _queuedAbsenceRequestRepository.Find(_personRequest.Request.Period);
-
-			if (requestWithOverlappingPeriod.Count >= int.Parse(_configReader.AppConfig("NumberOfAbsenceRequestsToBulkProcess")))
-			{
-				var Ids = new List<Guid>();
-				foreach (var req in requestWithOverlappingPeriod)
+				// before call we need to set up a person as it is logged on
+				using (var uow =_dataSourceState.Get().Application.CreateAndOpenUnitOfWork())
 				{
-					if (req.PersonRequest.Id != null)
-						Ids.Add(req.PersonRequest.Id.Value);
+					if (_loadDataActions.Any(action => !action.Invoke(@event)))
+					{
+						return;
+					}
 
-					_queuedAbsenceRequestRepository.Remove(req);
+					var queuedAbsenceRequest = new QueuedAbsenceRequest()
+					{
+						PersonRequest = _personRequest,
+						Created = _personRequest.CreatedOn.Value,
+						StartDateTime = _personRequest.Request.Period.StartDateTime,
+						EndDateTime = _personRequest.Request.Period.EndDateTime,
+					};
+					_queuedAbsenceRequestRepository.Add(queuedAbsenceRequest);
+					uow.PersistAll();
+					var requestWithOverlappingPeriod = _queuedAbsenceRequestRepository.Find(_personRequest.Request.Period);
+
+					int numberOfAbsenceRequestsToBulkProcess;
+					int.TryParse(_configReader.AppConfig("NumberOfAbsenceRequestsToBulkProcess"), out numberOfAbsenceRequestsToBulkProcess);
+
+					if (requestWithOverlappingPeriod.Count >= numberOfAbsenceRequestsToBulkProcess)
+					{
+						var Ids = new List<Guid>();
+						foreach (var req in requestWithOverlappingPeriod)
+						{
+							if (req.PersonRequest.Id != null)
+								Ids.Add(req.PersonRequest.Id.Value);
+
+							_queuedAbsenceRequestRepository.Remove(req);
+							uow.PersistAll();
+						}
+						var multiRequestEvent = new NewMultiAbsenceRequestsCreatedEvent()
+						{
+							PersonRequestIds = Ids
+						};
+						_eventPublisher.Publish(multiRequestEvent);
+
+					}
 				}
-				var multiRequestEvent = new NewMultiAbsenceRequestsCreatedEvent()
-				{
-					PersonRequestIds = Ids
-				};
-				_eventPublisher.Publish(multiRequestEvent);
-				
 			}
+
 		}
 
 		private bool checkAbsenceRequest(NewAbsenceRequestCreatedEvent @event)
