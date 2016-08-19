@@ -40,11 +40,13 @@ Background:
 	| Activity        | Phone        |
 	| Phone state     | Pause        |
 	| Name            | Not adhering |
+	| Is Alarm        | true         |
 	| Staffing effect | -1           |
 	And there is a rule with 
 	| Field           | Value        |
 	| Phone state     | Pause        |
 	| Name            | Not adhering |
+	| Is Alarm        | true         |
 	| Staffing effect | -1           |
 
 Scenario: Exclude terminated agents
@@ -52,18 +54,18 @@ Scenario: Exclude terminated agents
 	When I view Real time adherence for teams on site 'Paris'
 	And 'Ashely Andeen' sets his phone state to 'Pause'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
-	Then I should see team 'Red' with 2 employees out of adherence
+	Then I should see team 'Red' with 2 agents in alarm
 	When the time is '2016-01-15 12:00:00'
 	And I view Real time adherence for teams on site 'Paris'
-	Then I should see team 'Red' with 1 employees out of adherence
+	Then I should see team 'Red' with 1 agents in alarm
 
 Scenario: Exclude agents terminated retroactively
 	Given the time is '2016-01-14 09:00:00'
 	When I view Real time adherence for teams on site 'Paris'
 	And 'Ashely Andeen' sets his phone state to 'Pause'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
-	Then I should see team 'Red' with 2 employees out of adherence
+	Then I should see team 'Red' with 2 agents in alarm
 	When 'Pierre Baldi' is updated with
 	| Field         | Value      |
 	| Terminal Date | 2016-01-05 |
-	Then I should see team 'Red' with 1 employees out of adherence
+	Then I should see team 'Red' with 1 agents in alarm

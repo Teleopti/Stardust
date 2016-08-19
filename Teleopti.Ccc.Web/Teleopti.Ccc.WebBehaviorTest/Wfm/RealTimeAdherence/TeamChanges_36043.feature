@@ -47,6 +47,7 @@ Background:
 	| Activity        | Phone        |
 	| Phone state     | Pause        |
 	| Name            | Not adhering |
+	| Is Alarm        | true         |
 	| Staffing effect | -1           |
 
 Scenario: Exclude person changed team
@@ -54,16 +55,16 @@ Scenario: Exclude person changed team
 	When I view Real time adherence for teams on site 'Paris'
 	And 'Ashely Andeen ' sets his phone state to 'Pause'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
-	Then I should see team 'Red' with 2 employees out of adherence
+	Then I should see team 'Red' with 2 agents in alarm
 	When 'Pierre Baldi' changes team to 'Green'
-	Then I should see team 'Red' with 1 employees out of adherence
+	Then I should see team 'Red' with 1 agents in alarm
 
 Scenario: Exclude person changed team over time
 	Given the time is '2016-02-01 09:00:00'
 	When I view Real time adherence for teams on site 'Paris'
 	And 'Ashely Andeen ' sets his phone state to 'Pause'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
-	Then I should see team 'Red' with 2 employees out of adherence
+	Then I should see team 'Red' with 2 agents in alarm
 	When the time is '2016-02-02 09:00:00'
 	And I view Real time adherence for teams on site 'Paris'
-	Then I should see team 'Red' with 1 employees out of adherence
+	Then I should see team 'Red' with 1 agents in alarm
