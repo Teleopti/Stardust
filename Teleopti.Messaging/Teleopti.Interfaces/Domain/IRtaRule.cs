@@ -11,7 +11,7 @@ namespace Teleopti.Interfaces.Domain
 		Out,
 	}
 
-    public interface IRtaRule : IPayload, IAggregateRootWithEvents
+    public interface IRtaRule : IPayload
     {
 	    Description Description { get; set; }
 	    Color DisplayColor { get; set; }
