@@ -17,24 +17,28 @@
     .absolute {
         position: absolute;
     }
-    .message-reply-container-first textarea{
+
+    .message-reply-container-first textarea {
         min-height: 150px;
         width: 50%;
-        margin-bottom:10px;
+        margin-bottom: 10px;
     }
-    .message-reply-container-last textarea{
+
+    .message-reply-container-last textarea {
         min-height: 50px;
         width: 50%;
     }
-	.message-reply-label{
-		min-width:50px;
-	}
+
+    .message-reply-label {
+        min-width: 50px;
+    }
+
     schedule-table .wfm-checkbox-toggle {
         display: none;
     }
 
-    .is-close-day input[type=checkbox]:checked~.wfm-checkbox-toggle:after, .is-close-day input[type=checkbox]:checked~label .wfm-checkbox-toggle:after{
-        content:'X';
+    .is-close-day input[type=checkbox]:checked ~ .wfm-checkbox-toggle:after, .is-close-day input[type=checkbox]:checked ~ label .wfm-checkbox-toggle:after {
+        content: 'X';
     }
 
     .schedule-container {
@@ -157,7 +161,7 @@
         margin: 15px;
 
 
-        .ui-grid-header-cell md-select{
+        .ui-grid-header-cell md-select {
             text-align: left;
             margin-left: 3px !important;
         }
@@ -320,7 +324,7 @@
 
         .arrow-box:after {
             border-color: rgba(136, 183, 213, 0);
-            border-left-color:$teal-100;
+            border-left-color: $teal-100;
             border-width: 10px;
             margin-top: -10px;
         }
@@ -331,7 +335,7 @@
             border-width: 11px;
             margin-top: -11px;
         }
-       
+
         .arrow-box-no-border {
             margin-right: 2px !important;
         }
@@ -346,6 +350,29 @@
         /* show scroll bar outside of grid*/
         .ui-grid-render-container-body .ui-grid-viewport {
             position: absolute;
+        }
+        /* Fixes for layout of the non-pinned container used for the Shift Trade View so that it takes up space appropriately*/
+        [container-id="body"], .ui-grid-render-container-body {
+
+            .ui-grid-header-viewport {
+                width: 100%;
+                background-color: #99d6ff;
+            }
+
+
+            .ui-grid-canvas {
+                width: auto !important;
+            }
+
+
+            .ui-grid-row {
+                width: 100%;
+            }
+
+            .ui-grid-canvas .ui-grid-cell {
+                width: 100% !important;
+                max-width: none !important;
+            }
         }
 
         .ui-grid-row .ui-grid-cell {
@@ -412,7 +439,7 @@
             margin-top: 5px;
             margin-bottom: 5px;
             width: 30px;
-            min-height:22px;
+            min-height: 22px;
         }
 
         .ui-grid-pinned-container-left .ui-grid-top-panel,

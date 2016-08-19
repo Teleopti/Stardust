@@ -285,17 +285,20 @@
 			}
 
 			function setupShiftTradeVisualisationColumn(shiftTradeRequestDateSummary) {
+
 				var minimum = moment(shiftTradeRequestDateSummary.Minimum);
 				var maximum = moment(shiftTradeRequestDateSummary.Maximum);
 				var numberOfDays = maximum.diff(minimum, 'days') + 1;
 
 				return {
+					displayName: 'ShiftTrade',
 					field: 'AgentName',
 					enablePinning: false,
 					enableColumnMenu: false,
 					enableHiding: false,
 					cellTemplate: 'shift-trade-day-template.html',
 					width: numberOfDays * 40,
+					
 					enableSorting: false,
 					enableFiltering: false,
 					isShiftTradeDayColumn: true
@@ -327,7 +330,8 @@
 					return columns.concat([shifTradeVisualisationColumn]);
 				}
 
-				return columns;
+				// since upgrading to ui-grid 3.2.6, require copy of columns array (concat above already does copy)
+				return angular.copy(columns);
 			}
 
 			return service;

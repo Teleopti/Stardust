@@ -7,6 +7,7 @@
 		'ui.grid.autoResize',
 		'ui.grid.selection',
 		'ui.grid.pinning',
+		'ui.grid.saveState',
 		'pascalprecht.translate',
 		'wfm.notice',
 		'currentUserInfoService',

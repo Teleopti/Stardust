@@ -8,13 +8,8 @@
 			var columns = [];
 
 			var service = {
-				columnDefinitions: columnDefinitions,
-				categories: getCategories
-			}
-
-			function getCategories() {
-
-				return null;
+				columnDefinitions: columnDefinitions
+				
 			}
 
 			function setupColumns() {
@@ -106,11 +101,13 @@
 
 			function columnDefinitions() {
 
-				if (columns.length == 0) {
+				if (columns.length === 0) {
 					setupColumns();
 				}
 
-				return columns;
+				// since upgrading to ui-grid 3.2.6, require copy of columns array
+				return angular.copy(columns);
+
 			}
 
 			return service;

@@ -1390,6 +1390,7 @@
     <Content Include="WFM\js\requests\html\requests-reply-message.html" />
     <Content Include="WFM\js\requests\ngEnter.js" />
     <Content Include="WFM\js\requests\request-command-parameters.service.js" />
+    <Content Include="WFM\js\requests\request-grid-state.service.js" />
     <Content Include="WFM\js\requests\requests-absence-text-grid-configuration.service.js" />
     <Content Include="WFM\js\requests\requests-commands-pane.directive.js" />
     <Content Include="WFM\js\requests\requests-commands-pane.directive.spec.js" />
