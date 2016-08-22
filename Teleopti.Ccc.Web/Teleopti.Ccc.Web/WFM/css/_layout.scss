@@ -146,6 +146,7 @@ wfm-notice{
 	}
 }
 
+
 .nav-item-wrap:focus > .sidenav-header{
   background: $gray012;
 }
@@ -160,4 +161,7 @@ md-select-menu md-option:focus:not([disabled]):not([selected]){
 
 .hidden-visibility {
 	visibility: hidden;
-} 
+}
+md-progress-circular{
+transform: scale(0.4)!important;
+}
