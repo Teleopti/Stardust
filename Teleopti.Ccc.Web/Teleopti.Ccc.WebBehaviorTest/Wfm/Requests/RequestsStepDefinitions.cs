@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 		{
 			Browser.Interactions.ClickUsingJQuery(".test-status-selector");
 			Browser.Interactions.ClickUsingJQuery("md-select-menu md-option:contains(\'" + status + "\')");
+			Browser.Interactions.AssertExists (".md-click-catcher");
 			Browser.Interactions.ClickUsingJQuery(".md-click-catcher");
 		}
 
