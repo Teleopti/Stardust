@@ -56,7 +56,7 @@ RTA_MonitorBySkillArea_39337 = true
 RTA_RuleMappingOptimization_39812 = true
 RTA_BatchConnectionOptimization_40116 = true
 RTA_BatchQueryOptimization_40169 = true
-RTA_RemoveSiteTeamOutOfAdherenceReadModels_40069 = DEV
+RTA_RemoveSiteTeamOutOfAdherenceReadModels_40069 = RC
 
 WfmPermission_ReplaceOldPermission_34671 = true
 
