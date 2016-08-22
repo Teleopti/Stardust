@@ -1,5 +1,3 @@
-using System;
-
 namespace Teleopti.Interfaces.Domain
 {
     /// <summary>
@@ -7,11 +5,6 @@ namespace Teleopti.Interfaces.Domain
     /// </summary>
     public interface IScheduleOptimizationService
     {
-        /// <summary>
-        /// Occurs when [report progress].
-        /// </summary>
-        event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
-
         /// <summary>
         /// Executes this service.
         /// </summary>
