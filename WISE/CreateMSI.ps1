@@ -222,5 +222,9 @@ function global:CopyFilesToOutput {
     #Create lastchangeset.txt file for Output directory
 		
 	New-Item $OutDir\lastchangeset.txt -type file -force -value "$BuildVCSNumber" | Out-Null
+	
+	#Test
+	$test = $TCParams['build.number']
+	New-Item $OutDir\lastchangeset1.txt -type file -force -value "$test" | Out-Null
 		
 }
