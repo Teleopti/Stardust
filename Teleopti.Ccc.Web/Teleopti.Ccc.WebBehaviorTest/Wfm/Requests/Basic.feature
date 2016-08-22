@@ -201,6 +201,7 @@ Scenario: Can view different page
 	And I select to view the last page
 	Then I see the request from 'John Smith' in the list	
 
+@ignore
 @OnlyRunIfEnabled('Wfm_Requests_ApproveDeny_36297')
 Scenario: Can approve requests
 	Given 'Ashley Andeen' has an existing text request with
