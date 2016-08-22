@@ -87,6 +87,7 @@
 					} else {
 						RolesFunctionsService.unselectFunction(functionNode.FunctionId, $scope.selectedRole).then(function () {
 							functionNode.selected = false;
+							deselectToggleAllSwitch($scope.allToggleElement);
 							traverseNodes(functionNode.ChildFunctions);
 							increaseParentNumberOfSelectedNodes(functionNode);
 
@@ -107,9 +108,9 @@
 				var functionNode = $scope.tempActiveNode.$modelValue;
 				RolesFunctionsService.unselectFunction(functionNode.FunctionId, $scope.selectedRole).then(function () {
 					functionNode.selected = false;
+					deselectToggleAllSwitch($scope.allToggleElement);
 					traverseNodes(functionNode.ChildFunctions);
 					increaseParentNumberOfSelectedNodes(functionNode);
-
 				});
 
 				$scope.multiDeselectModal = false;
@@ -133,6 +134,11 @@
 
 					NoticeService.info("All functions are enabled.", 5000, true);
 			};
+
+			var deselectToggleAllSwitch = function (state) {
+				$scope.allToggleElement.is = false;
+				RolesFunctionsService.unselectAllToggleSwitch($scope.selectedRole);
+			}
 
 		    $scope.isAllNode = function(node) {
 		        return node.FunctionCode === 'All';

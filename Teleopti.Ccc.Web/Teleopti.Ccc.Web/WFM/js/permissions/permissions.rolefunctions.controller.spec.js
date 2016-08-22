@@ -26,6 +26,11 @@ describe('FunctionController', function() {
             var deferred = $q.defer();
             deferred.resolve();
             return deferred.promise;
+        },
+        unselectAllToggleSwitch: function(selectedRole, Type, Id) {
+            var deferred = $q.defer();
+            deferred.resolve();
+            return deferred.promise;
         }
     };
     var mockRoles = {

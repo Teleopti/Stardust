@@ -52,8 +52,8 @@
 				} else {
 					refreshCallback();
 				}
-				
-				
+
+
 				return deferred.promise;
 			};
 
@@ -87,6 +87,15 @@
 			rolesFunctionsService.unselectAllFunctions = function (selectedRole) {
 				var functions = [];
 				helperUnselectAllFunctions(rolesFunctionsService.functionsDisplayed, functions);
+				PermissionsService.deleteAllFunction.query({
+					Id: selectedRole.Id,
+					FunctionId: rolesFunctionsService.functionsDisplayed[0].FunctionId,
+					Functions: functions
+				});
+			};
+
+			rolesFunctionsService.unselectAllToggleSwitch = function (selectedRole) {
+				var functions = [];
 				PermissionsService.deleteAllFunction.query({
 					Id: selectedRole.Id,
 					FunctionId: rolesFunctionsService.functionsDisplayed[0].FunctionId,
