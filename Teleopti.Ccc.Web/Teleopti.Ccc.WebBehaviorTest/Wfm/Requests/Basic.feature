@@ -215,6 +215,7 @@ Scenario: Can approve requests
 	And I select to load requests in status 'Approved'
 	Then I should see request for 'Ashley Andeen' approved
 
+@ignore
 @OnlyRunIfEnabled('Wfm_Requests_ApproveDeny_36297')
 Scenario: Can approve waitlisted requests
 	Given 'John Smith' has an open workflow control set with absence request waitlisting enabled
@@ -230,6 +231,7 @@ Scenario: Can approve waitlisted requests
 	And I select to load requests in status 'Approved'
 	Then I should see request for 'John Smith' approved
 
+@ignore
 @OnlyRunIfEnabled('Wfm_Requests_ApproveDeny_36297')
 Scenario: Can deny waitlisted requests
 	Given 'John Smith' has an open workflow control set with absence request waitlisting enabled
@@ -381,6 +383,7 @@ Scenario: Can reply pending request
 	Then I reply message 'test'
 	And I should see replied messge 'test' in message column
 
+@ignore
 @OnlyRunIfEnabled('Wfm_Requests_Reply_Message_39629')
 Scenario: Can reply and appove pending request
 	Given 'Ashley Andeen' has an existing text request with
