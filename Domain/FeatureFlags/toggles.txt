@@ -1,4 +1,5 @@
-﻿# Note: If you change this file in production, app pool will recycle!
+﻿
+# Note: If you change this file in production, app pool will recycle!
 #
 # How to...
 #
@@ -49,9 +50,9 @@ RTA_AlarmContext_29357 = true
 RTA_TotalOutOfAdherenceTime_38702 = true
 RTA_PauseButton_39144 = true
 RTA_MonitorBySkills_39081 = true
-RTA_RecentOutOfAdherences_39145 = RC
+RTA_RecentOutOfAdherences_39145 = true
 RTA_Optimize_39667 = true
-RTA_MonitorBySkillArea_39337 = RC
+RTA_MonitorBySkillArea_39337 = true
 RTA_RuleMappingOptimization_39812 = true
 RTA_BatchConnectionOptimization_40116 = true
 RTA_BatchQueryOptimization_40169 = true
@@ -76,8 +77,8 @@ WfmTeamSchedule_ShowWeeklyRestTimeWarning_39800 = RC
 WfmTeamSchedule_ShowDayOffWarning_39801 = RC
 WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938 = RC
 
-WfmTeamSchedule_ShowShiftCategory_39796 = RC
-WfmTeamSchedule_ModifyShiftCategory_39797 = RC
+WfmTeamSchedule_ShowShiftCategory_39796 = true
+WfmTeamSchedule_ModifyShiftCategory_39797 = true
 WfmTeamSchedule_MakeNewMyTeamDefault_39744 = RC
 WfmTeamSchedule_WeekView_39870 = RC
 
@@ -100,11 +101,11 @@ Wfm_Requests_ShiftTrade_37751 = true
 Wfm_Requests_ShiftTrade_More_Relevant_Information_38492 = true
 Wfm_Requests_PrepareForRelease_38771 = true
 Wfm_Requests_ApproveDeny_ShiftTrade_38494 = true
-Wfm_Requests_Default_Status_Filter_39472 = RC
-Wfm_Requests_Show_Pending_Reasons_39473 = RC
+Wfm_Requests_Default_Status_Filter_39472 = true
+Wfm_Requests_Show_Pending_Reasons_39473 = true
 Wfm_Requests_Approve_Based_On_Budget_Allotment_39626 = RC
-Wfm_Requests_Reply_Message_39629 = RC
-Wfm_Requests_Show_Personal_Account_39628 = RC
+Wfm_Requests_Reply_Message_39629 = true
+Wfm_Requests_Show_Personal_Account_39628 = true
 Wfm_Requests_Approve_Based_On_Intraday_39868 = RC
 Wfm_Requests_Site_Open_Hours_39936 = RC
 Wfm_Requests_Waitlist_Process_Order_39869 = RC
