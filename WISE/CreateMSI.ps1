@@ -7,10 +7,11 @@ properties {
     #$source_dir = "$base_dir\src"
     
 	#Reading all TC Parametes, This is how you call them: $TCParams['build.number']
-	$TCParams = ConvertFrom-StringData (Get-Content $env:TEAMCITY_BUILD_PROPERTIES_FILE -Raw);
+	#$TCParams = ConvertFrom-StringData (Get-Content $env:TEAMCITY_BUILD_PROPERTIES_FILE -Raw);
 	
     #TC Properties
-    $BuildVCSNumber = $TCParams['dep.TeleoptiWFM_WfmMain.build_vcs_number.TeleoptiWFM_TeleoptiWFM']
+    #$BuildVCSNumber = $TCParams['dep.TeleoptiWFM_WfmMain.build_vcs_number.TeleoptiWFM_TeleoptiWFM']
+	$BuildVCSNumber = "$env:HgChangeset"
 	$DEPENDENCIESSRC = "$env:DEPENDENCIESSRC"
     $MountKDirectory = "$env:MountKDirectory"
     $ProductVersion = "$env:CccVersion"
@@ -220,11 +221,7 @@ function global:CopyFilesToOutput {
 	Copy-Item -Path "$MountKDirectory\PreReqsCheck\CheckPreRequisites.exe.config" -Destination "$OutDir\CheckPreRequisites.exe.config" -Force -ErrorAction stop
 
     #Create lastchangeset.txt file for Output directory
-		
 	New-Item $OutDir\lastchangeset.txt -type file -force -value "$BuildVCSNumber" | Out-Null
-	
-	#Test
-	$test = $TCParams['build.number']
-	New-Item $OutDir\lastchangeset1.txt -type file -force -value "$test" | Out-Null
+
 		
 }
