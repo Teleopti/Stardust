@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 			int validToId, int businessUnitId, Guid businessUnitCode, bool toBeDeleted, int timeZoneId)
 			: this(
 				person, datasource, personId, validFrom, validTo, validFromId, validToId, businessUnitId, businessUnitCode,
-				toBeDeleted, timeZoneId, null)
+				toBeDeleted, timeZoneId, person.PersonPeriodCollection.FirstOrDefault()?.Id)
 		{ }
 
 		public Person(IPerson person, IDatasourceData datasource, int personId, DateTime validFrom, DateTime validTo, int validFromId,
