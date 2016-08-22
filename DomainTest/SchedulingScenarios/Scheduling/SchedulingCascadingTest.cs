@@ -35,16 +35,22 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
 			var earlyInterval = new TimePeriod(7, 45, 8, 0); 
 			var lateInterval = new TimePeriod(15, 45, 16, 0);
-			var date = new DateOnly(2016, 08, 16); // DateOnly.Today;  <- TODO: REVIEW - using DateOnly.Today was causing tests to fail
+			var date = DateOnly.Today;
 			var activity = ActivityRepository.Has("_");
 			var skillA = SkillRepository.Has("A", activity, 1);
 			var skillB = SkillRepository.Has("B", activity, 2);
 			var scenario = ScenarioRepository.Has("default");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(earlyInterval, TimeSpan.FromMinutes(15)), new TimePeriodWithSegment(lateInterval, TimeSpan.FromMinutes(15)), shiftCategory));
+
+			var contract = new Contract("_")
+			{
+				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(1), TimeSpan.FromHours(168), TimeSpan.FromHours(1), TimeSpan.FromHours(1))
+			};
+
 			for (var i = 0; i < numberOfAgents; i++)
 			{
-				PersonRepository.Has(new Contract("_"), new SchedulePeriod(date, SchedulePeriodType.Day, 1), ruleSet, skillA, skillB);
+				PersonRepository.Has(contract, new SchedulePeriod(date, SchedulePeriodType.Day, 1), ruleSet, skillA, skillB);
 			}
 			SkillDayRepository.Has(new []
 							 {
