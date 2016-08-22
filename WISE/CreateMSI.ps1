@@ -6,8 +6,11 @@ properties {
     $base_dir = resolve-path .\
     #$source_dir = "$base_dir\src"
     
+	#Reading all TC Parametes, This is how you call them: $TCParams['build.number']
+	$TCParams = ConvertFrom-StringData (Get-Content $env:TEAMCITY_BUILD_PROPERTIES_FILE -Raw);
+	
     #TC Properties
-    $BuildVCSNumber = "%dep.TeleoptiWFM_WfmMain.build.vcs.number.TeleoptiWFM_TeleoptiWFM%"
+    $BuildVCSNumber = $TCParams['dep.TeleoptiWFM_WfmMain.build_vcs_number.TeleoptiWFM_TeleoptiWFM']
 	$DEPENDENCIESSRC = "$env:DEPENDENCIESSRC"
     $MountKDirectory = "$env:MountKDirectory"
     $ProductVersion = "$env:CccVersion"
@@ -22,6 +25,7 @@ properties {
 	$OutputPath = "$MountKDirectory\SdkDocOutput"
     $SdkHostPath = "$SourceDir\SDK\bin"
     $SdkFile = "$MountKDirectory\Teamcity\SdkDoc\docSdkx64.shfbproj" 
+	
 }
 
 Set-ExecutionPolicy bypass -force
@@ -216,28 +220,7 @@ function global:CopyFilesToOutput {
 	Copy-Item -Path "$MountKDirectory\PreReqsCheck\CheckPreRequisites.exe.config" -Destination "$OutDir\CheckPreRequisites.exe.config" -Force -ErrorAction stop
 
     #Create lastchangeset.txt file for Output directory
-		# Testing
-		$TCVariable1 = "$env:dep.TeleoptiWFM_WfmMain.build.vcs.number.TeleoptiWFM_TeleoptiWFM"
-		$Message = "Variable: " + $TCVariable1
-		write-host $( '##teamcity[message text=''{0}'']' -f $Message ) 
-
-		$TCVariable2 = "$env:dep.TeleoptiWFM_WfmMain.build_vcs_number.TeleoptiWFM_TeleoptiWFM"
-		$Message = "Variable: " + $TCVariable2
-		write-host $( '##teamcity[message text=''{0}'']' -f $Message ) 
-
-		$TCVariable3 = "$env:build_vcs_number"
-		$Message = "Variable: " + $TCVariable3
-		write-host $( '##teamcity[message text=''{0}'']' -f $Message ) 
-
-		$TCVariable4 = "$env:dep_TeleoptiWFM_WfmMain_build_vcs_number_TeleoptiWFM_TeleoptiWFM"
-		$Message = "Variable: " + $TCVariable4
-		write-host $( '##teamcity[message text=''{0}'']' -f $Message ) 
 		
-		New-Item $OutDir\lastchangeset.txt -type file -force -value "$BuildVCSNumber" | Out-Null
+	New-Item $OutDir\lastchangeset.txt -type file -force -value "$BuildVCSNumber" | Out-Null
 		
-		New-Item $OutDir\lastchangeset1.txt -type file -force -value "$TCVariable1" | Out-Null
-		New-Item $OutDir\lastchangeset2.txt -type file -force -value "$TCVariable2" | Out-Null
-		New-Item $OutDir\lastchangeset3.txt -type file -force -value "$TCVariable3" | Out-Null
-		New-Item $OutDir\lastchangeset4.txt -type file -force -value "$TCVariable4" | Out-Null
-
 }
