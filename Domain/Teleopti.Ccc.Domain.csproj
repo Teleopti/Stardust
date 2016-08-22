@@ -208,6 +208,7 @@
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IMappingReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\MappingReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\InputInfo.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\LicensedActivityChangeChecker.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\SkillViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeUpdaterHangfire.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradePendingReasonsService.cs" />

@@ -1,8 +1,11 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.Rta.Persisters;
@@ -20,6 +23,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
+
+
 			builder.RegisterType<Rta>().SingleInstance().ApplyAspects();
 			builder.RegisterType<RtaInitializor>().SingleInstance();
 			builder.RegisterType<TenantsInitializedInRta>().SingleInstance();
@@ -94,13 +99,24 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<BelongsToDateDecorator>().As<IRtaEventDecorator>().SingleInstance();
 			builder.RegisterType<CurrentBelongsToDate>().SingleInstance();
 			builder.RegisterType<AppliedAdherence>().SingleInstance();
-			
+
 			builder.RegisterType<ProperAlarm>().SingleInstance();
 
 			builder.RegisterType<SiteViewModelBuilder>().SingleInstance();
 			builder.RegisterType<TeamViewModelBuilder>().SingleInstance();
 			builder.RegisterType<NumberOfAgentsInSiteReader>().As<INumberOfAgentsInSiteReader>().SingleInstance();
 			builder.RegisterType<NumberOfAgentsInTeamReader>().As<INumberOfAgentsInTeamReader>().SingleInstance();
+
+			builder.RegisterType<ActivityChangeChecker>().SingleInstance();
+			builder.RegisterType<LicensedActivityChangeChecker>().SingleInstance();
+			builder.RegisterType<UnlicensedActivityChangeChecker>().SingleInstance();
+			builder.Register<Func<ILicenseActivatorProvider, LicensedActivityChangeChecker, UnlicensedActivityChangeChecker, IActivityChangeChecker>>(c =>
+				(license, licensed, unlicensed) => hasRtaLicense(license) ? (IActivityChangeChecker) licensed : unlicensed);
+		}
+
+		private static bool hasRtaLicense(ILicenseActivatorProvider license)
+		{
+			return license.Current().EnabledLicenseOptionPaths.Contains(DefinedLicenseOptionPaths.TeleoptiCccRealTimeAdherence);
 		}
 	}
 }
