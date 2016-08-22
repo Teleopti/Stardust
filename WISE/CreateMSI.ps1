@@ -2,7 +2,7 @@
 
 
 properties {
-	#$MSBuildPath = "C:\Program Files (x86)\MSBuild\12.0\bin\amd64\MSBuild.exe"
+	#$MSBuildPath = "C:\Program Files (x86)\MSBuild\14.0\bin\amd64\MSBuild.exe"
     $base_dir = resolve-path .\
     #$source_dir = "$base_dir\src"
     
@@ -107,7 +107,7 @@ task PostReq -depends CompileWse, CompileWsi, ProductVersion -description "Tasks
 task CHM-SDK-File -depends CompileWse, CompileWsi -description "Create chm sdk file" {
 
     #Add Msbuild to env path temporary
-    $env:Path = $env:Path + ";C:\Program Files (x86)\MSBuild\12.0\bin\amd64"
+    $env:Path = $env:Path + ";C:\Program Files (x86)\MSBuild\14.0\bin\amd64"
     
     #Compile docSdkx64.shfbproj
     exec { msbuild $SdkFile /p:WorkingDirectory=$env:MountKDirectory /p:SdkHostPath=$SdkHostPath /p:OutputPath=$OutputPath }
