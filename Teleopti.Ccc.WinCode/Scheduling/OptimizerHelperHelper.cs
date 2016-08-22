@@ -16,13 +16,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		public void ScheduleBlankSpots(
 			IEnumerable<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
 			IScheduleService scheduleService,
-			IComponentContext container,
 			ISchedulePartModifyAndRollbackService rollbackService,
-			ISchedulingResultStateHolder schedulingResultStateHolder)
+			ISchedulingResultStateHolder schedulingResultStateHolder,
+			IEffectiveRestrictionCreator effectiveRestrictionCreator,
+			IOptimizationPreferences optimizerPreferences,
+			IResourceOptimizationHelper resourceOptimizationHelper)
 		{
-
-			var effectiveRestrictionCreator = container.Resolve<IEffectiveRestrictionCreator>();
-			var optimizerPreferences = container.Resolve<IOptimizationPreferences>();
 			var schedulingOptionsSynchronizer = new SchedulingOptionsCreator();
 			var schedulingOptions = schedulingOptionsSynchronizer.CreateSchedulingOptions(optimizerPreferences);
 
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					{
 						var effectiveRestriction =
 							effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDayPro.DaySchedulePart(), schedulingOptions);
-						var resourceCalculateDelayer = new ResourceCalculateDelayer(container.Resolve<IResourceOptimizationHelper>(), 1, schedulingOptions.ConsiderShortBreaks, schedulingResultStateHolder);
+						var resourceCalculateDelayer = new ResourceCalculateDelayer(resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, schedulingResultStateHolder);
 
 						result = scheduleService.SchedulePersonOnDay(scheduleDayPro.DaySchedulePart(), schedulingOptions, effectiveRestriction, resourceCalculateDelayer, rollbackService);
 					}
@@ -59,17 +58,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			return dataExtractorProvider.CreatePersonalSkillDataExtractor(scheduleMatrix, advancedPreferences);
 		}
 
-		public void SetConsiderShortBreaks(IEnumerable<IPerson> persons, DateOnlyPeriod period, IReschedulingPreferences options, IComponentContext container)
+		public void SetConsiderShortBreaks(IEnumerable<IPerson> persons, DateOnlyPeriod period, IReschedulingPreferences options, IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak)
 		{
-			var ruleSetBagsOfGroupOfPeopleCanHaveShortBreak =
-				container.Resolve<IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak>();
 			options.ConsiderShortBreaks = ruleSetBagsOfGroupOfPeopleCanHaveShortBreak.CanHaveShortBreak(persons, period);
 		}
 
-		public void SetConsiderShortBreaks(IEnumerable<IPerson> persons, DateOnlyPeriod period, ISchedulingOptions options, IComponentContext container)
+		public void SetConsiderShortBreaks(IEnumerable<IPerson> persons, DateOnlyPeriod period, ISchedulingOptions options, IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak)
 		{
-			var ruleSetBagsOfGroupOfPeopleCanHaveShortBreak =
-				container.Resolve<IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak>();
 			options.ConsiderShortBreaks = ruleSetBagsOfGroupOfPeopleCanHaveShortBreak.CanHaveShortBreak(persons, period);
 		}
 

@@ -3577,7 +3577,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 					ISchedulingOptions options = new SchedulingOptions();
 					optimizerHelper.SetConsiderShortBreaks(SchedulerState.SchedulingResultState.PersonsInOrganization,
-						SchedulerState.RequestedPeriod.DateOnlyPeriod, options, _container);
+						SchedulerState.RequestedPeriod.DateOnlyPeriod, options, _container.Resolve<IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak>());
 					SchedulerState.ConsiderShortBreaks = options.ConsiderShortBreaks;
 				}
 				else

@@ -261,7 +261,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IList<IPerson> selectedPersons =
 				_container.Resolve<IPersonListExtractorFromScheduleParts>().ExtractPersons(selectedDays);
 
-			_optimizerHelper.SetConsiderShortBreaks(selectedPersons, selectedPeriod, optimizerPreferences.Rescheduling, _container);
+			_optimizerHelper.SetConsiderShortBreaks(selectedPersons, selectedPeriod, optimizerPreferences.Rescheduling, _container.Resolve<IRuleSetBagsOfGroupOfPeopleCanHaveShortBreak>());
 
 			var continuedStep = false;
 
@@ -575,7 +575,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var scheduleService = _container.Resolve<IScheduleService>();
 
 			// schedule those are the white spots after back to legal state
-			_optimizerHelper.ScheduleBlankSpots(matrixContainerList, scheduleService, _container, rollbackService, _stateHolder());
+			_optimizerHelper.ScheduleBlankSpots(matrixContainerList, scheduleService, rollbackService, _stateHolder(), 
+				_container.Resolve<IEffectiveRestrictionCreator>(), 
+				_container.Resolve<IOptimizationPreferences>(), 
+				_container.Resolve<IResourceOptimizationHelper>());
 
 
 			bool notFullyScheduledMatrixFound = false;
