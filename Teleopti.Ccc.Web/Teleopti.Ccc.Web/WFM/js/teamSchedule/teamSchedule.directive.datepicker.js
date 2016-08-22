@@ -9,6 +9,7 @@
 			scope: {
 				selectedDate: '=',
 				step: '@?',
+				isCalendarOpened: '=?status',
 				onDateChange: '&'
 			},
 			controller: ['$timeout', teamScheduleDatePickerCtrl],

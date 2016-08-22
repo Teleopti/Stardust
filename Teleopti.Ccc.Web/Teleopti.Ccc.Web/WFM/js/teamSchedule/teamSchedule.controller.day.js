@@ -78,6 +78,7 @@
 		vm.validateWarningToggle = false;
 		vm.lastCommandTrackId = "";
 		vm.permissionsAndTogglesLoaded = false;
+		vm.showDatePicker = false;
 
 		function keyword(){
 			if ($stateParams.site && $stateParams.team)

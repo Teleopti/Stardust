@@ -7,7 +7,7 @@
 	</div>
 </div>
 
-<div class="team-schedule panel wfm-block material-depth-1">
+<div class="team-schedule panel wfm-block material-depth-1" ng-click="vm.showDatePicker && (vm.showDatePicker = false)">
 	<div class="teamschedule-header">
 		<div class="leftside-part">
 			<span class="people-search-container">
@@ -15,7 +15,7 @@
 			</span>
 
 			<span class="datepicker-container">
-				<team-schedule-datepicker selected-date="vm.scheduleDate" on-date-change="vm.onScheduleDateChanged()"></team-schedule-datepicker>
+				<team-schedule-datepicker selected-date="vm.scheduleDate" status="vm.showDatePicker" on-date-change="vm.onScheduleDateChanged()"></team-schedule-datepicker>
 			</span>
 
 			<view-changer ng-if="vm.toggles.WeekViewEnabled" selected-date="vm.scheduleDate" keyword="vm.searchOptions.keyword"></view-changer>
