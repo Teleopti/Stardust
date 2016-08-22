@@ -133,6 +133,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 		}
 
+		//TODO: move to ctor dep
 		public IWorkShiftBackToLegalStateServicePro CreateWorkShiftBackToLegalStateServicePro(IWorkShiftMinMaxCalculator workShiftMinMaxCalculator,
 			IDailySkillForecastAndScheduledValueCalculator dailySkillForecastAndScheduledValueCalculator,
 			SchedulingStateHolderAllSkillExtractor allSkillExtractor,

@@ -352,6 +352,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<ScheduleOptimization>().As<IScheduleOptimization>().InstancePerLifetimeScope().ApplyAspects();
 				builder.RegisterType<DayOffOptimizationDesktopClassic>().As<IDayOffOptimizationDesktop>().InstancePerLifetimeScope();
 			}
+			builder.RegisterType<OptimizerHelperHelper>().SingleInstance();
+			builder.RegisterType<DaysOffBackToLegalState>().InstancePerLifetimeScope();
 			builder.RegisterType<FullScheduling>().InstancePerLifetimeScope().ApplyAspects(); //should be singleinstance but not yet possible
 			builder.RegisterType<IntradayOptimization>().InstancePerLifetimeScope();
 			builder.RegisterType<OptimizationResult>().InstancePerLifetimeScope().ApplyAspects();

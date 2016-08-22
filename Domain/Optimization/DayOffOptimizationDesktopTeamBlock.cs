@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
@@ -21,7 +23,36 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IResourceOptimizationHelper resourceOptimizationHelper,
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
 			ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService,
-			Func<ISchedulingResultStateHolder> schedulingResultStateHolder)
+			Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
+						IMatrixListFactory matrixListFactory,
+								IOptimizerHelperHelper optimizerHelperHelper,
+								Func<ISchedulerStateHolder> schedulerStateHolder,
+								DaysOffBackToLegalState daysOffBackToLegalState,
+								OptimizerHelperHelper optimizerHelper,
+								Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
+								IWorkShiftMinMaxCalculator workShiftMinMaxCalculator,
+								IDailySkillForecastAndScheduledValueCalculator dailySkillForecastAndScheduledValueCalculator,
+								SchedulingStateHolderAllSkillExtractor schedulingStateHolderAllSkillExtractor,
+								IWorkShiftLegalStateDayIndexCalculator workShiftLegalStateDayIndexCalculator,
+								IDeleteSchedulePartService deleteSchedulePartService,
+								IScheduleService scheduleService,
+								IEffectiveRestrictionCreator effectiveRestrictionCreator,
+								IScheduleDayEquator scheduleDayEquator) :
+			base(matrixListFactory,
+								optimizerHelperHelper,
+								schedulerStateHolder,
+								daysOffBackToLegalState,
+								optimizerHelper,
+								resourceOptimizationHelper,
+								scheduleDayChangeCallback,
+								workShiftMinMaxCalculator,
+								dailySkillForecastAndScheduledValueCalculator,
+								schedulingStateHolderAllSkillExtractor,
+								workShiftLegalStateDayIndexCalculator,
+								deleteSchedulePartService,
+								scheduleService,
+								effectiveRestrictionCreator,
+								scheduleDayEquator)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
