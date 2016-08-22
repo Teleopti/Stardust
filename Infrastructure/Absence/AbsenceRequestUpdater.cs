@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				}
 
 				var approvedPersonAbsence = requestApprovalServiceScheduler.GetApprovedPersonAbsence();
-				approvedPersonAbsence.IntradayAbsence(personRequest.Person, new TrackedCommandInfo
+				approvedPersonAbsence?.IntradayAbsence(personRequest.Person,new TrackedCommandInfo
 				{
 					OperatedPersonId = personRequest.Person.Id.GetValueOrDefault(),
 					TrackId = Guid.NewGuid()
