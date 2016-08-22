@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			const int numberOfAgents = 100;
 			var earlyInterval = new TimePeriod(7, 45, 8, 0);
 			var lateInterval = new TimePeriod(15, 45, 16, 0);
-			var date = DateOnly.Today;
+			var date = new DateOnly(2016, 08, 16); // DateOnly.Today;  <- TODO: REVIEW - using DateOnly.Today was causing tests to fail
 			var activity = new Activity("_").WithId();
 			var scenario = new Scenario("_");
 			var skillA = new Skill("A", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			const int numberOfAgents = 100;
 			var earlyInterval = new TimePeriod(7, 45, 8, 0);
 			var lateInterval = new TimePeriod(15, 45, 16, 0);
-			var date = DateOnly.Today;
+			var date = new DateOnly(2016, 08, 16); // DateOnly.Today;  <- TODO: REVIEW - using DateOnly.Today was causing tests to fail
 			var activity = new Activity("_").WithId();
 			var scenario = new Scenario("_");
 			var skillA = new Skill("A", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[Test]
 		public void ShouldShovelWhenSchedulingHasBeenDone()
 		{
-			var date = DateOnly.Today;
+			var date = new DateOnly(2016, 08, 16); // DateOnly.Today;  <- TODO: REVIEW - using DateOnly.Today was causing tests to fail
 			var activity = new Activity("_").WithId();
 			var scenario = new Scenario("_");
 			var skillA = new Skill("A", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
