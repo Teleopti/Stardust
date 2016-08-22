@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
@@ -24,8 +25,9 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         private INewBusinessRuleCollection businessRules;
         private IScheduleDayChangeCallback scheduleDayChangeCallback;
         private IGlobalSettingDataRepository globalSettingDataRepository;
+		private FakePersonAbsenceAccountRepository _personAbsenceAccountRepository;
 
-        [SetUp]
+		[SetUp]
         public void Setup()
         {
             mocks = new MockRepository();
@@ -35,8 +37,9 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             businessRules = mocks.DynamicMock<INewBusinessRuleCollection>();
             scheduleDayChangeCallback = mocks.DynamicMock<IScheduleDayChangeCallback>();
             globalSettingDataRepository = mocks.StrictMock<IGlobalSettingDataRepository>();
+			_personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 
-            target = new RequestApprovalServiceScheduler(scheduleDictionary, scenario, swapAndModifyService, businessRules, scheduleDayChangeCallback, globalSettingDataRepository);
+			target = new RequestApprovalServiceScheduler(scheduleDictionary, scenario, swapAndModifyService, businessRules, scheduleDayChangeCallback, globalSettingDataRepository, _personAbsenceAccountRepository);
         }
 
         [Test]
@@ -79,9 +82,9 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
                     Rhino.Mocks.Constraints.Is.Matching<IScheduleData>(p => p.Scenario == scenario &&
                                                                             p.Person == person &&
                                                                             p.Period == period));
-                Expect.Call(scheduleDictionary.Modify(ScheduleModifier.Request, day, businessRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance))).IgnoreArguments().Return(
+                Expect.Call(scheduleDictionary.Modify(ScheduleModifier.Request, new [] { day }, businessRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance))).IgnoreArguments().Return(
                     ruleResponses);
-                Expect.Call(scheduleDictionary.Modify(ScheduleModifier.Request, day, businessRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance))).IgnoreArguments().Return(
+                Expect.Call(scheduleDictionary.Modify(ScheduleModifier.Request, new[] { day }, businessRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance))).IgnoreArguments().Return(
                     emptyRuleResponse);
             }
             using (mocks.Playback())

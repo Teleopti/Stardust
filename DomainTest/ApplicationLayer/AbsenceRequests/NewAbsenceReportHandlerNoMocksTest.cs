@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			var requestFactory =
 				new RequestFactory(new SwapAndModifyService(new SwapService(), new DoNothingScheduleDayChangeCallBack()),
-					new PersonRequestAuthorizationCheckerForTest(), new FakeGlobalSettingDataRepository());
+					new PersonRequestAuthorizationCheckerForTest(), new FakeGlobalSettingDataRepository(), null);
 
 			var scheduleDictionarySaver = new FakeScheduleDifferenceSaver(_scheduleRepository);
 

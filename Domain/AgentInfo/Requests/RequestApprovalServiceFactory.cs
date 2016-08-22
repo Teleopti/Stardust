@@ -10,10 +10,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private readonly ISwapAndModifyService _swapAndModifyService;
 		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
 		private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
+		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
 
-		public RequestApprovalServiceFactory(ISwapAndModifyService swapAndModifyService, IGlobalSettingDataRepository globalSettingDataRepository, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate)
+		public RequestApprovalServiceFactory(ISwapAndModifyService swapAndModifyService, IGlobalSettingDataRepository globalSettingDataRepository, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, IPersonAbsenceAccountRepository personAbsenceAccountRepository)
 		{
 			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
+			_personAbsenceAccountRepository = personAbsenceAccountRepository;
 			_swapAndModifyService = swapAndModifyService;
 			_globalSettingDataRepository = globalSettingDataRepository;
 		}
@@ -29,7 +31,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				_swapAndModifyService,
 				businessRules,
 				new ResourceCalculationOnlyScheduleDayChangeCallback(),
-				_globalSettingDataRepository);
+				_globalSettingDataRepository,
+				_personAbsenceAccountRepository);
 		}
 	}
 }

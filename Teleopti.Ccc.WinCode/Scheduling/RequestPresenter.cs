@@ -267,9 +267,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
         private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
         private readonly INewBusinessRuleCollection _newBusinessRules;
+		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
 
-        public ApprovePersonRequestCommand(IViewBase view, IScheduleDictionary schedules, IScenario scenario, IRequestPresenterCallback callback, IHandleBusinessRuleResponse handleBusinessRuleResponse,
-            IPersonRequestCheckAuthorization authorization, INewBusinessRuleCollection newBusinessRules, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, IScheduleDayChangeCallback scheduleDayChangeCallback, IGlobalSettingDataRepository globalSettingDataRepository)
+		public ApprovePersonRequestCommand(IViewBase view, IScheduleDictionary schedules, IScenario scenario, IRequestPresenterCallback callback, IHandleBusinessRuleResponse handleBusinessRuleResponse,
+            IPersonRequestCheckAuthorization authorization, INewBusinessRuleCollection newBusinessRules, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, IScheduleDayChangeCallback scheduleDayChangeCallback, IGlobalSettingDataRepository globalSettingDataRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository)
         {
             _view = view;
             _schedules = schedules;
@@ -277,7 +278,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             _overriddenBusinessRulesHolder = overriddenBusinessRulesHolder;
             _scheduleDayChangeCallback = scheduleDayChangeCallback;
             _globalSettingDataRepository = globalSettingDataRepository;
-            _scenario = scenario;
+			_personAbsenceAccountRepository = personAbsenceAccountRepository;
+			_scenario = scenario;
             _callback = callback;
             _handleBusinessRuleResponse = handleBusinessRuleResponse;
             _authorization = authorization;
@@ -332,7 +334,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         public IList<IBusinessRuleResponse> Approve(INewBusinessRuleCollection newBusinessRules)
         {
-            var service = new RequestApprovalServiceScheduler(_schedules, _scenario, new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback), newBusinessRules, _scheduleDayChangeCallback, _globalSettingDataRepository);
+            var service = new RequestApprovalServiceScheduler(_schedules, _scenario, new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback), newBusinessRules, _scheduleDayChangeCallback, _globalSettingDataRepository, _personAbsenceAccountRepository);
 
             return Model.PersonRequest.Approve(service, _authorization);
         }

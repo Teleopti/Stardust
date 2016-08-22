@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -46,8 +47,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private TimeZoneInfo _TimeZoneInfo;
         private IDictionary<Guid, IPerson> filteredPersons;
 	    private IGlobalSettingDataRepository _globalSettingRepo;
+	    private FakePersonAbsenceAccountRepository _personAbsenceAccountRepository;
 
-	    [SetUp]
+		[SetUp]
         public void Setup()
         {
             _TimeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
@@ -64,8 +66,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _requestPresenter = new RequestPresenter(new PersonRequestAuthorizationCheckerForTest());
             _shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusCheckerForTestDoesNothing();
 	        _globalSettingRepo = _mocks.StrictMock<IGlobalSettingDataRepository>();
+			_personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 
-            _person1 = PersonFactory.CreatePerson("A", "B");
+			_person1 = PersonFactory.CreatePerson("A", "B");
             _person1.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
             _person2 = PersonFactory.CreatePerson("A", "A");
             _person2.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
@@ -234,7 +237,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                                                                             _requestPresenter,
                                                                             _handleBusinessRuleResponse,
                                                                             new PersonRequestAuthorizationCheckerForTest
-																				(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(), new ResourceCalculationOnlyScheduleDayChangeCallback(), _globalSettingRepo), string.Empty);
+																				(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(), new ResourceCalculationOnlyScheduleDayChangeCallback(), _globalSettingRepo, _personAbsenceAccountRepository), string.Empty);
 
             foreach (PersonRequestViewModel adapter in _requestViewAdapters)
             {
@@ -309,7 +312,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                                                                             _requestPresenter,
                                                                             _handleBusinessRuleResponse,
                                                                             new PersonRequestAuthorizationCheckerForTest
-																				(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(), new ResourceCalculationOnlyScheduleDayChangeCallback(), _globalSettingRepo), string.Empty);
+																				(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(), new ResourceCalculationOnlyScheduleDayChangeCallback(), _globalSettingRepo, _personAbsenceAccountRepository), string.Empty);
 
             foreach (PersonRequestViewModel adapter in _requestViewAdapters)
             {
@@ -330,6 +333,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _schedules = _mocks.StrictMock<IScheduleDictionary>();
 			expectsForMandatoryRuleViolation(totalScheduleRange, daySchedule, daySchedule, true);
             var newBusinessRuleCollection = _mocks.StrictMock<INewBusinessRuleCollection>();
+	        Expect.Call(newBusinessRuleCollection.Item(null)).IgnoreArguments().Return(null);
 
             _mocks.ReplayAll();
 
@@ -344,7 +348,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                                                                             _requestPresenter,
                                                                             _handleBusinessRuleResponse,
                                                                             new PersonRequestAuthorizationCheckerForTest
-																				(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(), new ResourceCalculationOnlyScheduleDayChangeCallback(), _globalSettingRepo), string.Empty);
+																				(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(), new ResourceCalculationOnlyScheduleDayChangeCallback(), _globalSettingRepo, _personAbsenceAccountRepository), string.Empty);
 
             foreach (PersonRequestViewModel adapter in _requestViewAdapters)
             {
@@ -364,8 +368,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _schedules = _mocks.StrictMock<IScheduleDictionary>();
 			expectsForRuleViolationAndCancel(totalScheduleRange, daySchedule, daySchedule, false);
             var newBusinessRuleCollection = _mocks.StrictMock<INewBusinessRuleCollection>();
-           
-            _mocks.ReplayAll();
+	        Expect.Call(newBusinessRuleCollection.Item(null)).IgnoreArguments().Return(null);
+
+			_mocks.ReplayAll();
 
             foreach (PersonRequestViewModel adapter in _requestViewAdapters)
             {
@@ -378,7 +383,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                                                                             _requestPresenter,
                                                                             _handleBusinessRuleResponse,
                                                                             new PersonRequestAuthorizationCheckerForTest
-																				(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(), new ResourceCalculationOnlyScheduleDayChangeCallback(), _globalSettingRepo), string.Empty);
+																				(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(), new ResourceCalculationOnlyScheduleDayChangeCallback(), _globalSettingRepo, _personAbsenceAccountRepository), string.Empty);
 
             foreach (PersonRequestViewModel adapter in _requestViewAdapters)
             {
@@ -415,7 +420,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                                                                             _requestPresenter,
                                                                             _handleBusinessRuleResponse,
                                                                             new PersonRequestAuthorizationCheckerForTest
-																				(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(), new ResourceCalculationOnlyScheduleDayChangeCallback(), _globalSettingRepo), string.Empty);
+																				(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(), new ResourceCalculationOnlyScheduleDayChangeCallback(), _globalSettingRepo, _personAbsenceAccountRepository), string.Empty);
 
             foreach (PersonRequestViewModel adapter in _requestViewAdapters)
             {
@@ -436,9 +441,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyUndoRedo()
         {
-            var newBusinessRuleCollection = _mocks.StrictMock<INewBusinessRuleCollection>();
-            
-            ITeam team = TeamFactory.CreateSimpleTeam();
+	        var newBusinessRuleCollection = new FakeNewBusinessRuleCollection();
+
+			ITeam team = TeamFactory.CreateSimpleTeam();
             _person1.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(1900, 1, 1), PersonContractFactory.CreatePersonContract(), team));
             
             UndoRedoContainer undo = new UndoRedoContainer(100);
@@ -456,7 +461,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                                             new ApprovePersonRequestCommand(_view, sched, _scenario, _requestPresenter,
                                                                             _handleBusinessRuleResponse,
                                                                             new PersonRequestAuthorizationCheckerForTest
-																				(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(), new ResourceCalculationOnlyScheduleDayChangeCallback(), _globalSettingRepo), string.Empty);
+																				(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(), new ResourceCalculationOnlyScheduleDayChangeCallback(), _globalSettingRepo, _personAbsenceAccountRepository), string.Empty);
             Assert.IsTrue(req.IsApproved);
             Assert.AreEqual(1, sched[_person1].ScheduledDay(new DateOnly(2000, 1, 1)).PersonAbsenceCollection().Count);
 
@@ -496,7 +501,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                                             new ApprovePersonRequestCommand(_view, sched, _scenario, _requestPresenter,
                                                                             _handleBusinessRuleResponse,
                                                                             new PersonRequestAuthorizationCheckerForTest
-																				(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(), new ResourceCalculationOnlyScheduleDayChangeCallback(), _globalSettingRepo), string.Empty);
+																				(), newBusinessRuleCollection, new OverriddenBusinessRulesHolder(), new ResourceCalculationOnlyScheduleDayChangeCallback(), _globalSettingRepo, _personAbsenceAccountRepository), string.Empty);
 
             Assert.IsTrue(req.IsPending);
             Assert.AreEqual(0, sched[person].ScheduledDay(new DateOnly(2000, 1, 1)).PersonAbsenceCollection().Count);
@@ -520,7 +525,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             DateTime start = DateTime.UtcNow.AddDays(2).Date;
             brokenRules.Add(new BusinessRuleResponse(typeof(DayOffRule), "Error", true, mandatory, new DateTimePeriod(start, start), _person1, new DateOnlyPeriod()));
 
-            Expect.Call(_schedules.Modify(ScheduleModifier.Request, (IScheduleDay) null, null, new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance))).Return(
+            Expect.Call(_schedules.Modify(ScheduleModifier.Request, new [] { (IScheduleDay) null }, null, new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance))).Return(
                 brokenRules).IgnoreArguments().Repeat.Twice();
             _handleBusinessRuleResponse.SetResponse(brokenRules);
             Expect.Call(_handleBusinessRuleResponse.DialogResult).Return(DialogResult.OK);
@@ -532,7 +537,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Expect.Call(dayScheduleForAbsenceReqStart.FullAccess).Return(true);
 			dayScheduleForAbsenceReqStart.Add(null);
             LastCall.IgnoreArguments();
-            Expect.Call(_schedules.Modify(ScheduleModifier.Request, (IScheduleDay)null, null, new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance))).Return(
+            Expect.Call(_schedules.Modify(ScheduleModifier.Request, new[] { (IScheduleDay)null }, null, new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance))).Return(
                 new List<IBusinessRuleResponse>()).IgnoreArguments();
             //Expect.Call(_handleBusinessRuleResponse.ApplyToAll).Return(true);
         }
@@ -551,7 +556,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             DateTime start = DateTime.UtcNow.AddDays(2).Date;
             brokenRules.Add(new BusinessRuleResponse(typeof(DayOffRule), "Error", true, mandatory, new DateTimePeriod(start, start), _person1, new DateOnlyPeriod()));
 
-            Expect.Call(_schedules.Modify(ScheduleModifier.Request, (IScheduleDay)null, null, new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance))).Return(
+            Expect.Call(_schedules.Modify(ScheduleModifier.Request, new [] { (IScheduleDay)null }, null, new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance))).Return(
                 brokenRules).IgnoreArguments().Repeat.Twice();
 
             _view.ShowErrorMessage("MandatoryError", "Dont break this rule");
@@ -572,9 +577,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             DateTime start = DateTime.UtcNow.AddDays(2).Date;
             brokenRules.Add(new BusinessRuleResponse(typeof(DayOffRule), "Error", true, mandatory, new DateTimePeriod(start, start), _person1, new DateOnlyPeriod()));
 
-            Expect.Call(_schedules.Modify(ScheduleModifier.Request, (IScheduleDay)null, null, new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance))).Return(
+            Expect.Call(_schedules.Modify(ScheduleModifier.Request, new [] { (IScheduleDay)null }, null, new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance))).Return(
                 brokenRules).IgnoreArguments();
-            Expect.Call(_schedules.Modify(ScheduleModifier.Request, (IScheduleDay)null, null, new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance))).Return(
+            Expect.Call(_schedules.Modify(ScheduleModifier.Request, new[] { (IScheduleDay)null }, null, new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance))).Return(
                 brokenRules).IgnoreArguments();
 
             _handleBusinessRuleResponse.SetResponse(brokenRules);

@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                                                        _authorization, _swapAndModifyService, _personRequestRepository,
                                                        _currentUnitOfWorkFactory,
 													   new DifferenceEntityCollectionService<IPersistableScheduleData>(),
-                                                       _globalSettingDataRepository);
+                                                       _globalSettingDataRepository, null);
 
             _person = PersonFactory.CreatePerson("Test Peson");
             _person.SetId(Guid.NewGuid());
