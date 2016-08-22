@@ -152,6 +152,8 @@
     <Compile Include="AgentInfo\Requests\ShiftExchangeOfferTest.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestIsAfterLoadedPeriodSpecificationTest.cs" />
     <Compile Include="Aop\InfoLogAspectTest.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\AbsenceRequestStrategyProcessorTest.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\AbsenceRequestTickHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\ApproveRequestsWithValidatorsEventHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceReportHandlerNoMocksTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceReportHandlerTest.cs" />

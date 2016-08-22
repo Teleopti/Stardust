@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
@@ -27,6 +29,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Add(Restrictions.Or(startCriteria, endCriteria))
 				.AddOrder(Order.Asc("Created"))
 				.List<IQueuedAbsenceRequest>();
+		}
+
+		public void Remove(IEnumerable<Guid> absenceRequests)
+		{
+			var hql = @"DELETE FROM QueuedAbsenceRequest WHERE personRequest in (:absenceRequests)";
+			ISQLQuery sqlQuery;
+			sqlQuery = Session.CreateSQLQuery(hql);
+			sqlQuery.SetParameterList("absenceRequests", absenceRequests.ToArray());
+			sqlQuery.ExecuteUpdate();
 		}
 	}
 }
