@@ -117,7 +117,7 @@ task CHM-SDK-File -depends CompileWse, CompileWsi -description "Create chm sdk f
 task MalewareScan -depends CompileWse, CompileWsi -description "Proves our MSI is clean" {
 
     #& $ClamWinTool --database="$ClamWinDb" $OurDir\ > "$OutDir\MalwareScan.log"
-	Start-Process -FilePath $ClamWinTool -ArgumentList "$OutDir\ -i --recursive=yes --database=$ClamWinDb --log=$OutDir\MalwareScan.log" -Wait
+	Start-Process -FilePath $ClamWinTool -ArgumentList "$OutDir\ --recursive=yes --database=$ClamWinDb --log=$OutDir\MalwareScan.log" -Wait
 }
 
 task UnMountK {
@@ -211,7 +211,7 @@ function global:CopyFilesToOutput {
     
     Copy-Item -Path "$SourceDir\Wise\ccc7_client\ccc7_client.msi" -Destination "$OutDir\Teleopti WFM Client $ProductVersion.msi" -Force -ErrorAction Stop
     Copy-Item -Path "$SourceDir\Wise\ccc7_server\ccc7_server.msi" -Destination "$OutDir\Teleopti WFM $ProductVersion.msi" -Force -ErrorAction Stop
-   #Copy-Item -Path "$SourceDir\Wise\ccc7_forecast\ccc7_forecast.exe" -Destination "$OutDir\Teleopti WFM Forecasts $CccVersion.exe" -Force -ErrorAction Continue
+    #Copy-Item -Path "$SourceDir\Wise\ccc7_forecast\ccc7_forecast.exe" -Destination "$OutDir\Teleopti WFM Forecasts $CccVersion.exe" -Force -ErrorAction Continue
 
     #Copy UnInstall bat to Output folder
     Copy-Item -Path "$SourceDir\Wise\Uninstall\Uninstall Teleopti WFM server.bat" -Destination "$OutDir\Uninstall Teleopti WFM server.bat" -Force -ErrorAction Stop
