@@ -127,7 +127,6 @@
 			setupShiftTradeVisualisation(requests);
 
 			vm.gridOptions.columnDefs = vm.gridConfigurationService.columnDefinitions(vm.shiftTradeRequestDateSummary);
-
 			vm.gridOptions.enablePinning = vm.shiftTradeView;
 
 			applyColumnFilters(vm.gridOptions.columnDefs);
