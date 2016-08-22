@@ -31,29 +31,33 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		}
 
 		[Then(@"I should see site '(.*)' with (.*) of (.*) employees out of adherence")]
-		public void ThenIShouldSeeSiteWithOfEmployeesOutOfAdherence(string site, int numberOfOutAdherence, int total)
+		[Then(@"I should see site '(.*)' with (.*) of (.*) agents in alarm")]
+		public void ThenIShouldSeeSiteWithOfEmployeesOutOfAdherence(string site, int number, int total)
 		{
-			Browser.Interactions.AssertAnyContains($".site [data-value='{numberOfOutAdherence}']", site);
+			Browser.Interactions.AssertAnyContains($".site [data-value='{number}']", site);
 			Browser.Interactions.AssertAnyContains($".site [data-max='{total}']", site);
 		}
 
 		[Then(@"I should see site '(.*)' with (.*) employees out of adherence")]
-		public void ThenIShouldSeeSiteWithOfEmployeesOutOfAdherence2(string site, int numberOfOutAdherence)
+		[Then(@"I should see site '(.*)' with (.*) agents in alarm")]
+		public void ThenIShouldSeeSiteWithOfEmployeesOutOfAdherence2(string site, int number)
 		{
-			Browser.Interactions.AssertAnyContains($".site [data-value='{numberOfOutAdherence}']", site);
+			Browser.Interactions.AssertAnyContains($".site [data-value='{number}']", site);
 		}
 
 		[Then(@"I should see team '(.*)' with (.*) of (.*) employees out of adherence")]
-		public void ThenIShouldSeeTeamWithOfEmployeesOutOfAdherence(string team, int numberOfOutAdherence, int total)
+		[Then(@"I should see team '(.*)' with (.*) of (.*) agents in alarm")]
+		public void ThenIShouldSeeTeamWithOfEmployeesOutOfAdherence(string team, int number, int total)
 		{
-			Browser.Interactions.AssertAnyContains($".team [data-value='{numberOfOutAdherence}']", team);
+			Browser.Interactions.AssertAnyContains($".team [data-value='{number}']", team);
 			Browser.Interactions.AssertAnyContains($".team [data-max='{total}']", team);
 		}
 
 		[Then(@"I should see team '(.*)' with (.*) employees out of adherence")]
-		public void ThenIShouldSeeTeamWithOfEmployeesOutOfAdherence2(string team, int numberOfOutAdherence)
+		[Then(@"I should see team '(.*)' with (.*) agents in alarm")]
+		public void ThenIShouldSeeTeamWithOfEmployeesOutOfAdherence2(string team, int number)
 		{
-			Browser.Interactions.AssertAnyContains($".team [data-value='{numberOfOutAdherence}']", team);
+			Browser.Interactions.AssertAnyContains($".team [data-value='{number}']", team);
 		}
 
 		[Then(@"I should see real time agent details for '(.*)'")]

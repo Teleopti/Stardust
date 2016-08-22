@@ -31,6 +31,7 @@
 		RTA_RuleMappingOptimization_39812,
 		RTA_BatchConnectionOptimization_40116,
 		RTA_BatchQueryOptimization_40169,
+		RTA_RemoveSiteTeamOutOfAdherenceReadModels_40069,
 
 		MessageBroker_SchedulingScreenMailbox_32733,
 

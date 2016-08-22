@@ -155,8 +155,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public virtual void Handle(PersonAssociationChangedEvent @event)
 		{
 			if (@event.TeamId.HasValue)
-				return;
-			_persister.Delete(@event.PersonId);
+			{
+				var existing = _persister.Get(@event.PersonId);
+				if (existing == null)
+					return;
+
+				existing.TeamId = @event.TeamId;
+				existing.SiteId = @event.SiteId;
+				_persister.Persist(existing);
+			}
+			else
+			{
+				_persister.Delete(@event.PersonId);
+			}
 		}
 
 	}

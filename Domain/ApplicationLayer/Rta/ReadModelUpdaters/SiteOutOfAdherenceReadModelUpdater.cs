@@ -3,9 +3,11 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 {
+	[DisabledBy(Toggles.RTA_RemoveSiteTeamOutOfAdherenceReadModels_40069)]
 	public class SiteOutOfAdherenceReadModelUpdater : 
 		IRunOnHangfire,
 		IHandleEvent<PersonOutOfAdherenceEvent>, 
