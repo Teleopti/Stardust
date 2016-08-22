@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				totalScheduleRange.ScheduledDay(
 					new DateOnly(period.EndDateTimeLocal(person.PermissionInformation.DefaultTimeZone())));
 
-			var scheduleDaysForCheckingAccount = getScheduleDaysForCheckingAccount(dayScheduleForAbsenceReqStart, totalScheduleRange, person, period).ToList();
+			var scheduleDaysForCheckingAccount = getScheduleDaysForCheckingAccount(absence, dayScheduleForAbsenceReqStart, totalScheduleRange, person, period).ToList();
 
 			IList<IBusinessRuleResponse> ret = new List<IBusinessRuleResponse>();
 
@@ -104,12 +104,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		/// Get scheduleDays for checking account
 		/// </summary>
 		/// <remarks>To be more efficient, we only return the first schedule day for each personal account for <see cref="Teleopti.Ccc.Domain.Scheduling.Rules.NewPersonAccountRule"/></remarks>
-		/// <param name="dayScheduleForAbsenceReqStart"></param>
-		/// <param name="totalScheduleRange"></param>
-		/// <param name="person"></param>
-		/// <param name="period"></param>
 		/// <returns></returns>
-		private IEnumerable<IScheduleDay> getScheduleDaysForCheckingAccount(IScheduleDay dayScheduleForAbsenceReqStart,
+		private IEnumerable<IScheduleDay> getScheduleDaysForCheckingAccount(IAbsence absence,
+			IScheduleDay dayScheduleForAbsenceReqStart,
 			IScheduleRange totalScheduleRange, IPerson person, DateTimePeriod period)
 		{
 			if (_newBusinessRules.Item(typeof(NewPersonAccountRule)) == null)
@@ -134,17 +131,14 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 			foreach (var day in days)
 			{
-				var accounts = personAccounts.Find(day).ToList();
+				var account = personAccounts.Find(absence, day);
 
-				if (!accounts.Any())
+				if (account == null)
 					continue;
 
-				foreach (var account in accounts)
+				if (checkedAccounts.Add(account) && checkedScheduleDays.Add(day))
 				{
-					if (checkedAccounts.Add(account) && checkedScheduleDays.Add(day))
-					{
-						scheduleDays.Add(totalScheduleRange.ScheduledDay(day));
-					}
+					scheduleDays.Add(totalScheduleRange.ScheduledDay(day));
 				}
 			}
 

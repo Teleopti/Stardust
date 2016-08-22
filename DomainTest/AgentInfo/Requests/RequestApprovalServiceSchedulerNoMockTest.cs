@@ -50,29 +50,67 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			var absence = new Absence();
 			var personRequest = createAbsenceRequest(person, absence, absenceDateTimePeriod);
 
-			var assignment1 = addAssignment(person, new DateTimePeriod(2016, 08, 17, 00, 2016, 08, 17, 23));
-			var assignment2 = addAssignment(person, new DateTimePeriod(2016, 08, 18, 00, 2016, 08, 18, 23));
-			var assignment3 = addAssignment(person, new DateTimePeriod(2016, 08, 19, 00, 2016, 08, 19, 23));
-			_scheduleDictionary = ScheduleDictionaryForTest.WithScheduleData(person, _scenario, absenceDateTimePeriod,
-				assignment1, assignment2, assignment3);
+			setScheduleDictionary(person, absenceDateTimePeriod);
 
 			var accountDay1 = createAccountDay(new DateOnly(2015, 12, 1));
 			var accountDay2 = createAccountDay(new DateOnly(2016, 08, 18));
 			var account = createAccount(person, absence, accountDay1, accountDay2);
 
+			setBusinessRules(person, account);
+
+			setRequestApprovalService();
+			var responses = _requestApprovalService.ApproveAbsence(absence, absenceDateTimePeriod, person, personRequest);
+
+			Assert.AreEqual(0, responses.Count());
+			Assert.AreEqual(24, accountDay1.Remaining.TotalDays);
+			Assert.AreEqual(23, accountDay2.Remaining.TotalDays);
+		}
+
+		[Test]
+		public void ShouldOnlyUpdateSpecificAbsencePersonalAccounts()
+		{
+			var absenceDateTimePeriod = new DateTimePeriod(2016, 08, 17, 00, 2016, 08, 19, 23);
+			var person = PersonFactory.CreatePersonWithId();
+			var holidayAbsence = AbsenceFactory.CreateAbsence("holiday");
+			var lieuAbsence = AbsenceFactory.CreateAbsence("lieu");
+			var personRequest = createAbsenceRequest(person, holidayAbsence, absenceDateTimePeriod);
+
+			setScheduleDictionary(person, absenceDateTimePeriod);
+
+			var holidayAccountDay1 = createAccountDay(new DateOnly(2015, 12, 1));
+			var holidayAccountDay2 = createAccountDay(new DateOnly(2016, 08, 18));
+			var lieuAccountDay = createAccountDay(new DateOnly(2016, 08, 18));
+			var holidayAccount = createAccount(person, holidayAbsence, holidayAccountDay1, holidayAccountDay2);
+			createAccount(person, lieuAbsence, lieuAccountDay);
+
+			setBusinessRules(person, holidayAccount);
+
+			setRequestApprovalService();
+			var responses = _requestApprovalService.ApproveAbsence(holidayAbsence, absenceDateTimePeriod, person, personRequest);
+
+			Assert.AreEqual(0, responses.Count());
+			Assert.AreEqual(24, holidayAccountDay1.Remaining.TotalDays);
+			Assert.AreEqual(23, holidayAccountDay2.Remaining.TotalDays);
+			Assert.AreEqual(25, lieuAccountDay.Remaining.TotalDays);
+		}
+
+		private void setScheduleDictionary(IPerson person, DateTimePeriod absenceDateTimePeriod)
+		{
+			var assignment1 = addAssignment(person, new DateTimePeriod(2016, 08, 17, 00, 2016, 08, 17, 23));
+			var assignment2 = addAssignment(person, new DateTimePeriod(2016, 08, 18, 00, 2016, 08, 18, 23));
+			var assignment3 = addAssignment(person, new DateTimePeriod(2016, 08, 19, 00, 2016, 08, 19, 23));
+			_scheduleDictionary = ScheduleDictionaryForTest.WithScheduleData(person, _scenario, absenceDateTimePeriod,
+				assignment1, assignment2, assignment3);
+		}
+
+		private void setBusinessRules(IPerson person, PersonAbsenceAccount account)
+		{
 			_schedulingResultStateHolder.AllPersonAccounts = new Dictionary<IPerson, IPersonAccountCollection>
 			{
 				{person, new PersonAccountCollection(person) {account}}
 			};
 			_schedulingResultStateHolder.Schedules = _scheduleDictionary;
 			_newBusinessRules = NewBusinessRuleCollection.MinimumAndPersonAccount(_schedulingResultStateHolder);
-
-			setRequestApprovalService();
-			var reponses = _requestApprovalService.ApproveAbsence(absence, absenceDateTimePeriod, person, personRequest);
-
-			Assert.AreEqual(0, reponses.Count());
-			Assert.AreEqual(24, accountDay1.Remaining.TotalDays);
-			Assert.AreEqual(23, accountDay2.Remaining.TotalDays);
 		}
 
 		private PersonRequest createAbsenceRequest(IPerson person, IAbsence absence, DateTimePeriod dateTimePeriod)
