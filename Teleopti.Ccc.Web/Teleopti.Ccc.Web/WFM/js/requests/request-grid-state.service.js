@@ -5,15 +5,13 @@
 	angular.module('wfm.requests')
 		.factory('RequestGridStateService', ['$timeout','$window', function ($timeout, $window) {
 
-
-			var columnsToExcludeFromSave = ['AgentName2']
+			var columnsToExcludeFromSave = ['AgentName2'];
 
 			var service = {
 				hasSavedState: hasSavedState,
 				restoreState: restoreState,
 				setupGridEventHandlers: setupGridEventHandlers
 			}
-			
 
 			function getGridStateKey(isShiftTradeView) {
 				return isShiftTradeView ? 'shiftTradeViewGridState' : 'absenceRequestViewGridState';
@@ -25,7 +23,6 @@
 				var state = $window.localStorage.getItem(localStorageKeyName);
 				return state != null;
 			}
-
 
 			function excludeColumns(vm, state) {
 
@@ -62,17 +59,10 @@
 			}
 
 			function setupGridEventHandlers($scope, vm) {
-				
-				//// delay the setup of these handlers a little to let the table load
-				//$timeout(function () {
-
-					vm.gridApi.core.on.columnVisibilityChanged($scope, function() { saveState(vm) });
-					if (vm.gridApi.colResizable) {
-						vm.gridApi.colResizable.on.columnSizeChanged($scope, function() { saveState(vm) });
-					};
-
-				//}, 500);
-
+				vm.gridApi.core.on.columnVisibilityChanged($scope, function() { saveState(vm) });
+				if (vm.gridApi.colResizable) {
+					vm.gridApi.colResizable.on.columnSizeChanged($scope, function() { saveState(vm) });
+				};
 			}
 			
 			return service;

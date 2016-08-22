@@ -160,13 +160,17 @@
         height: 68vh;
         margin: 15px;
 
+        /*align filter input to the left*/
+       div[ui-grid-filter] {
+            text-align: left !important;
+            padding-left: 3px !important;
 
-        .ui-grid-header-cell md-select {
-            text-align: left;
-            margin-left: 3px !important;
+            .ui-grid-filter-container{
+                padding-left: 3px !important;
+            }
+
         }
-
-
+       
         .ui-grid-cell-contents.ui-grid-cell-contents {
             width: 85%;
             text-align: left;
