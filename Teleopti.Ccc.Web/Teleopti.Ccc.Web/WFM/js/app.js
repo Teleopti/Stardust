@@ -188,7 +188,7 @@ wfm.config([
 			}
 		}).state('myTeamSchedule.for', {
 			url: '/:site/:team/?personIds',
-			templateUrl: 'js/teamSchedule/html/schedule.html',
+			templateUrl: 'js/teamSchedule/html/dayViewSchedule.html',
 			controller: 'TeamScheduleCtrl as vm',
 			params: {
 				site: '',
