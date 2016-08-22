@@ -98,8 +98,10 @@ ON p.person_id = dupl.remove_person_id
 DROP TABLE #dupl_persons
 
 --finally add constraint
-ALTER TABLE [mart].[dim_person] ADD CONSTRAINT AK_person_period_code UNIQUE (person_period_code)
-
+IF NOT EXISTS(SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_NAME ='AK_person_period_code')
+BEGIN
+	ALTER TABLE [mart].[dim_person] ADD CONSTRAINT AK_person_period_code UNIQUE (person_period_code)
+END
 --readd the FKs again
 ALTER TABLE [mart].[fact_schedule]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_dim_person] FOREIGN KEY([person_id])
 REFERENCES [mart].[dim_person] ([person_id])
