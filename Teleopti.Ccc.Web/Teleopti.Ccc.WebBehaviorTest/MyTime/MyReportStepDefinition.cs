@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			if (personId == -1)
 			{
 				var agent = new Person(DataMaker.Me().Person, datasourceData, 76, new DateTime(2010, 1, 1),
-							 new DateTime(2059, 12, 31), 0, -2, 0, DefaultBusinessUnit.BusinessUnit.Id.Value, false, timeZones.CetTimeZoneId);
+							 new DateTime(2059, 12, 31), 0, -2, 0, DefaultBusinessUnit.BusinessUnit.Id.Value, false, timeZones.CetTimeZoneId, Guid.NewGuid());
 				DataMaker.Data().Analytics().Setup(agent);
 				personId = agent.PersonId;
 			};
@@ -58,9 +58,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 
 			//some report data
 			const int intervalId = 32;
-			var queues = new AQueue(datasourceData);
-		    queues.QueueId = 5;
-			
+			var queues = new AQueue(datasourceData) {QueueId = 5};
+
 			DataMaker.Analytics().Setup(queues);
 			
 			DataMaker.Data().Analytics().Setup(new FillBridgeTimeZoneFromData(theDay, DefaultAnalyticsDataCreator.GetInterval(), timeZones, datasourceData));
