@@ -159,18 +159,16 @@
     .ui-grid {
         height: 68vh;
         margin: 15px;
-
         /*align filter input to the left*/
-       div[ui-grid-filter] {
+        div[ui-grid-filter] {
             text-align: left !important;
             padding-left: 3px !important;
 
-            .ui-grid-filter-container{
+            .ui-grid-filter-container {
                 padding-left: 3px !important;
             }
-
         }
-       
+
         .ui-grid-cell-contents.ui-grid-cell-contents {
             width: 85%;
             text-align: left;
@@ -354,6 +352,15 @@
         /* show scroll bar outside of grid*/
         .ui-grid-render-container-body .ui-grid-viewport {
             position: absolute;
+        }
+
+        .ui-grid-pinned-container-right {
+
+
+            .ui-grid-header-cell:first-child, .ui-grid-cell:first-child {
+                border-left: none;
+            }
+
         }
         /* Fixes for layout of the non-pinned container used for the Shift Trade View so that it takes up space appropriately*/
         [container-id="body"], .ui-grid-render-container-body {
