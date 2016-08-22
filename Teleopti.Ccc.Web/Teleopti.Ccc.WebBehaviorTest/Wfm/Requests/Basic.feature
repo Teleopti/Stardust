@@ -371,6 +371,7 @@ Scenario: View request details
 	When I expand the request from 'Ashley Andeen'
 	Then I should see detailed text request from 'Ashley Andeen'
 
+@ignore
 @OnlyRunIfEnabled('Wfm_Requests_Reply_Message_39629')
 Scenario: Can reply pending request
 	Given 'Ashley Andeen' has an existing text request with
