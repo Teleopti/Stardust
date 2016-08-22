@@ -1007,7 +1007,6 @@
     <Compile Include="Scheduling\ScheduleReporting\ScheduleReportDetail.cs" />
     <Compile Include="Scheduling\ScheduleReporting\ShiftsPerDayToPdfManager.cs" />
     <Compile Include="Scheduling\SchedulerStateLoader.cs" />
-    <Compile Include="Scheduling\SmartDayOffBackToLegalStateSolverContainer.cs" />
     <Compile Include="Scheduling\TeleoptiProgressChangeMessage.cs" />
     <Compile Include="Scheduling\WorkShiftContainsMasterActivitySpecification.cs" />
     <Compile Include="Settings\AbsenceView.cs" />

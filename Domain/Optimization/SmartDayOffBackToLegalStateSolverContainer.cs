@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Scheduling
+namespace Teleopti.Ccc.Domain.Optimization
 {
 
     public class SmartDayOffBackToLegalStateSolverContainer : ISmartDayOffBackToLegalStateSolverContainer
