@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 			builder.RegisterType<DefaultDataCreator>().SingleInstance();
 			builder.RegisterType<TestConfiguration>().SingleInstance();
 			builder.RegisterType<Http>().SingleInstance();
+			builder.RegisterType<AnalyticsDatabase>();
 			builder.RegisterType<Database>().SingleInstance().ApplyAspects();
 			builder.RegisterType<DataCreator>().SingleInstance().ApplyAspects();
 			builder.RegisterModule(new TenantServerModule(configuration));

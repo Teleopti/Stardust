@@ -23,11 +23,11 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			base.Setup(system, configuration);
-
 			system.AddService<TestConfiguration>();
 			system.AddService<Http>();
 			system.AddService<DataCreator>();
 			system.AddService<Database>();
+			system.AddService<AnalyticsDatabase>();
 			system.AddModule(new TenantServerModule(configuration));
 
 			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
