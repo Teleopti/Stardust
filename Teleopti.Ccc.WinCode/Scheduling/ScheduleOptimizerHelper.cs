@@ -148,7 +148,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		public void DaysOffBackToLegalState(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
 			ISchedulingProgress backgroundWorker,
 			IDayOffTemplate dayOffTemplate,
-			bool reschedule,
 			ISchedulingOptions schedulingOptions,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
@@ -236,12 +235,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 							}
 						}
 					}
-			}
-
-			if (reschedule)
-			{
-				//call backtolegal
-				//reschedule blank days
 			}
 		}
 
@@ -553,7 +546,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			displayList.Sort(new DayOffTemplateSorter());
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizerPreferences);
 			DaysOffBackToLegalState(matrixContainerList, _backgroundWorker,
-				displayList[0], false, schedulingOptions, dayOffOptimizationPreferenceProvider);
+				displayList[0], schedulingOptions, dayOffOptimizationPreferenceProvider);
 
 			var workShiftBackToLegalStateService =
 				_optimizerHelper.CreateWorkShiftBackToLegalStateServicePro(_container.Resolve<IWorkShiftMinMaxCalculator>(), _container.Resolve<IDailySkillForecastAndScheduledValueCalculator>(), _container.Resolve<SchedulingStateHolderAllSkillExtractor>(), _container.Resolve<IWorkShiftLegalStateDayIndexCalculator>(), _container.Resolve<IDeleteSchedulePartService>());

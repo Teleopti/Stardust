@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		void DaysOffBackToLegalState(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
 			ISchedulingProgress backgroundWorker,
 			IDayOffTemplate dayOffTemplate,
-			bool reschedule,
 			ISchedulingOptions schedulingOptions,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 

@@ -101,8 +101,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 							selectedPeriod.Value);
 					IList<IDayOffTemplate> displayList = schedulerStateHolder.CommonStateHolder.ActiveDayOffs.ToList();
 					scheduleOptimizerHelper.DaysOffBackToLegalState(scheduleMatrixOriginalStateContainers,
-						backgroundWorker, displayList[0], false,
-						optimizerOriginalPreferences.SchedulingOptions,
+						backgroundWorker, displayList[0], optimizerOriginalPreferences.SchedulingOptions,
 						dayOffOptimizationPreferenceProvider);
 
 					_resourceOptimizationHelperExtended().ResourceCalculateMarkedDays(null,
