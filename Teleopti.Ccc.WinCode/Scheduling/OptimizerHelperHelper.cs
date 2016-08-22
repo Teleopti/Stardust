@@ -140,21 +140,16 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			}
 		}
 
-		public IWorkShiftBackToLegalStateServicePro CreateWorkShiftBackToLegalStateServicePro(ILifetimeScope container)
+		public IWorkShiftBackToLegalStateServicePro CreateWorkShiftBackToLegalStateServicePro(IWorkShiftMinMaxCalculator workShiftMinMaxCalculator,
+			IDailySkillForecastAndScheduledValueCalculator dailySkillForecastAndScheduledValueCalculator,
+			SchedulingStateHolderAllSkillExtractor allSkillExtractor,
+			IWorkShiftLegalStateDayIndexCalculator dayIndexCalculator,
+			IDeleteSchedulePartService deleteService)
 		{
-			var workShiftMinMaxCalculator = container.Resolve<IWorkShiftMinMaxCalculator>();
 			var bitArrayCreator = new WorkShiftBackToLegalStateBitArrayCreator();
-
-			var dailySkillForecastAndScheduledValueCalculator = container.Resolve<IDailySkillForecastAndScheduledValueCalculator>();
-
-			var allSkillExtractor = container.Resolve<SchedulingStateHolderAllSkillExtractor>();
-
 			// when we move the period to the method we can have all this in autofac
 			var dataExtractor = new RelativeDailyDifferencesByAllSkillsExtractor(dailySkillForecastAndScheduledValueCalculator, allSkillExtractor);
-
-			var dayIndexCalculator = container.Resolve<IWorkShiftLegalStateDayIndexCalculator>();
 			var decisionMaker = new WorkShiftBackToLegalStateDecisionMaker(dataExtractor, dayIndexCalculator);
-			var deleteService = container.Resolve<IDeleteSchedulePartService>();
 			var workShiftBackToLegalStateStep = new WorkShiftBackToLegalStateStep(bitArrayCreator, decisionMaker, deleteService);
 			return new WorkShiftBackToLegalStateServicePro(workShiftBackToLegalStateStep, workShiftMinMaxCalculator);
 		}

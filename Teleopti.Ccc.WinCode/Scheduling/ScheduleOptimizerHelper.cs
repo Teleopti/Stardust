@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState, _scheduleDayChangeCallback(),
 						new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
 				IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateServicePro =
-					_optimizerHelper.CreateWorkShiftBackToLegalStateServicePro(_container);
+					_optimizerHelper.CreateWorkShiftBackToLegalStateServicePro(_container.Resolve<IWorkShiftMinMaxCalculator>(), _container.Resolve<IDailySkillForecastAndScheduledValueCalculator>(), _container.Resolve<SchedulingStateHolderAllSkillExtractor>(), _container.Resolve<IWorkShiftLegalStateDayIndexCalculator>(), _container.Resolve<IDeleteSchedulePartService>());
 				workShiftBackToLegalStateServicePro.Execute(scheduleMatrix, schedulingOptions, schedulePartModifyAndRollbackService);
 
 				backgroundWorker.ReportProgress(1);
@@ -556,7 +556,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				displayList[0], false, schedulingOptions, dayOffOptimizationPreferenceProvider);
 
 			var workShiftBackToLegalStateService =
-				_optimizerHelper.CreateWorkShiftBackToLegalStateServicePro(_container);
+				_optimizerHelper.CreateWorkShiftBackToLegalStateServicePro(_container.Resolve<IWorkShiftMinMaxCalculator>(), _container.Resolve<IDailySkillForecastAndScheduledValueCalculator>(), _container.Resolve<SchedulingStateHolderAllSkillExtractor>(), _container.Resolve<IWorkShiftLegalStateDayIndexCalculator>(), _container.Resolve<IDeleteSchedulePartService>());
 
 			ISchedulePartModifyAndRollbackService rollbackService =
 				new SchedulePartModifyAndRollbackService(_stateHolder(), _scheduleDayChangeCallback(),
