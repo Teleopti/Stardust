@@ -54,7 +54,9 @@
 					}
 				}
 				response.data.forEach(function (warning) {
-					warningDict[warning.PersonId].warnings = warning.Warnings;
+					warningDict[warning.PersonId].warnings = warning.Warnings.map(function(w) {
+						return w.Content;
+					});
 				});
 			});
 		}

@@ -260,7 +260,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 						return new BusinessRuleValidationResult
 						{
 							PersonId = x.Key,
-							Warnings = x.Select(y => y.Message).ToList()
+							Warnings = x.Select(y => new WarningInfo
+							{
+								Content = y.Message,
+								RuleType = y.TypeOfRule.Name
+							}).ToList()
 						};
 					})
 					.ToList();
