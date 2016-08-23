@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IScheduleService _scheduleService;
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
+		private readonly IResourceOptimizationHelperExtended _resouceOptimizationHelperExtended;
 
 		protected DayOffOptimizationDesktop(IMatrixListFactory matrixListFactory, 
 								IOptimizerHelperHelper optimizerHelperHelper, 
@@ -45,7 +46,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 								IDeleteSchedulePartService deleteSchedulePartService,
 								IScheduleService scheduleService,
 								IEffectiveRestrictionCreator effectiveRestrictionCreator,
-								IScheduleDayEquator scheduleDayEquator)
+								IScheduleDayEquator scheduleDayEquator,
+								IResourceOptimizationHelperExtended resouceOptimizationHelperExtended)
 		{
 			_matrixListFactory = matrixListFactory;
 			_optimizerHelperHelper = optimizerHelperHelper;
@@ -62,6 +64,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_scheduleService = scheduleService;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 			_scheduleDayEquator = scheduleDayEquator;
+			_resouceOptimizationHelperExtended = resouceOptimizationHelperExtended;
 		}
 
 
@@ -111,8 +114,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 				optimizationPreferences,
 				_resourceOptimizationHelper);
 
-
-			bool notFullyScheduledMatrixFound = false;
 			IList<IScheduleMatrixOriginalStateContainer> validMatrixContainerList = new List<IScheduleMatrixOriginalStateContainer>();
 			rollbackService = new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState, _scheduleDayChangeCallback(),
 				new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
@@ -121,21 +122,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 				bool isFullyScheduled = matrixContainer.IsFullyScheduled();
 				if (!isFullyScheduled)
 				{
-					notFullyScheduledMatrixFound = true;
 					rollbackMatrixChanges(matrixContainer, rollbackService, resourceOptimizerPersonOptimized);
 					continue;
 				}
 				validMatrixContainerList.Add(matrixContainer);
 			}
-
-			if (notFullyScheduledMatrixFound)
-			{
-				var resCalcData = _schedulerStateHolder().SchedulingResultState.ToResourceOptimizationData(optimizationPreferences.Rescheduling.ConsiderShortBreaks, false);
-				foreach (var dateOnly in selectedPeriod.DayCollection())
-				{
-					_resourceOptimizationHelper.ResourceCalculate(dateOnly, resCalcData);
-				}
-			}
+			_resouceOptimizationHelperExtended.ResourceCalculateAllDays(backgroundWorker, false);
 
 			Optimize(validMatrixContainerList, selectedPeriod, backgroundWorker, optimizationPreferences, dayOffOptimizationPreferenceProvider);
 			after(validMatrixContainerList, rollbackService, resourceOptimizerPersonOptimized);

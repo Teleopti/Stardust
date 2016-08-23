@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		{
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldMoveDayOffToDayWithLessDemand()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon

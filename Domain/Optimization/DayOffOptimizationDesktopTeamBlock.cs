@@ -37,7 +37,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 								IDeleteSchedulePartService deleteSchedulePartService,
 								IScheduleService scheduleService,
 								IEffectiveRestrictionCreator effectiveRestrictionCreator,
-								IScheduleDayEquator scheduleDayEquator) :
+								IScheduleDayEquator scheduleDayEquator,
+								IResourceOptimizationHelperExtended resouceOptimizationHelperExtended) :
 			base(matrixListFactory,
 								optimizerHelperHelper,
 								schedulerStateHolder,
@@ -52,7 +53,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 								deleteSchedulePartService,
 								scheduleService,
 								effectiveRestrictionCreator,
-								scheduleDayEquator)
+								scheduleDayEquator,
+								resouceOptimizationHelperExtended)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;

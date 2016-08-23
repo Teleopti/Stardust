@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly OptimizationResult _optimizationResult;
+		private readonly IResourceOptimizationHelperExtended _resourceOptimizationHelperExtended;
 
 		public ScheduleOptimization(IFillSchedulerStateHolder fillSchedulerStateHolder, Func<ISchedulerStateHolder> schedulerStateHolder,
 			ClassicDaysOffOptimizationCommand classicDaysOffOptimizationCommand,
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IMatrixListFactory matrixListFactory, IScheduleDayEquator scheduleDayEquator,
 			DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory,
 			IOptimizerHelperHelper optimizerHelperHelper, IResourceCalculationContextFactory resourceCalculationContextFactory,
-			OptimizationResult optimizationResult)
+			OptimizationResult optimizationResult, IResourceOptimizationHelperExtended resourceOptimizationHelperExtended)
 		{
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -51,6 +52,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_optimizerHelperHelper = optimizerHelperHelper;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_optimizationResult = optimizationResult;
+			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 		}
 
 		public virtual OptimizationResultModel Execute(Guid planningPeriodId)
@@ -81,6 +83,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills))
 			{
+				_resourceOptimizationHelperExtended.ResourceCalculateAllDays(new NoSchedulingProgress(), false);
 				_classicDaysOffOptimizationCommand.Execute(matrixOriginalStateContainerListForDayOffOptimization, period,
 					optimizationPreferences, new NoSchedulingProgress(), dayOffOptimizationPreferenceProvider);
 

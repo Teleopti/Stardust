@@ -118,8 +118,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			IDayOffOptimizationService service = new DayOffOptimizationService(periodValueCalculator);
 
-			_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker, false);
-
 			EventHandler<ResourceOptimizerProgressEventArgs> handler = (s, e) => backgroundWorker.ReportProgress(0, e);
 			service.ReportProgress += handler;
 			service.Execute(optimizerContainers);
