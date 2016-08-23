@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
@@ -13,22 +11,18 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly ClassicDaysOffOptimizationCommand _classicDaysOffOptimizationCommand;
 
 		public DayOffOptimizationDesktopClassic(ClassicDaysOffOptimizationCommand classicDaysOffOptimizationCommand,
-			IMatrixListFactory matrixListFactory,
+								IMatrixListFactory matrixListFactory,
 								IOptimizerHelperHelper optimizerHelperHelper,
 								Func<ISchedulerStateHolder> schedulerStateHolder,
 								DaysOffBackToLegalState daysOffBackToLegalState,
 								OptimizerHelperHelper optimizerHelper,
 								IResourceOptimizationHelper resourceOptimizationHelper,
 								Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
-								IWorkShiftMinMaxCalculator workShiftMinMaxCalculator,
-								IDailySkillForecastAndScheduledValueCalculator dailySkillForecastAndScheduledValueCalculator,
-								SchedulingStateHolderAllSkillExtractor schedulingStateHolderAllSkillExtractor,
-								IWorkShiftLegalStateDayIndexCalculator workShiftLegalStateDayIndexCalculator,
-								IDeleteSchedulePartService deleteSchedulePartService,
 								IScheduleService scheduleService,
 								IEffectiveRestrictionCreator effectiveRestrictionCreator,
 								IScheduleDayEquator scheduleDayEquator,
-								IResourceOptimizationHelperExtended resouceOptimizationHelperExtended) :
+								IResourceOptimizationHelperExtended resouceOptimizationHelperExtended,
+								WorkShiftBackToLegalStateServiceProFactory workShiftBackToLegalStateServiceProFactory) :
 			base(matrixListFactory,
 								optimizerHelperHelper,
 								schedulerStateHolder,
@@ -36,15 +30,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 								optimizerHelper,
 								resourceOptimizationHelper,
 								scheduleDayChangeCallback,
-								workShiftMinMaxCalculator,
-								dailySkillForecastAndScheduledValueCalculator,
-								schedulingStateHolderAllSkillExtractor,
-								workShiftLegalStateDayIndexCalculator,
-								deleteSchedulePartService,
 								scheduleService,
 								effectiveRestrictionCreator,
 								scheduleDayEquator,
-								resouceOptimizationHelperExtended)
+								resouceOptimizationHelperExtended,
+								workShiftBackToLegalStateServiceProFactory)
 		{
 			_classicDaysOffOptimizationCommand = classicDaysOffOptimizationCommand;
 		}

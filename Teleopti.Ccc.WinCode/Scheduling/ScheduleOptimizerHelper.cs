@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -52,7 +51,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_optimizeIntradayDesktop = _container.Resolve<OptimizeIntradayIslandsDesktop>();
 			_allResults = () => _container.Resolve<IWorkShiftFinderResultHolder>();
 			_extendReduceTimeHelper = new ExtendReduceTimeHelper(_container);
-			_extendReduceDaysOffHelper = new ExtendReduceDaysOffHelper(_container, optimizerHelper, _allResults);
+			_extendReduceDaysOffHelper = new ExtendReduceDaysOffHelper(_container, _allResults);
 			_schedulerStateHolder = () => _container.Resolve<ISchedulerStateHolder>();
 			_stateHolder = () => _schedulerStateHolder().SchedulingResultState;
 			_scheduleDayChangeCallback = () => _container.Resolve<IScheduleDayChangeCallback>();
@@ -132,8 +131,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService =
 					new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState, _scheduleDayChangeCallback(),
 						new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
-				IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateServicePro =
-					_optimizerHelper.CreateWorkShiftBackToLegalStateServicePro(_container.Resolve<IWorkShiftMinMaxCalculator>(), _container.Resolve<IDailySkillForecastAndScheduledValueCalculator>(), _container.Resolve<SchedulingStateHolderAllSkillExtractor>(), _container.Resolve<IWorkShiftLegalStateDayIndexCalculator>(), _container.Resolve<IDeleteSchedulePartService>());
+				IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateServicePro = _container.Resolve<WorkShiftBackToLegalStateServiceProFactory>().Create();
 				workShiftBackToLegalStateServicePro.Execute(scheduleMatrix, schedulingOptions, schedulePartModifyAndRollbackService);
 
 				backgroundWorker.ReportProgress(1);

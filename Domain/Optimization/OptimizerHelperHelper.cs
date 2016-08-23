@@ -4,7 +4,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -131,21 +130,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 				}
 			}
-		}
-
-		//TODO: move to ctor dep
-		public IWorkShiftBackToLegalStateServicePro CreateWorkShiftBackToLegalStateServicePro(IWorkShiftMinMaxCalculator workShiftMinMaxCalculator,
-			IDailySkillForecastAndScheduledValueCalculator dailySkillForecastAndScheduledValueCalculator,
-			SchedulingStateHolderAllSkillExtractor allSkillExtractor,
-			IWorkShiftLegalStateDayIndexCalculator dayIndexCalculator,
-			IDeleteSchedulePartService deleteService)
-		{
-			var bitArrayCreator = new WorkShiftBackToLegalStateBitArrayCreator();
-			// when we move the period to the method we can have all this in autofac
-			var dataExtractor = new RelativeDailyDifferencesByAllSkillsExtractor(dailySkillForecastAndScheduledValueCalculator, allSkillExtractor);
-			var decisionMaker = new WorkShiftBackToLegalStateDecisionMaker(dataExtractor, dayIndexCalculator);
-			var workShiftBackToLegalStateStep = new WorkShiftBackToLegalStateStep(bitArrayCreator, decisionMaker, deleteService);
-			return new WorkShiftBackToLegalStateServicePro(workShiftBackToLegalStateStep, workShiftMinMaxCalculator);
 		}
 	}
 }

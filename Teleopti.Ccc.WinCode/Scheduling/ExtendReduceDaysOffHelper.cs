@@ -20,15 +20,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	public class ExtendReduceDaysOffHelper : IExtendReduceDaysOffHelper
 	{
 		private readonly ILifetimeScope _container;
-		private readonly OptimizerHelperHelper _optimizerHelper;
 		private readonly Func<IWorkShiftFinderResultHolder> _allResults;
 
 		public ExtendReduceDaysOffHelper(ILifetimeScope container, 
-				OptimizerHelperHelper optimizerHelper, 
 				Func<IWorkShiftFinderResultHolder> allResults)
 		{
 			_container = container;
-			_optimizerHelper = optimizerHelper;
 			_allResults = allResults;
 		}
 
@@ -112,8 +109,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 						deleteAndResourceCalculateService,
 						scheduleServiceForFlexibleAgents, _allResults, resourceCalculateDelayer);
 
-				IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService =
-					_optimizerHelper.CreateWorkShiftBackToLegalStateServicePro(_container.Resolve<IWorkShiftMinMaxCalculator>(), _container.Resolve<IDailySkillForecastAndScheduledValueCalculator>(), _container.Resolve<SchedulingStateHolderAllSkillExtractor>(), _container.Resolve<IWorkShiftLegalStateDayIndexCalculator>(), _container.Resolve<IDeleteSchedulePartService>());
+				IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService = _container.Resolve<WorkShiftBackToLegalStateServiceProFactory>().Create();
 
 				IDayOffsInPeriodCalculator dayOffsInPeriodCalculator = new DayOffsInPeriodCalculator(()=>schedulerStateHolder.SchedulingResultState);
 

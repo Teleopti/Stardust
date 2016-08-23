@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.UserTexts;
@@ -22,15 +20,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly OptimizerHelperHelper _optimizerHelper;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
-		private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
-		private readonly IDailySkillForecastAndScheduledValueCalculator _dailySkillForecastAndScheduledValueCalculator;
-		private readonly SchedulingStateHolderAllSkillExtractor _schedulingStateHolderAllSkillExtractor;
-		private readonly IWorkShiftLegalStateDayIndexCalculator _workShiftLegalStateDayIndexCalculator;
-		private readonly IDeleteSchedulePartService _deleteSchedulePartService;
 		private readonly IScheduleService _scheduleService;
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly IResourceOptimizationHelperExtended _resouceOptimizationHelperExtended;
+		private readonly WorkShiftBackToLegalStateServiceProFactory _workShiftBackToLegalStateServiceProFactory;
 
 		protected DayOffOptimizationDesktop(IMatrixListFactory matrixListFactory, 
 								IOptimizerHelperHelper optimizerHelperHelper, 
@@ -39,15 +33,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 								OptimizerHelperHelper optimizerHelper,
 								IResourceOptimizationHelper resourceOptimizationHelper,
 								Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
-								IWorkShiftMinMaxCalculator workShiftMinMaxCalculator,
-								IDailySkillForecastAndScheduledValueCalculator dailySkillForecastAndScheduledValueCalculator,
-								SchedulingStateHolderAllSkillExtractor schedulingStateHolderAllSkillExtractor,
-								IWorkShiftLegalStateDayIndexCalculator workShiftLegalStateDayIndexCalculator,
-								IDeleteSchedulePartService deleteSchedulePartService,
 								IScheduleService scheduleService,
 								IEffectiveRestrictionCreator effectiveRestrictionCreator,
 								IScheduleDayEquator scheduleDayEquator,
-								IResourceOptimizationHelperExtended resouceOptimizationHelperExtended)
+								IResourceOptimizationHelperExtended resouceOptimizationHelperExtended,
+								WorkShiftBackToLegalStateServiceProFactory workShiftBackToLegalStateServiceProFactory)
 		{
 			_matrixListFactory = matrixListFactory;
 			_optimizerHelperHelper = optimizerHelperHelper;
@@ -56,15 +46,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_optimizerHelper = optimizerHelper;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
-			_workShiftMinMaxCalculator = workShiftMinMaxCalculator;
-			_dailySkillForecastAndScheduledValueCalculator = dailySkillForecastAndScheduledValueCalculator;
-			_schedulingStateHolderAllSkillExtractor = schedulingStateHolderAllSkillExtractor;
-			_workShiftLegalStateDayIndexCalculator = workShiftLegalStateDayIndexCalculator;
-			_deleteSchedulePartService = deleteSchedulePartService;
 			_scheduleService = scheduleService;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 			_scheduleDayEquator = scheduleDayEquator;
 			_resouceOptimizationHelperExtended = resouceOptimizationHelperExtended;
+			_workShiftBackToLegalStateServiceProFactory = workShiftBackToLegalStateServiceProFactory;
 		}
 
 
@@ -90,9 +76,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 			_daysOffBackToLegalState.Execute(matrixContainerList, backgroundWorker, displayList[0], schedulingOptions, dayOffOptimizationPreferenceProvider, optimizationPreferences, workShiftFinderResultHolder, resourceOptimizerPersonOptimized);
 
-			//TODO: move dep to this service
-			var workShiftBackToLegalStateService =
-				_optimizerHelper.CreateWorkShiftBackToLegalStateServicePro(_workShiftMinMaxCalculator, _dailySkillForecastAndScheduledValueCalculator, _schedulingStateHolderAllSkillExtractor, _workShiftLegalStateDayIndexCalculator, _deleteSchedulePartService);
+			var workShiftBackToLegalStateService = _workShiftBackToLegalStateServiceProFactory.Create();
 
 			ISchedulePartModifyAndRollbackService rollbackService =
 				new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState, _scheduleDayChangeCallback(),

@@ -386,6 +386,7 @@
     <Compile Include="Optimization\OptimizerHelperHelper.cs" />
     <Compile Include="Optimization\DayOffOptimizationDesktop.cs" />
     <Compile Include="Optimization\SmartDayOffBackToLegalStateSolverContainer.cs" />
+    <Compile Include="Optimization\WorkShiftBackToLegalStateServiceProFactory.cs" />
     <Compile Include="Repositories\IAnalyticsAbsenceRepository.cs" />
     <Compile Include="Repositories\IAnalyticsForecastWorkloadRepository.cs" />
     <Compile Include="Repositories\IAnalyticsHourlyAvailabilityRepository.cs" />
