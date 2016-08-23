@@ -189,6 +189,7 @@
     <Compile Include="NodeHandlers\ExportMultisiteSkillsToSkillEventHandler.cs" />
     <Compile Include="NodeHandlers\FixReadModelsHandler.cs" />
     <Compile Include="NodeHandlers\IndexMaintenanceHandler.cs" />
+    <Compile Include="NodeHandlers\MultiAbsenceRequestsHandler.cs" />
     <Compile Include="NodeHandlers\PersonAbsenceRemovedHandler.cs" />
     <Compile Include="NodeHandlers\RequestPersonAbsenceRemovedHandler.cs" />
     <Compile Include="NodeHandlers\ResourceCalculateReadModelUpdater.cs" />

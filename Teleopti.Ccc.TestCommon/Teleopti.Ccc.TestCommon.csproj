@@ -198,6 +198,7 @@
     <Compile Include="FakeRepositories\FakePersonScheduleDayReadModelFinder.cs" />
     <Compile Include="FakeRepositories\FakeProjectionVersionPersister.cs" />
     <Compile Include="FakeRepositories\FakeReadModelValidationResultPersistor.cs" />
+    <Compile Include="FakeRepositories\FakeRequestStrategySettingsReader.cs" />
     <Compile Include="FakeRepositories\FakeScheduleDayReadModelRepository.cs" />
     <Compile Include="FakeRepositories\FakeScheduleHistoryRepository.cs" />
     <Compile Include="FakeRepositories\FakeSiteOpenHourRepository.cs" />

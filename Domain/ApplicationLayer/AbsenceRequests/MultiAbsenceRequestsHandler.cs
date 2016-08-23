@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
-	public class MultiAbsenceRequestsHandler
+	public class MultiAbsenceRequestsHandler : IHandleEvent<NewMultiAbsenceRequestsCreatedEvent>, IRunOnStardust
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(MultiAbsenceRequestsHandler));
 

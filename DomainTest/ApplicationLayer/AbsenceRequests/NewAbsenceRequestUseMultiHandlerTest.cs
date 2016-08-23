@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 
 	[DomainTest]
-	[TestFixture]
+	[TestFixture, Ignore]
 	public class NewAbsenceRequestUseMultiHandlerTest : ISetup
 	{
 		public NewAbsenceRequestUseMultiHandler Target;
@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			system.UseTestDouble<FakeScheduleDataReadScheduleStorage>().For<FakeScheduleDataReadScheduleStorage>();
 			system.UseTestDouble<FakeCurrentScenario>().For<FakeCurrentScenario>();
 			system.UseTestDouble<NewAbsenceRequestUseMultiHandler>().For<NewAbsenceRequestUseMultiHandler>();
-			system.UseTestDouble(new FakeConfigReader("NumberOfAbsenceRequestsToBulkProcess", "2")).For<IConfigReader>();
 		}
 
 
@@ -50,37 +49,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			QueuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(1);
 		}
-
-
-		//[Test]
-		//public void ShouldPickJobsFromQueueAndSendMultiRequestEvent()
-		//{
-		//	var requestEvent1 = createNewRequestEvent();
-		//	var requestEvent2 = createNewRequestEvent();
-
-		//	Target.Handle(requestEvent1);
-		//	Target.Handle(requestEvent2);
-
-		//	EventPublisher.PublishedEvents.Count().Should().Be.EqualTo(1);
-		//	Assert.IsInstanceOf<NewMultiAbsenceRequestsCreatedEvent>(EventPublisher.PublishedEvents.FirstOrDefault());
-		//}
-
-
-		//[Test]
-		//public void ShouldRemoveJobsFromQueueWhenSentAsMultiRequestEvent()
-		//{
-		//	var requestEvent1 = createNewRequestEvent();
-		//	var requestEvent2 = createNewRequestEvent();
-
-		//	Target.Handle(requestEvent1);
-		//	Target.Handle(requestEvent2);
-
-		//	QueuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(0);
-		//}
-
-
-		
-
 
 
 		private NewAbsenceRequestCreatedEvent createNewRequestEvent()

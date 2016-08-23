@@ -6,7 +6,10 @@ using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -21,23 +24,31 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
 		private readonly IDataSourceScope _dataSourceScope;
+		private readonly IBusinessUnitScope _businessUnitScope;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+		private readonly IUpdatedByScope _updatedByScope;
 
 		private readonly IList<LoadDataAction> _loadDataActions;
 		private IPersonRequest _personRequest;
 
 		private static readonly isNullOrNotNewSpecification personRequestSpecification = new isNullOrNotNewSpecification();
 		private static readonly isNullSpecification absenceRequestSpecification = new isNullSpecification();
+		private readonly IBusinessUnitRepository _businessUnitRepository;
+		private readonly IPersonRepository _personRepository;
 
 		private delegate bool LoadDataAction(NewAbsenceRequestCreatedEvent @event);
 
 		public NewAbsenceRequestUseMultiHandler(IPersonRequestRepository personRequestRepository, IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository,
-			IDataSourceScope dataSourceScope, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory )
+			IDataSourceScope dataSourceScope, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IBusinessUnitScope businessUnitScope, IBusinessUnitRepository businessUnitRepository, IUpdatedByScope updatedByScope, IPersonRepository personRepository)
 		{
 			_personRequestRepository = personRequestRepository;
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
 			_dataSourceScope = dataSourceScope;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
+			_businessUnitScope = businessUnitScope;
+			_businessUnitRepository = businessUnitRepository;
+			_updatedByScope = updatedByScope;
+			_personRepository = personRepository;
 
 			_loadDataActions = new List<LoadDataAction>
 			{
@@ -46,7 +57,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			};
 		}
 
-
+		[AsSystem]
 		public void Handle(NewAbsenceRequestCreatedEvent @event)
 		{
 			using (_dataSourceScope.OnThisThreadUse(@event.LogOnDatasource))
@@ -57,15 +68,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					{
 						return;
 					}
-
+					var businessUnit = _businessUnitRepository.Load(@event.LogOnBusinessUnitId);
+					_businessUnitScope.OnThisThreadUse(businessUnit);
+					_updatedByScope.OnThisThreadUse(_personRepository.Load(SystemUser.Id));
 					var queuedAbsenceRequest = new QueuedAbsenceRequest()
 					{
 						PersonRequest = _personRequest.Id.Value,
 						Created = _personRequest.CreatedOn.Value,
 						StartDateTime = _personRequest.Request.Period.StartDateTime,
-						EndDateTime = _personRequest.Request.Period.EndDateTime,
+						EndDateTime = _personRequest.Request.Period.EndDateTime
 					};
 					_queuedAbsenceRequestRepository.Add(queuedAbsenceRequest);
+
 					uow.PersistAll();
 				}
 			}
