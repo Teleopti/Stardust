@@ -304,7 +304,6 @@ DEALLOCATE NoteCursor
 
 
 -- Insert new custom group pages
-SELECT @counter = ISNULL(MAX(group_id), 0) FROM mart.dim_group_page
 
 DECLARE CustomCursor CURSOR FOR
 SELECT DISTINCT
@@ -329,6 +328,7 @@ OPEN CustomCursor
 FETCH NEXT FROM CustomCursor INTO @group_page_code,@group_page_name,@group_page_name_resource_key,@group_code,@group_name,@datasource_id
 WHILE @@FETCH_STATUS = 0
 BEGIN
+	SELECT @counter = ISNULL(MAX(group_id), 0) FROM mart.dim_group_page
 	SET @counter = @counter + 1
 	
 	INSERT INTO mart.dim_group_page
