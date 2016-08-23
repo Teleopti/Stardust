@@ -50,16 +50,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, 
 			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder, Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
 		{
-
-			IList<IScheduleMatrixPro> matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListForSelection(selectedDays);
-			IList<IScheduleMatrixOriginalStateContainer> matrixContainerList = createMatrixContainerList(matrixListForDayOffOptimization);
-
-			IList<IScheduleMatrixPro> matrixList = matrixContainerList.Select(container => container.ScheduleMatrix).ToList();
+			var matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListForSelection(selectedDays);
+			var matrixContainerList = createMatrixContainerList(matrixListForDayOffOptimization);
+			var matrixList = matrixContainerList.Select(container => container.ScheduleMatrix).ToList();
 
 			_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixList, optimizationPreferences, selectedPeriod);
 
-			var e = new ResourceOptimizerProgressEventArgs(0, 0, Resources.DaysOffBackToLegalState + Resources.ThreeDots);
-			resourceOptimizerPersonOptimized(this, e);
+			resourceOptimizerPersonOptimized(this, new ResourceOptimizerProgressEventArgs(0, 0, Resources.DaysOffBackToLegalState + Resources.ThreeDots));
 
 			// to make sure we are in legal state before we can do day off optimization
 			var displayList = _schedulerStateHolder().CommonStateHolder.ActiveDayOffs.ToList();
@@ -69,29 +66,22 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			var workShiftBackToLegalStateService = _workShiftBackToLegalStateServiceProFactory.Create();
 
-			ISchedulePartModifyAndRollbackService rollbackService =
-				new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState, _scheduleDayChangeCallback(),
-					new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+			var rollbackService = new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState, _scheduleDayChangeCallback(), new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
 			foreach (var matrixOriginalStateContainer in matrixContainerList)
 			{
 				rollbackService.ClearModificationCollection();
-				workShiftBackToLegalStateService.Execute(matrixOriginalStateContainer.ScheduleMatrix, schedulingOptions,
-					rollbackService);
+				workShiftBackToLegalStateService.Execute(matrixOriginalStateContainer.ScheduleMatrix, schedulingOptions, rollbackService);
 			}
 
-			e = new ResourceOptimizerProgressEventArgs(0, 0, Resources.Rescheduling + Resources.ThreeDots);
-			resourceOptimizerPersonOptimized(this, e);
-
-
+			resourceOptimizerPersonOptimized(this, new ResourceOptimizerProgressEventArgs(0, 0, Resources.Rescheduling + Resources.ThreeDots));
 			// schedule those are the white spots after back to legal state
 			_scheduleBlankSpots.Execute(matrixContainerList, optimizationPreferences);
 
-			IList<IScheduleMatrixOriginalStateContainer> validMatrixContainerList = new List<IScheduleMatrixOriginalStateContainer>();
-			rollbackService = new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState, _scheduleDayChangeCallback(),
-				new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
+			var validMatrixContainerList = new List<IScheduleMatrixOriginalStateContainer>();
+			rollbackService = new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState, _scheduleDayChangeCallback(), new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
 			foreach (IScheduleMatrixOriginalStateContainer matrixContainer in matrixContainerList)
 			{
-				bool isFullyScheduled = matrixContainer.IsFullyScheduled();
+				var isFullyScheduled = matrixContainer.IsFullyScheduled();
 				if (!isFullyScheduled)
 				{
 					rollbackMatrixChanges(matrixContainer, rollbackService, resourceOptimizerPersonOptimized);
@@ -102,12 +92,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_resouceOptimizationHelperExtended.ResourceCalculateAllDays(backgroundWorker, false);
 
 			Optimize(validMatrixContainerList, selectedPeriod, backgroundWorker, optimizationPreferences, dayOffOptimizationPreferenceProvider);
-			after(validMatrixContainerList, rollbackService, resourceOptimizerPersonOptimized);
-		}
 
-		private void after(IEnumerable<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization, ISchedulePartModifyAndRollbackService rollbackService, Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
-		{
-			foreach (var matrixContainer in matrixOriginalStateContainerListForDayOffOptimization)
+			foreach (var matrixContainer in validMatrixContainerList)
 			{
 				if (!matrixContainer.IsFullyScheduled())
 				{
