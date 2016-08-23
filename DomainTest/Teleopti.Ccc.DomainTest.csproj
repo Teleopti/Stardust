@@ -247,6 +247,7 @@
     <Compile Include="Intraday\ForecastedStaffingProviderTest.cs" />
     <Compile Include="ReadModelValidator\ReadModelValidatorTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationTest.cs" />
+    <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationCascadingDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\DoubleExtensionsInCascadingTestScenarios.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCascadingDesktopTest.cs" />
