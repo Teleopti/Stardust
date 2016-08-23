@@ -45,10 +45,11 @@ namespace Teleopti.Ccc.Domain.Intraday
 				var skillStaffPeriods = (skillDay.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(minutesPerInterval)));
 				foreach (var skillStaffPeriod in skillStaffPeriods)
 				{
-					if (staffingIntervals.ContainsKey(skillStaffPeriod.Period.StartDateTime))
-						staffingIntervals[skillStaffPeriod.Period.StartDateTime] += skillStaffPeriod.FStaff;
+					var start = TimeZoneHelper.ConvertFromUtc(skillStaffPeriod.Period.StartDateTime, _timeZone.TimeZone());
+					if (staffingIntervals.ContainsKey(start))
+						staffingIntervals[start] += skillStaffPeriod.FStaff;
 					else
-						staffingIntervals.Add(skillStaffPeriod.Period.StartDateTime, skillStaffPeriod.FStaff);
+						staffingIntervals.Add(start, skillStaffPeriod.FStaff);
 				}
 			}
 

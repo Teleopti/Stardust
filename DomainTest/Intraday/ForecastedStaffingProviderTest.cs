@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldReturnStaffingForTwoIntervals()
 		{
+			TimeZone.IsSweden();
 			IntervalLengthFetcher.Has(minutesPerInterval);
 			var scenario = ScenarioFactory.CreateScenario("scenariorita", true, true).WithId();
 			ScenarioRepository.Has(scenario);
@@ -52,8 +53,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var staffingIntervals = skillDay.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(minutesPerInterval));
 			vm.DataSeries.Time.Length.Should().Be.EqualTo(2);
-			vm.DataSeries.Time.First().Should().Be.EqualTo(staffingIntervals.First().Period.StartDateTime);
-			vm.DataSeries.Time.Last().Should().Be.EqualTo(staffingIntervals.Last().Period.StartDateTime);
+			vm.DataSeries.Time.First().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(staffingIntervals.First().Period.StartDateTime, TimeZone.TimeZone()));
+			vm.DataSeries.Time.Last().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(staffingIntervals.Last().Period.StartDateTime, TimeZone.TimeZone()));
 			vm.DataSeries.ForecastedStaffing.Length.Should().Be.EqualTo(2);
 			vm.DataSeries.ForecastedStaffing.First().Should().Be.GreaterThan(0d);
 			vm.DataSeries.ForecastedStaffing.Last().Should().Be.GreaterThan(0d);
