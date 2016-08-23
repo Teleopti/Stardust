@@ -140,8 +140,6 @@ WHERE dgp.group_is_custom = 1
 
 
 -- Insert new non custom group pages (excluding Note)
-SELECT @counter = ISNULL(MAX(group_id), 0) FROM mart.dim_group_page
-
 DECLARE NoneCustomCursorExcludingNote CURSOR FOR
 SELECT DISTINCT
 	sgp.group_page_code,
@@ -165,6 +163,7 @@ OPEN NoneCustomCursorExcludingNote
 FETCH NEXT FROM NoneCustomCursorExcludingNote INTO @group_page_code,@group_page_name,@group_page_name_resource_key,@group_code,@group_name,@datasource_id
 WHILE @@FETCH_STATUS = 0
 BEGIN
+	SELECT @counter = ISNULL(MAX(group_id), 0) FROM mart.dim_group_page
 	SET @counter = @counter + 1
 	
 	-- Insert row where the group page already exists
@@ -223,8 +222,6 @@ DEALLOCATE NoneCustomCursorExcludingNote
 
 
 -- Insert new Note group pages
-SELECT @counter = ISNULL(MAX(group_id), 0) FROM mart.dim_group_page
-
 DECLARE NoteCursor CURSOR FOR
 SELECT DISTINCT
 	sgp.group_page_code,
@@ -248,6 +245,7 @@ OPEN NoteCursor
 FETCH NEXT FROM NoteCursor INTO @group_page_code,@group_page_name,@group_page_name_resource_key,@group_code,@group_name,@datasource_id
 WHILE @@FETCH_STATUS = 0
 BEGIN
+	SELECT @counter = ISNULL(MAX(group_id), 0) FROM mart.dim_group_page
 	SET @counter = @counter + 1
 	
 	-- Insert row where the group page already exists
