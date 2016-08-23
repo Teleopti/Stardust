@@ -4,7 +4,9 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentState
 {
@@ -44,8 +46,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 
 			Persister.Models.Single().PersonId.Should().Be(personId);
 		}
-
 		[Test]
+		[Toggle(Toggles.RTA_RemoveSiteTeamOutOfAdherenceReadModels_40069)]
 		public void ShouldMovePersonToNewTeam()
 		{
 			var personId = Guid.NewGuid();
@@ -62,6 +64,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 		}
 
 		[Test]
+		[Toggle(Toggles.RTA_RemoveSiteTeamOutOfAdherenceReadModels_40069)]
 		public void ShouldMovePersonToNewTeamOnDifferentSite()
 		{
 			var personId = Guid.NewGuid();

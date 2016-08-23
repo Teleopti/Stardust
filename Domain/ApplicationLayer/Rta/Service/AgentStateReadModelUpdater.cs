@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
@@ -132,44 +131,4 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 	}
-
-	public class AgentStateReadModelCleaner :
-		IRunOnHangfire,
-		IHandleEvent<PersonDeletedEvent>,
-		IHandleEvent<PersonAssociationChangedEvent>
-	{
-		private readonly IAgentStateReadModelPersister _persister;
-
-		public AgentStateReadModelCleaner(IAgentStateReadModelPersister persister)
-		{
-			_persister = persister;
-		}
-
-		[UnitOfWork]
-		public virtual void Handle(PersonDeletedEvent @event)
-		{
-			_persister.Delete(@event.PersonId);
-		}
-
-		[UnitOfWork]
-		public virtual void Handle(PersonAssociationChangedEvent @event)
-		{
-			if (@event.TeamId.HasValue)
-			{
-				var existing = _persister.Get(@event.PersonId);
-				if (existing == null)
-					return;
-
-				existing.TeamId = @event.TeamId;
-				existing.SiteId = @event.SiteId;
-				_persister.Persist(existing);
-			}
-			else
-			{
-				_persister.Delete(@event.PersonId);
-			}
-		}
-
-	}
-
 }

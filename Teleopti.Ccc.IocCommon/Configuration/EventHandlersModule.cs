@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
@@ -160,6 +161,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		        builder.RegisterType<TeamInAlarmFromAgentStatesReadModelReader>()
 			        .As<ITeamOutOfAdherenceReadModelReader>()
 			        .SingleInstance();
+		        builder.RegisterType<UpdatePersonAssociationOnAgentStateReadModel>()
+			        .As<IUpdatePersonAssociationOnAgentStateReadModel>()
+			        .SingleInstance();
 	        }
 	        else
 	        {
@@ -169,7 +173,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		        builder.RegisterType<TeamOutOfAdherenceReadModelPersister>()
 			        .As<ITeamOutOfAdherenceReadModelReader>()
 			        .SingleInstance();
-	        }
+				builder.RegisterType<DontUpdatePersonAssociationOnAgentStateReadModel>()
+					 .As<IUpdatePersonAssociationOnAgentStateReadModel>()
+					 .SingleInstance();
+			}
 
 	        builder.RegisterType<IntervalLengthFetcher>().As<IIntervalLengthFetcher>().SingleInstance();
             builder.RegisterType<AnalyticsFactScheduleTimeHandler>().As<IAnalyticsFactScheduleTimeHandler>().SingleInstance();
