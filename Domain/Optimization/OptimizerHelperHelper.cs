@@ -3,50 +3,12 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class OptimizerHelperHelper
 	{
-		public void ScheduleBlankSpots(
-			IEnumerable<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
-			IScheduleService scheduleService,
-			ISchedulePartModifyAndRollbackService rollbackService,
-			ISchedulingResultStateHolder schedulingResultStateHolder,
-			IEffectiveRestrictionCreator effectiveRestrictionCreator,
-			IOptimizationPreferences optimizerPreferences,
-			IResourceOptimizationHelper resourceOptimizationHelper)
-		{
-			var schedulingOptionsSynchronizer = new SchedulingOptionsCreator();
-			var schedulingOptions = schedulingOptionsSynchronizer.CreateSchedulingOptions(optimizerPreferences);
-
-			foreach (IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer in matrixOriginalStateContainers)
-			{
-				if (!matrixOriginalStateContainer.StillAlive)
-					continue;
-
-				foreach (IScheduleDayPro scheduleDayPro in matrixOriginalStateContainer.ScheduleMatrix.UnlockedDays)
-				{
-					bool result = true;
-					if (!scheduleDayPro.DaySchedulePart().IsScheduled())
-					{
-						var effectiveRestriction =
-							effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDayPro.DaySchedulePart(), schedulingOptions);
-						var resourceCalculateDelayer = new ResourceCalculateDelayer(resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, schedulingResultStateHolder);
-
-						result = scheduleService.SchedulePersonOnDay(scheduleDayPro.DaySchedulePart(), schedulingOptions, effectiveRestriction, resourceCalculateDelayer, rollbackService);
-					}
-					if (!result)
-					{
-						matrixOriginalStateContainer.StillAlive = false;
-						break;
-					}
-				}
-			}
-		}
-
 		public IScheduleResultDataExtractor CreatePersonalSkillsDataExtractor(
 			IAdvancedPreferences advancedPreferences,
 			IScheduleMatrixPro scheduleMatrix)

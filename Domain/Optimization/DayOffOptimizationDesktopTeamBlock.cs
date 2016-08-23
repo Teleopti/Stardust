@@ -26,25 +26,20 @@ namespace Teleopti.Ccc.Domain.Optimization
 								IOptimizerHelperHelper optimizerHelperHelper,
 								Func<ISchedulerStateHolder> schedulerStateHolder,
 								DaysOffBackToLegalState daysOffBackToLegalState,
-								OptimizerHelperHelper optimizerHelper,
 								Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
-								IScheduleService scheduleService,
-								IEffectiveRestrictionCreator effectiveRestrictionCreator,
 								IScheduleDayEquator scheduleDayEquator,
 								IResourceOptimizationHelperExtended resouceOptimizationHelperExtended,
-								WorkShiftBackToLegalStateServiceProFactory workShiftBackToLegalStateServiceProFactory) :
+								WorkShiftBackToLegalStateServiceProFactory workShiftBackToLegalStateServiceProFactory,
+								ScheduleBlankSpots scheduleBlankSpots) :
 			base(matrixListFactory,
 								optimizerHelperHelper,
 								schedulerStateHolder,
 								daysOffBackToLegalState,
-								optimizerHelper,
-								resourceOptimizationHelper,
 								scheduleDayChangeCallback,
-								scheduleService,
-								effectiveRestrictionCreator,
 								scheduleDayEquator,
 								resouceOptimizationHelperExtended,
-								workShiftBackToLegalStateServiceProFactory)
+								workShiftBackToLegalStateServiceProFactory,
+								scheduleBlankSpots)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;

@@ -17,40 +17,31 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly DaysOffBackToLegalState _daysOffBackToLegalState;
-		private readonly OptimizerHelperHelper _optimizerHelper;
-		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
-		private readonly IScheduleService _scheduleService;
-		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly IResourceOptimizationHelperExtended _resouceOptimizationHelperExtended;
 		private readonly WorkShiftBackToLegalStateServiceProFactory _workShiftBackToLegalStateServiceProFactory;
+		private readonly ScheduleBlankSpots _scheduleBlankSpots;
 
 		protected DayOffOptimizationDesktop(IMatrixListFactory matrixListFactory, 
 								IOptimizerHelperHelper optimizerHelperHelper, 
 								Func<ISchedulerStateHolder> schedulerStateHolder,
 								DaysOffBackToLegalState daysOffBackToLegalState,
-								OptimizerHelperHelper optimizerHelper,
-								IResourceOptimizationHelper resourceOptimizationHelper,
 								Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
-								IScheduleService scheduleService,
-								IEffectiveRestrictionCreator effectiveRestrictionCreator,
 								IScheduleDayEquator scheduleDayEquator,
 								IResourceOptimizationHelperExtended resouceOptimizationHelperExtended,
-								WorkShiftBackToLegalStateServiceProFactory workShiftBackToLegalStateServiceProFactory)
+								WorkShiftBackToLegalStateServiceProFactory workShiftBackToLegalStateServiceProFactory,
+								ScheduleBlankSpots scheduleBlankSpots)
 		{
 			_matrixListFactory = matrixListFactory;
 			_optimizerHelperHelper = optimizerHelperHelper;
 			_schedulerStateHolder = schedulerStateHolder;
 			_daysOffBackToLegalState = daysOffBackToLegalState;
-			_optimizerHelper = optimizerHelper;
-			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
-			_scheduleService = scheduleService;
-			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 			_scheduleDayEquator = scheduleDayEquator;
 			_resouceOptimizationHelperExtended = resouceOptimizationHelperExtended;
 			_workShiftBackToLegalStateServiceProFactory = workShiftBackToLegalStateServiceProFactory;
+			_scheduleBlankSpots = scheduleBlankSpots;
 		}
 
 
@@ -93,10 +84,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 
 			// schedule those are the white spots after back to legal state
-			_optimizerHelper.ScheduleBlankSpots(matrixContainerList, _scheduleService, rollbackService, _schedulerStateHolder().SchedulingResultState,
-				_effectiveRestrictionCreator,
-				optimizationPreferences,
-				_resourceOptimizationHelper);
+			_scheduleBlankSpots.Execute(matrixContainerList, optimizationPreferences);
 
 			IList<IScheduleMatrixOriginalStateContainer> validMatrixContainerList = new List<IScheduleMatrixOriginalStateContainer>();
 			rollbackService = new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState, _scheduleDayChangeCallback(),
