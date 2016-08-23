@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web.Http;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 		}
 
 		[Route("api/People/UploadPeople"), HttpPost]
-		public HttpResponseMessage Post()
+		async public Task<HttpResponseMessage> Post()
 		{
 			if (!Request.Content.IsMimeMultipartContent())
 			{
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 			}
 
 			var provider = new MultipartMemoryStreamProvider();
-			var result = Request.Content.ReadAsMultipartAsync(provider).Result;
+			await Request.Content.ReadAsMultipartAsync(provider);
 
 			var workbook = parseFiles(provider.Contents.First());
 			var isXlsx = workbook is XSSFWorkbook;
