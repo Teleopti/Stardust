@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database.StateCodes.Select(x => x.Name).Should().Contain("statecode");
 		}
 
-		[Test]
+		[Test, Ignore("Not stable. Fails like 30% of the times. Reporting this to Erik/Mattias")]
 		public void ShouldNotAddDuplicatesInBatch()
 		{
 			Database
