@@ -121,17 +121,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var errorMessages = new List<string>();
 			foreach (var personAbsence in personAbsences)
 			{
-				// Remove entire absence, then cancel the request
 				if (!periodToRemove.HasValue)
 				{
+					// Cancel the request if removing entire absence
 					_absenceRequestCancelService.CancelAbsenceRequestsFromPersonAbsence(personAbsence);
 					continue;
 				}
 
-				// Remove part absence, but now new absence need created, then cancel the request
 				var newAbsencePeriods = getPeriodsForNewAbsence(personAbsence.Period, periodToRemove.Value);
 				if (!newAbsencePeriods.Any())
 				{
+					// Cancel the request if removing part absence but no new absence need be created
 					_absenceRequestCancelService.CancelAbsenceRequestsFromPersonAbsence(personAbsence);
 					continue;
 				}
