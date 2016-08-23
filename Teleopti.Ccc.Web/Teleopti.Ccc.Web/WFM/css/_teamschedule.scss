@@ -73,11 +73,18 @@
 			margin: 10px;
 			padding: 0 60px 0 0;
 			min-width: 200px;
-			flex-grow: 1;
 			text-align: right;
 
 			.wfm-switch-toggle {
 				right: 0;
+			}
+		}
+
+		.settings-container{
+			display: inline-block;
+
+			i{
+				transform: scale(0.85);
 			}
 		}
 
@@ -418,7 +425,7 @@
 		}
 	}
 
-	.add-absence, .add-activity, .move-activity, .edit-shift-category, .command-check{
+	.add-absence, .add-activity, .move-activity, .edit-shift-category, .command-check, .settings-panel{
 		height: 100%;
 		display: flex;
 		flex-direction: column;
@@ -500,6 +507,11 @@
 		}
 	}
 
+	.settings-panel .sidenav-header{
+		background: $blue-500;
+		color: $white;
+		font-weight: 600;
+	}
 
 	.teamschedule-command-container md-select {
 		width: 100%;

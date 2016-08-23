@@ -111,6 +111,10 @@
 			return ValidateRulesService.checkValidationForPerson(personId);
 		};
 
+		vm.checkIsLoadedValidationForPerson = function(personId){
+			return ValidateRulesService.checkIsLoadedValidationForPerson(personId);
+		};
+
 		function isAllInCurrentPageSelected() {
 			var isAllSelected = true;
 			var selectedPeople = personSelectionSvc.personInfo;

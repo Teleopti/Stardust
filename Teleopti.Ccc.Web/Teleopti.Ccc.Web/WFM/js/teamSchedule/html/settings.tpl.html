@@ -1,0 +1,15 @@
+<div class="settings-panel">
+	<div class="sidenav-header">{{'Settings'|translate}}</div>
+	<md-content class="command-panel-content" layout-padding>
+		<div class="configure-validation">
+			<h3>{{'ConfigureValidationWarnings' | translate}}</h3>
+			<div class="wfm-checkbox" ng-repeat="rule in vm.availableValidationRules">
+				<label>
+					<input type="checkbox" ng-model="rule.checked" ng-change="vm.updateValidateRulesToggleState(rule.type, rule.checked)" value="true" />
+					<span class="wfm-checkbox-toggle"></span>
+					<span class="wfm-checkbox-label">{{rule.type | translate}}</span>
+				</label>
+			</div>
+		</div>
+	</md-content>
+</div>

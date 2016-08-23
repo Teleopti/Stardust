@@ -1,25 +1,46 @@
-(function(){
+(function() {
 	'use strict';
 	angular.module("wfm.teamSchedule").service("ValidateRulesService", ValidateRulesService);
 
 	ValidateRulesService.$inject = ["$http", "$q", "$timeout"];
 
-	function ValidateRulesService($http, $q, $timeout){
+	function ValidateRulesService($http, $q, $timeout) {
 
 		var self = this;
+		var getValidationRulesUrl = '../api/TeamScheduleData/FetchAllValidationRules';
 		var getValidateRulesResultUrl = '../api/TeamScheduleData/FetchRuleValidationResult';
 		var warningDict = {};
+		var currentEnabledTypes = {};
 
+		self.getAvailableValidationRules = getAvailableValidationRules;
 		self.getValidateRulesResultForCurrentPage = getValidateRulesResultForCurrentPage;
+		self.updateCheckedValidationTypes = updateCheckedValidationTypes;
 		self.updateValidateRulesResultForPeople = updateValidateRulesResultForPeople;
 		self.checkValidationForPerson = checkValidationForPerson;
+		self.checkIsLoadedValidationForPerson = checkIsLoadedValidationForPerson;
+
+		function getAvailableValidationRules() {
+			var deferred = $q.defer();
+
+			$http.get(getValidationRulesUrl).then(function(data) {
+				deferred.resolve(data);
+			}, function(error) {
+				deferred.reject(error);
+			});
+
+			return deferred.promise;
+		}
+
+		function updateCheckedValidationTypes(type, checked){
+			currentEnabledTypes[type] = checked;			
+		}
 
 		function getValidateRulesResultForCurrentPage(momentDate, personIds) {
 			warningDict = {};
 			personIds.forEach(function(id) {
 				warningDict[id] = {
-					isLoaded: false,
-					warnings: ""
+					isLoaded: false,					
+					warnings: []
 				}
 			});
 			getValidateRulesResult(momentDate, personIds);
@@ -27,7 +48,7 @@
 
 		function updateValidateRulesResultForPeople(momentDate, personIds) {
 			var personIdOnCurrentPage = [];
-			personIds.forEach(function (id) {
+			personIds.forEach(function(id) {
 				if (warningDict[id]) {
 					warningDict[id] = {
 						isLoaded: false,
@@ -35,7 +56,6 @@
 					}
 					personIdOnCurrentPage.push(id);
 				}
-				
 			});
 
 			getValidateRulesResult(momentDate, personIdOnCurrentPage);
@@ -47,22 +67,31 @@
 				PersonIds: personIds
 			};
 
-			$http.post(getValidateRulesResultUrl, postData).then(function (response) {
+			$http.post(getValidateRulesResultUrl, postData).then(function(response) {
 				for (var personId in warningDict) {
-					if (warningDict.hasOwnProperty(personId)) {
-						warningDict[personId].isLoaded = true;
-					}
+					warningDict[personId] && (warningDict[personId].isLoaded = true);
 				}
+
 				response.data.forEach(function (warning) {
-					warningDict[warning.PersonId].warnings = warning.Warnings.map(function(w) {
-						return w.Content;
-					});
+					warningDict[warning.PersonId].warnings = warning.Warnings;					
 				});
 			});
 		}
 
 		function checkValidationForPerson(personId) {
-			return warningDict[personId] || [];
+			 if (!warningDict[personId]) return [];
+
+			 var result = warningDict[personId].warnings.filter(function(w) {
+			 	return currentEnabledTypes[w.RuleType];
+			 }).map(function(w) {
+			 	return w.Content;
+			 });
+
+			 return result;
+		}
+
+		function checkIsLoadedValidationForPerson(personId){
+			return warningDict[personId] && warningDict[personId].isLoaded;
 		}
 	}
 })();

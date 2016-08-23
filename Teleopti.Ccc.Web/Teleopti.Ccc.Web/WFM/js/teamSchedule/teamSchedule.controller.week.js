@@ -73,7 +73,6 @@
 				SwapShiftEnabled: toggleSvc.WfmTeamSchedule_SwapShifts_36231,
 				MoveActivityEnabled: toggleSvc.WfmTeamSchedule_MoveActivity_37744,
 				AddPersonalActivityEnabled: toggleSvc.WfmTeamSchedule_AddPersonalActivity_37742,
-				ShowNightlyRestWarningEnabled: toggleSvc.WfmTeamSchedule_ShowNightlyRestWarning_39619,
 				ModifyShiftCategoryEnabled: toggleSvc.WfmTeamSchedule_ModifyShiftCategory_39797,
 				UndoScheduleEnabled: toggleSvc.WfmTeamSchedule_RevertToPreviousSchedule_39002,
 				CheckOverlappingCertainActivitiesEnabled: toggleSvc.WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938,

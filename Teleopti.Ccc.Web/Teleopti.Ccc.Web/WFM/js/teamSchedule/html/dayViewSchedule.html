@@ -20,16 +20,21 @@
 
 			<view-changer ng-if="vm.toggles.WeekViewEnabled" selected-date="vm.scheduleDate" keyword="vm.searchOptions.keyword"></view-changer>
 		</div>
+		
+		<span class="view-changer-container">
+		</span>
 
-		<div class="rightside-part">
-			<div id="show-warnings" class="wfm-switch" ng-if="vm.toggles.ShowNightlyRestWarningEnabled">
+		<div class="warning-container" ng-if="vm.toggles.ShowValidationWarnings">
+			<div id="show-warnings" class="wfm-switch">
 				<input type="checkbox" id="validateWarning" ng-model="vm.validateWarningToggle" ng-change="vm.checkValidationWarningForCurrentPage()" />
 				<label for="validateWarning">
 					<span class="wfm-switch-label" translate>ShowWarnings</span>
 					<span class="wfm-switch-toggle"></span>
 				</label>
 			</div>
+		</div>
 
+		<div class="rightside-part">
 			<div class="wfm-switch" ng-if="vm.toggles.RemoveAbsenceEnabled">
 				<input type="checkbox" id="switchAbsence" ng-model="vm.onlyLoadScheduleWithAbsence" ng-change="vm.toggleShowAbsenceOnly()" />
 				<label for="switchAbsence">
@@ -37,6 +42,11 @@
 					<span class="wfm-switch-toggle"></span>
 				</label>
 			</div>
+
+			<span class="settings-container context-menu card-context" ng-if="vm.toggles.ShowValidationWarnings && vm.toggles.FilterValidationWarnings" ng-click="vm.openSettingsPanel()">
+				<i class="mdi mdi-settings"></i>
+				<md-tooltip>{{'Settings' | translate}}</md-tooltip>
+			</span>
 
 			<teamschedule-command-menu class="teamschedule-command" ng-if="vm.permissionsAndTogglesLoaded" configurations="vm.cmdConfigurations" trigger-command="vm.triggerCommand(label, needToOpenSidePanel)"></teamschedule-command-menu>
 		</div>
@@ -55,6 +65,10 @@
 											action-callback="vm.commonCommandCallback(trackId, personIds)"
 											configurations="vm.cmdConfigurations"
 											md-sidenav-focus tabindex="100"></teamschedule-command-container>
+		</md-sidenav>
+
+		<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="teamschedule-settings-container">
+			<settings></settings>
 		</md-sidenav>
 
 	</div>

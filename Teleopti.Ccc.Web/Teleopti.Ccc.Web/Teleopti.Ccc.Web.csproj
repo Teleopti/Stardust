@@ -1501,6 +1501,7 @@
     <Content Include="WFM\js\teamSchedule\html\addPersonalActivity.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\commandCheck.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\commandConfirmDialog.tpl.html" />
+    <Content Include="WFM\js\teamSchedule\html\settings.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\dayViewSchedule.html" />
     <Content Include="WFM\js\teamSchedule\html\miniConfirmModal.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\modifyShiftCategory.tpl.html" />
@@ -1516,6 +1517,7 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.controller.day.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.controller.day.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.controller.week.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.directive.cmd.settings.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.scheduletable.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.cmd.addAbsence.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.cmd.addAbsence.spec.js" />

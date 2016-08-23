@@ -22,14 +22,46 @@
 		scheduleMgmtSvc, toggleSvc, signalRSVC, NoticeService, ValidateRulesService, CommandCheckService, $stateParams) {
 
 		var vm = this;
-		var commandContainerId = 'teamschedule-command-container';
 
 		vm.isLoading = false;
-		vm.scheduleDate = $stateParams.selectedDate ? $stateParams.selectedDate : new Date();
 		vm.scheduleFullyLoaded = false;
+		vm.scheduleDate = $stateParams.selectedDate ? $stateParams.selectedDate : new Date();
+		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
+
+		vm.toggleForSelectAgentsPerPageEnabled = false;
+		vm.onlyLoadScheduleWithAbsence = false;
+		vm.permissionsAndTogglesLoaded = false;
+		vm.lastCommandTrackId = "";
+		vm.validateWarningToggle = false;
+
+		vm.showDatePicker = false;
+
+		vm.paginationOptions = {
+			pageSize: 20,
+			pageNumber: 1,
+			totalPages: 0
+		};
+
+		vm.searchOptions = {
+			keyword: getDefaultKeyword() || '',
+			searchKeywordChanged: false
+		};
+
 		vm.hasSelectedAllPeopleInEveryPage = false;
+		vm.agentsPerPageSelection = [20, 50, 100, 500];
+
+		function getDefaultKeyword(){
+			if ($stateParams.site && $stateParams.team)
+				return $stateParams.site + '"' + $stateParams.team + '"';
+			else if ($stateParams.keyword)
+				return $stateParams.keyword;
+		}
+
+		var commandContainerId = 'teamschedule-command-container';
+		var settingsContainerId = 'teamschedule-settings-container';
 
 		vm.triggerCommand = function (label, needToOpenSidePanel) {
+			closeSettingsSidenav();
 			$mdSidenav(commandContainerId).close().then(function () {
 				if(CommandCheckService.getCommandCheckStatus())
 					CommandCheckService.resetCommandCheckStatus();
@@ -40,6 +72,11 @@
 					activeCmd: label
 				});
 			});
+		};
+
+		vm.openSettingsPanel = function(){
+			closeAllCommandSidenav();
+			$mdSidenav(settingsContainerId).toggle();
 		};
 
 		vm.commonCommandCallback = function(trackId, personIds) {
@@ -72,37 +109,18 @@
 			});
 		}
 
-		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
-		vm.toggleForSelectAgentsPerPageEnabled = false;
-		vm.onlyLoadScheduleWithAbsence = false;
-		vm.validateWarningToggle = false;
-		vm.lastCommandTrackId = "";
-		vm.permissionsAndTogglesLoaded = false;
-		vm.showDatePicker = false;
-
-		function keyword(){
-			if ($stateParams.site && $stateParams.team)
-				return $stateParams.site + '"' + $stateParams.team + '"';
-			else if ($stateParams.keyword)
-				return $stateParams.keyword;
+		function closeAllCommandSidenav() {
+			$mdSidenav(commandContainerId).isOpen() && $mdSidenav(commandContainerId).close();
 		}
-		vm.searchOptions = {
-			keyword: keyword() || '',
-			searchKeywordChanged: false
-		};
 
-		vm.agentsPerPageSelection = [20, 50, 100, 500];
+		function closeSettingsSidenav() {
+			$mdSidenav(settingsContainerId).isOpen() && $mdSidenav(settingsContainerId).close();
+		}
 
 		vm.selectorChanged = function() {
 			teamScheduleSvc.updateAgentsPerPageSetting.post({ agents: vm.paginationOptions.pageSize }).$promise.then(function () {
 				vm.resetSchedulePage();
 			});
-		};
-
-		vm.paginationOptions = {
-			pageSize: 20,
-			pageNumber: 1,
-			totalPages: 0
 		};
 
 		function updateShiftStatusForSelectedPerson() {
@@ -294,12 +312,17 @@
 				SwapShiftEnabled: toggleSvc.WfmTeamSchedule_SwapShifts_36231,
 				MoveActivityEnabled: toggleSvc.WfmTeamSchedule_MoveActivity_37744,
 				AddPersonalActivityEnabled: toggleSvc.WfmTeamSchedule_AddPersonalActivity_37742,
-				ShowNightlyRestWarningEnabled: toggleSvc.WfmTeamSchedule_ShowNightlyRestWarning_39619,
 				ModifyShiftCategoryEnabled: toggleSvc.WfmTeamSchedule_ModifyShiftCategory_39797,
 				UndoScheduleEnabled: toggleSvc.WfmTeamSchedule_RevertToPreviousSchedule_39002,
 				CheckOverlappingCertainActivitiesEnabled: toggleSvc.WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938,
-				WeekViewEnabled: toggleSvc.WfmTeamSchedule_WeekView_39870
+				WeekViewEnabled: toggleSvc.WfmTeamSchedule_WeekView_39870,
+				ShowValidationWarnings: toggleSvc.WfmTeamSchedule_ShowNightlyRestWarning_39619
+									 || toggleSvc.WfmTeamSchedule_ShowWeeklyWorktimeWarning_39799
+									 || toggleSvc.WfmTeamSchedule_ShowWeeklyRestTimeWarning_39800
+									 || toggleSvc.WfmTeamSchedule_ShowDayOffWarning_39801,
+				FilterValidationWarnings: toggleSvc.WfmTeamSchedule_FilterValidationWarnings_40110
 			};
+
 			vm.toggles.SeeScheduleChangesByOthers && monitorScheduleChanged();
 			vm.resetSchedulePage();
 
