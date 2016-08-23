@@ -51,6 +51,22 @@
 						isArray: false
 					}
 				});
+
+				this.getSkillAreaStaffingData = $resource('../api/intraday/monitorskillareastaffing/:id', { id: '@id' }, {
+					query: {
+						method: 'GET',
+						params: {},
+						isArray: false
+					}
+				});
+
+				this.getSkillStaffingData = $resource('../api/intraday/monitorskillstaffing/:id', { id: '@id' }, {
+					query: {
+						method: 'GET',
+						params: {},
+						isArray: false
+					}
+				});
 			}
 		]);
 })();
