@@ -69,6 +69,7 @@
 		WfmTeamSchedule_ShowWeeklyRestTimeWarning_39800,
 		WfmTeamSchedule_ShowDayOffWarning_39801,
 		WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938,
+		WfmTeamSchedule_ShowOverwrittenLayerWarning_40109,
 
 		WebByPassDefaultPermissionCheck_37984,
 		WfmTeamSchedule_RevertToPreviousSchedule_39002,

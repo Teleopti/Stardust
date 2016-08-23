@@ -4314,6 +4314,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The non-overwrittenable shift {0} in interval {1} - {2} is overwritten by {3} in interval {4} - {5}..
+        /// </summary>
+        public static string BusinessRuleOverlappingErrorMessage3 {
+            get {
+                return ResourceManager.GetString("BusinessRuleOverlappingErrorMessage3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to PersonAccount for {0}, starting at {1} exceeds accrued value.
         /// </summary>
         public static string BusinessRulePersonAccountError1 {

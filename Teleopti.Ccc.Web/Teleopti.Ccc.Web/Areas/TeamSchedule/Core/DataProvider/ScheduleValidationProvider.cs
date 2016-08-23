@@ -228,6 +228,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				rules.Add(new MinWeeklyRestRule(new WeeksFromScheduleDaysExtractor(), _personWeekViolating));
 				extendedPeriod = extendedPeriod.Inflate(1);
 			}
+			if (ruleFlags.HasFlag(BusinessRuleFlags.NotOverwriteLayerRule))
+			{
+				rules.Add(new NotOverwriteLayerRule());
+			}
 
 			var schedules = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(people,
 				new ScheduleDictionaryLoadOptions(false, false),

@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -951,5 +952,130 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 
 			result.Should().Be.Empty();
 		}
+
+		[Test]
+		public void ShouldGetResultForNotOverwriteLayerRuleCheckWhenStickyActivityIsOverlappedByAnotherActivity()
+		{
+			var scenario = CurrentScenario.Current();
+			var team = TeamFactory.CreateSimpleTeam();
+
+			var contract = PersonContractFactory.CreatePersonContract();
+			contract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(0),TimeSpan.FromHours(40),TimeSpan.FromHours(8),TimeSpan.FromHours(40));
+
+			var person = PersonFactory.CreatePersonWithGuid("Peter","peter");
+			person.AddPersonPeriod(new PersonPeriod(new DateOnly(2015,12,30),contract,team));
+			PersonRepository.Has(person);
+
+			var dateTimePeriodToday = new DateTimePeriod(2016,1,2,8,2016,1,2,17);
+			var stickyActivity = ActivityFactory.CreateActivity("Short Break");
+			stickyActivity.AllowOverwrite = false;
+			var normalActivity = ActivityFactory.CreateActivity("Phone");
+			normalActivity.AllowOverwrite = true;
+			
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(normalActivity, person,dateTimePeriodToday,shiftCategory,scenario);
+
+			var stickyActivityPeriod = new DateTimePeriod(2016, 1, 2, 11, 2016, 1, 2, 13);
+			var normalActivityPeriod = new DateTimePeriod(2016, 1, 2, 12, 2016, 1, 2, 14);
+
+			personAssignment.AddActivity(stickyActivity, stickyActivityPeriod);
+			personAssignment.AddActivity(normalActivity,normalActivityPeriod);
+
+			var loggedOnCulture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+			var loggedOnTimezone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+
+
+			var stickyActvityTimePeriod = stickyActivityPeriod.TimePeriod(loggedOnTimezone);
+			var normalActivityTimePeriod = normalActivityPeriod.TimePeriod(loggedOnTimezone);
+
+			ScheduleStorage.Add(personAssignment);
+			
+
+			var results = Target.GetBusinessRuleValidationResults(new FetchRuleValidationResultFormData
+			{
+				Date = new DateTime(2016,1,2),
+				PersonIds = new[]
+				{
+					person.Id.GetValueOrDefault()
+				}
+			}, BusinessRuleFlags.NotOverwriteLayerRule);
+
+			results.First().PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault());
+
+			results.First()
+				.Warnings.Single()
+				.Should()
+				.Be.EqualTo(string.Format(Resources.BusinessRuleOverlappingErrorMessage3,
+					"Short Break",
+					TimeHelper.GetLongHourMinuteTimeString(stickyActvityTimePeriod.StartTime, loggedOnCulture),
+					TimeHelper.GetLongHourMinuteTimeString(stickyActvityTimePeriod.EndTime, loggedOnCulture),
+					"Phone",
+					TimeHelper.GetLongHourMinuteTimeString(normalActivityTimePeriod.StartTime, loggedOnCulture),
+					TimeHelper.GetLongHourMinuteTimeString(normalActivityTimePeriod.EndTime, loggedOnCulture)));
+
+		}
+
+		[Test]
+		public void ShouldGetResultForNotOverwriteLayerRuleCheckWhenStickyActivityIsOverlappedByPersonalActivity()
+		{
+			var scenario = CurrentScenario.Current();
+			var team = TeamFactory.CreateSimpleTeam();
+
+			var contract = PersonContractFactory.CreatePersonContract();
+			contract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(0),TimeSpan.FromHours(40),TimeSpan.FromHours(8),TimeSpan.FromHours(40));
+
+			var person = PersonFactory.CreatePersonWithGuid("Peter","peter");
+			person.AddPersonPeriod(new PersonPeriod(new DateOnly(2015,12,30),contract,team));
+			PersonRepository.Has(person);
+
+			var dateTimePeriodToday = new DateTimePeriod(2016,1,2,8,2016,1,2,17);
+			var stickyActivity = ActivityFactory.CreateActivity("Short Break");
+			stickyActivity.AllowOverwrite = false;
+			var normalActivity = ActivityFactory.CreateActivity("Phone");
+			normalActivity.AllowOverwrite = true;
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(normalActivity,person,dateTimePeriodToday,shiftCategory,scenario);
+
+			var stickyActivityPeriod = new DateTimePeriod(2016,1,2,11,2016,1,2,13);
+			var normalActivityPeriod = new DateTimePeriod(2016,1,2,12,2016,1,2,14);
+
+			personAssignment.AddActivity(stickyActivity,stickyActivityPeriod);
+			personAssignment.AddPersonalActivity(normalActivity,normalActivityPeriod);
+
+			var loggedOnCulture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
+			var loggedOnTimezone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+
+
+			var stickyActvityTimePeriod = stickyActivityPeriod.TimePeriod(loggedOnTimezone);
+			var normalActivityTimePeriod = normalActivityPeriod.TimePeriod(loggedOnTimezone);
+
+			ScheduleStorage.Add(personAssignment);
+
+
+			var results = Target.GetBusinessRuleValidationResults(new FetchRuleValidationResultFormData
+			{
+				Date = new DateTime(2016,1,2),
+				PersonIds = new[]
+				{
+					person.Id.GetValueOrDefault()
+				}
+			},BusinessRuleFlags.NotOverwriteLayerRule);
+
+			results.First().PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault());
+
+			results.First()
+				.Warnings.Single()
+				.Should()
+				.Be.EqualTo(string.Format(Resources.BusinessRuleOverlappingErrorMessage3,
+					"Short Break",
+					TimeHelper.GetLongHourMinuteTimeString(stickyActvityTimePeriod.StartTime,loggedOnCulture),
+					TimeHelper.GetLongHourMinuteTimeString(stickyActvityTimePeriod.EndTime,loggedOnCulture),
+					"Phone",
+					TimeHelper.GetLongHourMinuteTimeString(normalActivityTimePeriod.StartTime,loggedOnCulture),
+					TimeHelper.GetLongHourMinuteTimeString(normalActivityTimePeriod.EndTime,loggedOnCulture)));
+
+		}
+	
 	}
 }

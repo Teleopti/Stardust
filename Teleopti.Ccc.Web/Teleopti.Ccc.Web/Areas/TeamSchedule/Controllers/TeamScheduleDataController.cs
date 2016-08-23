@@ -52,6 +52,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			{
 				ruleFlags |= BusinessRuleFlags.NewDayOffRule;
 			}
+			if (_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_ShowOverwrittenLayerWarning_40109))
+			{
+				ruleFlags |= BusinessRuleFlags.NotOverwriteLayerRule;
+			}
 
 			return _validationProvider.GetBusinessRuleValidationResults(input, ruleFlags);
 		}

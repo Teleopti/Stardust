@@ -419,6 +419,7 @@
     <Compile Include="Scheduling\Legacy\Commands\LockInfo.cs" />
     <Compile Include="Scheduling\Restrictions\MustHaveRestrictionProvider.cs" />
     <Compile Include="Scheduling\Rules\BusinessRuleProvider.cs" />
+    <Compile Include="Scheduling\Rules\NotOverwriteLayerRule.cs" />
     <Compile Include="Scheduling\Rules\SiteOpenHoursRule.cs" />
     <Compile Include="Scheduling\TeamBlock\AssignScheduledLayers.cs" />
     <Compile Include="Scheduling\TeamBlock\BetweenDayOffBlockFinder.cs" />

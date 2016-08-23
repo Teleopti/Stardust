@@ -43,18 +43,18 @@
 	<!-- Runs NPM command -->
 	<Target Name="RestoreNodePackages">
     
-    <Exec Command="$(NpmSetServerCmd)"  ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
-		<Exec Command="$(NpmSetNoProgressCmd)"  ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
-		<Exec Command="$(NpmInstallKarmaCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
-		<Exec Command="$(NpmInstallKarmaCliCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
+    <!--<Exec Command="$(NpmSetServerCmd)"  ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />-->
+		<!--<Exec Command="$(NpmSetNoProgressCmd)"  ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />-->
+		<!--<Exec Command="$(NpmInstallKarmaCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />-->
+		<!--<Exec Command="$(NpmInstallKarmaCliCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />-->
 
 		<Message Text="Restore Node Packages Command: $(NpmInstallCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
-		<Exec Command="PATH=&quot;$(NodeDir)&quot; &amp;&amp; $(NpmInstallCmd)" ContinueOnError="WarnAndContinue" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
+		<!--<Exec Command="PATH=&quot;$(NodeDir)&quot; &amp;&amp; $(NpmInstallCmd)" ContinueOnError="WarnAndContinue" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />-->
 
-		<Exec Command="$(NpmRebuildNodeSassCmd)"  ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
+		<!--<Exec Command="$(NpmRebuildNodeSassCmd)"  ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />-->
 	  
 		<Message Text="Deduplicate Node Packages Command: $(NpmDedupeCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
-		<Exec Command="$(NpmDedupeCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
+		<!--<Exec Command="$(NpmDedupeCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />-->
       
 	</Target>
 
@@ -66,10 +66,10 @@
 	</ItemGroup>
 	<Target Name="RunGruntBuild" Inputs="@(OriginalJsFiles);@(DistCssFiles)" Outputs="@(DistJsFiles);@(DistCssFiles)">
 		<Message Text="Restore Node Packages Command: $(NpmInstallGruntCliCmd) /w WorkingDirectory: $(NodeDir)" Importance="high" />
-		<Exec Command="$(NpmInstallGruntCliCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
+		<!--<Exec Command="$(NpmInstallGruntCliCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />-->
 		<Message Text="Executing Node.JS Builds: $(GruntBuild) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
-		<Exec ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" Command="$(GruntBuild)" />
+		<!--<Exec ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" Command="$(GruntBuild)" />-->
 	  <Message Text="Executing Node.JS Build for desktop client: $(GruntBuild) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
-	  <Exec ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" Command="$(GruntBuildForDesktop)" />
+	  <!--<Exec ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" Command="$(GruntBuildForDesktop)" />-->
 	</Target>
 </Project>
