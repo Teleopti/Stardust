@@ -60,7 +60,38 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			return _validationProvider.GetBusinessRuleValidationResults(input, ruleFlags);
 		}
 
-	    [UnitOfWork, HttpGet, Route("api/TeamScheduleData/FetchShiftCategories")]
+		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/FetchAllValidationRules")]
+		public virtual IList<string> FetchAllValidationRules()
+		{
+			var ruleFlags = BusinessRuleFlags.None;
+			if(_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_ShowNightlyRestWarning_39619))
+			{
+				ruleFlags |= BusinessRuleFlags.NewNightlyRestRule;
+			}
+			if(_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_ShowWeeklyWorktimeWarning_39799))
+			{
+				ruleFlags |= BusinessRuleFlags.MinWeekWorkTimeRule;
+				ruleFlags |= BusinessRuleFlags.NewMaxWeekWorkTimeRule;
+			}
+			if(_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_ShowWeeklyRestTimeWarning_39800))
+			{
+				ruleFlags |= BusinessRuleFlags.MinWeeklyRestRule;
+			}
+			if(_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_ShowDayOffWarning_39801))
+			{
+				ruleFlags |= BusinessRuleFlags.NewDayOffRule;
+			}
+			if(_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_ShowOverwrittenLayerWarning_40109))
+			{
+				ruleFlags |= BusinessRuleFlags.NotOverwriteLayerRule;
+			}
+
+			return _validationProvider.GetAllValidationRuleTypes(ruleFlags);
+		}
+
+
+
+		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/FetchShiftCategories")]
 	    public virtual IList<ShiftCategoryViewModel> FetchShiftCategories()
 	    {
 		    return _shiftCategoryProvider.GetAll();

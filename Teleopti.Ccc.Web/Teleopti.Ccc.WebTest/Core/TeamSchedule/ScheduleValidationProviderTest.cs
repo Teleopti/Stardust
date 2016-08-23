@@ -1094,6 +1094,27 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 					TimeHelper.GetLongHourMinuteTimeString(normalActivityTimePeriod.EndTime,loggedOnCulture)));
 
 		}
-	
+
+		[Test]
+		public void ShouldGetAllAvailableValidationRuleTypes()
+		{
+			var ruleFlags = BusinessRuleFlags.None;
+			ruleFlags |= BusinessRuleFlags.NewNightlyRestRule;
+			ruleFlags |= BusinessRuleFlags.MinWeekWorkTimeRule;
+			ruleFlags |= BusinessRuleFlags.NewMaxWeekWorkTimeRule;
+			ruleFlags |= BusinessRuleFlags.MinWeeklyRestRule;
+			ruleFlags |= BusinessRuleFlags.NewDayOffRule;
+			ruleFlags |= BusinessRuleFlags.NotOverwriteLayerRule;
+
+			var ruleTypes = Target.GetAllValidationRuleTypes(ruleFlags);
+
+			ruleTypes.Contains("NewNightlyRestRule").Should().Be.True();
+			ruleTypes.Contains("MinWeekWorkTimeRule").Should().Be.True();
+			ruleTypes.Contains("NewMaxWeekWorkTimeRule").Should().Be.True();
+			ruleTypes.Contains("MinWeeklyRestRule").Should().Be.True();
+			ruleTypes.Contains("NotOverwriteLayerRule").Should().Be.True();
+			ruleTypes.Contains("NewDayOffRule").Should().Be.True();
+		}
+
 	}
 }

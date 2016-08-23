@@ -195,6 +195,38 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					}).ToList();
 		}
 
+		public IList<string> GetAllValidationRuleTypes(BusinessRuleFlags ruleFlags)
+		{
+			var rules = new List<string>();
+
+			if(ruleFlags.HasFlag(BusinessRuleFlags.NewNightlyRestRule))
+			{
+				rules.Add(typeof(NewNightlyRestRule).Name);
+			}
+			if(ruleFlags.HasFlag(BusinessRuleFlags.MinWeekWorkTimeRule))
+			{
+				rules.Add(typeof(MinWeekWorkTimeRule).Name);
+			}
+			if(ruleFlags.HasFlag(BusinessRuleFlags.NewMaxWeekWorkTimeRule))
+			{
+				rules.Add(typeof(NewMaxWeekWorkTimeRule).Name);
+			}
+			if(ruleFlags.HasFlag(BusinessRuleFlags.MinWeeklyRestRule))
+			{
+				rules.Add(typeof(MinWeeklyRestRule).Name);				
+			}
+			if(ruleFlags.HasFlag(BusinessRuleFlags.NotOverwriteLayerRule))
+			{
+				rules.Add(typeof(NotOverwriteLayerRule).Name);
+			}
+			if(ruleFlags.HasFlag(BusinessRuleFlags.NewDayOffRule))
+			{
+				rules.Add(typeof (NewDayOffRule).Name);
+			}
+
+			return rules;
+		} 
+
 
 		public IList<BusinessRuleValidationResult> GetBusinessRuleValidationResults(FetchRuleValidationResultFormData input,
 			BusinessRuleFlags ruleFlags)
@@ -310,6 +342,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 		IList<ActivityLayerOverlapCheckingResult> GetMoveActivityLayerOverlapCheckingResult(
 			CheckMoveActivityLayerOverlapFormData input);
+
+		IList<string> GetAllValidationRuleTypes(BusinessRuleFlags ruleFlags);
 	}
 
 	public class OverlappedLayer
