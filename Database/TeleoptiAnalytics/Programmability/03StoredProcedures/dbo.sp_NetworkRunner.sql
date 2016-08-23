@@ -1,5 +1,6 @@
 --DJ
 --Clean up tables as part of every release
+-- Dummy comment to trigger build
 IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[NetworkRunnerRead]') AND type in (N'U'))
 DROP TABLE [dbo].[NetworkRunnerRead]
 GO
