@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
@@ -32,7 +33,10 @@ namespace Teleopti.Ccc.Infrastructure.Authentication
 
 		public void Add(CryptoKeyInfo cryptoKeyInfo)
 		{
-			_currentTenantSession.CurrentSession().SaveOrUpdate(cryptoKeyInfo);
+			if (Find(cryptoKeyInfo.Bucket, cryptoKeyInfo.Handle) != null)
+				throw new DuplicateCryptoKeyException();
+			var session = _currentTenantSession.CurrentSession();
+			session.SaveOrUpdate(cryptoKeyInfo);
 		}
 
 		public void Remove(string bucket, string handle)
@@ -42,4 +46,10 @@ namespace Teleopti.Ccc.Infrastructure.Authentication
 				_currentTenantSession.CurrentSession().Delete(cryptoKeyInfo);
 		}
 	}
+
+	public class DuplicateCryptoKeyException : Exception
+	{
+		
+	}
+	
 }

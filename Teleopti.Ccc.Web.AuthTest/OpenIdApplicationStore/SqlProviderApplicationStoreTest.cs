@@ -7,7 +7,6 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Infrastructure.Authentication;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Auth.OpenIdApplicationStore;
 using Teleopti.Interfaces.Domain;
 
@@ -89,11 +88,30 @@ namespace Teleopti.Ccc.Web.AuthTest.OpenIdApplicationStore
 			var cryptoKeyExpiration = now.UtcDateTime();
 			const string bucket = "bucket";
 			const string handle = "handle";
+
 			target.StoreKey(bucket, handle, new CryptoKey(key, cryptoKeyExpiration));
 
 			cryptoKeyInfoRepository.AssertWasCalled(x => x.Add(Arg<CryptoKeyInfo>.Matches(
 				c => c.Bucket == bucket && c.Handle == handle && c.CryptoKey == key && c.CryptoKeyExpiration == cryptoKeyExpiration
 				)));
+		}
+
+		[Test, ExpectedException(typeof(CryptoKeyCollisionException))]
+		public void ShouldThrowWhenHandleAndBucketExists()
+		{
+			var cryptoKeyInfoRepository = MockRepository.GenerateMock<ICryptoKeyInfoRepository>();
+
+			var now = new Now();
+			var target = new SqlProviderApplicationStore(cryptoKeyInfoRepository, null, now);
+
+			var key = Guid.NewGuid().ToByteArray();
+			var cryptoKeyExpiration = now.UtcDateTime();
+			const string bucket = "bucket";
+			const string handle = "handle";
+
+			cryptoKeyInfoRepository.Stub(x => x.Add(Arg<CryptoKeyInfo>.Is.Anything)).Throw(new DuplicateCryptoKeyException());
+
+			target.StoreKey(bucket, handle, new CryptoKey(key, cryptoKeyExpiration));
 		}
 
 		[Test]

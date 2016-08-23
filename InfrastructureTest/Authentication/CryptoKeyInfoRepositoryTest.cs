@@ -101,5 +101,39 @@ namespace Teleopti.Ccc.InfrastructureTest.Authentication
 				Target.Find(bucket, handle).Should().Be.Null();
 			}
 		}
+
+		[Test, ExpectedException(typeof(DuplicateCryptoKeyException))]
+		public void ShouldThrowWhenExisting()
+		{
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			{
+				const string bucket = "bucket";
+				const string handle = "handle";
+				var cryptoKey = Guid.NewGuid().ToByteArray();
+				var cryptoKeyExpiration = DateTime.Today;
+				try
+				{
+					Target.Add(new CryptoKeyInfo
+					{
+						Bucket = bucket,
+						Handle = handle,
+						CryptoKey = cryptoKey,
+						CryptoKeyExpiration = cryptoKeyExpiration
+					});
+				}
+				catch (Exception e)
+				{
+					throw new Exception("This part should not fail.", e);
+				}
+
+				Target.Add(new CryptoKeyInfo
+				{
+					Bucket = bucket,
+					Handle = handle,
+					CryptoKey = cryptoKey,
+					CryptoKeyExpiration = cryptoKeyExpiration
+				});
+			}
+		}
 	}
 }

@@ -37,13 +37,20 @@ namespace Teleopti.Ccc.Web.Auth.OpenIdApplicationStore
 
 		public void StoreKey(string bucket, string handle, CryptoKey key)
 		{
-			_cryptoKeyInfoRepository.Add(new CryptoKeyInfo
+			try
 			{
-				Bucket = bucket,
-				Handle = handle,
-				CryptoKey = key.Key,
-				CryptoKeyExpiration = key.ExpiresUtc
-			});
+				_cryptoKeyInfoRepository.Add(new CryptoKeyInfo
+				{
+					Bucket = bucket,
+					Handle = handle,
+					CryptoKey = key.Key,
+					CryptoKeyExpiration = key.ExpiresUtc
+				});
+			}
+			catch (DuplicateCryptoKeyException e)
+			{
+				throw new CryptoKeyCollisionException(e);
+			}
 		}
 
 		public void RemoveKey(string bucket, string handle)
