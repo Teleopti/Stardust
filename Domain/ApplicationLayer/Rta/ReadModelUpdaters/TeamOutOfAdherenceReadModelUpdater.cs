@@ -15,8 +15,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		IHandleEvent<PersonNeutralAdherenceEvent>,
 		IHandleEvent<PersonDeletedEvent>,
 		IHandleEvent<PersonAssociationChangedEvent>,
-		IInitializeble,
-		IRecreatable
+		IInitializeble
 	{
 		private readonly ITeamOutOfAdherenceReadModelPersister _persister;
 
@@ -232,12 +231,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		{
 			return _persister.HasData();
 		}
-
-		[ReadModelUnitOfWork]
-		public virtual void DeleteAll()
-		{
-			_persister.Clear();
-		}
-
 	}
 }

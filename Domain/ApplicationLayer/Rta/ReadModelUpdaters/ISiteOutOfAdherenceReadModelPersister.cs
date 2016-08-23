@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		void Persist(SiteOutOfAdherenceReadModel model);
 		SiteOutOfAdherenceReadModel Get(Guid siteId);
 		IEnumerable<SiteOutOfAdherenceReadModel> GetAll();
-		void Clear();
 		bool HasData();
 	}
 }

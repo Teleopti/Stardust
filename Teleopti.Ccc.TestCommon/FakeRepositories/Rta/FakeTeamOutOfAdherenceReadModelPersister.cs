@@ -34,11 +34,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			return _models.Any();
 		}
-		
-		public void Clear()
-		{
-			_models.Clear();
-		}
 
 		public void Has(TeamOutOfAdherenceReadModel model)
 		{

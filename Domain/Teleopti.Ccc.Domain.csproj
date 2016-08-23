@@ -635,7 +635,6 @@
     <Compile Include="ApplicationLayer\Rta\Service\IShiftEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\ISiteOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IStateEventPublisher.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IRecreatable.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\ITeamOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\NotificationCreator.cs" />
     <Compile Include="ApplicationLayer\Rta\Performance\PersonGenerator.cs" />

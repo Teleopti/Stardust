@@ -41,11 +41,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return _models.Where(x => x.BusinessUnitId == businessUnitId);
 		}
 
-		public void Clear()
-		{
-			_models.Clear();
-		}
-
 		public bool HasData()
 		{
 			return _models.Any();

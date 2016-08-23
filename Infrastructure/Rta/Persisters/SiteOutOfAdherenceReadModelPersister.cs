@@ -153,11 +153,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 			.Cast<SiteOutOfAdherenceReadModel>();
 		}
 
-		public void Clear()
-		{
-			_unitOfWork.Current().CreateSqlQuery("DELETE FROM ReadModel.SiteOutOfAdherence ").ExecuteUpdate();
-		}
-
 		public bool HasData()
 		{
 			return (int) _unitOfWork.Current().CreateSqlQuery("SELECT COUNT(*) FROM ReadModel.SiteOutOfAdherence ").UniqueResult() > 0;

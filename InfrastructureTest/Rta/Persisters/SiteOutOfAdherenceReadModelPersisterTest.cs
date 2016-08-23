@@ -108,16 +108,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		}
 
 		[Test]
-		public void ShouldClear()
-		{
-			Target.Persist(new SiteOutOfAdherenceReadModel());
-
-			Target.Clear();
-
-			Target.HasData().Should().Be.False();
-		}
-
-		[Test]
 		public void ShouldPersistIfStatesAreMoreThan4000Characters()
 		{
 			var states = Enumerable.Range(0, 200).Select(i => new SiteOutOfAdherenceReadModelState()

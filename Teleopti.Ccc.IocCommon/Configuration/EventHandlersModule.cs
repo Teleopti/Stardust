@@ -90,11 +90,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
                         let isHandleMethodEnabled = isHandler && t.GetMethod("Handle", new[] { eventType }).MethodEnabledByToggle(_config)
 
                         let isInitializable = i == typeof(IInitializeble)
-                        let isSynchronizable = i == typeof(IRecreatable)
                         where
                             (isHandler && isHandleMethodEnabled) ||
-                            isInitializable ||
-                            isSynchronizable
+                            isInitializable
                         select i;
                 })
                 .AsSelf()

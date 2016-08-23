@@ -143,11 +143,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 			return (int)_unitOfWork.Current().CreateSqlQuery("SELECT COUNT(*) FROM ReadModel.TeamOutOfAdherence ").UniqueResult() > 0;
 		}
 
-		public void Clear()
-		{
-			_unitOfWork.Current().CreateSqlQuery("DELETE FROM ReadModel.TeamOutOfAdherence ").ExecuteUpdate();
-		}
-
 		private class internalModel : TeamOutOfAdherenceReadModel
 		{
 			public string StateJson { get; set; }
