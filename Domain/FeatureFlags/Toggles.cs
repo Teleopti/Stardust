@@ -68,6 +68,8 @@
 		WfmTeamSchedule_ShowWeeklyWorktimeWarning_39799,
 		WfmTeamSchedule_ShowWeeklyRestTimeWarning_39800,
 		WfmTeamSchedule_ShowDayOffWarning_39801,
+		WfmTeamSchedule_FilterValidationWarnings_40110,
+
 		WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938,
 		WfmTeamSchedule_ShowOverwrittenLayerWarning_40109,
 
