@@ -99,7 +99,9 @@ Teleopti.MyTimeWeb.StudentAvailability.DayViewModel = function (ajaxForDate) {
 			type: 'DELETE',
 			data: JSON.stringify({ Date: self.Date }),
 			date: self.Date,
-			statusCode404: function () { },
+			statusCode404: function() {
+				self.ReadStudentAvailability();
+			},
 			success: this.ReadStudentAvailability,
 			complete: function () {
 				deferred.resolve();
