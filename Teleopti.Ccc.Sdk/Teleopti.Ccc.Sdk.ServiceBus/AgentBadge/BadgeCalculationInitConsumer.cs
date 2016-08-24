@@ -2,7 +2,6 @@ using Rhino.ServiceBus;
 using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Badge;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.General;
@@ -16,18 +15,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		private readonly IPerformBadgeCalculation _performBadgeCalculation;
 		private readonly IRunningEtlJobChecker _runningEtlJobChecker;
 		private readonly IServiceBus _serviceBus;
-		private readonly IToggleManager _toggleManager;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
 		public BadgeCalculationInitConsumer(IPerformBadgeCalculation performBadgeCalculation,
-			IRunningEtlJobChecker runningEtlJobChecker, IServiceBus serviceBus, INow now, IToggleManager toggleManager,
+			IRunningEtlJobChecker runningEtlJobChecker, IServiceBus serviceBus, INow now,
 			IIsTeamGamificationSettingsAvailable isTeamGamificationSettingsAvailable, ICurrentUnitOfWorkFactory unitOfWorkFactory)
 		{
 			_performBadgeCalculation = performBadgeCalculation;
 			_runningEtlJobChecker = runningEtlJobChecker;
 			_serviceBus = serviceBus;
 			_now = now;
-			_toggleManager = toggleManager;
 			_isTeamGamificationSettingsAvailable = isTeamGamificationSettingsAvailable;
 			_unitOfWorkFactory = unitOfWorkFactory;
 		}

@@ -4,7 +4,6 @@ using Rhino.ServiceBus;
 using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Badge;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Sdk.ServiceBus.AgentBadge;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -18,7 +17,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private IServiceBus serviceBus;
 		private BadgeCalculationInitConsumer target;
 		private ICurrentUnitOfWorkFactory currentUnitOfWorkFactory;
-		private IToggleManager toggleManager;
 		private IPerformBadgeCalculation _performBadgeCalculation;
 		private MockRepository _mock;
 		private IRunningEtlJobChecker _runningEtlJobChecker;
@@ -32,7 +30,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		{
 			_mock = new MockRepository();
 			_performBadgeCalculation = _mock.StrictMock<IPerformBadgeCalculation>();
-			toggleManager = _mock.StrictMock<IToggleManager>();
 			serviceBus = _mock.StrictMock<IServiceBus>();
 			currentUnitOfWorkFactory = _mock.StrictMock<ICurrentUnitOfWorkFactory>();
 			_runningEtlJobChecker = _mock.StrictMock<IRunningEtlJobChecker>();
@@ -42,7 +39,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_now = new MutableNow();
 
 			target = new BadgeCalculationInitConsumer(_performBadgeCalculation, _runningEtlJobChecker, serviceBus, _now,
-				toggleManager, _isTeamGamificationSettingsAvailable, currentUnitOfWorkFactory);
+				 _isTeamGamificationSettingsAvailable, currentUnitOfWorkFactory);
 		}
 
 		[Test]
