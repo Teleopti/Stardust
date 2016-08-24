@@ -30,7 +30,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly DataSourceState _dataSourceState;
 
 		public AbsenceRequestTickHandler(IAbsenceRequestStrategyProcessor absenceRequestStrategyProcessor,
-			IEventPublisher publisher, INow now, IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IRequestStrategySettingsReader requestStrategySettingsReader, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IBusinessUnitRepository businessUnitRepository, IBusinessUnitScope businessUnitScope, ICurrentDataSource currentDataSource, IDataSourceScope dataSourceScope, IPersonRepository personRepository, DataSourceState dataSourceState)
+			IEventPublisher publisher, INow now, IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository,
+			IRequestStrategySettingsReader requestStrategySettingsReader, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
+			IBusinessUnitRepository businessUnitRepository, IBusinessUnitScope businessUnitScope,
+			ICurrentDataSource currentDataSource, IDataSourceScope dataSourceScope)
 		{
 			_absenceRequestStrategyProcessor = absenceRequestStrategyProcessor;
 			_publisher = publisher;
@@ -65,27 +68,26 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						var absenceReqFarFutureTime = _requestStrategySettingsReader.GetIntSetting("AbsenceFarFutureTime", 60);
 
 						var now = _now.UtcDateTime();
-						var nearFutureInterval = _now.UtcDateTime().AddMinutes(absenceReqNearFutureTime * -1);
-						var farFutureInterval = _now.UtcDateTime().AddMinutes(absenceReqFarFutureTime * -1);
+						var nearFutureInterval = _now.UtcDateTime().AddMinutes(absenceReqNearFutureTime*-1);
+						var farFutureInterval = _now.UtcDateTime().AddMinutes(absenceReqFarFutureTime*-1);
 
-						var absenceRequests = _absenceRequestStrategyProcessor.Get(nearFutureInterval, farFutureInterval,
-							new DateTimePeriod(now.Date, now.Date.AddDays(nearFuture))).ToList();
-						if (!absenceRequests.Any()) return;
-						var multiAbsenceRequestsEvent = new NewMultiAbsenceRequestsCreatedEvent()
+						var listOfAbsenceRequests = _absenceRequestStrategyProcessor.Get(nearFutureInterval, farFutureInterval,
+							new DateTimePeriod(now.Date, now.Date.AddDays(nearFuture)), nearFuture);
+						if (!listOfAbsenceRequests.Any()) return;
+						listOfAbsenceRequests.ForEach(absenceRequests =>
 						{
-							PersonRequestIds = absenceRequests.ToList()
-						};
-						_publisher.Publish(multiAbsenceRequestsEvent);
-						_queuedAbsenceRequestRepository.Remove(absenceRequests);
+							var multiAbsenceRequestsEvent = new NewMultiAbsenceRequestsCreatedEvent()
+							{
+								PersonRequestIds = absenceRequests.ToList()
+							};
+							_publisher.Publish(multiAbsenceRequestsEvent);
+							_queuedAbsenceRequestRepository.Remove(absenceRequests);
+						});
+
 						uow.PersistAll();
 					});
-					
+
 				}
-			}
-			//
-			{
-				
-				//
 			}
 		}
 	}

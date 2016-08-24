@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -22,11 +23,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private DateTime _interval;
 		private DateTime _today;
 		private DateTime _farFutureInterval;
+		private int _windowSize;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<AbsenceRequestStrategyProcessor>().For<IAbsenceRequestStrategyProcessor>();
 			_nearFuture = 3;
+			_windowSize = _nearFuture;
 			var intervalMinutes = 10;
 			var now = new DateTime(2016, 03, 01, 10, 0, 0, DateTimeKind.Utc);
 			_interval = now.AddMinutes(intervalMinutes * -1);
@@ -35,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 		[Test]
-		public void ShouldFetchNoAbsenceRequestOlderThan10Minutes()
+		public void ShouldFetchNoAbsenceRequestNewerThan10MinutesForNearFuture()
 		{
 
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
@@ -46,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				PersonRequest = Guid.NewGuid()
 			});
 
-			var absenceRequests = Target.Get(_interval, _farFutureInterval, new DateTimePeriod(_today, _today.AddDays(_nearFuture)));
+			var absenceRequests = Target.Get(_interval, _farFutureInterval, new DateTimePeriod(_today, _today.AddDays(_nearFuture)), _windowSize);
 			absenceRequests.Count().Should().Be.EqualTo(0);
 
 		}
@@ -71,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				PersonRequest = Guid.NewGuid()
 			});
 
-			var absenceRequests = Target.Get(_interval, _farFutureInterval, new DateTimePeriod(_today, _today.AddDays(_nearFuture)));
+			var absenceRequests = Target.Get(_interval, _farFutureInterval, new DateTimePeriod(_today, _today.AddDays(_nearFuture)), _windowSize);
 			absenceRequests.Count().Should().Be.EqualTo(1);
 
 		}
@@ -96,8 +99,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			});
 
 			
-			var absenceRequests = Target.Get(_interval, _farFutureInterval, new DateTimePeriod(_today, _today.AddDays(_nearFuture)));
-			absenceRequests.Count().Should().Be.EqualTo(2);
+			var absenceRequests = Target.Get(_interval, _farFutureInterval, new DateTimePeriod(_today, _today.AddDays(_nearFuture)), _windowSize);
+			absenceRequests.First().Count().Should().Be.EqualTo(2);
 		}
 
 		[Test]
@@ -111,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				PersonRequest = Guid.NewGuid()
 			});
 
-			var absenceRequests = Target.Get(_interval, _farFutureInterval, new DateTimePeriod(_today, _today.AddDays(_nearFuture)));
+			var absenceRequests = Target.Get(_interval, _farFutureInterval, new DateTimePeriod(_today, _today.AddDays(_nearFuture)), _windowSize);
 			absenceRequests.Count().Should().Be.EqualTo(1);
 		}
 
@@ -134,8 +137,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				PersonRequest = Guid.NewGuid()
 			});
 
-			var absenceRequests = Target.Get(_interval,_farFutureInterval , new DateTimePeriod(_today, _today.AddDays(_nearFuture)));
-			absenceRequests.Count().Should().Be.EqualTo(2);
+			var absenceRequests = Target.Get(_interval,_farFutureInterval , new DateTimePeriod(_today, _today.AddDays(_nearFuture)), _windowSize);
+			absenceRequests.First().Count().Should().Be.EqualTo(2);
 		}
 
 
@@ -161,9 +164,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			});
 
 		  
-			var absenceRequests = Target.Get(_interval, _farFutureInterval, new DateTimePeriod(_today, _today.AddDays(_nearFuture)));
+			var absenceRequests = Target.Get(_interval, _farFutureInterval, new DateTimePeriod(_today, _today.AddDays(_nearFuture)), _windowSize);
 			absenceRequests.Count().Should().Be.EqualTo(1);
-			absenceRequests.First().Should().Be.EqualTo(nearFutureReqId);
+			absenceRequests.First().First().Should().Be.EqualTo(nearFutureReqId);
 		}
 
 		[Test]
@@ -194,9 +197,55 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			});
 
 
-			var absenceRequests = Target.Get(_interval, _farFutureInterval, new DateTimePeriod(_today, _today.AddDays(_nearFuture)));
-			absenceRequests.Count().Should().Be.EqualTo(2);
+			var absenceRequests = Target.Get(_interval, _farFutureInterval, new DateTimePeriod(_today, _today.AddDays(_nearFuture)), _windowSize);
+			absenceRequests.First().Count().Should().Be.EqualTo(2);
 		}
+
+		[Test]
+		public void ShouldFetchFarFutureAbsencesUsingSlidingWindow()
+		{
+			var lastAbsenceReqId = Guid.NewGuid();
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2016, 3, 11, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 3, 13, 23, 59, 00, DateTimeKind.Utc),
+				Created = new DateTime(2016, 03, 1, 8, 47, 0, DateTimeKind.Utc),
+				PersonRequest = Guid.NewGuid()
+			});
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2016, 3, 12, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 3, 12, 23, 59, 00, DateTimeKind.Utc),
+				Created = new DateTime(2016, 03, 1, 8, 46, 0, DateTimeKind.Utc),
+				PersonRequest = Guid.NewGuid()
+			});
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2016, 3, 13, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 3, 15, 23, 59, 00, DateTimeKind.Utc),
+				Created = new DateTime(2016, 03, 1, 8, 58, 0, DateTimeKind.Utc),
+				PersonRequest = Guid.NewGuid()
+			});
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2016, 3, 14, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 3, 20, 23, 59, 00, DateTimeKind.Utc),
+				Created = new DateTime(2016, 03, 1, 8, 58, 0, DateTimeKind.Utc),
+				PersonRequest = lastAbsenceReqId
+			});
+
+
+			var absenceRequests = Target.Get(_interval, _farFutureInterval, new DateTimePeriod(_today, _today.AddDays(_nearFuture)), _windowSize);
+			absenceRequests.Count().Should().Be.EqualTo(2);
+			absenceRequests.First().Count().Should().Be.EqualTo(3);
+			absenceRequests.Second().Count().Should().Be.EqualTo(1);
+			absenceRequests.Second().First().Should().Be.EqualTo(lastAbsenceReqId);
+
+		}
+
 
 	}
 
