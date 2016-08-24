@@ -228,6 +228,7 @@ you have to manually clean up or call CleanUpAfterTest() to restore the database
 			return new GenericDisposable(() =>
 			{
 				RestoreCcc7Database();
+				RestoreAnalyticsDatabase();
 				Logout();
 			});
 		}

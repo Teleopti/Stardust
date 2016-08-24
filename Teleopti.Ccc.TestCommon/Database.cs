@@ -353,11 +353,16 @@ namespace Teleopti.Ccc.TestCommon
 
 
 
-
-		[UnitOfWork]
 		public virtual Database WithStateGroup(string name)
 		{
-			addStateGroup(name);
+			WithStateGroup(name, false);
+			return this;
+		}
+
+		[UnitOfWork]
+		public virtual Database WithStateGroup(string name, bool @default)
+		{
+			addStateGroup(name, @default);
 			return this;
 		}
 
@@ -371,14 +376,14 @@ namespace Teleopti.Ccc.TestCommon
 		private IRtaStateGroup stateGroup()
 		{
 			if (_stateGroup == null)
-				addStateGroup(RandomName.Make());
+				addStateGroup(RandomName.Make(), false);
 			return _stateGroups.LoadAll().Single(x => x.Name == _stateGroup);
 		}
 
-		private void addStateGroup(string name)
+		private void addStateGroup(string name, bool @default)
 		{
 			_stateGroup = name;
-			var stateGroup = new RtaStateGroup(name, false, true);
+			var stateGroup = new RtaStateGroup(name, @default, true);
 			_stateGroups.Add(stateGroup);
 		}
 
