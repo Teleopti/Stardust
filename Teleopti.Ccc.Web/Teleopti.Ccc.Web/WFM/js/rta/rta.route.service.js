@@ -13,8 +13,8 @@
 				});
 			};
 
-			this.urlForChangingSchedule = function(siteName, teamName, personId) {
-				return "#/myTeam/" + siteName + "/" + teamName + "/" + '?personIds=' + personId;
+			this.urlForChangingSchedule = function(personId) {
+				return "#/myTeam/" + personId;
 			};
 
 			this.urlForAgentDetails = function(personId) {

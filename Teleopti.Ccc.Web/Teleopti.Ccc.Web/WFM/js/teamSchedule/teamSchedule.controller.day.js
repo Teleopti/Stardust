@@ -5,6 +5,8 @@
 		'$scope',
 		'$q',
 		'$translate',
+		'$stateParams',
+		'$state',
 		'$mdSidenav',
 		'TeamSchedule',
 		'GroupScheduleFactory',
@@ -15,11 +17,10 @@
 		'NoticeService',
 		'ValidateRulesService',
 		'CommandCheckService',
-		'$stateParams',
 		TeamScheduleController]);
 
-	function TeamScheduleController($scope, $q, $translate, $mdSidenav, teamScheduleSvc, groupScheduleFactory, personSelectionSvc,
-		scheduleMgmtSvc, toggleSvc, signalRSVC, NoticeService, ValidateRulesService, CommandCheckService, $stateParams) {
+	function TeamScheduleController($scope, $q, $translate, $stateParams, $state, $mdSidenav, teamScheduleSvc, groupScheduleFactory, personSelectionSvc,
+		scheduleMgmtSvc, toggleSvc, signalRSVC, NoticeService, ValidateRulesService, CommandCheckService) {
 
 		var vm = this;
 
@@ -34,6 +35,7 @@
 		vm.lastCommandTrackId = "";
 		vm.validateWarningToggle = false;
 
+		vm.searchEnabled = $state.current.name != 'myTeamSchedule.for';
 		vm.showDatePicker = false;
 
 		vm.paginationOptions = {
@@ -180,20 +182,31 @@
 
 		vm.loadSchedules = function() {
 			vm.isLoading = true;
+			var preSelectPersonIds = $stateParams.personId ? [$stateParams.personId] : [];
 
-			var params = getParamsForLoadingSchedules();
-			teamScheduleSvc.searchSchedules.query(params).$promise.then(function (result) {
-				scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment());
-				afterSchedulesLoaded(result);
+			if(vm.searchEnabled){
+				var params = getParamsForLoadingSchedules();
 
-				if ($stateParams.personIds) {
-					personSelectionSvc.preSelectPeople($stateParams.personIds, scheduleMgmtSvc.groupScheduleVm.Schedules, vm.scheduleDate);
-				}
+				teamScheduleSvc.searchSchedules.query(params).$promise.then(function (result) {
+					scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment());
+					afterSchedulesLoaded(result);
+					personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
+					vm.isLoading = false;
+					vm.checkValidationWarningForCurrentPage();
+				});
+			}else if(preSelectPersonIds.length > 0){
+				var date = vm.scheduleDateMoment().format('YYYY-MM-DD');
 
-				personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
-				vm.isLoading = false;
-				vm.checkValidationWarningForCurrentPage();
-			});
+				teamScheduleSvc.getSchedules(date, preSelectPersonIds).then(function(result){
+					scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment());
+					afterSchedulesLoaded(result);
+					personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
+					personSelectionSvc.preSelectPeople(preSelectPersonIds, scheduleMgmtSvc.groupScheduleVm.Schedules, vm.scheduleDate);
+
+					vm.checkValidationWarningForCurrentPage();
+					vm.isLoading = false;
+				})
+			}
 		};
 
 		vm.toggleShowAbsenceOnly = function () {

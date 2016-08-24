@@ -91,8 +91,8 @@
 							});
 					}
 				};
-				$scope.changeScheduleUrl = function(siteName, teamName, personId) {
-					return RtaRouteService.urlForChangingSchedule(siteName, teamName, personId);
+				$scope.changeScheduleUrl = function(personId) {
+					return RtaRouteService.urlForChangingSchedule(personId);
 				};
 				$scope.agentDetailsUrl = function(personId) {
 					return RtaRouteService.urlForAgentDetails(personId);

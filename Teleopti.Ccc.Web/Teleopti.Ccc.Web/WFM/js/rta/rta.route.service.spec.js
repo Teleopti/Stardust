@@ -33,8 +33,8 @@ describe('RtaRouteService', function() {
 	});
 
 	it('should get change schedule url for an agent', function() {
-		expect(target.urlForChangingSchedule("London", "Team Preferences", "11610fe4-0130-4568-97de-9b5e015b2564"))
-			.toEqual("#/myTeam/London/Team Preferences/?personIds=11610fe4-0130-4568-97de-9b5e015b2564");
+		expect(target.urlForChangingSchedule("11610fe4-0130-4568-97de-9b5e015b2564"))
+			.toEqual("#/myTeam/11610fe4-0130-4568-97de-9b5e015b2564");
 	});
 
 	it('should get agent details url', function() {
