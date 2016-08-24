@@ -17,10 +17,11 @@
 			<span class="datepicker-container">
 				<team-schedule-datepicker selected-date="vm.scheduleDate" on-date-change="vm.onScheduleDateChanged()"></team-schedule-datepicker>
 			</span>
+
+			<view-changer ng-if="vm.toggles.WeekViewEnabled" selected-date="vm.scheduleDate" keyword="vm.searchOptions.keyword"></view-changer>
 		</div>
 
 		<div class="rightside-part">
-			<view-changer ng-if="vm.toggles.WeekViewEnabled" selected-date="vm.scheduleDate" keyword="vm.searchOptions.keyword"></view-changer>
 			<div id="show-warnings" class="wfm-switch" ng-if="vm.toggles.ShowNightlyRestWarningEnabled">
 				<input type="checkbox" id="validateWarning" ng-model="vm.validateWarningToggle" ng-change="vm.checkValidationWarningForCurrentPage()" />
 				<label for="validateWarning">
