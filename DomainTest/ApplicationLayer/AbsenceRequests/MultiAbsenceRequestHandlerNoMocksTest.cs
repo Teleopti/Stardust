@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private IPersonRepository _personRepository;
 		private IPersonRequestRepository _personRequestRepository;
 		private SchedulingResultStateHolder _schedulingResultStateHolder;
-		readonly FakeCurrentUnitOfWorkFactory _unitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();
+		readonly FakeCurrentUnitOfWorkFactory _currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();
 
 		private FakeScheduleProjectionReadOnlyPersister _scheduleProjectionReadOnlyPersister;
 		private LoadSchedulesForRequestWithoutResourceCalculation _loadSchedulesForRequestWithoutResourceCalculation;
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var skillDayLoadHelper = new SkillDayLoadHelper(new FakeSkillDayRepository(),
 				new MultisiteDayRepository(new FakeUnitOfWork()));
 			_scenarioRepository = new FakeScenarioRepository(_currentScenario.Current());
-
+			
 			_loadSchedulesForRequestWithoutResourceCalculation = new LoadSchedulesForRequestWithoutResourceCalculation(_personAbsenceAccountRepository, _scheduleRepository);
 			_loadSchedulingStateHolderForResourceCalculation = new LoadSchedulingStateHolderForResourceCalculation(_personRepository, _personAbsenceAccountRepository, skillRepository,
 				workloadRepository, _scheduleRepository, peopleAndSkillLoaderDecider, skillDayLoadHelper);
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldNotUpdateExistingPersonalAccountDataWhenConsumingAbsenceRequest()
 		{
-			simpleRequestStatusTest(new GrantAbsenceRequest(), false);
+			simpleRequestStatusTest(new GrantAbsenceRequest());
 			Assert.AreEqual(0, _personAccountUpdaterDummy.CallCount);
 		}
 		
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var newRequest = createAbsenceRequest(personTwo, absence, requestDateTimePeriod);
 			var newAbsenceRequestConsumer = createNewAbsenceRequestHandler(true, false);
 
-			newAbsenceRequestConsumer.Handle(new NewMultiAbsenceRequestsCreatedEvent() { PersonRequestIds = new List<Guid>() { newRequest.Id.Value } });
+			newAbsenceRequestConsumer.Handle(new NewMultiAbsenceRequestsCreatedEvent() { PersonRequestIds = new List<Guid>() { newRequest.Id.GetValueOrDefault() } });
 
 			Assert.IsTrue(existingDeniedRequest.IsDenied);
 			Assert.IsFalse(existingDeniedRequest.IsAutoDenied);
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var newRequest = createAbsenceRequest(person, absence, requestDateTimePeriod);
 			var newAbsenceRequestConsumer = createNewAbsenceRequestHandler(false, false);
-			newAbsenceRequestConsumer.Handle(new NewMultiAbsenceRequestsCreatedEvent() { PersonRequestIds = new List<Guid>() { newRequest.Id.Value } });
+			newAbsenceRequestConsumer.Handle(new NewMultiAbsenceRequestsCreatedEvent() { PersonRequestIds = new List<Guid>() { newRequest.Id.GetValueOrDefault() } });
 
 			Assert.IsTrue(newRequest.IsApproved);
 			Assert.IsTrue(existingDeniedRequest.IsAutoDenied);
@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		private PersonRequest createAbsenceRequest(IPerson person, IAbsence absence, DateTimePeriod requestDateTimePeriod)
 		{
-			var personRequest = new PersonRequest(person, new Domain.AgentInfo.Requests.AbsenceRequest(absence, requestDateTimePeriod));
+			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, requestDateTimePeriod));
 
 			personRequest.SetId(Guid.NewGuid());
 			_personRequestRepository.Add(personRequest);
@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var newAbsenceRequestConsumer = createNewAbsenceRequestHandler(false, forcePersonalAccountUpdate);
 			var request = createAbsenceRequest(person, absence, new DateTimePeriod(startDateTime, endDateTime));
 
-			newAbsenceRequestConsumer.Handle(new NewMultiAbsenceRequestsCreatedEvent() { PersonRequestIds = new List<Guid>() { request.Id.Value } });
+			newAbsenceRequestConsumer.Handle(new NewMultiAbsenceRequestsCreatedEvent() { PersonRequestIds = new List<Guid>() { request.Id.GetValueOrDefault() } });
 
 			return request;
 		}
@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		private MultiAbsenceRequestsHandler createNewAbsenceRequestHandler(bool enableWaitlisting, bool forceAccountRecalcBeforeProcessingRequest)
 		{
-			var resourceCalculator = new ResourceCalculationPrerequisitesLoader(_unitOfWorkFactory,
+			var resourceCalculator = new ResourceCalculationPrerequisitesLoader(_currentUnitOfWorkFactory,
 				new FakeContractScheduleRepository(),
 				new FakeActivityRepository(), new FakeAbsenceRepository());
 
@@ -258,7 +258,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var absenceProcessor = new MultiAbsenceRequestProcessor(multiAbsenceRequestStatusUpdater, () => _schedulingResultStateHolder);
 			
 			var newAbsenceRequestConsumer = new MultiAbsenceRequestsHandler(
-				_unitOfWorkFactory, _currentScenario, _personRequestRepository, absenceProcessor);
+				 _currentScenario, _personRequestRepository, absenceProcessor, _currentUnitOfWorkFactory);
 
 			return newAbsenceRequestConsumer;
 		}

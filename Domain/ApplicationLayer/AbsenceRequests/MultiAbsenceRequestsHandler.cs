@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using log4net;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces;
@@ -15,26 +16,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 	public class MultiAbsenceRequestsHandler : IHandleEvent<NewMultiAbsenceRequestsCreatedEvent>, IRunOnStardust
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(MultiAbsenceRequestsHandler));
-
-		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
-		private readonly ICurrentScenario _scenarioRepository;
+		private readonly ICurrentScenario _currentScenario;
 		private readonly IPersonRequestRepository _personRequestRepository;
-
 		private List<IPersonRequest> _personRequests;
 		private readonly IMultiAbsenceRequestProcessor _absenceRequestProcessor;
-
 		private static readonly isNullOrNotNewSpecification personRequestSpecification = new isNullOrNotNewSpecification();
 		private static readonly isNullSpecification absenceRequestSpecification = new isNullSpecification();
-		
+		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
-		public MultiAbsenceRequestsHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, ICurrentScenario scenarioRepository,
-			IPersonRequestRepository personRequestRepository,
-			IMultiAbsenceRequestProcessor absenceRequestProcessor)
+
+
+		public MultiAbsenceRequestsHandler(ICurrentScenario currentScenario, IPersonRequestRepository personRequestRepository,
+			IMultiAbsenceRequestProcessor absenceRequestProcessor, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
-			_scenarioRepository = scenarioRepository;
+			_currentScenario = currentScenario;
 			_personRequestRepository = personRequestRepository;
 			_absenceRequestProcessor = absenceRequestProcessor;
+			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 
 			if (logger.IsInfoEnabled)
 			{
@@ -42,15 +40,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			}
 		}
 
-		public void Handle(NewMultiAbsenceRequestsCreatedEvent @event)
+		[AsSystem]
+		[UnitOfWork]
+		public virtual void Handle(NewMultiAbsenceRequestsCreatedEvent @event)
 		{
-			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
-			{
-				_scenarioRepository.Current();
-				checkPersonRequest(@event.PersonRequestIds);
-				_absenceRequestProcessor.ProcessAbsenceRequest(unitOfWork, _personRequests);
-			}
+			_currentScenario.Current();
+			checkPersonRequest(@event.PersonRequestIds);
+			_absenceRequestProcessor.ProcessAbsenceRequest(_currentUnitOfWorkFactory.Current().CurrentUnitOfWork(), _personRequests);
 		}
+
 
 		private void checkPersonRequest(List<Guid> personRequestIds)
 		{
@@ -68,7 +66,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 							personRequest.Id);
 					}
 				}
-				else if (absenceRequestSpecification.IsSatisfiedBy((IAbsenceRequest) personRequest.Request))
+				else if (absenceRequestSpecification.IsSatisfiedBy((IAbsenceRequest)personRequest.Request))
 				{
 					if (logger.IsWarnEnabled)
 					{

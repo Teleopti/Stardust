@@ -8,11 +8,13 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Infrastructure.Events;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Infrastructure.Absence;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
@@ -50,6 +52,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 				.As<IHandle<ValidateReadModelsEvent>>().SingleInstance().ApplyAspects();
 			builder.RegisterType<FixReadModelsHandler>().As<IHandle<FixReadModelsEvent>>().SingleInstance().ApplyAspects();
 			builder.RegisterType<MultiAbsenceRequestsHandler>().As<IHandle<NewMultiAbsenceRequestsCreatedEvent>>().SingleInstance().ApplyAspects();
+			builder.RegisterType<MultiAbsenceRequestProcessor>().As<IMultiAbsenceRequestProcessor>().SingleInstance().ApplyAspects();
+			builder.RegisterType<MultiAbsenceRequestsUpdater>().SingleInstance().ApplyAspects();
 		}
 	}
 }

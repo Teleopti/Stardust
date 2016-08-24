@@ -1,13 +1,13 @@
 ﻿using System.Linq;
+using System.Threading;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -26,10 +26,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IBusinessUnitScope _businessUnitScope;
 		private readonly ICurrentDataSource _currentDataSource;
 		private readonly IDataSourceScope _dataSourceScope;
-
+		private readonly IPersonRepository _personRepository;
+		private readonly DataSourceState _dataSourceState;
 
 		public AbsenceRequestTickHandler(IAbsenceRequestStrategyProcessor absenceRequestStrategyProcessor,
-			IEventPublisher publisher, INow now, IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IRequestStrategySettingsReader requestStrategySettingsReader, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IBusinessUnitRepository businessUnitRepository, IBusinessUnitScope businessUnitScope, ICurrentDataSource currentDataSource, IDataSourceScope dataSourceScope)
+			IEventPublisher publisher, INow now, IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IRequestStrategySettingsReader requestStrategySettingsReader, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IBusinessUnitRepository businessUnitRepository, IBusinessUnitScope businessUnitScope, ICurrentDataSource currentDataSource, IDataSourceScope dataSourceScope, IPersonRepository personRepository, DataSourceState dataSourceState)
 		{
 			_absenceRequestStrategyProcessor = absenceRequestStrategyProcessor;
 			_publisher = publisher;
@@ -41,8 +42,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_businessUnitScope = businessUnitScope;
 			_currentDataSource = currentDataSource;
 			_dataSourceScope = dataSourceScope;
+			_personRepository = personRepository;
+			_dataSourceState = dataSourceState;
 		}
-
 
 		public virtual void Handle(TenantMinuteTickEvent @event)
 		{
@@ -51,8 +53,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 				{
 					var businessUnits = _businessUnitRepository.LoadAll();
+					var person = _personRepository.Get(SystemUser.Id);
+
 					businessUnits.ForEach(businessUnit =>
 					{
+						Thread.CurrentPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity(person.Name.FirstName, _dataSourceState.Get(), businessUnit, null,""), person);
+
 						_businessUnitScope.OnThisThreadUse(businessUnit);
 						var nearFuture = _requestStrategySettingsReader.GetIntSetting("AbsenceNearFuture", 3);
 						var absenceReqNearFutureTime = _requestStrategySettingsReader.GetIntSetting("AbsenceNearFutureTime", 20);
@@ -62,9 +68,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						var nearFutureInterval = _now.UtcDateTime().AddMinutes(absenceReqNearFutureTime * -1);
 						var farFutureInterval = _now.UtcDateTime().AddMinutes(absenceReqFarFutureTime * -1);
 
-
 						var absenceRequests = _absenceRequestStrategyProcessor.Get(nearFutureInterval, farFutureInterval,
-							new DateTimePeriod(now.Date, now.Date.AddDays(nearFuture)));
+							new DateTimePeriod(now.Date, now.Date.AddDays(nearFuture))).ToList();
 						if (!absenceRequests.Any()) return;
 						var multiAbsenceRequestsEvent = new NewMultiAbsenceRequestsCreatedEvent()
 						{
