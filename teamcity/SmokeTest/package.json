@@ -1,12 +1,16 @@
 {
   "name": "SmokeTest",
-  "version": "0.0.1",
-  "description": "",
-  "scripts": {
-  },
+  "version": "0.0.2",
+  "description": "smoke test",
+  "scripts": {},
   "author": "Teleopti",
   "dependencies": {
-    "request": "2.53.0",
-    "webdriverio": "2.4.5"
+    "request": "^2.74.0",
+    "webdriverio": "^4.2.8"
+  },
+  "devDependencies": {
+    "selenium-standalone": "^5.6.1",
+    "wdio-mocha-framework": "^0.4.0",
+    "wdio-selenium-standalone-service": "0.0.6"
   }
 }
