@@ -431,16 +431,30 @@
 		flex-direction: column;
 		justify-content: flex-start;
 
-		md-content {
-			display: flex;
-			flex-direction: column;
-			justify-content: space-between;
-			height: 100%;
-		}
-
 		md-progress-linear{
 			width: auto;
 			margin: -16px;
+		}
+
+		.sidenav-header{
+			height: 41px;
+		}
+
+		md-content {
+			display: flex;
+			flex-grow: 1;
+			flex-direction: column;
+			justify-content: space-between;
+			max-height: 100%;
+
+			form{
+				flex-grow: 1;
+			}
+		}
+
+		md-select{
+			width: 100%;
+			min-height: 40px;
 		}
 	}
 
@@ -473,7 +487,7 @@
 		.agent-list{
 			position: relative;
 			overflow: auto;
-			flex-grow: 2;
+			
 
 			.wfm-checkbox-toggle:after {
 				width: 16px;
@@ -511,11 +525,6 @@
 		background: $blue-500;
 		color: $white;
 		font-weight: 600;
-	}
-
-	.teamschedule-command-container md-select {
-		width: 100%;
-		min-height: 40px;
 	}
 
 	md-content button.wfm-btn {
