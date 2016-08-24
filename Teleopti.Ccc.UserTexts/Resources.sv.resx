@@ -13327,7 +13327,7 @@ Dessa val är aktiverade:
     <value>Kan inte flytta flera aktiviteter för agent {0}.</value>
   </data>
   <data name="LoadRequests" xml:space="preserve">
-    <value>Ladda önskemål</value>
+    <value>Ladda förfrågningar</value>
     <comment>a choice when opening scheduler</comment>
   </data>
   <data name="CannotDeleteBaseActivity" xml:space="preserve">
@@ -13612,5 +13612,14 @@ Dessa val är aktiverade:
   </data>
   <data name="OverrideForTheseAgents" xml:space="preserve">
     <value>Ignorera för dessa agenter</value>
+  </data>
+  <data name="BusinessRuleNoSiteOpenHourErrorMessage" xml:space="preserve">
+    <value>Inga öppettider för {0} hittade på enheten {1} mellan {2} och {3}</value>
+  </data>
+  <data name="SiteOpeningHours" xml:space="preserve">
+    <value>Öppettider för enheten</value>
+  </data>
+  <data name="FirstComeFirstServed" xml:space="preserve">
+    <value>Först till kvarn</value>
   </data>
 </root>
