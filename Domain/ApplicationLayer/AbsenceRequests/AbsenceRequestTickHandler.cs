@@ -18,8 +18,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 	{
 		private readonly IAbsenceRequestStrategyProcessor _absenceRequestStrategyProcessor;
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
-		private readonly IEventPublisher _publisher;
-		private readonly INow _now;
 		private readonly IRequestStrategySettingsReader _requestStrategySettingsReader;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly IBusinessUnitRepository _businessUnitRepository;
@@ -28,16 +26,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IDataSourceScope _dataSourceScope;
 		private readonly IPersonRepository _personRepository;
 		private readonly DataSourceState _dataSourceState;
+		private readonly IEventPublisher _publisher;
+		private readonly INow _now;
 
 		public AbsenceRequestTickHandler(IAbsenceRequestStrategyProcessor absenceRequestStrategyProcessor,
 			IEventPublisher publisher, INow now, IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository,
 			IRequestStrategySettingsReader requestStrategySettingsReader, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
-			IBusinessUnitRepository businessUnitRepository, IBusinessUnitScope businessUnitScope,
-			ICurrentDataSource currentDataSource, IDataSourceScope dataSourceScope)
+			IBusinessUnitRepository businessUnitRepository, IBusinessUnitScope businessUnitScope,ICurrentDataSource currentDataSource, 
+			IDataSourceScope dataSourceScope, IPersonRepository personRepository, DataSourceState dataSourceState)
 		{
 			_absenceRequestStrategyProcessor = absenceRequestStrategyProcessor;
-			_publisher = publisher;
-			_now = now;
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
 			_requestStrategySettingsReader = requestStrategySettingsReader;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
@@ -47,6 +45,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_dataSourceScope = dataSourceScope;
 			_personRepository = personRepository;
 			_dataSourceState = dataSourceState;
+			_publisher = publisher;
+			_now = now;
 		}
 
 		public virtual void Handle(TenantMinuteTickEvent @event)
