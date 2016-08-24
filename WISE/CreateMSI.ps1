@@ -116,8 +116,8 @@ task CHM-SDK-File -depends CompileWse, CompileWsi -description "Create chm sdk f
 
 task MalewareScan -depends CompileWse, CompileWsi -description "Proves our MSI is clean" {
 
-    #& $ClamWinTool --database="$ClamWinDb" $OurDir\ > "$OutDir\MalwareScan.log"
-	Start-Process -FilePath $ClamWinTool -ArgumentList "$OutDir\ --recursive=yes --database=$ClamWinDb --log=$OutDir\MalwareScan.log" -Wait
+   	& $ClamWinTool --database=$ClamWindb $OutDir\ > $OutDir\MalwareScan.log	
+	#Start-Process -FilePath $ClamWinTool -ArgumentList "$OutDir\ --recursive=yes --database=$ClamWinDb --log=$OutDir\MalwareScan.log" -Wait
 }
 
 task UnMountK {
