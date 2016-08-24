@@ -43,8 +43,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			skillA.SetCascadingIndex(1);
 			var skillB = new Skill("B", "_", Color.AliceBlue, 15, new SkillTypePhone(new Description("_"), ForecastSource.InboundTelephony)) { Activity = activity }.WithId();
 			skillB.SetCascadingIndex(2);
-			WorkloadFactory.CreateWorkloadWithFullOpenHours(skillA);
-			WorkloadFactory.CreateWorkloadWithFullOpenHours(skillB);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(8, 0, 16, 0));
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(8, 0, 16, 0));
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
@@ -63,21 +63,21 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				agents.Add(agent);
 			}
 			var skillDaysA = skillA.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-			 TimeSpan.FromHours(0.5),
-			 TimeSpan.FromHours(0),
-			 TimeSpan.FromHours(20),
-			 TimeSpan.FromHours(20),
-			 TimeSpan.FromHours(20),
-			 TimeSpan.FromHours(20),
-			 TimeSpan.FromHours(20));
+			 0.5, 
+			 0.4, //?
+			 20, 
+			 20,
+			 20,
+			 20,
+			 20);
 			var skillDaysB = skillB.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-			 TimeSpan.FromHours(0),
-			 TimeSpan.FromHours(20),
-			 TimeSpan.FromHours(20),
-			 TimeSpan.FromHours(20),
-			 TimeSpan.FromHours(20),
-			 TimeSpan.FromHours(20),
-			 TimeSpan.FromHours(20));
+			 0,
+			 20,
+			 20,
+			 20,
+			 20,
+			 20,
+			 20);
 			var asses = new List<IPersonAssignment>();
 			foreach (var agent in agents)
 			{
@@ -98,6 +98,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var scheduleDays = agents.SelectMany(agent => stateHolder.Schedules.SchedulesForPeriod(period, agent)).ToList();
 
 			Target.Execute(period, scheduleDays, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), () => new WorkShiftFinderResultHolder(), (o, args) => { });
+
+
+			Console.WriteLine(agents.Count(agent => stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(0)).HasDayOff()));
+			Console.WriteLine(agents.Count(agent => stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(1)).HasDayOff()));
+			Console.WriteLine(agents.Count(agent => stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(2)).HasDayOff()));
+			Console.WriteLine(agents.Count(agent => stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(3)).HasDayOff()));
+			Console.WriteLine(agents.Count(agent => stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(4)).HasDayOff()));
+			Console.WriteLine(agents.Count(agent => stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(5)).HasDayOff()));
+			Console.WriteLine(agents.Count(agent => stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(6)).HasDayOff()));
 
 			agents.Count(agent => stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(0)).HasDayOff()).Should().Be.EqualTo(1); 
 			agents.Count(agent => stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(1)).HasDayOff()).Should().Be.EqualTo(1);
