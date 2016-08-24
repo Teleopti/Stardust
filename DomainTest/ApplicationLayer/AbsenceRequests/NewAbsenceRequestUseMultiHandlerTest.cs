@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 
 	[DomainTest]
-	[TestFixture, Ignore]
+	[TestFixture]
 	public class NewAbsenceRequestUseMultiHandlerTest : ISetup
 	{
 		public NewAbsenceRequestUseMultiHandler Target;
@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		
 		public FakeCurrentScenario CurrentScenario;
 		public FakeEventPublisher EventPublisher;
+		public FakeBusinessUnitRepository BusinessUnitRepository;
 
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
@@ -45,6 +46,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public void ShouldPersistNewRequestInQueue()
 		{
 			var reqEvent = createNewRequestEvent();
+			IBusinessUnit businessUnit = BusinessUnitFactory.CreateWithId("something");
+			reqEvent.LogOnBusinessUnitId = businessUnit.Id.Value;
+			BusinessUnitRepository.Add(businessUnit);
 			Target.Handle(reqEvent);
 
 			QueuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(1);

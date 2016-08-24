@@ -247,6 +247,30 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 
+		[Test]
+		public void ExcludeRequestsWithPeriodLongerThanConfiguredDays()
+		{
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 3, 10, 23, 59, 00, DateTimeKind.Utc),
+				Created = new DateTime(2016, 03, 1, 9, 47, 0, DateTimeKind.Utc),
+				PersonRequest = Guid.NewGuid()
+			});
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 7, 27, 23, 59, 00, DateTimeKind.Utc),
+				Created = new DateTime(2016, 03, 1, 8, 58, 0, DateTimeKind.Utc),
+				PersonRequest = Guid.NewGuid()
+			});
+
+			var absenceRequests = Target.Get(_interval, _farFutureInterval, new DateTimePeriod(_today, _today.AddDays(_nearFuture)), _windowSize);
+			absenceRequests.First().Count().Should().Be.EqualTo(1);
+		}
+
+		
 	}
 
 	

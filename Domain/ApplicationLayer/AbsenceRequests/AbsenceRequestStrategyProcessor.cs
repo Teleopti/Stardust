@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		{
 			var allRequests = _queuedAbsenceRequestRepo.LoadAll();
 			var tempAllRequests = new List<IQueuedAbsenceRequest>();
-			tempAllRequests.AddRange(allRequests);
+			tempAllRequests.AddRange(allRequests.Where(x=>(x.EndDateTime.Subtract(x.StartDateTime)).Days <=60 ));
 			if (allRequests.Any())
 			{
 				var nearFutureReuqests = getRequestsOnPeriod(nearFutureTimeStampInterval, nearFuturePeriod, tempAllRequests);

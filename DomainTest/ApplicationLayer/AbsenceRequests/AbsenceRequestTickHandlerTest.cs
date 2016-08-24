@@ -18,7 +18,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
-	[TestFixture, Ignore]
+	[TestFixture]
 	[Toggle(Toggles.AbsenceRequests_UseMultiRequestProcessing_39960)]
 	public class AbsenceRequestTickHandlerTest : ISetup
 	{
