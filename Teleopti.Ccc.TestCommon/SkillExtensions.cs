@@ -98,6 +98,7 @@ namespace Teleopti.Ccc.TestCommon
 				.ToList();
 		}
 
+		//TODO: Remove! "Timespan values" are totally incorrect. 
 		public static IList<ISkillDay> CreateSkillDaysWithDemandOnConsecutiveDays(this ISkill skill, IScenario scenario, DateOnly startDate, params TimeSpan[] demands)
 		{
 			var skillDays = new List<ISkillDay>();
