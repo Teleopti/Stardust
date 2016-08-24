@@ -43,9 +43,8 @@
 				</label>
 			</div>
 
-			<span class="settings-container context-menu card-context" ng-if="vm.toggles.ShowValidationWarnings && vm.toggles.FilterValidationWarnings" ng-click="vm.openSettingsPanel()">
+			<span class="settings-container cursor-pointer" ng-if="vm.toggles.ShowValidationWarnings && vm.toggles.FilterValidationWarnings" ng-click="vm.openSettingsPanel()">
 				<i class="mdi mdi-settings"></i>
-				<md-tooltip>{{'Settings' | translate}}</md-tooltip>
 			</span>
 
 			<teamschedule-command-menu class="teamschedule-command" ng-if="vm.permissionsAndTogglesLoaded" configurations="vm.cmdConfigurations" trigger-command="vm.triggerCommand(label, needToOpenSidePanel)"></teamschedule-command-menu>

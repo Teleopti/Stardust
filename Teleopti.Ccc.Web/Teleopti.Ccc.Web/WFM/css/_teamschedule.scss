@@ -81,11 +81,11 @@
 		}
 
 		.settings-container{
-			margin-right: 10px;
-			margin-left: 10px;
+			margin: 10px;
 			display: inline-block;
 
 			i{
+				vertical-align: middle;
 				transform: scale(0.85);
 			}
 		}
