@@ -55,11 +55,11 @@ task PreReq -depends init -description "Move/Copy preparation of files" {
 task CreateAzurePkg -depends Init, PreReq -description "Create Azure Package" {
     
 	#Create Azure Pkg
-	$Arg = @('teamcity\Azure\ServiceDefinition.csdef', '/role:TeleoptiCCC;TeleoptiCCC', '/rolePropertiesFile:TeleoptiCCC;teamcity\Azure\AzureRoleProperties.txt', "/out:$AzurePackagePath"
+	$Arg = @('teamcity\Azure\ServiceDefinition.csdef', '/role:TeleoptiCCC;TeleoptiCCC', '/rolePropertiesFile:TeleoptiCCC;teamcity\Azure\AzureRoleProperties.txt', "/out:$AzurePackagePath")
     & $CSPackEXE $Arg
 	
 	#Create Azure Pkg Large version
-	$Arg = @('teamcity\Azure\ServiceDefinition_Large.csdef', '/role:TeleoptiCCC;TeleoptiCCC', '/rolePropertiesFile:TeleoptiCCC;teamcity\Azure\AzureRoleProperties.txt', "/out:$AzurePackagePath_Large"
+	$Arg = @('teamcity\Azure\ServiceDefinition_Large.csdef', '/role:TeleoptiCCC;TeleoptiCCC', '/rolePropertiesFile:TeleoptiCCC;teamcity\Azure\AzureRoleProperties.txt', "/out:$AzurePackagePath_Large")
 	& $CSPackEXE $Arg
 }
 
