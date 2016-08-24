@@ -182,7 +182,7 @@ wfm.config([
 				selectedDate: new Date()
 			}
 		}).state('myTeamSchedule.for', {
-			url: '/:personId',
+			url: '/?personId',
 			templateUrl: 'js/teamSchedule/html/dayViewSchedule.html',
 			controller: 'TeamScheduleCtrl as vm',
 			params: {

@@ -14,7 +14,7 @@
 			};
 
 			this.urlForChangingSchedule = function(personId) {
-				return "#/myTeam/" + personId;
+				return "#/myTeam/?personId=" + personId;
 			};
 
 			this.urlForAgentDetails = function(personId) {

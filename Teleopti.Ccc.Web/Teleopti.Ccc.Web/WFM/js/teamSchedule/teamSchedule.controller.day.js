@@ -53,9 +53,7 @@
 		vm.agentsPerPageSelection = [20, 50, 100, 500];
 
 		function getDefaultKeyword(){
-			if ($stateParams.site && $stateParams.team)
-				return $stateParams.site + '"' + $stateParams.team + '"';
-			else if ($stateParams.keyword)
+			if ($stateParams.keyword)
 				return $stateParams.keyword;
 		}
 
