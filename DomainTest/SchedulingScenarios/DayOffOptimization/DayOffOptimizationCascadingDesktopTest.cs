@@ -81,23 +81,26 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var asses = new List<IPersonAssignment>();
 			foreach (var agent in agents)
 			{
-				foreach (var date in new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1)).DayCollection())
+				for (var i = 0; i < 7; i++)
 				{
-					var ass = new PersonAssignment(agent, scenario, date);
+					var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(i));
 					ass.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
 					ass.SetShiftCategory(shiftCategory);
+					if (i == 5) //saturday
+					{
+						ass.SetDayOff(new DayOffTemplate());
+					}
 					asses.Add(ass);
 				}
 			}
-			asses[5].SetDayOff(new DayOffTemplate()); //saturday
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, agents, asses, skillDaysA.Union(skillDaysB));
 			var optPrefs = new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag() } };
 			var scheduleDays = agents.SelectMany(agent => stateHolder.Schedules.SchedulesForPeriod(period, agent)).ToList();
 
 			Target.Execute(period, scheduleDays, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), () => new WorkShiftFinderResultHolder(), (o, args) => { });
 
-			agents.Count(agent => stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(0)).HasDayOff()).Should().Be.EqualTo(0);
-			agents.Count(agent => stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(1)).HasDayOff()).Should().Be.EqualTo(2);
+			agents.Count(agent => stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(0)).HasDayOff()).Should().Be.EqualTo(1); 
+			agents.Count(agent => stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(1)).HasDayOff()).Should().Be.EqualTo(1);
 		}
 	}
 }
