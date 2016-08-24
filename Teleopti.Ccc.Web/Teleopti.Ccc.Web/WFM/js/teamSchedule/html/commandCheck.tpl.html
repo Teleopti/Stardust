@@ -23,7 +23,7 @@
                     <label ng-click="vm.updatePersonSelection(agent)">
                         <input type="checkbox" ng-model="agent.IsSelected" value="true">
                         <span class="wfm-checkbox-toggle" ng-class="{'warning-checkbox': agent.IsSelected}"></span>
-                        <span class="wfm-checkbox-label">{{agent.Name}}</span>
+                        <span class="wfm-checkbox-label cursor-pointer">{{agent.Name}}</span>
                         <md-tooltip class="multiline-tooltip" md-direction="right">
                             <span ng-bind-html="vm.getOverlappedLayersForAgent(agent.PersonId) | br"></span>
                         </md-tooltip>
@@ -31,7 +31,7 @@
                 </div>
             </div>
             <ul ng-if="!vm.showCheckbox">
-                <li ng-repeat="agent in vm.overlappedAgents">
+                <li class="cursor-pointer" ng-repeat="agent in vm.overlappedAgents">
                     <span>{{agent.Name}}</span>
                     <md-tooltip class="multiline-tooltip margin-top-22">
                         <span ng-bind-html="vm.getOverlappedLayersForAgent(agent.PersonId) | br"></span>

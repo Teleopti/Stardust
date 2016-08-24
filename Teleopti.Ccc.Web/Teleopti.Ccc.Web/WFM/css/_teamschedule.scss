@@ -81,6 +81,8 @@
 		}
 
 		.settings-container{
+			margin-right: 10px;
+			margin-left: 10px;
 			display: inline-block;
 
 			i{
@@ -289,7 +291,6 @@
 	}
 
 	.person-name-column {
-
 		label{
 			position: relative;
 		}
@@ -487,7 +488,7 @@
 		.agent-list{
 			position: relative;
 			overflow: auto;
-			
+			flex-grow: 1;
 
 			.wfm-checkbox-toggle:after {
 				width: 16px;
@@ -512,7 +513,6 @@
 
 			ul li, .wfm-checkbox-label{
 				white-space: normal;
-				cursor: pointer;
 			}
 
 			ul li{
@@ -573,7 +573,6 @@
 }
 
 .team-schedule-command-confirm-dialog {
-
 	.row {
 		.wfm-btn-default {
 			margin-right: 20px;
