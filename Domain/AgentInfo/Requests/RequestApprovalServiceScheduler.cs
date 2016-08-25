@@ -101,11 +101,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			return _approvedPersonAbsence;
 		}
 
-		/// <summary>
-		/// Get scheduleDays for checking account
-		/// </summary>
 		/// <remarks>To be more efficient, we only return the first schedule day for each personal account for <see cref="Teleopti.Ccc.Domain.Scheduling.Rules.NewPersonAccountRule"/></remarks>
-		/// <returns></returns>
 		private IEnumerable<IScheduleDay> getScheduleDaysForCheckingAccount(IAbsence absence,
 			IScheduleDay dayScheduleForAbsenceReqStart,
 			IScheduleRange totalScheduleRange, IPerson person, DateTimePeriod period)

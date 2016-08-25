@@ -176,11 +176,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			return errorMessages;
 		}
 
-		/// <summary>
-		/// Get scheduleDays for checking account
-		/// </summary>
 		/// <remarks>To be more efficient, we only return the first schedule day for each personal account for <see cref="Teleopti.Ccc.Domain.Scheduling.Rules.NewPersonAccountRule"/></remarks>
-		/// <returns></returns>
 		private IEnumerable<IScheduleDay> getScheduleDaysForCheckingAccount(IEnumerable<IPersonAbsence> personAbsences,
 			DateOnly startDate,
 			IScheduleRange scheduleRange, IPerson person)
