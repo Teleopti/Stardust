@@ -1,5 +1,5 @@
 ﻿'use strict';
-(function() {
+(function () {
 	angular.module('wfm.requests')
 		.controller('requestsSiteOpenHoursCtrl', ['requestsDataService', 'requestsNotificationService', requestsSiteOpenHoursController])
 		.directive('requestsSiteOpenHours', requestsSiteOpenHoursDirective);
@@ -7,6 +7,7 @@
 	function requestsSiteOpenHoursController(requestsDataService, requestsNotificationService) {
 
 		var vm = this;
+		var sitesBefore, sitesAfter;
 		vm.openHours = [];
 		vm.sites = [];
 		vm.save = save;
@@ -15,10 +16,11 @@
 		init();
 		function init() {
 			var getSiteProgress = requestsDataService.getSitesPromise();
-			getSiteProgress.success(function(sites) {
+			getSiteProgress.success(function (sites) {
+				sitesBefore = sites;
 				vm.sites = [];
 				angular.forEach(sites,
-					function(site) {
+					function (site) {
 						vm.sites.push(denormalizeSite(site));
 					});
 				if (vm.sites.length > 0)
@@ -28,14 +30,19 @@
 
 		function save() {
 			var sites = [];
-			angular.forEach(vm.sites, function(site) {
+			angular.forEach(vm.sites, function (site) {
 				sites.push(normalizeSite(site));
 			});
-			var maintainOpenHoursProgress = requestsDataService.maintainOpenHoursPromise(sites);
-			maintainOpenHoursProgress.success(function (persistedSites) {
-				requestsNotificationService.notifySaveSiteOpenHoursSuccess(persistedSites);
-				cleanUp();
-			});
+			sitesAfter = sites;
+			if (isOpenHoursSame(sitesBefore, sitesAfter)) {
+				requestsNotificationService.notifyNothingChanged();
+			} else {
+				var maintainOpenHoursProgress = requestsDataService.maintainOpenHoursPromise(sites);
+				maintainOpenHoursProgress.success(function (persistedSites) {
+					requestsNotificationService.notifySaveSiteOpenHoursSuccess(persistedSites);
+				});
+			}
+			cleanUp();
 		}
 
 		function cancel() {
@@ -48,25 +55,64 @@
 		}
 
 		// these utilities have nothing to do with requests, so I keep everything contained in this directive
+		function isOpenHoursSame(sitesBefore, sitesAfter) {
+			if (!sitesBefore || !sitesAfter) return;
+			var isSame = true;
+			for (var i = 0; i < sitesBefore.length && isSame; i++) {
+				for (var j = 0; j < sitesBefore[i].OpenHours.length && isSame; j++) {
+					var openHourBefore = sitesBefore[i].OpenHours[j];
+					var k = sitesBefore[i].OpenHours.length - 1;
+					while (isSame && k >= 0) {
+						var openHourAfter = sitesAfter[i].OpenHours[k];
+						if (openHourBefore.WeekDay == openHourAfter.WeekDay) {
+							if (openHourAfter.IsClosed != openHourBefore.IsClosed) isSame = false;
+							if (openHourAfter.StartTime + ':00' != openHourBefore.StartTime) isSame = false;
+							if (openHourAfter.EndTime + ':00' != openHourBefore.EndTime) isSame = false;
+						}
+						k--;
+					}
+				}
+			}
+			return isSame;
+		}
+
 		function normalizeSite(site) {
 			var site = angular.copy(site);
-			var formattedWorkingHours = [];
-			site.OpenHours.forEach(function (d) {
-				d.WeekDaySelections.forEach(function (e) {
-					var timespan = formatTimespanObj({
-						StartTime: d.StartTime,
-						EndTime: d.EndTime
-					});
-					formattedWorkingHours.push({
-						WeekDay: e.WeekDay,
-						StartTime: timespan.StartTime,
-						EndTime: timespan.EndTime,
-						IsClosed: !e.Checked
-					});
+			var weekTemplet = [];
+			prepareWeekTemplet(weekTemplet);
+			angular.forEach(site.OpenHours, function (openHour) {
+				var timespan = formatTimespanObj({
+					StartTime: openHour.StartTime,
+					EndTime: openHour.EndTime
+				});
+				angular.forEach(openHour.WeekDaySelections, function (selection) {
+					if (selection.Checked) {
+						var keepLooking = true;
+						for (var j = 0; j < weekTemplet.length && keepLooking; j++) {
+							if (selection.WeekDay == weekTemplet[j].WeekDay) {
+								weekTemplet[j].EndTime = timespan.EndTime;
+								weekTemplet[j].StartTime = timespan.StartTime;
+								weekTemplet[j].IsClosed = false;
+								keepLooking = false;
+							}
+						}
+					}
 				});
 			});
-			site.OpenHours = formattedWorkingHours;
+			site.OpenHours = weekTemplet;
 			return site;
+		}
+
+		function prepareWeekTemplet(weekTemplet) {
+			for (var i = 0; i < 7; i++) {
+				var dayTemplet = {
+					EndTime: "00:00",
+					IsClosed: true,
+					StartTime: "00:00",
+					WeekDay: i
+				};
+				weekTemplet.push(dayTemplet);
+			}
 		}
 		function denormalizeSite(site) {
 			var siteCopy = angular.copy(site);
@@ -78,7 +124,7 @@
 						StartTime: startTime,
 						EndTime: endTime
 					};
-				var workingHourRows = reformattedWorkingHours.filter(function(wh) {
+				var workingHourRows = reformattedWorkingHours.filter(function (wh) {
 					return sameTimespan(timespan, wh);
 				});
 				var workingHourRow;

@@ -135,7 +135,7 @@ describe('requestsSiteOpenHoursDirectiveTests', function () {
 
 		var test = setUpTarget();
 
-		expect(test.targetScope.sites[0].OpenHours[0].EndTime.getHours()).toEqual(17); 
+		expect(test.targetScope.sites[0].OpenHours[0].EndTime.getHours()).toEqual(17);
 		expect(test.targetScope.sites[0].OpenHours[0].EndTime.getMinutes()).toEqual(0);
 		expect(test.targetScope.sites[0].OpenHours[0].StartTime.getHours()).toEqual(8);
 		expect(test.targetScope.sites[0].OpenHours[0].StartTime.getMinutes()).toEqual(0);
@@ -188,6 +188,15 @@ describe('requestsSiteOpenHoursDirectiveTests', function () {
 			expect(test.targetScope.sites[0].OpenHours.length).toEqual(1);
 		});
 
+	it('should notify nothing changed', function() {
+		var openHoursHandleResult = [{ id: 1, OpenHours: [] }];
+		requestsDataService.setOpenHoursHandleResult(openHoursHandleResult);
+		var test = setUpTarget();
+
+		test.targetScope.save();
+		expect(requestsNotificationService.getNotificationResult()).toEqual('nothing changed');
+	});
+
 	function setUpTarget() {
 		var targetScope = $rootScope.$new();
 		var targetElem = $compile('<requests-site-open-hours></requests-site-open-hours>')(targetScope);
@@ -200,8 +209,11 @@ describe('requestsSiteOpenHoursDirectiveTests', function () {
 		this.notifySaveSiteOpenHoursSuccess = function (persistedSitesCount) {
 			_notificationResult = persistedSitesCount;
 		}
-		this.getNotificationResult=function() {
+		this.getNotificationResult = function () {
 			return _notificationResult;
+		}
+		this.notifyNothingChanged = function () {
+			_notificationResult = 'nothing changed';
 		}
 	}
 

@@ -14839,6 +14839,10 @@ These options are activated:
     <value>Toggle close</value>
     <comment>indicate to toggle close day of site open hour</comment>
   </data>
+  <data name="NoChangeHasBeenMade" xml:space="preserve">
+    <value>No change has been made</value>
+    <comment>No change has been made</comment>
+  </data>
   <data name="BusinessRuleOverlappingErrorMessage3" xml:space="preserve">
     <value>The non-overwrittenable shift {0} in interval {1} - {2} is overwritten by {3} in interval {4} - {5}.</value>
     <comment>The warning to show when a non-overwrittenable shift layer is overwritten (overlapped) by another shift layer, personal activity, or meeting.</comment>

@@ -17876,6 +17876,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No change has been made.
+        /// </summary>
+        public static string NoChangeHasBeenMade {
+            get {
+                return ResourceManager.GetString("NoChangeHasBeenMade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No chart data rows enabled.
         /// </summary>
         public static string NoChartDataRowsEnabled {

@@ -43,7 +43,13 @@
         	$translate("SaveSiteOpenHoursSuccess").then(function (text) {
         		NoticeService.success(text.replace('{0}', persistedSites), 10000, true);
         	});
-		}
+        }
+
+        this.notifyNothingChanged = function () {
+	    	$translate("NoChangeHasBeenMade").then(function (text) {
+	    		NoticeService.success(text, 10000, true);
+	    	});
+	    }
 
         this.notifyProcessWaitlistedRequestsFinished = function (period) {
             $translate("ProcessWaitlistedRequestsFinished").then(function (text) {
