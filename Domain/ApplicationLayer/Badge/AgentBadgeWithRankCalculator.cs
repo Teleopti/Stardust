@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			if (agentAdherenceList.Count > 0)
 			{
 				var agentsWithAdherence = agentAdherenceList.Cast<object[]>()
-					.ToDictionary(data => (Guid)data[0], data => double.Parse(data[2].ToString()));
+					.ToDictionary(data => (Guid)data[0], data => double.Parse(data[1].ToString()));
 				//var personIdList = (from object[] data in agentAdherenceList select (Guid)data[0]).ToList();
 				var personIdList = agentsWithAdherence.Keys;
 				var personsList = _personRepository.FindPeople(personIdList);

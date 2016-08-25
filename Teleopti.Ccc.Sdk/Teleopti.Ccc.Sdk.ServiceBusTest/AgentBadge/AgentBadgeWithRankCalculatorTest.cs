@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				x =>
 					x.LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
 						timezoneCode, DateTime.Now, _gamificationSetting.AdherenceThreshold, _businessUnitId))
-				.IgnoreArguments().Return(new ArrayList {new object[] {_lastPersonId, DateTime.Now, 0.59}});
+				.IgnoreArguments().Return(new ArrayList {new object[] {_lastPersonId, 0.59}});
 
 			var result = _calculator.CalculateAdherenceBadges(_allPersons, timezoneCode, _calculateDateOnly,
 				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				x =>
 					x.LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
 						timezoneCode, DateTime.Now, _gamificationSetting.AdherenceThreshold, _businessUnitId))
-				.IgnoreArguments().Return(new ArrayList {new object[] {_lastPersonId, DateTime.Now, 0.61}});
+				.IgnoreArguments().Return(new ArrayList {new object[] {_lastPersonId, 0.61}});
 
 			var result = _calculator.CalculateAdherenceBadges(_allPersons, timezoneCode, _calculateDateOnly,
 				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				x =>
 					x.LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
 						timezoneCode, DateTime.Now, _gamificationSetting.AdherenceThreshold, _businessUnitId))
-				.IgnoreArguments().Return(new ArrayList {new object[] {_lastPersonId, DateTime.Now, 0.75}});
+				.IgnoreArguments().Return(new ArrayList {new object[] {_lastPersonId, 0.75}});
 
 			var result = _calculator.CalculateAdherenceBadges(_allPersons, timezoneCode, _calculateDateOnly,
 				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				x =>
 					x.LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
 						timezoneCode, DateTime.Now, _gamificationSetting.AdherenceThreshold, _businessUnitId))
-				.IgnoreArguments().Return(new ArrayList {new object[] {_lastPersonId, DateTime.Now, 0.91}});
+				.IgnoreArguments().Return(new ArrayList {new object[] {_lastPersonId, 0.91}});
 
 			var result = _calculator.CalculateAdherenceBadges(_allPersons, timezoneCode, _calculateDateOnly,
 				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			Assert.AreEqual(badge.CalculatedDate, _calculateDateOnly);
 		}
 
-		#endregion
+		#endregion Adherence Badge Calculation
 
 		#region AHT Badge Calculation
 
@@ -294,7 +294,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			Assert.AreEqual(badge.CalculatedDate, _calculateDateOnly);
 		}
 
-		#endregion
+		#endregion AHT Badge Calculation
 
 		#region Answered Call Badge Calculation
 
@@ -374,7 +374,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			Assert.AreEqual(badge.CalculatedDate, _calculateDateOnly);
 		}
 
-		#endregion
+		#endregion Answered Call Badge Calculation
 
 		[Test]
 		public void ShouldNotAwardAnsweredCallsBadgeForAgentsWithoutPermission()
@@ -388,7 +388,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				x =>
 					x.LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
 						timezoneCode, DateTime.Now, _gamificationSetting.AdherenceThreshold, _businessUnitId))
-				.IgnoreArguments().Return(new ArrayList {new object[] {_lastPersonId, DateTime.Now, 0.91}});
+				.IgnoreArguments().Return(new ArrayList {new object[] {_lastPersonId, 0.91}});
 
 			_statisticRepository.Stub(
 				x =>
@@ -423,7 +423,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				x =>
 					x.LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
 						timezoneCode, DateTime.Now, _gamificationSetting.AdherenceThreshold, _businessUnitId))
-				.IgnoreArguments().Return(new ArrayList { new object[] { _lastPersonId, DateTime.Now, 0.91 } });
+				.IgnoreArguments().Return(new ArrayList { new object[] { _lastPersonId, 0.91 } });
 
 			// Create a schedule with full day abasence
 			var utcNow = now.ToUniversalTime();
