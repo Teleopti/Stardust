@@ -256,9 +256,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				_personAccountUpdaterDummy, toggleManager);
 
 			var absenceProcessor = new MultiAbsenceRequestProcessor(multiAbsenceRequestStatusUpdater, () => _schedulingResultStateHolder);
-			
-			var newAbsenceRequestConsumer = new MultiAbsenceRequestsHandler(
-				 _currentScenario, _personRequestRepository, absenceProcessor, _currentUnitOfWorkFactory);
+
+			var newAbsenceRequestConsumer = new MultiAbsenceRequestsHandler(_personRequestRepository, absenceProcessor,
+				_currentUnitOfWorkFactory);
 
 			return newAbsenceRequestConsumer;
 		}
