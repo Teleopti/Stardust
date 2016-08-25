@@ -369,6 +369,33 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		{
 			Browser.Interactions.AssertInputValue("#teamschedule-datepicker-input", date);
 		}
+
+		[When(@"I open teamschedule setting panel")]
+		public void WhenIOpenTeamscheduleSettingPanel()
+		{
+			Browser.Interactions.Click(".team-schedule .settings-container");
+		}
+
+		[When(@"I choose not to view '(.*)' validation result")]
+		public void WhenIChooseNotToViewValidationResult(string ruleType)
+		{
+			Browser.Interactions.AssertExists($"div[test-attr={ ruleType}] input:checked");
+			Browser.Interactions.Click($"div[test-attr={ ruleType}] label");
+			Browser.Interactions.AssertExists($"div[test-attr={ ruleType}] input:not(checked)");
+		}
+
+		[Then(@"I should not see business rule warning")]
+		public void ThenIShouldNotSeeBusinessRuleWarning()
+		{
+			Browser.Interactions.AssertNotExists(".team-schedule", ".team-schedule .warning-icon .mdi-account-alert");
+		}
+
+		[When(@"I choose to view '(.*)' validation result")]
+		public void WhenIChooseToViewValidationResult(string ruleType)
+		{
+			Browser.Interactions.AssertExists($"div[test-attr={ ruleType}] input:checked");			
+		}
+
 	}
 
 	public class AddActivityFormInfo

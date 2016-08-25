@@ -3,7 +3,7 @@
 	<md-content class="command-panel-content" layout-padding>
 		<div class="configure-validation">
 			<h3>{{'ConfigureValidationWarnings' | translate}}</h3>
-			<div class="wfm-checkbox" ng-repeat="rule in vm.availableValidationRules">
+			<div class="wfm-checkbox" ng-repeat="rule in vm.availableValidationRules" test-attr="{{rule.type}}">
 				<label>
 					<input type="checkbox" ng-model="rule.checked" ng-change="vm.updateValidateRulesToggleState(rule.type, rule.checked)" value="true" />
 					<span class="wfm-checkbox-toggle"></span>
