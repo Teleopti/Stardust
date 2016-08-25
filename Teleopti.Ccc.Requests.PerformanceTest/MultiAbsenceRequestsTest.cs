@@ -59,52 +59,30 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			_configReader.FakeConnectionString("Tenancy",conString );
 			system.UseTestDouble(_configReader).For<IConfigReader>();
 		}
-		
 
-		[Test]
-		public void ShouldProcessMultipleAbsenceRequests1()
-		{
-			EventPublisher.OverwriteHandler(typeof(NewMultiAbsenceRequestsCreatedEvent), typeof(MultiAbsenceRequestsHandler));
-			_configReader.FakeSetting("NumberOfAbsenceRequestsToBulkProcess", "1");
-			setupRequests();
-			publishRequests();
-		}
-
-		[Test]
-		public void ShouldProcessMultipleAbsenceRequests5()
-		{
-			EventPublisher.OverwriteHandler(typeof(NewMultiAbsenceRequestsCreatedEvent), typeof(MultiAbsenceRequestsHandler));
-			_configReader.FakeSetting("NumberOfAbsenceRequestsToBulkProcess", "5");
-			setupRequests();
-			publishRequests();
-		}
-
-		[Test]
-		public void ShouldProcessMultipleAbsenceRequests10()
-		{
-			EventPublisher.OverwriteHandler(typeof(NewMultiAbsenceRequestsCreatedEvent), typeof(MultiAbsenceRequestsHandler));
-			_configReader.FakeSetting("NumberOfAbsenceRequestsToBulkProcess", "10");
-			setupRequests();
-			publishRequests();
-		}
 
 		[Test]
 		public void ShouldProcessMultipleAbsenceRequests20()
 		{
 			EventPublisher.OverwriteHandler(typeof(NewMultiAbsenceRequestsCreatedEvent), typeof(MultiAbsenceRequestsHandler));
-			_configReader.FakeSetting("NumberOfAbsenceRequestsToBulkProcess", "20");
 			setupRequests();
 			publishRequests();
 		}
 
+
 		private void publishRequests()
 		{
-			foreach (var personRequest in _personRequests)
+			WithUnitOfWork.Do(() =>
 			{
-				Target.Handle(new NewAbsenceRequestCreatedEvent() { PersonRequestId = personRequest.Id.Value,
-					LogOnDatasource = "Teleopti WFM" , LogOnBusinessUnitId = new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b") 
-				});
-			}
+				foreach (var personRequest in _personRequests)
+				{
+					Target.Handle(new NewAbsenceRequestCreatedEvent()
+					{
+						PersonRequestId = personRequest.Id.Value,
+						LogOnDatasource = "Teleopti WFM", LogOnBusinessUnitId = new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b")
+					});
+				}
+			});
 		}
 
 		private IPersonRequest createAbsenceRequest(IPerson person, IAbsence absence)
