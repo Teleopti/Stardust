@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -16,15 +17,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 	public class RuleSetPersonalSkillsActivityFilter : IRuleSetPersonalSkillsActivityFilter
 	{
 		private readonly IRuleSetSkillActivityChecker _ruleSetSkillActivityChecker;
+		private readonly IPersonalSkillsProvider _personalSkillsProvider;
 
-		public RuleSetPersonalSkillsActivityFilter(IRuleSetSkillActivityChecker ruleSetSkillActivityChecker)
+		public RuleSetPersonalSkillsActivityFilter(IRuleSetSkillActivityChecker ruleSetSkillActivityChecker, IPersonalSkillsProvider personalSkillsProvider)
 		{
 			_ruleSetSkillActivityChecker = ruleSetSkillActivityChecker;
+			_personalSkillsProvider = personalSkillsProvider;
 		}
 
 		public IEnumerable<IWorkShiftRuleSet> Filter(IEnumerable<IWorkShiftRuleSet> ruleSetList, IPerson person, DateOnly dateOnly)
 		{
-			var personalSkills = person.Period(dateOnly).PersonSkillCollection;
+			var personalSkills = _personalSkillsProvider.PersonSkillsBasedOnPrimarySkill(person.Period(dateOnly));
 			var skills = new List<ISkill>();
 			foreach (var personalSkill in personalSkills)
 			{

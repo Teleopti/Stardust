@@ -129,6 +129,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			get
 			{
+				//THIS IS MOST PROBABLY WRONG when having cascading skills and you're in primary mode
 				return _visibleSkills.Value;
 			}
 		}

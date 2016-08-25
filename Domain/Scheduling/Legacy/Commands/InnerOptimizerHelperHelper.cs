@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.MatrixLockers;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
@@ -9,10 +10,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	public class InnerOptimizerHelperHelper : IOptimizerHelperHelper
 	{
 		private readonly IRestrictionExtractor _restrictionExtractor;
+		private readonly IPersonalSkillsProvider _personalSkillsProvider;
 
-		public InnerOptimizerHelperHelper(IRestrictionExtractor restrictionExtractor)
+		public InnerOptimizerHelperHelper(IRestrictionExtractor restrictionExtractor, IPersonalSkillsProvider personalSkillsProvider)
 		{
 			_restrictionExtractor = restrictionExtractor;
+			_personalSkillsProvider = personalSkillsProvider;
 		}
 
 		public void LockDaysForDayOffOptimization(IEnumerable<IScheduleMatrixPro> matrixList, IOptimizationPreferences optimizationPreferences, DateOnlyPeriod selectedPeriod)
@@ -72,7 +75,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			DateOnlyPeriod selectedPeriod,
 			ISchedulingResultStateHolder stateHolder)
 		{
-			IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider();
+			IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider(_personalSkillsProvider);
 			IScheduleResultDataExtractor allSkillsDataExtractor = dataExtractorProvider.CreateAllSkillsDataExtractor(selectedPeriod, stateHolder, advancedPreferences);
 			return allSkillsDataExtractor;
 		}

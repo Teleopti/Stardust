@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -30,7 +31,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 								IScheduleDayEquator scheduleDayEquator,
 								IResourceOptimizationHelperExtended resouceOptimizationHelperExtended,
 								WorkShiftBackToLegalStateServiceProFactory workShiftBackToLegalStateServiceProFactory,
-								ScheduleBlankSpots scheduleBlankSpots) :
+								ScheduleBlankSpots scheduleBlankSpots,
+								IResourceCalculationContextFactory resourceCalculationContextFactory) :
 			base(matrixListFactory,
 								optimizerHelperHelper,
 								schedulerStateHolder,
@@ -39,7 +41,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 								scheduleDayEquator,
 								resouceOptimizationHelperExtended,
 								workShiftBackToLegalStateServiceProFactory,
-								scheduleBlankSpots)
+								scheduleBlankSpots,
+								resourceCalculationContextFactory)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;

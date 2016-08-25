@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IResourceOptimizationHelperExtended _resouceOptimizationHelperExtended;
 		private readonly WorkShiftBackToLegalStateServiceProFactory _workShiftBackToLegalStateServiceProFactory;
 		private readonly ScheduleBlankSpots _scheduleBlankSpots;
+		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
 
 		protected DayOffOptimizationDesktop(IMatrixListFactory matrixListFactory, 
 								IOptimizerHelperHelper optimizerHelperHelper, 
@@ -31,7 +32,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 								IScheduleDayEquator scheduleDayEquator,
 								IResourceOptimizationHelperExtended resouceOptimizationHelperExtended,
 								WorkShiftBackToLegalStateServiceProFactory workShiftBackToLegalStateServiceProFactory,
-								ScheduleBlankSpots scheduleBlankSpots)
+								ScheduleBlankSpots scheduleBlankSpots,
+								IResourceCalculationContextFactory resourceCalculationContextFactory)
 		{
 			_matrixListFactory = matrixListFactory;
 			_optimizerHelperHelper = optimizerHelperHelper;
@@ -42,6 +44,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_resouceOptimizationHelperExtended = resouceOptimizationHelperExtended;
 			_workShiftBackToLegalStateServiceProFactory = workShiftBackToLegalStateServiceProFactory;
 			_scheduleBlankSpots = scheduleBlankSpots;
+			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 		}
 
 
@@ -50,6 +53,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, 
 			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder, Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
 		{
+			var stateHolder = _schedulerStateHolder();
 			var matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListForSelection(selectedDays);
 			var matrixContainerList = createMatrixContainerList(matrixListForDayOffOptimization);
 			var matrixList = matrixContainerList.Select(container => container.ScheduleMatrix).ToList();
@@ -59,14 +63,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 			resourceOptimizerPersonOptimized(this, new ResourceOptimizerProgressEventArgs(0, 0, Resources.DaysOffBackToLegalState + Resources.ThreeDots));
 
 			// to make sure we are in legal state before we can do day off optimization
-			var displayList = _schedulerStateHolder().CommonStateHolder.ActiveDayOffs.ToList();
+			var displayList = stateHolder.CommonStateHolder.ActiveDayOffs.ToList();
 			displayList.Sort(new DayOffTemplateSorter());
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 			_daysOffBackToLegalState.Execute(matrixContainerList, backgroundWorker, displayList[0], schedulingOptions, dayOffOptimizationPreferenceProvider, optimizationPreferences, workShiftFinderResultHolder, resourceOptimizerPersonOptimized);
 
 			var workShiftBackToLegalStateService = _workShiftBackToLegalStateServiceProFactory.Create();
 
-			var rollbackService = new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState, _scheduleDayChangeCallback(), new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+			var rollbackService = new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, _scheduleDayChangeCallback(), new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
 			foreach (var matrixOriginalStateContainer in matrixContainerList)
 			{
 				rollbackService.ClearModificationCollection();
@@ -78,7 +82,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_scheduleBlankSpots.Execute(matrixContainerList, optimizationPreferences);
 
 			var validMatrixContainerList = new List<IScheduleMatrixOriginalStateContainer>();
-			rollbackService = new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState, _scheduleDayChangeCallback(), new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
+			rollbackService = new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, _scheduleDayChangeCallback(), new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
 			foreach (IScheduleMatrixOriginalStateContainer matrixContainer in matrixContainerList)
 			{
 				var isFullyScheduled = matrixContainer.IsFullyScheduled();
@@ -89,9 +93,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 				}
 				validMatrixContainerList.Add(matrixContainer);
 			}
-			_resouceOptimizationHelperExtended.ResourceCalculateAllDays(backgroundWorker, false);
 
-			Optimize(validMatrixContainerList, selectedPeriod, backgroundWorker, optimizationPreferences, dayOffOptimizationPreferenceProvider);
+			using(_resourceCalculationContextFactory.Create(stateHolder.Schedules, stateHolder.SchedulingResultState.Skills))
+			{
+				ResourceCalculationContext.Fetch().PrimarySkillMode = true;
+				_resouceOptimizationHelperExtended.ResourceCalculateAllDays(backgroundWorker, false);
+				Optimize(validMatrixContainerList, selectedPeriod, backgroundWorker, optimizationPreferences, dayOffOptimizationPreferenceProvider);
+			}
 
 			foreach (var matrixContainer in validMatrixContainerList)
 			{

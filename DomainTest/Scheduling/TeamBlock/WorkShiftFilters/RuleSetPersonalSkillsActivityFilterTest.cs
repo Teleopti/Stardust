@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		{
 			_mocks = new MockRepository();
 			_ruleSetSkillActivityChecker = _mocks.StrictMock<IRuleSetSkillActivityChecker>();
-			_target = new RuleSetPersonalSkillsActivityFilter(_ruleSetSkillActivityChecker);
+			_target = new RuleSetPersonalSkillsActivityFilter(_ruleSetSkillActivityChecker, new PersonalSkillsProvider());
 			_ruleSet1 = WorkShiftRuleSetFactory.Create();
 			_ruleSet2 = WorkShiftRuleSetFactory.Create();
 			_ruleSetList = new List<IWorkShiftRuleSet> {_ruleSet1, _ruleSet2};

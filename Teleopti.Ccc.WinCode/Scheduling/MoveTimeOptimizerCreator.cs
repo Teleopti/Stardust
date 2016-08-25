@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly IDayOffOptimizationPreferenceProvider _dayOffOptimizationPreferenceProvider;
 		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
+		private readonly IPersonalSkillsProvider _personalSkillsProvider;
 
 		public MoveTimeOptimizerCreator(
 			IList<IScheduleMatrixOriginalStateContainer> scheduleMatrixContainerList,
@@ -32,7 +34,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IEffectiveRestrictionCreator effectiveRestrictionCreator,
 			IResourceOptimizationHelper resourceOptimizationHelper,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
-			IDeleteAndResourceCalculateService deleteAndResourceCalculateService)
+			IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
+			IPersonalSkillsProvider personalSkillsProvider)
 		{
 			_scheduleMatrixContainerList = scheduleMatrixContainerList;
 			_workShiftContainerList = workShiftContainerList;
@@ -45,6 +48,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_dayOffOptimizationPreferenceProvider = dayOffOptimizationPreferenceProvider;
 			_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
+			_personalSkillsProvider = personalSkillsProvider;
 		}
 
 		/// <summary>
@@ -62,15 +66,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 				IScheduleMatrixPro scheduleMatrixPro = scheduleMatrixContainer.ScheduleMatrix;
 
-				IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider();
+				IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider(_personalSkillsProvider);
 				IScheduleResultDataExtractor personalSkillsDataExtractor = dataExtractorProvider.CreatePersonalSkillDataExtractor(scheduleMatrixPro, _optimizerPreferences.Advanced);
 
 				IPeriodValueCalculatorProvider periodValueCalculatorProvider = new PeriodValueCalculatorProvider();
 				IPeriodValueCalculator periodValueCalculator =
 					periodValueCalculatorProvider.CreatePeriodValueCalculator(_optimizerPreferences.Advanced, personalSkillsDataExtractor);
-
-				IDeleteSchedulePartService deleteSchedulePartService =
-					new DeleteSchedulePartService(()=>_schedulingResultStateHolder);
 
 				IScheduleMatrixOriginalStateContainer workShiftContainer = _workShiftContainerList[index];
 

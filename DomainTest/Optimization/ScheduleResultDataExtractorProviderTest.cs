@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _mock = new MockRepository();
             _scheduleMatrix = _mock.StrictMock<IScheduleMatrixPro>();
             _advancedPreferences = new AdvancedPreferences();
-            _target = new ScheduleResultDataExtractorProvider();
+            _target = new ScheduleResultDataExtractorProvider(new PersonalSkillsProvider());
         }
 
         [Test, ExpectedException(typeof(ArgumentNullException))]

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -18,12 +19,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		private readonly IDailySkillForecastAndScheduledValueCalculator _dailySkillForecastAndScheduledValueCalculator;
 		private readonly IDeviationStatisticData _deviationStatisticData;
+		private readonly IPersonalSkillsProvider _personalSkillsProvider;
 
-		public DayOffOptimizerPreMoveResultPredictor(IDailySkillForecastAndScheduledValueCalculator dailySkillForecastAndScheduledValueCalculator, IDeviationStatisticData deviationStatisticData)
+		public DayOffOptimizerPreMoveResultPredictor(IDailySkillForecastAndScheduledValueCalculator dailySkillForecastAndScheduledValueCalculator, 
+																		IDeviationStatisticData deviationStatisticData,
+																		IPersonalSkillsProvider personalSkillsProvider)
 
 		{
 			_dailySkillForecastAndScheduledValueCalculator = dailySkillForecastAndScheduledValueCalculator;
 			_deviationStatisticData = deviationStatisticData;
+			_personalSkillsProvider = personalSkillsProvider;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -108,10 +113,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return retDic;
 		}
 
-		private static IEnumerable<ISkill> extractSkills(IScheduleMatrixPro matrix)
+		private IEnumerable<ISkill> extractSkills(IScheduleMatrixPro matrix)
 		{
 			DateOnly firstPeriodDay = matrix.EffectivePeriodDays[0].Day;
-			var personalSkills = matrix.Person.Period(firstPeriodDay).PersonSkillCollection;
+			var personalSkills = _personalSkillsProvider.PersonSkillsBasedOnPrimarySkill(matrix.Person.Period(firstPeriodDay));
 			return personalSkills.Select(personalSkill => personalSkill.Skill).ToList();
 		}
 	}

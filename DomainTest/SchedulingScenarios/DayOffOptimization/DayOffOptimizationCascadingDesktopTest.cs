@@ -33,8 +33,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		{	
 		}
 
-		[Test, Ignore]
-		public void Anders()
+		[Test]
+		public void ShouldBaseMoveOnNonShoveledResourceCalculation_BasedOnAndersCase()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		}
 
 
-		[Test, Ignore]
+		[Test, Ignore("Fix soon... Fixed by making sure SchedulingStateHolderAllSkillExtractor only returns primary skill")]
 		public void ShouldBaseMoveOnNonShoveledResourceCalculation()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
@@ -122,21 +122,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				agents.Add(agent);
 			}
 			var skillDaysA = skillA.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-			 0.5, 
-			 0.4, //?
-			 20, 
-			 20,
-			 20,
-			 20,
-			 20);
+			 0.5, 0.4, 0, 20, 20, 20, 20);
 			var skillDaysB = skillB.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-			 0,
-			 20,
-			 20,
-			 20,
-			 20,
-			 20,
-			 20);
+			 0, 20, 20, 20, 20, 20, 20);
 			var asses = new List<IPersonAssignment>();
 			foreach (var agent in agents)
 			{

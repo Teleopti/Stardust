@@ -9,11 +9,18 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class OptimizerHelperHelper
 	{
+		private readonly IPersonalSkillsProvider _personalSkillsProvider;
+
+		public OptimizerHelperHelper(IPersonalSkillsProvider personalSkillsProvider)
+		{
+			_personalSkillsProvider = personalSkillsProvider;
+		}
+
 		public IScheduleResultDataExtractor CreatePersonalSkillsDataExtractor(
 			IAdvancedPreferences advancedPreferences,
 			IScheduleMatrixPro scheduleMatrix)
 		{
-			IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider();
+			IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider(_personalSkillsProvider);
 			return dataExtractorProvider.CreatePersonalSkillDataExtractor(scheduleMatrix, advancedPreferences);
 		}
 

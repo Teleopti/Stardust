@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -14,12 +15,19 @@ namespace Teleopti.Ccc.Domain.Optimization
 
     public class ScheduleResultDataExtractorProvider : IScheduleResultDataExtractorProvider
     {
-		public IScheduleResultDataExtractor CreatePersonalSkillDataExtractor(IScheduleMatrixPro scheduleMatrix, IAdvancedPreferences optimizerPreferences)
+	    private readonly IPersonalSkillsProvider _personalSkillsProvider;
+
+	    public ScheduleResultDataExtractorProvider(IPersonalSkillsProvider personalSkillsProvider)
+	    {
+		    _personalSkillsProvider = personalSkillsProvider;
+	    }
+
+	    public IScheduleResultDataExtractor CreatePersonalSkillDataExtractor(IScheduleMatrixPro scheduleMatrix, IAdvancedPreferences optimizerPreferences)
         {
             if(scheduleMatrix == null)
                 throw new ArgumentNullException("scheduleMatrix");
 
-            ISkillExtractor skillExtractor = new ScheduleMatrixPersonalSkillExtractor(scheduleMatrix);
+            ISkillExtractor skillExtractor = new ScheduleMatrixPersonalSkillExtractor(scheduleMatrix, _personalSkillsProvider);
             if (optimizerPreferences.UseTweakedValues)
             {
                 var dailySkillForecastAndScheduledValueCalculator = new DailyBoostedSkillForecastAndScheduledValueCalculator(()=>scheduleMatrix.SchedulingStateHolder);

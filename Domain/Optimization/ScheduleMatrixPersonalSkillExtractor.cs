@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -10,16 +11,18 @@ namespace Teleopti.Ccc.Domain.Optimization
     public class ScheduleMatrixPersonalSkillExtractor : ISkillExtractor
     {
         private readonly IScheduleMatrixPro _scheduleMatrix;
+	    private readonly IPersonalSkillsProvider _personalSkillsProvider;
 
-        public ScheduleMatrixPersonalSkillExtractor(IScheduleMatrixPro scheduleMatrix)
-        {
-            _scheduleMatrix = scheduleMatrix;
-        }
+	    public ScheduleMatrixPersonalSkillExtractor(IScheduleMatrixPro scheduleMatrix, IPersonalSkillsProvider personalSkillsProvider)
+	    {
+		    _scheduleMatrix = scheduleMatrix;
+		    _personalSkillsProvider = personalSkillsProvider;
+	    }
 
-        public IEnumerable<ISkill> ExtractSkills()
+	    public IEnumerable<ISkill> ExtractSkills()
         {
-            DateOnly firstPeriodDay = _scheduleMatrix.EffectivePeriodDays[0].Day;
-            var personalSkills = _scheduleMatrix.Person.Period(firstPeriodDay).PersonSkillCollection;
+			DateOnly firstPeriodDay = _scheduleMatrix.EffectivePeriodDays[0].Day;
+            var personalSkills = _personalSkillsProvider.PersonSkillsBasedOnPrimarySkill(_scheduleMatrix.Person.Period(firstPeriodDay));
             return personalSkills.Select(personalSkill => personalSkill.Skill).ToList();
         }
     }

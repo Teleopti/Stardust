@@ -3533,7 +3533,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void loadAndOptimizeData(DoWorkEventArgs e)
 		{
-			var optimizerHelper = new OptimizerHelperHelper();
+			var optimizerHelper = new OptimizerHelperHelper(_container.Resolve<IPersonalSkillsProvider>());
 			IList<LoaderMethod> methods = new List<LoaderMethod>();
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{

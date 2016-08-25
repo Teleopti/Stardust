@@ -90,8 +90,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				new ShiftProjectionCacheManager(new ShiftFromMasterActivityService(), new RuleSetDeletedActivityChecker(),
 					new RuleSetDeletedShiftCategoryChecker(),
 					new RuleSetProjectionEntityService(new ShiftCreatorService(new CreateWorkShiftsFromTemplate())),
-					new WorkShiftFromEditableShift()), new RuleSetPersonalSkillsActivityFilter(new RuleSetSkillActivityChecker()),
-				new DisallowedShiftProjectionCashesFilter(), new ActivityRequiresSkillProjectionFilter());
+					new WorkShiftFromEditableShift()), new RuleSetPersonalSkillsActivityFilter(new RuleSetSkillActivityChecker(), new PersonalSkillsProvider()),
+				new DisallowedShiftProjectionCashesFilter(), new ActivityRequiresSkillProjectionFilter(new PersonalSkillsProvider()));
 			
 			_group = new Group(new List<IPerson>{_person}, "Hej");
 			_matrixList = new List<IScheduleMatrixPro> { _matrix };

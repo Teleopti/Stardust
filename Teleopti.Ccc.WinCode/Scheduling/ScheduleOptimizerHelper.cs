@@ -95,7 +95,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					_container.Resolve<IEffectiveRestrictionCreator>(),
 					_container.Resolve<IResourceOptimizationHelper>(),
 					dayOffOptimizationPreferenceProvider,
-					_container.Resolve<IDeleteAndResourceCalculateService>());
+					_container.Resolve<IDeleteAndResourceCalculateService>(),
+					_container.Resolve<IPersonalSkillsProvider>());
 
 			IList<IMoveTimeOptimizer> optimizers = creator.Create();
 			var service = new MoveTimeOptimizerContainer(optimizers, periodValueCalculator);
@@ -179,18 +180,18 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			var continuedStep = false;
 
+			if (optimizerPreferences.General.OptimizationStepDaysOff)
+			{
+				runDayOffOptimization(optimizerPreferences,
+										selectedDays,
+										selectedPeriod,
+										dayOffOptimizationPreferenceProvider);
+
+				continuedStep = true;
+			}
+
 			using (_resourceCalculationContextFactory.Create(_stateHolder().Schedules, _stateHolder().Skills))
 			{
-				if (optimizerPreferences.General.OptimizationStepDaysOff)
-				{
-					runDayOffOptimization(	optimizerPreferences,
-											selectedDays,
-											selectedPeriod,
-											dayOffOptimizationPreferenceProvider);
-
-					continuedStep = true;
-				}
-
 				IList<IScheduleMatrixPro> matrixListForWorkShiftAndIntradayOptimization =
 					_matrixListFactory.CreateMatrixListForSelection(selectedDays);
 

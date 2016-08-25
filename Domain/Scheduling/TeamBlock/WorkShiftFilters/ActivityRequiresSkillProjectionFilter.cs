@@ -7,6 +7,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
 	public class ActivityRequiresSkillProjectionFilter : IActivityRequiresSkillProjectionFilter
 	{
+		private readonly IPersonalSkillsProvider _personalSkillsProvider;
+
+		public ActivityRequiresSkillProjectionFilter(IPersonalSkillsProvider personalSkillsProvider)
+		{
+			_personalSkillsProvider = personalSkillsProvider;
+		}
+
 		public IList<IShiftProjectionCache> Filter(IPerson person, IList<IShiftProjectionCache> shiftList, DateOnly dateToCheck, IWorkShiftFinderResult finderResult)
 		{
 			if (person == null) return null;
@@ -19,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 			IList<IShiftProjectionCache> workShiftsWithValidActivities = new List<IShiftProjectionCache>();
 
-			var validActivities = personPeriod.PersonSkillCollection.Where(s => s.Active).Select(p => p.Skill.Activity).ToArray();
+			var validActivities = _personalSkillsProvider.PersonSkillsBasedOnPrimarySkill(personPeriod).Select(p => p.Skill.Activity).ToArray();
 
 			foreach (var projection in shiftList)
 			{
