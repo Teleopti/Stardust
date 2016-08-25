@@ -9,10 +9,10 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 {
 	public class TestDataFactory
 	{
-		private readonly Action<Action<ICurrentUnitOfWork>> _unitOfWorkAction;
+		private readonly ICurrentUnitOfWork _unitOfWorkAction;
 		private readonly Action<Action<ICurrentTenantSession>> _tenantUnitOfWorkAction;
 
-		public TestDataFactory(Action<Action<ICurrentUnitOfWork>> unitOfWorkAction, Action<Action<ICurrentTenantSession>> tenantUnitOfWorkAction)
+		public TestDataFactory(ICurrentUnitOfWork unitOfWorkAction, Action<Action<ICurrentTenantSession>> tenantUnitOfWorkAction)
 		{
 			_unitOfWorkAction = unitOfWorkAction;
 			_tenantUnitOfWorkAction = tenantUnitOfWorkAction;

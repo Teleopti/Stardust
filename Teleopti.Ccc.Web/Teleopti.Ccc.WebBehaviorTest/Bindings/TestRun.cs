@@ -55,8 +55,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			log.Debug($"Cleaning up after scenario {ScenarioContext.Current.ScenarioInfo.Title}");
 
 			Browser.Interactions.GoTo("about:blank");
+			DataMaker.Data().Dispose();
 
-			DataMaker.Data().TryDisposeUnitOfWork();
 			handleScenarioException();
 
 			log.Debug($"Finished scenario {ScenarioContext.Current.ScenarioInfo.Title}");

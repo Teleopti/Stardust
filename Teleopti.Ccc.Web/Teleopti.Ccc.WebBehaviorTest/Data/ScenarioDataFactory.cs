@@ -3,40 +3,24 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
-	public class ScenarioDataFactory : TestDataFactory
+	public class ScenarioDataFactory : TestDataFactory, IDisposable
 	{
 		private readonly AnalyticsDataFactory _analyticsDataFactory = new AnalyticsDataFactory();
 		private readonly IList<IDelayedSetup> _delayedSetups = new List<IDelayedSetup>();
-		private static IUnitOfWork _unitOfWork;
 
-		public void TryDisposeUnitOfWork()
+		public void Dispose()
 		{
-			if (_unitOfWork == null) return;
-
-			_unitOfWork.Dispose();
-			_unitOfWork = null;
-		}
-
-		private static void withScenarioUnitOfWork(Action<ICurrentUnitOfWork> action)
-		{
-			if (_unitOfWork == null)
-			{
-				_unitOfWork = SystemSetup.UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork();
-				_unitOfWork.DisableFilter(QueryFilter.BusinessUnit);
-			}
-			action.Invoke(new ThisUnitOfWork(_unitOfWork));
-			_unitOfWork.PersistAll();
+			if (SystemSetup.UnitOfWork.HasCurrent())
+				SystemSetup.UnitOfWork.Current().Dispose();
 		}
 
 		private static void withTenantUnitOfWork(Action<ICurrentTenantSession> action)
@@ -52,8 +36,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			withTenantUnitOfWork(action);
 		}
 
-		public ScenarioDataFactory() : base(withScenarioUnitOfWork, withTenantUnitOfWork)
+		public ScenarioDataFactory() : base(SystemSetup.UnitOfWork, withTenantUnitOfWork)
 		{
+			SystemSetup.UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork(QueryFilter.NoFilter);
+
 			AddPerson("I").Apply(new PersonUserConfigurable
 			{
 				UserName = "1",
@@ -88,7 +74,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			_analyticsDataFactory.Persist(Me().Culture);
 
-			withScenarioUnitOfWork(uow => _delayedSetups.ForEach(s => s.Apply(Me().Person, uow)));
+			_delayedSetups.ForEach(s => s.Apply(Me().Person, SystemSetup.UnitOfWork));
+			SystemSetup.UnitOfWork.Current().PersistAll();
 
 			return Me().LogOnName;
 		}
@@ -119,5 +106,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			return UserDatasOfType<T>().Last();
 		}
+
 	}
 }

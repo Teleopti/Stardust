@@ -47,11 +47,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		{
 			_now.Is("2016-02-25 08:00".Utc());
 
-			var data = new TestDataFactory(action =>
-			{
-				action.Invoke(_unitOfWork);
-				_unitOfWork.Current().PersistAll();
-			}, action =>
+			var data = new TestDataFactory(_unitOfWork, action =>
 			{
 				using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 				{
