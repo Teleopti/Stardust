@@ -18,18 +18,26 @@ namespace Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart
 			_scheduleDictionarySaver = scheduleDictionarySaver;
 			_personAbsenceAccountRepository = personAbsenceAccountRepository;
 		}
-		
-		public IList<string> Save(IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleTag scheduleTag)
+
+		public IList<string> Save(IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection,
+			IScheduleTag scheduleTag)
 		{
+			return Save(new[] {scheduleDay}, newBusinessRuleCollection, scheduleTag);
+		}
+
+		public IList<string> Save(IEnumerable<IScheduleDay> scheduleDays, INewBusinessRuleCollection newBusinessRuleCollection,
+			IScheduleTag scheduleTag)
+		{
+			var scheduleDay = scheduleDays.FirstOrDefault();
 			openForEditsWhenReadOnlyDictionary(scheduleDay);
 			var dic = scheduleDay.Owner;
-
-			var checkResult = checkRules(dic, scheduleDay, newBusinessRuleCollection, scheduleTag);
+			
+			var checkResult = checkRules(dic, scheduleDays, newBusinessRuleCollection, scheduleTag);
 			if (checkResult != null)
 			{
 				return checkResult;
 			}
-
+			
 			performSave(dic, scheduleDay);
 			return null;
 		}
@@ -43,9 +51,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart
 			}
 		}
 
-		private IList<string> checkRules(IScheduleDictionary dic, IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleTag scheduleTag)
+		private IList<string> checkRules(IScheduleDictionary dic, IEnumerable<IScheduleDay> scheduleDays, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleTag scheduleTag)
 		{
-			var invalidList = dic.Modify(ScheduleModifier.Scheduler, scheduleDay, newBusinessRuleCollection, new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(scheduleTag)).ToList();
+			var invalidList = dic.Modify(ScheduleModifier.Scheduler, scheduleDays, newBusinessRuleCollection, new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(scheduleTag)).ToList();
 			if (invalidList != null && invalidList.Any(l => !l.Overridden))
 			{
 				return invalidList.Select(i => i.Message).Distinct().ToArray();

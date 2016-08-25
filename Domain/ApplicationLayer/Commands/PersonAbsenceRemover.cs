@@ -16,18 +16,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IPersonAbsenceCreator _personAbsenceCreator;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IAbsenceRequestCancelService _absenceRequestCancelService;
+		private readonly ICheckingPersonalAccountDaysProvider _checkingPersonalAccountDaysProvider;
 
 		public PersonAbsenceRemover(IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate,
 			ISaveSchedulePartService saveSchedulePartService,
 			IPersonAbsenceCreator personAbsenceCreator,
 			ILoggedOnUser loggedOnUser,
-			IAbsenceRequestCancelService absenceRequestCancelService)
+			IAbsenceRequestCancelService absenceRequestCancelService, ICheckingPersonalAccountDaysProvider checkingPersonalAccountDaysProvider)
 		{
 			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 			_saveSchedulePartService = saveSchedulePartService;
 			_personAbsenceCreator = personAbsenceCreator;
 			_loggedOnUser = loggedOnUser;
 			_absenceRequestCancelService = absenceRequestCancelService;
+			_checkingPersonalAccountDaysProvider = checkingPersonalAccountDaysProvider;
 		}
 
 		public IEnumerable<string> RemovePersonAbsence(DateOnly scheduleDate, IPerson person,
@@ -104,13 +106,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var scheduleDay = scheduleRange.ScheduledDay(scheduleDate) as ExtractedSchedule;
 			if (scheduleDay != null)
 			{
+				var scheduleDaysForChecking = new List<IScheduleDay> {scheduleDay};
+				scheduleDaysForChecking.AddRange(getScheduleDaysForCheckingAccount(personAbsences, scheduleDate, scheduleRange, person));
+
 				foreach (var personAbsence in personAbsences)
 				{
-					scheduleDay.Remove(personAbsence);
+					scheduleDaysForChecking.ForEach(s => s.Remove(personAbsence));
 				}
 
 				var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
-				var errors = _saveSchedulePartService.Save(scheduleDay, rules, KeepOriginalScheduleTag.Instance);
+				var errors = _saveSchedulePartService.Save(scheduleDaysForChecking, rules, KeepOriginalScheduleTag.Instance);
 
 				if (errors != null && errors.Any())
 				{
@@ -169,6 +174,35 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 
 			return errorMessages;
+		}
+
+		/// <summary>
+		/// Get scheduleDays for checking account
+		/// </summary>
+		/// <remarks>To be more efficient, we only return the first schedule day for each personal account for <see cref="Teleopti.Ccc.Domain.Scheduling.Rules.NewPersonAccountRule"/></remarks>
+		/// <returns></returns>
+		private IEnumerable<IScheduleDay> getScheduleDaysForCheckingAccount(IEnumerable<IPersonAbsence> personAbsences,
+			DateOnly startDate,
+			IScheduleRange scheduleRange, IPerson person)
+		{
+			var scheduleDaysForChecking = new List<IScheduleDay>();
+			var days = new HashSet<DateOnly>();
+
+			foreach (var personAbsence in personAbsences)
+			{
+				var daysForChecking =
+					_checkingPersonalAccountDaysProvider.GetDays(personAbsence.Layer.Payload, person,
+						personAbsence.Period);
+				foreach (var dayForChecking in daysForChecking)
+				{
+					if (dayForChecking != startDate && days.Add(dayForChecking))
+					{
+						scheduleDaysForChecking.Add(scheduleRange.ScheduledDay(dayForChecking));
+					}
+				}
+			}
+
+			return scheduleDaysForChecking;
 		}
 	}
 }

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
 		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
-		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
+		private readonly ICheckingPersonalAccountDaysProvider _checkingPersonalAccountDaysProvider;
 
 		public ApproveRequestCommandHandler(IScheduleStorage scheduleStorage, 
 																								IScheduleDifferenceSaver scheduleDictionarySaver, 
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 																								IPersonRequestRepository personRequestRepository, 
 																								ICurrentUnitOfWorkFactory unitOfWorkFactory, 
 																								IDifferenceCollectionService<IPersistableScheduleData> differenceService,
-                                                                                                IGlobalSettingDataRepository globalSettingDataRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository)
+                                                                                                IGlobalSettingDataRepository globalSettingDataRepository, ICheckingPersonalAccountDaysProvider checkingPersonalAccountDaysProvider)
 		{
 			_scheduleStorage = scheduleStorage;
 			_scheduleDictionarySaver = scheduleDictionarySaver;
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_differenceService = differenceService;
 			_globalSettingDataRepository = globalSettingDataRepository;
-			_personAbsenceAccountRepository = personAbsenceAccountRepository;
+			_checkingPersonalAccountDaysProvider = checkingPersonalAccountDaysProvider;
 		}
 
 		public virtual IRequestApprovalService GetRequestApprovalServiceScheduler(IScheduleDictionary scheduleDictionary,
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 																		  scenario,
 																		  swapAndModifyService, newBusinessRules,
                                                                           new ResourceCalculationOnlyScheduleDayChangeCallback(),
-                                                                          _globalSettingDataRepository, _personAbsenceAccountRepository);
+                                                                          _globalSettingDataRepository, _checkingPersonalAccountDaysProvider);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]

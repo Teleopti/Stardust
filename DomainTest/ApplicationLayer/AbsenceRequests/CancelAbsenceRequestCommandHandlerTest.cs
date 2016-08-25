@@ -171,13 +171,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public void CancellingARequestWithMultipleAbsencesShouldUpdatePersonAccount()
 		{
 			commonSetup();
-			var accountDay = new AccountDay(new DateOnly(2016, 03, 1))
-			{
-				BalanceIn = TimeSpan.FromDays(5),
-				Accrued = TimeSpan.FromDays(25),
-				Extra = TimeSpan.FromDays(0),
-				LatestCalculatedBalance = TimeSpan.FromDays(8)  // have used 8 days
-			};
+
+			var accountDay = createAccountDay(new DateOnly(2016, 03, 1), TimeSpan.FromDays(5), TimeSpan.FromDays(25),
+				TimeSpan.FromDays(8)); // have used 8 days
 
 			createPersonAbsenceAccount(person, absence, accountDay);
 
@@ -191,6 +187,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public void ShouldCancelAcceptedRequestAndDeleteMultipleRelatedAbsences()
 		{
 			commonSetup();
+			var accountDay = createAccountDay(new DateOnly(2016, 03, 1), TimeSpan.FromDays(5), TimeSpan.FromDays(25),
+				TimeSpan.FromDays(0));
+			createPersonAbsenceAccount(person, absence, accountDay);
+
 			var cancelRequestCommand = new CancelAbsenceRequestCommand();
 			var personRequest = cancelAbsenceRequestWithMultipleAbsences(cancelRequestCommand);
 
@@ -257,6 +257,40 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Assert.IsTrue(cancelRequestCommand.IsReplySuccess);
 		}
 
+		[Test]
+		public void ShouldUpdateAllPersonalAccountsWhenRequestIsCancelled()
+		{
+			commonSetup();
+
+			var absenceDateTimePeriod = new DateTimePeriod(2016, 08, 17, 00, 2016, 08, 19, 23);
+			var absenceRequest = createApprovedAbsenceRequest(absence, absenceDateTimePeriod, person);
+			var personRequest = absenceRequest.Parent as PersonRequest;
+			createShiftsForPeriod(absenceDateTimePeriod);
+			createPersonAbsence(absence, absenceDateTimePeriod, person, personRequest);
+
+			var accountDay1 = createAccountDay(new DateOnly(2015, 12, 1), TimeSpan.FromDays(0), TimeSpan.FromDays(5), TimeSpan.FromDays(1));
+			var accountDay2 = createAccountDay(new DateOnly(2016, 08, 18), TimeSpan.FromDays(0), TimeSpan.FromDays(3), TimeSpan.FromDays(2));
+			createPersonAbsenceAccount(person, absence, accountDay1, accountDay2);
+
+			var cancelRequestCommand = new CancelAbsenceRequestCommand();
+			cancelRequestCommand.PersonRequestId = personRequest.Id.GetValueOrDefault();
+			Target.Handle(cancelRequestCommand);
+
+			Assert.AreEqual(5, accountDay1.Remaining.TotalDays);
+			Assert.AreEqual(3, accountDay2.Remaining.TotalDays);
+		}
+
+		private AccountDay createAccountDay(DateOnly startDate, TimeSpan balanceIn, TimeSpan accrued, TimeSpan balance)
+		{
+			return new AccountDay(startDate)
+			{
+				BalanceIn = balanceIn,
+				Accrued = accrued,
+				Extra = TimeSpan.FromDays(0),
+				LatestCalculatedBalance = balance
+			};
+		}
+
 		private PersonRequest cancelAbsenceRequestWithMultipleAbsences(CancelAbsenceRequestCommand cancelRequestCommand, bool checkPersonAccounts = false)
 		{
 			var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(2016, 03, 01, 2016, 03, 14);
@@ -279,14 +313,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			return personRequest;
 		}
 
-
-		private void createPersonAbsenceAccount(IPerson person,IAbsence absence,IAccount accountDay)
+		private void createPersonAbsenceAccount(IPerson person, IAbsence absence, params IAccount[] accountDays)
 		{
-			var personAbsenceAccount = new PersonAbsenceAccount(person,absence);
-			personAbsenceAccount.Absence.Tracker = Tracker.CreateDayTracker();
-			personAbsenceAccount.Add(accountDay);
-
-			PersonAbsenceAccountRepository.Add(personAbsenceAccount);
+			PersonAbsenceAccountRepository.Add(PersonAbsenceAccountFactory.CreatePersonAbsenceAccount(person, absence,
+				accountDays));
 		}
 
 		private PersonRequest basicCancelAbsenceRequest(CancelAbsenceRequestCommand cancelRequestCommand, PropertyChangedEventHandler propertyChanged = null)

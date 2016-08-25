@@ -94,13 +94,49 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			Assert.AreEqual(25, lieuAccountDay.Remaining.TotalDays);
 		}
 
+		[Test]
+		public void ShouldUpdateAllPersonalAccountsWhenMultipleAbsencesAreApproved()
+		{
+			
+			var person = PersonFactory.CreatePersonWithId();
+			var absence = new Absence();
+
+			var absence1DateTimePeriod = new DateTimePeriod(2016, 08, 17, 00, 2016, 08, 19, 23);
+			var personRequest1 = createAbsenceRequest(person, absence, absence1DateTimePeriod);
+
+			var absence2DateTimePeriod = new DateTimePeriod(2016, 08, 23, 00, 2016, 08, 23, 23);
+			var personRequest2 = createAbsenceRequest(person, absence, absence2DateTimePeriod);
+
+			setScheduleDictionary(person, new DateTimePeriod(2016, 08, 17, 00, 2016, 08, 23, 23));
+
+			var accountDay1 = createAccountDay(new DateOnly(2015, 12, 1));
+			var accountDay2 = createAccountDay(new DateOnly(2016, 08, 18));
+			var account = createAccount(person, absence, accountDay1, accountDay2);
+
+			setBusinessRules(person, account);
+
+			setRequestApprovalService();
+			var absence1Responses =_requestApprovalService.ApproveAbsence(absence, absence1DateTimePeriod, person, personRequest1);
+			var absence2Responses = _requestApprovalService.ApproveAbsence(absence, absence2DateTimePeriod, person, personRequest2);
+
+			Assert.AreEqual(0, absence1Responses.Count());
+			Assert.AreEqual(0, absence2Responses.Count());
+			Assert.AreEqual(24, accountDay1.Remaining.TotalDays);
+			Assert.AreEqual(22, accountDay2.Remaining.TotalDays);
+		}
+
+
 		private void setScheduleDictionary(IPerson person, DateTimePeriod absenceDateTimePeriod)
 		{
-			var assignment1 = addAssignment(person, new DateTimePeriod(2016, 08, 17, 00, 2016, 08, 17, 23));
-			var assignment2 = addAssignment(person, new DateTimePeriod(2016, 08, 18, 00, 2016, 08, 18, 23));
-			var assignment3 = addAssignment(person, new DateTimePeriod(2016, 08, 19, 00, 2016, 08, 19, 23));
+			var timeZone = person.PermissionInformation.DefaultTimeZone();
+			var scheduleDatas = new List<IScheduleData>();
+			var dateOnlyPeriods = absenceDateTimePeriod.ToDateOnlyPeriod(timeZone).DayCollection();
+			foreach (var dateOnlyPeriod in dateOnlyPeriods)
+			{
+				scheduleDatas.Add(addAssignment(person, dateOnlyPeriod.ToDateTimePeriod(new TimePeriod(0, 0, 23, 0), timeZone)));
+			}
 			_scheduleDictionary = ScheduleDictionaryForTest.WithScheduleData(person, _scenario, absenceDateTimePeriod,
-				assignment1, assignment2, assignment3);
+				scheduleDatas.ToArray());
 		}
 
 		private void setBusinessRules(IPerson person, PersonAbsenceAccount account)
@@ -155,7 +191,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		private void setRequestApprovalService()
 		{
 			_requestApprovalService = new RequestApprovalServiceScheduler(_scheduleDictionary, _scenario, _swapAndModifyService,
-				_newBusinessRules, _scheduleDayChangeCallback, _globalSettingsDataRepository, _personAbsenceAccountRepository);
+				_newBusinessRules, _scheduleDayChangeCallback, _globalSettingsDataRepository, new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository));
 		}
 	}
 }

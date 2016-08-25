@@ -334,7 +334,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         public IList<IBusinessRuleResponse> Approve(INewBusinessRuleCollection newBusinessRules)
         {
-            var service = new RequestApprovalServiceScheduler(_schedules, _scenario, new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback), newBusinessRules, _scheduleDayChangeCallback, _globalSettingDataRepository, _personAbsenceAccountRepository);
+            var service = new RequestApprovalServiceScheduler(_schedules, _scenario, new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback), newBusinessRules, _scheduleDayChangeCallback, _globalSettingDataRepository, new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository));
 
             return Model.PersonRequest.Approve(service, _authorization);
         }

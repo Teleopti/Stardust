@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 			{
 				Expect.Call(dictionary.DifferenceSinceSnapshot()).Return(differenceCollectionItems);
 				Expect.Call(scheduleDay.Owner).Return(dictionary);
-				Expect.Call(dictionary.Modify(ScheduleModifier.Scheduler, scheduleDay, null, null, null)).IgnoreArguments().Return(response);
+				Expect.Call(dictionary.Modify(ScheduleModifier.Scheduler, new [] { scheduleDay }, null, null, null)).IgnoreArguments().Return(response);
 				Expect.Call(() => scheduleDictionarySaver.SaveChanges(differenceCollectionItems, null)).IgnoreArguments();
 				Expect.Call(dictionary.MakeEditable);
 			}
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 			using (mocks.Record())
 			{
 				Expect.Call(scheduleDay.Owner).Return(dictionary);
-				Expect.Call(dictionary.Modify(ScheduleModifier.Scheduler, scheduleDay, null, null, null)).IgnoreArguments().Return(response);
+				Expect.Call(dictionary.Modify(ScheduleModifier.Scheduler, new [] { scheduleDay }, null, null, null)).IgnoreArguments().Return(response);
 				Expect.Call(dictionary.MakeEditable);
 			}
 			using (mocks.Playback())
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 			{
 				Expect.Call(businessRuleResponse.Overridden).Return(true);
 				Expect.Call(scheduleDay.Owner).Return(dictionary);
-				Expect.Call(dictionary.Modify(ScheduleModifier.Scheduler, scheduleDay, null, null, null)).IgnoreArguments().Return(response);
+				Expect.Call(dictionary.Modify(ScheduleModifier.Scheduler, new[] { scheduleDay }, null, null, null)).IgnoreArguments().Return(response);
 				Expect.Call(dictionary.MakeEditable);
 
 				Expect.Call(dictionary.DifferenceSinceSnapshot()).Return(differenceCollectionItems);

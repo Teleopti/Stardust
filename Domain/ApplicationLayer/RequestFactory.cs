@@ -17,14 +17,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		private readonly ISwapAndModifyService _swapAndModifyService;
 		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
 		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
-		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
+		private readonly ICheckingPersonalAccountDaysProvider _checkingPersonalAccountDaysProvider;
 
-		public RequestFactory(ISwapAndModifyService swapAndModifyService, IPersonRequestCheckAuthorization personRequestCheckAuthorization,  IGlobalSettingDataRepository globalSettingDataRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository)
+		public RequestFactory(ISwapAndModifyService swapAndModifyService, IPersonRequestCheckAuthorization personRequestCheckAuthorization,  IGlobalSettingDataRepository globalSettingDataRepository, ICheckingPersonalAccountDaysProvider checkingPersonalAccountDaysProvider)
 		{
 			_swapAndModifyService = swapAndModifyService;
 			_personRequestCheckAuthorization = personRequestCheckAuthorization;
 			_globalSettingDataRepository = globalSettingDataRepository;
-			_personAbsenceAccountRepository = personAbsenceAccountRepository;
+			_checkingPersonalAccountDaysProvider = checkingPersonalAccountDaysProvider;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		{
 			return new RequestApprovalServiceScheduler(schedulingResultStateHolder.Schedules,
 				scenario, _swapAndModifyService, allNewRules, new ResourceCalculationOnlyScheduleDayChangeCallback(),
-				_globalSettingDataRepository, _personAbsenceAccountRepository);
+				_globalSettingDataRepository, _checkingPersonalAccountDaysProvider);
 		}
 
 		public IShiftTradeRequestStatusChecker GetShiftTradeRequestStatusChecker(ISchedulingResultStateHolder schedulingResultStateHolder)

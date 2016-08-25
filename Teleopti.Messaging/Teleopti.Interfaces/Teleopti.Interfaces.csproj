@@ -131,6 +131,7 @@
     <Compile Include="Domain\IBlockFinder.cs" />
     <Compile Include="Domain\IBlockInfo.cs" />
     <Compile Include="Domain\IBusinessRuleProvider.cs" />
+    <Compile Include="Domain\ICheckingPersonalAccountDaysProvider.cs" />
     <Compile Include="Domain\IOverrideTask.cs" />
     <Compile Include="Domain\IPaging.cs" />
     <Compile Include="Domain\IProjectionVersionPersister.cs" />

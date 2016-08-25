@@ -59,7 +59,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			var personAbsenceAccounts = _absenceAccounts.Where(account => account.Person == person);
 			var personAccountCollection = new PersonAccountCollection(person);
-			personAbsenceAccounts.ForEach(personAccountCollection.Add);
+			personAbsenceAccounts.ForEach(personAbsenceAccount =>
+			{
+				if (!personAccountCollection.Any(pc => pc.Absence == personAbsenceAccount.Absence))
+				{
+					personAccountCollection.Add(personAbsenceAccount);
+				}
+			});
 			return personAccountCollection;
 		}
 

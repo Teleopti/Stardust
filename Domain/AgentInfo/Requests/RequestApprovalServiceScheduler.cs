@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private readonly INewBusinessRuleCollection _newBusinessRules;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly IGlobalSettingDataRepository _globalSettingsDataRepository;
-		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
+		private readonly ICheckingPersonalAccountDaysProvider _checkingPersonalAccountDaysProvider;
 
 		private IPersonAbsence _approvedPersonAbsence;
 
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			INewBusinessRuleCollection newBusinessRules,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
 			IGlobalSettingDataRepository globalSettingsDataRepository,
-			IPersonAbsenceAccountRepository personAbsenceAccountRepository)
+			ICheckingPersonalAccountDaysProvider checkingPersonalAccountDaysProvider)
 		{
 			_scenario = scenario;
 			_swapAndModifyService = swapAndModifyService;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			_newBusinessRules = newBusinessRules;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_globalSettingsDataRepository = globalSettingsDataRepository;
-			_personAbsenceAccountRepository = personAbsenceAccountRepository;
+			_checkingPersonalAccountDaysProvider = checkingPersonalAccountDaysProvider;
 		}
 
 		public IEnumerable<IBusinessRuleResponse> ApproveAbsence(IAbsence absence, DateTimePeriod period, IPerson person, IPersonRequest personRequest =  null)
@@ -49,7 +49,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				totalScheduleRange.ScheduledDay(
 					new DateOnly(period.EndDateTimeLocal(person.PermissionInformation.DefaultTimeZone())));
 
-			var scheduleDaysForCheckingAccount = getScheduleDaysForCheckingAccount(absence, dayScheduleForAbsenceReqStart, totalScheduleRange, person, period).ToList();
+			var scheduleDaysForCheckingAccount 
+				= getScheduleDaysForCheckingAccount(absence, dayScheduleForAbsenceReqStart, totalScheduleRange, person, period).ToList();
 
 			IList<IBusinessRuleResponse> ret = new List<IBusinessRuleResponse>();
 
@@ -111,37 +112,24 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		{
 			if (_newBusinessRules.Item(typeof(NewPersonAccountRule)) == null)
 			{
-				return new [] {dayScheduleForAbsenceReqStart};
+				return new[] {dayScheduleForAbsenceReqStart};
 			}
 
-			var timeZone = person.PermissionInformation.DefaultTimeZone();
-			var startDate = new DateOnly(period.StartDateTimeLocal(timeZone));
-			var endDate = new DateOnly(period.EndDateTimeLocal(timeZone));
-
-			if (startDate == endDate)
+			var days = _checkingPersonalAccountDaysProvider.GetDays(absence, person, period).ToList();
+			if (days.Count == 1)
 			{
-				return new[] { dayScheduleForAbsenceReqStart };
+				return new[] {dayScheduleForAbsenceReqStart};
 			}
 
-			var scheduleDays = new List<IScheduleDay>();
-			var personAccounts = _personAbsenceAccountRepository.Find(person);
-			var days = period.ToDateOnlyPeriod(timeZone).DayCollection();
-			var checkedAccounts = new HashSet<IAccount>();
-			var checkedScheduleDays = new HashSet<DateOnly>();
-
+			var startDate = new DateOnly(period.StartDateTimeLocal(person.PermissionInformation.DefaultTimeZone()));
+			var scheduleDays = new List<IScheduleDay> {dayScheduleForAbsenceReqStart};
 			foreach (var day in days)
 			{
-				var account = personAccounts.Find(absence, day);
-
-				if (account == null)
+				if (day == startDate)
 					continue;
 
-				if (checkedAccounts.Add(account) && checkedScheduleDays.Add(day))
-				{
-					scheduleDays.Add(totalScheduleRange.ScheduledDay(day));
-				}
+				scheduleDays.Add(totalScheduleRange.ScheduledDay(day));
 			}
-
 			return scheduleDays;
 		}
 	}

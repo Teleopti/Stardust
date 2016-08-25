@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             globalSettingDataRepository = mocks.StrictMock<IGlobalSettingDataRepository>();
 			_personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 
-			target = new RequestApprovalServiceScheduler(scheduleDictionary, scenario, swapAndModifyService, businessRules, scheduleDayChangeCallback, globalSettingDataRepository, _personAbsenceAccountRepository);
+			target = new RequestApprovalServiceScheduler(scheduleDictionary, scenario, swapAndModifyService, businessRules, scheduleDayChangeCallback, globalSettingDataRepository, new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository));
         }
 
         [Test]

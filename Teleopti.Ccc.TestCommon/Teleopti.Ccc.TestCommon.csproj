@@ -164,6 +164,7 @@
     <Compile Include="FakeData\FakeSchedulingResultStateHolderProvider.cs" />
     <Compile Include="FakeData\FakeScheduleRangePersister.cs" />
     <Compile Include="FakeData\ConfigurablePermissions.cs" />
+    <Compile Include="FakeData\PersonAbsenceAccountFactory.cs" />
     <Compile Include="FakeData\PersonRequestAuthorizationCheckerConfigurable.cs" />
     <Compile Include="FakeEventPublisherWithOverwritingHandlers.cs" />
     <Compile Include="FakeHttpServer.cs" />
