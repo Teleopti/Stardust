@@ -79,7 +79,7 @@
 				WeekViewEnabled: toggleSvc.WfmTeamSchedule_WeekView_39870
 			};
 
-			vm.weekDays = Util.getWeekdays();
+			vm.weekDays = Util.getWeekdays(vm.scheduleDate);
 			vm.paginationOptions.totalPages = 1;
 			vm.loadSchedules();			
 		}
