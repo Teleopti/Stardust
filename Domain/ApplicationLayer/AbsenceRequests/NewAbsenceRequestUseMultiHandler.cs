@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -21,29 +22,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
-		private readonly IBusinessUnitScope _businessUnitScope;
-		private readonly IUpdatedByScope _updatedByScope;
 
 		private readonly IList<LoadDataAction> _loadDataActions;
 		private IPersonRequest _personRequest;
 
 		private static readonly isNullOrNotNewSpecification personRequestSpecification = new isNullOrNotNewSpecification();
 		private static readonly isNullSpecification absenceRequestSpecification = new isNullSpecification();
-		private readonly IBusinessUnitRepository _businessUnitRepository;
-		private readonly IPersonRepository _personRepository;
 
 		private delegate bool LoadDataAction(NewAbsenceRequestCreatedEvent @event);
 
 		public NewAbsenceRequestUseMultiHandler(IPersonRequestRepository personRequestRepository,
-			IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IBusinessUnitScope businessUnitScope,
-			IBusinessUnitRepository businessUnitRepository, IUpdatedByScope updatedByScope, IPersonRepository personRepository)
+			IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository)
 		{
 			_personRequestRepository = personRequestRepository;
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
-			_businessUnitScope = businessUnitScope;
-			_businessUnitRepository = businessUnitRepository;
-			_updatedByScope = updatedByScope;
-			_personRepository = personRepository;
 
 			_loadDataActions = new List<LoadDataAction>
 			{
@@ -52,6 +44,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			};
 		}
 
+		[ImpersonateSystem]
 		[UnitOfWork]
 		public virtual void Handle(NewAbsenceRequestCreatedEvent @event)
 		{
@@ -59,9 +52,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			{
 				return;
 			}
-			var businessUnit = _businessUnitRepository.Load(@event.LogOnBusinessUnitId);
-			_businessUnitScope.OnThisThreadUse(businessUnit);
-			_updatedByScope.OnThisThreadUse(_personRepository.Load(SystemUser.Id));
 			var queuedAbsenceRequest = new QueuedAbsenceRequest()
 			{
 				PersonRequest = _personRequest.Id.GetValueOrDefault(),

@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 	public class MultiAbsenceRequestsHandler : IHandleEvent<NewMultiAbsenceRequestsCreatedEvent>, IRunOnStardust
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(MultiAbsenceRequestsHandler));
-		private readonly ICurrentScenario _currentScenario;
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private List<IPersonRequest> _personRequests;
 		private readonly IMultiAbsenceRequestProcessor _absenceRequestProcessor;
@@ -26,10 +25,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 
 
-		public MultiAbsenceRequestsHandler(ICurrentScenario currentScenario, IPersonRequestRepository personRequestRepository,
+		public MultiAbsenceRequestsHandler(IPersonRequestRepository personRequestRepository,
 			IMultiAbsenceRequestProcessor absenceRequestProcessor, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
 		{
-			_currentScenario = currentScenario;
 			_personRequestRepository = personRequestRepository;
 			_absenceRequestProcessor = absenceRequestProcessor;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
@@ -44,7 +42,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		[UnitOfWork]
 		public virtual void Handle(NewMultiAbsenceRequestsCreatedEvent @event)
 		{
-			_currentScenario.Current();
 			checkPersonRequest(@event.PersonRequestIds);
 			_absenceRequestProcessor.ProcessAbsenceRequest(_currentUnitOfWorkFactory.Current().CurrentUnitOfWork(), _personRequests);
 		}
