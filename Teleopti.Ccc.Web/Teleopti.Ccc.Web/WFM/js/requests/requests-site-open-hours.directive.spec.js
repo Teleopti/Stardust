@@ -119,7 +119,7 @@ describe('requestsSiteOpenHoursDirectiveTests', function () {
 		expect(requestsDataService.getDataBeforeSend()[0].OpenHours.WeekDay).toEqual(openHoursFormatResult[0].OpenHours.WeekDay);
 		expect(requestsDataService.getDataBeforeSend()[0].OpenHours.EndTime).toEqual(openHoursFormatResult[0].OpenHours.EndTime);
 		expect(requestsDataService.getDataBeforeSend()[0].OpenHours.StartTime).toEqual(openHoursFormatResult[0].OpenHours.StartTime);
-		expect(requestsDataService.getDataBeforeSend()[0].OpenHours.length).toEqual(1);
+		expect(requestsDataService.getDataBeforeSend()[0].OpenHours.length).toEqual(7);
 	});
 
 	it('should deformat data after get open hours', function () {
@@ -142,7 +142,7 @@ describe('requestsSiteOpenHoursDirectiveTests', function () {
 		expect(test.targetScope.sites[0].OpenHours.length).toEqual(1);
 	});
 
-	it('should not deformat closed week day',
+	it('should deformat closed week day',
 		function() {
 			var openHoursHandleResult = [
 				{
@@ -150,6 +150,26 @@ describe('requestsSiteOpenHoursDirectiveTests', function () {
 						{
 							EndTime: '17:00:00',
 							StartTime: '08:00:00',
+							WeekDay: 1,
+							IsClosed: true
+						}
+					]
+				}
+			];
+			requestsDataService.setOpenHoursHandleResult(openHoursHandleResult);
+
+			var test = setUpTarget();
+			expect(test.targetScope.sites[0].OpenHours.length).toEqual(1);
+		});
+
+	it('should not deformat default time period',
+		function () {
+			var openHoursHandleResult = [
+				{
+					OpenHours: [
+						{
+							EndTime: '00:00:00',
+							StartTime: '00:00:00',
 							WeekDay: 1,
 							IsClosed: true
 						}

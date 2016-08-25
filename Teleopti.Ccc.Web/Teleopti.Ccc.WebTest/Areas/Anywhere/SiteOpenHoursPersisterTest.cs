@@ -33,10 +33,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 		{
 			var weekDay = DayOfWeek.Friday;
 			var timePeriod = new TimePeriod(new TimeSpan(1, 0, 0), new TimeSpan(10, 0, 0));
-			var sites = createSiteViewModels(new Dictionary<DayOfWeek, TimePeriod>
-			{
-				{weekDay, timePeriod}
-			});
+			var sites = createSiteViewModels(createSiteOpenHourViewModel(weekDay, timePeriod));
 
 			var target = new SiteOpenHoursPersister(_siteRepository, _siteOpenHourRepository);
 			var count = target.Persist(sites);
@@ -52,11 +49,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 		[Test]
 		public void ShouldPersistLackWeekDaysAsClosed()
 		{
-			var weekDayTimePeriods = new Dictionary<DayOfWeek, TimePeriod>
-			{
-				{DayOfWeek.Monday, new TimePeriod(new TimeSpan(1, 0, 0), new TimeSpan(10, 0, 0))}
-			};
-			var sites = createSiteViewModels(weekDayTimePeriods);
+			var weekDayTimePeriod = new TimePeriod(new TimeSpan(1, 0, 0), new TimeSpan(10, 0, 0));
+			var sites =
+				createSiteViewModels(createSiteOpenHourViewModel(DayOfWeek.Monday, weekDayTimePeriod));
 
 			var target = new SiteOpenHoursPersister(_siteRepository, _siteOpenHourRepository);
 			var count = target.Persist(sites);
@@ -65,12 +60,57 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			Assert.IsTrue(
 				_site.OpenHourCollection.Any(
 					openHour =>
-						openHour.WeekDay == DayOfWeek.Monday && openHour.TimePeriod == weekDayTimePeriods[DayOfWeek.Monday] &&
+						openHour.WeekDay == DayOfWeek.Monday && openHour.TimePeriod == weekDayTimePeriod &&
 						openHour.IsClosed == false));
 			Assert.IsTrue(
 				_site.OpenHourCollection.Any(
 					openHour =>
 						openHour.WeekDay == DayOfWeek.Tuesday && openHour.IsClosed));
+		}
+
+		[Test]
+		public void ShouldPersistWeekDayAsOpened()
+		{
+			var openedPeriod = new TimePeriod(8, 0, 17, 0);
+			var closedPeriod = new TimePeriod(5, 0, 16, 0);
+			var sites = createSiteViewModels(
+				createSiteOpenHourViewModel(DayOfWeek.Monday, openedPeriod),
+				createSiteOpenHourViewModel(DayOfWeek.Monday, closedPeriod, true)
+				);
+
+			var target = new SiteOpenHoursPersister(_siteRepository, _siteOpenHourRepository);
+			var count = target.Persist(sites);
+			Assert.IsTrue(count > 0);
+
+			var siteOpenHourForMonday = _site.OpenHourCollection.FirstOrDefault(s => s.WeekDay == DayOfWeek.Monday);
+			Assert.NotNull(siteOpenHourForMonday);
+			Assert.IsTrue(!siteOpenHourForMonday.IsClosed);
+			Assert.AreEqual(siteOpenHourForMonday.TimePeriod, openedPeriod);
+		}
+
+		[Test]
+		public void ShouldPersistClosedForSite()
+		{
+			var period = new TimePeriod(8, 0, 17, 0);
+			var sites = createSiteViewModels(
+				createSiteOpenHourViewModel(DayOfWeek.Monday, period, true),
+				createSiteOpenHourViewModel(DayOfWeek.Tuesday, period, true),
+				createSiteOpenHourViewModel(DayOfWeek.Wednesday, period, true),
+				createSiteOpenHourViewModel(DayOfWeek.Thursday, period, true),
+				createSiteOpenHourViewModel(DayOfWeek.Friday, period, true),
+				createSiteOpenHourViewModel(DayOfWeek.Saturday, period, true),
+				createSiteOpenHourViewModel(DayOfWeek.Sunday, period, true)
+				);
+
+			var target = new SiteOpenHoursPersister(_siteRepository, _siteOpenHourRepository);
+			var count = target.Persist(sites);
+			Assert.IsTrue(count > 0);
+
+			Assert.IsTrue(_site.OpenHourCollection.All(o => o.IsClosed));
+
+			var siteOpenHourForMonday = _site.OpenHourCollection.FirstOrDefault(s => s.WeekDay == DayOfWeek.Monday);
+			Assert.NotNull(siteOpenHourForMonday);
+			Assert.AreEqual(siteOpenHourForMonday.TimePeriod, period);
 		}
 
 		private void prepareData()
@@ -87,24 +127,24 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			_siteRepository.Add(_site);
 		}
 
-		private List<SiteViewModel> createSiteViewModels(Dictionary<DayOfWeek, TimePeriod> weekDayTimePeriods)
+		private List<SiteViewModel> createSiteViewModels(params SiteOpenHourViewModel[] siteOpenHourViewModels)
 		{
 			var siteViewModel = new SiteViewModel {Id = _site.Id.GetValueOrDefault()};
-			var openHourList = new List<SiteOpenHourViewModel>();
-			foreach (var weekDayTimePeriod in weekDayTimePeriods)
-			{
-				openHourList.Add(new SiteOpenHourViewModel()
-				{
-					WeekDay = weekDayTimePeriod.Key,
-					StartTime = weekDayTimePeriod.Value.StartTime,
-					EndTime = weekDayTimePeriod.Value.EndTime,
-					IsClosed = false
-				});
-			}
-			siteViewModel.OpenHours = openHourList;
+			siteViewModel.OpenHours = siteOpenHourViewModels;
 			return new List<SiteViewModel>()
 			{
 				siteViewModel
+			};
+		}
+
+		private SiteOpenHourViewModel createSiteOpenHourViewModel(DayOfWeek dayOfWeek, TimePeriod weekDayTimePeriod, bool isClosed = false)
+		{
+			return new SiteOpenHourViewModel()
+			{
+				WeekDay = dayOfWeek,
+				StartTime = weekDayTimePeriod.StartTime,
+				EndTime = weekDayTimePeriod.EndTime,
+				IsClosed = isClosed
 			};
 		}
 	}
