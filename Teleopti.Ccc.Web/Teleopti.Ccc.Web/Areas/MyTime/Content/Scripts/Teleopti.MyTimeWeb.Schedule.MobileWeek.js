@@ -66,6 +66,9 @@ Teleopti.MyTimeWeb.Schedule.MobileWeek = (function ($) {
         },
         PartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
         	if ($('.weekview-mobile').length > 0) {
+                $('#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(3)').hide();
+                $('#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar li:nth-child(4)').hide();
+                
 		        completelyLoaded = completelyLoadedCallback;
 		        vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(ajax, _fetchData);
 	        	ko.applyBindings(vm, $('#page')[0]);
