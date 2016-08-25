@@ -132,7 +132,7 @@ describe('RtaTeamsCtrl', function() {
 		$httpBackend.verifyNoOutstandingRequest();
 	});
 
-	it('should go to agents for multiple teams', function() {
+	fit('should go to agents for multiple teams', function() {
 		$fakeBackend.withTeam({
 				Id: "2d45a50e-db48-41db-b771-a53000ef6565"
 			})
@@ -155,7 +155,7 @@ describe('RtaTeamsCtrl', function() {
 		});
 	});
 
-	it('should go to agents after deselecting team', function() {
+	fit('should go to agents after deselecting team', function() {
 		$fakeBackend.withTeam({
 			Id: "2d45a50e-db48-41db-b771-a53000ef6565"
 		})

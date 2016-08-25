@@ -3,13 +3,12 @@
 	'use strict';
 
 	angular.module('wfm.rta').controller('RtaTeamsCtrl', [
-		'$scope', '$state', '$stateParams', '$interval', '$filter', 'RtaOrganizationService', 'RtaService', '$location', '$sessionStorage', 'RtaRouteService', 'RtaFormatService',
-		function($scope, $state, $stateParams, $interval, $filter, RtaOrganizationService, RtaService, $location, $sessionStorage, RtaRouteService, RtaFormatService) {
+		'$scope', '$state', '$stateParams', '$interval', '$filter', 'RtaOrganizationService', 'RtaService', '$location', '$sessionStorage', 'RtaRouteService', 'RtaFormatService', 'RtaSelectionService',
+		function($scope, $state, $stateParams, $interval, $filter, RtaOrganizationService, RtaService, $location, $sessionStorage, RtaRouteService, RtaFormatService, RtaSelectionService) {
 
 			$scope.getAdherencePercent = RtaFormatService.numberToPercent;
-			$scope.checkboxesChecked = 0;
 			$scope.siteId = $stateParams.siteId;
-			var selectedTeamIds = [];
+			$scope.selectedTeamIds = [];
 
 			RtaOrganizationService.getSiteName($scope.siteId).then(function(name) {
 				$scope.siteName = name;
@@ -43,22 +42,14 @@
 				});
 			};
 
-
 			$scope.toggleSelection = function(teamId) {
-				var index = selectedTeamIds.indexOf(teamId);
-				if (index > -1) {
-					selectedTeamIds.splice(index, 1);
-					$scope.checkboxesChecked--;
-				} else {
-					selectedTeamIds.push(teamId);
-					$scope.checkboxesChecked++;
-				}
-			};
+				$scope.selectedTeamIds = RtaSelectionService.toggleSelection(teamId, $scope.selectedTeamIds);
+			}
 
 			$scope.openSelectedTeams = function() {
-				if (selectedTeamIds.length === 0) return;
+				if ($scope.selectedTeamIds.length === 0) return;
 				$state.go('rta.agents-teams', {
-					teamIds: selectedTeamIds
+					teamIds: $scope.selectedTeamIds
 				});
 			};
 
