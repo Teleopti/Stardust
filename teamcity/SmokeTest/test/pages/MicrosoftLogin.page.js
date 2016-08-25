@@ -4,6 +4,7 @@ var MicrosoftLoginPage = Object.create(Page, {
 
     username: { get: function () { return browser.element('#cred_userid_inputtext'); } },
     password: { get: function () { return browser.element('#cred_password_inputtext'); } },
+	password2: { get: function () { return browser.element('#passwordInput'); } },
     signinButton:     { get: function () { return browser.element('#submitButton'); } },
 	
     clickSignin: { value: function() {
@@ -15,6 +16,8 @@ var MicrosoftLoginPage = Object.create(Page, {
 		this.username.waitForExist(60 * 1000);
 		this.username.setValue('demo@teleopti.com');
 		this.password.setValue('teleoptidemo');
+		this.password2.waitForExist(60 * 1000);
+		this.password2.setValue('teleoptidemo');
         this.signinButton.click();
     } }
 });

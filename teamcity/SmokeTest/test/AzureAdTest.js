@@ -16,8 +16,5 @@ describe('azure ad signin should work', function() {
 		IdentityProvidersPage.azureadProvider.click();
 		MicrosoftLoginPage.signin();
 		MytimePage.usernameLabel.waitForExist(60 * 1000);
-		
-		console.log('navigate to health check');
-		browser.url(UrlToTest + '/HealthCheck');
     });
 });
