@@ -316,6 +316,41 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			absenceRequests.First().Count().Should().Be.EqualTo(1);
 			absenceRequests.First().First().Should().Be.EqualTo(futureId);
 		}
+
+		[Test]
+		public void DontProcessRecentReuqestIfThereExistsAtleastOnePastPresentFuture()
+		{
+			var pastId = Guid.NewGuid();
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2016, 2, 25, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 2, 26, 23, 59, 00, DateTimeKind.Utc),
+				Created = new DateTime(2016, 03, 1, 9, 58, 0, DateTimeKind.Utc),
+				PersonRequest = pastId
+			});
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 3, 5, 23, 59, 00, DateTimeKind.Utc),
+				Created = new DateTime(2016, 03, 1, 9, 58, 0, DateTimeKind.Utc),
+				PersonRequest = Guid.NewGuid()
+			});
+
+			var futureId = Guid.NewGuid();
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2016, 3, 6, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 3, 7, 23, 59, 00, DateTimeKind.Utc),
+				Created = new DateTime(2016, 03, 1, 9, 58, 0, DateTimeKind.Utc),
+				PersonRequest = futureId
+			});
+
+			var absenceRequests = Target.Get(_interval, _farFutureInterval, new DateTimePeriod(_today, _today.AddDays(_nearFuture)), _windowSize);
+			absenceRequests.First().Count().Should().Be.EqualTo(1);
+		}
 	}
 
 	

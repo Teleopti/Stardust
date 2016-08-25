@@ -8,7 +8,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
 	public interface IAbsenceRequestStrategyProcessor
 	{
-		IList<IEnumerable<Guid>> Get(DateTime interval, DateTime farFutureTimeStampInterval, DateTimePeriod nearFuturePeriod, int windowSize);
+		IList<IEnumerable<Guid>> Get(DateTime interval, DateTime farFutureTimeStampInterval, DateTimePeriod nearFuturePeriod,
+			int windowSize);
 	}
 
 	public class AbsenceRequestStrategyProcessor : IAbsenceRequestStrategyProcessor
@@ -20,27 +21,58 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_queuedAbsenceRequestRepo = queuedAbsenceRequestRepo;
 		}
 
-		public IList<IEnumerable<Guid>> Get(DateTime nearFutureTimeStampInterval, DateTime farFutureTimeStampInterval, DateTimePeriod nearFuturePeriod,
+		//public IList<IEnumerable<Guid>> Get(DateTime nearFutureTimeStampInterval, DateTime farFutureTimeStampInterval,
+		//	DateTimePeriod nearFuturePeriod,
+		//	int windowSize)
+		//{
+		//	var allRequests = _queuedAbsenceRequestRepo.LoadAll();
+		//	var tempAllRequests = new List<IQueuedAbsenceRequest>();
+		//	tempAllRequests.AddRange(allRequests.Where(x => (x.EndDateTime.Subtract(x.StartDateTime)).Days <= 60));
+		//	if (allRequests.Any())
+		//	{
+		//		var nearFutureReuqests = getRequestsOnPeriod(nearFutureTimeStampInterval, nearFuturePeriod, tempAllRequests);
+		//		if (nearFutureReuqests.Any())
+		//			return new List<IEnumerable<Guid>> {nearFutureReuqests};
+		//		var farFutureRequests = getFutureRequests(farFutureTimeStampInterval, nearFuturePeriod, tempAllRequests,
+		//			windowSize);
+		//		if (farFutureRequests.Any())
+		//			return farFutureRequests;
+		//		return getPastRequests(nearFuturePeriod, tempAllRequests, windowSize);
+		//	}
+
+		//	return new List<IEnumerable<Guid>>();
+		//}
+
+		public IList<IEnumerable<Guid>> Get(DateTime nearFutureTimeStampInterval, DateTime farFutureTimeStampInterval,
+			DateTimePeriod nearFuturePeriod,
 			int windowSize)
 		{
-			var allRequests = _queuedAbsenceRequestRepo.LoadAll();
-			var tempAllRequests = new List<IQueuedAbsenceRequest>();
-			tempAllRequests.AddRange(allRequests.Where(x=>(x.EndDateTime.Subtract(x.StartDateTime)).Days <=60 ));
+			var allRequests = _queuedAbsenceRequestRepo.LoadAll().Where(x => (x.EndDateTime.Subtract(x.StartDateTime)).Days <= 60);
+			var filteredNearFutureList = new List<IQueuedAbsenceRequest>();
+			filteredNearFutureList.AddRange(allRequests);
 			if (allRequests.Any())
 			{
-				var nearFutureReuqests = getRequestsOnPeriod(nearFutureTimeStampInterval, nearFuturePeriod, tempAllRequests);
+				var nearFutureReuqests = getRequestsOnPeriod(nearFutureTimeStampInterval, nearFuturePeriod, filteredNearFutureList);
 				if (nearFutureReuqests.Any())
-					return new List<IEnumerable<Guid>> {nearFutureReuqests};
-				var farFutureRequests = getFarFutureRequests(farFutureTimeStampInterval, nearFuturePeriod, tempAllRequests, windowSize);
+					return new List<IEnumerable<Guid>> { nearFutureReuqests };
+
+				var filteredFarfutureList = new List<IQueuedAbsenceRequest>();
+				filteredFarfutureList.AddRange(filteredNearFutureList);
+				var farFutureRequests = getFutureRequests(farFutureTimeStampInterval, nearFuturePeriod, filteredFarfutureList,
+					windowSize);
 				if (farFutureRequests.Any())
 					return farFutureRequests;
-				return getPastRequests(nearFuturePeriod, tempAllRequests, windowSize);
+
+				var filteredPastList = new List<IQueuedAbsenceRequest>();
+				filteredPastList.AddRange(allRequests.Where(x=>x.StartDateTime < nearFuturePeriod.StartDateTime ));
+				return getPastRequests(nearFuturePeriod, filteredPastList, windowSize);
 			}
 
 			return new List<IEnumerable<Guid>>();
 		}
 
-		private IList<IEnumerable<Guid>> getPastRequests(DateTimePeriod windowPeriod, IList<IQueuedAbsenceRequest> tempAllRequests, int windowSize)
+		private IList<IEnumerable<Guid>> getPastRequests(DateTimePeriod windowPeriod,
+			IList<IQueuedAbsenceRequest> tempAllRequests, int windowSize)
 		{
 			var result = new List<IEnumerable<Guid>>();
 			while (tempAllRequests.Any())
@@ -54,8 +86,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			}
 			return result;
 		}
-		
-		private IList<IEnumerable<Guid>> getFarFutureRequests(DateTime farFutureTimeStampInterval, DateTimePeriod windowPeriod,
+
+		private IList<IEnumerable<Guid>> getFutureRequests(DateTime farFutureTimeStampInterval, DateTimePeriod windowPeriod,
 			IList<IQueuedAbsenceRequest> tempRequests, int windowSize)
 		{
 			var result = new List<IEnumerable<Guid>>();
@@ -84,7 +116,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		}
 
 		private List<Guid> getRequestsOnPeriod(DateTimePeriod windowPeriod,
-											   IList<IQueuedAbsenceRequest> allRequests)
+			IList<IQueuedAbsenceRequest> allRequests)
 		{
 			var requestsInPeriod = allRequests.Where(y => y.StartDateTime.Date >= windowPeriod.StartDateTime.Date &&
 																		 y.StartDateTime.Date <= windowPeriod.EndDateTime.Date);
@@ -97,7 +129,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					findAbsencesWithinPeriod(allRequests, min, max);
 				if (overlappingRequests.Any())
 					return overlappingRequests.Select(x => x.PersonRequest).ToList();
-				}
+			}
 
 			return new List<Guid>();
 		}
@@ -117,7 +149,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				if (overlappingRequests.Any(x => x.Created <= interval))
 					return overlappingRequests.Select(x => x.PersonRequest).ToList();
 				removeRequests(allRequests,
-					allRequests.Where(x => x.StartDateTime <= windowPeriod.EndDateTime).Select(x => x.PersonRequest).ToList());
+					allRequests.Where(x =>   x.StartDateTime <= windowPeriod.EndDateTime).Select(x => x.PersonRequest).ToList());
 			}
 
 			return new List<Guid>();
