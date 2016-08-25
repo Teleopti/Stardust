@@ -18,9 +18,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 			TestSiteConfigurationSetup.StartApplicationAsync();
 
-			SystemSetup.Setup();
+			LocalSystem.Setup();
 
-			datasource = DataSourceHelper.CreateDataSource(SystemSetup.TransactionHooks);
+			datasource = DataSourceHelper.CreateDataSource(LocalSystem.TransactionHooks);
 
 			StateHolderProxyHelper.SetupFakeState(
 				datasource,
@@ -29,24 +29,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				);
 			GlobalPrincipalState.Principal = Thread.CurrentPrincipal as TeleoptiPrincipal;
 
-			SystemSetup.Start();
+			LocalSystem.Start();
 
-			SystemSetup.DefaultDataCreator.Create();
-			SystemSetup.DefaultAnalyticsDataCreator.OneTimeSetup();
+			LocalSystem.DefaultDataCreator.Create();
+			LocalSystem.DefaultAnalyticsDataCreator.OneTimeSetup();
 
-			DataSourceHelper.BackupApplicationDatabase(SystemSetup.DefaultDataCreator.HashValue);
+			DataSourceHelper.BackupApplicationDatabase(LocalSystem.DefaultDataCreator.HashValue);
 		}
 
 		public static void ClearAnalyticsData()
 		{
 			DataSourceHelper.ClearAnalyticsData();
-			SystemSetup.DefaultAnalyticsDataCreator.Create();
+			LocalSystem.DefaultAnalyticsDataCreator.Create();
 			TestCommon.TestData.Analytics.BusinessUnit.IdCounter = 0;
 		}
 
 		public static void RestoreCcc7Data()
 		{
-			DataSourceHelper.RestoreApplicationDatabase(SystemSetup.DefaultDataCreator.HashValue);
+			DataSourceHelper.RestoreApplicationDatabase(LocalSystem.DefaultDataCreator.HashValue);
 		}
 
 		public static void SetupDefaultScenario()
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				DefaultBusinessUnit.BusinessUnit
 				);
 
-			SystemSetup.DefaultDataCreator.CreateDefaultScenario();
+			LocalSystem.DefaultDataCreator.CreateDefaultScenario();
 		}
 	}
 }

@@ -12,12 +12,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.MultiTenancy
 		[Given(@"There is a tenant called '(.*)'")]
 		public void GivenThereIsATenantCalled(string tenantName)
 		{
-			using (SystemSetup.TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			using (LocalSystem.TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var appDbConnstring = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().ConnectionString;
 				var tenant = new Tenant(tenantName);
 				tenant.DataSourceConfiguration.SetApplicationConnectionString(appDbConnstring);
-				new PersistTenant(SystemSetup.CurrentTenantSession).Persist(tenant);
+				new PersistTenant(LocalSystem.CurrentTenantSession).Persist(tenant);
 			}
 		}
 	}

@@ -16,7 +16,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
-	public static class SystemSetup
+	public static class LocalSystem
 	{
 		private static IContainer _container;
 

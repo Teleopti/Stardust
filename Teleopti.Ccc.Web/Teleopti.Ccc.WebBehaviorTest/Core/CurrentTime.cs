@@ -20,13 +20,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void Reset()
 		{
 			_currentTime = null;
-			SystemSetup.Now.Reset();
+			LocalSystem.Now.Reset();
 		}
 
 		public static void Set(DateTime time)
 		{
 			_currentTime = time;
-			SystemSetup.Now.Is(time);
+			LocalSystem.Now.Is(time);
 			TestControllerMethods.SetCurrentTime(Value());
 			Navigation.Navigation.ReapplyFakeTime();
 		}

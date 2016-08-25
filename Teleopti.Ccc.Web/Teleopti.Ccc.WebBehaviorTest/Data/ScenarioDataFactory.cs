@@ -19,16 +19,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public void Dispose()
 		{
-			if (SystemSetup.UnitOfWork.HasCurrent())
-				SystemSetup.UnitOfWork.Current().Dispose();
+			if (LocalSystem.UnitOfWork.HasCurrent())
+				LocalSystem.UnitOfWork.Current().Dispose();
 		}
 		
 		public ScenarioDataFactory() : base(
-			SystemSetup.UnitOfWork, 
-			SystemSetup.CurrentTenantSession, 
-			SystemSetup.TenantUnitOfWork)
+			LocalSystem.UnitOfWork, 
+			LocalSystem.CurrentTenantSession, 
+			LocalSystem.TenantUnitOfWork)
 		{
-			SystemSetup.UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork(QueryFilter.NoFilter);
+			LocalSystem.UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork(QueryFilter.NoFilter);
 
 			AddPerson("I").Apply(new PersonUserConfigurable
 			{
@@ -64,8 +64,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			_analyticsDataFactory.Persist(Me().Culture);
 
-			_delayedSetups.ForEach(s => s.Apply(Me().Person, SystemSetup.UnitOfWork));
-			SystemSetup.UnitOfWork.Current().PersistAll();
+			_delayedSetups.ForEach(s => s.Apply(Me().Person, LocalSystem.UnitOfWork));
+			LocalSystem.UnitOfWork.Current().PersistAll();
 
 			return Me().LogOnName;
 		}

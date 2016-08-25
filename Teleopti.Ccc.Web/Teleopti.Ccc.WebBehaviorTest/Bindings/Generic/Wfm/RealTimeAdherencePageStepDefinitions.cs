@@ -258,7 +258,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			if (state.Alarm != null)
 				Browser.Interactions.AssertAnyContains(selector, state.Alarm);
 
-			if (SystemSetup.Toggles.IsEnabled(Toggles.RTA_AlarmContext_29357))
+			if (LocalSystem.Toggles.IsEnabled(Toggles.RTA_AlarmContext_29357))
 			{
 				if (state.PreviousActivity != null)
 				{
@@ -279,9 +279,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 					Browser.Interactions.AssertExists(selector + " [style*='background-color: " + toRGBA(state.AlarmColor, "0.6") + "']");
 				if (state.Color != null)
 					Browser.Interactions.AssertExists(selector + " [style*='background-color: " + toRGBA(state.Color, "0.6") + "']");
-				if (SystemSetup.Toggles.IsEnabled(Toggles.RTA_TotalOutOfAdherenceTime_38702))
+				if (LocalSystem.Toggles.IsEnabled(Toggles.RTA_TotalOutOfAdherenceTime_38702))
 				{
-					if (SystemSetup.Toggles.IsEnabled(Toggles.RTA_RecentOutOfAdherences_39145))
+					if (LocalSystem.Toggles.IsEnabled(Toggles.RTA_RecentOutOfAdherences_39145))
 					{
 						if (state.RuleTimeFormatted() != null)
 						{
