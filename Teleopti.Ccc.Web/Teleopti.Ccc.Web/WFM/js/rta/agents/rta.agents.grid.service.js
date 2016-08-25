@@ -37,14 +37,14 @@
 					alarmCellTemplate = '<div class="ui-grid-cell-contents"><div class="label rta-label" ng-attr-style="font-size: 14px; color: white; background-color: {{grid.appScope.hexToRgb(row.entity.Color)}}">{{COL_FIELD}}</div></div>';
 				var alarmDurationCellTemplate = '<div ng-if="row.entity.TimeInAlarm" class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>';
 
-				var headerCellTemplate = 'js/rta/rta-agents-headercelltemplate.html';
+				var headerCellTemplate = 'js/rta/agents/rta-agents-headercelltemplate.html';
 
 				var timeInRuleTemplate = "";
 				if (toggleService.RTA_TotalOutOfAdherenceTime_38702) {
 					timeInRuleTemplate = '<div class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>';
 				}
 
-				var rowTemplate = 'js/rta/rta-agents-rowtemplate.html';
+				var rowTemplate = 'js/rta/agents/rta-agents-rowtemplate.html';
 
 				var name = {
 					displayName: 'Name',
@@ -118,17 +118,17 @@
 					headerCellFilter: 'translate'
 				};
 
-				var shiftcelltemplate =  'js/rta/rta-agent-shiftcelltemplate-RTA_AlarmContext_29357.html';
+				var shiftcelltemplate =  'js/rta/agents/rta-agent-shiftcelltemplate-RTA_AlarmContext_29357.html';
 
 				if (toggleService.RTA_RecentOutOfAdherences_39145) {
-					shiftcelltemplate = 'js/rta/rta-agents-shiftcelltemplate-RTA_RecentOutOfAdherences_39145.html';
+					shiftcelltemplate = 'js/rta/agents/rta-agents-shiftcelltemplate-RTA_RecentOutOfAdherences_39145.html';
 				}
 
 				var shift = {
 					displayName: 'Shift',
 					field: 'Shift',
 					enableColumnMenu: false,
-					headerCellTemplate: 'js/rta/rta-agents-headershiftcelltemplate-RTA_AlarmContext_29357.html',
+					headerCellTemplate: 'js/rta/agents/rta-agents-headershiftcelltemplate-RTA_AlarmContext_29357.html',
 					cellClass: 'shift-class',
 					cellTemplate: shiftcelltemplate,
 					headerCellFilter: 'translate',
@@ -140,10 +140,10 @@
 				var columnDefs = [];
 
 				if (toggleService.RTA_AdherenceDetails_34267)
-					rowTemplate = 'js/rta/rta-agents-rowtemplate-AdherenceDetails_34267.html';
+					rowTemplate = 'js/rta/agents/rta-agents-rowtemplate-AdherenceDetails_34267.html';
 
 				if (toggleService.RTA_AlarmContext_29357) {
-					rowTemplate = 'js/rta/rta-agents-rowtemplate-RTA_AlarmContext_29357.html';
+					rowTemplate = 'js/rta/agents/rta-agents-rowtemplate-RTA_AlarmContext_29357.html';
 					columnDefs.push(name);
 					columnDefs.push(siteAndTeam);
 					columnDefs.push(shift);

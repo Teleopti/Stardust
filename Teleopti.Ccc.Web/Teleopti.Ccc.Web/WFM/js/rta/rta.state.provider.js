@@ -10,34 +10,34 @@ angular.module('wfm.rta').provider('RtaState', function () {
 	var rtaAgentsTemplate = function (elem, attr) {
 		if (toggles.RTA_AlarmContext_29357) {
 			if (toggles.RTA_PauseButton_39144) {
-				return 'js/rta/rta-agents-RTA_PauseButton_39144.html';
+				return 'js/rta/agents/rta-agents-RTA_PauseButton_39144.html';
 			}
 			
-			return 'js/rta/rta-agents-RTA_AlarmContext_29357.html';
+			return 'js/rta/agents/rta-agents-RTA_AlarmContext_29357.html';
 		}
-		return 'js/rta/rta-agents.html';
+		return 'js/rta/agents/rta-agents.html';
 	};
 
 	var rtaSitesTemplate = function (elem, attr) {
 		if (toggles.RTA_MonitorBySkills_39081) {
-			return 'js/rta/rta-sites-RTA_MonitorBySkills_39081.html';
+			return 'js/rta/sites/rta-sites-RTA_MonitorBySkills_39081.html';
 		}
-		return 'js/rta/rta-sites.html';
+		return 'js/rta/sites/rta-sites.html';
 	};
 
 	var rtaAgentsBySkillsTemplate = function (elem, attr) {
 		if (toggles.RTA_MonitorBySkills_39081) {
 			
-			return 'js/rta/rta-agents-RTA_MonitorBySkills_39081.html';
+			return 'js/rta/agents/rta-agents-RTA_MonitorBySkills_39081.html';
 		}
-		return 'js/rta/rta-agents.html';
+		return 'js/rta/agents/rta-agents.html';
 	};
 
 	var rtaSelectTemplate = function(elem, attr) {
 		if (toggles.RTA_MonitorBySkillArea_39337) {
-			return 'js/rta/rta-selectSkill_MonitorBySkillArea_39337.html';
+			return 'js/rta/skills/rta-selectSkill_MonitorBySkillArea_39337.html';
 		} 
-		return 'js/rta/rta-selectSkill_MonitorBySkills_39081.html';
+		return 'js/rta/skills/rta-selectSkill_MonitorBySkills_39081.html';
 	}
 
 	this.$get = function () {
@@ -70,7 +70,7 @@ angular.module('wfm.rta').provider('RtaState', function () {
 			.state('rta.teams',
 			{
 				url: '/teams/:siteId',
-				templateUrl: 'js/rta/rta-teams.html',
+				templateUrl: 'js/rta/teams/rta-teams.html',
 				controller: 'RtaTeamsCtrl'
 			})
 			.state('rta.agents-view',
@@ -122,7 +122,7 @@ angular.module('wfm.rta').provider('RtaState', function () {
 			.state('rta.agent-details',
 			{
 				url: '/agent-details/:personId',
-				templateUrl: 'js/rta/rta-agent-details.html',
+				templateUrl: 'js/rta/details/rta-agent-details.html',
 				controller: 'RtaAgentDetailsCtrl'
 			});
 	};
