@@ -57,6 +57,7 @@
 					cellClass: 'request-message',
 					headerCellClass: 'request-message-header',
 					visible: false,
+					cellTooltip: true,
 					filter: {
 						disableCancelFilterButton: true,
 						placeholder: 'Filter...'
