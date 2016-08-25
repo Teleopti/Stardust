@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using log4net;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
@@ -43,7 +44,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		public virtual void Handle(NewMultiAbsenceRequestsCreatedEvent @event)
 		{
 			checkPersonRequest(@event.PersonRequestIds);
-			_absenceRequestProcessor.ProcessAbsenceRequest(_currentUnitOfWorkFactory.Current().CurrentUnitOfWork(), _personRequests);
+			if(!_personRequests.IsNullOrEmpty())
+				_absenceRequestProcessor.ProcessAbsenceRequest(_currentUnitOfWorkFactory.Current().CurrentUnitOfWork(), _personRequests);
 		}
 
 
