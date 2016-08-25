@@ -652,7 +652,6 @@
     <Compile Include="MyTime\AbsenceRequestFromScheduleStepDefinitions.cs" />
     <Compile Include="Data\Setups\Configurable\RoleConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\PersonPeriodConfigurable.cs" />
-    <Compile Include="Data\ScenarioUnitOfWorkState.cs" />
     <Compile Include="Data\Setups\DoNotUse\IUserRoleSetup.cs" />
     <Compile Include="MyTime\PreferencesExtended.feature.cs">
       <AutoGen>True</AutoGen>

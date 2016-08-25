@@ -2,7 +2,6 @@
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MultiTenancy
@@ -13,7 +12,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MultiTenancy
 		[Given(@"There is a tenant called '(.*)'")]
 		public void GivenThereIsATenantCalled(string tenantName)
 		{
-			TenantUnitOfWorkState.TenantUnitOfWorkAction(tenantSession =>
+			DataMaker.Data().WithTenantUnitOfWork(tenantSession =>
 			{
 				var appDbConnstring = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().ConnectionString;
 				var tenant = new Tenant(tenantName);
