@@ -84,7 +84,7 @@
 				var workingHourRow;
 				if (workingHourRows.length === 0) {
 					workingHourRow = createEmptyWorkingPeriod(startTime, endTime);
-					if (a.StartTime !== '00:00:00' && a.EndTime !== '00:00:00')
+					if (a.StartTime !== '00:00:00' || a.EndTime !== '00:00:00')
 						reformattedWorkingHours.push(workingHourRow);
 				} else {
 					workingHourRow = workingHourRows[0];

@@ -172,6 +172,12 @@ describe('requestsSiteOpenHoursDirectiveTests', function () {
 							StartTime: '00:00:00',
 							WeekDay: 1,
 							IsClosed: true
+						},
+						{
+							EndTime: '00:00:00',
+							StartTime: '23:00:00',
+							WeekDay: 2,
+							IsClosed: true
 						}
 					]
 				}
@@ -179,7 +185,7 @@ describe('requestsSiteOpenHoursDirectiveTests', function () {
 			requestsDataService.setOpenHoursHandleResult(openHoursHandleResult);
 
 			var test = setUpTarget();
-			expect(test.targetScope.sites[0].OpenHours.length).toEqual(0);
+			expect(test.targetScope.sites[0].OpenHours.length).toEqual(1);
 		});
 
 	function setUpTarget() {
