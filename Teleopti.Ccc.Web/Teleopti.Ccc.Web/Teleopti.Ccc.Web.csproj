@@ -1616,7 +1616,6 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.timeRangePicker.directive.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.timeRangePicker.directive.spec.js" />
     <Content Include="WFM\js\teamSchedule\_modules.js" />
-    <Content Include="WFM\vendor\uigrid.directive.ext.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-jalaali-ext.js" />
     <Content Include="WFM\js\forecasting\c3-fix-forecast.js" />
     <Content Include="WFM\js\forecasting\html\forecasting-advanced.html" />
@@ -1721,6 +1720,7 @@
     <Content Include="Areas\Start\Views\Return\Hash.cshtml" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.unsubscriber.js" />
     <Content Include="Areas\MyTime\Views\CiscoWidget\Index.cshtml" />
+    <Content Include="WFM\js\global\ui-grid\uigrid.disable-animation.directive.js" />
     <EmbeddedResource Include="tzdb2016c.nzd" />
     <Content Include="WFM\css\_navbar.scss" />
     <Content Include="WFM\css\_main.scss" />

@@ -139,7 +139,6 @@ module.exports = function(grunt) {
 					'vendor/ui-bootstrap-custom-build/timepicker.directive.ext.js',
 					'node_modules/angular-dialog-service/dist/dialogs.min.js',
 					'node_modules/angular-dialog-service/dist/dialogs-default-translations.min.js',
-					'vendor/uigrid.directive.ext.js',
 					'../Content/signalr/jquery.signalR-2.2.0.js',
 					'../Content/signalr/broker-hubs.js'
 				],
@@ -186,8 +185,7 @@ module.exports = function(grunt) {
 					'vendor/ui-bootstrap-custom-build/datepicker.directive.ext.js',
 					'vendor/ui-bootstrap-custom-build/timepicker.directive.ext.js',
 					'node_modules/angular-dialog-service/dist/dialogs.min.js',
-					'node_modules/angular-dialog-service/dist/dialogs-default-translations.min.js',
-					'vendor/uigrid.directive.ext.js',
+					'node_modules/angular-dialog-service/dist/dialogs-default-translations.min.js',					
 					'../Content/signalr/jquery.signalR-2.2.0.js',
 					'../Content/signalr/broker-hubs.js'
 				],
