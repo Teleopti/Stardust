@@ -91,7 +91,7 @@ angular.module('wfm.rta').provider('RtaState', function () {
 				templateUrl: rtaAgentsTemplate,
 				controller: 'RtaAgentsCtrl',
 				params: {
-					teamIds: {
+					ids: {
 						array: true
 					}
 				}

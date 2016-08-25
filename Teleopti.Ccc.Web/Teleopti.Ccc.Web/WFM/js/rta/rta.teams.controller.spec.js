@@ -132,7 +132,7 @@ describe('RtaTeamsCtrl', function() {
 		$httpBackend.verifyNoOutstandingRequest();
 	});
 
-	fit('should go to agents for multiple teams', function() {
+	it('should go to agents for multiple teams', function() {
 		$fakeBackend.withTeam({
 				Id: "2d45a50e-db48-41db-b771-a53000ef6565"
 			})
@@ -149,13 +149,13 @@ describe('RtaTeamsCtrl', function() {
 			});
 
 		expect($state.go).toHaveBeenCalledWith('rta.agents-teams', {
-			teamIds: ['2d45a50e-db48-41db-b771-a53000ef6565',
+			ids: ['2d45a50e-db48-41db-b771-a53000ef6565',
 				"0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495"
 			]
 		});
 	});
 
-	fit('should go to agents after deselecting team', function() {
+	it('should go to agents after deselecting team', function() {
 		$fakeBackend.withTeam({
 			Id: "2d45a50e-db48-41db-b771-a53000ef6565"
 		})
@@ -173,7 +173,7 @@ describe('RtaTeamsCtrl', function() {
 			});
 
 		expect($state.go).toHaveBeenCalledWith('rta.agents-teams', {
-			teamIds: ["0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495"]
+			ids: ["0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495"]
 		});
 	});
 
