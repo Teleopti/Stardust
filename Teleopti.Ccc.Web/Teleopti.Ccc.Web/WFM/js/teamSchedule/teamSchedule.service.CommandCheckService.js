@@ -62,7 +62,6 @@
 
         function completeCommandCheck() {
         	commandCheckDeferred.resolve();
-	        resetCommandCheckStatus();
         }
 
         function getOverlappingAgentList() {
