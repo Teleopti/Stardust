@@ -20,7 +20,7 @@ properties {
 
 	$AzureDependencies = "\\a380\T-Files\RnD\MSI_Dependencies\ccc7_azure"
 	$AzurePackagePath = "$WorkingDir\TeleoptiWFM.cspkg"
-	$AzurePackagePath_Large = "\TeleoptiWFM.cspkg\TeleoptiWFM_Large.cspkg"
+	$AzurePackagePath_Large = "$WorkingDir\TeleoptiWFM_Large.cspkg"
 	
 	$IndexMSBuildFile = "$WorkingDir\teamcity\Azure\UpdateIndexHtml.msbuild"
 	$CSPackEXE = $TCParams['AzureSDK_2.8_Path'] + "\bin\cspack.exe"
