@@ -52,7 +52,7 @@
 				if (warningDict[id]) {
 					warningDict[id] = {
 						isLoaded: false,
-						warnings: ""
+						warnings: []
 					}
 					personIdOnCurrentPage.push(id);
 				}

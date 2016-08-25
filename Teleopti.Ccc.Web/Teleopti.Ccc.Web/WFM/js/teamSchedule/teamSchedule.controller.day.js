@@ -195,7 +195,7 @@
 			}else if(preSelectPersonIds.length > 0){
 				var date = vm.scheduleDateMoment().format('YYYY-MM-DD');
 
-				teamScheduleSvc.getSchedules(date, preSelectPersonIds).then(function(result){
+				teamScheduleSvc.getSchedules(date, preSelectPersonIds).then(function(result) {
 					scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment());
 					afterSchedulesLoaded(result);
 					personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
@@ -203,7 +203,7 @@
 
 					vm.checkValidationWarningForCurrentPage();
 					vm.isLoading = false;
-				})
+				});
 			}
 		};
 
@@ -330,7 +330,8 @@
 				ShowValidationWarnings: toggleSvc.WfmTeamSchedule_ShowNightlyRestWarning_39619
 									 || toggleSvc.WfmTeamSchedule_ShowWeeklyWorktimeWarning_39799
 									 || toggleSvc.WfmTeamSchedule_ShowWeeklyRestTimeWarning_39800
-									 || toggleSvc.WfmTeamSchedule_ShowDayOffWarning_39801,
+									 || toggleSvc.WfmTeamSchedule_ShowDayOffWarning_39801
+									 || toggleSvc.WfmTeamSchedule_ShowOverwrittenLayerWarning_40109,
 				FilterValidationWarnings: toggleSvc.WfmTeamSchedule_FilterValidationWarnings_40110
 			};
 
