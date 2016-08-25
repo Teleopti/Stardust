@@ -15,6 +15,8 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 		public static int PortWindowsIdentityProvider = 52859;
 		public static string WindowsClaimProvider;
 		public static string TeleoptiClaimProvider;
+		public static string UrlWindowsIdentityProvider;
+
 
 		private static IISExpress _server;
 		private static IDisposable _portsConfiguration;
@@ -41,6 +43,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			URL = new Uri(string.Format("http://localhost:{0}/", Port));
 			UrlAuthenticationBridge = new Uri(string.Format("http://localhost:{0}/", PortAuthenticationBridge));
 			WindowsClaimProvider = string.Format("<add identifier=\"urn:Windows\" displayName=\"Windows\" url=\"http://localhost:{0}/\" protocolHandler=\"OpenIdHandler\" />", PortWindowsIdentityProvider);
+			UrlWindowsIdentityProvider = $"http://localhost:{PortWindowsIdentityProvider}/";
 			TeleoptiClaimProvider = string.Format("<add identifier=\"urn:Teleopti\" displayName=\"Teleopti\" url=\"http://localhost:{0}/sso/\" protocolHandler=\"OpenIdHandler\" />", Port);
 
 			return new GenericDisposable(() =>
@@ -51,9 +54,11 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 				UrlAuthenticationBridge = new Uri(string.Format("http://localhost:{0}/", PortAuthenticationBridge));
 				PortWindowsIdentityProvider = originalWindowsIdentityProviderPort;
 				WindowsClaimProvider = string.Format("<add identifier=\"urn:Windows\" displayName=\"Windows\" url=\"http://localhost:{0}/\" protocolHandler=\"OpenIdHandler\" />", PortWindowsIdentityProvider);
+				UrlWindowsIdentityProvider = $"http://localhost:{PortWindowsIdentityProvider}/";
 				TeleoptiClaimProvider = string.Format("<add identifier=\"urn:Teleopti\" displayName=\"Teleopti\" url=\"http://localhost:{0}/sso/\" protocolHandler=\"OpenIdHandler\" />", originalPort);
 			});
 		}
+
 
 		private static void StartIISExpress()
 		{
@@ -178,6 +183,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			settingsFile.UpdateFileByName("WEB_BROKER_FOR_WEB", TestSiteConfigurationSetup.URL.ToString());
 			settingsFile.UpdateFileByName("WindowsClaimProvider", TestSiteConfigurationSetup.WindowsClaimProvider);
 			settingsFile.UpdateFileByName("TeleoptiClaimProvider", TestSiteConfigurationSetup.TeleoptiClaimProvider);
+			settingsFile.UpdateFileByName("URL_WINDOWS_IDENTITY_PROVIDER", TestSiteConfigurationSetup.UrlWindowsIdentityProvider);
 
 			return settingsFile.ReadFile();
 		}

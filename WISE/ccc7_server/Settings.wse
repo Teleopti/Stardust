@@ -323,7 +323,7 @@ item: Set Variable
 end
 item: Set Variable
   Variable=WINDOWS_CLAIM_PROVIDER_TMP
-  Value=<add identifier="urn:Windows" displayName="Windows" url="%DNS_ALIAS_TMP%%SUB_SITE_TMP%/WindowsIdentityProvider/" protocolHandler="RelativeOpenIdHandler" />
+  Value=<add identifier="urn:Windows" displayName="Windows" url="%URLWINDOWSIDENTITYPROVIDER_TMP%" protocolHandler="RelativeOpenIdHandler" />
 end
 item: If/While Statement
   Variable=DMZ_TMP
@@ -396,6 +396,11 @@ end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
   New Text=$(DEFAULT_IDENTITY_PROVIDER)|%DEFAULT_IDENTITY_PROVIDER_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(URL_WINDOWS_IDENTITY_PROVIDER)|%URLWINDOWSIDENTITYPROVIDER_TMP%
   Line Number=0
 end
 item: Insert Line into Text File
