@@ -13923,7 +13923,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>use in WFM TeamSchedule, a notify message to user for all added absence successed.</comment>
   </data>
   <data name="AddAbsenceTotalResult" xml:space="preserve">
-    <value>Successfully added {0} absences, {1} absences were unable to be added</value>
+    <value>Adding absences for {0} agent(s), {1} succeeded and {2} failed.</value>
     <comment>use in WFM TeamSchedule, a notify message to user for telling the success and fail result.</comment>
   </data>
   <data name="SwapShifts" xml:space="preserve">

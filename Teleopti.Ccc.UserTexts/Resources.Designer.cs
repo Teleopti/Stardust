@@ -817,7 +817,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Successfully added {0} absences, {1} absences were unable to be added.
+        ///   Looks up a localized string similar to Adding absences for {0} agent(s), {1} succeeded and {2} failed..
         /// </summary>
         public static string AddAbsenceTotalResult {
             get {
