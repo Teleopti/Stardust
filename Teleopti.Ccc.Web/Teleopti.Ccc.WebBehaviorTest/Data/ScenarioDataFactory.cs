@@ -22,21 +22,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			if (SystemSetup.UnitOfWork.HasCurrent())
 				SystemSetup.UnitOfWork.Current().Dispose();
 		}
-
-		private static void withTenantUnitOfWork(Action<ICurrentTenantSession> action)
-		{
-			using (SystemSetup.TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
-			{
-				action.Invoke(SystemSetup.CurrentTenantSession);
-			}
-		}
-
-		public void WithTenantUnitOfWork(Action<ICurrentTenantSession> action)
-		{
-			withTenantUnitOfWork(action);
-		}
-
-		public ScenarioDataFactory() : base(SystemSetup.UnitOfWork, withTenantUnitOfWork)
+		
+		public ScenarioDataFactory() : base(
+			SystemSetup.UnitOfWork, 
+			SystemSetup.CurrentTenantSession, 
+			SystemSetup.TenantUnitOfWork)
 		{
 			SystemSetup.UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork(QueryFilter.NoFilter);
 

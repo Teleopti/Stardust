@@ -13,15 +13,21 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 	{
 		private readonly IPerson _person;
 		private readonly ICurrentUnitOfWork _unitOfWork;
-		private readonly Action<Action<ICurrentTenantSession>> _tenantUnitOfWorkAction;
+		private readonly ICurrentTenantSession _tenantSession;
+		private readonly ITenantUnitOfWork _tenantUnitOfWork;
 		private readonly IList<IUserSetup> _userSetups = new List<IUserSetup>();
 		private readonly IList<IUserDataSetup> _userDataSetups = new List<IUserDataSetup>();
 
-		public PersonDataFactory(IPerson person, ICurrentUnitOfWork unitOfWork, Action<Action<ICurrentTenantSession>> tenantUnitOfWorkAction)
+		public PersonDataFactory(
+			IPerson person, 
+			ICurrentUnitOfWork unitOfWork, 
+			ICurrentTenantSession tenantSession,
+			ITenantUnitOfWork tenantUnitOfWork)
 		{
 			_person = person;
 			_unitOfWork = unitOfWork;
-			_tenantUnitOfWorkAction = tenantUnitOfWorkAction;
+			_tenantSession = tenantSession;
+			_tenantUnitOfWork = tenantUnitOfWork;
 			Apply(new Setups.Specific.SwedishCulture());
 			Apply(new UtcTimeZone());
 		}
@@ -33,10 +39,9 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 
 			var setupTenant = setup as ITenantUserSetup;
 			if (setupTenant != null)
-				_tenantUnitOfWorkAction(ses =>
-				{
-					setupTenant.Apply(ses, Person, this);
-				});
+				using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+					setupTenant.Apply(_tenantSession, Person, this);
+
 			_userSetups.Add(setup);
 		}
 

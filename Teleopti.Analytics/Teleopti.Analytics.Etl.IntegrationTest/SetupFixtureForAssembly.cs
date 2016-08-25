@@ -31,14 +31,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			
 			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().CreateAndOpenUnitOfWork())
 			{
-				var testDataFactory = new TestDataFactory(new ThisUnitOfWork(uow),
-					tenantAction =>
-					{
-						using (tenantUnitOfWorkManager.EnsureUnitOfWorkIsStarted())
-						{
-							tenantAction(tenantUnitOfWorkManager);
-						}
-					});
+				var testDataFactory = new TestDataFactory(new ThisUnitOfWork(uow), tenantUnitOfWorkManager, tenantUnitOfWorkManager);
 				testDataFactory.Apply(new PersonThatCreatesTestData(personThatCreatesTestData));
 				testDataFactory.Apply(new DefaultLicense());
 				testDataFactory.Apply(new BusinessUnitFromFakeState(TestState.BusinessUnit));
@@ -63,12 +56,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		{
 			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(UnitOfWorkFactory.Current.ConnectionString);
 
-			TestState.TestDataFactory = new TestDataFactory(new ThisUnitOfWork(TestState.UnitOfWork),
-				tenantAction =>
-				{
-					tenantAction(tenantUnitOfWorkManager);
-					tenantUnitOfWorkManager.CommitAndDisposeCurrent();
-				});
+			TestState.TestDataFactory = new TestDataFactory(new ThisUnitOfWork(TestState.UnitOfWork), tenantUnitOfWorkManager, tenantUnitOfWorkManager);
 			DataSourceHelper.RestoreApplicationDatabase(123);
 			DataSourceHelper.ClearAnalyticsData();
 			OpenUnitOfWork();
