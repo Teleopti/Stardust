@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 
 		static Navigation()
 		{
+			_interceptors.Add(u => !u.Contains("Test/"), new PublishRecurringEvents());
 			_interceptors.Add(u => true, new ApplicationStartupTimeout());
 			_interceptors.Add(u => u == "", new BustCache());
 			_interceptors.Add(u => u == "MyTime#Requests/Index", new BustCache());
