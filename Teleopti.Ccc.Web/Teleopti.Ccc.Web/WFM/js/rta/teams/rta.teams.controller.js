@@ -13,6 +13,7 @@
 		'RtaRouteService',
 		'RtaFormatService',
 		'RtaSelectionService',
+		'RtaAdherenceService',
 		function (
 			$scope,
 			$stateParams,
@@ -23,7 +24,8 @@
 			RtaService,
 			RtaRouteService,
 			RtaFormatService,
-			RtaSelectionService
+			RtaSelectionService,
+			RtaAdherenceService
 			) {
 
 			$scope.getAdherencePercent = RtaFormatService.numberToPercent;
@@ -37,7 +39,9 @@
 			var polling = $interval(function () {
 				RtaService.getAdherenceForTeamsOnSite({
 					siteId: $scope.siteId
-				}).then(updateAdherence);
+				}).then(function(teamAdherence) {
+					RtaAdherenceService.updateAdherence($scope.teams, teamAdherence);
+				});
 			}, 5000);
 
 			RtaService.getTeams({
@@ -48,19 +52,8 @@
 					siteId: $scope.siteId
 				});
 			}).then(function (teamAdherence) {
-				updateAdherence(teamAdherence);
+				RtaAdherenceService.updateAdherence($scope.teams, teamAdherence);
 			});
-
-
-			function updateAdherence(teamAdherence) {
-				teamAdherence.forEach(function (team) {
-					var filteredTeam = $filter('filter')($scope.teams, {
-						Id: team.Id
-					});
-					if (filteredTeam.length > 0)
-						filteredTeam[0].OutOfAdherence = team.OutOfAdherence ? team.OutOfAdherence : 0;
-				});
-			};
 
 			$scope.toggleSelection = function (teamId) {
 				$scope.selectedTeamIds = RtaSelectionService.toggleSelection(teamId, $scope.selectedTeamIds);

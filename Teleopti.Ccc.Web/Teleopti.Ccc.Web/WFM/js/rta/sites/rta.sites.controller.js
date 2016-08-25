@@ -1,9 +1,8 @@
-(function() {
+(function () {
 	'use strict';
 	angular.module('wfm.rta')
 		.controller('RtaSitesCtrl', [
 			'$scope',
-			'$filter',
 			'$state',
 			'$interval',
 			'$translate',
@@ -11,10 +10,10 @@
 			'RtaFormatService',
 			'NoticeService',
 			'RtaSelectionService',
+			'RtaAdherenceService',
 			'Toggle',
 			function (
 				$scope,
-				$filter,
 				$state,
 				$interval,
 				$translate,
@@ -22,6 +21,7 @@
 				RtaFormatService,
 				NoticeService,
 				RtaSelectionService,
+				RtaAdherenceService,
 				toggleService
 				) {
 
@@ -36,26 +36,19 @@
 
 				NoticeService.info(message, null, true);
 
-				var polling = $interval(function() {
-					RtaService.getAdherenceForAllSites().then(updateAdherence);
-				}, 5000);
-
-				RtaService.getSites().then(function(sites) {
+				RtaService.getSites().then(function (sites) {
 					$scope.sites = sites;
 					return RtaService.getAdherenceForAllSites();
-				}).then(function(siteAdherence) {
-					updateAdherence(siteAdherence);
+				}).then(function (siteAdherences) {
+					RtaAdherenceService.updateAdherence($scope.sites, siteAdherences);
 				});
 
-				function updateAdherence(siteAdherence) {
-					siteAdherence.forEach(function(site) {
-						var filteredSite = $filter('filter')($scope.sites, {
-							Id: site.Id
+				var polling = $interval(function () {
+					RtaService.getAdherenceForAllSites()
+						.then(function (siteAdherences) {
+							RtaAdherenceService.updateAdherence($scope.sites, siteAdherences);
 						});
-						if (filteredSite.length > 0)
-							filteredSite[0].OutOfAdherence = site.OutOfAdherence ? site.OutOfAdherence : 0;
-					});
-				};
+				}, 5000);
 
 				$scope.toggleSelection = function (siteId) {
 					$scope.selectedSiteIds = RtaSelectionService.toggleSelection(siteId, $scope.selectedSiteIds);
@@ -63,13 +56,13 @@
 
 				$scope.openSelectedSites = function () {
 					if ($scope.selectedSiteIds.length > 0)
-						RtaSelectionService.openSelection('rta.agents-sites', {siteIds: $scope.selectedSiteIds});
+						RtaSelectionService.openSelection('rta.agents-sites', { siteIds: $scope.selectedSiteIds });
 				};
 
 				$scope.goToSkillSelection = function () {
 					$state.go('rta.select-skill');
 				}
-				$scope.$on('$destroy', function() {
+				$scope.$on('$destroy', function () {
 					$interval.cancel(polling);
 				});
 			}
