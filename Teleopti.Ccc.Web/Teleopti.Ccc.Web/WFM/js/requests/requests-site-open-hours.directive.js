@@ -59,17 +59,38 @@
 			if (!sitesBefore || !sitesAfter) return;
 			var isSame = true;
 			for (var i = 0; i < sitesBefore.length && isSame; i++) {
-				for (var j = 0; j < sitesBefore[i].OpenHours.length && isSame; j++) {
-					var openHourBefore = sitesBefore[i].OpenHours[j];
-					var k = sitesBefore[i].OpenHours.length - 1;
-					while (isSame && k >= 0) {
-						var openHourAfter = sitesAfter[i].OpenHours[k];
-						if (openHourBefore.WeekDay == openHourAfter.WeekDay) {
-							if (openHourAfter.IsClosed != openHourBefore.IsClosed) isSame = false;
-							if (openHourAfter.StartTime + ':00' != openHourBefore.StartTime) isSame = false;
-							if (openHourAfter.EndTime + ':00' != openHourBefore.EndTime) isSame = false;
-						}
-						k--;
+				var beforeOpenHours = sitesBefore[i].OpenHours;
+				var afterOpenHours = sitesAfter[i].OpenHours;
+				if (beforeOpenHours.length === 0 && afterOpenHours.length > 0) {
+					isSame = false;
+					continue;
+				}
+				for (var j = 0; j < beforeOpenHours.length && isSame; j++) {
+					var openHourBefore = beforeOpenHours[j];
+					var openHourAfter = getOpenHourForComparing(afterOpenHours, openHourBefore.WeekDay);
+
+					if (!openHourAfter) {
+						isSame = false;
+						continue;
+					}
+
+					if (openHourAfter.IsClosed && openHourBefore.IsClosed) {
+						continue;
+					}
+
+					if (openHourAfter.IsClosed !== openHourBefore.IsClosed) {
+						isSame = false;
+						continue;
+					}
+
+					if (openHourAfter.StartTime + ':00' !== openHourBefore.StartTime) {
+						isSame = false;
+						continue;
+					}
+
+					if (openHourAfter.EndTime + ':00' !== openHourBefore.EndTime) {
+						isSame = false;
+						continue;
 					}
 				}
 			}
@@ -78,28 +99,22 @@
 
 		function normalizeSite(site) {
 			var site = angular.copy(site);
-			var weekTemplet = [];
-			prepareWeekTemplet(weekTemplet);
-			angular.forEach(site.OpenHours, function (openHour) {
-				var timespan = formatTimespanObj({
-					StartTime: openHour.StartTime,
-					EndTime: openHour.EndTime
-				});
-				angular.forEach(openHour.WeekDaySelections, function (selection) {
-					if (selection.Checked) {
-						var keepLooking = true;
-						for (var j = 0; j < weekTemplet.length && keepLooking; j++) {
-							if (selection.WeekDay == weekTemplet[j].WeekDay) {
-								weekTemplet[j].EndTime = timespan.EndTime;
-								weekTemplet[j].StartTime = timespan.StartTime;
-								weekTemplet[j].IsClosed = false;
-								keepLooking = false;
-							}
-						}
-					}
+			var formattedWorkingHours = [];
+			site.OpenHours.forEach(function (d) {
+				d.WeekDaySelections.forEach(function (e) {
+					var timespan = formatTimespanObj({
+						StartTime: d.StartTime,
+						EndTime: d.EndTime
+					});
+					formattedWorkingHours.push({
+						WeekDay: e.WeekDay,
+						StartTime: timespan.StartTime,
+						EndTime: timespan.EndTime,
+						IsClosed: !e.Checked
+					});
 				});
 			});
-			site.OpenHours = weekTemplet;
+			site.OpenHours = formattedWorkingHours;
 			return site;
 		}
 
@@ -114,6 +129,25 @@
 				weekTemplet.push(dayTemplet);
 			}
 		}
+
+		function getOpenHourForComparing(compareOpenHours, weekDay) {
+			var weekDayOpenHours = compareOpenHours.filter(function(compareOpenHour) {
+				return weekDay === compareOpenHour.WeekDay;
+			});
+
+			var compareOpenHour = weekDayOpenHours[0];
+			if (weekDayOpenHours.length > 1) {
+				angular.forEach(weekDayOpenHours,
+					function(afterOpenHour) {
+						if (!afterOpenHour.IsClosed) {
+							compareOpenHour = afterOpenHour;
+						}
+					});
+			}
+
+			return compareOpenHour;
+		}
+
 		function denormalizeSite(site) {
 			var siteCopy = angular.copy(site);
 			var reformattedWorkingHours = [];
