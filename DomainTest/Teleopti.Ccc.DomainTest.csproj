@@ -171,6 +171,7 @@
     <Compile Include="ApplicationLayer\FakeMessageBrokerComposite.cs" />
     <Compile Include="ApplicationLayer\Availability\AnalyticsAvailabilityUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\FixReadModelsEventHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\PersonAssociationChanged\ExternalLogonTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodTransformerTests.cs" />
     <Compile Include="ApplicationLayer\ReplyRequestCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Request\AnalyticsRequestUpdaterTest.cs" />

@@ -55,10 +55,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 					var teamId = currentPeriod?.Team.Id;
 					var siteId = currentPeriod?.Team.Site.Id;
 					var businessUnitId = currentPeriod?.Team.Site.BusinessUnit.Id;
-					
-					if (previousTeam.HasValue &&
+
+					var sameTeam = previousTeam.HasValue &&
 						teamId.HasValue &&
-						previousTeam == teamId)
+						previousTeam == teamId;
+					
+					var sameExternalLogons =
+						(previousPeriod?.ExternalLogOnCollection.Select(x => x.AcdLogOnOriginalId).OrderBy(x => x))
+							.SequenceEqualNullSafe(
+								currentPeriod?.ExternalLogOnCollection.Select(x => x.AcdLogOnOriginalId).OrderBy(x => x)
+							);
+						
+					if (sameTeam && sameExternalLogons)
 						return;
 
 					var previousAssociation = from p in person.PersonPeriodCollection
@@ -79,7 +87,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 						TeamId = teamId,
 						SiteId = siteId,
 						BusinessUnitId = businessUnitId,
-						PreviousAssociation = previousAssociation
+						PreviousAssociation = previousAssociation,
+						ExternalLogons = (currentPeriod?.ExternalLogOnCollection ?? Enumerable.Empty<IExternalLogOn>())
+							.Select(x => new ExternalLogon
+							{
+								UserCode = x.AcdLogOnOriginalId,
+								DataSourceId = x.DataSourceId
+							}).ToArray()
 					});
 				});
 		}

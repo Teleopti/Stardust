@@ -259,5 +259,19 @@ namespace Teleopti.Ccc.Domain.Collection
 		{
 			return instance ?? Enumerable.Empty<T>();
 		}
+
+		public static TSource SingleOrDefaultNullSafe<TSource>(this IEnumerable<TSource> collection)
+		{
+			return collection == null ? default(TSource) : collection.SingleOrDefault();
+		}
+
+		public static bool SequenceEqualNullSafe<TSource>(this IEnumerable<TSource> first, IEnumerable<TSource> second)
+		{
+			if (first == null && second == null) return true;
+			if (first == null) return false;
+			if (second == null) return false;
+			return first.SequenceEqual(second);
+		}
+
 	}
 }

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.TestCommon
 		}
 
 		[AnalyticsUnitOfWork]
-		public virtual void WithDataSource(int datasourceId, string sourceid)
+		public virtual void WithDataSource(int datasourceId, string sourceId)
 		{
 			CurrentDataSourceId = datasourceId;
 			// really, shouldnt make 2 connections!
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.TestCommon
 				connection.Open();
 				using (var table = sys_datasource.CreateTable())
 				{
-					table.AddDataSource(CurrentDataSourceId, " ", -1, " ", -1, " ", " ", 1, false, sourceid, false);
+					table.AddDataSource(CurrentDataSourceId, " ", -1, " ", -1, " ", " ", 1, false, sourceId, false);
 					Bulk.Insert(connection, table);
 				}
 			}

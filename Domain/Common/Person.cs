@@ -172,6 +172,17 @@ namespace Teleopti.Ccc.Domain.Common
 			public IEnumerable<ExternalLogon> ExternalLogons { get; set; }
 		}
 
+		public virtual void AddSkill(ISkill skill, DateOnly personPeriodDate)
+		{
+			AddSkill(new PersonSkill(skill, new Percent(1)), Period(personPeriodDate));
+		}
+
+
+		public virtual void AddSkill(ISkill skill, IPersonPeriod personPeriod)
+		{
+			AddSkill(new PersonSkill(skill, new Percent(1)), personPeriod);
+		}
+
 		public virtual void AddSkill(IPersonSkill personSkill, IPersonPeriod personPeriod)
 		{
 			InParameter.NotNull("personSkill", personSkill);
@@ -188,11 +199,6 @@ namespace Teleopti.Ccc.Domain.Common
 				modify.SkillPercentage = personSkill.SkillPercentage;
 			}
 		}
-
-	    public virtual void AddSkill(ISkill skill, DateOnly personPeriodDate)
-	    {
-		    AddSkill(new PersonSkill(skill, new Percent(1)), Period(personPeriodDate));
-	    }
 
 		public virtual void ResetPersonSkills(IPersonPeriod personPeriod)
 		{

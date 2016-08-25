@@ -90,8 +90,9 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			//system.UseTestDouble<ActionImmediate>().For<IActionScheduler>();
 			system.UseTestDouble<FakeMailboxRepository>().For<IMailboxRepository>();
 			//
-			
+
 			// Rta
+			system.AddService<FakeDataSources>();
 			system.UseTestDouble<FakeRtaDatabase>().For<IDatabaseReader>();
 			system.UseTestDouble<FakeMappingReader>().For<IMappingReader>();
 			system.UseTestDouble<FakeAgentStateReadModelPersister>().For<IAgentStateReadModelReader, IAgentStateReadModelPersister>();
@@ -120,6 +121,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeSkillDayRepository>().For<ISkillDayRepository>();
 			system.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
 			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
+			system.UseTestDouble<FakeExternalLogOnRepository>().For<IExternalLogOnRepository>();
 			system.UseTestDouble<FakeScenarioRepository>().For<IScenarioRepository>();
 			system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
 			system.UseTestDouble<FakePlanningPeriodRepository>().For<IPlanningPeriodRepository>();

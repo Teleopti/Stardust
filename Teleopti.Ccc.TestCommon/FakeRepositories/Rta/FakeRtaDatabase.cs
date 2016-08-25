@@ -57,6 +57,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 	{
 		private readonly INow _now;
 		private readonly FakeDatabase _database;
+		private readonly FakeDataSources _dataSources;
 		private readonly FakeAgentStateReadModelPersister _agentStateReadModels;
 		private readonly FakeAgentStatePersister _agentStates;
 		private readonly FakeRtaStateGroupRepository _rtaStateGroupRepository;
@@ -64,8 +65,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		private readonly FakeTenants _tenants;
 		private readonly FakeDataSourceForTenant _dataSourceForTenant;
 		private readonly FakeBusinessUnitRepository _businessUnits;
-
-		private readonly List<KeyValuePair<string, int>> _datasources = new List<KeyValuePair<string, int>>();
 
 		private class userData
 		{
@@ -85,6 +84,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		public FakeRtaDatabase(
 			INow now,
 			FakeDatabase database,
+			FakeDataSources dataSources,
 			FakeAgentStateReadModelPersister agentStateReadModels,
 			FakeAgentStatePersister agentStates,
 			FakeRtaStateGroupRepository rtaStateGroupRepository,
@@ -96,6 +96,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			_now = now;
 			_database = database;
+			_dataSources = dataSources;
 			_agentStateReadModels = agentStateReadModels;
 			_agentStates = agentStates;
 			_rtaStateGroupRepository = rtaStateGroupRepository;
@@ -146,9 +147,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public FakeRtaDatabase WithSource(string sourceId)
 		{
-			if (_datasources.Any(x => x.Key == sourceId))
-				return this;
-			_datasources.Add(new KeyValuePair<string, int>(sourceId, new Random().Next(0, 1000)));
+			_database.WithDataSource(new Random().Next(0, 1000), sourceId);
 			return this;
 		}
 
@@ -167,14 +166,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			
 			if (!teamId.HasValue) teamId = Guid.NewGuid();
 			if (!siteId.HasValue) siteId = Guid.NewGuid();
-
-			var dataSource = _datasources.Last().Value;
-			if (_datasources.Any(x => x.Key == source))
-				dataSource = _datasources.Single(x => x.Key == source).Value;
 			
 			_userInfos.Add(new userData
 			{
-				DataSourceId = dataSource,
+				DataSourceId = _database.CurrentDataSourceId(),
 				Data = new PersonOrganizationData
 				{
 					UserCode = userCode,
@@ -291,7 +286,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public ConcurrentDictionary<string, int> Datasources()
 		{
-			return new ConcurrentDictionary<string, int>(_datasources);
+			return new ConcurrentDictionary<string, int>(
+				_dataSources
+					.Datasources
+					.GroupBy(x => x.Key, (key, g) => g.First()
+					));
 		}
 
 		public IEnumerable<PersonOrganizationData> LoadPersonOrganizationData(int dataSourceId, string externalLogOn)

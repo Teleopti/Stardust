@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -113,7 +114,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public static FakeDatabase WithAgent(this FakeDatabase database, Guid? id, string name, string terminalDate, Guid? teamId, Guid? siteId, Guid? businessUnitId, TimeZoneInfo timeZone)
 		{
 			database.WithPerson(id, name, terminalDate, timeZone, null, null);
-			database.WithPeriod(FakeDatabase.DefaultPersonPeriodStartDate, teamId, siteId, businessUnitId);
+			database.WithPeriod(null, teamId, siteId, businessUnitId);
+			database.WithExternalLogon(name);
 			return database;
 		}
 	}
@@ -167,6 +169,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 	}
 
+	public class FakeDataSources
+	{
+		public List<KeyValuePair<string, int>> Datasources = new List<KeyValuePair<string, int>>();
+
+		public void Add(string sourceId, int datasourceId)
+		{
+			Datasources.Add(new KeyValuePair<string, int>(sourceId, datasourceId));
+		}
+	}
+
 	public class FakeDatabase
 	{
 		private readonly FakeTenants _tenants;
@@ -192,10 +204,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly FakeGroupingReadOnlyRepository _groupings;
 		private readonly FakeRtaStateGroupRepository _stateGroups;
 		private readonly FakeRtaMapRepository _mappings;
+		private readonly FakeExternalLogOnRepository _externalLogOns;
+		private readonly FakeDataSources _dataSources;
+
 
 		private BusinessUnit _businessUnit;
 		private Site _site;
 		private Person _person;
+		private PersonPeriod _personPeriod;
 		private Team _team;
 		private Contract _contract;
 		private PartTimePercentage _partTimePercentage;
@@ -213,7 +229,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public static string DefaultTenantName = "default";
 		public static Guid DefaultBusinessUnitId = Guid.NewGuid();
-		public static string DefaultPersonPeriodStartDate = "2016-01-01";
 
 		public FakeDatabase(
 			FakeTenants tenants,
@@ -238,7 +253,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			FakeSkillRepository skills,
 			FakeGroupingReadOnlyRepository groupings,
 			FakeRtaStateGroupRepository stateGroups,
-			FakeRtaMapRepository mappings
+			FakeRtaMapRepository mappings,
+			FakeExternalLogOnRepository externalLogOns,
+			FakeDataSources dataSources
 			)
 		{
 			_tenants = tenants;
@@ -263,6 +280,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_skills = skills;
 			_groupings = groupings;
 			_stateGroups = stateGroups;
+			_externalLogOns = externalLogOns;
+			_dataSources = dataSources;
 			_mappings = mappings;
 			createDefaultData();
 		}
@@ -296,6 +315,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 			WithTenant(DefaultTenantName, LegacyAuthenticationKey.TheKey);
 			WithBusinessUnit(DefaultBusinessUnitId);
+
+			// seems to always exist
+			_dataSources.Add("-1", -1);
+			_dataSources.Add("-1", 1);
 		}
 
 		public Guid CurrentBusinessUnitId()
@@ -308,6 +331,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			ensurePlatformExists(null);
 			return _platform.Value;
+		}
+
+		public int CurrentDataSourceId()
+		{
+			return _dataSources.Datasources.Last().Value;
 		}
 
 		public FakeDatabase WithTenant(string tenant, string rtaKey)
@@ -406,6 +434,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public FakeDatabase WithPeriod(string startDate, Guid? teamId, Guid? siteId, Guid? businessUnitId)
 		{
+			startDate = startDate ?? "2016-01-01";
+
 			ensureExists(_businessUnits, businessUnitId, () => WithBusinessUnit(businessUnitId));
 			ensureExists(_sites, siteId, () => this.WithSite(siteId));
 			ensureExists(_teams, teamId, () => this.WithTeam(teamId));
@@ -415,8 +445,29 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			ensureExists(_contractSchedules, null, () => WithContractSchedule(null));
 
 			var personContract = new PersonContract(_contract, _partTimePercentage, _contractSchedule);
-			_person.AddPersonPeriod(new PersonPeriod(startDate.Date(), personContract, _team));
+			_personPeriod = new PersonPeriod(startDate.Date(), personContract, _team);
+			_person.AddPersonPeriod(_personPeriod);
 
+			return this;
+		}
+
+		public FakeDatabase WithDataSource(int datasourceId, string sourceId)
+		{
+			if (_dataSources.Datasources.Any(x => x.Key == sourceId))
+				return this;
+			_dataSources.Add(sourceId, datasourceId);
+			return this;
+		}
+
+		public FakeDatabase WithExternalLogon(string name)
+		{
+			var exteralLogOn = new ExternalLogOn
+			{
+				DataSourceId = CurrentDataSourceId(),
+				AcdLogOnOriginalId = name // this is what the rta receives
+			};
+			_externalLogOns.Add(exteralLogOn);
+			_person.AddExternalLogOn(exteralLogOn, _personPeriod);
 			return this;
 		}
 
@@ -522,7 +573,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public FakeDatabase WithSkill(Guid skillId)
 		{
 			ensureExists(_skills, skillId, () => withSkill(skillId));
-			_person.AddSkill(_skill, DefaultPersonPeriodStartDate.Date());
+			_person.AddSkill(_skill, _personPeriod);
 			return this;
 		}
 
@@ -662,7 +713,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			if (_platform == null)
 				WithPlatform(null);
 		}
-
+		
 		private static void ensureExists<T>(IRepository<T> loadAggregates, Guid? id, Action createAction)
 			where T : IAggregateRoot
 		{

@@ -1189,7 +1189,6 @@
     <Compile Include="Core\RequestContext\Cookie\SessionSpecificData.cs" />
     <Compile Include="Areas\Start\Models\Authentication\BusinessUnitViewModel.cs" />
     <Compile Include="Areas\MyTime\MyTimeAreaRegistration.cs" />
-    <Compile Include="Core\CoreExtensions.cs" />
     <Compile Include="Core\Logging\Log4NetModule.cs" />
     <Compile Include="Areas\MyTime\Core\LayoutBase\ILayoutBaseViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\LayoutBase\LayoutBaseViewModelFactory.cs" />
