@@ -31,17 +31,35 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				var nearFutureReuqests = getRequestsOnPeriod(nearFutureTimeStampInterval, nearFuturePeriod, tempAllRequests);
 				if (nearFutureReuqests.Any())
 					return new List<IEnumerable<Guid>> {nearFutureReuqests};
-				return getFarFutureRequests(farFutureTimeStampInterval, nearFuturePeriod, tempAllRequests, windowSize);
+				var farFutureRequests = getFarFutureRequests(farFutureTimeStampInterval, nearFuturePeriod, tempAllRequests, windowSize);
+				if (farFutureRequests.Any())
+					return farFutureRequests;
+				return getPastRequests(nearFuturePeriod, tempAllRequests, windowSize);
 			}
 
 			return new List<IEnumerable<Guid>>();
 		}
 
+		private IList<IEnumerable<Guid>> getPastRequests(DateTimePeriod windowPeriod, IList<IQueuedAbsenceRequest> tempAllRequests, int windowSize)
+		{
+			var result = new List<IEnumerable<Guid>>();
+			while (tempAllRequests.Any())
+			{
+				windowPeriod = new DateTimePeriod(windowPeriod.StartDateTime.AddDays(-windowSize),
+					windowPeriod.StartDateTime.AddDays(-1));
+				var windowRequests = getRequestsOnPeriod(windowPeriod, tempAllRequests);
+				tempAllRequests = removeRequests(tempAllRequests, windowRequests);
+				if (windowRequests.Any())
+					result.Add(windowRequests);
+			}
+			return result;
+		}
+		
 		private IList<IEnumerable<Guid>> getFarFutureRequests(DateTime farFutureTimeStampInterval, DateTimePeriod windowPeriod,
 			IList<IQueuedAbsenceRequest> tempRequests, int windowSize)
 		{
 			var result = new List<IEnumerable<Guid>>();
-			while (tempRequests.Any())
+			while (tempRequests.Any(x => x.StartDateTime >= windowPeriod.StartDateTime))
 			{
 				windowPeriod = new DateTimePeriod(windowPeriod.EndDateTime.AddDays(1),
 					windowPeriod.EndDateTime.AddDays(windowSize));
@@ -63,6 +81,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					removeFromList.Remove(foundRequest);
 			}
 			return removeFromList;
+		}
+
+		private List<Guid> getRequestsOnPeriod(DateTimePeriod windowPeriod,
+											   IList<IQueuedAbsenceRequest> allRequests)
+		{
+			var requestsInPeriod = allRequests.Where(y => y.StartDateTime >= windowPeriod.StartDateTime &&
+																		 y.StartDateTime <= windowPeriod.EndDateTime);
+			if (requestsInPeriod.Any())
+			{
+				var min = requestsInPeriod.Select(x => x.StartDateTime).Min();
+				var max = requestsInPeriod.Select(x => x.EndDateTime).Max();
+
+				var overlappingRequests =
+					findAbsencesWithinPeriod(allRequests, min, max);
+				if (overlappingRequests.Any())
+					return overlappingRequests.Select(x => x.PersonRequest).ToList();
+				}
+
+			return new List<Guid>();
 		}
 
 		private List<Guid> getRequestsOnPeriod(DateTime interval, DateTimePeriod windowPeriod,
