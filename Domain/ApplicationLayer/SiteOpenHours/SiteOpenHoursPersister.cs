@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
+namespace Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours
 {
 	public class SiteOpenHoursPersister : ISiteOpenHoursPersister
 	{
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				var siteOpenHour = new SiteOpenHour()
 				{
 					TimePeriod = timePeriod,
-					WeekDay = (DayOfWeek) dayOfWeek,
+					WeekDay = (DayOfWeek)dayOfWeek,
 					IsClosed = true
 				};
 				if (sitePersisted.AddOpenHour(siteOpenHour))

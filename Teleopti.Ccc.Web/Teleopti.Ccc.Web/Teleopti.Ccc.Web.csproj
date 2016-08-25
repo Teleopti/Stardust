@@ -419,8 +419,6 @@
     <Compile Include="Areas\Anywhere\Core\GroupScheduleProjectionViewModel.cs" />
     <Compile Include="Areas\Anywhere\Controllers\AnywhereReportsController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\AgentsController.cs" />
-    <Compile Include="Areas\Anywhere\Core\ISiteOpenHoursPersister.cs" />
-    <Compile Include="Areas\Anywhere\Core\SiteOpenHoursPersister.cs" />
     <Compile Include="Areas\Forecasting\Core\CampaignPersister.cs" />
     <Compile Include="Areas\Forecasting\Core\ForecastMisc.cs" />
     <Compile Include="Areas\Forecasting\Core\ICampaignPersister.cs" />
@@ -511,6 +509,8 @@
     <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\IRequestsShiftTradeScheduleViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\ViewModelFactory\RequestsShiftTradeScheduleViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\WeekScheduleDomainDataProvider.cs" />
+    <Compile Include="Areas\Options\IoC\OptionsAreaModule.cs" />
+    <Compile Include="Areas\Options\SiteOpenHourController.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\PerformanceToolApiController.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\LocalHostAccessAttribute.cs" />
     <Compile Include="Areas\Reporting\Core\ServerPathProvider.cs" />

@@ -26,6 +26,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
+using Teleopti.Ccc.Web.Areas.Options.IoC;
 using Teleopti.Ccc.Web.Areas.Outbound.core.IoC;
 using Teleopti.Ccc.Web.Areas.People.Core.IoC;
 using Teleopti.Ccc.Web.Areas.PerformanceTool.Core.IoC;
@@ -115,6 +116,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<TeamScheduleAreaModule>();
 			builder.RegisterModule<RequestsAreaModule>();
 			builder.RegisterModule<ReportsAreaModule>();
+			builder.RegisterModule<OptionsAreaModule>();
 
 			//remove me when #36904 is done!
 			builder.RegisterType<TranslatedTexts>().SingleInstance();

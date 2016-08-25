@@ -1488,6 +1488,7 @@
     <Compile Include="Scheduling\Assignment\PersonAssignmentTest.cs" />
     <Compile Include="Security\RegExpSpecificationTest.cs" />
     <Compile Include="SetUpFixtureForAssembly.cs" />
+    <Compile Include="SiteOpenHours\SiteOpenHoursPersisterTest.cs" />
     <Compile Include="Specification\AllTest.cs" />
     <Compile Include="Specification\SpecificationTest.cs" />
     <Compile Include="SystemSetting\GlobalSetting\CommonNameDescriptionSettingTest.cs" />

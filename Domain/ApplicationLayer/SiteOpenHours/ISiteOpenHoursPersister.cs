@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
+namespace Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours
 {
 	public interface ISiteOpenHoursPersister
 	{
