@@ -28,7 +28,7 @@ properties {
 }
 
 Set-ExecutionPolicy bypass -force
-#Import-module .\teamcity.psm1 -Force
+Import-module .\teamcity.psm1 -Force
 
 TaskSetup {
     TeamCity-ReportBuildProgress "Running task $($psake.context.Peek().currentTaskName)"
