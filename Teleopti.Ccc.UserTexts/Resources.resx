@@ -14843,4 +14843,8 @@ These options are activated:
     <value>The non-overwrittenable shift {0} in interval {1} - {2} is overwritten by {3} in interval {4} - {5}.</value>
     <comment>The warning to show when a non-overwrittenable shift layer is overwritten (overlapped) by another shift layer, personal activity, or meeting.</comment>
   </data>
+  <data name="ConfigureValidationWarnings" xml:space="preserve">
+    <value>Configure validation warnings</value>
+    <comment>Configure validation warnings section title text in wfm/myteam setting panel</comment>
+  </data>
 </root>
