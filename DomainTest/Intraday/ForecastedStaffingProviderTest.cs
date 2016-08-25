@@ -61,6 +61,22 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
+		public void ShouldReturnEmptyDataSeriesWhenNoForecastOnSkill()
+		{
+			IntervalLengthFetcher.Has(minutesPerInterval);
+			var scenario = ScenarioFactory.CreateScenario("scenariorita", true, true).WithId();
+			ScenarioRepository.Has(scenario);
+
+			var skill = createSkill(minutesPerInterval, "skill");
+			SkillRepository.Has(skill);
+
+			var vm = Target.Load(new[] { skill.Id.Value });
+
+			vm.DataSeries.Time.Length.Should().Be.EqualTo(0);
+			vm.DataSeries.ForecastedStaffing.Length.Should().Be.EqualTo(0);
+		}
+
+		[Test]
 		public void ShouldHandleDifferentIntervalLengthBetweenSkillAndView()
 		{
 			IntervalLengthFetcher.Has(minutesPerInterval);

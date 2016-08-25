@@ -41,7 +41,9 @@ namespace Teleopti.Ccc.Domain.Intraday
 			foreach (var skillId in skillIdList)
 			{
 				var skill = _skillRepository.Get(skillId);
-				var skillDay = _skillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(date, date), new[] { skill }, scenario).First();
+				var skillDay = _skillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(date, date), new[] { skill }, scenario).FirstOrDefault();
+				if (skillDay == null)
+					continue;
 				var skillStaffPeriods = (skillDay.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(minutesPerInterval)));
 				foreach (var skillStaffPeriod in skillStaffPeriods)
 				{
