@@ -1,7 +1,6 @@
 function Page () {
     this.title = 'My Page';
-	this.webUrl = 'http://qawfmfarmhost/TeleoptiWFM/Web';
-	//process.env.UrlToTest + '/Web';
+	this.webUrl = process.env.UrlToTest + '/Web';
 }
 
 Page.prototype.open = function (path) {
