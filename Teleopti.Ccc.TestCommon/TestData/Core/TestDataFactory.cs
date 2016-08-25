@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
@@ -8,18 +9,13 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 {
 	public class TestDataFactory
 	{
-		private readonly ICurrentUnitOfWork _unitOfWorkAction;
-		private readonly ICurrentTenantSession _tenantSession;
-		private readonly ITenantUnitOfWork _tenantUnitOfWork;
+		private readonly Action<Action<ICurrentUnitOfWork>> _unitOfWorkAction;
+		private readonly Action<Action<ICurrentTenantSession>> _tenantUnitOfWorkAction;
 
-		public TestDataFactory(
-			ICurrentUnitOfWork unitOfWorkAction, 
-			ICurrentTenantSession tenantSession,
-			ITenantUnitOfWork tenantUnitOfWork)
+		public TestDataFactory(Action<Action<ICurrentUnitOfWork>> unitOfWorkAction, Action<Action<ICurrentTenantSession>> tenantUnitOfWorkAction)
 		{
 			_unitOfWorkAction = unitOfWorkAction;
-			_tenantSession = tenantSession;
-			_tenantUnitOfWork = tenantUnitOfWork;
+			_tenantUnitOfWorkAction = tenantUnitOfWorkAction;
 			DataFactory = new DataFactory(_unitOfWorkAction);
 		}
 
@@ -63,8 +59,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 				foundPerson = new PersonDataFactory(
 					person.Person,
 					_unitOfWorkAction,
-					_tenantSession,
-					_tenantUnitOfWork
+					_tenantUnitOfWorkAction
 					);
 				_persons.Add(name, foundPerson);
 			}

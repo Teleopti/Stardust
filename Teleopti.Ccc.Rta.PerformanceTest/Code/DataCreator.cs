@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -6,7 +7,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
@@ -21,24 +22,18 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		private readonly TestConfiguration _testConfiguration;
 		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly IEventPublisher _eventPublisher;
-		private readonly ITenantUnitOfWork _tenantUnitOfWork;
-		private readonly ICurrentTenantSession _currentTenantSession;
 
 		public DataCreator(
 			MutableNow now,
 			TestConfiguration testConfiguration,
 			ICurrentUnitOfWork unitOfWork,
-			IEventPublisher eventPublisher,
-			ITenantUnitOfWork tenantUnitOfWork,
-			ICurrentTenantSession currentTenantSession
+			IEventPublisher eventPublisher
 			)
 		{
 			_now = now;
 			_testConfiguration = testConfiguration;
 			_unitOfWork = unitOfWork;
 			_eventPublisher = eventPublisher;
-			_tenantUnitOfWork = tenantUnitOfWork;
-			_currentTenantSession = currentTenantSession;
 		}
 
 		[LogTime]
@@ -47,7 +42,11 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		{
 			_now.Is("2016-02-25 08:00".Utc());
 
-			var data = new TestDataFactory(_unitOfWork, _currentTenantSession, _tenantUnitOfWork);
+			var data = new TestDataFactory(action =>
+			{
+				action.Invoke(_unitOfWork);
+				_unitOfWork.Current().PersistAll();
+			}, TenantUnitOfWorkState.TenantUnitOfWorkAction);
 
 			var datasource = new Datasources(_testConfiguration.DataSourceId, " ", -1, " ", -1, " ", " ", 1, false, _testConfiguration.SourceId, false);
 			new AnalyticsDataFactory().Apply(datasource);

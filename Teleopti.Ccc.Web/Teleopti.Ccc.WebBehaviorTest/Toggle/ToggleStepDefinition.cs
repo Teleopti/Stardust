@@ -51,13 +51,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Toggle
 
 			runIfEnabled.ForEach(t =>
 			{
-				if (!LocalSystem.Toggles.IsEnabled(t))
+				if (!SystemSetup.Toggles.IsEnabled(t))
 					Assert.Ignore("Ignoring scenario {0} because toggle {1} is disabled", ScenarioContext.Current.ScenarioInfo.Title, t);
 			});
 
 			runIfDisabled.ForEach(t =>
 			{
-				if (LocalSystem.Toggles.IsEnabled(t))
+				if (SystemSetup.Toggles.IsEnabled(t))
 					Assert.Ignore("Ignoring scenario {0} because toggle {1} is enabled", ScenarioContext.Current.ScenarioInfo.Title, t);
 			});
 			
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Toggle
 
 		public static bool CheckToggleEnabled(Toggles toggle)
 		{
-			return LocalSystem.Toggles.IsEnabled(toggle);
+			return SystemSetup.Toggles.IsEnabled(toggle);
 		}
 	}
 }

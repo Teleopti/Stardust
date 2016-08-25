@@ -4,7 +4,6 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.Hangfire;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
@@ -16,7 +15,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
-	public static class LocalSystem
+	public static class SystemSetup
 	{
 		private static IContainer _container;
 
@@ -29,8 +28,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static IHangfireUtilities Hangfire;
 		public static MutableNow Now;
 		public static IEventPublisher EventPublisher;
-		public static ITenantUnitOfWork TenantUnitOfWork;
-		public static ICurrentTenantSession CurrentTenantSession;
 
 		public static void Setup()
 		{
@@ -53,9 +50,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			UnitOfWorkFactory = _container.Resolve<ICurrentUnitOfWorkFactory>();
 			UnitOfWork = _container.Resolve<ICurrentUnitOfWork>();
 			EventPublisher = _container.Resolve<IEventPublisher>();
-			TenantUnitOfWork = _container.Resolve<ITenantUnitOfWork>();
-			CurrentTenantSession = _container.Resolve<ICurrentTenantSession>();
-
 			DefaultDataCreator = _container.Resolve<DefaultDataCreator>();
 			DefaultAnalyticsDataCreator = new DefaultAnalyticsDataCreator();
 		}

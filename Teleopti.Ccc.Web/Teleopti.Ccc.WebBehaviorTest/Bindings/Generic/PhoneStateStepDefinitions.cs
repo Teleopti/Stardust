@@ -40,6 +40,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"'(.*)' sets (?:his|her) phone state to '(.*)'")]
 		public void WhenSetsHisPhoneStateToOnDatasource(string personName, string stateCode)
 		{
+			// to create/update any data that is periodically kept up to date
+			// like the rule mappings
+			SystemSetup.EventPublisher.Publish(new TenantMinuteTickEvent(), new TenantHourTickEvent());
+
 			using (var h = new Http())
 				h.PostJson(
 					"Rta/State/Change",

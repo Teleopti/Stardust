@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -8,6 +10,7 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
 {
@@ -31,7 +34,18 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			
 			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().CreateAndOpenUnitOfWork())
 			{
-				var testDataFactory = new TestDataFactory(new ThisUnitOfWork(uow), tenantUnitOfWorkManager, tenantUnitOfWorkManager);
+				var testDataFactory = new TestDataFactory(action =>
+					{
+						action.Invoke(new ThisUnitOfWork(uow));
+						uow.PersistAll();
+					},
+					tenantAction =>
+					{
+						using (tenantUnitOfWorkManager.EnsureUnitOfWorkIsStarted())
+						{
+							tenantAction(tenantUnitOfWorkManager);
+						}
+					});
 				testDataFactory.Apply(new PersonThatCreatesTestData(personThatCreatesTestData));
 				testDataFactory.Apply(new DefaultLicense());
 				testDataFactory.Apply(new BusinessUnitFromFakeState(TestState.BusinessUnit));
@@ -52,11 +66,22 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 		}
 
+		private static void UnitOfWorkAction(Action<ICurrentUnitOfWork> action)
+		{
+			action(new ThisUnitOfWork(TestState.UnitOfWork));
+			TestState.UnitOfWork.PersistAll();
+		}
+
 		public static void BeginTest()
 		{
 			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(UnitOfWorkFactory.Current.ConnectionString);
-
-			TestState.TestDataFactory = new TestDataFactory(new ThisUnitOfWork(TestState.UnitOfWork), tenantUnitOfWorkManager, tenantUnitOfWorkManager);
+			
+			TestState.TestDataFactory = new TestDataFactory(UnitOfWorkAction,
+					tenantAction =>
+					{
+						tenantAction(tenantUnitOfWorkManager);
+						tenantUnitOfWorkManager.CommitAndDisposeCurrent();
+					});
 			DataSourceHelper.RestoreApplicationDatabase(123);
 			DataSourceHelper.ClearAnalyticsData();
 			OpenUnitOfWork();

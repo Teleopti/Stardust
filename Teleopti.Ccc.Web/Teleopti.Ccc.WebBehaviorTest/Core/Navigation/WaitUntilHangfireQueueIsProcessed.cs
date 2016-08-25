@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 	{
 		public void Before(GotoArgs args)
 		{
-			LocalSystem.Hangfire.WaitForQueue();
+			SystemSetup.Hangfire.WaitForQueue();
 		}
 
 		public void After(GotoArgs args)

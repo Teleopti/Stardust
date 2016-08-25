@@ -10,12 +10,10 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 	public class DefaultDataCreator
 	{
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
-		private readonly ICurrentUnitOfWork _unitOfWork;
 
-		public DefaultDataCreator(ICurrentUnitOfWorkFactory unitOfWorkFactory, ICurrentUnitOfWork unitOfWork)
+		public DefaultDataCreator(ICurrentUnitOfWorkFactory unitOfWorkFactory)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
-			_unitOfWork = unitOfWork;
 		}
 
 		private readonly IEnumerable<IHashableDataSetup> setups = new IHashableDataSetup[]
@@ -41,14 +39,15 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 
 		public void Create()
 		{
-			var dataFactory = new DataFactory(_unitOfWork);
-			setups.ForEach(s =>
+			var dataFactory = new DataFactory(action =>
 			{
-				using (_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+				using (var uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 				{
-					dataFactory.Apply(s);
+					action.Invoke(new ThisUnitOfWork(uow));
+					uow.PersistAll();
 				}
 			});
+			setups.ForEach(dataFactory.Apply);
 		}
 
 		public void CreateDefaultScenario()

@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		public void ThenThereIsASkillDayFor(string date)
 		{
 			var theDate = new DateOnly(DateTime.Parse(date));
-			new SkillDayRepository(LocalSystem.UnitOfWork).LoadAll().Any(x => x.CurrentDate == theDate).Should().Be.True();
+			new SkillDayRepository(SystemSetup.UnitOfWork).LoadAll().Any(x => x.CurrentDate == theDate).Should().Be.True();
 		}
 
 		[Given(@"Forecast has succeeded")]
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[Given(@"there is no forecast data")]
 		public void GivenThereIsNoForecastData()
 		{
-			new SkillDayRepository(LocalSystem.UnitOfWork).LoadAll().Any().Should().Be.False();
+			new SkillDayRepository(SystemSetup.UnitOfWork).LoadAll().Any().Should().Be.False();
 		}
 		
 		[Given(@"I select workload '(.*)'")]
@@ -127,8 +127,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			var choosenPeriod = new DateOnlyPeriod((DateOnly) ScenarioContext.Current["startdate"],
 				((DateOnly) ScenarioContext.Current["enddate"]).AddDays(-1));
 
-			var workloadId = new WorkloadRepository(LocalSystem.UnitOfWork).LoadAll().SingleOrDefault(x => x.Name == workload).Id;
-			var allSkillDays = new SkillDayRepository(LocalSystem.UnitOfWork).LoadAll();
+			var workloadId = new WorkloadRepository(SystemSetup.UnitOfWork).LoadAll().SingleOrDefault(x => x.Name == workload).Id;
+			var allSkillDays = new SkillDayRepository(SystemSetup.UnitOfWork).LoadAll();
 
 			allSkillDays = allSkillDays.Where(x => x.Scenario.Description.Name == scenario).ToList();
 
@@ -146,8 +146,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			var choosenPeriod = new DateOnlyPeriod((DateOnly) ScenarioContext.Current["startdate"],
 				((DateOnly) ScenarioContext.Current["enddate"]).AddDays(-1));
 
-			var workloadId = new WorkloadRepository(LocalSystem.UnitOfWork).LoadAll().SingleOrDefault(x => x.Name == workload).Id;
-			var allSkillDays = new SkillDayRepository(LocalSystem.UnitOfWork).LoadAll();
+			var workloadId = new WorkloadRepository(SystemSetup.UnitOfWork).LoadAll().SingleOrDefault(x => x.Name == workload).Id;
+			var allSkillDays = new SkillDayRepository(SystemSetup.UnitOfWork).LoadAll();
 
 			allSkillDays = allSkillDays.Where(x => x.Scenario.Description.Name == scenario).ToList();
 
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		public void ThenThereAreSkillDaysForDefaultPeriod()
 		{
 			var choosenPeriod = new DateOnlyPeriod((DateOnly)ScenarioContext.Current["startdate"], ((DateOnly)ScenarioContext.Current["enddate"]).AddDays(-1));
-			var allSkillDays = new SkillDayRepository(LocalSystem.UnitOfWork).LoadAll();
+			var allSkillDays = new SkillDayRepository(SystemSetup.UnitOfWork).LoadAll();
 
 			foreach (var dateOnly in choosenPeriod.DayCollection())
 			{

@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core
@@ -20,13 +21,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void Reset()
 		{
 			_currentTime = null;
-			LocalSystem.Now.Reset();
+			SystemSetup.Now.Reset();
 		}
 
 		public static void Set(DateTime time)
 		{
 			_currentTime = time;
-			LocalSystem.Now.Is(time);
+			SystemSetup.Now.Is(time);
 			TestControllerMethods.SetCurrentTime(Value());
 			Navigation.Navigation.ReapplyFakeTime();
 		}

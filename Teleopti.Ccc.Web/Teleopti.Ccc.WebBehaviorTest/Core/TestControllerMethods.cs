@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void SetCurrentTime(DateTime time)
 		{
-			DataMaker.PublishRecurringEvents();
 			navigateOrRequest("Test/SetCurrentTime?ticks=" + time.Ticks);
 		}
 		
@@ -82,6 +81,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void LogonForSpecificUser(string userName, string password)
 		{
+			
 			innerLogon(userName, password);
 		}
 

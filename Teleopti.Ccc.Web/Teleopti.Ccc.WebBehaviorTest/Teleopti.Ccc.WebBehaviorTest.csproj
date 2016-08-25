@@ -219,7 +219,6 @@
     <Compile Include="Core\Navigation\GotoArgs.cs" />
     <Compile Include="Core\Navigation\IFakeClientTimeMethod.cs" />
     <Compile Include="Core\Navigation\INavigationInterceptor.cs" />
-    <Compile Include="Core\Navigation\PublishRecurringEvents.cs" />
     <Compile Include="Core\Navigation\WaitUntilCompletelyLoaded.cs" />
     <Compile Include="Core\Navigation\WaitUntilHangfireQueueIsProcessed.cs" />
     <Compile Include="Core\Navigation\WaitUntilLoaded.cs" />
@@ -231,7 +230,7 @@
     <Compile Include="Data\Setups\Configurable\PersonEmptyDayConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\TeamGamificationSettingConfigurable.cs" />
     <Compile Include="Data\Setups\DoNotUse\Agent_ThingThatReallyAppliesSetupsInConstructor.cs" />
-    <Compile Include="Data\LocalSystem.cs" />
+    <Compile Include="Data\SystemSetup.cs" />
     <Compile Include="Data\TestDataSetup.cs" />
     <Compile Include="MultiTenancy\MultiTenancyStepDefinition.cs" />
     <Compile Include="MultiTenancy\Tenants.feature.cs">
@@ -653,6 +652,7 @@
     <Compile Include="MyTime\AbsenceRequestFromScheduleStepDefinitions.cs" />
     <Compile Include="Data\Setups\Configurable\RoleConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\PersonPeriodConfigurable.cs" />
+    <Compile Include="Data\ScenarioUnitOfWorkState.cs" />
     <Compile Include="Data\Setups\DoNotUse\IUserRoleSetup.cs" />
     <Compile Include="MyTime\PreferencesExtended.feature.cs">
       <AutoGen>True</AutoGen>

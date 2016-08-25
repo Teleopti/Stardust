@@ -1,7 +1,6 @@
 ﻿using System;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 
@@ -14,16 +13,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			if (ScenarioContext.Current.Value<ScenarioDataFactory>() == null)
 				ScenarioContext.Current.Value(new ScenarioDataFactory());
 			return ScenarioContext.Current.Value<ScenarioDataFactory>();
-		}
-
-		public static void PublishRecurringEvents()
-		{
-			if (ScenarioContext.Current.Value<bool>("hasPublished")) return;
-
-			ScenarioContext.Current.Value("hasPublished", true);
-			// to create/update any data that is periodically kept up to date
-			// like the rule mappings
-			LocalSystem.EventPublisher.Publish(new TenantMinuteTickEvent(), new TenantHourTickEvent());
 		}
 
 		public static PersonDataFactory Me()
