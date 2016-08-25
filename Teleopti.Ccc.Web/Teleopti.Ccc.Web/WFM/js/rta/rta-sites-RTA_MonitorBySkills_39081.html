@@ -13,7 +13,7 @@
 		</div>
 	</div>
 	<div class="fab-wrapper">
-		<button class="wfm-fab  material-depth-1 open" ng-cloak ng-class="{'hidden-visibility': checkboxesChecked < 1, 'grow-out': checkboxesChecked > 0}" ng-click="openSelectedSites()">
+		<button class="wfm-fab  material-depth-1 open" ng-cloak ng-class="{'hidden-visibility': selectedSiteIds.length < 1, 'grow-out': selectedSiteIds.length > 0}" ng-click="openSelectedSites()">
 			<i class="mdi mdi-arrow-right"></i>
 			<md-tooltip>{{'Open'|translate}}</md-tooltip>
 		</button>

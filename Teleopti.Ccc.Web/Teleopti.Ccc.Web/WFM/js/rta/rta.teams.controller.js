@@ -4,11 +4,9 @@
 
 	angular.module('wfm.rta').controller('RtaTeamsCtrl', [
 		'$scope',
-		'$state',
 		'$stateParams',
 		'$interval',
 		'$filter',
-		'$location',
 		'$sessionStorage',
 		'RtaOrganizationService',
 		'RtaService',
@@ -17,11 +15,9 @@
 		'RtaSelectionService',
 		function (
 			$scope,
-			$state,
 			$stateParams,
 			$interval,
 			$filter,
-			$location,
 			$sessionStorage,
 			RtaOrganizationService,
 			RtaService,
@@ -55,6 +51,7 @@
 				updateAdherence(teamAdherence);
 			});
 
+
 			function updateAdherence(teamAdherence) {
 				teamAdherence.forEach(function (team) {
 					var filteredTeam = $filter('filter')($scope.teams, {
@@ -70,7 +67,8 @@
 			}
 
 			$scope.openSelectedTeams = function () {
-				RtaSelectionService.openSelection($scope.selectedTeamIds, 'rta.agents-teams');
+				if ($scope.selectedTeamIds.length > 0)
+					RtaSelectionService.openSelection('rta.agents-teams', { teamIds: $scope.selectedTeamIds });
 			}
 
 			$scope.goBackWithUrl = function () {

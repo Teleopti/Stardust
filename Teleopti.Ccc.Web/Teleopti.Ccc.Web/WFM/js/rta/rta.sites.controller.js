@@ -2,14 +2,32 @@
 	'use strict';
 	angular.module('wfm.rta')
 		.controller('RtaSitesCtrl', [
-			'$scope', '$filter', '$state', '$stateParams', '$interval', 'RtaService', 'RtaOrganizationService', 'RtaFormatService', 'NoticeService', 'Toggle', '$translate',
-			function($scope, $filter, $state, $stateParams, $interval, RtaService, RtaOrganizationService, RtaFormatService, NoticeService, toggleService, $translate) {
+			'$scope',
+			'$filter',
+			'$state',
+			'$interval',
+			'$translate',
+			'RtaService',
+			'RtaFormatService',
+			'NoticeService',
+			'RtaSelectionService',
+			'Toggle',
+			function (
+				$scope,
+				$filter,
+				$state,
+				$interval,
+				$translate,
+				RtaService,
+				RtaFormatService,
+				NoticeService,
+				RtaSelectionService,
+				toggleService
+				) {
 
 				$scope.monitorBySkill = toggleService.RTA_MonitorBySkills_39081;
-
 				$scope.getAdherencePercent = RtaFormatService.numberToPercent;
-				$scope.checkboxesChecked = 0;
-				var selectedSiteIds = [];
+				$scope.selectedSiteIds = [];
 				var message = $translate.instant('WFMReleaseNotification')
 					.replace('{0}', 'RTA')
 					.replace('{1}', "<a href=' http://www.teleopti.com/wfm/customer-feedback.aspx'>")
@@ -39,22 +57,13 @@
 					});
 				};
 
-				$scope.toggleSelection = function(siteId) {
-					var index = selectedSiteIds.indexOf(siteId);
-					if (index > -1) {
-						selectedSiteIds.splice(index, 1);
-						$scope.checkboxesChecked--;
-					} else {
-						selectedSiteIds.push(siteId);
-						$scope.checkboxesChecked++;
-					}
+				$scope.toggleSelection = function (siteId) {
+					$scope.selectedSiteIds = RtaSelectionService.toggleSelection(siteId, $scope.selectedSiteIds);
 				};
 
-				$scope.openSelectedSites = function() {
-					if (selectedSiteIds.length === 0) return;
-					$state.go('rta.agents-sites', {
-						siteIds: selectedSiteIds
-					});
+				$scope.openSelectedSites = function () {
+					if ($scope.selectedSiteIds.length > 0)
+						RtaSelectionService.openSelection('rta.agents-sites', {siteIds: $scope.selectedSiteIds});
 				};
 
 				$scope.goToSkillSelection = function () {

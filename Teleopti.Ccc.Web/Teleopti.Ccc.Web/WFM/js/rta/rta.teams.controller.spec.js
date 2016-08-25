@@ -149,7 +149,7 @@ describe('RtaTeamsCtrl', function() {
 			});
 
 		expect($state.go).toHaveBeenCalledWith('rta.agents-teams', {
-			ids: ['2d45a50e-db48-41db-b771-a53000ef6565',
+			teamIds: ['2d45a50e-db48-41db-b771-a53000ef6565',
 				"0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495"
 			]
 		});
@@ -173,7 +173,7 @@ describe('RtaTeamsCtrl', function() {
 			});
 
 		expect($state.go).toHaveBeenCalledWith('rta.agents-teams', {
-			ids: ["0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495"]
+			teamIds: ["0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495"]
 		});
 	});
 

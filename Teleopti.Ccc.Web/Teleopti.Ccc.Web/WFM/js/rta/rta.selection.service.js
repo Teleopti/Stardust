@@ -14,20 +14,9 @@
 				return selectedItemIds;
 			};
 
-			this.openSelection = function(selectedItemIds, state) {
-				if (selectedItemIds.length === 0) return;
-				$state.go(state,
-				{
-					ids: selectedItemIds
-				});
+			this.openSelection = function (state, stateParams) {
+				$state.go(state, stateParams);
 			}
-
-			//$scope.openSelectedTeams = function () {
-			//	if ($scope.selectedTeamIds.length === 0) return;
-			//	$state.go('rta.agents-teams', {
-			//		teamIds: $scope.selectedTeamIds
-			//	});
-			//};
 		}
 	]);
 })();
