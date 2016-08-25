@@ -87,12 +87,22 @@ function global:PrepareCopyFiles {
 }
 
 function global:CorrectingURLinHTML {
-
-	#Add Msbuild to env path temporary
-    $env:Path = $env:Path + ";C:\Program Files (x86)\MSBuild\14.0\bin\amd64"
 	
+	## Obsolete solution ##
+	#Add Msbuild to env path temporary
+    #$env:Path = $env:Path + ";C:\Program Files (x86)\MSBuild\14.0\bin\amd64"
 	#Compile UpdateIndexHtml.msbuild
-    
-	exec { msbuild $IndexMSBuildFile /p:WorkingDirectory=$WorkingDir /toolsversion:14.0 }
+    #exec { msbuild $IndexMSBuildFile /p:WorkingDirectory=$WorkingDir /toolsversion:14.0 }
+	
+	$path = $IndexMSBuildFile
+	$word = "/TeleoptiWFM/"
+	$replacement = "/"
+	$text = get-content $path 
+	
+	Write-Host "Updating $IndexMSBuildFile..."
+	Write-Host "Replacing: $word  with: $replacement"
+	
+	$newText = $text -replace $word,$replacement
+	$newText > $path
 	
 }
