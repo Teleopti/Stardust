@@ -86,8 +86,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private List<Guid> getRequestsOnPeriod(DateTimePeriod windowPeriod,
 											   IList<IQueuedAbsenceRequest> allRequests)
 		{
-			var requestsInPeriod = allRequests.Where(y => y.StartDateTime >= windowPeriod.StartDateTime &&
-																		 y.StartDateTime <= windowPeriod.EndDateTime);
+			var requestsInPeriod = allRequests.Where(y => y.StartDateTime.Date >= windowPeriod.StartDateTime.Date &&
+																		 y.StartDateTime.Date <= windowPeriod.EndDateTime.Date);
 			if (requestsInPeriod.Any())
 			{
 				var min = requestsInPeriod.Select(x => x.StartDateTime).Min();
@@ -105,8 +105,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private List<Guid> getRequestsOnPeriod(DateTime interval, DateTimePeriod windowPeriod,
 			IList<IQueuedAbsenceRequest> allRequests)
 		{
-			var requestsInPeriod = allRequests.Where(y => y.StartDateTime >= windowPeriod.StartDateTime &&
-																		 y.StartDateTime <= windowPeriod.EndDateTime);
+			var requestsInPeriod = allRequests.Where(y => y.StartDateTime.Date >= windowPeriod.StartDateTime.Date &&
+																		 y.StartDateTime.Date <= windowPeriod.EndDateTime.Date);
 			if (requestsInPeriod.Any())
 			{
 				var min = requestsInPeriod.Select(x => x.StartDateTime).Min();
