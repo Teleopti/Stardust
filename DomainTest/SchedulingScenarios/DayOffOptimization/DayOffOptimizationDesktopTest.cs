@@ -56,14 +56,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
 			agent.AddPersonPeriod(personPeriod);
 			agent.AddSchedulePeriod(schedulePeriod);
+
 			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				TimeSpan.FromHours(5),
-				TimeSpan.FromHours(1),
-				TimeSpan.FromHours(5),
-				TimeSpan.FromHours(5),
-				TimeSpan.FromHours(5),
-				TimeSpan.FromHours(25),
-				TimeSpan.FromHours(5));
+				5,
+				1,
+				5,
+				5,
+				5,
+				25,
+				5);
+
 			var asses = new List<IPersonAssignment>();
 			for (var i = 0; i < 7; i++)
 			{

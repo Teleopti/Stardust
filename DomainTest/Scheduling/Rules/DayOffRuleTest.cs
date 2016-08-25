@@ -108,15 +108,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var normalRuleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 30, 8, 30, 15), new TimePeriodWithSegment(16, 30, 16, 30, 15), shiftCategory));
 			var ruleSetBag = new RuleSetBag(normalRuleSet);
 			agent1.Period(firstDay).RuleSetBag = ruleSetBag;
+
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10))
+				10,
+				10,
+				10,
+				10,
+				10,
+				10,
+				10)
 				);
+
 			var dayOffTemplate = new DayOffTemplate(new Description("_"));
 			dayOffTemplate.SetTargetAndFlexibility(TimeSpan.FromHours(36), TimeSpan.FromHours(6));
 			dayOffTemplate.Anchor = TimeSpan.FromHours(12.5);

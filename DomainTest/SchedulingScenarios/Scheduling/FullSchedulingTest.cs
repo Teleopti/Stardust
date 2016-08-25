@@ -46,14 +46,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var agent = PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill);
+
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10))
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1)
 				);
 
 			Target.DoScheduling(period);
@@ -80,14 +81,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var agent = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), new Team { Site = new Site("site") }, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill);
+
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10))
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1)
 				);
 
 			Target.DoScheduling(new DateOnlyPeriod(new DateOnly(2015,10,16), new DateOnly(2015, 10, 17))); //friday saturday

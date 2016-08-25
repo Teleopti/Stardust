@@ -50,14 +50,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, skill);
 
 			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				TimeSpan.FromHours(5),
-				TimeSpan.FromHours(1),
-				TimeSpan.FromHours(2),
-				TimeSpan.FromHours(5),
-				TimeSpan.FromHours(5),
-				TimeSpan.FromHours(25),
-				TimeSpan.FromHours(5))
+				5,
+				1,
+				2,
+				5,
+				5,
+				25,
+				5)
 				);
+
 			var dayWithPersonalActivity = skillDays[1].CurrentDate;
 			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay, firstDay.AddDays(7)), new TimePeriod(8, 0, 16, 0));
 			PersonAssignmentRepository.GetSingle(dayWithPersonalActivity)

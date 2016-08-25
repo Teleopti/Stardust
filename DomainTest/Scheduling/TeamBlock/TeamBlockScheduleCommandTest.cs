@@ -43,14 +43,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			skill.TimeZone = TimeZoneInfo.Utc;
 			skill.Activity = phoneActivity;
 			WorkloadFactory.CreateWorkloadWithOpenHours(skill, new TimePeriod(12, 0, 20, 0));
+
 			var skilldays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10));
+				10,
+				10,
+				10,
+				10,
+				10,
+				10,
+				10);
 
 			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
 			var site = new Site("site");

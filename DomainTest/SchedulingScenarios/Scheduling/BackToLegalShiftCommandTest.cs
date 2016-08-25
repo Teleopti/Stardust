@@ -58,15 +58,17 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(7, 0, 9, 0, 15), new TimePeriodWithSegment(15, 0, 17, 0, 15), shiftCategory));
 			ruleSet.AddExtender(new ActivityRelativeStartExtender(otherActivity, new TimePeriodWithSegment(1, 0, 1, 0, 15), new TimePeriodWithSegment(0, 0, 0, 0, 15)));
 			var agent1 = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill);
+
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10))
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1)
 				);
+
 			var dayOffTemplate = new DayOffTemplate(new Description("_default")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);
 			AssignmentRepository.Has(agent1, scenario, dayOffTemplate, firstDay);
@@ -113,15 +115,17 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(7, 0, 9, 0, 15), new TimePeriodWithSegment(15, 0, 17, 0, 15), shiftCategory));
 			ruleSet.AddExtender(new ActivityRelativeStartExtender(otherActivity, new TimePeriodWithSegment(1, 0, 1, 0, 15), new TimePeriodWithSegment(0, 0, 0, 0, 15)));
 			var agent1 = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill);
+
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10))
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1)
 				);
+
 			var dayOffTemplate = new DayOffTemplate(new Description("_default")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);
 			AssignmentRepository.Has(agent1, scenario, dayOffTemplate, firstDay);
@@ -168,15 +172,17 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(7, 0, 7, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), shiftCategory));
 			ruleSet.AddExtender(new ActivityRelativeStartExtender(otherActivity, new TimePeriodWithSegment(0, 15, 0, 15, 15), new TimePeriodWithSegment(0, 0, 0, 15, 15)));
 			var agent = PersonRepository.Has(new Contract("_"), ContractScheduleFactory.CreateWorkingWeekContractSchedule(), new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill);
+
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10))
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1)
 				);
+
 			var dayOffTemplate = new DayOffTemplate(new Description("_default")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);
 			AssignmentRepository.Has(agent, scenario, dayOffTemplate, firstDay);
@@ -225,14 +231,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(7, 0, 7, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), shiftCategory));
 			ruleSet.AddExtender(new ActivityRelativeStartExtender(otherActivity, new TimePeriodWithSegment(0, 15, 0, 15, 15), new TimePeriodWithSegment(0, 0, 0, 15, 15)));
 			var agent = PersonRepository.Has(new Contract("_"), ContractScheduleFactory.CreateWorkingWeekContractSchedule(), new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill);
+
 			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10))
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1)
 				);
 
 			var dayOffTemplate = new DayOffTemplate(new Description("_default")).WithId();

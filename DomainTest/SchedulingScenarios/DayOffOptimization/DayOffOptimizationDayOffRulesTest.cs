@@ -57,15 +57,17 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, skill);
+
 			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				TimeSpan.FromHours(1), //DO
-				TimeSpan.FromHours(1), //DO
-				TimeSpan.FromHours(5), //DO
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(25)) //DO
+				1, //DO
+				1, //DO
+				5, //DO
+				10,
+				20,
+				20,
+				25) //DO
 				);
+
 			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay.AddDays(-1), firstDay.AddDays(8)), new TimePeriod(8, 0, 16, 0));
 			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate).SetDayOff(new DayOffTemplate());
 			PersonAssignmentRepository.GetSingle(skillDays[1].CurrentDate).SetDayOff(new DayOffTemplate());
@@ -94,15 +96,17 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, skill);
+
 			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				TimeSpan.FromHours(5),
-				TimeSpan.FromHours(1),
-				TimeSpan.FromHours(5),
-				TimeSpan.FromHours(25),
-				TimeSpan.FromHours(5),
-				TimeSpan.FromHours(5),
-				TimeSpan.FromHours(5))
+				5,
+				1,
+				5,
+				25,
+				5,
+				5,
+				5)
 				);
+
 			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay.AddDays(-1), firstDay.AddDays(8)), new TimePeriod(8, 0, 16, 0));
 
 			PersonAssignmentRepository.GetSingle(skillDays[3].CurrentDate).SetDayOff(new DayOffTemplate());
@@ -129,22 +133,24 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, skill);
+
 			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(3),
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(1), 
-				TimeSpan.FromHours(2),
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(20)
+				20,
+				20,
+				3,
+				20,
+				20,
+				20,
+				20,
+				20,
+				20,
+				1,
+				2,
+				20,
+				20,
+				20
 				));
+
 			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay, firstDay.AddDays(14)), new TimePeriod(8, 0, 16, 0));
 
 			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate).SetDayOff(new DayOffTemplate());
@@ -174,22 +180,24 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, skill);
+
 			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(3), //expected
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(1), //expected
-				TimeSpan.FromHours(2),
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(20)
-        ));
+				20,
+				20,
+				3, //expected
+				20,
+				20,
+				20,
+				20,
+				20,
+				20,
+				1, //expected
+				2,
+				20,
+				20,
+				20
+			));
+
 			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay, firstDay.AddDays(14)), new TimePeriod(8, 0, 16, 0));
 
 			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate).SetDayOff(new DayOffTemplate());
@@ -223,21 +231,22 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, skill);
+
 			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(3), //expected
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(1), //expected
-				TimeSpan.FromHours(2),
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(20)
+				20,
+				20,
+				3, //expected
+				20,
+				20,
+				20,
+				20,
+				20,
+				20,
+				1, //expected
+				2,
+				20,
+				20,
+				20
 			));
 
 			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay, firstDay.AddDays(14)), new TimePeriod(8, 0, 16, 0));
@@ -276,14 +285,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			DayOffRulesRepository.Add(dayOffRules);
 
 			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				TimeSpan.FromHours(20), 
-				TimeSpan.FromHours(1), //expected
-				TimeSpan.FromHours(5), 
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(20),
-				TimeSpan.FromHours(25)) 
+				20, 
+				1, //expected
+				5, 
+				10,
+				20,
+				20,
+				25) 
 				);
+
 			PersonAssignmentRepository.Has(agentWithValidDefaultFilter, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay.AddDays(-1), firstDay.AddDays(8)), new TimePeriod(8, 0, 16, 0));
 			PersonAssignmentRepository.Has(agentWithExplicitFilter, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay.AddDays(-1), firstDay.AddDays(8)), new TimePeriod(8, 0, 16, 0));
 			PersonAssignmentRepository.GetSingle(skillDays[0].CurrentDate, agentWithValidDefaultFilter).SetDayOff(new DayOffTemplate());

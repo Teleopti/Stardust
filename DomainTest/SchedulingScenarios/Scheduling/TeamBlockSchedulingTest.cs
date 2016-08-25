@@ -61,15 +61,17 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			ruleSetBag.AddRuleSet(normalRuleSet);
 			agent1.Period(firstDay).RuleSetBag = ruleSetBag;
 			agent2.Period(firstDay).RuleSetBag = ruleSetBag;
+
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10))
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1)
 				);
+
 			var dayOffTemplate = new DayOffTemplate(new Description("_default")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);
 			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
@@ -133,14 +135,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			ruleSetBag.AddRuleSet(normalRuleSet);
 			agent1.Period(firstDay).RuleSetBag = ruleSetBag;
 			agent2.Period(firstDay).RuleSetBag = ruleSetBag;
+
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10))
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1)
 				);
 
 			var dayOffTemplate = new DayOffTemplate(new Description("_default")).WithId();
@@ -212,14 +215,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				{
 					StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8))
 				}).WithId());
+
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10))
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1)
 				);
 
 			var dayOffTemplate = new DayOffTemplate(new Description("_default")).WithId();
@@ -292,13 +296,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			agent2.Period(firstDay).RuleSetBag = ruleSetBag;
 
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10),
-				TimeSpan.FromHours(10))
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1)
 				);
 
 			var dayOffTemplate = new DayOffTemplate(new Description("_default")).WithId();
