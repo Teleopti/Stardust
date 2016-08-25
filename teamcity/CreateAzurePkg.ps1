@@ -23,7 +23,7 @@ properties {
 	$AzurePackagePath_Large = "\TeleoptiWFM.cspkg\TeleoptiWFM_Large.cspkg"
 	
 	$IndexMSBuildFile = "$WorkingDir\teamcity\Azure\UpdateIndexHtml.msbuild"
-	$CSPackEXE = $TCParams['AzureSDK_2.8_Path'] + "\bin.cspack.exe"
+	$CSPackEXE = $TCParams['AzureSDK_2.8_Path'] + "\bin\cspack.exe"
 		
 }
 
@@ -55,11 +55,11 @@ task PreReq -depends init -description "Move/Copy preparation of files" {
 task CreateAzurePkg -depends Init, PreReq -description "Create Azure Package" {
     
 	#Create Azure Pkg
-	$Arg = @('teamcity\Azure\ServiceDefinition.csdef', '/role:TeleoptiCCC;TeleoptiCCC', '/rolePropertiesFile:TeleoptiCCC;teamcity\Azure\AzureRoleProperties.txt', "/out:$AzurePackagePath")
+	$Arg = @("Azure\ServiceDefinition.csdef", '/role:TeleoptiCCC;Azure\TeleoptiCCC', '/rolePropertiesFile:TeleoptiCCC;Azure\AzureRoleProperties.txt', "/out:$AzurePackagePath")
     & $CSPackEXE $Arg
 	
 	#Create Azure Pkg Large version
-	$Arg = @('teamcity\Azure\ServiceDefinition_Large.csdef', '/role:TeleoptiCCC;TeleoptiCCC', '/rolePropertiesFile:TeleoptiCCC;teamcity\Azure\AzureRoleProperties.txt', "/out:$AzurePackagePath_Large")
+	$Arg = @('Azure\ServiceDefinition_Large.csdef', '/role:TeleoptiCCC;Azure\TeleoptiCCC', '/rolePropertiesFile:TeleoptiCCC;Azure\AzureRoleProperties.txt', "/out:$AzurePackagePath_Large")
 	& $CSPackEXE $Arg
 }
 
@@ -93,6 +93,6 @@ function global:CorrectingURLinHTML {
 	
 	#Compile UpdateIndexHtml.msbuild
     
-	exec { msbuild $IndexMSBuildFile /p:WorkingDirectory=$WorkingDirectory }
+	exec { msbuild $IndexMSBuildFile /p:WorkingDirectory=$WorkingDir /toolsversion:14.0 }
 	
 }
