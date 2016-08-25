@@ -4,14 +4,21 @@
 		'ui.grid.autoResize',
 		'ui.grid.resizeColumns',
 		'ui.grid.selection',
-		'ngResource', 'ui.router', 'ngStorage', 'toggleService', 'wfm.notice', 'pascalprecht.translate', 'currentUserInfoService']);
+		'ngResource',
+		'ui.router',
+		'ngStorage',
+		'toggleService',
+		'wfm.notice',
+		'pascalprecht.translate',
+		'currentUserInfoService'
+	]);
 
-		rta.run([
-		'$rootScope', '$state', '$location', function ($rootScope, $state, $location) {
-			$rootScope.$on('$stateChangeSuccess',
-				function (event, toState) {
-					if ($location.url() == $state.current.url && toState.name == 'rta') $state.go('rta.sites');
-				});
-		}
-]);
+	rta.run([
+	'$rootScope', '$state', '$location', function ($rootScope, $state, $location) {
+		$rootScope.$on('$stateChangeSuccess',
+			function (event, toState) {
+				if ($location.url() == $state.current.url && toState.name == 'rta') $state.go('rta.sites');
+			});
+	}
+	]);
 })();
