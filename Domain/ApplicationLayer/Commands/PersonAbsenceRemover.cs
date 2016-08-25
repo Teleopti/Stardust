@@ -107,6 +107,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			if (scheduleDay != null)
 			{
 				var scheduleDaysForChecking = new List<IScheduleDay> {scheduleDay};
+				// To be more efficient, we only return the first schedule day for each personal account for NewPersonAccountRule
 				scheduleDaysForChecking.AddRange(getScheduleDaysForCheckingAccount(personAbsences, scheduleDate, scheduleRange, person));
 
 				foreach (var personAbsence in personAbsences)
@@ -176,7 +177,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			return errorMessages;
 		}
 
-		/// <remarks>To be more efficient, we only return the first schedule day for each personal account for <see cref="Teleopti.Ccc.Domain.Scheduling.Rules.NewPersonAccountRule"/></remarks>
 		private IEnumerable<IScheduleDay> getScheduleDaysForCheckingAccount(IEnumerable<IPersonAbsence> personAbsences,
 			DateOnly startDate,
 			IScheduleRange scheduleRange, IPerson person)

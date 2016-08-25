@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				totalScheduleRange.ScheduledDay(
 					new DateOnly(period.EndDateTimeLocal(person.PermissionInformation.DefaultTimeZone())));
 
+			// To be more efficient, we only return the first schedule day for each personal account for NewPersonAccountRule
 			var scheduleDaysForCheckingAccount 
 				= getScheduleDaysForCheckingAccount(absence, dayScheduleForAbsenceReqStart, totalScheduleRange, person, period).ToList();
 
@@ -101,7 +102,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			return _approvedPersonAbsence;
 		}
 
-		/// <remarks>To be more efficient, we only return the first schedule day for each personal account for <see cref="Teleopti.Ccc.Domain.Scheduling.Rules.NewPersonAccountRule"/></remarks>
 		private IEnumerable<IScheduleDay> getScheduleDaysForCheckingAccount(IAbsence absence,
 			IScheduleDay dayScheduleForAbsenceReqStart,
 			IScheduleRange totalScheduleRange, IPerson person, DateTimePeriod period)
