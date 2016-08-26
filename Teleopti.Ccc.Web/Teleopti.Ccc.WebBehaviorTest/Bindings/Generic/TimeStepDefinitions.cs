@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"the time is '(.*)'")]
 		[When(@"the utc time is '(.*)'")]
 		[SetCulture("sv-SE")]
-		public void GivenCurrentTimeIs(DateTime time)
+		public void GivenCurrentTimeIs(string time)
 		{
 			CurrentTime.Set(time);
 		}
