@@ -24,7 +24,7 @@ properties {
 	$AzurePackagePath_Large = "$WorkingDir\TeleoptiWFM_Large.cspkg"
 	
 	$IndexMSBuildFile = "$WorkingDir\teamcity\Azure\UpdateIndexHtml.msbuild"
-	$CSPackEXE = "$env:AzureSDK_2.8_Path"
+	$CSPackEXE = $env:AzureSDK_2_8_Path
 	
 }
 
