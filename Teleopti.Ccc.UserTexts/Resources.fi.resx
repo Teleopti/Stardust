@@ -1093,7 +1093,7 @@
     <comment>Log object</comment>
   </data>
   <data name="MainGrid" xml:space="preserve">
-    <value>Työvuorot</value>
+    <value>Työvuorolista</value>
     <comment>Schedules</comment>
   </data>
   <data name="MainScreen" xml:space="preserve">
@@ -1341,7 +1341,7 @@
     <comment>People</comment>
   </data>
   <data name="OpenSchedulePage" xml:space="preserve">
-    <value>Työvuorot</value>
+    <value>Työvuorolista</value>
     <comment>Schedules</comment>
   </data>
   <data name="Options" xml:space="preserve">
@@ -1546,7 +1546,7 @@ Periods</comment>
     <comment>Are you sure that you want to delete the skill {0}{1}{0}?</comment>
   </data>
   <data name="QuestionSaveChanges" xml:space="preserve">
-    <value>Tallenna muutokset?</value>
+    <value>Haluatko tallentaa muutokset?</value>
     <comment>Save changes?</comment>
   </data>
   <data name="QuestionSkillDoesNotContainWorkload" xml:space="preserve">
@@ -1684,7 +1684,7 @@ Jaksot</value>
 Periods</comment>
   </data>
   <data name="Schedules" xml:space="preserve">
-    <value>Työvuorot</value>
+    <value>Työvuorolista</value>
     <comment>Schedules</comment>
   </data>
   <data name="ScheduleSelected" xml:space="preserve">
@@ -2144,7 +2144,7 @@ Periods</comment>
     <comment>Updating statistics</comment>
   </data>
   <data name="UpdateStatistics" xml:space="preserve">
-    <value>Päivitä raportti</value>
+    <value>Päivitä statistiikka</value>
     <comment>Update statistics</comment>
   </data>
   <data name="UseAverage" xml:space="preserve">
@@ -2227,8 +2227,7 @@ Periods</comment>
     <comment>Weekday</comment>
   </data>
   <data name="WeekdayExclusion" xml:space="preserve">
-    <value>Viikonpäivä
-n rajaus</value>
+    <value>Viikonpäivän rajaus</value>
     <comment>Weekday exclusion ribbon item</comment>
   </data>
   <data name="WeeklyView" xml:space="preserve">
@@ -3021,7 +3020,7 @@ n rajaus</value>
     <comment>SelectKPItohandleColon</comment>
   </data>
   <data name="EnterPropertyValuesForAbsences" xml:space="preserve">
-    <value>Syötä arvot poissaoloille</value>
+    <value>Syötä poissaolojen ominaisuudet</value>
     <comment>Enter property values for absences</comment>
   </data>
   <data name="EnterPropertyValuesForActivities" xml:space="preserve">
@@ -3202,7 +3201,7 @@ Korvaa</value>
     <comment>Relative difference row header</comment>
   </data>
   <data name="StandardDeviation" xml:space="preserve">
-    <value>Vakiopoikkeama</value>
+    <value>Keskihajonta</value>
     <comment>Standard deviation row header</comment>
   </data>
   <data name="ChangeInterval" xml:space="preserve">
@@ -3449,7 +3448,7 @@ Korvaa</value>
     <comment>Auto Position</comment>
   </data>
   <data name="ExitTELEOPTICCC" xml:space="preserve">
-    <value>Kirjaudu ulos Teleopti WFM:tä</value>
+    <value>Kirjaudu ulos Teleopti WFM:stä</value>
     <comment>Teleopti menu exit Teleopti CCC</comment>
   </data>
   <data name="Find" xml:space="preserve">
@@ -3489,7 +3488,7 @@ Korvaa</value>
     <comment>Hours inc</comment>
   </data>
   <data name="HoursIncShrinkage" xml:space="preserve">
-    <value>Tunnit sis. sairaspoissaolotoprosentin</value>
+    <value>Tunnit sis. sairaspoissaoloprosentin</value>
     <comment>Hours inc shrinkage</comment>
   </data>
   <data name="TotalAEW" xml:space="preserve">
@@ -3849,7 +3848,7 @@ Korvaa</value>
     <comment>Select meeting</comment>
   </data>
   <data name="RemoveParticipant" xml:space="preserve">
-    <value>Poista valitut osanottajat</value>
+    <value>Poista valitut osallistujat</value>
     <comment>Remove Meeting</comment>
   </data>
   <data name="AutomaticScheduling" xml:space="preserve">
@@ -4134,7 +4133,7 @@ tilit</value>
     <comment>Understaffing</comment>
   </data>
   <data name="BallonTipScheduleChange" xml:space="preserve">
-    <value>Työvuoroja on muuttunut. Klikkaa tästä nähdäksesi päivitetyt työvuorot.</value>
+    <value>Työvuorosi on muuttunut. Klikkaa tästä nähdäksesi päivitetyt työvuorot.</value>
     <comment>ballon tool tip text</comment>
   </data>
   <data name="Agent" xml:space="preserve">
@@ -4142,7 +4141,7 @@ tilit</value>
     <comment>Agent</comment>
   </data>
   <data name="TeleoptiRaptorColonIntraday" xml:space="preserve">
-    <value>Teleopti WFM: Päivänsisäinen näkymä</value>
+    <value>Teleopti WFM: Päivänsisäinen</value>
     <comment>Teleopti CCC : Intraday</comment>
   </data>
   <data name="OpenAgentPortal" xml:space="preserve">
@@ -4486,7 +4485,7 @@ tilit</value>
     <comment>Set as default state group</comment>
   </data>
   <data name="StateGroupAvailableDescription" xml:space="preserve">
-    <value>(agenttit ovat käytettävissä puhelujen vastaamiseen)</value>
+    <value>(agentit ovat käytettävissä puhelujen vastaamiseen)</value>
     <comment>(agents are available for taking calls)</comment>
   </data>
   <data name="Empty" xml:space="preserve">
@@ -4608,7 +4607,7 @@ tilit</value>
     <comment>Keep Free Week End Days</comment>
   </data>
   <data name="KeepFreeWeekEnds" xml:space="preserve">
-    <value>Viikonloppuvapaat</value>
+    <value>Säilytä viikonloppuvapaat</value>
     <comment>Keep Free Week Ends</comment>
   </data>
   <data name="KeepWeekEndsTogether" xml:space="preserve">
@@ -4781,11 +4780,11 @@ työmäärää</value>
     <comment>Are you sure you want to delete '{0}' grouping?</comment>
   </data>
   <data name="CannotDeleteSiteColon" xml:space="preserve">
-    <value>Ei voida poistaa sivua:</value>
+    <value>Toimipaikkaa ei voida poistaa:</value>
     <comment>Error message when deleteing site. The sites comes afterwards</comment>
   </data>
   <data name="CannotDeleteTeamColon" xml:space="preserve">
-    <value>Ei voida poistaa tiimiä:</value>
+    <value>Tiimiä ei voida poistaa:</value>
     <comment>Error message when deleteing team. The sites comes afterwards</comment>
   </data>
   <data name="ConfirmGroupingDeletion" xml:space="preserve">
@@ -4900,7 +4899,7 @@ työmäärää</value>
     <comment>AP: Information grid columns (My Report)</comment>
   </data>
   <data name="ScheduleWorkCtiTime" xml:space="preserve">
-    <value>Suunniteltu valmisaika</value>
+    <value>Suunniteltu valmiusaika</value>
     <comment>AP: Information grid columns (My Report)</comment>
   </data>
   <data name="Availabilities" xml:space="preserve">
@@ -5765,7 +5764,7 @@ työmäärää</value>
     <comment>Last update: {0}</comment>
   </data>
   <data name="LicensedToColon" xml:space="preserve">
-    <value>Lisensoitu:</value>
+    <value>Lisenssoitu:</value>
     <comment>Title bar</comment>
   </data>
   <data name="MainPortal" xml:space="preserve">
@@ -6160,7 +6159,7 @@ työmäärää</value>
     <value>Hylkäysaste ja vastausnopeus </value>
   </data>
   <data name="ResReportAgentQueueStatistics" xml:space="preserve">
-    <value>Agenttien jonostatistiikka</value>
+    <value>Agentin jonostatistiikat</value>
     <comment>Agent Queue Statistics</comment>
   </data>
   <data name="ResReportAgentScheduleAdherence" xml:space="preserve">
@@ -6172,23 +6171,23 @@ työmäärää</value>
     <comment>Agent Schedule Result</comment>
   </data>
   <data name="ResReportAgentStatistics" xml:space="preserve">
-    <value>Agentti statistiikat</value>
+    <value>Agenttistatistiikka</value>
     <comment>Agent Statistics</comment>
   </data>
   <data name="ResReportForecastvsActualWorkload" xml:space="preserve">
-    <value>Ennuste vrt todellinen työmäärä</value>
+    <value>Ennustettu vrt todellinen työmäärä</value>
     <comment>Forecast vs Actual Workload</comment>
   </data>
   <data name="ResReportForecastvsScheduledHours" xml:space="preserve">
-    <value>Ennuste vrt suunnitellut tunnit</value>
+    <value>Ennustetut vrt suunnitellut tunnit</value>
     <comment>Forecast vs Scheduled Hours</comment>
   </data>
   <data name="ResReportPreferencesPerAgent" xml:space="preserve">
-    <value>Työvuorotoiveita agenttia kohden</value>
+    <value>Työvuorotoive per agentti</value>
     <comment>Preference Per Agent</comment>
   </data>
   <data name="ResReportPreferencesPerDay" xml:space="preserve">
-    <value>Työvuorotoiveita päivää kohden</value>
+    <value>Työvuorotoive per päivä</value>
     <comment>Preference per Day</comment>
   </data>
   <data name="ResReportQueueStatistics" xml:space="preserve">
@@ -6196,7 +6195,7 @@ työmäärää</value>
     <comment>Queue Statistics</comment>
   </data>
   <data name="ResReportScheduledAgentsPerIntervalAndTeam" xml:space="preserve">
-    <value>Suunnitellut agentit per ajanjakso ja tiimi</value>
+    <value>Suunnitellut agentit per intervalli ja tiimi</value>
     <comment>Scheduled Agents per Interval and Team</comment>
   </data>
   <data name="ResReportScheduledTimePerActivity" xml:space="preserve">
@@ -6220,7 +6219,7 @@ työmäärää</value>
     <comment>Shift Category per Day</comment>
   </data>
   <data name="ResReportTeamMetrics" xml:space="preserve">
-    <value>Tiimin mittarit</value>
+    <value>Tiimin metriikat</value>
     <comment>Team Metrics</comment>
   </data>
   <data name="AreYouSureYouWantToDeleteDayOff" xml:space="preserve">
@@ -7482,7 +7481,7 @@ Päivitetty: {1}</value>
     <comment>Not valid</comment>
   </data>
   <data name="ShiftTradeStatusDtoOkByMe" xml:space="preserve">
-    <value>Odottaa kollegasi hyväksyntää</value>
+    <value>Odottaa kolleegasi hyväksyntää</value>
     <comment>Waiting for other part</comment>
   </data>
   <data name="ShiftTradeStatusDtoOkByBothParts" xml:space="preserve">
@@ -7518,11 +7517,11 @@ Päivitetty: {1}</value>
     <comment>Exception handler</comment>
   </data>
   <data name="SupportEmailAddress" xml:space="preserve">
-    <value>Service Desk sähköpostiosoite</value>
+    <value>Service Desk-sähköpostiosoite</value>
     <comment>System setting</comment>
   </data>
   <data name="UnhandledExceptionMessage" xml:space="preserve">
-    <value>Teleopti WFM:ssä on tapahtunut odottamaton virhe ja se suljetaan. Pahoittelemme tästä aiheutuvaa harmia. Jos sinulla oli jotain kesken, tallentamattomat tiedot voivat kadota.
+    <value>Teleopti WFM:ssä on tapahtunut odottamaton virhe ja se suljetaan. Pahoittelemme tästä aiheutuvaa harmia. Jos sinulla oli jotain kesken, tallentamattomat tiedot voi kadota.
 
 Jotta saisimme arvokasta tietoa tapahtuneesta virheestä, niin pyydämme sinua raportoimaan siitä klikkaamalla alla olevaa ”Lähetä sähköposti” -näppäintä. Tämä toiminto avaa oletus sähköpostiohjelmasi. 
 
@@ -7892,7 +7891,7 @@ päivämäärä</value>
     <value>Konflikti</value>
   </data>
   <data name="InfoTextConflict" xml:space="preserve">
-    <value>Toinen käyttäjä on muuttanut näitä tietoja. Sinun täytyy päättää mitä tehdä ennen kuin voit jatkoa. Klikkaa OK hyväksyäksesi toisen käyttäjän muutokset. Huomaathan, että sinun tekemät muutokset menetetään.  Klikkaa korvaa tallentaaksesi muutokset. Toisen käyttäjän muutokset korvataan. </value>
+    <value>Toinen käyttäjä on muuttanut näitä tietoja. Sinun täytyy päättää mitä tehdä ennen kuin voit jatkoa. Klikkaa OK hyväksyäksesi toisen käyttäjän muutokset. Huomaathan, että sinun tekemät muutokset menetetään. Klikkaa korvaa tallentaaksesi muutokset. Toisen käyttäjän muutokset korvataan. </value>
   </data>
   <data name="NotSaved" xml:space="preserve">
     <value>Ei tallennettu</value>
@@ -8060,7 +8059,7 @@ päivämäärä</value>
     <value>Per viikko</value>
   </data>
   <data name="ShiftCategoryLimitations" xml:space="preserve">
-    <value>Vuoroluokka rajoitukset</value>
+    <value>Vuoroluokkarajoitukset</value>
   </data>
   <data name="ResetLayout" xml:space="preserve">
     <value>Nollaa asetukset</value>
@@ -8130,7 +8129,7 @@ päivämäärä</value>
     <value>Vapaapäivien välillä</value>
   </data>
   <data name="BlockScheduling" xml:space="preserve">
-    <value>Blokki -työvuorot</value>
+    <value>Blokki-työvuorot</value>
   </data>
   <data name="UseBlockScheduling" xml:space="preserve">
     <value>Käytä Blokki -työvuoroja</value>
@@ -8292,10 +8291,10 @@ päivämäärä</value>
     <value>Tarkista miehitys</value>
   </data>
   <data name="ChooseWorkflowControlSetToEdit" xml:space="preserve">
-    <value>Valitse työkaavion kontrollisarja muokattavaksi</value>
+    <value>Valitse työmäärän sääntösarja muokattavaksi</value>
   </data>
   <data name="ManageWorkflowControlSets" xml:space="preserve">
-    <value>Hallinnoi työkaavion kontrollisarjoja</value>
+    <value>Hallinnoi työmäärän sääntösarjoja</value>
   </data>
   <data name="OpenForAbsenceRequests" xml:space="preserve">
     <value>Avoinna poissaolopyynnöille</value>
@@ -8388,7 +8387,7 @@ Jakso: {3}</value>
     <value>Muuta viikonloppuvapaa rajoituksia</value>
   </data>
   <data name="NewWorkflowControlSet" xml:space="preserve">
-    <value>Uusi työkaavio kontrollisarja</value>
+    <value>Uusi työmäärän sääntösarja</value>
   </data>
   <data name="SchedulingResult" xml:space="preserve">
     <value>Työvuorosuunnittelun tulos</value>
@@ -8460,10 +8459,10 @@ Jakso: {3}</value>
     <value>Vuoronvaihtopyyntö on hylätty, koska taitosi eivät vastaa kollegasi taitoja. </value>
   </data>
   <data name="WorkflowControlSetEqualsDenyReason" xml:space="preserve">
-    <value>Vuoronvaihtopyyntösi on hylätty, koska työsopimuksesi ei ole sama kuin kollegallasi. </value>
+    <value>Vuoronvaihtopyyntösi on hylätty, koska työsopimuksesi ei ole sama kuin kolleegallasi. </value>
   </data>
   <data name="ShiftTradeTargetTimeDenyReason" xml:space="preserve">
-    <value>Vuoronvaihtopyyntösi on hylätty, koska työvuoron sallima työkaikajousto ylittyy. </value>
+    <value>Vuoronvaihtopyyntösi on hylätty, koska työvuoron sallima työaikajousto ylittyy. </value>
   </data>
   <data name="WorkflowControlSetNotSetDenyReason" xml:space="preserve">
     <value>Vuoronvaihtopyyntösi on hylätty, koska ei työvuoron sääntösarjaa määritelty.</value>
@@ -8481,7 +8480,7 @@ Jakso: {3}</value>
     <value>Ei saatavilla</value>
   </data>
   <data name="CheckToEnableAutoGrant" xml:space="preserve">
-    <value>Valitse automaattinen hyväksyntä. </value>
+    <value>Valitse automaattinen hyväksyntä</value>
   </data>
   <data name="HColonMM" xml:space="preserve">
     <value>tt:min</value>
@@ -8733,7 +8732,7 @@ Jakso: {3}</value>
     <value>Pää-aktiviteetti:</value>
   </data>
   <data name="SelectActivitiesIncludedInMaster" xml:space="preserve">
-    <value>Valitse mihin aktiviteetteihin pääaktiviteetti on sidoksissa</value>
+    <value>Valitse mihin aktiviteetteihin pääaktiviteetti on yhdistetty</value>
   </data>
   <data name="SelectedActivities" xml:space="preserve">
     <value>Valitut aktiviteetit</value>
@@ -8742,10 +8741,10 @@ Jakso: {3}</value>
     <value>Valitse pääaktiviteetti muokattavaksi</value>
   </data>
   <data name="NewMasterActivity" xml:space="preserve">
-    <value>Uusi yleisaktiviteetti</value>
+    <value>Uusi pää-aktiviteetti</value>
   </data>
   <data name="AreYouSureYouWantToDeleteMasterActivity" xml:space="preserve">
-    <value>Haluatko varmasti poistaa yleisaktiviteetin {0}?</value>
+    <value>Haluatko varmasti poistaa pää-aktiviteetin {0}?</value>
   </data>
   <data name="RequestHasBeenDeleted" xml:space="preserve">
     <value>Pyyntö on poistettu, eikä sitä voi muuttua.</value>
@@ -8835,7 +8834,7 @@ Jakso: {3}</value>
     <value>Erotus (%)</value>
   </data>
   <data name="ForecastedStaff" xml:space="preserve">
-    <value>Enustettu henkilöstö</value>
+    <value>Ennustettu henkilöstö</value>
   </data>
   <data name="FulltimeEquivalentHoursPerDay" xml:space="preserve">
     <value>FTE t/päivä</value>
@@ -8931,10 +8930,10 @@ Jakso: {3}</value>
     <value>Työvuorot päivään</value>
   </data>
   <data name="OptimizingIntraday" xml:space="preserve">
-    <value>Optimoi päivänsisäinen</value>
+    <value>Päivänsisäinen optimointi</value>
   </data>
   <data name="EnterPropertiesOnSite" xml:space="preserve">
-    <value>Syötä rajoitukset sivulle</value>
+    <value>Syötä rajoitukset toimipisteelle</value>
   </data>
   <data name="ManageSites" xml:space="preserve">
     <value>Hallinnoi toimipistettä</value>
@@ -8949,7 +8948,7 @@ Jakso: {3}</value>
     <value>Palkka koodi:</value>
   </data>
   <data name="NoGoodSlotsFound" xml:space="preserve">
-    <value>Sopivaa ajankohtaa palaverille ei pystytty määrittelemään!</value>
+    <value>Sopivaa ajankohtaa kokoukselle ei pystytty määrittelemään!</value>
   </data>
   <data name="PickBestMeetingSlot" xml:space="preserve">
     <value>Suosittele ajankohta kokoukselle</value>
@@ -9129,13 +9128,13 @@ Jakso: {3}</value>
     <value>Lajittele:</value>
   </data>
   <data name="MeetingDeleteConfirmationQuestion" xml:space="preserve">
-    <value>Haluatko poistaa palaverin {0}?</value>
+    <value>Haluatko poistaa kokouksen {0}?</value>
   </data>
   <data name="MeetingOverview" xml:space="preserve">
-    <value>Palaverin yleisnäkymä</value>
+    <value>Kokousten yleisnäkymä</value>
   </data>
   <data name="NoMeetingIsSelected" xml:space="preserve">
-    <value>Ei palaveria valittu!</value>
+    <value>Kokousta ei ole valittu!</value>
   </data>
   <data name="CopyToThreeDots" xml:space="preserve">
     <value>Kopioi...</value>
@@ -9159,7 +9158,7 @@ Jakso: {3}</value>
     <value>Seuraava päivä:</value>
   </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
-    <value>Agenttien jonometriikka</value>
+    <value>Agentin jonometriikka</value>
   </data>
   <data name="UseOnlyForRestrictions" xml:space="preserve">
     <value>Vain rajoituksiin</value>
@@ -9207,10 +9206,10 @@ Jakso: {3}</value>
     <value>Vaatii käyttäjänimen</value>
   </data>
   <data name="ExportMeetings" xml:space="preserve">
-    <value>Vie palaverit</value>
+    <value>Vie kokoukset</value>
   </data>
   <data name="SuccessfullyExportedMeetings" xml:space="preserve">
-    <value>Palaveri {0} on viety onnistuneesti toiseen skenaarioon.</value>
+    <value>{0} kokousta on viety onnistuneesti toiseen skenaarioon.</value>
   </data>
   <data name="ActualServiceLevel" xml:space="preserve">
     <value>Tämän hetkinen palvelutaso</value>
@@ -9222,7 +9221,7 @@ Jakso: {3}</value>
     <value>Kaikki "Tärkeät" -toiveet</value>
   </data>
   <data name="ResReportActivityTimePerAgent" xml:space="preserve">
-    <value>Aktiviteetti aika per agentti</value>
+    <value>Aktiviteetin aika per agentti</value>
   </data>
   <data name="ProficiencyPercent" xml:space="preserve">
     <value>Tehokkuus (%)</value>
@@ -9252,10 +9251,10 @@ Jakso: {3}</value>
     <value>Käyttäjälle ei löytynyt työvuorojaksoa</value>
   </data>
   <data name="AlsoShowsMeetingsCreatedByMe" xml:space="preserve">
-    <value>Näytä myös palaverit, jotka olen luonut, mutta joissa en ole osallistujana.</value>
+    <value>Näytä myös kokoukset, jotka olen luonut, mutta joissa en ole osallistujana.</value>
   </data>
   <data name="MeetingsCreatedByMe" xml:space="preserve">
-    <value>Palaveri luotu minun toimesta</value>
+    <value>Kokous luotu minun toimesta</value>
   </data>
   <data name="SendASM" xml:space="preserve">
     <value>Lähetä ASM -viesti</value>
@@ -9273,7 +9272,7 @@ Jakso: {3}</value>
     <value>Työkategoria</value>
   </data>
   <data name="JobHistory" xml:space="preserve">
-    <value>Tapahtuma historia</value>
+    <value>Työhistoria</value>
   </data>
   <data name="LoadMoreHistory" xml:space="preserve">
     <value>Lataa lisää historiaa</value>
@@ -9321,7 +9320,7 @@ Jakso: {3}</value>
     <value>Sinun tulee valita vähintää yksi taito.</value>
   </data>
   <data name="CannotDisplayAllMeetings" xml:space="preserve">
-    <value>Ei voi näyttää kaikkia palavereja yhtä aikaa!</value>
+    <value>Ei voi näyttää kaikkia kokouksia yhtä aikaa!</value>
   </data>
   <data name="InvalidTimeValue" xml:space="preserve">
     <value>Virheellinen aika-arvo '{0}'</value>
@@ -9339,7 +9338,7 @@ Jakso: {3}</value>
     <value>Käytä tiimiä</value>
   </data>
   <data name="AuditingPageName" xml:space="preserve">
-    <value>Tarkistus</value>
+    <value>Auditointi</value>
   </data>
   <data name="AuditingReportAbsence" xml:space="preserve">
     <value>Poissaolo</value>
@@ -9444,7 +9443,7 @@ Jakso: {3}</value>
     <value>Työvuoro tagit</value>
   </data>
   <data name="WorkWeekStartsAt" xml:space="preserve">
-    <value>Työviikko alkaa päivästä</value>
+    <value>Työviikon ensimmäinen päivä</value>
   </data>
   <data name="AutoTag" xml:space="preserve">
     <value>Auto tagi</value>
@@ -9534,7 +9533,7 @@ Jakso: {3}</value>
     <value>Etsi...</value>
   </data>
   <data name="ErrorOccuredWhenSavingSettings" xml:space="preserve">
-    <value>Odottamaton virhe tapahtunut tallennuksen yhteydessä.</value>
+    <value>Odottamaton virhe tapahtui tallennuksen yhteydessä.</value>
   </data>
   <data name="ExportForecastToOtherBusinessUnit" xml:space="preserve">
     <value>Vie ennuste toiseen liiketoimintayksikköön</value>
@@ -9570,7 +9569,7 @@ Jakso: {3}</value>
     <value>Räätälöity raportti</value>
   </data>
   <data name="BrowserDefault" xml:space="preserve">
-    <value>Selain oletus</value>
+    <value>Oletusselain</value>
   </data>
   <data name="PasswordOld" xml:space="preserve">
     <value>Vanha salasana</value>
@@ -9597,7 +9596,7 @@ Jakso: {3}</value>
     <value>Älä ylitä maksimi paikkamäärää</value>
   </data>
   <data name="FulfillRestrictions" xml:space="preserve">
-    <value>Suorita rajoitukset. </value>
+    <value>Toteuta rajoitukset</value>
   </data>
   <data name="FullWeekEndDaysOff" xml:space="preserve">
     <value>Viikonloppuvapaa</value>
@@ -9648,7 +9647,7 @@ Jakso: {3}</value>
     <value>Muokkaa aikapankkia osa-aika prosentin mukaan.</value>
   </data>
   <data name="SelectPeriodAndScenarioToExportTo" xml:space="preserve">
-    <value>Valitse ajanjakso palaverin suunnitteluun ja valitse ennuste mihin se viedään.</value>
+    <value>Valitse ajanjakso kokousten suunnitteluun ja valitse ennuste mihin se viedään.</value>
   </data>
   <data name="NoAllowedScenarios" xml:space="preserve">
     <value>Ei ennustetta minkä voisit nähdä.</value>
@@ -9672,7 +9671,7 @@ Jakso: {3}</value>
     <value>Työvuoroluokan rajoitukset eivät vastaa työvuoroluokan asetuksia.</value>
   </data>
   <data name="ShiftTradeMeetingSpecificationDenyReason" xml:space="preserve">
-    <value>Työvuoronvaihtopyyntö hylätty, koska palaveri loppuu työvuoron ulkopuolelle. </value>
+    <value>Työvuoronvaihtopyyntö hylätty, koska kokous joutui työvuoron ulkopuolelle. </value>
   </data>
   <data name="ShiftTradePersonalActivityDenyReason" xml:space="preserve">
     <value>Työvuoronvaihtopyyntö hylätty, koska henkilökohtainen aktiviteetti työvuorossa. </value>
@@ -9699,7 +9698,7 @@ Jakso: {3}</value>
     <value>Muokkaa vapaapäiviä joustaville agenteille.</value>
   </data>
   <data name="YouShouldWorkAtLeastParameterHDotYouAreNowAvailableForBetweenParameterHAndParameterHDot" xml:space="preserve">
-    <value>Sinun tulee työskennellä vähintään {0}tuntia. Sinä olet nyt käytettävissä {1}t ja {2}t</value>
+    <value>Sinun tulee työskennellä vähintään {0} tuntia. Sinä olet nyt käytettävissä {1}t ja {2}t</value>
   </data>
   <data name="NoSkillMatchingPropertiesForCurrentSkillFound" xml:space="preserve">
     <value>Mikään taito ei vastaa ominaisuuksiltaan kyseistä taitoa. </value>
@@ -9717,7 +9716,7 @@ Jakso: {3}</value>
     <value>Sinun sähköpostiosoitteesi pitää olla rekisteröitynä Henkilöt valikossa käyttääksesi tätä toimintoa.</value>
   </data>
   <data name="TheServiceLevelForSpecifiedIntervalLengthIsTooLongDot" xml:space="preserve">
-    <value>Palvelutaso kyseisellä jaksolle on liian pitkä. </value>
+    <value>Palvelutaso kyseisellä jaksolla on liian pitkä. </value>
   </data>
   <data name="TheExportWillStartInBackgroundMessage" xml:space="preserve">
     <value>Tietojen vienti aloitetaan taustalla, kun ohjattu prosessi on valmis. Voit tarkistaa "Työhistoria" valikosta työn tilan.</value>
@@ -9732,7 +9731,7 @@ Jakso: {3}</value>
     <value>Vuoroluokka ja koko päivän poissaolo per päivä</value>
   </data>
   <data name="ManageMasterActivities" xml:space="preserve">
-    <value>Hallinnoi yleisaktiviteettia</value>
+    <value>Hallinnoi pää-aktiviteettia</value>
   </data>
   <data name="IncludedInRequestAllowance" xml:space="preserve">
     <value>Sisältyy poissaolopyyntöihin</value>
@@ -9789,7 +9788,7 @@ Jakso: {3}</value>
     <value>Hallinnoi työvuoro tageja</value>
   </data>
   <data name="ChooseScheduleTagToChange" xml:space="preserve">
-    <value>Valitse työvuoro tagi</value>
+    <value>Valitse työvuorotagi</value>
   </data>
   <data name="YourPreferencesCanResultXToYHours" xml:space="preserve">
     <value>Sinun työvuorotoiveesi voivat antaa tuloksen {0} - {1} työtuntia. </value>
@@ -9933,7 +9932,7 @@ Jakso: {3}</value>
     <value>Ulkoinen lähde on käytössä. </value>
   </data>
   <data name="ExportToPDFShiftsPerDay" xml:space="preserve">
-    <value>Vie DPF-muodossa työvuorot per päivä</value>
+    <value>Vie PDF-muodossa työvuorot per päivä</value>
   </data>
   <data name="DuplicateDaysOffValidationError" xml:space="preserve">
     <value>Päällekkäisiä vapaapäiviä {0}</value>
@@ -10011,7 +10010,7 @@ Jakso: {3}</value>
     <value>Vie työmäärä</value>
   </data>
   <data name="ResReportScheduledAndActualAgents" xml:space="preserve">
-    <value>Suunnitellut ja tämän hetkiset agentit</value>
+    <value>Suunnitellut ja todelliset agentit</value>
   </data>
   <data name="ExportWorkloadAndStaffing" xml:space="preserve">
     <value>Vie työmäärä ja henkilömäärä</value>
@@ -10050,7 +10049,7 @@ Jakso: {3}</value>
     <value>Sinun työaikaasi on muutettu</value>
   </data>
   <data name="SmsSettings" xml:space="preserve">
-    <value>SMS -asetukset</value>
+    <value>SMS-asetukset</value>
   </data>
   <data name="SetWhichColumnToGetSmsPhoneNumberFrom" xml:space="preserve">
     <value>Määritä mistä sarakkeesta SMS numero valitaan</value>
@@ -10083,7 +10082,7 @@ Jakso: {3}</value>
     <value>Vie toiseen liiketoimintayksikköön</value>
   </data>
   <data name="ExportToFile" xml:space="preserve">
-    <value>Vie tiedosto</value>
+    <value>Vie tiedostoon</value>
   </data>
   <data name="FileExportDone" xml:space="preserve">
     <value>Tiedoston vienti on valmis</value>
@@ -10404,7 +10403,7 @@ Jakso: {3}</value>
     <value>Viimeksi tallennettu ylityökäytettävyys</value>
   </data>
   <data name="OvertimeAvailability" xml:space="preserve">
-    <value>Ylityö käytettävyys</value>
+    <value>Ylityökäytettävyys</value>
   </data>
   <data name="Little" xml:space="preserve">
     <value>Vähän</value>
@@ -10446,10 +10445,10 @@ Jakso: {3}</value>
     <value>Maksimi agentti määrä pitää olla suurempi tai yhtä suuri kuin minimi agentti määrä.</value>
   </data>
   <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
-    <value>Työvuorot agenteille per aktiviteetti</value>
+    <value>Suunnitellut agentit per aktiviteetti</value>
   </data>
   <data name="NotReadyTime" xml:space="preserve">
-    <value>Ei valmis aika</value>
+    <value>Ei valmius aikaa</value>
   </data>
   <data name="ResTotals" xml:space="preserve">
     <value>Yhteensä</value>
@@ -10545,7 +10544,7 @@ Jakso: {3}</value>
     <value>Yrittää ratkaista päivät, joilta puuttuu työvuoro...</value>
   </data>
   <data name="ShiftTradeDifferentDateDenyReason" xml:space="preserve">
-    <value>Vuoronvaihtopyyntö hylätty, koska työvuorot ovat eri päiville.</value>
+    <value>Vuoronvaihtopyyntö hylätty, koska työvuorot ovat eri päivillä.</value>
   </data>
   <data name="ShiftCategoryDistribution" xml:space="preserve">
     <value>Vuoroluokkien jakautuminen</value>
@@ -10572,7 +10571,7 @@ Jakso: {3}</value>
     <value>Päivänsisäinen poissaolo</value>
   </data>
   <data name="Stop" xml:space="preserve">
-    <value>Stop</value>
+    <value>Pysäytä</value>
   </data>
   <data name="PerShiftCategory" xml:space="preserve">
     <value>Per vuoroluokka</value>
@@ -10629,7 +10628,7 @@ Jakso: {3}</value>
     <value>Tehtävän valinnat</value>
   </data>
   <data name="FilterOvertimeAvailability" xml:space="preserve">
-    <value>Lajittele ylityö käytettävyyttä</value>
+    <value>Lajittele ylityökäytettävyyttä</value>
   </data>
   <data name="RequestDenyReasonClosedPeriodBeforeSendRequest" xml:space="preserve">
     <value>Sinun pyyntösi on hylätty. Kyseinen päivä ei ole avoinna pyynnöille. </value>
@@ -10689,8 +10688,8 @@ Jakso: {3}</value>
     <value>Lähetä uudelleen</value>
   </data>
   <data name="ShiftGenerationStop" xml:space="preserve">
-    <value>Stop! Säännöt ovat liian monimutkaiset ja työvuoroja ei pystytty luomaan maksimi määrän sisällä. 
-Tässä sääntösarjassa olevia vuoroja ei tulla käyttämään työvuorojenteossa tai optimoinnissa. 
+    <value>Stop! Säännöt ovat liian monimutkaiset ja työvuoroja ei pystytty luomaan maksimimäärän sisällä. 
+Tässä sääntösarjassa olevia vuoroja ei tulla käyttämään työvuorojen teossa tai optimoinnissa. 
 Vähennä rajoituksia tässä sääntösarjassa.</value>
   </data>
   <data name="ShiftGenerationWarning" xml:space="preserve">
@@ -10736,13 +10735,13 @@ Vähennä rajoituksia tässä sääntösarjassa.</value>
     <value>Kaikki sivut</value>
   </data>
   <data name="ShareMyCalendarHint" xml:space="preserve">
-    <value>Tilataksesi työvuorosi kalenteri appsista, käytä URL linkkiä alla. Lisätietoja löydät yleisimmistä kalenteri appseista, katso</value>
+    <value>Tilataksesi työvuorosi kalenteri appsista, käytä allaolevaa URL linkkiä. Lisätietoja löydät yleisimmistä kalenteri appseista, katso</value>
   </data>
   <data name="NoBudgetGroupForPerson" xml:space="preserve">
     <value>Budjettia ei ole määritelty henkilölle: {0}</value>
   </data>
   <data name="TeamBlockNotInLegalState" xml:space="preserve">
-    <value>Tiimin ei ole sopimuksen mukaisessa tilassa.</value>
+    <value>Tiimin blokkijakso ei ole sopimuksen mukaisessa tilassa.</value>
   </data>
   <data name="RepViewerTextNotFound" xml:space="preserve">
     <value>Tekstiä ei löydy.</value>
@@ -10832,7 +10831,7 @@ Vähennä rajoituksia tässä sääntösarjassa.</value>
     <value>Budjettiryhmän henkilömäärä</value>
   </data>
   <data name="MessagesParenthesis" xml:space="preserve">
-    <value>Viestit {{0}}</value>
+    <value>Viestit ({0})</value>
   </data>
   <data name="LogOnFailedPasswordExpired" xml:space="preserve">
     <value>Sisäänkirjautuminen epäonnistui! Salasana on vanhentunut. </value>
@@ -10871,7 +10870,7 @@ Vähennä rajoituksia tässä sääntösarjassa.</value>
     <value>Nykyinen sivu</value>
   </data>
   <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
-    <value>Yhteys tietokantaan on katkennut, ole hyvä ja rajoita asetuksiasi.</value>
+    <value>Yhteys tietokantaan on katkennut, rajoita asetuksiasi.</value>
   </data>
   <data name="RepViewerFindText" xml:space="preserve">
     <value>Etsi teksti raportissa</value>
@@ -10934,7 +10933,7 @@ Vähennä rajoituksia tässä sääntösarjassa.</value>
     <value>Virheellinen päättymisaika.</value>
   </data>
   <data name="InvalidIntradayAbsenceTimes" xml:space="preserve">
-    <value>Lisää päivänsisäinen poissaolo olemassa olevaan työvuoroon. </value>
+    <value>Lisää päivänsisäinen poissaolo työvuoroon. </value>
   </data>
   <data name="Metric" xml:space="preserve">
     <value>Metriikka</value>
@@ -10982,7 +10981,7 @@ Vähennä rajoituksia tässä sääntösarjassa.</value>
     <value>Vertaa tiimiä</value>
   </data>
   <data name="ReadyTimePerScheduledReadyTime" xml:space="preserve">
-    <value>Valmisaika / Suunniteltu valmisaika</value>
+    <value>Valmiusaika / Suunniteltu valmiusaika</value>
   </data>
   <data name="ScheduleMustBeReloaded" xml:space="preserve">
     <value>Työvuorolista pitää ladata uudelleen</value>
@@ -10991,7 +10990,7 @@ Vähennä rajoituksia tässä sääntösarjassa.</value>
     <value>Vapaapäivä pisteet:</value>
   </data>
   <data name="SeniorityPoints" xml:space="preserve">
-    <value>Senioriteetti pisteet:</value>
+    <value>Senioriteettipisteet:</value>
   </data>
   <data name="ShiftCategoryPoints" xml:space="preserve">
     <value>Vuoroluokkapisteytys:</value>
@@ -11027,7 +11026,7 @@ Vähennä rajoituksia tässä sääntösarjassa.</value>
     <value>Noudattamisen poikkeama yhteensä</value>
   </data>
   <data name="ASMTimeAheadOfActivityChangeToAlert" xml:space="preserve">
-    <value>Aika ennen kuin agentille aktiviteetin muutoksesta ilmoitetaan (sekunneissa)</value>
+    <value>Aika ennen kuin agentille ilmoitetaan aktiviteetin muutoksesta (sekunneissa)</value>
   </data>
   <data name="AtLeastOneDayCannotBeScheduled" xml:space="preserve">
     <value>Vähintään yhtä päivää ei voida työvuorottaa</value>
@@ -11039,13 +11038,13 @@ Vähennä rajoituksia tässä sääntösarjassa.</value>
     <value>Tietokanta ei ole saatavilla. </value>
   </data>
   <data name="SignInAsAnotherUser" xml:space="preserve">
-    <value>Kirjaudu sisään toisena käyttäjäni</value>
+    <value>Kirjaudu sisään toisena käyttäjänä</value>
   </data>
   <data name="SignInWith" xml:space="preserve">
     <value>Kirjaudu sisään</value>
   </data>
   <data name="SignInAsAnotherUserInPermission" xml:space="preserve">
-    <value>Kirjaudu sisään toisena käyttäjäni</value>
+    <value>Kirjaudu sisään toisena käyttäjänä</value>
   </data>
   <data name="CalculateLegalState" xml:space="preserve">
     <value>Päivitä sopimuksen mukaiseen tilaan</value>
@@ -11096,7 +11095,7 @@ Vähennä rajoituksia tässä sääntösarjassa.</value>
     <value>Minimi aika per viikko:</value>
   </data>
   <data name="WeeklyWorkTimeBroken" xml:space="preserve">
-    <value>Työvuorotoiveittesi tuntimäärä on liian paljon. </value>
+    <value>Työvuorotoiveittesi tuntimäärä on liian suuri. </value>
   </data>
   <data name="QueueMetrics" xml:space="preserve">
     <value>Jonometriikka</value>
@@ -11108,10 +11107,10 @@ Vähennä rajoituksia tässä sääntösarjassa.</value>
     <value>Palvelin ei vastaa. Tästä syystä kaikki toiminnot eivät ole käytössä.</value>
   </data>
   <data name="SeniorityRankingAsc" xml:space="preserve">
-    <value>Senioriteetti järjestys nousevasti</value>
+    <value>Senioriteettijärjestys nousevasti</value>
   </data>
   <data name="SeniorityRankingDesc" xml:space="preserve">
-    <value>Senioriteetti järjestys laskevasti</value>
+    <value>Senioriteettijärjestys laskevasti</value>
   </data>
   <data name="File" xml:space="preserve">
     <value>TIEDOSTO</value>
@@ -11162,16 +11161,16 @@ Vähennä rajoituksia tässä sääntösarjassa.</value>
     <value>Kultakynnys:</value>
   </data>
   <data name="SetBadgeThresholdForAHT" xml:space="preserve">
-    <value>Kynnys (HH:mm:ss):</value>
+    <value>Kynnys (TT:mm:ss):</value>
   </data>
   <data name="SetBadgeBronzeThresholdForAHT" xml:space="preserve">
-    <value>Pronssikynnys (HH:mm:ss): </value>
+    <value>Pronssikynnys (TT:mm:ss): </value>
   </data>
   <data name="SetBadgeSilverThresholdForAHT" xml:space="preserve">
-    <value>Hopeakynnys (HH:mm:ss):</value>
+    <value>Hopeakynnys (TT:mm:ss):</value>
   </data>
   <data name="SetBadgeGoldThresholdForAHT" xml:space="preserve">
-    <value>Kultakynnys (HH:mm:ss): </value>
+    <value>Kultakynnys (TT:mm:ss): </value>
   </data>
   <data name="SetBadgeThresholdForAdherence" xml:space="preserve">
     <value>Kynnys (%):</value>
@@ -11255,7 +11254,7 @@ Vähennä rajoituksia tässä sääntösarjassa.</value>
     <value>Et ole kirjautunut sisään. </value>
   </data>
   <data name="BusinessRuleMinWeekWorktimeErrorMessage" xml:space="preserve">
-    <value>Viikko sisältää liian vähän työaikaa ({0}). Vähintään on oltava {1}. </value>
+    <value>Viikko sisältää liian vähän työaikaa ({0}). On oltava vähintään {1}. </value>
   </data>
   <data name="DeleteSkill" xml:space="preserve">
     <value>Poista taito</value>
@@ -11369,7 +11368,7 @@ Vähennä rajoituksia tässä sääntösarjassa.</value>
     <value>Aloitusaika</value>
   </data>
   <data name="FullDayAbsenceSettings" xml:space="preserve">
-    <value>Kokopäivän Poissaolon asetukset</value>
+    <value>Kokopäivän poissaolon asetukset</value>
   </data>
   <data name="UnSupportedOptimizationBlockAndTimeBetweendays" xml:space="preserve">
     <value>Optimointivaihe "Aika päivien välillä" ei ole suoritettu, kun blokki ja sama työvuoro on valittuna. </value>
@@ -11522,7 +11521,7 @@ Vähennä rajoituksia tässä sääntösarjassa.</value>
     <value>Vuoronvaihtoviestintäsi {0} ei ole sallittu, koska työvuorosi on muuttunut. </value>
   </data>
   <data name="HasNonMainShiftActivityErrorMessage" xml:space="preserve">
-    <value>{0} on henkilökohtainen aktiviteetti, ylityöaikaa tai palaveri työvuorossa {1}. </value>
+    <value>{0} on henkilökohtainen aktiviteetti, ylityöaikaa tai kokous työvuorossa {1}. </value>
   </data>
   <data name="NotifyAgent" xml:space="preserve">
     <value>Ilmoita agentille</value>
@@ -11630,13 +11629,13 @@ Vähennä rajoituksia tässä sääntösarjassa.</value>
     <value>Saapumisjärjestyksellinen ilmoitustaulu</value>
   </data>
   <data name="SeatPlanner" xml:space="preserve">
-    <value>Paikkasuunnittelu</value>
+    <value>Istuinpaikkasuunnittelu</value>
   </data>
   <data name="YouHaveBeenAllocatedSeat" xml:space="preserve">
-    <value>{0} sinulle on jaettu paikka numero {1}. </value>
+    <value>{0} sinulle on jaettu istuinpaikka {1}. </value>
   </data>
   <data name="YouHaveNotBeenAllocatedSeat" xml:space="preserve">
-    <value>{0} sinulle ei ole jaettu paikkaa. </value>
+    <value>{0} sinulle ei ole jaettu istuinpaikkaa. </value>
   </data>
   <data name="Bottom" xml:space="preserve">
     <value>Alin</value>
@@ -11663,7 +11662,7 @@ Vähennä rajoituksia tässä sääntösarjassa.</value>
     <value>Näytä Excel-raportti</value>
   </data>
   <data name="ShowPDFReport" xml:space="preserve">
-    <value>Näyty PDF-raportti</value>
+    <value>Näytä PDF-raportti</value>
   </data>
   <data name="ShowWordReport" xml:space="preserve">
     <value>Näytä Word-raportti</value>
@@ -11741,10 +11740,10 @@ Vähennä rajoituksia tässä sääntösarjassa.</value>
     <value>Pellistämisasetusta ei ole asetettu</value>
   </data>
   <data name="SeatMap" xml:space="preserve">
-    <value>Paikkakartta</value>
+    <value>Istuinpaikkakartta</value>
   </data>
   <data name="SeatPlan" xml:space="preserve">
-    <value>Paikkasuunnitelma</value>
+    <value>Istuinpaikkasuunnitelma</value>
   </data>
   <data name="CheckingForecastingRequirements" xml:space="preserve">
     <value>Etsii ennustusvaatimuksia</value>
@@ -11891,16 +11890,16 @@ Vähennä rajoituksia tässä sääntösarjassa.</value>
     <value>Valitettavasti ohjelma on tällä hetkellä varattu. Rajoita raporttikriteerisi tai yritä uudelleen. </value>
   </data>
   <data name="SeatPlanStatusError" xml:space="preserve">
-    <value>Joillekin agenteille ei ole jaettu paikkaa tälle päivälle</value>
+    <value>Joillekin agenteille ei ole jaettu istuinpaikkaa tälle päivälle</value>
   </data>
   <data name="SeatPlanStatusInProgress" xml:space="preserve">
-    <value>Paikkasuunnittelu on käynnissä tälle päivälle</value>
+    <value>Istuinpaikkasuunnittelu on käynnissä tälle päivälle</value>
   </data>
   <data name="SeatPlanStatusNoSeatPlanned" xml:space="preserve">
     <value>Paikkoja ei ole suunniteltu tälle päivälle</value>
   </data>
   <data name="SeatPlanStatusOK" xml:space="preserve">
-    <value>Kaikille agenteille on jaettu paikka</value>
+    <value>Kaikille agenteille on jaettu istuinpaikka</value>
   </data>
   <data name="AgentCountTitle" xml:space="preserve">
     <value>agentit</value>
@@ -11909,7 +11908,7 @@ Vähennä rajoituksia tässä sääntösarjassa.</value>
     <value>Lajittele sijainnit</value>
   </data>
   <data name="LoadingSeatPlanStatus" xml:space="preserve">
-    <value>Lataa Paikkasuunnitelmatilannetta</value>
+    <value>Lataa Istuinpaikkasuunnitelmatilannetta</value>
   </data>
   <data name="NoLocationsAvailable" xml:space="preserve">
     <value>Sijaintia ei saatavilla</value>
@@ -11924,7 +11923,7 @@ Vähennä rajoituksia tässä sääntösarjassa.</value>
     <value>paikat</value>
   </data>
   <data name="SeatPlanSubmittedOK" xml:space="preserve">
-    <value>Paikkasuunnitelma on toteutettu</value>
+    <value>Istuinpaikkasuunnitelma on toteutettu</value>
   </data>
   <data name="TeamsOrLocationsAreUnselected" xml:space="preserve">
     <value>tiimit tai sijainnit eivät ole valittuna</value>
@@ -11975,7 +11974,7 @@ Vähennä rajoituksia tässä sääntösarjassa.</value>
     <value>Käytä olemassa olevaa aktiviteettia</value>
   </data>
   <data name="ValueRange" xml:space="preserve">
-    <value>0 ~ 999</value>
+    <value>0 ~ 9999</value>
   </data>
   <data name="NewCampaignName" xml:space="preserve">
     <value>Uusi kampanjanimi</value>
@@ -12062,7 +12061,7 @@ Vähennä rajoituksia tässä sääntösarjassa.</value>
     <value>Luo raportti</value>
   </data>
   <data name="SeatPlanReport" xml:space="preserve">
-    <value>Paikkasuunnitelmaraportti</value>
+    <value>Istuinpaikkasuunnitelmaraportti</value>
   </data>
   <data name="ManuallyPlanned" xml:space="preserve">
     <value>Manuaalisesti suunniteltu</value>
@@ -12083,7 +12082,7 @@ Vähennä rajoituksia tässä sääntösarjassa.</value>
     <value>Aloituspäivämäärä on oltava yhtä suuri kuin tai aiemmin kuin päättymipäivämäärä</value>
   </data>
   <data name="ViewSeatBookings" xml:space="preserve">
-    <value>Näytä paikkavaraukset</value>
+    <value>Näytä istuinpaikkavaraukset</value>
   </data>
   <data name="YouMightNeedToChangeTheShiftBagAccordingly" xml:space="preserve">
     <value>Muokkaa vuoropussia tarvittaessa</value>
@@ -12119,7 +12118,7 @@ Vähennä rajoituksia tässä sääntösarjassa.</value>
     <value>Valittua tiedostoa ei voi hyväksyä. Tarkista tiedoston muoto. </value>
   </data>
   <data name="SeatBookings" xml:space="preserve">
-    <value>Paikkavaraukset</value>
+    <value>Istuinpaikkavaraukset</value>
   </data>
   <data name="FailedImportedCountColon" xml:space="preserve">
     <value>Lukujen tuonti epäonnistui:</value>
@@ -12143,7 +12142,7 @@ Vähennä rajoituksia tässä sääntösarjassa.</value>
     <value>Ylimiehitys</value>
   </data>
   <data name="EnterValidFile" xml:space="preserve">
-    <value>Syötä tiedostolle nimi</value>
+    <value>Syötä tiedostolle nimi tai kirjoita tiedoston polku</value>
   </data>
   <data name="Invalid" xml:space="preserve">
     <value>Ei hyväksytty</value>
@@ -12198,7 +12197,7 @@ Maksimi viikkotuntimäärä on pienempi kuin</value>
     <value>Muokkaa taitoa</value>
   </data>
   <data name="SeatPlanResultDetailMessage" xml:space="preserve">
-    <value>Järjestelmä on yrittänyt luoda {0} paikkavarausta. {1} onnistui, {2} epäonnistui. {3} päivää, joista puuttuu työvuoro. </value>
+    <value>Järjestelmä on yrittänyt luoda {0} istuinpaikkavarausta. {1} onnistui, {2} epäonnistui. {3} päivää, joista puuttuu työvuoro. </value>
   </data>
   <data name="Seasonality" xml:space="preserve">
     <value>Kausivaihtelu</value>
@@ -12210,7 +12209,7 @@ Maksimi viikkotuntimäärä on pienempi kuin</value>
     <value>Kuva</value>
   </data>
   <data name="Seat" xml:space="preserve">
-    <value>Paikka</value>
+    <value>Istuinpaikka</value>
   </data>
   <data name="SetBackgroundImage" xml:space="preserve">
     <value>Aseta taustakuva</value>
@@ -12331,5 +12330,800 @@ Maksimi viikkotuntimäärä on pienempi kuin</value>
   </data>
   <data name="NameRequired" xml:space="preserve">
     <value>Vaatii nimen</value>
+  </data>
+  <data name="CallsSlashDay" xml:space="preserve">
+    <value>Puhelut/päivä</value>
+  </data>
+  <data name="NewSkill" xml:space="preserve">
+    <value>Uusi taito</value>
+  </data>
+  <data name="Accuracy" xml:space="preserve">
+    <value>Tarkkuus</value>
+  </data>
+  <data name="ForecastMethodIDColon" xml:space="preserve">
+    <value>Ennustustavan tunnus: </value>
+  </data>
+  <data name="BestForecastMethod" xml:space="preserve">
+    <value>Paras ennustustapa</value>
+  </data>
+  <data name="StaffingLevels" xml:space="preserve">
+    <value>Henkilöstötaso</value>
+  </data>
+  <data name="WarningNoHistorícalData" xml:space="preserve">
+    <value>Varoitus! Historiallista dataa ei ole saatavilla</value>
+  </data>
+  <data name="ApplyProductActivationKey" xml:space="preserve">
+    <value>Liitä tuoteavain</value>
+  </data>
+  <data name="ProductActivationKeyApplicationSuccess" xml:space="preserve">
+    <value>Tuoteavain on liitetty. 
+Onnea! Sinulla on nyt lisenssi käyttää palkittua resurssienhallintaratkaisua. Applikaatio sulkeutuu. 
+
+Huom: 
+Pyydä IT-osastoltasi apua, että he käynnistävät Teleopti WFM uudelleen Teleopti tiedostosta palvelimen Käynnistä valikosta, jotta saatte kaikki palvelut ja web-applikaatiot toimimaan sekä käyttömahdollisuuden uusille lisensseille. </value>
+  </data>
+  <data name="ProductActivationKeyHasExpiredPleaseApplyANewOne" xml:space="preserve">
+    <value>Tuoteavain on mennyt umpeen, liitä uusi tuoteavain. </value>
+  </data>
+  <data name="ProductActivationKeyIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
+    <value>Tuoteavain on virheellinen tai muokattu, liitä uusi tuoteavain</value>
+  </data>
+  <data name="NewProductActivationKeyCorrupted" xml:space="preserve">
+    <value>Tuoteavain "{0}" on virheellinen tai väärennetty</value>
+  </data>
+  <data name="TotalCallsCaret" xml:space="preserve">
+    <value>Puhelut yhteensä &lt; </value>
+  </data>
+  <data name="CallsCaret" xml:space="preserve">
+    <value>Puhelut &lt; </value>
+  </data>
+  <data name="TalkTimeCaret" xml:space="preserve">
+    <value>Puheaika &lt; </value>
+  </data>
+  <data name="AcwCaret" xml:space="preserve">
+    <value>ACW &lt; </value>
+  </data>
+  <data name="ForecastValueOverride" xml:space="preserve">
+    <value>Ennustettu arvo on ylitetty</value>
+  </data>
+  <data name="CampaignAdded" xml:space="preserve">
+    <value>Lisätty kampanja</value>
+  </data>
+  <data name="Enable" xml:space="preserve">
+    <value>Salli</value>
+  </data>
+  <data name="ForecastDo" xml:space="preserve">
+    <value>Ennusta</value>
+  </data>
+  <data name="ManageMappings" xml:space="preserve">
+    <value>Hallinnoi tilaryhmien sääntöjen kartoitusta</value>
+  </data>
+  <data name="Mappings" xml:space="preserve">
+    <value>Tilaryhmien sääntöjen kartoitus</value>
+  </data>
+  <data name="IsAlarm" xml:space="preserve">
+    <value>Hälytys</value>
+  </data>
+  <data name="AlarmColor" xml:space="preserve">
+    <value>Hälytyksen väri</value>
+  </data>
+  <data name="PresentTenseSchedule" xml:space="preserve">
+    <value>Luodaan työvuorolistaa</value>
+  </data>
+  <data name="IntraOptimize" xml:space="preserve">
+    <value>Päivänsisäinen optimointi</value>
+  </data>
+  <data name="EnableWaitlisting" xml:space="preserve">
+    <value>Salli odotuslista</value>
+  </data>
+  <data name="AbsenceRequestHasBeenWaitlisted" xml:space="preserve">
+    <value>Poissaolopyyntö {0} ja {1} välillä ei ole myönnetty, joten se on laitettu odotuslistalle. </value>
+  </data>
+  <data name="Waitlisted" xml:space="preserve">
+    <value>Odotuslistalla</value>
+  </data>
+  <data name="InAlarm" xml:space="preserve">
+    <value>On hälytyksessä</value>
+  </data>
+  <data name="SelectSites" xml:space="preserve">
+    <value>Valitut toimipisteet</value>
+  </data>
+  <data name="SelectTeams" xml:space="preserve">
+    <value>Valitut tiimit</value>
+  </data>
+  <data name="WaitlistPosition" xml:space="preserve">
+    <value>Odotuslistan sijainti</value>
+  </data>
+  <data name="LoadedColon" xml:space="preserve">
+    <value>Ladattu: </value>
+  </data>
+  <data name="Replan" xml:space="preserve">
+    <value>Suunnittele uudelleen</value>
+  </data>
+  <data name="ModifySkillArea" xml:space="preserve">
+    <value>Muokkaa taitoaluetta</value>
+  </data>
+  <data name="CreateSkillArea" xml:space="preserve">
+    <value>Luo taitoalue</value>
+  </data>
+  <data name="ForecastedAverageHandleTime" xml:space="preserve">
+    <value>Ennustettu keskimääräinen käsittelyaika</value>
+  </data>
+  <data name="IntradayIntroText" xml:space="preserve">
+    <value>Valvot päivänsisäisiä arvoja täällä, aloita valitsemalla taito tai taitoalue</value>
+  </data>
+  <data name="SelectSkillArea" xml:space="preserve">
+    <value>Valitse taitoalue</value>
+  </data>
+  <data name="LoadRequests" xml:space="preserve">
+    <value>Lataa pyynnöt</value>
+  </data>
+  <data name="SubmitProcessWaitlistedRequestsSuccess" xml:space="preserve">
+    <value>Odotuslistan poissaolopyyntöjä kaudelle {0} käsitellään. </value>
+  </data>
+  <data name="WaitlistPeriod" xml:space="preserve">
+    <value>Kaikki odotuslistan poissaolopyynnöt käsitellään valitulle kaudelle. </value>
+  </data>
+  <data name="ProcessWaitlistedRequestsFinished" xml:space="preserve">
+    <value>Odotuslistan poissaolopyynnöt kaudelle {0} on käsitelty. </value>
+  </data>
+  <data name="ProcessWaitlist" xml:space="preserve">
+    <value>KÄSITTELEE ODOTUSLISTAA</value>
+  </data>
+  <data name="ProcessWaitlistRequestsReminder" xml:space="preserve">
+    <value>Odotuslistan käsittely tapahtuu taustalla ja voi kestää, kunnes se on valmis</value>
+  </data>
+  <data name="ShiftTrade" xml:space="preserve">
+    <value>Vuoronvaihto</value>
+  </data>
+  <data name="ShiftTradeRequestScheduleChanged" xml:space="preserve">
+    <value>Vuoronvaihtopyyntö {0} on hyväksyttävä uudelleen. Toisen agentin työvuorolista on muuttunut. </value>
+  </data>
+  <data name="ApplyProductActivationKeyInstructions" xml:space="preserve">
+    <value>Ohjeet:
+* Osta lisenssi (ota yhteyttä www.teleopti.com kautta)
+* Tilaa tuoteavain (esim. sähköpostina)
+* Tallenna tuoteavain kiintolevylle
+* Jos sinulla on keskeneräisiä töitä meneillään, muista tallentaa työ ennen kuin liität tuoteavaimen
+* Hae tuoteavain selaamalla
+* Liitä tuoteavain
+* Applikaatio sulkeutuu
+* Avaa MyTime uudelleen saadaksesi käyttömahdollisuudet uusille lisenseille</value>
+  </data>
+  <data name="CannotReadProductActivationKeyFile" xml:space="preserve">
+    <value>Tuoteavain "{0}" ei ole käytettävissä. 
+Virhe:
+{1}</value>
+  </data>
+  <data name="DatabaseProblem" xml:space="preserve">
+    <value>Tuoteavaimen tallentaminen tietokantaan epäonnistui. 
+Virhe:
+{0}</value>
+  </data>
+  <data name="NewProductActivationKeyAlreadyExpired" xml:space="preserve">
+    <value>Tuoteavain "{0}" on vanha, se on jo mennyt umpeen. </value>
+  </data>
+  <data name="NewProductActivationKeyNotValidFile" xml:space="preserve">
+    <value>Tuoteavain "{0}" ei ole oikeassa (xml) muodossa
+Virhe:
+{1}</value>
+  </data>
+  <data name="NoProductActivationKeyPleaseApplyANewOne" xml:space="preserve">
+    <value>Ette ole vielä liittänyt tuoteavainta, olkaa hyvä ja liittäkää se</value>
+  </data>
+  <data name="UploadingNewProductActivationKeyFailed" xml:space="preserve">
+    <value>Tuoteavaimen liittäminen epäonnistui</value>
+  </data>
+  <data name="YourProductActivationKeyWillExpireDoNotForgetToRenewItInTime" xml:space="preserve">
+    <value>Tuoteavain on voimassa {0} asti, muista liittää uusi ajoissa</value>
+  </data>
+  <data name="OpenProductActivationKeyFile" xml:space="preserve">
+    <value>Hae tuoteavain</value>
+  </data>
+  <data name="ProductActivationKeyV8" xml:space="preserve">
+    <value>Ratkaisu on lisenssoitu "{0}" käyttöehtojen mukaan ja tuoteavain menee umpeen {1}.
+
+Tuoteavain kattaa enintään {2} aktiivista agenttia. 
+
+Pääversio: {5}
+
+Tuoteavaimen kattavuus"{3}". 
+Seuraavat ominaisuudet ovat aktivoitu:
+{4}</value>
+  </data>
+  <data name="YouHaveAlmostTooManyActiveAgents" xml:space="preserve">
+    <value>Teillä on {0} aktiivista agenttia mutta lisenssi kattaa ainoastaan {1} agenttia. Muistakaa päivittää tuoteavain. </value>
+  </data>
+  <data name="YouHaveTooManyActiveAgents" xml:space="preserve">
+    <value>Teillä on {0} aktiivista agenttia mutta lisenssi kattaa ainoastaan {1} agenttia. Teidän on päivitettävä tuoteavain ennen kuin pääsette jatkamaan. </value>
+  </data>
+  <data name="NewProductActivationKeyDoesNotCoverEnoughActiveAgents" xml:space="preserve">
+    <value>Tämä tuoteavain kattaa ainoastaan {0} aktiivista agenttia, mutta teillä on {1} aktiivista agenttia. Teidän on hankittava tuoteavain, joka kattaa tapreeksi monta agenttia. </value>
+  </data>
+  <data name="CreateSkill" xml:space="preserve">
+    <value>Luo taito</value>
+  </data>
+  <data name="TeleoptiProductActivationKeyException" xml:space="preserve">
+    <value>Teleopti tuoteavaimen poikkeus</value>
+  </data>
+  <data name="AddCampaignIntro" xml:space="preserve">
+    <value>Määritä prosenttiosuus arvioidulle nousulle tai laskulle</value>
+  </data>
+  <data name="NewProductActivationKeyDoesNotCoverEnoughSeats" xml:space="preserve">
+    <value>Tämä tuoteavain kattaa ainoastaan {0} istuinpaikkaa. Teidän on hankittava tuoteavain, joka kattaa tarpeeksi monta istuinpaikkaa. </value>
+  </data>
+  <data name="SeatProductActivationKeyV8" xml:space="preserve">
+    <value>Ratkaisu on lisenssoitu "{0}" käyttöehtojen mukaan ja tuoteavain menee umpeen {1}.
+
+Tuoteavain kattaa enintään {2} istuinpaikkaa. 
+
+Pääversio: {5}
+
+Tuoteavaimen kattavuus"{3}". 
+Seuraavat ominaisuudet ovat aktivoitu:
+{4}</value>
+  </data>
+  <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
+    <value>Te ylitätte kohta lisenssoidun määrän paikkoja {0}. Muistakaa päivittää tuoteavain.</value>
+  </data>
+  <data name="YouHaveTooManySeats" xml:space="preserve">
+    <value>Te käytätte liian monta istuinpaikkaa, teidän lisenssi kattaa ainoastaan {0}. Teidän on päivitettävä tuoteavain ennen kuin pääsette jatkamaan. </value>
+  </data>
+  <data name="Outliers" xml:space="preserve">
+    <value>Poikkeavat arvot</value>
+  </data>
+  <data name="QueueStatWoOutliers" xml:space="preserve">
+    <value>Jonostatistiikka ilman poikkeavia arvoja</value>
+  </data>
+  <data name="Statistics" xml:space="preserve">
+    <value>Statistiikka</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>Ilmoitukset</value>
+  </data>
+  <data name="Disable" xml:space="preserve">
+    <value>Älä salli</value>
+  </data>
+  <data name="ForecastOverrideMsg" xml:space="preserve">
+    <value>Ylitä ennustetut arvot. </value>
+  </data>
+  <data name="SuccessTip" xml:space="preserve">
+    <value>Ennustaminen onnistui</value>
+  </data>
+  <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
+    <value>Teillä on liian monta agenttia ({0}) käytössä, koska lisenssi kattaa ainoastaan ({1}). Teillä on {2} päivää aikaa vähentää aktiivisien agenttien määrää tai liittää uusi tuoteavain, joka kattaa tarpeeksi monta agenttia. </value>
+  </data>
+  <data name="RunningForecast" xml:space="preserve">
+    <value>Ennustus on käynnissä</value>
+  </data>
+  <data name="ClearForecastChart" xml:space="preserve">
+    <value>Poista kaaviovalinta</value>
+  </data>
+  <data name="SeatBookingDeletedSuccessfully" xml:space="preserve">
+    <value>{1} varaus paikalle {0} on poistettu</value>
+  </data>
+  <data name="RevertToLastSave" xml:space="preserve">
+    <value>Palauta edellinen tallennus</value>
+  </data>
+  <data name="AccessAllFunctions" xml:space="preserve">
+    <value>Käytä kaikkia toimintoja</value>
+  </data>
+  <data name="ChangesAreDisabled" xml:space="preserve">
+    <value>Muutokset ovat estetty ennalta määrätyiltä rooleilta. </value>
+  </data>
+  <data name="TooManyResultsForSearchKeywords" xml:space="preserve">
+    <value>Hakusanojen tulos ylittää 500, rajoita hakua.</value>
+  </data>
+  <data name="BothOverrideAndCampaignAdded" xml:space="preserve">
+    <value>Ylitys sekä kampanja on lisätty</value>
+  </data>
+  <data name="TotalAcwCaret" xml:space="preserve">
+    <value>ACW yhteensä &gt;</value>
+  </data>
+  <data name="ScheduleIsRunning" xml:space="preserve">
+    <value>Varoitus: Palvelin on varattu työvuorolistan suunnitteluun, kokeile uudestaan</value>
+  </data>
+  <data name="TotalTalkTimeCaret" xml:space="preserve">
+    <value>Puheaika yhteensä &gt;</value>
+  </data>
+  <data name="createNewRuleset" xml:space="preserve">
+    <value>Luo uusi sääntösarja</value>
+  </data>
+  <data name="noSearchResults" xml:space="preserve">
+    <value>Hakua ei löytynyt. </value>
+  </data>
+  <data name="SecondsSlashCalls" xml:space="preserve">
+    <value>Sekuntit/puhelu</value>
+  </data>
+  <data name="DaysAreSelectedFrom" xml:space="preserve">
+    <value>{0} päivää on valittuna {1} ja {2} välillä</value>
+  </data>
+  <data name="SelectedDayIs" xml:space="preserve">
+    <value>Valittu päivä on {0}</value>
+  </data>
+  <data name="OverrideCallsForCampaign" xml:space="preserve">
+    <value>Ylitä puhelut tai kampanjat skenaariossa</value>
+  </data>
+  <data name="NameCantBeMoreThan" xml:space="preserve">
+    <value>Nimen on oltava lyhyempi kuin 50 merkkiä</value>
+  </data>
+  <data name="SecondsSpan" xml:space="preserve">
+    <value>Sekunttien on oltava 1 ja 86400 välillä</value>
+  </data>
+  <data name="ShrinkageSpan" xml:space="preserve">
+    <value>Kutistuman on oltava 1 ja 99 välillä</value>
+  </data>
+  <data name="AllDaysAreClosed" xml:space="preserve">
+    <value>Kaikki päivät ovat suljettu</value>
+  </data>
+  <data name="LatestAcquiredTime" xml:space="preserve">
+    <value>Viimeisin saavutettu aika</value>
+  </data>
+  <data name="PageSize" xml:space="preserve">
+    <value>Sivun koko</value>
+  </data>
+  <data name="TotalRequestsCount" xml:space="preserve">
+    <value>Pyynnöt yhteensä</value>
+  </data>
+  <data name="ClearOverride" xml:space="preserve">
+    <value>Poista ylitys</value>
+  </data>
+  <data name="AddAbsenceSuccessedResult" xml:space="preserve">
+    <value>Poissaolot on lisätty valituille agenteille. </value>
+  </data>
+  <data name="AddAbsenceTotalResult" xml:space="preserve">
+    <value>{0} lisättyä poissaoloa. {1} poissaoloa ei ole lisätty. </value>
+  </data>
+  <data name="SwapShifts" xml:space="preserve">
+    <value>Vaihda vuoroja</value>
+  </data>
+  <data name="ScheduleHasBeenChanged" xml:space="preserve">
+    <value>Toinen henkilö on muokannut työvuorolistaa, lataa uudelleen. </value>
+  </data>
+  <data name="CommandFailed" xml:space="preserve">
+    <value>Pyydetty toimenpide epäonnistui. {0}</value>
+  </data>
+  <data name="RequestsHaveBeenApproved" xml:space="preserve">
+    <value> {0} pyyntö(ä) on hyväksytty. </value>
+  </data>
+  <data name="RequestsHaveBeenDenied" xml:space="preserve">
+    <value>{0} pyyntö(ä) on hylätty. </value>
+  </data>
+  <data name="FailedToSwapShifts" xml:space="preserve">
+    <value>Vuorojen vaihto epäonnustui. </value>
+  </data>
+  <data name="FinishedSwapShifts" xml:space="preserve">
+    <value>Vuorojen vaihto onnistui. </value>
+  </data>
+  <data name="RemoveAbsence" xml:space="preserve">
+    <value>Poista poissaolo</value>
+  </data>
+  <data name="AreYouSureToRemoveSelectedAbsence" xml:space="preserve">
+    <value>Haluatko varmasti poistaa {0} poissaoloa {1} agentilta?</value>
+  </data>
+  <data name="FailedToRemoveAbsence" xml:space="preserve">
+    <value>Valitun poissaolon poistaminen epäonnistui. </value>
+  </data>
+  <data name="FinishedRemoveAbsence" xml:space="preserve">
+    <value>Poissaolon poistaminen onnistui. </value>
+  </data>
+  <data name="NoPermisionAddIntradayAbsenceForAgent" xml:space="preserve">
+    <value>Sinulla ei ole oikeuksia lisätä päivänsisäistä poissaoloa {0}:lle. </value>
+  </data>
+  <data name="NoPermissionAddFullDayAbsenceForAgent" xml:space="preserve">
+    <value>Sinulla ei ole oikeuksia lisätä kokopäivän poissaoloa {0}:lle. </value>
+  </data>
+  <data name="ConnectionErrorMessage" xml:space="preserve">
+    <value>Palvelin on saavuttamaton!
+Tarkista internetyhteys tai ota yhteyttä administratoriin. </value>
+  </data>
+  <data name="InternalErrorMessage" xml:space="preserve">
+    <value>Applikaatiossa tapahtui odottamaton virhe. Lähetä meille palautetta ja kerro kokemuksestasi: </value>
+  </data>
+  <data name="ClearCampaign" xml:space="preserve">
+    <value>Poista kampanja</value>
+  </data>
+  <data name="ProductActivationKeyMajorVersionWrong" xml:space="preserve">
+    <value>Teleopti WFM versio 8 tuoteavain on tarpeellinen ratkaisun toiminnallisuuden kannalta, ota yhteyttä Service Deskiin tai myyntipäällikköön tilataksesi uuden tuoteavaimen. </value>
+  </data>
+  <data name="ConfirmToggleChildPermissions" xml:space="preserve">
+    <value>Tämä valinta poistaa toiminnon ja kaikki alla olevat toiminnot, haluatko varmasti jatkaa?</value>
+  </data>
+  <data name="MustSelectTwoAgentsToSwap" xml:space="preserve">
+    <value>Valitse kaksi agenttia vaihtoon. </value>
+  </data>
+  <data name="PartialSuccessMessageForAddingActivity" xml:space="preserve">
+    <value>Lisää aktiviteetteja {0} agenteille. {1} onnistui ja {2} epäonnistui. </value>
+  </data>
+  <data name="CanOnlyCancelApprovedAbsenceRequest" xml:space="preserve">
+    <value>{0}:n poissaolopyyntöä ei voi peruuttaa{1}, koska se on jo hyväksytty. </value>
+  </data>
+  <data name="CanOnlyCancelApprovedAbsenceRequestMultiDay" xml:space="preserve">
+    <value>{0}:n poissaolopyyntöä ei voi peruuttaa{1} - {2} välillä, koska sitä ei ole vielä hyväksytty. </value>
+  </data>
+  <data name="WFMReleaseNotification" xml:space="preserve">
+    <value>{0} - moduulia on kehitetty! Haluamme {1}palautetta. {2} Vanha {3} on käytettävissä rajoitetun ajan. </value>
+  </data>
+  <data name="PartialSuccessMessageForMovingActivity" xml:space="preserve">
+    <value>Siirtää aktiviteetteja {0} agenteille. {1} onnistui ja {2} epäonnistui. </value>
+  </data>
+  <data name="ProductActivationKeyV8Perpetual" xml:space="preserve">
+    <value>Ratkaisu on lisenssoitu "{0}" käyttöehtojen mukaan.
+
+Tuoteavain kattaa enintään {1} aktiivista agenttia. 
+
+Pääversio: {4}
+
+Tuoteavaimen kattavuus"{2}". 
+Seuraavat ominaisuudet ovat aktivoitu:
+{3}</value>
+  </data>
+  <data name="SeatProductActivationKeyV8Perpetual" xml:space="preserve">
+    <value>Ratkaisu on lisenssoitu "{0}" käyttöehtojen mukaan.
+
+Tuoteavain kattaa enintään {1} istuinpaikkaa. 
+
+Pääversio: {4}
+
+Tuoteavaimen kattavuus"{2}". 
+Seuraavat ominaisuudet ovat aktivoitu:
+{3}</value>
+  </data>
+  <data name="LogonUserTimeZone" xml:space="preserve">
+    <value>Näytä aika minun aikavyöhykkeessä</value>
+  </data>
+  <data name="RequestSubmitterTimeZone" xml:space="preserve">
+    <value>Näytä aika pyynnön aikavyöhykkeessä</value>
+  </data>
+  <data name="FilterRoles" xml:space="preserve">
+    <value>Lajittele roolit</value>
+  </data>
+  <data name="InvalidDimensionsExpectingAnImageSmallerThan2000x4000" xml:space="preserve">
+    <value>Väärä mittasuhde! Kuvan on oltava 2000x4000</value>
+  </data>
+  <data name="LoadImage" xml:space="preserve">
+    <value>Lataa kuva</value>
+  </data>
+  <data name="NotAJPEGSVGOrAPNG" xml:space="preserve">
+    <value>JPEG, SVG tai PNG ei käy!</value>
+  </data>
+  <data name="InvalidInput" xml:space="preserve">
+    <value>Ei sallittu syöttö</value>
+  </data>
+  <data name="InvalidNumber" xml:space="preserve">
+    <value>Ei sallittu numero</value>
+  </data>
+  <data name="RequestInvalidStateTransition" xml:space="preserve">
+    <value>Pyyntö joka on {0} ei voi olla {1}. </value>
+  </data>
+  <data name="RequestsHaveNotBeenApproved" xml:space="preserve">
+    <value>{0} pyyntö(ä) ei ole hyväksytty. </value>
+  </data>
+  <data name="RequestsHaveNotBeenDenied" xml:space="preserve">
+    <value>{0} pyyntö(ä) ei ole hylätty. </value>
+  </data>
+  <data name="SelectedRequestsInfo" xml:space="preserve">
+    <value>Valitse {0} / {1} pyynnöstä</value>
+  </data>
+  <data name="DayOffRules" xml:space="preserve">
+    <value>Vapaapäivän sääntö</value>
+  </data>
+  <data name="NewDayOffRule" xml:space="preserve">
+    <value>Uusi vapaapäivän sääntö</value>
+  </data>
+  <data name="AgentsSuccessfullyScheduled" xml:space="preserve">
+    <value>agenteille luotiin työvuorolista</value>
+  </data>
+  <data name="CriticalUnderstaffingColon" xml:space="preserve">
+    <value>Kriittinen alimiehitys</value>
+  </data>
+  <data name="UnderstaffingColon" xml:space="preserve">
+    <value>Alimiehitys</value>
+  </data>
+  <data name="WeekendColon" xml:space="preserve">
+    <value>Viikonloppu: </value>
+  </data>
+  <data name="OverstaffingColon" xml:space="preserve">
+    <value>Ylimiehitys</value>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Muistatko minut?</value>
+  </data>
+  <data name="MyTeam" xml:space="preserve">
+    <value>MyTeam</value>
+  </data>
+  <data name="CurrentPlanningPeriodMessage" xml:space="preserve">
+    <value>Tämä suunnittelujakso alkaa </value>
+  </data>
+  <data name="AppliedFilters" xml:space="preserve">
+    <value>Asetukset ovat liitetty seuraaviin: </value>
+  </data>
+  <data name="SeatBookingsList" xml:space="preserve">
+    <value>Istuinpaikkojen varauslista</value>
+  </data>
+  <data name="SeatProperties" xml:space="preserve">
+    <value>Istuinpaikkojen ominaisuudet</value>
+  </data>
+  <data name="ShowErrors" xml:space="preserve">
+    <value>Näytä virheet</value>
+  </data>
+  <data name="Anonymous" xml:space="preserve">
+    <value>Anonyyminen</value>
+  </data>
+  <data name="ShowRightPanel" xml:space="preserve">
+    <value>Näytä oikea paneeli</value>
+  </data>
+  <data name="ShowOnlyAbsence" xml:space="preserve">
+    <value>Näytä ainoastaan poissaolot</value>
+  </data>
+  <data name="HidePanel" xml:space="preserve">
+    <value>Piilota paneeli</value>
+  </data>
+  <data name="DoubleClickHereToEditText" xml:space="preserve">
+    <value>Kaksoisklikkaa tästä muokataksesi tekstiä</value>
+  </data>
+  <data name="AbsenceRequestForOneDayHasBeenWaitlisted" xml:space="preserve">
+    <value>Poissaolopyyntö {0} ei voitu hyväksyä, se on laitettu odotuslistalle</value>
+  </data>
+  <data name="AddEmptyPeriod" xml:space="preserve">
+    <value>Lisää tyhjä jakso</value>
+  </data>
+  <data name="DeletePeriod" xml:space="preserve">
+    <value>Poista jakso</value>
+  </data>
+  <data name="AgentDetails" xml:space="preserve">
+    <value>Agentin tiedot</value>
+  </data>
+  <data name="Personalize" xml:space="preserve">
+    <value>Henkilökohtaiset asetukset</value>
+  </data>
+  <data name="ToggleLowLightFilter" xml:space="preserve">
+    <value>Himmeä näytönvalaistus</value>
+  </data>
+  <data name="NoHierarchiesExist" xml:space="preserve">
+    <value>Hierarkioita ei löytynyt kysytylle liiketoimintayksikölle</value>
+  </data>
+  <data name="ToggleAll" xml:space="preserve">
+    <value>Vaihda kaikki</value>
+  </data>
+  <data name="RemoveEntireAbsenceForMultiDayPersonAbsence" xml:space="preserve">
+    <value>Poista koko </value>
+  </data>
+  <data name="ToggleDarkTheme" xml:space="preserve">
+    <value>Tumma teema</value>
+  </data>
+  <data name="CanNotModifyMyRole" xml:space="preserve">
+    <value>Et voi muokata omaa roolia</value>
+  </data>
+  <data name="ConfirmToggleAllPermissions" xml:space="preserve">
+    <value>Tämä asetus antaa oikeudet kaikille toiminnoille, haluatko varmasti jatkaa?</value>
+  </data>
+  <data name="SameDay" xml:space="preserve">
+    <value>Sama päivä</value>
+  </data>
+  <data name="FailedMessageForAddingActivity" xml:space="preserve">
+    <value>Aktiviteetit ei ole lisätty valituille agenteille</value>
+  </data>
+  <data name="SuccessfulMessageForAddingActivity" xml:space="preserve">
+    <value>Aktiviteetit on lisätty valituille agenteille</value>
+  </data>
+  <data name="SelectAnActivity" xml:space="preserve">
+    <value>Valitse aktiviteetti</value>
+  </data>
+  <data name="CouldNotRemoveAbsenceFromProtectedSchedule" xml:space="preserve">
+    <value>Aktiviteettia ei voi poistaa kirjoitussuojatusta työvuorolistasta. </value>
+  </data>
+  <data name="DenyReason" xml:space="preserve">
+    <value>Hylkäyssyy</value>
+  </data>
+  <data name="YouHaveSelectedXAgent" xml:space="preserve">
+    <value>Olet valinnut {0} agentin/agenttia. </value>
+  </data>
+  <data name="RemoveActivity" xml:space="preserve">
+    <value>Poista aktiviteetti</value>
+  </data>
+  <data name="PersonsAreWriteProtected" xml:space="preserve">
+    <value>Työvuorolista on kirjoitussuojattu {0} agentille. Poista valinta päivittääksesi agentteja, jotka vielä ovat muokattavia. </value>
+  </data>
+  <data name="MustSelectAtLeastOneAgent" xml:space="preserve">
+    <value>Sinun on valittava vähintään yksi agentti. </value>
+  </data>
+  <data name="NoPermissionAddAgentActivity" xml:space="preserve">
+    <value>Sinulla ei ole oikeuksia lisätä aktiviteettia agentille</value>
+  </data>
+  <data name="NoPermissionRemoveAgentActivity" xml:space="preserve">
+    <value>Sinulla ei ole oikeuksia poistaa aktiviteettia agentilta</value>
+  </data>
+  <data name="AbsenceRequestForOneDayWasCancelled" xml:space="preserve">
+    <value>Poissaolopyyntö {0} on poistettu ja poissaolo on poistettu työvuorolistasta. </value>
+  </data>
+  <data name="AbsenceRequestWasCancelled" xml:space="preserve">
+    <value>Poissaolopyyntö {0} ja {1} välillä on poistettu ja poissaolo on poistettu työvuorolistasta. </value>
+  </data>
+  <data name="Cancelled" xml:space="preserve">
+    <value>Poistettu</value>
+  </data>
+  <data name="IncomingTraffic" xml:space="preserve">
+    <value>Saapuva liikenne</value>
+  </data>
+  <data name="OfferedAverageHandleTime" xml:space="preserve">
+    <value>Tarjottu keskimääräinen käsittelyaika</value>
+  </data>
+  <data name="IncludedSkills" xml:space="preserve">
+    <value>Sisälletyt taidot</value>
+  </data>
+  <data name="AreYouSureToRemoveSelectedActivity" xml:space="preserve">
+    <value>Haluatko varmasti poistaa {0} aktiviteettia {1} agentilta?</value>
+  </data>
+  <data name="SuccessfulMessageForRemovingActivity" xml:space="preserve">
+    <value>Aktiviteetit on poistettu valituilta agentilta</value>
+  </data>
+  <data name="FailedMessageForRemovingActivity" xml:space="preserve">
+    <value>Aktiviteettien poistaminen epäonnistui</value>
+  </data>
+  <data name="CouldNotCancelRequestNoAbsence" xml:space="preserve">
+    <value>{0}:n poissaolopyyntö {1} ei ole poistettu koska kuuluvaa poissaoloa ei ole löydetty. </value>
+  </data>
+  <data name="PartialSuccessMessageForRemovingActivity" xml:space="preserve">
+    <value>Poistaa aktiviteetteja {0} agentilta, {1} onnistui ja {2} epäonnistui. </value>
+  </data>
+  <data name="CouldNotCancelRequestNoAbsenceMultiDay" xml:space="preserve">
+    <value>{0}:n poissaolopyyntö {1} - {2} välillä ei ole peruutettu koska kuuluvaa poissaoloa ei ole löydetty. </value>
+  </data>
+  <data name="AddAbsenceFailed" xml:space="preserve">
+    <value>Poissaolon lisääminen epäonnistui</value>
+  </data>
+  <data name="RequestsHaveBeenCancelled" xml:space="preserve">
+    <value>{0} pyyntö(ä) on peruutettu</value>
+  </data>
+  <data name="RequestsHaveNotBeenCancelled" xml:space="preserve">
+    <value>{0} pyyntö(ä) ei ole peruutettu</value>
+  </data>
+  <data name="PartialSuccessMessageForRemovingAbsence" xml:space="preserve">
+    <value>Peruttaa poissaoloja {0} agentilta, {1} onnistui ja {2} epäonnistui- </value>
+  </data>
+  <data name="CancelRequest" xml:space="preserve">
+    <value>Peruuta pyyntö</value>
+  </data>
+  <data name="AreYouSureYouWishToCancelAbsence" xml:space="preserve">
+    <value>Haluatko varmasti peruuttaa tämän poissaolopyynnön?</value>
+  </data>
+  <data name="CancelAbsenceRequest" xml:space="preserve">
+    <value>Peruuta hyväksytty poissaolopyyntö</value>
+  </data>
+  <data name="CancelAbsenceRequestDescription" xml:space="preserve">
+    <value>Jos peruutat tämän hyväksytyn poissaolon, kaikki poissaolot, jotka on luotu tämän pyynnön kautta, poistuu agentin työvuorolistasta. </value>
+  </data>
+  <data name="TryOutTheNewImprovedMyTeam" xml:space="preserve">
+    <value>Kokeile uutta MyTeam:iä!</value>
+  </data>
+  <data name="CanNotAddActivityToAgentWithoutShift" xml:space="preserve">
+    <value>Aktiviteettia ei voi lisätä {0}:lle seuraavalle päivälle ilman vuoroa</value>
+  </data>
+  <data name="PreviewTheNewIntradayTool" xml:space="preserve">
+    <value>Katso Päivänsisäinen-toiminnallisuutta etukäteen!</value>
+  </data>
+  <data name="ExtendExistingShift" xml:space="preserve">
+    <value>Pidennä olemassa olevaa vuoroa</value>
+  </data>
+  <data name="NonWorkingDays" xml:space="preserve">
+    <value>Ei työpäivä</value>
+  </data>
+  <data name="UseShiftsFromColon" xml:space="preserve">
+    <value>Käytä vuoroja: </value>
+  </data>
+  <data name="AbsenceRequestCancellationThreshold" xml:space="preserve">
+    <value>Päivien määrä ennen poissaoloa, jotka voi poistaa: </value>
+  </data>
+  <data name="NoPermissionMoveAgentActivity" xml:space="preserve">
+    <value>Sinulla ei ole oikeuksia siirtää aktiviteettia agentilta {0}. </value>
+  </data>
+  <data name="SelectedAgentsColon" xml:space="preserve">
+    <value>Valitut agentit:</value>
+  </data>
+  <data name="CanNotMoveMultipleAcivitiesForAgent" xml:space="preserve">
+    <value>Useita aktiviteetteja ei voi siirtää agentilta {0}. </value>
+  </data>
+  <data name="CannotDeleteBaseActivity" xml:space="preserve">
+    <value>Perusaktiviteettia ei voi poistaa</value>
+  </data>
+  <data name="LatestActualInterval" xml:space="preserve">
+    <value>Viimeisin tämänhetkinen intervalli</value>
+  </data>
+  <data name="SuccessfulMessageForMovingActivity" xml:space="preserve">
+    <value>Aktiviteetit on siirretty valituilta agenteilta</value>
+  </data>
+  <data name="TheNewTimeIsNotAllowedFor" xml:space="preserve">
+    <value>Uusi aika ei ole sallittu</value>
+  </data>
+  <data name="ScheduleIsWriteProtected" xml:space="preserve">
+    <value>[{0} työvuorolistaa ei ole muokattu {1}, koska se on kirjoitussuojattu. </value>
+  </data>
+  <data name="ConfirmCancelRequest" xml:space="preserve">
+    <value>Jos peruutat tämän hyväksytyn poissaolon, kaikki poissaolot poistuu sinun työvuorolistasta. Haluatko varmasti jatkaa?</value>
+  </data>
+  <data name="AbsenceRequestCancellationThresholdExceeded" xml:space="preserve">
+    <value>On liian myöhäistä peruuttaa tämä pyyntö. Tämä pyyntö olisi pitänyt perua viimeistään {0} päivää ennen alkamispäivää. </value>
+  </data>
+  <data name="ActivityConflictsWithOvernightShiftsFromPreviousDay" xml:space="preserve">
+    <value>Aktiviteettia vuoron sisällä ei voi lisätä, koska vuoro kuuluu edelliselle päivälle</value>
+  </data>
+  <data name="Unselect" xml:space="preserve">
+    <value>Poista valinta</value>
+  </data>
+  <data name="NoPermissionAddPersonalActivity" xml:space="preserve">
+    <value>Sinulla ei ole oikeuksia lisätä henkilökohtaista aktiviteettia {0}:lle. </value>
+  </data>
+  <data name="CanNotAddPersonalActivityToAgentWithoutShift" xml:space="preserve">
+    <value>Henkilökohtaista aktiviteettia ei voi lisätä, jos ei ole vuoroa</value>
+  </data>
+  <data name="HelpLabel" xml:space="preserve">
+    <value>Ohjeita</value>
+  </data>
+  <data name="CanNotMoveMultipleActivitiesForSelectedAgents" xml:space="preserve">
+    <value>Useita aktiviteetteja ei voi siirtää valituilta henkilöiltä</value>
+  </data>
+  <data name="FilterReports" xml:space="preserve">
+    <value>Lajittele raportit</value>
+  </data>
+  <data name="AbandonedRate" xml:space="preserve">
+    <value>Menetysaste</value>
+  </data>
+  <data name="SummaryUpToLatestActualInterval" xml:space="preserve">
+    <value>Yhteenveto viimeisimmästä tämänhetkisestä intervallista</value>
+  </data>
+  <data name="ShiftLengthExceed36Hours" xml:space="preserve">
+    <value>Vuoron pityys ylittää 36 tuntia</value>
+  </data>
+  <data name="CannotBackoutScheduleChange" xml:space="preserve">
+    <value>Työvuorolistan muutoksia ei voi kumota</value>
+  </data>
+  <data name="PreviewTheNewRequestsModule" xml:space="preserve">
+    <value>Katso Pyynnöt-moduulia etukäteen!</value>
+  </data>
+  <data name="PreviewTheNewPeopleModule" xml:space="preserve">
+    <value>Katso Henkilöt-moduulia etukäteen! </value>
+  </data>
+  <data name="WFMReleaseNotificationWithoutOldModuleLink" xml:space="preserve">
+    <value>{0}-moduulia on kehitetty! Haluamme {1}palautetta. {2}</value>
+  </data>
+  <data name="DateRange" xml:space="preserve">
+    <value>Päivien valikoima</value>
+  </data>
+  <data name="ReportOptions" xml:space="preserve">
+    <value>Raporttien asetukset</value>
+  </data>
+  <data name="ShowOnlyAgentsWithNoSeat" xml:space="preserve">
+    <value>Näytä ainoastaan agentit, joilla ei ole istuinpaikkaa</value>
+  </data>
+  <data name="AreYouSureToBackoutSelectedSchedule" xml:space="preserve">
+    <value>Haluatko varmasti kumota viimeksi tehdyn työvuoromuutoksen valituille agenteille?</value>
+  </data>
+  <data name="FailedMessageForBackoutSchedule" xml:space="preserve">
+    <value>Työvuorolistan muutosten kumous epäonnustui valituille agenteille</value>
+  </data>
+  <data name="PartialSuccessMessageForBackoutSchedule" xml:space="preserve">
+    <value>Kumoa työvuorolistan muutokset {0} agentille. {1} onnustui, {2} epäonnistui. </value>
+  </data>
+  <data name="SuccessfulMessageForBackoutSchedule" xml:space="preserve">
+    <value>Työvuorolistan muutokset</value>
+  </data>
+  <data name="Backout" xml:space="preserve">
+    <value>Kumoa</value>
+  </data>
+  <data name="Pause" xml:space="preserve">
+    <value>Pause</value>
+  </data>
+  <data name="PausedAt" xml:space="preserve">
+    <value>Keskeytetty </value>
+  </data>
+  <data name="Play" xml:space="preserve">
+    <value>Play</value>
+  </data>
+  <data name="RtaPauseDisableNotice" xml:space="preserve">
+    <value>Reaaliaikainen valvonta aktivoitu</value>
+  </data>
+  <data name="RtaPauseEnabledNotice" xml:space="preserve">
+    <value>Reaaliaikainen valvonta keskeytetty {0}. Jatka näpsäyttämällä Play:tä</value>
   </data>
 </root>
