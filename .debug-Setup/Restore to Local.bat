@@ -13,6 +13,9 @@ SET Branch=%4
 SET SqlInstanceName=%5
 SET CustomPath=%~6
 
+:: Map network share
+net use z: \\gigantes\Customer Databases\CCC\RestoreToLocal\Baselines /USER:toptinet\tfsintegration m8kemew0rk /PERSISTENT:YES
+
 ::Instance were the Baseline will be restored
 SET INSTANCE=%SqlInstanceName%
 IF "%INSTANCE%"=="" SET INSTANCE=.
