@@ -79,8 +79,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						var nearFutureInterval = _now.UtcDateTime().AddMinutes(absenceReqNearFutureTime*-1);
 						var farFutureInterval = _now.UtcDateTime().AddMinutes(absenceReqFarFutureTime*-1);
 
-						var listOfAbsenceRequests = _absenceRequestStrategyProcessor.Get(nearFutureInterval, farFutureInterval,
-																						 new DateTimePeriod(now.Date, now.Date.AddDays(nearFuture)), nearFuture);
+						//include yesterday to deal with timezones
+						var nearFuturePeriod = new DateTimePeriod(now.Date.AddDays(-1), now.Date.AddDays(nearFuture));
+						var listOfAbsenceRequests = _absenceRequestStrategyProcessor.Get(nearFutureInterval, farFutureInterval, nearFuturePeriod, nearFuture);
 						if (!listOfAbsenceRequests.Any()) return;
 						listOfAbsenceRequests.ForEach(absenceRequests =>
 						{
