@@ -14851,4 +14851,28 @@ These options are activated:
     <value>Configure validation warnings</value>
     <comment>Configure validation warnings section title text in wfm/myteam setting panel</comment>
   </data>
+  <data name="MinWeeklyRestRuleName" xml:space="preserve">
+    <value>Minimum Weekly Rest Time</value>
+    <comment>Displayed name for schedule validation rule "MinWeeklyRestRule"</comment>
+  </data>
+  <data name="MinWeekWorkTimeRuleName" xml:space="preserve">
+    <value>Minimum Weekly Work Time</value>
+    <comment>Displayed name for schedule validation rule "MinWeekWorkTimeRule"</comment>
+  </data>
+  <data name="NewDayOffRuleName" xml:space="preserve">
+    <value>Shift Overlaps With Day-Off</value>
+    <comment>Displayed name for schedule validation rule "NewDayOffRule"</comment>
+  </data>
+  <data name="NewMaxWeekWorkTimeRuleName" xml:space="preserve">
+    <value>Maximum Weekly Work Time</value>
+    <comment>Displayed name for schedule validation rule "NewMaxWeekWorkTimeRule"</comment>
+  </data>
+  <data name="NewNightlyRestRuleName" xml:space="preserve">
+    <value>Nightly Rest</value>
+    <comment>Displayed name for schedule validation rule "NewNightlyRestRule"</comment>
+  </data>
+  <data name="NotOverwriteLayerRuleName" xml:space="preserve">
+    <value>Non-overwritable Activities</value>
+    <comment>Displayed name for schedule validation rule "NotOverwriteLayerRule"</comment>
+  </data>
 </root>

@@ -203,6 +203,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			{
 				rules.Add(typeof(NewNightlyRestRule).Name);
 			}
+			if(ruleFlags.HasFlag(BusinessRuleFlags.NewDayOffRule))
+			{
+				rules.Add(typeof(NewDayOffRule).Name);
+			}
+			if(ruleFlags.HasFlag(BusinessRuleFlags.NotOverwriteLayerRule))
+			{
+				rules.Add(typeof(NotOverwriteLayerRule).Name);
+			}
 			if(ruleFlags.HasFlag(BusinessRuleFlags.MinWeekWorkTimeRule))
 			{
 				rules.Add(typeof(MinWeekWorkTimeRule).Name);
@@ -215,16 +223,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			{
 				rules.Add(typeof(MinWeeklyRestRule).Name);				
 			}
-			if(ruleFlags.HasFlag(BusinessRuleFlags.NotOverwriteLayerRule))
-			{
-				rules.Add(typeof(NotOverwriteLayerRule).Name);
-			}
-			if(ruleFlags.HasFlag(BusinessRuleFlags.NewDayOffRule))
-			{
-				rules.Add(typeof (NewDayOffRule).Name);
-			}
-
-			return rules;
+			
+			return rules.Select(name => name + "Name").ToList();
 		} 
 
 

@@ -1108,12 +1108,12 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 
 			var ruleTypes = Target.GetAllValidationRuleTypes(ruleFlags);
 
-			ruleTypes.Contains("NewNightlyRestRule").Should().Be.True();
-			ruleTypes.Contains("MinWeekWorkTimeRule").Should().Be.True();
-			ruleTypes.Contains("NewMaxWeekWorkTimeRule").Should().Be.True();
-			ruleTypes.Contains("MinWeeklyRestRule").Should().Be.True();
-			ruleTypes.Contains("NotOverwriteLayerRule").Should().Be.True();
-			ruleTypes.Contains("NewDayOffRule").Should().Be.True();
+			ruleTypes.Contains("NewNightlyRestRuleName").Should().Be.True();
+			ruleTypes.Contains("MinWeekWorkTimeRuleName").Should().Be.True();
+			ruleTypes.Contains("NewMaxWeekWorkTimeRuleName").Should().Be.True();
+			ruleTypes.Contains("MinWeeklyRestRuleName").Should().Be.True();
+			ruleTypes.Contains("NotOverwriteLayerRuleName").Should().Be.True();
+			ruleTypes.Contains("NewDayOffRuleName").Should().Be.True();
 		}
 
 	}

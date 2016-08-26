@@ -15767,11 +15767,29 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Minimum Weekly Rest Time.
+        /// </summary>
+        public static string MinWeeklyRestRuleName {
+            get {
+                return ResourceManager.GetString("MinWeeklyRestRuleName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Min weekly work time.
         /// </summary>
         public static string MinWeeklyWorkTime {
             get {
                 return ResourceManager.GetString("MinWeeklyWorkTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minimum Weekly Work Time.
+        /// </summary>
+        public static string MinWeekWorkTimeRuleName {
+            get {
+                return ResourceManager.GetString("MinWeekWorkTimeRuleName", resourceCulture);
             }
         }
         
@@ -17099,6 +17117,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shift Overlaps With Day-Off.
+        /// </summary>
+        public static string NewDayOffRuleName {
+            get {
+                return ResourceManager.GetString("NewDayOffRuleName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New Definition Set.
         /// </summary>
         public static string NewDefinitionSet {
@@ -17171,6 +17198,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Maximum Weekly Work Time.
+        /// </summary>
+        public static string NewMaxWeekWorkTimeRuleName {
+            get {
+                return ResourceManager.GetString("NewMaxWeekWorkTimeRuleName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New Multiplicator.
         /// </summary>
         public static string NewMultiplicator {
@@ -17185,6 +17221,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NewMultisiteSkillThreeDots {
             get {
                 return ResourceManager.GetString("NewMultisiteSkillThreeDots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nightly Rest.
+        /// </summary>
+        public static string NewNightlyRestRuleName {
+            get {
+                return ResourceManager.GetString("NewNightlyRestRuleName", resourceCulture);
             }
         }
         
@@ -18583,6 +18628,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NotOk {
             get {
                 return ResourceManager.GetString("NotOk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Non-overwritable Activities.
+        /// </summary>
+        public static string NotOverwriteLayerRuleName {
+            get {
+                return ResourceManager.GetString("NotOverwriteLayerRuleName", resourceCulture);
             }
         }
         
