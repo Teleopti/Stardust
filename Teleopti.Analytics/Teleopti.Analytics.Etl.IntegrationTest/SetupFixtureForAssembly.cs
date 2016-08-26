@@ -54,12 +54,12 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 		public static void BeginTest()
 		{
-			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(UnitOfWorkFactory.Current.ConnectionString);
-
-			TestState.TestDataFactory = new TestDataFactory(new ThisUnitOfWork(TestState.UnitOfWork), tenantUnitOfWorkManager, tenantUnitOfWorkManager);
 			DataSourceHelper.RestoreApplicationDatabase(123);
 			DataSourceHelper.ClearAnalyticsData();
+
 			OpenUnitOfWork();
+			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(UnitOfWorkFactory.Current.ConnectionString);
+			TestState.TestDataFactory = new TestDataFactory(new ThisUnitOfWork(TestState.UnitOfWork), tenantUnitOfWorkManager, tenantUnitOfWorkManager);
 		}
 
 		public static void EndTest()
