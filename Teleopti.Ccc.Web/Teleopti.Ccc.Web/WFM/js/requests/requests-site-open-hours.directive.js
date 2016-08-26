@@ -67,7 +67,9 @@
 				}
 				for (var j = 0; j < beforeOpenHours.length && isSame; j++) {
 					var openHourBefore = beforeOpenHours[j];
-					var openHourAfter = getOpenHourForComparing(afterOpenHours, openHourBefore.WeekDay);
+					var openHourAfter = afterOpenHours.filter(function (compareOpenHour) {
+						return openHourBefore.WeekDay === compareOpenHour.WeekDay;
+					})[0];
 
 					if (!openHourAfter) {
 						isSame = false;
@@ -98,54 +100,58 @@
 		}
 
 		function normalizeSite(site) {
-			var site = angular.copy(site);
-			var formattedWorkingHours = [];
-			site.OpenHours.forEach(function (d) {
-				d.WeekDaySelections.forEach(function (e) {
-					var timespan = formatTimespanObj({
-						StartTime: d.StartTime,
-						EndTime: d.EndTime
-					});
-					formattedWorkingHours.push({
-						WeekDay: e.WeekDay,
-						StartTime: timespan.StartTime,
-						EndTime: timespan.EndTime,
-						IsClosed: !e.Checked
-					});
+			var copySite = angular.copy(site);
+			var weekDayOpenHours = [];
+			angular.forEach(copySite.OpenHours, function (openHour) {
+				var timespan = formatTimespanObj({
+					StartTime: openHour.StartTime,
+					EndTime: openHour.EndTime
 				});
+				for (var j = 0; j < 7; j++) {
+					var weekDayOpenHour = weekDayOpenHours[j];
+					if (!weekDayOpenHour) {
+						weekDayOpenHour = createEmptyWeekDayOpenHour(j);
+						weekDayOpenHours.push(weekDayOpenHour);
+					}
+					if (!weekDayOpenHour.IsClosed) {
+						continue;
+					}
+					var openHourSelection = getOpenHourSelection(openHour.WeekDaySelections, j);
+					weekDayOpenHour.EndTime = timespan.EndTime;
+					weekDayOpenHour.StartTime = timespan.StartTime;
+					weekDayOpenHour.IsClosed = openHourSelection && !openHourSelection.Checked;
+				}
 			});
-			site.OpenHours = formattedWorkingHours;
+			site.OpenHours = weekDayOpenHours;
+
 			return site;
 		}
 
-		function prepareWeekTemplet(weekTemplet) {
-			for (var i = 0; i < 7; i++) {
-				var dayTemplet = {
-					EndTime: "00:00",
-					IsClosed: true,
-					StartTime: "00:00",
-					WeekDay: i
-				};
-				weekTemplet.push(dayTemplet);
-			}
-		}
-
-		function getOpenHourForComparing(compareOpenHours, weekDay) {
-			var weekDayOpenHours = compareOpenHours.filter(function(compareOpenHour) {
-				return weekDay === compareOpenHour.WeekDay;
+		function getOpenHourSelection(weekDaySelections, weekDay) {
+			var openHourSelections = weekDaySelections.filter(function (weekDaySelection) {
+				return weekDay === weekDaySelection.WeekDay;
 			});
 
-			var compareOpenHour = weekDayOpenHours[0];
-			if (weekDayOpenHours.length > 1) {
-				angular.forEach(weekDayOpenHours,
-					function(afterOpenHour) {
-						if (!afterOpenHour.IsClosed) {
-							compareOpenHour = afterOpenHour;
+			var openHourSelection = openHourSelections[0];
+			if (openHourSelections.length > 1) {
+				angular.forEach(openHourSelections,
+					function (selection) {
+						if (!selection.IsClosed) {
+							openHourSelection = selection;
 						}
 					});
 			}
 
-			return compareOpenHour;
+			return openHourSelection;
+		}
+
+		function createEmptyWeekDayOpenHour(weekDay) {
+			return {
+				EndTime: "00:00",
+				IsClosed: true,
+				StartTime: "00:00",
+				WeekDay: weekDay
+			};
 		}
 
 		function denormalizeSite(site) {
