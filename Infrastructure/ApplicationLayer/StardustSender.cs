@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Globalization;
+using System.Threading;
 using log4net;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -22,11 +23,13 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(StardustSender));
 		private readonly IPostHttpRequest _postHttpRequest;
 		private readonly IEventInfrastructureInfoPopulator _eventInfrastructureInfoPopulator;
+		private readonly IUpdatedBy _updatedBy;
 
-		public StardustSender(IPostHttpRequest postHttpRequest, IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator)
+		public StardustSender(IPostHttpRequest postHttpRequest, IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator, IUpdatedBy updatedBy)
 		{
 			_postHttpRequest = postHttpRequest;
 			_eventInfrastructureInfoPopulator = eventInfrastructureInfoPopulator;
+			_updatedBy = updatedBy;
 		}
 
 		public Guid Send(IEvent @event)
@@ -34,9 +37,10 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			_eventInfrastructureInfoPopulator.PopulateEventContext(@event);
 
 			var userName = "Stardust";
-			string loggedOnUser = ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person.Name.ToString();
-			if (!string.IsNullOrEmpty(loggedOnUser))
-				userName = loggedOnUser;
+			if (_updatedBy.Person() != null)
+				userName = _updatedBy.Person().Name.ToString();
+			else if(TeleoptiPrincipal.CurrentPrincipal != null && ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person != null)
+				userName = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Name.ToString();
 
 			var jobName = @event.GetType().ToString();
 			var type = @event.GetType().ToString();
