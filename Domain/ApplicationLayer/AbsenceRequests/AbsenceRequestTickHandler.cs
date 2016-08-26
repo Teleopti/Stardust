@@ -26,12 +26,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IPersonRepository _personRepository;
 		private readonly IEventPublisher _publisher;
 		private readonly INow _now;
-		private readonly UpdatedBy _updatedBy;
+		private readonly IUpdatedByScope _updatedByScope;
 
 		public AbsenceRequestTickHandler(IAbsenceRequestStrategyProcessor absenceRequestStrategyProcessor,
 										 IEventPublisher publisher, INow now, IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository,
 										 IRequestStrategySettingsReader requestStrategySettingsReader, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
-										 IBusinessUnitRepository businessUnitRepository, IBusinessUnitScope businessUnitScope, IPersonRepository personRepository, UpdatedBy updatedBy)
+										 IBusinessUnitRepository businessUnitRepository, IBusinessUnitScope businessUnitScope, IPersonRepository personRepository, IUpdatedByScope updatedByScope)
 		{
 			_absenceRequestStrategyProcessor = absenceRequestStrategyProcessor;
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_businessUnitRepository = businessUnitRepository;
 			_businessUnitScope = businessUnitScope;
 			_personRepository = personRepository;
-			_updatedBy = updatedBy;
+			_updatedByScope = updatedByScope;
 			_publisher = publisher;
 			_now = now;
 		}
@@ -48,20 +48,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		public void Handle(TenantMinuteTickEvent @event)
 		{
 			IList<IBusinessUnit> businessUnits;
-			//Person tmpPerson = new Person();
 			using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				businessUnits = _businessUnitRepository.LoadAll();
 				var person = _personRepository.Get(SystemUser.Id);
-				_updatedBy.OnThisThreadUse(person);
-
-				//	tmpPerson.Name = person.Name;
+				_updatedByScope.OnThisThreadUse(person);
 			}
 
 			businessUnits.ForEach(businessUnit =>
 			{
-			//	Thread.CurrentPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity(tmpPerson.Name.FirstName, _dataSourceState.Get(), businessUnit, null, ""), tmpPerson);
-
 				_businessUnitScope.OnThisThreadUse(businessUnit);
 				using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 				{
