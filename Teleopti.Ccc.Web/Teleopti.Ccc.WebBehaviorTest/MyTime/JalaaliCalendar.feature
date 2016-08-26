@@ -38,7 +38,7 @@ Scenario: Check Number of Days in Month
 	
 Scenario: Open Jalaali Time Picker
 	Given I am an agent
-	And the time is '2015-05-17 02:15Z'
+	And the time is '2015-05-17 02:15'
 	And I am editing an existing Text Request
 	When I open the time picker
 	Then I should see a jalaali time picker with '02','15'
