@@ -56,7 +56,7 @@ Scenario: Should see no warnings if the validation rule type is not set to be vi
 	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
 	And I switch on show warnings toggle
 	And I open teamschedule setting panel
-	And I choose not to view 'NewNightlyRestRule' validation result
+	And I choose not to view 'NewNightlyRestRuleName' validation result
 	Then I should not see business rule warning
 
 
@@ -66,5 +66,5 @@ Scenario: Should see the warnings if the validation rule type is set to be viewa
 	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
 	And I switch on show warnings toggle
 	And I open teamschedule setting panel
-	And I choose to view 'NewNightlyRestRule' validation result
+	And I choose to view 'NewNightlyRestRuleName' validation result
 	Then I should see business rule warning
