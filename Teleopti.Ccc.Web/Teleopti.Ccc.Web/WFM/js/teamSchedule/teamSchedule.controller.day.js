@@ -78,7 +78,6 @@
 
 		vm.commonCommandCallback = function(trackId, personIds) {
 			$mdSidenav(commandContainerId).isOpen() && $mdSidenav(commandContainerId).close();
-			CommandCheckService.getCommandCheckStatus() && CommandCheckService.resetCommandCheckStatus();
 			
 			vm.lastCommandTrackId = trackId != null ? trackId : null;
 			personIds && vm.updateSchedules(personIds);
@@ -101,6 +100,7 @@
 			}, function(newValue, oldValue) {
 				if (newValue !== oldValue && !newValue) {
 					$scope.$broadcast('teamSchedule.reset.command');
+					CommandCheckService.getCommandCheckStatus() && CommandCheckService.resetCommandCheckStatus();
 					unbindWatchPanel();
 				}
 			});
