@@ -328,7 +328,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[When(@"I view person schedules move activity form for '(.*)' in '(.*)' on '(.*)' with selected start minutes of '(.*)'")]
 		public void WhenIViewPersonSchedulesMoveActivityFormForInOnWithSelectedStartTimeOf(string name, string teamName, DateTime date, string startTime)
 		{
-			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
+			DataMaker.Data().ApplyAfterSetup(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
 			var personId = DataMaker.Person(name).Person.Id.Value;
 			var teamId = (from t in DataMaker.Data().UserDatasOfType<TeamConfigurable>()

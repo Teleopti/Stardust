@@ -505,7 +505,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.DoNotUse
 		[Given(@"I have 2 existing request changed on different times")]
 		public void GivenIHave2ExistingRequestChangedOnDifferentTimes()
 		{
-			DataMaker.Data().ApplyLater(new TwoExistingTextRequestChangedOnDifferentTimes());
+			DataMaker.Data().ApplyAfterSetup(new TwoExistingTextRequestChangedOnDifferentTimes());
 		}
 
 		[Given(@"I have an existing absence request")]
@@ -519,7 +519,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.DoNotUse
 		public void GivenIHaveCreatedAShiftTradeRequest(Table table)
 		{
 			var existingShiftTrade = table.CreateInstance<ExistingShiftTradeRequest>();
-			DataMaker.Data().ApplyLater(existingShiftTrade);
+			DataMaker.Data().ApplyAfterSetup(existingShiftTrade);
 		}
 
 		[Given(@"I have a shift bag with start times (.*) to (.*) and end times (.*) to (.*)")]

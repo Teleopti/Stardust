@@ -219,7 +219,7 @@
     <Compile Include="Core\Navigation\GotoArgs.cs" />
     <Compile Include="Core\Navigation\IFakeClientTimeMethod.cs" />
     <Compile Include="Core\Navigation\INavigationInterceptor.cs" />
-    <Compile Include="Core\Navigation\PublishRecurringEvents.cs" />
+    <Compile Include="Core\Navigation\EndSetupPhase.cs" />
     <Compile Include="Core\Navigation\WaitUntilCompletelyLoaded.cs" />
     <Compile Include="Core\Navigation\WaitUntilHangfireQueueIsProcessed.cs" />
     <Compile Include="Core\Navigation\WaitUntilLoaded.cs" />

@@ -76,7 +76,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 					UserName = userName,
 					Password = password
 				});
-			DataMaker.Data().ApplyDelayed();
 			TestControllerMethods.LogonForSpecificUser(userName, password);
 			Navigation.GotoAnApplicationPage();
 		}
@@ -124,7 +123,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Given(@"I am viewing leaderboard report")]
 		public void WhenIAmViewingLeaderboardReport()
 		{
-			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
+			DataMaker.Data().ApplyAfterSetup(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
 			Navigation.GoToLeaderboardReport();
 		}
@@ -132,14 +131,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I go to mytime web")]
 		public void WhenIGoToMytimeWeb()
 		{
-			DataMaker.Data().ApplyDelayed();
 			Navigation.GotoWeekSchedulePageNoWait();
 		}
 
 		[When(@"I logon to mytime web")]
 		public void WhenILogonToMytimeWeb()
 		{
-			DataMaker.Data().ApplyDelayed();
 			Navigation.GotoWeekSchedulePage();
 		}
 
@@ -231,7 +228,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I view group schedules staffing metrics for '([0-9\-\\\/]*)'")]
 		public void WhenIViewSchedulesForDate(DateTime date)
 		{
-			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
+			DataMaker.Data().ApplyAfterSetup(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
 			Navigation.GotoAnywhereTeamSchedule(date, DefaultBusinessUnit.BusinessUnit.Id.GetValueOrDefault());
 		}
@@ -239,7 +236,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I view schedules for '(.*)' on '(.*)'")]
 		public void WhenIViewSchedulesWithTeamAndDate(string teamName, DateTime date)
 		{
-			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
+			DataMaker.Data().ApplyAfterSetup(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
 			Navigation.GotoAnywhereTeamSchedule(date, IdForTeam(teamName), buIdForTeam(teamName));
 		}
@@ -306,7 +303,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I view person schedule for '(.*)' in '(.*)' on '(.*)'")]
 		public void WhenIViewPersonScheduleForInOn(string person, string group, DateTime date)
 		{
-			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
+			DataMaker.Data().ApplyAfterSetup(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
 			var personId = DataMaker.Person(person).Person.Id.Value;
 			var groupId = IdForTeam(group);
@@ -316,7 +313,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I view person schedules add full day absence form for '(.*)' in '(.*)' on '(.*)'")]
 		public void WhenIViewPersonSchedulesAddFullDayAbsenceFormForInOn(string name, string group, DateTime date)
 		{
-			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
+			DataMaker.Data().ApplyAfterSetup(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
 			var personId = DataMaker.Person(name).Person.Id.Value;
 			var groupId = IdForTeam(group);
@@ -326,7 +323,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I view person schedules add intraday absence form for '(.*)' in '(.*)' on '(.*)'")]
 		public void WhenIViewPersonSchedulesAddIntradayAbsenceFormForInOn(string name, string @group, DateTime date)
 		{
-			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
+			DataMaker.Data().ApplyAfterSetup(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
 			var personId = DataMaker.Person(name).Person.Id.Value;
 			Navigation.GotoAnywherePersonScheduleIntradayAbsenceForm(buIdForTeam(@group), IdForTeam(@group), personId, date);
@@ -336,7 +333,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I view person schedules add activity form for '(.*)' in '(.*)' on '(.*)'")]
 		public void WhenIViewPersonSchedulesAddActivityFormForAndOn(string name, string @group, DateTime date)
 		{
-			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
+			DataMaker.Data().ApplyAfterSetup(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
 			var personId = DataMaker.Person(name).Person.Id.Value;
 			Navigation.GotoAnywherePersonScheduleAddActivityForm(buIdForTeam(@group), personId, IdForTeam(@group), date);
@@ -455,7 +452,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I view team schedule")]
 		public void WhenIViewTeamSchedule()
 		{
-			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
+			DataMaker.Data().ApplyAfterSetup(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
 			Navigation.GotoTeamSchedule();
 		}
@@ -481,7 +478,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Given(@"I am viewing group schedule for '(.*)'")]
 		public void WhenIViewTeamScheduleFor(DateTime date)
 		{
-			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
+			DataMaker.Data().ApplyAfterSetup(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
 			Navigation.GotoTeamSchedule(date);
 		}
@@ -528,7 +525,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Given(@"I am viewing the sign in page")]
 		public void GivenIAmAtTheSignInPage()
 		{
-			DataMaker.Data().ApplyDelayed();
 			Navigation.GotoGlobalSignInPage();
 		}
 
@@ -536,21 +532,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I navigate to the site's root")]
 		public void WhenINavigateToTheSiteSRoot()
 		{
-			DataMaker.Data().ApplyDelayed();
 			Navigation.GotoSiteHomePage();
 		}
 
 		[When(@"I navigate to MyTime")]
 		public void WhenINavigateToMyTime()
 		{
-			DataMaker.Data().ApplyDelayed();
 			Navigation.GotoMyTime();
 		}
 
 		[When(@"I navigate to CiscoWidget")]
 		public void WhenINavigateToCiscoWidget()
 		{
-			DataMaker.Data().ApplyDelayed();
 			Navigation.GotoCiscoWidget();
 		}
 
@@ -558,7 +551,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I navigate to Anywhere")]
 		public void WhenINavigateToAnywhere()
 		{
-			DataMaker.Data().ApplyDelayed();
 			Navigation.GotoAnywhere();
 		}
 
@@ -611,7 +603,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I view real time adherence view for team '(.*)'")]
 		public void WhenIViewRealTimeAdherenceViewForTeam(string team)
 		{
-			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
+			DataMaker.Data().ApplyAfterSetup(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
 			Navigation.GotoAnywhereRealTimeAdherenceTeamOverview(buIdForTeam(team),IdForTeam(team));
 		}

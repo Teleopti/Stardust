@@ -2,11 +2,11 @@ using Teleopti.Ccc.WebBehaviorTest.Data;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 {
-	public class PublishRecurringEvents : INavigationInterceptor
+	public class EndSetupPhase : INavigationInterceptor
 	{
 		public void Before(GotoArgs args)
 		{
-			DataMaker.PublishRecurringEvents();
+			DataMaker.EndSetupPhase();
 		}
 
 		public void After(GotoArgs args)

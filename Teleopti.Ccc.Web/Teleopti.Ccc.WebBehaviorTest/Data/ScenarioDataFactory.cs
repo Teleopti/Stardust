@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
@@ -55,19 +55,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			Me().Apply(setup);
 		}
 
-		public void ApplyLater(IDelayedSetup delayedSetup)
+		public void ApplyAfterSetup(IDelayedSetup delayedSetup)
 		{
 			_delayedSetups.Add(delayedSetup);
 		}
 
-		public string ApplyDelayed()
+		public void EndSetupPhase()
 		{
 			_analyticsDataFactory.Persist(Me().Culture);
 
 			_delayedSetups.ForEach(s => s.Apply(Me().Person, LocalSystem.UnitOfWork));
 			LocalSystem.UnitOfWork.Current().PersistAll();
 
-			return Me().LogOnName;
+			// to create/update any data that is periodically kept up to date
+			// like the rule mappings
+			LocalSystem.EventPublisher.Publish(new TenantMinuteTickEvent(), new TenantHourTickEvent());
 		}
 
 		private IEnumerable<object> AllSetups

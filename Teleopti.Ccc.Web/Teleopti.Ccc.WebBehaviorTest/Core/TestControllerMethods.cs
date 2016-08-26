@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void SetCurrentTime(DateTime time)
 		{
-			DataMaker.PublishRecurringEvents();
+			DataMaker.EndSetupPhase();
 			navigateOrRequest("Test/SetCurrentTime?ticks=" + time.Ticks);
 		}
 		
@@ -68,20 +68,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		/// </remarks>
 		public static void Logon()
 		{
-			var userName = DataMaker.Data().ApplyDelayed();
+			DataMaker.EndSetupPhase();
+			var userName = DataMaker.Me().LogOnName;
 			var password = DefaultPassword.ThePassword;
 			innerLogon(userName, password);
 		}
 
 		public static void LogonWithRememberMe()
 		{
-			var userName = DataMaker.Data().ApplyDelayed();
+			DataMaker.EndSetupPhase();
+			var userName = DataMaker.Me().LogOnName;
 			var password = DefaultPassword.ThePassword;
 			innerLogon(userName, password, true);
 		}
 
 		public static void LogonForSpecificUser(string userName, string password)
 		{
+			DataMaker.EndSetupPhase();
 			innerLogon(userName, password);
 		}
 

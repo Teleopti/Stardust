@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[Given(@"GroupingReadModel is updated")]
 		public void GivenGroupingReadModelIsUpdated()
 		{
-			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
+			DataMaker.Data().ApplyAfterSetup(new GroupingReadOnlyUpdate());
 		}
 
 

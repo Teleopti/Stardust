@@ -75,7 +75,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			var user = table.CreateInstance<PersonUserConfigurable>();
 			DataMaker.Data().Apply(user);
-			DataMaker.Data().ApplyDelayed();
 		}
 
 		[Given(@"I am a user signed in with")]
@@ -83,7 +82,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			var user = table.CreateInstance<PersonUserConfigurable>();
 			DataMaker.Data().Apply(user);
-			DataMaker.Data().ApplyDelayed();
 			TestControllerMethods.LogonForSpecificUser(user.UserName, user.Password); 
 		}
 		
