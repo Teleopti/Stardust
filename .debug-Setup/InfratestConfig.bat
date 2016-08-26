@@ -42,6 +42,9 @@ if exist "%ROOTDIR%\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" %MSBUILD
 ::get a fresh Settings.txt
 COPY "%SourceSettings%" "%AppliedSettings%"
 
+PAUSE
+SQLCMD -S. -E -d"%CCC7DB%" -i"%ROOTDIR%\.debug-setup\database\tsql\AddUserForTest.sql"
+PAUSE
 ::Run supportTool to replace all config
 "%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\Teleopti.Support.Tool.exe" -SET $(DB_CCC7) "%CCC7DB%"
 "%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\Teleopti.Support.Tool.exe" -SET $(DB_ANALYTICS) "%AnalyticsDB%"
