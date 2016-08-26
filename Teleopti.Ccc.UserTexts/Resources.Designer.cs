@@ -4314,7 +4314,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The non-overwrittenable shift {0} in interval {1} - {2} is overwritten by {3} in interval {4} - {5}..
+        ///   Looks up a localized string similar to The non-overwrittenable shift {0} in interval {1} is overwritten by {2} in interval {3}..
         /// </summary>
         public static string BusinessRuleOverlappingErrorMessage3 {
             get {

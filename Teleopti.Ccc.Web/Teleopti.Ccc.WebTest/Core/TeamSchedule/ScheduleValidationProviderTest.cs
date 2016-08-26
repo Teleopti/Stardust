@@ -996,7 +996,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 
 			personAssignment.AddActivity(stickyActivity, stickyActivityPeriod);
 			personAssignment.AddActivity(normalActivity,normalActivityPeriod);
-
+			
 			var loggedOnCulture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			var loggedOnTimezone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
 
@@ -1023,11 +1023,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			warning.Content.Should()
 				.Be.EqualTo(string.Format(Resources.BusinessRuleOverlappingErrorMessage3,
 					"Short Break",
-					TimeHelper.GetLongHourMinuteTimeString(stickyActvityTimePeriod.StartTime, loggedOnCulture),
-					TimeHelper.GetLongHourMinuteTimeString(stickyActvityTimePeriod.EndTime, loggedOnCulture),
+					stickyActvityTimePeriod.ToShortTimeString(loggedOnCulture),
 					"Phone",
-					TimeHelper.GetLongHourMinuteTimeString(normalActivityTimePeriod.StartTime, loggedOnCulture),
-					TimeHelper.GetLongHourMinuteTimeString(normalActivityTimePeriod.EndTime, loggedOnCulture)));
+					normalActivityTimePeriod.ToShortTimeString(loggedOnCulture)));
 
 			warning.RuleType.Should().Be.EqualTo("NotOverwriteLayerRule");
 		}
@@ -1087,12 +1085,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			warning.Content.Should()
 				.Be.EqualTo(string.Format(Resources.BusinessRuleOverlappingErrorMessage3,
 					"Short Break",
-					TimeHelper.GetLongHourMinuteTimeString(stickyActvityTimePeriod.StartTime,loggedOnCulture),
-					TimeHelper.GetLongHourMinuteTimeString(stickyActvityTimePeriod.EndTime,loggedOnCulture),
+					stickyActvityTimePeriod.ToShortTimeString(loggedOnCulture),
 					"Phone",
-					TimeHelper.GetLongHourMinuteTimeString(normalActivityTimePeriod.StartTime,loggedOnCulture),
-					TimeHelper.GetLongHourMinuteTimeString(normalActivityTimePeriod.EndTime,loggedOnCulture)));
-
+					normalActivityTimePeriod.ToShortTimeString(loggedOnCulture)));
 		}
 
 		[Test]

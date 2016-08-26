@@ -153,11 +153,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			string ret = string.Format(loggedOnCulture,
 									   Resources.BusinessRuleOverlappingErrorMessage3,
 									   overlappingLayers.LayerBelowName,
-									   TimeHelper.GetLongHourMinuteTimeString(layerBelowTimePeriod.StartTime, loggedOnCulture),
-									   TimeHelper.GetLongHourMinuteTimeString(layerBelowTimePeriod.EndTime, loggedOnCulture),
+									   layerBelowTimePeriod.ToShortTimeString(loggedOnCulture),
 									   overlappingLayers.LayerAboveName,
-									   TimeHelper.GetLongHourMinuteTimeString(layerAboveTimePeriod.StartTime,loggedOnCulture),
-									   TimeHelper.GetLongHourMinuteTimeString(layerAboveTimePeriod.EndTime,loggedOnCulture));
+									   layerAboveTimePeriod.ToShortTimeString(loggedOnCulture));
 			return ret;
 		}
 
