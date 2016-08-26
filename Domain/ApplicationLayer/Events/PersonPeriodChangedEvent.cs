@@ -15,7 +15,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 
 		[RemoveMeWithToggle(Toggles.RTA_RemoveSiteTeamOutOfAdherenceReadModels_40069)]
 		public IEnumerable<Association> PreviousAssociation { get; set; }
-		[RemoveMeWithToggle(Toggles.RTA_RemoveSiteTeamOutOfAdherenceReadModels_40069)]
-		public bool CurrentPersonPeriodChanged { get; set; }
 	}
 }

@@ -105,17 +105,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 		public void Handle(PersonTerminalDateChangedEvent @event)
 		{
-			var timeZone = @event.TimeZoneInfoId != null ? TimeZoneInfo.FindSystemTimeZoneById(@event.TimeZoneInfoId) : TimeZoneInfo.Utc;
+			var timeZone = @event.TimeZoneInfoId != null
+				? TimeZoneInfo.FindSystemTimeZoneById(@event.TimeZoneInfoId)
+				: TimeZoneInfo.Utc;
 			var previousTerminatedAt = terminationTime(@event.PreviousTerminationDate, timeZone);
 			var terminatedAt = terminationTime(@event.TerminationDate, timeZone);
 
 			var now = _now.UtcDateTime();
-			
+
 			if (previousTerminatedAt < now && terminatedAt < now)
 				return;
 			if (previousTerminatedAt > now && terminatedAt > now)
 				return;
-		
+
 			_eventPublisher.Publish(new PersonAssociationChangedEvent
 			{
 				Version = 2,
@@ -127,7 +129,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				PreviousAssociation = @event.PreviousAssociations
 			});
 		}
-		
 
 		private static DateTime terminationTime(DateTime? terminationDate, TimeZoneInfo timeZone)
 		{
@@ -144,32 +145,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 		public void Handle(PersonTeamChangedEvent @event)
 		{
-			if (@event.CurrentTeamChanged)
-				_eventPublisher.Publish(new PersonAssociationChangedEvent
-				{
-					Version = 2,
-					PersonId = @event.PersonId,
-					Timestamp = @event.Timestamp,
-					BusinessUnitId = @event.CurrentBusinessUnitId,
-					SiteId = @event.CurrentSiteId,
-					TeamId = @event.CurrentTeamId,
-					PreviousAssociation = @event.PreviousAssociations
-				});
+			_eventPublisher.Publish(new PersonAssociationChangedEvent
+			{
+				Version = 2,
+				PersonId = @event.PersonId,
+				Timestamp = @event.Timestamp,
+				BusinessUnitId = @event.CurrentBusinessUnitId,
+				SiteId = @event.CurrentSiteId,
+				TeamId = @event.CurrentTeamId,
+				PreviousAssociation = @event.PreviousAssociations
+			});
 		}
 
 		public void Handle(PersonPeriodChangedEvent @event)
 		{
-			if (@event.CurrentPersonPeriodChanged)
-				_eventPublisher.Publish(new PersonAssociationChangedEvent
-				{
-					Version = 2,
-					PersonId = @event.PersonId,
-					Timestamp = @event.Timestamp,
-					BusinessUnitId = @event.CurrentBusinessUnitId,
-					SiteId = @event.CurrentSiteId,
-					TeamId = @event.CurrentTeamId,
-					PreviousAssociation = @event.PreviousAssociation
-				});
+			_eventPublisher.Publish(new PersonAssociationChangedEvent
+			{
+				Version = 2,
+				PersonId = @event.PersonId,
+				Timestamp = @event.Timestamp,
+				BusinessUnitId = @event.CurrentBusinessUnitId,
+				SiteId = @event.CurrentSiteId,
+				TeamId = @event.CurrentTeamId,
+				PreviousAssociation = @event.PreviousAssociation
+			});
 		}
 	}
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
@@ -12,6 +13,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public string TimeZoneInfoId { get; set; }
 		public DateTime? PreviousTerminationDate { get; set; }
 		public DateTime? TerminationDate { get; set; }
+
+		[RemoveMeWithToggle(Toggles.RTA_RemoveSiteTeamOutOfAdherenceReadModels_40069)]
 		public IEnumerable<Association> PreviousAssociations { get; set; }
 	}
 }

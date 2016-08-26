@@ -111,7 +111,6 @@ namespace Teleopti.Ccc.Domain.Common
 			personPeriod.Team = team;
 			AddEvent(() =>
 			{
-				var currentTeamChanged = personPeriod.Period.Contains(new DateOnly(ServiceLocatorForEntity.Now.UtcDateTime()));
 				var info = currentAssociationInfo(ServiceLocatorForEntity.Now);
 				return new PersonTeamChangedEvent
 				{
@@ -119,7 +118,6 @@ namespace Teleopti.Ccc.Domain.Common
 					CurrentBusinessUnitId = info.BusinessUnitId,
 					CurrentSiteId = info.SiteId,
 					CurrentTeamId = info.TeamId,
-					CurrentTeamChanged = currentTeamChanged,
 					PreviousAssociations = new[] {previousAssociation}
 				};
 			});
@@ -373,8 +371,6 @@ namespace Teleopti.Ccc.Domain.Common
 				_personPeriodCollection.Add(period.StartDate, period);
 				AddEvent(() =>
 				{
-					var nowDateOnly = new DateOnly(ServiceLocatorForEntity.Now.UtcDateTime());
-					var currentChanged = period.Period.Contains(nowDateOnly);
 					var info = currentAssociationInfo(ServiceLocatorForEntity.Now);
 					var previousAssociation = previousAssociations(ServiceLocatorForEntity.Now);
 					return new PersonPeriodChangedEvent
@@ -383,7 +379,6 @@ namespace Teleopti.Ccc.Domain.Common
 						CurrentBusinessUnitId = info.BusinessUnitId,
 						CurrentSiteId = info.SiteId,
 						CurrentTeamId = info.TeamId,
-						CurrentPersonPeriodChanged = currentChanged,
 						PreviousAssociation = previousAssociation
 					};
 				});
@@ -396,8 +391,6 @@ namespace Teleopti.Ccc.Domain.Common
 		    _personPeriodCollection.Remove(period.StartDate);
 		    AddEvent(() =>
 		    {
-				var nowDateOnly = new DateOnly(ServiceLocatorForEntity.Now.UtcDateTime());
-				var currentChanged = period.Period.Contains(nowDateOnly);
 				var info = currentAssociationInfo(ServiceLocatorForEntity.Now);
 				var previousAssociation = previousAssociations(ServiceLocatorForEntity.Now);
 				return new PersonPeriodChangedEvent
@@ -406,7 +399,6 @@ namespace Teleopti.Ccc.Domain.Common
 					CurrentBusinessUnitId = info.BusinessUnitId,
 					CurrentSiteId = info.SiteId,
 					CurrentTeamId = info.TeamId,
-					CurrentPersonPeriodChanged = currentChanged,
 					PreviousAssociation = previousAssociation
 				};
 		    });
@@ -427,13 +419,6 @@ namespace Teleopti.Ccc.Domain.Common
 			
 			AddEvent(() =>
 			{
-				var nowDateOnly = new DateOnly(ServiceLocatorForEntity.Now.UtcDateTime());
-				var currentChanged = true;
-				if (startDateBefore < nowDateOnly && startDate < nowDateOnly)
-					currentChanged = false;
-				if (startDateBefore > nowDateOnly && startDate > nowDateOnly)
-					currentChanged = false;
-				
 				var info = currentAssociationInfo(ServiceLocatorForEntity.Now);
 				var previousAssociation = previousAssociations(ServiceLocatorForEntity.Now);
 				return new PersonPeriodChangedEvent
@@ -442,7 +427,6 @@ namespace Teleopti.Ccc.Domain.Common
 					CurrentBusinessUnitId = info.BusinessUnitId,
 					CurrentSiteId = info.SiteId,
 					CurrentTeamId = info.TeamId,
-					CurrentPersonPeriodChanged = currentChanged,
 					PreviousAssociation = previousAssociation
 				};
 			});
@@ -459,7 +443,6 @@ namespace Teleopti.Ccc.Domain.Common
 					TeamId = x.Team.Id.GetValueOrDefault(),
 				})
 				.ToArray();
-			var earliestPersonPeriodStartDate = InternalPersonPeriodCollection.Min(x => x.StartDate);
 			_personPeriodCollection.Clear();
 			AddEvent(() =>
 			{
@@ -470,7 +453,6 @@ namespace Teleopti.Ccc.Domain.Common
 					CurrentBusinessUnitId = info.BusinessUnitId,
 					CurrentSiteId = info.SiteId,
 					CurrentTeamId = info.TeamId,
-					CurrentPersonPeriodChanged = earliestPersonPeriodStartDate.Date < ServiceLocatorForEntity.Now.UtcDateTime(),
 					PreviousAssociation = previousAssociations
 				};
 			});
