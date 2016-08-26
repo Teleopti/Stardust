@@ -19,6 +19,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public IEnumerable<Association> PreviousAssociation { get; set; }
 	}
 
+	public class ExternalLogon
+	{
+		public string UserCode { get; set; }
+		public int DataSourceId { get; set; }
+	}
+
 	[RemoveMeWithToggle(Toggles.RTA_RemoveSiteTeamOutOfAdherenceReadModels_40069)]
 	public class Association
 	{

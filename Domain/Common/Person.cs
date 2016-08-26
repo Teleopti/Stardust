@@ -92,7 +92,8 @@ namespace Teleopti.Ccc.Domain.Common
 						TimeZoneInfoId = PermissionInformation.DefaultTimeZone().Id,
 						PreviousTerminationDate = valueBefore,
 						TerminationDate = valueAfter,
-						PreviousAssociations = previousAssociation
+						PreviousAssociations = previousAssociation,
+						ExternalLogons = info.ExternalLogons
 					};
 			    });
 		    }
@@ -118,7 +119,8 @@ namespace Teleopti.Ccc.Domain.Common
 					CurrentBusinessUnitId = info.BusinessUnitId,
 					CurrentSiteId = info.SiteId,
 					CurrentTeamId = info.TeamId,
-					PreviousAssociations = new[] {previousAssociation}
+					PreviousAssociations = new[] {previousAssociation},
+					ExternalLogons = info.ExternalLogons
 				};
 			});
 		}
@@ -154,6 +156,11 @@ namespace Teleopti.Ccc.Domain.Common
 					}
 				}
 			}
+			info.ExternalLogons = period?.ExternalLogOnCollection.Select(x => new ExternalLogon
+			{
+				UserCode = x.AcdLogOnOriginalId,
+				DataSourceId = x.DataSourceId
+			}) ?? Enumerable.Empty<ExternalLogon>();
 			return info;
 		}
 
@@ -162,6 +169,7 @@ namespace Teleopti.Ccc.Domain.Common
 			public Guid? BusinessUnitId { get; set; }
 			public Guid? SiteId { get; set; }
 			public Guid? TeamId { get; set; }
+			public IEnumerable<ExternalLogon> ExternalLogons { get; set; }
 		}
 
 		public virtual void AddSkill(IPersonSkill personSkill, IPersonPeriod personPeriod)
@@ -379,7 +387,8 @@ namespace Teleopti.Ccc.Domain.Common
 						CurrentBusinessUnitId = info.BusinessUnitId,
 						CurrentSiteId = info.SiteId,
 						CurrentTeamId = info.TeamId,
-						PreviousAssociation = previousAssociation
+						PreviousAssociation = previousAssociation,
+						ExternalLogons = info.ExternalLogons
 					};
 				});
 			}
@@ -399,7 +408,8 @@ namespace Teleopti.Ccc.Domain.Common
 					CurrentBusinessUnitId = info.BusinessUnitId,
 					CurrentSiteId = info.SiteId,
 					CurrentTeamId = info.TeamId,
-					PreviousAssociation = previousAssociation
+					PreviousAssociation = previousAssociation,
+					ExternalLogons = info.ExternalLogons
 				};
 		    });
 	    }
@@ -427,7 +437,8 @@ namespace Teleopti.Ccc.Domain.Common
 					CurrentBusinessUnitId = info.BusinessUnitId,
 					CurrentSiteId = info.SiteId,
 					CurrentTeamId = info.TeamId,
-					PreviousAssociation = previousAssociation
+					PreviousAssociation = previousAssociation,
+					ExternalLogons = info.ExternalLogons
 				};
 			});
 		}
@@ -453,7 +464,8 @@ namespace Teleopti.Ccc.Domain.Common
 					CurrentBusinessUnitId = info.BusinessUnitId,
 					CurrentSiteId = info.SiteId,
 					CurrentTeamId = info.TeamId,
-					PreviousAssociation = previousAssociations
+					PreviousAssociation = previousAssociations,
+					ExternalLogons = info.ExternalLogons
 				};
 			});
 		}
