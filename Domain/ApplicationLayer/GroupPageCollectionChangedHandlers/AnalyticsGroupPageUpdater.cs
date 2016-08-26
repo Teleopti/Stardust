@@ -79,14 +79,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandler
 			if (!groupPages.Any())
 			{
 				logger.Debug($"Did not find any group pages in APP database, deleting anything we have in analytics for group pages: {string.Join(",", @event.GroupPageIdCollection)}.");
-				_analyticsBridgeGroupPagePersonRepository.DeleteAllBridgeGroupPagePerson(@event.GroupPageIdCollection);
-				_analyticsGroupPageRepository.DeleteGroupPages(@event.GroupPageIdCollection);
+				_analyticsBridgeGroupPagePersonRepository.DeleteAllBridgeGroupPagePerson(@event.GroupPageIdCollection, @event.LogOnBusinessUnitId);
+				_analyticsGroupPageRepository.DeleteGroupPages(@event.GroupPageIdCollection, @event.LogOnBusinessUnitId);
 			}
 			else
 			{
 				foreach (var groupPage in groupPages)
 				{
-					var existingInAnalytics = _analyticsGroupPageRepository.GetGroupPage(groupPage.Id.GetValueOrDefault()).ToList();
+					var existingInAnalytics = _analyticsGroupPageRepository.GetGroupPage(groupPage.Id.GetValueOrDefault(), @event.LogOnBusinessUnitId).ToList();
 					foreach (var rootGroup in groupPage.RootGroupCollection)
 					{
 						var rootGroupId = rootGroup.Id.GetValueOrDefault();
@@ -111,16 +111,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandler
 							_analyticsGroupPageRepository.AddGroupPageIfNotExisting(analyticsGroupPage);
 						}
 						var people = getRecursively(rootGroup.ChildGroupCollection, rootGroup.PersonCollection.ToList()).Select(x => x.Id.GetValueOrDefault()).ToList();
-						var currentPersonCodesInGroupPage = _analyticsBridgeGroupPagePersonRepository.GetBridgeGroupPagePerson(rootGroupId);
+						var currentPersonCodesInGroupPage = _analyticsBridgeGroupPagePersonRepository.GetBridgeGroupPagePerson(rootGroupId, @event.LogOnBusinessUnitId);
 						var toBeAdded = people.Where(x => !currentPersonCodesInGroupPage.Contains(x)).ToList();
 						var toBeDeleted = currentPersonCodesInGroupPage.Where(x => !people.Contains(x)).ToList();
 
 						if (toBeAdded.Any())
 							logger.Debug($"Adding {toBeAdded.Count} people to group {rootGroupId}");
-						_analyticsBridgeGroupPagePersonRepository.AddBridgeGroupPagePerson(toBeAdded, rootGroupId);
+						_analyticsBridgeGroupPagePersonRepository.AddBridgeGroupPagePerson(toBeAdded, rootGroupId, @event.LogOnBusinessUnitId);
 						if (toBeDeleted.Any())
 							logger.Debug($"Removing {toBeDeleted.Count} people from group {rootGroupId}");
-						_analyticsBridgeGroupPagePersonRepository.DeleteBridgeGroupPagePerson(toBeDeleted, rootGroupId);
+						_analyticsBridgeGroupPagePersonRepository.DeleteBridgeGroupPagePerson(toBeDeleted, rootGroupId, @event.LogOnBusinessUnitId);
 					}
 				}
 			}

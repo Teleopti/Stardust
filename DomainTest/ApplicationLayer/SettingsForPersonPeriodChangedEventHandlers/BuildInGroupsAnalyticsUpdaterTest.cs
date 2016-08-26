@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 		private IRuleSetBagRepository _ruleSetBagRepository;
 		private IContractRepository _contractRepository;
 		private IContractScheduleRepository _contractScheduleRepository;
+		private Guid _businessUnitId;
 
 		[SetUp]
 		public void Setup()
@@ -33,17 +34,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 			_contractScheduleRepository = MockRepository.GenerateMock<IContractScheduleRepository>();
 
 			_target = new BuildInGroupsAnalyticsUpdaterBase(_analyticsGroupPageRepository, _skillRepository, _partTimePercentageRepository, _ruleSetBagRepository, _contractRepository, _contractScheduleRepository);
+			_businessUnitId = Guid.NewGuid();
 		}
 
 		[Test]
 		public void ShouldUpdatePartTimePercentage()
 		{
-			var @event = new SettingsForPersonPeriodChangedEvent();
+			var @event = new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId };
 			var entityId = Guid.NewGuid();
 			var updateGroupName = "UpdateGroupName";
 			@event.SetIdCollection(new [] {entityId});
 
-			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId))
+			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId, _businessUnitId))
 				.Return(new AnalyticsGroup {GroupName = "GroupName", GroupCode = entityId});
 			_partTimePercentageRepository.Stub(r => r.Get(entityId)).Return(new PartTimePercentage(updateGroupName));
 			_ruleSetBagRepository.Stub(r => r.Get(entityId)).Return(null);
@@ -60,12 +62,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 		[Test]
 		public void ShouldUpdateRuleSetBag()
 		{
-			var @event = new SettingsForPersonPeriodChangedEvent();
+			var @event = new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId };
 			var entityId = Guid.NewGuid();
 			var updateGroupName = "UpdateGroupName";
 			@event.SetIdCollection(new[] { entityId });
 
-			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId))
+			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId, _businessUnitId))
 				.Return(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId });
 			_partTimePercentageRepository.Stub(r => r.Get(entityId)).Return(null);
 			_ruleSetBagRepository.Stub(r => r.Get(entityId)).Return(new RuleSetBag {Description = new Description(updateGroupName)});
@@ -82,12 +84,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 		[Test]
 		public void ShouldUpdateContract()
 		{
-			var @event = new SettingsForPersonPeriodChangedEvent();
+			var @event = new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId };
 			var entityId = Guid.NewGuid();
 			var updateGroupName = "UpdateGroupName";
 			@event.SetIdCollection(new[] { entityId });
 
-			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId))
+			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId, _businessUnitId))
 				.Return(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId });
 			_partTimePercentageRepository.Stub(r => r.Get(entityId)).Return(null);
 			_ruleSetBagRepository.Stub(r => r.Get(entityId)).Return(null);
@@ -106,12 +108,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 		[Test]
 		public void ShouldUpdateContractSchedule()
 		{
-			var @event = new SettingsForPersonPeriodChangedEvent();
+			var @event = new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId };
 			var entityId = Guid.NewGuid();
 			var updateGroupName = "UpdateGroupName";
 			@event.SetIdCollection(new[] { entityId });
 
-			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId))
+			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId, _businessUnitId))
 				.Return(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId });
 			_partTimePercentageRepository.Stub(r => r.Get(entityId)).Return(null);
 			_ruleSetBagRepository.Stub(r => r.Get(entityId)).Return(null);
@@ -131,12 +133,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 		[Test]
 		public void ShouldUpdateSkill()
 		{
-			var @event = new SettingsForPersonPeriodChangedEvent();
+			var @event = new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId };
 			var entityId = Guid.NewGuid();
 			var updateGroupName = "UpdateGroupName";
 			@event.SetIdCollection(new[] { entityId });
 
-			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId))
+			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId, _businessUnitId))
 				.Return(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId });
 			_partTimePercentageRepository.Stub(r => r.Get(entityId)).Return(null);
 			_ruleSetBagRepository.Stub(r => r.Get(entityId)).Return(null);
@@ -159,12 +161,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 		[Test]
 		public void ShouldNotUpdateIfNotExisting()
 		{
-			var @event = new SettingsForPersonPeriodChangedEvent();
+			var @event = new SettingsForPersonPeriodChangedEvent { LogOnBusinessUnitId = _businessUnitId };
 			var entityId = Guid.NewGuid();
 			var updateGroupName = "UpdateGroupName";
 			@event.SetIdCollection(new[] { entityId });
 
-			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId))
+			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId, _businessUnitId))
 				.Return(null);
 
 			_target.Handle(@event);
@@ -175,12 +177,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 		[Test]
 		public void ShouldNotUpdateIfNotSpecificType()
 		{
-			var @event = new SettingsForPersonPeriodChangedEvent();
+			var @event = new SettingsForPersonPeriodChangedEvent {LogOnBusinessUnitId = _businessUnitId};
 			var entityId = Guid.NewGuid();
 			var updateGroupName = "UpdateGroupName";
 			@event.SetIdCollection(new[] { entityId });
 
-			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId))
+			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(entityId, _businessUnitId))
 				.Return(new AnalyticsGroup { GroupName = "GroupName", GroupCode = entityId });
 			_partTimePercentageRepository.Stub(r => r.Get(entityId)).Return(null);
 			_ruleSetBagRepository.Stub(r => r.Get(entityId)).Return(null);

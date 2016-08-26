@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEve
 		{
 			foreach (var entityId in @event.IdCollection)
 			{
-				var groupPage = _analyticsGroupPageRepository.GetGroupPageByGroupCode(entityId);
+				var groupPage = _analyticsGroupPageRepository.GetGroupPageByGroupCode(entityId, @event.LogOnBusinessUnitId);
 				if (groupPage == null) continue;
 				foreach (var check in _checks)
 				{

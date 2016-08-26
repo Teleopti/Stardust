@@ -23,16 +23,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		public ICurrentAnalyticsUnitOfWork UnitOfWork;
 		public IAnalyticsBridgeGroupPagePersonRepository Target;
 		public IAnalyticsGroupPageRepository AnalyticsGroupPageRepository;
-		AnalyticsGroup @group;
-		AnalyticsGroup groupPage2;
-		Guid personId;
-		Guid personPeriodId;
-		Guid personId2;
-		Guid personPeriodId2;
+		private AnalyticsGroup group;
+		private AnalyticsGroup groupPage2;
+		private Guid personId;
+		private Guid personPeriodId;
+		private Guid personId2;
+		private Guid personPeriodId2;
+		private Guid businessUnitId;
 
-		private void CreateData()
+		private void createData()
 		{
-			@group = new AnalyticsGroup
+			group = new AnalyticsGroup
 			{
 				GroupPageCode = Guid.NewGuid(),
 				GroupPageName = "GroupPageName1",
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupCode = Guid.NewGuid(),
 				GroupName = "GroupName1",
 				GroupIsCustom = false,
-				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+				BusinessUnitCode = businessUnitId
 			};
 
 			groupPage2 = new AnalyticsGroup
@@ -51,15 +52,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupCode = Guid.NewGuid(),
 				GroupName = "GroupName2",
 				GroupIsCustom = false,
-				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
+				BusinessUnitCode = businessUnitId
 			};
-			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(@group);
+			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(group);
 			AnalyticsGroupPageRepository.AddGroupPageIfNotExisting(groupPage2);
 		}
 
 		[SetUp]
 		public void SetUp()
 		{
+			businessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault();
 			var analyticsDataFactory = new AnalyticsDataFactory();
 			var timeZones = new UtcAndCetTimeZones();
 			var datasource = new ExistingDatasources(timeZones);
@@ -80,10 +82,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			person2.PersonPeriodCollection.First().SetId(personPeriodId2);
 
 			analyticsDataFactory.Setup(new Person(person, datasource, 0, new DateTime(2010, 1, 1),
-				new DateTime(2059, 12, 31), 0, -2, 0, BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault(),
+				new DateTime(2059, 12, 31), 0, -2, 0, businessUnitId,
 				false, timeZones.UtcTimeZoneId, personPeriodId));
 			analyticsDataFactory.Setup(new Person(person2, datasource, 1, new DateTime(2010, 1, 1),
-				new DateTime(2059, 12, 31), 0, -2, 0, BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault(),
+				new DateTime(2059, 12, 31), 0, -2, 0, businessUnitId,
 				false, timeZones.UtcTimeZoneId, personPeriodId2));
 
 			analyticsDataFactory.Persist();
@@ -92,10 +94,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldGetBridgeGroupPagePerson()
 		{
-			CreateData();
-			Target.AddBridgeGroupPagePerson(new[] {personId}, @group.GroupCode);
+			createData();
+			Target.AddBridgeGroupPagePerson(new[] {personId}, group.GroupCode, businessUnitId);
 
-			var result = Target.GetBridgeGroupPagePerson(@group.GroupCode).First();
+			var result = Target.GetBridgeGroupPagePerson(group.GroupCode, businessUnitId).First();
 
 			result.Should().Be.EqualTo(personId);
 		}
@@ -103,59 +105,59 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldDeleteAllBridgeGroupPagePerson()
 		{
-			CreateData();
+			createData();
 
-			Target.AddBridgeGroupPagePerson(new[] { personId }, @group.GroupCode);
-			Target.AddBridgeGroupPagePerson(new[] { personId }, groupPage2.GroupCode);
+			Target.AddBridgeGroupPagePerson(new[] { personId }, group.GroupCode, businessUnitId);
+			Target.AddBridgeGroupPagePerson(new[] { personId }, groupPage2.GroupCode, businessUnitId);
 
-			Target.DeleteAllBridgeGroupPagePerson(new[] { @group.GroupPageCode });
+			Target.DeleteAllBridgeGroupPagePerson(new[] { group.GroupPageCode }, businessUnitId);
 
-			var result = Target.GetBridgeGroupPagePerson(@group.GroupCode);
+			var result = Target.GetBridgeGroupPagePerson(group.GroupCode, businessUnitId);
 			result.Should().Be.Empty();
-			var result2 = Target.GetBridgeGroupPagePerson(groupPage2.GroupCode).Single();
+			var result2 = Target.GetBridgeGroupPagePerson(groupPage2.GroupCode, businessUnitId).Single();
 			result2.Should().Be.EqualTo(personId);
 		}
 
 		[Test]
 		public void ShouldDeleteBridgeGroupPagePerson()
 		{
-			CreateData();
+			createData();
 
-			Target.AddBridgeGroupPagePerson(new[] { personId }, @group.GroupCode);
-			Target.AddBridgeGroupPagePerson(new[] { personId2 }, @group.GroupCode);
-			Target.AddBridgeGroupPagePerson(new[] { personId2 }, groupPage2.GroupCode);
+			Target.AddBridgeGroupPagePerson(new[] { personId }, group.GroupCode, businessUnitId);
+			Target.AddBridgeGroupPagePerson(new[] { personId2 }, group.GroupCode, businessUnitId);
+			Target.AddBridgeGroupPagePerson(new[] { personId2 }, groupPage2.GroupCode, businessUnitId);
 
-			Target.DeleteBridgeGroupPagePerson(new[] {personId}, @group.GroupCode);
+			Target.DeleteBridgeGroupPagePerson(new[] {personId}, group.GroupCode, businessUnitId);
 
-			var result = Target.GetBridgeGroupPagePerson(@group.GroupCode).Single();
+			var result = Target.GetBridgeGroupPagePerson(group.GroupCode, businessUnitId).Single();
 			result.Should().Be.EqualTo(personId2);
-			var result2 = Target.GetBridgeGroupPagePerson(groupPage2.GroupCode).Single();
+			var result2 = Target.GetBridgeGroupPagePerson(groupPage2.GroupCode, businessUnitId).Single();
 			result2.Should().Be.EqualTo(personId2);
 		}
 
 		[Test]
 		public void ShouldBeAbleToGetBuildInGroupPagesForPersonPeriod()
 		{
-			CreateData();
+			createData();
 
-			Target.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, new [] { @group.GroupCode });
-			Target.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId2, new [] { groupPage2.GroupCode });
+			Target.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, new [] { group.GroupCode }, businessUnitId);
+			Target.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId2, new [] { groupPage2.GroupCode }, businessUnitId);
 
-			var result = Target.GetGroupPagesForPersonPeriod(personPeriodId).Single();
+			var result = Target.GetGroupPagesForPersonPeriod(personPeriodId, businessUnitId).Single();
 
-			result.Should().Be.EqualTo(@group.GroupCode);
+			result.Should().Be.EqualTo(group.GroupCode);
 		}
 
 		[Test]
 		public void ShouldBeAbleToDeleteBridgeGroupPagePersonForPersonPeriod()
 		{
-			CreateData();
+			createData();
 
-			Target.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, new[] { @group.GroupCode, groupPage2.GroupCode });
-			Target.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId2, new[] { groupPage2.GroupCode });
+			Target.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, new[] { group.GroupCode, groupPage2.GroupCode }, businessUnitId);
+			Target.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId2, new[] { groupPage2.GroupCode }, businessUnitId);
 
-			Target.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new[] { @group.GroupCode });
-			var result = Target.GetGroupPagesForPersonPeriod(personPeriodId).Single();
+			Target.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new[] { group.GroupCode }, businessUnitId);
+			var result = Target.GetGroupPagesForPersonPeriod(personPeriodId, businessUnitId).Single();
 
 			result.Should().Be.EqualTo(groupPage2.GroupCode);
 		}
@@ -163,13 +165,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldBeAbleToDeleteBridgeGroupPagePersonRemovedWhenNoPeriodsLeft()
 		{
-			CreateData();
+			createData();
 
-			Target.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, new[] { @group.GroupCode, groupPage2.GroupCode });
-			Target.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId2, new[] { groupPage2.GroupCode });
+			Target.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, new[] { group.GroupCode, groupPage2.GroupCode }, businessUnitId);
+			Target.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId2, new[] { groupPage2.GroupCode }, businessUnitId);
 
-			Target.DeleteBridgeGroupPagePersonExcludingPersonPeriods(personId, new Guid[] { });
-			var result = Target.GetGroupPagesForPersonPeriod(personPeriodId);
+			Target.DeleteBridgeGroupPagePersonExcludingPersonPeriods(personId, new Guid[] { }, businessUnitId);
+			var result = Target.GetGroupPagesForPersonPeriod(personPeriodId, businessUnitId);
 
 			result.Should().Be.Empty();
 		}
@@ -177,13 +179,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldBeNotDeleteExcludedPersonPeriods()
 		{
-			CreateData();
+			createData();
 
-			Target.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, new[] { @group.GroupCode, groupPage2.GroupCode });
-			Target.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId2, new[] { groupPage2.GroupCode });
+			Target.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, new[] { group.GroupCode, groupPage2.GroupCode }, businessUnitId);
+			Target.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId2, new[] { groupPage2.GroupCode }, businessUnitId);
 
-			Target.DeleteBridgeGroupPagePersonExcludingPersonPeriods(personId, new[] { personPeriodId });
-			var result = Target.GetGroupPagesForPersonPeriod(personPeriodId).ToList();
+			Target.DeleteBridgeGroupPagePersonExcludingPersonPeriods(personId, new[] { personPeriodId }, businessUnitId);
+			var result = Target.GetGroupPagesForPersonPeriod(personPeriodId, businessUnitId).ToList();
 
 			result.Should().Not.Be.Empty();
 			result.Should().Have.Count.EqualTo(2);

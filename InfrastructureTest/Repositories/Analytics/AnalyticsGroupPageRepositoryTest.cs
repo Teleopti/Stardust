@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			};
 			Target.AddGroupPageIfNotExisting(groupPage);
 
-			var result = Target.GetGroupPage(groupPage.GroupPageCode).First();
+			var result = Target.GetGroupPage(groupPage.GroupPageCode, groupPage.BusinessUnitCode).First();
 			result.GroupPageCode.Should().Be.EqualTo(groupPage.GroupPageCode);
 			result.GroupPageName.Should().Be.EqualTo(groupPage.GroupPageName);
 			result.GroupPageNameResourceKey.Should().Be.EqualTo(groupPage.GroupPageNameResourceKey);
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			};
 			Target.AddGroupPageIfNotExisting(groupPage);
 			Target.AddGroupPageIfNotExisting(groupPage);
-			var result = Target.GetGroupPageByGroupCode(groupPage.GroupCode);
+			var result = Target.GetGroupPageByGroupCode(groupPage.GroupCode, groupPage.BusinessUnitCode);
 			result.Should().Not.Be.Null();
 		}
 
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			};
 			Target.AddGroupPageIfNotExisting(groupPage);
 
-			var result = Target.GetGroupPageByGroupCode(groupPage.GroupCode);
+			var result = Target.GetGroupPageByGroupCode(groupPage.GroupCode, groupPage.BusinessUnitCode);
 			result.GroupPageCode.Should().Be.EqualTo(groupPage.GroupPageCode);
 			result.GroupPageName.Should().Be.EqualTo(groupPage.GroupPageName);
 			result.GroupPageNameResourceKey.Should().Be.EqualTo(groupPage.GroupPageNameResourceKey);
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 
 			Target.UpdateGroupPage(groupPage);
 
-			var result = Target.GetGroupPage(groupPage.GroupPageCode).First();
+			var result = Target.GetGroupPage(groupPage.GroupPageCode, groupPage.BusinessUnitCode).First();
 			result.GroupPageCode.Should().Be.EqualTo(groupPage.GroupPageCode);
 			result.GroupPageName.Should().Be.EqualTo("GroupPageName2");
 			result.GroupPageNameResourceKey.Should().Be.EqualTo(groupPage.GroupPageNameResourceKey);
@@ -144,9 +144,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			};
 			Target.AddGroupPageIfNotExisting(groupPage);
-			Target.DeleteGroupPages(new[] { groupPage.GroupPageCode });
+			Target.DeleteGroupPages(new[] { groupPage.GroupPageCode }, groupPage.BusinessUnitCode);
 
-			Target.GetGroupPage(groupPage.GroupPageCode).Should().Be.Empty();
+			Target.GetGroupPage(groupPage.GroupPageCode, groupPage.BusinessUnitCode).Should().Be.Empty();
 		}
 
 		[Test]
@@ -175,10 +175,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			};
 			Target.AddGroupPageIfNotExisting(groupPage2);
 
-			Target.DeleteGroupPagesByGroupCodes(new [] { groupPage.GroupCode});
+			Target.DeleteGroupPagesByGroupCodes(new [] { groupPage.GroupCode}, groupPage.BusinessUnitCode);
 
-			var result = Target.GetGroupPageByGroupCode(groupPage.GroupCode);
-			var result2 = Target.GetGroupPageByGroupCode(groupPage2.GroupCode);
+			var result = Target.GetGroupPageByGroupCode(groupPage.GroupCode, groupPage.BusinessUnitCode);
+			var result2 = Target.GetGroupPageByGroupCode(groupPage2.GroupCode, groupPage2.BusinessUnitCode);
 			result.Should().Be.Null();
 			result2.Should().Not.Be.Null();
 		}
@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			};
 			Target.AddGroupPageIfNotExisting(groupPage2);
 
-			var result = Target.GetBuildInGroupPageBase().FirstOrDefault();
+			var result = Target.GetBuildInGroupPageBase(BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()).FirstOrDefault();
 
 			result.Should().Not.Be.Null();
 			result.GroupPageName.Should().Be.EqualTo(groupPage.GroupPageName);

@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 				var person = _personRepository.Get(personId) ?? new Person();
 				foreach (var personPeriod in person.PersonPeriodCollection)
 				{
-					var groupPages = _analyticsGroupPageRepository.GetBuildInGroupPageBase().ToList();
+					var groupPages = _analyticsGroupPageRepository.GetBuildInGroupPageBase(@event.LogOnBusinessUnitId).ToList();
 					var groupIds = new List<analyticsGroupForPerson>();
 
 					handleSkills(personPeriod, groupIds, groupPages);
@@ -97,12 +97,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 
 					var deletedGroupIds = updatePersonGroups(personPeriod.Id.GetValueOrDefault(), groupIds, @event.LogOnBusinessUnitId);
 
-					clearEmptyGroups(deletedGroupIds);
+					clearEmptyGroups(deletedGroupIds, @event.LogOnBusinessUnitId);
 				}
 				// Remove any group pages associated with deleted person periods or deleted persons
 				var personPeriodIds = person.PersonPeriodCollection.Select(p => p.Id.GetValueOrDefault()).ToList();
 				logger.Debug($"Deleting bridge group page person {personId} excluding person periods {string.Join(",", personPeriodIds)}");
-				_analyticsBridgeGroupPagePersonRepository.DeleteBridgeGroupPagePersonExcludingPersonPeriods(personId, personPeriodIds);
+				_analyticsBridgeGroupPagePersonRepository.DeleteBridgeGroupPagePersonExcludingPersonPeriods(personId, personPeriodIds, @event.LogOnBusinessUnitId);
 			}
 		}
 
@@ -127,12 +127,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		// Add/Remove groups for a person period
 		private IEnumerable<Guid> updatePersonGroups(Guid personPeriodId, ICollection<analyticsGroupForPerson> groups, Guid businessUnitId)
 		{
-			var currentGroups = _analyticsBridgeGroupPagePersonRepository.GetGroupPagesForPersonPeriod(personPeriodId).ToList();
+			var currentGroups = _analyticsBridgeGroupPagePersonRepository.GetGroupPagesForPersonPeriod(personPeriodId, businessUnitId).ToList();
 
 			var toBeDeleted = currentGroups.Where(g => groups.All(t => t.GroupCode != g)).ToList();
 			var toBeAdded = groups.Where(t => currentGroups.All(g => g != t.GroupCode)).ToList();
 			
-			_analyticsBridgeGroupPagePersonRepository.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, toBeDeleted);
+			_analyticsBridgeGroupPagePersonRepository.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, toBeDeleted, businessUnitId);
 			logger.Debug($"Deleting groups {string.Join(",", toBeDeleted)} for period {personPeriodId}");
 			foreach (var groupInfo in toBeAdded)
 			{
@@ -149,20 +149,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 				});
 			}
 			logger.Debug($"Adding groups {string.Join(",", toBeAdded)} for period {personPeriodId}");
-			_analyticsBridgeGroupPagePersonRepository.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, toBeAdded.Select(x => x.GroupCode).ToList());
+			_analyticsBridgeGroupPagePersonRepository.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, toBeAdded.Select(x => x.GroupCode).ToList(), businessUnitId);
 			return toBeDeleted;
 		}
 
 		// Removes any GroupPages in specified set that have no people mapped to them
-		private void clearEmptyGroups(IEnumerable<Guid> toBeDeleted)
+		private void clearEmptyGroups(IEnumerable<Guid> toBeDeleted, Guid businessUnitId)
 		{
 			var groupsToDelete = (from groupId in toBeDeleted
-				let peopleInGroup = _analyticsBridgeGroupPagePersonRepository.GetBridgeGroupPagePerson(groupId)
+				let peopleInGroup = _analyticsBridgeGroupPagePersonRepository.GetBridgeGroupPagePerson(groupId, businessUnitId)
 				where !peopleInGroup.Any()
 				select groupId).ToList();
 
 			logger.Debug($"Clearing empty group for {string.Join(",", groupsToDelete)}");
-			_analyticsGroupPageRepository.DeleteGroupPagesByGroupCodes(groupsToDelete);
+			_analyticsGroupPageRepository.DeleteGroupPagesByGroupCodes(groupsToDelete, businessUnitId);
 		}
 
 		private static AnalyticsGroupPage getGroupPage(IEnumerable<AnalyticsGroupPage> groupPages, string resourceKey, string groupPageName)

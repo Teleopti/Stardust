@@ -6,13 +6,14 @@ GO
 -- Description:	Delete all people in specific group pages
 -- =============================================
 CREATE PROCEDURE [mart].[etl_bridge_group_page_person_delete_all]
-@group_page_codes nvarchar(max)
-
+@group_page_codes nvarchar(max),
+@business_unit_code uniqueidentifier
 AS
 BEGIN
 	delete bgpp from [mart].[bridge_group_page_person] bgpp
 	join [mart].[dim_group_page] p on p.group_page_id = bgpp.group_page_id
 	where p.group_page_code in (select * from mart.SplitStringGuid(@group_page_codes))
+	and p.business_unit_code = @business_unit_code
 END
 
 GO

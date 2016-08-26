@@ -11,7 +11,8 @@ CREATE PROCEDURE [mart].[etl_dim_group_page_update]
 @group_page_name_resource_key nvarchar(100),
 @group_code uniqueidentifier,
 @group_name nvarchar(1024),
-@group_is_custom bit
+@group_is_custom bit,
+@business_unit_code uniqueidentifier
 
 AS
 BEGIN
@@ -23,7 +24,7 @@ BEGIN
 	,group_name=@group_name
 	,group_is_custom=@group_is_custom
 	,datasource_update_date=GETUTCDATE()
-  where group_page_code = @group_page_code and group_code = @group_code 
+  where group_page_code = @group_page_code and group_code = @group_code and business_unit_code = @business_unit_code
 
 END
 

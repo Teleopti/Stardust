@@ -7,15 +7,18 @@ GO
 -- =============================================
 CREATE PROCEDURE [mart].[etl_bridge_group_page_person_insert]
 @person_codes nvarchar(max),
-@group_page_code uniqueidentifier
+@group_page_code uniqueidentifier,
+@business_unit_code uniqueidentifier
 
 AS
 BEGIN
-
-  declare @group_page_id int = (select group_page_id from [mart].[dim_group_page] where group_code = @group_page_code)
 	insert into [mart].[bridge_group_page_person]
-	select @group_page_id, p.person_id, 1, GETUTCDATE() 
-	from mart.SplitStringGuid(@person_codes) join [mart].dim_person p on p.person_code = id
+	select gp.group_page_id, p.person_id, 1, GETUTCDATE() 
+	from mart.SplitStringGuid(@person_codes) 
+	join [mart].dim_person p 
+		on p.person_code = id AND p.business_unit_code = @business_unit_code
+	join [mart].[dim_group_page] gp
+		on gp.group_code = @group_page_code AND gp.business_unit_code = @business_unit_code
 END
 
 GO

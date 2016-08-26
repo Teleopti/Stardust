@@ -6,12 +6,14 @@ GO
 -- Description:	Delete group pages
 -- =============================================
 CREATE PROCEDURE [mart].[etl_dim_group_page_delete]
-@group_page_codes nvarchar(max)
+@group_page_codes nvarchar(max),
+@business_unit_code uniqueidentifier
 
 AS
 BEGIN
   delete from [mart].[dim_group_page]
   where group_page_code in (select * from mart.SplitStringGuid(@group_page_codes))
+  AND business_unit_code = @business_unit_code
 
 END
 

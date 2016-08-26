@@ -31,9 +31,9 @@ DECLARE @group_page_name_resource_key nvarchar(100)
 DECLARE @group_code uniqueidentifier
 DECLARE @group_name nvarchar(1024)
 DECLARE @datasource_id int
-DECLARE @empty_guid uniqueidentifier
+DECLARE @note_resource_name nvarchar(100)
 
-SET @empty_guid = '00000000-0000-0000-0000-000000000000'
+SET @note_resource_name = 'Note'
 
 -- Delete all records for persons in current bu from bridge table
 DELETE FROM [mart].[bridge_group_page_person]
@@ -47,7 +47,7 @@ DELETE FROM mart.dim_group_page
 FROM mart.dim_group_page dgp
 WHERE dgp.group_is_custom = 0
 	AND dgp.business_unit_code = @business_unit_code
-	AND dgp.group_code <> @empty_guid
+	AND dgp.group_page_name_resource_key <> @note_resource_name
 	AND NOT EXISTS	(
 						SELECT * FROM stage.stg_group_page_person sgp
 						WHERE sgp.group_is_custom = 0
@@ -61,7 +61,7 @@ DELETE FROM mart.dim_group_page
 FROM mart.dim_group_page dgp
 WHERE dgp.group_is_custom = 0
 	AND dgp.business_unit_code = @business_unit_code
-	AND dgp.group_code = @empty_guid
+	AND dgp.group_page_name_resource_key = @note_resource_name
 	AND NOT EXISTS	(
 						SELECT * FROM stage.stg_group_page_person sgp
 						WHERE sgp.group_is_custom = 0
@@ -100,7 +100,7 @@ ON
 		AND dgp.group_code = sgp.group_code
 		AND dgp.business_unit_code = sgp.business_unit_code
 WHERE dgp.group_is_custom = 0
-	AND dgp.group_code <> @empty_guid
+	AND dgp.group_page_name_resource_key <> @note_resource_name
 	
 -- Update Note group page
 UPDATE 
@@ -117,7 +117,7 @@ ON
 		AND sgp.group_name COLLATE Latin1_General_CS_AS = dgp.group_name COLLATE Latin1_General_CS_AS
 		AND dgp.business_unit_code = sgp.business_unit_code
 WHERE dgp.group_is_custom = 0
-	AND dgp.group_code = @empty_guid
+	AND dgp.group_page_name_resource_key = @note_resource_name
 
 
 -- Update custom group pages
@@ -151,7 +151,7 @@ SELECT DISTINCT
 FROM stage.stg_group_page_person sgp
 WHERE sgp.group_is_custom = 0
 	AND sgp.business_unit_code = @business_unit_code
-	AND sgp.group_code <> @empty_guid
+	AND sgp.group_page_name_resource_key <> @note_resource_name
 	AND NOT EXISTS	(
 						SELECT * FROM mart.dim_group_page dgp
 						WHERE sgp.group_is_custom = 0
@@ -191,7 +191,7 @@ BEGIN
 	WHERE dgp.group_is_custom = 0
 		AND dgp.group_page_name_resource_key = @group_page_name_resource_key
 		AND dgp.business_unit_code = @business_unit_code
-		AND dgp.group_code <> @empty_guid
+		AND dgp.group_page_name_resource_key <> @note_resource_name
 	
 	IF @@ROWCOUNT = 0
 	BEGIN
@@ -233,7 +233,7 @@ SELECT DISTINCT
 FROM stage.stg_group_page_person sgp
 WHERE sgp.group_is_custom = 0
 	AND sgp.business_unit_code = @business_unit_code
-	AND sgp.group_code = @empty_guid
+	AND sgp.group_page_name_resource_key = @note_resource_name
 	AND NOT EXISTS	(
 						SELECT * FROM mart.dim_group_page dgp
 						WHERE sgp.group_is_custom = 0
@@ -273,7 +273,7 @@ BEGIN
 	WHERE dgp.group_is_custom = 0
 		AND dgp.group_page_name_resource_key = @group_page_name_resource_key
 		AND dgp.business_unit_code = @business_unit_code
-		AND dgp.group_code = @empty_guid
+		AND dgp.group_page_name_resource_key = @note_resource_name
 	
 	IF @@ROWCOUNT = 0
 	BEGIN

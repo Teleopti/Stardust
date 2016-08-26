@@ -15,28 +15,40 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 	[TestFixture]
 	public class AnalyticsGroupPageUpdaterTests
 	{
+		private Guid _businessUnitId;
+		private IGroupPageRepository _groupPageRepository;
+		private IAnalyticsGroupPageRepository _analyticsGroupPageRepository;
+		private IAnalyticsBridgeGroupPagePersonRepository _analyticsBridgeGroupPagePersonRepository;
+		private AnalyticsGroupPageUpdaterBase _target;
+
+		[SetUp]
+		public void Setup()
+		{
+			_groupPageRepository = MockRepository.GenerateMock<IGroupPageRepository>();
+			_analyticsGroupPageRepository = MockRepository.GenerateMock<IAnalyticsGroupPageRepository>();
+			_analyticsBridgeGroupPagePersonRepository = MockRepository.GenerateMock<IAnalyticsBridgeGroupPagePersonRepository>();
+
+			_target = new AnalyticsGroupPageUpdaterBase(_groupPageRepository, _analyticsGroupPageRepository, _analyticsBridgeGroupPagePersonRepository);
+			_businessUnitId = Guid.NewGuid();
+		}
+
 		[Test]
 		public void ShouldDeleteGroupPagesAndBridgeGroupPagePersonWhenAGroupPageIsDeleted()
 		{
-			var groupPageRepository = MockRepository.GenerateMock<IGroupPageRepository>();
 			var groupPageIdCollection = new List<Guid> { Guid.NewGuid()};
-			groupPageRepository.Stub(x => x.LoadGroupPagesByIds(groupPageIdCollection)).Return(new IGroupPage[] {});
-			var analyticsGroupPageRepository = MockRepository.GenerateMock<IAnalyticsGroupPageRepository>();
-			var analyticsBridgeGroupPagePersonRepository = MockRepository.GenerateMock<IAnalyticsBridgeGroupPagePersonRepository>();
-			var target = new AnalyticsGroupPageUpdaterBase(groupPageRepository, analyticsGroupPageRepository, analyticsBridgeGroupPagePersonRepository);
+			_groupPageRepository.Stub(x => x.LoadGroupPagesByIds(groupPageIdCollection)).Return(new IGroupPage[] {});
 
-			var groupPageCollectionChangedEvent = new GroupPageCollectionChangedEvent();
+			var groupPageCollectionChangedEvent = new GroupPageCollectionChangedEvent {LogOnBusinessUnitId = _businessUnitId};
 			groupPageCollectionChangedEvent.SetGroupPageIdCollection( groupPageIdCollection);
-			target.Handle(groupPageCollectionChangedEvent);
+			_target.Handle(groupPageCollectionChangedEvent);
 
-			analyticsGroupPageRepository.AssertWasCalled(x=>x.DeleteGroupPages(groupPageIdCollection));
-			analyticsBridgeGroupPagePersonRepository.AssertWasCalled(x=>x.DeleteAllBridgeGroupPagePerson(groupPageIdCollection));
+			_analyticsGroupPageRepository.AssertWasCalled(x=>x.DeleteGroupPages(groupPageIdCollection, _businessUnitId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(x=>x.DeleteAllBridgeGroupPagePerson(groupPageIdCollection, _businessUnitId));
 		}
 
 		[Test]
 		public void ShouldAddANewGroupPage()
 		{
-			var groupPageRepository = MockRepository.GenerateMock<IGroupPageRepository>();
 			var groupPageId = Guid.NewGuid();
 			var groupPageIdCollection = new List<Guid> { groupPageId };
 			var groupPage = new GroupPage("Test1");
@@ -46,21 +58,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 			var personWithGuid = PersonFactory.CreatePersonWithGuid("person1","person1Last");
 			rootPersonGroup.AddPerson(personWithGuid);
 			groupPage.AddRootPersonGroup(rootPersonGroup);
-			groupPageRepository.Stub(x => x.LoadGroupPagesByIds(groupPageIdCollection)).Return(new IGroupPage[] { groupPage });
-			var analyticsGroupPageRepository = MockRepository.GenerateMock<IAnalyticsGroupPageRepository>();
-			analyticsGroupPageRepository.Stub(x => x.GetGroupPage(groupPageId)).Return(new AnalyticsGroup[] {});
-			var analyticsBridgeGroupPagePersonRepository = MockRepository.GenerateMock<IAnalyticsBridgeGroupPagePersonRepository>();
-			analyticsBridgeGroupPagePersonRepository.Stub(x => x.GetBridgeGroupPagePerson(rootPersonGroup.Id.GetValueOrDefault())).Return(new Guid[] { });
-			var target = new AnalyticsGroupPageUpdaterBase(groupPageRepository, analyticsGroupPageRepository, analyticsBridgeGroupPagePersonRepository);
+			_groupPageRepository.Stub(x => x.LoadGroupPagesByIds(groupPageIdCollection)).Return(new IGroupPage[] { groupPage });
+			_analyticsGroupPageRepository.Stub(x => x.GetGroupPage(groupPageId, _businessUnitId)).Return(new AnalyticsGroup[] {});
+			_analyticsBridgeGroupPagePersonRepository.Stub(x => x.GetBridgeGroupPagePerson(rootPersonGroup.Id.GetValueOrDefault(), _businessUnitId)).Return(new Guid[] { });
 
 			var groupPageCollectionChangedEvent = new GroupPageCollectionChangedEvent
 			{
-				LogOnBusinessUnitId = Guid.NewGuid()
+				LogOnBusinessUnitId = _businessUnitId
 			};
 			groupPageCollectionChangedEvent.SetGroupPageIdCollection(groupPageIdCollection);
-			target.Handle(groupPageCollectionChangedEvent);
+			_target.Handle(groupPageCollectionChangedEvent);
 
-			analyticsGroupPageRepository.AssertWasCalled(
+			_analyticsGroupPageRepository.AssertWasCalled(
 				c => c.AddGroupPageIfNotExisting(Arg<AnalyticsGroup>.Matches(x => x.GroupPageCode == groupPageId &&
 																		 x.GroupPageName == groupPage.Description.Name &&
 																		 x.GroupPageNameResourceKey == groupPage.DescriptionKey &&
@@ -69,15 +78,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 																		 x.GroupIsCustom &&
 																		 x.BusinessUnitCode == groupPageCollectionChangedEvent.LogOnBusinessUnitId)));
 
-			analyticsBridgeGroupPagePersonRepository.AssertWasCalled(x => x.GetBridgeGroupPagePerson(rootPersonGroup.Id.GetValueOrDefault()));
-			analyticsBridgeGroupPagePersonRepository.AssertWasCalled(x => x.AddBridgeGroupPagePerson(new[] { personWithGuid.Id.GetValueOrDefault() }, rootPersonGroup.Id.GetValueOrDefault()));
-			analyticsBridgeGroupPagePersonRepository.AssertWasCalled(x => x.DeleteBridgeGroupPagePerson(new Guid[] { }, rootPersonGroup.Id.GetValueOrDefault()));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(x => x.GetBridgeGroupPagePerson(rootPersonGroup.Id.GetValueOrDefault(), _businessUnitId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(x => x.AddBridgeGroupPagePerson(new[] { personWithGuid.Id.GetValueOrDefault() }, rootPersonGroup.Id.GetValueOrDefault(), _businessUnitId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(x => x.DeleteBridgeGroupPagePerson(new Guid[] { }, rootPersonGroup.Id.GetValueOrDefault(), _businessUnitId));
 		}
 
 		[Test]
 		public void ShouldUpdateGroupPage()
 		{
-			var groupPageRepository = MockRepository.GenerateMock<IGroupPageRepository>();
 			var groupPageId = Guid.NewGuid();
 			var groupPageIdCollection = new List<Guid> { groupPageId };
 			var groupPage = new GroupPage("Test1");
@@ -87,27 +95,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 			var personWithGuid = PersonFactory.CreatePersonWithGuid("person1", "person1Last");
 			rootPersonGroup.AddPerson(personWithGuid);
 			groupPage.AddRootPersonGroup(rootPersonGroup);
-			groupPageRepository.Stub(x => x.LoadGroupPagesByIds(groupPageIdCollection)).Return(new IGroupPage[] { groupPage });
-			var analyticsGroupPageRepository = MockRepository.GenerateMock<IAnalyticsGroupPageRepository>();
-			analyticsGroupPageRepository.Stub(x => x.GetGroupPage(groupPageId)).Return(new[]
+			_groupPageRepository.Stub(x => x.LoadGroupPagesByIds(groupPageIdCollection)).Return(new IGroupPage[] { groupPage });
+			_analyticsGroupPageRepository.Stub(x => x.GetGroupPage(groupPageId, _businessUnitId)).Return(new[]
 			{
 				new AnalyticsGroup
 				{
 					GroupCode = rootPersonGroup.Id.GetValueOrDefault()
 				}
 			});
-			var analyticsBridgeGroupPagePersonRepository = MockRepository.GenerateMock<IAnalyticsBridgeGroupPagePersonRepository>();
-			analyticsBridgeGroupPagePersonRepository.Stub(x => x.GetBridgeGroupPagePerson(rootPersonGroup.Id.GetValueOrDefault())).Return(new Guid[] { });
-			var target = new AnalyticsGroupPageUpdaterBase(groupPageRepository, analyticsGroupPageRepository, analyticsBridgeGroupPagePersonRepository);
+			_analyticsBridgeGroupPagePersonRepository.Stub(x => x.GetBridgeGroupPagePerson(rootPersonGroup.Id.GetValueOrDefault(), _businessUnitId)).Return(new Guid[] { });
 
 			var groupPageCollectionChangedEvent = new GroupPageCollectionChangedEvent
 			{
-				LogOnBusinessUnitId = Guid.NewGuid()
+				LogOnBusinessUnitId = _businessUnitId
 			};
 			groupPageCollectionChangedEvent.SetGroupPageIdCollection(groupPageIdCollection);
-			target.Handle(groupPageCollectionChangedEvent);
+			_target.Handle(groupPageCollectionChangedEvent);
 
-			analyticsGroupPageRepository.AssertWasCalled(
+			_analyticsGroupPageRepository.AssertWasCalled(
 				c => c.UpdateGroupPage(Arg<AnalyticsGroup>.Matches(x => x.GroupPageCode == groupPageId &&
 																		 x.GroupPageName == groupPage.Description.Name &&
 																		 x.GroupPageNameResourceKey == groupPage.DescriptionKey &&
@@ -120,7 +125,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 		[Test]
 		public void ShouldAddPersonInChildGroup()
 		{
-			var groupPageRepository = MockRepository.GenerateMock<IGroupPageRepository>();
 			var groupPageId = Guid.NewGuid();
 			var groupPageIdCollection = new List<Guid> { groupPageId };
 			var groupPage = new GroupPage("Test1");
@@ -134,35 +138,31 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 			childPersonGroup.AddPerson(person2);
 			rootPersonGroup.AddChildGroup(childPersonGroup);
 			groupPage.AddRootPersonGroup(rootPersonGroup);
-			groupPageRepository.Stub(x => x.LoadGroupPagesByIds(groupPageIdCollection)).Return(new IGroupPage[] { groupPage });
-			var analyticsGroupPageRepository = MockRepository.GenerateMock<IAnalyticsGroupPageRepository>();
-			analyticsGroupPageRepository.Stub(x => x.GetGroupPage(groupPageId)).Return(new[]
+			_groupPageRepository.Stub(x => x.LoadGroupPagesByIds(groupPageIdCollection)).Return(new IGroupPage[] { groupPage });
+			_analyticsGroupPageRepository.Stub(x => x.GetGroupPage(groupPageId, _businessUnitId)).Return(new[]
 			{
 				new AnalyticsGroup
 				{
 					GroupCode = rootPersonGroup.Id.GetValueOrDefault()
 				}
 			});
-			var analyticsBridgeGroupPagePersonRepository = MockRepository.GenerateMock<IAnalyticsBridgeGroupPagePersonRepository>();
-			analyticsBridgeGroupPagePersonRepository.Stub(x => x.GetBridgeGroupPagePerson(rootPersonGroup.Id.GetValueOrDefault())).Return(new Guid[] { });
-			var target = new AnalyticsGroupPageUpdaterBase(groupPageRepository, analyticsGroupPageRepository, analyticsBridgeGroupPagePersonRepository);
+			_analyticsBridgeGroupPagePersonRepository.Stub(x => x.GetBridgeGroupPagePerson(rootPersonGroup.Id.GetValueOrDefault(), _businessUnitId)).Return(new Guid[] { });
 
 			var groupPageCollectionChangedEvent = new GroupPageCollectionChangedEvent
 			{
-				LogOnBusinessUnitId = Guid.NewGuid()
+				LogOnBusinessUnitId = _businessUnitId
 			};
 			groupPageCollectionChangedEvent.SetGroupPageIdCollection(groupPageIdCollection);
-			target.Handle(groupPageCollectionChangedEvent);
+			_target.Handle(groupPageCollectionChangedEvent);
 
-			analyticsBridgeGroupPagePersonRepository.AssertWasCalled(x => x.GetBridgeGroupPagePerson(rootPersonGroup.Id.GetValueOrDefault()));
-			analyticsBridgeGroupPagePersonRepository.AssertWasCalled(x => x.AddBridgeGroupPagePerson(new[] { person1.Id.GetValueOrDefault(), person2.Id.GetValueOrDefault() }, rootPersonGroup.Id.GetValueOrDefault()));
-			analyticsBridgeGroupPagePersonRepository.AssertWasCalled(x => x.DeleteBridgeGroupPagePerson(new Guid[] { }, rootPersonGroup.Id.GetValueOrDefault()));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(x => x.GetBridgeGroupPagePerson(rootPersonGroup.Id.GetValueOrDefault(), _businessUnitId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(x => x.AddBridgeGroupPagePerson(new[] { person1.Id.GetValueOrDefault(), person2.Id.GetValueOrDefault() }, rootPersonGroup.Id.GetValueOrDefault(), _businessUnitId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(x => x.DeleteBridgeGroupPagePerson(new Guid[] { }, rootPersonGroup.Id.GetValueOrDefault(), _businessUnitId));
 		}
 
 		[Test]
 		public void ShouldDeletePersonInChildGroup()
 		{
-			var groupPageRepository = MockRepository.GenerateMock<IGroupPageRepository>();
 			var groupPageId = Guid.NewGuid();
 			var groupPageIdCollection = new List<Guid> { groupPageId };
 			var groupPage = new GroupPage("Test1");
@@ -174,30 +174,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 			var childPersonGroup = new ChildPersonGroup();
 			rootPersonGroup.AddChildGroup(childPersonGroup);
 			groupPage.AddRootPersonGroup(rootPersonGroup);
-			groupPageRepository.Stub(x => x.LoadGroupPagesByIds(groupPageIdCollection)).Return(new IGroupPage[] { groupPage });
-			var analyticsGroupPageRepository = MockRepository.GenerateMock<IAnalyticsGroupPageRepository>();
-			analyticsGroupPageRepository.Stub(x => x.GetGroupPage(groupPageId)).Return(new[]
+			_groupPageRepository.Stub(x => x.LoadGroupPagesByIds(groupPageIdCollection)).Return(new IGroupPage[] { groupPage });
+			_analyticsGroupPageRepository.Stub(x => x.GetGroupPage(groupPageId, _businessUnitId)).Return(new[]
 			{
 				new AnalyticsGroup
 				{
 					GroupCode = rootPersonGroup.Id.GetValueOrDefault()
 				}
 			});
-			var analyticsBridgeGroupPagePersonRepository = MockRepository.GenerateMock<IAnalyticsBridgeGroupPagePersonRepository>();
 			var person2 = PersonFactory.CreatePersonWithGuid("person2", "person2Last");
-			analyticsBridgeGroupPagePersonRepository.Stub(x => x.GetBridgeGroupPagePerson(rootPersonGroup.Id.GetValueOrDefault())).Return(new[] { person2.Id.GetValueOrDefault() });
-			var target = new AnalyticsGroupPageUpdaterBase(groupPageRepository, analyticsGroupPageRepository, analyticsBridgeGroupPagePersonRepository);
+			_analyticsBridgeGroupPagePersonRepository.Stub(x => x.GetBridgeGroupPagePerson(rootPersonGroup.Id.GetValueOrDefault(), _businessUnitId)).Return(new[] { person2.Id.GetValueOrDefault() });
 
 			var groupPageCollectionChangedEvent = new GroupPageCollectionChangedEvent
 			{
-				LogOnBusinessUnitId = Guid.NewGuid()
+				LogOnBusinessUnitId = _businessUnitId
 			};
 			groupPageCollectionChangedEvent.SetGroupPageIdCollection(groupPageIdCollection);
-			target.Handle(groupPageCollectionChangedEvent);
+			_target.Handle(groupPageCollectionChangedEvent);
 
-			analyticsBridgeGroupPagePersonRepository.AssertWasCalled(x => x.GetBridgeGroupPagePerson(rootPersonGroup.Id.GetValueOrDefault()));
-			analyticsBridgeGroupPagePersonRepository.AssertWasCalled(x => x.AddBridgeGroupPagePerson(new[] { person1.Id.GetValueOrDefault()  }, rootPersonGroup.Id.GetValueOrDefault()));
-			analyticsBridgeGroupPagePersonRepository.AssertWasCalled(x => x.DeleteBridgeGroupPagePerson(new[] { person2.Id.GetValueOrDefault() }, rootPersonGroup.Id.GetValueOrDefault()));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(x => x.GetBridgeGroupPagePerson(rootPersonGroup.Id.GetValueOrDefault(), _businessUnitId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(x => x.AddBridgeGroupPagePerson(new[] { person1.Id.GetValueOrDefault()  }, rootPersonGroup.Id.GetValueOrDefault(), _businessUnitId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(x => x.DeleteBridgeGroupPagePerson(new[] { person2.Id.GetValueOrDefault() }, rootPersonGroup.Id.GetValueOrDefault(), _businessUnitId));
 		}
 	}
 }
