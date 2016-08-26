@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 					yesterday.ToShortDateString(),
 					today.ToShortDateString(), "2:00"));
 
-			warning.RuleType.Should().Be.EqualTo("NewNightlyRestRule");
+			warning.RuleType.Should().Be.EqualTo("NewNightlyRestRuleName");
 		}
 
 		[Test]
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 				.Be.EqualTo(string.Format(Resources.BusinessRuleNightlyRestRuleErrorMessage, "8:00",
 					today.ToShortDateString(),
 					tomorrow.ToShortDateString(), "2:00"));
-			warning.RuleType.Should().Be.EqualTo("NewNightlyRestRule");
+			warning.RuleType.Should().Be.EqualTo("NewNightlyRestRuleName");
 		}
 
 		[Test]
@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			warning.Content.Should()
 				.Be.EqualTo(string.Format(Resources.BusinessRuleMaxWeekWorkTimeErrorMessage, "03:00", "02:00"));
 
-			warning.RuleType.Should().Be.EqualTo("NewMaxWeekWorkTimeRule");
+			warning.RuleType.Should().Be.EqualTo("NewMaxWeekWorkTimeRuleName");
 		}
 
 		[Test]
@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			warning.Content.Should()
 				.Be.EqualTo(string.Format(Resources.BusinessRuleMinWeekWorktimeErrorMessage, "05:00", "40:00"));
 
-			warning.RuleType.Should().Be.EqualTo("MinWeekWorkTimeRule");
+			warning.RuleType.Should().Be.EqualTo("MinWeekWorkTimeRuleName");
 		}
 
 		[Test]
@@ -247,7 +247,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			var warning = result.Warnings.Single();
 			warning.Content.Should()
 				.Be.EqualTo(string.Format(Resources.BusinessRuleDayOffErrorMessage2, new DateOnly(2016, 7, 19).ToShortDateString()));
-			warning.RuleType.Should().Be.EqualTo("NewDayOffRule");
+			warning.RuleType.Should().Be.EqualTo("NewDayOffRuleName");
 		}
 
 		[Test]
@@ -301,7 +301,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			warning.Content.Should()
 				.Be.EqualTo(string.Format(Resources.BusinessRuleWeeklyRestErrorMessage, "36:00"));
 
-			warning.RuleType.Should().Be.EqualTo("MinWeeklyRestRule");
+			warning.RuleType.Should().Be.EqualTo("MinWeeklyRestRuleName");
 		}
 
 		[Test]
@@ -357,7 +357,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			warning.Content.Should()
 				.Be.EqualTo(string.Format(Resources.BusinessRuleWeeklyRestErrorMessage, "11:00"));
 
-			warning.RuleType.Should().Be.EqualTo("MinWeeklyRestRule");
+			warning.RuleType.Should().Be.EqualTo("MinWeeklyRestRuleName");
 		}
 
 		[Test]
@@ -1027,7 +1027,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 					"Phone",
 					normalActivityTimePeriod.ToShortTimeString(loggedOnCulture)));
 
-			warning.RuleType.Should().Be.EqualTo("NotOverwriteLayerRule");
+			warning.RuleType.Should().Be.EqualTo("NotOverwriteLayerRuleName");
 		}
 
 		[Test]
@@ -1081,7 +1081,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 
 			var warning = results.First().Warnings.Single();
 
-			warning.RuleType.Should().Be.EqualTo("NotOverwriteLayerRule");
+			warning.RuleType.Should().Be.EqualTo("NotOverwriteLayerRuleName");
 			warning.Content.Should()
 				.Be.EqualTo(string.Format(Resources.BusinessRuleOverlappingErrorMessage3,
 					"Short Break",

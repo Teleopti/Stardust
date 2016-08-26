@@ -197,36 +197,40 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 		public IList<string> GetAllValidationRuleTypes(BusinessRuleFlags ruleFlags)
 		{
-			var rules = new List<string>();
+			var rules = new List<Type>();
 
 			if(ruleFlags.HasFlag(BusinessRuleFlags.NewNightlyRestRule))
 			{
-				rules.Add(typeof(NewNightlyRestRule).Name);
+				rules.Add(typeof(NewNightlyRestRule));
 			}
 			if(ruleFlags.HasFlag(BusinessRuleFlags.NewDayOffRule))
 			{
-				rules.Add(typeof(NewDayOffRule).Name);
+				rules.Add(typeof(NewDayOffRule));
 			}
 			if(ruleFlags.HasFlag(BusinessRuleFlags.NotOverwriteLayerRule))
 			{
-				rules.Add(typeof(NotOverwriteLayerRule).Name);
+				rules.Add(typeof(NotOverwriteLayerRule));
 			}
 			if(ruleFlags.HasFlag(BusinessRuleFlags.MinWeekWorkTimeRule))
 			{
-				rules.Add(typeof(MinWeekWorkTimeRule).Name);
+				rules.Add(typeof(MinWeekWorkTimeRule));
 			}
 			if(ruleFlags.HasFlag(BusinessRuleFlags.NewMaxWeekWorkTimeRule))
 			{
-				rules.Add(typeof(NewMaxWeekWorkTimeRule).Name);
+				rules.Add(typeof(NewMaxWeekWorkTimeRule));
 			}
 			if(ruleFlags.HasFlag(BusinessRuleFlags.MinWeeklyRestRule))
 			{
-				rules.Add(typeof(MinWeeklyRestRule).Name);				
+				rules.Add(typeof(MinWeeklyRestRule));				
 			}
 			
-			return rules.Select(name => name + "Name").ToList();
-		} 
+			return rules.Select(getValidationRuleName).ToList();
+		}
 
+		private string getValidationRuleName(Type rule)
+		{
+			return rule.Name + "Name";
+		}
 
 		public IList<BusinessRuleValidationResult> GetBusinessRuleValidationResults(FetchRuleValidationResultFormData input,
 			BusinessRuleFlags ruleFlags)
@@ -295,7 +299,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 							Warnings = x.Select(y => new WarningInfo
 							{
 								Content = y.Message,
-								RuleType = y.TypeOfRule.Name
+								RuleType = getValidationRuleName(y.TypeOfRule)
 							}).ToList()
 						};
 					})
