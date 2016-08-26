@@ -1,0 +1,626 @@
+{
+  "Project": {
+    "Id": "Projects-2",
+    "VariableSetId": "variableset-Projects-2",
+    "DeploymentProcessId": "deploymentprocess-Projects-2",
+    "IncludedLibraryVariableSetIds": [],
+    "DefaultToSkipIfAlreadyInstalled": false,
+    "TenantedDeploymentMode": "Untenanted",
+    "VersioningStrategy": {
+      "DonorPackageStepId": "223f9881-47a9-4b41-a22f-3a4b75292c9b",
+      "Template": null
+    },
+    "ReleaseCreationStrategy": {
+      "ReleaseCreationPackageStepId": "",
+      "ChannelId": null
+    },
+    "Templates": [],
+    "AutoDeployReleaseOverrides": [],
+    "Name": "Teleopti WFM Server",
+    "Slug": "teleopti-wfm-server",
+    "Description": "",
+    "IsDisabled": false,
+    "ProjectGroupId": "ProjectGroups-1",
+    "LifecycleId": "Lifecycles-1",
+    "AutoCreateRelease": false,
+    "ProjectConnectivityPolicy": {
+      "SkipMachineBehavior": "None",
+      "TargetRoles": []
+    },
+    "Links": {
+      "Self": "/api/projects/Projects-2",
+      "Releases": "/api/projects/Projects-2/releases{/version}{?skip}",
+      "Channels": "/api/projects/Projects-2/channels",
+      "Triggers": "/api/projects/Projects-2/triggers",
+      "OrderChannels": "/api/projects/Projects-2/channels/order",
+      "Variables": "/api/variables/variableset-Projects-2",
+      "Progression": "/api/progression/Projects-2{?aggregate}",
+      "DeploymentProcess": "/api/deploymentprocesses/deploymentprocess-Projects-2",
+      "Web": "/app#/projects/Projects-2",
+      "Logo": "/api/projects/Projects-2/logo"
+    }
+  },
+  "ProjectGroup": {
+    "Id": "ProjectGroups-1",
+    "Name": "All Projects"
+  },
+  "VariableSet": {
+    "Id": "variableset-Projects-2",
+    "OwnerId": "Projects-2",
+    "Version": 1,
+    "Variables": [
+      {
+        "Id": "06fdd0cf-e3c3-f53b-6f7f-f802be9f314c",
+        "Name": "DNS_ALIAS",
+        "Value": "http://localhost/",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "5b24b176-ce0f-fd14-b8ec-ef21d72fce43",
+        "Name": "SUB_SITE",
+        "Value": "TeleoptiWFM",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "5e5ecd6a-a672-3eb5-7f8a-1b29a88fdaf9",
+        "Name": "SQL_SERVER_NAME",
+        "Value": "localhost",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "e92c848e-f05e-51bf-03f3-c856c0926bfe",
+        "Name": "SQL_SERVER_AUTH",
+        "Value": "SQL",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "5ac6c34b-eef0-1b2e-c49d-d15e3ca5a7d6",
+        "Name": "SQL_SERVER_USER",
+        "Value": "sa",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "c7650d38-0009-2800-9c13-bb6b49d59aae",
+        "Name": "SQL_SERVER_PASS",
+        "Value": null,
+        "Scope": {},
+        "IsSensitive": true,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "cf66e7ea-2d3d-8489-7983-1c343aa29eb5",
+        "Name": "SQL_USER_AUTH",
+        "Value": "SQL",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "d03c4bdd-397f-163a-3df1-363096d9a4ea",
+        "Name": "SQL_USER_NAME",
+        "Value": "sa",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "87e054eb-b749-0876-fe8c-8950c74b3b3e",
+        "Name": "SQL_USER_PASSWORD",
+        "Value": null,
+        "Scope": {},
+        "IsSensitive": true,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "fef82502-cf9f-a5e4-1bd8-019392fb2709",
+        "Name": "INSTALLDIR",
+        "Value": "C:\\TeleoptiOctopus\\",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "89a496eb-bb8f-af6e-c885-5eea329b5ccd",
+        "Name": "DB_ANALYTICS",
+        "Value": "Octopus_TeleoptiAnalytics",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "2e246d8a-653d-fc0e-edef-c7d6e9b7b3f9",
+        "Name": "SERVICE_USERNAME",
+        "Value": null,
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "9fec2519-85e5-e563-117d-6cdc26d1de47",
+        "Name": "SERVICE_PASSWORD",
+        "Value": null,
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "5eb758e3-9df2-6098-696f-ab7524afefc3",
+        "Name": "FEATURES",
+        "Value": "AgentPortalWeb,Analytics,ClickOnce,AdminClient,SDK,ServiceBus,ETL,Service,Tool,RTA,MessageBroker",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "0a69fb7a-2728-1db9-8ba8-1d02f5fe8c1f",
+        "Name": "CLICKONCE_CLIENT_URL",
+        "Value": "#{DNS_ALIAS}#{SUB_SITE}/Client/",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "6a024e50-6d26-11cd-375c-18a25f1ab7db",
+        "Name": "CLICKONCE_MYTIME_URL",
+        "Value": "#{DNS_ALIAS}#{SUB_SITE}/MyTime/",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "2ffe1ab8-6d2a-511e-1388-471f595370fa",
+        "Name": "CLICKONCE_SIGN_METHOD",
+        "Value": "TEMP",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "9732b7aa-4b0b-4e2e-6fdf-7926da40ad73",
+        "Name": "MATRIX_WEB_SITE_URL",
+        "Value": "#{DNS_ALIAS}#{SUB_SITE}/Analytics",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "002361d2-ac12-d9e2-fc2e-0d5b01285910",
+        "Name": "WISE_SQL_CONN_STR",
+        "Value": "Data Source=#{SQL_SERVER_NAME};User Id=#{SQL_SERVER_USER};Password=#{SQL_SERVER_PASS}",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "f0074249-7b29-69a1-687a-6234fd6b7442",
+        "Name": "SQL_AUTH_STRING",
+        "Value": "Data Source=#{SQL_SERVER_NAME};User Id=#{SQL_USER_NAME};Password=#{SQL_USER_PASSWORD};MultiSubnetFailover=True",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "4677b69d-db7e-dbfa-3aa3-7a13d95b4110",
+        "Name": "DB_CCC7",
+        "Value": "Octopus_TeleoptiApp",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "7ce21964-39fb-9031-894e-f50c9707386e",
+        "Name": "DB_CCCAGG",
+        "Value": "Octopus_TeleoptiAgg",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "5fbb0acb-c36e-ea0c-8de2-4b7df15c94c6",
+        "Name": "AGENT_SERVICE",
+        "Value": "#{DNS_ALIAS}#{SUB_SITE}/SDK/TeleoptiCccSdkService.svc",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "0b81a06c-3d4a-2a7b-3db8-ba4417790d36",
+        "Name": "SITEPATH",
+        "Value": "#{INSTALLDIR}Datasources",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "e5b1330d-38ea-f91c-3da6-6bb8e703872d",
+        "Name": "SDK_CRED_PROT",
+        "Value": "None",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "191202e6-77f0-e0c0-19a0-c95c7a77da16",
+        "Name": "SDK_SSL",
+        "Value": "False",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "54e9b1d5-70b2-996e-0b13-02f31c85606b",
+        "Name": "CONTEXT_HELP_URL",
+        "Value": "http://wiki.teleopti.com/TeleoptiCCC/Special:MyLanguage/",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "b7a5f300-c491-5f84-4bcb-7bb3dcf92494",
+        "Name": "SERVICEBUSENABLED",
+        "Value": "true",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "4a874826-199c-803d-baf2-6d4c2161dfe3",
+        "Name": "IIS_AUTH",
+        "Value": "Windows",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "43fcfa9c-5ec6-9cf4-0a55-38cf8c551573",
+        "Name": "RTA_SERVICE",
+        "Value": "#{DNS_ALIAS}#{SUB_SITE}/RTA/TeleoptiRtaService.svc",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "c0043cc4-1642-3e4b-2072-248585a4332e",
+        "Name": "DEFAULT_IDENTITY_PROVIDER",
+        "Value": "Teleopti",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "c655690f-ca6f-7a27-22f1-2337b7946b6b",
+        "Name": "SIGNALR_BACKPLANE",
+        "Value": "Data Source=#{SQL_SERVER_NAME};User Id=#{SQL_USER_NAME};Password=#{SQL_USER_PASSWORD};MultiSubnetFailover=True;Initial Catalog=#{DB_ANALYTICS};Application Name=Teleopti.Web.SignalRBackplane;MultiSubnetFailover=True",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "7a129107-028a-6034-fdb1-af9e20f51347",
+        "Name": "SIGNALR_BACKPLANE_TYPE",
+        "Value": "sqlserver",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "75fd1552-fed2-592e-c838-5dedc013ebba",
+        "Name": "HOST_NAME",
+        "Value": "#{Octopus.Machine.Hostname}",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "203017c0-af77-6e5c-2895-29166f461265",
+        "Name": "DATABASE_UPGRADE",
+        "Value": "UPGRADE",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": {
+          "Label": "Would you like to create the databases or upgrade existing?",
+          "Description": "NEW / UPGRADE",
+          "Required": true
+        }
+      },
+      {
+        "Id": "f4dad25f-b40b-906f-1eae-e3a235023e9b",
+        "Name": "INSTALL_DATABASE",
+        "Value": null,
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "395e9068-e5c5-4934-b711-dcf3f82124d0",
+        "Name": "INSTALL_DATABASE",
+        "Value": "Database,",
+        "Scope": {
+          "Role": [
+            "DatabaseUpgrader"
+          ]
+        },
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "95535079-9950-5749-6911-359a74135998",
+        "Name": "DB_WINGROUP",
+        "Value": null,
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "0813be2a-0bf1-366a-cdf4-5edc5966c5ed",
+        "Name": "MACHINE_KEY_VALIDATION",
+        "Value": "C2A453601FD78AB4D638796B2320D1509FAC582BC424AF1DC76C73FBBB1B59C9FE069448A03F4310A923F4428CBBE22836291EA5623C858EE10A7ABDE8EAE989",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      },
+      {
+        "Id": "75b1cafc-c28f-d703-c08b-36b0730b5cb0",
+        "Name": "MACHINE_KEY_DECRYPTION",
+        "Value": "BFCB85C8793D18385E88665EEBDECB496FAE587E5D9F0FE9",
+        "Scope": {},
+        "IsSensitive": false,
+        "IsEditable": true,
+        "Prompt": null
+      }
+    ],
+    "ScopeValues": {
+      "Environments": [],
+      "Machines": [],
+      "Actions": [
+        {
+          "Id": "223f9881-47a9-4b41-a22f-3a4b75292c9b",
+          "Name": "1. Download package"
+        },
+        {
+          "Id": "bcfa043e-b0f5-45eb-9ef8-1ca5a911cdc9",
+          "Name": "2. Uninstall bat"
+        },
+        {
+          "Id": "32055cf6-0ec7-46db-9eb6-a53a7b6e95df",
+          "Name": "3. Install"
+        },
+        {
+          "Id": "494e1101-4909-4a78-bb8c-c62b3d90a00c",
+          "Name": "4. Fix config"
+        }
+      ],
+      "Roles": [],
+      "Channels": [
+        {
+          "Id": "Channels-2",
+          "Name": "Default"
+        }
+      ],
+      "TenantTags": []
+    },
+    "Links": {
+      "Self": "/api/variables/variableset-Projects-2"
+    }
+  },
+  "NuGetFeeds": [
+    {
+      "Id": "feeds-builtin",
+      "Name": "Octopus Server (built-in)"
+    }
+  ],
+  "ActionTemplates": [
+    {
+      "Id": "ActionTemplates-1",
+      "Name": "Run - Windows Installer"
+    }
+  ],
+  "DeploymentProcess": {
+    "Id": "deploymentprocess-Projects-2",
+    "ProjectId": "Projects-2",
+    "Steps": [
+      {
+        "Id": "4f0f57d5-90bd-41e8-9643-d92e440209c0",
+        "Name": "Download package",
+        "RequiresPackagesToBeAcquired": false,
+        "Properties": {
+          "Octopus.Action.TargetRoles": "Web"
+        },
+        "Condition": "Success",
+        "StartTrigger": "StartAfterPrevious",
+        "Actions": [
+          {
+            "Id": "223f9881-47a9-4b41-a22f-3a4b75292c9b",
+            "Name": "Download package",
+            "ActionType": "Octopus.TentaclePackage",
+            "Environments": [],
+            "Channels": [],
+            "TenantTags": [],
+            "Properties": {
+              "Octopus.Action.EnabledFeatures": "Octopus.Features.ConfigurationTransforms,Octopus.Features.ConfigurationVariables",
+              "Octopus.Action.Package.AutomaticallyRunConfigurationTransformationFiles": "True",
+              "Octopus.Action.Package.AutomaticallyUpdateAppSettingsAndConnectionStrings": "True",
+              "Octopus.Action.Package.DownloadOnTentacle": "False",
+              "Octopus.Action.Package.NuGetFeedId": "feeds-builtin",
+              "Octopus.Action.Package.NuGetPackageId": "Teleopti WFM 8",
+              "Octopus.Action.Package.PackageId": "Teleopti WFM 8",
+              "Octopus.Action.Package.FeedId": "feeds-builtin"
+            },
+            "Links": {}
+          }
+        ]
+      },
+      {
+        "Id": "a2cdf79f-93a4-452f-92f6-c9609b175028",
+        "Name": "Uninstall bat",
+        "RequiresPackagesToBeAcquired": false,
+        "Properties": {
+          "Octopus.Action.TargetRoles": "Web"
+        },
+        "Condition": "Success",
+        "StartTrigger": "StartAfterPrevious",
+        "Actions": [
+          {
+            "Id": "bcfa043e-b0f5-45eb-9ef8-1ca5a911cdc9",
+            "Name": "Uninstall bat",
+            "ActionType": "Octopus.Script",
+            "Environments": [],
+            "Channels": [],
+            "TenantTags": [],
+            "Properties": {
+              "Octopus.Action.RunOnServer": "false",
+              "Octopus.Action.Script.Syntax": "PowerShell",
+              "Octopus.Action.Script.ScriptSource": "Inline",
+              "Octopus.Action.Script.ScriptBody": "$app = Get-WmiObject -Class Win32_Product | Where-Object { \r\n    $_.IdentifyingNumber -match \"52613B22-2102-4BFB-AAFB-EF420F3A24B5\" \r\n}\r\nif ($app -ne $null) { \r\n    Write-Host \"Uninstalling\"\r\n    $app.Uninstall()\r\n}\r\n\r\n"
+            },
+            "Links": {}
+          }
+        ]
+      },
+      {
+        "Id": "7847df50-6b1e-4f10-a33c-aeafc920f47a",
+        "Name": "Install",
+        "RequiresPackagesToBeAcquired": false,
+        "Properties": {
+          "Octopus.Action.TargetRoles": "Web"
+        },
+        "Condition": "Success",
+        "StartTrigger": "StartAfterPrevious",
+        "Actions": [
+          {
+            "Id": "32055cf6-0ec7-46db-9eb6-a53a7b6e95df",
+            "Name": "Install",
+            "ActionType": "Octopus.Script",
+            "Environments": [],
+            "Channels": [],
+            "TenantTags": [],
+            "Properties": {
+              "Octopus.Action.Script.ScriptBody": "# Running outside octopus\nparam(\n    [string]$MsiFilePath,\n\t[ValidateSet(\"Install\", \"Repair\", \"Remove\", IgnoreCase=$true)]\n\t[string]$Action,\n\t[string]$Properties,\n    [switch]$WhatIf\n) \n\n$ErrorActionPreference = \"Stop\"\n\n$ErrorMessages = @{\n\t\"0\" = \"Action completed successfully.\";\n\t\"13\" = \"The data is invalid.\";\n\t\"87\" = \"One of the parameters was invalid.\";\n\t\"1601\" = \"The Windows Installer service could not be accessed. Contact your support personnel to verify that the Windows Installer service is properly registered.\";\n\t\"1602\" = \"User cancel installation.\";\n\t\"1603\" = \"Fatal error during installation.\";\n\t\"1604\" = \"Installation suspended, incomplete.\";\n\t\"1605\" = \"This action is only valid for products that are currently installed.\";\n\t\"1606\" = \"Feature ID not registered.\";\n\t\"1607\" = \"Component ID not registered.\";\n\t\"1608\" = \"Unknown property.\";\n\t\"1609\" = \"Handle is in an invalid state.\";\n\t\"1610\" = \"The configuration data for this product is corrupt. Contact your support personnel.\";\n\t\"1611\" = \"Component qualifier not present.\";\n\t\"1612\" = \"The installation source for this product is not available. Verify that the source exists and that you can access it.\";\n\t\"1613\" = \"This installation package cannot be installed by the Windows Installer service. You must install a Windows service pack that contains a newer version of the Windows Installer service.\";\n\t\"1614\" = \"Product is uninstalled.\";\n\t\"1615\" = \"SQL query syntax invalid or unsupported.\";\n\t\"1616\" = \"Record field does not exist.\";\n\t\"1618\" = \"Another installation is already in progress. Complete that installation before proceeding with this install.\";\n\t\"1619\" = \"This installation package could not be opened. Verify that the package exists and that you can access it, or contact the application vendor to verify that this is a valid Windows Installer package.\";\n\t\"1620\" = \"This installation package could not be opened. Contact the application vendor to verify that this is a valid Windows Installer package.\";\n\t\"1621\" = \"There was an error starting the Windows Installer service user interface. Contact your support personnel.\";\n\t\"1622\" = \"Error opening installation log file. Verify that the specified log file location exists and is writable.\";\n\t\"1623\" = \"This language of this installation package is not supported by your system.\";\n\t\"1624\" = \"Error applying transforms. Verify that the specified transform paths are valid.\";\n\t\"1625\" = \"This installation is forbidden by system policy. Contact your system administrator.\";\n\t\"1626\" = \"Function could not be executed.\";\n\t\"1627\" = \"Function failed during execution.\";\n\t\"1628\" = \"Invalid or unknown table specified.\";\n\t\"1629\" = \"Data supplied is of wrong type.\";\n\t\"1630\" = \"Data of this type is not supported.\";\n\t\"1631\" = \"The Windows Installer service failed to start. Contact your support personnel.\";\n\t\"1632\" = \"The temp folder is either full or inaccessible. Verify that the temp folder exists and that you can write to it.\";\n\t\"1633\" = \"This installation package is not supported on this platform. Contact your application vendor.\";\n\t\"1634\" = \"Component not used on this machine.\";\n\t\"1635\" = \"This patch package could not be opened. Verify that the patch package exists and that you can access it, or contact the application vendor to verify that this is a valid Windows Installer patch package.\";\n\t\"1636\" = \"This patch package could not be opened. Contact the application vendor to verify that this is a valid Windows Installer patch package.\";\n\t\"1637\" = \"This patch package cannot be processed by the Windows Installer service. You must install a Windows service pack that contains a newer version of the Windows Installer service.\";\n\t\"1638\" = \"Another version of this product is already installed. Installation of this version cannot continue. To configure or remove the existing version of this product, use Add/Remove Programs on the Control Panel.\";\n\t\"1639\" = \"Invalid command line argument. Consult the Windows Installer SDK for detailed command line help.\";\n\t\"1640\" = \"Installation from a Terminal Server client session not permitted for current user.\";\n\t\"1641\" = \"The installer has started a reboot.\";\n\t\"1642\" = \"The installer cannot install the upgrade patch because the program being upgraded may be missing, or the upgrade patch updates a different version of the program. Verify that the program to be upgraded exists on your computer and that you have the correct upgrade patch.\";\n\t\"3010\" = \"A restart is required to complete the install. This does not include installs where the ForceReboot action is run. Note that this error will not be available until future version of the installer.\"\n};\n\nfunction Get-Param($Name, [switch]$Required, $Default) {\n    $result = $null\n\n    if ($OctopusParameters -ne $null) {\n        $result = $OctopusParameters[$Name]\n    }\n\n    if ($result -eq $null) {\n        $variable = Get-Variable $Name -EA SilentlyContinue   \n        if ($variable -ne $null) {\n            $result = $variable.Value\n        }\n    }\n\n    if ($result -eq $null) {\n        if ($Required) {\n            throw \"Missing parameter value $Name\"\n        } else {\n            $result = $Default\n        }\n    }\n\n    return $result\n}\n\nfunction Resolve-PotentialPath($Path) {\n\t[Environment]::CurrentDirectory = $pwd\n\treturn [IO.Path]::GetFullPath($Path)\n}\n\nfunction Get-LogOptionFile($msiFile, $streamLog) {\n\t$logPath = Resolve-PotentialPath \"$msiFile.log\"\n\t\n\tif (Test-Path $logPath) {\n\t\tRemove-Item $logPath\n\t}\n\t\n\treturn $logPath\n}\n\nfunction Exec\n{\n    [CmdletBinding()]\n    param(\n        [Parameter(Position=0,Mandatory=1)][scriptblock]$cmd,\n        [string]$errorMessage = ($msgs.error_bad_command -f $cmd),\n\t\t[switch]$ReturnCode\n    )\n\n\t$lastexitcode = 0\n    & $cmd\n\t\n\tif ($ReturnCode) {\n\t\treturn $lastexitcode\n\t} else  {\n\t\tif ($lastexitcode -ne 0) {\n\t\t\tthrow (\"Exec: \" + $errorMessage)\n\t\t}\t\t\n\t}\n}\n\nfunction Wrap-Arguments($Arguments)\n{\n\treturn $Arguments | % { \n\t\t\n\t\t[string]$val = $_\n\t\t\n\t\t#calling msiexec fails when arguments are quoted\n\t\tif (($val.StartsWith(\"/\") -and $val.IndexOf(\" \") -eq -1) -or ($val.IndexOf(\"=\") -ne -1) -or ($val.IndexOf('\"') -ne -1)) {\n\t\t\treturn $val\n\t\t}\n\t\n\t\treturn '\"{0}\"' -f $val\n\t}\n}\n\nfunction Start-Process2($FilePath, $ArgumentList, [switch]$showCall, [switch]$whatIf)\n{\n\t$ArgumentListString = (Wrap-Arguments $ArgumentList) -Join \" \"\n\n\t$pinfo = New-Object System.Diagnostics.ProcessStartInfo\n\t$pinfo.FileName = $FilePath\n\t$pinfo.UseShellExecute = $false\n\t$pinfo.CreateNoWindow = $true\n\t$pinfo.RedirectStandardOutput = $true\n\t$pinfo.RedirectStandardError = $true\n\t$pinfo.Arguments = $ArgumentListString;\n\t$pinfo.WorkingDirectory = $pwd\n\n\t$exitCode = 0\n\t\n\tif (!$whatIf) {\n\t\n\t\tif ($showCall) {\n\t\t\t$x = Write-Output \"$FilePath $ArgumentListString\"\n\t\t}\n\t\t\n\t\t$p = New-Object System.Diagnostics.Process\n\t\t$p.StartInfo = $pinfo\n\t\t$started = $p.Start()\n\t\t$p.WaitForExit()\n\n\t\t$stdout = $p.StandardOutput.ReadToEnd()\n\t\t$stderr = $p.StandardError.ReadToEnd()\n\t\t$x = Write-Output $stdout\n\t\t$x = Write-Output $stderr\n\t\t\n\t\t$exitCode = $p.ExitCode\n\t} else {\n\t\tWrite-Output \"skipping: $FilePath $ArgumentListString\"\n\t}\n\t\n\treturn $exitCode\n}\n\n& {\n    param(\n        [string]$MsiFilePath,\n\t\t[string]$Action,\n\t\t[string]$Properties\n    ) \n\n    Write-Output \"Installing MSI\"\n    Write-Host \" MsiFilePath: $MsiFilePath\" -f Gray\n\tWrite-Host \" Action: $Action\" -f Gray\n\tWrite-Host \" Properties: $Properties\" -f Gray\n\tWrite-Host\n\n\tif ((Get-Command msiexec) -Eq $Null) {\n\t\tthrow \"Command msiexec could not be found\"\n\t}\n\t\n\tif (!(Test-Path $MsiFilePath)) {\n\t\tthrow \"Could not find the file $MsiFilePath\"\n\t}\n\n\t$actions = @{\n\t\t\"Install\" = \"/i\";\n\t\t\"Repair\" = \"/f\";\n\t\t\"Remove\" = \"/x\";\n\t};\n\t\n\t$actionOption = $actions[$action]\n\t$actionOptionFile = Resolve-Path $MsiFilePath\n\t\n\t$logOption = \"/L*\"\n\t$logOptionFile = Get-LogOptionFile $MsiFilePath\n\t\n\t$quiteOption = \"/qn\"\n\t$noRestartOption = \"/norestart\"\n\t\n\t$parameterOptions = $Properties -Split \"\\r\\n?|\\n\" | ? { !([string]::IsNullOrEmpty($_)) } | % { $_.Trim() }\n\t\n\t$options = @($actionOption, $actionOptionFile, $logOption, $logOptionFile, $quiteOption, $noRestartOption) + $parameterOptions\n\n\t$exePath = \"msiexec.exe\"\n\n\t$exitCode = Start-Process2 -FilePath $exePath -ArgumentList $options -whatIf:$whatIf -ShowCall\n\t\n\tWrite-Output \"Exit Code was! $exitCode\"\n\t\n\tif (Test-Path $logOptionFile) {\n\t\tWrite-Output \"Reading installer log\"\n\t\tGet-Content $logOptionFile | Write-Output\n\t} else {\n\t\tWrite-Output \"No logs were generated\"\n\t}\n\n\tif ($exitCode -Ne 0) {\n\t\n\t\t$errorCodeString = $exitCode.ToString()\n\t\t$errorMessage = $ErrorMessages[$errorCodeString]\n\n\t\tthrow \"Error code $exitCode was returned: $errorMessage\" \n\t}\n\t\n} `\n(Get-Param 'MsiFilePath' -Required) `\n(Get-Param 'Action' -Required) `\n(Get-Param 'Properties')\n",
+              "Octopus.Action.Script.Syntax": "PowerShell",
+              "Octopus.Action.Script.ScriptSource": "Inline",
+              "Octopus.Action.Template.Id": "ActionTemplates-1",
+              "Octopus.Action.Template.Version": "1",
+              "Action": "Install",
+              "Octopus.Action.RunOnServer": "false",
+              "MsiFilePath": "#{Octopus.Action[Download package].Output.Package.InstallationDirectoryPath}\\Teleopti WFM 8.#{Octopus.Action[Download package].Package.NuGetPackageVersion}.msi",
+              "Properties": "ADDLOCAL=\"#{INSTALL_DATABASE}#{FEATURES}\"\nCLICKONCE_CLIENT_URL=\"#{CLICKONCE_CLIENT_URL}\"\nCLICKONCE_MYTIME_URL=\"#{CLICKONCE_MYTIME_URL}\"\nCLICKONCE_SIGN_METHOD=\"#{CLICKONCE_SIGN_METHOD}\"\nINSTALLDIR=\"#{INSTALLDIR}\"\nMATRIX_WEB_SITE_URL=\"#{MATRIX_WEB_SITE_URL}\"\nSQL_SERVER_NAME=\"#{SQL_SERVER_NAME}\"\nSQL_SERVER_AUTH=\"#{SQL_SERVER_AUTH}\"\nSQL_SERVER_USER=\"#{SQL_SERVER_USER}\"\nSQL_SERVER_PASS=\"#{SQL_SERVER_PASS}\"\nWISE_SQL_CONN_STR=\"#{WISE_SQL_CONN_STR}\"\nSQL_USER_AUTH=\"#{SQL_USER_AUTH}\"\nSQL_USER_NAME=\"#{SQL_USER_NAME}\"\nSQL_USER_PASSWORD=\"#{SQL_USER_PASSWORD}\"\nSQL_AUTH_STRING=\"#{SQL_AUTH_STRING}\"\nMYPASSWORD=\"#{SERVICE_PASSWORD}\"\nMYUSERNAME=\"#{SERVICE_USERNAME}\"\nDB_WINGROUP=\"#{DB_WINGROUP}\"\nDB_ANALYTICS=\"#{DB_ANALYTICS}\"\nDB_ANALYTICS_STAGE=\"#{DB_ANALYTICS}\"\nDB_CCC7=\"#{DB_CCC7}\"\nDB_CCCAGG=\"#{DB_CCCAGG}\"\nDB_MESSAGING=\"#{DB_ANALYTICS}\"\nDNS_ALIAS=\"#{DNS_ALIAS}\"\nAGENT_SERVICE=\"#{AGENT_SERVICE}\"\nSITEPATH=\"#{SITEPATH}\"\nSDK_CRED_PROT=\"#{SDK_CRED_PROT}\"\nSDK_SSL=\"#{SDK_SSL}\"\nCONTEXT_HELP_URL=\"#{CONTEXT_HELP_URL}\"\nWEB_BROKER=\"NOT_USED_ANYMORE\"\nWEB_BROKER_BACKPLANE=\"NOT_USED_ANYMORE\"\nSERVICEBUSENABLED=\"#{SERVICEBUSENABLED}\"\nIIS_AUTH=\"#{IIS_AUTH}\"\nAS_DATABASE=\"\"\nAS_SERVER_NAME=\"\"\nPM_ANONYMOUS_DOMAINUSER=\"\"\nPM_ANONYMOUS_PWD=\"\"\nPM_AUTH_MODE=\"\"\nPM_PROCESS_CUBE=\"\"\nPM_ASMX=\"\"\nPM_INSTALL=\"\"\nRTA_SERVICE=\"#{RTA_SERVICE}\"\nPM_SERVICE=\"\"\nETLUSERNAME=\"#{SERVICE_USERNAME}\"\nETLPASSWORD=\"#{SERVICE_PASSWORD}\"\nDEFAULT_IDENTITY_PROVIDER=\"#{DEFAULT_IDENTITY_PROVIDER}\"\nSIGNALR_BACKPLANE=\"#{SIGNALR_BACKPLANE}\"\nSIGNALR_BACKPLANE_TYPE=\"#{SIGNALR_BACKPLANE_TYPE}\"\nHOST_NAME=\"#{HOST_NAME}\"\nDATABASE_UPGRADE=\"#{DATABASE_UPGRADE}\""
+            },
+            "Links": {}
+          }
+        ]
+      },
+      {
+        "Id": "649d9e4f-5736-4c89-8093-3300393f3b00",
+        "Name": "Fix config",
+        "RequiresPackagesToBeAcquired": false,
+        "Properties": {
+          "Octopus.Action.TargetRoles": "Web"
+        },
+        "Condition": "Success",
+        "StartTrigger": "StartAfterPrevious",
+        "Actions": [
+          {
+            "Id": "494e1101-4909-4a78-bb8c-c62b3d90a00c",
+            "Name": "Fix config",
+            "ActionType": "Octopus.Script",
+            "Environments": [],
+            "Channels": [],
+            "TenantTags": [],
+            "Properties": {
+              "Octopus.Action.RunOnServer": "false",
+              "Octopus.Action.Script.Syntax": "PowerShell",
+              "Octopus.Action.Script.ScriptSource": "Inline",
+              "Octopus.Action.Script.ScriptBody": "\r\nfunction Configure()\r\n{\r\n    $installationSettingsKeyPath = @('HKLM:\\SOFTWARE\\Wow6432Node\\Teleopti\\TeleoptiCCC\\InstallationSettings')\r\n    $teleoptiWfmRoot = (Get-ItemProperty $installationSettingsKeyPath).INSTALLDIR\r\n    \r\n    ConfigureWebConfig 'Administration'\r\n    ConfigureWebConfig 'Analytics'\r\n    ConfigureWebConfig 'AuthenticationBridge'\r\n    ConfigureWebConfig 'PMService'\r\n    ConfigureWebConfig 'SDK'\r\n    ConfigureWebConfig 'Web'\r\n    ConfigureWebConfig 'WindowsIdentityProvider'\r\n}\r\n\r\nfunction ConfigureWebConfig\r\n{\r\n    param(\r\n        $ModuleName\r\n    )\r\n\r\n    # \"C:\\Program Files (x86)\\Teleopti\\TeleoptiCCC\\Administration\\web.config\"\r\n    [string] $webConfigFilePath = $teleoptiWfmRoot + 'TeleoptiCCC\\' + $ModuleName + '\\web.config'\r\n    Write-Host 'Modifying: ' $webConfigFilePath\r\n    $webConfig = New-Object XML\r\n    # load web.Config file as an xml object\r\n    $webConfig.Load($webConfigFilePath)\r\n\r\n\t#     <machineKey validationKey=\"C2A453601FD78AB4D638796B2320D1509FAC582BC424AF1DC76C73FBBB1B59C9FE069448A03F4310A923F4428CBBE22836291EA5623C858EE10A7ABDE8EAE989\" decryptionKey=\"BFCB85C8793D18385E88665EEBDECB496FAE587E5D9F0FE9\" decryption=\"AES\" validation=\"SHA1\" />\r\n    $obj = $webConfig.configuration.'system.web'.machineKey\r\n    if ($obj) \r\n\t{\r\n\t\t$obj.validationKey = $MACHINE_KEY_VALIDATION\r\n\t\t$obj.decryptionKey = $MACHINE_KEY_DECRYPTION\r\n\t}\r\n    $webConfig.Save($webConfigFilePath)\r\n}\r\n\r\nConfigure\r\n"
+            },
+            "Links": {}
+          }
+        ]
+      }
+    ],
+    "Version": 1,
+    "LastSnapshotId": null,
+    "Links": {
+      "Self": "/api/deploymentprocesses/deploymentprocess-Projects-2",
+      "Project": "/api/projects/Projects-2",
+      "Template": "/api/deploymentprocesses/deploymentprocess-Projects-2/template{?channel,releaseId}"
+    }
+  },
+  "LibraryVariableSets": [],
+  "Lifecycle": {
+    "Id": "Lifecycles-1",
+    "Name": "Default Lifecycle"
+  },
+  "Channels": [
+    {
+      "Id": "Channels-2",
+      "Name": "Default",
+      "Description": null,
+      "ProjectId": "Projects-2",
+      "LifecycleId": null,
+      "IsDefault": true,
+      "Rules": [],
+      "TenantTags": [],
+      "Links": {
+        "Self": "/api/channels/Channels-2",
+        "Releases": "/api/channels/Channels-2/releases",
+        "Project": "/api/projects/Projects-2"
+      }
+    }
+  ],
+  "ChannelLifecycles": [],
+  "$Meta": {
+    "ExportedAt": "2016-08-26T14:31:03.236+02:00",
+    "OctopusVersion": "3.4.1",
+    "Type": "project",
+    "ContainerType": "ProjectWithDependencies"
+  }
+}
