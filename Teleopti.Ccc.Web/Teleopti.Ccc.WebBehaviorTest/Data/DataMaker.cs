@@ -22,6 +22,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			Data().EndSetupPhase();
 		}
 
+		public static void AfterScenario()
+		{
+			if (ScenarioContext.Current.Value<ScenarioDataFactory>() != null)
+				Data().Dispose();
+		}
+
 		public static PersonDataFactory Me()
 		{
 			return Data().Me();
