@@ -6,17 +6,18 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 {
 	public class DataFactory
 	{
-		private readonly Action<Action<ICurrentUnitOfWork>> _unitOfWorkAction;
+		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly IList<IDataSetup> _applied = new List<IDataSetup>();
 
-		public DataFactory(Action<Action<ICurrentUnitOfWork>> unitOfWorkAction)
+		public DataFactory(ICurrentUnitOfWork unitOfWork)
 		{
-			_unitOfWorkAction = unitOfWorkAction;
+			_unitOfWork = unitOfWork;
 		}
 
 		public void Apply(IDataSetup setup)
 		{
-			_unitOfWorkAction(setup.Apply);
+			setup.Apply(_unitOfWork);
+			_unitOfWork.Current().PersistAll();
 			_applied.Add(setup);
 		}
 

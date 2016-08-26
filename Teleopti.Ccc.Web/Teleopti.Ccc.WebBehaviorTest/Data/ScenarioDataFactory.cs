@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.TestCommon.TestData;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
@@ -10,13 +12,24 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
-	public class ScenarioDataFactory : TestDataFactory
+	public class ScenarioDataFactory : TestDataFactory, IDisposable
 	{
 		private readonly AnalyticsDataFactory _analyticsDataFactory = new AnalyticsDataFactory();
 		private readonly IList<IDelayedSetup> _delayedSetups = new List<IDelayedSetup>();
 
-		public ScenarioDataFactory() : base(ScenarioUnitOfWorkState.UnitOfWorkAction, TenantUnitOfWorkState.TenantUnitOfWorkAction)
+		public void Dispose()
 		{
+			if (LocalSystem.UnitOfWork.HasCurrent())
+				LocalSystem.UnitOfWork.Current().Dispose();
+		}
+		
+		public ScenarioDataFactory() : base(
+			LocalSystem.UnitOfWork, 
+			LocalSystem.CurrentTenantSession, 
+			LocalSystem.TenantUnitOfWork)
+		{
+			LocalSystem.UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork(QueryFilter.NoFilter);
+
 			AddPerson("I").Apply(new PersonUserConfigurable
 			{
 				UserName = "1",
@@ -51,7 +64,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			_analyticsDataFactory.Persist(Me().Culture);
 
-			ScenarioUnitOfWorkState.UnitOfWorkAction(uow => _delayedSetups.ForEach(s => s.Apply(Me().Person, uow)));
+			_delayedSetups.ForEach(s => s.Apply(Me().Person, LocalSystem.UnitOfWork));
+			LocalSystem.UnitOfWork.Current().PersistAll();
 
 			return Me().LogOnName;
 		}
@@ -82,5 +96,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			return UserDatasOfType<T>().Last();
 		}
+
 	}
 }

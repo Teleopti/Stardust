@@ -1,13 +1,12 @@
-using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 {
-	public class WaitUntilHangfireQueueIsProcessed : INavigationInterceptor
+	public class PublishRecurringEvents : INavigationInterceptor
 	{
 		public void Before(GotoArgs args)
 		{
-			LocalSystem.Hangfire.WaitForQueue();
+			DataMaker.PublishRecurringEvents();
 		}
 
 		public void After(GotoArgs args)
