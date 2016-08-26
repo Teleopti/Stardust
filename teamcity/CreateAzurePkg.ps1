@@ -9,6 +9,7 @@ properties {
 	#TC Properties
     #Reading all TC Parametes, This is how you call them: $TCParams['build.number']
 	$TCParams = ConvertFrom-StringData (Get-Content $env:TEAMCITY_BUILD_PROPERTIES_FILE -Raw)
+	#$CSPackEXE = $TCParams['AzureSDK_2.8_Path'] + "\bin\cspack.exe"
 	
 	$WorkingDir = $TCParams['teamcity.build.workingDir']
 	
@@ -23,8 +24,8 @@ properties {
 	$AzurePackagePath_Large = "$WorkingDir\TeleoptiWFM_Large.cspkg"
 	
 	$IndexMSBuildFile = "$WorkingDir\teamcity\Azure\UpdateIndexHtml.msbuild"
-	$CSPackEXE = $TCParams['AzureSDK_2.8_Path'] + "\bin\cspack.exe"
-		
+	$CSPackEXE = "$env.AzureSDK_2.8_Path"
+	
 }
 
 Set-ExecutionPolicy bypass -force
