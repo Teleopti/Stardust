@@ -20,9 +20,9 @@ angular.module('wfm.rta').provider('RtaState', function () {
 
 	var rtaSitesTemplate = function (elem, attr) {
 		if (toggles.RTA_MonitorBySkills_39081) {
-			return 'js/rta/sites/rta-sites-RTA_MonitorBySkills_39081.html';
+			return 'js/rta/overview/rta-sites-RTA_MonitorBySkills_39081.html';
 		}
-		return 'js/rta/sites/rta-sites.html';
+		return 'js/rta/overview/rta-sites.html';
 	};
 
 	var rtaAgentsBySkillsTemplate = function (elem, attr) {
@@ -70,7 +70,7 @@ angular.module('wfm.rta').provider('RtaState', function () {
 			.state('rta.teams',
 			{
 				url: '/teams/:siteId',
-				templateUrl: 'js/rta/teams/rta-teams.html',
+				templateUrl: 'js/rta/overview/rta-teams.html',
 				controller: 'RtaTeamsCtrl'
 			})
 			.state('rta.agents-view',
