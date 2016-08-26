@@ -63,9 +63,6 @@
 		vm.triggerCommand = function (label, needToOpenSidePanel) {
 			closeSettingsSidenav();
 			$mdSidenav(commandContainerId).close().then(function () {
-				if(CommandCheckService.getCommandCheckStatus())
-					CommandCheckService.resetCommandCheckStatus();
-
 				needToOpenSidePanel && openSidePanel();
 
 				$scope.$broadcast('teamSchedule.init.command', {
@@ -80,9 +77,9 @@
 		};
 
 		vm.commonCommandCallback = function(trackId, personIds) {
-			if ($mdSidenav(commandContainerId).isOpen()) {
-				$mdSidenav(commandContainerId).close();
-			}
+			$mdSidenav(commandContainerId).isOpen() && $mdSidenav(commandContainerId).close();
+			CommandCheckService.getCommandCheckStatus() && CommandCheckService.resetCommandCheckStatus();
+			
 			vm.lastCommandTrackId = trackId != null ? trackId : null;
 			personIds && vm.updateSchedules(personIds);
 			vm.checkValidationWarningForCommandTargets(personIds);
