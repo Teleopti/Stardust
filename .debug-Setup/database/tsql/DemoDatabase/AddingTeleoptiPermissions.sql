@@ -110,10 +110,11 @@ inner join $(TELEOPTIANALYTICS).mart.dim_business_unit bu
             on 1=1
             and bu.business_unit_id > -1
 
+-- demo as password
 IF NOT EXISTS (SELECT * FROM $(TELEOPTICCC).Tenant.AdminUser WHERE Name = 'FirstAdmin')
 BEGIN
 	INSERT INTO $(TELEOPTICCC).Tenant.AdminUser (Name, Email, Password, AccessToken)
-	VALUES ('FirstAdmin', 'first@admin.is', '###2B2E73BBB3BEE5EC6C159C0FB4E5B9A2570CD8EE###', 'andaDummyToken')
+	VALUES ('FirstAdmin', 'first@admin.is', '###70D74A6BBA33B5972EADAD9DD449D273E1F4961D###', 'andaDummyToken')
 
 	UPDATE $(TELEOPTICCC).Tenant.Tenant SET Active = 1
 END
