@@ -140,7 +140,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				TeamId = @event.TeamId,
 				SiteId = @event.SiteId,
 				BusinessUnitId = @event.BusinessUnitId,
-				PreviousAssociation = @event.PreviousAssociations
+				PreviousAssociation = @event.PreviousAssociations,
+				ExternalLogons = @event.ExternalLogons
 			});
 		}
 
@@ -167,7 +168,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				BusinessUnitId = @event.CurrentBusinessUnitId,
 				SiteId = @event.CurrentSiteId,
 				TeamId = @event.CurrentTeamId,
-				PreviousAssociation = @event.PreviousAssociations
+				PreviousAssociation = @event.PreviousAssociations,
+				ExternalLogons = @event.ExternalLogons
 			});
 		}
 
@@ -181,7 +183,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				BusinessUnitId = @event.CurrentBusinessUnitId,
 				SiteId = @event.CurrentSiteId,
 				TeamId = @event.CurrentTeamId,
-				PreviousAssociation = @event.PreviousAssociation
+				PreviousAssociation = @event.PreviousAssociation,
+				ExternalLogons = @event.ExternalLogons
 			});
 		}
 	}
