@@ -65,13 +65,13 @@ angular.module('wfm.rta').provider('RtaState', function () {
 			.state('rta.sites',
 			{
 				templateUrl: rtaSitesTemplate,
-				controller: 'RtaSitesCtrl',
+				controller: 'RtaOverviewCtrl',
 			})
 			.state('rta.teams',
 			{
 				url: '/teams/:siteId',
 				templateUrl: 'js/rta/overview/rta-teams.html',
-				controller: 'RtaTeamsCtrl'
+				controller: 'RtaOverviewCtrl'
 			})
 			.state('rta.agents-view',
 			{

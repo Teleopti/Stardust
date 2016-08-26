@@ -1,12 +1,13 @@
 'use strict';
-describe('RtaSitesCtrl', function() {
+describe('RtaOverviewCtrl', function () {
 	var $interval,
 		$httpBackend,
 		$state,
 		$sessionStorage,
 		scope,
 		$fakeBackend,
-		$controllerBuilder;
+		$controllerBuilder,
+		NoticeService;
 
 	var stateParams = {};
 
@@ -21,15 +22,16 @@ describe('RtaSitesCtrl', function() {
 		});
 	});
 
-	beforeEach(inject(function (_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_) {
+	beforeEach(inject(function (_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_, _NoticeService_) {
 		$interval = _$interval_;
 		$state = _$state_;
 		$sessionStorage = _$sessionStorage_;
 		$httpBackend = _$httpBackend_;
 		$fakeBackend = _FakeRtaBackend_;
 		$controllerBuilder = _ControllerBuilder_;
+		NoticeService = _NoticeService_;
 
-		scope = $controllerBuilder.setup('RtaSitesCtrl');
+		scope = $controllerBuilder.setup('RtaOverviewCtrl');
 
 		$fakeBackend.clear();
 
@@ -162,5 +164,13 @@ describe('RtaSitesCtrl', function() {
 		var result = scope.getAdherencePercent(1, 11);
 
 		expect(result).toEqual(9);
+	});
+
+	it('should call notify service', function () {
+		spyOn(NoticeService, 'info');
+
+		$controllerBuilder.createController();
+
+		expect(NoticeService.info).toHaveBeenCalled();
 	});
 });
