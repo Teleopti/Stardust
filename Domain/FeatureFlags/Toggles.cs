@@ -4,9 +4,8 @@
 	//with namespaces if changed now.
 	public enum Toggles
 	{
-		//Don't remove this one - used in tests
+		//Don't remove these - used in tests
 		TestToggle,
-
 		TestToggle2,
 		TestToggle3,
 
