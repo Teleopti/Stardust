@@ -34,19 +34,19 @@ angular.module('wfm.rta').provider('RtaState', function () {
 			.state('rta.agents-view',
 			{
 				url: '/agents',
-				templateUrl: 'js/rta/agents/rta-agents-RTA_PauseButton_39144.html',
+				templateUrl: 'js/rta/agents/rta-agents.html',
 				controller: 'RtaAgentsCtrl'
 			})
 			.state('rta.agents',
 			{
 				url: '/agents/:siteId/:teamId?showAllAgents',
-				templateUrl: 'js/rta/agents/rta-agents-RTA_PauseButton_39144.html',
+				templateUrl: 'js/rta/agents/rta-agents.html',
 				controller: 'RtaAgentsCtrl'
 			})
 			.state('rta.agents-teams',
 			{
 				url: '/agents-teams/?teamIds',
-				templateUrl: 'js/rta/agents/rta-agents-RTA_PauseButton_39144.html',
+				templateUrl: 'js/rta/agents/rta-agents.html',
 				controller: 'RtaAgentsCtrl',
 				params: {
 					teamIds: {
@@ -57,7 +57,7 @@ angular.module('wfm.rta').provider('RtaState', function () {
 			.state('rta.agents-sites',
 			{
 				url: '/agents-sites/?siteIds',
-				templateUrl: 'js/rta/agents/rta-agents-RTA_PauseButton_39144.html',
+				templateUrl: 'js/rta/agents/rta-agents.html',
 				controller: 'RtaAgentsCtrl',
 				params: {
 					siteIds: {
@@ -68,13 +68,13 @@ angular.module('wfm.rta').provider('RtaState', function () {
 			.state('rta.agents-skill-area',
 			{
 				url: '/agents-skill-area/:skillAreaId',
-				templateUrl: 'js/rta/agents/rta-agents-RTA_MonitorBySkills_39081.html',
+				templateUrl: 'js/rta/agents/rta-agents.html',
 				controller: 'RtaAgentsCtrl',
 			})
 			.state('rta.agents-skill',
 			{
 				url: '/agents-skill/:skillId',
-				templateUrl: 'js/rta/agents/rta-agents-RTA_MonitorBySkills_39081.html',
+				templateUrl: 'js/rta/agents/rta-agents.html',
 				controller: 'RtaAgentsCtrl'
 			})		
 			.state('rta.agent-details',

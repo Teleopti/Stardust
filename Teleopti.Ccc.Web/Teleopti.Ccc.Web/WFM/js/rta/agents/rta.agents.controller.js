@@ -37,9 +37,8 @@
 				var lastUpdate, notice;
 				$scope.showPath = false;
 
-				$scope.noSiteIds = siteIds.length == 0;
+				$scope.noSiteIds = siteIds.length === 0;
 				$scope.showBreadcrumb = siteIds.length > 0 || teamIds.length > 0  || skillIds === [];
-				$scope.showGrid = !$scope.showBreadcrumb;
 				$scope.skillName = "";
 				$scope.skillAreaName = "";
 
