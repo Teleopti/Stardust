@@ -3,6 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -10,6 +11,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
 	public class PersonAssociationChangedEventPublisher : 
 		IHandleEvent<TenantHourTickEvent>,
+		IHandleEvent<TenantMinuteTickEvent>,
 		IHandleEvent<PersonTerminalDateChangedEvent>,
 		IHandleEvent<PersonTeamChangedEvent>,
 		IHandleEvent<PersonPeriodChangedEvent>,
@@ -18,60 +20,114 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		private readonly IPersonRepository _persons;
 		private readonly IEventPublisher _eventPublisher;
 		private readonly INow _now;
+		private readonly IDistributedLockAcquirer _distributedLock;
+		private readonly IKeyValueStorePersister _keyValueStore;
 
 		public PersonAssociationChangedEventPublisher(
 			IPersonRepository persons,
 			IEventPublisher eventPublisher,
-			INow now)
+			INow now,
+			IDistributedLockAcquirer distributedLock,
+			IKeyValueStorePersister keyValueStore)
 		{
 			_persons = persons;
 			_eventPublisher = eventPublisher;
 			_now = now;
+			_distributedLock = distributedLock;
+			_keyValueStore = keyValueStore;
+		}
+
+		[UnitOfWork]
+		[ReadModelUnitOfWork]
+		[RecurringJob]
+		public virtual void Handle(TenantMinuteTickEvent @event)
+		{
+			_distributedLock.TryLockForTypeOf(this, () =>
+			{
+				if (_keyValueStore.Get("PersonAssociationChangedPublishTrigger", false))
+				{
+					_keyValueStore.Update("PersonAssociationChangedPublishTrigger", false);
+					publishEventsFor(d => true);
+				}
+			});
 		}
 
 		[UnitOfWork]
 		[RecurringJob]
 		public virtual void Handle(TenantHourTickEvent @event)
 		{
+			publishEventsFor(data =>
+			{
+				var previousTeam = data.previousPeriod?.Team.Id;
+				var teamId = data.currentPeriod?.Team.Id;
+
+				if (data.timeOfChange == null)
+					return false;
+				if (data.timeOfChange > data.now)
+					return false;
+				if (data.timeOfChange < data.now.AddDays(-1))
+					return false;
+
+				var sameTeam = previousTeam.HasValue &&
+							   teamId.HasValue &&
+							   previousTeam == teamId;
+
+				var sameExternalLogons =
+					(data.previousPeriod?.ExternalLogOnCollection.Select(x => x.AcdLogOnOriginalId).OrderBy(x => x))
+						.SequenceEqualNullSafe(
+							data.currentPeriod?.ExternalLogOnCollection.Select(x => x.AcdLogOnOriginalId).OrderBy(x => x)
+						);
+
+				return !(sameTeam && sameExternalLogons);
+
+			});
+		}
+
+		private class data
+		{
+			public IPerson person;
+			public IPersonPeriod previousPeriod;
+			public IPersonPeriod currentPeriod;	
+			public DateOnly agentDate;	
+			public DateTime? timeOfChange;
+			public DateTime now;
+		}
+
+		private void publishEventsFor(Func<data, bool> predicate)
+		{
+			var now = _now.UtcDateTime();
+
 			_persons.LoadAll()
-				.ForEach(person =>
+				.Select(person =>
 				{
-					var now = _now.UtcDateTime();
 					var timeZone = person.PermissionInformation.DefaultTimeZone();
 					var agentDate = new DateOnly(TimeZoneInfo.ConvertTimeFromUtc(now, timeZone));
 					var currentPeriod = person.Period(agentDate);
 					var previousPeriod = this.previousPeriod(person, currentPeriod);
-
 					var time = timeOfChange(person.TerminalDate, currentPeriod, timeZone);
 
-					if (time == null)
-						return;
-					if (time > now)
-						return;
-					if (time < now.AddDays(-1))
-						return;
+					return new data
+					{
+						person = person,
+						previousPeriod = previousPeriod,
+						currentPeriod = currentPeriod,
+						agentDate = agentDate,
+						timeOfChange = time,
+						now = now
+					};
 
-					var previousTeam = previousPeriod?.Team.Id;
-					var teamId = currentPeriod?.Team.Id;
-					var siteId = currentPeriod?.Team.Site.Id;
-					var businessUnitId = currentPeriod?.Team.Site.BusinessUnit.Id;
+				})
+				.Where(predicate)
+				.ForEach(data =>
+				{
 
-					var sameTeam = previousTeam.HasValue &&
-						teamId.HasValue &&
-						previousTeam == teamId;
-					
-					var sameExternalLogons =
-						(previousPeriod?.ExternalLogOnCollection.Select(x => x.AcdLogOnOriginalId).OrderBy(x => x))
-							.SequenceEqualNullSafe(
-								currentPeriod?.ExternalLogOnCollection.Select(x => x.AcdLogOnOriginalId).OrderBy(x => x)
-							);
-						
-					if (sameTeam && sameExternalLogons)
-						return;
+					var teamId = data.currentPeriod?.Team.Id;
+					var siteId = data.currentPeriod?.Team.Site.Id;
+					var businessUnitId = data.currentPeriod?.Team.Site.BusinessUnit.Id;
 
-					var previousAssociation = from p in person.PersonPeriodCollection
+					var previousAssociation = from p in data.person.PersonPeriodCollection
 						where p != null &&
-						p.StartDate < agentDate
+							  p.StartDate < data.agentDate
 						select new Association
 						{
 							TeamId = p.Team.Id.Value,
@@ -82,13 +138,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 					_eventPublisher.Publish(new PersonAssociationChangedEvent
 					{
 						Version = 2,
-						PersonId = person.Id.Value,
+						PersonId = data.person.Id.Value,
 						Timestamp = now,
 						TeamId = teamId,
 						SiteId = siteId,
 						BusinessUnitId = businessUnitId,
 						PreviousAssociation = previousAssociation,
-						ExternalLogons = (currentPeriod?.ExternalLogOnCollection ?? Enumerable.Empty<IExternalLogOn>())
+						ExternalLogons = (data.currentPeriod?.ExternalLogOnCollection ?? Enumerable.Empty<IExternalLogOn>())
 							.Select(x => new ExternalLogon
 							{
 								UserCode = x.AcdLogOnOriginalId,
@@ -187,5 +243,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				ExternalLogons = @event.ExternalLogons
 			});
 		}
+
 	}
 }

@@ -5,8 +5,6 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.TestData.Analytics;
-using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 using BusinessUnit = Teleopti.Ccc.Domain.Common.BusinessUnit;
 using Person = Teleopti.Ccc.Domain.Common.Person;
@@ -164,5 +162,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			return this;
 		}
 
+		public DatabaseLegacy PublishRecurringEvents()
+		{
+			_database.PublishRecurringEvents();
+			return this;
+		}
 	}
 }

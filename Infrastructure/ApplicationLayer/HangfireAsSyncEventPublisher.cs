@@ -6,21 +6,26 @@ using NHibernate.Util;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
+using AggregateException = System.AggregateException;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
 	public class HangfireAsSyncEventPublisher : IEventPublisher
 	{
+		private readonly ICurrentDataSource _dataSource;
 		private readonly HangfireEventProcessor _processor;
 		private readonly ResolveEventHandlers _resolver;
 		private readonly Queue<IEvent> _queue = new Queue<IEvent>();
 		private readonly object processLock = new object();
 
 		public HangfireAsSyncEventPublisher(
+			ICurrentDataSource dataSource,
 			HangfireEventProcessor processor,
 			ResolveEventHandlers resolver)
 		{
+			_dataSource = dataSource;
 			_processor = processor;
 			_resolver = resolver;
 		}
@@ -40,10 +45,11 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		private void process()
 		{
+			var tenant = _dataSource.CurrentName();
 			try
 			{
 				var exceptions = new List<Exception>();
-				onAnotherThread(() => processQueue(exceptions));
+				onAnotherThread(() => processQueue(tenant, exceptions));
 				if (exceptions.Any())
 					throw new AggregateException(exceptions);
 			}
@@ -60,18 +66,22 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			thread.Join();
 		}
 
-		private void processQueue(ICollection<Exception> exceptions)
+		private void processQueue(string tenant, ICollection<Exception> exceptions)
 		{
 			while (_queue.Any())
 			{
-				try
+				var @event = _queue.Dequeue();
+				foreach (var handler in _resolver.HandlerTypesFor<IRunOnHangfire>(@event))
 				{
-					_processor.Process(_queue.Dequeue());
-				}
-				catch (Exception e)
-				{
-					PreserveStack.For(e);
-					exceptions.Add(e);
+					try
+					{
+						_processor.Process(tenant, @event, handler);
+					}
+					catch (Exception e)
+					{
+						PreserveStack.For(e);
+						exceptions.Add(e);
+					}
 				}
 			}
 		}

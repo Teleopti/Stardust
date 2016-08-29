@@ -15,9 +15,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		[Test]
 		public void ShouldPersistModel()
 		{
-			var state = new AgentStateForTest();
+			var state = new AgentStateForUpsert();
 
-			Target.Persist(state);
+			Target.Upsert(state);
 
 			var result = Target.Get(state.PersonId);
 			result.Should().Not.Be.Null();
@@ -27,9 +27,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		public void ShouldPersistBusinessUnit()
 		{
 			var businessUnitId = Guid.NewGuid();
-			var state = new AgentStateForTest { BusinessUnitId = businessUnitId};
+			var state = new AgentStateForUpsert { BusinessUnitId = businessUnitId};
 
-			Target.Persist(state);
+			Target.Upsert(state);
 
 			Target.Get(state.PersonId)
 				.BusinessUnitId.Should().Be(businessUnitId);
@@ -39,9 +39,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		public void ShouldPersistTeamId()
 		{
 			var teamId = Guid.NewGuid();
-			var state = new AgentStateForTest { TeamId = teamId};
+			var state = new AgentStateForUpsert { TeamId = teamId};
 
-			Target.Persist(state);
+			Target.Upsert(state);
 
 			Target.Get(state.PersonId)
 				.TeamId.Should().Be(teamId);
@@ -51,9 +51,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		public void ShouldPersistSiteId()
 		{
 			var siteId = Guid.NewGuid();
-			var state = new AgentStateForTest { SiteId = siteId};
+			var state = new AgentStateForUpsert { SiteId = siteId};
 
-			Target.Persist(state);
+			Target.Upsert(state);
 
 			Target.Get(state.PersonId)
 				.SiteId.Should().Be(siteId);
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var personId = Guid.NewGuid();
 
-			Target.Persist(new AgentStateForTest
+			Target.Upsert(new AgentStateForUpsert
 			{
 				PersonId = personId,
 				BusinessUnitId = Guid.NewGuid(),
@@ -93,9 +93,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		[Test]
 		public void ShouldPersistAlarmStartTime()
 		{
-			var state = new AgentStateForTest { AlarmStartTime = "2015-12-11 08:00".Utc()};
+			var state = new AgentStateForUpsert { AlarmStartTime = "2015-12-11 08:00".Utc()};
 
-			Target.Persist(state);
+			Target.Upsert(state);
 
 			Target.Get(state.PersonId)
 				.AlarmStartTime.Should().Be("2015-12-11 08:00".Utc());
@@ -104,9 +104,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		[Test]
 		public void ShouldPersistTimeWindowCheckSum()
 		{
-			var state = new AgentStateForTest {TimeWindowCheckSum = 375};
+			var state = new AgentStateForUpsert {TimeWindowCheckSum = 375};
 
-			Target.Persist(state);
+			Target.Upsert(state);
 
 			Target.Get(state.PersonId)
 				.TimeWindowCheckSum.Should().Be(375);
@@ -115,11 +115,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		[Test]
 		public void ShouldUpdateTimeWindowCheckSum()
 		{
-			var state = new AgentStateForTest { TimeWindowCheckSum = 375 };
-			Target.Persist(state);
+			var state = new AgentStateForUpsert { TimeWindowCheckSum = 375 };
+			Target.Upsert(state);
 			state.TimeWindowCheckSum = 475;
 
-			Target.Persist(state);
+			Target.Upsert(state);
 
 			Target.Get(state.PersonId)
 				.TimeWindowCheckSum.Should().Be(475);
@@ -129,8 +129,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		public void ShouldDelete()
 		{
 			var personId = Guid.NewGuid();
-			var model = new AgentStateForTest { PersonId = personId };
-			Target.Persist(model);
+			var model = new AgentStateForUpsert { PersonId = personId };
+			Target.Upsert(model);
 
 			Target.Delete(personId);
 

@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class AdherenceInfo
 	{
 		private readonly InputInfo _input;
-		private readonly Lazy<AgentState> _stored;
+		private readonly AgentState _stored;
 		private readonly MappingsState _mappings;
 		private readonly Guid _businessUnitId;
 		private readonly StateRuleInfo _stateRuleInfo;
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public AdherenceInfo(
 			InputInfo input,
-			Lazy<AgentState> stored,
+			AgentState stored,
 			MappingsState mappings,
 			Guid businessUnitId,
 			StateRuleInfo stateRuleInfo,
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public EventAdherence AdherenceForStoredState()
 		{
-			return adherenceFor(_stored.Value?.StateCode, _stored.Value.PlatformTypeId(), _stored.Value?.ActivityId);
+			return adherenceFor(_stored?.StateCode, _stored.PlatformTypeId(), _stored?.ActivityId);
 		}
 
 		public EventAdherence AdherenceForNewStateAndPreviousActivity()
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public EventAdherence AdherenceForStoredStateAndCurrentActivity()
 		{
-			return adherenceFor(_stored.Value?.StateCode, _stored.Value.PlatformTypeId(), _scheduleInfo.CurrentActivity());
+			return adherenceFor(_stored?.StateCode, _stored.PlatformTypeId(), _scheduleInfo.CurrentActivity());
 		}
 
 		private EventAdherence adherenceFor(string stateCode, Guid platformTypeId, ScheduledActivity activity)
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public bool AdherenceChangedFromActivityChange()
 		{
 			EventAdherence? from = null;
-			if (_stored.Value != null)
+			if (_stored != null)
 				from = AdherenceForStoredState();
 			var to = AdherenceForStoredStateAndCurrentActivity();
 			return from != to;
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public bool AdherenceChangedFromStateChange()
 		{
 			EventAdherence? from = null;
-			if (_stored.Value != null)
+			if (_stored != null)
 				from = AdherenceForStoredStateAndCurrentActivity();
 			var to = AdherenceForNewStateAndCurrentActivity();
 			return from != to;

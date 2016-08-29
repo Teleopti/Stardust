@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	{
 		public FakeRtaDatabase Database;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
-		public IRtaStateGroupRepository StateGroups;
+		public FakeRtaStateGroupRepository StateGroups;
 
 		[Test]
 		public void ShouldAddStateCodeToDatabase()
@@ -69,8 +69,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var personId = Guid.NewGuid();
 			Database
 				.WithUser("usercode", personId)
-				.WithRule()
-				.WithExistingAgentState(personId, "statecode");
+				.WithRule();
+			Target.SaveState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "statecode"
+			});
+			StateGroups.LoadAll().Single(x => x.DefaultStateGroup).ClearStates();
 
 			Target.CheckForActivityChanges(Database.TenantName(), personId);
 

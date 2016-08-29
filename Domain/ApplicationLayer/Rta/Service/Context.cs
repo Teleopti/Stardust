@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly Action<Context> _updateState;
 		private readonly ProperAlarm _appliedAlarm;
-		private readonly Lazy<AgentState> _stored;
 
 		public Context(
 			InputInfo input, 
@@ -46,8 +45,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			AppliedAdherence appliedAdherence,
 			ProperAlarm appliedAlarm)
 		{
-			var dontDeferForNow = stored == null ? null : stored.Invoke();
-			_stored = new Lazy<AgentState>(() => dontDeferForNow);
+
+			// on synchronze, the func is null
+			// and that is fine
+			// it means there's no previous state
+			if (stored != null)
+			{
+				Stored = stored.Invoke();
+				// if the stored state has no time
+				// its just a prepared state
+				// and there's no real previous state
+				if (Stored.ReceivedTime == null)
+					Stored = null;
+			}
+
 			var scheduleLazy = new Lazy<IEnumerable<ScheduledActivity>>(schedule);
 			var mappingsState = mappings.Invoke(this);
 			Input = input ?? new InputInfo();
@@ -60,9 +71,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_updateState = updateState ?? (c => {});
 			_appliedAlarm = appliedAlarm;
 
-			Schedule = new ScheduleInfo(scheduleLazy, _stored, CurrentTime);
-			State = new StateRuleInfo(mappingsState, _stored, StateCode, PlatformTypeId, businessUnitId, Input, Schedule, stateMapper);
-			Adherence = new AdherenceInfo(Input, _stored, mappingsState, businessUnitId, State, Schedule, appliedAdherence, stateMapper);
+			Schedule = new ScheduleInfo(scheduleLazy, Stored, CurrentTime);
+			State = new StateRuleInfo(mappingsState, Stored, StateCode, PlatformTypeId, businessUnitId, Input, Schedule, stateMapper);
+			Adherence = new AdherenceInfo(Input, Stored, mappingsState, businessUnitId, State, Schedule, appliedAdherence, stateMapper);
 		}
 
 		public Guid PersonId { get; private set; }
@@ -71,7 +82,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public Guid SiteId { get; private set; }
 
 		public InputInfo Input { get; set; }
-		public AgentState Stored { get { return _stored.Value; } }
+		public AgentState Stored { get; set; }
 		public StateRuleInfo State { get; private set; }
 		public ScheduleInfo Schedule { get; private set; }
 		public AdherenceInfo Adherence { get; private set; }

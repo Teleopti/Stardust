@@ -1,7 +1,8 @@
-﻿using Teleopti.Ccc.Domain.Aop;
+﻿using System.Linq;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Logon.Aspects;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -9,8 +10,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class AgentStateCleaner :
 		IRunOnHangfire,
 		IHandleEvent<PersonDeletedEvent>,
-		IHandleEvent<PersonAssociationChangedEvent>,
-		IHandleEvent<PersonPeriodChangedEvent>
+		IHandleEvent<PersonAssociationChangedEvent>
 	{
 		private readonly IAgentStatePersister _persister;
 
@@ -28,34 +28,32 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[UnitOfWork]
 		public virtual void Handle(PersonAssociationChangedEvent @event)
 		{
-			if (@event.TeamId.HasValue)
-				return;
-			_persister.Delete(@event.PersonId);
-		}
-
-		[UnitOfWork]
-		public virtual void Handle(PersonPeriodChangedEvent @event)
-		{
-			if (!@event.CurrentTeamId.HasValue)
-				return;
-			var existing = _persister.Get(@event.PersonId);
-			if (existing == null)
+			if (!@event.TeamId.HasValue)
 			{
-				_persister.Persist(new AgentState
-				{
-					PersonId = @event.PersonId,
-					BusinessUnitId = @event.CurrentBusinessUnitId.GetValueOrDefault(),
-					SiteId = @event.CurrentSiteId,
-					TeamId = @event.CurrentTeamId,
-					// if the current time is used, behavior tests regarding "details" view fail..
-					// .. because the current time later faked to an earlier time...
-					// .. and the rta service will see it as the activity starting in the past, since the previous state was later..
-					ReceivedTime = "2001-01-01 00:00".Utc()
-				});
+				_persister.Delete(@event.PersonId);
+				return;
 			}
+			if (@event.ExternalLogons.IsNullOrEmpty())
+			{
+				_persister.Delete(@event.PersonId);
+				return;
+			}
+
+			_persister.Prepare(new AgentStatePrepare
+			{
+				PersonId = @event.PersonId,
+				BusinessUnitId = @event.BusinessUnitId.GetValueOrDefault(),
+				SiteId = @event.SiteId,
+				TeamId = @event.TeamId,
+				ExternalLogons = @event.ExternalLogons.Select(x => new ExternalLogon
+				{
+					DataSourceId = x.DataSourceId,
+					UserCode = x.UserCode,
+				})
+			});
 		}
 	}
-	
+
 	public class Rta
 	{
 		public static string LogOutStateCode = "LOGGED-OFF";

@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 									() => data.agentStates.FirstOrDefault(s => s.PersonId == x.PersonId),
 									() => data.schedules.Where(s => s.PersonId == x.PersonId).ToArray(),
 									s => data.mappings,
-									c => _agentStatePersister.Persist(c.MakeAgentState()),
+									c => _agentStatePersister.Update(c.MakeAgentState()),
 									_now,
 									_stateMapper,
 									_appliedAdherence,
@@ -254,7 +254,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 											return _mappingReader.ReadFor(stateCodes, activities);
 										});
 									},
-									c => _agentStatePersister.Persist(c.MakeAgentState()),
+									c => _agentStatePersister.Update(c.MakeAgentState()),
 									_now,
 									_stateMapper,
 									_appliedAdherence,
@@ -441,7 +441,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 									return _mappingReader.ReadFor(stateCodes, activities);
 								});
 							},
-							c => _agentStatePersister.Persist(c.MakeAgentState()),
+							c => _agentStatePersister.Update(c.MakeAgentState()),
 							_now,
 							_stateMapper,
 							_appliedAdherence,
@@ -498,16 +498,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			{
 				WithUnitOfWork(() =>
 				{
+					var state = _agentStatePersister.Get(x.PersonId);
+					if (state == null)
+						return;
 					action.Invoke(new Context(
 						null,
 						x.PersonId,
 						x.BusinessUnitId,
 						x.TeamId,
 						x.SiteId,
-						() => _agentStatePersister.Get(x.PersonId),
+						() => state,
 						() => _databaseReader.GetCurrentSchedule(x.PersonId),
 						s => mappings,
-						c => _agentStatePersister.Persist(c.MakeAgentState()),
+						c => _agentStatePersister.Update(c.MakeAgentState()),
 						_now,
 						_stateMapper,
 						_appliedAdherence,
@@ -547,7 +550,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					() => x,
 					() => _databaseReader.GetCurrentSchedule(x.PersonId),
 					s => mappings,
-					c => _agentStatePersister.Persist(c.MakeAgentState()),
+					c => _agentStatePersister.Update(c.MakeAgentState()),
 					_now,
 					_stateMapper,
 					_appliedAdherence,

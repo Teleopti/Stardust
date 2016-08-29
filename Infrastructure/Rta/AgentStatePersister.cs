@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Internal;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
@@ -19,9 +20,68 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		}
 
 		[InfoLog]
-		public virtual void Persist(AgentState model)
+		public virtual void Prepare(AgentStatePrepare model)
 		{
-			var updated = _unitOfWork.Current().Session()
+			if (model.ExternalLogons.IsNullOrEmpty())
+			{
+				_unitOfWork.Current().Session()
+					.CreateSQLQuery("DELETE FROM [dbo].[AgentState] WHERE PersonId = :PersonId")
+					.SetParameter("PersonId", model.PersonId)
+					.ExecuteUpdate();
+				return;
+			}
+
+			_unitOfWork.Current().Session()
+				.CreateSQLQuery(@"
+DELETE FROM [dbo].[AgentState]
+WHERE
+	PersonId = :PersonId AND
+	CONCAT(DataSourceId, ';', UserCode) NOT IN (:DataSourceIdUserCode)")
+				.SetParameter("PersonId", model.PersonId)
+				.SetParameterList("DataSourceIdUserCode", model.ExternalLogons.Select(x => $"{x.DataSourceId};{x.UserCode}"))
+				.ExecuteUpdate();
+
+			model.ExternalLogons.ForEach(externalLogon =>
+			{
+				var updated = _unitOfWork.Current().Session()
+					.CreateSQLQuery(@"
+UPDATE [dbo].[AgentState] SET
+	BusinessUnitId = :BusinessUnitId,
+	SiteId = :SiteId,
+	TeamId = :TeamId
+WHERE
+	PersonId = :PersonId AND
+	DataSourceId = :DataSourceId AND
+	UserCode  = :UserCode")
+					.SetParameter("BusinessUnitId", model.BusinessUnitId)
+					.SetParameter("SiteId", model.SiteId)
+					.SetParameter("TeamId", model.TeamId)
+					.SetParameter("PersonId", model.PersonId)
+					.SetParameter("DataSourceId", externalLogon.DataSourceId)
+					.SetParameter("UserCode", externalLogon.UserCode)
+					.ExecuteUpdate();
+
+				if (updated == 0)
+				{
+					_unitOfWork.Current().Session()
+						.CreateSQLQuery(@"
+INSERT INTO [dbo].[AgentState] (BusinessUnitId, SiteId, TeamId, PersonId, DataSourceId, UserCode)
+VALUES (:BusinessUnitId, :SiteId, :TeamId, :PersonId, :DataSourceId, :UserCode)")
+						.SetParameter("BusinessUnitId", model.BusinessUnitId)
+						.SetParameter("SiteId", model.SiteId)
+						.SetParameter("TeamId", model.TeamId)
+						.SetParameter("PersonId", model.PersonId)
+						.SetParameter("DataSourceId", externalLogon.DataSourceId)
+						.SetParameter("UserCode", externalLogon.UserCode)
+						.ExecuteUpdate();
+				}
+			});
+		}
+
+		[InfoLog]
+		public virtual void Update(AgentState model)
+		{
+			_unitOfWork.Current().Session()
 				.CreateSQLQuery(@"
 					UPDATE [dbo].[AgentState]
 					SET
@@ -68,77 +128,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.SetParameter("AlarmStartTime", model.AlarmStartTime)
 				.SetParameter("TimeWindowCheckSum", model.TimeWindowCheckSum)
 				.ExecuteUpdate();
-			if (updated == 0)
-			{
-				_unitOfWork.Current().Session()
-					.CreateSQLQuery(@"
-						INSERT INTO [dbo].[AgentState]
-						(
-							PersonId, 
-							BatchId,
-							SourceId,
-							PlatformTypeId,
-							BusinessUnitId,
-							TeamId,
-							SiteId,
-							ReceivedTime,
-							StateCode,
-							StateGroupId,
-							StateStartTime,
-							ActivityId,
-							NextActivityId,
-							NextActivityStartTime,
-							RuleId,
-							RuleStartTime,
-							StaffingEffect,
-							Adherence,
-							AlarmStartTime,
-							TimeWindowCheckSum)
-						VALUES
-						(
-							:PersonId, 
-							:BatchId,
-							:SourceId,
-							:PlatformTypeId,
-							:BusinessUnitId,
-							:TeamId,
-							:SiteId,
-							:ReceivedTime,
-							:StateCode,
-							:StateGroupId,
-							:StateStartTime,
-							:ActivityId,
-							:NextActivityId,
-							:NextActivityStartTime,
-							:RuleId,
-							:RuleStartTime,
-							:StaffingEffect,
-							:Adherence,
-							:AlarmStartTime,
-							:TimeWindowCheckSum)
-					")
-					.SetParameter("PersonId", model.PersonId)
-					.SetParameter("BatchId", model.BatchId)
-					.SetParameter("SourceId", model.SourceId)
-					.SetParameter("PlatformTypeId", model.PlatformTypeId)
-					.SetParameter("BusinessUnitId", model.BusinessUnitId)
-					.SetParameter("SiteId", model.SiteId)
-					.SetParameter("TeamId", model.TeamId)
-					.SetParameter("ReceivedTime", model.ReceivedTime)
-					.SetParameter("StateCode", model.StateCode)
-					.SetParameter("StateGroupId", model.StateGroupId)
-					.SetParameter("StateStartTime", model.StateStartTime)
-					.SetParameter("ActivityId", model.ActivityId)
-					.SetParameter("NextActivityId", model.NextActivityId)
-					.SetParameter("NextActivityStartTime", model.NextActivityStartTime)
-					.SetParameter("RuleId", model.RuleId)
-					.SetParameter("RuleStartTime", model.RuleStartTime)
-					.SetParameter("StaffingEffect", model.StaffingEffect)
-					.SetParameter("Adherence", model.Adherence)
-					.SetParameter("AlarmStartTime", model.AlarmStartTime)
-					.SetParameter("TimeWindowCheckSum", model.TimeWindowCheckSum)
-					.ExecuteUpdate();
-			}
 		}
 
 		public void Delete(Guid personId)
@@ -149,15 +138,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.SetParameter("PersonId", personId)
 				.ExecuteUpdate()
 				;
-		}
-
-		public virtual IEnumerable<AgentState> GetAll()
-		{
-			var sql = SelectAgentState + "WITH (TABLOCK UPDLOCK)";
-			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
-				.SetResultTransformer(Transformers.AliasToBean(typeof (internalState)))
-				.SetReadOnly(true)
-				.List<AgentState>();
 		}
 
 		[InfoLog]
@@ -173,6 +153,19 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		}
 
 		[InfoLog]
+		public virtual IEnumerable<AgentState> Get(int dataSourceId, string userCode)
+		{
+			var sql = SelectAgentState + "WITH (UPDLOCK) WHERE DataSourceId = :DataSourceId AND UserCode = :UserCode";
+			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
+				.SetParameter("DataSourceId", dataSourceId)
+				.SetParameter("UserCode", userCode)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalState)))
+				.SetReadOnly(true)
+				.List<AgentState>()
+				;
+		}
+
+		[InfoLog]
 		public virtual IEnumerable<AgentState> Get(IEnumerable<Guid> personIds)
 		{
 			var sql = SelectAgentState + "WITH (UPDLOCK) WHERE PersonId IN (:PersonIds)";
@@ -181,31 +174,51 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalState)))
 				.SetReadOnly(true)
 				.List<AgentState>()
+				.GroupBy(x => x.PersonId, (guid, states) => states.First())
+				.ToArray()
 				;
 		}
 
 		[InfoLog]
-		public virtual IEnumerable<AgentState> GetNotInSnapshot(DateTime batchId, string sourceId)
+		public virtual IEnumerable<AgentState> GetAll()
+		{
+			var sql = SelectAgentState + "WITH (TABLOCK UPDLOCK)";
+			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalState)))
+				.SetReadOnly(true)
+				.List<AgentState>()
+				.GroupBy(x => x.PersonId, (guid, states) => states.First())
+				.ToArray()
+				;
+		}
+
+		[InfoLog]
+		public virtual IEnumerable<AgentState> GetNotInSnapshot(DateTime snapshotId, string sourceId)
 		{
 			var sql = SelectAgentState +
 					  @"WITH (UPDLOCK) WHERE 
 						SourceId = :SourceId
 						AND (
-							BatchId < :BatchId
+							BatchId < :SnapshotId
 							OR 
 							BatchId IS NULL
 							)";
 			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
-				.SetParameter("BatchId", batchId)
+				.SetParameter("SnapshotId", snapshotId)
 				.SetParameter("SourceId", sourceId)
 				.SetResultTransformer(Transformers.AliasToBean(typeof (internalState)))
 				.SetReadOnly(true)
-				.List<AgentState>();
+				.List<AgentState>()
+				.GroupBy(x => x.PersonId, (guid, states) => states.First())
+				.ToArray()
+				;
 		}
 
 		private class internalState : AgentState
 		{
 			public new int Adherence { set { base.Adherence = (Interfaces.Domain.Adherence?) value; } }
+			public int DataSourceId { get; set; }
+			public string UserCode { get; set; }
 		}
 
 		private static string SelectAgentState = @"SELECT * FROM [dbo].[AgentState] ";

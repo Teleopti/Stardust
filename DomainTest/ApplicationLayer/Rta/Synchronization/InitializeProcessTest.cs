@@ -55,8 +55,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			Database
 				.WithUser("user", personId)
 				.WithRule("statecode")
-				.WithExistingAgentState(personId, "statecode")
 				;
+			Rta.SaveState(new StateForTest
+			{
+				UserCode = "user",
+				StateCode = "statecode"
+			});
 
 			Context.SimulateRestart();
 			Rta.Touch(Database.TenantName());

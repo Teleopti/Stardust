@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
@@ -16,6 +18,7 @@ namespace Teleopti.Ccc.TestCommon
 	public class Database
 	{
 		private readonly AnalyticsDatabase _analytics;
+		private readonly IEventPublisher _eventPublisher;
 		private readonly IPersonAssignmentRepository _assignments;
 		private readonly IPersonRepository _persons;
 		private readonly ISiteRepository _sites;
@@ -46,6 +49,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public Database(
 			AnalyticsDatabase analytics,
+			IEventPublisher eventPublisher,
 			IPersonAssignmentRepository assignments,
 			IPersonRepository persons,
 			ISiteRepository sites,
@@ -60,9 +64,11 @@ namespace Teleopti.Ccc.TestCommon
 			IRtaStateGroupRepository stateGroups,
 			IRtaRuleRepository rules,
 			IRtaMapRepository mappings,
-			IExternalLogOnRepository externalLogOns)
+			IExternalLogOnRepository externalLogOns
+			)
 		{
 			_analytics = analytics;
+			_eventPublisher = eventPublisher;
 			_assignments = assignments;
 			_persons = persons;
 			_sites = sites;
@@ -439,5 +445,13 @@ namespace Teleopti.Ccc.TestCommon
 			return this;
 		}
 
+
+
+
+		public Database PublishRecurringEvents()
+		{
+			_eventPublisher.Publish(new TenantMinuteTickEvent(), new TenantHourTickEvent());
+			return this;
+		}
 	}
 }

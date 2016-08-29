@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public Guid BusinessUnitId { get; set; }
 		public Guid? TeamId { get; set; }
 		public Guid? SiteId { get; set; }
-		public DateTime ReceivedTime { get; set; }
+		public DateTime? ReceivedTime { get; set; }
 		public string StateCode { get; set; }
 		public Guid? StateGroupId { get; set; }
 		public DateTime? StateStartTime { get; set; }
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public static DateTime ReceivedTime(this AgentState stored)
 		{
-			return stored.get(s => s.ReceivedTime);
+			return stored.get(s => s.ReceivedTime ?? DateTime.MinValue);
 		}
 		
 

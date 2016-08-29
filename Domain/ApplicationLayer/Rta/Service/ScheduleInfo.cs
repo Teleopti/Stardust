@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly DateTime _currentTime;
 		private readonly Lazy<IEnumerable<ScheduledActivity>> _schedule;
-		private readonly Lazy<AgentState> _stored;
+		private readonly AgentState _stored;
 		private readonly Lazy<ScheduledActivity> _currentActivity;
 		private readonly Lazy<ScheduledActivity> _nextActivityInShift;
 		private readonly Lazy<ScheduledActivity> _previousActivity;
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public ScheduleInfo(
 			Lazy<IEnumerable<ScheduledActivity>> schedule,
-			Lazy<AgentState> stored,
+			AgentState stored,
 			DateTime currentTime
 			)
 		{
@@ -72,13 +72,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public bool ShiftStarted()
 		{
-			return _stored.Value?.ActivityId == null &&
+			return _stored?.ActivityId == null &&
 				   CurrentActivity() != null;
 		}
 
 		public bool ShiftEnded()
 		{
-			return _stored.Value?.ActivityId != null &&
+			return _stored?.ActivityId != null &&
 				   CurrentActivity() == null &&
 				   PreviousActivity() != null;
 		}

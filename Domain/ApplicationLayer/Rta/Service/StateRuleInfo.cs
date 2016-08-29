@@ -7,11 +7,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly Lazy<MappedRule> _mappedRule;
 		private readonly Lazy<MappedState> _mappedState;
-		private readonly Lazy<AgentState> _stored;
+		private readonly AgentState _stored;
 
 		public StateRuleInfo(
 			MappingsState mappings,
-			Lazy<AgentState> stored, 
+			AgentState stored, 
 			string stateCode,
 			Guid platformTypeId,
 			Guid businessUnitId,
@@ -27,9 +27,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public bool StateGroupChanged()
 		{
-			if (_stored.Value == null)
+			if (_stored == null)
 				return true;
-			return _mappedState.Value?.StateGroupId != _stored.Value?.StateGroupId;
+			return _mappedState.Value?.StateGroupId != _stored?.StateGroupId;
 		}
 
 		public Guid? StateGroupId()
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public bool RuleChanged()
 		{
-			return _mappedRule.Value?.RuleId != _stored.Value?.RuleId;
+			return _mappedRule.Value?.RuleId != _stored?.RuleId;
 		}
 
 		public Guid? RuleId()

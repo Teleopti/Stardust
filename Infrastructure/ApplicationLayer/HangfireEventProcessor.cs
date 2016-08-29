@@ -34,10 +34,9 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			_processor.Process(tenant, @event, publishTo);
 		}
 
-		public void Process(IEvent @event)
+		public void Process(string tenant, IEvent @event, Type handlerType)
 		{
-			foreach (var handler in _resolver.HandlerTypesFor<IRunOnHangfire>(@event))
-				_processor.Process(@event, handler);
+			_processor.Process(tenant, @event, handlerType);
 		}
 	}
 }

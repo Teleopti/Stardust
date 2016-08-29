@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
@@ -13,39 +14,30 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 	{
 		private readonly ICurrentReadModelUnitOfWork _unitOfWork;
 		private readonly IConfigReader _config;
+		private readonly IKeyValueStorePersister _keyValueStore;
 
-		public MappingReadModelPersister(ICurrentReadModelUnitOfWork unitOfWork, IConfigReader config)
+		public MappingReadModelPersister(ICurrentReadModelUnitOfWork unitOfWork, IConfigReader config, IKeyValueStorePersister keyValueStore)
 		{
 			_unitOfWork = unitOfWork;
 			_config = config;
+			_keyValueStore = keyValueStore;
 		}
 
 		public void Invalidate()
 		{
 			if (Invalid())
 				return;
-
 			setInvalido(true);
 		}
 
 		private void setInvalido(bool value)
 		{
-			var updated = _unitOfWork.Current()
-				.CreateSqlQuery($"UPDATE [ReadModel].[KeyValueStore] SET [Value] = '{value}' WHERE [Key] = 'RuleMappingsInvalido'")
-				.ExecuteUpdate();
-			if (updated == 0)
-				_unitOfWork.Current()
-					.CreateSqlQuery($"INSERT INTO [ReadModel].[KeyValueStore] ([Key], [Value]) VALUES ('RuleMappingsInvalido', '{value}')")
-					.ExecuteUpdate();
+			_keyValueStore.Update("RuleMappingsInvalido", value);
 		}
 
 		public bool Invalid()
 		{
-			var value = _unitOfWork.Current()
-				.CreateSqlQuery("SELECT [Value] FROM [ReadModel].[KeyValueStore] WHERE [Key] = 'RuleMappingsInvalido'")
-				.UniqueResult<string>() ?? bool.TrueString;
-
-			return bool.Parse(value);
+			return _keyValueStore.Get("RuleMappingsInvalido", true);
 		}
 
 		public void Persist(IEnumerable<Mapping> mappings)
@@ -186,13 +178,7 @@ UPDATE SET
 				.CreateSqlQuery("UPDATE [ReadModel].[RuleMappings] SET Updated = 0")
 				.ExecuteUpdate();
 
-			var updated = _unitOfWork.Current()
-				.CreateSqlQuery("UPDATE [ReadModel].[KeyValueStore] SET [Value] = NEWID() WHERE [Key] = 'RuleMappingsVersion'")
-				.ExecuteUpdate();
-			if (updated == 0)
-				_unitOfWork.Current()
-					.CreateSqlQuery("INSERT INTO [ReadModel].[KeyValueStore] ([Key], [Value]) VALUES ('RuleMappingsVersion', NEWID())")
-					.ExecuteUpdate();
+			_keyValueStore.Update("RuleMappingsVersion", Guid.NewGuid().ToString());
 		}
 	}
 }

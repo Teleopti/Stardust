@@ -1,54 +1,99 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Util;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
 	public class FakeAgentStatePersister : IAgentStatePersister
 	{
-		private readonly ConcurrentDictionary<Guid, AgentState> _data = new ConcurrentDictionary<Guid, AgentState>();
+		private readonly object _lock = new object();
+		private readonly List<data> _data = new List<data>();
 
-		public void Has(AgentState model)
+		private class data
 		{
-			Persist(model);
+			public AgentStatePrepare added;
+			public AgentState state;
 		}
 
-		public void Persist(AgentState model)
+		public void Prepare(AgentStatePrepare model)
 		{
-			_data.AddOrUpdate(model.PersonId, model, (k, v) => model);
+			lock(_lock)
+				_data.Add(new data
+				{
+					added = model,
+					state = new AgentState
+					{
+						PersonId = model.PersonId,
+						BusinessUnitId = model.BusinessUnitId,
+						SiteId = model.SiteId,
+						TeamId = model.TeamId
+					}
+				});
 		}
 
-		void IAgentStatePersister.Delete(Guid personId)
+		public void Delete(Guid personId)
 		{
-			AgentState state;
-			_data.TryRemove(personId, out state);
+			lock (_lock)
+			{
+				var existing = _data.Where(x => x.added.PersonId == personId).ToArray();
+				existing.ForEach(x => _data.Remove(x));
+			}
 		}
 
-		public IEnumerable<AgentState> GetNotInSnapshot(DateTime batchId, string sourceId)
+		public void Update(AgentState model)
 		{
-			return (from s in _data.Values
-				where s.SourceId == sourceId &&
-					  (s.BatchId < batchId ||
-					   s.BatchId == null)
-				select s)
-				.ToArray();
+			lock (_lock)
+				_data
+					.Where(x => x.added.PersonId == model.PersonId)
+					.ForEach(x => x.state = model);
+		}
+
+		public IEnumerable<AgentState> Get(int dataSourceId, string userCode)
+		{
+			lock (_lock)
+				return _data
+					.Where(x => x.added.ExternalLogons.Any(y => y.DataSourceId == dataSourceId && y.UserCode == userCode))
+					.Select(x => x.state)
+					.ToArray();
 		}
 
 		public AgentState Get(Guid personId)
 		{
-			return _data.Values.SingleOrDefault(x => x.PersonId == personId);
+			lock (_lock)
+				return _data
+					.Select(x => x.state)
+					.FirstOrDefault(x => x.PersonId == personId);
+		}
+
+		public IEnumerable<AgentState> GetNotInSnapshot(DateTime snapshotId, string sourceId)
+		{
+			lock (_lock)
+				return _data
+					.Select(x => x.state)
+					.Where(s => s.SourceId == sourceId && (s.BatchId < snapshotId || s.BatchId == null))
+					.GroupBy(x => x.PersonId, (guid, states) => states.First())
+					.ToArray();
 		}
 
 		public IEnumerable<AgentState> Get(IEnumerable<Guid> personIds)
 		{
-			return _data.Values.Where(x => personIds.Contains(x.PersonId));
+			lock (_lock)
+				return _data
+					.Where(x => personIds.Contains(x.added.PersonId))
+					.Select(x => x.state)
+					.GroupBy(x => x.PersonId, (guid, states) => states.First())
+					.ToArray();
 		}
 
 		public IEnumerable<AgentState> GetAll()
 		{
-			return _data.Values.ToArray();
+			lock (_lock)
+				return _data
+					.Select(x => x.state)
+					.GroupBy(x => x.PersonId, (guid, states) => states.First())
+					.ToArray();
 		}
 
 	}

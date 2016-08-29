@@ -21,8 +21,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		[Test]
 		public void ShouldGetByPersonId()
 		{
-			var state = new AgentStateForTest { PersonId = Guid.NewGuid() };
-			Persister.Persist(state);
+			var state = new AgentStateForUpsert { PersonId = Guid.NewGuid() };
+			Persister.Upsert(state);
 
 			var result = Persister.Get(state.PersonId);
 
@@ -32,12 +32,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		[Test]
 		public void ShouldGetByPersonIds()
 		{
-			var state1 = new AgentStateForTest { PersonId = Guid.NewGuid() };
-			var state2 = new AgentStateForTest { PersonId = Guid.NewGuid() };
-			var state3 = new AgentStateForTest { PersonId = Guid.NewGuid() };
-			Persister.Persist(state1);
-			Persister.Persist(state2);
-			Persister.Persist(state3);
+			var state1 = new AgentStateForUpsert { PersonId = Guid.NewGuid() };
+			var state2 = new AgentStateForUpsert { PersonId = Guid.NewGuid() };
+			var state3 = new AgentStateForUpsert { PersonId = Guid.NewGuid() };
+			Persister.Upsert(state1);
+			Persister.Upsert(state2);
+			Persister.Upsert(state3);
 
 			var result = Persister.Get(new[] {state1.PersonId, state3.PersonId});
 			
@@ -58,8 +58,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var writer = Persister;
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
-			writer.Persist(new AgentStateForTest { PersonId = personId1 });
-			writer.Persist(new AgentStateForTest { PersonId = personId2 });
+			writer.Upsert(new AgentStateForUpsert { PersonId = personId1 });
+			writer.Upsert(new AgentStateForUpsert { PersonId = personId2 });
 
 			var result = Persister.GetAll();
 
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		public void ShouldGetCurrentActualAgentStatesWithAllData()
 		{
 			var writer = Persister;
-			var state = new AgentStateForTest
+			var state = new AgentStateForUpsert
 			{
 				PersonId = Guid.NewGuid(),
 				BusinessUnitId = Guid.NewGuid(),
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				StateGroupId = Guid.NewGuid(),
 				StateStartTime = "2014-11-11 10:37".Utc(),
 			};
-			writer.Persist(state);
+			writer.Upsert(state);
 
 			var result = Persister.GetAll().Single();
 
@@ -114,13 +114,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		public void ShouldReadNullValuesWhenClosingSnapshot()
 		{
 			var personId = Guid.NewGuid();
-			var state = new AgentState
+			var state = new AgentStateForUpsert
 			{
 				PersonId = personId,
 				ReceivedTime = "2015-03-06 15:19".Utc(),
 				SourceId = "6"
 			};
-			Persister.Persist(state);
+			Persister.Upsert(state);
 
 			Persister.GetNotInSnapshot("2015-03-06 15:20".Utc(), "6")
 				.Single(x => x.PersonId == personId).Should().Not.Be.Null();
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		public void ShouldReadValuesWhenClosingSnapshot()
 		{
 			var personId = Guid.NewGuid();
-			var agentStateReadModel = new AgentState
+			var agentStateReadModel = new AgentStateForUpsert
 			{
 				BusinessUnitId = Guid.NewGuid(),
 				PersonId = personId,
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				ReceivedTime = "2015-03-06 15:19".Utc(),
 				SourceId = "6"
 			};
-			Persister.Persist(agentStateReadModel);
+			Persister.Upsert(agentStateReadModel);
 
 			var result = Persister.GetNotInSnapshot("2015-03-06 15:20".Utc(), "6")
 				.Single(x => x.PersonId == personId);

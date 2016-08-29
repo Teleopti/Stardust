@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return this;
 		}
 
-		public FakeRtaDatabase WithUser(string userCode, Guid personId, string source, Guid? businessUnitId, Guid? teamId, Guid? siteId)
+		public FakeRtaDatabase WithUser(string userCode, Guid personId, Guid? businessUnitId, Guid? teamId, Guid? siteId)
 		{
 			if (businessUnitId.HasValue)
 				WithBusinessUnit(businessUnitId.Value);
@@ -177,6 +177,22 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					BusinessUnitId = _database.CurrentBusinessUnitId(),
 					TeamId = teamId.Value,
 					SiteId = siteId.Value
+				}
+			});
+
+			_agentStates.Prepare(new AgentStatePrepare
+			{
+				PersonId = personId,
+				BusinessUnitId = _database.CurrentBusinessUnitId(),
+				TeamId = teamId.Value,
+				SiteId = siteId.Value,
+				ExternalLogons = new[]
+				{
+					new ExternalLogon
+					{
+						DataSourceId = _database.CurrentDataSourceId(),
+						UserCode = userCode
+					}
 				}
 			});
 			return this;
@@ -239,27 +255,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_database.WithAlarm(threshold, null);
 			return this;
 		}
-
-		public FakeRtaDatabase WithExistingAgentState(Guid personId, string stateCode)
-		{
-			return WithExistingAgentState(personId, null, stateCode);
-		}
-
-		public FakeRtaDatabase WithExistingAgentState(Guid personId, Guid? teamId, string stateCode)
-		{
-			_agentStates.Has(new AgentState
-			{
-				PersonId = personId,
-				BusinessUnitId = _database.CurrentBusinessUnitId(),
-				TeamId = teamId,
-				PlatformTypeId = _database.CurrentPlatform(),
-				StateCode = stateCode,
-				StaffingEffect = 0,
-				SourceId = new StateForTest().SourceId
-			});
-			return this;
-		}
-
+		
 		public IList<ScheduledActivity> GetCurrentSchedule(Guid personId)
 		{
 			return (
@@ -326,22 +322,22 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 	{
 		public static FakeRtaDatabase WithUser(this FakeRtaDatabase fakeDataBuilder, string userCode)
 		{
-			return fakeDataBuilder.WithUser(userCode, Guid.NewGuid(), null, null, null, null);
+			return fakeDataBuilder.WithUser(userCode, Guid.NewGuid(), null, null, null);
 		}
 
 		public static FakeRtaDatabase WithUser(this FakeRtaDatabase fakeDataBuilder, string userCode, Guid personId)
 		{
-			return fakeDataBuilder.WithUser(userCode, personId, null, null, null, null);
+			return fakeDataBuilder.WithUser(userCode, personId, null, null, null);
 		}
 
 		public static FakeRtaDatabase WithUser(this FakeRtaDatabase fakeDataBuilder, string userCode, string source, Guid personId)
 		{
-			return fakeDataBuilder.WithUser(userCode, personId, source, null, null, null);
+			return fakeDataBuilder.WithUser(userCode, personId, null, null, null);
 		}
 
 		public static FakeRtaDatabase WithUser(this FakeRtaDatabase fakeDataBuilder, string userCode, Guid personId, Guid? businessUnitId, Guid? teamId, Guid? siteId)
 		{
-			return fakeDataBuilder.WithUser(userCode, personId, null, businessUnitId, teamId, siteId);
+			return fakeDataBuilder.WithUser(userCode, personId, businessUnitId, teamId, siteId);
 		}
 	}
 

@@ -26,8 +26,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public IRtaRuleRepository Rules;
 		public IActivityRepository Activities;
 		public IMappingReader Target;
-		public WithUnitOfWorkWithRecurringEvents WithUnitOfWork;
 		public WithReadModelUnitOfWork WithReadModels;
+		public WithUnitOfWorkWithRecurringEvents WithUnitOfWork;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{

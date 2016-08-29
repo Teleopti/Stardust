@@ -9,7 +9,9 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		private readonly HangfireAsSyncEventPublisher _hangfireAsSyncEventPublisher;
 
 		public SyncAllEventPublisher(
-			ServiceBusAsSyncEventPublisher serviceBusAsSyncEventPublisher, HangfireAsSyncEventPublisher hangfireAsSyncEventPublisher)
+			ServiceBusAsSyncEventPublisher serviceBusAsSyncEventPublisher, 
+			HangfireAsSyncEventPublisher hangfireAsSyncEventPublisher
+			)
 		{
 			_serviceBusAsSyncEventPublisher = serviceBusAsSyncEventPublisher;
 			_hangfireAsSyncEventPublisher = hangfireAsSyncEventPublisher;

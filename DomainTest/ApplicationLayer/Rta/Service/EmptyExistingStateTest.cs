@@ -29,16 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithUser("user", person, null, team, null)
 				;
 
-			Handler.Handle(new PersonPeriodChangedEvent
-			{
-				PersonId = person,
-				CurrentTeamId = team
-			});
-			Rta.SaveState(new StateForTest
-			{
-				UserCode = "user",
-				StateCode = null,
-			});
+			Rta.Touch(Database.TenantName());
 
 			Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Should().Be.Empty();
 		}
@@ -46,12 +37,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		[Test]
 		public void ShouldNotSynchronize()
 		{
+			var person = Guid.NewGuid();
 			var team = Guid.NewGuid();
-			Handler.Handle(new PersonPeriodChangedEvent
-			{
-				PersonId = Guid.NewGuid(),
-				CurrentTeamId = team
-			});
+			Database
+				.WithUser("user", person, null, team, null)
+				;
 
 			Context.SimulateRestart();
 			Rta.Touch(Database.TenantName());
