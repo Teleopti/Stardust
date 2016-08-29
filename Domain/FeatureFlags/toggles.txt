@@ -47,12 +47,7 @@ MyTimeWeb_ShowSeatBookingMonthView_39068 = true
 MessageBroker_SchedulingScreenMailbox_32733 = true
 RTA_ScheduleProjectionReadOnlyHangfire_35703 = true
 
-RTA_AlarmContext_29357 = true
-RTA_TotalOutOfAdherenceTime_38702 = true
-RTA_PauseButton_39144 = true
-RTA_RecentOutOfAdherences_39145 = true
 RTA_Optimize_39667 = true
-
 RTA_RuleMappingOptimization_39812 = true
 RTA_BatchConnectionOptimization_40116 = true
 RTA_BatchQueryOptimization_40169 = true

@@ -344,10 +344,7 @@
 									var percentForTimeBar = function(seconds) {
 										return Math.min(secondsToPercent(seconds), 25);
 									}
-									if (toggleService.RTA_TotalOutOfAdherenceTime_38702)
-										return (state.TimeInAlarm ? percentForTimeBar(state.TimeInRule) : 0) + "%";
-									return percentForTimeBar(state.TimeInAlarm) + "%";
-
+									return (state.TimeInAlarm ? percentForTimeBar(state.TimeInRule) : 0) + "%";
 								}(),
 
 								Shift: function() {

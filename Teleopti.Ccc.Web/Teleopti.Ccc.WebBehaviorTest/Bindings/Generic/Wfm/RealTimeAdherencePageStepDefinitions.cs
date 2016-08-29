@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -258,75 +259,42 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			if (state.Alarm != null)
 				Browser.Interactions.AssertAnyContains(selector, state.Alarm);
 
-			if (LocalSystem.Toggles.IsEnabled(Toggles.RTA_AlarmContext_29357))
+			if (state.PreviousActivity != null)
 			{
-				if (state.PreviousActivity != null)
-				{
-					if (state.PreviousActivity == "<none>")
-						Browser.Interactions.AssertNotExists(selector, selector + " .previous-activity");
-					else
-						Browser.Interactions.AssertExists(selector + " .previous-activity[name='{0}']", state.PreviousActivity);
-				}
-				if (state.Activity != null)
-					Browser.Interactions.AssertExists(selector + " .current-activity[name='{0}']", state.Activity);
-				if (state.NextActivity != null)
-					Browser.Interactions.AssertExists(selector + " .next-activity[name='{0}']", state.NextActivity);
-				if (state.NextActivityStartTimeFormatted() != null)
-				{
-					//Assert.Fail("Enable this assert and remove from scenarios when toggle is removed");
-				}
-				if (state.AlarmColor != null)
-					Browser.Interactions.AssertExists(selector + " [style*='background-color: " + toRGBA(state.AlarmColor, "0.6") + "']");
-				if (state.Color != null)
-					Browser.Interactions.AssertExists(selector + " [style*='background-color: " + toRGBA(state.Color, "0.6") + "']");
-				if (LocalSystem.Toggles.IsEnabled(Toggles.RTA_TotalOutOfAdherenceTime_38702))
-				{
-					if (LocalSystem.Toggles.IsEnabled(Toggles.RTA_RecentOutOfAdherences_39145))
-					{
-						if (state.RuleTimeFormatted() != null)
-						{
-							//Assert.Fail("Enable this assert and remove from scenarios when toggle is removed");
-						}
-						if (state.AlarmTimeFormatted() != null)
-						{
-							//Assert.Fail("Enable this assert and remove from scenarios when toggle is removed");
-						}
-						if (state.OutOfAdherenceTimeFormatted() != null)
-							Browser.Interactions.AssertAnyContains(selector, state.OutOfAdherenceTimeFormatted());
-					}
-					else
-					{
-						if (state.RuleTimeFormatted() != null)
-							Browser.Interactions.AssertAnyContains(selector, state.RuleTimeFormatted());
-						if (state.AlarmTimeFormatted() != null)
-						{
-							//Assert.Fail("Enable this assert and remove from scenarios when toggle is removed");
-						}
-					}
-
-				}
+				if (state.PreviousActivity == "<none>")
+					Browser.Interactions.AssertNotExists(selector, selector + " .previous-activity");
 				else
-				{
-					if (state.AlarmTimeFormatted() != null)
-						Browser.Interactions.AssertAnyContains(selector, state.AlarmTimeFormatted());
-				}
+					Browser.Interactions.AssertExists(selector + " .previous-activity[name='{0}']", state.PreviousActivity);
 			}
-			else
+			if (state.Activity != null)
+				Browser.Interactions.AssertExists(selector + " .current-activity[name='{0}']", state.Activity);
+			if (state.NextActivity != null)
+				Browser.Interactions.AssertExists(selector + " .next-activity[name='{0}']", state.NextActivity);
+
+			if (state.NextActivityStartTimeFormatted() != null)
 			{
-				if (state.Activity != null)
-					Browser.Interactions.AssertAnyContains(selector, state.Activity);
-				if (state.NextActivity != null)
-					Browser.Interactions.AssertAnyContains(selector, state.NextActivity);
-				if (state.NextActivityStartTimeFormatted() != null)
-					Browser.Interactions.AssertAnyContains(selector, state.NextActivityStartTimeFormatted());
-				if (state.AlarmColor != null)
-					Browser.Interactions.AssertExists(selector + "[style*='background-color: " + toRGBA(state.AlarmColor, "0.6") + "']");
-				if (state.Color != null)
-					Browser.Interactions.AssertExists(selector + "[style*='background-color: " + toRGBA(state.Color, "0.6") + "']");
-				if (state.AlarmTimeFormatted() != null)
-					Browser.Interactions.AssertAnyContains(selector, state.AlarmTimeFormatted());
+				Assert.Fail("Enable this assert and remove from scenarios when toggle is removed");
 			}
 
+			if (state.AlarmColor != null)
+				Browser.Interactions.AssertExists(selector + " [style*='background-color: " + toRGBA(state.AlarmColor, "0.6") + "']");
+			if (state.Color != null)
+				Browser.Interactions.AssertExists(selector + " [style*='background-color: " + toRGBA(state.Color, "0.6") + "']");
+
+			if (state.RuleTimeFormatted() != null)
+			{
+
+				Assert.Fail("Enable this assert and remove from scenarios when toggle is removed");
+
+			}
+			if (state.AlarmTimeFormatted() != null)
+			{
+
+				Assert.Fail("Enable this assert and remove from scenarios when toggle is removed");
+
+			}
+			if (state.OutOfAdherenceTimeFormatted() != null)
+				Browser.Interactions.AssertAnyContains(selector, state.OutOfAdherenceTimeFormatted());
 		}
 		
 		private static string toRGBA(string colorName, string transparency)

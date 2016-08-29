@@ -89,7 +89,9 @@
     <EmbeddedResource Include="Resources.cs.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources.da.resx" />
+    <EmbeddedResource Include="Resources.da.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources.de.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>

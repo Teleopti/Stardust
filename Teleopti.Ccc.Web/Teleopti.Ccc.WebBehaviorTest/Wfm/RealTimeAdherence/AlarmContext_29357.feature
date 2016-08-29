@@ -29,7 +29,6 @@ Background:
 	| Name        | Not adhering |
 	| Is alarm    | true         |
 
-@OnlyRunIfEnabled('RTA_AlarmContext_29357')
 Scenario: Late for work
 	Given the time is '2016-05-19 17:00:00'
 	And 'Pierre Baldi' sets his phone state to 'LoggedOut'
@@ -41,7 +40,6 @@ Scenario: Late for work
 	| Previous activity | <none>       |
 	| Activity          | Phone        |
 
-@OnlyRunIfEnabled('RTA_AlarmContext_29357')
 Scenario: Late back from lunch
 	Given the time is '2016-05-19 12:00:00'
 	And 'Pierre Baldi' sets his phone state to 'LoggedOut'
@@ -53,7 +51,6 @@ Scenario: Late back from lunch
 	| Previous activity | Lunch        |
 	| Activity          | Phone        |
 
-@OnlyRunIfEnabled('RTA_AlarmContext_29357')
 Scenario: Early lunch
 	Given the time is '2016-05-20 11:45:00'
 	And 'Pierre Baldi' sets his phone state to 'LoggedOut'

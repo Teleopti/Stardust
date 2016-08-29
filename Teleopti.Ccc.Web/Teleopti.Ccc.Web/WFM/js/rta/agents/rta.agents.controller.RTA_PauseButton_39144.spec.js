@@ -32,7 +32,6 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 		$controllerBuilder = _ControllerBuilder_;
 
 		$fakeBackend.clear();
-		$fakeBackend.withToggle('RTA_PauseButton_39144');
 
 		scope = $controllerBuilder.setup('RtaAgentsCtrl');
 

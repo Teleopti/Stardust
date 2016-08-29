@@ -1,29 +1,13 @@
 'use strict';
 
 angular.module('wfm.rta').provider('RtaState', function () {
-	var toggles = {
-		RTA_AlarmContext_29357: false,
-		RTA_PauseButton_9999: false
-	};
-	var rtaAgentsTemplate = function (elem, attr) {
-		if (toggles.RTA_AlarmContext_29357) {
-			if (toggles.RTA_PauseButton_39144) {
-				return 'js/rta/agents/rta-agents-RTA_PauseButton_39144.html';
-			}
-			
-			return 'js/rta/agents/rta-agents-RTA_AlarmContext_29357.html';
-		}
-		return 'js/rta/agents/rta-agents.html';
-	};
 
 	this.$get = function () {
 		return function (toggleService) {
-			toggleService.togglesLoaded.then(function () {
-				toggles.RTA_AlarmContext_29357 = toggleService.RTA_AlarmContext_29357;
-				toggles.RTA_PauseButton_39144 = toggleService.RTA_PauseButton_39144;
-			});
+			toggleService.togglesLoaded.then(function () { });
 		};
 	};
+
 	this.config = function ($stateProvider) {
 		$stateProvider.state('rta',
 			{
@@ -50,19 +34,19 @@ angular.module('wfm.rta').provider('RtaState', function () {
 			.state('rta.agents-view',
 			{
 				url: '/agents',
-				templateUrl: rtaAgentsTemplate,
+				templateUrl: 'js/rta/agents/rta-agents-RTA_PauseButton_39144.html',
 				controller: 'RtaAgentsCtrl'
 			})
 			.state('rta.agents',
 			{
 				url: '/agents/:siteId/:teamId?showAllAgents',
-				templateUrl: rtaAgentsTemplate,
+				templateUrl: 'js/rta/agents/rta-agents-RTA_PauseButton_39144.html',
 				controller: 'RtaAgentsCtrl'
 			})
 			.state('rta.agents-teams',
 			{
 				url: '/agents-teams/?teamIds',
-				templateUrl: rtaAgentsTemplate,
+				templateUrl: 'js/rta/agents/rta-agents-RTA_PauseButton_39144.html',
 				controller: 'RtaAgentsCtrl',
 				params: {
 					teamIds: {
@@ -73,7 +57,7 @@ angular.module('wfm.rta').provider('RtaState', function () {
 			.state('rta.agents-sites',
 			{
 				url: '/agents-sites/?siteIds',
-				templateUrl: rtaAgentsTemplate,
+				templateUrl: 'js/rta/agents/rta-agents-RTA_PauseButton_39144.html',
 				controller: 'RtaAgentsCtrl',
 				params: {
 					siteIds: {

@@ -41,6 +41,7 @@ Background:
 	| Name            | Adhering |
 	| IsAlarm         | True     |
 	| Alarm Color     | Green    |
+	| Adherence       | Out      |
 	| Staffing effect | 0        |
 	And there is a rule with 
 	| Field           | Value        |
@@ -49,6 +50,7 @@ Background:
 	| IsAlarm         | True         |
 	| Alarm Color     | Red          |
 	| Name            | Not adhering |
+	| Adherence       | Out          |
 	| Staffing effect | -1           |
 
 Scenario: See current states
@@ -63,9 +65,8 @@ Scenario: See current states
 		| State                    | Pause        |
 		| Activity                 | Phone        |
 		| Next activity            | Lunch        |
-		| Next activity start time | 13:00        |
 		| Alarm                    | Not adhering |
-		| Alarm Time               | 0:15:00      |
+		| Out of adherence time    | 0:15:00      |
 		| Alarm Color              | Red          |
 	And I should see agent status
 		| Field                    | Value         |
@@ -73,9 +74,8 @@ Scenario: See current states
 		| State                    | Ready         |
 		| Activity                 | Phone         |
 		| Next activity            | Lunch         |
-		| Next activity start time | 13:00         |
 		| Alarm                    | Adhering      |
-		| Alarm Time               | 0:15:00       |
+		| Out of adherence time    | 0:15:00       |
 		| Alarm Color              | Green         |
 
 Scenario: See state updates
@@ -90,9 +90,8 @@ Scenario: See state updates
 		| State                    | Pause        |
 		| Activity                 | Phone        |
 		| Next activity            | Lunch        |
-		| Next activity start time | 13:00        |
 		| Alarm                    | Not adhering |
-		| Alarm Time               | 0:15:00      |
+		| Out of adherence time    | 0:15:00      |
 		| Alarm Color              | Red          |
 	And I should see agent status
 		| Field                    | Value         |
@@ -100,9 +99,8 @@ Scenario: See state updates
 		| State                    | Ready         |
 		| Activity                 | Phone         |
 		| Next activity            | Lunch         |
-		| Next activity start time | 13:00         |
 		| Alarm                    | Adhering      |
-		| Alarm Time               | 0:15:00       |
+		| Out of adherence time    | 0:15:00       |
 		| Alarm Color              | Green         |
 
 Scenario: See all agents of the team even without state updates
@@ -122,9 +120,6 @@ Scenario: See state updates when call center is in Istanbul
 		| Start time               | 2015-03-24 08:00 |
 		| End time                 | 2015-03-24 10:00 |
 		| Activity                 | Phone            |
-		| Next activity            | Lunch            |
-		| Next activity start time | 2015-03-24 10:00 |
-		| Next activity end time   | 2015-03-24 10:30 |
 	When I view real time adherence for all agents on team 'Red'
 	And 'Pierre Baldi' sets his phone state to 'Ready'
 	And the utc time is '2015-03-24 06:15:00'
@@ -132,9 +127,8 @@ Scenario: See state updates when call center is in Istanbul
 		| Field                    | Value        |
 		| Name                     | Pierre Baldi |
 		| State                    | Ready        |
-		| Next activity start time | 10:00        |
 		| Alarm                    | Adhering     |
-		| Alarm Time               | 0:15:00      |
+		| Out of adherence time    | 0:15:00      |
 		| Alarm Color              | Green        |
 
 Scenario: See schedule updates
@@ -161,9 +155,6 @@ Scenario: See agent status when call center is in Istanbul
 	| Start time               | 2015-03-24 08:00 |
 	| End time                 | 2015-03-24 10:00 |
 	| Activity                 | Phone            |
-	| Next activity            | Lunch            |
-	| Next activity start time | 2015-03-24 10:00 |
-	| Next activity end time   | 2015-03-24 10:30 |
 	When 'Pierre Baldi' sets his phone state to 'Ready'
 	And the utc time is '2015-03-24 07:00:00'
 	And I view real time adherence for all agents on team 'Red'
@@ -171,8 +162,7 @@ Scenario: See agent status when call center is in Istanbul
 		| Field                    | Value        |
 		| Name                     | Pierre Baldi |
 		| State                    | Ready        |
-		| Next activity start time | 10:00        |
 		| Alarm                    | Adhering     |
-		| Alarm Time               | 1:00:00      |
+		| Out of adherence time    | 1:00:00      |
 		| Alarm Color              | Green        |
 

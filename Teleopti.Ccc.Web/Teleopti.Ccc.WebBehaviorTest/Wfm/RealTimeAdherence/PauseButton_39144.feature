@@ -30,7 +30,6 @@ Background:
 	| Activity    | Phone     |
 	| Phone state | LoggedOut |
 
-@OnlyRunIfEnabled('RTA_PauseButton_39144')
 Scenario: Pause
 	Given the time is '2016-05-20 08:00:00'
 	And 'Pierre Baldi' sets his phone state to 'Ready'

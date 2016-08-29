@@ -38,7 +38,6 @@ Background:
 	| Phone state | LoggedOut |
 	| Adherence   | Out       |
 
-@OnlyRunIfEnabled('RTA_RecentOutOfAdherences_39145')
 Scenario: See recent out of adherence
 	Given at '2016-05-20 08:00:00' 'Pierre Baldi' sets his phone state to 'Ready'
 	And at '2016-05-20 09:10:00' 'Pierre Baldi' sets his phone state to 'LoggedOut'

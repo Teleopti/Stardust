@@ -81,10 +81,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AgentStatePersister>().As<IAgentStatePersister>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStateReadModelPersister>().As<IAgentStateReadModelPersister>().SingleInstance().ApplyAspects();
 			builder.RegisterType<MappingReadModelPersister>().As<IMappingReadModelPersister>().SingleInstance().ApplyAspects();
-			if (_config.Toggle(Toggles.RTA_RecentOutOfAdherences_39145))
-				builder.RegisterType<AgentStateReadModelUpdaterWithOutOfAdherences>().As<IAgentStateReadModelUpdater>().SingleInstance().ApplyAspects();
-			else
-				builder.RegisterType<AgentStateReadModelUpdater>().As<IAgentStateReadModelUpdater>().SingleInstance().ApplyAspects();
+			builder.RegisterType<AgentStateReadModelUpdater>().As<IAgentStateReadModelUpdater>().SingleInstance().ApplyAspects();
 
 			builder.RegisterType<AgentViewModelBuilder>().SingleInstance();
 			builder.RegisterType<AgentStatesViewModelBuilder>().SingleInstance();

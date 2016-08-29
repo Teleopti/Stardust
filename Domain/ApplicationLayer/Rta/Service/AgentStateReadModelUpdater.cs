@@ -11,21 +11,63 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		void Update(Context context, IEnumerable<IEvent> events);
 	}
 
-	public class AgentStateReadModelUpdaterWithOutOfAdherences : AgentStateReadModelUpdater
+	public class AgentStateReadModelUpdater : IAgentStateReadModelUpdater
 	{
+		private readonly IAgentStateReadModelPersister _persister;
 		private readonly INow _now;
 
-		public AgentStateReadModelUpdaterWithOutOfAdherences(IAgentStateReadModelPersister persister, INow now) : base(persister)
+		public AgentStateReadModelUpdater(IAgentStateReadModelPersister persister, INow now)
 		{
+			_persister = persister;
 			_now = now;
 		}
 
-		protected override AgentStateReadModel LoadModel(Context context)
+		public AgentStateReadModel LoadModel(Context context)
 		{
-			return _persister.Get(context.PersonId) ?? base.LoadModel(context);
+			return _persister.Get(context.PersonId) ?? new AgentStateReadModel();
 		}
 
-		protected override void BeforePersist(AgentStateReadModel model, IEnumerable<IEvent> events)
+		public void Update(Context context, IEnumerable<IEvent> events)
+		{
+			var model = LoadModel(context);
+
+			model.ReceivedTime = context.CurrentTime;
+			model.PersonId = context.PersonId;
+			model.BusinessUnitId = context.BusinessUnitId;
+			model.SiteId = context.SiteId;
+			model.TeamId = context.TeamId;
+
+			model.Activity = context.Schedule.CurrentActivityName();
+			model.NextActivity = context.Schedule.NextActivityName();
+			model.NextActivityStartTime = context.Schedule.NextActivityStartTime();
+
+			model.StateCode = context.StateCode;
+			model.StateName = context.State.StateGroupName();
+			model.StateStartTime = context.StateStartTime;
+
+			model.RuleName = context.State.RuleName();
+			model.RuleStartTime = context.RuleStartTime;
+			model.RuleColor = context.State.RuleDisplayColor();
+			model.StaffingEffect = context.State.StaffingEffect();
+
+			model.IsRuleAlarm = context.IsAlarm;
+			model.AlarmStartTime = context.AlarmStartTime;
+			model.AlarmColor = context.State.AlarmColor();
+			model.Shift = context.Schedule.ActivitiesInTimeWindow()
+				.Select(a => new AgentStateActivityReadModel
+				{
+					Color = a.DisplayColor,
+					StartTime = a.StartDateTime,
+					EndTime = a.EndDateTime,
+					Name = a.Name
+				});
+
+			BeforePersist(model, events);
+
+			_persister.Persist(model);
+		}
+
+		public void BeforePersist(AgentStateReadModel model, IEnumerable<IEvent> events)
 		{
 			applyEvents(model, events);
 		}
@@ -70,65 +112,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					EndTime = null
 				}).ToArray();
 		}
-	}
-
-	public class AgentStateReadModelUpdater : IAgentStateReadModelUpdater
-	{
-		protected readonly IAgentStateReadModelPersister _persister;
-
-		public AgentStateReadModelUpdater(IAgentStateReadModelPersister persister)
-		{
-			_persister = persister;
-		}
-
-		protected virtual AgentStateReadModel LoadModel(Context context)
-		{
-			return new AgentStateReadModel();
-		}
-
-		protected virtual void BeforePersist(AgentStateReadModel model, IEnumerable<IEvent> events)
-		{
-		}
-
-		public void Update(Context context, IEnumerable<IEvent> events)
-		{
-			var model = LoadModel(context);
-
-			model.ReceivedTime = context.CurrentTime;
-			model.PersonId = context.PersonId;
-			model.BusinessUnitId = context.BusinessUnitId;
-			model.SiteId = context.SiteId;
-			model.TeamId = context.TeamId;
-
-			model.Activity = context.Schedule.CurrentActivityName();
-			model.NextActivity = context.Schedule.NextActivityName();
-			model.NextActivityStartTime = context.Schedule.NextActivityStartTime();
-
-			model.StateCode = context.StateCode;
-			model.StateName = context.State.StateGroupName();
-			model.StateStartTime = context.StateStartTime;
-
-			model.RuleName = context.State.RuleName();
-			model.RuleStartTime = context.RuleStartTime;
-			model.RuleColor = context.State.RuleDisplayColor();
-			model.StaffingEffect = context.State.StaffingEffect();
-
-			model.IsRuleAlarm = context.IsAlarm;
-			model.AlarmStartTime = context.AlarmStartTime;
-			model.AlarmColor = context.State.AlarmColor();
-			model.Shift = context.Schedule.ActivitiesInTimeWindow()
-				.Select(a => new AgentStateActivityReadModel
-				{
-					Color = a.DisplayColor,
-					StartTime = a.StartDateTime,
-					EndTime = a.EndDateTime,
-					Name = a.Name
-				});
-
-			BeforePersist(model, events);
-
-			_persister.Persist(model);
-		}
-
 	}
 }

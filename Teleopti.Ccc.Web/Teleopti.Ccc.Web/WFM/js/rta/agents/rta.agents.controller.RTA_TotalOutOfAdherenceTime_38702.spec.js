@@ -30,7 +30,6 @@ describe('RtaAgentsCtrlTotalOutOfAdherenceTime_38702', function() {
 		$controllerBuilder = _ControllerBuilder_;
 
 		$fakeBackend.clear();
-		$fakeBackend.withToggle('RTA_TotalOutOfAdherenceTime_38702');
 
 		scope = $controllerBuilder.setup('RtaAgentsCtrl');
 
