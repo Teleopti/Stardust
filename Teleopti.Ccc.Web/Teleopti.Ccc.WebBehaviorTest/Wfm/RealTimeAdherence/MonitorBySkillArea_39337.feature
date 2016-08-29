@@ -56,8 +56,6 @@ Background:
 	| Name        | Not adhering |
 	| Is alarm    | true         |
 
-
-@OnlyRunIfEnabled('RTA_MonitorBySkillArea_39337')
 Scenario: Monitor agents by skill area
 	Given the time is '2016-06-14 08:00:00'
 	And 'Ashley Andeen' sets his phone state to 'LoggedOut'

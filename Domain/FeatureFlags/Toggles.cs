@@ -26,7 +26,6 @@
 		RTA_MonitorBySkills_39081,
 		RTA_RecentOutOfAdherences_39145,
 		RTA_Optimize_39667,
-		RTA_MonitorBySkillArea_39337,
 		RTA_RuleMappingOptimization_39812,
 		RTA_BatchConnectionOptimization_40116,
 		RTA_BatchQueryOptimization_40169,

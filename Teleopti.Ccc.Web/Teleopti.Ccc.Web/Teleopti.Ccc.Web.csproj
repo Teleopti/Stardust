@@ -1456,8 +1456,7 @@
     <Content Include="WFM\js\rta\agents\rta-agents-shiftcelltemplate-RTA_RecentOutOfAdherences_39145.html" />
     <Content Include="WFM\js\rta\agents\rta.agents.controller.RTA_RecentOutOfAdherences_39145.spec.js" />
     <Content Include="WFM\js\rta\rta.adherence.service.js" />
-    <Content Include="WFM\js\rta\skills\rta-selectSkill_MonitorBySkillArea_39337.html" />
-    <Content Include="WFM\js\rta\skills\rta-selectSkill_MonitorBySkills_39081.html" />
+    <Content Include="WFM\js\rta\skills\rta-selectSkill.html" />
     <Content Include="WFM\js\rta\overview\rta-sites-RTA_MonitorBySkills_39081.html" />
     <Content Include="WFM\js\rta\details\rta.agentdetails.controller.js" />
     <Content Include="WFM\js\rta\details\rta.agentdetails.controller.spec.js" />

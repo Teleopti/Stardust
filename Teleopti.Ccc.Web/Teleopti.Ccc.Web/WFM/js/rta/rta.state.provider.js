@@ -4,8 +4,7 @@ angular.module('wfm.rta').provider('RtaState', function () {
 	var toggles = {
 		RTA_AlarmContext_29357: false,
 		RTA_PauseButton_9999: false,
-		RTA_MonitorBySkills_39081: false,
-		RTA_MonitorBySkillArea_39337: false
+		RTA_MonitorBySkills_39081: false
 	};
 	var rtaAgentsTemplate = function (elem, attr) {
 		if (toggles.RTA_AlarmContext_29357) {
@@ -33,20 +32,12 @@ angular.module('wfm.rta').provider('RtaState', function () {
 		return 'js/rta/agents/rta-agents.html';
 	};
 
-	var rtaSelectTemplate = function(elem, attr) {
-		if (toggles.RTA_MonitorBySkillArea_39337) {
-			return 'js/rta/skills/rta-selectSkill_MonitorBySkillArea_39337.html';
-		} 
-		return 'js/rta/skills/rta-selectSkill_MonitorBySkills_39081.html';
-	}
-
 	this.$get = function () {
 		return function (toggleService) {
 			toggleService.togglesLoaded.then(function () {
 				toggles.RTA_AlarmContext_29357 = toggleService.RTA_AlarmContext_29357;
 				toggles.RTA_PauseButton_39144 = toggleService.RTA_PauseButton_39144;
 				toggles.RTA_MonitorBySkills_39081 = toggleService.RTA_MonitorBySkills_39081;
-				toggles.RTA_MonitorBySkillArea_39337 = toggleService.RTA_MonitorBySkillArea_39337;
 			});
 		};
 	};
@@ -59,7 +50,7 @@ angular.module('wfm.rta').provider('RtaState', function () {
 			.state('rta.select-skill',
 			{
 				url: '/select-skill',
-				templateUrl: rtaSelectTemplate,
+				templateUrl: 'js/rta/skills/rta-selectSkill.html',
 				controller: 'RtaSelectSkillCtrl'
 			})
 			.state('rta.sites',
