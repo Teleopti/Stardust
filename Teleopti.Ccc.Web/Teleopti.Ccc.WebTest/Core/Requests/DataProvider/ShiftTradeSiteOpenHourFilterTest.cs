@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		private readonly DateOnly _shiftTradeDate = new DateOnly(2016, 8, 8);
 
 		[Test]
+		[Ignore]
 		public void ShouldFilterScheduleViewByCurrentUserSiteOpenHour()
 		{
 			var personFrom = createPersonWithSiteOpenHours(8, 15);
@@ -67,6 +68,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		[Test]
+		[Ignore]
 		public void ShouldFilterScheduleViewByOtherAgentSiteOpenHour()
 		{
 			var personFrom = createPersonWithSiteOpenHours(8, 15);
@@ -103,6 +105,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		[Test]
+		[Ignore]
 		public void ShouldFilterScheduleViewWhenSiteOpenHoursIsClosed()
 		{
 			var personFrom = createPersonWithSiteOpenHours(8, 15, true);
@@ -138,6 +141,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		[Test]
+		[Ignore]
 		public void ShouldReturnScheduleViewsWithoutSiteOpenHourSetting()
 		{
 			var personFrom = PersonFactory.CreatePersonWithPersonPeriodTeamSite(_periodStartDate);
@@ -172,6 +176,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		[Test]
+		[Ignore]
 		public void ShouldFilterScheduleViewWithNightShiftSchedule()
 		{
 			var personFrom = createPersonWithSiteOpenHours(new Dictionary<DayOfWeek, TimePeriod>
@@ -204,6 +209,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		[Test]
+		[Ignore]
 		public void ShouldFilterShiftExchangeOfferByCurrentUserSiteOpenHour()
 		{
 			prepareData(createPersonWithSiteOpenHours(8, 15));
@@ -228,6 +234,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		[Test]
+		[Ignore]
 		public void ShouldFilterShiftExchangeOfferByOtherAgentSiteOpenHour()
 		{
 			prepareData(createPersonWithSiteOpenHours(8, 15));
@@ -252,6 +259,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		[Test]
+		[Ignore]
 		public void ShouldReturnShiftExchangeOffersWithoutSiteOpenHourSetting()
 		{
 			prepareData(PersonFactory.CreatePersonWithPersonPeriodTeamSite(_periodStartDate));
@@ -272,6 +280,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		[Test]
+		[Ignore]
 		public void ShouldReturnShiftExchangeOffersWithEmptyDay()
 		{
 			prepareData(createPersonWithSiteOpenHours(8, 15));
@@ -290,6 +299,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		[Test]
+		[Ignore]
 		public void ShouldFilterShiftExchangeOfferWithNightShiftSchedule()
 		{
 			var personFrom = createPersonWithSiteOpenHours(new Dictionary<DayOfWeek, TimePeriod>
