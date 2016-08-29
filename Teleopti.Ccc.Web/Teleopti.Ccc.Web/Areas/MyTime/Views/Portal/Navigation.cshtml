@@ -6,9 +6,13 @@
 @model PortalViewModel
 
 <script>
+	function hideNavMenu() {
+		if ($("#bs-example-navbar-collapse-1").is(':visible')) {
+			$('#mainNavbarToggler').click();
+		}
+	}
 
 	$(function() {
-
 		var dateTimeDefaultValues = {
 			defaultStartTime: "@Model.DateTimeDefaultValues.StartTime",
 			defaultEndTime: "@Model.DateTimeDefaultValues.EndTime",
@@ -19,7 +23,6 @@
 			todayDay: "@Model.DateTimeDefaultValues.TodayDay"
 		};
 
-
 		Teleopti.MyTimeWeb.Common.SetupCalendar(
 		{
 			UseJalaaliCalendar: @Model.UseJalaaliCalendar.ToString().ToLowerInvariant(),
@@ -29,12 +32,10 @@
 			PMDesignator: "@Model.PMDesignator",
 			DateTimeDefaultValues: dateTimeDefaultValues
 		});
-
 	});
 </script>
 
 <div id="autocollapse" class="navbar navbar-default navbar-inverse bdd-mytime-top-menu">
-
 	<div id="innerNavBar" class="container">
 		<div class="hidden" data-culture-show-meridian="@Model.ShowMeridian.ToString().ToLowerInvariant()"></div>
 
@@ -49,7 +50,6 @@
 		</div>
 
 		<!-- Non Collapsing Right Menu-->
-
 		<div class="navbar-header pull-right navbar-right" style="margin-right: 10px;">
 			<ul class="nav navbar-nav pull-left">
 				@if (Model.ShowBadge)
@@ -71,7 +71,7 @@
 								</span>
 							</div>
 						</a>
-						@if (Model.Badges != null && Model.Badges.Count() > 0)
+						@if (Model.Badges != null && Model.Badges.Any())
 						{
 							<ul class="dropdown-menu show-outside-toolbar">
 								@foreach (var badge in Model.Badges)
@@ -108,11 +108,11 @@
 											</span>
 										</div>
 									</li>
-												}
+								}
 							</ul>
-												}
+						}
 					</li>
-												}
+				}
 				<li class="dropdown pull-left" id="user-settings">
 					<a href="#" class="dropdown-toggle user-name-link" data-toggle="dropdown">
 						<i class="glyphicon glyphicon-user"></i>
@@ -144,17 +144,26 @@
 					<li>
 						@if (navSection.UnreadMessageCount > 0)
 						{
-							<a href="@string.Format("#{0}Tab", navSection.Controller)" data-mytime-action="@Html.Portal().GetAction(navSection)" @(navSection.PayAttention ? @Html.Raw("class=\"asm-new-message-indicator \"") : @Html.Raw(""))>@navSection.Title <span class="badge badge-important">@navSection.UnreadMessageCount</span></a>
+							<a href="@string.Format("#{0}Tab", navSection.Controller)"
+							   onclick="hideNavMenu();"
+							   data-mytime-action="@Html.Portal().GetAction(navSection)" @(navSection.PayAttention ? @Html.Raw("class=\"asm-new-message-indicator \"") : @Html.Raw(""))>
+							   @navSection.Title
+							   <span class="badge badge-important">@navSection.UnreadMessageCount</span>
+							</a>
 						}
 						else
 						{
-							<a href="@string.Format("#{0}Tab", navSection.Controller)" data-mytime-action="@Html.Portal().GetAction(navSection)">@navSection.Title<span class="badge hide no-unread-msg"></span></a>
+							<a href="@string.Format("#{0}Tab", navSection.Controller)"
+							   onclick="hideNavMenu();"
+							   data-mytime-action="@Html.Portal().GetAction(navSection)">
+							   @navSection.Title
+							   <span class="badge hide no-unread-msg"></span>
+							</a>
 						}
 					</li>
 				}
-				@if (Model.ReportNavigationItems.Count() > 0)
+				@if (Model.ReportNavigationItems.Any())
 				{
-
 					<li class="dropdown">
 						<a id="reports" href="#" class="dropdown-toggle" data-toggle="dropdown">@Resources.Reports <b class="caret"></b></a>
 						<ul id="report-list" class="dropdown-menu">
@@ -168,19 +177,25 @@
 								<li>
 									@if (reportNavSection.IsWebReport)
 									{
-										<a href="@string.Format("#{0}Tab", reportNavSection.Controller)" data-mytime-action="@Html.Portal().GetAction(reportNavSection)">@reportNavSection.Title<span class="badge hide"></span></a>
+										<a href="@string.Format("#{0}Tab", reportNavSection.Controller)"
+										   onclick="hideNavMenu();"
+										   data-mytime-action="@Html.Portal().GetAction(reportNavSection)">
+										   @reportNavSection.Title
+										   <span class="badge hide"></span>
+										</a>
 									}
 
 									@if (!reportNavSection.IsWebReport)
 									{
-										<a href="@reportNavSection.Url" target="_blank">@reportNavSection.Title</a>
+										<a href="@reportNavSection.Url"
+										   onclick="hideNavMenu();"
+										   target="_blank">@reportNavSection.Title</a>
 									}
 								</li>
 							}
 						</ul>
 					</li>
 				}
-
 			</ul>
 		</div>
 	</div>
