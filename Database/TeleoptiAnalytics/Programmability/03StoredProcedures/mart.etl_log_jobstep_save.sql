@@ -6,7 +6,7 @@ GO
 CREATE PROCEDURE [mart].[etl_log_jobstep_save]
 	
 	@job_execution_id int,
-	@jobstep_name varchar(50),
+	@jobstep_name varchar(200),
 	@business_unit_code uniqueidentifier,
 	@business_unit_name nvarchar(100),
 	@duration int,
