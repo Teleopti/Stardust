@@ -40,6 +40,7 @@
 		MyTimeWeb_TeamScheduleNoReadModel_36210,
 		MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211,
 		MyTimeWeb_ShiftTradeBoardNoReadModel_36662,
+		MyTimeWeb_MakeRequestsResponsiveOnMobile_40266,
 
 		Backlog_Module_23980,
 
