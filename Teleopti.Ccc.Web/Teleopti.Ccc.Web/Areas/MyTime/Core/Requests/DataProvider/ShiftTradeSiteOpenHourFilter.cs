@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 			var personDictionary = datePersons.Persons.ToDictionary(p => p.Id.GetValueOrDefault(Guid.NewGuid()));
 			var personFrom = _loggedOnUser.CurrentUser();
-			var personFromSchedulePeriod = getSchedulePeriod(personFromScheduleView);
+			var personFromSchedulePeriod = getSchedulePeriod(personFromScheduleView, personFrom.PermissionInformation.DefaultTimeZone());
 
 			return personToScheduleViews.Where(
 				shiftTradeAddPersonScheduleView =>
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 						return true;
 					}
 
-					var personToScheduleTimePeriod = getSchedulePeriod(shiftTradeAddPersonScheduleView);
+					var personToScheduleTimePeriod = getSchedulePeriod(shiftTradeAddPersonScheduleView, personTo.PermissionInformation.DefaultTimeZone());
 					var isSatisfiedPersonFromSiteOpenHours = _siteOpenHoursSpecification.IsSatisfiedBy(new SiteOpenHoursCheckItem
 					{
 						Period = personToScheduleTimePeriod,
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			}
 
 			var personFrom = _loggedOnUser.CurrentUser();
-			var personFromSchedulePeriod = getSchedulePeriod(personFromScheduleView);
+			var personFromSchedulePeriod = getSchedulePeriod(personFromScheduleView, personFrom.PermissionInformation.DefaultTimeZone());
 
 			return shiftExchangeOffers.Where(
 				shiftExchangeOffer =>
@@ -119,11 +119,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		}
 
 		private DateTimePeriod getSchedulePeriod(
-			ShiftTradeAddPersonScheduleViewModel shiftTradeAddPersonScheduleView)
+			ShiftTradeAddPersonScheduleViewModel shiftTradeAddPersonScheduleView, TimeZoneInfo timeZone)
 		{
 			var maxEndTime = shiftTradeAddPersonScheduleView.ScheduleLayers.Max(scheduleLayer => scheduleLayer.End);
 			var minStartTime = shiftTradeAddPersonScheduleView.ScheduleLayers.Min(scheduleLayer => scheduleLayer.Start);
-			return new DateTimePeriod(TimeZoneHelper.ConvertToUtc(minStartTime), TimeZoneHelper.ConvertToUtc(maxEndTime));
+			return new DateTimePeriod(TimeZoneHelper.ConvertToUtc(minStartTime, timeZone), TimeZoneHelper.ConvertToUtc(maxEndTime, timeZone));
 		}
 	}
 }
