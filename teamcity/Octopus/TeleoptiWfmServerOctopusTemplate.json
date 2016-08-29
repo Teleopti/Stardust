@@ -491,8 +491,8 @@
               "Octopus.Action.Package.AutomaticallyUpdateAppSettingsAndConnectionStrings": "True",
               "Octopus.Action.Package.DownloadOnTentacle": "False",
               "Octopus.Action.Package.NuGetFeedId": "feeds-builtin",
-              "Octopus.Action.Package.NuGetPackageId": "Teleopti WFM 8",
-              "Octopus.Action.Package.PackageId": "Teleopti WFM 8",
+              "Octopus.Action.Package.NuGetPackageId": "TeleoptiWFM",
+              "Octopus.Action.Package.PackageId": "TeleoptiWFM",
               "Octopus.Action.Package.FeedId": "feeds-builtin"
             },
             "Links": {}
@@ -551,7 +551,7 @@
               "Octopus.Action.Template.Version": "1",
               "Action": "Install",
               "Octopus.Action.RunOnServer": "false",
-              "MsiFilePath": "#{Octopus.Action[Download package].Output.Package.InstallationDirectoryPath}\\Teleopti WFM 8.#{Octopus.Action[Download package].Package.NuGetPackageVersion}.msi",
+              "MsiFilePath": "#{Octopus.Action[Download package].Output.Package.InstallationDirectoryPath}\\TeleoptiWFM.#{Octopus.Action[Download package].Package.NuGetPackageVersion}.msi",
               "Properties": "ADDLOCAL=\"#{INSTALL_DATABASE}#{FEATURES}\"\nCLICKONCE_CLIENT_URL=\"#{CLICKONCE_CLIENT_URL}\"\nCLICKONCE_MYTIME_URL=\"#{CLICKONCE_MYTIME_URL}\"\nCLICKONCE_SIGN_METHOD=\"#{CLICKONCE_SIGN_METHOD}\"\nINSTALLDIR=\"#{INSTALLDIR}\"\nMATRIX_WEB_SITE_URL=\"#{MATRIX_WEB_SITE_URL}\"\nSQL_SERVER_NAME=\"#{SQL_SERVER_NAME}\"\nSQL_SERVER_AUTH=\"#{SQL_SERVER_AUTH}\"\nSQL_SERVER_USER=\"#{SQL_SERVER_USER}\"\nSQL_SERVER_PASS=\"#{SQL_SERVER_PASS}\"\nWISE_SQL_CONN_STR=\"#{WISE_SQL_CONN_STR}\"\nSQL_USER_AUTH=\"#{SQL_USER_AUTH}\"\nSQL_USER_NAME=\"#{SQL_USER_NAME}\"\nSQL_USER_PASSWORD=\"#{SQL_USER_PASSWORD}\"\nSQL_AUTH_STRING=\"#{SQL_AUTH_STRING}\"\nMYPASSWORD=\"#{SERVICE_PASSWORD}\"\nMYUSERNAME=\"#{SERVICE_USERNAME}\"\nDB_WINGROUP=\"#{DB_WINGROUP}\"\nDB_ANALYTICS=\"#{DB_ANALYTICS}\"\nDB_ANALYTICS_STAGE=\"#{DB_ANALYTICS}\"\nDB_CCC7=\"#{DB_CCC7}\"\nDB_CCCAGG=\"#{DB_CCCAGG}\"\nDB_MESSAGING=\"#{DB_ANALYTICS}\"\nDNS_ALIAS=\"#{DNS_ALIAS}\"\nAGENT_SERVICE=\"#{AGENT_SERVICE}\"\nSITEPATH=\"#{SITEPATH}\"\nSDK_CRED_PROT=\"#{SDK_CRED_PROT}\"\nSDK_SSL=\"#{SDK_SSL}\"\nCONTEXT_HELP_URL=\"#{CONTEXT_HELP_URL}\"\nWEB_BROKER=\"NOT_USED_ANYMORE\"\nWEB_BROKER_BACKPLANE=\"NOT_USED_ANYMORE\"\nSERVICEBUSENABLED=\"#{SERVICEBUSENABLED}\"\nIIS_AUTH=\"#{IIS_AUTH}\"\nAS_DATABASE=\"\"\nAS_SERVER_NAME=\"\"\nPM_ANONYMOUS_DOMAINUSER=\"\"\nPM_ANONYMOUS_PWD=\"\"\nPM_AUTH_MODE=\"\"\nPM_PROCESS_CUBE=\"\"\nPM_ASMX=\"\"\nPM_INSTALL=\"\"\nRTA_SERVICE=\"#{RTA_SERVICE}\"\nPM_SERVICE=\"\"\nETLUSERNAME=\"#{SERVICE_USERNAME}\"\nETLPASSWORD=\"#{SERVICE_PASSWORD}\"\nDEFAULT_IDENTITY_PROVIDER=\"#{DEFAULT_IDENTITY_PROVIDER}\"\nSIGNALR_BACKPLANE=\"#{SIGNALR_BACKPLANE}\"\nSIGNALR_BACKPLANE_TYPE=\"#{SIGNALR_BACKPLANE_TYPE}\"\nHOST_NAME=\"#{HOST_NAME}\"\nDATABASE_UPGRADE=\"#{DATABASE_UPGRADE}\""
             },
             "Links": {}
