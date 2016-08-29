@@ -47,7 +47,7 @@
 
         this.notifyNothingChanged = function () {
 	    	$translate("NoChangeHasBeenMade").then(function (text) {
-	    		NoticeService.success(text, 10000, true);
+	    		NoticeService.info(text, 10000, false);
 	    	});
 	    }
 
