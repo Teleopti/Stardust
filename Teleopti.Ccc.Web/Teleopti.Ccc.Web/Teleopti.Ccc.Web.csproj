@@ -1449,7 +1449,7 @@
     <Content Include="WFM\js\rta\agents\rta-agents.html" />
     <Content Include="WFM\js\rta\details\rta-agent-details.html" />
     <Content Include="WFM\js\rta\agents\rta-agents-shiftcelltemplate.html" />
-    <Content Include="WFM\js\rta\agents\rta.agents.controller.RTA_RecentOutOfAdherences_39145.spec.js" />
+    <Content Include="WFM\js\rta\agents\rta.agents.controller.recentOutOfAdherences.spec.js" />
     <Content Include="WFM\js\rta\rta.adherence.service.js" />
     <Content Include="WFM\js\rta\skills\rta-selectSkill.html" />
     <Content Include="WFM\js\rta\overview\rta-sites.html" />
@@ -1458,11 +1458,11 @@
     <Content Include="WFM\js\rta\agents\rta.agents.controller.breadcrumb.spec.js" />
     <Content Include="WFM\js\rta\agents\rta.agents.controller.filter.spec.js" />
     <Content Include="WFM\js\rta\skills\rta.selectSkill.controller.js" />
-    <Content Include="WFM\js\rta\agents\rta.agents.controller.RTA_MonitorBySkills_39081.spec.js" />
+    <Content Include="WFM\js\rta\agents\rta.agents.controller.monitorBySkills.spec.js" />
     <Content Include="WFM\js\rta\agents\rta.agents.controller.inalarm.spec.js" />
     <Content Include="WFM\js\rta\agents\rta.agents.controller.alarmcontext.spec.js" />
-    <Content Include="WFM\js\rta\agents\rta.agents.controller.RTA_PauseButton_39144.spec.js" />
-    <Content Include="WFM\js\rta\agents\rta.agents.controller.RTA_TotalOutOfAdherenceTime_38702.spec.js" />
+    <Content Include="WFM\js\rta\agents\rta.agents.controller.pauseButton.spec.js" />
+    <Content Include="WFM\js\rta\agents\rta.agents.controller.totalOutOfAdherenceTime.spec.js" />
     <Content Include="WFM\js\rta\rta.controller.fortest.js" />
     <Content Include="WFM\js\rta\rta.backend.fake.js" />
     <Content Include="WFM\js\rta\agents\rta.agents.controller.spec.js" />
