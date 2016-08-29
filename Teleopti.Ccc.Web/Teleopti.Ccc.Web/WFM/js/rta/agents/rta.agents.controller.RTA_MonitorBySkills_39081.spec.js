@@ -32,7 +32,6 @@ describe('RtaAgentsCtrlMonitorBySkills_39081', function () {
 		$controllerBuilder = _ControllerBuilder_;
 
 		$fakeBackend.clear();
-		$fakeBackend.withToggle('RTA_MonitorBySkills_39081');
 
 		scope = $controllerBuilder.setup('RtaAgentsCtrl');
 

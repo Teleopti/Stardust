@@ -3,8 +3,7 @@
 angular.module('wfm.rta').provider('RtaState', function () {
 	var toggles = {
 		RTA_AlarmContext_29357: false,
-		RTA_PauseButton_9999: false,
-		RTA_MonitorBySkills_39081: false
+		RTA_PauseButton_9999: false
 	};
 	var rtaAgentsTemplate = function (elem, attr) {
 		if (toggles.RTA_AlarmContext_29357) {
@@ -17,27 +16,11 @@ angular.module('wfm.rta').provider('RtaState', function () {
 		return 'js/rta/agents/rta-agents.html';
 	};
 
-	var rtaSitesTemplate = function (elem, attr) {
-		if (toggles.RTA_MonitorBySkills_39081) {
-			return 'js/rta/overview/rta-sites-RTA_MonitorBySkills_39081.html';
-		}
-		return 'js/rta/overview/rta-sites.html';
-	};
-
-	var rtaAgentsBySkillsTemplate = function (elem, attr) {
-		if (toggles.RTA_MonitorBySkills_39081) {
-			
-			return 'js/rta/agents/rta-agents-RTA_MonitorBySkills_39081.html';
-		}
-		return 'js/rta/agents/rta-agents.html';
-	};
-
 	this.$get = function () {
 		return function (toggleService) {
 			toggleService.togglesLoaded.then(function () {
 				toggles.RTA_AlarmContext_29357 = toggleService.RTA_AlarmContext_29357;
 				toggles.RTA_PauseButton_39144 = toggleService.RTA_PauseButton_39144;
-				toggles.RTA_MonitorBySkills_39081 = toggleService.RTA_MonitorBySkills_39081;
 			});
 		};
 	};
@@ -55,7 +38,7 @@ angular.module('wfm.rta').provider('RtaState', function () {
 			})
 			.state('rta.sites',
 			{
-				templateUrl: rtaSitesTemplate,
+				templateUrl: 'js/rta/overview/rta-sites.html',
 				controller: 'RtaOverviewCtrl',
 			})
 			.state('rta.teams',
@@ -101,13 +84,13 @@ angular.module('wfm.rta').provider('RtaState', function () {
 			.state('rta.agents-skill-area',
 			{
 				url: '/agents-skill-area/:skillAreaId',
-				templateUrl: rtaAgentsBySkillsTemplate,
+				templateUrl: 'js/rta/agents/rta-agents-RTA_MonitorBySkills_39081.html',
 				controller: 'RtaAgentsCtrl',
 			})
 			.state('rta.agents-skill',
 			{
 				url: '/agents-skill/:skillId',
-				templateUrl: rtaAgentsBySkillsTemplate,
+				templateUrl: 'js/rta/agents/rta-agents-RTA_MonitorBySkills_39081.html',
 				controller: 'RtaAgentsCtrl'
 			})		
 			.state('rta.agent-details',

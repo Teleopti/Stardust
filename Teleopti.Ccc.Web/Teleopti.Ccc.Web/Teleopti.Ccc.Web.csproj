@@ -1449,15 +1449,15 @@
     <Content Include="WFM\js\resourceplanner\resourceplanner.filter.controller.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.temp.controller.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.filter.service.js" />
-    <Content Include="WFM\js\rta\details\rta-agent-details.html" />
     <Content Include="WFM\js\rta\agents\rta-agents-RTA_MonitorBySkills_39081.html" />
-    <Content Include="WFM\js\rta\agents\rta-agents-RTA_PauseButton_39144.html" />
+    <Content Include="WFM\js\rta\details\rta-agent-details.html" />
     <Content Include="WFM\js\rta\agents\rta-agents.html" />
+    <Content Include="WFM\js\rta\agents\rta-agents-RTA_PauseButton_39144.html" />
     <Content Include="WFM\js\rta\agents\rta-agents-shiftcelltemplate-RTA_RecentOutOfAdherences_39145.html" />
     <Content Include="WFM\js\rta\agents\rta.agents.controller.RTA_RecentOutOfAdherences_39145.spec.js" />
     <Content Include="WFM\js\rta\rta.adherence.service.js" />
     <Content Include="WFM\js\rta\skills\rta-selectSkill.html" />
-    <Content Include="WFM\js\rta\overview\rta-sites-RTA_MonitorBySkills_39081.html" />
+    <Content Include="WFM\js\rta\overview\rta-sites.html" />
     <Content Include="WFM\js\rta\details\rta.agentdetails.controller.js" />
     <Content Include="WFM\js\rta\details\rta.agentdetails.controller.spec.js" />
     <Content Include="WFM\js\rta\agents\rta.agents.controller.breadcrumb.spec.js" />
@@ -1624,7 +1624,6 @@
     <Content Include="WFM\js\forecasting\forecasting.advanced.controller.js" />
     <Content Include="WFM\js\outbound\angular-gantt.ext.js" />
     <Content Include="WFM\js\outbound\outbound.directive.scroll-fix.js" />
-    <Content Include="WFM\js\rta\overview\rta-sites.html" />
     <Content Include="WFM\js\rta\overview\rta-teams.html" />
     <Content Include="WFM\js\rta\agents\rta.agents.controller.js" />
     <Content Include="WFM\js\rta\rta.service.js" />

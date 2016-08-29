@@ -15,8 +15,7 @@
 		'RtaRouteService',
 		'RtaFormatService',
 		'RtaAdherenceService',
-		'NoticeService',
-		'Toggle',
+		'NoticeService',		
 		function (
 			$scope,
 			$stateParams,
@@ -30,11 +29,9 @@
 			RtaRouteService,
 			RtaFormatService,
 			RtaAdherenceService,
-			NoticeService,
-			toggleService
+			NoticeService
 			) {
 
-			$scope.monitorBySkill = toggleService.RTA_MonitorBySkills_39081;
 			$scope.selectedItemIds = [];
 			$scope.siteId = $stateParams.siteId || null;
 			$scope.getAdherencePercent = RtaFormatService.numberToPercent;

@@ -23,7 +23,6 @@
 		RTA_AlarmContext_29357,
 		RTA_TotalOutOfAdherenceTime_38702,
 		RTA_PauseButton_39144,
-		RTA_MonitorBySkills_39081,
 		RTA_RecentOutOfAdherences_39145,
 		RTA_Optimize_39667,
 		RTA_RuleMappingOptimization_39812,
