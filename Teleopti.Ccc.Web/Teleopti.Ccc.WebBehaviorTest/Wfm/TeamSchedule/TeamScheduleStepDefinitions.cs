@@ -379,9 +379,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[When(@"I choose not to view '(.*)' validation result")]
 		public void WhenIChooseNotToViewValidationResult(string ruleType)
 		{
-			Browser.Interactions.AssertExists($"div[test-attr={ ruleType}] input:checked");
+			Browser.Interactions.AssertExists($"div[test-attr={ ruleType}] input[type='checkbox']:checked");
 			Browser.Interactions.Click($"div[test-attr={ ruleType}] label");
-			Browser.Interactions.AssertExists($"div[test-attr={ ruleType}] input:not(checked)");
+			Browser.Interactions.AssertExists($"div[test-attr={ ruleType}] input[type='checkbox']:not(:checked)");
 		}
 
 		[Then(@"I should not see business rule warning")]
