@@ -306,6 +306,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			}
 		}
 
+		[OverrideAuthentication]
 		[HttpPost]
 		[TenantUnitOfWork]
 		[Route("CheckEmail")]
