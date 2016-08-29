@@ -48,6 +48,7 @@
 		vm.showCheckbox = false;
 		vm.overlappedAgents = [];
 		vm.overlappedLayers = [];
+		vm.initFinished = false;
 
 		vm.actionOptions = [{
 			Name: $translate.instant('DoNotModifyForTheseAgents'),
@@ -162,6 +163,8 @@
 			vm.overlappedAgents = ScheduleManagementSvc.groupScheduleVm.Schedules.filter(function(personSchedule) {
 				return personIds.indexOf(personSchedule.PersonId) > -1;
 			});
+
+			vm.initFinished = true;
 		};
 
 		vm.init();
