@@ -427,6 +427,7 @@
 
 	.add-absence, .add-activity, .move-activity, .edit-shift-category, .command-check, .settings-panel{
 		height: 100%;
+		display: -ms-flexbox;
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-start;
@@ -441,21 +442,22 @@
 		}
 
 		md-content {
+			display: -ms-flexbox;
 			display: flex;
 			flex-grow: 1;
 			flex-direction: column;
 			justify-content: space-between;
 			max-height: 100%;
-
-			form{
-				flex-grow: 1;
-			}
 		}
 
 		md-select{
 			width: 100%;
 			min-height: 40px;
 		}
+	}
+
+	.add-activity i.mdi-alert-octagon{
+		vertical-align: middle;
 	}
 
 	.command-check {

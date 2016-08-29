@@ -36,8 +36,8 @@
 					    if (resp.data.length === 0) {
 						    commandCheckDeferred.resolve();
 					    } else {
+                            overlappingPeopleList = resp.data;
 						    commandCheckedStatus = true;
-						    overlappingPeopleList = resp.data;
 					    }
 				    })
 				    .catch(function(e) {
