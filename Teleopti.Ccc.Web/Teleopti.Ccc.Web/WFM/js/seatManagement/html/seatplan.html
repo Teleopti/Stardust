@@ -44,11 +44,11 @@
 
 		<div class="col-sm-12 seatplan-calendar">
 
-			<datepicker ng-model="seatplan.selectedDate"
+			<div uib-datepicker  ng-model="seatplan.selectedDate"
 						on-change-of-month="seatplan.onChangeOfMonth(date)"
 						ng-change="seatplan.onChangeOfDate()" class="wfm-datepicker"
 						custom-class="seatplan.getDayClass(date,mode)">
-			</datepicker>
+			</div>
 		</div>
 
 		<div class="planning-day-detail" ng-if="seatplan.selectedDate!=null">

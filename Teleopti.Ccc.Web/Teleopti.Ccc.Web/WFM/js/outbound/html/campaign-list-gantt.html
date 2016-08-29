@@ -32,7 +32,7 @@
 				<input class="pointer text-center" type="text" ng-click="showDatePicker=!showDatePicker" value="{{settings.periodStart | monthview }}" readonly />
 				<i class="mdi mdi-calendar pointer" ng-click="showDatePicker=!showDatePicker"></i>
 				<div class="wfm-datepicker-wrap gantt-datepicker" ng-show="showDatePicker">
-					<datepicker show-weeks="true" ng-model="settings.periodStart" class="wfm-datepicker" min-mode="month" ng-change="showDatePicker=false"></datepicker>
+					<div uib-datepicker  show-weeks="true" ng-model="settings.periodStart" class="wfm-datepicker" min-mode="month" ng-change="showDatePicker=false"></div>
 				</div>
 			</div>
 			<button class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="viewOneMonthAfter()"><i class="mdi mdi-chevron-double-right middle"></i></button>

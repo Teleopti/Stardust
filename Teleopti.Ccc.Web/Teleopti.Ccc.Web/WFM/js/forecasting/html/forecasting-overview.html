@@ -121,13 +121,13 @@
 					<div class="sub-header">
 						{{'From' | translate}}: <span class="startDate">{{period.startDate | date: "shortDate"}}</span>
 					</div>
-					<uib-datepicker ng-model="period.startDate" show-weeks="true" custom-class="setRangeClass(date, mode)" class="wfm-datepicker" ng-change="updateEndDate()"></datepicker>
+					<div uib-datepicker ng-model="period.startDate" show-weeks="true" custom-class="setRangeClass(date, mode)" class="wfm-datepicker" ng-change="updateEndDate()"></div>
 					</div>
 					<div class="wfm-datepicker-wrap">
 						<div class="sub-header">
 							{{'To' | translate}}: <span class="endDate">{{period.endDate | date: "shortDate"}}</span>
 						</div>
-						<uib-datepicker ng-model="period.endDate" show-weeks="true" min-date="period.startDate" custom-class="setRangeClass(date, mode)" class="wfm-datepicker" ng-change="updateStartDate()"></datepicker>
+						<div uib-datepicker ng-model="period.endDate" show-weeks="true" min-date="period.startDate" custom-class="setRangeClass(date, mode)" class="wfm-datepicker" ng-change="updateStartDate()"></div>
 						</div>
 					</div>
 					<div class="con-flex"></div>

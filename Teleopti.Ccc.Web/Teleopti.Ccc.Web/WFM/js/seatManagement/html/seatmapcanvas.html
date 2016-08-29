@@ -38,9 +38,9 @@
 				{{vm.getDisplaySelectedDate()}}
 			</button>
 			<div class="date-picker">
-				<datepicker ng-if="vm.isDatePickerOpened" ng-model="vm.selectedDate"
+				<div uib-datepicker  ng-if="vm.isDatePickerOpened" ng-model="vm.selectedDate"
 							class="wfm-datepicker material-depth-1" ng-change="vm.onChangeOfDate()">
-				</datepicker>
+				</div>
 			</div>
 		</div>
 	</div>

@@ -155,11 +155,11 @@
 			controllerAs: 'requestsOverview',
 			bindToController: true,
 			scope: {
-				period: '=',
+				period: '=?',
 				agentSearchTerm: '=?',
 				filters: '=?',
-				filterEnabled: '=',
-				isActive: '='
+				filterEnabled: '=?',
+				isActive: '=?'
 			},
 			restrict: 'E',
 			templateUrl: 'js/requests/html/requests-overview.tpl.html',

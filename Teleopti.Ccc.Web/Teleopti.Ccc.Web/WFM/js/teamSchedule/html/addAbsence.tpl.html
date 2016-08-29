@@ -15,7 +15,7 @@
 					<team-schedule-datepicker selected-date="vm.timeRange.startTime" onDateChange="vm.isAbsenceDateValid()"/>
 				</span>
 				<span class="col-sm-5 uib-timepicker">
-					<uib-timepicker show-meridian="vm.showMeridian" ng-show="!vm.isFullDayAbsence && vm.isAddIntradayAbsenceAvailable()" ng-model="vm.timeRange.startTime"></uib-timepicker>
+					<div uib-timepicker show-meridian="vm.showMeridian" ng-show="!vm.isFullDayAbsence && vm.isAddIntradayAbsenceAvailable()" ng-model="vm.timeRange.startTime"></div>
 				</span>
 			</div>
 
@@ -25,7 +25,7 @@
 					<team-schedule-datepicker selected-date="vm.timeRange.endTime" onDateChange="vm.isAbsenceDateValid()"/>
 				</span>
 				<span class="col-sm-5 uib-timepicker">
-					<uib-timepicker show-meridian="vm.showMeridian" ng-show="!vm.isFullDayAbsence && vm.isAddIntradayAbsenceAvailable()" ng-model="vm.timeRange.endTime"></uib-timepicker>
+					<div uib-timepicker show-meridian="vm.showMeridian" ng-show="!vm.isFullDayAbsence && vm.isAddIntradayAbsenceAvailable()" ng-model="vm.timeRange.endTime"></div>
 				</span>
 			</div>
 

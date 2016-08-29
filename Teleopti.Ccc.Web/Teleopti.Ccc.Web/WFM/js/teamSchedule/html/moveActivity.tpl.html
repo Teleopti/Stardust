@@ -4,7 +4,7 @@
 		<form name="moveActivityForm">
 			<md-progress-linear ng-if="vm.checkingCommand" md-mode="indeterminate"></md-progress-linear>
 			<h3>{{'StartTime' | translate}}:</h3>
-			<uib-timepicker class="focus-default" ng-model="vm.moveToTime" required show-meridian="vm.showMeridian" meridians="vm.meridians"></uib-timepicker>
+			<div uib-timepicker class="focus-default" ng-model="vm.moveToTime" required show-meridian="vm.showMeridian" meridians="vm.meridians"></div>
 			<div class="wfm-switch">
 				<input type="checkbox" id="mvActNextDay" ng-model="vm.nextDay"/>
 				<label for="mvActNextDay">

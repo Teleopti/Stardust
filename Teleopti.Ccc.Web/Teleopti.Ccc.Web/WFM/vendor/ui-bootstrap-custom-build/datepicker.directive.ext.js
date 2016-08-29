@@ -4,46 +4,7 @@
 (function () {
 
 
-	angular.module('ui.bootstrap.datepicker').config(function ($provide) {
-		$provide.decorator('datepickerDirective', datepickerDecorator);
-		$provide.decorator('uibDatepickerDirective', datepickerDecorator);
-
-		datepickerDecorator.$inject = ['$delegate', '$timeout', '$locale'];
-		function datepickerDecorator($delegate, $timeout, $locale) {
-			var directive = $delegate[0];
-			var link = directive.link;
-
-			directive.$$isolateBindings['onChangeOfMonth'] = {
-				attrName: 'onChangeOfMonth',
-				mode: '&',
-				optional: true
-			};
-
-			directive.compile = function () {
-				return function (scope, element, attrs, ctrl) {
-
-					// set start of week based on locale.
-					ctrl[0].startingDay = ($locale.DATETIME_FORMATS.FIRSTDAYOFWEEK + 1) % 7;
-				
-					link.apply(this, arguments);
-
-					scope.$watch(function () {
-						return ctrl[0].activeDate.getTime();
-					}, function (newVal, oldVal) {
-
-						if (scope.onChangeOfMonth != undefined) {
-							if (moment(oldVal).month() !== moment(newVal).month()) {
-								$timeout(function () {
-									scope.onChangeOfMonth({ date: ctrl[0].activeDate });
-								});
-							}
-						}
-					});
-				}
-			};
-			return $delegate;
-		}
-	})
+	angular.module('ui.bootstrap.datepicker')
 	.run(['$templateCache', function ($templateCache) {
 		// Apply customized style to datepicker popup
 		$templateCache.put("template/datepicker/popup.html",
@@ -75,7 +36,7 @@
 			"  <tbody>\n" +
 			"    <tr ng-repeat=\"row in rows track by $index\">\n" +
 			"      <td ng-if=\"showWeeks\" class=\"text-center h6\"><em>{{ weekNumbers[$index] }}</em></td>\n" +
-			"      <td ng-repeat=\"dt in row track by dt.date\" class=\"text-center\" role=\"gridcell\" id=\"{{::dt.uid}}\" ng-class=\"dt.customClass\">\n" +  //remove the "::" to make the customClasshandler woks for date range change.
+			"      <td ng-repeat=\"dt in row track by dt.dat<e\" class=\"text-center\" role=\"gridcell\" id=\"{{::dt.uid}}\" ng-class=\"dt.customClass\">\n" +  //remove the "::" to make the customClasshandler woks for date range change.
 			"        <button type=\"button\" style=\"min-width:100%;\" class=\"btn btn-default btn-sm\" ng-class=\"{'btn-info': dt.selected, active: isActive(dt)}\" ng-click=\"select(dt.date)\" ng-disabled=\"dt.disabled\" tabindex=\"-1\"><span ng-class=\"::{'text-muted': dt.secondary, 'text-info': dt.current}\">{{::dt.label}}</span></button>\n" +
 			"      </td>\n" +
 			"    </tr>\n" +
