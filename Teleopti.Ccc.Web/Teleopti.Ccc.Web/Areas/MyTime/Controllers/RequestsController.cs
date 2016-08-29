@@ -38,17 +38,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IRequestsShiftTradeScheduleViewModelFactory _shiftTradeScheduleViewModelFactory;
 		private readonly ICancelAbsenceRequestCommandProvider _cancelAbsenceRequestCommandProvider;
 
-		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory, 
-								ITextRequestPersister textRequestPersister, 
-								IAbsenceRequestPersister absenceRequestPersister, 
-								IShiftTradeRequestPersister shiftTradeRequestPersister,
-								IRespondToShiftTrade respondToShiftTrade, 
-								IPermissionProvider permissionProvider,
-								ITimeFilterHelper timeFilterHelper,
-								IToggleManager toggleManager, 
-								IRequestsShiftTradeScheduleViewModelFactory shiftTradeScheduleViewModelFactory,
-								IAbsenceRequestDetailViewModelFactory absenceRequestDetailViewModelFactory,
-								ICancelAbsenceRequestCommandProvider cancelAbsenceRequestCommandProvider)
+		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory,
+			ITextRequestPersister textRequestPersister,
+			IAbsenceRequestPersister absenceRequestPersister,
+			IShiftTradeRequestPersister shiftTradeRequestPersister,
+			IRespondToShiftTrade respondToShiftTrade,
+			IPermissionProvider permissionProvider,
+			ITimeFilterHelper timeFilterHelper,
+			IToggleManager toggleManager,
+			IRequestsShiftTradeScheduleViewModelFactory shiftTradeScheduleViewModelFactory,
+			IAbsenceRequestDetailViewModelFactory absenceRequestDetailViewModelFactory,
+			ICancelAbsenceRequestCommandProvider cancelAbsenceRequestCommandProvider)
 		{
 			AbsenceRequestDetailViewModelFactory = absenceRequestDetailViewModelFactory;
 			_requestsViewModelFactory = requestsViewModelFactory;
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet]
 		public virtual JsonResult PersonalAccountPermission()
 		{
-			bool personalAccountPermission = _permissionProvider.HasApplicationFunctionPermission(
+			var personalAccountPermission = _permissionProvider.HasApplicationFunctionPermission(
 				DefinedRaptorApplicationFunctionPaths.ViewPersonalAccount);
 
 			return Json(personalAccountPermission, JsonRequestBehavior.AllowGet);
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			model.Status = Resources.WaitingThreeDots;
 			return Json(model);
 		}
-		
+
 		[UnitOfWork]
 		[HttpPostOrPut]
 		public virtual JsonResult DenyShiftTrade(ShiftTradeRequestReplyForm form)
@@ -174,23 +174,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json("");
 		}
 
-
 		[UnitOfWork]
 		[HttpPostOrPut]
 		public virtual JsonResult CancelRequest(Guid id)
 		{
-			var commandResult = _cancelAbsenceRequestCommandProvider.CancelAbsenceRequest (id);
-			
+			var commandResult = _cancelAbsenceRequestCommandProvider.CancelAbsenceRequest(id);
+
 			var result = new RequestCommandHandlingResult(
-				commandResult.AffectedRequestId.HasValue ? new List<Guid>() { commandResult.AffectedRequestId.Value } : null, 
+				commandResult.AffectedRequestId.HasValue ? new List<Guid>() {commandResult.AffectedRequestId.Value} : null,
 				commandResult.ErrorMessages);
-			
+
 			if (result.Success)
 			{
-				result.RequestViewModel =  _requestsViewModelFactory.CreateRequestViewModel(id);
+				result.RequestViewModel = _requestsViewModelFactory.CreateRequestViewModel(id);
 			}
 
-			return Json (result);
+			return Json(result);
 		}
 
 		[UnitOfWork]
@@ -203,7 +202,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				ShiftTradeDate = selectedDate,
 				TeamIdList = allTeamIds,
 				Paging = paging,
-				TimeFilter = _timeFilterHelper.GetFilter(selectedDate, filter.FilteredStartTimes, filter.FilteredEndTimes, filter.IsDayOff,filter.IsEmptyDay),
+				TimeFilter = _timeFilterHelper.GetFilter(selectedDate, filter.FilteredStartTimes, filter.FilteredEndTimes,
+						filter.IsDayOff, filter.IsEmptyDay),
 				SearchNameText = filter.SearchNameText,
 				TimeSortOrder = filter.TimeSortOrder
 			};
@@ -243,7 +243,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet]
 		public virtual JsonResult ShiftTradeRequestMyTeam(DateOnly selectedDate)
 		{
-			return Json(_requestsViewModelFactory.CreateShiftTradeMyTeamSimpleViewModel(selectedDate), JsonRequestBehavior.AllowGet);
+			return Json(_requestsViewModelFactory.CreateShiftTradeMyTeamSimpleViewModel(selectedDate),
+				JsonRequestBehavior.AllowGet);
 		}
 
 		[UnitOfWork]
@@ -257,8 +258,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet]
 		public virtual JsonResult AbsenceRequestDetail(Guid id)
 		{
-			return Json(AbsenceRequestDetailViewModelFactory.CreateAbsenceRequestDetailViewModel (id), JsonRequestBehavior.AllowGet);
+			return Json(AbsenceRequestDetailViewModelFactory.CreateAbsenceRequestDetailViewModel(id),
+				JsonRequestBehavior.AllowGet);
 		}
-
 	}
 }
