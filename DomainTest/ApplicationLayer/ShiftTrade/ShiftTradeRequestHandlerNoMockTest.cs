@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade;
+using Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -192,7 +193,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom }, null,
 				new DateOnlyPeriod(new DateOnly(scheduleDate), new DateOnly(scheduleDate.AddDays(7))), _scenarioRepository.Current());
 			var businessRules = businessRuleProvider.GetAllBusinessRules(_schedulingResultStateHolder);
-			businessRules.Add(new SiteOpenHoursRule());
+			businessRules.Add(new SiteOpenHoursRule(new SiteOpenHoursSpecification()));
 			setApprovalService(scheduleDictionary, businessRules);
 
 			handleRequest(@event, false, businessRuleProvider);

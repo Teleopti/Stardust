@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.IocCommon.Toggle;
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_target = new ShiftTradeScheduleViewModelMapper(_shiftTradeRequestProvider, _possibleShiftTradePersonsProvider,
 				_shiftTradePersonScheduleViewModelMapper, _shiftTradeTimeLineHoursViewModelMapper, _personRequestRepository,
 				_scheduleProvider, _loggedOnUser,
-				new ShiftTradeSiteOpenHourFilter(_loggedOnUser, new FakeToggleManager()));
+				new ShiftTradeSiteOpenHourFilter(_loggedOnUser, new FakeToggleManager(), new SiteOpenHoursSpecification()));
 		}
 
 		[Test]

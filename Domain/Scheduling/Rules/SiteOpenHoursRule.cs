@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -7,6 +8,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 {
 	public class SiteOpenHoursRule : INewBusinessRule
 	{
+		private readonly ISiteOpenHoursSpecification _siteOpenHoursSpecification;
+
+		public SiteOpenHoursRule(ISiteOpenHoursSpecification siteOpenHoursSpecification)
+		{
+			_siteOpenHoursSpecification = siteOpenHoursSpecification;
+		}
+
 		private bool _haltModify = true;
 
 		public string ErrorMessage
@@ -58,8 +66,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				return null;
 
 			var period = layerCollection.Period().Value;
-			var scheduleTimePeriods = getSchedulePeriods(period, person.PermissionInformation.DefaultTimeZone());
-			if (!isSatisfiedSiteOpenHours(scheduleTimePeriods, person))
+			if (!_siteOpenHoursSpecification.IsSatisfiedBy(new SiteOpenHoursCheckItem { Period = period , Person = person }))
 			{
 				var response = createResponse(person, date, getErrorMessage(person, date, period));
 				oldResponses.Add(response);
@@ -67,52 +74,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			}
 
 			return null;
-		}
-
-		private static TimePeriod getPersonSiteOpenHourPeriod(IPerson person, DateOnly scheduleDate)
-		{
-			var siteOpenHour = person.SiteOpenHour(scheduleDate);
-			if (siteOpenHour == null)
-			{
-				return new TimePeriod(TimeSpan.Zero, TimeSpan.FromHours(24).Subtract(new TimeSpan(1)));
-			}
-			if (siteOpenHour.IsClosed)
-			{
-				return new TimePeriod();
-			}
-			return siteOpenHour.TimePeriod;
-		}
-
-		private Dictionary<DateOnly, TimePeriod> getSchedulePeriods(DateTimePeriod dateTimePeriod, TimeZoneInfo timeZone)
-		{
-			var startTime = dateTimePeriod.StartDateTimeLocal(timeZone);
-			var endTime = dateTimePeriod.EndDateTimeLocal(timeZone);
-			var dateTimePeriodDictionary = new Dictionary<DateOnly, TimePeriod>();
-			if (startTime.Day == endTime.Day)
-			{
-				dateTimePeriodDictionary.Add(new DateOnly(startTime),
-					new TimePeriod(startTime.TimeOfDay, endTime.TimeOfDay));
-			}
-			else
-			{
-				dateTimePeriodDictionary.Add(new DateOnly(startTime),
-					new TimePeriod(startTime.TimeOfDay, TimeSpan.FromHours(24).Subtract(TimeSpan.FromSeconds(60))));
-				dateTimePeriodDictionary.Add(new DateOnly(endTime),
-					new TimePeriod(TimeSpan.Zero, endTime.TimeOfDay));
-			}
-
-			return dateTimePeriodDictionary;
-		}
-
-		private static bool isSatisfiedSiteOpenHours(Dictionary<DateOnly, TimePeriod> personScheduleTimePeriods, IPerson person)
-		{
-			var isSatisfied = true;
-			foreach (var personToScheduleTimePeriod in personScheduleTimePeriods)
-			{
-				var personSiteOpenHourPeriod = getPersonSiteOpenHourPeriod(person, personToScheduleTimePeriod.Key);
-				isSatisfied = isSatisfied && personSiteOpenHourPeriod.Contains(personToScheduleTimePeriod.Value);
-			}
-			return isSatisfied;
 		}
 
 		private IBusinessRuleResponse createResponse(IPerson person, DateOnly scheduleDate, string message)

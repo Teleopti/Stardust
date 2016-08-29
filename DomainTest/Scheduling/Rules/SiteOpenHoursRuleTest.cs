@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 	{
 		private readonly DateOnly _periodStartDate = new DateOnly(2016, 1, 1);
 		private readonly Scenario _scenario = ScenarioFactory.CreateScenarioWithId("scenario", true);
-		private readonly SiteOpenHoursRule _target = new SiteOpenHoursRule();
+		private readonly SiteOpenHoursRule _target = new SiteOpenHoursRule(new SiteOpenHoursSpecification());
 
 		[Test]
 		public void ShouldValidateWithOpenHourIsSatisfied()

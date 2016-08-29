@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
@@ -13,11 +14,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 	{
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IToggleManager _toggleManager;
+		private readonly ISiteOpenHoursSpecification _siteOpenHoursSpecification;
 
-		public ShiftTradeSiteOpenHourFilter(ILoggedOnUser loggedOnUser, IToggleManager toggleManager)
+		public ShiftTradeSiteOpenHourFilter(ILoggedOnUser loggedOnUser, IToggleManager toggleManager,
+			ISiteOpenHoursSpecification siteOpenHoursSpecification)
 		{
 			_loggedOnUser = loggedOnUser;
 			_toggleManager = toggleManager;
+			_siteOpenHoursSpecification = siteOpenHoursSpecification;
 		}
 
 		public IEnumerable<ShiftTradeAddPersonScheduleViewModel> FilterScheduleView(
@@ -36,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 			var personDictionary = datePersons.Persons.ToDictionary(p => p.Id.GetValueOrDefault(Guid.NewGuid()));
 			var personFrom = _loggedOnUser.CurrentUser();
-			var personFromSchedulePeriods = getSchedulePeriods(personFromScheduleView);
+			var personFromSchedulePeriod = getSchedulePeriod(personFromScheduleView);
 
 			return personToScheduleViews.Where(
 				shiftTradeAddPersonScheduleView =>
@@ -52,9 +56,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 						return true;
 					}
 
-					var personToScheduleTimePeriods = getSchedulePeriods(shiftTradeAddPersonScheduleView);
-					var isSatisfiedPersonFromSiteOpenHours = isSatisfiedSiteOpenHours(personToScheduleTimePeriods, personFrom);
-					var isSatisfiedPersonToSiteOpenHours = isSatisfiedSiteOpenHours(personFromSchedulePeriods, personTo);
+					var personToScheduleTimePeriod = getSchedulePeriod(shiftTradeAddPersonScheduleView);
+					var isSatisfiedPersonFromSiteOpenHours = _siteOpenHoursSpecification.IsSatisfiedBy(new SiteOpenHoursCheckItem
+					{
+						Period = personToScheduleTimePeriod,
+						Person = personFrom
+					});
+					var isSatisfiedPersonToSiteOpenHours = _siteOpenHoursSpecification.IsSatisfiedBy(new SiteOpenHoursCheckItem
+					{
+						Period = personFromSchedulePeriod,
+						Person = personTo
+					});
 
 					return isSatisfiedPersonFromSiteOpenHours && isSatisfiedPersonToSiteOpenHours;
 				});
@@ -74,7 +86,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			}
 
 			var personFrom = _loggedOnUser.CurrentUser();
-			var personFromSchedulePeriods = getSchedulePeriods(personFromScheduleView);
+			var personFromSchedulePeriod = getSchedulePeriod(personFromScheduleView);
 
 			return shiftExchangeOffers.Where(
 				shiftExchangeOffer =>
@@ -85,41 +97,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 					}
 
 					var personTo = shiftExchangeOffer.Person;
-					var timezone = shiftExchangeOffer.Person.PermissionInformation.DefaultTimeZone();
 					var personToScheduleDateTimePeriod = shiftExchangeOffer.MyShiftPeriod.Value;
-					var personToScheduleTimePeriods = getSchedulePeriods(personToScheduleDateTimePeriod.StartDateTimeLocal(timezone)
-						, personToScheduleDateTimePeriod.EndDateTimeLocal(timezone));
-					var isSatisfiedPersonFromSiteOpenHours = isSatisfiedSiteOpenHours(personToScheduleTimePeriods, personFrom);
-					var isSatisfiedPersonToSiteOpenHours = isSatisfiedSiteOpenHours(personFromSchedulePeriods, personTo);
+					var isSatisfiedPersonFromSiteOpenHours = _siteOpenHoursSpecification.IsSatisfiedBy(new SiteOpenHoursCheckItem
+					{
+						Period = personToScheduleDateTimePeriod,
+						Person = personFrom
+					});
+					var isSatisfiedPersonToSiteOpenHours = _siteOpenHoursSpecification.IsSatisfiedBy(new SiteOpenHoursCheckItem
+					{
+						Period = personFromSchedulePeriod,
+						Person = personTo
+					});
 
 					return isSatisfiedPersonFromSiteOpenHours && isSatisfiedPersonToSiteOpenHours;
 				});
-		}
-
-
-		private static bool isSatisfiedSiteOpenHours(Dictionary<DateOnly, TimePeriod> personScheduleTimePeriods, IPerson person)
-		{
-			var isSatisfied = true;
-			foreach (var personToScheduleTimePeriod in personScheduleTimePeriods)
-			{
-				var personSiteOpenHourPeriod = getPersonSiteOpenHourPeriod(person, personToScheduleTimePeriod.Key);
-				isSatisfied = isSatisfied && personSiteOpenHourPeriod.Contains(personToScheduleTimePeriod.Value);
-			}
-			return isSatisfied;
-		}
-
-		private static TimePeriod getPersonSiteOpenHourPeriod(IPerson person, DateOnly shiftTradeDate)
-		{
-			var siteOpenHour = person.SiteOpenHour(shiftTradeDate);
-			if (siteOpenHour == null)
-			{
-				return new TimePeriod(TimeSpan.Zero, TimeSpan.FromHours(24).Subtract(new TimeSpan(1)));
-			}
-			if (siteOpenHour.IsClosed)
-			{
-				return new TimePeriod();
-			}
-			return siteOpenHour.TimePeriod;
 		}
 
 		private bool isFilterEnabled()
@@ -127,30 +118,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			return _toggleManager.IsEnabled(Toggles.Wfm_Requests_Site_Open_Hours_39936);
 		}
 
-		private Dictionary<DateOnly, TimePeriod> getSchedulePeriods(
+		private DateTimePeriod getSchedulePeriod(
 			ShiftTradeAddPersonScheduleViewModel shiftTradeAddPersonScheduleView)
 		{
 			var maxEndTime = shiftTradeAddPersonScheduleView.ScheduleLayers.Max(scheduleLayer => scheduleLayer.End);
 			var minStartTime = shiftTradeAddPersonScheduleView.ScheduleLayers.Min(scheduleLayer => scheduleLayer.Start);
-			return getSchedulePeriods(minStartTime, maxEndTime);
-		}
-
-		private Dictionary<DateOnly, TimePeriod> getSchedulePeriods(DateTime startTime, DateTime endTime)
-		{
-			var dateTimePeriodDictionary = new Dictionary<DateOnly, TimePeriod>();
-			if (startTime.Day == endTime.Day)
-			{
-				dateTimePeriodDictionary.Add(new DateOnly(startTime),
-					new TimePeriod(startTime.TimeOfDay, endTime.TimeOfDay));
-			}
-			else
-			{
-				dateTimePeriodDictionary.Add(new DateOnly(startTime),
-					new TimePeriod(startTime.TimeOfDay, TimeSpan.FromHours(24).Subtract(TimeSpan.FromSeconds(60))));
-				dateTimePeriodDictionary.Add(new DateOnly(endTime), new TimePeriod(TimeSpan.Zero, endTime.TimeOfDay));
-			}
-
-			return dateTimePeriodDictionary;
+			return new DateTimePeriod(TimeZoneHelper.ConvertToUtc(minStartTime), TimeZoneHelper.ConvertToUtc(maxEndTime));
 		}
 	}
 }

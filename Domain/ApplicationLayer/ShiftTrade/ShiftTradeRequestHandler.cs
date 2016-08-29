@@ -7,6 +7,7 @@ using System.Text;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
@@ -259,7 +260,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			rules.Remove(typeof(OpenHoursRule));
 			rules.Add(new NonMainShiftActivityRule());
 			if (@event.UseSiteOpenHoursRule)
-				rules.Add(new SiteOpenHoursRule());
+				rules.Add(new SiteOpenHoursRule(new SiteOpenHoursSpecification()));
 			rules.SetUICulture(cultureInfo);
 			return rules;
 		}

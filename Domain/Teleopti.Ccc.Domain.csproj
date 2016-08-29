@@ -192,7 +192,10 @@
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateReadModelCleaner.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IUpdatePersonAssociationOnAgentStateReadModel.cs" />
     <Compile Include="ApplicationLayer\SiteOpenHours\ISiteOpenHoursPersister.cs" />
+    <Compile Include="ApplicationLayer\SiteOpenHours\ISiteOpenHoursSpecification.cs" />
+    <Compile Include="ApplicationLayer\SiteOpenHours\SiteOpenHoursCheckItem.cs" />
     <Compile Include="ApplicationLayer\SiteOpenHours\SiteOpenHoursPersister.cs" />
+    <Compile Include="ApplicationLayer\SiteOpenHours\SiteOpenHoursSpecification.cs" />
     <Compile Include="FeatureFlags\RemoveMeWithToggleAttribute.cs" />
     <Compile Include="ApplicationLayer\Events\RtaMapChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\RtaRuleChangedEvent.cs" />

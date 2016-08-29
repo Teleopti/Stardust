@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.WebReports;
@@ -147,6 +148,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<AbsenceRequestWaitlistProvider>().As<IAbsenceRequestWaitlistProvider>();
 			builder.RegisterType<CancelAbsenceRequestCommandProvider>().As<ICancelAbsenceRequestCommandProvider>();
 			builder.RegisterType<AbsenceRequestDetailViewModelFactory>().As<IAbsenceRequestDetailViewModelFactory>();
+			builder.RegisterType<SiteOpenHoursSpecification>().As<ISiteOpenHoursSpecification>();
 			builder.RegisterType<ShiftTradeSiteOpenHourFilter>().As<IShiftTradeSiteOpenHourFilter>();
 		}
 
