@@ -1071,7 +1071,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
                 if (cancelSave.Cancel)
                     return;
 
-                //Refresh grid control
+	            if (KillMode)
+		            return;
+
+	            //Refresh grid control
                 _gridConstructor.View.Invalidate();
 
                 _peopleAdminFilterPanel.Refresh();
