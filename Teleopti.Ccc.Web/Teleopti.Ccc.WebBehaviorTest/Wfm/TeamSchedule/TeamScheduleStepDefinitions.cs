@@ -381,7 +381,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		{
 			Browser.Interactions.AssertExists($"div[test-attr={ ruleType}] input[type='checkbox']:checked");
 			Browser.Interactions.Click($"div[test-attr={ ruleType}] label");
-			Browser.Interactions.AssertExists($"div[test-attr={ ruleType}] input[type='checkbox']:not(:checked)");
+			Browser.Interactions.AssertExists($"div[test-attr={ ruleType}] input[aria-checked='false']");
 		}
 
 		[Then(@"I should not see business rule warning")]
