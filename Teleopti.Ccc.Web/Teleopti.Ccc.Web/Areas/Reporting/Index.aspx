@@ -6,7 +6,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
 <head runat="server">
 	<title></title>
-	<script type="text/javascript" src="../../Content/jquery/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="../../Content/jquery/jquery-1.12.4.min.js"></script>
 	<script type="text/javascript" src="Content/Scripts/persianDatepicker.min.js"></script>
 	<script type="text/javascript">
 		//ensure report menu is closed

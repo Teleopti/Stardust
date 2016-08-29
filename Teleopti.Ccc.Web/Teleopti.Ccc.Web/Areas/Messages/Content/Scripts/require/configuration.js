@@ -1,6 +1,6 @@
 ﻿var requireconfiguration = {
 	paths: {
-		jquery: '../../../../Content/jquery/jquery-1.10.2',
+		jquery: '../../../../Content/jquery/jquery-1.12.4',
 		knockout: '../../../../Content/Scripts/knockout-2.2.1',
 		modernizr: '../../../../Content/modernizr/modernizr-2.6.2.min',
 		bootstrap: '../../../../Content/bootstrap/Scripts/bootstrap.min',

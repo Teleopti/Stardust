@@ -1,4 +1,4 @@
-﻿/// <reference path="~/Content/jquery/jquery-1.10.2.js" />
+﻿/// <reference path="~/Content/jquery/jquery-1.12.4.js" />
 /// <reference path="~/Content/Scripts/knockout-2.2.1.js"/>
 /// <reference path="~/Content/moment/moment.js" />
 /// <reference path="jquery.visible.js" />

@@ -1324,6 +1324,8 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.AbsenceRequestDetailViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.ChooseHistoryViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewNew.js" />
+    <Content Include="Content\jquery\jquery-1.12.4.js" />
+    <Content Include="Content\jquery\jquery-1.12.4.min.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.0.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.0.min.js" />
     <None Include="WFM\css\_wfmmultiplesearchinput.scss" />
@@ -2183,8 +2185,6 @@
     <Content Include="Content\jqueryui\smoothness\images\ui-icons_cd0a0a_256x240.png" />
     <Content Include="Content\jqueryui\smoothness\jquery-ui-1.10.2.custom.css" />
     <Content Include="Content\jqueryui\smoothness\jquery-ui-1.10.2.custom.min.css" />
-    <Content Include="Content\jquery\jquery-1.10.2.js" />
-    <Content Include="Content\jquery\jquery-1.10.2.min.js" />
     <Content Include="Content\Error\404.htm" />
     <Content Include="Content\Error\error.htm" />
     <Content Include="Areas\MyTime\Content\Images\ajax-loader.gif" />
@@ -2334,7 +2334,6 @@
     <Content Include="Areas\MyTime\Views\Requests\AbsenceRequestDetailView.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\AddNewRequestDetailView.cshtml" />
     <Content Include="Areas\MyTime\Views\Preference\AddPreferencesPartial.cshtml" />
-    <Content Include="Content\jquery\jquery-1.10.2.min.map" />
     <Content Include="Areas\MyTime\Views\Availability\AddStudentAvailabilityPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Schedule\AddOvertimeAvailabilityPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\MyReport\MyReportPartial.cshtml" />

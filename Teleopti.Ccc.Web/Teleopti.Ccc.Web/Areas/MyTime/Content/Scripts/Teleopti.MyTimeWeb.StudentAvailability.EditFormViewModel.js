@@ -1,4 +1,4 @@
-﻿/// <reference path="~/Content/jquery/jquery-1.10.2.js" />
+﻿/// <reference path="~/Content/jquery/jquery-1.12.4.js" />
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.min.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 

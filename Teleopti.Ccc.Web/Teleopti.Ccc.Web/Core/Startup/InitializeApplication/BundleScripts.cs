@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 				.IncludeDirectory("~/Areas/MyTime/Content/Css", "*.css");
 			var jsBundle = new ScriptBundle(MyTimeJs)
 				.Include(
-					"~/Content/jquery/jquery-1.10.2.js",
+					"~/Content/jquery/jquery-1.12.4.js",
 					"~/Content/Scripts/knockout-2.2.1.js",
 					"~/Content/moment/moment.js",
 					"~/Content/moment/moment-with-locales.min.js",
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 				);
 			var jsBundle = new ScriptBundle(SignInJs)
 				.Include(
-					"~/Content/jquery/jquery-1.10.2.js",
+					"~/Content/jquery/jquery-1.12.4.js",
 					"~/Content/Scripts/jquery.ba-hashchange.js",
 					"~/Content/Scripts/modernizr-2.6.2.js",
 					"~/Content/bootstrap/Scripts/bootstrap.js",
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 				);
 			var jsBundle = new ScriptBundle(SsoJs)
 				.Include(
-					"~/Content/jquery/jquery-1.10.2.js",
+					"~/Content/jquery/jquery-1.12.4.js",
 					"~/Content/Scripts/jquery.ba-hashchange.js",
 					"~/Content/Scripts/modernizr-2.6.2.js",
 					"~/Content/bootstrap/Scripts/bootstrap.js",

@@ -1,7 +1,7 @@
 ﻿/// <reference path="C:\Data\Main2\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Content/amplify/amplify.min.js" />
 var requireconfiguration = {
 	paths: {
-		jquery: '../../../../Content/jquery/jquery-1.10.2',
+		jquery: '../../../../Content/jquery/jquery-1.12.4',
 		jqueryui: '../../../../Content/jqueryui/jquery-ui-1.10.2.custom.min',
 		lazy: '../../../../Content/lazy/lazy.min',
 		knockout: '../Scripts/knockout-3.2.0',
