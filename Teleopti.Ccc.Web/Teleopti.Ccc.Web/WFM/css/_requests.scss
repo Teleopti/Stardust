@@ -18,6 +18,16 @@
         position: absolute;
     }
 
+    .auto{
+        overflow:auto;
+    }
+    .m-h-400{
+        max-height:400px;
+    }
+    .no-scroll{
+        overflow-y: inherit !important;
+    }
+
     .message-reply-container-first textarea {
         min-height: 150px;
         width: 50%;
