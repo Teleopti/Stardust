@@ -30,19 +30,17 @@ Background:
 	| End time   | 2016-08-18 19:00 |
 	| Activity   | Phone            |
 	And there is a rule with 
-	| Field           | Value    |
-	| Activity        | Phone    |
-	| Phone state     | Ready    |
-	| Name            | Adhering |
-	| Is Alarm        | false    |
-	| Staffing effect | 0        |
+	| Field       | Value |
+	| Adherence   | In    |
+	| Activity    | Phone |
+	| Phone state | Ready |
+	| Is Alarm    | false |
 	And there is a rule with 
-	| Field           | Value        |
-	| Activity        | Phone        |
-	| Phone state     | Pause        |
-	| Name            | Not adhering |
-	| Is Alarm        | true         |
-	| Staffing effect | -1           |
+	| Field       | Value |
+	| Adherence   | Out   |
+	| Activity    | Phone |
+	| Phone state | Pause |
+	| Is Alarm    | true  |
 
 @OnlyRunIfEnabled('RTA_RemoveSiteTeamOutOfAdherenceReadModels_40069')
 Scenario: See how many agents that are in alarm for each site

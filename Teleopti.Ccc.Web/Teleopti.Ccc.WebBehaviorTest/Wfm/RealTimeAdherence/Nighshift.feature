@@ -21,19 +21,20 @@ Scenario: See adherence percentage for night shift agents
 	| End time   | 2014-10-07 05:00 |
 	| Activity   | Phone            |
 	And there is a rule with 
+	| Field           | Value    |
+	| Name            | Adhering |
+	| Activity        | Phone    |
+	| Phone state     | Ready    |
+	| Alarm Color     | Green    |
+	| Staffing effect | 0        |
+	And there is a rule with 
 	| Field           | Value        |
+	| Name            | Not adhering |
 	| Activity        | Phone        |
 	| Phone state     | Pause        |
 	| Alarm Color     | Red          |
-	| Name            | Not adhering |
 	| Staffing effect | -1           |
-	And there is a rule with 
-	| Field           | Value    |
-	| Activity        | Phone    |
-	| Phone state     | Ready    |
-	| Name            | Adhering |
-	| Alarm Color     | Green    |
-	| Staffing effect | 0        |
+	
 	When the time is '2014-10-06 21:00:00'
 	And 'Pierre Baldi' sets his phone state to 'Ready'
 	And the time is '2014-10-07 01:00:00'

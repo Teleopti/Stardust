@@ -45,15 +45,15 @@ Background:
 	| End time                 | 2016-06-14 17:00 |
 	And there is a rule with 
 	| Field       | Value    |
+	| Name        | Adhering |
 	| Activity    | Phone    |
 	| Phone state | Ready    |
-	| Name        | Adhering |
 	| Is alarm    | false    |
 	And there is a rule with 
 	| Field       | Value        |
+	| Name        | Not adhering |
 	| Activity    | Phone        |
 	| Phone state | LoggedOut    |
-	| Name        | Not adhering |
 	| Is alarm    | true         |
 
 Scenario: Monitor agents by skill area

@@ -28,21 +28,18 @@ Background:
 	| Start time               | 2015-11-23 08:00 |
 	| End time                 | 2015-11-23 17:00 |
 	And there is a rule with 
-	| Field         | Value    |
-	| Activity      | Phone    |
-	| Phone state   | Ready    |
-	| Name          | Adhering |
-	| Is alarm      | False    |
-	| Display Color | Green    |
+	| Field       | Value |
+	| Adherence   | In    |
+	| Activity    | Phone |
+	| Phone state | Ready |
+	| Is alarm    | False |
 	And there is a rule with 
 	| Field           | Value        |
+	| Adherence       | Out          |
 	| Activity        | Phone        |
 	| Phone state     | Pause        |
-	| Display Color   | Orange       |
-	| Name            | Not adhering |
 	| Is alarm        | True         |
 	| Alarm threshold | 00:01:00     |
-	| Alarm color     | Red          |
 
 Scenario: See agents with the highest alarm time first
 	Given the time is '2015-11-23 08:00:00'

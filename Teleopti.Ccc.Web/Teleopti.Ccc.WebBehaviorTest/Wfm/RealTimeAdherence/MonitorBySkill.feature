@@ -43,22 +43,22 @@ Background:
 	| End time                 | 2016-06-14 17:00 |
 	And there is a rule with 
 	| Field       | Value        |
+	| Name        | Not adhering |
 	| Activity    | Phone        |
 	| Phone state | LoggedOut    |
-	| Name        | Not adhering |
 	| Is alarm    | true         |
 	And there is a rule with 
 	| Field       | Value    |
+	| Name        | Adhering |
 	| Activity    | Phone    |
 	| Phone state | Ready    |
-	| Name        | Adhering |
 	| Is alarm    | false    |
 
 Scenario: Monitor agents by skill
 	Given the time is '2016-06-14 08:00:00'
 	And 'Pierre Baldi' sets his phone state to 'LoggedOut'
-	And 'John King' sets his phone state to 'LoggedOut'
 	And 'Ashley Andeen' sets his phone state to 'LoggedOut'
+	And 'John King' sets his phone state to 'LoggedOut'
 	When I view Real time adherence sites
 	And I click 'select skill'
 	And I select skill 'Sales'

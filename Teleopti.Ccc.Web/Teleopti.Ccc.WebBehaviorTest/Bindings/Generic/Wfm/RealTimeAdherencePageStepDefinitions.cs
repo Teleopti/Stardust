@@ -270,29 +270,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 				Browser.Interactions.AssertExists(selector + " .current-activity[name='{0}']", state.Activity);
 			if (state.NextActivity != null)
 				Browser.Interactions.AssertExists(selector + " .next-activity[name='{0}']", state.NextActivity);
-
-			if (state.NextActivityStartTimeFormatted() != null)
-			{
-				Assert.Fail("Enable this assert and remove from scenarios when toggle is removed");
-			}
-
 			if (state.AlarmColor != null)
 				Browser.Interactions.AssertExists(selector + " [style*='background-color: " + toRGBA(state.AlarmColor, "0.6") + "']");
 			if (state.Color != null)
 				Browser.Interactions.AssertExists(selector + " [style*='background-color: " + toRGBA(state.Color, "0.6") + "']");
-
-			if (state.RuleTimeFormatted() != null)
-			{
-
-				Assert.Fail("Enable this assert and remove from scenarios when toggle is removed");
-
-			}
-			if (state.AlarmTimeFormatted() != null)
-			{
-
-				Assert.Fail("Enable this assert and remove from scenarios when toggle is removed");
-
-			}
 			if (state.OutOfAdherenceTimeFormatted() != null)
 				Browser.Interactions.AssertAnyContains(selector, state.OutOfAdherenceTimeFormatted());
 		}
@@ -316,8 +297,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public string AlarmColor { get; set; }
 		public string Color { get; set; }
 		public string AlarmTime	{ get; set; }
-		public string RuleTime { get; set; }
-		public string TimeInState { get; set; }
 		public string OutOfAdherenceTime { get; set; }
 
 		public string NextActivityStartTimeFormatted()
@@ -330,11 +309,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			return formatTime(AlarmTime);
 		}
 
-		public string RuleTimeFormatted()
-		{
-			return formatTime(RuleTime);
-		}
-
 		public string OutOfAdherenceTimeFormatted()
 		{
 			return formatTime(OutOfAdherenceTime);
@@ -343,11 +317,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		private static string formatTime(string time)
 		{
 			return time == null ? null : TimeSpan.Parse(time).ToString(@"h\:mm\:ss");
-		}
-
-		public string TimeInStateFormatted()
-		{
-			return TimeSpan.Parse(TimeInState).ToString(@"h\:mm\:ss");
 		}
 	}
 }

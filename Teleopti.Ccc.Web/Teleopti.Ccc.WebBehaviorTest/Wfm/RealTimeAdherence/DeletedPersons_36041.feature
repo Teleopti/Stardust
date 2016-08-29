@@ -19,12 +19,11 @@ Background:
 	| Start time | 2016-01-14 08:00 |
 	| End time   | 2016-01-14 17:00 |
 	And there is a rule with 
-	| Field           | Value        |
-	| Activity        | Phone        |
-	| Phone state     | Pause        |
-	| Name            | Not adhering |
-	| Is alarm        | true         |
-	| Staffing effect | -1           |
+	| Field       | Value |
+	| Adherence   | Out   |
+	| Activity    | Phone |
+	| Phone state | Pause |
+	| Is alarm    | true  |
 
 Scenario: Exclude deleted agents
 	Given the time is '2016-01-14 09:00:00'

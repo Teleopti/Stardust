@@ -26,17 +26,17 @@ Scenario: See adherence percentage with neutral adherence
 	| Next activity end time   | 2015-03-02 10:00 |
 	And there is a rule with 
 	| Field           | Value    |
-	| Activity        | Phone    |
-	| Phone state     | Ready    |
 	| Name            | Adhering |
 	| Adherence       | In       |
+	| Activity        | Phone    |
+	| Phone state     | Ready    |
 	| Staffing effect | 0        |
 	And there is a rule with 
 	| Field           | Value          |
-	| Activity        | Administration |
-	| Phone state     | SomeCode       |
 	| Name            | Unknown        |
 	| Adherence       | Neutral        |
+	| Activity        | Administration |
+	| Phone state     | SomeCode       |
 	| Staffing effect | -1             |
 	When the time is '2015-03-02 08:00:00'
 	And 'Pierre Baldi' sets his phone state to 'Ready'
@@ -68,17 +68,17 @@ Scenario: See adherence details with neutral adherence
 	| Next activity end time   | 2015-03-02 10:00 |
 	And there is a rule with 
 	| Field           | Value    |
+	| Adherence       | In       |
+	| Staffing effect | 0        |
 	| Activity        | Phone    |
 	| Phone state     | Ready    |
 	| Name            | Adhering |
-	| Adherence       | In       |
-	| Staffing effect | 0        |
 	And there is a rule with 
 	| Field           | Value          |
-	| Activity        | Administration |
-	| Phone state     | SomeCode       |
 	| Name            | Unknown        |
 	| Adherence       | Neutral        |
+	| Activity        | Administration |
+	| Phone state     | SomeCode       |
 	| Staffing effect | -1             |
 	When the time is '2015-03-02 08:00:00'
 	And 'Pierre Baldi' sets his phone state to 'Ready'

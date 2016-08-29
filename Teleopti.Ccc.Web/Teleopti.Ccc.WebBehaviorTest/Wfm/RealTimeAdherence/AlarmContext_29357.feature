@@ -26,8 +26,6 @@ Background:
 	| Field       | Value        |
 	| Activity    | Phone        |
 	| Phone state | LoggedOut    |
-	| Name        | Not adhering |
-	| Is alarm    | true         |
 
 Scenario: Late for work
 	Given the time is '2016-05-19 17:00:00'

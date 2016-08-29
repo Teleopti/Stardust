@@ -24,19 +24,15 @@ Scenario: See adherence percentage when call center is in Hawaii
 	| End time   | 2014-10-06 19:00 |
 	| Activity   | Phone            |
 	And there is a rule with 
-	| Field           | Value        |
-	| Activity        | Phone        |
-	| Phone state     | Pause        |
-	| Alarm Color     | Red          |
-	| Name            | Not adhering |
-	| Staffing effect | -1           |
+	| Field       | Value    |
+	| Adherence   | In       |
+	| Activity    | Phone    |
+	| Phone state | Ready    |
 	And there is a rule with 
-	| Field           | Value    |
-	| Activity        | Phone    |
-	| Phone state     | Ready    |
-	| Name            | Adhering |
-	| Alarm Color     | Green    |
-	| Staffing effect | 0        |
+	| Field       | Value        |
+	| Adherence   | Out          |
+	| Activity    | Phone        |
+	| Phone state | Pause        |
 	When the utc time is '2014-10-06 21:00:00'
 	And 'Pierre Baldi' sets his phone state to 'Ready'
 	And the utc time is '2014-10-07 01:00:00'
@@ -64,19 +60,15 @@ Scenario: See adherence details when call center is in Hawaii
 	| End time                 | 2014-10-07 19:00 |
 	| Activity                 | Phone            |
 	And there is a rule with 
-	| Field           | Value        |
-	| Activity        | Phone        |
-	| Phone state     | Pause        |
-	| Alarm Color     | Red          |
-	| Name            | Not adhering |
-	| Staffing effect | -1           |
+	| Field       | Value    |
+	| Adherence   | In       |
+	| Activity    | Phone    |
+	| Phone state | Ready    |
 	And there is a rule with 
-	| Field           | Value    |
-	| Activity        | Phone    |
-	| Phone state     | Ready    |
-	| Name            | Adhering |
-	| Alarm Color     | Green    |
-	| Staffing effect | 0        |
+	| Field       | Value        |
+	| Adherence   | Out          |
+	| Activity    | Phone        |
+	| Phone state | Pause        |
 	When the utc time is '2014-10-07 21:00:00'
 	And 'Pierre Baldi' sets his phone state to 'Ready'
 	And the utc time is '2014-10-08 01:00:00'

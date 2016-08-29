@@ -21,19 +21,15 @@ Scenario: See adherence percentage from agent state overview
 	| End time   | 2014-10-06 10:00 |
 	| Activity   | Phone            |
 	And there is a rule with 
-	| Field           | Value        |
-	| Activity        | Phone        |
-	| Phone state     | Pause        |
-	| Alarm Color     | Red          |
-	| Name            | Not adhering |
-	| Staffing effect | -1           |
+	| Field       | Value    |
+	| Adherence   | In       |
+	| Activity    | Phone    |
+	| Phone state | Ready    |
 	And there is a rule with 
-	| Field           | Value    |
-	| Activity        | Phone    |
-	| Phone state     | Ready    |
-	| Name            | Adhering |
-	| Alarm Color     | Green    |
-	| Staffing effect | 0        |
+	| Field       | Value        |
+	| Adherence   | Out          |
+	| Activity    | Phone        |
+	| Phone state | Pause        |
 	When the time is '2014-10-06 08:00:01'
 	And 'Pierre Baldi' sets his phone state to 'Ready'
 	And the time is '2014-10-06 09:00:01'

@@ -36,22 +36,18 @@ Background:
 	| Next activity end time   | 2014-01-21 13:30 |
 	And there is a rule with 
 	| Field           | Value    |
+	| Name            | Adhering |
+	| Adherence       | In       |
 	| Activity        | Phone    |
 	| Phone state     | Ready    |
-	| Name            | Adhering |
-	| IsAlarm         | True     |
 	| Alarm Color     | Green    |
-	| Adherence       | Out      |
-	| Staffing effect | 0        |
 	And there is a rule with 
 	| Field           | Value        |
-	| Activity        | Phone        |
-	| Phone state     | Pause        |
-	| IsAlarm         | True         |
-	| Alarm Color     | Red          |
 	| Name            | Not adhering |
 	| Adherence       | Out          |
-	| Staffing effect | -1           |
+	| Activity        | Phone        |
+	| Phone state     | Pause        |
+	| Alarm Color     | Red          |
 
 Scenario: See current states
 	Given the time is '2014-01-21 12:30:00'
@@ -75,7 +71,6 @@ Scenario: See current states
 		| Activity                 | Phone         |
 		| Next activity            | Lunch         |
 		| Alarm                    | Adhering      |
-		| Out of adherence time    | 0:15:00       |
 		| Alarm Color              | Green         |
 
 Scenario: See state updates
@@ -100,7 +95,6 @@ Scenario: See state updates
 		| Activity                 | Phone         |
 		| Next activity            | Lunch         |
 		| Alarm                    | Adhering      |
-		| Out of adherence time    | 0:15:00       |
 		| Alarm Color              | Green         |
 
 Scenario: See all agents of the team even without state updates
@@ -121,15 +115,15 @@ Scenario: See state updates when call center is in Istanbul
 		| End time                 | 2015-03-24 10:00 |
 		| Activity                 | Phone            |
 	When I view real time adherence for all agents on team 'Red'
-	And 'Pierre Baldi' sets his phone state to 'Ready'
+	And 'Pierre Baldi' sets his phone state to 'Pause'
 	And the utc time is '2015-03-24 06:15:00'
 	Then I should see agent status
-		| Field                    | Value        |
-		| Name                     | Pierre Baldi |
-		| State                    | Ready        |
-		| Alarm                    | Adhering     |
-		| Out of adherence time    | 0:15:00      |
-		| Alarm Color              | Green        |
+		| Field                 | Value        |
+		| Name                  | Pierre Baldi |
+		| State                 | Pause        |
+		| Alarm                 | Not adhering |
+		| Out of adherence time | 0:15:00      |
+		| Alarm Color           | Red          |
 
 Scenario: See schedule updates
 	Given the time is '2016-03-21 12:05:00'
@@ -155,14 +149,14 @@ Scenario: See agent status when call center is in Istanbul
 	| Start time               | 2015-03-24 08:00 |
 	| End time                 | 2015-03-24 10:00 |
 	| Activity                 | Phone            |
-	When 'Pierre Baldi' sets his phone state to 'Ready'
+	When 'Pierre Baldi' sets his phone state to 'Pause'
 	And the utc time is '2015-03-24 07:00:00'
 	And I view real time adherence for all agents on team 'Red'
 	Then I should see agent status
-		| Field                    | Value        |
-		| Name                     | Pierre Baldi |
-		| State                    | Ready        |
-		| Alarm                    | Adhering     |
-		| Out of adherence time    | 1:00:00      |
-		| Alarm Color              | Green        |
+		| Field                 | Value        |
+		| Name                  | Pierre Baldi |
+		| State                 | Pause        |
+		| Alarm                 | Not adhering |
+		| Out of adherence time | 1:00:00      |
+		| Alarm Color           | Red          |
 
