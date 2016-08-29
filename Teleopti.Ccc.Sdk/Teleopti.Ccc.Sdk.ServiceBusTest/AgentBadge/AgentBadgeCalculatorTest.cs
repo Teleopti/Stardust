@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				x =>
 					x.LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
 						timezoneCode, now, _gamificationSetting.AdherenceThreshold, _businessUnitId))
-				.IgnoreArguments().Return(new ArrayList {new object[] {_lastPersonId, 0.01}});
+				.IgnoreArguments().Return(new ArrayList {new object[] {_lastPersonId, now, 0.01}});
 
 			_statisticRepository.Stub(
 				x =>
