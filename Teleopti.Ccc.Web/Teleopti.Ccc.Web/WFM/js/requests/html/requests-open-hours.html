@@ -3,7 +3,13 @@
 	<div class="modal-inner-content">
 		<div class="con-row">
 			<div class="con-flex">
-				<div ng-repeat="site in requestsSiteOpenHours.sites">
+				<label for="siteName" class="input-prepend">
+					<i class="mdi mdi-filter-outline">
+						<md-tooltip>Filter sites</md-tooltip>
+					</i>
+					<input type="text" id="siteNameFilter" placeholder="Filter sites" ng-model="siteFilter.Name"/>
+				</label>
+				<div ng-repeat="site in requestsSiteOpenHours.sites | filter:siteFilter">
 					<div class="wfm-radio">
 						<label>
 							<input type="radio" name="radio" ng-value="site.Id" ng-model="requestsSiteOpenHours.selectedSite">
