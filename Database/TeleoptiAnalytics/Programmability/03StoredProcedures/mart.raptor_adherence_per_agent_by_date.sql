@@ -37,8 +37,6 @@ CREATE TABLE #fact_schedule_deviation_raw (
     deviation_schedule_ready_s INT,
     deviation_schedule_s INT,
     deviation_contract_s INT,
-    ready_time_s INT,
-    is_logged_in INT,
     contract_time_s INT
 )
 
@@ -57,8 +55,6 @@ CREATE TABLE #fact_schedule_deviation (
     deviation_schedule_ready_s INT,
     deviation_schedule_s INT,
     deviation_contract_s INT,
-    ready_time_s INT,
-    is_logged_in INT,
     contract_time_s INT
 )
 
@@ -137,11 +133,10 @@ CREATE TABLE #bridge_time_zone (
 ------------
 --Declares
 ------------
+DECLARE @local_date_id INT
 DECLARE @intervals_per_day INT
 DECLARE @intervals_length_s INT
-DECLARE @hide_time_zone bit
 DECLARE @selected_adherence_type nvarchar(100)
-DECLARE @date TABLE (date_from_id INT, date_to_id INT)
 DECLARE @nowutcDateOnly smalldatetime
 DECLARE @nowutcInterval smalldatetime
 DECLARE @nowLocalDateId int
@@ -155,6 +150,7 @@ SELECT @nowutcInterval = DATEADD(minute,DATEPART(minute, GETUTCDATE()),DATEADD(h
 ------------
 --Init
 ------------
+SELECT @local_date_id = date_id FROM [mart].[dim_date] WHERE date_date = @local_date
 SELECT @selected_adherence_type= adherence_name FROM mart.adherence_calculation WHERE adherence_id=@adherence_id
 SELECT @intervals_per_day = COUNT(interval_id) FROM mart.dim_interval
 
@@ -174,7 +170,7 @@ SELECT local_date_id        = d.date_id,
   FROM mart.bridge_time_zone b
  INNER JOIN mart.dim_date d
     ON b.local_date_id = d.date_id
-   AND d.date_date = @local_date
+   AND d.date_id = @local_date_id
  INNER JOIN mart.dim_interval i
     ON b.local_interval_id = i.interval_id
  INNER JOIN mart.dim_time_zone t
@@ -200,29 +196,24 @@ SELECT @nowLocalDateId     = b.local_date_id,
     ON b.time_zone_id = t.time_zone_id
  WHERE t.time_zone_code = @time_zone_code
 
---Multiple Time zones?
-IF (SELECT COUNT(*) FROM mart.dim_time_zone tz WHERE tz.time_zone_code<>'UTC') < 2
-    SET @hide_time_zone = 1
-ELSE
-    SET @hide_time_zone = 0
-
 -----------
 --Start
 -----------
 INSERT INTO #person_id
-select distinct
+SELECT DISTINCT
        p.person_id
-  From mart.dim_person p
- inner join mart.bridge_time_zone tz
-    on tz.time_zone_id = p.time_zone_id
- inner join mart.dim_date d
-    on tz.local_date_id = d.date_id
-   AND d.date_date = @local_date
+  FROM mart.dim_person p
+ INNER JOIN mart.bridge_time_zone tz
+    ON tz.time_zone_id = p.time_zone_id
+ INNER JOIN mart.dim_date d
+    ON tz.local_date_id = d.date_id
+   AND d.date_id = @local_date_id
  INNER JOIN mart.dim_time_zone t
     ON tz.time_zone_id = t.time_zone_id
- where p.business_unit_code = @business_unit_code and d.date_date = @local_date
-   and t.time_zone_code = @time_zone_code
-   and @local_date between p.valid_from_date and p.valid_to_date;
+ WHERE p.business_unit_code = @business_unit_code
+   AND d.date_id = @local_date_id
+   AND t.time_zone_code = @time_zone_code
+   AND @local_date BETWEEN p.valid_from_date AND p.valid_to_date;
 
 --Create UTC table from: mart.fact_schedule_deviation
 INSERT INTO #fact_schedule_deviation_raw(
@@ -235,8 +226,6 @@ INSERT INTO #fact_schedule_deviation_raw(
        deviation_schedule_ready_s,
        deviation_schedule_s,
        deviation_contract_s,
-       ready_time_s,
-       is_logged_in,
        contract_time_s)
 SELECT fsd.shift_startdate_local_id,
        fsd.shift_startdate_id,
@@ -247,8 +236,6 @@ SELECT fsd.shift_startdate_local_id,
        deviation_schedule_ready_s,
        deviation_schedule_s,
        deviation_contract_s,
-       ready_time_s,
-       is_logged_in,
        contract_time_s
   FROM mart.fact_schedule_deviation fsd
  WHERE fsd.date_id between @minUtcDateId-1 AND @maxUtcDateId+1
@@ -264,8 +251,6 @@ INSERT INTO #fact_schedule_deviation(
        deviation_schedule_ready_s,
        deviation_schedule_s,
        deviation_contract_s,
-       ready_time_s,
-       is_logged_in,
        contract_time_s)
 SELECT fsd.shift_startdate_local_id,
        fsd.shift_startdate_id,
@@ -276,8 +261,6 @@ SELECT fsd.shift_startdate_local_id,
        deviation_schedule_ready_s,
        deviation_schedule_s,
        deviation_contract_s,
-       ready_time_s,
-       is_logged_in,
        contract_time_s
   FROM #fact_schedule_deviation_raw fsd
  INNER JOIN #bridge_time_zone b
@@ -423,7 +406,7 @@ SELECT fs.shift_startdate_local_id,
   FROM mart.dim_person p
  INNER JOIN #fact_schedule fs
     ON fs.person_id=p.person_id
-   AND @local_date between p.valid_from_date and p.valid_to_date
+   AND @local_date BETWEEN p.valid_from_date AND p.valid_to_date
   LEFT JOIN #fact_schedule_deviation fsd
     ON fsd.person_id=fs.person_id
    AND fsd.date_id=fs.schedule_date_id
@@ -439,7 +422,7 @@ SELECT fs.shift_startdate_local_id,
     ON b2.local_interval_id = i.interval_id
  INNER JOIN mart.dim_date d
     ON b2.local_date_id = d.date_id
---   AND d.date_date = @local_date
+   AND d.date_id = @local_date_id
  INNER JOIN mart.dim_time_zone t
     ON t.time_zone_code = @time_zone_code
    AND b2.time_zone_id = t.time_zone_id
@@ -483,7 +466,7 @@ SELECT fsd.shift_startdate_local_id,
   FROM mart.dim_person p
  INNER JOIN #fact_schedule_deviation fsd
     ON fsd.person_id=p.person_id
-   AND @local_date between p.valid_from_date and p.valid_to_date
+   AND @local_date BETWEEN p.valid_from_date AND p.valid_to_date
  INNER JOIN #bridge_time_zone b1
     ON fsd.shift_startinterval_id= b1.interval_id
    AND fsd.shift_startdate_id=b1.date_id
@@ -494,7 +477,7 @@ SELECT fsd.shift_startdate_local_id,
     ON b2.local_interval_id = i.interval_id
  INNER JOIN mart.dim_date d
     ON b2.local_date_id = d.date_id
-   AND d.date_date = @local_date
+   AND d.date_id = @local_date_id
  INNER JOIN mart.dim_time_zone t
     ON t.time_zone_code = @time_zone_code
    AND b2.time_zone_id= t.time_zone_id
@@ -533,8 +516,8 @@ INSERT #person_adh(
 )
 SELECT person_id,
        person_code,
-       SUM(Deviation_S) as 'Deviation_S_tot',
-       SUM(Adherence_Calc_S) as 'Adherence_Calc_S_tot'
+       SUM(Deviation_S) AS 'Deviation_S_tot',
+       SUM(Adherence_Calc_S) AS 'Adherence_Calc_S_tot'
   FROM #adherence_detail
  GROUP BY person_id, person_code
 
@@ -548,7 +531,7 @@ UPDATE #person_adh
       END
  FROM #person_adh a
 
-SELECT person_code, @local_date, adherence_tot as Adherence
+SELECT person_code AS PersonId, adherence_tot AS Adherence
   FROM #person_adh
  WHERE adherence_tot >= @threshold
  ORDER BY person_code
