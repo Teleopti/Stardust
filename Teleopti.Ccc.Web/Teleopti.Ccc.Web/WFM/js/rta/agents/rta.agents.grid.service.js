@@ -95,7 +95,8 @@
 					enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
 					enableGridMenu: true,
 					enableColumnMenus: true,
-					enableColumnResizing: true
+					enableColumnResizing: true,
+					enableSorting: !alarmOnly
 				};
 			};
 		}
