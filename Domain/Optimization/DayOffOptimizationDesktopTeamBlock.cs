@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly IResourceOptimizationHelperExtended _resouceOptimizationHelperExtended;
 		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
 
@@ -32,7 +31,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 								IMatrixListFactory matrixListFactory,
 								IOptimizerHelperHelper optimizerHelperHelper,
 								Func<ISchedulerStateHolder> schedulerStateHolder,
-								IScheduleDayEquator scheduleDayEquator,
 								IResourceOptimizationHelperExtended resouceOptimizationHelperExtended,
 								IResourceCalculationContextFactory resourceCalculationContextFactory)
 		{
@@ -43,13 +41,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_matrixListFactory = matrixListFactory;
 			_optimizerHelperHelper = optimizerHelperHelper;
 			_schedulerStateHolder = schedulerStateHolder;
-			_scheduleDayEquator = scheduleDayEquator;
 			_resouceOptimizationHelperExtended = resouceOptimizationHelperExtended;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 		}
 
 		public void Execute(DateOnlyPeriod selectedPeriod, IEnumerable<IScheduleDay> selectedDays, ISchedulingProgress backgroundWorker,
-			IOptimizationPreferences optimizationPreferences,
+			IOptimizationPreferences optimizationPreferences, 
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
 			Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
 		{
@@ -61,12 +58,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				ResourceCalculationContext.Fetch().PrimarySkillMode = true;
 
-				var matrixListForSelection = _matrixListFactory.CreateMatrixListForSelection(selectedDays);
-				var matrixContainerList = matrixListForSelection.Select(matrixPro => new ScheduleMatrixOriginalStateContainer(matrixPro, _scheduleDayEquator))
-					.Cast<IScheduleMatrixOriginalStateContainer>().ToList();
-				var matrixList = matrixContainerList.Select(container => container.ScheduleMatrix).ToList();
+				var matrixList = _matrixListFactory.CreateMatrixListForSelection(selectedDays);
 
 				_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixList, optimizationPreferences, selectedPeriod);
+
 				_resouceOptimizationHelperExtended.ResourceCalculateAllDays(backgroundWorker, false);
 				var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 				var selectedPersons = matrixList.Select(x => x.Person).Distinct().ToList();
