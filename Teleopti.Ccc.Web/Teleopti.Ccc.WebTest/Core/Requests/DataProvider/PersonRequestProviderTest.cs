@@ -120,10 +120,15 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			var earliestDate = DateTime.UtcNow.AddDays(-10);
 			repository.Stub(x => x.FindAllRequestsForAgentByType(person, paging, earliestDate, requestTypes.ToArray()))
-				.Return(personRequests);
+				.IgnoreArguments().Return(personRequests);
 
-			Assert.That(personRequests.Length, Is.EqualTo(target.RetrieveRequestsForLoggedOnUser(paging, true).Count()));
-			repository.AssertWasCalled(x => x.FindAllRequestsForAgentByType(person, paging, earliestDate, requestTypes.ToArray()));
+			var result = target.RetrieveRequestsForLoggedOnUser(paging, true);
+			repository.AssertWasCalled(x => x.FindAllRequestsForAgentByType(
+				Arg<IPerson>.Matches(p => p.Equals(person)),
+				Arg<Paging>.Matches(p => p.Skip == paging.Skip && p.Take == paging.Take),
+				Arg<DateTime>.Is.Anything,
+				Arg<RequestType[]>.Matches(r => r.SequenceEqual(requestTypes))));
+			Assert.That(personRequests.Length, Is.EqualTo(result.Count()));
 		}
 
 		[Test]
