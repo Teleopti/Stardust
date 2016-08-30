@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             }
 	        foreach (var dateOnly in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
 			  {
-				  if (!_teamBlockMaxSeat.CheckMaxSeat(dateOnly, _schedulingOptions))
+				  if (!_teamBlockMaxSeat.CheckMaxSeat(dateOnly, _schedulingOptions, teamBlockInfo.TeamInfo))
 				  {
 					  executeRollback(schedulePartModifyAndRollbackService);
 					  dateOnlySkipList.AddRange(teamBlockInfo.BlockInfo.BlockPeriod.DayCollection());

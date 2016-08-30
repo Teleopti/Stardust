@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					continue;
 				}
 
-				if (!_teamBlockMaxSeatChecker.CheckMaxSeat(datePoint, schedulingOptions) || !_teamBlockOptimizationLimits.Validate(teamBlockInfo, optimizationPreferences, dayOffOptimizationPreferenceProvider))
+				if (!_teamBlockMaxSeatChecker.CheckMaxSeat(datePoint, schedulingOptions, teamBlockInfo.TeamInfo) || !_teamBlockOptimizationLimits.Validate(teamBlockInfo, optimizationPreferences, dayOffOptimizationPreferenceProvider))
 				{
 					var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, Resources.OptimizingIntraday + Resources.Colon + Resources.RollingBackSchedulesFor + " " + teamBlockInfo.BlockInfo.BlockPeriod.DateString + " " + teamName,cancelAction));
 					teamBlockToRemove.Add(teamBlockInfo);

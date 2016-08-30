@@ -75,18 +75,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			var dateOnly = new DateOnly();
 			var matrix1 = _mocks.StrictMock<IScheduleMatrixPro>();
 			var matrix2 = _mocks.StrictMock<IScheduleMatrixPro>();
-			var matrixes = new List<IScheduleMatrixPro> {matrix1, matrix2};
+			var matrixes = new List<IScheduleMatrixPro> { matrix1, matrix2 };
 			var selectedPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
 			var person = PersonFactory.CreatePerson("Bill");
-			var persons = new List<IPerson> {person};
+			var persons = new List<IPerson> { person };
 			var schedulingOptions = new SchedulingOptions();
-			var groupMatrixList = new List<IList<IScheduleMatrixPro>> {matrixes};
-			var group = new Group(new List<IPerson> {person}, "Hej");
+			var groupMatrixList = new List<IList<IScheduleMatrixPro>> { matrixes };
+			var group = new Group(new List<IPerson> { person }, "Hej");
 			var teaminfo = new TeamInfo(group, groupMatrixList);
 			var blockInfo = new BlockInfo(new DateOnlyPeriod(dateOnly, dateOnly));
 			var teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
 			var optimizationPreferences = new OptimizationPreferences();
-			var teamBlocks = new List<ITeamBlockInfo> {teamBlockInfo};
+			var teamBlocks = new List<ITeamBlockInfo> { teamBlockInfo };
 			using (_mocks.Record())
 			{
 				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences)).Return(schedulingOptions);
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 					new ShiftNudgeDirective(), NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder)))
 					.IgnoreArguments()
 					.Return(true);
-				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly, schedulingOptions)).Return(true);
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly, schedulingOptions, teaminfo)).Return(true);
 				Expect.Call(_teamBlockOptimizationLimits.Validate(teamBlockInfo, optimizationPreferences, _dayOffOptimizationPreferenceProvider)).Return(true);
 				Expect.Call(_dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced))
 					.Return(0.5).Repeat.Twice();
@@ -207,18 +207,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			var dateOnly = new DateOnly();
 			var matrix1 = _mocks.StrictMock<IScheduleMatrixPro>();
 			var matrix2 = _mocks.StrictMock<IScheduleMatrixPro>();
-			var matrixes = new List<IScheduleMatrixPro> {matrix1, matrix2};
+			var matrixes = new List<IScheduleMatrixPro> { matrix1, matrix2 };
 			var selectedPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
 			var person = PersonFactory.CreatePerson("Bill");
-			var persons = new List<IPerson> {person};
+			var persons = new List<IPerson> { person };
 			var schedulingOptions = new SchedulingOptions();
-			var groupMatrixList = new List<IList<IScheduleMatrixPro>> {matrixes};
-			var group = new Group(new List<IPerson> {person}, "Hej");
+			var groupMatrixList = new List<IList<IScheduleMatrixPro>> { matrixes };
+			var group = new Group(new List<IPerson> { person }, "Hej");
 			var teaminfo = new TeamInfo(group, groupMatrixList);
 			var blockInfo = new BlockInfo(new DateOnlyPeriod(dateOnly, dateOnly));
 			var teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
 			var optimizationPreferences = new OptimizationPreferences();
-			var teamBlocks = new List<ITeamBlockInfo> {teamBlockInfo};
+			var teamBlocks = new List<ITeamBlockInfo> { teamBlockInfo };
 			using (_mocks.Record())
 			{
 				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences)).Return(schedulingOptions);
@@ -237,7 +237,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(_teamBlockOptimizationLimits.Validate(teamBlockInfo, optimizationPreferences, _dayOffOptimizationPreferenceProvider)).Return(false);
 				Expect.Call(_dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced))
 					.Return(5.0);
-				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly, schedulingOptions)).Return(true);
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly, schedulingOptions, teaminfo)).Return(true);
 				Expect.Call(
 					() => _safeRollbackAndResourceCalculation.Execute(_schedulePartModifyAndRollbackService, schedulingOptions));
 				Expect.Call(_teamBlockSteadyStateValidator.IsTeamBlockInSteadyState(teamBlockInfo, schedulingOptions)).Return(true);
@@ -255,18 +255,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			var dateOnly = new DateOnly();
 			var matrix1 = _mocks.StrictMock<IScheduleMatrixPro>();
 			var matrix2 = _mocks.StrictMock<IScheduleMatrixPro>();
-			var matrixes = new List<IScheduleMatrixPro> {matrix1, matrix2};
+			var matrixes = new List<IScheduleMatrixPro> { matrix1, matrix2 };
 			var selectedPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
 			var person = PersonFactory.CreatePerson("Bill");
-			var persons = new List<IPerson> {person};
+			var persons = new List<IPerson> { person };
 			var schedulingOptions = new SchedulingOptions();
-			var groupMatrixList = new List<IList<IScheduleMatrixPro>> {matrixes};
-			var group = new Group(new List<IPerson> {person}, "Hej");
+			var groupMatrixList = new List<IList<IScheduleMatrixPro>> { matrixes };
+			var group = new Group(new List<IPerson> { person }, "Hej");
 			var teaminfo = new TeamInfo(group, groupMatrixList);
 			var blockInfo = new BlockInfo(new DateOnlyPeriod(dateOnly, dateOnly));
 			var teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
 			var optimizationPreferences = new OptimizationPreferences();
-			var teamBlocks = new List<ITeamBlockInfo> {teamBlockInfo};
+			var teamBlocks = new List<ITeamBlockInfo> { teamBlockInfo };
 			using (_mocks.Record())
 			{
 				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences)).Return(schedulingOptions);
@@ -285,7 +285,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(_teamBlockOptimizationLimits.Validate(teamBlockInfo, optimizationPreferences, _dayOffOptimizationPreferenceProvider)).Return(true);
 				Expect.Call(_dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced))
 					.Return(5.0);
-				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly, schedulingOptions)).Return(true);
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly, schedulingOptions, teaminfo)).Return(true);
 				Expect.Call(
 					() => _safeRollbackAndResourceCalculation.Execute(_schedulePartModifyAndRollbackService, schedulingOptions));
 				Expect.Call(_teamBlockSteadyStateValidator.IsTeamBlockInSteadyState(teamBlockInfo, schedulingOptions)).Return(true);
@@ -369,18 +369,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			var dateOnly = new DateOnly();
 			var matrix1 = _mocks.StrictMock<IScheduleMatrixPro>();
 			var matrix2 = _mocks.StrictMock<IScheduleMatrixPro>();
-			var matrixes = new List<IScheduleMatrixPro> {matrix1, matrix2};
+			var matrixes = new List<IScheduleMatrixPro> { matrix1, matrix2 };
 			var selectedPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
 			var person = PersonFactory.CreatePerson("Bill");
-			var persons = new List<IPerson> {person};
+			var persons = new List<IPerson> { person };
 			var schedulingOptions = new SchedulingOptions();
-			var groupMatrixList = new List<IList<IScheduleMatrixPro>> {matrixes};
-			var group = new Group(new List<IPerson> {person}, "Hej");
+			var groupMatrixList = new List<IList<IScheduleMatrixPro>> { matrixes };
+			var group = new Group(new List<IPerson> { person }, "Hej");
 			var teaminfo = new TeamInfo(group, groupMatrixList);
 			var blockInfo = new BlockInfo(new DateOnlyPeriod(dateOnly, dateOnly));
 			var teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
 			var optimizationPreferences = new OptimizationPreferences();
-			var teamBlocks = new List<ITeamBlockInfo> {teamBlockInfo};
+			var teamBlocks = new List<ITeamBlockInfo> { teamBlockInfo };
 
 			using (_mocks.Record())
 			{
@@ -396,7 +396,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 					new ShiftNudgeDirective(), NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder))).IgnoreArguments().Return(true);
 				Expect.Call(_teamBlockOptimizationLimits.Validate(teamBlockInfo, optimizationPreferences, _dayOffOptimizationPreferenceProvider)).Return(false);
 				Expect.Call(_dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced)).Return(5.0);
-				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly, schedulingOptions)).Return(true);
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly, schedulingOptions, teaminfo)).Return(true);
 				Expect.Call(
 					() => _safeRollbackAndResourceCalculation.Execute(_schedulePartModifyAndRollbackService, schedulingOptions));
 				Expect.Call(_teamBlockSteadyStateValidator.IsTeamBlockInSteadyState(teamBlockInfo, schedulingOptions)).Return(true);

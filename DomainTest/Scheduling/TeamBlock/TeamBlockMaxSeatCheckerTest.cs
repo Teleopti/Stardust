@@ -2,8 +2,10 @@
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
@@ -27,6 +29,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         private ISkillStaff _skillStaff2;
         private ISkill _skill2;
         private ISkillType _skillType2;
+	    private ITeamInfo _teamInfo;
+	    private IScheduleMatrixPro _scheduleMatrixPro;
+	    private IList<IScheduleMatrixPro> _scheduleMatrixPros;
+	    private IPerson _person;
+	    private IPersonPeriod _personPeriod;
+	    private ITeam _team;
+	    private ISite _site;
 
         [SetUp]
         public void Setup()
@@ -59,65 +68,94 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             _skillStaff1 = _mock.StrictMock<ISkillStaff>();
             _skillStaff2 = _mock.StrictMock<ISkillStaff>();
+			//_teamInfo = new TeamInfo(new Group(), new List<IList<IScheduleMatrixPro>>() );
+	        _teamInfo = _mock.StrictMock<ITeamInfo>();
+	        _scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
+			_scheduleMatrixPros = new List<IScheduleMatrixPro> {_scheduleMatrixPro};
+	        _person = _mock.StrictMock<IPerson>();
+	        _personPeriod = _mock.StrictMock<IPersonPeriod>();
+	        _team = _mock.StrictMock<ITeam>();
+	        _site = _mock.StrictMock<ISite>();
         }
 
-        [Test]
-        public void ShouldContinueWithSkillUnderMaxSeat()
-        {
-           
-            using (_mock.Record())
-            {
-                commonExpectCall();
+		[Test]
+		public void ShouldContinueWithSkillUnderMaxSeat()
+		{
 
-                Expect.Call(_skillStaffPeriod1.Payload).Return(_skillStaff1).Repeat.AtLeastOnce();
-                Expect.Call(_skillStaff1.CalculatedUsedSeats).Return(5.0);
-                Expect.Call(_skillStaff1.MaxSeats).Return(6);
-                Expect.Call(_skillStaffPeriod2.Payload).Return(_skillStaff2).Repeat.AtLeastOnce();
-                Expect.Call(_skillStaff2.CalculatedUsedSeats).Return(4.0);
-                Expect.Call(_skillStaff2.MaxSeats).Return(6);
-            }
-            Assert.IsTrue( _target.CheckMaxSeat(_dateOnly, _schedulingOption));
-        }
+			using (_mock.Record())
+			{
+				commonExpectCall();
 
-        [Test]
-        public void ShouldContinueWithSkillWhenSeatsAreEqual()
-        {
+				Expect.Call(_skillStaffPeriod1.Payload).Return(_skillStaff1).Repeat.AtLeastOnce();
+				Expect.Call(_skillStaff1.CalculatedUsedSeats).Return(5.0);
+				Expect.Call(_skillStaff1.MaxSeats).Return(6);
+				Expect.Call(_skillStaffPeriod2.Payload).Return(_skillStaff2).Repeat.AtLeastOnce();
+				Expect.Call(_skillStaff2.CalculatedUsedSeats).Return(4.0);
+				Expect.Call(_skillStaff2.MaxSeats).Return(6);
 
-            using (_mock.Record())
-            {
-                commonExpectCall();
+				Expect.Call(_teamInfo.MatrixesForGroupAndDate(_dateOnly)).Return(_scheduleMatrixPros);
+				Expect.Call(_scheduleMatrixPro.Person).Return(_person);
+				Expect.Call(_person.Period(_dateOnly)).Return(_personPeriod);
+				Expect.Call(_personPeriod.Team).Return(_team);
+				Expect.Call(_team.Site).Return(_site);
+				Expect.Call(_site.MaxSeatSkill).Return(_skill1);
+			}
+			Assert.IsTrue(_target.CheckMaxSeat(_dateOnly, _schedulingOption, _teamInfo));
+		}
 
-                Expect.Call(_skillStaffPeriod1.Payload).Return(_skillStaff1).Repeat.AtLeastOnce();
-                Expect.Call(_skillStaff1.CalculatedUsedSeats).Return(5.0);
-                Expect.Call(_skillStaff1.MaxSeats).Return(5);
-                Expect.Call(_skillStaffPeriod2.Payload).Return(_skillStaff2).Repeat.AtLeastOnce();
-                Expect.Call(_skillStaff2.CalculatedUsedSeats).Return(6.0);
-                Expect.Call(_skillStaff2.MaxSeats).Return(6);
-            }
-			Assert.IsTrue(_target.CheckMaxSeat(_dateOnly, _schedulingOption));
-        }
+		[Test]
+		public void ShouldContinueWithSkillWhenSeatsAreEqual()
+		{
 
-        [Test]
-        public void ShouldNotContinueWithSkillWhenSeatsAreMore()
-        {
+			using (_mock.Record())
+			{
+				commonExpectCall();
 
-            using (_mock.Record())
-            {
-                commonExpectCall();
-
-                Expect.Call(_skillStaffPeriod1.Payload).Return(_skillStaff1).Repeat.AtLeastOnce();
-                Expect.Call(_skillStaff1.CalculatedUsedSeats).Return(6.0);
-                Expect.Call(_skillStaff1.MaxSeats).Return(5);
-                Expect.Call(_skillStaffPeriod2.Payload).Return(_skillStaff2).Repeat.AtLeastOnce();
-                Expect.Call(_skillStaff2.CalculatedUsedSeats).Return(7.0);
-                Expect.Call(_skillStaff2.MaxSeats).Return(6);
-            }
-			Assert.IsFalse(_target.CheckMaxSeat(_dateOnly, _schedulingOption));
-        }
+				Expect.Call(_skillStaffPeriod1.Payload).Return(_skillStaff1).Repeat.AtLeastOnce();
+				Expect.Call(_skillStaff1.CalculatedUsedSeats).Return(5.0);
+				Expect.Call(_skillStaff1.MaxSeats).Return(5);
+				Expect.Call(_skillStaffPeriod2.Payload).Return(_skillStaff2).Repeat.AtLeastOnce();
+				Expect.Call(_skillStaff2.CalculatedUsedSeats).Return(6.0);
+				Expect.Call(_skillStaff2.MaxSeats).Return(6);
 
 
+				Expect.Call(_teamInfo.MatrixesForGroupAndDate(_dateOnly)).Return(_scheduleMatrixPros);
+				Expect.Call(_scheduleMatrixPro.Person).Return(_person);
+				Expect.Call(_person.Period(_dateOnly)).Return(_personPeriod);
+				Expect.Call(_personPeriod.Team).Return(_team);
+				Expect.Call(_team.Site).Return(_site);
+				Expect.Call(_site.MaxSeatSkill).Return(_skill1);
+			}
+			Assert.IsTrue(_target.CheckMaxSeat(_dateOnly, _schedulingOption, _teamInfo));
+		}
 
-        private void commonExpectCall()
+		[Test]
+		public void ShouldNotContinueWithSkillWhenSeatsAreMore()
+		{
+
+			using (_mock.Record())
+			{
+				commonExpectCall();
+
+				Expect.Call(_skillStaffPeriod1.Payload).Return(_skillStaff1).Repeat.AtLeastOnce();
+				Expect.Call(_skillStaff1.CalculatedUsedSeats).Return(6.0);
+				Expect.Call(_skillStaff1.MaxSeats).Return(5);
+				Expect.Call(_skillStaffPeriod2.Payload).Return(_skillStaff2).Repeat.AtLeastOnce();
+				Expect.Call(_skillStaff2.CalculatedUsedSeats).Return(7.0);
+				Expect.Call(_skillStaff2.MaxSeats).Return(6);
+				Expect.Call(_teamInfo.MatrixesForGroupAndDate(_dateOnly)).Return(_scheduleMatrixPros);
+				Expect.Call(_scheduleMatrixPro.Person).Return(_person);
+				Expect.Call(_person.Period(_dateOnly)).Return(_personPeriod);
+				Expect.Call(_personPeriod.Team).Return(_team);
+				Expect.Call(_team.Site).Return(_site);
+				Expect.Call(_site.MaxSeatSkill).Return(_skill1);
+			}
+			Assert.IsFalse(_target.CheckMaxSeat(_dateOnly, _schedulingOption, _teamInfo));
+		}
+
+
+
+		private void commonExpectCall()
         {
             Expect.Call(_schedulingResultStateHolder.SkillDays).Return(_skillDaysPair);
             Expect.Call(_skill1.SkillType).Return(_skillType);
