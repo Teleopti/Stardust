@@ -34,9 +34,7 @@
 
 		scope.vm.currentCommandLabel = containerCtrl.activeCmd;
 		scope.vm.getDate = containerCtrl.getDate;
-		scope.vm.toggles = containerCtrl.configurations.toggles;
-
-		if (!scope.vm.toggles.AutoMoveOverwrittenActivityForOperationsEnabled)
+		if (!containerCtrl.hasToggle('AutoMoveOverwrittenActivityForOperationsEnabled'))
 			scope.vm.actionOptions.shift();
 
 		var focusTarget = elem[0].querySelector('.focus-default');
