@@ -50,51 +50,36 @@
 		vm.overlappedLayers = [];
 		vm.initFinished = false;
 
-		vm.actionOptions = [{
-			Name: $translate.instant('DoNotModifyForTheseAgents'),
-			OnSelected: disableCheckbox,
-			BeforeAction: function() {
-				vm.toggleAllPersonSelection(false);
-			}
-		}, {
-			Name: $translate.instant('OverrideForTheseAgents'),
-			OnSelected: disableCheckbox,
-			BeforeAction: function() {
-				vm.toggleAllPersonSelection(true);
-			}
-		}, {
-			Name: $translate.instant('AutoFixForTheseAgents'),
-			OnSelected: enableCheckbox
-		}];
-
-		vm.onActionChange = function() {
-			vm.actionOptions.forEach(function(option) {
-				if (option.Name == vm.currentActionOption) {
-					option.OnSelected();
+		vm.actionOptions = [
+			{
+				Name: $translate.instant('AutoFixForTheseAgents')
+			},
+			{
+				Name: $translate.instant('DoNotModifyForTheseAgents'),
+				BeforeAction: function () {
+					vm.toggleAllPersonSelection(false);
 				}
-			});
-		};
-
-		function disableCheckbox() {
-			vm.showCheckbox = false;
-		}
-
-		function enableCheckbox() {
-			vm.showCheckbox = true;
-		}
+			},
+			{
+				Name: $translate.instant('OverrideForTheseAgents'),
+				BeforeAction: function() {
+					vm.toggleAllPersonSelection(true);
+				}
+			}
+		];
 
 		vm.updateActionOptionsText = function() {
 			if (vm.currentCommandLabel == 'AddActivity') {
-				vm.actionOptions[0].Name = vm.actionOptions[0].Name.replace('{0}', $translate.instant('AddActivity'));
+				vm.actionOptions[1].Name = vm.actionOptions[1].Name.replace('{0}', $translate.instant('AddActivity'));
 			}
 
 			if (vm.currentCommandLabel == 'MoveActivity') {
-				vm.actionOptions[0].Name = vm.actionOptions[0].Name.replace('{0}', $translate.instant('MoveActivity'));
+				vm.actionOptions[1].Name = vm.actionOptions[1].Name.replace('{0}', $translate.instant('MoveActivity'));
 				vm.actionOptions.pop();
 			}
 
 			if (vm.currentCommandLabel == 'AddPersonalActivity') {
-				vm.actionOptions[0].Name = vm.actionOptions[0].Name.replace('{0}', $translate.instant('AddPersonalActivity'));
+				vm.actionOptions[1].Name = vm.actionOptions[1].Name.replace('{0}', $translate.instant('AddPersonalActivity'));
 			}
 
 			vm.currentActionOption = vm.actionOptions[0].Name;
@@ -124,6 +109,22 @@
 			}
 		};
 
+		vm.getOverlappedLayersForAgent = function (personId) {
+			var overlappedLayers, result = [];
+
+			vm.overlappedLayers.forEach(function (agent) {
+				if (agent.PersonId == personId)
+					overlappedLayers = agent.OverlappedLayers;
+			});
+
+			overlappedLayers.forEach(function (overlappedLayer) {
+				result.push(overlappedLayer.Name);
+				result.push(moment(overlappedLayer.StartTime).format('YYYY-MM-DD HH:mm'));
+				result.push(moment(overlappedLayer.EndTime).format('YYYY-MM-DD HH:mm'));
+			});
+			return result;
+		};
+
 		vm.applyCommandFix = function() {
 			vm.actionOptions.forEach(function(option) {
 				if (option.Name == vm.currentActionOption) {
@@ -131,22 +132,6 @@
 				}
 			});
 			CommandCheckService.completeCommandCheck();
-		};
-
-		vm.getOverlappedLayersForAgent = function(personId) {
-			var overlappedLayers, result = [];
-
-			vm.overlappedLayers.forEach(function(agent) {
-				if (agent.PersonId == personId)
-					overlappedLayers = agent.OverlappedLayers;
-			});
-
-			overlappedLayers.forEach(function(overlappedLayer) {
-				result.push(overlappedLayer.Name);
-				result.push(moment(overlappedLayer.StartTime).format('YYYY-MM-DD HH:mm'));
-				result.push(moment(overlappedLayer.EndTime).format('YYYY-MM-DD HH:mm'));
-			});
-			return result;
 		};
 
 		vm.init = function() {

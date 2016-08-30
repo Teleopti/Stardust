@@ -11,26 +11,14 @@
             </p>
         </div>
 
-        <md-select class="command-check-selector focus-default" ng-model="vm.currentActionOption" placeholder="{{'SelectAnOption' | translate}}" ng-change="vm.onActionChange()">
+        <md-select class="command-check-selector focus-default" ng-model="vm.currentActionOption" placeholder="{{'SelectAnOption' | translate}}">
             <md-option ng-repeat="action in vm.actionOptions" ng-value="action.Name">
                 <span> {{action.Name}}</span>
             </md-option>
         </md-select>
 
         <div class="agent-list">
-            <div ng-if="vm.showCheckbox">
-    			<div class="wfm-checkbox" ng-repeat="agent in vm.overlappedAgents">
-                    <label ng-click="vm.updatePersonSelection(agent)">
-                        <input type="checkbox" ng-model="agent.IsSelected" value="true">
-                        <span class="wfm-checkbox-toggle" ng-class="{'warning-checkbox': agent.IsSelected}"></span>
-                        <span class="wfm-checkbox-label cursor-pointer">{{agent.Name}}</span>
-                        <md-tooltip class="multiline-tooltip" md-direction="right">
-                            <span ng-bind-html="vm.getOverlappedLayersForAgent(agent.PersonId) | br"></span>
-                        </md-tooltip>
-                    </label>
-                </div>
-            </div>
-            <ul ng-if="!vm.showCheckbox">
+            <ul>
                 <li class="cursor-pointer" ng-repeat="agent in vm.overlappedAgents">
                     <span>{{agent.Name}}</span>
                     <md-tooltip class="multiline-tooltip margin-top-22">
