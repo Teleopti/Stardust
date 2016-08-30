@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 		private readonly ITeamBlockDayOffOptimizerService _teamBlockDayOffOptimizerService;
+		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
 
 		public TeamBlockOptimizationCommand(Func<ISchedulerStateHolder> schedulerStateHolder,
 			ITeamBlockClearer teamBlockCleaner,
@@ -64,7 +65,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IOptimizerHelperHelper optimizerHelper,
 			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
-			ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService)
+			ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService,
+			IResourceCalculationContextFactory resourceCalculationContextFactory)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_teamBlockCleaner = teamBlockCleaner;
@@ -90,6 +92,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
 			_teamBlockDayOffOptimizerService = teamBlockDayOffOptimizerService;
+			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 		}
 
 		public void Execute(ISchedulingProgress backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
@@ -99,97 +102,103 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IList<IScheduleDay> selectedSchedules,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
-
-			_backgroundWorker = backgroundWorker;
-			var args = new ResourceOptimizerProgressEventArgs(0, 0, UserTexts.Resources.CollectingData);
-			_backgroundWorker.ReportProgress(1, args);
-
-			IList<IScheduleMatrixPro> allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
-
-			_groupPersonBuilderWrapper.Reset();
-			var groupPageType = schedulingOptions.GroupOnGroupPageForTeamBlockPer.Type;
-			if (groupPageType == GroupPageType.SingleAgent)
-				_groupPersonBuilderWrapper.SetSingleAgentTeam();
-			else
-				_groupPersonBuilderForOptimizationFactory.Create(schedulingOptions);
-
-			var teamInfoFactory = new TeamInfoFactory(_groupPersonBuilderWrapper);
-			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory,
-				_teamBlockScheudlingOptions);
-
-			if (optimizationPreferences.General.OptimizationStepDaysOff)
+			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.Skills))
 			{
-				optimizeTeamBlockDaysOff(selectedPeriod, selectedPersons, optimizationPreferences,
-					allMatrixes, schedulingOptions, teamInfoFactory, resourceCalculateDelayer, dayOffOptimizationPreferenceProvider);
+				_backgroundWorker = backgroundWorker;
+				var args = new ResourceOptimizerProgressEventArgs(0, 0, UserTexts.Resources.CollectingData);
+				_backgroundWorker.ReportProgress(1, args);
+
+				IList<IScheduleMatrixPro> allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
+
+				_groupPersonBuilderWrapper.Reset();
+				var groupPageType = schedulingOptions.GroupOnGroupPageForTeamBlockPer.Type;
+				if (groupPageType == GroupPageType.SingleAgent)
+					_groupPersonBuilderWrapper.SetSingleAgentTeam();
+				else
+					_groupPersonBuilderForOptimizationFactory.Create(schedulingOptions);
+
+				var teamInfoFactory = new TeamInfoFactory(_groupPersonBuilderWrapper);
+				var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory,
+					_teamBlockScheudlingOptions);
+
+				if (optimizationPreferences.General.OptimizationStepDaysOff)
+				{
+					optimizeTeamBlockDaysOff(selectedPeriod, selectedPersons, optimizationPreferences,
+						allMatrixes, schedulingOptions, teamInfoFactory, resourceCalculateDelayer, dayOffOptimizationPreferenceProvider);
+				}
+
+				if (optimizationPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime)
+				{
+					var optimizeDayOffs = optimizationPreferences.General.OptimizationStepDaysOff;
+					optimizationPreferences.General.OptimizationStepDaysOff = false;
+					optimizeTeamBlockDaysOff(selectedPeriod, selectedPersons, optimizationPreferences, allMatrixes,
+						schedulingOptions, teamInfoFactory, resourceCalculateDelayer, dayOffOptimizationPreferenceProvider);
+					optimizationPreferences.General.OptimizationStepDaysOff = optimizeDayOffs;
+				}
+
+				if (optimizationPreferences.General.OptimizationStepShiftsWithinDay)
+				{
+					optimizeTeamBlockIntraday(selectedPeriod, selectedPersons, optimizationPreferences, allMatrixes,
+						rollbackServiceWithResourceCalculation, resourceCalculateDelayer, teamBlockGenerator,
+						dayOffOptimizationPreferenceProvider);
+				}
+
+				if (optimizationPreferences.General.OptimizationStepTimeBetweenDays &&
+						!(optimizationPreferences.Extra.UseBlockSameShift && optimizationPreferences.Extra.UseTeamBlockOption))
+				{
+					var matrixesOnSelectedperiod = _matrixListFactory.CreateMatrixListForSelection(selectedSchedules);
+					optimizeMoveTimeBetweenDays(backgroundWorker, selectedPeriod, selectedPersons, optimizationPreferences,
+						rollbackServiceWithResourceCalculation, schedulingOptions, resourceCalculateDelayer, matrixesOnSelectedperiod,
+						allMatrixes);
+				}
+
+				if (optimizationPreferences.General.OptimizationStepFairness)
+				{
+					var rollbackServiceWithoutResourceCalculation =
+						new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState,
+							new ResourceCalculationOnlyScheduleDayChangeCallback(), tagSetter);
+					_optimizerHelper.LockDaysForDayOffOptimization(allMatrixes, optimizationPreferences, selectedPeriod);
+
+					_equalNumberOfCategoryFairness.ReportProgress += resourceOptimizerPersonOptimized;
+					_equalNumberOfCategoryFairness.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions,
+						_schedulerStateHolder().Schedules, rollbackServiceWithoutResourceCalculation,
+						optimizationPreferences, dayOffOptimizationPreferenceProvider);
+					_equalNumberOfCategoryFairness.ReportProgress -= resourceOptimizerPersonOptimized;
+
+					_teamBlockDayOffFairnessOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
+					_teamBlockDayOffFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions,
+						_schedulerStateHolder().Schedules, rollbackServiceWithoutResourceCalculation, optimizationPreferences,
+						_schedulerStateHolder().SchedulingResultState.SeniorityWorkDayRanks, dayOffOptimizationPreferenceProvider);
+					_teamBlockDayOffFairnessOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
+
+
+					_teamBlockSeniorityFairnessOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
+					_teamBlockSeniorityFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons,
+						schedulingOptions, _schedulerStateHolder().CommonStateHolder.ShiftCategories.ToList(),
+						_schedulerStateHolder().Schedules, rollbackServiceWithoutResourceCalculation, optimizationPreferences, true,
+						dayOffOptimizationPreferenceProvider);
+
+					_teamBlockSeniorityFairnessOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
+				}
+
+				if (optimizationPreferences.General.OptimizationStepIntraInterval)
+				{
+					_intraIntervalOptimizationCommand.Execute(optimizationPreferences, selectedPeriod, selectedSchedules,
+						_schedulerStateHolder().SchedulingResultState, allMatrixes, rollbackServiceWithResourceCalculation,
+						resourceCalculateDelayer, _backgroundWorker);
+				}
+
+				allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
+
+				solveWeeklyRestViolations(selectedPeriod, selectedPersons, optimizationPreferences, resourceCalculateDelayer,
+					rollbackServiceWithResourceCalculation, allMatrixes,
+					_schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences), dayOffOptimizationPreferenceProvider);
+
+				//run twice to se if it will solve the problem detected by sikuli tests
+				solveWeeklyRestViolations(selectedPeriod, selectedPersons, optimizationPreferences, resourceCalculateDelayer,
+					rollbackServiceWithResourceCalculation, allMatrixes,
+					_schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences), dayOffOptimizationPreferenceProvider);
 			}
-
-			if (optimizationPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime)
-			{
-				var optimizeDayOffs = optimizationPreferences.General.OptimizationStepDaysOff;
-				optimizationPreferences.General.OptimizationStepDaysOff = false;
-				optimizeTeamBlockDaysOff(selectedPeriod, selectedPersons, optimizationPreferences, allMatrixes,  
-										schedulingOptions, teamInfoFactory, resourceCalculateDelayer, dayOffOptimizationPreferenceProvider);
-				optimizationPreferences.General.OptimizationStepDaysOff = optimizeDayOffs;
-			}
-
-			if (optimizationPreferences.General.OptimizationStepShiftsWithinDay)
-			{
-				optimizeTeamBlockIntraday(selectedPeriod, selectedPersons, optimizationPreferences, allMatrixes,
-					rollbackServiceWithResourceCalculation, resourceCalculateDelayer, teamBlockGenerator, dayOffOptimizationPreferenceProvider);
-			}
-
-			if (optimizationPreferences.General.OptimizationStepTimeBetweenDays && !(optimizationPreferences.Extra.UseBlockSameShift && optimizationPreferences.Extra.UseTeamBlockOption))
-			{
-				var matrixesOnSelectedperiod = _matrixListFactory.CreateMatrixListForSelection(selectedSchedules);
-				optimizeMoveTimeBetweenDays(backgroundWorker, selectedPeriod, selectedPersons, optimizationPreferences,
-					rollbackServiceWithResourceCalculation, schedulingOptions, resourceCalculateDelayer, matrixesOnSelectedperiod,
-					allMatrixes);
-			}
-
-			if (optimizationPreferences.General.OptimizationStepFairness)
-			{
-				var rollbackServiceWithoutResourceCalculation =
-					new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState,
-						new ResourceCalculationOnlyScheduleDayChangeCallback(), tagSetter);
-				_optimizerHelper.LockDaysForDayOffOptimization(allMatrixes, optimizationPreferences, selectedPeriod);
-
-				_equalNumberOfCategoryFairness.ReportProgress += resourceOptimizerPersonOptimized;
-				_equalNumberOfCategoryFairness.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions,
-					_schedulerStateHolder().Schedules, rollbackServiceWithoutResourceCalculation,
-					optimizationPreferences, dayOffOptimizationPreferenceProvider);
-				_equalNumberOfCategoryFairness.ReportProgress -= resourceOptimizerPersonOptimized;
-
-				_teamBlockDayOffFairnessOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
-				_teamBlockDayOffFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions,
-					_schedulerStateHolder().Schedules, rollbackServiceWithoutResourceCalculation, optimizationPreferences,
-					_schedulerStateHolder().SchedulingResultState.SeniorityWorkDayRanks, dayOffOptimizationPreferenceProvider);
-				_teamBlockDayOffFairnessOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
-
-
-				_teamBlockSeniorityFairnessOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
-				_teamBlockSeniorityFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons,
-					schedulingOptions, _schedulerStateHolder().CommonStateHolder.ShiftCategories.ToList(),
-					_schedulerStateHolder().Schedules, rollbackServiceWithoutResourceCalculation, optimizationPreferences, true, dayOffOptimizationPreferenceProvider);
-
-				_teamBlockSeniorityFairnessOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
-			}
-
-			if (optimizationPreferences.General.OptimizationStepIntraInterval)
-			{
-				_intraIntervalOptimizationCommand.Execute(optimizationPreferences, selectedPeriod, selectedSchedules, _schedulerStateHolder().SchedulingResultState, allMatrixes, rollbackServiceWithResourceCalculation, resourceCalculateDelayer, _backgroundWorker);
-			}
-
-			allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
-
-			solveWeeklyRestViolations(selectedPeriod, selectedPersons, optimizationPreferences, resourceCalculateDelayer,
-				rollbackServiceWithResourceCalculation, allMatrixes,
-				_schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences), dayOffOptimizationPreferenceProvider);
-
-			//run twice to se if it will solve the problem detected by sikuli tests
-			solveWeeklyRestViolations(selectedPeriod, selectedPersons, optimizationPreferences, resourceCalculateDelayer,
-				rollbackServiceWithResourceCalculation, allMatrixes,
-				_schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences), dayOffOptimizationPreferenceProvider);
-
 		}
 
 		private void optimizeMoveTimeBetweenDays(ISchedulingProgress backgroundWorker, DateOnlyPeriod selectedPeriod,
