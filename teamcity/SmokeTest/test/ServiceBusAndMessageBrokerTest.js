@@ -1,14 +1,15 @@
 var assert = require('assert');
 var HealthCheckPage = require('./pages/HealthCheck.page');
 
-describe('service bus and message broker should work', function() {
+describe('health check', function() {
 
 	before(function() {
+		// Given that we are signed in and showing the HealthCheck page
 		HealthCheckPage.open();
 		HealthCheckPage.signin();
     });
 	
-    it('should work', function () {
+    it('starting healthcheck should show results', function () {
 		HealthCheckPage.clickStartCheck();
 		HealthCheckPage.busResults.waitForExist(60 * 1000);
     });
