@@ -73,6 +73,7 @@
 
 		WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938,
 		WfmTeamSchedule_ShowOverwrittenLayerWarning_40109,
+		WfmTeamSchedule_AutoMoveOverwrittenActivityForOperations_40279,
 
 		WebByPassDefaultPermissionCheck_37984,
 		WfmTeamSchedule_RevertToPreviousSchedule_39002,
