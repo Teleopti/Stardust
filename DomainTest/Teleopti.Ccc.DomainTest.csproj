@@ -252,6 +252,7 @@
     <Compile Include="ResourceCalculation\ResourceCalculationTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationCascadingDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationDesktopTest.cs" />
+    <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationTeamBlockDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\DoubleExtensionsInCascadingTestScenarios.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCascadingDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCascadingTest.cs" />
