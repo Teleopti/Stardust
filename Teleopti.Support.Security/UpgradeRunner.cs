@@ -22,6 +22,7 @@ namespace Teleopti.Support.Security
 		private static readonly ICommandLineCommand DelayedDataConvert = new DelayedDataConvert();
 		private static readonly ICommandLineCommand reportTextCommand = new ReportTextsCommand();
 		private static readonly ICommandLineCommand DayOffCodeFixer = new DayOffCodeFixer();
+		private static readonly ICommandLineCommand DayOffIndexFixer = new DayOffIndexFixer();
 		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
 		public IUpgradeLog Logger = new NullLog();
 
@@ -68,6 +69,7 @@ namespace Teleopti.Support.Security
 			if (!string.IsNullOrEmpty(databaseArguments.AnalyticsDbConnectionString))
 			{
 				DayOffCodeFixer.Execute(databaseArguments);
+				DayOffIndexFixer.Execute(databaseArguments);
 			}
 			setPersonAssignmentDate(databaseArguments);
 			removeDuplicateAssignments(databaseArguments);
