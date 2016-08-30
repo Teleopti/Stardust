@@ -63,7 +63,7 @@
 				vm.toggleAllPersonSelection(true);
 			}
 		}, {
-			Name: $translate.instant('OverrideForSelectedAgents'),
+			Name: $translate.instant('AutoFixForTheseAgents'),
 			OnSelected: enableCheckbox
 		}];
 

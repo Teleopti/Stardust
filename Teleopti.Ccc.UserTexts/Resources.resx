@@ -14800,10 +14800,6 @@ These options are activated:
     <value>Do not {0} for these agents</value>
     <comment>Do not modify schedule change for these agents option of fixing activity overlapping issue when adding activities on top of Not Allow Meeting activities.</comment>
   </data>
-  <data name="OverrideForSelectedAgents" xml:space="preserve">
-    <value>Override for selected agents</value>
-    <comment>Override for selected agents option text  of fixing activity overlapping issue when adding activities on top of Not Allow Meeting activities.</comment>
-  </data>
   <data name="OverrideForTheseAgents" xml:space="preserve">
     <value>Override for these agents</value>
     <comment>Override for these agents option text of fixing activity overlapping issue when adding activities on top of Not Allow Meeting activities.</comment>

@@ -19839,15 +19839,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Override for selected agents.
-        /// </summary>
-        public static string OverrideForSelectedAgents {
-            get {
-                return ResourceManager.GetString("OverrideForSelectedAgents", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Override for these agents.
         /// </summary>
         public static string OverrideForTheseAgents {
