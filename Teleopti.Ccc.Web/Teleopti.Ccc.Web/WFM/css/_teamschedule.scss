@@ -2,7 +2,6 @@
 	background-color: $white;
 	border-right: 1px solid $white;
 	min-height: 350px;
-	min-width: 590px;
 	overflow: hidden;
 	padding: 0;
 
@@ -31,7 +30,7 @@
 
 		& > div {
 			-ms-flex: none;
-			flex: 0 0 auto;
+			flex: 0 1 auto;
 		}
 
 		.leftside-part {
@@ -71,11 +70,11 @@
 			display: inline-block;
 			margin: 10px;
 			padding: 0 60px 0 0;
-			min-width: 200px;
 			text-align: right;
 
 			.wfm-switch-toggle {
 				right: 0;
+				top: 0;
 			}
 		}
 
@@ -152,6 +151,7 @@
 	.big-table-wrapper {
 		position: relative;
 		overflow: hidden;
+		overflow-x: auto;
 		width: 100%;
 		height: 100%;
 
@@ -163,6 +163,7 @@
 				display: block;
 				max-height: 62vh;
 				min-height: 500px;
+				min-width: 680px;
 				overflow-y: scroll;
 				border-top: 1px solid $gray012;
 			}
@@ -410,6 +411,12 @@
 		display: inline-block;
 		text-align: left;
 		margin: .8rem 2rem .8rem 0;
+	}
+
+	@media(max-width: 768px){
+		.pagination li{
+			padding: 8px;
+		}
 	}
 
 	md-sidenav {
