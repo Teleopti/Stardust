@@ -48,8 +48,13 @@
 			}
 		};
 
-		var addActivity = function () {
+		var addActivity = function (option) {
 			var requestData = getRequestData();
+
+			if (option && option.allowedToMoveStickyActivities) {
+				requestData.AllowedToMoveStickyActivities = true;
+			}
+
 			if(requestData.PersonIds.length > 0){
 				activityService.addActivity(requestData).then(function (response) {
 					if (vm.getActionCb(vm.label)) {
@@ -94,7 +99,10 @@
 		vm.addActivity = function () {
 			if (vm.checkCommandActivityLayerOrders){
 				vm.checkingCommand = true;
-				CommandCheckService.checkOverlappingCertainActivities(getRequestData()).then(addActivity);
+				CommandCheckService.checkOverlappingCertainActivities(getRequestData())
+					.then(function(option) {						
+						addActivity(option);						
+					});
 			}
 			else
 				addActivity();

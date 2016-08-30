@@ -34,7 +34,10 @@
 
 		scope.vm.currentCommandLabel = containerCtrl.activeCmd;
 		scope.vm.getDate = containerCtrl.getDate;
-		scope.vm.updateActionOptionsText();
+		scope.vm.toggles = containerCtrl.configurations.toggles;
+
+		if (!scope.vm.toggles.AutoMoveOverwrittenActivityForOperationsEnabled)
+			scope.vm.actionOptions.shift();
 
 		var focusTarget = elem[0].querySelector('.focus-default');
 		if (focusTarget) angular.element(focusTarget).focus();
@@ -50,40 +53,39 @@
 		vm.overlappedLayers = [];
 		vm.initFinished = false;
 
+		var allowedToMoveStickyActivities = false;
+
 		vm.actionOptions = [
 			{
-				Name: $translate.instant('AutoFixForTheseAgents')
+				value: 'AutoFixForTheseAgents',
+				getName: function() {
+					return $translate.instant(this.value);
+				},
+				beforeAction: function() {
+					allowedToMoveStickyActivities = true;
+				}
 			},
 			{
-				Name: $translate.instant('DoNotModifyForTheseAgents'),
-				BeforeAction: function () {
+				value: 'DoNotModifyForTheseAgents',
+				getName: function(currentCmdLabel) {
+					return this.value.replace('{0}', $translate.instant(currentCmdLabel));
+				},
+				beforeAction: function () {
 					vm.toggleAllPersonSelection(false);
 				}
 			},
 			{
-				Name: $translate.instant('OverrideForTheseAgents'),
-				BeforeAction: function() {
+				value: 'OverrideForTheseAgents',
+				getName: function() {
+					return $translate.instant(this.value);
+				},
+				beforeAction: function() {
 					vm.toggleAllPersonSelection(true);
 				}
 			}
 		];
 
-		vm.updateActionOptionsText = function() {
-			if (vm.currentCommandLabel == 'AddActivity') {
-				vm.actionOptions[1].Name = vm.actionOptions[1].Name.replace('{0}', $translate.instant('AddActivity'));
-			}
-
-			if (vm.currentCommandLabel == 'MoveActivity') {
-				vm.actionOptions[1].Name = vm.actionOptions[1].Name.replace('{0}', $translate.instant('MoveActivity'));
-				vm.actionOptions.pop();
-			}
-
-			if (vm.currentCommandLabel == 'AddPersonalActivity') {
-				vm.actionOptions[1].Name = vm.actionOptions[1].Name.replace('{0}', $translate.instant('AddPersonalActivity'));
-			}
-
-			vm.currentActionOption = vm.actionOptions[0].Name;
-		};
+		vm.currentActionOptionValue = vm.actionOptions[0].value;
 
 		vm.updatePersonSelection = function(agent) {
 			personSelectionSvc.updatePersonSelection(agent);
@@ -126,12 +128,14 @@
 		};
 
 		vm.applyCommandFix = function() {
-			vm.actionOptions.forEach(function(option) {
-				if (option.Name == vm.currentActionOption) {
-					option.BeforeAction && option.BeforeAction();
+			vm.actionOptions.forEach(function (option) {
+				if (option.value == vm.currentActionOptionValue) {
+					option.beforeAction && option.beforeAction();
 				}
 			});
-			CommandCheckService.completeCommandCheck();
+			CommandCheckService.completeCommandCheck({
+				allowedToMoveStickyActivities: allowedToMoveStickyActivities
+			});
 		};
 
 		vm.init = function() {

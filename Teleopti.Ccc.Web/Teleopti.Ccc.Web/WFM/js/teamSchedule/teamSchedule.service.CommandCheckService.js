@@ -60,8 +60,8 @@
             commandCheckedStatus = false;
         }
 
-        function completeCommandCheck() {
-        	commandCheckDeferred.resolve();
+        function completeCommandCheck(option) {
+        	commandCheckDeferred.resolve(option);
         }
 
         function getOverlappingAgentList() {
