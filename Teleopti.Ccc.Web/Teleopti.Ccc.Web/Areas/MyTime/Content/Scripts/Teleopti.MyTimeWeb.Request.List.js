@@ -7,12 +7,10 @@
 /// <reference path="~/Content/Scripts/knockout-2.2.1.debug.js" />
 
 Teleopti.MyTimeWeb.Request.List = (function ($) {
-
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var pageViewModel;
 
 	function RequestItemViewModel(requestPageViewModel) {
-
 		var self = this;
 
 		self.isProcessing = ko.observable(false);
@@ -58,7 +56,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		self.IsShiftTradeRequest = function () {
 			return (self.RequestTypeEnum() == 2);
 		};
-		
+
 		self.GetDateDisplay = function() {
 			if (!(self.StartDateTime() && self.EndDateTime())) {
 				return null;
@@ -66,7 +64,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
 			if (self.IsSingleDay() && (self.IsShiftTradeRequest() || self.IsFullDay()) ) {
 				return Teleopti.MyTimeWeb.Common.FormatDate(self.StartDateTime());
-			} 
+			}
 
 			var showTimes = !self.IsShiftTradeRequest() && !self.IsFullDay();
 			return Teleopti.MyTimeWeb.Common.FormatDatePeriod(self.StartDateTime(), self.EndDateTime(), showTimes );
@@ -74,9 +72,8 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
 		self.Dates = ko.computed(function () {
 			return self.GetDateDisplay();
-
 		});
-		
+
 		self.ShowDetails = function ( ) {
 			if (self.IsSelected()) {
 				self.IsSelected(false);
@@ -103,7 +100,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			} else {
 				self.IsSelected(true);
 			}
-
 		};
 
 		self.successUpdatingRequest = function (data) {
@@ -122,7 +118,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	}
 
 	function RequestPageViewModel(readyForInteraction, completelyLoaded) {
-
 		var self = this;
 
 		self.Ready = readyForInteraction;
@@ -174,10 +169,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			});
 		}, null, 'cancel_request');
 
-
 		self.clearAllPromptsFromOtherRequestItemViewModels = function(requestItemViewModel) {
-			
-
 			ko.utils.arrayForEach(self.Requests(), function (request) {
 				if (request !== requestItemViewModel) {
 					request.IsCancelPending(false);
@@ -193,7 +185,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			requestItemViewModel.ErrorMessage(null);
 
 			self.clearAllPromptsFromOtherRequestItemViewModels(requestItemViewModel);
-
 		};
 
 		self.SwitchCancelConfirmationVisibility = function (requestItemViewModel) {
@@ -202,7 +193,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			requestItemViewModel.ErrorMessage(null);
 
 			self.clearAllPromptsFromOtherRequestItemViewModels(requestItemViewModel);
-
 		};
 
 		self.SwitchErrorMessageVisibility = function (requestItemViewModel) {
@@ -212,7 +202,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
 			self.clearAllPromptsFromOtherRequestItemViewModels(requestItemViewModel);
 		};
-		
+
 		self.Delete = function (requestItemViewModel) {
 			var url = requestItemViewModel.Link();
 
@@ -243,22 +233,18 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 						self.Requests.remove(requestItemViewModel);
 						selectedViewModel.Initialize(result.RequestViewModel);
 						self.Requests.unshift(selectedViewModel);
-
 					} else {
 						if (result.ErrorMessages && result.ErrorMessages != null) {
 							requestItemViewModel.ErrorMessage(result.ErrorMessages[0]);
 						}
-
 					}
 					requestItemViewModel.IsCancelPending(false);
-
 				},
 				error: function (jqXHR, textStatus) {
 					Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
 				}
 			});
 		}
-
 
 		self.AddRequest = function (request, isProcessing) {
 			var selectedViewModel = ko.utils.arrayFirst(self.Requests(), function (item) {
@@ -299,7 +285,8 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 				type: 'GET',
 				data: {
 					Take: take,
-					Skip: skip
+					Skip: skip,
+					hideOldRequest: false
 				},
 				beforeSend: function () {
 					self.isLoadingRequests(true);
@@ -346,7 +333,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
 	ko.utils.extend(RequestItemViewModel.prototype, {
 		Initialize: function (data, isProcessing) {
-
 			var textSegs = data.Text.split("\n");
 			var textNoBr = "";
 			var messageInList = [];
@@ -370,7 +356,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
 			self.StartDateTime(moment(data.DateTimeFrom));
 			self.EndDateTime(moment(data.DateTimeTo));
-			self.IsSingleDay(moment(data.DateTimeFrom).isSame(moment(data.DateTimeTo), 'day')); 
+			self.IsSingleDay(moment(data.DateTimeFrom).isSame(moment(data.DateTimeTo), 'day'));
 
 			self.UpdatedOn(Teleopti.MyTimeWeb.Common.FormatDate(data.UpdatedOnDateTime));
 
@@ -408,7 +394,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	}
 
 	function _isAtBottom(jqDocument, jqWindow) {
-
 		var totalContentHeight = jqDocument.height();
 		var inViewContentHeight = jqWindow.height();
 		var aboveViewContentHeight = jqWindow.scrollTop();
@@ -443,6 +428,4 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			_unbind();
 		}
 	};
-
 })(jQuery);
-

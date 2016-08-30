@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	/// </summary>
 	public class PersonRequestRepository : Repository<IPersonRequest>, IPersonRequestRepository
 	{
-		const char splitter = ' ';
+		private const char splitter = ' ';
 
 		public PersonRequestRepository(IUnitOfWork unitOfWork)
 #pragma warning disable 618
@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public PersonRequestRepository(ICurrentUnitOfWork currentUnitOfWork)
 			: base(currentUnitOfWork)
 		{
-
 		}
 
 		public IList<IPersonRequest> FindByStatus<T>(IPerson person, DateTime startDateTime, int status) where T : Request
@@ -102,13 +101,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetFetchMode("requests", FetchMode.Join)
 				.SetFetchMode("Person", FetchMode.Join)
 				.UniqueResult<IPersonRequest>();
-			if (returnPersonRequest != null)
+
+			var shiftTrade = returnPersonRequest?.Request as IShiftTradeRequest;
+
+			if (shiftTrade != null)
 			{
-				var shiftTrade = returnPersonRequest.Request as IShiftTradeRequest;
-				if (shiftTrade != null)
-				{
-					LazyLoadingManager.Initialize(shiftTrade.ShiftTradeSwapDetails);
-				}
+				LazyLoadingManager.Initialize(shiftTrade.ShiftTradeSwapDetails);
 			}
 
 			return returnPersonRequest;
@@ -144,7 +142,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			return personRequests.List<IPersonRequest>();
 		}
-
 
 		public IEnumerable<IPersonRequest> FindAllRequests(RequestFilter filter)
 		{
@@ -202,13 +199,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.Add(Restrictions.Le("Period.period.Minimum", period.EndDateTime));
 			}
 
-
 			if (filter.OnlyIncludeRequestsStartingWithinPeriod)
 			{
-				requestForPeriod
-					.Add (Restrictions.Ge ("Period.period.Minimum", period.StartDateTime));
+				requestForPeriod.Add(Restrictions.Ge("Period.period.Minimum", period.StartDateTime));
 			}
-
 
 			criteria.Add(Subqueries.PropertyIn("Id", requestForPeriod));
 		}
@@ -224,30 +218,27 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			var people = persons.ToArray();
 
-			criteria.Add (Restrictions.Or(
-					includeRequestsWithShiftTradePersonTo(people),
-					Restrictions.In("Person", people)
-				));
+			criteria.Add(Restrictions.Or(includeRequestsWithShiftTradePersonTo(people), Restrictions.In("Person", people)));
 		}
 
-		private static AbstractCriterion includeRequestsWithShiftTradePersonTo (IPerson[] people)
+		private static AbstractCriterion includeRequestsWithShiftTradePersonTo(IPerson[] people)
 		{
 			var shiftTradeDetailsForAgentPersonTo = DetachedCriteria.For<ShiftTradeSwapDetail>()
 				.SetProjection(Projections.Property("Parent"))
-				.Add(Restrictions.In("PersonTo", people ));
-			
+				.Add(Restrictions.In("PersonTo", people));
+
 			var shiftTradeRequestsForAgentPersonTo = DetachedCriteria.For<ShiftTradeRequest>()
 				.SetProjection(Projections.Property("Parent"))
 				.Add(Subqueries.PropertyIn("ShiftTradeSwapDetails", shiftTradeDetailsForAgentPersonTo));
 
-			return Subqueries.PropertyIn ("requests", shiftTradeRequestsForAgentPersonTo);
+			return Subqueries.PropertyIn("requests", shiftTradeRequestsForAgentPersonTo);
 		}
 
 		private void filterRequestByRequestType(ICriteria criteria, IEnumerable<RequestType> requestTypes)
 		{
 			if (requestTypes == null) return;
 			var typeCriterion = requestTypes.Select(toRequestClassTypeConstraint)
-					.Where(c => c != null).Aggregate(Restrictions.Or);
+				.Where(c => c != null).Aggregate(Restrictions.Or);
 			criteria.Add(typeCriterion);
 		}
 
@@ -263,6 +254,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					case RequestFilterField.Status:
 						addStatusCriteria(criteria, filter);
 						break;
+
 					case RequestFilterField.Absence:
 						var absenceFilters = filter.Value.Split(splitter).Select(x =>
 						{
@@ -279,14 +271,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						criteria.Add(absenceCriterion);
 						criteria.Add(toRequestClassTypeConstraint(RequestType.AbsenceRequest));
 						break;
+
 					case RequestFilterField.Subject:
 						var subjectCriterion = getStringFilterCriteria(filter.Value, "personRequests.Subject");
 						if (subjectCriterion != null) criteria.Add(subjectCriterion);
 						break;
+
 					case RequestFilterField.Message:
 						var messageCriterion = getStringFilterCriteria(filter.Value, "personRequests.Message");
 						if (messageCriterion != null) criteria.Add(messageCriterion);
 						break;
+
 					default:
 						continue;
 				}
@@ -295,37 +290,36 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private void filterRequestByShiftTradeStatus(ICriteria criteria, RequestFilter filter)
 		{
-			if (filter.ExcludeInvalidShiftTradeRequest)
-			{
-				criteria.Add(toRequestClassTypeConstraint(RequestType.ShiftTradeRequest));
-				criteria.Add(!Restrictions.Eq("req.shiftTradeStatus", ShiftTradeStatus.OkByMe));
-				criteria.Add(!Restrictions.Eq("req.shiftTradeStatus", ShiftTradeStatus.Referred));
-			}
+			if (!filter.ExcludeInvalidShiftTradeRequest) return;
+
+			criteria.Add(toRequestClassTypeConstraint(RequestType.ShiftTradeRequest));
+			criteria.Add(!Restrictions.Eq("req.shiftTradeStatus", ShiftTradeStatus.OkByMe));
+			criteria.Add(!Restrictions.Eq("req.shiftTradeStatus", ShiftTradeStatus.Referred));
 		}
 
-		private static void addStatusCriteria (ICriteria criteria, KeyValuePair<RequestFilterField, string> filter)
+		private static void addStatusCriteria(ICriteria criteria, KeyValuePair<RequestFilterField, string> filter)
 		{
-			var statusFilters = filter.Value.Split (splitter).Select (x =>
+			var statusFilters = filter.Value.Split(splitter).Select(x =>
 			{
 				int status;
-				return int.TryParse (x.Trim(), out status) ? status : int.MinValue;
-			}).Where (x => x > int.MinValue).ToList();
+				return int.TryParse(x.Trim(), out status) ? status : int.MinValue;
+			}).Where(x => x > int.MinValue).ToList();
 
 			if (!statusFilters.Any()) return;
 
 			addAutoDeniedFilterIfDeniedFilterIsIncluded(statusFilters);
-			
+
 			var statusCriterion = statusFilters
-				.Select (x => (ICriterion) Restrictions.Eq ("personRequests.requestStatus", x))
-				.Aggregate (Restrictions.Or);
-			criteria.Add (statusCriterion);
+				.Select(x => (ICriterion) Restrictions.Eq("personRequests.requestStatus", x))
+				.Aggregate(Restrictions.Or);
+			criteria.Add(statusCriterion);
 		}
 
-		private static void addAutoDeniedFilterIfDeniedFilterIsIncluded (ICollection<int> statusFilters)
+		private static void addAutoDeniedFilterIfDeniedFilterIsIncluded(ICollection<int> statusFilters)
 		{
-			if (statusFilters.Contains ((int)PersonRequestStatus.Denied))
+			if (statusFilters.Contains((int) PersonRequestStatus.Denied))
 			{
-				statusFilters.Add ((int)PersonRequestStatus.AutoDenied);
+				statusFilters.Add((int) PersonRequestStatus.AutoDenied);
 			}
 		}
 
@@ -338,7 +332,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			if (!subjectKeywords.Any()) return null;
 
 			var criteria = subjectKeywords
-				.Select(x => (ICriterion)Restrictions.Like(propertyPath, $"%{x}%"))
+				.Select(x => (ICriterion) Restrictions.Like(propertyPath, $"%{x}%"))
 				.Aggregate(Restrictions.And);
 			return criteria;
 		}
@@ -351,12 +345,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				case RequestType.AbsenceRequest:
 					type = typeof(AbsenceRequest);
 					break;
+
 				case RequestType.TextRequest:
 					type = typeof(TextRequest);
 					break;
+
 				case RequestType.ShiftTradeRequest:
 					type = typeof(ShiftTradeRequest);
 					break;
+
 				default:
 					return null;
 			}
@@ -369,11 +366,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			query.SetFirstResult(paging.Skip).SetMaxResults(paging.Take);
 		}
 
-		public IEnumerable<IPersonRequest> FindAllRequestsForAgentByType(IPerson person, Paging paging, params RequestType[] requestTypes)
+		public IEnumerable<IPersonRequest> FindAllRequestsForAgentByType(IPerson person, Paging paging,
+			DateTime? earliestDate, params RequestType[] requestTypes)
 		{
 			var allRequests = FindAllRequestsForAgent(person);
-			var filteredRequests =
-				allRequests.Where(x => requestTypes.Contains(x.Request.RequestType)).OrderByDescending(x => x.UpdatedOn);
+			var filteredRequests = allRequests.Where(x => requestTypes.Contains(x.Request.RequestType));
+			if (earliestDate != null)
+			{
+				filteredRequests = filteredRequests.Where(x=>x.Request.Period.StartDateTime >= earliestDate);
+			}
+			filteredRequests = filteredRequests.OrderByDescending(x => x.UpdatedOn);
 
 			return paging == null ? filteredRequests : filteredRequests.Skip(paging.Skip).Take(paging.Take);
 		}
@@ -537,11 +539,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							Restrictions.Not(Restrictions.Eq("requestStatus", 4))), Restrictions.Eq("requestStatus", 0)),
 					personTo);
 
-			var retList =
-				Session.CreateCriteria(typeof(PersonRequest))
-					.Add(Restrictions.Or(personToRestriction, personFromRestriction))
-					.SetFetchMode("requests", FetchMode.Join)
-					.List<IPersonRequest>();
+			var retList = Session.CreateCriteria(typeof(PersonRequest))
+				.Add(Restrictions.Or(personToRestriction, personFromRestriction))
+				.SetFetchMode("requests", FetchMode.Join)
+				.List<IPersonRequest>();
 
 			return retList;
 		}
@@ -665,8 +666,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			var personRequests =
 				(from result in personRequestResults
-				 from request in result
-				 select request).Distinct();
+					from request in result
+					select request).Distinct();
 
 			var personRequestList = personRequests.ToList();
 
@@ -721,7 +722,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IEnumerable<IShiftExchangeOffer> FindShiftExchangeOffersForBulletin(IEnumerable<IPerson> personList,
 			DateOnly shiftTradeDate)
 		{
-			return Session.CreateCriteria(typeof (IShiftExchangeOffer), "offer")
+			return Session.CreateCriteria(typeof(IShiftExchangeOffer), "offer")
 				.CreateCriteria("Parent", "req", JoinType.InnerJoin)
 				.Add(Restrictions.Eq("req.IsDeleted", false))
 				.Add(Restrictions.Eq("offer.Date", shiftTradeDate))
@@ -736,40 +737,43 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			if (sortingOrders == null) return;
 
 			var orderMapping = new Dictionary<RequestsSortingOrder, Action<ICriteria>>
+			{
 				{
-					{RequestsSortingOrder.AgentNameAsc, c =>
+					RequestsSortingOrder.AgentNameAsc, c =>
 					{
-						c.AddOrder (Order.Asc ("p.Name.LastName"));
-						c.AddOrder (Order.Asc ("p.Name.FirstName"));
-					}},
-					{RequestsSortingOrder.AgentNameDesc, c =>
+						c.AddOrder(Order.Asc("p.Name.LastName"));
+						c.AddOrder(Order.Asc("p.Name.FirstName"));
+					}
+				},
+				{
+					RequestsSortingOrder.AgentNameDesc, c =>
 					{
-						c.AddOrder (Order.Desc ("p.Name.LastName"));
-						c.AddOrder (Order.Desc ("p.Name.FirstName"));
-					}},
-					{RequestsSortingOrder.SubjectAsc, c => c.AddOrder(Order.Asc("personRequests.Subject"))},
-					{RequestsSortingOrder.SubjectDesc, c => c.AddOrder(Order.Desc("personRequests.Subject"))},
-					{RequestsSortingOrder.CreatedOnAsc, c => c.AddOrder(Order.Asc("personRequests.CreatedOn"))},
-					{RequestsSortingOrder.CreatedOnDesc, c => c.AddOrder(Order.Desc("personRequests.CreatedOn"))},
-					{RequestsSortingOrder.DenyReasonAsc, c => c.AddOrder(Order.Asc("personRequests.DenyReason"))},
-					{RequestsSortingOrder.DenyReasonDesc, c => c.AddOrder(Order.Desc("personRequests.DenyReason"))},
-					{RequestsSortingOrder.MessageAsc, c => c.AddOrder(Order.Asc("personRequests.Message"))},
-					{RequestsSortingOrder.MessageDesc, c => c.AddOrder(Order.Desc("personRequests.Message"))},
-					
-					{RequestsSortingOrder.UpdatedOnAsc, c => c.AddOrder(Order.Asc("personRequests.UpdatedOn"))},
-					{RequestsSortingOrder.UpdatedOnDesc, c => c.AddOrder(Order.Desc("personRequests.UpdatedOn"))},
-					{RequestsSortingOrder.PeriodStartAsc, c => c.AddOrder(Order.Asc("req.Period.period.Minimum"))},
-					{RequestsSortingOrder.PeriodStartDesc, c => c.AddOrder(Order.Desc("req.Period.period.Minimum"))},
-					{RequestsSortingOrder.PeriodEndAsc, c => c.AddOrder(Order.Asc("req.Period.period.Maximum"))},
-					{RequestsSortingOrder.PeriodEndDesc, c => c.AddOrder(Order.Desc("req.Period.period.Maximum"))},
+						c.AddOrder(Order.Desc("p.Name.LastName"));
+						c.AddOrder(Order.Desc("p.Name.FirstName"));
+					}
+				},
+				{RequestsSortingOrder.SubjectAsc, c => c.AddOrder(Order.Asc("personRequests.Subject"))},
+				{RequestsSortingOrder.SubjectDesc, c => c.AddOrder(Order.Desc("personRequests.Subject"))},
+				{RequestsSortingOrder.CreatedOnAsc, c => c.AddOrder(Order.Asc("personRequests.CreatedOn"))},
+				{RequestsSortingOrder.CreatedOnDesc, c => c.AddOrder(Order.Desc("personRequests.CreatedOn"))},
+				{RequestsSortingOrder.DenyReasonAsc, c => c.AddOrder(Order.Asc("personRequests.DenyReason"))},
+				{RequestsSortingOrder.DenyReasonDesc, c => c.AddOrder(Order.Desc("personRequests.DenyReason"))},
+				{RequestsSortingOrder.MessageAsc, c => c.AddOrder(Order.Asc("personRequests.Message"))},
+				{RequestsSortingOrder.MessageDesc, c => c.AddOrder(Order.Desc("personRequests.Message"))},
 
-					{RequestsSortingOrder.SeniorityAsc, c => c.AddOrder(Order.Asc (getSeniorityProjection()))},
-					{RequestsSortingOrder.SeniorityDesc, c => c.AddOrder(Order.Desc (getSeniorityProjection()))},
+				{RequestsSortingOrder.UpdatedOnAsc, c => c.AddOrder(Order.Asc("personRequests.UpdatedOn"))},
+				{RequestsSortingOrder.UpdatedOnDesc, c => c.AddOrder(Order.Desc("personRequests.UpdatedOn"))},
+				{RequestsSortingOrder.PeriodStartAsc, c => c.AddOrder(Order.Asc("req.Period.period.Minimum"))},
+				{RequestsSortingOrder.PeriodStartDesc, c => c.AddOrder(Order.Desc("req.Period.period.Minimum"))},
+				{RequestsSortingOrder.PeriodEndAsc, c => c.AddOrder(Order.Asc("req.Period.period.Maximum"))},
+				{RequestsSortingOrder.PeriodEndDesc, c => c.AddOrder(Order.Desc("req.Period.period.Maximum"))},
 
-					{RequestsSortingOrder.TeamAsc, c => c.AddOrder(Order.Asc (getTeamProjection()))},
-					{RequestsSortingOrder.TeamDesc, c => c.AddOrder(Order.Desc (getTeamProjection()))},
-					
-				};
+				{RequestsSortingOrder.SeniorityAsc, c => c.AddOrder(Order.Asc(getSeniorityProjection()))},
+				{RequestsSortingOrder.SeniorityDesc, c => c.AddOrder(Order.Desc(getSeniorityProjection()))},
+
+				{RequestsSortingOrder.TeamAsc, c => c.AddOrder(Order.Asc(getTeamProjection()))},
+				{RequestsSortingOrder.TeamDesc, c => c.AddOrder(Order.Desc(getTeamProjection()))},
+			};
 
 			foreach (var order in sortingOrders)
 			{
@@ -780,15 +784,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				}
 			}
 		}
-		
+
 		private static IProjection getSeniorityProjection()
 		{
 			var dateDiffFunction = Projections.SqlFunction(
-			new VarArgsSQLFunction("DateDiff(DAY,", ",", ")+1"),
-			NHibernateUtil.Int32,
-			Projections.Property<PersonPeriod>(val => val.StartDate),
-			Projections.Conditional(
-				Restrictions.Where<PersonPeriod>(period => period.internalEndDate >= DateOnly.Today),
+				new VarArgsSQLFunction("DateDiff(DAY,", ",", ")+1"),
+				NHibernateUtil.Int32,
+				Projections.Property<PersonPeriod>(val => val.StartDate),
+				Projections.Conditional(
+					Restrictions.Where<PersonPeriod>(period => period.internalEndDate >= DateOnly.Today),
 					Projections.Constant(DateTime.Today, NHibernateUtil.DateTime),
 					Projections.Cast(NHibernateUtil.DateTime, Projections.Property<PersonPeriod>(val => val.internalEndDate))));
 
@@ -797,23 +801,22 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Add(Restrictions.Le("StartDate", DateOnly.Today))
 				.SetProjection(Projections.Sum(dateDiffFunction));
 
-			return Projections.SubQuery (senioritySubquery);
+			return Projections.SubQuery(senioritySubquery);
 		}
 
 		private static IProjection getTeamProjection()
 		{
-			var team = DetachedCriteria.For <Team>("team")
+			var team = DetachedCriteria.For<Team>("team")
 				.Add(Restrictions.EqProperty("team.Id", "pp.Team"))
 				.SetProjection(Projections.Property("Description.Name"));
 
-			var personPeriodSubquery = DetachedCriteria.For<PersonPeriod> ("pp")
-				.Add (Restrictions.EqProperty ("pp.Parent", "p.Id"))
-				.Add (Restrictions.LeProperty ("StartDate", "req.Period.period.Minimum"))
-				.Add (Restrictions.GeProperty ("internalEndDate", "req.Period.period.Minimum"))
-				.SetProjection (Projections.SubQuery (team));
-			
-			return Projections.SubQuery(personPeriodSubquery);
+			var personPeriodSubquery = DetachedCriteria.For<PersonPeriod>("pp")
+				.Add(Restrictions.EqProperty("pp.Parent", "p.Id"))
+				.Add(Restrictions.LeProperty("StartDate", "req.Period.period.Minimum"))
+				.Add(Restrictions.GeProperty("internalEndDate", "req.Period.period.Minimum"))
+				.SetProjection(Projections.SubQuery(team));
 
+			return Projections.SubQuery(personPeriodSubquery);
 		}
 	}
 }

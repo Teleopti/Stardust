@@ -55,20 +55,22 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, DateTimePeriod period);
 
 		IEnumerable<IPersonRequest> FindAllRequests(RequestFilter filter);
+
 		IEnumerable<IPersonRequest> FindAllRequests(RequestFilter filter, out int count, bool ignoreCount = false);
-				
+
 		/// <summary>
 		/// Finds all specific types requests from and to a person for given page.
 		/// </summary>
 		/// <param name="person">The person.</param>
 		/// <param name="paging">Paging information.</param>
+		/// <param name="earliestDate">Hide requests earlier than this date</param>
 		/// <param name="requestTypes">Paging information.</param>
 		/// <returns></returns>
 		/// <remarks>
 		/// Created by: jianfeng
 		/// Created date: 2015-07-22
 		/// </remarks>
-		IEnumerable<IPersonRequest> FindAllRequestsForAgentByType(IPerson person, Paging paging, params RequestType[] requestTypes);
+		IEnumerable<IPersonRequest> FindAllRequestsForAgentByType(IPerson person, Paging paging, DateTime? earliestDate, params RequestType[] requestTypes);
 
 		/// <summary>
 		/// Finds all requests modified within or pending.
@@ -106,10 +108,13 @@ namespace Teleopti.Ccc.Domain.Repositories
 		/// Created date: 2010-03-24
 		/// </remarks>
 		IPersonRequest Find(Guid id);
+
 		IList<IPersonRequest> Find(List<Guid> id);
 
 		IList<IPersonRequest> FindByStatus<T>(IPerson person, DateTime startDate, int status) where T: Request;
+
 		IPersonRequest FindPersonRequestByRequestId(Guid value);
+
 		IList<IShiftExchangeOffer> FindOfferByStatus(IPerson person, DateOnly date, ShiftExchangeOfferStatus status);
 
 		IEnumerable<IShiftExchangeOffer> FindShiftExchangeOffersForBulletin(IEnumerable<IPerson> personList,

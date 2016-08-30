@@ -28,19 +28,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IShiftTradeScheduleViewModelMapper _shiftTradeScheduleViewModelMapper;
 		private readonly IPersonRequestRepository _personRequestRepository;
-		
+
 		public RequestsViewModelFactory(
 			IPersonRequestProvider personRequestProvider,
 			IMappingEngine mapper,
-			IAbsenceTypesProvider absenceTypesProvider, 
+			IAbsenceTypesProvider absenceTypesProvider,
 			IPermissionProvider permissionProvider,
-			IShiftTradeRequestProvider shiftTradeRequestprovider, 
-			IShiftTradePeriodViewModelMapper shiftTradeRequestsPeriodViewModelMapper, 
+			IShiftTradeRequestProvider shiftTradeRequestprovider,
+			IShiftTradePeriodViewModelMapper shiftTradeRequestsPeriodViewModelMapper,
 			IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker,
 			INow now,
-			ILoggedOnUser loggedOnUser, 
+			ILoggedOnUser loggedOnUser,
 			IShiftTradeScheduleViewModelMapper shiftTradeScheduleViewModelMapper,
-			IAbsenceAccountProvider personAccountProvider, 
+			IAbsenceAccountProvider personAccountProvider,
 			IPersonRequestRepository personRequestRepository)
 		{
 			_personRequestProvider = personRequestProvider;
@@ -60,24 +60,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		public RequestsViewModel CreatePageViewModel()
 		{
 			var permission = new RequestPermission
-			                 	{
-			                 		TextRequestPermission =
-			                 			_permissionProvider.HasApplicationFunctionPermission(
-			                 				DefinedRaptorApplicationFunctionPaths.TextRequests),
-			                 		AbsenceRequestPermission =
-			                 			_permissionProvider.HasApplicationFunctionPermission(
-											DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb),
-									ShiftTradeRequestPermission =
-										_permissionProvider.HasApplicationFunctionPermission(
-											DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb),
-									AbsenceReportPermission =
-										_permissionProvider.HasApplicationFunctionPermission(
-											DefinedRaptorApplicationFunctionPaths.AbsenceReport),
-									ShiftTradeBulletinBoardPermission =
-									_permissionProvider.HasApplicationFunctionPermission(
-									DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard),
-
-			                 	};
+			{
+				TextRequestPermission = _permissionProvider.HasApplicationFunctionPermission(
+						DefinedRaptorApplicationFunctionPaths.TextRequests),
+				AbsenceRequestPermission = _permissionProvider.HasApplicationFunctionPermission(
+						DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb),
+				ShiftTradeRequestPermission = _permissionProvider.HasApplicationFunctionPermission(
+						DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb),
+				AbsenceReportPermission = _permissionProvider.HasApplicationFunctionPermission(
+						DefinedRaptorApplicationFunctionPaths.AbsenceReport),
+				ShiftTradeBulletinBoardPermission = _permissionProvider.HasApplicationFunctionPermission(
+						DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard),
+			};
 			var dateFormat = _loggedOnUser.CurrentUser().PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
 			return new RequestsViewModel
 			{
@@ -85,9 +79,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 					_absenceTypesProvider.GetRequestableAbsences().Select(requestableAbsence => new AbsenceTypeViewModel
 					{
 						Id = requestableAbsence.Id,
-						Name =
-							requestableAbsence.
-							Description.Name
+						Name = requestableAbsence.Description.Name
 					}).ToList(),
 				AbsenceTypesForReport =
 					_absenceTypesProvider.GetReportableAbsences().Select(x => new AbsenceTypeViewModel
@@ -100,9 +92,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			};
 		}
 
-		public IEnumerable<RequestViewModel> CreatePagingViewModel(Paging paging)
+		public IEnumerable<RequestViewModel> CreatePagingViewModel(Paging paging, bool hideOldRequest = false)
 		{
-			var requests = _personRequestProvider.RetrieveRequestsForLoggedOnUser(paging);
+			var requests = _personRequestProvider.RetrieveRequestsForLoggedOnUser(paging, hideOldRequest);
 			return _mapper.Map<IEnumerable<IPersonRequest>, IEnumerable<RequestViewModel>>(requests);
 		}
 
@@ -111,7 +103,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			var request = _personRequestProvider.RetrieveRequest(id);
 			return _mapper.Map<IPersonRequest, RequestViewModel>(request);
 		}
-		
 
 		public AbsenceAccountViewModel GetAbsenceAccountViewModel(Guid absenceId, DateOnly date)
 		{
@@ -162,7 +153,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 				var shiftTradeSwapDetails = _mapper.Map<IShiftTradeSwapDetail, ShiftTradeSwapDetailsViewModel>(detail);
 
 				var startTimeForTimeline = shiftTradeSwapDetails.TimeLineStartDateTime;
-				
+
 				DateTime startTimeForSchedOne;
 				DateTime startTimeForSchedTwo;
 				if (detail.SchedulePartFrom != null && detail.SchedulePartTo != null)

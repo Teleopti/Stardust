@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 	[TestFixture]
 	public class RequestsViewModelFactoryTest
 	{
-		
 		[Test]
 		public void ShouldRetrieveDatePickerFormatForPersonForViewModel()
 		{
@@ -36,9 +35,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
 			var loggedOnUser = new FakeLoggedOnUser(person);
 
-			var target = new RequestsViewModelFactory(null, null, new AbsenceTypesProvider(new FakeAbsenceRepository(), loggedOnUser), 
-			                                          new FakePermissionProvider(), null, null, null, null,
-			                                          loggedOnUser, null, null, null);
+			var target = new RequestsViewModelFactory(null, null,
+				new AbsenceTypesProvider(new FakeAbsenceRepository(), loggedOnUser),
+				new FakePermissionProvider(), null, null, null, null,
+				loggedOnUser, null, null, null);
 
 			var result = target.CreatePageViewModel();
 			var expectedFormat = person.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
@@ -51,25 +51,26 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			IPerson person = new Person();
 			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
 			var loggedOnUser = new FakeLoggedOnUser(person);
-			
+
 			var absence = new Absence { Description = new Description("Vacation") ,Requestable = true}.WithId();
-			
+
 			var absenceRepository = new FakeAbsenceRepository();
 			absenceRepository.Add(absence);
 
 			var absenceTypesProvider = new AbsenceTypesProvider(absenceRepository, loggedOnUser);
-			
+
 			var target = new RequestsViewModelFactory(null, null, absenceTypesProvider, new FakePermissionProvider(), null, null, null,
 			                                          null, loggedOnUser, null, null, null);
 
 			var result = target.CreatePageViewModel();
 
-			result.AbsenceTypes.FirstOrDefault().Name.Should().Be.EqualTo(absence.Description.Name);
-			result.AbsenceTypes.FirstOrDefault().Id.Should().Be.EqualTo(absence.Id);
+			var absenceType = result.AbsenceTypes.FirstOrDefault();
+			absenceType.Name.Should().Be.EqualTo(absence.Description.Name);
+			absenceType.Id.Should().Be.EqualTo(absence.Id);
 
 			result.Should().Not.Be.Null();
 		}
-		
+
 		[Test]
 		public void ShouldReturnEmptyAbsenceAccountModelWhenNoMatchingRequestableAbsenceFound()
 		{
@@ -84,8 +85,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 			var absenceTypesProvider = new AbsenceTypesProvider(absenceRepository, loggedOnUser);
 
-			var target = new RequestsViewModelFactory(null, null, absenceTypesProvider, new FakePermissionProvider(), null, null, null,
-													  null, loggedOnUser, null, null, null);
+			var target = new RequestsViewModelFactory(null, null, absenceTypesProvider, new FakePermissionProvider(), null, null,
+				null, null, loggedOnUser, null, null, null);
 
 			var result = target.GetAbsenceAccountViewModel(Guid.NewGuid(), new DateOnly(2013, 1, 1));
 			result.Should().Be.Null();
@@ -95,10 +96,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		public void ShouldRetrieveReportableAbsenceTypesforViewModel()
 		{
 			var absence = new Absence { Description = new Description("Vacation") }.WithId();
-			
+
 			var wfcs = new WorkflowControlSet();
 			wfcs.AddAllowedAbsenceForReport(absence);
-			
+
 			var person = new Person { WorkflowControlSet = wfcs };
 			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
 			var loggedOnUser = new FakeLoggedOnUser(person);
@@ -133,7 +134,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				Return(true);
 
 			var target = new RequestsViewModelFactory(null, null, absenceTypesProvider, permissionProvider, null, null, null,
-			                                          null, loggedOnUser, null, null, null);
+				null, loggedOnUser, null, null, null);
 			var result = target.CreatePageViewModel();
 
 			result.RequestPermission.TextRequestPermission.Should().Be.True();
@@ -145,11 +146,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			IPerson person = new Person();
 			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
 			var loggedOnUser = new FakeLoggedOnUser(person);
-			
+
 			var permissionProvider = new FakePermissionProvider();
 
-			var target = new RequestsViewModelFactory(null, null, new AbsenceTypesProvider(new FakeAbsenceRepository(), loggedOnUser), permissionProvider, null, null, null,
-			                                          null, loggedOnUser, null, null, null);
+			var target = new RequestsViewModelFactory(null, null,
+				new AbsenceTypesProvider(new FakeAbsenceRepository(), loggedOnUser), permissionProvider, null, null, null, null,
+				loggedOnUser, null, null, null);
 			var result = target.CreatePageViewModel();
 
 			result.RequestPermission.AbsenceRequestPermission.Should().Be.True();
@@ -160,13 +162,27 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		{
 			var personRequestProvider = MockRepository.GenerateMock<IPersonRequestProvider>();
 			var target = new RequestsViewModelFactory(personRequestProvider, MockRepository.GenerateMock<IMappingEngine>(), null,
-			                                          null, null, null, null, null, null, null, null, null);
+				null, null, null, null, null, null, null, null, null);
 			var paging = new Paging();
-			personRequestProvider.Stub(x => x.RetrieveRequestsForLoggedOnUser(paging)).Return(new IPersonRequest[] { });
+			personRequestProvider.Stub(x => x.RetrieveRequestsForLoggedOnUser(paging, false)).Return(new IPersonRequest[] { });
 
 			target.CreatePagingViewModel(paging);
 
-			personRequestProvider.AssertWasCalled(x => x.RetrieveRequestsForLoggedOnUser(paging));
+			personRequestProvider.AssertWasCalled(x => x.RetrieveRequestsForLoggedOnUser(paging, false));
+		}
+
+		[Test]
+		public void ShouldRetrievePersonRequestsAfterSpecificDateForPagingViewModel()
+		{
+			var personRequestProvider = MockRepository.GenerateMock<IPersonRequestProvider>();
+			var target = new RequestsViewModelFactory(personRequestProvider, MockRepository.GenerateMock<IMappingEngine>(), null,
+				null, null, null, null, null, null, null, null, null);
+			var paging = new Paging();
+			personRequestProvider.Stub(x => x.RetrieveRequestsForLoggedOnUser(paging, true)).Return(new IPersonRequest[] { });
+
+			var result = target.CreatePagingViewModel(paging, true);
+
+			personRequestProvider.AssertWasCalled(x => x.RetrieveRequestsForLoggedOnUser(paging, true));
 		}
 
 		[Test]
@@ -174,7 +190,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		{
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var target = new RequestsViewModelFactory(MockRepository.GenerateMock<IPersonRequestProvider>(), mapper, null, null,
-			                                          null, null, null, null, null, null, null, null);
+				null, null, null, null, null, null, null, null);
 			var requests = new RequestViewModel[] {};
 
 			mapper.Stub(x => x.Map<IEnumerable<IPersonRequest>, IEnumerable<RequestViewModel>>(null)).Return(requests);
@@ -220,8 +236,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var result = target.CreateShiftTradePeriodViewModel();
 
 			result.Should().Be.SameInstanceAs(shiftTradePeriodViewModel);
-		}		
-		
+		}
+
 		[Test]
 		public void ShouldSetMiscSettingsFalseWhenNoOfferInShiftTrade()
 		{
@@ -259,8 +275,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			target.CreateShiftTradeMyTeamSimpleViewModel(shiftTradeDate).Should().Be.EqualTo(myTeamId.ToString());
 		}
 
-		
-
 		[Test]
 		public void ShouldRetrieveEmptyStringWhenNotBelongingToATeam()
 		{
@@ -275,7 +289,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 			target.CreateShiftTradeMyTeamSimpleViewModel(shiftTradeDate).Should().Be.EqualTo(string.Empty);
 		}
-		
+
 		[Test]
 		public void ShouldRetrieveShiftTradeScheduleViewModel()
 		{
@@ -324,7 +338,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 			var result = target.CreateShiftTradeRequestSwapDetails(personRequestId);
 			Assert.That(result.First(),Is.SameAs(shiftTradeSwapDetailsViewModel));
-
 		}
 
 		[Test]
@@ -339,7 +352,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var personRequestProvider = MockRepository.GenerateMock<IPersonRequestProvider>();
 			var shiftTrade = MockRepository.GenerateStub<IShiftTradeRequest>();
 			var personRequest = MockRepository.GenerateStub<IPersonRequest>(); personRequest.Request = shiftTrade;
-			
+
 			var shiftTradeSwapDetailsViewModel = new ShiftTradeSwapDetailsViewModel()
 			{
 				TimeLineStartDateTime = timelineStartTime,
@@ -363,7 +376,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var result = target.CreateShiftTradeRequestSwapDetails(new Guid());
 			Assert.That(result.First().From.MinutesSinceTimeLineStart, Is.EqualTo(20));
 			Assert.That(result.First().To.MinutesSinceTimeLineStart, Is.EqualTo(180));
-
 		}
 
 		[Test]

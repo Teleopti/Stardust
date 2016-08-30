@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public IEnumerable<IPersonRequest> FindAllRequestsForAgentByType(IPerson person, Paging paging,
-			params RequestType[] requestTypes)
+			DateTime? earliestDate, params RequestType[] requestTypes)
 		{
 			return _requestRepository.Where(request => requestTypes.Contains(request.Request.RequestType));
 		}

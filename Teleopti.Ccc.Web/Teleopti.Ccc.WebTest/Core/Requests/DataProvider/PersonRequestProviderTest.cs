@@ -93,11 +93,37 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				RequestType.AbsenceRequest,RequestType.TextRequest
 			};
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
-			repository.Stub(x => x.FindAllRequestsForAgentByType(person, paging, requestTypes.ToArray())).Return(personRequests);
+			repository.Stub(x => x.FindAllRequestsForAgentByType(person, paging, null, requestTypes.ToArray())).Return(personRequests);
 
-			Assert.That(personRequests.Length, Is.EqualTo(target.RetrieveRequestsForLoggedOnUser(paging).Count()));
+			Assert.That(personRequests.Length, Is.EqualTo(target.RetrieveRequestsForLoggedOnUser(paging, false).Count()));
+			repository.AssertWasCalled(x => x.FindAllRequestsForAgentByType(person, paging, null, requestTypes.ToArray()));
+		}
 
-			repository.AssertWasCalled(x => x.FindAllRequestsForAgentByType(person, paging, requestTypes.ToArray()));
+		[Test]
+		public void ShouldFindAllRequestsForCurrentUserAfterSpecificDateWithPaging()
+		{
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var repository = MockRepository.GenerateMock<IPersonRequestRepository>();
+			var target = new PersonRequestProvider(repository, loggedOnUser, null, new FakePermissionProvider());
+			var person = new Person();
+			var paging = new Paging();
+			var personRequests = new[]
+			{
+				new PersonRequestFactory().CreatePersonRequest(),
+				new PersonRequestFactory().CreatePersonRequest()
+			};
+			var requestTypes = new List<RequestType>
+			{
+				RequestType.AbsenceRequest,
+				RequestType.TextRequest
+			};
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			var earliestDate = DateTime.UtcNow.AddDays(-10);
+			repository.Stub(x => x.FindAllRequestsForAgentByType(person, paging, earliestDate, requestTypes.ToArray()))
+				.Return(personRequests);
+
+			Assert.That(personRequests.Length, Is.EqualTo(target.RetrieveRequestsForLoggedOnUser(paging, true).Count()));
+			repository.AssertWasCalled(x => x.FindAllRequestsForAgentByType(person, paging, earliestDate, requestTypes.ToArray()));
 		}
 
 		[Test]
@@ -118,10 +144,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 				RequestType.AbsenceRequest,RequestType.TextRequest
 			};
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
-			repository.Stub(x => x.FindAllRequestsForAgentByType(person, paging, requestTypes.ToArray())).Return(personRequests);
+			repository.Stub(x => x.FindAllRequestsForAgentByType(person, paging, null, requestTypes.ToArray())).Return(personRequests);
 
-			Assert.That(personRequests.Length, Is.EqualTo(target.RetrieveRequestsForLoggedOnUser(paging).Count()));
-			repository.AssertWasCalled(x => x.FindAllRequestsForAgentByType(person, paging, requestTypes.ToArray()));
+			Assert.That(personRequests.Length, Is.EqualTo(target.RetrieveRequestsForLoggedOnUser(paging, false).Count()));
+			repository.AssertWasCalled(x => x.FindAllRequestsForAgentByType(person, paging, null, requestTypes.ToArray()));
 		}
 
 		[Test]
@@ -134,9 +160,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			((FakeLoggedOnUser)LoggedOnUser).SetFakeLoggedOnUser(person);
 			RequestRepository.Add(shiftTradeRequest);
 
-			var requestQueue = RequestProvider.RetrieveRequestsForLoggedOnUser(new Paging { Skip = 0, Take = 5 }).ToArray();
+			var requestQueue = RequestProvider.RetrieveRequestsForLoggedOnUser(new Paging {Skip = 0, Take = 5}, false).ToArray();
 
-			requestQueue.Count().Should().Be(0);
+			requestQueue.Length.Should().Be(0);
 			Assert.IsFalse(requestQueue.Any(requestFromProvider =>
 					requestFromProvider.Request.RequestType == RequestType.ShiftTradeRequest));
 		}
@@ -152,9 +178,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			RequestRepository.Add(shiftTradeRequest);
 			((FakePermissionProvider)PermissionProvider).PermitPerson(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, requestDate, person);
 
-			var requestQueue = RequestProvider.RetrieveRequestsForLoggedOnUser(new Paging { Skip = 0, Take = 5 }).ToArray();
+			var requestQueue = RequestProvider.RetrieveRequestsForLoggedOnUser(new Paging { Skip = 0, Take = 5 }, false).ToArray();
 
-			requestQueue.Count().Should().Be(1);
+			requestQueue.Length.Should().Be(1);
 			Assert.IsTrue(requestQueue.Count(requestFromProvider =>
 				requestFromProvider.Request.RequestType == RequestType.ShiftTradeRequest) == 1);
 		}
@@ -171,9 +197,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			RequestRepository.Add(shiftTradeRequest);
 			RequestRepository.Add(textRequest);
 
-			var requestQueue = RequestProvider.RetrieveRequestsForLoggedOnUser(new Paging {Skip = 0, Take = 5}).ToArray();
+			var requestQueue = RequestProvider.RetrieveRequestsForLoggedOnUser(new Paging {Skip = 0, Take = 5}, false).ToArray();
 
-			requestQueue.Count().Should().Be(1);
+			requestQueue.Length.Should().Be(1);
 			Assert.IsTrue(requestQueue.Any(requestFromProvider =>
 				requestFromProvider.Request.RequestType == RequestType.TextRequest));
 		}
@@ -198,11 +224,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			RequestRepository.Add(textRequest);
 			RequestRepository.Add(request);
 
-			var requestQueue = RequestProvider.RetrieveRequestsForLoggedOnUser(new Paging { Skip = 0, Take = 5 }).ToArray();
+			var requestQueue = RequestProvider.RetrieveRequestsForLoggedOnUser(new Paging { Skip = 0, Take = 5 }, false).ToArray();
 
-			requestQueue.Count().Should().Be(2);
+			requestQueue.Length.Should().Be(2);
 			Assert.IsTrue(requestQueue.Any(requestFromProvider =>
 				requestFromProvider.Request.RequestType == RequestType.TextRequest || requestFromProvider.Request.RequestType == RequestType.ShiftTradeRequest));
-		}		
+		}
 	}
 }

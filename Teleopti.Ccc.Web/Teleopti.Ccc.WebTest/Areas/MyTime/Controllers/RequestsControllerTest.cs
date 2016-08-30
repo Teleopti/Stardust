@@ -61,13 +61,31 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
 
-			var target = new RequestsController(viewModelFactory, null, null, null, null, new FakePermissionProvider(), null, null, null, null, null);
+			var target = new RequestsController(viewModelFactory, null, null, null, null,
+				new FakePermissionProvider(), null, null, null, null, null);
 			var model = new RequestViewModel[] { };
 			var paging = new Paging();
 
 			viewModelFactory.Stub(x => x.CreatePagingViewModel(paging)).Return(model);
 
-			var result = target.Requests(paging);
+			var result = target.Requests(paging, false);
+
+			result.Data.Should().Be.SameInstanceAs(model);
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		public void ShouldReturnViewModelAfterSpecificDateOnly()
+		{
+			var viewModelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
+
+			var target = new RequestsController(viewModelFactory, null, null, null, null,
+				new FakePermissionProvider(), null, null, null, null, null);
+			var model = new RequestViewModel[] { };
+			var paging = new Paging();
+
+			viewModelFactory.Stub(x => x.CreatePagingViewModel(paging, true)).Return(model);
+
+			var result = target.Requests(paging, true);
 
 			result.Data.Should().Be.SameInstanceAs(model);
 		}
@@ -272,7 +290,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			data.Should().Be.EqualTo(myTeamId);
 		}
 
-
 		[Test]
 		public void ShouldApproveShiftTradeRequest()
 		{
@@ -411,7 +428,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var data = doCancelAbsenceRequestMyTimeSpecificValidation(person, new DateTimePeriod(2016, 03, 02, 2016, 03, 03));
 			data.ErrorMessages.Should().Be.Empty();
 		}
-
 
 		[Test]
 		public void ShouldValidatePermissionForCancelAbsenceRequest()

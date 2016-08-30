@@ -72,9 +72,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWork]
 		[HttpGet]
-		public virtual JsonResult Requests(Paging paging)
+		public virtual JsonResult Requests(Paging paging, bool hideOldRequest)
 		{
-			return Json(_requestsViewModelFactory.CreatePagingViewModel(paging), JsonRequestBehavior.AllowGet);
+			return Json(_requestsViewModelFactory.CreatePagingViewModel(paging, hideOldRequest), JsonRequestBehavior.AllowGet);
 		}
 
 		[UnitOfWork]
