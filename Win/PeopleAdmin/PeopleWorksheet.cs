@@ -172,9 +172,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             view.Grid.ClipboardPaste -= gridWorksheetClipboardPaste;
             view.Grid.SelectionChanged -= gridWorksheetSelectionChanged;
             view.Grid.KeyDown -= gridWorksheetKeyDown;
+						view.Grid.MouseDown -= gridWorksheetMouseDown;
 
-            // Periods specific events.
-            view.Grid.CellButtonClicked -= gridWorksheetCellButtonClicked;
+			// Periods specific events.
+			view.Grid.CellButtonClicked -= gridWorksheetCellButtonClicked;
             view.Grid.DrawCellButton -= gridWorksheetDrawCellButton;
             view.Grid.CellClick -= gridWorksheetCellClick;
             view.Grid.CellDoubleClick -= gridWorksheetCellDoubleClick;
@@ -333,6 +334,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
                 view.Grid.ClipboardPaste += gridWorksheetClipboardPaste;
                 view.Grid.SelectionChanged += gridWorksheetSelectionChanged;
                 view.Grid.KeyDown += gridWorksheetKeyDown;
+								view.Grid.MouseDown += gridWorksheetMouseDown;
 
                 // Periods specific events.
                 view.Grid.CellButtonClicked += gridWorksheetCellButtonClicked;
@@ -382,7 +384,20 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             }
         }
 
-        private IAbsence getPersonAccountAbsenceType()
+		private void gridWorksheetMouseDown(object sender, MouseEventArgs e)
+		{
+			if (e.Button == MouseButtons.Right)
+			{
+				GridRangeInfo rangeInfo = _gridConstructor.View.Grid.PointToRangeInfo(e.Location);
+				if (!_gridConstructor.View.Grid.Selections.Ranges.AnyRangeIntersects(rangeInfo))
+				{
+					_gridConstructor.View.Grid.Selections.Clear(true);
+					_gridConstructor.View.Grid.CurrentCell.MoveTo(rangeInfo, GridSetCurrentCellOptions.None);
+				}
+			}
+		}
+
+		private IAbsence getPersonAccountAbsenceType()
         {
             IAbsence currentType = null;
 
