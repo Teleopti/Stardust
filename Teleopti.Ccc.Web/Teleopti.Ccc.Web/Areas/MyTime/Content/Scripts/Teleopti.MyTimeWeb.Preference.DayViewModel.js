@@ -140,7 +140,9 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 	};
 
 
-	this.ClearPreference = function() {
+	this.ClearPreference = function (decrementMustHave) {
+		var originalMustHave = self.MustHave();
+		if (originalMustHave && decrementMustHave) decrementMustHave(false, originalMustHave);
 		this.ReadPreference({});
 	};
 

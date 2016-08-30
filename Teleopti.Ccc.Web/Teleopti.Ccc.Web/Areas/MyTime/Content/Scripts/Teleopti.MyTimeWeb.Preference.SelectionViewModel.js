@@ -80,7 +80,9 @@ Teleopti.MyTimeWeb.Preference.SelectionViewModel = function (dayViewModels, maxM
         return self.currentMustHaves() < maxMustHave;
     });
 
-    self.deletePreference = deletePreferenceMethod;
+    self.deletePreference = function () {
+    	deletePreferenceMethod(updateMustHave);	     
+    }
     
     self.selectedPreferenceText = ko.computed(function () {
         if (self.selectedPreference()) {

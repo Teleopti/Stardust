@@ -65,7 +65,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		});
 	}
 
-	function _deletePreference() {
+	function _deletePreference(successCb) {
 		_hideExtendedPanels();
 		var dates = [];
 
@@ -83,17 +83,17 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				type: 'POST',
 				data: JSON.stringify({ dateList: dates }),
 				success: function (data) {
-					_onSuccessDeletePeriod(dates);
+					_onSuccessDeletePeriod(dates, successCb);
 				},
 				statusCode404: function () { },
 			});
 		}
 	}
 
-	function _onSuccessDeletePeriod(dates) {
+	function _onSuccessDeletePeriod(dates, successCb) {
 		dates.forEach(function(date) {
 			var dayViewModel = preferencesAndScheduleViewModel.DayViewModels[date];
-			dayViewModel.ClearPreference();
+			dayViewModel.ClearPreference(successCb);
 			dayViewModel.LoadFeedback();
 		});
 
