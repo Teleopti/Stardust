@@ -118,6 +118,19 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Add(Restrictions.In("Id", ids))
 				.SetFetchMode("requests", FetchMode.Join)
 				.SetFetchMode("Person", FetchMode.Join)
+				.SetFetchMode("Person.WorkflowControlSet", FetchMode.Join)
+				.SetFetchMode("Person.PersonPeriodCollection", FetchMode.Join)
+				.SetFetchMode("Person.PersonPeriodCollection.PersonSkillCollection", FetchMode.Join)
+				.SetFetchMode("Person.PersonSchedulePeriodCollection", FetchMode.Join)
+				.SetFetchMode("Person.PersonPeriodCollection.PersonSkillCollection.Skill", FetchMode.Join)
+				.SetFetchMode("Person.PersonPeriodCollection.PersonSkillCollection.Skill.WorkloadCollection", FetchMode.Join)
+				.SetFetchMode("Person.PersonPeriodCollection.PersonSkillCollection.Skill.WorkloadCollection.TemplateWeekCollection", FetchMode.Join)
+				.SetFetchMode("Person.PersonPeriodCollection.PersonSkillCollection.Skill.WorkloadCollection.TemplateWeekCollection.OpenHourList", FetchMode.Join)
+				.SetFetchMode("Person.PersonPeriodCollection.PersonContract.Contract", FetchMode.Join)
+				.SetFetchMode("Person.PersonPeriodCollection.PersonContract.PartTimePercentage", FetchMode.Join)
+				.SetFetchMode("Person.PersonPeriodCollection.PersonContract.ContractSchedule", FetchMode.Join)
+				.SetFetchMode("Person.PersonPeriodCollection.PersonContract.ContractSchedule.ContractScheduleWeeks", FetchMode.Join)
+				.SetFetchMode("Person.PersonPeriodCollection.PersonContract.ContractSchedule.ContractScheduleWeeks.workDays", FetchMode.Join)
 				.List<IPersonRequest>();
 			if (returnPersonRequests != null)
 			{
@@ -127,6 +140,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					if (shiftTrade != null)
 					{
 						LazyLoadingManager.Initialize(shiftTrade.ShiftTradeSwapDetails);
+					}
+
+					var absenceRequest = returnPersonRequest.Request as IAbsenceRequest;
+					if (absenceRequest != null)
+					{
+						LazyLoadingManager.Initialize(absenceRequest.Absence);
 					}
 				}
 			}

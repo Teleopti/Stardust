@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			_alreadyAbsent = alreadyAbsence;
 			if (CanDeny(isAutoDeny))
 			{
-				RequestState.Deny();
+				RequestState.Deny(isAutoDeny);
 			}
 			
 			var request = getRequest();
@@ -643,7 +643,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				get { return false; }
 			}
 
-			protected internal virtual void Deny()
+			protected internal virtual void Deny(bool isAutoDeny)
 			{
 				throw new InvalidRequestStateTransitionException(string.Format(CultureInfo.InvariantCulture,
 																			   "This transition is not allowed (from {0} to denied).",
@@ -826,9 +826,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				PersonRequest.moveToApproved(isAutoGrant);
 			}
 
-			protected internal override void Deny()
+			protected internal override void Deny(bool isAutoDeny)
 			{
-				PersonRequest.moveToDenied();
+				PersonRequest.moveToDenied(isAutoDeny);
 			}
 
 			protected internal override string StatusText
@@ -847,10 +847,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				: base(personRequest, (int) PersonRequestStatus.Pending)
 			{
 			}
+			
 
-			protected internal override void Deny()
+			protected internal override void Deny(bool isAutoDeny)
 			{
-				PersonRequest.moveToDenied();
+				PersonRequest.moveToDenied(isAutoDeny);
 			}
 
 			protected internal override void Approve(bool isAutoGrant)
@@ -906,7 +907,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			{
 			}
 
-			protected internal override void Deny()
+			protected internal override void Deny(bool isAutoDeny)
 			{
 				PersonRequest.moveToDenied(true);
 			}

@@ -5,8 +5,8 @@ using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -43,6 +43,9 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private IProcessAbsenceRequest _process;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IToggleManager _toggleManager;
+		private readonly IHandleCommand<ApproveRequestCommand> _approveRequestCommandHandler;
+		private readonly IHandleCommand<DenyRequestCommand> _denyRequestCommandHandler;
+		private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
 		public MultiAbsenceRequestsUpdater(IPersonAbsenceAccountProvider personAbsenceAccountProvider,
 			IResourceCalculationPrerequisitesLoader prereqLoader, ICurrentScenario scenarioRepository,
@@ -54,7 +57,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			IResourceOptimizationHelper resourceOptimizationHelper,
 			IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification,
 			IScheduleDifferenceSaver scheduleDictionarySaver, IPersonAccountUpdater personAccountUpdater,
-			IToggleManager toggleManager)
+			IToggleManager toggleManager, IHandleCommand<ApproveRequestCommand> approveRequestCommandHandler, IHandleCommand<DenyRequestCommand> denyRequestCommandHandler, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
 		{
 			_personAbsenceAccountProvider = personAbsenceAccountProvider;
 			_prereqLoader = prereqLoader;
@@ -71,9 +74,12 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			_scheduleDictionarySaver = scheduleDictionarySaver;
 			_personAccountUpdater = personAccountUpdater;
 			_toggleManager = toggleManager;
+			_approveRequestCommandHandler = approveRequestCommandHandler;
+			_denyRequestCommandHandler = denyRequestCommandHandler;
+			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 		}
 
-		public bool UpdateAbsenceRequest(List<IPersonRequest> personRequests, IUnitOfWork unitOfWork,
+		public bool UpdateAbsenceRequest(List<IPersonRequest> personRequests,
 										 ISchedulingResultStateHolder schedulingResultStateHolder, IProcessAbsenceRequest process, IEnumerable<IAbsenceRequestValidator> validators)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
@@ -89,7 +95,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 					aggregatedValidatorList.UnionWith(validators ?? mergedPeriod.GetSelectedValidatorList());
 				}
 			}
-
+			
 			loadDataForResourceCalculation(personRequests, aggregatedValidatorList);
 
 			foreach (var personRequest in personRequests)
@@ -112,33 +118,39 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				}
 				else
 				{
-					if (_toggleManager.IsEnabled(Toggles.Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850))
+					//if (_toggleManager.IsEnabled(Toggles.Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850))
+					//{
+					//	updatePersonAccountBalancesForAbsence(unitOfWork, absenceRequest);
+					//}
+					IPersonAccountCollection allAccounts;
+					IScenario currentScenario;
+					using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 					{
-						updatePersonAccountBalancesForAbsence(unitOfWork, absenceRequest);
+						allAccounts = _personAbsenceAccountProvider.Find(absenceRequest.Person);
+						affectedPersonAbsenceAccount = allAccounts.Find(absenceRequest.Absence);
+						currentScenario = _scenarioRepository.Current();
 					}
-
-					var allAccounts = _personAbsenceAccountProvider.Find(absenceRequest.Person);
-					affectedPersonAbsenceAccount = allAccounts.Find(absenceRequest.Absence);
-
 					var mergedPeriod = workflowControlSet.GetMergedAbsenceRequestOpenPeriod(absenceRequest);
-					validatorList = (validators ?? mergedPeriod.GetSelectedValidatorList()).ToArray();
-					_process = process ?? mergedPeriod.AbsenceRequestProcess;
+						validatorList = (validators ?? mergedPeriod.GetSelectedValidatorList()).ToArray();
+						_process = process ?? mergedPeriod.AbsenceRequestProcess;
 
-				
-					personAccountBalanceCalculator = getPersonAccountBalanceCalculator(affectedPersonAbsenceAccount, absenceRequest,
-																					   personRequest, dateOnlyPeriod);
 
-					setupUndoContainersAndTakeSnapshot(undoRedoContainer, allAccounts);
+						personAccountBalanceCalculator = getPersonAccountBalanceCalculator(affectedPersonAbsenceAccount, absenceRequest,
+																						   personRequest, dateOnlyPeriod);
 
-					checkIfPersonIsAlreadyAbsentDuringRequestPeriod(absenceRequest, personRequest);
+						setupUndoContainersAndTakeSnapshot(undoRedoContainer, allAccounts);
 
-					var businessRules = NewBusinessRuleCollection.Minimum();
+						checkIfPersonIsAlreadyAbsentDuringRequestPeriod(absenceRequest, personRequest);
 
-					requestApprovalServiceScheduler = _requestFactory.GetRequestApprovalService(businessRules, _scenarioRepository.Current(), schedulingResultStateHolder);
+						var businessRules = NewBusinessRuleCollection.Minimum();
+
+						requestApprovalServiceScheduler = _requestFactory.GetRequestApprovalService(businessRules, currentScenario, schedulingResultStateHolder);
+					
 					simulateApproveAbsence(absenceRequest, requestApprovalServiceScheduler);
 
-					//Will issue a rollback for simulated schedule data
-					handleInvalidSchedule();
+						//Will issue a rollback for simulated schedule data
+						handleInvalidSchedule();
+					
 				}
 
 				var requiredForProcessingAbsenceRequest = new RequiredForProcessingAbsenceRequest(
@@ -164,13 +176,50 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 							   requiredForHandlingAbsenceRequest, validatorList);
 
 				//Ugly fix to get the number updated for person account. Don't try this at home!
-				if (personRequest.IsApproved)
+				using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 				{
-					if (affectedPersonAbsenceAccount != null)
+
+					if (personRequest.IsApproved)
 					{
-						trackAccounts(affectedPersonAbsenceAccount, dateOnlyPeriod, absenceRequest);
-						unitOfWork.Merge(affectedPersonAbsenceAccount);
+						//if (affectedPersonAbsenceAccount != null)
+						//{
+						//	trackAccounts(affectedPersonAbsenceAccount, dateOnlyPeriod, absenceRequest);
+						//	unitOfWork.Merge(affectedPersonAbsenceAccount);
+						//}
+
+						var approveCommand = new ApproveRequestCommand()
+						{
+							PersonRequestId = personRequest.Id.GetValueOrDefault()
+						};
+
+						_approveRequestCommandHandler.Handle(approveCommand);
+						if (approveCommand.ErrorMessages != null)
+						{
+							logger.Warn(approveCommand.ErrorMessages);
+						}
 					}
+					else
+					{
+						var denyCommand = new DenyRequestCommand()
+						{
+							PersonRequestId = personRequest.Id.GetValueOrDefault(),
+							ReplyMessage = personRequest.DenyReason
+						};
+						_denyRequestCommandHandler.Handle(denyCommand);
+						if (denyCommand.ErrorMessages != null)
+						{
+							logger.Warn(denyCommand.ErrorMessages);
+						}
+					}
+					try
+					{
+						uow.PersistAll();
+					}
+					catch (OptimisticLockException)
+					{
+						
+					}
+
 				}
 				//try
 				//{
@@ -246,33 +295,33 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				requiredForHandlingAbsenceRequest,
 				validatorList);
 
-			if (personRequest.IsApproved)
-			{
-				try
-				{
-					persistScheduleChanges(absenceRequest.Person);
-				}
-				catch (ValidationException validationException)
-				{
-					logger.Error("A validation error occurred. Review the error log. Processing cannot continue.", validationException);
-					return false;
-				}
+			//if (personRequest.IsApproved)
+			//{
+			//	try
+			//	{
+			//		persistScheduleChanges(absenceRequest.Person);
+			//	}
+			//	catch (ValidationException validationException)
+			//	{
+			//		logger.Error("A validation error occurred. Review the error log. Processing cannot continue.", validationException);
+			//		return false;
+			//	}
 
-			}
+			//}
 
 			return true;
 		}
 
-		private void updatePersonAccountBalancesForAbsence(IUnitOfWork unitOfWork, IAbsenceRequest absenceRequest)
-		{
-			if (_personAccountUpdater.UpdateForAbsence(
-				absenceRequest.Person,
-				absenceRequest.Absence,
-				new DateOnly(absenceRequest.Period.StartDateTime)))
-			{
-				unitOfWork.PersistAll();
-			}
-		}
+		//private void updatePersonAccountBalancesForAbsence(IUnitOfWork unitOfWork, IAbsenceRequest absenceRequest)
+		//{
+		//	if (_personAccountUpdater.UpdateForAbsence(
+		//		absenceRequest.Person,
+		//		absenceRequest.Absence,
+		//		new DateOnly(absenceRequest.Period.StartDateTime)))
+		//	{
+		//		unitOfWork.PersistAll();
+		//	}
+		//}
 
 		private void handleNoWorkflowControlSet(IAbsenceRequest absenceRequest, IPersonRequest personRequest)
 		{
@@ -298,50 +347,53 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 		private void loadDataForResourceCalculation(List<IPersonRequest> personRequests, IEnumerable<IAbsenceRequestValidator> validatorList)
 		{
-			var shouldLoadDataForResourceCalculation = validatorList != null && validatorList.Any(v => typeof(StaffingThresholdValidator) == v.GetType());
-
-			var totalPeriod = personRequests.First().Request.Period;
-			var persons = new List<IPerson>();
-
-			foreach (var personRequest in personRequests)
+			using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				if (totalPeriod.StartDateTime > personRequest.Request.Period.StartDateTime)
-				{
-					totalPeriod = new DateTimePeriod(personRequest.Request.Period.StartDateTime, totalPeriod.EndDateTime);
-				}
-				if (totalPeriod.EndDateTime < personRequest.Request.Period.EndDateTime)
-				{
-					totalPeriod = new DateTimePeriod(totalPeriod.StartDateTime, personRequest.Request.Period.EndDateTime);
-				}
-				persons.Add(personRequest.Person);
-			}
-			totalPeriod.ChangeStartTime(TimeSpan.FromDays(-1));
 
-			if (shouldLoadDataForResourceCalculation)
-			{
-				_prereqLoader.Execute();
-				_loadSchedulingStateHolderForResourceCalculation.Execute(_scenarioRepository.Current(),
-																		 totalPeriod,
-																		 persons, _schedulingResultStateHolder);
-				if (logger.IsDebugEnabled)
+				var shouldLoadDataForResourceCalculation = validatorList != null && validatorList.Any(v => typeof(StaffingThresholdValidator) == v.GetType());
+
+				var totalPeriod = personRequests.First().Request.Period;
+				var persons = new List<IPerson>();
+
+				foreach (var personRequest in personRequests)
 				{
-					logger.DebugFormat("Loaded schedules and data needed for resource calculation. (Period = {0})",
-										totalPeriod);
+					if (totalPeriod.StartDateTime > personRequest.Request.Period.StartDateTime)
+					{
+						totalPeriod = new DateTimePeriod(personRequest.Request.Period.StartDateTime, totalPeriod.EndDateTime);
+					}
+					if (totalPeriod.EndDateTime < personRequest.Request.Period.EndDateTime)
+					{
+						totalPeriod = new DateTimePeriod(totalPeriod.StartDateTime, personRequest.Request.Period.EndDateTime);
+					}
+					persons.Add(personRequest.Person);
 				}
-			}
-			else
-			{
-				_loadSchedulesForRequestWithoutResourceCalculation.Execute(_scenarioRepository.Current(),
-																		 totalPeriod,
-																		 persons, _schedulingResultStateHolder);
-				if (logger.IsDebugEnabled)
+				totalPeriod.ChangeStartTime(TimeSpan.FromDays(-1));
+
+				if (shouldLoadDataForResourceCalculation)
 				{
-					logger.DebugFormat("Loaded schedules and data needed for absence request handling. (Period = {0})",
-										totalPeriod);
+					_prereqLoader.Execute();
+					_loadSchedulingStateHolderForResourceCalculation.Execute(_scenarioRepository.Current(),
+																			 totalPeriod,
+																			 persons, _schedulingResultStateHolder);
+					if (logger.IsDebugEnabled)
+					{
+						logger.DebugFormat("Loaded schedules and data needed for resource calculation. (Period = {0})",
+										   totalPeriod);
+					}
+				}
+				else
+				{
+					_loadSchedulesForRequestWithoutResourceCalculation.Execute(_scenarioRepository.Current(),
+																			   totalPeriod,
+																			   persons, _schedulingResultStateHolder);
+					if (logger.IsDebugEnabled)
+					{
+						logger.DebugFormat("Loaded schedules and data needed for absence request handling. (Period = {0})",
+										   totalPeriod);
+					}
 				}
 			}
 		}
-
 
 		private static void simulateApproveAbsence(IAbsenceRequest absenceRequest, IRequestApprovalService requestApprovalServiceScheduler)
 		{

@@ -6,7 +6,7 @@ namespace Teleopti.Interfaces
 {
 	public interface IMultiAbsenceRequestProcessor	
 	{
-		void ProcessAbsenceRequest(IUnitOfWork unitOfWork, List<IPersonRequest> personRequests);
+		void ProcessAbsenceRequest(List<IPersonRequest> personRequests);
 		void ApproveAbsenceRequestWithValidators(List<IPersonRequest> personRequest,
 												 IUnitOfWork unitOfWork, IEnumerable<IAbsenceRequestValidator> validators);
 	}

@@ -40,41 +40,50 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		}
 
 		[AsSystem]
-		[UnitOfWork]
+	//	[UnitOfWork]
 		public virtual void Handle(NewMultiAbsenceRequestsCreatedEvent @event)
 		{
 			checkPersonRequest(@event.PersonRequestIds);
+
 			if(!_personRequests.IsNullOrEmpty())
-				_absenceRequestProcessor.ProcessAbsenceRequest(_currentUnitOfWorkFactory.Current().CurrentUnitOfWork(), _personRequests);
+				_absenceRequestProcessor.ProcessAbsenceRequest(_personRequests);
 		}
 
 
 		private void checkPersonRequest(List<Guid> personRequestIds)
 		{
-			_personRequests = new List<IPersonRequest>();
-
-			var personRequests = _personRequestRepository.Find(personRequestIds);
-			foreach (var personRequest in personRequests)
+			using (var uow =_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				if (personRequestSpecification.IsSatisfiedBy(personRequest))
+				_personRequests = new List<IPersonRequest>();
+
+				var personRequests = _personRequestRepository.Find(personRequestIds);
+				foreach (var personRequest in personRequests)
 				{
-					if (logger.IsWarnEnabled)
+					if (personRequestSpecification.IsSatisfiedBy(personRequest))
 					{
-						logger.WarnFormat(
-							"No person request found with the supplied Id, or the request is not in New status mode. (Id = {0})",
-							personRequest.Id);
+						if (logger.IsWarnEnabled)
+						{
+							logger.WarnFormat(
+								"No person request found with the supplied Id, or the request is not in New status mode. (Id = {0})",
+								personRequest.Id);
+						}
 					}
-				}
-				else if (absenceRequestSpecification.IsSatisfiedBy((IAbsenceRequest)personRequest.Request))
-				{
-					if (logger.IsWarnEnabled)
+					else if (absenceRequestSpecification.IsSatisfiedBy((IAbsenceRequest) personRequest.Request))
 					{
-						logger.WarnFormat("The found person request is not of type absence request. (Id = {0})",
-										  personRequest.Id);
+						if (logger.IsWarnEnabled)
+						{
+							logger.WarnFormat("The found person request is not of type absence request. (Id = {0})",
+											  personRequest.Id);
+						}
 					}
+					else
+					{
+						personRequest.Pending();
+						_personRequests.Add(personRequest);
+					}
+						
 				}
-				else
-					_personRequests.Add(personRequest);
+				uow.PersistAll();
 			}
 		}
 
