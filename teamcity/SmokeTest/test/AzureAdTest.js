@@ -8,7 +8,7 @@ describe('azure ad signin should work', function() {
 	before(function() {
 		MytimePage.open();
 		MytimePage.signin();
-    });
+    }, 2);
 	
     it('should work', function () {
 		MytimePage.signout();
@@ -16,5 +16,5 @@ describe('azure ad signin should work', function() {
 		IdentityProvidersPage.azureadProvider.click();
 		MicrosoftLoginPage.signin();
 		MytimePage.usernameLabel.waitForExist(60 * 1000);
-    });
+    }, 2);
 });
