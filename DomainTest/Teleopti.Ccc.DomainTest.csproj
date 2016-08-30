@@ -176,6 +176,7 @@
     <Compile Include="ApplicationLayer\ReplyRequestCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Request\AnalyticsRequestUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\ShiftStartEndTimeTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentState\PersonChangedTeamTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\Mappings\MappingsTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteAdherence\OptimizeReadingDataFromDatabase.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TeamAdherence\OptimizeReadingDataFromDatabase.cs" />

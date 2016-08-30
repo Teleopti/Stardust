@@ -266,5 +266,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			Target.Get(personId)
 				.Should().Be.Null();
 		}
+
+		[Test]
+		public void ShouldUpdatePersonAssociation()
+		{
+			var personId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var model = new AgentStateReadModelForTest { PersonId = personId };
+			Target.Persist(model);
+
+			Target.UpdateAssociation(personId, teamId, siteId);
+
+			var result = Target.Get(personId);
+			result.TeamId.Should().Be(teamId);
+			result.SiteId.Should().Be(siteId);
+		}
 	}
 }

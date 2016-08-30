@@ -190,7 +190,6 @@
     <Compile Include="ApplicationLayer\Events\NewMultiAbsenceRequestsCreatedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonRequestChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateReadModelCleaner.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\IUpdatePersonAssociationOnAgentStateReadModel.cs" />
     <Compile Include="ApplicationLayer\SiteOpenHours\ISiteOpenHoursPersister.cs" />
     <Compile Include="ApplicationLayer\SiteOpenHours\ISiteOpenHoursSpecification.cs" />
     <Compile Include="ApplicationLayer\SiteOpenHours\SiteOpenHoursCheckItem.cs" />

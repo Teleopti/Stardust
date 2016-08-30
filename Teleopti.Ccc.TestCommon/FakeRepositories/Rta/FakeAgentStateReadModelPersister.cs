@@ -50,6 +50,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return null;
 		}
 
+		public void UpdateAssociation(Guid personId, Guid teamId, Guid? siteId)
+		{
+			AgentStateReadModel removed;
+			if (!_data.TryRemove(personId, out removed)) return;
+			removed.TeamId = teamId;
+			removed.SiteId = siteId;
+			_data.AddOrUpdate(personId, removed, (g, m) => removed);
+		}
+
 
 		public IEnumerable<AgentStateReadModel> Load(IEnumerable<IPerson> persons)
 		{

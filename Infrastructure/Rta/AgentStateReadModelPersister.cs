@@ -177,6 +177,23 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.FirstOrDefault();
 		}
 
+		public void UpdateAssociation(Guid personId, Guid teamId, Guid? siteId)
+		{
+			_unitOfWork.Current().Session()
+				.CreateSQLQuery(@"
+					UPDATE [ReadModel].[AgentState]
+					SET
+						SiteId = :SiteId,
+						TeamId = :TeamId
+					WHERE 
+						PersonId = :PersonId
+				")
+				.SetParameter("PersonId", personId)
+				.SetParameter("SiteId", siteId)
+				.SetParameter("TeamId", teamId)
+				.ExecuteUpdate();
+		}
+
 		private class internalModel : AgentStateReadModel
 		{
 			public new string Shift { get; set; }

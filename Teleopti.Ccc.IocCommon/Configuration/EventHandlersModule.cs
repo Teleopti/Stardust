@@ -161,9 +161,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		        builder.RegisterType<TeamInAlarmFromAgentStatesReadModelReader>()
 			        .As<ITeamOutOfAdherenceReadModelReader>()
 			        .SingleInstance();
-		        builder.RegisterType<UpdatePersonAssociationOnAgentStateReadModel>()
-			        .As<IUpdatePersonAssociationOnAgentStateReadModel>()
-			        .SingleInstance();
 	        }
 	        else
 	        {
@@ -173,9 +170,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		        builder.RegisterType<TeamOutOfAdherenceReadModelPersister>()
 			        .As<ITeamOutOfAdherenceReadModelReader>()
 			        .SingleInstance();
-				builder.RegisterType<DontUpdatePersonAssociationOnAgentStateReadModel>()
-					 .As<IUpdatePersonAssociationOnAgentStateReadModel>()
-					 .SingleInstance();
 			}
 
 	        builder.RegisterType<IntervalLengthFetcher>().As<IIntervalLengthFetcher>().SingleInstance();
