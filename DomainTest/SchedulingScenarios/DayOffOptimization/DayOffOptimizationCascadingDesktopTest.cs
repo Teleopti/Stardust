@@ -91,8 +91,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			agents.Count(agent => stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(6)).HasDayOff()).Should().Be.EqualTo(1);
 		}
 
-
-		[Test, Ignore("Fix soon... Fixed by making sure SchedulingStateHolderAllSkillExtractor only returns primary skill")]
+		[Test]
 		public void ShouldBaseMoveOnNonShoveledResourceCalculation()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon

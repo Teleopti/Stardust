@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -10,7 +11,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         IScheduleResultDataExtractor CreateAllSkillsDataExtractor(DateOnlyPeriod selectedPeriod, ISchedulingResultStateHolder stateHolder, IAdvancedPreferences optimizerPreferences);
 
-	    IScheduleResultDataExtractor CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(IScheduleMatrixPro scheduleMatrix, ISchedulingOptions schedulingOptions);
+		IScheduleResultDataExtractor CreatePrimarySkillsDataExtractor(DateOnlyPeriod selectedPeriod, ISchedulingResultStateHolder stateHolder, IAdvancedPreferences optimizerPreferences, IList<IScheduleMatrixPro> allScheduleMatrixPros );
+
+		IScheduleResultDataExtractor CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(IScheduleMatrixPro scheduleMatrix, ISchedulingOptions schedulingOptions);
     }
 
     public class ScheduleResultDataExtractorProvider : IScheduleResultDataExtractorProvider
@@ -57,6 +60,24 @@ namespace Teleopti.Ccc.Domain.Optimization
                 dailySkillForecastAndScheduledValueCalculator,
                 allSkillExtractor);
         }
+
+		public IScheduleResultDataExtractor CreatePrimarySkillsDataExtractor(DateOnlyPeriod selectedPeriod, ISchedulingResultStateHolder stateHolder, IAdvancedPreferences optimizerPreferences, IList<IScheduleMatrixPro> allScheduleMatrixPros)
+		{
+			ISkillExtractor primarySkillExtractor = new ScheduleMatrixesPrimarySkillExtractor(allScheduleMatrixPros, _personalSkillsProvider);
+			IDailySkillForecastAndScheduledValueCalculator dailySkillForecastAndScheduledValueCalculator;
+			if (optimizerPreferences.UseTweakedValues)
+			{
+				dailySkillForecastAndScheduledValueCalculator = new DailyBoostedSkillForecastAndScheduledValueCalculator(() => stateHolder);
+				return new RelativeBoostedDailyDifferencesByAllSkillsExtractor(selectedPeriod,
+																			   dailySkillForecastAndScheduledValueCalculator,
+																			   primarySkillExtractor);
+			}
+			dailySkillForecastAndScheduledValueCalculator = new DailySkillForecastAndScheduledValueCalculator(() => stateHolder);
+			return new RelativeDailyDifferencesByAllSkillsExtractor(
+				selectedPeriod,
+				dailySkillForecastAndScheduledValueCalculator,
+				primarySkillExtractor);
+		}
 
 		public IScheduleResultDataExtractor CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(IScheduleMatrixPro scheduleMatrix, ISchedulingOptions schedulingOptions)
 		{

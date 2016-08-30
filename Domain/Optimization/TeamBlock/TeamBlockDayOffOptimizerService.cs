@@ -117,17 +117,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				tagSetter);
 			schedulingOptions.DayOffTemplate = schedulerStateHolder.CommonStateHolder.DefaultDayOffTemplate;
 
-			IScheduleResultDataExtractor allSkillsDataExtractor =
-	_optimizerHelper.CreateAllSkillsDataExtractor(optimizationPreferences.Advanced, selectedPeriod, schedulerStateHolder.SchedulingResultState);
+			
+			var skillsDataExtractor = _optimizerHelper.CreateTeamBlockAllSkillsDataExtractor(optimizationPreferences.Advanced, selectedPeriod, schedulerStateHolder.SchedulingResultState, allPersonMatrixList);
+			var periodValueCalculatorForAllSkills = _optimizerHelper.CreatePeriodValueCalculator(optimizationPreferences.Advanced, skillsDataExtractor);
 
-			IPeriodValueCalculator periodValueCalculatorForAllSkills =
-	_optimizerHelper.CreatePeriodValueCalculator(optimizationPreferences.Advanced,
-		allSkillsDataExtractor);
-
-			ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService
-	= new SmartDayOffBackToLegalStateService(
-		100,
-		_dayOffDecisionMaker);
+			ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService = 
+				new SmartDayOffBackToLegalStateService(
+				100,
+				_dayOffDecisionMaker);
 
 			ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder =
 				new TeamBlockDaysOffMoveFinder(_scheduleResultDataExtractorProvider,

@@ -392,6 +392,7 @@
     <Compile Include="Optimization\OptimizerHelperHelper.cs" />
     <Compile Include="Optimization\DayOffOptimizationDesktop.cs" />
     <Compile Include="Optimization\ScheduleBlankSpots.cs" />
+    <Compile Include="Optimization\ScheduleMatrixesPrimarySkillExtractor.cs" />
     <Compile Include="Optimization\SmartDayOffBackToLegalStateSolverContainer.cs" />
     <Compile Include="Optimization\WorkShiftBackToLegalStateServiceProFactory.cs" />
     <Compile Include="Repositories\IAnalyticsAbsenceRepository.cs" />

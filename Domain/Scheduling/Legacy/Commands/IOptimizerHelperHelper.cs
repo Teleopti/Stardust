@@ -15,5 +15,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IAdvancedPreferences advancedPreferences,
 			DateOnlyPeriod selectedPeriod,
 			ISchedulingResultStateHolder stateHolder);
+
+		IScheduleResultDataExtractor CreateTeamBlockAllSkillsDataExtractor(
+			IAdvancedPreferences advancedPreferences,
+			DateOnlyPeriod selectedPeriod,
+			ISchedulingResultStateHolder stateHolder,
+			IList<IScheduleMatrixPro> allScheduleMatrixPros);
 	}
 }

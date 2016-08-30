@@ -79,5 +79,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IScheduleResultDataExtractor allSkillsDataExtractor = dataExtractorProvider.CreateAllSkillsDataExtractor(selectedPeriod, stateHolder, advancedPreferences);
 			return allSkillsDataExtractor;
 		}
+
+		public IScheduleResultDataExtractor CreateTeamBlockAllSkillsDataExtractor(
+			IAdvancedPreferences advancedPreferences,
+			DateOnlyPeriod selectedPeriod,
+			ISchedulingResultStateHolder stateHolder,
+			IList<IScheduleMatrixPro> allScheduleMatrixPros )
+		{
+			IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider(_personalSkillsProvider);
+			IScheduleResultDataExtractor primarySkillsDataExtractor = dataExtractorProvider.CreatePrimarySkillsDataExtractor(selectedPeriod, stateHolder, advancedPreferences, allScheduleMatrixPros);
+			return primarySkillsDataExtractor;
+		}
 	}
 }
