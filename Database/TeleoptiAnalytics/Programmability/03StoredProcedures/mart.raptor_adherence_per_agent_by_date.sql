@@ -6,7 +6,7 @@ GO
 -- Author:      Xinfeng
 -- Create date: 2014-07-22
 -- Example: EXEC [mart].[raptor_adherence_per_agent_by_date]
---               @threshold=0.58, -- 58%
+--               @threshold=0.58, --58%
 --               @local_date='2014-05-29',
 --               @adherence_id=2,
 --               @time_zone_code='UTC';
@@ -31,8 +31,8 @@ CREATE TABLE #fact_schedule_deviation_raw (
     shift_startdate_local_id int,
     shift_startdate_id INT,
     shift_startinterval_id int,
-    date_id INT,
-    interval_id INT,
+    utc_date_id INT,
+    utc_interval_id INT,
     person_id INT,
     deviation_schedule_ready_s INT,
     deviation_schedule_s INT,
@@ -51,8 +51,8 @@ CREATE TABLE #fact_schedule_deviation (
     shift_startdate_local_id int,
     shift_startdate_id INT,
     shift_startinterval_id int,
-    date_id INT,
-    interval_id INT,
+    utc_date_id INT,
+    utc_interval_id INT,
     person_id INT,
     deviation_schedule_ready_s INT,
     deviation_schedule_s INT,
@@ -129,8 +129,8 @@ CREATE TABLE #person_id (
 CREATE TABLE #bridge_time_zone (
     local_date_id int,
     local_interval_id int,
-    date_id int,
-    interval_id int,
+    utc_date_id int,
+    utc_interval_id int,
     date_date datetime
 )
 
@@ -138,16 +138,13 @@ CREATE TABLE #bridge_time_zone (
 --Declares
 ------------
 DECLARE @intervals_per_day INT
-DECLARE @intervals_length_s INT
-DECLARE @hide_time_zone bit
 DECLARE @selected_adherence_type nvarchar(100)
-DECLARE @date TABLE (date_from_id INT, date_to_id INT)
 DECLARE @nowutcDateOnly smalldatetime
 DECLARE @nowutcInterval smalldatetime
 DECLARE @nowLocalDateId int
 DECLARE @nowLocalIntervalId smallint
-DECLARE @minUtcDateId int
-DECLARE @maxUtcDateId int
+DECLARE @minLocalDateId int
+DECLARE @maxLocalDateId int
 
 SELECT @nowutcDateOnly = DATEADD(dd, 0, DATEDIFF(dd, 0, GETUTCDATE()))
 SELECT @nowutcInterval = DATEADD(minute,DATEPART(minute, GETUTCDATE()),DATEADD(hour, DATEPART(hour, GETUTCDATE()),'1900-01-01 00:00:00'))
@@ -155,82 +152,72 @@ SELECT @nowutcInterval = DATEADD(minute,DATEPART(minute, GETUTCDATE()),DATEADD(h
 ------------
 --Init
 ------------
-SELECT @selected_adherence_type= adherence_name FROM mart.adherence_calculation WHERE adherence_id=@adherence_id
-SELECT @intervals_per_day = COUNT(interval_id) FROM mart.dim_interval
+SELECT @selected_adherence_type = adherence_name FROM [mart].[adherence_calculation] WHERE adherence_id = @adherence_id
+SELECT @intervals_per_day = COUNT(interval_id) FROM [mart].[dim_interval]
 
 --handle empty Analytics
-IF @intervals_per_day = 0 SET @intervals_per_day=96
-
---how many seconds per interval
-SELECT @intervals_length_s = 1440*60/@intervals_per_day
+IF @intervals_per_day = 0 SET @intervals_per_day = 96
 
 --Get needed dates and intervals from bridge time zone into temp table
 INSERT INTO #bridge_time_zone
-SELECT local_date_id        = d.date_id,
-       local_interval_id    = i.interval_id,
-       date_id              = b.date_id,
-       interval_id          = b.interval_id,
-       date_date            = d.date_date
-  FROM mart.bridge_time_zone b
- INNER JOIN mart.dim_date d
+SELECT local_date_id       = d.date_id,
+       local_interval_id   = i.interval_id,
+       utc_date_id         = b.date_id,
+       utc_interval_id     = b.interval_id,
+       date_date           = d.date_date
+  FROM [mart].[bridge_time_zone] b
+ INNER JOIN [mart].[dim_date] d
     ON b.local_date_id = d.date_id
    AND d.date_date = @local_date
- INNER JOIN mart.dim_interval i
+ INNER JOIN [mart].[dim_interval] i
     ON b.local_interval_id = i.interval_id
- INNER JOIN mart.dim_time_zone t
+ INNER JOIN [mart].[dim_time_zone] t
     ON b.time_zone_id = t.time_zone_id
  WHERE t.time_zone_code = @time_zone_code
 
---Get the min/max UTC date_id
-SELECT @minUtcDateId = MIN(b.date_id),
-       @maxUtcDateId = MAX(b.date_id)
+--Get the min/max local date_id
+SELECT @minLocalDateId = MIN(b.local_date_id),
+       @maxLocalDateId = MAX(b.local_date_id)
   FROM #bridge_time_zone b
 
 --Get Now() in local date/interval Id variables
 SELECT @nowLocalDateId     = b.local_date_id,
        @nowLocalIntervalId = b.local_interval_id
-  FROM bridge_time_zone b
- INNER JOIN mart.dim_date d
+  FROM [mart].[bridge_time_zone] b
+ INNER JOIN [mart].[dim_date] d
     ON b.date_id = d.date_id
    AND d.date_date = @nowUtcDateOnly
- INNER JOIN mart.dim_interval i
+ INNER JOIN [mart].[dim_interval] i
     ON b.interval_id = i.interval_id
    AND @nowUtcInterval between i.interval_start and i.interval_end
- INNER JOIN mart.dim_time_zone t
+ INNER JOIN [mart].[dim_time_zone] t
     ON b.time_zone_id = t.time_zone_id
  WHERE t.time_zone_code = @time_zone_code
-
---Multiple Time zones?
-IF (SELECT COUNT(*) FROM mart.dim_time_zone tz WHERE tz.time_zone_code<>'UTC') < 2
-    SET @hide_time_zone = 1
-ELSE
-    SET @hide_time_zone = 0
 
 -----------
 --Start
 -----------
 INSERT INTO #person_id
-select distinct
-       p.person_id
-  From mart.dim_person p
- inner join mart.bridge_time_zone tz
-    on tz.time_zone_id = p.time_zone_id
- inner join mart.dim_date d
-    on tz.local_date_id = d.date_id
+SELECT DISTINCT p.person_id
+  From [mart].[dim_person] p
+ INNER JOIN [mart].[bridge_time_zone] tz
+    ON tz.time_zone_id = p.time_zone_id
+ INNER JOIN [mart].[dim_date] d
+    ON tz.local_date_id = d.date_id
    AND d.date_date = @local_date
- INNER JOIN mart.dim_time_zone t
+ INNER JOIN [mart].[dim_time_zone] t
     ON tz.time_zone_id = t.time_zone_id
- where p.business_unit_code = @business_unit_code and d.date_date = @local_date
-   and t.time_zone_code = @time_zone_code
-   and @local_date between p.valid_from_date and p.valid_to_date;
+ WHERE p.business_unit_code = @business_unit_code and d.date_date = @local_date
+   AND t.time_zone_code = @time_zone_code
+   AND @local_date BETWEEN p.valid_from_date and p.valid_to_date;
 
---Create UTC table from: mart.fact_schedule_deviation
+--Create UTC table from: [mart].[fact_schedule_deviation]
 INSERT INTO #fact_schedule_deviation_raw(
        shift_startdate_local_id,
        shift_startdate_id,
        shift_startinterval_id,
-       date_id,
-       interval_id,
+       utc_date_id,
+       utc_interval_id,
        person_id,
        deviation_schedule_ready_s,
        deviation_schedule_s,
@@ -250,16 +237,16 @@ SELECT fsd.shift_startdate_local_id,
        ready_time_s,
        is_logged_in,
        contract_time_s
-  FROM mart.fact_schedule_deviation fsd
- WHERE fsd.date_id between @minUtcDateId-1 AND @maxUtcDateId+1
-   AND fsd.person_id IN (SELECT person_id FROM #person_id)
+  FROM [mart].[fact_schedule_deviation] fsd
+ INNER JOIN #person_id ON fsd.person_id = #person_id.person_id
+ WHERE fsd.shift_startdate_local_id between @minLocalDateId - 2 AND @maxLocalDateId + 2
 
 INSERT INTO #fact_schedule_deviation(
        shift_startdate_local_id,
        shift_startdate_id,
        shift_startinterval_id,
-       date_id,
-       interval_id,
+       utc_date_id,
+       utc_interval_id,
        person_id,
        deviation_schedule_ready_s,
        deviation_schedule_s,
@@ -270,8 +257,8 @@ INSERT INTO #fact_schedule_deviation(
 SELECT fsd.shift_startdate_local_id,
        fsd.shift_startdate_id,
        fsd.shift_startinterval_id,
-       fsd.date_id,
-       fsd.interval_id,
+       fsd.utc_date_id,
+       fsd.utc_interval_id,
        fsd.person_id,
        deviation_schedule_ready_s,
        deviation_schedule_s,
@@ -281,8 +268,8 @@ SELECT fsd.shift_startdate_local_id,
        contract_time_s
   FROM #fact_schedule_deviation_raw fsd
  INNER JOIN #bridge_time_zone b
-    ON fsd.shift_startinterval_id= b.interval_id
-   AND fsd.shift_startdate_id=b.date_id
+    ON fsd.shift_startinterval_id = b.utc_interval_id
+   AND fsd.shift_startdate_id = b.utc_date_id
 
 --Get all fact_schedule-data for the day in question.
 --Note: local date e.g. incl. time zone
@@ -308,17 +295,18 @@ SELECT shift_startdate_local_id,
        absence_id,
        scheduled_time_m,
        scheduled_ready_time_m
-  FROM mart.fact_schedule fs
+  FROM [mart].[fact_schedule] fs
+ INNER JOIN #person_id
+    ON fs.person_id = #person_id.person_id
  INNER JOIN #bridge_time_zone b
-    ON fs.shift_startinterval_id= b.interval_id
-   AND fs.shift_startdate_id = b.date_id
- INNER JOIN mart.dim_business_unit bu
+    ON fs.shift_startdate_local_id = b.local_date_id
+   AND fs.shift_startinterval_id = b.utc_interval_id
+ INNER JOIN [mart].[dim_business_unit] bu
     ON fs.business_unit_id = bu.business_unit_id
- INNER JOIN mart.dim_scenario sc
+ INNER JOIN [mart].[dim_scenario] sc
     ON sc.business_unit_id = bu.business_unit_id
    AND fs.scenario_id = sc.scenario_id
    AND sc.default_scenario = 1
- WHERE fs.person_id in(SELECT person_id FROM #person_id)
 
 INSERT #fact_schedule(
        shift_startdate_local_id,
@@ -340,48 +328,49 @@ SELECT fs.shift_startdate_local_id,
        SUM(fs.scheduled_ready_time_m) * 60,
        COUNT(fs.interval_id)
   FROM #fact_schedule_raw fs
+ INNER JOIN #person_id
+    ON fs.person_id = #person_id.person_id
  INNER JOIN #bridge_time_zone b
-    ON fs.shift_startinterval_id= b.interval_id
-   AND fs.shift_startdate_id= b.date_id
- WHERE fs.person_id in(SELECT person_id FROM  #person_id)
+    ON fs.shift_startinterval_id = b.utc_interval_id
+   AND fs.shift_startdate_id = b.utc_date_id
  GROUP BY fs.shift_startdate_local_id,fs.shift_startdate_id,fs.shift_startinterval_id,fs.schedule_date_id,fs.person_id,fs.interval_id
 
 --Update with activity.
 --a) In case there are multiple activities per interval, we use activities where in_ready_time = 1
 UPDATE #fact_schedule
-   SET activity_id= fs.activity_id
+   SET activity_id = fs.activity_id
   FROM #fact_schedule_raw fs
  INNER JOIN #fact_schedule SchTemp
-    ON SchTemp.schedule_date_id=fs.schedule_date_id
-   AND SchTemp.person_id=fs.person_id
-   AND SchTemp.interval_id=fs.interval_id
-   AND SchTemp.shift_startdate_local_id=fs.shift_startdate_local_id --in case overlapping shifts
- INNER JOIN mart.dim_activity a
-    ON a.activity_id=fs.activity_id
- WHERE a.in_ready_time=1
+    ON SchTemp.schedule_date_id = fs.schedule_date_id
+   AND SchTemp.person_id = fs.person_id
+   AND SchTemp.interval_id = fs.interval_id
+   AND SchTemp.shift_startdate_local_id = fs.shift_startdate_local_id --in case overlapping shifts
+ INNER JOIN [mart].[dim_activity] a
+    ON a.activity_id = fs.activity_id
+ WHERE a.in_ready_time = 1
 
 -- b) in case there is no ready time; just take any one
 UPDATE #fact_schedule
-   SET activity_id= fs.activity_id
+   SET activity_id = fs.activity_id
   FROM #fact_schedule_raw fs
  INNER JOIN #fact_schedule SchTemp
-    ON SchTemp.schedule_date_id=fs.schedule_date_id
-   AND SchTemp.person_id=fs.person_id
-   AND SchTemp.interval_id=fs.interval_id
-   AND SchTemp.shift_startdate_local_id=fs.shift_startdate_local_id --in case overlapping shifts
- INNER JOIN mart.dim_activity a
-    ON a.activity_id=fs.activity_id
+    ON SchTemp.schedule_date_id = fs.schedule_date_id
+   AND SchTemp.person_id = fs.person_id
+   AND SchTemp.interval_id = fs.interval_id
+   AND SchTemp.shift_startdate_local_id = fs.shift_startdate_local_id --in case overlapping shifts
+ INNER JOIN [mart].[dim_activity] a
+    ON a.activity_id = fs.activity_id
  WHERE SchTemp.activity_id IS NULL
 
 --Update with absence code
 UPDATE #fact_schedule
-   SET absence_id= fs.absence_id
+   SET absence_id = fs.absence_id
   FROM #fact_schedule_raw fs
  INNER JOIN #fact_schedule SchTemp
-    ON SchTemp.schedule_date_id=fs.schedule_date_id
-   AND SchTemp.person_id=fs.person_id
-   AND SchTemp.interval_id=fs.interval_id
-   AND SchTemp.shift_startdate_local_id=fs.shift_startdate_local_id --in case overlapping shifts
+    ON SchTemp.schedule_date_id = fs.schedule_date_id
+   AND SchTemp.person_id = fs.person_id
+   AND SchTemp.interval_id = fs.interval_id
+   AND SchTemp.shift_startdate_local_id = fs.shift_startdate_local_id --in case overlapping shifts
  WHERE SchTemp.absence_id IS NULL
 
 --Start creating the adherence detail set
@@ -400,7 +389,7 @@ INSERT #adherence_detail(shift_startdate_local_id,
        adherence_calc_s,
        adherence_type_selected)
 SELECT fs.shift_startdate_local_id,
-       b1.date_id,
+       b1.utc_date_id,
        b1.date_date,
        d.date_id,
        d.date_date,
@@ -410,8 +399,8 @@ SELECT fs.shift_startdate_local_id,
        p.person_code,
        p.person_id,
        CASE @adherence_id
-           WHEN 1 THEN  isnull(fsd.deviation_schedule_ready_s,0)
-           WHEN 2 THEN  isnull(fsd.deviation_schedule_s,0)
+           WHEN 1 THEN isnull(fsd.deviation_schedule_ready_s,0)
+           WHEN 2 THEN isnull(fsd.deviation_schedule_s,0)
            WHEN 3 THEN isnull(fsd.deviation_contract_s,0)
        END AS 'deviation_s',
        CASE @adherence_id
@@ -420,27 +409,26 @@ SELECT fs.shift_startdate_local_id,
            WHEN 3 THEN isnull(fsd.contract_time_s,0)
        END AS 'adherence_calc_s',
        @selected_adherence_type
-  FROM mart.dim_person p
+  FROM [mart].[dim_person] p
  INNER JOIN #fact_schedule fs
-    ON fs.person_id=p.person_id
+    ON fs.person_id = p.person_id
    AND @local_date between p.valid_from_date and p.valid_to_date
   LEFT JOIN #fact_schedule_deviation fsd
-    ON fsd.person_id=fs.person_id
-   AND fsd.date_id=fs.schedule_date_id
-   AND fsd.interval_id=fs.interval_id
-   AND fsd.shift_startdate_local_id=fs.shift_startdate_local_id
+    ON fsd.person_id = fs.person_id
+   AND fsd.utc_date_id = fs.schedule_date_id
+   AND fsd.utc_interval_id = fs.interval_id
+   AND fsd.shift_startdate_local_id = fs.shift_startdate_local_id
  INNER JOIN #bridge_time_zone b1
-    ON fs.shift_startinterval_id= b1.interval_id
-   AND fs.shift_startdate_id=b1.date_id
- INNER JOIN bridge_time_zone b2
-    ON fs.interval_id= b2.interval_id
-   AND fs.schedule_date_id= b2.date_id
- INNER JOIN mart.dim_interval i
+    ON fs.shift_startinterval_id = b1.utc_interval_id
+   AND fs.shift_startdate_id = b1.utc_date_id
+ INNER JOIN [mart].[bridge_time_zone] b2
+    ON fs.interval_id = b2.interval_id
+   AND fs.schedule_date_id = b2.date_id
+ INNER JOIN [mart].[dim_interval] i
     ON b2.local_interval_id = i.interval_id
- INNER JOIN mart.dim_date d
+ INNER JOIN [mart].[dim_date] d
     ON b2.local_date_id = d.date_id
---   AND d.date_date = @local_date
- INNER JOIN mart.dim_time_zone t
+ INNER JOIN [mart].[dim_time_zone] t
     ON t.time_zone_code = @time_zone_code
    AND b2.time_zone_id = t.time_zone_id
 
@@ -460,7 +448,7 @@ INSERT #adherence_detail(
        adherence_calc_s,
        adherence_type_selected)
 SELECT fsd.shift_startdate_local_id,
-       b1.date_id,
+       b1.utc_date_id,
        b1.date_date,
        d.date_id,
        d.date_date,
@@ -470,8 +458,8 @@ SELECT fsd.shift_startdate_local_id,
        p.person_code,
        p.person_id,
        CASE @adherence_id
-           WHEN 1 THEN  isnull(fsd.deviation_schedule_ready_s,0)
-           WHEN 2 THEN  isnull(fsd.deviation_schedule_s,0)
+           WHEN 1 THEN isnull(fsd.deviation_schedule_ready_s,0)
+           WHEN 2 THEN isnull(fsd.deviation_schedule_s,0)
            WHEN 3 THEN isnull(fsd.deviation_contract_s,0)
        END AS 'deviation_s',
        CASE @adherence_id
@@ -480,25 +468,25 @@ SELECT fsd.shift_startdate_local_id,
            WHEN 3 THEN isnull(fsd.contract_time_s,0)
        END AS 'adherence_calc_s',
        @selected_adherence_type
-  FROM mart.dim_person p
+  FROM [mart].[dim_person] p
  INNER JOIN #fact_schedule_deviation fsd
-    ON fsd.person_id=p.person_id
+    ON fsd.person_id = p.person_id
    AND @local_date between p.valid_from_date and p.valid_to_date
  INNER JOIN #bridge_time_zone b1
-    ON fsd.shift_startinterval_id= b1.interval_id
-   AND fsd.shift_startdate_id=b1.date_id
- INNER JOIN bridge_time_zone b2
-    ON fsd.interval_id= b2.interval_id
-   AND fsd.date_id= b2.date_id
- INNER JOIN mart.dim_interval i
+    ON fsd.shift_startinterval_id = b1.utc_interval_id
+   AND fsd.shift_startdate_id = b1.utc_date_id
+ INNER JOIN [mart].[bridge_time_zone] b2
+    ON fsd.utc_interval_id = b2.interval_id
+   AND fsd.utc_date_id = b2.date_id
+ INNER JOIN [mart].[dim_interval] i
     ON b2.local_interval_id = i.interval_id
- INNER JOIN mart.dim_date d
+ INNER JOIN [mart].[dim_date] d
     ON b2.local_date_id = d.date_id
    AND d.date_date = @local_date
- INNER JOIN mart.dim_time_zone t
+ INNER JOIN [mart].[dim_time_zone] t
     ON t.time_zone_code = @time_zone_code
-   AND b2.time_zone_id= t.time_zone_id
- WHERE NOT EXISTS (SELECT 1 FROM #adherence_detail r where r.person_id=fsd.person_id and r.interval_id=i.interval_id and r.date_id=d.date_id)
+   AND b2.time_zone_id = t.time_zone_id
+ WHERE NOT EXISTS (SELECT 1 FROM #adherence_detail r where r.person_id = fsd.person_id and r.interval_id = i.interval_id and r.date_id = d.date_id)
 
 UPDATE #adherence_detail
    SET adherence_calc_s = NULL,
@@ -506,7 +494,7 @@ UPDATE #adherence_detail
  WHERE date_id > @nowLocalDateId
 
 UPDATE #adherence_detail
-   SET adherence_calc_s=NULL,
+   SET adherence_calc_s = NULL,
        deviation_s = NULL
  WHERE date_id = @nowLocalDateId
    AND interval_id > @nowLocalIntervalId
@@ -539,7 +527,7 @@ SELECT person_id,
  GROUP BY person_id, person_code
 
 UPDATE #person_adh
-  SET adherence_tot=
+  SET adherence_tot =
       CASE
          WHEN a.adherence_calc_s_tot = 0 AND @adherence_id <> 2 THEN 1
          WHEN a.adherence_calc_s_tot = 0 AND @adherence_id = 2 THEN 0
@@ -548,11 +536,10 @@ UPDATE #person_adh
       END
  FROM #person_adh a
 
-SELECT person_code, @local_date, adherence_tot as Adherence
+SELECT person_code AS PersonId, adherence_tot as Adherence
   FROM #person_adh
  WHERE adherence_tot >= @threshold
  ORDER BY person_code
 
 END
-
 GO
