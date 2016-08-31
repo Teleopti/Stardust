@@ -16,39 +16,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 		private readonly Func<IWeeklyRestSolverService> _weeklyRestSolverService;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-		private readonly IGroupPersonBuilderForOptimizationFactory _groupPersonBuilderForOptimizationFactory;
-		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 
 		public WeeklyRestSolverCommand(ITeamBlockInfoFactory teamBlockInfoFactory,
 			ITeamBlockSchedulingOptions teamBlockSchedulingOptions, Func<IWeeklyRestSolverService> weeklyRestSolverService,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
-			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
-			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
-			IResourceCalculationContextFactory resourceCalculationContextFactory)
+			IResourceCalculationContextFactory resourceCalculationContextFactory,
+			TeamInfoFactoryFactory teamInfoFactoryFactory)
 		{
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
 			_weeklyRestSolverService = weeklyRestSolverService;
 			_schedulerStateHolder = schedulerStateHolder;
-			_groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
-			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
+			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 		}
 
 		public void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, 
 						IResourceCalculateDelayer resourceCalculateDelayer, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allVisibleMatrixes, ISchedulingProgress backgroundWorker,
 						IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
-
-			_groupPersonBuilderWrapper.Reset();
-			var groupPageType = schedulingOptions.GroupOnGroupPageForTeamBlockPer.Type;
-			if (groupPageType == GroupPageType.SingleAgent)
-				_groupPersonBuilderWrapper.SetSingleAgentTeam();
-			else
-				_groupPersonBuilderForOptimizationFactory.Create(schedulingOptions.GroupOnGroupPageForTeamBlockPer);
-			
-			var teamInfoFactory = new TeamInfoFactory(_groupPersonBuilderWrapper);
+		
+			var teamInfoFactory = _teamInfoFactoryFactory.Create(schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory,
 				_teamBlockSchedulingOptions);
 
