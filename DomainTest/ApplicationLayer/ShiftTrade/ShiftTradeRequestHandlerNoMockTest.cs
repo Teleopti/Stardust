@@ -99,8 +99,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			_target.Handle(getAcceptShiftTradeEvent(personTo, personRequest.Id.Value));
 
-			Assert.IsTrue(personRequest.BrokenBusinessRules.HasFlag(BusinessRuleFlags.MinWeeklyRestRule));
-			Assert.IsTrue(personRequest.BrokenBusinessRules.HasFlag(BusinessRuleFlags.NewMaxWeekWorkTimeRule));
+			Assert.IsTrue(personRequest.BrokenBusinessRules.Value.HasFlag(BusinessRuleFlags.MinWeeklyRestRule));
+			Assert.IsTrue(personRequest.BrokenBusinessRules.Value.HasFlag(BusinessRuleFlags.NewMaxWeekWorkTimeRule));
 
 		}
 
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			handleRequest(@event, false, businessRuleProvider);
 
-			Assert.IsTrue(personRequest.BrokenBusinessRules.HasFlag(BusinessRuleFlags.MinWeekWorkTimeRule));
+			Assert.IsTrue(personRequest.BrokenBusinessRules.Value.HasFlag(BusinessRuleFlags.MinWeekWorkTimeRule));
 		}
 
 		[Test]
@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			handleRequest(@event, false, businessRuleProvider);
 
-			Assert.IsTrue(personRequest.BrokenBusinessRules.HasFlag(BusinessRuleFlags.SiteOpenHoursRule));
+			Assert.IsTrue(personRequest.BrokenBusinessRules.Value.HasFlag(BusinessRuleFlags.SiteOpenHoursRule));
 		}
 
 		private basicShiftTradeTestResult doBasicShiftTrade(IWorkflowControlSet workflowControlSet, bool addBrokenBusinessRules = false, bool toggle39473IsOff = false)

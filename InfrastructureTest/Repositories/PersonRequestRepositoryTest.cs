@@ -436,6 +436,37 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			results.Single().Should().Be.EqualTo(personRequestWithAbsenceRequest2);
 		}
 
+		[Test]
+		public void ShouldNotUpdateBrokenRulesAfterFindAllRequestsForAgent()
+		{
+			IPerson personFrom = PersonFactory.CreatePerson("vjiosd");
+			personFrom.Name = new Name("mala", "mala");
+			PersistAndRemoveFromUnitOfWork(personFrom);
+
+			IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
+				new List<IShiftTradeSwapDetail>
+				{
+					new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 16),
+						new DateOnly(2008, 7, 16)),
+					new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 17),
+						new DateOnly(2008, 7, 17)),
+					new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 18),
+						new DateOnly(2008, 7, 18)),
+					new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 19),
+						new DateOnly(2008, 7, 19))
+				});
+
+			IPersonRequest personRequestWithShiftTrade = new PersonRequest(personFrom);
+			personRequestWithShiftTrade.Request = shiftTradeRequest;
+
+			PersistAndRemoveFromUnitOfWork(personRequestWithShiftTrade);
+
+			var foundRequests = new PersonRequestRepository(UnitOfWork).FindAllRequestsForAgent(_person);
+			var foundRequest = foundRequests.FirstOrDefault();
+			foundRequest.BrokenBusinessRules.Should(null);
+			foundRequest.UpdatedOn.Should().Equals(personRequestWithShiftTrade.UpdatedOn);
+		}
+
 		private void setUpdatedOnForRequest(IPersonRequest personRequest, int minutes)
 		{
 			const string sql = "UPDATE dbo.PersonRequest SET UpdatedOn = DATEADD(mi,:Minutes,UpdatedOn) WHERE Id=:Id;";

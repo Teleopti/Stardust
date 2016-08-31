@@ -52,7 +52,7 @@ namespace Teleopti.Interfaces.Domain
 		/// Gets broken business rule
 		/// </summary>
 		/// <returns></returns>
-		BusinessRuleFlags BrokenBusinessRules { get; }
+		BusinessRuleFlags? BrokenBusinessRules { get; }
 
         /// <summary>
         /// Gets or sets the request.

@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			Assert.AreEqual(false, personRequest.IsNew);
 			Assert.AreEqual(false, personRequest.IsPending);
 			Assert.AreEqual(true, personRequest.IsApproved);
-			Assert.AreEqual(BusinessRuleFlags.None, personRequest.BrokenBusinessRules);
+			Assert.AreEqual(BusinessRuleFlags.None, personRequest.BrokenBusinessRules.GetValueOrDefault());
 			Assert.AreEqual(ShiftTradeStatus.OkByBothParts,
 				shiftTradeRequest.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
 			Assert.AreEqual(accept.Message, personRequest.GetMessage(new NoFormatting()));
