@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				if (groupPageType == GroupPageType.SingleAgent)
 					_groupPersonBuilderWrapper.SetSingleAgentTeam();
 				else
-					_groupPersonBuilderForOptimizationFactory.Create(schedulingOptions);
+					_groupPersonBuilderForOptimizationFactory.Create(schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 
 				var teamInfoFactory = new TeamInfoFactory(_groupPersonBuilderWrapper);
 				var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory,

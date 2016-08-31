@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public interface IGroupPersonBuilderForOptimizationFactory
 	{
-		void Create(ISchedulingOptions schedulingOptions);
+		void Create(GroupPageLight groupPageLight);
 	}
 }

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
 		}
 
-		public void Create(ISchedulingOptions schedulingOptions)
+		public void Create(GroupPageLight groupPageLight)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
 			if (schedulerStateHolder.LoadedPeriod != null)
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				_groupPagePerDateHolder().GroupPersonGroupPagePerDate =
 					_groupPageCreator.CreateGroupPagePerDate(dates,
 						_groupScheduleGroupPageDataProvider,
-						schedulingOptions.GroupOnGroupPageForTeamBlockPer,
+						groupPageLight,
 						true);
 			}
 		}
