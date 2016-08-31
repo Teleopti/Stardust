@@ -247,7 +247,7 @@
     <Compile Include="ApplicationLayer\Workload\AnalyticsWorkloadUpdaterTest.cs" />
     <Compile Include="Common\ScheduleChangedEventDetector.cs" />
     <Compile Include="ApplicationLayer\Skill\AnalyticsSkillUpdaterTest.cs" />
-    <Compile Include="Intraday\ForecastedStaffingProviderTest.cs" />
+    <Compile Include="Intraday\ForecastedStaffingViewModelCreatorTest.cs" />
     <Compile Include="Intraday\LatestStatisticsTimeProviderTest.cs" />
     <Compile Include="ReadModelValidator\ReadModelValidatorTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationTest.cs" />

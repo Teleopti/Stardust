@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
+			builder.RegisterType<ForecastedStaffingViewModelCreator>().SingleInstance();
 			builder.RegisterType<ForecastedStaffingProvider>().SingleInstance();
 			builder.RegisterType<FetchSkillInIntraday>().SingleInstance();
 			builder.RegisterType<FetchSkillArea>().SingleInstance();
