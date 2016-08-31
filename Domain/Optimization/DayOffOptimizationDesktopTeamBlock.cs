@@ -56,8 +56,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var stateHolder = _schedulerStateHolder();
 
-			resourceOptimizerPersonOptimized(this, new ResourceOptimizerProgressEventArgs(0, 0, Resources.Rescheduling + Resources.ThreeDots));
-
 			using (_resourceCalculationContextFactory.Create(stateHolder.Schedules, stateHolder.SchedulingResultState.Skills))
 			{
 				ResourceCalculationContext.Fetch().PrimarySkillMode = true;

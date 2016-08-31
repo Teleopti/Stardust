@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ITeamBlockDayOffOptimizerService _teamBlockDayOffOptimizerService;
 		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
+		private readonly DayOffOptimizationDesktopTeamBlock _dayOffOptimizationDesktopTeamBlock;
 
 		public TeamBlockOptimizationCommand(Func<ISchedulerStateHolder> schedulerStateHolder,
 			ITeamBlockClearer teamBlockCleaner,
@@ -64,7 +65,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
 			ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService,
 			IResourceCalculationContextFactory resourceCalculationContextFactory,
-			TeamInfoFactoryFactory teamInfoFactoryFactory)
+			TeamInfoFactoryFactory teamInfoFactoryFactory,
+			DayOffOptimizationDesktopTeamBlock dayOffOptimizationDesktopTeamBlock)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_teamBlockCleaner = teamBlockCleaner;
@@ -90,6 +92,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_teamBlockDayOffOptimizerService = teamBlockDayOffOptimizerService;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
+			_dayOffOptimizationDesktopTeamBlock = dayOffOptimizationDesktopTeamBlock;
 		}
 
 		public void Execute(ISchedulingProgress backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
@@ -99,28 +102,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IList<IScheduleDay> selectedSchedules,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
+			_backgroundWorker = backgroundWorker;
+			var args = new ResourceOptimizerProgressEventArgs(0, 0, UserTexts.Resources.CollectingData);
+			_backgroundWorker.ReportProgress(1, args);
+
+			IList<IScheduleMatrixPro> allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
+
+			var teamInfoFactory = _teamInfoFactoryFactory.Create(schedulingOptions.GroupOnGroupPageForTeamBlockPer);
+			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory, _teamBlockScheudlingOptions);
+
+			if (optimizationPreferences.General.OptimizationStepDaysOff)
+			{
+				_dayOffOptimizationDesktopTeamBlock.Execute(selectedPeriod, selectedSchedules, _backgroundWorker, optimizationPreferences, dayOffOptimizationPreferenceProvider, schedulingOptions.GroupOnGroupPageForTeamBlockPer, null, null);
+			}
+
 			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.Skills))
 			{
-				_backgroundWorker = backgroundWorker;
-				var args = new ResourceOptimizerProgressEventArgs(0, 0, UserTexts.Resources.CollectingData);
-				_backgroundWorker.ReportProgress(1, args);
-
-				IList<IScheduleMatrixPro> allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
-
-				var teamInfoFactory = _teamInfoFactoryFactory.Create(schedulingOptions.GroupOnGroupPageForTeamBlockPer);
-				var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory,
-					_teamBlockScheudlingOptions);
-
-				if (optimizationPreferences.General.OptimizationStepDaysOff)
-				{
-					optimizeTeamBlockDaysOff(selectedPeriod, selectedPersons, optimizationPreferences,
-						allMatrixes, schedulingOptions, teamInfoFactory, resourceCalculateDelayer, dayOffOptimizationPreferenceProvider);
-				}
-
 				if (optimizationPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime)
 				{
 					var optimizeDayOffs = optimizationPreferences.General.OptimizationStepDaysOff;
 					optimizationPreferences.General.OptimizationStepDaysOff = false;
+					//should probably use _dayOffOptimizationDesktopTeamBlock here later
 					optimizeTeamBlockDaysOff(selectedPeriod, selectedPersons, optimizationPreferences, allMatrixes,
 						schedulingOptions, teamInfoFactory, resourceCalculateDelayer, dayOffOptimizationPreferenceProvider);
 					optimizationPreferences.General.OptimizationStepDaysOff = optimizeDayOffs;

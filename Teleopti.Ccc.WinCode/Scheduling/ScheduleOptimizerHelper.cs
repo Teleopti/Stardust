@@ -454,7 +454,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			if (_progressEvent != null && _progressEvent.Cancel) return;
 			_allResults = () => new WorkShiftFinderResultHolder();
 
-			_dayOffOptimizationDesktop.Execute(selectedPeriod, selectedDays, _backgroundWorker, optimizerPreferences, dayOffOptimizationPreferenceProvider, _allResults, resourceOptimizerPersonOptimized);
+			_dayOffOptimizationDesktop.Execute(selectedPeriod, selectedDays, _backgroundWorker, optimizerPreferences, dayOffOptimizationPreferenceProvider, new GroupPageLight("_", GroupPageType.SingleAgent),  _allResults, resourceOptimizerPersonOptimized);
 		}
 
 		private void rollbackMatrixChanges(IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer, ISchedulePartModifyAndRollbackService rollbackService)
