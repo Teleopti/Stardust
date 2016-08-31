@@ -59,7 +59,7 @@ Scenario: Should see no warnings if the validation rule type is not set to be vi
 	And I choose not to view 'NewNightlyRestRuleName' validation result
 	Then I should not see business rule warning
 
-
+@ignore
 @OnlyRunIfEnabled('WfmTeamSchedule_FilterValidationWarnings_40110')
 Scenario: Should see the warnings if the validation rule type is set to be viewable
 	When I view wfm team schedules
