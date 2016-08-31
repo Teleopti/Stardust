@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	public class DayOffOptimizationTeamBlockDesktopTest : DayOffOptimizationScenario
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
-		public IDayOffOptimizationDesktop Target;
+		public DayOffOptimizationDesktopTeamBlock Target;
 		public FakeGroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider; //should not use fake here...
 
 		public DayOffOptimizationTeamBlockDesktopTest(bool cascading) : base(true, cascading)
