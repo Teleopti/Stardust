@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 
-		[Test]
+		[Test, Ignore("Until PBI 39950 is done")]
 		public void ShouldShowValidationAlertIfIllegalOverWriteOfActivities()
 		{
 			var scenario = new Scenario("_");
