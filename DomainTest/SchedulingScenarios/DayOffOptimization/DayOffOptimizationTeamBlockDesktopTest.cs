@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public IDayOffOptimizationDesktop Target;
+		public FakeGroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider; //should not use fake here...
 
 		public DayOffOptimizationTeamBlockDesktopTest(bool cascading) : base(true, cascading)
 		{
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var ruleSetBag = new RuleSetBag(new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory))) {Description = new Description("_")};
 			var team = new Team { Site = new Site("_") };
 			var agents = new List<IPerson>();
 			for (var i = 0; i < 2; i++)
@@ -51,13 +52,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 				var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
 				schedulePeriod.SetDaysOff(2);
-				var personPeriod = new PersonPeriod(firstDay.AddWeeks(-1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team) { RuleSetBag = new RuleSetBag(ruleSet) };
+				var personPeriod = new PersonPeriod(firstDay.AddWeeks(-1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team) { RuleSetBag = ruleSetBag };
 				agent.AddPeriodWithSkill(personPeriod, skill);
 				agent.AddSchedulePeriod(schedulePeriod);
 				agents.Add(agent);
 			}
 			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				10, 10, 10, 10, 10, 10, 100);
+				1, 10, 10, 10, 10, 10, 100);
 			var asses = new List<IPersonAssignment>();
 			foreach (var agent in agents)
 			{
@@ -74,7 +75,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				}
 			}
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, agents, asses, skillDays);
-			var optPrefs = new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag() } };
+			var optPrefs = new OptimizationPreferences
+			{
+				General = {ScheduleTag = new ScheduleTag()},
+				Extra = {UseTeamSameDaysOff = true}
+			};
+			GroupScheduleGroupPageDataProvider.AddRuleSetBag(ruleSetBag); //remove me later!
+
 
 			Target.Execute(period, stateHolder.Schedules.SchedulesForPeriod(period, agents.ToArray()), new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), () => new WorkShiftFinderResultHolder(), (o, args) => { });
 
