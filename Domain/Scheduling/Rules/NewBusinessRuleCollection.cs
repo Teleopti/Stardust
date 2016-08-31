@@ -132,7 +132,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 					new PersonWeekViolatingWeeklyRestSpecification(new ExtractDayOffFromGivenWeek(),
 						new VerifyWeeklyRestAroundDayOffSpecification(), ensureWeeklyRestRule)),
 				new NewDayOffRule(new WorkTimeStartEndExtractor()),
-				new NewPersonAccountRule(schedulingResultStateHolder, schedulingResultStateHolder.AllPersonAccounts)
+				new NewPersonAccountRule(schedulingResultStateHolder, schedulingResultStateHolder.AllPersonAccounts),
+				new NotOverwriteLayerRule()
 
 				//This one takes to long time tu run first time when caches are empty, so put on hold for now
 				//new NewLegalStateRule(
