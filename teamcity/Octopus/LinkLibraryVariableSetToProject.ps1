@@ -1,8 +1,18 @@
-$baseUri = "%OctopusServerUrl%" # <-- Update this to the base URL to your Octopus server(i.e. not including 'app' or 'api'
-$apiKey = "%OctopusApiKey%" # <-- Update this to your API key
+param
+(
+ [Parameter(Mandatory=$true)] [String] $OctopusServerUrl,
+ [Parameter(Mandatory=$true)] [String] $OctopusApiKey,
+ [Parameter(Mandatory=$true)] [String] $OctopusLibraryVariableSet,
+ [Parameter(Mandatory=$true)] [String] $OctopusProjectName
+)
+
+Write-Host "Include variable set '$OctopusLibraryVariableSet' in '$OctopusProjectName' on server '$OctopusServerUrl'"
+
+$baseUri = $OctopusServerUrl # Octopus server(i.e. not including 'app' or 'api'
+$apiKey = $OctopusApiKey
 $headers = @{"X-Octopus-ApiKey" = $apiKey}
-$libraryVariableSetId = "%OctopusLibraryVariableSet%" # <-- Update this to the Id of your variable set
-$projectName = "teleopti-wfm-server" # <-- Update this to the name of your project
+$libraryVariableSetId = $OctopusLibraryVariableSet
+$projectName = $OctopusProjectName
 
 function Get-OctopusResource([string]$uri) {
     Write-Host "[GET]: $uri"
