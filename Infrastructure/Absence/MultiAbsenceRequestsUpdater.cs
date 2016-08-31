@@ -206,8 +206,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 						var denyCommand = new DenyRequestCommand()
 						{
 							PersonRequestId = personRequest.Id.GetValueOrDefault(),
-							DenyReason = personRequest.DenyReason,
-							ReplyMessage = personRequest.DenyReason
+							DenyReason = personRequest.DenyReason
 						};
 						_denyRequestCommandHandler.Handle(denyCommand);
 						if (denyCommand.ErrorMessages != null)

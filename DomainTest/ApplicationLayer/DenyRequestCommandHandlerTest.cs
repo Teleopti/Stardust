@@ -22,7 +22,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var personRequest = createPersonRequest();
 			var command = new DenyRequestCommand
 			{
-				PersonRequestId = personRequest.Id.GetValueOrDefault()
+				PersonRequestId = personRequest.Id.GetValueOrDefault(),
+				DenyReason = "RequestDenyReasonSupervisor"
 			};
 
 			var commandHandler = new DenyRequestCommandHandler(PersonRequestRepository, Authorization);
@@ -49,7 +50,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var command = new DenyRequestCommand
 			{
 				PersonRequestId = personRequest.Id.GetValueOrDefault(),
-				ReplyMessage = "test"
+				ReplyMessage = "test",
+				DenyReason = "RequestDenyReasonSupervisor"
 			};
 
 			var commandHandler = new DenyRequestCommandHandler(PersonRequestRepository, Authorization);
