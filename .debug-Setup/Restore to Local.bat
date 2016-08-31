@@ -13,8 +13,8 @@ SET Branch=%4
 SET SqlInstanceName=%5
 SET CustomPath=%~6
 
-:: Map network share
-net use z: \\gigantes\Customer Databases\CCC\RestoreToLocal\Baselines /USER:toptinet\tfsintegration m8kemew0rk /PERSISTENT:YES
+:: Map network share, needed for Sikuli smoke/scheduler 
+net use "\\gigantes\Customer Databases\CCC\RestoreToLocal\Baselines" /USER:toptinet\tfsintegration m8kemew0rk /PERSISTENT:NO
 
 ::Instance were the Baseline will be restored
 SET INSTANCE=%SqlInstanceName%
