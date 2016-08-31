@@ -1,6 +1,7 @@
 var LoginPage = require('./Login.page')
 
 var HealthCheckPage = Object.create(LoginPage, {
+	title: { get: function () { return 'Teleopti WFM Health Check Tool'; } },
 
     serviceList: { get: function () { return browser.element('.services li span'); } },
     stardustStatus: { get: function () { return browser.element('.stardust'); } },

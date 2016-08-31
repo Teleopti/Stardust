@@ -1,7 +1,12 @@
 var Page = require('./Page.page')
 
 var IdentityProvidersPage = Object.create(Page, {
-    azureadProvider: { get: function () { return browser.element('.azuread'); } }
+	title: { get: function () { return 'Teleopti Authentication Bridge'; } },
+	
+    azureadProvider: { get: function () { return browser.element('.azuread'); } },
+	teleoptiProvider: { get: function () { return browser.element('.teleopti'); } },
+	
+	
 });
 
 module.exports = IdentityProvidersPage

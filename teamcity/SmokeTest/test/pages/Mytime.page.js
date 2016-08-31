@@ -1,7 +1,7 @@
 var LoginPage = require('./Login.page')
 
 var MytimePage = Object.create(LoginPage, {
-
+	title: { get: function () { return 'Teleopti WFM MyTime'; } },
     usernameLabel: { get: function () { return browser.element('.user-name'); } },
     usernameLink: { get: function () { return browser.element('.user-name-link'); } },
     signoutButton: { get: function () { return browser.element('#signout'); } },

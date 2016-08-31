@@ -1,7 +1,8 @@
 var Page = require('./Page.page')
 
 var LoginPage = Object.create(Page, {
-
+	title: { get: function () { return 'Teleopti WFM'; } },
+	
     username: { get: function () { return browser.element('#Username-input'); } },
     password: { get: function () { return browser.element('#Password-input'); } },
     signinButton:     { get: function () { return browser.element('#Signin-button'); } },

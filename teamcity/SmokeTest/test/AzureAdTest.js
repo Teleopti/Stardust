@@ -4,13 +4,18 @@ var IdentityProvidersPage = require('./pages/IdentityProviders.page');
 var MicrosoftLoginPage = require('./pages/MicrosoftLogin.page');
 
 describe('Azure AD', function() {
-	this.timeout(360 * 1000); // Set global timeout for this test to 5 minutes
+	this.timeout(360 * 1000); // Set global timeout for this test to 6 minutes
 	
 	before(function() {
 		// Given that we are showing the IdentityProviders selection page
 		MytimePage.open();
-		MytimePage.signin();
-		MytimePage.signout();
+		if (MytimePage.isCurrentPage()) {
+			MytimePage.signout();
+		}
+		if (!IdentityProvidersPage.isCurrentPage()) {
+			MytimePage.signin();
+			MytimePage.signout();
+		}
     }, 2);
 	
     it('should be able to sign in with AD user', function () {
