@@ -47,8 +47,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			foreach (var person in people)
 			{
 				var activity = _activityForId.Load(input.ActivityId);
-				var dateTimePeriod = new DateTimePeriod(input.StartTime, input.EndTime);
-				var overlapLayers = _nonoverwritableLayerChecker.GetOverlappedLayersWhenAddingActivity(person, input.Date, activity, dateTimePeriod);
+				var periodInUtc = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(input.StartTime, _timeZone.TimeZone()), TimeZoneHelper.ConvertToUtc(input.EndTime, TimeZoneInfo.Utc));
+				var overlapLayers = _nonoverwritableLayerChecker.GetOverlappedLayersWhenAddingActivity(person, input.Date, activity, periodInUtc);
 
 				if(overlapLayers.IsEmpty()) continue;
 
@@ -68,20 +68,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			CheckMoveActivityLayerOverlapFormData input)
 		{
 			var results = new List<ActivityLayerOverlapCheckingResult>();
-			var scenario = _currentScenario.Current();
-			var schedulePeriod = (new DateOnlyPeriod(input.Date, input.Date)).Inflate(1);
 
 			foreach (var personActivity in input.PersonActivities)
 			{
 				var person = _personRepository.Get(personActivity.PersonId);
 
-				var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false),
-					schedulePeriod,
-					scenario);
-
-				var scheduleDay = schedules[person].ScheduledDay(input.Date);
-
-				var overlapLayers = getOverlappedLayersForScheduleDayWhenMoving(input, scheduleDay, personActivity);
+				var newStartTimeInUtc = TimeZoneHelper.ConvertToUtc(input.StartTime, _timeZone.TimeZone());
+				var overlapLayers = _nonoverwritableLayerChecker.GetOverlappedLayersWhenMovingActivity(person, input.Date,
+					personActivity.ShiftLayerIds.ToArray(), newStartTimeInUtc);
 
 				if (overlapLayers.IsEmpty()) continue;
 
@@ -95,60 +89,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			}
 
 			return results;
-		}
-
-		private IList<OverlappedLayer> getOverlappedLayersForScheduleDayWhenMoving(CheckMoveActivityLayerOverlapFormData input, IScheduleDay scheduleDay,
-			PersonActivityItem personActivity)
-		{
-			var overlapLayers = new List<OverlappedLayer>();
-			var personAssignment = scheduleDay.PersonAssignment().EntityClone();
-
-			if (!personActivity.ShiftLayerIds.Any()) return overlapLayers;
-
-			var targetLayer =
-				personAssignment.ShiftLayers.FirstOrDefault(layer => layer.Id == personActivity.ShiftLayerIds.First());
-
-			if (targetLayer == null) return overlapLayers;
-
-			personAssignment.MoveActivityAndKeepOriginalPriority(targetLayer,
-				TimeZoneHelper.ConvertToUtc(input.StartTime, _timeZone.TimeZone()), null);
-
-			Func<IVisualLayer, bool> stickyLayerPredicate = layer =>
-			{
-				var activityLayer = layer.Payload as IActivity;
-
-				return activityLayer != null &&
-					   !(activityLayer.Id == targetLayer.Payload.Id && targetLayer.Period.Contains(layer.Period))
-					   && !activityLayer.AllowOverwrite;
-			};
-
-			overlapLayers.AddRange(getOverlappedLayersInProjection(scheduleDay, personAssignment, stickyLayerPredicate));
-
-			return overlapLayers;
-		}
-
-		private IList<OverlappedLayer> getOverlappedLayersInProjection(IScheduleDay originalScheduleDay,
-			IPersonAssignment assForChecking,
-			Func<IVisualLayer, bool> stickyLayerPredicate)
-		{
-			var stickyLayersInNewProjection =
-				assForChecking.ProjectionService().CreateProjection().Where(stickyLayerPredicate).ToList();
-
-			var stickyLayersInOldProjection =
-				originalScheduleDay.ProjectionService().CreateProjection().Where(stickyLayerPredicate).ToList();
-
-			return
-				stickyLayersInOldProjection.Where(
-					layer =>
-					{
-						return !stickyLayersInNewProjection.Any(l => l.Payload.Id == layer.Payload.Id && l.Period.Contains(layer.Period));
-					})
-					.Select(layer => new OverlappedLayer
-					{
-						Name = ((IActivity) layer.Payload).Name,
-						StartTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime, _timeZone.TimeZone()),
-						EndTime = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.EndDateTime, _timeZone.TimeZone())
-					}).ToList();
 		}
 
 		public IList<string> GetAllValidationRuleTypes(BusinessRuleFlags ruleFlags)

@@ -390,8 +390,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			{
 				PersonIds = new Guid[] { person.Id.Value },
 				Date = new DateOnly(2013, 11, 14),
-				StartTime = new DateTime(2013, 11, 14, 10, 0, 0, DateTimeKind.Utc),
-				EndTime = new DateTime(2013, 11, 14, 14, 0, 0, DateTimeKind.Utc),
+				StartTime = new DateTime(2013, 11, 14, 10, 0, 0),
+				EndTime = new DateTime(2013, 11, 14, 14, 0, 0),
 				ActivityId = mainActivity.Id.GetValueOrDefault(),
 				ActivityType =ActivityType.RegularActivity
 			};
@@ -435,8 +435,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			{
 				PersonIds = new Guid[] { person.Id.Value },
 				Date = new DateOnly(2013, 11, 14),
-				StartTime = new DateTime(2013, 11, 14, 10, 0, 0, DateTimeKind.Utc),
-				EndTime = new DateTime(2013, 11, 14, 14, 0, 0, DateTimeKind.Utc),
+				StartTime = new DateTime(2013, 11, 14, 10, 0, 0),
+				EndTime = new DateTime(2013, 11, 14, 14, 0, 0),
 				ActivityId = mainActivity.Id.GetValueOrDefault(),
 				ActivityType =ActivityType.PersonalActivity
 			};
@@ -480,8 +480,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			{
 				PersonIds = new Guid[] { person.Id.Value },
 				Date = new DateOnly(2013, 11, 14),
-				StartTime = new DateTime(2013, 11, 14, 10, 0, 0, DateTimeKind.Utc),
-				EndTime = new DateTime(2013, 11, 14, 14, 0, 0, DateTimeKind.Utc),
+				StartTime = new DateTime(2013, 11, 14, 10, 0, 0),
+				EndTime = new DateTime(2013, 11, 14, 14, 0, 0),
 				ActivityId = stickyActivity.Id.Value,
 				ActivityType = ActivityType.RegularActivity
 			};
@@ -519,8 +519,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			{
 				PersonIds = new Guid[] { person.Id.Value },
 				Date = new DateOnly(2013, 11, 14),
-				StartTime = new DateTime(2013, 11, 14, 10, 0, 0, DateTimeKind.Utc),
-				EndTime = new DateTime(2013, 11, 14, 14, 0, 0, DateTimeKind.Utc),
+				StartTime = new DateTime(2013, 11, 14, 10, 0, 0),
+				EndTime = new DateTime(2013, 11, 14, 14, 0, 0),
 				ActivityId = stickyActivity.Id.Value,
 				ActivityType = ActivityType.PersonalActivity
 			};
@@ -561,8 +561,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			{
 				PersonIds = new Guid[] { person.Id.Value },
 				Date = new DateOnly(2013, 11, 14),
-				StartTime = new DateTime(2013, 11, 14, 10, 0, 0, DateTimeKind.Utc),
-				EndTime = new DateTime(2013, 11, 14, 14, 0, 0, DateTimeKind.Utc),
+				StartTime = new DateTime(2013, 11, 14, 10, 0, 0),
+				EndTime = new DateTime(2013, 11, 14, 14, 0, 0),
 				ActivityId = stickyActivity.Id.Value,
 				ActivityType = ActivityType.RegularActivity
 			};
@@ -595,8 +595,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			{
 				PersonIds = new Guid[] { person.Id.Value },
 				Date = new DateOnly(2013, 11, 14),
-				StartTime = new DateTime(2013, 11, 14, 10, 0, 0,DateTimeKind.Utc),
-				EndTime = new DateTime(2013, 11, 14, 14, 0, 0, DateTimeKind.Utc),
+				StartTime = new DateTime(2013, 11, 14, 10, 0, 0),
+				EndTime = new DateTime(2013, 11, 14, 14, 0, 0),
 				ActivityId = stickyActivity.Id.Value,
 				ActivityType = ActivityType.RegularActivity
 			};
@@ -620,8 +620,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			{
 				PersonIds = new Guid[] { person.Id.Value },
 				Date = new DateOnly(2013, 11, 14),
-				StartTime = new DateTime(2013, 11, 14, 10, 0, 0, DateTimeKind.Utc),
-				EndTime = new DateTime(2013, 11, 14, 14, 0, 0, DateTimeKind.Utc),
+				StartTime = new DateTime(2013, 11, 14, 10, 0, 0),
+				EndTime = new DateTime(2013, 11, 14, 14, 0, 0),
 				ActivityId = mainActivity.Id.Value,
 				ActivityType = ActivityType.RegularActivity
 			};
@@ -662,8 +662,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			{
 				PersonIds = new Guid[] { person.Id.Value },
 				Date = new DateOnly(2013, 11, 14),
-				StartTime = new DateTime(2013, 11, 14, 10, 0, 0, DateTimeKind.Utc),
-				EndTime = new DateTime(2013, 11, 14, 14, 0, 0, DateTimeKind.Utc),
+				StartTime = new DateTime(2013, 11, 14, 10, 0, 0),
+				EndTime = new DateTime(2013, 11, 14, 14, 0, 0),
 				ActivityId = mainActivity.Id.GetValueOrDefault(),
 				ActivityType = ActivityType.RegularActivity
 			};
