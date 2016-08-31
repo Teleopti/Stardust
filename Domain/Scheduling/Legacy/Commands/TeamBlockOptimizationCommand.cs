@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class TeamBlockOptimizationCommand : ITeamBlockOptimizationCommand
 	{
-		private readonly IGroupPersonBuilderForOptimizationFactory _groupPersonBuilderForOptimizationFactory;
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
@@ -39,13 +38,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IIntraIntervalOptimizationCommand _intraIntervalOptimizationCommand;
 		private readonly IOptimizerHelperHelper _optimizerHelper;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
-		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 		private readonly ITeamBlockDayOffOptimizerService _teamBlockDayOffOptimizerService;
 		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 
 		public TeamBlockOptimizationCommand(Func<ISchedulerStateHolder> schedulerStateHolder,
 			ITeamBlockClearer teamBlockCleaner,
-			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
 			ISchedulingOptionsCreator schedulingOptionsCreator,
 			ITeamBlockInfoFactory teamBlockInfoFactory,
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
@@ -64,13 +62,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IIntraIntervalOptimizationCommand intraIntervalOptimizationCommand,
 			IOptimizerHelperHelper optimizerHelper,
 			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
-			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
 			ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService,
-			IResourceCalculationContextFactory resourceCalculationContextFactory)
+			IResourceCalculationContextFactory resourceCalculationContextFactory,
+			TeamInfoFactoryFactory teamInfoFactoryFactory)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_teamBlockCleaner = teamBlockCleaner;
-			_groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
@@ -90,9 +87,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_intraIntervalOptimizationCommand = intraIntervalOptimizationCommand;
 			_optimizerHelper = optimizerHelper;
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
-			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
 			_teamBlockDayOffOptimizerService = teamBlockDayOffOptimizerService;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
+			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 		}
 
 		public void Execute(ISchedulingProgress backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
@@ -110,14 +107,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 				IList<IScheduleMatrixPro> allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
 
-				_groupPersonBuilderWrapper.Reset();
-				var groupPageType = schedulingOptions.GroupOnGroupPageForTeamBlockPer.Type;
-				if (groupPageType == GroupPageType.SingleAgent)
-					_groupPersonBuilderWrapper.SetSingleAgentTeam();
-				else
-					_groupPersonBuilderForOptimizationFactory.Create(schedulingOptions.GroupOnGroupPageForTeamBlockPer);
-
-				var teamInfoFactory = new TeamInfoFactory(_groupPersonBuilderWrapper);
+				var teamInfoFactory = _teamInfoFactoryFactory.Create(schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 				var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory,
 					_teamBlockScheudlingOptions);
 

@@ -120,6 +120,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<BackToLegalShiftCommand>();
 			builder.RegisterType<IntraIntervalOptimizationCommand>().As<IIntraIntervalOptimizationCommand>();
 			builder.RegisterType<GroupPersonBuilderWrapper>().As<IGroupPersonBuilderWrapper>().InstancePerLifetimeScope();
+			builder.RegisterType<TeamInfoFactoryFactory>().InstancePerLifetimeScope();
 
 			builder.RegisterType<DisableDeletedFilter>().As<IDisableDeletedFilter>().SingleInstance();
 			builder.RegisterType<InnerOptimizerHelperHelper>().As<IOptimizerHelperHelper>().SingleInstance();
