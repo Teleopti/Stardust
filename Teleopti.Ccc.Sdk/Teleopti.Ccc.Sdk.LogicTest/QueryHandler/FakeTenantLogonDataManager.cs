@@ -21,12 +21,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 
 		public LogonInfoModel GetLogonInfoForLogonName(string logonName)
 		{
-			throw new NotImplementedException();
+			return storage.FirstOrDefault(s => s.LogonName == logonName);
 		}
 
 		public LogonInfoModel GetLogonInfoForIdentity(string identity)
 		{
-			throw new NotImplementedException();
+			return storage.FirstOrDefault(s => s.Identity == identity);
 		}
 	}
 }

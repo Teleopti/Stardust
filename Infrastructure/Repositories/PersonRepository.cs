@@ -587,5 +587,19 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 			return foundPerson;
 		}
+
+		public IList<IPerson> FindUsers()
+		{
+			return Session.CreateCriteria(typeof(Person), "per")
+				 .Add(Restrictions.Or(
+							 Restrictions.IsNull("TerminalDate"),
+							 Restrictions.Gt("TerminalDate", DateOnly.Today)
+							 ))
+				.Add(Subqueries.NotExists(DetachedCriteria.For(typeof(PersonPeriod))
+				.SetProjection(Projections.Id())
+				.Add(Restrictions.EqProperty("Parent", "per.Id"))))
+				.SetResultTransformer(Transformers.DistinctRootEntity)
+						 .List<IPerson>();
+		}
 	}
 }

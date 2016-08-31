@@ -2,12 +2,15 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
+using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -19,25 +22,27 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		[Test]
 		public void ShouldGetPeopleByEmail()
 		{
-			var assembler = MockRepository.GenerateMock<IAssembler<IPerson, PersonDto>>();
-			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
-			var currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
+			var personRepository = new FakePersonRepository();
+			
+			var assembler = new PersonAssembler(personRepository,
+				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
+					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
+					new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy(),
+				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+			
 			var person = PersonFactory.CreatePerson();
-			personRepository.Stub(x => x.FindPeopleByEmail(person.Email)).Return(new []{person});
-			var personDto = new PersonDto();
-			assembler.Stub(x => x.DomainEntitiesToDtos(new []{person})).Return(new[] { personDto });
-			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(MockRepository.GenerateMock<IUnitOfWork>());
-			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(unitOfWorkFactory);
-			var target = new GetPersonByEmailQueryHandler(assembler, personRepository, currentUnitOfWorkFactory);
+			person.Email = "a@b.com";
+			personRepository.Add(person);
+
+			var target = new GetPersonByEmailQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory());
 
 			var result = target.Handle(new GetPersonByEmailQueryDto
 			{
-				Email = person.Email
+				Email = "a@b.com"
 			});
 
 			result.Count.Should().Be.EqualTo(1);
-			result.First().Should().Be.EqualTo(personDto);
+			result.First().Name.Should().Be.EqualTo(person.Name.ToString());
 		}
 	}
 }

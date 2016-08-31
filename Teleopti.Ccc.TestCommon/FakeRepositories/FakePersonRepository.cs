@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -215,7 +216,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public ICollection<IPerson> FindPeopleByEmail(string email)
 		{
-			throw new NotImplementedException();
+			return _persons.Where(p => p.Email == email).ToArray();
 		}
 
 		public IPerson LoadPersonAndPermissions(Guid id)
@@ -226,6 +227,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public ICollection<IPerson> FindPeopleInOrganizationQuiteLight(DateOnlyPeriod period)
 		{
 			throw new NotImplementedException();
+		}
+
+		public IList<IPerson> FindUsers()
+		{
+			return
+			_persons.Where(
+				p => p.PersonPeriodCollection.IsEmpty() && p.TerminalDate.GetValueOrDefault(DateOnly.MaxValue) >= DateOnly.Today).ToArray();
 		}
 	}
 }

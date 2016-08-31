@@ -6,35 +6,33 @@ using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 {
 	[TestFixture]
-	public class GetPersonByEmploymentNumberQueryHandlerTest
+	public class GetUsersQueryHandlerTest
 	{
 		[Test]
-		public void ShouldGetPeopleByEmploymentNumber()
+		public void ShouldGetUsers()
 		{
 			var personRepository = new FakePersonRepository();
 
+			var fakeTenantLogonDataManager = new FakeTenantLogonDataManager();
 			var assembler = new PersonAssembler(personRepository,
 				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
 					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
 					new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy(),
-				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+				new TenantPeopleLoader(fakeTenantLogonDataManager));
 
-			var person = PersonFactory.CreatePerson();
-			person.EmploymentNumber = "1234";
+			var person = PersonFactory.CreatePerson().WithId();
 			personRepository.Add(person);
 
-			var target = new GetPersonByEmploymentNumberQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory());
-
-			var result = target.Handle(new GetPersonByEmploymentNumberQueryDto
-			{
-				EmploymentNumber = "1234"
-			});
+			var target = new GetUsersQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory());
+			var result = target.Handle(new GetUsersQueryDto { LoadDeleted = false});
 
 			result.Count.Should().Be.EqualTo(1);
 			result.First().Name.Should().Be.EqualTo(person.Name.ToString());
