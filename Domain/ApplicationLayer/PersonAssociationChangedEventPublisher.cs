@@ -125,7 +125,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 					var siteId = data.currentPeriod?.Team.Site.Id;
 					var businessUnitId = data.currentPeriod?.Team.Site.BusinessUnit.Id;
 
-					var previousAssociation = from p in data.person.PersonPeriodCollection
+					var previousAssociation = (
+						from p in data.person.PersonPeriodCollection
 						where p != null &&
 							  p.StartDate < data.agentDate
 						select new Association
@@ -133,7 +134,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 							TeamId = p.Team.Id.Value,
 							SiteId = p.Team.Site.Id.Value,
 							BusinessUnitId = p.Team.Site.BusinessUnit.Id.Value
-						};
+						}).ToArray();
 
 					_eventPublisher.Publish(new PersonAssociationChangedEvent
 					{
