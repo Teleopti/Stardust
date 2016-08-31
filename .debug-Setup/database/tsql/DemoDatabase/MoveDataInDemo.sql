@@ -154,9 +154,17 @@ FROM $(TELEOPTIANALYTICS).mart.dim_date
 WHERE 
 	date_id > -1
 
-exec $(TELEOPTIANALYTICS).mart.etl_fact_agent_load @start_date,@end_date,-2
-exec $(TELEOPTIANALYTICS).mart.etl_fact_agent_queue_load @start_date,@end_date,-2
-exec $(TELEOPTIANALYTICS).mart.etl_fact_queue_load @start_date,@end_date,-2
+DECLARE @tempdate smalldatetime
+SET @tempdate= dateadd(MONTH,3,@start_date)
+WHILE @tempdate<=@end_date
+BEGIN
+	exec $(TELEOPTIANALYTICS).mart.etl_fact_agent_load @start_date,@tempdate,-2
+	exec $(TELEOPTIANALYTICS).mart.etl_fact_agent_queue_load @start_date,@tempdate,-2
+	exec $(TELEOPTIANALYTICS).mart.etl_fact_queue_load @start_date,@tempdate,-2
+	SET @start_date=@tempdate
+	SET @tempdate= dateadd(MONTH,3,@tempdate)
+END
+
 GO
 
 ----------------
