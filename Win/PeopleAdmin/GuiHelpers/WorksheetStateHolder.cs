@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using Syncfusion.Windows.Forms.Tools.Win32API;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -1075,21 +1076,18 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
 		public void LoadRotationStateHolder(ViewType type, FilteredPeopleHolder filteredPeopleHolder)
 		{
-			if (_rotationStateHolderCache.ContainsKey(type))
+			IRotationStateHolder stateHolder;
+			if (!_rotationStateHolderCache.TryGetValue(type, out stateHolder))
 			{
-				RotationStateHolder = _rotationStateHolderCache[type];
-				RotationStateHolder.FilteredStateHolder = filteredPeopleHolder;
+				stateHolder = CreatorRotationStateHolder(type, filteredPeopleHolder);
+
+				InParameter.NotNull("rotationStateHolder", stateHolder);
+				
+				_rotationStateHolderCache.Add(type, stateHolder);
 			}
-			else
-			{
-				IRotationStateHolder rotationStateHolder = CreatorRotationStateHolder(type, filteredPeopleHolder);
 
-				InParameter.NotNull("rotationStateHolder", rotationStateHolder);
-
-				RotationStateHolder = rotationStateHolder;
-
-				_rotationStateHolderCache.Add(type, rotationStateHolder);
-			}
+			RotationStateHolder = stateHolder;
+			RotationStateHolder.FilteredStateHolder = filteredPeopleHolder;
 		}
 
 		public IRotationStateHolder RotationStateHolder

@@ -345,7 +345,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 		public void ReassociateSelectedPeopleWithNewUowOpenPeople(IList<IPerson> people, IEnumerable<LogonInfoModel> logonData)
 		{
 			_logonData = logonData;
-			int length = people.Count();
+			int length = people.Count;
 
 			if (length > 0)
 			{
@@ -488,8 +488,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 				personRotationModel.PersonRotation = currentPersonRotation;
 				personRotationModel.CurrentRotation = currentPersonRotation.Rotation;
 			}
-
-
+			
 			//set the Rotation Count. It is necessary to make it 0 when the count it 1 to make sure the + sign doesnt appear
 			personRotationModel.RotationCount = rotationCollection.Count == 1 && currentPersonRotation != null ? 0 : rotationCollection.Count;
 

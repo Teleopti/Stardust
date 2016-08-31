@@ -329,7 +329,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
                     if (isFirstItem)
                     {
-                        personAvailabilityAdapter.PersonFullName =FilteredStateHolder.CommonNameDescription.BuildCommonNameDescription( pAvailability.Person);  //.Name.ToString();
+                        personAvailabilityAdapter.PersonFullName =FilteredStateHolder.CommonNameDescription.BuildCommonNameDescription( pAvailability.Person);
                         isFirstItem = false;
                     }
                     else
@@ -395,7 +395,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             if (selectedItem != null)
             {
                 //TODO:Check whethere this need to be duplicated
-                WorksheetStateHolder.CurrentRotationChildName = selectedItem.Person.Name.ToString(); // FilteredStateHolder.ParentPersonAvailabilityCollection[rowIndex].Person.Name.ToString();
+                WorksheetStateHolder.CurrentRotationChildName = FilteredStateHolder.CommonNameDescription.BuildCommonNameDescription(selectedItem.Person); // FilteredStateHolder.ParentPersonAvailabilityCollection[rowIndex].Person.Name.ToString();
 
                 _childrenPersonAvailabilityCollection =
                     FilteredStateHolder.AllPersonAvailabilityCollection.Where(a => a.Person.Id == selectedItem.Person.Id).ToList();
@@ -412,7 +412,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
                     if (isFirstItem)
                     {
-                        personAvailabilityAdapter.PersonFullName = pAvailability.Person.Name.ToString();
+                        personAvailabilityAdapter.PersonFullName = FilteredStateHolder.CommonNameDescription.BuildCommonNameDescription(pAvailability.Person);
                         isFirstItem = false;
                     }
                     else
