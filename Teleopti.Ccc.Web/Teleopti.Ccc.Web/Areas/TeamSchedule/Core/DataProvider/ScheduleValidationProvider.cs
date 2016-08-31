@@ -22,10 +22,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly IPersonNameProvider _personNameProvider;
 		private readonly IUserTimeZone _timeZone;
 		private readonly IProxyForId<IActivity> _activityForId;
+		private readonly INonoverwritableLayerChecker _nonoverwritableLayerChecker;
 
 		public ScheduleValidationProvider(IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,
 			IPersonRepository personRepository, IPersonWeekViolatingWeeklyRestSpecification personWeekViolating,
-			IUserTimeZone timeZone, IPersonNameProvider personNameProvider, IProxyForId<IActivity> activityForId)
+			IUserTimeZone timeZone, IPersonNameProvider personNameProvider, IProxyForId<IActivity> activityForId, INonoverwritableLayerChecker nonoverwritableLayerChecker)
 		{
 			_scheduleStorage = scheduleStorage;
 			_currentScenario = currentScenario;
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			_timeZone = timeZone;
 			_personNameProvider = personNameProvider;
 			_activityForId = activityForId;
+			_nonoverwritableLayerChecker = nonoverwritableLayerChecker;
 		}
 
 		public IList<ActivityLayerOverlapCheckingResult> GetActivityLayerOverlapCheckingResult(
@@ -41,19 +43,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		{
 			var results = new List<ActivityLayerOverlapCheckingResult>();
 			var people = _personRepository.FindPeople(input.PersonIds);
-			var scenario = _currentScenario.Current();
-			
 
-			var schedulePeriod = (new DateOnlyPeriod(input.Date, input.Date)).Inflate(1);
-			
 			foreach (var person in people)
 			{
-				var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false),
-					schedulePeriod,
-					scenario);
-
-				var scheduleDay = schedules[person].ScheduledDay(input.Date);
-				var overlapLayers = getOverlappedLayersForScheduleDayWhenAdding(input, scheduleDay);
+				var activity = _activityForId.Load(input.ActivityId);
+				var dateTimePeriod = new DateTimePeriod(input.StartTime, input.EndTime);
+				var overlapLayers = _nonoverwritableLayerChecker.GetOverlappedLayersWhenAddingActivity(person, input.Date, activity, dateTimePeriod);
 
 				if(overlapLayers.IsEmpty()) continue;
 
@@ -101,45 +96,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 			return results;
 		}
-
-		private IList<OverlappedLayer> getOverlappedLayersForScheduleDayWhenAdding(CheckActivityLayerOverlapFormData input, IScheduleDay scheduleDay)
-		{
-			var overlappedLayers = new List<OverlappedLayer>();
-
-			var personAssignment = scheduleDay.PersonAssignment();
-			if (personAssignment == null || !personAssignment.ShiftLayers.Any()) return overlappedLayers;
-
-			var assForChecking = tryAdding(personAssignment, input);
-
-			Func<IVisualLayer, bool> predictFunc = layer =>
-			{
-				var activityLayer = layer.Payload as IActivity;
-				return activityLayer != null && !activityLayer.AllowOverwrite;
-			};
-
-			overlappedLayers.AddRange(getOverlappedLayersInProjection(scheduleDay, assForChecking, predictFunc));
-			return overlappedLayers;
-		}
-
-		IPersonAssignment tryAdding(IPersonAssignment ass, CheckActivityLayerOverlapFormData input)
-		{
-			var assForChecking=ass.EntityClone();
-
-			var activity = _activityForId.Load(input.ActivityId);
-			var activityPeriod = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(input.StartTime, _timeZone.TimeZone()),
-				TimeZoneHelper.ConvertToUtc(input.EndTime, _timeZone.TimeZone()));
-
-			if (input.ActivityType == ActivityType.RegularActivity)
-			{
-				assForChecking.AddActivity(activity, activityPeriod);
-			}
-			else if (input.ActivityType == ActivityType.PersonalActivity)
-			{
-				assForChecking.AddPersonalActivity(activity, activityPeriod);
-			}
-			return assForChecking;
-		}
-
 
 		private IList<OverlappedLayer> getOverlappedLayersForScheduleDayWhenMoving(CheckMoveActivityLayerOverlapFormData input, IScheduleDay scheduleDay,
 			PersonActivityItem personActivity)
@@ -350,19 +306,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		IList<string> GetAllValidationRuleTypes(BusinessRuleFlags ruleFlags);
 	}
 
-	public class OverlappedLayer
-	{
-		public string Name { get; set; }
-		public DateTime StartTime { get; set; }
-		public DateTime EndTime { get; set; }
-	}
-
 	public class ActivityLayerOverlapCheckingResult
 	{
 		public Guid PersonId { get; set; }
 		public string Name { get; set; }
 		public IList<OverlappedLayer> OverlappedLayers { get; set; }
 	}
-
-
 }

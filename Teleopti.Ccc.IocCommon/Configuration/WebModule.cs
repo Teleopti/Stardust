@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<CurrentHttpContext>().As<ICurrentHttpContext>().SingleInstance();
+			builder.RegisterType<NonoverwritableLayerChecker>().As<INonoverwritableLayerChecker>().SingleInstance();
 		}
 	}
 }
