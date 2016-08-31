@@ -8,9 +8,9 @@
 				<button class="wfm-btn wfm-btn-default" ng-click="goToOverview()">Overview</button>
 				<button class="wfm-btn wfm-btn-default" ng-click="goToSelectItem()">Select skill</button>
 				<span class="wfm-chip">
-					<span ng-if="skillName !=''" class="chip-text rta-default-cursor">You are now viewing <span ng-if="filteredData.length"><b>top {{filteredData.length}}</b></span> agents with skill: <b>{{skillName}}</b></span>
-					<span ng-if="skillAreaName !=''" class="chip-text rta-default-cursor">You are now viewing <span ng-if="filteredData.length"><b>top {{filteredData.length}}</b></span> agents with skill area: <b>{{skillAreaName}}</b></span>
-					<span ng-if="!(skillName || skillAreaName) && filteredData.length > 50" class="chip-text rta-default-cursor">You are now viewing <b>top {{filteredData.length}} agents</b></span>
+					<span ng-if="skillName !=''" class="chip-text rta-default-cursor">You are now viewing <span ng-if="filteredData.length == 50"><b>top {{filteredData.length}}</b></span> agents with skill: <b>{{skillName}}</b></span>
+					<span ng-if="skillAreaName !=''" class="chip-text rta-default-cursor">You are now viewing <span ng-if="filteredData.length == 50"><b>top {{filteredData.length}}</b></span> agents with skill area: <b>{{skillAreaName}}</b></span>
+					<span ng-if="!(skillName || skillAreaName) && filteredData.length == 50" class="chip-text rta-default-cursor">You are now viewing <b>top {{filteredData.length}} agents</b> in alarm</span>
 				</span>
 			</span>
 		</div>
