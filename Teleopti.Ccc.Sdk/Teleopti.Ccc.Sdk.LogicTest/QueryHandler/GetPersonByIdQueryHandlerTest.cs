@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 
 			var target = new GetPersonByIdQueryHandler(assembler, personRepository, new FakeCurrentUnitOfWorkFactory());
 			var result = target.Handle(new GetPersonByIdQueryDto { PersonId = Guid.NewGuid() });
-			result.Count.Should().Be.EqualTo(1);
+			result.Count.Should().Be.EqualTo(0);
 		}
 	}
 }
