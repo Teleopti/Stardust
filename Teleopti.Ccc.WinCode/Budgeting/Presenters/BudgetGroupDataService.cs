@@ -101,7 +101,9 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Presenters
             foreach (var budgetGroupDayDetailModel in budgetDayProvider.VisibleDayModels().Where(b => b.BudgetDay.Id.HasValue))
             {
                 budgetGroupDayDetailModel.BudgetDay =
+#pragma warning disable 618
                     _budgetDayRepository.UnitOfWork.Merge(budgetGroupDayDetailModel.BudgetDay);
+#pragma warning restore 618
             }
     	}
 

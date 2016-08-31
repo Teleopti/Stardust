@@ -40,7 +40,9 @@ namespace Teleopti.Ccc.WinCode.Common
 
         private ISchedulerStateHolder filterPersonsInOrg() 
         {
+#pragma warning disable 618
             using(_contractRepository.UnitOfWork.DisableFilter(QueryFilter.Deleted))
+#pragma warning restore 618
             {
                 _contractRepository.FindAllContractByDescription();
                 // same uow
