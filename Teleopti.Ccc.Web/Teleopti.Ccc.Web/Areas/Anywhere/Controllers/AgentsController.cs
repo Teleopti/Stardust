@@ -78,19 +78,19 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		[UnitOfWork, HttpGet, Route("api/Agents/GetStates")]
 		public virtual IHttpActionResult GetStates(Guid teamId)
 		{
-			return Ok(_agentStatesBuilder.ForTeams(new[] {teamId}, false).States);
+			return Ok(_agentStatesBuilder.ForTeams(new[] {teamId}).States);
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForTeams")]
 		public virtual IHttpActionResult GetStatesForTeams([FromUri]StatesQuery query)
 		{
-			return Ok(_agentStatesBuilder.ForTeams(query.Ids, false));
+			return Ok(_agentStatesBuilder.ForTeams(query.Ids));
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/GetAlarmStatesForTeams")]
 		public virtual IHttpActionResult GetAlarmStatesForTeams([FromUri]StatesQuery query)
 		{
-			return Ok(_agentStatesBuilder.ForTeams(query.Ids, true));
+			return Ok(_agentStatesBuilder.InAlarmForTeams(query.Ids));
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForSites")]

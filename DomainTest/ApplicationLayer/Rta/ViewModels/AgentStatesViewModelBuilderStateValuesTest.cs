@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				);
 			Now.Is("2015-10-22 08:30".Utc());
 
-			var states = Target.ForTeams(new[] { teamId }, false).States;
+			var states = Target.ForTeams(new[] { teamId }).States;
 
 			states.Single().PersonId.Should().Be(personId);
 			states.Single().State.Should().Be("state");
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				}
 				);
 
-			var states = Target.ForTeams(new[] { teamId }, false).States;
+			var states = Target.ForTeams(new[] { teamId }).States;
 
 			states.Single().Color.Should().Be("#FFFFFF");
 		}
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			TimeZone.IsSweden();
 			Culture.IsSwedish();
 
-			var states = Target.ForTeams(new[] { teamId }, false).States;
+			var states = Target.ForTeams(new[] { teamId }).States;
 
 			states.Single().NextActivityStartTime.Should().Be("10:00");
 		}
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			TimeZone.IsSweden();
 			Culture.IsSwedish();
 
-			var states = Target.ForTeams(new[] { teamId }, false).States;
+			var states = Target.ForTeams(new[] { teamId }).States;
 
 			states.Single().NextActivityStartTime.Should().Be("2015-11-24 10:00");
 		}
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				);
 			Now.Is("2015-11-23 08:30".Utc());
 
-			var states = Target.ForTeams(new[] { teamId }, false).States;
+			var states = Target.ForTeams(new[] { teamId }).States;
 
 			states.Single().NextActivityStartTime.Should().Be(null);
 		}
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				}
 				);
 
-			var states = Target.ForTeams(new[] { teamId }, false).States;
+			var states = Target.ForTeams(new[] { teamId }).States;
 
 			states.Single().TimeInAlarm.Should().Be(null);
 		}
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			);
 			Now.Is("2015-12-22 08:01".Utc());
 
-			var states = Target.ForTeams(new[] { teamId }, false).States;
+			var states = Target.ForTeams(new[] { teamId }).States;
 
 			states.Single().TimeInAlarm.Should().Be(60);
 		}
@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				);
 			Now.Is("2015-12-22 08:30".Utc());
 
-			var states = Target.ForTeams(new[] { teamId }, false).States;
+			var states = Target.ForTeams(new[] { teamId }).States;
 
 			states.Single().TimeInAlarm.Should().Be(null);
 		}
@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				);
 			Now.Is("2015-12-22 08:30".Utc());
 
-			var states = Target.ForTeams(new[] { teamId }, false).States;
+			var states = Target.ForTeams(new[] { teamId }).States;
 
 			states.Single().Color.Should().Be(ColorTranslator.ToHtml(Color.FromArgb(Color.Red.ToArgb())));
 		}

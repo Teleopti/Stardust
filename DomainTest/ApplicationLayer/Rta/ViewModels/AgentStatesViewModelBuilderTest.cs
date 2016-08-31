@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			});
 			Now.Is("2015-10-22 08:30".Utc());
 
-			var agentState = Target.ForTeams(new[] { teamId }, false).States.Single();
+			var agentState = Target.ForTeams(new[] { teamId }).States.Single();
 
 			agentState.PersonId.Should().Be(personId);
 			agentState.State.Should().Be("state");
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				}
 			});
 
-			var state = Target.ForTeams(new[] { teamId }, false).States.Single();
+			var state = Target.ForTeams(new[] { teamId }).States.Single();
 
 			state.Shift.Single().Color.Should().Be("#80FF80");
 			state.Shift.Single().StartTime.Should().Be("2016-05-29T12:00:00");
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			});
 			TimeZone.IsSweden();
 
-			var state = Target.ForTeams(new[] { teamId }, false).States.Single();
+			var state = Target.ForTeams(new[] { teamId }).States.Single();
 
 			state.Shift.Single().StartTime.Should().Be("2016-05-29T14:00:00");
 			state.Shift.Single().EndTime.Should().Be("2016-05-29T15:00:00");
@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		{
 			Now.Is("2016-05-28 12:00");
 
-			Target.ForTeams(new Guid[] { }, false)
+			Target.ForTeams(new Guid[] { })
 				.Time.Should().Be("2016-05-28 12:00".Utc());
 		}
 
@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Now.Is("2016-05-28 12:00");
 			TimeZone.IsSweden();
 
-			Target.ForTeams(new Guid[] { }, false)
+			Target.ForTeams(new Guid[] { })
 				.Time.Should().Be("2016-05-28 14:00".Utc());
 		}
 
@@ -243,7 +243,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			});
 			Now.Is("2016-06-08 08:02".Utc());
 
-			var agentState = Target.ForTeams(new[] { teamId }, false).States.Single();
+			var agentState = Target.ForTeams(new[] { teamId }).States.Single();
 			
 			agentState.TimeInRule.Should().Be(120);
 		}
@@ -260,7 +260,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			});
 			Now.Is("2016-06-08 08:02".Utc());
 
-			var agentState = Target.ForTeams(new[] { teamId }, false).States.Single();
+			var agentState = Target.ForTeams(new[] { teamId }).States.Single();
 			
 			agentState.TimeInRule.Should().Be(null);
 		}
@@ -285,7 +285,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			});
 			Now.Is("2016-06-16 08:00");
 
-			var outOfAdherence = Target.ForTeams(new[] {teamId}, false).States.Single()
+			var outOfAdherence = Target.ForTeams(new[] {teamId}).States.Single()
 				.OutOfAdherences.Single();
 
 			outOfAdherence.StartTime.Should().Be("2016-06-16T07:40:00");
@@ -312,7 +312,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			});
 			Now.Is("2016-06-16 08:00");
 
-			var outOfAdherence = Target.ForTeams(new[] { teamId }, false).States.Single()
+			var outOfAdherence = Target.ForTeams(new[] { teamId }).States.Single()
 				.OutOfAdherences.Single();
 
 			outOfAdherence.StartTime.Should().Be("2016-06-16T07:40:00");
@@ -340,7 +340,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Now.Is("2016-06-16 12:30");
 			TimeZone.IsSweden();
 
-			var outOfAdherence = Target.ForTeams(new[] { teamId }, false).States.Single()
+			var outOfAdherence = Target.ForTeams(new[] { teamId }).States.Single()
 				.OutOfAdherences.Single();
 
 			outOfAdherence.StartTime.Should().Be("2016-06-16T14:00:00");
