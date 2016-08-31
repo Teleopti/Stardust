@@ -350,6 +350,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 			else
 			{
+				builder.RegisterType<DayOffOptimizationDesktopTeamBlock>().AsSelf().InstancePerLifetimeScope();
 				builder.RegisterType<ScheduleOptimization>().As<IScheduleOptimization>().InstancePerLifetimeScope().ApplyAspects();
 				builder.RegisterType<DayOffOptimizationDesktopClassic>().As<IDayOffOptimizationDesktop>().InstancePerLifetimeScope();
 			}

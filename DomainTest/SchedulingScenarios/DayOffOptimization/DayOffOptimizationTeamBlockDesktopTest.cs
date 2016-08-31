@@ -21,8 +21,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
-	[TestFixture(false)]
-	[TestFixture(true)]
+	[TestFixture(false, false)]
+	[TestFixture(false, true)]
+	[TestFixture(true, false)]
+	[TestFixture(true, true)]
 	[DomainTest]
 	public class DayOffOptimizationTeamBlockDesktopTest : DayOffOptimizationScenario
 	{
@@ -30,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public DayOffOptimizationDesktopTeamBlock Target;
 		public FakeGroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider; //should not use fake here...
 
-		public DayOffOptimizationTeamBlockDesktopTest(bool cascading) : base(true, cascading)
+		public DayOffOptimizationTeamBlockDesktopTest(bool teamBlockDayOffForIndividuals, bool cascading) : base(teamBlockDayOffForIndividuals, cascading)
 		{
 		}
 
