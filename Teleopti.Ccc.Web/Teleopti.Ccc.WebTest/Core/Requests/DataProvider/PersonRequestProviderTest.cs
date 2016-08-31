@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var result = target.RetrieveRequestsForLoggedOnUser(paging, true);
 			repository.AssertWasCalled(x => x.FindAllRequestsForAgentByType(
 				Arg<IPerson>.Matches(p => p.Equals(person)),
-				Arg<Paging>.Matches(p => p.Skip == paging.Skip && p.Take == paging.Take),
+				Arg<Paging>.Matches(p => p.Equals(paging)),
 				Arg<DateTime>.Is.Anything,
 				Arg<RequestType[]>.Matches(r => r.SequenceEqual(requestTypes))));
 			Assert.That(personRequests.Length, Is.EqualTo(result.Count()));
