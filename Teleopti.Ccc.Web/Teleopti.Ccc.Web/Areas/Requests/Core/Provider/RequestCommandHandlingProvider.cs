@@ -88,7 +88,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 					TrackedCommandInfo = trackInfo,
 					PersonRequestId = personRequestId,
 					IsManualDeny = true,
-					ReplyMessage = replyMessage
+					ReplyMessage = replyMessage,
+					DenyReason = "RequestDenyReasonSupervisor"
 				};
 
 				_commandDispatcher.Execute(command);

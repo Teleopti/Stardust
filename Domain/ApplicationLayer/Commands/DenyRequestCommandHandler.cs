@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		{
 			try
 			{
-				personRequest.Deny(null, "RequestDenyReasonSupervisor", _authorization, !command.IsManualDeny);
+				personRequest.Deny(null, command.DenyReason, _authorization, !command.IsManualDeny);
 				return true;
 			}
 			catch (InvalidRequestStateTransitionException)

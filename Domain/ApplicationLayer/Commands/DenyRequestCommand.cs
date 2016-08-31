@@ -13,5 +13,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public IList<string> ErrorMessages { get; set; }
 		public string ReplyMessage { get; set; }
 		public bool IsReplySuccess { get; set; }
+		public string DenyReason { get; set; }
 	}
 }
