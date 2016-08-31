@@ -34,8 +34,10 @@
 
 		scope.vm.currentCommandLabel = containerCtrl.activeCmd;
 		scope.vm.getDate = containerCtrl.getDate;
-		if (!containerCtrl.hasToggle('AutoMoveOverwrittenActivityForOperationsEnabled'))
+		if (!containerCtrl.hasToggle('AutoMoveOverwrittenActivityForOperationsEnabled')){
 			scope.vm.actionOptions.shift();
+			scope.vm.currentActionOptionValue = scope.vm.actionOptions[0].value;
+		}
 
 		var focusTarget = elem[0].querySelector('.focus-default');
 		if (focusTarget) angular.element(focusTarget).focus();
@@ -66,7 +68,7 @@
 			{
 				value: 'DoNotModifyForTheseAgents',
 				getName: function(currentCmdLabel) {
-					return this.value.replace('{0}', $translate.instant(currentCmdLabel));
+					return $translate.instant(this.value).replace('{0}', $translate.instant(currentCmdLabel));
 				},
 				beforeAction: function () {
 					vm.toggleAllPersonSelection(false);
