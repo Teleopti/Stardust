@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		{
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldCareAboutGroupType()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
@@ -81,9 +81,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				Extra = {UseTeamSameDaysOff = true}
 			};
 			GroupScheduleGroupPageDataProvider.AddRuleSetBag(ruleSetBag); //remove me later!
+			var groupPageLight = new GroupPageLight("_", GroupPageType.RuleSetBag);
 
-
-			Target.Execute(period, stateHolder.Schedules.SchedulesForPeriod(period, agents.ToArray()), new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), () => new WorkShiftFinderResultHolder(), (o, args) => { });
+			Target.Execute(period, stateHolder.Schedules.SchedulesForPeriod(period, agents.ToArray()), new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), groupPageLight, () => new WorkShiftFinderResultHolder(), (o, args) => { });
 
 			var dayOffs = stateHolder.Schedules.SchedulesForPeriod(period, agents.ToArray()).Where(x => x.HasDayOff()).Select(x => x.PersonAssignment());
 			var dayOffsAgent1 = dayOffs.Where(x => x.Person.Equals(agents.First())).Select(x => x.Date);

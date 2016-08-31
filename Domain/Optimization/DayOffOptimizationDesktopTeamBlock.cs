@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class DayOffOptimizationDesktopTeamBlock : IDayOffOptimizationDesktop
 	{
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
-		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 		private readonly ITeamBlockDayOffOptimizerService _teamBlockDayOffOptimizerService;
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IMatrixListFactory _matrixListFactory;
@@ -23,19 +22,19 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IResourceOptimizationHelperExtended _resouceOptimizationHelperExtended;
 		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 
 		public DayOffOptimizationDesktopTeamBlock(IResourceOptimizationHelper resourceOptimizationHelper,
-								IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
 								ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService,
 								Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
 								IMatrixListFactory matrixListFactory,
 								IOptimizerHelperHelper optimizerHelperHelper,
 								Func<ISchedulerStateHolder> schedulerStateHolder,
 								IResourceOptimizationHelperExtended resouceOptimizationHelperExtended,
-								IResourceCalculationContextFactory resourceCalculationContextFactory)
+								IResourceCalculationContextFactory resourceCalculationContextFactory,
+								TeamInfoFactoryFactory teamInfoFactoryFactory)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;
-			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
 			_teamBlockDayOffOptimizerService = teamBlockDayOffOptimizerService;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_matrixListFactory = matrixListFactory;
@@ -43,11 +42,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_schedulerStateHolder = schedulerStateHolder;
 			_resouceOptimizationHelperExtended = resouceOptimizationHelperExtended;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
+			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 		}
 
-		public void Execute(DateOnlyPeriod selectedPeriod, IEnumerable<IScheduleDay> selectedDays, ISchedulingProgress backgroundWorker,
+		public void Execute(DateOnlyPeriod selectedPeriod, 
+			IEnumerable<IScheduleDay> selectedDays, 
+			ISchedulingProgress backgroundWorker,
 			IOptimizationPreferences optimizationPreferences, 
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, 
+			GroupPageLight groupPageLight,
+			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
 			Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
 		{
 			var stateHolder = _schedulerStateHolder();
@@ -67,8 +71,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				var selectedPersons = matrixList.Select(x => x.Person).Distinct().ToList();
 
 				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder());
-				_groupPersonBuilderWrapper.SetSingleAgentTeam();
-				var teamInfoFactory = new TeamInfoFactory(_groupPersonBuilderWrapper);
+				var teamInfoFactory = _teamInfoFactoryFactory.Create(groupPageLight);
 
 				_teamBlockDayOffOptimizerService.OptimizeDaysOff(matrixList,
 					selectedPeriod,

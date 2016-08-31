@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public void Execute(DateOnlyPeriod selectedPeriod, IEnumerable<IScheduleDay> selectedDays,
 			ISchedulingProgress backgroundWorker, IOptimizationPreferences optimizationPreferences,
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, GroupPageLight groupPageLight,
 			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder, Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
 		{
 			var stateHolder = _schedulerStateHolder();

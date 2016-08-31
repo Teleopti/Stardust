@@ -6,12 +6,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	//remove me when toggle 37998 is set to true
+	//remove me when toggle 37998 is set to true. And clean up unnecesssary params
 	public interface IDayOffOptimizationDesktop
 	{
 		void Execute(DateOnlyPeriod selectedPeriod, IEnumerable<IScheduleDay> selectedDays,
 			ISchedulingProgress backgroundWorker, IOptimizationPreferences optimizationPreferences,
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, 
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
+			GroupPageLight groupPageLight,
 			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder, 
 			Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized);
 	}
