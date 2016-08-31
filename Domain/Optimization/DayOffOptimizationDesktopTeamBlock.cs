@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -61,7 +60,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 				ResourceCalculationContext.Fetch().PrimarySkillMode = true;
 
 				var matrixList = _matrixListFactory.CreateMatrixListForSelection(selectedDays);
-
 				_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixList, optimizationPreferences, selectedPeriod);
 
 				_resouceOptimizationHelperExtended.ResourceCalculateAllDays(backgroundWorker, false);

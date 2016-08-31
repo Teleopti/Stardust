@@ -106,11 +106,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var args = new ResourceOptimizerProgressEventArgs(0, 0, UserTexts.Resources.CollectingData);
 			_backgroundWorker.ReportProgress(1, args);
 
-			IList<IScheduleMatrixPro> allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
-
-			var teamInfoFactory = _teamInfoFactoryFactory.Create(schedulingOptions.GroupOnGroupPageForTeamBlockPer);
-			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory, _teamBlockScheudlingOptions);
-
+			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
 			if (optimizationPreferences.General.OptimizationStepDaysOff)
 			{
 				_dayOffOptimizationDesktopTeamBlock.Execute(selectedPeriod, selectedSchedules, _backgroundWorker, optimizationPreferences, dayOffOptimizationPreferenceProvider, schedulingOptions.GroupOnGroupPageForTeamBlockPer, null, null);
@@ -118,6 +114,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.Skills))
 			{
+				var teamInfoFactory = _teamInfoFactoryFactory.Create(schedulingOptions.GroupOnGroupPageForTeamBlockPer);
+				var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory, _teamBlockScheudlingOptions);
+
 				if (optimizationPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime)
 				{
 					var optimizeDayOffs = optimizationPreferences.General.OptimizationStepDaysOff;
