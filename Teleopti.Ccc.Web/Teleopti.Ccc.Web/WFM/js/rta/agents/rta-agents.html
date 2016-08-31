@@ -8,9 +8,9 @@
 				<button class="wfm-btn wfm-btn-default" ng-click="goToOverview()">Overview</button>
 				<button class="wfm-btn wfm-btn-default" ng-click="goToSelectItem()">Select skill</button>
 				<span class="wfm-chip">
-					<span ng-if="skillName !=''" class="chip-text rta-default-cursor">You are now viewing <b>top {{agents.length}} agents</b> with skill: <b>{{skillName}}</b></span>
-					<span ng-if="skillAreaName !=''" class="chip-text rta-default-cursor">You are now viewing <b>top {{agents.length}} agents</b>  with skill area: <b>{{skillAreaName}}</b></span>
-					<span ng-if="!(skillName || skillAreaName)" class="chip-text rta-default-cursor">You are now viewing <b>top {{agents.length}} agents</b></span>
+					<span ng-if="skillName !=''" class="chip-text rta-default-cursor">You are now viewing <span ng-if="filteredData.length"><b>top {{filteredData.length}}</b></span> agents with skill: <b>{{skillName}}</b></span>
+					<span ng-if="skillAreaName !=''" class="chip-text rta-default-cursor">You are now viewing <span ng-if="filteredData.length"><b>top {{filteredData.length}}</b></span> agents with skill area: <b>{{skillAreaName}}</b></span>
+					<span ng-if="!(skillName || skillAreaName) && filteredData.length > 50" class="chip-text rta-default-cursor">You are now viewing <b>top {{filteredData.length}} agents</b></span>
 				</span>
 			</span>
 		</div>
@@ -48,7 +48,10 @@
 		<div class="con-flex">
 			<div class="wfm-switch panel-switch line-right">
 				<input id="switch1" ng-model="agentsInAlarm" type="checkbox" />
-				<label class="rta-agents-in-alarm-switch" for="switch1">
+				<md-tooltip ng-if="agents.length > 50" md-direction="right">
+					You're trying to open too many agents
+				</md-tooltip>
+				<label class="rta-agents-in-alarm-switch" for="switch1" ng-class="{ 'rta-no-pointer': agents.length > 50}">
 					<span class="wfm-switch-label">{{'InAlarm'|translate}}</span>
 					<span class="wfm-switch-toggle"></span>
 				</label>
