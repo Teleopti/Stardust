@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Interfaces.Domain
 {
 	public interface IScheduleStorage
 	{
-
-		IUnitOfWork UnitOfWork { get; }
 		void Add(IPersistableScheduleData scheduleData);
 		void Remove(IPersistableScheduleData scheduleData);
 		IPersistableScheduleData Get(Type concreteType, Guid id);

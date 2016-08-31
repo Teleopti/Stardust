@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			
 			_scheduleStorage = new FakeScheduleStorage();
 			_scheduleStorage.SetUnitOfWork(new FakeUnitOfWork());
-			var scheduleDifferenceSaver = new ScheduleDifferenceSaver(_scheduleStorage);
+			var scheduleDifferenceSaver = new ScheduleDifferenceSaver(_scheduleStorage, CurrentUnitOfWork.Make());
 			_saveSchedulePartService = new SaveSchedulePartService(scheduleDifferenceSaver, _personAbsenceAccountRepository);
 
 			_personAbsenceCreator = new PersonAbsenceCreator(_saveSchedulePartService, _businessRulesForAccountUpdate);

@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
@@ -54,7 +55,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var fakePersonAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 		    var businessRulesForPersonalAccountUpdate = new BusinessRulesForPersonalAccountUpdate(fakePersonAbsenceAccountRepository, new SchedulingResultStateHolder());
 			var scheduleTagAssembler = new ScheduleTagAssembler(new FakeScheduleTagRepository());
-			var scheduleSaveHandler = new ScheduleSaveHandler(new SaveSchedulePartService(new ScheduleDifferenceSaver(_scheduleStorage), fakePersonAbsenceAccountRepository));
+			var scheduleSaveHandler = new ScheduleSaveHandler(new SaveSchedulePartService(new ScheduleDifferenceSaver(_scheduleStorage, new ThisUnitOfWork(new FakeUnitOfWork())), fakePersonAbsenceAccountRepository));
 
 			_target = new CancelAbsenceCommandHandler(dateTimePeriodAssembler, scheduleTagAssembler, _scheduleStorage, personRepository, _scenarioRepository, currentUnitOfWorkFactory, businessRulesForPersonalAccountUpdate, scheduleSaveHandler);
         }

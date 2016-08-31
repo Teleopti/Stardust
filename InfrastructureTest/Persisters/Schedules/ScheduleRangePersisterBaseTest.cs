@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			return new ScheduleRangePersister(CurrentUnitOfWorkFactory.Make(),
 				new DifferenceEntityCollectionService<IPersistableScheduleData>(),
 				ConflictCollector(),
-				new ScheduleDifferenceSaver(scheduleRep),
+				new ScheduleDifferenceSaver(scheduleRep, CurrentUnitOfWork.Make()),
 				MockRepository.GenerateMock<IInitiatorIdentifier>(),
 				new KeepScheduleEvents());
 		}

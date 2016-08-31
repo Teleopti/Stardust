@@ -19,6 +19,7 @@ using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_businessRuleProvider = new FakeBusinessRuleProvider();
 			_businessRuleCollection = new FakeNewBusinessRuleCollection();
 
-			_scheduleDifferenceSaver = new ScheduleDifferenceSaver(_scheduleStorage);
+			_scheduleDifferenceSaver = new ScheduleDifferenceSaver(_scheduleStorage, CurrentUnitOfWork.Make());
 			_shiftTradePendingReasonsService = new ShiftTradePendingReasonsService(_requestFactory, _scenarioRepository);
 
 			var shiftTradeSpecifications = new List<IShiftTradeSpecification>
