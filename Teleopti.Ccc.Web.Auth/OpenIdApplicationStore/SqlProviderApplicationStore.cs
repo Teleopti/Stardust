@@ -14,12 +14,14 @@ namespace Teleopti.Ccc.Web.Auth.OpenIdApplicationStore
 		private readonly INonceInfoRepository _nonceInfoRepository;
 		private readonly INow _now;
 		private readonly TimeSpan maximumMessageAge = TimeSpan.FromMinutes(5);
+		private DateTime _lastChecked;
 
 		public SqlProviderApplicationStore(ICryptoKeyInfoRepository cryptoKeyInfoRepository, INonceInfoRepository nonceInfoRepository, INow now)
 		{
 			_cryptoKeyInfoRepository = cryptoKeyInfoRepository;
 			_nonceInfoRepository = nonceInfoRepository;
 			_now = now;
+			_lastChecked = DateTime.MinValue;
 		}
 
 		public CryptoKey GetKey(string bucket, string handle)
@@ -51,6 +53,12 @@ namespace Teleopti.Ccc.Web.Auth.OpenIdApplicationStore
 			{
 				throw new CryptoKeyCollisionException(e);
 			}
+
+			if (_lastChecked + TimeSpan.FromMinutes(30) >= _now.UtcDateTime())
+				return;
+
+			_cryptoKeyInfoRepository.ClearExpired(_now.UtcDateTime());
+			_lastChecked = _now.UtcDateTime();
 		}
 
 		public void RemoveKey(string bucket, string handle)

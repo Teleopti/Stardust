@@ -102,6 +102,29 @@ namespace Teleopti.Ccc.InfrastructureTest.Authentication
 			}
 		}
 
+		[Test]
+		public void ShouldClearExpired()
+		{
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			{
+				const string bucket = "bucket";
+				const string handle = "handle";
+				var cryptoKey = Guid.NewGuid().ToByteArray();
+				var cryptoKeyExpiration = DateTime.Today-TimeSpan.FromDays(1);
+				Target.Add(new CryptoKeyInfo
+				{
+					Bucket = bucket,
+					Handle = handle,
+					CryptoKey = cryptoKey,
+					CryptoKeyExpiration = cryptoKeyExpiration
+				});
+
+				Target.ClearExpired(DateTime.UtcNow);
+
+				Target.Find(bucket, handle).Should().Be.Null();
+			}
+		}
+
 		[Test, ExpectedException(typeof(DuplicateCryptoKeyException))]
 		public void ShouldThrowWhenExisting()
 		{

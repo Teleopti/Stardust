@@ -94,6 +94,8 @@ namespace Teleopti.Ccc.Web.AuthTest.OpenIdApplicationStore
 			cryptoKeyInfoRepository.AssertWasCalled(x => x.Add(Arg<CryptoKeyInfo>.Matches(
 				c => c.Bucket == bucket && c.Handle == handle && c.CryptoKey == key && c.CryptoKeyExpiration == cryptoKeyExpiration
 				)));
+
+			cryptoKeyInfoRepository.AssertWasCalled(x => x.ClearExpired(Arg<DateTime>.Is.Anything));
 		}
 
 		[Test, ExpectedException(typeof(CryptoKeyCollisionException))]

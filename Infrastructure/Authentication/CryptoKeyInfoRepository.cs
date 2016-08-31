@@ -45,11 +45,17 @@ namespace Teleopti.Ccc.Infrastructure.Authentication
 			if (cryptoKeyInfo != null)
 				_currentTenantSession.CurrentSession().Delete(cryptoKeyInfo);
 		}
+
+		public void ClearExpired(DateTime expiredTimestamp)
+		{
+			var session = _currentTenantSession.CurrentSession();
+			session.CreateQuery("DELETE FROM CryptoKeyInfo c WHERE c.CryptoKeyExpiration < :expiredTimestamp")
+				.SetParameter("expiredTimestamp", expiredTimestamp)
+				.ExecuteUpdate();
+		}
 	}
 
 	public class DuplicateCryptoKeyException : Exception
 	{
-		
 	}
-	
 }

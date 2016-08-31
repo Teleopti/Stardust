@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Infrastructure.Authentication
@@ -8,5 +9,6 @@ namespace Teleopti.Ccc.Infrastructure.Authentication
 		IEnumerable<CryptoKeyInfo> Find(string bucket);
 		void Add(CryptoKeyInfo cryptoKeyInfo);
 		void Remove(string bucket, string handle);
+		void ClearExpired(DateTime expiredTimestamp);
 	}
 }
