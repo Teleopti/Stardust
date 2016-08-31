@@ -13622,4 +13622,31 @@ Dessa val är aktiverade:
   <data name="FirstComeFirstServed" xml:space="preserve">
     <value>Först till kvarn</value>
   </data>
+  <data name="ConfirmDeleteCampaign" xml:space="preserve">
+    <value>Är du säker på att du vill ta bort den här kampanjen?</value>
+  </data>
+  <data name="OfferedAverageHandleTime" xml:space="preserve">
+    <value>Genomsnittlig hanteringstid inkommande</value>
+  </data>
+  <data name="RtaPauseEnabledNotice" xml:space="preserve">
+    <value>RTA-övervakningen pausad {0}! Aktivera igenom genom att klicka på play</value>
+  </data>
+  <data name="EditLocationProperty" xml:space="preserve">
+    <value>Redigera lokalegenskaper</value>
+  </data>
+  <data name="LocationProperties" xml:space="preserve">
+    <value>Lokalegenskaper</value>
+  </data>
+  <data name="NoChangeHasBeenMade" xml:space="preserve">
+    <value>Ingen ändring har gjorts</value>
+  </data>
+  <data name="ConfigureValidationWarnings" xml:space="preserve">
+    <value>Konfigurera valideringsvarningar</value>
+  </data>
+  <data name="MinWeeklyRestRuleName" xml:space="preserve">
+    <value>Minsta veckovila</value>
+  </data>
+  <data name="NewNightlyRestRuleName" xml:space="preserve">
+    <value>Nattvila</value>
+  </data>
 </root>

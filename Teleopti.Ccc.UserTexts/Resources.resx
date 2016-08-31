@@ -14856,7 +14856,7 @@ These options are activated:
     <comment>Displayed name for schedule validation rule "MinWeekWorkTimeRule"</comment>
   </data>
   <data name="NewDayOffRuleName" xml:space="preserve">
-    <value>Shift Overlaps With Day-Off</value>
+    <value>Shift Overlaps With Day Off</value>
     <comment>Displayed name for schedule validation rule "NewDayOffRule"</comment>
   </data>
   <data name="NewMaxWeekWorkTimeRuleName" xml:space="preserve">
