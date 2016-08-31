@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 DELETE FROM [dbo].[AgentState]
 WHERE
 	PersonId = :PersonId AND
-	CONCAT(DataSourceId, ';', UserCode) NOT IN (:DataSourceIdUserCode)")
+	CAST(DataSourceId AS varchar(max)) + ';' + UserCode NOT IN (:DataSourceIdUserCode)")
 				.SetParameter("PersonId", model.PersonId)
 				.SetParameterList("DataSourceIdUserCode", model.ExternalLogons.Select(x => $"{x.DataSourceId};{x.UserCode}"))
 				.ExecuteUpdate();
@@ -45,7 +45,8 @@ WHERE
 			{
 				var updated = _unitOfWork.Current().Session()
 					.CreateSQLQuery(@"
-UPDATE [dbo].[AgentState] SET
+UPDATE [dbo].[AgentState]
+SET
 	BusinessUnitId = :BusinessUnitId,
 	SiteId = :SiteId,
 	TeamId = :TeamId
