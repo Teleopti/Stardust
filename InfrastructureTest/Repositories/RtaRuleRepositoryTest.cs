@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		    var rule = new RtaRule(new Description("."), Color.AliceBlue, TimeSpan.Zero, 0);
 			PersistAndRemoveFromUnitOfWork(rule);
 			
-			var loaded = new RtaRuleRepository(UnitOfWork).LoadAll().Single();
+			var loaded = new RtaRuleRepository(CurrUnitOfWork).LoadAll().Single();
 
 			loaded.IsAlarm.Should().Be.False();
 	    }
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		    rule.IsAlarm = false;
 			PersistAndRemoveFromUnitOfWork(rule);
 			
-			var loaded = new RtaRuleRepository(UnitOfWork).LoadAll().Single();
+			var loaded = new RtaRuleRepository(CurrUnitOfWork).LoadAll().Single();
 
 			loaded.IsAlarm.Should().Be.False();
 	    }
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var rule = new RtaRule(new Description("."), Color.AliceBlue, TimeSpan.Zero, 0);
 			PersistAndRemoveFromUnitOfWork(rule);
 
-			var loaded = new RtaRuleRepository(UnitOfWork).LoadAll().Single();
+			var loaded = new RtaRuleRepository(CurrUnitOfWork).LoadAll().Single();
 
 			loaded.AlarmColor.ToArgb().Should().Be(Color.AliceBlue.ToArgb());
 		}
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			rule.AlarmColor = Color.AntiqueWhite;
 			PersistAndRemoveFromUnitOfWork(rule);
 
-			var loaded = new RtaRuleRepository(UnitOfWork).LoadAll().Single();
+			var loaded = new RtaRuleRepository(CurrUnitOfWork).LoadAll().Single();
 
 			loaded.AlarmColor.ToArgb().Should().Be(Color.AntiqueWhite.ToArgb());
 		}

@@ -9,13 +9,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class TeamGamificationSettingRepository : Repository<ITeamGamificationSetting>, ITeamGamificationSettingRepository
 	{
-		public TeamGamificationSettingRepository(IUnitOfWork unitOfWork)
-#pragma warning disable 618
-			: base(unitOfWork)
-#pragma warning restore 618
-		{
-		}
-
 		public TeamGamificationSettingRepository(ICurrentUnitOfWork currentUnitOfWork)
 			: base(currentUnitOfWork)
 		{

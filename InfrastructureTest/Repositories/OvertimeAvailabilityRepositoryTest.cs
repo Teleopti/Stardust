@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             var item = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(item);
 
-            var foundItem = new OvertimeAvailabilityRepository(UnitOfWork).LoadAggregate(item.Id.GetValueOrDefault());
+            var foundItem = new OvertimeAvailabilityRepository(CurrUnitOfWork).LoadAggregate(item.Id.GetValueOrDefault());
             Assert.AreEqual(item, foundItem);
         }
 
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(createOvertimeAvailability(new DateOnly(2009, 2, 3), _person, true));
             PersistAndRemoveFromUnitOfWork(createOvertimeAvailability(new DateOnly(2009, 3, 2), _person, false));
             IEnumerable<IPerson> persons = new Collection<IPerson> { _person };
-            IList<IOvertimeAvailability> days = new OvertimeAvailabilityRepository(UnitOfWork).Find(period, persons);
+            IList<IOvertimeAvailability> days = new OvertimeAvailabilityRepository(CurrUnitOfWork).Find(period, persons);
             Assert.AreEqual(2, days.Count);
             //Assert.IsTrue(days[1].NotAvailable);
             //Assert.IsFalse(days[0].NotAvailable);
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(createOvertimeAvailability(new DateOnly(2009, 2, 3), _person, true));
             PersistAndRemoveFromUnitOfWork(createOvertimeAvailability(new DateOnly(2009, 3, 2), _person, false));
             IEnumerable<IPerson> persons = new Collection<IPerson>();
-            IList<IOvertimeAvailability> days = new OvertimeAvailabilityRepository(UnitOfWork).Find(period, persons);
+            IList<IOvertimeAvailability> days = new OvertimeAvailabilityRepository(CurrUnitOfWork).Find(period, persons);
             Assert.AreEqual(0, days.Count);
         }
 
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(createOvertimeAvailability(date, person2, false));
             PersistAndRemoveFromUnitOfWork(createOvertimeAvailability(date.AddDays(1), _person, false));
 
-            IList<IOvertimeAvailability > days = new OvertimeAvailabilityRepository(UnitOfWork).Find(date, _person);
+            IList<IOvertimeAvailability > days = new OvertimeAvailabilityRepository(CurrUnitOfWork).Find(date, _person);
             Assert.AreEqual(1, days.Count);
 
             //Assert.IsTrue(days[0].NotAvailable);
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(createOvertimeAvailability(date, _person, true));
             PersistAndRemoveFromUnitOfWork(createOvertimeAvailability(date.AddDays(1), _person, false));
 
-            IList<IOvertimeAvailability> days = new OvertimeAvailabilityRepository(UnitOfWork).Find(date, _person);
+            IList<IOvertimeAvailability> days = new OvertimeAvailabilityRepository(CurrUnitOfWork).Find(date, _person);
             Assert.IsFalse( days[0].StartTime.HasValue);
             Assert.IsFalse( days[0].EndTime.HasValue);
             
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(createOvertimeAvailability(date, _person, true,TimeSpan.FromHours(10),null ));
             PersistAndRemoveFromUnitOfWork(createOvertimeAvailability(date.AddDays(1), _person, false, TimeSpan.FromHours(8), null));
 
-            IList<IOvertimeAvailability> days = new OvertimeAvailabilityRepository(UnitOfWork).Find(date, _person);
+            IList<IOvertimeAvailability> days = new OvertimeAvailabilityRepository(CurrUnitOfWork).Find(date, _person);
 
             var startTime = days[0].StartTime;
             if (startTime != null) 
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(createOvertimeAvailability(date, _person, true,null, TimeSpan.FromHours(5)));
             PersistAndRemoveFromUnitOfWork(createOvertimeAvailability(date.AddDays(1), _person, false,null, TimeSpan.FromHours(3)));
 
-            IList<IOvertimeAvailability> days = new OvertimeAvailabilityRepository(UnitOfWork).Find(date, _person);
+            IList<IOvertimeAvailability> days = new OvertimeAvailabilityRepository(CurrUnitOfWork).Find(date, _person);
 
             var endTime = days[0].EndTime;
             if (endTime != null)

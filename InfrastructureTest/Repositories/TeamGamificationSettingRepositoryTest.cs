@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			_teamGamificationSetting = new TeamGamificationSetting { Team = _team, GamificationSetting = _gamificationSetting };
 			
 			PersistAndRemoveFromUnitOfWork(_teamGamificationSetting);
-			IList<ITeamGamificationSetting> loadedTeamGamificationSettings = new TeamGamificationSettingRepository(UnitOfWork).LoadAll();
+			IList<ITeamGamificationSetting> loadedTeamGamificationSettings = new TeamGamificationSettingRepository(CurrUnitOfWork).LoadAll();
 			Assert.AreEqual(1, loadedTeamGamificationSettings.Count);
 			Assert.AreEqual("team", loadedTeamGamificationSettings[0].Team.Description.Name);
 			Assert.AreEqual("gamificationsetting", loadedTeamGamificationSettings[0].GamificationSetting.Description.Name);
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			_teamGamificationSetting = new TeamGamificationSetting { Team = _team, GamificationSetting = _gamificationSetting };
 			PersistAndRemoveFromUnitOfWork(_teamGamificationSetting);
 			IEnumerable<ITeamGamificationSetting> loadedGamificationSettings =
-				new TeamGamificationSettingRepository(UnitOfWork).FindAllTeamGamificationSettingsSortedByTeam();
+				new TeamGamificationSettingRepository(CurrUnitOfWork).FindAllTeamGamificationSettingsSortedByTeam();
 			Assert.AreEqual(1, loadedGamificationSettings.Count());
 		}
 		[Test]
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			_teamGamificationSetting = new TeamGamificationSetting { Team = _team, GamificationSetting = _gamificationSetting };
 			PersistAndRemoveFromUnitOfWork(_teamGamificationSetting);
 			ITeamGamificationSetting loadedMyGamificationSetting =
-				new TeamGamificationSettingRepository(UnitOfWork).FindTeamGamificationSettingsByTeam(_team);
+				new TeamGamificationSettingRepository(CurrUnitOfWork).FindTeamGamificationSettingsByTeam(_team);
 			Assert.AreEqual("team" , loadedMyGamificationSetting.Team.Description.Name);
 		}
 

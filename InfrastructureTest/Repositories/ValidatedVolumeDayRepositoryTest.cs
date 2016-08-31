@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IValidatedVolumeDay validatedVolumeDay = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(validatedVolumeDay);
 
-            IValidatedVolumeDayRepository validatedVolumeDayRepository = new ValidatedVolumeDayRepository(UnitOfWork);
+            IValidatedVolumeDayRepository validatedVolumeDayRepository = new ValidatedVolumeDayRepository(CurrUnitOfWork);
             ICollection<IValidatedVolumeDay> validatedVolumeDays = validatedVolumeDayRepository.FindRange(new DateOnlyPeriod(validatedVolumeDay.VolumeDayDate, validatedVolumeDay.VolumeDayDate.AddDays(1)),
                 validatedVolumeDay.Workload);
 
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             Mocks.ReplayAll();
 
-            IValidatedVolumeDayRepository repository = new ValidatedVolumeDayRepository(UnitOfWork);
+            IValidatedVolumeDayRepository repository = new ValidatedVolumeDayRepository(CurrUnitOfWork);
             ICollection<IValidatedVolumeDay> existingValidatedVolumeDays = repository.FindRange(period, validatedVolumeDay1.Workload);
             Assert.AreEqual(2, existingValidatedVolumeDays.Count);
             var validatedVolumeDays = repository.MatchDays(validatedVolumeDay1.Workload, taskOwnerList, existingValidatedVolumeDays);
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 validatedVolumeDay1.VolumeDayDate.AddDays(-1));
             PersistAndRemoveFromUnitOfWork(validatedVolumeDay2);
 
-            IValidatedVolumeDayRepository validatedVolumeDayRepository = new ValidatedVolumeDayRepository(UnitOfWork);
+            IValidatedVolumeDayRepository validatedVolumeDayRepository = new ValidatedVolumeDayRepository(CurrUnitOfWork);
             DateOnly latestValidated = validatedVolumeDayRepository.FindLastValidatedDay(validatedVolumeDay1.Workload);
 
             Assert.AreEqual(validatedVolumeDay1.VolumeDayDate, latestValidated);
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IValidatedVolumeDay validatedVolumeDay = CreateAggregateWithCorrectBusinessUnit();
             //No persisting here! Just get the day to create skill/workload!
 
-            IValidatedVolumeDayRepository validatedVolumeDayRepository = new ValidatedVolumeDayRepository(UnitOfWork);
+            IValidatedVolumeDayRepository validatedVolumeDayRepository = new ValidatedVolumeDayRepository(CurrUnitOfWork);
             DateOnly latestValidated = validatedVolumeDayRepository.FindLastValidatedDay(validatedVolumeDay.Workload);
 
             Assert.AreEqual(latestValidated, new DateOnly(DateTime.Today.AddMonths(-1)));
@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(validatedVolumeDay2);
 			SetUpdatedOnForValidatedVolumeDay(validatedVolumeDay2, -1);
 
-            IValidatedVolumeDayRepository validatedVolumeDayRepository = new ValidatedVolumeDayRepository(UnitOfWork);
+            IValidatedVolumeDayRepository validatedVolumeDayRepository = new ValidatedVolumeDayRepository(CurrUnitOfWork);
             IValidatedVolumeDay result = validatedVolumeDayRepository.FindLatestUpdated(validatedVolumeDay1.Workload.Skill);
 
             Assert.AreEqual(validatedVolumeDay2, result);

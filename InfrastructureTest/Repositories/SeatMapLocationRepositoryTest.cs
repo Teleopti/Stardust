@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			PersistAndRemoveFromUnitOfWork(seatMapLocation);
 			
-			var loaded = new SeatMapLocationRepository(UnitOfWork).LoadAggregate(seatMapLocation.Id.Value) as SeatMapLocation;
+			var loaded = new SeatMapLocationRepository(CurrUnitOfWork).LoadAggregate(seatMapLocation.Id.Value) as SeatMapLocation;
 
 			Assert.AreEqual(seatMapLocation.Id, loaded.Id);
 			Assert.AreEqual(locationName, loaded.Name);
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			seatMapLocation.SetLocation("{DummyData}", locationName);
 			PersistAndRemoveFromUnitOfWork(seatMapLocation);
 
-			var loaded = new SeatMapLocationRepository(UnitOfWork).LoadRootSeatMap() as SeatMapLocation;
+			var loaded = new SeatMapLocationRepository(CurrUnitOfWork).LoadRootSeatMap() as SeatMapLocation;
 
 			Assert.AreEqual(seatMapLocation.Id, loaded.Id);
 			Assert.AreEqual(locationName, loaded.Name);
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			seatMapLocation.SetLocation("{DummyData}", locationName);
 			PersistAndRemoveFromUnitOfWork(seatMapLocation);
 
-			var loaded = new SeatMapLocationRepository(UnitOfWork).LoadRootSeatMap() as SeatMapLocation;
+			var loaded = new SeatMapLocationRepository(CurrUnitOfWork).LoadRootSeatMap() as SeatMapLocation;
 
 			Assert.AreEqual(seatMapLocation.Id, loaded.Id);
 			Assert.AreEqual(locationName, loaded.Name);
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(seatMapLocation);
 
 
-			var loaded = new SeatMapLocationRepository(UnitOfWork).LoadAggregate(seatMapLocation.Id.Value) as SeatMapLocation;
+			var loaded = new SeatMapLocationRepository(CurrUnitOfWork).LoadAggregate(seatMapLocation.Id.Value) as SeatMapLocation;
 
 			Assert.AreEqual(seatMapLocation.Id, loaded.Id);
 			Assert.AreEqual(seatMapLocation.SeatCount, 1);

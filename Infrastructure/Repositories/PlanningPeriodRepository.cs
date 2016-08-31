@@ -9,12 +9,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class PlanningPeriodRepository : Repository<IPlanningPeriod> , IPlanningPeriodRepository
 	{
-#pragma warning disable 618
-		public PlanningPeriodRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
-#pragma warning restore 618
-		{
-		}
-
 		public PlanningPeriodRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 		{
 		}

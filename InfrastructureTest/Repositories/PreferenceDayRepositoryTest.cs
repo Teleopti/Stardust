@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(CreatePreferenceDay(new DateOnly(2009, 3, 2), _person, _activity));
 			IEnumerable<IPerson> persons = new Collection<IPerson> { _person };
 
-			IList<IPreferenceDay> days = new PreferenceDayRepository(UnitOfWork).Find(period, persons);
+			IList<IPreferenceDay> days = new PreferenceDayRepository(CurrUnitOfWork).Find(period, persons);
 			Assert.AreEqual(2, days.Count);
 			LazyLoadingManager.IsInitialized(days[0].Restriction.ActivityRestrictionCollection).Should().Be.True();
 		}
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			DateOnlyPeriod period = new DateOnlyPeriod(2009, 2, 1, 2009, 3, 1);
 			IEnumerable<IPerson> persons = new Collection<IPerson>();
 
-			IList<IPreferenceDay> days = new PreferenceDayRepository(UnitOfWork).Find(period, persons);
+			IList<IPreferenceDay> days = new PreferenceDayRepository(CurrUnitOfWork).Find(period, persons);
 			Assert.AreEqual(0, days.Count);
 		}
 
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(CreatePreferenceDay(date, person2, _activity));
 			PersistAndRemoveFromUnitOfWork(CreatePreferenceDay(date.AddDays(1), _person, _activity));
 
-			IList<IPreferenceDay> days = new PreferenceDayRepository(UnitOfWork).Find(date, _person);
+			IList<IPreferenceDay> days = new PreferenceDayRepository(CurrUnitOfWork).Find(date, _person);
 			Assert.AreEqual(1, days.Count);
 			Assert.AreEqual(1, days[0].Restriction.ActivityRestrictionCollection.Count);
 			Assert.AreEqual(_activity, days[0].Restriction.ActivityRestrictionCollection[0].Activity);
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(CreatePreferenceDay(date, person2, _activity));
 			PersistAndRemoveFromUnitOfWork(CreatePreferenceDay(date.AddDays(1), _person, _activity));
 
-			IList<IPreferenceDay> days = new PreferenceDayRepository(UnitOfWork).FindAndLock(date, _person);
+			IList<IPreferenceDay> days = new PreferenceDayRepository(CurrUnitOfWork).FindAndLock(date, _person);
 			Assert.AreEqual(1, days.Count);
 			Assert.AreEqual(1, days[0].Restriction.ActivityRestrictionCollection.Count);
 			Assert.AreEqual(_activity, days[0].Restriction.ActivityRestrictionCollection[0].Activity);
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(CreatePreferenceDayWithoutMustHave(date, person2, _activity));
 			PersistAndRemoveFromUnitOfWork(CreatePreferenceDayWithoutMustHave(date.AddDays(1), person2, _activity));
 
-			var repository = new PreferenceDayRepository(UnitOfWork);
+			var repository = new PreferenceDayRepository(CurrUnitOfWork);
 			var result = new MustHaveRestrictionSetter(repository).SetMustHave(date, person2, true);
 			Assert.AreEqual(true, result);
 		}
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(CreatePreferenceDayWithoutMustHave(date, person2, _activity));
 			PersistAndRemoveFromUnitOfWork(CreatePreferenceDay(date.AddDays(1), person2, _activity));
 
-			var repository = new PreferenceDayRepository(UnitOfWork);
+			var repository = new PreferenceDayRepository(CurrUnitOfWork);
 			var result = new MustHaveRestrictionSetter(repository).SetMustHave(date, person2, true);
 			Assert.AreEqual(false, result);
 		}
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(CreatePreferenceDayWithoutMustHave(date, person2, _activity));
 			PersistAndRemoveFromUnitOfWork(CreatePreferenceDay(date.AddDays(1), person2, _activity));
 
-			var repository = new PreferenceDayRepository(UnitOfWork);
+			var repository = new PreferenceDayRepository(CurrUnitOfWork);
 			var result = new MustHaveRestrictionSetter(repository).SetMustHave(date.AddDays(3), person2, true);
 			Assert.AreEqual(false, result);
 		}
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(CreatePreferenceDay(date, person2, _activity));
 			PersistAndRemoveFromUnitOfWork(CreatePreferenceDay(date.AddDays(1), person2, _activity));
 
-			var repository = new PreferenceDayRepository(UnitOfWork);
+			var repository = new PreferenceDayRepository(CurrUnitOfWork);
 			var result = new MustHaveRestrictionSetter(repository).SetMustHave(date, person2, false);
 			Assert.AreEqual(false, result);
 		}
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IPreferenceDay preferenceDay = CreateAggregateWithCorrectBusinessUnit();
 			PersistAndRemoveFromUnitOfWork(preferenceDay);
 
-			IPreferenceDay loaded = new PreferenceDayRepository(UnitOfWork).LoadAggregate(preferenceDay.Id.Value);
+			IPreferenceDay loaded = new PreferenceDayRepository(CurrUnitOfWork).LoadAggregate(preferenceDay.Id.Value);
 			Assert.AreEqual(preferenceDay.Id, loaded.Id);
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.Person));
 		}
@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(CreatePreferenceDay(new DateOnly(2013, 2, 2), _person, _activity));
 			PersistAndRemoveFromUnitOfWork(CreatePreferenceDay(new DateOnly(2013, 3, 2), _person, _activity));
 			
-			var days = new PreferenceDayRepository(UnitOfWork).FindNewerThan(newerThan);
+			var days = new PreferenceDayRepository(CurrUnitOfWork).FindNewerThan(newerThan);
 			Assert.AreEqual(3, days.Count);
 			LazyLoadingManager.IsInitialized(days[0].Restriction.ActivityRestrictionCollection).Should().Be.True();
 		}

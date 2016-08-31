@@ -18,13 +18,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class SeatBookingRepository : Repository<ISeatBooking>, ISeatBookingRepository
 	{
-		public SeatBookingRepository(IUnitOfWork unitOfWork)
-#pragma warning disable 618
-			: base(unitOfWork)
-#pragma warning restore 618
-		{
-		}
-
 		public SeatBookingRepository(ICurrentUnitOfWork currentUnitOfWork)
 			: base(currentUnitOfWork)
 		{

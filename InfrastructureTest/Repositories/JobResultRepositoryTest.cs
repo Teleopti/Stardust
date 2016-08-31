@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var item = CreateAggregateWithCorrectBusinessUnit();
 			PersistAndRemoveFromUnitOfWork(item);
 
-			IJobResultRepository repository = new JobResultRepository(UnitOfWork);
+			IJobResultRepository repository = new JobResultRepository(CurrUnitOfWork);
 			var pagingDetail = new PagingDetail {Skip = 0, Take = 10};
 			var result = repository.LoadHistoryWithPaging(pagingDetail, JobCategory.QuickForecast);
 			result.Count.Should().Be.EqualTo(1);

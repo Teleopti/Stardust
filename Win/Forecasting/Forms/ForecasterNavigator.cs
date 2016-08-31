@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -1264,7 +1265,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 							var everyStep = Convert.ToInt32((1000/message.WorkloadIds.Count)/3);
 							message.IncreaseWith = everyStep;
 							var period =new DateOnlyPeriod(new DateOnly( message.TargetPeriodStart),new DateOnly(message.TargetPeriodEnd));
-							var jobResultRep = new JobResultRepository(uow);
+							var jobResultRep = new JobResultRepository(new ThisUnitOfWork(uow));
 							var jobResult = new JobResult(JobCategory.QuickForecast, period,
 				                              ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person, DateTime.UtcNow);
 							jobResultRep.Add(jobResult);
@@ -1406,7 +1407,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 								var message = model.ExportMultisiteSkillToSkillCommandModel.TransformToServiceBusMessage();
 								using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 								{
-									var jobResultRep = new JobResultRepository(uow);
+									var jobResultRep = new JobResultRepository(new ThisUnitOfWork(uow));
 									var period = new DateOnlyPeriod(new DateOnly( message.PeriodStart),new DateOnly(message.PeriodEnd));
 									var jobResult = new JobResult(JobCategory.MultisiteExport, period,
 																			((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person, DateTime.UtcNow);

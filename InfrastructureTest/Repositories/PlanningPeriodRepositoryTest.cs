@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldGetMostCommonlyUsedSchedulePeriods()
 		{
 			SetupPersonsInOrganizationWithContract(new Func<SchedulePeriod>[] {() => new SchedulePeriod(_startDate, SchedulePeriodType.Week, 1)});
-			var repository = new PlanningPeriodRepository(UnitOfWork);
+			var repository = new PlanningPeriodRepository(CurrUnitOfWork);
 			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)));
 			var range = planningPeriodSuggestions.Default().Range;
 			range.StartDate.Should().Be.EqualTo(new DateOnly(2015, 04, 6));
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldGetMonthAsDefaultWhenNoSchedulePeriods()
 		{
-			var repository = new PlanningPeriodRepository(UnitOfWork);
+			var repository = new PlanningPeriodRepository(CurrUnitOfWork);
 			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)));
 
 			var defaultRange = planningPeriodSuggestions.Default().Range;
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldGetSuggestions()
 		{
 			SetupPersonsInOrganizationWithContract(new Func<SchedulePeriod>[] { () => new SchedulePeriod(_startDate, SchedulePeriodType.Week, 1) });
-			var repository = new PlanningPeriodRepository(UnitOfWork);
+			var repository = new PlanningPeriodRepository(CurrUnitOfWork);
 			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)));
 
 			var suggestedPeriod = planningPeriodSuggestions.SuggestedPeriods(new DateOnlyPeriod(new DateOnly(2015, 4, 6),new DateOnly(2015, 4,12)));
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				() => new SchedulePeriod(_startDate, SchedulePeriodType.Week, 1),
 				() => new SchedulePeriod(_startDate.AddDays(7), SchedulePeriodType.Week, 1)
 			});
-			var repository = new PlanningPeriodRepository(UnitOfWork);
+			var repository = new PlanningPeriodRepository(CurrUnitOfWork);
 			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)));
 
 			var suggestedPeriod = planningPeriodSuggestions.SuggestedPeriods(new DateOnlyPeriod(new DateOnly(2015, 4, 6), new DateOnly(2015, 4, 12)));
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				() => new SchedulePeriod(_startDate, SchedulePeriodType.Week, 1),
 				() => new SchedulePeriod(_startDate.AddDays(5), SchedulePeriodType.Week, 1)
 			});
-			var repository = new PlanningPeriodRepository(UnitOfWork);
+			var repository = new PlanningPeriodRepository(CurrUnitOfWork);
 			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)));
 
 			var suggestedPeriod = planningPeriodSuggestions.SuggestedPeriods(new DateOnlyPeriod(new DateOnly(2015, 4, 6), new DateOnly(2015, 4, 12)));
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				() => new SchedulePeriod(_startDate, SchedulePeriodType.Week, 1),
 				() => new SchedulePeriod(_startDate.AddDays(5), SchedulePeriodType.Week, 1)
 			});
-			var repository = new PlanningPeriodRepository(UnitOfWork);
+			var repository = new PlanningPeriodRepository(CurrUnitOfWork);
 			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)));
 
 			var suggestedPeriod = planningPeriodSuggestions.SuggestedPeriods(new DateOnlyPeriod(new DateOnly(2015, 4, 6), new DateOnly(2015, 4, 12)));

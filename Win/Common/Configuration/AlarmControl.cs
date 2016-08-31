@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common.Configuration;
@@ -168,7 +169,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void loadRules()
 		{
-			_rtaRuleRepository = new RtaRuleRepository(_uow);
+			_rtaRuleRepository = new RtaRuleRepository(new ThisUnitOfWork(_uow));
 			_rules.Clear();
 			_rules.AddRange(_rtaRuleRepository.LoadAll());
 

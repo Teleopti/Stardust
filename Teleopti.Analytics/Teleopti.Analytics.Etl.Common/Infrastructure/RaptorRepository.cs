@@ -814,7 +814,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		{
 			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().CreateAndOpenUnitOfWork())
 			{
-				var rep = new PreferenceDayRepository(uow);
+				var rep = new PreferenceDayRepository(new ThisUnitOfWork(uow));
 				return rep.FindNewerThan(lastTime);
 			}
 		}

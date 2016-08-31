@@ -12,12 +12,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </summary>
     public class JobResultRepository : Repository<IJobResult>, IJobResultRepository
 	{
-#pragma warning disable 618
-        public JobResultRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
-#pragma warning restore 618
-        {
-        }
-
 		public JobResultRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 	    {
 		    

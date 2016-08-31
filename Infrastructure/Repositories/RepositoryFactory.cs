@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		/// </remarks>
 		public IValidatedVolumeDayRepository CreateValidatedVolumeDayRepository(IUnitOfWork unitOfWork)
 		{
-			return new ValidatedVolumeDayRepository(unitOfWork);
+			return new ValidatedVolumeDayRepository(new ThisUnitOfWork(unitOfWork));
 		}
 
 		public IMultisiteDayRepository CreateMultisiteDayRepository(IUnitOfWork unitOfWork)
@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IPreferenceDayRepository CreatePreferenceDayRepository(IUnitOfWork unitOfWork)
 		{
-			return new PreferenceDayRepository(unitOfWork);
+			return new PreferenceDayRepository(new ThisUnitOfWork(unitOfWork));
 		}
 
 		public IStudentAvailabilityDayRepository CreateStudentAvailabilityDayRepository(IUnitOfWork unitOfWork)
@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IOvertimeAvailabilityRepository CreateOvertimeAvailabilityRepository(IUnitOfWork unitOfWork)
 		{
-			return new OvertimeAvailabilityRepository(unitOfWork);
+			return new OvertimeAvailabilityRepository(new ThisUnitOfWork(unitOfWork));
 		}
 
 		public IWorkShiftRuleSetRepository CreateWorkShiftRuleSetRepository(IUnitOfWork unitOfWork)
@@ -258,7 +258,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IMeetingRepository CreateMeetingRepository(IUnitOfWork unitOfWork)
 		{
-			return new MeetingRepository(unitOfWork);
+			return new MeetingRepository(new ThisUnitOfWork(unitOfWork));
 		}
 
 		public IActivityRepository CreateActivityRepository(IUnitOfWork unitOfWork)
@@ -328,7 +328,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IExtendedPreferenceTemplateRepository CreateExtendedPreferenceTemplateRepository(IUnitOfWork unitOfWork)
 		{
-			return new ExtendedPreferenceTemplateRepository(unitOfWork);
+			return new ExtendedPreferenceTemplateRepository(new ThisUnitOfWork(unitOfWork));
 		}
 
 		public IRepository<IBudgetGroup> CreateBudgetGroupRepository(IUnitOfWork unitOfWork)

@@ -12,17 +12,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </summary>
     public class ExtendedPreferenceTemplateRepository : Repository<IExtendedPreferenceTemplate>, IExtendedPreferenceTemplateRepository
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ExtendedPreferenceTemplateRepository"/> class.
-        /// </summary>
-        /// <param name="unitOfWork">The unitofwork</param>
-        public ExtendedPreferenceTemplateRepository(IUnitOfWork unitOfWork)
-#pragma warning disable 618
-            : base(unitOfWork)
-#pragma warning restore 618
-        {
-        }
-
 	    public ExtendedPreferenceTemplateRepository(ICurrentUnitOfWork currentUnitOfWork)
 					: base(currentUnitOfWork)
 	    {

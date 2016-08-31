@@ -18,17 +18,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	/// </summary>
 	public class PreferenceDayRepository : Repository<IPreferenceDay>, IPreferenceDayRepository
 	{
-		public PreferenceDayRepository(IUnitOfWork unitOfWork)
-#pragma warning disable 618
-			: base(unitOfWork)
-#pragma warning restore 618
-		{
-		}
-
 		public PreferenceDayRepository(ICurrentUnitOfWork currentUnitOfWork)
 			: base(currentUnitOfWork)
 		{
-
 		}
 
 		public IList<IPreferenceDay> Find(DateOnlyPeriod period, IEnumerable<IPerson> persons)

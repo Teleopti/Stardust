@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IExtendedPreferenceTemplate extendedPreferenceTemplate = CreateAggregateWithCorrectBusinessUnit();
 			PersistAndRemoveFromUnitOfWork(extendedPreferenceTemplate);
 
-			IExtendedPreferenceTemplate foundTemplate = new ExtendedPreferenceTemplateRepository(UnitOfWork).Find(extendedPreferenceTemplate.Id.Value);
+			IExtendedPreferenceTemplate foundTemplate = new ExtendedPreferenceTemplateRepository(CurrUnitOfWork).Find(extendedPreferenceTemplate.Id.Value);
 			Assert.AreEqual("Test", foundTemplate.Name);
 		}
 
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IExtendedPreferenceTemplate extendedPreferenceTemplate = CreateAggregateWithCorrectBusinessUnit();
 			PersistAndRemoveFromUnitOfWork(extendedPreferenceTemplate);
 
-			IExtendedPreferenceTemplate foundTemplate = new ExtendedPreferenceTemplateRepository(UnitOfWork).Find(Guid.NewGuid());
+			IExtendedPreferenceTemplate foundTemplate = new ExtendedPreferenceTemplateRepository(CurrUnitOfWork).Find(Guid.NewGuid());
 			Assert.IsNull(foundTemplate);
 		}
 
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IExtendedPreferenceTemplate extendedPreferenceTemplate = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(extendedPreferenceTemplate);
 
-            IList<IExtendedPreferenceTemplate> foundTemplates = new ExtendedPreferenceTemplateRepository(UnitOfWork).FindByUser(person);
+            IList<IExtendedPreferenceTemplate> foundTemplates = new ExtendedPreferenceTemplateRepository(CurrUnitOfWork).FindByUser(person);
             Assert.AreEqual(1, foundTemplates.Count);
         }
 
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(temp3);
             PersistAndRemoveFromUnitOfWork(temp4);
 
-            IList<IExtendedPreferenceTemplate> foundTemplates = new ExtendedPreferenceTemplateRepository(UnitOfWork).FindByUser(person);
+            IList<IExtendedPreferenceTemplate> foundTemplates = new ExtendedPreferenceTemplateRepository(CurrUnitOfWork).FindByUser(person);
             Assert.AreEqual(4, foundTemplates.Count);
             Assert.AreEqual("Anders", foundTemplates[0].Name);
             Assert.AreEqual("Tommys", foundTemplates[1].Name);

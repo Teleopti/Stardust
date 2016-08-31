@@ -9,13 +9,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </summary>
     public class RtaRuleRepository : Repository<IRtaRule>, IRtaRuleRepository
     {
-        public RtaRuleRepository(IUnitOfWork unitOfWork)
-#pragma warning disable 618
-            : base(unitOfWork)
-#pragma warning restore 618
-        {
-        }
-
 	    public RtaRuleRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 	    {
 	    }
