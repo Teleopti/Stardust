@@ -179,6 +179,7 @@
     <Compile Include="ApplicationLayer\Commands\ChangeShiftCategoryCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\ChangeShiftCategoryCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\IReplyCommand.cs" />
+    <Compile Include="ApplicationLayer\Commands\NonoverwritableLayerMovabilityChecker.cs" />
     <Compile Include="ApplicationLayer\Commands\PersonRequestCommandExtensions.cs" />
     <Compile Include="ApplicationLayer\Commands\ReplyRequestCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\ReplyRequestCommandHandler.cs" />
