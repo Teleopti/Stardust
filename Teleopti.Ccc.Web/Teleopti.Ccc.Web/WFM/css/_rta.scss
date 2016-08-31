@@ -118,6 +118,9 @@
 .rta-default-cursor:hover{
 	box-shadow: none;
 }
+.rta-no-pointer{
+	pointer-events: none;
+}
 ///////////End of rta-skills///////////////////////
 ///////////rta-agents///////////////////////
 .agent-row {
