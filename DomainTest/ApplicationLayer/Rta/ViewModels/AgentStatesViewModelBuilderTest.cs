@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					SiteId = siteId2
 				});
 
-			var agentState = Target.ForSites(new[] { siteId1, siteId2 }, false).States.ToArray();
+			var agentState = Target.ForSites(new[] { siteId1, siteId2 }).States.ToArray();
 
 			agentState.First().PersonId.Should().Be(personId1);
 			agentState.Last().PersonId.Should().Be(personId2);
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			});
 			Now.Is("2015-10-22 08:30".Utc());
 
-			var agentState = Target.ForSites(new[] { siteId }, false).States.Single();
+			var agentState = Target.ForSites(new[] { siteId }).States.Single();
 
 			agentState.PersonId.Should().Be(personId);
 			agentState.State.Should().Be("state");
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					IsRuleAlarm = false
 				});
 
-			var agentStates = Target.ForSites(new[] { siteId1, siteId2 }, true).States.Single();
+			var agentStates = Target.InAlarmForSites(new[] { siteId1, siteId2 }).States.Single();
 
 			agentStates.PersonId.Should().Be(personId1);
 		}
@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		{
 			Now.Is("2016-05-28 12:00");
 
-			Target.ForSites(new Guid[] { }, false)
+			Target.ForSites(new Guid[] { })
 				.Time.Should().Be("2016-05-28 12:00".Utc());
 		}
 		

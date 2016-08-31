@@ -96,13 +96,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForSites")]
 		public virtual IHttpActionResult GetStatesForSites([FromUri]StatesQuery query)
 		{
-			return Ok(_agentStatesBuilder.ForSites(query.Ids, false));
+			return Ok(_agentStatesBuilder.ForSites(query.Ids));
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/GetAlarmStatesForSites")]
 		public virtual IHttpActionResult GetAlarmStatesForSites([FromUri]StatesQuery query)
 		{
-			return Ok(_agentStatesBuilder.ForSites(query.Ids, true));
+			return Ok(_agentStatesBuilder.InAlarmForSites(query.Ids));
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForSkills")]

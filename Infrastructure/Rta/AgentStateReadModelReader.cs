@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			{
 				ret.AddRange(
 					transform(_unitOfWork.Current().Session()
-						.CreateSQLQuery(selectAgentState + "WITH (NOLOCK) WHERE PersonId IN(:persons)")
+						.CreateSQLQuery(string.Format(selectAgentState, "", "WITH (NOLOCK) WHERE PersonId IN(:persons)"))
 						.SetParameterList("persons", personList)
 						)
 					);
@@ -52,14 +52,14 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		public IEnumerable<AgentStateReadModel> LoadForTeam(Guid teamId)
 		{
 			return transform(_unitOfWork.Current().Session()
-				.CreateSQLQuery(selectAgentState + "WITH (NOLOCK) WHERE TeamId = :teamId")
+				.CreateSQLQuery(string.Format(selectAgentState, "", "WITH (NOLOCK) WHERE TeamId = :teamId"))
 				.SetParameter("teamId", teamId)
 				);
 		}
 
 		public IEnumerable<AgentStateReadModel> LoadForSites(IEnumerable<Guid> siteIds)
 		{
-			var query = selectAgentState + @"WITH (NOLOCK) WHERE SiteId IN (:siteIds)";
+			var query = string.Format(selectAgentState, "", @"WITH (NOLOCK) WHERE SiteId IN (:siteIds)");
 			return transform(_unitOfWork.Current().Session()
 				.CreateSQLQuery(query)
 				.SetParameterList("siteIds", siteIds)
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public IEnumerable<AgentStateReadModel> LoadForTeams(IEnumerable<Guid> teamIds)
 		{
-			var query = selectAgentState + @"WITH (NOLOCK) WHERE TeamId IN (:teamIds)";
+			var query = string.Format(selectAgentState, "", @"WITH (NOLOCK) WHERE TeamId IN (:teamIds)");
 			return transform(_unitOfWork.Current().Session()
 				.CreateSQLQuery(query)
 				.SetParameterList("teamIds", teamIds)
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public IEnumerable<AgentStateReadModel> LoadAlarmsForSites(IEnumerable<Guid> siteIds)
 		{
-			var query = selectAgentState + @"WITH (NOLOCK) WHERE SiteId IN (:siteIds) AND AlarmStarttime <= :now ORDER BY AlarmStartTime ASC";
+			var query =string.Format(selectAgentState, " TOP 50 ", @"WITH (NOLOCK) WHERE SiteId IN (:siteIds) AND AlarmStarttime <= :now ORDER BY AlarmStartTime ASC");
 			return transform(_unitOfWork.Current().Session()
 				.CreateSQLQuery(query)
 				.SetParameterList("siteIds", siteIds)
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public IEnumerable<AgentStateReadModel> LoadAlarmsForTeams(IEnumerable<Guid> teamIds)
 		{
-			var query = selectAgentState + @"WITH (NOLOCK) WHERE TeamId IN (:teamIds) AND AlarmStartTime <= :now ORDER BY AlarmStartTime ASC";
+			var query = string.Format(selectAgentState," TOP 50 ", @"WITH (NOLOCK) WHERE TeamId IN (:teamIds) AND AlarmStartTime <= :now ORDER BY AlarmStartTime ASC");
 			return transform(_unitOfWork.Current().Session()
 				.CreateSQLQuery(query)
 				.SetParameterList("teamIds", teamIds)
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		}
 
 		private const string agentsForSkillQuery = @"
-SELECT DISTINCT
+SELECT DISTINCT {0}
 	a.[PersonId],
 	a.[BusinessUnitId],
 	a.[SiteId],
@@ -122,15 +122,15 @@ INNER JOIN ReadModel.GroupingReadOnly AS g
 	ON a.PersonId = g.PersonId
 WHERE PageId = :skillGroupingPageId
 AND g.GroupId IN (:skillId)
-AND :today BETWEEN g.StartDate and g.EndDate ";
-
+AND :today BETWEEN g.StartDate and g.EndDate 
+{1}";
 		private const string hardcodedSkillGroupingPageId = "4CE00B41-0722-4B36-91DD-0A3B63C545CF";
 
 		public IEnumerable<AgentStateReadModel> LoadForSkill(IEnumerable<Guid> skillId)
 		{
 			return transform(
 				_unitOfWork.Current().Session()
-				.CreateSQLQuery(agentsForSkillQuery)
+				.CreateSQLQuery(string.Format(agentsForSkillQuery, "", ""))
 				.SetParameterList("skillId", skillId)
 				.SetParameter("today", _now.UtcDateTime().Date)
 				.SetParameter("skillGroupingPageId", hardcodedSkillGroupingPageId)
@@ -139,7 +139,7 @@ AND :today BETWEEN g.StartDate and g.EndDate ";
 
 		public IEnumerable<AgentStateReadModel> LoadAlarmsForSkill(IEnumerable<Guid> skillId)
 		{
-			var query = agentsForSkillQuery + " AND AlarmStartTime <= :now ORDER BY AlarmStartTime ASC ";
+			var query = string.Format(agentsForSkillQuery," TOP 50 ", " AND AlarmStartTime <= :now ORDER BY AlarmStartTime ASC ");
 			return transform(
 				_unitOfWork.Current().Session()
 				.CreateSQLQuery(query)
@@ -167,7 +167,7 @@ AND :today BETWEEN g.StartDate and g.EndDate ";
 				.ToArray();
 		}
 
-		private static readonly string selectAgentState = @"SELECT * FROM [ReadModel].AgentState ";
+		private static readonly string selectAgentState = @"SELECT {0} * FROM [ReadModel].AgentState {1}";
 
 		private class internalModel : AgentStateReadModel
 		{
