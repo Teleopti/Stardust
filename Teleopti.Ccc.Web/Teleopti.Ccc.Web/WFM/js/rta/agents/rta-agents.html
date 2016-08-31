@@ -3,13 +3,14 @@
 		<div class="rta-title-wrapper">
 			<h1><i class="mdi mdi-alarm"></i> {{'Agents'|translate}}</h1>
 		</div>
-		<div class="rta-top-buttons-wrapper" ng-show="monitorBySkill">
+		<div class="rta-top-buttons-wrapper">
 			<span>
 				<button class="wfm-btn wfm-btn-default" ng-click="goToOverview()">Overview</button>
 				<button class="wfm-btn wfm-btn-default" ng-click="goToSelectItem()">Select skill</button>
 				<span class="wfm-chip">
-					<span ng-if="skillName !=''" class="chip-text rta-default-cursor">You are now viewing agents with skill: <b>{{skillName}}</b></span>
-					<span ng-if="skillAreaName !=''" class="chip-text rta-default-cursor">You are now viewing agents with skill area: <b>{{skillAreaName}}</b></span>
+					<span ng-if="skillName !=''" class="chip-text rta-default-cursor">You are now viewing <b>top {{agents.length}} agents</b> with skill: <b>{{skillName}}</b></span>
+					<span ng-if="skillAreaName !=''" class="chip-text rta-default-cursor">You are now viewing <b>top {{agents.length}} agents</b>  with skill area: <b>{{skillAreaName}}</b></span>
+					<span ng-if="!(skillName || skillAreaName)" class="chip-text rta-default-cursor">You are now viewing <b>top {{agents.length}} agents</b></span>
 				</span>
 			</span>
 		</div>
