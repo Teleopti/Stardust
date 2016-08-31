@@ -8,6 +8,7 @@ using Teleopti.Ccc.WinCode.Budgeting.Models;
 using Teleopti.Ccc.WinCode.Budgeting.Presenters;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+#pragma warning disable 618
 
 namespace Teleopti.Ccc.WinCodeTest.Budgeting
 {

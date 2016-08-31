@@ -64,7 +64,9 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 				_modelWorkDayRank = workDayRankings.First();
 			}
 
+#pragma warning disable 618
 			_repositoryWorkDayRanks.UnitOfWork.PersistAll();
+#pragma warning restore 618
 		}
 
 		public IList<ISeniorityWorkDay> SeniorityWorkDays()
@@ -83,15 +85,21 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 			_repositoryWorkDayRanks.Remove(_modelWorkDayRank);
 			_modelWorkDayRank.ClearId();
 			_repositoryWorkDayRanks.Add(_modelWorkDayRank);
+#pragma warning disable 618
 			_repositoryWorkDayRanks.UnitOfWork.PersistAll();
+#pragma warning restore 618
 
 			foreach (var seniorityShiftCategoryRank in SeniorityShiftCategoryRanks())
 			{
 				seniorityShiftCategoryRank.ShiftCategory.Rank = seniorityShiftCategoryRank.Rank;
+#pragma warning disable 618
 				_repositoryShiftCategory.UnitOfWork.Merge(seniorityShiftCategoryRank.ShiftCategory);
+#pragma warning restore 618
 			}
 
+#pragma warning disable 618
 			_repositoryShiftCategory.UnitOfWork.PersistAll();	
+#pragma warning restore 618
 		}
 
 		public void Unload()

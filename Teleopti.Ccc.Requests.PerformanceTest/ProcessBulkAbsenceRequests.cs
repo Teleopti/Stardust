@@ -96,7 +96,9 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 					if (datePeriod != null)
 						datePeriod.Period = period.OpenForRequestsPeriod;
 				}
+#pragma warning disable 618
 				WorkflowControlSetRepository.UnitOfWork.PersistAll();
+#pragma warning restore 618
 
 				// load some persons
 				var persons = PersonRepository.FindPeople(personIds);
@@ -114,7 +116,9 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 				foreach (var pReq in personReqs)
 				{
 					PersonRequestRepository.Add(pReq);
+#pragma warning disable 618
 					PersonRequestRepository.UnitOfWork.PersistAll();
+#pragma warning restore 618
 
 					absenceRequestIds.Add(pReq.Id.Value);
 				}

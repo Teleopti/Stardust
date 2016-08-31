@@ -49,14 +49,7 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="entityCollection">The entity collection.</param>
         void AddRange(IEnumerable<T> entityCollection);
 
-        /// <summary>
-        /// Gets the unit of work.
-        /// </summary>
-        /// <value>The unit of work.</value>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-06-02
-        /// </remarks>
+        [Obsolete("Will hopefully be removed in the future. Don't add new usages of this prop - use ICurrentUnitOfWork instead (or get the unitofwork in some other way).")]
         IUnitOfWork UnitOfWork { get; }
     }
 }

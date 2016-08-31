@@ -7,6 +7,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common.Configuration;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+#pragma warning disable 618
 
 
 namespace Teleopti.Ccc.WinCodeTest.Configuration

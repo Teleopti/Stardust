@@ -11,6 +11,7 @@ using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+#pragma warning disable 618
 
 namespace Teleopti.Ccc.WinCodeTest.Common
 {

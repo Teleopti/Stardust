@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.WinCode.Common.Commands;
 using Teleopti.Interfaces.Infrastructure;
+#pragma warning disable 618
 
 namespace Teleopti.Ccc.WinCodeTest.Common.Commands
 {
