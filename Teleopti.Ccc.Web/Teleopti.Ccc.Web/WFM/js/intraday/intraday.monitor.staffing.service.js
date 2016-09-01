@@ -45,7 +45,7 @@
 				return staffingData;
 			};
 
-			service.getStaffingData = function () {
+			service.getData = function () {
 				return staffingData;
 			}
 

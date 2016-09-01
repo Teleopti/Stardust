@@ -136,12 +136,12 @@ describe('IntradayAreaCtrl', function () {
 				$httpBackend.flush();
 			};
 
-			xit('should stop polling when page is about to destroy', function() {
+			it('should stop polling when page is about to destroy', function() {
 				createController(false);
 				$interval(function(){
 					scope.$emit('$destroy');
-				}, 60000);
-				$interval.flush(60000);
+				}, 5000);
+				$interval.flush(5000);
 				$httpBackend.verifyNoOutstandingRequest();
 			});
 

@@ -177,60 +177,25 @@
 					pollActiveTabData(activeTab);
 				};
 
+
 				function pollActiveTabData(activeTab) {
+					var services = [intradayTrafficService, intradayPerformanceService, intradayMonitorStaffingService];
 
 					if ($scope.selectedItem !== null && $scope.selectedItem !== undefined) {
-						if (activeTab === 0) {
-							loadTraffic();
-							$scope.viewObj = intradayTrafficService.getTrafficData();
-							getViewObject();
+						if ($scope.selectedItem.Skills) {
+								services[activeTab].pollSkillAreaData($scope.selectedItem);
+						} else {
+							services[activeTab].pollSkillData($scope.selectedItem);
 						}
-						if (activeTab === 1) {
-							loadPerformance();
-							$scope.viewObj = intradayPerformanceService.getPerformanceData();
-							getViewObject();
-						}
-						if (activeTab === 2) {
-							loadStaffing();
-							$scope.viewObj = intradayMonitorStaffingService.getStaffingData();
-							getViewObject();
-						}
+						$scope.viewObj = services[activeTab].getData();
+						$scope.latestActualInterval = $scope.viewObj.latestActualInterval;
+						$scope.hasMonitorData = $scope.viewObj.hasMonitorData;
 					} else {
 						$timeout(function() {
 							pollActiveTabData(activeTab);
 						}, 1000);
 					}
-				};
-
-				var loadTraffic = function() {
-					if ($scope.selectedItem.Skills) {
-						intradayTrafficService.pollSkillAreaData($scope.selectedItem);
-					} else {
-						intradayTrafficService.pollSkillData($scope.selectedItem);
-					}
-				};
-
-				var loadStaffing = function() {
-					if ($scope.selectedItem.Skills) {
-						intradayMonitorStaffingService.pollSkillAreaData($scope.selectedItem);
-					} else {
-						intradayMonitorStaffingService.pollSkillData($scope.selectedItem);
-					}
-				};
-
-				var loadPerformance = function() {
-					if ($scope.selectedItem.Skills) {
-						intradayPerformanceService.pollSkillAreaData($scope.selectedItem);
-					} else {
-						intradayPerformanceService.pollSkillData($scope.selectedItem);
-					}
-				};
-
-				var getViewObject = function() {
-					$scope.latestActualInterval = $scope.viewObj.latestActualInterval;
-					$scope.hasMonitorData = $scope.viewObj.hasMonitorData;
-
-				};
+				}
 
 				$scope.$on("$destroy", function(event) {
 					cancelTimeout();

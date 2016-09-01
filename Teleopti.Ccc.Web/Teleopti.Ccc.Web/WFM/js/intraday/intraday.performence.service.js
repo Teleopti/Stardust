@@ -65,7 +65,7 @@
 				return performanceData;
 			};
 
-			service.getPerformanceData = function () {
+			service.getData = function () {
 				return performanceData;
 			};
 

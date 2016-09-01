@@ -76,7 +76,7 @@
 				return trafficData;
 			};
 
-			service.getTrafficData = function () {
+			service.getData = function () {
 				return trafficData;
 			};
 
