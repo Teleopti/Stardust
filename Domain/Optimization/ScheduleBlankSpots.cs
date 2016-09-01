@@ -32,21 +32,23 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var schedulingOptionsSynchronizer = new SchedulingOptionsCreator();
 			var schedulingOptions = schedulingOptionsSynchronizer.CreateSchedulingOptions(optimizerPreferences);
+		    var stateHolder = _schedulingResultStateHolder();
 
-			foreach (var matrixOriginalStateContainer in matrixOriginalStateContainers)
+		    foreach (var matrixOriginalStateContainer in matrixOriginalStateContainers)
 			{
 				if (!matrixOriginalStateContainer.StillAlive)
 					continue;
 
-				foreach (var scheduleDayPro in matrixOriginalStateContainer.ScheduleMatrix.UnlockedDays)
+			    foreach (var scheduleDayPro in matrixOriginalStateContainer.ScheduleMatrix.UnlockedDays)
 				{
-					if (scheduleDayPro.DaySchedulePart().IsScheduled())
+				    var scheduleDay = scheduleDayPro.DaySchedulePart();
+				    if (scheduleDay.IsScheduled())
 						continue;
 
-					var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDayPro.DaySchedulePart(), schedulingOptions);
-					var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder());
+					var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay, schedulingOptions);
+				    var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, stateHolder);
 
-					if (!_scheduleService.SchedulePersonOnDay(scheduleDayPro.DaySchedulePart(), schedulingOptions, effectiveRestriction, resourceCalculateDelayer, _rollbackService))
+					if (!_scheduleService.SchedulePersonOnDay(scheduleDay, schedulingOptions, effectiveRestriction, resourceCalculateDelayer, _rollbackService))
 					{
 						matrixOriginalStateContainer.StillAlive = false;
 						break;
