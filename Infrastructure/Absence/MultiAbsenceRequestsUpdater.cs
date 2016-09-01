@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 								   requiredForHandlingAbsenceRequest, validatorList);
 				}
 			}
-			//Ugly fix to get the number updated for person account. Don't try this at home!
+
 			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				foreach (var personRequest in personRequests)
