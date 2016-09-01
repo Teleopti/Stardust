@@ -40,16 +40,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 				foreach (var scheduleDayPro in matrixOriginalStateContainer.ScheduleMatrix.UnlockedDays)
 				{
-					var result = true;
-					if (!scheduleDayPro.DaySchedulePart().IsScheduled())
-					{
-						var effectiveRestriction =
-							_effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDayPro.DaySchedulePart(), schedulingOptions);
-						var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder());
+					if (scheduleDayPro.DaySchedulePart().IsScheduled())
+						continue;
 
-						result = _scheduleService.SchedulePersonOnDay(scheduleDayPro.DaySchedulePart(), schedulingOptions, effectiveRestriction, resourceCalculateDelayer, _rollbackService);
-					}
-					if (!result)
+					var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDayPro.DaySchedulePart(), schedulingOptions);
+					var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks, _schedulingResultStateHolder());
+
+					if (!_scheduleService.SchedulePersonOnDay(scheduleDayPro.DaySchedulePart(), schedulingOptions, effectiveRestriction, resourceCalculateDelayer, _rollbackService))
 					{
 						matrixOriginalStateContainer.StillAlive = false;
 						break;
