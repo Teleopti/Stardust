@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using log4net;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -164,43 +165,56 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				}
 			}
 
-			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			foreach (var personRequest in personRequests)
 			{
-				foreach (var personRequest in personRequests)
+				var count = 0;
+				while (count < 3)
 				{
-					IRequestCommand command;
-
-					if (personRequest.IsApproved)
-					{
-						command = new ApproveRequestCommand()
-						{
-							PersonRequestId = personRequest.Id.GetValueOrDefault(),
-						};
-					}
-					else
-					{
-						command = new DenyRequestCommand()
-						{
-							PersonRequestId = personRequest.Id.GetValueOrDefault(),
-							DenyReason = personRequest.DenyReason
-						};
-					}
-					_commandDispatcher.Execute(command);
-
-					if (command.ErrorMessages != null)
-					{
-						logger.Warn(command.ErrorMessages);
-					}
-
 					try
 					{
-						uow.PersistAll();
+						using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+						{
+							sendRequestCommand(personRequest);
+							uow.PersistAll();
+							break;
+						}
 					}
 					catch (OptimisticLockException)
 					{
-
+						count++;
 					}
 				}
+				if (count >= 3)
+				{
+					logger.Error("Optimistic lock when persisting an absence request! Number of retries: " + count);
+				}
+			}
+		}
+
+		private void sendRequestCommand(IPersonRequest personRequest)
+		{
+			IRequestCommand command;
+
+			if (personRequest.IsApproved)
+			{
+				command = new ApproveRequestCommand()
+				{
+					PersonRequestId = personRequest.Id.GetValueOrDefault(),
+				};
+			}
+			else
+			{
+				command = new DenyRequestCommand()
+				{
+					PersonRequestId = personRequest.Id.GetValueOrDefault(),
+					DenyReason = personRequest.DenyReason
+				};
+			}
+			_commandDispatcher.Execute(command);
+
+			if (command.ErrorMessages != null)
+			{
+				logger.Warn(command.ErrorMessages);
 			}
 		}
 
