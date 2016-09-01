@@ -20,10 +20,9 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		public TokenIdentity RetrieveToken()
 		{
 			var httpContext = _httpContext.Current();
-			if (httpContext == null)
-				return null;
-			if (httpContext.User == null)
-				return null;
+			if (httpContext == null) return null;
+			if (httpContext.User == null) return null;
+
 			var teleoptiIdentity = httpContext.User.Identity as ITeleoptiIdentity;
 			if (teleoptiIdentity != null)
 			{
@@ -42,10 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			{
 				var nameClaimValue = Uri.UnescapeDataString(nameClaim.Value);
 				var token = getTokenIdentity(nameClaimValue);
-				if (isPersistentClaim != null && isPersistentClaim.Value.ToLowerInvariant() == "true")
-					token.IsPersistent = true;
-				else
-					token.IsPersistent = false;
+				token.IsPersistent = isPersistentClaim != null && isPersistentClaim.Value.ToLowerInvariant() == "true";
 
 				return token;
 			}
@@ -81,5 +77,4 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			};
 		}
 	}
-
 }

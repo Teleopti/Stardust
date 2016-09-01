@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			if (string.IsNullOrEmpty(userName))
 			{
 				var winAccount = _tokenIdentityProvider.RetrieveToken();
-				userName = winAccount.UserIdentifier;
+				userName = winAccount==null ? "N/A" : winAccount.UserIdentifier;
 				provider = IdentityProvider;
 			}
 			return new LoginAttemptModel
