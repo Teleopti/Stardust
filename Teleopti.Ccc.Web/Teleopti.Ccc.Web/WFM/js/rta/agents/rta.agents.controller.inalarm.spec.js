@@ -151,4 +151,40 @@ describe('RtaAgentsCtrl', function() {
 
 		expect(scope.agentsInAlarm).toEqual(false);
 	});
+
+	it('should set bool to indicate if user opened max number of agents', function() {
+		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+
+		for (var i = 0; i < 50; i++) {
+			$fakeBackend.withAgent({
+				PersonId: i,
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
+			})
+			.withState({
+				PersonId: i,
+				TimeInAlarm: 30
+			});
+		}
+		$controllerBuilder.createController()
+			.apply('agentsInAlarm = true');
+
+		expect(scope.openedMaxNumberOfAgents).toEqual(true);
+	});
+
+	it('should not set bool to indicate if user opened max number of agents', function () {
+		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+
+		$fakeBackend.withAgent({
+			PersonId: "1",
+			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
+		})
+			.withState({
+				PersonId: "1",
+				TimeInAlarm: 30
+			});
+		$controllerBuilder.createController()
+			.apply('agentsInAlarm = true');
+
+		expect(scope.openedMaxNumberOfAgents).toEqual(false);
+	});
 });

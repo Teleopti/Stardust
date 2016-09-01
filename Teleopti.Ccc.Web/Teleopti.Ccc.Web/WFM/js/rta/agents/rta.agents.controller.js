@@ -38,9 +38,13 @@
 				$scope.showPath = false;
 
 				$scope.noSiteIds = siteIds.length === 0;
-				$scope.showBreadcrumb = siteIds.length > 0 || teamIds.length > 0  || skillIds === [];
+				$scope.showBreadcrumb = siteIds.length > 0 || teamIds.length > 0 || skillIds === [];
+				$scope.skill = false;
+				$scope.skillArea = false;
 				$scope.skillName = "";
 				$scope.skillAreaName = "";
+				$scope.openedMaxNumberOfAgents = false;
+				$scope.maxNumberOfAgents = 50;
 
 				$scope.$watch('pause', function() {
 					if ($scope.pause) {
@@ -123,6 +127,7 @@
 					return RtaService.getSkillArea(skillAreaId)
 						.then(function (skillArea) {
 							$scope.skillAreaName = skillArea.Name || '?';
+							$scope.skillArea = true;
 							skillIds = skillArea.Skills.map(function (skill) { return skill.Id; });
 						});
 				}
@@ -177,6 +182,7 @@
 					RtaService.getSkillName(skillIds[0])
 						.then(function(skill) {
 							$scope.skillName = skill.Name || '?';
+							$scope.skill = true;
 						});
 				}
 
@@ -219,9 +225,11 @@
 					else
 						$scope.filteredData = $filter('agentFilter')($scope.agents, $scope.filterText, propertiesForFiltering);
 					if ($scope.agentsInAlarm) {
-						$scope.filteredData = $filter('filter')($scope.filteredData, {
+						$scope.filteredData = $filter('filter')($scope.filteredData,
+						{
 							TimeInAlarm: ''
 						});
+						$scope.openedMaxNumberOfAgents = ($scope.filteredData.length === $scope.maxNumberOfAgents);
 					}
 				}
 
@@ -401,7 +409,6 @@
 				$scope.goToSelectItem = function() {
 					$state.go('rta.select-skill');
 				}
-
 
 			}
 		]);
