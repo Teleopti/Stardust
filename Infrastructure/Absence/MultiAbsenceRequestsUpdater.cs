@@ -40,18 +40,22 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private IProcessAbsenceRequest _process;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
-		private ICommandDispatcher _commandDispatcher;
+		private readonly ICommandDispatcher _commandDispatcher;
 
 		public MultiAbsenceRequestsUpdater(IPersonAbsenceAccountProvider personAbsenceAccountProvider,
-			IResourceCalculationPrerequisitesLoader prereqLoader, ICurrentScenario scenarioRepository,
+			IResourceCalculationPrerequisitesLoader prereqLoader, 
+			ICurrentScenario scenarioRepository,
 			ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation,
 			ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulesForRequestWithoutResourceCalculation,
-			IRequestFactory requestFactory, IAlreadyAbsentSpecification alreadyAbsentSpecification,
-			IScheduleIsInvalidSpecification scheduleIsInvalidSpecification, IPersonRequestCheckAuthorization authorization,
+			IRequestFactory requestFactory, 
+			IAlreadyAbsentSpecification alreadyAbsentSpecification,
+			IScheduleIsInvalidSpecification scheduleIsInvalidSpecification, 
+			IPersonRequestCheckAuthorization authorization,
 			IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification,
 			IResourceOptimizationHelper resourceOptimizationHelper,
 			IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification,
-			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, ICommandDispatcher commandDispatcher)
+			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, 
+			ICommandDispatcher commandDispatcher)
 		{
 			_personAbsenceAccountProvider = personAbsenceAccountProvider;
 			_prereqLoader = prereqLoader;
@@ -69,7 +73,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			_commandDispatcher = commandDispatcher;
 		}
 
-		public bool UpdateAbsenceRequest(List<IPersonRequest> personRequests,
+		public void UpdateAbsenceRequest(List<IPersonRequest> personRequests,
 										 ISchedulingResultStateHolder schedulingResultStateHolder, IProcessAbsenceRequest process, IEnumerable<IAbsenceRequestValidator> validators)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
@@ -197,9 +201,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 					}
 				}
 			}
-
-			//TODO should return true or false
-			return true;
 		}
 
 		private void trackAccounts(IPersonAbsenceAccount personAbsenceAccount, DateOnlyPeriod period, IAbsenceRequest absenceRequest)
