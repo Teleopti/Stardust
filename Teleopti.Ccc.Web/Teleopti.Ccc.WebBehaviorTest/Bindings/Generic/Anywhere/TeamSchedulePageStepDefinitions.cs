@@ -169,6 +169,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see '(.*)' with the scheduled activities")]
 		public void ThenIShouldSeeWithTheScheduledActivities(string personName, Table table)
 		{
+			Browser.Interactions.AssertUrlContains("teamschedule");
 			var scheduledActivity = table.CreateSet<ScheduledActivityInfo>();
 			scheduledActivity.ForEach(sa => assertScheduledActivity(personName, sa));
 		}
