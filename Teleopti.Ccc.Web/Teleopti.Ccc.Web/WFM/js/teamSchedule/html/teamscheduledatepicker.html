@@ -6,7 +6,7 @@
 	<input type="text" id="teamschedule-datepicker-input" class="pointer" ng-model="vm.shortDateFormat"
 		   ng-change="vm.afterDateChangeInput(vm.shortDateFormat)" />
 
-	<div class="wfm-datepicker-wrap" ng-if="vm.isCalendarOpened" ng-outside-click="vm.isCalendarOpened = false;">
+	<div class="wfm-datepicker-wrap" ng-if="vm.isCalendarOpened">
 		<div class="sub-header" ng-if="false">
 			From/to:
 		</div>
