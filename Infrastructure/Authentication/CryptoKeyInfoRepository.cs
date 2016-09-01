@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 
@@ -18,8 +19,10 @@ namespace Teleopti.Ccc.Infrastructure.Authentication
 		{
 			var session = _currentTenantSession.CurrentSession();
 			var crit = session.CreateCriteria<CryptoKeyInfo>()
-				.Add(Restrictions.Eq("Bucket", bucket))
-				.Add(Restrictions.Eq("Handle", handle));
+				.Add(Restrictions.Eq(nameof(CryptoKeyInfo.Bucket), bucket))
+				.Add(Restrictions.Eq(nameof(CryptoKeyInfo.Handle), handle))
+				.Add(Restrictions.Gt(nameof(CryptoKeyInfo.CryptoKeyExpiration), DateTime.UtcNow))
+				;
 			return crit.UniqueResult<CryptoKeyInfo>();
 		}
 
@@ -27,14 +30,13 @@ namespace Teleopti.Ccc.Infrastructure.Authentication
 		{
 			var session = _currentTenantSession.CurrentSession();
 			var crit = session.CreateCriteria<CryptoKeyInfo>()
-				.Add(Restrictions.Eq("Bucket", bucket));
-			return crit.List<CryptoKeyInfo>();
+				.Add(Restrictions.Eq(nameof(CryptoKeyInfo.Bucket), bucket))
+				.Add(Restrictions.Gt(nameof(CryptoKeyInfo.CryptoKeyExpiration), DateTime.UtcNow));
+			return crit.List<CryptoKeyInfo>().OrderByDescending(x => x.CryptoKeyExpiration);
 		}
 
 		public void Add(CryptoKeyInfo cryptoKeyInfo)
 		{
-			if (Find(cryptoKeyInfo.Bucket, cryptoKeyInfo.Handle) != null)
-				throw new DuplicateCryptoKeyException();
 			var session = _currentTenantSession.CurrentSession();
 			session.SaveOrUpdate(cryptoKeyInfo);
 		}
@@ -49,13 +51,9 @@ namespace Teleopti.Ccc.Infrastructure.Authentication
 		public void ClearExpired(DateTime expiredTimestamp)
 		{
 			var session = _currentTenantSession.CurrentSession();
-			session.CreateQuery("DELETE FROM CryptoKeyInfo c WHERE c.CryptoKeyExpiration < :expiredTimestamp")
-				.SetParameter("expiredTimestamp", expiredTimestamp)
+			session.CreateQuery($"DELETE FROM {nameof(CryptoKeyInfo)} c WHERE c.{nameof(CryptoKeyInfo.CryptoKeyExpiration)} < :{nameof(expiredTimestamp)}")
+				.SetParameter(nameof(expiredTimestamp), expiredTimestamp)
 				.ExecuteUpdate();
 		}
-	}
-
-	public class DuplicateCryptoKeyException : Exception
-	{
 	}
 }

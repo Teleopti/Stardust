@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Authentication
 				const string bucket = "bucket";
 				const string handle = "handle";
 				var cryptoKey = Guid.NewGuid().ToByteArray();
-				var cryptoKeyExpiration = DateTime.Today;
+				var cryptoKeyExpiration = DateTime.Today+TimeSpan.FromDays(1);
 				Target.Add(new CryptoKeyInfo
 				{
 					Bucket = bucket,
@@ -40,6 +40,29 @@ namespace Teleopti.Ccc.InfrastructureTest.Authentication
 			}
 		}
 
+		[Test]
+		public void ShouldNotFindExpiredKeyByBucketAndHandle()
+		{
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			{
+				const string bucket = "bucket";
+				const string handle = "handle";
+				var cryptoKey = Guid.NewGuid().ToByteArray();
+				var cryptoKeyExpiration = DateTime.Today-TimeSpan.FromDays(1);
+				Target.Add(new CryptoKeyInfo
+				{
+					Bucket = bucket,
+					Handle = handle,
+					CryptoKey = cryptoKey,
+					CryptoKeyExpiration = cryptoKeyExpiration
+				});
+
+				var result = Target.Find(bucket, handle);
+
+				result.Should().Be.Null();
+			}
+		}
+
 
 		[Test]
 		public void ShouldFindKeysByBucket()
@@ -50,7 +73,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Authentication
 				const string handle = "handle";
 				const string handle2 = "handle2";
 				var cryptoKey = Guid.NewGuid().ToByteArray();
-				var cryptoKeyExpiration = DateTime.Today;
+				var cryptoKeyExpiration = DateTime.Today + TimeSpan.FromDays(1);
 				Target.Add(new CryptoKeyInfo
 				{
 					Bucket = bucket,
@@ -69,7 +92,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Authentication
 
 				var result = Target.Find(bucket).ToList();
 
-				result.Count().Should().Be.EqualTo(2);
+				result.Count.Should().Be.EqualTo(2);
 				result.ForEach(x => x.Bucket.Should().Be.EqualTo(bucket));
 				result.ForEach(x => x.CryptoKey.Should().Have.SameSequenceAs(cryptoKey));
 				result.ForEach(x => x.CryptoKeyExpiration.Should().Be.EqualTo(cryptoKeyExpiration));
@@ -78,7 +101,46 @@ namespace Teleopti.Ccc.InfrastructureTest.Authentication
 			}
 			
 		}
-		
+
+		[Test]
+		public void ShouldNotFindExpiredKeysByBucket()
+		{
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			{
+				const string bucket = "bucket";
+				const string handle = "handle";
+				const string handle2 = "handle2";
+				var cryptoKey = Guid.NewGuid().ToByteArray();
+				var notExpired = DateTime.Today + TimeSpan.FromDays(1);
+				var expired = DateTime.Today - TimeSpan.FromDays(1);
+
+				Target.Add(new CryptoKeyInfo
+				{
+					Bucket = bucket,
+					Handle = handle,
+					CryptoKey = cryptoKey,
+					CryptoKeyExpiration = notExpired
+				});
+				
+				Target.Add(new CryptoKeyInfo
+				{
+					Bucket = bucket,
+					Handle = handle2,
+					CryptoKey = cryptoKey,
+					CryptoKeyExpiration = expired
+				});
+
+				var result = Target.Find(bucket).ToList();
+
+				result.Count.Should().Be.EqualTo(1);
+				result.First().Bucket.Should().Be.EqualTo(bucket);
+				result.First().Handle.Should().Be.EqualTo(handle);
+				result.First().CryptoKeyExpiration.Should().Be.EqualTo(notExpired);
+				result.First().CryptoKey.Should().Have.SameSequenceAs(cryptoKey);
+			}
+
+		}
+
 		[Test]
 		public void ShouldRemove()
 		{
@@ -87,7 +149,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Authentication
 				const string bucket = "bucket";
 				const string handle = "handle";
 				var cryptoKey = Guid.NewGuid().ToByteArray();
-				var cryptoKeyExpiration = DateTime.Today;
+				var cryptoKeyExpiration = DateTime.Today + TimeSpan.FromDays(1);
 				Target.Add(new CryptoKeyInfo
 				{
 					Bucket = bucket,
@@ -110,7 +172,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Authentication
 				const string bucket = "bucket";
 				const string handle = "handle";
 				var cryptoKey = Guid.NewGuid().ToByteArray();
-				var cryptoKeyExpiration = DateTime.Today-TimeSpan.FromDays(1);
+				var cryptoKeyExpiration = DateTime.Today+TimeSpan.FromDays(1);
 				Target.Add(new CryptoKeyInfo
 				{
 					Bucket = bucket,
@@ -119,43 +181,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Authentication
 					CryptoKeyExpiration = cryptoKeyExpiration
 				});
 
-				Target.ClearExpired(DateTime.UtcNow);
+				Target.ClearExpired(DateTime.Today + TimeSpan.FromDays(2));
 
 				Target.Find(bucket, handle).Should().Be.Null();
-			}
-		}
-
-		[Test, ExpectedException(typeof(DuplicateCryptoKeyException))]
-		public void ShouldThrowWhenExisting()
-		{
-			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
-			{
-				const string bucket = "bucket";
-				const string handle = "handle";
-				var cryptoKey = Guid.NewGuid().ToByteArray();
-				var cryptoKeyExpiration = DateTime.Today;
-				try
-				{
-					Target.Add(new CryptoKeyInfo
-					{
-						Bucket = bucket,
-						Handle = handle,
-						CryptoKey = cryptoKey,
-						CryptoKeyExpiration = cryptoKeyExpiration
-					});
-				}
-				catch (Exception e)
-				{
-					throw new Exception("This part should not fail.", e);
-				}
-
-				Target.Add(new CryptoKeyInfo
-				{
-					Bucket = bucket,
-					Handle = handle,
-					CryptoKey = cryptoKey,
-					CryptoKeyExpiration = cryptoKeyExpiration
-				});
 			}
 		}
 	}
