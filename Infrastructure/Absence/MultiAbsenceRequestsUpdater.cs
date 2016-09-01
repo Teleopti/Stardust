@@ -39,9 +39,8 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private readonly ICurrentScenario _scenarioRepository;
 		private IProcessAbsenceRequest _process;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
-		private readonly IHandleCommand<ApproveRequestCommand> _approveRequestCommandHandler;
-		private readonly IHandleCommand<DenyRequestCommand> _denyRequestCommandHandler;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+		private ICommandDispatcher _commandDispatcher;
 
 		public MultiAbsenceRequestsUpdater(IPersonAbsenceAccountProvider personAbsenceAccountProvider,
 			IResourceCalculationPrerequisitesLoader prereqLoader, ICurrentScenario scenarioRepository,
@@ -51,7 +50,8 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			IScheduleIsInvalidSpecification scheduleIsInvalidSpecification, IPersonRequestCheckAuthorization authorization,
 			IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification,
 			IResourceOptimizationHelper resourceOptimizationHelper,
-			IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, IHandleCommand<ApproveRequestCommand> approveRequestCommandHandler, IHandleCommand<DenyRequestCommand> denyRequestCommandHandler, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
+			IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification,
+			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, ICommandDispatcher commandDispatcher)
 		{
 			_personAbsenceAccountProvider = personAbsenceAccountProvider;
 			_prereqLoader = prereqLoader;
@@ -65,9 +65,8 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			_budgetGroupHeadCountSpecification = budgetGroupHeadCountSpecification;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_budgetGroupAllowanceSpecification = budgetGroupAllowanceSpecification;
-			_approveRequestCommandHandler = approveRequestCommandHandler;
-			_denyRequestCommandHandler = denyRequestCommandHandler;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
+			_commandDispatcher = commandDispatcher;
 		}
 
 		public bool UpdateAbsenceRequest(List<IPersonRequest> personRequests,
@@ -104,15 +103,12 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 					var undoRedoContainer = new UndoRedoContainer(400);
 
 					var workflowControlSet = absenceRequest.Person.WorkflowControlSet;
-
-
 					if (workflowControlSet == null)
 					{
 						handleNoWorkflowControlSet(absenceRequest, personRequest);
 					}
 					else
 					{
-
 						var allAccounts = _personAbsenceAccountProvider.Find(absenceRequest.Person);
 						affectedPersonAbsenceAccount = allAccounts.Find(absenceRequest.Absence);
 						var currentScenario = _scenarioRepository.Current();
@@ -167,35 +163,30 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			{
 				foreach (var personRequest in personRequests)
 				{
-
+					IRequestCommand command;
 
 					if (personRequest.IsApproved)
 					{
-
-						var approveCommand = new ApproveRequestCommand()
+						command = new ApproveRequestCommand()
 						{
-							PersonRequestId = personRequest.Id.GetValueOrDefault()
+							PersonRequestId = personRequest.Id.GetValueOrDefault(),
 						};
-
-						_approveRequestCommandHandler.Handle(approveCommand);
-						if (approveCommand.ErrorMessages != null)
-						{
-							logger.Warn(approveCommand.ErrorMessages);
-						}
 					}
 					else
 					{
-						var denyCommand = new DenyRequestCommand()
+						command = new DenyRequestCommand()
 						{
 							PersonRequestId = personRequest.Id.GetValueOrDefault(),
 							DenyReason = personRequest.DenyReason
 						};
-						_denyRequestCommandHandler.Handle(denyCommand);
-						if (denyCommand.ErrorMessages != null)
-						{
-							logger.Warn(denyCommand.ErrorMessages);
-						}
 					}
+					_commandDispatcher.Execute(command);
+
+					if (command.ErrorMessages != null)
+					{
+						logger.Warn(command.ErrorMessages);
+					}
+
 					try
 					{
 						uow.PersistAll();
