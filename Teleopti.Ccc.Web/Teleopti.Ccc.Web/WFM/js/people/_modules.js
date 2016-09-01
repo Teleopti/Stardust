@@ -10,6 +10,7 @@
 		'ui.indeterminate',
 		'wfm.pagination',
 		'pascalprecht.translate',
-		'ui.router'
+		'ui.router',
+		'wfm.multiplesearchinput'
 	]);
 })();

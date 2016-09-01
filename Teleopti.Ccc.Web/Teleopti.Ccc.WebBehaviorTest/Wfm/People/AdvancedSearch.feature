@@ -43,7 +43,7 @@ Scenario: match any search terms in a field
 	When I view people
 	And I search with
 	| Field        | Value        |
-	| last name    | Andeen Smith |
+	| LastName    | Andeen Smith |
 	Then I should see 'Andeen' in people list
 	And I should see 'Smith' in people list
 
@@ -51,8 +51,8 @@ Scenario: match all search terms in different fields
 	When I view people
 	And I search with
 	| Field        | Value        |
-	| last name    | Andeen Smith |
-	| organization | Red        |
+	| LastName    | Andeen Smith |
+	| Organization | Red        |
 	Then I should see 'Andeen' in people list
 
 @ignore
@@ -67,6 +67,6 @@ Scenario: match entire quoted search term in different fields
 	When I view people
 	And I search with
 	| Field        | Value      |
-	| last name    | Andeen     |
-	| organization | "Team Red" |
+	| LastName    | Andeen     |
+	| Organization | "Team Red" |
 	Then I should see 'Andeen' in people list

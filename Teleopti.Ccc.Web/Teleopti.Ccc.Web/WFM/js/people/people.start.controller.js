@@ -13,7 +13,11 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 	$scope.pageSize = 20;
 	$scope.searchOptions = {
 		keyword: $stateParams.currentKeyword !== undefined ? $stateParams.currentKeyword : "",
-		searchKeywordChanged: false
+		searchKeywordChanged: false,
+		searchFields: [
+			'FirstName', 'LastName', 'EmploymentNumber', 'Organization', 'Role', 'Contract', 'ContractSchedule', 'ShiftBag',
+			'PartTimePercentage', 'Skill', 'BudgetGroup', 'Note'
+		]
 	};
 	$scope.lang = i18nService.getCurrentLang();
 	$scope.showImportPanel = false;

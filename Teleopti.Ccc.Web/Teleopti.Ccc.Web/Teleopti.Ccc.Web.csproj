@@ -1326,6 +1326,7 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewNew.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.0.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.0.min.js" />
+    <None Include="WFM\css\_wfmmultiplesearchinput.scss" />
     <Content Include="WFM\index_desktop_client.tpl.html" />
     <Content Include="WFM\index.tpl.html" />
     <Content Include="WFM\js\app_desktop_client.js" />
@@ -1345,8 +1346,10 @@
     <Content Include="WFM\js\global\exceptionhandler.js" />
     <Content Include="WFM\js\global\http.spec.js" />
     <Content Include="WFM\js\global\jalaali-calendar\jalaali.service.js" />
+    <Content Include="WFM\js\global\wfm-multiple-search-input\wfm-multiple-search-input.tpl.html" />
     <Content Include="WFM\js\global\notification.controller.spec.js" />
     <Content Include="WFM\js\global\signalR.service.js" />
+    <Content Include="WFM\js\global\wfm-multiple-search-input\wfm-multiple-search-input.directive.spec.js" />
     <Content Include="WFM\js\global\wfm.main.controller.js" />
     <Content Include="WFM\js\global\shortcuts.service.js" />
     <Content Include="WFM\js\global\shortcuts.service.spec.js" />
@@ -2414,6 +2417,7 @@
     <Content Include="WFM\css\_requests.scss" />
     <Content Include="WFM\css\_start.scss" />
     <Content Include="WFM\css\_reports.scss" />
+    <Content Include="WFM\js\global\wfm-multiple-search-input\wfm-multiple-search-input.directive.js" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
