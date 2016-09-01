@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
-	public class DenyRequestCommand : ITrackableCommand, IErrorAttachedCommand, IReplyCommand
+	public class DenyRequestCommand : IRequestCommand
 	{
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
 		public Guid PersonRequestId { get; set; }

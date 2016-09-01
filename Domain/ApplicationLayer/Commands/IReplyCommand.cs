@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
+﻿namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
-	interface IReplyCommand
+	public interface IReplyCommand
 	{
 		string ReplyMessage { get; set; }
 		bool IsReplySuccess { get; set; }

@@ -55,8 +55,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			build.RegisterModule<PayrollContainerInstaller>();
 			build.RegisterModule<SchedulingContainerInstaller>();
 			build.Register(c => StatisticRepositoryFactory.Create()).As<IStatisticRepository>();
-			build.RegisterModule<CommandDispatcherModule>();
-			build.RegisterModule<CommandHandlersModule>();
 			build.RegisterModule(new NotificationModule(_toggleManager));
 			build.RegisterModule<IntraIntervalSolverServiceModule>();
 

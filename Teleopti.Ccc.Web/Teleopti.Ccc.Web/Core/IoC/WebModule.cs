@@ -102,9 +102,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			builder.RegisterModule<NotificationModule>();
 
-			builder.RegisterModule<CommandDispatcherModule>();
-			builder.RegisterModule<CommandHandlersModule>();
-
 			builder.RegisterType<PersonInRoleQuerier>().As<IPersonInRoleQuerier>().SingleInstance();
 			builder.RegisterType<PersonToRoleAssociation>().SingleInstance();
 
