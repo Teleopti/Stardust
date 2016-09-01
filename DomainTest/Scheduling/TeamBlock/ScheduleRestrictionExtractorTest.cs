@@ -51,9 +51,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_nightlyRestRestrictionForTeamBlock.AggregatedNightlyRestRestriction(_teamBlockInfo)).Return(new EffectiveRestriction(new StartTimeLimitation(),
                                                         new EndTimeLimitation(),
                                                         new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>()));
+                Expect.Call(scheduleMatrixPro.GetScheduleDayByKey(new DateOnly(2012, 12, 7))).Return(null);
             }
-
-
+            
             var expected = new EffectiveRestriction(new StartTimeLimitation(),
                                                            new EndTimeLimitation(),
                                                            new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
@@ -571,15 +571,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             using (_mocks.Record())
             {
-                Expect.Call(scheduleMatrixPro.GetScheduleDayByKey(dateOnly)).Return(scheduleDayPro1).Repeat.Twice();
-                Expect.Call(scheduleMatrixPro.GetScheduleDayByKey(dateOnly.AddDays(1))).Return(scheduleDayPro2).Repeat.Twice();
-                Expect.Call(scheduleDayPro1.DaySchedulePart()).Return(scheduleDay1).Repeat.Twice();
-                Expect.Call(scheduleDay1.ProjectionService()).Return(projectionService1).Repeat.Twice();
-                Expect.Call(projectionService1.CreateProjection()).Return(visualLayerCollection1).Repeat.Twice();
+                Expect.Call(scheduleMatrixPro.GetScheduleDayByKey(dateOnly)).Return(scheduleDayPro1);
+                Expect.Call(scheduleMatrixPro.GetScheduleDayByKey(dateOnly.AddDays(1))).Return(scheduleDayPro2);
+                Expect.Call(scheduleDayPro1.DaySchedulePart()).Return(scheduleDay1);
+                Expect.Call(scheduleDay1.ProjectionService()).Return(projectionService1);
+                Expect.Call(projectionService1.CreateProjection()).Return(visualLayerCollection1);
                 Expect.Call(visualLayerCollection1.Period()).Return(period1).Repeat.Twice();
-                Expect.Call(scheduleDay2.ProjectionService()).Return(projectionService2).Repeat.Twice();
-                Expect.Call(scheduleDayPro2.DaySchedulePart()).Return(scheduleDay2).Repeat.Twice();
-                Expect.Call(projectionService2.CreateProjection()).Return(visualLayerCollection2).Repeat.Twice();
+                Expect.Call(scheduleDay2.ProjectionService()).Return(projectionService2);
+                Expect.Call(scheduleDayPro2.DaySchedulePart()).Return(scheduleDay2);
+                Expect.Call(projectionService2.CreateProjection()).Return(visualLayerCollection2);
                 Expect.Call(visualLayerCollection2.Period()).Return(period2).Repeat.Twice();
                 Expect.Call(_nightlyRestRestrictionForTeamBlock.AggregatedNightlyRestRestriction(_teamBlockInfo)).Return(new EffectiveRestriction(new StartTimeLimitation(),
                                                         new EndTimeLimitation(),
@@ -614,10 +614,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             using (_mocks.Record())
             {
-                Expect.Call(scheduleMatrixPro.GetScheduleDayByKey(dateOnly)).Return(scheduleDayPro1).Repeat.Twice();
-                Expect.Call(scheduleDayPro1.DaySchedulePart()).Return(scheduleDay1).Repeat.Twice();
-                Expect.Call(scheduleDay1.ProjectionService()).Return(projectionService1).Repeat.Twice();
-                Expect.Call(projectionService1.CreateProjection()).Return(visualLayerCollection1).Repeat.Twice();
+                Expect.Call(scheduleMatrixPro.GetScheduleDayByKey(dateOnly)).Return(scheduleDayPro1);
+                Expect.Call(scheduleDayPro1.DaySchedulePart()).Return(scheduleDay1);
+                Expect.Call(scheduleDay1.ProjectionService()).Return(projectionService1);
+                Expect.Call(projectionService1.CreateProjection()).Return(visualLayerCollection1);
                 Expect.Call(visualLayerCollection1.Period()).Return(period1).Repeat.Twice();
             }
             using (_mocks.Playback())
