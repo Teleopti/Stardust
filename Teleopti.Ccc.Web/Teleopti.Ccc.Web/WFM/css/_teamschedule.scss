@@ -599,12 +599,14 @@
 .multiline-tooltip .md-content {
 	height: auto;
 
-	span {
-		display: inline-block;
-		line-height: 25px;
-		max-width: 500px;
-		white-space: normal;
+	@media(max-width: 1200px){
+		span {
+			display: inline-block;
+			line-height: 25px;
+			max-width: 500px;
+			white-space: normal;
 
+		}
 		br {
 			display: inline;
 			line-height: 5px;
