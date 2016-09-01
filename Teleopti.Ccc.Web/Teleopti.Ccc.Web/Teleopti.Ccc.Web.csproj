@@ -1364,14 +1364,12 @@
     <Content Include="WFM\js\global\wfmrightpanel\wfmrightpanel.directive.js" />
     <Content Include="WFM\js\global\wfmrightpanel\wfmrightpanel.html" />
     <Content Include="WFM\js\intraday\intraday-area.html" />
-    <Content Include="WFM\js\intraday\intraday-skill.service.js" />
     <Content Include="WFM\js\intraday\intraday-staffing.html" />
     <Content Include="WFM\js\intraday\intraday.area.controller.js" />
     <Content Include="WFM\js\intraday\intraday.area.controller.spec.js" />
     <Content Include="WFM\js\intraday\intraday.config.controller.spec.js" />
     <Content Include="WFM\js\intraday\intraday.monitor.staffing.service.js" />
     <Content Include="WFM\js\intraday\intraday.performence.service.js" />
-    <Content Include="WFM\js\intraday\intraday.skill.service.spec.js" />
     <Content Include="WFM\js\intraday\intraday.staffing.controller.js" />
     <Content Include="WFM\js\intraday\intraday.staffing.controller.spec.js" />
     <Content Include="WFM\js\intraday\intraday.staffing.service.js" />

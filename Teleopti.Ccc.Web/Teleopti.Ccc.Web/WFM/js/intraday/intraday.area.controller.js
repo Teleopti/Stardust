@@ -2,32 +2,28 @@
 	'use strict';
 	angular.module('wfm.intraday')
 	.controller('IntradayAreaCtrl', [
-		'$scope', '$state', 'intradayService', '$filter', 'NoticeService', '$timeout', '$compile', '$translate', 'intradaySkillService', 'intradayTrafficService', 'intradayPerformanceService', 'intradayMonitorStaffingService',
-		function ($scope, $state, intradayService, $filter, NoticeService, $timeout, $compile, $translate, intradaySkillService, intradayTrafficService, intradayPerformanceService, intradayMonitorStaffingService) {
+		'$scope', '$state', 'intradayService', '$filter', 'NoticeService', '$interval', '$timeout', '$compile', '$translate', 'intradayTrafficService', 'intradayPerformanceService', 'intradayMonitorStaffingService',
+		function ($scope, $state, intradayService, $filter, NoticeService, $interval, $timeout, $compile, $translate, intradayTrafficService, intradayPerformanceService, intradayMonitorStaffingService) {
 
 			var autocompleteSkill;
 			var autocompleteSkillArea;
 			var timeoutPromise;
-			var staffingTimeoutPromise;
-			var interval;
 			var pollingTimeout = 60000;
 			$scope.DeleteSkillAreaModal = false;
-			$scope.hiddenArray = [];
 			$scope.prevArea;
 			$scope.drillable;
 			var message = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink')
 			.replace('{0}', $translate.instant('Intraday'))
 			.replace('{1}', "<a href=' http://www.teleopti.com/wfm/customer-feedback.aspx' target='_blank'>")
 			.replace('{2}', '</a>');
+			var noDataMessage = $translate.instant('NoDataAvailable');
 			var prevSkill = {};
 			$scope.currentInterval = [];
-			$scope.chart;
-			$scope.staffingChart;
-			$scope.trafficData = {};
-			$scope.performanceData = {};
 			$scope.format = intradayService.formatDateTime;
+			$scope.viewObj;
 
 			NoticeService.info(message, null, true);
+
 
 			var getAutoCompleteControls = function () {
 				var autocompleteSkillDOM = document.querySelector('.autocomplete-skill');
@@ -50,16 +46,14 @@
 
 			$scope.skillSelected = function (item) {
 				$scope.selectedItem = item;
-				intradaySkillService.setSkill(item);
 				clearSkillAreaSelection();
-				pollSkillMonitorData();
+				pollActiveTabData();
 			};
 
 			$scope.skillAreaSelected = function (item) {
 				$scope.selectedItem = item;
-				intradaySkillService.setSkill(item);
 				clearSkillSelection();
-				pollSkillAreaMonitorData();
+				pollActiveTabData();
 			};
 
 			$scope.deleteSkillArea = function (skillArea) {
@@ -71,7 +65,7 @@
 					.$promise.then(function (result) {
 						$scope.skillAreas.splice($scope.skillAreas.indexOf(skillArea), 1);
 						$scope.selectedItem = null;
-						$scope.HasMonitorData = false;
+						$scope.hasMonitorData = false;
 						clearSkillAreaSelection();
 						notifySkillAreaDeletion();
 					});
@@ -88,7 +82,7 @@
 				$scope.selectedSkillChange = function (item) {
 					if (item) {
 						$scope.skillSelected(item);
-						pollSkillStaffingData();
+						intradayTrafficService.pollSkillData(item);
 						$scope.hiddenArray = [];
 
 						if (!(prevSkill === autocompleteSkill.selectedSkill)) {
@@ -100,7 +94,7 @@
 				$scope.selectedSkillAreaChange = function (item) {
 					if (item) {
 						$scope.skillAreaSelected(item);
-						pollSkillAreaStaffingData();
+						intradayTrafficService.pollSkillAreaData(item);
 						$scope.hiddenArray = [];
 						$scope.prevArea = autocompleteSkillArea.selectedSkillArea;
 					}
@@ -143,7 +137,6 @@
 
 				function clearSkillSelection() {
 					if (!autocompleteSkill) return;
-
 					autocompleteSkill.selectedSkill = null;
 					autocompleteSkill.searchSkillText = '';
 					$scope.drillable = false;
@@ -151,7 +144,6 @@
 
 				function clearSkillAreaSelection() {
 					if (!autocompleteSkillArea) return;
-
 					autocompleteSkillArea.selectedSkillArea = null;
 					autocompleteSkillArea.searchSkillAreaText = '';
 				};
@@ -169,463 +161,123 @@
 					};
 				};
 
-				var setStaffingResult = function (result) {
-					$scope.timeSeries = [];
-					angular.forEach(result.DataSeries.Time, function (value, key) {
-						this.push($filter('date')(value, 'shortTime'));
-					}, $scope.timeSeries);
-
-					$scope.timeSeries.splice(0, 0, 'x');
-					// $scope.currentInterval.splice(0, 0, 'Current');
-
-					$scope.HasMonitorData = true;
-
-					$scope.staffingData = intradayMonitorStaffingService.setStaffingData(result);
-					loadStaffingChart();
-				};
-
-				var setResult = function (result) {
-					if (!result.LatestActualIntervalEnd) {
-						$scope.latestActualInterval = '--:--';
-						$scope.HasMonitorData = false;
-						return;
-					} else {
-						$scope.latestActualInterval = $filter('date')(result.LatestActualIntervalStart, 'shortTime') + ' - ' + $filter('date')(result.LatestActualIntervalEnd, 'shortTime');
-
-						$scope.timeSeries = [];
-						angular.forEach(result.StatisticsDataSeries.Time, function (value, key) {
-							this.push($filter('date')(value, 'shortTime'));
-						}, $scope.timeSeries);
-
-						$scope.timeSeries.splice(0, 0, 'x');
-						$scope.currentInterval.splice(0, 0, 'Current');
-
-						$scope.HasMonitorData = true;
-
-						$scope.trafficData = intradayTrafficService.setTrafficData(result);
-						loadTrafficChart();
-
-						$scope.performanceData = intradayPerformanceService.setPerformanceData(result);
-						loadPerformenceChart();
-					}
-				};
-
 				if (!$scope.selectedSkillArea && !$scope.selectedSkill && $scope.latestActualInterval === '--:--') {
-					$scope.HasMonitorData = false;
-				}
-
-				function findCurrent(currentMaxValue) {
-					if ($scope.latestActualInterval) {
-						for (var i = 0; i < $scope.timeSeries.length; i++) {
-							if ($scope.timeSeries[i] === $scope.latestActualInterval.split(' - ')[0]) {
-								$scope.currentInterval[i] = currentMaxValue;
-							} else {
-								if (i > 0) {
-									$scope.currentInterval[i] = null;
-								}
-							}
-						}
-					}else{
-						$scope.HasMonitorData = false;
-					}
-				}
-
-				var getMaxValueFromVisibleDataSeries = function (dataPrioListY1, dataPrioListY2) {
-					var maxValue = 0;
-					$scope.chartCurrentYAxis = 'y1';
-					angular.forEach(dataPrioListY1, function (value, key) {
-						if ($scope.chartHiddenLines.indexOf(value.Series[0]) === -1) {
-							if (value.Max > maxValue)
-							maxValue = value.Max;
-						}
-					});
-					if (maxValue === 0) {
-						$scope.chartCurrentYAxis = 'y2';
-						angular.forEach(dataPrioListY2, function (value, key) {
-							if ($scope.chartHiddenLines.indexOf(value.Series[0]) === -1) {
-								if (value.Max > maxValue)
-								maxValue = value.Max;
-							}
-						});
-					}
-					return maxValue * 1.1;
+					$scope.hasMonitorData = false;
 				};
-
-				$scope.resizeChart = function () {
-					$timeout(function () {
-						$scope.chart.resize();
-						$scope.prefChart.resize();
-						$scope.staffingChart.resize();
-					}, 1000);
-				}
-
-				var loadTrafficChart = function () {
-					$scope.chartHiddenLines = $scope.hiddenArray;
-					var max = getMaxValueFromVisibleDataSeries([
-						$scope.trafficData.forecastedCallsObj,
-						$scope.trafficData.actualCallsObj
-					], [
-						$scope.trafficData.forecastedAverageHandleTimeObj,
-						$scope.trafficData.actualAverageHandleTimeObj
-					]);
-
-					findCurrent(max);
-					var intervalsList = [];
-					for (interval = 0; interval < $scope.timeSeries.length - 1; interval += 4) {
-						intervalsList.push(interval);
-					}
-					$scope.chart = c3.generate({
-						bindto: '#intradayChart',
-						data: {
-							x: 'x',
-							columns: [
-								$scope.timeSeries,
-								$scope.trafficData.forecastedCallsObj.Series,
-								$scope.trafficData.actualCallsObj.Series,
-								$scope.trafficData.forecastedAverageHandleTimeObj.Series,
-								$scope.trafficData.actualAverageHandleTimeObj.Series,
-								$scope.currentInterval
-							],
-							hide: $scope.chartHiddenLines,
-							colors: {
-								Forecasted_calls: '#9CCC65',
-								Calls: '#4DB6AC',
-								Forecasted_AHT: '#F06292',
-								AHT: '#BA68C8',
-								Current: '#cacaca'
-							},
-							type: 'line',
-							types: {
-								Current: 'bar'
-							},
-							names: {
-								Forecasted_calls: $translate.instant('ForecastedCalls') + ' ←',
-								Calls: $translate.instant('Calls') + ' ←',
-								Forecasted_AHT: $translate.instant('ForecastedAverageHandleTime') + ' →',
-								AHT: $translate.instant('AverageHandlingTime') + ' →',
-								Current: $translate.instant('latestActualInterval')
-							},
-							axes: {
-								AHT: 'y2',
-								Forecasted_AHT: 'y2',
-								Current: $scope.chartCurrentYAxis
-							}
-						},
-						axis: {
-							y2: {
-								show: true,
-								label: 'AHT',
-								tick: {
-									format: d3.format('.1f')
-								}
-							},
-							y: {
-								label: $translate.instant('Calls'),
-								tick: {
-									format: d3.format('.1f')
-								}
-							},
-							x: {
-								label: $translate.instant('SkillTypeTime'),
-								type: 'category',
-								tick: {
-									fit: true,
-									centered: true,
-									multiline: false,
-									values: intervalsList
-								},
-								categories: $scope.timeSeries
-							}
-						},
-						legend: {
-							item: {
-								onclick: function (id) {
-									if ($scope.chartHiddenLines.indexOf(id) > -1) {
-										$scope.chartHiddenLines.splice($scope.chartHiddenLines.indexOf(id), 1);
-									} else {
-										$scope.chartHiddenLines.push(id);
-									}
-									loadTrafficChart();
-								}
-							}
-						}
-					});
-				}
-
-				var loadStaffingChart = function () {
-					$scope.chartHiddenLines = $scope.hiddenArray;
-
-					var max = $scope.staffingData.forecastedStaffing.max;
-
-					findCurrent(max);
-					var intervalsList = [];
-					for (interval = 0; interval < $scope.timeSeries.length - 1; interval += 4) {
-						intervalsList.push(interval);
-					}
-					$scope.staffingChart = c3.generate({
-						bindto: '#staffingChart',
-						data: {
-							x: 'x',
-							columns: [
-								$scope.staffingData.forecastedStaffing.series,
-								$scope.timeSeries,
-								$scope.currentInterval
-
-							],
-							hide: $scope.chartHiddenLines,
-							colors: {
-								Current: '#cacaca'
-							},
-							type: 'line',
-							types: {
-								Current: 'bar'
-							},
-							names: {
-								Current: $translate.instant('latestActualInterval')
-							},
-							axes: {
-								Current: $scope.chartCurrentYAxis
-							}
-						},
-						axis: {
-							y: {
-								label: 'Agents',
-								tick: {
-									format: d3.format('.1f')
-								}
-							},
-							x: {
-								label: $translate.instant('SkillTypeTime'),
-								type: 'category',
-								tick: {
-									fit: true,
-									centered: true,
-									multiline: false,
-									values: intervalsList
-								},
-								categories: $scope.timeSeries
-							}
-						},
-						legend: {
-							item: {
-								onclick: function (id) {
-									if ($scope.chartHiddenLines.indexOf(id) > -1) {
-										$scope.chartHiddenLines.splice($scope.chartHiddenLines.indexOf(id), 1);
-									} else {
-										$scope.chartHiddenLines.push(id);
-									}
-									loadStaffingChart();
-								}
-							}
-						}
-					});
-				}
-
-				var loadPerformenceChart = function () {
-					$scope.chartHiddenLines = $scope.hiddenArray;
-
-					var max = getMaxValueFromVisibleDataSeries([
-						$scope.performanceData.serviceLevelObj,
-						$scope.performanceData.abandonedRateObj
-					], [
-						$scope.performanceData.averageSpeedOfAnswerObj
-					]);
-
-					findCurrent(max);
-					var intervalsList = [];
-					for (interval = 0; interval < $scope.timeSeries.length - 1; interval += 4) {
-						intervalsList.push(interval);
-					}
-					$scope.prefChart = c3.generate({
-						bindto: '#perfChart',
-						data: {
-							x: 'x',
-							columns: [
-								$scope.performanceData.serviceLevelObj.Series,
-								$scope.performanceData.abandonedRateObj.Series,
-								$scope.performanceData.averageSpeedOfAnswerObj.Series,
-								$scope.timeSeries,
-								$scope.currentInterval
-
-							],
-							hide: $scope.chartHiddenLines,
-							colors: {
-								Service_level: '#F06292',
-								Abandoned_rate: '#4DB6AC',
-								ASA: '#9CCC65',
-								Current: '#cacaca'
-							},
-							type: 'line',
-							types: {
-								Current: 'bar'
-							},
-							names: {
-								Service_level: $translate.instant('ServiceLevelPercentSign') + ' ←',
-								Abandoned_rate: $translate.instant('AbandonedRate') + ' ←',
-								ASA: $translate.instant('AverageSpeedOfAnswer') + ' →',
-								Current: $translate.instant('latestActualInterval')
-							},
-							axes: {
-								ASA: 'y2',
-								Current: $scope.chartCurrentYAxis
-							}
-						},
-						axis: {
-							y2: {
-								show: true,
-								label: $translate.instant('Seconds'),
-								tick: {
-									format: d3.format('.1f')
-								}
-							},
-							y: {
-								label: '%',
-								tick: {
-									format: d3.format('.1f')
-								}
-							},
-							x: {
-								label: $translate.instant('SkillTypeTime'),
-								type: 'category',
-								tick: {
-									fit: true,
-									centered: true,
-									multiline: false,
-									values: intervalsList
-								},
-								categories: $scope.timeSeries
-							}
-						},
-						legend: {
-							item: {
-								onclick: function (id) {
-									if ($scope.chartHiddenLines.indexOf(id) > -1) {
-										$scope.chartHiddenLines.splice($scope.chartHiddenLines.indexOf(id), 1);
-									} else {
-										$scope.chartHiddenLines.push(id);
-									}
-									loadPerformenceChart();
-								}
-							}
-						}
-					});
-				}
 
 				var cancelTimeout = function () {
 					if (timeoutPromise) {
 						$timeout.cancel(timeoutPromise);
 						timeoutPromise = undefined;
 					}
-					if(staffingTimeoutPromise ){
-						$timeout.cancel(staffingTimeoutPromise);
-						staffingTimeoutPromise = '';
+				};
+
+				function pollActiveTabData() {
+					if ($scope.activeTab === undefined){
+						$scope.activeTab = 0;
+					}
+
+					if ($scope.selectedItem !== null && $scope.selectedItem !== undefined) {
+						if ($scope.activeTab === 0){
+							loadTraffic();
+							$scope.viewObj = intradayTrafficService.getTrafficData();
+							getViewObject();
+						}
+						if ($scope.activeTab === 1){
+							loadPerformance();
+							$scope.viewObj = intradayPerformanceService.getPerformanceData();
+							getViewObject();
+						}
+						if ($scope.activeTab === 2){
+							loadStaffing();
+							$scope.viewObj = intradayMonitorStaffingService.getStaffingData();
+							getViewObject();
+						}
+					}else{
+						$timeout(function () {
+							pollActiveTabData();
+						}, 1000);
 					}
 				};
 
-				var pollSkillMonitorData = function () {
+				var getViewObject = function () {
+					$scope.latestActualInterval = $scope.viewObj.latestActualInterval;
+					$scope.hasMonitorData = $scope.viewObj.hasMonitorData;
+
+				};
+
+				$scope.pollActiveTabDataHelper = function () {
+					pollActiveTabData();
+				};
+
+				$scope.$on("$destroy", function (event) {
 					cancelTimeout();
-					intradayService.getSkillMonitorStatistics.query(
-						{
-							id: $scope.selectedItem.Id
-						})
-						.$promise.then(function (result) {
-							if (timeoutPromise)
-								return;
-							timeoutPromise = $timeout(pollSkillMonitorData, pollingTimeout);
-							setResult(result);
-						},
-						function(error) {
-							timeoutPromise = $timeout(pollSkillMonitorData, pollingTimeout);
-							$scope.HasMonitorData = false;
-						});
-					};
+				});
 
-					var pollSkillAreaMonitorData = function () {
-						cancelTimeout();
-						intradayService.getSkillAreaMonitorStatistics.query(
-							{
-								id: $scope.selectedItem.Id
-							})
-							.$promise.then(function (result) {
-								if (timeoutPromise)
-								return;
-								timeoutPromise = $timeout(pollSkillAreaMonitorData, pollingTimeout);
-								setResult(result);
-							},
-							function (error) {
-								timeoutPromise = $timeout(pollSkillAreaMonitorData, pollingTimeout);
-								$scope.HasMonitorData = false;
-							});
-						}
+				$scope.$on('$locationChangeStart', function () {
+					cancelTimeout();
+				});
 
-						var pollSkillStaffingData = function () {
-							cancelTimeout();
-							intradayService.getSkillStaffingData.query(
-								{
-									id: $scope.selectedItem.Id
-								})
-								.$promise.then(function (result) {
-									if (staffingTimeoutPromise)
-									return;
-									staffingTimeoutPromise = $timeout(pollSkillStaffingData, pollingTimeout);
-									setStaffingResult(result);
-								},
-								function (error) {
-									staffingTimeoutPromise = $timeout(pollSkillStaffingData, pollingTimeout);
-									$scope.HasMonitorData = false;
-								});
-							};
+				$scope.configMode = function () {
+					$state.go('intraday.config', { isNewSkillArea: false });
+				};
 
-							var pollSkillAreaStaffingData = function () {
-								cancelTimeout();
-								intradayService.getSkillAreaStaffingData.query(
-									{
-										id: $scope.selectedItem.Id
-									})
-									.$promise.then(function (result) {
-										if (staffingTimeoutPromise)
-										return;
-										staffingTimeoutPromise = $timeout(pollSkillAreaStaffingData, pollingTimeout);
-										setStaffingResult(result);
-									},
-									function (error) {
-										staffingTimeoutPromise = $timeout(pollSkillAreaStaffingData, pollingTimeout);
-										$scope.HasMonitorData = false;
-									});
-								};
+				$scope.toggleModal = function () {
+					$scope.DeleteSkillAreaModal = !$scope.DeleteSkillAreaModal;
+				};
 
-								$scope.$on("$destroy", function (event) {
-									cancelTimeout();
-								});
+				$scope.onStateChanged = function (evt, to, params, from) {
+					if (to.name !== 'intraday.area')
+					return;
+					if (params.isNewSkillArea === true){
+						reloadSkillAreas(true);
+					}
+					else
+					reloadSkillAreas(false);
+				};
 
-								$scope.$on('$locationChangeStart', function () {
-									cancelTimeout();
-								});
+				$scope.$on('$stateChangeSuccess', $scope.onStateChanged);
 
-								$scope.configMode = function () {
-									$state.go('intraday.config', { isNewSkillArea: false });
-								};
 
-								$scope.toggleModal = function () {
-									$scope.DeleteSkillAreaModal = !$scope.DeleteSkillAreaModal;
-								};
+				var loadTraffic = function () {
+					if ($scope.selectedItem.Skills) {
+						intradayTrafficService.pollSkillAreaData($scope.selectedItem);
+					}else{
+						intradayTrafficService.pollSkillData($scope.selectedItem);
+					}
+				};
 
-								$scope.onStateChanged = function (evt, to, params, from) {
-									if (to.name !== 'intraday.area')
-									return;
+				var loadStaffing = function () {
+					if ($scope.selectedItem.Skills) {
+						intradayMonitorStaffingService.pollSkillAreaData($scope.selectedItem);
+					}else{
+						intradayMonitorStaffingService.pollSkillData($scope.selectedItem);
+					}
+				};
 
-									if (params.isNewSkillArea === true)
-									reloadSkillAreas(true);
-									else
-									reloadSkillAreas(false);
-								};
+				var loadPerformance = function () {
+					if ($scope.selectedItem.Skills) {
+						intradayPerformanceService.pollSkillAreaData($scope.selectedItem);
+					}else{
+						intradayPerformanceService.pollSkillData($scope.selectedItem);
+					}
+				};
 
-								$scope.$on('$stateChangeSuccess', $scope.onStateChanged);
+				$scope.$on('$viewContentLoaded', function(){
+					pollActiveTabData();
+				});
 
-								var notifySkillAreaDeletion = function () {
-									var message = $translate.instant('Deleted');
-									NoticeService.success(message, 5000, true);
-								};
-							}
-						]);
-					})();
+				var polling = $interval(function(){pollActiveTabData();}, pollingTimeout);
+
+				var notifySkillAreaDeletion = function () {
+					var message = $translate.instant('Deleted');
+					NoticeService.success(message, 5000, true);
+				};
+
+				$scope.$on('$destroy', function () {
+					$interval.cancel(polling);
+				});
+
+			}
+		]);
+	})();
