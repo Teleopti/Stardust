@@ -15767,7 +15767,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Minimum Weekly Rest Time.
+        ///   Looks up a localized string similar to Weekly rest time.
         /// </summary>
         public static string MinWeeklyRestRuleName {
             get {
@@ -15785,7 +15785,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Minimum Weekly Work Time.
+        ///   Looks up a localized string similar to Min weekly work time.
         /// </summary>
         public static string MinWeekWorkTimeRuleName {
             get {
@@ -17117,7 +17117,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Shift Overlaps With Day-Off.
+        ///   Looks up a localized string similar to Shift overlaps with Day Off.
         /// </summary>
         public static string NewDayOffRuleName {
             get {
@@ -17198,7 +17198,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maximum Weekly Work Time.
+        ///   Looks up a localized string similar to Max weekly work time.
         /// </summary>
         public static string NewMaxWeekWorkTimeRuleName {
             get {
@@ -17225,7 +17225,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nightly Rest.
+        ///   Looks up a localized string similar to Nightly rest time.
         /// </summary>
         public static string NewNightlyRestRuleName {
             get {
@@ -18632,7 +18632,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Non-overwritable Activities.
+        ///   Looks up a localized string similar to Allow Overwriting.
         /// </summary>
         public static string NotOverwriteLayerRuleName {
             get {
