@@ -170,7 +170,14 @@ VALUES (:BusinessUnitId, :SiteId, :TeamId, :PersonId, :DataSourceId, :UserCode)"
 		[InfoLog]
 		public virtual IEnumerable<AgentStateFound> Find(int dataSourceId, IEnumerable<string> userCodes)
 		{
-			throw new NotImplementedException();
+			var sql = SelectAgentState + "WITH (UPDLOCK) WHERE DataSourceId = :DataSourceId AND UserCode IN (:UserCodes)";
+			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
+				.SetParameter("DataSourceId", dataSourceId)
+				.SetParameterList("UserCodes", userCodes)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateFound)))
+				.SetReadOnly(true)
+				.List<AgentStateFound>()
+				;
 		}
 
 		[InfoLog]

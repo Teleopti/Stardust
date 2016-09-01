@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.TestCommon.TestData;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 {
@@ -290,5 +291,47 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				.Single().PersonId.Should().Be(person);
 		}
 
+		[Test]
+		public void ShouldFindMany()
+		{
+			var person1 = Guid.NewGuid();
+			var person2 = Guid.NewGuid();
+			var usercodeA = RandomName.Make();
+			var usercodeB = RandomName.Make();
+
+			Target.Prepare(new AgentStatePrepare
+			{
+				PersonId = person1,
+				ExternalLogons = new[]
+				{
+					new ExternalLogon
+					{
+						DataSourceId = 1,
+						UserCode = usercodeA
+					},
+					new ExternalLogon
+					{
+						DataSourceId = 2,
+						UserCode = usercodeA
+					}
+				}
+			});
+			Target.Prepare(new AgentStatePrepare
+			{
+				PersonId = person2,
+				ExternalLogons = new[]
+				{
+					new ExternalLogon
+					{
+						DataSourceId = 1,
+						UserCode = usercodeB
+					}
+				}
+			});
+
+			Target.Find(1, new[] {usercodeA, usercodeB})
+				.Select(x => x.UserCode)
+				.Should().Have.SameSequenceAs(usercodeA, usercodeB);
+		}
 	}
 }
