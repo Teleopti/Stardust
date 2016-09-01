@@ -195,6 +195,39 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			if (!found)
 				throw new InvalidUserCodeException($"No person found for SourceId {input.SourceId} and UserCode {input.UserCode}");
 		}
+
+		public override void ForAll(Action<Context> action)
+		{
+			var mappings = new MappingsState(() => _mappingReader.Read());
+
+			IEnumerable<AgentState> states = null;
+			WithUnitOfWork(() =>
+			{
+				states = _agentStatePersister.GetStates();
+			});
+
+			states.ForEach(x =>
+			{
+				WithUnitOfWork(() =>
+				{
+					action.Invoke(new Context(
+						null,
+						x.PersonId,
+						x.BusinessUnitId,
+						x.TeamId.GetValueOrDefault(),
+						x.SiteId.GetValueOrDefault(),
+						() => _agentStatePersister.Get(x.PersonId),// still need to lock one by one
+						() => _databaseReader.GetCurrentSchedule(x.PersonId),
+						s => mappings,
+						c => _agentStatePersister.Update(c.MakeAgentState()),
+						_now,
+						_stateMapper,
+						_appliedAdherence,
+						_appliedAlarm
+						));
+				});
+			});
+		}
 	}
 
 	public class ContextLoaderWithBatchQueryOptimization : ContextLoader
