@@ -180,7 +180,6 @@
 			var preSelectPersonIds = $stateParams.personId ? [$stateParams.personId] : [];
 
 			if(vm.searchEnabled){
-				personSelectionSvc.clearPersonInfo();
 				var params = getParamsForLoadingSchedules();
 
 				teamScheduleSvc.searchSchedules.query(params).$promise.then(function (result) {
