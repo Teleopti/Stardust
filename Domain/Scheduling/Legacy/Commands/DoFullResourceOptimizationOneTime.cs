@@ -1,9 +1,11 @@
 using System;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_CascadingSkills_38524)]
 	public class DoFullResourceOptimizationOneTime
 	{
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;

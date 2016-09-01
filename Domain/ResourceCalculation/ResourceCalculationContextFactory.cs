@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
+	[RemoveMeWithToggle("Remove impl of IResourceCalculationContextFactory on this class", Toggles.ResourcePlanner_CascadingSkills_38524)]
 	public class ResourceCalculationContextFactory : IResourceCalculationContextFactory
 	{
 		private readonly IPersonSkillProvider _personSkillProvider;

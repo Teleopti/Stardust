@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.FeatureFlags
 {
@@ -8,9 +7,10 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 	{
 		public RemoveMeWithToggleAttribute(params Toggles[] toggles)
 		{
-			TrickCompilerToThinkThisIsUsed = toggles;
 		}
 
-		public IEnumerable<Toggles> TrickCompilerToThinkThisIsUsed { get; private set; }
+		public RemoveMeWithToggleAttribute(string comment, params Toggles[] toggles)
+		{
+		}
 	}
 }
