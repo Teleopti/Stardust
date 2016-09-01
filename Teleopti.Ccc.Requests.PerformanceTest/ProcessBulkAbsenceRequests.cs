@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 				//load  Halvdag 16h/år
 				var absence = AbsenceRepository.Get(new Guid("5B859CEF-0F35-4BA8-A82E-A14600EEE42E"));
 
-				var wfcs = WorkflowControlSetRepository.Get(new Guid("7485EEAB-72D6-43D3-8B6F-A47A00C7D496"));
+				var wfcs = WorkflowControlSetRepository.Get(new Guid("E97BC114-8939-4A70-AE37-A338010FFF19"));
 				foreach (var period in wfcs.AbsenceRequestOpenPeriods)
 				{
 					if (period.Absence.Equals(absence))

@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -25,7 +26,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private readonly DenyAbsenceRequest _denyAbsenceRequest = new DenyAbsenceRequest();
 		private readonly PendingAbsenceRequest _pendingAbsenceRequest = new PendingAbsenceRequest();
 
-		private readonly IPersonAbsenceAccountProvider _personAbsenceAccountProvider;
 		private readonly IResourceCalculationPrerequisitesLoader _prereqLoader;
 		private readonly ILoadSchedulingStateHolderForResourceCalculation _loadSchedulingStateHolderForResourceCalculation;
 		private readonly ILoadSchedulesForRequestWithoutResourceCalculation _loadSchedulesForRequestWithoutResourceCalculation;
@@ -42,8 +42,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly ICommandDispatcher _commandDispatcher;
 
-		public MultiAbsenceRequestsUpdater(IPersonAbsenceAccountProvider personAbsenceAccountProvider,
-			IResourceCalculationPrerequisitesLoader prereqLoader, 
+		public MultiAbsenceRequestsUpdater(IResourceCalculationPrerequisitesLoader prereqLoader, 
 			ICurrentScenario scenarioRepository,
 			ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation,
 			ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulesForRequestWithoutResourceCalculation,
@@ -57,7 +56,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, 
 			ICommandDispatcher commandDispatcher)
 		{
-			_personAbsenceAccountProvider = personAbsenceAccountProvider;
 			_prereqLoader = prereqLoader;
 			_scenarioRepository = scenarioRepository;
 			_loadSchedulingStateHolderForResourceCalculation = loadSchedulingStateHolderForResourceCalculation;
@@ -113,7 +111,10 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 					}
 					else
 					{
-						var allAccounts = _personAbsenceAccountProvider.Find(absenceRequest.Person);
+						IPersonAccountCollection allAccounts;
+						if(! _schedulingResultStateHolder.AllPersonAccounts.TryGetValue(absenceRequest.Person, out allAccounts ))
+							allAccounts = new PersonAccountCollection(absenceRequest.Person);
+
 						affectedPersonAbsenceAccount = allAccounts.Find(absenceRequest.Absence);
 						var currentScenario = _scenarioRepository.Current();
 
