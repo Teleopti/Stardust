@@ -13,7 +13,6 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -35,17 +34,14 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private readonly IScheduleIsInvalidSpecification _scheduleIsInvalidSpecification;
 		private readonly IAlreadyAbsentSpecification _alreadyAbsentSpecification;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
-		private readonly IScheduleDifferenceSaver _scheduleDictionarySaver;
 		private readonly IPersonRequestCheckAuthorization _authorization;
 		private readonly IRequestFactory _requestFactory;
 		private readonly ICurrentScenario _scenarioRepository;
-		private readonly IPersonAccountUpdater _personAccountUpdater;
 		private IProcessAbsenceRequest _process;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
-		private readonly IToggleManager _toggleManager;
 		private readonly IHandleCommand<ApproveRequestCommand> _approveRequestCommandHandler;
 		private readonly IHandleCommand<DenyRequestCommand> _denyRequestCommandHandler;
-		private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
 		public MultiAbsenceRequestsUpdater(IPersonAbsenceAccountProvider personAbsenceAccountProvider,
 			IResourceCalculationPrerequisitesLoader prereqLoader, ICurrentScenario scenarioRepository,
@@ -55,9 +51,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			IScheduleIsInvalidSpecification scheduleIsInvalidSpecification, IPersonRequestCheckAuthorization authorization,
 			IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification,
 			IResourceOptimizationHelper resourceOptimizationHelper,
-			IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification,
-			IScheduleDifferenceSaver scheduleDictionarySaver, IPersonAccountUpdater personAccountUpdater,
-			IToggleManager toggleManager, IHandleCommand<ApproveRequestCommand> approveRequestCommandHandler, IHandleCommand<DenyRequestCommand> denyRequestCommandHandler, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
+			IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, IHandleCommand<ApproveRequestCommand> approveRequestCommandHandler, IHandleCommand<DenyRequestCommand> denyRequestCommandHandler, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
 		{
 			_personAbsenceAccountProvider = personAbsenceAccountProvider;
 			_prereqLoader = prereqLoader;
@@ -71,9 +65,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			_budgetGroupHeadCountSpecification = budgetGroupHeadCountSpecification;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_budgetGroupAllowanceSpecification = budgetGroupAllowanceSpecification;
-			_scheduleDictionarySaver = scheduleDictionarySaver;
-			_personAccountUpdater = personAccountUpdater;
-			_toggleManager = toggleManager;
 			_approveRequestCommandHandler = approveRequestCommandHandler;
 			_denyRequestCommandHandler = denyRequestCommandHandler;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
@@ -121,10 +112,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 					}
 					else
 					{
-						//if (_toggleManager.IsEnabled(Toggles.Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850))
-						//{
-						//	updatePersonAccountBalancesForAbsence(unitOfWork, absenceRequest);
-						//}
 
 						var allAccounts = _personAbsenceAccountProvider.Find(absenceRequest.Person);
 						affectedPersonAbsenceAccount = allAccounts.Find(absenceRequest.Absence);
@@ -184,11 +171,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 					if (personRequest.IsApproved)
 					{
-						//if (affectedPersonAbsenceAccount != null)
-						//{
-						//	trackAccounts(affectedPersonAbsenceAccount, dateOnlyPeriod, absenceRequest);
-						//	unitOfWork.Merge(affectedPersonAbsenceAccount);
-						//}
 
 						var approveCommand = new ApproveRequestCommand()
 						{
@@ -223,19 +205,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 					}
 				}
-
-				//try
-				//{
-				//	unitOfWork.PersistAll();
-				//}
-				//catch (OptimisticLockException ex)
-				//{
-				//	logger.Error("A optimistic locking error occurred. Review the error log. Processing cannot continue this time.", ex);
-				//}
-				//catch (Exception ex)
-				//{
-				//	logger.Error("Error when persisting Absence Request", ex);
-				//}
 			}
 
 			//TODO should return true or false
@@ -298,33 +267,8 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				requiredForHandlingAbsenceRequest,
 				validatorList);
 
-			//if (personRequest.IsApproved)
-			//{
-			//	try
-			//	{
-			//		persistScheduleChanges(absenceRequest.Person);
-			//	}
-			//	catch (ValidationException validationException)
-			//	{
-			//		logger.Error("A validation error occurred. Review the error log. Processing cannot continue.", validationException);
-			//		return false;
-			//	}
-
-			//}
-
 			return true;
 		}
-
-		//private void updatePersonAccountBalancesForAbsence(IUnitOfWork unitOfWork, IAbsenceRequest absenceRequest)
-		//{
-		//	if (_personAccountUpdater.UpdateForAbsence(
-		//		absenceRequest.Person,
-		//		absenceRequest.Absence,
-		//		new DateOnly(absenceRequest.Period.StartDateTime)))
-		//	{
-		//		unitOfWork.PersistAll();
-		//	}
-		//}
 
 		private void handleNoWorkflowControlSet(IAbsenceRequest absenceRequest, IPersonRequest personRequest)
 		{
@@ -485,12 +429,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				}
 			}
 		}
-
-		private void persistScheduleChanges(IPerson person)
-		{
-			_scheduleDictionarySaver.SaveChanges(_schedulingResultStateHolder.Schedules.DifferenceSinceSnapshot(), (IUnvalidatedScheduleRangeUpdate)_schedulingResultStateHolder.Schedules[person]);
-		}
-
 
 	}
 }
