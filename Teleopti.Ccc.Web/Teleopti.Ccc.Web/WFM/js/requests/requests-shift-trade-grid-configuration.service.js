@@ -212,6 +212,7 @@
 						pinnedRight: true,
 						enablePinning: false,
 						minWidth: 111,
+						cellTooltip: true,
 						filter: {
 							disableCancelFilterButton: true,
 							placeholder: 'Filter...'
