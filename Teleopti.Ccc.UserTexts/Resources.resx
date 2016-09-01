@@ -14781,11 +14781,11 @@ These options are activated:
     <comment>Tip for dialog in request module</comment>
   </data>
   <data name="ValidateRequestsBasedOnBudgetAllotment" xml:space="preserve">
-    <value>Validate requests based on budget allotment</value>
+    <value>Validate requests based on budget allowance</value>
     <comment>Business rule description in request module</comment>
   </data>
   <data name="ValidateRequestsBasedOnIntraday" xml:space="preserve">
-    <value>Validate requests based on intraday</value>
+    <value>Validate requests based on intraday staffing check</value>
     <comment>Business rule description in request module</comment>
   </data>
   <data name="NoPermissionToEditShiftCategory" xml:space="preserve">
@@ -14793,7 +14793,7 @@ These options are activated:
     <comment>Error message for modifying shift category without permission.</comment>
   </data>
   <data name="ThisActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping" xml:space="preserve">
-    <value>This activity will intersect existing activities that do not allow overlapping.</value>
+    <value>This activity will overlap existing activities that do not allow overlapping.</value>
     <comment>Command check info text after adding activity, adding personal activity and move activity in wfm team schedule.</comment>
   </data>
   <data name="DoNotModifyForTheseAgents" xml:space="preserve">
@@ -14840,7 +14840,7 @@ These options are activated:
     <comment>No change has been made</comment>
   </data>
   <data name="BusinessRuleOverlappingErrorMessage3" xml:space="preserve">
-    <value>The non-overwrittenable shift {0} in interval {1} is overwritten by {2} in interval {3}.</value>
+    <value>The non-overwritable activity {0} in interval {1} is overwritten by {2} in interval {3}.</value>
     <comment>The warning to show when a non-overwrittenable shift layer is overwritten (overlapped) by another shift layer, personal activity, or meeting.</comment>
   </data>
   <data name="ConfigureValidationWarnings" xml:space="preserve">

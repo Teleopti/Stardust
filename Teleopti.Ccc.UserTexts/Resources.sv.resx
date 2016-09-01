@@ -13649,4 +13649,34 @@ Dessa val är aktiverade:
   <data name="NewNightlyRestRuleName" xml:space="preserve">
     <value>Nattvila</value>
   </data>
+  <data name="NoPermissionToModifyPersonAssignment" xml:space="preserve">
+    <value>Mer information om prognosmetoder och detektion av extremvärden</value>
+  </data>
+  <data name="ValidateRequestsBasedOnBudgetAllotment" xml:space="preserve">
+    <value>Validera förfrågningar baserat på budgettilldelning</value>
+  </data>
+  <data name="ValidateRequestsBasedOnIntraday" xml:space="preserve">
+    <value>Validera förfrågningar baserat på kontroll av bemanning inom dagen</value>
+  </data>
+  <data name="ThisActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping" xml:space="preserve">
+    <value>Den här aktiviteten kommer att överlappa befintliga aktiviteter som inte tillåter överlappning. </value>
+  </data>
+  <data name="BySeniority" xml:space="preserve">
+    <value>Baserat på senioritet</value>
+  </data>
+  <data name="BusinessRuleOverlappingErrorMessage3" xml:space="preserve">
+    <value>Den icke överskrivningsbara aktiviteten {0} i intervall {1} är överskriven av {2} i intervall {3}.</value>
+  </data>
+  <data name="MinWeekWorkTimeRuleName" xml:space="preserve">
+    <value>Minsta arbetstid per vecka</value>
+  </data>
+  <data name="NewDayOffRuleName" xml:space="preserve">
+    <value>Skiftet överlappar en fridag</value>
+  </data>
+  <data name="NewMaxWeekWorkTimeRuleName" xml:space="preserve">
+    <value>Max arbetstid per vecka</value>
+  </data>
+  <data name="NotOverwriteLayerRuleName" xml:space="preserve">
+    <value>Icke överskrivningsbara aktiviteter</value>
+  </data>
 </root>
