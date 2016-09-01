@@ -50,5 +50,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 
 			businessUnit.Should().Be.Null();
 		}
+
+		[Test]
+		public void ShouldNotThrowIfCurrentUnitOfWorkFactoryDoesntExistButReturnNullInstead()
+		{
+			//sort of wrong - but to keep old behavior after HttpRequestFalse no longer used in web
+			var bu = BusinessUnitFactory.CreateWithId("testBu1");
+			var httpContext = new MutableFakeCurrentHttpContext();
+			var headers = new NameValueCollection { { "X-Business-Unit-Filter", bu.Id.Value.ToString() } };
+			httpContext.SetContext(new FakeHttpContext(null, null, null, null, null, null, null, headers));
+			var currentUowFactory = MockRepository.GenerateStub<ICurrentUnitOfWorkFactory>();
+			currentUowFactory.Expect(x => x.Current()).Return(null);
+
+			var target = new BusinessUnitForRequest(httpContext, null, currentUowFactory);
+			var businessUnit = target.TryGetBusinessUnit();
+
+			businessUnit.Should().Be.Null();
+		}
 	}
 }

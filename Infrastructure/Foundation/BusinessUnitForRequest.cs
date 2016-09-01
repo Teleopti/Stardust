@@ -27,11 +27,12 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			var buid = UnitOfWorkAspect.BusinessUnitIdForRequest(_currentHttpContext);
 			if (buid.HasValue)
 			{
-				return _currentUnitOfWorkFactory.Current().HasCurrentUnitOfWork() ? 
+			    var unitOfWorkFactory = _currentUnitOfWorkFactory.Current();
+			    return unitOfWorkFactory == null ? null : unitOfWorkFactory.HasCurrentUnitOfWork() ? 
 					_businessUnitRepository.Load(buid.Value) : 
 					null;
 			}
-			return null;
+		    return null;
 		}
 	}
 }
