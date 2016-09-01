@@ -148,21 +148,29 @@ namespace Teleopti.Ccc.Win.Shifts
 				return;
 			}
 
-			_editControl.NewClicked -= (editControlNewClicked);
-			_editControl.NewSpecialClicked -= (editControlNewSpecialClicked);
-			_editControl.DeleteClicked -= (editControlDeleteClicked);
-			_editControl.NewSpecialItems.Clear();
-			_editControl.Dispose();
-			_editControl = null;
-			KeyDown -= workShiftsExplorerKeyDown;
+		    if (_editControl!=null)
+		    {
+		        _editControl.NewClicked -= (editControlNewClicked);
+		        _editControl.NewSpecialClicked -= (editControlNewSpecialClicked);
+		        _editControl.DeleteClicked -= (editControlDeleteClicked);
+		        _editControl.NewSpecialItems.Clear();
+		        _editControl.Dispose();
+		        _editControl = null;
+		    }
+		    KeyDown -= workShiftsExplorerKeyDown;
 			KeyPress -= workShiftsExplorerKeyPress;
-			_mainWindow.Activate();
+		    if (_mainWindow != null)
+		    {
+		        _mainWindow.Activate();
+		    }
 		}
 
 		private void splitContainerAdvHorizontalPanel1Resize(object sender, EventArgs e)
 		{
-			if(_visualizeView != null)
-				_visualizeView.RefreshView();
+		    if (_visualizeView != null)
+		    {
+		        _visualizeView.RefreshView();
+		    }
 		}
 
 		private void instantiateEditControl()
@@ -176,10 +184,10 @@ namespace Teleopti.Ccc.Win.Shifts
 			_editControl.NewSpecialItems.Add(new ToolStripButton { Text = UserTexts.Resources.NewActivity, Tag = ShiftCreatorViewType.Activities });
 			_editControl.NewSpecialItems.Add(new ToolStripButton { Text = UserTexts.Resources.NewLimitation, Tag = ShiftCreatorViewType.Limitation });
 			_editControl.NewSpecialItems.Add(new ToolStripButton { Text = UserTexts.Resources.NewDateExclusion, Tag = ShiftCreatorViewType.DateExclusion });
-			_editControl.NewClicked += (editControlNewClicked);
-			_editControl.NewSpecialClicked += (editControlNewSpecialClicked);
+			_editControl.NewClicked += editControlNewClicked;
+			_editControl.NewSpecialClicked += editControlNewSpecialClicked;
 
-			_editControl.DeleteClicked += (editControlDeleteClicked);
+			_editControl.DeleteClicked += editControlDeleteClicked;
 			
 		}
 

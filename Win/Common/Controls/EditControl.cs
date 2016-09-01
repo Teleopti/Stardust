@@ -67,11 +67,11 @@ namespace Teleopti.Ccc.Win.Common.Controls
 
 		    _deleteSpecialItems = new List<ToolStripItem>();
 		    _newSpecialItems = new List<ToolStripItem>();
-		    Load += new EventHandler(NewDeleteControl_Load);
-		    toolStripSplitButtonNew.ButtonClick += new EventHandler(toolStripSplitButtonNew_Click);
+		    Load += NewDeleteControl_Load;
+		    toolStripSplitButtonNew.ButtonClick += toolStripSplitButtonNew_Click;
 		    toolStripButtonNew.Click += toolStripSplitButtonNew_Click;
 
-		    toolStripSplitButtonDelete.ButtonClick += new EventHandler(toolStripSplitButtonDelete_Click);
+		    toolStripSplitButtonDelete.ButtonClick += toolStripSplitButtonDelete_Click;
 		    toolStripButtonDelete.Click += toolStripSplitButtonDelete_Click;
 
 		    toolStripSplitButtonNew.RightToLeft = RightToLeft.No;
@@ -238,14 +238,17 @@ namespace Teleopti.Ccc.Win.Common.Controls
                 drop.Items.Add(item);
             }
             toolStripSplitButtonDelete.DropDown = drop;
-            toolStripSplitButtonDelete.DropDown.ItemClicked += new ToolStripItemClickedEventHandler(DeleteDropDown_ItemClicked);
+            toolStripSplitButtonDelete.DropDown.ItemClicked += DeleteDropDown_ItemClicked;
         }
 
        
         void DeleteDropDown_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             if (_deleteSpecialItems != null)
-                DeleteSpecialClicked.Invoke(sender, e);
+            {
+                var onDeleteSpecialClicked = DeleteSpecialClicked;
+                if (onDeleteSpecialClicked != null) onDeleteSpecialClicked.Invoke(sender, e);
+            }
         }
 
         /// <summary>
