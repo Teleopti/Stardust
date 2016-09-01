@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		    builder.RegisterType<WriteProtectedScheduleCommandValidator>().As<IWriteProtectedScheduleCommandValidator>().SingleInstance();
 		    builder.RegisterType<CancelAbsenceRequestCommandValidator>().As<ICancelAbsenceRequestCommandValidator>().SingleInstance();
 			builder.RegisterType<CheckingPersonalAccountDaysProvider>().As< ICheckingPersonalAccountDaysProvider>().SingleInstance();
+			builder.RegisterType<RequestApprovalServiceFactory>().As<IRequestApprovalServiceFactory>().InstancePerDependency();
 
 			//ROBTODO: remove when Wfm_Requests_Cancel_37741 is always true
 			if (_configuration.Toggle (Toggles.Wfm_Requests_Cancel_37741))

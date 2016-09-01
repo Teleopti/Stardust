@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.IOC
 			builder.RegisterType<ShiftTradeRequestViewModelFactory>().As<IShiftTradeRequestViewModelFactory>().SingleInstance();
 			builder.RegisterType<RequestCommandHandlingProvider>().As<IRequestCommandHandlingProvider>().InstancePerLifetimeScope();
 			builder.RegisterType<RequestViewModelMapper>().As<IRequestViewModelMapper>().InstancePerLifetimeScope();
-			builder.RegisterType<RequestApprovalServiceFactory>().As<IRequestApprovalServiceFactory>().InstancePerDependency();
 			builder.RegisterType<SwapAndModifyService>().As<ISwapAndModifyService>().InstancePerDependency();
 			builder.RegisterType<SwapService>().As<ISwapService>().InstancePerDependency();
 			builder.RegisterType<ResourceCalculationOnlyScheduleDayChangeCallback>().As<IScheduleDayChangeCallback>().InstancePerDependency();
