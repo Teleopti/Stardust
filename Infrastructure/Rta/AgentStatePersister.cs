@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Castle.Core.Internal;
 using NHibernate.Transform;
@@ -41,28 +42,31 @@ WHERE
 				.SetParameterList("DataSourceIdUserCode", model.ExternalLogons.Select(x => $"{x.DataSourceId};{x.UserCode}"))
 				.ExecuteUpdate();
 
-			model.ExternalLogons.ForEach(externalLogon =>
-			{
-				var updated = _unitOfWork.Current().Session()
-					.CreateSQLQuery(@"
+			// select with upd lock to prevent deadlock
+			var existing = _unitOfWork.Current().Session()
+				.CreateSQLQuery(SelectAgentState + "WITH (UPDLOCK) WHERE PersonId = :PersonId")
+				.SetParameter("PersonId", model.PersonId)
+				.SetResultTransformer(Transformers.AliasToBean(typeof (AgentStateFound)))
+				.List<AgentStateFound>();
+
+			_unitOfWork.Current().Session()
+				.CreateSQLQuery(@"
 UPDATE [dbo].[AgentState]
 SET
 	BusinessUnitId = :BusinessUnitId,
 	SiteId = :SiteId,
 	TeamId = :TeamId
 WHERE
-	PersonId = :PersonId AND
-	DataSourceId = :DataSourceId AND
-	UserCode  = :UserCode")
-					.SetParameter("BusinessUnitId", model.BusinessUnitId)
-					.SetParameter("SiteId", model.SiteId)
-					.SetParameter("TeamId", model.TeamId)
-					.SetParameter("PersonId", model.PersonId)
-					.SetParameter("DataSourceId", externalLogon.DataSourceId)
-					.SetParameter("UserCode", externalLogon.UserCode)
-					.ExecuteUpdate();
+	PersonId = :PersonId")
+				.SetParameter("BusinessUnitId", model.BusinessUnitId)
+				.SetParameter("SiteId", model.SiteId)
+				.SetParameter("TeamId", model.TeamId)
+				.SetParameter("PersonId", model.PersonId)
+				.ExecuteUpdate();
 
-				if (updated == 0)
+			model.ExternalLogons
+				.Where(e => !existing.Any(x => x.DataSourceId == e.DataSourceId && x.UserCode == e.UserCode))
+				.ForEach(e =>
 				{
 					_unitOfWork.Current().Session()
 						.CreateSQLQuery(@"
@@ -72,11 +76,10 @@ VALUES (:BusinessUnitId, :SiteId, :TeamId, :PersonId, :DataSourceId, :UserCode)"
 						.SetParameter("SiteId", model.SiteId)
 						.SetParameter("TeamId", model.TeamId)
 						.SetParameter("PersonId", model.PersonId)
-						.SetParameter("DataSourceId", externalLogon.DataSourceId)
-						.SetParameter("UserCode", externalLogon.UserCode)
+						.SetParameter("DataSourceId", e.DataSourceId)
+						.SetParameter("UserCode", e.UserCode)
 						.ExecuteUpdate();
-				}
-			});
+				});
 		}
 
 		[InfoLog]
