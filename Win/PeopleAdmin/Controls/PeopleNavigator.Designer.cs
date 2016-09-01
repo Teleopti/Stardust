@@ -15,9 +15,15 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
+            if (disposing)
             {
-                components.Dispose();
+                if (components != null)
+                {
+                    components.Dispose();
+                }
+
+                toolStripButtonOpen.Click -= onOpenPeople;
+                toolStripButtonAddPerson.Click -= onAddNewPeople;
             }
 
             base.Dispose(disposing);
