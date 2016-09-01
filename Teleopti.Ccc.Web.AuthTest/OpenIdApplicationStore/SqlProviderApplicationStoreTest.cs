@@ -98,24 +98,6 @@ namespace Teleopti.Ccc.Web.AuthTest.OpenIdApplicationStore
 			cryptoKeyInfoRepository.AssertWasCalled(x => x.ClearExpired(Arg<DateTime>.Is.Anything));
 		}
 
-		[Test, ExpectedException(typeof(CryptoKeyCollisionException))]
-		public void ShouldThrowWhenHandleAndBucketExists()
-		{
-			var cryptoKeyInfoRepository = MockRepository.GenerateMock<ICryptoKeyInfoRepository>();
-
-			var now = new Now();
-			var target = new SqlProviderApplicationStore(cryptoKeyInfoRepository, null, now);
-
-			var key = Guid.NewGuid().ToByteArray();
-			var cryptoKeyExpiration = now.UtcDateTime();
-			const string bucket = "bucket";
-			const string handle = "handle";
-
-			cryptoKeyInfoRepository.Stub(x => x.Add(Arg<CryptoKeyInfo>.Is.Anything)).Throw(new DuplicateCryptoKeyException());
-
-			target.StoreKey(bucket, handle, new CryptoKey(key, cryptoKeyExpiration));
-		}
-
 		[Test]
 		public void ShouldRemoveKey()
 		{
