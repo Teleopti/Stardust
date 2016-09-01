@@ -15,12 +15,12 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 		private Description _description;
 		private Color _displayColor;
 		private Color _alarmColor;
-		private TimeSpan _thresholdTime;
+		private int _thresholdTime;
 		private double _staffingEffect;
 		private Adherence? _adherence;
 		private bool _isAlarm = ServiceLocatorForEntity.AppliedAlarm.RuleDefaultAlarm();
 
-		public RtaRule(Description description, Color color, TimeSpan thresholdTime, double staffingEffect)
+		public RtaRule(Description description, Color color, int thresholdTime, double staffingEffect)
 		{
 			_description = description;
 			_displayColor = color;
@@ -95,14 +95,14 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 		public virtual bool IsAlarm { get { return _isAlarm; } set { _isAlarm = value; }}
 		public virtual Color AlarmColor { get { return _alarmColor; } set { _alarmColor = value; } }
 
-		public virtual TimeSpan ThresholdTime
+		public virtual int ThresholdTime
 		{
 			get { return _thresholdTime; }
 			set
 			{
-				if (value < TimeSpan.Zero)
+				if (value < 0)
 					throw new ArgumentOutOfRangeException("value", "A negative threshold time cannot be used for alarm");
-				if (value > TimeSpan.Zero)
+				if (value > 0)
 					IsAlarm = true;
 				_thresholdTime = value;
 			}

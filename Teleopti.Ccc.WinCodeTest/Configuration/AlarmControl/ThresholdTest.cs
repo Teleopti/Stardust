@@ -44,14 +44,14 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
 		[Test]
 		public void ShouldDisplayThreshold()
 		{
-			var rule = new RtaRule { ThresholdTime = TimeSpan.FromSeconds(60) };
+			var rule = new RtaRule { ThresholdTime = 60 };
 			var target = new AlarmControlPresenter(new IRtaRule[] { rule }, new FakeView(), new[] { new ThresholdColumn() });
 			var threshold = target.Columns.Single(x => x.Text == Resources.Threshold);
 
 			var info = new GridStyleInfo();
 			target.QueryCellInfo(this, new GridQueryCellInfoEventArgs(1, threshold.Index, info));
 
-			info.CellValue.Should().Be(60d);
+			info.CellValue.Should().Be(60);
 		}
 
 		[Test]
@@ -63,9 +63,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
 
 			target.SaveCellInfo(this, new GridSaveCellInfoEventArgs(1, threshold.Index, new GridStyleInfo { CellValue = 60 }, new StyleModifyType()));
 
-			rule.ThresholdTime.Should().Be(TimeSpan.FromSeconds(60));
+			rule.ThresholdTime.Should().Be(60);
 		}
-
 
 		[Test]
 		public void ShouldNotUpdateWithNegativeNumber()
@@ -76,7 +75,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
 
 			target.SaveCellInfo(this, new GridSaveCellInfoEventArgs(1, threshold.Index, new GridStyleInfo { CellValue = -1 }, new StyleModifyType()));
 
-			rule.ThresholdTime.Should().Be(TimeSpan.Zero);
+			rule.ThresholdTime.Should().Be(0);
 		}
 	}
 }

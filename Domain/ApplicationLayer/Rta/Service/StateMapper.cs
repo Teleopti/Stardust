@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public int DisplayColor { get; set; }
 
 		public bool IsAlarm { get; set; }
-		public long ThresholdTime { get; set; }
+		public int ThresholdTime { get; set; }
 		public int AlarmColor { get; set; }
 	}
 

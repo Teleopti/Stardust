@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Mapping
 
 			var mapping = Persister.Data.Single(x => x.StateCode == "phone" && x.ActivityId == phone);
 			mapping.IsAlarm.Should().Be(true);
-			mapping.ThresholdTime.Should().Be(TimeSpan.FromMinutes(2).Ticks);
+			mapping.ThresholdTime.Should().Be(TimeSpan.FromMinutes(2).TotalSeconds);
 			mapping.AlarmColor.Should().Be(Color.Red.ToArgb());
 		}
 

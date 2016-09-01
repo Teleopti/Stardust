@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			if (rule == null)
 			{
-				rule = new RtaRule(new Description(Name ?? RandomName.Make()), displayColor, TimeSpan.Zero, StaffingEffect)
+				rule = new RtaRule(new Description(Name ?? RandomName.Make()), displayColor, 0, StaffingEffect)
 				{
 					AlarmColor = alarmColor
 				};
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				if (!string.IsNullOrWhiteSpace(IsAlarm))
 					rule.IsAlarm = bool.Parse(IsAlarm);
 				if (!string.IsNullOrWhiteSpace(AlarmThreshold))
-					rule.ThresholdTime = TimeSpan.Parse(AlarmThreshold);
+					rule.ThresholdTime = int.Parse(AlarmThreshold);
 				ruleRepository.Add(rule);
 			}
 

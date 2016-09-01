@@ -697,7 +697,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public FakeDatabase WithAlarm(TimeSpan threshold, Color? color)
 		{
 			_rtaRule.IsAlarm = true;
-			_rtaRule.ThresholdTime = threshold;
+			_rtaRule.ThresholdTime = (int) threshold.TotalSeconds;
 			_rtaRule.AlarmColor = color.GetValueOrDefault();
 			return this;
 		}

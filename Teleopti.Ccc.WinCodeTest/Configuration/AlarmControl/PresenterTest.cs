@@ -31,10 +31,10 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
             mocks = new MockRepository();
 
             _rules = new List<IRtaRule>();
-            _rules.Add(new RtaRule(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1), 0.8));
-            _rules.Add(new RtaRule(new Description("moo"), Color.Blue, new TimeSpan(0, 0, 1), 0.8));
-            _rules.Add(new RtaRule(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), 0.8));
-            _rules.Add(new RtaRule(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), 0.8));
+            _rules.Add(new RtaRule(new Description("userALARM"), Color.Blue, 1, 0.8));
+            _rules.Add(new RtaRule(new Description("moo"), Color.Blue, 1, 0.8));
+            _rules.Add(new RtaRule(new Description("ok"), Color.Blue, 1, 0.8));
+            _rules.Add(new RtaRule(new Description("unknown"), Color.Blue, 1, 0.8));
             SetCreatedInfo(_rules);
             _view = mocks.StrictMock<IAlarmControlView>();
             _target = new AlarmControlPresenter(_rules, _view, null);
@@ -183,9 +183,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
         {
             var style = new GridStyleInfo();
             var e = new GridSaveCellInfoEventArgs(1, (int)AlarmControlPresenter.ColumnHeader.Time, style, StyleModifyType.Changes);
-            e.Style.CellValue = 45.0d;
+            e.Style.CellValue = 45;
             _target.SaveCellInfo(null, e);
-            Assert.AreEqual(45.0d, _rules[0].ThresholdTime.TotalSeconds);
+            Assert.AreEqual(45.0d, _rules[0].ThresholdTime);
         }
 
         [Test]
@@ -218,9 +218,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
 
             style = new GridStyleInfo();
             e = new GridSaveCellInfoEventArgs(1, (int)AlarmControlPresenter.ColumnHeader.Time, style, StyleModifyType.Changes);
-            e.Style.CellValue = 0.0d;
+            e.Style.CellValue = 0;
             _target.SaveCellInfo(null, e);
-            Assert.AreEqual(0.0d, _rules[0].ThresholdTime.TotalSeconds);
+            Assert.AreEqual(0.0d, _rules[0].ThresholdTime);
 
             style = new GridStyleInfo();
             e = new GridSaveCellInfoEventArgs(1, (int)AlarmControlPresenter.ColumnHeader.StaffingEffect, style, StyleModifyType.Changes);
@@ -254,7 +254,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
             var e = new GridSaveCellInfoEventArgs(1, 2, style, StyleModifyType.Changes);
             e.Style.CellValue = -10.0d;
             _target.SaveCellInfo(null, e);
-            Assert.AreEqual(1.0d, _rules[0].ThresholdTime.TotalSeconds);
+            Assert.AreEqual(1.0d, _rules[0].ThresholdTime);
         }
 
         [Test]

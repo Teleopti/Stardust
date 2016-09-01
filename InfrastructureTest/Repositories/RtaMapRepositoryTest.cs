@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             stateGroup = new RtaStateGroup("state group", true, true);
             PersistAndRemoveFromUnitOfWork(stateGroup);
 
-            _rtaRule = new RtaRule(new Description("alarma!"), Color.DodgerBlue, TimeSpan.FromSeconds(50),0.0);
+            _rtaRule = new RtaRule(new Description("alarma!"), Color.DodgerBlue, TimeSpan.FromSeconds(50).Seconds, 0.0);
             PersistAndRemoveFromUnitOfWork(_rtaRule);
         }
 

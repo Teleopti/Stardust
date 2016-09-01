@@ -37,7 +37,7 @@
               type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.ColorNumber, Teleopti.Ccc.Infrastructure"
               not-null="true" />
     <property name="ThresholdTime"
-          type="TimeSpan"
+          type="int"
           not-null="true" />
     <property name="StaffingEffect"
           type="double"

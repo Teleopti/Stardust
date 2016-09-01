@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return _mappedRule.Value?.IsAlarm ?? false;
 		}
 
-		public long AlarmThresholdTime()
+		public int AlarmThresholdTime()
 		{
 			return _mappedRule.Value?.ThresholdTime ?? 0;
 		}

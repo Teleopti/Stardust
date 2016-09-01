@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 
 		private static void getTime(IRtaRule rule, GridQueryCellInfoEventArgs e)
 		{
-			e.Style.CellValue = rule.ThresholdTime.TotalSeconds;
+			e.Style.CellValue = rule.ThresholdTime;
 			e.Style.CellType = "NumericCell";
 		}
 
@@ -176,10 +176,10 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 
 		private static void updateTime(IRtaRule alarm, IEnumerable<IRtaRule> alarmTypes, IAlarmControlView view, GridSaveCellInfoEventArgs e)
 		{
-			var d = (double)e.Style.CellValue;
+			var d = (int) e.Style.CellValue;
 			if (d < 0) return;
 
-			alarm.ThresholdTime = TimeSpan.FromSeconds(d);
+			alarm.ThresholdTime = d;
 		}
 
 		private static void updateName(IRtaRule alarm, IEnumerable<IRtaRule> alarmTypes, IAlarmControlView view, GridSaveCellInfoEventArgs e)

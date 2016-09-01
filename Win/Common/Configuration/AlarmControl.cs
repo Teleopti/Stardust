@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void buttonNewClick(object sender, EventArgs e)
 		{
-			var atype = new RtaRule(new Description(Resources.GiveAlarmAName), Color.Red, new TimeSpan(0, 0, 0), 0.0);
+			var atype = new RtaRule(new Description(Resources.GiveAlarmAName), Color.Red, 0, 0.0);
 			_rules.Add(atype);
 			_view.LoadGrid();
 		}
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				warn(Resources.SelectSuitableColor);
 				return false;
 			}   
-			if (type.ThresholdTime < TimeSpan.Zero)
+			if (type.ThresholdTime < 0)
 			{
 				warn(Resources.SetTresholdTime);
 				return false;

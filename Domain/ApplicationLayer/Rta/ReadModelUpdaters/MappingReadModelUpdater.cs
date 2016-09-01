@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				let adherence = mapping?.Rule?.Adherence
 				let displayColor = mapping?.Rule?.DisplayColor.ToArgb() ?? 0
 				let isAlarm = mapping?.Rule?.IsAlarm ?? false
-				let thresholdTime = mapping?.Rule?.ThresholdTime.Ticks ?? 0
+				let thresholdTime = mapping?.Rule?.ThresholdTime ?? 0
 				let alarmColor = mapping?.Rule?.AlarmColor.ToArgb() ?? 0
 				select new Mapping
 				{

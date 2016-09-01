@@ -1,4 +1,3 @@
-using System;
 using System.Drawing;
 
 namespace Teleopti.Interfaces.Domain
@@ -15,7 +14,7 @@ namespace Teleopti.Interfaces.Domain
     {
 	    Description Description { get; set; }
 	    Color DisplayColor { get; set; }
-	    TimeSpan ThresholdTime { get; set; }
+		int ThresholdTime { get; set; }
         double StaffingEffect { get; set; }
 
 		Adherence? Adherence { get; set; }

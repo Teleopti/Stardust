@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				return null;
 
 			if (state.RuleChanged())
-				return currentTime.AddTicks(state.AlarmThresholdTime());
+				return currentTime.AddSeconds(state.AlarmThresholdTime());
 			return stored.AlarmStartTime;
 		}
 

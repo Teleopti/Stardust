@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 		private RtaRule _target;
 		private readonly Description _description = new Description("Wrong state");
 		private readonly Color _color = Color.DeepPink;
-		private readonly TimeSpan _thresholdTime = TimeSpan.FromSeconds(150);
+		private readonly int _thresholdTime = TimeSpan.FromSeconds(150).Seconds;
 		private const double _staffingEffect = 1.0;
 
 		[SetUp]
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 
 			Description description = new Description("My new description");
 			Color color = Color.Firebrick;
-			TimeSpan thresholdTime = TimeSpan.FromSeconds(73);
+			int thresholdTime = TimeSpan.FromSeconds(73).Seconds;
 
 			_target.Description = description;
 			_target.DisplayColor = color;
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 		[Test, ExpectedException(typeof (ArgumentOutOfRangeException))]
 		public void VerifyCannotHaveNegativeThresholdTime()
 		{
-			_target.ThresholdTime = TimeSpan.FromSeconds(-20);
+			_target.ThresholdTime = TimeSpan.FromSeconds(-20).Seconds;
 		}
 
 		[Test]

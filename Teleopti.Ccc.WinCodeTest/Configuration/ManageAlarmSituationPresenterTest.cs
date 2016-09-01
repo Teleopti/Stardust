@@ -381,9 +381,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 
 			var alarms = new List<IRtaRule>
 				{
-					new RtaRule(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1), 0.8),
-					new RtaRule(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), 0.8),
-					new RtaRule(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), 0.8)
+					new RtaRule(new Description("userALARM"), Color.Blue, 1, 0.8),
+					new RtaRule(new Description("ok"), Color.Blue, 1, 0.8),
+					new RtaRule(new Description("unknown"), Color.Blue, 1, 0.8)
 				};
 
 			var rtaMap1 = new RtaMap(rtaitem1, activity) {RtaRule = alarms[1]};
@@ -450,9 +450,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		{
 			var alarms = new List<IRtaRule>
 				{
-					new RtaRule(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1), 0.8),
-					new RtaRule(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), 0.8),
-					new RtaRule(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), 0.8)
+					new RtaRule(new Description("userALARM"), Color.Blue, 1, 0.8),
+					new RtaRule(new Description("ok"), Color.Blue, 1, 0.8),
+					new RtaRule(new Description("unknown"), Color.Blue, 1, 0.8)
 				};
 
 			var activity = ActivityFactory.CreateActivity("activity");
@@ -478,9 +478,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		{
 			var alarms = new List<IRtaRule>
 				{
-					new RtaRule(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1), 0.8),
-					new RtaRule(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), 0.8),
-					new RtaRule(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), 0.8)
+					new RtaRule(new Description("userALARM"), Color.Blue, 1, 0.8),
+					new RtaRule(new Description("ok"), Color.Blue, 1, 0.8),
+					new RtaRule(new Description("unknown"), Color.Blue, 1, 0.8)
 				};
 
 			var activity = ActivityFactory.CreateActivity("activity");
@@ -519,9 +519,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 
 			var alarms = new List<IRtaRule>
 				{
-					new RtaRule(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1), 0.8),
-					new RtaRule(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), 0.8),
-					new RtaRule(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), 0.8)
+					new RtaRule(new Description("userALARM"), Color.Blue, 1, 0.8),
+					new RtaRule(new Description("ok"), Color.Blue, 1, 0.8),
+					new RtaRule(new Description("unknown"), Color.Blue, 1, 0.8)
 				};
 
 			var activities = new List<IActivity>();
@@ -557,9 +557,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 
 			var alarms = new List<IRtaRule>
 				{
-					new RtaRule(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1), 0.8),
-					new RtaRule(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), 0.8),
-					new RtaRule(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), 0.8)
+					new RtaRule(new Description("userALARM"), Color.Blue, 1, 0.8),
+					new RtaRule(new Description("ok"), Color.Blue, 1, 0.8),
+					new RtaRule(new Description("unknown"), Color.Blue, 1, 0.8)
 				};
 
 			var activities = new List<IActivity>();
@@ -592,9 +592,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 
 			var alarms = new List<IRtaRule>
 				{
-					new RtaRule(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1), 0.8),
-					new RtaRule(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), 0.8),
-					new RtaRule(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), 0.8)
+					new RtaRule(new Description("userALARM"), Color.Blue, 1, 0.8),
+					new RtaRule(new Description("ok"), Color.Blue, 1, 0.8),
+					new RtaRule(new Description("unknown"), Color.Blue, 1, 0.8)
 				};
 
 			var activities = new List<IActivity>();
@@ -625,9 +625,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		{
 			var alarms = new List<IRtaRule>
 				{
-					new RtaRule(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1), 0.8),
-					new RtaRule(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), 0.8),
-					new RtaRule(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), 0.8)
+					new RtaRule(new Description("userALARM"), Color.Blue, 1, 0.8),
+					new RtaRule(new Description("ok"), Color.Blue, 1, 0.8),
+					new RtaRule(new Description("unknown"), Color.Blue, 1, 0.8)
 				};
 
 			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();

@@ -24,16 +24,16 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration.Rta
 
 		private static void getTime(IRtaRule rule, GridQueryCellInfoEventArgs e)
 		{
-			e.Style.CellValue = rule.ThresholdTime.TotalSeconds;
+			e.Style.CellValue = rule.ThresholdTime;
 			e.Style.CellType = "NumericCell";
 		}
 
 		private static void updateTime(IRtaRule rule, IEnumerable<IRtaRule> rules, IAlarmControlView view, GridSaveCellInfoEventArgs e)
 		{
-			var d = Convert.ToDouble(e.Style.CellValue);
+			var d = Convert.ToInt32(e.Style.CellValue);
 			if (d < 0) return;
 
-			rule.ThresholdTime = TimeSpan.FromSeconds(d);
+			rule.ThresholdTime = d;
 		}
 	}
 }

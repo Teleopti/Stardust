@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var rule = new RtaRule(
 				new Description("InAdherence"), 
 				Color.Blue, 
-				TimeSpan.Zero, 
+				0, 
 				1)
 			{
 				Adherence = Adherence.In,
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				Description = new Description("_"),
 				IsAlarm = true,
 				AlarmColor = Color.Red,
-				ThresholdTime = TimeSpan.FromSeconds(2)
+				ThresholdTime = 2
 			};
 			WithUnitOfWork.Do(() =>
 			{
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 			mapping.IsAlarm.Should().Be(true);
 			mapping.AlarmColor.Should().Be(Color.Red.ToArgb());
-			mapping.ThresholdTime.Should().Be(TimeSpan.FromSeconds(2).Ticks);
+			mapping.ThresholdTime.Should().Be(2);
 		}
 
 		[Test]

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override IRtaRule CreateAggregateWithCorrectBusinessUnit()
         {
-            return new RtaRule(new Description("Wrong state"), Color.DarkTurquoise, TimeSpan.FromSeconds(15),0.8)
+            return new RtaRule(new Description("Wrong state"), Color.DarkTurquoise, TimeSpan.FromSeconds(15).Seconds, 0.8)
             {
 	            Adherence = Adherence.In
             };
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	    [Test]
 	    public void ShouldNotBeAlarmByDefault()
 	    {
-		    var rule = new RtaRule(new Description("."), Color.AliceBlue, TimeSpan.Zero, 0);
+		    var rule = new RtaRule(new Description("."), Color.AliceBlue, 0, 0);
 			PersistAndRemoveFromUnitOfWork(rule);
 			
 			var loaded = new RtaRuleRepository(CurrUnitOfWork).LoadAll().Single();
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	    [Test]
 	    public void ShouldChangeToNotAnAlarm()
 	    {
-		    var rule = new RtaRule(new Description("."), Color.AliceBlue, TimeSpan.Zero, 0);
+		    var rule = new RtaRule(new Description("."), Color.AliceBlue, 0, 0);
 			PersistAndRemoveFromUnitOfWork(rule);
 		    rule.IsAlarm = false;
 			PersistAndRemoveFromUnitOfWork(rule);
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldHaveAlarmColorTheSameAsRuleColorByDefault()
 		{
-			var rule = new RtaRule(new Description("."), Color.AliceBlue, TimeSpan.Zero, 0);
+			var rule = new RtaRule(new Description("."), Color.AliceBlue, 0, 0);
 			PersistAndRemoveFromUnitOfWork(rule);
 
 			var loaded = new RtaRuleRepository(CurrUnitOfWork).LoadAll().Single();
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldHaveNewAlarmColor()
 		{
-			var rule = new RtaRule(new Description("."), Color.AliceBlue, TimeSpan.Zero, 0);
+			var rule = new RtaRule(new Description("."), Color.AliceBlue, 0, 0);
 			PersistAndRemoveFromUnitOfWork(rule);
 			rule.AlarmColor = Color.AntiqueWhite;
 			PersistAndRemoveFromUnitOfWork(rule);
