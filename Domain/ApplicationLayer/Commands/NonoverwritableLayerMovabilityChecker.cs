@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Interfaces.Domain;
 
@@ -51,6 +48,26 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var rule = new NotOverwriteLayerRule();
 			var result = rule.Validate(scheduleDictionary, new List<IScheduleDay> {scheduleDay});
 			return result.Any();
+		}
+
+		public bool IsDestinationValidForMovedShiftLayer(IScheduleDay scheduleDay, IShiftLayer layer, TimeSpan distance)
+		{
+			var periodAtDestination = layer.Period.MovePeriod(distance);
+			var projectionPeriod = scheduleDay.ProjectionService().CreateProjection().Period();
+			if (!projectionPeriod.HasValue) return false;
+			if (!projectionPeriod.Value.Contains(periodAtDestination)) return false;
+
+			var newStartTimeInUtc = layer.Period.StartDateTime.Add(distance);
+			var overlappedLayers = _nonoverwritableLayerChecker.GetOverlappedLayersForScheduleDayWhenMoving(scheduleDay,
+				new [] { layer.Id.GetValueOrDefault()}, newStartTimeInUtc);
+			if (overlappedLayers.Count != 0) return false;
+
+			var personAssignmentClone = scheduleDay.PersonAssignment().EntityClone();
+			var layerInClone = personAssignmentClone.ShiftLayers.FirstOrDefault(l => l.Id == layer.Id.GetValueOrDefault());
+			personAssignmentClone.MoveActivityAndKeepOriginalPriority(layerInClone, newStartTimeInUtc,null);
+			return personAssignmentClone.ProjectionService()
+				.CreateProjection()
+				.Any(pl => pl.Period == periodAtDestination && pl.Payload.Id == layer.Payload.Id);
 		}
 
 		public List<IShiftLayer> GetNonoverwritableLayersToMove(IScheduleDay scheduleDay, DateTimePeriod newPeriod)

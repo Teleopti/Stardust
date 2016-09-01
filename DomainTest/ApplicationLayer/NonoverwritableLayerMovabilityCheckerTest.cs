@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
@@ -289,6 +291,186 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var result = Target.IsFixableByMovingNonoverwritableLayer(schedules,
 				new DateTimePeriod(2013, 11, 14, 13, 2013, 11, 14, 16), person, date);
 
+			result.Should().Be.False();
+		}
+
+		[Test]
+		public void MoveShiftLayerToLocationThatWouldCauseTheTargetToBeOverlappedByOtherLayerShouldNotBeValid()
+		{
+			var person = PersonFactory.CreatePersonWithGuid("John","Watson");
+			PersonRepository.Has(person);
+
+			var mainActivity = ActivityFactory.CreateActivity("Phone");
+			var lunchActivity = ActivityFactory.CreateActivity("Lunch");
+			var emailActivity = ActivityFactory.CreateActivity("Email");
+
+			mainActivity.AllowOverwrite = true;
+			lunchActivity.AllowOverwrite = false;
+			emailActivity.AllowOverwrite = true;
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
+			var scenario = CurrentScenario.Current();
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				mainActivity,person,
+				new DateTimePeriod(2013,11,14,8,2013,11,14,18),
+				shiftCategory,scenario);
+
+			pa.AddActivity(lunchActivity,new DateTimePeriod(2013,11,14,11,2013,11,14,13));
+			pa.AddActivity(emailActivity,new DateTimePeriod(2013,11,14,14,2013,11,14,15));
+			
+			pa.ShiftLayers.ForEach(l => l.WithId());
+			ScheduleStorage.Add(pa);
+
+			var date = new DateOnly(2013,11,14);
+			var scheduleDay = getScheduleDay(date,person);
+
+			var layerToMove = pa.ShiftLayers.First(l => l.Payload == lunchActivity);
+
+			var result = Target.IsDestinationValidForMovedShiftLayer(scheduleDay,layerToMove,TimeSpan.FromHours(2));
+			result.Should().Be.False();
+		}
+
+
+		[Test]
+		public void MoveShiftLayerToLocationCausingNewOverlappedNonoverwritableLayerShouldNotBeValid()
+		{
+			var person = PersonFactory.CreatePersonWithGuid("John","Watson");
+			PersonRepository.Has(person);
+
+			var mainActivity = ActivityFactory.CreateActivity("Phone");
+			var lunchActivity = ActivityFactory.CreateActivity("Lunch");
+			var shortBreakActivity = ActivityFactory.CreateActivity("Short Break");
+
+			mainActivity.AllowOverwrite = true;
+			lunchActivity.AllowOverwrite = false;
+			shortBreakActivity.AllowOverwrite = false;
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
+			var scenario = CurrentScenario.Current();
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				mainActivity,person,
+				new DateTimePeriod(2013,11,14,8,2013,11,14,18),
+				shiftCategory,scenario);
+			
+			pa.AddActivity(shortBreakActivity,new DateTimePeriod(2013,11,14,14,2013,11,14,15));
+			pa.AddActivity(lunchActivity,new DateTimePeriod(2013,11,14,11,2013,11,14,13));
+
+			pa.ShiftLayers.ForEach(l => l.WithId());
+			ScheduleStorage.Add(pa);
+
+			var date = new DateOnly(2013,11,14);
+			var scheduleDay = getScheduleDay(date,person);
+
+			var layerToMove = pa.ShiftLayers.First(l => l.Payload == lunchActivity);
+
+			var result = Target.IsDestinationValidForMovedShiftLayer(scheduleDay,layerToMove, TimeSpan.FromHours(2));
+			result.Should().Be.False();
+		}
+
+		[Test]
+		public void MoveShiftLayerToLocationWithoutCausingNewOverlappedNonoverwritableLayerShouldBeValid()
+		{
+			var person = PersonFactory.CreatePersonWithGuid("John","Watson");
+			PersonRepository.Has(person);
+
+			var mainActivity = ActivityFactory.CreateActivity("Phone");
+			var lunchActivity = ActivityFactory.CreateActivity("Lunch");
+			var shortBreakActivity = ActivityFactory.CreateActivity("Short Break");
+
+			mainActivity.AllowOverwrite = true;
+			lunchActivity.AllowOverwrite = false;
+			shortBreakActivity.AllowOverwrite = false;
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
+			var scenario = CurrentScenario.Current();
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				mainActivity,person,
+				new DateTimePeriod(2013,11,14,8,2013,11,14,18),
+				shiftCategory,scenario);
+
+			pa.AddActivity(lunchActivity,new DateTimePeriod(2013,11,14,11,2013,11,14,13));
+			pa.AddActivity(shortBreakActivity,new DateTimePeriod(2013,11,14,16,2013,11,14,17));
+
+			pa.ShiftLayers.ForEach(l => l.WithId());
+			ScheduleStorage.Add(pa);
+
+			var date = new DateOnly(2013,11,14);
+			var scheduleDay = getScheduleDay(date,person);
+
+			var layerToMove = pa.ShiftLayers.First(l => l.Payload == lunchActivity);
+
+			var result = Target.IsDestinationValidForMovedShiftLayer(scheduleDay,layerToMove,TimeSpan.FromHours(2));
+			result.Should().Be.True();
+		}
+
+		[Test]
+		public void MoveShiftLayerToLocationLaterTheMainShiftShouldNotBeValid()
+		{
+			var person = PersonFactory.CreatePersonWithGuid("John","Watson");
+			PersonRepository.Has(person);
+
+			var mainActivity = ActivityFactory.CreateActivity("Phone");
+			var lunchActivity = ActivityFactory.CreateActivity("Lunch");
+		
+			mainActivity.AllowOverwrite = true;
+			lunchActivity.AllowOverwrite = false;
+			
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
+			var scenario = CurrentScenario.Current();
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				mainActivity,person,
+				new DateTimePeriod(2013,11,14,8,2013,11,14,16),
+				shiftCategory,scenario);
+
+			pa.AddActivity(lunchActivity,new DateTimePeriod(2013,11,14,11,2013,11,14,13));
+		
+			pa.ShiftLayers.ForEach(l => l.WithId());
+			ScheduleStorage.Add(pa);
+
+			var date = new DateOnly(2013,11,14);
+			var scheduleDay = getScheduleDay(date,person);
+
+			var layerToMove = pa.ShiftLayers.First(l => l.Payload == lunchActivity);
+
+			var result = Target.IsDestinationValidForMovedShiftLayer(scheduleDay,layerToMove,TimeSpan.FromHours(4));
+			result.Should().Be.False();
+		}
+
+		[Test]
+		public void MoveShiftLayerToLocationEarlierTheMainShiftShouldNotBeValid()
+		{
+			var person = PersonFactory.CreatePersonWithGuid("John","Watson");
+			PersonRepository.Has(person);
+
+			var mainActivity = ActivityFactory.CreateActivity("Phone");
+			var lunchActivity = ActivityFactory.CreateActivity("Lunch");
+
+			mainActivity.AllowOverwrite = true;
+			lunchActivity.AllowOverwrite = false;
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
+			var scenario = CurrentScenario.Current();
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				mainActivity,person,
+				new DateTimePeriod(2013,11,14,8,2013,11,14,16),
+				shiftCategory,scenario);
+
+			pa.AddActivity(lunchActivity,new DateTimePeriod(2013,11,14,11,2013,11,14,13));
+
+			pa.ShiftLayers.ForEach(l => l.WithId());
+			ScheduleStorage.Add(pa);
+
+			var date = new DateOnly(2013,11,14);
+			var scheduleDay = getScheduleDay(date,person);
+
+			var layerToMove = pa.ShiftLayers.First(l => l.Payload == lunchActivity);
+
+			var result = Target.IsDestinationValidForMovedShiftLayer(scheduleDay,layerToMove,TimeSpan.FromHours(-4));
 			result.Should().Be.False();
 		}
 

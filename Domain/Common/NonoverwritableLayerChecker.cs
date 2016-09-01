@@ -43,12 +43,12 @@ namespace Teleopti.Ccc.Domain.Common
 
 			var scheduleDay = schedules[person].ScheduledDay(belongsToDate);
 
-			var overlapLayers = getOverlappedLayersForScheduleDayWhenMoving(scheduleDay, layerIdsToMove, newStartTime);
+			var overlapLayers = GetOverlappedLayersForScheduleDayWhenMoving(scheduleDay, layerIdsToMove, newStartTime);
 
 			return overlapLayers;
 		}
 
-		private IList<OverlappedLayer> getOverlappedLayersForScheduleDayWhenMoving(IScheduleDay scheduleDay, Guid[] layerIdsToMove, DateTime newStartTimeInUtc)
+		public IList<OverlappedLayer> GetOverlappedLayersForScheduleDayWhenMoving(IScheduleDay scheduleDay, Guid[] layerIdsToMove, DateTime newStartTimeInUtc)
 		{
 			var overlapLayers = new List<OverlappedLayer>();
 			var personAssignment = scheduleDay.PersonAssignment().EntityClone();
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Common
 			overlappedLayers.AddRange(getOverlappedLayersInProjection(scheduleDay, assForChecking, predictFunc));
 			return overlappedLayers;
 		}
-
+		
 		IPersonAssignment tryAdding(IPersonAssignment ass, IActivity activity, DateTimePeriod periodInUtc)
 		{
 			var assForChecking = ass.EntityClone();
@@ -136,6 +136,9 @@ namespace Teleopti.Ccc.Domain.Common
 
 		IList<OverlappedLayer> GetOverlappedLayersWhenMovingActivity(IPerson person, DateOnly belongsToDate,
 			Guid[] layerIdsToMove, DateTime newStartTimeInUtc);
+
+		IList<OverlappedLayer> GetOverlappedLayersForScheduleDayWhenMoving(IScheduleDay scheduleDay, Guid[] layerIdsToMove,
+			DateTime newStartTimeInUtc);
 	}
 
 	public class OverlappedLayer
