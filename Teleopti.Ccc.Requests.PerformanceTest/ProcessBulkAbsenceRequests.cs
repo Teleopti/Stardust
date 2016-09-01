@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
@@ -178,13 +179,102 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			CollectionAssert.AreEquivalent(expectedStatuses, resultStatuses);
 		}
 
+		[Test]
+		public void ShouldDenyBecauseOfPersonAccountIsFull()
+		{
+			using (DataSource.OnThisThreadUse("Teleopti WFM"))
+				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
+			//Consumer Online
+			var personRequests = new List<IPersonRequest>();
+			WithUnitOfWork.Do(() =>
+			{
+				//load  Halvdag 16h/år
+				var absence = AbsenceRepository.Get(new Guid("5B859CEF-0F35-4BA8-A82E-A14600EEE42E"));
+
+				var wfcs = WorkflowControlSetRepository.Get(new Guid("7485EEAB-72D6-43D3-8B6F-A47A00C7D496"));
+				foreach (var period in wfcs.AbsenceRequestOpenPeriods)
+				{
+					if (period.Absence.Equals(absence))
+					{
+						period.OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(2016, 3, 1), new DateOnly(2099, 5, 30));
+						period.StaffingThresholdValidator = new AbsenceRequestNoneValidator();
+						period.PersonAccountValidator = new PersonAccountBalanceValidator();
+						period.AbsenceRequestProcess = new GrantAbsenceRequest();
+						var datePeriod = period as AbsenceRequestOpenDatePeriod;
+						if (datePeriod != null)
+							datePeriod.Period = period.OpenForRequestsPeriod;
+					}
+
+				}
+				// person  Vinblad, Christian has a person account that on that absence 
+				var person = PersonRepository.Load(new Guid("6E75AF18-F494-42AE-8272-A141010651CB"));
+
+				var req4th = createAbsenceRequest(person, absence,
+					new DateTimePeriod(new DateTime(2016, 4, 4, 8, 0, 0, DateTimeKind.Utc),
+						new DateTime(2016, 4, 4, 12, 0, 0, DateTimeKind.Utc)));
+				PersonRequestRepository.Add(req4th);
+				personRequests.Add(req4th);
+				var req5th = createAbsenceRequest(person, absence,
+					new DateTimePeriod(new DateTime(2016, 4, 5, 8, 0, 0, DateTimeKind.Utc),
+						new DateTime(2016, 4, 5, 12, 0, 0, DateTimeKind.Utc)));
+				PersonRequestRepository.Add(req5th);
+				personRequests.Add(req5th);
+				var req6th = createAbsenceRequest(person, absence,
+					new DateTimePeriod(new DateTime(2016, 4, 6, 8, 0, 0, DateTimeKind.Utc),
+						new DateTime(2016, 4, 6, 12, 0, 0, DateTimeKind.Utc)));
+				PersonRequestRepository.Add(req6th);
+				personRequests.Add(req6th);
+
+#pragma warning disable 618
+				PersonRequestRepository.UnitOfWork.PersistAll();
+#pragma warning restore 618
+				var absenceRequestIds = new List<Guid> {req4th.Id.Value, req5th.Id.Value, req6th.Id.Value};
+
+				var newMultiAbsenceRequestsCreatedEvent = new NewMultiAbsenceRequestsCreatedEvent()
+				{
+					PersonRequestIds = absenceRequestIds,
+					InitiatorId = new Guid("00000000-0000-0000-0000-000000000000"),
+					LogOnBusinessUnitId = new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"),
+					LogOnDatasource = "Teleopti WFM",
+					Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z")
+				};
+
+				Target.Process(newMultiAbsenceRequestsCreatedEvent);
+			});
+
+			var cntApproved = 0;
+			var cntDenied = 0;
+			WithUnitOfWork.Do(() =>
+			{
+				foreach (var req in personRequests)
+				{
+					var request = PersonRequestRepository.Get(req.Id.Value);
+
+					if (request.IsApproved)
+						cntApproved ++;
+
+					else if (request.IsDenied)
+						cntDenied ++;
+					
+				}
+			});
+
+			cntDenied.Should().Be.EqualTo(1);
+			cntApproved.Should().Be.EqualTo(2);
+		}
 
 		private IPersonRequest createAbsenceRequest(IPerson person, IAbsence absence)
 		{
 			var req = new AbsenceRequest(absence,
 										 new DateTimePeriod(new DateTime(2016, 3, 10, 8, 0, 0, DateTimeKind.Utc),
 															new DateTime(2016, 3, 10, 18, 0, 0, DateTimeKind.Utc)));
-			return new PersonRequest(person) {Request = req};
+			return new PersonRequest(person) { Request = req };
+		}
+
+		private IPersonRequest createAbsenceRequest(IPerson person, IAbsence absence, DateTimePeriod dateTimePeriod)
+		{
+			var req = new AbsenceRequest(absence,dateTimePeriod);
+			return new PersonRequest(person) { Request = req };
 		}
 	}
 }
