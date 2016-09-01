@@ -14,6 +14,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 	{
 		bool HasNonoverwritableLayer(IScheduleDay scheduleDay, DateTimePeriod period, IActivity activity);
 		bool IsFixableByMovingNonoverwritableLayer(IScheduleDictionary scheduleDictionary, DateTimePeriod newPeriod, IPerson person, DateOnly date);
+		List<IShiftLayer> GetNonoverwritableLayersToMove(IScheduleDay scheduleDay, DateTimePeriod newPeriod);
+		bool ContainsOverlappedNonoverwritableLayers(IScheduleDictionary scheduleDictionary, IPerson person, DateOnly date);
 	}
 
 	public class NonoverwritableLayerMovabilityChecker : INonoverwritableLayerMovabilityChecker
@@ -37,31 +39,37 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public bool IsFixableByMovingNonoverwritableLayer(IScheduleDictionary scheduleDictionary, DateTimePeriod newPeriod, IPerson person, DateOnly date)
 		{
 			var scheduleDay = scheduleDictionary[person].ScheduledDay(date);
+			if (ContainsOverlappedNonoverwritableLayers(scheduleDictionary, person, date)) return false;
+			var shiftLayersToMove = GetNonoverwritableLayersToMove(scheduleDay, newPeriod);
+			return shiftLayersToMove.Count == 1;
+		}
+
+		public bool ContainsOverlappedNonoverwritableLayers(IScheduleDictionary scheduleDictionary, IPerson person,
+			DateOnly date)
+		{
+			var scheduleDay = scheduleDictionary[person].ScheduledDay(date);
+			var rule = new NotOverwriteLayerRule();
+			var result = rule.Validate(scheduleDictionary, new List<IScheduleDay> {scheduleDay});
+			return result.Any();
+		}
+
+		public List<IShiftLayer> GetNonoverwritableLayersToMove(IScheduleDay scheduleDay, DateTimePeriod newPeriod)
+		{
 			var projection = scheduleDay.ProjectionService().CreateProjection();
+			if (!projection.HasLayers) return new List<IShiftLayer>(); ;
 
-			var rules = NewBusinessRuleCollection.New();
-			rules.Add(new NotOverwriteLayerRule());
-			var result = rules.CheckRules(scheduleDictionary, new List<IScheduleDay> {scheduleDay});
-
-			if (result.Any())
-				return false;
-
-			if (!projection.HasLayers) return false;
-			var conflictLayers = projection.Where(l =>
+			var conflictVisualLayers = projection.Where(l =>
 			{
 				var activityLayer = l.Payload as IActivity;
 				return (activityLayer != null && l.Period.Intersect(newPeriod) && !activityLayer.AllowOverwrite);
 			}).ToList();
-			if (conflictLayers.Count > 1) return false;
 
-			var shiftLayerIds = getMatchedMainShiftLayers(scheduleDay, conflictLayers.SingleOrDefault());
-
-			return shiftLayerIds.Count == 1;
+			return conflictVisualLayers.SelectMany(l => getMatchedMainShiftLayers(scheduleDay, l)).ToList();
 		}
 
-		private IList<Guid> getMatchedMainShiftLayers(IScheduleDay scheduleDay, IVisualLayer layer)
+		private IList<IShiftLayer> getMatchedMainShiftLayers(IScheduleDay scheduleDay, IVisualLayer layer)
 		{
-			var matchedLayerIds = new List<Guid>();
+			var matchedLayers = new List<IShiftLayer>();
 			var personAssignment = scheduleDay.PersonAssignment();
 			var shiftLayersList = new List<IShiftLayer>();
 			if (personAssignment != null && personAssignment.ShiftLayers.Any())
@@ -72,10 +80,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			{
 				if (layer.Payload.Id.GetValueOrDefault() == shiftLayer.Payload.Id.GetValueOrDefault() && (layer.Period.Contains(shiftLayer.Period) || shiftLayer.Period.Contains(layer.Period)))
 				{
-					matchedLayerIds.Add(shiftLayer.Id.GetValueOrDefault());
+					matchedLayers.Add(shiftLayer);
 				}
 			}
-			return matchedLayerIds;
+			return matchedLayers;
 		}
 	}
 }
