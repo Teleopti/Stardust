@@ -121,7 +121,7 @@
 			<div class="wfm-slide-tabs tabbed-panel">
 				<md-content class="md-padding">
 					<md-tabs md-dynamic-height md-selected="activeTab">
-						<md-tab label="{{'IncomingTraffic'|translate}}" ng-click="pollActiveTabDataHelper()">
+						<md-tab label="{{'IncomingTraffic'|translate}}" ng-click="pollActiveTabDataHelper(activeTab)">
 							<md-content class="md-padding">
 								<div class="con-row">
 									<div class="con-flex">
@@ -162,7 +162,7 @@
 								</div>
 							</md-content>
 						</md-tab>
-						<md-tab label="Performance" ng-click="pollActiveTabDataHelper()">
+						<md-tab label="Performance" ng-click="pollActiveTabDataHelper(activeTab)">
 							<md-content class="md-padding">
 								<div class="con-row">
 									<div class="con-flex">
@@ -201,7 +201,7 @@
 								</div>
 							</md-content>
 						</md-tab>
-						<md-tab label="Staffing" ng-click="pollActiveTabDataHelper()">
+						<md-tab label="Staffing" ng-click="pollActiveTabDataHelper(activeTab)">
 							<md-content class="md-padding">
 								<div class="con-row">
 									<div class="con-flex">

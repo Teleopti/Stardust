@@ -217,11 +217,10 @@ describe('IntradayAreaCtrl', function () {
 
 			it('should only poll traffic skill data when traffic tab and skill is selected', function () {
 				createController(false);
-				scope.activeTab = 0;
 
 				scope.skillSelected(scope.skills[0]);
 				$httpBackend.flush();
-				scope.pollActiveTabDataHelper();
+				scope.pollActiveTabDataHelper(0);
 				$httpBackend.flush();
 
 				expect(scope.viewObj.hasMonitorData).toEqual(true);
@@ -229,11 +228,10 @@ describe('IntradayAreaCtrl', function () {
 
 			it('should only poll performance skill data when performance tab and skill is selected', function (){
 				createController(false);
-				scope.activeTab = 1;
 
 				scope.skillSelected(scope.skills[0]);
 				$httpBackend.flush();
-				scope.pollActiveTabDataHelper();
+				scope.pollActiveTabDataHelper(1);
 				$httpBackend.flush();
 
 				expect(scope.viewObj.hasMonitorData).toEqual(true);
@@ -241,11 +239,10 @@ describe('IntradayAreaCtrl', function () {
 
 			it('should only poll staffing skill data when staffing tab and skill is selected', function (){
 				createController(false);
-				scope.activeTab = 2;
 
 				scope.skillSelected(scope.skills[0]);
 				$httpBackend.flush();
-				scope.pollActiveTabDataHelper();
+				scope.pollActiveTabDataHelper(2);
 				$httpBackend.flush();
 
 				expect(scope.viewObj.hasMonitorData).toEqual(true);
@@ -253,11 +250,10 @@ describe('IntradayAreaCtrl', function () {
 
 			it('should only poll traffic skill area data when traffic tab and skill area is selected', function () {
 				createController(false);
-				scope.activeTab = 0;
 
 				scope.skillAreaSelected(scope.skillAreas[0]);
 				$httpBackend.flush();
-				scope.pollActiveTabDataHelper();
+				scope.pollActiveTabDataHelper(0);
 				$httpBackend.flush();
 
 				expect(scope.viewObj.hasMonitorData).toEqual(true);
@@ -265,11 +261,10 @@ describe('IntradayAreaCtrl', function () {
 
 			it('should only poll performance skill area data when performance tab and skill area is selected', function (){
 				createController(false);
-				scope.activeTab = 1;
 
 				scope.skillAreaSelected(scope.skillAreas[0]);
 				$httpBackend.flush();
-				scope.pollActiveTabDataHelper();
+				scope.pollActiveTabDataHelper(1);
 				$httpBackend.flush();
 
 				expect(scope.viewObj.hasMonitorData).toEqual(true);
@@ -277,11 +272,10 @@ describe('IntradayAreaCtrl', function () {
 
 			it('should only poll staffing skill area data when staffing tab and skill area is selected', function (){
 				createController(false);
-				scope.activeTab = 2;
 
 				scope.skillAreaSelected(scope.skillAreas[0]);
 				$httpBackend.flush();
-				scope.pollActiveTabDataHelper();
+				scope.pollActiveTabDataHelper(2);
 				$httpBackend.flush();
 
 				expect(scope.viewObj.hasMonitorData).toEqual(true);
@@ -289,9 +283,8 @@ describe('IntradayAreaCtrl', function () {
 
 			xit('should get latest actual interval when selecting performance tab', function () {
 				createController(false);
-				scope.activeTab = 1;
 
-				scope.pollActiveTabDataHelper();
+				scope.pollActiveTabDataHelper(1);
 				$httpBackend.flush();
 				// console.log('viewObj ',scope.viewObj.latestActualInterval);
 				// console.log('latest ', scope.latestActualInterval);
