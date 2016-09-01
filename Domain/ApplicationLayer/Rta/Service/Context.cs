@@ -55,6 +55,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				// if the stored state has no time
 				// its just a prepared state
 				// and there's no real previous state
+				// throws if Stored is null, which is by design
 				if (Stored.ReceivedTime == null)
 					Stored = null;
 			}
@@ -177,8 +178,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 				RuleId = State.RuleId(),
 				RuleStartTime = RuleStartTime,
-				StaffingEffect = State.StaffingEffect(),
-				Adherence = State.Adherence(),
 
 				AlarmStartTime = AlarmStartTime,
 

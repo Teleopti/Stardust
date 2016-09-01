@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			writer.Upsert(new AgentStateForUpsert { PersonId = personId1 });
 			writer.Upsert(new AgentStateForUpsert { PersonId = personId2 });
 
-			var result = Persister.GetAll();
+			var result = Persister.GetStates();
 
 			result.Where(x => x.PersonId == personId1).Should().Have.Count.EqualTo(1);
 			result.Where(x => x.PersonId == personId2).Should().Have.Count.EqualTo(1);
@@ -83,15 +83,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				SourceId = "1",
 				PlatformTypeId = Guid.NewGuid(),
 				ReceivedTime = "2014-11-11 10:36".Utc(),
-				StaffingEffect = 1,
-				Adherence = (int) Adherence.Neutral,
 				StateCode = "statecode",
 				StateGroupId = Guid.NewGuid(),
 				StateStartTime = "2014-11-11 10:37".Utc(),
 			};
 			writer.Upsert(state);
 
-			var result = Persister.GetAll().Single();
+			var result = Persister.GetStates().Single();
 
 			result.PersonId.Should().Be(state.PersonId);
 			result.BusinessUnitId.Should().Be(state.BusinessUnitId);
@@ -103,8 +101,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			result.SourceId.Should().Be(state.SourceId);
 			result.PlatformTypeId.Should().Be(state.PlatformTypeId);
 			result.ReceivedTime.Should().Be(state.ReceivedTime);
-			result.StaffingEffect.Should().Be(state.StaffingEffect);
-			result.Adherence.Should().Be(state.Adherence);
 			result.StateCode.Should().Be(state.StateCode);
 			result.StateGroupId.Should().Be(state.StateGroupId);
 			result.StateStartTime.Should().Be(state.StateStartTime);
@@ -122,7 +118,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			};
 			Persister.Upsert(state);
 
-			Persister.GetNotInSnapshot("2015-03-06 15:20".Utc(), "6")
+			Persister.GetStatesNotInSnapshot("2015-03-06 15:20".Utc(), "6")
 				.Single(x => x.PersonId == personId).Should().Not.Be.Null();
 		}
 
@@ -142,7 +138,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			};
 			Persister.Upsert(agentStateReadModel);
 
-			var result = Persister.GetNotInSnapshot("2015-03-06 15:20".Utc(), "6")
+			var result = Persister.GetStatesNotInSnapshot("2015-03-06 15:20".Utc(), "6")
 				.Single(x => x.PersonId == personId);
 
 			result.BusinessUnitId.Should().Be(agentStateReadModel.BusinessUnitId);

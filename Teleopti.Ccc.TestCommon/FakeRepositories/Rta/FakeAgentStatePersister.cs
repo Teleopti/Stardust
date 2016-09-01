@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using NHibernate.Util;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 
@@ -13,23 +14,32 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		private class data
 		{
-			public AgentStatePrepare added;
-			public AgentState state;
+			public AgentStateFound State { get; set; }
+			public Guid PersonId { get; set; }
+			public int DataSourceId { get; set; }
+			public string UserCode { get; set; }
 		}
 
 		public void Prepare(AgentStatePrepare model)
 		{
 			lock(_lock)
-				_data.Add(new data
+				model.ExternalLogons.ForEach(x =>
 				{
-					added = model,
-					state = new AgentState
+					_data.Add(new data
 					{
+						State = new AgentStateFound
+						{
+							PersonId = model.PersonId,
+							BusinessUnitId = model.BusinessUnitId,
+							SiteId = model.SiteId,
+							TeamId = model.TeamId,
+							DataSourceId = x.DataSourceId,
+							UserCode = x.UserCode
+						},
 						PersonId = model.PersonId,
-						BusinessUnitId = model.BusinessUnitId,
-						SiteId = model.SiteId,
-						TeamId = model.TeamId
-					}
+						DataSourceId = x.DataSourceId,
+						UserCode = x.UserCode
+					});
 				});
 		}
 
@@ -37,7 +47,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			lock (_lock)
 			{
-				var existing = _data.Where(x => x.added.PersonId == personId).ToArray();
+				var existing = _data.Where(x => x.PersonId == personId).ToArray();
 				existing.ForEach(x => _data.Remove(x));
 			}
 		}
@@ -46,16 +56,31 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			lock (_lock)
 				_data
-					.Where(x => x.added.PersonId == model.PersonId)
-					.ForEach(x => x.state = model);
+					.Where(x => x.PersonId == model.PersonId)
+					.ForEach(x =>
+					{
+						var state = JsonConvert.DeserializeObject<AgentStateFound>(JsonConvert.SerializeObject(model));
+						state.DataSourceId = x.DataSourceId;
+						state.UserCode = x.UserCode;
+						x.State = state;
+					});
 		}
 
-		public IEnumerable<AgentState> Get(int dataSourceId, string userCode)
+		public IEnumerable<AgentStateFound> Find(int dataSourceId, string userCode)
 		{
 			lock (_lock)
 				return _data
-					.Where(x => x.added.ExternalLogons.Any(y => y.DataSourceId == dataSourceId && y.UserCode == userCode))
-					.Select(x => x.state)
+					.Where(x => x.DataSourceId == dataSourceId && x.UserCode == userCode)
+					.Select(x => x.State)
+					.ToArray();
+		}
+
+		public IEnumerable<AgentStateFound> Find(int dataSourceId, IEnumerable<string> userCodes)
+		{
+			lock (_lock)
+				return _data
+					.Where(x => dataSourceId == x.DataSourceId && userCodes.Any(userCode => userCode == x.UserCode))
+					.Select(x => x.State)
 					.ToArray();
 		}
 
@@ -63,15 +88,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			lock (_lock)
 				return _data
-					.Select(x => x.state)
+					.Select(x => x.State)
 					.FirstOrDefault(x => x.PersonId == personId);
 		}
 
-		public IEnumerable<AgentState> GetNotInSnapshot(DateTime snapshotId, string sourceId)
+		public IEnumerable<AgentState> GetStatesNotInSnapshot(DateTime snapshotId, string sourceId)
 		{
 			lock (_lock)
 				return _data
-					.Select(x => x.state)
+					.Select(x => x.State)
 					.Where(s => s.SourceId == sourceId && (s.BatchId < snapshotId || s.BatchId == null))
 					.GroupBy(x => x.PersonId, (guid, states) => states.First())
 					.ToArray();
@@ -81,17 +106,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			lock (_lock)
 				return _data
-					.Where(x => personIds.Contains(x.added.PersonId))
-					.Select(x => x.state)
+					.Where(x => personIds.Contains(x.PersonId))
+					.Select(x => x.State)
 					.GroupBy(x => x.PersonId, (guid, states) => states.First())
 					.ToArray();
 		}
 
-		public IEnumerable<AgentState> GetAll()
+		public IEnumerable<AgentState> GetStates()
 		{
 			lock (_lock)
 				return _data
-					.Select(x => x.state)
+					.Select(x => x.State)
 					.GroupBy(x => x.PersonId, (guid, states) => states.First())
 					.ToArray();
 		}

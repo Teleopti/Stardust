@@ -36,8 +36,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				}
 			});
 
-			Target.Get(3, "usercode1").Single().PersonId.Should().Be(person);
-			Target.Get(4, "usercode2").Single().PersonId.Should().Be(person);
+			Target.Find(3, "usercode1").Single().PersonId.Should().Be(person);
+			Target.Find(4, "usercode2").Single().PersonId.Should().Be(person);
 		}
 
 		[Test]
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				}
 			});
 
-			Target.Get(7, "usercode").Should().Have.Count.EqualTo(2);
+			Target.Find(7, "usercode").Should().Have.Count.EqualTo(2);
 		}
 
 		[Test]
@@ -124,10 +124,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				}
 			});
 
-			Target.Get(1, "usercodeA").Should().Have.Count.EqualTo(0);
-			Target.Get(2, "usercodeA").Should().Have.Count.EqualTo(1);
-			Target.Get(1, "usercodeB").Should().Have.Count.EqualTo(1);
-			Target.Get(2, "usercodeB").Should().Have.Count.EqualTo(0);
+			Target.Find(1, "usercodeA").Should().Have.Count.EqualTo(0);
+			Target.Find(2, "usercodeA").Should().Have.Count.EqualTo(1);
+			Target.Find(1, "usercodeB").Should().Have.Count.EqualTo(1);
+			Target.Find(2, "usercodeB").Should().Have.Count.EqualTo(0);
 		}
 
 		[Test]
@@ -224,7 +224,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				}
 			});
 
-			Target.GetAll().Single().PersonId.Should().Be(person);
+			Target.GetStates().Single().PersonId.Should().Be(person);
 		}
 
 		[Test]
@@ -255,8 +255,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				StateCode = "statecode"
 			});
 
-			Target.Get(1, "usercode1").Single().StateCode.Should().Be("statecode");
-			Target.Get(2, "usercode2").Single().StateCode.Should().Be("statecode");
+			Target.Find(1, "usercode1").Single().StateCode.Should().Be("statecode");
+			Target.Find(2, "usercode2").Single().StateCode.Should().Be("statecode");
 		}
 
 		[Test]
@@ -286,7 +286,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				SourceId = "source"
 			});
 
-			Target.GetNotInSnapshot("2016-08-29 13:01".Utc(), "source")
+			Target.GetStatesNotInSnapshot("2016-08-29 13:01".Utc(), "source")
 				.Single().PersonId.Should().Be(person);
 		}
 

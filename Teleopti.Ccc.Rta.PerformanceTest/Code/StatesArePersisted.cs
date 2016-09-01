@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 				{
 					while (true)
 					{
-						var states = _persister.GetAll();
+						var states = _persister.GetStates();
 						if (states.All(x => x.ReceivedTime == timeWhenLastStateWasSent.Utc()))
 							break;
 						Thread.Sleep(20);

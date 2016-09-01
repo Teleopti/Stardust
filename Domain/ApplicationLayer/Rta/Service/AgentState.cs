@@ -1,8 +1,30 @@
 using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
+	public class AgentStatePrepare
+	{
+		public Guid PersonId { get; set; }
+		public Guid BusinessUnitId { get; set; }
+		public Guid? TeamId { get; set; }
+		public Guid? SiteId { get; set; }
+		public IEnumerable<ExternalLogon> ExternalLogons { get; set; }
+	}
+
+	public class ExternalLogon
+	{
+		public int DataSourceId { get; set; }
+		public string UserCode { get; set; }
+	}
+
+	public class AgentStateFound : AgentState
+	{
+		public int DataSourceId { get; set; }
+		public string UserCode { get; set; }
+	}
+
 	public class AgentState
 	{
 		public DateTime? BatchId { get; set; }
@@ -24,8 +46,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public Guid? RuleId { get; set; }
 		public DateTime? RuleStartTime { get; set; }
-		public double? StaffingEffect { get; set; }
-		public Adherence? Adherence { get; set; }
 
 		public DateTime? AlarmStartTime { get; set; }
 

@@ -82,8 +82,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				RuleId = null,
 				RuleStartTime = null,
 				AlarmStartTime = null,
-				StaffingEffect = null,
-				Adherence = null
 			});
 
 			Target.Get(personId)

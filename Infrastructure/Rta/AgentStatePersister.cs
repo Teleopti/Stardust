@@ -101,8 +101,6 @@ VALUES (:BusinessUnitId, :SiteId, :TeamId, :PersonId, :DataSourceId, :UserCode)"
 						NextActivityStartTime = :NextActivityStartTime, 
 						RuleId = :RuleId,
 						RuleStartTime = :RuleStartTime,
-						StaffingEffect = :StaffingEffect,
-						Adherence = :Adherence,
 						AlarmStartTime = :AlarmStartTime,
 						TimeWindowCheckSum = :TimeWindowCheckSum
 					WHERE 
@@ -124,8 +122,6 @@ VALUES (:BusinessUnitId, :SiteId, :TeamId, :PersonId, :DataSourceId, :UserCode)"
 				.SetParameter("NextActivityStartTime", model.NextActivityStartTime)
 				.SetParameter("RuleId", model.RuleId)
 				.SetParameter("RuleStartTime", model.RuleStartTime)
-				.SetParameter("StaffingEffect", model.StaffingEffect)
-				.SetParameter("Adherence", model.Adherence)
 				.SetParameter("AlarmStartTime", model.AlarmStartTime)
 				.SetParameter("TimeWindowCheckSum", model.TimeWindowCheckSum)
 				.ExecuteUpdate();
@@ -141,29 +137,40 @@ VALUES (:BusinessUnitId, :SiteId, :TeamId, :PersonId, :DataSourceId, :UserCode)"
 				;
 		}
 
+		public IEnumerable<AgentState> Get(int dataSourceId, IEnumerable<string> userCodes)
+		{
+			throw new NotImplementedException();
+		}
+
 		[InfoLog]
 		public virtual AgentState Get(Guid personId)
 		{
 			var sql = SelectAgentState + "WITH (UPDLOCK) WHERE PersonId = :PersonId";
 			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
 				.SetParameter("PersonId", personId)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(internalState)))
+				.SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateFound)))
 				.SetReadOnly(true)
 				.List<AgentState>()
 				.FirstOrDefault();
 		}
 
 		[InfoLog]
-		public virtual IEnumerable<AgentState> Get(int dataSourceId, string userCode)
+		public virtual IEnumerable<AgentStateFound> Find(int dataSourceId, string userCode)
 		{
 			var sql = SelectAgentState + "WITH (UPDLOCK) WHERE DataSourceId = :DataSourceId AND UserCode = :UserCode";
 			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
 				.SetParameter("DataSourceId", dataSourceId)
 				.SetParameter("UserCode", userCode)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(internalState)))
+				.SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateFound)))
 				.SetReadOnly(true)
-				.List<AgentState>()
+				.List<AgentStateFound>()
 				;
+		}
+
+		[InfoLog]
+		public virtual IEnumerable<AgentStateFound> Find(int dataSourceId, IEnumerable<string> userCodes)
+		{
+			throw new NotImplementedException();
 		}
 
 		[InfoLog]
@@ -172,7 +179,7 @@ VALUES (:BusinessUnitId, :SiteId, :TeamId, :PersonId, :DataSourceId, :UserCode)"
 			var sql = SelectAgentState + "WITH (UPDLOCK) WHERE PersonId IN (:PersonIds)";
 			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
 				.SetParameterList("PersonIds", personIds)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(internalState)))
+				.SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateFound)))
 				.SetReadOnly(true)
 				.List<AgentState>()
 				.GroupBy(x => x.PersonId, (guid, states) => states.First())
@@ -181,11 +188,11 @@ VALUES (:BusinessUnitId, :SiteId, :TeamId, :PersonId, :DataSourceId, :UserCode)"
 		}
 
 		[InfoLog]
-		public virtual IEnumerable<AgentState> GetAll()
+		public virtual IEnumerable<AgentState> GetStates()
 		{
 			var sql = SelectAgentState + "WITH (TABLOCK UPDLOCK)";
 			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(internalState)))
+				.SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateFound)))
 				.SetReadOnly(true)
 				.List<AgentState>()
 				.GroupBy(x => x.PersonId, (guid, states) => states.First())
@@ -194,7 +201,7 @@ VALUES (:BusinessUnitId, :SiteId, :TeamId, :PersonId, :DataSourceId, :UserCode)"
 		}
 
 		[InfoLog]
-		public virtual IEnumerable<AgentState> GetNotInSnapshot(DateTime snapshotId, string sourceId)
+		public virtual IEnumerable<AgentState> GetStatesNotInSnapshot(DateTime snapshotId, string sourceId)
 		{
 			var sql = SelectAgentState +
 					  @"WITH (UPDLOCK) WHERE 
@@ -207,21 +214,14 @@ VALUES (:BusinessUnitId, :SiteId, :TeamId, :PersonId, :DataSourceId, :UserCode)"
 			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
 				.SetParameter("SnapshotId", snapshotId)
 				.SetParameter("SourceId", sourceId)
-				.SetResultTransformer(Transformers.AliasToBean(typeof (internalState)))
+				.SetResultTransformer(Transformers.AliasToBean(typeof (AgentStateFound)))
 				.SetReadOnly(true)
 				.List<AgentState>()
 				.GroupBy(x => x.PersonId, (guid, states) => states.First())
 				.ToArray()
 				;
 		}
-
-		private class internalState : AgentState
-		{
-			public new int Adherence { set { base.Adherence = (Interfaces.Domain.Adherence?) value; } }
-			public int DataSourceId { get; set; }
-			public string UserCode { get; set; }
-		}
-
+		
 		private static string SelectAgentState = @"SELECT * FROM [dbo].[AgentState] ";
 	}
 }

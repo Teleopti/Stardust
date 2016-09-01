@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			[UnitOfWork]
 			public virtual void AddOneToNotInSnapshot(DateTime batchId, string datasourceId)
 			{
-				var all = _persister.GetNotInSnapshot(batchId, datasourceId);
+				var all = _persister.GetStatesNotInSnapshot(batchId, datasourceId);
 				Thread.Sleep(TimeSpan.FromMilliseconds(100 * all.Count()));
 				addOneTo(all);
 			}
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			[UnitOfWork]
 			public virtual void AddOneToAll()
 			{
-				var all = _persister.GetAll();
+				var all = _persister.GetStates();
 				Thread.Sleep(TimeSpan.FromMilliseconds(100 * all.Count()));
 				addOneTo(all);
 			}
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			[UnitOfWork]
 			public virtual IEnumerable<AgentState> GetAll()
 			{
-				return _persister.GetAll();
+				return _persister.GetStates();
 			}
 
 		}
