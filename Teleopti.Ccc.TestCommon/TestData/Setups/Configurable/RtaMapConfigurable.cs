@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				if (!string.IsNullOrWhiteSpace(IsAlarm))
 					rule.IsAlarm = bool.Parse(IsAlarm);
 				if (!string.IsNullOrWhiteSpace(AlarmThreshold))
-					rule.ThresholdTime = int.Parse(AlarmThreshold);
+					rule.ThresholdTime = (int) TimeSpan.Parse(AlarmThreshold).TotalSeconds;
 				ruleRepository.Add(rule);
 			}
 
