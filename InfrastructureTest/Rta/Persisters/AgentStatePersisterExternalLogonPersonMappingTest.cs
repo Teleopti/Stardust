@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 {
 	[TestFixture]
 	[UnitOfWorkTest]
-	public class AgentStatePersisterExternalLogonPersonMappingTest2
+	public class AgentStatePersisterExternalLogonPersonMappingTest
 	{
 		public IAgentStatePersister Target;
 
@@ -331,7 +331,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Find(1, new[] {usercodeA, usercodeB})
 				.Select(x => x.UserCode)
-				.Should().Have.SameSequenceAs(usercodeA, usercodeB);
+				.OrderBy(x => x)
+				.Should().Have.SameSequenceAs(new [] { usercodeA, usercodeB}.OrderBy(x => x));
 		}
 	}
 }
