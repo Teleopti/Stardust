@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
@@ -51,7 +53,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			public IEnumerable<ScheduledActivity> schedules;
 			public MappingsState mappings;
-			public IEnumerable<AgentState> agentStates;
+			public IEnumerable<AgentStateFound> agentStates;
 		}
 
 		public override void ForBatch(BatchInputModel batch, Action<Context> action)
@@ -69,7 +71,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					.Where(x => agentStates.All(s => s.UserCode != x))
 					.Select(x => new InvalidUserCodeException($"No person found for UserCode {x}, DataSourceId {dataSourceId}, SourceId {batch.SourceId}"))
 					.ForEach(exceptions.Add);
-				
+
 				var personIds = agentStates.Select(x => x.PersonId);
 				var schedules = _databaseReader.GetCurrentSchedules(personIds);
 				var mappings = new MappingsState(() => _mappingReader.Read());
@@ -93,7 +95,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			if (exceptions.Any())
 				throw new AggregateException(exceptions);
-
 		}
 
 		[TenantScope]
@@ -113,31 +114,33 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				{
 					try
 					{
-						data.agentStates.ForEach(x =>
-						{
-							action.Invoke(new Context(
-								new InputInfo
-								{
-									PlatformTypeId = batch.PlatformTypeId,
-									SourceId = batch.SourceId,
-									SnapshotId = batch.SnapshotId,
-									StateCode = input.StateCode,
-									StateDescription = input.StateDescription
-								},
-								x.PersonId,
-								x.BusinessUnitId,
-								x.TeamId.GetValueOrDefault(),
-								x.SiteId.GetValueOrDefault(),
-								() => x,
-								() => data.schedules.Where(s => s.PersonId == x.PersonId).ToArray(),
-								s => data.mappings,
-								c => _agentStatePersister.Update(c.MakeAgentState()),
-								_now,
-								_stateMapper,
-								_appliedAdherence,
-								_appliedAlarm
-								));
-						});
+						data.agentStates
+							.Where(x => x.UserCode == input.UserCode)
+							.ForEach(x =>
+							{
+								action.Invoke(new Context(
+									new InputInfo
+									{
+										PlatformTypeId = batch.PlatformTypeId,
+										SourceId = batch.SourceId,
+										SnapshotId = batch.SnapshotId,
+										StateCode = input.StateCode,
+										StateDescription = input.StateDescription
+									},
+									x.PersonId,
+									x.BusinessUnitId,
+									x.TeamId.GetValueOrDefault(),
+									x.SiteId.GetValueOrDefault(),
+									() => x,
+									() => data.schedules.Where(s => s.PersonId == x.PersonId).ToArray(),
+									s => data.mappings,
+									c => _agentStatePersister.Update(c.MakeAgentState()),
+									_now,
+									_stateMapper,
+									_appliedAdherence,
+									_appliedAlarm
+									));
+							});
 					}
 					catch (Exception e)
 					{
@@ -147,6 +150,50 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			});
 
 			return exceptions;
+		}
+
+		public override void For(StateInputModel input, Action<Context> action)
+		{
+			var found = false;
+
+			WithUnitOfWork(() =>
+			{
+				var mappings = new MappingsState(() => _mappingReader.Read());
+				var dataSourceId = ValidateSourceId(input);
+				var userCode = input.UserCode;
+
+				_agentStatePersister.Find(dataSourceId, userCode)
+					.ForEach(state =>
+					{
+						found = true;
+
+						action.Invoke(new Context(
+							new InputInfo
+							{
+								PlatformTypeId = input.PlatformTypeId,
+								SourceId = input.SourceId,
+								SnapshotId = input.SnapshotId,
+								StateCode = input.StateCode,
+								StateDescription = input.StateDescription
+							},
+							state.PersonId,
+							state.BusinessUnitId,
+							state.TeamId.GetValueOrDefault(),
+							state.SiteId.GetValueOrDefault(),
+							() => state,
+							() => _databaseReader.GetCurrentSchedule(state.PersonId),
+							s => mappings,
+							c => _agentStatePersister.Update(c.MakeAgentState()),
+							_now,
+							_stateMapper,
+							_appliedAdherence,
+							_appliedAlarm
+							));
+					});
+			});
+
+			if (!found)
+				throw new InvalidUserCodeException($"No person found for SourceId {input.SourceId} and UserCode {input.UserCode}");
 		}
 	}
 
@@ -687,6 +734,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					_appliedAlarm
 					));
 			});
+
 		}
 
 		[AllBusinessUnitsUnitOfWork]
