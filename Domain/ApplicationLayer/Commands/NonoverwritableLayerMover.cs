@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
 	public interface INonoverwritableLayerMover
 	{
-		bool MoveShiftLayer(IScheduleDay scheduleDay, DateTimePeriod avoidPeriod, Guid shiftLayerId);
+		bool MoveShiftLayerOutsidePeriod(IScheduleDay scheduleDay, DateTimePeriod avoidPeriod, Guid shiftLayerId);
 		bool IsDestinationValidForMovedShiftLayer(IScheduleDay scheduleDay, IShiftLayer layer,TimeSpan distance);
 	}
 
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_nonoverwritableLayerChecker = nonoverwritableLayerChecker;
 		}
 
-		public bool MoveShiftLayer(IScheduleDay scheduleDay, DateTimePeriod avoidPeriod, Guid shiftLayerId)
+		public bool MoveShiftLayerOutsidePeriod(IScheduleDay scheduleDay, DateTimePeriod avoidPeriod, Guid shiftLayerId)
 		{
 			var personAssignment = scheduleDay.PersonAssignment();
 			var shiftLayer = personAssignment.ShiftLayers.FirstOrDefault(l => l.Id == shiftLayerId);
@@ -29,16 +29,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var toBeforeDistance = getDistanceToMoveToBefore(avoidPeriod, shiftLayer.Period);
 			var toAfterDistance = getDistanceToMoveToAfter(avoidPeriod, shiftLayer.Period);
 
+			if ((toBeforeDistance <= TimeSpan.Zero) == (toAfterDistance <= TimeSpan.Zero)) return false;
+
 			var isBeforeLocationValid = IsDestinationValidForMovedShiftLayer(scheduleDay, shiftLayer, toBeforeDistance);
 			var isAfterLocationValid = IsDestinationValidForMovedShiftLayer(scheduleDay, shiftLayer, toAfterDistance);
-
-			if (isBeforeLocationValid && (!isAfterLocationValid || toBeforeDistance <= toAfterDistance))
+			
+			if (isBeforeLocationValid && (!isAfterLocationValid || toBeforeDistance.Duration() <= toAfterDistance.Duration()))
 			{
 				moveLayer(personAssignment, shiftLayer, toBeforeDistance);
 				return true;
 			}
 
-			if (isAfterLocationValid && (!isBeforeLocationValid || toBeforeDistance > toAfterDistance))
+			if (isAfterLocationValid && (!isBeforeLocationValid || toBeforeDistance.Duration() > toAfterDistance.Duration()))
 			{
 				moveLayer(personAssignment, shiftLayer, toAfterDistance);
 				return true;

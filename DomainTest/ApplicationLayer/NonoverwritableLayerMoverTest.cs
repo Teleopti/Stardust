@@ -203,8 +203,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			result.Should().Be.False();
 		}
 
-		[Test]
-		[Ignore]
+		[Test]		
 		public void ShouldMoveToBeforeIfTheDistanceIsShorterAndTheLocationIsValid()
 		{
 			var person = PersonFactory.CreatePersonWithGuid("John","Watson");
@@ -234,14 +233,176 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var layerToMove = pa.ShiftLayers.First(l => l.Payload == lunchActivity);
 
-			var result = Target.MoveShiftLayer(scheduleDay, new DateTimePeriod(2013, 11, 14, 10, 2013, 11, 14, 15),
+			var result = Target.MoveShiftLayerOutsidePeriod(scheduleDay, new DateTimePeriod(2013, 11, 14, 10, 2013, 11, 14, 15),
 				layerToMove.Id.Value);
 
 			result.Should().Be.True();
-			var layerAfterMove = pa.ShiftLayers.First(l => l.Payload == lunchActivity);
+			
+			var layerAfterMove = scheduleDay.PersonAssignment().ShiftLayers.First(l => l.Payload == lunchActivity);
 			layerAfterMove.Period.Should().Be.EqualTo(new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 10));
 
 		}
+
+		[Test]
+		public void ShouldMoveToAfterIfTheDistanceIsShorterAndTheLocationIsValid()
+		{
+			var person = PersonFactory.CreatePersonWithGuid("John", "Watson");
+			PersonRepository.Has(person);
+
+			var mainActivity = ActivityFactory.CreateActivity("Phone");
+			var lunchActivity = ActivityFactory.CreateActivity("Lunch");
+
+			mainActivity.AllowOverwrite = true;
+			lunchActivity.AllowOverwrite = false;
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
+			var scenario = CurrentScenario.Current();
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				mainActivity, person,
+				new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 18),
+				shiftCategory, scenario);
+
+			pa.AddActivity(lunchActivity, new DateTimePeriod(2013, 11, 14, 12, 2013, 11, 14, 14));
+
+			pa.ShiftLayers.ForEach(l => l.WithId());
+			ScheduleStorage.Add(pa);
+
+			var date = new DateOnly(2013, 11, 14);
+			var scheduleDay = getScheduleDay(date, person);
+
+			var layerToMove = pa.ShiftLayers.First(l => l.Payload == lunchActivity);
+
+			var result = Target.MoveShiftLayerOutsidePeriod(scheduleDay, new DateTimePeriod(2013, 11, 14, 10, 2013, 11, 14, 15),
+				layerToMove.Id.Value);
+
+			result.Should().Be.True();
+
+			var layerAfterMove = scheduleDay.PersonAssignment().ShiftLayers.First(l => l.Payload == lunchActivity);
+			layerAfterMove.Period.Should().Be.EqualTo(new DateTimePeriod(2013, 11, 14, 15, 2013, 11, 14, 17));
+
+		}
+
+		[Test]
+		public void ShouldMoveToBeforeIfMoveToAfterIsNotValid()
+		{
+			var person = PersonFactory.CreatePersonWithGuid("John", "Watson");
+			PersonRepository.Has(person);
+
+			var mainActivity = ActivityFactory.CreateActivity("Phone");
+			var lunchActivity = ActivityFactory.CreateActivity("Lunch");
+
+			mainActivity.AllowOverwrite = true;
+			lunchActivity.AllowOverwrite = false;
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
+			var scenario = CurrentScenario.Current();
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				mainActivity, person,
+				new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16),
+				shiftCategory, scenario);
+
+			pa.AddActivity(lunchActivity, new DateTimePeriod(2013, 11, 14, 12, 2013, 11, 14, 14));
+
+			pa.ShiftLayers.ForEach(l => l.WithId());
+			ScheduleStorage.Add(pa);
+
+			var date = new DateOnly(2013, 11, 14);
+			var scheduleDay = getScheduleDay(date, person);
+
+			var layerToMove = pa.ShiftLayers.First(l => l.Payload == lunchActivity);
+
+			var result = Target.MoveShiftLayerOutsidePeriod(scheduleDay, new DateTimePeriod(2013, 11, 14, 10, 2013, 11, 14, 15),
+				layerToMove.Id.Value);
+
+			result.Should().Be.True();
+
+			var layerAfterMove = scheduleDay.PersonAssignment().ShiftLayers.First(l => l.Payload == lunchActivity);
+			layerAfterMove.Period.Should().Be.EqualTo(new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 10));
+		}
+
+		[Test]
+		public void ShouldMoveToAfterIfMoveToBeforeIsNotValid()
+		{
+			var person = PersonFactory.CreatePersonWithGuid("John", "Watson");
+			PersonRepository.Has(person);
+
+			var mainActivity = ActivityFactory.CreateActivity("Phone");
+			var lunchActivity = ActivityFactory.CreateActivity("Lunch");
+
+			mainActivity.AllowOverwrite = true;
+			lunchActivity.AllowOverwrite = false;
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
+			var scenario = CurrentScenario.Current();
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				mainActivity, person,
+				new DateTimePeriod(2013, 11, 14, 9, 2013, 11, 14, 18),
+				shiftCategory, scenario);
+
+			pa.AddActivity(lunchActivity, new DateTimePeriod(2013, 11, 14, 11, 2013, 11, 14, 13));
+
+			pa.ShiftLayers.ForEach(l => l.WithId());
+			ScheduleStorage.Add(pa);
+
+			var date = new DateOnly(2013, 11, 14);
+			var scheduleDay = getScheduleDay(date, person);
+
+			var layerToMove = pa.ShiftLayers.First(l => l.Payload == lunchActivity);
+
+			var result = Target.MoveShiftLayerOutsidePeriod(scheduleDay, new DateTimePeriod(2013, 11, 14, 10, 2013, 11, 14, 15),
+				layerToMove.Id.Value);
+
+			result.Should().Be.True();
+
+			var layerAfterMove = scheduleDay.PersonAssignment().ShiftLayers.First(l => l.Payload == lunchActivity);
+			layerAfterMove.Period.Should().Be.EqualTo(new DateTimePeriod(2013, 11, 14, 15, 2013, 11, 14, 17));
+
+		}
+
+		[Test]
+		public void ShouldNotMoveLayerIfTheLayerIsAlreadyOutsideOfGivenPeriod()
+		{
+			var person = PersonFactory.CreatePersonWithGuid("John", "Watson");
+			PersonRepository.Has(person);
+
+			var mainActivity = ActivityFactory.CreateActivity("Phone");
+			var lunchActivity = ActivityFactory.CreateActivity("Lunch");
+
+			mainActivity.AllowOverwrite = true;
+			lunchActivity.AllowOverwrite = false;
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
+			var scenario = CurrentScenario.Current();
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				mainActivity, person,
+				new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 18),
+				shiftCategory, scenario);
+
+			pa.AddActivity(lunchActivity, new DateTimePeriod(2013, 11, 14, 13, 2013, 11, 14, 14));
+
+			pa.ShiftLayers.ForEach(l => l.WithId());
+			ScheduleStorage.Add(pa);
+
+			var date = new DateOnly(2013, 11, 14);
+			var scheduleDay = getScheduleDay(date, person);
+
+			var layerToMove = pa.ShiftLayers.First(l => l.Payload == lunchActivity);
+
+			var result = Target.MoveShiftLayerOutsidePeriod(scheduleDay, new DateTimePeriod(2013, 11, 11, 10, 2013, 11, 14, 13),
+				layerToMove.Id.Value);
+
+			result.Should().Be.False();
+
+			var layerAfterMove = scheduleDay.PersonAssignment().ShiftLayers.First(l => l.Payload == lunchActivity);
+			layerAfterMove.Period.Should().Be.EqualTo(new DateTimePeriod(2013, 11, 14, 13, 2013, 11, 14, 14));
+		}
+
+
+	
 
 		private IScheduleDictionary getScheduleDictionary(DateOnly date,IPerson person)
 		{
