@@ -29,10 +29,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
 		private IApplicationFunctionRepository _applicationFunctionRepository;
 		private Guid personId;
 		private int analyticsBusinessUnitId;
+		private ICurrentBusinessUnit _temp;
 
 		[SetUp]
 		public void Setup()
 		{
+			_temp = ServiceLocatorForEntity.CurrentBusinessUnit; // Store previous value
+
 			_now = MockRepository.GenerateMock<INow>();
 			_analyticsTeamRepository = MockRepository.GenerateMock<IAnalyticsTeamRepository>();
 			_personRepository = MockRepository.GenerateMock<IPersonRepository>();
@@ -42,6 +45,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
 			
 			analyticsBusinessUnitId = 1;
 			target = new PermissionsConverter(_analyticsTeamRepository, _now, _personRepository, _siteRepository, _applicationFunctionRepository);
+		}
+
+		[TearDown]
+		public void AfterTest()
+		{
+			ServiceLocatorForEntity.CurrentBusinessUnit = _temp; // Restore to previous state
 		}
 
 		[Test]
@@ -63,11 +72,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
 		[Test]
 		public void PermissionsShouldBeMappedAnalyticsPermissions()
 		{
+
 			var fakeCurrentBusinessUnit = new FakeCurrentBusinessUnit();
 			var businessUnit = new BusinessUnit("Test");
 			businessUnit.SetId(Guid.NewGuid());
 			fakeCurrentBusinessUnit.FakeBusinessUnit(businessUnit);
 			ServiceLocatorForEntity.CurrentBusinessUnit = fakeCurrentBusinessUnit;
+
 			var now = DateTime.UtcNow;
 			var reportId = Guid.NewGuid();
 			var analyticTeam = new AnalyticTeam { TeamCode = Guid.NewGuid(), TeamId = 123 };
