@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				}),
 				new NoSchedulingProgress(), StateHolder,
 				new[] {dictionary[person].ScheduledDay(date), dictionary[person2].ScheduledDay(date)}, GroupPagePerDateHolder,
-				new ScheduleOptimizerHelper(Scope, new OptimizerHelperHelper(new PersonalSkillsProvider()), RequiredScheduleHelper,
+				new ScheduleOptimizerHelper(Scope, new OptimizerHelperHelper(), RequiredScheduleHelper,
 					MatrixListFactory), OptimizationPreferences, false, new DaysOffPreferences(),
 				new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 
