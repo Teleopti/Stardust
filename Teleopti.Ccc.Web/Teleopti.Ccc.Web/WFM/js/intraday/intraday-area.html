@@ -87,21 +87,21 @@
 				<h2 class="skill-list-header"><b>{{ selectedSkillArea.Name }}</b>: {{selectedSkillArea.Skills.length}} {{'PersonSkill'|translate}}</h2>
 				<div class="head-actions panel-menu">
 					<div tabindex=0 class="context-menu card-context">
-						<span ng-click="showIncluded=!showIncluded">
-							<i ng-show="showIncluded" class="mdi mdi-eye"></i>
-							<i ng-hide="showIncluded" class="mdi mdi-eye-off"></i>
-							<md-tooltip>{{'IncludedSkills'|translate}}</md-tooltip>
+						<i class="skill-area-options mdi mdi-dots-vertical"></i>
+						<span class="context-menu-left">
+							<ul class="wfm-list">
+								<li ng-click="showIncluded=!showIncluded">
+									<i ng-hide="showIncluded" class="mdi mdi-eye"></i>
+									<i ng-show="showIncluded" class="mdi mdi-eye-off"></i>
+									{{'IncludedSkills'|translate}}
+								</li>
+								<li ng-click='toggleModal()'><i class="skill-area-delete mdi mdi-delete"></i>{{'Delete'|translate}}</li>
+							</ul>
 						</span>
 					</div>
-					<div tabindex=0 class="context-menu card-context">
-					<span ng-click='toggleModal()'>
-						<i class="skill-area-delete mdi mdi-delete"></i>
-						<md-tooltip>{{'Delete'|translate}}</md-tooltip>
-					</span>
-				</div>
 				</div>
 			</div>
-			<div ng-show="showIncluded" class="animate-show con-row">
+			<div ng-hide="showIncluded" class="animate-show con-row">
 				<div class="con-flex">
 					<div class="unrelated-filters" ng-repeat="skill in selectedSkillArea.Skills | orderBy : Name">
 						<span class="pointer" ng-click="openSkillFromArea(skill)">
