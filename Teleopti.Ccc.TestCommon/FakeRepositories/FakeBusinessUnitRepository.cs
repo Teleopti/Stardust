@@ -9,11 +9,22 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeBusinessUnitRepository : IBusinessUnitRepository
 	{
+		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 		private readonly IList<IBusinessUnit> _businessUnits = new List<IBusinessUnit>();
+
+		public FakeBusinessUnitRepository(ICurrentBusinessUnit currentBusinessUnit)
+		{
+			_currentBusinessUnit = currentBusinessUnit;
+		}
 
 		public void Has(IBusinessUnit businessUnit)
 		{
 			Add(businessUnit);
+		}
+
+		public void HasCurrentBusinessUnit()
+		{
+			Has(_currentBusinessUnit.Current());
 		}
 
 		public void Add(IBusinessUnit entity)

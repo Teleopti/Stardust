@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -21,7 +20,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
-	public class TeamBlockSchedulingTest : ISetup
+	public class TeamBlockSchedulingTest
 	{
 		public FullScheduling Target;
 		public FakePersonRepository PersonRepository;
@@ -44,12 +43,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
-			var site = new Site("site"); 
 			var team = new Team { Description = new Description("team") };
-			site.AddTeam(team); 
-			businessUnit.AddSite(site);
-			BusinessUnitRepository.Has(businessUnit);
+			BusinessUnitRepository.HasCurrentBusinessUnit();
 			var contract = new Contract("_");
 			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
 			var agent1 = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
@@ -116,14 +111,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
-			var site = new Site("site");
 			var team1 = new Team { Description = new Description("team1") };
 			var team2 = new Team { Description = new Description("team2") };
-			site.AddTeam(team1);
-			site.AddTeam(team2);
-			businessUnit.AddSite(site);
-			BusinessUnitRepository.Has(businessUnit);
+			BusinessUnitRepository.HasCurrentBusinessUnit();
 			var contract = new Contract("_");
 			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
 			var agent1 = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team1, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
@@ -191,14 +181,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
-			var site = new Site("site");
 			var team1 = new Team { Description = new Description("team1") };
 			var team2 = new Team { Description = new Description("team2") };
-			site.AddTeam(team1);
-			site.AddTeam(team2);
-			businessUnit.AddSite(site);
-			BusinessUnitRepository.Has(businessUnit);
+			BusinessUnitRepository.HasCurrentBusinessUnit();
 			var contract = new Contract("_");
 			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
 			var agent1 = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team1, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
@@ -276,12 +261,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
-			var site = new Site("site");
 			var team1 = new Team { Description = new Description("team1") };
-			site.AddTeam(team1);
-			businessUnit.AddSite(site);
-			BusinessUnitRepository.Has(businessUnit);
+			BusinessUnitRepository.HasCurrentBusinessUnit();
 
 			var contract = new Contract("_");
 			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
@@ -324,12 +305,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 
 			Target.DoScheduling(period);
-		}
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			//TODO: Remove this!
-			system.UseTestDouble<FakeGroupScheduleGroupPageDataProvider>().For<IGroupScheduleGroupPageDataProvider>();
 		}
 	}
 }
