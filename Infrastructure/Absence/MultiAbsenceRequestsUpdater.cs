@@ -77,11 +77,9 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		public void UpdateAbsenceRequest(List<IPersonRequest> personRequests,
 										 ISchedulingResultStateHolder schedulingResultStateHolder, IProcessAbsenceRequest process, IEnumerable<IAbsenceRequestValidator> validators)
 		{
-
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 
 			var aggregatedValidatorList = new HashSet<IAbsenceRequestValidator>();
-
 			foreach (var personRequest in personRequests)
 			{
 				var person = personRequest.Person;
@@ -93,9 +91,8 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			}
 			using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				_feedback.SendProgress?.Invoke("Start loading data for resource calculation");
 				loadDataForResourceCalculation(personRequests, aggregatedValidatorList);
-				_feedback.SendProgress?.Invoke("Done loading!");
+				_feedback.SendProgress?.Invoke("Done loading  data for resource calculation!");
 
 				foreach (var personRequest in personRequests)
 				{
