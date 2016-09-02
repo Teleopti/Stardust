@@ -53,7 +53,7 @@
 		vm.overlappedLayers = [];
 		vm.initFinished = false;
 
-		var allowedToMoveStickyActivities = false;
+		var moveConflictLayerAllowed = false;
 
 		vm.actionOptions = [
 			{
@@ -62,7 +62,7 @@
 					return $translate.instant(this.value);
 				},
 				beforeAction: function() {
-					allowedToMoveStickyActivities = true;
+					moveConflictLayerAllowed = true;
 				}
 			},
 			{
@@ -134,7 +134,7 @@
 				}
 			});
 			CommandCheckService.completeCommandCheck({
-				allowedToMoveStickyActivities: allowedToMoveStickyActivities
+				moveConflictLayerAllowed: moveConflictLayerAllowed
 			});
 		};
 

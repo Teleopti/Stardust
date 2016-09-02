@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
+		public bool MoveConflictLayerAllowed { get; set; }
 		public IList<string> ErrorMessages { get; set; }
 	}
 }

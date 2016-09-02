@@ -51,8 +51,8 @@
 		var addActivity = function (option) {
 			var requestData = getRequestData();
 
-			if (option && option.allowedToMoveStickyActivities) {
-				requestData.AllowedToMoveStickyActivities = true;
+			if (option && option.moveConflictLayerAllowed) {
+				requestData.MoveConflictLayerAllowed = true;
 			}
 
 			if(requestData.PersonIds.length > 0){
