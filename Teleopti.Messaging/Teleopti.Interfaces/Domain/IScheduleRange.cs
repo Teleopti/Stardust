@@ -50,17 +50,6 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         bool Contains(IScheduleData scheduleData, bool includeNonPermitted);
 
-        /// <summary>
-        /// Gets the justice points for the requested period + 4 weeks before.
-        /// High points means more protection against optimizations
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2009-01-15
-        /// </remarks>
-        IFairnessValueResult FairnessValue();
-
 		TimeSpan CalculatedContractTimeHolderOnPeriod(DateOnlyPeriod periodToCheck);
 
 	    /// <summary>

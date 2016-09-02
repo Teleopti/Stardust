@@ -70,11 +70,6 @@ namespace Teleopti.Ccc.TestCommon
 			throw new NotImplementedException();
 		}
 
-		public IFairnessValueResult FairnessValue()
-		{
-			throw new NotImplementedException();
-		}
-
 		public TimeSpan CalculatedContractTimeHolder { get; set; }
 
 		public TimeSpan CalculatedContractTimeHolderOnPeriod(DateOnlyPeriod periodToCheck)

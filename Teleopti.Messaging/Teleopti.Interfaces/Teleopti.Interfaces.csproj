@@ -368,7 +368,6 @@
     <Compile Include="Domain\IDeviationStatisticsCalculator.cs" />
     <Compile Include="Domain\IExportToAnotherScenario.cs" />
     <Compile Include="Domain\IFullWeekOuterWeekPeriodCreator.cs" />
-    <Compile Include="Domain\IFairnessValueResult.cs" />
     <Compile Include="Domain\IMultiplicatorDefinitionAdapter.cs" />
     <Compile Include="Domain\IntervalDefinition.cs" />
     <Compile Include="Domain\IOptimizerOriginalPreferences.cs" />

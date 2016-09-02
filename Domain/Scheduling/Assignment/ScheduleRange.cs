@@ -168,31 +168,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			_calculatedScheduleDaysOff = null;
 			_shiftCategoryFairnessHolder = null;
 		}
-		private IFairnessValueResult fairnessValue(DateTimePeriod period)
-		{
-			IFairnessValueResult ret = new FairnessValueResult();
-			foreach (var scheduleData in ScheduleDataInternalCollection())
-			{
-				if (!(scheduleData is PersonAssignment))
-					continue;
-
-				if (!period.Contains(scheduleData.Period.StartDateTime))
-					continue;
-
-				var assignment = (IPersonAssignment)scheduleData;
-				if (assignment.ShiftCategory == null)
-					continue;
-
-				ret.TotalNumberOfShifts += 1;
-			}
-			return ret;
-		}
-
-		public IFairnessValueResult FairnessValue()
-		{
-			DateTimePeriod period = VisiblePeriodMinusFourWeeksPeriod();
-			return fairnessValue(period);
-		}
 
 		public TimeSpan CalculatedContractTimeHolderOnPeriod(DateOnlyPeriod periodToCheck)
 		{
