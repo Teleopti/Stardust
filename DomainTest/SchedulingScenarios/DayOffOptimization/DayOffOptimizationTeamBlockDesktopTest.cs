@@ -14,8 +14,10 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -30,7 +32,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public DayOffOptimizationDesktopTeamBlock Target;
-		public FakeGroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider; //should not use fake here...
+		public FakeContractRepository ContractRepository;
+		public FakeRuleSetBagRepository RuleSetBagRepository;
 
 		public DayOffOptimizationTeamBlockDesktopTest(bool teamBlockDayOffForIndividuals, bool cascading) : base(teamBlockDayOffForIndividuals, cascading)
 		{
@@ -46,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
-			var ruleSetBag = new RuleSetBag(new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory))) {Description = new Description("_")};
+			var ruleSetBag = RuleSetBagRepository.Has(new RuleSetBag(new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory))) {Description = new Description("_")});
 			var team = new Team { Site = new Site("_") };
 			var agents = new List<IPerson>();
 			for (var i = 0; i < 2; i++)
@@ -82,7 +85,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				General = {ScheduleTag = new ScheduleTag()},
 				Extra = {UseTeamSameDaysOff = true}
 			};
-			GroupScheduleGroupPageDataProvider.AddRuleSetBag(ruleSetBag); //remove me later!
 			var groupPageLight = new GroupPageLight("_", GroupPageType.RuleSetBag);
 
 			Target.Execute(period, stateHolder.Schedules.SchedulesForPeriod(period, agents.ToArray()), new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), groupPageLight, () => new WorkShiftFinderResultHolder(), (o, args) => { });
@@ -136,7 +138,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				}
 			}
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, agents, asses, skillDays);
-			GroupScheduleGroupPageDataProvider.AddContract(contract); //remove me later!
+			ContractRepository.Has(contract);
 			var groupPageLight = new GroupPageLight("Contract", GroupPageType.Contract, "Contract");
 
 			var optPrefs = new OptimizationPreferences
@@ -146,6 +148,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			};
 
 			Target.Execute(period, stateHolder.Schedules.SchedulesForPeriod(period, agents.ToArray()), new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), groupPageLight, () => new WorkShiftFinderResultHolder(), (o, args) => { });
+		}
+
+		public override void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			//TODO: REMOVE ME SOOON! Should be the default registration of domaintest also
+			system.UseTestDouble<GroupScheduleGroupPageDataProvider>().For<IGroupScheduleGroupPageDataProvider>();
 		}
 	}
 }
