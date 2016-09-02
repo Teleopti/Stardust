@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
@@ -7,6 +8,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
@@ -35,7 +37,10 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 		public IProcessMultipleAbsenceRequest Target;
 		public WithUnitOfWork WithUnitOfWork;
 		public IWorkflowControlSetRepository WorkflowControlSetRepository;
-
+		public IBudgetGroupRepository BudgetGroupRepository;
+		public IBudgetDayRepository BudgetDayRepository;
+		public IScenarioRepository ScenarioRepository;
+		public IBusinessUnitRepository BusinessUnitRepository;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -263,6 +268,94 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			cntApproved.Should().Be.EqualTo(2);
 		}
 
+		[Test]
+		[Ignore("does not work yet")]
+		public void ShouldDenyBecauseOfBudgetIsUsed()
+		{
+			using (DataSource.OnThisThreadUse("Teleopti WFM"))
+				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
+			//Consumer Online
+			var personRequests = new List<IPersonRequest>();
+			WithUnitOfWork.Do(() =>
+			{
+				//load  Halvdag 16h/år
+				var absence = AbsenceRepository.Get(new Guid("5B859CEF-0F35-4BA8-A82E-A14600EEE42E"));
+
+				var wfcs = WorkflowControlSetRepository.Get(new Guid("E97BC114-8939-4A70-AE37-A338010FFF19"));
+				foreach (var period in wfcs.AbsenceRequestOpenPeriods)
+				{
+					if (period.Absence.Equals(absence))
+					{
+						period.OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(2016, 3, 1), new DateOnly(2099, 5, 30));
+						period.StaffingThresholdValidator = new BudgetGroupAllowanceValidator();
+						period.PersonAccountValidator = new AbsenceRequestNoneValidator();
+						period.AbsenceRequestProcess = new GrantAbsenceRequest();
+						var datePeriod = period as AbsenceRequestOpenDatePeriod;
+						if (datePeriod != null)
+							datePeriod.Period = period.OpenForRequestsPeriod;
+					}
+
+				}
+
+				var bu = BusinessUnitRepository.Load(new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
+				var scenario = ScenarioRepository.LoadDefaultScenario(bu);
+				var bGroup = BudgetGroupRepository.Get(new Guid("81BAF583-4875-43EC-8E1D-A53A00DF0B3D"));
+				var bDay = BudgetDayRepository.Find(scenario, bGroup,
+					new DateOnlyPeriod(new DateOnly(2016, 4, 11), new DateOnly(2016, 4, 11)));
+
+				bDay.First().Allowance = 1;
+
+				var person = PersonRepository.Load(new Guid("6E75AF18-F494-42AE-8272-A141010651CB"));
+				var person2 = PersonRepository.Load(new Guid("8080B4A4-785D-44FD-B7F9-A141010651CB"));
+
+				var req4th = createAbsenceRequest(person, absence,
+					new DateTimePeriod(new DateTime(2016, 4, 11, 6, 0, 0, DateTimeKind.Utc),
+						new DateTime(2016, 4, 11, 18, 0, 0, DateTimeKind.Utc)));
+				PersonRequestRepository.Add(req4th);
+				personRequests.Add(req4th);
+				var req4th2 = createAbsenceRequest(person2, absence,
+					new DateTimePeriod(new DateTime(2016, 4, 11, 6, 0, 0, DateTimeKind.Utc),
+						new DateTime(2016, 4, 11, 18, 0, 0, DateTimeKind.Utc)));
+				PersonRequestRepository.Add(req4th2);
+				personRequests.Add(req4th2);
+
+#pragma warning disable 618
+				PersonRequestRepository.UnitOfWork.PersistAll();
+#pragma warning restore 618
+				var absenceRequestIds = new List<Guid> { req4th.Id.Value, req4th2.Id.Value};
+
+				var newMultiAbsenceRequestsCreatedEvent = new NewMultiAbsenceRequestsCreatedEvent()
+				{
+					PersonRequestIds = absenceRequestIds,
+					InitiatorId = new Guid("00000000-0000-0000-0000-000000000000"),
+					LogOnBusinessUnitId = new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"),
+					LogOnDatasource = "Teleopti WFM",
+					Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z")
+				};
+
+				Target.Process(newMultiAbsenceRequestsCreatedEvent);
+			});
+
+			var cntApproved = 0;
+			var cntDenied = 0;
+			WithUnitOfWork.Do(() =>
+			{
+				foreach (var req in personRequests)
+				{
+					var request = PersonRequestRepository.Get(req.Id.Value);
+
+					if (request.IsApproved)
+						cntApproved++;
+
+					else if (request.IsDenied)
+						cntDenied++;
+
+				}
+			});
+
+			cntDenied.Should().Be.EqualTo(1);
+			cntApproved.Should().Be.EqualTo(1);
+		}
 		private IPersonRequest createAbsenceRequest(IPerson person, IAbsence absence)
 		{
 			var req = new AbsenceRequest(absence,
