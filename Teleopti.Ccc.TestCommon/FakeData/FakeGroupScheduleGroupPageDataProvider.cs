@@ -11,15 +11,17 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	{
 		private readonly Func<ISchedulerStateHolder> _stateHolder;
 		private readonly IList<IRuleSetBag> _ruleSetBags;
+		private readonly IList<IContract> _contracts;
 
 		public FakeGroupScheduleGroupPageDataProvider(Func<ISchedulerStateHolder> stateHolder)
 		{
 			_stateHolder = stateHolder;
 			_ruleSetBags = new List<IRuleSetBag>();
+			_contracts = new List<IContract>();
 		}
 
 		public IEnumerable<IPerson> PersonCollection { get { return _stateHolder().AllPermittedPersons; } }
-		public IEnumerable<IContract> ContractCollection { get { return Enumerable.Empty<IContract>(); } }
+		public IEnumerable<IContract> ContractCollection { get { return _contracts; } }
 		public IEnumerable<IContractSchedule> ContractScheduleCollection { get { return Enumerable.Empty<IContractSchedule>(); } }
 		public IEnumerable<IPartTimePercentage> PartTimePercentageCollection { get { return Enumerable.Empty<IPartTimePercentage>(); } }
 		public IEnumerable<IRuleSetBag> RuleSetBagCollection { get { return _ruleSetBags; } }
@@ -32,6 +34,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public void AddRuleSetBag(IRuleSetBag ruleSetBag)
 		{
 			_ruleSetBags.Add(ruleSetBag);
+		}
+
+		public void AddContract(IContract contract)
+		{
+			_contracts.Add(contract);
 		}
 	}
 }

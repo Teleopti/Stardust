@@ -93,5 +93,59 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			dayOffsAgent1.Should().Have.SameValuesAs(dayOffsAgent2);
 			dayOffsAgent1.Should().Not.Have.SameValuesAs(skillDays[5].CurrentDate, skillDays[6].CurrentDate);
 		}
+
+		[Test]
+		public void ShouldNotCrashOnAgentWithoutRuleSetBag()
+		{
+			var firstDay = new DateOnly(2015, 10, 12); //mon
+			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(1));
+			var activity = new Activity("_");
+			var skill = new Skill("_", "_", Color.AliceBlue, 15, new SkillTypePhone(new Description("_"), ForecastSource.InboundTelephony)) { Activity = activity };
+			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
+			var scenario = new Scenario("_");
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSetBag = new RuleSetBag(new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory))) { Description = new Description("_") };
+			var team = new Team { Site = new Site("_").WithId() }.WithId();
+			var agents = new List<IPerson>();
+			var contract = new Contract("Contract").WithId();
+			for (var i = 0; i < 2; i++)
+			{
+				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+				var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
+				schedulePeriod.SetDaysOff(2);
+				var personPeriod = new PersonPeriod(firstDay.AddWeeks(-1), new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), team);
+				if (i == 1) personPeriod.RuleSetBag = ruleSetBag;	
+				agent.AddPeriodWithSkill(personPeriod, skill);
+				agent.AddSchedulePeriod(schedulePeriod);
+				agents.Add(agent);
+			}
+			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 10, 10, 10, 10, 10, 100);
+			var asses = new List<IPersonAssignment>();
+			foreach (var agent in agents)
+			{
+				for (var i = 0; i < 7; i++)
+				{
+					var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(i));
+					ass.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
+					ass.SetShiftCategory(shiftCategory);
+					asses.Add(ass);
+					if (i == 5 || i == 6)
+					{
+						ass.SetDayOff(new DayOffTemplate()); //saturday/sunday
+					}
+				}
+			}
+			var stateHolder = SchedulerStateHolder.Fill(scenario, period, agents, asses, skillDays);
+			GroupScheduleGroupPageDataProvider.AddContract(contract); //remove me later!
+			var groupPageLight = new GroupPageLight("Contract", GroupPageType.Contract, "Contract");
+
+			var optPrefs = new OptimizationPreferences
+			{
+				General = { ScheduleTag = new ScheduleTag() },
+				Extra = { UseTeamSameDaysOff = true, UseTeams = true, TeamGroupPage = groupPageLight}
+			};
+
+			Target.Execute(period, stateHolder.Schedules.SchedulesForPeriod(period, agents.ToArray()), new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), groupPageLight, () => new WorkShiftFinderResultHolder(), (o, args) => { });
+		}
 	}
 }

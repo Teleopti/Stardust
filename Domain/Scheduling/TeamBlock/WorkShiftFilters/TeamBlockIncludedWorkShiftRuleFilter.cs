@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
             var filteredList = new List<IWorkShiftRuleSet>();
             foreach (var ruleSet in ruleSetBags)
             {
+				if(ruleSet == null) continue;
 	            foreach (var workShiftRuleSet in ruleSet.RuleSetCollection)
 	            {
 					var ruleSetValidForAllDates = true;
