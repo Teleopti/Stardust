@@ -21,15 +21,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private static readonly isNullOrNotNewSpecification personRequestSpecification = new isNullOrNotNewSpecification();
 		private static readonly isNullSpecification absenceRequestSpecification = new isNullSpecification();
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+		private IStardustJobFeedback _feedback;
 
 
 
 		public MultiAbsenceRequestsHandler(IPersonRequestRepository personRequestRepository,
-			IMultiAbsenceRequestProcessor absenceRequestProcessor, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
+			IMultiAbsenceRequestProcessor absenceRequestProcessor, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IStardustJobFeedback stardustJobFeedback)
 		{
 			_personRequestRepository = personRequestRepository;
 			_absenceRequestProcessor = absenceRequestProcessor;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
+			_feedback = stardustJobFeedback;
 
 			if (logger.IsInfoEnabled)
 			{
@@ -41,8 +43,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		public virtual void Handle(NewMultiAbsenceRequestsCreatedEvent @event)
 		{
 			checkPersonRequest(@event.PersonRequestIds);
-
-			if(!_personRequests.IsNullOrEmpty())
+			_feedback.SendProgress?.Invoke("Done Checking Person Requests.");
+			if (!_personRequests.IsNullOrEmpty())
 				_absenceRequestProcessor.ProcessAbsenceRequest(_personRequests);
 		}
 

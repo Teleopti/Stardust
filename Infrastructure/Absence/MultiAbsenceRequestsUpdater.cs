@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				loadDataForResourceCalculation(personRequests, aggregatedValidatorList);
-				_feedback.SendProgress?.Invoke("Done loading  data for resource calculation!");
+				_feedback.SendProgress?.Invoke("Done loading data for resource calculation!");
 
 				foreach (var personRequest in personRequests)
 				{
