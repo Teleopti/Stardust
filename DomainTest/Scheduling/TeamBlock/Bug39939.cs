@@ -6,10 +6,8 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -19,7 +17,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 {
 	[DomainTest]
-	public class Bug39939 : ISetup
+	public class Bug39939
 	{
 		public FullScheduling Target;
 		public FakePersonRepository PersonRepository;
@@ -31,6 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public SchedulingOptionsProvider SchedulingOptionsProvider;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
+		public FakeBusinessUnitRepository BusinessUnitRepository;
 
 		[Test]
 		public void ShouldHandleStrangeSchedules()
@@ -41,12 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
 			var team = new Team { Description = new Description("team") };
-			//remove this - must currently be here due to GroupPageCreator reads businessunit.sitecollection, fix that!
-			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
-			var site = new Site("site");
-			site.AddTeam(team);
-			businessUnit.AddSite(site);
-			//
+			BusinessUnitRepository.HasCurrentBusinessUnit();
 			var contract = new Contract("_");
 			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
 			var shiftCategory = new ShiftCategory("_").WithId();
@@ -87,12 +81,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			var assignments = AssignmentRepository.Find(new[] { agent1, agent2 }, period, scenario);
 			assignments.Count.Should().Be.EqualTo(12);
-		}
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			//TODO: Remove this!
-			system.UseTestDouble<FakeGroupScheduleGroupPageDataProvider>().For<IGroupScheduleGroupPageDataProvider>();
 		}
 	}
 }
