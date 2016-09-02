@@ -15,7 +15,7 @@ namespace Stardust.Manager
 		// Added error codes 10928 and 10929 from SQL Database as transient errors (see http://blogs.msdn.com/b/psssql/archive/2012/10/31/worker-thread-governance-coming-to-azure-sql-database.aspx).
 		// Added error codes 4060, 40197, 40501, 40613 from MSDN documentation (see https://azure.microsoft.com/en-us/documentation/articles/sql-database-develop-error-messages/)
 
-		private readonly int[] _errorNumbers = {40540, 10928, 10929, 4060, 40197, 40501, 40613};
+		private readonly int[] _errorNumbers = {40540, 10928, 10929, 4060, 40197, 40501, 40613, 258, 121};
 
 		public virtual bool IsTransient(Exception ex)
 		{
