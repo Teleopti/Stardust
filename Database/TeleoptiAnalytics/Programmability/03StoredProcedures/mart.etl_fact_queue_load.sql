@@ -59,6 +59,7 @@ BEGIN
 
 	--declare
 	CREATE TABLE #bridge_time_zone(date_id int,interval_id int,time_zone_id int,local_date_id int,local_interval_id int)
+	CREATE NONCLUSTERED INDEX [#IX_bridge_timezone]ON #bridge_time_zone ([local_date_id],[local_interval_id])INCLUDE ([date_id],[interval_id])
 	CREATE TABLE #agg_queue_ids (queue_agg_id int, mart_queue_id int)
 
 	DECLARE @UtcNow as smalldatetime
