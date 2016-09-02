@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			BusinessUnitRepository.HasCurrentBusinessUnit();
 			var contract = new Contract("_")
 			{
 				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(168), TimeSpan.FromHours(1), TimeSpan.FromHours(1))
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			BusinessUnitRepository.HasCurrentBusinessUnit();
 			var contract = new Contract("_")
 			{
 				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(168), TimeSpan.FromHours(1), TimeSpan.FromHours(1))
