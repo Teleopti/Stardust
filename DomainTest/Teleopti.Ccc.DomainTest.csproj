@@ -172,6 +172,7 @@
     <Compile Include="ApplicationLayer\Availability\AnalyticsAvailabilityUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\FixReadModelsEventHandlerTest.cs" />
     <Compile Include="ApplicationLayer\NonoverwritableLayerMovabilityCheckerTest.cs" />
+    <Compile Include="ApplicationLayer\NonoverwritableLayerMoverTest.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationChanged\ExternalLogonTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodTransformerTests.cs" />
     <Compile Include="ApplicationLayer\ReplyRequestCommandHandlerTest.cs" />

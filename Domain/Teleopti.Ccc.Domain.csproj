@@ -181,6 +181,7 @@
     <Compile Include="ApplicationLayer\Commands\IReplyCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\NonoverwritableLayerMovabilityChecker.cs" />
     <Compile Include="ApplicationLayer\Commands\IRequestCommand.cs" />
+    <Compile Include="ApplicationLayer\Commands\NonoverwritableLayerMover.cs" />
     <Compile Include="ApplicationLayer\Commands\PersonRequestCommandExtensions.cs" />
     <Compile Include="ApplicationLayer\Commands\ReplyRequestCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\ReplyRequestCommandHandler.cs" />
