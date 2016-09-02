@@ -6,7 +6,9 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -17,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_CascadingSkills_38524)]
-	public class SchedulingCascadingTest
+	public class SchedulingCascadingTest : ISetup
 	{
 		public FullScheduling Target;
 		public FakePersonRepository PersonRepository;
@@ -27,7 +29,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakePersonAssignmentRepository AssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
-		public FakeBusinessUnitRepository BusinessUnitRepository;
 
 		[Test]
 		public void ShouldBaseBestShiftOnNonShoveledResourceCalculation()
@@ -42,7 +43,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var skillB = SkillRepository.Has("B", activity, 2);
 			var scenario = ScenarioRepository.Has("default");
 			var shiftCategory = new ShiftCategory("_").WithId();
-			BusinessUnitRepository.HasCurrentBusinessUnit();
 			var ruleSet =
 				new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
 					new TimePeriodWithSegment(earlyInterval, TimeSpan.FromMinutes(15)),
@@ -72,6 +72,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.EqualTo(numberOfAgents/2);
 			allAssignmentsStartTime.Count(x => x == new TimeSpan(8, 0, 0))
 				.Should().Be.EqualTo(numberOfAgents/2);
+		}
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			//TODO: Remove this!
+			system.UseTestDouble<FakeGroupScheduleGroupPageDataProvider>().For<IGroupScheduleGroupPageDataProvider>();
 		}
 	}
 }
