@@ -17,12 +17,11 @@ CREATE PROCEDURE [mart].[etl_dim_group_page_insert]
 AS
 BEGIN
 
-  declare @counter int
-  select @counter = ISNULL(MAX(group_id), 0) from [mart].[dim_group_page]
-  set @counter = @counter + 1
-
-  insert into [mart].[dim_group_page]
-  select 
+  DECLARE @counter int  
+  SELECT @counter = ISNULL((SELECT TOP 1 group_id from [mart].[dim_group_page] ORDER BY group_id DESC),0)+1
+ 
+  INSERT INTO [mart].[dim_group_page]
+  SELECT 
             @group_page_code
             ,@group_page_name
             ,@group_page_name_resource_key
@@ -36,9 +35,9 @@ BEGIN
             ,bu.datasource_id
             ,GETUTCDATE()
             ,GETUTCDATE()
-  from [mart].[dim_business_unit] bu
-  where business_unit_code = @business_unit_code
-  and NOT EXISTS (SELECT 1 
+  FROM [mart].[dim_business_unit] bu
+  WHERE business_unit_code = @business_unit_code
+  AND NOT EXISTS (SELECT 1 
                      FROM [mart].[dim_group_page]
                     WHERE group_code = @group_code and business_unit_id = bu.business_unit_id)
 

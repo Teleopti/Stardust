@@ -29,7 +29,7 @@ SELECT @interval_length = value FROM mart.sys_configuration WHERE [key] = 'Inter
 
 CREATE TABLE #grouppagecontrols (id uniqueidentifier)
 
-IF EXISTS (SELECT distinct group_page_code FROM mart.dim_group_page WHERE group_page_code = @group_page_code)
+IF EXISTS (SELECT distinct group_page_code FROM mart.dim_group_page WITH (NOLOCK) WHERE group_page_code = @group_page_code)
 	BEGIN
 			-- Get set of controls for other group page than Main (Business Hierarchy)
 		INSERT into #grouppagecontrols  SELECT  'E12C7EB1-23B6-4730-8019-5013C9758663'
