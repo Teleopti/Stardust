@@ -33,21 +33,21 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
             shiftDic1.Add(fm, 5);
             shiftDic1.Add(da, 7);
 
-            _target = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairnessHolder(shiftDic1, new FairnessValueResult());
+            _target = new ShiftCategoryFairnessHolder(shiftDic1);
 
             Dictionary<IShiftCategory, int> shiftDic2 = new Dictionary<IShiftCategory, int>();
             shiftDic2.Add(fm, 5);
             shiftDic2.Add(da, 7);
 
-			IShiftCategoryFairnessHolder holder2 = new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairnessHolder(shiftDic2, new FairnessValueResult());
+			IShiftCategoryFairnessHolder holder2 = new ShiftCategoryFairnessHolder(shiftDic2);
 
             Assert.AreEqual(_target, holder2);
-            Assert.AreNotEqual(_target, new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairnessHolder());
+            Assert.AreNotEqual(_target, new ShiftCategoryFairnessHolder());
 
 
 			HashSet<IShiftCategoryFairnessHolder> hashSet = new HashSet<IShiftCategoryFairnessHolder>();
             hashSet.Add(holder2);
-            hashSet.Add(new Domain.Optimization.ShiftCategoryFairness.ShiftCategoryFairnessHolder());
+            hashSet.Add(new ShiftCategoryFairnessHolder());
             hashSet.Add(holder2);
 
             Assert.AreEqual(2, hashSet.Count);

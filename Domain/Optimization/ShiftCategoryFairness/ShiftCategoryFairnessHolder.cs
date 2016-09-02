@@ -7,24 +7,16 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
     public class ShiftCategoryFairnessHolder : IShiftCategoryFairnessHolder
     {
         private IDictionary<IShiftCategory, int> _shiftDictionary;
-    	private readonly IFairnessValueResult _fairnessValueResult;
 
     	public ShiftCategoryFairnessHolder()
         {
             _shiftDictionary = new Dictionary<IShiftCategory, int>();
-    		_fairnessValueResult = new FairnessValueResult();
         }
 
-        public ShiftCategoryFairnessHolder(IDictionary<IShiftCategory, int> shiftDictionary, IFairnessValueResult fairnessValueResult)
+        public ShiftCategoryFairnessHolder(IDictionary<IShiftCategory, int> shiftDictionary)
         {
         	_shiftDictionary = shiftDictionary;
-        	_fairnessValueResult = fairnessValueResult;
         }
-
-    	public IFairnessValueResult FairnessValueResult
-    	{
-    		get { return _fairnessValueResult; }
-    	}
 
     	public IDictionary<IShiftCategory, int> ShiftCategoryFairnessDictionary
         {

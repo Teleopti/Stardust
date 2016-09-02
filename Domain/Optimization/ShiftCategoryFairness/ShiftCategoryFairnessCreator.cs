@@ -33,9 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 
             }
 
-        	IFairnessValueResult fairnessValueResult = scheduleRange.FairnessValue();
-
-            return new ShiftCategoryFairnessHolder(shiftDic, fairnessValueResult);
+            return new ShiftCategoryFairnessHolder(shiftDic);
         }
     }
 }
