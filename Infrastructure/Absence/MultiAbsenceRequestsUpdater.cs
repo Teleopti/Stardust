@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Threading;
 using log4net;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -42,6 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly ICommandDispatcher _commandDispatcher;
+		private readonly IStardustJobFeedback _feedback;
 
 		public MultiAbsenceRequestsUpdater(IResourceCalculationPrerequisitesLoader prereqLoader, 
 			ICurrentScenario scenarioRepository,
@@ -55,7 +55,8 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			IResourceOptimizationHelper resourceOptimizationHelper,
 			IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification,
 			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, 
-			ICommandDispatcher commandDispatcher)
+			ICommandDispatcher commandDispatcher,
+			IStardustJobFeedback feedback)
 		{
 			_prereqLoader = prereqLoader;
 			_scenarioRepository = scenarioRepository;
@@ -70,11 +71,13 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			_budgetGroupAllowanceSpecification = budgetGroupAllowanceSpecification;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_commandDispatcher = commandDispatcher;
+			_feedback = feedback;
 		}
 
 		public void UpdateAbsenceRequest(List<IPersonRequest> personRequests,
 										 ISchedulingResultStateHolder schedulingResultStateHolder, IProcessAbsenceRequest process, IEnumerable<IAbsenceRequestValidator> validators)
 		{
+
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 
 			var aggregatedValidatorList = new HashSet<IAbsenceRequestValidator>();
@@ -90,7 +93,9 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			}
 			using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
+				_feedback.SendProgress?.Invoke("Start loading data for resource calculation");
 				loadDataForResourceCalculation(personRequests, aggregatedValidatorList);
+				_feedback.SendProgress?.Invoke("Done loading!");
 
 				foreach (var personRequest in personRequests)
 				{
@@ -162,6 +167,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 					processRequest(personRequest, absenceRequest, requiredForProcessingAbsenceRequest,
 								   requiredForHandlingAbsenceRequest, validatorList);
+					_feedback.SendProgress?.Invoke($"Processed request {personRequest.Id} ({personRequest.Person.Name}, {personRequest.Request.Period}).");
 				}
 			}
 
@@ -188,6 +194,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				{
 					logger.Error("Optimistic lock when persisting an absence request! Number of retries: " + count);
 				}
+				_feedback.SendProgress?.Invoke($"Persisted request {personRequest.Id}.");
 			}
 		}
 
