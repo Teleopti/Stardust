@@ -19,7 +19,6 @@ using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -37,13 +36,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		public IMatrixListFactory MatrixListFactory;
 		public IRequiredScheduleHelper RequiredScheduleHelper;
 		public IResourceOptimizationHelperExtended ResourceCalculator;
-		public FakeBusinessUnitRepository BusinessUnitRepository;
 
 		[Test]
 		public void ShouldNotCrashWhenDoingRollbackWithTwoPeople()
 		{
 			BusinessUnitFactory.CreateNewBusinessUnitUsedInTest();
-			BusinessUnitRepository.HasCurrentBusinessUnit();
 
 			var date = new DateOnly(2014, 3, 31);
 			var scenario = new Scenario("Default").WithId();
@@ -224,6 +221,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<DesktopOptimizationContext>().For<IFillSchedulerStateHolder>();
+			system.UseTestDouble<FakeGroupScheduleGroupPageDataProvider>().For<IGroupScheduleGroupPageDataProvider>();
 		}
 	}
 }
