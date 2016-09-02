@@ -14,9 +14,9 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -24,11 +24,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_CascadingSkills_38524)]
-	public class SchedulingCascadingDesktopTest
+	public class SchedulingCascadingDesktopTest : ISetup
 	{
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
-		public FakeBusinessUnitRepository BusinessUnitRepository;
 
 		[Test]
 		public void ShouldBaseBestShiftOnNonShoveledResourceCalculation()
@@ -48,12 +47,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(7, 45, 16, 0));
 			var skillDayB = skillB.CreateSkillDayWithDemandOnInterval(scenario, date, 1, new Tuple<TimePeriod, double>(lateInterval, 1000)); //should not shovel resources here when deciding what shift to choose		
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(earlyInterval, TimeSpan.FromMinutes(15)), new TimePeriodWithSegment(lateInterval, TimeSpan.FromMinutes(15)), new ShiftCategory("_").WithId()));
-			BusinessUnitRepository.HasCurrentBusinessUnit();
 			var agents = new List<IPerson>();
+
 			var contract = new Contract("_")
 			{
 				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(1), TimeSpan.FromHours(168), TimeSpan.FromHours(1), TimeSpan.FromHours(1))
 			};
+
 			for (var i = 0; i < numberOfAgents; i++)
 			{
 				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
@@ -100,12 +100,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(7, 45, 16, 0));
 			var skillDayB = skillB.CreateSkillDayWithDemandOnInterval(scenario, date, 1, new Tuple<TimePeriod, double>(lateInterval, 1000)); //should not shovel resources here when deciding what shift to choose		
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(earlyInterval, TimeSpan.FromMinutes(15)), new TimePeriodWithSegment(lateInterval, TimeSpan.FromMinutes(15)), new ShiftCategory("_").WithId()));
-			BusinessUnitRepository.HasCurrentBusinessUnit();
 			var agents = new List<IPerson>();
+
+
 			var contract = new Contract("_")
 			{
 				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(1), TimeSpan.FromHours(168), TimeSpan.FromHours(1), TimeSpan.FromHours(1))
 			};
+
 			for (var i = 0; i < numberOfAgents; i++)
 			{
 				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
@@ -150,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(8, 0, 16, 0));
 			var skillDayB = skillB.CreateSkillDayWithDemandOnInterval(scenario, date, 1);
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8,0,8,0,15), new TimePeriodWithSegment(16,0,16,0,15), new ShiftCategory("_").WithId()));
-			BusinessUnitRepository.HasCurrentBusinessUnit();
+
 			var contract = new Contract("_")
 			{
 				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(1), TimeSpan.FromHours(168), TimeSpan.FromHours(1), TimeSpan.FromHours(1))
@@ -173,6 +175,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.EqualTo(0);
 			skillDayB.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0);
+		}
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			//TODO: Remove this!
+			system.UseTestDouble<FakeGroupScheduleGroupPageDataProvider>().For<IGroupScheduleGroupPageDataProvider>();
 		}
 	}
 }
