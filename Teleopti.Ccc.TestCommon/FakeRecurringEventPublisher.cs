@@ -83,34 +83,16 @@ namespace Teleopti.Ccc.TestCommon
 			});
 		}
 
-		public void StopPublishingForCurrentTenant()
-		{
-			var tenant = _dataSource.Current().DataSourceName;
-			_publishings.Where(x => x.Tenant == tenant)
-				.ToArray()
-				.ForEach(job => _publishings.Remove(job));
-		}
-
 		public void StopPublishingAll()
 		{
 			_publishings.Clear();
 		}
 
-		public void StopPublishingForEvent<T>() where T : IEvent
+		public void StopPublishingForTenantsExcept(IEnumerable<string> excludedTenants)
 		{
-			var toBeRemoved = _publishings.Where(publishingInfo => publishingInfo.Event.GetType() == typeof(T)).ToList();
-			foreach (var publishingInfo in toBeRemoved)
-			{
-				_publishings.Remove(publishingInfo);
-			}
-		}
-
-		public IEnumerable<string> TenantsWithRecurringJobs()
-		{
-			return _publishings
-				.Select(x => x.Tenant)
-				.Distinct()
-				.ToArray();
+			_publishings.Where(x => !excludedTenants.Contains(x.Tenant))
+				.ToArray()
+				.ForEach(job => _publishings.Remove(job));
 		}
 
 		public void Clear()

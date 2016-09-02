@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 
 			JobClient.RecurringHandlerTypes.Single().Should().Be(typeof(TestHandler).FullName + ", " + typeof(TestHandler).Assembly.GetName().Name);
 		}
-		
+
 		[Test]
 		public void ShouldNotAddIfNoHandler()
 		{
@@ -132,18 +132,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		}
 
 		[Test]
-		public void ShouldReturnTenantsWithRecurringJobs()
-		{
-			var dataSource = new FakeDataSource { DataSourceName = RandomName.Make() };
-			DataSources.Has(dataSource);
-
-			using (DataSource.OnThisThreadUse(dataSource))
-				Target.PublishHourly(new MultiHandlerTestEvent());
-
-			Target.TenantsWithRecurringJobs().Single().Should().Be(dataSource.DataSourceName);
-		}
-
-		[Test]
 		public void ShouldUpdateExistingJob()
 		{
 			Target.PublishHourly(new HangfireTestEvent());
@@ -151,30 +139,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			Target.PublishHourly(new HangfireTestEvent());
 
 			JobClient.RecurringIds.Should().Have.Count.EqualTo(1);
-		}
-
-		[Test, ExpectedException(typeof(ArgumentException))]
-		public void ShouldAssignIdNoLongerThanMaxLength()
-		{
-			Target.PublishHourly(new LongNameHandlerTestEvent());
-		}
-
-		[Test]
-		public void ShouldStopPublishingCurrentTenant()
-		{
-			var dataSource1 = new FakeDataSource { DataSourceName = RandomName.Make() };
-			var dataSource2 = new FakeDataSource { DataSourceName = RandomName.Make() };
-			DataSources.Has(dataSource1);
-			DataSources.Has(dataSource2);
-			using (DataSource.OnThisThreadUse(dataSource1))
-				Target.PublishHourly(new HangfireTestEvent());
-			using (DataSource.OnThisThreadUse(dataSource2))
-				Target.PublishHourly(new HangfireTestEvent());
-
-			using (DataSource.OnThisThreadUse(dataSource1))
-				Target.StopPublishingForCurrentTenant();
-
-			Target.TenantsWithRecurringJobs().Single().Should().Be(dataSource2.DataSourceName);
 		}
 
 		[Test]
@@ -185,6 +149,23 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			Target.StopPublishingAll();
 
 			JobClient.HasRecurringJobs.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldStopPublishingExceptSpecificTenant()
+		{
+			var dataSource1 = new FakeDataSource { DataSourceName = RandomName.Make() };
+			var dataSource2 = new FakeDataSource { DataSourceName = RandomName.Make() };
+			DataSources.Has(dataSource1);
+			DataSources.Has(dataSource2);
+			using (DataSource.OnThisThreadUse(dataSource1))
+				Target.PublishHourly(new HangfireTestEvent());
+			using (DataSource.OnThisThreadUse(dataSource2))
+				Target.PublishHourly(new HangfireTestEvent());
+
+			Target.StopPublishingForTenantsExcept(new[] { dataSource1.DataSourceName });
+
+			JobClient.RecurringIds.Should().Have.Count.EqualTo(1);
 		}
 
 		public class UnknownTestEvent : IEvent

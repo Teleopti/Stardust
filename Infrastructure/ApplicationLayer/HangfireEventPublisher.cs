@@ -5,6 +5,7 @@ using NHibernate.Util;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages;
 
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		{
 			jobsFor(@event).ForEach(j =>
 			{
-				_client.AddOrUpdateDaily(j.DisplayName, idForJob(j, @event), j.Tenant, j.EventTypeName, j.Event, j.HandlerTypeName, timeZone);
+				_client.AddOrUpdateDaily(j.DisplayName, j.IdForJob(@event), j.Tenant, j.EventTypeName, j.Event, j.HandlerTypeName, timeZone);
 			});
 		}
 
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		{
 			jobsFor(@event).ForEach(j =>
 			{
-				_client.AddOrUpdateHourly(j.DisplayName, idForJob(j, @event), j.Tenant, j.EventTypeName, j.Event, j.HandlerTypeName);
+				_client.AddOrUpdateHourly(j.DisplayName, j.IdForJob(@event), j.Tenant, j.EventTypeName, j.Event, j.HandlerTypeName);
 			});
 		}
 
@@ -61,23 +62,8 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		{
 			jobsFor(@event).ForEach(j =>
 			{
-				_client.AddOrUpdateMinutely(j.DisplayName, idForJob(j, @event), j.Tenant, j.EventTypeName, j.Event, j.HandlerTypeName);
+				_client.AddOrUpdateMinutely(j.DisplayName, j.IdForJob(@event), j.Tenant, j.EventTypeName, j.Event, j.HandlerTypeName);
 			});
-		}
-
-		private static string idForJob(jobInfo j, IEvent @event)
-		{
-			var maxLength = 100 - "recurring-job:".Length;
-
-			var handlerId = $"{j.HandlerType.Name}{delimiter}{@event.GetType().Name}";
-
-			var id = $"{j.Tenant}{delimiter}{handlerId}";
-			if (id.Length > maxLength)
-			{
-				throw new ArgumentException($"A recurring job cannot not have a long name. The maximum length is {maxLength} and now it is '{id}' with length {id.Length}. Please change class or event name.");
-			}
-
-			return id;
 		}
 
 		private class jobInfo
@@ -89,6 +75,13 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			public Type HandlerType;
 			public string HandlerTypeName;
 			public string QueueName { get; set; }
+
+			public string IdForJob(IEvent @event)
+			{
+				var hashedHandlerAndEvent = $"{HandlerType.Name}{delimiter}{@event.GetType().Name}".GenerateGuid().ToString("N");
+				var hashedTenant = Tenant?.GenerateGuid().ToString("N") ?? "";
+				return $"{hashedTenant}{delimiter}{hashedHandlerAndEvent}";
+			}
 		}
 
 		private IEnumerable<jobInfo> jobsFor(IEvent @event)
@@ -101,7 +94,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 			return handlerTypes.Select(handlerType => new jobInfo
 			{
-				DisplayName = $"{handlerType.Name} got {eventType.Name}",
+				DisplayName = $"{handlerType.Name} got {eventType.Name} on {(string.IsNullOrWhiteSpace(tenant) ? "ALL" : tenant)}",
 				Tenant = tenant,
 				EventTypeName = eventTypeName,
 				Event = serialized,
@@ -111,33 +104,22 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			});
 		}
 
-		public IEnumerable<string> TenantsWithRecurringJobs()
+		public void StopPublishingForTenantsExcept(IEnumerable<string> excludedTenants)
 		{
-			return _client.GetRecurringJobIds()
-				.Select(x => x.Substring(0, x.IndexOf(delimiter, StringComparison.Ordinal)))
-				.Where(x => !string.IsNullOrEmpty(x))
-				.Distinct();
-		}
-
-		public void StopPublishingForCurrentTenant()
-		{
-			var tenant = _dataSource.CurrentName();
-			var jobsToRemove =
-				_client.GetRecurringJobIds()
-				.Where(x => x.StartsWith($"{tenant}{delimiter}"));
-			jobsToRemove.ForEach(x => _client.RemoveIfExists(x));
+			var hashed = excludedTenants.Select(x => x.GenerateGuid().ToString("N")).ToList();
+			foreach (var job in _client.GetRecurringJobIds())
+			{
+				var tenantHash = job.Substring(0, job.IndexOf(delimiter, StringComparison.Ordinal));
+				if (!string.IsNullOrWhiteSpace(tenantHash) && !hashed.Contains(tenantHash))
+				{
+					_client.RemoveIfExists(job);
+				}
+			}
 		}
 
 		public void StopPublishingAll()
 		{
 			_client.GetRecurringJobIds()
-				.ForEach(x => _client.RemoveIfExists(x));
-		}
-
-		public void StopPublishingForEvent<T>() where T : IEvent
-		{
-			_client.GetRecurringJobIds()
-				.Where(x => x.EndsWith($"{delimiter}{typeof(T).Name}"))
 				.ForEach(x => _client.RemoveIfExists(x));
 		}
 	}

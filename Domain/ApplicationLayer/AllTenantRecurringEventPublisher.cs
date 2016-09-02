@@ -27,21 +27,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_publisher.StopPublishingAll();
 		}
 
-		public void RemovePublishingForEvent<T>() where T : IEvent
-		{
-			_publisher.StopPublishingForEvent<T>();
-		}
-
 		public void RemovePublishingsOfRemovedTenants()
 		{
 			_publisher
-				.TenantsWithRecurringJobs()
-				.Except(_tenants.Tenants())
-				.ForEach(j =>
-				{
-					using (_dataSourceScope.OnThisThreadUse(new DummyDataSource(j)))
-						_publisher.StopPublishingForCurrentTenant();
-				});
+				.StopPublishingForTenantsExcept(_tenants.Tenants());
 		}
 
 		public void PublishHourly(IEvent @event)
