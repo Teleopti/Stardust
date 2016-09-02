@@ -221,6 +221,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<DesktopOptimizationContext>().For<IFillSchedulerStateHolder>();
+			system.UseTestDouble<FakeGroupScheduleGroupPageDataProvider>().For<IGroupScheduleGroupPageDataProvider>();
 		}
 	}
 }
