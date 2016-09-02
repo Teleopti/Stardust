@@ -16,10 +16,10 @@ describe('Azure AD', function() {
 			MytimePage.signin();
 			MytimePage.signout();
 		}
+		IdentityProvidersPage.azureadProvider.waitForExist(10 * 1000);
     }, 2);
 	
     it('should be able to sign in with AD user', function () {
-		IdentityProvidersPage.azureadProvider.waitForExist(10 * 1000);
 		IdentityProvidersPage.azureadProvider.click();
 		MicrosoftLoginPage.signin();
 		MytimePage.usernameLabel.waitForExist(60 * 1000);
