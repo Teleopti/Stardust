@@ -31,7 +31,7 @@ namespace Teleopti.Wfm.AdministrationTest.Core
 		{
 			_dataSourcesFactory = new FakeDataSourcesFactory();
 			_runWithUnitOfWork = new FakeRunWithUnitOfWork();
-			_businessUnitRepository = new FakeBusinessUnitRepository();
+			_businessUnitRepository = new FakeBusinessUnitRepository(new FakeCurrentBusinessUnit());
 			_personRepository = new FakePersonRepository();
 			_scenarioRepository = new FakeScenarioRepository();
 			_applicationRoleRepository =  new FakeApplicationRoleRepository();
