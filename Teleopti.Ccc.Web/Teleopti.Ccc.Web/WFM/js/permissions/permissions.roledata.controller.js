@@ -7,7 +7,7 @@
 				$scope.organization = { DynamicOptions: [] };
 				$scope.dynamicOptionSelected = { data: 0, isBuiltIn: false, isMyRole:false };
 				$scope.tempDataNode = {};
-				$scope.multiDeselectDataModal = false;
+			//	$scope.multiDeselectDataModal = false;
 
 				$scope.$watch(function () { return Roles.selectedRole; },
 					function (newSelectedRole) {
@@ -16,6 +16,13 @@
 						$scope.dynamicOptionSelected.isBuiltIn = Roles.selectedRole.BuiltIn;
 					}
 				);
+
+				$scope.$watch(function(){ return $scope.$parent.deselectedDataNodes; },
+					function(){
+						if(!$scope.$parent.deselectedDataNodes) return;
+						$scope.multiDeslectConfirmed();
+						$scope.$parent.deselectedDataNodes = false;
+					})
 
 				$scope.$watch(function () { return Roles.selectedRole; },
 					function (newSelectedRole) {
@@ -131,7 +138,7 @@
 				$scope.launchDeselectConfirmModal = function (node) {
 					$scope.tempDataNode = node;
 					if (node.$modelValue.ChildNodes.length > 0 && node.$modelValue.selected) {
-						$scope.multiDeselectDataModal = true;
+						$scope.$parent.multiDeselectDataModal = true;
 					}
 					else {
 						$scope.toggleOrganizationSelection($scope.tempDataNode);
@@ -139,7 +146,7 @@
 				}
 
 				$scope.closeDeselectConfirmModal = function () {
-					$scope.multiDeselectDataModal = false;
+					$scope.$parent.multiDeselectDataModal = false;
 				}
 
 				$scope.multiDeslectConfirmed = function () {

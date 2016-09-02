@@ -16,6 +16,28 @@
 				$scope.editing = false;
 				$scope.builtInCheck = false;
 
+				$scope.multiDeselectFunctionModal = false;
+				$scope.multiDeselectDataModal = false
+
+				$scope.deselectedFunctionNodes = false;
+				$scope.deselectedDataNodes = false;
+
+				$scope.closemultiDeselectFunctionModal = function(callback){
+						$scope.multiDeselectFunctionModal = false;
+				};
+
+				$scope.closemultiDeselectDataModal = function(callback){
+						$scope.multiDeselectDataModal = false;
+				};
+
+				$scope.deselectFunctionNodes = function(callback){
+					$scope.deselectedFunctionNodes = true;
+				};
+
+				$scope.deselectDataNodes = function(callback){
+					$scope.deselectedDataNodes = true;
+				};
+
 				$scope.$watch(function () { return Roles.selectedRole; },
 			   function (newSelectedRole) {
 			   	if (!newSelectedRole.Id) return;

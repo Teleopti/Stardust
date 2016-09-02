@@ -102,3 +102,39 @@
 			</div>
 	</div>
 </div>
+
+<div ng-cloak class="modal-box">
+	<div ng-cloak ng-show="multiDeselectFunctionModal">
+		<div class="modalbg">
+			<div class="dialog-mini">
+				<div class="modal-inner-content">
+					{{'ConfirmToggleChildPermissions'|translate}}
+				</div>
+				<div class="modal-actions">
+					<aside>
+						<button ng-click="closemultiDeselectFunctionModal()" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
+						<button ng-click="deselectFunctionNodes()" class="wfm-btn wfm-btn-invis-primary">{{'Clear'|translate}}</button>
+					</aside>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div ng-cloak class="modal-box">
+	<div ng-cloak ng-show="multiDeselectDataModal">
+		<div class="modalbg">
+			<div class="dialog-mini">
+				<div class="modal-inner-content">
+					{{'ConfirmToggleChildPermissions'|translate}}
+				</div>
+				<div class="modal-actions">
+					<aside>
+						<button ng-click="closemultiDeselectDataModal()" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
+						<button ng-click="deselectDataNodes()" class="wfm-btn wfm-btn-invis-primary">{{'Clear'|translate}}</button>
+					</aside>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
