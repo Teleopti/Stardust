@@ -34,11 +34,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			if (groupPageDataProvider == null) throw new ArgumentNullException("groupPageDataProvider");
 	
 			var concDic = new ConcurrentDictionary<DateOnly, IGroupPage>();
-
-			foreach (var date in dates)
-			{
-				createAndAddGroupPageForDate(groupPageDataProvider, selectedGrouping, date, concDic);
-			}
+			
+			Parallel.ForEach(dates, date => createAndAddGroupPageForDate(groupPageDataProvider, selectedGrouping, date, concDic));
 
 			return new GroupPagePerDate(concDic);
 		}
