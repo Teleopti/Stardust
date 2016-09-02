@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -17,7 +18,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 {
 	[DomainTest]
-	public class TeamBlockDaysOffSameDaysOffLockSyncronizerTest
+	public class TeamBlockDaysOffSameDaysOffLockSyncronizerTest : ISetup
 	{
 		public TeamBlockDaysOffSameDaysOffLockSyncronizer Target;
 		public IGroupPersonBuilderWrapper GroupPersonBuilderWrapper;
@@ -146,6 +147,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 
 			agentUnLockedDates.Should().Contain(dateOnly.AddDays(1));
 			agentUnLockedDates.Should().Contain(dateOnly.AddDays(2));			
+		}
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			//TODO: Remove this!
+			system.UseTestDouble<FakeGroupScheduleGroupPageDataProvider>().For<IGroupScheduleGroupPageDataProvider>();
 		}
 	}
 }

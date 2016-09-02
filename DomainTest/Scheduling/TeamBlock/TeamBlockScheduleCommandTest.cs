@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.DomainTest.SchedulingScenarios;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -21,7 +22,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 {
 	[DomainTest]
-	public class TeamBlockScheduleCommandTest
+	public class TeamBlockScheduleCommandTest : ISetup
 	{
 		public ITeamBlockScheduleCommand Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
@@ -107,6 +108,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var result = Target.Execute(schedulingOptions, new NoSchedulingProgress(), new List<IPerson> {agent1},
 				selectedSchedules, rollbackService, resourceCalculateDelayer, dayOffOptimizePreferenceProvider);
 			result.GetResults(true, true).Count.Should().Be.EqualTo(0);
+		}
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			//TODO: Remove this!
+			system.UseTestDouble<FakeGroupScheduleGroupPageDataProvider>().For<IGroupScheduleGroupPageDataProvider>();
 		}
 	}
 }

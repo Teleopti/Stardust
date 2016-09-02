@@ -149,11 +149,5 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 			Target.Execute(period, stateHolder.Schedules.SchedulesForPeriod(period, agents.ToArray()), new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), groupPageLight, () => new WorkShiftFinderResultHolder(), (o, args) => { });
 		}
-
-		public override void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			//TODO: REMOVE ME SOOON! Should be the default registration of domaintest also
-			system.UseTestDouble<GroupScheduleGroupPageDataProvider>().For<IGroupScheduleGroupPageDataProvider>();
-		}
 	}
 }
