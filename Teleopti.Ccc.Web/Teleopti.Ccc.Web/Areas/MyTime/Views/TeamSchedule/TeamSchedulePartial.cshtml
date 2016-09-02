@@ -41,7 +41,7 @@
 				<div class="col-sm-6 col-md-6 col-lg-3">
 					<div id="ScheduleDatePicker" class="input-group schedule-filter-component">
 						<span class="input-group-btn">
-							<button class="previous-date btn" data-bind="click: previousDate, clickable: previousDateValid, enable: previousDateValid">
+							<button disabled="disabled" class="previous-date btn" data-bind="click: previousDate, clickable: previousDateValid, enable: previousDateValid">
 								<i class="glyphicon glyphicon-chevron-left" data-bind="enable: !isLocked()"></i>
 							</button>
 						</span>
@@ -53,10 +53,10 @@
 						<![endif]-->
 						<!-- ko if : cultureLoaded -->
 						<span class="input-group-btn">
-							<button class="btn moment-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { autoHide: true, weekStart: weekStart() }, enable: !isLoading()">
+							<button disabled="disabled" class="btn moment-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { autoHide: true, weekStart: weekStart() }, enable: !isLoading()">
 								<i class="glyphicon glyphicon-calendar"></i>
 							</button>
-							<button class="next-date btn" data-bind="click: nextDate, clickable: nextDateValid, enable: nextDateValid">
+							<button disabled="disabled" class="next-date btn" data-bind="click: nextDate, clickable: nextDateValid, enable: nextDateValid">
 								<i class="glyphicon glyphicon-chevron-right" data-bind="enable: !isLoading()"></i>
 							</button>
 						</span>
@@ -213,7 +213,7 @@
 								<div data-bind="foreach: mySchedule().layers">
 									<div class="shift-trade-layer-container floatleft">
 										<div class="shift-trade-layer add" data-bind="style: styleJson, tooltip: { title: tooltipText, html: true}"></div>
-									</div>
+									</div>nfig
 								</div>
 								<!--ko if:mySchedule().isDayOff-->
 								<div class="shift-trade-layer-container floatleft shift-trade-dayoff">

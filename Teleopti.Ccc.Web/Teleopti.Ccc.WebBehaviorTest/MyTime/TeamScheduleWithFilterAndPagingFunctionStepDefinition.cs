@@ -503,13 +503,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I click the previous day button in datepicker")]
 		public void WhenIClickThePreviousDayButtonInDatepicker()
 		{
-			Browser.Interactions.Click("button.previous-date");
+			Browser.Interactions.Click("button.previous-date:enabled");
 		}
 
 		[When(@"I click the next day button in datepicker")]
 		public void WhenIClickTheNextDayButtonInDatepicker()
 		{
-			Browser.Interactions.Click("button.next-date");
+			Browser.Interactions.Click("button.next-date:enabled");
 		}
 
 		[When(@"I type '(.*)' in the name search box")]
