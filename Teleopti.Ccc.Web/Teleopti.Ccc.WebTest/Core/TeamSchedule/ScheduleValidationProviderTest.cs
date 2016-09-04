@@ -969,7 +969,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			result.Should().Be.Empty();
 		}
 
-		[Test]
+		[Test, Ignore("Micke needs to talk to Yanyi")]
 		public void ShouldGetResultForNotOverwriteLayerRuleCheckWhenStickyActivityIsOverlappedByAnotherActivity()
 		{
 			var scenario = CurrentScenario.Current();
