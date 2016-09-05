@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]		
-		public void ShouldMoveToBeforeIfTheDistanceIsShorterAndTheLocationIsValid()
+		public void ShouldGetCorrectDistanceForMovingToBeforeIfTheDistanceIsShorterAndTheLocationIsValid()
 		{
 			var person = PersonFactory.CreatePersonWithGuid("John","Watson");
 			PersonRepository.Has(person);
@@ -233,16 +233,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var layerToMove = pa.ShiftLayers.First(l => l.Payload == lunchActivity);
 
-			var result = Target.MoveShiftLayerOutsidePeriod(scheduleDay, new DateTimePeriod(2013, 11, 14, 10, 2013, 11, 14, 15),
+			var result = Target.GetMovingDistance(scheduleDay, new DateTimePeriod(2013, 11, 14, 10, 2013, 11, 14, 15),
 				layerToMove.Id.Value);
 
-			result.Should().Be.True();
-			
-			var layerAfterMove = scheduleDay.PersonAssignment().ShiftLayers.First(l => l.Payload == lunchActivity);
-			layerAfterMove.Period.Should().Be.EqualTo(new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 10));
-
+			result.Should().Be.EqualTo(TimeSpan.FromHours(-3));
 		}
-
+		
 		[Test]
 		public void ShouldMoveToAfterIfTheDistanceIsShorterAndTheLocationIsValid()
 		{
@@ -273,16 +269,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var layerToMove = pa.ShiftLayers.First(l => l.Payload == lunchActivity);
 
-			var result = Target.MoveShiftLayerOutsidePeriod(scheduleDay, new DateTimePeriod(2013, 11, 14, 10, 2013, 11, 14, 15),
+			var result = Target.GetMovingDistance(scheduleDay, new DateTimePeriod(2013, 11, 14, 10, 2013, 11, 14, 15),
 				layerToMove.Id.Value);
 
-			result.Should().Be.True();
-
-			var layerAfterMove = scheduleDay.PersonAssignment().ShiftLayers.First(l => l.Payload == lunchActivity);
-			layerAfterMove.Period.Should().Be.EqualTo(new DateTimePeriod(2013, 11, 14, 15, 2013, 11, 14, 17));
-
+			result.Should().Be.EqualTo(TimeSpan.FromHours(3));
 		}
-
+		
 		[Test]
 		public void ShouldMoveToBeforeIfMoveToAfterIsNotValid()
 		{
@@ -313,13 +305,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var layerToMove = pa.ShiftLayers.First(l => l.Payload == lunchActivity);
 
-			var result = Target.MoveShiftLayerOutsidePeriod(scheduleDay, new DateTimePeriod(2013, 11, 14, 10, 2013, 11, 14, 15),
+			var result = Target.GetMovingDistance(scheduleDay, new DateTimePeriod(2013, 11, 14, 10, 2013, 11, 14, 15),
 				layerToMove.Id.Value);
 
-			result.Should().Be.True();
-
-			var layerAfterMove = scheduleDay.PersonAssignment().ShiftLayers.First(l => l.Payload == lunchActivity);
-			layerAfterMove.Period.Should().Be.EqualTo(new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 10));
+			result.Should().Be.EqualTo(TimeSpan.FromHours(-4));
 		}
 
 		[Test]
@@ -352,14 +341,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var layerToMove = pa.ShiftLayers.First(l => l.Payload == lunchActivity);
 
-			var result = Target.MoveShiftLayerOutsidePeriod(scheduleDay, new DateTimePeriod(2013, 11, 14, 10, 2013, 11, 14, 15),
+			var result = Target.GetMovingDistance(scheduleDay, new DateTimePeriod(2013, 11, 14, 10, 2013, 11, 14, 15),
 				layerToMove.Id.Value);
 
-			result.Should().Be.True();
-
-			var layerAfterMove = scheduleDay.PersonAssignment().ShiftLayers.First(l => l.Payload == lunchActivity);
-			layerAfterMove.Period.Should().Be.EqualTo(new DateTimePeriod(2013, 11, 14, 15, 2013, 11, 14, 17));
-
+			result.Should().Be.EqualTo(TimeSpan.FromHours(4));
 		}
 
 		[Test]
@@ -392,17 +377,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var layerToMove = pa.ShiftLayers.First(l => l.Payload == lunchActivity);
 
-			var result = Target.MoveShiftLayerOutsidePeriod(scheduleDay, new DateTimePeriod(2013, 11, 11, 10, 2013, 11, 14, 13),
+			var result = Target.GetMovingDistance(scheduleDay, new DateTimePeriod(2013, 11, 11, 10, 2013, 11, 14, 13),
 				layerToMove.Id.Value);
 
-			result.Should().Be.False();
-
-			var layerAfterMove = scheduleDay.PersonAssignment().ShiftLayers.First(l => l.Payload == lunchActivity);
-			layerAfterMove.Period.Should().Be.EqualTo(new DateTimePeriod(2013, 11, 14, 13, 2013, 11, 14, 14));
+			result.Should().Be.EqualTo(TimeSpan.Zero);
 		}
-
-
-	
 
 		private IScheduleDictionary getScheduleDictionary(DateOnly date,IPerson person)
 		{

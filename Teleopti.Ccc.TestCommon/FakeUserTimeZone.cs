@@ -8,6 +8,11 @@ namespace Teleopti.Ccc.TestCommon
 	{
 		private TimeZoneInfo _timeZone;
 
+		public FakeUserTimeZone()
+		{
+			_timeZone = TimeZoneInfo.Utc;
+		}
+
 		public FakeUserTimeZone(TimeZoneInfo timeZone)
 		{
 			_timeZone = timeZone;

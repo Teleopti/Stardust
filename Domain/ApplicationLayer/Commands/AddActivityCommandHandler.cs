@@ -19,8 +19,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IUserTimeZone _timeZone;
 		private readonly IShiftCategoryRepository _shiftCategoryRepository;
 		private readonly IPersonAssignmentAddActivity _addActivity;
+		private readonly INonoverwritableLayerMovabilityChecker _movabilityChecker;
+		private readonly INonoverwritableLayerMover _mover;
 
-		public AddActivityCommandHandler(IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey> personAssignmentRepository, ICurrentScenario currentScenario, IProxyForId<IActivity> activityForId, IProxyForId<IPerson> personForId, IUserTimeZone timeZone, IShiftCategoryRepository shiftCategoryRepository, IPersonAssignmentAddActivity addActivity)
+
+		public AddActivityCommandHandler(IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey> personAssignmentRepository, 
+			ICurrentScenario currentScenario, 
+			IProxyForId<IActivity> activityForId, 
+			IProxyForId<IPerson> personForId, 
+			IUserTimeZone timeZone, 
+			IShiftCategoryRepository shiftCategoryRepository, 
+			IPersonAssignmentAddActivity addActivity,
+			INonoverwritableLayerMovabilityChecker movabilityChecker,
+			INonoverwritableLayerMover mover)
 		{
 			_activityForId = activityForId;
 			_personAssignmentRepository = personAssignmentRepository;
@@ -29,6 +40,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_timeZone = timeZone;
 			_shiftCategoryRepository = shiftCategoryRepository;
 			_addActivity = addActivity;
+			_movabilityChecker = movabilityChecker;
+			_mover = mover;
 		}
 
 		public void Handle(AddActivityCommand command)
@@ -84,6 +97,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 			else
 			{
+				if (_movabilityChecker.HasNonoverwritableLayer(person, command.Date, period, activity) &&
+					_movabilityChecker.IsFixableByMovingNonoverwritableLayer(period, person, command.Date))
+				{
+					var conflictLayer = _movabilityChecker.GetNonoverwritableLayersToMove(person, command.Date, period).Single();
+					var movingDistance = _mover.GetMovingDistance(person, command.Date, period,
+						conflictLayer.Id.GetValueOrDefault());
+					personAssignment.MoveActivityAndKeepOriginalPriority(conflictLayer, conflictLayer.Period.StartDateTime.Add(movingDistance), null);
+				}
 				_addActivity.AddActivity(personAssignment, activity, period, command.TrackedCommandInfo);
 				if (personAssignment.ShiftCategory == null)
 				{
