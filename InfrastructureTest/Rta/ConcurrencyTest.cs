@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		}
 
 		[Test]
-		[Ignore]
+		[Explicit]
 		public void ShouldNotDeadlockBetweenProcesses()
 		{
 			Publisher.AddHandler(typeof(PersonAssociationChangedEventPublisher));
