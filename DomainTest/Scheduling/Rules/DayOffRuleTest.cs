@@ -92,12 +92,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
 			var site = new Site("site");
 			var team = new Team { Description = new Description("team") };
 			site.AddTeam(team);
-			businessUnit.AddSite(site);
-			BusinessUnitRepository.Has(businessUnit);
+			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
 			var contract = new Contract("_");
 			var agent1 = PersonRepository.Has(contract, ContractScheduleFactory.CreateWorkingWeekContractSchedule(),
 				new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
