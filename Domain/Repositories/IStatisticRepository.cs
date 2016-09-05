@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using Teleopti.Ccc.Domain.ETL;
+using Teleopti.Ccc.Domain.LogObject;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
@@ -35,12 +36,17 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IList LoadAgentQueueStat(DateTime startDate, DateTime endDate, string timeZoneId, Guid personCode);
 
 		IList LoadAgentsOverThresholdForAnsweredCalls(string timezoneCode, DateTime date, int answeredCallsThreshold, Guid businessUnitId);
+
 		IList LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod adherenceCalculationMethod, string timezoneCode, DateTime date, Percent adherenceThreshold, Guid businessUnitId);
+
 		IList LoadAgentsUnderThresholdForAHT(string timezoneCode, DateTime date, TimeSpan aHTThreshold, Guid businessUnitId);
 
 		IEnumerable<RunningEtlJob> GetRunningEtlJobs();
 
+		IEnumerable<HistoricalDataDetail> GetLogObjectDetails();
+
 		ICollection<IStatisticTask> LoadDailyStatisticForSpecificDates(ICollection<IQueueSource> sources, DateTimePeriod period, string timeZoneId, TimeSpan midnightBreakOffset);
+
 		DateOnlyPeriod? QueueStatisticsUpUntilDate(ICollection<IQueueSource> sources);
 
 		ICollection<IIntradayStatistics> LoadSkillStatisticForSpecificDates(DateOnly date);

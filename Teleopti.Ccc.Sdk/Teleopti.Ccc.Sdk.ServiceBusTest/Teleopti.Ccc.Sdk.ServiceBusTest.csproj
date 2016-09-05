@@ -111,6 +111,7 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="AgentBadge\LogObjectDateCheckerTest.cs" />
     <Compile Include="BootstrapperResolveTest.cs" />
     <Compile Include="ContainerTest.cs" />
     <Compile Include="AgentBadge\AgentBadgeWithRankCalculatorTest.cs" />

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using Teleopti.Ccc.Domain.ETL;
+using Teleopti.Ccc.Domain.LogObject;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -103,6 +104,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
+		public IEnumerable<HistoricalDataDetail> GetLogObjectDetails()
+		{
+			throw new NotImplementedException();
+		}
+
 		public ICollection<IStatisticTask> LoadDailyStatisticForSpecificDates(ICollection<IQueueSource> sources, DateTimePeriod period, string timeZoneId,
 			TimeSpan midnightBreakOffset)
 		{
@@ -119,7 +125,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _intradayStat;
 		}
 
-		private readonly List<IIntradayStatistics> _intradayStat = new List<IIntradayStatistics>(); 
+		private readonly List<IIntradayStatistics> _intradayStat = new List<IIntradayStatistics>();
+
 		public void AddIntradayStatistics(IList<IIntradayStatistics> intradayStat)
 		{
 			_intradayStat.AddRange(intradayStat);

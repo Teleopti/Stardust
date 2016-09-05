@@ -1,4 +1,3 @@
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Logon
@@ -10,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Logon
 	    private readonly ITokenIdentityProvider _tokenIdentityProvider;
 
 	    public LogOnOff(
-			ICurrentPrincipalContext currentPrincipalContext, 
+			ICurrentPrincipalContext currentPrincipalContext,
 			IPrincipalFactory principalFactory,
 			ITokenIdentityProvider tokenIdentityProvider)
 	    {

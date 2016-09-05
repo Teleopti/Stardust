@@ -170,6 +170,8 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\MultiAbsenceRequestsHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceRequestUseMultiHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandler.cs" />
+    <Compile Include="ApplicationLayer\Badge\ILogObjectDateChecker.cs" />
+    <Compile Include="ApplicationLayer\Badge\LogObjectDateChecker.cs" />
     <Compile Include="ApplicationLayer\BusinessUnit\AnalyticsBusinessUnitUpdater.cs" />
     <Compile Include="ApplicationLayer\Commands\ApproveBatchRequestsCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\ApproveBatchRequestsCommandHandler.cs" />
@@ -393,6 +395,7 @@
     <Compile Include="Intraday\ScheduleForecastSkillProvider.cs" />
     <Compile Include="Intraday\StaffingDataSeries.cs" />
     <Compile Include="Intraday\StaffingIntervalModel.cs" />
+    <Compile Include="LogObject\LogObjectDetail.cs" />
     <Compile Include="Logon\ImpersonateSystem.cs" />
     <Compile Include="Logon\ImpersonateSystemAspect.cs" />
     <Compile Include="Logon\ImpersonateSystemAttribute.cs" />

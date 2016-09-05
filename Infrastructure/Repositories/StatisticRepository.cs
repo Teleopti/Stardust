@@ -13,6 +13,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ETL;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.LogObject;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -249,8 +250,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			.AddScalar("StatAverageTimeLongestInQueueAnsweredSeconds", NHibernateUtil.Int32)
 			.AddScalar("StatAverageTimeLongestInQueueAbandonedSeconds", NHibernateUtil.Int32)
 
-
-
 				 .AddScalar("Interval", NHibernateUtil.DateTime)
 				 .SetReadOnly(true)
 				 .SetString("DateFrom", date.StartDateTime.ToString(CultureInfo.InvariantCulture))
@@ -463,6 +462,44 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			});
 		}
 
+		public IEnumerable<HistoricalDataDetail> GetLogObjectDetails()
+		{
+			return repositoryActionWithRetry(uow =>
+			{
+				const string sql = "SELECT obj.log_object_id AS LogObjectId\r\n"
+								   + "     , log_object_desc AS LogObjectName\r\n"
+								   + "	   , obj.intervals_per_day AS IntervalsPerDay\r\n"
+								   + "	   , det.detail_id AS DetailId\r\n"
+								   + "	   , detail_desc AS DetailName\r\n"
+								   + "	   , date_value AS DateValue\r\n"
+								   + "	   , int_value AS IntervalValue\r\n"
+								   + "  FROM mart.v_log_object obj\r\n"
+								   + " INNER JOIN mart.v_log_object_detail det\r\n"
+								   + "    ON obj.log_object_id = det.log_object_id";
+
+				return ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(sql)
+					.AddScalar("LogObjectId", NHibernateUtil.Int32)
+					.AddScalar("LogObjectName", NHibernateUtil.String)
+					.AddScalar("IntervalsPerDay", NHibernateUtil.Int32)
+					.AddScalar("DetailId", NHibernateUtil.Int32)
+					.AddScalar("DetailName", NHibernateUtil.String)
+					.AddScalar("DateValue", NHibernateUtil.DateTime)
+					.AddScalar("IntervalValue", NHibernateUtil.Int32)
+					.SetReadOnly(true)
+					.List<object[]>()
+					.Select(x => new HistoricalDataDetail
+					{
+						LogObjectId = (int) x[0],
+						LogObjectName = (string) x[1],
+						IntervalsPerDay = (int) x[2],
+						DetailId = (int) x[3],
+						DetailName = (string) x[4],
+						DateValue = (DateTime) x[5],
+						IntervalValue = (int) x[6]
+					});
+			});
+		}
+
 		private TResult repositoryActionWithRetry<TResult>(Func<IStatelessUnitOfWork, TResult> innerAction, int attempt = 0)
 		{
 			try
@@ -496,7 +533,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public DateTime? StartDate { get; set; }
 		public DateTime? EndDate { get; set; }
 	}
-	//                                                                                         
+
+	//
 	public class IntradayStatistics: IIntradayStatistics
 	{
 		public Guid SkillId { get; set; }

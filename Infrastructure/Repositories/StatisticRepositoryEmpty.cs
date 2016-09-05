@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ETL;
+using Teleopti.Ccc.Domain.LogObject;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -42,7 +43,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return new List<IStatisticTask>();
         }
 
-		public ICollection<IStatisticTask> LoadDailyStatisticForSpecificDates(ICollection<IQueueSource> sources, DateTimePeriod period, string timeZoneId, TimeSpan midnightBreakOffset)
+	    public IEnumerable<HistoricalDataDetail> GetLogObjectDetails()
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    public ICollection<IStatisticTask> LoadDailyStatisticForSpecificDates(ICollection<IQueueSource> sources, DateTimePeriod period, string timeZoneId, TimeSpan midnightBreakOffset)
 		{
 			return new List<IStatisticTask>();
 		}
@@ -58,7 +64,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	    }
 
 	    /// <summary>
-        /// Stub for loading matrix reports. 
+        /// Stub for loading matrix reports.
         /// Note: It will return null, instead of an empty list.
         /// </summary>
         /// <returns></returns>
@@ -106,17 +112,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public void DeleteStgQueues()
         {
-
         }
 
         public void LoadFactQueues()
         {
-
         }
 
         public void LoadDimQueues()
         {
-
         }
 
         public IList LoadAdherenceData(DateTime dateTime, string timeZoneId, Guid personCode, Guid agentPersonCode, int languageId, int adherenceId)
@@ -125,6 +128,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         }
 
         #region IStatisticRepository Members
+
 		public IEnumerable<RunningEtlJob> GetRunningEtlJobs()
 	    {
 			return new List<RunningEtlJob>();
@@ -134,6 +138,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             return new List<object>();
         }
+
         public IList LoadAgentQueueStat(DateTime startDate, DateTime endDate, string timeZoneId, Guid personCode)
         {
             return new List<object>();
@@ -178,6 +183,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return new List<Guid>();
         }
 
-        #endregion
+        #endregion IStatisticRepository Members
     }
 }
