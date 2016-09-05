@@ -131,7 +131,7 @@
 					</tr>
 				</tbody>
 				<tbody data-bind="foreach: possibleTradeSchedules">
-					<tr id="agent-in-bulletin-board" class="shift-trade-person-schedule-row agent" data-bind="visible: isVisible, click: $parent.chooseAgent, hoverToggle: 'hoverBorder', hoverIf: !$parent.isDetailVisible()">
+					<tr id="agent-in-bulletin-board" style="display: none;" class="shift-trade-person-schedule-row agent" data-bind="visible: isVisible, click: $parent.chooseAgent, hoverToggle: 'hoverBorder', hoverIf: !$parent.isDetailVisible()">
 						<td class="shift-trade-agent-name agent-name-row floatleft" data-bind="text: $data.agentName==''?'(@Resources.Anonymous)':$data.agentName"></td>
 						<td class="shift-trade-possible-trade-schedule">
 							<div data-bind="foreach: $data.layers">
@@ -163,7 +163,7 @@
 					</tr>
 				</tbody>
 			</table>
-			<div style="float:right" data-bind="visible:  !isDetailVisible() && isPageVisible()">
+			<div style="float:right; display: none;" data-bind="visible: !isDetailVisible() && isPageVisible()">
 				<a data-bind="click: goToFirstPage"><i class="glyphicon glyphicon-fast-backward"></i></a>
 				<a data-bind="click: goPreviousPages, visible: isPreviousMore()">...</a>
 				<!-- ko foreach: selectablePages() -->
@@ -178,7 +178,7 @@
 		<p></p>
 		<p></p>
 		<div class="row" style="margin: 0;">
-			<div id="Request-add-shift-trade-detail-section" data-bind="visible: isDetailVisible" class="well well-sm col-xs-12 col-md-6" style="margin-bottom: 0">
+			<div id="Request-add-shift-trade-detail-section" data-bind="visible: isDetailVisible" class="well well-sm col-xs-12 col-md-6" style="margin-bottom: 0; display: none;">
 				<div data-bind="visible: hideMessageBox()">
 					@Resources.SureToMakeShiftTrade
 				</div>
@@ -196,7 +196,7 @@
 			</div>
 		</div>
 
-		<div class="shift-trade-no-possible-trades alert alert-info" data-bind="visible: noPossibleShiftTrades()">
+		<div class="shift-trade-no-possible-trades alert alert-info" style="display: none;" data-bind="visible: noPossibleShiftTrades()">
 			@Resources.NoAgentsAvailableForBulletinBoard
 		</div>
 	</div>
