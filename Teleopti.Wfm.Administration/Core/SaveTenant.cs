@@ -57,8 +57,6 @@ namespace Teleopti.Wfm.Administration.Core
 				Success = true,
 				Message = ""
 			};
-
 		}
-
 	}
 }

@@ -78,7 +78,14 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[Route("Users")]
 		public virtual JsonResult<IList<TenantAdminUser>> Users()
 		{
-			return Json(_currentTenantSession.CurrentSession().GetNamedQuery("loadAllTenantUsers").List<TenantAdminUser>());
+			return
+				Json(
+					(IList<TenantAdminUser>)
+						_currentTenantSession.CurrentSession()
+							.GetNamedQuery("loadAllTenantUsers")
+							.List<TenantAdminUser>()
+							.Select(t => new TenantAdminUser {Id = t.Id, Email = t.Email, Name = t.Name})
+							.ToArray());
 		}
 
 		[HttpPost]
