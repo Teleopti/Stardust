@@ -1988,7 +1988,6 @@
     <Compile Include="Scheduling\TeamBlock\IntervalDataMedianCalculator.cs" />
     <Compile Include="Scheduling\TeamBlock\MaxMovedDaysOverLimitValidator.cs" />
     <Compile Include="Scheduling\TeamBlock\SafeRollbackAndResourceCalculation.cs" />
-    <Compile Include="Scheduling\TeamBlock\ScheduleRestrictionExtractor.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillInterval\SkillIntervalData.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataAggregator.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataDivider.cs" />
