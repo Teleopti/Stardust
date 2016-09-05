@@ -387,7 +387,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 
 				bDay.First().Allowance = 1;
 
-				var person = PersonRepository.Load(new Guid("6E75AF18-F494-42AE-8272-A141010651CB"));
+				var person = PersonRepository.Load(new Guid("BD2400CC-0FFE-4E30-8D4F-A141010651CB"));
 				var person2 = PersonRepository.Load(new Guid("8080B4A4-785D-44FD-B7F9-A141010651CB"));
 
 				var req4Th = createAbsenceRequest(person, absence,
