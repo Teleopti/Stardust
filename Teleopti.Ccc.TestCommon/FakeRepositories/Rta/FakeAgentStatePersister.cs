@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using NHibernate.Util;
+using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
@@ -82,6 +83,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					.Where(x => dataSourceId == x.DataSourceId && userCodes.Any(userCode => userCode == x.UserCode))
 					.Select(x => x.State)
 					.ToArray();
+		}
+
+		public IEnumerable<Guid> GetPersonIds()
+		{
+			return GetStates().Select(x => x.PersonId).ToArray();
 		}
 
 		public AgentState Get(Guid personId)

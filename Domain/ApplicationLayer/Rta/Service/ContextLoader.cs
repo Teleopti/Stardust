@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
@@ -200,24 +198,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			var mappings = new MappingsState(() => _mappingReader.Read());
 
-			IEnumerable<AgentState> states = null;
+			IEnumerable<Guid> personIds = null;
 			WithUnitOfWork(() =>
 			{
-				states = _agentStatePersister.GetStates();
+				personIds = _agentStatePersister.GetPersonIds();
 			});
 
-			states.ForEach(x =>
+			personIds.ForEach(x =>
 			{
 				WithUnitOfWork(() =>
 				{
+					var state = _agentStatePersister.Get(x); // still lock one by one
 					action.Invoke(new Context(
 						null,
-						x.PersonId,
-						x.BusinessUnitId,
-						x.TeamId.GetValueOrDefault(),
-						x.SiteId.GetValueOrDefault(),
-						() => _agentStatePersister.Get(x.PersonId),// still need to lock one by one
-						() => _databaseReader.GetCurrentSchedule(x.PersonId),
+						state.PersonId,
+						state.BusinessUnitId,
+						state.TeamId.GetValueOrDefault(),
+						state.SiteId.GetValueOrDefault(),
+						() => state,
+						() => _databaseReader.GetCurrentSchedule(x),
 						s => mappings,
 						c => _agentStatePersister.Update(c.MakeAgentState()),
 						_now,

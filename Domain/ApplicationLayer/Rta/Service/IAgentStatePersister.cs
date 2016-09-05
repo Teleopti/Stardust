@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		IEnumerable<AgentStateFound> Find(int dataSourceId, string userCode);
 		IEnumerable<AgentStateFound> Find(int dataSourceId, IEnumerable<string> userCodes);
 		// query states for each person
+		IEnumerable<Guid> GetPersonIds();
 		IEnumerable<AgentState> GetStates();
 		IEnumerable<AgentState> GetStatesNotInSnapshot(DateTime snapshotId, string sourceId);
 		void Update(AgentState model);
@@ -23,5 +24,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		AgentState Get(Guid personId);
 		[RemoveMeWithToggle(Toggles.RTA_PersonOrganizationQueryOptimization_40261)]
 		IEnumerable<AgentState> Get(IEnumerable<Guid> personIds);
+
 	}
 }

@@ -1,7 +1,6 @@
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
@@ -36,6 +35,80 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<ConfigurableSyncEventPublisher>().For<IEventPublisher>();
+		}
+
+		[Test]
+		[Ignore]
+		public void ShouldNotDeadlockBetweenProcesses()
+		{
+			Publisher.AddHandler(typeof(PersonAssociationChangedEventPublisher));
+			Publisher.AddHandler(typeof(AgentStateCleaner));
+			Publisher.AddHandler(typeof(MappingReadModelUpdater));
+			var tenant = DataSource.CurrentName();
+			Analytics.WithDataSource(9, "sourceId");
+			var stateCodes = Enumerable.Range(0, 10).Select(x => $"statecode{x}").ToArray();
+			stateCodes.ForEach(x =>
+			{
+				Database
+					.WithStateGroup(x)
+					.WithStateCode(x);
+			});
+			var userCodes = Enumerable.Range(0, 100).Select(x => $"user{x}").ToArray();
+			userCodes.ForEach(x => Database.WithAgent(x));
+			Database.PublishRecurringEvents();
+
+			var done = false;
+			Run.InParallel(() =>
+			{
+				while (!done)
+				{
+					WithReadModelUnitOfWork.Do(() =>
+					{
+						KeyValues.Update("PersonAssociationChangedPublishTrigger", true);
+					});
+					Database.PublishRecurringEvents();
+				}
+			});
+			Run.InParallel(() =>
+			{
+				while (!done)
+				{
+					Rta.CheckForActivityChanges(tenant);
+				}
+			}).Times(2);
+			Run.InParallel(() =>
+			{
+				while (!done)
+				{
+					Rta.SaveState(new StateForTest
+					{
+						SourceId = "sourceId",
+						UserCode = userCodes.Randomize().First(),
+						StateCode = stateCodes.Randomize().First()
+					});
+				}
+			}).Times(2);
+			Run.InParallel(() =>
+			{
+				try
+				{
+					20000.Times(() =>
+					{
+						Rta.SaveState(new StateForTest
+						{
+							SourceId = "sourceId",
+							UserCode = userCodes.Randomize().First(),
+							StateCode = stateCodes.Randomize().First()
+						});
+					});
+				}
+				finally 
+				{
+					done = true;
+				}
+			});
+
+			Run.Wait();
 		}
 
 		[Test]

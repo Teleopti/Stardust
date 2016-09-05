@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Castle.Core.Internal;
+using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
@@ -139,12 +140,7 @@ VALUES (:BusinessUnitId, :SiteId, :TeamId, :PersonId, :DataSourceId, :UserCode)"
 				.ExecuteUpdate()
 				;
 		}
-
-		public IEnumerable<AgentState> Get(int dataSourceId, IEnumerable<string> userCodes)
-		{
-			throw new NotImplementedException();
-		}
-
+		
 		[InfoLog]
 		public virtual AgentState Get(Guid personId)
 		{
@@ -193,6 +189,17 @@ VALUES (:BusinessUnitId, :SiteId, :TeamId, :PersonId, :DataSourceId, :UserCode)"
 				.SetReadOnly(true)
 				.List<AgentState>()
 				.GroupBy(x => x.PersonId, (guid, states) => states.First())
+				.ToArray()
+				;
+		}
+
+		public IEnumerable<Guid> GetPersonIds()
+		{
+			var sql = @"SELECT DISTINCT PersonId FROM [dbo].[AgentState] WITH (NOLOCK)";
+			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
+				.AddScalar("PersonId", NHibernateUtil.Guid)
+				.SetReadOnly(true)
+				.List<Guid>()
 				.ToArray()
 				;
 		}
