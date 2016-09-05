@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
+using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Logon;
@@ -19,6 +18,7 @@ using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Absence;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
@@ -30,8 +30,8 @@ using Teleopti.Messaging.Client;
 
 namespace Teleopti.Ccc.Requests.PerformanceTest
 {
-	[DomainTest]
-	public class ProcessBulkAbsenceRequests : ISetup
+	[RequestPerformanceTest]
+	public class ProcessBulkAbsenceRequests 
 	{
 		public IAbsenceRepository AbsenceRepository;
 		public AsSystem AsSystem;
@@ -45,22 +45,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 		public IBudgetDayRepository BudgetDayRepository;
 		public IScenarioRepository ScenarioRepository;
 		public IBusinessUnitRepository BusinessUnitRepository;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			system.AddModule(new CommonModule(configuration));
-			system.UseTestDouble<MultiAbsenceRequestsUpdater>().For<MultiAbsenceRequestsUpdater>();
-			system.UseTestDouble<MultiAbsenceRequestProcessor>().For<IMultiAbsenceRequestProcessor>();
-			system.UseTestDouble<MultiAbsenceRequestsHandler>().For<MultiAbsenceRequestsHandler>();
-			system.UseTestDouble<ProcessMultipleAbsenceRequests>().For<IProcessMultipleAbsenceRequest>();
-			system.UseTestDouble<ApproveRequestCommandHandler>().For<IHandleCommand<ApproveRequestCommand>>();
-			system.UseTestDouble<DenyRequestCommandHandler>().For<IHandleCommand<DenyRequestCommand>>();
-			system.UseTestDouble<RequestApprovalServiceFactory>().For<IRequestApprovalServiceFactory>();
-			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
-			system.UseTestDouble<StardustJobFeedback>().For<IStardustJobFeedback>();
-			system.AddService<Database>();
-			system.AddModule(new TenantServerModule(configuration));
-		}
 
 		[Test]
 		public void ShouldProcessMultipleAbsenceRequests()
@@ -273,7 +257,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			cntApproved.Should().Be.EqualTo(2);
 		}
 
-		[Test,Ignore]
+		[Test]
 		public void ShouldDenyBecuaseOfLowAllowanceInBudgetHeadCount()
 		{
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
@@ -469,6 +453,41 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 		{
 			var req = new AbsenceRequest(absence,dateTimePeriod);
 			return new PersonRequest(person) { Request = req };
+		}
+	}
+
+	public class RequestPerformanceTestAttribute : IoCTestAttribute
+	{
+		//protected override FakeConfigReader Config()
+		//{
+		//	var config = base.Config();
+		//	config.FakeConnectionString("Tenancy", InfraTestConfigReader.ConnectionString);
+		//	config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
+		//	return config;
+		//}
+
+		protected override void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			base.Setup(system, configuration);
+			system.AddModule(new CommonModule(configuration));
+			system.UseTestDouble<MultiAbsenceRequestsUpdater>().For<MultiAbsenceRequestsUpdater>();
+			system.UseTestDouble<MultiAbsenceRequestProcessor>().For<IMultiAbsenceRequestProcessor>();
+			system.UseTestDouble<MultiAbsenceRequestsHandler>().For<MultiAbsenceRequestsHandler>();
+			system.UseTestDouble<ProcessMultipleAbsenceRequests>().For<IProcessMultipleAbsenceRequest>();
+			system.UseTestDouble<ApproveRequestCommandHandler>().For<IHandleCommand<ApproveRequestCommand>>();
+			system.UseTestDouble<DenyRequestCommandHandler>().For<IHandleCommand<DenyRequestCommand>>();
+			system.UseTestDouble<RequestApprovalServiceFactory>().For<IRequestApprovalServiceFactory>();
+			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
+			system.UseTestDouble<StardustJobFeedback>().For<IStardustJobFeedback>();
+			system.AddService<Database>();
+			system.AddModule(new TenantServerModule(configuration));
+
+		}
+
+		protected override void Startup(IComponentContext container)
+		{
+			base.Startup(container);
+			container.Resolve<HangfireClientStarter>().Start();
 		}
 	}
 }
