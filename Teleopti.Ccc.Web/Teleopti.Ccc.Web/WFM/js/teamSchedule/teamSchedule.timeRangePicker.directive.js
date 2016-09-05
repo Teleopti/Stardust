@@ -34,7 +34,7 @@
 			}
 
 			addTabindexTo(
-				tElement[0].querySelectorAll('uib-timepicker')
+				tElement[0].querySelectorAll('[uib-timepicker]')
 			);
 
 			return postlink;
