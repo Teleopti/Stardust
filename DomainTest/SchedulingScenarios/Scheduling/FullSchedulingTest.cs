@@ -6,9 +6,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -18,7 +16,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
-	public class FullSchedulingTest : ISetup
+	public class FullSchedulingTest
 	{
 		public FullScheduling Target;
 		public FakePersonRepository PersonRepository;
@@ -102,13 +100,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var assignment = assignments.First();
 			assignment.Date.Should().Be.EqualTo(new DateOnly(2015, 10, 17));
 			assignment.DayOff().Should().Not.Be.Null();
-		}
-
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			//TODO: Remove this!
-			system.UseTestDouble<FakeGroupScheduleGroupPageDataProvider>().For<IGroupScheduleGroupPageDataProvider>();
 		}
 	}
 }
