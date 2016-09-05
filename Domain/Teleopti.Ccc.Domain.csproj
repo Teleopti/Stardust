@@ -1608,7 +1608,6 @@
     <Compile Include="Scheduling\TeamBlock\FirstShiftInTeamBlockFinder.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForDays.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForSkillInterval.cs" />
-    <Compile Include="Scheduling\TeamBlock\NightlyRestRestrictionForTeamBlock.cs" />
     <Compile Include="Scheduling\TeamBlock\PullTargetValueFromSkillIntervalData.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\BlockRestrictionAggregator.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\CommonActivity.cs" />
