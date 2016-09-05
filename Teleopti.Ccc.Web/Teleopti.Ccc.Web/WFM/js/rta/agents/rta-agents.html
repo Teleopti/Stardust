@@ -47,14 +47,12 @@
 		</div>
 		<div class="con-flex">
 			<div class="wfm-switch panel-switch line-right">
-				<input id="switch1" ng-model="agentsInAlarm" type="checkbox" ng-class="{ 'rta-no-pointer': agents.length > maxNumberOfAgents}"/>
-				<md-tooltip ng-if="agents.length > 50" md-direction="right">
-					You're trying to open too many agents
-				</md-tooltip>
-				<label class="rta-agents-in-alarm-switch" for="switch1" ng-class="{ 'rta-no-pointer': agents.length > maxNumberOfAgents}">
+				<input id="switch1" ng-model="agentsInAlarm" type="checkbox"/>
+				<label class="rta-agents-in-alarm-switch" for="switch1" ng-if="agents.length <= maxNumberOfAgents">
 					<span class="wfm-switch-label">{{'InAlarm'|translate}}</span>
 					<span class="wfm-switch-toggle"></span>
 				</label>
+				<span ng-if="agents.length > maxNumberOfAgents">Agents in alarm</span>
 			</div>
 		</div>
 	</div>

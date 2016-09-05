@@ -36,6 +36,7 @@
 				$scope.pausedAt = null;
 				var lastUpdate, notice;
 				$scope.showPath = false;
+				$scope.notifySwitchDisabled = false;
 
 				$scope.noSiteIds = siteIds.length === 0;
 				$scope.showBreadcrumb = siteIds.length > 0 || teamIds.length > 0 || skillIds === [];
@@ -230,6 +231,11 @@
 							TimeInAlarm: ''
 						});
 						$scope.openedMaxNumberOfAgents = ($scope.filteredData.length === $scope.maxNumberOfAgents);
+						if(!$scope.notifySwitchDisabled && $scope.agents.length > $scope.maxNumberOfAgents){
+							NoticeService.warning($translate.instant('Viewing agents out of alarm is not possible due to high number of agents. The switch is enabled for maximum '+$scope.maxNumberOfAgents+' agents'), null, true);
+							$scope.notifySwitchDisabled = true;
+						}
+
 					}
 				}
 
