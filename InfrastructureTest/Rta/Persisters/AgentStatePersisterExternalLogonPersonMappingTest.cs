@@ -334,5 +334,50 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				.OrderBy(x => x)
 				.Should().Have.SameSequenceAs(new [] { usercodeA, usercodeB}.OrderBy(x => x));
 		}
+
+
+		[Test]
+		public void ShouldGetAllPersonIds()
+		{
+			var person1 = Guid.NewGuid();
+			var person2 = Guid.NewGuid();
+			var usercodeA = RandomName.Make();
+			var usercodeB = RandomName.Make();
+
+			Target.Prepare(new AgentStatePrepare
+			{
+				PersonId = person1,
+				ExternalLogons = new[]
+				{
+					new ExternalLogon
+					{
+						DataSourceId = 1,
+						UserCode = usercodeA
+					},
+					new ExternalLogon
+					{
+						DataSourceId = 2,
+						UserCode = usercodeA
+					}
+				}
+			});
+			Target.Prepare(new AgentStatePrepare
+			{
+				PersonId = person2,
+				ExternalLogons = new[]
+				{
+					new ExternalLogon
+					{
+						DataSourceId = 1,
+						UserCode = usercodeB
+					}
+				}
+			});
+
+			Target.GetAllPersonIds()
+				.OrderBy(x => x)
+				.Should()
+				.Have.SameSequenceAs(new[] {person1, person2}.OrderBy(x => x));
+		}
 	}
 }

@@ -146,6 +146,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			result.PlatformTypeId.Should().Be(agentStateReadModel.PlatformTypeId);
 			result.StateStartTime.Should().Be(agentStateReadModel.StateStartTime);
 		}
+
 		
 	}
 }

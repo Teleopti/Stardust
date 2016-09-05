@@ -201,14 +201,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IEnumerable<Guid> personIds = null;
 			WithUnitOfWork(() =>
 			{
-				personIds = _agentStatePersister.GetPersonIds();
+				personIds = _agentStatePersister.GetAllPersonIds();
 			});
 
 			personIds.ForEach(x =>
 			{
 				WithUnitOfWork(() =>
 				{
-					var state = _agentStatePersister.Get(x); // still lock one by one
+					var state = _agentStatePersister.Get(x);
+					if (state == null)
+						return;
 					action.Invoke(new Context(
 						null,
 						state.PersonId,

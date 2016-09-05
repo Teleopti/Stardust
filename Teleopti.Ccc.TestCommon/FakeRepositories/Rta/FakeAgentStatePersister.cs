@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					.ToArray();
 		}
 
-		public IEnumerable<Guid> GetPersonIds()
+		public IEnumerable<Guid> GetAllPersonIds()
 		{
 			return GetStates().Select(x => x.PersonId).ToArray();
 		}

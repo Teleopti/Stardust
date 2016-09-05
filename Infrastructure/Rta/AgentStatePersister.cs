@@ -193,7 +193,8 @@ VALUES (:BusinessUnitId, :SiteId, :TeamId, :PersonId, :DataSourceId, :UserCode)"
 				;
 		}
 
-		public IEnumerable<Guid> GetPersonIds()
+		[InfoLog]
+		public virtual IEnumerable<Guid> GetAllPersonIds()
 		{
 			var sql = @"SELECT DISTINCT PersonId FROM [dbo].[AgentState] WITH (NOLOCK)";
 			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
