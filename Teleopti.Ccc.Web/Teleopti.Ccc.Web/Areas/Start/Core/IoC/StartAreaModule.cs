@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
 using Teleopti.Ccc.Web.Areas.SSO.Core;
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.IoC
 
 			builder.RegisterType<Authenticator>().As<IIdentityLogon>();
 			builder.RegisterType<HttpRequestUserAgent>().As<IHttpRequestUserAgent>();
-			
+
 			builder.RegisterType<BusinessUnitProvider>().As<IBusinessUnitProvider>();
 			builder.RegisterType<TokenIdentityProvider>().As<ITokenIdentityProvider>().SingleInstance();
 			builder.RegisterType<LayoutBaseViewModelFactory>().As<ILayoutBaseViewModelFactory>();

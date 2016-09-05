@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Security.Claims;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Web;
 
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		public const char ApplicationIdentifier = '@';
 
 		private readonly ICurrentHttpContext _httpContext;
-		
+
 		public TokenIdentityProvider(ICurrentHttpContext httpContext)
 		{
 			_httpContext = httpContext;
