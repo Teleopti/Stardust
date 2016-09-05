@@ -278,7 +278,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[Route("HasNoUser")]
 		public virtual JsonResult<bool> HasNoUser()
 		{
-			return Json(_currentTenantSession.CurrentSession().GetNamedQuery("loadAllTenantUsers").List<TenantAdminUser>().Count == 0);
+			return Json(!hasUser());
+		}
+
+		private bool hasUser()
+		{
+			return _currentTenantSession.CurrentSession().GetNamedQuery("loadAllTenantUsers").List<TenantAdminUser>().Count > 0;
 		}
 
 		[OverrideAuthentication]
@@ -287,15 +292,23 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[Route("AddFirstUser")]
 		public virtual UpdateUserResultModel AddFirstUser(AddUserModel model)
 		{
-			var result= addOneUser(model);
-			var existing = _currentTenantSession
-				.CurrentSession()
-				.GetNamedQuery("loadAllTenants")
-				.List<Tenant>();
-			foreach (var tenant in existing)
+			if (hasUser())
 			{
-				tenant.Active = true;
-				_currentTenantSession.CurrentSession().Save(tenant);
+				return new UpdateUserResultModel {Success = false, Message = "First user was already created."};
+			}
+
+			var result= addOneUser(model);
+			if (result.Success)
+			{
+				var existing = _currentTenantSession
+					.CurrentSession()
+					.GetNamedQuery("loadAllTenants")
+					.List<Tenant>();
+				foreach (var tenant in existing)
+				{
+					tenant.Active = true;
+					_currentTenantSession.CurrentSession().Save(tenant);
+				}
 			}
 			return result;
 		}

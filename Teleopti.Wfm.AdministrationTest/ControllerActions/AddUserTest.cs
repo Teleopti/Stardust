@@ -26,9 +26,36 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			{
 				var tenant = new Tenant("Old One") {Active = false};
 				CurrentTenantSession.CurrentSession().Save(tenant);
+				CurrentTenantSession.CurrentSession().Delete("select u from TenantAdminUser u");
+
+				var inactiveOnes = LoadAllTenants.Tenants().Where(t => t.Active.Equals(false));
+				inactiveOnes.Should().Not.Be.Empty();
 			}
+			Target.AddFirstUser(new AddUserModel
+			{
+				Email = "auser@somecompany.com",
+				Name = "FirstUser",
+				Password = "aGoodPassword12",
+				ConfirmPassword = "aGoodPassword12"
+			});
+
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
+				var inactiveOnes = LoadAllTenants.Tenants().Where(t => t.Active.Equals(false));
+				inactiveOnes.Should().Be.Empty();
+			}
+		}
+
+		[Test]
+		public void ShouldNotActivateAllTenantsWhenFirstUserIsAddedWithNonMatchingPasswords()
+		{
+			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			{
+				var tenant = new Tenant("Old One") { Active = false };
+				CurrentTenantSession.CurrentSession().Save(tenant);
+				CurrentTenantSession.CurrentSession().Delete("select u from TenantAdminUser u");
+
 				var inactiveOnes = LoadAllTenants.Tenants().Where(t => t.Active.Equals(false));
 				inactiveOnes.Should().Not.Be.Empty();
 			}
@@ -43,7 +70,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var inactiveOnes = LoadAllTenants.Tenants().Where(t => t.Active.Equals(false));
-				inactiveOnes.Should().Be.Empty();
+				inactiveOnes.Should().Not.Be.Empty();
 			}
 		}
 	}
