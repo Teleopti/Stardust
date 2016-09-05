@@ -122,7 +122,7 @@
 				<md-content class="md-padding">
 					<md-tabs md-dynamic-height md-selected="activeTab">
 						<md-tab label="{{'IncomingTraffic'|translate}}" ng-click="pollActiveTabDataHelper(activeTab)">
-							<md-content class="md-padding">
+							<md-content ng-cloak class="md-padding" ng-show="viewObj.timeSeries.length > 2">
 								<div class="con-row">
 									<div class="con-flex">
 										<div class="wfm-chart intraday-chart" id="trafficChart"></div>
@@ -161,9 +161,16 @@
 									<div class="con-flex"></div>
 								</div>
 							</md-content>
+							<md-content ng-cloak class="md-padding" ng-hide="viewObj.timeSeries.length > 2">
+								<div class="con-row">
+										<div class="con-flex no-data-available">
+											{{'NoDataAvailable'|translate}}
+										</div>
+								</div>
+							</md-content>
 						</md-tab>
 						<md-tab label="Performance" ng-click="pollActiveTabDataHelper(activeTab)">
-							<md-content class="md-padding">
+							<md-content class="md-padding" ng-show="viewObj.timeSeries.length > 2">
 								<div class="con-row">
 									<div class="con-flex">
 										<div class="wfm-chart intraday-chart" id="performanceChart"></div>
@@ -200,13 +207,27 @@
 									<div class="con-flex"></div>
 								</div>
 							</md-content>
+							<md-content ng-cloak class="md-padding" ng-hide="viewObj.timeSeries.length > 2">
+								<div class="con-row">
+										<div class="con-flex no-data-available">
+											{{'NoDataAvailable'|translate}}
+										</div>
+								</div>
+							</md-content>
 						</md-tab>
 						<md-tab label="Staffing" ng-click="pollActiveTabDataHelper(activeTab)">
-							<md-content class="md-padding">
+							<md-content class="md-padding" ng-show="viewObj.timeSeries.length > 2">
 								<div class="con-row">
 									<div class="con-flex">
 										<div class="wfm-chart intraday-chart" id="staffingChart"></div>
 									</div>
+								</div>
+							</md-content>
+							<md-content ng-cloak class="md-padding" ng-hide="viewObj.timeSeries.length > 2">
+								<div class="con-row">
+										<div class="con-flex no-data-available">
+											{{'NoDataAvailable'|translate}}
+										</div>
 								</div>
 							</md-content>
 						</md-tab>
@@ -218,13 +239,13 @@
 </div>
 
 <!-- <div class="con-row no-data-available" ng-cloak ng-hide="selectedSkill.Name || selectedSkillArea.Name">
-	<div class="con-flex">
-		<div class="panel full-padding material-depth-1">
-			<i class="mdi mdi-alert"></i> <span class="text-warning">{{selectedItem.Name}} {{'NoDataAvailable'|translate}}</span>
-		</div>
-	</div>
-	<div class="con-flex"></div>
-	<div class="con-flex"></div>
+<div class="con-flex">
+<div class="panel full-padding material-depth-1">
+<i class="mdi mdi-alert"></i> <span class="text-warning">{{selectedItem.Name}} {{'NoDataAvailable'|translate}}</span>
+</div>
+</div>
+<div class="con-flex"></div>
+<div class="con-flex"></div>
 </div> -->
 
 <div ng-cloak class="modal-box">
