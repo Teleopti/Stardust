@@ -256,7 +256,7 @@ function SetDefaultSettings{
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(PM_SERVICE)" -content "`$(PM_SERVICE|NotImplemented"
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(AS_DATABASE)" -content "`$(AS_DATABASE)|NotImplemented"
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(AS_SERVER_NAME)" -content "`$(AS_SERVER_NAME)|NotImplemented"
-	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(LOCAL_WIKI)" -content "`$(LOCAL_WIKI)|http://wiki.teleopti.com/TeleoptiCCC/Special:MyLanguage/"
+	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(LOCAL_WIKI)" -content "`$(LOCAL_WIKI)|https://wiki.teleopti.com/TeleoptiCCC/Special:MyLanguage/"
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(ETLPM_BINDING_NAME)" -content "`$(ETLPM_BINDING_NAME)|Etl_Pm_Https_Binding"	
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(URL)" -content "`$(URL)|https://$DataSourceName.teleopticloud.com/Web/"
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(STARDUST)" -content "`$(STARDUST)|http://$theHost"

@@ -58,7 +58,7 @@ namespace Teleopti.Runtime.Environment
 
 		private void WebView_NewWindow(object sender, NewWindowEventArgs e)
 		{
-			if (e.TargetUrl.ToLower().StartsWith("http://wiki.teleopti.com"))
+			if (e.TargetUrl.ToLower().StartsWith("https://wiki.teleopti.com"))
 			{
 				var sInfo = new ProcessStartInfo(e.TargetUrl);
 				Process.Start(sInfo);

@@ -277,7 +277,7 @@
       {
         "Id": "54e9b1d5-70b2-996e-0b13-02f31c85606b",
         "Name": "CONTEXT_HELP_URL",
-        "Value": "http://wiki.teleopti.com/TeleoptiCCC/Special:MyLanguage/",
+        "Value": "https://wiki.teleopti.com/TeleoptiCCC/Special:MyLanguage/",
         "Scope": {},
         "IsSensitive": false,
         "IsEditable": true,

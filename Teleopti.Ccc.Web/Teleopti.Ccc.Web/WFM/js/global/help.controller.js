@@ -20,7 +20,7 @@
 				helpService.currentHelp = {
 					name: $translate.instant(state.current.name),
 					helpDesc: '',
-					helpUrl: 'http://wiki.teleopti.com/TeleoptiWFM/' + state.current.name
+					helpUrl: 'https://wiki.teleopti.com/TeleoptiWFM/' + state.current.name
 				}
 			};
 
