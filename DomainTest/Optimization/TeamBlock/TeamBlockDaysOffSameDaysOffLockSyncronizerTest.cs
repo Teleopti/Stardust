@@ -9,22 +9,23 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 {
 	[DomainTest]
-	public class TeamBlockDaysOffSameDaysOffLockSyncronizerTest : ISetup
+	public class TeamBlockDaysOffSameDaysOffLockSyncronizerTest
 	{
 		public TeamBlockDaysOffSameDaysOffLockSyncronizer Target;
 		public IGroupPersonBuilderWrapper GroupPersonBuilderWrapper;
 		public IMatrixListFactory MatrixListFactory;
 		public SchedulerStateHolder SchedulerStateHolder;
 		public IGroupPersonBuilderForOptimizationFactory GroupPersonBuilderForOptimizationFactory;
+		public FakeBusinessUnitRepository BusinessUnitRepository;
 
 		[Test]
 		public void ShouldLockAllIfOneIsLockedAndUseSameDaysOff()
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			var schedulePeriod1 = new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1);
 			var schedulePeriod2 = new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1);
 			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
+			BusinessUnitRepository.Add(businessUnit);
 			var sameSite = SiteFactory.CreateSiteWithOneTeam("team");
 			businessUnit.AddSite(sameSite);
 			var sameTeam = businessUnit.SiteCollection[0].TeamCollection[0];
@@ -94,6 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			var schedulePeriod1 = new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1);
 			var schedulePeriod2 = new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1);
 			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
+			BusinessUnitRepository.Add(businessUnit);
 			var sameSite = SiteFactory.CreateSiteWithOneTeam("team");
 			businessUnit.AddSite(sameSite);
 			var sameTeam = businessUnit.SiteCollection[0].TeamCollection[0];
@@ -147,12 +150,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 
 			agentUnLockedDates.Should().Contain(dateOnly.AddDays(1));
 			agentUnLockedDates.Should().Contain(dateOnly.AddDays(2));			
-		}
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			//TODO: Remove this!
-			system.UseTestDouble<FakeGroupScheduleGroupPageDataProvider>().For<IGroupScheduleGroupPageDataProvider>();
 		}
 	}
 }
