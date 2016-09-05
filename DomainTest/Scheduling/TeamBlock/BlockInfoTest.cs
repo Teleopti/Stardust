@@ -34,15 +34,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			Assert.That(_target.StandardDeviations, Is.EqualTo(values));
 		}
 
-		[Test]
-		public void ShouldGetAverageOfStandardDeviations()
-		{
-			var values = new List<double?> {0.1, 0.2, null, 0.3};
-			_target.StandardDeviations = values;
-
-			Assert.That(Math.Round(_target.SumOfStandardDeviations, 1), Is.EqualTo(0.6));
-		}
-
         [Test]
         public void ShouldReturnSameHashIfBlockPeriodAreTheSame()
         {

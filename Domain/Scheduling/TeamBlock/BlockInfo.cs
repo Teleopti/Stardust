@@ -24,20 +24,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 		public IList<double?> StandardDeviations { get; set; }
 
-		public double SumOfStandardDeviations
-		{
-			get
-			{
-				var sum = 0.0;
-				foreach (var standardDeviation in StandardDeviations)
-				{
-					if (!standardDeviation.HasValue) continue;
-					sum += standardDeviation.Value;
-				}
-				return sum;
-			}
-		}
-
 		public double AverageOfStandardDeviations
 		{
 			get

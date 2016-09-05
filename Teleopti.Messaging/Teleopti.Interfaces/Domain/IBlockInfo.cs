@@ -6,7 +6,6 @@ namespace Teleopti.Interfaces.Domain
 	{
 		DateOnlyPeriod BlockPeriod { get; }
 		IList<double?> StandardDeviations { get; set; }
-		double SumOfStandardDeviations { get; }
 		double AverageOfStandardDeviations { get; }
 		void LockDate(DateOnly date);
 		IList<DateOnly> UnLockedDates();
