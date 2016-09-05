@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Budgeting;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
@@ -270,6 +271,100 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 
 			cntDenied.Should().Be.EqualTo(1);
 			cntApproved.Should().Be.EqualTo(2);
+		}
+
+		[Test,Ignore]
+		public void ShouldDenyBecuaseOfLowAllowanceInBudgetHeadCount()
+		{
+			using (DataSource.OnThisThreadUse("Teleopti WFM"))
+				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
+			//Consumer Online
+			var personRequests = new List<IPersonRequest>();
+			WithUnitOfWork.Do(() =>
+			{
+				//load  Halvdag 16h/år
+				var absence = AbsenceRepository.Get(new Guid("5B859CEF-0F35-4BA8-A82E-A14600EEE42E"));
+
+				var wfcs = WorkflowControlSetRepository.Get(new Guid("E97BC114-8939-4A70-AE37-A338010FFF19"));
+				foreach (var period in wfcs.AbsenceRequestOpenPeriods)
+				{
+					if (period.Absence.Equals(absence))
+					{
+						period.OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(2016, 3, 1), new DateOnly(2099, 5, 30));
+						period.StaffingThresholdValidator = new BudgetGroupHeadCountValidator();
+						period.PersonAccountValidator = new AbsenceRequestNoneValidator();
+						period.AbsenceRequestProcess = new GrantAbsenceRequest();
+						var datePeriod = period as AbsenceRequestOpenDatePeriod;
+						if (datePeriod != null)
+							datePeriod.Period = period.OpenForRequestsPeriod;
+					}
+				}
+
+				var scenario = ScenarioRepository.Load(new Guid("10E3B023-5C3B-4219-AF34-A11C00F0F283"));
+				var budgetGroup = BudgetGroupRepository.Get(new Guid("81BAF583-4875-43EC-8E1D-A53A00DF0B3D"));
+				var budgetDays = BudgetDayRepository.Find(scenario, budgetGroup,
+					new DateOnlyPeriod(new DateOnly(2016, 4, 15), new DateOnly(2016, 4, 15)));
+				budgetDays.ForEach(budgetDay =>
+				{
+					budgetDay.Allowance = 36;
+					budgetDay.TotalAllowance = 36;
+					budgetDay.AbsenceOverride = 36;
+				});
+#pragma warning disable 618
+				BudgetDayRepository.UnitOfWork.PersistAll();
+#pragma warning restore 618
+				// person Englund, Rasmus 
+				var person1 = PersonRepository.Load(new Guid("90FA4DCD-65CA-4599-B1EB-A276008EC775"));
+				//Persson, Josefin
+				var person2 = PersonRepository.Load(new Guid("F2588126-373C-47CC-BD78-A3E000AACF79"));
+
+				var req1 = createAbsenceRequest(person1, absence,
+					new DateTimePeriod(new DateTime(2016, 4, 15, 11, 0, 0, DateTimeKind.Utc),
+						new DateTime(2016, 4, 15, 13, 0, 0, DateTimeKind.Utc)));
+				PersonRequestRepository.Add(req1);
+				personRequests.Add(req1);
+				var req2 = createAbsenceRequest(person2, absence,
+					new DateTimePeriod(new DateTime(2016, 4, 15, 14, 0, 0, DateTimeKind.Utc),
+						new DateTime(2016, 4, 15, 16, 0, 0, DateTimeKind.Utc)));
+				PersonRequestRepository.Add(req2);
+				personRequests.Add(req2);
+
+#pragma warning disable 618
+				PersonRequestRepository.UnitOfWork.PersistAll();
+#pragma warning restore 618
+				var absenceRequestIds = new List<Guid> { req1.Id.Value, req2.Id.Value};
+
+				var newMultiAbsenceRequestsCreatedEvent = new NewMultiAbsenceRequestsCreatedEvent()
+				{
+					PersonRequestIds = absenceRequestIds,
+					InitiatorId = new Guid("00000000-0000-0000-0000-000000000000"),
+					LogOnBusinessUnitId = new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"),
+					LogOnDatasource = "Teleopti WFM",
+					Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z")
+				};
+
+				Target.Process(newMultiAbsenceRequestsCreatedEvent);
+			});
+
+			var cntApproved = 0;
+			var cntDenied = 0;
+			WithUnitOfWork.Do(() =>
+			{
+				foreach (var req in personRequests)
+				{
+					var request = PersonRequestRepository.Get(req.Id.Value);
+
+					if (request.IsApproved)
+						cntApproved++;
+
+					else if (request.IsDenied)
+						cntDenied++;
+
+				}
+			});
+
+			cntDenied.Should().Be.EqualTo(1);
+			cntApproved.Should().Be.EqualTo(1);
 		}
 
 		[Test]
