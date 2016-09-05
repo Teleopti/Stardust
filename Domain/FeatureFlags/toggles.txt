@@ -52,7 +52,7 @@ RTA_RuleMappingOptimization_39812 = true
 RTA_BatchConnectionOptimization_40116 = true
 RTA_BatchQueryOptimization_40169 = true
 RTA_RemoveSiteTeamOutOfAdherenceReadModels_40069 = RC
-RTA_PersonOrganizationQueryOptimization_40261 = RC
+RTA_PersonOrganizationQueryOptimization_40261 = true
 
 WfmPermission_ReplaceOldPermission_34671 = true
 
