@@ -83,7 +83,10 @@
 								columns: [
 									staffingData.timeSeries,
 									staffingData.forecastedStaffing.series
-								]
+								],
+								names: {
+									Forecasted_staffing: $translate.instant('ForecastedStaff') + ' ←'
+								}
 							},
 							axis: {
 								x : {
