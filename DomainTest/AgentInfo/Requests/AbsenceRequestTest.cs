@@ -137,7 +137,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             IPerson person = PersonFactory.CreatePerson();
 
             Expect.Call(requestApprovalService.ApproveAbsence(null, period, null)).Return(new List<IBusinessRuleResponse>()).IgnoreArguments();
-            Expect.Call(() => authorization.VerifyEditRequestPermission(null)).IgnoreArguments();
+			Expect.Call(requestApprovalService.GetApprovedPersonAbsence()).Return(null).IgnoreArguments();
+			Expect.Call(() => authorization.VerifyEditRequestPermission(null)).IgnoreArguments();
 
             mocks.ReplayAll();
 
@@ -168,7 +169,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             var target = new AbsenceRequest(absence, period);
 
             Expect.Call(requestApprovalService.ApproveAbsence(null, period, null)).Return(new List<IBusinessRuleResponse>()).IgnoreArguments();
-            Expect.Call(() => authorization.VerifyEditRequestPermission(null)).IgnoreArguments();
+			Expect.Call(requestApprovalService.GetApprovedPersonAbsence()).Return(null).IgnoreArguments();
+			Expect.Call(() => authorization.VerifyEditRequestPermission(null)).IgnoreArguments();
 
             mocks.ReplayAll();
 
