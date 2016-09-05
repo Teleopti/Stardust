@@ -66,7 +66,25 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				fullDayAbsenceAddedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
 				fullDayAbsenceAddedEvent.CommandId = trackedCommandInfo.TrackId;
 			}
-			AddEvent(fullDayAbsenceAddedEvent);
+
+			var @events = PopAllEvents().ToList();
+
+			if(!@events.Any(e =>
+			{
+				var _e = e as FullDayAbsenceAddedEvent;
+				if(_e == null) return false;
+				return _e.AbsenceId == fullDayAbsenceAddedEvent.AbsenceId
+					   && _e.PersonId == fullDayAbsenceAddedEvent.PersonId
+					   && _e.StartDateTime == fullDayAbsenceAddedEvent.StartDateTime
+					   && _e.EndDateTime == fullDayAbsenceAddedEvent.EndDateTime
+					   && _e.ScenarioId == fullDayAbsenceAddedEvent.ScenarioId
+					   && _e.LogOnBusinessUnitId == fullDayAbsenceAddedEvent.LogOnBusinessUnitId;
+			}))
+			{
+				@events.Add(fullDayAbsenceAddedEvent);
+			}
+
+			@events.ForEach(AddEvent);
 		}
 
 		public virtual void IntradayAbsence(IPerson person, TrackedCommandInfo trackedCommandInfo)
@@ -87,7 +105,25 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				personAbsenceAddedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
 				personAbsenceAddedEvent.CommandId = trackedCommandInfo.TrackId;
 			}
-			AddEvent(personAbsenceAddedEvent);
+
+			var @events = PopAllEvents().ToList();
+
+			if (!@events.Any(e =>
+			{
+				var _e = e as PersonAbsenceAddedEvent;
+				if (_e == null) return false;
+				return _e.AbsenceId == personAbsenceAddedEvent.AbsenceId
+					   && _e.PersonId == personAbsenceAddedEvent.PersonId
+					   && _e.StartDateTime == personAbsenceAddedEvent.StartDateTime
+					   && _e.EndDateTime == personAbsenceAddedEvent.EndDateTime
+					   && _e.ScenarioId == personAbsenceAddedEvent.ScenarioId
+					   && _e.LogOnBusinessUnitId == personAbsenceAddedEvent.LogOnBusinessUnitId;
+			}))
+			{
+				@events.Add(personAbsenceAddedEvent);				
+			}
+
+			@events.ForEach(AddEvent);
 		}
 
 		public virtual void RemovePersonAbsence(TrackedCommandInfo trackedCommandInfo)

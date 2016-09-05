@@ -101,7 +101,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             using (_mocks.Record())
             {
                 Expect.Call(_validator.Validate(_absenceRequest,handling)).Return(_validatedRequest);
-                Expect.Call(_requestApprovalService.ApproveAbsence(_absence, _period, _absenceRequest.Person, _personRequest)).Return(
+				Expect.Call(_requestApprovalService.GetApprovedPersonAbsence()).Return(null);
+				Expect.Call(_requestApprovalService.ApproveAbsence(_absence, _period, _absenceRequest.Person, _personRequest)).Return(
                     new List<IBusinessRuleResponse>());
                 _authorization.VerifyEditRequestPermission(_personRequest);
             }
@@ -128,7 +129,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
                 _authorization.VerifyEditRequestPermission(_personRequest);
                 Expect.Call(_requestApprovalService.ApproveAbsence(_absence, _period, _absenceRequest.Person, _personRequest)).Return(
                     new List<IBusinessRuleResponse>());
-            }
+				Expect.Call(_requestApprovalService.GetApprovedPersonAbsence()).Return(null);
+			}
 
             _mocks.ReplayAll();
             Assert.IsTrue(_personRequest.IsNew);
