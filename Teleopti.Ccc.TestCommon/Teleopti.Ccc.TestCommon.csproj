@@ -235,7 +235,6 @@
     <Compile Include="FakeData\FakeCampaignRepository.cs" />
     <Compile Include="FakeData\FakeCommonAgentNameProvider.cs" />
     <Compile Include="FakeData\FakeCurrentUnitOfWorkFactory.cs" />
-    <Compile Include="FakeData\FakeGroupScheduleGroupPageDataProvider.cs" />
     <Compile Include="FakeData\FakeLogManagerWrapper.cs" />
     <Compile Include="FakeData\FakeIntradayMonitorDataLoader.cs" />
     <Compile Include="FakeData\FakePersonContractProvider.cs" />
