@@ -248,6 +248,11 @@
 				border-right: 1px solid $gray012;
 				text-align: center;
 				cursor: default;
+
+				.summary {
+					overflow: hidden;
+					text-overflow: ellipsis;
+				}
 			}
 
 			td.weekview-td.dayoff{
