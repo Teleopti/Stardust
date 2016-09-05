@@ -100,6 +100,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
 				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
 				Expect.Call(_visualLayerCollection.Period()).Return(null);
+				Expect.Call(_schedulingResultStateHolder.AddedAbsenceMinutesDuringCurrentRequestHandlingCycle(budgetDay)).Return(0);
+				_schedulingResultStateHolder.AddAbsenceMinutesDuringCurrentRequestHandlingCycle(budgetDay, 60);
 			}
 			using (_mocks.Playback())
 			{
@@ -153,6 +155,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 				Expect.Call(_visualLayerCollection.Period()).Return(lPeriod);
 				Expect.Call(_visualLayerCollection.ContractTime(new DateTimePeriod(lPeriod.StartDateTime, sPeriod.EndDateTime)))
 					.Return(sPeriod.EndDateTime - lPeriod.StartDateTime);
+				Expect.Call(_schedulingResultStateHolder.AddedAbsenceMinutesDuringCurrentRequestHandlingCycle(budgetDay)).Return(0);
+				_schedulingResultStateHolder.AddAbsenceMinutesDuringCurrentRequestHandlingCycle(budgetDay,60);
 			}
 
 			using (_mocks.Playback())
@@ -195,6 +199,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
 				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
 				Expect.Call(_visualLayerCollection.Period()).Return(null);
+				Expect.Call(_schedulingResultStateHolder.AddedAbsenceMinutesDuringCurrentRequestHandlingCycle(budgetDay)).Return(0);
 			}
 			using (_mocks.Playback())
 			{
