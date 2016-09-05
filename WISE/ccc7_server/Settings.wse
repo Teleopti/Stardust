@@ -425,6 +425,11 @@ item: Insert Line into Text File
 end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(HSTS_HEADER)|
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
   New Text=$(DB_ANALYTICS)|%DB_ANALYTICS_TMP%
   Line Number=0
 end
