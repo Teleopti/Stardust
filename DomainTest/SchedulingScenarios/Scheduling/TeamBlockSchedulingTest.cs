@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -21,7 +20,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
-	public class TeamBlockSchedulingTest : ISetup
+	public class TeamBlockSchedulingTest
 	{
 		public FullScheduling Target;
 		public FakePersonRepository PersonRepository;
@@ -44,12 +43,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
-			var site = new Site("site"); 
-			var team = new Team { Description = new Description("team") };
-			site.AddTeam(team); 
-			businessUnit.AddSite(site);
-			BusinessUnitRepository.Has(businessUnit);
+			var team = new Team { Description = new Description("team1") };
+			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
 			var contract = new Contract("_");
 			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
 			var agent1 = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
@@ -62,16 +57,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			ruleSetBag.AddRuleSet(normalRuleSet);
 			agent1.Period(firstDay).RuleSetBag = ruleSetBag;
 			agent2.Period(firstDay).RuleSetBag = ruleSetBag;
-
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				1,
-				1,
-				1,
-				1,
-				1,
-				1,
-				1)
-				);
+				1, 1, 1, 1, 1, 1, 1));
 
 			var dayOffTemplate = new DayOffTemplate(new Description("_default")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);
@@ -116,18 +103,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
-			var site = new Site("site");
-			var team1 = new Team { Description = new Description("team1") };
-			var team2 = new Team { Description = new Description("team2") };
-			site.AddTeam(team1);
-			site.AddTeam(team2);
-			businessUnit.AddSite(site);
-			BusinessUnitRepository.Has(businessUnit);
+			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			var team = new Team { Description = new Description("team1") };
 			var contract = new Contract("_");
 			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
-			var agent1 = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team1, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
-			var agent2 = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team2, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
+			var agent1 = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
+			var agent2 = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var restrictedRuleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var normalRuleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(12, 0, 12, 0, 15), new TimePeriodWithSegment(20, 0, 20, 0, 15), shiftCategory));
@@ -136,20 +117,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			ruleSetBag.AddRuleSet(normalRuleSet);
 			agent1.Period(firstDay).RuleSetBag = ruleSetBag;
 			agent2.Period(firstDay).RuleSetBag = ruleSetBag;
-
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				1,
-				1,
-				1,
-				1,
-				1,
-				1,
-				1)
-				);
-
+				1, 1, 1, 1, 1, 1, 1));
 			var dayOffTemplate = new DayOffTemplate(new Description("_default")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);
-
 			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
 			{
 				UseAvailability = true,
@@ -191,18 +162,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
-			var site = new Site("site");
-			var team1 = new Team { Description = new Description("team1") };
-			var team2 = new Team { Description = new Description("team2") };
-			site.AddTeam(team1);
-			site.AddTeam(team2);
-			businessUnit.AddSite(site);
-			BusinessUnitRepository.Has(businessUnit);
+			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			var team = new Team { Description = new Description("team") };
 			var contract = new Contract("_");
 			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
-			var agent1 = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team1, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
-			var agent2 = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team2, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
+			var agent1 = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
+			var agent2 = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var restrictedRuleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var normalRuleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(12, 0, 12, 0, 15), new TimePeriodWithSegment(20, 0, 20, 0, 15), shiftCategory));
@@ -218,14 +183,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				}).WithId());
 
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				1,
-				1,
-				1,
-				1,
-				1,
-				1,
-				1)
-				);
+				1, 1, 1, 1, 1, 1, 1));
 
 			var dayOffTemplate = new DayOffTemplate(new Description("_default")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);
@@ -276,17 +234,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
-			var site = new Site("site");
-			var team1 = new Team { Description = new Description("team1") };
-			site.AddTeam(team1);
-			businessUnit.AddSite(site);
-			BusinessUnitRepository.Has(businessUnit);
-
+			var team = new Team { Description = new Description("team") };
+			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
 			var contract = new Contract("_");
 			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
-			var agent1 = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team1, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
-			var agent2 = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team1, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
+			var agent1 = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
+			var agent2 = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), skill);
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var restrictedRuleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			var normalRuleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(12, 0, 12, 0, 15), new TimePeriodWithSegment(20, 0, 20, 0, 15), shiftCategory));
@@ -297,14 +250,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			agent2.Period(firstDay).RuleSetBag = ruleSetBag;
 
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				1,
-				1,
-				1,
-				1,
-				1,
-				1,
-				1)
-				);
+				1, 1, 1, 1, 1, 1, 1));
 
 			var dayOffTemplate = new DayOffTemplate(new Description("_default")).WithId();
 			DayOffTemplateRepository.Add(dayOffTemplate);
@@ -324,12 +270,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 
 			Target.DoScheduling(period);
-		}
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			//TODO: Remove this!
-			system.UseTestDouble<FakeGroupScheduleGroupPageDataProvider>().For<IGroupScheduleGroupPageDataProvider>();
 		}
 	}
 }

@@ -13,22 +13,23 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.DomainTest.SchedulingScenarios;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 {
 	[DomainTest]
-	public class TeamBlockScheduleCommandTest : ISetup
+	public class TeamBlockScheduleCommandTest
 	{
 		public ITeamBlockScheduleCommand Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public IResourceOptimizationHelper ResourceOptimizationHelper;
 		public Func<IScheduleDayChangeCallback> ScheduleDayChangeCallback;
 		public IGroupPersonBuilderForOptimizationFactory GroupPersonBuilderForOptimizationFactory;
+		public FakeBusinessUnitRepository BusinessUnitRepository;
 
 		[Test]
 		public void ShouldBeAbleToScheduleTeamWithAllMembersLoadedButOneMemberFilteredOut()
@@ -46,19 +47,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			WorkloadFactory.CreateWorkloadWithOpenHours(skill, new TimePeriod(12, 0, 20, 0));
 
 			var skilldays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
-				10,
-				10,
-				10,
-				10,
-				10,
-				10,
-				10);
+				10, 10, 10, 10, 10, 10, 10);
 
-			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
-			var site = new Site("site");
+			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
 			var team1 = new Team {Description = new Description("team1")};
-			site.AddTeam(team1);
-			businessUnit.AddSite(site);
 
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var normalRuleSet =
@@ -108,12 +100,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var result = Target.Execute(schedulingOptions, new NoSchedulingProgress(), new List<IPerson> {agent1},
 				selectedSchedules, rollbackService, resourceCalculateDelayer, dayOffOptimizePreferenceProvider);
 			result.GetResults(true, true).Count.Should().Be.EqualTo(0);
-		}
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			//TODO: Remove this!
-			system.UseTestDouble<FakeGroupScheduleGroupPageDataProvider>().For<IGroupScheduleGroupPageDataProvider>();
 		}
 	}
 }

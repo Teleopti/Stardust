@@ -6,9 +6,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -19,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_CascadingSkills_38524)]
-	public class SchedulingCascadingTest : ISetup
+	public class SchedulingCascadingTest
 	{
 		public FullScheduling Target;
 		public FakePersonRepository PersonRepository;
@@ -29,12 +27,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakePersonAssignmentRepository AssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
+		public FakeBusinessUnitRepository BusinessUnitRepository;
 
 		[Test]
 		public void ShouldBaseBestShiftOnNonShoveledResourceCalculation()
 		{
 			const int numberOfAgents = 100;
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
+			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
 			var earlyInterval = new TimePeriod(7, 45, 8, 0);
 			var lateInterval = new TimePeriod(15, 45, 16, 0);
 			var date = DateOnly.Today;
@@ -47,7 +47,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
 					new TimePeriodWithSegment(earlyInterval, TimeSpan.FromMinutes(15)),
 					new TimePeriodWithSegment(lateInterval, TimeSpan.FromMinutes(15)), shiftCategory));
-
 			var contract = new Contract("_")
 			{
 				WorkTimeDirective =
@@ -72,12 +71,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.EqualTo(numberOfAgents/2);
 			allAssignmentsStartTime.Count(x => x == new TimeSpan(8, 0, 0))
 				.Should().Be.EqualTo(numberOfAgents/2);
-		}
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			//TODO: Remove this!
-			system.UseTestDouble<FakeGroupScheduleGroupPageDataProvider>().For<IGroupScheduleGroupPageDataProvider>();
 		}
 	}
 }
