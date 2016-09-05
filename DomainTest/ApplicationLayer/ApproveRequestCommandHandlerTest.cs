@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -75,6 +78,28 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			Assert.IsTrue(personRequest.IsApproved);
 			Assert.AreEqual (24, accountDay.Remaining.TotalDays);
 		}
+
+		[Test]
+		public void ShouldPublishAbsenceAddedEventWhenRequestIsGranted()
+		{
+			var absenceDateTimePeriod = new DateTimePeriod(2016,01,01,00,2016,01,01,23);
+
+			var person = PersonFactory.CreatePersonWithId();
+			var absence = new Absence();
+
+			var accountDay = createAccountDay(person,absence,new DateOnly(2015,12,1));
+
+			addAssignment(person,absenceDateTimePeriod);
+			var personRequest = createAbsenceRequest(person,absence,absenceDateTimePeriod);
+
+			_approveRequestCommandHandler.Handle(new ApproveRequestCommand() { PersonRequestId = personRequest.Id.Value });
+
+			var personAbsence = _approveRequestCommandHandler.GetRequestApprovalService().GetApprovedPersonAbsence();
+
+			var @events = personAbsence.PopAllEvents();
+			@events.Single().Should().Be.OfType<PersonAbsenceAddedEvent>();
+		}
+
 
 		[Test]
 		public void ShouldUpdateMessageWhenThereIsAReplyMessage()
