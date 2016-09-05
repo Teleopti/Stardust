@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldNotCrashWhenDoingRollbackWithTwoPeople()
 		{
-			BusinessUnitFactory.CreateNewBusinessUnitUsedInTest();
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
 			var date = new DateOnly(2014, 3, 31);
 			var scenario = new Scenario("Default").WithId();
