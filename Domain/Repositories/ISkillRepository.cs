@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
@@ -38,5 +39,7 @@ namespace Teleopti.Ccc.Domain.Repositories
         IMultisiteSkill LoadMultisiteSkill(ISkill skill);
 	    int MinimumResolution();
 	    IEnumerable<ISkill> FindSkillsWithAtLeastOneQueueSource();
+	    ICollection<ISkill> LoadSkills(IEnumerable<Guid> skillIdList);
+
     }
 }

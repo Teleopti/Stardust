@@ -116,5 +116,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			return _skills;
 		}
+
+		public ICollection<ISkill> LoadSkills(IEnumerable<Guid> skillIdList)
+		{
+			return _skills.Where(s => skillIdList.Contains(s.Id.Value)).ToList();
+		}
 	}
 }

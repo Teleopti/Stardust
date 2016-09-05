@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -625,6 +626,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var target = new SkillRepository(CurrUnitOfWork);
 			target.Get(skill.Id.Value).CascadingIndex
 				.Should().Be.EqualTo(index);
+		}
+
+		[Test]
+		public void ShouldLoadSkillsByIdList()
+		{
+			ISkill skill1 = SkillFactory.CreateSkill("skill 1", _skillType, 15);
+			skill1.Activity = _activity;
+			ISkill skill2 = SkillFactory.CreateSkill("skill 2", _skillType, 15);
+			skill2.Activity = _activity;
+
+			PersistAndRemoveFromUnitOfWork(skill1);
+			PersistAndRemoveFromUnitOfWork(skill2);
+
+			var skills = new SkillRepository(CurrUnitOfWork).LoadSkills(new Guid[] { skill1.Id.Value, skill2.Id.Value });
+
+			skills.Count.Should().Be.EqualTo(2);
 		}
 
 		protected override Repository<ISkill> TestRepository(ICurrentUnitOfWork currentUnitOfWork)

@@ -41,12 +41,12 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var staffingIntervals = new List<StaffingIntervalModel>();
 			var usersNow = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
 			var usersToday = new DateOnly(usersNow);
-
+			TimeSpan wantedIntervalResolution = TimeSpan.FromMinutes(minutesPerInterval);
 			double forecastedWorkloadSeconds = 0;
 
-			foreach (var skillId in skillIdList)
+			var skills = _skillRepository.LoadSkills(skillIdList);
+			foreach (var skill in skills)
 			{
-				var skill = _skillRepository.Get(skillId);
 				var skillDays = _skillDayRepository.FindReadOnlyRange(new DateOnlyPeriod(usersToday.AddDays(-1), usersToday.AddDays(1)), new[] { skill }, scenario);
 				if (skillDays.Count == 0)
 					continue;
@@ -54,7 +54,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 				foreach (var skillDay in skillDays)
 				{
-					var skillStaffPeriods = skillDay.SkillStaffPeriodViewCollection(TimeSpan.FromMinutes(minutesPerInterval));
+					
+					var skillStaffPeriods = skillDay.SkillStaffPeriodViewCollection(wantedIntervalResolution);
 
 					staffingIntervals.AddRange(skillStaffPeriods.Select(skillStaffPeriod => new StaffingIntervalModel
 					{

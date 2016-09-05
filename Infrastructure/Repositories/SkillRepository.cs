@@ -279,6 +279,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .List<ISkill>();
         }
 
+		public ICollection<ISkill> LoadSkills(IEnumerable<Guid> skillIdList)
+		{
+			ICollection<ISkill> retList = Session.CreateCriteria(typeof(Skill), "skill")
+				.Add(Restrictions.InG("Id", skillIdList))
+				.AddOrder(Order.Asc("Name"))
+				.List<ISkill>();
+
+			return retList;
+		}
+
 	    public int MinimumResolution()
 	    {
 		    return Session.CreateCriteria<Skill>()
