@@ -200,8 +200,8 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 					}
 
 				}
-				// person  Didrik Wikberg, Lul14
-				var person = PersonRepository.Load(new Guid("8080B4A4-785D-44FD-B7F9-A141010651CB"));
+				// person  Vinblad, Christian has a person account that on that absence 
+				var person = PersonRepository.Load(new Guid("6E75AF18-F494-42AE-8272-A141010651CB"));
 
 				var req4th = createAbsenceRequest(person, absence,
 					new DateTimePeriod(new DateTime(2016, 4, 4, 8, 0, 0, DateTimeKind.Utc),
@@ -209,13 +209,13 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 				PersonRequestRepository.Add(req4th);
 				personRequests.Add(req4th);
 				var req5th = createAbsenceRequest(person, absence,
-					new DateTimePeriod(new DateTime(2016, 4, 5, 11, 0, 0, DateTimeKind.Utc),
-						new DateTime(2016, 4, 5, 13, 0, 0, DateTimeKind.Utc)));
+					new DateTimePeriod(new DateTime(2016, 4, 5, 8, 0, 0, DateTimeKind.Utc),
+						new DateTime(2016, 4, 5, 12, 0, 0, DateTimeKind.Utc)));
 				PersonRequestRepository.Add(req5th);
 				personRequests.Add(req5th);
 				var req6th = createAbsenceRequest(person, absence,
-					new DateTimePeriod(new DateTime(2016, 4, 6, 13, 0, 0, DateTimeKind.Utc),
-						new DateTime(2016, 4, 6, 17, 0, 0, DateTimeKind.Utc)));
+					new DateTimePeriod(new DateTime(2016, 4, 6, 8, 0, 0, DateTimeKind.Utc),
+						new DateTime(2016, 4, 6, 12, 0, 0, DateTimeKind.Utc)));
 				PersonRequestRepository.Add(req6th);
 				personRequests.Add(req6th);
 
