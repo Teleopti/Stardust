@@ -137,5 +137,8 @@ namespace Teleopti.Interfaces.Domain
 	    void RemoveSkill(ISkill skill);
 	    bool GuessResourceCalculationHasBeenMade();
 	    IResourceCalculationData ToResourceOptimizationData(bool considerShortBreaks, bool doIntraIntervalCalculation);
-    }
+
+	    double AddedAbsenceMinutesDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay);
+		void AddAbsenceMinutesDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay, double minutes);
+	}
 }

@@ -78,5 +78,15 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			return new ResourceCalculationData(this, considerShortBreaks, doIntraIntervalCalculation);
 		}
+
+		public double AddedAbsenceMinutesDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void AddAbsenceMinutesDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay, double minutes)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

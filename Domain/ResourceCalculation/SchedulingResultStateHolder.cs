@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
@@ -115,6 +116,20 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public IResourceCalculationData ToResourceOptimizationData(bool considerShortBreaks, bool doIntraIntervalCalculation)
 		{
 			return new ResourceCalculationData(this, considerShortBreaks, doIntraIntervalCalculation);
+		}
+
+		private readonly ConcurrentDictionary<IBudgetDay, double> addedAbsenceMinutesDictionary = new ConcurrentDictionary<IBudgetDay, double>();
+		public double AddedAbsenceMinutesDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay)
+		{
+			double value;
+			if (!addedAbsenceMinutesDictionary.TryGetValue(budgetDay, out value))
+				return 0;
+			return value;
+		}
+
+		public void AddAbsenceMinutesDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay, double minutes)
+		{
+			addedAbsenceMinutesDictionary.AddOrUpdate(budgetDay, minutes,(b, m) => m+minutes);
 		}
 
 		/// <summary>

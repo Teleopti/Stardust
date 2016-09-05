@@ -10879,7 +10879,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <comment>Caption on messagebox when shift generation is stopped </comment>
   </data>
   <data name="InsufficientStaffingDays" xml:space="preserve">
-    <value>Otillräcklig bemanning för:</value>
+    <value>Otillräcklig bemanning för: </value>
   </data>
   <data name="InsufficientStaffingHours" xml:space="preserve">
     <value>Otillräcklig bemanning den: {0} vid </value>

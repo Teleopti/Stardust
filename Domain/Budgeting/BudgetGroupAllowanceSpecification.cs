@@ -89,6 +89,8 @@ namespace Teleopti.Ccc.Domain.Budgeting
 				var remainingAllowanceMinutes = getRemainingAllowanceMinutes(personPeriod, defaultScenario, budgetDay, currentDay);
 				var requestedAbsenceMinutes =
 					calculateRequestedMinutes(currentDay, absenceRequest.Period, scheduleRange, personPeriod).TotalMinutes;
+				var addedBefore = schedulingResultStateHolder.AddedAbsenceMinutesDuringCurrentRequestHandlingCycle(budgetDay);
+				remainingAllowanceMinutes -= addedBefore;
 
 				if (remainingAllowanceMinutes < requestedAbsenceMinutes)
 				{
@@ -102,6 +104,10 @@ namespace Teleopti.Ccc.Domain.Budgeting
 						remainingAllowanceMinutes / TimeDefinition.MinutesPerHour,
 						requestedAbsenceMinutes / TimeDefinition.MinutesPerHour);
 					invalidDays += currentDay.ToShortDateString(culture) + ",";
+				}
+				else
+				{
+					schedulingResultStateHolder.AddAbsenceMinutesDuringCurrentRequestHandlingCycle(budgetDay, requestedAbsenceMinutes);
 				}
 			}
 			return invalidDays.IsEmpty() ? invalidDays : invalidDays.Substring(0, invalidDays.Length - 1);

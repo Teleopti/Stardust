@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -16,12 +17,14 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Absence;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Messaging.Client;
 
 namespace Teleopti.Ccc.Requests.PerformanceTest
@@ -53,6 +56,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			system.UseTestDouble<DenyRequestCommandHandler>().For<IHandleCommand<DenyRequestCommand>>();
 			system.UseTestDouble<RequestApprovalServiceFactory>().For<IRequestApprovalServiceFactory>();
 			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
+			system.UseTestDouble<StardustJobFeedback>().For<IStardustJobFeedback>();
 			system.AddService<Database>();
 			system.AddModule(new TenantServerModule(configuration));
 		}
@@ -269,7 +273,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 		}
 
 		[Test]
-		[Ignore("does not work yet")]
 		public void ShouldDenyBecauseOfBudgetIsUsed()
 		{
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
@@ -308,21 +311,21 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 				var person = PersonRepository.Load(new Guid("6E75AF18-F494-42AE-8272-A141010651CB"));
 				var person2 = PersonRepository.Load(new Guid("8080B4A4-785D-44FD-B7F9-A141010651CB"));
 
-				var req4th = createAbsenceRequest(person, absence,
+				var req4Th = createAbsenceRequest(person, absence,
 					new DateTimePeriod(new DateTime(2016, 4, 11, 6, 0, 0, DateTimeKind.Utc),
 						new DateTime(2016, 4, 11, 18, 0, 0, DateTimeKind.Utc)));
-				PersonRequestRepository.Add(req4th);
-				personRequests.Add(req4th);
-				var req4th2 = createAbsenceRequest(person2, absence,
+				PersonRequestRepository.Add(req4Th);
+				personRequests.Add(req4Th);
+				var req4Th2 = createAbsenceRequest(person2, absence,
 					new DateTimePeriod(new DateTime(2016, 4, 11, 6, 0, 0, DateTimeKind.Utc),
 						new DateTime(2016, 4, 11, 18, 0, 0, DateTimeKind.Utc)));
-				PersonRequestRepository.Add(req4th2);
-				personRequests.Add(req4th2);
+				PersonRequestRepository.Add(req4Th2);
+				personRequests.Add(req4Th2);
 
 #pragma warning disable 618
 				PersonRequestRepository.UnitOfWork.PersistAll();
 #pragma warning restore 618
-				var absenceRequestIds = new List<Guid> { req4th.Id.Value, req4th2.Id.Value};
+				var absenceRequestIds = new List<Guid> { req4Th.Id.GetValueOrDefault(), req4Th2.Id.GetValueOrDefault()};
 
 				var newMultiAbsenceRequestsCreatedEvent = new NewMultiAbsenceRequestsCreatedEvent()
 				{
@@ -342,13 +345,16 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			{
 				foreach (var req in personRequests)
 				{
-					var request = PersonRequestRepository.Get(req.Id.Value);
+					var request = PersonRequestRepository.Get(req.Id.GetValueOrDefault());
 
 					if (request.IsApproved)
 						cntApproved++;
 
 					else if (request.IsDenied)
+					{
 						cntDenied++;
+						Assert.That(request.DenyReason.Contains("Otillräcklig bemanning"));
+					}
 
 				}
 			});
