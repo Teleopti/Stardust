@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		public FakeSkillRepository SkillRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
+		public FakeIntradayQueueStatisticsLoader IntradayQueueStatisticsLoader;
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
 
@@ -117,6 +118,70 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm.DataSeries.Time.First().Should().Be.EqualTo(userNow);
 			vm.DataSeries.Time.Last().Should().Be.EqualTo(userNow.AddDays(1).AddMinutes(-minutesPerInterval));
 			vm.DataSeries.ForecastedStaffing.Length.Should().Be.EqualTo(96);
+		}
+
+		[Test]
+		public void ShouldReturnUpdatedStaffingForecastFromNowUntilEndOfDay()
+		{
+			var userNow = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+			IntervalLengthFetcher.Has(minutesPerInterval);
+			var scenario = ScenarioFactory.CreateScenario("scenariorita", true, true).WithId();
+			ScenarioRepository.Has(scenario);
+
+			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30));
+			SkillRepository.Has(skill);
+
+			var skillDay = skill.CreateSkillDayWithDemand(scenario, new DateOnly(userNow), TimeSpan.FromMinutes(60));
+			skillDay.WorkloadDayCollection.First().TaskPeriodList.First().Tasks = 20;
+			skillDay.WorkloadDayCollection.First().TaskPeriodList.First().AverageTaskTime = TimeSpan.FromSeconds(100);
+			skillDay.WorkloadDayCollection.First().TaskPeriodList.First().AverageAfterTaskTime = TimeSpan.FromSeconds(20);
+			SkillDayRepository.Add(skillDay);
+
+			var actualworkloadSeconds = (20 * 120) * 1.2; // 20% more workload than forecasted
+
+			IntradayQueueStatisticsLoader.Has((int?) actualworkloadSeconds);
+
+			var vm = Target.Load(new[] { skill.Id.Value });
+
+			vm.DataSeries.Time.Length.Should().Be.EqualTo(2);
+			vm.DataSeries.Time.First().Should().Be.EqualTo(userNow.AddMinutes(-15));
+			vm.DataSeries.Time.Last().Should().Be.EqualTo(userNow);
+
+			var forecastedWorkload = skillDay.WorkloadDayCollection.First().Tasks * 
+											 (skillDay.WorkloadDayCollection.First().AverageTaskTime.TotalSeconds +
+											  skillDay.WorkloadDayCollection.First().AverageAfterTaskTime.TotalSeconds);
+			
+			var deviationPercent = actualworkloadSeconds / forecastedWorkload;
+			var expectedUpdatedForecastOnLastInterval = vm.DataSeries.ForecastedStaffing.Last() * deviationPercent;
+
+			vm.DataSeries.UpdatedForecastedStaffing.Length.Should().Be.EqualTo(2);
+			vm.DataSeries.UpdatedForecastedStaffing.First().Should().Be.EqualTo(null);
+			vm.DataSeries.UpdatedForecastedStaffing.Last().Should().Be.EqualTo(expectedUpdatedForecastOnLastInterval);
+		}
+
+		[Test]
+		public void ShouldReturnAllNullForUpdatedStaffingForecastWhenNoStats()
+		{
+			var userNow = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+			IntervalLengthFetcher.Has(minutesPerInterval);
+			var scenario = ScenarioFactory.CreateScenario("scenariorita", true, true).WithId();
+			ScenarioRepository.Has(scenario);
+
+			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30));
+			SkillRepository.Has(skill);
+
+			var skillDay = skill.CreateSkillDayWithDemand(scenario, new DateOnly(userNow), TimeSpan.FromMinutes(60));
+			SkillDayRepository.Add(skillDay);
+
+			IntradayQueueStatisticsLoader.Has(null);
+
+			var vm = Target.Load(new[] { skill.Id.Value });
+
+			vm.DataSeries.UpdatedForecastedStaffing.Length.Should().Be.EqualTo(2);
+			vm.DataSeries.UpdatedForecastedStaffing.First().Should().Be.EqualTo(null);
+			vm.DataSeries.UpdatedForecastedStaffing.Last().Should().Be.EqualTo(null);
 		}
 
 		[Test]

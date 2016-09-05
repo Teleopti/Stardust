@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -22,9 +21,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					.SetString("SkillList", skillListString)
 					.UniqueResult<int>();
 				if (intervalId == -1)
-				{
 					return null;
-				}
+
 				return intervalId;
 			}
 		}

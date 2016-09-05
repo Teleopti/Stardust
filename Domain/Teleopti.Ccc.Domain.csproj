@@ -392,6 +392,7 @@
     <Compile Include="Intraday\IntradayStatisticsSummary.cs" />
     <Compile Include="Intraday\IScheduleForecastSkillReadModelRepository.cs" />
     <Compile Include="Intraday\LatestStatisticsTimeProvider.cs" />
+    <Compile Include="Intraday\QueueStatisticsInterval.cs" />
     <Compile Include="Intraday\ScheduleForecastSkillProvider.cs" />
     <Compile Include="Intraday\StaffingDataSeries.cs" />
     <Compile Include="Intraday\StaffingIntervalModel.cs" />
@@ -415,6 +416,7 @@
     <Compile Include="Repositories\IAnalyticsActivityRepository.cs" />
     <Compile Include="Repositories\IAnalyticsShiftCategoryRepository.cs" />
     <Compile Include="Repositories\IAnalyticsWorkloadRepository.cs" />
+    <Compile Include="Repositories\IIntradayQueueStatisticsLoader.cs" />
     <Compile Include="Repositories\IKpiRepository.cs" />
     <Compile Include="Repositories\IQueuedAbsenceRequestRepository.cs" />
     <Compile Include="Repositories\ISiteOpenHourRepository.cs" />

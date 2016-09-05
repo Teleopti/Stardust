@@ -6,5 +6,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 	{
 		public DateTime[] Time { get; set; }
 		public double[] ForecastedStaffing { get; set; }
+		public double?[] UpdatedForecastedStaffing { get; set; }
 	}
 }

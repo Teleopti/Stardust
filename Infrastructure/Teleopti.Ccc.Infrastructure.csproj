@@ -403,6 +403,7 @@
     <Compile Include="Repositories\Analytics\AnalyticsTimeZoneRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsWorkloadRepository.cs" />
     <Compile Include="Repositories\Analytics\IntradayMonitorDataLoader.cs" />
+    <Compile Include="Repositories\Analytics\IntradayQueueStatisticsLoader.cs" />
     <Compile Include="Repositories\Analytics\LatestStatisticsIntervalIdLoader.cs" />
     <Compile Include="Repositories\ExistingForecastRepository.cs" />
     <Compile Include="Repositories\IndexMaintenanceRepository.cs" />
