@@ -3,8 +3,8 @@ var HealthCheckPage = require('./pages/HealthCheck.page');
 var IdentityProvidersPage = require('./pages/IdentityProviders.page');
 
 describe('health check', function() {
-
-	before(function() {
+	
+    it('starting healthcheck should show results', function () {
 		// Given that we are signed in and showing the HealthCheck page
 		HealthCheckPage.open();
 		if (HealthCheckPage.isCurrentPage()) {
@@ -15,10 +15,8 @@ describe('health check', function() {
 		}
 		
 		HealthCheckPage.signin();
-    });
-	
-    it('starting healthcheck should show results', function () {
+		
 		HealthCheckPage.clickStartCheck();
 		HealthCheckPage.busResults.waitForExist(60 * 1000);
-    });
+    }, 2);
 });
