@@ -124,6 +124,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 
 			// MORE CLEAN UP!
 			Add(new PurgeJobStep(jobParameters));     // BU independent
+			
+			AddWhenAllEnabled(new CalculateBadgesJobStep(jobParameters), Toggles.ETL_MoveBadgeCalculationToETL_38421);
 
 			if (jobParameters.RunIndexMaintenance)
 			{
@@ -131,7 +133,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 				AddWhenAllDisabled(new AppIndexMaintenanceJobStep(jobParameters), Toggles.ETL_FasterIndexMaintenance_38847);// BU independent
 				AddWhenAllDisabled(new AggIndexMaintenanceJobStep(jobParameters), Toggles.ETL_FasterIndexMaintenance_38847);// BU independent
 			}
-			AddWhenAllEnabled(new CalculateBadgesJobStep(jobParameters), Toggles.ETL_MoveBadgeCalculationToETL_38421);
 		}
 	}
 }
