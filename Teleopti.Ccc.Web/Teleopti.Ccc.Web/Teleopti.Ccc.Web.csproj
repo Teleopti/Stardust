@@ -1495,6 +1495,7 @@
     <Content Include="WFM\js\seatManagement\seatmapeditor.controller.spec.js" />
     <Content Include="WFM\js\seatManagement\seatmapoccupancy.spec.js" />
     <Content Include="WFM\js\seatManagement\seatplan.controller.spec.js" />
+    <Content Include="WFM\js\seatManagement\seatplan.datepickerwapper.directive.js" />
     <Content Include="WFM\js\seatManagement\seatplanreport.controller.spec.js" />
     <Content Include="WFM\js\seatManagement\teampicker.controller.spec.js" />
     <Content Include="WFM\js\teamSchedule\html\addAbsence.tpl.html" />

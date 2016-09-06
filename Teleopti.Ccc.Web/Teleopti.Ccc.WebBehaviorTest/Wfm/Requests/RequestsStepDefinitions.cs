@@ -30,7 +30,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 		public void WhenISelectToGoToShiftTradeRequestsView()
 		{
 			Browser.Interactions.AssertScopeValue("requests-table-container", "requestsOverview.loaded", true);
-			Browser.Interactions.ClickUsingJQuery("[aria-controls='tab-content-2']");
+			Browser.Interactions.AssertExistsUsingJQuery("md-tab-item:contains('Shift Trade')");
+			Browser.Interactions.ClickUsingJQuery("md-tab-item:contains('Shift Trade')");
 		}
 
 		[When(@"I select to load requests from '(.*)' to '(.*)'")]

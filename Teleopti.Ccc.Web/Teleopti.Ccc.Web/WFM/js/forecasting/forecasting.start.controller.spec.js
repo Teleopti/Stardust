@@ -73,10 +73,10 @@ describe('ForecastingStartCtrl', function() {
 	it("forecasting period should default to next month", inject(function($controller) {
 		var scope = $rootScope.$new();
 
-		expect(scope.period).toBe(undefined);
+		expect(scope.query).toBe(undefined);
 		$controller('ForecastingStartCtrl', { $scope: scope, $state: {} });
-		expect(scope.period.startDate.toString()).toBe(moment().utc().add(1, 'months').startOf('month').toDate().toString());
-		expect(scope.period.endDate.toString()).toBe(moment().utc().add(2, 'months').startOf('month').toDate().toString());
+		expect(scope.query.period.startDate.toString()).toBe(moment().utc().add(1, 'months').startOf('month').toDate().toString());
+		expect(scope.query.period.endDate.toString()).toBe(moment().utc().add(2, 'months').startOf('month').toDate().toString());
 	}));
 
 	it('Should cancel forecasting modal', inject(function($controller) {
@@ -241,11 +241,11 @@ describe('ForecastingStartCtrl', function() {
 		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService() });
 		var startDate = moment().utc().add(1, 'months').startOf('month').toDate();
 		var endDate = moment().utc().add(13, 'months').startOf('month').toDate();
-		scope.period = { startDate: startDate, endDate: endDate };
+		scope.query = {period: { startDate: startDate, endDate: endDate }};
 		expect(scope.moreThanOneYear()).toBe(true);
 
 		endDate = moment().utc().add(13, 'months').startOf('month').add(-1, 'days').toDate();
-		scope.period = { startDate: startDate, endDate: endDate };
+		scope.query = { period: { startDate: startDate, endDate: endDate }};
 		expect(scope.moreThanOneYear()).toBe(false);
 	}));
 });

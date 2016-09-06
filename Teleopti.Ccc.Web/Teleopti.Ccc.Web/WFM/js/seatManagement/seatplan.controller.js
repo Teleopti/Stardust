@@ -4,9 +4,9 @@
 
 	angular.module('wfm.seatPlan').controller('SeatPlanCtrl', seatPlanDirectiveController);
 
-	seatPlanDirectiveController.$inject = ['ResourcePlannerSvrc', 'seatPlanService', '$stateParams', '$timeout'];
+	seatPlanDirectiveController.$inject = ['ResourcePlannerSvrc', 'seatPlanService', '$stateParams', '$timeout', '$scope'];
 
-	function seatPlanDirectiveController(resourcePlannerService, seatPlanService, params, $timeout) {
+	function seatPlanDirectiveController(resourcePlannerService, seatPlanService, params, $timeout, $scope) {
 
 		var vm = this;
 
@@ -92,14 +92,29 @@
 			return moment(date).format('LL');
 		};
 
-		vm.onChangeOfDate = function () {
+		$scope.$on('seatplan.month.changed', onChangeOfMonth);
 
+		function onChangeOfMonth(e, data) {
+			if (vm.isLoadingCalendar) {
+				return;
+			}
+			vm.loadMonthDetails(data.activeDate);
+		};
+
+		vm.onChangeOfDate = function () {
 			if (vm.currentMonth != moment(vm.selectedDate).month()) {
 				vm.loadMonthDetails(moment(vm.selectedDate));
 			} else {
 				vm.loadSeatBookingInformation(moment(vm.selectedDate));
+			}		
+		};
+
+		vm.datepickerOptions = {
+			customClass: function(data) {
+				var date = data.date,
+					mode = data.mode;
+				vm.getDayClass(date, mode);
 			}
-		
 		};
 
 		vm.loadSeatBookingInformation = function(date) {
@@ -114,16 +129,6 @@
 				vm.seatBookingSummaryForDay = data;
 				vm.isLoadingCalendar = false;
 			});
-		};
-		
-
-		vm.onChangeOfMonth = function (date) {
-
-			if (vm.isLoadingCalendar) {
-				return;
-			}
-
-			vm.loadMonthDetails(date);
 		};
 
 		vm.onSeatPlanStart = function () {
@@ -177,7 +182,7 @@
 			return dayInfoString;
 		};
 
-		vm.getDayClass = function (date, mode) {
+		vm.getDayClass= function (date, mode) {		
 			if (mode === 'day') {
 
 				var dayClass = '';

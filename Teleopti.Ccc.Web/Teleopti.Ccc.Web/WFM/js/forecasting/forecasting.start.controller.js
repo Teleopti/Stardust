@@ -26,12 +26,12 @@
 						$interval.cancel(stopPolling);
 					}
 				}
-
+				
 				$scope.isCreateSkillEnabled = false;
 
 				var startDate = moment().utc().add(1, 'months').startOf('month').toDate();
 				var endDate = moment().utc().add(2, 'months').startOf('month').toDate();
-				$scope.period = { startDate: startDate, endDate: endDate };
+				$scope.query = { period: { startDate: startDate, endDate: endDate } };
 
 				$scope.workloads = [];
 
@@ -407,10 +407,11 @@
 					} else {
 						workloadToSend.ForecastMethodId = -1;
 					}
+
 					forecastingService.forecast(JSON.stringify(
 					{
-						ForecastStart: $scope.period.startDate,
-						ForecastEnd: $scope.period.endDate,
+						ForecastStart: $scope.query.period.startDate,
+						ForecastEnd: $scope.query.period.endDate,
 						Workloads: [workloadToSend],
 						ScenarioId: $scope.modalForecastingInfo.selectedScenario.Id,
 						BlockToken: blockToken,
@@ -514,39 +515,12 @@
 				};
 
 				$scope.moreThanOneYear = function () {
-					if ($scope.period && $scope.period.endDate && $scope.period.startDate) {
-						return moment($scope.period.endDate).diff(moment($scope.period.startDate), 'years') >= 1;
+					if ($scope.query.period && $scope.query.period.endDate && $scope.query.period.startDate) {
+						return moment($scope.query.period.endDate).diff(moment($scope.query.period.startDate), 'years') >= 1;
 					} else
 						return false;
 				};
-
-				$scope.setRangeClass = function (date, mode) {
-					if (mode === 'day') {
-						var dayToCheck = new Date(date).setHours(12, 0, 0, 0);
-						var startDay = new Date($scope.period.startDate).setHours(12, 0, 0, 0);
-						var endDay = new Date($scope.period.endDate).setHours(12, 0, 0, 0);
-
-						if (dayToCheck >= startDay && dayToCheck <= endDay) {
-							return 'range';
-						}
-					}
-					return '';
-				};
-
-				$scope.updateStartDate = function () {
-					$scope.period.startDate = angular.copy($scope.period.startDate);
-				};
-
-				$scope.updateEndDate = function () {
-					if ($scope.period && $scope.period.endDate && $scope.period.startDate) {
-						if ($scope.period.startDate > $scope.period.endDate) {
-							$scope.period.endDate = angular.copy($scope.period.startDate);
-							return;
-						}
-					}
-					$scope.period.endDate = angular.copy($scope.period.endDate);
-				};
-
+			
 				$scope.createSkill = function () {
 					$state.go('forecasting.skillcreate');
 				};

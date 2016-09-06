@@ -23,6 +23,10 @@
 		$scope.month = "month";
 		$scope.$storage = $sessionStorage;
 
+		$scope.monthpickerOptions = {
+			minMode: 'month'
+		};
+
 		outboundService.checkPermission($scope).then(function() {
 			toggleSvc.togglesLoaded.then(init);
 		});

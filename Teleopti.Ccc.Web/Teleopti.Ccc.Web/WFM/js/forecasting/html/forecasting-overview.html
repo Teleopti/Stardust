@@ -116,19 +116,8 @@
 		<div class="con-row">
 			<div class="con-flex"></div>
 			<div class="con-flex split-3-1 line-center">
-				<label>{{'ForecastPeriod' | translate}}:</label><br/>
-				<div class="wfm-datepicker-wrap">
-					<div class="sub-header">
-						{{'From' | translate}}: <span class="startDate">{{period.startDate | date: "shortDate"}}</span>
-					</div>
-					<div uib-datepicker ng-model="period.startDate" show-weeks="true" custom-class="setRangeClass(date, mode)" class="wfm-datepicker" ng-change="updateEndDate()"></div>
-					</div>
-					<div class="wfm-datepicker-wrap">
-						<div class="sub-header">
-							{{'To' | translate}}: <span class="endDate">{{period.endDate | date: "shortDate"}}</span>
-						</div>
-						<div uib-datepicker ng-model="period.endDate" show-weeks="true" min-date="period.startDate" custom-class="setRangeClass(date, mode)" class="wfm-datepicker" ng-change="updateStartDate()"></div>
-						</div>
+				<label>{{'ForecastPeriod' | translate}}: </label><br/>
+				<date-range-picker ng-model="query.period"></date-range-picker>				
 					</div>
 					<div class="con-flex"></div>
 				</div>
@@ -136,7 +125,7 @@
 			<div class="modal-actions">
 				<aside>
 					<button class="wfm-btn wfm-btn-invis-default" ng-click="cancelForecastingModal()">{{ 'Close' | translate }}</button>
-					<button class="wfm-btn wfm-btn-invis-primary do-forecast" ng-disabled="disableDoForecast()" ng-class="{'wfm-btn-invis-disabled': disableDoForecast()}" ng-click="doForecast(period)">{{ 'ForecastDo' | translate }}</button>
+					<button class="wfm-btn wfm-btn-invis-primary do-forecast" ng-disabled="disableDoForecast()" ng-class="{'wfm-btn-invis-disabled': disableDoForecast()}" ng-click="doForecast(query.period)">{{ 'ForecastDo' | translate }}</button>
 				</aside>
 			</div>
 		</modal-dialog>

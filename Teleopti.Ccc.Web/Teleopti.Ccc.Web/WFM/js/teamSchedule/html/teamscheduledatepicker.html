@@ -10,7 +10,7 @@
 		<div class="sub-header" ng-if="false">
 			From/to:
 		</div>
-		<div uib-datepicker  show-weeks="true" ng-model="vm.selectedDate" class="wfm-datepicker" ng-change="vm.afterDateChangeDatePicker()"></div>
+		<div uib-datepicker ng-model="vm.selectedDate" class="wfm-datepicker" ng-change="vm.afterDateChangeDatePicker()"></div>
 	</div>
 
 	<button type="button" class="wfm-btn wfm-btn-invis-primary wfm-btn-sm toggle-datepicker" ng-click="vm.toggleCalendar()">
