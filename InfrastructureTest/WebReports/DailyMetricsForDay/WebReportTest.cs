@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
@@ -89,8 +88,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
             if (AdherenceSetting.HasValue)
             {
                 var globalSettingRep = new GlobalSettingDataRepository(UnitOfWork);
-                var adherenceSetting = new GlobalSettingDataRepository(UnitOfWork).FindValueByKey(AdherenceReportSetting.Key,
-                    new AdherenceReportSetting());
+                var adherenceSetting = new GlobalSettingDataRepository(UnitOfWork).FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
                 adherenceSetting.CalculationMethod = AdherenceSetting.Value;
                 globalSettingRep.PersistSettingValue(adherenceSetting);
                 UnitOfWork.Flush();
@@ -111,7 +109,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
             return createTarget(loggedOnUser,
                 CurrentDataSource.Make(),
                 currentBu,
-				new GlobalSettingDataRepository(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make())));
+				new GlobalSettingDataRepository(UnitOfWork));
         }
 
         protected virtual AdherenceReportSettingCalculationMethod? AdherenceSetting
