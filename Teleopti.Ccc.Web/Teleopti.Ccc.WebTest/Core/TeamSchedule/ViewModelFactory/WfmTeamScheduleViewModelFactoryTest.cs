@@ -196,6 +196,51 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			first.DaySchedules[2].Title.Should().Be(null);
 			first.DaySchedules.All(d => d.IsTerminated).Should().Be.True();
 		}
+
+		[Test]
+		public void ShouldShowPersonScheduleOnTheTerminationDate()
+		{
+			UserCulture.Is(CultureInfoFactory.CreateSwedishCulture());
+			var scheduleDate = new DateOnly(2020,1,1);
+			var person = PersonFactory.CreatePerson("Sherlock","Holmes");
+			person.TerminatePerson(new DateOnly(2020,1,1),new PersonAccountUpdaterDummy());
+			person.WithId();
+			PeopleSearchProvider.Add(person);
+			PersonRepository.Has(person);
+			var scenario = ScenarioFactory.CreateScenarioWithId("test",true);
+			CurrentScenario.FakeScenario(scenario);
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,person,
+				new DateTimePeriod(new DateTime(2020,1,1,8,0,0,DateTimeKind.Utc),new DateTime(2020,1,1,17,0,0,DateTimeKind.Utc)),
+				ShiftCategoryFactory.CreateShiftCategory("Day","blue"));
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person,scenario,
+				new DateTimePeriod(new DateTime(2020,1,1,8,0,0,DateTimeKind.Utc),
+					new DateTime(2020,1,1,17,0,0,DateTimeKind.Utc)),AbsenceFactory.CreateAbsence("abs"));
+
+			ScheduleStorage.Add(pa);
+			ScheduleStorage.Add(personAbsence);
+
+			var searchTerm = new Dictionary<PersonFinderField,string>
+			{
+				{PersonFinderField.FirstName, "Sherlock"}
+			};
+
+			var result = Target.CreateWeekScheduleViewModel(searchTerm,scheduleDate,20,1);
+
+			result.Total.Should().Be(1);
+
+			var first = result.PersonWeekSchedules.First();
+
+			first.PersonId.Should().Be(person.Id.GetValueOrDefault());
+			first.DaySchedules.Count.Should().Be(7);
+			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019,12,30));
+			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020,1,5));
+			first.DaySchedules[2].Date.Should().Be(new DateOnly(2020,1,1));
+			first.DaySchedules[2].Title.Should().Not.Be(null);
+			first.DaySchedules[2].IsTerminated.Should().Be.False();		
+		}
+
+
 		[Test]
 		public void ShouldReturnCorrectDayScheduleSummaryForNotPermittedConfidentialAbs()
 		{

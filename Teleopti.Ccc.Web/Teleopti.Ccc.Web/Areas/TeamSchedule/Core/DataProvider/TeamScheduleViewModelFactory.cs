@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 						var dayScheduleViewModel = new PersonDayScheduleSummayViewModel
 						{
-							IsTerminated = person.TerminalDate.HasValue && person.TerminalDate.Value <= d,
+							IsTerminated = person.TerminalDate.HasValue && person.TerminalDate.Value < d,
 							Date = d,
 							DayOfWeek = (int)d.DayOfWeek
 						};
