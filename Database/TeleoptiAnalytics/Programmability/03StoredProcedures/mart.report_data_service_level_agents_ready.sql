@@ -153,7 +153,6 @@ INNER JOIN
 INNER JOIN 
 	mart.bridge_queue_workload bq
 	ON bq.queue_id=dq.queue_id
-	AND bq.skill_id IN (select id from #skills)
 	AND bq.workload_id IN (SELECT id from #workloads)
 INNER JOIN 
 	#bridge_time_zone b
