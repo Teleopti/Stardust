@@ -1,12 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
@@ -21,6 +23,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IPersonAssignmentAddActivity _addActivity;
 		private readonly INonoverwritableLayerMovabilityChecker _movabilityChecker;
 		private readonly INonoverwritableLayerMover _mover;
+		private readonly ILoggedOnUser _loggedOnUser;
 
 
 		public AddActivityCommandHandler(IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey> personAssignmentRepository, 
@@ -31,7 +34,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			IShiftCategoryRepository shiftCategoryRepository, 
 			IPersonAssignmentAddActivity addActivity,
 			INonoverwritableLayerMovabilityChecker movabilityChecker,
-			INonoverwritableLayerMover mover)
+			INonoverwritableLayerMover mover,
+			ILoggedOnUser loggedOnUser)
 		{
 			_activityForId = activityForId;
 			_personAssignmentRepository = personAssignmentRepository;
@@ -42,12 +46,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_addActivity = addActivity;
 			_movabilityChecker = movabilityChecker;
 			_mover = mover;
+			_loggedOnUser = loggedOnUser;
 		}
 
 		public void Handle(AddActivityCommand command)
 		{
 			var activity = _activityForId.Load(command.ActivityId);
 			var person = _personForId.Load(command.PersonId);
+			var timeZone = _timeZone.TimeZone();
 			var scenario = _currentScenario.Current();
 			var personAssignment = _personAssignmentRepository.LoadAggregate(new PersonAssignmentKey
 			{
@@ -57,7 +63,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			});
 
 			command.ErrorMessages = new List<string>();
-			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(command.StartTime, _timeZone.TimeZone()), TimeZoneHelper.ConvertToUtc(command.EndTime, _timeZone.TimeZone()));
+			var warnings = new List<string>();
+			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(command.StartTime, timeZone), TimeZoneHelper.ConvertToUtc(command.EndTime, timeZone));
 
 			var personAssignmentOfPreviousDay = _personAssignmentRepository.LoadAggregate(new PersonAssignmentKey
 			{
@@ -97,13 +104,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 			else
 			{
-				if (_movabilityChecker.HasNonoverwritableLayer(person, command.Date, period, activity) &&
-					_movabilityChecker.IsFixableByMovingNonoverwritableLayer(period, person, command.Date))
+				if (command.MoveConflictLayerAllowed && _movabilityChecker.HasNonoverwritableLayer(person, command.Date, period, activity))
 				{
-					var conflictLayer = _movabilityChecker.GetNonoverwritableLayersToMove(person, command.Date, period).Single();
-					var movingDistance = _mover.GetMovingDistance(person, command.Date, period,
-						conflictLayer.Id.GetValueOrDefault());
-					personAssignment.MoveActivityAndKeepOriginalPriority(conflictLayer, conflictLayer.Period.StartDateTime.Add(movingDistance), null);
+					var conflictLayers = _movabilityChecker.GetNonoverwritableLayersToMove(person, command.Date, period);
+					if (_movabilityChecker.IsFixableByMovingNonoverwritableLayer(period, person, command.Date))
+					{
+						var fixableLayer = conflictLayers.Single();
+						var movingDistance = _mover.GetMovingDistance(person, command.Date, period,
+							fixableLayer.Id.GetValueOrDefault());
+						if (movingDistance == TimeSpan.Zero)
+						{
+							warnings.AddRange(createWarningMessages(new[] {fixableLayer}, activity.Name, period));
+						}
+						else
+						{
+							personAssignment.MoveActivityAndKeepOriginalPriority(fixableLayer,
+								fixableLayer.Period.StartDateTime.Add(movingDistance), null);
+						}
+					}
+					else
+					{
+						warnings.AddRange(createWarningMessages(conflictLayers, activity.Name, period));
+					}
+					command.WarningMessages = warnings;
 				}
 				_addActivity.AddActivity(personAssignment, activity, period, command.TrackedCommandInfo);
 				if (personAssignment.ShiftCategory == null)
@@ -115,6 +138,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 						personAssignment.SetShiftCategory(shiftCategory);
 				}
 			}
+		}
+
+		private IList<string> createWarningMessages(IList<IShiftLayer> conflictLayers, string newActivityName, DateTimePeriod period)
+		{
+			var warnings = new List<string>();
+			var currentCulture = _loggedOnUser.CurrentUser().PermissionInformation.Culture();
+			var timeZone = _timeZone.TimeZone();
+			conflictLayers.ForEach(l =>
+			{
+				var warning = string.Format(currentCulture, Resources.BusinessRuleOverlappingErrorMessage3, l.Payload.Name,
+					l.Period.TimePeriod(timeZone).ToShortTimeString(currentCulture), newActivityName,
+					period.TimePeriod(timeZone).ToShortTimeString(currentCulture));
+				warnings.Add(warning);
+			});
+			return warnings;
 		}
 	}
 
