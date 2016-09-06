@@ -30,7 +30,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 		public FakeScheduleStorage ScheduleStorage;
 		public FakePersonRepository PersonRepository;
 		public ScheduleValidationProvider Target;
-		public FakeWriteSideRepository<IActivity> ActivityForId; 
+		public FakeWriteSideRepository<IActivity> ActivityForId;
+		public FakeUserTimeZone UserTimeZone;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -39,6 +40,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			system.UseTestDouble<ScheduleValidationProvider>().For<IScheduleValidationProvider>();
 			system.UseTestDouble<FakePersonNameProvider>().For<IPersonNameProvider>();
 			system.UseTestDouble<FakeWriteSideRepository<IActivity>>().For<IProxyForId<IActivity>>();
+			system.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
 
 			var dataSource = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
 			var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
@@ -404,6 +406,48 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule
 			overlappedLayer.Name.Should().Be.EqualTo(stickyActivity.Name);
 			overlappedLayer.StartTime.Should().Be.EqualTo(new DateTime(2013, 11, 14, 12, 0, 0));
 			overlappedLayer.EndTime.Should().Be.EqualTo(new DateTime(2013,11,14,13,0,0));
+		}
+
+		[Test]
+		public void ShouldHandleTimezoneForCheckingOverlappedActivitiesWhenAddActivity()
+		{
+			UserTimeZone.IsSweden();
+			var person = PersonFactory.CreatePersonWithGuid("John","Watson");
+			PersonRepository.Has(person);
+
+			var mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
+			var stickyActivity = ActivityFactory.CreateActivity("Short Break").WithId();
+
+			mainActivity.AllowOverwrite = true;
+			stickyActivity.AllowOverwrite = false;
+			ActivityForId.Add(mainActivity);
+			ActivityForId.Add(stickyActivity);
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
+			var scenario = CurrentScenario.Current();
+		
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				mainActivity,person,
+				new DateTimePeriod(2013,11,14,8,2013,11,14,16),
+				shiftCategory,scenario);
+
+		
+			pa.AddActivity(stickyActivity, new DateTimePeriod(2013,11,14,10,2013,11,14,11)); //11:00-12:00
+
+			ScheduleStorage.Add(pa);
+			var input = new CheckActivityLayerOverlapFormData
+			{
+				PersonIds = new Guid[] { person.Id.Value },
+				Date = new DateOnly(2013, 11, 14),
+				StartTime = new DateTime(2013, 11, 14, 10, 0, 0),
+				EndTime = new DateTime(2013, 11, 14, 11, 0, 0),
+				ActivityId = mainActivity.Id.GetValueOrDefault(),
+				ActivityType =ActivityType.RegularActivity
+			};
+
+			var result = Target.GetActivityLayerOverlapCheckingResult(input);
+
+			result.Count.Should().Be(0);
 		}
 		[Test]
 		public void ShouldReturnOverlappedActivitiesWhenAddPersonalActivity()
