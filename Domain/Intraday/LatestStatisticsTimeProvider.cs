@@ -23,13 +23,20 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_now = now;
 		}
 
-		public DateTime? Get(Guid[] skillIdList)
+		public LatestStatitsticsTimeModel Get(Guid[] skillIdList)
 		{
 			var usersToday = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _userTimeZone.TimeZone()));
 			var intervalId = _latestStatisticsIntervalIdLoader.Load(skillIdList, usersToday, _userTimeZone.TimeZone());
 			if (!intervalId.HasValue)
 				return null;
-			return DateTime.MinValue.AddMinutes(intervalId.Value * _intervalLengthFetcher.IntervalLength);
+
+			int minutesPerInterval = _intervalLengthFetcher.IntervalLength;
+
+			return new LatestStatitsticsTimeModel
+			{
+				StartTime = DateTime.MinValue.AddMinutes(intervalId.Value * minutesPerInterval),
+				EndTime = DateTime.MinValue.AddMinutes((intervalId.Value + 1) * minutesPerInterval)
+			};
 		}
 	}
 }

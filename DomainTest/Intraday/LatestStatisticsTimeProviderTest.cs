@@ -21,8 +21,15 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			IntervalLengthFetcher.Has(15);
 			LatestStatisticsIntervalIdLoader.Has(95);
 
-			var expectedTime = DateTime.MinValue.AddMinutes(95*15);
-			Target.Get(new [] {Guid.NewGuid()}).Should().Be.EqualTo(expectedTime);
+			var expectedTime = new LatestStatitsticsTimeModel
+			{
+				StartTime = DateTime.MinValue.AddMinutes(95 * 15),
+				EndTime = DateTime.MinValue.AddMinutes(96 * 15)
+			};
+			var result = Target.Get(new [] {Guid.NewGuid()});
+			
+			result.StartTime.Should().Be.EqualTo(expectedTime.StartTime);
+			result.EndTime.Should().Be.EqualTo(expectedTime.EndTime);
 		}
 
 		[Test]

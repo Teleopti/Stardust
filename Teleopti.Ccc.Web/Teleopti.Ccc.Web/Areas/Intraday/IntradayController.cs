@@ -33,5 +33,11 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 			var skillIdList = skillArea.Skills.Select(skill => skill.Id).ToArray();
 			return Ok(new { latestIntervalTime = _latestStatisticsTimeProvider.Get(skillIdList) });
 		}
+
+		[UnitOfWork, HttpGet, Route("api/intraday/lateststatisticstimeforskill/{id}")]
+		public virtual IHttpActionResult GetLatestStatisticsTimeForSkill(Guid id)
+		{
+			return Ok(_latestStatisticsTimeProvider.Get(new[] { id }));
+		}
 	}
 }
