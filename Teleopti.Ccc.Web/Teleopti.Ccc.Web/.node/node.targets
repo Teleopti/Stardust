@@ -79,8 +79,8 @@
 	<Target Name="RunGruntBuildDev" Inputs="@(OriginalJsFiles);@(DistCssFiles)" Outputs="@(DistJsFiles);@(DistCssFiles)">
 		<Message Text="Restore Node Packages Command: $(NpmInstallGruntCliCmd) /w WorkingDirectory: $(NodeDir)" Importance="high" />
 		<Exec Command="$(NpmInstallGruntCliCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
-		<Message Text="Executing Node.JS Builds: $(GruntBuildDev) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
-		<Exec ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" Command="$(GruntBuildDev)" />
+		<!-- <Message Text="Executing Node.JS Builds: $(GruntBuildDev) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" /> -->
+		<!-- <Exec ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" Command="$(GruntBuildDev)" /> -->
 		<Message Text="Executing Node.JS Build for desktop client: $(GruntBuild) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
 		<Exec ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" Command="$(GruntBuildForDesktop)" />
 	</Target>
