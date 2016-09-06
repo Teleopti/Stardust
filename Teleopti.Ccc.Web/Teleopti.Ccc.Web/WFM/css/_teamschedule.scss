@@ -667,7 +667,6 @@
 			display: flex;
 			-ms-flex-pack: center;
 			justify-content: center;
-
 			min-width: 4em;
 
 			&:hover {
@@ -690,7 +689,7 @@
 			}
 
 			.view-option-radio {
-				opacity: 0;
+				display: none;
 				position: absolute;
 			}
 
@@ -711,7 +710,6 @@
 				justify-content: center;
 				-ms-flex-align: center;
 				align-items: center;
-
 				cursor: pointer;
 			}
 
