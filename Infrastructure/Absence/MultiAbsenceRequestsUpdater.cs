@@ -94,6 +94,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				loadDataForResourceCalculation(personRequests, aggregatedValidatorList);
 				_feedback.SendProgress?.Invoke("Done loading data for resource calculation!");
 
+
 				foreach (var personRequest in personRequests)
 				{
 					var absenceRequest = personRequest.Request as IAbsenceRequest;
@@ -197,28 +198,31 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 		private void sendRequestCommand(IPersonRequest personRequest)
 		{
-			IRequestCommand command;
+			if (personRequest.IsApproved || personRequest.IsDenied)
+			{
+				IRequestCommand command;
 
-			if (personRequest.IsApproved)
-			{
-				command = new ApproveRequestCommand()
+				if (personRequest.IsApproved)
 				{
-					PersonRequestId = personRequest.Id.GetValueOrDefault(),
-				};
-			}
-			else
-			{
-				command = new DenyRequestCommand()
+					command = new ApproveRequestCommand()
+					{
+						PersonRequestId = personRequest.Id.GetValueOrDefault(),
+					};
+				}
+				else
 				{
-					PersonRequestId = personRequest.Id.GetValueOrDefault(),
-					DenyReason = personRequest.DenyReason
-				};
-			}
-			_commandDispatcher.Execute(command);
+					command = new DenyRequestCommand()
+					{
+						PersonRequestId = personRequest.Id.GetValueOrDefault(),
+						DenyReason = personRequest.DenyReason
+					};
+				}
+				_commandDispatcher.Execute(command);
 
-			if (command.ErrorMessages != null)
-			{
-				logger.Warn(command.ErrorMessages);
+				if (command.ErrorMessages != null)
+				{
+					logger.Warn(command.ErrorMessages);
+				}
 			}
 		}
 
