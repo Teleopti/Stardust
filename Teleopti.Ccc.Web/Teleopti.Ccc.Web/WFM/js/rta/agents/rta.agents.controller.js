@@ -103,6 +103,26 @@
 					}
 				});
 
+				(function initialize(){
+					if (siteIds.length > 0 || teamIds.length > 0 || skillIds.length > 0 || skillAreaId) {
+						getAgents()
+							.then(function(fn) {
+								return fn({
+									siteIds: siteIds,
+									teamIds: teamIds,
+									skillIds: skillIds
+								});
+							})
+							.then(function(agentsInfo) {
+								$scope.agentsInfo = agentsInfo;
+								$scope.agents = agentsInfo;
+								$scope.$watchCollection('agents', filterData);
+								updateBreadCrumb(agentsInfo);
+							})
+							.then(updateStates);
+					}					
+				})();
+
 				function updateStates() {
 					if ($scope.pause || !(siteIds.length > 0 || teamIds.length > 0 || skillIds.length > 0 || skillAreaId))
 						return;
@@ -326,24 +346,6 @@
 					return RtaRouteService.urlForAgentDetails(personId);
 				};
 
-				if (siteIds.length > 0 || teamIds.length > 0 || skillIds.length > 0 || skillAreaId) {
-					getAgents()
-						.then(function(fn) {
-							return fn({
-								siteIds: siteIds,
-								teamIds: teamIds,
-								skillIds: skillIds
-							});
-						})
-						.then(function(agentsInfo) {
-							$scope.agentsInfo = agentsInfo;
-							$scope.agents = agentsInfo;
-							$scope.$watchCollection('agents', filterData);
-							updateBreadCrumb(agentsInfo);
-						})
-						.then(updateStates);
-				}
-
 				function getAgents() {
 					var deferred = $q.defer();
 					if (skillAreaId) {
@@ -414,13 +416,15 @@
 					return 'current-activity';
 				}
 
-				if (skillIds.length === 1) {
-					RtaService.getSkillName(skillIds[0])
-						.then(function(skill) {
-							$scope.skillName = skill.Name || '?';
-							$scope.skill = true;
-						});
-				}
+				(function getSkillName(){
+					if (skillIds.length === 1) {
+						RtaService.getSkillName(skillIds[0])
+							.then(function(skill) {
+								$scope.skillName = skill.Name || '?';
+								$scope.skill = true;
+							});
+					}
+				})();
 
 				$scope.$watch(
 					function() {
