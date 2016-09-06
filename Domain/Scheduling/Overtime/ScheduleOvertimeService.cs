@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 	{
 		bool SchedulePersonOnDay(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences,
 			IResourceCalculateDelayer resourceCalculateDelayer, DateOnly dateOnly, INewBusinessRuleCollection rules,
-			IScheduleTagSetter scheduleTagSetter, TimeZoneInfo timeZoneInfo);
+			IScheduleTagSetter scheduleTagSetter);
 	}
 
 	public class ScheduleOvertimeService : IScheduleOvertimeService
@@ -26,21 +26,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 		private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IGridlockManager _gridlockManager;
+		private readonly ITimeZoneGuard _timeZoneGuard;
 
 		public ScheduleOvertimeService(IOvertimeLengthDecider overtimeLengthDecider, 
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
 			ISchedulingResultStateHolder schedulingResultStateHolder,
-			IGridlockManager gridlockManager )
+			IGridlockManager gridlockManager,
+			ITimeZoneGuard timeZoneGuard)
 		{
 			_overtimeLengthDecider = overtimeLengthDecider;
 			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_gridlockManager = gridlockManager;
+			_timeZoneGuard = timeZoneGuard;
 		}
 
-		public bool SchedulePersonOnDay(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences, IResourceCalculateDelayer resourceCalculateDelayer, DateOnly dateOnly, INewBusinessRuleCollection rules, IScheduleTagSetter scheduleTagSetter, TimeZoneInfo timeZoneInfo)
+		public bool SchedulePersonOnDay(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences, IResourceCalculateDelayer resourceCalculateDelayer, DateOnly dateOnly, INewBusinessRuleCollection rules, IScheduleTagSetter scheduleTagSetter)
 		{
 			var person = scheduleDay.Person;
+			var timeZoneInfo = _timeZoneGuard.CurrentTimeZone();
 			if (_gridlockManager.Gridlocks(person, dateOnly) != null) return false;
 			if (!hasMultiplicatorDefinitionSetOfOvertimeType(person, dateOnly)) return false;
 

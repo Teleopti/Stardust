@@ -14,21 +14,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class ScheduleOvertime
 	{
-		private readonly Func<ISchedulerStateHolder> _schedulerState;
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IScheduleOvertimeService _scheduleOvertimeService;
 		private readonly ScheduleOvertimeOnNonScheduleDays _scheduleOvertimeOnNonScheduleDays;
 		private readonly IFullResourceCalculation _fullResourceCalculation;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 
-		public ScheduleOvertime(Func<ISchedulerStateHolder> schedulerState, 
-																	Func<ISchedulingResultStateHolder> schedulingResultStateHolder, 
+		public ScheduleOvertime(Func<ISchedulingResultStateHolder> schedulingResultStateHolder, 
 																	IScheduleOvertimeService scheduleOvertimeService,
 																	ScheduleOvertimeOnNonScheduleDays scheduleOvertimeOnNonScheduleDays,
 																	IFullResourceCalculation fullResourceCalculation,
 																	IResourceOptimizationHelper resourceOptimizationHelper)
 		{
-			_schedulerState = schedulerState;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_scheduleOvertimeService = scheduleOvertimeService;
 			_scheduleOvertimeOnNonScheduleDays = scheduleOvertimeOnNonScheduleDays;
@@ -55,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					var scheduleDay = _schedulingResultStateHolder().Schedules[person].ScheduledDay(dateOnly);
 					var rules = NewBusinessRuleCollection.Minimum();
 					IScheduleTagSetter scheduleTagSetter = new ScheduleTagSetter(overtimePreferences.ScheduleTag);
-					_scheduleOvertimeService.SchedulePersonOnDay(scheduleDay, overtimePreferences, resourceCalculateDelayer, dateOnly, rules, scheduleTagSetter, _schedulerState().TimeZoneInfo);
+					_scheduleOvertimeService.SchedulePersonOnDay(scheduleDay, overtimePreferences, resourceCalculateDelayer, dateOnly, rules, scheduleTagSetter);
 					_scheduleOvertimeOnNonScheduleDays.SchedulePersonOnDay(scheduleDay, overtimePreferences, resourceCalculateDelayer);
 					var progressResult = onDayScheduled(backgroundWorker,new SchedulingServiceSuccessfulEventArgs(scheduleDay,()=>cancel=true));
 					if (progressResult.ShouldCancel) return;

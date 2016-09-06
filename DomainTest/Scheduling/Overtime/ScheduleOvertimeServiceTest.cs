@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 		public FakeSkillRepository SkillRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeScenarioRepository ScenarioRepository;
+		public FakeTimeZoneGuard TimeZoneGuard;
 
 		private ScheduleOvertimeService _target;
 		private MockRepository _mock;
@@ -45,7 +46,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 		private INewBusinessRuleCollection _rules;
 		private IScheduleTagSetter _scheduleTagSetter;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
-		private TimeZoneInfo _timeZoneInfo;
 		private IPerson _person;
 		private IPersonPeriod _personPeriod;
 		private ISkill _skill;
@@ -67,8 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			_rules = NewBusinessRuleCollection.Minimum();
 			_scheduleTagSetter = _mock.StrictMock<IScheduleTagSetter>();
 			_schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
-			_target = new ScheduleOvertimeService(_overtimeLengthDecider, _schedulePartModifyAndRollbackService, _schedulingResultStateHolder, new GridlockManager());
-			_timeZoneInfo = TimeZoneInfo.Utc;
+			_target = new ScheduleOvertimeService(_overtimeLengthDecider, _schedulePartModifyAndRollbackService, _schedulingResultStateHolder, new GridlockManager(), new FakeTimeZoneGuard());
 			_person = PersonFactory.CreatePerson("person");
 			_activity = ActivityFactory.CreateActivity("activity");
 			_skill = SkillFactory.CreateSkill("skill");
@@ -114,9 +113,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			};
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(ResourceOptimizationHelper, 1, true, stateHolder.SchedulingResultState);
 			var rules = NewBusinessRuleCollection.Minimum();
+			TimeZoneGuard.SetTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			var scheduleTagSetter = new ScheduleTagSetter(overtimePreference.ScheduleTag);
 			Target.SchedulePersonOnDay(stateHolder.Schedules[agent].ScheduledDay(dateOnly), overtimePreference,
-				resourceCalculateDelayer, dateOnly, rules, scheduleTagSetter, TimeZoneInfoFactory.StockholmTimeZoneInfo());
+				resourceCalculateDelayer, dateOnly, rules, scheduleTagSetter);
 
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().Should().Not.Be.Empty();
 		}
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Playback())
 			{
-				var res = _target.SchedulePersonOnDay(_scheduleDay, _overtimePreferences, _resourceCalculateDelayer, _dateOnly, _rules, _scheduleTagSetter, _timeZoneInfo);
+				var res = _target.SchedulePersonOnDay(_scheduleDay, _overtimePreferences, _resourceCalculateDelayer, _dateOnly, _rules, _scheduleTagSetter);
 				Assert.IsFalse(res);
 			}	
 		}
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Playback())
 			{
-				var res = _target.SchedulePersonOnDay(_scheduleDay, _overtimePreferences, _resourceCalculateDelayer, _dateOnly, _rules, _scheduleTagSetter, _timeZoneInfo);
+				var res = _target.SchedulePersonOnDay(_scheduleDay, _overtimePreferences, _resourceCalculateDelayer, _dateOnly, _rules, _scheduleTagSetter);
 				Assert.IsFalse(res);
 			}
 		}
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Playback())
 			{
-				var res = _target.SchedulePersonOnDay(_scheduleDay, _overtimePreferences, _resourceCalculateDelayer, _dateOnly, _rules, _scheduleTagSetter, _timeZoneInfo);
+				var res = _target.SchedulePersonOnDay(_scheduleDay, _overtimePreferences, _resourceCalculateDelayer, _dateOnly, _rules, _scheduleTagSetter);
 				Assert.IsFalse(res);
 			}	
 		}
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Playback())
 			{
-				var result = _target.SchedulePersonOnDay(_scheduleDay, _overtimePreferences, _resourceCalculateDelayer, _dateOnly, _rules, _scheduleTagSetter, _timeZoneInfo);
+				var result = _target.SchedulePersonOnDay(_scheduleDay, _overtimePreferences, _resourceCalculateDelayer, _dateOnly, _rules, _scheduleTagSetter);
 				Assert.IsFalse(result);
 			}		
 		}
@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			using (_mock.Playback())
 			{
-				var result = _target.SchedulePersonOnDay(_scheduleDay, _overtimePreferences, _resourceCalculateDelayer, _dateOnly, _rules, _scheduleTagSetter, _timeZoneInfo);
+				var result = _target.SchedulePersonOnDay(_scheduleDay, _overtimePreferences, _resourceCalculateDelayer, _dateOnly, _rules, _scheduleTagSetter);
 				Assert.IsFalse(result);
 			}	
 		}
@@ -258,8 +258,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(ResourceOptimizationHelper, 1, true, stateHolder.SchedulingResultState);
 			var rules = NewBusinessRuleCollection.Minimum();
 			var scheduleTagSetter = new ScheduleTagSetter(overtimePreference.ScheduleTag);
+			TimeZoneGuard.SetTimeZone(TimeZoneInfoFactory.DenverTimeZoneInfo());
 			Target.SchedulePersonOnDay(stateHolder.Schedules[agent].ScheduledDay(dateOnly.AddDays(1)), overtimePreference,
-				resourceCalculateDelayer, dateOnly.AddDays(1), rules, scheduleTagSetter, TimeZoneInfoFactory.DenverTimeZoneInfo());
+				resourceCalculateDelayer, dateOnly.AddDays(1), rules, scheduleTagSetter);
 
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly.AddDays(1)).PersonAssignment(true).OvertimeActivities().Should().Be.Empty();
 		}
