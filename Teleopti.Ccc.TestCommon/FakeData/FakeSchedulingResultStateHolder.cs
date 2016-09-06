@@ -91,12 +91,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	
 		public void AddAbsenceHeadCountDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay)
 		{
-			throw new NotImplementedException();
+			
 		}
 
 		public int AddedAbsenceHeadCountDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay)
 		{
-			throw new NotImplementedException();
+			return 0;
 		}
 	}
 }
