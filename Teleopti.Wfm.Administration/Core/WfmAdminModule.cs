@@ -27,8 +27,9 @@ namespace Teleopti.Wfm.Administration.Core
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader()));
-			var iocConf = new IocConfiguration(new IocArgs(new ConfigReader()), toggleManager);
+			var iocArgs = new IocArgs(new ConfigReader());
+			var toggleManager = CommonModule.ToggleManagerForIoc(iocArgs);
+			var iocConf = new IocConfiguration(iocArgs, toggleManager);
 			builder.RegisterModule(new TenantServerModule(iocConf));
 			builder.RegisterApiControllers(typeof(HomeController).Assembly).ApplyAspects();
 			builder.RegisterModule(new CommonModule(iocConf));
