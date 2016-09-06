@@ -1,6 +1,5 @@
 ﻿using System;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -20,7 +19,6 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
     {
         private AnalyticsDataFactory _analyticsDataFactory;
         private IPerson _loggedOnUser;
-        private ExistingDatasources _datasource;
         private IBusinessUnit _currentBusinessUnit;
         protected int PersonId;
         protected int AcdLoginId;
@@ -48,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
                 DateId = 0
             };
             var intervals = new QuarterOfAnHourInterval();
-            _datasource = new ExistingDatasources(timeZones);
+            var datasource = new ExistingDatasources(timeZones);
 
             _loggedOnUser = new Domain.Common.Person();
             _loggedOnUser.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
@@ -61,18 +59,18 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
             AcdLoginId = 123;
             ScenarioId = 12;
 
-            var agent = new Person(_loggedOnUser, _datasource, PersonId, new DateTime(2010, 1, 1),
+            var agent = new Person(_loggedOnUser, datasource, PersonId, new DateTime(2010, 1, 1),
                          new DateTime(2059, 12, 31), yesterDay.DateId, TheDate.DateId, 0, _currentBusinessUnit.Id.Value, false, timeZones.CetTimeZoneId);
             var scenario = Scenario.DefaultScenarioFor(ScenarioId, _currentBusinessUnit.Id.Value);
 
-            _analyticsDataFactory.Setup(new EternityAndNotDefinedDate());
+			_analyticsDataFactory.Setup(new EternityAndNotDefinedDate());
             _analyticsDataFactory.Setup(timeZones);
-            _analyticsDataFactory.Setup(TheDate);
-            _analyticsDataFactory.Setup(yesterDay);
+			_analyticsDataFactory.Setup(yesterDay);
+			_analyticsDataFactory.Setup(TheDate);
             _analyticsDataFactory.Setup(intervals);
-            _analyticsDataFactory.Setup(_datasource);
-            _analyticsDataFactory.Setup(new FillBridgeTimeZoneFromData(TheDate, intervals, timeZones, _datasource));
-            _analyticsDataFactory.Setup(new FillBridgeTimeZoneFromData(yesterDay, intervals, timeZones, _datasource));
+            _analyticsDataFactory.Setup(datasource);
+            _analyticsDataFactory.Setup(new FillBridgeTimeZoneFromData(TheDate, intervals, timeZones, datasource));
+            _analyticsDataFactory.Setup(new FillBridgeTimeZoneFromData(yesterDay, intervals, timeZones, datasource));
             _analyticsDataFactory.Setup(agent);
             _analyticsDataFactory.Setup(new FillBridgeAcdLoginPersonFromData(agent, AcdLoginId));
             _analyticsDataFactory.Setup(scenario);
@@ -87,8 +85,8 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
         {
             if (AdherenceSetting.HasValue)
             {
-                var globalSettingRep = new GlobalSettingDataRepository(UnitOfWork);
-                var adherenceSetting = new GlobalSettingDataRepository(UnitOfWork).FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
+                var globalSettingRep = new GlobalSettingDataRepository(CurrUnitOfWork);
+                var adherenceSetting = globalSettingRep.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
                 adherenceSetting.CalculationMethod = AdherenceSetting.Value;
                 globalSettingRep.PersistSettingValue(adherenceSetting);
                 UnitOfWork.Flush();
@@ -99,17 +97,13 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 
         protected T Target<T>(Func<ILoggedOnUser, ICurrentDataSource, ICurrentBusinessUnit, IGlobalSettingDataRepository, T> createTarget)
         {
-            var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-            loggedOnUser.Expect(x => x.CurrentUser()).Return(_loggedOnUser);
+			var currentBusinessUnit = new FakeCurrentBusinessUnit();
+	        currentBusinessUnit.FakeBusinessUnit(_currentBusinessUnit);
 
-            var currentBu = MockRepository.GenerateMock<ICurrentBusinessUnit>();
-            currentBu.Expect(x => x.Current()).Return(_currentBusinessUnit);
-
-
-            return createTarget(loggedOnUser,
+			return createTarget(new FakeLoggedOnUser(_loggedOnUser),
                 CurrentDataSource.Make(),
-                currentBu,
-				new GlobalSettingDataRepository(UnitOfWork));
+				currentBusinessUnit, 
+				new GlobalSettingDataRepository(CurrUnitOfWork));
         }
 
         protected virtual AdherenceReportSettingCalculationMethod? AdherenceSetting

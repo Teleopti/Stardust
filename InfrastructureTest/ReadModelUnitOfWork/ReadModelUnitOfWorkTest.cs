@@ -299,6 +299,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 		}
 	}
 
+	[Serializable]
 	public class TestException : Exception
 	{
 	}

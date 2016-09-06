@@ -223,6 +223,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MessageBroker
 		}
 	}
 
+	[Serializable]
 	public class TestException : Exception
 	{
 	}

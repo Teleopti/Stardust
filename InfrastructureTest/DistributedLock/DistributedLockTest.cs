@@ -219,6 +219,7 @@ namespace Teleopti.Ccc.InfrastructureTest.DistributedLock
 			exceptionThrown.Should().Be(true);
 		}
 
+		[Serializable]
 		public class TestException : Exception
 		{
 		}
