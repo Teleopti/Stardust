@@ -52,6 +52,7 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
                 foreach (var team in site.TeamCollection.OrderBy(t => t.Description.Name))
                 {
                     if (!team.IsChoosable) continue;
+										if(string.IsNullOrEmpty(team.Description.Name)) continue;
 
                     IChildPersonGroup teamGroup = new ChildPersonGroup(team.Description.Name);
                     teamGroup.Entity = team;
