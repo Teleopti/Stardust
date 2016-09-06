@@ -83,32 +83,18 @@ module.exports = function(grunt) {
 		},
 
 		cssmin: {
-			distAndDev: {
-				options: {
-					shorthandCompacting: false,
-					roundingPrecision: -1
-				},
-				target: {
-					files: {
-						'dist/style_classic.min.css': ['css/style_classic.css'],
-						'dist/style_dark.min.css': ['css/style_dark.css'],
-						'dist/modules_classic.min.css': ['dist/modules_classic.css'],
-						'dist/modules_dark.min.css': ['dist/modules_dark.css']
-					}
-				}
+			options: {
+				shorthandCompacting: false,
+				roundingPrecision: -1
 			},
-				minForDesktop: {
-					options: {
-						shorthandCompacting: false,
-						roundingPrecision: -1
-					},
-					target: {
-						files: {
-							'dist/style_classic.min.css': ['css/style_classic.css'],
-							'dist/modules_classic.min.css': ['dist/modules_classic.css']
-						}
-					}
+			target: {
+				files: {
+					'dist/style_classic.min.css': ['css/style_classic.css'],
+					'dist/style_dark.min.css': ['css/style_dark.css'],
+					'dist/modules_classic.min.css': ['dist/modules_classic.css'],
+					'dist/modules_dark.min.css': ['dist/modules_dark.css']
 				}
+			}
 		},
 		concat: {
 			distJs: {
@@ -199,7 +185,7 @@ module.exports = function(grunt) {
 					'vendor/ui-bootstrap-custom-build/datepicker.directive.ext.js',
 					'vendor/ui-bootstrap-custom-build/timepicker.directive.ext.js',
 					'node_modules/angular-dialog-service/dist/dialogs.min.js',
-					'node_modules/angular-dialog-service/dist/dialogs-default-translations.min.js',
+					'node_modules/angular-dialog-service/dist/dialogs-default-translations.min.js',					
 					'../Content/signalr/jquery.signalR-2.2.0.js',
 					'../Content/signalr/broker-hubs.js'
 				],
@@ -294,17 +280,17 @@ module.exports = function(grunt) {
 		},
 		processhtml: {
 			dev: {
-				options: {
-					process: true,
-					enviroment: 'dev'
+				options:{
+					process:true,
+					enviroment:'dev'
 				},
 				files: {
 					'index.html': ['index.tpl.html']
 				}
 			},
 			dist: {
-				options: {
-					process: true
+				options:{
+					process:true
 				},
 				files: {
 					'index.html': ['index.tpl.html']
@@ -377,15 +363,15 @@ module.exports = function(grunt) {
 	grunt.registerTask('default', ['devDist', 'test', 'watch:dev']); // this task run the main task and then watch for file changes
 	grunt.registerTask('test', ['ngtemplates', 'karma:unit']);
 	grunt.registerTask('devTest', ['ngtemplates', 'karma:dev']);
-	grunt.registerTask('devDist', ['ngtemplates', 'sass', 'concat:distJs', 'concat:distCss', 'concat:distDarkCss', 'cssmin:distAndDev', 'copy', 'uglify:dev', 'generateIndexDev']);
+	grunt.registerTask('devDist', ['ngtemplates', 'sass', 'concat:distJs', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'copy', 'uglify:dev', 'generateIndexDev']);
 	grunt.registerTask('test:continuous', ['ngtemplates', 'karma:continuous']);
-	grunt.registerTask('dist', ['ngtemplates', 'sass', 'concat:distJs', 'concat:distCss', 'concat:distDarkCss', 'cssmin:distAndDev', 'uglify:dist', 'copy', 'generateIndex', 'clean:dist']); // this task should only be used by the build. It's kind of packaging for production.
+	grunt.registerTask('dist', ['ngtemplates', 'sass', 'concat:distJs', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'copy', 'generateIndex','clean:dist']); // this task should only be used by the build. It's kind of packaging for production.
 	grunt.registerTask('nova', ['devDist', 'iisexpress:authBridge', 'iisexpress:web', 'watch:dev']); // this task run the main task and then watch for file changes
 	grunt.registerTask('build', ['msbuild:build']); // build the solution
 	grunt.registerTask('generateIndex', ['processhtml:dist', 'cacheBust:dist']);
 	grunt.registerTask('generateIndexDev', ['processhtml:dev', 'cacheBust:dist']);
 
 	// for desktop client
-	grunt.registerTask('buildForDesktop', ['ngtemplates', 'sass', 'concat:distJsForDesktop', 'concat:distCss', 'cssmin:minForDesktop', 'uglify:distForDesktop', 'copy:sourceMaps', 'processhtml:distForDesktop', 'cacheBust:distForDesktop']);
+	grunt.registerTask('buildForDesktop', ['ngtemplates', 'sass', 'concat:distJsForDesktop', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:distForDesktop', 'copy:sourceMaps', 'processhtml:distForDesktop', 'cacheBust:distForDesktop']);
 
 };
