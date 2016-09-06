@@ -197,7 +197,7 @@
     <Compile Include="ApplicationLayer\Events\MainShiftCategoryReplaceEvent.cs" />
     <Compile Include="ApplicationLayer\Events\NewMultiAbsenceRequestsCreatedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonRequestChangedEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\ScheduleProjectionReadModelChangedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\ScheduleProjectionReadOnlyChangedEvent.cs" />
     <Compile Include="ApplicationLayer\IKeyValueStorePersister.cs" />
     <Compile Include="ApplicationLayer\KeyValueStorePersisterExtensions.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateReadModelCleaner.cs" />

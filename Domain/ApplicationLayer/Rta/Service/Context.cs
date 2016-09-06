@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly Action<Context> _updateState;
 		private readonly ProperAlarm _appliedAlarm;
-		private readonly Lazy<IEnumerable<ScheduledActivity>> _fullSchedule;
+		private readonly Lazy<IEnumerable<ScheduledActivity>> _scheduleData;
 
 		public Context(
 			InputInfo input, 
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					Stored = null;
 			}
 
-			_fullSchedule = new Lazy<IEnumerable<ScheduledActivity>>(schedule);
+			_scheduleData = new Lazy<IEnumerable<ScheduledActivity>>(schedule);
 			var mappingsState = mappings.Invoke(this);
 			Input = input ?? new InputInfo();
 			CurrentTime = now.UtcDateTime();
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_updateState = updateState ?? (c => {});
 			_appliedAlarm = appliedAlarm;
 			
-			Schedule = new ScheduleInfo(_fullSchedule, Stored, CurrentTime);
+			Schedule = new ScheduleInfo(_scheduleData, Stored, CurrentTime);
 			State = new StateRuleInfo(mappingsState, Stored, StateCode, PlatformTypeId, businessUnitId, Input, Schedule, stateMapper);
 			Adherence = new AdherenceInfo(Input, Stored, mappingsState, businessUnitId, State, Schedule, appliedAdherence, stateMapper);
 		}
@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 				TimeWindowCheckSum = Schedule.TimeWindowCheckSum(),
 
-				Schedule = _fullSchedule.Value
+				Schedule = _scheduleData.Value
 			};
 		}
 		

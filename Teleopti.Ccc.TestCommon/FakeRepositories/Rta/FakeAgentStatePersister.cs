@@ -45,7 +45,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public void InvalidateSchedules(Guid personId)
 		{
-			throw new NotImplementedException();
+			lock (_lock)
+			{
+				var existing = _data.Where(x => x.PersonId == personId).ToArray();
+				existing.ForEach(x => x.State.Schedule = null);
+			}
 		}
 
 		public void Delete(Guid personId)

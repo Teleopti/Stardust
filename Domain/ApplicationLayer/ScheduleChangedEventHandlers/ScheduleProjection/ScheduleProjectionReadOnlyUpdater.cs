@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 				}
 			}
 
-			_eventPublisher.Publish(new ScheduleProjectionReadModelChangedEvent
+			_eventPublisher.Publish(new ScheduleProjectionReadOnlyChangedEvent
 			{
 				PersonId = @event.PersonId
 			});

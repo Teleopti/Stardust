@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		IRunOnHangfire,
 		IHandleEvent<PersonDeletedEvent>,
 		IHandleEvent<PersonAssociationChangedEvent>,
-		IHandleEvent<ScheduleProjectionReadModelChangedEvent>
+		IHandleEvent<ScheduleProjectionReadOnlyChangedEvent>
 	{
 		private readonly IAgentStatePersister _persister;
 
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		[UnitOfWork]
 		[EnabledBy(Toggles.RTA_ScheduleQueryOptimization_40260)]
-		public virtual void Handle(ScheduleProjectionReadModelChangedEvent @event)
+		public virtual void Handle(ScheduleProjectionReadOnlyChangedEvent @event)
 		{
 			_persister.InvalidateSchedules(@event.PersonId);
 		}

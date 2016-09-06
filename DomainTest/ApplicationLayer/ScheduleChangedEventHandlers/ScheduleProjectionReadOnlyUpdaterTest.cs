@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		}
 
 		[Test]
-		public void ShouldPublishProjectionReadModelEventWhenProjectionChanged()
+		public void ShouldPublishEvent()
 		{
 			var person = Guid.NewGuid();
 
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				ScheduleDays = new ProjectionChangedEventScheduleDay[] {}
 			});
 
-			EventPublisher.PublishedEvents.OfType<ScheduleProjectionReadModelChangedEvent>()
+			EventPublisher.PublishedEvents.OfType<ScheduleProjectionReadOnlyChangedEvent>()
 				.Single().PersonId.Should().Be.EqualTo(person);
 		}
 	}
