@@ -14,5 +14,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
 		public bool MoveConflictLayerAllowed { get; set; }
 		public IList<string> ErrorMessages { get; set; }
+		public IList<string> WarningMessages { get; set; }
 	}
 }

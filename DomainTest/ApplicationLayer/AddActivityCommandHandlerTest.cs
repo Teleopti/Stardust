@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public FakeScheduleStorage ScheduleStorage;
 		public FakeUserTimeZone UserTimeZone;
 		public FakeShiftCategoryRepository ShiftCategoryRepository;
+		public FakeLoggedOnUser LoggedOnUser;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			system.UseTestDouble<AddActivityCommandHandler>().For<IHandleCommand<AddActivityCommand>>();
 			system.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
 			system.UseTestDouble<FakeShiftCategoryRepository>().For<IShiftCategoryRepository>();
+			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 		}
 
 		[Test]
@@ -318,6 +320,58 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var movedLunchLayer = PersonAssignmentRepo.Single().ShiftLayers.First(l => l.Payload == lunchActivity);
 			movedLunchLayer.Period.Should().Be(new DateTimePeriod(2013, 11, 14, 11, 2013, 11, 14, 12));
+		}
+				
+		[Test]
+		public void ShouldReturnWarningForConflictNonoverwritableLayerWhenItsNotFixable()
+		{
+			var scenario = CurrentScenario.Current();
+			PersonRepository.Add(PersonFactory.CreatePersonWithId());
+			
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
+			ShiftCategoryRepository.Add(shiftCategory);
+			var mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
+			var addedActivity = ActivityFactory.CreateActivity("Added activity").WithId();
+			var lunchActivity = ActivityFactory.CreateActivity("Lunch").WithId();
+			mainActivity.AllowOverwrite = true;
+			lunchActivity.AllowOverwrite = false;
+			ActivityRepository.Add(addedActivity);
+			ActivityRepository.Add(mainActivity);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				mainActivity, PersonRepository.Single(),
+				new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 15), shiftCategory, scenario);
+			pa.AddActivity(lunchActivity, new DateTimePeriod(2013, 11, 14, 11, 2013, 11, 14,14));
+			pa.ShiftLayers.ForEach(l => l.WithId());
+			PersonAssignmentRepo.Add(pa);
+			ScheduleStorage.Add(pa);
+
+
+			var command = new AddActivityCommand
+			{
+				PersonId = PersonRepository.Single().Id.Value,
+				Date = new DateOnly(2013, 11, 14),
+				ActivityId = addedActivity.Id.Value,
+				StartTime = new DateTime(2013, 11, 14, 9, 0, 0),
+				EndTime = new DateTime(2013, 11, 14, 14, 0, 0),
+				MoveConflictLayerAllowed = true
+			};
+			Target.Handle(command);
+
+			var addedLayer = PersonAssignmentRepo.Single().ShiftLayers.Last();
+			addedLayer.Payload.Should().Be(addedActivity);
+			addedLayer.Period.StartDateTime.Should().Be(command.StartTime);
+			addedLayer.Period.EndDateTime.Should().Be(command.EndTime);
+
+			var movedLunchLayer = PersonAssignmentRepo.Single().ShiftLayers.First(l => l.Payload == lunchActivity);
+			movedLunchLayer.Period.Should().Be(new DateTimePeriod(2013, 11, 14, 11, 2013, 11, 14, 14));
+			command.WarningMessages.Count.Should().Be.EqualTo(1);
+			var timeZone = UserTimeZone.TimeZone();
+			var currentCulture = LoggedOnUser.CurrentUser().PermissionInformation.Culture();
+			var lunchLayer = pa.ShiftLayers.Single(l => l.Payload.Name == "Lunch");
+			var expectedWarning = string.Format(currentCulture, Resources.BusinessRuleOverlappingErrorMessage3, "Lunch",
+					lunchLayer.Period.TimePeriod(timeZone).ToShortTimeString(currentCulture), "Added activity",
+					new DateTimePeriod(2013, 11, 14, 9, 2013, 11, 14, 14).TimePeriod(timeZone).ToShortTimeString(currentCulture));
+			command.WarningMessages.First().Should().Be(expectedWarning);
 		}
 
 	}
