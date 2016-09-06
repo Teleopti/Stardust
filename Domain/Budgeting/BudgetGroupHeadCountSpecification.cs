@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.Budgeting
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "HeadCount")]
-	public class BudgetGroupHeadCountSpecification : PersonRequestSpecification<IAbsenceRequest>, IBudgetGroupHeadCountSpecification
+	public class BudgetGroupHeadCountSpecification : PersonRequestSpecification<IAbsenceRequestAndSchedules>, IBudgetGroupHeadCountSpecification
 	{
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IBudgetDayRepository _budgetDayRepository;
@@ -24,17 +24,17 @@ namespace Teleopti.Ccc.Domain.Budgeting
 			_scheduleProjectionReadOnlyPersister = scheduleProjectionReadOnlyPersister;
 		}
 
-		public override IValidatedRequest IsSatisfied(IAbsenceRequest absenceRequest)
+		public override IValidatedRequest IsSatisfied(IAbsenceRequestAndSchedules absenceRequest)
 		{
-			var timeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
-			var culture = absenceRequest.Person.PermissionInformation.Culture();
-		    var language = absenceRequest.Person.PermissionInformation.UICulture();
-            var requestedPeriod = absenceRequest.Period.ToDateOnlyPeriod(timeZone);
-			var personPeriod = absenceRequest.Person.PersonPeriods(requestedPeriod).FirstOrDefault();
+			var timeZone = absenceRequest.AbsenceRequest.Person.PermissionInformation.DefaultTimeZone();
+			var culture = absenceRequest.AbsenceRequest.Person.PermissionInformation.Culture();
+		    var language = absenceRequest.AbsenceRequest.Person.PermissionInformation.UICulture();
+            var requestedPeriod = absenceRequest.AbsenceRequest.Period.ToDateOnlyPeriod(timeZone);
+			var personPeriod = absenceRequest.AbsenceRequest.Person.PersonPeriods(requestedPeriod).FirstOrDefault();
 
 			if (personPeriod == null || personPeriod.BudgetGroup == null)
 			{
-				return AbsenceRequestBudgetGroupValidationHelper.PersonPeriodOrBudgetGroupIsNull(culture, absenceRequest.Person.Id);
+				return AbsenceRequestBudgetGroupValidationHelper.PersonPeriodOrBudgetGroupIsNull(culture, absenceRequest.AbsenceRequest.Person.Id);
 			}
 
 			var defaultScenario = _scenarioRepository.LoadDefaultScenario();
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 				return AbsenceRequestBudgetGroupValidationHelper.BudgetDaysAreNotEqualToRequestedPeriodDays(language, culture, requestedPeriod);
 			}
 
-			var invalidDays = getInvalidDaysIfExist(budgetDays, personPeriod.BudgetGroup, culture);
+			var invalidDays = getInvalidDaysIfExist(budgetDays, personPeriod.BudgetGroup, culture, absenceRequest.SchedulingResultStateHolder);
 			if (!string.IsNullOrEmpty(invalidDays))
 			{
 				var notEnoughAllowance = UserTexts.Resources.ResourceManager.GetString("NotEnoughAllowance", language);
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 			return new ValidatedRequest { IsValid = true, ValidationErrors = string.Empty };
 		}
 
-		private string getInvalidDaysIfExist(IEnumerable<IBudgetDay> budgetDays, IBudgetGroup budgetGroup, CultureInfo culture)
+		private string getInvalidDaysIfExist(IEnumerable<IBudgetDay> budgetDays, IBudgetGroup budgetGroup, CultureInfo culture, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			var count = 0;
 			var invalidDays = string.Empty;
@@ -72,13 +72,15 @@ namespace Teleopti.Ccc.Domain.Budgeting
 				var allowance = budgetDay.Allowance;
 				var alreadyUsedAllowance = _scheduleProjectionReadOnlyPersister.GetNumberOfAbsencesPerDayAndBudgetGroup(
 						budgetGroup.Id.GetValueOrDefault(), currentDay);
-
+				var addedBefore = schedulingResultStateHolder.AddedAbsenceHeadCountDuringCurrentRequestHandlingCycle(budgetDay);
+				alreadyUsedAllowance += addedBefore;
 				if (Math.Floor(allowance) <= alreadyUsedAllowance)
 				{
 					count++;
 					if (count > 5) break;
 					invalidDays += currentDay.ToShortDateString(culture) + ",";
-				}
+				}else
+					schedulingResultStateHolder.AddAbsenceHeadCountDuringCurrentRequestHandlingCycle(budgetDay);
 			}
 			return invalidDays.IsEmpty() ? invalidDays : invalidDays.Substring(0, invalidDays.Length - 1);
 		}

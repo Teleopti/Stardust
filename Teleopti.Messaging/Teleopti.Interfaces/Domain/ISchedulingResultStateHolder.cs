@@ -140,5 +140,9 @@ namespace Teleopti.Interfaces.Domain
 
 	    double AddedAbsenceMinutesDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay);
 		void AddAbsenceMinutesDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay, double minutes);
-	}
+
+	    void AddAbsenceHeadCountDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay);
+	    int AddedAbsenceHeadCountDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay);
+
+    }
 }

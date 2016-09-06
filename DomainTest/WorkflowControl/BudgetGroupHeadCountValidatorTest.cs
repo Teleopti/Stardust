@@ -60,21 +60,26 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             Assert.IsNotNull(result);
         }
 
-        [Test]
-        public void ShouldReturnFalseIfNotEnoughAllowanceLeft()
-        {
-            var specification = _mocks.StrictMock<IBudgetGroupHeadCountSpecification>();
-            var absenceRequest = _mocks.StrictMock<IAbsenceRequest>();
-            
-            using (_mocks.Record())
-            {
-                Expect.Call(specification.IsSatisfied(absenceRequest).IsValid).IgnoreArguments().Return(false);
-            }
-            using (_mocks.Playback())
-            {
-                var result = _target.Validate(absenceRequest, new RequiredForHandlingAbsenceRequest(null, null, null, null, specification));
-                Assert.IsFalse(result.IsValid);
-            }
-        }
+	    [Test]
+	    public void ShouldReturnFalseIfNotEnoughAllowanceLeft()
+	    {
+		    var specification = _mocks.StrictMock<IBudgetGroupHeadCountSpecification>();
+		    var absenceRequest = _mocks.StrictMock<IAbsenceRequest>();
+		    var validatedRequest = _mocks.StrictMock<IValidatedRequest>();
+		    using (_mocks.Record())
+		    {
+
+			    Expect.Call(specification.IsSatisfied(new AbsenceRequstAndSchedules()))
+				    .IgnoreArguments()
+				    .Return(validatedRequest);
+			    Expect.Call(validatedRequest.IsValid).IgnoreArguments().Return(false);
+		    }
+		    using (_mocks.Playback())
+		    {
+			    var result = _target.Validate(absenceRequest,
+				    new RequiredForHandlingAbsenceRequest(null, null, null, null, specification));
+			    Assert.IsFalse(result.IsValid);
+		    }
+	    }
     }
 }

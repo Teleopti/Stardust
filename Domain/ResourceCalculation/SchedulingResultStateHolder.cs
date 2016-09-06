@@ -132,6 +132,20 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			addedAbsenceMinutesDictionary.AddOrUpdate(budgetDay, minutes,(b, m) => m+minutes);
 		}
 
+		private readonly ConcurrentDictionary<IBudgetDay, int> addedAbsenceHeadCountDictionary = new ConcurrentDictionary<IBudgetDay, int>();
+		public int AddedAbsenceHeadCountDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay)
+		{
+			int value;
+			if (!addedAbsenceHeadCountDictionary.TryGetValue(budgetDay, out value))
+				return 0;
+			return value;
+		}
+
+		public void AddAbsenceHeadCountDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay)
+		{
+			addedAbsenceHeadCountDictionary.AddOrUpdate(budgetDay,1, (b, m) => m + 1);
+		}
+
 		/// <summary>
 		/// Gets the visible skills.
 		/// </summary>

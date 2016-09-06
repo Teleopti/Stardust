@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -22,8 +23,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
         private readonly DateOnly _defaultDay = new DateOnly();
         private readonly DateOnlyPeriod _defaultDatePeriod = new DateOnlyPeriod();
 	    private IScenario _scenario;
+		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 
-	    [SetUp]
+		[SetUp]
         public void Setup()
         {
             _scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
@@ -31,8 +33,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             _scheduleProjectionReadOnlyPersister = MockRepository.GenerateMock<IScheduleProjectionReadOnlyPersister>();
 	        _scenario = ScenarioFactory.CreateScenarioAggregate();
             _person = PersonFactory.CreatePerson("billg");
-            
-            _target = new BudgetGroupHeadCountSpecification(_scenarioRepository, _budgetDayRepository,  
+			_schedulingResultStateHolder = MockRepository.GenerateMock<ISchedulingResultStateHolder>();
+
+			_target = new BudgetGroupHeadCountSpecification(_scenarioRepository, _budgetDayRepository,  
                                                             _scheduleProjectionReadOnlyPersister);
         }
 
@@ -54,7 +57,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_budgetDayRepository.Stub(x => x.Find(null, null, _defaultDatePeriod)).IgnoreArguments().Return(new List<IBudgetDay> { budgetDay });
 			_scheduleProjectionReadOnlyPersister.Stub(x => x.GetNumberOfAbsencesPerDayAndBudgetGroup(budgetGroup.Id.GetValueOrDefault(), personPeriod.StartDate)).Return(0);
 
-		    Assert.IsTrue(_target.IsSatisfied(absenceRequest).IsValid);
+		    Assert.IsTrue(_target.IsSatisfied(new AbsenceRequstAndSchedules { SchedulingResultStateHolder = _schedulingResultStateHolder, AbsenceRequest = absenceRequest }).IsValid);
 	    }
 
 	    [Test]
@@ -75,7 +78,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_budgetDayRepository.Stub(x => x.Find(null, null, _defaultDatePeriod)).IgnoreArguments().Return(new List<IBudgetDay> { budgetDay });
 			_scheduleProjectionReadOnlyPersister.Stub(x => x.GetNumberOfAbsencesPerDayAndBudgetGroup(budgetGroup.Id.GetValueOrDefault(), personPeriod.StartDate)).Return(1);
 			
-		    Assert.IsFalse(_target.IsSatisfied(absenceRequest).IsValid);
+		    Assert.IsFalse(_target.IsSatisfied(new AbsenceRequstAndSchedules { SchedulingResultStateHolder = _schedulingResultStateHolder, AbsenceRequest = absenceRequest }).IsValid);
 	    }
 
 	    [Test]
@@ -87,7 +90,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		    var personRequest = new PersonRequest(_person, absenceRequest);
 		    personRequest.SetId(Guid.NewGuid());
 
-		    Assert.IsFalse(_target.IsSatisfied(absenceRequest).IsValid);
+		    Assert.IsFalse(_target.IsSatisfied(new AbsenceRequstAndSchedules { SchedulingResultStateHolder = _schedulingResultStateHolder, AbsenceRequest = absenceRequest }).IsValid);
 	    }
 
 	    [Test]
@@ -100,7 +103,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		    var personRequest = new PersonRequest(_person, absenceRequest);
 		    personRequest.SetId(Guid.NewGuid());
 
-		    Assert.IsFalse(_target.IsSatisfied(absenceRequest).IsValid);
+		    Assert.IsFalse(_target.IsSatisfied(new AbsenceRequstAndSchedules { SchedulingResultStateHolder = _schedulingResultStateHolder, AbsenceRequest = absenceRequest }).IsValid);
 	    }
 
 	    [Test]
@@ -118,7 +121,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
 		    _scenarioRepository.Stub(x => x.LoadDefaultScenario()).Return(_scenario);
 		    
-		    Assert.IsFalse(_target.IsSatisfied(absenceRequest).IsValid);
+		    Assert.IsFalse(_target.IsSatisfied(new AbsenceRequstAndSchedules { SchedulingResultStateHolder = _schedulingResultStateHolder, AbsenceRequest = absenceRequest }).IsValid);
 	    }
 
 	    [Test]
@@ -143,7 +146,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_scenarioRepository.Stub(x => x.LoadDefaultScenario()).Return(_scenario);
 			_budgetDayRepository.Stub(x => x.Find(null, null, _defaultDatePeriod)).IgnoreArguments().Return(budgetDayList);
 		    
-		    Assert.IsFalse(_target.IsSatisfied(absenceRequest).IsValid);
+		    Assert.IsFalse(_target.IsSatisfied(new AbsenceRequstAndSchedules { SchedulingResultStateHolder = _schedulingResultStateHolder, AbsenceRequest = absenceRequest }).IsValid);
 	    }
 
 	    private static IBudgetGroup GetBudgetGroup()

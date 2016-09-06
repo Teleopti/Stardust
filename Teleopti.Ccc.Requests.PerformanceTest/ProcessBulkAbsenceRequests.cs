@@ -284,15 +284,19 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 					}
 				}
 
+#pragma warning disable 618
+				WorkflowControlSetRepository.UnitOfWork.PersistAll();
+#pragma warning restore 618
+
 				var scenario = ScenarioRepository.Load(new Guid("10E3B023-5C3B-4219-AF34-A11C00F0F283"));
 				var budgetGroup = BudgetGroupRepository.Get(new Guid("81BAF583-4875-43EC-8E1D-A53A00DF0B3D"));
 				var budgetDays = BudgetDayRepository.Find(scenario, budgetGroup,
 					new DateOnlyPeriod(new DateOnly(2016, 4, 15), new DateOnly(2016, 4, 15)));
 				budgetDays.ForEach(budgetDay =>
 				{
-					budgetDay.Allowance = 36;
-					budgetDay.TotalAllowance = 36;
-					budgetDay.AbsenceOverride = 36;
+					budgetDay.Allowance = 1;
+					budgetDay.TotalAllowance = 1;
+					budgetDay.AbsenceOverride = 1;
 				});
 #pragma warning disable 618
 				BudgetDayRepository.UnitOfWork.PersistAll();
