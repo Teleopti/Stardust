@@ -150,11 +150,6 @@
 					return RtaService.getStatesForSites;
 				};
 
-						if(!$scope.notifySwitchDisabled && $scope.agents.length > $scope.maxNumberOfAgents){
-							NoticeService.warning($translate.instant('Viewing agents out of alarm is not possible due to high number of agents. The switch is enabled for maximum '+$scope.maxNumberOfAgents+' agents'), null, true);
-							$scope.notifySwitchDisabled = true;
-						}
-
 				function setStatesInAgents(states) {
 					$scope.agents = [];
 					lastUpdate = states.Time;
@@ -382,13 +377,19 @@
 					else
 						$scope.filteredData = $filter('agentFilter')($scope.agents, $scope.filterText, propertiesForFiltering);
 					if ($scope.agentsInAlarm) {
-						$scope.filteredData = $filter('filter')($scope.filteredData, {
-							TimeInAlarm: ''
+						$scope.filteredData = $filter('filter')($scope.filteredData,
+						{
+						     TimeInAlarm: ''
 						});
 						$scope.openedMaxNumberOfAgents = ($scope.filteredData.length === $scope.maxNumberOfAgents);
-					}
-				}
+						if(!$scope.notifySwitchDisabled && $scope.agents.length > $scope.maxNumberOfAgents){
+							NoticeService.warning($translate.instant('Viewing agents out of alarm is not possible due to high number of agents. The switch is enabled for maximum '+$scope.maxNumberOfAgents+' agents'), null, true);
+							$scope.notifySwitchDisabled = true;
+						}
 
+                    }
+				}
+				
 				function secondsToPercent(seconds) {
 					return seconds / 3600 * 25;
 				}
