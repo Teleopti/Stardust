@@ -52,29 +52,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			var overtimeSpecifiedPeriod = new MinMax<TimeSpan>(overtimePreferences.SelectedSpecificTimePeriod.StartTime, overtimePreferences.SelectedSpecificTimePeriod.EndTime);
 			var overtimeLayerLengthPeriodsUtc = _overtimeLengthDecider.Decide(person, dateOnly, scheduleDay, overtimePreferences.SkillActivity, overtimeDuration, overtimeSpecifiedPeriod, overtimePreferences.AvailableAgentsOnly);
 
-			var overtimeLayerLengthPeriods = new List<DateTimePeriod>();
+			DateTimePeriod? overtimeLayerLengthPeriod = null;
 			foreach (var dateTimePeriod in overtimeLayerLengthPeriodsUtc)
 			{
 				var periodStartMyViewPoint = dateTimePeriod.StartDateTimeLocal(timeZoneInfo);
 				var periodEndMyViewPoint = dateTimePeriod.EndDateTimeLocal(timeZoneInfo);
 				var overtimeSpecifiedPeriodStartDateTime = dateOnly.Date.Add(overtimeSpecifiedPeriod.Minimum);
 				var overtimeSpecifiedPeriodEndDateTime = dateOnly.Date.Add(overtimeSpecifiedPeriod.Maximum);
-				bool startOk = periodStartMyViewPoint >= overtimeSpecifiedPeriodStartDateTime &&
-					periodStartMyViewPoint < overtimeSpecifiedPeriodEndDateTime;
-				bool endOk = periodEndMyViewPoint <= overtimeSpecifiedPeriodEndDateTime &&
-							 periodEndMyViewPoint > overtimeSpecifiedPeriodStartDateTime;
-				if(startOk && endOk)
-					overtimeLayerLengthPeriods.Add(dateTimePeriod);
+				var startOk = periodStartMyViewPoint >= overtimeSpecifiedPeriodStartDateTime && periodStartMyViewPoint < overtimeSpecifiedPeriodEndDateTime;
+				var endOk = periodEndMyViewPoint <= overtimeSpecifiedPeriodEndDateTime && periodEndMyViewPoint > overtimeSpecifiedPeriodStartDateTime;
+				if (startOk && endOk)
+				{
+					overtimeLayerLengthPeriod = dateTimePeriod;
+					break;
+				}
 			}
-
-			if (overtimeLayerLengthPeriods.Count == 0) return false;
+			if (!overtimeLayerLengthPeriod.HasValue) return false;
 
 			var oldRmsValue = calculatePeriodValue(dateOnly, overtimePreferences.SkillActivity, person, timeZoneInfo);
-
-			foreach (var overtimeLayerLengthPeriod in overtimeLayerLengthPeriods)
-			{
-				scheduleDay.CreateAndAddOvertime(overtimePreferences.SkillActivity, overtimeLayerLengthPeriod, overtimePreferences.OvertimeType);
-			}
+			scheduleDay.CreateAndAddOvertime(overtimePreferences.SkillActivity, overtimeLayerLengthPeriod.Value, overtimePreferences.OvertimeType);
 
 			if (!overtimePreferences.AllowBreakNightlyRest) rules.Add(new NewNightlyRestRule(new WorkTimeStartEndExtractor()));
 			if (!overtimePreferences.AllowBreakMaxWorkPerWeek) rules.Add(new NewMaxWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
