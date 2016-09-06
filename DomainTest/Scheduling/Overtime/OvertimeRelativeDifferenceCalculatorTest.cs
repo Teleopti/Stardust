@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
@@ -77,28 +78,22 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 		public void ShouldCalculate()
 		{
 			var dateTimePeriodBefore = new DateTimePeriod(_periodBefore1.StartDateTime, _periodBefore6.EndDateTime);
-			var overtimePeriodHolderBefore = new OvertimeDateTimePeriodHolder();
-			overtimePeriodHolderBefore.Add(dateTimePeriodBefore);
 
 			var dateTimePeriodAfter = new DateTimePeriod(_periodAfter1.StartDateTime, _periodAfter6.EndDateTime);
-			var overtimePeriodHolderAfter = new OvertimeDateTimePeriodHolder();
-			overtimePeriodHolderAfter.Add(dateTimePeriodAfter);
 
-			var overtimePeriodHolders = new List<IOvertimeDateTimePeriodHolder> { overtimePeriodHolderBefore, overtimePeriodHolderAfter };
+			var overtimePeriodHolders = new List<DateTimePeriod> { dateTimePeriodBefore, dateTimePeriodAfter };
 
 			var result = _target.Calculate(overtimePeriodHolders, _mappedData, false, _scheduleDay);
-			Assert.AreEqual(2, result.Count);
-			Assert.AreEqual(-53d, result[0].TotalValue());
-			Assert.AreEqual(-35d, result[1].TotalValue());
+			Assert.AreEqual(2, result.Count());
+			Assert.AreEqual(-53d, result.First().Value);
+			Assert.AreEqual(-35d, result.Last().Value);
 		}
 
 		[Test]
 		public void ShouldConsiderOvertimeAvailability()
 		{
 			var dateTimePeriodBefore = new DateTimePeriod(_periodBefore1.StartDateTime, _periodBefore6.EndDateTime);
-			var overtimePeriodHolderBefore = new OvertimeDateTimePeriodHolder();
-			overtimePeriodHolderBefore.Add(dateTimePeriodBefore);
-			var overtimePeriodHolders = new List<IOvertimeDateTimePeriodHolder> { overtimePeriodHolderBefore};
+			var overtimePeriodHolders = new List<DateTimePeriod> { dateTimePeriodBefore };
 			var dateOnly = new DateOnly(_shiftEndingTime);
 			var person = PersonFactory.CreatePerson("logon", "password");
 			IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(dateOnly, person.PermissionInformation.DefaultTimeZone());
@@ -114,8 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			using (_mock.Playback())
 			{
 				var result = _target.Calculate(overtimePeriodHolders, _mappedData, true, _scheduleDay);
-				Assert.AreEqual(1, result.Count);
-				Assert.AreEqual(-8d, result[0].TotalValue());
+				Assert.AreEqual(-8d, result.Single().Value);
 			}	
 		}
 
@@ -123,19 +117,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 		public void ShouldSkipWhenNoSkillData()
 		{
 			var dateTimePeriodBefore = new DateTimePeriod(_periodBefore1.StartDateTime, _periodBefore6.EndDateTime);
-			var overtimePeriodHolderBefore = new OvertimeDateTimePeriodHolder();
-			overtimePeriodHolderBefore.Add(dateTimePeriodBefore);
-
 			var dateTimePeriodAfter = new DateTimePeriod(_periodAfter1.StartDateTime, _periodAfter6.EndDateTime);
-			var overtimePeriodHolderAfter = new OvertimeDateTimePeriodHolder();
-			overtimePeriodHolderAfter.Add(dateTimePeriodAfter);
 
 			_mappedData.Clear();
 
-			var overtimePeriodHolders = new List<IOvertimeDateTimePeriodHolder> { overtimePeriodHolderBefore, overtimePeriodHolderAfter };
+			var overtimePeriodHolders = new List<DateTimePeriod> { dateTimePeriodBefore, dateTimePeriodAfter };
 
 			var result = _target.Calculate(overtimePeriodHolders, _mappedData, false, _scheduleDay);
-			Assert.AreEqual(0, result.Count);
+			Assert.AreEqual(0, result.Count());
 		}
 	}
 }

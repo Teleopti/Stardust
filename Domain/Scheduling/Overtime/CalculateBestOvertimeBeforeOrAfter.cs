@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
 	public interface ICalculateBestOvertime
 	{
-		IList<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDuration, MinMax<TimeSpan> overtimeSpecifiedPeriod,
+		IEnumerable<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDuration, MinMax<TimeSpan> overtimeSpecifiedPeriod,
 			IList<OvertimePeriodValue> overtimePeriodValueMappedDat, IScheduleDay scheduleDay, int minimumResolution,
 			bool onlyAvailableAgents, IList<IOvertimeSkillIntervalData> skillIntervalDataList);
 	}
@@ -24,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			_overtimeRelativeDifferenceCalculator = overtimeRelativeDifferenceCalculator;
 		}
 
-		public IList<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDuration, MinMax<TimeSpan> overtimeSpecifiedPeriod, IList<OvertimePeriodValue> overtimePeriodValueMappedData, IScheduleDay scheduleDay, int minimumResolution, bool onlyAvailableAgents, IList<IOvertimeSkillIntervalData> skillIntervalDataList)
+		public IEnumerable<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDuration, MinMax<TimeSpan> overtimeSpecifiedPeriod, IList<OvertimePeriodValue> overtimePeriodValueMappedData, IScheduleDay scheduleDay, int minimumResolution, bool onlyAvailableAgents, IList<IOvertimeSkillIntervalData> skillIntervalDataList)
 		{
 			var scheduleDayPeriodStart = scheduleDay.Period.StartDateTime;
 			var start = scheduleDayPeriodStart.Add(overtimeSpecifiedPeriod.Minimum);
@@ -36,18 +35,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			var result = _overtimeDateTimePeriodExtractor.Extract(minimumResolution, overtimeDuration, visualLayerCollection, specifiedPeriod, skillIntervalDataList);
 			var possibleOvertimePeriods = _overtimeRelativeDifferenceCalculator.Calculate(result, overtimePeriodValueMappedData, onlyAvailableAgents, scheduleDay);
 			var lowestRelativeDifferenceSum = double.MaxValue;
-			IOvertimePeriodValues lowestPeriodValues = new OvertimePeriodValues();
+			IOvertimePeriodValue lowestPeriodValues = null;
 			foreach (var overtimePeriodValues in possibleOvertimePeriods)
 			{
-				var totalValue = overtimePeriodValues.TotalValue();
+				var totalValue = overtimePeriodValues.Value;
 				if (totalValue >= 0) continue;
 				if (!(totalValue < lowestRelativeDifferenceSum)) continue;
 				lowestRelativeDifferenceSum = totalValue;
 				lowestPeriodValues = overtimePeriodValues;
 			}
-
-			return lowestPeriodValues.PeriodValues.Select(overtimePeriodValue => overtimePeriodValue.Period).ToList();
+			return lowestPeriodValues == null ? 
+				new List<DateTimePeriod>() : 
+				new List<DateTimePeriod> { lowestPeriodValues.Period};
 		}
-
 	}
 }

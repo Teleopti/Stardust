@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -68,11 +69,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			using (_mock.Playback())
 			{
 				var result = _target.Extract(_minimumResolution, _overtimeDuration, _visualLayerCollection, specifiedPeriod, _overtimeSkillIntervalDatas);
-				Assert.AreEqual(2, result.Count);
-				Assert.AreEqual(1, result[0].DateTimePeriods.Count);
-				Assert.AreEqual(1, result[1].DateTimePeriods.Count);
-				Assert.AreEqual(expectedBefore, result[0].DateTimePeriods[0]);
-				Assert.AreEqual(expectedAfter, result[1].DateTimePeriods[0]);	
+				Assert.AreEqual(2, result.Count());
+				Assert.AreEqual(expectedBefore, result.First());
+				Assert.AreEqual(expectedAfter, result.Last());	
 			}	
 		}
 
@@ -90,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			using (_mock.Playback())
 			{
 				var result = _target.Extract(_minimumResolution, _overtimeDuration, _visualLayerCollection, specifiedPeriod, new List<IOvertimeSkillIntervalData>());
-				Assert.AreEqual(0, result.Count);
+				Assert.AreEqual(0, result.Count());
 			}
 		}
 
@@ -113,9 +112,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			using (_mock.Playback())
 			{
 				var result = _target.Extract(_minimumResolution, _overtimeDuration, _visualLayerCollection, specifiedPeriod, _overtimeSkillIntervalDatas);
-				Assert.AreEqual(1, result.Count);
-				Assert.AreEqual(1, result[0].DateTimePeriods.Count);
-				Assert.AreEqual(expectedAfter, result[0].DateTimePeriods[0]);
+				Assert.AreEqual(expectedAfter, result.Single());
 			}		
 		}
 
@@ -138,9 +135,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			using (_mock.Playback())
 			{
 				var result = _target.Extract(_minimumResolution, _overtimeDuration, _visualLayerCollection, specifiedPeriod, _overtimeSkillIntervalDatas);
-				Assert.AreEqual(1, result.Count);
-				Assert.AreEqual(1, result[0].DateTimePeriods.Count);
-				Assert.AreEqual(expectedBefore, result[0].DateTimePeriods[0]);
+				Assert.AreEqual(expectedBefore, result.Single());
 			}
 		}
 
@@ -162,9 +157,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			using (_mock.Playback())
 			{
 				var result = _target.Extract(_minimumResolution, _overtimeDuration, _visualLayerCollection, specifiedPeriod, _overtimeSkillIntervalDatas);
-				Assert.AreEqual(1, result.Count);
-				Assert.AreEqual(1, result[0].DateTimePeriods.Count);
-				Assert.AreEqual(expectedAfter, result[0].DateTimePeriods[0]);
+				Assert.AreEqual(expectedAfter, result.Single());
 			}		
 		}
 
@@ -186,9 +179,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			using (_mock.Playback())
 			{
 				var result = _target.Extract(_minimumResolution, _overtimeDuration, _visualLayerCollection, specifiedPeriod, _overtimeSkillIntervalDatas);
-				Assert.AreEqual(1, result.Count);
-				Assert.AreEqual(1, result[0].DateTimePeriods.Count);
-				Assert.AreEqual(expectedBefore, result[0].DateTimePeriods[0]);
+				Assert.AreEqual(expectedBefore, result.Single());
 			}
 		}
 
@@ -206,7 +197,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			using (_mock.Playback())
 			{
 				var result = _target.Extract(_minimumResolution, _overtimeDuration, _visualLayerCollection, specifiedPeriod, new List<IOvertimeSkillIntervalData>());
-				Assert.AreEqual(0, result.Count);	
+				Assert.AreEqual(0, result.Count());	
 			}	
 		}
 
@@ -227,11 +218,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			using (_mock.Playback())
 			{
 				var result = _target.Extract(_minimumResolution, _overtimeDuration, _visualLayerCollection, specifiedPeriod, _overtimeSkillIntervalDatas);
-				Assert.AreEqual(2, result.Count);
-				Assert.AreEqual(1, result[0].DateTimePeriods.Count);
-				Assert.AreEqual(1, result[1].DateTimePeriods.Count);
-				Assert.AreEqual(expectedBefore, result[0].DateTimePeriods[0]);
-				Assert.AreEqual(expectedAfter, result[1].DateTimePeriods[0]);	
+				Assert.AreEqual(2, result.Count());
+				Assert.AreEqual(expectedBefore, result.First());
+				Assert.AreEqual(expectedAfter, result.Last());	
 			}	
 		}
 
@@ -249,7 +238,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			using (_mock.Playback())
 			{
 				var result = _target.Extract(_minimumResolution, _overtimeDuration, _visualLayerCollection, specifiedPeriod, new List<IOvertimeSkillIntervalData>());
-				Assert.AreEqual(0, result.Count);	
+				Assert.AreEqual(0, result.Count());	
 			}	
 		}
 
@@ -269,9 +258,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			using (_mock.Playback())
 			{
 				var result = _target.Extract(_minimumResolution, _overtimeDuration, _visualLayerCollection, specifiedPeriod, _overtimeSkillIntervalDatas);
-				Assert.AreEqual(1, result.Count);
-				Assert.AreEqual(1, result[0].DateTimePeriods.Count);
-				Assert.AreEqual(expectedBefore, result[0].DateTimePeriods[0]);	
+				Assert.AreEqual(expectedBefore, result.Single());
 			}
 		}
 	}

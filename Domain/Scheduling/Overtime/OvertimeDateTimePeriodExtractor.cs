@@ -8,18 +8,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
 	public interface IOvertimeDateTimePeriodExtractor
 	{
-		IList<IOvertimeDateTimePeriodHolder> Extract(int minimumResolution, MinMax<TimeSpan> overtimeDuration,
+		IEnumerable<DateTimePeriod> Extract(int minimumResolution, MinMax<TimeSpan> overtimeDuration,
 			IVisualLayerCollection visualLayerCollection, DateTimePeriod specificPeriod,
 			IList<IOvertimeSkillIntervalData> skillIntervalDataList);
 	}
 
 	public class OvertimeDateTimePeriodExtractor : IOvertimeDateTimePeriodExtractor
 	{
-		public IList<IOvertimeDateTimePeriodHolder> Extract(int minimumResolution, MinMax<TimeSpan> overtimeDuration,
+		public IEnumerable<DateTimePeriod> Extract(int minimumResolution, MinMax<TimeSpan> overtimeDuration,
 			IVisualLayerCollection visualLayerCollection, DateTimePeriod specificPeriod,
 			IList<IOvertimeSkillIntervalData> skillIntervalDataList)
 		{
-			IList<IOvertimeDateTimePeriodHolder> dateTimePeriodHolders = new List<IOvertimeDateTimePeriodHolder>();
+			IList<DateTimePeriod> dateTimePeriodHolders = new List<DateTimePeriod>();
 			var shiftPeriod = visualLayerCollection.Period().GetValueOrDefault();
 			var shiftStart = shiftPeriod.StartDateTime;
 			var shiftEnd = shiftPeriod.EndDateTime;
@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 				if (duration < overtimeDuration.Minimum) continue;
 
 				var periodBefore = new DateTimePeriod(shiftStart.Add(-duration), shiftStart);
-				//var openPeriodBefore = openOvertimePeriod(periodBefore, openHoursList);
 
 				if (periodBefore.ElapsedTime() >= overtimeDuration.Minimum)
 				{
@@ -48,16 +47,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 						{
 							if (checkIfInsideOpenHour(periodBefore, skillIntervalDataList))
 							{
-								var dateTimePeriodHolderBefore = new OvertimeDateTimePeriodHolder();
-								dateTimePeriodHolderBefore.Add(periodBefore);
-								dateTimePeriodHolders.Add(dateTimePeriodHolderBefore);
+								dateTimePeriodHolders.Add(periodBefore);
 							}
 						}
 					}
 				}
 
 				var periodAfter = new DateTimePeriod(shiftEnd, shiftEnd.Add(duration));
-				//var openPeriodAfter = openOvertimePeriod(periodAfter, openHoursList);
 
 				if (periodAfter.ElapsedTime() >= overtimeDuration.Minimum)
 				{
@@ -72,9 +68,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 						{
 							if (checkIfInsideOpenHour(periodAfter, skillIntervalDataList))
 							{
-								var dateTimePeriodHolderAfter = new OvertimeDateTimePeriodHolder();
-								dateTimePeriodHolderAfter.Add(periodAfter);
-								dateTimePeriodHolders.Add(dateTimePeriodHolderAfter);
+								dateTimePeriodHolders.Add(periodAfter);
 							}
 						}
 					}

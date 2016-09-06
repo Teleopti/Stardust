@@ -25,8 +25,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 		private IOvertimeRelativeDifferenceCalculator _overtimeRelativeDifferenceCalculator;
 		private MinMax<TimeSpan> _overtimeDuration;
 		private DateTimePeriod _specifiedPeriod;
-		private IList<IOvertimeDateTimePeriodHolder> _overtimePeriodHolders;
-		private IList<IOvertimePeriodValues> _overtimePeriodValues;
+		private IList<DateTimePeriod> _overtimePeriodHolders;
+		private IList<IOvertimePeriodValue> _overtimePeriodValues;
 			
 		[SetUp]
 		public void SetUp()
@@ -51,24 +51,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			var dateTimePeriodBefore = new DateTimePeriod(_shiftDateTimePeriod.StartDateTime.AddMinutes(-90), _shiftDateTimePeriod.StartDateTime);
 			var dateTimePeriodAfter = new DateTimePeriod(_shiftDateTimePeriod.EndDateTime, _shiftDateTimePeriod.EndDateTime.AddMinutes(90));
 
-			IOvertimeDateTimePeriodHolder overtimePeriodHolderBefore = new OvertimeDateTimePeriodHolder();
-			IOvertimeDateTimePeriodHolder overtimePeriodHolderAfter = new OvertimeDateTimePeriodHolder();
-
-			overtimePeriodHolderBefore.Add(dateTimePeriodBefore);
-			overtimePeriodHolderAfter.Add(dateTimePeriodAfter);
-
-			_overtimePeriodHolders = new List<IOvertimeDateTimePeriodHolder> { overtimePeriodHolderBefore, overtimePeriodHolderAfter };
+			_overtimePeriodHolders = new List<DateTimePeriod> { dateTimePeriodBefore, dateTimePeriodAfter };
 
 			var overtimePeriodValueAfter = new OvertimePeriodValue(new DateTimePeriod(new DateTime(2014, 02, 26, 16, 30, 0, DateTimeKind.Utc), new DateTime(2014, 02, 26, 17, 30, 0, DateTimeKind.Utc)), -7d);
 			var overtimePeriodValueBefore = new OvertimePeriodValue(new DateTimePeriod(new DateTime(2014, 02, 26, 14, 30, 0, DateTimeKind.Utc), new DateTime(2014, 02, 26, 15, 30, 0, DateTimeKind.Utc)), -4d);
 
-			var overtimePeriodValuesBefore = new OvertimePeriodValues();
-			var overtimePeriodValuesAfter = new OvertimePeriodValues();
-
-			overtimePeriodValuesBefore.Add(overtimePeriodValueBefore);
-			overtimePeriodValuesAfter.Add(overtimePeriodValueAfter);
-
-			_overtimePeriodValues = new List<IOvertimePeriodValues> { overtimePeriodValuesBefore, overtimePeriodValuesAfter };
+			_overtimePeriodValues = new List<IOvertimePeriodValue> { overtimePeriodValueBefore, overtimePeriodValueAfter };
 		}
 
 		[Test]
@@ -89,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			using (_mock.Playback())
 			{
 				var result = _target.GetBestOvertime(_overtimeDuration, _overtimeSpecifiedPeriod, _mappedData, _scheduleDay, 15, false, null);
-				Assert.AreEqual(1, result.Count);
+				Assert.AreEqual(1, result.Count());
 				Assert.AreEqual(expected, result.First());
 			}
 		}
@@ -100,12 +88,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 		{
 			var overtimePeriodValueAfter = new OvertimePeriodValue(new DateTimePeriod(new DateTime(2014, 02, 26, 16, 30, 0, DateTimeKind.Utc), new DateTime(2014, 02, 26, 17, 30, 0, DateTimeKind.Utc)), 1d);
 			var overtimePeriodValueBefore = new OvertimePeriodValue(new DateTimePeriod(new DateTime(2014, 02, 26, 14, 30, 0, DateTimeKind.Utc), new DateTime(2014, 02, 26, 15, 30, 0, DateTimeKind.Utc)), 2d);
-			var overtimePeriodValuesBefore = new OvertimePeriodValues();
-			var overtimePeriodValuesAfter = new OvertimePeriodValues();
-			overtimePeriodValuesBefore.Add(overtimePeriodValueBefore);
-			overtimePeriodValuesAfter.Add(overtimePeriodValueAfter);
 
-			_overtimePeriodValues = new List<IOvertimePeriodValues> { overtimePeriodValuesBefore, overtimePeriodValuesAfter };
+			_overtimePeriodValues = new List<IOvertimePeriodValue> { overtimePeriodValueBefore, overtimePeriodValueAfter };
 
 			using (_mock.Record())
 			{
@@ -120,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			using (_mock.Playback())
 			{
 				var result = _target.GetBestOvertime(_overtimeDuration, _overtimeSpecifiedPeriod, _mappedData, _scheduleDay, 15, false, null);
-				Assert.AreEqual(0, result.Count);
+				Assert.AreEqual(0, result.Count());
 			}
 		}
 	}
