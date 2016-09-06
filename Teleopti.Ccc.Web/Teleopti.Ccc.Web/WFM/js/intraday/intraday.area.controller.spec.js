@@ -76,6 +76,7 @@ describe('IntradayAreaCtrl', function () {
 				staffingData = {
 					DataSeries: {
 						ForecastedStaffing: [1,2,3],
+						UpdatedForecastedStaffing: [2,3,4],
 						Time: ["2016-08-30T00:00:00", "2016-08-30T00:15:00"]
 					}
 				};

@@ -8,7 +8,8 @@
 			var staffingData = {
 				forecastedStaffing: {
 					max: {},
-					series:[]
+					series: [],
+					updatedSeries: []
 				},
 				hasMonitorData:false,
 				timeSeries:[],
@@ -21,8 +22,10 @@
 			service.setStaffingData = function (result) {
 				staffingData.timeSeries = [];
 				staffingData.forecastedStaffing.series = [];
+				staffingData.forecastedStaffing.updatedSeries = [];
 
 				staffingData.forecastedStaffing.series = result.DataSeries.ForecastedStaffing;
+				staffingData.forecastedStaffing.updatedSeries = result.DataSeries.UpdatedForecastedStaffing;
 				// staffingData.latestActualInterval = $filter('date')(result.LatestActualIntervalStart, 'shortTime') + ' - ' + $filter('date')(result.LatestActualIntervalEnd, 'shortTime');
 
 				staffingData.timeSeries = [];
@@ -36,10 +39,18 @@
 				}
 
 				staffingData.forecastedStaffing.series.splice(0, 0, 'Forecasted_staffing');
+				staffingData.forecastedStaffing.updatedSeries.splice(0, 0, 'Updated_forecasted_staffing');
 
 				staffingData.hasMonitorData = true;
 
-				staffingData.forecastedStaffing.max = Math.max.apply(Math, result.DataSeries.ForecastedStaffing);
+				var forecastedStaffingMax = Math.max.apply(Math, result.DataSeries.ForecastedStaffing);
+				var updatedForecastedStaffingMax = Math.max.apply(Math, result.DataSeries.UpdatedForecastedStaffing);
+				if (forecastedStaffingMax > updatedForecastedStaffingMax) {
+					staffingData.forecastedStaffing.max = forecastedStaffingMax;
+				} else {
+					staffingData.forecastedStaffing.max = updatedForecastedStaffingMax;
+				}
+				
 
 				service.loadStaffingChart(staffingData);
 				return staffingData;
@@ -82,10 +93,12 @@
 								x: 'x',
 								columns: [
 									staffingData.timeSeries,
-									staffingData.forecastedStaffing.series
+									staffingData.forecastedStaffing.series,
+									staffingData.forecastedStaffing.updatedSeries
 								],
 								names: {
-									Forecasted_staffing: $translate.instant('ForecastedStaff') + ' ←'
+									Forecasted_staffing: $translate.instant('ForecastedStaff') + ' ←',
+									Updated_forecasted_staffing: 'xxUpdated Forecasted Staffing' + ' ←'
 								}
 							},
 							axis: {
