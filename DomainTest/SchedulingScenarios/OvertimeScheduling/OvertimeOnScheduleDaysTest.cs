@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().Should().Be.Empty();
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldPlaceOvertimeWhenViewerAndAgentTimeZonesAreFarAway()
 		{
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 				skill.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(15))
 			});
 			var ass = new PersonAssignment(agent, scenario, dateOnly);
-			ass.AddActivity(phoneActivity, new DateTimePeriod(2015,10,11,23,2015,10,12,8));
+			ass.AddActivity(phoneActivity, new DateTimePeriod(2015, 10, 11, 23, 2015, 10, 12, 8));
 			ass.SetShiftCategory(shiftCategory);
 			PersonAssignmentRepository.Add(ass);	
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, skillDays);
