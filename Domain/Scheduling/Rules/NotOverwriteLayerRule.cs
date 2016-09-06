@@ -119,35 +119,35 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 			for(var i = 0;i < layers.Length;i++)
 			{
-				var layerAbove = layers[i];
-				if (layerAbove.Payload.AllowOverwrite) continue;
+				var layerWithLowPriority = layers[i];
+				if (layerWithLowPriority.Payload.AllowOverwrite) continue;
 
 				for (var j = i + 1; j < layers.Length; j++)
 				{
-					var layerBelow = layers[j];
-					if(layerBelow.Payload.Equals(layerAbove.Payload))
+					var layerWithHighPriority = layers[j];
+					if(layerWithHighPriority.Payload.Equals(layerWithLowPriority.Payload))
 						continue;
 
-					if (layerBelow.Period.Intersect(layerAbove.Period))
+					if (layerWithHighPriority.Period.Intersect(layerWithLowPriority.Period))
 					{
 						result.Add(new OverlappingLayers
 						{
-							LayerBelowName = layerBelow.Payload.Name,
-							LayerBelowPeriod = layerBelow.Period,
-							LayerAboveName = layerAbove.Payload.Name,
-							LayerAbovePeriod = layerAbove.Period
+							LayerBelowName = layerWithLowPriority.Payload.Name,
+							LayerBelowPeriod = layerWithLowPriority.Period,
+							LayerAboveName = layerWithHighPriority.Payload.Name,
+							LayerAbovePeriod = layerWithHighPriority.Period
 						});
 					}
 				}
 
 				foreach (var personMeeting in meetings)
 				{
-					if (personMeeting.Period.Intersect(layerAbove.Period))
+					if (personMeeting.Period.Intersect(layerWithLowPriority.Period))
 					{
 						var overlappingLayerIssue = new OverlappingLayers
 						{
-							LayerBelowName = layerAbove.Payload.Name,
-							LayerBelowPeriod = layerAbove.Period,
+							LayerBelowName = layerWithLowPriority.Payload.Name,
+							LayerBelowPeriod = layerWithLowPriority.Period,
 							LayerAboveName = personMeeting.ToLayer().Payload.Name,
 							LayerAbovePeriod = personMeeting.Period
 						};
@@ -167,12 +167,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 				foreach (var personalShiftLayer in personalShiftLayers)
 				{
-					if (personalShiftLayer.Period.Intersect(layerAbove.Period))
+					if (personalShiftLayer.Period.Intersect(layerWithLowPriority.Period))
 					{
 						var overlappingLayerIssue = new OverlappingLayers
 						{
-							LayerBelowName = layerAbove.Payload.Name,
-							LayerBelowPeriod = layerAbove.Period,
+							LayerBelowName = layerWithLowPriority.Payload.Name,
+							LayerBelowPeriod = layerWithLowPriority.Period,
 							LayerAboveName = personalShiftLayer.Payload.Name,
 							LayerAbovePeriod = personalShiftLayer.Period
 						};
