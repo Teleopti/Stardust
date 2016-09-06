@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Castle.Core.Internal;
 using NHibernate;
@@ -81,6 +80,12 @@ VALUES (:BusinessUnitId, :SiteId, :TeamId, :PersonId, :DataSourceId, :UserCode)"
 						.SetParameter("UserCode", e.UserCode)
 						.ExecuteUpdate();
 				});
+		}
+		
+		[InfoLog]
+		public virtual void InvalidateSchedules(Guid personId)
+		{
+			throw new NotImplementedException();
 		}
 
 		[InfoLog]

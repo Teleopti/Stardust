@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public void ShouldLogOutAgentsNotInSnapshot()
 		{
 			Publisher.AddHandler(typeof(PersonAssociationChangedEventPublisher));
-			Publisher.AddHandler(typeof(AgentStateCleaner));
+			Publisher.AddHandler(typeof(AgentStateMaintainer));
 			Publisher.AddHandler(typeof(MappingReadModelUpdater));
 			var logOutBySnapshot = Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot;
 			Database

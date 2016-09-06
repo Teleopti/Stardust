@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public void ShouldNotDeadlockBetweenProcesses()
 		{
 			Publisher.AddHandler(typeof(PersonAssociationChangedEventPublisher));
-			Publisher.AddHandler(typeof(AgentStateCleaner));
+			Publisher.AddHandler(typeof(AgentStateMaintainer));
 			Publisher.AddHandler(typeof(MappingReadModelUpdater));
 			var tenant = DataSource.CurrentName();
 			Analytics.WithDataSource(9, "sourceId");
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public void ShouldNotDeadlockBetweenSaveStateAndPrepareState()
 		{
 			Publisher.AddHandler(typeof(PersonAssociationChangedEventPublisher));
-			Publisher.AddHandler(typeof(AgentStateCleaner));
+			Publisher.AddHandler(typeof(AgentStateMaintainer));
 			Publisher.AddHandler(typeof(MappingReadModelUpdater));
 			Analytics.WithDataSource(9, "sourceId");
 			var stateCodes = Enumerable.Range(0, 10).Select(x => $"statecode{x}").ToArray();

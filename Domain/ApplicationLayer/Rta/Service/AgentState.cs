@@ -50,6 +50,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public DateTime? AlarmStartTime { get; set; }
 
 		public int? TimeWindowCheckSum { get; set; }
+
+		public IEnumerable<ScheduledActivity> Schedule { get; set; }
 	}
 
 	public static class AgentStateExtensions

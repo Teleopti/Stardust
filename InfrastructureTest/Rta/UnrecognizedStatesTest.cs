@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public void ShouldAddMissingStateCodeToDefaultStateGroup()
 		{
 			Publisher.AddHandler(typeof(PersonAssociationChangedEventPublisher));
-			Publisher.AddHandler(typeof(AgentStateCleaner));
+			Publisher.AddHandler(typeof(AgentStateMaintainer));
 			Publisher.AddHandler(typeof(MappingReadModelUpdater));
 			Now.Is("2015-05-13 08:00");
 			TheService.DoesWhileLoggedIn(uow =>
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public void ShouldNotAddDuplicateStateCodes()
 		{
 			Publisher.AddHandler(typeof(PersonAssociationChangedEventPublisher));
-			Publisher.AddHandler(typeof(AgentStateCleaner));
+			Publisher.AddHandler(typeof(AgentStateMaintainer));
 			Publisher.AddHandler(typeof(MappingReadModelUpdater));
 			Now.Is("2016-07-11 08:00");
 			TheService.DoesWhileLoggedIn(uow =>

@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 	{
 		public ScheduleProjectionReadOnlyUpdater Target;
 		public FakeScheduleProjectionReadOnlyPersister Persister;
+		public FakeEventPublisher EventPublisher;
 
 		[Test]
 		public void ShouldPersistScheduleProjection()
@@ -57,6 +58,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			layer.Name.Should().Be("Phone");
 			layer.StartDateTime.Should().Be("2016-04-29 08:00".Utc());
 			layer.EndDateTime.Should().Be("2016-04-29 17:00".Utc());
+		}
+
+		[Test]
+		public void ShouldPublishProjectionReadModelEventWhenProjectionChanged()
+		{
+			var person = Guid.NewGuid();
+
+			Target.Handle(new ProjectionChangedEvent
+			{
+				PersonId = person,
+				ScheduleDays = new ProjectionChangedEventScheduleDay[] {}
+			});
+
+			EventPublisher.PublishedEvents.OfType<ScheduleProjectionReadModelChangedEvent>()
+				.Single().PersonId.Should().Be.EqualTo(person);
 		}
 	}
 }

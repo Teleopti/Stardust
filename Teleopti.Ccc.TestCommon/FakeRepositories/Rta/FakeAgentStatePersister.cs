@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using NHibernate.Util;
-using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
@@ -42,6 +41,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 						UserCode = x.UserCode
 					});
 				});
+		}
+
+		public void InvalidateSchedules(Guid personId)
+		{
+			throw new NotImplementedException();
 		}
 
 		public void Delete(Guid personId)

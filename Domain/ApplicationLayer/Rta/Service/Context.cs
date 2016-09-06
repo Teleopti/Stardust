@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly Action<Context> _updateState;
 		private readonly ProperAlarm _appliedAlarm;
+		private readonly Lazy<IEnumerable<ScheduledActivity>> _fullSchedule;
 
 		public Context(
 			InputInfo input, 
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					Stored = null;
 			}
 
-			var scheduleLazy = new Lazy<IEnumerable<ScheduledActivity>>(schedule);
+			_fullSchedule = new Lazy<IEnumerable<ScheduledActivity>>(schedule);
 			var mappingsState = mappings.Invoke(this);
 			Input = input ?? new InputInfo();
 			CurrentTime = now.UtcDateTime();
@@ -71,8 +72,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			_updateState = updateState ?? (c => {});
 			_appliedAlarm = appliedAlarm;
-
-			Schedule = new ScheduleInfo(scheduleLazy, Stored, CurrentTime);
+			
+			Schedule = new ScheduleInfo(_fullSchedule, Stored, CurrentTime);
 			State = new StateRuleInfo(mappingsState, Stored, StateCode, PlatformTypeId, businessUnitId, Input, Schedule, stateMapper);
 			Adherence = new AdherenceInfo(Input, Stored, mappingsState, businessUnitId, State, Schedule, appliedAdherence, stateMapper);
 		}
@@ -95,12 +96,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				return true;
 			
 			var isSameState =
-				SnapshotId.Equals(Stored?.BatchId) &&
-				Schedule.CurrentActivityId().Equals(Stored?.ActivityId) &&
-				Schedule.NextActivityId().Equals(Stored?.NextActivityId) &&
-				Schedule.NextActivityStartTime().Equals(Stored?.NextActivityStartTime) &&
-				State.StateGroupId().Equals(Stored?.StateGroupId) &&
-				Schedule.TimeWindowCheckSum().Equals(Stored?.TimeWindowCheckSum)
+				SnapshotId.Equals(Stored.BatchId) &&
+				Schedule.CurrentActivityId().Equals(Stored.ActivityId) &&
+				Schedule.NextActivityId().Equals(Stored.NextActivityId) &&
+				Schedule.NextActivityStartTime().Equals(Stored.NextActivityStartTime) &&
+				State.StateGroupId().Equals(Stored.StateGroupId) &&
+				Schedule.TimeWindowCheckSum().Equals(Stored.TimeWindowCheckSum)
 				;
 
 			return !isSameState;
@@ -114,9 +115,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		// for logging
 		public override string ToString()
 		{
-			return string.Format(
-				"PersonId: {0}, BusinessUnitId: {1}, TeamId: {2}, SiteId: {3}",
-				PersonId, BusinessUnitId, TeamId, SiteId);
+			return $"PersonId: {PersonId}, BusinessUnitId: {BusinessUnitId}, TeamId: {TeamId}, SiteId: {SiteId}";
 		}
 
 		public DateTime? SnapshotId
@@ -181,7 +180,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 				AlarmStartTime = AlarmStartTime,
 
-				TimeWindowCheckSum = Schedule.TimeWindowCheckSum()
+				TimeWindowCheckSum = Schedule.TimeWindowCheckSum(),
+
+				Schedule = _fullSchedule.Value
 			};
 		}
 		

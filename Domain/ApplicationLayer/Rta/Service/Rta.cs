@@ -3,18 +3,20 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon.Aspects;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	public class AgentStateCleaner :
+	public class AgentStateMaintainer :
 		IRunOnHangfire,
 		IHandleEvent<PersonDeletedEvent>,
-		IHandleEvent<PersonAssociationChangedEvent>
+		IHandleEvent<PersonAssociationChangedEvent>,
+		IHandleEvent<ScheduleProjectionReadModelChangedEvent>
 	{
 		private readonly IAgentStatePersister _persister;
 
-		public AgentStateCleaner(IAgentStatePersister persister)
+		public AgentStateMaintainer(IAgentStatePersister persister)
 		{
 			_persister = persister;
 		}
@@ -51,6 +53,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					UserCode = x.UserCode,
 				})
 			});
+		}
+
+		[UnitOfWork]
+		[EnabledBy(Toggles.RTA_ScheduleQueryOptimization_40260)]
+		public virtual void Handle(ScheduleProjectionReadModelChangedEvent @event)
+		{
+			_persister.InvalidateSchedules(@event.PersonId);
 		}
 	}
 

@@ -6,9 +6,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public interface IAgentStatePersister
 	{
-		// cleaner/updater/preparer stuff
+		// maintainer stuff
 		void Delete(Guid personId);
 		void Prepare(AgentStatePrepare model);
+		void InvalidateSchedules(Guid personId);
 
 		// query states by external logon
 		IEnumerable<AgentStateFound> Find(int dataSourceId, string userCode);

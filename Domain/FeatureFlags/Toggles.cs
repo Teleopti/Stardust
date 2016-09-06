@@ -25,6 +25,7 @@
 		RTA_BatchConnectionOptimization_40116,
 		RTA_BatchQueryOptimization_40169,
 		RTA_PersonOrganizationQueryOptimization_40261,
+		RTA_ScheduleQueryOptimization_40260,
 		RTA_RemoveSiteTeamOutOfAdherenceReadModels_40069,
 
 		MessageBroker_SchedulingScreenMailbox_32733,

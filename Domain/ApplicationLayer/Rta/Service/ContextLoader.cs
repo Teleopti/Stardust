@@ -20,6 +20,62 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		void ForSynchronize(Action<Context> action);
 	}
 
+	public class ContextLoaderWithScheduleOptimization : ContextLoader
+	{
+		public ContextLoaderWithScheduleOptimization(IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper, IAgentStatePersister agentStatePersister, IMappingReader mappingReader, IDatabaseReader databaseReader, AppliedAdherence appliedAdherence, ProperAlarm appliedAlarm) : base(databaseLoader, now, stateMapper, agentStatePersister, mappingReader, databaseReader, appliedAdherence, appliedAlarm)
+		{
+		}
+
+		public override void For(StateInputModel input, Action<Context> action)
+		{
+			var found = false;
+
+			WithUnitOfWork(() =>
+			{
+				var mappings = new MappingsState(() => _mappingReader.Read());
+				var dataSourceId = ValidateSourceId(input);
+				var userCode = input.UserCode;
+
+				_agentStatePersister.Find(dataSourceId, userCode)
+					.ForEach(state =>
+					{
+						found = true;
+
+						action.Invoke(new Context(
+							new InputInfo
+							{
+								PlatformTypeId = input.PlatformTypeId,
+								SourceId = input.SourceId,
+								SnapshotId = input.SnapshotId,
+								StateCode = input.StateCode,
+								StateDescription = input.StateDescription
+							},
+							state.PersonId,
+							state.BusinessUnitId,
+							state.TeamId.GetValueOrDefault(),
+							state.SiteId.GetValueOrDefault(),
+							() => state,
+							() =>
+							{
+								if (state.Schedule == null)
+									state.Schedule = _databaseReader.GetCurrentSchedule(state.PersonId);
+								return state.Schedule;
+							},
+							s => mappings,
+							c => _agentStatePersister.Update(c.MakeAgentState()),
+							_now,
+							_stateMapper,
+							_appliedAdherence,
+							_appliedAlarm
+							));
+					});
+			});
+
+			if (!found)
+				throw new InvalidUserCodeException($"No person found for SourceId {input.SourceId} and UserCode {input.UserCode}");
+		}
+	}
+
 	public class ContextLoaderWithPersonOrganizationQueryOptimization : ContextLoader
 	{
 		private readonly IConfigReader _config;

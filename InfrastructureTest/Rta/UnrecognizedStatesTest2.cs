@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public void ShouldNotAddDuplicatesInBatch()
 		{
 			Publisher.AddHandler(typeof(PersonAssociationChangedEventPublisher));
-			Publisher.AddHandler(typeof(AgentStateCleaner));
+			Publisher.AddHandler(typeof(AgentStateMaintainer));
 			Publisher.AddHandler(typeof(MappingReadModelUpdater));
 			Analytics.WithDataSource(7, new BatchForTest().SourceId);
 			Database

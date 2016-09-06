@@ -12,8 +12,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		IHandleEvent<ProjectionChangedEvent>,
 		IRunOnHangfire
 	{
-		public ScheduleProjectionReadOnlyUpdater(IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister)
-			: base(scheduleProjectionReadOnlyPersister)
+		public ScheduleProjectionReadOnlyUpdater(IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister, IEventPublisher eventPublisher)
+			: base(scheduleProjectionReadOnlyPersister, eventPublisher)
 		{
 		}
 
@@ -39,7 +39,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		IRunOnServiceBus
 #pragma warning restore 618
 	{
-		public ScheduleProjectionReadOnlyUpdaterBus(IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister) : base(scheduleProjectionReadOnlyPersister)
+		public ScheduleProjectionReadOnlyUpdaterBus(IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister, IEventPublisher eventPublisher) : 
+			base(scheduleProjectionReadOnlyPersister, eventPublisher)
 		{
 		}
 	}
@@ -47,10 +48,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 	public class ScheduleProjectionReadOnlyUpdaterBase
 	{
 		private readonly IScheduleProjectionReadOnlyPersister _scheduleProjectionReadOnlyPersister;
-	    
-		public ScheduleProjectionReadOnlyUpdaterBase(IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister)
+		private readonly IEventPublisher _eventPublisher;
+
+		public ScheduleProjectionReadOnlyUpdaterBase(IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister, IEventPublisher eventPublisher)
 		{
 			_scheduleProjectionReadOnlyPersister = scheduleProjectionReadOnlyPersister;
+			_eventPublisher = eventPublisher;
 		}
 
 		public virtual void Handle(ProjectionChangedEventForScheduleProjection @event)
@@ -66,18 +69,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		private void handleProjectionChanged(ProjectionChangedEventBase @event)
 		{
 			if (!@event.IsDefaultScenario) return;
-
+			
 			foreach (var scheduleDay in @event.ScheduleDays)
 			{
 				var date = new DateOnly(scheduleDay.Date);
 
 				var add = @event.IsInitialLoad ||
-							 _scheduleProjectionReadOnlyPersister.BeginAddingSchedule(
-								 date,
-								 @event.ScenarioId,
-								 @event.PersonId,
-								 scheduleDay.Version);
-					
+						  _scheduleProjectionReadOnlyPersister.BeginAddingSchedule(
+							  date,
+							  @event.ScenarioId,
+							  @event.PersonId,
+							  scheduleDay.Version);
+
 				if (!add) continue;
 				if (scheduleDay.Shift == null) continue;
 
@@ -100,6 +103,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 						});
 				}
 			}
+
+			_eventPublisher.Publish(new ScheduleProjectionReadModelChangedEvent
+			{
+				PersonId = @event.PersonId
+			});
 		}
 	}
 }

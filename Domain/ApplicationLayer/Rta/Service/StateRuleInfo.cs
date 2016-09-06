@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			if (_stored == null)
 				return true;
-			return _mappedState.Value?.StateGroupId != _stored?.StateGroupId;
+			return _mappedState.Value?.StateGroupId != _stored.StateGroupId;
 		}
 
 		public Guid? StateGroupId()

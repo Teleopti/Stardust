@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public FakeTeamOutOfAdherenceReadModelPersister Model;
 		public RtaTestAttribute Context;
 		public FakeEventPublisher Publisher;
-		public AgentStateCleaner Handler;
 
 		[Test]
 		public void ShouldNotPublishStateChangedEvent()
