@@ -808,6 +808,24 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			_target.SendChangeOverMessageBroker().Should().Be.EqualTo(true);
 		}
 
+		[Test]
+		public void ShouldDenyWaitlistedRequestWithAlreadyAbsence()
+		{
+			var person = PersonFactory.CreatePerson("Kalle", "kula");
+			var waitlistedPersonRequest = new PersonRequest(person);
+			var absence = new Absence();
+			person.WorkflowControlSet = createWorkFlowControlSet(
+				new DateTime(2015, 12, 12, 00, 00, 00, DateTimeKind.Utc),
+				new DateTime(2016, 12, 12, 00, 00, 00, DateTimeKind.Utc), absence, new GrantAbsenceRequest(), true);
+			waitlistedPersonRequest.Request = new AbsenceRequest(absence, new DateTimePeriod(2016, 9, 6, 2016, 9, 6));
+			waitlistedPersonRequest.ForcePending();
+			waitlistedPersonRequest.Deny(null, null, _authorization, true);
+			waitlistedPersonRequest.IsWaitlisted.Should().Be(true);
+
+			waitlistedPersonRequest.Deny(null, null, _authorization, true, true);
+			waitlistedPersonRequest.IsDenied.Should().Be(true);
+			waitlistedPersonRequest.IsWaitlisted.Should().Be(false);
+		}
 
 		private PersonRequest tryMovePersonRequestFromDeniedToApproved(bool waitlistingEnabled)
 		{

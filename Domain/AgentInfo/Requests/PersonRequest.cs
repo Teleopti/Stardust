@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		{
 			authorization.VerifyEditRequestPermission(this);
 			_alreadyAbsent = alreadyAbsence;
-			if (CanDeny(isAutoDeny))
+			if (CanDeny(isAutoDeny, alreadyAbsence))
 			{
 				RequestState.Deny(isAutoDeny);
 			}
@@ -227,9 +227,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			notifyOnStatusChange();
 		}
 
-		public virtual bool CanDeny(bool isAutoDeny)
+		public virtual bool CanDeny(bool isAutoDeny, bool alreadyAbsence)
 		{
-			return (!isAutoDeny && IsWaitlisted) || !IsDenied;
+			return (!isAutoDeny && IsWaitlisted) || !IsDenied || alreadyAbsence;
 		}
 
 		public virtual bool IsEditable
