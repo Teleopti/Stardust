@@ -43,11 +43,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		{
 			var results = new List<ActivityLayerOverlapCheckingResult>();
 			var people = _personRepository.FindPeople(input.PersonIds);
+			var timezone = _timeZone.TimeZone();
 
 			foreach (var person in people)
 			{
 				var activity = _activityForId.Load(input.ActivityId);
-				var periodInUtc = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(input.StartTime, _timeZone.TimeZone()), TimeZoneHelper.ConvertToUtc(input.EndTime, TimeZoneInfo.Utc));
+				var periodInUtc = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(input.StartTime, timezone), TimeZoneHelper.ConvertToUtc(input.EndTime, timezone));
 				var overlapLayers = _nonoverwritableLayerChecker.GetOverlappedLayersWhenAddingActivity(person, input.Date, activity, periodInUtc);
 
 				if(overlapLayers.IsEmpty()) continue;
