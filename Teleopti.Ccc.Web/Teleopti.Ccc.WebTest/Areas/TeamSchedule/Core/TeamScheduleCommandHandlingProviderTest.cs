@@ -238,7 +238,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			var result = Target.MoveActivity(input);
 			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
 			result.Count.Should().Be.EqualTo(1);
-			result.First().Messages.Contains(Resources.NoPermissionMoveAgentActivity).Should().Be.True();
+			result.First().ErrorMessages.Contains(Resources.NoPermissionMoveAgentActivity).Should().Be.True();
 		}
 
 		[Test]
@@ -270,7 +270,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 
 			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
 			result.Count.Should().Be.EqualTo(1);
-			result.First().Messages.Contains(Resources.WriteProtectSchedule).Should().Be.True();
+			result.First().ErrorMessages.Contains(Resources.WriteProtectSchedule).Should().Be.True();
 		}
         
 		[Test]
@@ -349,7 +349,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			var result = Target.MoveActivity(input);
 
 			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
-			result.First().Messages.Contains(Resources.ShiftLengthExceed36Hours).Should().Be.True();
+			result.First().ErrorMessages.Contains(Resources.ShiftLengthExceed36Hours).Should().Be.True();
 		}
 		[Test]
 		public void ShouldInvokeMoveShiftLayerCommandWhenMoveToTimeMakeShiftLengthIs36Hours()
@@ -535,9 +535,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			var results = Target.RemoveActivity(input);
 			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
 			results.Count.Should().Be.EqualTo(1);
-			results.First().Messages.Count.Should().Be.EqualTo(2);
-			results.First().Messages[0].Should().Be.EqualTo(Resources.WriteProtectSchedule);
-			results.First().Messages[1].Should().Be.EqualTo(Resources.NoPermissionRemoveAgentActivity);
+			results.First().ErrorMessages.Count.Should().Be.EqualTo(2);
+			results.First().ErrorMessages[0].Should().Be.EqualTo(Resources.WriteProtectSchedule);
+			results.First().ErrorMessages[1].Should().Be.EqualTo(Resources.NoPermissionRemoveAgentActivity);
 		}
 
 		[Test]
@@ -565,9 +565,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
 
 			results.Count.Should().Be.EqualTo(1);
-			results.First().Messages.Count.Should().Be.EqualTo(2);
-			results.First().Messages[0].Should().Be.EqualTo(Resources.WriteProtectSchedule);
-			results.First().Messages[1].Should().Be.EqualTo(Resources.NoPermissionAddAgentActivity);
+			results.First().ErrorMessages.Count.Should().Be.EqualTo(2);
+			results.First().ErrorMessages[0].Should().Be.EqualTo(Resources.WriteProtectSchedule);
+			results.First().ErrorMessages[1].Should().Be.EqualTo(Resources.NoPermissionAddAgentActivity);
 		}
 
 		[Test]
@@ -592,8 +592,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
 
 			results.Count.Should().Be.EqualTo(1);
-			results.First().Messages.Count.Should().Be.EqualTo(1);
-			results.First().Messages[0].Should().Be.EqualTo(Resources.WriteProtectSchedule);
+			results.First().ErrorMessages.Count.Should().Be.EqualTo(1);
+			results.First().ErrorMessages[0].Should().Be.EqualTo(Resources.WriteProtectSchedule);
 		}
 
 		[Test]

@@ -121,8 +121,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var error = result[0];
 
 			error.PersonId.Should().Be.EqualTo(personIdFrom);
-			error.Messages.Count.Should().Be.EqualTo(1);
-			error.Messages[0].Should().Be.EqualTo(errorMessage);
+			error.ErrorMessages.Count.Should().Be.EqualTo(1);
+			error.ErrorMessages[0].Should().Be.EqualTo(errorMessage);
 		}
 	}
 }

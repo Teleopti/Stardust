@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.SymbolStore;
 using System.Linq;
 using NHibernate.Util;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
@@ -12,8 +9,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -365,13 +360,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var movedLunchLayer = PersonAssignmentRepo.Single().ShiftLayers.First(l => l.Payload == lunchActivity);
 			movedLunchLayer.Period.Should().Be(new DateTimePeriod(2013, 11, 14, 11, 2013, 11, 14, 14));
 			command.WarningMessages.Count.Should().Be.EqualTo(1);
-			var timeZone = UserTimeZone.TimeZone();
-			var currentCulture = LoggedOnUser.CurrentUser().PermissionInformation.Culture();
-			var lunchLayer = pa.ShiftLayers.Single(l => l.Payload.Name == "Lunch");
-			var expectedWarning = string.Format(currentCulture, Resources.BusinessRuleOverlappingErrorMessage3, "Lunch",
-					lunchLayer.Period.TimePeriod(timeZone).ToShortTimeString(currentCulture), "Added activity",
-					new DateTimePeriod(2013, 11, 14, 9, 2013, 11, 14, 14).TimePeriod(timeZone).ToShortTimeString(currentCulture));
-			command.WarningMessages.First().Should().Be(expectedWarning);
+			command.WarningMessages.First().Should().Be(Resources.NewActivityOverlapsNonoverwritableActivities);
 		}
 
 	}

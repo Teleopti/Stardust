@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IPersonAssignmentAddActivity _addActivity;
 		private readonly INonoverwritableLayerMovabilityChecker _movabilityChecker;
 		private readonly INonoverwritableLayerMover _mover;
-		private readonly ILoggedOnUser _loggedOnUser;
 
 
 		public AddActivityCommandHandler(IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey> personAssignmentRepository, 
@@ -34,8 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			IShiftCategoryRepository shiftCategoryRepository, 
 			IPersonAssignmentAddActivity addActivity,
 			INonoverwritableLayerMovabilityChecker movabilityChecker,
-			INonoverwritableLayerMover mover,
-			ILoggedOnUser loggedOnUser)
+			INonoverwritableLayerMover mover)
 		{
 			_activityForId = activityForId;
 			_personAssignmentRepository = personAssignmentRepository;
@@ -46,7 +44,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_addActivity = addActivity;
 			_movabilityChecker = movabilityChecker;
 			_mover = mover;
-			_loggedOnUser = loggedOnUser;
 		}
 
 		public void Handle(AddActivityCommand command)
@@ -114,7 +111,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 							fixableLayer.Id.GetValueOrDefault());
 						if (movingDistance == TimeSpan.Zero)
 						{
-							warnings.AddRange(createWarningMessages(new[] {fixableLayer}, activity.Name, period));
+							warnings.Add(Resources.NewActivityOverlapsNonoverwritableActivities);
 						}
 						else
 						{
@@ -124,7 +121,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 					}
 					else
 					{
-						warnings.AddRange(createWarningMessages(conflictLayers, activity.Name, period));
+						warnings.Add(Resources.NewActivityOverlapsNonoverwritableActivities);
 					}
 					command.WarningMessages = warnings;
 				}
@@ -138,21 +135,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 						personAssignment.SetShiftCategory(shiftCategory);
 				}
 			}
-		}
-
-		private IList<string> createWarningMessages(IList<IShiftLayer> conflictLayers, string newActivityName, DateTimePeriod period)
-		{
-			var warnings = new List<string>();
-			var currentCulture = _loggedOnUser.CurrentUser().PermissionInformation.Culture();
-			var timeZone = _timeZone.TimeZone();
-			conflictLayers.ForEach(l =>
-			{
-				var warning = string.Format(currentCulture, Resources.BusinessRuleOverlappingErrorMessage3, l.Payload.Name,
-					l.Period.TimePeriod(timeZone).ToShortTimeString(currentCulture), newActivityName,
-					period.TimePeriod(timeZone).ToShortTimeString(currentCulture));
-				warnings.Add(warning);
-			});
-			return warnings;
 		}
 	}
 

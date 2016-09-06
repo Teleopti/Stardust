@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 {
 	public interface ISwapMainShiftForTwoPersonsCommandHandler
 	{
-		IEnumerable<FailActionResult> SwapShifts(SwapMainShiftForTwoPersonsCommand command);
+		IEnumerable<ActionResult> SwapShifts(SwapMainShiftForTwoPersonsCommand command);
 	}
 
 	public class SwapMainShiftForTwoPersonsCommandHandler : ISwapMainShiftForTwoPersonsCommandHandler
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			_scheduleDifferenceSaver = scheduleDifferenceSaver;
 		}
 
-		public IEnumerable<FailActionResult> SwapShifts(SwapMainShiftForTwoPersonsCommand command)
+		public IEnumerable<ActionResult> SwapShifts(SwapMainShiftForTwoPersonsCommand command)
 		{
 			var defaultScenario = _scenarioRepository.LoadDefaultScenario();
 			var personIds = new[] {command.PersonIdFrom, command.PersonIdTo};
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			people.ForEach( person =>
 				   saveScheduleDictionaryChanges(scheduleDictionary, person));
 
-			return new List<FailActionResult>();
+			return new List<ActionResult>();
 		}
 
 		private IScheduleDictionary getScheduleDictionary(IScenario scenario, DateTime date, IPerson[] people)
@@ -100,12 +100,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			_scheduleDifferenceSaver.SaveChanges(diff, (IUnvalidatedScheduleRangeUpdate)range);
 		}
 
-		private IEnumerable<FailActionResult> parseErrorResponses(IBusinessRuleResponse[] errorResponses)
+		private IEnumerable<ActionResult> parseErrorResponses(IBusinessRuleResponse[] errorResponses)
 		{
-			return errorResponses.Select(r => new FailActionResult
+			return errorResponses.Select(r => new ActionResult
 			{
 				PersonId = r.Person.Id.GetValueOrDefault(),
-				Messages = new List<string> {r.Message}
+				ErrorMessages = new List<string> {r.Message}
 			});
 		}
 	}

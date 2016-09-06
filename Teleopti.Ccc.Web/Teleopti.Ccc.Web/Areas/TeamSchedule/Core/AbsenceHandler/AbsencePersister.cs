@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler
 			_permissionChecker = permissionChecker;
 		}
 
-		public FailActionResult PersistFullDayAbsence(AddFullDayAbsenceCommand command)
+		public ActionResult PersistFullDayAbsence(AddFullDayAbsenceCommand command)
 		{
 			var absenceCreatorInfo = _absenceCommandConverter.GetCreatorInfoForFullDayAbsence(command);
 
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler
 			return null;
 		}
 
-		public FailActionResult PersistIntradayAbsence(AddIntradayAbsenceCommand command)
+		public ActionResult PersistIntradayAbsence(AddIntradayAbsenceCommand command)
 		{
 			var absenceCreatorInfo = _absenceCommandConverter.GetCreatorInfoForIntradayAbsence(command);
 
@@ -46,12 +46,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler
 			return null;
 		}
 
-		private FailActionResult getFailActionResult(Guid personId, IList<string> message)
+		private ActionResult getFailActionResult(Guid personId, IList<string> message)
 		{
-			return new FailActionResult
+			return new ActionResult
 			{
 				PersonId = personId,
-				Messages = message
+				ErrorMessages = message
 			};
 		}
 	}

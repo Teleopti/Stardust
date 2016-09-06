@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler
 {
 	public interface IAbsencePersister
 	{
-		FailActionResult PersistFullDayAbsence(AddFullDayAbsenceCommand command);
-		FailActionResult PersistIntradayAbsence(AddIntradayAbsenceCommand command);
+		ActionResult PersistFullDayAbsence(AddFullDayAbsenceCommand command);
+		ActionResult PersistIntradayAbsence(AddIntradayAbsenceCommand command);
 	}
 }

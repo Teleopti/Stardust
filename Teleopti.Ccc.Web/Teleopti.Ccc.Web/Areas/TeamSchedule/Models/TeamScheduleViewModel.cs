@@ -82,9 +82,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 		public DateTime ScheduleDate { get; set; }
 	}
 
-	public class FailActionResult
+	public class ActionResult
 	{
-		public IList<string> Messages { get; set; }
+		public IList<string> ErrorMessages { get; set; }
+		public IList<string> WarningMessages { get; set; }
 		public Guid PersonId { get; set; }
 	}
 

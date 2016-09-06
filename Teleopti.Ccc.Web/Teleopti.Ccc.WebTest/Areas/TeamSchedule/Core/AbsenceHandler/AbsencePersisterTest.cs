@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.AbsenceHandler
 			var target = new AbsencePersister(_absenceCommandConverter, _personAbsenceCreator, _permissionChecker);
 			var result = target.PersistFullDayAbsence(command);
 
-			result.Messages[0].Should().Be.EqualTo(expectedErrorMessage);
+			result.ErrorMessages[0].Should().Be.EqualTo(expectedErrorMessage);
 		}
 		
 		[Test]
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.AbsenceHandler
 			var result = target.PersistFullDayAbsence(command);
 
 			result.PersonId.Should().Be.EqualTo(_absenceCreatorInfo.Person.Id.GetValueOrDefault());
-			result.Messages.Should().Be.Equals(createResult);
+			result.ErrorMessages.Should().Be.Equals(createResult);
 		}
 
 		[Test]
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.AbsenceHandler
 			var target = new AbsencePersister(_absenceCommandConverter, _personAbsenceCreator, _permissionChecker);
 			var result = target.PersistIntradayAbsence(command);
 
-			result.Messages[0].Should().Be.EqualTo(expectedErrorMessage);
+			result.ErrorMessages[0].Should().Be.EqualTo(expectedErrorMessage);
 		}
 
 		[Test]
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.AbsenceHandler
 			var result = target.PersistIntradayAbsence(command);
 
 			result.PersonId.Should().Be.EqualTo(_absenceCreatorInfo.Person.Id.GetValueOrDefault());
-			result.Messages.Should().Be.Equals(createResult);
+			result.ErrorMessages.Should().Be.Equals(createResult);
 		}
 	}
 }

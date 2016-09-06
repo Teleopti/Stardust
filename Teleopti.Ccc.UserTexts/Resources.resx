@@ -14871,4 +14871,12 @@ These options are activated:
     <value>Allow Overwriting</value>
     <comment>Displayed name for schedule validation rule "NotOverwriteLayerRule"</comment>
   </data>
+  <data name="MoveNonoverwritableActivityForTheseAgents" xml:space="preserve">
+    <value>Move nonoverwritable activities for these agents</value>
+    <comment>select option for pre-check panel in adding activity -team schedule.</comment>
+  </data>
+  <data name="NewActivityOverlapsNonoverwritableActivities" xml:space="preserve">
+    <value>The new added activity overlaps nonoverwritable activitie(s)</value>
+    <comment>warning notice for adding activity in Web-TeamSchedule</comment>
+  </data>
 </root>

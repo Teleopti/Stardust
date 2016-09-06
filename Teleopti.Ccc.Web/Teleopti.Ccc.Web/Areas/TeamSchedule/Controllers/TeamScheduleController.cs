@@ -129,10 +129,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		}
 
 		[HttpPost, UnitOfWork, AddFullDayAbsencePermission, Route("api/TeamSchedule/AddFullDayAbsence")]
-		public virtual JsonResult<List<FailActionResult>> AddFullDayAbsence(FullDayAbsenceForm form)
+		public virtual JsonResult<List<ActionResult>> AddFullDayAbsence(FullDayAbsenceForm form)
 		{
 			setTrackedCommandInfo(form.TrackedCommandInfo);
-			var failResults = new List<FailActionResult>();
+			var failResults = new List<ActionResult>();
 			foreach (var personId in form.PersonIds)
 			{
 				var command = new AddFullDayAbsenceCommand
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			}
 
 			setTrackedCommandInfo(form.TrackedCommandInfo);
-			var failResults = new List<FailActionResult>();
+			var failResults = new List<ActionResult>();
 			foreach (var personId in form.PersonIds)
 			{
 				var command = new AddIntradayAbsenceCommand
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		public virtual IHttpActionResult RemoveAbsence(RemovePersonAbsenceForm command)
 		{
 			setTrackedCommandInfo(command.TrackedCommandInfo);
-			var errors = new List<FailActionResult>();
+			var errors = new List<ActionResult>();
 			foreach (var personAbsence in command.SelectedPersonAbsences)
 			{
 				var personAbsencesForRemove = _personAbsenceRepository.Find(personAbsence.PersonAbsenceIds, _currentScenario.Current());
@@ -245,7 +245,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			return _teamScheduleViewModelFactory.CreateViewModelForPeople(personIds.ToArray(), scheduleDateOnly);
 		}
 
-		private IEnumerable<FailActionResult> removeEntirePersonAbsence(DateTime scheduleDate,
+		private IEnumerable<ActionResult> removeEntirePersonAbsence(DateTime scheduleDate,
 			IEnumerable<IPersonAbsence> personAbsencesForRemove, TrackedCommandInfo trackInfo)
 		{
 			var personAbsenceGroups = personAbsencesForRemove
@@ -256,7 +256,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 					PersonAbsences = group.Select(x=>x)
 				});
 			
-			var failResults = new List<FailActionResult>();
+			var failResults = new List<ActionResult>();
 			foreach (var personAbsenceGroup in personAbsenceGroups)
 			{
 				var cmd = new RemovePersonAbsenceCommand
@@ -276,7 +276,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			return failResults;
 		}
 
-		private IEnumerable<FailActionResult> removePartPersonAbsence(DateTime scheduleDate,
+		private IEnumerable<ActionResult> removePartPersonAbsence(DateTime scheduleDate,
 			IEnumerable<IPersonAbsence> personAbsencesForRemove,
 			DateTime dateToRemove, TrackedCommandInfo trackInfo)
 		{
@@ -292,7 +292,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 				_loggonUser.CurrentUser().PermissionInformation.DefaultTimeZone());
 			var periodToRemove = new DateTimePeriod(scheduleDateInUtc, scheduleDateInUtc.AddDays(1));
 
-			var failResults = new List<FailActionResult>();
+			var failResults = new List<ActionResult>();
 			foreach (var personAbsenceGroup in personAbsenceGroups)
 			{
 				var cmd = new RemovePartPersonAbsenceCommand
@@ -313,20 +313,20 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			return failResults;
 		}
 
-		private void appendErrorMessage(ICollection<FailActionResult> failResults, ActionErrorMessage error)
+		private void appendErrorMessage(ICollection<ActionResult> failResults, ActionErrorMessage error)
 		{
 			var existingFailResult = failResults.SingleOrDefault(r => r.PersonId == error.PersonId);
 			if (existingFailResult == null)
 			{
-				failResults.Add(new FailActionResult
+				failResults.Add(new ActionResult
 				{
 					PersonId = error.PersonId,
-					Messages = error.ErrorMessages.ToList()
+					ErrorMessages = error.ErrorMessages.ToList()
 				});
 			}
 			else
 			{
-				existingFailResult.Messages = existingFailResult.Messages.Concat(error.ErrorMessages).ToList();
+				existingFailResult.ErrorMessages = existingFailResult.ErrorMessages.Concat(error.ErrorMessages).ToList();
 			}
 		}
 	}

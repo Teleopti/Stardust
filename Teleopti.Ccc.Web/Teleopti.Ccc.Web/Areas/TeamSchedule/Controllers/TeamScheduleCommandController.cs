@@ -18,31 +18,31 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		}
 
 		[UnitOfWork, HttpPost, Route("api/TeamScheduleCommand/AddActivity")]
-		public virtual List<FailActionResult> AddActivityCommand([FromBody]AddActivityFormData input)
+		public virtual List<ActionResult> AddActivityCommand([FromBody]AddActivityFormData input)
 		{
 			return _commandHandlingProvider.AddActivity(input);
 		}
 		
 		[UnitOfWork, HttpPost, Route("api/TeamScheduleCommand/AddPersonalActivity")]
-		public virtual List<FailActionResult> AddPersonalActivityCommand([FromBody]AddPersonalActivityFormData input)
+		public virtual List<ActionResult> AddPersonalActivityCommand([FromBody]AddPersonalActivityFormData input)
 		{
 			return _commandHandlingProvider.AddPersonalActivity(input);
 		}
 
 		[UnitOfWork, HttpPost, Route("api/TeamScheduleCommand/RemoveActivity")]
-		public virtual List<FailActionResult> RemoveActivityCommand([FromBody]RemoveActivityFormData input)
+		public virtual List<ActionResult> RemoveActivityCommand([FromBody]RemoveActivityFormData input)
 		{
 			return _commandHandlingProvider.RemoveActivity(input);
 		}
 
 		[UnitOfWork, HttpPost, Route("api/TeamScheduleCommand/MoveActivity")]
-		public virtual List<FailActionResult> MoveActivityCommand([FromBody] MoveActivityFormData input)
+		public virtual List<ActionResult> MoveActivityCommand([FromBody] MoveActivityFormData input)
 		{
 			return _commandHandlingProvider.MoveActivity(input);
 		}
 
 		[UnitOfWork, HttpPost, Route("api/TeamScheduleCommand/BackoutScheduleChange")]
-		public virtual List<FailActionResult> BackoutScheduleChangeCommand([FromBody] BackoutScheduleChangeFormData input)
+		public virtual List<ActionResult> BackoutScheduleChangeCommand([FromBody] BackoutScheduleChangeFormData input)
 		{
 			return _commandHandlingProvider.BackoutScheduleChange(input);
 		}
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		}
 
 		[UnitOfWork, HttpPost, Route("api/TeamScheduleCommand/ChangeShiftCategory")]
-		public virtual IList<FailActionResult> ChangeShiftCategoryCommand([FromBody] ChangeShiftCategoryFormData input)
+		public virtual IList<ActionResult> ChangeShiftCategoryCommand([FromBody] ChangeShiftCategoryFormData input)
 		{
 			return _commandHandlingProvider.ChangeShiftCategory(input);
 		}

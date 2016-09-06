@@ -57,7 +57,7 @@
 
 		vm.actionOptions = [
 			{
-				value: 'AutoFixForTheseAgents',
+				value: 'MoveNonoverwritableActivityForTheseAgents',
 				getName: function() {
 					return $translate.instant(this.value);
 				},

@@ -4314,7 +4314,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The non-overwrittenable shift {0} in interval {1} is overwritten by {2} in interval {3}..
+        ///   Looks up a localized string similar to The non-overwritable activity {0} in interval {1} is overwritten by {2} in interval {3}..
         /// </summary>
         public static string BusinessRuleOverlappingErrorMessage3 {
             get {
@@ -16316,6 +16316,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Move nonoverwritable activities for these agents.
+        /// </summary>
+        public static string MoveNonoverwritableActivityForTheseAgents {
+            get {
+                return ResourceManager.GetString("MoveNonoverwritableActivityForTheseAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move one interval earlier.
         /// </summary>
         public static string MoveOneIntervalEarlier {
@@ -17005,6 +17014,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NewActivityName {
             get {
                 return ResourceManager.GetString("NewActivityName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The new added activity overlaps nonoverwritable activitie(s).
+        /// </summary>
+        public static string NewActivityOverlapsNonoverwritableActivities {
+            get {
+                return ResourceManager.GetString("NewActivityOverlapsNonoverwritableActivities", resourceCulture);
             }
         }
         
@@ -30214,7 +30232,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This activity will intersect existing activities that do not allow overlapping..
+        ///   Looks up a localized string similar to This activity will overlap existing activities that do not allow overlapping..
         /// </summary>
         public static string ThisActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping {
             get {
@@ -32050,7 +32068,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validate requests based on budget allotment.
+        ///   Looks up a localized string similar to Validate requests based on budget allowance.
         /// </summary>
         public static string ValidateRequestsBasedOnBudgetAllotment {
             get {
@@ -32059,7 +32077,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validate requests based on intraday.
+        ///   Looks up a localized string similar to Validate requests based on intraday staffing check.
         /// </summary>
         public static string ValidateRequestsBasedOnIntraday {
             get {
