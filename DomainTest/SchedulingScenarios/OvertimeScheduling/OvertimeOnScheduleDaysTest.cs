@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public IGridlockManager LockManager;
+		public FakeTimeZoneGuard TimeZoneGuard;
 
 		[Test]
 		public void ShouldSkipLockedDaysWithAssignmentWithLayers()
@@ -68,9 +69,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().Should().Be.Empty();
 		}
 
-		[Test, Ignore]
-		public void ShouldPlaceOvertimeWhenViewerAndAgentTimeZonesAreFarAway()
+		[Test, Ignore("#40092")]
+		public void ShouldPlaceOvertimeWhenViewerAndAgentTimeZonesAreFarAway([Values("W. Europe Standard Time", "Mountain Standard Time")] string viewersTimeZone)
 		{
+			TimeZoneGuard.SetTimeZone(TimeZoneInfo.FindSystemTimeZoneById(viewersTimeZone));
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
 			var phoneActivity = ActivityFactory.CreateActivity("phone");
 			var skill = SkillRepository.Has("skill", phoneActivity);
