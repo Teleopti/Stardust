@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Castle.Core.Internal;
+using Newtonsoft.Json;
 using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
@@ -14,10 +16,12 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 	public class AgentStatePersister : IAgentStatePersister
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
+		private readonly IJsonSerializer _serializer;
 
-		public AgentStatePersister(ICurrentUnitOfWork unitOfWork)
+		public AgentStatePersister(ICurrentUnitOfWork unitOfWork, IJsonSerializer serializer)
 		{
 			_unitOfWork = unitOfWork;
+			_serializer = serializer;
 		}
 
 		[InfoLog]
@@ -46,7 +50,7 @@ WHERE
 			var existing = _unitOfWork.Current().Session()
 				.CreateSQLQuery(SelectAgentState + "WITH (UPDLOCK) WHERE PersonId = :PersonId")
 				.SetParameter("PersonId", model.PersonId)
-				.SetResultTransformer(Transformers.AliasToBean(typeof (AgentStateFound)))
+				.SetResultTransformer(Transformers.AliasToBean(typeof (internalAgentState)))
 				.List<AgentStateFound>();
 
 			_unitOfWork.Current().Session()
@@ -85,7 +89,10 @@ VALUES (:BusinessUnitId, :SiteId, :TeamId, :PersonId, :DataSourceId, :UserCode)"
 		[InfoLog]
 		public virtual void InvalidateSchedules(Guid personId)
 		{
-			throw new NotImplementedException();
+			_unitOfWork.Current().Session()
+				.CreateSQLQuery("UPDATE [dbo].[AgentState] SET Schedule = NULL WHERE PersonId = :PersonId")
+				.SetParameter("PersonId", personId)
+				.ExecuteUpdate();
 		}
 
 		[InfoLog]
@@ -93,28 +100,28 @@ VALUES (:BusinessUnitId, :SiteId, :TeamId, :PersonId, :DataSourceId, :UserCode)"
 		{
 			_unitOfWork.Current().Session()
 				.CreateSQLQuery(@"
-					UPDATE [dbo].[AgentState]
-					SET
-						BatchId = :BatchId,
-						SourceId = :SourceId,
-						PlatformTypeId = :PlatformTypeId,
-						BusinessUnitId = :BusinessUnitId,
-						SiteId = :SiteId,
-						TeamId = :TeamId,
-						ReceivedTime = :ReceivedTime,
-						StateCode = :StateCode,
-						StateGroupId = :StateGroupId,
-						StateStartTime = :StateStartTime,
-						ActivityId = :ActivityId, 
-						NextActivityId = :NextActivityId,
-						NextActivityStartTime = :NextActivityStartTime, 
-						RuleId = :RuleId,
-						RuleStartTime = :RuleStartTime,
-						AlarmStartTime = :AlarmStartTime,
-						TimeWindowCheckSum = :TimeWindowCheckSum
-					WHERE 
-						PersonId = :PersonId
-				")
+UPDATE [dbo].[AgentState]
+SET
+	BatchId = :BatchId,
+	SourceId = :SourceId,
+	PlatformTypeId = :PlatformTypeId,
+	BusinessUnitId = :BusinessUnitId,
+	SiteId = :SiteId,
+	TeamId = :TeamId,
+	ReceivedTime = :ReceivedTime,
+	StateCode = :StateCode,
+	StateGroupId = :StateGroupId,
+	StateStartTime = :StateStartTime,
+	ActivityId = :ActivityId, 
+	NextActivityId = :NextActivityId,
+	NextActivityStartTime = :NextActivityStartTime, 
+	RuleId = :RuleId,
+	RuleStartTime = :RuleStartTime,
+	AlarmStartTime = :AlarmStartTime,
+	TimeWindowCheckSum = :TimeWindowCheckSum,
+	Schedule = :Schedule
+WHERE 
+	PersonId = :PersonId")
 				.SetParameter("PersonId", model.PersonId)
 				.SetParameter("BatchId", model.BatchId)
 				.SetParameter("SourceId", model.SourceId)
@@ -133,6 +140,7 @@ VALUES (:BusinessUnitId, :SiteId, :TeamId, :PersonId, :DataSourceId, :UserCode)"
 				.SetParameter("RuleStartTime", model.RuleStartTime)
 				.SetParameter("AlarmStartTime", model.AlarmStartTime)
 				.SetParameter("TimeWindowCheckSum", model.TimeWindowCheckSum)
+				.SetParameter("Schedule", _serializer.SerializeObject(model.Schedule))
 				.ExecuteUpdate();
 		}
 
@@ -152,7 +160,7 @@ VALUES (:BusinessUnitId, :SiteId, :TeamId, :PersonId, :DataSourceId, :UserCode)"
 			var sql = SelectAgentState + "WITH (UPDLOCK) WHERE PersonId = :PersonId";
 			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
 				.SetParameter("PersonId", personId)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateFound)))
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
 				.SetReadOnly(true)
 				.List<AgentState>()
 				.FirstOrDefault();
@@ -165,7 +173,7 @@ VALUES (:BusinessUnitId, :SiteId, :TeamId, :PersonId, :DataSourceId, :UserCode)"
 			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
 				.SetParameter("DataSourceId", dataSourceId)
 				.SetParameter("UserCode", userCode)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateFound)))
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
 				.SetReadOnly(true)
 				.List<AgentStateFound>()
 				;
@@ -178,7 +186,7 @@ VALUES (:BusinessUnitId, :SiteId, :TeamId, :PersonId, :DataSourceId, :UserCode)"
 			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
 				.SetParameter("DataSourceId", dataSourceId)
 				.SetParameterList("UserCodes", userCodes)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateFound)))
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
 				.SetReadOnly(true)
 				.List<AgentStateFound>()
 				;
@@ -190,7 +198,7 @@ VALUES (:BusinessUnitId, :SiteId, :TeamId, :PersonId, :DataSourceId, :UserCode)"
 			var sql = SelectAgentState + "WITH (UPDLOCK) WHERE PersonId IN (:PersonIds)";
 			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
 				.SetParameterList("PersonIds", personIds)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateFound)))
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
 				.SetReadOnly(true)
 				.List<AgentState>()
 				.GroupBy(x => x.PersonId, (guid, states) => states.First())
@@ -215,7 +223,7 @@ VALUES (:BusinessUnitId, :SiteId, :TeamId, :PersonId, :DataSourceId, :UserCode)"
 		{
 			var sql = SelectAgentState + "WITH (TABLOCK UPDLOCK)";
 			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateFound)))
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
 				.SetReadOnly(true)
 				.List<AgentState>()
 				.GroupBy(x => x.PersonId, (guid, states) => states.First())
@@ -237,7 +245,7 @@ VALUES (:BusinessUnitId, :SiteId, :TeamId, :PersonId, :DataSourceId, :UserCode)"
 			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
 				.SetParameter("SnapshotId", snapshotId)
 				.SetParameter("SourceId", sourceId)
-				.SetResultTransformer(Transformers.AliasToBean(typeof (AgentStateFound)))
+				.SetResultTransformer(Transformers.AliasToBean(typeof (internalAgentState)))
 				.SetReadOnly(true)
 				.List<AgentState>()
 				.GroupBy(x => x.PersonId, (guid, states) => states.First())
@@ -246,5 +254,13 @@ VALUES (:BusinessUnitId, :SiteId, :TeamId, :PersonId, :DataSourceId, :UserCode)"
 		}
 		
 		private static string SelectAgentState = @"SELECT * FROM [dbo].[AgentState] ";
+
+		private class internalAgentState : AgentStateFound
+		{
+			public new string Schedule { set
+			{
+				base.Schedule = value != null ? JsonConvert.DeserializeObject<IEnumerable<ScheduledActivity>>(value) : null;
+			} }
+		}
 	}
 }

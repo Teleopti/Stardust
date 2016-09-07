@@ -57,12 +57,12 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 SELECT
 	PersonId,
 	PayloadId,
-	StartDateTime,
-	EndDateTime,
+	StartDateTime as start,
+	EndDateTime as [end],
 	Name,
 	ShortName,
 	DisplayColor, 
-	BelongsToDate 
+	BelongsToDate as date
 FROM ReadModel.ScheduleProjectionReadOnly
 WHERE 
 	{constraint} AND
@@ -72,9 +72,9 @@ ORDER BY EndDateTime ASC";
 
 		private class internalScheduledActivity : ScheduledActivity
 		{
-			public new DateTime BelongsToDate { set { base.BelongsToDate = new DateOnly(value); } }
-			public new DateTime StartDateTime {  set { base.StartDateTime = DateTime.SpecifyKind(value, DateTimeKind.Utc); } }
-			public new DateTime EndDateTime {  set { base.EndDateTime = DateTime.SpecifyKind(value, DateTimeKind.Utc); } }
+			public DateTime date { set { base.BelongsToDate = new DateOnly(value); } }
+			public DateTime start { set { base.StartDateTime = DateTime.SpecifyKind(value, DateTimeKind.Utc); } }
+			public DateTime end { set { base.EndDateTime = DateTime.SpecifyKind(value, DateTimeKind.Utc); } }
 		}
 
 		public ConcurrentDictionary<string, int> Datasources()

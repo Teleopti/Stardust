@@ -1,0 +1,1 @@
+ALTER TABLE [dbo].[AgentState] ADD Schedule nvarchar(max)

@@ -282,6 +282,7 @@
     <Compile Include="Rta\Persisters\TeamInAlarmFromAgentStatesReadModelTest.cs" />
     <Compile Include="Rta\Persisters\TeamOutOfAdherenceReadModelPersisterConcurrencyTest.cs" />
     <Compile Include="Rta\PublishRtaEventsToHangfireTest.cs" />
+    <Compile Include="Rta\ScheduleInvalidationTest.cs" />
     <Compile Include="Rta\SnapshotTest.cs" />
     <Compile Include="Rta\UnrecognizedStatesTest.cs" />
     <Compile Include="Rta\UnrecognizedStatesTest2.cs" />

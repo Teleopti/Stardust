@@ -321,7 +321,13 @@ namespace Teleopti.Ccc.TestCommon
 			_activities.Add(new Activity(name));
 			return this;
 		}
-		
+
+		public Database WithAssignment(string date)
+		{
+			WithAssignment(date.Date());
+			return this;
+		}
+
 		[UnitOfWork]
 		public virtual Database WithAssignment(DateOnly date)
 		{
