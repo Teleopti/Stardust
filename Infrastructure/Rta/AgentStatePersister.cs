@@ -140,7 +140,7 @@ WHERE
 				.SetParameter("RuleStartTime", model.RuleStartTime)
 				.SetParameter("AlarmStartTime", model.AlarmStartTime)
 				.SetParameter("TimeWindowCheckSum", model.TimeWindowCheckSum)
-				.SetParameter("Schedule", _serializer.SerializeObject(model.Schedule))
+				.SetParameter("Schedule", _serializer.SerializeObject(model.Schedule), NHibernateUtil.StringClob)
 				.ExecuteUpdate();
 		}
 
