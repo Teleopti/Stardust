@@ -33,9 +33,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			var visualLayerCollection = scheduleDay.ProjectionService().CreateProjection();
 			var result = _overtimeDateTimePeriodExtractor.Extract(minimumResolution, overtimeDuration, visualLayerCollection, specifiedPeriod, skillIntervalDataList);
 			var possibleOvertimePeriods = _overtimeRelativeDifferenceCalculator.Calculate(result, overtimePeriodValueMappedData, onlyAvailableAgents, scheduleDay);
-			var sortedPeriodValues = possibleOvertimePeriods.Where(possibleOvertimePeriod => possibleOvertimePeriod.Value < 0).ToList().OrderBy(x => x.Value);
+			var sortedPeriodValues = possibleOvertimePeriods.Where(possibleOvertimePeriod => possibleOvertimePeriod.Value < 0).OrderBy(x => x.Value);
 
-			return sortedPeriodValues.Select(overtimePeriodValue => overtimePeriodValue.Period).ToList();
+			return sortedPeriodValues.Select(overtimePeriodValue => overtimePeriodValue.Period);
 		}
 	}
 }
