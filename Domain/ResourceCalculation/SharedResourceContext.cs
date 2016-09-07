@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	{
 		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly Func<ISchedulerStateHolder> _stateHolder;
+		private IResourceCalculationDataContainerWithSingleOperation _sharedContext;
 
 		public SharedResourceContext(IResourceCalculationContextFactory resourceCalculationContextFactory, Func<ISchedulerStateHolder> stateHolder)
 		{
@@ -18,11 +19,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public IDisposable MakeSureExists(DateOnlyPeriod period)
 		{
 			var stateHolder = _stateHolder();
-
-			if (!ResourceCalculationContext.InContext)
+			if (_sharedContext == null)
 			{
 				_resourceCalculationContextFactory.Create(stateHolder.Schedules, stateHolder.SchedulingResultState.Skills, period);
+				_sharedContext = ResourceCalculationContext.Fetch();
 			}
+			new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => _sharedContext));
 
 			return new GenericDisposable(() =>{});
 		}

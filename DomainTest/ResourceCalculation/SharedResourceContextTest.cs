@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
@@ -22,6 +23,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test]
 		public void ShouldMakeSureContextIsAlive()
 		{
+			SchedulerStateHolder.Fill(new Scenario("_"), DateOnly.Today.ToDateOnlyPeriod(), Enumerable.Empty<IPerson>(), Enumerable.Empty<IPersistableScheduleData>(), Enumerable.Empty<ISkillDay>());
+
 			using (Target.MakeSureExists(new DateOnlyPeriod())) { }
 
 			ResourceCalculationContext.InContext
@@ -40,6 +43,22 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			ResourceCalculationContext.Fetch()
 				.Should().Be.SameInstanceAs(context);
 		}
+
+		[Test]
+		public void ShouldShareBetweenThreads()
+		{
+			SchedulerStateHolder.Fill(new Scenario("_"), DateOnly.Today.ToDateOnlyPeriod(), Enumerable.Empty<IPerson>(), Enumerable.Empty<IPersistableScheduleData>(), Enumerable.Empty<ISkillDay>());
+
+			Target.MakeSureExists(new DateOnlyPeriod());
+			var context = ResourceCalculationContext.Fetch();
+			Task.Factory.StartNew(() =>
+			{
+				Target.MakeSureExists(new DateOnlyPeriod());
+				ResourceCalculationContext.Fetch()
+					.Should().Be.SameInstanceAs(context);
+			}).Wait();
+		}
+
 
 		[TearDown]
 		public void Teardown()
