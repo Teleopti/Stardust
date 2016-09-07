@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 		private readonly IOptionalColumnRepository _optionalColumnRepository;
 		private readonly IPersonAbsenceRepository _personAbsenceRepository;
 		private readonly ILoggedOnUser _loggedOnUser;
-		private readonly IUserCulture _culture;
 		private readonly ICurrentBusinessUnit _businessUnitProvider;
 
 		public PeopleSearchProvider(
@@ -34,7 +33,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 			_optionalColumnRepository = optionalColumnRepository;
 			_personAbsenceRepository = personAbsenceRepository;
 			_loggedOnUser = loggedOnUser;
-			_culture = culture;
 			_businessUnitProvider = businessUnitProvider;
 		}
 
@@ -52,6 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 		{
 			var searchCriteria = CreatePersonFinderSearchCriteria(criteriaDictionary, 9999, 1, dateInUserTimeZone,
 				null);
+			PopulateSearchCriteriaResult(searchCriteria);
 			var personIdList = GetPermittedPersonIdList(searchCriteria, dateInUserTimeZone, function);
 			return _personRepository.FindPeople(personIdList).ToList();
 		}
@@ -92,32 +91,20 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 		public IEnumerable<Guid> GetPermittedPersonIdList(IEnumerable<IPerson> people ,DateOnly currentDate,
 			string function)
 		{
-			var entities = people.Select(p =>
-				new PersonFinderDisplayRow
+			return GetPermittedPersonList(people, currentDate, function).Select(x => x.Id.GetValueOrDefault());			
+		}
+
+		public IEnumerable<IPerson> GetPermittedPersonList(IEnumerable<IPerson> people,DateOnly currentDate,
+			string function)
+		{		
+			return
+				people.Where(p => _permissionProvider.HasOrganisationDetailPermission(function, currentDate, new PersonFinderDisplayRow
 				{
 					PersonId = p.Id.GetValueOrDefault(),
 					TeamId = p.MyTeam(currentDate)?.Id,
 					SiteId = p.MyTeam(currentDate)?.Site.Id,
 					BusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault()
-				});
-
-			return
-				entities.Where(e => _permissionProvider.HasOrganisationDetailPermission(function, currentDate, e))
-					.Select(x => x.PersonId);		
-		}
-
-		public IEnumerable<Guid> GetPermittedPersonIdListInWeek(PersonFinderSearchCriteria searchCriteria,DateOnly currentDate, string function)
-		{
-			var firstDayOfWeek = DateHelper.GetFirstDateInWeek(currentDate, _culture.GetCulture().DateTimeFormat.FirstDayOfWeek);
-			var week = new DateOnlyPeriod(firstDayOfWeek,firstDayOfWeek.AddDays(6));
-
-			return week.DayCollection().SelectMany(d =>
-			{
-				return searchCriteria.DisplayRows
-					.Where(
-						r => r.RowNumber > 0 && _permissionProvider.HasOrganisationDetailPermission(function, currentDate, r))
-					.Select(x => x.PersonId);
-			}).Distinct().ToList();			
+				}));
 		}
 
 		public PersonFinderSearchCriteria CreatePersonFinderSearchCriteria(IDictionary<PersonFinderField, string> criteriaDictionary,
@@ -127,16 +114,20 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 			{
 				CurrentPage = currentPageIndex
 			};
-									
-			_searchRepository.Find(search);
+												
 			return search;
+		}
+
+		public void PopulateSearchCriteriaResult(PersonFinderSearchCriteria search)
+		{
+			_searchRepository.Find(search);
 		}
 
 		private IEnumerable<Guid> getPermittedPersonIdList(IDictionary<PersonFinderField, string> criteriaDictionary,
 			int pageSize, int currentPageIndex, DateOnly currentDate, IDictionary<string, bool> sortedColumns, string function)
 		{
 			var search = CreatePersonFinderSearchCriteria(criteriaDictionary, pageSize, currentPageIndex, currentDate, sortedColumns);
-
+			PopulateSearchCriteriaResult(search);
 			var permittedPersonList =
 				search.DisplayRows.Where(
 					r => r.RowNumber > 0 && _permissionProvider.HasOrganisationDetailPermission(function, currentDate, r));
@@ -161,6 +152,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 				TotalPages = totalPages,
 				OptionalColumns = optionalColumnCollection
 			};
-		}
+		}	
 	}
 }

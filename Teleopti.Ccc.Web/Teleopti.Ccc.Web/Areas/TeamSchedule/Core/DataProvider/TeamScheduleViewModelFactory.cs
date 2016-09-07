@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -45,34 +46,36 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		{
 			var searchCriteria = _searchProvider.CreatePersonFinderSearchCriteria(criteriaDictionary, 9999, 1, dateInUserTimeZone,
 				null);
-			var people = _searchProvider.SearchPermittedPeople(searchCriteria, dateInUserTimeZone,
-				DefinedRaptorApplicationFunctionPaths.ViewSchedules).ToArray();
-
+			_searchProvider.PopulateSearchCriteriaResult(searchCriteria);
+			var targetIds = searchCriteria.DisplayRows.Where(r => r.RowNumber > 0).Select(r => r.PersonId).Distinct();
+			var matchedPersons = _personRepository.FindPeople(targetIds);
+			var permittedPersons = _searchProvider.GetPermittedPersonList(matchedPersons,dateInUserTimeZone,DefinedRaptorApplicationFunctionPaths.ViewSchedules).ToArray();
+					
 			if (isOnlyAbsences)
 			{
-				people = _searchProvider.SearchPermittedPeopleWithAbsence(people, dateInUserTimeZone).ToArray();
-				people = filterAbsenceOutOfSchedule(dateInUserTimeZone, people);
+				permittedPersons = _searchProvider.SearchPermittedPeopleWithAbsence(permittedPersons, dateInUserTimeZone).ToArray();
+				permittedPersons = filterAbsenceOutOfSchedule(dateInUserTimeZone,permittedPersons);
 			}
 
-			if (people.Length > 500)
+			if (permittedPersons.Length > 500)
 			{
 				return new GroupScheduleViewModel
 				{
 					Schedules = new List<GroupScheduleShiftViewModel>(),
-					Total = people.Length,
+					Total = permittedPersons.Length,
 				};
 			}
 
 			var peopleCanSeeConfidentialAbsencesFor = _searchProvider.GetPermittedPersonIdList(searchCriteria, dateInUserTimeZone,
 					DefinedRaptorApplicationFunctionPaths.ViewConfidential).ToArray();
 
-			var list = constructGroupScheduleShiftViewModels(dateInUserTimeZone, people, peopleCanSeeConfidentialAbsencesFor,
+			var list = constructGroupScheduleShiftViewModels(dateInUserTimeZone,permittedPersons, peopleCanSeeConfidentialAbsencesFor,
 				pageSize, currentPageIndex);
 
 			return new GroupScheduleViewModel
 			{
 				Schedules = list,
-				Total = people.Length
+				Total = permittedPersons.Length
 			};
 		}
 
@@ -80,20 +83,33 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			IDictionary<PersonFinderField, string> criteriaDictionary,
 			DateOnly dateInUserTimeZone, int pageSize, int currentPageIndex)
 		{
-			var searchCriteria = _searchProvider.CreatePersonFinderSearchCriteria(criteriaDictionary,9999,1,dateInUserTimeZone,
-				null);
 
-			var personIds = _searchProvider.GetPermittedPersonIdListInWeek(searchCriteria,dateInUserTimeZone,
-				DefinedRaptorApplicationFunctionPaths.ViewSchedules).ToArray();
+			var firstDayOfWeek = DateHelper.GetFirstDateInWeek(dateInUserTimeZone,_userCulture.GetCulture().DateTimeFormat.FirstDayOfWeek);
+			var week = new DateOnlyPeriod(firstDayOfWeek,firstDayOfWeek.AddDays(6));
 
-			var people = _personRepository.FindPeople(personIds).ToArray();
+			var personIds = new HashSet<Guid>();
+			var people = new List<IPerson>();
 
-			if(people.Length > 500)
+			foreach (var d in week.DayCollection())
+			{
+				var searchCriteria = _searchProvider.CreatePersonFinderSearchCriteria(criteriaDictionary,9999,1,d,null);
+				_searchProvider.PopulateSearchCriteriaResult(searchCriteria);
+				var targetIds = searchCriteria.DisplayRows.Where(r => r.RowNumber > 0).Select(r => r.PersonId).Where(id => !personIds.Contains(id)).ToList();
+
+				if (targetIds.Count == 0) continue;
+
+				var matchedPersons = _personRepository.FindPeople(targetIds);
+				var permittedPersons = _searchProvider.GetPermittedPersonList(matchedPersons,d,DefinedRaptorApplicationFunctionPaths.ViewSchedules).ToList();
+				permittedPersons.ForEach(p => personIds.Add(p.Id.GetValueOrDefault()));
+				people.AddRange(permittedPersons);
+			}
+												
+			if(people.Count > 500)
 			{
 				return new GroupWeekScheduleViewModel
 				{
 					PersonWeekSchedules = new List<PersonWeekScheduleViewModel>(),
-					Total = people.Length,
+					Total = people.Count,
 				};
 			}
 
@@ -102,7 +118,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			return new GroupWeekScheduleViewModel
 			{
 				PersonWeekSchedules = list,
-				Total = people.Length
+				Total = people.Count
 			};
 		}
 

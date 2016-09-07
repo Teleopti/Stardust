@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Core
 		{
 			var searchCriteria = _searchProvider.CreatePersonFinderSearchCriteria(criteriaDic, 9999, 1, currentDate,
 				null);
+			_searchProvider.PopulateSearchCriteriaResult(searchCriteria);
 			var people = _searchProvider.SearchPermittedPeople(searchCriteria, currentDate,
 				DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboardUnderReports).ToArray();
 
