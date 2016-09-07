@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 		}
 
 		[Test]
-		public void ShouldGetBestOvertime()
+		public void ShouldGetBestOvertimesSorted()
 		{
 			var expected = new DateTimePeriod(new DateTime(2014, 02, 26, 16, 30, 0, DateTimeKind.Utc), new DateTime(2014, 02, 26, 17, 30, 0, DateTimeKind.Utc));
 
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			using (_mock.Playback())
 			{
 				var result = _target.GetBestOvertime(_overtimeDuration, _overtimeSpecifiedPeriod, _mappedData, _scheduleDay, 15, false, null);
-				Assert.AreEqual(1, result.Count());
+				Assert.AreEqual(2, result.Count());
 				Assert.AreEqual(expected, result.First());
 			}
 		}
