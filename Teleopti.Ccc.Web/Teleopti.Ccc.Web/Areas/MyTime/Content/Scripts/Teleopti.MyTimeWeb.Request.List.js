@@ -276,12 +276,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			}
 		};
 
-		self.hideOldRequests = ko.observable(true);
-		self.hideOldRequests.subscribe(function () {
-		    self.Requests([]);
-	        self.LoadPage();
-	    });
-
 		self.LoadPage = function () {
 			var skip = self.Requests().length;
 			var take = 20;
@@ -292,10 +286,10 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 				data: {
 					Take: take,
 					Skip: skip,
-					hideOldRequest: self.hideOldRequests()
+					hideOldRequest: false
 				},
 				beforeSend: function () {
-				    self.isLoadingRequests(true);
+					self.isLoadingRequests(true);
 				},
 				success: function (data) {
 					self.MoreToLoad(data.length == take);
@@ -387,7 +381,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	});
 
 	function _initScrollPaging() {
-	    pageViewModel.LoadPage();
+		pageViewModel.LoadPage();
 		$(window).scroll(_loadAPageIfRequired);
 	}
 
@@ -395,7 +389,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		var jqWindow = $(window);
 		var jqDocument = $(window.document);
 		if (_isAtBottom(jqDocument, jqWindow)) {
-		    pageViewModel.LoadPage();
+			pageViewModel.LoadPage();
 		}
 	}
 

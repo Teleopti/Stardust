@@ -451,19 +451,6 @@
 	max-width: 130px;	
 }
 
-.request-date-container {
-	width: 43%;
-}
-
-.request-time-container {
-	width: 43%;
-	margin-top: -4px;
-}
-
-.request-list-filter {
-    margin-bottom: 10px;
-}
-
 .shift-trade-dayoff{
 	padding-top: 5px;
 	text-align: center;
