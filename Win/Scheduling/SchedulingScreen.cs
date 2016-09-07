@@ -5611,14 +5611,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 				selectedActivity = e.SelectedLayer.Payload as IActivity;
 
 			_scheduleView.Presenter.AddActivity(new List<IScheduleDay> {e.SchedulePart}, e.Period, selectedActivity);
-			RecalculateResources(true);
+			RecalculateResources(false);
 		}
 
 		private void wpfShiftEditor_AddPersonalShift(object sender, ShiftEditorEventArgs e)
 		{
 			if (_scheduleView == null) return;
 			_scheduleView.Presenter.AddPersonalShift(new List<IScheduleDay> {e.SchedulePart}, e.Period);
-			RecalculateResources(true);
+			RecalculateResources(false);
 		}
 
 		private void wpfShiftEditor_AddOvertime(object sender, ShiftEditorEventArgs e)
@@ -5626,14 +5626,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_scheduleView == null) return;
 			_scheduleView.Presenter.AddOvertime(new List<IScheduleDay> {e.SchedulePart}, e.Period,
 				MultiplicatorDefinitionSet.Where(m => m.MultiplicatorType == MultiplicatorType.Overtime).ToList());
-			RecalculateResources(true);
+			RecalculateResources(false);
 		}
 
 		private void wpfShiftEditor_AddAbsence(object sender, ShiftEditorEventArgs e)
 		{
 			if (_scheduleView == null) return;
 			_scheduleView.Presenter.AddAbsence(new List<IScheduleDay> {e.SchedulePart}, e.Period);
-			RecalculateResources(true);
+			RecalculateResources(false);
 		}
 
 		private void wpfShiftEditor_Undo(object sender, EventArgs e)
