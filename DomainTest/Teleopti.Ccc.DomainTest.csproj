@@ -185,6 +185,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\ExecuteBatchesInParallelTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ExternalLogonPersonMappingTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\NoRtaLicenseTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelActivityTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelOutOfAdherencesTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\EmptyExistingStateTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStatesViewModelBuilderTest.cs" />
@@ -405,7 +406,6 @@
     <Compile Include="ApplicationLayer\Rta\Service\PersonStateChangedEventTest.cs" />
     <Compile Include="ApplicationLayer\Rta\RtaExtensions.cs" />
     <Compile Include="ApplicationLayer\Rta\RtaTestAttribute.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\PersistAgentStateTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteAdherence\UpdaterTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteAdherence\UnorderedEventsTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\SnapshotTests.cs" />
