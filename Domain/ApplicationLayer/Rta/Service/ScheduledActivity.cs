@@ -6,6 +6,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
+	public interface IScheduleProjectionReadOnlyReader
+	{
+		IEnumerable<ScheduledActivity> GetCurrentSchedule(DateTime utcNow, Guid personId);
+		IEnumerable<ScheduledActivity> GetCurrentSchedules(DateTime utcNow, IEnumerable<Guid> personIds);
+	}
+
 	public static class ScheduledActivityExtensions
 	{
 		public static int CheckSum(this IEnumerable<ScheduledActivity> activities)

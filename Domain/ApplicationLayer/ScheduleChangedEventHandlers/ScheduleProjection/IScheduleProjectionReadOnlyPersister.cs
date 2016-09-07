@@ -1,10 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection
 {
+	public interface IScheduleProjectionReadOnlyPersister
+	{
+		bool IsInitialized();
+
+		bool BeginAddingSchedule(DateOnly date, Guid scenarioId, Guid personId, int version);
+		void AddActivity(ScheduleProjectionReadOnlyModel model);
+
+		IEnumerable<PayloadWorkTime> AbsenceTimePerBudgetGroup(DateOnlyPeriod period, IBudgetGroup budgetGroup, IScenario scenario);
+		int GetNumberOfAbsencesPerDayAndBudgetGroup(Guid budgetGroupId, DateOnly currentDate);
+
+		IEnumerable<ScheduleProjectionReadOnlyModel> ForPerson(DateOnly date, Guid personId, Guid scenarioId);
+	}
+
 	public class ScheduleProjectionReadOnlyModel : IEquatable<ScheduleProjectionReadOnlyModel>
 	{
 		public Guid PersonId { get; set; }
@@ -31,17 +45,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 				&& DisplayColor == other.DisplayColor);
 		}
 	}
-	
-	public interface IScheduleProjectionReadOnlyPersister
-	{
-		bool IsInitialized();
 
-		bool BeginAddingSchedule(DateOnly date, Guid scenarioId, Guid personId, int version);
-		void AddActivity(ScheduleProjectionReadOnlyModel model);
-
-		IEnumerable<PayloadWorkTime> AbsenceTimePerBudgetGroup(DateOnlyPeriod period, IBudgetGroup budgetGroup, IScenario scenario);
-		int GetNumberOfAbsencesPerDayAndBudgetGroup(Guid budgetGroupId, DateOnly currentDate);
-		
-		IEnumerable<ScheduleProjectionReadOnlyModel> ForPerson(DateOnly date, Guid personId, Guid scenarioId);
-	}
 }

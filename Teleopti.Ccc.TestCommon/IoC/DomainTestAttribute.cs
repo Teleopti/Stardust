@@ -166,10 +166,10 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeLatestStatisticsIntervalIdLoader>().For<ILatestStatisticsIntervalIdLoader>();
 			system.UseTestDouble<FakeRuleSetBagRepository>().For<IRuleSetBagRepository>();
 			system.UseTestDouble<FakeIntradayQueueStatisticsLoader>().For<IIntradayQueueStatisticsLoader>();
-			
 
 			// schedule readmodels
-			system.UseTestDouble<FakeScheduleProjectionReadOnlyPersister>().For<IScheduleProjectionReadOnlyPersister>();
+			system.UseTestDouble<FakeScheduleProjectionReadOnlyPersister>()
+				.For<IScheduleProjectionReadOnlyPersister, IScheduleProjectionReadOnlyReader>();
 			system.UseTestDouble<FakeProjectionVersionPersister>().For<IProjectionVersionPersister>();
 			
 			system.UseTestDouble<FakeJobStorageWrapper>().For<IJobStorageWrapper>();

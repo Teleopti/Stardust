@@ -3,13 +3,16 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Interfaces.Domain;
+using ExternalLogon = Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service.ExternalLogon;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
@@ -65,6 +68,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		private readonly FakeTenants _tenants;
 		private readonly FakeDataSourceForTenant _dataSourceForTenant;
 		private readonly FakeBusinessUnitRepository _businessUnits;
+		private readonly FakeScheduleProjectionReadOnlyPersister _schedules;
+		private readonly AgentStateMaintainer _agentStateMaintainer;
 
 		private class userData
 		{
@@ -73,13 +78,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		}
 
 		private readonly List<userData> _userInfos = new List<userData>();
-
-		private class scheduleLayer2
-		{
-			public Guid PersonId { get; set; }
-			public ScheduledActivity ScheduledActivity { get; set; }
-		}
-		private readonly List<scheduleLayer2> _schedules = new List<scheduleLayer2>();
 
 		public FakeRtaDatabase(
 			INow now,
@@ -91,7 +89,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			FakeRtaMapRepository rtaMapRepository,
 			FakeTenants tenants,
 			FakeDataSourceForTenant dataSourceForTenant,
-			FakeBusinessUnitRepository businessUnits
+			FakeBusinessUnitRepository businessUnits,
+			FakeScheduleProjectionReadOnlyPersister schedules,
+			AgentStateMaintainer agentStateMaintainer
 			)
 		{
 			_now = now;
@@ -104,6 +104,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_tenants = tenants;
 			_dataSourceForTenant = dataSourceForTenant;
 			_businessUnits = businessUnits;
+			_schedules = schedules;
+			_agentStateMaintainer = agentStateMaintainer;
 
 			withTenant("default", LegacyAuthenticationKey.TheKey);
 			WithSource(new StateForTest().SourceId);
@@ -204,25 +206,30 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				belongsToDate = new DateOnly(start.Utc());
 			if (!color.HasValue)
 				color = Color.Black;
-			_schedules.Add(new scheduleLayer2
+			_schedules.AddActivity(new ScheduleProjectionReadOnlyModel
 			{
 				PersonId = personId,
-				ScheduledActivity = new ScheduledActivity
-				{
-					PayloadId = activityId,
-					Name = name,
-					StartDateTime = start.Utc(),
-					EndDateTime = end.Utc(),
-					BelongsToDate = belongsToDate.Value,
-					DisplayColor = color.Value.ToArgb()
-				}
+				PayloadId = activityId,
+				Name = name,
+				StartDateTime = start.Utc(),
+				EndDateTime = end.Utc(),
+				BelongsToDate = belongsToDate.Value,
+				DisplayColor = color.Value.ToArgb()
+			});
+			_agentStateMaintainer.Handle(new ScheduleProjectionReadOnlyChangedEvent
+			{
+				PersonId = personId
 			});
 			return this;
 		}
 		
 		public FakeRtaDatabase ClearSchedule(Guid personId)
 		{
-			_schedules.RemoveAll(x => x.PersonId == personId);
+			_schedules.Clear(personId);
+			_agentStateMaintainer.Handle(new ScheduleProjectionReadOnlyChangedEvent
+			{
+				PersonId = personId
+			});
 			return this;
 		}
 
@@ -256,30 +263,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return this;
 		}
 		
-		public IEnumerable<ScheduledActivity> GetCurrentSchedule(DateTime utcNow, Guid personId)
-		{
-			return (
-				from l in _schedules
-				where
-					l.PersonId == personId &&
-					l.ScheduledActivity.BelongsToDate.Date >= utcNow.Date.AddDays(-1) &&
-					l.ScheduledActivity.BelongsToDate.Date <= utcNow.Date.AddDays(1)
-				select l.ScheduledActivity.CopyBySerialization()
-				).ToList();
-		}
-
-		public IEnumerable<ScheduledActivity> GetCurrentSchedules(DateTime utcNow, IEnumerable<Guid> personIds)
-		{
-			return (
-				from l in _schedules
-				where
-					personIds.Contains(l.PersonId) &&
-					l.ScheduledActivity.BelongsToDate.Date >= utcNow.Date.AddDays(-1) &&
-					l.ScheduledActivity.BelongsToDate.Date <= utcNow.Date.AddDays(1)
-				select l.ScheduledActivity.CopyBySerialization()
-				).ToList();
-		}
-
 		public ConcurrentDictionary<string, int> Datasources()
 		{
 			return new ConcurrentDictionary<string, int>(

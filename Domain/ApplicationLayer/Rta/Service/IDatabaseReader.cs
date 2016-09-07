@@ -8,9 +8,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		ConcurrentDictionary<string, int> Datasources();
 
-		IEnumerable<ScheduledActivity> GetCurrentSchedule(DateTime utcNow, Guid personId);
-		IEnumerable<ScheduledActivity> GetCurrentSchedules(DateTime utcNow, IEnumerable<Guid> personIds);
-
 		IEnumerable<PersonOrganizationData> LoadPersonOrganizationData(int dataSourceId, string externalLogOn);
 		IEnumerable<PersonOrganizationData> LoadPersonOrganizationDatas(int dataSourceId, IEnumerable<string> externalLogOns);
 		IEnumerable<PersonOrganizationData> LoadAllPersonOrganizationData();

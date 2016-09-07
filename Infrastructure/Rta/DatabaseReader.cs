@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
-	public class DatabaseReader : IDatabaseReader
+	public class DatabaseReader : IDatabaseReader, IScheduleProjectionReadOnlyReader
 	{
 		private readonly ICurrentAnalyticsUnitOfWork _analyticsUnitOfWork;
 		private readonly ICurrentUnitOfWork _unitOfWork;

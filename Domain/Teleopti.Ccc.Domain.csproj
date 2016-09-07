@@ -182,6 +182,11 @@
     <Compile Include="ApplicationLayer\Commands\ChangeShiftCategoryCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\INonoverwritableLayerMovabilityChecker.cs" />
     <Compile Include="ApplicationLayer\Commands\IReplyCommand.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\ContextLoaderWithBatchConnectionOptimization.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\ContextLoaderWithBatchQueryOptimization.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\ContextLoaderWithParalellBatch.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\ContextLoaderWithPersonOrganizationQueryOptimization.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\ContextLoaderWithScheduleOptimization.cs" />
     <Compile Include="Common\IScheduleDayProvider.cs" />
     <Compile Include="ApplicationLayer\Commands\NonoverwritableLayerMovabilityChecker.cs" />
     <Compile Include="ApplicationLayer\Commands\IRequestCommand.cs" />

@@ -2,8 +2,6 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -17,7 +15,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public FakeRtaDatabase Database;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 		public MutableNow Now;
-		public AgentStateMaintainer Maintainer;
 		public IIoCTestContext Context;
 
 		[Test]
@@ -83,10 +80,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.ClearSchedule(personId)
 				.WithSchedule(personId, "admin", "2016-09-06 14:00", "2016-09-06 16:00");
-			Maintainer.Handle(new ScheduleProjectionReadOnlyChangedEvent
-			{
-				PersonId = personId
-			});
 			Target.SaveState(new StateForTest
 			{
 				UserCode = "usercode",

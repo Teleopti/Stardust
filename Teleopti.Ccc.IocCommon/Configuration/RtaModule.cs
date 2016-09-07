@@ -69,7 +69,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.CacheKey(c.Resolve<CachePerDataSource>())
 				);
 			builder.CacheByInterfaceProxy<DatabaseLoader, IDatabaseLoader>().SingleInstance();
-			builder.RegisterType<DatabaseReader>().As<IDatabaseReader>().SingleInstance();
+			builder.RegisterType<DatabaseReader>()
+				.As<IScheduleProjectionReadOnlyReader>()
+				.As<IDatabaseReader>()
+				.SingleInstance();
 			if (_config.Toggle(Toggles.RTA_RuleMappingOptimization_39812))
 				builder.RegisterType<MappingReadModelReader>().As<IMappingReader>().SingleInstance();
 			else

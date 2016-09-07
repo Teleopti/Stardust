@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 	{
 		public IAgentStatePersister Target;
 		public IScheduleProjectionReadOnlyPersister Persister;
-		public IDatabaseReader Reader;
+		public IScheduleProjectionReadOnlyReader Reader;
 
 		[Test]
 		public void ShouldPersistModel()
