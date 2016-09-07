@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if (_sharedContext == null || forceNewContext)
 			{
 				var stateHolder = _stateHolder();
-				_resourceCalculationContextFactory.Create(stateHolder.Schedules, stateHolder.SchedulingResultState.Skills, period);
+				_resourceCalculationContextFactory.Create(stateHolder.Schedules, stateHolder.SchedulingResultState.Skills);
 				_sharedContext = ResourceCalculationContext.Fetch();
 			}
 			new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => _sharedContext));
