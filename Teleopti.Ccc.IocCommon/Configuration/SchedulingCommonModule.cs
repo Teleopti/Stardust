@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<ResourceCalculationContextFactory>().As<IResourceCalculationContextFactory>().SingleInstance();
 				builder.RegisterType<PersonalSkillsProviderNoCascading>().As<IPersonalSkillsProvider>().SingleInstance();
 			}
-
+			builder.RegisterType<SharedResourceContextOldSchedulingScreenBehavior>().As<ISharedResourceContext>().InstancePerLifetimeScope();
 			builder.RegisterType<SchedulingOptionsProvider>().As<ISchedulingOptionsProvider>().AsSelf().InstancePerLifetimeScope();
 			builder.RegisterModule(new IntraIntervalOptimizationServiceModule(_configuration));
 			builder.RegisterModule<IntraIntervalSolverServiceModule>();

@@ -2161,17 +2161,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (!_schedulerState.SchedulingResultState.Skills.Any()) return;
 			if (!_schedulerState.DaysToRecalculate.Any()) return;
 
-			IDisposable disposableContext = null;
-			if (!ResourceCalculationContext.InContext)
+			using (_container.Resolve<ISharedResourceContext>().Use(new DateOnlyPeriod(_schedulerState.DaysToRecalculate.Min().AddDays(-1), _schedulerState.DaysToRecalculate.Max())))
 			{
-				var period = new DateOnlyPeriod(_schedulerState.DaysToRecalculate.Min().AddDays(-1), _schedulerState.DaysToRecalculate.Max());
-				disposableContext = _container.Resolve<IResourceCalculationContextFactory>().Create(_schedulerState.Schedules, _schedulerState.SchedulingResultState.Skills, period);
-			}
-			_optimizationHelperExtended.ResourceCalculateMarkedDays(
-				new BackgroundWorkerWrapper(_backgroundWorkerResourceCalculator), SchedulerState.ConsiderShortBreaks, true);
-			if (disposableContext != null)
-			{
-				disposableContext.Dispose();
+				_optimizationHelperExtended.ResourceCalculateMarkedDays(new BackgroundWorkerWrapper(_backgroundWorkerResourceCalculator), SchedulerState.ConsiderShortBreaks, true);
 			}
 		}
 
@@ -3592,7 +3584,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (!_schedulerState.SchedulingResultState.SkipResourceCalculation && !_teamLeaderMode)
 			{
 				backgroundWorkerLoadData.ReportProgress(1, LanguageResourceHelper.Translate("XXCalculatingResourcesDotDotDot"));
-				_optimizationHelperExtended.ResourceCalculateAllDays(new BackgroundWorkerWrapper(backgroundWorkerLoadData), true);
+				var requestPeriod = _schedulerState.RequestedPeriod.DateOnlyPeriod;
+				using (_container.Resolve<ISharedResourceContext>().Use(new DateOnlyPeriod(requestPeriod.StartDate.AddDays(-1), requestPeriod.EndDate.AddDays(1))))
+				{
+					_optimizationHelperExtended.ResourceCalculateAllDays(new BackgroundWorkerWrapper(backgroundWorkerLoadData), true);
+				}
 			}
 
 			if (e.Cancel)

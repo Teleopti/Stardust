@@ -432,11 +432,13 @@
     <Compile Include="ResourceCalculation\FullResourceCalculationWithCascading.cs" />
     <Compile Include="ResourceCalculation\IPersonalSkillsProvider.cs" />
     <Compile Include="ResourceCalculation\IResourceCalculationContextFactory.cs" />
+    <Compile Include="ResourceCalculation\ISharedResourceContext.cs" />
     <Compile Include="ResourceCalculation\PersonalSkills.cs" />
     <Compile Include="ResourceCalculation\PersonalSkillsProvider.cs" />
     <Compile Include="ResourceCalculation\PersonalSkillsProviderNoCascading.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationCurrent.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationData.cs" />
+    <Compile Include="ResourceCalculation\SharedResourceContextOldSchedulingScreenBehavior.cs" />
     <Compile Include="ResourceCalculation\SkillCombination.cs" />
     <Compile Include="Scheduling\Assignment\ByPassPersistableScheduleDataPermissionChecker.cs" />
     <Compile Include="Scheduling\Assignment\IIsDayScheduled.cs" />
