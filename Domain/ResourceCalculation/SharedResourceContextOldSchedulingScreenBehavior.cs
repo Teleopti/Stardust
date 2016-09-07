@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_stateHolder = stateHolder;
 		}
 
-		public IDisposable Use(DateOnlyPeriod period)
+		public IDisposable MakeSureExists(DateOnlyPeriod period)
 		{
 			var stateHolder = _stateHolder();
 			IDisposable disposableContext = null;

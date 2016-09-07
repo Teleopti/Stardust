@@ -2161,7 +2161,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (!_schedulerState.SchedulingResultState.Skills.Any()) return;
 			if (!_schedulerState.DaysToRecalculate.Any()) return;
 
-			using (_container.Resolve<ISharedResourceContext>().Use(new DateOnlyPeriod(_schedulerState.DaysToRecalculate.Min().AddDays(-1), _schedulerState.DaysToRecalculate.Max())))
+			using (_container.Resolve<ISharedResourceContext>().MakeSureExists(new DateOnlyPeriod(_schedulerState.DaysToRecalculate.Min().AddDays(-1), _schedulerState.DaysToRecalculate.Max())))
 			{
 				_optimizationHelperExtended.ResourceCalculateMarkedDays(new BackgroundWorkerWrapper(_backgroundWorkerResourceCalculator), SchedulerState.ConsiderShortBreaks, true);
 			}
@@ -3585,7 +3585,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				backgroundWorkerLoadData.ReportProgress(1, LanguageResourceHelper.Translate("XXCalculatingResourcesDotDotDot"));
 				var requestPeriod = _schedulerState.RequestedPeriod.DateOnlyPeriod;
-				using (_container.Resolve<ISharedResourceContext>().Use(new DateOnlyPeriod(requestPeriod.StartDate.AddDays(-1), requestPeriod.EndDate.AddDays(1))))
+				using (_container.Resolve<ISharedResourceContext>().MakeSureExists(new DateOnlyPeriod(requestPeriod.StartDate.AddDays(-1), requestPeriod.EndDate.AddDays(1))))
 				{
 					_optimizationHelperExtended.ResourceCalculateAllDays(new BackgroundWorkerWrapper(backgroundWorkerLoadData), true);
 				}

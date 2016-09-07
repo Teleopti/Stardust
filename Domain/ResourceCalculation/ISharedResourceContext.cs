@@ -5,6 +5,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public interface ISharedResourceContext
 	{
-		IDisposable Use(DateOnlyPeriod period); //no need to keep period as param when toggle is gone - then it should always be "full" period
+		//no need to keep period as param when toggle is gone - then it should always be "full" period
+		//also - no need to return IDisposable
+		IDisposable MakeSureExists(DateOnlyPeriod period); 
 	}
 }
