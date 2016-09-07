@@ -5,12 +5,18 @@ using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Domain.Analytics.Transformer
 {
-	public class PersonPeriodTransformer
+	public interface IPersonPeriodTransformer
+	{
+		AnalyticsPersonPeriod Transform(IPerson person, IPersonPeriod personPeriod, out List<AnalyticsSkill> analyticsSkills);
+	}
+
+	public class PersonPeriodTransformer : IPersonPeriodTransformer
 	{
 		private static readonly DateTime eternity = new DateTime(2059, 12, 31);
 		private readonly IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository;
@@ -20,8 +26,9 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 		private readonly IAnalyticsPersonPeriodMapNotDefined _analyticsPersonPeriodMapNotDefined;
 		private readonly IAnalyticsDateRepository _analyticsDateRepository;
 		private readonly IAnalyticsTimeZoneRepository _analyticsTimeZoneRepository;
-		private readonly ICommonNameDescriptionSetting _commonNameDescription;
 		private readonly IAnalyticsIntervalRepository _analyticsIntervalRepository;
+		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
+		private ICommonNameDescriptionSetting _commonNameDescription;
 
 		public PersonPeriodTransformer(
 			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository, 
@@ -31,8 +38,8 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined, 
 			IAnalyticsDateRepository analyticsDateRepository, 
 			IAnalyticsTimeZoneRepository analyticsTimeZoneRepository, 
-			ICommonNameDescriptionSetting commonNameDescription, 
-			IAnalyticsIntervalRepository analyticsIntervalRepository)
+			IAnalyticsIntervalRepository analyticsIntervalRepository,
+			IGlobalSettingDataRepository globalSettingDataRepository)
 		{
 			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
 			_analyticsSkillRepository = analyticsSkillRepository;
@@ -41,8 +48,8 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 			_analyticsPersonPeriodMapNotDefined = analyticsPersonPeriodMapNotDefined;
 			_analyticsDateRepository = analyticsDateRepository;
 			_analyticsTimeZoneRepository = analyticsTimeZoneRepository;
-			_commonNameDescription = commonNameDescription;
 			_analyticsIntervalRepository = analyticsIntervalRepository;
+			_globalSettingDataRepository = globalSettingDataRepository;
 		}
 
 		public AnalyticsPersonPeriod Transform(IPerson person, IPersonPeriod personPeriod, out List<AnalyticsSkill> analyticsSkills)
@@ -103,6 +110,8 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 
 		public string GetPersonName(IPerson person)
 		{
+			if (_commonNameDescription == null)
+				_commonNameDescription = _globalSettingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
 			return _commonNameDescription.BuildCommonNameDescription(person);
 		}
 

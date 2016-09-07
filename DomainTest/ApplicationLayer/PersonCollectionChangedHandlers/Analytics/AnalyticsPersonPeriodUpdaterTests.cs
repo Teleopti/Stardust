@@ -7,6 +7,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Analytics;
+using Teleopti.Ccc.Domain.Analytics.Transformer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
 using Teleopti.Ccc.Domain.Common;
@@ -90,7 +91,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var auow = MockRepository.GenerateMock<ICurrentAnalyticsUnitOfWork>();
 			auow.Stub(a => a.Current()).Return(new FakeUnitOfWork());
 
-			_target = new AnalyticsPersonPeriodUpdater(_personRepository, _personPeriodRepository, _analyticsSkillRepository, _eventPublisher, _analyticsBusinessUnitRepository, _analyticsTeamRepository, new ReturnNotDefined(), auow, _analyticsDateRepository, _analyticsTimeZoneRepository, _globalSettingDataRepository, _analyticsIntervalRepository);
+			var personPeriodFilter = new PersonPeriodFilter(_analyticsDateRepository);
+			var personPeriodTransformer = new PersonPeriodTransformer(_personPeriodRepository, 
+				_analyticsSkillRepository, 
+				_analyticsBusinessUnitRepository, 
+				_analyticsTeamRepository, 
+				new ReturnNotDefined(),
+				_analyticsDateRepository,
+				_analyticsTimeZoneRepository,
+				_analyticsIntervalRepository,
+				_globalSettingDataRepository);
+
+			_target = new AnalyticsPersonPeriodUpdater(_personRepository, _personPeriodRepository, _eventPublisher, auow, personPeriodFilter, personPeriodTransformer);
 		}
 
 		[Test]

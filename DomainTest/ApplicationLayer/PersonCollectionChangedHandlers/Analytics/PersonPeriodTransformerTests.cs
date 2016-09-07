@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 	[TestFixture]
 	public class PersonPeriodTransformerTests
 	{
-		private PersonPeriodTransformer transformer;
 		private FakeAnalyticsPersonPeriodRepository fakeAnalyticsPersonPeriodRepository;
 		private FakeAnalyticsSkillRepository fakeAnalyticsSkillRepository;
 		private FakeAnalyticsBusinessUnitRepository fakeAnalyticsBusinessUnitRepository;
@@ -21,6 +20,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		private FakeAnalyticsDateRepository fakeAnalyticsDateRepository;
 		private FakeAnalyticsTimeZoneRepository fakeAnalyticsTimeZoneRepository;
 		private IAnalyticsIntervalRepository _analyticsIntervalRepository;
+		private FakeGlobalSettingDataRepository _globalSettingDataRepository;
+		private PersonPeriodTransformer _target;
 
 		[SetUp]
 		public void Setup()
@@ -33,40 +34,37 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			 fakeAnalyticsDateRepository = new FakeAnalyticsDateRepository();
 			 fakeAnalyticsTimeZoneRepository = new FakeAnalyticsTimeZoneRepository();
 			_analyticsIntervalRepository = new FakeAnalyticsIntervalRepository();
+			_globalSettingDataRepository = new FakeGlobalSettingDataRepository();
+
+			_target = new PersonPeriodTransformer(fakeAnalyticsPersonPeriodRepository,
+				fakeAnalyticsSkillRepository,
+				fakeAnalyticsBusinessUnitRepository,
+				fakeAnalyticsTeamRepository,
+				throwExceptionOnSkillMapError,
+				fakeAnalyticsDateRepository,
+				fakeAnalyticsTimeZoneRepository,
+				_analyticsIntervalRepository,
+				_globalSettingDataRepository);
 		}
 
 		[Test]
 		public void PersonNameShouldBeFirstNameLastName()
 		{
-			transformer = new PersonPeriodTransformer(fakeAnalyticsPersonPeriodRepository,
-				fakeAnalyticsSkillRepository,
-				fakeAnalyticsBusinessUnitRepository,
-				fakeAnalyticsTeamRepository,
-				throwExceptionOnSkillMapError,
-				fakeAnalyticsDateRepository,
-				fakeAnalyticsTimeZoneRepository,
-				new CommonNameDescriptionSetting($"{CommonNameDescriptionSetting.FirstName} {CommonNameDescriptionSetting.LastName}"),
-				_analyticsIntervalRepository);
-
+			_globalSettingDataRepository.PersistSettingValue("CommonNameDescription",
+				new CommonNameDescriptionSetting($"{CommonNameDescriptionSetting.FirstName} {CommonNameDescriptionSetting.LastName}"));
+			
 			var person = PersonFactory.CreatePerson("First", "Last");
-			transformer.GetPersonName(person).Should().Be.EqualTo("First Last");
+			_target.GetPersonName(person).Should().Be.EqualTo("First Last");
 		}
 
 		[Test]
 		public void PersonNameShouldBeLastNameFirstName()
 		{
-			transformer = new PersonPeriodTransformer(fakeAnalyticsPersonPeriodRepository,
-				fakeAnalyticsSkillRepository,
-				fakeAnalyticsBusinessUnitRepository,
-				fakeAnalyticsTeamRepository,
-				throwExceptionOnSkillMapError,
-				fakeAnalyticsDateRepository,
-				fakeAnalyticsTimeZoneRepository,
-				new CommonNameDescriptionSetting($"{CommonNameDescriptionSetting.LastName} {CommonNameDescriptionSetting.FirstName}"),
-				_analyticsIntervalRepository);
+			_globalSettingDataRepository.PersistSettingValue("CommonNameDescription",
+				new CommonNameDescriptionSetting($"{CommonNameDescriptionSetting.LastName} {CommonNameDescriptionSetting.FirstName}"));
 
 			var person = PersonFactory.CreatePerson("First", "Last");
-			transformer.GetPersonName(person).Should().Be.EqualTo("Last First");
+			_target.GetPersonName(person).Should().Be.EqualTo("Last First");
 		}
 	}
 }

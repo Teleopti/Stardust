@@ -1,4 +1,5 @@
 using Autofac;
+using Teleopti.Ccc.Domain.Analytics.Transformer;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
@@ -78,6 +79,9 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule<BadgeCalculationModule>();
 			builder.RegisterModule<CommandDispatcherModule>();
 			builder.RegisterModule<CommandHandlersModule>();
+
+			builder.RegisterType<PersonPeriodFilter>().As<IPersonPeriodFilter>();
+			builder.RegisterType<PersonPeriodTransformer>().As<IPersonPeriodTransformer>();
 		}
 
 		public static IToggleManager ToggleManagerForIoc(IocArgs iocArgs)

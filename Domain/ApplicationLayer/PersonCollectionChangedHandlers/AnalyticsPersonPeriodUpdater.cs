@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -27,20 +26,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 	{
 		public AnalyticsPersonPeriodUpdaterBus(IPersonRepository personRepository,
 			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository,
-			IAnalyticsSkillRepository analyticsSkillRepository,
 			IEventPublisher eventPublisher,
-			IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository,
-			IAnalyticsTeamRepository analyticsTeamRepository,
-			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined,
 			ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork,
-			IAnalyticsDateRepository analyticsDateRepository,
-			IAnalyticsTimeZoneRepository analyticsTimeZoneRepository,
-			 IGlobalSettingDataRepository globalSettingDataRepository,
-			IAnalyticsIntervalRepository analyticsIntervalRepository)
-			: base(
-				personRepository, analyticsPersonPeriodRepository, analyticsSkillRepository, eventPublisher,
-				analyticsBusinessUnitRepository, analyticsTeamRepository, analyticsPersonPeriodMapNotDefined,
-				currentAnalyticsUnitOfWork, analyticsDateRepository, analyticsTimeZoneRepository, globalSettingDataRepository, analyticsIntervalRepository)
+			IPersonPeriodFilter personPeriodFilter,
+			IPersonPeriodTransformer personPeriodTransformer)
+			: base(personRepository, analyticsPersonPeriodRepository, eventPublisher,
+				currentAnalyticsUnitOfWork, personPeriodFilter, personPeriodTransformer)
 		{
 		}
 
@@ -59,20 +50,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 	{
 		public AnalyticsPersonPeriodUpdaterHangfire(IPersonRepository personRepository,
 			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository,
-			IAnalyticsSkillRepository analyticsSkillRepository,
 			IEventPublisher eventPublisher,
-			IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository,
-			IAnalyticsTeamRepository analyticsTeamRepository,
-			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined,
 			ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork,
-			IAnalyticsDateRepository analyticsDateRepository,
-			IAnalyticsTimeZoneRepository analyticsTimeZoneRepository,
-			IGlobalSettingDataRepository globalSettingDataRepository,
-			IAnalyticsIntervalRepository analyticsIntervalRepository)
-			: base(
-				personRepository, analyticsPersonPeriodRepository, analyticsSkillRepository, eventPublisher,
-				analyticsBusinessUnitRepository, analyticsTeamRepository, analyticsPersonPeriodMapNotDefined,
-				currentAnalyticsUnitOfWork, analyticsDateRepository, analyticsTimeZoneRepository, globalSettingDataRepository, analyticsIntervalRepository)
+			IPersonPeriodFilter personPeriodFilter,
+			IPersonPeriodTransformer personPeriodTransformer)
+			: base(personRepository, analyticsPersonPeriodRepository, eventPublisher,
+				currentAnalyticsUnitOfWork, personPeriodFilter, personPeriodTransformer)
 		{
 		}
 
@@ -89,65 +72,32 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsPersonPeriodUpdater));
 		private readonly AcdLoginPersonTransformer _analyticsAcdLoginPerson;
 		private readonly IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository;
-		private readonly IAnalyticsSkillRepository _analyticsSkillRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IEventPublisher _eventPublisher;
-		private readonly IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
-		private readonly IAnalyticsTeamRepository _analyticsTeamRepository;
-		private readonly IAnalyticsPersonPeriodMapNotDefined _analyticsPersonPeriodMapNotDefined;
 		private readonly ICurrentAnalyticsUnitOfWork _currentAnalyticsUnitOfWork;
-		private readonly IAnalyticsDateRepository _analyticsDateRepository;
-		private readonly IAnalyticsTimeZoneRepository _analyticsTimeZoneRepository;
-		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
-		private readonly IAnalyticsIntervalRepository _analyticsIntervalRepository;
+		private readonly IPersonPeriodFilter _personPeriodFilter;
+		private readonly IPersonPeriodTransformer _personPeriodTransformer;
 
 		public AnalyticsPersonPeriodUpdater(IPersonRepository personRepository,
 			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository,
-			IAnalyticsSkillRepository analyticsSkillRepository,
 			IEventPublisher eventPublisher,
-			IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository,
-			IAnalyticsTeamRepository analyticsTeamRepository,
-			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined,
 			ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork,
-			IAnalyticsDateRepository analyticsDateRepository,
-			IAnalyticsTimeZoneRepository analyticsTimeZoneRepository,
-			IGlobalSettingDataRepository globalSettingDataRepository, 
-			IAnalyticsIntervalRepository analyticsIntervalRepository)
+			IPersonPeriodFilter personPeriodFilter, 
+			IPersonPeriodTransformer personPeriodTransformer)
 		{
 			_personRepository = personRepository;
 			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
-			_analyticsSkillRepository = analyticsSkillRepository;
 			_eventPublisher = eventPublisher;
-			_analyticsBusinessUnitRepository = analyticsBusinessUnitRepository;
-			_analyticsTeamRepository = analyticsTeamRepository;
-			_analyticsPersonPeriodMapNotDefined = analyticsPersonPeriodMapNotDefined;
 			_currentAnalyticsUnitOfWork = currentAnalyticsUnitOfWork;
-			_analyticsDateRepository = analyticsDateRepository;
-			_analyticsTimeZoneRepository = analyticsTimeZoneRepository;
-			_globalSettingDataRepository = globalSettingDataRepository;
-			_analyticsIntervalRepository = analyticsIntervalRepository;
+			_personPeriodFilter = personPeriodFilter;
+			_personPeriodTransformer = personPeriodTransformer;
 
 			_analyticsAcdLoginPerson = new AcdLoginPersonTransformer(_analyticsPersonPeriodRepository);
 		}
 
 		public virtual void Handle(PersonCollectionChangedEvent @event)
 		{
-			var personPeriodFilter = new PersonPeriodFilter(
-				_analyticsDateRepository.MinDate().DateDate,
-				_analyticsDateRepository.MaxDate().DateDate);
-
 			var persons = _personRepository.FindPeople(@event.PersonIdCollection.Distinct());
-
-			var transformer = new PersonPeriodTransformer(
-				_analyticsPersonPeriodRepository,
-				_analyticsSkillRepository,
-				_analyticsBusinessUnitRepository,
-				_analyticsTeamRepository,
-				_analyticsPersonPeriodMapNotDefined,
-				_analyticsDateRepository,
-				_analyticsTimeZoneRepository,
-				GetCommonNameDescription(_globalSettingDataRepository),
-				_analyticsIntervalRepository);
 
 			var changedPeople = new List<Guid>();
 			foreach (var personCodeGuid in @event.PersonIdCollection.Distinct())
@@ -163,7 +113,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 
 				var personPeriodsInAnalytics = _analyticsPersonPeriodRepository.GetPersonPeriods(personCodeGuid);
 
-				foreach (var personPeriod in personPeriodFilter.GetFiltered(person.PersonPeriodCollection))
+				foreach (var personPeriod in _personPeriodFilter.GetFiltered(person.PersonPeriodCollection))
 				{
 					// Check if person period already exists in database
 					var existingPeriod = personPeriodsInAnalytics.FirstOrDefault(a => a.PersonPeriodCode.Equals(personPeriod.Id.GetValueOrDefault()));
@@ -174,7 +124,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 						logger.Debug($"Update person period for {person.Name}");
 
 						// Update
-						var updatedAnalyticsPersonPeriod = transformer.Transform(person, personPeriod, out analyticsSkills);
+						var updatedAnalyticsPersonPeriod = _personPeriodTransformer.Transform(person, personPeriod, out analyticsSkills);
 
 						// Keep windows domain and username until external login information is availble from service bus
 						updatedAnalyticsPersonPeriod.WindowsUsername = existingPeriod.WindowsUsername;
@@ -187,7 +137,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 						logger.Debug($"Insert new person period for {person.Name}");
 
 						// Insert
-						var newAnalyticsPersonPeriod = transformer.Transform(person, personPeriod, out analyticsSkills);
+						var newAnalyticsPersonPeriod = _personPeriodTransformer.Transform(person, personPeriod, out analyticsSkills);
 						_analyticsPersonPeriodRepository.AddPersonPeriod(newAnalyticsPersonPeriod);
 					}
 
@@ -264,12 +214,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 				analyticsPersonCollectionChangedEvent.SetPersonIdCollection(changedPeople);
 				_eventPublisher.Publish(analyticsPersonCollectionChangedEvent);
 			});
-
-		}
-
-		private ICommonNameDescriptionSetting GetCommonNameDescription(IGlobalSettingDataRepository globalSettingDataRepository)
-		{
-			return globalSettingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
 
 		}
 
