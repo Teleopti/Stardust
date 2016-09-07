@@ -1,16 +1,17 @@
-﻿using System.Linq;
+using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.WebReports;
-using Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay;
+using Teleopti.Ccc.InfrastructureTest._WebReports.DailyMetricsForDay;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.InfrastructureTest.WebReports.DetailedAdherenceForDay
+namespace Teleopti.Ccc.InfrastructureTest._WebReports.DetailedAdherenceForDay
 {
 	[TestFixture]
-	public class TotalAdherenceForDateTest : WebReportTest
+	public class IntervalIdForDateTest : WebReportTest
 	{
 		private const int scheduledReadyTimeOneMinutes = 1;
 		private const int scheduledReadyTimeTwoMinutes = 3;
@@ -26,14 +27,26 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DetailedAdherenceForDay
 		}
 
 		[Test]
-		public void ShouldReturnTotalAdherenceForDate()
+		public void ShouldReturnIntervalIdForDate()
 		{
-			var expectedPercentage = new Percent(0.25);
-			Target(
+			var minTarget = Target(
 				(loggedOnUser, currentDataSource, currentBusinessUnit, globalSettingDataRepository) =>
-					new DetailedAdherenceForDayQuery(loggedOnUser, currentDataSource, currentBusinessUnit, globalSettingDataRepository))
-				.Execute(TheDate.Date).Last()
-				.TotalAdherence.Should().Be.EqualTo(expectedPercentage);
+					new DetailedAdherenceForDayQuery(loggedOnUser, currentDataSource, currentBusinessUnit, globalSettingDataRepository));
+			var ex = minTarget.Execute(TheDate.Date).First();
+			ex.IntervalId.Should().Be.EqualTo(expectedLocalIntervalId());
+		}
+
+		private int expectedLocalIntervalId()
+		{
+			var cetTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			var localIntervalTime = TimeZoneHelper.ConvertFromUtc(TheDate.Date.Date.AddMinutes(15), cetTimeZone);
+			return getIdFromDateTime(localIntervalTime);
+		}
+
+		private static int getIdFromDateTime(DateTime date)
+		{
+			double minutesElapsedOfDay = date.TimeOfDay.TotalMinutes;
+			return (int)minutesElapsedOfDay / 15;
 		}
 	}
 }

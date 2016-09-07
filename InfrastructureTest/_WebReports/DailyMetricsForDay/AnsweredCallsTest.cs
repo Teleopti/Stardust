@@ -4,7 +4,7 @@ using Teleopti.Ccc.Infrastructure.WebReports;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 
-namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
+namespace Teleopti.Ccc.InfrastructureTest._WebReports.DailyMetricsForDay
 {
 	[TestFixture]
 	public class AnsweredCallsTest : WebReportTest

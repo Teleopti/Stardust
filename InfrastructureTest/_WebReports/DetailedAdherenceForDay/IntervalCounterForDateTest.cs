@@ -2,14 +2,14 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.WebReports;
-using Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay;
+using Teleopti.Ccc.InfrastructureTest._WebReports.DailyMetricsForDay;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 
-namespace Teleopti.Ccc.InfrastructureTest.WebReports.DetailedAdherenceForDay
+namespace Teleopti.Ccc.InfrastructureTest._WebReports.DetailedAdherenceForDay
 {
 	[TestFixture]
-	public class ShiftDateForDateTest : WebReportTest
+	public class IntervalCounterForDateTest : WebReportTest
 	{
 		private const int scheduledReadyTimeOneMinutes = 1;
 		private const int scheduledReadyTimeTwoMinutes = 3;
@@ -25,14 +25,13 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DetailedAdherenceForDay
 		}
 
 		[Test]
-		public void ShouldReturnShiftDateForDate()
+		public void ShouldReturnIntervalCounterForDate()
 		{
-			var dateOnly = TheDate.Date;
 			Target(
 				(loggedOnUser, currentDataSource, currentBusinessUnit, globalSettingDataRepository) =>
 					new DetailedAdherenceForDayQuery(loggedOnUser, currentDataSource, currentBusinessUnit, globalSettingDataRepository))
-				.Execute(dateOnly).Last()
-				.ShiftDate.Should().Be.EqualTo(dateOnly);
+				.Execute(TheDate.Date).First()
+				.IntervalCounter.Should().Be.EqualTo(1);
 		}
 	}
 }

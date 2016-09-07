@@ -1,20 +1,25 @@
-﻿using System.Linq;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.WebReports;
-using Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.InfrastructureTest.WebReports.DetailedAdherenceForDay
+namespace Teleopti.Ccc.InfrastructureTest._WebReports.DailyMetricsForDay
 {
 	[TestFixture]
-	public class IntervalsPerDayForDateTest : WebReportTest
+	public class AdherenceForReadyTimeVSScheduledReadyTimeTest : WebReportTest
 	{
 		private const int scheduledReadyTimeOneMinutes = 1;
 		private const int scheduledReadyTimeTwoMinutes = 3;
 		private const int deviationScheduleReadyOneSeconds = 60;
 		private const int deviationScheduleReadyTwoSeconds = 120;
+
+		protected override AdherenceReportSettingCalculationMethod? AdherenceSetting
+		{
+			get { return AdherenceReportSettingCalculationMethod.ReadyTimeVSScheduledReadyTime; }
+		}
 
 		protected override void InsertTestSpecificData(AnalyticsDataFactory analyticsDataFactory)
 		{
@@ -25,13 +30,14 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DetailedAdherenceForDay
 		}
 
 		[Test]
-		public void ShouldReturnIntervalsPerDayForDate()
+		public void ShouldReturnAdherenceForAdherenceType1()
 		{
+			var expectedPercentage = new Percent(0.25);
 			Target(
 				(loggedOnUser, currentDataSource, currentBusinessUnit, globalSettingDataRepository) =>
-					new DetailedAdherenceForDayQuery(loggedOnUser, currentDataSource, currentBusinessUnit, globalSettingDataRepository))
-				.Execute(TheDate.Date).Last()
-				.IntervalsPerDay.Should().Be.EqualTo(96);
+					new DailyMetricsForDayQuery(loggedOnUser, currentDataSource, currentBusinessUnit, globalSettingDataRepository))
+				.Execute(TheDate.Date)
+				.Adherence.Should().Be.EqualTo(expectedPercentage);
 		}
 	}
 }

@@ -6,7 +6,7 @@ using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
+namespace Teleopti.Ccc.InfrastructureTest._WebReports.DailyMetricsForDay
 {
 	[TestFixture]
 	public class AdherenceForReadyTimeVSContractScheduleTimeTest : WebReportTest
