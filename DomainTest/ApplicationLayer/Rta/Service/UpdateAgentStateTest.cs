@@ -1,8 +1,6 @@
 using System;
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
@@ -106,23 +104,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database.StoredState.PersonId.Should().Be(personId);
 		}
 
-		[Test]
-		public void ShouldPersistScheduleWhenUpdating()
-		{
-			var personId = Guid.NewGuid();
-			Database
-				.WithUser("usercode", personId)
-				.WithSchedule(personId, "phone", "2016-09-06 14:00", "2016-09-06 15:00")
-				;
-
-			Now.Is("2016-09-06 15:00");
-			Target.SaveState(new StateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "phone"
-			});
-
-			Database.StoredState.Schedule.Single().Name.Should().Be.EqualTo("phone");
-		}
 	}
 }

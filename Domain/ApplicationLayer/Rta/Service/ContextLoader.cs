@@ -22,7 +22,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	public class ContextLoaderWithScheduleOptimization : ContextLoader
 	{
-		public ContextLoaderWithScheduleOptimization(IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper, IAgentStatePersister agentStatePersister, IMappingReader mappingReader, IDatabaseReader databaseReader, AppliedAdherence appliedAdherence, ProperAlarm appliedAlarm) : base(databaseLoader, now, stateMapper, agentStatePersister, mappingReader, databaseReader, appliedAdherence, appliedAlarm)
+		public ContextLoaderWithScheduleOptimization(IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper, IAgentStatePersister agentStatePersister, IMappingReader mappingReader, IDatabaseReader databaseReader, AppliedAdherence appliedAdherence, ProperAlarm appliedAlarm) : 
+			base(databaseLoader, now, stateMapper, agentStatePersister, mappingReader, databaseReader, appliedAdherence, appliedAlarm)
 		{
 		}
 
@@ -59,8 +60,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							() => state,
 							() =>
 							{
-								if (state.Schedule == null)
-									state.Schedule = _databaseReader.GetCurrentSchedule(now, state.PersonId);
+								if (state.Schedule == null || now.Date != state.ReceivedTime.GetValueOrDefault().Date)
+									return _databaseReader.GetCurrentSchedule(now, state.PersonId);
 								return state.Schedule;
 							},
 							s => mappings,
