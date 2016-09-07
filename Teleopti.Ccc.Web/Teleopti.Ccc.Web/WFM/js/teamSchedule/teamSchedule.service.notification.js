@@ -14,13 +14,13 @@
 			var failActionResults = [];
 			var warningActionResults = [];
 			actionResults.forEach(function(x) {
-				if (x.ErrorMessages.length > 0) {
+				if (x.ErrorMessages && x.ErrorMessages.length > 0) {
 					failActionResults.push({
 						PersonId: x.PersonId,
 						Messages: x.ErrorMessages
 					});
 				}
-				if (x.WarningMessages.length > 0) {
+				if (x.WarningMessages && x.WarningMessages.length > 0) {
 					warningActionResults.push({
 						PersonId: x.PersonId,
 						Warnings: x.WarningMessages
