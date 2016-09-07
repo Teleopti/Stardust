@@ -30,7 +30,9 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	self.timeLineStartTime = ko.observable();
 	self.timeLineLengthInMinutes = ko.observable();
 	self.DatePickerFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
+	self.availableSites = ko.observableArray();
 	self.availableTeams = ko.observableArray();
+	self.selectedSite = ko.observable();
 	self.selectedTeamInternal = ko.observable();
 	self.missingMyTeam = ko.observable();
 	self.myTeamId = ko.observable();
@@ -50,6 +52,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	self.searchNameText = ko.observable();
 	self.refocusToNameSearch = null;
 	self.isShiftTradeScheduleNoReadModelEnabled = ko.observable(false);
+	self.isSiteFilterEnabled = ko.observable(Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeFilterSite_40374'));
 
 	self.isDetailVisible = ko.computed(function () {
 		if (self.agentChoosed() === null) {
