@@ -253,6 +253,7 @@
     <Compile Include="Intraday\LatestStatisticsTimeProviderTest.cs" />
     <Compile Include="ReadModelValidator\ReadModelValidatorTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationTest.cs" />
+    <Compile Include="ResourceCalculation\SharedResourceContextTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationCascadingDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationTeamBlockDesktopTest.cs" />

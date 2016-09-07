@@ -439,6 +439,7 @@
     <Compile Include="ResourceCalculation\ResourceCalculationCurrent.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationData.cs" />
     <Compile Include="ResourceCalculation\SharedResourceContextOldSchedulingScreenBehavior.cs" />
+    <Compile Include="ResourceCalculation\SharedResourceContext.cs" />
     <Compile Include="ResourceCalculation\SkillCombination.cs" />
     <Compile Include="Scheduling\Assignment\ByPassPersistableScheduleDataPermissionChecker.cs" />
     <Compile Include="Scheduling\Assignment\IIsDayScheduled.cs" />
