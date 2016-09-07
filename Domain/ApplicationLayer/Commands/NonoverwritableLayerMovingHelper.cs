@@ -5,24 +5,22 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
-	public interface INonoverwritableLayerMover
+	public interface INonoverwritableLayerMovingHelper
 	{
 		TimeSpan GetMovingDistance(IScheduleDay scheduleDay, DateTimePeriod avoidPeriod, Guid shiftLayerId);
 		TimeSpan GetMovingDistance(IPerson person, DateOnly date, DateTimePeriod avoidPeriod, Guid shiftLayerId);
 		bool IsDestinationValidForMovedShiftLayer(IScheduleDay scheduleDay, IShiftLayer layer,TimeSpan distance);
 	}
 
-	public class NonoverwritableLayerMover : INonoverwritableLayerMover
+	public class NonoverwritableLayerMovingHelper : INonoverwritableLayerMovingHelper
 	{
 		private readonly INonoverwritableLayerChecker _nonoverwritableLayerChecker;
-		private readonly IScheduleStorage _scheduleStorage;
-		private readonly ICurrentScenario _currentScenario;
+		private readonly IScheduleDayProvider _scheduleDayProvider;
 
-		public NonoverwritableLayerMover(INonoverwritableLayerChecker nonoverwritableLayerChecker, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario)
+		public NonoverwritableLayerMovingHelper(INonoverwritableLayerChecker nonoverwritableLayerChecker, IScheduleDayProvider scheduleDayProvider)
 		{
 			_nonoverwritableLayerChecker = nonoverwritableLayerChecker;
-			_scheduleStorage = scheduleStorage;
-			_currentScenario = currentScenario;
+			_scheduleDayProvider = scheduleDayProvider;
 		}
 
 		public TimeSpan GetMovingDistance(IScheduleDay scheduleDay, DateTimePeriod avoidPeriod, Guid shiftLayerId)
@@ -54,24 +52,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		public TimeSpan GetMovingDistance(IPerson person, DateOnly date, DateTimePeriod avoidPeriod, Guid shiftLayerId)
 		{
-			var scheduleDay = getScheduleDay(date, person);
+			var scheduleDay = _scheduleDayProvider.GetScheduleDay(date, person);
 			return GetMovingDistance(scheduleDay, avoidPeriod, shiftLayerId);
-		}
-
-		private IScheduleDictionary getScheduleDictionary(DateOnly date, IPerson person)
-		{
-			var period = new DateOnlyPeriod(date, date).Inflate(1);
-			var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
-				new ScheduleDictionaryLoadOptions(false, false),
-				period,
-				_currentScenario.Current());
-			return schedules;
-		}
-
-		private IScheduleDay getScheduleDay(DateOnly date, IPerson person)
-		{
-			var schedules = getScheduleDictionary(date, person);
-			return schedules[person].ScheduledDay(date);
 		}
 		public bool IsDestinationValidForMovedShiftLayer(IScheduleDay scheduleDay, IShiftLayer layer,TimeSpan distance)
 		{			

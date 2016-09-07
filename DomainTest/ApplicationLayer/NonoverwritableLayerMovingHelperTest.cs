@@ -16,12 +16,12 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[TestFixture, DomainTest]
-	public class NonoverwritableLayerMoverTest : ISetup
+	public class NonoverwritableLayerMovingHelperTest : ISetup
 	{
 		public FakePersonRepository PersonRepository;
 		public FakeCurrentScenario CurrentScenario;
 		public FakeScheduleStorage ScheduleStorage;
-		public NonoverwritableLayerMover Target;
+		public NonoverwritableLayerMovingHelper Target;
 
 		[Test]
 		public void MoveShiftLayerToLocationThatWouldCauseTheTargetToBeOverlappedByOtherLayerShouldNotBeValid()
@@ -404,7 +404,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
-			system.UseTestDouble<NonoverwritableLayerMover>().For<INonoverwritableLayerMover>();
+			system.UseTestDouble<NonoverwritableLayerMovingHelper>().For<INonoverwritableLayerMovingHelper>();
 			system.UseTestDouble<NonoverwritableLayerChecker>().For<INonoverwritableLayerChecker>();
 		}
 	}

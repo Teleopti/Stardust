@@ -7,28 +7,15 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
-	public interface INonoverwritableLayerMovabilityChecker
-	{
-		bool HasNonoverwritableLayer(IScheduleDay scheduleDay, DateTimePeriod period, IActivity activity);
-		bool HasNonoverwritableLayer(IPerson person, DateOnly belongsToDate, DateTimePeriod periodInUtc, IActivity activity);
-		bool IsFixableByMovingNonoverwritableLayer(IScheduleDictionary scheduleDictionary, DateTimePeriod newPeriod, IPerson person, DateOnly date);
-		bool IsFixableByMovingNonoverwritableLayer(DateTimePeriod newPeriod, IPerson person, DateOnly date);
-		IList<IShiftLayer> GetNonoverwritableLayersToMove(IScheduleDay scheduleDay, DateTimePeriod newPeriod);
-		IList<IShiftLayer> GetNonoverwritableLayersToMove(IPerson person, DateOnly date, DateTimePeriod newPeriod);
-		bool ContainsOverlappedNonoverwritableLayers(IScheduleDictionary scheduleDictionary, IPerson person, DateOnly date);
-	}
-
 	public class NonoverwritableLayerMovabilityChecker : INonoverwritableLayerMovabilityChecker
 	{
 		private readonly INonoverwritableLayerChecker _nonoverwritableLayerChecker;
-		private readonly IScheduleStorage _scheduleStorage;
-		private readonly ICurrentScenario _currentScenario;
+		private readonly IScheduleDayProvider _scheduleDayProvider;
 
-		public NonoverwritableLayerMovabilityChecker(INonoverwritableLayerChecker nonoverwritableLayerChecker, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario)
+		public NonoverwritableLayerMovabilityChecker(INonoverwritableLayerChecker nonoverwritableLayerChecker, IScheduleDayProvider scheduleDayProvider)
 		{
 			_nonoverwritableLayerChecker = nonoverwritableLayerChecker;
-			_scheduleStorage = scheduleStorage;
-			_currentScenario = currentScenario;
+			_scheduleDayProvider = scheduleDayProvider;
 		}
 
 		public bool HasNonoverwritableLayer(IScheduleDay scheduleDay, DateTimePeriod period, IActivity activity)
@@ -41,7 +28,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		}
 		public bool HasNonoverwritableLayer(IPerson person, DateOnly belongsToDate, DateTimePeriod periodInUtc, IActivity activity)
 		{
-			var scheduleDay = getScheduleDay(belongsToDate, person);
+			var scheduleDay = _scheduleDayProvider.GetScheduleDay(belongsToDate, person);
 			return HasNonoverwritableLayer(scheduleDay, periodInUtc, activity);
 		}
 		
@@ -55,7 +42,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		public bool IsFixableByMovingNonoverwritableLayer(DateTimePeriod newPeriod, IPerson person, DateOnly date)
 		{
-			var dic = getScheduleDictionary(date, person);
+			var dic = _scheduleDayProvider.GetScheduleDictionary(date, person);
 			return IsFixableByMovingNonoverwritableLayer(dic, newPeriod, person, date);
 		}
 
@@ -84,23 +71,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		public IList<IShiftLayer> GetNonoverwritableLayersToMove(IPerson person, DateOnly date, DateTimePeriod newPeriod)
 		{
-			var scheduleDay = getScheduleDay(date, person);
+			var scheduleDay = _scheduleDayProvider.GetScheduleDay(date, person);
 			return GetNonoverwritableLayersToMove(scheduleDay, newPeriod);
-		}
-		private IScheduleDictionary getScheduleDictionary(DateOnly date, IPerson person)
-		{
-			var period = new DateOnlyPeriod(date, date).Inflate(1);
-			var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
-				new ScheduleDictionaryLoadOptions(false, false),
-				period,
-				_currentScenario.Current());
-			return schedules;
-		}
-
-		private IScheduleDay getScheduleDay(DateOnly date, IPerson person)
-		{
-			var schedules = getScheduleDictionary(date, person);
-			return schedules[person].ScheduledDay(date);
 		}
 
 		private IList<IShiftLayer> getMatchedMainShiftLayers(IScheduleDay scheduleDay, IVisualLayer layer)

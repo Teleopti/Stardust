@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IShiftCategoryRepository _shiftCategoryRepository;
 		private readonly IPersonAssignmentAddActivity _addActivity;
 		private readonly INonoverwritableLayerMovabilityChecker _movabilityChecker;
-		private readonly INonoverwritableLayerMover _mover;
+		private readonly INonoverwritableLayerMovingHelper _movingHelper;
 
 
 		public AddActivityCommandHandler(IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey> personAssignmentRepository, 
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			IShiftCategoryRepository shiftCategoryRepository, 
 			IPersonAssignmentAddActivity addActivity,
 			INonoverwritableLayerMovabilityChecker movabilityChecker,
-			INonoverwritableLayerMover mover)
+			INonoverwritableLayerMovingHelper movingHelper)
 		{
 			_activityForId = activityForId;
 			_personAssignmentRepository = personAssignmentRepository;
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_shiftCategoryRepository = shiftCategoryRepository;
 			_addActivity = addActivity;
 			_movabilityChecker = movabilityChecker;
-			_mover = mover;
+			_movingHelper = movingHelper;
 		}
 
 		public void Handle(AddActivityCommand command)
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			});
 
 			command.ErrorMessages = new List<string>();
-			var warnings = new List<string>();
+			
 			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(command.StartTime, timeZone), TimeZoneHelper.ConvertToUtc(command.EndTime, timeZone));
 
 			var personAssignmentOfPreviousDay = _personAssignmentRepository.LoadAggregate(new PersonAssignmentKey
@@ -103,11 +103,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			{
 				if (command.MoveConflictLayerAllowed && _movabilityChecker.HasNonoverwritableLayer(person, command.Date, period, activity))
 				{
-					var conflictLayers = _movabilityChecker.GetNonoverwritableLayersToMove(person, command.Date, period);
+					var warnings = new List<string>();
 					if (_movabilityChecker.IsFixableByMovingNonoverwritableLayer(period, person, command.Date))
 					{
-						var fixableLayer = conflictLayers.Single();
-						var movingDistance = _mover.GetMovingDistance(person, command.Date, period,
+						var fixableLayer = _movabilityChecker.GetNonoverwritableLayersToMove(person, command.Date, period).Single();
+						var movingDistance = _movingHelper.GetMovingDistance(person, command.Date, period,
 							fixableLayer.Id.GetValueOrDefault());
 						if (movingDistance == TimeSpan.Zero)
 						{
