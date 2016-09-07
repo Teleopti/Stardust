@@ -3,7 +3,7 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
 
   <WebRole name="TeleoptiCCC" vmsize="Large">
     <Sites>
-      <Site name="TeleoptiCCC" physicalDirectory="../../TeleoptiCCC">
+      <Site name="TeleoptiCCC" physicalDirectory="../../StartPage">
         <VirtualApplication name="SDK" physicalDirectory="../../SDK" />
         <VirtualApplication name="Analytics" physicalDirectory="../../Analytics" />
         <VirtualApplication name="Web" physicalDirectory="../../Web" />
