@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			SchedulerStateHolder.Fill(new Scenario("_"), DateOnly.Today.ToDateOnlyPeriod(), Enumerable.Empty<IPerson>(), Enumerable.Empty<IPersistableScheduleData>(), Enumerable.Empty<ISkillDay>());
 
-			using (Target.MakeSureExists(new DateOnlyPeriod())) { }
+			using (Target.MakeSureExists(new DateOnlyPeriod(), false)) { }
 
 			ResourceCalculationContext.InContext
 				.Should().Be.True();
@@ -36,9 +36,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			SchedulerStateHolder.Fill(new Scenario("_"), DateOnly.Today.ToDateOnlyPeriod(), Enumerable.Empty<IPerson>(), Enumerable.Empty<IPersistableScheduleData>(), Enumerable.Empty<ISkillDay>());
 
-			Target.MakeSureExists(new DateOnlyPeriod());
+			Target.MakeSureExists(new DateOnlyPeriod(), false);
 			var context = ResourceCalculationContext.Fetch();
-			Target.MakeSureExists(new DateOnlyPeriod());
+			Target.MakeSureExists(new DateOnlyPeriod(), false);
 
 			ResourceCalculationContext.Fetch()
 				.Should().Be.SameInstanceAs(context);
@@ -49,16 +49,28 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			SchedulerStateHolder.Fill(new Scenario("_"), DateOnly.Today.ToDateOnlyPeriod(), Enumerable.Empty<IPerson>(), Enumerable.Empty<IPersistableScheduleData>(), Enumerable.Empty<ISkillDay>());
 
-			Target.MakeSureExists(new DateOnlyPeriod());
+			Target.MakeSureExists(new DateOnlyPeriod(), false);
 			var context = ResourceCalculationContext.Fetch();
 			Task.Factory.StartNew(() =>
 			{
-				Target.MakeSureExists(new DateOnlyPeriod());
+				Target.MakeSureExists(new DateOnlyPeriod(), false);
 				ResourceCalculationContext.Fetch()
 					.Should().Be.SameInstanceAs(context);
 			}).Wait();
 		}
 
+		[Test]
+		public void ShouldForceNewContext()
+		{
+			SchedulerStateHolder.Fill(new Scenario("_"), DateOnly.Today.ToDateOnlyPeriod(), Enumerable.Empty<IPerson>(), Enumerable.Empty<IPersistableScheduleData>(), Enumerable.Empty<ISkillDay>());
+
+			Target.MakeSureExists(new DateOnlyPeriod(), false);
+			var context = ResourceCalculationContext.Fetch();
+			Target.MakeSureExists(new DateOnlyPeriod(), true);
+
+			ResourceCalculationContext.Fetch()
+				.Should().Not.Be.SameInstanceAs(context);
+		}
 
 		[TearDown]
 		public void Teardown()

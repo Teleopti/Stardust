@@ -16,11 +16,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_stateHolder = stateHolder;
 		}
 
-		public IDisposable MakeSureExists(DateOnlyPeriod period)
+		public IDisposable MakeSureExists(DateOnlyPeriod period, bool forceNewContext)
 		{
-			var stateHolder = _stateHolder();
-			if (_sharedContext == null)
+			if (_sharedContext == null || forceNewContext)
 			{
+				var stateHolder = _stateHolder();
 				_resourceCalculationContextFactory.Create(stateHolder.Schedules, stateHolder.SchedulingResultState.Skills, period);
 				_sharedContext = ResourceCalculationContext.Fetch();
 			}

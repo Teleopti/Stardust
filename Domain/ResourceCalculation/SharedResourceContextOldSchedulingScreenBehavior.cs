@@ -1,9 +1,11 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpManualChanges_37029)]
 	public class SharedResourceContextOldSchedulingScreenBehavior : ISharedResourceContext
 	{
 		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
@@ -15,7 +17,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_stateHolder = stateHolder;
 		}
 
-		public IDisposable MakeSureExists(DateOnlyPeriod period)
+		public IDisposable MakeSureExists(DateOnlyPeriod period, bool forceNewContext)
 		{
 			var stateHolder = _stateHolder();
 			IDisposable disposableContext = null;
