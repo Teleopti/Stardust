@@ -57,7 +57,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 
 			_personAbsenceRemover = new PersonAbsenceRemover(_businessRulesForAccountUpdate, _saveSchedulePartService, _personAbsenceCreator,
-				_loggedOnUser, new AbsenceRequestCancelService (new PersonRequestAuthorizationCheckerForTest(), _scenario), new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository));
+				_loggedOnUser, new AbsenceRequestCancelService (new PersonRequestAuthorizationCheckerForTest(), _scenario)
+				, new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository), new PersonRequestAuthorizationCheckerForTest());
 		}
 
 		[Test]
@@ -136,7 +137,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			currentScenario.FakeScenario (nonDefaultScenario);
 
 			_personAbsenceRemover = new PersonAbsenceRemover(_businessRulesForAccountUpdate, _saveSchedulePartService, _personAbsenceCreator,
-				_loggedOnUser, new AbsenceRequestCancelService(new PersonRequestAuthorizationCheckerForTest(), currentScenario), new CheckingPersonalAccountDaysProvider(new FakePersonAbsenceAccountRepository()));
+				_loggedOnUser, new AbsenceRequestCancelService(new PersonRequestAuthorizationCheckerForTest(), currentScenario)
+				, new CheckingPersonalAccountDaysProvider(new FakePersonAbsenceAccountRepository()), new PersonRequestAuthorizationCheckerForTest());
 
 
 			var startDate = new DateTime(2015, 10, 1, 13, 0, 0, DateTimeKind.Utc);
@@ -354,7 +356,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_personAbsenceRemover = new PersonAbsenceRemover(_businessRulesForAccountUpdate, _saveSchedulePartService,
 				_personAbsenceCreator,
 				_loggedOnUser, new AbsenceRequestCancelService(new PersonRequestAuthorizationCheckerForTest(), _scenario),
-				new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository));
+				new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository), new PersonRequestAuthorizationCheckerForTest());
 		}
 
 		private AccountDay createAccountDay(DateOnly startDate, TimeSpan balanceIn, TimeSpan accrued, TimeSpan balance)

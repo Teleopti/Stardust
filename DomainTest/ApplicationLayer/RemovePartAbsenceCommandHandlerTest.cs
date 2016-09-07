@@ -17,6 +17,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.Services;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
@@ -196,7 +197,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 
-			var personAbsenceRemover = new PersonAbsenceRemover(_businessRulesForAccountUpdate, _saveSchedulePartService, _personAbsenceCreator, loggedOnUser, new AbsenceRequestCancelService(new PersonRequestAuthorizationCheckerForTest(), _scenario), new CheckingPersonalAccountDaysProvider(new FakePersonAbsenceAccountRepository()));
+			var personAbsenceRemover = new PersonAbsenceRemover(_businessRulesForAccountUpdate, _saveSchedulePartService, _personAbsenceCreator, loggedOnUser, new AbsenceRequestCancelService(new PersonRequestAuthorizationCheckerForTest(), _scenario)
+				, new CheckingPersonalAccountDaysProvider(new FakePersonAbsenceAccountRepository()), new PersonRequestAuthorizationCheckerForTest());
 
 			var target = new RemovePartPersonAbsenceCommandHandler(personAbsenceRemover, _scheduleStorage, _scenario);
 
@@ -271,6 +273,46 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			}
 		}
 
+		[Test]
+		public void ShouldReturnInsufficientPermissionErrorMessage()
+		{
+			var startDate = new DateTime(2016, 01, 01, 00, 00, 00, DateTimeKind.Utc);
+			var endDate = new DateTime(2016, 01, 01, 01, 00, 00, DateTimeKind.Utc);
+			var period = new DateTimePeriod(startDate, endDate);
+			var absence = new Absence();
+			var layer = new AbsenceLayer(absence, period);
+			var person = PersonFactory.CreatePersonWithId();
+			var personAbsence = new PersonAbsence(person, _scenario.Current(), layer).WithId();
+			personAbsence.PersonRequest = new PersonRequest(person, new AbsenceRequest(absence, period));
+
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+
+			var personAbsenceRemover = new PersonAbsenceRemover(_businessRulesForAccountUpdate, _saveSchedulePartService,
+				_personAbsenceCreator, loggedOnUser,
+				new AbsenceRequestCancelService(new PersonRequestAuthorizationCheckerForTest(), _scenario)
+				, new CheckingPersonalAccountDaysProvider(new FakePersonAbsenceAccountRepository()),
+				new PersonRequestAuthorizationCheckerConfigurable { HasCancelPermission = false });
+
+			var target = new RemovePartPersonAbsenceCommandHandler(personAbsenceRemover, _scheduleStorage, _scenario);
+
+			var command = new RemovePartPersonAbsenceCommand
+			{
+				ScheduleDate = startDate,
+				Person = person,
+				PersonAbsences = new[] {personAbsence},
+				PeriodToRemove = period
+			};
+
+			target.Handle(command);
+
+			var error = command.Errors;
+			Assert.That(error != null);
+			Assert.That(error.PersonId == person.Id.Value);
+			Assert.That(error.PersonName == person.Name);
+			Assert.That(error.ErrorMessages.Contains(Resources.InsufficientPermission));
+		}
+
 		private IEnumerable<IPersistableScheduleData> removePartPersonAbsence(DateTimePeriod periodForAbsence,
 			DateTimePeriod periodToRemove, IAbsenceRequest absenceRequest = null)
 		{
@@ -284,7 +326,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 
-			var personAbsenceRemover = new PersonAbsenceRemover(_businessRulesForAccountUpdate, _saveSchedulePartService, _personAbsenceCreator, loggedOnUser, new AbsenceRequestCancelService(new PersonRequestAuthorizationCheckerForTest(), _scenario), new CheckingPersonalAccountDaysProvider(new FakePersonAbsenceAccountRepository()));
+			var personAbsenceRemover = new PersonAbsenceRemover(_businessRulesForAccountUpdate, _saveSchedulePartService, _personAbsenceCreator, loggedOnUser, new AbsenceRequestCancelService(new PersonRequestAuthorizationCheckerForTest(), _scenario)
+				, new CheckingPersonalAccountDaysProvider(new FakePersonAbsenceAccountRepository()), new PersonRequestAuthorizationCheckerForTest());
 			var target = new RemovePartPersonAbsenceCommandHandler(personAbsenceRemover, _scheduleStorage, _scenario);
 
 			var command = new RemovePartPersonAbsenceCommand

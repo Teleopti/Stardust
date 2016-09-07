@@ -17,12 +17,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IAbsenceRequestCancelService _absenceRequestCancelService;
 		private readonly ICheckingPersonalAccountDaysProvider _checkingPersonalAccountDaysProvider;
+		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
 
 		public PersonAbsenceRemover(IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate,
 			ISaveSchedulePartService saveSchedulePartService,
 			IPersonAbsenceCreator personAbsenceCreator,
 			ILoggedOnUser loggedOnUser,
-			IAbsenceRequestCancelService absenceRequestCancelService, ICheckingPersonalAccountDaysProvider checkingPersonalAccountDaysProvider)
+			IAbsenceRequestCancelService absenceRequestCancelService, ICheckingPersonalAccountDaysProvider checkingPersonalAccountDaysProvider, IPersonRequestCheckAuthorization personRequestCheckAuthorization)
 		{
 			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 			_saveSchedulePartService = saveSchedulePartService;
@@ -30,6 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_loggedOnUser = loggedOnUser;
 			_absenceRequestCancelService = absenceRequestCancelService;
 			_checkingPersonalAccountDaysProvider = checkingPersonalAccountDaysProvider;
+			_personRequestCheckAuthorization = personRequestCheckAuthorization;
 		}
 
 		public IEnumerable<string> RemovePersonAbsence(DateOnly scheduleDate, IPerson person,
@@ -96,6 +98,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			if (!canRemovePersonAbsence(person, scheduleDate))
 			{
 				return new[] {Resources.CouldNotRemoveAbsenceFromProtectedSchedule};
+			}
+
+			if (!hasRemoveAbsencePermission(personAbsences))
+			{
+				return new[] {Resources.InsufficientPermission};
 			}
 
 			foreach (var personAbsence in personAbsences)
@@ -199,6 +206,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 
 			return scheduleDaysForChecking;
+		}
+
+		private bool hasRemoveAbsencePermission(IList<IPersonAbsence> personAbsences)
+		{
+			return personAbsences.All(personAbsence => personAbsence.PersonRequest == null
+													   || _personRequestCheckAuthorization.HasCancelRequestPermission(personAbsence.PersonRequest));
 		}
 	}
 }
