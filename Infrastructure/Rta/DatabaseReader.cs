@@ -27,28 +27,26 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_now = now;
 		}
 
-		public IList<ScheduledActivity> GetCurrentSchedule(Guid personId)
+		public IEnumerable<ScheduledActivity> GetCurrentSchedule(DateTime utcNow, Guid personId)
 		{
-			var utcDate = _now.UtcDateTime().Date;
 			return _unitOfWork.Current()
 				.Session()
 				.CreateSQLQuery(scheduleQuery("PersonId = :PersonId"))
 				.SetParameter("PersonId", personId)
-				.SetParameter("StartDate", utcDate.AddDays(-1))
-				.SetParameter("EndDate", utcDate.AddDays(1))
+				.SetParameter("StartDate", utcNow.Date.AddDays(-1))
+				.SetParameter("EndDate", utcNow.Date.AddDays(1))
 				.SetResultTransformer(Transformers.AliasToBean(typeof (internalScheduledActivity)))
 				.List<ScheduledActivity>();
 		}
 
-		public IEnumerable<ScheduledActivity> GetCurrentSchedules(IEnumerable<Guid> personIds)
+		public IEnumerable<ScheduledActivity> GetCurrentSchedules(DateTime utcNow, IEnumerable<Guid> personIds)
 		{
-			var utcDate = _now.UtcDateTime().Date;
 			return _unitOfWork.Current()
 				.Session()
 				.CreateSQLQuery(scheduleQuery("PersonId IN (:PersonIds)"))
 				.SetParameterList("PersonIds", personIds)
-				.SetParameter("StartDate", utcDate.AddDays(-1))
-				.SetParameter("EndDate", utcDate.AddDays(1))
+				.SetParameter("StartDate", utcNow.Date.AddDays(-1))
+				.SetParameter("EndDate", utcNow.Date.AddDays(1))
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalScheduledActivity)))
 				.List<ScheduledActivity>();
 		}

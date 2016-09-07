@@ -256,26 +256,26 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return this;
 		}
 		
-		public IList<ScheduledActivity> GetCurrentSchedule(Guid personId)
+		public IEnumerable<ScheduledActivity> GetCurrentSchedule(DateTime utcNow, Guid personId)
 		{
 			return (
 				from l in _schedules
 				where
 					l.PersonId == personId &&
-					l.ScheduledActivity.BelongsToDate.Date >= _now.UtcDateTime().Date.AddDays(-1) &&
-					l.ScheduledActivity.BelongsToDate.Date <= _now.UtcDateTime().Date.AddDays(1)
+					l.ScheduledActivity.BelongsToDate.Date >= utcNow.Date.AddDays(-1) &&
+					l.ScheduledActivity.BelongsToDate.Date <= utcNow.Date.AddDays(1)
 				select l.ScheduledActivity.CopyBySerialization()
 				).ToList();
 		}
 
-		public IEnumerable<ScheduledActivity> GetCurrentSchedules(IEnumerable<Guid> personIds)
+		public IEnumerable<ScheduledActivity> GetCurrentSchedules(DateTime utcNow, IEnumerable<Guid> personIds)
 		{
 			return (
 				from l in _schedules
 				where
 					personIds.Contains(l.PersonId) &&
-					l.ScheduledActivity.BelongsToDate.Date >= _now.UtcDateTime().Date.AddDays(-1) &&
-					l.ScheduledActivity.BelongsToDate.Date <= _now.UtcDateTime().Date.AddDays(1)
+					l.ScheduledActivity.BelongsToDate.Date >= utcNow.Date.AddDays(-1) &&
+					l.ScheduledActivity.BelongsToDate.Date <= utcNow.Date.AddDays(1)
 				select l.ScheduledActivity.CopyBySerialization()
 				).ToList();
 		}

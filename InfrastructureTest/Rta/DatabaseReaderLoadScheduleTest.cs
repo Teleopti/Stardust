@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				EndDateTime = "2014-11-07 10:00".Utc()
 			});
 
-			var result = Reader.GetCurrentSchedules(new[] {personId1, personId3});
+			var result = Reader.GetCurrentSchedules(Now.UtcDateTime(), new[] {personId1, personId3});
 
 			result.Select(x => x.PersonId).Should().Have.SameValuesAs(personId1, personId3);
 		}
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				EndDateTime = "2014-11-07 10:00".Utc()
 			});
 
-			var result = Reader.GetCurrentSchedule(personId);
+			var result = Reader.GetCurrentSchedule(Now.UtcDateTime(), personId);
 
 			result.Single().BelongsToDate.Should().Be(new DateOnly("2014-11-07".Utc()));
 		}
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				EndDateTime = "2014-11-07 10:00".Utc()
 			});
 
-			var result = Reader.GetCurrentSchedule(personId);
+			var result = Reader.GetCurrentSchedule(Now.UtcDateTime(), personId);
 
 			result.Single().StartDateTime.Should().Be("2014-11-07 10:00".Utc());
 			result.Single().EndDateTime.Should().Be("2014-11-07 10:00".Utc());
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				EndDateTime = "2014-11-07 10:00".Utc()
 			});
 
-			var result = Reader.GetCurrentSchedule(personId);
+			var result = Reader.GetCurrentSchedule(Now.UtcDateTime(), personId);
 
 			result.Single().StartDateTime.Kind.Should().Be(DateTimeKind.Utc);
 			result.Single().EndDateTime.Kind.Should().Be(DateTimeKind.Utc);

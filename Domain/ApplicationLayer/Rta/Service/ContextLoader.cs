@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				var mappings = new MappingsState(() => _mappingReader.Read());
 				var dataSourceId = ValidateSourceId(input);
 				var userCode = input.UserCode;
+				var now = _now.UtcDateTime();
 
 				_agentStatePersister.Find(dataSourceId, userCode)
 					.ForEach(state =>
@@ -42,6 +43,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						found = true;
 
 						action.Invoke(new Context(
+							now,
 							new InputInfo
 							{
 								PlatformTypeId = input.PlatformTypeId,
@@ -58,12 +60,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							() =>
 							{
 								if (state.Schedule == null)
-									state.Schedule = _databaseReader.GetCurrentSchedule(state.PersonId);
+									state.Schedule = _databaseReader.GetCurrentSchedule(now, state.PersonId);
 								return state.Schedule;
 							},
 							s => mappings,
 							c => _agentStatePersister.Update(c.MakeAgentState()),
-							_now,
 							_stateMapper,
 							_appliedAdherence,
 							_appliedAlarm
@@ -105,6 +106,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public class batchData
 		{
+			public DateTime now;
 			public IEnumerable<ScheduledActivity> schedules;
 			public MappingsState mappings;
 			public IEnumerable<AgentStateFound> agentStates;
@@ -116,6 +118,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			var batchData = new Lazy<batchData>(() =>
 			{
+				var now = _now.UtcDateTime();
 				var dataSourceId = ValidateSourceId(batch);
 
 				var userCodes = batch.States.Select(x => x.UserCode);
@@ -127,11 +130,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					.ForEach(exceptions.Add);
 
 				var personIds = agentStates.Select(x => x.PersonId);
-				var schedules = _databaseReader.GetCurrentSchedules(personIds);
+				var schedules = _databaseReader.GetCurrentSchedules(now, personIds);
 				var mappings = new MappingsState(() => _mappingReader.Read());
 
 				return new batchData
 				{
+					now = now,
 					schedules = schedules,
 					mappings = mappings,
 					agentStates = agentStates
@@ -173,6 +177,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							.ForEach(x =>
 							{
 								action.Invoke(new Context(
+									data.now,
 									new InputInfo
 									{
 										PlatformTypeId = batch.PlatformTypeId,
@@ -189,7 +194,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 									() => data.schedules.Where(s => s.PersonId == x.PersonId).ToArray(),
 									s => data.mappings,
 									c => _agentStatePersister.Update(c.MakeAgentState()),
-									_now,
 									_stateMapper,
 									_appliedAdherence,
 									_appliedAlarm
@@ -215,6 +219,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				var mappings = new MappingsState(() => _mappingReader.Read());
 				var dataSourceId = ValidateSourceId(input);
 				var userCode = input.UserCode;
+				var now = _now.UtcDateTime();
 
 				_agentStatePersister.Find(dataSourceId, userCode)
 					.ForEach(state =>
@@ -222,6 +227,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						found = true;
 
 						action.Invoke(new Context(
+							now,
 							new InputInfo
 							{
 								PlatformTypeId = input.PlatformTypeId,
@@ -235,10 +241,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							state.TeamId.GetValueOrDefault(),
 							state.SiteId.GetValueOrDefault(),
 							() => state,
-							() => _databaseReader.GetCurrentSchedule(state.PersonId),
+							() => _databaseReader.GetCurrentSchedule(now, state.PersonId),
 							s => mappings,
 							c => _agentStatePersister.Update(c.MakeAgentState()),
-							_now,
 							_stateMapper,
 							_appliedAdherence,
 							_appliedAlarm
@@ -253,6 +258,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public override void ForAll(Action<Context> action)
 		{
 			var mappings = new MappingsState(() => _mappingReader.Read());
+			var now = _now.UtcDateTime();
 
 			IEnumerable<Guid> personIds = null;
 			WithUnitOfWork(() =>
@@ -268,16 +274,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					if (state == null)
 						return;
 					action.Invoke(new Context(
+						now,
 						null,
 						state.PersonId,
 						state.BusinessUnitId,
 						state.TeamId.GetValueOrDefault(),
 						state.SiteId.GetValueOrDefault(),
 						() => state,
-						() => _databaseReader.GetCurrentSchedule(x),
+						() => _databaseReader.GetCurrentSchedule(now, x),
 						s => mappings,
 						c => _agentStatePersister.Update(c.MakeAgentState()),
-						_now,
 						_stateMapper,
 						_appliedAdherence,
 						_appliedAlarm
@@ -316,6 +322,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public class batchData
 		{
+			public DateTime now;
 			public IEnumerable<PersonOrganizationData> persons;
 			public IEnumerable<ScheduledActivity> schedules;
 			public MappingsState mappings;
@@ -330,15 +337,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			{
 				var dataSourceId = ValidateSourceId(batch);
 
+				var now = _now.UtcDateTime();
 				var userCodes = batch.States.Select(x => x.UserCode);
 				var persons = _databaseReader.LoadPersonOrganizationDatas(dataSourceId, userCodes);
 				var personIds = persons.Select(x => x.PersonId).ToArray();
-				var schedules = _databaseReader.GetCurrentSchedules(personIds);
+				var schedules = _databaseReader.GetCurrentSchedules(now, personIds);
 				var mappings = new MappingsState(() => _mappingReader.Read());
 				var agentStates = _agentStatePersister.Get(personIds);
 
 				return new batchData
 				{
+					now = now,
 					persons = persons,
 					schedules = schedules,
 					mappings = mappings,
@@ -385,6 +394,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 								found = true;
 
 								action.Invoke(new Context(
+									data.now,
 									new InputInfo
 									{
 										PlatformTypeId = batch.PlatformTypeId,
@@ -401,7 +411,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 									() => data.schedules.Where(s => s.PersonId == x.PersonId).ToArray(),
 									s => data.mappings,
 									c => _agentStatePersister.Update(c.MakeAgentState()),
-									_now,
 									_stateMapper,
 									_appliedAdherence,
 									_appliedAlarm
@@ -479,6 +488,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			WithUnitOfWork(() =>
 			{
 				var dataSourceId = ValidateSourceId(batch);
+				var now = _now.UtcDateTime();
 
 				states.ForEach(input =>
 				{
@@ -492,6 +502,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 								found = true;
 
 								action.Invoke(new Context(
+									now,
 									new InputInfo
 									{
 										PlatformTypeId = batch.PlatformTypeId,
@@ -505,7 +516,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 									x.TeamId,
 									x.SiteId,
 									() => _agentStatePersister.Get(x.PersonId),
-									() => _databaseReader.GetCurrentSchedule(x.PersonId),
+									() => _databaseReader.GetCurrentSchedule(now, x.PersonId),
 									s =>
 									{
 										return new MappingsState(() =>
@@ -522,7 +533,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 										});
 									},
 									c => _agentStatePersister.Update(c.MakeAgentState()),
-									_now,
 									_stateMapper,
 									_appliedAdherence,
 									_appliedAlarm
@@ -672,6 +682,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			{
 				var dataSourceId = ValidateSourceId(input);
 				var userCode = input.UserCode;
+				var now = _now.UtcDateTime();
 
 				_databaseReader.LoadPersonOrganizationData(dataSourceId, userCode)
 					.ForEach(x =>
@@ -679,6 +690,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						found = true;
 
 						action.Invoke(new Context(
+							now,
 							new InputInfo
 							{
 								PlatformTypeId = input.PlatformTypeId,
@@ -692,7 +704,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							x.TeamId,
 							x.SiteId,
 							() => _agentStatePersister.Get(x.PersonId),
-							() => _databaseReader.GetCurrentSchedule(x.PersonId),
+							() => _databaseReader.GetCurrentSchedule(now, x.PersonId),
 							s =>
 							{
 								return new MappingsState(() =>
@@ -709,7 +721,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 								});
 							},
 							c => _agentStatePersister.Update(c.MakeAgentState()),
-							_now,
 							_stateMapper,
 							_appliedAdherence,
 							_appliedAlarm
@@ -754,6 +765,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public virtual void ForAll(Action<Context> action)
 		{
 			var mappings = new MappingsState(() => _mappingReader.Read());
+			var now = _now.UtcDateTime();
 
 			IEnumerable<PersonOrganizationData> persons = null;
 			WithUnitOfWork(() =>
@@ -769,16 +781,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					if (state == null)
 						return;
 					action.Invoke(new Context(
+						now,
 						null,
 						x.PersonId,
 						x.BusinessUnitId,
 						x.TeamId,
 						x.SiteId,
 						() => state,
-						() => _databaseReader.GetCurrentSchedule(x.PersonId),
+						() => _databaseReader.GetCurrentSchedule(now, x.PersonId),
 						s => mappings,
 						c => _agentStatePersister.Update(c.MakeAgentState()),
-						_now,
 						_stateMapper,
 						_appliedAdherence,
 						_appliedAlarm
@@ -792,6 +804,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public virtual void ForClosingSnapshot(DateTime snapshotId, string sourceId, Action<Context> action)
 		{
 			var stateCode = Rta.LogOutBySnapshot;
+			var now = _now.UtcDateTime();
 
 			var missingAgents = _agentStatePersister.GetStatesNotInSnapshot(snapshotId, sourceId);
 			var agentsNotAlreadyLoggedOut =
@@ -804,6 +817,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			agentsNotAlreadyLoggedOut.ForEach(x =>
 			{
 				action.Invoke(new Context(
+					now,
 					new InputInfo
 					{
 						StateCode = stateCode,
@@ -815,10 +829,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					x.TeamId.GetValueOrDefault(),
 					x.SiteId.GetValueOrDefault(),
 					() => x,
-					() => _databaseReader.GetCurrentSchedule(x.PersonId),
+					() => _databaseReader.GetCurrentSchedule(now, x.PersonId),
 					s => mappings,
 					c => _agentStatePersister.Update(c.MakeAgentState()),
-					_now,
 					_stateMapper,
 					_appliedAdherence,
 					_appliedAlarm
@@ -832,12 +845,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public virtual void ForSynchronize(Action<Context> action)
 		{
 			var mappings = new MappingsState(() => _mappingReader.Read());
+			var now = _now.UtcDateTime();
 
 			_agentStatePersister.GetStates()
 				.Where(x => x.StateCode != null)
 				.ForEach(x =>
 				{
 					action.Invoke(new Context(
+						now,
 						new InputInfo
 						{
 							StateCode = x.StateCode,
@@ -848,10 +863,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						x.TeamId.GetValueOrDefault(),
 						x.SiteId.GetValueOrDefault(),
 						null,
-						() => _databaseReader.GetCurrentSchedule(x.PersonId),
+						() => _databaseReader.GetCurrentSchedule(now, x.PersonId),
 						s => mappings,
 						null,
-						_now,
 						_stateMapper,
 						_appliedAdherence,
 						_appliedAlarm

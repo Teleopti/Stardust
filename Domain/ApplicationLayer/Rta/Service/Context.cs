@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly Lazy<IEnumerable<ScheduledActivity>> _scheduleData;
 
 		public Context(
+			DateTime utcNow,
 			InputInfo input, 
 			Guid personId, 
 			Guid businessUnitId, 
@@ -41,7 +42,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			Func<IEnumerable<ScheduledActivity>> schedule,
 			Func<Context, MappingsState> mappings,
 			Action<Context> updateState, 
-			INow now,
 			StateMapper stateMapper,
 			AppliedAdherence appliedAdherence,
 			ProperAlarm appliedAlarm)
@@ -61,10 +61,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					Stored = null;
 			}
 
-			_scheduleData = new Lazy<IEnumerable<ScheduledActivity>>(schedule);
 			var mappingsState = mappings.Invoke(this);
 			Input = input ?? new InputInfo();
-			CurrentTime = now.UtcDateTime();
+			CurrentTime = utcNow;
 			PersonId = personId;
 			BusinessUnitId = businessUnitId;
 			TeamId = teamId;
@@ -72,7 +71,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			_updateState = updateState ?? (c => {});
 			_appliedAlarm = appliedAlarm;
-			
+			_scheduleData = new Lazy<IEnumerable<ScheduledActivity>>(schedule);
+
 			Schedule = new ScheduleInfo(_scheduleData, Stored, CurrentTime);
 			State = new StateRuleInfo(mappingsState, Stored, StateCode, PlatformTypeId, businessUnitId, Input, Schedule, stateMapper);
 			Adherence = new AdherenceInfo(Input, Stored, mappingsState, businessUnitId, State, Schedule, appliedAdherence, stateMapper);
