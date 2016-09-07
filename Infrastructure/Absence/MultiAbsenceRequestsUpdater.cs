@@ -214,7 +214,8 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 					command = new DenyRequestCommand()
 					{
 						PersonRequestId = personRequest.Id.GetValueOrDefault(),
-						DenyReason = personRequest.DenyReason
+						DenyReason = personRequest.DenyReason,
+						IsAlreadyAbsent = personRequest.IsAlreadyAbsent
 					};
 				}
 				_commandDispatcher.Execute(command);

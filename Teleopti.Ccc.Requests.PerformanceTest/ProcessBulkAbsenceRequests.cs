@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -23,6 +24,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -115,7 +117,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 					PersonRequestRepository.UnitOfWork.PersistAll();
 #pragma warning restore 618
 
-					absenceRequestIds.Add(pReq.Id.Value);
+					absenceRequestIds.Add(pReq.Id.GetValueOrDefault());
 				}
 
 				var newMultiAbsenceRequestsCreatedEvent = new NewMultiAbsenceRequestsCreatedEvent()
@@ -156,21 +158,164 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			{
 				foreach (var req in personReqs)
 				{
-					var request = PersonRequestRepository.Get(req.Id.Value);
-
-					var requestStatus = 0;
-
-					if (request.IsApproved)
-						requestStatus = 2;
-
-					else if (request.IsDenied)
-						requestStatus = 4;
-
-					resultStatuses.Add(request.Person.Id.Value, requestStatus);
+					var request = PersonRequestRepository.Get(req.Id.GetValueOrDefault());
+					var requestStatus = getRequestStatus(request);
+					resultStatuses.Add(request.Person.Id.GetValueOrDefault(), requestStatus);
 				}
 			});
 
 			CollectionAssert.AreEquivalent(expectedStatuses, resultStatuses);
+		}
+
+		[Test, Ignore]
+		public void ShouldProcessMultipleAbsenceRequestsWithWaitList()
+		{
+			IPersonRequest waitListedRequest = null;
+
+			IEnumerable<Guid> personIds = new List<Guid>
+			{
+				// people from team FL_Online_CC1_97905(Lul)
+				//DO NOT CHANGE THE ORDER OF THE GUIDS!
+				new Guid("C7015A40-F300-42F3-98B3-A14100FFA30A"), //Stefan Haupt
+				new Guid("811ACA34-B256-4E72-9E69-A141010DDC78"), //Susanne Eriksson
+				new Guid("AE6CE283-11C8-4647-B8F9-A1410111B413") //Sara Andersson
+			};
+
+
+			using (DataSource.OnThisThreadUse("Teleopti WFM"))
+				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
+
+
+			var personReqs = new List<IPersonRequest>();
+			var absenceRequestIds = new List<Guid>();
+
+			WithUnitOfWork.Do(() =>
+			{
+				var wfcs = WorkflowControlSetRepository.Get(new Guid("7485EEAB-72D6-43D3-8B6F-A47A00C7D496")); //Consumer Online
+				foreach (var period in wfcs.AbsenceRequestOpenPeriods)
+				{
+					period.OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(2016, 3, 1), new DateOnly(2099, 5, 30));
+					period.StaffingThresholdValidator = new BudgetGroupHeadCountValidator();
+					period.AbsenceRequestProcess = new GrantAbsenceRequest();
+					var datePeriod = period as AbsenceRequestOpenDatePeriod;
+					if (datePeriod != null)
+						datePeriod.Period = period.OpenForRequestsPeriod;
+				}
+				wfcs.AbsenceRequestWaitlistEnabled = true;
+
+#pragma warning disable 618
+				WorkflowControlSetRepository.UnitOfWork.PersistAll();
+#pragma warning restore 618
+
+				var scenario = ScenarioRepository.Load(new Guid("10E3B023-5C3B-4219-AF34-A11C00F0F283"));
+				var budgetGroup = BudgetGroupRepository.Get(new Guid("F6EA1653-8C48-4F5B-9214-A53A00FFF8C6")); //Digital support
+				var budgetDays = BudgetDayRepository.Find(scenario, budgetGroup,
+														  new DateOnlyPeriod(new DateOnly(2016, 3, 9), new DateOnly(2016, 3, 11)));
+
+				budgetDays.ForEach(budgetDay =>
+				{
+					budgetDay.Allowance = 0;
+				});
+
+#pragma warning disable 618
+				BudgetDayRepository.UnitOfWork.PersistAll();
+#pragma warning restore 618
+
+				// load some persons
+				var persons = PersonRepository.FindPeople(personIds);
+
+				//load vacation
+				var absence = AbsenceRepository.Get(new Guid("3A5F20AE-7C18-4CA5-A02B-A11C00F0F27F"));
+
+				//Add request to waitlist
+				waitListedRequest = createAbsenceRequest(persons.ElementAt(2), absence, new DateTimePeriod(new DateTime(2016, 3, 10, 8, 0, 0, DateTimeKind.Utc),
+																										   new DateTime(2016, 3, 10, 18, 0, 0, DateTimeKind.Utc)));
+
+				waitListedRequest.Deny(waitListedRequest.Person, "Deny Monster says: DENY!", new PersonRequestAuthorizationCheckerForTest());
+				PersonRequestRepository.Add(waitListedRequest);
+#pragma warning disable 618
+				PersonRequestRepository.UnitOfWork.PersistAll();
+#pragma warning restore 618
+				Thread.Sleep(1000); // 1 sec sleep to make sure 'first come first serve'
+
+
+				budgetDays.ForEach(budgetDay =>
+				{
+					budgetDay.Allowance = 1; 
+				});
+
+#pragma warning disable 618
+				BudgetDayRepository.UnitOfWork.PersistAll();
+#pragma warning restore 618
+
+				foreach (var person in persons)
+				{
+					var pReq = createAbsenceRequest(person, absence);
+					personReqs.Add(pReq);
+					PersonRequestRepository.Add(pReq);
+					absenceRequestIds.Add(pReq.Id.GetValueOrDefault());
+				}
+
+#pragma warning disable 618
+				PersonRequestRepository.UnitOfWork.PersistAll();
+#pragma warning restore 618
+
+				var newMultiAbsenceRequestsCreatedEvent = new NewMultiAbsenceRequestsCreatedEvent()
+				{
+					PersonRequestIds = absenceRequestIds,
+					InitiatorId = new Guid("00000000-0000-0000-0000-000000000000"),
+					LogOnBusinessUnitId = new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"),
+					LogOnDatasource = "Teleopti WFM",
+					Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z")
+				};
+
+				Target.Process(newMultiAbsenceRequestsCreatedEvent);
+			});
+
+			var expectedStatuses = new Dictionary<Guid, int>();
+			var resultStatuses = new Dictionary<Guid, int>();
+
+			expectedStatuses.Add(waitListedRequest.Id.GetValueOrDefault(), 2); //was in waitList, should then be approved
+			expectedStatuses.Add(personReqs.Single(x => x.Person.Id == new Guid("C7015A40-F300-42F3-98B3-A14100FFA30A")).Id.GetValueOrDefault(), 4); //already absent
+			expectedStatuses.Add(personReqs.Single(x => x.Person.Id == new Guid("811ACA34-B256-4E72-9E69-A141010DDC78")).Id.GetValueOrDefault(), 5); 
+			expectedStatuses.Add(personReqs.Single(x => x.Person.Id == new Guid("AE6CE283-11C8-4647-B8F9-A1410111B413")).Id.GetValueOrDefault(), 5); 
+
+			WithUnitOfWork.Do(() =>
+			{
+				foreach (var req in personReqs)
+				{
+					var request = PersonRequestRepository.Get(req.Id.GetValueOrDefault());
+					resultStatuses.Add(request.Id.GetValueOrDefault(), getRequestStatus(request));
+				}
+
+				PersonRequestRepository.Get(waitListedRequest.Id.GetValueOrDefault());
+				resultStatuses.Add(waitListedRequest.Id.GetValueOrDefault(), getRequestStatus(waitListedRequest));
+			});
+			
+			CollectionAssert.AreEquivalent(expectedStatuses, resultStatuses);
+		}
+
+		private int getRequestStatus(IPersonRequest request)
+		{
+			var requestStatus = 10;
+
+			if (request.IsApproved)
+				requestStatus = 2;
+			else if (request.IsPending)
+				requestStatus = 0;
+			else if (request.IsNew)
+				requestStatus = 3;
+			else if (request.IsCancelled)
+				requestStatus = 6;
+			else if (request.IsWaitlisted && request.IsDenied)
+				requestStatus = 5;
+			else if (request.IsAutoDenied)
+				requestStatus = 4;
+			else if (request.IsDenied)
+				requestStatus = 1;
+
+
+			return requestStatus;
 		}
 
 		[Test]
@@ -222,7 +367,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 #pragma warning disable 618
 				PersonRequestRepository.UnitOfWork.PersistAll();
 #pragma warning restore 618
-				var absenceRequestIds = new List<Guid> {req4th.Id.Value, req5th.Id.Value, req6th.Id.Value};
+				var absenceRequestIds = new List<Guid> {req4th.Id.GetValueOrDefault(), req5th.Id.GetValueOrDefault(), req6th.Id.GetValueOrDefault()};
 
 				var newMultiAbsenceRequestsCreatedEvent = new NewMultiAbsenceRequestsCreatedEvent()
 				{
@@ -242,7 +387,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			{
 				foreach (var req in personRequests)
 				{
-					var request = PersonRequestRepository.Get(req.Id.Value);
+					var request = PersonRequestRepository.Get(req.Id.GetValueOrDefault());
 
 					if (request.IsApproved)
 						cntApproved ++;
@@ -320,7 +465,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 #pragma warning disable 618
 				PersonRequestRepository.UnitOfWork.PersistAll();
 #pragma warning restore 618
-				var absenceRequestIds = new List<Guid> { req1.Id.Value, req2.Id.Value};
+				var absenceRequestIds = new List<Guid> { req1.Id.GetValueOrDefault(), req2.Id.GetValueOrDefault()};
 
 				var newMultiAbsenceRequestsCreatedEvent = new NewMultiAbsenceRequestsCreatedEvent()
 				{
@@ -340,7 +485,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			{
 				foreach (var req in personRequests)
 				{
-					var request = PersonRequestRepository.Get(req.Id.Value);
+					var request = PersonRequestRepository.Get(req.Id.GetValueOrDefault());
 
 					if (request.IsApproved)
 						cntApproved++;
@@ -445,11 +590,14 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			cntDenied.Should().Be.EqualTo(1);
 			cntApproved.Should().Be.EqualTo(1);
 		}
+		
+
 		private IPersonRequest createAbsenceRequest(IPerson person, IAbsence absence)
 		{
 			var req = new AbsenceRequest(absence,
 										 new DateTimePeriod(new DateTime(2016, 3, 10, 8, 0, 0, DateTimeKind.Utc),
 															new DateTime(2016, 3, 10, 18, 0, 0, DateTimeKind.Utc)));
+			
 			return new PersonRequest(person) { Request = req };
 		}
 
@@ -462,13 +610,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 
 	public class RequestPerformanceTestAttribute : IoCTestAttribute
 	{
-		//protected override FakeConfigReader Config()
-		//{
-		//	var config = base.Config();
-		//	config.FakeConnectionString("Tenancy", InfraTestConfigReader.ConnectionString);
-		//	config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
-		//	return config;
-		//}
 
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{

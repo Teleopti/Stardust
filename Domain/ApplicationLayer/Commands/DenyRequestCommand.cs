@@ -14,5 +14,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public string ReplyMessage { get; set; }
 		public bool IsReplySuccess { get; set; }
 		public string DenyReason { get; set; }
+		public bool IsAlreadyAbsent { get; set; }
 	}
 }

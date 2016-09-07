@@ -333,7 +333,9 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
 	ko.utils.extend(RequestItemViewModel.prototype, {
 		Initialize: function (data, isProcessing) {
-			var textSegs = data.Text.split("\n");
+			if (data.Text !== null) {
+				var textSegs = data.Text.split("\n");
+			}
 			var textNoBr = "";
 			var messageInList = [];
 

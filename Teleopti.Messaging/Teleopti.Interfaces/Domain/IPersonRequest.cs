@@ -203,5 +203,7 @@ namespace Teleopti.Interfaces.Domain
 	    void Cancel (IPersonRequestCheckAuthorization authorization);
 
 	    IList<IPersonAbsence> PersonAbsences { get; }
+
+		bool IsAlreadyAbsent { get; }
     }
 }

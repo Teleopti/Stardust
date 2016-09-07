@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private string _denyReason = string.Empty;
 		private DateTime _updatedOnServerUtc;
 		private IList<IPersonAbsence> _personAbsences = new List<IPersonAbsence>();
+		private PersonRequestDenyOption _personRequestDenyOption = PersonRequestDenyOption.None;
 
 		protected PersonRequest()
 		{
@@ -92,6 +93,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		    get { return _personAbsences; }
 		    
 	    }
+		
+		public virtual bool IsAlreadyAbsent
+		{
+			get { return _personRequestDenyOption.HasFlag(PersonRequestDenyOption.AlreadyAbsence); }
+		}
 
 		public virtual bool TrySetMessage(string message)
 		{
@@ -192,6 +198,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		public virtual void Deny(IPerson denyPerson, string denyReasonTextResourceKey,
 			IPersonRequestCheckAuthorization authorization, PersonRequestDenyOption personRequestDenyOption = PersonRequestDenyOption.None)
 		{
+			_personRequestDenyOption = personRequestDenyOption;
 			authorization.VerifyEditRequestPermission(this);
 			if (canDeny(personRequestDenyOption))
 			{
