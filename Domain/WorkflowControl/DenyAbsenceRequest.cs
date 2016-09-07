@@ -29,8 +29,11 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			IEnumerable<IAbsenceRequestValidator> absenceRequestValidatorList)
 		{
 			UndoAll(requiredForProcessingAbsenceRequest);
-			var personRequest = (IPersonRequest)absenceRequest.Parent;
-			personRequest.Deny(processingPerson, DenyReason, requiredForProcessingAbsenceRequest.Authorization, true, AlreadyAbsence);
+			var personRequest = (IPersonRequest) absenceRequest.Parent;
+			var denyOption = PersonRequestDenyOption.AutoDeny;
+			if (AlreadyAbsence)
+				denyOption = denyOption | PersonRequestDenyOption.AlreadyAbsence;
+			personRequest.Deny(processingPerson, DenyReason, requiredForProcessingAbsenceRequest.Authorization, denyOption);
 		}
 
 		public override bool Equals(object obj)

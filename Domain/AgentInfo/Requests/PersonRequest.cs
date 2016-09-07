@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private ISet<IRequest> requests = new HashSet<IRequest>();
 		private bool _isDeleted;
 		private string _denyReason = string.Empty;
-		private bool _alreadyAbsent;
 		private DateTime _updatedOnServerUtc;
 		private IList<IPersonAbsence> _personAbsences = new List<IPersonAbsence>();
 
@@ -191,13 +190,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		}
 
 		public virtual void Deny(IPerson denyPerson, string denyReasonTextResourceKey,
-			IPersonRequestCheckAuthorization authorization, bool isAutoDeny = false, bool alreadyAbsence = false)
+			IPersonRequestCheckAuthorization authorization, PersonRequestDenyOption personRequestDenyOption = PersonRequestDenyOption.None)
 		{
 			authorization.VerifyEditRequestPermission(this);
-			_alreadyAbsent = alreadyAbsence;
-			if (CanDeny(isAutoDeny, alreadyAbsence))
+			if (canDeny(personRequestDenyOption))
 			{
-				RequestState.Deny(isAutoDeny);
+				RequestState.Deny(personRequestDenyOption);
 			}
 			
 			var request = getRequest();
@@ -227,8 +225,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			notifyOnStatusChange();
 		}
 
-		public virtual bool CanDeny(bool isAutoDeny, bool alreadyAbsence)
+		private bool canDeny(PersonRequestDenyOption personRequestDenyOption)
 		{
+			var isAutoDeny = personRequestDenyOption.HasFlag(PersonRequestDenyOption.AutoDeny);
+			var alreadyAbsence = personRequestDenyOption.HasFlag(PersonRequestDenyOption.AlreadyAbsence);
 			return (!isAutoDeny && IsWaitlisted) || !IsDenied || alreadyAbsence;
 		}
 
@@ -473,11 +473,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		}
 
 
-		private void moveToDenied(bool autoDenied = false)
+		private void moveToDenied(PersonRequestDenyOption personRequestDenyOption)
 		{
+			var autoDenied = personRequestDenyOption.HasFlag(PersonRequestDenyOption.AutoDeny);
+			var alreadyAbsent = personRequestDenyOption.HasFlag(PersonRequestDenyOption.AlreadyAbsence);
 			if (autoDenied)
 			{
-				if (waitlistingIsEnabled()&&!_alreadyAbsent)
+				if (waitlistingIsEnabled() && !alreadyAbsent)
 				{
 					RequestState = new waitListedPersonRequest(this);
 				}
@@ -643,7 +645,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				get { return false; }
 			}
 
-			protected internal virtual void Deny(bool isAutoDeny)
+			protected internal virtual void Deny(PersonRequestDenyOption denyOption)
 			{
 				throw new InvalidRequestStateTransitionException(string.Format(CultureInfo.InvariantCulture,
 																			   "This transition is not allowed (from {0} to denied).",
@@ -826,9 +828,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				PersonRequest.moveToApproved(isAutoGrant);
 			}
 
-			protected internal override void Deny(bool isAutoDeny)
+			protected internal override void Deny(PersonRequestDenyOption denyOption)
 			{
-				PersonRequest.moveToDenied(isAutoDeny);
+				PersonRequest.moveToDenied(denyOption);
 			}
 
 			protected internal override string StatusText
@@ -849,9 +851,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			}
 			
 
-			protected internal override void Deny(bool isAutoDeny)
+			protected internal override void Deny(PersonRequestDenyOption denyOption)
 			{
-				PersonRequest.moveToDenied(isAutoDeny);
+				PersonRequest.moveToDenied(denyOption);
 			}
 
 			protected internal override void Approve(bool isAutoGrant)
@@ -907,9 +909,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			{
 			}
 
-			protected internal override void Deny(bool isAutoDeny)
+			protected internal override void Deny(PersonRequestDenyOption denyOption)
 			{
-				PersonRequest.moveToDenied(true);
+				if (denyOption == PersonRequestDenyOption.None)
+					denyOption = PersonRequestDenyOption.AutoDeny;
+				PersonRequest.moveToDenied(denyOption);
 			}
 
 			protected internal override void MakePending()

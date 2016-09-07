@@ -1585,12 +1585,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var request2 = createAbsenceRequestAndBusinessUnit(secondAbsence);
 			var request3 = createAbsenceRequestAndBusinessUnit(thirdAbsence);
 
-			request1.Deny(null, "Work harder", authChecker, false);
+			request1.Deny(null, "Work harder", authChecker);
 			request2.Approve(new ApprovalServiceForTest(), authChecker);
 
 			request3.SetNew();
 
-			request3.Deny(null, "Work harder", authChecker, true);
+			request3.Deny(null, "Work harder", authChecker, PersonRequestDenyOption.AutoDeny);
 
 			PersistAndRemoveFromUnitOfWork(request1);
 			PersistAndRemoveFromUnitOfWork(request2);

@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		{
 			Assert.IsTrue(_target.IsNew);
 
-			_target.Deny(null, "DeniedDueToRain", _authorization, true);
+			_target.Deny(null, "DeniedDueToRain", _authorization, PersonRequestDenyOption.AutoDeny);
 			Assert.IsTrue(_target.IsDenied);
 			Assert.IsTrue(_target.IsAutoDenied);
 
@@ -819,10 +819,10 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 				new DateTime(2016, 12, 12, 00, 00, 00, DateTimeKind.Utc), absence, new GrantAbsenceRequest(), true);
 			waitlistedPersonRequest.Request = new AbsenceRequest(absence, new DateTimePeriod(2016, 9, 6, 2016, 9, 6));
 			waitlistedPersonRequest.ForcePending();
-			waitlistedPersonRequest.Deny(null, null, _authorization, true);
+			waitlistedPersonRequest.Deny(null, null, _authorization, PersonRequestDenyOption.AutoDeny);
 			waitlistedPersonRequest.IsWaitlisted.Should().Be(true);
 
-			waitlistedPersonRequest.Deny(null, null, _authorization, true, true);
+			waitlistedPersonRequest.Deny(null, null, _authorization, PersonRequestDenyOption.AutoDeny | PersonRequestDenyOption.AlreadyAbsence);
 			waitlistedPersonRequest.IsDenied.Should().Be(true);
 			waitlistedPersonRequest.IsWaitlisted.Should().Be(false);
 		}

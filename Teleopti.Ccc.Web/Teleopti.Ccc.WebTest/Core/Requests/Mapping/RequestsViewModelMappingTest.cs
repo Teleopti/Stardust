@@ -810,7 +810,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			workflowControlSet.Stub(x => x.WaitlistingIsEnabled(absenceRequest)).Return(true);
 			person.WorkflowControlSet = workflowControlSet;
 
-			request.Deny(null, null, MockRepository.GenerateMock<IPersonRequestCheckAuthorization>(), true);
+			request.Deny(null, null, MockRepository.GenerateMock<IPersonRequestCheckAuthorization>(), PersonRequestDenyOption.AutoDeny);
 
 			return Mapper.Map<IPersonRequest, RequestViewModel>(request);
 		}

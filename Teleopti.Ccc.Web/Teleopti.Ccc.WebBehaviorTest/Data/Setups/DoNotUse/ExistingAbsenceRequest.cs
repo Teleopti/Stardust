@@ -98,11 +98,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			AbsenceRequest = new AbsenceRequest(absence, new DateTimePeriod(today, today.AddHours(5)));
 			PersonRequest = new PersonRequest(user, AbsenceRequest) { Subject = "I need some vacation" };
 			PersonRequest.TrySetMessage("This is just a short text that doesn't say anything, except explaining that it doesn't say anything");
+			PersonRequestDenyOption denyOption = PersonRequestDenyOption.AutoDeny;
 			if (!_isAutoDenied)
 			{
 				PersonRequest.Pending();
+				denyOption = PersonRequestDenyOption.None;
 			}
-			PersonRequest.Deny(null, _denyReason, new PersonRequestAuthorizationCheckerForTest(),_isAutoDenied);
+			PersonRequest.Deny(null, _denyReason, new PersonRequestAuthorizationCheckerForTest(), denyOption);
 
 			var requestRepository = new PersonRequestRepository(currentUnitOfWork);
 
