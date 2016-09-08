@@ -2056,33 +2056,33 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			IPersonRequest request1 = new PersonRequest(person, absenceRequest1);
 			request1.Pending();
-			request1.Deny(request1.Person, "waitlisted", new PersonRequestCheckAuthorization(),true);
+			request1.Deny(request1.Person, "waitlisted", new PersonRequestCheckAuthorization(), PersonRequestDenyOption.AutoDeny);
 			PersistAndRemoveFromUnitOfWork(request1);
 
 
 			IPersonRequest request2 = new PersonRequest(person, absenceRequest2);
 			request2.Pending();
-			request2.Deny(request1.Person, "waitlisted",  new PersonRequestCheckAuthorization(), true);
+			request2.Deny(request1.Person, "waitlisted",  new PersonRequestCheckAuthorization(), PersonRequestDenyOption.AutoDeny);
 			PersistAndRemoveFromUnitOfWork(request2);
 
 			IPersonRequest request3 = new PersonRequest(person, absenceRequest3);
 			request3.Pending();
-			request3.Deny(request1.Person, "waitlisted", new PersonRequestCheckAuthorization(), true);
+			request3.Deny(request1.Person, "waitlisted", new PersonRequestCheckAuthorization(), PersonRequestDenyOption.AutoDeny);
 			PersistAndRemoveFromUnitOfWork(request3);
 
 			IPersonRequest request5 = new PersonRequest(person, absenceRequest5);
 			request5.Pending();
-			request5.Deny(request1.Person, "waitlisted", new PersonRequestCheckAuthorization(), true);
+			request5.Deny(request1.Person, "waitlisted", new PersonRequestCheckAuthorization(), PersonRequestDenyOption.AutoDeny);
 			PersistAndRemoveFromUnitOfWork(request5);
 
 			IPersonRequest request6 = new PersonRequest(person, absenceRequest6);
 			request6.Pending();
-			request6.Deny(request1.Person, "waitlisted", new PersonRequestCheckAuthorization(), true);
+			request6.Deny(request1.Person, "waitlisted", new PersonRequestCheckAuthorization(), PersonRequestDenyOption.AutoDeny);
 			PersistAndRemoveFromUnitOfWork(request6);
 
 			IPersonRequest request4 = new PersonRequest(person2, absenceRequest4);
 			request4.Pending();
-			request4.Deny(request1.Person, "Not waitlisted", new PersonRequestCheckAuthorization(), true);
+			request4.Deny(request1.Person, "Not waitlisted", new PersonRequestCheckAuthorization(), PersonRequestDenyOption.AutoDeny);
 			PersistAndRemoveFromUnitOfWork(request4);
 
 
