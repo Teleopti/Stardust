@@ -183,6 +183,31 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				.Should().Be.EqualTo(1);
 		}
 
+		[Test,Ignore("#40477")]
+		public void ShouldNotMoveTooMuchResourcesWhenPrimarySkillIsClosed()
+		{
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var dateOnly = DateOnly.Today;
+			var skillA = new Skill("A", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillA.SetCascadingIndex(1);
+			WorkloadFactory.CreateWorkloadThatIsClosed(skillA);
+			var skillADay = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var skillB = new Skill("B", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillB.SetCascadingIndex(2);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(6, 0, 7, 0));
+			var skillBDay = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 10);
+			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
+			agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA, skillB });
+			var ass = new PersonAssignment(agent, scenario, dateOnly);
+			ass.AddActivity(activity, new TimePeriod(6, 0, 7, 0));
+
+			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { ass }, new[] { skillADay, skillBDay}, false, false));
+
+			skillBDay.SkillStaffPeriodCollection.First().CalculatedResource
+				.Should().Be.EqualTo(1);
+		}
+
 		[Test]
 		public void ShouldNotMoveResourceWhenNonPrioritizedSkillIsMaxSeat()
 		{
