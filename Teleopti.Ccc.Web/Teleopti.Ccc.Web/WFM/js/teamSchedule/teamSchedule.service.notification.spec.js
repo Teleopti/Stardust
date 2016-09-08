@@ -37,7 +37,6 @@
 				success: 'success',
 				warning: 'partial success'
 			};
-			console.log('target', target);
 			target.reportActionResult(commandTemplates, actionTargets, actionResults);
 
 			expect(fakeNotice.getLastWarning()).toBe('warning1 : testPerson1');
@@ -62,7 +61,6 @@
 				success: 'success',
 				warning: 'partial success'
 			};
-			console.log('target', target);
 			target.reportActionResult(commandTemplates, actionTargets, actionResults);
 
 			expect(fakeNotice.getLastWarning()).toBe('partial success');
