@@ -17,7 +17,6 @@ using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests;
@@ -48,6 +47,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_BatchQueryOptimization_40169)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_PersonOrganizationQueryOptimization_40261)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_ScheduleQueryOptimization_40260)]
+	[Toggle(Domain.FeatureFlags.Toggles.RTA_ConnectionQueryOptimizeAllTheThings_40262)]
 	public class DomainTestAttribute : IoCTestAttribute
 	{
 		protected override void Setup(ISystem system, IIocConfiguration configuration)

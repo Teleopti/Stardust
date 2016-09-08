@@ -17,6 +17,11 @@ namespace Teleopti.Ccc.TestCommon
 			_processor = processor;
 		}
 
+		public void AddHandler<T>()
+		{
+			_handlerTypes.Add(typeof(T));
+		}
+
 		public void AddHandler(Type type)
 		{
 			_handlerTypes.Add(type);

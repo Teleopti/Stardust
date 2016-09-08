@@ -257,7 +257,7 @@
     <Compile Include="Repositories\RequestStrategySettingsReaderTest.cs" />
     <Compile Include="Repositories\SkillAreaRepositoryTest.cs" />
     <Compile Include="Rta\AgentStateForUpsert.cs" />
-    <Compile Include="Rta\BatchPerformanceTest.cs" />
+    <Compile Include="Rta\PerformanceMeasurementTest.cs" />
     <Compile Include="Rta\ConcurrencyTest.cs" />
     <Compile Include="Rta\DatabaseLegacy.cs" />
     <Compile Include="Rta\DatabaseReaderDatasourcesTest.cs" />

@@ -44,7 +44,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					if (_config.Toggle(Toggles.RTA_BatchQueryOptimization_40169))
 						if (_config.Toggle(Toggles.RTA_PersonOrganizationQueryOptimization_40261))
 							if (_config.Toggle(Toggles.RTA_ScheduleQueryOptimization_40260))
-								builder.RegisterType<ContextLoaderWithScheduleOptimization>().As<IContextLoader>().ApplyAspects().SingleInstance();
+								if (_config.Toggle(Toggles.RTA_ConnectionQueryOptimizeAllTheThings_40262))
+									builder.RegisterType<ContextLoaderWithConnectionQueryOptimizeAllTheThings>().As<IContextLoader>().ApplyAspects().SingleInstance();
+								else
+									builder.RegisterType<ContextLoaderWithScheduleOptimization>().As<IContextLoader>().ApplyAspects().SingleInstance();
 							else
 								builder.RegisterType<ContextLoaderWithPersonOrganizationQueryOptimization>().As<IContextLoader>().ApplyAspects().SingleInstance();
 						else
