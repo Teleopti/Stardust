@@ -7,31 +7,10 @@ using Teleopti.Ccc.Domain.Aop;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
-#pragma warning disable 618
 	[EnabledBy(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439)]
-    public class AnalyticsPersonPeriodSkillsUpdaterBus : AnalyticsPersonPeriodSkillsUpdater,
-        IHandleEvent<AnalyticsPersonPeriodSkillsChangedEvent>,
-        IRunOnServiceBus
-#pragma warning restore 618
-    {
-        public AnalyticsPersonPeriodSkillsUpdaterBus(IAnalyticsSkillRepository analyticsSkillRepository)
-            :base(analyticsSkillRepository)
-        {
-        }
-    }
-
-    [EnabledBy(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439, Toggles.PersonCollectionChanged_ToHangfire_38420)]
-    public class AnalyticsPersonPeriodSkillsUpdaterHangfire : AnalyticsPersonPeriodSkillsUpdater,
-       IHandleEvent<AnalyticsPersonPeriodSkillsChangedEvent>,
-       IRunOnHangfire
-    {
-	    public AnalyticsPersonPeriodSkillsUpdaterHangfire(IAnalyticsSkillRepository analyticsSkillRepository)
-		    : base(analyticsSkillRepository)
-	    {
-	    }
-    }
-
-    public class AnalyticsPersonPeriodSkillsUpdater
+	public class AnalyticsPersonPeriodSkillsUpdater :
+		IHandleEvent<AnalyticsPersonPeriodSkillsChangedEvent>,
+	    IRunOnHangfire
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsPersonPeriodSkillsUpdater));
 		private readonly IAnalyticsSkillRepository _analyticsSkillRepository;

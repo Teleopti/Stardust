@@ -14,53 +14,10 @@ using Teleopti.Ccc.Domain.Aop;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
-
-#pragma warning disable 618
-	[EnabledBy(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623, 
-        Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439), DisabledBy(Toggles.PersonCollectionChanged_ToHangfire_38420)]
-    public class AnalyticsPersonGroupsHandlerBus : AnalyticsPersonGroupsHandler,
-        IHandleEvent<AnalyticsPersonCollectionChangedEvent>,
-        IRunOnServiceBus
-#pragma warning restore 618
-    {
-		public AnalyticsPersonGroupsHandlerBus(IPersonRepository personRepository,
-			IAnalyticsBridgeGroupPagePersonRepository analyticsBridgeGroupPagePersonRepository,
-			IAnalyticsGroupPageRepository analyticsGroupPageRepository, IGroupPageRepository groupPageRepository)
-			: base(personRepository, analyticsBridgeGroupPagePersonRepository, analyticsGroupPageRepository, groupPageRepository)
-		{
-			
-		}
-
-        [AnalyticsUnitOfWork]
-        public new virtual void Handle(AnalyticsPersonCollectionChangedEvent @event)
-        {
-            base.Handle(@event);
-        }
-    }
-
-    [EnabledBy(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623,
-        Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439, Toggles.PersonCollectionChanged_ToHangfire_38420)]
-    public class AnalyticsPersonGroupsHandlerHangfire : AnalyticsPersonGroupsHandler,
-        IHandleEvent<AnalyticsPersonCollectionChangedEvent>,
-        IRunOnHangfire
-
-    {
-        public AnalyticsPersonGroupsHandlerHangfire(IPersonRepository personRepository,
-            IAnalyticsBridgeGroupPagePersonRepository analyticsBridgeGroupPagePersonRepository,
-            IAnalyticsGroupPageRepository analyticsGroupPageRepository, IGroupPageRepository groupPageRepository)
-            : base(personRepository, analyticsBridgeGroupPagePersonRepository, analyticsGroupPageRepository, groupPageRepository)
-        {
-
-        }
-
-        [UnitOfWork, AnalyticsUnitOfWork]
-        public new virtual void Handle(AnalyticsPersonCollectionChangedEvent @event)
-        {
-            base.Handle(@event);
-        }
-    }
-
-    public class AnalyticsPersonGroupsHandler
+	[EnabledBy(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623, Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439)]
+    public class AnalyticsPersonGroupsHandler : 
+		IHandleEvent<AnalyticsPersonCollectionChangedEvent>,
+		IRunOnHangfire
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsPersonGroupsHandler));
 		private readonly IPersonRepository _personRepository;
@@ -76,6 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			_groupPageRepository = groupPageRepository;
 		}
 
+		[UnitOfWork, AnalyticsUnitOfWork]
 		public virtual void Handle(AnalyticsPersonCollectionChangedEvent @event)
 		{
 			logger.Debug($"Handle AnalyticsPersonCollectionChangedEvent for {@event.SerializedPeople}");

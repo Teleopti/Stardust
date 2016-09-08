@@ -41,7 +41,6 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 			fakeToggleManager.Enable(Toggles.ETL_SpeedUpIntradayBusinessUnit_38932);
 			fakeToggleManager.Enable(Toggles.ETL_SpeedUpScenario_38300);
 			fakeToggleManager.Enable(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439);
-			fakeToggleManager.Enable(Toggles.PersonCollectionChanged_ToHangfire_38420);
 			var configuration = new IocConfiguration(args, fakeToggleManager);
 			builder.RegisterModule(new CommonModule(configuration));
 			builder.RegisterType<MutableNow>().AsSelf().As<INow>().SingleInstance();

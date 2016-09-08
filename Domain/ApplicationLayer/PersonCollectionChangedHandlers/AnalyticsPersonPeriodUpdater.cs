@@ -13,61 +13,10 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
-
-#pragma warning disable 618
-	[EnabledBy(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623,
-				  Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439),
-		DisabledBy(Toggles.PersonCollectionChanged_ToHangfire_38420)]
-	public class AnalyticsPersonPeriodUpdaterBus : AnalyticsPersonPeriodUpdater,
-		IHandleEvent<PersonCollectionChangedEvent>,
-		IHandleEvent<PersonDeletedEvent>,
-		IRunOnServiceBus
-#pragma warning restore 618
-	{
-		public AnalyticsPersonPeriodUpdaterBus(IPersonRepository personRepository,
-			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository,
-			IEventPublisher eventPublisher,
-			ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork,
-			IPersonPeriodFilter personPeriodFilter,
-			IPersonPeriodTransformer personPeriodTransformer)
-			: base(personRepository, analyticsPersonPeriodRepository, eventPublisher,
-				currentAnalyticsUnitOfWork, personPeriodFilter, personPeriodTransformer)
-		{
-		}
-
-		[AnalyticsUnitOfWork]
-		public new virtual void Handle(PersonCollectionChangedEvent @event)
-		{
-			base.Handle(@event);
-		}
-	}
-
-	[EnabledBy(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439, Toggles.PersonCollectionChanged_ToHangfire_38420)]
-	public class AnalyticsPersonPeriodUpdaterHangfire : AnalyticsPersonPeriodUpdater,
-	   IHandleEvent<PersonCollectionChangedEvent>,
+	[EnabledBy(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439)]
+	public class AnalyticsPersonPeriodUpdater : IHandleEvent<PersonCollectionChangedEvent>,
 	   IHandleEvent<PersonDeletedEvent>,
 	   IRunOnHangfire
-	{
-		public AnalyticsPersonPeriodUpdaterHangfire(IPersonRepository personRepository,
-			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository,
-			IEventPublisher eventPublisher,
-			ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork,
-			IPersonPeriodFilter personPeriodFilter,
-			IPersonPeriodTransformer personPeriodTransformer)
-			: base(personRepository, analyticsPersonPeriodRepository, eventPublisher,
-				currentAnalyticsUnitOfWork, personPeriodFilter, personPeriodTransformer)
-		{
-		}
-
-		[AnalyticsUnitOfWork]
-		[UnitOfWork]
-		public new virtual void Handle(PersonCollectionChangedEvent @event)
-		{
-			base.Handle(@event);
-		}
-	}
-
-	public class AnalyticsPersonPeriodUpdater
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsPersonPeriodUpdater));
 		private readonly AcdLoginPersonTransformer _analyticsAcdLoginPerson;
@@ -95,6 +44,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			_analyticsAcdLoginPerson = new AcdLoginPersonTransformer(_analyticsPersonPeriodRepository);
 		}
 
+		[AnalyticsUnitOfWork]
+		[UnitOfWork]
 		public virtual void Handle(PersonCollectionChangedEvent @event)
 		{
 			var persons = _personRepository.FindPeople(@event.PersonIdCollection.Distinct());

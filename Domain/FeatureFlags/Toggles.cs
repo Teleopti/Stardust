@@ -151,7 +151,6 @@
 		ETL_SpeedUpScenario_38300,
 		ETL_SpeedUpScenarioNightly_38300,
 		Scheduler_LoadWithoutRequests_38567,
-		PersonCollectionChanged_ToHangfire_38420,
 		ETL_SpeedUpIntradayActivity_38303,
 		ETL_SpeedUpNightlyActivity_38303,
 		ETL_SpeedUpIntradayOvertime_38304,

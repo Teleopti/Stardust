@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 	[Toggle(Toggles.ETL_SpeedUpIntradayBusinessUnit_38932)]
 	[Toggle(Toggles.ETL_SpeedUpScenario_38300)]
 	[Toggle(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439)]
-	[Toggle(Toggles.PersonCollectionChanged_ToHangfire_38420)]
 	[Category("SaveSchedulesTest")]
 	public class SaveSchedulesTest
 	{

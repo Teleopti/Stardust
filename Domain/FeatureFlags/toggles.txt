@@ -165,7 +165,6 @@ SettingsForPersonPeriodChanged_ToHangfire_38207 = true
 Wfm_MoveExportMultiSiteSkillOnStardust_38134 = true
 Payroll_ToStardust_38204 = RC
 Scheduler_LoadWithoutRequests_38567 = true
-PersonCollectionChanged_ToHangfire_38420 = true
 ETL_SpeedUpIntradayOvertime_38304 = true
 ETL_SpeedUpNightlyOvertime_38304 = RC
 ETL_SpeedUpIntradayAbsence_38301 = true
