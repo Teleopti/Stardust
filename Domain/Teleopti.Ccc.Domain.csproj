@@ -104,6 +104,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AbsenceWaitlisting\AbsenceRequestWaitlistProvider.cs" />
+    <Compile Include="AbsenceWaitlisting\ArrangeRequestsByProcessOrder.cs" />
     <Compile Include="AbsenceWaitlisting\QueuedAbsenceRequest.cs" />
     <Compile Include="AgentInfo\EnumerablePersonExtensions.cs" />
     <Compile Include="AgentInfo\ExtractBudgetGroupPeriods.cs" />

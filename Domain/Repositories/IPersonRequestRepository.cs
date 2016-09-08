@@ -119,5 +119,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 
 		IEnumerable<IShiftExchangeOffer> FindShiftExchangeOffersForBulletin(IEnumerable<IPerson> personList,
 			DateOnly shiftTradeDate);
+
+		IList<Guid> GetWaitlistRequests(DateTimePeriod dateTimePeriod);
 	}
 }

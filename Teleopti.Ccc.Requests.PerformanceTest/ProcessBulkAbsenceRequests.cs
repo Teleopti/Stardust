@@ -5,6 +5,7 @@ using System.Threading;
 using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
@@ -167,7 +168,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			CollectionAssert.AreEquivalent(expectedStatuses, resultStatuses);
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldProcessMultipleAbsenceRequestsWithWaitList()
 		{
 			IPersonRequest waitListedRequest = null;
@@ -228,7 +229,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 				var absence = AbsenceRepository.Get(new Guid("3A5F20AE-7C18-4CA5-A02B-A11C00F0F27F"));
 
 				//Add request to waitlist
-				waitListedRequest = createAbsenceRequest(persons.ElementAt(2), absence, new DateTimePeriod(new DateTime(2016, 3, 10, 8, 0, 0, DateTimeKind.Utc),
+				waitListedRequest = createAbsenceRequest(PersonRepository.Get(new Guid("AE6CE283-11C8-4647-B8F9-A1410111B413")), absence, new DateTimePeriod(new DateTime(2016, 3, 10, 8, 0, 0, DateTimeKind.Utc),
 																										   new DateTime(2016, 3, 10, 18, 0, 0, DateTimeKind.Utc)));
 
 				waitListedRequest.Deny(waitListedRequest.Person, "Deny Monster says: DENY!", new PersonRequestAuthorizationCheckerForTest());
@@ -250,6 +251,8 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 
 				foreach (var person in persons)
 				{
+					if (person.Id == new Guid("AE6CE283-11C8-4647-B8F9-A1410111B413")) // don't make 2 requests for Sara, already in waitlist
+						continue;
 					var pReq = createAbsenceRequest(person, absence);
 					personReqs.Add(pReq);
 					PersonRequestRepository.Add(pReq);
@@ -275,21 +278,18 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			var expectedStatuses = new Dictionary<Guid, int>();
 			var resultStatuses = new Dictionary<Guid, int>();
 
-			expectedStatuses.Add(waitListedRequest.Id.GetValueOrDefault(), 2); //was in waitList, should then be approved
-			expectedStatuses.Add(personReqs.Single(x => x.Person.Id == new Guid("C7015A40-F300-42F3-98B3-A14100FFA30A")).Id.GetValueOrDefault(), 4); //already absent
-			expectedStatuses.Add(personReqs.Single(x => x.Person.Id == new Guid("811ACA34-B256-4E72-9E69-A141010DDC78")).Id.GetValueOrDefault(), 5); 
-			expectedStatuses.Add(personReqs.Single(x => x.Person.Id == new Guid("AE6CE283-11C8-4647-B8F9-A1410111B413")).Id.GetValueOrDefault(), 5); 
+			expectedStatuses.Add(waitListedRequest.Id.GetValueOrDefault(), 2); //was in waitList, should then be approved, Sara
+			expectedStatuses.Add(personReqs.Single(x => x.Person.Id == new Guid("C7015A40-F300-42F3-98B3-A14100FFA30A")).Id.GetValueOrDefault(), 4); //already absent, Stefan
+			expectedStatuses.Add(personReqs.Single(x => x.Person.Id == new Guid("811ACA34-B256-4E72-9E69-A141010DDC78")).Id.GetValueOrDefault(), 5); //Susanne
 
 			WithUnitOfWork.Do(() =>
 			{
+				personReqs.Add(waitListedRequest);
 				foreach (var req in personReqs)
 				{
 					var request = PersonRequestRepository.Get(req.Id.GetValueOrDefault());
 					resultStatuses.Add(request.Id.GetValueOrDefault(), getRequestStatus(request));
 				}
-
-				PersonRequestRepository.Get(waitListedRequest.Id.GetValueOrDefault());
-				resultStatuses.Add(waitListedRequest.Id.GetValueOrDefault(), getRequestStatus(waitListedRequest));
 			});
 			
 			CollectionAssert.AreEquivalent(expectedStatuses, resultStatuses);
@@ -624,6 +624,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			system.UseTestDouble<RequestApprovalServiceFactory>().For<IRequestApprovalServiceFactory>();
 			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
 			system.UseTestDouble<StardustJobFeedback>().For<IStardustJobFeedback>();
+			system.UseTestDouble<ArrangeRequestsByProcessOrder>().For<ArrangeRequestsByProcessOrder>();
 			system.AddService<Database>();
 			system.AddModule(new TenantServerModule(configuration));
 

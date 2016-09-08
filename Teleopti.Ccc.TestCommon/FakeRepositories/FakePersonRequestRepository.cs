@@ -182,6 +182,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return result;
 		}
 
+		public IList<Guid> GetWaitlistRequests(DateTimePeriod dateTimePeriod)
+		{
+			throw new NotImplementedException();
+		}
+
 		public long CountAllEntities()
 		{
 			throw new NotImplementedException();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private static readonly isNullOrNotNewSpecification personRequestSpecification = new isNullOrNotNewSpecification();
 		private static readonly isNullSpecification absenceRequestSpecification = new isNullSpecification();
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
-		private IStardustJobFeedback _feedback;
+		private readonly IStardustJobFeedback _feedback;
 
 
 
@@ -55,7 +56,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			{
 				_personRequests = new List<IPersonRequest>();
 
+				
 				var personRequests = _personRequestRepository.Find(personRequestIds);
+				DateTime min = DateTime.MaxValue;
+				DateTime max = DateTime.MinValue;
 				foreach (var personRequest in personRequests)
 				{
 					if (personRequestSpecification.IsSatisfiedBy(personRequest))
@@ -79,9 +83,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					{
 						personRequest.Pending();
 						_personRequests.Add(personRequest);
+
+						if (personRequest.Request.Period.StartDateTime < min)
+							min = personRequest.Request.Period.StartDateTime;
+						if (personRequest.Request.Period.EndDateTime > max)
+							max = personRequest.Request.Period.EndDateTime;
 					}
 						
 				}
+				
+				if (max > min)
+				{
+					DateTimePeriod period = new DateTimePeriod(min, max);
+					var waitListIds = _personRequestRepository.GetWaitlistRequests(period).ToList();
+					_personRequests.AddRange(_personRequestRepository.Find(waitListIds));
+				}
+
 				uow.PersistAll();
 			}
 		}

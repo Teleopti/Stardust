@@ -133,7 +133,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetFetchMode("Person.PersonPeriodCollection.PersonContract.ContractSchedule", FetchMode.Join)
 				.SetFetchMode("Person.PersonPeriodCollection.PersonContract.ContractSchedule.ContractScheduleWeeks", FetchMode.Join)
 				.SetFetchMode("Person.PersonPeriodCollection.PersonContract.ContractSchedule.ContractScheduleWeeks.workDays", FetchMode.Join)
+				.SetResultTransformer(Transformers.DistinctRootEntity)
 				.List<IPersonRequest>();
+			
 			if (returnPersonRequests != null)
 			{
 				foreach (var returnPersonRequest in returnPersonRequests)

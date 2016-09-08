@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -139,24 +140,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			return personReq1;
 		}
 
-	}
-
-	public class ArrangeRequestsByProcessOrder
-	{
-		public IEnumerable<IPersonRequest> GetRequestsSortedByDate(List<IPersonRequest> personReuqestList)
-		{
-			var result =
-				personReuqestList.Where(
-					x => x.Person.WorkflowControlSet.AbsenceRequestWaitlistProcessOrder != WaitlistProcessOrder.BySeniority);
-			return result.OrderBy(x => x.CreatedOn).ToList();
-		}
-
-		public IEnumerable<IPersonRequest> GetRequestsSortedBySeniority(List<IPersonRequest> personReuqestList)
-		{
-			var requestsHavingSenerioty =
-				personReuqestList.Where(
-					x => x.Person.WorkflowControlSet.AbsenceRequestWaitlistProcessOrder == WaitlistProcessOrder.BySeniority);
-			return requestsHavingSenerioty.OrderByDescending(x => x.Person.Seniority).ThenBy(x => x.CreatedOn);
-		}
 	}
 }
