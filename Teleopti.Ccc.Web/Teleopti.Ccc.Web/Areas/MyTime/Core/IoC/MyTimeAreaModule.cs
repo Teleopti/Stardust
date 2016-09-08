@@ -230,6 +230,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<TimeLineViewModelReworkedMapper>().As<ITimeLineViewModelReworkedMapper>();
 			builder.RegisterType<AgentScheduleViewModelReworkedMapper>().As<IAgentScheduleViewModelReworkedMapper>();
 			builder.RegisterType<TeamProvider>().As<ITeamProvider>();
+			builder.RegisterType<SiteProvider>().As<ISiteProvider>();
 			builder.RegisterType<DefaultTeamProvider>().As<IDefaultTeamProvider>();
 			builder.RegisterType<GroupingReadOnlyRepository>().As<IGroupingReadOnlyRepository>();
 		}
@@ -277,6 +278,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<AbsenceTimeProviderCache>().As<IAbsenceTimeProviderCache>().SingleInstance();
 			builder.RegisterType<AbsenceRequestProbabilityProvider>().As<IAbsenceRequestProbabilityProvider>();
 			builder.RegisterType<TeamViewModelFactory>().As<ITeamViewModelFactory>();
+			builder.RegisterType<SiteViewModelFactory>().As<ISiteViewModelFactory>();
 			builder.RegisterType<PersonNameProvider>().As<IPersonNameProvider>().SingleInstance();
 			builder.RegisterType<TimeFilterHelper>().As<ITimeFilterHelper>().SingleInstance();
 			builder.RegisterType<PersonForScheduleFinder>().As<IPersonForScheduleFinder>();

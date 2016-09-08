@@ -490,6 +490,10 @@
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AllowanceDay.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IAbsenceTimeProviderCache.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IAllowanceDay.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\ISiteProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\SiteProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\ViewModelFactory\ISiteViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\ViewModelFactory\SiteViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\IMonthScheduleDomainDataProvider.cs" />
     <Compile Include="Areas\MyTime\Core\IWeekScheduleDomainDataProvider.cs" />
     <Compile Include="Areas\MyTime\Core\MonthScheduleDomainDataProvider.cs" />

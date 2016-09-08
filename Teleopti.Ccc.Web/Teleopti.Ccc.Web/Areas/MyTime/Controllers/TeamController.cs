@@ -11,12 +11,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	public class TeamController : Controller
 	{
 		private readonly ITeamViewModelFactory _teamViewModelFactory;
+		private readonly ISiteViewModelFactory _siteViewModelFactory;
 		private readonly INow _now;
 
-		public TeamController(ITeamViewModelFactory teamViewModelFactory, INow now)
+		public TeamController(ITeamViewModelFactory teamViewModelFactory, INow now, ISiteViewModelFactory siteViewModelFactory)
 		{
 			_teamViewModelFactory = teamViewModelFactory;
 			_now = now;
+			_siteViewModelFactory = siteViewModelFactory;
 		}
 
 		[UnitOfWork]
@@ -48,6 +50,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return
 				Json(
 					_teamViewModelFactory.CreateTeamOptionsViewModel(date.Value, DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard),
+					JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWork]
+		public virtual JsonResult SitesForShiftTradeBoard(DateOnly? date)
+		{
+			if (!date.HasValue)
+				date = _now.LocalDateOnly();
+			return
+				Json(
+					_siteViewModelFactory.CreateSiteOptionsViewModel(date.Value, DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard),
 					JsonRequestBehavior.AllowGet);
 		}
 
