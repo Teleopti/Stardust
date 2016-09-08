@@ -1552,6 +1552,7 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.guidgenerator.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.moveActivityValidator.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.moveActivityValidator.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.service.notification.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.notification.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.modal.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.filter.br.js" />
