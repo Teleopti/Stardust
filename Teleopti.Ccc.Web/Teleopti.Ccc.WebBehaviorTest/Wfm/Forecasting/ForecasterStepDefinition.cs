@@ -71,9 +71,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		{
 			Browser.Interactions.AssertVisibleUsingJQuery(".forecast-create-button");
 			Browser.Interactions.Click(".forecast-create-button");
-			Browser.Interactions.AssertVisibleUsingJQuery("span.startDate");
-			ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.startDate"), CultureInfo.GetCultureInfo(1053))));
-			ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.endDate"), CultureInfo.GetCultureInfo(1053))));
+			Browser.Interactions.AssertVisibleUsingJQuery(".date-range-start-date strong");
+			ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText(".date-range-start-date strong"), CultureInfo.GetCultureInfo(1053))));
+			ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText(".date-range-end-date strong"), CultureInfo.GetCultureInfo(1053))));
 			Browser.Interactions.Click(".do-forecast");
 			Browser.Interactions.AssertNotVisibleUsingJQuery(".do-forecast");
 		}
@@ -85,11 +85,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		{
 			Browser.Interactions.AssertNotExists(".wfm-card-selected .wfm-btn-invis-default.forecast-workload", ".wfm-card-selected .wfm-btn-invis-disabled.forecast-workload");
 			Browser.Interactions.Click(".wfm-card-selected .wfm-btn-invis-default.forecast-workload");
-			Browser.Interactions.AssertExists("span.startDate");
+			Browser.Interactions.AssertExists(".date-range-start-date strong");
 			if (!ScenarioContext.Current.ContainsKey("startdate"))
-				ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.startDate"), CultureInfo.GetCultureInfo(1053))));
+				ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText(".date-range-start-date strong"), CultureInfo.GetCultureInfo(1053))));
 			if (!ScenarioContext.Current.ContainsKey("enddate"))
-				ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.endDate"), CultureInfo.GetCultureInfo(1053))));
+				ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText(".date-range-end-date strong"), CultureInfo.GetCultureInfo(1053))));
 			Browser.Interactions.Click(".do-forecast");
 		}
 
@@ -104,8 +104,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[When(@"I use default forecast period and continue with advanced")]
 		public void WhenIClickQuickforecaster()
 		{
-			ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.startDate"), CultureInfo.GetCultureInfo(1053))));
-			ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.endDate"), CultureInfo.GetCultureInfo(1053))));
+			ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText(".date-range-start-date strong"), CultureInfo.GetCultureInfo(1053))));
+			ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText(".date-range-end-date strong"), CultureInfo.GetCultureInfo(1053))));
 			Browser.Interactions.Click(".next-step-advanced");
 		}
 
