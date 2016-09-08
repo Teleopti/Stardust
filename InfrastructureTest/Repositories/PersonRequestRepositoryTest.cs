@@ -2005,14 +2005,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var absence = AbsenceFactory.CreateAbsence("Football");
 			PersistAndRemoveFromUnitOfWork(absence);
 
-			var wcs = new WorkflowControlSet()
+			var waitlistedWCS = new WorkflowControlSet()
 			{
 				Name = "dd",
 				AbsenceRequestWaitlistEnabled = true,
 				AbsenceRequestWaitlistProcessOrder = WaitlistProcessOrder.BySeniority
 
 			};
-			wcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			waitlistedWCS.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
 			{
 				Absence = absence,
 				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 2, 1, 2099, 2, 28),
@@ -2022,12 +2022,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			
 			});
-			var wcs2 = new WorkflowControlSet()
+			var wcs = new WorkflowControlSet()
 			{
 				Name = "No Waitlist",
 				AbsenceRequestWaitlistEnabled = false
 			};
-			wcs2.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			wcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
 			{
 				Absence = absence,
 				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 2, 1, 2099, 2, 28),
@@ -2037,14 +2037,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			});
 
-			PersistAndRemoveFromUnitOfWork(new[] { wcs, wcs2 });
+			PersistAndRemoveFromUnitOfWork(new[] { waitlistedWCS, wcs });
 			
-			var person = PersonFactory.CreatePerson("Asad");
-			person.WorkflowControlSet = wcs;
+			var waitlistedPerson = PersonFactory.CreatePerson("Asad");
+			waitlistedPerson.WorkflowControlSet = waitlistedWCS;
 			var person2 = PersonFactory.CreatePerson("Ali");
-			person2.WorkflowControlSet = wcs2;
+			person2.WorkflowControlSet = wcs;
 
-			PersistAndRemoveFromUnitOfWork(new [] {person, person2});
+			PersistAndRemoveFromUnitOfWork(new [] {waitlistedPerson, person2});
 
 			
 			IAbsenceRequest absenceRequest1 = new AbsenceRequest(absence, new DateTimePeriod(new DateTime(2016,03,02,10,0,0,DateTimeKind.Utc), new DateTime(2016, 03, 05, 12, 0, 0, DateTimeKind.Utc)));
@@ -2054,37 +2054,38 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IAbsenceRequest absenceRequest5 = new AbsenceRequest(absence, new DateTimePeriod(new DateTime(2016,03,5,11,0,0,DateTimeKind.Utc), new DateTime(2016, 03, 6, 18, 0, 0, DateTimeKind.Utc)));
 			IAbsenceRequest absenceRequest6 = new AbsenceRequest(absence, new DateTimePeriod(new DateTime(2016,02,28,11,0,0,DateTimeKind.Utc), new DateTime(2016, 03, 8, 18, 0, 0, DateTimeKind.Utc)));
 
-			IPersonRequest request1 = new PersonRequest(person, absenceRequest1);
+			IPersonRequest request1 = new PersonRequest(waitlistedPerson, absenceRequest1);
 			request1.Pending();
 			request1.Deny(request1.Person, "waitlisted", new PersonRequestCheckAuthorization(), PersonRequestDenyOption.AutoDeny);
 			PersistAndRemoveFromUnitOfWork(request1);
 
 
-			IPersonRequest request2 = new PersonRequest(person, absenceRequest2);
+			IPersonRequest request2 = new PersonRequest(waitlistedPerson, absenceRequest2);
 			request2.Pending();
 			request2.Deny(request1.Person, "waitlisted",  new PersonRequestCheckAuthorization(), PersonRequestDenyOption.AutoDeny);
 			PersistAndRemoveFromUnitOfWork(request2);
 
-			IPersonRequest request3 = new PersonRequest(person, absenceRequest3);
+			IPersonRequest request3 = new PersonRequest(waitlistedPerson, absenceRequest3);
 			request3.Pending();
 			request3.Deny(request1.Person, "waitlisted", new PersonRequestCheckAuthorization(), PersonRequestDenyOption.AutoDeny);
 			PersistAndRemoveFromUnitOfWork(request3);
-
-			IPersonRequest request5 = new PersonRequest(person, absenceRequest5);
-			request5.Pending();
-			request5.Deny(request1.Person, "waitlisted", new PersonRequestCheckAuthorization(), PersonRequestDenyOption.AutoDeny);
-			PersistAndRemoveFromUnitOfWork(request5);
-
-			IPersonRequest request6 = new PersonRequest(person, absenceRequest6);
-			request6.Pending();
-			request6.Deny(request1.Person, "waitlisted", new PersonRequestCheckAuthorization(), PersonRequestDenyOption.AutoDeny);
-			PersistAndRemoveFromUnitOfWork(request6);
 
 			IPersonRequest request4 = new PersonRequest(person2, absenceRequest4);
 			request4.Pending();
 			request4.Deny(request1.Person, "Not waitlisted", new PersonRequestCheckAuthorization(), PersonRequestDenyOption.AutoDeny);
 			PersistAndRemoveFromUnitOfWork(request4);
 
+			IPersonRequest request5 = new PersonRequest(waitlistedPerson, absenceRequest5);
+			request5.Pending();
+			request5.Deny(request1.Person, "waitlisted", new PersonRequestCheckAuthorization(), PersonRequestDenyOption.AutoDeny);
+			PersistAndRemoveFromUnitOfWork(request5);
+
+			IPersonRequest request6 = new PersonRequest(waitlistedPerson, absenceRequest6);
+			request6.Pending();
+			request6.Deny(request1.Person, "waitlisted", new PersonRequestCheckAuthorization(), PersonRequestDenyOption.AutoDeny);
+			PersistAndRemoveFromUnitOfWork(request6);
+
+			
 
 			var waitlistRequestsIds = new PersonRequestRepository(UnitOfWork).GetWaitlistRequests(new DateTimePeriod(new DateTime(2016,03,01,0,0,0,DateTimeKind.Utc), new DateTime(2016, 03, 04, 0, 0, 0, DateTimeKind.Utc))).ToArray();
 			waitlistRequestsIds.Count().Should().Be.EqualTo(4);
