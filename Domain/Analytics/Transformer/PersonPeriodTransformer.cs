@@ -11,11 +11,6 @@ using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Domain.Analytics.Transformer
 {
-	public interface IPersonPeriodTransformer
-	{
-		AnalyticsPersonPeriod Transform(IPerson person, IPersonPeriod personPeriod, out List<AnalyticsSkill> analyticsSkills);
-	}
-
 	public class PersonPeriodTransformer : IPersonPeriodTransformer
 	{
 		private static readonly DateTime eternity = new DateTime(2059, 12, 31);

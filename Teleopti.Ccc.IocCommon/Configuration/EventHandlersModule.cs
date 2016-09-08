@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
 using Autofac;
+using MbCache.Configuration;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Analytics.Transformer;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -196,11 +198,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<DoNotNotify>().As<INotificationValidationCheck>().SingleInstance();
 
-            _config.Cache().This<IAnalyticsDateRepository>(b => b
-                .CacheMethod(x => x.Dates())
-                );
-            builder.CacheByInterfaceProxy<AnalyticsDateRepository, IAnalyticsDateRepository>();
-
             if (!_config.Toggle(Toggles.ETL_SpeedUpIntradayPreference_37124))
             {
                 _config.Cache().This<IAnalyticsScheduleRepository>(b => b
@@ -220,7 +217,22 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				  .SingleInstance();
 
 	        builder.RegisterType<RequestStrategySettingsReader>().As<IRequestStrategySettingsReader>().SingleInstance();
-        }
+
+			_config.Cache().This<IAnalyticsDateRepository>(b => b.CacheMethod(x => x.Date(new DateTime())));
+			builder.CacheByInterfaceProxy<AnalyticsDateRepository, IAnalyticsDateRepository>();
+
+			builder.RegisterType<PersonPeriodTransformer>().As<IPersonPeriodTransformer>(); // TODO
+			if (_config.Toggle(Toggles.ETL_EventbasedDate_39562))
+			{
+				builder.RegisterType<PersonPeriodFilterWithoutMaxDate>().As<IPersonPeriodFilter>();
+				builder.RegisterType<AnalyticsDateRepositoryWithCreation>().As<IAnalyticsDateRepository>();
+			}
+			else
+			{
+				builder.RegisterType<PersonPeriodFilter>().As<IPersonPeriodFilter>();
+				builder.RegisterType<AnalyticsDateRepository>().As<IAnalyticsDateRepository>();
+			}
+		}
 	}
 
 }

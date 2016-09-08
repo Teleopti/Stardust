@@ -146,6 +146,8 @@
     <Compile Include="Analytics\AnalyticsFactSchedulePreference.cs" />
     <Compile Include="Analytics\AnalyticsWorkload.cs" />
     <Compile Include="Analytics\AnalyticTeam.cs" />
+    <Compile Include="Analytics\Transformer\IPersonPeriodFilter.cs" />
+    <Compile Include="Analytics\Transformer\IPersonPeriodTransformer.cs" />
     <Compile Include="Aop\AnalyticsUnitOfWorkAttribute.cs" />
     <Compile Include="Aop\Core\AspectAttribute.cs" />
     <Compile Include="Aop\Core\IInvocationInfo.cs" />

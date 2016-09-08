@@ -26,25 +26,20 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 		}
 	}
 
-	//public class PersonPeriodWithoutMaxDate : IPersonPeriodFilter
-	//{
-	//	private static readonly DateTime eternity = new DateTime(2059, 12, 31);
-	//	private readonly DateTime minDate;
-
-	//	public PersonPeriodWithoutMaxDate(IAnalyticsDateRepository analyticsDateRepository)
-	//	{
-	//		minDate = analyticsDateRepository.MinDate().DateDate;
-	//	}
-
-	//	public IEnumerable<IPersonPeriod> GetFiltered(IEnumerable<IPersonPeriod> personPeriods)
-	//	{
-	//		return personPeriods.Where(personPeriod => personPeriod.StartDate.Date < eternity &&
-	//										  personPeriod.EndDate().Date >= minDate);
-	//	}
-	//}
-
-	public interface IPersonPeriodFilter
+	public class PersonPeriodFilterWithoutMaxDate : IPersonPeriodFilter
 	{
-		IEnumerable<IPersonPeriod> GetFiltered(IEnumerable<IPersonPeriod> personPeriods);
+		private static readonly DateTime eternity = new DateTime(2059, 12, 31);
+		private readonly DateTime minDate;
+
+		public PersonPeriodFilterWithoutMaxDate(IAnalyticsDateRepository analyticsDateRepository)
+		{
+			minDate = analyticsDateRepository.MinDate().DateDate;
+		}
+
+		public IEnumerable<IPersonPeriod> GetFiltered(IEnumerable<IPersonPeriod> personPeriods)
+		{
+			return personPeriods.Where(personPeriod => personPeriod.StartDate.Date < eternity &&
+											  personPeriod.EndDate().Date >= minDate);
+		}
 	}
 }

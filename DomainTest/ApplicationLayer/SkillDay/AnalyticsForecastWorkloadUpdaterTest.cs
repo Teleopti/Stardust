@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SkillDay
 		private ISkillDayRepository _skillDayRepository;
 		private IAnalyticsIntervalRepository _analyticsIntervalRepository;
 		private IAnalyticsWorkloadRepository _analyticsWorkloadRepository;
-		private IAnalyticsDateRepository _analyticsDateRepository;
+		private FakeAnalyticsDateRepository _analyticsDateRepository;
 		private IAnalyticsScenarioRepository _analyticsScenarioRepository;
 		private FakeAnalyticsForecastWorkloadRepository _analyticsForecastWorkloadRepository;
 
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SkillDay
 		[Test, ExpectedException(typeof(DateMissingInAnalyticsException))]
 		public void ShouldThrowWhenDateMissingFromAnalytics()
 		{
-			_analyticsDateRepository.Dates().Clear();
+			_analyticsDateRepository.Clear();
 			var skill = SkillFactory.CreateSkill("TestSkill");
 			var scenario = ScenarioFactory.CreateScenario("TestScenario", true, true);
 			var skillDay = SkillDayFactory.CreateSkillDay(skill, DateOnly.Today, scenario);

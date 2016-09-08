@@ -383,6 +383,7 @@
     <Compile Include="Repositories\Analytics\AnalyticsAbsenceRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsBridgeGroupPagePersonRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsBusinessUnitRepository.cs" />
+    <Compile Include="Repositories\Analytics\AnalyticsDateRepositoryWithCreation.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsDayOffRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsForecastWorkloadRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsHourlyAvailabilityRepository.cs" />

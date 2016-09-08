@@ -21,6 +21,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			initDates(start, end);
 		}
 
+		public void Clear()
+		{
+			_fakeDates.Clear();
+		}
+
 		private void initDates(DateTime start, DateTime end)
 		{
 			_fakeDates.Add(new AnalyticsDate {DateDate = new DateTime(1900, 01, 01),DateId = -1});
@@ -34,11 +39,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				d = d.AddDays(1);
 				dIndex++;
 			}
-		}
-
-		public IList<IAnalyticsDate> Dates()
-		{
-			return _fakeDates;
 		}
 
 		public IAnalyticsDate MaxDate()
