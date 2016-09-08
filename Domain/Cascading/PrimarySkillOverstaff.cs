@@ -26,10 +26,6 @@ namespace Teleopti.Ccc.Domain.Cascading
 				foreach (var otherSkillGroup in allSkillGroups.Where(x => !x.Equals(skillGroup) && x.PrimarySkills.Contains(primarySkill)))
 				{
 					var resourcesOnOtherSkillGroup = otherSkillGroup.Resources;
-					foreach (var otherPrimarySkill in otherSkillGroup.PrimarySkills.Where(x => !x.Equals(primarySkill)))
-					{
-						resourcesOnOtherSkillGroup -= skillStaffPeriodHolder.SkillStaffPeriodOrDefault(otherPrimarySkill, interval).CalculatedResource;
-					}
 					resourcesOnOtherSkillGroups += resourcesOnOtherSkillGroup;
 				}
 
