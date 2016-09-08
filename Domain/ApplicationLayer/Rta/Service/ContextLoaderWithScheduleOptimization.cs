@@ -227,6 +227,49 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		[AllBusinessUnitsUnitOfWork]
 		[ReadModelUnitOfWork]
+		public override void ForClosingSnapshot(DateTime snapshotId, string sourceId, Action<Context> action)
+		{
+			var stateCode = Rta.LogOutBySnapshot;
+			var now = _now.UtcDateTime();
+
+			var missingAgents = _agentStatePersister.GetStatesNotInSnapshot(snapshotId, sourceId);
+			var agentsNotAlreadyLoggedOut =
+				from a in missingAgents
+				where a.StateCode != stateCode
+				select a;
+
+			var mappings = new MappingsState(() => _mappingReader.Read());
+
+			agentsNotAlreadyLoggedOut.ForEach(state =>
+			{
+				action.Invoke(new Context(
+					now,
+					new InputInfo
+					{
+						StateCode = stateCode,
+						PlatformTypeId = Guid.Empty.ToString(),
+						SnapshotId = snapshotId
+					},
+					state.PersonId,
+					state.BusinessUnitId,
+					state.TeamId.GetValueOrDefault(),
+					state.SiteId.GetValueOrDefault(),
+					() => state,
+						() => scheduleIsValid(state, now)
+							? state.Schedule
+							: _scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, state.PersonId),
+					s => mappings,
+					c => _agentStatePersister.Update(c.MakeAgentState()),
+					_stateMapper,
+					_appliedAdherence,
+					_appliedAlarm
+					));
+			});
+
+		}
+
+		[AllBusinessUnitsUnitOfWork]
+		[ReadModelUnitOfWork]
 		public override void ForSynchronize(Action<Context> action)
 		{
 			var mappings = new MappingsState(() => _mappingReader.Read());

@@ -217,7 +217,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			var mappings = new MappingsState(() => _mappingReader.Read());
 
-			agentsNotAlreadyLoggedOut.ForEach(x =>
+			agentsNotAlreadyLoggedOut.ForEach(state =>
 			{
 				action.Invoke(new Context(
 					now,
@@ -227,12 +227,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						PlatformTypeId = Guid.Empty.ToString(),
 						SnapshotId = snapshotId
 					}, 
-					x.PersonId,
-					x.BusinessUnitId,
-					x.TeamId.GetValueOrDefault(),
-					x.SiteId.GetValueOrDefault(),
-					() => x,
-					() => _scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, x.PersonId),
+					state.PersonId,
+					state.BusinessUnitId,
+					state.TeamId.GetValueOrDefault(),
+					state.SiteId.GetValueOrDefault(),
+					() => state,
+					() => _scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, state.PersonId),
 					s => mappings,
 					c => _agentStatePersister.Update(c.MakeAgentState()),
 					_stateMapper,
