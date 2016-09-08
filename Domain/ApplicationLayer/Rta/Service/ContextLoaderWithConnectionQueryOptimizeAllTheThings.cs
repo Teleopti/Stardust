@@ -56,11 +56,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							state.TeamId.GetValueOrDefault(),
 							state.SiteId.GetValueOrDefault(),
 							() => state,
-							() => new ScheduleState(
-								scheduleIsValid(state, now)
-								? state.Schedule
-								: _scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, state.PersonId),
-								false),
+							() => makeScheduleState(state, now),
 							s => mappings,
 							c => _agentStatePersister.Update(c.MakeAgentState()),
 							_stateMapper,
@@ -114,6 +110,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			process(personIds, (ids, _) => _agentStatePersister.Get(ids), null, action);
 		}
 
+		public class scheduleData : ScheduleState
+		{
+			public Guid PersonId;
+
+			public scheduleData(IEnumerable<ScheduledActivity> schedules, bool cacheSchedules, Guid personId) : base(schedules, cacheSchedules)
+			{
+				PersonId = personId;
+			}
+		}
+
 		public class sharedData
 		{
 			public DateTime now;
@@ -122,7 +128,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public class transactionData
 		{
-			public IEnumerable<ScheduledActivity> schedules;
+			public IEnumerable<scheduleData> schedules;
 			public IEnumerable<AgentState> agentStates;
 			public Lazy<sharedData> shared;
 
@@ -168,21 +174,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					return new Lazy<transactionData>(() =>
 					{
 						var agentStates = getAgentStates(someThings, exceptions.Add);
+						var now = shared.Value.now;
 
-						IEnumerable<ScheduledActivity> schedules = agentStates
-							.Where(x => scheduleIsValid(x, shared.Value.now))
-							.SelectMany(x => x.Schedule)
-							.ToArray();
-						var querySchedulesFor = agentStates
-							.Where(x => !scheduleIsValid(x, shared.Value.now))
+						var schedules = agentStates
+							.GroupBy(x => x.PersonId, (_, states) => states.First())
+							.Where(x => scheduleIsValid(x, now))
+							.Select(x => new scheduleData(x.Schedule, false, x.PersonId));
+						var loadSchedulesFor = agentStates
+							.Where(x => !scheduleIsValid(x, now))
 							.Select(x => x.PersonId)
 							.ToArray();
-						if (querySchedulesFor.Any())
+						if (loadSchedulesFor.Any())
 						{
-							schedules = schedules.Concat(
-								_scheduleProjectionReadOnlyReader.GetCurrentSchedules(shared.Value.now, querySchedulesFor)
-								).ToArray();
+							var loaded = _scheduleProjectionReadOnlyReader.GetCurrentSchedules(now, loadSchedulesFor);
+							var loadedSchedules = loadSchedulesFor
+								.Select(x => new scheduleData(loaded.Where(l => l.PersonId == x).ToArray(), true, x));
+							schedules = schedules.Concat(loadedSchedules);
 						}
+						schedules = schedules.ToArray();
 
 						return new transactionData
 						{
@@ -232,7 +241,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							state.TeamId.GetValueOrDefault(),
 							state.SiteId.GetValueOrDefault(),
 							() => state,
-							() => new ScheduleState(data.schedules.Where(s => s.PersonId == state.PersonId).ToArray(), false),
+							() => data.schedules.Single(s => s.PersonId == state.PersonId),
 							s => shared.mappings,
 							c => _agentStatePersister.Update(c.MakeAgentState()),
 							_stateMapper,
@@ -308,11 +317,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					state.TeamId.GetValueOrDefault(),
 					state.SiteId.GetValueOrDefault(),
 					() => state,
-					() => new ScheduleState(
-						scheduleIsValid(state, now)
-							? state.Schedule
-							: _scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, state.PersonId),
-						false),
+					() => makeScheduleState(state, now),
 					s => mappings,
 					c => _agentStatePersister.Update(c.MakeAgentState()),
 					_stateMapper,
@@ -346,11 +351,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						state.TeamId.GetValueOrDefault(),
 						state.SiteId.GetValueOrDefault(),
 						null,
-						() => new ScheduleState(
-							scheduleIsValid(state, now)
-								? state.Schedule
-								: _scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, state.PersonId),
-							false),
+						() => makeScheduleState(state, now),
 						s => mappings,
 						null,
 						_stateMapper,
@@ -358,6 +359,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						_appliedAlarm
 						));
 				});
+		}
+
+		private ScheduleState makeScheduleState(AgentState state, DateTime now)
+		{
+			var cached = scheduleIsValid(state, now);
+			return new ScheduleState(
+				cached
+					? state.Schedule
+					: _scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, state.PersonId),
+				!cached);
 		}
 
 		private static bool scheduleIsValid(AgentState state, DateTime now)

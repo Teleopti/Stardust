@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 {
 	[TestFixture]
 	[UnitOfWorkTest]
-	[Ignore]
 	public class AgentStatePersisterScheduleTest
 	{
 		public IAgentStatePersister Target;
@@ -134,6 +133,35 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			var schedule = Target.Get(personId).Schedule;
 			schedule.Should().Have.Count.EqualTo(expected.Count());
+		}
+
+		[Test]
+		public void ShouldSkipUpdateNullSchedule()
+		{
+			var personId = Guid.NewGuid();
+			Target.Prepare(new AgentStatePrepare
+			{
+				PersonId = personId,
+				ExternalLogons = new[] { new ExternalLogon { DataSourceId = 1, UserCode = "user" } }
+			});
+			Target.Update(new AgentState
+			{
+				PersonId = personId,
+				Schedule = new[]
+				{
+					new ScheduledActivity
+					{
+						Name = "phone",
+					}
+				}
+			});
+
+			Target.Update(new AgentState
+			{
+				PersonId = personId
+			});
+
+			Target.Get(personId).Schedule.Single().Should().Be("phone");
 		}
 
 	}

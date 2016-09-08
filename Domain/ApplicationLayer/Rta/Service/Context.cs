@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 				TimeWindowCheckSum = Schedule.TimeWindowCheckSum(),
 
-				Schedule = null
+				Schedule = _schedule.Value.CacheSchedules ? _schedule.Value.Schedules : null
 			};
 		}
 		

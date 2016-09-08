@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Aop;
@@ -15,10 +16,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly IConfigReader _config;
 
+		public class scheduleData : ScheduleState
+		{
+			public Guid PersonId;
+
+			public scheduleData(IEnumerable<ScheduledActivity> schedules, bool cacheSchedules, Guid personId) : base(schedules, cacheSchedules)
+			{
+				PersonId = personId;
+			}
+		}
+
 		public class batchData
 		{
 			public DateTime now;
-			public IEnumerable<ScheduledActivity> schedules;
+			public IEnumerable<scheduleData> schedules;
 			public MappingsState mappings;
 			public IEnumerable<AgentStateFound> agentStates;
 		}
@@ -45,20 +56,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					.Select(x => new InvalidUserCodeException($"No person found for UserCode {x}, DataSourceId {dataSourceId}, SourceId {batch.SourceId}"))
 					.ForEach(exceptions.Add);
 
-				IEnumerable<ScheduledActivity> schedules = agentStates
+				var schedules = agentStates
+					.GroupBy(x => x.PersonId, (_, states) => states.First())
 					.Where(x => scheduleIsValid(x, now))
-					.SelectMany(x => x.Schedule)
-					.ToArray();
-				var querySchedulesFor = agentStates
+					.Select(x => new scheduleData(x.Schedule, false, x.PersonId));
+				var loadSchedulesFor = agentStates
 					.Where(x => !scheduleIsValid(x, now))
 					.Select(x => x.PersonId)
 					.ToArray();
-				if (querySchedulesFor.Any())
+				if (loadSchedulesFor.Any())
 				{
-					schedules = schedules.Concat(
-						_scheduleProjectionReadOnlyReader.GetCurrentSchedules(now, querySchedulesFor)
-						).ToArray();
+					var loaded = _scheduleProjectionReadOnlyReader.GetCurrentSchedules(now, loadSchedulesFor);
+					var loadedSchedules = loadSchedulesFor
+						.Select(x => new scheduleData(loaded.Where(l => l.PersonId == x).ToArray(), true, x));
+					schedules = schedules.Concat(loadedSchedules);
 				}
+				schedules = schedules.ToArray();
 
 				var mappings = new MappingsState(() => _mappingReader.Read());
 
@@ -72,7 +85,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			});
 
 			// 7 transactions seems like a sweet spot when unit testing
-			var transactionCount = (int)Math.Ceiling(batch.States.Count() / _config.ReadValue("RtaBatchTransactions", 7d));
+			var transactionCount = (int) Math.Ceiling(batch.States.Count() / _config.ReadValue("RtaBatchTransactions", 7d));
 			var transactions = batch.States.Batch(transactionCount);
 			Parallel.ForEach(transactions, states =>
 			{
@@ -120,7 +133,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 									state.TeamId.GetValueOrDefault(),
 									state.SiteId.GetValueOrDefault(),
 									() => state,
-									() => new ScheduleState(data.schedules.Where(s => s.PersonId == state.PersonId).ToArray(), false),
+									() => data.schedules.Single(s => s.PersonId == state.PersonId),
 									s => data.mappings,
 									c => _agentStatePersister.Update(c.MakeAgentState()),
 									_stateMapper,
@@ -170,11 +183,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							state.TeamId.GetValueOrDefault(),
 							state.SiteId.GetValueOrDefault(),
 							() => state,
-							() => new ScheduleState(
-								scheduleIsValid(state, now)
-								? state.Schedule
-								: _scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, state.PersonId),
-								false),
+							() => makeScheduleState(state, now),
 							s => mappings,
 							c => _agentStatePersister.Update(c.MakeAgentState()),
 							_stateMapper,
@@ -214,11 +223,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						state.TeamId.GetValueOrDefault(),
 						state.SiteId.GetValueOrDefault(),
 						() => state,
-						() => new ScheduleState(
-							scheduleIsValid(state, now)
-								? state.Schedule
-								: _scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, state.PersonId),
-							false),
+						() => makeScheduleState(state, now),
 						s => mappings,
 						c => _agentStatePersister.Update(c.MakeAgentState()),
 						_stateMapper,
@@ -259,11 +264,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					state.TeamId.GetValueOrDefault(),
 					state.SiteId.GetValueOrDefault(),
 					() => state,
-					() => new ScheduleState(
-						scheduleIsValid(state, now)
-							? state.Schedule
-							: _scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, state.PersonId),
-						false),
+					() => makeScheduleState(state, now),
 					s => mappings,
 					c => _agentStatePersister.Update(c.MakeAgentState()),
 					_stateMapper,
@@ -297,11 +298,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						state.TeamId.GetValueOrDefault(),
 						state.SiteId.GetValueOrDefault(),
 						null,
-						() => new ScheduleState(
-							scheduleIsValid(state, now)
-								? state.Schedule
-								: _scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, state.PersonId),
-							false),
+						() => makeScheduleState(state, now),
 						s => mappings,
 						null,
 						_stateMapper,
@@ -309,6 +306,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						_appliedAlarm
 						));
 				});
+		}
+
+		private ScheduleState makeScheduleState(AgentState state, DateTime now)
+		{
+			var cached = scheduleIsValid(state, now);
+			return new ScheduleState(
+				cached
+					? state.Schedule
+					: _scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, state.PersonId),
+				!cached);
 		}
 
 		private static bool scheduleIsValid(AgentState state, DateTime now)

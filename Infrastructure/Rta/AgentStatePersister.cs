@@ -98,8 +98,10 @@ VALUES (:BusinessUnitId, :SiteId, :TeamId, :PersonId, :DataSourceId, :UserCode)"
 		[InfoLog]
 		public virtual void Update(AgentState model)
 		{
-			_unitOfWork.Current().Session()
-				.CreateSQLQuery(@"
+			var scheduleSql = "";
+			if (model.Schedule != null)
+				scheduleSql = ", Schedule = :Schedule";
+			var sql = $@"
 UPDATE [dbo].[AgentState]
 SET
 	BatchId = :BatchId,
@@ -119,8 +121,11 @@ SET
 	RuleStartTime = :RuleStartTime,
 	AlarmStartTime = :AlarmStartTime,
 	TimeWindowCheckSum = :TimeWindowCheckSum
+	{scheduleSql}
 WHERE
-	PersonId = :PersonId")
+	PersonId = :PersonId";
+			var query = _unitOfWork.Current().Session()
+				.CreateSQLQuery(sql)
 				.SetParameter("PersonId", model.PersonId)
 				.SetParameter("BatchId", model.BatchId)
 				.SetParameter("SourceId", model.SourceId)
@@ -138,8 +143,12 @@ WHERE
 				.SetParameter("RuleId", model.RuleId)
 				.SetParameter("RuleStartTime", model.RuleStartTime)
 				.SetParameter("AlarmStartTime", model.AlarmStartTime)
-				.SetParameter("TimeWindowCheckSum", model.TimeWindowCheckSum)
-				.ExecuteUpdate();
+				.SetParameter("TimeWindowCheckSum", model.TimeWindowCheckSum);
+
+			if (model.Schedule != null)
+				query.SetParameter("Schedule", _serializer.SerializeObject(model.Schedule), NHibernateUtil.StringClob);
+
+			query.ExecuteUpdate();
 		}
 
 		public void Delete(Guid personId)
