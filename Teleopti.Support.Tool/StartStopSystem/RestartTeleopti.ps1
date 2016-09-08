@@ -255,7 +255,7 @@ Try
 	TeleoptiWindowsServices-Stop
 	IIS-Restart
 	write-host "sleep 5 seconds for IIS to restart ..."
-	Start-Sleep -Seconds 5       
+	Start-Sleep -Seconds 30      
 	AppPools-Start $isAzure
 	TeleoptiWindowsServices-Start
 }
