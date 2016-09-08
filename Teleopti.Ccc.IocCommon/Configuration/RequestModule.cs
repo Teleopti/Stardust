@@ -52,7 +52,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 
 			builder.RegisterType<AbsenceRequestStrategyProcessor>().As<IAbsenceRequestStrategyProcessor>().SingleInstance();
-		    if (_configuration.Toggle (Toggles.Wfm_Requests_Show_Pending_Reasons_39473))
+			builder.RegisterType<ArrangeRequestsByProcessOrder>().As<ArrangeRequestsByProcessOrder>().SingleInstance();
+
+			if (_configuration.Toggle (Toggles.Wfm_Requests_Show_Pending_Reasons_39473))
 		    {
 				builder.RegisterType<ShiftTradePendingReasonsService>().As<IShiftTradePendingReasonsService>().SingleInstance();
 			}
