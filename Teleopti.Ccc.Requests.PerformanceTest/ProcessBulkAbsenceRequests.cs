@@ -172,6 +172,8 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 		public void ShouldProcessMultipleAbsenceRequestsWithWaitList()
 		{
 			IPersonRequest waitListedRequest = null;
+			var personReqs = new List<IPersonRequest>();
+			var absenceRequestIds = new List<Guid>();
 
 			IEnumerable<Guid> personIds = new List<Guid>
 			{
@@ -181,17 +183,15 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 				new Guid("811ACA34-B256-4E72-9E69-A141010DDC78"), //Susanne Eriksson
 				new Guid("AE6CE283-11C8-4647-B8F9-A1410111B413") //Sara Andersson
 			};
-
-
+			
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 
-
-			var personReqs = new List<IPersonRequest>();
-			var absenceRequestIds = new List<Guid>();
-
 			WithUnitOfWork.Do(() =>
 			{
+				var persons = PersonRepository.FindPeople(personIds);
+				var absence = AbsenceRepository.Get(new Guid("3A5F20AE-7C18-4CA5-A02B-A11C00F0F27F")); //Semester
+
 				var wfcs = WorkflowControlSetRepository.Get(new Guid("7485EEAB-72D6-43D3-8B6F-A47A00C7D496")); //Consumer Online
 				foreach (var period in wfcs.AbsenceRequestOpenPeriods)
 				{
@@ -221,44 +221,37 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 #pragma warning disable 618
 				BudgetDayRepository.UnitOfWork.PersistAll();
 #pragma warning restore 618
-
-				// load some persons
-				var persons = PersonRepository.FindPeople(personIds);
-
-				//load vacation
-				var absence = AbsenceRepository.Get(new Guid("3A5F20AE-7C18-4CA5-A02B-A11C00F0F27F"));
-
-				//Add request to waitlist
-				waitListedRequest = createAbsenceRequest(PersonRepository.Get(new Guid("AE6CE283-11C8-4647-B8F9-A1410111B413")), absence, new DateTimePeriod(new DateTime(2016, 3, 10, 8, 0, 0, DateTimeKind.Utc),
+				
+				
+				//Add a request to waitlist
+				waitListedRequest = createAbsenceRequest(persons.FirstOrDefault(x => x.Name.ToString().Contains("Sara")), absence, new DateTimePeriod(new DateTime(2016, 3, 10, 8, 0, 0, DateTimeKind.Utc),
 																										   new DateTime(2016, 3, 10, 18, 0, 0, DateTimeKind.Utc)));
-
 				waitListedRequest.Deny(waitListedRequest.Person, "Deny Monster says: DENY!", new PersonRequestAuthorizationCheckerForTest());
 				PersonRequestRepository.Add(waitListedRequest);
+				personReqs.Add(waitListedRequest);
 #pragma warning disable 618
 				PersonRequestRepository.UnitOfWork.PersistAll();
 #pragma warning restore 618
 				Thread.Sleep(1000); // 1 sec sleep to make sure 'first come first serve'
 
 
+				//give one request the opprtunity to be approved
 				budgetDays.ForEach(budgetDay =>
 				{
-					budgetDay.Allowance = 1; 
+					budgetDay.Allowance = 1;
 				});
-
 #pragma warning disable 618
 				BudgetDayRepository.UnitOfWork.PersistAll();
 #pragma warning restore 618
 
-				foreach (var person in persons)
+
+				foreach (var person in persons.Where(x => !x.Name.ToString().Contains("Sara")))
 				{
-					if (person.Id == new Guid("AE6CE283-11C8-4647-B8F9-A1410111B413")) // don't make 2 requests for Sara, already in waitlist
-						continue;
 					var pReq = createAbsenceRequest(person, absence);
 					personReqs.Add(pReq);
 					PersonRequestRepository.Add(pReq);
 					absenceRequestIds.Add(pReq.Id.GetValueOrDefault());
 				}
-
 #pragma warning disable 618
 				PersonRequestRepository.UnitOfWork.PersistAll();
 #pragma warning restore 618
@@ -278,13 +271,12 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			var expectedStatuses = new Dictionary<Guid, int>();
 			var resultStatuses = new Dictionary<Guid, int>();
 
-			expectedStatuses.Add(waitListedRequest.Id.GetValueOrDefault(), 2); //was in waitList, should then be approved, Sara
+			expectedStatuses.Add(waitListedRequest.Id.GetValueOrDefault(), 2); //was in waitList, should be approved, Sara
 			expectedStatuses.Add(personReqs.Single(x => x.Person.Id == new Guid("C7015A40-F300-42F3-98B3-A14100FFA30A")).Id.GetValueOrDefault(), 4); //already absent, Stefan
 			expectedStatuses.Add(personReqs.Single(x => x.Person.Id == new Guid("811ACA34-B256-4E72-9E69-A141010DDC78")).Id.GetValueOrDefault(), 5); //Susanne
 
 			WithUnitOfWork.Do(() =>
 			{
-				personReqs.Add(waitListedRequest);
 				foreach (var req in personReqs)
 				{
 					var request = PersonRequestRepository.Get(req.Id.GetValueOrDefault());
