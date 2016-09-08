@@ -36,6 +36,15 @@
 				return theSite;
 			};
 
+			this.URLPath = ko.observable(getNewImprovedRTAUrl());
+		
+			function getNewImprovedRTAUrl() {			
+				var currentUrl = document.location.href;
+				var match = currentUrl.match(/(.*?)\/(?:areas\/)?anywhere\b/i);
+				if (!match) return '';
+				return match[1] + '/wfm/#/rta';
+			}
+
 			that.fill = function (data) {
 				that.sites([]);
 				for (var i = 0; i < data.length; i++) {

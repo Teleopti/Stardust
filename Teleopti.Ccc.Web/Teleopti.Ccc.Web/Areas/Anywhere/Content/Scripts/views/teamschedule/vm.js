@@ -39,6 +39,15 @@ define([
 		this.BusinessUnitId = ko.observable();
 		this.TryOutTheNewImprovedMyTeam = ko.observable();
 
+		this.URLPath = ko.observable(getNewImprovedMyTeamUrl());
+
+		function getNewImprovedMyTeamUrl() {
+			var currentUrl = document.location.href;
+			var match = currentUrl.match(/(.*?)\/(?:areas\/)?anywhere\b/i);
+			if (!match) return '';
+			return match[1] + '/wfm/#/myTeam';
+		}
+
 		this.Persons = ko.observableArray();
 		this.SortedPersons = ko.computed(function() {
 			return self.Persons().sort(function (first, second) {
