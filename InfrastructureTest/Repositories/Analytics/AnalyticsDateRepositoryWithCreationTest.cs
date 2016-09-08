@@ -92,15 +92,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		}
 
 		[Test]
-		public void ShouldLoadMaxDate()
+		public void ShouldLoadEternityAsMaxDate()
 		{
 			var targetDate = new DateTime(2000, 01, 05);
 			WithAnalyticsUnitOfWork.Get(() => Target.Date(targetDate));
 			_fakeEventPublisher.Clear();
 
 			var date = WithAnalyticsUnitOfWork.Get(() => Target.MaxDate());
-			date.DateDate.Date.Should().Be.EqualTo(targetDate.Date);
-			date.DateId.Should().Be.EqualTo(6);
+			date.DateDate.Date.Should().Be.EqualTo(new DateTime(2059, 12, 31));
+			date.DateId.Should().Be.EqualTo(-2);
 
 			_fakeEventPublisher.PublishedEvents.Should().Be.Empty();
 		}

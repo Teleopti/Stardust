@@ -11,7 +11,6 @@ using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
-	
 	public class AnalyticsDateRepositoryWithCreation : AnalyticsDateRepositoryBase, IAnalyticsDateRepository
 	{
 		private readonly IDistributedLockAcquirer _distributedLockAcquirer;
@@ -25,7 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public new IAnalyticsDate MaxDate()
 		{
-			return base.MaxDate();
+			return new AnalyticsDate {DateDate = new DateTime(2059, 12, 31), DateId = -2};
 		}
 
 		public new IAnalyticsDate MinDate()
@@ -35,46 +34,45 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public new IAnalyticsDate Date(DateTime dateDate)
 		{
-			var date = base.Date(dateDate);
-			if (date == null)
+			return base.Date(dateDate) ?? createDatesTo(dateDate);
+		}
+
+		private IAnalyticsDate createDatesTo(DateTime dateDate)
+		{
+			using (_distributedLockAcquirer.LockForTypeOf(new dimDateCreationLock()))
 			{
-				using (_distributedLockAcquirer.LockForTypeOf(new dimDateCreationLock()))
+				// Check again to see that we still don't have the date after aquiring the lock
+				var date = base.Date(dateDate);
+				if (date != null) return date;
+				var currentMax = base.MaxDate() ?? new AnalyticsDate {DateDate = new DateTime(1999, 12, 30)};
+				var currentDay = currentMax.DateDate;
+				while ((currentDay += TimeSpan.FromDays(1)) <= dateDate)
 				{
-					// Check again to see that we don't have the date
-					date = base.Date(dateDate);
-					if (date != null) return date;
-					var currentMax = MaxDate() ?? new AnalyticsDate { DateDate = new DateTime(1999, 12, 30) };
-					var currentDay = currentMax.DateDate;
-					while ((currentDay += TimeSpan.FromDays(1)) <= dateDate)
-					{
-						AnalyticsUnitOfWork.Current().Session().CreateSQLQuery(@"
+					AnalyticsUnitOfWork.Current().Session().CreateSQLQuery(@"
 					INSERT INTO [mart].[dim_date]
 						   ([date_date],[year],[year_month],[month],[month_name],[month_resource_key],[day_in_month],[weekday_number]
 						   ,[weekday_name],[weekday_resource_key],[week_number],[year_week],[quarter],[insert_date])
 					 VALUES
 						   (:date_date,:year,:year_month,:month,:month_name,:month_resource_key,:day_in_month,:weekday_number
 						   ,:weekday_name,:weekday_resource_key,:week_number,:year_week,:quarter,:insert_date)")
-							.SetParameter("date_date", currentDay)
-							.SetParameter("year", currentDay.Year)
-							.SetParameter("year_month", int.Parse($"{currentDay.Year}{currentDay.Month.ToString("D2")}"))
-							.SetParameter("month", currentDay.Month)
-							.SetParameter("month_name", DateHelper.GetMonthName(currentDay, CultureInfo.CurrentCulture))
-							.SetParameter("month_resource_key", currentDay.Month.GetMonthResourceKey())
-							.SetParameter("day_in_month", currentDay.Day)
-							.SetParameter("weekday_number", currentDay.GetDayOfWeek())
-							.SetParameter("weekday_name", CultureInfo.CurrentCulture.DateTimeFormat.DayNames[(int) currentDay.DayOfWeek])
-							.SetParameter("weekday_resource_key", currentDay.GetDayOfWeek().GetWeekDayResourceKey())
-							.SetParameter("week_number", DateHelper.WeekNumber(currentDay, CultureInfo.CurrentCulture))
-							.SetParameter("year_week", currentDay.GetYearWeek())
-							.SetParameter("quarter", currentDay.GetQuarter())
-							.SetParameter("insert_date", DateTime.UtcNow)
-							.ExecuteUpdate();
-					}
+						.SetParameter("date_date", currentDay)
+						.SetParameter("year", currentDay.Year)
+						.SetParameter("year_month", int.Parse($"{currentDay.Year}{currentDay.Month.ToString("D2")}"))
+						.SetParameter("month", currentDay.Month)
+						.SetParameter("month_name", DateHelper.GetMonthName(currentDay, CultureInfo.CurrentCulture))
+						.SetParameter("month_resource_key", (object) currentDay.Month.GetMonthResourceKey())
+						.SetParameter("day_in_month", currentDay.Day).SetParameter("weekday_number", (object) currentDay.GetDayOfWeek())
+						.SetParameter("weekday_name", CultureInfo.CurrentCulture.DateTimeFormat.DayNames[(int) currentDay.DayOfWeek])
+						.SetParameter("weekday_resource_key", (object) currentDay.GetDayOfWeek().GetWeekDayResourceKey())
+						.SetParameter("week_number", DateHelper.WeekNumber(currentDay, CultureInfo.CurrentCulture))
+						.SetParameter("year_week", (object) currentDay.GetYearWeek())
+						.SetParameter("quarter", (object) currentDay.GetQuarter())
+						.SetParameter("insert_date", DateTime.UtcNow)
+						.ExecuteUpdate();
 				}
-				_eventPublisher.Publish(new AnalyticsDatesChangedEvent());
-				return base.Date(dateDate);
 			}
-			return date;
+			_eventPublisher.Publish(new AnalyticsDatesChangedEvent());
+			return base.Date(dateDate);
 		}
 
 		private class dimDateCreationLock
