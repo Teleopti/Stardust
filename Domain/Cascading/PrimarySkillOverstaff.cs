@@ -39,10 +39,10 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 			if (primarySkillsExistsButTheyAreAllClosed)
 			{
-				//FEL?? att lägga alla resurser "multipla gånger på flera primärskill)!
+				var numberOfSkills = skillGroup.PrimarySkills.Count();
 				foreach (var primarySkill in skillGroup.PrimarySkills)
 				{
-					dic.Add(primarySkill, skillGroup.Resources); //FEL?? Måste ta hänsyn till/dra av andra skillgruppers resurser
+					dic.Add(primarySkill, skillGroup.Resources / numberOfSkills); 
 				}
 			}
 
