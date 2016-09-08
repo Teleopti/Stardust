@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -7,16 +8,16 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class FakeIntradayQueueStatisticsLoader : IIntradayQueueStatisticsLoader
 	{
-		private int? _actualworkloadSeconds;
+		private LatestStatisticsTimeAndWorkload _latestStatisticsTimeAndWorkload;
 
-		public int? LoadActualWorkloadInSeconds(IList<Guid> skillList, TimeZoneInfo timeZone, DateOnly today)
+		public LatestStatisticsTimeAndWorkload LoadActualWorkloadInSeconds(IList<Guid> skillList, TimeZoneInfo timeZone, DateOnly today)
 		{
-			return (int?)_actualworkloadSeconds;
+			return _latestStatisticsTimeAndWorkload;
 		}
 
-		public void Has(int? actualworkloadSeconds)
+		public void Has(LatestStatisticsTimeAndWorkload latestStatisticsTimeAndWorkload)
 		{
-			_actualworkloadSeconds = actualworkloadSeconds;
+			_latestStatisticsTimeAndWorkload = latestStatisticsTimeAndWorkload;
 		}
 	}
 }

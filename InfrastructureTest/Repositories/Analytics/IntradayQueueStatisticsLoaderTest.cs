@@ -15,9 +15,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		public void ShouldCheckThatStoredProcedureExists()
 		{
 			var target = new IntradayQueueStatisticsLoader();
-			var workloadInSeconds = target.LoadActualWorkloadInSeconds(new Guid[] { Guid.NewGuid() }, TimeZoneInfo.Utc, DateOnly.Today);
+			var latestStatisticsTimeAndWorkload = target.LoadActualWorkloadInSeconds(new Guid[] { Guid.NewGuid() }, TimeZoneInfo.Utc, DateOnly.Today);
 
-			workloadInSeconds.HasValue.Should().Be.False();
+			latestStatisticsTimeAndWorkload.ActualworkloadInSeconds.HasValue.Should().Be.False();
+			latestStatisticsTimeAndWorkload.LatestStatisticsIntervalId.HasValue.Should().Be.False();
 		}
 	}
 }

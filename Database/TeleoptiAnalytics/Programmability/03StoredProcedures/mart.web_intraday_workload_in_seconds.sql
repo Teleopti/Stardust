@@ -7,7 +7,7 @@ GO
 -- Create date: 2016-09-05
 -- Description:	Get the workload (offered calls * handle time) in seconds for the given day. 
 -- =============================================
--- EXEC [mart].[web_intraday_workload_in_seconds] 'W. Europe Standard Time', '2016-09-05', 'F08D75B3-FDB4-484A-AE4C-9F0800E2F753'
+-- EXEC [mart].[web_intraday_workload_in_seconds] 'W. Europe Standard Time', '2016-09-06', 'F08D75B3-FDB4-484A-AE4C-9F0800E2F753'
 CREATE PROCEDURE [mart].[web_intraday_workload_in_seconds]
 @time_zone_code nvarchar(100),
 @today smalldatetime,
@@ -20,7 +20,6 @@ BEGIN
 	DECLARE @time_zone_id as int
 	DECLARE @default_scenario_id int
 	DECLARE @bu_id int
-	DECLARE @return_value int
 	
 	CREATE TABLE #skills(id uniqueidentifier)	
 	CREATE TABLE #queues(queue_id int)	
@@ -70,7 +69,8 @@ BEGIN
 		AND offered_calls > 0
 	
 	SELECT
-		@return_value = SUM(qs.workload_seconds)
+		CONVERT(INT, MAX(i.interval_id)) AS LatestStatisticsIntervalId,
+		SUM(qs.workload_seconds) AS ActualworkloadInSeconds
 	FROM
 		#queue_stats qs
 		INNER JOIN mart.bridge_time_zone bz ON qs.date_id = bz.date_id AND qs.utc_interval_id = bz.interval_id
@@ -79,11 +79,6 @@ BEGIN
 	WHERE
 		bz.time_zone_id = @time_zone_id 
 		AND d.date_date = @today
-
-	IF(@return_value IS NULL)
-		SET @return_value = -1
-
-	SELECT @return_value
 END
 
 GO

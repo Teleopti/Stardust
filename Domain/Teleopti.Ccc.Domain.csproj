@@ -402,6 +402,7 @@
     <Compile Include="Intraday\IntradayStatisticsDataSeries.cs" />
     <Compile Include="Intraday\IntradayStatisticsSummary.cs" />
     <Compile Include="Intraday\IScheduleForecastSkillReadModelRepository.cs" />
+    <Compile Include="Intraday\LatestStatisticsTimeAndWorkload.cs" />
     <Compile Include="Intraday\LatestStatisticsTimeProvider.cs" />
     <Compile Include="Intraday\LatestStatitsticsTimeModel.cs" />
     <Compile Include="Intraday\ScheduleForecastSkillProvider.cs" />
