@@ -37,7 +37,16 @@ namespace Teleopti.Ccc.Domain.Cascading
 				dic.Add(primarySkill, primarySkillOverstaff - otherSkillGroupOverstaff);
 			}
 
-			return new ShovelResourcesState(dic, primarySkillsExistsButTheyAreAllClosed);
+			if (primarySkillsExistsButTheyAreAllClosed)
+			{
+				//FEL?? att lägga alla resurser "multipla gånger på flera primärskill)!
+				foreach (var primarySkill in skillGroup.PrimarySkills)
+				{
+					dic.Add(primarySkill, skillGroup.Resources); //FEL?? Måste ta hänsyn till/dra av andra skillgruppers resurser
+				}
+			}
+
+			return new ShovelResourcesState(dic);
 		}
 	}
 }

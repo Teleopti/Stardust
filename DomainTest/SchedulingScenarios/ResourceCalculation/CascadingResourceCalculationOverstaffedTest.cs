@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				.Should().Be.EqualTo(1);
 		}
 
-		[Test,Ignore("#40477")]
+		[Test]
 		public void ShouldNotMoveTooMuchResourcesWhenPrimarySkillIsClosed()
 		{
 			var scenario = new Scenario("_");

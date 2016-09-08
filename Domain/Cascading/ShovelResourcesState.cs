@@ -7,14 +7,10 @@ namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class ShovelResourcesState
 	{
-		private const int highValueForClosedSkill = int.MaxValue;
-
-		public ShovelResourcesState(IDictionary<ISkill, double> resources, bool allPrimarySkillsAreClosed)
+		public ShovelResourcesState(IDictionary<ISkill, double> resources)
 		{
 			ResourcesAvailableForPrimarySkill = resources;
-			RemainingOverstaffing = allPrimarySkillsAreClosed ? 
-				highValueForClosedSkill : 
-				ResourcesAvailableForPrimarySkill.Values.Sum();
+			RemainingOverstaffing = ResourcesAvailableForPrimarySkill.Values.Sum();
 			TotalOverstaffingAtStart = RemainingOverstaffing;
 		}
 
