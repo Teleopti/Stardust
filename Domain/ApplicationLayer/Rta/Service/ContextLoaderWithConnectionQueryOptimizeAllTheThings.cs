@@ -74,112 +74,169 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public override void ForBatch(BatchInputModel batch, Action<Context> action)
 		{
-			var exceptions = new ConcurrentBag<Exception>();
-
-			var batchData = new Lazy<batchData>(() =>
+			process(batch.States, (states, addException) =>
 			{
-				var now = _now.UtcDateTime();
 				var dataSourceId = ValidateSourceId(batch);
-
-				var userCodes = batch.States.Select(x => x.UserCode);
+				var userCodes = states.Select(x => x.UserCode);
 				var agentStates = _agentStatePersister.Find(dataSourceId, userCodes);
 
 				userCodes
-					.Where(x => agentStates.All(s => s.UserCode != x))
-					.Select(x => new InvalidUserCodeException($"No person found for UserCode {x}, DataSourceId {dataSourceId}, SourceId {batch.SourceId}"))
-					.ForEach(exceptions.Add);
+                   .Where(x => agentStates.All(s => s.UserCode != x))
+                   .Select(x => new InvalidUserCodeException($"No person found for UserCode {x}, DataSourceId {dataSourceId}, SourceId {batch.SourceId}"))
+                   .ForEach(addException);
 
-				IEnumerable<ScheduledActivity> schedules = agentStates
-					.Where(x => scheduleIsValid(x, now))
-					.SelectMany(x => x.Schedule)
-					.ToArray();
-				var querySchedulesFor = agentStates
-					.Where(x => !scheduleIsValid(x, now))
-					.Select(x => x.PersonId)
-					.ToArray();
-				if (querySchedulesFor.Any())
+				return agentStates;
+			}, state =>
+			{
+				var s = state as AgentStateFound;
+				var input = batch.States.Single(x => x.UserCode == s.UserCode);
+				return new InputInfo
 				{
-					schedules = schedules.Concat(
-						_scheduleProjectionReadOnlyReader.GetCurrentSchedules(now, querySchedulesFor)
-						).ToArray();
-				}
+					PlatformTypeId = batch.PlatformTypeId,
+					SnapshotId = batch.SnapshotId,
+					SourceId = batch.SourceId,
+					StateCode = input.StateCode,
+					StateDescription = input.StateDescription,
+				};
+			}, action);
+		}
+		
+		public override void ForAll(Action<Context> action)
+		{
+			IEnumerable<Guid> personIds = null;
+			WithUnitOfWork(() =>
+			{
+				personIds = _agentStatePersister.GetAllPersonIds();
+			});
 
+			process(personIds, (ids, _) => _agentStatePersister.Get(ids), null, action);
+		}
+
+		public class sharedData
+		{
+			public DateTime now;
+			public MappingsState mappings;
+		}
+
+		public class transactionData
+		{
+			public IEnumerable<ScheduledActivity> schedules;
+			public IEnumerable<AgentState> agentStates;
+			public Lazy<sharedData> shared;
+
+			public Func<AgentState, InputInfo> getInputFor;
+
+			public InputInfo inputFor(AgentState state)
+			{
+				return getInputFor?.Invoke(state);
+			}
+		}
+
+		private void process<T>(
+			IEnumerable<T> allThings,
+			Func<IEnumerable<T>, Action<Exception>, IEnumerable<AgentState>> getAgentStates,
+			Func<AgentState, InputInfo> getInputFor,
+			Action<Context> action)
+		{
+			var exceptions = new ConcurrentBag<Exception>();
+
+			var allThingsSize = allThings.Count();
+			if (allThingsSize == 0)
+				return;
+			var someThingsSize = _config.ReadValue("RtaMaxTransactionSize", 100);
+			var transactionCount = _config.ReadValue("RtaParallelTransactions", 7);
+			if (allThingsSize < someThingsSize*transactionCount)
+				someThingsSize = (int) Math.Ceiling(allThingsSize / (double) transactionCount);
+
+			var shared = new Lazy<sharedData>(() =>
+			{
 				var mappings = new MappingsState(() => _mappingReader.Read());
-
-				return new batchData
+				mappings.Use();
+				return new sharedData
 				{
-					now = now,
-					schedules = schedules,
-					mappings = mappings,
-					agentStates = agentStates
+					now = _now.UtcDateTime(),
+					mappings = mappings
 				};
 			});
 
-			// 7 transactions seems like a sweet spot when unit testing
-			var transactionCount = (int) Math.Ceiling(batch.States.Count() / _config.ReadValue("RtaBatchTransactions", 7d));
-			var transactions = batch.States.Batch(transactionCount);
-			Parallel.ForEach(transactions, states =>
-			{
-				BatchTransaction(batch, action, batchData, states)
-					.ForEach(exceptions.Add);
-			});
+			var transactions = allThings
+				.Batch(someThingsSize)
+				.Select(someThings =>
+				{
+					return new Lazy<transactionData>(() =>
+					{
+						var agentStates = getAgentStates(someThings, exceptions.Add);
+
+						IEnumerable<ScheduledActivity> schedules = agentStates
+							.Where(x => scheduleIsValid(x, shared.Value.now))
+							.SelectMany(x => x.Schedule)
+							.ToArray();
+						var querySchedulesFor = agentStates
+							.Where(x => !scheduleIsValid(x, shared.Value.now))
+							.Select(x => x.PersonId)
+							.ToArray();
+						if (querySchedulesFor.Any())
+						{
+							schedules = schedules.Concat(
+								_scheduleProjectionReadOnlyReader.GetCurrentSchedules(shared.Value.now, querySchedulesFor)
+								).ToArray();
+						}
+
+						return new transactionData
+						{
+							agentStates = agentStates,
+							shared = shared,
+							schedules = schedules,
+							getInputFor = getInputFor,
+						};
+					});
+				});
+
+			var tenant = _dataSource.CurrentName();
+			Parallel.ForEach(
+				transactions,
+				new ParallelOptions {MaxDegreeOfParallelism = transactionCount},
+				sharedData =>
+					Transaction(tenant, sharedData, action)
+						.ForEach(exceptions.Add)
+				);
 
 			if (exceptions.Any())
 				throw new AggregateException(exceptions);
 		}
 
-		public class batchData
-		{
-			public DateTime now;
-			public IEnumerable<ScheduledActivity> schedules;
-			public MappingsState mappings;
-			public IEnumerable<AgentStateFound> agentStates;
-		}
-
 		[TenantScope]
-		protected virtual IEnumerable<Exception> BatchTransaction(
-			BatchInputModel batch,
-			Action<Context> action,
-			Lazy<batchData> batchData,
-			IEnumerable<BatchStateInputModel> states)
+		protected virtual IEnumerable<Exception> Transaction(
+			string tenant,
+			Lazy<transactionData> sharedData,
+			Action<Context> action)
 		{
 			var exceptions = new List<Exception>();
 
 			WithUnitOfWork(() =>
 			{
-				var data = batchData.Value;
+				var data = sharedData.Value;
+				var shared = data.shared.Value;
 
-				states.ForEach(input =>
+				data.agentStates.ForEach(state =>
 				{
 					try
 					{
-						data.agentStates
-							.Where(x => x.UserCode == input.UserCode)
-							.ForEach(state =>
-							{
-								action.Invoke(new Context(
-									data.now,
-									new InputInfo
-									{
-										PlatformTypeId = batch.PlatformTypeId,
-										SourceId = batch.SourceId,
-										SnapshotId = batch.SnapshotId,
-										StateCode = input.StateCode,
-										StateDescription = input.StateDescription
-									},
-									state.PersonId,
-									state.BusinessUnitId,
-									state.TeamId.GetValueOrDefault(),
-									state.SiteId.GetValueOrDefault(),
-									() => state,
-									() => data.schedules.Where(s => s.PersonId == state.PersonId).ToArray(),
-									s => data.mappings,
-									c => _agentStatePersister.Update(c.MakeAgentState()),
-									_stateMapper,
-									_appliedAdherence,
-									_appliedAlarm
-									));
-							});
+						action.Invoke(new Context(
+							shared.now,
+							data.inputFor(state),
+							state.PersonId,
+							state.BusinessUnitId,
+							state.TeamId.GetValueOrDefault(),
+							state.SiteId.GetValueOrDefault(),
+							() => state,
+							() => data.schedules.Where(s => s.PersonId == state.PersonId).ToArray(),
+							s => shared.mappings,
+							c => _agentStatePersister.Update(c.MakeAgentState()),
+							_stateMapper,
+							_appliedAdherence,
+							_appliedAlarm
+							));
 					}
 					catch (Exception e)
 					{
@@ -191,94 +248,33 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return exceptions;
 		}
 
-		public override void ForAll(Action<Context> action)
-		{
-			var mappings = new MappingsState(() => _mappingReader.Read());
-			var now = _now.UtcDateTime();
 
-			IEnumerable<Guid> allPersons = null;
-			WithUnitOfWork(() =>
-			{
-				allPersons = _agentStatePersister.GetAllPersonIds();
-			});
 
-			var transactions = allPersons
-				.Batch(_config.ReadValue("RtaAllBatchSize", 100))
-				.Select(personIds =>
-				{
-					return new Lazy<allData>(() =>
-					{
-						var agentStates = _agentStatePersister.Get(personIds);
-						IEnumerable<ScheduledActivity> schedules = agentStates
-							.Where(x => scheduleIsValid(x, now))
-							.SelectMany(x => x.Schedule)
-							.ToArray();
-						var querySchedulesFor = agentStates
-							.Where(x => !scheduleIsValid(x, now))
-							.Select(x => x.PersonId)
-							.ToArray();
-						if (querySchedulesFor.Any())
-						{
-							schedules = schedules.Concat(
-								_scheduleProjectionReadOnlyReader.GetCurrentSchedules(now, querySchedulesFor)
-								).ToArray();
-						}
-						mappings.Use(); // force load all here
 
-						return new allData
-						{
-							now = now,
-							agentStates = agentStates,
-							mappings = mappings,
-							schedules = schedules
-						};
-					});
-				});
 
-			Parallel.ForEach(
-				transactions,
-				new ParallelOptions {MaxDegreeOfParallelism = _config.ReadValue("RtaAllParallelTransactions", 7)},
-				sharedData => ForAllSingleTransaction(_dataSource.CurrentName(), sharedData, action));
-		}
 
-		[TenantScope]
-		protected virtual void ForAllSingleTransaction(
-			string tenant,
-			Lazy<allData> sharedData,
-			Action<Context> action)
-		{
-			WithUnitOfWork(() =>
-			{
-				var data = sharedData.Value;
 
-				data.agentStates.ForEach(state =>
-				{
-					action.Invoke(new Context(
-						data.now,
-						null,
-						state.PersonId,
-						state.BusinessUnitId,
-						state.TeamId.GetValueOrDefault(),
-						state.SiteId.GetValueOrDefault(),
-						() => state,
-						() => data.schedules.Where(s => s.PersonId == state.PersonId).ToArray(),
-						s => data.mappings,
-						c => _agentStatePersister.Update(c.MakeAgentState()),
-						_stateMapper,
-						_appliedAdherence,
-						_appliedAlarm
-						));
-				});
-			});
-		}
 
-		public class allData
-		{
-			public DateTime now;
-			public IEnumerable<ScheduledActivity> schedules;
-			public MappingsState mappings;
-			public IEnumerable<AgentState> agentStates;
-		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 		[AllBusinessUnitsUnitOfWork]
 		[ReadModelUnitOfWork]

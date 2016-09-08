@@ -38,10 +38,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		}
 
 		[Test]
-		public void MeasureBatch([Values(1,2,3,4,5,6,7,8,9,10)] int transactions, [Values("A", "B", "C")] string version)
+		public void MeasureBatch()
 		{
-			Config.FakeSetting("RtaBatchTransactions", transactions.ToString());
-
 			Publisher.AddHandler<MappingReadModelUpdater>();
 			Publisher.AddHandler<PersonAssociationChangedEventPublisher>();
 			Publisher.AddHandler<AgentStateMaintainer>();
@@ -56,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			Publisher.Publish(new TenantMinuteTickEvent());
 
 			var batches = Enumerable.Range(0, 100)
-				.Select(x =>
+				.Select(_ =>
 					new BatchForTest
 					{
 						States = userCodes
@@ -71,13 +69,33 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 					}
 				);
 
-			var timer = new Stopwatch();
-			timer.Start();
+			var results = (
+				from transactions in new[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+				from size in new[] {100}
+				from variation in new[] {"A", "B", "C"}
+				select new {transactions, size, variation}).Select(x =>
+				{
+					Config.FakeSetting("RtaParallelTransactions", x.transactions.ToString());
+					Config.FakeSetting("RtaMaxTransactionSize", x.size.ToString());
 
-			batches.ForEach(Rta.SaveStateBatch);
+					var timer = new Stopwatch();
+					timer.Start();
 
-			timer.Stop();
-			Debug.WriteLine(timer.Elapsed);
+					batches.ForEach(Rta.SaveStateBatch);
+
+					timer.Stop();
+					return new
+					{
+						timer.Elapsed,
+						x.transactions,
+						x.size,
+						x.variation
+					};
+				});
+
+			results
+				.OrderBy(x => x.Elapsed)
+				.ForEach(x => Debug.WriteLine($"{x.Elapsed} - {x.size} {x.transactions} {x.variation}"));
 
 		}
 
@@ -108,13 +126,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				}).ForEach(Rta.SaveStateBatch);
 			
 			var results = (
-				from transactions in new[] {6, 7, 8, 10}
-				from size in new[] {50, 90, 100, 110}
+				from transactions in new[] {3, 6, 7, 8, 30}
+				from size in new[] {50, 95, 100, 105, 300}
 				from variation in new[] {"A", "B", "C"}
 				select new {transactions, size, variation}).Select(x =>
 				{
-					Config.FakeSetting("RtaAllParallelTransactions", x.transactions.ToString());
-					Config.FakeSetting("RtaAllBatchSize", x.size.ToString());
+					Config.FakeSetting("RtaParallelTransactions", x.transactions.ToString());
+					Config.FakeSetting("RtaMaxTransactionSize", x.size.ToString());
 
 					var timer = new Stopwatch();
 					timer.Start();
