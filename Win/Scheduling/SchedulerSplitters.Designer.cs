@@ -83,6 +83,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.tabPageAdvAgentInfo = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.tabPageAdvShiftCategoryDistribution = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.shiftCategoryDistributionControl1 = new Teleopti.Ccc.Win.Scheduling.PropertyPanel.ShiftCategoryDistributionControl();
+			this.tabPageAdvValidationAlerts = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
+			this.validationAlertsView1 = new Teleopti.Ccc.Win.Scheduling.ValidationAlertsView();
 			this.lessIntellegentSplitContainerAdvMainContainer = new Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction.TeleoptiLessIntelligentSplitContainer();
 			((System.ComponentModel.ISupportInitialize)(this.lessIntellegentSplitContainerAdvMain)).BeginInit();
 			this.lessIntellegentSplitContainerAdvMain.Panel1.SuspendLayout();
@@ -115,6 +117,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			((System.ComponentModel.ISupportInitialize)(this.tabInfoPanels)).BeginInit();
 			this.tabInfoPanels.SuspendLayout();
 			this.tabPageAdvShiftCategoryDistribution.SuspendLayout();
+			this.tabPageAdvValidationAlerts.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.lessIntellegentSplitContainerAdvMainContainer)).BeginInit();
 			this.lessIntellegentSplitContainerAdvMainContainer.Panel1.SuspendLayout();
 			this.lessIntellegentSplitContainerAdvMainContainer.Panel2.SuspendLayout();
@@ -641,6 +644,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.tabInfoPanels.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tabInfoPanels.Controls.Add(this.tabPageAdvAgentInfo);
 			this.tabInfoPanels.Controls.Add(this.tabPageAdvShiftCategoryDistribution);
+			this.tabInfoPanels.Controls.Add(this.tabPageAdvValidationAlerts);
 			this.tabInfoPanels.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabInfoPanels.FixedSingleBorderColor = System.Drawing.Color.White;
 			this.tabInfoPanels.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -652,6 +656,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.tabInfoPanels.TabIndex = 12;
 			this.tabInfoPanels.TabPanelBackColor = System.Drawing.Color.White;
 			this.tabInfoPanels.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererMetro);
+			this.tabInfoPanels.SelectedIndexChanged += new System.EventHandler(this.tabInfoPanelsSelectedIndexChanged);
 			// 
 			// tabPageAdvAgentInfo
 			// 
@@ -688,6 +693,27 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.shiftCategoryDistributionControl1.Name = "shiftCategoryDistributionControl1";
 			this.shiftCategoryDistributionControl1.Size = new System.Drawing.Size(434, 651);
 			this.shiftCategoryDistributionControl1.TabIndex = 0;
+			// 
+			// tabPageAdvValidationAlerts
+			// 
+			this.tabPageAdvValidationAlerts.Controls.Add(this.validationAlertsView1);
+			this.tabPageAdvValidationAlerts.Image = null;
+			this.tabPageAdvValidationAlerts.ImageSize = new System.Drawing.Size(16, 16);
+			this.tabPageAdvValidationAlerts.Location = new System.Drawing.Point(0, 21);
+			this.tabPageAdvValidationAlerts.Name = "tabPageAdvValidationAlerts";
+			this.tabPageAdvValidationAlerts.ShowCloseButton = true;
+			this.tabPageAdvValidationAlerts.Size = new System.Drawing.Size(434, 651);
+			this.tabPageAdvValidationAlerts.TabIndex = 13;
+			this.tabPageAdvValidationAlerts.Text = "xxValidationAlerts";
+			this.tabPageAdvValidationAlerts.ThemesEnabled = false;
+			// 
+			// validationAlertsView1
+			// 
+			this.validationAlertsView1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.validationAlertsView1.Location = new System.Drawing.Point(0, 0);
+			this.validationAlertsView1.Name = "validationAlertsView1";
+			this.validationAlertsView1.Size = new System.Drawing.Size(434, 651);
+			this.validationAlertsView1.TabIndex = 0;
 			// 
 			// lessIntellegentSplitContainerAdvMainContainer
 			// 
@@ -761,6 +787,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			((System.ComponentModel.ISupportInitialize)(this.tabInfoPanels)).EndInit();
 			this.tabInfoPanels.ResumeLayout(false);
 			this.tabPageAdvShiftCategoryDistribution.ResumeLayout(false);
+			this.tabPageAdvValidationAlerts.ResumeLayout(false);
 			this.lessIntellegentSplitContainerAdvMainContainer.Panel1.ResumeLayout(false);
 			this.lessIntellegentSplitContainerAdvMainContainer.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.lessIntellegentSplitContainerAdvMainContainer)).EndInit();
@@ -798,5 +825,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private AgentRestrictions.AgentRestrictionGrid agentRestrictionGrid1;
 		private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdvShiftCategoryDistribution;
 		private PropertyPanel.ShiftCategoryDistributionControl shiftCategoryDistributionControl1;
-    }
+		private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdvValidationAlerts;
+		private ValidationAlertsView validationAlertsView1;
+	}
 }

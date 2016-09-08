@@ -15,11 +15,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
         public BusinessRuleResponse(Type typeOfRule, string message, bool error, bool mandatory, DateTimePeriod period, IPerson person, DateOnlyPeriod dateOnlyPeriod)
         {
-            //if(person.GetType()!=typeof(Person))
-            //{
-            //    string foo = string.Empty;
-            //}
-
             InParameter.NotNull("person", person);
             _typeOfRule = typeOfRule;
             _message = message ?? string.Empty;

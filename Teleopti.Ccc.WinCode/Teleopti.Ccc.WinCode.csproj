@@ -1007,6 +1007,7 @@
     <Compile Include="Scheduling\ScheduleReporting\ShiftsPerDayToPdfManager.cs" />
     <Compile Include="Scheduling\SchedulerStateLoader.cs" />
     <Compile Include="Scheduling\TeleoptiProgressChangeMessage.cs" />
+    <Compile Include="Scheduling\ValidationAlertsModel.cs" />
     <Compile Include="Scheduling\WorkShiftContainsMasterActivitySpecification.cs" />
     <Compile Include="Settings\AbsenceView.cs" />
     <Compile Include="Settings\GamificationSettingView.cs" />

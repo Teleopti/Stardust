@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
@@ -26,8 +27,10 @@ namespace Teleopti.Ccc.Win.Scheduling
         private bool _usePreference = true;
         private bool _useSchedules = true;
         private readonly PinnedSkillHelper _pinnedSkillHelper;
+		IEnumerable<IPerson> _filteredPersons = new List<IPerson>();
 
-        public SchedulerSplitters()
+
+		public SchedulerSplitters()
         {
             InitializeComponent();
             if (!DesignMode)
@@ -40,9 +43,17 @@ namespace Teleopti.Ccc.Win.Scheduling
             _pinnedSkillHelper = new PinnedSkillHelper();
 				tabSkillData.TabStyle = typeof(SkillTabRenderer);
 				tabSkillData.TabPanelBackColor = Color.FromArgb(199, 216, 237);
+			validationAlertsView1.AgentDoubleClick += ValidationAlertsView1AgentDoubleClick;
         }
 
-        public WpfControls.Common.Interop.MultipleHostControl MultipleHostControl3
+		public event EventHandler<ValidationViewAgentDoubleClickEvenArgs> ValidationAlertsAgentDoubleClick;
+
+		private void ValidationAlertsView1AgentDoubleClick(object sender, ValidationViewAgentDoubleClickEvenArgs e)
+		{
+			OnValidationAlertsAgentDoubleClick(e);
+		}
+
+		public WpfControls.Common.Interop.MultipleHostControl MultipleHostControl3
         {
             get { return multipleHostControl1; }
         }
@@ -230,6 +241,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			shiftCategoryDistributionControl.SetModel(model);
 		}
 
+		public void InsertValidationAlertsModel(ValidationAlertsModel model)
+		{
+			var validationAlertsControl = (ValidationAlertsView)tabInfoPanels.TabPages[2].Controls[0];
+			validationAlertsControl.SetModel(model);
+		}
+
 		public void DisableViewShiftCategoryDistribution()
 		{
 			var shiftCategoryDistributionControl = (ShiftCategoryDistributionControl)tabInfoPanels.TabPages[1].Controls[0];
@@ -242,9 +259,25 @@ namespace Teleopti.Ccc.Win.Scheduling
 			shiftCategoryDistributionControl.EnableViewShiftCategoryDistribution();
 		}
 
-		public void RefreshTabInfoPanels()
+		public void RefreshTabInfoPanels(IEnumerable<IPerson> filteredPersons)
 		{
+			_filteredPersons = filteredPersons;
+			if(tabInfoPanels.SelectedIndex == 2)
+			{
+				var validationAlertsControl = (ValidationAlertsView)tabInfoPanels.TabPages[2].Controls[0];
+				validationAlertsControl.ReDraw(_filteredPersons);
+			}
 			tabInfoPanels.Refresh();
 		}
-    }
+
+	    protected virtual void OnValidationAlertsAgentDoubleClick(ValidationViewAgentDoubleClickEvenArgs e)
+	    {
+		    ValidationAlertsAgentDoubleClick?.Invoke(this, e);
+	    }
+
+		private void tabInfoPanelsSelectedIndexChanged(object sender, EventArgs e)
+		{
+			RefreshTabInfoPanels(_filteredPersons);
+		}
+	}
 }

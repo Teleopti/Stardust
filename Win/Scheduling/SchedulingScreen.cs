@@ -2265,6 +2265,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 				else
 					SikuliHelper.ShowTaskDoneView(this);
 			}
+
+			schedulerSplitters1.RefreshTabInfoPanels(_schedulerState.FilteredCombinedAgentsDictionary.Values);
 		}
 
 		private GridRangeInfo _lastGridSelection;
@@ -2380,7 +2382,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						_scheduleView.SetSelectedDateLocal(scheduleDay.DateOnlyAsPeriod.DateOnly);
 					}
 
-				}
+				}				
 			}
 		}
 
@@ -3860,8 +3862,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 						enableSave();
 					if (_scheduleView != null && _scheduleView.SelectedSchedules().Count == 1)
 						updateShiftEditor();
-
-					schedulerSplitters1.RefreshTabInfoPanels();
 				}
 			}
 		}
@@ -4399,6 +4399,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_schedulerState);
 			_shiftCategoryDistributionModel.SetFilteredPersons(_schedulerState.FilteredCombinedAgentsDictionary.Values);
 			schedulerSplitters1.InsertShiftCategoryDistributionModel(_shiftCategoryDistributionModel);
+			schedulerSplitters1.InsertValidationAlertsModel(new	ValidationAlertsModel(_schedulerState.Schedules, NameOrderOption.LastNameFirstName));
 			schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
 		}
 
@@ -5068,6 +5069,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void setEventHandlers()
 		{
+			schedulerSplitters1.ValidationAlertsAgentDoubleClick += schedulerSplitters1ValidationAlertsAgentDoubleClick;
 			_schedulerMeetingHelper.ModificationOccured += _schedulerMeetingHelper_ModificationOccured;
 			_tmpTimer.Tick += _tmpTimer_Tick;
 			schedulerSplitters1.TabSkillData.SelectedIndexChanged += tabSkillData_SelectedIndexChanged;
@@ -5129,6 +5131,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 				.Subscribe(replyAndDenyRequestFromRequestDetailsView);
 
 			#endregion
+		}
+
+		private void schedulerSplitters1ValidationAlertsAgentDoubleClick(object sender, ValidationViewAgentDoubleClickEvenArgs e)
+		{
+			var row = _scheduleView.GetRowForAgent(e.Person);
+			int column = _scheduleView.GetColumnForDate(e.Date);
+			GridRangeInfo info = GridRangeInfo.Cells(row, column, row, column);
+			_scheduleView.TheGrid.Selections.Clear(true);
+			_scheduleView.TheGrid.CurrentCell.Activate(row, column, GridSetCurrentCellOptions.SetFocus);
+			_scheduleView.TheGrid.Selections.ChangeSelection(info, info, true);
+			_scheduleView.TheGrid.CurrentCell.MoveTo(row, column, GridSetCurrentCellOptions.ScrollInView);
+			_scheduleView.SetSelectedDateLocal(e.Date);
+			updateShiftEditor();
 		}
 
 		private void wpfShiftEditor1ShowLayers(object sender, EventArgs e)
@@ -5254,7 +5269,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			//Request tab
 			toolStripTabItem1.Click -= toolStripTabItem1_Click;
-
+			schedulerSplitters1.ValidationAlertsAgentDoubleClick -= schedulerSplitters1ValidationAlertsAgentDoubleClick;
 			toolStripButtonRequestBack.Click -= toolStripButtonRequestBackClick;
 			toolStripButtonFilterAgentsRequestView.Click -= toolStripButtonFilterAgents_Click;
 			ToolStripMenuItemViewDetails.Click -= ToolStripMenuItemViewDetails_Click;
@@ -6691,7 +6706,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			drawSkillGrid();
 
 			_shiftCategoryDistributionModel.SetFilteredPersons(_schedulerState.FilteredCombinedAgentsDictionary.Values);
-			schedulerSplitters1.RefreshTabInfoPanels();
+			schedulerSplitters1.RefreshTabInfoPanels(_schedulerState.FilteredCombinedAgentsDictionary.Values);
 			updateShiftEditor();
 			toolStripStatusLabelNumberOfAgents.Text = LanguageResourceHelper.Translate("XXAgentsColon") + " " +
 													  _schedulerState.FilteredCombinedAgentsDictionary.Count;
