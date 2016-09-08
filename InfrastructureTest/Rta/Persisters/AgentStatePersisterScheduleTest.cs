@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				PersonId = personId
 			});
 
-			Target.Get(personId).Schedule.Single().Should().Be("phone");
+			Target.Get(personId).Schedule.Single().Name.Should().Be("phone");
 		}
 
 	}
