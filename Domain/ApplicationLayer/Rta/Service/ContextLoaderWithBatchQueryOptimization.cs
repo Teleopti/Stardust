@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 									x.TeamId,
 									x.SiteId,
 									() => data.agentStates.FirstOrDefault(s => s.PersonId == x.PersonId),
-									() => data.schedules.Where(s => s.PersonId == x.PersonId).ToArray(),
+									() => new ScheduleState(data.schedules.Where(s => s.PersonId == x.PersonId).ToArray(), false),
 									s => data.mappings,
 									c => _agentStatePersister.Update(c.MakeAgentState()),
 									_stateMapper,

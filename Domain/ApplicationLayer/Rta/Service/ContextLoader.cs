@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				var now = _now.UtcDateTime();
 
 				_databaseReader.LoadPersonOrganizationData(dataSourceId, userCode)
-					.ForEach(x =>
+					.ForEach(state =>
 					{
 						found = true;
 
@@ -102,12 +102,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 								StateCode = input.StateCode,
 								StateDescription = input.StateDescription
 							}, 
-							x.PersonId,
-							x.BusinessUnitId,
-							x.TeamId,
-							x.SiteId,
-							() => _agentStatePersister.Get(x.PersonId),
-							() => _scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, x.PersonId),
+							state.PersonId,
+							state.BusinessUnitId,
+							state.TeamId,
+							state.SiteId,
+							() => _agentStatePersister.Get(state.PersonId),
+							() => new ScheduleState(_scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, state.PersonId), false),
 							s =>
 							{
 								return new MappingsState(() =>
@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						x.TeamId,
 						x.SiteId,
 						() => state,
-						() => _scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, x.PersonId),
+						() => new ScheduleState(_scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, state.PersonId), false),
 						s => mappings,
 						c => _agentStatePersister.Update(c.MakeAgentState()),
 						_stateMapper,
@@ -232,7 +232,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					state.TeamId.GetValueOrDefault(),
 					state.SiteId.GetValueOrDefault(),
 					() => state,
-					() => _scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, state.PersonId),
+					() => new ScheduleState(_scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, state.PersonId), false), 
 					s => mappings,
 					c => _agentStatePersister.Update(c.MakeAgentState()),
 					_stateMapper,
@@ -266,7 +266,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						state.TeamId.GetValueOrDefault(),
 						state.SiteId.GetValueOrDefault(),
 						null,
-						() => _scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, state.PersonId),
+						() => new ScheduleState(_scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, state.PersonId), false),
 						s => mappings,
 						null,
 						_stateMapper,

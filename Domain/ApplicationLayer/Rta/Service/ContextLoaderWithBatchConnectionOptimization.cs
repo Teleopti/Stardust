@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 									x.TeamId,
 									x.SiteId,
 									() => _agentStatePersister.Get(x.PersonId),
-									() => _scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, x.PersonId),
+									() => new ScheduleState(_scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, x.PersonId), false),
 									s =>
 									{
 										return new MappingsState(() =>

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -24,12 +23,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_mappings = null;
 		}
 	}
+
+	public class ScheduleState
+	{
+		public ScheduleState(IEnumerable<ScheduledActivity> schedules, bool cacheSchedules)
+		{
+			Schedules = schedules;
+			CacheSchedules = cacheSchedules;
+		}
+
+		public IEnumerable<ScheduledActivity> Schedules { get; } 
+		public bool CacheSchedules { get; }
+	}
 	
 	public class Context
 	{
 		private readonly Action<Context> _updateState;
 		private readonly ProperAlarm _appliedAlarm;
-		private readonly Lazy<IEnumerable<ScheduledActivity>> _scheduleData;
+		private readonly Lazy<ScheduleState> _schedule;
 
 		public Context(
 			DateTime utcNow,
@@ -39,7 +50,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			Guid teamId, 
 			Guid siteId, 
 			Func<AgentState> stored, 
-			Func<IEnumerable<ScheduledActivity>> schedule,
+			Func<ScheduleState> schedule,
 			Func<Context, MappingsState> mappings,
 			Action<Context> updateState, 
 			StateMapper stateMapper,
@@ -71,9 +82,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			_updateState = updateState ?? (c => {});
 			_appliedAlarm = appliedAlarm;
-			_scheduleData = new Lazy<IEnumerable<ScheduledActivity>>(schedule);
+			_schedule = new Lazy<ScheduleState>(schedule); ;
 
-			Schedule = new ScheduleInfo(_scheduleData, Stored, CurrentTime);
+			var schedules = new Lazy<IEnumerable<ScheduledActivity>>(() => _schedule.Value.Schedules);
+			Schedule = new ScheduleInfo(schedules, Stored, CurrentTime);
 			State = new StateRuleInfo(mappingsState, Stored, StateCode, PlatformTypeId, businessUnitId, Input, Schedule, stateMapper);
 			Adherence = new AdherenceInfo(Input, Stored, mappingsState, businessUnitId, State, Schedule, appliedAdherence, stateMapper);
 		}
@@ -182,7 +194,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 				TimeWindowCheckSum = Schedule.TimeWindowCheckSum(),
 
-				Schedule = _scheduleData.Value
+				Schedule = null
 			};
 		}
 		

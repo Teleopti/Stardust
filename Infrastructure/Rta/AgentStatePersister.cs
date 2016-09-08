@@ -118,9 +118,8 @@ SET
 	RuleId = :RuleId,
 	RuleStartTime = :RuleStartTime,
 	AlarmStartTime = :AlarmStartTime,
-	TimeWindowCheckSum = :TimeWindowCheckSum,
-	Schedule = :Schedule
-WHERE 
+	TimeWindowCheckSum = :TimeWindowCheckSum
+WHERE
 	PersonId = :PersonId")
 				.SetParameter("PersonId", model.PersonId)
 				.SetParameter("BatchId", model.BatchId)
@@ -140,7 +139,6 @@ WHERE
 				.SetParameter("RuleStartTime", model.RuleStartTime)
 				.SetParameter("AlarmStartTime", model.AlarmStartTime)
 				.SetParameter("TimeWindowCheckSum", model.TimeWindowCheckSum)
-				.SetParameter("Schedule", _serializer.SerializeObject(model.Schedule), NHibernateUtil.StringClob)
 				.ExecuteUpdate();
 		}
 

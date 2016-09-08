@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 {
 	[TestFixture]
 	[UnitOfWorkTest]
+	[Ignore]
 	public class AgentStatePersisterScheduleTest
 	{
 		public IAgentStatePersister Target;
