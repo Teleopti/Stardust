@@ -17,8 +17,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 			TestControllerMethods.Logon();
 			Navigation.GotoRequests();
-
-			Browser.Interactions.Click(".request-body");
+            Browser.Interactions.Click(".request-list-filter>label");
+            Browser.Interactions.Click(".request-body");
 			
 		}
 
