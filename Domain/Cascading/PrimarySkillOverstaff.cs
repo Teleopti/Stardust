@@ -32,11 +32,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 			if (primarySkillsExistsButTheyAreAllClosed)
 			{
-				var numberOfSkills = skillGroup.PrimarySkills.Count();
-				foreach (var primarySkill in skillGroup.PrimarySkills)
-				{
-					dic.Add(primarySkill, skillGroup.Resources / numberOfSkills); 
-				}
+				dic.Add(skillGroup.PrimarySkills.First(), skillGroup.Resources); //shouldn't really matter what primary skill we choose here (if multiple).
 			}
 
 			return new ShovelResourcesState(dic);
