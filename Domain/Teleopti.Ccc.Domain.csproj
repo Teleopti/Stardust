@@ -173,6 +173,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\MultiAbsenceRequestsHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\QueuedAbsenceRequestHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandler.cs" />
+    <Compile Include="ApplicationLayer\Dates\AnalyticsDateChangedHandler.cs" />
     <Compile Include="ApplicationLayer\Badge\ILogObjectDateChecker.cs" />
     <Compile Include="ApplicationLayer\Badge\LogObjectDateChecker.cs" />
     <Compile Include="ApplicationLayer\BusinessUnit\AnalyticsBusinessUnitUpdater.cs" />
@@ -186,6 +187,7 @@
     <Compile Include="ApplicationLayer\Commands\INonoverwritableLayerMovabilityChecker.cs" />
     <Compile Include="ApplicationLayer\Commands\IReplyCommand.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ContextLoaderWithBatchConnectionOptimization.cs" />
+    <Compile Include="ApplicationLayer\Events\AnalyticsDatesChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ContextLoaderWithBatchQueryOptimization.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ContextLoaderWithParalellBatch.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ContextLoaderWithPersonOrganizationQueryOptimization.cs" />

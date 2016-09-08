@@ -1,12 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.TestCommon.TestData.Analytics;
+using Teleopti.Ccc.TestCommon.TestData.Core;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 {
@@ -14,10 +22,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 	[Category("LongRunning")]
 	[AnalyticsDatabaseTest]
 	[Toggle(Toggles.ETL_EventbasedDate_39562)]
-	public class AnalyticsDateRepositoryWithCreationTest
+	public class AnalyticsDateRepositoryWithCreationTest : ISetup
 	{
 		public IAnalyticsDateRepository Target;
 		public WithAnalyticsUnitOfWork WithAnalyticsUnitOfWork;
+		private FakeEventPublisher _fakeEventPublisher;
+
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			_fakeEventPublisher = new FakeEventPublisher();
+			system.UseTestDouble(_fakeEventPublisher).For<IEventPublisher>();
+		}
+
+		[SetUp]
+		public void Setup()
+		{
+			var analyticsDataFactory = new AnalyticsDataFactory();
+			analyticsDataFactory.Setup(new EternityAndNotDefinedDate());
+			analyticsDataFactory.Persist();
+		}
 
 		[Test]
 		public void ShouldCreateMissingDatesWhenLoading()
@@ -26,6 +50,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			var date = WithAnalyticsUnitOfWork.Get(() => Target.Date(targetDate));
 			date.DateDate.Date.Should().Be.EqualTo(targetDate.Date);
 			date.DateId.Should().Be.EqualTo(6);
+
+			_fakeEventPublisher.PublishedEvents.Should().Not.Be.Empty();
+			_fakeEventPublisher.PublishedEvents.OfType<AnalyticsDatesChangedEvent>().SingleOrDefault().Should().Not.Be.Null();
+		}
+
+		[LogTime]
+		[Test]
+		public void ShouldCreateManyMissingDatesWhenLoading()
+		{
+			var targetDate = new DateTime(2010, 01, 05);
+			var date = WithAnalyticsUnitOfWork.Get(() => Target.Date(targetDate));
+			date.DateDate.Date.Should().Be.EqualTo(targetDate.Date);
+
+			_fakeEventPublisher.PublishedEvents.Should().Not.Be.Empty();
+			_fakeEventPublisher.PublishedEvents.OfType<AnalyticsDatesChangedEvent>().SingleOrDefault().Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -47,6 +86,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				task.Start();
 
 			await Task.WhenAll(tasks.ToArray());
+
+			_fakeEventPublisher.PublishedEvents.Should().Not.Be.Empty();
+			_fakeEventPublisher.PublishedEvents.OfType<AnalyticsDatesChangedEvent>().SingleOrDefault().Should().Not.Be.Null();
 		}
 
 		[Test]
@@ -54,10 +96,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		{
 			var targetDate = new DateTime(2000, 01, 05);
 			WithAnalyticsUnitOfWork.Get(() => Target.Date(targetDate));
+			_fakeEventPublisher.Clear();
 
 			var date = WithAnalyticsUnitOfWork.Get(() => Target.MaxDate());
 			date.DateDate.Date.Should().Be.EqualTo(targetDate.Date);
 			date.DateId.Should().Be.EqualTo(6);
+
+			_fakeEventPublisher.PublishedEvents.Should().Be.Empty();
 		}
 
 		[Test]
@@ -65,10 +110,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		{
 			var targetDate = new DateTime(2000, 01, 05);
 			WithAnalyticsUnitOfWork.Get(() => Target.Date(targetDate));
+			_fakeEventPublisher.Clear();
 
 			var date = WithAnalyticsUnitOfWork.Get(() => Target.MinDate());
 			date.DateDate.Should().Be.EqualTo(new DateTime(1999, 12, 31));
 			date.DateId.Should().Be.EqualTo(1);
+
+			_fakeEventPublisher.PublishedEvents.Should().Be.Empty();
 		}
 	}
 }

@@ -18,8 +18,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 
 		public bool MapDateId(DateOnly date, out int dateId)
 		{
-			var datePair = _analyticsDateRepository.Date(date.Date) ?? new AnalyticsDate();
 			var noDateIdFound = new AnalyticsDate();
+			var datePair = _analyticsDateRepository.Date(date.Date) ?? noDateIdFound;
 			if (datePair.DateDate == noDateIdFound.DateDate)
 			{
 				dateId = -1;

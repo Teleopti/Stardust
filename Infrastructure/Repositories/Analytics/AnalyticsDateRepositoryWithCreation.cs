@@ -1,6 +1,8 @@
 using System;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Analytics;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -12,14 +14,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 	
 	public class AnalyticsDateRepositoryWithCreation : AnalyticsDateRepositoryBase, IAnalyticsDateRepository
 	{
-		private class DimDateCreationLock
-		{
-			
-		}
 		private readonly IDistributedLockAcquirer _distributedLockAcquirer;
-		public AnalyticsDateRepositoryWithCreation(ICurrentAnalyticsUnitOfWork analyticsUnitOfWork, IDistributedLockAcquirer distributedLockAcquirer) : base(analyticsUnitOfWork)
+		private readonly IEventPublisher _eventPublisher;
+
+		public AnalyticsDateRepositoryWithCreation(ICurrentAnalyticsUnitOfWork analyticsUnitOfWork, IDistributedLockAcquirer distributedLockAcquirer, IEventPublisher eventPublisher) : base(analyticsUnitOfWork)
 		{
 			_distributedLockAcquirer = distributedLockAcquirer;
+			_eventPublisher = eventPublisher;
 		}
 
 		public new IAnalyticsDate MaxDate()
@@ -37,14 +38,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			var date = base.Date(dateDate);
 			if (date == null)
 			{
-				using (_distributedLockAcquirer.LockForTypeOf(new DimDateCreationLock()))
+				using (_distributedLockAcquirer.LockForTypeOf(new dimDateCreationLock()))
 				{
 					// Check again to see that we don't have the date
 					date = base.Date(dateDate);
 					if (date != null) return date;
 					var currentMax = MaxDate() ?? new AnalyticsDate { DateDate = new DateTime(1999, 12, 30) };
-					var currentDay = currentMax.DateDate + TimeSpan.FromDays(1);
-					while (currentDay <= dateDate)
+					var currentDay = currentMax.DateDate;
+					while ((currentDay += TimeSpan.FromDays(1)) <= dateDate)
 					{
 						AnalyticsUnitOfWork.Current().Session().CreateSQLQuery(@"
 					INSERT INTO [mart].[dim_date]
@@ -68,12 +69,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 							.SetParameter("quarter", currentDay.GetQuarter())
 							.SetParameter("insert_date", DateTime.UtcNow)
 							.ExecuteUpdate();
-						currentDay = currentDay + TimeSpan.FromDays(1);
 					}
 				}
+				_eventPublisher.Publish(new AnalyticsDatesChangedEvent());
 				return base.Date(dateDate);
 			}
 			return date;
+		}
+
+		private class dimDateCreationLock
+		{
+
 		}
 	}
 
