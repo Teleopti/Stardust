@@ -38,9 +38,11 @@ define([
 		http.get('HealthCheck/FixScheduleProjectionReadOnly').done(cb);
 	};
 
-	var checkAndFixReadModels = function(cb) {
-		http.get('HealthCheck/CheckAndFixReadModels', { start: new Date(vm.readModelCheckStartDate()).toISOString(), end: new Date(vm.readModelCheckEndDate()).toISOString() })
-			.done(cb);
+	var checkAndFixReadModels = function (cb) {
+		http.get('HealthCheck/ClearCheckReadModelResult').done(function () {
+			http.get('HealthCheck/CheckAndFixReadModels', { start: new Date(vm.readModelCheckStartDate()).toISOString(), end: new Date(vm.readModelCheckEndDate()).toISOString() })
+				.done(cb);
+		});
 	};
 
 	var reinitReadModels = function (cb) {
