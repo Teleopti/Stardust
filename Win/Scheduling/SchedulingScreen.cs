@@ -671,7 +671,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						break;
 				}
 				_scheduleView.Presenter.ClipHandlerSchedule.Clear();
-				RecalculateResources(true);
+				RecalculateResources(false);
 				RunActionWithDelay(updateShiftEditor, 50);
 			}
 		}
@@ -763,7 +763,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_backgroundWorkerRunning = true;
 			_undoRedo.Redo();
 			_backgroundWorkerRunning = false;
-			SelectAndRefresh();
+			undoRedoSelectAndRefresh();
 		}
 
 		private void undoKeyDown()
@@ -771,7 +771,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_backgroundWorkerRunning = true;
 			_undoRedo.Undo();
 			_backgroundWorkerRunning = false;
-			SelectAndRefresh();
+			undoRedoSelectAndRefresh();
 		}
 
 		private void toggleCalculation()
@@ -1809,7 +1809,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_backgroundWorkerRunning = true;
 			_scheduleView.GridClipboardPaste(options, _undoRedo);
 			_backgroundWorkerRunning = false;
-			RecalculateResources(true);
+			RecalculateResources(false);
 		}
 
 		#endregion
@@ -2067,7 +2067,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void _currentView_viewPasteCompleted(object sender, EventArgs e)
 		{
-			RecalculateResources(true);
+			RecalculateResources(false);
 			_grid.Invalidate();
 		}
 
@@ -2836,7 +2836,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				releaseUserInterface(e.Cancelled);
 
 			updateShiftEditor();
-			RecalculateResources(true);
+			RecalculateResources(false);
 		}
 
 		private bool shouldCancelBeforeStartingDeleteAction()
@@ -5866,7 +5866,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_backgroundWorkerRunning = true;
 			_undoRedo.Redo();
 			_backgroundWorkerRunning = false;
-			SelectAndRefresh();
+			undoRedoSelectAndRefresh();
 		}
 
 		private void toolStripSplitButtonQuickAccessUndo_ButtonClick(object sender, EventArgs e)
@@ -5874,7 +5874,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_backgroundWorkerRunning = true;
 			_undoRedo.Undo();
 			_backgroundWorkerRunning = false;
-			SelectAndRefresh();
+			undoRedoSelectAndRefresh();
 		}
 
 		private void toolStripMenuItemQuickAccessUndoAll_Click_1(object sender, EventArgs e)
@@ -5882,22 +5882,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_backgroundWorkerRunning = true;
 			_undoRedo.UndoAll();
 			_backgroundWorkerRunning = false;
-			SelectAndRefresh();
+			undoRedoSelectAndRefresh();
 		}
 
-		private void SelectAndRefresh()
+		private void undoRedoSelectAndRefresh()
 		{
 			if (_lastModifiedPart != null)
 			{
 				selectCellFromPersonDate(_lastModifiedPart.ModifiedPerson,
 					new DateOnly(_lastModifiedPart.ModifiedPeriod.StartDateTimeLocal(_schedulerState.TimeZoneInfo)));
 			}
-			refreshView();
-		}
 
-		private void refreshView()
-		{
-			RecalculateResources(true);
+			RecalculateResources(false);
 			if (_requestView != null)
 				updateShiftEditor();
 		}
