@@ -65,10 +65,30 @@
 		function showShiftDetail(oEvent, personFromId, personToId, scheduleDate) {
 			if (!vm.showRelevantInfo) return;
 			vm.personIds = [personFromId, personToId];
-			vm.shiftDetailLeft = oEvent.pageX - 5;
-			vm.shiftDetailTop = oEvent.pageY - 5;
-			if ((document.body.clientWidth - oEvent.pageX) < 710) vm.shiftDetailLeft = document.body.clientWidth - 710;
-			if ((document.body.clientHeight - oEvent.pageY) < 145) vm.shiftDetailTop = document.body.clientHeight - 145;
+			var normalLeftSidenavWidth = 240 + 10;
+			var miniLeftSidenavWidth = 40 + 10;
+			var shiftDetailTableWidth = 710;
+			var shiftDetailTableHeight = 145;
+			var aboveHeaderBarHeight = 160;
+			var clientWidth = document.body.clientWidth;
+			var clientHeight = document.body.clientHeight;
+
+			vm.shiftDetailTop = oEvent.pageY - aboveHeaderBarHeight;
+
+			if(document.querySelectorAll('.sidenav.is-hidden').length == 0){
+				vm.shiftDetailLeft = oEvent.pageX - normalLeftSidenavWidth - shiftDetailTableWidth/2;
+
+				if ((clientWidth - oEvent.pageX) < (shiftDetailTableWidth / 2))
+					vm.shiftDetailLeft = vm.shiftDetailLeft - (shiftDetailTableWidth / 2 - (clientWidth - oEvent.pageX));
+			}else{
+				vm.shiftDetailLeft = oEvent.pageX - miniLeftSidenavWidth - shiftDetailTableWidth/2;
+				if ((clientWidth - oEvent.pageX) < (shiftDetailTableWidth / 2))
+					vm.shiftDetailLeft = vm.shiftDetailLeft - (shiftDetailTableWidth / 2 - (clientWidth - oEvent.pageX));
+			}
+
+			if ((clientHeight - oEvent.pageY) < shiftDetailTableHeight) 
+				vm.shiftDetailTop = vm.shiftDetailTop - (shiftDetailTableHeight / 2 - (clientHeight - oEvent.pageY));
+
 			updateShiftStatusForSelectedPerson(moment(scheduleDate));
 		}
 
@@ -81,7 +101,7 @@
 			return {
 				top: vm.shiftDetailTop + 'px',
 				left: vm.shiftDetailLeft + 'px',
-				position: 'fixed'
+				position: 'absolute'
 			};
 		}
 
