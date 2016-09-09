@@ -2,8 +2,13 @@
 using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.WorkflowControl
@@ -169,5 +174,44 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			Assert.IsTrue(expect.Equals(result.ValidationErrors));
 	    }
 
-	}
+	    [Test]
+		public void ShouldGetWaitlistedInvalidReason()
+	    {
+		    var absence = new Absence().WithId();
+			var person = PersonFactory.CreatePersonWithId();
+			person.WorkflowControlSet = WorkflowControlSetFactory.CreateWorkFlowControlSet(absence, new GrantAbsenceRequest(),
+				true);
+			var period = new DateTimePeriod(2016, 9, 9, 9, 2016, 9, 9, 17);
+			var absenceRequest = new AbsenceRequest(absence, period);
+			var personRequest = new PersonRequest(person, absenceRequest);
+
+			var schedulingResultStateHolder = new SchedulingResultStateHolder();
+			var scenario = ScenarioFactory.CreateScenarioWithId("default", true);
+			var absenceLayer = new AbsenceLayer(absence, period);
+			var personAbsence = new PersonAbsence(person, scenario, absenceLayer).WithId();
+
+		    var scheduleDictionary = new ScheduleDictionaryForTest(scenario, period);
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
+				scenario,
+				person,
+				period);
+			scheduleDictionary.AddPersonAssignment(assignment);
+		    scheduleDictionary.AddPersonAbsence(personAbsence);
+			schedulingResultStateHolder.Schedules = scheduleDictionary;
+
+			var accountDay = AbsenceAccountFactory.CreateAbsenceAccountDays(person, absence, new DateOnly(2016, 1, 1),
+				TimeSpan.Zero, TimeSpan.Zero, TimeSpan.Zero, TimeSpan.Zero, TimeSpan.Zero, TimeSpan.Zero);
+			var personAccountBalanceCalculator = new PersonAccountBalanceCalculator(new[] {accountDay});
+			var requiredForHandlingAbsenceRequest = new RequiredForHandlingAbsenceRequest(schedulingResultStateHolder,
+				personAccountBalanceCalculator, null, null);
+
+			var result = _target.Validate(absenceRequest, requiredForHandlingAbsenceRequest);
+
+			Assert.IsTrue(_target.InvalidReason.Equals("RequestWaitlistedReasonPersonAccount"));
+			Assert.IsFalse(result.IsValid);
+
+			var errorMessage = Resources.RequestWaitlistedReasonPersonAccount;
+			Assert.IsTrue(result.ValidationErrors.Equals(errorMessage));
+		}
+}
 }

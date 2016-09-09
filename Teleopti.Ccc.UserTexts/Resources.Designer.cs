@@ -23595,6 +23595,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You don&apos;t have enough time left in your personal account balance..
+        /// </summary>
+        public static string RequestWaitlistedReasonPersonAccount {
+            get {
+                return ResourceManager.GetString("RequestWaitlistedReasonPersonAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Required.
         /// </summary>
         public static string Required {

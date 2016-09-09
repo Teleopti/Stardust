@@ -2,58 +2,79 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
 {
-    public class PersonAccountBalanceValidator : IAbsenceRequestValidator
-    {
-        public IBudgetGroupHeadCountSpecification BudgetGroupHeadCountSpecification { get; set; }
-        public string InvalidReason
-        {
-            get { return "RequestDenyReasonPersonAccount"; }
-        }
+	public class PersonAccountBalanceValidator : IAbsenceRequestValidator
+	{
+		private string _invalidReason = "RequestDenyReasonPersonAccount";
 
-        public string DisplayText
-        {
-            get { return UserTexts.Resources.Yes; }
-        }
+		public IBudgetGroupHeadCountSpecification BudgetGroupHeadCountSpecification { get; set; }
 
-        public IValidatedRequest Validate(IAbsenceRequest absenceRequest, RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest)
-        {
-            InParameter.NotNull("SchedulingResultStateHolder", requiredForHandlingAbsenceRequest.SchedulingResultStateHolder);
-            InParameter.NotNull("PersonAccountBalanceCalculator", requiredForHandlingAbsenceRequest.PersonAccountBalanceCalculator);
+		public string InvalidReason
+		{
+			get { return _invalidReason; }
+		}
 
-            var person = absenceRequest.Person;
+		public string DisplayText
+		{
+			get { return UserTexts.Resources.Yes; }
+		}
 
-            var validatedRequest = new ValidatedRequest();
-            validatedRequest.IsValid =
-                requiredForHandlingAbsenceRequest.PersonAccountBalanceCalculator.CheckBalance(
-                    requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.Schedules[person],
-                    absenceRequest.Period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()));
+		public IValidatedRequest Validate(IAbsenceRequest absenceRequest,
+			RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest)
+		{
+			InParameter.NotNull("SchedulingResultStateHolder", requiredForHandlingAbsenceRequest.SchedulingResultStateHolder);
+			InParameter.NotNull("PersonAccountBalanceCalculator",
+				requiredForHandlingAbsenceRequest.PersonAccountBalanceCalculator);
 
-            if (!validatedRequest.IsValid)
-                validatedRequest.ValidationErrors =
-                    UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonPersonAccount",
-                                                                  person.PermissionInformation.UICulture());
-            return validatedRequest;
-        }
+			var person = absenceRequest.Person;
 
-        public IAbsenceRequestValidator CreateInstance()
-        {
-            return new PersonAccountBalanceValidator();
-        }
+			var validatedRequest = new ValidatedRequest();
+			validatedRequest.IsValid =
+				requiredForHandlingAbsenceRequest.PersonAccountBalanceCalculator.CheckBalance(
+					requiredForHandlingAbsenceRequest.SchedulingResultStateHolder.Schedules[person],
+					absenceRequest.Period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()));
 
-        public override bool Equals(object obj)
-        {
-            var validator = obj as PersonAccountBalanceValidator;
-            return validator != null;
-        }
+			if (!validatedRequest.IsValid)
+			{
+				if (waitlistingIsEnabled(absenceRequest))
+					_invalidReason = "RequestWaitlistedReasonPersonAccount";
+				validatedRequest.ValidationErrors =
+					UserTexts.Resources.ResourceManager.GetString(_invalidReason,
+						person.PermissionInformation.UICulture());
+			}
+			return validatedRequest;
+		}
 
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int result = (GetType().GetHashCode());
-                result = (result * 397) ^ (BudgetGroupHeadCountSpecification != null ? BudgetGroupHeadCountSpecification.GetHashCode() : 0);
-                return result;
-            }
-        }
-    }
+		public IAbsenceRequestValidator CreateInstance()
+		{
+			return new PersonAccountBalanceValidator();
+		}
+
+		public override bool Equals(object obj)
+		{
+			var validator = obj as PersonAccountBalanceValidator;
+			return validator != null;
+		}
+
+		public override int GetHashCode()
+		{
+			unchecked
+			{
+				int result = (GetType().GetHashCode());
+				result = (result*397) ^
+						 (BudgetGroupHeadCountSpecification != null ? BudgetGroupHeadCountSpecification.GetHashCode() : 0);
+				return result;
+			}
+		}
+
+		private static bool waitlistingIsEnabled(IAbsenceRequest absenceRequest)
+		{
+			var person = absenceRequest.Person;
+			var workflowControlSet = person.WorkflowControlSet;
+			if (workflowControlSet != null && workflowControlSet.WaitlistingIsEnabled(absenceRequest))
+			{
+				return true;
+			}
+			return false;
+		}
+	}
 }

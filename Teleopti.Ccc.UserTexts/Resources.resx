@@ -8268,6 +8268,10 @@ Period</value>
     <value>Your absence request has been denied automatically. You don't have enough time left in your personal account balance.</value>
     <comment>Your Absence Request has been denied due to Personal Account Check.</comment>
   </data>
+  <data name="RequestWaitlistedReasonPersonAccount" xml:space="preserve">
+    <value>You don't have enough time left in your personal account balance.</value>
+    <comment>Your Absence Request has been waitlisted due to Personal Account Check.</comment>
+  </data>
   <data name="RequestDenyReasonSkillThreshold" xml:space="preserve">
     <value>Your absence request has been denied automatically, since it would bring the needed number of resources below the required threshold.</value>
     <comment>Your Absence Request has been denied due to the need of skill resource hours.</comment>
