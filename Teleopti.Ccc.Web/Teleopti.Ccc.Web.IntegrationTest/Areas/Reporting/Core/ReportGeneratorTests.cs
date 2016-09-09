@@ -12,7 +12,7 @@ using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Ccc.Web.Areas.Reporting.Core;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
+namespace Teleopti.Ccc.Web.IntegrationTest.Areas.Reporting.Core
 {
 	[TestFixture]
 	[Category("LongRunning")]

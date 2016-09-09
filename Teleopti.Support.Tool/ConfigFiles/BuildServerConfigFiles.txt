@@ -1,4 +1,5 @@
 ..\..\..\Teleopti.Analytics\Teleopti.Analytics.Etl.IntegrationTest\App.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
+..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.Web.IntegrationTest\App.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
 ..\..\..\InfrastructureTest\App.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
 ..\..\..\Teleopti.Ccc.ApplicationConfigTest\App.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
 ..\..\..\Teleopti.Wfm.AdministrationTest\App.config,BuildArtifacts\Teleopti.Ccc.TestCommon.App.config
