@@ -103,7 +103,7 @@
 				addTabindexTo(
 					tElement[0].querySelectorAll('md-select.absence-selector'),
 					tElement[0].querySelectorAll('team-schedule-datepicker'),
-					tElement[0].querySelectorAll('uib-timepicker'),
+					tElement[0].querySelectorAll('[uib-timepicker]'),
 					tElement[0].querySelectorAll('input#is-full-day'),
 					tElement[0].querySelectorAll('button#applyAbsence')
 				);

@@ -130,7 +130,7 @@
 					});
 				}
 				addTabindexTo(
-					tElement[0].querySelectorAll('uib-timepicker'),
+					tElement[0].querySelectorAll('[uib-timepicker]'),
 					tElement[0].querySelectorAll('input[type=checkbox]#mvActNextDay'),
 					tElement[0].querySelectorAll('button#applyMoveActivity')
 				);
