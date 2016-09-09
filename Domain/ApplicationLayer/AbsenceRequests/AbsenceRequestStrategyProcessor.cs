@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -26,26 +28,28 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 											int windowSize)
 		{
 			var allRequestsRaw = _queuedAbsenceRequestRepo.LoadAll();
-			var allRequests = new List<IQueuedAbsenceRequest>();
-			allRequests.AddRange(allRequestsRaw.Where(x => (x.EndDateTime.Subtract(x.StartDateTime)).Days <= 60 && x.Sent == null));
-		
-			if (allRequests.Any())
+			var allNewRequests = new List<IQueuedAbsenceRequest>();
+			allNewRequests.AddRange(allRequestsRaw.Where(x => (x.EndDateTime.Subtract(x.StartDateTime)).Days <= 60 && x.Sent == null));
+			var processingPeriods = getProcessingPeriods(allRequestsRaw.Where(x => x.Sent != null));
+			var notConflictingRequests = getNotConflictingRequests(allNewRequests, processingPeriods);
+
+			if (notConflictingRequests.Any())
 			{
-				var futureRequests = getFutureRequests(allRequests, nearFuturePeriod);
+				var futureRequests = getFutureRequests(notConflictingRequests, nearFuturePeriod);
 				var nearFutureRequestIds = getNearFutureRequestIds(nearFutureTimeStampInterval, nearFuturePeriod, futureRequests);
 
 				if (nearFutureRequestIds.Any())
 					return nearFutureRequestIds;
 
 
-				var farFutureRequests = getFarFutureRequests(allRequests, nearFuturePeriod);
+				var farFutureRequests = getFarFutureRequests(notConflictingRequests, nearFuturePeriod);
 				var farFutureRequestIds = getFarFutureRequestIds(farFutureTimeStampInterval, nearFuturePeriod, farFutureRequests,
 																 windowSize);
 				if (farFutureRequestIds.Any())
 					return farFutureRequestIds;
 
 
-				var pastRequests = getPastRequests(allRequests, nearFuturePeriod);
+				var pastRequests = getPastRequests(notConflictingRequests, nearFuturePeriod);
 				var pastRequestIds = getPastRequestIds(nearFuturePeriod, pastRequests, windowSize);
 				return pastRequestIds;
 
@@ -54,6 +58,52 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			return new List<IEnumerable<Guid>>();
 		}
 
+		private static List<IQueuedAbsenceRequest> getNotConflictingRequests(List<IQueuedAbsenceRequest> allNewRequests, List<DateTimePeriod> processingPeriods)
+		{
+			return allNewRequests.Where(request => !IsInPeriod(processingPeriods, request)).ToList();
+		}
+
+		private static bool IsInPeriod(List<DateTimePeriod> processingPeriods, IQueuedAbsenceRequest request)
+		{
+			foreach (var period in processingPeriods)
+			{
+				if(period.ContainsPart(new DateTimePeriod(request.StartDateTime, request.EndDateTime)))
+					return true;
+			}
+			return false;
+		}
+
+		private List<DateTimePeriod> getProcessingPeriods(IEnumerable<IQueuedAbsenceRequest> processingRequests)
+		{
+			var groupedRequests = new ConcurrentDictionary<DateTime, List<IQueuedAbsenceRequest>>();
+			foreach (var request in processingRequests)
+			{
+				groupedRequests.AddOrUpdate(request.Sent.GetValueOrDefault(), new List<IQueuedAbsenceRequest>() {request}, (key, oldValue) =>
+				{
+					oldValue.Add(request);
+					return oldValue;
+				});
+			}
+
+			var periods = new List<DateTimePeriod>();
+			foreach (var timeStamp in groupedRequests.Keys)
+			{
+				var min = DateTime.MaxValue.Utc();
+				var max = DateTime.MinValue.Utc();
+				
+				var requestsWithSameTimeStamp = groupedRequests[timeStamp];
+				foreach (var request in requestsWithSameTimeStamp)
+				{
+					if (request.StartDateTime < min)
+						min = request.StartDateTime;
+					if (request.EndDateTime > max)
+						max = request.EndDateTime;
+				}
+				if(min < max)
+					periods.Add(new DateTimePeriod(min, max));
+			}
+			return periods;
+		}
 
 
 		private IList<IQueuedAbsenceRequest> getPastRequests(IEnumerable<IQueuedAbsenceRequest> allRequests, DateTimePeriod nearFuturePeriod)

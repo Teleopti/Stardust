@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 							PersonRequestIds = absenceRequests.ToList()
 						};
 						_publisher.Publish(multiAbsenceRequestsEvent);
-					_queuedAbsenceRequestRepository.Send(absenceRequests.ToList(), now);
+					_queuedAbsenceRequestRepository.Send(absenceRequests.ToList(), DateTime.UtcNow);
 					});
 
 					uow.PersistAll();

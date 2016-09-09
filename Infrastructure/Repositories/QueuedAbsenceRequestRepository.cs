@@ -31,12 +31,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.List<IQueuedAbsenceRequest>();
 		}
 
-		public void Send(List<Guid> requestIds, DateTime timeStamp)
+		public void Send(List<Guid> requestId, DateTime timeStamp)
 		{
 			var quesryString = "UPDATE[QueuedAbsenceRequest] SET Sent = :timestamp WHERE PersonRequest in (:ids)";
 			var sqlQuery = Session.CreateSQLQuery(quesryString);
 			sqlQuery.SetDateTime("timestamp", timeStamp);
-			sqlQuery.SetParameterList("ids", requestIds);
+			sqlQuery.SetParameterList("ids", requestId);
 			sqlQuery.ExecuteUpdate();
 		}
 

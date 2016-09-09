@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 2, 23, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016,03,1,9,58,0, DateTimeKind.Utc),
+				Created = new DateTime(2016, 03, 1, 9, 58, 0, DateTimeKind.Utc),
 				PersonRequest = Guid.NewGuid()
 			});
 
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				PersonRequest = Guid.NewGuid()
 			});
 
-			
+
 			var absenceRequests = Target.Get(_nearFutureInterval, _farFutureInterval, _nearFuturePeriod, _windowSize);
 			absenceRequests.First().Count().Should().Be.EqualTo(2);
 		}
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				PersonRequest = Guid.NewGuid()
 			});
 
-			var absenceRequests = Target.Get(_nearFutureInterval,_farFutureInterval , _nearFuturePeriod, _windowSize);
+			var absenceRequests = Target.Get(_nearFutureInterval, _farFutureInterval, _nearFuturePeriod, _windowSize);
 			absenceRequests.First().Count().Should().Be.EqualTo(2);
 		}
 
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				PersonRequest = nearFutureReqId
 			});
 
-		  
+
 			var absenceRequests = Target.Get(_nearFutureInterval, _farFutureInterval, _nearFuturePeriod, _windowSize);
 			absenceRequests.Count().Should().Be.EqualTo(1);
 			absenceRequests.First().First().Should().Be.EqualTo(nearFutureReqId);
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
 				StartDateTime = new DateTime(2016, 3, 7, 0, 0, 0, DateTimeKind.Utc),
-				EndDateTime = new DateTime(2016, 3,8, 23, 59, 00, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 3, 8, 23, 59, 00, DateTimeKind.Utc),
 				Created = new DateTime(2016, 03, 1, 9, 58, 0, DateTimeKind.Utc),
 				PersonRequest = Guid.NewGuid()
 			});
@@ -380,7 +380,66 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			absenceRequests.First().Count().Should().Be.EqualTo(1);
 			absenceRequests.First().First().Should().Be.EqualTo(yesterdayId);
 		}
+
+		[Test]
+		public void ShouldNotSendRequestInProcessingPeriod()
+		{
+			var id = Guid.NewGuid();
+			//var now = new DateTime(2016, 03, 01, 10, 0, 0, DateTimeKind.Utc);
+
+			var timeStamp1 = new DateTime(2016, 03, 01, 9, 50, 0, DateTimeKind.Utc); // 10 min before now
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2016, 3, 5, 8, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 3, 5, 19, 59, 00, DateTimeKind.Utc),
+				Created = new DateTime(2016, 03, 1, 9, 38, 0, DateTimeKind.Utc),
+				PersonRequest = Guid.NewGuid(),
+				Sent =  timeStamp1
+			});
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2016, 3, 6, 8, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 3, 6, 19, 59, 00, DateTimeKind.Utc),
+				Created = new DateTime(2016, 03, 1, 9, 38, 0, DateTimeKind.Utc),
+				PersonRequest = Guid.NewGuid(),
+				Sent = timeStamp1
+			});
+
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2016, 3, 9, 8, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 3, 9, 19, 59, 00, DateTimeKind.Utc),
+				Created = new DateTime(2016, 03, 1, 9, 38, 0, DateTimeKind.Utc),
+				PersonRequest = Guid.NewGuid(),
+				Sent = new DateTime(2016, 03, 01, 9, 52, 0, DateTimeKind.Utc)
+			});
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2016, 3, 6, 15, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 3, 7, 19, 59, 00, DateTimeKind.Utc),
+				Created = new DateTime(2016, 03, 1, 9, 38, 0, DateTimeKind.Utc),
+				PersonRequest = Guid.NewGuid()
+			});
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2016, 3, 8, 8, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 3, 8, 19, 59, 00, DateTimeKind.Utc),
+				Created = new DateTime(2016, 03, 1, 9, 38, 0, DateTimeKind.Utc),
+				PersonRequest = id
+			});
+
+			var absenceRequests = Target.Get(_nearFutureInterval, _farFutureInterval, _nearFuturePeriod, _windowSize);
+			absenceRequests.Count().Should().Be.EqualTo(1);
+			absenceRequests.First().Count().Should().Be.EqualTo(1);
+			absenceRequests.First().First().Should().Be.EqualTo(id);
+
+		}
 	}
 
-	
+
 }
