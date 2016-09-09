@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			IsMandatory = true;
 			HaltModify = true;
 			ForDelete = true;
+			FriendlyName = Resources.NotAllowedMoveOfAssignmentToOtherDate;
 		}
 
 		public string ErrorMessage { get; private set; }
@@ -37,11 +38,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 					if (!dateOnlyAsDatePeriod.Contains(assignmentPeriod.StartDateTime))
 					{
 						ret.Add(new BusinessRuleResponse(typeof(DataPartOfAgentDay), Resources.NotAllowedMoveOfAssignmentToOtherDate, true, true, assignmentPeriod,
-																						 scheduleDay.Person, dateOnlyPeriod));
+																						 scheduleDay.Person, dateOnlyPeriod, FriendlyName));
 					}
 				}
 			}
 			return ret;
 		}
+
+		public string FriendlyName { get; }
 	}
 }

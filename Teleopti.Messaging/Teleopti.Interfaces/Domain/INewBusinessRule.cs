@@ -41,6 +41,7 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="scheduleDays">The schedule days.</param>
         /// <returns></returns>
         IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays);
-        
-    }
+
+		string FriendlyName { get; }
+	}
 }

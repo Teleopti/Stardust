@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Rules
@@ -14,6 +15,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
         public NewMaxWeekWorkTimeRule(IWeeksFromScheduleDaysExtractor weeksFromScheduleDaysExtractor)
         {
             _weeksFromScheduleDaysExtractor = weeksFromScheduleDaysExtractor;
+	        FriendlyName = Resources.BusinessRuleMaxWeekWorkTimeFriendlyName;
+
         }
         public string ErrorMessage
         {
@@ -89,7 +92,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return responseList;
         }
 
-        private static bool setMaxTimePerWeekMinutes(out double maxTimePerWeek, PersonWeek personWeek)
+	    public string FriendlyName { get; }
+
+	    private static bool setMaxTimePerWeekMinutes(out double maxTimePerWeek, PersonWeek personWeek)
         {
             var person = personWeek.Person;
             var max = double.MinValue;
@@ -130,7 +135,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
         {
             var dop = new DateOnlyPeriod(dateOnly, dateOnly);
             DateTimePeriod period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-            IBusinessRuleResponse response = new BusinessRuleResponse(type, message, _haltModify, IsMandatory, period, person, dop)
+            IBusinessRuleResponse response = new BusinessRuleResponse(type, message, _haltModify, IsMandatory, period, person, dop, FriendlyName)
                                                  {Overridden = !_haltModify};
             return response;
         }

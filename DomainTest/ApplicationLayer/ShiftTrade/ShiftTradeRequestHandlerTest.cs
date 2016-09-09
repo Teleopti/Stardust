@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var statusChecker = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();
 			var shiftTradeRequest = (IShiftTradeRequest) personRequest.Request;
 			var ruleResponse = new BusinessRuleResponse(typeof (NewPersonAccountRule), "no go", false, false,
-				new DateTimePeriod(), PersonFactory.CreatePersonWithId(), new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
+				new DateTimePeriod(), PersonFactory.CreatePersonWithId(), new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), "tjillevippen");
 			var rules = new List<IBusinessRuleResponse> {ruleResponse};
 			((FakeNewBusinessRuleCollection) newBusinessRuleCollection).SetRuleResponse(rules);
 			newBusinessRuleCollection.Add(new NewPersonAccountRule(null, null));
@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker(schedulingResultState)).Return(statusChecker);
 			scheduleDictionarySaver.Stub(x => x.SaveChanges(null, null)).IgnoreArguments().Throw(new ValidationException());
 			var ruleResponse = new BusinessRuleResponse(typeof (NewPersonAccountRule), "no go", false, false,
-				new DateTimePeriod(), PersonFactory.CreatePersonWithId(), new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
+				new DateTimePeriod(), PersonFactory.CreatePersonWithId(), new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), "tjillevippen");
 			var rules = new List<IBusinessRuleResponse> {ruleResponse};
 			((FakeNewBusinessRuleCollection) newBusinessRuleCollection).SetRuleResponse(rules);
 			newBusinessRuleCollection.Add(new NewPersonAccountRule(null, null));
@@ -318,10 +318,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker(schedulingResultState)).Return(statusChecker);
 			var ruleResponse1 = new BusinessRuleResponse(typeof (NewMaxWeekWorkTimeRule), "no go", false, false,
 				new DateTimePeriod(), PersonFactory.CreatePersonWithId(),
-				new DateOnlyPeriod(new DateOnly(2008, 12, 22), new DateOnly(2008, 12, 25)));
+				new DateOnlyPeriod(new DateOnly(2008, 12, 22), new DateOnly(2008, 12, 25)), "tjillevippen");
 			var ruleResponse2 = new BusinessRuleResponse(typeof (NewShiftCategoryLimitationRule), "no go", false, false,
 				new DateTimePeriod(), PersonFactory.CreatePersonWithId(),
-				new DateOnlyPeriod(new DateOnly(2008, 12, 22), new DateOnly(2008, 12, 25)));
+				new DateOnlyPeriod(new DateOnly(2008, 12, 22), new DateOnly(2008, 12, 25)), "tjillevippen");
 			var rules = new List<IBusinessRuleResponse> {ruleResponse1, ruleResponse2};
 			((FakeNewBusinessRuleCollection) newBusinessRuleCollection).SetRuleResponse(rules);
 			newBusinessRuleCollection.Add(new NewPersonAccountRule(null, null));

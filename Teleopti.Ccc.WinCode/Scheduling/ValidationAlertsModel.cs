@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 						PersonName = businessRuleResponse.Person.Name.ToString(_nameOrderOption),
 						Person = businessRuleResponse.Person,
 						Alert = businessRuleResponse.Message,
-						TypeName = "xx" + businessRuleResponse.TypeOfRule
+						TypeName = businessRuleResponse.FriendlyName
 					});
 				}
 			}

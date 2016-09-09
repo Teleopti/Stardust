@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Rules
@@ -11,12 +13,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
         private readonly IDictionary<IPerson, IPersonAccountCollection> _allAccounts;
         private bool _haltModify = true;
         private bool _forDelete;
-		private static readonly object _modifiedAccountLock = new object();
+		private static readonly object modifiedAccountLock = new object();
 
         public NewPersonAccountRule(ISchedulingResultStateHolder schedulingResultStateHolder, IDictionary<IPerson, IPersonAccountCollection> allAccounts)
         {
             _schedulingResultStateHolder = schedulingResultStateHolder;
             _allAccounts = allAccounts;
+	        FriendlyName = Resources.BusinessRulePersonAccountFriendlyName;
         }
 
         public string ErrorMessage
@@ -51,14 +54,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                 return responseList;
             }
 
-            foreach (var rangeCloneValueKey in rangeClones)
+	        var enumerable = scheduleDays as IScheduleDay[] ?? scheduleDays.ToArray();
+	        foreach (var rangeCloneValueKey in rangeClones)
             {
                 IPersonAccountCollection myAccounts;
                 if (!_allAccounts.TryGetValue(rangeCloneValueKey.Key, out myAccounts))
                     continue;
 
                 var affectedAccounts = new HashSet<IAccount>();
-                foreach (var scheduleDay in scheduleDays)
+                foreach (var scheduleDay in enumerable)
                 {
                     if(scheduleDay.Person == rangeCloneValueKey.Key)
                     {
@@ -87,7 +91,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 					if (lastRemaining != affectedAccount.Remaining)
 					{
 						//Tell someone this account is dirty
-						lock (_modifiedAccountLock)
+						lock (modifiedAccountLock)
 							_schedulingResultStateHolder.Schedules.ModifiedPersonAccounts.Add((IPersonAbsenceAccount) affectedAccount.Root());
 					}
 
@@ -101,7 +105,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                         foreach (var scheduleDay in scheduleDaysForAccount)
                         {
                             string message = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
-                                                    UserTexts.Resources.BusinessRulePersonAccountError1,
+                                                    Resources.BusinessRulePersonAccountError1,
                                                     affectedAccount.Owner.Absence.Description.Name, affectedAccount.Period().StartDate.ToShortDateString());
 
                             if (!ForDelete)
@@ -120,7 +124,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return responseList;
         }
 
-        private bool otherScenarioThanDefault()
+	    public string FriendlyName { get; }
+
+	    private bool otherScenarioThanDefault()
         {
             return !_schedulingResultStateHolder.Schedules.Scenario.DefaultScenario;
         }
@@ -128,7 +134,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
         private IBusinessRuleResponse createResponse(IPerson person, IDateOnlyAsDateTimePeriod dateOnly, string message, Type type)
         {
             var dop = new DateOnlyPeriod(dateOnly.DateOnly, dateOnly.DateOnly);
-            IBusinessRuleResponse response = new BusinessRuleResponse(type, message, _haltModify, IsMandatory, dateOnly.Period(), person, dop) { Overridden = !_haltModify };
+            IBusinessRuleResponse response = new BusinessRuleResponse(type, message, _haltModify, IsMandatory, dateOnly.Period(), person, dop, FriendlyName) { Overridden = !_haltModify };
             return response;
         }
     }

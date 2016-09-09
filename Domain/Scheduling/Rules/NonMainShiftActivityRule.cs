@@ -55,6 +55,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return ret;
 		}
 
+		public string FriendlyName
+		{
+			get { return "xxHasNonMainShiftActivityFriendlyName"; }
+		}
+
 		private bool isPersonalActivityOverSchedule(IScheduleDay currentSchedule)
 		{
 			var shiftLayers = (List<IShiftLayer>)currentSchedule.PersonAssignment().ShiftLayers;
@@ -101,7 +106,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		{
 			var dop = new DateOnlyPeriod(dateOnly, dateOnly);
 			DateTimePeriod period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-			IBusinessRuleResponse response = new BusinessRuleResponse(type, message, _haltModify, IsMandatory, period, person, dop) { Overridden = !_haltModify };
+			IBusinessRuleResponse response = new BusinessRuleResponse(type, message, _haltModify, IsMandatory, period, person, dop, FriendlyName) { Overridden = !_haltModify };
 			return response;
 		}
 	}

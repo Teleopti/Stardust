@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void BusinessRuleResponseContainsTheFirstOnly()
 		{
 			_businessRuleResponse =
-				new BusinessRuleResponse(typeof(NewNightlyRestRule), "", true, true, new DateTimePeriod(), _person, new DateOnlyPeriod(_dateFrom1, _dateNotContained));
+				new BusinessRuleResponse(typeof(NewNightlyRestRule), "", true, true, new DateTimePeriod(), _person, new DateOnlyPeriod(_dateFrom1, _dateNotContained), "tjillevippen");
 			Assert.IsTrue(_target.IsSatisfiedBy(_businessRuleResponse));
 		}
 
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void BusinessRuleResponseContainsTheSecondOnly()
 		{
 			_businessRuleResponse =
-				new BusinessRuleResponse(typeof(NewNightlyRestRule), "", true, true, new DateTimePeriod(), _person, new DateOnlyPeriod(_dateNotContained, _dateTo2));
+				new BusinessRuleResponse(typeof(NewNightlyRestRule), "", true, true, new DateTimePeriod(), _person, new DateOnlyPeriod(_dateNotContained, _dateTo2), "tjillevippen");
 			Assert.IsTrue(_target.IsSatisfiedBy(_businessRuleResponse));
 		}
 
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void BusinessRuleResponseNotContains()
 		{
 			_businessRuleResponse =
-				new BusinessRuleResponse(typeof(NewNightlyRestRule), "", true, true, new DateTimePeriod(), _person, new DateOnlyPeriod(_dateNotContained, _dateNotContained));
+				new BusinessRuleResponse(typeof(NewNightlyRestRule), "", true, true, new DateTimePeriod(), _person, new DateOnlyPeriod(_dateNotContained, _dateNotContained), "tjillevippen");
 			Assert.IsFalse(_target.IsSatisfiedBy(_businessRuleResponse));
 		}
 
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void BusinessRuleResponseContainsBoth()
 		{
 			_businessRuleResponse =
-				new BusinessRuleResponse(typeof(NewNightlyRestRule), "", true, true, new DateTimePeriod(), _person, new DateOnlyPeriod(_dateFrom1, _dateTo2));
+				new BusinessRuleResponse(typeof(NewNightlyRestRule), "", true, true, new DateTimePeriod(), _person, new DateOnlyPeriod(_dateFrom1, _dateTo2), "tjillevippen");
 			Assert.IsTrue(_target.IsSatisfiedBy(_businessRuleResponse));
 		}
 	}

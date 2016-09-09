@@ -88,5 +88,7 @@ namespace Teleopti.Interfaces.Domain
         ///  Created date: 2009-08-31    
         /// /// </remarks>
         IPerson Person { get; }
+
+		string FriendlyName { get; }
     }
 }

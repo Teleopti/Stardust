@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Rules
@@ -18,6 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		{
 			_weeksFromScheduleDaysExtractor = weeksFromScheduleDaysExtractor;
 			_personWeekViolatingWeeklyRestSpecification = personWeekViolatingWeeklyRestSpecification;
+			FriendlyName = string.Empty;
 		}
 
 		public string ErrorMessage
@@ -56,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				var oldResponses = currentSchedules.BusinessRuleResponseInternalCollection;
 				foreach (DateOnly day in personWeek.Week.DayCollection())
 				{
-					oldResponses.Remove(createResponse(person, day, "remove", typeof (MinWeeklyRestRule)));
+					oldResponses.Remove(createResponse(person, day, "remove", typeof (MinWeeklyRestRule), Resources.BusinessRuleNoContractErrorMessage));
 				}
 
 				TimeSpan weeklyRest;
@@ -66,10 +68,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 					foreach (DateOnly dateOnly in personWeek.Week.DayCollection())
 					{
 						string message = string.Format(CultureInfo.CurrentCulture,
-							UserTexts.Resources.BusinessRuleNoContractErrorMessage, person.Name,
+							Resources.BusinessRuleNoContractErrorMessage, person.Name,
 							dateOnly.Date.ToShortDateString());
 						IBusinessRuleResponse response = createResponse(person, dateOnly, message,
-							typeof (MinWeeklyRestRule));
+							typeof (MinWeeklyRestRule), Resources.BusinessRuleNoContractErrorMessage);
 						if (!ForDelete)
 							responseList.Add(response);
 						oldResponses.Add(response);
@@ -81,11 +83,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 					{
 						string weeklyRestString = DateHelper.HourMinutesString(weeklyRest.TotalMinutes);
 						string message = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
-							UserTexts.Resources.BusinessRuleWeeklyRestErrorMessage, weeklyRestString);
+							Resources.BusinessRuleWeeklyRestErrorMessage, weeklyRestString);
 						foreach (DateOnly dateOnly in personWeek.Week.DayCollection())
 						{
 							IBusinessRuleResponse response = createResponse(person, dateOnly, message,
-								typeof (MinWeeklyRestRule));
+								typeof (MinWeeklyRestRule), Resources.BusinessRuleWeeklyRestFriendlyName);
 							responseList.Add(response);
 							oldResponses.Add(response);
 						}
@@ -96,6 +98,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 			return responseList;
 		}
+
+		public string FriendlyName { get; }
 
 		private static bool setWeeklyRest(out TimeSpan weeklyRest, PersonWeek personWeek)
 		{
@@ -112,12 +116,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return true;
 		}
 
-		private IBusinessRuleResponse createResponse(IPerson person, DateOnly dateOnly, string message, Type type)
+		private IBusinessRuleResponse createResponse(IPerson person, DateOnly dateOnly, string message, Type type, string friendlyName)
 		{
 			var dop = new DateOnlyPeriod(dateOnly, dateOnly);
 			DateTimePeriod period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
 			IBusinessRuleResponse response = new BusinessRuleResponse(type, message, _haltModify, IsMandatory, period, person,
-				dop)
+				dop, friendlyName)
 			{Overridden = !_haltModify};
 			return response;
 		}

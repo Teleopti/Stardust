@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			var swapList = new List<IScheduleDay> { _day1, _day2 };
 			IBusinessRuleResponse response = new BusinessRuleResponse(typeof (NewDayOffRule), "", true, false,
 			                                                          new DateTimePeriod(), person1,
-			                                                          new DateOnlyPeriod(2013, 12, 3, 2013, 12, 3));
+			                                                          new DateOnlyPeriod(2013, 12, 3, 2013, 12, 3), "tjillevippen");
 			using (_mocks.Record())
 			{
 				Expect.Call(_teamBlockInfo1.TeamInfo).Return(teamInfo1);

@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var dateOnly = new DateOnly(2000, 1, 1);
 
 			var expected = new BusinessRuleResponse(typeof (DataPartOfAgentDay), string.Empty, true, true, assignmentPeriod,
-					                         scheduleDataTooEarly.Person, new DateOnlyPeriod(dateOnly, dateOnly));
+					                         scheduleDataTooEarly.Person, new DateOnlyPeriod(dateOnly, dateOnly), "tjillevippen");
 
 			var pa = new PersonAssignment(scheduleDataTooEarly.Person, scheduleDataTooEarly.Scenario, dateOnly);
 			pa.AddActivity(new Activity("d"), assignmentPeriod);
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var dateOnly = new DateOnly(2000, 1, 1);
 
 			var expected =  new BusinessRuleResponse(typeof (DataPartOfAgentDay), string.Empty, true, true, assignmentPeriod,
-					                         scheduleDataTooEarly.Person, new DateOnlyPeriod(dateOnly, dateOnly));
+					                         scheduleDataTooEarly.Person, new DateOnlyPeriod(dateOnly, dateOnly), "tjillevippen");
 
 			var pa = new PersonAssignment(scheduleDataTooEarly.Person, scheduleDataTooEarly.Scenario, dateOnly);
 			pa.AddActivity(new Activity("d"), assignmentPeriod);
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var dateOnly = new DateOnly(2000, 1, 1);
 
 			var expected = new BusinessRuleResponse(typeof (DataPartOfAgentDay), string.Empty, true, true, assignmentPeriod,
-				                         scheduleDataTooEarly.Person, new DateOnlyPeriod(dateOnly, dateOnly));
+				                         scheduleDataTooEarly.Person, new DateOnlyPeriod(dateOnly, dateOnly), "tjillevippen");
 
 			var pa = new PersonAssignment(scheduleDataTooEarly.Person, scheduleDataTooEarly.Scenario, dateOnly);
 			pa.AddActivity(new Activity("d"), assignmentPeriod);

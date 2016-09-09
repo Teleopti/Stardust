@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Rules
@@ -16,9 +17,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
         {
             _limitationChecker = limitationChecker;
             _virtualSchedulePeriodExtractor = virtualSchedulePeriodExtractor;
+	        FriendlyName = Resources.BusinessRuleShiftCategoryLimitationFriendlyName;
+
         }
 
-        public string ErrorMessage { get { return ""; } }
+		public string ErrorMessage { get { return ""; } }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public bool IsMandatory
@@ -63,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                             if (_limitationChecker.IsShiftCategoryOverPeriodLimit(shiftCategoryLimitation, period, currentSchedules, out datesWithCategory))
                             {
                                 string message = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
-                                                    UserTexts.Resources.BusinessRuleShiftCategoryLimitationErrorMessage2,
+                                                    Resources.BusinessRuleShiftCategoryLimitationErrorMessage2,
                                                     shiftCategoryLimitation.ShiftCategory.Description.Name);
                                 foreach (DateOnly dateOnly in datesWithCategory)
                                 {
@@ -84,11 +87,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return responseList;
         }
 
-        private IBusinessRuleResponse createResponse(IPerson person, DateOnly dateOnly, string message)
+	    public string FriendlyName { get; }
+
+	    private IBusinessRuleResponse createResponse(IPerson person, DateOnly dateOnly, string message)
         {
             var dop = new DateOnlyPeriod(dateOnly, dateOnly);
             DateTimePeriod period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-            IBusinessRuleResponse response = new BusinessRuleResponse(typeof(NewShiftCategoryLimitationRule), message, _haltModify, IsMandatory, period, person, dop)
+            IBusinessRuleResponse response = new BusinessRuleResponse(typeof(NewShiftCategoryLimitationRule), message, _haltModify, IsMandatory, period, person, dop, FriendlyName)
                                                  {Overridden = !_haltModify};
             return response;
         }

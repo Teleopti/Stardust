@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			swapList.AddRange(swapList2);
 			IBusinessRuleResponse response = new BusinessRuleResponse(typeof(NewDayOffRule), "", true, false,
 																	  new DateTimePeriod(), _personSenior,
-																	  new DateOnlyPeriod());
+																	  new DateOnlyPeriod(), "tjillevippen");
 			
 			using (_mocks.Record())
 			{

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Rules
@@ -21,6 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		public NewDayOffRule(IWorkTimeStartEndExtractor workTimeStartEndExtractor)
 		{
 			_workTimeStartEndExtractor = workTimeStartEndExtractor;
+			FriendlyName = Resources.BusinessRuleDayOffFriendlyName;
 		}
 
 		public string ErrorMessage
@@ -87,6 +89,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return responseList;
 		}
 
+		public string FriendlyName { get; }
+
 		private dayForValidation convert(IScheduleDay scheduleDay)
 		{
 			var dayForValidation = new dayForValidation {Date = scheduleDay.DateOnlyAsPeriod.DateOnly};
@@ -120,7 +124,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			if (dayOff.TargetLength > (assignmentAfterPeriod.StartDateTime - assignmentBeforePeriod.EndDateTime))
 			{
 				// we can't fit the day off beween the days
-				ErrorMessage = string.Format(_loggedOnCulture, UserTexts.Resources.BusinessRuleDayOffErrorMessage1 + ErrorMessage,
+				ErrorMessage = string.Format(_loggedOnCulture, Resources.BusinessRuleDayOffErrorMessage1 + ErrorMessage,
 					dayOff.Anchor);
 				return true;
 			}
@@ -151,7 +155,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				if (dayOff.Boundary.EndDateTime < endDayOff.Add(conflictTime))
 				{
 
-					ErrorMessage = string.Format(_loggedOnCulture, UserTexts.Resources.BusinessRuleDayOffErrorMessage2 + ErrorMessage,
+					ErrorMessage = string.Format(_loggedOnCulture, Resources.BusinessRuleDayOffErrorMessage2 + ErrorMessage,
 						day);
 					return true;
 				}
@@ -167,7 +171,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				// flexibility does not allow the move
 				if (startDayOff.Add(conflictTime) < dayOff.Boundary.StartDateTime)
 				{
-					ErrorMessage = string.Format(_loggedOnCulture, UserTexts.Resources.BusinessRuleDayOffErrorMessage4 + ErrorMessage,
+					ErrorMessage = string.Format(_loggedOnCulture, Resources.BusinessRuleDayOffErrorMessage4 + ErrorMessage,
 						day);
 					return true;
 				}
@@ -221,7 +225,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			DateTimePeriod period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
 			var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
 			IBusinessRuleResponse response = new BusinessRuleResponse(typeof (NewDayOffRule), message, _haltModify, IsMandatory,
-				period, person, dateOnlyPeriod) {Overridden = !_haltModify};
+				period, person, dateOnlyPeriod, FriendlyName) {Overridden = !_haltModify};
 			return response;
 		}
 

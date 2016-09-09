@@ -39,23 +39,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				responseList.AddRange(checkDay(rangeClones, scheduleDay));
 			}
 
-			return responseList;
+			return responseList;		
+		}
 
-			//var responseList = new List<IBusinessRuleResponse>();
-			//var groupedByPerson = scheduleDays.GroupBy(s => s.Person);
-
-			//foreach (var scheduleDay in groupedByPerson)
-			//{
-			//	if (!scheduleDay.Any()) continue;
-			//	var period = new DateOnlyPeriod(scheduleDay.Min(s => s.DateOnlyAsPeriod.DateOnly).AddDays(-1),
-			//		scheduleDay.Max(s => s.DateOnlyAsPeriod.DateOnly).AddDays(1));
-			//	var schedules =
-			//		rangeClones[scheduleDay.Key].ScheduledDayCollection(period)
-			//			.ToDictionary(k => k.DateOnlyAsPeriod.DateOnly, s => s);
-			//	responseList.AddRange(checkDay(period, schedules, rangeClones));
-			//}
-
-			//return responseList;
+		public string FriendlyName
+		{
+			get { return Resources.BusinessRuleOverlappingFriendlyName3; }
 		}
 
 		private IEnumerable<IBusinessRuleResponse> checkDay(IDictionary<IPerson, IScheduleRange> rangeClones, IScheduleDay scheduleDay)
@@ -64,16 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			IPerson person = scheduleDay.Person;
 			DateOnly dateToCheck = scheduleDay.DateOnlyAsPeriod.DateOnly;
 			IScheduleRange currentSchedules = rangeClones[person];
-			var oldResponses = currentSchedules.BusinessRuleResponseInternalCollection;
-			//foreach (var date in period.DayCollection())
-			//{
-
-			//	if (!schedules.ContainsKey(date)) continue;
-
-			//	var scheduleDay = schedules[date];
-			//	var person = scheduleDay.Person;
-			//	IScheduleRange currentSchedules = rangeClones[person];
-			//	var oldResponses = currentSchedules.BusinessRuleResponseInternalCollection;
+			var oldResponses = currentSchedules.BusinessRuleResponseInternalCollection;			
 			while (oldResponses.Contains(createResponse(person, dateToCheck, "remove")))
 			{
 				oldResponses.Remove(createResponse(person, dateToCheck, "remove"));
@@ -81,12 +61,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 			if (!scheduleDay.HasProjection())
 				return new List<IBusinessRuleResponse>();
-				//	var personAssignment = scheduleDay.PersonAssignment();
-				//	if (personAssignment == null) continue;
-			var layers = scheduleDay.PersonAssignment().MainActivities().ToArray();
-			//	var layers = scheduleDay.PersonAssignment().ShiftLayers.Where(l => l is IMainShiftLayer).ToArray();
-			//	if(layers.Length == 0) continue;
 
+			var layers = scheduleDay.PersonAssignment().MainActivities().ToArray();
 			var meetings = scheduleDay.PersonMeetingCollection().ToArray();
 			var personalActivities = scheduleDay.PersonAssignment().PersonalActivities().ToArray();
 			var overlappingLayersList = getOverlappingLayerses(layers, meetings, personalActivities);
@@ -96,25 +72,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				responsList.Add(businessRuleResponse);
 				oldResponses.Add(businessRuleResponse);
 			}
-			//var responses =
-			//	getOverlappingLayerses(layers, meetings, personalActivities)
-			//		.Select(ls => createResponse(scheduleDay.Person, dateToCheck, ls));
-
-			//	foreach (var businessRuleResponse in responses)
-			//	{
-			//		responsList.Add(businessRuleResponse);
-			//		oldResponses.Add(businessRuleResponse);
-			//	}
-
-			//}
 
 			return responsList;
 		}
 		
 
-		private IList<OverlappingLayers> getOverlappingLayerses(IMainShiftLayer[] layers, IPersonMeeting[] meetings, IPersonalShiftLayer[] personalShiftLayers )
+		private IList<overlappingLayers> getOverlappingLayerses(IMainShiftLayer[] layers, IPersonMeeting[] meetings, IPersonalShiftLayer[] personalShiftLayers )
 		{
-			var result = new List<OverlappingLayers>();
+			var result = new List<overlappingLayers>();
 			if (layers.Length == 0) return result;
 
 			for(var i = 0;i < layers.Length;i++)
@@ -130,7 +95,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 					if (layerWithHighPriority.Period.Intersect(layerWithLowPriority.Period))
 					{
-						result.Add(new OverlappingLayers
+						result.Add(new overlappingLayers
 						{
 							LayerBelowName = layerWithLowPriority.Payload.Name,
 							LayerBelowPeriod = layerWithLowPriority.Period,
@@ -144,7 +109,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				{
 					if (personMeeting.Period.Intersect(layerWithLowPriority.Period))
 					{
-						var overlappingLayerIssue = new OverlappingLayers
+						var overlappingLayerIssue = new overlappingLayers
 						{
 							LayerBelowName = layerWithLowPriority.Payload.Name,
 							LayerBelowPeriod = layerWithLowPriority.Period,
@@ -155,21 +120,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 					}
 				}
 
-				//result.AddRange(from meeting in meetings
-				//	where meeting.Period.Intersect(layerBelow.Period)
-				//	select new OverlappingLayers
-				//	{
-				//		LayerBelowName = layerBelow.Payload.Name,
-				//		LayerBelowPeriod = layerBelow.Period,
-				//		LayerAboveName = meeting.ToLayer().Payload.Name,
-				//		LayerAbovePeriod = meeting.Period
-				//	});
-
 				foreach (var personalShiftLayer in personalShiftLayers)
 				{
 					if (personalShiftLayer.Period.Intersect(layerWithLowPriority.Period))
 					{
-						var overlappingLayerIssue = new OverlappingLayers
+						var overlappingLayerIssue = new overlappingLayers
 						{
 							LayerBelowName = layerWithLowPriority.Payload.Name,
 							LayerBelowPeriod = layerWithLowPriority.Period,
@@ -179,16 +134,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 						result.Add(overlappingLayerIssue);
 					}
 				}
-
-				//result.AddRange(from personalShiftLayer in personalShiftLayers
-				//	where layerBelow.Period.Intersect(personalShiftLayer.Period)
-				//	select new OverlappingLayers
-				//	{
-				//		LayerBelowName = layerBelow.Payload.Name,
-				//		LayerBelowPeriod = layerBelow.Period,
-				//		LayerAboveName = personalShiftLayer.Payload.Name,
-				//		LayerAbovePeriod = personalShiftLayer.Period
-				//	});
 			}
 
 			return result;
@@ -198,11 +143,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		{
 			var dop = new DateOnlyPeriod(dateOnly, dateOnly);
 			DateTimePeriod period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-			IBusinessRuleResponse response = new BusinessRuleResponse(typeof(NotOverwriteLayerRule), message, _haltModify, IsMandatory, period, person, dop) { Overridden = !_haltModify };
+			IBusinessRuleResponse response = new BusinessRuleResponse(typeof(NotOverwriteLayerRule), message, _haltModify, IsMandatory, period, person, dop, FriendlyName) { Overridden = !_haltModify };
 			return response;
 		}
 
-		private IBusinessRuleResponse createResponse(IPerson person,DateOnly dateOnly, OverlappingLayers overlappingLayers)
+		private IBusinessRuleResponse createResponse(IPerson person,DateOnly dateOnly, overlappingLayers overlappingLayers)
 		{
 			var dop = new DateOnlyPeriod(dateOnly,dateOnly);
 			DateTimePeriod period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
@@ -214,11 +159,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				IsMandatory,
 				period,
 				person,
-				dop) {Overridden = !_haltModify};			
+				dop,
+				FriendlyName) {Overridden = !_haltModify};			
 			return response;
 		}
 
-		private static string createErrorMessage(OverlappingLayers overlappingLayers)
+		private static string createErrorMessage(overlappingLayers overlappingLayers)
 		{
 			var loggedOnCulture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
 			var loggedOnTimezone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
@@ -236,7 +182,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		}
 
 
-		private class OverlappingLayers
+		private class overlappingLayers
 		{
 			public string LayerBelowName { get; set; }
 			public DateTimePeriod LayerBelowPeriod { get; set; }

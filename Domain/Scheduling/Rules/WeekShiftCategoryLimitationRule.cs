@@ -20,6 +20,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             _limitationChecker = limitationChecker;
             _virtualSchedulePeriodExtractor = virtualSchedulePeriodExtractor;
             _weeksFromScheduleDaysExtractor = weeksFromScheduleDaysExtractor;
+	        FriendlyName = Resources.BusinessRuleShiftCategoryLimitationFriendlyName1;
+
         }
 
         public string ErrorMessage { get { return ""; } }
@@ -131,9 +133,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
          return responseList;
         }
 
-        private IBusinessRuleResponse createResponse(IPerson person, DateOnlyPeriod dop, DateTimePeriod period, string message, Type type)
+	    public string FriendlyName { get; }
+
+	    private IBusinessRuleResponse createResponse(IPerson person, DateOnlyPeriod dop, DateTimePeriod period, string message, Type type)
         {
-            IBusinessRuleResponse response = new BusinessRuleResponse(type, message, _haltModify, IsMandatory, period, person, dop) { Overridden = !_haltModify };
+            IBusinessRuleResponse response = new BusinessRuleResponse(type, message, _haltModify, IsMandatory, period, person, dop, FriendlyName) { Overridden = !_haltModify };
             return response;
         }
     }

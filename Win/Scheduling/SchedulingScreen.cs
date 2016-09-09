@@ -2266,6 +2266,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 					SikuliHelper.ShowTaskDoneView(this);
 			}
 
+			if(_schedulerState.FilteredCombinedAgentsDictionary.Values.Count == 0)
+				_schedulerState.ResetFilteredPersons();
 			schedulerSplitters1.RefreshTabInfoPanels(_schedulerState.FilteredCombinedAgentsDictionary.Values);
 		}
 
@@ -3621,6 +3623,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_defaultScheduleTag = tag;
 				break;
 			}
+
+			if (_schedulerState.FilteredCombinedAgentsDictionary.Values.Count == 0)
+				_schedulerState.ResetFilteredPersons();
+			schedulerSplitters1.RefreshTabInfoPanels(_schedulerState.FilteredCombinedAgentsDictionary.Values);
 
 			_lastSaved = DateTime.Now;
 		}

@@ -225,7 +225,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         
         private class NewFailingRule : INewBusinessRule
         {
-            public string ErrorMessage
+
+	        public string ErrorMessage
             {
                 get { return "hotta brudar från djursholm"; }
             }
@@ -252,10 +253,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
                 IList<IBusinessRuleResponse> ret = new List<IBusinessRuleResponse>();
                 var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(), new DateOnly());
                 IBusinessRuleResponse resp = new BusinessRuleResponse(typeof(NewFailingRule), "", true, true,
-                                                                      new DateTimePeriod(), PersonFactory.CreatePerson(), dateOnlyPeriod);
+                                                                      new DateTimePeriod(), PersonFactory.CreatePerson(), dateOnlyPeriod, FriendlyName);
                 ret.Add(resp);
                 return ret;
             }
+
+	        public string FriendlyName
+	        {
+		        get { return "tjillevippen"; }
+	        }
         }
     }
 

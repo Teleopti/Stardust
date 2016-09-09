@@ -226,10 +226,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			IEnumerable<IScheduleDay> scheduleDays = new List<IScheduleDay> { _p1D1, _p1D2 };
 
-			IBusinessRuleResponse response1 = new BusinessRuleResponse(typeof(NewNightlyRestRule), "", true, true, new DateTimePeriod(), _person1, new DateOnlyPeriod(2010, 2, 1, 2010, 2, 2));
-			IBusinessRuleResponse response2 = new BusinessRuleResponse(typeof(NewNightlyRestRule), "", true, true, new DateTimePeriod(), _person1, new DateOnlyPeriod(2010, 2, 2, 2010, 2, 3));
+			IBusinessRuleResponse response1 = new BusinessRuleResponse(typeof(NewNightlyRestRule), "", true, true, new DateTimePeriod(), _person1, new DateOnlyPeriod(2010, 2, 1, 2010, 2, 2), "tjillevippen");
+			IBusinessRuleResponse response2 = new BusinessRuleResponse(typeof(NewNightlyRestRule), "", true, true, new DateTimePeriod(), _person1, new DateOnlyPeriod(2010, 2, 2, 2010, 2, 3), "tjillevippen");
 			// this rule will be the only in the returnlist
-			IBusinessRuleResponse response3 = new BusinessRuleResponse(typeof(NewNightlyRestRule), "", true, true, new DateTimePeriod(), _person1, new DateOnlyPeriod(2010, 1, 1, 2010, 2, 3));
+			IBusinessRuleResponse response3 = new BusinessRuleResponse(typeof(NewNightlyRestRule), "", true, true, new DateTimePeriod(), _person1, new DateOnlyPeriod(2010, 1, 1, 2010, 2, 3), "tjillevippen");
 
 			IEnumerable<IBusinessRuleResponse> lista = new List<IBusinessRuleResponse> { response1, response2, response3 };
 

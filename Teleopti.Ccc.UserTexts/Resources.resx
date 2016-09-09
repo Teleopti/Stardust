@@ -11178,10 +11178,6 @@ These options are activated:
     <value>Schedule Only Preference Must Have</value>
     <comment>Schedule only must have preferences</comment>
   </data>
-  <data name="AllowMeetings" xml:space="preserve">
-    <value>Allow Meetings</value>
-    <comment>Column Allow meetings</comment>
-  </data>
   <data name="ShiftCategories" xml:space="preserve">
     <value>Shift categories</value>
     <comment>Shift categories</comment>
@@ -14882,5 +14878,61 @@ These options are activated:
   <data name="NewActivityOverlapsNonoverwritableActivities" xml:space="preserve">
     <value>The new added activity overlaps nonoverwritable activitie(s)</value>
     <comment>warning notice for adding activity in Web-TeamSchedule</comment>
+  </data>
+  <data name="Alert" xml:space="preserve">
+    <value>Alert</value>
+    <comment>Description of the alert</comment>
+  </data>
+  <data name="BusinessRuleDayOffFriendlyName" xml:space="preserve">
+    <value>Day Off conflict</value>
+    <comment>Day Off conflict</comment>
+  </data>
+  <data name="BusinessRuleMaxWeekWorkTimeFriendlyName" xml:space="preserve">
+    <value>The week contains too much work time</value>
+    <comment>The week contains too much work time</comment>
+  </data>
+  <data name="BusinessRuleMinWeekWorktimeFriendlyName" xml:space="preserve">
+    <value>The week contains too little work time</value>
+    <comment>The week contains too little work time</comment>
+  </data>
+  <data name="BusinessRuleNightlyRestRuleFriendlyName" xml:space="preserve">
+    <value>Nightly rest broken</value>
+    <comment>Nightly rest broken</comment>
+  </data>
+  <data name="BusinessRuleNoSiteOpenHourFriendlyName" xml:space="preserve">
+    <value>Activity outside open hours for site</value>
+    <comment>Activity outside open hours for site</comment>
+  </data>
+  <data name="BusinessRuleNoSkillsOpenFriendlyName" xml:space="preserve">
+    <value>Activity outside open hours for skill</value>
+    <comment>Activity outside open hours for skill</comment>
+  </data>
+  <data name="BusinessRuleOverlappingFriendlyName3" xml:space="preserve">
+    <value>Not overwritable activity overwritten</value>
+    <comment>Not overwritable activity overwritten</comment>
+  </data>
+  <data name="BusinessRulePersonAccountFriendlyName" xml:space="preserve">
+    <value>PersonAccount exceeds accrued value</value>
+    <comment>PersonAccount exceeds accrued value</comment>
+  </data>
+  <data name="BusinessRuleShiftCategoryLimitationFriendlyName" xml:space="preserve">
+    <value>Shift category limitation broken on period</value>
+    <comment>Shift category limitation broken on period</comment>
+  </data>
+  <data name="BusinessRuleShiftCategoryLimitationFriendlyName1" xml:space="preserve">
+    <value>Shift category limitation broken on week</value>
+    <comment>Shift category limitation broken on week</comment>
+  </data>
+  <data name="BusinessRuleWeeklyRestFriendlyName" xml:space="preserve">
+    <value>The week does not have the stipulated weekly rest</value>
+    <comment>The week does not have the stipulated weekly rest</comment>
+  </data>
+  <data name="Overwritable" xml:space="preserve">
+    <value>Overwritable</value>
+    <comment>Activity can be overwritten without warnings</comment>
+  </data>
+  <data name="ValidationAlerts" xml:space="preserve">
+    <value>Validation Alerts</value>
+    <comment>Validation Alerts</comment>
   </data>
 </root>

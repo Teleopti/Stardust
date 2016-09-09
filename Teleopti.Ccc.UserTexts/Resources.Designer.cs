@@ -2033,6 +2033,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Alert.
+        /// </summary>
+        public static string Alert {
+            get {
+                return ResourceManager.GetString("Alert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Align Bottom.
         /// </summary>
         public static string AlignBottom {
@@ -2227,15 +2236,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AllowDesktopNotifications {
             get {
                 return ResourceManager.GetString("AllowDesktopNotifications", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Allow Meetings.
-        /// </summary>
-        public static string AllowMeetings {
-            get {
-                return ResourceManager.GetString("AllowMeetings", resourceCulture);
             }
         }
         
@@ -4233,6 +4233,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Day Off conflict.
+        /// </summary>
+        public static string BusinessRuleDayOffFriendlyName {
+            get {
+                return ResourceManager.GetString("BusinessRuleDayOffFriendlyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The maximum length of an assignment is {0} hours. Current assignment&apos;s length is {1} hours..
         /// </summary>
         public static string BusinessRuleErrorAssignmentLength {
@@ -4251,6 +4260,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The week contains too much work time.
+        /// </summary>
+        public static string BusinessRuleMaxWeekWorkTimeFriendlyName {
+            get {
+                return ResourceManager.GetString("BusinessRuleMaxWeekWorkTimeFriendlyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The week contains too little work time ({0}). Min is {1}..
         /// </summary>
         public static string BusinessRuleMinWeekWorktimeErrorMessage {
@@ -4260,11 +4278,29 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The week contains too little work time.
+        /// </summary>
+        public static string BusinessRuleMinWeekWorktimeFriendlyName {
+            get {
+                return ResourceManager.GetString("BusinessRuleMinWeekWorktimeFriendlyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There must be a daily rest of at least {0} hours between 2 shifts. Between {1} and {2} there are only {3} hours..
         /// </summary>
         public static string BusinessRuleNightlyRestRuleErrorMessage {
             get {
                 return ResourceManager.GetString("BusinessRuleNightlyRestRuleErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nightly rest broken.
+        /// </summary>
+        public static string BusinessRuleNightlyRestRuleFriendlyName {
+            get {
+                return ResourceManager.GetString("BusinessRuleNightlyRestRuleFriendlyName", resourceCulture);
             }
         }
         
@@ -4287,11 +4323,29 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Activity outside open hours for site.
+        /// </summary>
+        public static string BusinessRuleNoSiteOpenHourFriendlyName {
+            get {
+                return ResourceManager.GetString("BusinessRuleNoSiteOpenHourFriendlyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No Skill with open hours connected to activity: {0} found at: {1} - {2}.
         /// </summary>
         public static string BusinessRuleNoSkillsOpenErrorMessage {
             get {
                 return ResourceManager.GetString("BusinessRuleNoSkillsOpenErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Activity outside open hours for skill.
+        /// </summary>
+        public static string BusinessRuleNoSkillsOpenFriendlyName {
+            get {
+                return ResourceManager.GetString("BusinessRuleNoSkillsOpenFriendlyName", resourceCulture);
             }
         }
         
@@ -4323,11 +4377,29 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not overwritable activity overwritten.
+        /// </summary>
+        public static string BusinessRuleOverlappingFriendlyName3 {
+            get {
+                return ResourceManager.GetString("BusinessRuleOverlappingFriendlyName3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to PersonAccount for {0}, starting at {1} exceeds accrued value.
         /// </summary>
         public static string BusinessRulePersonAccountError1 {
             get {
                 return ResourceManager.GetString("BusinessRulePersonAccountError1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PersonAccount exceeds accrued value.
+        /// </summary>
+        public static string BusinessRulePersonAccountFriendlyName {
+            get {
+                return ResourceManager.GetString("BusinessRulePersonAccountFriendlyName", resourceCulture);
             }
         }
         
@@ -4359,11 +4431,38 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shift category limitation broken on period.
+        /// </summary>
+        public static string BusinessRuleShiftCategoryLimitationFriendlyName {
+            get {
+                return ResourceManager.GetString("BusinessRuleShiftCategoryLimitationFriendlyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shift category limitation broken on week.
+        /// </summary>
+        public static string BusinessRuleShiftCategoryLimitationFriendlyName1 {
+            get {
+                return ResourceManager.GetString("BusinessRuleShiftCategoryLimitationFriendlyName1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The week does not have the stipulated ({0}) weekly rest..
         /// </summary>
         public static string BusinessRuleWeeklyRestErrorMessage {
             get {
                 return ResourceManager.GetString("BusinessRuleWeeklyRestErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The week does not have the stipulated weekly rest.
+        /// </summary>
+        public static string BusinessRuleWeeklyRestFriendlyName {
+            get {
+                return ResourceManager.GetString("BusinessRuleWeeklyRestFriendlyName", resourceCulture);
             }
         }
         
@@ -19974,6 +20073,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Overwritable.
+        /// </summary>
+        public static string Overwritable {
+            get {
+                return ResourceManager.GetString("Overwritable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Overwrite.
         /// </summary>
         public static string OverWrite {
@@ -32118,6 +32226,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Validation {
             get {
                 return ResourceManager.GetString("Validation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validation Alerts.
+        /// </summary>
+        public static string ValidationAlerts {
+            get {
+                return ResourceManager.GetString("ValidationAlerts", resourceCulture);
             }
         }
         

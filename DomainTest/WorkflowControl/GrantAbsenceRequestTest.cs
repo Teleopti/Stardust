@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             var start = new DateTime(2007,1,1,0,0,0,DateTimeKind.Utc);
             var dateOnly = new DateOnly(2007, 1, 1);
             var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
-            var businessRuleResponse = new BusinessRuleResponse(typeof(string), "An error has occurred!", true, false, new DateTimePeriod(start, start), person, dateOnlyPeriod);
+            var businessRuleResponse = new BusinessRuleResponse(typeof(string), "An error has occurred!", true, false, new DateTimePeriod(start, start), person, dateOnlyPeriod, "tjillevippen");
             
 
             using (_mocks.Ordered())
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var start = new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 			var dateOnly = new DateOnly(2007, 1, 1);
 			var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
-			var businessRuleResponse = new BusinessRuleResponse(typeof(string), "An error has occurred!", true, false, new DateTimePeriod(start, start), person, dateOnlyPeriod);
+			var businessRuleResponse = new BusinessRuleResponse(typeof(string), "An error has occurred!", true, false, new DateTimePeriod(start, start), person, dateOnlyPeriod, "tjillevippen");
 
 
 			using (_mocks.Ordered())

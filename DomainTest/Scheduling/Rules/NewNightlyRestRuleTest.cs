@@ -229,12 +229,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
             doPeriod = new DateOnlyPeriod(2010, 1, 3, 2010, 1, 4);
             IBusinessRuleResponse thisResponse = new BusinessRuleResponse(typeof (NewNightlyRestRule), "", true, true,
-                                                                          period, _person, doPeriod);
+                                                                          period, _person, doPeriod, "tjillevippen");
             IBusinessRuleResponse anotherResponse = new BusinessRuleResponse(typeof(NewNightlyRestRule), "", true, true,
-                                                                          period.MovePeriod(TimeSpan.FromDays(10)), _person, doPeriod);
+                                                                          period.MovePeriod(TimeSpan.FromDays(10)), _person, doPeriod, "tjillevippen");
 
             IBusinessRuleResponse thirdResponse = new BusinessRuleResponse(typeof(NewNightlyRestRule), "", true, true,
-                                                                          period, PersonFactory.CreatePerson(), doPeriod);
+                                                                          period, PersonFactory.CreatePerson(), doPeriod, "tjillevippen");
             list.Add(thisResponse);
             list.Add(anotherResponse);
             list.Add(thirdResponse);

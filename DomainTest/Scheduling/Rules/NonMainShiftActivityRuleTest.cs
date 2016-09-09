@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 												 Resources.HasNonMainShiftActivityErrorMessage, scheduleDataWithPersonalActivity.Person.Name,
 												 dateOnly.Date.ToShortDateString());
 			var expected = new BusinessRuleResponse(typeof(NonMainShiftActivityRule), message, true, false, period.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone()),
-					                         scheduleDataWithPersonalActivity.Person, period);
+					                         scheduleDataWithPersonalActivity.Person, period, "tjillevippen");
 
 			var pa = new PersonAssignment(scheduleDataWithPersonalActivity.Person, scheduleDataWithPersonalActivity.Scenario, dateOnly);
 			pa.AddPersonalActivity(new Activity("p"), assignmentPeriod);
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 												 Resources.HasNonMainShiftActivityErrorMessage, scheduleDataWithOvertimeActivity.Person.Name,
 												 dateOnly.Date.ToShortDateString());
 			var expected = new BusinessRuleResponse(typeof(NonMainShiftActivityRule), message, true, false, period.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone()),
-											 scheduleDataWithOvertimeActivity.Person, period);
+											 scheduleDataWithOvertimeActivity.Person, period, "tjillevippen");
 
 			var pa = new PersonAssignment(scheduleDataWithOvertimeActivity.Person, scheduleDataWithOvertimeActivity.Scenario, dateOnly);
 			pa.AddOvertimeActivity(new Activity("p"), assignmentPeriod, new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime));
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 												 Resources.HasNonMainShiftActivityErrorMessage, scheduleDataWithMeeting.Person.Name,
 												 dateOnly.Date.ToShortDateString());
 			var expected = new BusinessRuleResponse(typeof(NonMainShiftActivityRule), message, true, false, period.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone()),
-											 scheduleDataWithMeeting.Person, period);
+											 scheduleDataWithMeeting.Person, period, "tjillevippen");
 
 			var targetRel = new NonMainShiftActivityRule()
 				.Validate(null, new[] { scheduleDataWithMeeting });
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 												 Resources.HasNonMainShiftActivityErrorMessage, scheduleDataWithPersonalActivity.Person.Name,
 												 dateOnly.Date.ToShortDateString());
 			var expected = new BusinessRuleResponse(typeof(NonMainShiftActivityRule), message, true, false, period.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone()),
-					                         scheduleDataWithPersonalActivity.Person, period);
+					                         scheduleDataWithPersonalActivity.Person, period, "tjillevippen");
 
 			var pa = new PersonAssignment(scheduleDataWithPersonalActivity.Person, scheduleDataWithPersonalActivity.Scenario, dateOnly);
 			pa.AddPersonalActivity(new Activity("p"), assignmentPeriod);
@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 												 Resources.HasNonMainShiftActivityErrorMessage, scheduleDataWithMeeting.Person.Name,
 												 dateOnly.Date.ToShortDateString());
 			var expected = new BusinessRuleResponse(typeof(NonMainShiftActivityRule), message, true, false, period.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone()),
-											 scheduleDataWithMeeting.Person, period);
+											 scheduleDataWithMeeting.Person, period, "tjillevippen");
 
 			var targetRel = new NonMainShiftActivityRule()
 				.Validate(null, new[] { scheduleDataWithMeeting, scheduleBeTrade });
@@ -266,7 +266,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 												 Resources.HasNonMainShiftActivityErrorMessage, scheduleDataWithMeeting.Person.Name,
 												 dateOnly.Date.ToShortDateString());
 			var expected = new BusinessRuleResponse(typeof(NonMainShiftActivityRule), message, true, false, period.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone()),
-											 scheduleDataWithMeeting.Person, period);
+											 scheduleDataWithMeeting.Person, period, "tjillevippen");
 
 			var targetRel = new NonMainShiftActivityRule()
 				.Validate(null, new[] { scheduleDataWithMeeting, scheduleBeTrade });
@@ -344,7 +344,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 									 Resources.HasNonMainShiftActivityErrorMessage, scheduleDataWithPersonalActivity.Person.Name,
 									 dateOnly.Date.ToShortDateString());
 			var expected = new BusinessRuleResponse(typeof(NonMainShiftActivityRule), message, true, false, period.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone()),
-											 scheduleDataWithPersonalActivity.Person, period);
+											 scheduleDataWithPersonalActivity.Person, period, "tjillevippen");
 
 			var targetRel = new NonMainShiftActivityRule()
 				.Validate(null, new[] { scheduleDataWithPersonalActivity, scheduleBeTrade });

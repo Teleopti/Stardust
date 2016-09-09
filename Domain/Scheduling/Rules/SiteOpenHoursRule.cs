@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Rules
@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		public SiteOpenHoursRule(ISiteOpenHoursSpecification siteOpenHoursSpecification)
 		{
 			_siteOpenHoursSpecification = siteOpenHoursSpecification;
+			FriendlyName = Resources.BusinessRuleNoSiteOpenHourFriendlyName;
 		}
 
 		private bool _haltModify = true;
@@ -50,6 +51,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			return responseList;
 		}
 
+		public string FriendlyName { get; }
+
 		private IBusinessRuleResponse checkScheduleDay(IDictionary<IPerson, IScheduleRange> rangeClones, IScheduleDay scheduleDay)
 		{
 			var person = scheduleDay.Person;
@@ -81,7 +84,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			var dop = new DateOnlyPeriod(scheduleDate, scheduleDate);
 			var period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
 			var response = new BusinessRuleResponse(typeof(SiteOpenHoursRule), message, HaltModify, IsMandatory,
-				period, person, dop)
+				period, person, dop, FriendlyName)
 			{Overridden = !_haltModify };
 			return response;
 		}
@@ -89,10 +92,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		private string getErrorMessage(IPerson person, DateOnly scheduleDate, DateTimePeriod scheduleTimePeriod)
 		{
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
-			var dayOfWeek = UserTexts.Resources.ResourceManager.GetString(scheduleDate.DayOfWeek.ToString());
+			var dayOfWeek = Resources.ResourceManager.GetString(scheduleDate.DayOfWeek.ToString());
 			var siteName = person.MyTeam(scheduleDate).Site.Description.Name;
 			return string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
-				UserTexts.Resources.BusinessRuleNoSiteOpenHourErrorMessage,
+				Resources.BusinessRuleNoSiteOpenHourErrorMessage,
 				dayOfWeek,
 				siteName,
 				scheduleTimePeriod.StartDateTimeLocal(timeZone),

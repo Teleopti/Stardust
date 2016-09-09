@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Rules
@@ -13,6 +14,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
         public MinWeekWorkTimeRule(IWeeksFromScheduleDaysExtractor weeksFromScheduleDaysExtractor)
         {
             _weeksFromScheduleDaysExtractor = weeksFromScheduleDaysExtractor;
+	        FriendlyName = Resources.BusinessRuleMinWeekWorktimeFriendlyName;
+
         }
 
         public string ErrorMessage
@@ -73,7 +76,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return responseList;
         }
 
-        private static bool setMinTimePerWeekMinutes(out TimeSpan minTimePerWeek, PersonWeek personWeek)
+		public string FriendlyName { get; }
+
+		private static bool setMinTimePerWeekMinutes(out TimeSpan minTimePerWeek, PersonWeek personWeek)
         {
             var person = personWeek.Person;
             var min = double.MaxValue;
@@ -126,7 +131,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
         {
             var dop = new DateOnlyPeriod(dateOnly, dateOnly);
             var period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-            IBusinessRuleResponse response = new BusinessRuleResponse(type, message, _haltModify, IsMandatory, period, person, dop) { Overridden = !_haltModify };
+            IBusinessRuleResponse response = new BusinessRuleResponse(type, message, _haltModify, IsMandatory, period, person, dop, FriendlyName) { Overridden = !_haltModify };
             return response;
         }
     }

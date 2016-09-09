@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Rules
@@ -13,6 +14,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
         public OpenHoursRule(ISchedulingResultStateHolder schedulingResultStateHolder)
         {
             _schedulingResultStateHolder = schedulingResultStateHolder;
+	        FriendlyName = Resources.BusinessRuleNoSkillsOpenFriendlyName;
+
         }
 
 
@@ -45,14 +48,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return responseList;
         }
 
-        private IEnumerable<IBusinessRuleResponse> checkDay(IDictionary<IPerson, IScheduleRange> rangeClones, IScheduleDay scheduleDay)
+	    public string FriendlyName { get; }
+
+	    private IEnumerable<IBusinessRuleResponse> checkDay(IDictionary<IPerson, IScheduleRange> rangeClones, IScheduleDay scheduleDay)
         {
             ICollection<IBusinessRuleResponse> responseList = new List<IBusinessRuleResponse>();
             IPerson person = scheduleDay.Person;
             DateOnly dateToCheck = scheduleDay.DateOnlyAsPeriod.DateOnly;
             IScheduleRange currentSchedules = rangeClones[person];
             var oldResponses = currentSchedules.BusinessRuleResponseInternalCollection;
-            oldResponses.Remove(CreateResponse(person, dateToCheck, "remove"));
+            oldResponses.Remove(createResponse(person, dateToCheck, "remove"));
             //on delete this should be empty and never runned
             
             IBusinessRuleResponse response = checkScheduleDay(scheduleDay, person, dateToCheck);
@@ -65,11 +70,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return responseList;
         }
         
-        private IBusinessRuleResponse CreateResponse(IPerson person, DateOnly dateOnly, string message)
+        private IBusinessRuleResponse createResponse(IPerson person, DateOnly dateOnly, string message)
         {
             var dop = new DateOnlyPeriod(dateOnly, dateOnly);
             DateTimePeriod period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-            IBusinessRuleResponse response = new BusinessRuleResponse(typeof(OpenHoursRule), message, _haltModify, IsMandatory, period, person, dop) { Overridden = !_haltModify };
+            IBusinessRuleResponse response = new BusinessRuleResponse(typeof(OpenHoursRule), message, _haltModify, IsMandatory, period, person, dop, FriendlyName) { Overridden = !_haltModify };
             return response;
         }
 
@@ -94,11 +99,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                         if (!found)
                         {
                             var errorMessage = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
-                                           UserTexts.Resources.BusinessRuleNoSkillsOpenErrorMessage,
+                                           Resources.BusinessRuleNoSkillsOpenErrorMessage,
                                            layer.DisplayDescription(),
                                            layer.Period.StartDateTimeLocal(timeZone),
                                            layer.Period.EndDateTimeLocal(timeZone));
-                            return CreateResponse(person, dateOnly, errorMessage);
+                            return createResponse(person, dateOnly, errorMessage);
                         }
                     }
                 }

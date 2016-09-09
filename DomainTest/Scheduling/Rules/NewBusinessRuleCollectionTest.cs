@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		{
 			INewBusinessRule rule = _target.Item(typeof(NewShiftCategoryLimitationRule));
 			var dateOnlyPeriod = new DateOnlyPeriod();
-			_target.Remove(new BusinessRuleResponse(typeof(NewShiftCategoryLimitationRule), "d", false, false, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), new Person(), dateOnlyPeriod));
+			_target.Remove(new BusinessRuleResponse(typeof(NewShiftCategoryLimitationRule), "d", false, false, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), new Person(), dateOnlyPeriod, "tjillevippen"));
 			Assert.AreEqual(totalNumberOfRules, _target.Count);
 			Assert.IsFalse(rule.HaltModify);
 		}
@@ -171,6 +171,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			public dummyRule(bool mandatory)
 			{
 				_mandatory = mandatory;
+				FriendlyName = string.Empty;
 			}
 
 			public string ErrorMessage
@@ -195,6 +196,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			{
 				throw new NotImplementedException();
 			}
+
+			public string FriendlyName { get; }
 		}
 	}
 }

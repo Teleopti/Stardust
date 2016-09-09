@@ -80,9 +80,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			addPersonAssignment(personTo, dateTimePeriod);
 
 			var ruleResponse1 = new BusinessRuleResponse(typeof(MinWeeklyRestRule), "no go", true, false,
-				new DateTimePeriod(), personTo, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
+				new DateTimePeriod(), personTo, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), "tjillevippen");
 			var ruleResponse2 = new BusinessRuleResponse(typeof(NewMaxWeekWorkTimeRule), "no go", true, false,
-				new DateTimePeriod(), personTo, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
+				new DateTimePeriod(), personTo, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), "tjillevippen");
 
 			prepareBusinessRuleProvider(ruleResponse1, ruleResponse2);
 
@@ -223,9 +223,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			if (addBrokenBusinessRules)
 			{
 				var ruleResponse1 = new BusinessRuleResponse(typeof(MinWeeklyRestRule), "no go", true, false, new DateTimePeriod(),
-					personTo, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
+					personTo, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), "tjillevippen");
 				var ruleResponse2 = new BusinessRuleResponse(typeof(NewMaxWeekWorkTimeRule), "no go", true, false,
-					new DateTimePeriod(), personTo, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
+					new DateTimePeriod(), personTo, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), "tjillevippen");
 				prepareBusinessRuleProvider(ruleResponse1, ruleResponse2);
 			}
 			else

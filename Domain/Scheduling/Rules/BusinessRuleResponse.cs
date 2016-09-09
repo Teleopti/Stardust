@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
         private readonly IPerson _person;
         private DateOnlyPeriod _dateOnlyPeriod;
 
-        public BusinessRuleResponse(Type typeOfRule, string message, bool error, bool mandatory, DateTimePeriod period, IPerson person, DateOnlyPeriod dateOnlyPeriod)
+        public BusinessRuleResponse(Type typeOfRule, string message, bool error, bool mandatory, DateTimePeriod period, IPerson person, DateOnlyPeriod dateOnlyPeriod, string friendlyName)
         {
             InParameter.NotNull("person", person);
             _typeOfRule = typeOfRule;
@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             _period = period;
             _person = person;
             _dateOnlyPeriod = dateOnlyPeriod;
+	        FriendlyName = friendlyName;
         }
 
         public Type TypeOfRule
@@ -62,7 +63,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             get { return _person; }
         }
 
-        public override bool Equals(object obj)
+	    public string FriendlyName { get; }
+
+	    public override bool Equals(object obj)
         {
             var casted = obj as BusinessRuleResponse;
             if (obj == null || casted == null)

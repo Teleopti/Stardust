@@ -2,14 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-	public partial class ValidationAlertsView : UserControl
+	public partial class ValidationAlertsView : BaseUserControl
 	{
 		private ValidationAlertsModel _model;
 		private int _sortColumn = -1;
@@ -20,6 +20,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 		public ValidationAlertsView()
 		{
 			InitializeComponent();
+			if (!DesignMode)
+				SetTexts();
 		}
 
 		public event EventHandler<ValidationViewAgentDoubleClickEvenArgs> AgentDoubleClick;
@@ -64,7 +66,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if (!found)
 				{
 					var toolStripMenuItem = new ToolStripMenuItem();
-					//toolStripMenuItem.Name = toolStripMenuItem + (toolStripDropDownButtonFilter.DropDownItems.Count + 1).ToString();
 					toolStripMenuItem.Checked = true;
 					toolStripMenuItem.CheckOnClick = true;
 					toolStripMenuItem.Text = alertType;

@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             DateTimePeriod period = new DateTimePeriod(new DateTime(2008, 1, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2008, 1, 1, 0, 0, 0, DateTimeKind.Utc));
             IList<IBusinessRuleResponse> validationList = new List<IBusinessRuleResponse>();
             var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(), new DateOnly());
-            validationList.Add(new BusinessRuleResponse(typeof(string), "hej", true, false, period, person, dateOnlyPeriod));
+            validationList.Add(new BusinessRuleResponse(typeof(string), "hej", true, false, period, person, dateOnlyPeriod, "tjillevippen"));
 
             using (_mocks.Record())
             {
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			DateTimePeriod period = new DateTimePeriod(new DateTime(2008, 1, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2008, 1, 1, 0, 0, 0, DateTimeKind.Utc));
 			IList<IBusinessRuleResponse> validationList = new List<IBusinessRuleResponse>();
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(), new DateOnly());
-			validationList.Add(new BusinessRuleResponse(typeof(string), "hej", true, false, period, person, dateOnlyPeriod));
+			validationList.Add(new BusinessRuleResponse(typeof(string), "hej", true, false, period, person, dateOnlyPeriod, "tjillevippen"));
 			var rules = NewBusinessRuleCollection.Minimum();
 
 			using (_mocks.Record())
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			DateTimePeriod period = new DateTimePeriod(new DateTime(2008, 1, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2008, 1, 1, 0, 0, 0, DateTimeKind.Utc));
 			IList<IBusinessRuleResponse> validationList = new List<IBusinessRuleResponse>();
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(), new DateOnly());
-			validationList.Add(new BusinessRuleResponse(typeof(string), "hej", true, false, period, person, dateOnlyPeriod));
+			validationList.Add(new BusinessRuleResponse(typeof(string), "hej", true, false, period, person, dateOnlyPeriod, "tjillevippen"));
 			var rules = NewBusinessRuleCollection.Minimum();
 
 			using (_mocks.Record())
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             DateTimePeriod period = new DateTimePeriod(new DateTime(2008, 1, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2008, 1, 1, 0, 0, 0, DateTimeKind.Utc));
             IList<IBusinessRuleResponse> validationList = new List<IBusinessRuleResponse>();
             var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(), new DateOnly());
-            validationList.Add(new BusinessRuleResponse(typeof(string), "hej", true, false, period, person, dateOnlyPeriod));
+            validationList.Add(new BusinessRuleResponse(typeof(string), "hej", true, false, period, person, dateOnlyPeriod, "tjillevippen"));
 
             using (_mocks.Record())
             {
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             DateTimePeriod period = new DateTimePeriod(new DateTime(2008, 1, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2008, 1, 1, 0, 0, 0, DateTimeKind.Utc));
             IList<IBusinessRuleResponse> validationList = new List<IBusinessRuleResponse>();
             var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(), new DateOnly());
-            validationList.Add(new BusinessRuleResponse(typeof(string), "hej", true, false, period, person, dateOnlyPeriod));
+            validationList.Add(new BusinessRuleResponse(typeof(string), "hej", true, false, period, person, dateOnlyPeriod, "tjillevippen"));
 
             using (_mocks.Record())
             {
@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var period = new DateTimePeriod(new DateTime(2008, 1, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2008, 1, 1, 0, 0, 0, DateTimeKind.Utc));
 			IList<IBusinessRuleResponse> validationList = new List<IBusinessRuleResponse>();
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(), new DateOnly());
-			validationList.Add(new BusinessRuleResponse(typeof(string), "hej", true, false, period, person, dateOnlyPeriod));
+			validationList.Add(new BusinessRuleResponse(typeof(string), "hej", true, false, period, person, dateOnlyPeriod, "tjillevippen"));
 
 			Expect.Call(_stateHolder.AllPersonAccounts).Return(new Dictionary<IPerson, IPersonAccountCollection>());
 			Expect.Call(_stateHolder.Schedules).Return(schedules).Repeat.AtLeastOnce();

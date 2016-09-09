@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             var start = new DateTime(2007,1,1,0,0,0,DateTimeKind.Utc);
             _dateOnly = new DateOnly(2007, 1, 1);
             _dateOnlyPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly);
-            _target = new BusinessRuleResponse(typeof(string), Message, true, false, new DateTimePeriod(start, start), _person, _dateOnlyPeriod);
+            _target = new BusinessRuleResponse(typeof(string), Message, true, false, new DateTimePeriod(start, start), _person, _dateOnlyPeriod, "tjillevippen");
             
         }
 
@@ -80,8 +80,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         public void VerifyCanBeUsedInHashSet()
         {
             var start = new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            _target = new BusinessRuleResponse(typeof(string), Message, true, false, new DateTimePeriod(start, start), _person, _dateOnlyPeriod);
-            IBusinessRuleResponse same = new BusinessRuleResponse(typeof(string), Message, true, false, new DateTimePeriod(start, start), _person, _dateOnlyPeriod);
+            _target = new BusinessRuleResponse(typeof(string), Message, true, false, new DateTimePeriod(start, start), _person, _dateOnlyPeriod, "tjillevippen");
+            IBusinessRuleResponse same = new BusinessRuleResponse(typeof(string), Message, true, false, new DateTimePeriod(start, start), _person, _dateOnlyPeriod, "tjillevippen");
             var list = new HashSet<IBusinessRuleResponse> {_target, same};
             Assert.AreEqual(1, list.Count);
         }
@@ -90,8 +90,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         public void VerifyDifferentTypeBreaksEqual()
         {
             var start = new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            _target = new BusinessRuleResponse(typeof(string), Message, true, false, new DateTimePeriod(start, start), _person, _dateOnlyPeriod);
-            IBusinessRuleResponse another = new BusinessRuleResponse(typeof(int), Message, true, false, new DateTimePeriod(start, start), _person, _dateOnlyPeriod);
+            _target = new BusinessRuleResponse(typeof(string), Message, true, false, new DateTimePeriod(start, start), _person, _dateOnlyPeriod, "tjillevippen");
+            IBusinessRuleResponse another = new BusinessRuleResponse(typeof(int), Message, true, false, new DateTimePeriod(start, start), _person, _dateOnlyPeriod, "tjillevippen");
             Assert.AreNotEqual(_target, another);
         }
 
@@ -99,8 +99,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         public void VerifyDifferentPersonBreaksEqual()
         {
             var start = new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            _target = new BusinessRuleResponse(typeof(string), Message, true, false, new DateTimePeriod(start, start), _person, _dateOnlyPeriod);
-            IBusinessRuleResponse another = new BusinessRuleResponse(typeof(string), Message, true, false, new DateTimePeriod(start, start), PersonFactory.CreatePerson(), _dateOnlyPeriod);
+            _target = new BusinessRuleResponse(typeof(string), Message, true, false, new DateTimePeriod(start, start), _person, _dateOnlyPeriod, "tjillevippen");
+            IBusinessRuleResponse another = new BusinessRuleResponse(typeof(string), Message, true, false, new DateTimePeriod(start, start), PersonFactory.CreatePerson(), _dateOnlyPeriod, "tjillevippen");
             Assert.AreNotEqual(_target, another);
         }
 
@@ -108,8 +108,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         public void VerifyDifferentPeriodBreaksEqual()
         {
             var start = new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            _target = new BusinessRuleResponse(typeof(string), Message, true, false, new DateTimePeriod(start, start), _person, _dateOnlyPeriod);
-            IBusinessRuleResponse another = new BusinessRuleResponse(typeof(string), Message, true, false, new DateTimePeriod(start, start.AddHours(1)), _person, _dateOnlyPeriod);
+            _target = new BusinessRuleResponse(typeof(string), Message, true, false, new DateTimePeriod(start, start), _person, _dateOnlyPeriod, "tjillevippen");
+            IBusinessRuleResponse another = new BusinessRuleResponse(typeof(string), Message, true, false, new DateTimePeriod(start, start.AddHours(1)), _person, _dateOnlyPeriod, "tjillevippen");
             Assert.AreNotEqual(_target, another);
         }
 
@@ -117,11 +117,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         public void VerifyCanBeUsedWithContains()
         {
             var start = new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            _target = new BusinessRuleResponse(typeof(string), Message, true, false, new DateTimePeriod(start, start), _person, _dateOnlyPeriod);
-            IBusinessRuleResponse another = new BusinessRuleResponse(typeof(string), Message, true, false, new DateTimePeriod(start, start.AddHours(1)), _person, _dateOnlyPeriod);
+            _target = new BusinessRuleResponse(typeof(string), Message, true, false, new DateTimePeriod(start, start), _person, _dateOnlyPeriod, "tjillevippen");
+            IBusinessRuleResponse another = new BusinessRuleResponse(typeof(string), Message, true, false, new DateTimePeriod(start, start.AddHours(1)), _person, _dateOnlyPeriod, "tjillevippen");
             IList<IBusinessRuleResponse> list = new List<IBusinessRuleResponse>{_target, another};
-            _target = new BusinessRuleResponse(typeof(string), Message, true, false, new DateTimePeriod(start, start), _person, _dateOnlyPeriod);
-            another = new BusinessRuleResponse(typeof(int), Message, true, false, new DateTimePeriod(start, start.AddHours(1)), _person, _dateOnlyPeriod);
+            _target = new BusinessRuleResponse(typeof(string), Message, true, false, new DateTimePeriod(start, start), _person, _dateOnlyPeriod, "tjillevippen");
+            another = new BusinessRuleResponse(typeof(int), Message, true, false, new DateTimePeriod(start, start.AddHours(1)), _person, _dateOnlyPeriod, "tjillevippen");
             Assert.IsTrue(list.Contains(_target));
             Assert.IsFalse(list.Contains(another));
         }
@@ -130,10 +130,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         public void VerifyCanBeUsedWithRemove()
         {
             var start = new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            _target = new BusinessRuleResponse(typeof(NewShiftCategoryLimitationRule), Message, true, false, new DateTimePeriod(start, start), _person, _dateOnlyPeriod);
-            IBusinessRuleResponse another = new BusinessRuleResponse(typeof(NewNightlyRestRule), Message, true, false, new DateTimePeriod(start, start), _person, _dateOnlyPeriod);
+            _target = new BusinessRuleResponse(typeof(NewShiftCategoryLimitationRule), Message, true, false, new DateTimePeriod(start, start), _person, _dateOnlyPeriod, "tjillevippen");
+            IBusinessRuleResponse another = new BusinessRuleResponse(typeof(NewNightlyRestRule), Message, true, false, new DateTimePeriod(start, start), _person, _dateOnlyPeriod, "tjillevippen");
             IList<IBusinessRuleResponse> list = new List<IBusinessRuleResponse> { _target, another };
-            IBusinessRuleResponse shouldBeSameAsTarget = new BusinessRuleResponse(typeof(NewShiftCategoryLimitationRule), Message, true, false, new DateTimePeriod(start, start), _person, _dateOnlyPeriod);
+            IBusinessRuleResponse shouldBeSameAsTarget = new BusinessRuleResponse(typeof(NewShiftCategoryLimitationRule), Message, true, false, new DateTimePeriod(start, start), _person, _dateOnlyPeriod, "tjillevippen");
 
             list.Remove(shouldBeSameAsTarget);
 
@@ -145,10 +145,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         public void ShouldNotRemoveWhenDateOnlyPeriodDiffer()
         {
             var start = new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            _target = new BusinessRuleResponse(typeof(NewNightlyRestRule), Message, true, false, new DateTimePeriod(start, start), _person, _dateOnlyPeriod);
-            IBusinessRuleResponse another = new BusinessRuleResponse(typeof(NewNightlyRestRule), Message, true, false, new DateTimePeriod(start, start), _person,_dateOnlyPeriod);
+            _target = new BusinessRuleResponse(typeof(NewNightlyRestRule), Message, true, false, new DateTimePeriod(start, start), _person, _dateOnlyPeriod, "tjillevippen");
+            IBusinessRuleResponse another = new BusinessRuleResponse(typeof(NewNightlyRestRule), Message, true, false, new DateTimePeriod(start, start), _person,_dateOnlyPeriod, "tjillevippen");
             IList<IBusinessRuleResponse> list = new List<IBusinessRuleResponse> { _target, another };
-            IBusinessRuleResponse shouldNotBeSameAsTarget = new BusinessRuleResponse(typeof(NewNightlyRestRule), Message, true, false, new DateTimePeriod(start, start), _person, new DateOnlyPeriod(_dateOnly.AddDays(1), _dateOnly.AddDays(1)));
+            IBusinessRuleResponse shouldNotBeSameAsTarget = new BusinessRuleResponse(typeof(NewNightlyRestRule), Message, true, false, new DateTimePeriod(start, start), _person, new DateOnlyPeriod(_dateOnly.AddDays(1), _dateOnly.AddDays(1)), "tjillevippen");
 
             list.Remove(shouldNotBeSameAsTarget);
 
