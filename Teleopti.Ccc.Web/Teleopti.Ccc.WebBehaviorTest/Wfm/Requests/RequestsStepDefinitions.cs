@@ -5,20 +5,23 @@ using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 {
 	[Binding]
 	public class RequestsStepDefinitions
 	{
+		private const string approvedStatusText = "Approved";
+		private const string deniedStatusText = "Denied";
+		private const string cancelledStatusText = "Cancelled";
+
 		[Given(@"'(.*)' has an existing text request with")]
 		public void GivenHasAnExistingTextRequestWith(string userName, Table table)
 		{
 			var textRequest = table.CreateInstance<TextRequestConfigurable>();
 			DataMaker.Person(userName).Apply(textRequest);
 		}
-		
+
 		[Given(@"'(.*)' has an existing absence request with")]
 		public void GivenHasAnExistingAbsenceRequestWith(string userName, Table table)
 		{
@@ -39,8 +42,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 		{
 			Browser.Interactions.SetScopeValues("date-range-picker", new Dictionary<string, string>
 			{
-				{ "requests.period.startDate", string.Format("new Date('{0}')", from)},
-				{ "requests.period.endDate", string.Format("new Date('{0}')", to) },
+				{"requests.period.startDate", $"new Date('{@from}')"},
+				{"requests.period.endDate", $"new Date('{to}')"}
 			});
 		}
 
@@ -50,7 +53,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 		{
 			Browser.Interactions.ClickUsingJQuery(".test-status-selector");
 			Browser.Interactions.ClickUsingJQuery("md-select-menu md-option:contains(\'" + status + "\')");
-			Browser.Interactions.AssertExists (".md-click-catcher");
+			Browser.Interactions.AssertExists(".md-click-catcher");
 			Browser.Interactions.ClickUsingJQuery(".md-click-catcher");
 		}
 
@@ -79,7 +82,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 		[Then(@"I should see the request from '(.*)' before the request from '(.*)' in the list")]
 		public void ThenIShouldSeeTheRequestFromBeforeTheRequestFromInTheList(string agentName1, string agentName2)
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(".ui-grid-row:contains('{0}') + .ui-grid-row:contains('{1}')", agentName1, agentName2);
+			Browser.Interactions.AssertExistsUsingJQuery(".ui-grid-row:contains('{0}') + .ui-grid-row:contains('{1}')",
+				agentName1, agentName2);
 		}
 
 		[When(@"I approve all requests that I see")]
@@ -101,32 +105,34 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 		[Then(@"I should see request for '(.*)' approved")]
 		public void ThenIShouldSeeRequestForApproved(string agentName)
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".ui-grid-row:contains('{0}') .request-status:contains('{1}')", agentName, "Approved"));
+			Browser.Interactions.AssertExistsUsingJQuery($".ui-grid-row:contains('{agentName}') .request-status:contains('" +
+														 approvedStatusText + "')");
 		}
 
 		[Then(@"I should see request for '(.*)' denied")]
 		public void ThenIShouldSeeRequestForDenied(string agentName)
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".ui-grid-row:contains('{0}') .request-status:contains('{1}')", agentName, "Denied"));
+			Browser.Interactions.AssertExistsUsingJQuery($".ui-grid-row:contains('{agentName}') .request-status:contains('" +
+														 deniedStatusText + "')");
 		}
 
 		[Then(@"I should see request for '(.*)' cancelled")]
 		public void ThenIShouldSeeRequestForCanceled(string agentName)
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".ui-grid-row:contains('{0}') .request-status:contains('{1}')", agentName, "Cancelled"));
+			Browser.Interactions.AssertExistsUsingJQuery($".ui-grid-row:contains('{agentName}') .request-status:contains('" +
+														 cancelledStatusText + "')");
 		}
-
 
 		[Then(@"I should see all requests approved")]
 		public void ThenIShouldSeeAllRequestsApproved()
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".request-status:contains('{0}')", "Approved"));
+			Browser.Interactions.AssertExistsUsingJQuery(".request-status:contains('" + approvedStatusText+ "')");
 		}
 
 		[Then(@"I should see all requests denied")]
 		public void ThenIShouldSeeAllRequestsDenied()
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".request-status:contains('{0}')", "Denied"));
+			Browser.Interactions.AssertExistsUsingJQuery(".request-status:contains('" + deniedStatusText + "')");
 		}
 
 		[When(@"I click the shift trade schedule day")]
@@ -169,13 +175,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 			Browser.Interactions.ClickUsingJQuery("requests-reply-message #btnReplyAndCancel");
 		}
 
-
 		[Then(@"I should see replied messge '(.*)' in message column")]
 		public void ThenIShouldSeeRepliedMessgeInMessageColumn(string message)
 		{
 			Browser.Interactions.ClickUsingJQuery(".ui-grid-icon-menu");
 			Browser.Interactions.ClickUsingJQuery(".ui-grid-menu-button button:contains('Message'):first");
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".request-message:contains('{0}')", message));
+			Browser.Interactions.AssertExistsUsingJQuery($".request-message:contains('{message}')");
 			Browser.Interactions.ClickUsingJQuery(".ui-grid-icon-menu");
 		}
 
