@@ -69,6 +69,50 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().Should().Be.Empty();
 		}
 
+		[Test, Ignore("40092")]
+		public void ShouldHandleCasesWhereSkillsTimeZoneIsFarAway()
+		{
+			TimeZoneGuard.SetTimeZone(TimeZoneInfo.Utc);
+			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
+			var phoneActivity = ActivityFactory.CreateActivity("phone");
+			var skill = SkillRepository.Has("skill", phoneActivity);
+			skill.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Mountain Standard Time");
+			var dateOnly = new DateOnly(2015, 10, 12);
+			var scenario = ScenarioRepository.Has("some name");
+			var schedulePeriod = new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1);
+			var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
+			var contract = new Contract("contract") { WorkTimeDirective = worktimeDirective, PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9) };
+			contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var agent = PersonRepository.Has(contract, new ContractSchedule("_"),
+					new PartTimePercentage("_"),
+					new Team {Site = new Site("site")}, schedulePeriod,
+					skill)
+				.InTimeZone(TimeZoneInfo.Utc);
+			var skillDays = SkillDayRepository.Has(new List<ISkillDay>
+			{
+				skill.CreateSkillDayWithDemand(scenario, dateOnly.AddDays(-1), 10),
+				skill.CreateSkillDayWithDemand(scenario, dateOnly, 10),
+				skill.CreateSkillDayWithDemand(scenario, dateOnly.AddDays(1), 10)
+			});
+			var ass = new PersonAssignment(agent, scenario, dateOnly);
+			ass.AddActivity(phoneActivity, new TimePeriod(1, 0, 2, 0));
+			ass.SetShiftCategory(shiftCategory);
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, skillDays);
+			var overtimePreference = new OvertimePreferences
+			{
+				OvertimeType = definitionSet,
+				ScheduleTag = new ScheduleTag(),
+				SelectedSpecificTimePeriod = new TimePeriod(0, 0, 30, 0),
+				SelectedTimePeriod = new TimePeriod(1, 0, 1, 0),
+				SkillActivity = phoneActivity
+			};
+
+			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
+
+			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().Should().Not.Be.Empty();
+		}
+
 		[Test]
 		public void ShouldPlaceOvertimeWhenViewerAndAgentTimeZonesAreFarAway([Values("W. Europe Standard Time", "Mountain Standard Time")] string viewersTimeZone)
 		{
