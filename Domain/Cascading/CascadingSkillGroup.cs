@@ -17,6 +17,6 @@ namespace Teleopti.Ccc.Domain.Cascading
 		public int PrimarySkillsCascadingIndex { get; }
 		public IEnumerable<ISkill> PrimarySkills { get; }
 		public IEnumerable<SubSkillsWithSameIndex> SubSkillsWithSameIndex { get; }
-		public double Resources { get; }
+		public double Resources { get; set; }
 	}
 }
