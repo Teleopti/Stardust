@@ -11,7 +11,7 @@
             </p>
         </div>
 
-        <md-select class="command-check-selector focus-default" ng-model="vm.currentActionOptionValue" placeholder="{{'SelectAnOption' | translate}}">
+        <md-select class="command-check-selector focus-default" ng-model="vm.currentActionOptionValue" placeholder="{{'SelectAnOption' | translate}}" autofocus>
             <md-option ng-repeat="action in vm.actionOptions" ng-value="action.value">
                 <span> {{action.getName(vm.currentCommandLabel)}}</span>
             </md-option>
