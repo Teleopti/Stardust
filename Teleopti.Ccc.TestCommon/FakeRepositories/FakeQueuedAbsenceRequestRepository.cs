@@ -73,6 +73,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				_queuedRequests.Remove(Load(x));
 			});
 		}
-		
+
+		public void Send(List<Guid> ids, DateTime timeStamp)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

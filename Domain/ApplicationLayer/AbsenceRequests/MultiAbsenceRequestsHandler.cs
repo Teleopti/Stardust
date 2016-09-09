@@ -86,8 +86,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					}
 						
 				}
-				min = _personRequests.Min(x => x.Request.Period.StartDateTime);
-				max = _personRequests.Max(x => x.Request.Period.EndDateTime);
+				if (_personRequests.Any())
+				{
+					min = _personRequests.Min(x => x.Request.Period.StartDateTime);
+					max = _personRequests.Max(x => x.Request.Period.EndDateTime);
+				}
 				
 				if (max > min)
 				{

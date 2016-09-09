@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -77,6 +78,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					var nearFuturePeriod = new DateTimePeriod(now.Date.AddDays(-1).Utc(), now.Date.AddDays(nearFuture).Utc());
 					var listOfAbsenceRequests = _absenceRequestStrategyProcessor.Get(nearFutureInterval, farFutureInterval, nearFuturePeriod, nearFuture);
 					if (!listOfAbsenceRequests.Any()) return;
+				
 					listOfAbsenceRequests.ForEach(absenceRequests =>
 					{
 						var multiAbsenceRequestsEvent = new NewMultiAbsenceRequestsCreatedEvent()
@@ -84,7 +86,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 							PersonRequestIds = absenceRequests.ToList()
 						};
 						_publisher.Publish(multiAbsenceRequestsEvent);
-					
+					_queuedAbsenceRequestRepository.Send(absenceRequests.ToList(), now);
 					});
 
 					uow.PersistAll();
@@ -94,12 +96,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 		}
 
-		public void Handle(PersonRequestProcessedEvent @event)
+		[UnitOfWork]
+		public virtual void Handle(PersonRequestProcessedEvent @event)
 		{
-			using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
-			{
-				_queuedAbsenceRequestRepository.Remove(new List<Guid>() {@event.PersonRequestId});
-			}
+			_queuedAbsenceRequestRepository.Remove(new List<Guid>() {@event.PersonRequestId});
 		}
 	}
 }

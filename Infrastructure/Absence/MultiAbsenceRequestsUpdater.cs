@@ -117,8 +117,8 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 						using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 						{
 							sendRequestCommand(personRequest);
-							_eventPublisher.Publish(new PersonRequestProcessedEvent() {PersonRequestId = personRequest.Id.GetValueOrDefault()});
 							uow.PersistAll();
+							_eventPublisher.Publish(new PersonRequestProcessedEvent() {PersonRequestId = personRequest.Id.GetValueOrDefault()});
 							break;
 						}
 					}

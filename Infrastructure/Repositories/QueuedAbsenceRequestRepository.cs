@@ -31,11 +31,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.List<IQueuedAbsenceRequest>();
 		}
 
+		public void Send(List<Guid> requestIds, DateTime timeStamp)
+		{
+			var quesryString = "UPDATE[QueuedAbsenceRequest] SET Sent = :timestamp WHERE PersonRequest in (:ids)";
+			var sqlQuery = Session.CreateSQLQuery(quesryString);
+			sqlQuery.SetDateTime("timestamp", timeStamp);
+			sqlQuery.SetParameterList("ids", requestIds);
+			sqlQuery.ExecuteUpdate();
+		}
+
+
 		public void Remove(IEnumerable<Guid> absenceRequests)
 		{
 			var hql = @"DELETE FROM QueuedAbsenceRequest WHERE personRequest in (:absenceRequests)";
-			ISQLQuery sqlQuery;
-			sqlQuery = Session.CreateSQLQuery(hql);
+			var sqlQuery = Session.CreateSQLQuery(hql);
 			sqlQuery.SetParameterList("absenceRequests", absenceRequests.ToArray());
 			sqlQuery.ExecuteUpdate();
 		}

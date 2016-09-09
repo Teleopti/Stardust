@@ -8,5 +8,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 	{
 		IList<IQueuedAbsenceRequest> Find( DateTimePeriod period);
 		void Remove(IEnumerable<Guid> absenceRequests);
+		void Send(List<Guid> ids, DateTime timeStamp);
 	}
 }
