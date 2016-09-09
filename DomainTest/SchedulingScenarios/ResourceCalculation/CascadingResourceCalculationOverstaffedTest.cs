@@ -237,6 +237,46 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				.Should().Be.EqualTo(1);
 		}
 
+		[Test, Ignore]
+		public void ShouldNotMoveTooLittleWhenPrimarySkillExistsInOtherSkillGroup()
+		{
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var dateOnly = DateOnly.Today;
+
+			var skillA1 = new Skill("A1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillA1.SetCascadingIndex(1);
+
+			var skillA2 = new Skill("A2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillA2.SetCascadingIndex(1);
+
+			var skillB = new Skill("B", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillB.SetCascadingIndex(2);
+
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillA1, new TimePeriod(6, 0, 7, 0));
+			WorkloadFactory.CreateWorkloadThatIsClosed(skillA2);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(6, 0, 7, 0));
+
+			var skillADay1 = skillA1.CreateSkillDayWithDemand(scenario, dateOnly, 0);
+			var skillADay2 = skillA2.CreateSkillDayWithDemand(scenario, dateOnly, 1);	
+			var skillBDay = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 10);
+
+			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
+			agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA1, skillA2, skillB });
+			var ass = new PersonAssignment(agent, scenario, dateOnly);
+			ass.AddActivity(activity, new TimePeriod(6, 0, 7, 0));
+
+			var agent2 = new Person().InTimeZone(TimeZoneInfo.Utc);
+			agent2.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA1, skillB });
+			var ass2 = new PersonAssignment(agent2, scenario, dateOnly);
+			ass2.AddActivity(activity, new TimePeriod(6, 0, 7, 0));
+
+			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, new[] { ass, ass2}, new[] { skillADay1, skillADay2, skillBDay }, false, false));
+
+			skillBDay.SkillStaffPeriodCollection.First().CalculatedResource
+				.Should().Be.EqualTo(2);
+		}
+
 		[Test]
 		public void ShouldNotMoveResourceWhenNonPrioritizedSkillIsMaxSeat()
 		{
