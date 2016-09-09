@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			_datasource = new ExistingDatasources(_timeZones);
 
 			analyticsDataFactory.Setup(new Person(personId, Guid.NewGuid(), Guid.NewGuid(), "Ashley", "Andeen", new DateTime(2010, 1, 1),
-				new DateTime(2059, 12, 31), 0, -2, businessUnitId, Guid.NewGuid(), _datasource, false, _timeZones.UtcTimeZoneId));
+				AnalyticsDate.Eternity.DateDate, 0, -2, businessUnitId, Guid.NewGuid(), _datasource, false, _timeZones.UtcTimeZoneId));
 
 			analyticsDataFactory.Setup(Scenario.DefaultScenarioFor(scenarioId, Guid.NewGuid()));
 

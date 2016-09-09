@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 					TeamId = -1,
 					BusinessUnitId = -1,
 					DatasourceId = -1,
-					DatasourceUpdateDate = new DateTime(2059, 12, 31)
+					DatasourceUpdateDate = AnalyticsDate.Eternity.DateDate
 				});
 			}
 			else

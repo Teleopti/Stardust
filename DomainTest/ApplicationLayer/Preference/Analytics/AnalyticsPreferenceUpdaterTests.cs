@@ -403,7 +403,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 				DatasourceUpdateDate = DateTime.Now,
 				Email = person.Email,
 				EmploymentStartDate = new DateTime(2000, 1, 1),
-				EmploymentEndDate = new DateTime(2059, 12, 31),
+				EmploymentEndDate = AnalyticsDate.Eternity.DateDate,
 				EmploymentNumber = "",
 				EmploymentTypeCode = 0,
 				EmploymentTypeName = "",

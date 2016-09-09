@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.InfrastructureTest._WebReports.DailyMetricsForDay
             ScenarioId = 12;
 
             var agent = new Person(_loggedOnUser, datasource, PersonId, new DateTime(2010, 1, 1),
-                         new DateTime(2059, 12, 31), yesterDay.DateId, TheDate.DateId, 0, _currentBusinessUnit.Id.Value, false, timeZones.CetTimeZoneId);
+						 AnalyticsDate.Eternity.DateDate, yesterDay.DateId, TheDate.DateId, 0, _currentBusinessUnit.Id.Value, false, timeZones.CetTimeZoneId);
             var scenario = Scenario.DefaultScenarioFor(ScenarioId, _currentBusinessUnit.Id.Value);
 
 			_analyticsDataFactory.Setup(new EternityAndNotDefinedDate());

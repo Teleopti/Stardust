@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
@@ -99,8 +100,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			_fakeEventPublisher.Clear();
 
 			var date = WithAnalyticsUnitOfWork.Get(() => Target.MaxDate());
-			date.DateDate.Date.Should().Be.EqualTo(new DateTime(2059, 12, 31));
-			date.DateId.Should().Be.EqualTo(-2);
+			date.DateDate.Date.Should().Be.EqualTo(AnalyticsDate.Eternity.DateDate);
+			date.DateId.Should().Be.EqualTo(AnalyticsDate.Eternity.DateId);
 
 			_fakeEventPublisher.PublishedEvents.Should().Be.Empty();
 		}

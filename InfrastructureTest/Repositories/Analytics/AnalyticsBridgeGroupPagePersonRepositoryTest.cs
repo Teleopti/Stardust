@@ -82,10 +82,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			person2.PersonPeriodCollection.First().SetId(personPeriodId2);
 
 			analyticsDataFactory.Setup(new Person(person, datasource, 0, new DateTime(2010, 1, 1),
-				new DateTime(2059, 12, 31), 0, -2, 0, businessUnitId,
+				AnalyticsDate.Eternity.DateDate, 0, -2, 0, businessUnitId,
 				false, timeZones.UtcTimeZoneId, personPeriodId));
 			analyticsDataFactory.Setup(new Person(person2, datasource, 1, new DateTime(2010, 1, 1),
-				new DateTime(2059, 12, 31), 0, -2, 0, businessUnitId,
+				AnalyticsDate.Eternity.DateDate, 0, -2, 0, businessUnitId,
 				false, timeZones.UtcTimeZoneId, personPeriodId2));
 
 			analyticsDataFactory.Persist();

@@ -48,10 +48,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 
 			
 			analyticsDataFactory.Setup(new Person(_personWithGuid, datasource, 0, validFrom,
-				new DateTime(2059, 12, 31), 0, -2, 0, BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault(),
+				AnalyticsDate.Eternity.DateDate, 0, -2, 0, BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault(),
 				false, timeZones.UtcTimeZoneId));
 			analyticsDataFactory.Setup(new Person(personWithGuid2, datasource, 1, validFrom,
-				new DateTime(2059, 12, 31), 0, -2, 0, BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault(),
+				AnalyticsDate.Eternity.DateDate, 0, -2, 0, BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault(),
 				false, timeZones.UtcTimeZoneId));
 
 			analyticsDataFactory.Persist();
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				DatasourceUpdateDate = DateTime.Now,
 				Email = _personWithGuid.Email,
 				EmploymentStartDate = new DateTime(2000, 1, 1),
-				EmploymentEndDate = new DateTime(2059, 12, 31),
+				EmploymentEndDate = AnalyticsDate.Eternity.DateDate,
 				EmploymentNumber = "",
 				EmploymentTypeCode = 0,
 				EmploymentTypeName = "",

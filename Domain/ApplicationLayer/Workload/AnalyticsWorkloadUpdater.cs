@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Workload
 			var queueAdjustments = workload.QueueAdjustments;
 			var workloadDeleteCheck = workload as IDeleteTag;
 
-			var datasourceUpdateDate = workload.UpdatedOn.GetValueOrDefault(new DateTime(2059, 12, 31));
+			var datasourceUpdateDate = workload.UpdatedOn.GetValueOrDefault(AnalyticsDate.Eternity.DateDate);
 			var analyticsWorkload = new AnalyticsWorkload
 			{
 				WorkloadCode = workload.Id.GetValueOrDefault(),

@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public new IAnalyticsDate MaxDate()
 		{
-			return new AnalyticsDate {DateDate = new DateTime(2059, 12, 31), DateId = -2};
+			return AnalyticsDate.Eternity;
 		}
 
 		public new IAnalyticsDate MinDate()

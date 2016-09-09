@@ -15,17 +15,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				new DateTime(2067, 03, 06),
 				TimeZoneInfo.Utc, new DateTime(2000,1,1));
 
-			Assert.AreEqual(new DateTime(2059, 12, 31), validFromDate);
+			Assert.AreEqual(AnalyticsDate.Eternity.DateDate, validFromDate);
 		}
 
 		[Test]
 		public void PersonPeriodStartDateEternity_Transform_Eternity()
 		{
 			var validFromDate = PersonPeriodTransformer.ValidFromDate(
-				new DateTime(2059, 12, 31),
+				AnalyticsDate.Eternity.DateDate,
 				TimeZoneInfo.Utc,new DateTime(2000,4,4));
 
-			Assert.AreEqual(new DateTime(2059, 12, 31), validFromDate);
+			Assert.AreEqual(AnalyticsDate.Eternity.DateDate, validFromDate);
 		}
 
         [Test]
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				TimeZoneInfo.Utc,
 				new DateTime(2020, 01, 01));
 
-			Assert.AreEqual(new DateTime(2059, 12, 31), validToDate);
+			Assert.AreEqual(AnalyticsDate.Eternity.DateDate, validToDate);
 		}
 
 		[Test]
@@ -74,11 +74,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		public void PersonPeriodEndDateEternity_Transform_Eternity()
 		{
 			var validToDate = PersonPeriodTransformer.ValidToDate(
-				new DateTime(2059, 12, 31),
+				AnalyticsDate.Eternity.DateDate,
 				TimeZoneInfo.Utc,
 				new DateTime(2020, 01, 01));
 
-			Assert.AreEqual(new DateTime(2059, 12, 31), validToDate);
+			Assert.AreEqual(AnalyticsDate.Eternity.DateDate, validToDate);
 		}
 
 		[Test]
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		[Test]
 		public void PersonPeriodValidToDateEternity_Transform_SecondToMaxDateId()
 		{
-			var validTo = new DateTime(2059, 12, 31);
+			var validTo = AnalyticsDate.Eternity.DateDate;
 			var maxDate = new AnalyticsDate
 			{
 				DateId = 1000,

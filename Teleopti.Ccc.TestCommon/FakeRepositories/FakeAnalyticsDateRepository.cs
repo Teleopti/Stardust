@@ -28,8 +28,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		private void initDates(DateTime start, DateTime end)
 		{
-			_fakeDates.Add(new AnalyticsDate {DateDate = new DateTime(1900, 01, 01),DateId = -1});
-			_fakeDates.Add(new AnalyticsDate { DateDate = new DateTime(2059, 12, 31), DateId = -2 });
+			_fakeDates.Add(AnalyticsDate.NotDefined);
+			_fakeDates.Add(AnalyticsDate.Eternity);
 
 			var d = start;
 			var dIndex = 0;

@@ -5,8 +5,10 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Analytics.Transformer;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandlers.Analytics
 {
@@ -118,17 +120,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		[Test]
 		public void BigBangDate_MapDateToId_NotDefinedDate()
 		{
-			var date = new DateTime(1900, 01, 01);
+			var date = AnalyticsDate.NotDefined.DateDate;
 			var dateId = personPeriodTransformer.MapDateId(date);
-			Assert.AreEqual(-1, dateId);
+			Assert.AreEqual(AnalyticsDate.NotDefined.DateId, dateId);
 		}
 
 		[Test]
 		public void Eternity_MapDateToId_EternityDate()
 		{
-			var date = new DateTime(2059, 12, 31);
+			var date = AnalyticsDate.Eternity.DateDate;
 			var dateId = personPeriodTransformer.MapDateId(date);
-			Assert.AreEqual(-2, dateId);
+			Assert.AreEqual(AnalyticsDate.Eternity.DateId, dateId);
 		}
 
 		[Test]

@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 {
 	public class PersonPeriodTransformer : IPersonPeriodTransformer
 	{
-		private static readonly DateTime eternity = new DateTime(2059, 12, 31);
 		private readonly IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository;
 		private readonly IAnalyticsSkillRepository _analyticsSkillRepository;
 		private readonly IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
@@ -162,16 +161,12 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 
 		public static DateTime ValidToDateLocal(DateTime personPeriodEndDate, IAnalyticsDate maxDate)
 		{
-			if (personPeriodEndDate.Equals(eternity))
-				return maxDate.DateDate;
-			return personPeriodEndDate;
+			return personPeriodEndDate.Equals(AnalyticsDate.Eternity.DateDate) ? maxDate.DateDate : personPeriodEndDate;
 		}
 
 		public static int ValidToDateIdLocal(int dateId, IAnalyticsDate maxDate)
 		{
-			if (dateId == -2)
-				return maxDate.DateId;
-			return dateId;
+			return dateId == AnalyticsDate.Eternity.DateId ? maxDate.DateId : dateId;
 		}
 
 		public static int ValidToIntervalId(DateTime validToDate, int intervalsPerDay)
@@ -187,14 +182,12 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 		private int getValidToIntervalIdMaxDate(int validToIntervalId, int validToDateId)
 		{
 			// Samma som ValidToIntervalId om inte validToDateId är eterntity då ska det vara sista interval i dim_interval
-			if (validToDateId != -2)
-				return validToIntervalId;
-			return _analyticsIntervalRepository.MaxIntervalId();
+			return validToDateId != AnalyticsDate.Eternity.DateId ? validToIntervalId : _analyticsIntervalRepository.MaxIntervalId();
 		}
 
 		private static DateTime getPeriodIntervalEndDate(DateTime endDate, int intervalsPerDay)
 		{
-			if (endDate.Equals(eternity))
+			if (endDate.Equals(AnalyticsDate.Eternity.DateDate))
 			{
 				return endDate;
 			}
@@ -206,15 +199,15 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 		public static int GetValidToDateIdMaxDate(DateTime validToDate, IAnalyticsDate maxDate, int validToDateId)
 		{
 			// Samma som ValidToDateId om inte eternity då ska vara näst sista dagen i dim_date
-			return validToDate.Equals(eternity)
+			return validToDate.Equals(AnalyticsDate.Eternity.DateDate)
 				? maxDate.DateId - 1
 				: validToDateId;
 		}
 
 		public static DateTime ValidToDate(DateTime personPeriodEndDate, TimeZoneInfo timeZoneInfo, DateTime maxDate)
 		{
-			var validToDate = personPeriodEndDate.Equals(eternity) || personPeriodEndDate > maxDate
-				? eternity
+			var validToDate = personPeriodEndDate.Equals(AnalyticsDate.Eternity.DateDate) || personPeriodEndDate > maxDate
+				? AnalyticsDate.Eternity.DateDate
 				: timeZoneInfo.SafeConvertTimeToUtc(personPeriodEndDate.AddDays(1));
 			// Add one days because there is no end time in app database but it is in analytics and we do not want gap between person periods end and start date.
 			return validToDate;
@@ -225,17 +218,15 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 			if (personPeriodStartDate < minDate)
 				return minDate;
 			var validFromDate = timeZoneInfo.SafeConvertTimeToUtc(personPeriodStartDate);
-			if (validFromDate >= eternity)
-				validFromDate = eternity;
+			if (validFromDate >= AnalyticsDate.Eternity.DateDate)
+				validFromDate = AnalyticsDate.Eternity.DateDate;
 			return validFromDate;
 		}
 
 		public int MapDateId(DateTime date)
 		{
 			var analyticsDate = _analyticsDateRepository.Date(date);
-			if (analyticsDate != null)
-				return analyticsDate.DateId;
-			return -1;
+			return analyticsDate?.DateId ?? AnalyticsDate.NotDefined.DateId;
 		}
 
 		public IAnalyticsDate MapMaxDate()
@@ -293,7 +284,7 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 		{
 			mappedAnalyticsSkills = null;
 			if (applicationSkillCodes.IsEmpty())
-				return -1;
+				return AnalyticsDate.NotDefined.DateId;
 
 			var allAnalyticsSkills = _analyticsSkillRepository.Skills(businessUnitId).ToList();
 			mappedAnalyticsSkills = allAnalyticsSkills.Where(a => applicationSkillCodes.Contains(a.SkillCode)).ToList();

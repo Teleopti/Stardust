@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			Assert.AreEqual(1, bridgeRowsForAcdLogin.Count);
 			Assert.AreEqual(2, bridgeRowsForAcdLogin.First().AcdLoginId);
 			Assert.AreEqual(-1, bridgeRowsForAcdLogin.First().PersonId);
-			Assert.AreEqual(new DateTime(2059, 12, 31), bridgeRowsForAcdLogin.First().DatasourceUpdateDate);
+			Assert.AreEqual(AnalyticsDate.Eternity.DateDate, bridgeRowsForAcdLogin.First().DatasourceUpdateDate);
 		}
 
 		[Test]

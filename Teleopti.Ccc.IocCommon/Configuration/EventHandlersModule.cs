@@ -221,15 +221,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			_config.Cache().This<IAnalyticsDateRepository>(b => b.CacheMethod(x => x.Date(new DateTime())));
 			builder.CacheByInterfaceProxy<AnalyticsDateRepository, IAnalyticsDateRepository>();
 
-			builder.RegisterType<PersonPeriodTransformer>().As<IPersonPeriodTransformer>(); // TODO
+			builder.RegisterType<PersonPeriodTransformer>().As<IPersonPeriodTransformer>();
+			builder.RegisterType<PersonPeriodFilter>().As<IPersonPeriodFilter>();
+
 			if (_config.Toggle(Toggles.ETL_EventbasedDate_39562))
 			{
-				builder.RegisterType<PersonPeriodFilterWithoutMaxDate>().As<IPersonPeriodFilter>();
 				builder.RegisterType<AnalyticsDateRepositoryWithCreation>().As<IAnalyticsDateRepository>();
 			}
 			else
 			{
-				builder.RegisterType<PersonPeriodFilter>().As<IPersonPeriodFilter>();
 				builder.RegisterType<AnalyticsDateRepository>().As<IAnalyticsDateRepository>();
 			}
 		}

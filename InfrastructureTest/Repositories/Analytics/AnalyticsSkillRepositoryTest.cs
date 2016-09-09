@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			analyticsDataFactory.Persist();
 		}
 
-		private void SetUpData()
+		private void setUpData()
 		{
 			skillSetId = Target.AddSkillSet(new AnalyticsSkillSet
 			{
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				SkillsetName = "skill1,skill2,skill3"
 			});
 
-			SetUpPerson();
+			setUpPerson();
 
 			Target.AddAgentSkill(1, 0, true, 1);
 			Target.AddAgentSkill(1, 1, false, 1);
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			Target.AddAgentSkill(2, 2, true, 1);
 		}
 
-		private void SetUpPerson()
+		private void setUpPerson()
 		{
 			var personWithGuid = PersonFactory.CreatePersonWithGuid("firstName", "lastName");
 			var personPeriodCode1 = Guid.NewGuid();
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				DatasourceUpdateDate = DateTime.Now,
 				Email = personWithGuid.Email,
 				EmploymentStartDate = new DateTime(2000, 1, 1),
-				EmploymentEndDate = new DateTime(2059, 12, 31),
+				EmploymentEndDate = AnalyticsDate.Eternity.DateDate,
 				EmploymentNumber = "",
 				EmploymentTypeCode = 0,
 				EmploymentTypeName = "",
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldReturnAllSkillsets()
 		{
-			SetUpData();
+			setUpData();
 
 			var result = Target.SkillSets();
 			result.Count.Should().Be.EqualTo(1);
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldReturnSkillset()
 		{
-			SetUpData();
+			setUpData();
 
 			var list = new List<AnalyticsSkill> {
 				new AnalyticsSkill { SkillId = 3 },
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldReturnSkills()
 		{
-			SetUpData();
+			setUpData();
 
 			var result = Target.Skills(businessUnit.BusinessUnitId);
 			result.Count().Should().Be.EqualTo(3);
@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldReturnFactAgentSkills()
 		{
-			SetUpData();
+			setUpData();
 
 			var result = Target.GetFactAgentSkillsForPerson(1);
 			result.Count.Should().Be.EqualTo(3);
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldDeleteAgentSkillsForOnePerson()
 		{
-			SetUpData();
+			setUpData();
 
 			Target.DeleteAgentSkillForPersonId(1);
 			var result = Target.GetFactAgentSkillsForPerson(1);
@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldAddBridgeSkillsetSkill()
 		{
-			SetUpData();
+			setUpData();
 
 			Target.AddBridgeSkillsetSkill(new AnalyticsBridgeSkillsetSkill
 			{
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldAddOrUpdateSkill()
 		{
-			SetUpData();
+			setUpData();
 
 			var analyticsSkill = new AnalyticsSkill
 			{
@@ -219,7 +219,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			Target.AddOrUpdateSkill(analyticsSkill);
 
 			result = Target.Skills(businessUnit.BusinessUnitId);
-			result.FirstOrDefault(x => x.SkillCode == analyticsSkill.SkillCode).IsDeleted.Should().Be.True();
+			var firstSkill = result.FirstOrDefault(x => x.SkillCode == analyticsSkill.SkillCode);
+			(firstSkill != null && firstSkill.IsDeleted).Should().Be.True();
 		}
 	}
 }

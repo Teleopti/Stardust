@@ -8,7 +8,6 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 {
 	public class PersonPeriodFilter : IPersonPeriodFilter
 	{
-		private static readonly DateTime eternity = new DateTime(2059, 12, 31);
 		private readonly DateTime minDate;
 		private readonly DateTime maxDate;
 
@@ -20,25 +19,8 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 
 		public IEnumerable<IPersonPeriod> GetFiltered(IEnumerable<IPersonPeriod> personPeriods)
 		{
-			return personPeriods.Where(personPeriod => personPeriod.StartDate.Date < eternity &&
+			return personPeriods.Where(personPeriod => personPeriod.StartDate.Date < AnalyticsDate.Eternity.DateDate &&
 											  personPeriod.StartDate.Date <= maxDate &&
-											  personPeriod.EndDate().Date >= minDate);
-		}
-	}
-
-	public class PersonPeriodFilterWithoutMaxDate : IPersonPeriodFilter
-	{
-		private static readonly DateTime eternity = new DateTime(2059, 12, 31);
-		private readonly DateTime minDate;
-
-		public PersonPeriodFilterWithoutMaxDate(IAnalyticsDateRepository analyticsDateRepository)
-		{
-			minDate = analyticsDateRepository.MinDate().DateDate;
-		}
-
-		public IEnumerable<IPersonPeriod> GetFiltered(IEnumerable<IPersonPeriod> personPeriods)
-		{
-			return personPeriods.Where(personPeriod => personPeriod.StartDate.Date < eternity &&
 											  personPeriod.EndDate().Date >= minDate);
 		}
 	}
