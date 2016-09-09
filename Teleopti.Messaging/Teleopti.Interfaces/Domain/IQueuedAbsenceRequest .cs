@@ -10,5 +10,7 @@ namespace Teleopti.Interfaces.Domain
 		DateTime StartDateTime { get; set; }
 
 		DateTime EndDateTime { get; set; }
+
+		DateTime? Sent { get; set; }
 	}
 }

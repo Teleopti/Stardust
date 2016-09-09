@@ -26,6 +26,10 @@
 						type="DateTime"
 						not-null="true"/>
 
+		<property name="Sent"
+						type="DateTime"
+						not-null="false"/>
+		
 		<property name="PersonRequest"
 			 type="guid"
 			 not-null="true" />

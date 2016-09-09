@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -49,7 +50,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		private IQueuedAbsenceRequest createAbsenceRequestAndBusinessUnit(IAbsence absence = null)
 		{
-			return  new QueuedAbsenceRequest {PersonRequest = _personRequest.Id.Value, StartDateTime = _absenceRequest.Period.StartDateTime, EndDateTime = _absenceRequest.Period.EndDateTime, Created = _personRequest.CreatedOn.Value};
+			return new QueuedAbsenceRequest
+			{
+				PersonRequest = _personRequest.Id.Value,
+				StartDateTime = _absenceRequest.Period.StartDateTime,
+				EndDateTime = _absenceRequest.Period.EndDateTime,
+				Created = _personRequest.CreatedOn.Value,
+				//Sent = DateTime.Now
+			};
 		}
 
 		
@@ -68,11 +76,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldFindAllQueuedWithSomePartInsidePeriod()
 		{
-			createQueduedRequest(new DateTime(2008, 7, 10, 8, 0, 0), new DateTime(2008, 7, 10, 9, 0, 0));
+			var sent = DateTime.Now.Truncate(TimeSpan.FromSeconds(1));
+			createQueduedRequest(new DateTime(2008, 7, 10, 8, 0, 0), new DateTime(2008, 7, 10, 9, 0, 0), sent);
 			System.Threading.Thread.Sleep(1000);
-			createQueduedRequest(new DateTime(2008, 7, 10, 10, 0, 0), new DateTime(2008, 7, 14, 9, 0, 0));
-			createQueduedRequest(new DateTime(2008, 7, 10, 18, 0, 0), new DateTime(2008, 7, 10, 20, 0, 0));
-			createQueduedRequest(new DateTime(2008, 7, 11, 8, 0, 0), new DateTime(2008, 7, 11, 9, 0, 0));
+			createQueduedRequest(new DateTime(2008, 7, 10, 10, 0, 0), new DateTime(2008, 7, 14, 9, 0, 0), sent);
+			createQueduedRequest(new DateTime(2008, 7, 10, 18, 0, 0), new DateTime(2008, 7, 10, 20, 0, 0), sent);
+			createQueduedRequest(new DateTime(2008, 7, 11, 8, 0, 0), new DateTime(2008, 7, 11, 9, 0, 0), sent);
 
 			var period = new DateTimePeriod(
 				new DateTime(2008, 7, 10, 9, 0, 0, DateTimeKind.Utc),
@@ -83,15 +92,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			queued.Count.Should().Be.EqualTo(2);
 			queued[0].StartDateTime.Should().Be.EqualTo(new DateTime(2008, 7, 10, 8, 0, 0));
 			queued[1].StartDateTime.Should().Be.EqualTo(new DateTime(2008, 7, 10, 10, 0, 0));
+			queued.First().Sent.GetValueOrDefault().Should().Be.EqualTo(sent);
 		}
 
 		[Test]
 		public void ShouldRemoveQueuedAbsenceRequests()
 		{
 			var guidsToRemove = new List<Guid>();
-			guidsToRemove.Add(createQueduedRequest(new DateTime(2008, 7, 10, 10, 0, 0), new DateTime(2008, 7, 14, 9, 0, 0)));
-			guidsToRemove.Add(createQueduedRequest(new DateTime(2008, 7, 10, 18, 0, 0), new DateTime(2008, 7, 10, 20, 0, 0)));
-			var notDeletedId =  createQueduedRequest(new DateTime(2008, 7, 11, 8, 0, 0), new DateTime(2008, 7, 11, 9, 0, 0));
+			var sent = DateTime.Now;
+
+			guidsToRemove.Add(createQueduedRequest(new DateTime(2008, 7, 10, 10, 0, 0), new DateTime(2008, 7, 14, 9, 0, 0), sent));
+			guidsToRemove.Add(createQueduedRequest(new DateTime(2008, 7, 10, 18, 0, 0), new DateTime(2008, 7, 10, 20, 0, 0), sent));
+			var notDeletedId =  createQueduedRequest(new DateTime(2008, 7, 11, 8, 0, 0), new DateTime(2008, 7, 11, 9, 0, 0), sent);
 
 			var target = new QueuedAbsenceRequestRepository(CurrUnitOfWork);
 			target.Remove(guidsToRemove);
@@ -100,7 +112,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			result.First().PersonRequest.Should().Be.EqualTo(notDeletedId);
 		}
 
-		private Guid createQueduedRequest(DateTime start, DateTime end)
+		private Guid createQueduedRequest(DateTime start, DateTime end, DateTime sentDateTime)
 		{
 			var period = new DateTimePeriod(
 				new DateTime(start.Ticks, DateTimeKind.Utc),
@@ -112,7 +124,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			PersistAndRemoveFromUnitOfWork(personRequest);
 
-			var queued = new QueuedAbsenceRequest { PersonRequest = personRequest.Id.Value, StartDateTime = absenceRequest.Period.StartDateTime, EndDateTime = absenceRequest.Period.EndDateTime, Created = personRequest.CreatedOn.Value };
+			var queued = new QueuedAbsenceRequest
+			{
+				PersonRequest = personRequest.Id.Value,
+				StartDateTime = absenceRequest.Period.StartDateTime,
+				EndDateTime = absenceRequest.Period.EndDateTime,
+				Created = personRequest.CreatedOn.Value,
+				Sent = sentDateTime
+			};
 			PersistAndRemoveFromUnitOfWork(queued);
 			return queued.PersonRequest;
 		}
