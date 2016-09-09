@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
@@ -141,6 +142,68 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 					timer.Start();
 
 					Rta.CheckForActivityChanges(DataSourceHelper.TestTenantName);
+
+					timer.Stop();
+					return new
+					{
+						timer.Elapsed,
+						x.transactions,
+						x.size,
+						x.variation
+					};
+				});
+
+			results
+				.OrderBy(x => x.Elapsed)
+				.ForEach(x => Debug.WriteLine($"{x.Elapsed} - {x.size} {x.transactions} {x.variation}"));
+
+		}
+
+		[Test]
+		public void MeasureClosingSnapshot()
+		{
+			Publisher.AddHandler<MappingReadModelUpdater>();
+			Publisher.AddHandler<PersonAssociationChangedEventPublisher>();
+			Publisher.AddHandler<AgentStateMaintainer>();
+			Analytics.WithDataSource(9, "sourceId");
+			Database
+				.WithStateGroup("phone")
+				.WithStateCode("phone");
+			Enumerable.Range(0, 100).ForEach(x => Database.WithStateGroup($"code{x}").WithStateCode($"code{x}"));
+			Enumerable.Range(0, 10).ForEach(x => Database.WithActivity($"activity{x}"));
+			var userCodes = Enumerable.Range(0, 12000).Select(x => $"user{x}").ToArray();
+			userCodes.ForEach(x => Database.WithAgent(x));
+			Publisher.Publish(new TenantMinuteTickEvent());
+			var batches = userCodes
+				.Batch(1000)
+				.Select(x => new BatchForTest
+				{
+					SnapshotId = "2016-09-09 10:00".Utc(),
+					States = x.Select(y => new BatchStateForTest
+					{
+						UserCode = y,
+						StateCode = "phone"
+					}).ToArray()
+				}).ToArray();
+
+			var results = (
+				from transactions in new[] {7}
+				from size in new[] {100}
+				from variation in new[] {"A"} //, "B", "C"}
+				select new {transactions, size, variation}).Select(x =>
+				{
+					Config.FakeSetting("RtaParallelTransactions", x.transactions.ToString());
+					Config.FakeSetting("RtaMaxTransactionSize", x.size.ToString());
+
+					batches.ForEach(Rta.SaveStateBatch);
+
+					var timer = new Stopwatch();
+					timer.Start();
+
+					Rta.CloseSnapshot(new CloseSnapshotForTest
+					{
+						SnapshotId = "2016-09-09 10:01".Utc()
+					});
 
 					timer.Stop();
 					return new

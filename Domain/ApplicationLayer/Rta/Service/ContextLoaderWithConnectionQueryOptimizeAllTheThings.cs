@@ -110,6 +110,31 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			process(personIds, (ids, _) => _agentStatePersister.Get(ids), null, action);
 		}
 
+		public override void ForClosingSnapshot(DateTime snapshotId, string sourceId, Action<Context> action)
+		{
+			IEnumerable<Guid> personIds = null;
+
+			WithUnitOfWork(() =>
+			{
+				var missingAgents = _agentStatePersister.GetStatesNotInSnapshot(snapshotId, sourceId);
+				personIds = missingAgents
+					.Where(x => x.StateCode != Rta.LogOutBySnapshot)
+					.Select(x => x.PersonId)
+					.ToArray();
+			});
+
+			process(
+				personIds,
+				(ids, _) => _agentStatePersister.Get(ids),
+				_ => new InputInfo
+				{
+					StateCode = Rta.LogOutBySnapshot,
+					PlatformTypeId = Guid.Empty.ToString(),
+					SnapshotId = snapshotId
+				},
+				action);
+		}
+
 		public class scheduleData : ScheduleState
 		{
 			public Guid PersonId;
@@ -286,47 +311,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 
 
+		
 
-		[AllBusinessUnitsUnitOfWork]
-		[ReadModelUnitOfWork]
-		public override void ForClosingSnapshot(DateTime snapshotId, string sourceId, Action<Context> action)
-		{
-			var stateCode = Rta.LogOutBySnapshot;
-			var now = _now.UtcDateTime();
 
-			var missingAgents = _agentStatePersister.GetStatesNotInSnapshot(snapshotId, sourceId);
-			var agentsNotAlreadyLoggedOut =
-				from a in missingAgents
-				where a.StateCode != stateCode
-				select a;
-
-			var mappings = new MappingsState(() => _mappingReader.Read());
-
-			agentsNotAlreadyLoggedOut.ForEach(state =>
-			{
-				action.Invoke(new Context(
-					now,
-					new InputInfo
-					{
-						StateCode = stateCode,
-						PlatformTypeId = Guid.Empty.ToString(),
-						SnapshotId = snapshotId
-					},
-					state.PersonId,
-					state.BusinessUnitId,
-					state.TeamId.GetValueOrDefault(),
-					state.SiteId.GetValueOrDefault(),
-					() => state,
-					() => makeScheduleState(state, now),
-					s => mappings,
-					c => _agentStatePersister.Update(c.MakeAgentState()),
-					_stateMapper,
-					_appliedAdherence,
-					_appliedAlarm
-					));
-			});
-
-		}
 
 		[AllBusinessUnitsUnitOfWork]
 		[ReadModelUnitOfWork]
