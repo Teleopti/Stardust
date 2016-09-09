@@ -52,7 +52,6 @@ namespace Teleopti.Ccc.Domain.Cascading
 								{
 									var state = _primarySkillOverstaff.AvailableSum(skillStaffPeriodHolder, skillGroups, skillGroup, interval);
 									_addResourcesToSubSkillsFocusHighUnderstaffingPercentage.Execute(state, skillStaffPeriodHolder, skillGroup, interval);
-									skillGroup.Resources -= state.ResourcesMoved;
 									_reducePrimarySkillResourcesPercentageDistribution.Execute(state, skillStaffPeriodHolder, skillGroup.PrimarySkills, interval);
 								}
 							}

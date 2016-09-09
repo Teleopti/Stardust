@@ -10,13 +10,13 @@ namespace Teleopti.Ccc.Domain.Cascading
 		{
 			PrimarySkills = primarySkills;
 			SubSkillsWithSameIndex = subSkillsWithSameIndex;
-			Resources = resources;
+			RemainingResources = resources;
 			PrimarySkillsCascadingIndex = primarySkills.First().CascadingIndex.Value;
 		}
 
 		public int PrimarySkillsCascadingIndex { get; }
 		public IEnumerable<ISkill> PrimarySkills { get; }
 		public IEnumerable<SubSkillsWithSameIndex> SubSkillsWithSameIndex { get; }
-		public double Resources { get; set; }
+		public double RemainingResources { get; set; }
 	}
 }

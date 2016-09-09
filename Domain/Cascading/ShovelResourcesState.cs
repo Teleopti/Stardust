@@ -7,8 +7,11 @@ namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class ShovelResourcesState
 	{
-		public ShovelResourcesState(IDictionary<ISkill, double> resources)
+		private readonly CascadingSkillGroup _skillGroup;
+
+		public ShovelResourcesState(IDictionary<ISkill, double> resources, CascadingSkillGroup skillGroup)
 		{
+			_skillGroup = skillGroup;
 			ResourcesAvailableForPrimarySkill = resources;
 			RemainingOverstaffing = ResourcesAvailableForPrimarySkill.Values.Sum();
 			TotalOverstaffingAtStart = RemainingOverstaffing;
@@ -24,6 +27,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 			skillStaffPeriod.AddResources(value);
 			RemainingOverstaffing -= value;
 			ResourcesMoved += value;
+			_skillGroup.RemainingResources -= value;
 		}
 	}
 }

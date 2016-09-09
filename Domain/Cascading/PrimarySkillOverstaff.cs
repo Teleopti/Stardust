@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 				var resourcesOnOtherSkillGroupsContainingThisPrimarySkill = allSkillGroups
 					.Where(x => !x.Equals(skillGroup) && x.PrimarySkills.Contains(primarySkill))
-					.Sum(otherSkillGroup => otherSkillGroup.Resources);
+					.Sum(otherSkillGroup => otherSkillGroup.RemainingResources);
 
 				var otherSkillGroupOverstaff = Math.Max(resourcesOnOtherSkillGroupsContainingThisPrimarySkill - primarySkillStaffPeriod.FStaff, 0);
 				dic.Add(primarySkill, primarySkillOverstaff - otherSkillGroupOverstaff);
@@ -32,10 +32,10 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 			if (primarySkillsExistsButTheyAreAllClosed)
 			{
-				dic.Add(skillGroup.PrimarySkills.First(), skillGroup.Resources); //shouldn't really matter what primary skill we choose here (if multiple).
+				dic.Add(skillGroup.PrimarySkills.First(), skillGroup.RemainingResources); //shouldn't really matter what primary skill we choose here (if multiple).
 			}
 
-			return new ShovelResourcesState(dic);
+			return new ShovelResourcesState(dic, skillGroup);
 		}
 	}
 }
