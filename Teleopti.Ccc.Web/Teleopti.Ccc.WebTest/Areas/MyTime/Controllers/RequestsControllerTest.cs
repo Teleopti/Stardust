@@ -291,6 +291,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldGetIdOfSiteIBelongTo()
+		{
+			var givenDate = DateOnly.Today;
+			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
+			var mySiteId = Guid.NewGuid().ToString();
+
+			modelFactory.Stub(x => x.CreateShiftTradeMySiteIdViewModel(givenDate)).Return(mySiteId);
+
+			var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider(), null, null, null, null, null);
+			var result = target.ShiftTradeRequestMySite(givenDate);
+
+			var data = (string)result.Data;
+			data.Should().Be.EqualTo(mySiteId);
+		}
+
+		[Test]
 		public void ShouldApproveShiftTradeRequest()
 		{
 			var id = Guid.NewGuid();

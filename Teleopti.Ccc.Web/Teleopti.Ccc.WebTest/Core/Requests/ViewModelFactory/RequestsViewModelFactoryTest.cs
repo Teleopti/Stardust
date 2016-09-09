@@ -276,7 +276,38 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		}
 
 		[Test]
+		public void ShouldRetrieveMySiteId()
+		{
+			var provider = MockRepository.GenerateMock<IShiftTradeRequestProvider>();
+			var shiftTradeDate = DateOnly.Today;
+			Guid? mySiteId = Guid.NewGuid();
+
+			provider.Stub(x => x.RetrieveMySiteId(shiftTradeDate)).Return(mySiteId);
+
+			var target = new RequestsViewModelFactory(null, null, null, null, provider,
+			                                          MockRepository.GenerateMock<IShiftTradePeriodViewModelMapper>(), null,
+													  MockRepository.GenerateMock<INow>(), null, null, null, null);
+
+			target.CreateShiftTradeMySiteIdViewModel(shiftTradeDate).Should().Be.EqualTo(mySiteId.ToString());
+		}
+
+		[Test]
 		public void ShouldRetrieveEmptyStringWhenNotBelongingToATeam()
+		{
+			var provider = MockRepository.GenerateMock<IShiftTradeRequestProvider>();
+			var shiftTradeDate = DateOnly.Today;
+
+			provider.Stub(x => x.RetrieveMyTeamId(shiftTradeDate)).Return(null);
+
+			var target = new RequestsViewModelFactory(null, null, null, null, provider,
+													  MockRepository.GenerateMock<IShiftTradePeriodViewModelMapper>(), null,
+													  MockRepository.GenerateMock<INow>(), null, null, null, null);
+
+			target.CreateShiftTradeMyTeamSimpleViewModel(shiftTradeDate).Should().Be.EqualTo(string.Empty);
+		}
+
+		[Test]
+		public void ShouldRetrieveEmptyStringWhenNotBelongingToASite()
 		{
 			var provider = MockRepository.GenerateMock<IShiftTradeRequestProvider>();
 			var shiftTradeDate = DateOnly.Today;

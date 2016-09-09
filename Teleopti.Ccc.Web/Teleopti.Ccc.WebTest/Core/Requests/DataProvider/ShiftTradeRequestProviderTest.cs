@@ -147,6 +147,29 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		[Test]
+		public void ShouldReturnMySiteForGivenDate()
+		{
+			var theDate = DateOnly.Today;
+			var myTeam = new Team();
+			var mySite = new Site("mySite");
+			mySite.SetId(Guid.NewGuid());
+			myTeam.Site = mySite;
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var person = MockRepository.GenerateMock<IPerson>();
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			person.Stub(x => x.MyTeam(theDate).Site).Return(mySite);
+			permissionProvider.Stub(x => x.HasSitePermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, theDate, mySite)).Return(true);
+
+			var target = new ShiftTradeRequestProvider(loggedOnUser, MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), permissionProvider);
+
+			var result = target.RetrieveMySiteId(theDate);
+
+			result.Should().Be.EqualTo(mySite.Id);
+		}
+
+		[Test]
 		public void ShouldReturnNullIfNoTeamForGivenDate()
 		{
 			var theDate = DateOnly.Today;
@@ -159,6 +182,23 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var target = new ShiftTradeRequestProvider(loggedOnUser, MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), MockRepository.GenerateMock<IPermissionProvider>());
 
 			var result = target.RetrieveMyTeamId(theDate);
+
+			result.Should().Be.EqualTo(null);
+		}
+
+		[Test]
+		public void ShouldReturnNullIfNoSiteForGivenDate()
+		{
+			var theDate = DateOnly.Today;
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var person = MockRepository.GenerateMock<IPerson>();
+
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			person.Stub(x => x.MyTeam(theDate).Site).Return(null);
+
+			var target = new ShiftTradeRequestProvider(loggedOnUser, MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), MockRepository.GenerateMock<IPermissionProvider>());
+
+			var result = target.RetrieveMySiteId(theDate);
 
 			result.Should().Be.EqualTo(null);
 		}
@@ -181,6 +221,29 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var target = new ShiftTradeRequestProvider(loggedOnUser, MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), permissionProvider);
 
 			var result = target.RetrieveMyTeamId(theDate);
+
+			result.Should().Be.EqualTo(null);
+		}
+
+		[Test]
+		public void ShouldReturnNullIfNoPermissionForMySite()
+		{
+			var theDate = DateOnly.Today;
+			var myTeam = new Team();
+			var mySite = new Site("mySite");
+			mySite.SetId(Guid.NewGuid());
+			myTeam.Site = mySite;
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var person = MockRepository.GenerateMock<IPerson>();
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			person.Stub(x => x.MyTeam(theDate).Site).Return(mySite);
+			permissionProvider.Stub(x => x.HasSitePermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, theDate, mySite)).Return(false);
+
+			var target = new ShiftTradeRequestProvider(loggedOnUser, MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), permissionProvider);
+
+			var result = target.RetrieveMySiteId(theDate);
 
 			result.Should().Be.EqualTo(null);
 		}

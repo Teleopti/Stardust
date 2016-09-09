@@ -15,5 +15,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			IEnumerable<IPerson> possibleShiftTradePersons, Paging paging,
 			TimeFilterInfo filterInfo, string timeSortOrder = "");
 		Guid? RetrieveMyTeamId(DateOnly date);
+		Guid? RetrieveMySiteId(DateOnly date);
 	}
 }

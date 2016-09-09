@@ -249,6 +249,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWork]
 		[HttpGet]
+		public virtual JsonResult ShiftTradeRequestMySite(DateOnly selectedDate)
+		{
+			return Json(_requestsViewModelFactory.CreateShiftTradeMySiteIdViewModel(selectedDate),
+				JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWork]
+		[HttpGet]
 		public virtual JsonResult GetShiftTradeRequestMiscSetting(Guid id)
 		{
 			return Json(_requestsViewModelFactory.CreateShiftTradePeriodViewModel(id).MiscSetting, JsonRequestBehavior.AllowGet);

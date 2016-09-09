@@ -198,5 +198,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 
 			return myTeam.HasValue ? myTeam.ToString() : "";
 		}
+
+		public string CreateShiftTradeMySiteIdViewModel(DateOnly selectedDate)
+		{
+			Guid? mySite = _shiftTradeRequestprovider.RetrieveMySiteId(selectedDate);
+
+			return mySite.HasValue ? mySite.ToString() : "";
+		}
 	}
 }

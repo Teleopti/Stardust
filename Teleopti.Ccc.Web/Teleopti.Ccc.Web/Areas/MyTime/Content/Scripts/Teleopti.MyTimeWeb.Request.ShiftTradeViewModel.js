@@ -35,7 +35,9 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	self.selectedSite = ko.observable();
 	self.selectedTeamInternal = ko.observable();
 	self.missingMyTeam = ko.observable();
+	self.missingMySite = ko.observable();
 	self.myTeamId = ko.observable();
+	self.mySiteId = ko.observable();
 	self.maxShiftsPerPage = 20;
 	self.maxPagesVisible = 5;
 	self.selectedPageIndex = ko.observable(1);
@@ -52,7 +54,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	self.searchNameText = ko.observable();
 	self.refocusToNameSearch = null;
 	self.isShiftTradeScheduleNoReadModelEnabled = ko.observable(false);
-	self.isSiteFilterEnabled = ko.observable(Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeFilterSite_40374'));
+	self.isSiteFilterEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeFilterSite_40374');
 
 	self.isDetailVisible = ko.computed(function () {
 		if (self.agentChoosed() === null) {
@@ -397,6 +399,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 			self.prepareLoad();
 			self.requestedDateInternal(value);
 
+			self.loadMySiteId(self.getFormattedDateForServiceCall());
 			self.loadMyTeamId(self.getFormattedDateForServiceCall());
 		}
 	});
@@ -472,6 +475,8 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 			}
 		});
 	};
+
+	//self.selectedSite = ko.computed({});
 
 	self.selectedTeam = ko.computed({
 		read: function () {
@@ -633,6 +638,55 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 				self.loadTeams(date);
 			},
 			error: function (e) {
+			}
+		});
+	};
+
+	self.loadMySiteId = function(date) {
+		ajax.Ajax({
+			url: "Requests/ShiftTradeRequestMySite",
+			dataType: "json",
+			type: 'GET',
+			contentType: 'application/json; charset=utf-8',
+			data: {
+				selectedDate: date
+			},
+			success: function (data, textStatus, jqXHR) {
+				if (!data) {
+					self.mySiteId(undefined);
+					self.missingMySite(true);
+					self.IsLoading(false);
+					self.isReadyLoaded(true);
+					return;
+				}
+				self.missingMySite(false);
+				self.mySiteId(data);
+				self.loadSites(date);
+			},
+			error: function (e) {
+			}
+		});
+	}
+
+	self.loadSites = function(date) {
+		var siteToSelect = self.mySiteId();
+
+		ajax.Ajax({
+			url: "Team/SitesForShiftTradeBoard",
+			dataType: "json",
+			type: 'GET',
+			contentType: 'application/json; charset=utf-8',
+			data: {
+				date: date
+			},
+			success: function (data, textStatus, jqXHR) {
+				self.selectedSite(null);
+				self.availableSites(data);
+				//if (data && data.length > 0) self.setSiteAll();
+				self.selectedSite(siteToSelect);
+			},
+			error: function (e) {
+				//console.log(e);
 			}
 		});
 	};

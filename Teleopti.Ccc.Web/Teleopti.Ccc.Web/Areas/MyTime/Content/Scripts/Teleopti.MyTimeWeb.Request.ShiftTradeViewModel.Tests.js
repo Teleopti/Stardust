@@ -293,6 +293,35 @@ $(document).ready(function () {
 		equal(teamTwo.text, "Team B");
 	});
 
+	test("should load sites", function () {
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url == "Team/SitesForShiftTradeBoard") {
+					options.success(
+							[
+								{ id: "A", text: "Site A"},
+								{ id: "B", text: "Site B" },
+								{ id: "C", text: "Site C" }
+							]
+					);
+				}
+			}
+		};
+
+		
+
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
+		viewModel.mySiteId("A");
+
+		viewModel.loadSites();
+
+		equal(viewModel.selectedSite(), "A");
+		equal(viewModel.availableSites().length, 3);
+		var siteTwo = viewModel.availableSites()[1];
+		equal(siteTwo.id, "B");
+		equal(siteTwo.text, "Site B");
+	});
+
 	test("should set default team ID when get nothing", function () {
 		var myTeamId = "";
 		var ajax = {
@@ -330,6 +359,25 @@ $(document).ready(function () {
 
 		equal(viewModel.myTeamId(), myTeamId);
 		equal(viewModel.missingMyTeam(), false);
+	});
+
+	test("should load my site ID", function () {
+		var mySiteId = "mySite";
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url == "Requests/ShiftTradeRequestMySite") {
+					options.success(
+							mySiteId
+					);
+				}
+			}
+		};
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
+
+		viewModel.loadMySiteId();
+
+		equal(viewModel.mySiteId(), mySiteId);
+		equal(viewModel.missingMySite(), false);
 	});
 
 	test("should hide page view when no data", function() {

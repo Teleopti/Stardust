@@ -608,6 +608,9 @@
 .select2-container#s2id_Team-Picker {
 	width: 100% !important;
 }
+.select2-container#s2id_Site-Picker {
+	width: 100% !important;
+}
 
 input[type=search]::-ms-clear {
 	display: none;

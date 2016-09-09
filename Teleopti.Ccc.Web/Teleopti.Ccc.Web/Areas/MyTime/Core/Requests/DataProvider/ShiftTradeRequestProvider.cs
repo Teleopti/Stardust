@@ -72,5 +72,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 			return myTeam.Id;
 		}
+
+		public Guid? RetrieveMySiteId(DateOnly date)
+		{
+			var myTeam = _loggedOnUser.CurrentUser().MyTeam(date);
+			var mySite = myTeam?.Site;
+			if (mySite == null || !_permissionProvider.HasSitePermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, date, mySite))
+			{
+				return null;
+			}
+
+			return mySite.Id;
+		}
 	}
 }
