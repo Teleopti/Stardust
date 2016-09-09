@@ -1380,6 +1380,7 @@
     <Content Include="WFM\js\intraday\intraday.staffing.controller.spec.js" />
     <Content Include="WFM\js\intraday\intraday.staffing.service.js" />
     <Content Include="WFM\js\intraday\intraday.staffing.service.spec.js" />
+    <Content Include="WFM\js\intraday\intraday.time.service.js" />
     <Content Include="WFM\js\intraday\intraday.traffic.service.js" />
     <Content Include="WFM\js\people\people.searchInputDirective.controller.spec.js" />
     <Content Include="WFM\js\reports\html\leaderboard.html" />

@@ -126,6 +126,7 @@
 									performanceData.averageSpeedOfAnswerObj.series,
 									performanceData.currentInterval
 								],
+								hide: hiddenArray,
 								types: {
 									Current:'bar'
 								},
@@ -140,7 +141,8 @@
 									Service_level: $translate.instant('ServiceLevel') + ' →',
 								},
 								axes: {
-									Service_level: 'y2'
+									Service_level: 'y2',
+									Current:'y2'
 								}
 							},
 							axis: {
@@ -165,6 +167,18 @@
 									show: true,
 									tick: {
 										format: d3.format('.1f')
+									}
+								}
+							},
+							legend: {
+								item: {
+									onclick: function (id) {
+										if (hiddenArray.indexOf(id) > -1) {
+											hiddenArray.splice(hiddenArray.indexOf(id), 1);
+										} else {
+											hiddenArray.push(id);
+										}
+										service.loadPerformanceChart(performanceData);
 									}
 								}
 							}

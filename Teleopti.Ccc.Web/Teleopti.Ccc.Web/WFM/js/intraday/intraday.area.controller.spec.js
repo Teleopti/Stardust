@@ -1,5 +1,5 @@
 'use strict';
-describe('IntradayAreaCtrl', function () {
+fdescribe('IntradayAreaCtrl', function () {
 	var $httpBackend,
 	$controller,
 	$filter,
@@ -13,6 +13,7 @@ describe('IntradayAreaCtrl', function () {
 	var skillAreaInfo;
 	var trafficAndPerformanceData;
 	var staffingData;
+	var timeData;
 
 	beforeEach(module('wfm.intraday'));
 
@@ -73,6 +74,12 @@ describe('IntradayAreaCtrl', function () {
 					}
 				};
 
+				timeData = {
+					latestIntervalTime:{
+						StartTime:{},
+						EndTime:{}
+					}
+				};
 				staffingData = {
 					DataSeries: {
 						ForecastedStaffing: [1,2,3],
@@ -123,6 +130,17 @@ describe('IntradayAreaCtrl', function () {
 				.respond(function () {
 					return [200, staffingData];
 				});
+
+				$httpBackend.whenGET("../api/intraday/lateststatisticstimeforskill/5f15b334-22d1-4bc1-8e41-72359805d30f")
+				.respond(function () {
+					return [200, timeData];
+				});
+
+				$httpBackend.whenGET("../api/intraday/lateststatisticstimeforskillarea/fa9b5393-ef48-40d1-b7cc-09e797589f81")
+				.respond(function () {
+					return [200, timeData];
+				});
+
 
 			}));
 
@@ -200,8 +218,9 @@ describe('IntradayAreaCtrl', function () {
 
 			it('should poll data for skill when selecting that skill', function () {
 				createController(false);
+				scope.activeTab = 0;
 
-				scope.skillSelected(scope.skills[0]);
+				scope.selectedSkillChange(scope.skills[0]);
 				$httpBackend.flush();
 
 				expect(scope.viewObj.hasMonitorData).toEqual(true);
@@ -209,8 +228,9 @@ describe('IntradayAreaCtrl', function () {
 
 			it('should poll data for skill area when selecting that area', function(){
 				createController(false);
+				scope.activeTab = 0;
 
-				scope.skillAreaSelected(scope.skillAreas[0]);
+				scope.selectedSkillAreaChange(scope.skillAreas[0]);
 				$httpBackend.flush();
 
 				expect(scope.viewObj.hasMonitorData).toEqual(true);
@@ -218,78 +238,62 @@ describe('IntradayAreaCtrl', function () {
 
 			it('should only poll traffic skill data when traffic tab and skill is selected', function () {
 				createController(false);
+				scope.activeTab = 0;
 
-				scope.skillSelected(scope.skills[0]);
-				$httpBackend.flush();
-				scope.pollActiveTabDataHelper(0);
+				scope.selectedSkillChange(scope.skills[0]);
 				$httpBackend.flush();
 
-				expect(scope.viewObj.hasMonitorData).toEqual(true);
+				expect(scope.viewObj.forecastedCallsObj.series.length).toBeGreaterThan(5);
 			});
 
 			it('should only poll performance skill data when performance tab and skill is selected', function (){
 				createController(false);
+				scope.activeTab = 1;
 
-				scope.skillSelected(scope.skills[0]);
-				$httpBackend.flush();
-				scope.pollActiveTabDataHelper(1);
+				scope.selectedSkillChange(scope.skills[0]);
 				$httpBackend.flush();
 
-				expect(scope.viewObj.hasMonitorData).toEqual(true);
+				expect(scope.viewObj.serviceLevelObj.series.length).toBeGreaterThan(5);
 			});
 
 			it('should only poll staffing skill data when staffing tab and skill is selected', function (){
 				createController(false);
+				scope.activeTab = 2;
 
-				scope.skillSelected(scope.skills[0]);
-				$httpBackend.flush();
-				scope.pollActiveTabDataHelper(2);
+				scope.selectedSkillChange(scope.skills[0]);
 				$httpBackend.flush();
 
-				expect(scope.viewObj.hasMonitorData).toEqual(true);
+				expect(scope.viewObj.forecastedStaffing.series.length).toBeGreaterThan(3);
 			});
 
 			it('should only poll traffic skill area data when traffic tab and skill area is selected', function () {
 				createController(false);
+				scope.activeTab = 0;
 
-				scope.skillAreaSelected(scope.skillAreas[0]);
-				$httpBackend.flush();
-				scope.pollActiveTabDataHelper(0);
+				scope.selectedSkillAreaChange(scope.skillAreas[0]);
 				$httpBackend.flush();
 
-				expect(scope.viewObj.hasMonitorData).toEqual(true);
+				expect(scope.viewObj.forecastedCallsObj.series.length).toBeGreaterThan(5);
 			});
 
 			it('should only poll performance skill area data when performance tab and skill area is selected', function (){
 				createController(false);
+				scope.activeTab = 1;
 
-				scope.skillAreaSelected(scope.skillAreas[0]);
-				$httpBackend.flush();
-				scope.pollActiveTabDataHelper(1);
+				scope.selectedSkillAreaChange(scope.skillAreas[0]);
 				$httpBackend.flush();
 
-				expect(scope.viewObj.hasMonitorData).toEqual(true);
+				expect(scope.viewObj.serviceLevelObj.series.length).toBeGreaterThan(5);
 			});
 
 			it('should only poll staffing skill area data when staffing tab and skill area is selected', function (){
 				createController(false);
+				scope.activeTab = 2;
 
-				scope.skillAreaSelected(scope.skillAreas[0]);
+				scope.selectedSkillAreaChange(scope.skillAreas[0]);
 				$httpBackend.flush();
-				scope.pollActiveTabDataHelper(2);
-				$httpBackend.flush();
 
-				expect(scope.viewObj.hasMonitorData).toEqual(true);
-			});
-
-			xit('should get latest actual interval when selecting performance tab', function () {
-				createController(false);
-
-				scope.pollActiveTabDataHelper(1);
-				$httpBackend.flush();
-				// console.log('viewObj ',scope.viewObj.latestActualInterval);
-				// console.log('latest ', scope.latestActualInterval);
-				expect(scope.latestActualInterval).not.toBe(undefined);
+				expect(scope.viewObj.forecastedStaffing.series.length).toBeGreaterThan(3);
 			});
 
 		});

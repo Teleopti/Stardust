@@ -28,3 +28,7 @@
 .intraday-chart>svg{
 	max-width: 100%;
 }
+
+#staffingChart > svg > g > .c3-axis-y2{
+		opacity: 0!important;
+}
