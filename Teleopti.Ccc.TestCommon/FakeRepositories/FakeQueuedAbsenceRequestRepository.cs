@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Criterion;
 using NHibernate.Util;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -74,9 +75,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			});
 		}
 
-		public void Send(List<Guid> ids, DateTime timeStamp)
+		public void Send(List<Guid> requestId, DateTime timeStamp)
 		{
-			throw new NotImplementedException();
+			foreach (var id in requestId)
+			{
+				_queuedRequests.FirstOrDefault(x => x.PersonRequest == id).Sent = timeStamp;
+			}
 		}
 	}
 }

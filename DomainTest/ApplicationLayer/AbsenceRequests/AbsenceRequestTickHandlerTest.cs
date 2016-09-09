@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				PersonRequest =farFutureId
 			});
 
-			Target.Handle(new TenantMinuteTickEvent());
+			Target.Handle(new PersonRequestProcessedEvent() {PersonRequestId = nearFutureId });
 
 			QueuedAbsenceRequestRepository.Load(nearFutureId).Should().Be.Null();
 			QueuedAbsenceRequestRepository.Load(farFutureId).Should().Not.Be.Null();
