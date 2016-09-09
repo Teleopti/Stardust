@@ -48,15 +48,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			return createAbsenceRequestAndBusinessUnit();
 		}
 
-		private IQueuedAbsenceRequest createAbsenceRequestAndBusinessUnit(IAbsence absence = null)
+		private IQueuedAbsenceRequest createAbsenceRequestAndBusinessUnit()
 		{
 			return new QueuedAbsenceRequest
 			{
-				PersonRequest = _personRequest.Id.Value,
+				PersonRequest = _personRequest.Id.GetValueOrDefault(),
 				StartDateTime = _absenceRequest.Period.StartDateTime,
 				EndDateTime = _absenceRequest.Period.EndDateTime,
-				Created = _personRequest.CreatedOn.Value,
-				//Sent = DateTime.Now
+				Created = _personRequest.CreatedOn.GetValueOrDefault()
+
 			};
 		}
 
@@ -125,10 +125,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var queued = new QueuedAbsenceRequest
 			{
-				PersonRequest = personRequest.Id.Value,
+				PersonRequest = personRequest.Id.GetValueOrDefault(),
 				StartDateTime = absenceRequest.Period.StartDateTime,
 				EndDateTime = absenceRequest.Period.EndDateTime,
-				Created = personRequest.CreatedOn.Value,
+				Created = personRequest.CreatedOn.GetValueOrDefault(),
 				Sent = sentDateTime
 			};
 			PersistAndRemoveFromUnitOfWork(queued);
