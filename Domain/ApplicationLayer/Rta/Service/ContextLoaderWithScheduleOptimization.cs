@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				throw new InvalidUserCodeException($"No person found for SourceId {input.SourceId} and UserCode {input.UserCode}");
 		}
 
-		public override void ForAll(Action<Context> action)
+		public override void ForActivityChanges(Action<Context> action)
 		{
 			var mappings = new MappingsState(() => _mappingReader.Read());
 			var now = _now.UtcDateTime();

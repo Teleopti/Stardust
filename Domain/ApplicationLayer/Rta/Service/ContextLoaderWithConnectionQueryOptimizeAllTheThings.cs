@@ -72,7 +72,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public override void ForBatch(BatchInputModel batch, Action<Context> action)
 		{
-			process(batch.States, (states, addException) =>
+			var maxTransactionSize = _config.ReadValue("RtaBatchMaxTransactionSize", 100);
+			var parallelTransactions = _config.ReadValue("RtaBatchParallelTransactions", 7);
+
+			process(parallelTransactions, maxTransactionSize, batch.States, (states, addException) =>
 			{
 				var dataSourceId = ValidateSourceId(batch);
 				var userCodes = states.Select(x => x.UserCode);
@@ -99,19 +102,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			}, action);
 		}
 		
-		public override void ForAll(Action<Context> action)
+		public override void ForActivityChanges(Action<Context> action)
 		{
+			var maxTransactionSize = _config.ReadValue("RtaActivityChangesMaxTransactionSize", 100);
+			var parallelTransactions = _config.ReadValue("RtaActivityChangesParallelTransactions", 7);
 			IEnumerable<Guid> personIds = null;
 			WithUnitOfWork(() =>
 			{
 				personIds = _agentStatePersister.GetAllPersonIds();
 			});
 
-			process(personIds, (ids, _) => _agentStatePersister.Get(ids), null, action);
+			process(
+				parallelTransactions, 
+				maxTransactionSize, 
+				personIds, 
+				(ids, _) => _agentStatePersister.Get(ids), 
+				null, 
+				action);
 		}
 
 		public override void ForClosingSnapshot(DateTime snapshotId, string sourceId, Action<Context> action)
 		{
+			var maxTransactionSize = _config.ReadValue("RtaCloseSnapshotMaxTransactionSize", 1000);
+			var parallelTransactions = _config.ReadValue("RtaCloseSnapshotParallelTransactions", 3);
 			IEnumerable<Guid> personIds = null;
 
 			WithUnitOfWork(() =>
@@ -124,6 +137,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			});
 
 			process(
+				parallelTransactions,
+				maxTransactionSize,
 				personIds,
 				(ids, _) => _agentStatePersister.Get(ids),
 				_ => new InputInfo
@@ -166,6 +181,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		private void process<T>(
+			int parallelTransactions,
+			int maxTransactionSize,
 			IEnumerable<T> allThings,
 			Func<IEnumerable<T>, Action<Exception>, IEnumerable<AgentState>> getAgentStates,
 			Func<AgentState, InputInfo> getInputFor,
@@ -176,8 +193,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var allThingsSize = allThings.Count();
 			if (allThingsSize == 0)
 				return;
-			var someThingsSize = _config.ReadValue("RtaMaxTransactionSize", 100);
-			var transactionCount = _config.ReadValue("RtaParallelTransactions", 7);
+			var someThingsSize = maxTransactionSize;
+			var transactionCount = parallelTransactions;
 			if (allThingsSize <= someThingsSize * transactionCount)
 				someThingsSize = (int) Math.Ceiling(allThingsSize / (double) transactionCount);
 

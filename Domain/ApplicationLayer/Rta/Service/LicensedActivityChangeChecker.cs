@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public void CheckForActivityChanges()
 		{
-			_contextLoader.ForAll(person =>
+			_contextLoader.ForActivityChanges(person =>
 			{
 				_processor.Process(person);
 			});

@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		void For(StateInputModel input, Action<Context> action);
 		void ForBatch(BatchInputModel batch, Action<Context> action);
-		void ForAll(Action<Context> action);
+		void ForActivityChanges(Action<Context> action);
 		void ForClosingSnapshot(DateTime snapshotId, string sourceId, Action<Context> action);
 		void ForSynchronize(Action<Context> action);
 	}
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				throw new AggregateException(exceptions);
 		}
 
-		public virtual void ForAll(Action<Context> action)
+		public virtual void ForActivityChanges(Action<Context> action)
 		{
 			var mappings = new MappingsState(() => _mappingReader.Read());
 			var now = _now.UtcDateTime();

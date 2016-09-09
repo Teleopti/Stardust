@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				.WithStateCode("phone");
 			Enumerable.Range(0, 100).ForEach(x => Database.WithStateGroup($"code{x}").WithStateCode($"code{x}"));
 			Enumerable.Range(0, 10).ForEach(x => Database.WithActivity($"activity{x}"));
-			var userCodes = Enumerable.Range(0, 12000).Select(x => $"user{x}").ToArray();
+			var userCodes = Enumerable.Range(0, 3000).Select(x => $"user{x}").ToArray();
 			userCodes.ForEach(x => Database.WithAgent(x));
 			Publisher.Publish(new TenantMinuteTickEvent());
 			var batches = userCodes
@@ -187,8 +187,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				}).ToArray();
 
 			var results = (
-				from transactions in new[] {7}
-				from size in new[] {100}
+				from transactions in new[] {1, 2, 3, 4, 5, 6, 7}
+				from size in new[] {200, 500, 1000, 1500}
 				from variation in new[] {"A"} //, "B", "C"}
 				select new {transactions, size, variation}).Select(x =>
 				{
