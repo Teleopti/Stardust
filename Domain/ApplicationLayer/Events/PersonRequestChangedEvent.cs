@@ -11,6 +11,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 	public class PersonRequestChangedEvent : PersonRequestChangedBase
 	{
 	}
+	public class PersonRequestProcessedEvent : PersonRequestChangedBase
+	{
+	}
 
 	public class PersonRequestChangedBase : EventWithInfrastructureContext
 	{

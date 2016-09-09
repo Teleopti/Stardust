@@ -163,7 +163,7 @@
     <Compile Include="Aop\UnitOfWorkAttribute.cs" />
     <Compile Include="Aop\AllBusinessUnitsUnitOfWorkAttribute.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\AbsenceRequestStrategyProcessor.cs" />
-    <Compile Include="ApplicationLayer\AbsenceRequests\AbsenceRequestTickHandler.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\AbsenceRequestQueueStrategyHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\ApproveRequestsWithValidatorsEventHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IApproveRequestsWithValidatorsEventMessage.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\INewAbsenceRequestHandler.cs" />

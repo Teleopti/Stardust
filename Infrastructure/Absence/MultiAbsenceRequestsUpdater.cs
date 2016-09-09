@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -44,6 +45,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly IStardustJobFeedback _feedback;
 		private readonly ArrangeRequestsByProcessOrder _arrangeRequestsByProcessOrder;
+		private readonly IEventPublisher _eventPublisher;
 
 		public MultiAbsenceRequestsUpdater(IResourceCalculationPrerequisitesLoader prereqLoader, 
 			ICurrentScenario scenarioRepository,
@@ -59,7 +61,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, 
 			ICommandDispatcher commandDispatcher,
 			IStardustJobFeedback feedback, 
-			ArrangeRequestsByProcessOrder arrangeRequestsByProcessOrder)
+			ArrangeRequestsByProcessOrder arrangeRequestsByProcessOrder, IEventPublisher eventPublisher)
 		{
 			_prereqLoader = prereqLoader;
 			_scenarioRepository = scenarioRepository;
@@ -76,6 +78,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			_commandDispatcher = commandDispatcher;
 			_feedback = feedback;
 			_arrangeRequestsByProcessOrder = arrangeRequestsByProcessOrder;
+			_eventPublisher = eventPublisher;
 		}
 
 		public void UpdateAbsenceRequest(List<IPersonRequest> personRequests,
@@ -114,6 +117,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 						using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 						{
 							sendRequestCommand(personRequest);
+							_eventPublisher.Publish(new PersonRequestProcessedEvent() {PersonRequestId = personRequest.Id.GetValueOrDefault()});
 							uow.PersistAll();
 							break;
 						}

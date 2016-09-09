@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 	public class AbsenceRequestTickHandlerTest : ISetup
 	{
 		public FakeQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
-		public AbsenceRequestTickHandler Target;
+		public AbsenceRequestQueueStrategyHandler Target;
 		public IMutateNow Now;
 		public FakeEventPublisher Publisher;
 		public FakeBusinessUnitRepository FakeBusinessUnitRepository;
