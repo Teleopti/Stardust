@@ -75,6 +75,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				from variation in new[] {"A", "B", "C"}
 				select new {transactions, size, variation}).Select(x =>
 				{
+					RemoveMeWithToggleAttribute.This(Toggles.RTA_ScheduleQueryOptimization_40260);
+					Config.FakeSetting("RtaBatchTransactions", x.transactions.ToString());
+
 					Config.FakeSetting("RtaParallelTransactions", x.transactions.ToString());
 					Config.FakeSetting("RtaMaxTransactionSize", x.size.ToString());
 

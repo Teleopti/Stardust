@@ -13,5 +13,9 @@ namespace Teleopti.Ccc.Domain.FeatureFlags
 		{
 
 		}
+
+		public static void This(params Toggles[] toggles)
+		{
+		}
 	}
 }
