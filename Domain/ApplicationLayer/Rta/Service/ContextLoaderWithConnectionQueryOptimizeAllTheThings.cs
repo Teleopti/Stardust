@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				return;
 			var someThingsSize = _config.ReadValue("RtaMaxTransactionSize", 100);
 			var transactionCount = _config.ReadValue("RtaParallelTransactions", 7);
-			if (allThingsSize < someThingsSize*transactionCount)
+			if (allThingsSize <= someThingsSize * transactionCount)
 				someThingsSize = (int) Math.Ceiling(allThingsSize / (double) transactionCount);
 
 			var shared = new Lazy<sharedData>(() =>
