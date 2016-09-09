@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					builder.RegisterType<EventualStateCodeAdder>().As<IStateCodeAdder>().SingleInstance();
 				else
 					builder.RegisterType<ScaleOutStateCodeAdder>().As<IStateCodeAdder>().SingleInstance();
+
 				if (_config.Toggle(Toggles.RTA_BatchConnectionOptimization_40116))
 				{
 					if (_config.Toggle(Toggles.RTA_BatchQueryOptimization_40169))
@@ -49,7 +50,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 								else
 									builder.RegisterType<ContextLoaderWithScheduleOptimization>().As<IContextLoader>().ApplyAspects().SingleInstance();
 							else
-								builder.RegisterType<ContextLoaderWithPersonOrganizationQueryOptimization>().As<IContextLoader>().ApplyAspects().SingleInstance();
+								if (_config.Toggle(Toggles.RTA_ConnectionQueryOptimizeAllTheThings_40262))
+									builder.RegisterType<ContextLoaderWithConnectionQueryOptimizeAllTheThings>().As<IContextLoader>().ApplyAspects().SingleInstance();
+								else
+									builder.RegisterType<ContextLoaderWithPersonOrganizationQueryOptimization>().As<IContextLoader>().ApplyAspects().SingleInstance();
 						else
 							builder.RegisterType<ContextLoaderWithBatchConnectionOptimization>().As<IContextLoader>().ApplyAspects().SingleInstance();
 					else
@@ -90,7 +94,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AgentStateReadModelReader>().As<IAgentStateReadModelReader>().SingleInstance().ApplyAspects();
 
 			builder.RegisterType<KeyValueStorePersister>().As<IKeyValueStorePersister>().SingleInstance().ApplyAspects();
-			builder.RegisterType<AgentStatePersister>().As<IAgentStatePersister>().SingleInstance().ApplyAspects();
+			if (_config.Toggle(Toggles.RTA_ScheduleQueryOptimization_40260))
+				builder.RegisterType<AgentStatePersisterWithSchedules>().As<IAgentStatePersister>().SingleInstance().ApplyAspects();
+			else
+				builder.RegisterType<AgentStatePersister>().As<IAgentStatePersister>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStateReadModelPersister>().As<IAgentStateReadModelPersister>().SingleInstance().ApplyAspects();
 			builder.RegisterType<MappingReadModelPersister>().As<IMappingReadModelPersister>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStateReadModelUpdater>().As<IAgentStateReadModelUpdater>().SingleInstance().ApplyAspects();

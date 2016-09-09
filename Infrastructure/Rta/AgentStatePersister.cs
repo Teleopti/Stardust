@@ -13,10 +13,72 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
+	public class AgentStatePersisterWithSchedules : AgentStatePersister
+	{
+		public AgentStatePersisterWithSchedules(ICurrentUnitOfWork unitOfWork, IJsonSerializer serializer) : base(unitOfWork, serializer)
+		{
+		}
+
+		public override void Update(AgentState model)
+		{
+			var scheduleSql = "";
+			if (model.Schedule != null)
+				scheduleSql = ", Schedule = :Schedule";
+			var sql = $@"
+UPDATE [dbo].[AgentState]
+SET
+	BatchId = :BatchId,
+	SourceId = :SourceId,
+	PlatformTypeId = :PlatformTypeId,
+	BusinessUnitId = :BusinessUnitId,
+	SiteId = :SiteId,
+	TeamId = :TeamId,
+	ReceivedTime = :ReceivedTime,
+	StateCode = :StateCode,
+	StateGroupId = :StateGroupId,
+	StateStartTime = :StateStartTime,
+	ActivityId = :ActivityId, 
+	NextActivityId = :NextActivityId,
+	NextActivityStartTime = :NextActivityStartTime, 
+	RuleId = :RuleId,
+	RuleStartTime = :RuleStartTime,
+	AlarmStartTime = :AlarmStartTime,
+	TimeWindowCheckSum = :TimeWindowCheckSum
+	{scheduleSql}
+WHERE
+	PersonId = :PersonId";
+			var query = _unitOfWork.Current().Session()
+				.CreateSQLQuery(sql)
+				.SetParameter("PersonId", model.PersonId)
+				.SetParameter("BatchId", model.BatchId)
+				.SetParameter("SourceId", model.SourceId)
+				.SetParameter("PlatformTypeId", model.PlatformTypeId)
+				.SetParameter("BusinessUnitId", model.BusinessUnitId)
+				.SetParameter("SiteId", model.SiteId)
+				.SetParameter("TeamId", model.TeamId)
+				.SetParameter("ReceivedTime", model.ReceivedTime)
+				.SetParameter("StateCode", model.StateCode)
+				.SetParameter("StateGroupId", model.StateGroupId)
+				.SetParameter("StateStartTime", model.StateStartTime)
+				.SetParameter("ActivityId", model.ActivityId)
+				.SetParameter("NextActivityId", model.NextActivityId)
+				.SetParameter("NextActivityStartTime", model.NextActivityStartTime)
+				.SetParameter("RuleId", model.RuleId)
+				.SetParameter("RuleStartTime", model.RuleStartTime)
+				.SetParameter("AlarmStartTime", model.AlarmStartTime)
+				.SetParameter("TimeWindowCheckSum", model.TimeWindowCheckSum);
+
+			if (model.Schedule != null)
+				query.SetParameter("Schedule", _serializer.SerializeObject(model.Schedule), NHibernateUtil.StringClob);
+
+			query.ExecuteUpdate();
+		}
+	}
+
 	public class AgentStatePersister : IAgentStatePersister
 	{
-		private readonly ICurrentUnitOfWork _unitOfWork;
-		private readonly IJsonSerializer _serializer;
+		protected readonly ICurrentUnitOfWork _unitOfWork;
+		protected readonly IJsonSerializer _serializer;
 
 		public AgentStatePersister(ICurrentUnitOfWork unitOfWork, IJsonSerializer serializer)
 		{
@@ -98,10 +160,8 @@ VALUES (:BusinessUnitId, :SiteId, :TeamId, :PersonId, :DataSourceId, :UserCode)"
 		[InfoLog]
 		public virtual void Update(AgentState model)
 		{
-			var scheduleSql = "";
-			if (model.Schedule != null)
-				scheduleSql = ", Schedule = :Schedule";
-			var sql = $@"
+			_unitOfWork.Current().Session()
+				.CreateSQLQuery(@"
 UPDATE [dbo].[AgentState]
 SET
 	BatchId = :BatchId,
@@ -121,11 +181,8 @@ SET
 	RuleStartTime = :RuleStartTime,
 	AlarmStartTime = :AlarmStartTime,
 	TimeWindowCheckSum = :TimeWindowCheckSum
-	{scheduleSql}
 WHERE
-	PersonId = :PersonId";
-			var query = _unitOfWork.Current().Session()
-				.CreateSQLQuery(sql)
+	PersonId = :PersonId")
 				.SetParameter("PersonId", model.PersonId)
 				.SetParameter("BatchId", model.BatchId)
 				.SetParameter("SourceId", model.SourceId)
@@ -143,12 +200,8 @@ WHERE
 				.SetParameter("RuleId", model.RuleId)
 				.SetParameter("RuleStartTime", model.RuleStartTime)
 				.SetParameter("AlarmStartTime", model.AlarmStartTime)
-				.SetParameter("TimeWindowCheckSum", model.TimeWindowCheckSum);
-
-			if (model.Schedule != null)
-				query.SetParameter("Schedule", _serializer.SerializeObject(model.Schedule), NHibernateUtil.StringClob);
-
-			query.ExecuteUpdate();
+				.SetParameter("TimeWindowCheckSum", model.TimeWindowCheckSum)
+				.ExecuteUpdate();
 		}
 
 		public void Delete(Guid personId)
