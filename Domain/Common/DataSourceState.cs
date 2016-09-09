@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
@@ -6,16 +7,24 @@ namespace Teleopti.Ccc.Domain.Common
 	public class DataSourceState
 	{
 		[ThreadStatic]
-		private static IDataSource _threadDataSource;
+		private static Stack<IDataSource> _threadDataSources;
 
-		public void SetOnThread(IDataSource dataSource)
+		public IDisposable SetOnThread(IDataSource dataSource)
 		{
-			_threadDataSource = dataSource;
+			if (_threadDataSources == null)
+				_threadDataSources = new Stack<IDataSource>();
+			_threadDataSources.Push(dataSource);
+			return new GenericDisposable(() =>
+			{
+				_threadDataSources.Pop();
+			});
 		}
 
 		public IDataSource Get()
 		{
-			return _threadDataSource;
+			if (_threadDataSources == null) return null;
+			if (_threadDataSources.Count == 0) return null;
+			return _threadDataSources.Peek();
 		}
 
 	}

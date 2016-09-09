@@ -38,13 +38,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private void processStatesTo(object handler)
 		{
-			using (_eventPublisherScope.OnThisThreadPublishTo(new SyncPublishTo(_resolver, handler)))
+			_contextLoader.ForSynchronize(context =>
 			{
-				_contextLoader.ForSynchronize(context =>
+				using (_eventPublisherScope.OnThisThreadPublishTo(new SyncPublishTo(_resolver, handler)))
 				{
 					_processor.Process(context);
-				});
-			}
+				}
+			});
 		}
 	}
 

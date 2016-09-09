@@ -16,8 +16,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public IDisposable OnThisThreadUse(IDataSource dataSource)
 		{
-			_state.SetOnThread(dataSource);
-			return new GenericDisposable(() => _state.SetOnThread(null));
+			return _state.SetOnThread(dataSource);
 		}
 
 		public IDisposable OnThisThreadUse(string tenant)

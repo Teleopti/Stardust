@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	public class ContextLoader : IContextLoader
 	{
-		private readonly IDatabaseLoader _databaseLoader;
+		protected readonly IDatabaseLoader _databaseLoader;
 		protected readonly INow _now;
 		protected readonly StateMapper _stateMapper;
 		protected readonly IAgentStatePersister _agentStatePersister;
@@ -53,10 +53,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		protected int ValidateSourceId(IValidatable input)
 		{
+			return ValidateSourceId(_databaseLoader, input);
+		}
+
+		public static int ValidateSourceId(IDatabaseLoader databaseLoader, IValidatable input)
+		{
 			if (string.IsNullOrEmpty(input.SourceId))
 				throw new InvalidSourceException("Source id is required");
 			int dataSourceId;
-			if (!_databaseLoader.Datasources().TryGetValue(input.SourceId, out dataSourceId))
+			if (!databaseLoader.Datasources().TryGetValue(input.SourceId, out dataSourceId))
 				throw new InvalidSourceException(string.Format("Source id not found {0}", input.SourceId));
 			return dataSourceId;
 		}

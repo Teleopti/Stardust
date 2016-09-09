@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
@@ -72,82 +70,215 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public override void ForBatch(BatchInputModel batch, Action<Context> action)
 		{
-			var maxTransactionSize = _config.ReadValue("RtaBatchMaxTransactionSize", 100);
-			var parallelTransactions = _config.ReadValue("RtaBatchParallelTransactions", 7);
+			process(new batchStrategy(_config, _agentStatePersister, _databaseLoader, action, batch));
+		}
 
-			process(parallelTransactions, maxTransactionSize, batch.States, (states, addException) =>
+		private class batchStrategy : baseStrategy<BatchStateInputModel>
+		{
+			private readonly IDatabaseLoader _databaseLoader;
+			private readonly BatchInputModel _batch;
+
+			public batchStrategy(IConfigReader config, IAgentStatePersister persister, IDatabaseLoader databaseLoader, Action<Context> action, BatchInputModel batch) : base(config, persister, action)
 			{
-				var dataSourceId = ValidateSourceId(batch);
+				_databaseLoader = databaseLoader;
+				_batch = batch;
+				ParallelTransactions = _config.ReadValue("RtaBatchParallelTransactions", 7);
+				MaxTransactionSize = _config.ReadValue("RtaBatchMaxTransactionSize", 100);
+			}
+
+			public override IEnumerable<BatchStateInputModel> AllThings()
+			{
+				return _batch.States;
+			}
+
+			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<BatchStateInputModel> states, Action<Exception> addException)
+			{
+				var dataSourceId = ValidateSourceId(_databaseLoader, _batch);
 				var userCodes = states.Select(x => x.UserCode);
-				var agentStates = _agentStatePersister.Find(dataSourceId, userCodes);
+				var agentStates = _persister.Find(dataSourceId, userCodes);
 
 				userCodes
-                   .Where(x => agentStates.All(s => s.UserCode != x))
-                   .Select(x => new InvalidUserCodeException($"No person found for UserCode {x}, DataSourceId {dataSourceId}, SourceId {batch.SourceId}"))
-                   .ForEach(addException);
+					.Where(x => agentStates.All(s => s.UserCode != x))
+					.Select(x => new InvalidUserCodeException($"No person found for UserCode {x}, DataSourceId {dataSourceId}, SourceId {_batch.SourceId}"))
+					.ForEach(addException);
 
 				return agentStates;
-			}, state =>
+			}
+
+			public override InputInfo GetInputFor(AgentState state)
 			{
 				var s = state as AgentStateFound;
-				var input = batch.States.Single(x => x.UserCode == s.UserCode);
+				var input = _batch.States.Single(x => x.UserCode == s.UserCode);
 				return new InputInfo
 				{
-					PlatformTypeId = batch.PlatformTypeId,
-					SnapshotId = batch.SnapshotId,
-					SourceId = batch.SourceId,
+					PlatformTypeId = _batch.PlatformTypeId,
+					SnapshotId = _batch.SnapshotId,
+					SourceId = _batch.SourceId,
 					StateCode = input.StateCode,
 					StateDescription = input.StateDescription,
 				};
-			}, action);
+			}
+
 		}
-		
+
 		public override void ForActivityChanges(Action<Context> action)
 		{
-			var maxTransactionSize = _config.ReadValue("RtaActivityChangesMaxTransactionSize", 100);
-			var parallelTransactions = _config.ReadValue("RtaActivityChangesParallelTransactions", 7);
-			IEnumerable<Guid> personIds = null;
-			WithUnitOfWork(() =>
-			{
-				personIds = _agentStatePersister.GetAllPersonIds();
-			});
+			var personIds = WithUnitOfWork(() => _agentStatePersister.GetAllPersonIds());
+			process(new activityChangesStrategy(_config, _agentStatePersister, action, personIds));
+		}
 
-			process(
-				parallelTransactions, 
-				maxTransactionSize, 
-				personIds, 
-				(ids, _) => _agentStatePersister.Get(ids), 
-				null, 
-				action);
+		private class activityChangesStrategy : baseStrategy<Guid>
+		{
+			private readonly IEnumerable<Guid> _things;
+
+			public activityChangesStrategy(IConfigReader config, IAgentStatePersister persister, Action<Context> action, IEnumerable<Guid> things) : base(config, persister, action)
+			{
+				_things = things;
+				ParallelTransactions = _config.ReadValue("RtaActivityChangesParallelTransactions", 7);
+				MaxTransactionSize = _config.ReadValue("RtaActivityChangesMaxTransactionSize", 100);
+			}
+
+			public override IEnumerable<Guid> AllThings()
+			{
+				return _things;
+			}
+
+			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<Guid> ids, Action<Exception> addException)
+			{
+				return _persister.Get(ids);
+			}
+
+			public override InputInfo GetInputFor(AgentState state)
+			{
+				return null;
+			}
 		}
 
 		public override void ForClosingSnapshot(DateTime snapshotId, string sourceId, Action<Context> action)
 		{
-			var maxTransactionSize = _config.ReadValue("RtaCloseSnapshotMaxTransactionSize", 1000);
-			var parallelTransactions = _config.ReadValue("RtaCloseSnapshotParallelTransactions", 3);
-			IEnumerable<Guid> personIds = null;
-
-			WithUnitOfWork(() =>
-			{
+			var personIds = WithUnitOfWork(() => {
 				var missingAgents = _agentStatePersister.GetStatesNotInSnapshot(snapshotId, sourceId);
-				personIds = missingAgents
+				return missingAgents
 					.Where(x => x.StateCode != Rta.LogOutBySnapshot)
 					.Select(x => x.PersonId)
 					.ToArray();
 			});
+			process(new closingSnapshotStrategy(_config, _agentStatePersister, action, snapshotId, personIds));
+		}
 
-			process(
-				parallelTransactions,
-				maxTransactionSize,
-				personIds,
-				(ids, _) => _agentStatePersister.Get(ids),
-				_ => new InputInfo
+		private class closingSnapshotStrategy : baseStrategy<Guid>
+		{
+			private readonly DateTime _snapshotId;
+			private readonly IEnumerable<Guid> _things;
+
+			public closingSnapshotStrategy(IConfigReader config, IAgentStatePersister persister, Action<Context> action, DateTime snapshotId, IEnumerable<Guid> things) : base(config, persister, action)
+			{
+				_snapshotId = snapshotId;
+				_things = things;
+				ParallelTransactions = _config.ReadValue("RtaCloseSnapshotParallelTransactions", 3);
+				MaxTransactionSize = _config.ReadValue("RtaCloseSnapshotMaxTransactionSize", 1000);
+			}
+
+			public override IEnumerable<Guid> AllThings()
+			{
+				return _things;
+			}
+
+			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<Guid> ids, Action<Exception> addException)
+			{
+				return _persister.Get(ids);
+			}
+
+			public override InputInfo GetInputFor(AgentState state)
+			{
+				return new InputInfo
 				{
 					StateCode = Rta.LogOutBySnapshot,
 					PlatformTypeId = Guid.Empty.ToString(),
-					SnapshotId = snapshotId
-				},
-				action);
+					SnapshotId = _snapshotId
+				};
+			}
+		}
+
+		public override void ForSynchronize(Action<Context> action)
+		{
+			var personIds = WithUnitOfWork(() =>
+				_agentStatePersister.GetStates()
+					.Where(x => x.StateCode != null)
+					.Select(x => x.PersonId)
+					.ToArray()
+				);
+			process(new synchronizeStrategy(_config, _agentStatePersister, action, personIds));
+		}
+
+		private class synchronizeStrategy : baseStrategy<Guid>
+		{
+			private readonly IEnumerable<Guid> _things;
+
+			public synchronizeStrategy(IConfigReader config, IAgentStatePersister persister, Action<Context> action, IEnumerable<Guid> things) : base(config, persister, action)
+			{
+				_things = things;
+				ParallelTransactions = _config.ReadValue("RtaSynchronizeParallelTransactions", 1);
+				MaxTransactionSize = _config.ReadValue("RtaSynchronizeMaxTransactionSize", 1000);
+				UpdateAgentState = null;
+			}
+
+			public override IEnumerable<Guid> AllThings()
+			{
+				return _things;
+			}
+
+			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<Guid> ids, Action<Exception> addException)
+			{
+				return _persister.Get(ids);
+			}
+
+			public override InputInfo GetInputFor(AgentState state)
+			{
+				return new InputInfo
+				{
+					StateCode = state.StateCode,
+					PlatformTypeId = state.PlatformTypeId.ToString()
+				};
+			}
+
+			public override Func<AgentState> GetStored(AgentState state)
+			{
+				return null;
+			}
+		}
+
+		private abstract class baseStrategy<T> : IStrategy<T>
+		{
+			protected readonly IConfigReader _config;
+			protected readonly IAgentStatePersister _persister;
+
+			protected baseStrategy(
+				IConfigReader config,
+				IAgentStatePersister persister,
+				Action<Context> action
+				)
+			{
+				_config = config;
+				_persister = persister;
+				Action = action;
+				UpdateAgentState = c => _persister.Update(c.MakeAgentState());
+			}
+
+			public int ParallelTransactions { get; protected set; }
+			public int MaxTransactionSize { get; protected set; }
+
+			public abstract IEnumerable<T> AllThings();
+			public abstract IEnumerable<AgentState> GetStatesFor(IEnumerable<T> things, Action<Exception> addException);
+			public abstract InputInfo GetInputFor(AgentState state);
+			public virtual Func<AgentState> GetStored(AgentState state)
+			{
+				return () => state;
+			}
+
+			public Action<Context> UpdateAgentState { get; protected set; }
+
+			public Action<Context> Action { get; }
 		}
 
 		public class scheduleData : ScheduleState
@@ -171,32 +302,35 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			public IEnumerable<scheduleData> schedules;
 			public IEnumerable<AgentState> agentStates;
 			public Lazy<sharedData> shared;
-
-			public Func<AgentState, InputInfo> getInputFor;
-
-			public InputInfo inputFor(AgentState state)
-			{
-				return getInputFor?.Invoke(state);
-			}
 		}
 
-		private void process<T>(
-			int parallelTransactions,
-			int maxTransactionSize,
-			IEnumerable<T> allThings,
-			Func<IEnumerable<T>, Action<Exception>, IEnumerable<AgentState>> getAgentStates,
-			Func<AgentState, InputInfo> getInputFor,
-			Action<Context> action)
+		public interface IStrategy<T>
+		{
+			int ParallelTransactions { get; }
+			int MaxTransactionSize { get; }
+
+			IEnumerable<T> AllThings();
+			IEnumerable<AgentState> GetStatesFor(IEnumerable<T> things, Action<Exception> addException);
+			InputInfo GetInputFor(AgentState state);
+
+			Action<Context> UpdateAgentState { get; }
+
+			Action<Context> Action { get; }
+
+			Func<AgentState> GetStored(AgentState state);
+		}
+
+		private void process<T>(IStrategy<T> strategy)
 		{
 			var exceptions = new ConcurrentBag<Exception>();
 
+			var allThings = strategy.AllThings();
 			var allThingsSize = allThings.Count();
 			if (allThingsSize == 0)
 				return;
-			var someThingsSize = maxTransactionSize;
-			var transactionCount = parallelTransactions;
-			if (allThingsSize <= someThingsSize * transactionCount)
-				someThingsSize = (int) Math.Ceiling(allThingsSize / (double) transactionCount);
+			var maxTransactionSize = strategy.MaxTransactionSize;
+			if (allThingsSize <= maxTransactionSize * strategy.ParallelTransactions)
+				maxTransactionSize = (int) Math.Ceiling(allThingsSize / (double)strategy.ParallelTransactions);
 
 			var shared = new Lazy<sharedData>(() =>
 			{
@@ -210,12 +344,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			});
 
 			var transactions = allThings
-				.Batch(someThingsSize)
+				.Batch(maxTransactionSize)
 				.Select(someThings =>
 				{
 					return new Lazy<transactionData>(() =>
 					{
-						var agentStates = getAgentStates(someThings, exceptions.Add);
+						var agentStates = strategy.GetStatesFor(someThings, exceptions.Add);
 						var now = shared.Value.now;
 
 						var schedules = agentStates
@@ -239,8 +373,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						{
 							agentStates = agentStates,
 							shared = shared,
-							schedules = schedules,
-							getInputFor = getInputFor,
+							schedules = schedules
 						};
 					});
 				});
@@ -248,9 +381,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var tenant = _dataSource.CurrentName();
 			Parallel.ForEach(
 				transactions,
-				new ParallelOptions {MaxDegreeOfParallelism = transactionCount},
+				new ParallelOptions {MaxDegreeOfParallelism = strategy.ParallelTransactions},
 				sharedData =>
-					Transaction(tenant, sharedData, action)
+					Transaction(tenant, strategy, sharedData)
 						.ForEach(exceptions.Add)
 				);
 
@@ -259,33 +392,33 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[TenantScope]
-		protected virtual IEnumerable<Exception> Transaction(
+		protected virtual IEnumerable<Exception> Transaction<T>(
 			string tenant,
-			Lazy<transactionData> sharedData,
-			Action<Context> action)
+			IStrategy<T> strategy,
+			Lazy<transactionData> transactionData)
 		{
 			var exceptions = new List<Exception>();
 
 			WithUnitOfWork(() =>
 			{
-				var data = sharedData.Value;
+				var data = transactionData.Value;
 				var shared = data.shared.Value;
 
 				data.agentStates.ForEach(state =>
 				{
 					try
 					{
-						action.Invoke(new Context(
+						strategy.Action.Invoke(new Context(
 							shared.now,
-							data.inputFor(state),
+							strategy.GetInputFor(state),
 							state.PersonId,
 							state.BusinessUnitId,
 							state.TeamId.GetValueOrDefault(),
 							state.SiteId.GetValueOrDefault(),
-							() => state,
+							strategy.GetStored(state),
 							() => data.schedules.Single(s => s.PersonId == state.PersonId),
 							s => shared.mappings,
-							c => _agentStatePersister.Update(c.MakeAgentState()),
+							strategy.UpdateAgentState,
 							_stateMapper,
 							_appliedAdherence,
 							_appliedAlarm
@@ -299,70 +432,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			});
 
 			return exceptions;
-		}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-		
-
-
-
-		[AllBusinessUnitsUnitOfWork]
-		[ReadModelUnitOfWork]
-		public override void ForSynchronize(Action<Context> action)
-		{
-			var mappings = new MappingsState(() => _mappingReader.Read());
-			var now = _now.UtcDateTime();
-
-			_agentStatePersister.GetStates()
-				.Where(x => x.StateCode != null)
-				.ForEach(state =>
-				{
-					action.Invoke(new Context(
-						now,
-						new InputInfo
-						{
-							StateCode = state.StateCode,
-							PlatformTypeId = state.PlatformTypeId.ToString()
-						},
-						state.PersonId,
-						state.BusinessUnitId,
-						state.TeamId.GetValueOrDefault(),
-						state.SiteId.GetValueOrDefault(),
-						null,
-						() => makeScheduleState(state, now),
-						s => mappings,
-						null,
-						_stateMapper,
-						_appliedAdherence,
-						_appliedAlarm
-						));
-				});
 		}
 
 		private ScheduleState makeScheduleState(AgentState state, DateTime now)
