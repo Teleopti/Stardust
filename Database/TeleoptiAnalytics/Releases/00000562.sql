@@ -109,22 +109,25 @@ truncate table Hangfire.State
 truncate table Hangfire.Job
 GO
 
-
+SET IDENTITY_INSERT [HangFire].[Job] ON
 --insert back
 INSERT INTO [HangFire].[Job]
-           ([StateId]
+           ([Id]
+		   ,[StateId]
            ,[StateName]
            ,[InvocationData]
            ,[Arguments]
            ,[CreatedAt]
            ,[ExpireAt])
-SELECT		[StateId]
+SELECT		[Id]
+			,[StateId]
            ,[StateName]
            ,[InvocationData]
            ,[Arguments]
            ,[CreatedAt]
            ,[ExpireAt]
 FROM Hangfire.Job2
+SET IDENTITY_INSERT [HangFire].[Job] OFF
 GO
 
 INSERT INTO [HangFire].[JobParameter]
