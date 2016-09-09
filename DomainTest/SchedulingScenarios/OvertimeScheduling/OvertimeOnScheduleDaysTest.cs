@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().Should().Be.Empty();
 		}
 
-		[Test, Ignore("40092")]
+		[Test]
 		public void ShouldHandleCasesWhereSkillsTimeZoneIsFarAway()
 		{
 			TimeZoneGuard.SetTimeZone(TimeZoneInfo.Utc);
