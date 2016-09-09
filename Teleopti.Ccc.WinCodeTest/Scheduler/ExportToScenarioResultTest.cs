@@ -379,9 +379,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			const string sharedMessage = "EnGång";
 			return new List<IBusinessRuleResponse>
 					   {
-						   new BusinessRuleResponse(typeof (int), sharedMessage, false, false, new DateTimePeriod(), sharedPerson, new DateOnlyPeriod(new DateOnly(),new DateOnly() )),
-						   new BusinessRuleResponse(typeof (object), sharedMessage, true, true, new DateTimePeriod(), sharedPerson, new DateOnlyPeriod(new DateOnly(),new DateOnly() )),
-						   new BusinessRuleResponse(typeof (object), "unik", true, true, new DateTimePeriod(), sharedPerson, new DateOnlyPeriod(new DateOnly(),new DateOnly() ))
+						   new BusinessRuleResponse(typeof (int), sharedMessage, false, false, new DateTimePeriod(), sharedPerson, new DateOnlyPeriod(new DateOnly(),new DateOnly() ), "tjillevippen"),
+						   new BusinessRuleResponse(typeof (object), sharedMessage, true, true, new DateTimePeriod(), sharedPerson, new DateOnlyPeriod(new DateOnly(),new DateOnly() ), "tjillevippen"),
+						   new BusinessRuleResponse(typeof (object), "unik", true, true, new DateTimePeriod(), sharedPerson, new DateOnlyPeriod(new DateOnly(),new DateOnly() ), "tjillevippen")
 					   };
 		}
 

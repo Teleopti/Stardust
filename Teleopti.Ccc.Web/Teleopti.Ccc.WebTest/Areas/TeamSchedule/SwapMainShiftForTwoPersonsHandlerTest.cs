@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 				.Return(new List<BusinessRuleResponse>
 				{
 					new BusinessRuleResponse(null, errorMessage, true, true, new DateTimePeriod(), personFrom,
-						new DateOnlyPeriod())
+						new DateOnlyPeriod(), "tjillevippen")
 				}).IgnoreArguments();
 
 			_target = new SwapMainShiftForTwoPersonsCommandHandler(_commonNameDescriptionSetting, _personRepository,

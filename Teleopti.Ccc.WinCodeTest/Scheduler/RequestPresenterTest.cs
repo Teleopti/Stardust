@@ -489,7 +489,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             UndoRedoContainer undo = new UndoRedoContainer(100);
             ScheduleWithBusinessRuleDictionary sched = new ScheduleWithBusinessRuleDictionary(_scenario, new ScheduleDateTimePeriod(new DateTimePeriod(1900, 1, 1, 2100, 1, 1)));
             sched.SetUndoRedoContainer(undo);
-            sched.AddBusinessRule(new BusinessRuleResponse(typeof(string), string.Empty, false, true, new DateTimePeriod(2000, 1, 1, 2001, 1, 1), person, new DateOnlyPeriod(new DateOnly(),new DateOnly() )));
+            sched.AddBusinessRule(new BusinessRuleResponse(typeof(string), string.Empty, false, true, new DateTimePeriod(2000, 1, 1, 2001, 1, 1), person, new DateOnlyPeriod(new DateOnly(),new DateOnly() ), "tjillevippen"));
             IRequest part = new AbsenceRequest(absence, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
             IPersonRequest req = new PersonRequest(person);
             req.Request = part;
@@ -523,7 +523,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             IList<IBusinessRuleResponse> brokenRules = new List<IBusinessRuleResponse>();
             DateTime start = DateTime.UtcNow.AddDays(2).Date;
-            brokenRules.Add(new BusinessRuleResponse(typeof(DayOffRule), "Error", true, mandatory, new DateTimePeriod(start, start), _person1, new DateOnlyPeriod()));
+            brokenRules.Add(new BusinessRuleResponse(typeof(DayOffRule), "Error", true, mandatory, new DateTimePeriod(start, start), _person1, new DateOnlyPeriod(), "tjillevippen"));
 
             Expect.Call(_schedules.Modify(ScheduleModifier.Request, new [] { (IScheduleDay) null }, null, new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance))).Return(
                 brokenRules).IgnoreArguments().Repeat.Twice();
@@ -554,7 +554,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             IList<IBusinessRuleResponse> brokenRules = new List<IBusinessRuleResponse>();
             DateTime start = DateTime.UtcNow.AddDays(2).Date;
-            brokenRules.Add(new BusinessRuleResponse(typeof(DayOffRule), "Error", true, mandatory, new DateTimePeriod(start, start), _person1, new DateOnlyPeriod()));
+            brokenRules.Add(new BusinessRuleResponse(typeof(DayOffRule), "Error", true, mandatory, new DateTimePeriod(start, start), _person1, new DateOnlyPeriod(), "tjillevippen"));
 
             Expect.Call(_schedules.Modify(ScheduleModifier.Request, new [] { (IScheduleDay)null }, null, new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance))).Return(
                 brokenRules).IgnoreArguments().Repeat.Twice();
@@ -575,7 +575,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             IList<IBusinessRuleResponse> brokenRules = new List<IBusinessRuleResponse>();
             DateTime start = DateTime.UtcNow.AddDays(2).Date;
-            brokenRules.Add(new BusinessRuleResponse(typeof(DayOffRule), "Error", true, mandatory, new DateTimePeriod(start, start), _person1, new DateOnlyPeriod()));
+            brokenRules.Add(new BusinessRuleResponse(typeof(DayOffRule), "Error", true, mandatory, new DateTimePeriod(start, start), _person1, new DateOnlyPeriod(), "tjillevippen"));
 
             Expect.Call(_schedules.Modify(ScheduleModifier.Request, new [] { (IScheduleDay)null }, null, new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance))).Return(
                 brokenRules).IgnoreArguments();
