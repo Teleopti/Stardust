@@ -241,11 +241,11 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeUpdaterHangfire.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradePendingReasonsService.cs" />
     <Compile Include="ApplicationLayer\SkillDay\AnalyticsForecastWorkloadUpdater.cs" />
-    <Compile Include="Cascading\AddResourcesToSubSkillsFocusHighUnderstaffingPercentage.cs" />
+    <Compile Include="Cascading\AddResourcesToSubSkills.cs" />
     <Compile Include="Cascading\SubSkillsWithSameIndex.cs" />
     <Compile Include="Cascading\CascadingSkills.cs" />
     <Compile Include="Cascading\PrimarySkillOverstaff.cs" />
-    <Compile Include="Cascading\ReducePrimarySkillResourcesPercentageDistribution.cs" />
+    <Compile Include="Cascading\ReducePrimarySkillResources.cs" />
     <Compile Include="Cascading\ShovelResourcesState.cs" />
     <Compile Include="Common\SiteOpenHour.cs" />
     <Compile Include="Exceptions\AbsenceMissingInAnalyticsException.cs" />
@@ -3021,6 +3021,6 @@
   </Target>
    -->
   <Target Name="AfterBuild">
-  <Message Text="!!! Project info: Configuration=$(Configuration) Platform=$(Platform) DebugType=$(DebugType) !!!" Importance="high" />
+    <Message Text="!!! Project info: Configuration=$(Configuration) Platform=$(Platform) DebugType=$(DebugType) !!!" Importance="high" />
   </Target>
- </Project>
+</Project>

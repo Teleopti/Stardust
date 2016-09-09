@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Cascading
 {
-	public class AddResourcesToSubSkillsFocusHighUnderstaffingPercentage
+	public class AddResourcesToSubSkills
 	{
 		private const double minPrimaryOverstaffToContinue = 0.1;
 

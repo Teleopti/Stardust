@@ -71,9 +71,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<ShovelResources>().SingleInstance();
-			builder.RegisterType<AddResourcesToSubSkillsFocusHighUnderstaffingPercentage>().SingleInstance();
+			builder.RegisterType<AddResourcesToSubSkills>().SingleInstance();
 			builder.RegisterType<PrimarySkillOverstaff>().SingleInstance();
-			builder.RegisterType<ReducePrimarySkillResourcesPercentageDistribution>().SingleInstance();
+			builder.RegisterType<ReducePrimarySkillResources>().SingleInstance();
 			builder.RegisterType<SkillGroupPerActivityProvider>().SingleInstance();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_CascadingSkills_38524))
 			{

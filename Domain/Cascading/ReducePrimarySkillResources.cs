@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Cascading
 {
-	public class ReducePrimarySkillResourcesPercentageDistribution
+	public class ReducePrimarySkillResources
 	{
 		public void Execute(ShovelResourcesState state, ISkillStaffPeriodHolder skillStaffPeriodHolder, IEnumerable<ISkill> primarySkills, DateTimePeriod interval)
 		{

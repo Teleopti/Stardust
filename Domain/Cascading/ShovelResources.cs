@@ -9,20 +9,20 @@ namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class ShovelResources
 	{
-		private readonly AddResourcesToSubSkillsFocusHighUnderstaffingPercentage _addResourcesToSubSkillsFocusHighUnderstaffingPercentage;
-		private readonly ReducePrimarySkillResourcesPercentageDistribution _reducePrimarySkillResourcesPercentageDistribution;
+		private readonly AddResourcesToSubSkills _addResourcesToSubSkills;
+		private readonly ReducePrimarySkillResources _reducePrimarySkillResources;
 		private readonly SkillGroupPerActivityProvider _skillGroupPerActivityProvider;
 		private readonly PrimarySkillOverstaff _primarySkillOverstaff;
 		private readonly ITimeZoneGuard _timeZoneGuard;
 
-		public ShovelResources(AddResourcesToSubSkillsFocusHighUnderstaffingPercentage addResourcesToSubSkillsFocusHighUnderstaffingPercentage,
-			ReducePrimarySkillResourcesPercentageDistribution reducePrimarySkillResourcesPercentageDistribution,
+		public ShovelResources(AddResourcesToSubSkills addResourcesToSubSkills,
+			ReducePrimarySkillResources reducePrimarySkillResources,
 			SkillGroupPerActivityProvider skillGroupPerActivityProvider,
 			PrimarySkillOverstaff primarySkillOverstaff,
 			ITimeZoneGuard timeZoneGuard)
 		{
-			_addResourcesToSubSkillsFocusHighUnderstaffingPercentage = addResourcesToSubSkillsFocusHighUnderstaffingPercentage;
-			_reducePrimarySkillResourcesPercentageDistribution = reducePrimarySkillResourcesPercentageDistribution;
+			_addResourcesToSubSkills = addResourcesToSubSkills;
+			_reducePrimarySkillResources = reducePrimarySkillResources;
 			_skillGroupPerActivityProvider = skillGroupPerActivityProvider;
 			_primarySkillOverstaff = primarySkillOverstaff;
 			_timeZoneGuard = timeZoneGuard;
@@ -51,8 +51,8 @@ namespace Teleopti.Ccc.Domain.Cascading
 								foreach (var skillGroup in skillGroups)
 								{
 									var state = _primarySkillOverstaff.AvailableSum(skillStaffPeriodHolder, skillGroups, skillGroup, interval);
-									_addResourcesToSubSkillsFocusHighUnderstaffingPercentage.Execute(state, skillStaffPeriodHolder, skillGroup, interval);
-									_reducePrimarySkillResourcesPercentageDistribution.Execute(state, skillStaffPeriodHolder, skillGroup.PrimarySkills, interval);
+									_addResourcesToSubSkills.Execute(state, skillStaffPeriodHolder, skillGroup, interval);
+									_reducePrimarySkillResources.Execute(state, skillStaffPeriodHolder, skillGroup.PrimarySkills, interval);
 								}
 							}
 						}
