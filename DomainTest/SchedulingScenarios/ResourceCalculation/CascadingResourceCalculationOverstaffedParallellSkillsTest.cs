@@ -483,7 +483,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				.Should().Be.EqualTo(0);
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldHandleMultipleSkillgroupsContainingSamePrimarySkill_HighUnderstaffing()
 		{
 			var scenario = new Scenario("_");
