@@ -22,9 +22,16 @@ namespace Teleopti.Ccc.Domain.Cascading
 				if (!primarySkillOverstaff.IsOverstaffed())
 					continue;
 
-				var resourcesOnOtherSkillGroupsContainingThisPrimarySkill = allSkillGroups
-					.Where(x => !x.Equals(skillGroup) && x.PrimarySkills.Contains(primarySkill))
-					.Sum(otherSkillGroup => otherSkillGroup.RemainingResources);
+				var resourcesOnOtherSkillGroupsContainingThisPrimarySkill = 0d;
+				foreach (var otherSkillGroup in allSkillGroups.Where(x => !x.Equals(skillGroup) && x.PrimarySkills.Contains(primarySkill)))
+				{
+					var resourcesOnOtherSkillGroup = otherSkillGroup.RemainingResources;
+					foreach (var otherPrimarySkill in otherSkillGroup.PrimarySkills.Where(x => !x.Equals(primarySkill)))
+					{
+						resourcesOnOtherSkillGroup -= skillStaffPeriodHolder.SkillStaffPeriodOrDefault(otherPrimarySkill, interval).CalculatedResource;
+					}
+					resourcesOnOtherSkillGroupsContainingThisPrimarySkill += resourcesOnOtherSkillGroup;
+				}
 
 				var otherSkillGroupOverstaff = Math.Max(resourcesOnOtherSkillGroupsContainingThisPrimarySkill - primarySkillStaffPeriod.FStaff, 0);
 				dic.Add(primarySkill, primarySkillOverstaff - otherSkillGroupOverstaff);
