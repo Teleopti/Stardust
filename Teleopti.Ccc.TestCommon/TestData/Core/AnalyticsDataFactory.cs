@@ -30,9 +30,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 
 		public void Persist(CultureInfo culture)
 		{
-			Bulk.Retrying(InfraTestConfigReader.AnalyticsConnectionString, connection =>
+			_analyticsSetups.ForEach(s =>
 			{
-				_analyticsSetups.ForEach(s => s.Apply(connection, culture, CultureInfo.GetCultureInfo("sv-SE")));
+				Bulk.Retrying(InfraTestConfigReader.AnalyticsConnectionString, connection =>
+				{
+					s.Apply(connection, culture, CultureInfo.GetCultureInfo("sv-SE"))
+				});
 			});
 		}
 
