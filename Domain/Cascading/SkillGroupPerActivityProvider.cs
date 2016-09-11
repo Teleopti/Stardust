@@ -6,11 +6,11 @@ namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class SkillGroupPerActivityProvider
 	{
-		public IEnumerable<CascadingSkillGroup> FetchOrdered(CascadingSkills cascadingSkills, IActivity activity, DateTimePeriod period)
+		public IEnumerable<IEnumerable<CascadingSkillGroup>> FetchOrdered(CascadingSkills cascadingSkills, IActivity activity, DateTimePeriod period)
 		{
 			var affectedSkills = ResourceCalculationContext.Fetch().AffectedResources(activity, period).Values;
 			var cascadingSkillsForActivity = cascadingSkills.ForActivity(activity).ToArray();
-			var ret = new List<CascadingSkillGroup>();
+			var tempList = new List<CascadingSkillGroup>();
 
 			foreach (var skillGroup in affectedSkills)
 			{
@@ -35,10 +35,25 @@ namespace Teleopti.Ccc.Domain.Cascading
 						last.AddSubSkill(skillInSameChainAsPrimarySkill);
 					}
 				}
-				ret.Add(new CascadingSkillGroup(primarySkills, cascadingSubSkills, skillGroup.Resource));
+				tempList.Add(new CascadingSkillGroup(primarySkills, cascadingSubSkills, skillGroup.Resource));
 			}
-			ret.Sort(new CascadingSkillGroupSorter());
+			tempList.Sort(new CascadingSkillGroupSorter());
+			//TODO: hack for now!
+			var ret = new List<List<CascadingSkillGroup>>();
+			foreach (var skillGroup in tempList)
+			{
+				var retLast = ret.LastOrDefault();
+				if (retLast == null || retLast.First().SkillGroupIndexHash() != skillGroup.SkillGroupIndexHash())
+				{
+					ret.Add(new List<CascadingSkillGroup> {skillGroup});
+				}
+				else
+				{
+					ret.Last().Add(skillGroup);
+				}
+			}
 			return ret;
+			//
 		}
 	}
 }

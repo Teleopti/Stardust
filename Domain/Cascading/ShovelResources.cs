@@ -47,16 +47,31 @@ namespace Teleopti.Ccc.Domain.Cascading
 						{
 							foreach (var interval in date.ToDateTimePeriod(_timeZoneGuard.CurrentTimeZone()).Intervals(defaultResolution))
 							{
-								var skillGroups = _skillGroupPerActivityProvider.FetchOrdered(cascadingSkills, activity, interval);
-								foreach (var skillGroup in skillGroups)
+								var allSkillGroups = _skillGroupPerActivityProvider.FetchOrdered(cascadingSkills, activity, interval);
+								var allSkillGroups_GiveBetterName = foo(allSkillGroups).ToArray();
+								foreach (var skillGroupsWithSameIndex in allSkillGroups)
 								{
-									var state = _primarySkillOverstaff.AvailableSum(skillStaffPeriodHolder, skillGroups, skillGroup, interval);
-									_addResourcesToSubSkills.Execute(state, skillStaffPeriodHolder, skillGroup, interval);
-									_reducePrimarySkillResources.Execute(state, skillStaffPeriodHolder, skillGroup.PrimarySkills, interval);
+									var state = _primarySkillOverstaff.AvailableSum(skillStaffPeriodHolder, allSkillGroups_GiveBetterName, skillGroupsWithSameIndex, interval);
+									foreach (var skillGroup in skillGroupsWithSameIndex)
+									{
+										_addResourcesToSubSkills.Execute(state, skillStaffPeriodHolder, skillGroup, interval);
+									}
+									_reducePrimarySkillResources.Execute(state, skillStaffPeriodHolder, skillGroupsWithSameIndex.First().PrimarySkills, interval);
 								}
 							}
 						}
 					}
+				}
+			}
+		}
+
+		public IEnumerable<CascadingSkillGroup> foo(IEnumerable<IEnumerable<CascadingSkillGroup>> bar)
+		{
+			foreach (var VARIABLE in bar)
+			{
+				foreach (var cascadingSkillGroup in VARIABLE)
+				{
+					yield return cascadingSkillGroup;
 				}
 			}
 		}

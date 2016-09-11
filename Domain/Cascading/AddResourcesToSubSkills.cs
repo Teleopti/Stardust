@@ -11,9 +11,14 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 		public void Execute(ShovelResourcesState shovelResourcesState, ISkillStaffPeriodHolder skillStaffPeriodHolder, CascadingSkillGroup skillGroup, DateTimePeriod interval)
 		{
-			while (shovelResourcesState.RemainingOverstaffing > minPrimaryOverstaffToContinue && skillGroup.RemainingResources > minPrimaryOverstaffToContinue)
+			var maxToMoveForThisSkillGroup = shovelResourcesState.MaxToMoveForThisSkillGroup(skillGroup);
+			var remaingResourcesForThisSkillGroup = maxToMoveForThisSkillGroup;
+			var anySubSkillIsUnderstaffed = true;
+			while (shovelResourcesState.RemainingOverstaffing > minPrimaryOverstaffToContinue &&
+				remaingResourcesForThisSkillGroup > minPrimaryOverstaffToContinue &&
+				anySubSkillIsUnderstaffed)
 			{
-				var anySubSkillIsUnderstaffed = false;
+				anySubSkillIsUnderstaffed = false;
 
 				foreach (var subSkillsWithSameIndex in skillGroup.SubSkillsWithSameIndex)
 				{
@@ -22,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 						.Where(x => x.AbsoluteDifference.IsUnderstaffed())
 						.Sum(x => -x.RelativeDifference);
 
-					var remainingResourcesToShovel = shovelResourcesState.RemainingOverstaffing;
+					var remainingResourcesToShovel = Math.Min(shovelResourcesState.RemainingOverstaffing, maxToMoveForThisSkillGroup);
 
 					foreach (var skillToMoveTo in subSkillsWithSameIndex)
 					{
@@ -36,13 +41,12 @@ namespace Teleopti.Ccc.Domain.Cascading
 						var proportionalResourcesToMove = understaffingPercent/totalUnderstaffingPercent*remainingResourcesToShovel;
 
 						var resourceToMove = Math.Min(-skillToMoveToAbsoluteDifference, proportionalResourcesToMove);
-						resourceToMove = Math.Min(resourceToMove, shovelResourcesState.SkillgroupResourcesAtStart);
 						shovelResourcesState.AddResourcesTo(skillStaffPeriodTo, resourceToMove);
+						//TODO: fix this!
+						remaingResourcesForThisSkillGroup -= resourceToMove;
+						skillGroup.RemainingResources -= resourceToMove;
 					}
 				}
-
-				if (!anySubSkillIsUnderstaffed)
-					return;
 			}
 		}
 	}
