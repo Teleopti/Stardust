@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 			{
 				Bulk.Retrying(InfraTestConfigReader.AnalyticsConnectionString, connection =>
 				{
-					s.Apply(connection, culture, CultureInfo.GetCultureInfo("sv-SE"))
+					s.Apply(connection, culture, CultureInfo.GetCultureInfo("sv-SE"));
 				});
 			});
 		}
