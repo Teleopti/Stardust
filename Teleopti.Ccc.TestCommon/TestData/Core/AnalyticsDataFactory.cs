@@ -1,10 +1,9 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Threading;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.TestCommon.TestData.Analytics.Sql;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Core
 {
@@ -14,11 +13,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 
 		public void Apply(IAnalyticsDataSetup analyticsDataSetup)
 		{
-			Bulk.Retrying(InfraTestConfigReader.AnalyticsConnectionString, connection =>
+			using (var connection = new SqlConnection(InfraTestConfigReader.AnalyticsConnectionString))
 			{
 				var culture = Thread.CurrentThread.CurrentCulture;
+				connection.Open();
 				analyticsDataSetup.Apply(connection, culture, CultureInfo.GetCultureInfo("sv-SE"));
-			});
+			}
 		}
 
 		public void Setup(IAnalyticsDataSetup analyticsDataSetup)
@@ -30,13 +30,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 
 		public void Persist(CultureInfo culture)
 		{
-			_analyticsSetups.ForEach(s =>
+			using (var connection = new SqlConnection(InfraTestConfigReader.AnalyticsConnectionString))
 			{
-				Bulk.Retrying(InfraTestConfigReader.AnalyticsConnectionString, connection =>
-				{
-					s.Apply(connection, culture, CultureInfo.GetCultureInfo("sv-SE"));
-				});
-			});
+				connection.Open();
+				_analyticsSetups.ForEach(s => s.Apply(connection, culture, CultureInfo.GetCultureInfo("sv-SE")));
+			}
 		}
 
 		public IEnumerable<IAnalyticsDataSetup> Setups { get { return _analyticsSetups; } } 
