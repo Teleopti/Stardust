@@ -527,5 +527,57 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			skillDayB2.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(-9);
 		}
+
+		[Test, Ignore]
+		public void ShouldHandleMultipleSkillgroupsContainingSamePrimarySkill_MultipleAgents()
+		{
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var dateOnly = DateOnly.Today;
+			var skillA1 = new Skill("A1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillA1.SetCascadingIndex(1);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillA1, new TimePeriod(8, 0, 9, 0));
+			var skillDayA1 = skillA1.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var skillA2 = new Skill("A2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillA2.SetCascadingIndex(1);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillA2, new TimePeriod(8, 0, 9, 0));
+			var skillDayA2 = skillA2.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var skillB1 = new Skill("B1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillB1.SetCascadingIndex(2);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillB1, new TimePeriod(8, 0, 9, 0));
+			var skillDayB1 = skillB1.CreateSkillDayWithDemand(scenario, dateOnly, 2);
+			var skillB2 = new Skill("B2", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillB2.SetCascadingIndex(2);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillB2, new TimePeriod(8, 0, 9, 0));
+			var skillDayB2 = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, 2);
+
+			var assignments = new List<IPersonAssignment>();
+			for (var i = 0; i < 2; i++)
+			{
+				var agent1 = new Person().InTimeZone(TimeZoneInfo.Utc);
+				agent1.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }),
+					new[] { skillA1, skillA2, skillB1 });
+				var ass1 = new PersonAssignment(agent1, scenario, dateOnly);
+				ass1.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
+				var agent2 = new Person().InTimeZone(TimeZoneInfo.Utc);
+				agent2.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }),
+					new[] { skillA1, skillA2, skillB2 });
+				var ass2 = new PersonAssignment(agent2, scenario, dateOnly);
+				ass2.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
+				assignments.Add(ass1);
+				assignments.Add(ass2);
+			}
+
+			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, assignments, new[] { skillDayA1, skillDayA2, skillDayB1, skillDayB2 }, false, false));
+
+			skillDayA1.SkillStaffPeriodCollection.First().AbsoluteDifference
+				.Should().Be.EqualTo(0);
+			skillDayA2.SkillStaffPeriodCollection.First().AbsoluteDifference
+				.Should().Be.EqualTo(0);
+			skillDayB1.SkillStaffPeriodCollection.First().AbsoluteDifference
+				.Should().Be.EqualTo(-1);
+			skillDayB2.SkillStaffPeriodCollection.First().AbsoluteDifference
+				.Should().Be.EqualTo(-1);
+		}
 	}
 }
