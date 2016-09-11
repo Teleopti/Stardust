@@ -253,7 +253,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			WorkloadFactory.CreateWorkloadThatIsClosed(skillA2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(6, 0, 7, 0));
 			var skillADay1 = skillA1.CreateSkillDayWithDemand(scenario, dateOnly, 0);
-			var skillADay2 = skillA2.CreateSkillDayWithDemand(scenario, dateOnly, 1);	
+			var skillADay2 = skillA2.CreateSkillDayWithDemand(scenario, dateOnly, 0);
 			var skillBDay = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 10);
 			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA1, skillA2, skillB });
