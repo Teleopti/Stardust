@@ -34,7 +34,7 @@
 
 		scope.vm.currentCommandLabel = containerCtrl.activeCmd;
 		scope.vm.getDate = containerCtrl.getDate;
-		if (!containerCtrl.hasToggle('AutoMoveOverwrittenActivityForOperationsEnabled')){
+		if (!containerCtrl.hasToggle('AutoMoveOverwrittenActivityForOperationsEnabled') || scope.vm.currentCommandLabel == 'MoveActivity'){
 			scope.vm.actionOptions.shift();
 			scope.vm.currentActionOptionValue = scope.vm.actionOptions[0].value;
 		}
