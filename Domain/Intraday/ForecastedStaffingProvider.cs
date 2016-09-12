@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -38,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var usersNow = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
 			var usersToday = new DateOnly(usersNow);
 			TimeSpan wantedIntervalResolution = TimeSpan.FromMinutes(minutesPerInterval);
-			double forecastedWorkloadSeconds = 0;
+			var mergedTaskPeriodList = new List<ITemplateTaskPeriod>();
 
 			var skills = _skillRepository.LoadSkills(skillIdList);
 			foreach (var skill in skills)
@@ -58,10 +60,21 @@ namespace Teleopti.Ccc.Domain.Intraday
 						StartTime = skillStaffPeriod.Period.StartDateTime,
 						Agents = skillStaffPeriod.FStaff
 					}));
-					var callsTodayUpUntilNow = tasksTodayUpUntilNow(skillDay.SkillStaffPeriodCollection, minutesPerInterval, skill.DefaultResolution, latestStatisticsTime);
-					forecastedWorkloadSeconds += callsTodayUpUntilNow * (skillDay.AverageTaskTime.TotalSeconds + skillDay.AverageAfterTaskTime.TotalSeconds);
+
+					var latestStatisticsTimeUtc = latestStatisticsTime.HasValue
+						? TimeZoneHelper.ConvertToUtc(latestStatisticsTime.Value, _timeZone.TimeZone())
+						: (DateTime?) null;
+
+					foreach (var workloadDay in skillDay.WorkloadDayCollection)
+					{
+						var taskPeriods = taskPeriodsUpUntilNow(workloadDay.TaskPeriodList, minutesPerInterval, skill.DefaultResolution, latestStatisticsTimeUtc, _now.UtcDateTime());
+						mergedTaskPeriodList.AddRange(taskPeriods);
+					}
 				}
 			}
+
+			var taskOwner = new TaskOwnerPeriod(DateOnly.MinValue, mergedTaskPeriodList, TaskOwnerPeriodType.Other);
+			var forecastedWorkloadSeconds = taskOwner.TotalTasks * (taskOwner.TotalAverageTaskTime.TotalSeconds + taskOwner.TotalAverageAfterTaskTime.TotalSeconds);
 
 			return new ForecastedStaffingModel()
 			{
@@ -70,49 +83,44 @@ namespace Teleopti.Ccc.Domain.Intraday
 			};
 		}
 
-		private double tasksTodayUpUntilNow(
-			ReadOnlyCollection<ISkillStaffPeriod> skillStaffPeriodCollection,
-			int targetMinutesPerInterval,
-			int skillMinutesPerInterval,
-			DateTime? latestStatisticsTime
-			)
+		private IEnumerable<ITemplateTaskPeriod> taskPeriodsUpUntilNow(
+			IList<ITemplateTaskPeriod> templateTaskPeriodCollection, 
+			int targetMinutesPerInterval, 
+			int skillMinutesPerInterval, 
+			DateTime? latestStatisticsTimeUtc,
+			DateTime? usersNowUtc)
 		{
-			if (!latestStatisticsTime.HasValue)
-				return 0;
+			var returnList = new List<ITemplateTaskPeriod>();
+			var periodLength = TimeSpan.FromMinutes(targetMinutesPerInterval);
+
+			if (!latestStatisticsTimeUtc.HasValue)
+				return returnList;
 
 			if (targetMinutesPerInterval > skillMinutesPerInterval)
 			{
-				return 0;
+				return returnList;
 			}
 
 			if (targetMinutesPerInterval < skillMinutesPerInterval)
 			{
-				var splitTasksCollection = new List<myTaskPeriod>();
-				var splitFactor = targetMinutesPerInterval / skillMinutesPerInterval;
-
-				foreach (var staffPeriod in skillStaffPeriodCollection)
+				foreach (var taskPeriod in templateTaskPeriodCollection)
 				{
-					var tasksSplit = staffPeriod.Payload.TaskData.Tasks / splitFactor;
-					for (int i = 0; i < splitFactor - 1; i++)
-					{
-						splitTasksCollection.Add(new myTaskPeriod
-						{
-							StartTime = staffPeriod.Period.StartDateTime.AddMinutes(targetMinutesPerInterval * i),
-							Tasks = tasksSplit
-						});
-					}
+					var splittedTaskPeriods = taskPeriod.Split(periodLength);
+					returnList.AddRange(splittedTaskPeriods.Select(p => new TemplateTaskPeriod(
+						new Task(p.Tasks, p.TotalAverageTaskTime, p.TotalAverageAfterTaskTime), p.Period)));
 				}
+				return returnList
+					.Where(t =>
+						t.Period.StartDateTime >= usersNowUtc.Value.Date &&
+						t.Period.EndDateTime <= latestStatisticsTimeUtc.Value.AddMinutes(targetMinutesPerInterval)
+					);
 			}
 
-			return skillStaffPeriodCollection
-					.Where(s => s.Period.StartDateTime <= latestStatisticsTime)
-					.Sum(t => t.Payload.TaskData.Tasks);
-		}
-
-		private class myTaskPeriod
-		{
-			public DateTime StartTime { get; set; }
-			public double Tasks { get; set; }
+			return templateTaskPeriodCollection
+				.Where(t => 
+					t.Period.StartDateTime >= usersNowUtc.Value.Date && 
+					t.Period.EndDateTime <= latestStatisticsTimeUtc.Value.AddMinutes(targetMinutesPerInterval)
+				);
 		}
 	}
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
@@ -67,8 +68,11 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldReturnStaffingForUsersCurrentDayInUsTimeZoneWhenOpen247()
 		{
-			var userNow = new DateTime(2016, 8, 26, 0, 0, 0, DateTimeKind.Local);
 			TimeZone.IsNewYork();
+			var userNow = new DateTime(2016, 8, 26, 23, 0, 0, DateTimeKind.Local);
+			var userNowUtc = TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone());
+			var latestStatsTimeLocal = new DateTime(2016, 8, 26, 22, 30, 0, DateTimeKind.Local);
+			var latestStatsTimeUtc = TimeZoneHelper.ConvertToUtc(latestStatsTimeLocal, TimeZone.TimeZone());
 			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
 			
 			IntervalLengthFetcher.Has(minutesPerInterval);
@@ -78,21 +82,42 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(0, 0, 24, 0));
 			SkillRepository.Has(skill);
 
-			var skillDay1 = createSkillDay(skill, scenario, userNow.AddDays(-1), 0);
-			var skillDay2 = createSkillDay(skill, scenario, userNow, 0);
-			var skillDay3 = createSkillDay(skill, scenario, userNow.AddDays(1), 0);
+			var skillDay1 = createSkillDay(skill, scenario, userNow.AddDays(-1), 96);
+			var skillDay2 = createSkillDay(skill, scenario, userNow, 96);
+			var skillDay3 = createSkillDay(skill, scenario, userNow.AddDays(1), 96);
 			SkillDayRepository.Add(skillDay1);
 			SkillDayRepository.Add(skillDay2);
 			SkillDayRepository.Add(skillDay3);
 
-			IntradayQueueStatisticsLoader.Has(new LatestStatisticsTimeAndWorkload());
+			var taskPeriodList = new List<ITemplateTaskPeriod>();
+			taskPeriodList.AddRange(skillDay1.WorkloadDayCollection.First().TaskPeriodList
+				.Where(t => t.Period.StartDateTime >= userNowUtc.Date && t.Period.EndDateTime <= latestStatsTimeUtc.AddMinutes(minutesPerInterval)));
+			taskPeriodList.AddRange(skillDay2.WorkloadDayCollection.First().TaskPeriodList
+				.Where(t => t.Period.StartDateTime >= userNowUtc.Date && t.Period.EndDateTime <= latestStatsTimeUtc.AddMinutes(minutesPerInterval)));
+			taskPeriodList.AddRange(skillDay3.WorkloadDayCollection.First().TaskPeriodList
+				.Where(t => t.Period.StartDateTime >= userNowUtc.Date && t.Period.EndDateTime <= latestStatsTimeUtc.AddMinutes(minutesPerInterval)));
+			var taskOwner = new TaskOwnerPeriod(DateOnly.MinValue, taskPeriodList, TaskOwnerPeriodType.Other);
+
+			var latestStatsTimeAndWorkload = new LatestStatisticsTimeAndWorkload
+			{
+				LatestStatisticsIntervalId = (int?)latestStatsTimeLocal.TimeOfDay.TotalMinutes / minutesPerInterval,
+				ActualworkloadInSeconds = 250000
+			};
+			IntradayQueueStatisticsLoader.Has(latestStatsTimeAndWorkload);
+
+			var forecastedWorkloadInSeconds = taskOwner.TotalTasks *
+											 (taskOwner.TotalAverageTaskTime.TotalSeconds +
+											  taskOwner.TotalAverageAfterTaskTime.TotalSeconds);
+			var deviationFactor = latestStatsTimeAndWorkload.ActualworkloadInSeconds / forecastedWorkloadInSeconds;
 
 			var vm = Target.Load(new[] { skill.Id.Value });
 
 			vm.DataSeries.Time.Length.Should().Be.EqualTo(96);
-			vm.DataSeries.Time.First().Should().Be.EqualTo(userNow);
-			vm.DataSeries.Time.Last().Should().Be.EqualTo(userNow.AddDays(1).AddMinutes(-minutesPerInterval));
+			vm.DataSeries.Time.First().Should().Be.EqualTo(userNow.Date);
+			vm.DataSeries.Time.Last().Should().Be.EqualTo(userNow.Date.AddDays(1).AddMinutes(-minutesPerInterval));
 			vm.DataSeries.ForecastedStaffing.Length.Should().Be.EqualTo(96);
+			vm.DataSeries.UpdatedForecastedStaffing.Length.Should().Be.EqualTo(96);	
+			vm.DataSeries.UpdatedForecastedStaffing.Last().Should().Be.EqualTo(vm.DataSeries.ForecastedStaffing.Last() * deviationFactor);
 		}
 
 		[Test]
@@ -205,7 +230,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			IntradayQueueStatisticsLoader.Has(new LatestStatisticsTimeAndWorkload
 			{
 				LatestStatisticsIntervalId = (int?) (latestStatsTime.TimeOfDay.TotalMinutes/minutesPerInterval),
-				ActualworkloadInSeconds = (int?) ((skillDay.TotalTasks * (skillDay.AverageTaskTime.TotalSeconds + skillDay.AverageAfterTaskTime.TotalSeconds)) * 1.2)
+				ActualworkloadInSeconds = (int?) ((skillDay.TotalTasks/2 * (skillDay.AverageTaskTime.TotalSeconds + skillDay.AverageAfterTaskTime.TotalSeconds)) * 1.2)
 				// 20% more workload than forecasted
 			});
 
