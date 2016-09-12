@@ -8,8 +8,6 @@ namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class AddResourcesToSubSkills
 	{
-		private const double minPrimaryOverstaffToContinue = 0.1;
-
 		public void Execute(ShovelResourcesState shovelResourcesState, ISkillStaffPeriodHolder skillStaffPeriodHolder, IEnumerable<CascadingSkillGroup> skillGroupsWithSameIndex, DateTimePeriod interval)
 		{
 			foreach (var skillGroup in skillGroupsWithSameIndex)
@@ -21,11 +19,8 @@ namespace Teleopti.Ccc.Domain.Cascading
 		private static void doForSkillgroup(ShovelResourcesState shovelResourcesState, ISkillStaffPeriodHolder skillStaffPeriodHolder, CascadingSkillGroup skillGroup, DateTimePeriod interval)
 		{
 			var maxToMoveForThisSkillGroup = shovelResourcesState.MaxToMoveForThisSkillGroup(skillGroup);
-			var remaingResourcesForThisSkillGroup = maxToMoveForThisSkillGroup;
 			var anySubSkillIsUnderstaffed = true;
-			while (shovelResourcesState.RemainingOverstaffing > minPrimaryOverstaffToContinue &&
-				remaingResourcesForThisSkillGroup > minPrimaryOverstaffToContinue &&
-				anySubSkillIsUnderstaffed)
+			while (shovelResourcesState.ContinueShovel(skillGroup) && anySubSkillIsUnderstaffed)
 			{
 				anySubSkillIsUnderstaffed = false;
 
@@ -50,10 +45,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 						var proportionalResourcesToMove = understaffingPercent / totalUnderstaffingPercent * remainingResourcesToShovel;
 
 						var resourceToMove = Math.Min(-skillToMoveToAbsoluteDifference, proportionalResourcesToMove);
-						shovelResourcesState.AddResourcesTo(skillStaffPeriodTo, resourceToMove);
-						//TODO: fix this!
-						remaingResourcesForThisSkillGroup -= resourceToMove;
-						skillGroup.RemainingResources -= resourceToMove;
+						shovelResourcesState.AddResourcesTo(skillStaffPeriodTo, skillGroup, resourceToMove);
 					}
 				}
 			}

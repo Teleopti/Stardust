@@ -7,7 +7,9 @@ namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class ShovelResourcesState
 	{
+		private const double minPrimaryOverstaffToContinue = 0.1;
 		private readonly ResourceDistributionForSkillGroupsWithSameIndex _resourceDistribution;
+		private readonly IDictionary<CascadingSkillGroup, double> _resourcesMovedOnSkillGroup;
 
 		public ShovelResourcesState(IDictionary<ISkill, double> resources, ResourceDistributionForSkillGroupsWithSameIndex resourceDistribution)
 		{
@@ -15,6 +17,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 			ResourcesAvailableForPrimarySkill = resources;
 			RemainingOverstaffing = ResourcesAvailableForPrimarySkill.Values.Sum();
 			TotalOverstaffingAtStart = RemainingOverstaffing;
+			_resourcesMovedOnSkillGroup = new Dictionary<CascadingSkillGroup, double>();
 		}
 
 		public IDictionary<ISkill, double> ResourcesAvailableForPrimarySkill { get; }
@@ -22,16 +25,36 @@ namespace Teleopti.Ccc.Domain.Cascading
 		public double RemainingOverstaffing { get; private set; }
 		public double TotalOverstaffingAtStart { get; }
 
-		public double MaxToMoveForThisSkillGroup(CascadingSkillGroup skillgroup)
+		public bool ContinueShovel(CascadingSkillGroup skillGroup)
 		{
-			return TotalOverstaffingAtStart* _resourceDistribution.For(skillgroup);
+			double resourcesMovedOnSkillGroup;
+			if (!_resourcesMovedOnSkillGroup.TryGetValue(skillGroup, out resourcesMovedOnSkillGroup))
+			{
+				resourcesMovedOnSkillGroup = 0;
+			}
+			return RemainingOverstaffing > minPrimaryOverstaffToContinue && 
+				resourcesMovedOnSkillGroup < MaxToMoveForThisSkillGroup(skillGroup);
 		}
 
-		public void AddResourcesTo(ISkillStaffPeriod skillStaffPeriod, double value)
+		public double MaxToMoveForThisSkillGroup(CascadingSkillGroup skillgroup)
+		{
+			return TotalOverstaffingAtStart * _resourceDistribution.For(skillgroup);
+		}
+
+		public void AddResourcesTo(ISkillStaffPeriod skillStaffPeriod, CascadingSkillGroup skillGroup, double value)
 		{
 			skillStaffPeriod.AddResources(value);
 			RemainingOverstaffing -= value;
 			ResourcesMoved += value;
+			skillGroup.RemainingResources -= value;
+			if (_resourcesMovedOnSkillGroup.ContainsKey(skillGroup))
+			{
+				_resourcesMovedOnSkillGroup[skillGroup] += value;
+			}
+			else
+			{
+				_resourcesMovedOnSkillGroup[skillGroup] = value;
+			}
 		}
 	}
 }
