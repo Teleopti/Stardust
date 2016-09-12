@@ -41,10 +41,10 @@ namespace Teleopti.Ccc.Domain.Cascading
 			return mergeSkillGroupsWithSameIndex(cascadingSkillGroups);
 		}
 
-		private static OrderedSkillGroups mergeSkillGroupsWithSameIndex(IEnumerable<CascadingSkillGroup> tempList)
+		private static OrderedSkillGroups mergeSkillGroupsWithSameIndex(IEnumerable<CascadingSkillGroup> cascadingSkillGroups)
 		{
 			var ret = new List<List<CascadingSkillGroup>>();
-			foreach (var skillGroup in tempList)
+			foreach (var skillGroup in cascadingSkillGroups)
 			{
 				var retLast = ret.LastOrDefault();
 				if (retLast == null || retLast.First().SkillGroupIndexHash() != skillGroup.SkillGroupIndexHash())
