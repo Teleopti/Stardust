@@ -76,7 +76,8 @@
 				ModifyShiftCategoryEnabled: toggleSvc.WfmTeamSchedule_ModifyShiftCategory_39797,
 				UndoScheduleEnabled: toggleSvc.WfmTeamSchedule_RevertToPreviousSchedule_39002,
 				CheckOverlappingCertainActivitiesEnabled: toggleSvc.WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938,
-				WeekViewEnabled: toggleSvc.WfmTeamSchedule_WeekView_39870
+				WeekViewEnabled: toggleSvc.WfmTeamSchedule_WeekView_39870,
+				WeekViewContractTimeEnabled: toggleSvc.WfmTeamSchedule_WeeklyContractTime_39871
 			};
 
 			vm.weekDays = Util.getWeekdays(vm.scheduleDate);
@@ -94,6 +95,6 @@
 			};
 			return params;
 		}
-
+		
 	}
 })()

@@ -84,6 +84,7 @@ WfmTeamSchedule_ModifyShiftCategory_39797 = true
 WfmTeamSchedule_MakeNewMyTeamDefault_39744 = RC
 WfmTeamSchedule_WeekView_39870 = RC
 WfmTeamSchedule_MakePersonalActivityUnmerged_40252 = DEV
+WfmTeamSchedule_WeeklyContractTime_39871 = RC
 
 WfmReportPortal_Basic_38825 = true
 WfmReportPortal_LeaderBoard_39440 = true

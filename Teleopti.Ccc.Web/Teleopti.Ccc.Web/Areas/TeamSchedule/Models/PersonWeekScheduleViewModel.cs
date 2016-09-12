@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 		public string Color { get; set; }
 		public DateOnly Date { get; set; }
 		public int DayOfWeek { get; set; }
+		public double ContractTimeMinutes { get; set; }
 	}
 
 
@@ -21,5 +22,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 		public Guid PersonId { get; set; }
 		public string Name { get; set; }				
 		public List<PersonDayScheduleSummayViewModel> DaySchedules { get; set; }
+		public double ContractTimeMinutes { get; set; }
 	}
 }

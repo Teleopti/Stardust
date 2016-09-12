@@ -29,13 +29,17 @@
 			</div>
 			<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
 			<table>
-				<thead class="weekview-thead">
-					<td class="agent-name-colomn"></td>
-					<td ng-repeat="day in vm.weekDays">
-						<span translate>{{day.name}}</span>
-						<span class="pull-right">{{day.date | date : 'dd'}}</span>
-					</td>
+				<thead>
+					<tr class="weekview-thead">
+						<th class="agent-name-colomn"></th>
+						<th ng-repeat="day in vm.weekDays">
+							<span translate>{{day.name}}</span>
+							<span class="pull-right">{{day.date | date : 'dd'}}</span>
+						</th>
+						<th class="contract-time-header contract-time-column" ng-if="vm.toggles.WeekViewContractTimeEnabled">{{'ContractTime' | translate}}</th>
+					</tr>
 				</thead>
+
 				<tbody>
 					<tr class="weekview-tr" ng-repeat="person in vm.groupWeeks">
 						<td class="weekview-td weekview-person-name">{{person.name}}</td>
@@ -43,6 +47,7 @@
 							<div class="summary" title="{{day.summeryTitle}}">{{day.summeryTitle}}</div>
 							<div>{{day.summeryTimeSpan | timerange }}</div>
 						</td>
+						<td class="contract-time contract-time-column" ng-if="vm.toggles.WeekViewContractTimeEnabled">{{person.contractTime}}</td>
 					</tr>
 				</tbody>
 			</table>

@@ -474,5 +474,40 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			first.DaySchedules[2].Title.Should().Be("abs");
 			first.DaySchedules[2].IsDayOff.Should().Be.False();
 		}
+
+		[Test]
+		public void ShouldProvideWeeklyContractTimeInWeeklyViewModel()
+		{
+			UserCulture.Is(CultureInfoFactory.CreateSwedishCulture());
+			var scheduleDate = new DateOnly(2020,1,1);
+			var person = PersonFactory.CreatePerson("Sherlock","Holmes");			
+			person.WithId();
+			PeopleSearchProvider.Add(person);
+			PersonRepository.Has(person);
+			var scenario = ScenarioFactory.CreateScenarioWithId("test",true);
+			CurrentScenario.FakeScenario(scenario);
+
+			var activity = ActivityFactory.CreateActivity("Phone");
+			activity.InContractTime = true;
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day", "blue");
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity,person,new DateTimePeriod(new DateTime(2020,1,1,8,0,0,DateTimeKind.Utc),new DateTime(2020,1,1,17,0,0,DateTimeKind.Utc)),shiftCategory,scenario);
+		
+			ScheduleStorage.Add(pa);
+
+			var searchTerm = new Dictionary<PersonFinderField,string>
+			{
+				{PersonFinderField.FirstName, "Sherlock"}
+			};
+
+			var result = Target.CreateWeekScheduleViewModel(searchTerm,scheduleDate,20,1);
+
+			result.Total.Should().Be(1);
+
+			var first = result.PersonWeekSchedules.First();
+
+			first.PersonId.Should().Be(person.Id.GetValueOrDefault());			
+			first.ContractTimeMinutes.Should().Be.EqualTo(9*60);
+		}
 	}
 }

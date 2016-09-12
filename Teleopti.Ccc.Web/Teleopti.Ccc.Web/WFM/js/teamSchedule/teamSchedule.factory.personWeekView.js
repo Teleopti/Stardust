@@ -15,14 +15,15 @@
 					isDayOff: day.IsDayOff,
 					isTerminated: day.IsTerminated,
 					color: day.Color,
-					contrastFontColor: getContrastColor(day.Color)
+					contrastFontColor: getContrastColor(day.Color)					
 				};
 				days.push(dayViewModel);
 			});
 			var personWeekViewModel = {
 				personId: personWeek.PersonId,
 				name: personWeek.Name,
-				days: days
+				days: days,
+				contractTime: formatContractTimeMinutes(personWeek.ContractTimeMinutes)
 			}
 			return personWeekViewModel;
 		}
@@ -51,6 +52,10 @@
 			var yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
 
 			return (yiq >= 128) ? 'black' : 'white';
+		}
+
+		function formatContractTimeMinutes(minutes) {
+			return Math.floor(minutes / 60) + ':' + (minutes % 60 === 0 ? '00' : minutes % 60);
 		}
 
 		function createGroupWeeks(personWeeks) {

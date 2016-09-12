@@ -19,7 +19,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 	{
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IScheduleProvider _scheduleProvider;
-		private readonly ITeamScheduleProjectionProvider _projectionProvider;
+		private readonly ITeamScheduleProjectionProvider _teamScheduleProjectionProvider;
+		private readonly IProjectionProvider _projectionProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
 		private readonly IPeopleSearchProvider _searchProvider;
@@ -27,18 +28,19 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly IUserCulture _userCulture;
 
 		public TeamScheduleViewModelFactory(IPermissionProvider permissionProvider, IScheduleProvider scheduleProvider, 
-			ITeamScheduleProjectionProvider projectionProvider, ILoggedOnUser loggedOnUser,
+			ITeamScheduleProjectionProvider teamScheduleProjectionProvider, ILoggedOnUser loggedOnUser,
 			ICommonAgentNameProvider commonAgentNameProvider, IPeopleSearchProvider searchProvider,
-			IPersonRepository personRepository, IUserCulture userCulture)
+			IPersonRepository personRepository, IUserCulture userCulture, IProjectionProvider projectionProvider)
 		{
 			_permissionProvider = permissionProvider;
 			_scheduleProvider = scheduleProvider;
-			_projectionProvider = projectionProvider;
+			_teamScheduleProjectionProvider = teamScheduleProjectionProvider;
 			_loggedOnUser = loggedOnUser;
 			_commonAgentNameProvider = commonAgentNameProvider;
 			_searchProvider = searchProvider;
 			_personRepository = personRepository;
 			_userCulture = userCulture;
+			_projectionProvider = projectionProvider;
 		}
 
 		public GroupScheduleViewModel CreateViewModel(IDictionary<PersonFinderField, string> criteriaDictionary,
@@ -233,7 +235,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				{
 					PersonId = person.Id.GetValueOrDefault(),
 					Name = nameDescriptionSetting.BuildCommonNameDescription(person),					
-					DaySchedules = daySchedules
+					DaySchedules = daySchedules,
+					ContractTimeMinutes = daySchedules.Sum(s => s.ContractTimeMinutes)
 				});
 			}
 
@@ -302,7 +305,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				{
 					var isPublished = isSchedulePublished(scheduleDay.DateOnlyAsPeriod.DateOnly,person);
 					list.Add(isPublished || canSeeUnpublishedSchedules
-						? _projectionProvider.Projection(scheduleDay,canViewConfidential,nameDescriptionSetting)
+						? _teamScheduleProjectionProvider.Projection(scheduleDay,canViewConfidential,nameDescriptionSetting)
 						: new GroupScheduleShiftViewModel
 						{
 							PersonId = person.Id.GetValueOrDefault().ToString(),
@@ -326,6 +329,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var significantPart = scheduleDay.SignificantPartForDisplay();
 			var personAssignment = scheduleDay.PersonAssignment();			
 			var absenceCollection = scheduleDay.PersonAbsenceCollection();
+			var visualLayerCollection = _projectionProvider.Projection(scheduleDay);
+
+			if (visualLayerCollection != null && visualLayerCollection.HasLayers)
+			{
+				vm.ContractTimeMinutes = visualLayerCollection.ContractTime().TotalMinutes;
+			}
 
 			if (significantPart == SchedulePartView.DayOff)
 			{
