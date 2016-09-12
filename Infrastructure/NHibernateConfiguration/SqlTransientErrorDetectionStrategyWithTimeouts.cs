@@ -12,7 +12,10 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			if (base.IsConnectionTimeout(ex))
 				return true;
 
-			return isNetworkTimeout(ex);
+			if (isNetworkTimeout(ex))
+				return true;
+
+			return isForciblyClosedExistingConnection(ex);
 		}
 
 		private bool isNetworkTimeout(Exception exception)
@@ -21,6 +24,16 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			if (sqlException != null)
 			{
 				return sqlException.Errors.Cast<SqlError>().Any(error => error.Number == 40);
+			}
+			return false;
+		}
+
+		private bool isForciblyClosedExistingConnection(Exception exception)
+		{
+			var sqlException = exception as SqlException;
+			if (sqlException != null)
+			{
+				return sqlException.Errors.Cast<SqlError>().Any(error => error.Number == 0 && (error.Message.Contains("existing connection was forcibly closed") || error.Message.Contains("marked by the server as unrecoverable")));
 			}
 			return false;
 		}
