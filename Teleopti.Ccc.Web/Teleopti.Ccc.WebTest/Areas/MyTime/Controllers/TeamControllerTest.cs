@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IdentityModel.Claims;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -146,7 +147,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var authorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(teleoptiPrincipal));
 			var permissionProvider = new PermissionProvider(authorization);
 
-			var siteProvider = new SiteProvider(siteRepository, permissionProvider);
+			var siteProvider = new SiteProvider(siteRepository, permissionProvider, null);
 
 			var viewModelFactory = new SiteViewModelFactory(siteProvider);
 			var target = new TeamController(null, new Now(), viewModelFactory);
@@ -155,6 +156,19 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var data = result.Data as IEnumerable<ISelectOption>;
 			var selectOption = data.FirstOrDefault();
 			selectOption.text.Should().Equals("mysite");
+		}
+
+		[Test]
+		public void ShouldGetTeamIdsWithGivenSiteIds()
+		{
+			var expectedResult = new List<Guid> {new Guid()};
+			var viewModelFactory = MockRepository.GenerateMock<ISiteViewModelFactory>();
+			viewModelFactory.Stub(x => x.GetTeamIds(new List<Guid> {new Guid()})).IgnoreArguments().Return(expectedResult);
+
+			var target = new TeamController(null, null, viewModelFactory);
+			var result = target.GetTeamIds("00000000-0000-0000-0000-000000000000");
+
+			result.Data.Should().Be.EqualTo(expectedResult);
 		}
 	}
 }

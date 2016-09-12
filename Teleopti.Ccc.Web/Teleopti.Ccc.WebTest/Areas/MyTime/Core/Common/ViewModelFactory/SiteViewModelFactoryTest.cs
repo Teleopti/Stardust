@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -32,6 +33,32 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 			var result = target.CreateSiteOptionsViewModel(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb);
 
 			result.Select(t => t.text).Should().Have.SameSequenceAs("BU/mySite");
+		}
+
+		[Test]
+		public void ShouldGetAllTeamIdsOfTwoSites()
+		{
+			var siteId1 = Guid.NewGuid();
+			var siteId2 = Guid.NewGuid();
+
+			var teamId1 = Guid.NewGuid();
+			var teamId2 = Guid.NewGuid();
+			var teamId3 = Guid.NewGuid();
+			var teamId4 = Guid.NewGuid();
+
+			var siteIds = new List<Guid>() {siteId1, siteId2};
+
+			var siteProvider = MockRepository.GenerateMock<ISiteProvider>();
+			siteProvider.Stub(x => x.GetTeamIdsUnderSite(siteId1)).Return(new List<Guid> {teamId1, teamId2});
+			siteProvider.Stub(x => x.GetTeamIdsUnderSite(siteId2)).Return(new List<Guid> {teamId3, teamId4});
+
+			var target = new SiteViewModelFactory(siteProvider);
+
+			var result = target.GetTeamIds(siteIds);
+			result.ToList()[0].Should().Be.EqualTo(teamId1);
+			result.ToList()[1].Should().Be.EqualTo(teamId2);
+			result.ToList()[2].Should().Be.EqualTo(teamId3);
+			result.ToList()[3].Should().Be.EqualTo(teamId4);
 		}
 	}
 }

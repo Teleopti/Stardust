@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -38,6 +39,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 			});
 
 			return options;
+		}
+
+		public IEnumerable<Guid> GetTeamIds(List<Guid> siteIds)
+		{
+			var teamIds = new List<Guid>();
+
+			foreach (var siteId in siteIds)
+			{
+				teamIds.AddRange(_siteProvider.GetTeamIdsUnderSite(siteId));
+			}
+
+			return teamIds;
 		}
 	}
 }

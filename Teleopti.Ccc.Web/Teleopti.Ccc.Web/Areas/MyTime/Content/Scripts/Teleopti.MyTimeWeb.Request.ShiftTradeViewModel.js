@@ -33,6 +33,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	self.availableSites = ko.observableArray();
 	self.availableTeams = ko.observableArray();
 	self.selectedSite = ko.observable();
+	self.selectedSiteInternal = ko.observable();
 	self.selectedTeamInternal = ko.observable();
 	self.missingMyTeam = ko.observable();
 	self.missingMySite = ko.observable();
@@ -55,6 +56,8 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	self.refocusToNameSearch = null;
 	self.isShiftTradeScheduleNoReadModelEnabled = ko.observable(false);
 	self.isSiteFilterEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_ShiftTradeFilterSite_40374');
+	self.allTeamsId = "allTeams";
+	self.allSitesId = "allSites";
 
 	self.isDetailVisible = ko.computed(function () {
 		if (self.agentChoosed() === null) {
@@ -416,7 +419,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 
 		for (var i = 0; i < self.availableTeams().length; ++i) {
 			// skip the first one as contains "allTeams"
-			if (self.availableTeams()[i].id !== "allTeams") {
+			if (self.availableTeams()[i].id !== self.allTeamsId) {
 				allTeamIds.push(self.availableTeams()[i].id);
 			}
 		}
@@ -428,7 +431,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		if (selectedTeamOption === undefined) return;
 		if (self.IsLoading()) return;
 
-		var teamIds = (selectedTeamOption === "allTeams") ? self.getAllTeamIds() : [selectedTeamOption];
+		var teamIds = (selectedTeamOption === self.allTeamsId) ? self.getAllTeamIds() : [selectedTeamOption];
 		var take = self.maxShiftsPerPage;
 		var skip = (self.selectedPageIndex() - 1) * take;
 
@@ -476,7 +479,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		});
 	};
 
-	//self.selectedSite = ko.computed({});
+
 
 	self.selectedTeam = ko.computed({
 		read: function () {
@@ -669,7 +672,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	}
 
 	self.loadSites = function(date) {
-		var siteToSelect = self.mySiteId();
+		var siteToSelect = self.selectedSiteInternal() ? self.selectedSiteInternal() : self.mySiteId();
 
 		ajax.Ajax({
 			url: "Team/SitesForShiftTradeBoard",
@@ -692,7 +695,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 
 	self.setTeamAll = function () {
 		var text = $("#Request-all-permitted-teams").val() ? $("#Request-all-permitted-teams").val() : "Team All";
-		self.availableTeams.unshift({ id: "allTeams", text: text });
+		self.availableTeams.unshift({ id: self.allTeamsId, text: text });
 	};
 
 	self.setSiteAll = function () {
@@ -703,7 +706,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 			contentType: 'application/json; charset=utf-8',
 			success: function (data) {
 				var text = data ? data : "All Sites";
-				self.availableSites.unshift({ id: "allSites", text: text });
+				self.availableSites.unshift({ id: self.allSitesId, text: text });
 			}
 		});
 	};
