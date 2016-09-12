@@ -129,6 +129,7 @@
     <Compile Include="Analytics\AnalyticBusinessUnit.cs" />
     <Compile Include="Analytics\AnalyticsActivity.cs" />
     <Compile Include="Analytics\AnalyticsBridgeQueueWorkload.cs" />
+    <Compile Include="Analytics\AnalyticsBridgeTimeZone.cs" />
     <Compile Include="Analytics\AnalyticsForcastWorkload.cs" />
     <Compile Include="Analytics\AnalyticsHourlyAvailability.cs" />
     <Compile Include="Analytics\AnalyticsOvertime.cs" />
@@ -3013,6 +3014,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="AbsenceWaitlisting\QueuedAbsenceRequest.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Analytics\AnalyticsBridgeTimeZone.analytics.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Content Include="FeatureFlags\toggles.txt" />

@@ -54,35 +54,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Dates
 						else
 						{
 							var localTime = localDate + interval.Offset;
-							var localDateId = getDateId(dateDictionary, localTime);
-							var localIntervalId = getIntervalId(intervalDictionary, localTime);
-							if (localDateId < 0 || localIntervalId < 0)
-								continue;
-							toBeAdded.Add(new AnalyticsBridgeTimeZone
-							{
-								TimeZoneId = timezone.TimeZoneId,
-								DateId = date.DateId,
-								IntervalId = interval.IntervalId,
-								LocalDateId = localDateId,
-								LocalIntervalId = localIntervalId
-							});
+							var bridge = AnalyticsBridgeTimeZone.Create(date.DateId, interval.IntervalId, timezone.TimeZoneId,
+								intervalDictionary, dateDictionary, localTime);
+
+							if (bridge == null) continue;
+							toBeAdded.Add(bridge);
 						}
 					}
 				}
 				_analyticsBridgeTimeZoneRepository.Save(toBeAdded);
 			}
-		}
-
-		private static int getIntervalId(IDictionary<TimeSpan, AnalyticsInterval> intervals, DateTime localTime)
-		{
-			AnalyticsInterval interval;
-			return intervals.TryGetValue(localTime.TimeOfDay, out interval) ? interval.IntervalId : -1;
-		}
-
-		private static int getDateId(IDictionary<DateTime, IAnalyticsDate> dates, DateTime localTime)
-		{
-			IAnalyticsDate date;
-			return dates.TryGetValue(localTime.Date, out date) ? date.DateId : AnalyticsDate.NotDefined.DateId;
 		}
 	}
 }

@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Analytics"
+									 schema="mart">
+	<class name="AnalyticsBridgeTimeZone" table="bridge_time_zone">
+		<composite-id>
+			<key-property name="DateId" column="date_id"/>
+			<key-property name="IntervalId" column="interval_id"/>
+			<key-property name="TimeZoneId" column="time_zone_id"/>
+		</composite-id>
+		<property name="LocalDateId" column="local_date_id"/>
+		<property name="LocalIntervalId" column="local_interval_id"/>
+		<property name="DatasourceId" column="datasource_id"/>
+		<property name="InsertDate" column="insert_date"/>
+		<property name="UpdateDate" column="update_date"/>
+	</class>
+</hibernate-mapping>

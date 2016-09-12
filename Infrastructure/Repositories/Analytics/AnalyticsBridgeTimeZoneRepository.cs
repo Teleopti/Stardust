@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using NHibernate.Criterion;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Analytics;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -17,50 +21,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public IList<AnalyticsBridgeTimeZone> GetBridges(int timeZoneId)
 		{
-			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				$@"SELECT 
-						date_id {nameof(AnalyticsBridgeTimeZone.DateId)},
-						interval_id {nameof(AnalyticsBridgeTimeZone.IntervalId)},
-						time_zone_id {nameof(AnalyticsBridgeTimeZone.TimeZoneId)},
-						local_date_id {nameof(AnalyticsBridgeTimeZone.LocalDateId)},
-						local_interval_id {nameof(AnalyticsBridgeTimeZone.LocalIntervalId)}
-						").SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsBridgeTimeZone)))
-				.SetReadOnly(true)
-				.List<AnalyticsBridgeTimeZone>();
+			var query = _analyticsUnitOfWork.Current().Session().CreateCriteria<AnalyticsBridgeTimeZone>()
+				.Add(Restrictions.Eq(nameof(AnalyticsBridgeTimeZone.TimeZoneId), timeZoneId));
+
+			var result = query.List<AnalyticsBridgeTimeZone>();
+			return result;
 		}
 
-		public void Save(List<AnalyticsBridgeTimeZone> toBeAdded)
+		public void Save(IList<AnalyticsBridgeTimeZone> toBeAdded)
 		{
-			foreach (var bridge in toBeAdded)
+			foreach (var bridgeTimeZone in toBeAdded)
 			{
-				_analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-					$@"INSERT INTO [mart].[bridge_time_zone]
-							([date_id]
-							,[interval_id]
-							,[time_zone_id]
-							,[local_date_id]
-							,[local_interval_id]
-							,[datasource_id]
-							,[insert_date]
-							,[update_date])
-						VALUES
-							(:date_id
-							,:interval_id
-							,:time_zone_id
-							,:local_date_id
-							,:local_interval_id
-							,:datasource_id
-							,:insert_date
-							,:update_date)")
-						.SetParameter(":date_id", bridge.DateId)
-						.SetParameter(":interval_id", bridge.IntervalId)
-						.SetParameter(":time_zone_id", bridge.TimeZoneId)
-						.SetParameter(":local_date_id", bridge.LocalDateId)
-						.SetParameter(":local_interval_id", bridge.LocalIntervalId)
-						.SetParameter(":datasource_id", 1)
-						.SetParameter(":insert_date", DateTime.UtcNow)
-						.SetParameter(":update_date", DateTime.UtcNow)
-						.ExecuteUpdate();
+				_analyticsUnitOfWork.Current().Session().Save(bridgeTimeZone);
 			}
 		}
 	}
