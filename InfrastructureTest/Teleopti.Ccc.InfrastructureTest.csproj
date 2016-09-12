@@ -228,6 +228,7 @@
     <Compile Include="Repositories\Analytics\AnalyticsDateRepositoryWithCreationTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsForecastWorkloadRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsHourlyAvailabilityRepositoryTest.cs" />
+    <Compile Include="Repositories\Analytics\AnalyticsIntervalRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsOvertimeRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsPermissionExecutionRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsPermissionsRepositoryTest.cs" />

@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Analytics;
+﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
@@ -8,6 +9,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public AnalyticsTimeZone Get(string timeZoneCode)
 		{
 			return new AnalyticsTimeZone {TimeZoneId = 1};
+		}
+
+		public IList<AnalyticsTimeZone> GetAll()
+		{
+			return new List<AnalyticsTimeZone>(); // TODO?
 		}
 	}
 }

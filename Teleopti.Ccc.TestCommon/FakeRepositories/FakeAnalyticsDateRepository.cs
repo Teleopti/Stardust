@@ -55,5 +55,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return _fakeDates.FirstOrDefault(a => new DateOnly(a.DateDate) == new DateOnly(dateDate));
 		}
+
+		public IList<IAnalyticsDate> GetAll()
+		{
+			return _fakeDates;
+		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Domain.Repositories
@@ -8,5 +9,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IAnalyticsDate MaxDate();
 		IAnalyticsDate MinDate();
 		IAnalyticsDate Date(DateTime dateDate);
+		IList<IAnalyticsDate> GetAll();
 	}
 }

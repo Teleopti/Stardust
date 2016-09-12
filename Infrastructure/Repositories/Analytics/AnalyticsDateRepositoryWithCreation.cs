@@ -27,11 +27,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			return AnalyticsDate.Eternity;
 		}
 
-		public new IAnalyticsDate MinDate()
-		{
-			return base.MinDate();
-		}
-
 		public new IAnalyticsDate Date(DateTime dateDate)
 		{
 			return base.Date(dateDate) ?? createDatesTo(dateDate);

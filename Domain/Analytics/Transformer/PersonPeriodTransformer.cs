@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 		private int getValidToIntervalIdMaxDate(int validToIntervalId, int validToDateId)
 		{
 			// Samma som ValidToIntervalId om inte validToDateId är eterntity då ska det vara sista interval i dim_interval
-			return validToDateId != AnalyticsDate.Eternity.DateId ? validToIntervalId : _analyticsIntervalRepository.MaxIntervalId();
+			return validToDateId != AnalyticsDate.Eternity.DateId ? validToIntervalId : _analyticsIntervalRepository.MaxInterval().IntervalId;
 		}
 
 		private static DateTime getPeriodIntervalEndDate(DateTime endDate, int intervalsPerDay)

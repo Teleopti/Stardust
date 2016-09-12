@@ -50,5 +50,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			var date = WithAnalyticsUnitOfWork.Get(() => Target.MinDate());
 			date.DateId.Should().Be.EqualTo(0);
 		}
+
+		[Test]
+		public void ShouldLoadAllDates()
+		{
+			var dates = WithAnalyticsUnitOfWork.Get(() => Target.GetAll());
+			dates.Count.Should().Be.EqualTo(7);
+		}
 	}
 }

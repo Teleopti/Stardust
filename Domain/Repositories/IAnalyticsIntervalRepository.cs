@@ -1,8 +1,20 @@
-﻿namespace Teleopti.Ccc.Domain.Repositories
+﻿
+using System;
+using System.Collections.Generic;
+
+namespace Teleopti.Ccc.Domain.Repositories
 {
 	public interface IAnalyticsIntervalRepository
 	{
 		int IntervalsPerDay();
-		int MaxIntervalId();
+		AnalyticsInterval MaxInterval();
+		IList<AnalyticsInterval> GetAll();
+	}
+
+	public class AnalyticsInterval
+	{
+		public int IntervalId { get; set; }
+		public DateTime IntervalStart { get; set; }
+		public TimeSpan Offset => IntervalStart.TimeOfDay;
 	}
 }

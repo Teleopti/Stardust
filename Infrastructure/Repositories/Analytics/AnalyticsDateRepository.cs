@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
@@ -11,21 +12,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 	{
 		public AnalyticsDateRepository(ICurrentAnalyticsUnitOfWork analyticsUnitOfWork) : base(analyticsUnitOfWork)
 		{
-		}
-
-		public new IAnalyticsDate MaxDate()
-		{
-			return base.MaxDate();
-		}
-
-		public new IAnalyticsDate MinDate()
-		{
-			return base.MinDate();
-		}
-
-		public new IAnalyticsDate Date(DateTime dateDate)
-		{
-			return base.Date(dateDate);
 		}
 	}
 
@@ -41,7 +27,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public IAnalyticsDate MaxDate()
 		{
 			return AnalyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				$@"SELECT TOP 1 date_id {nameof(IAnalyticsDate.DateId)}, date_date {nameof(IAnalyticsDate.DateDate)}
+				$@"SELECT TOP 1 
+						date_id {nameof(IAnalyticsDate.DateId)}, 
+						date_date {nameof(IAnalyticsDate.DateDate)}
 					FROM [mart].[dim_date] WITH (NOLOCK)
 					WHERE date_id >= 0
 					ORDER BY date_id DESC")
@@ -53,7 +41,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public IAnalyticsDate MinDate()
 		{
 			return AnalyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				$@"SELECT TOP 1 date_id {nameof(IAnalyticsDate.DateId)}, date_date {nameof(IAnalyticsDate.DateDate)}
+				$@"SELECT TOP 1 
+						date_id {nameof(IAnalyticsDate.DateId)}, 
+						date_date {nameof(IAnalyticsDate.DateDate)}
 					FROM [mart].[dim_date] WITH (NOLOCK)
 					WHERE date_id >= 0
 					ORDER BY date_id ASC")
@@ -74,6 +64,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsDate)))
 				.SetReadOnly(true)
 				.UniqueResult<IAnalyticsDate>();
+		}
+
+		public IList<IAnalyticsDate> GetAll()
+		{
+			return AnalyticsUnitOfWork.Current().Session().CreateSQLQuery(
+				$@"select
+						date_id {nameof(IAnalyticsDate.DateId)}, 
+						date_date {nameof(IAnalyticsDate.DateDate)} 
+					FROM mart.dim_date WITH (NOLOCK)
+					WHERE date_id >= 0
+					ORDER BY date_id asc
+				")
+				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsDate)))
+				.SetReadOnly(true)
+				.List<IAnalyticsDate>();
 		}
 	}
 }

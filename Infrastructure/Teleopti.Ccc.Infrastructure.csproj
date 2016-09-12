@@ -382,6 +382,7 @@
     <Compile Include="Repositories\AggregateRootInitilizer.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsAbsenceRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsBridgeGroupPagePersonRepository.cs" />
+    <Compile Include="Repositories\Analytics\AnalyticsBridgeTimeZoneRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsBusinessUnitRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsDateRepositoryWithCreation.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsDayOffRepository.cs" />
