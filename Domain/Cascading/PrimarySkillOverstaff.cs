@@ -57,7 +57,6 @@ namespace Teleopti.Ccc.Domain.Cascading
 		{
 			var ret = new Dictionary<CascadingSkillGroup, double>();
 			var tottiRelativeDifference = 0d;
-			//FEL HÄR!! Inte primaryskillscascadingindwex
 			foreach (var skillGroupWithSameIndex in skillGroupsWithSameIndex)
 			{
 				foreach (var otherPrimarySkill in skillGroupWithSameIndex.PrimarySkills)
