@@ -22,5 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		[RemoveMeWithToggle(Toggles.RTA_PersonOrganizationQueryOptimization_40261)]
 		IEnumerable<AgentState> Get(IEnumerable<Guid> personIds);
+
+		IEnumerable<Guid> GetPersonIdsForLogout(DateTime snapshotId, string sourceId, string loggedOutState);
 	}
 }

@@ -156,13 +156,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public override void ForClosingSnapshot(DateTime snapshotId, string sourceId, Action<Context> action)
 		{
-			var personIds = WithUnitOfWork(() => {
-				var missingAgents = _agentStatePersister.GetStatesNotInSnapshot(snapshotId, sourceId);
-				return missingAgents
-					.Where(x => x.StateCode != Rta.LogOutBySnapshot)
-					.Select(x => x.PersonId)
-					.ToArray();
-			});
+			var personIds = WithUnitOfWork(() => _agentStatePersister.GetPersonIdsForLogout(snapshotId, sourceId, Rta.LogOutBySnapshot));
 			process(new closingSnapshotStrategy(_config, _agentStatePersister, action, snapshotId, personIds));
 		}
 

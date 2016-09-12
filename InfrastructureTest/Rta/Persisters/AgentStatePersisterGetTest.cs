@@ -5,7 +5,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
@@ -147,6 +146,27 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			result.StateStartTime.Should().Be(agentStateReadModel.StateStartTime);
 		}
 
-		
+		[Test]
+		public void ShouldFetchPersonIdsForLogout()
+		{
+			var person1 = Guid.NewGuid();
+			var person2 = Guid.NewGuid();
+			Persister.Upsert(new AgentStateForUpsert
+			{
+				PersonId = person1,
+				ReceivedTime = "2016-09-12 13:00".Utc(),
+				SourceId = "6",
+				StateCode = Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot
+			});
+			Persister.Upsert(new AgentStateForUpsert
+			{
+				PersonId = person2,
+				ReceivedTime = "2016-09-12 13:00".Utc(),
+				SourceId = "6"
+			});
+
+			Persister.GetPersonIdsForLogout("2016-09-12 13:01".Utc(), "6", Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
+				.Single().Should().Be(person2);
+		}
 	}
 }

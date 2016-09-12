@@ -260,6 +260,26 @@ WHERE
 				;
 		}
 
+		public IEnumerable<Guid> GetPersonIdsForLogout(DateTime snapshotId, string sourceId, string loggedOutState)
+		{
+			return _unitOfWork.Current().Session().CreateSQLQuery(@"
+SELECT DISTINCT
+	PersonId
+FROM [dbo].[AgentState] WITH (NOLOCK)
+WHERE
+	SourceId = :SourceId AND 
+	(BatchId < :SnapshotId OR BatchId IS NULL) AND
+	(StateCode <> :State OR StateCode IS NULL)")
+				.AddScalar("PersonId", NHibernateUtil.Guid)
+				.SetParameter("SourceId", sourceId)
+				.SetParameter("SnapshotId", snapshotId)
+				.SetParameter("State", loggedOutState)
+				.SetReadOnly(true)
+				.List<Guid>()
+				.ToArray()
+				;
+		}
+
 		[InfoLog]
 		public virtual IEnumerable<Guid> GetAllPersonIds()
 		{
