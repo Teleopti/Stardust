@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 	[DomainTest]
 	[TestFixture]
 	[Toggle(Toggles.AbsenceRequests_UseMultiRequestProcessing_39960)]
-	public class AbsenceRequestTickHandlerTest : ISetup
+	public class AbsenceRequestQueueStrategyHandlerTest : ISetup
 	{
 		public FakeQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
 		public AbsenceRequestQueueStrategyHandler Target;
@@ -28,11 +28,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakeEventPublisher Publisher;
 		public FakeBusinessUnitRepository FakeBusinessUnitRepository;
 		public FakePersonRepository FakePersonRepository;
+		private DateTime _now;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<AbsenceRequestStrategyProcessor>().For<IAbsenceRequestStrategyProcessor>();
 			system.UseTestDouble(new MutableNow("2016-03-01 10:00")).For<INow>();
+			_now = new DateTime(2016, 03, 01, 10, 0, 0, DateTimeKind.Utc);
 		}
 
 		[Test]
@@ -87,6 +89,29 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			QueuedAbsenceRequestRepository.Load(nearFutureId).Should().Be.Null();
 			QueuedAbsenceRequestRepository.Load(farFutureId).Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldResendTimedOutRequests()
+		{
+			var person = new Person { Name = new Name("Reko", "kille") };
+			person.SetId(SystemUser.Id);
+			FakePersonRepository.Add(person);
+			FakeBusinessUnitRepository.Add(new Domain.Common.BusinessUnit("BU"));
+
+			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
+			{
+				StartDateTime = new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 3, 2, 23, 59, 00, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-100),
+				Sent = _now.AddMinutes(-95),
+				PersonRequest = Guid.NewGuid()
+			});
+
+			Target.Handle(new TenantMinuteTickEvent());
+
+			Publisher.PublishedEvents.Count().Should().Be.EqualTo(1);
+
 		}
 	}
 }

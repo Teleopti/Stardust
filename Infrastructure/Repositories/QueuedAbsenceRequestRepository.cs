@@ -4,6 +4,7 @@ using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -48,5 +49,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			sqlQuery.SetParameterList("absenceRequests", absenceRequests.ToArray());
 			sqlQuery.ExecuteUpdate();
 		}
+
+		public void CheckAndUpdateSent(int minutes)
+		{
+			var hql = @"update [dbo].[QueuedAbsenceRequest] set [Sent] = null where [Sent] < :timeStamp";
+			var sqlQuery = Session.CreateSQLQuery(hql);
+			sqlQuery.SetDateTime("timeStamp", DateTime.UtcNow.AddMinutes(-minutes));
+			sqlQuery.ExecuteUpdate();
+		}
+
 	}
 }

@@ -82,5 +82,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				_queuedRequests.FirstOrDefault(x => x.PersonRequest == id).Sent = timeStamp;
 			}
 		}
+
+		public void CheckAndUpdateSent(int minutes)
+		{
+			foreach (var request in _queuedRequests)
+			{
+				if (request.Sent != null && request.Sent.GetValueOrDefault() < DateTime.UtcNow.AddMinutes(-minutes))
+					request.Sent = null;
+			}
+		}
 	}
 }

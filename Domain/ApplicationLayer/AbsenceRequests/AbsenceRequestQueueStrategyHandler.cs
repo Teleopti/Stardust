@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			int absenceReqNearFutureTime;
 			int absenceReqFarFutureTime;
 
-			using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				businessUnits = _businessUnitRepository.LoadAll();
 				var person = _personRepository.Get(SystemUser.Id);
@@ -63,6 +63,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				nearFuture = _requestStrategySettingsReader.GetIntSetting("AbsenceNearFuture", 3);
 				absenceReqNearFutureTime = _requestStrategySettingsReader.GetIntSetting("AbsenceNearFutureTime", 20);
 				absenceReqFarFutureTime = _requestStrategySettingsReader.GetIntSetting("AbsenceFarFutureTime", 60);
+				var bulkRequestTimeoutMinutes = _requestStrategySettingsReader.GetIntSetting("BulkRequestTimeoutMinutes", 90);
+				
+				_queuedAbsenceRequestRepository.CheckAndUpdateSent(bulkRequestTimeoutMinutes);
+				uow.PersistAll();
 			}
 
 			businessUnits.ForEach(businessUnit =>

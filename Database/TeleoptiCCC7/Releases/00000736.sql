@@ -1,0 +1,1 @@
+Insert into dbo.RequestStrategySettings values ('BulkRequestTimeoutMinutes', 90)

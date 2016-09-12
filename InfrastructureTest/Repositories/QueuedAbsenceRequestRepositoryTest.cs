@@ -135,5 +135,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(queued);
 			return queued.PersonRequest;
 		}
+
+		[Test]
+		public void ShouldUpdateSent()
+		{
+			createQueduedRequest(new DateTime(2008, 7, 10, 10, 0, 0), new DateTime(2008, 7, 14, 9, 0, 0), DateTime.UtcNow.AddMinutes(-100));
+			var target = new QueuedAbsenceRequestRepository(CurrUnitOfWork);
+			target.CheckAndUpdateSent(90);
+			var requests = target.LoadAll();
+			requests.Count.Should().Be.EqualTo(1);
+			requests.FirstOrDefault().Sent.Should().Be.EqualTo(null);
+		}
 	}
 }
