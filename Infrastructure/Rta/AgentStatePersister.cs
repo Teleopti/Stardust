@@ -30,9 +30,6 @@ SET
 	BatchId = :BatchId,
 	SourceId = :SourceId,
 	PlatformTypeId = :PlatformTypeId,
-	BusinessUnitId = :BusinessUnitId,
-	SiteId = :SiteId,
-	TeamId = :TeamId,
 	ReceivedTime = :ReceivedTime,
 	StateCode = :StateCode,
 	StateGroupId = :StateGroupId,
@@ -53,9 +50,6 @@ WHERE
 				.SetParameter("BatchId", model.BatchId)
 				.SetParameter("SourceId", model.SourceId)
 				.SetParameter("PlatformTypeId", model.PlatformTypeId)
-				.SetParameter("BusinessUnitId", model.BusinessUnitId)
-				.SetParameter("SiteId", model.SiteId)
-				.SetParameter("TeamId", model.TeamId)
 				.SetParameter("ReceivedTime", model.ReceivedTime)
 				.SetParameter("StateCode", model.StateCode)
 				.SetParameter("StateGroupId", model.StateGroupId)
