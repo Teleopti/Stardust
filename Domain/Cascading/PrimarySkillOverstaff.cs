@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Domain.Cascading
 	{
 		public ShovelResourcesState AvailableSum(ISkillStaffPeriodHolder skillStaffPeriodHolder, IEnumerable<CascadingSkillGroup> allSkillGroups, IEnumerable<CascadingSkillGroup> skillGroupsWithSameIndex, DateTimePeriod interval)
 		{
-			//TODO: fix all break-foreach and skillgroup.first() due to only interested in prim skills
 			var primarySkillsExistsButTheyAreAllClosed = true;
 			var dic = new Dictionary<ISkill, double>();
 
@@ -25,7 +24,6 @@ namespace Teleopti.Ccc.Domain.Cascading
 					continue;
 
 				var resourcesOnOtherSkillGroupsContainingThisPrimarySkill = 0d;
-				//TODO: does skillGroupsWithSameIndex need to be ALL skills?
 				foreach (var otherSkillGroup in allSkillGroups.Where(x => !skillGroupsWithSameIndex.Contains(x) && x.PrimarySkills.Contains(primarySkill)))
 				{
 					var resourcesOnOtherSkillGroup = otherSkillGroup.RemainingResources;
