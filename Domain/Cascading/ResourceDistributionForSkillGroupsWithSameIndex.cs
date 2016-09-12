@@ -24,7 +24,8 @@ namespace Teleopti.Ccc.Domain.Cascading
 				foreach (var otherPrimarySkill in skillGroupWithSameIndex.PrimarySkills)
 				{
 					var relDiffInOtherPrimarySkill = skillStaffPeriodHolder.SkillStaffPeriodOrDefault(otherPrimarySkill, interval).AbsoluteDifference;
-					if (!double.IsNaN(relDiffInOtherPrimarySkill)) //TODO: Check for positive value? Needed here?
+					//TODO: suspicious code here - bug? Only include positive values here?
+					if (!double.IsNaN(relDiffInOtherPrimarySkill)) 
 					{
 						tottiRelativeDifference += relDiffInOtherPrimarySkill;
 					}

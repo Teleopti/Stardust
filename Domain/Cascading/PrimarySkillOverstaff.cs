@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 			if (primarySkillsExistsButTheyAreAllClosed)
 			{
-				//behöver man ta hänsyn till skillgrupper med samma index även här?
+				//TODO: suspicious code here - bug?
 				foreach (var skillGroup in skillGroupsWithSameIndex)
 				{
 					dic.Add(skillGroup.PrimarySkills.First(), skillGroup.RemainingResources);
