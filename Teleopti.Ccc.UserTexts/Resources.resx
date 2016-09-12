@@ -14797,8 +14797,8 @@ These options are activated:
     <comment>Command check info text after adding activity, adding personal activity and move activity in wfm team schedule.</comment>
   </data>
   <data name="DoNotModifyForTheseAgents" xml:space="preserve">
-    <value>Do not {0} for these agents</value>
-    <comment>Do not modify schedule change for these agents option of fixing activity overlapping issue when adding activities on top of Not Allow Meeting activities.</comment>
+    <value>Do not make changes for these agents</value>
+    <comment>Do not make schedule change for these agents option in team schedule command panel</comment>
   </data>
   <data name="OverrideForTheseAgents" xml:space="preserve">
     <value>Override for these agents</value>

@@ -8861,7 +8861,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do not {0} for these agents.
+        ///   Looks up a localized string similar to Do not make changes for these agents.
         /// </summary>
         public static string DoNotModifyForTheseAgents {
             get {
