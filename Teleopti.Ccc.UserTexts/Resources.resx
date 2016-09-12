@@ -14935,4 +14935,8 @@ These options are activated:
     <value>Validation Alerts</value>
     <comment>Validation Alerts</comment>
   </data>
+  <data name="AllPermittedSitesToMakeShiftTradeWith" xml:space="preserve">
+    <value>All Sites</value>
+    <comment>use in MyTime shift trade site selector, when user choose this, it will show all of the agents in permitted sites</comment>
+  </data>
 </root>

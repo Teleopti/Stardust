@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
 
@@ -12,15 +11,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 	public class RequestsShiftTradeScheduleFilterViewModelFactory : IRequestsShiftTradeScheduleFilterViewModelFactory
 	{
 		private readonly IDayOffTemplateRepository _dayOffTemplateRepository;
-		private readonly ICreateHourText _createHourText;
-		private readonly IUserTimeZone _userTimeZone;
 
-		public RequestsShiftTradeScheduleFilterViewModelFactory(IDayOffTemplateRepository dayOffTemplateRepository,
-																			ICreateHourText createHourText, IUserTimeZone timeZone)
+		public RequestsShiftTradeScheduleFilterViewModelFactory(IDayOffTemplateRepository dayOffTemplateRepository)
 		{
 			_dayOffTemplateRepository = dayOffTemplateRepository;
-			_createHourText = createHourText;
-			_userTimeZone = timeZone;
 		}
 
 		public RequestsShiftTradeScheduleFilterViewModel ViewModel()
@@ -42,6 +36,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			};
 
 			return ret;
+		}
+
+		public string GetAllSitesText()
+		{
+			return Resources.AllPermittedSitesToMakeShiftTradeWith;
 		}
 	}
 }

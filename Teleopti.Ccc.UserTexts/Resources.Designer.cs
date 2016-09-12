@@ -2267,6 +2267,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All Sites.
+        /// </summary>
+        public static string AllPermittedSitesToMakeShiftTradeWith {
+            get {
+                return ResourceManager.GetString("AllPermittedSitesToMakeShiftTradeWith", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All Teams.
         /// </summary>
         public static string AllPermittedTeamsToMakeShiftTradeWith {

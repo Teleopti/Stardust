@@ -682,11 +682,10 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 			success: function (data, textStatus, jqXHR) {
 				self.selectedSite(null);
 				self.availableSites(data);
-				//if (data && data.length > 0) self.setSiteAll();
+				if (data && data.length > 0) self.setSiteAll();
 				self.selectedSite(siteToSelect);
 			},
 			error: function (e) {
-				//console.log(e);
 			}
 		});
 	};
@@ -694,6 +693,19 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	self.setTeamAll = function () {
 		var text = $("#Request-all-permitted-teams").val() ? $("#Request-all-permitted-teams").val() : "Team All";
 		self.availableTeams.unshift({ id: "allTeams", text: text });
+	};
+
+	self.setSiteAll = function () {
+		ajax.Ajax({
+			url: "RequestsShiftTradeScheduleFilter/GetAllSitesText",
+			dataType: "json",
+			type: 'GET',
+			contentType: 'application/json; charset=utf-8',
+			success: function (data) {
+				var text = data ? data : "All Sites";
+				self.availableSites.unshift({ id: "allSites", text: text });
+			}
+		});
 	};
 
 	self.loadTeams = function (date) {

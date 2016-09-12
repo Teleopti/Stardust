@@ -21,7 +21,7 @@
 		
 		
 		<%
-			var version = DateTime.UtcNow.Ticks;
+		    var version = 1;//DateTime.UtcNow.Ticks;
         %>
 		
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Common.js?bust=<%=version%>"></script>
