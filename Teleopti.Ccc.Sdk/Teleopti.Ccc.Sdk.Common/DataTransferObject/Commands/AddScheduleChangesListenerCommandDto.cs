@@ -14,7 +14,8 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
 	/// <para>The name must be provided and will be used when the endpoint should be removed using the <see cref="RevokeScheduleChangesListenerCommandDto"/> command.</para>
 	/// <para>The schedule data sent from Teleopti WFM is formatted as json.</para>
 	/// <para>In the http request there will be a header named Signature with a base64 encoded signature value. That signature can be used to verify the contents of the request body. Use the public key exposed in the SDK mentioned before in combination with the signature. The hashing algorithm used is SHA1. If the request body cannot be verified with the signature someone has tampered with the contents and the request should be discarded.</para>
-	/// <para>Only schedule information for the default scenario gets sent to the listener. You might get ScheduleDays outside your predefined filter, so always make sure you filter the schedule days on the recieving side as well.</para>	/// <para>The content of the messages will contain the following information:</para>
+	/// <para>Only schedule information for the default scenario gets sent to the listener. You might get ScheduleDays outside your predefined filter, so always make sure you filter the schedule days on the recieving side as well.</para>
+	/// <para>The content of the messages will contain the following information:</para>
 	/// <pre>
 	/// ├─ IsDefaultScenario: (always true)
 	/// ├─ ScenarioId: the scenario id
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
 	///          ├─ Name: the name of the activity or absence
 	///          ├─ PayrollCode: the payroll code for the activity or absence
 	///          ├─ DisplayColor: the argb color value for the layer
-	///          └─ MultiplicatorDefinitionSetId: the id of the multiplicator definition set for the layer in case of overtime}}}
+	///          └─ MultiplicatorDefinitionSetId: the id of the multiplicator definition set for the layer in case of overtime
 	/// </pre>
 	/// </summary>
 	[DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2016/03/")]
