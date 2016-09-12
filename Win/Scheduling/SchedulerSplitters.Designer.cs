@@ -681,6 +681,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.tabPageAdvShiftCategoryDistribution.Name = "tabPageAdvShiftCategoryDistribution";
 			this.tabPageAdvShiftCategoryDistribution.ShowCloseButton = true;
 			this.tabPageAdvShiftCategoryDistribution.Size = new System.Drawing.Size(434, 651);
+			this.tabPageAdvShiftCategoryDistribution.TabFont = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold);
 			this.tabPageAdvShiftCategoryDistribution.TabIndex = 12;
 			this.tabPageAdvShiftCategoryDistribution.Text = "xxShiftCategoryDistribution";
 			this.tabPageAdvShiftCategoryDistribution.ThemesEnabled = false;
@@ -703,7 +704,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.tabPageAdvValidationAlerts.Name = "tabPageAdvValidationAlerts";
 			this.tabPageAdvValidationAlerts.ShowCloseButton = true;
 			this.tabPageAdvValidationAlerts.Size = new System.Drawing.Size(434, 651);
+			this.tabPageAdvValidationAlerts.TabFont = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold);
 			this.tabPageAdvValidationAlerts.TabIndex = 13;
+			this.tabPageAdvValidationAlerts.TabVisible = false;
 			this.tabPageAdvValidationAlerts.Text = "xxValidationAlerts";
 			this.tabPageAdvValidationAlerts.ThemesEnabled = false;
 			// 

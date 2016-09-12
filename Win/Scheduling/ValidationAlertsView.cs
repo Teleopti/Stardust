@@ -219,6 +219,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public int Compare(object x, object y)
 		{
+			var subItemCountx = ((ListViewItem) x).SubItems.Count;
+			if (_col > subItemCountx - 1)
+				return 0;
+			var subItemCounty = ((ListViewItem)y).SubItems.Count;
+			if (_col > subItemCounty - 1)
+				return 0;
 			var returnVal = string.Compare(((ListViewItem)x).SubItems[_col].Text,
 				((ListViewItem)y).SubItems[_col].Text,StringComparison.InvariantCultureIgnoreCase);
 			if (_order == SortOrder.Descending)
