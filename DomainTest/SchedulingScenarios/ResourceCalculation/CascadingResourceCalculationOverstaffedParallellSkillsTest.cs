@@ -675,5 +675,135 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 
 			skillDayBronze1ResultAfter.Should().Be.EqualTo(skillDayBronze1ResultBefore);
 		}
+
+		[Test]
+		public void ShouldValueSkillGroupsWithMoreSubSkillsHigherWhenCascadingIndexesAreEqualOnOtherSkillGroup()
+		{
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var dateOnly = DateOnly.Today;
+
+			var skillGold = new Skill("gold", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
+			var skillBronze0 = new Skill("silver", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
+			var skillBronz1 = new Skill("bronze", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
+			var skillBronze2 = new Skill("bronze1", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
+
+			skillGold.SetId(new Guid("000ea41a-d63e-492f-ae97-71e956e494ff"));
+			skillBronze0.SetId(new Guid("15be7c61-f850-4064-b9b3-33c74891291c"));
+			skillBronz1.SetId(new Guid("de6c88cb-ef94-43d5-9ea8-e606d5086d3c"));
+			skillBronze2.SetId(new Guid("d227a88c-017a-435a-aafd-a1c065badb7e"));
+
+			skillGold.SetCascadingIndex(1);
+			skillBronze0.SetCascadingIndex(2);
+			skillBronz1.SetCascadingIndex(2);
+			skillBronze2.SetCascadingIndex(2);
+
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillGold, new TimePeriod(10, 0, 10, 30));
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillBronze0, new TimePeriod(10, 0, 10, 30));
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillBronz1, new TimePeriod(10, 0, 10, 30));
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillBronze2, new TimePeriod(10, 0, 10, 30));
+
+			var skillDayGold = skillGold.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var skillDayBronze0 = skillBronze0.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var skillDayBronze1 = skillBronz1.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var skillDayBronze2 = skillBronze2.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+
+			var asses = new List<IPersonAssignment>();
+
+			//gold, bronze0
+			for (var i = 0; i < 1; i++)
+			{
+				var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
+				agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }),
+				new[] { skillGold, skillBronze0 });
+				var ass = new PersonAssignment(agent, scenario, dateOnly);
+				ass.AddActivity(activity, new TimePeriod(10, 0, 10, 30));
+				asses.Add(ass);
+			}
+
+			//gold, bronze1, bronze2
+			for (var i = 0; i < 1; i++)
+			{
+				var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
+				agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }),
+				new[] { skillGold, skillBronz1, skillBronze2 });
+				var ass = new PersonAssignment(agent, scenario, dateOnly);
+				ass.AddActivity(activity, new TimePeriod(10, 0, 10, 30));
+				asses.Add(ass);
+			}
+
+			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, asses, new[] { skillDayGold, skillDayBronze0, skillDayBronze1, skillDayBronze2 }, false, false));
+
+			skillDayBronze1.SkillStaffPeriodCollection.First().AbsoluteDifference.Should().Be.EqualTo(-0.5);
+			skillDayBronze2.SkillStaffPeriodCollection.First().AbsoluteDifference.Should().Be.EqualTo(-0.5);
+		}
+
+		[Test]
+		public void ShouldValueSkillGroupsWithLowerSubSkillIndexesHigher()
+		{
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var dateOnly = DateOnly.Today;
+
+			var skillGold = new Skill("gold", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
+			var skillSilver = new Skill("silver", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
+			var skillSilver1 = new Skill("silver1", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
+			var skillBronze = new Skill("bronze", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
+
+			skillGold.SetId(new Guid("000ea41a-d63e-492f-ae97-71e956e494ff"));
+			skillSilver.SetId(new Guid("15be7c61-f850-4064-b9b3-33c74891291c"));
+			skillSilver1.SetId(new Guid("d227a88c-017a-435a-aafd-a1c065badb7e"));
+			skillBronze.SetId(new Guid("de6c88cb-ef94-43d5-9ea8-e606d5086d3c"));
+			
+			skillGold.SetCascadingIndex(1);
+			skillSilver.SetCascadingIndex(2);
+			skillSilver1.SetCascadingIndex(2);
+			skillBronze.SetCascadingIndex(3);
+			
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillGold, new TimePeriod(10, 0, 10, 30));
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillSilver, new TimePeriod(10, 0, 10, 30));
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillSilver1, new TimePeriod(10, 0, 10, 30));
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillBronze, new TimePeriod(10, 0, 10, 30));
+			
+			var skillDayGold = skillGold.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var skillDaySilver = skillSilver.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var skillDaySilver1 = skillSilver1.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var skillDayBronze = skillBronze.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			
+			var asses = new List<IPersonAssignment>();
+
+			//gold, silver, silver1
+			for (var i = 0; i < 1; i++)
+			{
+				var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
+				agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }),
+				new[] { skillGold, skillSilver, skillSilver1 });
+				var ass = new PersonAssignment(agent, scenario, dateOnly);
+				ass.AddActivity(activity, new TimePeriod(10, 0, 10, 30));
+				asses.Add(ass);
+			}
+
+			//gold, silver, bronze
+			for (var i = 0; i < 1; i++)
+			{
+				var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
+				agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }),
+				new[] { skillGold, skillSilver, skillBronze });
+				var ass = new PersonAssignment(agent, scenario, dateOnly);
+				ass.AddActivity(activity, new TimePeriod(10, 0, 10, 30));
+				asses.Add(ass);
+			}
+
+			var singleSkillAgent = new Person().InTimeZone(TimeZoneInfo.Utc);
+			singleSkillAgent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }),
+			new[] { skillSilver });
+			var singleSkillAss = new PersonAssignment(singleSkillAgent, scenario, dateOnly);
+			singleSkillAss.AddActivity(activity, new TimePeriod(10, 0, 10, 30));
+			asses.Add(singleSkillAss);
+
+			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(scenario, dateOnly, asses, new[] { skillDayGold, skillDaySilver, skillDaySilver1, skillDayBronze}, false, false));
+
+			skillDaySilver1.SkillStaffPeriodCollection.First().AbsoluteDifference.Should().Be.EqualTo(0);
+		}
 	}
 }
