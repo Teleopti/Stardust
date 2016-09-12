@@ -15,7 +15,7 @@ properties {
 	
 	$TeleoptiBin = "$WorkingDir\TeleoptiCCC\bin"
 	$ToBeArtifacted = "$WorkingDir\tobeartifact"
-	$BinDependencies = "\\a380\T-Files\RnD\MSI_Dependencies\Azure_Net"
+	$BinDependencies = "\\a380\T-Files\RnD\MSI_Dependencies"
 	$Dependencies = "\\a380\T-Files\RnD\MSI_Dependencies\ccc7_server"
 	$InternalFileShare = "\\hebe\Installation\msi\$env:CccVersion"
 
@@ -55,9 +55,15 @@ task PreReq -depends init -description "Move/Copy preparation of files" {
 
 task CreateAzurePkg -depends Init, PreReq -description "Create Azure Package" {
     
-	#Create Azure Pkg
+	<#Create Azure Pkg
 	$Arg = @("Azure\ServiceDefinition.csdef", '/role:TeleoptiCCC;Azure\TeleoptiCCC', '/rolePropertiesFile:TeleoptiCCC;Azure\AzureRoleProperties.txt', "/out:$AzurePackagePath")
-    & $CSPackEXE $Arg
+    & $CSPackEXE $Arg #>
+	
+	#Create Azure Pkg
+    & $CSPackEXE "Azure\ServiceDefinition.csdef" `
+      "/role:TeleoptiCCC;Azure\TeleoptiCCC" `
+      "/rolePropertiesFile:TeleoptiCCC;Azure\AzureRoleProperties.txt" `
+      "/out:$AzurePackagePath"
 	
 	#Create Azure Pkg Large version
 	$Arg = @('Azure\ServiceDefinition_Large.csdef', '/role:TeleoptiCCC;Azure\TeleoptiCCC', '/rolePropertiesFile:TeleoptiCCC;Azure\AzureRoleProperties.txt', "/out:$AzurePackagePath_Large")
@@ -79,11 +85,11 @@ function global:PrepareCopyFiles {
 	#Copy azure bin folder
 	Copy-Item -Path "$WorkingDir\teamcity\azure\TeleoptiCCC\bin" -Destination "$TeleoptiBin" -Force -ErrorAction Stop
 	#Copy RegisterEventLogSource
-	Copy-Item -Path "$Dependencies\RegisterEventLogSource.exe" -Destination "$TeleoptiBin" -Force -ErrorAction Stop
+	Copy-Item -Path "$Dependencies\RegisterEventLogSource.exe" -Destination "$TeleoptiBin" -Recurse -Force -ErrorAction Stop
 	#Copy azure dependencies
 	Copy-Item -Path "$AzureDependencies" -Destination "$TeleoptiBin\ccc7_azure" -Recurse -Force -ErrorAction Stop
 	#Copy azure .NET461
-	Copy-Item -Path "$BinDependencies\" -Destination "$TeleoptiBin" -Recurse -Force -ErrorAction Stop
+	Copy-Item -Path "$BinDependencies\Azure_Net" -Destination "$TeleoptiBin" -Recurse -Force -ErrorAction Stop
 	
 }
 
