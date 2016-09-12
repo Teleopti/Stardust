@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class SkillGroupPerActivityProvider
 	{
-		public IEnumerable<IEnumerable<CascadingSkillGroup>> FetchOrdered(CascadingSkills cascadingSkills, IActivity activity, DateTimePeriod period)
+		public OrderedSkillGroups FetchOrdered(CascadingSkills cascadingSkills, IActivity activity, DateTimePeriod period)
 		{
 			var affectedSkills = ResourceCalculationContext.Fetch().AffectedResources(activity, period).Values;
 			var cascadingSkillsForActivity = cascadingSkills.ForActivity(activity).ToArray();
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 					ret.Last().Add(skillGroup);
 				}
 			}
-			return ret;
+			return new OrderedSkillGroups(ret);
 			//
 		}
 	}

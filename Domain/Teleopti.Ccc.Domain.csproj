@@ -189,6 +189,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\ContextLoaderWithPersonOrganizationQueryOptimization.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ContextLoaderWithConnectionQueryOptimizeAllTheThings.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ContextLoaderWithScheduleOptimization.cs" />
+    <Compile Include="Cascading\OrderedSkillGroups.cs" />
     <Compile Include="Common\IScheduleDayProvider.cs" />
     <Compile Include="ApplicationLayer\Commands\NonoverwritableLayerMovabilityChecker.cs" />
     <Compile Include="ApplicationLayer\Commands\IRequestCommand.cs" />
