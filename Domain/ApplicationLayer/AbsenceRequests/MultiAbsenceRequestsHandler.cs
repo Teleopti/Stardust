@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		{
 			public override bool IsSatisfiedBy(IPersonRequest obj)
 			{
-				return (obj == null || !obj.IsNew);
+				return (obj == null || !(obj.IsNew || obj.IsPending));
 			}
 		}
 
