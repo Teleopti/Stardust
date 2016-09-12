@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.Common;
 
@@ -10,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Logon.Aspects
 		private readonly TenantFromArguments _tenant;
 
 		[ThreadStatic]
-		private static IDisposable _scope;
+		private static Stack<IDisposable> _scope;
 
 		public TenantScopeAspect(IDataSourceScope dataSource, TenantFromArguments tenant)
 		{
@@ -20,12 +21,14 @@ namespace Teleopti.Ccc.Domain.Logon.Aspects
 
 		public void OnBeforeInvocation(IInvocationInfo invocation)
 		{
-			_scope = _dataSource.OnThisThreadUse(_tenant.Resolve(invocation.Arguments));
+			if (_scope == null)
+				_scope = new Stack<IDisposable>();
+			_scope.Push(_dataSource.OnThisThreadUse(_tenant.Resolve(invocation.Arguments)));
 		}
 
 		public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
 		{
-			_scope.Dispose();
+			_scope.Pop().Dispose();
 		}
 	}
 }

@@ -38,8 +38,10 @@ namespace Teleopti.Ccc.DomainTest.Logon
 			public IDataSource RanWithDataSource;
 
 			[TenantScope]
-			public virtual void Does(object input)
+			public virtual void Does(object input, Action action = null)
 			{
+				if (action != null)
+					action.Invoke();
 				RanWithDataSource = _dataSource.Current();
 			}
 
@@ -120,6 +122,24 @@ namespace Teleopti.Ccc.DomainTest.Logon
 
 			DataSource.Current().Should().Be.Null();
 		}
-		
+
+		[Test]
+		public void ShouldHandleNestedScopes()
+		{
+			Database.WithTenant("tenant1");
+			Database.WithTenant("tenant2");
+
+			TheService.Does("tenant1", () =>
+			{
+				DataSource.Current().DataSourceName.Should().Be("tenant1");
+				TheService.Does("tenant2", () =>
+				{
+					DataSource.Current().DataSourceName.Should().Be("tenant2");
+				});
+				DataSource.Current().DataSourceName.Should().Be("tenant1");
+			});
+			DataSource.Current().Should().Be.Null();
+
+		}
 	}
 }
