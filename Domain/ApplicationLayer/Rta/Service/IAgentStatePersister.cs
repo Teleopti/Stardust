@@ -17,12 +17,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		IEnumerable<Guid> GetAllPersonIds();
 		AgentState Get(Guid personId);
 		IEnumerable<AgentState> GetStates();
+		[RemoveMeWithToggle(Toggles.RTA_PersonOrganizationQueryOptimization_40261)]
 		IEnumerable<AgentState> GetStatesNotInSnapshot(DateTime snapshotId, string sourceId);
+		IEnumerable<Guid> GetPersonIdsForClosingSnapshot(DateTime snapshotId, string sourceId, string loggedOutState);
 		void Update(AgentState model);
 
 		[RemoveMeWithToggle(Toggles.RTA_PersonOrganizationQueryOptimization_40261)]
 		IEnumerable<AgentState> Get(IEnumerable<Guid> personIds);
 
-		IEnumerable<Guid> GetPersonIdsForLogout(DateTime snapshotId, string sourceId, string loggedOutState);
 	}
 }

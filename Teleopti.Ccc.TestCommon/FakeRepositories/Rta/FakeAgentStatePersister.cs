@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					.ToArray();
 		}
 
-		public IEnumerable<Guid> GetPersonIdsForLogout(DateTime snapshotId, string sourceId, string loggedOutState)
+		public IEnumerable<Guid> GetPersonIdsForClosingSnapshot(DateTime snapshotId, string sourceId, string loggedOutState)
 		{
 			lock (_lock)
 				return _data

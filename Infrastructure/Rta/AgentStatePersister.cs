@@ -260,7 +260,8 @@ WHERE
 				;
 		}
 
-		public IEnumerable<Guid> GetPersonIdsForLogout(DateTime snapshotId, string sourceId, string loggedOutState)
+		[InfoLog]
+		public virtual IEnumerable<Guid> GetPersonIdsForClosingSnapshot(DateTime snapshotId, string sourceId, string loggedOutState)
 		{
 			return _unitOfWork.Current().Session().CreateSQLQuery(@"
 SELECT DISTINCT

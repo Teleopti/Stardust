@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				SourceId = "6"
 			});
 
-			Persister.GetPersonIdsForLogout("2016-09-12 13:01".Utc(), "6", Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
+			Persister.GetPersonIdsForClosingSnapshot("2016-09-12 13:01".Utc(), "6", Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
 				.Single().Should().Be(person2);
 		}
 	}
