@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -25,16 +26,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private DateTime _farFutureInterval;
 		private int _windowSize;
 		private DateTimePeriod _nearFuturePeriod;
+		private DateTime _now;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<AbsenceRequestStrategyProcessor>().For<IAbsenceRequestStrategyProcessor>();
 			_nearFuture = 3;
 			_windowSize = _nearFuture;
-			var now = new DateTime(2016, 03, 01, 10, 0, 0, DateTimeKind.Utc);
-			_nearFutureInterval = now.AddMinutes(10*-1);
-			_farFutureInterval = now.AddMinutes(20*-1);
-			_today = new DateTime(2016, 03, 01, 0, 0, 0, DateTimeKind.Utc);
+			_now = new DateTime(2016, 03, 01, 10, 0, 0, DateTimeKind.Utc);
+			_nearFutureInterval = _now.AddMinutes(10*-1);
+			_farFutureInterval = _now.AddMinutes(20*-1);
+			_today = _now.Date;
 			_nearFuturePeriod = new DateTimePeriod(_today.AddDays(-1), _today.AddDays(_nearFuture));
 		}
 
@@ -46,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 2, 23, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 9, 58, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-2),
 				PersonRequest = Guid.NewGuid()
 			});
 
@@ -63,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 2, 23, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 9, 47, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-13),
 				PersonRequest = Guid.NewGuid()
 			});
 
@@ -71,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 5, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 5, 23, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 9, 48, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-12),
 				PersonRequest = Guid.NewGuid()
 			});
 
@@ -87,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 2, 23, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 9, 47, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-12),
 				PersonRequest = Guid.NewGuid()
 			});
 
@@ -95,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 2, 23, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 9, 58, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-2),
 				PersonRequest = Guid.NewGuid()
 			});
 
@@ -111,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 5, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 6, 23, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 9, 37, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-23),
 				PersonRequest = Guid.NewGuid()
 			});
 
@@ -126,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 5, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 6, 23, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 9, 38, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-22),
 				PersonRequest = Guid.NewGuid()
 			});
 
@@ -134,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 6, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 7, 23, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 9, 58, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-2),
 				PersonRequest = Guid.NewGuid()
 			});
 
@@ -152,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 5, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 6, 23, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 9, 47, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-13),
 				PersonRequest = farFutureReqId
 			});
 
@@ -160,7 +162,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 1, 23, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 9, 48, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-12),
 				PersonRequest = nearFutureReqId
 			});
 
@@ -177,7 +179,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 10, 23, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 9, 47, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-13),
 				PersonRequest = Guid.NewGuid()
 			});
 
@@ -185,7 +187,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 7, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 8, 23, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 9, 58, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-2),
 				PersonRequest = Guid.NewGuid()
 			});
 
@@ -193,7 +195,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 7, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 11, 23, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 9, 58, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-2),
 				PersonRequest = Guid.NewGuid()
 			});
 
@@ -210,7 +212,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 11, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 13, 23, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 8, 47, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-13).AddHours(-1),
 				PersonRequest = Guid.NewGuid()
 			});
 
@@ -218,7 +220,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 12, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 12, 23, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 8, 46, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-14).AddHours(-1),
 				PersonRequest = Guid.NewGuid()
 			});
 
@@ -226,7 +228,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 13, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 15, 23, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 8, 58, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-2).AddHours(-1),
 				PersonRequest = Guid.NewGuid()
 			});
 
@@ -234,7 +236,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 14, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 20, 23, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 8, 58, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-2).AddHours(-1),
 				PersonRequest = lastAbsenceReqId
 			});
 
@@ -255,7 +257,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 10, 23, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 9, 47, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-13),
 				PersonRequest = Guid.NewGuid()
 			});
 
@@ -263,7 +265,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 7, 27, 23, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 8, 58, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-2).AddHours(-1),
 				PersonRequest = Guid.NewGuid()
 			});
 
@@ -281,7 +283,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 2, 2, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 2, 2, 23, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 8, 58, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-2).AddHours(-1),
 				PersonRequest = pastId
 			});
 
@@ -299,7 +301,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 2, 2, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 2, 2, 23, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 8, 58, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-2).AddHours(-1),
 				PersonRequest = pastId
 			});
 
@@ -309,7 +311,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 2, 23, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 8, 58, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-2).AddHours(-1),
 				PersonRequest = futureId
 			});
 
@@ -327,7 +329,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 2, 25, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 2, 26, 23, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 9, 58, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-2),
 				PersonRequest = pastId
 			});
 
@@ -335,7 +337,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 5, 23, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 9, 58, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-2),
 				PersonRequest = Guid.NewGuid()
 			});
 
@@ -345,7 +347,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 6, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 7, 23, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 9, 58, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-2),
 				PersonRequest = futureId
 			});
 
@@ -363,7 +365,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 2, 29, 20, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 1, 19, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 9, 38, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-22),
 				PersonRequest = yesterdayId
 			});
 
@@ -372,7 +374,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 5, 0, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 5, 19, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 9, 38, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-22),
 				PersonRequest = fatFutureId
 			});
 
@@ -385,24 +387,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public void ShouldNotSendRequestInProcessingPeriod()
 		{
 			var id = Guid.NewGuid();
-			//var now = new DateTime(2016, 03, 01, 10, 0, 0, DateTimeKind.Utc);
-
-			var timeStamp1 = new DateTime(2016, 03, 01, 9, 50, 0, DateTimeKind.Utc); // 10 min before now
+			var timeStamp1 = _now.AddMinutes(-10); 
 
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
 				StartDateTime = new DateTime(2016, 3, 5, 8, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 5, 19, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 9, 38, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-22),
 				PersonRequest = Guid.NewGuid(),
-				Sent =  timeStamp1
+				Sent = timeStamp1
 			});
 
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
 			{
 				StartDateTime = new DateTime(2016, 3, 6, 8, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 6, 19, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 9, 38, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-22),
 				PersonRequest = Guid.NewGuid(),
 				Sent = timeStamp1
 			});
@@ -412,7 +412,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 9, 8, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 9, 19, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 9, 38, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-22),
 				PersonRequest = Guid.NewGuid(),
 				Sent = new DateTime(2016, 03, 01, 9, 52, 0, DateTimeKind.Utc)
 			});
@@ -421,7 +421,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 6, 15, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 7, 19, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 9, 38, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-22),
 				PersonRequest = Guid.NewGuid()
 			});
 
@@ -429,7 +429,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				StartDateTime = new DateTime(2016, 3, 8, 8, 0, 0, DateTimeKind.Utc),
 				EndDateTime = new DateTime(2016, 3, 8, 19, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 9, 38, 0, DateTimeKind.Utc),
+				Created = _now.AddMinutes(-22),
 				PersonRequest = id
 			});
 
