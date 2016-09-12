@@ -78,6 +78,7 @@
 		WfmTeamSchedule_ModifyShiftCategory_39797,
 		WfmTeamSchedule_MakeNewMyTeamDefault_39744,
 		WfmTeamSchedule_WeekView_39870,
+		WfmTeamSchedule_MakePersonalActivityUnmerged_40252,
 
 		WfmReportPortal_Basic_38825,
 		WfmReportPortal_LeaderBoard_39440,
