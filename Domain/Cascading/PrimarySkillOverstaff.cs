@@ -50,31 +50,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 				}
 			}
 
-			return new ShovelResourcesState(dic, foo(skillStaffPeriodHolder, skillGroupsWithSameIndex, interval)); 
-		}
-
-		private IDictionary<CascadingSkillGroup, double> foo(ISkillStaffPeriodHolder skillStaffPeriodHolder, IEnumerable<CascadingSkillGroup> skillGroupsWithSameIndex, DateTimePeriod interval)
-		{
-			var ret = new Dictionary<CascadingSkillGroup, double>();
-			var tottiRelativeDifference = 0d;
-			foreach (var skillGroupWithSameIndex in skillGroupsWithSameIndex)
-			{
-				foreach (var otherPrimarySkill in skillGroupWithSameIndex.PrimarySkills)
-				{
-					var relDiffInOtherPrimarySkill = skillStaffPeriodHolder.SkillStaffPeriodOrDefault(otherPrimarySkill, interval).AbsoluteDifference;
-					if (!double.IsNaN(relDiffInOtherPrimarySkill)) //TODO: Check for positive value? Needed here?
-					{
-						tottiRelativeDifference += relDiffInOtherPrimarySkill;
-					}
-				}
-			}
-			foreach (var skillGroup in skillGroupsWithSameIndex)
-			{
-				var myrelativeDifference = skillGroup.PrimarySkills.Sum(primarySkill => skillStaffPeriodHolder.SkillStaffPeriodOrDefault(primarySkill, interval).AbsoluteDifference);
-				var myFactor = myrelativeDifference/tottiRelativeDifference;
-				ret[skillGroup] = double.IsNaN(myFactor) ? 1 : myFactor;
-			}
-			return ret;
+			return new ShovelResourcesState(dic, new ResourceDistributionForSkillGroupsWithSameIndex(skillStaffPeriodHolder, skillGroupsWithSameIndex, interval)); 
 		}
 	}
 }

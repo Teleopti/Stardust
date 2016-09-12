@@ -7,11 +7,11 @@ namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class ShovelResourcesState
 	{
-		private readonly IDictionary<CascadingSkillGroup, double> _maxfactorPerSkillGroup;
+		private readonly ResourceDistributionForSkillGroupsWithSameIndex _resourceDistribution;
 
-		public ShovelResourcesState(IDictionary<ISkill, double> resources, IDictionary<CascadingSkillGroup, double> maxfactorPerSkillGroup)
+		public ShovelResourcesState(IDictionary<ISkill, double> resources, ResourceDistributionForSkillGroupsWithSameIndex resourceDistribution)
 		{
-			_maxfactorPerSkillGroup = maxfactorPerSkillGroup;
+			_resourceDistribution = resourceDistribution;
 			ResourcesAvailableForPrimarySkill = resources;
 			RemainingOverstaffing = ResourcesAvailableForPrimarySkill.Values.Sum();
 			TotalOverstaffingAtStart = RemainingOverstaffing;
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 		public double MaxToMoveForThisSkillGroup(CascadingSkillGroup skillgroup)
 		{
-			return TotalOverstaffingAtStart*_maxfactorPerSkillGroup[skillgroup];
+			return TotalOverstaffingAtStart* _resourceDistribution.For(skillgroup);
 		}
 
 		public void AddResourcesTo(ISkillStaffPeriod skillStaffPeriod, double value)

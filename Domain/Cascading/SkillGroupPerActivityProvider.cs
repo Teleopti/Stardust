@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 			return mergeSkillGroupsWithSameIndex(cascadingSkillGroups);
 		}
 
-		private static OrderedSkillGroups mergeSkillGroupsWithSameIndex(List<CascadingSkillGroup> tempList)
+		private static OrderedSkillGroups mergeSkillGroupsWithSameIndex(IEnumerable<CascadingSkillGroup> tempList)
 		{
 			var ret = new List<List<CascadingSkillGroup>>();
 			foreach (var skillGroup in tempList)
