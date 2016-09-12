@@ -60,12 +60,13 @@ BEGIN
 	SELECT
 		date_id = fq.date_id,
 		utc_interval_id = interval_id,
-		workload_seconds = fq.offered_calls * (ISNULL(fq.talk_time_s, 0) + ISNULL(fq.after_call_work_s, 0))
+		workload_seconds = ISNULL(fq.handle_time_s, 0)
 	FROM 
 		#queues q
 		INNER JOIN mart.fact_queue fq ON q.queue_id = fq.queue_id
 	WHERE
 		date_id between @current_date_id - 1 and @current_date_id + 1
+		AND offered_calls IS NOT NULL
 		AND offered_calls > 0
 	
 	SELECT
