@@ -9,7 +9,7 @@ GO
 ------------------------------------------------
 -- Updates:		
 -- =============================================
-
+--Trigger
 CREATE VIEW mart.v_bridge_acd_login_person_date
 
 AS
