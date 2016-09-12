@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
@@ -7,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class ReducePrimarySkillResources
 	{
-		public void Execute(ShovelResourcesState state, ISkillStaffPeriodHolder skillStaffPeriodHolder, IEnumerable<ISkill> primarySkills, DateTimePeriod interval)
+		public void Execute(ShovelResourcesState state, ISkillStaffPeriodHolder skillStaffPeriodHolder, DateTimePeriod interval)
 		{
 			if (jumpOutEarly(state))
 				return;

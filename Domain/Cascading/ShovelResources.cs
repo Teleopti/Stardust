@@ -52,11 +52,8 @@ namespace Teleopti.Ccc.Domain.Cascading
 								foreach (var skillGroupsWithSameIndex in orderedSkillGroups)
 								{
 									var state = _primarySkillOverstaff.AvailableSum(skillStaffPeriodHolder, allSkillGroups, skillGroupsWithSameIndex, interval);
-									foreach (var skillGroup in skillGroupsWithSameIndex)
-									{
-										_addResourcesToSubSkills.Execute(state, skillStaffPeriodHolder, skillGroup, interval);
-									}
-									_reducePrimarySkillResources.Execute(state, skillStaffPeriodHolder, skillGroupsWithSameIndex.First().PrimarySkills, interval);
+									_addResourcesToSubSkills.Execute(state, skillStaffPeriodHolder, skillGroupsWithSameIndex, interval);
+									_reducePrimarySkillResources.Execute(state, skillStaffPeriodHolder, interval);
 								}
 							}
 						}
