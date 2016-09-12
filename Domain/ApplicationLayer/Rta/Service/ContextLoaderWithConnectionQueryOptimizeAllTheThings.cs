@@ -25,47 +25,58 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public override void For(StateInputModel input, Action<Context> action)
 		{
-			var found = false;
+			process(new singleStrategy(_config, _agentStatePersister, action, _databaseLoader, input));
+		}
 
-			WithUnitOfWork(() =>
+		private class singleStrategy : baseStrategy<StateInputModel> {
+			private readonly IDatabaseLoader _databaseLoader;
+			private readonly StateInputModel _model;
+
+			public singleStrategy(IConfigReader config, IAgentStatePersister persister, Action<Context> action, IDatabaseLoader databaseLoader, StateInputModel model) : base(config, persister, action)
 			{
-				var mappings = new MappingsState(() => _mappingReader.Read());
-				var dataSourceId = ValidateSourceId(input);
-				var userCode = input.UserCode;
-				var now = _now.UtcDateTime();
+				_databaseLoader = databaseLoader;
+				_model = model;
+				ParallelTransactions = 1;
+				MaxTransactionSize = 1;
+			}
 
-				_agentStatePersister.Find(dataSourceId, userCode)
-					.ForEach(state =>
-					{
-						found = true;
+			public override IEnumerable<StateInputModel> AllThings()
+			{
+				return new[] {_model};
+			}
 
-						action.Invoke(new Context(
-							now,
-							new InputInfo
-							{
-								PlatformTypeId = input.PlatformTypeId,
-								SourceId = input.SourceId,
-								SnapshotId = input.SnapshotId,
-								StateCode = input.StateCode,
-								StateDescription = input.StateDescription
-							},
-							state.PersonId,
-							state.BusinessUnitId,
-							state.TeamId.GetValueOrDefault(),
-							state.SiteId.GetValueOrDefault(),
-							() => state,
-							() => makeScheduleState(state, now),
-							s => mappings,
-							c => _agentStatePersister.Update(c.MakeAgentState()),
-							_stateMapper,
-							_appliedAdherence,
-							_appliedAlarm
-							));
-					});
-			});
+			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<StateInputModel> things, Action<Exception> addException)
+			{
+				try
+				{
+					var dataSourceId = ValidateSourceId(_databaseLoader, _model);
 
-			if (!found)
-				throw new InvalidUserCodeException($"No person found for SourceId {input.SourceId} and UserCode {input.UserCode}");
+					var userCode = _model.UserCode;
+					var agentStates = _persister.Find(dataSourceId, userCode);
+					if (agentStates.IsEmpty())
+						throw new InvalidUserCodeException($"No person found for SourceId {_model.SourceId} and UserCode {_model.UserCode}");
+
+					return agentStates;
+				}
+				catch (Exception e)
+				{
+					addException(e);
+				}
+
+				return Enumerable.Empty<AgentState>();
+			}
+
+			public override InputInfo GetInputFor(AgentState state)
+			{
+				return new InputInfo
+				{
+					PlatformTypeId = _model.PlatformTypeId,
+					SourceId = _model.SourceId,
+					SnapshotId = _model.SnapshotId,
+					StateCode = _model.StateCode,
+					StateDescription = _model.StateDescription
+				};
+			}
 		}
 
 		public override void ForBatch(BatchInputModel batch, Action<Context> action)
@@ -324,7 +335,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				return;
 			var maxTransactionSize = strategy.MaxTransactionSize;
 			if (allThingsSize <= maxTransactionSize * strategy.ParallelTransactions)
-				maxTransactionSize = (int) Math.Ceiling(allThingsSize / (double)strategy.ParallelTransactions);
+				maxTransactionSize = (int) Math.Ceiling(allThingsSize / (double) strategy.ParallelTransactions);
 
 			var shared = new Lazy<sharedData>(() =>
 			{
@@ -381,6 +392,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						.ForEach(exceptions.Add)
 				);
 
+			if (exceptions.Count == 1)
+				throw exceptions.First();
 			if (exceptions.Any())
 				throw new AggregateException(exceptions);
 		}
