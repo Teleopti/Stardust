@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 		{
 			var affectedSkills = ResourceCalculationContext.Fetch().AffectedResources(activity, period).Values;
 			var cascadingSkillsForActivity = cascadingSkills.ForActivity(activity).ToArray();
-			var tempList = new List<CascadingSkillGroup>();
+			var cascadingSkillGroups = new List<CascadingSkillGroup>();
 
 			foreach (var skillGroup in affectedSkills)
 			{
@@ -35,10 +35,14 @@ namespace Teleopti.Ccc.Domain.Cascading
 						last.AddSubSkill(skillInSameChainAsPrimarySkill);
 					}
 				}
-				tempList.Add(new CascadingSkillGroup(primarySkills, cascadingSubSkills, skillGroup.Resource));
+				cascadingSkillGroups.Add(new CascadingSkillGroup(primarySkills, cascadingSubSkills, skillGroup.Resource));
 			}
-			tempList.Sort(new CascadingSkillGroupSorter());
-			//TODO: hack for now!
+			cascadingSkillGroups.Sort(new CascadingSkillGroupSorter());
+			return mergeSkillGroupsWithSameIndex(cascadingSkillGroups);
+		}
+
+		private static OrderedSkillGroups mergeSkillGroupsWithSameIndex(List<CascadingSkillGroup> tempList)
+		{
 			var ret = new List<List<CascadingSkillGroup>>();
 			foreach (var skillGroup in tempList)
 			{
@@ -53,7 +57,6 @@ namespace Teleopti.Ccc.Domain.Cascading
 				}
 			}
 			return new OrderedSkillGroups(ret);
-			//
 		}
 	}
 }
