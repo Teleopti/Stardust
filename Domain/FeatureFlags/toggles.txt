@@ -81,7 +81,7 @@ WfmTeamSchedule_AutoMoveOverwrittenActivityForOperations_40279 = RC
 
 WfmTeamSchedule_ShowShiftCategory_39796 = true
 WfmTeamSchedule_ModifyShiftCategory_39797 = true
-WfmTeamSchedule_MakeNewMyTeamDefault_39744 = true
+WfmTeamSchedule_MakeNewMyTeamDefault_39744 = RC
 WfmTeamSchedule_WeekView_39870 = RC
 WfmTeamSchedule_MakePersonalActivityUnmerged_40252 = DEV
 WfmTeamSchedule_WeeklyContractTime_39871 = RC
