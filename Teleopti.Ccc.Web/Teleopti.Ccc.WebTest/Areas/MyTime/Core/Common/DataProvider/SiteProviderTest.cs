@@ -17,6 +17,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 	[TestFixture]
 	public class SiteProviderTest
 	{
+		private ITeamRepository _teamRepository;
+
+		public SiteProviderTest()
+		{
+			_teamRepository = MockRepository.GenerateMock<ITeamRepository>();
+		}
+
 		[Test]
 		public void ShouldFilterPermittedTeamsWhenQueryingAll()
 		{
@@ -47,14 +54,32 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			team2.SetId(Guid.NewGuid());
 			team2.Site = site;
 
-			var teamRepository = MockRepository.GenerateMock<ITeamRepository>();
-			teamRepository.Stub(x => x.FindTeamsForSite(site.Id.Value)).Return(new List<Team>() {team1, team2});
+			_teamRepository.Stub(x => x.FindTeamsForSite(site.Id.Value)).Return(new List<Team>() {team1, team2});
 
-			var target = new SiteProvider(null, null, teamRepository);
+			var target = new SiteProvider(null, null, _teamRepository);
 
 			var result = target.GetTeamIdsUnderSite(site.Id.Value);
 			result.ToList()[0].Should().Be.EqualTo(team1.Id);
 			result.ToList()[1].Should().Be.EqualTo(team2.Id);
 		}
+
+		[Test]
+		public void ShouldGetTeamsUnderSite()
+		{
+			var site = new Site("mySite");
+			site.SetId(Guid.NewGuid());
+			var team1 = new Team();
+			team1.Site = site;
+			var team2 = new Team();
+			team2.Site = site;
+
+			_teamRepository.Stub(x => x.FindTeamsForSite(site.Id.Value)).Return(new List<Team>() { team1, team2 });
+
+			var target = new SiteProvider(null, null, _teamRepository);
+
+			var result = target.GetTeamsUnderSite(site.Id.Value);
+			result.ToList()[0].Should().Be.EqualTo(team1);
+			result.ToList()[1].Should().Be.EqualTo(team2);
 	}
+}
 }

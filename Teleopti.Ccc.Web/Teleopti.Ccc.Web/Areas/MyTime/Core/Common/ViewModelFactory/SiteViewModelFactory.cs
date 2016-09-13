@@ -52,5 +52,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 
 			return teamIds;
 		}
+
+		public IEnumerable<ISelectOption> GetTeams(List<Guid> siteIds)
+		{
+			var options = new List<ISelectOption>();
+
+			foreach (var siteId in siteIds)
+			{
+				var teams = _siteProvider.GetTeamsUnderSite(siteId).ToList();
+				var teamOptions = from t in teams
+										select new SelectOptionItem
+										{
+											id = t.Id.ToString(),
+											text = t.Description.Name
+										};
+				options.AddRange(teamOptions);
+			}
+
+			return options;
+		} 
 	}
 }
