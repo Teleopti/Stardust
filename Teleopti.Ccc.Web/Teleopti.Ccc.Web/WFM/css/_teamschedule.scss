@@ -175,7 +175,7 @@
 			}
 
 			thead{
-				width: calc( 100% - 1.2em );
+				width: calc( 100% - 1.2em + 1px );
 			}
 
 			tbody tr:last-child{
@@ -227,8 +227,8 @@
 			}
 
 			//Week view table
-			thead.weekview-thead{
-				td{
+			thead tr.weekview-thead{
+				th{
 					font-weight: bold;
 					padding-left: 5px;
 					padding-right: 5px;
