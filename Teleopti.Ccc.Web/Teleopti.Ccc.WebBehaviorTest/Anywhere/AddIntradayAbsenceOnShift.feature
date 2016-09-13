@@ -137,7 +137,7 @@ Scenario: Add cross midnight on night shift
 	| Start time | 23:00 |
 	| End time   | 01:00 |
 	| Color      | Red   |
-
+@ignore
 Scenario: Adding overlapping of shift
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has a shift with

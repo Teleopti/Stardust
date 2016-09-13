@@ -40,7 +40,7 @@ Scenario: Should be able to view the report
 	And I click SeatPlanReport button
 	Then I should be able to view the report content
 
-
+@ignore
 Scenario: Should show paging bar when there is only one page
 	When I view Seat plan on "2015-01-01"
 	And I click SeatPlanReport button
