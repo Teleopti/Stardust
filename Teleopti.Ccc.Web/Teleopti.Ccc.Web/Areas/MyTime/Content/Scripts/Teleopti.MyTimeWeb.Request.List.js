@@ -137,11 +137,22 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		self.isLoadingRequests = ko.observable(true);
 
 		self.ShowRequests = function (data) {
-			ko.utils.arrayForEach(data, function (item) {
-				var vm = new RequestItemViewModel(self);
-				vm.Initialize(item, false);
-				self.Requests.push(vm);
-			});
+		    ko.utils.arrayForEach(data, function (item) {
+		        ko.utils.arrayForEach(self.Requests(), function (request) {
+		            if (item!==undefined && request.Id()===item.Id) {
+		                var index = data.indexOf(item);
+		                if (index !== -1) {
+		                    data.splice(index, 1);
+		                }
+		            }
+		        });
+		    });
+
+		    ko.utils.arrayForEach(data, function(item) {
+		        var vm = new RequestItemViewModel(self);
+		        vm.Initialize(item, false);
+		        self.Requests.push(vm);
+		    });
 		};
 
 		self.ColumnRequests = ko.computed(function () {
@@ -279,11 +290,14 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		self.hideOldRequests = ko.observable(true);
 		self.hideOldRequests.subscribe(function () {
 		    self.Requests([]);
+		    self.pages = 0;
 	        self.LoadPage();
-	    });
+		});
 
+		self.pages = 0;
+        
 		self.LoadPage = function () {
-			var skip = self.Requests().length;
+		    var skip = self.pages * 20;
 			var take = 20;
 			ajax.Ajax({
 				url: "Requests/Requests",
@@ -298,8 +312,11 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 				    self.isLoadingRequests(true);
 				},
 				success: function (data) {
-					self.MoreToLoad(data.length == take);
+					self.MoreToLoad(data.length === take);
 					self.ShowRequests(data);
+					if (data.length !== 0) {
+					    self.pages++;
+					}
 				},
 				complete: function () {
 					if (self.Ready) {
@@ -390,14 +407,18 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
 	function _initScrollPaging() {
 	    pageViewModel.LoadPage();
-		$(window).scroll(_loadAPageIfRequired);
+	    $(window).scroll(_loadAPageIfRequired);
 	}
 
 	function _loadAPageIfRequired() {
-		var jqWindow = $(window);
+	    var jqWindow = $(window);
 		var jqDocument = $(window.document);
 		if (_isAtBottom(jqDocument, jqWindow)) {
+		    $(window).off("scroll");
 		    pageViewModel.LoadPage();
+		    setTimeout(function () {
+		        $(window).scroll(_loadAPageIfRequired);
+		    }, 1000);
 		}
 	}
 
