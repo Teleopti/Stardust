@@ -8,12 +8,10 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonAbsences
 {
-	[EnabledBy(Toggles.Wfm_Requests_Cancel_37741)]
-#pragma warning disable 618
+	[EnabledBy(Toggles.Wfm_Requests_Cancel_37741), DisabledBy(Toggles.AbsenceRequests_UseMultiRequestProcessing_39960)]
 	public class RequestPersonAbsenceRemovedHandler : IHandleEvent<RequestPersonAbsenceRemovedEvent>, IRunOnStardust
-#pragma warning restore 618
 	{
-		private readonly static ILog logger = LogManager.GetLogger(typeof(RequestPersonAbsenceRemovedHandler));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(RequestPersonAbsenceRemovedHandler));
 
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IAbsenceRequestWaitlistProcessor _waitlistProcessor;

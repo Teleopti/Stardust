@@ -1,18 +1,18 @@
 ﻿using System;
-using System.Configuration;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
@@ -20,9 +20,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 	[DomainTest]
 	[TestFixture]
-	public class NewAbsenceRequestUseMultiHandlerTest : ISetup
+	public class QueuedAbsenceRequestHandlerTest : ISetup
 	{
-		public NewAbsenceRequestUseMultiHandler Target;
+		public QueuedAbsenceRequestHandler Target;
 
 		public FakePersonRequestRepository PersonRequestRepository;
 		public FakeQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			system.UseTestDouble<FakeScheduleDataReadScheduleStorage>().For<FakeScheduleDataReadScheduleStorage>();
 			system.UseTestDouble<FakeCurrentScenario>().For<FakeCurrentScenario>();
-			system.UseTestDouble<NewAbsenceRequestUseMultiHandler>().For<NewAbsenceRequestUseMultiHandler>();
+			system.UseTestDouble<QueuedAbsenceRequestHandler>().For<QueuedAbsenceRequestHandler>();
 		}
 
 
@@ -52,6 +52,41 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Target.Handle(reqEvent);
 
 			QueuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldQueueCancelledRequest()
+		{
+			var removedEvent = createRequestPersonAbsenceRemovedEvent();
+			IBusinessUnit businessUnit = BusinessUnitFactory.CreateWithId("something");
+			removedEvent.LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault();
+			BusinessUnitRepository.Add(businessUnit);
+			Target.Handle(removedEvent);
+
+			QueuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(1);
+			QueuedAbsenceRequestRepository.LoadAll().FirstOrDefault().PersonRequest.Should().Be.EqualTo(removedEvent.PersonRequestId);
+		}
+
+		private RequestPersonAbsenceRemovedEvent createRequestPersonAbsenceRemovedEvent()
+		{
+			var startDateTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc);
+			var endDateTime = new DateTime(2016, 3, 1, 23, 59, 00, DateTimeKind.Utc);
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var workflowControlSet = createWorkFlowControlSet(new DateTime(2016, 01, 01), new DateTime(2016, 12, 31), absence);
+			var person = createAndSetupPerson(startDateTime, endDateTime, workflowControlSet);
+
+			var request = createAbsenceRequest(person, absence, new DateTimePeriod(startDateTime, endDateTime));
+			request.Pending();
+			request.Approve(new ApprovalServiceForTest(), new PersonRequestAuthorizationCheckerForTest());
+			request.Cancel(new PersonRequestAuthorizationCheckerForTest());
+			var requestPersonAbsenceRemovedEvent = new RequestPersonAbsenceRemovedEvent()
+			{
+				PersonRequestId = request.Id.GetValueOrDefault(),
+				StartDateTime = startDateTime,
+				EndDateTime = endDateTime
+			};
+			return requestPersonAbsenceRemovedEvent;
 		}
 
 

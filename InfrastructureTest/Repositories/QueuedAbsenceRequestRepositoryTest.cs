@@ -98,21 +98,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldRemoveQueuedAbsenceRequests()
 		{
-			var guidsToRemove = new List<Guid>();
-			var sent = DateTime.Now;
+			var sent = DateTime.UtcNow;
 
-			guidsToRemove.Add(createQueduedRequest(new DateTime(2008, 7, 10, 10, 0, 0), new DateTime(2008, 7, 14, 9, 0, 0), sent));
-			guidsToRemove.Add(createQueduedRequest(new DateTime(2008, 7, 10, 18, 0, 0), new DateTime(2008, 7, 10, 20, 0, 0), sent));
-			var notDeletedId =  createQueduedRequest(new DateTime(2008, 7, 11, 8, 0, 0), new DateTime(2008, 7, 11, 9, 0, 0), sent);
+			createQueduedRequest(new DateTime(2008, 7, 10, 10, 0, 0), new DateTime(2008, 7, 14, 9, 0, 0), sent);
+			createQueduedRequest(new DateTime(2008, 7, 10, 18, 0, 0), new DateTime(2008, 7, 10, 20, 0, 0), sent);
+			var notDeletedId =  createQueduedRequest(new DateTime(2008, 7, 11, 8, 0, 0), new DateTime(2008, 7, 11, 9, 0, 0), null);
 
 			var target = new QueuedAbsenceRequestRepository(CurrUnitOfWork);
-			target.Remove(guidsToRemove);
+			target.Remove(sent);
 			var result = target.LoadAll();
 			result.Count.Should().Be.EqualTo(1);
 			result.First().PersonRequest.Should().Be.EqualTo(notDeletedId);
 		}
 
-		private Guid createQueduedRequest(DateTime start, DateTime end, DateTime sentDateTime)
+		private Guid createQueduedRequest(DateTime start, DateTime end, DateTime? sentDateTime)
 		{
 			var period = new DateTimePeriod(
 				new DateTime(start.Ticks, DateTimeKind.Utc),

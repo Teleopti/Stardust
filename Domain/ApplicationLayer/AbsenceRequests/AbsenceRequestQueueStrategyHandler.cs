@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -17,7 +16,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
 	[EnabledBy(Toggles.AbsenceRequests_UseMultiRequestProcessing_39960)]
-	public class AbsenceRequestQueueStrategyHandler : IHandleEvent<TenantMinuteTickEvent>, IHandleEvent<PersonRequestProcessedEvent>, IRunOnHangfire
+	public class AbsenceRequestQueueStrategyHandler : IHandleEvent<TenantMinuteTickEvent>, IRunOnHangfire
 	{
 		private readonly IAbsenceRequestStrategyProcessor _absenceRequestStrategyProcessor;
 		private readonly IRequestStrategySettingsReader _requestStrategySettingsReader;
@@ -31,9 +30,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
 
 		public AbsenceRequestQueueStrategyHandler(IAbsenceRequestStrategyProcessor absenceRequestStrategyProcessor,
-										 IEventPublisher publisher, INow now,
-										 IRequestStrategySettingsReader requestStrategySettingsReader, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
-										 IBusinessUnitRepository businessUnitRepository, IBusinessUnitScope businessUnitScope, IPersonRepository personRepository, IUpdatedByScope updatedByScope, IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository)
+												  IEventPublisher publisher, INow now,
+												  IRequestStrategySettingsReader requestStrategySettingsReader, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
+												  IBusinessUnitRepository businessUnitRepository, IBusinessUnitScope businessUnitScope, IPersonRepository personRepository, IUpdatedByScope updatedByScope, IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository)
 		{
 			_absenceRequestStrategyProcessor = absenceRequestStrategyProcessor;
 			_requestStrategySettingsReader = requestStrategySettingsReader;
@@ -64,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				absenceReqNearFutureTime = _requestStrategySettingsReader.GetIntSetting("AbsenceNearFutureTime", 20);
 				absenceReqFarFutureTime = _requestStrategySettingsReader.GetIntSetting("AbsenceFarFutureTime", 60);
 				var bulkRequestTimeoutMinutes = _requestStrategySettingsReader.GetIntSetting("BulkRequestTimeoutMinutes", 90);
-				
+
 				_queuedAbsenceRequestRepository.CheckAndUpdateSent(bulkRequestTimeoutMinutes);
 				uow.PersistAll();
 			}
@@ -82,28 +81,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					var nearFuturePeriod = new DateTimePeriod(now.Date.AddDays(-1).Utc(), now.Date.AddDays(nearFuture).Utc());
 					var listOfAbsenceRequests = _absenceRequestStrategyProcessor.Get(nearFutureInterval, farFutureInterval, nearFuturePeriod, nearFuture);
 					if (!listOfAbsenceRequests.Any()) return;
-				
+
 					listOfAbsenceRequests.ForEach(absenceRequests =>
 					{
+						var sent = DateTime.UtcNow;
+						
 						var multiAbsenceRequestsEvent = new NewMultiAbsenceRequestsCreatedEvent()
 						{
-							PersonRequestIds = absenceRequests.ToList()
+							PersonRequestIds = absenceRequests.ToList(),
+							Sent = sent
 						};
 						_publisher.Publish(multiAbsenceRequestsEvent);
-					_queuedAbsenceRequestRepository.Send(absenceRequests.ToList(), DateTime.UtcNow);
+						_queuedAbsenceRequestRepository.Send(absenceRequests.ToList(), sent);
 					});
 
 					uow.PersistAll();
 				}
 
 			});
-
-		}
-
-		[UnitOfWork]
-		public virtual void Handle(PersonRequestProcessedEvent @event)
-		{
-			_queuedAbsenceRequestRepository.Remove(new List<Guid>() {@event.PersonRequestId});
 		}
 	}
 }

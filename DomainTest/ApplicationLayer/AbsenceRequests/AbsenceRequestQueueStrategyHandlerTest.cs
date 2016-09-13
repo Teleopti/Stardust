@@ -59,39 +59,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 		[Test]
-		public void ShouldRemovePublishedAbsenceRequests()
-		{
-			var nearFutureId = Guid.NewGuid();
-			var farFutureId = Guid.NewGuid();
-
-			var person = new Person { Name = new Name("Reko", "kille") };
-			person.SetId(SystemUser.Id);
-			FakePersonRepository.Add(person);
-			FakeBusinessUnitRepository.Add(new Domain.Common.BusinessUnit("BU"));
-
-			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
-			{
-				StartDateTime = new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc),
-				EndDateTime = new DateTime(2016, 3, 2, 23, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 9, 38, 0, DateTimeKind.Utc),
-				PersonRequest =nearFutureId 
-			});
-
-			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest
-			{
-				StartDateTime = new DateTime(2016, 3, 14, 0, 0, 0, DateTimeKind.Utc),
-				EndDateTime = new DateTime(2016, 3,14, 23, 59, 00, DateTimeKind.Utc),
-				Created = new DateTime(2016, 03, 1, 9, 38, 0, DateTimeKind.Utc),
-				PersonRequest =farFutureId
-			});
-
-			Target.Handle(new PersonRequestProcessedEvent() {PersonRequestId = nearFutureId });
-
-			QueuedAbsenceRequestRepository.Load(nearFutureId).Should().Be.Null();
-			QueuedAbsenceRequestRepository.Load(farFutureId).Should().Not.Be.Null();
-		}
-
-		[Test]
 		public void ShouldResendTimedOutRequests()
 		{
 			var person = new Person { Name = new Name("Reko", "kille") };

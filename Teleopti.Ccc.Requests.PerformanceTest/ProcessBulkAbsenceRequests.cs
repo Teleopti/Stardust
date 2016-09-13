@@ -127,7 +127,8 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 					InitiatorId = new Guid("00000000-0000-0000-0000-000000000000"),
 					LogOnBusinessUnitId = new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"),
 					LogOnDatasource = "Teleopti WFM",
-					Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z")
+					Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z"),
+					Sent = DateTime.UtcNow
 				};
 
 				Target.Process(newMultiAbsenceRequestsCreatedEvent);
@@ -262,7 +263,8 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 					InitiatorId = new Guid("00000000-0000-0000-0000-000000000000"),
 					LogOnBusinessUnitId = new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"),
 					LogOnDatasource = "Teleopti WFM",
-					Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z")
+					Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z"),
+					Sent = DateTime.UtcNow
 				};
 
 				Target.Process(newMultiAbsenceRequestsCreatedEvent);
@@ -367,7 +369,8 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 					InitiatorId = new Guid("00000000-0000-0000-0000-000000000000"),
 					LogOnBusinessUnitId = new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"),
 					LogOnDatasource = "Teleopti WFM",
-					Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z")
+					Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z"),
+					Sent = DateTime.UtcNow
 				};
 
 				Target.Process(newMultiAbsenceRequestsCreatedEvent);
@@ -465,7 +468,8 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 					InitiatorId = new Guid("00000000-0000-0000-0000-000000000000"),
 					LogOnBusinessUnitId = new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"),
 					LogOnDatasource = "Teleopti WFM",
-					Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z")
+					Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z"),
+					Sent = DateTime.UtcNow
 				};
 
 				Target.Process(newMultiAbsenceRequestsCreatedEvent);
@@ -553,7 +557,8 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 					InitiatorId = new Guid("00000000-0000-0000-0000-000000000000"),
 					LogOnBusinessUnitId = new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"),
 					LogOnDatasource = "Teleopti WFM",
-					Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z")
+					Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z"),
+					Sent = DateTime.UtcNow
 				};
 
 				Target.Process(newMultiAbsenceRequestsCreatedEvent);

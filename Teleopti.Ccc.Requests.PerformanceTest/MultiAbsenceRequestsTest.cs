@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddModule(new CommonModule(configuration));
-			system.UseTestDouble<NewAbsenceRequestUseMultiHandler>().For<INewAbsenceRequestHandler>();
+			system.UseTestDouble<QueuedAbsenceRequestHandler>().For<INewAbsenceRequestHandler>();
 			system.UseTestDouble<MultiAbsenceRequestsHandler>().For<MultiAbsenceRequestsHandler>();
 			system.UseTestDouble<MultiAbsenceRequestsUpdater>().For<MultiAbsenceRequestsUpdater>();
 			system.UseTestDouble<MultiAbsenceRequestProcessor>().For<IMultiAbsenceRequestProcessor>();

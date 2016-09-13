@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Criterion;
 using NHibernate.Util;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -67,12 +66,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return overlappingRequests;
 		}
 
-		public void Remove(IEnumerable<Guid> absenceRequests)
+		public void Remove(DateTime sent)
 		{
-			absenceRequests.ForEach(x =>
+			var sentRequests = _queuedRequests.Where(y => y.Sent == sent).ToList();
+			foreach (var request in sentRequests)
 			{
-				_queuedRequests.Remove(Load(x));
-			});
+				_queuedRequests.Remove(request);
+			}
 		}
 
 		public void Send(List<Guid> requestId, DateTime timeStamp)

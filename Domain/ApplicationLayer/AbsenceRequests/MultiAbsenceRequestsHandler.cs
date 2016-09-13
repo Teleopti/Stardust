@@ -17,22 +17,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(MultiAbsenceRequestsHandler));
 		private readonly IPersonRequestRepository _personRequestRepository;
-		private List<IPersonRequest> _personRequests;
 		private readonly IMultiAbsenceRequestProcessor _absenceRequestProcessor;
 		private static readonly isNullOrNotNewSpecification personRequestSpecification = new isNullOrNotNewSpecification();
 		private static readonly isNullSpecification absenceRequestSpecification = new isNullSpecification();
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly IStardustJobFeedback _feedback;
+		private readonly IWorkflowControlSetRepository _workflowControlSetRepository;
+		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
 
 
 
 		public MultiAbsenceRequestsHandler(IPersonRequestRepository personRequestRepository,
-			IMultiAbsenceRequestProcessor absenceRequestProcessor, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IStardustJobFeedback stardustJobFeedback)
+			IMultiAbsenceRequestProcessor absenceRequestProcessor, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IStardustJobFeedback stardustJobFeedback, IWorkflowControlSetRepository workflowControlSetRepository, IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository)
 		{
 			_personRequestRepository = personRequestRepository;
 			_absenceRequestProcessor = absenceRequestProcessor;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_feedback = stardustJobFeedback;
+			_workflowControlSetRepository = workflowControlSetRepository;
+			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
 
 			if (logger.IsInfoEnabled)
 			{
@@ -43,23 +46,42 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		[AsSystem]
 		public virtual void Handle(NewMultiAbsenceRequestsCreatedEvent @event)
 		{
-			checkPersonRequest(@event.PersonRequestIds);
+			var personRequests = checkPersonRequest(@event);
 			_feedback.SendProgress?.Invoke("Done Checking Person Requests.");
-			if (!_personRequests.IsNullOrEmpty())
-				_absenceRequestProcessor.ProcessAbsenceRequest(_personRequests);
-		}
+			if (!personRequests.IsNullOrEmpty())
+				_absenceRequestProcessor.ProcessAbsenceRequest(personRequests);
 
-
-		private void checkPersonRequest(List<Guid> personRequestIds)
-		{
-			using (var uow =_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				_personRequests = new List<IPersonRequest>();
+				_queuedAbsenceRequestRepository.Remove(@event.Sent);
+				uow.PersistAll();
+			}
+		}
+		
+		private List<IPersonRequest> checkPersonRequest(NewMultiAbsenceRequestsCreatedEvent @event)
+		{
+			DateTime min = DateTime.MaxValue;
+			DateTime max = DateTime.MinValue;
+			var requests = new List<IPersonRequest>();
 
+			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
+				var wfcs = _workflowControlSetRepository.LoadAll();
+				if (wfcs.Any(x => x.AbsenceRequestWaitlistEnabled))
+				{
+					var queuedRequests = _queuedAbsenceRequestRepository.LoadAll().Where(x => x.Sent == @event.Sent);
+
+					foreach (var request in queuedRequests)
+					{
+						if (request.StartDateTime < min)
+							min = request.StartDateTime;
+						if (request.EndDateTime > max)
+							max = request.EndDateTime;
+					}
+				}
 				
-				var personRequests = _personRequestRepository.Find(personRequestIds);
-				DateTime min = DateTime.MaxValue;
-				DateTime max = DateTime.MinValue;
+				var personRequests = _personRequestRepository.Find(@event.PersonRequestIds);
+
 				foreach (var personRequest in personRequests)
 				{
 					if (personRequestSpecification.IsSatisfiedBy(personRequest))
@@ -82,25 +104,28 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					else
 					{
 						personRequest.Pending();
-						_personRequests.Add(personRequest);
+						requests.Add(personRequest);
 					}
 						
 				}
-				if (_personRequests.Any())
+				if (requests.Any())
 				{
-					min = _personRequests.Min(x => x.Request.Period.StartDateTime);
-					max = _personRequests.Max(x => x.Request.Period.EndDateTime);
+					if(requests.Min(x => x.Request.Period.StartDateTime) < min)
+						min = requests.Min(x => x.Request.Period.StartDateTime);
+					if(requests.Max(x => x.Request.Period.EndDateTime) > max)
+						max = requests.Max(x => x.Request.Period.EndDateTime);
 				}
 				
 				if (max > min)
 				{
 					DateTimePeriod period = new DateTimePeriod(min, max);
 					var waitListIds = _personRequestRepository.GetWaitlistRequests(period).ToList();
-					_personRequests.AddRange(_personRequestRepository.Find(waitListIds));
+					requests.AddRange(_personRequestRepository.Find(waitListIds));
 				}
 
 				uow.PersistAll();
 			}
+			return requests;
 		}
 
 		private class isNullOrNotNewSpecification : Specification<IPersonRequest>

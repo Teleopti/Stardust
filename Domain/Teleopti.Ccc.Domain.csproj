@@ -169,7 +169,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\INewAbsenceRequestHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IRunRequestWaitlistEventMessage.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\MultiAbsenceRequestsHandler.cs" />
-    <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceRequestUseMultiHandler.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\QueuedAbsenceRequestHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandler.cs" />
     <Compile Include="ApplicationLayer\Badge\ILogObjectDateChecker.cs" />
     <Compile Include="ApplicationLayer\Badge\LogObjectDateChecker.cs" />

@@ -45,7 +45,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly IStardustJobFeedback _feedback;
 		private readonly ArrangeRequestsByProcessOrder _arrangeRequestsByProcessOrder;
-		private readonly IEventPublisher _eventPublisher;
 
 		public MultiAbsenceRequestsUpdater(IResourceCalculationPrerequisitesLoader prereqLoader, 
 			ICurrentScenario scenarioRepository,
@@ -61,7 +60,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, 
 			ICommandDispatcher commandDispatcher,
 			IStardustJobFeedback feedback, 
-			ArrangeRequestsByProcessOrder arrangeRequestsByProcessOrder, IEventPublisher eventPublisher)
+			ArrangeRequestsByProcessOrder arrangeRequestsByProcessOrder)
 		{
 			_prereqLoader = prereqLoader;
 			_scenarioRepository = scenarioRepository;
@@ -78,7 +77,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			_commandDispatcher = commandDispatcher;
 			_feedback = feedback;
 			_arrangeRequestsByProcessOrder = arrangeRequestsByProcessOrder;
-			_eventPublisher = eventPublisher;
 		}
 
 		public void UpdateAbsenceRequest(List<IPersonRequest> personRequests,
@@ -118,7 +116,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 						{
 							sendRequestCommand(personRequest);
 							uow.PersistAll();
-							_eventPublisher.Publish(new PersonRequestProcessedEvent() {PersonRequestId = personRequest.Id.GetValueOrDefault()});
 							break;
 						}
 					}

@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using NHibernate;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -42,11 +39,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		}
 
 
-		public void Remove(IEnumerable<Guid> absenceRequests)
+		public void Remove(DateTime sentTimeStamp)
 		{
-			var hql = @"DELETE FROM QueuedAbsenceRequest WHERE personRequest in (:absenceRequests)";
+			var hql = @"DELETE FROM QueuedAbsenceRequest WHERE Sent = :sent";
 			var sqlQuery = Session.CreateSQLQuery(hql);
-			sqlQuery.SetParameterList("absenceRequests", absenceRequests.ToArray());
+			sqlQuery.SetDateTime("sent", sentTimeStamp);
 			sqlQuery.ExecuteUpdate();
 		}
 

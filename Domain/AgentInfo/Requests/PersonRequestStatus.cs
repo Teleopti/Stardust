@@ -1,6 +1,7 @@
 namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
-	public enum PersonRequestStatus
+	public enum 
+		PersonRequestStatus
 	{
 		Pending,
 		Denied,
