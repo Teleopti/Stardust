@@ -48,7 +48,9 @@ namespace Teleopti.Ccc.Domain.Intraday
 				{
 					StartTime = TimeZoneHelper.ConvertFromUtc(s.First().StartTime, _timeZone.TimeZone()),
 					Agents = s.Sum(a => a.Agents)
-				}).ToList();
+				})
+				.OrderBy(o => o.StartTime)
+				.ToList();
 
 			var staffingForUsersToday = forecastedStaffingModel.StaffingIntervals
 												.Where(t => t.StartTime >= usersToday.Date && t.StartTime < usersToday.Date.AddDays(1))
