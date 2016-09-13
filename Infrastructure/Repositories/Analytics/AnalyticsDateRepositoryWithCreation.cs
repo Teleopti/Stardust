@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			return AnalyticsDate.Eternity;
 		}
 
-		public new IAnalyticsDate Date(DateTime dateDate)
+		public IAnalyticsDate Date(DateTime dateDate)
 		{
 			return base.Date(dateDate) ?? createDatesTo(dateDate);
 		}
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			using (_distributedLockAcquirer.LockForTypeOf(new dimDateCreationLock()))
 			{
 				// Check again to see that we still don't have the date after aquiring the lock
-				var date = base.Date(dateDate);
+				var date = base.Date(dateDate, true);
 				if (date != null) return date;
 				var currentMax = base.MaxDate() ?? new AnalyticsDate {DateDate = new DateTime(1999, 12, 30)};
 				var currentDay = currentMax.DateDate;

@@ -44,7 +44,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Dates
 				var toBeAdded = new List<AnalyticsBridgeTimeZone>();
 				foreach (var date in dates)
 				{
-					var localDate = TimeZoneInfo.ConvertTimeFromUtc(date.DateDate, timeZoneInfo);
 					foreach (var interval in intervals)
 					{
 						var bridge = new AnalyticsBridgeTimeZone(date.DateId, interval.IntervalId, timezone.TimeZoneId);
@@ -54,7 +53,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Dates
 						}
 						else
 						{
-							var localTime = localDate + interval.Offset;
+							var localTime = TimeZoneInfo.ConvertTimeFromUtc(date.DateDate + interval.Offset, timeZoneInfo);
 							var acceptable = bridge.FillLocals(intervalDictionary, dateDictionary, localTime);
 							if (!acceptable)
 								continue; // If we can't set a local date or interval because they don't exist, ignore this item

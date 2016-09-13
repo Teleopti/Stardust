@@ -13,6 +13,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public AnalyticsDateRepository(ICurrentAnalyticsUnitOfWork analyticsUnitOfWork) : base(analyticsUnitOfWork)
 		{
 		}
+
+		public IAnalyticsDate Date(DateTime dateDate)
+		{
+			return base.Date(dateDate);
+		}
 	}
 
 	public abstract class AnalyticsDateRepositoryBase
@@ -55,13 +60,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.UniqueResult<IAnalyticsDate>();
 		}
 
-		public IAnalyticsDate Date(DateTime dateDate)
+		public IAnalyticsDate Date(DateTime dateDate, bool readUncommitted=false)
 		{
+			var lockMode = readUncommitted ? "WITH (READUNCOMMITTED)" : noLock;
 			return AnalyticsUnitOfWork.Current().Session().CreateSQLQuery(
 				$@"SELECT 
 						date_id {nameof(IAnalyticsDate.DateId)}, 
 						date_date {nameof(IAnalyticsDate.DateDate)} 
-					FROM mart.dim_date {noLock}
+					FROM mart.dim_date {lockMode}
 					WHERE date_date=:{nameof(dateDate)}")
 				.SetDateTime(nameof(dateDate), dateDate.Date)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsDate)))

@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Analytics
 		protected virtual DateTime UpdateDate { get; set; } = DateTime.UtcNow;
 
 
-		public bool FillLocals(IDictionary<TimeSpan, AnalyticsInterval> intervals, IDictionary<DateTime, IAnalyticsDate> dates,
+		public virtual bool FillLocals(IDictionary<TimeSpan, AnalyticsInterval> intervals, IDictionary<DateTime, IAnalyticsDate> dates,
 			DateTime localTime)
 		{
 			AnalyticsInterval localInterval;
