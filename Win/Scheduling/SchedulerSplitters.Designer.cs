@@ -706,7 +706,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.tabPageAdvValidationAlerts.Size = new System.Drawing.Size(434, 651);
 			this.tabPageAdvValidationAlerts.TabFont = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold);
 			this.tabPageAdvValidationAlerts.TabIndex = 13;
-			this.tabPageAdvValidationAlerts.TabVisible = false;
 			this.tabPageAdvValidationAlerts.Text = "xxValidationAlerts";
 			this.tabPageAdvValidationAlerts.ThemesEnabled = false;
 			// 

@@ -117,11 +117,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 					if ((string)item.Tag == validationAlert.TypeName && item.Checked)
 					{
-						var listItem = listView1.Items.Add(validationAlert.Date.ToShortDateString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture));
+						var listItem = new ListViewItem {Text = validationAlert.Date.ToShortDateString(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture)};
 						listItem.SubItems.Add(validationAlert.PersonName);
 						listItem.SubItems.Add(validationAlert.Alert);
 						listItem.Tag = new Tuple<DateOnly, IPerson>(validationAlert.Date, validationAlert.Person);
 						listItem.ToolTipText = validationAlert.Alert;
+						listView1.Items.Add(listItem);
 						break;
 					}
 				}
@@ -219,14 +220,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public int Compare(object x, object y)
 		{
-			var subItemCountx = ((ListViewItem) x).SubItems.Count;
-			if (_col > subItemCountx - 1)
+			var ix = x as ListViewItem;
+			var iy = y as ListViewItem;
+			if (iy == null || ix == null)
 				return 0;
-			var subItemCounty = ((ListViewItem)y).SubItems.Count;
-			if (_col > subItemCounty - 1)
+
+			if (ix.SubItems.Count <= _col || iy.SubItems.Count <= _col)
 				return 0;
-			var returnVal = string.Compare(((ListViewItem)x).SubItems[_col].Text,
-				((ListViewItem)y).SubItems[_col].Text,StringComparison.InvariantCultureIgnoreCase);
+
+			int returnVal = string.CompareOrdinal(ix.SubItems[_col].Text, iy.SubItems[_col].Text);
+
 			if (_order == SortOrder.Descending)
 				returnVal *= -1;
 
