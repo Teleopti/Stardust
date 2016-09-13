@@ -452,7 +452,7 @@
 }
 
 .request-date-container {
-	width: 43%;
+	width: 54%;
 }
 
 .request-time-container {
@@ -462,6 +462,8 @@
 
 .request-list-filter {
     margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
 }
 
 .shift-trade-dayoff{
@@ -628,4 +630,13 @@ input[type=search]::-ms-clear {
 	width:100px;
 	display:inline-block;
 	margin-top:22px;
+}
+
+@media (max-width: 767px)  {
+    .request-edit .col-xs-8 {
+        width: 100%;
+    }
+    .full-day-label {
+	    max-width: 100px;
+    }
 }
