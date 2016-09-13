@@ -99,7 +99,7 @@
 								hide: hiddenArray,
 								names: {
 									Forecasted_staffing: $translate.instant('ForecastedStaff') + ' ←',
-									Updated_forecasted_staffing: 'xxUpdated Forecasted Staffing' + ' ←'
+									Updated_forecasted_staffing: $translate.instant('ReforecastedStaff') + ' ←'
 								}
 							},
 							axis: {

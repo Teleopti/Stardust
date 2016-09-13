@@ -14939,4 +14939,8 @@ These options are activated:
     <value>All Sites</value>
     <comment>use in MyTime shift trade site selector, when user choose this, it will show all of the agents in permitted sites</comment>
   </data>
+  <data name="ReforecastedStaff" xml:space="preserve">
+    <value>Reforecasted Staff</value>
+    <comment>Reforecasted staff in web intraday</comment>
+  </data>
 </root>

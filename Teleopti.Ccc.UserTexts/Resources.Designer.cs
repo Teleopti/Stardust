@@ -22612,6 +22612,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reforecasted Staff.
+        /// </summary>
+        public static string ReforecastedStaff {
+            get {
+                return ResourceManager.GetString("ReforecastedStaff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Refresh.
         /// </summary>
         public static string Refresh {
