@@ -130,13 +130,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				}).ForEach(Rta.SaveStateBatch);
 			
 			var results = (
-				from transactions in new[] {3, 6, 7, 8, 30}
-				from size in new[] {50, 95, 100, 105, 300}
+				from transactions in new[] {6, 7, 8}
+				from size in new[] {90, 100, 110}
 				from variation in new[] {"A", "B", "C"}
 				select new {transactions, size, variation}).Select(x =>
 				{
-					Config.FakeSetting("RtaParallelTransactions", x.transactions.ToString());
-					Config.FakeSetting("RtaMaxTransactionSize", x.size.ToString());
+					Config.FakeSetting("RtaActivityChangesParallelTransactions", x.transactions.ToString());
+					Config.FakeSetting("RtaActivityChangesMaxTransactionSize", x.size.ToString());
 
 					var timer = new Stopwatch();
 					timer.Start();

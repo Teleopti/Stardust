@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -47,15 +48,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				return null;
 			});
 			_timeWindowCheckSum = new Lazy<int>(() => ActivitiesInTimeWindow().CheckSum());
-			_timeWindowActivities = new Lazy<IEnumerable<ScheduledActivity>>(() =>
-			{
-				var timeWindowStart = _currentTime.AddHours(-1);
-				var timeWindowEnd = _currentTime.AddHours(3);
-				return from a in _schedule.Value
-					   where a.EndDateTime > timeWindowStart
-					   where a.StartDateTime < timeWindowEnd
-					   select a;
-			});
+			_timeWindowActivities = new Lazy<IEnumerable<ScheduledActivity>>(() => ActivitiesInTimeWindow(_schedule.Value, _currentTime));
 		}
 
 		public int? TimeWindowCheckSum()
@@ -195,6 +188,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 
+
+
 		public static ScheduledActivity ActivityForTime(IEnumerable<ScheduledActivity> schedule, DateTime time)
 		{
 			return schedule.FirstOrDefault(l => time >= l.StartDateTime && time < l.EndDateTime);
@@ -208,6 +203,56 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public static ScheduledActivity NextActivity(IEnumerable<ScheduledActivity> schedule, DateTime time)
 		{
 			return schedule.FirstOrDefault(l => l.StartDateTime > time);
+		}
+
+		public static IEnumerable<ScheduledActivity> ActivitiesInTimeWindow(IEnumerable<ScheduledActivity> schedule, DateTime now)
+		{
+			return ActivitiesBetween(schedule, TimeWindowStart(now), TimeWindowEnd(now));
+		}
+
+		public static DateTime TimeWindowStart(DateTime now)
+		{
+			return now.AddHours(-1);
+		}
+
+		public static DateTime TimeWindowEnd(DateTime now)
+		{
+			return now.AddHours(3);
+		}
+
+		public static IEnumerable<ScheduledActivity> ActivitiesBetween(IEnumerable<ScheduledActivity> schedule, DateTime start, DateTime end)
+		{
+			return from a in schedule
+				   where a.EndDateTime > start
+				   where a.StartDateTime <= end
+				   select a;
+		}
+
+		public static IEnumerable<ScheduledActivity> AllAdjecentTo(IEnumerable<ScheduledActivity> schedule, IEnumerable<ScheduledActivity> adjecentTo)
+		{
+			return adjecentTo
+				.SelectMany(activity =>
+				{
+					var result = Enumerable.Empty<ScheduledActivity>();
+
+					var before = activity;
+					while (before != null)
+					{
+						before = schedule.SingleOrDefault(x => x != before && x.EndDateTime == before.StartDateTime);
+						result = result.Concat(new[] {before});
+					}
+
+					var after = activity;
+					while (after != null)
+					{
+						after = schedule.SingleOrDefault(x => x != after && x.StartDateTime == after.EndDateTime);
+						result = result.Concat(new[] {after});
+					}
+
+					return result;
+				})
+				.Where(x => x != null)
+				.ToArray();
 		}
 
 	}

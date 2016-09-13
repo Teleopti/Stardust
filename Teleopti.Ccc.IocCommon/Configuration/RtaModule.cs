@@ -24,8 +24,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
-
-
 			builder.RegisterType<Rta>().SingleInstance().ApplyAspects();
 			builder.RegisterType<RtaInitializor>().SingleInstance();
 			builder.RegisterType<TenantsInitializedInRta>().SingleInstance();
@@ -70,6 +68,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					builder.RegisterType<StateCodeAdder>().As<IStateCodeAdder>().SingleInstance().ApplyAspects();
 				builder.RegisterType<ContextLoader>().As<IContextLoader>().ApplyAspects().SingleInstance();
 			}
+			if (_config.Toggle(Toggles.RTA_ScheduleQueryOptimizationFilteredCache_40260))
+				builder.RegisterType<Filtered>().As<IScheduleCacheStrategy>().SingleInstance();
+			else
+				builder.RegisterType<ThreeDays>().As<IScheduleCacheStrategy>().SingleInstance();
 
 			_config.Cache().This<IDatabaseLoader>((c, b) => b
 				.CacheMethod(x => x.Datasources())

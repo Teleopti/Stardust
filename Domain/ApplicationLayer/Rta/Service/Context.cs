@@ -24,18 +24,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 	}
 
-	public class ScheduleState
-	{
-		public ScheduleState(IEnumerable<ScheduledActivity> schedules, bool cacheSchedules)
-		{
-			Schedules = schedules;
-			CacheSchedules = cacheSchedules;
-		}
-
-		public IEnumerable<ScheduledActivity> Schedules { get; } 
-		public bool CacheSchedules { get; }
-	}
-	
 	public class Context
 	{
 		private readonly Action<Context> _updateState;

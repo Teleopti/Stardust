@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Aop;
@@ -14,6 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class ContextLoaderWithScheduleOptimization : ContextLoader
 	{
+		private readonly IScheduleCacheStrategy _scheduleCacheStrategy;
 		private readonly IConfigReader _config;
 
 		public class scheduleData : ScheduleState
@@ -34,8 +34,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			public IEnumerable<AgentStateFound> agentStates;
 		}
 
-		public ContextLoaderWithScheduleOptimization(IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper, IAgentStatePersister agentStatePersister, IMappingReader mappingReader, IDatabaseReader databaseReader, IScheduleProjectionReadOnlyReader scheduleProjectionReadOnlyReader, AppliedAdherence appliedAdherence, ProperAlarm appliedAlarm, IConfigReader config) : base(databaseLoader, now, stateMapper, agentStatePersister, mappingReader, databaseReader, scheduleProjectionReadOnlyReader, appliedAdherence, appliedAlarm)
+		public ContextLoaderWithScheduleOptimization(IScheduleCacheStrategy scheduleCacheStrategy, IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper, IAgentStatePersister agentStatePersister, IMappingReader mappingReader, IDatabaseReader databaseReader, IScheduleProjectionReadOnlyReader scheduleProjectionReadOnlyReader, AppliedAdherence appliedAdherence, ProperAlarm appliedAlarm, IConfigReader config) : base(databaseLoader, now, stateMapper, agentStatePersister, mappingReader, databaseReader, scheduleProjectionReadOnlyReader, appliedAdherence, appliedAlarm)
 		{
+			_scheduleCacheStrategy = scheduleCacheStrategy;
 			_config = config;
 		}
 
@@ -56,19 +57,26 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					.Select(x => new InvalidUserCodeException($"No person found for UserCode {x}, DataSourceId {dataSourceId}, SourceId {batch.SourceId}"))
 					.ForEach(exceptions.Add);
 
-				var schedules = agentStates
+				var validated = agentStates
 					.GroupBy(x => x.PersonId, (_, states) => states.First())
-					.Where(x => scheduleIsValid(x, now))
-					.Select(x => new scheduleData(x.Schedule, false, x.PersonId));
-				var loadSchedulesFor = agentStates
-					.Where(x => !scheduleIsValid(x, now))
-					.Select(x => x.PersonId)
+					.Select(x => new
+					{
+						state = x,
+						valid = _scheduleCacheStrategy.ValidateCached(x, now)
+					})
+					.ToArray();
+				var schedules = validated
+					.Where(x => x.valid)
+					.Select(x => new scheduleData(x.state.Schedule, false, x.state.PersonId));
+				var loadSchedulesFor = validated
+					.Where(x => !x.valid)
+					.Select(x => x.state.PersonId)
 					.ToArray();
 				if (loadSchedulesFor.Any())
 				{
 					var loaded = _scheduleProjectionReadOnlyReader.GetCurrentSchedules(now, loadSchedulesFor);
 					var loadedSchedules = loadSchedulesFor
-						.Select(x => new scheduleData(loaded.Where(l => l.PersonId == x).ToArray(), true, x));
+						.Select(x => new scheduleData(_scheduleCacheStrategy.FilterSchedules(loaded.Where(l => l.PersonId == x), now), true, x));
 					schedules = schedules.Concat(loadedSchedules);
 				}
 				schedules = schedules.ToArray();
@@ -310,21 +318,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private ScheduleState makeScheduleState(AgentState state, DateTime now)
 		{
-			var cached = scheduleIsValid(state, now);
+			var cached = _scheduleCacheStrategy.ValidateCached(state, now);
 			return new ScheduleState(
 				cached
 					? state.Schedule
-					: _scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, state.PersonId),
+					: _scheduleCacheStrategy.FilterSchedules(_scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, state.PersonId), now),
 				!cached);
 		}
-
-		private static bool scheduleIsValid(AgentState state, DateTime now)
-		{
-			if (state.Schedule == null)
-				return false;
-			if (now.Date != state.ReceivedTime.GetValueOrDefault().Date)
-				return false;
-			return true;
-		}
+		
 	}
 }

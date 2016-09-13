@@ -26,6 +26,7 @@
 		RTA_BatchQueryOptimization_40169,
 		RTA_PersonOrganizationQueryOptimization_40261,
 		RTA_ScheduleQueryOptimization_40260,
+		RTA_ScheduleQueryOptimizationFilteredCache_40260,
 		RTA_ConnectionQueryOptimizeAllTheThings_40262,
 		RTA_RemoveSiteTeamOutOfAdherenceReadModels_40069,
 

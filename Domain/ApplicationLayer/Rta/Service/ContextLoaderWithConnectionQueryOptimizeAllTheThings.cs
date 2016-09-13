@@ -8,17 +8,18 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Interfaces.Domain;
-using AggregateException = System.AggregateException;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class ContextLoaderWithConnectionQueryOptimizeAllTheThings : ContextLoader
 	{
+		private readonly IScheduleCacheStrategy _scheduleCacheStrategy;
 		private readonly ICurrentDataSource _dataSource;
 		private readonly IConfigReader _config;
 
-		public ContextLoaderWithConnectionQueryOptimizeAllTheThings(ICurrentDataSource dataSource, IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper, IAgentStatePersister agentStatePersister, IMappingReader mappingReader, IDatabaseReader databaseReader, IScheduleProjectionReadOnlyReader scheduleProjectionReadOnlyReader, AppliedAdherence appliedAdherence, ProperAlarm appliedAlarm, IConfigReader config) : base(databaseLoader, now, stateMapper, agentStatePersister, mappingReader, databaseReader, scheduleProjectionReadOnlyReader, appliedAdherence, appliedAlarm)
+		public ContextLoaderWithConnectionQueryOptimizeAllTheThings(IScheduleCacheStrategy scheduleCacheStrategy, ICurrentDataSource dataSource, IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper, IAgentStatePersister agentStatePersister, IMappingReader mappingReader, IDatabaseReader databaseReader, IScheduleProjectionReadOnlyReader scheduleProjectionReadOnlyReader, AppliedAdherence appliedAdherence, ProperAlarm appliedAlarm, IConfigReader config) : base(databaseLoader, now, stateMapper, agentStatePersister, mappingReader, databaseReader, scheduleProjectionReadOnlyReader, appliedAdherence, appliedAlarm)
 		{
+			_scheduleCacheStrategy = scheduleCacheStrategy;
 			_dataSource = dataSource;
 			_config = config;
 		}
@@ -28,7 +29,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			process(new singleStrategy(_config, _agentStatePersister, action, _databaseLoader, input));
 		}
 
-		private class singleStrategy : baseStrategy<StateInputModel> {
+		public override void ForBatch(BatchInputModel batch, Action<Context> action)
+		{
+			process(new batchStrategy(_config, _agentStatePersister, _databaseLoader, action, batch));
+		}
+
+		public override void ForActivityChanges(Action<Context> action)
+		{
+			var personIds = WithUnitOfWork(() => _agentStatePersister.GetAllPersonIds());
+			process(new activityChangesStrategy(_config, _agentStatePersister, action, personIds));
+		}
+
+		public override void ForSynchronize(Action<Context> action)
+		{
+			var personIds = WithUnitOfWork(() =>
+				_agentStatePersister.GetStates()
+					.Where(x => x.StateCode != null)
+					.Select(x => x.PersonId)
+					.ToArray()
+				);
+			process(new synchronizeStrategy(_config, _agentStatePersister, action, personIds));
+		}
+
+		private class singleStrategy : baseStrategy<StateInputModel>
+		{
 			private readonly IDatabaseLoader _databaseLoader;
 			private readonly StateInputModel _model;
 
@@ -42,7 +66,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			public override IEnumerable<StateInputModel> AllThings()
 			{
-				return new[] {_model};
+				return new[] { _model };
 			}
 
 			public override IEnumerable<AgentState> GetStatesFor(IEnumerable<StateInputModel> things, Action<Exception> addException)
@@ -77,11 +101,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					StateDescription = _model.StateDescription
 				};
 			}
-		}
-
-		public override void ForBatch(BatchInputModel batch, Action<Context> action)
-		{
-			process(new batchStrategy(_config, _agentStatePersister, _databaseLoader, action, batch));
 		}
 
 		private class batchStrategy : baseStrategy<BatchStateInputModel>
@@ -130,12 +149,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				};
 			}
 
-		}
-
-		public override void ForActivityChanges(Action<Context> action)
-		{
-			var personIds = WithUnitOfWork(() => _agentStatePersister.GetAllPersonIds());
-			process(new activityChangesStrategy(_config, _agentStatePersister, action, personIds));
 		}
 
 		private class activityChangesStrategy : baseStrategy<Guid>
@@ -203,17 +216,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					SnapshotId = _snapshotId
 				};
 			}
-		}
-
-		public override void ForSynchronize(Action<Context> action)
-		{
-			var personIds = WithUnitOfWork(() =>
-				_agentStatePersister.GetStates()
-					.Where(x => x.StateCode != null)
-					.Select(x => x.PersonId)
-					.ToArray()
-				);
-			process(new synchronizeStrategy(_config, _agentStatePersister, action, personIds));
 		}
 
 		private class synchronizeStrategy : baseStrategy<Guid>
@@ -357,19 +359,26 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						var agentStates = strategy.GetStatesFor(someThings, exceptions.Add);
 						var now = shared.Value.now;
 
-						var schedules = agentStates
+						var validated = agentStates
 							.GroupBy(x => x.PersonId, (_, states) => states.First())
-							.Where(x => scheduleIsValid(x, now))
-							.Select(x => new scheduleData(x.Schedule, false, x.PersonId));
-						var loadSchedulesFor = agentStates
-							.Where(x => !scheduleIsValid(x, now))
-							.Select(x => x.PersonId)
+							.Select(x => new
+							{
+								state = x,
+								valid = _scheduleCacheStrategy.ValidateCached(x, now)
+							})
+							.ToArray();
+						var schedules = validated
+							.Where(x => x.valid)
+							.Select(x => new scheduleData(x.state.Schedule, false, x.state.PersonId));
+						var loadSchedulesFor = validated
+							.Where(x => !x.valid)
+							.Select(x => x.state.PersonId)
 							.ToArray();
 						if (loadSchedulesFor.Any())
 						{
 							var loaded = _scheduleProjectionReadOnlyReader.GetCurrentSchedules(now, loadSchedulesFor);
 							var loadedSchedules = loadSchedulesFor
-								.Select(x => new scheduleData(loaded.Where(l => l.PersonId == x).ToArray(), true, x));
+								.Select(x => new scheduleData(_scheduleCacheStrategy.FilterSchedules(loaded.Where(l => l.PersonId == x), now), true, x));
 							schedules = schedules.Concat(loadedSchedules);
 						}
 						schedules = schedules.ToArray();
@@ -395,7 +404,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			if (exceptions.Count == 1)
 				throw exceptions.First();
 			if (exceptions.Any())
-				throw new AggregateException(exceptions);
+				throw new System.AggregateException(exceptions);
 		}
 
 		[TenantScope]
@@ -441,23 +450,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return exceptions;
 		}
 
-		private ScheduleState makeScheduleState(AgentState state, DateTime now)
-		{
-			var cached = scheduleIsValid(state, now);
-			return new ScheduleState(
-				cached
-					? state.Schedule
-					: _scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, state.PersonId),
-				!cached);
-		}
-
-		private static bool scheduleIsValid(AgentState state, DateTime now)
-		{
-			if (state.Schedule == null)
-				return false;
-			if (now.Date != state.ReceivedTime.GetValueOrDefault().Date)
-				return false;
-			return true;
-		}
 	}
+
 }

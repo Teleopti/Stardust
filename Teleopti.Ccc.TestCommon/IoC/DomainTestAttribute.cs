@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_BatchQueryOptimization_40169)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_PersonOrganizationQueryOptimization_40261)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_ScheduleQueryOptimization_40260)]
+	[Toggle(Domain.FeatureFlags.Toggles.RTA_ScheduleQueryOptimizationFilteredCache_40260)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_ConnectionQueryOptimizeAllTheThings_40262)]
 	public class DomainTestAttribute : IoCTestAttribute
 	{
