@@ -26,8 +26,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I click '(.*)' at end time drop down button")]
 		public void ThenIClickAtEndTimeDropDownButton(string p0)
 		{
-			Browser.Interactions.ClickUsingJQuery(".row .filter-time-dropdown-button .dropdown-toggle:contains('Sluttid')");
-			Browser.Interactions.ClickUsingJQuery(".filter-time-dropdown-button .end-time-sort-order .glyphicon-arrow-up:nth-child(1)");
+			Browser.Interactions.ClickContaining(".row .filter-time-dropdown-button .dropdown-toggle", "Sluttid");
+			Browser.Interactions.Click(".filter-time-dropdown-button .end-time-sort-order .glyphicon-arrow-up");
 		}
 
 		[When(@"I navigate to the requests page")]
