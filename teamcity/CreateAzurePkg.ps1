@@ -55,19 +55,25 @@ task PreReq -depends init -description "Move/Copy preparation of files" {
 
 task CreateAzurePkg -depends Init, PreReq -description "Create Azure Package" {
     
+	#Create Azure pkg
+    & $CSPackEXE "Azure\ServiceDefinition.csdef" `
+      "/role:TeleoptiCCC;..\TeleoptiCCC" `
+      "/rolePropertiesFile:TeleoptiCCC;Azure\AzureRoleProperties.txt" `
+      "/out:$AzurePackagePath"
+	
+	#Create Azure Large pkg
+	& $CSPackEXE "Azure\ServiceDefinition_Large.csdef" `
+	  "/role:TeleoptiCCC;..\TeleoptiCCC" `
+	  "/rolePropertiesFile:TeleoptiCCC;Azure\AzureRoleProperties.txt" `
+	  "/out:$AzurePackagePath_Large" 
+	
 	<#Create Azure Pkg
 	$Arg = @("Azure\ServiceDefinition.csdef", '/role:TeleoptiCCC;Azure\TeleoptiCCC', '/rolePropertiesFile:TeleoptiCCC;Azure\AzureRoleProperties.txt', "/out:$AzurePackagePath")
     & $CSPackEXE $Arg #>
 	
-	#Create Azure Pkg
-    & $CSPackEXE "Azure\ServiceDefinition.csdef" `
-      "/role:TeleoptiCCC;Azure\TeleoptiCCC" `
-      "/rolePropertiesFile:TeleoptiCCC;Azure\AzureRoleProperties.txt" `
-      "/out:$AzurePackagePath"
-	
-	#Create Azure Pkg Large version
+	<#Create Azure Pkg Large version
 	$Arg = @('Azure\ServiceDefinition_Large.csdef', '/role:TeleoptiCCC;Azure\TeleoptiCCC', '/rolePropertiesFile:TeleoptiCCC;Azure\AzureRoleProperties.txt', "/out:$AzurePackagePath_Large")
-	& $CSPackEXE $Arg
+	& $CSPackEXE $Arg #>
 }
 
 task PostReq -depends Init, PreReq, CreateAzurePkg -description "PostReq steps" {
