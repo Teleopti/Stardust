@@ -8,8 +8,8 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Dates
 {
-	public class AnalyticsDateChangedHandler : 
-		IHandleEvent<AnalyticsDatesChangedEvent>, 
+	public class AnalyticsDateChangedHandler :
+		IHandleEvent<AnalyticsDatesChangedEvent>,
 		IRunOnHangfire
 	{
 		private readonly IAnalyticsIntervalRepository _analyticsIntervalRepository;
@@ -39,59 +39,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Dates
 			foreach (var timezone in timezones)
 			{
 				var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timezone.TimeZoneCode);
-				var existingBridges = _analyticsBridgeTimeZoneRepository
-					.GetBridges(timezone.TimeZoneId)
-					.ToDictionary(x => new bridgeKey(x.TimeZoneId, x.DateId, x.IntervalId), x => x);
+				var existingBridges = new HashSet<AnalyticsBridgeTimeZone>(_analyticsBridgeTimeZoneRepository
+					.GetBridges(timezone.TimeZoneId));
 				var toBeAdded = new List<AnalyticsBridgeTimeZone>();
 				foreach (var date in dates)
 				{
 					var localDate = TimeZoneInfo.ConvertTimeFromUtc(date.DateDate, timeZoneInfo);
 					foreach (var interval in intervals)
 					{
-						if (existingBridges.ContainsKey(new bridgeKey(timezone.TimeZoneId, date.DateId, interval.IntervalId)))
+						var bridge = new AnalyticsBridgeTimeZone(date.DateId, interval.IntervalId, timezone.TimeZoneId);
+						if (existingBridges.Contains(bridge))
 						{
 							// For now assume we do not need to change anything
 						}
 						else
 						{
 							var localTime = localDate + interval.Offset;
-							var bridge = AnalyticsBridgeTimeZone.Create(date.DateId, interval.IntervalId, timezone.TimeZoneId,
-								intervalDictionary, dateDictionary, localTime);
-
-							if (bridge == null) continue;
+							var acceptable = bridge.FillLocals(intervalDictionary, dateDictionary, localTime);
+							if (!acceptable)
+								continue; // If we can't set a local date or interval because they don't exist, ignore this item
 							toBeAdded.Add(bridge);
 						}
 					}
 				}
 				_analyticsBridgeTimeZoneRepository.Save(toBeAdded);
-			}
-		}
-
-		private class bridgeKey
-		{
-			private int timeZoneId { get; set; }
-			private int dateId { get; set; }
-			private int intervalId { get; set; }
-
-			public bridgeKey(int timezoneid, int dateid, int intervalid)
-			{
-				timeZoneId = timezoneid;
-				dateId = dateid;
-				intervalId = intervalid;
-			}
-
-			public override bool Equals(object obj)
-			{
-				var analyticsPermission = obj as bridgeKey;
-				if (analyticsPermission == null)
-					return false;
-				return dateId == analyticsPermission.dateId
-					   && intervalId == analyticsPermission.intervalId
-					   && timeZoneId == analyticsPermission.timeZoneId;
-			}
-			public override int GetHashCode()
-			{
-				return $"{dateId}|{intervalId}|{timeZoneId}".GetHashCode();
 			}
 		}
 	}

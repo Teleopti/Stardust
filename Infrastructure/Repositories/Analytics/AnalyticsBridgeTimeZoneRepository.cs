@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
@@ -17,15 +18,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public IList<AnalyticsBridgeTimeZone> GetBridges(int timeZoneId)
 		{
-			var query = _analyticsUnitOfWork.Current().Session().CreateCriteria<AnalyticsBridgeTimeZone>()
-				.Add(Restrictions.Eq(nameof(AnalyticsBridgeTimeZone.TimeZoneId), timeZoneId));
-
-			var result = query.List<AnalyticsBridgeTimeZone>();
-			return result;
+			return _analyticsUnitOfWork.Current().Session().CreateCriteria<AnalyticsBridgeTimeZone>()
+				.Add(Restrictions.Eq(nameof(AnalyticsBridgeTimeZone.TimeZoneId), timeZoneId))
+				.SetReadOnly(true)
+				.List<AnalyticsBridgeTimeZone>();
 		}
 
 		public void Save(IList<AnalyticsBridgeTimeZone> toBeAdded)
 		{
+			if (!toBeAdded.Any()) return;
 			using (var session = _analyticsUnitOfWork.Current().Session().SessionFactory.OpenStatelessSession())
 			using (var transaction = session.BeginTransaction())
 			{

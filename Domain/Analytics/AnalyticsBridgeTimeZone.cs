@@ -10,9 +10,13 @@ namespace Teleopti.Ccc.Domain.Analytics
 	{
 		public AnalyticsBridgeTimeZone()
 		{
-			DatasourceId = 1;
-			InsertDate = DateTime.UtcNow;
-			UpdateDate = DateTime.UtcNow;
+		}
+
+		public AnalyticsBridgeTimeZone(int dateId, int intervalId, int timeZoneId) : this()
+		{
+			DateId = dateId;
+			IntervalId = intervalId;
+			TimeZoneId = timeZoneId;
 		}
 
 		public virtual int DateId { get; set; }
@@ -20,27 +24,24 @@ namespace Teleopti.Ccc.Domain.Analytics
 		public virtual int TimeZoneId { get; set; }
 		public virtual int LocalDateId { get; set; }
 		public virtual int LocalIntervalId { get; set; }
-		protected virtual int DatasourceId { get; set; }
-		protected virtual DateTime InsertDate { get; set; }
-		protected virtual DateTime UpdateDate { get; set; }
+		protected virtual int DatasourceId { get; set; } = 1;
+		protected virtual DateTime InsertDate { get; set; } = DateTime.UtcNow;
+		protected virtual DateTime UpdateDate { get; set; } = DateTime.UtcNow;
 
-		public static AnalyticsBridgeTimeZone Create(int dateId, int intervalId, int timeZoneId, IDictionary<TimeSpan, AnalyticsInterval> intervals, IDictionary<DateTime, IAnalyticsDate> dates, DateTime localTime)
+
+		public bool FillLocals(IDictionary<TimeSpan, AnalyticsInterval> intervals, IDictionary<DateTime, IAnalyticsDate> dates,
+			DateTime localTime)
 		{
 			AnalyticsInterval localInterval;
 			if (!intervals.TryGetValue(localTime.TimeOfDay, out localInterval))
-				return null;
+				return false;
 			IAnalyticsDate localDate;
 			if (!dates.TryGetValue(localTime.Date, out localDate))
-				return null;
+				return false;
 
-			return new AnalyticsBridgeTimeZone
-			{
-				TimeZoneId = timeZoneId,
-				DateId = dateId,
-				IntervalId = intervalId,
-				LocalDateId = localDate.DateId,
-				LocalIntervalId = localInterval.IntervalId
-			};
+			LocalIntervalId = localInterval.IntervalId;
+			LocalDateId = localDate.DateId;
+			return true;
 		}
 
 		public override bool Equals(object obj)

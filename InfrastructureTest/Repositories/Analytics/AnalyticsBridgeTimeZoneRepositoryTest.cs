@@ -31,11 +31,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldAddBridgesAndGetByTimeZone()
 		{
-			var expected = new AnalyticsBridgeTimeZone
+			var expected = new AnalyticsBridgeTimeZone(1, 1, 0)
 				{
-					DateId = 1,
-					IntervalId = 1,
-					TimeZoneId = 0,
 					LocalIntervalId = 1,
 					LocalDateId = 1
 				};
