@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var usersToday = new DateOnly(usersNow);
 			var latestStatisticsTimeAndWorkload = _intradayQueueStatisticsLoader.LoadActualWorkloadInSeconds(skillIdList, _timeZone.TimeZone(), usersToday);
 			DateTime? latestStatsTime = null;
+
 			if (latestStatisticsTimeAndWorkload.LatestStatisticsIntervalId.HasValue)
 				latestStatsTime = usersNow.Date.AddMinutes(latestStatisticsTimeAndWorkload.LatestStatisticsIntervalId.Value*minutesPerInterval);
 
@@ -53,26 +54,14 @@ namespace Teleopti.Ccc.Domain.Intraday
 												.Where(t => t.StartTime >= usersToday.Date && t.StartTime < usersToday.Date.AddDays(1))
 												.ToArray();
 
-
-			List<double?> updatedForecastedSeries = new List<double?>();
-			if (latestStatisticsTimeAndWorkload.LatestStatisticsIntervalId.HasValue)
-			{
-				var workloadDeviationFactor = latestStatisticsTimeAndWorkload.ActualworkloadInSeconds / forecastedStaffingModel.WorkloadSeconds;
-
-				if (latestStatsTime > usersNow) // This case only for dev, test and demo
-					usersNow = latestStatsTime.Value.AddMinutes(minutesPerInterval);
-
-				updatedForecastedSeries = staffingForUsersToday
-					.Where(s => s.StartTime >= usersNow)
-					.Select(t => ((double?)t.Agents * workloadDeviationFactor))
-					.ToList();
-
-				var nullCount = staffingForUsersToday.Count() - updatedForecastedSeries.Count;
-				for (int i = 0; i < nullCount; i++)
-				{
-					updatedForecastedSeries.Insert(0, null);
-				}
-			}
+			var updatedForecastedSeries = getUpdatedForecastedStaffing(
+				staffingForUsersToday, 
+				latestStatisticsTimeAndWorkload.ActualworkloadInSeconds, 
+				forecastedStaffingModel.WorkloadSeconds,
+				latestStatsTime, 
+				usersNow, 
+				minutesPerInterval
+			);
 
 			return new IntradayStaffingViewModel()
 			{
@@ -88,6 +77,39 @@ namespace Teleopti.Ccc.Domain.Intraday
 								.ToArray()
 				}
 			};
+		}
+
+		private List<double?> getUpdatedForecastedStaffing(
+			StaffingIntervalModel[] staffingForUsersToday, 
+			int? actualworkloadInSeconds, 
+			double forecastedWorkloadSeconds, 
+			DateTime? latestStatsTime, 
+			DateTime usersNow, 
+			int minutesPerInterval)
+		{
+			var updatedForecastedSeries = new List<double?>();
+
+			if (!latestStatsTime.HasValue)
+				return updatedForecastedSeries;
+
+			var workloadDeviationFactor = actualworkloadInSeconds / forecastedWorkloadSeconds;
+
+			if (latestStatsTime > usersNow) // This case only for dev, test and demo
+				usersNow = latestStatsTime.Value.AddMinutes(minutesPerInterval);
+
+				
+			updatedForecastedSeries = staffingForUsersToday
+				.Where(s => s.StartTime >= usersNow)
+				.Select(t => ((double?)t.Agents * workloadDeviationFactor))
+				.ToList();
+
+			var nullCount = staffingForUsersToday.Count() - updatedForecastedSeries.Count;
+			for (int i = 0; i < nullCount; i++)
+			{
+				updatedForecastedSeries.Insert(0, null);
+			}
+
+			return updatedForecastedSeries;
 		}
 	}
 }
