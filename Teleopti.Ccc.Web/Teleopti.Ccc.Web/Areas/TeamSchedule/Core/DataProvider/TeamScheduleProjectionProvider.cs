@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Castle.Core.Internal;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
@@ -17,12 +21,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly IProjectionProvider _projectionProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IPersonNameProvider _personNameProvider;
+		private readonly IToggleManager _toggleManager;
 
-		public TeamScheduleProjectionProvider(IProjectionProvider projectionProvider, ILoggedOnUser loggedOnUser, IPersonNameProvider personNameProvider)
+		public TeamScheduleProjectionProvider(IProjectionProvider projectionProvider, ILoggedOnUser loggedOnUser, IPersonNameProvider personNameProvider, IToggleManager toggleManager)
 		{
 			_projectionProvider = projectionProvider;
 			_loggedOnUser = loggedOnUser;
 			_personNameProvider = personNameProvider;
+			_toggleManager = toggleManager;
 		}
 
 		public GroupScheduleShiftViewModel Projection(IScheduleDay scheduleDay, bool canViewConfidential, ICommonNameDescriptionSetting agentNameSetting)
@@ -71,50 +77,42 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					var isMainShiftLayer = layer.Payload is IActivity;
 					var isAbsenceConfidential = isPayloadAbsence && (layer.Payload as IAbsence).Confidential;
 					var startDateTimeInUserTimeZone = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime, userTimeZone);
-					var endDateTimeInUserTimeZone = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.EndDateTime, userTimeZone);
 
 					var description = isPayloadAbsence
 						? (isAbsenceConfidential && !canViewConfidential
 							? ConfidentialPayloadValues.Description
 							: ((IAbsence) layer.Payload).Description)
 						: layer.DisplayDescription();
-
-					projections.Add(new GroupScheduleProjectionViewModel
+					if (_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_MakePersonalActivityUnmerged_40252) && getMatchedShiftLayers(scheduleDay, layer).Count > 1 && getMatchedPersonalShiftLayers(scheduleDay, layer).Count > 0)
 					{
-						ParentPersonAbsences = isPayloadAbsence ? getMatchedAbsenceLayers(scheduleDay, layer).ToArray() : null,
-						ShiftLayerIds = isMainShiftLayer ? getMatchedMainShiftLayers(scheduleDay, layer).ToArray(): null,
-						Description = description.Name,
-						Color = isPayloadAbsence
+						projections.AddRange(splitMergedPersonalLayers(scheduleDay, layer, userTimeZone));
+					}
+					else
+					{
+						projections.Add(new GroupScheduleProjectionViewModel
+						{
+							ParentPersonAbsences = isPayloadAbsence ? getMatchedAbsenceLayers(scheduleDay, layer).ToArray() : null,
+							ShiftLayerIds = isMainShiftLayer ? getMatchedShiftLayers(scheduleDay, layer).ToArray() : null,
+							Description = description.Name,
+							Color = isPayloadAbsence
 							? (isAbsenceConfidential && !canViewConfidential
 								? ConfidentialPayloadValues.DisplayColorHex
-								: ((IAbsence) layer.Payload).DisplayColor.ToHtml())
+								: ((IAbsence)layer.Payload).DisplayColor.ToHtml())
 							: layer.DisplayColor().ToHtml(),
-						Start = startDateTimeInUserTimeZone.ToFixedDateTimeFormat(),
-						Minutes = (int) endDateTimeInUserTimeZone.Subtract(startDateTimeInUserTimeZone).TotalMinutes,
-						IsOvertime = overtimeActivities != null
+							Start = startDateTimeInUserTimeZone.ToFixedDateTimeFormat(),
+							Minutes = (int)layer.Period.ElapsedTime().TotalMinutes,
+							IsOvertime = overtimeActivities != null
 									 && overtimeActivities.Any(overtime => overtime.Period.Contains(layer.Period))
-					});
+						});
+					}
+					
 				}
 			}
 			scheduleVm.Projection = projections;
 			return scheduleVm;
 		}
 
-		private ShiftCategoryViewModel getShiftCategoryDescription(IScheduleDay scheduleDay)
-		{
-			var significantPart = scheduleDay.SignificantPart();
-			if (significantPart == SchedulePartView.MainShift)
-			{
-				var shiftCategory = scheduleDay.PersonAssignment().ShiftCategory;
-				return new ShiftCategoryViewModel
-				{
-					Name = shiftCategory.Description.Name,
-					ShortName = shiftCategory.Description.ShortName,
-					DisplayColor = shiftCategory.DisplayColor.ToHtml()
-				};
-			}
-			return null;
-		}
+		
 
 		public AgentInTeamScheduleViewModel MakeScheduleReadModel(IPerson person, IScheduleDay scheduleDay, bool isPermittedToViewConfidential)
 		{
@@ -223,8 +221,63 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			}
 			return false;
 		}
+		private IList<GroupScheduleProjectionViewModel> splitMergedPersonalLayers(IScheduleDay scheduleDay, IVisualLayer layer, TimeZoneInfo userTimeZone)
+		{
+			var splittedVisualLayers = new List<GroupScheduleProjectionViewModel>();
+			var unMergedCollection =
+				((VisualLayerCollection)scheduleDay.ProjectionService().CreateProjection()).UnMergedCollection;
+			var splittedLayers = unMergedCollection.Where(l => layer.Period.Contains(l.Period)).ToList();
 
-		private IList<Guid> getMatchedMainShiftLayers(IScheduleDay scheduleDay, IVisualLayer layer)
+			splittedLayers.ForEach(l =>
+			{
+				splittedVisualLayers.Add(new GroupScheduleProjectionViewModel
+				{
+					ShiftLayerIds = new[] { getMatchedShiftLayers(scheduleDay, l).Last() },
+					Description = layer.DisplayDescription().Name,
+					Color = layer.DisplayColor().ToHtml(),
+					Start = TimeZoneInfo.ConvertTimeFromUtc(l.Period.StartDateTime, userTimeZone).ToFixedDateTimeFormat(),
+					Minutes = (int)l.Period.ElapsedTime().TotalMinutes
+				});
+			});
+			return splittedVisualLayers;
+		}
+
+		private IList<IPersonalShiftLayer> getMatchedPersonalShiftLayers(IScheduleDay scheduleDay, IVisualLayer layer)
+		{
+			var matchedLayers = new List<IPersonalShiftLayer>();
+			var personAssignment = scheduleDay.PersonAssignment();
+			var shiftLayersList = new List<IShiftLayer>();
+			if (personAssignment != null && personAssignment.ShiftLayers.Any())
+			{
+				shiftLayersList = personAssignment.ShiftLayers.ToList();
+			}
+			foreach (var shiftLayer in shiftLayersList)
+			{
+				var isPersonalLayer = shiftLayer is IPersonalShiftLayer;
+				if (layer.Payload.Id.GetValueOrDefault() == shiftLayer.Payload.Id.GetValueOrDefault() && (layer.Period.Intersect(shiftLayer.Period)) && isPersonalLayer)
+				{
+					matchedLayers.Add(shiftLayer as IPersonalShiftLayer);
+				}
+			}
+			return matchedLayers;
+		}
+
+		private ShiftCategoryViewModel getShiftCategoryDescription(IScheduleDay scheduleDay)
+		{
+			var significantPart = scheduleDay.SignificantPart();
+			if (significantPart == SchedulePartView.MainShift)
+			{
+				var shiftCategory = scheduleDay.PersonAssignment().ShiftCategory;
+				return new ShiftCategoryViewModel
+				{
+					Name = shiftCategory.Description.Name,
+					ShortName = shiftCategory.Description.ShortName,
+					DisplayColor = shiftCategory.DisplayColor.ToHtml()
+				};
+			}
+			return null;
+		}
+		private IList<Guid> getMatchedShiftLayers(IScheduleDay scheduleDay, IVisualLayer layer)
 		{
 			var matchedLayerIds = new List<Guid>();
 			var personAssignment = scheduleDay.PersonAssignment();
@@ -235,7 +288,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			}
 			foreach (var shiftLayer in shiftLayersList)
 			{
-				if (layer.Payload.Id.GetValueOrDefault() == shiftLayer.Payload.Id.GetValueOrDefault() && (layer.Period.Contains(shiftLayer.Period) || shiftLayer.Period.Contains(layer.Period)))
+				if (layer.Payload.Id.GetValueOrDefault() == shiftLayer.Payload.Id.GetValueOrDefault() && layer.Period.Intersect(shiftLayer.Period))
 				{
 					matchedLayerIds.Add(shiftLayer.Id.GetValueOrDefault());
 				}
