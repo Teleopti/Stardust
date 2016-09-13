@@ -69,9 +69,9 @@ task CreateAzurePkg -depends Init, PreReq -description "Create Azure Package" {
 	
 	<#Create Azure Pkg
 	$Arg = @("Azure\ServiceDefinition.csdef", '/role:TeleoptiCCC;Azure\TeleoptiCCC', '/rolePropertiesFile:TeleoptiCCC;Azure\AzureRoleProperties.txt', "/out:$AzurePackagePath")
-    & $CSPackEXE $Arg #>
+    & $CSPackEXE $Arg 
 	
-	<#Create Azure Pkg Large version
+	Create Azure Pkg Large version
 	$Arg = @('Azure\ServiceDefinition_Large.csdef', '/role:TeleoptiCCC;Azure\TeleoptiCCC', '/rolePropertiesFile:TeleoptiCCC;Azure\AzureRoleProperties.txt', "/out:$AzurePackagePath_Large")
 	& $CSPackEXE $Arg #>
 }
@@ -89,13 +89,13 @@ function global:PrepareCopyFiles {
 	#Create bin folder
 	New-Item "$TeleoptiBin\ccc7_azure" -Itemtype Directory -Force | Out-Null
 	#Copy azure bin folder
-	Copy-Item -Path "$WorkingDir\teamcity\azure\TeleoptiCCC\bin" -Destination "$TeleoptiBin" -Force -ErrorAction Stop
+	Copy-Item -Path "$WorkingDir\teamcity\azure\TeleoptiCCC\bin\*" -Destination "$TeleoptiBin" -verbose -Recurse -Force -ErrorAction Stop
 	#Copy RegisterEventLogSource
-	Copy-Item -Path "$Dependencies\RegisterEventLogSource.exe" -Destination "$TeleoptiBin" -Recurse -Force -ErrorAction Stop
+	Copy-Item -Path "$Dependencies\RegisterEventLogSource.exe" -Destination "$TeleoptiBin" -verbose -Recurse -Force -ErrorAction Stop
 	#Copy azure dependencies
-	Copy-Item -Path "$AzureDependencies" -Destination "$TeleoptiBin\ccc7_azure" -Recurse -Force -ErrorAction Stop
+	Copy-Item -Path "$AzureDependencies" -Destination "$TeleoptiBin\ccc7_azure" -verbose -Recurse -Force -ErrorAction Stop
 	#Copy azure .NET461
-	Copy-Item -Path "$BinDependencies\Azure_Net" -Destination "$TeleoptiBin" -Recurse -Force -ErrorAction Stop
+	Copy-Item -Path "$BinDependencies\Azure_Net\*" -Destination "$TeleoptiBin" -verbose -Recurse -Force -ErrorAction Stop
 	
 }
 
