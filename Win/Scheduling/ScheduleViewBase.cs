@@ -938,7 +938,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void splitAbsences(IList<IScheduleDay> selectedParts)
         {
-            foreach (var part in selectedParts)
+			var permitted = PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule);
+			foreach (var part in selectedParts)
             {
                 var day = Presenter.SchedulerState.Schedules[part.Person].ScheduledDay(part.Period.ToDateOnlyPeriod(part.TimeZone).StartDate);
 	            var locks = Presenter.LockManager.Gridlocks(part.Person, day.DateOnlyAsPeriod.DateOnly);
@@ -948,10 +949,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 	            {
 		            foreach (var gridLock in locks)
 		            {
-			            if (gridLock.Value.LockType == LockType.WriteProtected && !PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule))
+			            if (gridLock.Value.LockType == LockType.WriteProtected && !permitted)
 				            locked = true; 
 			            else
-				            locked = true;     
+				            locked = true;
 		            }
 	            }
 
@@ -1139,6 +1140,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if(gridlockManager == null)
 				throw new ArgumentNullException("gridlockManager");
 
+			var permitted = PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule);
 			IDictionary<IPerson, IList<DateOnly>> locks = new Dictionary<IPerson, IList<DateOnly>>();
 
 			foreach (var scheduleDay in SelectedSchedules())
@@ -1153,8 +1155,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 					if (gridLock.Value.LockType == LockType.WriteProtected)
 					{
-						if(!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule))
-							writeProtectLock = true;	
+						if(!permitted)
+							writeProtectLock = true;
 					}
 					else
 					{
@@ -1164,15 +1166,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 				if (!writeProtectLock && !otherLock) continue;
 
-				if(locks.ContainsKey(scheduleDay.Person))
+				IList<DateOnly> dates;
+				if(!locks.TryGetValue(scheduleDay.Person, out dates))
 				{
-					locks[scheduleDay.Person].Add(scheduleDay.DateOnlyAsPeriod.DateOnly);
+					dates = new List<DateOnly>();
+					locks.Add(scheduleDay.Person, dates);
 				}
-				else
-				{
-					IList<DateOnly> lockeDates = new List<DateOnly>{scheduleDay.DateOnlyAsPeriod.DateOnly};
-					locks.Add(scheduleDay.Person, lockeDates);
-				}
+				dates.Add(scheduleDay.DateOnlyAsPeriod.DateOnly);
 			}
 
 			return locks;
@@ -1454,10 +1454,9 @@ namespace Teleopti.Ccc.Win.Scheduling
                 int row = GetRowForAgent(person);
                 _grid.RefreshRange(GridRangeInfo.Cell(row, (int)ColumnType.RowHeaderColumn + 1), true);
                 //loop for all days in period
-	            var endDate = new DateOnly(period.EndDateTime);
-	            var startDate = new DateOnly(period.StartDateTime);
-	            for (var date = startDate; date < endDate; date = date.AddDays(1))
-                {
+	            var datePeriod = period.ToDateOnlyPeriod(TimeZoneGuard.Instance.TimeZone);
+	            foreach (var date in datePeriod.DayCollection())
+	            {
                     int column = GetColumnForDate(date);
                     if (column >= 0 && row >= 0)
                     {

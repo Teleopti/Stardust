@@ -17,34 +17,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         void InvalidateSelectedRows(IEnumerable<IScheduleDay> schedules);
         void OnPasteCompleted();
         GridControl TheGrid { get; }
-
-
-        /// <summary>
-        /// Gets a list with selected schedules for current column
-        /// </summary>
-        /// <returns></returns>
+		
         IList<IScheduleDay> CurrentColumnSelectedSchedules();
-
-        /// <summary>
-        /// Gets a list of the current selected schedules.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-03-26
-        /// </remarks>
+		
         IList<IScheduleDay> SelectedSchedules();
-
-        /// <summary>
-        /// Refresh range on Person, Period
-        /// </summary>
-        /// <param name="person"></param>
-        /// <param name="period"></param>
+		
         void RefreshRangeForAgentPeriod(IEntity person, DateTimePeriod period);
-
-        //void ValidateSelectedPersons(IBusinessRuleCollection businessRules);
-        //void ValidateSelectedPersons(IList<IScheduleDay> parts, IBusinessRuleCollection businessRules);
-
+		
         void GridClipboardPaste(PasteOptions options, IUndoRedoContainer undoRedo);
 
         ICollection<DateOnly> AllSelectedDates();

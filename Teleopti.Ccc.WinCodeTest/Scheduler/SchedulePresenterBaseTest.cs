@@ -571,7 +571,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(() => _viewBase.ShowErrorMessage("", "")).IgnoreArguments();
             Expect.Call(_viewBase.HandleBusinessRuleResponse).Return(null);
             Expect.Call(_viewBase.TheGrid).Return(_grid);
-            Expect.Call(businessRuleResponse.Overridden).Return(false);
+            Expect.Call(businessRuleResponse.Overridden).Return(false).Repeat.AtLeastOnce();
 
             _mocks.ReplayAll();
             _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
@@ -594,7 +594,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             LastCall.Repeat.Once();
             Expect.Call(handleBusinessRuleResponse.DialogResult).Return(DialogResult.Cancel);
             Expect.Call(_viewBase.TheGrid).Return(_grid);
-            Expect.Call(businessRuleResponse.Overridden).Return(false);
+            Expect.Call(businessRuleResponse.Overridden).Return(false).Repeat.AtLeastOnce();
 
             _mocks.ReplayAll();
             _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
@@ -653,7 +653,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(scheduleDictionary.Modify(ScheduleModifier.Scheduler, (IEnumerable<IScheduleDay>)null, null, _scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance))).IgnoreArguments().Return(
                 new List<IBusinessRuleResponse>());
             Expect.Call(_viewBase.TheGrid).Return(_grid);
-            Expect.Call(businessRuleResponse.Overridden).Return(false);
+            Expect.Call(businessRuleResponse.Overridden).Return(false).Repeat.AtLeastOnce();
             _mocks.ReplayAll();
 
             _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
@@ -752,7 +752,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(schedulePart.Person).Return(_person).Repeat.AtLeastOnce();
             Expect.Call(schedulePart.PersonAssignment()).Return(personAssignment).Repeat.AtLeastOnce();
             Expect.Call(personAssignment.CheckRestrictions).Repeat.AtLeastOnce();
-            Expect.Call(businessRuleResponse.Overridden).Return(false);
+            Expect.Call(businessRuleResponse.Overridden).Return(false).Repeat.AtLeastOnce();
         }
 
         [Test]

@@ -663,6 +663,7 @@
     <Compile Include="Scheduler\SkillWeekGridControlPresenterTest.cs" />
     <Compile Include="Scheduler\SmartDayOffBackToLegalStateSolverContainerTest.cs" />
     <Compile Include="Scheduler\SplitLongDayAbsencesTest.cs" />
+    <Compile Include="Scheduler\TryModifyTests.cs" />
     <Compile Include="Scheduler\WorkShiftMasterActivityCheckerTest.cs" />
     <Compile Include="Settings\AbsenceViewTest.cs" />
     <Compile Include="Settings\PageHelperTest.cs" />

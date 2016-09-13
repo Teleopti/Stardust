@@ -88,12 +88,14 @@ namespace Teleopti.Ccc.Win.Common
 
             if (options.Default)
             {
-                if(source.SignificantPart() != SchedulePartView.PreferenceRestriction && source.SignificantPart() != SchedulePartView.StudentAvailabilityRestriction)
+	            var significantPart = source.SignificantPart();
+	            if(significantPart != SchedulePartView.PreferenceRestriction && significantPart != SchedulePartView.StudentAvailabilityRestriction)
                     destination.Merge(source, false, true);
             }
             else if (options.DefaultDelete)
             {
-                if (source.SignificantPart() != SchedulePartView.PreferenceRestriction && source.SignificantPart() != SchedulePartView.StudentAvailabilityRestriction)
+	            var significantPart = source.SignificantPart();
+	            if (significantPart != SchedulePartView.PreferenceRestriction && significantPart != SchedulePartView.StudentAvailabilityRestriction)
                     destination.Merge(source, true);
             }
             else

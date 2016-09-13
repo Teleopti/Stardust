@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -640,7 +641,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             }
             var lstBusinessRuleResponseToOverride = new List<IBusinessRuleResponse>();
             var lstBusinessRuleResponse = _schedulerState.Schedules.Modify(ScheduleModifier.Scheduler, scheduleParts, rulesToRun, _scheduleDayChangeCallback, new ScheduleTagSetter(scheduleTag));
-            if (!lstBusinessRuleResponse.Any())
+            if (lstBusinessRuleResponse.IsEmpty() || lstBusinessRuleResponse.All(r => r.Overridden))
                 return true;
             var handleBusinessRules = new HandleBusinessRules(View.HandleBusinessRuleResponse, View, _overriddenBusinessRulesHolder);
             lstBusinessRuleResponseToOverride.AddRange(handleBusinessRules.Handle(lstBusinessRuleResponse, lstBusinessRuleResponseToOverride));
