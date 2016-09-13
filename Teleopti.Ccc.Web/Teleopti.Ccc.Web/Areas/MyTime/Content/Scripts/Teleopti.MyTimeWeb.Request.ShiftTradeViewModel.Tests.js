@@ -144,6 +144,7 @@ $(document).ready(function () {
 			}
 		};
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
+		viewModel.isSiteFilterEnabled = false;
 		var date = moment("12-25-1995", "MM-DD-YYYY");
 
 		viewModel.requestedDate(date);
@@ -225,6 +226,44 @@ $(document).ready(function () {
 		equal(target.length, 2);
 		equal(target[0], "A");
 		equal(target[1], "B");
+	});
+
+	test("should get all site ids except 'All Sites'", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
+		viewModel.availableSites.push({ id: "A", text: "Site A" });
+		viewModel.availableSites.push({ id: "B", text: "Site B" });
+		viewModel.availableSites.push({ id: "allSites", text: "All Sites" });
+
+		var target = viewModel.getAllSiteIds();
+
+		equal(target.length, 2);
+		equal(target[0], "A");
+		equal(target[1], "B");
+	});
+
+	test("should load teams under site", function() {
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url == "Team/TeamsUnderSiteForShiftTrade") {
+					options.success(
+							[
+								{ id: "A", text: "Team A" },
+								{ id: "B", text: "Team B" },
+								{ id: "C", text: "Team C" }
+							]
+					);
+				}
+			}
+		};
+
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
+
+		viewModel.loadTeamsUnderSite("site1");
+
+		equal(viewModel.availableTeams().length, 4);
+		var teamAll = viewModel.availableTeams()[0];
+		equal(teamAll.id, "allTeams");
+		equal(teamAll.text, "Team All");
 	});
 
 	test("should load Team All", function() {

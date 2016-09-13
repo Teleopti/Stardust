@@ -170,5 +170,19 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			result.Data.Should().Be.EqualTo(expectedResult);
 		}
+
+		[Test]
+		public void ShouldGetTeamsUnderGivenSite()
+		{
+			var expectedId = Guid.NewGuid();
+			var expectedResult = new List<ISelectOption> { new SelectOptionItem {id = expectedId.ToString(), text = "myTeam"} };
+			var viewModelFactory = MockRepository.GenerateMock<ISiteViewModelFactory>();
+			viewModelFactory.Stub(x => x.GetTeams(new List<Guid> { new Guid() })).IgnoreArguments().Return(expectedResult);
+
+			var target = new TeamController(null, null, viewModelFactory);
+			var result = target.TeamsUnderSiteForShiftTrade("00000000-0000-0000-0000-000000000000");
+
+			result.Data.Should().Be.EqualTo(expectedResult);
 	}
+}
 }
