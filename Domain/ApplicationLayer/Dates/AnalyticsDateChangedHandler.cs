@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Dates
 {
@@ -40,16 +39,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Dates
 			foreach (var timezone in timezones)
 			{
 				var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timezone.TimeZoneCode);
-				var existingBridges = _analyticsBridgeTimeZoneRepository.GetBridges(timezone.TimeZoneId);
+				var existingBridges = _analyticsBridgeTimeZoneRepository
+					.GetBridges(timezone.TimeZoneId)
+					.ToDictionary(x => new bridgeKey(x.TimeZoneId, x.DateId, x.IntervalId), x => x);
 				var toBeAdded = new List<AnalyticsBridgeTimeZone>();
 				foreach (var date in dates)
 				{
 					var localDate = TimeZoneInfo.ConvertTimeFromUtc(date.DateDate, timeZoneInfo);
 					foreach (var interval in intervals)
 					{
-						if (existingBridges.Any(x => x.DateId == date.DateId && x.IntervalId == interval.IntervalId))
+						if (existingBridges.ContainsKey(new bridgeKey(timezone.TimeZoneId, date.DateId, interval.IntervalId)))
 						{
-							// Update if needed?
+							// For now assume we do not need to change anything
 						}
 						else
 						{
@@ -63,6 +64,34 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Dates
 					}
 				}
 				_analyticsBridgeTimeZoneRepository.Save(toBeAdded);
+			}
+		}
+
+		private class bridgeKey
+		{
+			private int timeZoneId { get; set; }
+			private int dateId { get; set; }
+			private int intervalId { get; set; }
+
+			public bridgeKey(int timezoneid, int dateid, int intervalid)
+			{
+				timeZoneId = timezoneid;
+				dateId = dateid;
+				intervalId = intervalid;
+			}
+
+			public override bool Equals(object obj)
+			{
+				var analyticsPermission = obj as bridgeKey;
+				if (analyticsPermission == null)
+					return false;
+				return dateId == analyticsPermission.dateId
+					   && intervalId == analyticsPermission.intervalId
+					   && timeZoneId == analyticsPermission.timeZoneId;
+			}
+			public override int GetHashCode()
+			{
+				return $"{dateId}|{intervalId}|{timeZoneId}".GetHashCode();
 			}
 		}
 	}

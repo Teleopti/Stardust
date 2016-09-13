@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using NHibernate.Criterion;
-using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Analytics;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -30,9 +26,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public void Save(IList<AnalyticsBridgeTimeZone> toBeAdded)
 		{
-			foreach (var bridgeTimeZone in toBeAdded)
+			using (var session = _analyticsUnitOfWork.Current().Session().SessionFactory.OpenStatelessSession())
+			using (var transaction = session.BeginTransaction())
 			{
-				_analyticsUnitOfWork.Current().Session().Save(bridgeTimeZone);
+				foreach (var bridgeTimeZone in toBeAdded)
+				{
+					session.Insert(bridgeTimeZone);
+				}
+				transaction.Commit();
 			}
 		}
 	}

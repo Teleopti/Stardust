@@ -8,17 +8,18 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 {
 	public class PersonPeriodFilter : IPersonPeriodFilter
 	{
-		private readonly DateTime minDate;
-		private readonly DateTime maxDate;
+		private readonly IAnalyticsDateRepository _analyticsDateRepository;
 
 		public PersonPeriodFilter(IAnalyticsDateRepository analyticsDateRepository)
 		{
-			minDate = analyticsDateRepository.MinDate().DateDate;
-			maxDate = analyticsDateRepository.MaxDate().DateDate;
+			_analyticsDateRepository = analyticsDateRepository;
 		}
 
 		public IEnumerable<IPersonPeriod> GetFiltered(IEnumerable<IPersonPeriod> personPeriods)
 		{
+			var minDate = _analyticsDateRepository.MinDate().DateDate;
+			var maxDate = _analyticsDateRepository.MaxDate().DateDate;
+
 			return personPeriods.Where(personPeriod => personPeriod.StartDate.Date < AnalyticsDate.Eternity.DateDate &&
 											  personPeriod.StartDate.Date <= maxDate &&
 											  personPeriod.EndDate().Date >= minDate);

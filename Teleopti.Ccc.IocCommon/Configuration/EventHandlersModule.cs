@@ -226,11 +226,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			if (_config.Toggle(Toggles.ETL_EventbasedDate_39562))
 			{
-				builder.RegisterType<AnalyticsDateRepositoryWithCreation>().As<IAnalyticsDateRepository>();
+				builder.RegisterType<AnalyticsDateRepositoryWithCreation>().As<IAnalyticsDateRepository>().SingleInstance();
 			}
 			else
 			{
-				builder.RegisterType<AnalyticsDateRepository>().As<IAnalyticsDateRepository>();
+				builder.RegisterType<AnalyticsDateRepository>().As<IAnalyticsDateRepository>().SingleInstance();
 			}
 		}
 	}

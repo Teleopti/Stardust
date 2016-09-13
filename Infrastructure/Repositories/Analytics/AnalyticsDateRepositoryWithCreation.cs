@@ -13,6 +13,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
 	public class AnalyticsDateRepositoryWithCreation : AnalyticsDateRepositoryBase, IAnalyticsDateRepository
 	{
+		protected override bool WithNoLock => false;
+
 		private readonly IDistributedLockAcquirer _distributedLockAcquirer;
 		private readonly IEventPublisher _eventPublisher;
 
@@ -65,9 +67,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 						.SetParameter("insert_date", DateTime.UtcNow)
 						.ExecuteUpdate();
 				}
+				_eventPublisher.Publish(new AnalyticsDatesChangedEvent());
+				return base.Date(dateDate);
 			}
-			_eventPublisher.Publish(new AnalyticsDatesChangedEvent());
-			return base.Date(dateDate);
 		}
 
 		private class dimDateCreationLock

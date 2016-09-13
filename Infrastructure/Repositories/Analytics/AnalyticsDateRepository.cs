@@ -17,6 +17,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 	public abstract class AnalyticsDateRepositoryBase
 	{
+		protected virtual bool WithNoLock => true;
+		private string noLock => WithNoLock ? "WITH (NOLOCK)" : "";
+
 		protected readonly ICurrentAnalyticsUnitOfWork AnalyticsUnitOfWork;
 
 		protected AnalyticsDateRepositoryBase(ICurrentAnalyticsUnitOfWork analyticsUnitOfWork)
@@ -30,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				$@"SELECT TOP 1 
 						date_id {nameof(IAnalyticsDate.DateId)}, 
 						date_date {nameof(IAnalyticsDate.DateDate)}
-					FROM [mart].[dim_date] WITH (NOLOCK)
+					FROM [mart].[dim_date] {noLock}
 					WHERE date_id >= 0
 					ORDER BY date_id DESC")
 				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsDate)))
@@ -44,7 +47,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				$@"SELECT TOP 1 
 						date_id {nameof(IAnalyticsDate.DateId)}, 
 						date_date {nameof(IAnalyticsDate.DateDate)}
-					FROM [mart].[dim_date] WITH (NOLOCK)
+					FROM [mart].[dim_date] {noLock}
 					WHERE date_id >= 0
 					ORDER BY date_id ASC")
 				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsDate)))
@@ -55,10 +58,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public IAnalyticsDate Date(DateTime dateDate)
 		{
 			return AnalyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				$@"select 
+				$@"SELECT 
 						date_id {nameof(IAnalyticsDate.DateId)}, 
 						date_date {nameof(IAnalyticsDate.DateDate)} 
-					FROM mart.dim_date WITH (NOLOCK) 
+					FROM mart.dim_date {noLock}
 					WHERE date_date=:{nameof(dateDate)}")
 				.SetDateTime(nameof(dateDate), dateDate.Date)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsDate)))
@@ -72,7 +75,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				$@"select
 						date_id {nameof(IAnalyticsDate.DateId)}, 
 						date_date {nameof(IAnalyticsDate.DateDate)} 
-					FROM mart.dim_date WITH (NOLOCK)
+					FROM mart.dim_date {noLock}
 					WHERE date_id >= 0
 					ORDER BY date_id asc
 				")
