@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -16,6 +17,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 {
@@ -78,7 +80,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				tasks.Add(new Task(() =>
 				{
 					var targetDate = new DateTime(2000, 01, 05);
-					var date = WithAnalyticsUnitOfWork.Get(() => Target.Date(targetDate));
+					IAnalyticsDate date = null;
+					WithAnalyticsUnitOfWork.Do(() =>
+					{
+						date = Target.Date(targetDate);
+						Thread.Sleep(100);
+					});
 					date.DateDate.Date.Should().Be.EqualTo(targetDate.Date);
 					date.DateId.Should().Be.EqualTo(6);
 				}));

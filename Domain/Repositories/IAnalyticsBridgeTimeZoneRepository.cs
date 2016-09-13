@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 {
 	public interface IAnalyticsBridgeTimeZoneRepository
 	{
-		IList<AnalyticsBridgeTimeZone> GetBridges(int timeZoneId);
+		IList<AnalyticsBridgeTimeZonePartial> GetBridgesPartial(int timeZoneId);
 		void Save(IList<AnalyticsBridgeTimeZone> toBeAdded);
 	}
 }

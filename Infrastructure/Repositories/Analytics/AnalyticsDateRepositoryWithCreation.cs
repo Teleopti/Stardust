@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -13,8 +14,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
 	public class AnalyticsDateRepositoryWithCreation : AnalyticsDateRepositoryBase, IAnalyticsDateRepository
 	{
-		protected override bool WithNoLock => false;
-
 		private readonly IDistributedLockAcquirer _distributedLockAcquirer;
 		private readonly IEventPublisher _eventPublisher;
 
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			return AnalyticsDate.Eternity;
 		}
 
-		public IAnalyticsDate Date(DateTime dateDate)
+		public new IAnalyticsDate Date(DateTime dateDate)
 		{
 			return base.Date(dateDate) ?? createDatesTo(dateDate);
 		}
@@ -39,36 +38,45 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			using (_distributedLockAcquirer.LockForTypeOf(new dimDateCreationLock()))
 			{
 				// Check again to see that we still don't have the date after aquiring the lock
-				var date = base.Date(dateDate, true);
-				if (date != null) return date;
-				var currentMax = base.MaxDate() ?? new AnalyticsDate {DateDate = new DateTime(1999, 12, 30)};
-				var currentDay = currentMax.DateDate;
-				while ((currentDay += TimeSpan.FromDays(1)) <= dateDate)
+				using (var session = AnalyticsUnitOfWork.Current().Session().SessionFactory.OpenSession())
+				using (var transaction = session.BeginTransaction(IsolationLevel.ReadUncommitted))
 				{
-					AnalyticsUnitOfWork.Current().Session().CreateSQLQuery(@"
-					INSERT INTO [mart].[dim_date]
-						   ([date_date],[year],[year_month],[month],[month_name],[month_resource_key],[day_in_month],[weekday_number]
-						   ,[weekday_name],[weekday_resource_key],[week_number],[year_week],[quarter],[insert_date])
-					 VALUES
-						   (:date_date,:year,:year_month,:month,:month_name,:month_resource_key,:day_in_month,:weekday_number
-						   ,:weekday_name,:weekday_resource_key,:week_number,:year_week,:quarter,:insert_date)")
-						.SetParameter("date_date", currentDay)
-						.SetParameter("year", currentDay.Year)
-						.SetParameter("year_month", int.Parse($"{currentDay.Year}{currentDay.Month.ToString("D2")}"))
-						.SetParameter("month", currentDay.Month)
-						.SetParameter("month_name", DateHelper.GetMonthName(currentDay, CultureInfo.CurrentCulture))
-						.SetParameter("month_resource_key", (object) currentDay.Month.GetMonthResourceKey())
-						.SetParameter("day_in_month", currentDay.Day).SetParameter("weekday_number", (object) currentDay.GetDayOfWeek())
-						.SetParameter("weekday_name", CultureInfo.CurrentCulture.DateTimeFormat.DayNames[(int) currentDay.DayOfWeek])
-						.SetParameter("weekday_resource_key", (object) currentDay.GetDayOfWeek().GetWeekDayResourceKey())
-						.SetParameter("week_number", DateHelper.WeekNumber(currentDay, CultureInfo.CurrentCulture))
-						.SetParameter("year_week", (object) currentDay.GetYearWeek())
-						.SetParameter("quarter", (object) currentDay.GetQuarter())
-						.SetParameter("insert_date", DateTime.UtcNow)
-						.ExecuteUpdate();
+					var date = Date(session, dateDate);
+					transaction.Commit();
+					if (date != null)
+						return date;
 				}
-				_eventPublisher.Publish(new AnalyticsDatesChangedEvent());
-				return base.Date(dateDate);
+				
+				var currentMax = base.MaxDate() ?? new AnalyticsDate { DateDate = new DateTime(1999, 12, 30) };
+				var currentDay = currentMax.DateDate;
+
+				using (var session = AnalyticsUnitOfWork.Current().Session().SessionFactory.OpenStatelessSession())
+				using (var transaction = session.BeginTransaction())
+				{
+					while ((currentDay += TimeSpan.FromDays(1)) <= dateDate)
+					{
+						session.Insert(new AnalyticsDate
+						{
+							DateDate = currentDay,
+							Year = currentDay.Year,
+							YearMonth = int.Parse($"{currentDay.Year}{currentDay.Month.ToString("D2")}"),
+							Month = currentDay.Month,
+							MonthName = DateHelper.GetMonthName(currentDay, CultureInfo.CurrentCulture),
+							MonthResourceKey = currentDay.Month.GetMonthResourceKey(),
+							DayInMonth = currentDay.Day,
+							WeekNumber = DateHelper.WeekNumber(currentDay, CultureInfo.CurrentCulture),
+							WeekdayName = CultureInfo.CurrentCulture.DateTimeFormat.DayNames[(int)currentDay.DayOfWeek],
+							WeekdayResourceKey = currentDay.GetDayOfWeek().GetWeekDayResourceKey(),
+							WeekdayNumber = currentDay.GetDayOfWeek(),
+							YearWeek = currentDay.GetYearWeek(),
+							Quarter = currentDay.GetQuarter(),
+							InsertDate = DateTime.UtcNow
+						});
+					}
+					transaction.Commit();
+					_eventPublisher.Publish(new AnalyticsDatesChangedEvent());
+					return base.Date(dateDate);
+				}
 			}
 		}
 

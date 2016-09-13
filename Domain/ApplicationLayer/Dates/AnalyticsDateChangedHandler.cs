@@ -29,18 +29,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Dates
 		public virtual void Handle(AnalyticsDatesChangedEvent @event)
 		{
 			// Find all dates, intervals and timezones
-			var dates = _analyticsDateRepository.GetAll();
-			var dateDictionary = dates.ToDictionary(x => x.DateDate, x => x);
+			var dates = _analyticsDateRepository.GetAllPartial();
+			var dateDictionary = dates.ToDictionary(x => x.DateDate, x => x.DateId);
 			var timezones = _analyticsTimeZoneRepository.GetAll();
 			var intervals = _analyticsIntervalRepository.GetAll();
-			var intervalDictionary = intervals.ToDictionary(x => x.Offset, x => x);
+			var intervalDictionary = intervals.ToDictionary(x => x.Offset, x => x.IntervalId);
 
 			// for each timezone, get existing entries from bridge and add/update
 			foreach (var timezone in timezones)
 			{
 				var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timezone.TimeZoneCode);
-				var existingBridges = new HashSet<AnalyticsBridgeTimeZone>(_analyticsBridgeTimeZoneRepository
-					.GetBridges(timezone.TimeZoneId));
+				var existingBridges = new HashSet<AnalyticsBridgeTimeZonePartial>(_analyticsBridgeTimeZoneRepository
+					.GetBridgesPartial(timezone.TimeZoneId));
 				var toBeAdded = new List<AnalyticsBridgeTimeZone>();
 				foreach (var date in dates)
 				{

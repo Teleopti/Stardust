@@ -85,7 +85,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				statConfiguration.AddResources(new []
 				{
 					"Teleopti.Ccc.Domain.Analytics.AnalyticsPermission.analytics.xml",
-					"Teleopti.Ccc.Domain.Analytics.AnalyticsBridgeTimeZone.analytics.xml"
+					"Teleopti.Ccc.Domain.Analytics.AnalyticsBridgeTimeZone.analytics.xml",
+					"Teleopti.Ccc.Domain.Analytics.AnalyticsDate.analytics.xml"
 				}, typeof(AnalyticsPermission).Assembly);
 				statFactory = new AnalyticsUnitOfWorkFactory(
 					buildSessionFactory(statConfiguration),

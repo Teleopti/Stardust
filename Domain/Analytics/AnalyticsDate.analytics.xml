@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.Analytics"
+									 schema="mart">
+	<class name="AnalyticsDate" table="dim_date">
+		<id name="DateId"  type="int" column="date_id">
+			<generator class="native" />
+		</id>
+		<property name="DateDate" column="date_date"/>
+		<property name="Year" column="year"/>
+		<property name="YearMonth" column="year_month"/>
+		<property name="Month" column="month"/>
+		<property name="MonthName" column="month_name"/>
+		<property name="MonthResourceKey" column="month_resource_key"/>
+		<property name="DayInMonth" column="day_in_month"/>
+		<property name="WeekdayNumber" column="weekday_number"/>
+		<property name="WeekdayName" column="weekday_name"/>
+		<property name="WeekdayResourceKey" column="weekday_resource_key"/>
+		<property name="WeekNumber" column="week_number"/>
+		<property name="YearWeek" column="year_week"/>
+		<property name="Quarter" column="quarter"/>
+		<property name="InsertDate" column="insert_date"/>
+	</class>
+</hibernate-mapping>

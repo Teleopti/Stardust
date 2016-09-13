@@ -38,13 +38,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				};
 			WithAnalyticsUnitOfWork.Do(() => Target.Save(new [] { expected }));
 
-			var utcBridges = WithAnalyticsUnitOfWork.Get(() => Target.GetBridges(0));
+			var utcBridges = WithAnalyticsUnitOfWork.Get(() => Target.GetBridgesPartial(0));
 			utcBridges.Count.Should().Be.EqualTo(1);
 			utcBridges.First().DateId.Should().Be.EqualTo(expected.DateId);
 			utcBridges.First().IntervalId.Should().Be.EqualTo(expected.IntervalId);
 			utcBridges.First().TimeZoneId.Should().Be.EqualTo(expected.TimeZoneId);
-			utcBridges.First().LocalDateId.Should().Be.EqualTo(expected.LocalDateId);
-			utcBridges.First().LocalIntervalId.Should().Be.EqualTo(expected.LocalIntervalId);
 		}
 
 	}

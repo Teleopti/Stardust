@@ -6,5 +6,5 @@ namespace Teleopti.Interfaces.Infrastructure.Analytics
     {
 		int DateId { get; set; }
 		DateTime DateDate { get; set; }
-    }
+	}
 }

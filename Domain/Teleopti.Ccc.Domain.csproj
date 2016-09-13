@@ -3019,6 +3019,9 @@
     <EmbeddedResource Include="Analytics\AnalyticsBridgeTimeZone.analytics.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Analytics\AnalyticsDate.analytics.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <Content Include="FeatureFlags\toggles.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

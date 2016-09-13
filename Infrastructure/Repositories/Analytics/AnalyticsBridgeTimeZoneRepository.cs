@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Criterion;
+using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Infrastructure;
@@ -16,12 +16,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			_analyticsUnitOfWork = analyticsUnitOfWork;
 		}
 
-		public IList<AnalyticsBridgeTimeZone> GetBridges(int timeZoneId)
+		public IList<AnalyticsBridgeTimeZonePartial> GetBridgesPartial(int timeZoneId)
 		{
-			return _analyticsUnitOfWork.Current().Session().CreateCriteria<AnalyticsBridgeTimeZone>()
-				.Add(Restrictions.Eq(nameof(AnalyticsBridgeTimeZone.TimeZoneId), timeZoneId))
-				.SetReadOnly(true)
-				.List<AnalyticsBridgeTimeZone>();
+			AnalyticsBridgeTimeZonePartial analyticsBridgeTimeZonePartial = null;
+			return _analyticsUnitOfWork.Current().Session().QueryOver<AnalyticsBridgeTimeZone>()
+				.Where(b => b.TimeZoneId == timeZoneId)
+				.SelectList(list => list
+					.Select(x => x.DateId).WithAlias(() => analyticsBridgeTimeZonePartial.DateId)
+					.Select(x => x.IntervalId).WithAlias(() => analyticsBridgeTimeZonePartial.IntervalId)
+					.Select(x => x.TimeZoneId).WithAlias(() => analyticsBridgeTimeZonePartial.TimeZoneId)
+					)
+				.TransformUsing(Transformers.AliasToBean<AnalyticsBridgeTimeZonePartial>())
+				.List<AnalyticsBridgeTimeZonePartial>();
 		}
 
 		public void Save(IList<AnalyticsBridgeTimeZone> toBeAdded)

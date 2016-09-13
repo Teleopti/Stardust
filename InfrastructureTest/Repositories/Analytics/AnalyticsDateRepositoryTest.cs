@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -54,8 +55,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldLoadAllDates()
 		{
-			var dates = WithAnalyticsUnitOfWork.Get(() => Target.GetAll());
+			var dates = WithAnalyticsUnitOfWork.Get(() => Target.GetAllPartial());
 			dates.Count.Should().Be.EqualTo(7);
+			dates.Any(x => x.DateDate.Date == DateTime.Today).Should().Be.True();
 		}
 	}
 }

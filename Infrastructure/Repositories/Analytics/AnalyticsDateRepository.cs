@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using NHibernate;
+using NHibernate.Criterion;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
@@ -13,18 +15,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public AnalyticsDateRepository(ICurrentAnalyticsUnitOfWork analyticsUnitOfWork) : base(analyticsUnitOfWork)
 		{
 		}
-
-		public IAnalyticsDate Date(DateTime dateDate)
-		{
-			return base.Date(dateDate);
-		}
 	}
 
 	public abstract class AnalyticsDateRepositoryBase
 	{
-		protected virtual bool WithNoLock => true;
-		private string noLock => WithNoLock ? "WITH (NOLOCK)" : "";
-
 		protected readonly ICurrentAnalyticsUnitOfWork AnalyticsUnitOfWork;
 
 		protected AnalyticsDateRepositoryBase(ICurrentAnalyticsUnitOfWork analyticsUnitOfWork)
@@ -34,59 +28,49 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public IAnalyticsDate MaxDate()
 		{
-			return AnalyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				$@"SELECT TOP 1 
-						date_id {nameof(IAnalyticsDate.DateId)}, 
-						date_date {nameof(IAnalyticsDate.DateDate)}
-					FROM [mart].[dim_date] {noLock}
-					WHERE date_id >= 0
-					ORDER BY date_id DESC")
-				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsDate)))
+			return AnalyticsUnitOfWork.Current().Session().CreateCriteria<AnalyticsDate>()
+				.Add(Restrictions.Ge(nameof(AnalyticsDate.DateId), 0))
+				.AddOrder(Order.Desc(nameof(AnalyticsDate.DateId)))
+				.SetMaxResults(1)
 				.SetReadOnly(true)
 				.UniqueResult<IAnalyticsDate>();
 		}
 
 		public IAnalyticsDate MinDate()
 		{
-			return AnalyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				$@"SELECT TOP 1 
-						date_id {nameof(IAnalyticsDate.DateId)}, 
-						date_date {nameof(IAnalyticsDate.DateDate)}
-					FROM [mart].[dim_date] {noLock}
-					WHERE date_id >= 0
-					ORDER BY date_id ASC")
-				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsDate)))
+			return AnalyticsUnitOfWork.Current().Session().CreateCriteria<AnalyticsDate>()
+				.Add(Restrictions.Ge(nameof(AnalyticsDate.DateId), 0))
+				.AddOrder(Order.Asc(nameof(AnalyticsDate.DateId)))
+				.SetMaxResults(1)
 				.SetReadOnly(true)
 				.UniqueResult<IAnalyticsDate>();
 		}
 
-		public IAnalyticsDate Date(DateTime dateDate, bool readUncommitted=false)
+		public IAnalyticsDate Date(DateTime dateDate)
 		{
-			var lockMode = readUncommitted ? "WITH (READUNCOMMITTED)" : noLock;
-			return AnalyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				$@"SELECT 
-						date_id {nameof(IAnalyticsDate.DateId)}, 
-						date_date {nameof(IAnalyticsDate.DateDate)} 
-					FROM mart.dim_date {lockMode}
-					WHERE date_date=:{nameof(dateDate)}")
-				.SetDateTime(nameof(dateDate), dateDate.Date)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsDate)))
+			return Date(AnalyticsUnitOfWork.Current().Session(), dateDate);
+		}
+
+		protected IAnalyticsDate Date(ISession session, DateTime dateDate)
+		{
+			return session.CreateCriteria<AnalyticsDate>()
+				.Add(Restrictions.Eq(nameof(AnalyticsDate.DateDate), dateDate.Date))
 				.SetReadOnly(true)
 				.UniqueResult<IAnalyticsDate>();
 		}
 
-		public IList<IAnalyticsDate> GetAll()
+		public IList<IAnalyticsDate> GetAllPartial()
 		{
-			return AnalyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				$@"select
-						date_id {nameof(IAnalyticsDate.DateId)}, 
-						date_date {nameof(IAnalyticsDate.DateDate)} 
-					FROM mart.dim_date {noLock}
-					WHERE date_id >= 0
-					ORDER BY date_id asc
-				")
-				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsDate)))
-				.SetReadOnly(true)
+			AnalyticsDatePartial analyticsDatePartial = null;
+			return AnalyticsUnitOfWork.Current().Session().QueryOver<AnalyticsDate>()
+				.Where(ad => ad.DateId >= 0)
+				.SelectList(list => list
+					.Select(d => d.DateId).WithAlias(() => analyticsDatePartial.DateId)
+					.Select(d => d.DateDate).WithAlias(() => analyticsDatePartial.DateDate)
+					)
+				.OrderBy(ad => ad.DateId)
+				.Asc
+				.TransformUsing(Transformers.AliasToBean<AnalyticsDatePartial>())
 				.List<IAnalyticsDate>();
 		}
 	}
