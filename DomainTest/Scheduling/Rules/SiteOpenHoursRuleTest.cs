@@ -81,8 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		{
 			var person = createPersonWithSiteOpenHours(new Dictionary<DayOfWeek, TimePeriod>
 			{
-				{DayOfWeek.Monday, new TimePeriod(TimeSpan.FromHours(9), TimeSpan.FromHours(24).Subtract(new TimeSpan(1)))},
-				{DayOfWeek.Tuesday, new TimePeriod(TimeSpan.Zero, TimeSpan.FromHours(9))},
+				{DayOfWeek.Monday, new TimePeriod(TimeSpan.FromHours(9), TimeSpan.FromHours(33))}
 			});
 			var result = executeValidate(person,
 				new TimePeriod(TimeSpan.FromHours(22), TimeSpan.FromDays(1).Add(TimeSpan.FromHours(5))));

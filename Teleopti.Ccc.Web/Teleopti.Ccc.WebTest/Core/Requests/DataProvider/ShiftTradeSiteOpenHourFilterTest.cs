@@ -176,8 +176,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		{
 			var personFrom = createPersonWithSiteOpenHours(new Dictionary<DayOfWeek, TimePeriod>
 			{
-				{ DayOfWeek.Monday, new TimePeriod(TimeSpan.FromHours(9), TimeSpan.FromHours(24).Subtract(new TimeSpan(1))) },
-				{ DayOfWeek.Tuesday, new TimePeriod(TimeSpan.Zero, TimeSpan.FromHours(9)) },
+				{ DayOfWeek.Monday, new TimePeriod(TimeSpan.FromHours(9), TimeSpan.FromHours(33)) }
 			});
 			prepareData(personFrom);
 			var personFromScheduleView = createShiftTradeAddPersonScheduleViewModel(personFrom, _shiftTradeDate, new[]
@@ -294,8 +293,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		{
 			var personFrom = createPersonWithSiteOpenHours(new Dictionary<DayOfWeek, TimePeriod>
 			{
-				{ DayOfWeek.Monday, new TimePeriod(TimeSpan.FromHours(9), TimeSpan.FromHours(24).Subtract(new TimeSpan(1))) },
-				{ DayOfWeek.Tuesday, new TimePeriod(TimeSpan.Zero, TimeSpan.FromHours(9)) },
+				{ DayOfWeek.Monday, new TimePeriod(TimeSpan.FromHours(9), TimeSpan.FromHours(33)) }
 			});
 			prepareData(personFrom);
 

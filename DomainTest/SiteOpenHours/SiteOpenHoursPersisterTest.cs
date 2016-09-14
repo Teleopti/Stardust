@@ -113,6 +113,24 @@ namespace Teleopti.Ccc.DomainTest.SiteOpenHours
 			Assert.AreEqual(siteOpenHourForMonday.TimePeriod, period);
 		}
 
+		[Test]
+		public void ShouldPersistWithNextDayPeriod()
+		{
+			var weekDay = DayOfWeek.Friday;
+			var timePeriod = new TimePeriod(new TimeSpan(20, 0, 0), new TimeSpan(34, 0, 0));
+			var sites = createSiteViewModels(createSiteOpenHourViewModel(weekDay, timePeriod));
+
+			var target = new SiteOpenHoursPersister(_siteRepository, _siteOpenHourRepository);
+			var count = target.Persist(sites);
+
+			Assert.IsTrue(count > 0);
+			Assert.IsTrue(
+				_site.OpenHourCollection.Any(
+					openHour =>
+						openHour.WeekDay == weekDay && openHour.TimePeriod == timePeriod &&
+						openHour.IsClosed == false));
+		}
+
 		private void prepareData()
 		{
 			_site = new Site("Site to be updated").WithId();
