@@ -131,8 +131,10 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
 			Assert.IsTrue(messageWillOnlyBeSentToRequestPerson(), "Only Request person needs to be notified");
 
-			// tamasb: note that it is a hardcoded notification string !!! 
-			var notificationString = "A shift trade request 16-07-2008 was denied.";
+			var timeZone = _requestedPerson.PermissionInformation.DefaultTimeZone();
+			var format = _requestedPerson.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
+			var notificationString = string.Format("A shift trade request {0} was denied."
+				, _personRequest.Request.Period.StartDateTimeLocal(timeZone).ToString(format));
 
 			Assert.AreEqual(notificationString, _target.TextForNotification);
 		}
@@ -284,8 +286,10 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			_target.Accept(_requestedPerson, shiftTradeRequestSetChecksum, _authorization);
 			_target.Accept(_tradePerson, shiftTradeRequestSetChecksum, _authorization);
 
-			// must be in english with english date format
-			var notificationString = "A shift trade request 16-07-2008 was accepted by other person.";
+			var timeZone = _requestedPerson.PermissionInformation.DefaultTimeZone();
+			var format = _requestedPerson.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
+		    var notificationString = string.Format("A shift trade request {0} was accepted by other person.",
+			    _personRequest.Request.Period.StartDateTimeLocal(timeZone).ToString(format));
 
 			Assert.AreEqual(notificationString, _target.TextForNotification);
 
