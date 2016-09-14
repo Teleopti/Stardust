@@ -1261,13 +1261,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void swapRaw()
 		{
-			var swapper = new Swapper(_scheduleView, _undoRedo, _schedulerState, _gridLockManager, this, _defaultScheduleTag);
+			var swapper = new Swapper(_scheduleView, _undoRedo, _schedulerState, _gridLockManager, this, _defaultScheduleTag, _container.Resolve<IScheduleDayChangeCallback>());
 			swapper.SwapRaw();
 		}
 
 		private void swapSelectedSchedules()
 		{
-			var swapper = new Swapper(_scheduleView, _undoRedo, _schedulerState, _gridLockManager, this, _defaultScheduleTag);
+			var swapper = new Swapper(_scheduleView, _undoRedo, _schedulerState, _gridLockManager, this, _defaultScheduleTag, _container.Resolve<IScheduleDayChangeCallback>());
 			swapper.SwapSelectedSchedules(_handleBusinessRuleResponse, _overriddenBusinessRulesHolder);
 		}
 
