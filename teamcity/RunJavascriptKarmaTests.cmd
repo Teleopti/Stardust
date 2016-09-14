@@ -22,5 +22,5 @@ IF %ERRORLEV% NEQ 0 ECHO Errors found!
 
 ECHO.
 ECHO --------
-PAUSE
+Exit /B %ERRORLEV%
 GOTO :EOF
