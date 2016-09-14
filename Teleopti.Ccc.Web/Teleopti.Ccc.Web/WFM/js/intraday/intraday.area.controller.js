@@ -135,6 +135,14 @@
 				});
 			};
 
+			$scope.clearSkillHelper = function() {
+				clearSkillSelection();
+			}
+
+			$scope.clearSkillAreaHelper = function() {
+				clearSkillAreaSelection();
+			}
+
 			function clearSkillSelection() {
 				if (!autocompleteSkill) return;
 				autocompleteSkill.selectedSkill = null;
