@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Dates
@@ -16,17 +17,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Dates
 		private readonly IAnalyticsDateRepository _analyticsDateRepository;
 		private readonly IAnalyticsTimeZoneRepository _analyticsTimeZoneRepository;
 		private readonly IAnalyticsBridgeTimeZoneRepository _analyticsBridgeTimeZoneRepository;
+		private readonly IDistributedLockAcquirer _distributedLockAcquirer;
 
-		public AnalyticsDateChangedHandler(IAnalyticsDateRepository analyticsDateRepository, IAnalyticsIntervalRepository analyticsIntervalRepository, IAnalyticsTimeZoneRepository analyticsTimeZoneRepository, IAnalyticsBridgeTimeZoneRepository analyticsBridgeTimeZoneRepository)
+		public AnalyticsDateChangedHandler(IAnalyticsDateRepository analyticsDateRepository, IAnalyticsIntervalRepository analyticsIntervalRepository, IAnalyticsTimeZoneRepository analyticsTimeZoneRepository, IAnalyticsBridgeTimeZoneRepository analyticsBridgeTimeZoneRepository, IDistributedLockAcquirer distributedLockAcquirer)
 		{
 			_analyticsDateRepository = analyticsDateRepository;
 			_analyticsIntervalRepository = analyticsIntervalRepository;
 			_analyticsTimeZoneRepository = analyticsTimeZoneRepository;
 			_analyticsBridgeTimeZoneRepository = analyticsBridgeTimeZoneRepository;
+			_distributedLockAcquirer = distributedLockAcquirer;
 		}
 
 		[AnalyticsUnitOfWork]
 		public virtual void Handle(AnalyticsDatesChangedEvent @event)
+		{
+			// Use a distributed lock to make other events trying to update at the same time fail
+			_distributedLockAcquirer.TryLockForTypeOf(this, updateBridges);
+		}
+
+		private void updateBridges()
 		{
 			// Find all dates, intervals and timezones
 			var dates = _analyticsDateRepository.GetAllPartial();

@@ -218,18 +218,18 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 	        builder.RegisterType<RequestStrategySettingsReader>().As<IRequestStrategySettingsReader>().SingleInstance();
 
+			builder.RegisterType<PersonPeriodTransformer>().As<IPersonPeriodTransformer>().SingleInstance();
+			builder.RegisterType<PersonPeriodFilter>().As<IPersonPeriodFilter>().SingleInstance();
+
 			_config.Cache().This<IAnalyticsDateRepository>(b => b.CacheMethod(x => x.Date(new DateTime())));
-			builder.CacheByInterfaceProxy<AnalyticsDateRepository, IAnalyticsDateRepository>();
-
-			builder.RegisterType<PersonPeriodTransformer>().As<IPersonPeriodTransformer>();
-			builder.RegisterType<PersonPeriodFilter>().As<IPersonPeriodFilter>();
-
 			if (_config.Toggle(Toggles.ETL_EventbasedDate_39562))
 			{
+				builder.CacheByInterfaceProxy<AnalyticsDateRepositoryWithCreation, IAnalyticsDateRepository>();
 				builder.RegisterType<AnalyticsDateRepositoryWithCreation>().As<IAnalyticsDateRepository>().SingleInstance();
 			}
 			else
 			{
+				builder.CacheByInterfaceProxy<AnalyticsDateRepository, IAnalyticsDateRepository>();
 				builder.RegisterType<AnalyticsDateRepository>().As<IAnalyticsDateRepository>().SingleInstance();
 			}
 		}

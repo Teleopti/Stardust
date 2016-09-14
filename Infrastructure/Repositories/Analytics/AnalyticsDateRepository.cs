@@ -48,12 +48,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public IAnalyticsDate Date(DateTime dateDate)
 		{
-			return Date(AnalyticsUnitOfWork.Current().Session(), dateDate);
-		}
-
-		protected IAnalyticsDate Date(ISession session, DateTime dateDate)
-		{
-			return session.CreateCriteria<AnalyticsDate>()
+			return AnalyticsUnitOfWork.Current().Session().CreateCriteria<AnalyticsDate>()
 				.Add(Restrictions.Eq(nameof(AnalyticsDate.DateDate), dateDate.Date))
 				.SetReadOnly(true)
 				.UniqueResult<IAnalyticsDate>();

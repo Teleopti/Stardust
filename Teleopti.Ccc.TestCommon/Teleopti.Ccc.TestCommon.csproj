@@ -176,6 +176,7 @@
     <Compile Include="FakeRepositories\FakeAggregateRootInitializer.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsActivityRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsAbsenceRepository.cs" />
+    <Compile Include="FakeRepositories\FakeAnalyticsBridgeTimeZoneRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsForecastWorkloadRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsHourlyAvailabilityRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsIntervalRepository.cs" />

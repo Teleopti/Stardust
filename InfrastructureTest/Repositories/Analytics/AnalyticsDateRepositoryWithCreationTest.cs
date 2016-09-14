@@ -71,6 +71,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		}
 
 		[Test]
+		public void ShouldOnlyPublishOnceEvenIfMultipleCreationsHappenInSameUoW()
+		{
+			var targetDate = new DateTime(2000, 01, 05);
+			IAnalyticsDate date = null;
+			WithAnalyticsUnitOfWork.Do(() =>
+			{
+				date = Target.Date(targetDate-TimeSpan.FromDays(1));
+				date = Target.Date(targetDate);
+			});
+			date.DateDate.Date.Should().Be.EqualTo(targetDate.Date);
+			date.DateId.Should().Be.EqualTo(6);
+
+			_fakeEventPublisher.PublishedEvents.Should().Not.Be.Empty();
+			_fakeEventPublisher.PublishedEvents.OfType<AnalyticsDatesChangedEvent>().SingleOrDefault().Should().Not.Be.Null();
+		}
+
+		[Test]
 		public async void ShouldHandleMultipleRequestsAtTheSameTime()
 		{
 			var tasks = new List<Task>();
@@ -84,7 +101,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 					WithAnalyticsUnitOfWork.Do(() =>
 					{
 						date = Target.Date(targetDate);
-						Thread.Sleep(100);
 					});
 					date.DateDate.Date.Should().Be.EqualTo(targetDate.Date);
 					date.DateId.Should().Be.EqualTo(6);
