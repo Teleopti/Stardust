@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Tracking;
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_requestApprovalServiceFactory = new RequestApprovalServiceFactory(
 				new SwapAndModifyService(null, null), 
 				new FakeGlobalSettingDataRepository(),
-				businessRules, new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository)
+				businessRules, new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository), new DoNothingScheduleDayChangeCallBack()
 			);
 			
 			var writeProtectedScheduleCommandValidator = new WriteProtectedScheduleCommandValidator ( 

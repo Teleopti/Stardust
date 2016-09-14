@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var fakePersonAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 		    var businessRulesForPersonalAccountUpdate = new BusinessRulesForPersonalAccountUpdate(fakePersonAbsenceAccountRepository, new SchedulingResultStateHolder());
 			var scheduleTagAssembler = new ScheduleTagAssembler(new FakeScheduleTagRepository());
-			var scheduleSaveHandler = new ScheduleSaveHandler(new SaveSchedulePartService(new ScheduleDifferenceSaver(_scheduleStorage, new ThisUnitOfWork(new FakeUnitOfWork())), fakePersonAbsenceAccountRepository));
+			var scheduleSaveHandler = new ScheduleSaveHandler(new SaveSchedulePartService(new ScheduleDifferenceSaver(_scheduleStorage, new ThisUnitOfWork(new FakeUnitOfWork())), fakePersonAbsenceAccountRepository, new DoNothingScheduleDayChangeCallBack()));
 
 			_target = new CancelAbsenceCommandHandler(dateTimePeriodAssembler, scheduleTagAssembler, _scheduleStorage, personRepository, _scenarioRepository, currentUnitOfWorkFactory, businessRulesForPersonalAccountUpdate, scheduleSaveHandler);
         }

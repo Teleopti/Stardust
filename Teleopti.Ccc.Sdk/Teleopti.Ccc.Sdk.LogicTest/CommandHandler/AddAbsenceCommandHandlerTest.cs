@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var scheduleTagAssembler = new ScheduleTagAssembler(scheduleTagRepository);
 			var scheduleSaveHandler =
 				new ScheduleSaveHandler(new SaveSchedulePartService(new FakeScheduleDifferenceSaver(scheduleStorage),
-					new FakePersonAbsenceAccountRepository()));
+					new FakePersonAbsenceAccountRepository(), new DoNothingScheduleDayChangeCallBack()));
 
 			var person = PersonFactory.CreatePerson().WithId();
 			personRepository.Add(person);
@@ -95,7 +96,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var scheduleTagAssembler = new ScheduleTagAssembler(scheduleTagRepository);
 			var scheduleSaveHandler =
 				new ScheduleSaveHandler(new SaveSchedulePartService(new FakeScheduleDifferenceSaver(scheduleStorage),
-					new FakePersonAbsenceAccountRepository()));
+					new FakePersonAbsenceAccountRepository(), new DoNothingScheduleDayChangeCallBack()));
 
 			var person = PersonFactory.CreatePerson().WithId();
 			personRepository.Add(person);

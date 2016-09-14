@@ -4,6 +4,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Interfaces.Domain;
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 			mocks = new MockRepository();
 			scheduleDictionarySaver = mocks.DynamicMock<IScheduleDifferenceSaver>();
 			personAbsenceAccountRepository = mocks.DynamicMock<IPersonAbsenceAccountRepository>();
-			target = new SaveSchedulePartService(scheduleDictionarySaver, personAbsenceAccountRepository);
+			target = new SaveSchedulePartService(scheduleDictionarySaver, personAbsenceAccountRepository, new DoNothingScheduleDayChangeCallBack());
 		}
 
 		[Test]

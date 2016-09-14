@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly DayOffOptimizationDesktopTeamBlock _dayOffOptimizationDesktopTeamBlock;
+		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 
 		public TeamBlockOptimizationCommand(Func<ISchedulerStateHolder> schedulerStateHolder,
 			ITeamBlockClearer teamBlockCleaner,
@@ -66,7 +67,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService,
 			IResourceCalculationContextFactory resourceCalculationContextFactory,
 			TeamInfoFactoryFactory teamInfoFactoryFactory,
-			DayOffOptimizationDesktopTeamBlock dayOffOptimizationDesktopTeamBlock)
+			DayOffOptimizationDesktopTeamBlock dayOffOptimizationDesktopTeamBlock,
+			IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_teamBlockCleaner = teamBlockCleaner;
@@ -93,6 +95,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 			_dayOffOptimizationDesktopTeamBlock = dayOffOptimizationDesktopTeamBlock;
+			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
 		public void Execute(ISchedulingProgress backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
@@ -146,8 +149,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				if (optimizationPreferences.General.OptimizationStepFairness)
 				{
 					var rollbackServiceWithoutResourceCalculation =
-						new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState,
-							new ResourceCalculationOnlyScheduleDayChangeCallback(), tagSetter);
+						new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState, _scheduleDayChangeCallback, tagSetter);
 					_optimizerHelper.LockDaysForDayOffOptimization(allMatrixes, optimizationPreferences, selectedPeriod);
 
 					_equalNumberOfCategoryFairness.ReportProgress += resourceOptimizerPersonOptimized;

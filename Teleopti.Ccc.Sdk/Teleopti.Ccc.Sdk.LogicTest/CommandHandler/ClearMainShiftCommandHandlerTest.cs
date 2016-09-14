@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			    personRepository, scenarioRepository, new FakeCurrentUnitOfWorkFactory(),
 			    new BusinessRulesForPersonalAccountUpdate(accountRepository, new FakeSchedulingResultStateHolder()),
 			    new ScheduleSaveHandler(new SaveSchedulePartService(new FakeScheduleDifferenceSaver(scheduleStorage),
-				    accountRepository)));
+				    accountRepository, new DoNothingScheduleDayChangeCallBack())));
 			target.Handle(new ClearMainShiftCommandDto { Date = _dateOnlydto, PersonId = person.Id.GetValueOrDefault() });
 
 		    scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false,false),
@@ -71,7 +72,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				personRepository, scenarioRepository, new FakeCurrentUnitOfWorkFactory(),
 				new BusinessRulesForPersonalAccountUpdate(accountRepository, new FakeSchedulingResultStateHolder()),
 				new ScheduleSaveHandler(new SaveSchedulePartService(new FakeScheduleDifferenceSaver(scheduleStorage),
-					accountRepository)));
+					accountRepository, new DoNothingScheduleDayChangeCallBack())));
 			target.Handle(new ClearMainShiftCommandDto { Date = _dateOnlydto, PersonId = person.Id.GetValueOrDefault() });
 
 			var scheduledDay = scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false),
@@ -106,7 +107,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				personRepository, scenarioRepository, new FakeCurrentUnitOfWorkFactory(),
 				new BusinessRulesForPersonalAccountUpdate(accountRepository, new FakeSchedulingResultStateHolder()),
 				new ScheduleSaveHandler(new SaveSchedulePartService(new FakeScheduleDifferenceSaver(scheduleStorage),
-					accountRepository)));
+					accountRepository, new DoNothingScheduleDayChangeCallBack())));
 			target.Handle(new ClearMainShiftCommandDto { Date = _dateOnlydto, PersonId = person.Id.GetValueOrDefault(), ScenarioId = newScenario.Id.GetValueOrDefault() });
 			
 			scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false),
@@ -139,7 +140,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				personRepository, scenarioRepository, new FakeCurrentUnitOfWorkFactory(),
 				new BusinessRulesForPersonalAccountUpdate(accountRepository, new FakeSchedulingResultStateHolder()),
 				new ScheduleSaveHandler(new SaveSchedulePartService(new FakeScheduleDifferenceSaver(scheduleStorage),
-					accountRepository)));
+					accountRepository, new DoNothingScheduleDayChangeCallBack())));
 			target.Handle(new ClearMainShiftCommandDto { Date = _dateOnlydto, PersonId = person.Id.GetValueOrDefault(), ScheduleTagId = scheduleTag.Id.GetValueOrDefault() });
 			
 			scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false),

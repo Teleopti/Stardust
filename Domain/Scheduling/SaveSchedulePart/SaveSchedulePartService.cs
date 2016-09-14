@@ -12,11 +12,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart
 	{
 		private readonly IScheduleDifferenceSaver _scheduleDictionarySaver;
 		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
+		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 
-		public SaveSchedulePartService(IScheduleDifferenceSaver scheduleDictionarySaver, IPersonAbsenceAccountRepository personAbsenceAccountRepository)
+		public SaveSchedulePartService(IScheduleDifferenceSaver scheduleDictionarySaver, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
 			_scheduleDictionarySaver = scheduleDictionarySaver;
 			_personAbsenceAccountRepository = personAbsenceAccountRepository;
+			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
 		public IList<string> Save(IScheduleDay scheduleDay, INewBusinessRuleCollection newBusinessRuleCollection,
@@ -53,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart
 
 		private IList<string> checkRules(IScheduleDictionary dic, IEnumerable<IScheduleDay> scheduleDays, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleTag scheduleTag)
 		{
-			var invalidList = dic.Modify(ScheduleModifier.Scheduler, scheduleDays, newBusinessRuleCollection, new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(scheduleTag)).ToList();
+			var invalidList = dic.Modify(ScheduleModifier.Scheduler, scheduleDays, newBusinessRuleCollection, _scheduleDayChangeCallback, new ScheduleTagSetter(scheduleTag)).ToList();
 			if (invalidList != null && invalidList.Any(l => !l.Overridden))
 			{
 				return invalidList.Select(i => i.Message).Distinct().ToArray();
