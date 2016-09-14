@@ -752,7 +752,6 @@ Scenario: Show possible shift trades from All
 	Then I should see a possible schedule trade with 'OtherAgent'
 	And I should see a possible schedule trade with 'OtherAgentNotInMyTeam' 
 
-@ignore
 Scenario: Show possible shift trades with name filter
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
