@@ -328,6 +328,11 @@
 			text-align: center;
 		}
 
+		.layer.sameTypeAsLast {
+			border-left-style: solid;
+			border-left-width: 1px;
+		}
+
 		.layer.hasSelected {
 			opacity: 0.4;
 		}

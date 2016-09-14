@@ -115,13 +115,14 @@
 				return undefined;
 			}
 
-			var projectionVms = [];
-			projections.forEach(function (projection) {
-				var proj = createShiftProjectionViewModel(projection, timeLine);
-				if (proj !== undefined) {
-					projectionVms.push(proj);
+			var projectionVms = projections.reduce(function (vms, proj, i, arr) {
+				var lproj = arr[i - 1] ? arr[i - 1] : null;
+				var vm = createShiftProjectionViewModel(proj, timeLine, lproj);
+				if (vm !== undefined) {
+					vms.push(vm);
 				}
-			});
+				return vms;
+			}, []);
 
 			return projectionVms;
 		}
@@ -183,7 +184,7 @@
 			return (yiq >= 128) ? 'black' : 'white';
 		}
 
-		function createShiftProjectionViewModel(projection, timeLine) {
+		function createShiftProjectionViewModel(projection, timeLine, lproj) {
 			if (!projection) projection = {};
 
 			var startTime = moment(projection.Start);
@@ -220,7 +221,8 @@
 					this.Selected = !this.Selected;
 				},
 				Minutes: projectionMinutes,
-				UseLighterBorder: useLightColor(projection.Color)
+				UseLighterBorder: useLightColor(projection.Color),
+				SameTypeAsLast: lproj ? (lproj.Description === projection.Description) : false
 			};
 
 			return shiftProjectionVm;
