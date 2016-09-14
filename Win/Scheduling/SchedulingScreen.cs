@@ -6575,7 +6575,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void toolStripMenuItemRestrictionDelete_Click(object sender, EventArgs e)
 		{
-			((AgentRestrictionsDetailView) _scheduleView).DeleteSelectedRestrictions(_undoRedo, _defaultScheduleTag);
+			((AgentRestrictionsDetailView) _scheduleView).DeleteSelectedRestrictions(_undoRedo, _defaultScheduleTag, _container.Resolve<IScheduleDayChangeCallback>());
 		}
 
 		private void editControlRestrictionsNewClicked(object sender, EventArgs e)

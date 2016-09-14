@@ -230,8 +230,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void DeleteSelectedRestrictions(IUndoRedoContainer undoRedo, IScheduleTag defaultScheduleTag)
+		public void DeleteSelectedRestrictions(IUndoRedoContainer undoRedo, IScheduleTag defaultScheduleTag, IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
 			if (_agentRestrictionGrid.CurrentDisplayRow == null)
 				return;
@@ -256,8 +255,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 			ISchedulePartModifyAndRollbackService rollbackService =
 				new SchedulePartModifyAndRollbackService(Presenter.SchedulerState.SchedulingResultState,
-														 new SchedulerStateScheduleDayChangedCallback(
-															 new ResourceCalculateDaysDecider(), ()=>Presenter.SchedulerState),
+														 scheduleDayChangeCallback,
 														 new ScheduleTagSetter(defaultScheduleTag));
 
 			var options = new DeleteOption { Preference = true, StudentAvailability = true };
