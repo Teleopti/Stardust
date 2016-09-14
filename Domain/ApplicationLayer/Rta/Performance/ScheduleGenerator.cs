@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -29,6 +28,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance
 		private readonly IScheduleDifferenceSaver _scheduleDifferenceSaver;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IActivityRepository _activityRepository;
+		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 
 		public ScheduleGenerator(ICurrentUnitOfWork unitOfWork,
 			IScenarioRepository scenarioRepository,
@@ -38,7 +38,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance
 			IPersonAbsenceAccountRepository personAbsenceAccountRepository,
 			IScheduleDifferenceSaver scheduleDifferenceSaver,
 			ISchedulingResultStateHolder schedulingResultStateHolder, 
-			IActivityRepository activityRepository
+			IActivityRepository activityRepository,
+			IScheduleDayChangeCallback scheduleDayChangeCallback
 			)
 		{
 			_unitOfWork = unitOfWork;
@@ -50,6 +51,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance
 			_scheduleDifferenceSaver = scheduleDifferenceSaver;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_activityRepository = activityRepository;
+			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
 		public void Generate(Guid personId, DateOnly date)
@@ -87,7 +89,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance
 			dic.MakeEditable();
 
 			var invalidList = dic.Modify(ScheduleModifier.Scheduler,
-				scheduleDay, rules, new ResourceCalculationOnlyScheduleDayChangeCallback(),
+				scheduleDay, rules, _scheduleDayChangeCallback,
 				new ScheduleTagSetter(NullScheduleTag.Instance));
 			if (invalidList != null && invalidList.Any(l => !l.Overridden))
 			{
