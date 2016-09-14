@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -71,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 				_ensureWeeklyRestRule, _contractWeeklyRestForPersonWeek, 
 				_teamBlockScheduleCloner, _filterForTeamBlockInSelection, 
 				_teamBlockOptimizationLimits, _schedulingOptionsCreator, 
-				_teamBlockSteadyStateValidator, _scheduleDayIsLockedSpecification);
+				_teamBlockSteadyStateValidator, _scheduleDayIsLockedSpecification, new DoNothingScheduleDayChangeCallBack());
 			_person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
 			_person.AddSchedulePeriod(new SchedulePeriod(_selectedPeriod.StartDate, SchedulePeriodType.Month, 1));
 			_person.Period(DateOnly.MinValue).PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.Zero, TimeSpan.FromHours(48), TimeSpan.FromHours(11), TimeSpan.FromHours(36));

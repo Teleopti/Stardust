@@ -3,7 +3,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -36,13 +35,15 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly ITeamBlockSteadyStateValidator _teamBlockSteadyStateValidator;
 		private readonly IScheduleDayIsLockedSpecification _scheduleDayIsLockedSpecification;
+		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private IList<IScheduleDay> _clonedSchedules;
 
 		public ShiftNudgeManager(IShiftNudgeEarlier shiftNudgeEarlier, IShiftNudgeLater shiftNudgeLater,
 			IEnsureWeeklyRestRule ensureWeeklyRestRule, IContractWeeklyRestForPersonWeek contractWeeklyRestForPersonWeek,
 			ITeamBlockScheduleCloner teamBlockScheduleCloner, IFilterForTeamBlockInSelection filterForTeamBlockInSelection,
 			ITeamBlockOptimizationLimits teamBlockOptimizationLimits, ISchedulingOptionsCreator schedulingOptionsCreator,
-			ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator, IScheduleDayIsLockedSpecification scheduleDayIsLockedSpecification)
+			ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator, IScheduleDayIsLockedSpecification scheduleDayIsLockedSpecification,
+			IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
 			_shiftNudgeEarlier = shiftNudgeEarlier;
 			_shiftNudgeLater = shiftNudgeLater;
@@ -54,6 +55,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 			_teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
 			_scheduleDayIsLockedSpecification = scheduleDayIsLockedSpecification;
+			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
 		public bool TrySolveForDayOff(PersonWeek personWeek, DateOnly dayOffDateToWorkWith,
@@ -130,7 +132,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			resourceCalculateDelayer.Pause();
 			var firstLeftNudge = true;
 			var firstRightNudge = true;
-			var rollbackServiceKeep = new SchedulePartModifyAndRollbackService(schedulingResultStateHolder, new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
+			var rollbackServiceKeep = new SchedulePartModifyAndRollbackService(schedulingResultStateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
 
 			while (!restTimeEnsured)
 			{
