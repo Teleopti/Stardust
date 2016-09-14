@@ -3825,6 +3825,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
+		[RemoveMeWithToggle("Check if MarkDateToBeRecalculated can be deleted when SchedulerStateScheduleDayChangedCallback is used everywhere", Toggles.ResourcePlanner_SpeedUpManualChanges_37029)]
 		private void _schedules_PartModified(object sender, ModifyEventArgs e)
 		{
 			if (InvokeRequired)
