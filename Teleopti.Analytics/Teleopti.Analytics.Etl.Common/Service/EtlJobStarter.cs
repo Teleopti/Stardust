@@ -24,6 +24,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 
 		private readonly string _connectionString;
 		private readonly string _cube;
+		private readonly int _databaseTimeoutInSecond;
 		private readonly JobExtractor _jobExtractor;
 		private readonly JobHelper _jobHelper;
 		private readonly string _pmInstallation;
@@ -44,6 +45,11 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			_connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
 			_cube = ConfigurationManager.AppSettings["cube"];
 			_pmInstallation = ConfigurationManager.AppSettings["pmInstallation"];
+
+			if (!int.TryParse(ConfigurationManager.AppSettings["databaseTimeout"], out _databaseTimeoutInSecond))
+			{
+				_databaseTimeoutInSecond = 60;
+			}
 		}
 
 		public void Initialize(DateTime serviceStartTime, Action stopService)
@@ -103,7 +109,8 @@ namespace Teleopti.Analytics.Etl.Common.Service
 				 _cube,
 				 _pmInstallation,
 				 configHandler.BaseConfiguration.RunIndexMaintenance,
-				 culture
+				 culture,
+				 _databaseTimeoutInSecond
 				 );
 
 			log.DebugFormat("Running job {0}", jobToRun.Name);

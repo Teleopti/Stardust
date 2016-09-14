@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 		private readonly IAgentBadgeCalculator _calculator;
 		private readonly IAgentBadgeWithRankCalculator _badgeWithRankCalculator;
 		private readonly IAgentBadgeRepository _badgeRepository;
-		public readonly IAgentBadgeWithRankRepository _badgeWithRankRepository;
+		private readonly IAgentBadgeWithRankRepository _badgeWithRankRepository;
 		private static readonly ILog logger = LogManager.GetLogger(typeof (CalculateBadges));
 		private readonly IGlobalSettingDataRepository _globalSettingRep;
 		private readonly IPersonRepository _personRepository;
@@ -80,7 +80,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 					{
 						var newAwardedBadgesWithRankForAdherence =
 							_badgeWithRankCalculator.CalculateAdherenceBadges(agentsWithSetting, message.TimeZoneCode, calculateDate,
-								adherenceReportSetting.CalculationMethod, setting, message.LogOnBusinessUnitId).ToList();
+								adherenceReportSetting.CalculationMethod, setting, message.LogOnBusinessUnitId,
+								message.TimeoutInSeconds).ToList();
 						if (logger.IsDebugEnabled)
 						{
 							logger.DebugFormat("Total {0} agents will get new badge for adherence",
@@ -92,7 +93,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 					{
 						var newAwardedBadgesForAdherence =
 							_calculator.CalculateAdherenceBadges(agentsWithSetting, message.TimeZoneCode, calculateDate,
-								adherenceReportSetting.CalculationMethod, setting, message.LogOnBusinessUnitId).ToList();
+								adherenceReportSetting.CalculationMethod, setting, message.LogOnBusinessUnitId,
+								message.TimeoutInSeconds).ToList();
 						if (logger.IsDebugEnabled)
 						{
 							logger.DebugFormat("Total {0} agents will get new badge for adherence", newAwardedBadgesForAdherence.Count);
@@ -107,7 +109,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 					{
 						var newAwardedBadgesWithRankForAht =
 							_badgeWithRankCalculator.CalculateAHTBadges(agentsWithSetting, message.TimeZoneCode, calculateDate, setting,
-								message.LogOnBusinessUnitId).ToList();
+								message.LogOnBusinessUnitId, message.TimeoutInSeconds).ToList();
 						if (logger.IsDebugEnabled)
 						{
 							logger.DebugFormat("Total {0} agents will get new badge for AHT", newAwardedBadgesWithRankForAht.Count);
@@ -119,7 +121,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 					{
 						var newAwardedBadgesForAht =
 							_calculator.CalculateAHTBadges(agentsWithSetting, message.TimeZoneCode, calculateDate, setting,
-								message.LogOnBusinessUnitId).ToList();
+								message.LogOnBusinessUnitId, message.TimeoutInSeconds).ToList();
 						if (logger.IsDebugEnabled)
 						{
 							logger.DebugFormat("Total {0} agents will get new badge for AHT", newAwardedBadgesForAht.Count);
@@ -134,8 +136,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 					{
 						var newAwardedBadgesWithRankForAnsweredCalls =
 							_badgeWithRankCalculator.CalculateAnsweredCallsBadges(agentsWithSetting, message.TimeZoneCode, calculateDate,
-								setting, message.LogOnBusinessUnitId)
-								.ToList();
+								setting, message.LogOnBusinessUnitId, message.TimeoutInSeconds).ToList();
 						if (logger.IsDebugEnabled)
 						{
 							logger.DebugFormat("Total {0} agents will get new badge for answered calls",
@@ -148,7 +149,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 					{
 						var newAwardedBadgesForAnsweredCalls =
 							_calculator.CalculateAnsweredCallsBadges(agentsWithSetting, message.TimeZoneCode,
-								calculateDate, setting, message.LogOnBusinessUnitId).ToList();
+								calculateDate, setting, message.LogOnBusinessUnitId, message.TimeoutInSeconds).ToList();
 						if (logger.IsDebugEnabled)
 						{
 							logger.DebugFormat("Total {0} agents will get new badge for answered calls",
@@ -157,10 +158,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 						sendMessagesToPeopleGotABadge(newAwardedBadgesForAnsweredCalls, setting, calculateDate, BadgeType.AnsweredCalls);
 					}
 				}
-
 			}
 		}
-
 
 		private void sendMessagesToPeopleGotABadge(IEnumerable<IAgentBadgeTransaction> newAwardedBadges,
 			IGamificationSetting setting, DateOnly calculateDate, BadgeType badgeType)
@@ -173,7 +172,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			{
 				var person = badgeTransaction.Person;
 
-				var existedBadge = existedBadges.SingleOrDefault(x => x.Person == person.Id) ?? new Domain.Common.AgentBadge
+				var existedBadge = existedBadges.SingleOrDefault(x => x.Person == person.Id) ?? new Common.AgentBadge
 				{
 					Person = person.Id.GetValueOrDefault(),
 					TotalAmount = 0,
@@ -198,12 +197,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 						goldBadgeMessageTemplate = Resources.YouGotANewGoldBadgeForAHT;
 						threshold = setting.AHTThreshold.TotalSeconds.ToString(CultureInfo.InvariantCulture);
 						break;
+
 					case BadgeType.AnsweredCalls:
 						bronzeBadgeMessageTemplate = Resources.YouGotANewBronzeBadgeForAnsweredCalls;
 						silverBadgeMessageTemplate = Resources.YouGotANewSilverBadgeForAnsweredCalls;
 						goldBadgeMessageTemplate = Resources.YouGotANewGoldBadgeForAnsweredCalls;
 						threshold = setting.AnsweredCallsThreshold.ToString(CultureInfo.InvariantCulture);
 						break;
+
 					case BadgeType.Adherence:
 						bronzeBadgeMessageTemplate = Resources.YouGotANewBronzeBadgeForAdherence;
 						silverBadgeMessageTemplate = Resources.YouGotANewSilverBadgeForAdherence;
@@ -251,7 +252,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			{
 				var person = badgeTransaction.Person;
 
-				var existedBadge = existedBadges.SingleOrDefault(x => x.Person == person.Id) ?? new Domain.Common.AgentBadgeWithRank
+				var existedBadge = existedBadges.SingleOrDefault(x => x.Person == person.Id) ?? new Common.AgentBadgeWithRank
 				{
 					Person = person.Id.GetValueOrDefault(),
 					BronzeBadgeAmount = 0,
@@ -287,6 +288,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 						silverBadgeThreshold = setting.AHTSilverThreshold.TotalSeconds.ToString(CultureInfo.InvariantCulture);
 						goldBadgeThreshold = setting.AHTGoldThreshold.TotalSeconds.ToString(CultureInfo.InvariantCulture);
 						break;
+
 					case BadgeType.AnsweredCalls:
 						bronzeBadgeMessageTemplate = Resources.BadgeWithRank_YouGotANewBronzeBadgeForAnsweredCalls;
 						silverBadgeMessageTemplate = Resources.BadgeWithRank_YouGotANewSilverBadgeForAnsweredCalls;
@@ -296,6 +298,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 						silverBadgeThreshold = setting.AnsweredCallsSilverThreshold.ToString(CultureInfo.InvariantCulture);
 						goldBadgeThreshold = setting.AnsweredCallsGoldThreshold.ToString(CultureInfo.InvariantCulture);
 						break;
+
 					case BadgeType.Adherence:
 						bronzeBadgeMessageTemplate = Resources.BadgeWithRank_YouGotANewBronzeBadgeForAdherence;
 						silverBadgeMessageTemplate = Resources.BadgeWithRank_YouGotANewSilverBadgeForAdherence;
@@ -342,37 +345,45 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 						case BadgeType.Adherence:
 							messageType = MessageType.AdherenceBronzeBadge;
 							break;
+
 						case BadgeType.AverageHandlingTime:
 							messageType = MessageType.AHTBronzeBadge;
 							break;
+
 						case BadgeType.AnsweredCalls:
 							messageType = MessageType.AnsweredCallsBronzeBadge;
 							break;
 					}
 					break;
+
 				case BadgeRank.Silver:
 					switch (badgeType)
 					{
 						case BadgeType.Adherence:
 							messageType = MessageType.AdherenceSilverBadge;
 							break;
+
 						case BadgeType.AverageHandlingTime:
 							messageType = MessageType.AHTSilverBadge;
 							break;
+
 						case BadgeType.AnsweredCalls:
 							messageType = MessageType.AnsweredCallsSilverBadge;
 							break;
 					}
 					break;
+
 				case BadgeRank.Gold:
 					switch (badgeType)
 					{
 						case BadgeType.Adherence:
 							messageType = MessageType.AdherenceGoldBadge;
 							break;
+
 						case BadgeType.AverageHandlingTime:
 							messageType = MessageType.AHTGoldBadge;
 							break;
+
 						case BadgeType.AnsweredCalls:
 							messageType = MessageType.AnsweredCallsGoldBadge;
 							break;

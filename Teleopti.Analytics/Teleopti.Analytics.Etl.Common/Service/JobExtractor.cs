@@ -22,30 +22,31 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		}
 
 		public IJob ExtractJobFromSchedule(
-			IEtlJobSchedule etlJobScheduleToRun, 
-			JobHelper jobHelper, 
-			string timeZoneId, 
-			int intervalLengthMinutes, 
+			IEtlJobSchedule etlJobScheduleToRun,
+			JobHelper jobHelper,
+			string timeZoneId,
+			int intervalLengthMinutes,
 			string cube,
-			string pmInstallation, 
-			bool runIndexMaintenance, 
-			CultureInfo culture)
+			string pmInstallation,
+			bool runIndexMaintenance,
+			CultureInfo culture,
+			int databaseTimeoutInSecond)
 		{
 			log.InfoFormat(CultureInfo.InvariantCulture, "Getting job to run from schedule '{0}'.", etlJobScheduleToRun.ScheduleName);
 
-			var jobParameters =
-				new JobParameters(
-					GetJobCategoryDatePeriods(etlJobScheduleToRun, timeZoneId),
-					etlJobScheduleToRun.DataSourceId, timeZoneId,
-					intervalLengthMinutes,
-					cube,
-					pmInstallation,
-					culture,
-					new IocContainerHolder(_componentContext), 
-					runIndexMaintenance)
-					{
-						Helper = jobHelper
-					};
+			var jobParameters = new JobParameters(
+				GetJobCategoryDatePeriods(etlJobScheduleToRun, timeZoneId),
+				etlJobScheduleToRun.DataSourceId, timeZoneId,
+				intervalLengthMinutes,
+				cube,
+				pmInstallation,
+				culture,
+				new IocContainerHolder(_componentContext),
+				runIndexMaintenance)
+			{
+				Helper = jobHelper,
+				DatabaseTimeoutInSecond = databaseTimeoutInSecond
+			};
 
 			var jobCollection = new JobCollection(jobParameters);
 
@@ -53,7 +54,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 
 			foreach (var job in jobCollection)
 			{
-				if (String.Compare(job.Name, etlJobScheduleToRun.JobName, StringComparison.Ordinal) == 0)
+				if (string.Compare(job.Name, etlJobScheduleToRun.JobName, StringComparison.Ordinal) == 0)
 					jobToRun = job;
 			}
 

@@ -163,19 +163,23 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-	    public IList LoadAgentsOverThresholdForAnsweredCalls(string timezoneCode, DateTime date, int answeredCallsThreshold, Guid businessUnitId)
-		{
-			return new List<Guid>();
-		}
-
-	    public IList LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod adherenceCalculationMethod, string timezoneCode, DateTime date, Percent adherenceThreshold, Guid businessUnitId)
+	    public IList LoadAgentsOverThresholdForAnsweredCalls(string timezoneCode, DateTime date, int answeredCallsThreshold,
+		    Guid businessUnitId, int? timeoutInSecond)
 	    {
-			return new List<Guid>();
+		    return new List<Guid>();
 	    }
 
-	    public IList LoadAgentsUnderThresholdForAHT(string timezoneCode, DateTime date, TimeSpan aHTThreshold, Guid businessUnitId)
+	    public IList LoadAgentsOverThresholdForAdherence(
+		    AdherenceReportSettingCalculationMethod adherenceCalculationMethod, string timezoneCode, DateTime date,
+			    Percent adherenceThreshold, Guid businessUnitId, int? timeoutInSecond)
 	    {
-			return new List<Guid>();
+		    return new List<Guid>();
+	    }
+
+	    public IList LoadAgentsUnderThresholdForAHT(string timezoneCode, DateTime date, TimeSpan ahtThreshold,
+		    Guid businessUnitId, int? timeoutInSecond)
+	    {
+		    return new List<Guid>();
 	    }
 
 	    public ICollection<Guid> PersonIdsWithExternalLogOn(Guid businessUnitId)

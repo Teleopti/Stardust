@@ -17,8 +17,10 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 		IJobMultipleDate JobCategoryDates { get; }
 		string OlapServer { get; }
 		string OlapDatabase { get; }
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 		IList<TimeZoneInfo> TimeZonesUsedByDataSources { get; set; }
+
 		bool IsPmInstalled { get; }
 		CultureInfo CurrentCulture { get; }
 		IToggleManager ToggleManager { get; }
@@ -27,6 +29,8 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 		bool RunIndexMaintenance { get; }
 
 		void SetTenantBaseConfigValues(IBaseConfiguration baseConfiguration);
+
 		IContainerHolder ContainerHolder { get; set; }
+		int DatabaseTimeoutInSecond { get; set; }
 	}
 }

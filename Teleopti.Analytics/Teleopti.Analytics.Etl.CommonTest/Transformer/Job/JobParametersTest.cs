@@ -27,15 +27,15 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job
 			string cubeConnectionString = string.Concat("Data Source=", _olapServer, ";", "Initial Catalog=",
 														_olapDatabase);
 			_target = new JobParameters(
-				_jobMultipleDate, 1, "W. Europe Standard Time", 5, 
-				cubeConnectionString, "true", 
-				CultureInfo.CurrentCulture, 
-				new JobParametersFactory.FakeContainerHolder(), 
+				_jobMultipleDate, 1, "W. Europe Standard Time", 5,
+				cubeConnectionString, "true",
+				CultureInfo.CurrentCulture,
+				new JobParametersFactory.FakeContainerHolder(),
 				false
 			);
 		}
 
-		#endregion
+		#endregion Setup/Teardown
 
 		[Test]
 		public void VerifyDataSource()
@@ -94,6 +94,12 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job
 			_target = new JobParameters(
 				_jobMultipleDate, 1, "W. Europe Standard Time", 5, "", "", CultureInfo.CurrentCulture, new JobParametersFactory.FakeContainerHolder(), false);
 			Assert.IsFalse(_target.IsPmInstalled);
+		}
+
+		[Test]
+		public void VerifyDatabaseTimeout()
+		{
+			Assert.AreEqual(60, _target.DataSource);
 		}
 	}
 }
