@@ -434,7 +434,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		var allSiteIds = [];
 
 		for (var i = 0; i < self.availableSites().length; ++i) {
-			// skip the first one as contains "allTeams"
 			if (self.availableSites()[i].id !== self.allSitesId) {
 				allSiteIds.push(self.availableSites()[i].id);
 			}
