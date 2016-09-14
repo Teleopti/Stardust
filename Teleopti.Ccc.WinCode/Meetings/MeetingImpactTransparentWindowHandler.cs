@@ -171,12 +171,14 @@ namespace Teleopti.Ccc.WinCode.Meetings
 
         private void OnTransparentWindowMoved(EventArgs e)
         {
-            if (TransparentWindowMoved != null)
+	        var onTransparentWindowMoved = TransparentWindowMoved;
+	        if (onTransparentWindowMoved != null)
             {
-                TransparentWindowMoved(this, e);
+                onTransparentWindowMoved(this, e);
             }
         }
-        private int HScrollValue()
+
+	    private int HScrollValue()
         {
             return _meetingImpactView.GetCurrentHScrollPixelPos;
         }

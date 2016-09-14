@@ -386,8 +386,9 @@ namespace Teleopti.Ccc.Win.Shifts
 
 		protected virtual void OnShowModifyCollection(object sender, EventArgs e)
 		{
-			if (ShowModifyCollection != null)
-				ShowModifyCollection(this, e);
+			var onShowModifyCollection = ShowModifyCollection;
+			if (onShowModifyCollection != null)
+				onShowModifyCollection(this, e);
 		}
 
 		public void ChangeGridView(ShiftCreatorViewType viewType)

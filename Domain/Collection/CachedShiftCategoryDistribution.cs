@@ -58,9 +58,10 @@ namespace Teleopti.Ccc.Domain.Collection
 
 		private void OnPartModified(ModifyEventArgs e)
 		{
-			if (PartModified != null)
+			var partModified = PartModified;
+			if (partModified != null)
 			{
-				PartModified(this, e);
+				partModified(this, e);
 			}
 		}
 

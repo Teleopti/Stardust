@@ -55,8 +55,9 @@ namespace Teleopti.Ccc.Win.Common.Controls.Chart
 
 		private void invokeZoomChanged(ZoomButtonsEventArgs e)
 		{
-			if (ZoomChanged == null) return;
-			ZoomChanged.Invoke(this, e);
+			var onZoomChanged = ZoomChanged;
+			if (onZoomChanged == null) return;
+			onZoomChanged.Invoke(this, e);
 			Refresh();
 		}
 

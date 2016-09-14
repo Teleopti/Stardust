@@ -532,14 +532,14 @@ namespace Teleopti.Ccc.Domain.Collection
         private void OnPartModified(ModifyEventArgs e)
 // ReSharper restore InconsistentNaming
         {
-            if (PartModified != null)
+	        var partModified = PartModified;
+	        if (partModified != null)
             {
-                PartModified(this, e);
+                partModified(this, e);
             }
         }
 
-
-        #region IDictionary<T,T>
+	    #region IDictionary<T,T>
 
         public bool ContainsKey(IPerson key)
         {

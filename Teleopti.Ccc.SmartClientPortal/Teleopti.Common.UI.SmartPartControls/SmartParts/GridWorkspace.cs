@@ -307,8 +307,9 @@ namespace Teleopti.Common.UI.SmartPartControls.SmartParts
         /// </remarks>
         protected virtual void OnWorkspaceGridSizeChanged(EventArgs e)
         {
-            if (WorkspaceGridSizeChanged != null)
-                WorkspaceGridSizeChanged(this, e);
+	        var onWorkspaceGridSizeChanged = WorkspaceGridSizeChanged;
+	        if (onWorkspaceGridSizeChanged != null)
+                onWorkspaceGridSizeChanged(this, e);
         }
     }
 }
