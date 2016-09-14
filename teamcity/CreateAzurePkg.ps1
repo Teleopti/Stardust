@@ -39,7 +39,7 @@ task default -depends init, PreReq, CreateAzurePkg, PostReq
 
 task Init {
 
-#    delete_file $package_file
+#    delete_file $package_file dummy
 #    delete_directory $build_dir
 #    create_directory $test_dir
 #    create_directory $build_dir
