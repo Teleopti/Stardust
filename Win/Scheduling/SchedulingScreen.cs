@@ -2879,7 +2879,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var deleteService = new DeleteSchedulePartService(() => SchedulerState.SchedulingResultState);
 			ISchedulePartModifyAndRollbackService rollbackService =
 				new SchedulePartModifyAndRollbackService(SchedulerState.SchedulingResultState,
-					new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), () => SchedulerState),
+					_container.Resolve<IScheduleDayChangeCallback>(),
 					new ScheduleTagSetter(_defaultScheduleTag));
 			if (!list.IsEmpty())
 			{
@@ -4517,7 +4517,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				toolStripExLocks, toolStripButtonFilterAgents, toolStripMenuItemLock, toolStripMenuItemLoggedOnUserTimeZone,
 				isRestrictionView);
 
-			var callback = new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), () => SchedulerState);
+			var callback = _container.Resolve<IScheduleDayChangeCallback>();
 			switch (level)
 			{
 				case ZoomLevel.DayView:
@@ -4733,8 +4733,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var exportToScenarioAbsenceFinder = new ExportToScenarioAbsenceFinder();
 			using (
 				var exportForm = new ExportToScenarioResultView(uowFactory, scheduleRepository,
-					new MoveDataBetweenSchedules(allNewRules,
-						new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), () => SchedulerState)),
+					new MoveDataBetweenSchedules(allNewRules, _container.Resolve<IScheduleDayChangeCallback>()),
 					_schedulerMessageBrokerHandler,
 					_scheduleView.AllSelectedPersons(selectedSchedules),
 					selectedSchedules,
@@ -5199,7 +5198,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_schedulerState.RequestedScenario, _requestPresenter,
 					_handleBusinessRuleResponse, _personRequestAuthorizationChecker, businessRules,
 					_overriddenBusinessRulesHolder,
-					new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), () => SchedulerState),
+				_container.Resolve<IScheduleDayChangeCallback>(),
 					globalSettingRepository, personAbsenceAccountRepository);
 
 				IList<PersonRequestViewModel> selectedRequestList = new List<PersonRequestViewModel>() {obj.Value.Request};
@@ -5255,7 +5254,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_schedulerState.RequestedScenario, _requestPresenter,
 					_handleBusinessRuleResponse,
 					_personRequestAuthorizationChecker, allNewBusinessRules, _overriddenBusinessRulesHolder,
-					new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), () => SchedulerState),
+				_container.Resolve<IScheduleDayChangeCallback>(),
 					globalSettingRepository, personAbsenceAccountRepository);
 
 				var selectedAdapters = new List<PersonRequestViewModel>() {eventParameters.Value.Request};
@@ -5735,7 +5734,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					new ApprovePersonRequestCommand(this, _schedulerState.Schedules, _schedulerState.RequestedScenario,
 						_requestPresenter, _handleBusinessRuleResponse,
 						_personRequestAuthorizationChecker, allNewBusinessRules, _overriddenBusinessRulesHolder,
-						new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), () => SchedulerState),
+				_container.Resolve<IScheduleDayChangeCallback>(),
 						globalSettingRepository, personAbsenceAccountRepository), _requestView.SelectedAdapters());
 			}
 
@@ -5772,7 +5771,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_schedulerState.RequestedScenario, _requestPresenter,
 					_handleBusinessRuleResponse, _personRequestAuthorizationChecker, businessRules,
 					_overriddenBusinessRulesHolder,
-					new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), () => SchedulerState),
+				_container.Resolve<IScheduleDayChangeCallback>(),
 					globalSettingRepository, personAbsenceAccountRepository));
 			}
 			if (_requestView != null)
@@ -6505,7 +6504,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 				var schedulePartModifyAndRollbackService =
 					new SchedulePartModifyAndRollbackService(SchedulerState.SchedulingResultState,
-						new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), () => SchedulerState),
+				_container.Resolve<IScheduleDayChangeCallback>(),
 						new ScheduleTagSetter(_defaultScheduleTag));
 				schedulePartModifyAndRollbackService.Modify(historyDay);
 				updateShiftEditor();
