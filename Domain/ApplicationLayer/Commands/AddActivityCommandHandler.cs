@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 						else
 						{
 							personAssignment.MoveActivityAndKeepOriginalPriority(fixableLayer,
-								fixableLayer.Period.StartDateTime.Add(movingDistance), null);
+								fixableLayer.Period.StartDateTime.Add(movingDistance), null, true);
 						}
 					}
 					else

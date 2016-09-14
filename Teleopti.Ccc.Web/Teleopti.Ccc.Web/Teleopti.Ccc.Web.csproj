@@ -2612,10 +2612,12 @@ copy "$(ProjectDir)..\..\Domain\FeatureFlags\toggles.txt" "$(TargetDir)FeatureFl
 </PreBuildEvent>
   </PropertyGroup>
   <Import Project=".node\node.targets" Condition="Exists('.node\node.targets')" />
+  <!--
   <Target Name="BeforeBuild">
     <CallTarget Targets="RestoreNodePackages;RunGruntBuildDev" Condition="'$(Configuration)' == 'Debug'" />
     <CallTarget Targets="RestoreNodePackages;RunGruntBuildDist" Condition="'$(Configuration)' != 'Debug'" />
   </Target>
+  -->
   <!--<Import Project="..\..\.nuget\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\.nuget\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
     <Error Condition="!Exists('..\..\.nuget\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />

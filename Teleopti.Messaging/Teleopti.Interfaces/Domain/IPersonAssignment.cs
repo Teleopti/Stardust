@@ -57,8 +57,8 @@ namespace Teleopti.Interfaces.Domain
 		void SetThisAssignmentsDayOffOn(IPersonAssignment dayOffDestination,TrackedCommandInfo trackedCommandInfo = null);
 		bool AssignedWithDayOff(IDayOffTemplate template);
 		void FillWithDataFrom(IPersonAssignment newAss);
-		void AddActivity(IActivity activity, DateTimePeriod period);
-		void AddActivity(IActivity activity, DateTimePeriod period, TrackedCommandInfo trackedCommandInfo, bool triggerResourceCalcualtion = false);
+		void AddActivity(IActivity activity, DateTimePeriod period, bool muteEvent = false);
+		void AddActivity(IActivity activity, DateTimePeriod period, TrackedCommandInfo trackedCommandInfo, bool triggerResourceCalcualtion = false, bool muteEvent = false);
 		void SetShiftCategory(IShiftCategory shiftCategory, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null);
 		void SetActivitiesAndShiftCategoryFrom(IPersonAssignment assignment);
 		void InsertActivity(IActivity activity, DateTimePeriod period, int index);
@@ -73,7 +73,7 @@ namespace Teleopti.Interfaces.Domain
 			TimeSpan length, TrackedCommandInfo trackedCommandInfo);
 
 		void MoveActivityAndKeepOriginalPriority(IShiftLayer shiftLayer, DateTime newStartTimeInUtc,
-			TrackedCommandInfo trackedCommandInfo);
+			TrackedCommandInfo trackedCommandInfo, bool muteEvent = false);
 
 		void AddActivity(IActivity activity, TimePeriod period);
 		void SetActivitiesAndShiftCategoryFromWithOffset(IPersonAssignment sourceAssignment, TimeSpan periodOffset);

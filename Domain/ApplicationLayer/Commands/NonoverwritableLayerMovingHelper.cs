@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			var personAssignmentClone = scheduleDay.PersonAssignment().EntityClone();
 			var layerInClone = personAssignmentClone.ShiftLayers.FirstOrDefault(l => l.Id == layer.Id.GetValueOrDefault());
-			personAssignmentClone.MoveActivityAndKeepOriginalPriority(layerInClone,newStartTimeInUtc,null);
+			personAssignmentClone.MoveActivityAndKeepOriginalPriority(layerInClone,newStartTimeInUtc,null, true);
 			return personAssignmentClone.ProjectionService()
 				.CreateProjection()
 				.Any(pl => pl.Period == periodAtDestination && pl.Payload.Id == layer.Payload.Id);

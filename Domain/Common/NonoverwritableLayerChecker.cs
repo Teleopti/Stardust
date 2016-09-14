@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Common
 			if (targetLayer == null) return overlapLayers;
 
 			personAssignment.MoveActivityAndKeepOriginalPriority(targetLayer,
-				newStartTimeInUtc, null);
+				newStartTimeInUtc, null, true);
 
 			Func<IVisualLayer, bool> stickyLayerPredicate = layer =>
 			{
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 			var assForChecking = ass.EntityClone();
 
-			assForChecking.AddActivity(activity, periodInUtc);
+			assForChecking.AddActivity(activity, periodInUtc, true);
 
 			return assForChecking;
 		}

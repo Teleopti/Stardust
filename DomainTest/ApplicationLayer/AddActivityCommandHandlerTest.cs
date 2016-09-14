@@ -316,7 +316,44 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var movedLunchLayer = PersonAssignmentRepo.Single().ShiftLayers.First(l => l.Payload == lunchActivity);
 			movedLunchLayer.Period.Should().Be(new DateTimePeriod(2013, 11, 14, 11, 2013, 11, 14, 12));
 		}
-				
+		[Test]
+		public void ShouldRaiseOneActivityAddedEventWithFixableConflictNonoverwritableLayer()
+		{
+			var scenario = CurrentScenario.Current();
+			PersonRepository.Add(PersonFactory.CreatePersonWithId());
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
+			ShiftCategoryRepository.Add(shiftCategory);
+			var mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
+			var addedActivity = ActivityFactory.CreateActivity("Added activity").WithId();
+			var lunchActivity = ActivityFactory.CreateActivity("Lunch").WithId();
+			mainActivity.AllowOverwrite = true;
+			lunchActivity.AllowOverwrite = false;
+			ActivityRepository.Add(addedActivity);
+			ActivityRepository.Add(mainActivity);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				mainActivity, PersonRepository.Single(),
+				new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16), shiftCategory, scenario);
+			pa.AddActivity(lunchActivity, new DateTimePeriod(2013, 11, 14, 12, 2013, 11, 14, 13));
+			pa.ShiftLayers.ForEach(l => l.WithId());
+			PersonAssignmentRepo.Add(pa);
+			ScheduleStorage.Add(pa);
+			PersonAssignmentRepo.Single().PopAllEvents();
+			var command = new AddActivityCommand
+			{
+				PersonId = PersonRepository.Single().Id.Value,
+				Date = new DateOnly(2013, 11, 14),
+				ActivityId = addedActivity.Id.Value,
+				StartTime = new DateTime(2013, 11, 14, 12, 0, 0),
+				EndTime = new DateTime(2013, 11, 14, 14, 0, 0),
+				MoveConflictLayerAllowed = true
+			};
+			Target.Handle(command);
+			var allEves = PersonAssignmentRepo.Single().PopAllEvents();
+			allEves.Count().Should().Be(1);
+			var @events = allEves.OfType<ActivityAddedEvent>().Where(e => e.ActivityId == addedActivity.Id.Value);
+			@events.Count().Should().Be(1);
+		}
 		[Test]
 		public void ShouldReturnWarningForConflictNonoverwritableLayerWhenItsNotFixable()
 		{

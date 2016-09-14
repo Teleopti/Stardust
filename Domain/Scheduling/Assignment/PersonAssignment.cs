@@ -337,9 +337,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			AddActivity(activity, new DateTimePeriod(start, end), null);
 		}
 
-		public virtual void AddActivity(IActivity activity, DateTimePeriod period)
+		public virtual void AddActivity(IActivity activity, DateTimePeriod period, bool muteEvent = false)
 		{
-			AddActivity(activity, period, null);
+			AddActivity(activity, period, null,false, muteEvent);
 		}
 
 		public virtual void AddActivity(IActivity activity, TimePeriod period)
@@ -350,28 +350,32 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			AddActivity(activity, periodAsDateTimePeriod);
 		}
 
-		public virtual void AddActivity(IActivity activity, DateTimePeriod period, TrackedCommandInfo trackedCommandInfo, bool triggerResourceCalcualtion = false)
+		public virtual void AddActivity(IActivity activity, DateTimePeriod period, TrackedCommandInfo trackedCommandInfo, bool triggerResourceCalcualtion = false, bool muteEvent = false)
 		{
 			addActivityInternal(activity, period);
-			AddEvent(() =>
+			if (!muteEvent)
 			{
-				var activityAddedEvent = new ActivityAddedEvent
+				AddEvent(() =>
 				{
-					Date = Date.Date,
-					PersonId = Person.Id.GetValueOrDefault(),
-					ActivityId = activity.Id.GetValueOrDefault(),
-					StartDateTime = period.StartDateTime,
-					EndDateTime = period.EndDateTime,
-					ScenarioId = Scenario.Id.GetValueOrDefault(),
-					LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
-				};
-				if (trackedCommandInfo != null)
-				{
-					activityAddedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
-					activityAddedEvent.CommandId = trackedCommandInfo.TrackId;
-				}
-				return activityAddedEvent;
-			});
+					var activityAddedEvent = new ActivityAddedEvent
+					{
+						Date = Date.Date,
+						PersonId = Person.Id.GetValueOrDefault(),
+						ActivityId = activity.Id.GetValueOrDefault(),
+						StartDateTime = period.StartDateTime,
+						EndDateTime = period.EndDateTime,
+						ScenarioId = Scenario.Id.GetValueOrDefault(),
+						LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+					};
+					if (trackedCommandInfo != null)
+					{
+						activityAddedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
+						activityAddedEvent.CommandId = trackedCommandInfo.TrackId;
+					}
+					return activityAddedEvent;
+				});
+			}
+			
 			if (triggerResourceCalcualtion)
 			{
 				AddEvent(() =>
@@ -532,7 +536,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				return activityMovedEvent;
 			});
 		}
-		public virtual void MoveActivityAndKeepOriginalPriority(IShiftLayer shiftLayer, DateTime newStartTimeInUtc, TrackedCommandInfo trackedCommandInfo)
+		public virtual void MoveActivityAndKeepOriginalPriority(IShiftLayer shiftLayer, DateTime newStartTimeInUtc, TrackedCommandInfo trackedCommandInfo, bool muteEvent = false)
 		{
 			var originalOrderIndex = ShiftLayers.ToList().IndexOf(shiftLayer);
 			if (originalOrderIndex < 0)
@@ -550,24 +554,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 
 			var affectedPeriod = shiftLayer.Period.MaximumPeriod(newLayerPeriod);
-			
-			AddEvent(()=>
+			if (!muteEvent)
 			{
-				var activityMovedEvent = new ActivityMovedEvent
+				AddEvent(() =>
 				{
-					PersonId = Person.Id.Value,
-					StartDateTime = affectedPeriod.StartDateTime,
-					EndDateTime =affectedPeriod.EndDateTime,
-					ScenarioId = Scenario.Id.Value,
-					LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
-				};
-				if (trackedCommandInfo != null)
-				{
-					activityMovedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
-					activityMovedEvent.CommandId = trackedCommandInfo.TrackId;
-				}
-				return activityMovedEvent;
-			});
+					var activityMovedEvent = new ActivityMovedEvent
+					{
+						PersonId = Person.Id.Value,
+						StartDateTime = affectedPeriod.StartDateTime,
+						EndDateTime = affectedPeriod.EndDateTime,
+						ScenarioId = Scenario.Id.Value,
+						LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+					};
+					if (trackedCommandInfo != null)
+					{
+						activityMovedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
+						activityMovedEvent.CommandId = trackedCommandInfo.TrackId;
+					}
+					return activityMovedEvent;
+				});
+			}
+			
 		}
 
 		public virtual IDayOff DayOff()
