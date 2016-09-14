@@ -91,6 +91,13 @@ WHERE
 					.ExecuteUpdate();
 				return;
 			}
+			
+			// select with upd lock to prevent deadlock
+			var existing = _unitOfWork.Current().Session()
+				.CreateSQLQuery(SelectAgentState + "WITH (UPDLOCK) WHERE PersonId = :PersonId")
+				.SetParameter("PersonId", model.PersonId)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalAgentState)))
+				.List<AgentStateFound>();
 
 			_unitOfWork.Current().Session()
 				.CreateSQLQuery(@"
@@ -101,13 +108,6 @@ WHERE
 				.SetParameter("PersonId", model.PersonId)
 				.SetParameterList("DataSourceIdUserCode", model.ExternalLogons.Select(x => $"{x.DataSourceId};{x.UserCode}"))
 				.ExecuteUpdate();
-
-			// select with upd lock to prevent deadlock
-			var existing = _unitOfWork.Current().Session()
-				.CreateSQLQuery(SelectAgentState + "WITH (UPDLOCK) WHERE PersonId = :PersonId")
-				.SetParameter("PersonId", model.PersonId)
-				.SetResultTransformer(Transformers.AliasToBean(typeof (internalAgentState)))
-				.List<AgentStateFound>();
 
 			_unitOfWork.Current().Session()
 				.CreateSQLQuery(@"
@@ -124,18 +124,81 @@ WHERE
 				.SetParameter("PersonId", model.PersonId)
 				.ExecuteUpdate();
 
+			var copyFrom = existing.FirstOrDefault();
+
 			model.ExternalLogons
 				.Where(e => !existing.Any(x => x.DataSourceId == e.DataSourceId && x.UserCode == e.UserCode))
 				.ForEach(e =>
 				{
 					_unitOfWork.Current().Session()
 						.CreateSQLQuery(@"
-INSERT INTO [dbo].[AgentState] (BusinessUnitId, SiteId, TeamId, PersonId, DataSourceId, UserCode)
-VALUES (:BusinessUnitId, :SiteId, :TeamId, :PersonId, :DataSourceId, :UserCode)")
+INSERT INTO [dbo].[AgentState]
+(
+	PersonId,
+	BatchId,
+	SourceId,
+	PlatformTypeId,
+	BusinessUnitId,
+	SiteId,
+	TeamId,
+	ReceivedTime,
+	StateCode,
+	StateGroupId,
+	StateStartTime,
+	ActivityId,
+	NextActivityId,
+	NextActivityStartTime,
+	RuleId,
+	RuleStartTime,
+	AlarmStartTime,
+	TimeWindowCheckSum,
+	Schedule,
+	DataSourceId,
+	UserCode
+)
+VALUES
+(
+	:PersonId,
+	:BatchId,
+	:SourceId,
+	:PlatformTypeId,
+	:BusinessUnitId,
+	:SiteId,
+	:TeamId,
+	:ReceivedTime,
+	:StateCode,
+	:StateGroupId,
+	:StateStartTime,
+	:ActivityId,
+	:NextActivityId,
+	:NextActivityStartTime,
+	:RuleId,
+	:RuleStartTime,
+	:AlarmStartTime,
+	:TimeWindowCheckSum,
+	:Schedule,
+	:DataSourceId,
+	:UserCode
+)")
+						.SetParameter("PersonId", model.PersonId)
+						.SetParameter("BatchId", copyFrom?.BatchId)
+						.SetParameter("SourceId", copyFrom?.SourceId)
+						.SetParameter("PlatformTypeId", copyFrom?.PlatformTypeId)
 						.SetParameter("BusinessUnitId", model.BusinessUnitId)
 						.SetParameter("SiteId", model.SiteId)
 						.SetParameter("TeamId", model.TeamId)
-						.SetParameter("PersonId", model.PersonId)
+						.SetParameter("ReceivedTime", copyFrom?.ReceivedTime)
+						.SetParameter("StateCode", copyFrom?.StateCode)
+						.SetParameter("StateGroupId", copyFrom?.StateGroupId)
+						.SetParameter("StateStartTime", copyFrom?.StateStartTime)
+						.SetParameter("ActivityId", copyFrom?.ActivityId)
+						.SetParameter("NextActivityId", copyFrom?.NextActivityId)
+						.SetParameter("NextActivityStartTime", copyFrom?.NextActivityStartTime)
+						.SetParameter("RuleId", copyFrom?.RuleId)
+						.SetParameter("RuleStartTime", copyFrom?.RuleStartTime)
+						.SetParameter("AlarmStartTime", copyFrom?.AlarmStartTime)
+						.SetParameter("TimeWindowCheckSum", copyFrom?.TimeWindowCheckSum)
+						.SetParameter("Schedule", copyFrom?.Schedule != null ? _serializer.SerializeObject(copyFrom.Schedule) : null, NHibernateUtil.StringClob)
 						.SetParameter("DataSourceId", e.DataSourceId)
 						.SetParameter("UserCode", e.UserCode)
 						.ExecuteUpdate();

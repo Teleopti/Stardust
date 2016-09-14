@@ -261,6 +261,49 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		}
 
 		[Test]
+		public void ShouldKeepStateWhenChangingExternalLogon()
+		{
+			var person = Guid.NewGuid();
+			Target.Prepare(new AgentStatePrepare
+			{
+				PersonId = person,
+				ExternalLogons = new[]
+				{
+					new ExternalLogon
+					{
+						DataSourceId = 1,
+						UserCode = "usercode1"
+					},
+				}
+			});
+			Target.Update(new AgentState
+			{
+				PersonId = person,
+				StateCode = "code",
+				ReceivedTime = "2016-09-14".Utc()
+			});
+			Target.Prepare(new AgentStatePrepare
+			{
+				PersonId = person,
+				ExternalLogons = new[]
+				{
+					new ExternalLogon
+					{
+						DataSourceId = 2,
+						UserCode = "usercode2"
+					}
+				}
+			});
+
+			Target.Find(2, "usercode2").Single().StateCode.Should().Be("code");
+			Target.Find(2, "usercode2").Single().ReceivedTime.Should().Be("2016-09-14".Utc());
+		}
+
+
+
+
+
+		[Test]
 		public void ShouldGetOneForAllPersonIdsNotInSnapshot()
 		{
 			var person = Guid.NewGuid();
@@ -379,5 +422,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				.Should()
 				.Have.SameSequenceAs(new[] {person1, person2}.OrderBy(x => x));
 		}
+
 	}
 }
