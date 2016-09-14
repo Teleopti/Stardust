@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 		private static bool isInPeriod(IEnumerable<DateTimePeriod> processingPeriods, IQueuedAbsenceRequest request)
 		{
-			return processingPeriods.Any(period => period.ContainsPart(new DateTimePeriod(request.StartDateTime, request.EndDateTime)));
+			return processingPeriods.Any(period => period.ContainsPart(new DateTimePeriod(request.StartDateTime.Utc(), request.EndDateTime.Utc())));
 		}
 
 		private static List<DateTimePeriod> getProcessingPeriods(IEnumerable<IQueuedAbsenceRequest> processingRequests)
@@ -76,8 +76,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			var periods = new List<DateTimePeriod>();
 			foreach (var timeStamp in groupedRequests.Keys)
 			{
-				var min = DateTime.MaxValue.Utc();
-				var max = DateTime.MinValue.Utc();
+				var min = DateTime.MaxValue;
+				var max = DateTime.MinValue;
 				
 				var requestsWithSameTimeStamp = groupedRequests[timeStamp];
 				foreach (var request in requestsWithSameTimeStamp)
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						max = request.EndDateTime;
 				}
 				if(min < max)
-					periods.Add(new DateTimePeriod(min, max));
+					periods.Add(new DateTimePeriod(min.Utc(), max.Utc()));
 			}
 			return periods;
 		}
@@ -125,8 +125,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			var result = new List<IEnumerable<Guid>>();
 			while (pastRequests.Any())
 			{
-				windowPeriod = new DateTimePeriod(windowPeriod.StartDateTime.AddDays(-windowSize),
-					windowPeriod.StartDateTime.AddDays(-1));
+				windowPeriod = new DateTimePeriod(windowPeriod.StartDateTime.AddDays(-windowSize).Utc(),
+					windowPeriod.StartDateTime.AddDays(-1).Utc());
 				var windowRequests = getRequestsOnPeriod(windowPeriod, pastRequests);
 				pastRequests = removeRequests(pastRequests, windowRequests);
 				if (windowRequests.Any())
@@ -141,8 +141,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			var result = new List<IEnumerable<Guid>>();
 			while (farFutureRequests.Any(x => x.StartDateTime >= windowPeriod.StartDateTime))
 			{
-				windowPeriod = new DateTimePeriod(windowPeriod.EndDateTime.AddDays(1),
-					windowPeriod.EndDateTime.AddDays(windowSize));
+				windowPeriod = new DateTimePeriod(windowPeriod.EndDateTime.AddDays(1).Utc(),
+					windowPeriod.EndDateTime.AddDays(windowSize).Utc());
 				var windowRequests = getRequestsOnPeriod(farFutureTimeStampInterval, windowPeriod, farFutureRequests);
 				farFutureRequests = removeRequests(farFutureRequests, windowRequests);
 				if (windowRequests.Any())

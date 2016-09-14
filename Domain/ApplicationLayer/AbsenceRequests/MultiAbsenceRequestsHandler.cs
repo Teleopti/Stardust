@@ -4,6 +4,7 @@ using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Specification;
@@ -118,7 +119,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				
 				if (max > min)
 				{
-					DateTimePeriod period = new DateTimePeriod(min, max);
+					DateTimePeriod period = new DateTimePeriod(min.Utc(), max.Utc());
 					var waitListIds = _personRequestRepository.GetWaitlistRequests(period).ToList();
 					requests.AddRange(_personRequestRepository.Find(waitListIds));
 				}
