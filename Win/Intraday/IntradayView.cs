@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.Win.Intraday
 	    private readonly IEventPublisher _publisher;
 	    private readonly IEventInfrastructureInfoPopulator _eventInfrastructureInfoPopulator;
 		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 
 		private DateNavigateControl _timeNavigationControl;
 		private GridRowInChartSettingButtons _gridrowInChartSetting;
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.Win.Intraday
 		private readonly IntradaySettingManager _settingManager;
 
 		public IntradayView(IEventAggregator eventAggregator, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder,
-			IResourceOptimizationHelperExtended resourceOptimizationHelperExtended,IEventPublisher publisher,IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator, IResourceCalculationContextFactory resourceCalculationContextFactory)
+			IResourceOptimizationHelperExtended resourceOptimizationHelperExtended,IEventPublisher publisher,IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator, IResourceCalculationContextFactory resourceCalculationContextFactory, IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
 			_eventAggregator = eventAggregator;
 			_overriddenBusinessRulesHolder = overriddenBusinessRulesHolder;
@@ -61,6 +62,7 @@ namespace Teleopti.Ccc.Win.Intraday
 		    _publisher = publisher;
 		    _eventInfrastructureInfoPopulator = eventInfrastructureInfoPopulator;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
+			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 
 			var authorization = PrincipalAuthorization.Current();
 
@@ -552,7 +554,7 @@ namespace Teleopti.Ccc.Win.Intraday
 				throw e.Error;
 			}
 
-			_intradayViewContent = new IntradayViewContent(Presenter, this, _eventAggregator, Presenter.SchedulerStateHolder, _settingManager, _overriddenBusinessRulesHolder, _resourceOptimizationHelperExtended, _resourceCalculationContextFactory);
+			_intradayViewContent = new IntradayViewContent(Presenter, this, _eventAggregator, Presenter.SchedulerStateHolder, _settingManager, _overriddenBusinessRulesHolder, _resourceOptimizationHelperExtended, _resourceCalculationContextFactory, _scheduleDayChangeCallback);
 			_intradayViewContent.RightToLeft = RightToLeft; //To solve error with wrong dock labels running RTL
 			_timeNavigationControl.SetSelectedDate(Presenter.IntradayDate);
 			Presenter.ExternalAgentStateReceived += presenterExternalAgentStateReceived;

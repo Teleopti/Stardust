@@ -62,9 +62,11 @@ namespace Teleopti.Ccc.Win.Intraday
 		private MultipleHostControl shiftEditorHost;
 		private readonly IResourceOptimizationHelperExtended _resourceOptimizationHelperExtended;
 		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 
 		public IntradayViewContent(IntradayPresenter presenter, IIntradayView owner, IEventAggregator eventAggregator, ISchedulerStateHolder schedulerStateHolder,
-			 IntradaySettingManager settingManager, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, IResourceOptimizationHelperExtended resourceOptimizationHelperExtended, IResourceCalculationContextFactory resourceCalculationContextFactory)
+			 IntradaySettingManager settingManager, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, IResourceOptimizationHelperExtended resourceOptimizationHelperExtended, 
+			 IResourceCalculationContextFactory resourceCalculationContextFactory, IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
 			if (presenter == null) throw new ArgumentNullException("presenter");
 			if (owner == null) throw new ArgumentNullException("owner");
@@ -75,6 +77,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			_overriddenBusinessRulesHolder = overriddenBusinessRulesHolder;
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
+			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_presenter = presenter;
 			_schedulerStateHolder = schedulerStateHolder;
 			_owner = owner;
@@ -201,7 +204,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			_owner.AddControlHelpContext(tabSkillData);
 
 			_scheduleView = new IntradayScheduleView(_skillIntradayGridControl, _owner, _presenter.SchedulerStateHolder, _gridLockManager, SchedulePartFilter.None, _clipHandlerSchedule,
-				 _overriddenBusinessRulesHolder, new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), ()=>_schedulerStateHolder), NullScheduleTag.Instance);
+				 _overriddenBusinessRulesHolder, _scheduleDayChangeCallback, NullScheduleTag.Instance);
 
 			wpfShiftEditor1.LoadFromStateHolder(_presenter.SchedulerStateHolder.CommonStateHolder);
 			wpfShiftEditor1.CommitChanges += shiftEditorCommitChanges;
