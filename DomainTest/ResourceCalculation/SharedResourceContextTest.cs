@@ -1,15 +1,24 @@
 ﻿using System;
+using System.Drawing;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.DomainTest.SchedulingScenarios;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
+using Task = System.Threading.Tasks.Task;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
@@ -19,6 +28,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	{
 		public ISharedResourceContext Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
+		public IResourceOptimizationHelperExtended ResourceOptimizationHelperExtended;
 
 		[Test]
 		public void ShouldMakeSureContextIsAlive()
@@ -70,6 +80,44 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			ResourceCalculationContext.Fetch()
 				.Should().Not.Be.SameInstanceAs(context);
+		}
+
+		[Test, Ignore("#37029")]
+		public void ShouldHandleScheduleChangesInOtherThread_ReuseSameContext()
+		{
+			var scenario = new Scenario("_");
+			var date = new DateOnly(2000, 1, 2);
+			var activity = new Activity("_");
+			var skill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony))
+			{
+				Activity = activity,
+				TimeZone = TimeZoneInfo.Utc
+			};
+			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
+			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, 1);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+			agent.AddPeriodWithSkill(new PersonPeriod(date, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
+			agent.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Day, 1));
+			var ass = new PersonAssignment(agent, scenario, date);
+			ass.AddActivity(activity, new TimePeriod(0, 0, 1, 0));
+			var stateHolder = SchedulerStateHolder.Fill(scenario, date.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, skillDay);
+
+			Target.MakeSureExists(new DateOnlyPeriod(), true);
+			ResourceOptimizationHelperExtended.ResourceCalculateAllDays(new NoSchedulingProgress(), false);
+			skillDay.SkillStaffPeriodCollection.First().CalculatedResource.Should().Be.EqualTo(1);
+
+
+			Task.Factory.StartNew(() =>
+			{
+				var part = stateHolder.SchedulingResultState.Schedules[agent].ScheduledDay(date);
+				part.DeleteMainShift(part);
+				stateHolder.Schedules.Modify(part);
+			}).Wait();
+
+
+			Target.MakeSureExists(new DateOnlyPeriod(), false);
+			ResourceOptimizationHelperExtended.ResourceCalculateAllDays(new NoSchedulingProgress(), false);
+			skillDay.SkillStaffPeriodCollection.First().CalculatedResource.Should().Be.EqualTo(0);
 		}
 
 		[TearDown]
