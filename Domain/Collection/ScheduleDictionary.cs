@@ -283,17 +283,7 @@ namespace Teleopti.Ccc.Domain.Collection
                     }
                 }
 
-				foreach (var rangeClone in rangeClones.Values)
-				{
-					IScheduleRange range = this[rangeClone.Person];
-					range.BusinessRuleResponseInternalCollection.Clear();
-					foreach (var businessRuleResponse in rangeClone.BusinessRuleResponseInternalCollection)
-					{
-						range.BusinessRuleResponseInternalCollection.Add(businessRuleResponse);
-					}
-				}
-
-				if (notOverriddenErrors.Count == 0)
+                if (notOverriddenErrors.Count == 0)
                 {
                     lock (_permissionLockObject)
                     {
@@ -312,7 +302,17 @@ namespace Teleopti.Ccc.Domain.Collection
 							OnPartModified(new ModifyEventArgs(modifier, partAfter.Person, partAfter.Period, part));
 
                         }
-                    }               
+                    }
+
+                    foreach (var rangeClone in rangeClones.Values)
+                    {
+                        IScheduleRange range = this[rangeClone.Person];
+                        range.BusinessRuleResponseInternalCollection.Clear();
+                        foreach (var businessRuleResponse in rangeClone.BusinessRuleResponseInternalCollection)
+                        {
+                            range.BusinessRuleResponseInternalCollection.Add(businessRuleResponse);
+                        }
+                    }
                 }
                 return lstErrors;
             }
@@ -532,8 +532,11 @@ namespace Teleopti.Ccc.Domain.Collection
         private void OnPartModified(ModifyEventArgs e)
 // ReSharper restore InconsistentNaming
         {
-			PartModified?.Invoke(this, e);
-		}
+            if (PartModified != null)
+            {
+                PartModified(this, e);
+            }
+        }
 
 
         #region IDictionary<T,T>
