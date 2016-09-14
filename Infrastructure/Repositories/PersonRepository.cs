@@ -575,6 +575,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Add(Restrictions.Eq("Team", team));
 		}
 
+		private static DetachedCriteria findActivePeriod(DateOnly date)
+		{
+			return DetachedCriteria.For(typeof(PersonPeriod))
+				.SetProjection(Projections.Id())
+				.Add(Restrictions.Le("StartDate", date))
+				.Add(Restrictions.EqProperty("Parent", "per.Id"));
+		}
+
 		public IPerson LoadAggregate(Guid id) { return Load(id); }
 
 		public IPerson LoadPersonAndPermissions(Guid id)
@@ -588,16 +596,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return foundPerson;
 		}
 
-		public IList<IPerson> FindUsers()
+		public IList<IPerson> FindUsers(DateOnly date)
 		{
 			return Session.CreateCriteria(typeof(Person), "per")
 				 .Add(Restrictions.Or(
 							 Restrictions.IsNull("TerminalDate"),
-							 Restrictions.Gt("TerminalDate", DateOnly.Today)
+							 Restrictions.Gt("TerminalDate", date)
 							 ))
-				.Add(Subqueries.NotExists(DetachedCriteria.For(typeof(PersonPeriod))
-				.SetProjection(Projections.Id())
-				.Add(Restrictions.EqProperty("Parent", "per.Id"))))
+				.Add(Subqueries.NotExists(findActivePeriod(date)))
 				.SetResultTransformer(Transformers.DistinctRootEntity)
 						 .List<IPerson>();
 		}

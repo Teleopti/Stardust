@@ -229,11 +229,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IList<IPerson> FindUsers()
+		public IList<IPerson> FindUsers(DateOnly date)
 		{
 			return
 			_persons.Where(
-				p => p.PersonPeriodCollection.IsEmpty() && p.TerminalDate.GetValueOrDefault(DateOnly.MaxValue) >= DateOnly.Today).ToArray();
+				p => !p.IsAgent(date) && p.TerminalDate.GetValueOrDefault(DateOnly.MaxValue) >= date).ToArray();
 		}
 	}
 }

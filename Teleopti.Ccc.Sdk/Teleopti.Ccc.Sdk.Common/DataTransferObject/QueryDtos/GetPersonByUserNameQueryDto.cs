@@ -30,10 +30,12 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos
 		/// </summary>
 		/// <value>True or false.</value>
 		[DataMember]
-		public bool LoadDeleted
-		{
-			get;
-			set;
-		}
+		public bool LoadDeleted { get; set; }
+
+		/// <summary>
+		/// Get and sets the date to search for users for. Defaults to todays date when not specified.
+		/// </summary>
+		[DataMember]
+		public DateOnlyDto Date { get; set; }
 	}
 }

@@ -1569,7 +1569,37 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(person2);
 
 			var pr = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
-			var foundPeople = pr.FindUsers();
+			var foundPeople = pr.FindUsers(DateOnly.Today);
+			Assert.AreEqual(1, foundPeople.Count);
+		}
+
+		[Test]
+		public void ShouldFindPeopleThatAreUsersCurrentlyAndAgentsInTheFuture()
+		{
+			ISite site1 = SiteFactory.CreateSimpleSite("Site1");
+			ITeam team1 = TeamFactory.CreateSimpleTeam("Team1");
+			site1.AddTeam(team1);
+
+			IPartTimePercentage partTimePercentage = new PartTimePercentage("100%");
+			IContractSchedule contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
+			IContract contract = new Contract("Full time");
+
+			IPerson per1 = PersonFactory.CreatePerson("sumeda", "Herath");
+			IPersonPeriod personPeriod1 =
+				PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010, 1, 2), new PersonContract(contract, partTimePercentage, contractSchedule), team1);
+			per1.AddPersonPeriod(personPeriod1);
+
+			PersistAndRemoveFromUnitOfWork(site1);
+			PersistAndRemoveFromUnitOfWork(team1);
+
+			PersistAndRemoveFromUnitOfWork(contractSchedule);
+			PersistAndRemoveFromUnitOfWork(partTimePercentage);
+			PersistAndRemoveFromUnitOfWork(contract);
+
+			PersistAndRemoveFromUnitOfWork(per1);
+			
+			var pr = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
+			var foundPeople = pr.FindUsers(new DateOnly(2010, 1, 1));
 			Assert.AreEqual(1, foundPeople.Count);
 		}
 
@@ -1581,7 +1611,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(person2);
 
 			var pr = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
-			var foundPeople = pr.FindUsers();
+			var foundPeople = pr.FindUsers(new DateOnly(2010,1,2));
 			Assert.AreEqual(0, foundPeople.Count);
 		}
 
@@ -1778,6 +1808,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			return new PersonRepository(currentUnitOfWork);
 		}
-
 	}
 }

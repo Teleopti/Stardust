@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 				using (unitOfWork.LoadDeletedIfSpecified(query.LoadDeleted))
 				{
 					var memberList = new List<IPerson>();
-					var foundPersons = _personRepository.FindUsers();
+					var foundPersons = _personRepository.FindUsers(query.Date==null ? DateOnly.Today : query.Date.ToDateOnly());
 					memberList.AddRange(foundPersons);
 					return _assembler.DomainEntitiesToDtos(memberList).ToList();
 				}
