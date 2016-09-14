@@ -319,7 +319,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I type '(.*)' in the name search box")]
 		public void WhenITypeInTheNameSearchBox(string partialName)
 		{
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".name-search input.form-control", partialName);
+			var selector = ".name-search input.form-control";
+			Browser.Interactions.FillWith(selector, partialName);
+			Browser.Interactions.PressEnter(selector);
 		}
 
 
