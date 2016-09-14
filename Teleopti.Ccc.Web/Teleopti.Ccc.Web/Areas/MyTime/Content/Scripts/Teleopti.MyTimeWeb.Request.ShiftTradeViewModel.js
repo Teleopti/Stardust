@@ -402,11 +402,8 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 			self.prepareLoad();
 			self.requestedDateInternal(value);
 
-			if (self.isSiteFilterEnabled) {
 			self.loadMySiteId(self.getFormattedDateForServiceCall());
-			} else {
 			self.loadMyTeamId(self.getFormattedDateForServiceCall());
-		}
 		}
 	});
 
@@ -428,18 +425,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		}
 
 		return allTeamIds;
-	};
-
-	self.getAllSiteIds = function () {
-		var allSiteIds = [];
-
-		for (var i = 0; i < self.availableSites().length; ++i) {
-			if (self.availableSites()[i].id !== self.allSitesId) {
-				allSiteIds.push(self.availableSites()[i].id);
-			}
-		}
-
-		return allSiteIds;
 	};
 
 	self.loadSchedule = function (date, selectedTeamOption) {
@@ -653,13 +638,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 				}
 				self.missingMyTeam(false);
 				self.myTeamId(data);
-				if (self.isSiteFilterEnabled) {
-					var siteId = self.selectedSite() ? self.selectedSite() : self.mySiteId();
-					self.loadTeamsUnderSite(siteId);
-				} else {
 				self.loadTeams(date);
-				}
-				
 			},
 			error: function (e) {
 			}
@@ -708,7 +687,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 				self.availableSites(data);
 				if (data && data.length > 0) self.setSiteAll();
 				self.selectedSite(siteToSelect);
-				self.loadMyTeamId(self.getFormattedDateForServiceCall());
 			},
 			error: function (e) {
 			}
@@ -752,31 +730,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 			},
 			error: function (e) {
 				//console.log(e);
-			}
-		});
-	};
-
-	self.loadTeamsUnderSite = function (siteId) {
-
-		var siteIds = (siteId === self.allTeamsId) ? self.getAllSiteIds() : [siteId];
-		var teamToSelect = self.selectedTeamInternal() ? self.selectedTeamInternal() : self.myTeamId();
-
-		ajax.Ajax({
-			url: "Team/TeamsUnderSiteForShiftTrade",
-			dataType: "json",
-			type: 'POST',
-			contentType: 'application/json; charset=utf-8',
-			data: JSON.stringify({
-				siteIds: siteIds.join(",")
-			}),
-			success: function (data, textStatus, jqXHR) {
-				self.selectedTeam(null);
-				self.availableTeams(data);
-				if (data && data.length > 0) self.setTeamAll();
-				self.selectedTeam(teamToSelect);
-			},
-			error: function (e) {
-				console.log(e);
 			}
 		});
 	};

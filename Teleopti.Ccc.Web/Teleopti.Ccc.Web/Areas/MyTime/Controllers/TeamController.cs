@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory;
 using Teleopti.Interfaces.Domain;
 
@@ -43,14 +42,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				Json(
 					_teamViewModelFactory.CreateTeamOptionsViewModel(date.Value, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb),
 					JsonRequestBehavior.AllowGet);
-		}
-
-		[UnitOfWork]
-		[HttpPost]
-		public virtual JsonResult TeamsUnderSiteForShiftTrade(string siteIds)
-		{
-			var allSiteIds = siteIds.Split(',').Select(siteId => new Guid(siteId)).ToList();
-			return Json(_siteViewModelFactory.GetTeams(allSiteIds));
 		}
 
 		[UnitOfWork]

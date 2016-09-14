@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Interfaces.Domain;
@@ -34,11 +33,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			var teams = _teamRepository.FindTeamsForSite(siteId);
 
 			return teams.Select(team => team.Id.Value).ToList();
-		} 
-
-		public IEnumerable<ITeam> GetTeamsUnderSite(Guid siteId)
-		{
-			return _teamRepository.FindTeamsForSite(siteId);
 		} 
 	}
 }
