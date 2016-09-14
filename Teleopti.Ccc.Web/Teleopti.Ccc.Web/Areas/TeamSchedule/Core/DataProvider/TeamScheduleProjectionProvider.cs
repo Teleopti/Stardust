@@ -224,8 +224,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private IList<GroupScheduleProjectionViewModel> splitMergedPersonalLayers(IScheduleDay scheduleDay, IVisualLayer layer, TimeZoneInfo userTimeZone)
 		{
 			var splittedVisualLayers = new List<GroupScheduleProjectionViewModel>();
-			var unMergedCollection =
-				((VisualLayerCollection)scheduleDay.ProjectionService().CreateProjection()).UnMergedCollection;
+			var unMergedCollection = _projectionProvider.UnmergedProjection(scheduleDay);
 			var splittedLayers = unMergedCollection.Where(l => layer.Period.Contains(l.Period)).ToList();
 
 			splittedLayers.ForEach(l =>
