@@ -14872,11 +14872,11 @@ These options are activated:
     <comment>Displayed name for schedule validation rule "NotOverwriteLayerRule"</comment>
   </data>
   <data name="MoveNonoverwritableActivityForTheseAgents" xml:space="preserve">
-    <value>Move nonoverwritable activities for these agents</value>
+    <value>Move non-overwritable activities for these agents</value>
     <comment>select option for pre-check panel in adding activity -team schedule.</comment>
   </data>
   <data name="NewActivityOverlapsNonoverwritableActivities" xml:space="preserve">
-    <value>The new added activity overlaps nonoverwritable activitie(s)</value>
+    <value>The new added activity overlaps non-overwritable activities</value>
     <comment>warning notice for adding activity in Web-TeamSchedule</comment>
   </data>
   <data name="Alert" xml:space="preserve">
@@ -14908,8 +14908,8 @@ These options are activated:
     <comment>Activity outside open hours for skill</comment>
   </data>
   <data name="BusinessRuleOverlappingFriendlyName3" xml:space="preserve">
-    <value>Not overwritable activity overwritten</value>
-    <comment>Not overwritable activity overwritten</comment>
+    <value>Non-overwritable activity overwritten</value>
+    <comment>Non-overwritable activity overwritten</comment>
   </data>
   <data name="BusinessRulePersonAccountFriendlyName" xml:space="preserve">
     <value>PersonAccount exceeds accrued value</value>

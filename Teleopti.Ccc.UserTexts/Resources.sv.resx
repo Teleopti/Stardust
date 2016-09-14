@@ -13679,4 +13679,67 @@ Dessa val är aktiverade:
   <data name="NotOverwriteLayerRuleName" xml:space="preserve">
     <value>Icke överskrivningsbara aktiviteter</value>
   </data>
+  <data name="RequestWaitlistedReasonPersonAccount" xml:space="preserve">
+    <value>Du har inte tillräckligt med tid kvar i tidsuppföljningssaldot.</value>
+  </data>
+  <data name="LatestAcquiredTime" xml:space="preserve">
+    <value>Senaste uppdatering</value>
+  </data>
+  <data name="DoNotModifyForTheseAgents" xml:space="preserve">
+    <value>Gör inte ändringar för dessa agenter</value>
+  </data>
+  <data name="MoveNonoverwritableActivityForTheseAgents" xml:space="preserve">
+    <value>Flytta icke överskrivningsbara aktiviteter för dessa agenter</value>
+  </data>
+  <data name="NewActivityOverlapsNonoverwritableActivities" xml:space="preserve">
+    <value>Den nya tillagda aktiviteter överlappar icke överskrivningsbara aktiviteter</value>
+  </data>
+  <data name="Alert" xml:space="preserve">
+    <value>Varning</value>
+  </data>
+  <data name="BusinessRuleDayOffFriendlyName" xml:space="preserve">
+    <value>Fridagskonflikt</value>
+  </data>
+  <data name="BusinessRuleMaxWeekWorkTimeFriendlyName" xml:space="preserve">
+    <value>Veckan har för mycket arbetstid</value>
+  </data>
+  <data name="BusinessRuleMinWeekWorktimeFriendlyName" xml:space="preserve">
+    <value>Veckan har för lite arbetstid</value>
+  </data>
+  <data name="BusinessRuleNightlyRestRuleFriendlyName" xml:space="preserve">
+    <value>Nattvilan är bruten</value>
+  </data>
+  <data name="BusinessRuleNoSiteOpenHourFriendlyName" xml:space="preserve">
+    <value>Aktivitet utanför enhetens öppettider</value>
+  </data>
+  <data name="BusinessRuleNoSkillsOpenFriendlyName" xml:space="preserve">
+    <value>Aktivitet utanför kompetensens öppettider</value>
+  </data>
+  <data name="BusinessRuleOverlappingFriendlyName3" xml:space="preserve">
+    <value>Icke överskrivningsbar aktivitet överskriven</value>
+  </data>
+  <data name="BusinessRulePersonAccountFriendlyName" xml:space="preserve">
+    <value>Tidsuppföljningen överskrider saldot</value>
+  </data>
+  <data name="BusinessRuleShiftCategoryLimitationFriendlyName" xml:space="preserve">
+    <value>Skiftkategoribegränsningarna är brutna för perioden</value>
+  </data>
+  <data name="BusinessRuleShiftCategoryLimitationFriendlyName1" xml:space="preserve">
+    <value>Skiftkategoribegränsningarna är brutan för veckan</value>
+  </data>
+  <data name="BusinessRuleWeeklyRestFriendlyName" xml:space="preserve">
+    <value>Veckan uppfyller inte veckovilan</value>
+  </data>
+  <data name="Overwritable" xml:space="preserve">
+    <value>Överskrivningsbar</value>
+  </data>
+  <data name="ValidationAlerts" xml:space="preserve">
+    <value>Valideringsvarningar</value>
+  </data>
+  <data name="AllPermittedSitesToMakeShiftTradeWith" xml:space="preserve">
+    <value>Alla enheter</value>
+  </data>
+  <data name="ReforecastedStaff" xml:space="preserve">
+    <value>Omprognostiserad bemanning</value>
+  </data>
 </root>
