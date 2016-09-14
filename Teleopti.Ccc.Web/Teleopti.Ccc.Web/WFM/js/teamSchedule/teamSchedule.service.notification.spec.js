@@ -43,7 +43,7 @@
 
 		});
 
-		it('should not notify warning when action result not contains warnings', function () {
+		it('should notify error when action result contains errors', function () {
 			fakeNotice.reset();
 			var actionResults = [
 				{
@@ -64,6 +64,7 @@
 			target.reportActionResult(commandTemplates, actionTargets, actionResults);
 
 			expect(fakeNotice.getLastWarning()).toBe('partial success');
+			expect(fakeNotice.getLastError()).toBe('error happens : testPerson1');
 
 		});
 
@@ -87,6 +88,9 @@
 			}
 			this.getLastWarning = function () {
 				return warning;
+			}
+			this.getLastError = function () {
+				return error;
 			}
 		};
 	});
