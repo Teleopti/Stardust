@@ -4,31 +4,29 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
     public class ResourceCalculationOnlyScheduleDayChangeCallback : IScheduleDayChangeCallback
     {
-        private IScheduleDay _dayBefore;
 
-        public void ScheduleDayChanging(IScheduleDay partBefore)
+        public void ScheduleDayBeforeChanging()
         {
 	        if (ResourceCalculationContext.InContext)
 	        {
 		        ResourceCalculationContext.Fetch();
 	        }
-	        _dayBefore = partBefore;
         }
 
-        public void ScheduleDayChanged(IScheduleDay partAfter)
+        public void ScheduleDayChanged(IScheduleDay partBefore, IScheduleDay partAfter)
         {
-            if (_dayBefore != null && partAfter != null)
+            if (partBefore != null && partAfter != null)
             {
-                applyChangesToResourceContainer(partAfter);
+                applyChangesToResourceContainer(partBefore, partAfter);
             }
         }
 
-        private void applyChangesToResourceContainer(IScheduleDay partAfter)
+        private static void applyChangesToResourceContainer(IScheduleDay partBefore, IScheduleDay partAfter)
         {
             if (ResourceCalculationContext.InContext)
             {
                 var container = ResourceCalculationContext.Fetch();
-                container.RemoveScheduleDayFromContainer(_dayBefore, container.MinSkillResolution);
+                container.RemoveScheduleDayFromContainer(partBefore, container.MinSkillResolution);
                 container.AddScheduleDayToContainer(partAfter, container.MinSkillResolution);
             }
         }

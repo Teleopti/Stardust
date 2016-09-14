@@ -293,11 +293,11 @@ namespace Teleopti.Ccc.Domain.Collection
                         {
                             var range = ((ScheduleRange) this[part.Person]);
                             var partBefore = range.ReFetch(part);
-                            scheduleDayChangeCallback.ScheduleDayChanging(partBefore);
+                            scheduleDayChangeCallback.ScheduleDayBeforeChanging();
                             range.ModifyInternal(part);
 							// permission can prevent part to be applied so let us check
 							var partAfter = range.ReFetch(part);				
-							scheduleDayChangeCallback.ScheduleDayChanged(partAfter);
+							scheduleDayChangeCallback.ScheduleDayChanged(partBefore, partAfter);
 
 							OnPartModified(new ModifyEventArgs(modifier, partAfter.Person, partAfter.Period, part));
 

@@ -330,8 +330,8 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			using (mocks.Record())
 			{
 				SetAuthorizationServiceExpectations();
-				Expect.Call(() => scheduleDayChangeCallback.ScheduleDayChanging(null)).IgnoreArguments();
-				Expect.Call(() => scheduleDayChangeCallback.ScheduleDayChanged(null)).IgnoreArguments();
+				Expect.Call(() => scheduleDayChangeCallback.ScheduleDayBeforeChanging()).IgnoreArguments();
+				Expect.Call(() => scheduleDayChangeCallback.ScheduleDayChanged(null, null)).IgnoreArguments();
 			}
 			using (mocks.Playback())
 			{

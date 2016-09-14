@@ -5,16 +5,8 @@
     ///</summary>
     public interface IScheduleDayChangeCallback
     {
-        ///<summary>
-        /// Schedule before change.
-        ///</summary>
-        ///<param name="partBefore">The schedule before changes.</param>
-        void ScheduleDayChanging(IScheduleDay partBefore);
+        void ScheduleDayBeforeChanging();
 
-        ///<summary>
-        /// Schedule after change.
-        ///</summary>
-        ///<param name="partAfter">The schedule after changes.</param>
-        void ScheduleDayChanged(IScheduleDay partAfter);
+        void ScheduleDayChanged(IScheduleDay partBefore, IScheduleDay partAfter);
     }
 }
