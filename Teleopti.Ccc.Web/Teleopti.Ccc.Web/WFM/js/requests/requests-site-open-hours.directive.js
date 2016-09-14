@@ -248,11 +248,12 @@
 		function (newValue, oldValue) {
 			if (newValue) {
 				setTimeout(function() {
-						var pickerScope = angular.element(document.getElementsByTagName('time-range-picker')).scope();
+					var pickerScope = angular.element(document.getElementsByTagName('time-range-picker')).scope();
+					if (pickerScope) {
 						pickerScope.disableNextDay = false;
 						pickerScope.$apply();
-					},
-					500);
+					}
+				});
 			}
 		});
 	}
