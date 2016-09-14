@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
     {
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<ResourceCalculationOnlyScheduleDayChangeCallback>().As<IScheduleDayChangeCallback>();
 			builder.RegisterType<SeatImpactOnPeriodForProjection>().As<ISeatImpactOnPeriodForProjection>();
 			builder.RegisterType<NonBlendSkillImpactOnPeriodForProjection>().As<INonBlendSkillImpactOnPeriodForProjection>();
 			builder.RegisterType<SignificantChangeChecker>().As<ISignificantChangeChecker>();		
