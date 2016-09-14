@@ -3,8 +3,9 @@
 
 	angular.module('wfm.teamSchedule').controller('TeamScheduleWeeklyCtrl', TeamScheduleWeeklyCtrl);
 
-	TeamScheduleWeeklyCtrl.$inject = ['$stateParams', '$locale', '$filter', 'PersonScheduleWeekViewCreator', 'UtilityService', 'weekViewScheduleSvc', 'Toggle', 'TeamSchedule'];
-	function TeamScheduleWeeklyCtrl(params, $locale, $filter, WeekViewCreator, Util, weekViewScheduleSvc, toggleSvc, teamScheduleSvc) {
+	TeamScheduleWeeklyCtrl.$inject = ['$stateParams', '$locale', '$filter', 'PersonScheduleWeekViewCreator', 'UtilityService', 'weekViewScheduleSvc', 'Toggle', 'TeamSchedule', 'signalRSVC'];
+
+	function TeamScheduleWeeklyCtrl(params, $locale, $filter, WeekViewCreator, Util, weekViewScheduleSvc, toggleSvc, teamScheduleSvc, signalR) {
 		var vm = this;
 		vm.searchOptions = {
 			keyword: angular.isDefined(params.keyword) && params.keyword !== '' ? params.keyword : '',
@@ -82,19 +83,32 @@
 
 			vm.weekDays = Util.getWeekdays(vm.scheduleDate);
 			vm.paginationOptions.totalPages = 1;
-			vm.loadSchedules();			
+			vm.loadSchedules();
+
+			if (toggleSvc.WfmTeamSchedule_SeeScheduleChangesByOthers_36303) {
+				monitorScheduleChanged();
+			}
 		}
 
 		function getParamsForLoadingSchedules(options) {
-			if (options == undefined) options = {};
+			options = options || {};
 			var params = {
-				Keyword: options.keyword != undefined ? options.keyword : vm.searchOptions.keyword,
-				Date: options.date != undefined ? options.date : moment(vm.startOfWeek).format("YYYY-MM-DD"),
-				PageSize: options.pageSize != undefined ? options.pageSize : vm.paginationOptions.pageSize,
-				CurrentPageIndex: options.currentPageIndex != undefined ? options.currentPageIndex : vm.paginationOptions.pageNumber,
+				Keyword: options.keyword || vm.searchOptions.keyword,
+				Date: options.date || moment(vm.startOfWeek).format('YYYY-MM-DD'),
+				PageSize: options.pageSize || vm.paginationOptions.pageSize,
+				CurrentPageIndex: options.currentPageIndex || vm.paginationOptions.pageNumber
 			};
 			return params;
 		}
-		
+
+		function monitorScheduleChanged() {
+			var options = {DomainType: 'IScheduleChangedInDefaultScenario'};
+			signalR.subscribeBatchMessage(options, scheduleChangedEventHandler, 300);
+		}
+
+		function scheduleChangedEventHandler() {
+			vm.loadSchedules();
+		}
+
 	}
 })()
