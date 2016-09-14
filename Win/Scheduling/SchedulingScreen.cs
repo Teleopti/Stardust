@@ -3862,7 +3862,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						_scheduleView.RefreshRangeForAgentPeriod(e.ModifiedPerson, e.ModifiedPeriod);
 					if (e.Modifier == ScheduleModifier.UndoRedo)
 					{
-						selectCellFromPersonDate(e.ModifiedPerson, localDate);
+						selectCellFromPersonDate(e.ModifiedPerson, e.ModifiedPart.DateOnlyAsPeriod.DateOnly);
 					}
 					if (e.Modifier != ScheduleModifier.MessageBroker)
 						enableSave();
@@ -5909,8 +5909,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (_lastModifiedPart != null)
 			{
-				selectCellFromPersonDate(_lastModifiedPart.ModifiedPerson,
-					new DateOnly(_lastModifiedPart.ModifiedPeriod.StartDateTimeLocal(_schedulerState.TimeZoneInfo)));
+				selectCellFromPersonDate(_lastModifiedPart.ModifiedPerson,_lastModifiedPart.ModifiedPart.DateOnlyAsPeriod.DateOnly);
 			}
 
 			RecalculateResources(false);
