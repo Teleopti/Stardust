@@ -507,7 +507,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				highAss.ClearOvertimeActivities();
 		}
 
-		public void DeleteMainShift(IScheduleDay source)
+		public void DeleteMainShift(IScheduleDay source) //TODO: remove source
 		{
 			IPersonAssignment highAss = PersonAssignment();
 
@@ -519,7 +519,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				
 		}
 
-		public void DeleteMainShiftSpecial(IScheduleDay source)
+		public void DeleteMainShiftSpecial(IScheduleDay source) //TODO: remove source
 		{
 			var highAss = PersonAssignment();
 
