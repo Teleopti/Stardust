@@ -9,9 +9,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	{
 		public readonly HashSet<AnalyticsBridgeTimeZone> Bridges = new HashSet<AnalyticsBridgeTimeZone>();
 
-		public IList<AnalyticsBridgeTimeZonePartial> GetBridgesPartial(int timeZoneId)
+		public IList<AnalyticsBridgeTimeZonePartial> GetBridgesPartial(int timeZoneId, int minDateId)
 		{
-			return Bridges.Where(x => x.TimeZoneId == timeZoneId).Cast<AnalyticsBridgeTimeZonePartial>().ToList();
+			return Bridges.Where(x => x.TimeZoneId == timeZoneId && x.DateId >= minDateId).Cast<AnalyticsBridgeTimeZonePartial>().ToList();
 		}
 
 		public void Save(IList<AnalyticsBridgeTimeZone> toBeAdded)
@@ -21,6 +21,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				if (!Bridges.Contains(item))
 					Bridges.Add(item);
 			}
+		}
+
+		public int GetMaxDateForTimeZone(int timeZoneId)
+		{
+			return Bridges.Where(x => x.TimeZoneId == timeZoneId).OrderByDescending(x => x.DateId).FirstOrDefault()?.DateId ?? 0;
 		}
 	}
 }

@@ -47,11 +47,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Dates
 			// for each timezone, get existing entries from bridge and add/update
 			foreach (var timezone in timezones)
 			{
+				var maxExistingDateId = _analyticsBridgeTimeZoneRepository.GetMaxDateForTimeZone(timezone.TimeZoneId);
 				var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timezone.TimeZoneCode);
 				var existingBridges = new HashSet<AnalyticsBridgeTimeZonePartial>(_analyticsBridgeTimeZoneRepository
-					.GetBridgesPartial(timezone.TimeZoneId));
+					.GetBridgesPartial(timezone.TimeZoneId, maxExistingDateId));
 				var toBeAdded = new List<AnalyticsBridgeTimeZone>();
-				foreach (var date in dates)
+				foreach (var date in dates.Where(x => x.DateId >= maxExistingDateId))
 				{
 					foreach (var interval in intervals)
 					{

@@ -16,11 +16,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			_analyticsUnitOfWork = analyticsUnitOfWork;
 		}
 
-		public IList<AnalyticsBridgeTimeZonePartial> GetBridgesPartial(int timeZoneId)
+		public IList<AnalyticsBridgeTimeZonePartial> GetBridgesPartial(int timeZoneId, int minDateId)
 		{
 			AnalyticsBridgeTimeZonePartial analyticsBridgeTimeZonePartial = null;
 			return _analyticsUnitOfWork.Current().Session().QueryOver<AnalyticsBridgeTimeZone>()
 				.Where(b => b.TimeZoneId == timeZoneId)
+				.And(x => x.DateId >= minDateId)
 				.SelectList(list => list
 					.Select(x => x.DateId).WithAlias(() => analyticsBridgeTimeZonePartial.DateId)
 					.Select(x => x.IntervalId).WithAlias(() => analyticsBridgeTimeZonePartial.IntervalId)
@@ -42,6 +43,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				}
 				transaction.Commit();
 			}
+		}
+
+		public int GetMaxDateForTimeZone(int timeZoneId)
+		{
+			return _analyticsUnitOfWork.Current().Session().QueryOver<AnalyticsBridgeTimeZone>()
+				.Where(b => b.TimeZoneId == timeZoneId)
+				.Select(x => x.DateId)
+				.OrderBy(zone => zone.DateId)
+				.Desc
+				.Take(1)
+				.SingleOrDefault<int>();
 		}
 	}
 }

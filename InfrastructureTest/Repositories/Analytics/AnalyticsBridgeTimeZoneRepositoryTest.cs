@@ -31,18 +31,29 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldAddBridgesAndGetByTimeZone()
 		{
-			var expected = new AnalyticsBridgeTimeZone(1, 1, 0)
+			var expected1 = new AnalyticsBridgeTimeZone(1, 1, 0)
 				{
 					LocalIntervalId = 1,
 					LocalDateId = 1
 				};
-			WithAnalyticsUnitOfWork.Do(() => Target.Save(new [] { expected }));
+			var expected2 = new AnalyticsBridgeTimeZone(2, 1, 0)
+			{
+				LocalIntervalId = 1,
+				LocalDateId = 2
+			};
 
-			var utcBridges = WithAnalyticsUnitOfWork.Get(() => Target.GetBridgesPartial(0));
-			utcBridges.Count.Should().Be.EqualTo(1);
-			utcBridges.First().DateId.Should().Be.EqualTo(expected.DateId);
-			utcBridges.First().IntervalId.Should().Be.EqualTo(expected.IntervalId);
-			utcBridges.First().TimeZoneId.Should().Be.EqualTo(expected.TimeZoneId);
+			var maxDateId = WithAnalyticsUnitOfWork.Get(() => Target.GetMaxDateForTimeZone(0));
+			maxDateId.Should().Be.EqualTo(0);
+			WithAnalyticsUnitOfWork.Do(() => Target.Save(new [] { expected1, expected2 }));
+
+			var utcBridges = WithAnalyticsUnitOfWork.Get(() => Target.GetBridgesPartial(0, 0));
+			utcBridges.Count.Should().Be.EqualTo(2);
+			utcBridges.First().DateId.Should().Be.EqualTo(expected1.DateId);
+			utcBridges.First().IntervalId.Should().Be.EqualTo(expected1.IntervalId);
+			utcBridges.First().TimeZoneId.Should().Be.EqualTo(expected1.TimeZoneId);
+
+			maxDateId = WithAnalyticsUnitOfWork.Get(() => Target.GetMaxDateForTimeZone(0));
+			maxDateId.Should().Be.EqualTo(expected2.DateId);
 		}
 
 	}
