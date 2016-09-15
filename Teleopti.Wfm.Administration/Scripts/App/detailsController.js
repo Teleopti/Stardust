@@ -64,8 +64,6 @@
 					vm.TenantId = data.Id,
 					vm.TenantOk = data.Success;
 					vm.Server = data.Server;
-					vm.UserName = data.UserName;
-					vm.Password = data.Password;
 					vm.UseIntegratedSecurity = data.UseIntegratedSecurity;
 					vm.AnalyticsDatabase = data.AnalyticsDatabase;
 					vm.AppDatabase = data.AppDatabase;
