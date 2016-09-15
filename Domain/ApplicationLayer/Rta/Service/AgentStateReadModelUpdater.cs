@@ -105,12 +105,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private static void handle(AgentStateReadModel model, PersonOutOfAdherenceEvent @event)
 		{
-			model.OutOfAdherences =
-				model.OutOfAdherences.EmptyIfNull().Append(new AgentStateOutOfAdherenceReadModel
-				{
-					StartTime = @event.Timestamp,
-					EndTime = null
-				}).ToArray();
+			var outOfAdherences = model.OutOfAdherences.EmptyIfNull();
+			var last = outOfAdherences.LastOrDefault();
+			if (last == null || last.EndTime != null)
+				model.OutOfAdherences = outOfAdherences
+					.Append(new AgentStateOutOfAdherenceReadModel
+					{
+						StartTime = @event.Timestamp,
+						EndTime = null
+					}).ToArray();
 		}
 	}
 }

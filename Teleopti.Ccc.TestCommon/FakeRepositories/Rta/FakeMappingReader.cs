@@ -38,14 +38,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public IEnumerable<Mapping> Read()
 		{
-			var mappingsExpression = MappingReadModelUpdater.MakeMappings(_businessUnits, _activities, _stateGroups, _mapRepository);
-
-			// mimic the new mapping read models eventual updating
-			if (_toggles.IsEnabled(Toggles.RTA_RuleMappingOptimization_39812))
-				return _mappings ?? (_mappings = mappingsExpression.ToArray());
-
-			// mimic the view kinda (will include all combinations, it really shouldnt)
-			return mappingsExpression.ToArray();
+			// we dont mimic the mapping caching
+			return MappingReadModelUpdater.MakeMappings(_businessUnits, _activities, _stateGroups, _mapRepository)
+				.ToArray();
 		}
 
 		public IEnumerable<Mapping> ReadFor(IEnumerable<string> stateCodes, IEnumerable<Guid?> activities)
