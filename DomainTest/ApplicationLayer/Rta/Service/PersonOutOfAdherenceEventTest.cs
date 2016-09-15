@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
@@ -238,5 +239,37 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.Single().Timestamp.Should().Be("2015-11-25 12:01".Utc());
 		}
 
+		[Test]
+		public void ShouldNotPublishDuplicateEventsBecauseOfRuleChanges()
+		{
+			var person = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.WithUser("usercode", person)
+				.WithSchedule(person, phone, "2016-05-30 09:00", "2016-05-30 10:00")
+				.WithRule("state1", phone, -1, Adherence.Out)
+				.WithRule("state2", phone, -1, Adherence.Out)
+				;
+
+			Now.Is("2016-05-30 09:00");
+			Target.SaveState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "state1"
+			});
+			Database.ClearRuleMap()
+				.WithRule("state1", phone, 0, Adherence.In)
+				.WithRule("state2", phone, -1, Adherence.Out)
+				;
+			Now.Is("2016-05-30 09:01");
+			Target.SaveState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "state2"
+			});
+
+			Publisher.PublishedEvents.OfType<PersonOutOfAdherenceEvent>()
+				.Single().Timestamp.Should().Be("2016-05-30 09:00".Utc());
+		}
 	}
 }
