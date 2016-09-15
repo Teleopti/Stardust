@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -14,6 +15,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
 	[DomainTest]
+	[Toggle(Toggles.ResourcePlanner_CalculateFarAwayTimeZones_40646)]
 	public class ResourceCalculateCorrectDaysTest
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;

@@ -417,6 +417,7 @@
     <Compile Include="Logon\ImpersonateSystemAttribute.cs" />
     <Compile Include="Optimization\DaysOffBackToLegalState.cs" />
     <Compile Include="Optimization\OptimizerHelperHelper.cs" />
+    <Compile Include="Optimization\ResourceCalculateDaysDecider.cs" />
     <Compile Include="Optimization\ScheduleBlankSpots.cs" />
     <Compile Include="Optimization\ScheduleMatrixesPrimarySkillExtractor.cs" />
     <Compile Include="Optimization\SmartDayOffBackToLegalStateSolverContainer.cs" />

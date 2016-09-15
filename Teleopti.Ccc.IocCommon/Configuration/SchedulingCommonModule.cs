@@ -186,7 +186,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WorkShiftCalculatorsManager>().As<IWorkShiftCalculatorsManager>().InstancePerLifetimeScope();
 			builder.RegisterType<FairnessAndMaxSeatCalculatorsManager28317>().As<IFairnessAndMaxSeatCalculatorsManager>()
 				.InstancePerLifetimeScope();
-			builder.RegisterType<ResourceCalculateDaysDeciderOld>().As<IResourceCalculateDaysDecider>().SingleInstance();
+			if (_configuration.Toggle(Toggles.ResourcePlanner_CalculateFarAwayTimeZones_40646))
+			{
+				builder.RegisterType<ResourceCalculateDaysDecider>().As<IResourceCalculateDaysDecider>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<ResourceCalculateDaysDeciderOld>().As<IResourceCalculateDaysDecider>().SingleInstance();
+			}
 			builder.RegisterType<PeopleAndSkillLoaderDecider>().As<IPeopleAndSkillLoaderDecider>().SingleInstance();
 			builder.RegisterGeneric(typeof(PairMatrixService<>)).As(typeof(IPairMatrixService<>)).SingleInstance();
 			builder.RegisterGeneric(typeof(PairDictionaryFactory<>)).As(typeof(IPairDictionaryFactory<>)).SingleInstance();

@@ -1,15 +1,17 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-    public interface IResourceCalculateDaysDecider
+	public interface IResourceCalculateDaysDecider
     {
         IList<DateOnly> DecideDates(IScheduleDay currentSchedule, IScheduleDay previousSchedule);
 	    bool IsNightShift(IScheduleDay scheduleDay);
     }
 
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_CalculateFarAwayTimeZones_40646)]
     public class ResourceCalculateDaysDeciderOld : IResourceCalculateDaysDecider
     {
         public IList<DateOnly> DecideDates(IScheduleDay currentSchedule, IScheduleDay previousSchedule)
