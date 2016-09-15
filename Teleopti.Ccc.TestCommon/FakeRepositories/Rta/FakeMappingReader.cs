@@ -1,13 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using NHibernate.Util;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Toggle;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
@@ -17,23 +13,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		private readonly IActivityRepository _activities;
 		private readonly IRtaMapRepository _mapRepository;
 		private readonly IRtaStateGroupRepository _stateGroups;
-		private readonly IToggleManager _toggles;
-
-		private IEnumerable<Mapping> _mappings;
 
 		public FakeMappingReader(
 			IBusinessUnitRepository businessUnits,
 			IActivityRepository activities,
 			IRtaMapRepository mapRepository,
-			IRtaStateGroupRepository stateGroups,
-			IToggleManager toggles
+			IRtaStateGroupRepository stateGroups
 			)
 		{
 			_businessUnits = businessUnits;
 			_activities = activities;
 			_mapRepository = mapRepository;
 			_stateGroups = stateGroups;
-			_toggles = toggles;
 		}
 
 		public IEnumerable<Mapping> Read()
