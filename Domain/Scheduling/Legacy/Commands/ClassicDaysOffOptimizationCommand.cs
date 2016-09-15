@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IPersonalSkillsProvider _personalSkillsProvider;
+		private readonly IResourceCalculateDaysDecider _resourceCalculateDaysDecider;
 
 		public ClassicDaysOffOptimizationCommand(IOptimizerHelperHelper optimizerHelperHelper, 
 			IScheduleMatrixLockableBitArrayConverterEx bitArrayConverter,
@@ -45,7 +46,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
 			IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
-			IPersonalSkillsProvider personalSkillsProvider)
+			IPersonalSkillsProvider personalSkillsProvider,
+			IResourceCalculateDaysDecider resourceCalculateDaysDecider)
 		{
 			_optimizerHelperHelper = optimizerHelperHelper;
 			_bitArrayConverter = bitArrayConverter;
@@ -62,6 +64,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
 			_schedulerStateHolder = schedulerStateHolder;
 			_personalSkillsProvider = personalSkillsProvider;
+			_resourceCalculateDaysDecider = resourceCalculateDaysDecider;
 		}
 
 		public void Execute(
@@ -183,7 +186,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					workShiftBackToLegalStateService,
 					_effectiveRestrictionCreator,
 					_resourceOptimizationHelper,
-					new ResourceCalculateDaysDecider(),
+					_resourceCalculateDaysDecider,
 					_dayOffOptimizerValidator,
 					dayOffOptimizerConflictHandler,
 					originalStateContainer,
