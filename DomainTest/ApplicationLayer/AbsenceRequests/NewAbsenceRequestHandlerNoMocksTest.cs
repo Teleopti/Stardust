@@ -573,7 +573,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var requestFactory =
 				new RequestFactory(new SwapAndModifyService(new SwapService(), new DoNothingScheduleDayChangeCallBack()),
-					new PersonRequestAuthorizationCheckerForTest(), new FakeGlobalSettingDataRepository(), null);
+					new PersonRequestAuthorizationCheckerForTest(), new FakeGlobalSettingDataRepository(), null, new DoNothingScheduleDayChangeCallBack());
 
 
 			var toggleManager = enableWaitlisting

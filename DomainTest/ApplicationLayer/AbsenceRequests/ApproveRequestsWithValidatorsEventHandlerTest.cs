@@ -273,7 +273,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				new FakeActivityRepository(), new FakeAbsenceRepository());
 			var requestFactory =
 				new RequestFactory(new SwapAndModifyService(new SwapService(), new DoNothingScheduleDayChangeCallBack()),
-					new PersonRequestAuthorizationCheckerForTest(), new FakeGlobalSettingDataRepository(), null);
+					new PersonRequestAuthorizationCheckerForTest(), new FakeGlobalSettingDataRepository(), null, new DoNothingScheduleDayChangeCallBack());
 			var toggleManager = new FakeToggleManager();
 
 			var budgetGroupHeadCountSpecification = new BudgetGroupHeadCountSpecification(_scenarioRepository,
