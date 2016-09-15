@@ -11,7 +11,7 @@ namespace Stardust.Node.Workers
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (InvokeHandler));
 
-		public InvokeHandler(IContainer componentContext)
+		public InvokeHandler(ILifetimeScope componentContext)
 		{
 			if (componentContext == null)
 			{
@@ -21,7 +21,7 @@ namespace Stardust.Node.Workers
 			ComponentContext = componentContext;
 		}
 
-		private IContainer ComponentContext { get; set; }
+		private ILifetimeScope ComponentContext { get; set; }
 
 		public void Invoke(object query,
 		                   CancellationTokenSource cancellationTokenSource,
