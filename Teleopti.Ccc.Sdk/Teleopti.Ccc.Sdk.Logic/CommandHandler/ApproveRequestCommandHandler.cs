@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Domain;
@@ -26,6 +25,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
 		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
 		private readonly ICheckingPersonalAccountDaysProvider _checkingPersonalAccountDaysProvider;
+		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 
 		public ApproveRequestCommandHandler(IScheduleStorage scheduleStorage, 
 																								IScheduleDifferenceSaver scheduleDictionarySaver, 
@@ -35,7 +35,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 																								IPersonRequestRepository personRequestRepository, 
 																								ICurrentUnitOfWorkFactory unitOfWorkFactory, 
 																								IDifferenceCollectionService<IPersistableScheduleData> differenceService,
-                                                                                                IGlobalSettingDataRepository globalSettingDataRepository, ICheckingPersonalAccountDaysProvider checkingPersonalAccountDaysProvider)
+																								IGlobalSettingDataRepository globalSettingDataRepository, 
+																								ICheckingPersonalAccountDaysProvider checkingPersonalAccountDaysProvider,
+																								IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
 			_scheduleStorage = scheduleStorage;
 			_scheduleDictionarySaver = scheduleDictionarySaver;
@@ -47,6 +49,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			_differenceService = differenceService;
 			_globalSettingDataRepository = globalSettingDataRepository;
 			_checkingPersonalAccountDaysProvider = checkingPersonalAccountDaysProvider;
+			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
 		public virtual IRequestApprovalService GetRequestApprovalServiceScheduler(IScheduleDictionary scheduleDictionary,
@@ -59,7 +62,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		   return new RequestApprovalServiceScheduler(scheduleDictionary,
 																		  scenario,
 																		  swapAndModifyService, newBusinessRules,
-                                                                          new ResourceCalculationOnlyScheduleDayChangeCallback(),
+																																					_scheduleDayChangeCallback,
                                                                           _globalSettingDataRepository, _checkingPersonalAccountDaysProvider);
 		}
 
