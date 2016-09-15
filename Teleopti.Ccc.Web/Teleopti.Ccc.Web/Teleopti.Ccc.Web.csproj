@@ -1635,6 +1635,8 @@
     <Content Include="WFM\js\rta\overview\rta.overview.controller.js" />
     <Content Include="WFM\js\rta\_modules.js" />
     <Content Include="WFM\js\outbound\outbound.controller.campaign-list-gantt.js" />
+    <Content Include="WFM\vendor\angular-bootstrap-persian-datepicker-master\persian-datepicker-tpls.js" />
+    <Content Include="WFM\vendor\angular-bootstrap-persian-datepicker-master\persiandate.js" />
     <Content Include="WFM\vendor\ui-bootstrap-custom-build\timepicker.directive.ext.js" />
     <Content Include=".node\Gruntfile.js" />
     <Content Include="Areas\Anywhere\Content\feature.js" />
@@ -2422,6 +2424,7 @@
     <Content Include="WFM\css\_start.scss" />
     <Content Include="WFM\css\_reports.scss" />
     <Content Include="WFM\js\global\wfm-multiple-search-input\wfm-multiple-search-input.directive.js" />
+    <Content Include="WFM\vendor\angular-bootstrap-persian-datepicker-master\README.md" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

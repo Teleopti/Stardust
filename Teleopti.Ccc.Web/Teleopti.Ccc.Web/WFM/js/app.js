@@ -12,7 +12,8 @@ var externalModules = angular.module('externalModules', ['ui.router',
 	'ui.grid.exporter',
 	'ui.grid.selection',
 	'ngStorage',
-	'dialogs.main'
+	'dialogs.main',
+	'ui.bootstrap.persian.datepicker'
 ]);
 
 var wfm = angular.module('wfm', [
@@ -42,12 +43,13 @@ var wfm = angular.module('wfm', [
 	'wfm.requests',
 	'wfm.themes',
 	'wfm.reports',
-    'wfm.signalR'
+	'wfm.signalR',
+	'wfm.culturalDatepicker'
 ]);
 
 wfm.config([
 	'$stateProvider', '$urlRouterProvider', '$translateProvider', '$httpProvider', 'RtaStateProvider',
-	function ($stateProvider, $urlRouterProvider, $translateProvider, $httpProvider, RtaStateProvider) {
+	function($stateProvider, $urlRouterProvider, $translateProvider, $httpProvider, RtaStateProvider) {
 
 		$urlRouterProvider.otherwise("/#");
 
@@ -224,7 +226,7 @@ wfm.config([
 	}
 ]).run([
 	'$rootScope', '$state', '$translate', 'HelpService', '$timeout', 'CurrentUserInfo', 'Toggle', '$q', 'RtaState', 'WfmShortcuts',
-	function ($rootScope, $state, $translate, HelpService, $timeout, currentUserInfo, toggleService, $q, RtaState, WfmShortcuts) {
+	function($rootScope, $state, $translate, HelpService, $timeout, currentUserInfo, toggleService, $q, RtaState, WfmShortcuts) {
 		$rootScope.isAuthenticated = false;
 
 		(function broadcastEventOnToggle() {
@@ -236,18 +238,18 @@ wfm.config([
 		})();
 
 		function refreshContext(event, next, toParams) {
-			currentUserInfo.initContext().then(function () {
+			currentUserInfo.initContext().then(function() {
 				$rootScope.isAuthenticated = true;
 				$translate.fallbackLanguage('en');
 
-				$rootScope.$on('$stateChangeSuccess', function (event, next, toParams) {
+				$rootScope.$on('$stateChangeSuccess', function(event, next, toParams) {
 					HelpService.updateState($state);
 				});
 				$state.go(next, toParams);
 			});
 		};
 
-		$rootScope.$on('$stateChangeStart', function (event, next, toParams) {
+		$rootScope.$on('$stateChangeStart', function(event, next, toParams) {
 
 			if (!currentUserInfo.isConnected()) {
 				event.preventDefault();
@@ -256,7 +258,7 @@ wfm.config([
 			}
 			if (!toggleService.togglesLoaded.$$state.status) {
 				event.preventDefault();
-				toggleService.togglesLoaded.then(function () {
+				toggleService.togglesLoaded.then(function() {
 					$state.go(next, toParams);
 				});
 				return;

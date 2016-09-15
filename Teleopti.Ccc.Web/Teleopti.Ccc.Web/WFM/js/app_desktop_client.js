@@ -12,7 +12,8 @@ var externalModules = angular.module('externalModules', ['ui.router',
 	'ui.grid.exporter',
 	'ui.grid.selection',
 	'ngStorage',
-	'dialogs.main'
+	'dialogs.main',
+	'ui.bootstrap.persian.datepicker'
 ]);
 
 var wfm = angular.module('wfm', [
@@ -41,7 +42,8 @@ var wfm = angular.module('wfm', [
 	'wfm.intraday',
 	'wfm.requests',
 	'wfm.reports',
-	'wfm.themes'
+	'wfm.themes',
+	'wfm.culturalDatepicker'
 ]);
 
 wfm.config([
