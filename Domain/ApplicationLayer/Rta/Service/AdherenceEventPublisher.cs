@@ -1,13 +1,14 @@
 using System;
+using System.Diagnostics;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	public class AdherenceEventPublisher : IAdherenceEventPublisher
+	public class AdherenceEventPublisher
 	{
-		private readonly IRtaDecoratingEventPublisher _eventPublisher;
+		private readonly IEventPopulatingPublisher _eventPublisher;
 
-		public AdherenceEventPublisher(IRtaDecoratingEventPublisher	eventPublisher)
+		public AdherenceEventPublisher(IEventPopulatingPublisher eventPublisher)
 		{
 			_eventPublisher = eventPublisher;
 		}
@@ -16,8 +17,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			if (toAdherence == EventAdherence.In)
 			{
-				_eventPublisher.Publish(info, new PersonInAdherenceEvent
+				_eventPublisher.Publish(new PersonInAdherenceEvent
 				{
+					BelongsToDate = info.Schedule.BelongsToDate,
 					PersonId = info.PersonId,
 					Timestamp = time,
 					BusinessUnitId = info.BusinessUnitId,
@@ -28,8 +30,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			if (toAdherence == EventAdherence.Out)
 			{
-				_eventPublisher.Publish(info, new PersonOutOfAdherenceEvent
+				_eventPublisher.Publish(new PersonOutOfAdherenceEvent
 				{
+					BelongsToDate = info.Schedule.BelongsToDate,
 					PersonId = info.PersonId,
 					Timestamp = time,
 					BusinessUnitId = info.BusinessUnitId,
@@ -40,8 +43,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			if (toAdherence == EventAdherence.Neutral)
 			{
-				_eventPublisher.Publish(info, new PersonNeutralAdherenceEvent
+				_eventPublisher.Publish(new PersonNeutralAdherenceEvent
 				{
+					BelongsToDate = info.Schedule.BelongsToDate,
 					PersonId = info.PersonId,
 					Timestamp = time,
 					BusinessUnitId = info.BusinessUnitId,

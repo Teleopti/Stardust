@@ -2,12 +2,12 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	public class StateEventPublisher : IStateEventPublisher
+	public class StateEventPublisher
 	{
-		private readonly IRtaDecoratingEventPublisher _eventPublisher;
-		private readonly IAdherenceEventPublisher _adherenceEventPublisher;
+		private readonly IEventPopulatingPublisher _eventPublisher;
+		private readonly AdherenceEventPublisher _adherenceEventPublisher;
 		
-		public StateEventPublisher(IRtaDecoratingEventPublisher eventPublisher, IAdherenceEventPublisher adherenceEventPublisher)
+		public StateEventPublisher(IEventPopulatingPublisher eventPublisher, AdherenceEventPublisher adherenceEventPublisher)
 		{
 			_eventPublisher = eventPublisher;
 			_adherenceEventPublisher = adherenceEventPublisher;
@@ -17,8 +17,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			if (!info.State.StateGroupChanged()) return;
 
-			_eventPublisher.Publish(info, new PersonStateChangedEvent
+			_eventPublisher.Publish(new PersonStateChangedEvent
 			{
+				BelongsToDate = info.Schedule.BelongsToDate,
 				PersonId = info.PersonId,
 				Timestamp = info.CurrentTime,
 				AdherenceWithPreviousActivity = info.Adherence.AdherenceForNewStateAndPreviousActivity(),

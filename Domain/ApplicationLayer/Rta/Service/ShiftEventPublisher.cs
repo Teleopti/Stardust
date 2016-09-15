@@ -2,11 +2,11 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	public class ShiftEventPublisher : IShiftEventPublisher
+	public class ShiftEventPublisher
 	{
-		private readonly IRtaDecoratingEventPublisher _eventPublisher;
+		private readonly IEventPopulatingPublisher _eventPublisher;
 
-		public ShiftEventPublisher(IRtaDecoratingEventPublisher eventPublisher)
+		public ShiftEventPublisher(IEventPopulatingPublisher eventPublisher)
 		{
 			_eventPublisher = eventPublisher;
 		}
@@ -21,8 +21,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			if (!info.Schedule.ShiftStarted())
 				return;
-			_eventPublisher.Publish(info, new PersonShiftStartEvent
+			_eventPublisher.Publish(new PersonShiftStartEvent
 			{
+				BelongsToDate = info.Schedule.BelongsToDate,
 				PersonId = info.PersonId,
 				ShiftStartTime = info.Schedule.CurrentShiftStartTime,
 				ShiftEndTime = info.Schedule.CurrentShiftEndTime
@@ -33,8 +34,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			if (!info.Schedule.ShiftEnded())
 				return;
-			_eventPublisher.Publish(info, new PersonShiftEndEvent
+			_eventPublisher.Publish(new PersonShiftEndEvent
 			{
+				BelongsToDate = info.Schedule.PreviousActivity().BelongsToDate,
 				PersonId = info.PersonId,
 				ShiftStartTime = info.Schedule.ShiftStartTimeForPreviousActivity,
 				ShiftEndTime = info.Schedule.ShiftEndTimeForPreviousActivity

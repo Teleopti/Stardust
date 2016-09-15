@@ -109,14 +109,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SkillViewModelBuilder>().SingleInstance();
 			builder.RegisterType<AdherencePercentageViewModelBuilder>().SingleInstance().As<IAdherencePercentageViewModelBuilder>();
 			builder.RegisterType<AdherenceDetailsViewModelBuilder>().SingleInstance().As<IAdherenceDetailsViewModelBuilder>();
-			builder.RegisterType<RtaDecoratingEventPublisher>().As<IRtaDecoratingEventPublisher>().SingleInstance();
 
-			builder.RegisterType<ShiftEventPublisher>().SingleInstance().As<IShiftEventPublisher>();
-			builder.RegisterType<AdherenceEventPublisher>().SingleInstance().As<IAdherenceEventPublisher>();
-			builder.RegisterType<StateEventPublisher>().SingleInstance().As<IStateEventPublisher>();
-			builder.RegisterType<ActivityEventPublisher>().SingleInstance().As<IActivityEventPublisher>();
+			builder.RegisterType<ShiftEventPublisher>().SingleInstance();
+			builder.RegisterType<AdherenceEventPublisher>().SingleInstance();
+			builder.RegisterType<StateEventPublisher>().SingleInstance();
+			builder.RegisterType<ActivityEventPublisher>().SingleInstance();
 
-			builder.RegisterType<BelongsToDateDecorator>().As<IRtaEventDecorator>().SingleInstance();
 			builder.RegisterType<CurrentBelongsToDate>().SingleInstance();
 			builder.RegisterType<AppliedAdherence>().SingleInstance();
 

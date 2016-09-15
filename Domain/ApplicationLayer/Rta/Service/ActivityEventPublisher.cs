@@ -3,12 +3,12 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	public class ActivityEventPublisher : IActivityEventPublisher
+	public class ActivityEventPublisher
 	{
-		private readonly IRtaDecoratingEventPublisher _eventPublisher;
-		private readonly IAdherenceEventPublisher _adherenceEventPublisher;
+		private readonly IEventPopulatingPublisher _eventPublisher;
+		private readonly AdherenceEventPublisher _adherenceEventPublisher;
 
-		public ActivityEventPublisher(IRtaDecoratingEventPublisher eventPublisher, IAdherenceEventPublisher adherenceEventPublisher)
+		public ActivityEventPublisher(IEventPopulatingPublisher eventPublisher, AdherenceEventPublisher adherenceEventPublisher)
 		{
 			_eventPublisher = eventPublisher;
 			_adherenceEventPublisher = adherenceEventPublisher;
@@ -30,8 +30,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					? previousStateTime
 					: currentActivity.StartDateTime;
 
-				_eventPublisher.Publish(info, new PersonActivityStartEvent
+				_eventPublisher.Publish(new PersonActivityStartEvent
 				{
+					BelongsToDate = info.Schedule.BelongsToDate,
 					PersonId = info.PersonId,
 					StartTime = activityStartTime.Value,
 					Name = currentActivity.Name,
