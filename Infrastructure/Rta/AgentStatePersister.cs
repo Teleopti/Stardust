@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces;
@@ -40,7 +41,8 @@ SET
 	RuleId = :RuleId,
 	RuleStartTime = :RuleStartTime,
 	AlarmStartTime = :AlarmStartTime,
-	TimeWindowCheckSum = :TimeWindowCheckSum
+	TimeWindowCheckSum = :TimeWindowCheckSum,
+	Adherence = :Adherence
 	{scheduleSql}
 WHERE
 	PersonId = :PersonId";
@@ -60,7 +62,8 @@ WHERE
 				.SetParameter("RuleId", model.RuleId)
 				.SetParameter("RuleStartTime", model.RuleStartTime)
 				.SetParameter("AlarmStartTime", model.AlarmStartTime)
-				.SetParameter("TimeWindowCheckSum", model.TimeWindowCheckSum);
+				.SetParameter("TimeWindowCheckSum", model.TimeWindowCheckSum)
+				.SetParameter("Adherence", (int?) model.Adherence);
 
 			if (model.Schedule != null)
 				query.SetParameter("Schedule", _serializer.SerializeObject(model.Schedule), NHibernateUtil.StringClob);
@@ -153,6 +156,7 @@ INSERT INTO [dbo].[AgentState]
 	AlarmStartTime,
 	TimeWindowCheckSum,
 	Schedule,
+	Adherence,
 	DataSourceId,
 	UserCode
 )
@@ -177,6 +181,7 @@ VALUES
 	:AlarmStartTime,
 	:TimeWindowCheckSum,
 	:Schedule,
+	:Adherence,
 	:DataSourceId,
 	:UserCode
 )")
@@ -199,6 +204,7 @@ VALUES
 						.SetParameter("AlarmStartTime", copyFrom?.AlarmStartTime)
 						.SetParameter("TimeWindowCheckSum", copyFrom?.TimeWindowCheckSum)
 						.SetParameter("Schedule", copyFrom?.Schedule != null ? _serializer.SerializeObject(copyFrom.Schedule) : null, NHibernateUtil.StringClob)
+						.SetParameter("Adherence", (int?) copyFrom?.Adherence)
 						.SetParameter("DataSourceId", e.DataSourceId)
 						.SetParameter("UserCode", e.UserCode)
 						.ExecuteUpdate();
@@ -237,7 +243,8 @@ SET
 	RuleId = :RuleId,
 	RuleStartTime = :RuleStartTime,
 	AlarmStartTime = :AlarmStartTime,
-	TimeWindowCheckSum = :TimeWindowCheckSum
+	TimeWindowCheckSum = :TimeWindowCheckSum,
+	Adherence = :Adherence
 WHERE
 	PersonId = :PersonId")
 				.SetParameter("PersonId", model.PersonId)
@@ -258,6 +265,7 @@ WHERE
 				.SetParameter("RuleStartTime", model.RuleStartTime)
 				.SetParameter("AlarmStartTime", model.AlarmStartTime)
 				.SetParameter("TimeWindowCheckSum", model.TimeWindowCheckSum)
+				.SetParameter("Adherence", (int?) model.Adherence)
 				.ExecuteUpdate();
 		}
 
@@ -399,6 +407,11 @@ WHERE
 			{
 				base.Schedule = value != null ? JsonConvert.DeserializeObject<IEnumerable<ScheduledActivity>>(value) : null;
 			} }
+
+			public new int? Adherence
+			{
+				set { base.Adherence = (EventAdherence?) value; }
+			}
 		}
 	}
 }

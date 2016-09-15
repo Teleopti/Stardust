@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -142,7 +143,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public DateTime? StateStartTime
 	    {
-	        get { return State.StateGroupChanged() ? CurrentTime : Stored?.StateStartTime; }
+	        get { return State.StateChanged() ? CurrentTime : Stored?.StateStartTime; }
 	    }
 
 		public DateTime? RuleStartTime
@@ -184,6 +185,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 				RuleId = State.RuleId(),
 				RuleStartTime = RuleStartTime,
+				Adherence = Adherence.Adherence,
 
 				AlarmStartTime = AlarmStartTime,
 
@@ -192,6 +194,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				Schedule = _schedule.Value.CacheSchedules ? _schedule.Value.Schedules : null
 			};
 		}
-		
+
 	}
 }

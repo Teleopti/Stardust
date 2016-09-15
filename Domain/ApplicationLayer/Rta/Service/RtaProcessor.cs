@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly ShiftEventPublisher _shiftEventPublisher;
 		private readonly ActivityEventPublisher _activityEventPublisher;
 		private readonly StateEventPublisher _stateEventPublisher;
+		private readonly AdherenceEventPublisher _adherenceEventPublisher;
 		private readonly IEventPublisherScope _eventPublisherScope;
 		private readonly ICurrentEventPublisher _eventPublisher;
 		private readonly IAgentStateReadModelUpdater _agentStateReadModelUpdater;
@@ -18,6 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			ShiftEventPublisher shiftEventPublisher,
 			ActivityEventPublisher activityEventPublisher,
 			StateEventPublisher stateEventPublisher,
+			AdherenceEventPublisher adherenceEventPublisher,
 			IEventPublisherScope eventPublisherScope,
 			ICurrentEventPublisher eventPublisher,
 			IAgentStateReadModelUpdater agentStateReadModelUpdater)
@@ -25,6 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_shiftEventPublisher = shiftEventPublisher;
 			_activityEventPublisher = activityEventPublisher;
 			_stateEventPublisher = stateEventPublisher;
+			_adherenceEventPublisher = adherenceEventPublisher;
 			_eventPublisherScope = eventPublisherScope;
 			_eventPublisher = eventPublisher;
 			_agentStateReadModelUpdater = agentStateReadModelUpdater;
@@ -45,10 +48,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				_shiftEventPublisher.Publish(context);
 				_activityEventPublisher.Publish(context);
 				_stateEventPublisher.Publish(context);
+
+				context.Adherence.AdherenceChanges()
+					.ForEach(x => _adherenceEventPublisher.Publish(context, x.Time, x.Adherence));
 			}
 
-			var events = eventCollector.PublishTransitions();
-
+			var events = eventCollector.Publish();
+			
 			_agentStateReadModelUpdater.Update(context, events);
 		}
 	}

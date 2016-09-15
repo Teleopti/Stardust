@@ -48,7 +48,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		[Ignore]
 		public void ShouldNotPublishStateChangedEventOnActivityCheck()
 		{
 			var person = Guid.NewGuid();

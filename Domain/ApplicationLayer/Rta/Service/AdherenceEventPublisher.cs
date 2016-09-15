@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service

@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
@@ -20,20 +22,31 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			events.ForEach(_events.Add);
 		}
 
-		public IEnumerable<IEvent> PublishTransitions()
+		public IEnumerable<IEvent> Publish()
 		{
 			var publisher = _publisher.Current();
-			// of duplicate events, publish the first, which IS the first in time because..
-			// they are already in order of time because they are currently collected in that order by the callers...
-			var toPublish = (
-				from e in _events
-				group e by e.GetType()
-				into x
-				select x.First()
-				).ToArray();
-			toPublish.ForEach(@event => publisher.Publish(@event));
+			_events
+				.OrderBy(@event =>
+				{
+					if (@event is PersonShiftStartEvent)
+						return (@event as PersonShiftStartEvent).ShiftStartTime;
+					if (@event is PersonShiftEndEvent)
+						return (@event as PersonShiftEndEvent).ShiftEndTime;
+					if (@event is PersonActivityStartEvent)
+						return (@event as PersonActivityStartEvent).StartTime;
+					if (@event is PersonStateChangedEvent)
+						return (@event as PersonStateChangedEvent).Timestamp;
+					if (@event is PersonOutOfAdherenceEvent)
+						return (@event as PersonOutOfAdherenceEvent).Timestamp;
+					if (@event is PersonInAdherenceEvent)
+						return (@event as PersonInAdherenceEvent).Timestamp;
+					if (@event is PersonNeutralAdherenceEvent)
+						return (@event as PersonNeutralAdherenceEvent).Timestamp;
 
-			return toPublish;
+					return DateTime.MinValue;
+				})
+				.ForEach(@event => publisher.Publish(@event));
+			return _events;
 		}
 
 	}

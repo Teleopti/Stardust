@@ -240,7 +240,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		[Ignore]
 		public void ShouldNotPublishDuplicateEventsBecauseOfRuleChanges()
 		{
 			var person = Guid.NewGuid();

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -46,12 +47,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public Guid? RuleId { get; set; }
 		public DateTime? RuleStartTime { get; set; }
+		public EventAdherence? Adherence { get; set; }
 
 		public DateTime? AlarmStartTime { get; set; }
 
 		public int? TimeWindowCheckSum { get; set; }
 
 		public IEnumerable<ScheduledActivity> Schedule { get; set; }
+
 	}
 
 	public static class AgentStateExtensions

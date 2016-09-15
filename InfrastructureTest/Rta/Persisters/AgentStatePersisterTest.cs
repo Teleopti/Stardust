@@ -1,12 +1,10 @@
 using System;
-using System.Drawing;
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 {
@@ -127,6 +125,32 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Get(state.PersonId)
 				.TimeWindowCheckSum.Should().Be(475);
+		}
+
+		[Test]
+		public void ShouldPersistAdherence()
+		{
+			var state = new AgentStateForUpsert {Adherence = EventAdherence.Neutral};
+
+			Target.Upsert(state);
+
+			Target.Get(state.PersonId)
+				.Adherence.Should().Be(EventAdherence.Neutral);
+		}
+
+		[Test]
+		public void ShouldUpdateAdherence()
+		{
+			var state = new AgentStateForUpsert { Adherence = EventAdherence.Neutral };
+
+			Target.Upsert(state);
+
+			state.Adherence = EventAdherence.In;
+
+			Target.Update(state);
+
+			Target.Get(state.PersonId)
+				.Adherence.Should().Be(EventAdherence.In);
 		}
 
 		[Test]

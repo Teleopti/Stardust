@@ -44,16 +44,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_timeWindowActivities = new Lazy<IEnumerable<ScheduledActivity>>(() => ActivitiesInTimeWindow(_schedule.Value, context.CurrentTime));
 		}
 
-		public int? TimeWindowCheckSum()
+		public bool ActivityChanged()
 		{
-			if (_timeWindowCheckSum.Value == 0)
-				return null;
-			return _timeWindowCheckSum.Value;
-		}
-
-		public IEnumerable<ScheduledActivity> ActivitiesInTimeWindow()
-		{
-			return _timeWindowActivities.Value;
+			return _context.Schedule.CurrentActivityId() != _context.Stored?.ActivityId;
 		}
 
 		public bool ShiftStarted()
@@ -67,6 +60,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return _context.Stored?.ActivityId != null &&
 				   CurrentActivity() == null &&
 				   PreviousActivity() != null;
+		}
+
+		public int? TimeWindowCheckSum()
+		{
+			if (_timeWindowCheckSum.Value == 0)
+				return null;
+			return _timeWindowCheckSum.Value;
+		}
+
+		public IEnumerable<ScheduledActivity> ActivitiesInTimeWindow()
+		{
+			return _timeWindowActivities.Value;
 		}
 
 		public ScheduledActivity CurrentActivity()
@@ -116,6 +121,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			if (_currentActivity.Value != null)
 				return _currentActivity.Value.EndDateTime;
 			return null;
+		}
+
+		public DateTime? ActivityStartTime()
+		{
+			var currentActivity = _context.Schedule.CurrentActivity();
+			if (currentActivity == null)
+				return null;
+			var previousStateTime = _context.Stored.ReceivedTime();
+			var activityStartedInThePast = currentActivity.StartDateTime < previousStateTime;
+			return activityStartedInThePast
+				? previousStateTime
+				: currentActivity.StartDateTime;
 		}
 
 		public string NextActivityName()

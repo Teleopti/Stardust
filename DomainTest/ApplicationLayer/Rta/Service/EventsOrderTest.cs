@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
@@ -82,5 +83,82 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var after = Publisher.PublishedEvents.IndexOf(Publisher.PublishedEvents.OfType<PersonOutOfAdherenceEvent>().Single());
 			before.Should().Be.LessThan(after);
 		}
+
+		[Test]
+		public void ShouldPublishAdherenceEventsAfterItsTrigger()
+		{
+			var personId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, phone, "2014-10-20 8:00", "2014-10-20 17:00")
+				.WithRule("phone", phone, 0, Adherence.In)
+				.WithRule("phone", null, 1, Adherence.Out)
+				.WithRule("loggedout", null, 0, Adherence.In)
+				.WithRule("loggedout", phone, -1, Adherence.Out)
+				;
+			Now.Is("2014-10-20 7:55");
+			Target.SaveState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "loggedout"
+			});
+			Publisher.Clear();
+
+			Now.Is("2014-10-20 8:05");
+			Target.SaveState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
+
+			var event0 = Publisher.PublishedEvents.IndexOf(Publisher.PublishedEvents.OfType<PersonShiftStartEvent>().Single());
+			var event1 = Publisher.PublishedEvents.IndexOf(Publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single());
+			var event2 = Publisher.PublishedEvents.IndexOf(Publisher.PublishedEvents.OfType<PersonOutOfAdherenceEvent>().Single());
+			var event3 = Publisher.PublishedEvents.IndexOf(Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single());
+			var event4 = Publisher.PublishedEvents.IndexOf(Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single());
+			event0.Should().Be.LessThan(event1);
+			event1.Should().Be.LessThan(event2);
+			event2.Should().Be.LessThan(event3);
+			event3.Should().Be.LessThan(event4);
+		}
+
+		[Test]
+		public void ShouldPublishAdherenceEventsAfterItsTrigger2()
+		{
+			var personId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, phone, "2014-10-20 8:00", "2014-10-20 17:00")
+				.WithRule("phone", phone, 0, Adherence.In)
+				.WithRule("phone", null, 1, Adherence.Neutral)
+				.WithRule("loggedout", null, 0, Adherence.In)
+				.WithRule("loggedout", phone, -1, Adherence.Out)
+				;
+			Now.Is("2014-10-20 16:55");
+			Target.SaveState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
+			Publisher.Clear();
+
+			Now.Is("2014-10-20 17:05");
+			Target.SaveState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "loggedout"
+			});
+
+			var event0 = Publisher.PublishedEvents.IndexOf(Publisher.PublishedEvents.OfType<PersonShiftEndEvent>().Single());
+			var event1 = Publisher.PublishedEvents.IndexOf(Publisher.PublishedEvents.OfType<PersonNeutralAdherenceEvent>().Single());
+			var event2 = Publisher.PublishedEvents.IndexOf(Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single());
+			var event3 = Publisher.PublishedEvents.IndexOf(Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single());
+			event0.Should().Be.LessThan(event1);
+			event1.Should().Be.LessThan(event2);
+			event2.Should().Be.LessThan(event3);
+		}
+
 	}
 }

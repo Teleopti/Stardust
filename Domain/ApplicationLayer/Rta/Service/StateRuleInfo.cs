@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly Lazy<MappedRule> _mappedRule;
 		private readonly Lazy<MappedState> _mappedState;
+		private readonly Lazy<bool> _stateChanged;
 		private readonly Context _context;
 
 		public StateRuleInfo(Context context, MappingsState mappings)
@@ -14,13 +15,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_context = context;
 			_mappedState = new Lazy<MappedState>(() => context.StateMapper.StateFor(mappings, context.BusinessUnitId, context.PlatformTypeId, context.StateCode, context.Input.StateDescription));
 			_mappedRule = new Lazy<MappedRule>(() => context.StateMapper.RuleFor(mappings, context.BusinessUnitId, context.PlatformTypeId, context.StateCode, context.Schedule.CurrentActivityId()));
+			_stateChanged = new Lazy<bool>(() =>
+			{
+				var mappedStateGroupId = _mappedState.Value?.StateGroupId;
+				if (mappedStateGroupId == null)
+					return _context.StateCode != _context.Stored?.StateCode;
+				return mappedStateGroupId != _context.Stored?.StateGroupId;
+			});
 		}
-
-		public bool StateGroupChanged()
+		
+		public bool StateChanged()
 		{
-			if (_context.Stored == null)
-				return true;
-			return _mappedState.Value?.StateGroupId != _context.Stored.StateGroupId;
+			return _stateChanged.Value;
 		}
 
 		public Guid? StateGroupId()
