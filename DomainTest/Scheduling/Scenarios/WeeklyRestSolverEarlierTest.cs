@@ -343,7 +343,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 				new SchedulePartModifyAndRollbackService(
 					SchedulerStateHolder.SchedulingResultState,
 					new SchedulerStateScheduleDayChangedCallback(
-						new ResourceCalculateDaysDecider(),
+						new ResourceCalculateDaysDeciderOld(),
 						() => SchedulerStateHolder
 						),
 					new ScheduleTagSetter(
@@ -514,7 +514,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 				new SchedulePartModifyAndRollbackService(
 					SchedulerStateHolder.SchedulingResultState,
 					new SchedulerStateScheduleDayChangedCallback(
-						new ResourceCalculateDaysDecider(),
+						new ResourceCalculateDaysDeciderOld(),
 						() => SchedulerStateHolder
 						),
 					new ScheduleTagSetter(

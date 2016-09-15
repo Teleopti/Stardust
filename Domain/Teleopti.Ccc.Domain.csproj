@@ -1540,7 +1540,7 @@
     <Compile Include="Optimization\RelativeDailyValueByPersonalSkillsExtractor.cs" />
     <Compile Include="Optimization\DayOffOptimizer.cs" />
     <Compile Include="Optimization\MatrixLockers\MatrixOvertimeLocker.cs" />
-    <Compile Include="Optimization\ResourceCalculateDaysDecider.cs" />
+    <Compile Include="Optimization\ResourceCalculateDaysDeciderOld.cs" />
     <Compile Include="Optimization\StdDevPeriodValueCalculator.cs" />
     <Compile Include="Optimization\MoveTimeOptimizerContainer.cs" />
     <Compile Include="Optimization\DayOffOptimizerContainer.cs" />

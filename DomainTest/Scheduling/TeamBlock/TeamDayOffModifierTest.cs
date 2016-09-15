@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var rollBackService = new SchedulePartModifyAndRollbackService(
 				SchedulerStateHolder.SchedulingResultState,
 				new SchedulerStateScheduleDayChangedCallback(
-					new ResourceCalculateDaysDecider(),
+					new ResourceCalculateDaysDeciderOld(),
 					() => SchedulerStateHolder),
 				new ScheduleTagSetter(new NullScheduleTag()));
 
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var rollBackService = new SchedulePartModifyAndRollbackService(
 				SchedulerStateHolder.SchedulingResultState,
 				new SchedulerStateScheduleDayChangedCallback(
-					new ResourceCalculateDaysDecider(),
+					new ResourceCalculateDaysDeciderOld(),
 					() => SchedulerStateHolder),
 				new ScheduleTagSetter(new NullScheduleTag()));
 
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var rollBackService = new SchedulePartModifyAndRollbackService(
 				SchedulerStateHolder.SchedulingResultState,
 				new SchedulerStateScheduleDayChangedCallback(
-					new ResourceCalculateDaysDecider(),
+					new ResourceCalculateDaysDeciderOld(),
 					() => SchedulerStateHolder),
 				new ScheduleTagSetter(new NullScheduleTag()));
 
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var rollBackService = new SchedulePartModifyAndRollbackService(
 				SchedulerStateHolder.SchedulingResultState,
 				new SchedulerStateScheduleDayChangedCallback(
-					new ResourceCalculateDaysDecider(),
+					new ResourceCalculateDaysDeciderOld(),
 					() => SchedulerStateHolder),
 				new ScheduleTagSetter(new NullScheduleTag()));
 

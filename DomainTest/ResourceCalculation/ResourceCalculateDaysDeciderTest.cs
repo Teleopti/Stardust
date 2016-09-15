@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _dayWithFullDayAbsence = _mocks.StrictMock<IScheduleDay>();
             _dayWithNightShift = _mocks.StrictMock<IScheduleDay>();
 
-            _target = new ResourceCalculateDaysDecider();
+            _target = new ResourceCalculateDaysDeciderOld();
         }
 
         private void mockExpectations()

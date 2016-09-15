@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	    bool IsNightShift(IScheduleDay scheduleDay);
     }
 
-    public class ResourceCalculateDaysDecider : IResourceCalculateDaysDecider
+    public class ResourceCalculateDaysDeciderOld : IResourceCalculateDaysDecider
     {
         public IList<DateOnly> DecideDates(IScheduleDay currentSchedule, IScheduleDay previousSchedule)
         {
