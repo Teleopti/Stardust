@@ -46,6 +46,7 @@
 				$scope.skillAreaName = "";
 				$scope.openedMaxNumberOfAgents = false;
 				$scope.maxNumberOfAgents = 50;
+				$scope.isLoading = true;
 
 				$scope.$watch('pause', function() {
 					if ($scope.pause) {
@@ -256,6 +257,7 @@
 					fillAgentsWithState(states);
 					fillAgentsWithoutState();
 					buildTimeline(states);
+					$scope.isLoading = false;
 				}
 
 				function secondsToPercent(seconds) {
