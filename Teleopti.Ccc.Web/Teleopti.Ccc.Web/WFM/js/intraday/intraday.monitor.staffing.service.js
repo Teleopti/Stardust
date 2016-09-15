@@ -96,6 +96,10 @@
 									staffingData.forecastedStaffing.series,
 									staffingData.forecastedStaffing.updatedSeries
 								],
+								groups: [
+									['Forecasted_staffing'],['Updated_forecasted_staffing']
+								],
+								order: 'asc',
 								hide: hiddenArray,
 								names: {
 									Forecasted_staffing: $translate.instant('ForecastedStaff') + ' ←',

@@ -126,6 +126,10 @@
 									performanceData.averageSpeedOfAnswerObj.series,
 									performanceData.currentInterval
 								],
+								groups: [
+									['ASA'],['Abandoned_rate'],['Service_level']
+								],
+								order: 'asc',
 								hide: hiddenArray,
 								types: {
 									Current:'bar'
