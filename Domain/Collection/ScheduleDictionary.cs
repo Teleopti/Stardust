@@ -39,8 +39,6 @@ namespace Teleopti.Ccc.Domain.Collection
         private readonly object _permissionLockObject = new object();
 	    private IPersistableScheduleDataPermissionChecker _dataPermissionChecker;
 	    private const string SetPermissionExMessage = "Can't reset _permissionEnabled to the same value ({0}). Threading issue?";
-
-        public bool ShowScheduleAfterTerminalDate { get; set; }
         public ICollection<IPersonAbsenceAccount> ModifiedPersonAccounts { get; private set; }
 
         protected ScheduleDictionary(IScenario scenario,
