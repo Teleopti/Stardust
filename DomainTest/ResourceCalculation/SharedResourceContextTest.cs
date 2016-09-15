@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				.Should().Not.Be.SameInstanceAs(context);
 		}
 
-		[Test, Ignore("#37029")]
+		[Test]
 		public void ShouldHandleScheduleChangesInOtherThread_ReuseSameContext()
 		{
 			var scenario = new Scenario("_");
