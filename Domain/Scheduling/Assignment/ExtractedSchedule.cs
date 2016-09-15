@@ -707,11 +707,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return this;
 		}
 
-		public void ModifyDictionary()
-		{
-			Owner.Modify(this);
-		}
-
 		public void CreateAndAddActivity(IActivity activity, DateTimePeriod period, IShiftCategory shiftCategory)
 		{
 			var authorization = PrincipalAuthorization.Current();

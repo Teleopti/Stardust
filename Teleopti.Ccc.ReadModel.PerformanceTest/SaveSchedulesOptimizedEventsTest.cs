@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 						assignment.AddActivity(phone, startTime, endTime);
 						var scheduledDay = schedules[person].ScheduledDay(date);
 						scheduledDay.Add(assignment);
-						schedules.Modify(scheduledDay);
+						schedules.Modify(scheduledDay, new DoNothingScheduleDayChangeCallBack());
 					});
 				});
 			});

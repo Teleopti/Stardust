@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public ISharedResourceContext Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public IResourceOptimizationHelperExtended ResourceOptimizationHelperExtended;
+		public IScheduleDayChangeCallback ScheduleDayChangeCallback;
 
 		[Test]
 		public void ShouldMakeSureContextIsAlive()
@@ -109,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			{
 				var part = stateHolder.SchedulingResultState.Schedules[agent].ScheduledDay(date);
 				part.DeleteMainShift(part);
-				stateHolder.Schedules.Modify(part);
+				stateHolder.Schedules.Modify(part, ScheduleDayChangeCallback);
 			}).Wait();
 
 

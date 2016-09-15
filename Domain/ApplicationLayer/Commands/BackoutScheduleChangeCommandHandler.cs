@@ -21,9 +21,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IScheduleDifferenceSaver _scheduleDifferenceSaver;
 		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
 		private readonly IAuditSettingRepository _auditSettingRepository;
+		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 
 
-		public BackoutScheduleChangeCommandHandler(IScheduleHistoryRepository scheduleHistoryRepository, IPersonRepository personRepository, ILoggedOnUser loggedOnUser, IAggregateRootInitializer aggregateRootInitializer, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IScheduleDifferenceSaver scheduleDifferenceSaver, IDifferenceCollectionService<IPersistableScheduleData> differenceService, IAuditSettingRepository auditSettingRepository)
+		public BackoutScheduleChangeCommandHandler(IScheduleHistoryRepository scheduleHistoryRepository, IPersonRepository personRepository, ILoggedOnUser loggedOnUser, IAggregateRootInitializer aggregateRootInitializer, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IScheduleDifferenceSaver scheduleDifferenceSaver, IDifferenceCollectionService<IPersistableScheduleData> differenceService, IAuditSettingRepository auditSettingRepository, IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
 			_scheduleHistoryRepository = scheduleHistoryRepository;
 			_personRepository = personRepository;
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_scheduleDifferenceSaver = scheduleDifferenceSaver;
 			_differenceService = differenceService;
 			_auditSettingRepository = auditSettingRepository;
+			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
 		public void Handle(BackoutScheduleChangeCommand command)
@@ -91,7 +93,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			var sd = toScheduleDay(getCurrentScheduleDay(scheduleDictionary, person, command.Date), scheduleData);
 
-			var errorResponses = scheduleDictionary.Modify(sd).ToList();
+			var errorResponses = scheduleDictionary.Modify(sd, _scheduleDayChangeCallback).ToList();
 
 			if (errorResponses.Count > 0)
 			{

@@ -28,16 +28,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 		private readonly ILegalShiftDecider _legalShiftDecider;
 		private readonly IWorkShiftFinderResultHolder _workShiftFinderResultHolder;
 		private readonly IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
+		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 
 		public BackToLegalShiftService(IBackToLegalShiftWorker backToLegalShiftWorker,
 			IFirstShiftInTeamBlockFinder firstShiftInTeamBlockFinder, ILegalShiftDecider legalShiftDecider,
-			IWorkShiftFinderResultHolder workShiftFinderResultHolder, IDayOffsInPeriodCalculator dayOffsInPeriodCalculator)
+			IWorkShiftFinderResultHolder workShiftFinderResultHolder, IDayOffsInPeriodCalculator dayOffsInPeriodCalculator,
+			IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
 			_backToLegalShiftWorker = backToLegalShiftWorker;
 			_firstShiftInTeamBlockFinder = firstShiftInTeamBlockFinder;
 			_legalShiftDecider = legalShiftDecider;
 			_workShiftFinderResultHolder = workShiftFinderResultHolder;
 			_dayOffsInPeriodCalculator = dayOffsInPeriodCalculator;
+			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
 		public event EventHandler<BackToLegalShiftArgs> Progress;
@@ -115,7 +118,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 						{
 							scheduledDay.CreateAndAddOvertime(overtimeShiftLayer.Payload, overtimeShiftLayer.Period, overtimeShiftLayer.DefinitionSet);
 						}
-						schedulingResultStateHolder.Schedules.Modify(scheduledDay);
+						schedulingResultStateHolder.Schedules.Modify(scheduledDay, _scheduleDayChangeCallback);
 						resourceCalculateDelayer.CalculateIfNeeded(date, null, false);
 					}
 				}

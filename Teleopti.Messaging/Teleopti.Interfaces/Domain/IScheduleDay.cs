@@ -280,7 +280,6 @@ namespace Teleopti.Interfaces.Domain
 
 		void CreateAndAddActivity(IActivity activity, DateTimePeriod period, IShiftCategory shiftCategory);
 		IScheduleDay CreateAndAddActivity(IActivity activity, DateTimePeriod period);
-		void ModifyDictionary();
 
 		/// <summary>
 		/// Creates and adds personal activity

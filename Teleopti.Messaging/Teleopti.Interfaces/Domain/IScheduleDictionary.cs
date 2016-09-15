@@ -75,7 +75,7 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         void ExtractAllScheduleData(IScheduleExtractor extractor, DateTimePeriod period);
 
-		IEnumerable<IBusinessRuleResponse> Modify(IScheduleDay scheduleDay);
+		IEnumerable<IBusinessRuleResponse> Modify(IScheduleDay scheduleDay, IScheduleDayChangeCallback scheduleDayChangeCallback);
 
 		/// <summary>
 		/// Modifies the specified modifier.

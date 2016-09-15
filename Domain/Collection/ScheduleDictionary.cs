@@ -228,9 +228,9 @@ namespace Teleopti.Ccc.Domain.Collection
         }
 
 
-		public IEnumerable<IBusinessRuleResponse> Modify(IScheduleDay scheduleDay)
+		public IEnumerable<IBusinessRuleResponse> Modify(IScheduleDay scheduleDay, IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
-			return Modify(ScheduleModifier.NotApplicable, new List<IScheduleDay> {scheduleDay}, NewBusinessRuleCollection.Minimum(), new ResourceCalculationOnlyScheduleDayChangeCallback(), new NoScheduleTagSetter());
+			return Modify(ScheduleModifier.NotApplicable, new List<IScheduleDay> {scheduleDay}, NewBusinessRuleCollection.Minimum(), scheduleDayChangeCallback, new NoScheduleTagSetter());
 		}
 
 		public IEnumerable<IBusinessRuleResponse> Modify(ScheduleModifier modifier, IScheduleDay schedulePart, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleDayChangeCallback scheduleDayChangeCallback, IScheduleTagSetter scheduleTagSetter)

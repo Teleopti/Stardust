@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.BackToLegalShift;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 			_legalShiftDecider = _mocks.StrictMock<ILegalShiftDecider>();
 			_workShiftFinderResultHolder = new WorkShiftFinderResultHolder();
 			_dayOffsInPeriodCalculator = _mocks.StrictMock<IDayOffsInPeriodCalculator>();
-			_target = new BackToLegalShiftService(_backToLegalShiftWorker, _firstShiftInTeamBlockFinder, _legalShiftDecider, _workShiftFinderResultHolder, _dayOffsInPeriodCalculator);
+			_target = new BackToLegalShiftService(_backToLegalShiftWorker, _firstShiftInTeamBlockFinder, _legalShiftDecider, _workShiftFinderResultHolder, _dayOffsInPeriodCalculator, new DoNothingScheduleDayChangeCallBack());
 			_teamBlock = _mocks.StrictMock<ITeamBlockInfo>();
 			_schedulingOptions = new SchedulingOptions();
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();

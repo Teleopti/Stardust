@@ -347,6 +347,7 @@
     <Compile Include="LinqPerumationExtension.cs" />
     <Compile Include="PersonExtensions.cs" />
     <Compile Include="RequestInfo.cs" />
+    <Compile Include="ScheduleDayExtensions.cs" />
     <Compile Include="Services\ShiftTradeRequestStatusCheckerForTestAlwaysRefer.cs" />
     <Compile Include="SkillExtensions.cs" />
     <Compile Include="TestData\Analytics\DatesFromPeriod.cs" />

@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			throw new NotImplementedException();
 		}
 
-		public IEnumerable<IBusinessRuleResponse> Modify(IScheduleDay scheduleDay)
+		public IEnumerable<IBusinessRuleResponse> Modify(IScheduleDay scheduleDay, IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
 			throw new NotImplementedException();
 		}
