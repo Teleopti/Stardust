@@ -51,9 +51,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			builder.RegisterType<ValidateReadModelsHandler>()
 				.As<IHandle<ValidateReadModelsEvent>>().SingleInstance().ApplyAspects();
 			builder.RegisterType<FixReadModelsHandler>().As<IHandle<FixReadModelsEvent>>().SingleInstance().ApplyAspects();
-			builder.RegisterType<MultiAbsenceRequestsHandler>().As<IHandle<NewMultiAbsenceRequestsCreatedEvent>>().SingleInstance().ApplyAspects();
-			builder.RegisterType<MultiAbsenceRequestProcessor>().As<IMultiAbsenceRequestProcessor>().SingleInstance().ApplyAspects();
-			builder.RegisterType<MultiAbsenceRequestsUpdater>().SingleInstance().ApplyAspects();
+			builder.RegisterType<MultiAbsenceRequestsHandler>().As<IHandle<NewMultiAbsenceRequestsCreatedEvent>>().InstancePerLifetimeScope().ApplyAspects();
+			builder.RegisterType<MultiAbsenceRequestProcessor>().As<IMultiAbsenceRequestProcessor>().InstancePerLifetimeScope().ApplyAspects();
+			builder.RegisterType<MultiAbsenceRequestsUpdater>().InstancePerLifetimeScope().ApplyAspects();
 		}
 	}
 }

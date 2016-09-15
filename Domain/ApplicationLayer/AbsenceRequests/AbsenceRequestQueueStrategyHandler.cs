@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -93,6 +94,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						};
 						_publisher.Publish(multiAbsenceRequestsEvent);
 						_queuedAbsenceRequestRepository.Send(absenceRequests.ToList(), sent);
+						Thread.Sleep(1000); //Sleep 1 second to make unique timestamps
 					});
 
 					uow.PersistAll();

@@ -3,6 +3,7 @@ using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
@@ -124,7 +125,16 @@ namespace Teleopti.Ccc.IocCommon.Configuration
                             .AsSelf()
                             .InstancePerLifetimeScope()
                             .ApplyAspects();
-                });
+                })
+				.Except<MultiAbsenceRequestsHandler>(ct =>
+				{
+					if (!_config.Toggle(Toggles.AbsenceRequests_UseMultiRequestProcessing_39960)) return;
+					ct.As(
+							typeof(IHandleEvent<NewMultiAbsenceRequestsCreatedEvent>))
+							.AsSelf()
+							.InstancePerLifetimeScope()
+							.ApplyAspects();
+				});
 
 
             builder.RegisterType<UnitOfWorkTransactionEventSyncronization>().As<IEventSyncronization>().SingleInstance();

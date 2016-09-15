@@ -124,6 +124,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetFetchMode("Person.PersonPeriodCollection.Team.Site", FetchMode.Join)
 				.SetFetchMode("Person.PersonPeriodCollection.PersonSkillCollection", FetchMode.Join)
 				.SetFetchMode("Person.PersonPeriodCollection.PersonSkillCollection.Skill", FetchMode.Join)
+				.SetFetchMode("Person.PersonPeriodCollection.PersonSkillCollection.Skill.SkillType", FetchMode.Join)
 				.SetFetchMode("Person.PersonPeriodCollection.PersonSkillCollection.Skill.WorkloadCollection", FetchMode.Join)
 				.SetFetchMode("Person.PersonPeriodCollection.PersonSkillCollection.Skill.WorkloadCollection.TemplateWeekCollection", FetchMode.Join)
 				.SetFetchMode("Person.PersonPeriodCollection.PersonSkillCollection.Skill.WorkloadCollection.TemplateWeekCollection.OpenHourList", FetchMode.Join)

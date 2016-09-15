@@ -29,7 +29,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 
 		public MultiAbsenceRequestsHandler(IPersonRequestRepository personRequestRepository,
-			IMultiAbsenceRequestProcessor absenceRequestProcessor, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IStardustJobFeedback stardustJobFeedback, IWorkflowControlSetRepository workflowControlSetRepository, IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository)
+			IMultiAbsenceRequestProcessor absenceRequestProcessor, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, 
+			IStardustJobFeedback stardustJobFeedback, IWorkflowControlSetRepository workflowControlSetRepository, 
+			IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository)
 		{
 			_personRequestRepository = personRequestRepository;
 			_absenceRequestProcessor = absenceRequestProcessor;

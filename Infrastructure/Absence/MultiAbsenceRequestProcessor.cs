@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 		public void ProcessAbsenceRequest(List<IPersonRequest> personRequests)
 		{
-			_absenceRequestUpdater.UpdateAbsenceRequest(personRequests, _scheduleResultStateHolder(), null, null);
+			_absenceRequestUpdater.UpdateAbsenceRequest(personRequests, _scheduleResultStateHolder());
 		}
 	}
 }
