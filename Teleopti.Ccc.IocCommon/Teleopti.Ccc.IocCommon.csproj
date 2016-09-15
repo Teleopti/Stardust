@@ -136,9 +136,9 @@
       <HintPath>..\packages\Teleopti.Secrets.8.0.0.142\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Toggle.Net, Version=0.6.0.0, Culture=neutral, PublicKeyToken=edf35f5974b06d9f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Toggle.Net.0.6.0\lib\net40\Toggle.Net.dll</HintPath>
+    <Reference Include="Toggle.Net, Version=1.0.0.0, Culture=neutral, PublicKeyToken=edf35f5974b06d9f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Toggle.Net.1.0.0\lib\net40\Toggle.Net.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
