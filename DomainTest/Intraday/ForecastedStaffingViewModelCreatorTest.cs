@@ -341,6 +341,56 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm.DataSeries.UpdatedForecastedStaffing.Length.Should().Be.EqualTo(0);
 		}
 
+		[Test]
+		public void ShouldCalculateReforecastedStaffingCorrectlyForSkillArea()
+		{
+			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
+			var latestStatsTime = new DateTime(2016, 8, 26, 7, 45, 0, DateTimeKind.Utc);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+			IntervalLengthFetcher.Has(minutesPerInterval);
+			var scenario = ScenarioFactory.CreateScenario("scenariorita", true, true).WithId();
+			ScenarioRepository.Has(scenario);
+
+			var skillWithReforecast = createSkill(minutesPerInterval, "skill with reforecast", new TimePeriod(7,45,8,15));
+			SkillRepository.Has(skillWithReforecast);
+			
+			var skillWithoutReforecast = createSkill(minutesPerInterval, "skill without reforecast", new TimePeriod(8, 0, 8, 15));
+			SkillRepository.Has(skillWithoutReforecast);
+
+			var skillDayWithReforecast = createSkillDay(skillWithReforecast, scenario, Now.UtcDateTime(), 1);
+			SkillDayRepository.Add(skillDayWithReforecast);
+			var skillDayWithoutReforecast = createSkillDay(skillWithoutReforecast, scenario, Now.UtcDateTime(), 1);
+			SkillDayRepository.Add(skillDayWithoutReforecast);
+
+			var actualWorkload =
+				(int)
+					((skillDayWithReforecast.TotalTasks*
+						(skillDayWithReforecast.AverageTaskTime.TotalSeconds + skillDayWithReforecast.AverageAfterTaskTime.TotalSeconds))*
+					 2);
+
+			IntradayQueueStatisticsLoader.Has(new LatestStatisticsTimeAndWorkload
+			{
+				ActualWorkloadInSecondsPerSkill = new List<SkillWorkload>()
+				{
+					new SkillWorkload()
+					{
+						SkillId = skillWithReforecast.Id.Value,
+						StartTime = latestStatsTime,
+						WorkloadInSeconds = actualWorkload
+					}
+				},
+				LatestStatisticsIntervalId = (int?) (latestStatsTime.TimeOfDay.TotalMinutes/minutesPerInterval),
+			});
+
+			var vm = Target.Load(new[] { skillWithReforecast.Id.Value, skillWithoutReforecast.Id.Value });
+			
+			vm.DataSeries.UpdatedForecastedStaffing.Length.Should().Be.EqualTo(2);
+			vm.DataSeries.UpdatedForecastedStaffing.First().Should().Be.EqualTo(null);
+
+			var expectedUpdatedStaffing = skillDayWithoutReforecast.SkillStaffPeriodCollection.Last().FStaff + skillDayWithReforecast.SkillStaffPeriodCollection.Last().FStaff * 2;
+			vm.DataSeries.UpdatedForecastedStaffing.Last().Should().Be.EqualTo(expectedUpdatedStaffing);
+		}
+
 
 		private ISkill createSkill(int intervalLength, string skillName, TimePeriod openHours)
 		{

@@ -42,28 +42,40 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			var forecastedStaffingModel = _forecastedStaffingProvider.Load(skillIdList, latestStatsTime, minutesPerInterval);
 
-			forecastedStaffingModel.StaffingIntervals = forecastedStaffingModel.StaffingIntervals
-				.GroupBy(g => g.StartTime)
-				.Select(s => new StaffingIntervalModel
-				{
-					StartTime = TimeZoneHelper.ConvertFromUtc(s.First().StartTime, _timeZone.TimeZone()),
-					Agents = s.Sum(a => a.Agents)
-				})
-				.OrderBy(o => o.StartTime)
-				.ToList();
+			//forecastedStaffingModel.StaffingIntervals = forecastedStaffingModel.StaffingIntervals
+			//	.GroupBy(g => g.StartTime)
+			//	.Select(s => new StaffingIntervalModel
+			//	{
+			//		SkillId = s.First().SkillId,
+			//		StartTime = TimeZoneHelper.ConvertFromUtc(s.First().StartTime, _timeZone.TimeZone()),
+			//		Agents = s.Sum(a => a.Agents)
+			//	})
+			//	.OrderBy(o => o.StartTime)
+			//	.ToList();
 
 			var staffingForUsersToday = forecastedStaffingModel.StaffingIntervals
 												.Where(t => t.StartTime >= usersToday.Date && t.StartTime < usersToday.Date.AddDays(1))
-												.ToArray();
+												.ToList();
 
 			var updatedForecastedSeries = getUpdatedForecastedStaffing(
-				staffingForUsersToday, 
-				latestStatisticsTimeAndWorkload.ActualworkloadInSeconds, 
-				forecastedStaffingModel.WorkloadSeconds,
+				staffingForUsersToday,
+				latestStatisticsTimeAndWorkload.ActualWorkloadInSecondsPerSkill, 
+				forecastedStaffingModel.WorkloadInSecondsPerSkill,
 				latestStatsTime, 
 				usersNow, 
 				minutesPerInterval
 			);
+
+			staffingForUsersToday = staffingForUsersToday
+				.GroupBy(g => g.StartTime)
+				.Select(s => new StaffingIntervalModel
+				{
+					SkillId = s.First().SkillId,
+					StartTime = s.First().StartTime,
+					Agents = s.Sum(a => a.Agents)
+				})
+				.OrderBy(o => o.StartTime)
+				.ToList();
 
 			return new IntradayStaffingViewModel()
 			{
@@ -82,36 +94,74 @@ namespace Teleopti.Ccc.Domain.Intraday
 		}
 
 		private List<double?> getUpdatedForecastedStaffing(
-			StaffingIntervalModel[] staffingForUsersToday, 
-			int? actualworkloadInSeconds, 
-			double forecastedWorkloadSeconds, 
+			List<StaffingIntervalModel> forecastedStaffingList, 
+			IList<SkillWorkload> actualworkloadInSeconds, 
+			Dictionary<Guid, List<SkillWorkload>> forecastedWorkloadDictionary, 
 			DateTime? latestStatsTime, 
 			DateTime usersNow, 
 			int minutesPerInterval)
 		{
-			var updatedForecastedSeries = new List<double?>();
+
 
 			if (!latestStatsTime.HasValue)
-				return updatedForecastedSeries;
-
-			var workloadDeviationFactor = actualworkloadInSeconds / forecastedWorkloadSeconds;
+				return new List<double?>();
 
 			if (latestStatsTime > usersNow) // This case only for dev, test and demo
 				usersNow = latestStatsTime.Value.AddMinutes(minutesPerInterval);
 
-				
-			updatedForecastedSeries = staffingForUsersToday
-				.Where(s => s.StartTime >= usersNow)
-				.Select(t => ((double?)t.Agents * workloadDeviationFactor))
-				.ToList();
+			var forecastedStaffingDictionary = forecastedStaffingList
+				.GroupBy(g => g.SkillId)
+				.Select(s => s)
+				.ToDictionary(x => x.Key, x => forecastedStaffingList.Where(s => s.SkillId == x.Key));
 
-			var nullCount = staffingForUsersToday.Count() - updatedForecastedSeries.Count;
-			for (int i = 0; i < nullCount; i++)
+			var actualWorkloadDictionary = actualworkloadInSeconds
+				.GroupBy(g => g.SkillId)
+				.Select(s => s)
+				.ToDictionary(x => x.Key, x => actualworkloadInSeconds.Where(s => s.SkillId == x.Key));
+
+			var updatedForecastedSeries = new List<StaffingIntervalModel>();
+
+			foreach (var skillId in forecastedWorkloadDictionary.Keys)
 			{
-				updatedForecastedSeries.Insert(0, null);
+				double workloadDeviationFactor = 0;
+				IEnumerable<SkillWorkload> actualWorkload = actualWorkloadDictionary[skillId];
+				foreach (var forecastedWorkloadInterval in forecastedWorkloadDictionary[skillId])
+				{
+					var actualWorkloadInterval =
+						actualWorkload.SingleOrDefault(x => x.StartTime == forecastedWorkloadInterval.StartTime);
+
+					workloadDeviationFactor += actualWorkloadInterval.WorkloadInSeconds/forecastedWorkloadInterval.WorkloadInSeconds;
+				}
+				var averageDeviation = workloadDeviationFactor/actualWorkload.Count();
+				var updatedForecastedSeriesPerSkill = new List<StaffingIntervalModel>();
+
+
+
+				updatedForecastedSeriesPerSkill = forecastedStaffingDictionary[skillId]
+					.Where(s => s.StartTime >= usersNow)
+					.Select(t => new StaffingIntervalModel
+					{
+						SkillId = skillId ,
+						Agents = t.Agents * averageDeviation,
+						StartTime = t.StartTime					
+					})
+					.ToList();
+
+				var nullCount = forecastedStaffingDictionary[skillId].Count() - updatedForecastedSeriesPerSkill.Count;
+				for (int i = 0; i < nullCount; i++)
+				{
+					updatedForecastedSeriesPerSkill.Insert(0, null);
+				}
+
+				updatedForecastedSeries.AddRange(updatedForecastedSeriesPerSkill);
 			}
 
-			return updatedForecastedSeries;
+			return updatedForecastedSeries
+				.OrderBy(g => g.StartTime)
+				.GroupBy(h => h.StartTime)
+				.Select(s => (double?)s.Sum(a => a.Agents))
+				.ToList();
+
 		}
 	}
 }
