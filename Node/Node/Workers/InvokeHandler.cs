@@ -11,7 +11,7 @@ namespace Stardust.Node.Workers
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (InvokeHandler));
 
-		public InvokeHandler(IComponentContext componentContext)
+		public InvokeHandler(IContainer componentContext)
 		{
 			if (componentContext == null)
 			{
@@ -21,51 +21,54 @@ namespace Stardust.Node.Workers
 			ComponentContext = componentContext;
 		}
 
-		private IComponentContext ComponentContext { get; set; }
+		private IContainer ComponentContext { get; set; }
 
 		public void Invoke(object query,
 		                   CancellationTokenSource cancellationTokenSource,
 		                   Action<string> progressCallback)
 		{
-			var handler =
-				ComponentContext.Resolve(typeof (IHandle<>).MakeGenericType(query.GetType()));
-
-			if (handler == null)
+			using (var lifetimeScope = ComponentContext.BeginLifetimeScope())
 			{
-				Logger.ErrorWithLineNumber(string.Format("The job type [{0}] could not be resolved. The job cannot be started.",
-				                                         query.GetType()));
+				var handler =
+					lifetimeScope.Resolve(typeof(IHandle<>).MakeGenericType(query.GetType()));
 
-				throw new Exception("The handler " + query.GetType() + " could not be resolved");
-			}
-
-			var method = handler.GetType().GetMethod("Handle");
-
-			if (method == null)
-			{
-				Logger.ErrorWithLineNumber(string.Format("The method for handler [{0}] could not be found. ",
-				                                         handler.GetType()));
-
-				throw new Exception("The method 'Handle' for handler " + handler.GetType() + " could not be found");
-			}
-
-			//this is to throw right exception and not cause faulted on cancellation
-			try
-			{
-				method.Invoke(handler,
-				              new[]
-				              {
-					              query,
-								  cancellationTokenSource,
-								  progressCallback
-				              });
-			}
-			catch (Exception ex)
-			{
-				if (ex.InnerException is OperationCanceledException)
+				if (handler == null)
 				{
-					throw ex.InnerException;
+					Logger.ErrorWithLineNumber(string.Format("The job type [{0}] could not be resolved. The job cannot be started.",
+					                                         query.GetType()));
+
+					throw new Exception("The handler " + query.GetType() + " could not be resolved");
 				}
-				throw;
+
+				var method = handler.GetType().GetMethod("Handle");
+
+				if (method == null)
+				{
+					Logger.ErrorWithLineNumber(string.Format("The method for handler [{0}] could not be found. ",
+					                                         handler.GetType()));
+
+					throw new Exception("The method 'Handle' for handler " + handler.GetType() + " could not be found");
+				}
+
+				//this is to throw right exception and not cause faulted on cancellation
+				try
+				{
+					method.Invoke(handler,
+					              new[]
+					              {
+						              query,
+						              cancellationTokenSource,
+						              progressCallback
+					              });
+				}
+				catch (Exception ex)
+				{
+					if (ex.InnerException is OperationCanceledException)
+					{
+						throw ex.InnerException;
+					}
+					throw;
+				}
 			}
 		}
 	}
