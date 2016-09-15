@@ -5,53 +5,33 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class AdherenceInfo
 	{
-		private readonly InputInfo _input;
-		private readonly AgentState _stored;
-		private readonly MappingsState _mappings;
-		private readonly Guid _businessUnitId;
-		private readonly StateRuleInfo _stateRuleInfo;
-		private readonly ScheduleInfo _scheduleInfo;
-		private readonly AppliedAdherence _appliedAdherence;
-		private readonly StateMapper _stateMapper;
+		private readonly Context _context;
+		private readonly MappingsState _mappingsState;
 
-		public AdherenceInfo(
-			InputInfo input,
-			AgentState stored,
-			MappingsState mappings,
-			Guid businessUnitId,
-			StateRuleInfo stateRuleInfo,
-			ScheduleInfo scheduleInfo,
-			AppliedAdherence appliedAdherence,
-			StateMapper stateMapper)
+		public AdherenceInfo(Context context, MappingsState mappingsState)
 		{
-			_input = input;
-			_stored = stored;
-			_mappings = mappings;
-			_businessUnitId = businessUnitId;
-			_stateRuleInfo = stateRuleInfo;
-			_scheduleInfo = scheduleInfo;
-			_appliedAdherence = appliedAdherence;
-			_stateMapper = stateMapper;
+			_context = context;
+			_mappingsState = mappingsState;
 		}
 
 		public EventAdherence AdherenceForNewStateAndCurrentActivity()
 		{
-			return _appliedAdherence.ForEvent(_stateRuleInfo.Adherence(), _stateRuleInfo.StaffingEffect());
+			return _context.AppliedAdherence.ForEvent(_context.State.Adherence(), _context.State.StaffingEffect());
 		}
 
 		public EventAdherence AdherenceForStoredState()
 		{
-			return adherenceFor(_stored?.StateCode, _stored.PlatformTypeId(), _stored?.ActivityId);
+			return adherenceFor(_context.Stored?.StateCode, _context.Stored.PlatformTypeId(), _context.Stored?.ActivityId);
 		}
 
 		public EventAdherence AdherenceForNewStateAndPreviousActivity()
 		{
-			return adherenceFor(_input.StateCode, _input.ParsedPlatformTypeId(), _scheduleInfo.PreviousActivity());
+			return adherenceFor(_context.Input.StateCode, _context.Input.ParsedPlatformTypeId(), _context.Schedule.PreviousActivity());
 		}
 
 		public EventAdherence AdherenceForStoredStateAndCurrentActivity()
 		{
-			return adherenceFor(_stored?.StateCode, _stored.PlatformTypeId(), _scheduleInfo.CurrentActivity());
+			return adherenceFor(_context.Stored?.StateCode, _context.Stored.PlatformTypeId(), _context.Schedule.CurrentActivity());
 		}
 
 		private EventAdherence adherenceFor(string stateCode, Guid platformTypeId, ScheduledActivity activity)
@@ -64,10 +44,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private EventAdherence adherenceFor(string stateCode, Guid platformTypeId, Guid? activityId)
 		{
-			var rule = _stateMapper.RuleFor(_mappings, _businessUnitId, platformTypeId, stateCode, activityId);
+			var rule = _context.StateMapper.RuleFor(_mappingsState, _context.BusinessUnitId, platformTypeId, stateCode, activityId);
 			if (rule == null)
-				return _appliedAdherence.ForEvent(null, null);
-			return _appliedAdherence.ForEvent(rule.Adherence, rule.StaffingEffect);
+				return _context.AppliedAdherence.ForEvent(null, null);
+			return _context.AppliedAdherence.ForEvent(rule.Adherence, rule.StaffingEffect);
 		}
 
 
@@ -76,7 +56,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public bool AdherenceChangedFromActivityChange()
 		{
 			EventAdherence? from = null;
-			if (_stored != null)
+			if (_context.Stored != null)
 				from = AdherenceForStoredState();
 			var to = AdherenceForStoredStateAndCurrentActivity();
 			return from != to;
@@ -85,7 +65,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public bool AdherenceChangedFromStateChange()
 		{
 			EventAdherence? from = null;
-			if (_stored != null)
+			if (_context.Stored != null)
 				from = AdherenceForStoredStateAndCurrentActivity();
 			var to = AdherenceForNewStateAndCurrentActivity();
 			return from != to;

@@ -67,28 +67,35 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			BusinessUnitId = businessUnitId;
 			TeamId = teamId;
 			SiteId = siteId;
+			AppliedAdherence = appliedAdherence;
+			StateMapper = stateMapper;
 
 			_updateState = updateState ?? (c => {});
 			_appliedAlarm = appliedAlarm;
 			_schedule = new Lazy<ScheduleState>(schedule); ;
 
 			var schedules = new Lazy<IEnumerable<ScheduledActivity>>(() => _schedule.Value.Schedules);
-			Schedule = new ScheduleInfo(schedules, Stored, CurrentTime);
-			State = new StateRuleInfo(mappingsState, Stored, StateCode, PlatformTypeId, businessUnitId, Input, Schedule, stateMapper);
-			Adherence = new AdherenceInfo(Input, Stored, mappingsState, businessUnitId, State, Schedule, appliedAdherence, stateMapper);
+			Schedule = new ScheduleInfo(this, schedules);
+			State = new StateRuleInfo(this, mappingsState);
+			Adherence = new AdherenceInfo(this, mappingsState);
 		}
+
+		public DateTime CurrentTime { get; private set; }
 
 		public Guid PersonId { get; private set; }
 		public Guid BusinessUnitId { get; private set; }
 		public Guid TeamId { get; private set; }
 		public Guid SiteId { get; private set; }
 
+		public StateMapper StateMapper { get; set; }
+		public AppliedAdherence AppliedAdherence { get; set; }
+
 		public InputInfo Input { get; set; }
 		public AgentState Stored { get; set; }
+
 		public StateRuleInfo State { get; private set; }
 		public ScheduleInfo Schedule { get; private set; }
 		public AdherenceInfo Adherence { get; private set; }
-		public DateTime CurrentTime { get; private set; }
 
 		public bool ShouldProcessState()
 		{
