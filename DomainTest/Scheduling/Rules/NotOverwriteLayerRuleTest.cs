@@ -241,12 +241,36 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			scheduleDay.BusinessRuleResponseCollection.Count.Should().Be.EqualTo(0);
 
 			scheduleDay.PersonAssignment().AddActivity(phoneActivity, new TimePeriod(11, 30, 12, 30));
-			var respons = stateHolder.Schedules.Modify(ScheduleModifier.Scheduler, scheduleDay, bussinesRuleCollection,
+			var responses = stateHolder.Schedules.Modify(ScheduleModifier.Scheduler, scheduleDay, bussinesRuleCollection,
 				new DoNothingScheduleDayChangeCallBack(), new NoScheduleTagSetter());
 
-			respons.Count().Should().Be.EqualTo(1);
+			responses.Count().Should().Be.EqualTo(1);
 			scheduleDay = stateHolder.Schedules[agent].ScheduledDay(dateOnly);
 			scheduleDay.BusinessRuleResponseCollection.Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldHandleAgentWithNoAssignment()
+		{
+			var scenario = new Scenario("_");
+			var dateOnly = new DateOnly(2016, 05, 23);
+
+			var agent = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(new Person(), dateOnly);
+			var schedulePeriod = agent.SchedulePeriod(dateOnly);
+			schedulePeriod.PeriodType = SchedulePeriodType.Week;
+
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)),
+				new[] { agent }, Enumerable.Empty<IScheduleData>(), Enumerable.Empty<ISkillDay>());
+
+			var bussinesRuleCollection = NewBusinessRuleCollection.All(stateHolder.SchedulingResultState);
+			stateHolder.Schedules.ValidateBusinessRulesOnPersons(new List<IPerson> { agent }, CultureInfo.InvariantCulture, bussinesRuleCollection);
+
+			var scheduleDay = stateHolder.Schedules[agent].ScheduledDay(dateOnly);
+			scheduleDay.CreateAndAddAbsence(new AbsenceLayer(new Absence(), new DateTimePeriod(2016, 05, 22, 2016, 05, 24)));
+			var responses = stateHolder.Schedules.Modify(ScheduleModifier.Scheduler, scheduleDay, bussinesRuleCollection,
+				new DoNothingScheduleDayChangeCallBack(), new NoScheduleTagSetter());
+
+			responses.Count().Should().Be.EqualTo(0);
 		}
 	}
 }

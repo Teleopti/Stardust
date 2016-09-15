@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			if (!scheduleDay.HasProjection())
 				return new List<IBusinessRuleResponse>();
 
-			var layers = scheduleDay.PersonAssignment().MainActivities().ToArray();
+			var layers = scheduleDay.PersonAssignment(true).MainActivities().ToArray();
 			var meetings = scheduleDay.PersonMeetingCollection().ToArray();
 			var personalActivities = scheduleDay.PersonAssignment().PersonalActivities().ToArray();
 			var overlappingLayersList = getOverlappingLayerses(layers, meetings, personalActivities);
