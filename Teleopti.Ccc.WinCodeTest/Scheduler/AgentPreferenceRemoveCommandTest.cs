@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_scheduleDay = _mock.StrictMock<IScheduleDay>();
 			_scheduleDictionary = _mock.DynamicMock<IScheduleDictionary>();
 			_preferenceDay = _mock.StrictMock<IPreferenceDay>();
-			_removeCommand = new AgentPreferenceRemoveCommand(_scheduleDay, _scheduleDictionary);
+			_removeCommand = new AgentPreferenceRemoveCommand(_scheduleDay, _scheduleDictionary, new DoNothingScheduleDayChangeCallBack());
 		}
 
 		[Test]

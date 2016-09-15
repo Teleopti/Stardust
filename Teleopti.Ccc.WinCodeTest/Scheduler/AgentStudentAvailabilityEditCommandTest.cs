@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
 			_startTime = TimeSpan.FromHours(8);
 			_endTime = TimeSpan.FromHours(10);
-			_target = new AgentStudentAvailabilityEditCommand(_scheduleDay, _startTime, _endTime, _studentAvailabilityDayCreator,_scheduleDictionary);
+			_target = new AgentStudentAvailabilityEditCommand(_scheduleDay, _startTime, _endTime, _studentAvailabilityDayCreator,_scheduleDictionary, new DoNothingScheduleDayChangeCallBack());
 			_studentAvailabilityDay = new StudentAvailabilityDay(PersonFactory.CreatePerson(), new DateOnly(2001,1,1), new List<IStudentAvailabilityRestriction>());
 		}
 

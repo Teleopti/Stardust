@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				MaxLength = TimeSpan.FromHours(3)
 			};
 
-			_target = new AgentPreferenceEditCommand(_scheduleDay, _data, _agentPreferenceDayCreator, _scheduleDictionary);
+			_target = new AgentPreferenceEditCommand(_scheduleDay, _data, _agentPreferenceDayCreator, _scheduleDictionary, new DoNothingScheduleDayChangeCallBack());
 		}
 
 		[Test]

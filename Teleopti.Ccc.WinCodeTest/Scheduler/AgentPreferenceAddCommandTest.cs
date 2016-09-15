@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				};
 
 			_preferenceDayCreator = _mock.StrictMock<IAgentPreferenceDayCreator>();
-			_target = new AgentPreferenceAddCommand(_scheduleDay,_data, _preferenceDayCreator, _scheduleDictionary);
+			_target = new AgentPreferenceAddCommand(_scheduleDay,_data, _preferenceDayCreator, _scheduleDictionary, new DoNothingScheduleDayChangeCallBack());
 			_preferenceDay = _mock.StrictMock<IPreferenceDay>();	
 		}
 

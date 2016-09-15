@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_view = _mock.StrictMock<IAgentPreferenceView>();
 			_scheduleDay = _mock.StrictMock<IScheduleDay>();
 			_schedulingResultStateHolder = _mock.DynamicMock<ISchedulingResultStateHolder>();
-			_presenter = new AgentPreferencePresenter(_view, _scheduleDay, _schedulingResultStateHolder);
+			_presenter = new AgentPreferencePresenter(_view, _scheduleDay, _schedulingResultStateHolder, new DoNothingScheduleDayChangeCallBack());
 			_person = _mock.StrictMock<IPerson>();
 			_dateOnly = new DateOnly(2013,1,1);
 			_preferenceRestriction = new PreferenceRestriction {MustHave = true};
