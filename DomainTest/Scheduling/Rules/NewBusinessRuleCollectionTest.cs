@@ -3,19 +3,30 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.DomainTest.SchedulingScenarios;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable"), TestFixture]
+	[DomainTest]
 	public class NewBusinessRuleCollectionTest
 	{
 		private INewBusinessRuleCollection _target;
 		private const int totalNumberOfRules = 10;
 		private ISchedulingResultStateHolder _state;
+
+		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 
 		[SetUp]
 		public void Setup()
@@ -152,6 +163,67 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var allForScheduling = NewBusinessRuleCollection.AllForScheduling(_state);
 			Assert.AreEqual(totalNumberOfRules + 1, allForScheduling.Count);
 			Assert.IsTrue(collectionContainsType(allForScheduling, typeof(MinWeekWorkTimeRule)));
+		}
+
+		[Test]
+		public void ShouldHandleAgentWithNoAssignment()
+		{
+			var scenario = new Scenario("_");
+			var dateOnly = new DateOnly(2016, 05, 23);
+
+			var agent = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(new Person(), dateOnly);
+			var schedulePeriod = agent.SchedulePeriod(dateOnly);
+			schedulePeriod.PeriodType = SchedulePeriodType.Week;
+
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)),
+				new[] { agent }, Enumerable.Empty<IScheduleData>(), Enumerable.Empty<ISkillDay>());
+
+			var bussinesRuleCollection = NewBusinessRuleCollection.All(stateHolder.SchedulingResultState);
+			stateHolder.Schedules.ValidateBusinessRulesOnPersons(new List<IPerson> { agent }, CultureInfo.InvariantCulture, bussinesRuleCollection);
+
+			var scheduleDay = stateHolder.Schedules[agent].ScheduledDay(dateOnly);
+			scheduleDay.CreateAndAddAbsence(new AbsenceLayer(new Absence(), new DateTimePeriod(2016, 05, 22, 2016, 05, 24)));
+			var responses = stateHolder.Schedules.Modify(ScheduleModifier.Scheduler, scheduleDay, bussinesRuleCollection,
+				new DoNothingScheduleDayChangeCallBack(), new NoScheduleTagSetter());
+
+			responses.Count().Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldShowValidationAlertIfModifyIsCanceled()
+		{
+			var scenario = new Scenario("_");
+			var phoneActivity = new Activity("_") { AllowOverwrite = true };
+			var lunch = new Activity("_") { AllowOverwrite = false };
+			var dateOnly = new DateOnly(2016, 05, 23);
+			var shiftCategory1 = new ShiftCategory("_").WithId();
+
+			var agent = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(new Person(), dateOnly);
+			var schedulePeriod = agent.SchedulePeriod(dateOnly);
+			schedulePeriod.PeriodType = SchedulePeriodType.Week;
+
+			var ass1 = new PersonAssignment(agent, scenario, dateOnly); //should not
+			ass1.AddActivity(phoneActivity, new TimePeriod(8, 0, 16, 0));
+			ass1.AddActivity(lunch, new TimePeriod(11, 0, 12, 0));
+
+			ass1.SetShiftCategory(shiftCategory1);
+
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)),
+				new[] { agent }, new[] { ass1 }, Enumerable.Empty<ISkillDay>());
+
+			var bussinesRuleCollection = NewBusinessRuleCollection.All(stateHolder.SchedulingResultState);
+			stateHolder.Schedules.ValidateBusinessRulesOnPersons(new List<IPerson> { agent }, CultureInfo.InvariantCulture, bussinesRuleCollection);
+
+			var scheduleDay = stateHolder.Schedules[agent].ScheduledDay(dateOnly);
+			scheduleDay.BusinessRuleResponseCollection.Count.Should().Be.EqualTo(0);
+
+			scheduleDay.PersonAssignment().AddActivity(phoneActivity, new TimePeriod(11, 30, 12, 30));
+			var responses = stateHolder.Schedules.Modify(ScheduleModifier.Scheduler, scheduleDay, bussinesRuleCollection,
+				new DoNothingScheduleDayChangeCallBack(), new NoScheduleTagSetter());
+
+			responses.Count().Should().Be.EqualTo(1);
+			scheduleDay = stateHolder.Schedules[agent].ScheduledDay(dateOnly);
+			scheduleDay.BusinessRuleResponseCollection.Count.Should().Be.EqualTo(0);
 		}
 
 		private static bool collectionContainsType(IEnumerable<INewBusinessRule> businessRuleCollection, Type type)
