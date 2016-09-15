@@ -3,7 +3,6 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
@@ -20,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public FakeEventPublisher Publisher;
 
 		[Test]
-		public void ShouldNotPublishStateChangedEvent()
+		public void ShouldNotPublishStateChangedEventOnStartup()
 		{
 			var person = Guid.NewGuid();
 			var team = Guid.NewGuid();
@@ -46,6 +45,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Rta.Touch(Database.TenantName());
 
 			Model.Get(team).Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldNotPublishStateChangedEventOnActivityCheck()
+		{
+			var person = Guid.NewGuid();
+			var team = Guid.NewGuid();
+			Database
+				.WithUser("user", person, null, team, null)
+				;
+
+			Rta.CheckForActivityChanges(Database.TenantName());
+
+			Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Should().Be.Empty();
 		}
 
 	}
