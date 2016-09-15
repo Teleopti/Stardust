@@ -14,14 +14,21 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly TimeSpan? _endTime;
 		private readonly IOvertimeAvailabilityCreator _overtimeAvailabilityDayCreator;
         private readonly IScheduleDictionary _scheduleDictionary;
+	    private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 
-        public AgentOvertimeAvailabilityAddCommand(IScheduleDay scheduleDay, TimeSpan? startTime, TimeSpan? endTime, IOvertimeAvailabilityCreator overtimeAvailabilityDayCreator, IScheduleDictionary scheduleDictionary)
+	    public AgentOvertimeAvailabilityAddCommand(IScheduleDay scheduleDay, 
+													TimeSpan? startTime, 
+													TimeSpan? endTime, 
+													IOvertimeAvailabilityCreator overtimeAvailabilityDayCreator, 
+													IScheduleDictionary scheduleDictionary,
+													IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
 			_scheduleDay = scheduleDay;
 			_startTime = startTime;
 			_endTime = endTime;
 			_overtimeAvailabilityDayCreator = overtimeAvailabilityDayCreator;
 		    _scheduleDictionary = scheduleDictionary;
+		    _scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
 		public void Execute()
@@ -32,7 +39,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			{
 			    _scheduleDay.Add(overtimeAvailabilityDay);
 
-                _scheduleDictionary.Modify(ScheduleModifier.Scheduler, _scheduleDay, NewBusinessRuleCollection.Minimum(), new ResourceCalculationOnlyScheduleDayChangeCallback(),
+                _scheduleDictionary.Modify(ScheduleModifier.Scheduler, _scheduleDay, NewBusinessRuleCollection.Minimum(), 
+											_scheduleDayChangeCallback,
                                               new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
 			}
 		}

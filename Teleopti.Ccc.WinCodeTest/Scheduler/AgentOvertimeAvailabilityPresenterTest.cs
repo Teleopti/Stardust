@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.Restriction;
 using Teleopti.Interfaces.Domain;
 
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_scheduleDay = _mock.StrictMock<IScheduleDay>();
 			_dateOnly = new DateOnly(2013, 1, 1);
 			_overtimeAvailabilityDay = new OvertimeAvailability(_person, _dateOnly, TimeSpan.FromHours(8), TimeSpan.FromHours(18));
-			_presenter = new AgentOvertimeAvailabilityPresenter(_view, _scheduleDay, new SchedulingResultStateHolder());
+			_presenter = new AgentOvertimeAvailabilityPresenter(_view, _scheduleDay, new SchedulingResultStateHolder(), new DoNothingScheduleDayChangeCallBack());
 			_command = _mock.StrictMock<IAgentOvertimeAvailabilityCommand>();
 			_dayCreator = _mock.StrictMock<IOvertimeAvailabilityCreator>();
 			_projectionService = _mock.StrictMock<IProjectionService>();

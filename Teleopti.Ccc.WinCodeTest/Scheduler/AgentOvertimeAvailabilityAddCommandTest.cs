@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.WinCode.Scheduling.Restriction;
 using Teleopti.Interfaces.Domain;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _scheduleDictionary = _mock.DynamicMock<IScheduleDictionary>();
 			_startTime = TimeSpan.FromHours(8);
 			_endTime = TimeSpan.FromHours(10);
-			_target = new AgentOvertimeAvailabilityAddCommand(_scheduleDay, _startTime, _endTime, _overtimeAvailabilityDayCreator, _scheduleDictionary);
+			_target = new AgentOvertimeAvailabilityAddCommand(_scheduleDay, _startTime, _endTime, _overtimeAvailabilityDayCreator, _scheduleDictionary, new DoNothingScheduleDayChangeCallBack());
 			_overtimeAvailabilityDay = _mock.StrictMock<IOvertimeAvailability>();
 		}
 

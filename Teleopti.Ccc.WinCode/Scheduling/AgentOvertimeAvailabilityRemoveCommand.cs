@@ -8,11 +8,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	public class AgentOvertimeAvailabilityRemoveCommand : IAgentOvertimeAvailabilityCommand
 	{
 		private readonly IScheduleDay _scheduleDay;
-	    private readonly IScheduleDictionary _scheduleDictionary;
+		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
+		private readonly IScheduleDictionary _scheduleDictionary;
 
-	    public AgentOvertimeAvailabilityRemoveCommand(IScheduleDay scheduleDay, IScheduleDictionary scheduleDictionary)
+	    public AgentOvertimeAvailabilityRemoveCommand(IScheduleDay scheduleDay, IScheduleDictionary scheduleDictionary, IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
 		    _scheduleDay = scheduleDay;
+		    _scheduleDayChangeCallback = scheduleDayChangeCallback;
 		    _scheduleDictionary = scheduleDictionary;
 		}
 
@@ -22,7 +24,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			{
 				_scheduleDay.DeleteOvertimeAvailability();
 
-                _scheduleDictionary.Modify(ScheduleModifier.Scheduler, _scheduleDay, NewBusinessRuleCollection.Minimum(), new ResourceCalculationOnlyScheduleDayChangeCallback(),
+                _scheduleDictionary.Modify(ScheduleModifier.Scheduler, _scheduleDay, NewBusinessRuleCollection.Minimum(),
+											_scheduleDayChangeCallback,
                                               new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
 			}
 		}

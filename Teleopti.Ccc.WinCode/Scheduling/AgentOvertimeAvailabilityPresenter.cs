@@ -11,15 +11,20 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IAgentOvertimeAvailabilityView _view;
 		private readonly IScheduleDay _scheduleDay;
 	    private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
-	    private TimePeriod? _existingShiftTimePeriod;
+		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
+		private TimePeriod? _existingShiftTimePeriod;
 		private TimeSpan _startTime = new TimeSpan(8, 0, 0);
 		private TimeSpan _endTime = new TimeSpan(17, 0, 0);
 
-		public AgentOvertimeAvailabilityPresenter(IAgentOvertimeAvailabilityView view, IScheduleDay scheduleDay, ISchedulingResultStateHolder schedulingResultStateHolder)
+		public AgentOvertimeAvailabilityPresenter(IAgentOvertimeAvailabilityView view, 
+													IScheduleDay scheduleDay, 
+													ISchedulingResultStateHolder schedulingResultStateHolder,
+													IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
 			_view = view;
 			_scheduleDay = scheduleDay;
 		    _schedulingResultStateHolder = schedulingResultStateHolder;
+			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
 		public void Initialize()
@@ -89,13 +94,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var canCreate = dayCreator.CanCreate(startTime, endTime, out startError, out endError);
 			
 			if (overtimeAvailabilityday != null && !canCreate && startError && endError)
-				return new AgentOvertimeAvailabilityRemoveCommand(_scheduleDay, _schedulingResultStateHolder.Schedules);
+				return new AgentOvertimeAvailabilityRemoveCommand(_scheduleDay, _schedulingResultStateHolder.Schedules, _scheduleDayChangeCallback);
 
 			if (overtimeAvailabilityday == null && canCreate)
-                return new AgentOvertimeAvailabilityAddCommand(_scheduleDay, startTime, endTime, dayCreator, _schedulingResultStateHolder.Schedules);
+                return new AgentOvertimeAvailabilityAddCommand(_scheduleDay, startTime, endTime, dayCreator, _schedulingResultStateHolder.Schedules, _scheduleDayChangeCallback);
 
 			if (overtimeAvailabilityday != null && canCreate)
-                return new AgentOvertimeAvailabilityEditCommand(_scheduleDay, startTime, endTime, dayCreator, _schedulingResultStateHolder.Schedules);
+                return new AgentOvertimeAvailabilityEditCommand(_scheduleDay, startTime, endTime, dayCreator, _schedulingResultStateHolder.Schedules, _scheduleDayChangeCallback);
 
 			return null;
 		}

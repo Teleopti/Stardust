@@ -6635,7 +6635,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IScheduleDay selectedDay;
 			if (!tryGetFirstSelectedSchedule(_scheduleView.SelectedSchedules(), out selectedDay)) return;
 
-			using (var view = new AgentOvertimeAvailabilityView(selectedDay, _schedulerState.SchedulingResultState))
+			using (var view = new AgentOvertimeAvailabilityView(selectedDay, _schedulerState.SchedulingResultState, _container.Resolve<IScheduleDayChangeCallback>()))
 			{
 				view.ShowDialog(this);
 				updateOvertimeAvailability();

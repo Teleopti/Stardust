@@ -14,13 +14,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly IOvertimeAvailabilityCreator _dayCreator;
 	    private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 
-	    public AgentOvertimeAvailabilityView(IScheduleDay scheduleDay, ISchedulingResultStateHolder schedulingResultStateHolder)
+	    public AgentOvertimeAvailabilityView(IScheduleDay scheduleDay, ISchedulingResultStateHolder schedulingResultStateHolder, IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
 	        _schedulingResultStateHolder = schedulingResultStateHolder;
 	        InitializeComponent();
 			SetTexts();
 			_dayCreator = new OvertimeAvailabilityCreator();
-			_presenter = new AgentOvertimeAvailabilityPresenter(this, scheduleDay, _schedulingResultStateHolder);
+			_presenter = new AgentOvertimeAvailabilityPresenter(this, scheduleDay, _schedulingResultStateHolder, scheduleDayChangeCallback);
 			_presenter.Initialize();
 		}
 
