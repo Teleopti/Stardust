@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         {
 	        permissionChecker = new PersistableScheduleDataPermissionChecker();
 			newRules = NewBusinessRuleCollection.Minimum();
-            target = new MoveDataBetweenSchedules(newRules,new ResourceCalculationOnlyScheduleDayChangeCallback());
+            target = new MoveDataBetweenSchedules(newRules, new DoNothingScheduleDayChangeCallBack());
             destination = new ScheduleDictionary(new Scenario("dest scen"), new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 10)), permissionChecker);
         }
 
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             var nfRule = new NewFailingRule();
             var nr = NewBusinessRuleCollection.Minimum();
             nr.Add(nfRule);
-            target =new MoveDataBetweenSchedules( nr,new ResourceCalculationOnlyScheduleDayChangeCallback());
+            target =new MoveDataBetweenSchedules( nr, new DoNothingScheduleDayChangeCallBack());
 
             IPersonAssignment assValid = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Scenario("sdf"),
                                                                             new Person(),
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 				person1.AddPersonPeriod(personPeriod);
 				rules.Add(nightlyRest);
-				target = new MoveDataBetweenSchedules(rules, new ResourceCalculationOnlyScheduleDayChangeCallback());
+				target = new MoveDataBetweenSchedules(rules, new DoNothingScheduleDayChangeCallBack());
 
 				var startTimeLateDay1 = new DateTime(2000, 1, 3, 15, 0, 0, DateTimeKind.Utc);
 				var endTimeLateDay1 = new DateTime(2000, 1, 3, 22, 0, 0, DateTimeKind.Utc);
