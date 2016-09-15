@@ -402,7 +402,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				);
 
 			if (exceptions.Count == 1)
-				throw exceptions.First();
+			{
+				var e = exceptions.First();
+				PreserveStack.For(e);
+				throw e;
+			}
 			if (exceptions.Any())
 				throw new System.AggregateException(exceptions);
 		}
