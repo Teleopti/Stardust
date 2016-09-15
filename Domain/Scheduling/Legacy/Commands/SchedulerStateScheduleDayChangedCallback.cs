@@ -1,10 +1,12 @@
 using System;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpManualChanges_37029)]
     public class SchedulerStateScheduleDayChangedCallback : IScheduleDayChangeCallback
     {
         private readonly IResourceCalculateDaysDecider _resourceCalculateDaysDecider;

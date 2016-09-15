@@ -95,10 +95,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_configuration.Toggle(Toggles.ResourcePlanner_SpeedUpManualChanges_37029))
 			{
 				builder.RegisterType<SharedResourceContext>().As<ISharedResourceContext>().InstancePerLifetimeScope();
+				builder.RegisterType<ScheduleDayChangeCallback>().As<IScheduleDayChangeCallback>().InstancePerLifetimeScope();
 			}
 			else
 			{
 				builder.RegisterType<SharedResourceContextOldSchedulingScreenBehavior>().As<ISharedResourceContext>().InstancePerLifetimeScope();
+				builder.RegisterType<SchedulerStateScheduleDayChangedCallback>().As<IScheduleDayChangeCallback>().InstancePerLifetimeScope();
 			}
 			
 			builder.RegisterType<SchedulingOptionsProvider>().As<ISchedulingOptionsProvider>().AsSelf().InstancePerLifetimeScope();
@@ -183,9 +185,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.SingleInstance();
 			builder.RegisterType<WorkShiftCalculatorsManager>().As<IWorkShiftCalculatorsManager>().InstancePerLifetimeScope();
 			builder.RegisterType<FairnessAndMaxSeatCalculatorsManager28317>().As<IFairnessAndMaxSeatCalculatorsManager>()
-				.InstancePerLifetimeScope();
-			builder.RegisterType<SchedulerStateScheduleDayChangedCallback>()
-				.As<IScheduleDayChangeCallback>()
 				.InstancePerLifetimeScope();
 			builder.RegisterType<ResourceCalculateDaysDecider>().As<IResourceCalculateDaysDecider>().SingleInstance();
 			builder.RegisterType<PeopleAndSkillLoaderDecider>().As<IPeopleAndSkillLoaderDecider>().SingleInstance();

@@ -465,6 +465,7 @@
     <Compile Include="Scheduling\Rules\BusinessRuleProvider.cs" />
     <Compile Include="Scheduling\Rules\NotOverwriteLayerRule.cs" />
     <Compile Include="Scheduling\Rules\SiteOpenHoursRule.cs" />
+    <Compile Include="Scheduling\ScheduleDayChangeCallback.cs" />
     <Compile Include="Scheduling\TeamBlock\AssignScheduledLayers.cs" />
     <Compile Include="Scheduling\TeamBlock\BetweenDayOffBlockFinder.cs" />
     <Compile Include="Scheduling\TeamBlock\ReturnPeriodBasedOnDayBlockFinder.cs" />
