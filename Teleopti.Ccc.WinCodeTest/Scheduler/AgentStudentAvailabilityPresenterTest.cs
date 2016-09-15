@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_studentAvailabilityRestriction.EndTimeLimitation = new EndTimeLimitation(null, TimeSpan.FromHours(10));
 			_studentAvailabilityRestrictions = new List<IStudentAvailabilityRestriction>{_studentAvailabilityRestriction};
 			_studentAvailabilityDay = new StudentAvailabilityDay(_person, _dateOnly, _studentAvailabilityRestrictions);
-			_presenter = new AgentStudentAvailabilityPresenter(_view, _scheduleDay, _schedulingResultStateHolder);
+			_presenter = new AgentStudentAvailabilityPresenter(_view, _scheduleDay, _schedulingResultStateHolder, new DoNothingScheduleDayChangeCallBack());
 			_command = _mock.StrictMock<IAgentStudentAvailabilityCommand>();
 			_dayCreator = _mock.StrictMock<IAgentStudentAvailabilityDayCreator>();
 		}

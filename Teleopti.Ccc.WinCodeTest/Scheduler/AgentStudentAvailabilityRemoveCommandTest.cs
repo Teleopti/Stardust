@@ -4,6 +4,7 @@ using Teleopti.Ccc.WinCode.Scheduling;
 using NUnit.Framework;
 using Teleopti.Interfaces.Domain;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_mock = new MockRepository();
 			_scheduleDay = _mock.StrictMock<IScheduleDay>();
 			_scheduleDictionary = _mock.DynamicMock<IScheduleDictionary>();
-			_target = new AgentStudentAvailabilityRemoveCommand(_scheduleDay,_scheduleDictionary);
+			_target = new AgentStudentAvailabilityRemoveCommand(_scheduleDay,_scheduleDictionary, new DoNothingScheduleDayChangeCallBack());
 			_studentAvailabilityDay = _mock.StrictMock<IStudentAvailabilityDay>();
 		}
 

@@ -9,11 +9,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	{
 		private readonly IScheduleDay _scheduleDay;
 	    private readonly IScheduleDictionary _scheduleDictionary;
+		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 
-	    public AgentPreferenceRemoveCommand(IScheduleDay scheduleDay, IScheduleDictionary scheduleDictionary)
+		public AgentPreferenceRemoveCommand(IScheduleDay scheduleDay, IScheduleDictionary scheduleDictionary, IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
 		    _scheduleDay = scheduleDay;
 		    _scheduleDictionary = scheduleDictionary;
+			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
 	    public void Execute()
@@ -22,7 +24,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			{
 				_scheduleDay.DeletePreferenceRestriction();
 
-                _scheduleDictionary.Modify(ScheduleModifier.Scheduler, _scheduleDay, NewBusinessRuleCollection.Minimum(), new ResourceCalculationOnlyScheduleDayChangeCallback(),
+                _scheduleDictionary.Modify(ScheduleModifier.Scheduler, _scheduleDay, NewBusinessRuleCollection.Minimum(), _scheduleDayChangeCallback,
                                               new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
 			}
 		}

@@ -9,12 +9,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IAgentPreferenceView _view;
 		private IScheduleDay _scheduleDay;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 
-		public AgentPreferencePresenter(IAgentPreferenceView view, IScheduleDay scheduleDay, ISchedulingResultStateHolder schedulingResultStateHolder)
+		public AgentPreferencePresenter(IAgentPreferenceView view, IScheduleDay scheduleDay, ISchedulingResultStateHolder schedulingResultStateHolder, IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
 			_view = view;
 			_scheduleDay = scheduleDay;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
+			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
 		public IAgentPreferenceView View
@@ -169,13 +171,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var canCreate = dayCreator.CanCreate(data);
 
 			if (preferenceDay == null && canCreate.Result)
-				return new AgentPreferenceAddCommand(_scheduleDay,data,dayCreator,_schedulingResultStateHolder.Schedules);
+				return new AgentPreferenceAddCommand(_scheduleDay,data,dayCreator,_schedulingResultStateHolder.Schedules, _scheduleDayChangeCallback);
 			
 			if(preferenceDay != null && canCreate.Result)
-				return new AgentPreferenceEditCommand(_scheduleDay,data,dayCreator,_schedulingResultStateHolder.Schedules);
+				return new AgentPreferenceEditCommand(_scheduleDay,data,dayCreator,_schedulingResultStateHolder.Schedules, _scheduleDayChangeCallback);
 
 			if(preferenceDay != null && !canCreate.Result && canCreate.EmptyError)
-				return new AgentPreferenceRemoveCommand(_scheduleDay,_schedulingResultStateHolder.Schedules);
+				return new AgentPreferenceRemoveCommand(_scheduleDay,_schedulingResultStateHolder.Schedules, _scheduleDayChangeCallback);
 
 			return null;
 		}

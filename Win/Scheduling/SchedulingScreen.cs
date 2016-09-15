@@ -6598,7 +6598,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var selectedSchedules = _scheduleView.SelectedSchedules();
 			if (!tryGetFirstSelectedSchedule(selectedSchedules, out selectedDay)) return;
 
-			using (var view = new AgentPreferenceView(selectedDay, _schedulerState))
+			using (var view = new AgentPreferenceView(selectedDay, _schedulerState, _container.Resolve<IScheduleDayChangeCallback>()))
 			{
 				view.ShowDialog(this);
 				updateRestrictions(selectedSchedules.First());
@@ -6611,7 +6611,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var selectedSchedules = _scheduleView.SelectedSchedules();
 			if (!tryGetFirstSelectedSchedule(selectedSchedules, out selectedDay)) return;
 
-			using (var view = new AgentStudentAvailabilityView(selectedDay, _schedulerState.SchedulingResultState))
+			using (var view = new AgentStudentAvailabilityView(selectedDay, _schedulerState.SchedulingResultState, _container.Resolve<IScheduleDayChangeCallback>()))
 			{
 				view.ShowDialog(this);
 				updateRestrictions(selectedSchedules.First());

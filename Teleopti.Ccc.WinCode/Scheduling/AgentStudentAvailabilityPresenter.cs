@@ -9,12 +9,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IAgentStudentAvailabilityView _view;
 		private readonly IScheduleDay _scheduleDay;
 	    private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 
-	    public AgentStudentAvailabilityPresenter(IAgentStudentAvailabilityView view, IScheduleDay scheduleDay, ISchedulingResultStateHolder schedulingResultStateHolder)
+		public AgentStudentAvailabilityPresenter(IAgentStudentAvailabilityView view, IScheduleDay scheduleDay, ISchedulingResultStateHolder schedulingResultStateHolder, IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
 			_view = view;
 			_scheduleDay = scheduleDay;
 		    _schedulingResultStateHolder = schedulingResultStateHolder;
+			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
 		public IAgentStudentAvailabilityView View
@@ -60,13 +62,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var canCreate = dayCreator.CanCreate(startTime, endTime, out startError, out endError);
 			
 			if (studentAvailabilityday != null && !canCreate && startError && endError)
-				return new AgentStudentAvailabilityRemoveCommand(_scheduleDay,_schedulingResultStateHolder.Schedules);
+				return new AgentStudentAvailabilityRemoveCommand(_scheduleDay,_schedulingResultStateHolder.Schedules, _scheduleDayChangeCallback);
 
 			if (studentAvailabilityday == null && canCreate)
-				return new AgentStudentAvailabilityAddCommand(_scheduleDay,startTime,endTime,dayCreator,_schedulingResultStateHolder.Schedules);
+				return new AgentStudentAvailabilityAddCommand(_scheduleDay,startTime,endTime,dayCreator,_schedulingResultStateHolder.Schedules, _scheduleDayChangeCallback);
 
 			if (studentAvailabilityday != null && canCreate)
-				return new AgentStudentAvailabilityEditCommand(_scheduleDay,startTime,endTime,dayCreator,_schedulingResultStateHolder.Schedules);
+				return new AgentStudentAvailabilityEditCommand(_scheduleDay,startTime,endTime,dayCreator,_schedulingResultStateHolder.Schedules, _scheduleDayChangeCallback);
 
 			return null;
 		}

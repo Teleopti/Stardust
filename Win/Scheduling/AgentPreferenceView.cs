@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private bool _isInitialized;
 		private readonly ISchedulerStateHolder _schedulerStateHolder;
 
-		public AgentPreferenceView(IScheduleDay scheduleDay, ISchedulerStateHolder schedulerStateHolder)
+		public AgentPreferenceView(IScheduleDay scheduleDay, ISchedulerStateHolder schedulerStateHolder, IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
 			InitializeComponent();
 			SetTexts();
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolTip.SetToolTip(checkBoxAdvShiftCategoryNextDayMax, Resources.NextDay);
 			_dayCreator = new AgentPreferenceDayCreator();
 			_schedulerStateHolder = schedulerStateHolder;
-			_presenter = new AgentPreferencePresenter(this, scheduleDay, schedulerStateHolder.SchedulingResultState);
+			_presenter = new AgentPreferencePresenter(this, scheduleDay, schedulerStateHolder.SchedulingResultState, scheduleDayChangeCallback);
 		}
 
 		public void UpdateShiftCategory(IShiftCategory shiftCategory)

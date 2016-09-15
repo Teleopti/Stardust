@@ -12,12 +12,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly AgentStudentAvailabilityPresenter _presenter;
 		private readonly IAgentStudentAvailabilityDayCreator _dayCreator;
 
-		public AgentStudentAvailabilityView(IScheduleDay scheduleDay, ISchedulingResultStateHolder schedulingResultStateHolder)
+		public AgentStudentAvailabilityView(IScheduleDay scheduleDay, ISchedulingResultStateHolder schedulingResultStateHolder, IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
 			InitializeComponent();
 			SetTexts();
 			_dayCreator = new AgentStudentAvailabilityDayCreator();
-			_presenter = new AgentStudentAvailabilityPresenter(this, scheduleDay, schedulingResultStateHolder);
+			_presenter = new AgentStudentAvailabilityPresenter(this, scheduleDay, schedulingResultStateHolder, scheduleDayChangeCallback);
 		}
 
 		public void Update(TimeSpan? startTime, TimeSpan? endTime)
