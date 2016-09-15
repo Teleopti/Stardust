@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsTrue(_target.DayOffEquals(original, current));
             Assert.IsTrue(_target.MainShiftEquals(original, current));
 
-            original.DeleteMainShift(original);
+            original.DeleteMainShift();
 						Assert.AreEqual(0, original.PersonAssignment().MainActivities().Count());
 
             Assert.IsTrue(_target.DayOffEquals(original, current));
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsFalse(_target.DayOffEquals(original, current));
             Assert.IsTrue(_target.MainShiftEquals(original, current));
 
-            current.DeleteMainShift(current);
+            current.DeleteMainShift();
 						Assert.AreEqual(0, current.PersonAssignment().MainActivities().Count());
 
             Assert.IsFalse(_target.DayOffEquals(original, current));
@@ -221,13 +221,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsTrue(_target.DayOffEquals(original, current2));
             Assert.IsTrue(_target.MainShiftEquals(original, current2));
 
-            original.DeleteMainShift(original);
+            original.DeleteMainShift();
 						Assert.AreEqual(0, original.PersonAssignment().MainActivities().Count());
 
             Assert.IsTrue(_target.DayOffEquals(original, current));
             Assert.IsTrue(_target.MainShiftEquals(original, current));
 
-            current.DeleteMainShift(current);
+            current.DeleteMainShift();
 						Assert.AreEqual(0, current.PersonAssignment().MainActivities().Count());
 
             Assert.IsTrue(_target.DayOffEquals(original, current));
@@ -252,8 +252,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsTrue(_target.DayOffEquals(original, current));
             Assert.IsTrue(_target.MainShiftEquals(original, current));
 
-            original.DeleteMainShift(original);
-            current.DeleteMainShift(current);
+            original.DeleteMainShift();
+            current.DeleteMainShift();
             Assert.AreEqual(0, original.PersonAssignment().MainActivities().Count());
 						Assert.AreEqual(0, current.PersonAssignment().MainActivities().Count());
 
@@ -272,7 +272,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			setSameIdOnActivites(original, current);
 
             Assert.IsTrue(_target.MainShiftEquals(original, current));
-            original.DeleteMainShift(original);
+            original.DeleteMainShift();
 
             Assert.IsTrue(_target.DayOffEquals(original, current));
             Assert.IsFalse(_target.MainShiftEquals(original, current));

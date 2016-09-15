@@ -265,7 +265,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					if (isDelete) DeleteAbsence(false); else mergeAbsence(source); break;
 
 				case SchedulePartView.MainShift:
-					if (isDelete) DeleteMainShift(source); else mergeMainShift(source, ignoreTimeZoneChanges, true); break;
+					if (isDelete) DeleteMainShift(); else mergeMainShift(source, ignoreTimeZoneChanges, true); break;
 
 				case SchedulePartView.PersonalShift:
 					if (isDelete) DeletePersonalStuff(); else mergePersonalStuff(source, ignoreTimeZoneChanges); break;
@@ -507,7 +507,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				highAss.ClearOvertimeActivities();
 		}
 
-		public void DeleteMainShift(IScheduleDay source) //TODO: remove source
+		public void DeleteMainShift()
 		{
 			IPersonAssignment highAss = PersonAssignment();
 
@@ -519,7 +519,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				
 		}
 
-		public void DeleteMainShiftSpecial(IScheduleDay source) //TODO: remove source
+		public void DeleteMainShiftSpecial()
 		{
 			var highAss = PersonAssignment();
 
@@ -796,7 +796,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				DeleteDayOff();
 
 			if (options.MainShift)
-				DeleteMainShift(this);
+				DeleteMainShift();
 
 			if (options.Overtime)
 				DeleteOvertime();

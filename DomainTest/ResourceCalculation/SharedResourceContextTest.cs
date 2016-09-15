@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Task.Factory.StartNew(() =>
 			{
 				var part = stateHolder.SchedulingResultState.Schedules[agent].ScheduledDay(date);
-				part.DeleteMainShift(part);
+				part.DeleteMainShift();
 				stateHolder.Schedules.Modify(part, ScheduleDayChangeCallback);
 			}).Wait();
 

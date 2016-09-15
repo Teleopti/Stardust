@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		private bool tryFix(IScheduleDay scheduleDay, ISchedulingOptions schedulingOptions)
 		{
-			scheduleDay.DeleteMainShift(scheduleDay);
+			scheduleDay.DeleteMainShift();
 			_rollbackService.Modify(scheduleDay);
 			var dateOnly = scheduleDay.DateOnlyAsPeriod.DateOnly;
 			_resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, false);

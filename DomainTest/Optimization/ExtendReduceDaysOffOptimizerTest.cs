@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                    .Return(true).Repeat.AtLeastOnce();
 
                 Expect.Call(_dayOffsInPeriodCalculator.OutsideOrAtMaximumTargetDaysOff(_schedulePeriod)).Return(false);
-                Expect.Call(() => _scheduleDay.DeleteMainShift(_scheduleDay));
+                Expect.Call(() => _scheduleDay.DeleteMainShift());
                 Expect.Call(() => _scheduleDay.CreateAndAddDayOff(_dayOffTemplate));
                 Expect.Call(() => _rollbackService.Modify(_scheduleDay));
                 Expect.Call(_decider.DecideDates(_scheduleDay, _scheduleDay)).Return(new List<DateOnly>

@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			    var scheduleDay = scheduleRange.ScheduledDay(startDate);
 			    var dayOff = _dayOffRepository.Load(command.DayOffInfoId);
 
-			    scheduleDay.DeleteMainShift(scheduleDay);
+			    scheduleDay.DeleteMainShift();
 			    scheduleDay.DeleteOvertime();
 			    scheduleDay.DeleteAbsence(false);
 			    scheduleDay.DeleteFullDayAbsence(scheduleDay);

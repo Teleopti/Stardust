@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 						{
 							IScheduleDay part =
 								matrix.OuterWeeksPeriodDays[i + bitArrayToMatrixOffset].DaySchedulePart();
-							part.DeleteMainShift(part);
+							part.DeleteMainShift();
 							part.CreateAndAddDayOff(dayOffTemplate);
 							new SchedulePartModifyAndRollbackService(schedulingResultStateHolder, scheduleDayChangeCallback, scheduleTagSetter).Modify(part);
 						}

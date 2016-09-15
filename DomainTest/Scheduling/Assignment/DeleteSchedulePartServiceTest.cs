@@ -57,8 +57,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         {
             using (_mocks.Record())
             {
-                _part3.DeleteMainShift(_part3);
-                _part3.DeleteMainShift(_part3);
+                _part3.DeleteMainShift();
+                _part3.DeleteMainShift();
 
                 Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
                 Expect.Call(_part1.Person).Return(_person).Repeat.AtLeastOnce();
@@ -81,8 +81,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			using (_mocks.Record())
 			{
-				_part3.DeleteMainShiftSpecial(_part3);
-				_part3.DeleteMainShiftSpecial(_part3);
+				_part3.DeleteMainShiftSpecial();
+				_part3.DeleteMainShiftSpecial();
 
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
 				Expect.Call(_part1.Person).Return(_person).Repeat.AtLeastOnce();
@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				Expect.Call(_part3.SignificantPartForDisplay()).Return(SchedulePartView.DayOff).Repeat.Twice();
 				Expect.Call(_part3.SignificantPartForDisplay()).Return(SchedulePartView.Overtime).Repeat.Twice();
 
-                Expect.Call(() => _part3.DeleteMainShift(_part3)).Repeat.AtLeastOnce();
+                Expect.Call(() => _part3.DeleteMainShift()).Repeat.AtLeastOnce();
                 Expect.Call(() => _part3.DeletePersonalStuff()).Repeat.AtLeastOnce();
                 Expect.Call(() => _part3.DeleteDayOff()).Repeat.AtLeastOnce();
                 Expect.Call(() => _part3.DeleteFullDayAbsence(_part3)).Repeat.AtLeastOnce();
@@ -259,7 +259,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				Expect.Call(_part3.SignificantPartForDisplay()).Return(SchedulePartView.DayOff).Repeat.Twice();
 				Expect.Call(_part3.SignificantPartForDisplay()).Return(SchedulePartView.Overtime).Repeat.Twice();
 
-				Expect.Call(() => _part3.DeleteMainShift(_part3)).Repeat.AtLeastOnce();
+				Expect.Call(() => _part3.DeleteMainShift()).Repeat.AtLeastOnce();
 				Expect.Call(() => _part3.DeletePersonalStuff()).Repeat.AtLeastOnce();
 				Expect.Call(() => _part3.DeleteDayOff()).Repeat.AtLeastOnce();
 				Expect.Call(() => _part3.DeleteFullDayAbsence(_part3)).Repeat.AtLeastOnce();

@@ -93,9 +93,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             IScheduleDay clonePart = _scheduleResultStateHolder().Schedules[part.Person].ReFetch(part);
 
             if (options.MainShift)
-                clonePart.DeleteMainShift(clonePart);
+                clonePart.DeleteMainShift();
 			if (options.MainShiftSpecial)
-				clonePart.DeleteMainShiftSpecial(clonePart);
+				clonePart.DeleteMainShiftSpecial();
             if (options.PersonalShift)
                 clonePart.DeletePersonalStuff();
             if (options.DayOff)
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
                 if (view == SchedulePartView.MainShift)
                 {
-					clonePart.DeleteMainShift(clonePart);
+					clonePart.DeleteMainShift();
                 	return clonePart;
                 }
                     

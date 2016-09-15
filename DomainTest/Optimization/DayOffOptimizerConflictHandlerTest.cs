@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(() => _rollbackService.ClearModificationCollection());
                 Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(_dateOnly.AddDays(-1))).Return(_scheduleDayPro);
                 Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay).Repeat.AtLeastOnce();
-                Expect.Call(() => _scheduleDay.DeleteMainShift(_scheduleDay));
+                Expect.Call(() => _scheduleDay.DeleteMainShift());
                 Expect.Call(() => _rollbackService.Modify(_scheduleDay));
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly);
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(() => _rollbackService.ClearModificationCollection());
                 Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(_dateOnly.AddDays(-1))).Return(_scheduleDayPro);
                 Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay).Repeat.AtLeastOnce();
-                Expect.Call(() => _scheduleDay.DeleteMainShift(_scheduleDay));
+                Expect.Call(() => _scheduleDay.DeleteMainShift());
                 Expect.Call(() => _rollbackService.Modify(_scheduleDay));
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly);
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
                 Expect.Call(() => _rollbackService.ClearModificationCollection());
                 Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(_dateOnly.AddDays(1))).Return(_scheduleDayPro);
-                Expect.Call(() => _scheduleDay.DeleteMainShift(_scheduleDay));
+                Expect.Call(() => _scheduleDay.DeleteMainShift());
                 Expect.Call(() => _rollbackService.Modify(_scheduleDay));
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly);
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(() => _rollbackService.ClearModificationCollection());
                 Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(_dateOnly.AddDays(-1))).Return(_scheduleDayPro);
                 Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay).Repeat.AtLeastOnce();
-                Expect.Call(() => _scheduleDay.DeleteMainShift(_scheduleDay));
+                Expect.Call(() => _scheduleDay.DeleteMainShift());
                 Expect.Call(() => _rollbackService.Modify(_scheduleDay));
 	            Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
 	            Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly);
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
                 Expect.Call(() => _rollbackService.ClearModificationCollection());
                 Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(_dateOnly.AddDays(1))).Return(_scheduleDayPro);
-                Expect.Call(() => _scheduleDay.DeleteMainShift(_scheduleDay));
+                Expect.Call(() => _scheduleDay.DeleteMainShift());
                 Expect.Call(() => _rollbackService.Modify(_scheduleDay));
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly);

@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (scheduleDay.SignificantPart() == SchedulePartView.FullDayAbsence || scheduleDay.SignificantPart() == SchedulePartView.ContractDayOff)
 				return;
 
-			scheduleDay.DeleteMainShift(scheduleDay);
+			scheduleDay.DeleteMainShift();
 			scheduleDay.CreateAndAddDayOff(dayOffTemplate);
 			schedulePartModifyAndRollbackService.Modify(scheduleDay);
 

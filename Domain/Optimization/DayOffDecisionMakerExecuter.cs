@@ -311,7 +311,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                                               DateChanged = scheduleDayPro.Day,
                                               PrevoiousSchedule = (IScheduleDay)part.Clone()
                                           };
-                        part.DeleteMainShift(part);
+                        part.DeleteMainShift();
                         part.CreateAndAddDayOff(_dayOffTemplate);
 
                         removeDayOffFromMatrix(workingBitArray, originalBitArray, matrix, daysOffPreferences, movedDays);

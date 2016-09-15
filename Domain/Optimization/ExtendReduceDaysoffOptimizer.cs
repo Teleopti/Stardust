@@ -250,7 +250,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var currentPart = _matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart();
 			var changed = new changedDay {DateChanged = dateOnly, PreviousSchedule = currentPart};
 
-			currentPart.DeleteMainShift(currentPart);
+			currentPart.DeleteMainShift();
 			currentPart.CreateAndAddDayOff(_dayOffTemplate);
 			_rollbackService.Modify(currentPart);
 

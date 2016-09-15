@@ -318,17 +318,8 @@ namespace Teleopti.Interfaces.Domain
 		/// </remarks>
 		void AddMainShift(IEditableShift mainShift);
 
-		/// <summary>
-		/// Delete main shift
-		/// </summary>
-		/// <param name="source"></param>
-		void DeleteMainShift(IScheduleDay source);
-
-		/// <summary>
-		/// Delete main shift
-		/// </summary>
-		/// <param name="source"></param>
-		void DeleteMainShiftSpecial(IScheduleDay source);
+		void DeleteMainShift();
+		void DeleteMainShiftSpecial();
 
 		/// <summary>
 		/// Delete personal shift

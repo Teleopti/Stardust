@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				var scheduleRange = scheduleDictionary[person];
 				var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
                 var scheduleDay = scheduleRange.ScheduledDay(startDate);
-                scheduleDay.DeleteMainShiftSpecial(scheduleDay);
+                scheduleDay.DeleteMainShiftSpecial();
 				
 				var scheduleTagEntity = _scheduleTagAssembler.DtoToDomainEntity(new ScheduleTagDto { Id = command.ScheduleTagId });
 
