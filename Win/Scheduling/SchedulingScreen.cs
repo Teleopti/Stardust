@@ -5913,7 +5913,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				selectCellFromPersonDate(_lastModifiedPart.ModifiedPerson,_lastModifiedPart.ModifiedPart.DateOnlyAsPeriod.DateOnly);
 			}
 
-			RecalculateResources(false);
+			RecalculateResources(true);
 			if (_requestView != null)
 				updateShiftEditor();
 		}
