@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public FakeAnalyticsDateRepository(DateTime start, DateTime end)
 		{
 			_fakeDates = new List<IAnalyticsDate>();
-			InitDates(start, end);
+			initDates(start, end);
 		}
 
 		public void Clear()
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_fakeDates.Clear();
 		}
 
-		public void InitDates(DateTime start, DateTime end)
+		private void initDates(DateTime start, DateTime end)
 		{
 			_fakeDates.Add(AnalyticsDate.NotDefined);
 			_fakeDates.Add(AnalyticsDate.Eternity);

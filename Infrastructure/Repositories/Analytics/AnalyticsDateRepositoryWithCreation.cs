@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -14,12 +13,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 	{
 		private readonly IDistributedLockAcquirer _distributedLockAcquirer;
 		private readonly IEventPublisher _eventPublisher;
+		private readonly IAnalyticsConfigurationRepository _analyticsConfigurationRepository;
 		private static bool shouldPublish;
 
-		public AnalyticsDateRepositoryWithCreation(ICurrentAnalyticsUnitOfWork analyticsUnitOfWork, IDistributedLockAcquirer distributedLockAcquirer, IEventPublisher eventPublisher) : base(analyticsUnitOfWork)
+		public AnalyticsDateRepositoryWithCreation(ICurrentAnalyticsUnitOfWork analyticsUnitOfWork, IDistributedLockAcquirer distributedLockAcquirer, IEventPublisher eventPublisher, IAnalyticsConfigurationRepository analyticsConfigurationRepository) : base(analyticsUnitOfWork)
 		{
 			_distributedLockAcquirer = distributedLockAcquirer;
 			_eventPublisher = eventPublisher;
+			_analyticsConfigurationRepository = analyticsConfigurationRepository;
 		}
 
 		public new IAnalyticsDate MaxDate()
@@ -42,13 +43,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					return date;
 
 				var currentDay = base.MaxDate()?.DateDate ?? new DateTime(1999, 12, 30);
-				
+				var culture = _analyticsConfigurationRepository.GetCulture();
 				while ((currentDay += TimeSpan.FromDays(1)) <= dateDate)
 				{
-					AnalyticsUnitOfWork.Current().Session().Save(new AnalyticsDate(currentDay, CultureInfo.CurrentCulture)); // TODO: Should we use some other culture?
+					AnalyticsUnitOfWork.Current().Session().Save(new AnalyticsDate(currentDay, culture));
 					shouldPublish = true;
 				}
-				//AnalyticsUnitOfWork.Current().PersistAll();
 				AnalyticsUnitOfWork.Current().AfterSuccessfulTx(() =>
 				{
 					if (!shouldPublish) return;

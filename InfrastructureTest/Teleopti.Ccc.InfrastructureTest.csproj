@@ -226,6 +226,7 @@
     <Compile Include="Repositories\Analytics\AnalyticsAbsenceRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsBridgeTimeZoneRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsBusinessUnitRepositoryTest.cs" />
+    <Compile Include="Repositories\Analytics\AnalyticsConfigurationRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsDateRepositoryWithCreationTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsForecastWorkloadRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsHourlyAvailabilityRepositoryTest.cs" />
