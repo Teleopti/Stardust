@@ -8,7 +8,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public interface IResourceCalculateDaysDecider
     {
         IList<DateOnly> DecideDates(IScheduleDay currentSchedule, IScheduleDay previousSchedule);
-	    bool IsNightShift(IScheduleDay scheduleDay);
     }
 
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_CalculateFarAwayTimeZones_40646)]

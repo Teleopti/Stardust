@@ -7,10 +7,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class ResourceCalculateDaysDecider : IResourceCalculateDaysDecider
 	{
 		private readonly ITimeZoneGuard _timeZoneGuard;
+		private readonly IsNightShift _isNightShift;
 
-		public ResourceCalculateDaysDecider(ITimeZoneGuard timeZoneGuard)
+		public ResourceCalculateDaysDecider(ITimeZoneGuard timeZoneGuard, IsNightShift isNightShift)
 		{
 			_timeZoneGuard = timeZoneGuard;
+			_isNightShift = isNightShift;
 		}
 
 		public IList<DateOnly> DecideDates(IScheduleDay currentSchedule, IScheduleDay previousSchedule)
@@ -24,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var currentDate = earliestShiftStartInUserViewPoint(previousSchedule, currentSchedule);
 			if (current == SchedulePartView.DayOff && previous == SchedulePartView.MainShift)
 			{
-				if (!IsNightShift(previousSchedule))
+				if (!_isNightShift.Check(previousSchedule))
 				{
 					return new List<DateOnly> { currentDate };
 				}
@@ -32,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			if (current == SchedulePartView.MainShift && previous == SchedulePartView.DayOff)
 			{
-				if (!IsNightShift(currentSchedule))
+				if (!_isNightShift.Check(currentSchedule))
 				{
 					return new List<DateOnly> { currentDate };
 				}
@@ -40,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			if (current == SchedulePartView.MainShift && previous == SchedulePartView.MainShift)
 			{
-				if (!IsNightShift(previousSchedule) && !IsNightShift(currentSchedule))
+				if (!_isNightShift.Check(previousSchedule) && !_isNightShift.Check(currentSchedule))
 				{
 					return new List<DateOnly> { currentDate };
 				}
@@ -48,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			if (!currentSchedule.IsScheduled() && previous == SchedulePartView.MainShift)
 			{
-				if (!IsNightShift(previousSchedule))
+				if (!_isNightShift.Check(previousSchedule))
 				{
 					return new List<DateOnly> { currentDate };
 				}
@@ -81,16 +83,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 				earliestDate = currentDate;
 
 			return earliestDate;
-		}
-
-		public bool IsNightShift(IScheduleDay scheduleDay)
-		{
-			var tz = _timeZoneGuard.CurrentTimeZone();
-			var personAssignmentPeriod = scheduleDay.PersonAssignment().Period;
-			var viewerStartDate = new DateOnly(personAssignmentPeriod.StartDateTimeLocal(tz));
-			var viewerEndDate = new DateOnly(personAssignmentPeriod.EndDateTimeLocal(tz).AddMinutes(-1));
-
-			return viewerStartDate != viewerEndDate;
 		}
 	}
 }

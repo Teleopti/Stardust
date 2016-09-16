@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			skillGroupInfo.Expect(x => x.DoCalculation(agent, date)).Return(true);
 			var stateHolder = new SchedulingResultStateHolder(new List<IPerson>(), new FakeScheduleDictionary(), new Dictionary<ISkill, IEnumerable<ISkillDay>>());
 
-			var target = new DeleteAndResourceCalculateService(() => stateHolder, MockRepository.GenerateStub<IDeleteSchedulePartService>(), resourceOptHelper, MockRepository.GenerateStub<IResourceCalculateDaysDecider>(), skillGroupInfo);
+			var target = new DeleteAndResourceCalculateService(() => stateHolder, MockRepository.GenerateStub<IDeleteSchedulePartService>(), resourceOptHelper, skillGroupInfo, new IsNightShift(new FakeTimeZoneGuard()));
 			target.DeleteWithResourceCalculation(scheduleDay, null, false, false);
 
 			resourceOptHelper.AssertWasCalled(x => x.ResourceCalculate(date, new ResourceCalculationData(stateHolder, false, false)), options => options.IgnoreArguments());
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			skillGroupInfo.Expect(x => x.DoCalculation(agent, date)).Return(false);
 			var stateHolder = new SchedulingResultStateHolder(new List<IPerson>(), new FakeScheduleDictionary(), new Dictionary<ISkill, IEnumerable<ISkillDay>>());
 
-			var target = new DeleteAndResourceCalculateService(() => stateHolder, MockRepository.GenerateStub<IDeleteSchedulePartService>(), resourceOptHelper, MockRepository.GenerateStub<IResourceCalculateDaysDecider>(), skillGroupInfo);
+			var target = new DeleteAndResourceCalculateService(() => stateHolder, MockRepository.GenerateStub<IDeleteSchedulePartService>(), resourceOptHelper, skillGroupInfo, new IsNightShift(new FakeTimeZoneGuard()));
 			target.DeleteWithResourceCalculation(scheduleDay, null, false, false);
 
 			resourceOptHelper.AssertWasNotCalled(x => x.ResourceCalculate(date, new ResourceCalculationData(stateHolder, false, false)), options => options.IgnoreArguments());

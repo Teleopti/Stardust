@@ -16,20 +16,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IDeleteSchedulePartService _deleteSchedulePartService;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
-		private readonly IResourceCalculateDaysDecider _resourceCalculateDaysDecider;
 		private readonly IResourceCalculateAfterDeleteDecider _resourceCalculateAfterDeleteDecider;
+		private readonly IsNightShift _isNightShift;
 
 		public DeleteAndResourceCalculateService(Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
 																					IDeleteSchedulePartService deleteSchedulePartService, 
 																					IResourceOptimizationHelper resourceOptimizationHelper,
-																					IResourceCalculateDaysDecider resourceCalculateDaysDecider,
-																					IResourceCalculateAfterDeleteDecider resourceCalculateAfterDeleteDecider)
+																					IResourceCalculateAfterDeleteDecider resourceCalculateAfterDeleteDecider,
+																					IsNightShift isNightShift)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_deleteSchedulePartService = deleteSchedulePartService;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
-			_resourceCalculateDaysDecider = resourceCalculateDaysDecider;
 			_resourceCalculateAfterDeleteDecider = resourceCalculateAfterDeleteDecider;
+			_isNightShift = isNightShift;
 		}
 
 		public void DeleteWithResourceCalculation(IEnumerable<IScheduleDay> daysToDelete, ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks, bool doIntraIntervalCalculation)
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				var resCalcData = _schedulingResultStateHolder().ToResourceOptimizationData(considerShortBreaks, doIntraIntervalCalculation);
 				var date = dayToDelete.DateOnlyAsPeriod.DateOnly;
 				_resourceOptimizationHelper.ResourceCalculate(date, resCalcData);
-				if (_resourceCalculateDaysDecider.IsNightShift(dayToDelete))
+				if (_isNightShift.Check(dayToDelete))
 				{
 					_resourceOptimizationHelper.ResourceCalculate(date.AddDays(1), resCalcData);
 				}
