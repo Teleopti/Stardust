@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			schedule.DeleteMainShift();
 			stateHolder.Schedules.Modify(schedule, ScheduleDayChangeCallback);
 
-			stateHolder.DaysToRecalculate.Should().Contain(date.AddDays(-1));
+			stateHolder.DaysToRecalculate.Should().Have.SameValuesAs(date.AddDays(-1));
 		}
 
 		[Test]
@@ -61,6 +61,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			schedule.AddMainShift(ass);
 			stateHolder.Schedules.Modify(schedule, ScheduleDayChangeCallback);
 
+			//Claes! ska detta vara enbart -1 eller -1 och 0?
 			stateHolder.DaysToRecalculate.Should().Contain(date.AddDays(-1));
 		}
 
@@ -88,8 +89,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			schedule.AddMainShift(assCurrent);
 			stateHolder.Schedules.Modify(schedule, ScheduleDayChangeCallback);
 
-			stateHolder.DaysToRecalculate.Should().Contain(date);
-			stateHolder.DaysToRecalculate.Should().Contain(date.AddDays(1));
+			stateHolder.DaysToRecalculate.Should().Have.SameValuesAs(date, date.AddDays(1));
 		}
 	}
 }
