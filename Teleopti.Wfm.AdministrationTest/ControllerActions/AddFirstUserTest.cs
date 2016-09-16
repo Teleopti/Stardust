@@ -34,6 +34,16 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 
 			var result = Target.AddFirstUser(new AddUserModel
 			{
+				Email = "theuser@somecompany.com",
+				Name = "TheFirstUser",
+				Password = "aGoodPassword12",
+				ConfirmPassword = "aGoodPassword12"
+			});
+
+			result.Success.Should().Be.True();
+
+			result = Target.AddFirstUser(new AddUserModel
+			{
 				Email = "auser@somecompany.com",
 				Name = "FirstUser",
 				Password = "aGoodPassword12",
