@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -88,6 +89,31 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			stateHolder.Schedules.Modify(schedule, ScheduleDayChangeCallback);
 
 			stateHolder.DaysToRecalculate.Should().Have.SameValuesAs(date, date.AddDays(1));
+		}
+
+		[Test, Ignore]
+		public void ShouldMarkDayWhenUndo()
+		{
+			FakeTimeZoneGuard.SetTimeZone(TimeZoneInfo.Utc);
+			var date = new DateOnly(2015, 10, 12);
+			var period = new DateOnlyPeriod(date, date.AddWeeks(1));
+			var activity = new Activity("_");
+			var scenario = new Scenario("_");
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+			var assPrevious = new PersonAssignment(agent, scenario, date);
+			assPrevious.AddActivity(activity, new TimePeriod(10, 0, 11, 0));
+			assPrevious.SetShiftCategory(new ShiftCategory("_"));
+			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, new[] { assPrevious }, Enumerable.Empty<ISkillDay>());
+			var undoRedoContainer = new UndoRedoContainer(10);
+			stateHolder.UndoRedoContainer = undoRedoContainer;
+
+			var schedule = stateHolder.Schedules[agent].ScheduledDay(date);
+			schedule.DeleteMainShift();
+			stateHolder.Schedules.Modify(schedule, ScheduleDayChangeCallback);
+			stateHolder.ClearDaysToRecalculate();
+			undoRedoContainer.Undo();
+
+			stateHolder.DaysToRecalculate.Should().Have.SameValuesAs(date);
 		}
 	}
 }
