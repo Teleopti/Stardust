@@ -23,24 +23,35 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 	        _scheduleDayIsLockedSpecification = scheduleDayIsLockedSpecification;
         }
 
-	    public void DeleteAppropiateScheduleDay(IScheduleRange personScheduleRange, DateOnly dayOff, ISchedulePartModifyAndRollbackService rollbackService, DateOnlyPeriod selectedPeriod, IScheduleMatrixPro scheduleMatrix, IOptimizationPreferences optimizationPreferences)
-        {
-            //lets pick the previous day as an experinment 
+	    public void DeleteAppropiateScheduleDay(IScheduleRange personScheduleRange, DateOnly dayOff,
+		    ISchedulePartModifyAndRollbackService rollbackService, DateOnlyPeriod selectedPeriod,
+		    IScheduleMatrixPro scheduleMatrix, IOptimizationPreferences optimizationPreferences)
+	    {
+		    var dayToDelete = dayOff.AddDays(-1);
+		    var firstTrySuccess = tryDeleteDay(dayToDelete, personScheduleRange, selectedPeriod, rollbackService, scheduleMatrix,
+			    optimizationPreferences);
+			if (!firstTrySuccess)
+				tryDeleteDay(dayToDelete.AddDays(2), personScheduleRange, selectedPeriod, rollbackService, scheduleMatrix,
+				optimizationPreferences);
 
-			var dayToDelete = dayOff.AddDays(-1);
-			if (!selectedPeriod.Contains(dayToDelete)) return;
+		}
+
+	    private bool tryDeleteDay(DateOnly dayToDelete, IScheduleRange personScheduleRange, DateOnlyPeriod selectedPeriod, ISchedulePartModifyAndRollbackService rollbackService, IScheduleMatrixPro scheduleMatrix, IOptimizationPreferences optimizationPreferences)
+	    {
+			if (!selectedPeriod.Contains(dayToDelete))
+				return false;
+
 			var scheduleDayToDelete = personScheduleRange.ScheduledDay(dayToDelete);
-			if(isDaysLocked(scheduleDayToDelete, scheduleMatrix))
-				return;
+			if (isDaysLocked(scheduleDayToDelete, scheduleMatrix))
+				return false;
 
-			if(isAnyOptimizeShiftPreferencesUsed(optimizationPreferences, scheduleDayToDelete))
-				return;
+			if (isAnyOptimizeShiftPreferencesUsed(optimizationPreferences, scheduleDayToDelete))
+				return false;
 
-            var deleteOption = new DeleteOption { Default = true };
-
+			var deleteOption = new DeleteOption { Default = true };
 			_deleteSchedulePartService.Delete(new List<IScheduleDay> { scheduleDayToDelete }, deleteOption, rollbackService, new NoSchedulingProgress());
-        }
-
+		    return true;
+	    }
 
 		private bool isDaysLocked(IScheduleDay scheduleDay, IScheduleMatrixPro scheduleMatrix)
 		{

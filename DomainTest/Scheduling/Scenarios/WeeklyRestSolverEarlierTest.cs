@@ -332,11 +332,41 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 				.ShiftLayers.Should().Be.Empty();
 		}
 
-		private void executeTarget(IList<IPerson> agents, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+		[Test]
+		public void ShouldDeleteDayAfterDayOffIfDayBeforeDayOffIsLocked()
 		{
-			var selectedPeriod = new DateOnlyPeriod(weekPeriod.StartDate, weekPeriod.StartDate);
+
+			var activityForRuleSet = new Activity("activityForRuleSet") { InWorkTime = true, InContractTime = true, RequiresSkill = true }.WithId();
+			var activity = new Activity("in worktime") { InWorkTime = true, InContractTime = true, RequiresSkill = true }.WithId();
+			var shiftCategory = new ShiftCategory("unimportant").WithId();
+
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activityForRuleSet, new TimePeriodWithSegment(6, 0, 10, 0, 60), new TimePeriodWithSegment(15, 0, 20, 0, 60), shiftCategory));
+
+			var agent = setupAgent(ruleSet, activity);
+			setUpSchedules(agent, activity, shiftCategory);
+
+			var optimizationPref = new OptimizationPreferences
+			{
+				Shifts = { KeepActivityLength = true, ActivityToKeepLengthOn = activityForRuleSet },
+				Extra = { TeamGroupPage = GroupPageLight.SingleAgentGroup("blajj") }
+			};
+
+			var dayOffPreferences = new DaysOffPreferences();
+			var dayOffOptimzationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(dayOffPreferences);
+
+			executeTarget(new[] {agent}, optimizationPref, dayOffOptimzationPreferenceProvider,
+				new DateOnlyPeriod(weekPeriod.StartDate.AddDays(2), weekPeriod.StartDate.AddDays(2)));
+
+			SchedulerStateHolder.Schedules[agent].ScheduledDay(weekPeriod.StartDate.AddDays(2))
+				.PersonAssignment()
+				.ShiftLayers.Should().Be.Empty();
+		}
+
+		private void executeTarget(IList<IPerson> agents, IOptimizationPreferences optimizationPreferences,
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, DateOnlyPeriod selectedPeriod)
+		{
 			var matrixlist = MatrixListFactory.CreateMatrixListAllForLoadedPeriod(selectedPeriod);
-			
+
 			Target.Execute(new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences),
 				optimizationPreferences,
 				agents,
@@ -375,6 +405,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 				new NoSchedulingProgress(),
 				dayOffOptimizationPreferenceProvider
 				);
+		}
+
+		private void executeTarget(IList<IPerson> agents, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+		{
+			var selectedPeriod = new DateOnlyPeriod(weekPeriod.StartDate, weekPeriod.StartDate);
+			executeTarget(agents, optimizationPreferences, dayOffOptimizationPreferenceProvider, selectedPeriod);
+
 		}
 
 		private void setUpSchedules(IPerson agent, IActivity activity, IShiftCategory shiftCategory)
