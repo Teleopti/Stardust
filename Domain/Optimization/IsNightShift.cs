@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_timeZoneGuard = timeZoneGuard;
 		}
 
-		public bool Check(IScheduleDay scheduleDay)
+		public bool InEndUserTimeZone(IScheduleDay scheduleDay)
 		{
 			var tz = _timeZoneGuard.CurrentTimeZone();
 			var personAssignmentPeriod = scheduleDay.PersonAssignment(true).Period;

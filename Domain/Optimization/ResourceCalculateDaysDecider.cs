@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var currentDate = earliestShiftStartInUserViewPoint(previousSchedule, currentSchedule);
 			if (current == SchedulePartView.DayOff && previous == SchedulePartView.MainShift)
 			{
-				if (!_isNightShift.Check(previousSchedule))
+				if (!_isNightShift.InEndUserTimeZone(previousSchedule))
 				{
 					return new List<DateOnly> { currentDate };
 				}
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			if (current == SchedulePartView.MainShift && previous == SchedulePartView.DayOff)
 			{
-				if (!_isNightShift.Check(currentSchedule))
+				if (!_isNightShift.InEndUserTimeZone(currentSchedule))
 				{
 					return new List<DateOnly> { currentDate };
 				}
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			if (current == SchedulePartView.MainShift && previous == SchedulePartView.MainShift)
 			{
-				if (!_isNightShift.Check(previousSchedule) && !_isNightShift.Check(currentSchedule))
+				if (!_isNightShift.InEndUserTimeZone(previousSchedule) && !_isNightShift.InEndUserTimeZone(currentSchedule))
 				{
 					return new List<DateOnly> { currentDate };
 				}
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			if (!currentSchedule.IsScheduled() && previous == SchedulePartView.MainShift)
 			{
-				if (!_isNightShift.Check(previousSchedule))
+				if (!_isNightShift.InEndUserTimeZone(previousSchedule))
 				{
 					return new List<DateOnly> { currentDate };
 				}

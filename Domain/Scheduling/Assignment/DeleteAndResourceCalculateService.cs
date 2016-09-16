@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				var resCalcData = _schedulingResultStateHolder().ToResourceOptimizationData(considerShortBreaks, doIntraIntervalCalculation);
 				var date = dayToDelete.DateOnlyAsPeriod.DateOnly;
 				_resourceOptimizationHelper.ResourceCalculate(date, resCalcData);
-				if (_isNightShift.Check(dayToDelete))
+				if (_isNightShift.InEndUserTimeZone(dayToDelete))
 				{
 					_resourceOptimizationHelper.ResourceCalculate(date.AddDays(1), resCalcData);
 				}
