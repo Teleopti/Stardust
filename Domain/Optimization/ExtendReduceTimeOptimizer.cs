@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IScheduleDay scheduleDayAfter =
                (IScheduleDay)matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart().Clone();
 
-            IList<DateOnly> daysToRecalculate = _decider.DecideDates(scheduleDayAfter, scheduleDayBefore);
+            var daysToRecalculate = _decider.DecideDates(scheduleDayAfter, scheduleDayBefore);
             foreach (var dateToRecalculate in daysToRecalculate)
             {
                 _resourceCalculateDelayer.CalculateIfNeeded(dateToRecalculate, null, false);
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IScheduleDay scheduleDayBefore = (IScheduleDay) _matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart().Clone();
             _rollbackService.Rollback();
             IScheduleDay scheduleDayAfter = (IScheduleDay) _matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart().Clone();
-            IList<DateOnly> days = _decider.DecideDates(scheduleDayAfter, scheduleDayBefore);
+            var days = _decider.DecideDates(scheduleDayAfter, scheduleDayBefore);
 
             foreach (var date in days)
             {

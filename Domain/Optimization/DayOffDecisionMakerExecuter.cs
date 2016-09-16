@@ -463,7 +463,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var resCalcData = _schedulingResultStateHolder.ToResourceOptimizationData(considerShortBreaks, false);
 			foreach (changedDay changed in changedDays)
             {
-                IList<DateOnly> days = _resourceCalculateDaysDecider.DecideDates(changed.CurrentSchedule, changed.PrevoiousSchedule);
+                var days = _resourceCalculateDaysDecider.DecideDates(changed.CurrentSchedule, changed.PrevoiousSchedule);
                 foreach (var dateOnly in days)
                 {
                     _resourceOptimizationHelper.ResourceCalculate(dateOnly, resCalcData);

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -7,58 +8,46 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class ResourceCalculateDaysDecider : IResourceCalculateDaysDecider
 	{
 		private readonly ITimeZoneGuard _timeZoneGuard;
-		private readonly IsNightShift _isNightShift;
 
-		public ResourceCalculateDaysDecider(ITimeZoneGuard timeZoneGuard, IsNightShift isNightShift)
+		public ResourceCalculateDaysDecider(ITimeZoneGuard timeZoneGuard)
 		{
 			_timeZoneGuard = timeZoneGuard;
-			_isNightShift = isNightShift;
 		}
 
-		public IList<DateOnly> DecideDates(IScheduleDay currentSchedule, IScheduleDay previousSchedule)
+		public IEnumerable<DateOnly> DecideDates(IScheduleDay currentSchedule, IScheduleDay previousSchedule)
 		{
-			var current = currentSchedule.SignificantPart();
-			var previous = previousSchedule.SignificantPart();
-			
-			if (!currentSchedule.IsScheduled() && previous == SchedulePartView.DayOff)
-				return new List<DateOnly>();
+			var earliestDate = earliestShiftStartInUserViewPoint(previousSchedule, currentSchedule);
+			var latestDate = latestShiftEndInUserViewPoint(previousSchedule, currentSchedule);
 
-			var currentDate = earliestShiftStartInUserViewPoint(previousSchedule, currentSchedule);
-			if (current == SchedulePartView.DayOff && previous == SchedulePartView.MainShift)
+			while (earliestDate <= latestDate)
 			{
-				if (!_isNightShift.InEndUserTimeZone(previousSchedule))
-				{
-					return new List<DateOnly> { currentDate };
-				}
+				yield return earliestDate;
+				earliestDate = earliestDate.AddDays(1);
 			}
+		}
 
-			if (current == SchedulePartView.MainShift && previous == SchedulePartView.DayOff)
-			{
-				if (!_isNightShift.InEndUserTimeZone(currentSchedule))
-				{
-					return new List<DateOnly> { currentDate };
-				}
-			}
+		private DateOnly latestShiftEndInUserViewPoint(IScheduleDay previous, IScheduleDay current)
+		{
+			var currentTimeZone = _timeZoneGuard.CurrentTimeZone();
+			var latestDate = previous.DateOnlyAsPeriod.DateOnly;
+			var assPrevious = previous.PersonAssignment(true);
+			var visualLayersPrevious = assPrevious.ProjectionService().CreateProjection();
+			var periodPrevious = visualLayersPrevious.Period();
+			var assCurrent = current.PersonAssignment(true);
+			var visualLayersCurrent = assCurrent.ProjectionService().CreateProjection();
+			var periodCurrent = visualLayersCurrent.Period();
 
-			if (current == SchedulePartView.MainShift && previous == SchedulePartView.MainShift)
-			{
-				if (!_isNightShift.InEndUserTimeZone(previousSchedule) && !_isNightShift.InEndUserTimeZone(currentSchedule))
-				{
-					return new List<DateOnly> { currentDate };
-				}
-			}
+			if (periodPrevious != null)
+				latestDate = new DateOnly(periodPrevious.Value.EndDateTimeLocal(currentTimeZone));
 
-			if (!currentSchedule.IsScheduled() && previous == SchedulePartView.MainShift)
-			{
-				if (!_isNightShift.InEndUserTimeZone(previousSchedule))
-				{
-					return new List<DateOnly> { currentDate };
-				}
-			}
+			if (periodCurrent == null) return latestDate;
 
-			IList<DateOnly> ret = new List<DateOnly> { currentDate, currentDate.AddDays(1) };
+			var currentDate = new DateOnly(periodCurrent.Value.EndDateTimeLocal(currentTimeZone));
 
-			return ret;
+			if (currentDate > latestDate)
+				latestDate = currentDate;
+
+			return latestDate;
 		}
 
 		private DateOnly earliestShiftStartInUserViewPoint(IScheduleDay previous, IScheduleDay current)

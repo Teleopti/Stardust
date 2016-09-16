@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
-using System.Diagnostics.Tracing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -66,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			stateHolder.DaysToRecalculate.Should().Contain(date.AddDays(-1));
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldMarkDayAndDayAfterWhenAffectingShiftStartsDayAfterInUsersTimeZone()
 		{
 			FakeTimeZoneGuard.SetTimeZone(TimeZoneInfo.Utc);

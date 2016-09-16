@@ -275,7 +275,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			foreach (changedDay changed in changedDays)
 			{
-				IList<DateOnly> days = _decider.DecideDates(changed.CurrentSchedule, changed.PreviousSchedule);
+				var days = _decider.DecideDates(changed.CurrentSchedule, changed.PreviousSchedule);
 				foreach (var dateOnly in days)
 				{
 				    _resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, false);

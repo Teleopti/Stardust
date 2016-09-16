@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
@@ -83,13 +84,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             {
                 mockExpectations();
             }
-            IList<DateOnly> result;
+            IEnumerable<DateOnly> result;
             using(_mocks.Playback())
             {
                 result = _target.DecideDates(_dayWithNotScheduled, _dayWithDayOff);
             }
 
-            Assert.AreEqual(0, result.Count);
+            Assert.AreEqual(0, result.Count());
         }
 
         [Test]
@@ -99,13 +100,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             {
                 mockExpectations();
             }
-            IList<DateOnly> result;
+			IEnumerable<DateOnly> result;
             using (_mocks.Playback())
             {
                 result = _target.DecideDates(_dayWithDayOff, _dayWithShift);
-                Assert.AreEqual(1, result.Count);
+                Assert.AreEqual(1, result.Count());
                 result = _target.DecideDates(_dayWithDayOff, _dayWithNightShift);
-                Assert.AreEqual(2, result.Count);
+                Assert.AreEqual(2, result.Count());
             }
         }
 
@@ -116,17 +117,17 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             {
                 mockExpectations();
             }
-            IList<DateOnly> result;
+			IEnumerable<DateOnly> result;
             using (_mocks.Playback())
             {
                 result = _target.DecideDates(_dayWithShift, _dayWithShift);
-                Assert.AreEqual(1, result.Count);
+                Assert.AreEqual(1, result.Count());
                 result = _target.DecideDates(_dayWithNightShift, _dayWithNightShift);
-                Assert.AreEqual(2, result.Count);
+                Assert.AreEqual(2, result.Count());
                 result = _target.DecideDates(_dayWithNightShift, _dayWithShift);
-                Assert.AreEqual(2, result.Count);
+                Assert.AreEqual(2, result.Count());
                 result = _target.DecideDates(_dayWithShift, _dayWithNightShift);
-                Assert.AreEqual(2, result.Count);
+                Assert.AreEqual(2, result.Count());
             }
         }
 
@@ -137,13 +138,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             {
                 mockExpectations();
             }
-            IList<DateOnly> result;
+			IEnumerable<DateOnly> result;
             using (_mocks.Playback())
             {
                 result = _target.DecideDates(_dayWithShift, _dayWithDayOff);
-                Assert.AreEqual(1, result.Count);
+                Assert.AreEqual(1, result.Count());
                 result = _target.DecideDates(_dayWithNightShift, _dayWithNightShift);
-                Assert.AreEqual(2, result.Count);
+                Assert.AreEqual(2, result.Count());
             }
         }
 
@@ -154,13 +155,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             {
                 mockExpectations();
             }
-            IList<DateOnly> result;
+			IEnumerable<DateOnly> result;
             using (_mocks.Playback())
             {
                 result = _target.DecideDates(_dayWithNotScheduled, _dayWithShift);
-                Assert.AreEqual(1, result.Count);
+                Assert.AreEqual(1, result.Count());
                 result = _target.DecideDates(_dayWithNotScheduled, _dayWithNightShift);
-                Assert.AreEqual(2, result.Count);
+                Assert.AreEqual(2, result.Count());
             }
         }
     }

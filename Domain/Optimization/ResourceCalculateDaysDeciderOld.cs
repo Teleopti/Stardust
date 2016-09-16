@@ -7,13 +7,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface IResourceCalculateDaysDecider
     {
-        IList<DateOnly> DecideDates(IScheduleDay currentSchedule, IScheduleDay previousSchedule);
+		IEnumerable<DateOnly> DecideDates(IScheduleDay currentSchedule, IScheduleDay previousSchedule);
     }
 
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_CalculateFarAwayTimeZones_40646)]
     public class ResourceCalculateDaysDeciderOld : IResourceCalculateDaysDecider
     {
-        public IList<DateOnly> DecideDates(IScheduleDay currentSchedule, IScheduleDay previousSchedule)
+        public IEnumerable<DateOnly> DecideDates(IScheduleDay currentSchedule, IScheduleDay previousSchedule)
         {
 
             SchedulePartView current = currentSchedule.SignificantPart();
