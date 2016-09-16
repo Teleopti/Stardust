@@ -1,8 +1,11 @@
 ﻿using System.Configuration;
 using Teleopti.Ccc.DBManager.Library;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Wfm.Administration.Core;
@@ -21,6 +24,7 @@ namespace Teleopti.Wfm.AdministrationTest
 			system.AddModule(new WfmAdminModule());
 			system.UseTestDouble<ConsoleLogger>().For<IUpgradeLog>();
 			system.UseTestDouble<FakeHangfireCookie>().For<IHangfireCookie>();
+			system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();			
 
 			_tenantUnitOfWorkManager = TenantUnitOfWorkForTest();
 			system.AddService(_tenantUnitOfWorkManager);
