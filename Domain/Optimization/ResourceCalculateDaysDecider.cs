@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -16,8 +15,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public IEnumerable<DateOnly> DecideDates(IScheduleDay currentSchedule, IScheduleDay previousSchedule)
 		{
-			var earliestDate = earliestShiftStartInUserViewPoint(previousSchedule, currentSchedule);
-			var latestDate = latestShiftEndInUserViewPoint(previousSchedule, currentSchedule);
+			var previousLayers = previousSchedule.PersonAssignment(true).ProjectionService().CreateProjection();
+			var currentLayers = currentSchedule.PersonAssignment(true).ProjectionService().CreateProjection();
+			var earliestDate = earliestShiftStartInUserViewPoint(previousLayers, currentLayers, currentSchedule.DateOnlyAsPeriod.DateOnly);
+			var latestDate = latestShiftEndInUserViewPoint(previousLayers, currentLayers, previousSchedule.DateOnlyAsPeriod.DateOnly);
 
 			while (earliestDate <= latestDate)
 			{
@@ -26,15 +27,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 		}
 
-		private DateOnly latestShiftEndInUserViewPoint(IScheduleDay previous, IScheduleDay current)
+		private DateOnly latestShiftEndInUserViewPoint(IVisualLayerCollection visualLayersPrevious, IVisualLayerCollection visualLayersCurrent, DateOnly date)
 		{
+			var latestDate = date;
 			var currentTimeZone = _timeZoneGuard.CurrentTimeZone();
-			var latestDate = previous.DateOnlyAsPeriod.DateOnly;
-			var assPrevious = previous.PersonAssignment(true);
-			var visualLayersPrevious = assPrevious.ProjectionService().CreateProjection();
 			var periodPrevious = visualLayersPrevious.Period();
-			var assCurrent = current.PersonAssignment(true);
-			var visualLayersCurrent = assCurrent.ProjectionService().CreateProjection();
 			var periodCurrent = visualLayersCurrent.Period();
 
 			if (periodPrevious != null)
@@ -50,15 +47,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return latestDate;
 		}
 
-		private DateOnly earliestShiftStartInUserViewPoint(IScheduleDay previous, IScheduleDay current)
+		private DateOnly earliestShiftStartInUserViewPoint(IVisualLayerCollection visualLayersPrevious, IVisualLayerCollection visualLayersCurrent, DateOnly date)
 		{
+			var earliestDate = date;
 			var currentTimeZone = _timeZoneGuard.CurrentTimeZone();
-			var earliestDate = previous.DateOnlyAsPeriod.DateOnly;
-			var assPrevious = previous.PersonAssignment(true);	
-			var visualLayersPrevious = assPrevious.ProjectionService().CreateProjection();	
-			var periodPrevious = visualLayersPrevious.Period();	
-			var assCurrent = current.PersonAssignment(true);
-			var visualLayersCurrent = assCurrent.ProjectionService().CreateProjection();
+			var periodPrevious = visualLayersPrevious.Period();
 			var periodCurrent = visualLayersCurrent.Period();
 
 			if (periodPrevious != null)
