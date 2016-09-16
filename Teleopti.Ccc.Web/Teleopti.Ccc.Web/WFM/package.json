@@ -53,14 +53,12 @@
     "grunt-iisexpress": "0.4.0",
     "grunt-karma": "0.10.1",
     "grunt-msbuild": "0.3.4",
-    "grunt-newer": "1.2.0",
     "grunt-processhtml": "0.3.8",
     "grunt-sass": "1.1.0",
-    "grunt-timer": "^0.6.0",
     "jasmine-core": "2.2.0",
     "karma": "0.12.31",
     "karma-chrome-launcher": "0.1.10",
     "karma-jasmine": "0.3.5",
     "karma-teamcity-reporter": "0.2.0"
-    }
+  }
 }
