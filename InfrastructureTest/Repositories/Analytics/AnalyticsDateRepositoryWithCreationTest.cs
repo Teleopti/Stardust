@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			var targetDate = new DateTime(2000, 01, 05);
 			var date = WithAnalyticsUnitOfWork.Get(() => Target.Date(targetDate));
 			date.DateDate.Date.Should().Be.EqualTo(targetDate.Date);
-			date.DateId.Should().Be.EqualTo(6);
+			date.DateId.Should().Be.GreaterThan(0);
 
 			_fakeEventPublisher.PublishedEvents.Should().Not.Be.Empty();
 			_fakeEventPublisher.PublishedEvents.OfType<AnalyticsDatesChangedEvent>().SingleOrDefault().Should().Not.Be.Null();
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				date = Target.Date(targetDate);
 			});
 			date.DateDate.Date.Should().Be.EqualTo(targetDate.Date);
-			date.DateId.Should().Be.EqualTo(6);
+			date.DateId.Should().Be.GreaterThan(0);
 
 			_fakeEventPublisher.PublishedEvents.Should().Not.Be.Empty();
 			_fakeEventPublisher.PublishedEvents.OfType<AnalyticsDatesChangedEvent>().SingleOrDefault().Should().Not.Be.Null();
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 						date = Target.Date(targetDate);
 					});
 					date.DateDate.Date.Should().Be.EqualTo(targetDate.Date);
-					date.DateId.Should().Be.EqualTo(6);
+					date.DateId.Should().Be.GreaterThan(0);
 				}));
 			}
 			foreach(var task in tasks)
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 
 			var date = WithAnalyticsUnitOfWork.Get(() => Target.MinDate());
 			date.DateDate.Should().Be.EqualTo(new DateTime(1999, 12, 31));
-			date.DateId.Should().Be.EqualTo(1);
+			date.DateId.Should().Be.GreaterThan(0);
 
 			_fakeEventPublisher.PublishedEvents.Should().Be.Empty();
 		}
