@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			assPrevious.SetShiftCategory(new ShiftCategory("_"));
 			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(date.AddWeeks(-1), date.AddWeeks(1)), new[] { agent }, new[] { assPrevious }, Enumerable.Empty<ISkillDay>());
 			var undoRedoContainer = new UndoRedoContainer(10);
-			stateHolder.UndoRedoContainer = undoRedoContainer;
+			stateHolder.Schedules.SetUndoRedoContainer(undoRedoContainer);
 
 			var schedule = stateHolder.Schedules[agent].ScheduledDay(date);
 			schedule.DeleteMainShift();
