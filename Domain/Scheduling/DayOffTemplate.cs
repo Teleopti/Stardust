@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	    public override void NotifyTransactionComplete(DomainUpdateType operation)
 	    {
 		    base.NotifyTransactionComplete(operation);
-		    if (operation == DomainUpdateType.Update)
+		    if (operation == DomainUpdateType.Update || operation == DomainUpdateType.Insert)
 			    AddEvent(new DayOffTemplateChangedEvent
 			    {
 				    DayOffTemplateId = Id.GetValueOrDefault(),
