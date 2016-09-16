@@ -35,8 +35,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			ass.AddActivity(activity, new TimePeriod(0, 0, 1, 0));
 			ass.SetShiftCategory(new ShiftCategory("_"));
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, new[] {ass}, Enumerable.Empty<ISkillDay>());
-			var schedule = stateHolder.Schedules[agent].ScheduledDay(date);
 
+			var schedule = stateHolder.Schedules[agent].ScheduledDay(date);
 			schedule.DeleteMainShift();
 			stateHolder.Schedules.Modify(schedule, ScheduleDayChangeCallback);
 
@@ -53,11 +53,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var scenario = new Scenario("_");
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfoFactory.SingaporeTimeZoneInfo());	
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, Enumerable.Empty<IPersonAssignment>(), Enumerable.Empty<ISkillDay>());
+
 			var schedule = stateHolder.Schedules[agent].ScheduledDay(date);
 			var ass = new PersonAssignment(agent, scenario, date);
 			ass.AddActivity(activity, new TimePeriod(0, 0, 1, 0));
 			ass.SetShiftCategory(new ShiftCategory("_"));
-
 			schedule.AddMainShift(ass);
 			stateHolder.Schedules.Modify(schedule, ScheduleDayChangeCallback);
 
@@ -78,14 +78,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			assPrevious.AddActivity(activity, new TimePeriod(10,0, 11, 0));
 			assPrevious.SetShiftCategory(new ShiftCategory("_"));
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, new[] { assPrevious }, Enumerable.Empty<ISkillDay>());
-			var schedule = stateHolder.Schedules[agent].ScheduledDay(date);
-			
-			schedule.DeleteMainShift();
 
+			var schedule = stateHolder.Schedules[agent].ScheduledDay(date);
+			schedule.DeleteMainShift();
 			var assCurrent = new PersonAssignment(agent, scenario, date);
 			assCurrent.AddActivity(activity, new TimePeriod(23, 45, 24, 45));
 			assCurrent.SetShiftCategory(new ShiftCategory("_"));
-
 			schedule.AddMainShift(assCurrent);
 			stateHolder.Schedules.Modify(schedule, ScheduleDayChangeCallback);
 
