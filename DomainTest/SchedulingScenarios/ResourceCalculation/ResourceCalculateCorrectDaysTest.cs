@@ -28,14 +28,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		{
 			FakeTimeZoneGuard.SetTimeZone(TimeZoneInfo.Utc);
 			var date = new DateOnly(2015, 10, 12); 
-			var period = new DateOnlyPeriod(date, date.AddWeeks(1));
 			var activity = new Activity("_");
 			var scenario = new Scenario("_");
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfoFactory.SingaporeTimeZoneInfo());
 			var ass = new PersonAssignment(agent, scenario, date);
 			ass.AddActivity(activity, new TimePeriod(0, 0, 1, 0));
 			ass.SetShiftCategory(new ShiftCategory("_"));
-			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, new[] {ass}, Enumerable.Empty<ISkillDay>());
+			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(date.AddWeeks(-1), date.AddWeeks(1)), new[] { agent }, new[] {ass}, Enumerable.Empty<ISkillDay>());
 
 			var schedule = stateHolder.Schedules[agent].ScheduledDay(date);
 			schedule.DeleteMainShift();
@@ -49,11 +48,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		{
 			FakeTimeZoneGuard.SetTimeZone(TimeZoneInfo.Utc);
 			var date = new DateOnly(2015, 10, 12);
-			var period = new DateOnlyPeriod(date, date.AddWeeks(1));
 			var activity = new Activity("_");
 			var scenario = new Scenario("_");
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfoFactory.SingaporeTimeZoneInfo());	
-			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, Enumerable.Empty<IPersonAssignment>(), Enumerable.Empty<ISkillDay>());
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfoFactory.SingaporeTimeZoneInfo());
+			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(date.AddWeeks(-1), date.AddWeeks(1)), new[] { agent }, Enumerable.Empty<IPersonAssignment>(), Enumerable.Empty<ISkillDay>());
 
 			var schedule = stateHolder.Schedules[agent].ScheduledDay(date);
 			var ass = new PersonAssignment(agent, scenario, date);
@@ -71,14 +69,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		{
 			FakeTimeZoneGuard.SetTimeZone(TimeZoneInfo.Utc);
 			var date = new DateOnly(2015, 10, 12);
-			var period = new DateOnlyPeriod(date, date.AddWeeks(1));
 			var activity = new Activity("_");
 			var scenario = new Scenario("_");
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfoFactory.DenverTimeZoneInfo());
 			var assPrevious = new PersonAssignment(agent, scenario, date);
 			assPrevious.AddActivity(activity, new TimePeriod(10,0, 11, 0));
 			assPrevious.SetShiftCategory(new ShiftCategory("_"));
-			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, new[] { assPrevious }, Enumerable.Empty<ISkillDay>());
+			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(date.AddWeeks(-1), date.AddWeeks(1)), new[] { agent }, new[] { assPrevious }, Enumerable.Empty<ISkillDay>());
 
 			var schedule = stateHolder.Schedules[agent].ScheduledDay(date);
 			schedule.DeleteMainShift();
@@ -96,14 +93,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		{
 			FakeTimeZoneGuard.SetTimeZone(TimeZoneInfo.Utc);
 			var date = new DateOnly(2015, 10, 12);
-			var period = new DateOnlyPeriod(date, date.AddWeeks(1));
 			var activity = new Activity("_");
 			var scenario = new Scenario("_");
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			var assPrevious = new PersonAssignment(agent, scenario, date);
 			assPrevious.AddActivity(activity, new TimePeriod(10, 0, 11, 0));
 			assPrevious.SetShiftCategory(new ShiftCategory("_"));
-			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, new[] { assPrevious }, Enumerable.Empty<ISkillDay>());
+			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(date.AddWeeks(-1), date.AddWeeks(1)), new[] { agent }, new[] { assPrevious }, Enumerable.Empty<ISkillDay>());
 			var undoRedoContainer = new UndoRedoContainer(10);
 			stateHolder.UndoRedoContainer = undoRedoContainer;
 
