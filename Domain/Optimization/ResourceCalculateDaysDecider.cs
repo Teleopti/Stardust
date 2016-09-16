@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -8,10 +9,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		public IList<DateOnly> DecideDates(IScheduleDay currentSchedule, IScheduleDay previousSchedule)
 		{
-			SchedulePartView current = currentSchedule.SignificantPart();
-			SchedulePartView previous = previousSchedule.SignificantPart();
-			DateOnly currentDate = currentSchedule.DateOnlyAsPeriod.DateOnly;
-
+			var current = currentSchedule.SignificantPart();
+			var previous = previousSchedule.SignificantPart();
+			var currentDate = earliestShiftStartInUserViewPoint(previousSchedule, currentSchedule);
+			
 			if (!currentSchedule.IsScheduled() && previous == SchedulePartView.DayOff)
 				return new List<DateOnly>();
 
@@ -50,6 +51,29 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IList<DateOnly> ret = new List<DateOnly> { currentDate, currentDate.AddDays(1) };
 
 			return ret;
+		}
+
+		private static DateOnly earliestShiftStartInUserViewPoint(IScheduleDay previous, IScheduleDay current)
+		{
+			var earliestDate = previous.DateOnlyAsPeriod.DateOnly;
+			var assPrevious = previous.PersonAssignment(true);	
+			var visualLayersPrevious = assPrevious.ProjectionService().CreateProjection();	
+			var periodPrevious = visualLayersPrevious.Period();	
+			var assCurrent = current.PersonAssignment(true);
+			var visualLayersCurrent = assCurrent.ProjectionService().CreateProjection();
+			var periodCurrent = visualLayersCurrent.Period();
+
+			if (periodPrevious != null)
+				earliestDate = new DateOnly(periodPrevious.Value.StartDateTimeLocal(TimeZoneGuard.Instance.TimeZone));
+
+			if (periodCurrent == null) return earliestDate;
+
+			var currentDate = new DateOnly(periodCurrent.Value.StartDateTimeLocal(TimeZoneGuard.Instance.TimeZone));
+
+			if (currentDate < earliestDate)
+				earliestDate = currentDate;
+
+			return earliestDate;
 		}
 
 		public bool IsNightShift(IScheduleDay scheduleDay)

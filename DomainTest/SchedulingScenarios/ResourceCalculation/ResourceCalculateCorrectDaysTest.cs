@@ -22,8 +22,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		public IScheduleDayChangeCallback ScheduleDayChangeCallback;
 		public FakeTimeZoneGuard FakeTimeZoneGuard;
 
-		[Test, Ignore("40646")]
-		public void ShouldMarkDayBeforeIfShiftStartsDayBeforeInUsersTimeZone()
+		[Test]
+		public void ShouldMarkDayBeforeIfAffectedShiftStartedDayBeforeInUsersTimeZone()
 		{
 			FakeTimeZoneGuard.SetTimeZone(TimeZoneInfo.Utc);
 			var date = new DateOnly(2015, 10, 12); 
@@ -37,6 +37,26 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var schedule = stateHolder.Schedules[agent].ScheduledDay(date);
 
 			schedule.DeleteMainShift();
+			stateHolder.Schedules.Modify(schedule, ScheduleDayChangeCallback);
+
+			stateHolder.DaysToRecalculate.Should().Contain(date.AddDays(-1));
+		}
+
+		[Test]
+		public void ShouldMarkDayBeforeIfAffectingShiftStartsDayBeforeInUsersTimeZone()
+		{
+			FakeTimeZoneGuard.SetTimeZone(TimeZoneInfo.Utc);
+			var date = new DateOnly(2015, 10, 12);
+			var period = new DateOnlyPeriod(date, date.AddWeeks(1));
+			var activity = new Activity("_");
+			var scenario = new Scenario("_");
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfoFactory.SingaporeTimeZoneInfo());	
+			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, Enumerable.Empty<IPersonAssignment>(), Enumerable.Empty<ISkillDay>());
+			var schedule = stateHolder.Schedules[agent].ScheduledDay(date);
+			var ass = new PersonAssignment(agent, scenario, date);
+			ass.AddActivity(activity, new TimePeriod(0, 0, 1, 0));
+
+			schedule.AddMainShift(ass);
 			stateHolder.Schedules.Modify(schedule, ScheduleDayChangeCallback);
 
 			stateHolder.DaysToRecalculate.Should().Contain(date.AddDays(-1));
