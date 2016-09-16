@@ -8,7 +8,7 @@
 #Properties
 $username = "toptinet\tfsintegration"
 $password = "m8kemew0rk"
-$server = "http://devbuild01"
+$server = "http://buildsrv01"
 $buildTypeMain = "TeleoptiWFM_WfmMain"
 $secpasswd = ConvertTo-SecureString "m8kemew0rk" -AsPlainText -Force
 $cred = New-Object System.Management.Automation.PSCredential($username,$secpasswd)

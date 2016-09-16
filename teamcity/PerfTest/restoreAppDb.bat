@@ -46,7 +46,7 @@ exit
 
 :wrongInput
 echo Two arguments are needed. Pass in server name and a path to a folder containing "ccc7.bak" and "app.config". Eg,
-echo restoreAppDb.bat . \\devbuild01\perftests\demosales
+echo restoreAppDb.bat . \\buildsrv01\perftests\demosales
 echo.
 pause
 exit -1

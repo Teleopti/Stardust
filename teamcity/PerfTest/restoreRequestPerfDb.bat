@@ -42,7 +42,7 @@ exit
 
 :wrongInput
 echo Two arguments are needed. Pass in server name and a path to a folder containing "Telia_perfTest_TeleoptiCCC7.bak" and "Telia_perfTest_TeleoptiAnalytics.bak". Eg,
-echo restoreIntradayPerfDb.bat . \\devbuild01\PerfTests\WebIntraday\Telia
+echo restoreIntradayPerfDb.bat . \\buildsrv01\PerfTests\WebIntraday\Telia
 echo.
 pause
 exit -1
