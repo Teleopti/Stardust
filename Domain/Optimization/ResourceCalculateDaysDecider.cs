@@ -11,11 +11,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var current = currentSchedule.SignificantPart();
 			var previous = previousSchedule.SignificantPart();
-			var currentDate = earliestShiftStartInUserViewPoint(previousSchedule, currentSchedule);
 			
 			if (!currentSchedule.IsScheduled() && previous == SchedulePartView.DayOff)
 				return new List<DateOnly>();
 
+			var currentDate = earliestShiftStartInUserViewPoint(previousSchedule, currentSchedule);
 			if (current == SchedulePartView.DayOff && previous == SchedulePartView.MainShift)
 			{
 				if (!IsNightShift(previousSchedule))
