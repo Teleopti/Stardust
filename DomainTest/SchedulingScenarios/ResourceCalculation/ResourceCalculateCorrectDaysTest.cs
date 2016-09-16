@@ -111,5 +111,30 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 
 			stateHolder.DaysToRecalculate.Should().Have.SameValuesAs(date);
 		}
+
+		[Test, Ignore]
+		public void ShouldMarkDayWhenRedo()
+		{
+			FakeTimeZoneGuard.SetTimeZone(TimeZoneInfo.Utc);
+			var date = new DateOnly(2015, 10, 12);
+			var activity = new Activity("_");
+			var scenario = new Scenario("_");
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+			var assPrevious = new PersonAssignment(agent, scenario, date);
+			assPrevious.AddActivity(activity, new TimePeriod(10, 0, 11, 0));
+			assPrevious.SetShiftCategory(new ShiftCategory("_"));
+			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(date.AddWeeks(-1), date.AddWeeks(1)), new[] { agent }, new[] { assPrevious }, Enumerable.Empty<ISkillDay>());
+			var undoRedoContainer = new UndoRedoContainer(10);
+			stateHolder.Schedules.SetUndoRedoContainer(undoRedoContainer);
+
+			var schedule = stateHolder.Schedules[agent].ScheduledDay(date);
+			schedule.DeleteMainShift();
+			stateHolder.Schedules.Modify(schedule, ScheduleDayChangeCallback);
+			undoRedoContainer.Undo();
+			stateHolder.ClearDaysToRecalculate();
+			undoRedoContainer.Redo();
+
+			stateHolder.DaysToRecalculate.Should().Have.SameValuesAs(date);
+		}
 	}
 }
