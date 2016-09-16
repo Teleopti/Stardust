@@ -273,7 +273,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         public void VerifyReplyOnRequest()
         {
             _mocks.ReplayAll();
-            var undo = new UndoRedoContainer(100);
+            var undo = new UndoRedoContainer(new DoNothingScheduleDayChangeCallBack(), 100);
             _requestPresenter.SetUndoRedoContainer(undo);
 
             _requestPresenter.Reply(_requestViewAdapters, "Testin'");
@@ -446,7 +446,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			ITeam team = TeamFactory.CreateSimpleTeam();
             _person1.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(1900, 1, 1), PersonContractFactory.CreatePersonContract(), team));
             
-            UndoRedoContainer undo = new UndoRedoContainer(100);
+            UndoRedoContainer undo = new UndoRedoContainer(new DoNothingScheduleDayChangeCallBack(), 100);
             IScheduleDictionary sched = new ScheduleWithBusinessRuleDictionary(_scenario, new ScheduleDateTimePeriod(new DateTimePeriod(1900, 1, 1, 2100, 1, 1)));
             sched.SetUndoRedoContainer(undo);
             IRequest part = new AbsenceRequest(AbsenceFactory.CreateAbsence("asdf"),
@@ -486,7 +486,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IPerson person = PersonFactory.CreatePerson();
             person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(1900, 1, 1)));
 
-            UndoRedoContainer undo = new UndoRedoContainer(100);
+            UndoRedoContainer undo = new UndoRedoContainer(new DoNothingScheduleDayChangeCallBack(), 100);
             ScheduleWithBusinessRuleDictionary sched = new ScheduleWithBusinessRuleDictionary(_scenario, new ScheduleDateTimePeriod(new DateTimePeriod(1900, 1, 1, 2100, 1, 1)));
             sched.SetUndoRedoContainer(undo);
             sched.AddBusinessRule(new BusinessRuleResponse(typeof(string), string.Empty, false, true, new DateTimePeriod(2000, 1, 1, 2001, 1, 1), person, new DateOnlyPeriod(new DateOnly(),new DateOnly() ), "tjillevippen"));

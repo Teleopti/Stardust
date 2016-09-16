@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 			var dictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2014, 3, 22, 2014, 4, 4));
 			dictionary.UsePermissions(false);
-			dictionary.SetUndoRedoContainer(new UndoRedoContainer(500));
+			dictionary.SetUndoRedoContainer(new UndoRedoContainer(new DoNothingScheduleDayChangeCallBack(), 500));
 			dictionary.AddPersonAbsence(PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
 				new DateTimePeriod(2014, 3, 24, 0, 2014, 3, 25, 0)));
 			dictionary.AddPersonAssignment(PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person,

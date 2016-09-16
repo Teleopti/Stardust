@@ -6,12 +6,14 @@ namespace Teleopti.Ccc.Domain.UndoRedo
 {
 	public class UndoRedoContainer : IUndoRedoContainer
 	{
+		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly FixedCapacityStack<IMemento> _redoStack;
 		private readonly FixedCapacityStack<IMemento> _undoStack;
 		private BatchMemento _batchMemento;
 
-		public UndoRedoContainer(int containerSize)
+		public UndoRedoContainer(IScheduleDayChangeCallback scheduleDayChangeCallback, int containerSize)
 		{
+			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_undoStack = new FixedCapacityStack<IMemento>(containerSize);
 			_redoStack = new FixedCapacityStack<IMemento>(containerSize);
 		}
@@ -71,11 +73,14 @@ namespace Teleopti.Ccc.Domain.UndoRedo
 			var undoStackHasValue = CanUndo();
 			if (undoStackHasValue)
 			{
-				InUndoRedo = true;
-				var graph = _undoStack.Pop();
-				_redoStack.Push(graph.Restore());
-				fireChanged();
-				InUndoRedo = false;
+				using (UndoRedoState.Create(_scheduleDayChangeCallback))
+				{
+					InUndoRedo = true;
+					var graph = _undoStack.Pop();
+					_redoStack.Push(graph.Restore());
+					fireChanged();
+					InUndoRedo = false;
+				}
 			}
 			return undoStackHasValue;
 		}
@@ -88,11 +93,14 @@ namespace Teleopti.Ccc.Domain.UndoRedo
 			var redoStackHasValue = CanRedo();
 			if (redoStackHasValue)
 			{
-				InUndoRedo = true;
-				var graph = _redoStack.Pop();
-				_undoStack.Push(graph.Restore());
-				fireChanged();
-				InUndoRedo = false;
+				using (UndoRedoState.Create(_scheduleDayChangeCallback))
+				{
+					InUndoRedo = true;
+					var graph = _redoStack.Pop();
+					_undoStack.Push(graph.Restore());
+					fireChanged();
+					InUndoRedo = false;
+				}
 			}
 			return redoStackHasValue;
 		}

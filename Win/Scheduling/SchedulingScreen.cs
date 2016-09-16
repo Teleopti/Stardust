@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly BackgroundWorker _backgroundWorkerScheduling = new BackgroundWorker();
 		private readonly BackgroundWorker _backgroundWorkerOptimization = new BackgroundWorker();
 		private readonly BackgroundWorker _backgroundWorkerOvertimeScheduling = new BackgroundWorker();
-		private readonly IUndoRedoContainer _undoRedo = new UndoRedoContainer(500);
+		private readonly IUndoRedoContainer _undoRedo;
 
 		private readonly ICollection<IPersonWriteProtectionInfo> _modifiedWriteProtections =
 			new HashSet<IPersonWriteProtectionInfo>();
@@ -362,6 +362,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_mainWindow = ownerWindow;
 
 			_container = componentContext.Resolve<ILifetimeScope>().BeginLifetimeScope();
+			_undoRedo = new UndoRedoContainer(_container.Resolve<IScheduleDayChangeCallback>(), 500);
 			_schedulerMessageBrokerHandler = new SchedulerMessageBrokerHandler(this, _container);
 			updateLifeTimeScopeWith2ThingsWithFullDependencyChain();
 
@@ -5915,7 +5916,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				selectCellFromPersonDate(_lastModifiedPart.ModifiedPerson,_lastModifiedPart.ModifiedPart.DateOnlyAsPeriod.DateOnly);
 			}
 
-			RecalculateResources(true);
+			RecalculateResources(false);
 			if (_requestView != null)
 				updateShiftEditor();
 		}

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.TestCommon;
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 
             _allAccounts = new Dictionary<IPerson, IPersonAccountCollection> { { _person, acc } };
             _TimeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
-            _target = new HandlePersonRequestViewModel(_schedulePeriod, new List<IPerson> { _person }, new UndoRedoContainer(1), _allAccounts,
+            _target = new HandlePersonRequestViewModel(_schedulePeriod, new List<IPerson> { _person }, new UndoRedoContainer(new DoNothingScheduleDayChangeCallBack(), 1), _allAccounts,
                 _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _TimeZoneInfo);
         }
 
@@ -143,7 +144,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         public void VerifyValidatesAgainstSchedulePeriod()
         {
             _target = new HandlePersonRequestViewModel(new DateTimePeriod(DateTime.MinValue.ToUniversalTime(), DateTime.MaxValue.ToUniversalTime()),
-                new List<IPerson> { _person }, new UndoRedoContainer(1), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _TimeZoneInfo);
+                new List<IPerson> { _person }, new UndoRedoContainer(new DoNothingScheduleDayChangeCallBack(), 1), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _TimeZoneInfo);
 
             IList<IPersonRequest> requests = new List<IPersonRequest> { _source };
             _target.CreatePersonRequestViewModels(requests, new ShiftTradeRequestStatusCheckerForTestDoesNothing(), new PersonRequestAuthorizationCheckerForTest());
@@ -152,7 +153,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             Assert.IsTrue(_target.SelectedModel.IsWithinSchedulePeriod, "The model is within the period, so its set to true");
 
             _target = new HandlePersonRequestViewModel(new DateTimePeriod(DateTime.MinValue.ToUniversalTime(), DateTime.MinValue.AddDays(2).ToUniversalTime()),
-                new List<IPerson> { _person }, new UndoRedoContainer(1), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _TimeZoneInfo);
+                new List<IPerson> { _person }, new UndoRedoContainer(new DoNothingScheduleDayChangeCallBack(), 1), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _TimeZoneInfo);
             _target.CreatePersonRequestViewModels(requests, new ShiftTradeRequestStatusCheckerForTestDoesNothing(), new PersonRequestAuthorizationCheckerForTest());
             _target.PersonRequestViewModels.MoveCurrentToFirst();
             Assert.IsFalse(_target.SelectedModel.IsWithinSchedulePeriod, "Model is outside the period, so it should be set to false when created");
@@ -162,7 +163,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         public void VerifyValidatesAgainstSchedulePeriodAndPerson()
         {
             _target = new HandlePersonRequestViewModel(new DateTimePeriod(DateTime.MinValue.ToUniversalTime(), DateTime.MaxValue.ToUniversalTime()),
-                new List<IPerson> { _person }, new UndoRedoContainer(1), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _TimeZoneInfo);
+                new List<IPerson> { _person }, new UndoRedoContainer(new DoNothingScheduleDayChangeCallBack(), 1), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _TimeZoneInfo);
 
             IList<IPersonRequest> requests = new List<IPersonRequest> { _source };
             _target.CreatePersonRequestViewModels(requests, new ShiftTradeRequestStatusCheckerForTestDoesNothing(), new PersonRequestAuthorizationCheckerForTest());
@@ -171,7 +172,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             Assert.IsTrue(_target.SelectedModel.IsWithinSchedulePeriod, "The model is within the period, so its set to true");
 
             _target = new HandlePersonRequestViewModel(new DateTimePeriod(DateTime.MinValue.ToUniversalTime(), DateTime.MaxValue.ToUniversalTime()),
-                new List<IPerson> { PersonFactory.CreatePerson("Tommy") }, new UndoRedoContainer(1), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _TimeZoneInfo);
+                new List<IPerson> { PersonFactory.CreatePerson("Tommy") }, new UndoRedoContainer(new DoNothingScheduleDayChangeCallBack(), 1), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _TimeZoneInfo);
             _target.CreatePersonRequestViewModels(requests, new ShiftTradeRequestStatusCheckerForTestDoesNothing(), new PersonRequestAuthorizationCheckerForTest());
             _target.PersonRequestViewModels.MoveCurrentToFirst();
             Assert.IsFalse(_target.SelectedModel.IsWithinSchedulePeriod, "Model is within the period but purson is not within, so it should be set to false when created");

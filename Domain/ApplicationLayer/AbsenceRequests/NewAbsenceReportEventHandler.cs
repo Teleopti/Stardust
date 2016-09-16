@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						allowedAbsencesForReport.Single(x => x.Id == message.AbsenceId);
 					var dateOnlyPeriod = period.ToDateOnlyPeriod(agentTimeZone);
 
-					var undoRedoContainer = new UndoRedoContainer(400);
+					var undoRedoContainer = new UndoRedoContainer(new DoNothingScheduleDayChangeCallBack(), 400);
 
 					loadDataForResourceCalculation(period, person);
 

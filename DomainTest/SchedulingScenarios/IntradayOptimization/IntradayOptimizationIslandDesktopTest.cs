@@ -574,7 +574,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		[Test]
 		public void ShouldBeAbleToUndo()
 		{
-			var undoRedoContainer = new UndoRedoContainer(int.MaxValue);
+			var undoRedoContainer = new UndoRedoContainer(new DoNothingScheduleDayChangeCallBack(), int.MaxValue);
 
 			var scenario = new Scenario("_");
 			var phoneActivity = ActivityFactory.CreateActivity("_");

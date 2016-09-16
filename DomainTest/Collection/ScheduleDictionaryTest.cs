@@ -1369,7 +1369,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			{
 				using (new CustomAuthorizationContext(authorization))
 				{
-					IUndoRedoContainer container = new UndoRedoContainer(100);
+					IUndoRedoContainer container = new UndoRedoContainer(new DoNothingScheduleDayChangeCallBack(), 100);
 					target.SetUndoRedoContainer(container);
 					IPersonAssignment pAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson,
 															   new DateTimePeriod(
@@ -1416,7 +1416,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			{
 				using (new CustomAuthorizationContext(authorization))
 				{
-					IUndoRedoContainer container = new UndoRedoContainer(100);
+					IUndoRedoContainer container = new UndoRedoContainer(new DoNothingScheduleDayChangeCallBack(), 100);
 					target.SetUndoRedoContainer(container);
 					IPersonAssignment pAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson,
 															   new DateTimePeriod(
@@ -1469,7 +1469,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			{
 				using (new CustomAuthorizationContext(authorization))
 				{
-					IUndoRedoContainer container = new UndoRedoContainer(100);
+					IUndoRedoContainer container = new UndoRedoContainer(new DoNothingScheduleDayChangeCallBack(), 100);
 					target.SetUndoRedoContainer(container);
 					IPersonAssignment pAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson,
 															   new DateTimePeriod(
@@ -1512,7 +1512,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			{
 				using (new CustomAuthorizationContext(authorization))
 				{
-					IUndoRedoContainer container = new UndoRedoContainer(100);
+					IUndoRedoContainer container = new UndoRedoContainer(new DoNothingScheduleDayChangeCallBack(), 100);
 					target.SetUndoRedoContainer(container);
 					IPersonAssignment pAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,
 															   dummyPerson,

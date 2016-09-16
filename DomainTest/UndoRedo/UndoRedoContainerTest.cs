@@ -1,6 +1,7 @@
 using System;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Interfaces.Domain;
 
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.UndoRedo
 		[SetUp]
 		public void Setup()
 		{
-			target = new UndoRedoContainer(10);
+			target = new UndoRedoContainer(new DoNothingScheduleDayChangeCallBack(), 10);
 			changedEventFired = false;
 			target.ChangedHandler+=OnChanged;
 		}
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.UndoRedo
 		[Test]
 		public void VerifyContainerSize()
 		{
-				target = new UndoRedoContainer(1);
+				target = new UndoRedoContainer(new DoNothingScheduleDayChangeCallBack(), 1);
 		    var mem = new dummy("1");
 		    target.SaveState(mem);
 		    mem.state = "2";
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.UndoRedo
 		public void VerifyExceededContainerSizeWorks()
 		{
 			//Probably unnecessarly test because this is already tested in FixedCapacityTest
-			target = new UndoRedoContainer(2);
+			target = new UndoRedoContainer(new DoNothingScheduleDayChangeCallBack(), 2);
 			var mem = new dummy("1");
 			target.SaveState(mem);
 			mem.state = "2";

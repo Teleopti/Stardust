@@ -761,8 +761,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public void Restore(IScheduleDay previousState)
 		{
-			//HACK! "DoNothingScheduleDayChangeCallBack" works here because we always create a new context after an undo/redo has occured and rescalc is made
-			Owner.Modify(ScheduleModifier.UndoRedo, previousState, null, new DoNothingScheduleDayChangeCallBack(), new ScheduleTagSetter(NullScheduleTag.Instance));
+			var callback = UndoRedoState.ScheduleDayChangeCallback ?? new DoNothingScheduleDayChangeCallBack();
+			Owner.Modify(ScheduleModifier.UndoRedo, previousState, null, callback, new ScheduleTagSetter(NullScheduleTag.Instance));
 		}
 
 		public IMemento CreateMemento()

@@ -2,6 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Interfaces.Domain;
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 
 		public void SimulateApproveAndSetBusinessRuleResponsesOnFail(IShiftTradeRequest shiftTradeRequest, INewBusinessRuleCollection allNewRules, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
-			var undoRedoContainer = new UndoRedoContainer(400);
+			var undoRedoContainer = new UndoRedoContainer(new DoNothingScheduleDayChangeCallBack(), 400);
 			setupUndo (undoRedoContainer, schedulingResultStateHolder);
 
 			var requestApprovalServiceScheduler = _requestFactory.GetRequestApprovalService(allNewRules, _scenarioRepository.Current(), schedulingResultStateHolder);
