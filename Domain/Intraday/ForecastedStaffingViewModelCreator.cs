@@ -42,17 +42,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			var forecastedStaffingModel = _forecastedStaffingProvider.Load(skillIdList, latestStatsTime, minutesPerInterval);
 
-			//forecastedStaffingModel.StaffingIntervals = forecastedStaffingModel.StaffingIntervals
-			//	.GroupBy(g => g.StartTime)
-			//	.Select(s => new StaffingIntervalModel
-			//	{
-			//		SkillId = s.First().SkillId,
-			//		StartTime = TimeZoneHelper.ConvertFromUtc(s.First().StartTime, _timeZone.TimeZone()),
-			//		Agents = s.Sum(a => a.Agents)
-			//	})
-			//	.OrderBy(o => o.StartTime)
-			//	.ToList();
-
 			var staffingForUsersToday = forecastedStaffingModel.StaffingIntervals
 												.Where(t => t.StartTime >= usersToday.Date && t.StartTime < usersToday.Date.AddDays(1))
 												.ToList();
@@ -123,21 +112,24 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			foreach (var skillId in forecastedWorkloadDictionary.Keys)
 			{
-				double workloadDeviationFactor = 0;
-				IEnumerable<SkillWorkload> actualWorkload = actualWorkloadDictionary[skillId];
-				foreach (var forecastedWorkloadInterval in forecastedWorkloadDictionary[skillId])
+				double averageDeviation = 1;
+				if (actualWorkloadDictionary.ContainsKey(skillId))
 				{
-					var actualWorkloadInterval =
-						actualWorkload.SingleOrDefault(x => x.StartTime == forecastedWorkloadInterval.StartTime);
+					IEnumerable<SkillWorkload> actualWorkload = actualWorkloadDictionary[skillId];
+					double workloadDeviationFactor = 0;
+					foreach (var forecastedWorkloadInterval in forecastedWorkloadDictionary[skillId])
+					{
+						var actualWorkloadInterval =
+							actualWorkload.SingleOrDefault(x => x.StartTime == forecastedWorkloadInterval.StartTime);
+						if (actualWorkloadInterval == null)
+							continue;
+						workloadDeviationFactor += actualWorkloadInterval.WorkloadInSeconds / forecastedWorkloadInterval.WorkloadInSeconds;
+					}
 
-					workloadDeviationFactor += actualWorkloadInterval.WorkloadInSeconds/forecastedWorkloadInterval.WorkloadInSeconds;
+					averageDeviation = workloadDeviationFactor / actualWorkload.Count();
 				}
-				var averageDeviation = workloadDeviationFactor/actualWorkload.Count();
-				var updatedForecastedSeriesPerSkill = new List<StaffingIntervalModel>();
-
-
-
-				updatedForecastedSeriesPerSkill = forecastedStaffingDictionary[skillId]
+				
+				var updatedForecastedSeriesPerSkill = forecastedStaffingDictionary[skillId]
 					.Where(s => s.StartTime >= usersNow)
 					.Select(t => new StaffingIntervalModel
 					{
@@ -147,20 +139,24 @@ namespace Teleopti.Ccc.Domain.Intraday
 					})
 					.ToList();
 
-				var nullCount = forecastedStaffingDictionary[skillId].Count() - updatedForecastedSeriesPerSkill.Count;
-				for (int i = 0; i < nullCount; i++)
-				{
-					updatedForecastedSeriesPerSkill.Insert(0, null);
-				}
-
 				updatedForecastedSeries.AddRange(updatedForecastedSeriesPerSkill);
 			}
 
-			return updatedForecastedSeries
+			var returnValue = updatedForecastedSeries
 				.OrderBy(g => g.StartTime)
 				.GroupBy(h => h.StartTime)
 				.Select(s => (double?)s.Sum(a => a.Agents))
 				.ToList();
+
+			var nullStartTime = forecastedStaffingDictionary
+				.Select(x => x.Value.Min(m => m.StartTime)).First();
+			var nullEndTime = updatedForecastedSeries.Min(m => m.StartTime);
+			for (DateTime i = nullStartTime; i < nullEndTime; i = i.AddMinutes(minutesPerInterval))
+			{
+				returnValue.Insert(0, null);
+			}
+
+			return returnValue;
 
 		}
 	}

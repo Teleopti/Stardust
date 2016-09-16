@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var scenario = _scenarioRepository.LoadDefaultScenario();
 			var staffingIntervals = new List<StaffingIntervalModel>();
 			var usersNow = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
+			var usersNowStartOfDayUtc = TimeZoneHelper.ConvertToUtc(usersNow.Date, _timeZone.TimeZone());
 			var usersToday = new DateOnly(usersNow);
 			TimeSpan wantedIntervalResolution = TimeSpan.FromMinutes(minutesPerInterval);
 
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 				foreach (var skillDay in skillDays)
 				{
 					staffingIntervals.AddRange(getStaffingIntervalModels(skillDay, wantedIntervalResolution));
-					mergedTaskPeriodList.AddRange(getTaskPeriods(skillDay, minutesPerInterval, latestStatisticsTimeUtc, _now.UtcDateTime()));
+					mergedTaskPeriodList.AddRange(getTaskPeriods(skillDay, minutesPerInterval, latestStatisticsTimeUtc, usersNowStartOfDayUtc));
 				}
 
 				workloadInSecondsPerSkill.Add(skill.Id.Value, mergedTaskPeriodList.Select(x => new SkillWorkload
@@ -123,14 +124,14 @@ namespace Teleopti.Ccc.Domain.Intraday
 				}
 				return returnList
 					.Where(t =>
-						t.Period.StartDateTime >= usersNowUtc.Value.Date &&
+						t.Period.StartDateTime >= usersNowUtc.Value &&
 						t.Period.EndDateTime <= latestStatisticsTimeUtc.Value.AddMinutes(targetMinutesPerInterval)
 					);
 			}
 
 			return templateTaskPeriodCollection
 				.Where(t => 
-					t.Period.StartDateTime >= usersNowUtc.Value.Date && 
+					t.Period.StartDateTime >= usersNowUtc.Value && 
 					t.Period.EndDateTime <= latestStatisticsTimeUtc.Value.AddMinutes(targetMinutesPerInterval)
 				);
 		}
