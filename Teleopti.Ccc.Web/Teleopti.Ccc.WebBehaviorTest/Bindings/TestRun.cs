@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestDataSetup.RestoreCcc7Data();
 			TestDataSetup.ClearAnalyticsData();
 			TestDataSetup.SetupDefaultScenario();
+			TestDataSetup.CreateFirstTenantAdminUser();
 
 			TestControllerMethods.ClearConnections();
 

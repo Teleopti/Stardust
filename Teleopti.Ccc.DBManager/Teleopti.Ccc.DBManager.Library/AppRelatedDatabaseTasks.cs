@@ -32,7 +32,7 @@ SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', 
 
 		public void CleanByAnalyticsProcedure()
 		{
-			_execute.ExecuteNonQuery("EXEC [mart].[etl_data_mart_delete] @DeleteAll=1",60);
+			_execute.ExecuteNonQuery("EXEC [mart].[etl_data_mart_delete] @DeleteAll=1", 60);
 		}
 
 		public bool IsCorrectDb(DatabaseType databaseType)
@@ -53,15 +53,31 @@ SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', 
 
 		public void SetTenantConnectionInfo(string name, string appConnectionString, string analyticsConnectionString)
 		{
-			_execute.ExecuteNonQuery("update tenant.tenant set active = 1, name = @name, applicationconnectionstring = @app, analyticsconnectionstring = @analytics",
-				parameters: new Dictionary<string, object> { { "@name", name ?? string.Empty }, { "@app", appConnectionString }, { "@analytics", analyticsConnectionString } });
+			_execute.ExecuteNonQuery(
+				"update tenant.tenant set active = 1, name = @name, applicationconnectionstring = @app, analyticsconnectionstring = @analytics",
+				parameters:
+					new Dictionary<string, object>
+					{
+						{"@name", name ?? string.Empty},
+						{"@app", appConnectionString},
+						{"@analytics", analyticsConnectionString}
+					});
 		}
 
-        public void PersistAuditSetting()
+		public void PersistAuditSetting()
 		{
 			_execute.ExecuteNonQuery("exec Auditing.InitAuditTables");
 			_execute.ExecuteNonQuery("delete from auditing.Auditsetting");
-			_execute.ExecuteNonQuery("insert into auditing.Auditsetting (id, IsScheduleEnabled) values (" + AuditSettingDefault.TheId + ", 1)");
+			_execute.ExecuteNonQuery("insert into auditing.Auditsetting (id, IsScheduleEnabled) values (" +
+											 AuditSettingDefault.TheId + ", 1)");
+		}
+
+		public void TryAddTenantAdminUser()
+		{
+			_execute.ExecuteNonQuery(@" if not exists (select * from Tenant.AdminUser )
+										INSERT INTO Tenant.AdminUser(Name, Email, Password, AccessToken)
+										VALUES('FirstAdmin', 'first@admin.is', '###70D74A6BBA33B5972EADAD9DD449D273E1F4961D###', 'andaDummyToken')
+			");
 		}
 	}
 }

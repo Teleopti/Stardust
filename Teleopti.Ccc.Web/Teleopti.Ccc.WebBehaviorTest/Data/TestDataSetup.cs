@@ -59,5 +59,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 			LocalSystem.DefaultDataCreator.CreateDefaultScenario();
 		}
+
+		public static void CreateFirstTenantAdminUser()
+		{
+			DataSourceHelper.CreateFirstTenantAdminUser();
+		}
 	}
 }

@@ -228,7 +228,12 @@ namespace Teleopti.Ccc.TestCommon
 				dictionary[Environment.CommandTimeout] = timeout.Value.ToString(CultureInfo.CurrentCulture);
 			return dictionary;
 		}
-		
 
+
+		public static void CreateFirstTenantAdminUser()
+		{
+			var database = application();
+			database.ConfigureSystem().TryAddTenantAdminUser();
+		}
 	}
 }
