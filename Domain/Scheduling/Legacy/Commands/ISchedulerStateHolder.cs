@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		void LoadCommonState(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory);
 
+		[Obsolete("Remove this one")]
 		IUndoRedoContainer UndoRedoContainer { get; set; }
 
 		CommonNameDescriptionSetting CommonNameDescription { get; }

@@ -415,7 +415,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_schedulerState.SetRequestedScenario(loadScenario);
 			_schedulerState.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(loadingPeriod,
 				TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+#pragma warning disable 618
 			_schedulerState.UndoRedoContainer = _undoRedo;
+#pragma warning restore 618
 			_schedulerMeetingHelper = new SchedulerMeetingHelper(_schedulerMessageBrokerHandler, _schedulerState, _container.Resolve<IResourceCalculationContextFactory>());
 			//Using the same module id when saving meeting changes to avoid getting them via MB as well
 

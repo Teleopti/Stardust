@@ -602,7 +602,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 }
             }
 
-            IUndoRedoContainer undoRedoContainer = _schedulerState.UndoRedoContainer ?? new UndoRedoContainer(500);
+#pragma warning disable 618
+            IUndoRedoContainer undoRedoContainer = _schedulerState.UndoRedoContainer;
+#pragma warning restore 618
             undoRedoContainer.CreateBatch("Saving parts");
             bool result;
             try
@@ -685,7 +687,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             if (LastUnsavedSchedulePart == null) return;
             IList<IScheduleDay> theParts = new List<IScheduleDay> { LastUnsavedSchedulePart };
 
-            IUndoRedoContainer undoRedoContainer = _schedulerState.UndoRedoContainer ?? new UndoRedoContainer(500);
+#pragma warning disable 618
+            IUndoRedoContainer undoRedoContainer = _schedulerState.UndoRedoContainer;
+#pragma warning restore 618
             undoRedoContainer.CreateBatch("Saving note");
 
             _schedulerState.Schedules.Modify(ScheduleModifier.Scheduler, theParts, NewBusinessRuleCollection.AllForScheduling(_schedulerState.SchedulingResultState), _scheduleDayChangeCallback, new ScheduleTagSetter(DefaultScheduleTag));
@@ -699,7 +703,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             if (LastUnsavedSchedulePart == null) return;
             IList<IScheduleDay> theParts = new List<IScheduleDay> { LastUnsavedSchedulePart };
 
-            IUndoRedoContainer undoRedoContainer = _schedulerState.UndoRedoContainer ?? new UndoRedoContainer(500);
+#pragma warning disable 618
+            IUndoRedoContainer undoRedoContainer = _schedulerState.UndoRedoContainer;
+#pragma warning restore 618
             undoRedoContainer.CreateBatch("Saving public note");
 
             _schedulerState.Schedules.Modify(ScheduleModifier.Scheduler, theParts, NewBusinessRuleCollection.AllForScheduling(_schedulerState.SchedulingResultState), _scheduleDayChangeCallback, new ScheduleTagSetter(DefaultScheduleTag));

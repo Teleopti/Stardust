@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
@@ -74,6 +75,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _clipHandlerSchedulePart = new ClipHandler<IScheduleDay>();
             _period = new DateOnlyPeriod(2009, 2, 2, 2009, 3, 1);
 			_schedulerState = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, _timeZoneInfo), new List<IPerson>(), _mocks.DynamicMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder(), new FakeTimeZoneGuard(_timeZoneInfo));
+			_schedulerState.UndoRedoContainer = new UndoRedoContainer(100);
             _overriddenBusinessRulesHolder = new OverriddenBusinessRulesHolder();
 
             createMockObjects();
