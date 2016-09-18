@@ -32,9 +32,8 @@
 				<thead>
 					<tr class="weekview-thead">
 						<th class="agent-name-colomn"></th>
-						<th ng-repeat="day in vm.weekDays">
-							<span translate>{{day.name}}</span>
-							<span class="pull-right">{{day.date | date : 'dd'}}</span>
+						<th class="date-header" ng-repeat="day in vm.weekDays">
+							<span translate>{{day.name}}</span>&nbsp;{{day.date | date : 'dd'}}
 						</th>
 						<th class="contract-time-header contract-time-column" ng-if="vm.toggles.WeekViewContractTimeEnabled">{{'ContractTime' | translate}}</th>
 					</tr>
