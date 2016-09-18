@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 		}
 
 		public IEnumerable<IAgentBadgeTransaction> CalculateAdherenceBadges(IEnumerable<IPerson> allPersons, string timezoneCode, DateOnly date,
-			AdherenceReportSettingCalculationMethod adherenceCalculationMethod, IGamificationSetting setting, Guid businessUnitId)
+			AdherenceReportSettingCalculationMethod adherenceCalculationMethod, IGamificationSetting setting, Guid businessUnitId, int timeoutInSecond)
 		{
 			if (logger.IsDebugEnabled)
 			{
@@ -124,8 +124,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			var personList = allPersons.ToList();
 			var newAwardedBadges = new List<IAgentBadgeTransaction>();
 			var agentAdherenceList =
-				_statisticRepository.LoadAgentsOverThresholdForAdherence(adherenceCalculationMethod, timezoneCode, date.Date, setting.AdherenceThreshold, businessUnitId);
-			
+				_statisticRepository.LoadAgentsOverThresholdForAdherence(adherenceCalculationMethod, timezoneCode, date.Date, setting.AdherenceThreshold,
+				businessUnitId, timeoutInSecond);
+
 			if (agentAdherenceList.Count > 0)
 			{
 				var personIdList = (from object[] data in agentAdherenceList select (Guid)data[0]).ToList();
@@ -169,7 +170,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 
 				if (logger.IsDebugEnabled)
 				{
-					logger.DebugFormat("{0} agents will get badge for adherence", idListOfPersonShouldGetBadge.Count());
+					logger.DebugFormat("{0} agents will get badge for adherence", idListOfPersonShouldGetBadge.Count);
 				}
 
 				var newAwardedBadge = AddBadge(personList, idListOfPersonShouldGetBadge, BadgeType.Adherence, setting.SilverToBronzeBadgeRate,
@@ -192,7 +193,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			return newAwardedBadges;
 		}
 
-		public IEnumerable<IAgentBadgeTransaction> CalculateAHTBadges(IEnumerable<IPerson> allPersons, string timezoneCode, DateOnly date, IGamificationSetting setting, Guid businessUnitId)
+		public IEnumerable<IAgentBadgeTransaction> CalculateAHTBadges(IEnumerable<IPerson> allPersons, string timezoneCode, DateOnly date,
+			IGamificationSetting setting, Guid businessUnitId, int timeoutInSecond)
 		{
 			if (logger.IsDebugEnabled)
 			{
@@ -204,7 +206,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 
 			var personList = allPersons.ToList();
 			var newAwardedBadges = new List<IAgentBadgeTransaction>();
-			var agentsList = _statisticRepository.LoadAgentsUnderThresholdForAHT(timezoneCode, date.Date, setting.AHTThreshold, businessUnitId);
+			var agentsList = _statisticRepository.LoadAgentsUnderThresholdForAHT(timezoneCode, date.Date, setting.AHTThreshold,
+				businessUnitId, timeoutInSecond);
 
 			var agents = new List<Guid>();
 			if (agentsList.Count > 0)
@@ -216,7 +219,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			{
 				if (logger.IsDebugEnabled)
 				{
-					logger.DebugFormat("{0} agents will get badge for AHT", agents.Count());
+					logger.DebugFormat("{0} agents will get badge for AHT", agents.Count);
 				}
 
 				var newAwardedAhtBadges
@@ -239,7 +242,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 		}
 
 		public IEnumerable<IAgentBadgeTransaction> CalculateAnsweredCallsBadges(IEnumerable<IPerson> allPersons, string timezoneCode, DateOnly date,
-			IGamificationSetting setting, Guid businessUnitId)
+			IGamificationSetting setting, Guid businessUnitId, int timeoutInSecond)
 		{
 			if (logger.IsDebugEnabled)
 			{
@@ -251,7 +254,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 
 			var personList = allPersons.ToList();
 			var newAwardedBadges = new List<IAgentBadgeTransaction>();
-			var agentsList = _statisticRepository.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, date.Date, setting.AnsweredCallsThreshold, businessUnitId);
+			var agentsList = _statisticRepository.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, date.Date, setting.AnsweredCallsThreshold,
+				businessUnitId, timeoutInSecond);
 
 			var agents = new List<Guid>();
 			if (agentsList.Count > 0)
@@ -263,7 +267,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			{
 				if (logger.IsDebugEnabled)
 				{
-					logger.DebugFormat("{0} agents will get badge for answered calls", agents.Count());
+					logger.DebugFormat("{0} agents will get badge for answered calls", agents.Count);
 				}
 
 				var newAwardedAnsweredCallsBadges

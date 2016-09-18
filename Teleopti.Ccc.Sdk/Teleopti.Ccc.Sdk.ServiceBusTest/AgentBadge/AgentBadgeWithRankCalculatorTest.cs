@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 	public class AgentBadgeWithRankCalculatorTest
 	{
 		private const string timezoneCode = "";
+		private const int defaultDatabaseTimeout = 60;
 
 		private IAgentBadgeWithRankCalculator _calculator;
 		private DateOnly _calculateDateOnly;
@@ -141,7 +142,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 
 			var result = _calculator.CalculateAdherenceBadges(_allPersons, timezoneCode, _calculateDateOnly,
 				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
-				_gamificationSetting, _businessUnitId);
+				_gamificationSetting, _businessUnitId, defaultDatabaseTimeout);
 
 			var badge = result.Single(x => x.Person.Id == _lastPersonId);
 			Assert.AreEqual(badge.Person.Id, _lastPersonId);
@@ -162,7 +163,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 
 			var result = _calculator.CalculateAdherenceBadges(_allPersons, timezoneCode, _calculateDateOnly,
 				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
-				_gamificationSetting, _businessUnitId);
+				_gamificationSetting, _businessUnitId, defaultDatabaseTimeout);
 
 			var badge = result.Single(x => x.Person.Id == _lastPersonId);
 			Assert.AreEqual(badge.Person.Id, _lastPersonId);
@@ -183,7 +184,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 
 			var result = _calculator.CalculateAdherenceBadges(_allPersons, timezoneCode, _calculateDateOnly,
 				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
-				_gamificationSetting, _businessUnitId);
+				_gamificationSetting, _businessUnitId, defaultDatabaseTimeout);
 
 			var badge = result.Single(x => x.Person.Id == _lastPersonId);
 			Assert.AreEqual(badge.Person.Id, _lastPersonId);
@@ -204,7 +205,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 
 			var result = _calculator.CalculateAdherenceBadges(_allPersons, timezoneCode, _calculateDateOnly,
 				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
-				_gamificationSetting, _businessUnitId);
+				_gamificationSetting, _businessUnitId, defaultDatabaseTimeout);
 
 			var badge = result.Single(x => x.Person.Id == _lastPersonId);
 			Assert.AreEqual(badge.Person.Id, _lastPersonId);
@@ -227,7 +228,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				.IgnoreArguments()
 				.Return(new ArrayList {new object[] {_lastPersonId, DateTime.Now, 1000}});
 			var result = _calculator.CalculateAHTBadges(_allPersons, timezoneCode, _calculateDateOnly,
-				_gamificationSetting, _businessUnitId);
+				_gamificationSetting, _businessUnitId, defaultDatabaseTimeout);
 
 			var badge = result.Single(x => x.Person.Id == _lastPersonId);
 			Assert.AreEqual(badge.Person.Id, _lastPersonId);
@@ -246,7 +247,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				.IgnoreArguments()
 				.Return(new ArrayList {new object[] {_lastPersonId, DateTime.Now, 720}});
 			var result = _calculator.CalculateAHTBadges(_allPersons, timezoneCode, _calculateDateOnly,
-				_gamificationSetting, _businessUnitId);
+				_gamificationSetting, _businessUnitId, defaultDatabaseTimeout);
 
 			var badge = result.Single(x => x.Person.Id == _lastPersonId);
 			Assert.AreEqual(badge.Person.Id, _lastPersonId);
@@ -265,7 +266,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				.IgnoreArguments()
 				.Return(new ArrayList {new object[] {_lastPersonId, DateTime.Now, 420}});
 			var result = _calculator.CalculateAHTBadges(_allPersons, timezoneCode, _calculateDateOnly,
-				_gamificationSetting, _businessUnitId);
+				_gamificationSetting, _businessUnitId, defaultDatabaseTimeout);
 
 			var badge = result.Single(x => x.Person.Id == _lastPersonId);
 			Assert.AreEqual(badge.Person.Id, _lastPersonId);
@@ -284,7 +285,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				.IgnoreArguments()
 				.Return(new ArrayList {new object[] {_lastPersonId, DateTime.Now, 200}});
 			var result = _calculator.CalculateAHTBadges(_allPersons, timezoneCode, _calculateDateOnly,
-				_gamificationSetting, _businessUnitId);
+				_gamificationSetting, _businessUnitId, defaultDatabaseTimeout);
 
 			var badge = result.Single(x => x.Person.Id == _lastPersonId);
 			Assert.AreEqual(badge.Person.Id, _lastPersonId);
@@ -307,7 +308,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				.IgnoreArguments()
 				.Return(new ArrayList {new object[] {_lastPersonId, DateTime.Now, 5}});
 			var result = _calculator.CalculateAnsweredCallsBadges(_allPersons, timezoneCode, _calculateDateOnly,
-				_gamificationSetting, _businessUnitId);
+				_gamificationSetting, _businessUnitId, defaultDatabaseTimeout);
 
 			var badge = result.Single(x => x.Person.Id == _lastPersonId);
 			Assert.AreEqual(badge.Person.Id, _lastPersonId);
@@ -326,7 +327,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				.IgnoreArguments()
 				.Return(new ArrayList {new object[] {_lastPersonId, DateTime.Now, 15}});
 			var result = _calculator.CalculateAnsweredCallsBadges(_allPersons, timezoneCode, _calculateDateOnly,
-				_gamificationSetting, _businessUnitId);
+				_gamificationSetting, _businessUnitId, defaultDatabaseTimeout);
 
 			var badge = result.Single(x => x.Person.Id == _lastPersonId);
 			Assert.AreEqual(badge.Person.Id, _lastPersonId);
@@ -345,7 +346,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				.IgnoreArguments()
 				.Return(new ArrayList {new object[] {_lastPersonId, DateTime.Now, 25}});
 			var result = _calculator.CalculateAnsweredCallsBadges(_allPersons, timezoneCode, _calculateDateOnly,
-				_gamificationSetting, _businessUnitId);
+				_gamificationSetting, _businessUnitId, defaultDatabaseTimeout);
 
 			var badge = result.Single(x => x.Person.Id == _lastPersonId);
 			Assert.AreEqual(badge.Person.Id, _lastPersonId);
@@ -364,7 +365,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				.IgnoreArguments()
 				.Return(new ArrayList {new object[] {_lastPersonId, DateTime.Now, 35}});
 			var result = _calculator.CalculateAnsweredCallsBadges(_allPersons, timezoneCode, _calculateDateOnly,
-				_gamificationSetting, _businessUnitId);
+				_gamificationSetting, _businessUnitId, defaultDatabaseTimeout);
 
 			var badge = result.Single(x => x.Person.Id == _lastPersonId);
 			Assert.AreEqual(badge.Person.Id, _lastPersonId);
@@ -403,16 +404,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				.Return(new ArrayList {new object[] {_lastPersonId, DateTime.Now, 120}});
 
 			var result = _calculator.CalculateAnsweredCallsBadges(_allPersons, timezoneCode, _calculateDateOnly,
-				_gamificationSetting, _businessUnitId);
+				_gamificationSetting, _businessUnitId, defaultDatabaseTimeout);
 			Assert.AreEqual(result.Any(), false);
 
 			result = _calculator.CalculateAdherenceBadges(_allPersons, timezoneCode, _calculateDateOnly,
 				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
-				_gamificationSetting, _businessUnitId);
+				_gamificationSetting, _businessUnitId, defaultDatabaseTimeout);
 			Assert.AreEqual(result.Any(), false);
 
 			result = _calculator.CalculateAHTBadges(_allPersons, timezoneCode, _calculateDateOnly,
-				_gamificationSetting, _businessUnitId);
+				_gamificationSetting, _businessUnitId, defaultDatabaseTimeout);
 			Assert.AreEqual(result.Any(), false);
 		}
 
@@ -448,7 +449,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 
 			var result = _calculator.CalculateAdherenceBadges(_allPersons, timezoneCode, _calculateDateOnly,
 				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
-				_gamificationSetting, _businessUnitId);
+				_gamificationSetting, _businessUnitId, defaultDatabaseTimeout);
 
 			Assert.AreEqual(result.Any(), false);
 		}

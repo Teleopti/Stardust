@@ -35,11 +35,14 @@ namespace Teleopti.Ccc.Domain.Repositories
 
 		IList LoadAgentQueueStat(DateTime startDate, DateTime endDate, string timeZoneId, Guid personCode);
 
-		IList LoadAgentsOverThresholdForAnsweredCalls(string timezoneCode, DateTime date, int answeredCallsThreshold, Guid businessUnitId);
+		IList LoadAgentsOverThresholdForAnsweredCalls(string timezoneCode, DateTime date, int answeredCallsThreshold,
+			Guid businessUnitId, int? timeoutInSecond = null);
 
-		IList LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod adherenceCalculationMethod, string timezoneCode, DateTime date, Percent adherenceThreshold, Guid businessUnitId);
+		IList LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod adherenceCalculationMethod,
+			string timezoneCode, DateTime date, Percent adherenceThreshold, Guid businessUnitId, int? timeoutInSecond = null);
 
-		IList LoadAgentsUnderThresholdForAHT(string timezoneCode, DateTime date, TimeSpan aHTThreshold, Guid businessUnitId);
+		IList LoadAgentsUnderThresholdForAHT(string timezoneCode, DateTime date, TimeSpan ahtThreshold, Guid businessUnitId,
+			int? timeoutInSecond = null);
 
 		IEnumerable<RunningEtlJob> GetRunningEtlJobs();
 

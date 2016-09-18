@@ -9,12 +9,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 	{
 		IEnumerable<IAgentBadgeWithRankTransaction> CalculateAdherenceBadges(IEnumerable<IPerson> allPersons,
 			string timezoneCode, DateOnly date, AdherenceReportSettingCalculationMethod adherenceCalculationMethod,
-			IGamificationSetting setting, Guid businessUnitId);
+			IGamificationSetting setting, Guid businessUnitId, int timeoutInSecond);
 
 		IEnumerable<IAgentBadgeWithRankTransaction> CalculateAHTBadges(IEnumerable<IPerson> allPersons, string timezoneCode,
-			DateOnly date, IGamificationSetting setting, Guid businessUnitId);
+			DateOnly date, IGamificationSetting setting, Guid businessUnitId, int timeoutInSecond);
 
 		IEnumerable<IAgentBadgeWithRankTransaction> CalculateAnsweredCallsBadges(IEnumerable<IPerson> allPersons,
-			string timezoneCode, DateOnly date, IGamificationSetting setting, Guid businessUnitId);
+			string timezoneCode, DateOnly date, IGamificationSetting setting, Guid businessUnitId, int timeoutInSecond);
 	}
 }

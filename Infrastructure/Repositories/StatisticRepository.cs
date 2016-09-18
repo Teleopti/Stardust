@@ -35,7 +35,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	{
 		private readonly ILog _logger = LogManager.GetLogger(typeof(StatisticRepository));
 
-		internal StatisticRepository() { }
+		internal StatisticRepository()
+		{
+		}
 
 		/// <summary>
 		/// Load matrix reports
@@ -379,15 +381,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.List());
 		}
 
-		public IList LoadAgentsOverThresholdForAnsweredCalls(string timezoneCode, DateTime date, int answeredCallsThreshold, Guid businessUnitId)
+		public IList LoadAgentsOverThresholdForAnsweredCalls(string timezoneCode, DateTime date, int answeredCallsThreshold,
+			Guid businessUnitId, int? timeoutInSecond)
 		{
 			return repositoryActionWithRetry(uow =>
 			{
-				const string sql =
-				"exec [mart].[raptor_number_of_calls_per_agent_by_date] @threshold=:threshold, @time_zone_code=:timezoneCode, @local_date=:date, @business_unit_code=:businessUnitId";
+				const string sql = "exec [mart].[raptor_number_of_calls_per_agent_by_date] @threshold=:threshold, "
+								   + "@time_zone_code=:timezoneCode, @local_date=:date, @business_unit_code=:businessUnitId";
 
-				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(sql)
-					.SetReadOnly(true)
+				var query = ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(sql);
+				if (timeoutInSecond != null)
+				{
+					query.SetTimeout(timeoutInSecond.Value);
+				}
+				return query.SetReadOnly(true)
 					.SetInt32("threshold", answeredCallsThreshold)
 					.SetString("timezoneCode", timezoneCode)
 					.SetDateTime("date", date)
@@ -396,7 +403,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			});
 		}
 
-		public IList LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod adherenceCalculationMethod, string timezoneCode, DateTime date, Percent adherenceThreshold, Guid businessUnitId)
+		public IList LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod adherenceCalculationMethod,
+			string timezoneCode, DateTime date, Percent adherenceThreshold, Guid businessUnitId, int? timeoutInSecond)
 		{
 			var reportSetting = new AdherenceReportSetting
 			{
@@ -405,11 +413,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			return repositoryActionWithRetry(uow =>
 			{
-				const string sql =
-				"exec [mart].[raptor_adherence_per_agent_by_date] @threshold=:threshold, @time_zone_code=:timezoneCode, @local_date=:date, @adherence_id=:adherenceId, @business_unit_code=:businessUnitId";
+				const string sql = "exec [mart].[raptor_adherence_per_agent_by_date] @threshold=:threshold, "
+								   + "@time_zone_code=:timezoneCode, @local_date=:date, @adherence_id=:adherenceId, "
+								   + "@business_unit_code=:businessUnitId";
 
-				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(sql)
-					.SetReadOnly(true)
+				var query = ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(sql);
+				if (timeoutInSecond != null)
+				{
+					query.SetTimeout(timeoutInSecond.Value);
+				}
+
+				return query.SetReadOnly(true)
 					.SetDouble("threshold", adherenceThreshold.Value)
 					.SetString("timezoneCode", timezoneCode)
 					.SetDateTime("date", date)
@@ -419,16 +433,22 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			});
 		}
 
-		public IList LoadAgentsUnderThresholdForAHT(string timezoneCode, DateTime date, TimeSpan aHTThreshold, Guid businessUnitId)
+		public IList LoadAgentsUnderThresholdForAHT(string timezoneCode, DateTime date, TimeSpan ahtThreshold,
+			Guid businessUnitId, int? timeoutInSecond)
 		{
 			return repositoryActionWithRetry(uow =>
 			{
-				const string sql =
-				"exec [mart].[raptor_AHT_per_agent_by_date] @threshold=:threshold, @time_zone_code=:timezoneCode, @local_date=:date, @business_unit_code=:businessUnitId";
+				const string sql = "exec [mart].[raptor_AHT_per_agent_by_date] @threshold=:threshold, "
+								   + "@time_zone_code=:timezoneCode, @local_date=:date, @business_unit_code=:businessUnitId";
 
-				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(sql)
-					.SetReadOnly(true)
-					.SetDouble("threshold", aHTThreshold.TotalSeconds)
+				var query = ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(sql);
+				if (timeoutInSecond != null)
+				{
+					query.SetTimeout(timeoutInSecond.Value);
+				}
+
+				return query.SetReadOnly(true)
+					.SetDouble("threshold", ahtThreshold.TotalSeconds)
 					.SetString("timezoneCode", timezoneCode)
 					.SetDateTime("date", date)
 					.SetGuid("businessUnitId", businessUnitId)
