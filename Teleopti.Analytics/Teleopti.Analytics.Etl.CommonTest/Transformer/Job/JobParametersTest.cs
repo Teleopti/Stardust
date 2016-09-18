@@ -99,7 +99,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job
 		[Test]
 		public void VerifyDatabaseTimeout()
 		{
-			Assert.AreEqual(60, _target.DatabaseTimeoutInSecond);
+			Assert.AreEqual(60, _target.DataSource);
 		}
 	}
 }
