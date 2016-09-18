@@ -38,7 +38,7 @@
 					  selected-period="seatplan.reportPeriod" selected-teams="seatplan.reportSelectedTeams"
 					  selected-locations="seatplan.reportSelectedLocations" seat-bookings-all="seatplan.seatBookingsAll"></seat-plan-report>
 
-	<seatmap-canvas occupancy date="seatplan.selectedDate" toggle="seatplan.showSeatmap()" ng-if="seatplan.isSeatMapBookingViewOpened"></seatmap-canvas>
+	<seatmap-canvas occupancy date="seatplan.selectedDate" toggle="seatplan.showSeatmap()" ng-if="!seatplan.isLoadingCalendar && seatplan.isSeatMapBookingViewOpened"></seatmap-canvas>
 
 	<div class="row" ng-show="!seatplan.isReportOpened && !seatplan.isSeatMapBookingViewOpened">
 
