@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Globalization;
 using Autofac;
 using Teleopti.Analytics.Etl.Common;
+using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer;
@@ -11,6 +12,8 @@ using Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 {
@@ -27,12 +30,6 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 		{
 			get
 			{
-				int databaseTimeoutInSecond;
-				if (!int.TryParse(ConfigurationManager.AppSettings["databaseTimeout"], out databaseTimeoutInSecond))
-				{
-					databaseTimeoutInSecond = 60;
-				}
-
 				var jobParameters = new JobParameters(
 					null, 1,
 					_baseConfiguration.TimeZoneCode,
@@ -40,16 +37,13 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Transformer
 					ConfigurationManager.AppSettings["cube"],
 					ConfigurationManager.AppSettings["pmInstallation"],
 					CultureInfo.CurrentCulture,
-					new IocContainerHolder(App.Container),
+					new IocContainerHolder(App.Container), 
 					_baseConfiguration.RunIndexMaintenance
-					)
-				{
-					DatabaseTimeoutInSecond = databaseTimeoutInSecond
-				};
+					);
 
 				_baseConfiguration.JobHelper = new JobHelper(
 					App.Container.Resolve<IAvailableBusinessUnitsProvider>(),
-					App.Container.Resolve<Tenants>(),
+					App.Container.Resolve<Tenants>(), 
 					App.Container.Resolve<IIndexMaintenanceRepository>(),
 					App.Container.Resolve<IMessageSender>());
 

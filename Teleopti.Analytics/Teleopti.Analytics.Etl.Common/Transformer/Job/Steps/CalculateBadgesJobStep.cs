@@ -2,6 +2,7 @@ using Autofac;
 using System.Collections.Generic;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Badge;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
@@ -26,8 +27,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 			{
 				if (isTeamGamificationSettingsAvailable.Satisfy())
 				{
-					var currentBusinessUnit = RaptorTransformerHelper.CurrentBusinessUnit.Id.GetValueOrDefault();
-					performBadgeCalculation.Calculate(currentBusinessUnit, _jobParameters.DatabaseTimeoutInSecond);
+					performBadgeCalculation.Calculate(RaptorTransformerHelper.CurrentBusinessUnit.Id.Value);
 				}
 				uow.PersistAll();
 			}

@@ -11,14 +11,17 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 {
 	public class JobParameters : IJobParameters
 	{
-		public JobParameters(IJobMultipleDate jobCategoryDates, int dataSource, string timeZone, int intervalLengthMinutes,
-			string cubeConnectionString, string pmInstall, CultureInfo currentCulture, IContainerHolder containerHolder,
-			bool runIndexMaintenance)
+		public JobParameters(
+			IJobMultipleDate jobCategoryDates, int dataSource, string timeZone,
+			int intervalLengthMinutes, string cubeConnectionString,
+			string pmInstall, CultureInfo currentCulture,
+			IContainerHolder containerHolder, bool runIndexMaintenance
+			)
 		{
 			DataSource = dataSource;
 			CurrentCulture = currentCulture;
 			DefaultTimeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZone);
-			IntervalsPerDay = 1440/intervalLengthMinutes;
+			IntervalsPerDay = 1440 / intervalLengthMinutes;
 			StateHolder = new CommonStateHolder(this);
 			JobCategoryDates = jobCategoryDates ?? new JobMultipleDate(DefaultTimeZone);
 			setOlapServerAndDatabase(cubeConnectionString);
@@ -28,12 +31,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 			ToggleManager = containerHolder.ToggleManager;
 			TenantLogonInfoLoader = containerHolder.TenantLogonInfoLoader;
 
+
 			RunIndexMaintenance = runIndexMaintenance;
-			DatabaseTimeoutInSecond = 60;
 		}
 
 		public IContainerHolder ContainerHolder { get; set; }
-		public int DatabaseTimeoutInSecond { get; set; }
 
 		public int DataSource { get; set; }
 
@@ -44,7 +46,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 			RunIndexMaintenance = baseConfiguration.RunIndexMaintenance;
 			CurrentCulture = CultureInfo.GetCultureInfo(baseConfiguration.CultureId.Value).FixPersianCulture();
 		}
-
 		public IJobHelper Helper { get; set; }
 
 		public TimeZoneInfo DefaultTimeZone { get; private set; }

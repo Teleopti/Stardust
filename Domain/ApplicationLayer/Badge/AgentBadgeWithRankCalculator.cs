@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 
 		public IEnumerable<IAgentBadgeWithRankTransaction> CalculateAdherenceBadges(IEnumerable<IPerson> allPersons,
 			string timezoneCode, DateOnly date, AdherenceReportSettingCalculationMethod adherenceCalculationMethod,
-			IGamificationSetting setting, Guid businessUnitId, int? timeoutInSecond = null)
+			IGamificationSetting setting, Guid businessUnitId)
 		{
 			if (logger.IsDebugEnabled)
 			{
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			var newAwardedBadges = new List<IAgentBadgeWithRankTransaction>();
 			var agentAdherenceList =
 				_statisticRepository.LoadAgentsOverThresholdForAdherence(adherenceCalculationMethod, timezoneCode, date.Date,
-					setting.AdherenceBronzeThreshold, businessUnitId, timeoutInSecond);
+					setting.AdherenceBronzeThreshold, businessUnitId);
 
 			if (agentAdherenceList.Count > 0)
 			{
@@ -256,7 +256,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 		}
 
 		public virtual IEnumerable<IAgentBadgeWithRankTransaction> CalculateAHTBadges(IEnumerable<IPerson> allPersons,
-			string timezoneCode, DateOnly date, IGamificationSetting setting, Guid businessUnitId, int? timeoutInSecond = null)
+			string timezoneCode, DateOnly date, IGamificationSetting setting, Guid businessUnitId)
 		{
 			if (logger.IsDebugEnabled)
 			{
@@ -300,8 +300,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			return newAwardedBadges;
 		}
 
-		public virtual IEnumerable<IAgentBadgeWithRankTransaction> CalculateAnsweredCallsBadges(IEnumerable<IPerson> allPersons,
-			string timezoneCode, DateOnly date, IGamificationSetting setting, Guid businessUnitId, int? timeoutInSecond = null)
+		public virtual IEnumerable<IAgentBadgeWithRankTransaction> CalculateAnsweredCallsBadges(
+			IEnumerable<IPerson> allPersons, string timezoneCode, DateOnly date, IGamificationSetting setting, Guid businessUnitId)
 		{
 			if (logger.IsDebugEnabled)
 			{

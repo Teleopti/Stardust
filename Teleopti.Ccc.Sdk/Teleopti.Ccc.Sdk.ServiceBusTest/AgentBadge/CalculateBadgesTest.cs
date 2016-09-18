@@ -60,16 +60,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			// Mock badge calculator
 			calculator = MockRepository.GenerateMock<IAgentBadgeCalculator>();
 			calculator.Stub(
-				x => x.CalculateAHTBadges(new List<IPerson>(), "", DateOnly.Today, new GamificationSetting("test"), _businessUnitId, null))
+				x => x.CalculateAHTBadges(new List<IPerson>(), "", DateOnly.Today, new GamificationSetting("test"), _businessUnitId))
 				.Return(new List<IAgentBadgeTransaction>()).IgnoreArguments();
 			calculator.Stub(x => x.CalculateAdherenceBadges(new List<IPerson>(), "", DateOnly.Today,
 				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime, new GamificationSetting("test"),
-				_businessUnitId, null))
+				_businessUnitId))
 				.Return(new List<IAgentBadgeTransaction>()).IgnoreArguments();
 			calculator.Stub(
 				x =>
 					x.CalculateAnsweredCallsBadges(new List<IPerson>(), "", DateOnly.Today, new GamificationSetting("test"),
-						_businessUnitId, null))
+						_businessUnitId))
 				.Return(new List<IAgentBadgeTransaction>()).IgnoreArguments();
 
 			// Mock badge with rank calculator
@@ -84,6 +84,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				x =>
 					x.CalculateAnsweredCallsBadges(new List<IPerson>(), "", DateOnly.Today, new GamificationSetting("test"),
 						_businessUnitId)).Return(new List<IAgentBadgeWithRankTransaction>()).IgnoreArguments();
+
+
 
 			etlJobChecker = MockRepository.GenerateMock<IRunningEtlJobChecker>();
 			etlJobChecker.Stub(x => x.NightlyEtlJobStillRunning()).Return(false);
@@ -142,6 +144,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			badgeWithRankCalculator.AssertWasCalled(
 				x => x.CalculateAnsweredCallsBadges(persons, "", DateOnly.Today, newSetting, _businessUnitId),
 				o => o.IgnoreArguments());
+
 		}
 
 		[Test]
@@ -183,17 +186,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			target.Calculate(message);
 
 			calculator.AssertWasNotCalled(
-				x => x.CalculateAHTBadges(persons, "", DateOnly.Today, deletedSetting, _businessUnitId, null),
+				x => x.CalculateAHTBadges(persons, "", DateOnly.Today, deletedSetting, _businessUnitId),
 				o => o.IgnoreArguments());
 
 			calculator.AssertWasNotCalled(
 				x => x.CalculateAdherenceBadges(persons, "", DateOnly.Today,
-					AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime, deletedSetting, _businessUnitId, null),
+					AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime, deletedSetting, _businessUnitId),
 				o => o.IgnoreArguments());
 
 			calculator.AssertWasNotCalled(
-				x => x.CalculateAnsweredCallsBadges(persons, "", DateOnly.Today, deletedSetting, _businessUnitId, null),
+				x => x.CalculateAnsweredCallsBadges(persons, "", DateOnly.Today, deletedSetting, _businessUnitId),
 				o => o.IgnoreArguments());
+
 		}
 
 		[Test]
@@ -222,15 +226,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			target.Calculate(message);
 
 			calculator.AssertWasNotCalled(
-				x => x.CalculateAHTBadges(new List<IPerson>(), "", DateOnly.Today, newSetting, _businessUnitId, null),
+				x => x.CalculateAHTBadges(new List<IPerson>(), "", DateOnly.Today, newSetting, _businessUnitId),
 				o => o.IgnoreArguments());
 			calculator.AssertWasNotCalled(
 				x => x.CalculateAdherenceBadges(new List<IPerson>(), "", DateOnly.Today,
-					AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime, newSetting, _businessUnitId, null),
+					AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime, newSetting, _businessUnitId),
 				o => o.IgnoreArguments());
 			calculator.AssertWasNotCalled(
-				x => x.CalculateAnsweredCallsBadges(new List<IPerson>(), "", DateOnly.Today, newSetting, _businessUnitId, null),
+				x => x.CalculateAnsweredCallsBadges(new List<IPerson>(), "", DateOnly.Today, newSetting, _businessUnitId),
 				o => o.IgnoreArguments());
+
+
 		}
 
 		[Test]
@@ -238,7 +244,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		{
 			var timezone = TimeZoneInfo.Utc;
 			var today = new DateTime(2014, 8, 8);
-
+			
 			now.Stub(x => x.UtcDateTime()).Return(today);
 			var newSetting = new GamificationSetting("test")
 			{
@@ -263,15 +269,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			target.Calculate(message);
 
 			calculator.AssertWasNotCalled(
-				x => x.CalculateAHTBadges(new List<IPerson>(), "", DateOnly.Today, newSetting, _businessUnitId, null),
+				x => x.CalculateAHTBadges(new List<IPerson>(), "", DateOnly.Today, newSetting, _businessUnitId),
 				o => o.IgnoreArguments());
 			calculator.AssertWasNotCalled(
 				x => x.CalculateAdherenceBadges(new List<IPerson>(), "", DateOnly.Today,
-					AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime, newSetting, _businessUnitId, null),
+					AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime, newSetting, _businessUnitId),
 				o => o.IgnoreArguments());
 			calculator.AssertWasNotCalled(
-				x => x.CalculateAnsweredCallsBadges(new List<IPerson>(), "", DateOnly.Today, newSetting, _businessUnitId, null),
+				x => x.CalculateAnsweredCallsBadges(new List<IPerson>(), "", DateOnly.Today, newSetting, _businessUnitId),
 				o => o.IgnoreArguments());
+
+
 		}
 	}
 }

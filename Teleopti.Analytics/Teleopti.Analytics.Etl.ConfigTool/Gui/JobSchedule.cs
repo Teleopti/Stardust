@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
 using Teleopti.Analytics.Etl.Common.Entity;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
@@ -23,7 +24,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 		private IEtlJobSchedule _etlJobSchedule;
 		private readonly IEtlJobSchedule _etlJobScheduleToEdit;
 		private readonly IJobScheduleRepository _repository;
-		private readonly int _databaseTimeoutInSecond;
+		private readonly string _connectionString;
 		private bool _isScheduleSettingsValid;
 		private bool _isOkButtonClicked;
 		private IJob _selectedJob;
@@ -31,16 +32,11 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 		private readonly IBaseConfiguration _baseConfiguration;
 		private readonly bool _selectDataSourceIsPossible;
 
-		public JobSchedule(IEtlJobSchedule etlJobSchedule, ObservableCollection<IEtlJobSchedule> observableCollection,
-			IBaseConfiguration baseConfiguration, bool selectDataSourceIsPossible)
+		public JobSchedule(IEtlJobSchedule etlJobSchedule, ObservableCollection<IEtlJobSchedule> observableCollection, IBaseConfiguration baseConfiguration, bool selectDataSourceIsPossible)
 		{
 			InitializeComponent();
-			var connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
-			_repository = new Repository(connectionString);
-			if (!int.TryParse(ConfigurationManager.AppSettings["databaseTimeout"], out _databaseTimeoutInSecond))
-			{
-				_databaseTimeoutInSecond = 60;
-			}
+			_connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
+			_repository = new Repository(_connectionString);
 			_observableCollection = observableCollection;
 			_baseConfiguration = baseConfiguration;
 			_selectDataSourceIsPossible = selectDataSourceIsPossible;
@@ -65,21 +61,19 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 
 		private void fillJobCombo()
 		{
-			var jobParameter = new JobParameters(
-				null, 1,
-				_baseConfiguration.TimeZoneCode,
-				_baseConfiguration.IntervalLength.Value,
-				ConfigurationManager.AppSettings["cube"],
-				ConfigurationManager.AppSettings["pmInstallation"],
-				CultureInfo.CurrentCulture,
-				new IocContainerHolder(App.Container),
-				_baseConfiguration.RunIndexMaintenance
-				)
-			{
-				DatabaseTimeoutInSecond = _databaseTimeoutInSecond
-			};
-
-			var jobCollection = new JobCollection(jobParameter);
+			var jobCollection =
+				 new JobCollection(
+					new JobParameters(
+						null, 1,
+						_baseConfiguration.TimeZoneCode,
+						_baseConfiguration.IntervalLength.Value,
+						ConfigurationManager.AppSettings["cube"],
+						ConfigurationManager.AppSettings["pmInstallation"],
+						CultureInfo.CurrentCulture,
+						new IocContainerHolder(App.Container), 
+						_baseConfiguration.RunIndexMaintenance
+						)
+					);
 			comboBoxJob.DataSource = jobCollection;
 			comboBoxJob.DisplayMember = "Name";
 			comboBoxJob.ValueMember = "Name";
@@ -150,7 +144,6 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 						else
 							radioButtonRelativePeriodInitial.Checked = true;
 						break;
-
 					case JobCategoryType.QueueStatistics:
 						numericUpDownRelativePeriodStartQueueStats.Value = relativePeriod.RelativePeriod.Minimum;
 						numericUpDownRelativePeriodEndQueueStats.Value = relativePeriod.RelativePeriod.Maximum;
@@ -159,7 +152,6 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 						else
 							radioButtonRelativePeriodQueueStats.Checked = true;
 						break;
-
 					case JobCategoryType.AgentStatistics:
 						numericUpDownRelativePeriodStartAgentStats.Value = relativePeriod.RelativePeriod.Minimum;
 						numericUpDownRelativePeriodEndAgentStats.Value = relativePeriod.RelativePeriod.Maximum;
@@ -168,7 +160,6 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 						else
 							radioButtonRelativePeriodAgentStats.Checked = true;
 						break;
-
 					case JobCategoryType.Schedule:
 						numericUpDownRelativePeriodStartSchedule.Value = relativePeriod.RelativePeriod.Minimum;
 						numericUpDownRelativePeriodEndSchedule.Value = relativePeriod.RelativePeriod.Maximum;
@@ -177,7 +168,6 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 						else
 							radioButtonRelativePeriodSchedule.Checked = true;
 						break;
-
 					case JobCategoryType.Forecast:
 						numericUpDownRelativePeriodStartForecast.Value = relativePeriod.RelativePeriod.Minimum;
 						numericUpDownRelativePeriodEndForecast.Value = relativePeriod.RelativePeriod.Maximum;
@@ -186,7 +176,6 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 						else
 							radioButtonRelativePeriodForecast.Checked = true;
 						break;
-
 					default:
 						break;
 				}
@@ -252,34 +241,27 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 				case "Initial":
 					initiateInitialLoadDatePeriod();
 					break;
-
 				case "Schedule":
 					initiateScheduleDatePeriod();
 					break;
-
 				case "Queue Statistics":
 					initiateQueueStatisticsDatePeriod();
 					break;
-
 				case "Forecast":
 					initiateForecastDatePeriod();
 					break;
-
 				case "Agent Statistics":
 					initiateAgentStatisticsDatePeriod();
 					break;
-
 				case "Intraday":
 					//					Do nothing, all date periods are remove from Intraday job
 					break;
-
 				case "Nightly":
 					initiateScheduleDatePeriod();
 					initiateQueueStatisticsDatePeriod();
 					initiateForecastDatePeriod();
 					initiateAgentStatisticsDatePeriod();
 					break;
-
 				default:
 					break;
 			}
@@ -345,6 +327,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 				}
 			}
 			else _selectedJob = null;
+
 		}
 
 		private void disableJobScheduleSave()
@@ -490,31 +473,26 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
 							minMaxRelativePeriod = new MinMax<int>((int)numericUpDownRelativePeriodStartInitial.Value,
 																				(int)numericUpDownRelativePeriodEndInitial.Value);
 						break;
-
 					case JobCategoryType.QueueStatistics:
 						if (radioButtonRelativePeriodQueueStats.Checked)
 							minMaxRelativePeriod = new MinMax<int>((int)numericUpDownRelativePeriodStartQueueStats.Value,
 																				(int)numericUpDownRelativePeriodEndQueueStats.Value);
 						break;
-
 					case JobCategoryType.AgentStatistics:
 						if (radioButtonRelativePeriodAgentStats.Checked)
 							minMaxRelativePeriod = new MinMax<int>((int)numericUpDownRelativePeriodStartAgentStats.Value,
 																				(int)numericUpDownRelativePeriodEndAgentStats.Value);
 						break;
-
 					case JobCategoryType.Schedule:
 						if (radioButtonRelativePeriodSchedule.Checked)
 							minMaxRelativePeriod = new MinMax<int>((int)numericUpDownRelativePeriodStartSchedule.Value,
 																				(int)numericUpDownRelativePeriodEndSchedule.Value);
 						break;
-
 					case JobCategoryType.Forecast:
 						if (radioButtonRelativePeriodForecast.Checked)
 							minMaxRelativePeriod = new MinMax<int>((int)numericUpDownRelativePeriodStartForecast.Value,
 																				(int)numericUpDownRelativePeriodEndForecast.Value);
 						break;
-
 					default:
 						minMaxRelativePeriod = new MinMax<int>(int.MinValue, int.MaxValue);
 						break;
