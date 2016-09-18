@@ -10,6 +10,7 @@ Background:
 	And there is a role with
 	| Field        | Value                 |
 	| Name         | Full access to mytime |
+	| AccessToSite | The site              |
 	| AccessToTeam | Other team            |
 	And there is a workflow control set with
 	| Field                            | Value                                     |
@@ -320,6 +321,7 @@ Scenario: Show my full day absence
 	| Start time	| 08:00 |
 	| End time		| 16:00 |
 
+@OnlyRunIfDisabled('MyTimeWeb_ShiftTradeFilterSite_40374')
 Scenario: Default to my team
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -346,6 +348,7 @@ Scenario: Default to my team
 	And I should see a possible schedule trade with 'OtherAgent'
 	And I should not see a possible schedule trade with 'OtherAgentNotInMyTeam'
 
+@OnlyRunIfDisabled('MyTimeWeb_ShiftTradeFilterSite_40374')
 Scenario: Change team
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -367,6 +370,7 @@ Scenario: Change team
 	Then the option 'The site/Other team' should be selected
 	And I should see a possible schedule trade with 'OtherAgentNotInMyTeam'
 
+@OnlyRunIfDisabled('MyTimeWeb_ShiftTradeFilterSite_40374')
 Scenario: Change date and keep selected team
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'

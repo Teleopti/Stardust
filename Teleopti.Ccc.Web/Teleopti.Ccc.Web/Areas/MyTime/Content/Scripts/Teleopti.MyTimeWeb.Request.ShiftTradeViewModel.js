@@ -680,6 +680,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 				if (!data) {
 					self.mySiteId(undefined);
 					self.missingMySite(true);
+					self.missingMyTeam(true);
 					self.IsLoading(false);
 					self.isReadyLoaded(true);
 					return;
