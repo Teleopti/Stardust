@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
@@ -11,11 +10,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 	{
 		private readonly INonoverwritableLayerChecker _nonoverwritableLayerChecker;
 		private readonly IScheduleDayProvider _scheduleDayProvider;
+		private readonly IScheduleProjectionHelper _projectionHelper;
 
-		public NonoverwritableLayerMovabilityChecker(INonoverwritableLayerChecker nonoverwritableLayerChecker, IScheduleDayProvider scheduleDayProvider)
+		public NonoverwritableLayerMovabilityChecker(INonoverwritableLayerChecker nonoverwritableLayerChecker, IScheduleDayProvider scheduleDayProvider, IScheduleProjectionHelper projectionHelper)
 		{
 			_nonoverwritableLayerChecker = nonoverwritableLayerChecker;
 			_scheduleDayProvider = scheduleDayProvider;
+			_projectionHelper = projectionHelper;
 		}
 
 		public bool HasNonoverwritableLayer(IScheduleDay scheduleDay, DateTimePeriod period, IActivity activity)
@@ -66,32 +67,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				return (activityLayer != null && l.Period.Intersect(newPeriod) && !activityLayer.AllowOverwrite);
 			}).ToList();
 
-			return conflictVisualLayers.SelectMany(l => getMatchedMainShiftLayers(scheduleDay, l)).ToList();
+			return conflictVisualLayers.SelectMany(l => _projectionHelper.GetMatchedMainShiftLayers(scheduleDay, l)).ToList();
 		}
 
 		public IList<IShiftLayer> GetNonoverwritableLayersToMove(IPerson person, DateOnly date, DateTimePeriod newPeriod)
 		{
 			var scheduleDay = _scheduleDayProvider.GetScheduleDay(date, person);
 			return GetNonoverwritableLayersToMove(scheduleDay, newPeriod);
-		}
-
-		private IList<IShiftLayer> getMatchedMainShiftLayers(IScheduleDay scheduleDay, IVisualLayer layer)
-		{
-			var matchedLayers = new List<IShiftLayer>();
-			var personAssignment = scheduleDay.PersonAssignment();
-			var shiftLayersList = new List<IShiftLayer>();
-			if (personAssignment != null && personAssignment.ShiftLayers.Any())
-			{
-				shiftLayersList = personAssignment.ShiftLayers.ToList();
-			}
-			foreach (var shiftLayer in shiftLayersList)
-			{
-				if (layer.Payload.Id.GetValueOrDefault() == shiftLayer.Payload.Id.GetValueOrDefault() && (layer.Period.Contains(shiftLayer.Period) || shiftLayer.Period.Contains(layer.Period)))
-				{
-					matchedLayers.Add(shiftLayer);
-				}
-			}
-			return matchedLayers;
 		}
 	}
 }

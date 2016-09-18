@@ -36,8 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.IoC
 			builder.RegisterType<TeamScheduleCommandHandlingProvider>().As<ITeamScheduleCommandHandlingProvider>().SingleInstance();
 			builder.RegisterType<SearchTermParser>().As<ISearchTermParser>().SingleInstance();
 			builder.RegisterType<ScheduleValidationProvider>().As<IScheduleValidationProvider>().SingleInstance();
-
-
+			builder.RegisterType<ProjectionSplitter>().As<IProjectionSplitter>().SingleInstance();
 		}
 	}
 }

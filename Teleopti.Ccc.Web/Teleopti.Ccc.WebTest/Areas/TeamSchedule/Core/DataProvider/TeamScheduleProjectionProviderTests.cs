@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			fakeGlobalSettingRepo.PersistSettingValue("CommonNameDescription", new CommonNameDescriptionSetting("{FirstName}{LastName}"));
 			_commonAgentNameProvider = new CommonAgentNameProvider(fakeGlobalSettingRepo);
 			_toggleManager = new FakeToggleManager();
-			target = new TeamScheduleProjectionProvider(projectionProvider, loggonUser, new FakePersonNameProvider(), _toggleManager);
+			target = new TeamScheduleProjectionProvider(projectionProvider, loggonUser, new FakePersonNameProvider(), _toggleManager, new ScheduleProjectionHelper(), new ProjectionSplitter(projectionProvider, new ScheduleProjectionHelper()));
 		}
 
 		[Test]

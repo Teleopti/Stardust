@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Castle.Core.Internal;
-using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -22,13 +21,17 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IPersonNameProvider _personNameProvider;
 		private readonly IToggleManager _toggleManager;
+		private readonly IScheduleProjectionHelper _projectionHelper;
+		private readonly IProjectionSplitter _projectionSplitter;
 
-		public TeamScheduleProjectionProvider(IProjectionProvider projectionProvider, ILoggedOnUser loggedOnUser, IPersonNameProvider personNameProvider, IToggleManager toggleManager)
+		public TeamScheduleProjectionProvider(IProjectionProvider projectionProvider, ILoggedOnUser loggedOnUser, IPersonNameProvider personNameProvider, IToggleManager toggleManager, IScheduleProjectionHelper projectionHelper, IProjectionSplitter projectionSplitter)
 		{
 			_projectionProvider = projectionProvider;
 			_loggedOnUser = loggedOnUser;
 			_personNameProvider = personNameProvider;
 			_toggleManager = toggleManager;
+			_projectionHelper = projectionHelper;
+			_projectionSplitter = projectionSplitter;
 		}
 
 		public GroupScheduleShiftViewModel Projection(IScheduleDay scheduleDay, bool canViewConfidential, ICommonNameDescriptionSetting agentNameSetting)
@@ -83,16 +86,18 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 							? ConfidentialPayloadValues.Description
 							: ((IAbsence) layer.Payload).Description)
 						: layer.DisplayDescription();
-					if (_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_MakePersonalActivityUnmerged_40252) && getMatchedShiftLayers(scheduleDay, layer).Count > 1 && getMatchedPersonalShiftLayers(scheduleDay, layer).Count > 0)
+					if (_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_MakePersonalActivityUnmerged_40252) 
+						&& _projectionHelper.GetMatchedShiftLayerIds(scheduleDay, layer).Count > 1 
+						&& _projectionHelper.GetMatchedPersonalShiftLayers(scheduleDay, layer).Count > 0)
 					{
-						projections.AddRange(splitMergedPersonalLayers(scheduleDay, layer, userTimeZone));
+						projections.AddRange(_projectionSplitter.SplitMergedPersonalLayers(scheduleDay, layer, userTimeZone));
 					}
 					else
 					{
 						projections.Add(new GroupScheduleProjectionViewModel
 						{
-							ParentPersonAbsences = isPayloadAbsence ? getMatchedAbsenceLayers(scheduleDay, layer).ToArray() : null,
-							ShiftLayerIds = isMainShiftLayer ? getMatchedShiftLayers(scheduleDay, layer).ToArray() : null,
+							ParentPersonAbsences = isPayloadAbsence ? _projectionHelper.GetMatchedAbsenceLayers(scheduleDay, layer).ToArray() : null,
+							ShiftLayerIds = isMainShiftLayer ? _projectionHelper.GetMatchedShiftLayerIds(scheduleDay, layer).ToArray() : null,
 							Description = description.Name,
 							Color = isPayloadAbsence
 							? (isAbsenceConfidential && !canViewConfidential
@@ -111,9 +116,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			scheduleVm.Projection = projections;
 			return scheduleVm;
 		}
-
-		
-
 		public AgentInTeamScheduleViewModel MakeScheduleReadModel(IPerson person, IScheduleDay scheduleDay, bool isPermittedToViewConfidential)
 		{
 			var ret = new AgentInTeamScheduleViewModel
@@ -221,46 +223,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			}
 			return false;
 		}
-		private IList<GroupScheduleProjectionViewModel> splitMergedPersonalLayers(IScheduleDay scheduleDay, IVisualLayer layer, TimeZoneInfo userTimeZone)
-		{
-			var splittedVisualLayers = new List<GroupScheduleProjectionViewModel>();
-			var unMergedCollection = _projectionProvider.UnmergedProjection(scheduleDay);
-			var splittedLayers = unMergedCollection.Where(l => layer.Period.Contains(l.Period)).ToList();
-
-			splittedLayers.ForEach(l =>
-			{
-				splittedVisualLayers.Add(new GroupScheduleProjectionViewModel
-				{
-					ShiftLayerIds = new[] { getMatchedShiftLayers(scheduleDay, l).Last() },
-					Description = layer.DisplayDescription().Name,
-					Color = layer.DisplayColor().ToHtml(),
-					Start = TimeZoneInfo.ConvertTimeFromUtc(l.Period.StartDateTime, userTimeZone).ToFixedDateTimeFormat(),
-					Minutes = (int)l.Period.ElapsedTime().TotalMinutes
-				});
-			});
-			return splittedVisualLayers;
-		}
-
-		private IList<IPersonalShiftLayer> getMatchedPersonalShiftLayers(IScheduleDay scheduleDay, IVisualLayer layer)
-		{
-			var matchedLayers = new List<IPersonalShiftLayer>();
-			var personAssignment = scheduleDay.PersonAssignment();
-			var shiftLayersList = new List<IShiftLayer>();
-			if (personAssignment != null && personAssignment.ShiftLayers.Any())
-			{
-				shiftLayersList = personAssignment.ShiftLayers.ToList();
-			}
-			foreach (var shiftLayer in shiftLayersList)
-			{
-				var isPersonalLayer = shiftLayer is IPersonalShiftLayer;
-				if (layer.Payload.Id.GetValueOrDefault() == shiftLayer.Payload.Id.GetValueOrDefault() && (layer.Period.Intersect(shiftLayer.Period)) && isPersonalLayer)
-				{
-					matchedLayers.Add(shiftLayer as IPersonalShiftLayer);
-				}
-			}
-			return matchedLayers;
-		}
-
 		private ShiftCategoryViewModel getShiftCategoryDescription(IScheduleDay scheduleDay)
 		{
 			var significantPart = scheduleDay.SignificantPart();
@@ -276,46 +238,5 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			}
 			return null;
 		}
-		private IList<Guid> getMatchedShiftLayers(IScheduleDay scheduleDay, IVisualLayer layer)
-		{
-			var matchedLayerIds = new List<Guid>();
-			var personAssignment = scheduleDay.PersonAssignment();
-			var shiftLayersList = new List<IShiftLayer>();
-			if (personAssignment != null && personAssignment.ShiftLayers.Any())
-			{
-				shiftLayersList = personAssignment.ShiftLayers.ToList();
-			}
-			foreach (var shiftLayer in shiftLayersList)
-			{
-				if (layer.Payload.Id.GetValueOrDefault() == shiftLayer.Payload.Id.GetValueOrDefault() && layer.Period.Intersect(shiftLayer.Period))
-				{
-					matchedLayerIds.Add(shiftLayer.Id.GetValueOrDefault());
-				}
-			}
-			return matchedLayerIds;
-		}
-		private IList<Guid> getMatchedAbsenceLayers(IScheduleDay scheduleDay, IVisualLayer layer)
-		{
-			var matchedLayerIds = new List<Guid>();
-			var personAbsences = scheduleDay.PersonAbsenceCollection().ToList();
-
-			foreach (var personAbs in personAbsences)
-			{
-				if (layer.Payload.Id.GetValueOrDefault() == personAbs.Layer.Payload.Id.GetValueOrDefault() && (layer.Period.Contains(personAbs.Period) || personAbs.Period.Contains(layer.Period)))
-				{
-					matchedLayerIds.Add(personAbs.Id.GetValueOrDefault());
-				}
-			}
-			return matchedLayerIds;
-		}
-	}
-
-	public interface ITeamScheduleProjectionProvider
-	{
-		GroupScheduleShiftViewModel Projection(IScheduleDay scheduleDay, bool canViewConfidential, ICommonNameDescriptionSetting agentNameSetting);
-		AgentInTeamScheduleViewModel MakeScheduleReadModel(IPerson person, IScheduleDay scheduleDay, bool isPermittedToViewConfidential);
-
-		bool IsFullDayAbsence(IScheduleDay scheduleDay);
-		bool IsOvertimeOnDayOff(IScheduleDay scheduleDay);
 	}
 }
