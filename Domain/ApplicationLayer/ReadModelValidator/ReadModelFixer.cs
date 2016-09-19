@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using System.Reflection;
+using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
@@ -16,6 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 		private readonly IPersonAssignmentRepository _personAssignmentRepository;
 		private readonly IPersonScheduleDayReadModelPersister _personScheduleDayReadModelPersister;
 		private readonly IScheduleDayReadModelRepository _scheduleDayReadModelRepository;
+		private readonly ILog logger = LogManager.GetLogger(typeof(ScheduleProjectionReadOnlyUpdaterBase));
 
 		public ReadModelFixer(IProjectionVersionPersister projectionVersionPersister, IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister, ICurrentScenario currentScenario, IPersonAssignmentRepository personAssignmentRepository, IPersonScheduleDayReadModelPersister personScheduleDayReadModelPersister, IScheduleDayReadModelRepository scheduleDayReadModelRepository)
 		{
@@ -32,8 +35,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 			var version =
 				_projectionVersionPersister.LockAndGetVersions(data.PersonId,data.Date, data.Date).FirstOrDefault()?.Version;
 
-			_scheduleProjectionReadOnlyPersister.BeginAddingSchedule(data.Date,_currentScenario.Current().Id.GetValueOrDefault(),
-				data.PersonId,version ?? 0);		
+			try
+			{
+				_scheduleProjectionReadOnlyPersister.BeginAddingSchedule(data.Date, _currentScenario.Current().Id.GetValueOrDefault(),
+				data.PersonId, version ?? 0);
+			}
+			catch (TargetInvocationException exception)
+			{
+				logger.Error("Cannot add Schedule!", exception);
+			}		
 
 			data.ScheduleProjectionReadOnly.ForEach(_scheduleProjectionReadOnlyPersister.AddActivity);
 		}

@@ -1,4 +1,6 @@
-﻿using Teleopti.Ccc.Domain.Aop;
+﻿using System.Reflection;
+using log4net;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
@@ -49,6 +51,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 	{
 		private readonly IScheduleProjectionReadOnlyPersister _scheduleProjectionReadOnlyPersister;
 		private readonly IEventPublisher _eventPublisher;
+		private readonly ILog logger = LogManager.GetLogger(typeof(ScheduleProjectionReadOnlyUpdaterBase));
 
 		public ScheduleProjectionReadOnlyUpdaterBase(IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister, IEventPublisher eventPublisher)
 		{
@@ -74,14 +77,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			{
 				var date = new DateOnly(scheduleDay.Date);
 
-				var add = @event.IsInitialLoad ||
+				try
+				{
+					var add = @event.IsInitialLoad ||
 						  _scheduleProjectionReadOnlyPersister.BeginAddingSchedule(
 							  date,
 							  @event.ScenarioId,
 							  @event.PersonId,
 							  scheduleDay.Version);
 
-				if (!add) continue;
+					if (!add) continue;
+				}
+				catch (TargetInvocationException exception)
+				{
+					logger.Error("Cannot add Schedule!", exception);
+				}
+				
 				if (scheduleDay.Shift == null) continue;
 
 				foreach (var layer in scheduleDay.Shift.Layers)
