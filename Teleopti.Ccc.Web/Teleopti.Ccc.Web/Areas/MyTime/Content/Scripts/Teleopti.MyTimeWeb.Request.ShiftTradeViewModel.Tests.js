@@ -644,11 +644,23 @@ $(document).ready(function () {
 
 	test("should not load team when there is no selected team", function() {
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
+		viewModel.dateChanged(false);
 
 		viewModel.selectedSite("site1");
 
 		equal(viewModel.selectedSiteInternal(), "site1");
 		equal(viewModel.selectedTeamInternal(), null);
+	});
+
+	test("should not reload team when date changed", function () {
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
+		viewModel.dateChanged(true);
+		viewModel.selectedTeamInternal("myTeam");
+
+		viewModel.selectedSite("site1");
+
+		equal(viewModel.selectedSiteInternal(), "site1");
+		equal(viewModel.selectedTeamInternal(), "myTeam");
 	});
 
 	test("should load team when there is a selected team", function () {

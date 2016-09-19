@@ -393,12 +393,14 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		}
 	};
 
+	self.dateChanged = ko.observable(false);
 	self.requestedDate = ko.computed({
 		read: function () {
 			return self.requestedDateInternal();
 		},
 		write: function (value) {
 			if (self.requestedDateInternal().diff(value) === 0) return;
+			self.dateChanged(true);
 			self.prepareLoad();
 			self.requestedDateInternal(value);
 
@@ -486,6 +488,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 			complete: function () {
 				self.IsLoading(false);
 				self.isReadyLoaded(true);
+				self.dateChanged(false);
 				if (self.refocusToNameSearch !== null) {
 					self.refocusToNameSearch();
 					self.refocusToNameSearch = null;
@@ -520,7 +523,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		},
 		write: function (siteId) {
 			self.selectedSiteInternal(siteId);
-			if (self.selectedTeam() != null) {
+			if (self.selectedTeam() != null && !self.dateChanged()) {
 				self.selectedTeamInternal(self.allTeamsId);
 				self.loadTeamsUnderSite(siteId);
 			}
