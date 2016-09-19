@@ -166,10 +166,18 @@
         place: function () {
             var sourceItem = this.component ? this.component : this.element;
             var offset = sourceItem.offset();
-            this.picker.css({
-                top: offset.top + this.height,
-                left: offset.left
-            });
+            console.log(this);
+            if (this.calendarPlacement == 'left') {
+                this.picker.css({
+                    top: offset.top + this.height,
+                    left: offset.left + sourceItem[0].offsetWidth - sourceItem[0].parentElement.parentElement.offsetWidth
+                });
+            } else {
+                this.picker.css({
+                    top: offset.top + this.height,
+                    left: offset.left
+                });
+            }
         },
         lastValue: null,
         triggerChangeDate: function () {

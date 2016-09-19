@@ -287,7 +287,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			}
 		};
 
-		self.hideOldRequests = ko.observable(true);
+		self.hideOldRequests = ko.observable("true");
 		self.hideOldRequests.subscribe(function () {
 		    self.Requests([]);
 		    self.pages = 0;
@@ -418,7 +418,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		    pageViewModel.LoadPage();
 		    setTimeout(function () {
 		        $(window).scroll(_loadAPageIfRequired);
-		    }, 1000);
+		    }, 100);
 		}
 	}
 
