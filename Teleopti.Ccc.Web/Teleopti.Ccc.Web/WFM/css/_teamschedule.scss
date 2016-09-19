@@ -230,16 +230,10 @@
 			thead tr.weekview-thead{
 				th{
 					font-weight: bold;
-					padding-left: 5px;
-					padding-right: 5px;
+					padding: 0 10px;
 					border-left: 1px solid $gray012;
 					border-right: 1px solid $gray012;
 				}
-
-			}
-
-			.date-header {
-				padding: 0 4px;
 			}
 
 			tr.weekview-tr{
