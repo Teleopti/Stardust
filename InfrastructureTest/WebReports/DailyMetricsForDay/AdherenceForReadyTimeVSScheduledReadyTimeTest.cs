@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 {
-	[TestFixture]
+	[TestFixture, Category("LongRunning")]
 	public class AdherenceForReadyTimeVsScheduledReadyTimeTest : WebReportTest
 	{
 		private const int scheduledReadyTimeOneMinutes = 1;

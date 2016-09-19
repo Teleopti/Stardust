@@ -7,7 +7,7 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 
 namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 {
-	[TestFixture]
+	[TestFixture, Category("LongRunning")]
 	public class AverageHandlingTimeTest : WebReportTest
 	{
 		private const int talkTimeQueueOne = 50;

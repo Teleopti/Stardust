@@ -6,7 +6,7 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 
 namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 {
-	[TestFixture]
+	[TestFixture, Category("LongRunning")]
 	public class AnsweredCallsTest : WebReportTest
 	{
 		private int answeredCalls;

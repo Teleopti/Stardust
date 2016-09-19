@@ -8,7 +8,7 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 
 namespace Teleopti.Ccc.InfrastructureTest.WebReports.DetailedAdherenceForDay
 {
-	[TestFixture]
+	[TestFixture, Category("LongRunning")]
 	public class ShiftDateForDateTest : WebReportTest
 	{
 		private const int scheduledReadyTimeOneMinutes = 1;

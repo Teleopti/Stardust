@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 {
-	[TestFixture]
+	[TestFixture, Category("LongRunning")]
 	public class ReadyTimePerScheduledReadyTimeTest : WebReportTest
 	{
 		private const int readyTimeIntervalOne = 50;

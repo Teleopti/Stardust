@@ -15,8 +15,8 @@ using Scenario = Teleopti.Ccc.TestCommon.TestData.Analytics.Scenario;
 
 namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 {
-    [TestFixture]
-    public abstract class WebReportTest : DatabaseTest
+	[TestFixture, Category("LongRunning")]
+	public abstract class WebReportTest : DatabaseTest
     {
         private AnalyticsDataFactory _analyticsDataFactory;
         private IPerson _loggedOnUser;
