@@ -10,6 +10,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	{
 		const string notifyTextSelector = "#noty_bottom_layout_container .noty_bar .noty_message .noty_text";
 
+		[When(@"I wait until week schedule is fully loaded")]
+		public void WhenIWaitUntilWeekScheduleIsFullyLoaded()
+		{
+			Browser.Interactions.AssertUrlContains("MyTime#Schedule/Week");
+			var jsCode = "return $('#loaded:visible').length == 0";
+			Browser.Interactions.AssertJavascriptResultContains(jsCode, "True");
+		}
+
 		[When(@"An activity with time '(.*)' to '(.*)' is added to my schedule")]
 		public void WhenAnActivityWithTimeToIsAddedToMySchedule(string startTime, string endTime)
 		{
@@ -27,9 +35,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should see one notify message")]
 		public void ThenIShouldSeeAnAlert()
 		{
-			var jsCode = string.Format("return $('{0}').length === 1", notifyTextSelector);
-			Browser.Interactions.AssertJavascriptResultContains(jsCode, "True");
+			//var jsCode = string.Format("return $('{0}').length === 1", notifyTextSelector);
+			//Browser.Interactions.AssertJavascriptResultContains(jsCode, "True");
+
+			Browser.Interactions.AssertExists(notifyTextSelector);
 		}
+
 		[Then(@"I should see a notify message contains text (.*)")]
 		public void ThenIShouldSeeANotifyMessageContainsText(string content)
 		{
@@ -37,6 +48,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			Browser.Interactions.AssertExistsUsingJQuery(selector);
 		}
 
+		[When(@"I should not see any notify")]
 		[Then(@"I should not see any notify")]
 		public void ThenIShouldNotSeeAnyNotify()
 		{
