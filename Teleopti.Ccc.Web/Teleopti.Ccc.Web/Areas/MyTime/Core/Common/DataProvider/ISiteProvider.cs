@@ -9,8 +9,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 	{
 		IEnumerable<ISite> GetPermittedSites(DateOnly date, string functionPath);
 
-		IEnumerable<Guid> GetTeamIdsUnderSite(Guid siteId);
-
 		IEnumerable<ITeam> GetTeamsUnderSite(Guid siteId);
 	}
 }

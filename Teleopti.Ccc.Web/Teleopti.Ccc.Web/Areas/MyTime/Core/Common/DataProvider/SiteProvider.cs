@@ -29,13 +29,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 					  select t).ToArray();
 		}
 
-		public IEnumerable<Guid> GetTeamIdsUnderSite(Guid siteId)
-		{
-			var teams = _teamRepository.FindTeamsForSite(siteId);
-
-			return teams.Select(team => team.Id.Value).ToList();
-		} 
-
 		public IEnumerable<ITeam> GetTeamsUnderSite(Guid siteId)
 		{
 			return _teamRepository.FindTeamsForSite(siteId);

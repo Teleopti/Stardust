@@ -41,31 +41,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 		}
 
 		[Test]
-		public void ShouldGetAllTeamIdsOfTwoSites()
-		{
-			var siteId1 = Guid.NewGuid();
-			var siteId2 = Guid.NewGuid();
-
-			var teamId1 = Guid.NewGuid();
-			var teamId2 = Guid.NewGuid();
-			var teamId3 = Guid.NewGuid();
-			var teamId4 = Guid.NewGuid();
-
-			var siteIds = new List<Guid>() {siteId1, siteId2};
-
-			_siteProvider.Stub(x => x.GetTeamIdsUnderSite(siteId1)).Return(new List<Guid> {teamId1, teamId2});
-			_siteProvider.Stub(x => x.GetTeamIdsUnderSite(siteId2)).Return(new List<Guid> {teamId3, teamId4});
-
-			var target = new SiteViewModelFactory(_siteProvider);
-
-			var result = target.GetTeamIds(siteIds);
-			result.ToList()[0].Should().Be.EqualTo(teamId1);
-			result.ToList()[1].Should().Be.EqualTo(teamId2);
-			result.ToList()[2].Should().Be.EqualTo(teamId3);
-			result.ToList()[3].Should().Be.EqualTo(teamId4);
-		}
-
-		[Test]
 		public void ShouldGetTeamsUnderGivenSites()
 		{
 			var siteId1 = Guid.NewGuid();

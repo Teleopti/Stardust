@@ -159,19 +159,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldGetTeamIdsWithGivenSiteIds()
-		{
-			var expectedResult = new List<Guid> {new Guid()};
-			var viewModelFactory = MockRepository.GenerateMock<ISiteViewModelFactory>();
-			viewModelFactory.Stub(x => x.GetTeamIds(new List<Guid> {new Guid()})).IgnoreArguments().Return(expectedResult);
-
-			var target = new TeamController(null, null, viewModelFactory);
-			var result = target.GetTeamIds("00000000-0000-0000-0000-000000000000");
-
-			result.Data.Should().Be.EqualTo(expectedResult);
-		}
-
-		[Test]
 		public void ShouldGetTeamsUnderGivenSite()
 		{
 			var expectedId = Guid.NewGuid();
