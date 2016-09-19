@@ -53,6 +53,7 @@
     "grunt-iisexpress": "0.4.0",
     "grunt-karma": "0.10.1",
     "grunt-msbuild": "0.3.4",
+    "grunt-newer": "1.2.0",
     "grunt-processhtml": "0.3.8",
     "grunt-sass": "1.1.0",
     "jasmine-core": "2.2.0",
