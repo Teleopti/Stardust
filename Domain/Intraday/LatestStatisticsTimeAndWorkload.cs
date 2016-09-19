@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 {
 	public class LatestStatisticsTimeAndWorkload
 	{
-		public int? LatestStatisticsIntervalId { get; set; }
+		public int? LatestStatisticsStartTime { get; set; }
 		public IList<SkillWorkload> ActualWorkloadInSecondsPerSkill { get; set; }
 	}
 
@@ -15,5 +15,4 @@ namespace Teleopti.Ccc.Domain.Intraday
 		public double WorkloadInSeconds { get; set; }
 		public DateTime StartTime { get; set; }
 	}
-
 }

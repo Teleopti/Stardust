@@ -7,7 +7,7 @@ GO
 -- Create date: 2016-09-05
 -- Description:	Get the workload (offered calls * handle time) in seconds for the given day. 
 -- =============================================
--- EXEC [mart].[web_intraday_workload_in_seconds] 'W. Europe Standard Time', '2016-09-06', 'F08D75B3-FDB4-484A-AE4C-9F0800E2F753'
+-- EXEC [mart].[web_intraday_workload_in_seconds] 'W. Europe Standard Time', '2016-09-19', 'F08D75B3-FDB4-484A-AE4C-9F0800E2F753,48D3423F-D044-45F0-8C5B-A0A200F2F3C0'
 CREATE PROCEDURE [mart].[web_intraday_workload_in_seconds]
 @time_zone_code nvarchar(100),
 @today smalldatetime,
@@ -22,8 +22,12 @@ BEGIN
 	DECLARE @bu_id int
 	
 	CREATE TABLE #skills(id uniqueidentifier)	
-	CREATE TABLE #queues(queue_id int)	
+	CREATE TABLE #queues(
+		skill_code uniqueidentifier,
+		queue_id int
+		)
 	CREATE TABLE #queue_stats(
+		skill_code uniqueidentifier,
 		date_id int, 
 		utc_interval_id smallint,
 		workload_seconds int
@@ -47,7 +51,9 @@ BEGIN
 		AND default_scenario = 1
                          
 	INSERT INTO #queues
-	SELECT DISTINCT qw.queue_id 
+	SELECT 
+		ds.skill_code,
+		qw.queue_id 
 	FROM mart.bridge_queue_workload qw
 	INNER JOIN mart.dim_skill ds ON qw.skill_id = ds.skill_id
 	INNER JOIN #skills s ON ds.skill_code = s.id
@@ -58,6 +64,7 @@ BEGIN
 
 	INSERT INTO #queue_stats
 	SELECT
+		skill_code = q.skill_code,
 		date_id = fq.date_id,
 		utc_interval_id = interval_id,
 		workload_seconds = ISNULL(fq.handle_time_s, 0)
@@ -70,8 +77,9 @@ BEGIN
 		AND offered_calls > 0
 	
 	SELECT
-		CONVERT(INT, MAX(i.interval_id)) AS LatestStatisticsIntervalId,
-		SUM(qs.workload_seconds) AS ActualworkloadInSeconds
+		qs.skill_code AS SkillId,
+		DATEADD(mi, DATEDIFF(MINUTE, DATEADD(DAY, DATEDIFF(DAY, 0, i.interval_start), 0), i.interval_start), d.date_date) AS StartTime,
+		SUM(qs.workload_seconds) AS WorkloadInSeconds
 	FROM
 		#queue_stats qs
 		INNER JOIN mart.bridge_time_zone bz ON qs.date_id = bz.date_id AND qs.utc_interval_id = bz.interval_id
@@ -80,6 +88,10 @@ BEGIN
 	WHERE
 		bz.time_zone_id = @time_zone_id 
 		AND d.date_date = @today
+	GROUP BY
+		qs.skill_code,
+		d.date_date,
+		i.interval_start
 END
 
 GO

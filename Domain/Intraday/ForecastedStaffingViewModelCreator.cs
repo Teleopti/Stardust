@@ -34,11 +34,11 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var minutesPerInterval = _intervalLengthFetcher.IntervalLength;
 			var usersNow = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
 			var usersToday = new DateOnly(usersNow);
-			var latestStatisticsTimeAndWorkload = _intradayQueueStatisticsLoader.LoadActualWorkloadInSeconds(skillIdList, _timeZone.TimeZone(), usersToday);
+			var actualWorkloadPerSkillInterval = _intradayQueueStatisticsLoader.LoadActualWorkloadInSeconds(skillIdList, _timeZone.TimeZone(), usersToday);
 			DateTime? latestStatsTime = null;
 
-			if (latestStatisticsTimeAndWorkload.LatestStatisticsIntervalId.HasValue)
-				latestStatsTime = usersNow.Date.AddMinutes(latestStatisticsTimeAndWorkload.LatestStatisticsIntervalId.Value*minutesPerInterval);
+			if (actualWorkloadPerSkillInterval.Count > 0)
+				latestStatsTime = actualWorkloadPerSkillInterval.Max(d => d.StartTime);
 
 			var forecastedStaffingModel = _forecastedStaffingProvider.Load(skillIdList, latestStatsTime, minutesPerInterval);
 
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			var updatedForecastedSeries = getUpdatedForecastedStaffing(
 				staffingForUsersToday,
-				latestStatisticsTimeAndWorkload.ActualWorkloadInSecondsPerSkill, 
+				actualWorkloadPerSkillInterval, 
 				forecastedStaffingModel.WorkloadInSecondsPerSkill,
 				latestStatsTime, 
 				usersNow, 

@@ -13,24 +13,24 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
 	public class IntradayQueueStatisticsLoader : IIntradayQueueStatisticsLoader
 	{
-		public LatestStatisticsTimeAndWorkload LoadActualWorkloadInSeconds(IList<Guid> skillIdList, TimeZoneInfo timeZone, DateOnly today)
+		public IList<SkillWorkload> LoadActualWorkloadInSeconds(IList<Guid> skillIdList, TimeZoneInfo timeZone, DateOnly today)
 		{
 
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
 				var skillListString = String.Join(",", skillIdList.Select(id => id.ToString()).ToArray());
 
-				var latestStatisticsTimeAndWorkload =
+				var workloadInSecondsPerSkillInterval =
 					uow.Session()
 						.CreateSQLQuery(
 							@"mart.web_intraday_workload_in_seconds @time_zone_code=:TimeZone, @today=:Today, @skill_list=:SkillList")
 						.SetString("TimeZone", timeZone.Id)
 						.SetString("Today", today.ToShortDateString(CultureInfo.InvariantCulture))
 						.SetString("SkillList", skillListString)
-						.SetResultTransformer(Transformers.AliasToBean(typeof(LatestStatisticsTimeAndWorkload)))
-						.UniqueResult<LatestStatisticsTimeAndWorkload>();
+						.SetResultTransformer(Transformers.AliasToBean(typeof(SkillWorkload)))
+						.List<SkillWorkload>();
 
-				return latestStatisticsTimeAndWorkload;
+				return workloadInSecondsPerSkillInterval;
 			}
 		}
 
