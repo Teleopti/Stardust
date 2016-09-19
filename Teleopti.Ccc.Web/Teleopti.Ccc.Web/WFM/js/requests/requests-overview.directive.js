@@ -11,8 +11,8 @@
 	function requestsOverviewController($scope, $attrs, requestsDataService, toggleService, requestCommandParamsHolder, $translate) {
 		var vm = this;
 
-		vm.loadRequestWatchersInitialised = false;
-		
+		vm.loadRequestWatchersInitialized = false;
+
 		vm.requests = [];
 		vm.period = {
 			startDate: moment().startOf('week')._d,
@@ -23,7 +23,7 @@
 		vm.agentSearchTerm = "";
 		vm.reload = reload;
 		vm.sortingOrders = [];
-		
+
 		vm.forceRequestsReloadWithSelection = forceRequestsReloadWithSelection;
 		vm.onTotalRequestsCountChanges = onTotalRequestsCountChanges;
 		vm.pageSizeOptions = [20, 50, 100, 200];
@@ -33,14 +33,14 @@
 		vm.shiftTradeView = $attrs.shiftTradeView != undefined;
 
 		getSelectedRequestsInfoText();
-		
+
 		vm.paging = {
 			pageSize: 20,
 			pageNumber: 1,
 			totalPages: 1,
 			totalRequestsCount: 0
 		};
-		
+
 		function init() {
 			vm.requestsPromise = vm.shiftTradeView ? requestsDataService.getShiftTradeRequestsPromise : requestsDataService.getAllRequestsPromise;
 			vm.isPaginationEnabled = toggleService.Wfm_Requests_Performance_36295;
@@ -50,11 +50,10 @@
 				vm.filters = [{ "Status": vm.shiftTradeView ? "0" : "0 5" }];
 			}
 			vm.loaded = false;
-			
+
 			if (vm.isActive) {
 				reload();
 			}
-
 		}
 
 		toggleService.togglesLoaded.then(init);
@@ -99,11 +98,9 @@
 		}
 
 		function getRequests(requestsFilter, sortingOrders, paging, done) {
-			
 			vm.requestsPromise(requestsFilter, sortingOrders, paging).then(function (requests) {
-
 				vm.requests = requests.data.Requests;
-				
+
 				if (vm.requests && vm.requests.length > 0) {
 					vm.shiftTradeRequestDateSummary = {
 						Minimum: requests.data.MinimumDateTime,
@@ -124,7 +121,6 @@
 		}
 
 		function reload(callback) {
-
 			if (!vm.isActive) {
 				return;
 			}
@@ -136,7 +132,7 @@
 			}
 
 			vm.loaded = false;
-			
+
 			if (vm.isPaginationEnabled) {
 				getRequests(requestsFilter, vm.sortingOrders, vm.paging, callback);
 			} else {
@@ -179,20 +175,25 @@
 					startDate: vm.period ? vm.period.startDate : null,
 					endDate: vm.period ? vm.period.endDate : null,
 					agentSearchTerm: vm.agentSearchTerm ? vm.agentSearchTerm : '',
-					filters: vm.filters
+					filters: vm.filters,
+					isActive: vm.isActive
 				};
 				return target;
 			}, function (newValue) {
-				if (!newValue || !validateDateParameters(newValue.startDate, newValue.endDate)) {
+				if (!newValue || !newValue.isActive) {
+					return;
+				}
+
+				if (!validateDateParameters(newValue.startDate, newValue.endDate)) {
 					vm.loaded = true;
 					return;
 				}
-				
-				scope.$broadcast('reload.requests.without.selection');
-				
-				if (!ctrl.loadRequestWatchersInitialised) {
+
+				if (!ctrl.loadRequestWatchersInitialized) {
 					listenToReload();
-				}				
+				}
+
+				scope.$broadcast('reload.requests.without.selection');
 			}, true);
 
 			scope.$watch(function() {
@@ -204,8 +205,6 @@
 			});
 
 			function listenToReload() {
-				ctrl.loadRequestWatchersInitialised = true;
-				
 				scope.$on('reload.requests.with.selection', function (event) {
 					reload();
 				});
@@ -213,14 +212,13 @@
 				scope.$on('reload.requests.without.selection', function (event) {
 					reload();
 				});
+
+				ctrl.loadRequestWatchersInitialized = true;
 			}
 
 			function reload(callback) {
 				ctrl.reload(callback);
 			}
-
-			
-
 		}
 	}
 })();
