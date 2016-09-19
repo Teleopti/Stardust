@@ -400,6 +400,7 @@ Scenario: Cannot trade shifts when teamless
 	Then I should see a message text saying that I have no access to any teams
 	And I should not see a possible schedule trade with 'OtherAgent'
 
+@ignore
 Scenario: Show possible shift trades from my team
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
