@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Castle.Core.Internal;
 using Hangfire;
 using Hangfire.Storage;
+using Hangfire.Storage.Monitoring;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Interfaces.Messages;
 using Teleopti.Interfaces.Infrastructure;
@@ -63,8 +65,22 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 
 		public void CleanFailedJobsBefore(DateTime time)
 		{
-			var expiredFailed = _monitoring.FailedJobs(0, 100)
-				.Where(x => x.Value.FailedAt.HasValue && x.Value.FailedAt < time);
+			const int batch = 100;
+			var iteration = 0;
+
+			var expiredFailed = new Dictionary<string, FailedJobDto>();
+			while (true)
+			{
+				var failedJobs = _monitoring.FailedJobs(iteration*batch, batch);
+				 failedJobs
+					.Where(x => x.Value.FailedAt.HasValue && x.Value.FailedAt < time)
+					.ForEach(x => expiredFailed[x.Key] = x.Value);
+				
+				if (failedJobs.Count < batch)
+					break;
+
+				iteration++;
+			}
 
 			expiredFailed.ForEach(j => _backgroundJobs.Delete(j.Key));
 		}
