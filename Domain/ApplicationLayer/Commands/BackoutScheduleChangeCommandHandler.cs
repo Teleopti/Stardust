@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -22,9 +23,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
 		private readonly IAuditSettingRepository _auditSettingRepository;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
+		private readonly Func<ISchedulingResultStateHolder> _scheduleingResultStateHolderFunc;
 
 
-		public BackoutScheduleChangeCommandHandler(IScheduleHistoryRepository scheduleHistoryRepository, IPersonRepository personRepository, ILoggedOnUser loggedOnUser, IAggregateRootInitializer aggregateRootInitializer, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IScheduleDifferenceSaver scheduleDifferenceSaver, IDifferenceCollectionService<IPersistableScheduleData> differenceService, IAuditSettingRepository auditSettingRepository, IScheduleDayChangeCallback scheduleDayChangeCallback)
+		public BackoutScheduleChangeCommandHandler(IScheduleHistoryRepository scheduleHistoryRepository, IPersonRepository personRepository, ILoggedOnUser loggedOnUser, IAggregateRootInitializer aggregateRootInitializer, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IScheduleDifferenceSaver scheduleDifferenceSaver, IDifferenceCollectionService<IPersistableScheduleData> differenceService, IAuditSettingRepository auditSettingRepository, IScheduleDayChangeCallback scheduleDayChangeCallback, Func<ISchedulingResultStateHolder> scheduleingResultStateHolderFunc)
 		{
 			_scheduleHistoryRepository = scheduleHistoryRepository;
 			_personRepository = personRepository;
@@ -36,6 +38,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_differenceService = differenceService;
 			_auditSettingRepository = auditSettingRepository;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
+			_scheduleingResultStateHolderFunc = scheduleingResultStateHolderFunc;
 		}
 
 		public void Handle(BackoutScheduleChangeCommand command)
@@ -90,6 +93,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 
 			var scheduleDictionary = getScheduleDictionary(person, command.Date);
+
+			_scheduleingResultStateHolderFunc().Schedules = scheduleDictionary;
 
 			var sd = toScheduleDay(getCurrentScheduleDay(scheduleDictionary, person, command.Date), scheduleData);
 
