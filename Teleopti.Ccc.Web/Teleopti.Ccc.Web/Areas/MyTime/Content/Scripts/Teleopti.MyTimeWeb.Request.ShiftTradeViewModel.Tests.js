@@ -641,5 +641,40 @@ $(document).ready(function () {
 		equal(viewModel.filterStartTimeList()[0].text, "0:00 - 2:00");
 		equal(viewModel.filterStartTimeList()[12].text, "DO");
 	});
-	
+
+	test("should not load team when there is no selected team", function() {
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
+
+		viewModel.selectedSite("site1");
+
+		equal(viewModel.selectedSiteInternal(), "site1");
+		equal(viewModel.selectedTeamInternal(), null);
+	});
+
+	test("should load team when there is a selected team", function () {
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url == "Team/TeamsUnderSiteForShiftTrade") {
+					options.success(
+							[
+								{ id: "A", text: "Team A" },
+								{ id: "B", text: "Team B" },
+								{ id: "C", text: "Team C" }
+							]
+					);
+				}
+			}
+		};
+
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel(ajax);
+		viewModel.selectedTeamInternal("myTeam");
+		viewModel.selectedSiteInternal("site1");
+
+		viewModel.selectedSite("site2");
+
+		equal(viewModel.selectedSiteInternal(), "site2");
+		equal(viewModel.selectedTeamInternal(), "allTeams");
+		equal(viewModel.availableTeams().length, 4);
+	});
+
 });

@@ -513,6 +513,20 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		}
 	});
 
+
+	self.selectedSite = ko.computed({
+		read: function () {
+			return self.selectedSiteInternal();
+		},
+		write: function (siteId) {
+			self.selectedSiteInternal(siteId);
+			if (self.selectedTeam() != null) {
+				self.selectedTeamInternal(self.allTeamsId);
+				self.loadTeamsUnderSite(siteId);
+			}
+		}
+	});
+
 	self.nextDateValid = ko.computed(function () {
 		return self.openPeriodEndDate().diff(self.requestedDateInternal()) > 0;
 	});
