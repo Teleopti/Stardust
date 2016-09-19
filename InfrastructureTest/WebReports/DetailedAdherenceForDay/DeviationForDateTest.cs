@@ -1,16 +1,15 @@
-using System.Drawing;
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.WebReports;
-using Teleopti.Ccc.InfrastructureTest._WebReports.DailyMetricsForDay;
+using Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 
-namespace Teleopti.Ccc.InfrastructureTest._WebReports.DetailedAdherenceForDay
+namespace Teleopti.Ccc.InfrastructureTest.WebReports.DetailedAdherenceForDay
 {
 	[TestFixture]
-	public class DisplayColorForDateTest : WebReportTest
+	public class DeviationForDateTest : WebReportTest
 	{
 		private const int scheduledReadyTimeOneMinutes = 1;
 		private const int scheduledReadyTimeTwoMinutes = 3;
@@ -26,13 +25,13 @@ namespace Teleopti.Ccc.InfrastructureTest._WebReports.DetailedAdherenceForDay
 		}
 
 		[Test]
-		public void ShouldReturnDisplayColorForDate()
+		public void ShouldReturnDeviationForDate()
 		{
 			Target(
 				(loggedOnUser, currentDataSource, currentBusinessUnit, globalSettingDataRepository) =>
 					new DetailedAdherenceForDayQuery(loggedOnUser, currentDataSource, currentBusinessUnit, globalSettingDataRepository))
-				.Execute(TheDate.Date).First()
-				.DisplayColor.Should().Be.EqualTo(Color.Empty);
+				.Execute(TheDate.Date).Last()
+				.Deviation.Should().Be.EqualTo(2);
 		}
 	}
 }

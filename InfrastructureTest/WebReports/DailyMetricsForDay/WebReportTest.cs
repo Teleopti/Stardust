@@ -13,7 +13,7 @@ using Teleopti.Interfaces.Domain;
 using Person = Teleopti.Ccc.TestCommon.TestData.Analytics.Person;
 using Scenario = Teleopti.Ccc.TestCommon.TestData.Analytics.Scenario;
 
-namespace Teleopti.Ccc.InfrastructureTest._WebReports.DailyMetricsForDay
+namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 {
     [TestFixture]
     public abstract class WebReportTest : DatabaseTest
