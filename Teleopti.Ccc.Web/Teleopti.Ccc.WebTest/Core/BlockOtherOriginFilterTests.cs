@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			filterTester.ControllerContext.HttpContext.Response.StatusCode.Should().Be.EqualTo(HttpStatusCode.Forbidden);
 		}
 
-		[Test, Ignore("I'll continue on this /Robin")]
+		[Test]
 		public void ShouldBlockOtherReferrer()
 		{
 			var filter = new CsrfFilter();
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			filterTester.ControllerContext.HttpContext.Response.StatusCode.Should().Not.Be.EqualTo(HttpStatusCode.Forbidden);
 		}
 
-		[Test, Ignore("I'll continue on this /Robin")]
+		[Test]
 		public void ShouldPrioritizeOrigin()
 		{
 			var filter = new CsrfFilter();

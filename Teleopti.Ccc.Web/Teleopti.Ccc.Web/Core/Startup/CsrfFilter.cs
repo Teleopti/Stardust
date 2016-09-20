@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				var refererUri = new Uri(referer);
 				if (refererUri.Authority != filterContext.HttpContext.Request.Url.Authority)
 				{
+					filterContext.Result = new HttpStatusCodeResult(403);
 					filterContext.HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
 				}
 			}
