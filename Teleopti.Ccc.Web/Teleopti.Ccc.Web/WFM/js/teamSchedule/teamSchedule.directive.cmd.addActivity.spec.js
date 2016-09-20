@@ -261,9 +261,25 @@
 
 		var defaultStartTime = vm.getDefaultActvityStartTime();
 		var nextTick = new Date(WFMDate.getNextTickNoEarlierThanEight());
-
 		expect(defaultStartTime.getHours()).toBe(nextTick.getHours());
 		expect(defaultStartTime.getMinutes()).toBe(nextTick.getMinutes());
+	});
+
+	it('should have correct default start time when no other shifts on selected date which is not today', function () {
+		var today = new Date(moment(WFMDate.nowInUserTimeZone()).add(1,'day'));
+		fakeScheduleManagementSvc.setLatestEndTime(null);
+		fakeScheduleManagementSvc.setLatestStartTime(null);
+
+		var result = setUp(today);
+		var vm = result.commandControl;
+		vm.selectedAgents = [];
+
+		var defaultStartTime = vm.getDefaultActvityStartTime();
+		var defaultEndTime = vm.getDefaultActvityEndTime();
+		expect(defaultStartTime.getHours()).toBe(8);
+		expect(defaultStartTime.getMinutes()).toBe(0);
+		expect(defaultEndTime.getHours()).toBe(9);
+		expect(defaultEndTime.getMinutes()).toBe(0);
 	});
 
 	it('should have later default start time than previous day over night shift end', function () {

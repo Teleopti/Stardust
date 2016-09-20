@@ -43,16 +43,6 @@ Background:
 	| Contract schedule    | A contract schedule  |
 	| Part time percentage | Part time percentage |
 
-
-@OnlyRunIfEnabled('WfmTeamSchedule_AddActivity_37541')
-Scenario: Default activity start time range should be 08:00-09:00 when agent's schedule is empty
-	When I view wfm team schedules
-	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
-	And I selected agent 'John Smith'
-	And I open menu in team schedule
-	And I click menu item 'AddActivity' in team schedule
-	Then I should see the add activity time starts '08:00' and ends '09:00'
-
 @OnlyRunIfEnabled('WfmTeamSchedule_AddActivity_37541')
 Scenario: Should be able to add activity
 	When I view wfm team schedules
