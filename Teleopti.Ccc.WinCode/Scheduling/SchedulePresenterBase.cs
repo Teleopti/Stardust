@@ -864,6 +864,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		    public void UndoAll()
 		    {
 		    }
+
+		    protected virtual void OnChangedHandler()
+		    {
+			    ChangedHandler?.Invoke(this, EventArgs.Empty);
+		    }
 	    }
     }
 
