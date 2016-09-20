@@ -9,10 +9,10 @@ namespace Teleopti.Ccc.DBManager.Library
 	{
 		private readonly TextWriter _logFile;
 
-		public FileLogger()
+		public FileLogger(string loggerSuffix)
 		{
 			var nowDateTime = DateTime.Now;
-			_logFile = new StreamWriter(string.Format(CultureInfo.CurrentCulture, "DBManagerLibrary_{0}_{1}.log", nowDateTime.ToString("yyyyMMdd", CultureInfo.CurrentCulture), nowDateTime.ToString("hhmmss", CultureInfo.CurrentCulture)));
+			_logFile = new StreamWriter(string.Format(CultureInfo.CurrentCulture, "DBManagerLibrary_{0}_{1}_{2}.log", nowDateTime.ToString("yyyyMMdd", CultureInfo.CurrentCulture), nowDateTime.ToString("hhmmss", CultureInfo.CurrentCulture), loggerSuffix));
 		}
 
 		public void Write(string message)

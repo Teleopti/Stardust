@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using Teleopti.Ccc.DBManager.Library;
 
@@ -9,7 +10,20 @@ namespace Teleopti.Ccc.DBManager
     {
         static int Main(string[] args)
         {
-			var logger = new FileLogger();
+	        var loggerSuffix = "";
+	        if (args.Any(a => a.Contains("-O" + DatabaseType.TeleoptiCCC7.GetName())))
+	        {
+		        loggerSuffix = "App";
+	        }
+	        else if (args.Any(a => a.Contains("-O" + DatabaseType.TeleoptiAnalytics.GetName())))
+	        {
+		        loggerSuffix = "Analytics";
+	        }
+	        else if (args.Any(a => a.Contains("-O" + DatabaseType.TeleoptiCCCAgg.GetName())))
+	        {
+		        loggerSuffix = "Agg";
+	        }
+	        var logger = new FileLogger(loggerSuffix);
             try
             {
                 Version version = Assembly.GetExecutingAssembly().GetName().Version;
