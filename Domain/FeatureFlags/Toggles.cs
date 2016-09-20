@@ -29,8 +29,10 @@
 		RTA_ScheduleQueryOptimizationFilteredCache_40260,
 		RTA_ConnectionQueryOptimizeAllTheThings_40262,
 		RTA_RemoveSiteTeamOutOfAdherenceReadModels_40069,
+        RTA_HideAgentsByStateGroup_40469,
 
-		MessageBroker_SchedulingScreenMailbox_32733,
+
+        MessageBroker_SchedulingScreenMailbox_32733,
 
 		Portal_NewLandingpage_29415,
 		Show_StaticPageOnNoInternet_29415,
