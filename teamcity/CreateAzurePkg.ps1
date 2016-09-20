@@ -93,7 +93,7 @@ function global:PrepareCopyFiles {
 	#Copy RegisterEventLogSource
 	Copy-Item -Path "$Dependencies\RegisterEventLogSource.exe" -Destination "$TeleoptiBin" -verbose -Recurse -Force -ErrorAction Stop
 	#Copy azure dependencies
-	Copy-Item -Path "$AzureDependencies" -Destination "$TeleoptiBin\ccc7_azure" -verbose -Recurse -Force -ErrorAction Stop
+	Copy-Item -Path "$AzureDependencies" -Destination "$TeleoptiBin" -verbose -Recurse -Force -ErrorAction Stop
 	#Copy azure .NET461
 	Copy-Item -Path "$BinDependencies\Azure_Net\*" -Destination "$TeleoptiBin" -verbose -Recurse -Force -ErrorAction Stop
 	
