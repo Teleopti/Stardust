@@ -98,8 +98,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 
 			var cache = MockRepository.GenerateMock<HttpCachePolicyBase>();
 			controller.ControllerContext.HttpContext.Response.Stub(x => x.Cache).Return(cache);
-			controller.ControllerContext.HttpContext.Response.StatusCode = 200;
-
+			
 			return controller;
 		}
 
