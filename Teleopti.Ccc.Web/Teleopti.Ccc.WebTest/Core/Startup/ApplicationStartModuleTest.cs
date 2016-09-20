@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Web;
 using System.Web.Http;
 using Autofac;
 using NUnit.Framework;
@@ -19,6 +20,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		[SetUp]
 		public void Setup()
 		{
+			HttpContext.Current = null;
 			ApplicationStartModule.ErrorAtStartup = null;
 			ApplicationStartModule.TasksFromStartup = null;
 		}

@@ -19,17 +19,10 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 	[TestFixture]
 	public class ContainerConfigurationTest
 	{
-		private IContainerConfiguration builder;
-
-		[SetUp]
-		public void Setup()
-		{
-			builder = new ContainerConfiguration();
-		}
-
 		[Test]
 		public void BootstrapperModuleHasBeenRegistered()
 		{
+			var builder = new ContainerConfiguration();
 			using (var container = builder.Configure(string.Empty, new HttpConfiguration()))
 			{
 				container.IsRegistered<IBootstrapperTask>()
@@ -40,6 +33,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void RepositoryModuleHasBeenRegistered()
 		{
+			var builder = new ContainerConfiguration();
 			using (var container = builder.Configure(string.Empty, new HttpConfiguration()))
 			{
 				container.IsRegistered<IPersonRepository>()
@@ -50,6 +44,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void MvcModuleHasBeenRegistered()
 		{
+			var builder = new ContainerConfiguration();
 			using (var container = builder.Configure(string.Empty, new HttpConfiguration()))
 			{
 				container.IsRegistered<AuthenticationController>()
@@ -60,6 +55,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void InitializeApplicationHasBeenRegistered()
 		{
+			var builder = new ContainerConfiguration();
 			using (var container = builder.Configure(string.Empty, new HttpConfiguration()))
 			{
 				container.IsRegistered<IInitializeApplication>()
@@ -70,6 +66,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ApplicationDataHasBeenRegistered()
 		{
+			var builder = new ContainerConfiguration();
 			using (var container = builder.Configure(string.Empty, new HttpConfiguration()))
 			{
 				container.IsRegistered<IApplicationData>()
@@ -80,6 +77,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void StudentAvailabilityViewModelFactoryHasBeenRegistered()
 		{
+			var builder = new ContainerConfiguration();
 			using (var container = builder.Configure(string.Empty, new HttpConfiguration()))
 			{
 				container.IsRegistered<IStudentAvailabilityViewModelFactory>()
@@ -90,6 +88,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldResolveNumberOfAgentsInTeamReader()
 		{
+			var builder = new ContainerConfiguration();
 			using (var container = builder.Configure(string.Empty, new HttpConfiguration()))
 			{
 				container.Resolve<INumberOfAgentsInTeamReader>()
@@ -100,6 +99,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ResourceHandlerModuleHasBeenRegistered()
 		{
+			var builder = new ContainerConfiguration();
 			using (var container = builder.Configure(string.Empty, new HttpConfiguration()))
 			{
 				container.IsRegistered<IUserTextTranslator>()
@@ -110,6 +110,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldResolveRtaController()
 		{
+			var builder = new ContainerConfiguration();
 			using (var container = builder.Configure(string.Empty, new HttpConfiguration()))
 			{
 				container.Resolve<StateController>()
@@ -120,6 +121,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldResolveForecastController()
 		{
+			var builder = new ContainerConfiguration();
 			using (var container = builder.Configure(string.Empty, new HttpConfiguration()))
 			{
 				container.Resolve<ForecastController>()

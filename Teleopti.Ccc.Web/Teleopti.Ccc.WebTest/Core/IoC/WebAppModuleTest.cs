@@ -74,6 +74,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[SetUp]
 		public void Setup()
 		{
+			HttpContext.Current = null;
 			requestContainer = buildContainer();
 			SignalRConfiguration.Configure(SignalRSettings.Load(), () => { });
 		}
@@ -139,13 +140,15 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			try
 			{
 				File.WriteAllText(tempFile, string.Empty);
-				var container = new ContainerConfiguration().Configure(tempFile, new HttpConfiguration());
-				var containerAdder = new ContainerBuilder();
-				containerAdder.Register(_ => MockRepository.GenerateMock<ILicenseActivator>());
-				containerAdder.Update(container);
+				using (var container = new ContainerConfiguration().Configure(tempFile, new HttpConfiguration()))
+				{
+					var containerAdder = new ContainerBuilder();
+					containerAdder.Register(_ => MockRepository.GenerateMock<ILicenseActivator>());
+					containerAdder.Update(container);
 
-				container.Resolve<ToggleHandlerController>()
-					.Should().Not.Be.Null();
+					container.Resolve<ToggleHandlerController>()
+						.Should().Not.Be.Null();
+				}
 			}
 			finally
 			{

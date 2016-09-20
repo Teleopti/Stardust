@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Web;
 using System.Web.Http;
 using Autofac;
 using NUnit.Framework;
@@ -11,17 +12,11 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 	[TestFixture]
 	public class BootstrapperModuleTest
 	{
-		private IContainerConfiguration containerConfiguration;
-		
-		[SetUp]
-		public void Setup()
-		{
-			containerConfiguration = new ContainerConfiguration();
-		}
-
 		[Test]
 		public void RegisteredGlobalFiltersShouldBeenRegistered()
 		{
+			HttpContext.Current = null;
+			var containerConfiguration = new ContainerConfiguration();
 			using (var container = containerConfiguration.Configure(string.Empty, new HttpConfiguration()))
 			{
 				var tasks = container.Resolve<IEnumerable<IBootstrapperTask>>();
@@ -32,6 +27,8 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void TasksShouldBeRegisteredAsSingletons()
 		{
+			HttpContext.Current = null;
+			var containerConfiguration = new ContainerConfiguration();
 			using (var container = containerConfiguration.Configure(string.Empty, new HttpConfiguration()))
 			{
 				var tasks = container.Resolve<IEnumerable<IBootstrapperTask>>();
