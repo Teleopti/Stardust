@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Owin;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
@@ -23,16 +24,18 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		private readonly IIdentityProviderProvider _identityProviderProvider;
 		private readonly Log4NetLogger _log4NetLogger;
 		private readonly ILoadAllTenantsUsers _loadAllTenantsUsers;
+		private readonly IConfigReader _configReader;
 
 		public RegisterGlobalFiltersTask(IErrorMessageProvider errorMessageProvider,
 			IAuthenticationModule authenticationModule, IIdentityProviderProvider identityProviderProvider,
-			Log4NetLogger log4NetLogger, ILoadAllTenantsUsers loadAllTenantsUsers)
+			Log4NetLogger log4NetLogger, ILoadAllTenantsUsers loadAllTenantsUsers, IConfigReader configReader)
 		{
 			_errorMessageProvider = errorMessageProvider;
 			_authenticationModule = authenticationModule;
 			_identityProviderProvider = identityProviderProvider;
 			_log4NetLogger = log4NetLogger;
 			_loadAllTenantsUsers = loadAllTenantsUsers;
+			_configReader = configReader;
 		}
 
 		public Task Execute(IAppBuilder application)
@@ -44,6 +47,10 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		private void registerGlobalFilters(GlobalFilterCollection filters)
 		{
 			filters.Add(new Log4NetMvCLogger(_log4NetLogger));
+			if (string.IsNullOrEmpty(_configReader.AppConfig("DisableCsrfProtection")))
+			{
+				filters.Add(new CsrfFilter());
+			}
 			filters.Add(new NoCacheFilterMvc());
 			filters.Add(new AjaxHandleErrorAttribute(_errorMessageProvider));
 			filters.Add(new TeleoptiPrincipalAuthorizeAttribute(_authenticationModule, _identityProviderProvider, _loadAllTenantsUsers, new List<Type>

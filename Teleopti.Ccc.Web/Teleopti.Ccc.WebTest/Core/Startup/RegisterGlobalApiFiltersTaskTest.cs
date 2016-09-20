@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web.Http;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Core.Logging;
 using Teleopti.Ccc.Web.Core.Startup;
 using Teleopti.Ccc.Web.Filters;
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		public void FiltersShouldBeAdded()
 		{
 			var config = new HttpConfiguration();
-			var target = new RegisterGlobalApiFiltersTask(new FakeApiConfig(config), null);
+			var target = new RegisterGlobalApiFiltersTask(new FakeApiConfig(config), null, new FakeConfigReader());
 			
 			target.Execute(null);
 
@@ -24,7 +25,8 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 				.Should().Have.SameValuesAs(new[]
 				{
 					typeof(AuthorizeTeleoptiAttribute),
-					typeof(NoCacheFilterHttp)
+					typeof(CsrfFilterHttp),
+					typeof(NoCacheFilterHttp),
 				});
 		}
 
@@ -32,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 	    public void LoggerShouldBeAddedAsAService()
 	    {
 	        var config = new HttpConfiguration();
-            var target = new RegisterGlobalApiFiltersTask(new FakeApiConfig(config), null);
+            var target = new RegisterGlobalApiFiltersTask(new FakeApiConfig(config), null, new FakeConfigReader());
 
             target.Execute(null);
 

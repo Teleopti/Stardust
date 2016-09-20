@@ -67,6 +67,8 @@ namespace Teleopti.Ccc.WebTest.Filters
 
 		public void AcceptJson() { _headers.Add("Accept", "application/json, text/javascript"); }
 
+		public void AddHeader(string key, string value) { _headers.Add(key,value);}
+
 		public void IsUser(IPrincipal principal) { _user = principal; }
 
 		public void UseController(ITestController controller) { _controller = controller; }
@@ -92,9 +94,11 @@ namespace Teleopti.Ccc.WebTest.Filters
 			controller.ControllerContext.HttpContext.Request.Stub(x => x.Headers).Return(_headers);
 			controller.ControllerContext.HttpContext.Request.Stub(x => x.RequestContext)
 				.Return(new RequestContext(controller.ControllerContext.HttpContext, controller.ControllerContext.RouteData));
+			controller.ControllerContext.HttpContext.Request.Stub(x => x.Url).Return(new Uri("http://tempuri.org/foo"));
 
 			var cache = MockRepository.GenerateMock<HttpCachePolicyBase>();
 			controller.ControllerContext.HttpContext.Response.Stub(x => x.Cache).Return(cache);
+			controller.ControllerContext.HttpContext.Response.StatusCode = 200;
 
 			return controller;
 		}

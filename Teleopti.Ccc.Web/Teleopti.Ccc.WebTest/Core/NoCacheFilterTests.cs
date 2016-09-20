@@ -2,6 +2,8 @@
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using NUnit.Framework;
@@ -10,20 +12,24 @@ using Teleopti.Ccc.Web.Core.Startup;
 
 namespace Teleopti.Ccc.WebTest.Core
 {
+	internal class FakeController : IHttpController
+	{
+		public Task<HttpResponseMessage> ExecuteAsync(HttpControllerContext controllerContext, CancellationToken cancellationToken)
+		{
+			return null;
+		}
+	}
+
 	[TestFixture]
 	public class NoCacheFilterTests
 	{
-		private readonly CacheControlHeaderValue _expectedCacheControlHeader;
-		public NoCacheFilterTests()
-		{
-			_expectedCacheControlHeader = new CacheControlHeaderValue
+		private readonly CacheControlHeaderValue _expectedCacheControlHeader = new CacheControlHeaderValue
 			{
 				NoCache = true,
 				NoStore = true,
 				MustRevalidate = true,
 				Private = true
 			};
-		}
 
 		[Test]
 		public void ResponseShouldIncludeAllNoCacheHeaders()

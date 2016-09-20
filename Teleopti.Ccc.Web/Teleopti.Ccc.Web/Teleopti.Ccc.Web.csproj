@@ -690,6 +690,7 @@
     <Compile Include="Areas\TeamSchedule\Models\SearchWeekSchedulesFormData.cs" />
     <Compile Include="Core\Data\IShiftCategoryProvider.cs" />
     <Compile Include="Core\Data\ShiftCategoryProvider.cs" />
+    <Compile Include="Core\Startup\CsrfFilter.cs" />
     <Compile Include="Core\Startup\NoCacheFilter.cs" />
     <Compile Include="Core\Startup\OriginHandlerPipelineModule.cs" />
     <Compile Include="Core\Startup\TenantStartupTask.cs" />

@@ -122,24 +122,24 @@ namespace Teleopti.Ccc.WebTest.Filters
 
 			actual.Should().Be(expected);
 		}
-
-		private class TestTaskController : AsyncController, FilterTester.ITestController
-		{
-			private readonly Action<TestTaskController> _taskAction;
-
-			public TestTaskController(Action<TestTaskController> taskAction)
-				: base() { _taskAction = taskAction; }
-
-			public ActionResult DummyAction() { return null; }
-
-			public void DummyActionTask() { _taskAction.Invoke(this); }
-
-		}
-
+		
 		private class TestPrincipal : IPrincipal
 		{
 			public bool IsInRole(string role) { return true; }
 			public IIdentity Identity { get { throw new NotImplementedException(); } }
 		}
+	}
+
+	public class TestTaskController : AsyncController, FilterTester.ITestController
+	{
+		private readonly Action<TestTaskController> _taskAction;
+
+		public TestTaskController(Action<TestTaskController> taskAction)
+			: base() { _taskAction = taskAction; }
+
+		public ActionResult DummyAction() { return null; }
+
+		public void DummyActionTask() { _taskAction.Invoke(this); }
+
 	}
 }

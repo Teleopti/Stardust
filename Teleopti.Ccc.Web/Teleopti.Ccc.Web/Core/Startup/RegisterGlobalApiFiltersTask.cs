@@ -3,6 +3,7 @@ using System.Web.Http.ExceptionHandling;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Owin;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Web.Areas.Global;
 using Teleopti.Ccc.Web.Areas.MultiTenancy;
 using Teleopti.Ccc.Web.Areas.PerformanceTool.Controllers;
@@ -22,11 +23,13 @@ namespace Teleopti.Ccc.Web.Core.Startup
 	{
 		private readonly IGlobalConfiguration _globalConfiguration;
 		private readonly Log4NetLogger _log4NetLogger;
+		private readonly IConfigReader _configReader;
 
-		public RegisterGlobalApiFiltersTask(IGlobalConfiguration globalConfiguration, Log4NetLogger log4NetLogger)
+		public RegisterGlobalApiFiltersTask(IGlobalConfiguration globalConfiguration, Log4NetLogger log4NetLogger, IConfigReader configReader)
 		{
 			_globalConfiguration = globalConfiguration;
 			_log4NetLogger = log4NetLogger;
+			_configReader = configReader;
 		}
 
 		public Task Execute(IAppBuilder application)
@@ -48,7 +51,11 @@ namespace Teleopti.Ccc.Web.Core.Startup
 					typeof (JavascriptLoggingController),
 					typeof (ChangePasswordController)
 				}));
-				
+
+				if (string.IsNullOrEmpty(_configReader.AppConfig("DisableCsrfProtection")))
+				{
+					c.Filters.Add(new CsrfFilterHttp());
+				}
 				c.Filters.Add(new NoCacheFilterHttp());
 				c.Services.Add(typeof (IExceptionLogger), new Log4NetWebApiLogger(_log4NetLogger));
 
