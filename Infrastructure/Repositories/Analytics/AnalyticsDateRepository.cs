@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.AddOrder(Order.Desc(nameof(AnalyticsDate.DateId)))
 				.SetMaxResults(1)
 				.SetReadOnly(true)
-				.UniqueResult<IAnalyticsDate>() ?? new AnalyticsDate();
+				.UniqueResult<IAnalyticsDate>() ?? new AnalyticsDate {DateDate = new DateTime(1999, 12, 30) };
 		}
 
 		public IAnalyticsDate MinDate()
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.AddOrder(Order.Asc(nameof(AnalyticsDate.DateId)))
 				.SetMaxResults(1)
 				.SetReadOnly(true)
-				.UniqueResult<IAnalyticsDate>() ?? new AnalyticsDate();
+				.UniqueResult<IAnalyticsDate>() ?? new AnalyticsDate {DateDate = new DateTime(1900, 01, 01)};
 		}
 
 		public IAnalyticsDate Date(DateTime dateDate)

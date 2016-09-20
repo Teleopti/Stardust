@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				if (date != null)
 					return date;
 
-				var currentDay = base.MaxDate()?.DateDate ?? new DateTime(1999, 12, 30);
+				var currentDay = base.MaxDate().DateDate;
 				var culture = _analyticsConfigurationRepository.GetCulture();
 				while ((currentDay += TimeSpan.FromDays(1)) <= dateDate)
 				{
