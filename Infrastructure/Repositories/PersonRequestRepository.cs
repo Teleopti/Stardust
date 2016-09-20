@@ -12,6 +12,8 @@ using NHibernate;
 using System.Linq;
 using NHibernate.Dialect.Function;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
@@ -117,36 +119,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var returnPersonRequests = Session.CreateCriteria(typeof(PersonRequest), "req")
 				.Add(Restrictions.In("Id", ids))
 				.SetFetchMode("requests", FetchMode.Join)
-				.SetFetchMode("Person", FetchMode.Join)
-				.SetFetchMode("Person.WorkflowControlSet", FetchMode.Join)
-				.SetFetchMode("Person.PersonPeriodCollection", FetchMode.Join)
-				.SetFetchMode("Person.PersonPeriodCollection.Team", FetchMode.Join)
-				.SetFetchMode("Person.PersonPeriodCollection.Team.Site", FetchMode.Join)
-				.SetFetchMode("Person.PersonPeriodCollection.PersonSkillCollection", FetchMode.Join)
-				.SetFetchMode("Person.PersonPeriodCollection.PersonSkillCollection.Skill", FetchMode.Join)
-				.SetFetchMode("Person.PersonPeriodCollection.PersonSkillCollection.Skill.SkillType", FetchMode.Join)
-				.SetFetchMode("Person.PersonPeriodCollection.PersonSkillCollection.Skill.WorkloadCollection", FetchMode.Join)
-				.SetFetchMode("Person.PersonPeriodCollection.PersonSkillCollection.Skill.WorkloadCollection.TemplateWeekCollection", FetchMode.Join)
-				.SetFetchMode("Person.PersonPeriodCollection.PersonSkillCollection.Skill.WorkloadCollection.TemplateWeekCollection.OpenHourList", FetchMode.Join)
-				.SetFetchMode("Person.PersonSchedulePeriodCollection", FetchMode.Join)
-				.SetFetchMode("Person.PersonPeriodCollection.PersonContract.Contract", FetchMode.Join)
-				.SetFetchMode("Person.PersonPeriodCollection.PersonContract.PartTimePercentage", FetchMode.Join)
-				.SetFetchMode("Person.PersonPeriodCollection.PersonContract.ContractSchedule", FetchMode.Join)
-				.SetFetchMode("Person.PersonPeriodCollection.PersonContract.ContractSchedule.ContractScheduleWeeks", FetchMode.Join)
-				.SetFetchMode("Person.PersonPeriodCollection.PersonContract.ContractSchedule.ContractScheduleWeeks.workDays", FetchMode.Join)
-				.SetResultTransformer(Transformers.DistinctRootEntity)
 				.List<IPersonRequest>();
 			
 			if (returnPersonRequests != null)
 			{
 				foreach (var returnPersonRequest in returnPersonRequests)
 				{
-					var shiftTrade = returnPersonRequest.Request as IShiftTradeRequest;
-					if (shiftTrade != null)
-					{
-						LazyLoadingManager.Initialize(shiftTrade.ShiftTradeSwapDetails);
-					}
-
 					var absenceRequest = returnPersonRequest.Request as IAbsenceRequest;
 					if (absenceRequest != null)
 					{

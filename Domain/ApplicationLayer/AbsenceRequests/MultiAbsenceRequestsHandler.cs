@@ -25,13 +25,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IStardustJobFeedback _feedback;
 		private readonly IWorkflowControlSetRepository _workflowControlSetRepository;
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
-
+		private readonly IPersonRepository _personRepository;
+		private readonly ISkillRepository _skillRepository;
 
 
 		public MultiAbsenceRequestsHandler(IPersonRequestRepository personRequestRepository,
 			IMultiAbsenceRequestProcessor absenceRequestProcessor, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, 
 			IStardustJobFeedback stardustJobFeedback, IWorkflowControlSetRepository workflowControlSetRepository, 
-			IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository)
+			IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IPersonRepository personRepository, ISkillRepository skillRepository)
 		{
 			_personRequestRepository = personRequestRepository;
 			_absenceRequestProcessor = absenceRequestProcessor;
@@ -39,17 +40,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_feedback = stardustJobFeedback;
 			_workflowControlSetRepository = workflowControlSetRepository;
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
-
-			if (logger.IsInfoEnabled)
-			{
-				logger.Info("New instance of handler was created");
-			}
+			_personRepository = personRepository;
+			_skillRepository = skillRepository;
 		}
 
 		[AsSystem]
 		public virtual void Handle(NewMultiAbsenceRequestsCreatedEvent @event)
 		{
 			var personRequests = checkPersonRequest(@event);
+			
 			_feedback.SendProgress?.Invoke("Done Checking Person Requests.");
 			if (!personRequests.IsNullOrEmpty())
 				_absenceRequestProcessor.ProcessAbsenceRequest(personRequests);
@@ -60,7 +59,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				uow.PersistAll();
 			}
 		}
-		
+
 		private List<IPersonRequest> checkPersonRequest(NewMultiAbsenceRequestsCreatedEvent @event)
 		{
 			DateTime min = DateTime.MaxValue;
@@ -82,7 +81,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 							max = request.EndDateTime;
 					}
 				}
-				
+
 				var personRequests = _personRequestRepository.Find(@event.PersonRequestIds);
 
 				foreach (var personRequest in personRequests)
@@ -109,16 +108,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						personRequest.Pending();
 						requests.Add(personRequest);
 					}
-						
+
 				}
 				if (requests.Any())
 				{
-					if(requests.Min(x => x.Request.Period.StartDateTime) < min)
+					if (requests.Min(x => x.Request.Period.StartDateTime) < min)
 						min = requests.Min(x => x.Request.Period.StartDateTime);
-					if(requests.Max(x => x.Request.Period.EndDateTime) > max)
+					if (requests.Max(x => x.Request.Period.EndDateTime) > max)
 						max = requests.Max(x => x.Request.Period.EndDateTime);
 				}
-				
+
 				if (max > min)
 				{
 					DateTimePeriod period = new DateTimePeriod(min.Utc(), max.Utc());
@@ -126,6 +125,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					requests.AddRange(_personRequestRepository.Find(waitListIds));
 				}
 
+				_personRepository.FindPeople(personRequests.Select(x => x.Person.Id.GetValueOrDefault()));
+				var skills = _skillRepository.LoadAll();
+
+				foreach (var skill in skills)
+				{
+					_skillRepository.LoadSkill(skill);
+				}
 				uow.PersistAll();
 			}
 			return requests;

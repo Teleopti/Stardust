@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using log4net;
+using NHibernate;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -16,6 +15,7 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly IStardustJobFeedback _feedback;
 		private readonly ArrangeRequestsByProcessOrder _arrangeRequestsByProcessOrder;
+		private IPersonRepository _personRepository;
 
 		public MultiAbsenceRequestsUpdater(IResourceCalculationPrerequisitesLoader prereqLoader, 
 			ICurrentScenario scenarioRepository,
@@ -59,7 +60,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, 
 			ICommandDispatcher commandDispatcher,
 			IStardustJobFeedback feedback, 
-			ArrangeRequestsByProcessOrder arrangeRequestsByProcessOrder)
+			ArrangeRequestsByProcessOrder arrangeRequestsByProcessOrder, IPersonRepository personRepository)
 		{
 			_prereqLoader = prereqLoader;
 			_scenarioRepository = scenarioRepository;
@@ -76,6 +77,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			_commandDispatcher = commandDispatcher;
 			_feedback = feedback;
 			_arrangeRequestsByProcessOrder = arrangeRequestsByProcessOrder;
+			_personRepository = personRepository;
 		}
 
 		public void UpdateAbsenceRequest(List<IPersonRequest> personRequests,
@@ -84,17 +86,18 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 
 			var aggregatedValidatorList = new HashSet<IAbsenceRequestValidator>();
-			foreach (var personRequest in personRequests)
-			{
-				var person = personRequest.Person;
-				if (person.WorkflowControlSet != null)
-				{
-					var mergedPeriod = person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((AbsenceRequest) personRequest.Request);
-					aggregatedValidatorList.UnionWith(mergedPeriod.GetSelectedValidatorList());
-				}
-			}
 			using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
+				foreach (var personRequest in personRequests)
+				{
+					var person = personRequest.Person;
+					if (person.WorkflowControlSet != null)
+					{
+						var mergedPeriod = person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((AbsenceRequest) personRequest.Request);
+						aggregatedValidatorList.UnionWith(mergedPeriod.GetSelectedValidatorList());
+					}
+				}
+
 				loadDataForResourceCalculation(personRequests, aggregatedValidatorList);
 				_feedback.SendProgress?.Invoke("Done loading data for resource calculation!");
 
@@ -150,7 +153,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				var workflowControlSet = absenceRequest.Person.WorkflowControlSet;
 				if (workflowControlSet == null)
 				{
-					process = handleNoWorkflowControlSet(absenceRequest, personRequest);
+					process = handleNoWorkflowControlSet(absenceRequest);
 				}
 				else
 				{
@@ -166,12 +169,11 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 					process = mergedPeriod.AbsenceRequestProcess;
 
 
-					personAccountBalanceCalculator = getPersonAccountBalanceCalculator(affectedPersonAbsenceAccount, absenceRequest,
-																					   personRequest, dateOnlyPeriod);
+					personAccountBalanceCalculator = getPersonAccountBalanceCalculator(affectedPersonAbsenceAccount, absenceRequest, dateOnlyPeriod);
 
 					setupUndoContainersAndTakeSnapshot(undoRedoContainer, allAccounts);
 
-					process = checkIfPersonIsAlreadyAbsentDuringRequestPeriod(absenceRequest, personRequest, process);
+					process = checkIfPersonIsAlreadyAbsentDuringRequestPeriod(absenceRequest, process);
 
 					var businessRules = NewBusinessRuleCollection.Minimum();
 
@@ -201,9 +203,11 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 					_budgetGroupAllowanceSpecification,
 					_budgetGroupHeadCountSpecification);
 
+				process.Process(null, absenceRequest,
+								requiredForProcessingAbsenceRequest,
+								requiredForHandlingAbsenceRequest,
+								validatorList);
 
-				processRequest(personRequest, absenceRequest, requiredForProcessingAbsenceRequest,
-							   requiredForHandlingAbsenceRequest, validatorList, process);
 				_feedback.SendProgress?.Invoke($"Processed request {personRequest.Id} ({personRequest.Person.Name}, {personRequest.Request.Period}).");
 			}
 		}
@@ -279,33 +283,8 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			}
 		}
 
-		private void processRequest(IPersonRequest personRequest, IAbsenceRequest absenceRequest,
-			RequiredForProcessingAbsenceRequest requiredForProcessingAbsenceRequest,
-			RequiredForHandlingAbsenceRequest requiredForHandlingAbsenceRequest,
-			IEnumerable<IAbsenceRequestValidator> validatorList, IProcessAbsenceRequest process)
+		private IProcessAbsenceRequest handleNoWorkflowControlSet(IAbsenceRequest absenceRequest)
 		{
-			if (logger.IsInfoEnabled)
-			{
-				logger.InfoFormat("The following process will be used for request {0}: {1}", personRequest.Id,
-					process.GetType());
-			}
-
-			process.Process(null, absenceRequest,
-				requiredForProcessingAbsenceRequest,
-				requiredForHandlingAbsenceRequest,
-				validatorList);
-		}
-
-		private IProcessAbsenceRequest handleNoWorkflowControlSet(IAbsenceRequest absenceRequest, IPersonRequest personRequest)
-		{
-			if (logger.IsDebugEnabled)
-			{
-				logger.DebugFormat(CultureInfo.CurrentCulture,
-					"No workflow control set defined for {0}, {1} (PersonId = {2}). The request with Id = {3} will be denied.",
-					absenceRequest.Person.EmploymentNumber, absenceRequest.Person.Name,
-					absenceRequest.Person.Id, personRequest.Id);
-			}
-
 			return denyAbsenceRequest(UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonNoWorkflow",
 				absenceRequest.Person.PermissionInformation.Culture()));
 		}
@@ -345,58 +324,28 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				_loadSchedulingStateHolderForResourceCalculation.Execute(_scenarioRepository.Current(),
 																		 totalPeriod,
 																		 persons, _schedulingResultStateHolder);
-				if (logger.IsDebugEnabled)
-				{
-					logger.DebugFormat("Loaded schedules and data needed for resource calculation. (Period = {0})",
-									   totalPeriod);
-				}
 			}
 			else
 			{
 				_loadSchedulesForRequestWithoutResourceCalculation.Execute(_scenarioRepository.Current(),
 																		   totalPeriod,
 																		   persons, _schedulingResultStateHolder);
-				if (logger.IsDebugEnabled)
-				{
-					logger.DebugFormat("Loaded schedules and data needed for absence request handling. (Period = {0})",
-									   totalPeriod);
-				}
 			}
 		}
 
 		private static void simulateApproveAbsence(IAbsenceRequest absenceRequest, IRequestApprovalService requestApprovalServiceScheduler)
 		{
 			var personRequest = absenceRequest.Parent as IPersonRequest;
-			var brokenBusinessRules = requestApprovalServiceScheduler.ApproveAbsence(absenceRequest.Absence, absenceRequest.Period, absenceRequest.Person, personRequest);
-			if (logger.IsDebugEnabled)
-			{
-				foreach (var brokenBusinessRule in brokenBusinessRules)
-				{
-					logger.DebugFormat("A rule was broken: {0}", brokenBusinessRule.Message);
-				}
-
-				logger.Debug("Simulated approving absence successfully");
-			}
+			requestApprovalServiceScheduler.ApproveAbsence(absenceRequest.Absence, absenceRequest.Period, absenceRequest.Person, personRequest);
 		}
 
-		private IPersonAccountBalanceCalculator getPersonAccountBalanceCalculator(IPersonAbsenceAccount personAccount, IAbsenceRequest absenceRequest, IPersonRequest personRequest, DateOnlyPeriod dateOnlyPeriod)
+
+		private IPersonAccountBalanceCalculator getPersonAccountBalanceCalculator(IPersonAbsenceAccount personAccount, IAbsenceRequest absenceRequest, DateOnlyPeriod dateOnlyPeriod)
 		{
 			IPersonAccountBalanceCalculator personAccountBalanceCalculator;
 
 			if (personAccount == null)
 			{
-				if (absenceRequest.Absence.Tracker != null)
-				{
-					if (logger.IsDebugEnabled)
-					{
-						logger.DebugFormat(CultureInfo.CurrentCulture,
-							"No person account defined for {0}, {1} (PersonId = {2}) with absence {4} for {5}. (Request Id = {3})",
-							absenceRequest.Person.EmploymentNumber, absenceRequest.Person.Name,
-							absenceRequest.Person.Id, personRequest.Id,
-							absenceRequest.Absence.Description,
-							dateOnlyPeriod.StartDate);
-					}
-				}
 				personAccountBalanceCalculator = new EmptyPersonAccountBalanceCalculator(absenceRequest.Absence);
 			}
 			else
@@ -412,23 +361,13 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			return personAccountBalanceCalculator;
 		}
 
-		private IProcessAbsenceRequest checkIfPersonIsAlreadyAbsentDuringRequestPeriod(IAbsenceRequest absenceRequest,
-			IPersonRequest personRequest, IProcessAbsenceRequest process)
+		private IProcessAbsenceRequest checkIfPersonIsAlreadyAbsentDuringRequestPeriod(IAbsenceRequest absenceRequest, IProcessAbsenceRequest process)
 		{
 			var alreadyAbsent = personAlreadyAbsentDuringRequestPeriod(absenceRequest);
 			var requiredCheckAlreadyAbsent = process.GetType() == typeof(GrantAbsenceRequest) ||
 											 process.GetType() == typeof(ApproveAbsenceRequestWithValidators);
 			if (requiredCheckAlreadyAbsent && alreadyAbsent)
 			{
-				if (logger.IsDebugEnabled)
-				{
-					logger.DebugFormat(CultureInfo.CurrentCulture,
-						"The person is already absent during the absence request period. {0}, {1} (PersonId = {2}). The request with Id = {3} will be denied.",
-						absenceRequest.Person.EmploymentNumber, absenceRequest.Person.Name,
-						absenceRequest.Person.Id,
-						personRequest.Id);
-				}
-
 				process =  denyAbsenceRequest(UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonAlreadyAbsent",
 					absenceRequest.Person.PermissionInformation.Culture()), true);
 			}
