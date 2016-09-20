@@ -14,9 +14,10 @@ if (typeof (Teleopti.MyTimeWeb.Schedule) === 'undefined') {
     Teleopti.MyTimeWeb.Schedule = {};
 }
 
-Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (ajax, reloadData) {
+Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (userTexts, ajax, reloadData) {
 	var self = this;
 
+	self.userTexts = userTexts;
 	self.dayViewModels = ko.observableArray();
 	self.displayDate = ko.observable();
 	self.nextWeekDate = ko.observable(moment());
@@ -144,7 +145,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (ajax, reloadData) {
 
 
 		var dayViewModels = data.Days.map(function(scheduleDay) {
-			return new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, hasAbsenceReportPermission, hasOvertimeAvailabilityPermission);
+			return new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay, hasAbsenceReportPermission, hasOvertimeAvailabilityPermission, self);
 		});
 
 		self.dayViewModels(dayViewModels);
@@ -156,7 +157,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (ajax, reloadData) {
 	};
 };
 
-Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, absenceReportPermission, overtimeAvailabilityPermission) {
+Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay, absenceReportPermission, overtimeAvailabilityPermission, parent) {
 	var self = this;
 	self.summaryName = ko.observable(scheduleDay.Summary ? scheduleDay.Summary.Title : null);
 	self.summaryTimeSpan = ko.observable(scheduleDay.Summary ? scheduleDay.Summary.TimeSpan : null);
