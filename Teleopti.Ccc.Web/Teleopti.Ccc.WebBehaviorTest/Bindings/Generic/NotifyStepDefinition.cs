@@ -14,8 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void WhenIWaitUntilWeekScheduleIsFullyLoaded()
 		{
 			Browser.Interactions.AssertUrlContains("MyTime#Schedule/Week");
-			var jsCode = "return $('#loaded:visible').length == 0";
-			Browser.Interactions.AssertJavascriptResultContains(jsCode, "True");
+			Browser.Interactions.AssertNotVisibleUsingJQuery("#loading");
 		}
 
 		[When(@"An activity with time '(.*)' to '(.*)' is added to my schedule")]
@@ -35,9 +34,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should see one notify message")]
 		public void ThenIShouldSeeAnAlert()
 		{
-			//var jsCode = string.Format("return $('{0}').length === 1", notifyTextSelector);
-			//Browser.Interactions.AssertJavascriptResultContains(jsCode, "True");
-
 			Browser.Interactions.AssertExists(notifyTextSelector);
 		}
 
