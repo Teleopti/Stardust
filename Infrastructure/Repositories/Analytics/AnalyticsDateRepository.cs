@@ -42,11 +42,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.AddOrder(Order.Asc(nameof(AnalyticsDate.DateId)))
 				.SetMaxResults(1)
 				.SetReadOnly(true)
-				.UniqueResult<IAnalyticsDate>() ?? new AnalyticsDate {DateDate = new DateTime(1900, 01, 01)};
+				.UniqueResult<IAnalyticsDate>() ?? AnalyticsDate.NotDefined;
 		}
 
 		public IAnalyticsDate Date(DateTime dateDate)
 		{
+			if (dateDate == AnalyticsDate.Eternity.DateDate)
+				return AnalyticsDate.Eternity;
 			return AnalyticsUnitOfWork.Current().Session().CreateCriteria<AnalyticsDate>()
 				.Add(Restrictions.Eq(nameof(AnalyticsDate.DateDate), dateDate.Date))
 				.SetReadOnly(true)

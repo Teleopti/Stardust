@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using Autofac;
 using log4net.Config;
 using NUnit.Framework;
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 	{
 		private DefaultDataCreator defaultDataCreator;
 		private DataCreator dataCreator;
+		private AnalyticsDatabase analyticsDatabase;
 
 		[SetUp]
 		public void Setup()
@@ -37,10 +39,8 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 				AllEventPublishingsAsSync = true,
 			};
 			var fakeToggleManager = new FakeToggleManager();
-			fakeToggleManager.Enable(Toggles.RTA_ScheduleProjectionReadOnlyHangfire_35703);
-			fakeToggleManager.Enable(Toggles.ETL_SpeedUpIntradayBusinessUnit_38932);
-			fakeToggleManager.Enable(Toggles.ETL_SpeedUpScenario_38300);
-			fakeToggleManager.Enable(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439);
+			enabledTogglesOnStartup
+				.ForEach(fakeToggleManager.Enable);
 			var configuration = new IocConfiguration(args, fakeToggleManager);
 			builder.RegisterModule(new CommonModule(configuration));
 			builder.RegisterType<MutableNow>().AsSelf().As<INow>().SingleInstance();
@@ -57,6 +57,7 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 			
 			defaultDataCreator = container.Resolve<DefaultDataCreator>();
 			dataCreator = container.Resolve<DataCreator>();
+			analyticsDatabase = container.Resolve<AnalyticsDatabase>();
 			
 
 			var dataHash = defaultDataCreator.HashValue ^ TestConfiguration.HashValue;
@@ -81,6 +82,11 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 				DefaultBusinessUnit.BusinessUnit
 				);
 
+			analyticsDatabase
+				.WithQuarterOfAnHourInterval()
+				.WithEternityAndNotDefinedDate()
+				.WithDefaultSkillset()
+				.WithDefaultAcdLogin();
 			defaultDataCreator.Create();
 			dataCreator.Create();
 
@@ -95,5 +101,30 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 		{
 			TestSiteConfigurationSetup.TearDown();
 		}
+
+		private readonly List<Toggles> enabledTogglesOnStartup = new List<Toggles>
+		{
+			Toggles.RTA_ScheduleProjectionReadOnlyHangfire_35703,
+
+			// Analytics stuff based on events
+			Toggles.ETL_SpeedUpIntradayBusinessUnit_38932,
+			Toggles.ETL_SpeedUpScenario_38300,
+			Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439,
+			Toggles.ETL_EventbasedDate_39562,
+			Toggles.ETL_SpeedUpIntradayPreference_37124,
+			Toggles.ETL_SpeedUpIntradaySkill_37543,
+			Toggles.SettingsForPersonPeriodChanged_ToHangfire_38207,
+			Toggles.ETL_SpeedUpIntradayDayOff_38213,
+			Toggles.ETL_SpeedUpIntradayActivity_38303,
+			Toggles.ETL_SpeedUpIntradayOvertime_38304,
+			Toggles.ETL_SpeedUpIntradayAbsence_38301,
+			Toggles.ETL_SpeedUpIntradayShiftCategory_38718,
+			Toggles.ETL_SpeedUpIntradayRequest_38914,
+			Toggles.ETL_SpeedUpIntradayScorecard_38933,
+			Toggles.ETL_SpeedUpIntradayAvailability_38926,
+			Toggles.ETL_SpeedUpIntradayWorkload_38928,
+			Toggles.ETL_SpeedUpIntradayDate_38934,
+			Toggles.ETL_SpeedUpIntradayForecastWorkload_38929,
+		};
 	}
 }

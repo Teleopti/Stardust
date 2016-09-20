@@ -252,6 +252,7 @@ namespace Teleopti.Ccc.TestCommon
 			var exteralLogOn = new ExternalLogOn
 			{
 				//AcdLogOnName = name, // is not used?
+				AcdLogOnMartId = -1, // NotDefined should be there, 0 probably wont
 				DataSourceId = _analytics.CurrentDataSourceId,
 				AcdLogOnOriginalId = name // this is what the rta receives
 			};
