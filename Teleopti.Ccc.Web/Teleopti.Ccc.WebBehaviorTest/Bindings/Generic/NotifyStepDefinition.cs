@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void WhenIWaitUntilWeekScheduleIsFullyLoaded()
 		{
 			Browser.Interactions.AssertUrlContains("MyTime#Schedule/Week");
-			Browser.Interactions.AssertNotVisibleUsingJQuery("#loading");
+			Browser.Interactions.AssertNotVisibleUsingJQuery("#loaded");
 		}
 
 		[When(@"An activity with time '(.*)' to '(.*)' is added to my schedule")]
