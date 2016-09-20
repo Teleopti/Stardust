@@ -1449,6 +1449,7 @@
     <Content Include="WFM\js\resourceplanner\temp.html" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.filter.controller.spec.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.report.controller.spec.js" />
+    <Content Include="WFM\js\rta\agents\rta-agents-HideAgentsByStateGroup_40469.html" />
     <Content Include="WFM\js\rta\agents\rta-agents-headershiftcelltemplate.html" />
     <Content Include="WFM\js\rta\agents\rta-agents-rowtemplate.html" />
     <Content Include="WFM\js\rta\agents\rta-agents-headercelltemplate.html" />

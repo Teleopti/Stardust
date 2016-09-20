@@ -462,6 +462,69 @@
 				$scope.$on('$destroy', function() {
 					cancelPolling();
 				});
+
+				$scope.rightPanelOptions = {
+				    panelState: false,
+				    panelTitle: " ",
+				    showCloseButton: true,
+				    showBackdrop: true,
+				    showResizer: true,
+				    showPopupButton: true
+				};
+
+				$scope.stateGroups = [
+					{
+					    Id: '1',
+					    Name: 'Phone',
+					    Selected: true
+					},
+					{
+					    Id: '2',
+					    Name: 'Ready',
+					    Selected: true
+					},
+					{
+					    Id: '3',
+					    Name: 'Meeting',
+					    Selected: true
+					},
+					{
+					    Id: '4',
+					    Name: 'Training',
+					    Selected: true
+					},
+					{
+					    Id: '5',
+					    Name: 'Break',
+					    Selected: true
+					},
+					{
+					    Id: '6',
+					    Name: 'Logged out',
+					    Selected: true
+					}
+				];
+
+				$scope.selectedStateGroups = [];
+				for (var i = 0; i < $scope.stateGroups.length; i++) {
+				    if ($scope.stateGroups[i].Selected) {
+				        $scope.selectedStateGroups.push($scope.stateGroups[i].Id);
+				    }
+				}
+
+				$scope.selectedStatusChanged = function (group) {
+				    $scope.stateGroups.forEach(function (g) {
+				        var groupIndex = $scope.selectedStateGroups.includes(g.Id);
+				        if (g.Selected && groupIndex === -1) {
+				            $scope.selectedStateGroups.push(group.Id);
+				        }
+				        if (!g.Selected && groupIndex > -1) {
+				            $scope.selectedStateGroups.splice(groupIndex, 1);
+				        }
+				    });
+				}
+
+
 			}
 		]);
 })();
