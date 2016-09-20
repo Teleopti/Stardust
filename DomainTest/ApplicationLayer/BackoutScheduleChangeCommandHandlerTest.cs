@@ -17,13 +17,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
-	[Toggle(Domain.FeatureFlags.Toggles.ResourcePlanner_SpeedUpManualChanges_37029)]
-	public class ScheduleCommandHandlerTestAttribute : DomainTestAttribute
-	{		
-	}
-
-
-	[ScheduleCommandHandlerTest]
+	[DomainTest]
 	[TestFixture]
 	public class BackoutScheduleChangeCommandHandlerTest : ISetup
 	{
