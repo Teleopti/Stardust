@@ -254,8 +254,8 @@ Try
 	$BaseUrl = BaseUrl-get $isAzure
 	TeleoptiWindowsServices-Stop
 	IIS-Restart
-	write-host "sleep 30 seconds for IIS to restart ..."
-	Start-Sleep -Seconds 30      
+	write-host "sleep 5 seconds for IIS to restart ..."
+	Start-Sleep -Seconds 5    
 	AppPools-Start $isAzure
 	TeleoptiWindowsServices-Start
 }
