@@ -146,7 +146,7 @@ describe("teamschedule move activity directive tests", function () {
 			}, {
 				PersonId: 'agent2',
 				Name: 'agent2',
-				CheduleStartTime: '2016-06-15T09:00:00Z',
+				ScheduleStartTime: '2016-06-15T09:00:00Z',
 				ScheduleEndTime: '2016-06-15T18:00:00Z',
 				SelectedActivities: selectedActivities
 			}];
