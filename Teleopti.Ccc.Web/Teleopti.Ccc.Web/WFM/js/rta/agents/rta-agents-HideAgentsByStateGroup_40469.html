@@ -62,7 +62,7 @@
             <div class="grid" ng-style="getTableHeight()" ng-if="inAlarmGrid && agentsInAlarm" ui-grid-auto-resize ui-grid-auto-resize ui-grid-resize-columns ui-grid-disable-animation ui-grid="inAlarmGrid"></div>
         </div>
     </div>
-    <wfm-right-panel panel-options="rightPanelOptions" style="min-height:400px">
+    <wfm-right-panel ng-if="agentsInAlarm" panel-options="rightPanelOptions" style="min-height:400px">
         <h3><i class="mdi mdi-filter-outline"></i>Include agents in state group:</h3>
         <div class="wfm-checkbox" ng-repeat="group in stateGroups">
             <input type="checkbox" id="{{group.Id}}" ng-model="group.Selected" ng-change="selectedStatusChanged(group)" />
