@@ -35,14 +35,17 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		public override void OnActionExecuting(ActionExecutingContext filterContext)
 		{
 			base.OnActionExecuting(filterContext);
+			if (filterContext.HttpContext.Request.HttpMethod.Equals("GET", StringComparison.OrdinalIgnoreCase) ||
+				filterContext.HttpContext.Request.HttpMethod.Equals("OPTIONS", StringComparison.OrdinalIgnoreCase)) return;
 
 			var referer = filterContext.HttpContext.Request.Headers["Origin"] ??
 						  filterContext.HttpContext.Request.Headers["Referer"];
-
-			if (!string.IsNullOrEmpty(referer) && filterContext.HttpContext.Request.Url!=null)
+ 
+			var url = filterContext.HttpContext.Request.Url;
+			if (!string.IsNullOrEmpty(referer) && url!=null)
 			{
 				var refererUri = new Uri(referer);
-				if (refererUri.Authority != filterContext.HttpContext.Request.Url.Authority)
+				if (refererUri.Host != url.Host)
 				{
 					filterContext.Result = new HttpStatusCodeResult(403);
 					filterContext.HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;

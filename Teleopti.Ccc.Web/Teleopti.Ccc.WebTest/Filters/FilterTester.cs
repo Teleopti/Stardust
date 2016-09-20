@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Principal;
 using System.Threading;
 using System.Web;
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 		private ITestController _controller;
 		private IPrincipal _user = Thread.CurrentPrincipal;
 		private readonly IDictionary<string, string> _routeDataTokens = new Dictionary<string, string>();
+		private string _method = "GET";
 
 		public ActionResult InvokeFilter(IAuthorizationFilter authorizationFilter) { return InvokeFilter(new FilterTestActionInvoker(authorizationFilter)); }
 		public ActionResult InvokeFilter(AuthorizeAttribute authorizationFilter) { return InvokeFilter(new FilterTestActionInvoker(authorizationFilter)); }
@@ -65,6 +67,8 @@ namespace Teleopti.Ccc.WebTest.Filters
 
 		public void IsCustomErrorEnabled() { _isCustomErrorEnabled = true; }
 
+		public void UsePost(){_method = "POST";}
+
 		public void AcceptJson() { _headers.Add("Accept", "application/json, text/javascript"); }
 
 		public void AddHeader(string key, string value) { _headers.Add(key,value);}
@@ -92,6 +96,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 			controller.ControllerContext.HttpContext.Stub(x => x.Items).Return(_items);
 			controller.ControllerContext.HttpContext.Stub(x => x.User).Return(_user);
 			controller.ControllerContext.HttpContext.Request.Stub(x => x.Headers).Return(_headers);
+			controller.ControllerContext.HttpContext.Request.Stub(x => x.HttpMethod).Return(_method);
 			controller.ControllerContext.HttpContext.Request.Stub(x => x.RequestContext)
 				.Return(new RequestContext(controller.ControllerContext.HttpContext, controller.ControllerContext.RouteData));
 			controller.ControllerContext.HttpContext.Request.Stub(x => x.Url).Return(new Uri("http://tempuri.org/foo"));

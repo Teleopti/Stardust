@@ -91,6 +91,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var filter = new CsrfFilter();
 			var filterTester = new FilterTester();
 			filterTester.AddHeader("Origin", "http://burp/test/2");
+			filterTester.UsePost();
 			filterTester.InvokeFilter(filter);
 
 			filterTester.ControllerContext.HttpContext.Response.StatusCode.Should().Be.EqualTo(HttpStatusCode.Forbidden);
@@ -102,6 +103,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var filter = new CsrfFilter();
 			var filterTester = new FilterTester();
 			filterTester.AddHeader("Referer", "http://burp/test/2");
+			filterTester.UsePost();
 			filterTester.InvokeFilter(filter);
 
 			filterTester.ControllerContext.HttpContext.Response.StatusCode.Should().Be.EqualTo(HttpStatusCode.Forbidden);
@@ -112,6 +114,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		{
 			var filter = new CsrfFilter();
 			var filterTester = new FilterTester();
+			filterTester.UsePost();
 			filterTester.InvokeFilter(filter);
 
 			filterTester.ControllerContext.HttpContext.Response.StatusCode.Should().Not.Be.EqualTo(HttpStatusCode.Forbidden);
@@ -124,6 +127,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var filterTester = new FilterTester();
 			filterTester.AddHeader("Origin", "http://burp/test/2");
 			filterTester.AddHeader("Referer", "http://tempuri.org/foo/test/2");
+			filterTester.UsePost();
 			filterTester.InvokeFilter(filter);
 
 			filterTester.ControllerContext.HttpContext.Response.StatusCode.Should().Be.EqualTo(HttpStatusCode.Forbidden);
@@ -135,6 +139,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var filter = new CsrfFilter();
 			var filterTester = new FilterTester();
 			filterTester.AddHeader("Origin", "http://tempuri.org/foo/test/2");
+			filterTester.UsePost();
 			filterTester.InvokeFilter(filter);
 			
 			filterTester.ControllerContext.HttpContext.Response.StatusCode.Should().Not.Be.EqualTo(HttpStatusCode.Forbidden);
