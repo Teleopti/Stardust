@@ -160,7 +160,11 @@ namespace Teleopti.Ccc.WebTest.Filters
 
 			public TestController(Func<ActionResult> controllerAction) { _controllerAction = controllerAction; }
 
-			public ActionResult DummyAction() { return _controllerAction.Invoke(); }
+			public ActionResult DummyAction()
+			{
+				ControllerContext.HttpContext.Response.StatusCode = 200;
+				return _controllerAction.Invoke();
+			}
 		}
 
 		#endregion
