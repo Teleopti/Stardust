@@ -116,6 +116,15 @@
 					.$promise;
 			};
 
+			this.getAlarmStatesForTeamsExcludingGroups = function(data) {
+				return $resource('../api/Agents/GetAlarmStatesForTeamsExcludingGroups', {}, {
+						query: {
+							method: 'POST'
+						}
+					}).query({ ids: data.teamIds, excludedStateGroupIds: data.excludedStateGroupIds })
+					.$promise;
+			};
+
 			this.getAdherenceForTeamsOnSite = function(data) {
 				return $resource('../api/Teams/GetOutOfAdherenceForTeamsOnSite', {}, {
 					query: {

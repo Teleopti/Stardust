@@ -47,6 +47,7 @@
 				$scope.filterText = "";
 				$scope.timestamp = "";
 				$scope.agents = [];
+				$scope.stateGroups = [];
 				$scope.format = RtaFormatService.formatDateTime;
 				$scope.formatDuration = RtaFormatService.formatDuration;
 				$scope.hexToRgb = RtaFormatService.formatHexToRgb;
@@ -103,7 +104,7 @@
 					}
 				});
 
-				(function initialize(){
+				(function initialize() {
 					if (siteIds.length > 0 || teamIds.length > 0 || skillIds.length > 0 || skillAreaId) {
 						getAgents()
 							.then(function(fn) {
@@ -120,7 +121,7 @@
 								updateBreadCrumb(agentsInfo);
 							})
 							.then(updateStates);
-					}					
+					}
 				})();
 
 				function updateStates() {
@@ -129,7 +130,8 @@
 					getStates($scope.agentsInAlarm)({
 							siteIds: siteIds,
 							teamIds: teamIds,
-							skillIds: skillIds
+							skillIds: skillIds,
+							excludedStateGroupIds : excludedStateGroupIds()
 						})
 						.then(setStatesInAgents);
 				}
@@ -141,14 +143,22 @@
 						return RtaService.getStatesForSkills;
 					}
 					if (teamIds.length > 0) {
-						if (inAlarm)
+						if (inAlarm) {
+							if (excludedStateGroupIds().length >0){
+									return RtaService.getAlarmStatesForTeamsExcludingGroups;
+								}
 							return RtaService.getAlarmStatesForTeams;
+						}
 						return RtaService.getStatesForTeams;
 					}
 					if (inAlarm)
 						return RtaService.getAlarmStatesForSites;
 					return RtaService.getStatesForSites;
 				};
+
+				function excludedStateGroupIds(){
+					return $scope.stateGroups.filter(function(s) { return s.Selected === false;}).map(function(s){ return s.StateId; });
+				}
 
 				function setStatesInAgents(states) {
 					$scope.agents = [];
@@ -197,6 +207,18 @@
 								ShiftTimeBar: getShiftTimeBar(state),
 								Shift: getShift(state, timeInfo)
 							});
+
+							if ($scope.stateGroups
+								.map(function(sg) {
+									return sg.StateId;
+								})
+								.indexOf(state.StateId) === -1) {
+								$scope.stateGroups.push({
+									StateId: state.StateId,
+									State: state.State,
+									Selected: true,
+								})
+							}
 						}
 					});
 				}
@@ -377,19 +399,18 @@
 					else
 						$scope.filteredData = $filter('agentFilter')($scope.agents, $scope.filterText, propertiesForFiltering);
 					if ($scope.agentsInAlarm) {
-						$scope.filteredData = $filter('filter')($scope.filteredData,
-						{
-						     TimeInAlarm: ''
+						$scope.filteredData = $filter('filter')($scope.filteredData, {
+							TimeInAlarm: ''
 						});
 						$scope.openedMaxNumberOfAgents = ($scope.filteredData.length === $scope.maxNumberOfAgents);
-						if(!$scope.notifySwitchDisabled && $scope.agents.length > $scope.maxNumberOfAgents){
-							NoticeService.warning($translate.instant('Viewing agents out of alarm is not possible due to high number of agents. The switch is enabled for maximum '+$scope.maxNumberOfAgents+' agents'), null, true);
+						if (!$scope.notifySwitchDisabled && $scope.agents.length > $scope.maxNumberOfAgents) {
+							NoticeService.warning($translate.instant('Viewing agents out of alarm is not possible due to high number of agents. The switch is enabled for maximum ' + $scope.maxNumberOfAgents + ' agents'), null, true);
 							$scope.notifySwitchDisabled = true;
 						}
 
-                    }
+					}
 				}
-				
+
 				function secondsToPercent(seconds) {
 					return seconds / 3600 * 25;
 				}
@@ -417,7 +438,7 @@
 					return 'current-activity';
 				}
 
-				(function getSkillName(){
+				(function getSkillName() {
 					if (skillIds.length === 1) {
 						RtaService.getSkillName(skillIds[0])
 							.then(function(skill) {
@@ -464,66 +485,13 @@
 				});
 
 				$scope.rightPanelOptions = {
-				    panelState: false,
-				    panelTitle: " ",
-				    showCloseButton: true,
-				    showBackdrop: true,
-				    showResizer: true,
-				    showPopupButton: true
+					panelState: false,
+					panelTitle: " ",
+					showCloseButton: true,
+					showBackdrop: true,
+					showResizer: true,
+					showPopupButton: true
 				};
-
-				$scope.stateGroups = [
-					{
-					    Id: '1',
-					    Name: 'Phone',
-					    Selected: true
-					},
-					{
-					    Id: '2',
-					    Name: 'Ready',
-					    Selected: true
-					},
-					{
-					    Id: '3',
-					    Name: 'Meeting',
-					    Selected: true
-					},
-					{
-					    Id: '4',
-					    Name: 'Training',
-					    Selected: true
-					},
-					{
-					    Id: '5',
-					    Name: 'Break',
-					    Selected: true
-					},
-					{
-					    Id: '6',
-					    Name: 'Logged out',
-					    Selected: true
-					}
-				];
-
-				$scope.selectedStateGroups = [];
-				for (var i = 0; i < $scope.stateGroups.length; i++) {
-				    if ($scope.stateGroups[i].Selected) {
-				        $scope.selectedStateGroups.push($scope.stateGroups[i].Id);
-				    }
-				}
-
-				$scope.selectedStatusChanged = function (group) {
-				    $scope.stateGroups.forEach(function (g) {
-				        var groupIndex = $scope.selectedStateGroups.includes(g.Id);
-				        if (g.Selected && groupIndex === -1) {
-				            $scope.selectedStateGroups.push(group.Id);
-				        }
-				        if (!g.Selected && groupIndex > -1) {
-				            $scope.selectedStateGroups.splice(groupIndex, 1);
-				        }
-				    });
-				}
-
 
 			}
 		]);

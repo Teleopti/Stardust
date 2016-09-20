@@ -13,15 +13,15 @@ describe('RtaAgentsCtrl', function() {
 	beforeEach(module('wfm.rta'));
 
 	beforeEach(function() {
-		module(function ($provide) {
-			$provide.service('$stateParams', function () {
+		module(function($provide) {
+			$provide.service('$stateParams', function() {
 				stateParams = {};
 				return stateParams;
 			});
 		});
 	});
 
-	beforeEach(inject(function (_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_) {
+	beforeEach(inject(function(_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_) {
 		$interval = _$interval_;
 		$state = _$state_;
 		$sessionStorage = _$sessionStorage_;
@@ -74,21 +74,21 @@ describe('RtaAgentsCtrl', function() {
 	it('should get agent states', function() {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
 		$fakeBackend.withAgent({
-			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
-			TeamName: "Team Preferences",
-			SiteName: "London"
-		})
-		.withState({
-			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-			State: "Ready",
-			Activity: "Phone",
-			NextActivity: "Short break",
-			NextActivityStartTime: "\/Date(1432109700000)\/",
-			Alarm: "In Adherence",
-			Color: "#00FF00",
-			TimeInState: 15473
-		});
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+				TeamName: "Team Preferences",
+				SiteName: "London"
+			})
+			.withState({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				State: "Ready",
+				Activity: "Phone",
+				NextActivity: "Short break",
+				NextActivityStartTime: "\/Date(1432109700000)\/",
+				Alarm: "In Adherence",
+				Color: "#00FF00",
+				TimeInState: 15473
+			});
 
 		$controllerBuilder.createController()
 			.apply('agentsInAlarm = false');
@@ -132,19 +132,19 @@ describe('RtaAgentsCtrl', function() {
 	it('should set state to agent', function() {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
 		$fakeBackend.withAgent({
-			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-		})
-		.withState({
-			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-			State: "Ready",
-			Activity: "Phone",
-			NextActivity: "Short break",
-			NextActivityStartTime: "\/Date(1432109700000)\/",
-			Alarm: "In Adherence",
-			Color: "#00FF00",
-			TimeInState: 15473
-		});
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
+			})
+			.withState({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				State: "Ready",
+				Activity: "Phone",
+				NextActivity: "Short break",
+				NextActivityStartTime: "\/Date(1432109700000)\/",
+				Alarm: "In Adherence",
+				Color: "#00FF00",
+				TimeInState: 15473
+			});
 
 		$controllerBuilder.createController()
 			.apply('agentsInAlarm = false');
@@ -161,21 +161,21 @@ describe('RtaAgentsCtrl', function() {
 	it('should display in the same order as states received', function() {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
 		$fakeBackend.withAgent({
-			Name: "Ashley Andeen",
-			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-		})
-		.withAgent({
-			Name: "Charley Caper",
-			PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
-			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
-		})
-		.withState({
-			PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b"
-		})
-		.withState({
-			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564"
-		});
+				Name: "Ashley Andeen",
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
+			})
+			.withAgent({
+				Name: "Charley Caper",
+				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+			})
+			.withState({
+				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b"
+			})
+			.withState({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564"
+			});
 
 		$controllerBuilder.createController()
 			.apply('agentsInAlarm = false');
@@ -278,7 +278,9 @@ describe('RtaAgentsCtrl', function() {
 		});
 
 		$controllerBuilder.createController()
-			.apply(function() { scope.selectAgent(personId); });
+			.apply(function() {
+				scope.selectAgent(personId);
+			});
 
 		expect(scope.isSelected(personId)).toEqual(true);
 	});
@@ -290,8 +292,12 @@ describe('RtaAgentsCtrl', function() {
 		});
 
 		$controllerBuilder.createController()
-			.apply(function () { scope.selectAgent(personId); })
-			.apply(function () { scope.selectAgent(personId); });
+			.apply(function() {
+				scope.selectAgent(personId);
+			})
+			.apply(function() {
+				scope.selectAgent(personId);
+			});
 
 		expect(scope.isSelected(personId)).toEqual(false);
 	});
@@ -300,15 +306,19 @@ describe('RtaAgentsCtrl', function() {
 		var personId1 = '11610fe4-0130-4568-97de-9b5e015b2564';
 		var personId2 = '6b693b41-e2ca-4ef0-af0b-9e06008d969b';
 		$fakeBackend.withAgent({
-			PersonId: personId1
-		})
-		.withAgent({
-			PersonId: personId2
-		});
+				PersonId: personId1
+			})
+			.withAgent({
+				PersonId: personId2
+			});
 
 		$controllerBuilder.createController()
-			.apply(function () { scope.selectAgent(personId1); })
-			.apply(function () { scope.selectAgent(personId2); });
+			.apply(function() {
+				scope.selectAgent(personId1);
+			})
+			.apply(function() {
+				scope.selectAgent(personId2);
+			});
 
 		expect(scope.isSelected(personId1)).toEqual(false);
 	});
@@ -324,6 +334,92 @@ describe('RtaAgentsCtrl', function() {
 			.apply('adherencePercent = 0');
 
 		expect(scope.showAdherenceUpdates()).toEqual(true);
+	});
+
+	it('should include state id in agent states', function() {
+		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		$fakeBackend.withAgent({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+			})
+			.withState({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				State: "LoggedOut",
+				StateId: '17560fe4-0130-4568-97de-9b5e015b2555',
+				TimeInAlarm: 10
+			});
+
+		$controllerBuilder.createController()
+			.apply('agentsInAlarm = true');
+
+		expect(scope.stateGroups[0].State).toEqual('LoggedOut');
+		expect(scope.stateGroups[0].StateId).toEqual('17560fe4-0130-4568-97de-9b5e015b2555');
+		expect(scope.stateGroups[0].Selected).toEqual(true);
+	});
+
+	it('should not have duplicate state groups', function() {
+		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		$fakeBackend.withAgent({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+			})
+			.withAgent({
+				PersonId: "22610fe4-0130-4568-97de-9b5e015b2577",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+			})
+			.withState({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				State: "LoggedOut",
+				StateId: '17560fe4-0130-4568-97de-9b5e015b2555',
+				TimeInAlarm: 15
+			})
+			.withState({
+				PersonId: "22610fe4-0130-4568-97de-9b5e015b2577",
+				State: "LoggedOut",
+				StateId: '17560fe4-0130-4568-97de-9b5e015b2555',
+				TimeInAlarm: 10
+			});
+
+		$controllerBuilder.createController()
+			.apply('agentsInAlarm = true');
+
+		expect(scope.stateGroups.length).toEqual(1);
+	});
+
+	it('should get selected state groups', function() {
+		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		$fakeBackend.withAgent({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+			})
+			.withAgent({
+				PersonId: "22610fe4-0130-4568-97de-9b5e015b2577",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+			})
+			.withState({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				State: "Training",
+				StateId: 'TrainingGuid',
+				TimeInAlarm: 15
+			})
+			.withState({
+				PersonId: "22610fe4-0130-4568-97de-9b5e015b2577",
+				State: "LoggedOut",
+				StateId: 'LoggedOutGuid',
+				TimeInAlarm: 10
+			});
+
+		var c = $controllerBuilder.createController()
+			.apply('agentsInAlarm = true')
+			.apply(function() {
+				scope.stateGroups.filter(function(sg){
+					return sg.StateId=== 'LoggedOutGuid'
+				})[0].Selected = false;
+			});
+		c.wait(5000);
+
+		expect(scope.filteredData.length).toEqual(1);
+		expect(scope.filteredData[0].PersonId).toEqual("11610fe4-0130-4568-97de-9b5e015b2564");
 	});
 
 });
