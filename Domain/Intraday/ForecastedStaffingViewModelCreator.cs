@@ -149,7 +149,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 				.ToList();
 
 			var nullStartTime = forecastedStaffingDictionary
-				.Select(x => x.Value.Min(m => m.StartTime)).First();
+				.Select(x => x.Value.Min(m => m.StartTime))
+				.Min(t => t);
 			var nullEndTime = updatedForecastedSeries.Min(m => m.StartTime);
 			for (DateTime i = nullStartTime; i < nullEndTime; i = i.AddMinutes(minutesPerInterval))
 			{
