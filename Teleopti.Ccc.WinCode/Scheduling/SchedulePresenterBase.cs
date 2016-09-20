@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands;
@@ -19,7 +18,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
     public class SchedulePresenterBase : ISchedulePresenterBase
     {
         private readonly IScheduleViewBase _view;
@@ -603,7 +601,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             }
 
 #pragma warning disable 618
-            IUndoRedoContainer undoRedoContainer = _schedulerState.UndoRedoContainer;
+            var undoRedoContainer = _schedulerState.UndoRedoContainer ?? new NonExistentUndoRedoContainer();
 #pragma warning restore 618
             undoRedoContainer.CreateBatch("Saving parts");
             bool result;
@@ -642,7 +640,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 rulesToRun.Remove(overriddenBusinessRule.TypeOfRule);
             }
             var lstBusinessRuleResponseToOverride = new List<IBusinessRuleResponse>();
-            var lstBusinessRuleResponse = _schedulerState.Schedules.Modify(ScheduleModifier.Scheduler, scheduleParts, rulesToRun, _scheduleDayChangeCallback, new ScheduleTagSetter(scheduleTag));
+            var lstBusinessRuleResponse = _schedulerState.Schedules.Modify(ScheduleModifier.Scheduler, scheduleParts, rulesToRun, _scheduleDayChangeCallback, new ScheduleTagSetter(scheduleTag)).ToArray();
             if (lstBusinessRuleResponse.IsEmpty() || lstBusinessRuleResponse.All(r => r.Overridden))
                 return true;
             var handleBusinessRules = new HandleBusinessRules(View.HandleBusinessRuleResponse, View, _overriddenBusinessRulesHolder);
@@ -652,7 +650,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             if (lstBusinessRuleResponseToOverride.Count > 0)
             {
                 lstBusinessRuleResponseToOverride.ForEach(rulesToRun.Remove);
-                lstBusinessRuleResponse = _schedulerState.Schedules.Modify(ScheduleModifier.Scheduler, scheduleParts, rulesToRun, _scheduleDayChangeCallback, new ScheduleTagSetter(scheduleTag));
+                lstBusinessRuleResponse = _schedulerState.Schedules.Modify(ScheduleModifier.Scheduler, scheduleParts, rulesToRun, _scheduleDayChangeCallback, new ScheduleTagSetter(scheduleTag)).ToArray();
                 lstBusinessRuleResponseToOverride = new List<IBusinessRuleResponse>();
                 foreach (var response in lstBusinessRuleResponse)
                 {
@@ -688,7 +686,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             IList<IScheduleDay> theParts = new List<IScheduleDay> { LastUnsavedSchedulePart };
 
 #pragma warning disable 618
-            IUndoRedoContainer undoRedoContainer = _schedulerState.UndoRedoContainer;
+            IUndoRedoContainer undoRedoContainer = _schedulerState.UndoRedoContainer ?? new NonExistentUndoRedoContainer();
 #pragma warning restore 618
             undoRedoContainer.CreateBatch("Saving note");
 
@@ -704,7 +702,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             IList<IScheduleDay> theParts = new List<IScheduleDay> { LastUnsavedSchedulePart };
 
 #pragma warning disable 618
-            IUndoRedoContainer undoRedoContainer = _schedulerState.UndoRedoContainer;
+            IUndoRedoContainer undoRedoContainer = _schedulerState.UndoRedoContainer ?? new NonExistentUndoRedoContainer();
 #pragma warning restore 618
             undoRedoContainer.CreateBatch("Saving public note");
 
@@ -819,7 +817,54 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             AddPersonalShift(null, null);
         }
 
-		
+	    private class NonExistentUndoRedoContainer : IUndoRedoContainer
+	    {
+		    public bool InUndoRedo { get; }
+		    public bool CanRedo()
+		    {
+				return false;
+			}
+
+		    public bool CanUndo()
+		    {
+			    return false;
+		    }
+
+		    public void Clear()
+		    {
+		    }
+
+		    public bool Redo()
+		    {
+				return false;
+			}
+
+		    public void SaveState<T>(IOriginator<T> state)
+		    {
+		    }
+
+		    public bool Undo()
+		    {
+				return false;
+			}
+
+		    public void CreateBatch(string description)
+		    {
+		    }
+
+		    public void CommitBatch()
+		    {
+		    }
+
+		    public void RollbackBatch()
+		    {
+		    }
+
+		    public event EventHandler ChangedHandler;
+		    public void UndoAll()
+		    {
+		    }
+	    }
     }
 
 

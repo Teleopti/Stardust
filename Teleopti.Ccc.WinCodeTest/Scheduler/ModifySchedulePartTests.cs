@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
-using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -20,13 +19,13 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {
 	[DomainTest]
-	public class TryModifyTests : ISetup
+	public class ModifySchedulePartTests : ISetup
 	{
 		public ISchedulerStateHolder StateHolder;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 
 		[Test]
-		public void ShouldReturnTrueForModificationWithAlreadyOverridenRuleBroken()
+		public void ShouldModifyScheduleWithoutUndoRedoContainer()
 		{
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
 			var scenario = new Scenario("Default").WithId();
@@ -48,59 +47,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			personPeriod.Team.Site = SiteFactory.CreateSimpleSite();
 			personPeriod.PersonContract.Contract.NegativePeriodWorkTimeTolerance = TimeSpan.FromHours(24);
 			personPeriod.PersonContract.Contract.PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(24);
-			
-			var dictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2014, 3, 22, 2014, 4, 4));
-			dictionary.UsePermissions(false);
-			dictionary.SetUndoRedoContainer(new UndoRedoContainer(new DoNothingScheduleDayChangeCallBack(), 500));
-			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person,
-				new DateTimePeriod(2014, 3, 25, 8, 2014, 3, 25, 22), shiftCategory, scenario);
-			assignment.AddActivity(lunch,new DateTimePeriod(2014,3,25,13,2014,3,25,14));
-			dictionary.AddPersonAssignment(assignment);
-
-			StateHolder.SetRequestedScenario(scenario);
-			StateHolder.SchedulingResultState.Schedules = dictionary;
-			StateHolder.SchedulingResultState.UseValidation = true;
-			
-			var overriddenBusinessRulesHolder = new OverriddenBusinessRulesHolder();
-			overriddenBusinessRulesHolder.AddOverriddenRule(new BusinessRuleResponse(typeof(NotOverwriteLayerRule),"",false,false,new DateTimePeriod(), person,new DateOnlyPeriod(), ""));
-			
-			var fakeResponseHandler = new FakeBusinessRulesResponseHandler();
-			var view = new FakeScheduleView().WithBusinessRuleResponse(fakeResponseHandler);
-
-			var target = new SchedulePresenterBase(view, StateHolder, new GridlockManager(), new ClipHandler<IScheduleDay>(), SchedulePartFilter.None, overriddenBusinessRulesHolder, new DoNothingScheduleDayChangeCallBack(), NullScheduleTag.Instance);
-
-			var dayToChange = StateHolder.Schedules[person].ScheduledDay(new DateOnly(2014, 3, 25));
-			dayToChange.PersonAssignment().AddActivity(activity,new DateTimePeriod(2014, 3, 25, 13, 2014, 3, 25, 14));
-			Assert.IsTrue(target.TryModify(new List<IScheduleDay> {dayToChange}));
-		}
-
-		[Test]
-		public void ShouldReturnTrueForModificationWithRuleBroken()
-		{
-			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
-			var scenario = new Scenario("Default").WithId();
-			var shiftCategory = new ShiftCategory("DY").WithId();
-			var activity = new Activity("Phone")
-			{
-				InContractTime = true,
-				InWorkTime = true,
-				InPaidTime = true
-			};
-			var lunch = new Activity("Lunch")
-			{
-				AllowOverwrite = false
-			};
-
-			var person = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson().WithId(),
-				new DateOnly(2014, 3, 1));
-			var personPeriod = person.Period(new DateOnly(2014, 3, 1));
-			personPeriod.Team.Site = SiteFactory.CreateSimpleSite();
-			personPeriod.PersonContract.Contract.NegativePeriodWorkTimeTolerance = TimeSpan.FromHours(24);
-			personPeriod.PersonContract.Contract.PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(24);
 
 			var dictionary = new ScheduleDictionaryForTest(scenario, new DateTimePeriod(2014, 3, 22, 2014, 4, 4));
 			dictionary.UsePermissions(false);
-			dictionary.SetUndoRedoContainer(new UndoRedoContainer(new DoNothingScheduleDayChangeCallBack(), 500));
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person,
 				new DateTimePeriod(2014, 3, 25, 8, 2014, 3, 25, 22), shiftCategory, scenario);
 			assignment.AddActivity(lunch, new DateTimePeriod(2014, 3, 25, 13, 2014, 3, 25, 14));
@@ -111,6 +60,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			StateHolder.SchedulingResultState.UseValidation = true;
 
 			var overriddenBusinessRulesHolder = new OverriddenBusinessRulesHolder();
+			overriddenBusinessRulesHolder.AddOverriddenRule(new BusinessRuleResponse(typeof (NotOverwriteLayerRule), "", false,
+				false, new DateTimePeriod(), person, new DateOnlyPeriod(), ""));
 
 			var fakeResponseHandler = new FakeBusinessRulesResponseHandler();
 			var view = new FakeScheduleView().WithBusinessRuleResponse(fakeResponseHandler);
@@ -121,7 +72,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 			var dayToChange = StateHolder.Schedules[person].ScheduledDay(new DateOnly(2014, 3, 25));
 			dayToChange.PersonAssignment().AddActivity(activity, new DateTimePeriod(2014, 3, 25, 13, 2014, 3, 25, 14));
-			Assert.IsTrue(target.TryModify(new List<IScheduleDay> {dayToChange}));
+			Assert.IsTrue(target.ModifySchedulePart(new List<IScheduleDay> {dayToChange}));
 		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)

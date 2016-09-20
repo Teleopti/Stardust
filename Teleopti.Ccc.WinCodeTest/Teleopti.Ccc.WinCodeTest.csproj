@@ -555,10 +555,13 @@
     <Compile Include="Scheduler\Editor\Bug26842.cs" />
     <Compile Include="Scheduler\ExportToScenarioAbsenceFinderTest.cs" />
     <Compile Include="Scheduler\ExportToScenarioAccountPersisterTest.cs" />
+    <Compile Include="Scheduler\FakeBusinessRulesResponseHandler.cs" />
+    <Compile Include="Scheduler\FakeScheduleView.cs" />
     <Compile Include="Scheduler\FilterHourlyAvailabilityPresenterTest.cs" />
     <Compile Include="Scheduler\FilterOvertimeAvailabilityPresenterTest.cs" />
     <Compile Include="Scheduler\DaysOnlyHelperTest.cs" />
     <Compile Include="Scheduler\MatrixUnselectedDaysLockerTest.cs" />
+    <Compile Include="Scheduler\ModifySchedulePartTests.cs" />
     <Compile Include="Scheduler\MultiplicatorsetForPasteSpecialFilterTest.cs" />
     <Compile Include="Scheduler\OptimizationBug37966Test.cs" />
     <Compile Include="Scheduler\OptimizationBug37126Test.cs" />
@@ -576,6 +579,7 @@
     <Compile Include="Scheduler\Restriction\HourlyAvailabilityPersonFilterTest.cs" />
     <Compile Include="Scheduler\Restriction\OvertimeAvailabilityCreatorTest.cs" />
     <Compile Include="Scheduler\Restriction\OvertimeAvailabilityPersonFilterTest.cs" />
+    <Compile Include="Scheduler\SchedulePartNoteTests.cs" />
     <Compile Include="Scheduler\ScheduleSortingCommands\ScheduleSortBySeniorityRankingCommandsTest.cs" />
     <Compile Include="Scheduler\SchedulingScreenPersisterTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftCategoryDistributionModelTest.cs" />
