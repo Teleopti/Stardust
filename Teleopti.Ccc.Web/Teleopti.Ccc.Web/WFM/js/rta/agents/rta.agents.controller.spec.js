@@ -386,40 +386,68 @@ describe('RtaAgentsCtrl', function() {
 		expect(scope.stateGroups.length).toEqual(1);
 	});
 
-	it('should get selected state groups', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
-		$fakeBackend.withAgent({
-				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
-			})
-			.withAgent({
-				PersonId: "22610fe4-0130-4568-97de-9b5e015b2577",
-				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
-			})
-			.withState({
-				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				State: "Training",
-				StateId: 'TrainingGuid',
-				TimeInAlarm: 15
-			})
-			.withState({
-				PersonId: "22610fe4-0130-4568-97de-9b5e015b2577",
-				State: "LoggedOut",
-				StateId: 'LoggedOutGuid',
-				TimeInAlarm: 10
-			});
+	[{
+		name: "site",
+		type: 'siteId',
+		id: "siteGuid",
+		createAgent: function(personId) {
+			return {
+				PersonId: personId,
+				SiteId: "siteGuid"
+			}
+		}
+	}, {
+		name: "team",
+		type: 'teamId',
+		id: "teamGuid",
+		createAgent: function(personId) {
+			return {
+				PersonId: personId,
+				TeamId: "teamGuid"
+			}
+		}
+	}, {
+		name: "skill",
+		type: 'skillId',
+		id: "skillGuid",
+		createAgent: function(personId) {
+			return {
+				PersonId: personId,
+				SkillId: "skillGuid"
+			}
+		}
+	}].forEach(function(selection) {
+		it('should get selected state groups for ' + selection.name, function() {
+			stateParams[selection.type] = selection.id;
+			$fakeBackend
+				.withAgent(
+					selection.createAgent("person1"))
+				.withAgent(
+					selection.createAgent("person2"))
+				.withState({
+					PersonId: "person1",
+					State: "Training",
+					StateId: 'TrainingGuid',
+					TimeInAlarm: 15
+				})
+				.withState({
+					PersonId: "person2",
+					State: "LoggedOut",
+					StateId: 'LoggedOutGuid',
+					TimeInAlarm: 10
+				});
 
-		var c = $controllerBuilder.createController()
-			.apply('agentsInAlarm = true')
-			.apply(function() {
-				scope.stateGroups.filter(function(sg){
-					return sg.StateId=== 'LoggedOutGuid'
-				})[0].Selected = false;
-			});
-		c.wait(5000);
+			var c = $controllerBuilder.createController()
+				.apply('agentsInAlarm = true')
+				.apply(function() {
+					scope.stateGroups.filter(function(sg) {
+						return sg.StateId === 'LoggedOutGuid'
+					})[0].Selected = false;
+				});
+			c.wait(5000);
 
-		expect(scope.filteredData.length).toEqual(1);
-		expect(scope.filteredData[0].PersonId).toEqual("11610fe4-0130-4568-97de-9b5e015b2564");
-	});
-
+			expect(scope.filteredData.length).toEqual(1);
+			expect(scope.filteredData[0].PersonId).toEqual("person1");
+		});
+	})
 });

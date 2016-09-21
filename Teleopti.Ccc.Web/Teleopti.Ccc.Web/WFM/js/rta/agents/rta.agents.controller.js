@@ -138,21 +138,26 @@
 
 				function getStates(inAlarm) {
 					if (skillIds.length > 0) {
-						if (inAlarm)
+						if (inAlarm) {
+							if (excludedStateGroupIds().length >0)
+									return RtaService.getAlarmStatesForSkillsExcludingGroups;
 							return RtaService.getAlarmStatesForSkills;
+						}
 						return RtaService.getStatesForSkills;
 					}
 					if (teamIds.length > 0) {
 						if (inAlarm) {
-							if (excludedStateGroupIds().length >0){
+							if (excludedStateGroupIds().length >0)
 									return RtaService.getAlarmStatesForTeamsExcludingGroups;
-								}
 							return RtaService.getAlarmStatesForTeams;
 						}
 						return RtaService.getStatesForTeams;
 					}
-					if (inAlarm)
+					if (inAlarm) {
+						if (excludedStateGroupIds().length >0)
+								return RtaService.getAlarmStatesForSitesExcludingGroups;
 						return RtaService.getAlarmStatesForSites;
+					}
 					return RtaService.getStatesForSites;
 				};
 

@@ -84,6 +84,15 @@
 				}).$promise;
 			};
 
+			this.getAlarmStatesForSitesExcludingGroups = function(data) {
+				return $resource('../api/Agents/GetAlarmStatesForSitesExcludingGroups', {}, {
+						query: {
+							method: 'POST'
+						}
+					}).query({ ids: data.siteIds, excludedStateGroupIds: data.excludedStateGroupIds })
+					.$promise;
+			};
+
 			this.getAlarmStatesForSkills = function(data) {
 				return $resource('../api/Agents/GetAlarmStatesForSkills',
 					{},
@@ -94,6 +103,20 @@
 					})
 					.query({
 						ids: data.skillIds
+					})
+					.$promise;
+			};
+
+			this.getAlarmStatesForSkillsExcludingGroups = function(data) {
+				return $resource('../api/Agents/GetAlarmStatesForSkillsExcludingGroups',
+					{},
+					{
+						query: {
+							method: 'POST'
+						}
+					})
+					.query({
+						ids: data.skillIds, excludedStateGroupIds: data.excludedStateGroupIds
 					})
 					.$promise;
 			};
