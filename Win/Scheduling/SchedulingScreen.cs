@@ -3828,7 +3828,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		[RemoveMeWithToggle("Check if MarkDateToBeRecalculated can be deleted when SchedulerStateScheduleDayChangedCallback is used everywhere", Toggles.ResourcePlanner_SpeedUpManualChanges_37029)]
 		private void _schedules_PartModified(object sender, ModifyEventArgs e)
 		{
 			if (InvokeRequired)
@@ -3844,13 +3843,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if (_selectedPeriod.Contains(e.ModifiedPeriod))
 					_totalScheduled++;
 
-				var localDate = new DateOnly(e.ModifiedPeriod.StartDateTimeLocal(_schedulerState.TimeZoneInfo));
-
-				if (e.Modifier != ScheduleModifier.Scheduler)
+				if (!_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_CalculateFarAwayTimeZones_40646))
 				{
-					_schedulerState.MarkDateToBeRecalculated(localDate);
-					//add date after for night shifts
-					_schedulerState.MarkDateToBeRecalculated(localDate.AddDays(1));
+					var localDate = new DateOnly(e.ModifiedPeriod.StartDateTimeLocal(_schedulerState.TimeZoneInfo));
+
+					if (e.Modifier != ScheduleModifier.Scheduler)
+					{
+						_schedulerState.MarkDateToBeRecalculated(localDate);
+						//add date after for night shifts
+						_schedulerState.MarkDateToBeRecalculated(localDate.AddDays(1));
+					}
 				}
 
 				_restrictionPersonsToReload.Add(e.ModifiedPerson);
