@@ -13,10 +13,14 @@
 		function getWeekdayNames() {
 			var names = $locale.DATETIME_FORMATS.DAY;
 			var defaultIdx = [6, 0, 1, 2, 3, 4, 5];
-			var sdow = $locale.DATETIME_FORMATS.FIRSTDAYOFWEEK;
+			var fdow = $locale.DATETIME_FORMATS.FIRSTDAYOFWEEK;
+
+			if ($locale.id === 'zh-cn') {
+				fdow = 0;
+			}
 
 			var result = [];
-			var startIndex = defaultIdx.indexOf(sdow);
+			var startIndex = defaultIdx.indexOf(fdow);
 			for (var i = 0; i < 7; i++) {
 				result.push(names[(startIndex + i) % 7]);
 			}
