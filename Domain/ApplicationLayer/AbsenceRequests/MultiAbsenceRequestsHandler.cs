@@ -125,13 +125,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					requests.AddRange(_personRequestRepository.Find(waitListIds));
 				}
 
+				//preload some data
 				_personRepository.FindPeople(requests.Select(x => x.Person.Id.GetValueOrDefault()));
-				var skills = _skillRepository.LoadAll();
-
-				foreach (var skill in skills)
-				{
-					_skillRepository.LoadSkill(skill);
-				}
+				_skillRepository.LoadAllSkills();
+				
 				uow.PersistAll();
 			}
 			return requests;

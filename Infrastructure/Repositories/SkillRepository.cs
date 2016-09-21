@@ -155,7 +155,23 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return fetchedSkill;
         }
 
-        public IMultisiteSkill LoadMultisiteSkill(ISkill skill)
+		public IEnumerable<ISkill> LoadAllSkills()
+		{
+			var workloads = DetachedCriteria.For<Skill>()
+				.SetFetchMode("WorkloadCollection", FetchMode.Join);
+
+			var workloadIds = getWorkloadIds();
+			var templates = getWorkloadTemplates(workloadIds);
+			var templateIds = getWorkloadDayTemplateIds(workloadIds);
+			var openhours = getOpenhours(templateIds);
+
+			var multiCriteria = Session.CreateMultiCriteria().Add(workloads).Add(templates).Add(openhours);
+			var fetchedSkills = CollectionHelper.ToDistinctGenericCollection<ISkill>(wrapMultiCriteria(multiCriteria));
+
+			return fetchedSkills;
+		}
+
+		public IMultisiteSkill LoadMultisiteSkill(ISkill skill)
         {
             var workloadIds = getWorkloadIds(skill);
             var workloads = getWorkloads(skill);
@@ -264,14 +280,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .SetFetchMode("WorkloadCollection", FetchMode.Join);
         }
 
-        private DetachedCriteria getWorkloadIds(ISkill skill)
+		private DetachedCriteria getWorkloadIds(ISkill skill)
         {
             return DetachedCriteria.For<Workload>()
                 .Add(Restrictions.Eq("Skill", skill))
                 .SetProjection(Projections.Property("Id")).SetResultTransformer(Transformers.DistinctRootEntity);
         }
 
-        public IEnumerable<ISkill> LoadInboundTelephonySkills(int defaultResolution)
+		private DetachedCriteria getWorkloadIds()
+		{
+			return DetachedCriteria.For<Workload>()
+				.SetProjection(Projections.Property("Id")).SetResultTransformer(Transformers.DistinctRootEntity);
+		}
+
+		public IEnumerable<ISkill> LoadInboundTelephonySkills(int defaultResolution)
         {
             return Session.GetNamedQuery("loadInboundTelephonySkills")
                 .SetEnum("forecastSource", ForecastSource.InboundTelephony)

@@ -101,8 +101,8 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 				var seniority = _arrangeRequestsByProcessOrder.GetRequestsSortedBySeniority(personRequests);
 				var firstComeFirstServe = _arrangeRequestsByProcessOrder.GetRequestsSortedByDate(personRequests);
-				processOrderList(seniority, _schedulingResultStateHolder);
-				processOrderList(firstComeFirstServe, _schedulingResultStateHolder);
+				processOrderList(seniority);
+				processOrderList(firstComeFirstServe);
 
 			}
 			foreach (var personRequest in personRequests)
@@ -132,13 +132,13 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			}
 		}
 
-		private void processOrderList(IList<IPersonRequest> requests, ISchedulingResultStateHolder schedulingResultStateHolder)
+		private void processOrderList(IList<IPersonRequest> requests)
 		{
 			foreach (var personRequest in requests)
 			{
 				var absenceRequest = personRequest.Request as IAbsenceRequest;
 
-				IProcessAbsenceRequest process;
+				IProcessAbsenceRequest processAbsenceRequest;
 				IEnumerable<IAbsenceRequestValidator> validatorList = null;
 				IPersonAccountBalanceCalculator personAccountBalanceCalculator = null;
 				IRequestApprovalService requestApprovalServiceScheduler = null;
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				var workflowControlSet = absenceRequest.Person.WorkflowControlSet;
 				if (workflowControlSet == null)
 				{
-					process = handleNoWorkflowControlSet(absenceRequest);
+					processAbsenceRequest = handleNoWorkflowControlSet(absenceRequest);
 				}
 				else
 				{
@@ -164,23 +164,23 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 					var mergedPeriod = workflowControlSet.GetMergedAbsenceRequestOpenPeriod(absenceRequest);
 					validatorList = mergedPeriod.GetSelectedValidatorList();
-					process = mergedPeriod.AbsenceRequestProcess;
+					processAbsenceRequest = mergedPeriod.AbsenceRequestProcess;
 
 
 					personAccountBalanceCalculator = getPersonAccountBalanceCalculator(affectedPersonAbsenceAccount, absenceRequest, dateOnlyPeriod);
 
 					setupUndoContainersAndTakeSnapshot(undoRedoContainer, allAccounts);
 
-					process = checkIfPersonIsAlreadyAbsentDuringRequestPeriod(absenceRequest, process);
+					processAbsenceRequest = checkIfPersonIsAlreadyAbsentDuringRequestPeriod(absenceRequest, processAbsenceRequest);
 
 					var businessRules = NewBusinessRuleCollection.Minimum();
 
-					requestApprovalServiceScheduler = _requestFactory.GetRequestApprovalService(businessRules, currentScenario, schedulingResultStateHolder);
+					requestApprovalServiceScheduler = _requestFactory.GetRequestApprovalService(businessRules, currentScenario, _schedulingResultStateHolder);
 
 					simulateApproveAbsence(absenceRequest, requestApprovalServiceScheduler);
 
 					//Will issue a rollback for simulated schedule data
-					process = handleInvalidSchedule(process);
+					processAbsenceRequest = handleInvalidSchedule(processAbsenceRequest);
 				}
 
 				var requiredForProcessingAbsenceRequest = new RequiredForProcessingAbsenceRequest(
@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 					_budgetGroupAllowanceSpecification,
 					_budgetGroupHeadCountSpecification);
 
-				process.Process(null, absenceRequest,
+				processAbsenceRequest.Process(null, absenceRequest,
 								requiredForProcessingAbsenceRequest,
 								requiredForHandlingAbsenceRequest,
 								validatorList);

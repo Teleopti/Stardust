@@ -102,6 +102,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			throw new NotImplementedException();
 		}
 
+		public IEnumerable<ISkill> LoadAllSkills()
+		{
+			throw new NotImplementedException();
+		}
+
 		public IMultisiteSkill LoadMultisiteSkill(ISkill skill)
 		{
 			throw new NotImplementedException();

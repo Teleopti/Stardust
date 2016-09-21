@@ -36,7 +36,8 @@ namespace Teleopti.Ccc.Domain.Repositories
         ICollection<ISkill> FindAllWithSkillDays(DateOnlyPeriod periodWithSkillDays);
 
         ISkill LoadSkill(ISkill skill);
-        IMultisiteSkill LoadMultisiteSkill(ISkill skill);
+	    IEnumerable<ISkill> LoadAllSkills();
+		IMultisiteSkill LoadMultisiteSkill(ISkill skill);
 	    int MinimumResolution();
 	    IEnumerable<ISkill> FindSkillsWithAtLeastOneQueueSource();
 	    ICollection<ISkill> LoadSkills(IEnumerable<Guid> skillIdList);
