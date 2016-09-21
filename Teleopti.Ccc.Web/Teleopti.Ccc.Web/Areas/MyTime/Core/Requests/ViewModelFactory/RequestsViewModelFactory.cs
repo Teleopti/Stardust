@@ -203,7 +203,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		{
 			Guid? mySite = _shiftTradeRequestprovider.RetrieveMySiteId(selectedDate);
 
-			return mySite.HasValue ? mySite.ToString() : "";
+			var test = mySite.HasValue ? mySite.ToString() : "";
+			return test;
 		}
 	}
 }

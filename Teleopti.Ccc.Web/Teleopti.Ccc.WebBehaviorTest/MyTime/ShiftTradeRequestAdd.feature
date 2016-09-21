@@ -5,13 +5,16 @@
 
 Background:
 	Given there is a site named 'The site'
+	And there is a site named 'Other site'
 	And there is a team named 'My team' on 'The site'
 	And there is a team named 'Other team' on 'The site'
+	And there is a team named 'Team in other site' on 'Other site'
 	And there is a role with
-	| Field        | Value                 |
-	| Name         | Full access to mytime |
-	| AccessToSite | The site              |
-	| AccessToTeam | Other team            |
+	| Field          | Value                 |
+	| Name           | Full access to mytime |
+	| AccessToMySite | true                  |
+	| AccessToSite   | Other site            |
+	| AccessToTeam   | Other team            |
 	And there is a workflow control set with
 	| Field                            | Value                                     |
 	| Name                             | Trade from tomorrow until 30 days forward |
@@ -43,6 +46,11 @@ Background:
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
 	| Team		 | Other team |
+	And OtherAgentNotInMySite has a person period with
+	| Field      | Value              |
+	| Start date | 2012-06-18         |
+	| Team       | Team in other site |
+	| Site       | Other site         |
 	And there are shift categories
 	| Name  |
 	| Day   |
@@ -347,6 +355,28 @@ Scenario: Default to my team
 	Then the option 'The site/My team' should be selected
 	And I should see a possible schedule trade with 'OtherAgent'
 	And I should not see a possible schedule trade with 'OtherAgentNotInMyTeam'
+
+@OnlyRunIfEnabled('MyTimeWeb_ShiftTradeFilterSite_40374')
+Scenario: Change site
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgentNotInMySite have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field          | Value            |
+	| StartTime      | 2030-01-01 06:00 |
+	| EndTime        | 2030-01-01 16:00 |
+	| Shift category | Day              |
+	And OtherAgentNotInMySite has a shift with
+	| Field          | Value            |
+	| StartTime      | 2030-01-01 08:00 |
+	| EndTime        | 2030-01-01 18:00 |
+	| Shift category | Day              |
+	And the time is '2029-12-27'
+	And I view Add Shift Trade Request for date '2030-01-01'
+	And I should see a message text saying that no possible shift trades could be found
+	When I select the site filter 'Other site'
+	Then the option for site filter 'BusinessUnit/Other site' should be selected
+	And I should see a possible schedule trade with 'OtherAgentNotInMySite'
 
 @OnlyRunIfDisabled('MyTimeWeb_ShiftTradeFilterSite_40374')
 Scenario: Change team

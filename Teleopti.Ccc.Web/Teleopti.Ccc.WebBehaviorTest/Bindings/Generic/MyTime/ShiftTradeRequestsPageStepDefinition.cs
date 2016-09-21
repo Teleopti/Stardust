@@ -309,11 +309,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Select2Box.AssertSelectedOptionText("Team-Picker", optionSelected);
 		}
 
+		[Then(@"the option for site filter '(.*)' should be selected")]
+		public void ThenTheOptionForSiteFilterShouldBeSelected(string optionSelected)
+		{
+			Select2Box.AssertSelectedOptionText("Site-Picker", optionSelected);
+		}
+
 		[When(@"I select the '(.*)'")]
 		public void WhenISelectThe(string optionToSelect)
 		{
 			Select2Box.OpenWhenOptionsAreLoaded("Team-Picker");
 			Select2Box.SelectItemByText("Team-Picker", optionToSelect);
+		}
+
+		[When(@"I select the site filter '(.*)'")]
+		public void WhenISelectTheSiteFilter(string optionToSelect)
+		{
+			Select2Box.OpenWhenOptionsAreLoaded("Site-Picker");
+			Select2Box.SelectItemByText("Site-Picker", optionToSelect);
 		}
 
 		[When(@"I type '(.*)' in the name search box")]

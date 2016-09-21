@@ -483,7 +483,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 				self.redrawLayers();
 			},
 			error: function (e) {
-				//console.log(e);
+				console.log(e);
 			},
 			complete: function () {
 				self.IsLoading(false);
@@ -523,10 +523,9 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 		},
 		write: function (siteId) {
 			self.selectedSiteInternal(siteId);
-			if (self.selectedTeam() != null && !self.dateChanged()) {
-				self.selectedTeamInternal(self.allTeamsId);
-				self.loadTeamsUnderSite(siteId);
-			}
+			if (self.selectedTeam() == null || self.dateChanged()) return;
+			self.selectedTeamInternal(self.allTeamsId);
+			self.loadTeamsUnderSite(siteId);
 		}
 	});
 
