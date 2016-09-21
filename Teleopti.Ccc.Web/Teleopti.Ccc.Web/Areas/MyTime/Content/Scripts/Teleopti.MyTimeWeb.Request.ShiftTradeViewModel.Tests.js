@@ -642,7 +642,8 @@ $(document).ready(function () {
 		equal(viewModel.filterStartTimeList()[12].text, "DO");
 	});
 
-	test("should not load team when there is no selected team", function() {
+	test("should not load team when there is no selected team", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { return true; };
 		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
 		viewModel.dateChanged(false);
 
@@ -689,4 +690,11 @@ $(document).ready(function () {
 		equal(viewModel.availableTeams().length, 4);
 	});
 
+	test("should update time sort order correctly", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) { return true; };
+		var viewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeViewModel();
+		viewModel.updateTimeSortOrder({ Value: 'start asc' });
+
+		equal(viewModel.TimeSortOrder(), 'start asc');
+	});
 });
