@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -28,6 +30,36 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
+
+		[Test, Ignore("Failing test for #38872")]
+		public void ShouldBaseBestShiftOnPrimarySkillOpenHoursEvenIfSubskillIsOpenWithHigherDemand()
+		{
+			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
+			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			var date = DateOnly.Today;
+			var activity = ActivityRepository.Has("_");
+			var skillA = new Skill("A", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillA.SetCascadingIndex(1);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(0, 0, 8, 0));
+			var skillB = new Skill("B", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillB.SetCascadingIndex(1);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(16, 0, 24, 0));
+			var scenario = ScenarioRepository.Has("default");
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet =new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(0, 0, 16, 0, 60), new TimePeriodWithSegment(8, 0, 24, 0, 60), shiftCategory));
+			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(1), TimeSpan.FromHours(168), TimeSpan.FromHours(1), TimeSpan.FromHours(1))};
+			PersonRepository.Has(contract, new SchedulePeriod(date, SchedulePeriodType.Day, 1), ruleSet, skillA, skillB);
+			SkillDayRepository.Has(new[]
+			{
+				skillA.CreateSkillDayWithDemand(scenario, date, 1), //lower demand
+				skillB.CreateSkillDayWithDemand(scenario, date, 2)  //higher demand
+			});
+
+			Target.DoScheduling(date.ToDateOnlyPeriod());
+
+			AssignmentRepository.LoadAll().Single().Period.StartDateTime.TimeOfDay
+				.Should().Be.EqualTo(TimeSpan.FromHours(0));
+		}
 
 		[Test]
 		public void ShouldBaseBestShiftOnNonShoveledResourceCalculation()
