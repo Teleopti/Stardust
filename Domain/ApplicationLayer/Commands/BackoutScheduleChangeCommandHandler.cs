@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -21,10 +22,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IScheduleDifferenceSaver _scheduleDifferenceSaver;
 		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
 		private readonly IAuditSettingRepository _auditSettingRepository;
-		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 
 
-		public BackoutScheduleChangeCommandHandler(IScheduleHistoryRepository scheduleHistoryRepository, IPersonRepository personRepository, ILoggedOnUser loggedOnUser, IAggregateRootInitializer aggregateRootInitializer, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IScheduleDifferenceSaver scheduleDifferenceSaver, IDifferenceCollectionService<IPersistableScheduleData> differenceService, IAuditSettingRepository auditSettingRepository, IScheduleDayChangeCallback scheduleDayChangeCallback)
+		public BackoutScheduleChangeCommandHandler(IScheduleHistoryRepository scheduleHistoryRepository, IPersonRepository personRepository, ILoggedOnUser loggedOnUser, IAggregateRootInitializer aggregateRootInitializer, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IScheduleDifferenceSaver scheduleDifferenceSaver, IDifferenceCollectionService<IPersistableScheduleData> differenceService, IAuditSettingRepository auditSettingRepository)
 		{
 			_scheduleHistoryRepository = scheduleHistoryRepository;
 			_personRepository = personRepository;
@@ -35,7 +35,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_scheduleDifferenceSaver = scheduleDifferenceSaver;
 			_differenceService = differenceService;
 			_auditSettingRepository = auditSettingRepository;
-			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
 		public void Handle(BackoutScheduleChangeCommand command)
@@ -93,7 +92,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			var sd = toScheduleDay(getCurrentScheduleDay(scheduleDictionary, person, command.Date), scheduleData);
 
-			var errorResponses = scheduleDictionary.Modify(sd, _scheduleDayChangeCallback).ToList();
+			var errorResponses = scheduleDictionary.Modify(sd, new DoNothingScheduleDayChangeCallBack()).ToList();
 
 			if (errorResponses.Count > 0)
 			{
