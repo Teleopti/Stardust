@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		}
 
 		[Test]
-		[Ignore]
+		[Ignore("Reason mandatory for NUnit 3")]
 		public void ShouldResolveSameInstanceOfHandlers()
 		{
 			allEvents().ForEach(x =>

@@ -301,11 +301,11 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 											   .Should().Be.EqualTo(4);
 		}
 
-		[Test, ExpectedException(typeof(ArgumentException))]
+		[Test]
 		public void ShouldThrowIfPreferenceTypeCanNotBeResolved()
 		{
 			var preference = new PreferenceRestriction();
-			SchedulePreferenceTransformerHelper.GetPreferenceTypeId(preference);	
+			Assert.Throws<ArgumentException>(() => SchedulePreferenceTransformerHelper.GetPreferenceTypeId(preference));
 		}
 	}
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Autofac;
 using NUnit.Framework;
+using NUnit.Framework.Interfaces;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
@@ -79,7 +80,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 		}
 
-		public void BeforeTest(TestDetails testDetails)
+		public void BeforeTest(ITest testDetails)
 		{
 			fixture(testDetails);
 			method(testDetails);
@@ -89,22 +90,22 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			BeforeTest();
 		}
 
-		public void AfterTest(TestDetails testDetails)
+		public void AfterTest(ITest testDetails)
 		{
 			AfterTest();
 			disposeContainer();
 			disposeTestDoubles();
 		}
 
-		private void fixture(TestDetails testDetails)
+		private void fixture(ITest testDetails)
 		{
 			_fixture = testDetails.Fixture;
 			_fixtureType = _fixture.GetType();
 		}
 
-		private void method(TestDetails testDetails)
+		private void method(ITest testDetails)
 		{
-			_method = testDetails.Method;
+			_method = testDetails.Method.MethodInfo;
 		}
 
 		private void buildContainer()
