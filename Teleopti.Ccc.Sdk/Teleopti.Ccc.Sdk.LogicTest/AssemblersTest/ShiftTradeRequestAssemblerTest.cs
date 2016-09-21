@@ -52,14 +52,14 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             Assert.AreEqual(shiftTradeRequest.GetDetails(_cultureForDetails), shiftTradeRequestDto.Details);
         }
 
-        [Test, ExpectedException(typeof(InvalidOperationException))]
+        [Test]
         public void VerifyInjectionForDoToDto()
         {
             _target = new ShiftTradeRequestAssembler(new TestCultureProvider(_cultureForDetails), new PersonRequestAuthorizationCheckerForTest(), new DateTimePeriodAssembler(),null);
 
             IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail>());
             shiftTradeRequest.SetShiftTradeStatus(ShiftTradeStatus.OkByBothParts, new PersonRequestAuthorizationCheckerForTest());
-            _target.DomainEntityToDto(shiftTradeRequest);
+            Assert.Throws<InvalidOperationException>(() => _target.DomainEntityToDto(shiftTradeRequest));
         }
     }
 }

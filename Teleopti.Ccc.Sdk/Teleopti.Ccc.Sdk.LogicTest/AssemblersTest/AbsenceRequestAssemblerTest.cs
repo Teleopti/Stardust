@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             Assert.AreEqual(period, textRequest.Period);
         }
 
-        [Test, ExpectedException(typeof(InvalidOperationException))]
+        [Test]
         public void VerifyInjectionForDtoToDo()
         {
 			var cultureForDetails = new CultureInfo("en-US");
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			
 			var target = new AbsenceRequestAssembler(new TestCultureProvider(cultureForDetails),null,dateTimePeriodAssembler);
 
-	        target.DtoToDomainEntity(new AbsenceRequestDto());
+	        Assert.Throws<InvalidOperationException>(() => target.DtoToDomainEntity(new AbsenceRequestDto()));
         }
 
         [Test]

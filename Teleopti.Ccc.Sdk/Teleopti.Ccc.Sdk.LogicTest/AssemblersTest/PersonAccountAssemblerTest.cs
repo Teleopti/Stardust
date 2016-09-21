@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
     public class PersonAccountAssemblerTest
     {
         [Test]
-        [ExpectedException(typeof(NotImplementedException))]
         public void VerifyDoToDo()
         {
 			var target = new PersonAccountAssembler();
@@ -20,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var scenario = ScenarioFactory.CreateScenarioAggregate();
 			target.Person = person;
 			target.DefaultScenario = scenario;
-			target.DtoToDomainEntity(new PersonAccountDto());
+			Assert.Throws<NotImplementedException>(() => target.DtoToDomainEntity(new PersonAccountDto()));
         }
 		
         [Test]

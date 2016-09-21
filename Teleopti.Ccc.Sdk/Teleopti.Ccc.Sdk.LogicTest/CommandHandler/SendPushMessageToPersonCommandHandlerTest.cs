@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			}
 		}
 
-		[Test, ExpectedException(typeof(FaultException))]
+		[Test]
 		public void ShouldNotAllowPushMessagesWithMoreThanFiftyReceivers()
 		{
 			using (mock.Record())
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			{
 				var command = new SendPushMessageToPeopleCommandDto();
 				Enumerable.Range(0, 51).ForEach(i => command.Recipients.Add(Guid.NewGuid()));
-				target.Handle(command);
+				Assert.Throws<FaultException>(() => target.Handle(command));
 			}
 		}
 
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			}
 		}
 
-		[Test, ExpectedException(typeof(FaultException))]
+		[Test]
 		public void ShouldNotSendPushMessageWhenNotPermittedToPerson()
 		{
 			var untiOfWork = mock.StrictMock<IUnitOfWork>();
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				{
 					var command = new SendPushMessageToPeopleCommandDto();
 					command.Recipients.Add(person.Id.GetValueOrDefault());
-					target.Handle(command);
+					Assert.Throws<FaultException>(() => target.Handle(command));
 				}
 			}
 		}

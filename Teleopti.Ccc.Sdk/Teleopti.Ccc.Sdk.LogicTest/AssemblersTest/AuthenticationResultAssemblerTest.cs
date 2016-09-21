@@ -46,12 +46,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             Assert.AreEqual(1,authenticationResultDto.BusinessUnitCollection.Count);
         }
 
-        [Test,ExpectedException(typeof(NotImplementedException))]
+        [Test]
         public void VerifyDtoToDomainEntityNotImplemented()
         {
 			var target = new AuthenticationResultAssembler();
-			
-			target.DtoToDomainEntity(new AuthenticationResultDto());
+			Assert.Throws<NotImplementedException>(() => target.DtoToDomainEntity(new AuthenticationResultDto()));
         }
     }
 }

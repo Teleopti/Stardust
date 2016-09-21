@@ -17,34 +17,34 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
     [TestFixture]
     public class MinMaxWorkTimeCheckerTest
     {
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowIfRuleSetProjectionServiceIsNull()
         {
-            new MinMaxWorkTimeChecker(null);
+            Assert.Throws<ArgumentNullException>(() => new MinMaxWorkTimeChecker(null));
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowIfScheduleDayIsNull()
         {
 			var workShiftWorkTime = new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService(new CreateWorkShiftsFromTemplate())));
 			var target = new MinMaxWorkTimeChecker(workShiftWorkTime);
-			target.MinMaxWorkTime(null, new RuleSetBag(), new EffectiveRestriction(), false);
+			Assert.Throws<ArgumentNullException>(() => target.MinMaxWorkTime(null, new RuleSetBag(), new EffectiveRestriction(), false));
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowIfRuleSetBagIsNull()
 		{
 			var scheduleDay = new SchedulePartFactoryForDomain().CreatePart();
 			var workShiftWorkTime = new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService(new CreateWorkShiftsFromTemplate())));
 			var target = new MinMaxWorkTimeChecker(workShiftWorkTime);
 
-			target.MinMaxWorkTime(scheduleDay, null, new EffectiveRestriction(), false);
+			Assert.Throws<ArgumentNullException>(() => target.MinMaxWorkTime(scheduleDay, null, new EffectiveRestriction(), false));
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void GetWorkTimeShouldThrowIfScheduleDayIsNull()
 		{
-            MinMaxWorkTimeChecker.GetWorkTime(null);
+            Assert.Throws<ArgumentNullException>(() => MinMaxWorkTimeChecker.GetWorkTime(null));
         }
 
         [Test]

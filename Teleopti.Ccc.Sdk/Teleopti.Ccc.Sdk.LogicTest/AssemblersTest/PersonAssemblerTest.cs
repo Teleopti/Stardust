@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			Assert.AreEqual(personDto.IsDeleted, ((IDeleteTag)personDo).IsDeleted);
 		}
 
-		[Test, ExpectedException(typeof(ArgumentException))]
+		[Test]
 		public void VerifyCannotAddPersonWithoutName()
 		{
 			var personRepository = new FakePersonRepository();
@@ -200,10 +200,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
 			var personDto = new PersonDto { TimeZoneId = timeZone, CultureLanguageId = culture };
 
-			target.DtoToDomainEntity(personDto);
+			Assert.Throws<ArgumentException>(() => target.DtoToDomainEntity(personDto));
 		}
 
-		[Test, ExpectedException(typeof(ArgumentException))]
+		[Test]
 		public void VerifyCannotUpdatePersonWithoutName()
 		{
 			var personRepository = new FakePersonRepository();
@@ -225,10 +225,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			personDto.CultureLanguageId = culture;
 
 			target.EnableSaveOrUpdate = true;
-			target.DtoToDomainEntity(personDto);
+			Assert.Throws<ArgumentException>(() => target.DtoToDomainEntity(personDto));
 		}
 
-		[Test, ExpectedException(typeof(ArgumentException))]
+		[Test]
 		public void VerifyCannotAddPersonWithoutTimeZone()
 		{
 			var personRepository = new FakePersonRepository();
@@ -245,7 +245,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
 			var personDto = new PersonDto { FirstName = firstName, LastName = lastName, CultureLanguageId = culture };
 
-			target.DtoToDomainEntity(personDto);
+			Assert.Throws<ArgumentException>(() => target.DtoToDomainEntity(personDto));
 		}
 
 		[Test]

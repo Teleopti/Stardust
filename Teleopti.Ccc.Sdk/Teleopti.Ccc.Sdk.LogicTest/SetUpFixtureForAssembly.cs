@@ -11,8 +11,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest
     [SetUpFixture]
     public class SetupFixtureForAssembly
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), SetUp]
-        public void RunBeforeAnyTest()
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+	    [OneTimeSetUp]
+	    public void RunBeforeAnyTest()
         {
             LogOn.RunAsPeterWestlinJunior();
         }

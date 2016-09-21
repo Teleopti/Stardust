@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		    dto.ProjectedLayerCollection.Count.Should().Be.EqualTo(2);
 	    }
 		
-	    [Test, ExpectedException(typeof(NotSupportedException))]
+	    [Test]
         public void VerifyDtoToDo()
         {
 			var person = PersonFactory.CreatePerson().WithId();
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
                                           PersonDayOff = new PersonDayOffDto()
                                       };
 
-		    target.DtoToDomainEntity(dto);
+		    Assert.Throws<NotSupportedException>(() => target.DtoToDomainEntity(dto));
         }
 
         [Test]

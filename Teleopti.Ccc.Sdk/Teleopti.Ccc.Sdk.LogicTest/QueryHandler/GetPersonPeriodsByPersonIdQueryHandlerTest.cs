@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			}
 		}
 
-		[Test, ExpectedException(typeof (FaultException))]
+		[Test]
 		public void ShouldOnlyAllowToGetPersonPeriodsForFiftyPersons()
 		{
 			var query = new GetPersonPeriodsByPersonIdQueryDto
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var personRepository = new FakePersonRepository();
 			var target = new GetPersonPeriodsByPersonIdQueryHandler(personRepository, new FakeCurrentUnitOfWorkFactory(),
 				new PersonPeriodAssembler(new ExternalLogOnAssembler()));
-			target.Handle(query);
+			Assert.Throws<FaultException>(() => target.Handle(query));
 		}
 	}
 }

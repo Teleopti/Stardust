@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             }
         }
 
-		[Test, ExpectedException(typeof(FaultException))]
+		[Test]
 		public void ShouldThrowAnExceptionGivenThePersonIdNotExisting()
         {
             var untiOfWork = mock.StrictMock<IUnitOfWork>();
@@ -112,15 +112,18 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				Expect.Call(personRepository.Get(personId)).Return(null);
 				Expect.Call(optionalColumnRepository.GetOptionalColumns<Person>()).Repeat.Never();
 			}
-			using (mock.Playback())
+			Assert.Throws<FaultException>(() =>
 			{
-				var command = new SetPersonOptionalValuesForPersonCommandDto{PersonId = personId};
-                command.OptionalValueCollection.Add(new OptionalValueDto{Key = "Shoe size",Value = "42"});
-				target.Handle(command);
-			}
-		}
+				using (mock.Playback())
+				{
+					var command = new SetPersonOptionalValuesForPersonCommandDto {PersonId = personId};
+					command.OptionalValueCollection.Add(new OptionalValueDto {Key = "Shoe size", Value = "42"});
+					target.Handle(command);
+				}
+			});
+        }
 
-		[Test, ExpectedException(typeof(FaultException))]
+		[Test]
 		public void ShouldNotSetOptionalColumnValuesWhenNotPermittedToPerson()
 		{
 			var untiOfWork = mock.StrictMock<IUnitOfWork>();
@@ -142,7 +145,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				{
 					var command = new SetPersonOptionalValuesForPersonCommandDto{PersonId = person.Id.GetValueOrDefault()};
                     command.OptionalValueCollection.Add(new OptionalValueDto { Key = "Shoe size", Value = "42" });
-					target.Handle(command);
+					Assert.Throws<FaultException>(() => target.Handle(command));
 				}
 			}
 		}

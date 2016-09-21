@@ -135,7 +135,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         }
 
         [Test]
-        [ExpectedException(typeof(FaultException))]
         public void ShouldThrowExceptionIfRequestIsInvalid()
         {
             var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
@@ -156,11 +155,13 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(request.Approve(null, _authorization)).IgnoreArguments().Throw(new InvalidRequestStateTransitionException());
                 Expect.Call(() => _scheduleDictionarySaver.SaveChanges(null, null)).IgnoreArguments();
             }
-
-            using (_mock.Playback())
-            {
-                _target.Handle(_approveRequestCommandDto);
-            }
+	        Assert.Throws<FaultException>(() =>
+	        {
+				using (_mock.Playback())
+				{
+					_target.Handle(_approveRequestCommandDto);
+				}
+	        });
         }
     }
 }

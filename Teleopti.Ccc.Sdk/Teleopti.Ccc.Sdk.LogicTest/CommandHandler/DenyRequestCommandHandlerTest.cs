@@ -56,7 +56,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         }
 
         [Test]
-        [ExpectedException(typeof(FaultException))]
         public void ShouldThrowExceptionIfRequestIsInvalid()
         {
             var unitOfWork = _mock.StrictMock<IUnitOfWork>();
@@ -71,10 +70,13 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(() => unitOfWork.PersistAll());
                 Expect.Call(unitOfWork.Dispose);
             }
-            using (_mock.Playback())
-            {
-                _target.Handle(_denyRequestCommandDto);
-            }
+	        Assert.Throws<FaultException>(() =>
+	        {
+				using (_mock.Playback())
+				{
+					_target.Handle(_denyRequestCommandDto);
+				}
+	        });
         }
     }
 }

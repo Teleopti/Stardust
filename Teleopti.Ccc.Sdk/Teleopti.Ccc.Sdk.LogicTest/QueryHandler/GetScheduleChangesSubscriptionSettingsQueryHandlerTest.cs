@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			subscription.Exponent.Should().Be.EqualTo("AQAB");
 		}
 
-		[Test, ExpectedException(typeof(FaultException))]
+		[Test]
 		public void ShouldRequirePermissionsToGetTheSubscriptions()
 		{
 			var globalSettingDataRepository = new FakeGlobalSettingDataRepository();
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 
 			using (new CustomAuthorizationContext(new NoPermission()))
 			{
-				target.Handle(new GetScheduleChangesSubscriptionSettingsQueryDto());
+				Assert.Throws<FaultException>(() => target.Handle(new GetScheduleChangesSubscriptionSettingsQueryDto()));
 			}
 		}
 	}

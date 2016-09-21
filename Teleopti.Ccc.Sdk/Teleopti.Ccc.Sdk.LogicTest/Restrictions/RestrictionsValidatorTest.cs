@@ -66,16 +66,16 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             _part = _mocks.StrictMock<IScheduleDay>();
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowIfStateHolderIsNull()
         {
-            _target.ValidateSchedulePeriod(_period, _period, null, 160, 8, 0, 0, _person, 0, 0, 0, 0, 0, 0, 0, false);
+            Assert.Throws<ArgumentNullException>(() => _target.ValidateSchedulePeriod(_period, _period, null, 160, 8, 0, 0, _person, 0, 0, 0, 0, 0, 0, 0, false));
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowIfPersonIsNull()
         {
-            _target.ValidateSchedulePeriod(_period, _period, _stateHolder, 160, 8, 0, 0, null, 0, 0, 0, 0, 0, 0, 0, false);
+            Assert.Throws<ArgumentNullException>(() => _target.ValidateSchedulePeriod(_period, _period, _stateHolder, 160, 8, 0, 0, null, 0, 0, 0, 0, 0, 0, 0, false));
         }
 
         [Test]

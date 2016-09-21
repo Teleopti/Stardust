@@ -56,10 +56,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		}
 
 		[Test]
-		[ExpectedException(typeof(FaultException))]
 		public void ShouldThrowFaultExceptionIfCommandIsNull()
 		{
-			_target.Handle(null);
+			Assert.Throws<FaultException>(() => _target.Handle(null));
 		}
 
 		[Test]

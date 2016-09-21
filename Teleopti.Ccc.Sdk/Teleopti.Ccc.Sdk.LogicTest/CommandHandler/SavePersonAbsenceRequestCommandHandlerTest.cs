@@ -86,7 +86,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         }
 
         [Test]
-        [ExpectedException(typeof(FaultException))]
         public void ShouldThrowExceptionIfOtherThanAbsenceRequest()
         {
             var unitOfWork = _mock.StrictMock<IUnitOfWork>();
@@ -99,7 +98,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             }
             using (_mock.Playback())
             {
-                _target.Handle(_savePersonAbsenceRequestCommandDto);
+                Assert.Throws<FaultException>(() => _target.Handle(_savePersonAbsenceRequestCommandDto));
             }
         }
 

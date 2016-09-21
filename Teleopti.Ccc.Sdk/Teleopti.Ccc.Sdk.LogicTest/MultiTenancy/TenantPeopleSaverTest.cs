@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.MultiTenancy
 			sent.Should().Contain("Identity\":\"THEREALIDENTITY");
 		}
 
-		[Test, ExpectedException(typeof(InvalidDataException))]
+		[Test]
 		public void ShouldThrowOnNotValidAnything()
 		{
 			var id = Guid.NewGuid();
@@ -79,8 +79,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.MultiTenancy
 			};
 
 			HttpRequestFake.SetReturnValue(new PersistPersonInfoResult { ApplicationLogonNameIsValid = true, IdentityIsValid = false, PasswordStrengthIsValid = true });
-			Target.SaveTenantData(dto, id);
-
+			Assert.Throws<InvalidDataException>(() => Target.SaveTenantData(dto, id));
 		}
 	}
 }

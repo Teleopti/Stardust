@@ -90,7 +90,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         }
 
         [Test]
-        [ExpectedException(typeof(FaultException))]
         public void ShouldThrowExceptionIfPersonDoesNotFound()
         {
             var unitOfWork = _mock.StrictMock<IUnitOfWork>();
@@ -104,12 +103,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             }
             using (_mock.Playback())
             {
-                _target.Handle(_setPersonAccountForPersonCommandDto);
+                Assert.Throws<FaultException>(() => _target.Handle(_setPersonAccountForPersonCommandDto));
             }
         }
 
         [Test]
-        [ExpectedException(typeof(FaultException))]
         public void ShouldThrowExceptionIfAbsenceDoesNotFound()
         {
             var unitOfWork = _mock.StrictMock<IUnitOfWork>();
@@ -124,7 +122,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             }
             using (_mock.Playback())
             {
-                _target.Handle(_setPersonAccountForPersonCommandDto);
+                Assert.Throws<FaultException>(() => _target.Handle(_setPersonAccountForPersonCommandDto));
             }
         }
 
@@ -183,7 +181,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         }
 
         [Test]
-        [ExpectedException(typeof(FaultException))]
         public void ShouldThrowExceptionIfNotPermitted()
         {
             var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
@@ -194,13 +191,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(_currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
                 Expect.Call(_personRepository.Get(_setPersonAccountForPersonCommandDto.PersonId)).Return(_person);
                 Expect.Call(_absenceRepository.Get(_setPersonAccountForPersonCommandDto.AbsenceId)).Return(_absence);
-                
             }
             using (_mock.Playback())
             {
                 using (new CustomAuthorizationContext(new NoPermission()))
                 {
-                    _target.Handle(_setPersonAccountForPersonCommandDto);
+                    Assert.Throws<FaultException>(() => _target.Handle(_setPersonAccountForPersonCommandDto));
                 }
             }
         }

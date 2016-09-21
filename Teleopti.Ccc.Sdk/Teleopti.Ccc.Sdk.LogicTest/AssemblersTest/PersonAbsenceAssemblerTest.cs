@@ -44,7 +44,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 	    }
 
 	    [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void CannotExecuteFromDtoConverterWithoutPerson()
         {
 			var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
@@ -55,11 +54,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			target.DefaultScenario = scenario;
 			target.Person = null;
 
-            target.DtoToDomainEntity(new PersonAbsenceDto());
+            Assert.Throws<InvalidOperationException>(() => target.DtoToDomainEntity(new PersonAbsenceDto()));
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void CannotExecuteFromDtoConverterWithoutDefaultScenario()
 		{
 			var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
@@ -70,7 +68,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			target.Person = person;
 			target.DefaultScenario = null;
 
-            target.DtoToDomainEntity(new PersonAbsenceDto());
+            Assert.Throws<InvalidOperationException>(() => target.DtoToDomainEntity(new PersonAbsenceDto()));
         }
 
         [Test]

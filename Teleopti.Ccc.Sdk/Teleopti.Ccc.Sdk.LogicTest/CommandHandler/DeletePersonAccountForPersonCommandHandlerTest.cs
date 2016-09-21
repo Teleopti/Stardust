@@ -82,7 +82,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         }
 
         [Test]
-        [ExpectedException(typeof(FaultException))]
         public void ShouldThrowExceptionIfPersonDoesNotExists()
         {
             var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
@@ -95,13 +94,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             }
             using (_mock.Playback())
             {
-                _target.Handle(_deletePersonAccountForPersonCommandDto);
-
+                Assert.Throws<FaultException>(() => _target.Handle(_deletePersonAccountForPersonCommandDto));
             }
         }
 
         [Test]
-        [ExpectedException(typeof(FaultException))]
         public void ShouldThrowExceptionIfAbsenceDoesNotExists()
         {
             var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
@@ -115,13 +112,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             }
             using (_mock.Playback())
             {
-                _target.Handle(_deletePersonAccountForPersonCommandDto);
-
+                Assert.Throws<FaultException>(() => _target.Handle(_deletePersonAccountForPersonCommandDto));
             }
         }
 
         [Test]
-        [ExpectedException(typeof(FaultException))]
         public void ShouldThrowExceptionIfNotPermitted()
         {
             var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
@@ -137,7 +132,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             {
                 using (new CustomAuthorizationContext(new NoPermission()))
                 {
-                    _target.Handle(_deletePersonAccountForPersonCommandDto);
+                    Assert.Throws<FaultException>(() => _target.Handle(_deletePersonAccountForPersonCommandDto));
                 }
             }
         }

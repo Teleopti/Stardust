@@ -51,12 +51,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		    Assert.AreEqual(2, result.ReplyOptions.Count);
 	    }
 
-	    [Test, ExpectedException(typeof(NotSupportedException))]
+	    [Test]
         public void VerifyDtoToDo()
         {
             var dialogueMessageDto = new PushMessageDto();
 			var target = new PushMessageAssembler();
-			target.DtoToDomainEntity(dialogueMessageDto);
+			Assert.Throws<NotSupportedException>(() => target.DtoToDomainEntity(dialogueMessageDto));
         }
     }
 }

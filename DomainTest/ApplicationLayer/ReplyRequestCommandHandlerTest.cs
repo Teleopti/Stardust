@@ -12,7 +12,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[TestFixture]
 	public class ReplyRequestCommandHandlerTest

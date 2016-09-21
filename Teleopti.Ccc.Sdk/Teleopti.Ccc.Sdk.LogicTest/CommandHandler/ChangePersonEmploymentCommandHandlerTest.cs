@@ -459,7 +459,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         }
 
         [Test]
-        [ExpectedException(typeof (FaultException))]
         public void ShouldThrowExceptionIfPersonContractIsNull()
         {
             var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
@@ -472,11 +471,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _personRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault()))
                 .Return(_person);
 
-            _target.Handle(_changePersonEmploymentCommandDto);
+            Assert.Throws<FaultException>(() => _target.Handle(_changePersonEmploymentCommandDto));
         }
 
         [Test]
-        [ExpectedException(typeof (FaultException))]
         public void ShouldThrowExceptionIfTeamIsNull()
         {
             var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
@@ -489,12 +487,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _personRepository.Stub(x => x.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault()))
                 .Return(_person);
 
-            _target.Handle(_changePersonEmploymentCommandDto);
+            Assert.Throws<FaultException>(() => _target.Handle(_changePersonEmploymentCommandDto));
         }
 
         [Test]
-        [ExpectedException(typeof (FaultException))]
-        public void ShouldThrowExceptionIfTeamIsFromWrongBusinessUnit()
+		public void ShouldThrowExceptionIfTeamIsFromWrongBusinessUnit()
         {
             var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
             var personPeriod = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(-7));
@@ -509,7 +506,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _teamRepository.Stub(x => x.Load(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault()))
                 .Return(_team);
 
-            _target.Handle(_changePersonEmploymentCommandDto);
+            Assert.Throws<FaultException>(() => _target.Handle(_changePersonEmploymentCommandDto));
         }
     }
 }

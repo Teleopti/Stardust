@@ -129,7 +129,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         }
 
         [Test]
-        [ExpectedException(typeof(FaultException))]
         public void ShouldThrowExceptionIfNotPermitted()
         {
             var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
@@ -138,13 +137,16 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             {
                 Expect.Call(_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork()).Return(unitOfWork);
             }
-            using (_mock.Playback())
-            {
-                using (new CustomAuthorizationContext(new NoPermission()))
-                {
-                    _target.Handle(_exportMultisiteSkillToSkillCommandDto);
-                }
-            }
+	        Assert.Throws<FaultException>(() =>
+	        {
+				using (_mock.Playback())
+				{
+					using (new CustomAuthorizationContext(new NoPermission()))
+					{
+						_target.Handle(_exportMultisiteSkillToSkillCommandDto);
+					}
+				}
+	        });
         }
     }
 }

@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				.Be.EqualTo("Facebook");
 		}
 
-		[Test, ExpectedException(typeof(FaultException))]
+		[Test]
 		public void ShouldRejectNewListenerWithoutName()
 		{
 			var repository = new FakeGlobalSettingDataRepository();
@@ -58,10 +58,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 						DaysEndFromCurrentDate = 1
 					}
 			};
-			handler.Handle(commandDto);
+			Assert.Throws<FaultException>(() => handler.Handle(commandDto));
 		}
 
-		[Test, ExpectedException(typeof(FaultException))]
+		[Test]
 		public void ShouldRejectNewListenerWithRelativeStartDateAfterEndDate()
 		{
 			var repository = new FakeGlobalSettingDataRepository();
@@ -78,10 +78,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 						DaysEndFromCurrentDate = -1
 					}
 			};
-			handler.Handle(commandDto);
+			Assert.Throws<FaultException>(() => handler.Handle(commandDto));
 		}
 
-		[Test, ExpectedException(typeof(FaultException))]
+		[Test]
 		public void ShouldRejectNewListenerWithInvalidUri()
 		{
 			var repository = new FakeGlobalSettingDataRepository();
@@ -98,10 +98,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 						DaysEndFromCurrentDate = 1
 					}
 			};
-			handler.Handle(commandDto);
+			Assert.Throws<FaultException>(() => handler.Handle(commandDto));
 		}
 
-		[Test, ExpectedException(typeof(FaultException))]
+		[Test]
 		public void ShouldRejectNewListenerWithInsufficientPermissions()
 		{
 			var repository = new FakeGlobalSettingDataRepository();
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			};
 			using (new CustomAuthorizationContext(new NoPermission()))
 			{
-				handler.Handle(commandDto);
+				Assert.Throws<FaultException>(() => handler.Handle(commandDto));
 			}
 		}
 	}

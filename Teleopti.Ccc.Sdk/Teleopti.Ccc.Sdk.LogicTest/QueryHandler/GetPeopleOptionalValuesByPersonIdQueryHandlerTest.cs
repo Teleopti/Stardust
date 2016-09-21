@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			result.Count.Should().Be.EqualTo(0);
 		}
 
-		[Test, ExpectedException(typeof (FaultException))]
+		[Test]
 		public void ShouldNotAllowToGetOptionalValuesWithoutPermissions()
 		{
 			var query = new GetPeopleOptionalValuesByPersonIdQueryDto();
@@ -92,18 +92,18 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 
 			using (new CustomAuthorizationContext(new NoPermission()))
 			{
-				target.Handle(query);
+				Assert.Throws<FaultException>(() => target.Handle(query));
 			}
 			optionalColumnRepository.AssertWasNotCalled(x => x.GetOptionalColumns<Person>());
 		}
 
-		[Test, ExpectedException(typeof (FaultException))]
+		[Test]
 		public void ShouldOnlyAllowToGetOptionalValuesForFiftyPersons()
 		{
 			var query = new GetPeopleOptionalValuesByPersonIdQueryDto();
 			Enumerable.Range(0, 51).ForEach(i => query.PersonIdCollection.Add(Guid.NewGuid()));
 
-			target.Handle(query);
+			Assert.Throws<FaultException>(() => target.Handle(query));
 			optionalColumnRepository.AssertWasNotCalled(x => x.GetOptionalColumns<Person>());
 		}
 	}

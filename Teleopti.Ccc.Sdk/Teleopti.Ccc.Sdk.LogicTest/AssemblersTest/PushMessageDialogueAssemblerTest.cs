@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		    result.Message.Should().Not.Contain("");
 	    }
 
-	    [Test, ExpectedException(typeof(NotSupportedException))]
+	    [Test]
         public void VerifyDtoToDo()
         {
 			var personRepository = new FakePersonRepository();
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		    };
 
 		    var dialogueMessageDto = new PushMessageDialogueDto();
-            target.DtoToDomainEntity(dialogueMessageDto);
+            Assert.Throws<NotSupportedException>(() => target.DtoToDomainEntity(dialogueMessageDto));
         }
     }
 }

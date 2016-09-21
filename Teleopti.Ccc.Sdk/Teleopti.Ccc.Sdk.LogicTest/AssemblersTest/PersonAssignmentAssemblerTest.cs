@@ -111,7 +111,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 	    }
 
 	    [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void CannotExecuteFromDtoConverterWithoutPerson()
         {
 			var shiftCatRep = new FakeShiftCategoryRepository();
@@ -134,11 +133,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			target.DefaultScenario = scenario;
 			target.Person = null;
 
-            target.DtoToDomainEntity(new PersonAssignmentDto());
+            Assert.Throws<InvalidOperationException>(() => target.DtoToDomainEntity(new PersonAssignmentDto()));
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void CannotExecuteFromDtoConverterWithoutDefaultScenario()
         {
 			var shiftCatRep = new FakeShiftCategoryRepository();
@@ -160,7 +158,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			target.Person = person;
 			target.DefaultScenario = null;
 
-			target.DtoToDomainEntity(new PersonAssignmentDto());
+			Assert.Throws<InvalidOperationException>(() => target.DtoToDomainEntity(new PersonAssignmentDto()));
         }
 
         [Test]

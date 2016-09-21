@@ -70,10 +70,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		}
 
 		[Test]
-		[ExpectedException(typeof (FaultException))]
 		public void ShouldThrowFaultExceptionIfCommandIsNull()
 		{
-			_target.Handle(null);
+			Assert.Throws<FaultException>(() => _target.Handle(null));
 		}
 
 		[Test]
@@ -94,12 +93,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		}
 		
 		[Test]
-		[ExpectedException(typeof (FaultException))]
 		public void ShouldThrowExceptionIfNotPermitted()
 		{
 			using (new CustomAuthorizationContext(new NoPermission()))
 			{
-				_target.Handle(_importForecastsFileCommandDto);
+				Assert.Throws<FaultException>(() => _target.Handle(_importForecastsFileCommandDto));
 			}
 		}
 	}

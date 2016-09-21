@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				.Be.Empty();
 		}
 
-		[Test, ExpectedException(typeof(FaultException))]
+		[Test]
 		public void ShouldRejectRevokeListenerWhenNotPermitted()
 		{
 			var repository = new FakeGlobalSettingDataRepository();
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			};
 			using (new CustomAuthorizationContext(new NoPermission()))
 			{
-				handler.Handle(commandDto);
+				Assert.Throws<FaultException>(() => handler.Handle(commandDto));
 			}
 		}
 	}
