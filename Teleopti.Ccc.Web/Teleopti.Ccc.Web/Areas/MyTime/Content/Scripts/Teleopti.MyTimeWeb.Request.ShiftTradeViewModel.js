@@ -483,7 +483,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 				self.redrawLayers();
 			},
 			error: function (e) {
-				console.log(e);
+				//console.log(e);
 			},
 			complete: function () {
 				self.IsLoading(false);
