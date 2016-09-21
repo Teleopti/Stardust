@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			model.StateCode = context.StateCode;
 			model.StateName = context.State.StateGroupName();
+			model.StateGroupId = context.State.StateGroupId();
 			model.StateStartTime = context.StateStartTime;
 
 			model.RuleName = context.State.RuleName();

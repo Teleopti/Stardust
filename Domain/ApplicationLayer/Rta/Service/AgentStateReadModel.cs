@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public string StateCode { get; set; }
 		public string StateName { get; set; }
+		public Guid? StateGroupId { get; set; }
 		public DateTime? StateStartTime { get; set; }
 		
 		public string RuleName { get; set; }

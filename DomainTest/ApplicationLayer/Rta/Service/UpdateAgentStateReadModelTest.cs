@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -12,6 +13,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	public class UpdateAgentStateReadModelTest
 	{
 		public FakeRtaDatabase Database;
+		public FakeRtaStateGroupRepository StateGroups;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 		public MutableNow Now;
 
@@ -205,6 +207,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			});
 
 			Database.PersistedReadModel.StateStartTime.Should().Be.EqualTo("2014-10-20 10:01".Utc());
+		}
+
+		[Test]
+		public void ShouldPersistStateGroupId()
+		{
+			Database
+				.WithUser("usercode")
+				.WithRule("phone");
+			var stateGroupId = StateGroups.LoadAll().Single().Id;
+
+			Target.SaveState(new StateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
+
+			Database.PersistedReadModel.StateGroupId.Should().Be(stateGroupId);
 		}
 	}
 }
