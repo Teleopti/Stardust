@@ -14,7 +14,6 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -32,8 +31,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public DayOffOptimizationDesktopTeamBlock Target;
-		public FakeContractRepository ContractRepository;
-		public FakeRuleSetBagRepository RuleSetBagRepository;
+		public FakeRuleSetBagRepository RuleSetBagRepository; //needed also in Desktop tests becaused used in grouppagecreator
 
 		public DayOffOptimizationTeamBlockDesktopTest(bool teamBlockDayOffForIndividuals, bool cascading) : base(teamBlockDayOffForIndividuals, cascading)
 		{
@@ -138,7 +136,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				}
 			}
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, agents, asses, skillDays);
-			ContractRepository.Has(contract);
 			var groupPageLight = new GroupPageLight("Contract", GroupPageType.Contract, "Contract");
 
 			var optPrefs = new OptimizationPreferences
