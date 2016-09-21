@@ -9545,6 +9545,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable Maximum Seat Validation.
+        /// </summary>
+        public static string EnableShiftTradeRequestMaxSeatsValidation {
+            get {
+                return ResourceManager.GetString("EnableShiftTradeRequestMaxSeatsValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enable Waitlisting.
         /// </summary>
         public static string EnableWaitlisting {
@@ -27412,6 +27421,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The shift trade request has been denied as there are not enough available seats..
+        /// </summary>
+        public static string ShiftTradeMaxSeatViolationDenyReason {
+            get {
+                return ResourceManager.GetString("ShiftTradeMaxSeatViolationDenyReason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shift trade denied because a meeting ended up outside a shift..
         /// </summary>
         public static string ShiftTradeMeetingSpecificationDenyReason {
@@ -27521,6 +27539,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Maximum Seats Validation.
+        /// </summary>
+        public static string ShiftTradeRequestMaxSeatsValidation {
+            get {
+                return ResourceManager.GetString("ShiftTradeRequestMaxSeatsValidation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interval to use when validating seats usage.
+        /// </summary>
+        public static string ShiftTradeRequestMaxSeatValidationInterval {
+            get {
+                return ResourceManager.GetString("ShiftTradeRequestMaxSeatValidationInterval", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shift Trade Requests.
         /// </summary>
         public static string ShiftTradeRequests {
@@ -27535,6 +27571,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShiftTradeRequestScheduleChanged {
             get {
                 return ResourceManager.GetString("ShiftTradeRequestScheduleChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shift Trade Request Settings.
+        /// </summary>
+        public static string ShiftTradeRequestSettings {
+            get {
+                return ResourceManager.GetString("ShiftTradeRequestSettings", resourceCulture);
             }
         }
         

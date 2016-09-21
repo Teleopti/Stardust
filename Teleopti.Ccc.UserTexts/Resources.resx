@@ -14943,4 +14943,24 @@ These options are activated:
     <value>Reforecasted Staff</value>
     <comment>Reforecasted staff in web intraday</comment>
   </data>
+  <data name="ShiftTradeMaxSeatViolationDenyReason" xml:space="preserve">
+    <value>The shift trade request has been denied as there are not enough available seats.</value>
+    <comment>The denial reason displayed when a shift trade would violate the Max Seats value for a site.</comment>
+  </data>
+  <data name="EnableShiftTradeRequestMaxSeatsValidation" xml:space="preserve">
+    <value>Enable Maximum Seat Validation</value>
+    <comment>An option in the Shift Trade Request system options that controls if Shift Trade Requests will validate against a sites Max Seats property</comment>
+  </data>
+  <data name="ShiftTradeRequestMaxSeatValidationInterval" xml:space="preserve">
+    <value>Interval to use when validating seats usage</value>
+    <comment>An option in the Shift Trade Request system options that controls what interval is used when detecting seat usage for max seats validation</comment>
+  </data>
+  <data name="ShiftTradeRequestMaxSeatsValidation" xml:space="preserve">
+    <value>Maximum Seats Validation</value>
+    <comment>Used as a sub heading in the Shift Trade Request system options</comment>
+  </data>
+  <data name="ShiftTradeRequestSettings" xml:space="preserve">
+    <value>Shift Trade Request Settings</value>
+    <comment>Used in the Options Module to define Shift Trade Request Settings that appear under the System Settings option</comment>
+  </data>
 </root>

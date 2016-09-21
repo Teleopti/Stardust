@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IScheduleDictionary FindSchedulesForPersons(DateTimePeriod period, IScenario scenario, IPersonProvider personsProvider,
 			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IEnumerable<IPerson> visiblePersons)
 		{
-			return null;
+			return ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, period, _data.Where(d => d.BelongsToScenario(scenario) && visiblePersons.Contains(d.Person)).ToArray());
 		}
 
 		public IScheduleDictionary FindSchedulesForPersons(IScheduleDateTimePeriod period, IScenario scenario,

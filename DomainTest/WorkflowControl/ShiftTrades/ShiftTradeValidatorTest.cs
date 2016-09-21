@@ -20,7 +20,9 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
     	private ValidatorSpecificationForTest _shiftTradeAbsenceSpecification;
     	private ValidatorSpecificationForTest _shiftTradePersonalActivitySpecification;
     	private ValidatorSpecificationForTest _shiftTradeMeetingSpecification;
-    	private IShiftTradeLightValidator shiftTradeLightValidator;
+	    private ValidatorSpecificationForTest _shiftTradeMaxSeatsSpecification;
+
+		private IShiftTradeLightValidator shiftTradeLightValidator;
 
         [SetUp]
         public void Setup()
@@ -33,6 +35,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			_shiftTradeAbsenceSpecification = new ValidatorSpecificationForTest(true, "_shiftTradeAbsenceSpecification");
 			_shiftTradePersonalActivitySpecification = new ValidatorSpecificationForTest(true, "_shiftTradePersonalActivitySpecification");
 			_shiftTradeMeetingSpecification = new ValidatorSpecificationForTest(true, "_shiftTradeMettingSpecification");
+			_shiftTradeMaxSeatsSpecification = new ValidatorSpecificationForTest(true, "_shiftTradeMaxSeatsSpecification");
 		}
 
         private ShiftTradeValidator CreateValidator()
@@ -43,7 +46,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
                 _isWorkflowControlSetNotNullSpecification,
 				_shiftTradeAbsenceSpecification,
 				_shiftTradePersonalActivitySpecification,
-				_shiftTradeMeetingSpecification});
+				_shiftTradeMeetingSpecification,
+				_shiftTradeMaxSeatsSpecification});
         }
 
         [Test]
@@ -74,7 +78,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			Assert.That(_shiftTradeAbsenceSpecification.HasBeenCalledWith(details));
 			Assert.That(_shiftTradePersonalActivitySpecification.HasBeenCalledWith(details));
 			Assert.That(_shiftTradeMeetingSpecification.HasBeenCalledWith(details));
-        }
+			Assert.That(_shiftTradeMaxSeatsSpecification.HasBeenCalledWith(details));
+		}
 
         [Test]
         public void VerifyReturnsFalseIfAnyValidatorIsFalse()

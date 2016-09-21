@@ -158,6 +158,8 @@
     <Compile Include="Domain\ISeatFrequencyCalculator.cs" />
     <Compile Include="Domain\ISeatMapPersister.cs" />
     <Compile Include="Domain\ISeatOccupancyFrequency.cs" />
+    <Compile Include="Domain\ISeatUsageForInterval.cs" />
+    <Compile Include="Domain\IShiftTradeMaxSeatValidator.cs" />
     <Compile Include="Domain\IShiftTradePendingReasonsService.cs" />
     <Compile Include="Domain\ISiteOpenHour.cs" />
     <Compile Include="Domain\IUserUICulture.cs" />
@@ -736,6 +738,7 @@
     <Compile Include="Infrastructure\ILoadPasswordPolicyService.cs" />
     <Compile Include="Infrastructure\IScheduleDifferenceSaver.cs" />
     <Compile Include="Infrastructure\IReadModelValidationResultPersister.cs" />
+    <Compile Include="Infrastructure\IScheduleProjectionReadOnlyActivityProvider.cs" />
     <Compile Include="Infrastructure\IStardustJobFeedback.cs" />
     <Compile Include="Infrastructure\IUpgradeLog.cs" />
     <Compile Include="Infrastructure\IMainReference.cs" />

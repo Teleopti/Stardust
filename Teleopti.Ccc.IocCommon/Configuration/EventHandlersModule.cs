@@ -26,6 +26,7 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
+using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnly;
@@ -212,7 +213,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	        builder.RegisterType<ScheduleProjectionReadOnlyPersister>()
 		        .As<IScheduleProjectionReadOnlyPersister>()
 		        .SingleInstance();
-			  builder.RegisterType<ScheduleForecastSkillReadModelRepository>()
+	        builder.RegisterType<ScheduleProjectionReadOnlyActivityProvider>()
+		        .As<IScheduleProjectionReadOnlyActivityProvider>()
+		        .SingleInstance();
+
+	      
+			builder.RegisterType<ScheduleForecastSkillReadModelRepository>()
 				  .As<IScheduleForecastSkillReadModelRepository>()
 				  .SingleInstance();
 

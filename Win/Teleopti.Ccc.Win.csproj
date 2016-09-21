@@ -466,6 +466,12 @@
     <Compile Include="Common\Configuration\NotificationSettingsControl.Designer.cs">
       <DependentUpon>NotificationSettingsControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Common\Configuration\ShiftTradeSystemSettings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Common\Configuration\ShiftTradeSystemSettings.Designer.cs">
+      <DependentUpon>ShiftTradeSystemSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Common\Configuration\SmsSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2773,6 +2779,9 @@
     <EmbeddedResource Include="Common\Configuration\NotificationSettingsControl.resx">
       <DependentUpon>NotificationSettingsControl.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\Configuration\ShiftTradeSystemSettings.resx">
+      <DependentUpon>ShiftTradeSystemSettings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\Configuration\SmsSettingsControl.resx">
       <DependentUpon>SmsSettingsControl.cs</DependentUpon>

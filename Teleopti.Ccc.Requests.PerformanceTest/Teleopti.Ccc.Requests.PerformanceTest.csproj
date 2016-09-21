@@ -65,6 +65,7 @@
     <Compile Include="MultiAbsenceRequestsTest.cs" />
     <Compile Include="ProcessBulkAbsenceRequests.cs" />
     <Compile Include="ProcessMultipleAbsenceRequests.cs" />
+    <Compile Include="ShiftTradeRequestsTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">

@@ -199,6 +199,7 @@
     <Compile Include="ApplicationLayer\MultiEventPublisherServiceBusAsSync.cs" />
     <Compile Include="ApplicationLayer\RunInProcessEventPublisher.cs" />
     <Compile Include="ApplicationLayer\ScheduleProjectionReadOnly\ReadModelValidationResultPersister.cs" />
+    <Compile Include="ApplicationLayer\ScheduleProjectionReadOnly\ScheduleProjectionReadOnlyActivityProvider.cs" />
     <Compile Include="ApplicationLayer\StardustEventPublisher.cs" />
     <Compile Include="ApplicationLayer\ServiceBusEventProcessor.cs" />
     <Compile Include="ApplicationLayer\StardustSender.cs" />

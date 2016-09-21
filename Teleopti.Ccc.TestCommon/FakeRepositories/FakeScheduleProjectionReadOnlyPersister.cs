@@ -54,8 +54,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 
-
-
 		public IEnumerable<ScheduledActivity> GetCurrentSchedule(DateTime utcNow, Guid personId)
 		{
 			return (

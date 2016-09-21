@@ -534,6 +534,7 @@
     <Compile Include="Repositories\IAnalyticsGroupPageRepository.cs" />
     <Compile Include="Scheduling\WebLegacy\FillSchedulerStateHolder.cs" />
     <Compile Include="UndoRedo\UndoRedoState.cs" />
+    <Compile Include="SystemSetting\GlobalSetting\ShiftTradeSystemSettings.cs" />
     <Compile Include="UnitOfWork\ThisUnitOfWork.cs" />
     <Compile Include="UnitOfWork\WithAnalyticsUnitOfWork.cs" />
     <Compile Include="ApplicationLayer\AllTenantRecurringEventPublisher.cs" />
@@ -2478,6 +2479,9 @@
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeAvailableCheckItem.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeDateSpecification.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeLightValidator.cs" />
+    <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeMaxSeatReadModelValidator.cs" />
+    <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeMaxSeatsSpecification.cs" />
+    <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeMaxSeatValidator.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeMeetingSpecification.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradePersonalActivitySpecification.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeSkillSpecification.cs" />

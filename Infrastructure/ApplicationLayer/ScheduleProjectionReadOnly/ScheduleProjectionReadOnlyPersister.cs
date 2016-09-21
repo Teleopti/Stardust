@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Budgeting;
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 		    _currentUnitOfWork = new FromFactory(() => unitOfWorkFactory);
 	    }
 
-        public IEnumerable<PayloadWorkTime> AbsenceTimePerBudgetGroup(DateOnlyPeriod period, IBudgetGroup budgetGroup,
+	    public IEnumerable<PayloadWorkTime> AbsenceTimePerBudgetGroup(DateOnlyPeriod period, IBudgetGroup budgetGroup,
                                                                       IScenario scenario)
         {
 	        return _currentUnitOfWork.Session().CreateSQLQuery(
@@ -98,8 +99,8 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 										   .SetGuid("ScenarioId", scenarioId)
 										   .SetGuid("PersonId", personId)
 										   .SetDateOnly("Date", date)
-										   .SetResultTransformer(new AliasToBeanResultTransformer(typeof(internalModel)))
-										   .List<internalModel>();
+										   .SetResultTransformer(new AliasToBeanResultTransformer(typeof(ScheduleProjectionReadOnlyPersister.internalModel)))
+										   .List<ScheduleProjectionReadOnlyPersister.internalModel>();
 		}
 
 	    public int GetNumberOfAbsencesPerDayAndBudgetGroup(Guid budgetGroupId, DateOnly currentDate)
@@ -143,7 +144,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 
             return numberOfHeadCounts;
         }
-
+		
 		private class internalModel : ScheduleProjectionReadOnlyModel
 		{
 			public new long WorkTime { set { base.WorkTime = TimeSpan.FromTicks(value); } }
@@ -163,4 +164,8 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
         public int NumberOfRequests { get; set; }
         public DateTime BelongsToDate { get; set; }
     }
+
+	
+
 }
+

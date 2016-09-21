@@ -109,6 +109,8 @@
 		Wfm_Requests_Site_Open_Hours_39936,
 		Wfm_Requests_Waitlist_Process_Order_39869,
 		Wfm_Requests_Save_Grid_Columns_37976,
+		Wfm_Requests_Check_Max_Seats_39937,
+		Wfm_Requests_Check_Max_Seats_NoReadModel_39937,
 
 		Wfm_Intraday_38074,
 
