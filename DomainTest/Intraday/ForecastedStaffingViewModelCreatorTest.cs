@@ -269,38 +269,55 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
-		public void ShouldCalculateUpdatedForecastedStaffingCorrectlyForTwoSkills()
+		public void ShouldCalculateUpdatedForecastedStaffingCorrectlyForThreeSkills()
 		{
 			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
 			var latestStatsTime = new DateTime(2016, 8, 26, 7, 45, 0, DateTimeKind.Utc);
 			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
 			var scenario = fakeScenarioAndIntervalLength();
 
-			var skillWithReforecast = createSkill(minutesPerInterval, "skill with reforecast", new TimePeriod(7,45,8,15));
-			SkillRepository.Has(skillWithReforecast);
-			
+			var skillWithReforecast1 = createSkill(minutesPerInterval, "skill with reforecast 1", new TimePeriod(7,45,8,15));
+			var skillWithReforecast2 = createSkill(minutesPerInterval, "skill with reforecast 2", new TimePeriod(7,45,8,15));
 			var skillWithoutReforecast = createSkill(minutesPerInterval, "skill without reforecast", new TimePeriod(8, 0, 8, 15));
-			SkillRepository.Has(skillWithoutReforecast);
 
-			var skillDayWithReforecast = createSkillDay(skillWithReforecast, scenario, Now.UtcDateTime(), 1);
-			SkillDayRepository.Add(skillDayWithReforecast);
+
+			var skillDayWithReforecast1 = createSkillDay(skillWithReforecast1, scenario, Now.UtcDateTime(), 1);
+			var skillDayWithReforecast2 = createSkillDay(skillWithReforecast2, scenario, Now.UtcDateTime(), 1);
 			var skillDayWithoutReforecast = createSkillDay(skillWithoutReforecast, scenario, Now.UtcDateTime(), 1);
-			SkillDayRepository.Add(skillDayWithoutReforecast);
-			
-			var actualWorkload = getActualWorkloadPerSkillAndInterval(skillDayWithReforecast.WorkloadDayCollection.First().TaskPeriodList.ToList(), skillWithReforecast, 2, latestStatsTime);
-			IntradayQueueStatisticsLoader.Has(actualWorkload);
-			
-			var vm = Target.Load(new[] { skillWithReforecast.Id.Value, skillWithoutReforecast.Id.Value });
 
-			var expectedUpdatedStaffing = skillDayWithoutReforecast.SkillStaffPeriodCollection.Last().FStaff + skillDayWithReforecast.SkillStaffPeriodCollection.Last().FStaff * 2;
+			var deviationWithReforecast1 = 1.25d;
+			var deviationWithReforecast2 = 1.5d;
+			var noDeviationWithoutReforecast = 1.0d;
+			var finalDeviationFactor = (deviationWithReforecast1 + deviationWithReforecast2 + noDeviationWithoutReforecast)/3;
+			
+			var actualWorkload1 = getActualWorkloadPerSkillAndInterval(skillDayWithReforecast1.WorkloadDayCollection.First().TaskPeriodList.ToList(), skillWithReforecast1, deviationWithReforecast1, latestStatsTime);
+			var actualWorkload2 = getActualWorkloadPerSkillAndInterval(skillDayWithReforecast2.WorkloadDayCollection.First().TaskPeriodList.ToList(), skillWithReforecast2, deviationWithReforecast2, latestStatsTime);
+
+			var actualWorkloadTotal = new List<SkillWorkload>();
+			actualWorkloadTotal.AddRange(actualWorkload1);
+			actualWorkloadTotal.AddRange(actualWorkload2);
+
+			SkillRepository.Has(skillWithReforecast1);
+			SkillRepository.Has(skillWithReforecast2);
+			SkillRepository.Has(skillWithoutReforecast);
+			SkillDayRepository.Add(skillDayWithReforecast1);
+			SkillDayRepository.Add(skillDayWithReforecast2);
+			SkillDayRepository.Add(skillDayWithoutReforecast);
+			IntradayQueueStatisticsLoader.Has(actualWorkloadTotal);
+			
+			var vm = Target.Load(new[] { skillWithReforecast1.Id.Value, skillWithReforecast2.Id.Value, skillWithoutReforecast.Id.Value });
+
+			var expectedUpdatedStaffing = 
+				skillDayWithoutReforecast.SkillStaffPeriodCollection.Last().FStaff + 
+				skillDayWithReforecast1.SkillStaffPeriodCollection.Last().FStaff * deviationWithReforecast1 +
+				skillDayWithReforecast2.SkillStaffPeriodCollection.Last().FStaff * deviationWithReforecast2;
 
 			vm.DataSeries.UpdatedForecastedStaffing.Length.Should().Be.EqualTo(2);
 			vm.DataSeries.UpdatedForecastedStaffing.First().Should().Be.EqualTo(null);
 			vm.DataSeries.UpdatedForecastedStaffing.Last().Should().Be.EqualTo(expectedUpdatedStaffing);
+			expectedUpdatedStaffing.Should().Be.EqualTo(vm.DataSeries.ForecastedStaffing.Last() * finalDeviationFactor);
 		}
-
-
-
+		
 		private Scenario fakeScenarioAndIntervalLength()
 		{
 			IntervalLengthFetcher.Has(minutesPerInterval);
@@ -308,7 +325,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			ScenarioRepository.Has(scenario);
 			return scenario;
 		}
-
 
 		private ISkill createSkill(int intervalLength, string skillName, TimePeriod openHours)
 		{
@@ -330,7 +346,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			for (int i = 0; i < tasksForNumberOfIntervals; i++)
 			{
-				skillDay.WorkloadDayCollection.First().TaskPeriodList[i].Tasks = 20;
+				skillDay.WorkloadDayCollection.First().TaskPeriodList[i].Tasks = new Random().Next(5,50);
 				skillDay.WorkloadDayCollection.First().TaskPeriodList[i].AverageTaskTime = TimeSpan.FromSeconds(100);
 				skillDay.WorkloadDayCollection.First().TaskPeriodList[i].AverageAfterTaskTime = TimeSpan.FromSeconds(20);
 			}
