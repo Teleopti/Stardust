@@ -5,7 +5,7 @@ using Teleopti.Ccc.PayrollFormatter;
 
 namespace Teleopti.Ccc.PayrollFormatterTest
 {
-    [TestFixture]
+    [TestFixture, Parallelizable]
     public class CsvFormatterTest
     {
         private FlatFileFormatter target;
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.PayrollFormatterTest
         public void VerifyBasicCsvExport()
         {
             var document = new XmlDocument();
-            document.Load("BasicCsvExport.xml");
+            document.Load(Path.Combine(TestContext.CurrentContext.TestDirectory, "BasicCsvExport.xml"));
 
             var format = DocumentFormat.LoadFromXml(document);
             var result = target.Format(document, format);
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.PayrollFormatterTest
 
             var streamReader = new StreamReader(result, format.Encoding);
             var content = streamReader.ReadToEnd();
-	        var fileContent = File.ReadAllText("BasicCsvExportResult.txt").Replace("\r", "");
+	        var fileContent = File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "BasicCsvExportResult.txt")).Replace("\r", "");
 
             Assert.AreEqual(fileContent,content);
             Assert.AreEqual("txt",target.FileSuffix);

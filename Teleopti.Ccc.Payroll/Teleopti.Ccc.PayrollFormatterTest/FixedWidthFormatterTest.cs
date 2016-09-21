@@ -5,7 +5,7 @@ using Teleopti.Ccc.PayrollFormatter;
 
 namespace Teleopti.Ccc.PayrollFormatterTest
 {
-    [TestFixture]
+    [TestFixture, Parallelizable]
     public class FixedWidthFormatterTest
     {
         private FlatFileFormatter target;
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.PayrollFormatterTest
         public void VerifyBasicFixedWidthExport()
         {
             XmlDocument document = new XmlDocument();
-            document.Load("BasicFixedWidthExport.xml");
+            document.Load(Path.Combine(TestContext.CurrentContext.TestDirectory, "BasicFixedWidthExport.xml"));
 
             DocumentFormat format = DocumentFormat.LoadFromXml(document);
             Stream result = target.Format(document, format);
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.PayrollFormatterTest
             StreamReader streamReader = new StreamReader(result, format.Encoding);
             string content = streamReader.ReadToEnd();
 
-            Assert.AreEqual(File.ReadAllText("BasicFixedWidthExportResult.txt").Replace("\r",""),content);
+            Assert.AreEqual(File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "BasicFixedWidthExportResult.txt")).Replace("\r",""),content);
             Assert.AreEqual("txt", target.FileSuffix);
         }
     }

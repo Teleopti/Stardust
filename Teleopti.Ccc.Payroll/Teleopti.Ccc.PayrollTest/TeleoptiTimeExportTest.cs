@@ -13,7 +13,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.PayrollTest
 {
-    [TestFixture]
+    [TestFixture, Parallelizable]
     public class TeleoptiTimeExportTest : BaseExportTest
     {
         protected override void ConcreteSetup()

@@ -3,7 +3,7 @@ using Teleopti.Ccc.PayrollFormatter;
 
 namespace Teleopti.Ccc.PayrollFormatterTest
 {
-    [TestFixture]
+    [TestFixture, Parallelizable]
     public class PayrollFormatterFactoryTest
     {
         private DocumentFormat format;

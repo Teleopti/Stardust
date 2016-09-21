@@ -5,7 +5,7 @@ using Teleopti.Ccc.PayrollFormatter;
 
 namespace Teleopti.Ccc.PayrollFormatterTest
 {
-    [TestFixture]
+    [TestFixture, Parallelizable]
     public class ExcelFormatterTest
     {
         private ExcelFormatter target;
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.PayrollFormatterTest
         public void VerifyThroughputResult()
         {
             XmlDocument document = new XmlDocument();
-            document.Load("BasicExcelExport.xml");
+            document.Load(Path.Combine(TestContext.CurrentContext.TestDirectory, "BasicExcelExport.xml"));
 
             DocumentFormat format = DocumentFormat.LoadFromXml(document);
             Stream stream = target.Format(document, format);
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.PayrollFormatterTest
             StreamReader streamReader = new StreamReader(stream, format.Encoding);
             string content = streamReader.ReadToEnd();
 
-            Assert.AreEqual(File.ReadAllText("BasicExcelExportResult.txt").Replace("\r\n","\n"), content);
+            Assert.AreEqual(File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "BasicExcelExportResult.txt")).Replace("\r\n","\n"), content);
             Assert.AreEqual("xls", target.FileSuffix);
         }
     }

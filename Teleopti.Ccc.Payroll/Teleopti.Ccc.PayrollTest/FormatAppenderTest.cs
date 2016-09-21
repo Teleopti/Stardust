@@ -5,7 +5,7 @@ using Teleopti.Ccc.Payroll;
 
 namespace Teleopti.Ccc.PayrollTest
 {
-    [TestFixture]
+    [TestFixture, Parallelizable]
     public class FormatAppenderTest
     {
         private XmlDocument document;
@@ -30,11 +30,14 @@ namespace Teleopti.Ccc.PayrollTest
             Assert.AreEqual(document, FormatAppender.AppendFormat(document, "TeleoptiDetailedExportFormat1.xml"));
         }
 
-        [Test, ExpectedException(typeof(InvalidOperationException))]
+        [Test]
         public void VerifyInvalidFormatXmlDocument()
         {
             document.AppendChild(document.CreateElement("Teleopti"));
-            FormatAppender.AppendFormat(document, format);
+	        Assert.Throws<InvalidOperationException>(() =>
+	        {
+				FormatAppender.AppendFormat(document, format);
+			});
         }
     }
 }
