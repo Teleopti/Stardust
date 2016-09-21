@@ -46,6 +46,7 @@ Scenario: Cancel a draft absence report
 	And I cancel the current absence report draft
 	Then I should not see the add absence report form
 
+@ignore
 Scenario: Save a draft absence report
 	Given I have the role 'Full access to mytime'
 	And the time is '2020-10-05'
