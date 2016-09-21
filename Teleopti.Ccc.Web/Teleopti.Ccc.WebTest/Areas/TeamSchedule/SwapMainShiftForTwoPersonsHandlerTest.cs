@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			_differenceService = new DifferenceEntityCollectionService<IPersistableScheduleData>();
 		}
 
-		[Test, Ignore]
+		[Test, Ignore("Reason mandatory for NUnit 3")]
 		public void ShouldSwapShiftsAndPersistSchedules()
 		{
 			_swapAndModifyServiceNew.Stub(x => x.Swap(personFrom, personTo, null, null, null, null, null))

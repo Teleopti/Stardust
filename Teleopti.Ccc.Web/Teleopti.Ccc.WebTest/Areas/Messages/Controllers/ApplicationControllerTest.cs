@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Messages.Controllers
 			target.ControllerContext = new ControllerContext(context, new RouteData(), target);
 
 			request.Stub(x => x.MapPath("")).IgnoreArguments().Return(
-				Path.GetFullPath(@"..\..\..\Teleopti.Ccc.Web\Areas\Messages\Content\Translation\TranslationTemplate.txt"));
+				Path.GetFullPath(Path.Combine(TestContext.CurrentContext.TestDirectory, @"..\..\..\Teleopti.Ccc.Web\Areas\Messages\Content\Translation\TranslationTemplate.txt")));
 
 			var result = target.Resources() as ContentResult;
 			result.ContentType.Should().Be("text/javascript");

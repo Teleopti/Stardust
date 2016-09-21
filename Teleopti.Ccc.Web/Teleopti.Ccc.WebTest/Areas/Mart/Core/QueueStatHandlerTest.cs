@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 		}
 
 
-		[Test, ExpectedException(typeof(ArgumentException))]
+		[Test]
 		public void ShouldThrowWhenDateIdNotFoundInDatabase()
 		{
 			var fakeRepos = new FakeQueueStatRepository();
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Core
 				QueueName = "kön",
 				IntervalStart = "2014-12-12 15:00"
 			};
-			target.Handle(new List<QueueStatsModel> { queueStatsModel }, "nhib", 1, 0);
+			Assert.Throws<ArgumentException>(() => target.Handle(new List<QueueStatsModel> { queueStatsModel }, "nhib", 1, 0));
 		}
 
 		[Test]

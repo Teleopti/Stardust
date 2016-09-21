@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using NUnit.Framework;
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 	{
 		 
 		[Test]
-		public async void ShouldReturnClaimOnCorrectPassword()
+		public async Task ShouldReturnClaimOnCorrectPassword()
 		{
 			var target = new KeyBasedAuthenticationAttribute();
 			
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 		}
 
 		[Test]
-		public async void ShouldNotReturnClaimOnInCorrectPassword()
+		public async Task ShouldNotReturnClaimOnInCorrectPassword()
 		{
 			var target = new KeyBasedAuthenticationAttribute();
 

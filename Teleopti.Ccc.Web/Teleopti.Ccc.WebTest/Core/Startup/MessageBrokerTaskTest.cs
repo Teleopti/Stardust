@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		}
 
 		[Test]
-		public async void ShouldStartMessageBroker()
+		public async Task ShouldStartMessageBroker()
 		{
 			var currentHttpContext = CurrentHttpContext("http://localhost", "/");
 			var messageBroker = MockRepository.GenerateMock<IMessageBrokerComposite>();

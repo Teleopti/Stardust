@@ -748,8 +748,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var personRequest = new PersonRequest(PersonFactory.CreatePerson(), shifTradeRequest);
 			var shiftTradeRequestModel = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 
-			Assert.IsNullOrEmpty(shiftTradeRequestModel.From);
-			Assert.IsNullOrEmpty(shiftTradeRequestModel.To);
+			Assert.That(shiftTradeRequestModel.From, Is.Null.Or.Empty);
+			Assert.That(shiftTradeRequestModel.To, Is.Null.Or.Empty);
 		}
 
 		private static IPersonRequest createShiftTrade(IPerson from, IPerson to)

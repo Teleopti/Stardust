@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
 			personScheduleDayReadModelFinder.AssertWasCalled(x => x.ForPerson(startDate, publishedToDate, person.Id.GetValueOrDefault()));
 		}
 		
-		[Test, ExpectedException(typeof(InvalidOperationException))]
+		[Test]
 		public void ShouldThrowIfCalendarLinkNonActive()
 		{
 		    var personalSettingDataRepository = MockRepository.GenerateMock<IPersonalSettingDataRepository>();
@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.ShareCalendar
 			                  .Return(personalSettingDataRepository);
 			
 			var target = new CheckCalendarActiveCommand(_repositoryFactory);
-			target.Execute(_unitOfWork,person);
+			Assert.Throws<InvalidOperationException>(() => target.Execute(_unitOfWork,person));
 		}
 
         [Test]

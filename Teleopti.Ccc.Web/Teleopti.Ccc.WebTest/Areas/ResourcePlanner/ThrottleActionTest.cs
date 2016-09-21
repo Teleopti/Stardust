@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		}
 
 		[Test]
-		public async void ShouldNotCancelPauseWithinAllottedTime()
+		public async Task ShouldNotCancelPauseWithinAllottedTime()
 		{
 			var target = new BasicActionThrottler();
 			var reference = target.Block(ThrottledAction.Forecasting);
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		}
 
 		[Test]
-		public async void ShouldCancelPause()
+		public async Task ShouldCancelPause()
 		{
 			var target = new BasicActionThrottler();
 			var reference = target.Block(ThrottledAction.Forecasting);
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		}
 
 		[Test]
-		public async void ShouldBeBlockedAfterResume()
+		public async Task ShouldBeBlockedAfterResume()
 		{
 			var target = new BasicActionThrottler();
 			var reference = target.Block(ThrottledAction.Forecasting);
