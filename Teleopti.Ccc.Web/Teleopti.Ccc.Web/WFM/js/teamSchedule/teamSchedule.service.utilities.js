@@ -15,10 +15,6 @@
 			var defaultIdx = [6, 0, 1, 2, 3, 4, 5];
 			var fdow = $locale.DATETIME_FORMATS.FIRSTDAYOFWEEK;
 
-			if ($locale.id === 'zh-cn') {
-				fdow = 0;
-			}
-
 			var result = [];
 			var startIndex = defaultIdx.indexOf(fdow);
 			for (var i = 0; i < 7; i++) {

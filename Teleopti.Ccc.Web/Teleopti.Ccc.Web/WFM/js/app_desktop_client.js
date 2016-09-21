@@ -220,8 +220,8 @@ wfm.config([
 		$httpProvider.interceptors.push('httpInterceptor');
 	}
 ]).run([
-	'$rootScope', '$state', '$translate', 'HelpService', '$timeout', 'CurrentUserInfo', 'Toggle', '$q', 'RtaState', 'WfmShortcuts',
-	function ($rootScope, $state, $translate, HelpService, $timeout, currentUserInfo, toggleService, $q, RtaState, WfmShortcuts) {
+	'$rootScope', '$state', '$translate', 'HelpService', '$timeout', 'CurrentUserInfo', 'Toggle', '$q', 'RtaState', 'WfmShortcuts', '$locale',
+	function ($rootScope, $state, $translate, HelpService, $timeout, currentUserInfo, toggleService, $q, RtaState, WfmShortcuts, $locale) {
 		$rootScope.isAuthenticated = false;
 
 		(function broadcastEventOnToggle() {
@@ -241,6 +241,11 @@ wfm.config([
 					HelpService.updateState($state);
 				});
 				$state.go(next, toParams);
+
+				$rootScope.$on('$localeChangeSuccess', function () {
+					if ($locale.id === 'zh-cn')
+						$locale.DATETIME_FORMATS.FIRSTDAYOFWEEK = 0;
+				});
 			});
 		};
 
