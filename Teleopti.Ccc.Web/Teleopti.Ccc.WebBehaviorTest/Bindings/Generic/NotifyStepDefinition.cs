@@ -14,21 +14,47 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void WhenIWaitUntilWeekScheduleIsFullyLoaded()
 		{
 			Browser.Interactions.AssertUrlContains("MyTime#Schedule/Week");
-			Browser.Interactions.AssertNotVisibleUsingJQuery("#loaded");
+			Browser.Interactions.AssertNotVisibleUsingJQuery("#loading");
 		}
 
-		[When(@"An activity with time '(.*)' to '(.*)' is added to my schedule")]
-		public void WhenAnActivityWithTimeToIsAddedToMySchedule(string startTime, string endTime)
+		[When(@"An activity '(.*)' with time '(.*)' to '(.*)' is added to my schedule")]
+		public void WhenAnActivityWithTimeToIsAddedToMySchedule(string activity, string startTime, string endTime)
 		{
 			var fetchActivityUrl = "/api/TeamScheduleData/FetchActivities";
-			var createActivityUrl = "/api/TeamScheduleCommand/AddActivity";
-			var requestData = $"ActivityId:d[0].Id, Date:'{startTime.Split(' ')[0]}',StartTime:'{startTime}',EndTime:'{endTime}',PersonIds:[user.AgentId]";
+			var addActivityUrl = "/api/TeamScheduleCommand/AddActivity";
+			var getActivityId = "(function(activities){" +
+									"var result;" +
+									"activities.forEach(function(activity){" +
+										"if(activity.Name == '" + activity + "')" +
+											"result = activity.Id; " +
+									"});" +
+									"return result;" +
+								"})(data)";
 
-			var javascript = "Teleopti.MyTimeWeb.Common.GetUserData(function(user){$.ajax({url:'" + fetchActivityUrl +
-				"',type:'GET',contentType:'application/json',success:function(d){$.ajax({url:'" + createActivityUrl +
-				"',type:'POST',contentType:'application/json',data:JSON.stringify({" + requestData + "})});}});});";
+			var js = "Teleopti.MyTimeWeb.Common.GetUserData(function(user){" +
+							"$.ajax({" +
+								"url:'"+ fetchActivityUrl + "'," +
+								"type:'GET'," +
+								"contentType:'application/json'," +
+								"success:function(data){" +
+									"$.ajax({" +
+										"url:'"+ addActivityUrl + "'," +
+										"type:'POST'," +
+										"contentType:'application/json'," +
+										"data:JSON.stringify({" +
+												"ActivityId: "+ getActivityId +"," +
+												"Date:'"+ startTime.Split(' ')[0] +"', " +
+												"StartTime:'"+ startTime + "'," +
+												"EndTime:'"+ endTime + "'," +
+												"PersonIds:[user.AgentId]" +
+										"})" +
+									"});" +
+								"}" +
+							"});" +
+						"})";
 
-			Browser.Interactions.Javascript(javascript);
+			Browser.Interactions.Javascript(js);
+			Browser.Interactions.AssertAnyContains(".schedule-table-container", activity);
 		}
 
 		[Then(@"I should see one notify message")]

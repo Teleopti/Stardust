@@ -12,6 +12,7 @@ Background:
 	| Field         | Value            |
 	| Name          | No access to ASM |
 	| Access To Asm | False            |
+	And I am american
 	And I have a workflow control set with
 	| Field                      | Value              |
 	| Name                       | Published schedule |
@@ -36,6 +37,10 @@ Background:
 	| Field | Value  |
 	| Name  | Lunch  |
 	| Color | Yellow |
+	And there is an activity with
+	| Field | Value    |
+	| Name  | Training |
+	| Color | Blue     |
 	And I have a shift with
 	| Field                         | Value            |
 	| Shift category                | Day              |
@@ -47,7 +52,7 @@ Background:
 	| Scheduled activity end time   | 2030-01-01 12:00 |
 	And I have a shift with
 	| Field                         | Value            |
-	| Shift category                | Night              |
+	| Shift category                | Night            |
 	| Activity                      | Phone            |
 	| StartTime                     | 2030-01-02 23:00 |
 	| EndTime                       | 2030-01-03 07:00 |
@@ -69,9 +74,7 @@ Background:
 	| Activity                      | Phone            |
 	| StartTime                     | 2030-01-04 08:00 |
 	| EndTime                       | 2030-01-04 17:00 |
-	And I am american
 
-@ignore
 @broker
 Scenario: Alert agent when schedule changed
 	Given I have the role 'Full access to mytime'
@@ -79,9 +82,7 @@ Scenario: Alert agent when schedule changed
 	And the time is '2030-01-04 09:00:00'
 	When I am viewing week schedule
 	And I wait until week schedule is fully loaded
-	And I should not see any notify
-	And An activity with time '2030-01-04 12:00' to '2030-01-04 13:00' is added to my schedule
-	And I wait until week schedule is fully loaded
+	And An activity 'Training' with time '2030-01-04 12:00' to '2030-01-04 13:00' is added to my schedule
 	Then I should see one notify message
 
 Scenario: Alert agent before first activity starts

@@ -55,7 +55,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	                'top': 50 + $(window).scrollTop()
 	            });
 	    });
-	    $(document).ajaxSuccess(function() {
+	    $(document).ajaxStop(function() {
 	        $('#loading').hide();
 	    });
 	}
