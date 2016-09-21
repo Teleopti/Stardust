@@ -27,6 +27,11 @@ namespace Teleopti.Interfaces.Domain
 			return InContext && Fetch().PrimarySkillMode;
 		}
 
+		public static void Clear()
+		{
+			new ResourceCalculationContext(null);
+		}
+
 		public void Dispose()
 		{
 			_container = null;

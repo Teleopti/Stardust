@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	public class SharedResourceContext : ISharedResourceContext
+	public class SharedResourceContext : ISharedResourceContext, IDisposable
 	{
 		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly Func<ISchedulerStateHolder> _stateHolder;
@@ -27,6 +27,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => _sharedContext));
 
 			return new GenericDisposable(() =>{});
+		}
+
+		public void Dispose()
+		{
+			ResourceCalculationContext.Clear();
+			_sharedContext = null;
 		}
 	}
 }
