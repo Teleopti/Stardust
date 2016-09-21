@@ -24,10 +24,9 @@ namespace Teleopti.Ccc.WinCodeTest.Converters
         }
 
         [Test]
-        [ExpectedException(typeof(NotImplementedException))]
         public void VerifyConvertBack()
         {
-            _target.ConvertBack(null, null, null, null);
+            Assert.Throws<NotImplementedException>(() => _target.ConvertBack(null, null, null, null));
         }
     }
 }

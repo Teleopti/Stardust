@@ -42,17 +42,17 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "Teleopti.Ccc.WinCode.Scheduling.AuditHistory.AuditHistoryPresenter")]
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldGenerateExceptionOnNullView()
         {
-            new AuditHistoryPresenter(null, _model);
+            Assert.Throws<ArgumentNullException>(() => new AuditHistoryPresenter(null, _model));
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "Teleopti.Ccc.WinCode.Scheduling.AuditHistory.AuditHistoryPresenter")]
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldGenerateExceptionOnNullModel()
         {
-            new AuditHistoryPresenter(_view, null);
+            Assert.Throws<ArgumentNullException>(() => new AuditHistoryPresenter(_view, null));
         }
 
         [Test]

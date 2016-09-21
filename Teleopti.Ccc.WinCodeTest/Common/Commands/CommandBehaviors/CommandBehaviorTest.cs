@@ -114,17 +114,17 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Commands.CommandBehaviors
 
        
 
-        [Test, ExpectedException(typeof(InvalidOperationException))]
+        [Test]
         public void VerifyThatCommandExecutingStrategyMustHaveBehavior()
         {
             CommandExecutionStrategy strategy = new CommandExecutionStrategy();
-            strategy.Execute(_parameter);
+            Assert.Throws<InvalidOperationException>(() => strategy.Execute(_parameter));
         }
 
-        [Test,ExpectedException(typeof(InvalidOperationException))]
+        [Test]
         public void VerifyCannotBindToEventThatDosNotExistOnTheTargetElement()
         {
-            CommandBehavior.SetEvent(new DependencyObject(), _parameter); //Parameter does not exist as event 
+            Assert.Throws<InvalidOperationException>(() => CommandBehavior.SetEvent(new DependencyObject(), _parameter)); //Parameter does not exist as event 
         }
 
         #region actions

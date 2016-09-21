@@ -403,22 +403,22 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             target.FilterPersons(new List<IPerson>());
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowExceptionOnNullScheduleRepository()
         {
             var personProvider = mocks.StrictMock<IPersonProvider>();
             var scheduleDictionaryLoadOptions = mocks.StrictMock<IScheduleDictionaryLoadOptions>();
             var scheduleDateTimePeriod = mocks.StrictMock<IScheduleDateTimePeriod>();
-            target.LoadSchedules(null, personProvider, scheduleDictionaryLoadOptions, scheduleDateTimePeriod);
+			Assert.Throws<ArgumentNullException>(() => target.LoadSchedules(null, personProvider, scheduleDictionaryLoadOptions, scheduleDateTimePeriod));
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowExceptionOnNullPeriod()
         {
             var personProvider = mocks.StrictMock<IPersonProvider>();
             var scheduleDictionaryLoadOptions = mocks.StrictMock<IScheduleDictionaryLoadOptions>();
             var scheduleRepository = mocks.StrictMock<IScheduleStorage>();
-            target.LoadSchedules(scheduleRepository, personProvider, scheduleDictionaryLoadOptions, null);
+			Assert.Throws<ArgumentNullException>(() => target.LoadSchedules(scheduleRepository, personProvider, scheduleDictionaryLoadOptions, null));
         }
 
 		[Test]

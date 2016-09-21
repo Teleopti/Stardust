@@ -297,22 +297,22 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             }
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowExceptionOnNullPixelConverterMoveStart()
         {
-            _target.Move(null, 0, new Rectangle(),MeetingMoveState.MovingStart, TimeSpan.Zero);
+            Assert.Throws<ArgumentNullException>(() => _target.Move(null, 0, new Rectangle(),MeetingMoveState.MovingStart, TimeSpan.Zero));
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
-        public void ShouldThrowExceptionOnNullPixelConverterMoveEnd()
+		[Test]
+		public void ShouldThrowExceptionOnNullPixelConverterMoveEnd()
         {
-            _target.Move(null, 0, new Rectangle(), MeetingMoveState.MovingEnd, TimeSpan.Zero);
+			Assert.Throws<ArgumentNullException>(() => _target.Move(null, 0, new Rectangle(), MeetingMoveState.MovingEnd, TimeSpan.Zero));
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
-        public void ShouldThrowExceptionOnNullPixelConverterMoveStartAndEnd()
+		[Test]
+		public void ShouldThrowExceptionOnNullPixelConverterMoveStartAndEnd()
         {
-            _target.Move(null, 0, new Rectangle(), MeetingMoveState.MovingStartAndEnd, TimeSpan.Zero);
+			Assert.Throws<ArgumentNullException>(() => _target.Move(null, 0, new Rectangle(), MeetingMoveState.MovingStartAndEnd, TimeSpan.Zero));
         }
     }
 }

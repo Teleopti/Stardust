@@ -553,18 +553,17 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			}	
 		}
 		       
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test, ExpectedException(typeof(ArgumentNullException))]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void ShouldThrowExceptionOnNullStyle()
         {
-            ViewBaseHelper.StyleTargetScheduleDaysOffCell(null, null, new DateOnlyPeriod(), null);
+            Assert.Throws<ArgumentNullException>(() => ViewBaseHelper.StyleTargetScheduleDaysOffCell(null, null, new DateOnlyPeriod(), null));
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test, ExpectedException(typeof(ArgumentNullException))]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void ShouldThrowExceptionOnNullPerson()
         {
             var style = new GridStyleInfo();
-
-            ViewBaseHelper.StyleTargetScheduleDaysOffCell(style, null, new DateOnlyPeriod(), null);
+            Assert.Throws<ArgumentNullException>(() => ViewBaseHelper.StyleTargetScheduleDaysOffCell(style, null, new DateOnlyPeriod(), null));
         }
 
         [Test]

@@ -48,10 +48,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_scheduleMatrixPros = new List<IScheduleMatrixPro>{_scheduleMatrixPro};
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowExceptionOnNullPersons()
 		{
-			_agentRestrictionsDisplayRowCreator.Create(null);		
+			Assert.Throws<ArgumentNullException>(() => _agentRestrictionsDisplayRowCreator.Create(null));		
 		}
 
 		[Test]

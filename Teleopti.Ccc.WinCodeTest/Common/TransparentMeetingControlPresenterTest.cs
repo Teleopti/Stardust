@@ -303,22 +303,22 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			}	
 		}
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowIfViewIsNull()
         {
-            _presenter = new TransparentMeetingControlPresenter(null, _model, _helper);
+			Assert.Throws<ArgumentNullException>(() => _presenter = new TransparentMeetingControlPresenter(null, _model, _helper));
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowIfModelIsNull()
         {
-            _presenter = new TransparentMeetingControlPresenter(_view, null, _helper);
+			Assert.Throws<ArgumentNullException>(() => _presenter = new TransparentMeetingControlPresenter(_view, null, _helper));
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowIfHelperIsNull()
         {
-            _presenter = new TransparentMeetingControlPresenter(_view, _model, null);
+			Assert.Throws<ArgumentNullException>(() => _presenter = new TransparentMeetingControlPresenter(_view, _model, null));
         }
 	}
 }

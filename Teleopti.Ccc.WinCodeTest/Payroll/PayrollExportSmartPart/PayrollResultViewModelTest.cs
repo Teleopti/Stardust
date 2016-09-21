@@ -109,11 +109,9 @@ namespace Teleopti.Ccc.WinCodeTest.Payroll.PayrollExportSmartPart
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ModelMustNotBeNull()
         {
-            _target = new PayrollResultViewModel(null);
-            Assert.IsNotNull(_target, "fx cop");
+            Assert.Throws<ArgumentNullException>(() => _target = new PayrollResultViewModel(null));
         }
 
         [Test]

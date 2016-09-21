@@ -20,10 +20,10 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
             budgetDayProvider = mocks.StrictMock<IBudgetDayProvider>();
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowExceptionWhenBudgetDayProviderIsNull()
         {
-            target = new BudgetDaysUpdater(null);
+	        Assert.Throws<ArgumentNullException>(() => target = new BudgetDaysUpdater(null));
         }
 
         [Test]

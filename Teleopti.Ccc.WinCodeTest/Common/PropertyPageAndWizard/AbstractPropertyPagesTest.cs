@@ -535,7 +535,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common.PropertyPageAndWizard
         /// Created date: 2008-01-16
         /// </remarks>
         [Test]
-        [ExpectedException(typeof(NotImplementedException))]
         public void VerifyAddToRepositoryGivesException()
         {
             target.AddToRepository();
@@ -543,8 +542,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common.PropertyPageAndWizard
 
             mocks.ReplayAll();
 
-            target.AddToRepository();
-            mocks.VerifyAll();
+	        Assert.Throws<NotImplementedException>(() => target.AddToRepository());
+			mocks.VerifyAll();
         }
     }
 

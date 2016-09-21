@@ -52,19 +52,17 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		}
 
 		[Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ShouldThrowExceptionIfPersonNull()
         {
             _person = null;
-            _target = new ScheduleTargetTimeCalculator(_schedulerStateHolder, _person, _dateOnlyPeriod);
+			Assert.Throws<ArgumentNullException>(() => _target = new ScheduleTargetTimeCalculator(_schedulerStateHolder, _person, _dateOnlyPeriod));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ShouldThrowExceptionIfStateHolderNull()
         {
             _schedulerStateHolder = null;
-            _target = new ScheduleTargetTimeCalculator(_schedulerStateHolder, _person, _dateOnlyPeriod);
+			Assert.Throws<ArgumentNullException>(() => _target = new ScheduleTargetTimeCalculator(_schedulerStateHolder, _person, _dateOnlyPeriod));
         }
 
 	    [Test]

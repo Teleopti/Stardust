@@ -503,16 +503,16 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             }
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowExceptionOnNullPixelConverterMouseMove()
         {
-            _target.GridControlSchedulesMouseMove(0, new Rectangle(), null, 0 );
+            Assert.Throws<ArgumentNullException>(() => _target.GridControlSchedulesMouseMove(0, new Rectangle(), null, 0 ));
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowExceptionOnNullPixelConverterGetLayerRectangle()
         {
-            _target.GetLayerRectangle(null, new DateTimePeriod(), new RectangleF());
+            Assert.Throws<ArgumentNullException>(() => _target.GetLayerRectangle(null, new DateTimePeriod(), new RectangleF()));
         }
 	}
 }

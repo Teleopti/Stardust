@@ -1,3 +1,4 @@
+using System.IO;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting.Import;
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
         [Test]
         public void ShouldHandleEmptyFile()
         {
-            target.Execute("Forecasting\\ImportForecast\\EmptyFile.txt");
+            target.Execute(Path.Combine(TestContext.CurrentContext.TestDirectory, "Forecasting\\ImportForecast\\EmptyFile.txt"));
 
             model.HasValidationError.Should().Be.True();
             model.ValidationMessage.Should().Not.Be.Empty();
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
         [Test]
         public void ShouldHandleValidFile()
         {
-            target.Execute("Forecasting\\ImportForecast\\ValidFile.txt");
+            target.Execute(Path.Combine(TestContext.CurrentContext.TestDirectory, "Forecasting\\ImportForecast\\ValidFile.txt"));
 
             model.HasValidationError.Should().Be.False();
             model.ValidationMessage.Should().Be.Empty();
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
         [Test]
         public void ShouldHandleInvalidFile()
         {
-            target.Execute("Forecasting\\ImportForecast\\InvalidFile.txt");
+            target.Execute(Path.Combine(TestContext.CurrentContext.TestDirectory, "Forecasting\\ImportForecast\\InvalidFile.txt"));
 
             model.HasValidationError.Should().Be.True();
             model.ValidationMessage.Should().Not.Be.Empty();

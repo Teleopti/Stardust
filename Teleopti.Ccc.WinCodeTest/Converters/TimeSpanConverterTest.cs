@@ -41,19 +41,23 @@ namespace Teleopti.Ccc.WinCodeTest.Converters
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void VerifyOnlyTakesTimeSpanAsArgument()
         {
-            _target = new TimeSpanConverter();
-            Assert.AreEqual(0d, (double)_target.Convert(DateTime.Now, typeof(string), null, null));
+	        Assert.Throws<ArgumentException>(() =>
+	        {
+				_target = new TimeSpanConverter();
+				Assert.AreEqual(0d, (double)_target.Convert(DateTime.Now, typeof(string), null, null));
+	        });
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void VerifyOnlyTakesDoubleAsConvertBackArgument()
         {
-            _target = new TimeSpanConverter();
-            Assert.AreEqual(TimeSpan.FromMinutes(15), (TimeSpan)_target.ConvertBack(DateTime.Now, typeof(string), null, null));
+	        Assert.Throws<ArgumentException>(() =>
+	        {
+				_target = new TimeSpanConverter();
+				Assert.AreEqual(TimeSpan.FromMinutes(15), (TimeSpan)_target.ConvertBack(DateTime.Now, typeof(string), null, null));
+	        });
         }
     }
 }

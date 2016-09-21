@@ -38,10 +38,10 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			}
 		}
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowIfRepositoryIsNull()
         {
-            _defaultScenarioLoader.Load(null);
+			Assert.Throws<ArgumentNullException>(() => _defaultScenarioLoader.Load(null));
         }
 	}
 }

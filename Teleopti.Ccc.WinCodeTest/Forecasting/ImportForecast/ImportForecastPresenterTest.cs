@@ -47,11 +47,11 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
 		{
 			var workload = _skill.WorkloadCollection.FirstOrDefault();
 			_model.SelectedSkill = _skill;
-			
+
 			_view.Stub(x => x.SetSkillName(_skill.Name));
 			_view.Stub(x => x.SetWorkloadName(workload.Name));
 			_view.Stub(x => x.SetVisibility(_skill.SkillType));
-			
+
 			_target.Initialize();
 		}
 
@@ -72,19 +72,20 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
 			uow.Stub(x => x.PersistAll());
 			_publisher.Stub(x => x.Publish(null)).IgnoreArguments();
 			_view.Stub(x => x.ShowStatusDialog(jobId));
-			
+
 			_target.StartImport(fileName);
 		}
 
 		[Test]
-		[ExpectedException(typeof(InvalidOperationException))]
 		public void ShouldThrowInvalidOperationException()
 		{
 			_model.SelectedSkill = _skill;
 			_view.Stub(x => x.SetSkillName(_skill.Name));
-			_model.Stub(x => x.SelectedWorkload()).Return(null);
-			
-			_target.Initialize();
+			Assert.Throws<InvalidOperationException>(() =>
+			{
+				_model.Stub(x => x.SelectedWorkload()).Return(null);
+				_target.Initialize();
+			});
 		}
 
 		[Test]
@@ -94,10 +95,10 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ImportForecast
 			_model.FileId = Guid.NewGuid();
 			_model.HasValidationError = true;
 			_model.SelectedSkill = _skill;
-			
+
 			_validateImportForecastFileCommand.Stub(x => x.Execute(fileName));
 			_view.Stub(x => x.ShowValidationException(null));
-			
+
 			_target.StartImport(fileName);
 		}
 

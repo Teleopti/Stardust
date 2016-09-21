@@ -89,16 +89,16 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			}
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowExceptionWhenNullCommand()
 		{
-		    _presenter.RunCommand(null);
+		    Assert.Throws<ArgumentNullException>(() => _presenter.RunCommand(null));
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowExceptionWhenNullDayCreator()
 		{
-			_presenter.CommandToExecute(TimeSpan.FromHours(1), TimeSpan.FromHours(2), null);
+			Assert.Throws<ArgumentNullException>(() => _presenter.CommandToExecute(TimeSpan.FromHours(1), TimeSpan.FromHours(2), null));
 		}
 
 		[Test]

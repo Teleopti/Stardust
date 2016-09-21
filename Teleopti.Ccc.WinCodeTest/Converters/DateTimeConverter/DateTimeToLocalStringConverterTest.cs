@@ -64,10 +64,10 @@ namespace Teleopti.Ccc.WinCodeTest.Converters.DateTimeConverter
         } 
 
 
-        [Test,ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifyConvertChecksInParameter()
         {
-            _target.Convert(new object[]{ "not datetime" }, typeof (DateTime), null, CultureInfo.CurrentCulture);
+            Assert.Throws<ArgumentException>(() => _target.Convert(new object[]{ "not datetime" }, typeof (DateTime), null, CultureInfo.CurrentCulture));
         }
 
         [Test]

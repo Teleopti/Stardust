@@ -40,10 +40,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Panels
 
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void VerifyDateTimeKindIsUtc()
         {
-           _target.PositionFromDateTime(new DateTime(2001, 1, 1, 8, 0, 0, DateTimeKind.Local));
+           Assert.Throws<ArgumentException>(() => _target.PositionFromDateTime(new DateTime(2001, 1, 1, 8, 0, 0, DateTimeKind.Local)));
         }
 
         [Test]

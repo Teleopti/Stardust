@@ -61,16 +61,16 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		}
 
        
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowIfStateHolderIsNull()
         {
-            _scheduleContractTimeCalculator = new ScheduleContractTimeCalculator(null, _person, _dateOnlyPeriod);
+			Assert.Throws<ArgumentNullException>(() => _scheduleContractTimeCalculator = new ScheduleContractTimeCalculator(null, _person, _dateOnlyPeriod));
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowIfPersonIsNull()
         {
-            _scheduleContractTimeCalculator = new ScheduleContractTimeCalculator(_schedulerStateHolder, null, _dateOnlyPeriod);
+			Assert.Throws<ArgumentNullException>(() => _scheduleContractTimeCalculator = new ScheduleContractTimeCalculator(_schedulerStateHolder, null, _dateOnlyPeriod));
         }
 	}
 }

@@ -74,14 +74,14 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin
             Assert.AreEqual(2, _target.MaxNumberOf.Value);
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifySameShiftCategoryWhenCombine()
         {
             Guid guid = Guid.NewGuid();
             IShiftCategory category = ShiftCategoryFactory.CreateShiftCategory("yy");
             category.SetId(guid);
             IShiftCategoryLimitation limitation = new ShiftCategoryLimitation(category);
-            _target.CombineLimitations(limitation);
+            Assert.Throws<ArgumentException>(() => _target.CombineLimitations(limitation));
         }
 
         [Test]
@@ -161,10 +161,10 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin
             Assert.AreEqual(2, _target.MaxNumberOf.Value);
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifySameShiftCategoryWhenCombineWithNoLimitation()
         {
-            _target.CombineWithNoLimitation(ShiftCategoryFactory.CreateShiftCategory("yy"));
+            Assert.Throws<ArgumentException>(() => _target.CombineWithNoLimitation(ShiftCategoryFactory.CreateShiftCategory("yy")));
         }
 
         [Test]

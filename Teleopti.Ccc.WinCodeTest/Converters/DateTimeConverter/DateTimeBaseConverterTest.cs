@@ -147,21 +147,25 @@ namespace Teleopti.Ccc.WinCodeTest.Converters.DateTimeConverter
 
         #region parameters
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void VerifyValueMustBeDateTime()
         {
-            var dateTime = _target.Convert("not a dateTime", typeof(DateTime), null, null);
-            Assert.AreEqual(dateTime, _target, "FxCop");
+	        Assert.Throws<ArgumentException>(() =>
+	        {
+				var dateTime = _target.Convert("not a dateTime", typeof(DateTime), null, null);
+				Assert.AreEqual(dateTime, _target, "FxCop");
+	        });
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void VerifyParametersForMultipleBinding()
         {
-            object[] values = new object[] { _utcDateTime, "not a timezone" };
-            _target.ConverterTimeZone = _testTimeZone;
-            DateTime convertedDateTime = (DateTime)_target.Convert(values, typeof(DateTime), null, null);
-            Assert.AreEqual(convertedDateTime, _target, "FxCop");
+	        Assert.Throws<ArgumentException>(() =>
+	        {
+				object[] values = new object[] {_utcDateTime, "not a timezone"};
+				_target.ConverterTimeZone = _testTimeZone;
+				DateTime convertedDateTime = (DateTime) _target.Convert(values, typeof(DateTime), null, null);
+				Assert.AreEqual(convertedDateTime, _target, "FxCop");
+	        });
         }
 
         #endregion

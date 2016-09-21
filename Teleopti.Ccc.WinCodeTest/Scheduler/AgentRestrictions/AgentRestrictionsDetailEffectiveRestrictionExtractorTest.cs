@@ -70,16 +70,16 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			TimeZoneGuard.Instance.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("UTC");
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowExceptionOnNoMatrixPro()
 		{
-			_effectiveRestrictionExtractor.Extract(null, _preferenceCellData, DateOnly.MinValue, _dateTimePeriod, _periodTarget);	
+			Assert.Throws<ArgumentNullException>(() => _effectiveRestrictionExtractor.Extract(null, _preferenceCellData, DateOnly.MinValue, _dateTimePeriod, _periodTarget));	
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowExceptionOnNoPreferenceCellData()
 		{
-			_effectiveRestrictionExtractor.Extract(_scheduleMatrixPro, null, DateOnly.MinValue, _dateTimePeriod, _periodTarget);
+			Assert.Throws<ArgumentNullException>(() => _effectiveRestrictionExtractor.Extract(_scheduleMatrixPro, null, DateOnly.MinValue, _dateTimePeriod, _periodTarget));
 		}
 
 		[Test]

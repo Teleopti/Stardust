@@ -49,10 +49,10 @@ namespace Teleopti.Ccc.WinCodeTest.Converters
             Assert.AreEqual(DependencyProperty.UnsetValue, value);
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void ShouldThrowOnWrongType()
         {
-            _target.Convert(33, null, null, null);
+	        Assert.Throws<ArgumentException>(() => _target.Convert(33, null, null, null));
         }
     }
 }

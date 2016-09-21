@@ -167,10 +167,10 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             Assert.That(newName.Equals("NewMaster3"));
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowIfCashedModelsIsNull()
         {
-            MasterActivityPresenter.GetNewName(null, "NewMaster");
+			Assert.Throws<ArgumentNullException>(() => MasterActivityPresenter.GetNewName(null, "NewMaster"));
         }
 
         [Test]

@@ -26,18 +26,18 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_target = new GroupPageCreator(_groupPageFactory);
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowIfDatesIsNull()
 		{
 			var grouping = new GroupPageLight();
-			_target.CreateGroupPagePerDate(null, _groupPageDataProvider, grouping);
+			Assert.Throws<ArgumentNullException>(() => _target.CreateGroupPagePerDate(null, _groupPageDataProvider, grouping));
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowIfProviderIsNull()
 		{
 			var grouping = new GroupPageLight();
-			_target.CreateGroupPagePerDate(new List<DateOnly>(), null, grouping);
+			Assert.Throws<ArgumentNullException>(() => _target.CreateGroupPagePerDate(new List<DateOnly>(), null, grouping));
 		}
 
 		[Test]

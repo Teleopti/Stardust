@@ -196,10 +196,9 @@ namespace Teleopti.Ccc.WinCodeTest.Payroll
         }
 
         [Test]
-        [ExpectedException(typeof(NotImplementedException))]
         public void VerifySort()
         {
-            target.Sort(SortingMode.Ascending);
+            Assert.Throws<NotImplementedException>(() => target.Sort(SortingMode.Ascending));
         }
 
         [Test]

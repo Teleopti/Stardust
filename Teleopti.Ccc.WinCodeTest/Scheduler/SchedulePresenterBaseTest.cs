@@ -152,8 +152,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.AreEqual(_scheduleTag, _target.DefaultScheduleTag);
         }
 
-        [Test, Ignore]
-        public void VerifyScheduleSort()
+        [Test]
+		[Ignore("Reason mandatory for NUnit 3")]
+		public void VerifyScheduleSort()
         {
             var range1 = _mocks.StrictMock<IScheduleRange>();
             var range2 = _mocks.StrictMock<IScheduleRange>();
@@ -821,10 +822,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_target.UpdatePublicNoteFromEditor();
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowExceptionIfNullSchedulePartsOnTryModify()
 		{
-			_target.TryModify(null);
+			Assert.Throws<ArgumentNullException>(() => _target.TryModify(null));
 		}
 
         [Test]

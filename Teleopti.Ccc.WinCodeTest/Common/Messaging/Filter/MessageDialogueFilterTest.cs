@@ -48,16 +48,16 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Messaging.Filter
             Assert.IsFalse(specification.IsSatisfiedBy(_model2));
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifyParameter()
         {
-            _target.FilterOutSpecification("test");
+            Assert.Throws<ArgumentException>(() => _target.FilterOutSpecification("test"));
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifyParameterAllButSpecification()
         {
-            _target.FilterAllButSpecification("test");
+			Assert.Throws<ArgumentException>(() => _target.FilterAllButSpecification("test"));
         }
 
         [Test]

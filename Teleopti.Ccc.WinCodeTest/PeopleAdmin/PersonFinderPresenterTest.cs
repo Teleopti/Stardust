@@ -59,10 +59,10 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin
             }
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowExceptionOnNullCommand()
         {
-            _target.Find(null);   
+            Assert.Throws<ArgumentNullException>(() => _target.Find(null));   
         }
 
         [Test]

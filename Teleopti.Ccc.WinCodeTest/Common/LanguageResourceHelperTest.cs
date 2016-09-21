@@ -123,10 +123,10 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         /// Created by: robink
         /// Created date: 2008-05-28
         /// </remarks>
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void VerifyEnumWithNoTranslationCannotBeTranslated()
         {
-            LanguageResourceHelper.TranslateEnum<TaskOwnerPeriodType>();
+            Assert.Throws<ArgumentNullException>(() => LanguageResourceHelper.TranslateEnum<TaskOwnerPeriodType>());
         }
 
         /// <summary>
@@ -177,16 +177,16 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         /// Created by: robink
         /// Created date: 2008-05-28
         /// </remarks>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test, ExpectedException(typeof(ArgumentException))]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void VerifyNotEnumCannotBeTranslated()
         {
-            LanguageResourceHelper.TranslateEnum<LanguageResourceHelper>();
+			Assert.Throws<ArgumentException>(() => LanguageResourceHelper.TranslateEnum<LanguageResourceHelper>());
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifyNotEnumValueCannotBeTranslated()
         {
-            LanguageResourceHelper.TranslateEnumValue(new object());
+			Assert.Throws<ArgumentException>(() => LanguageResourceHelper.TranslateEnumValue(new object()));
         }
 
         [Test]

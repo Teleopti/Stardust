@@ -97,10 +97,10 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 			}
 		}
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowOnLoadBudgetGroupGivenNull()
         {
-            target.LoadBudgetGroup(null);
+	        Assert.Throws<ArgumentNullException>(() => target.LoadBudgetGroup(null));
         }
     }
 }

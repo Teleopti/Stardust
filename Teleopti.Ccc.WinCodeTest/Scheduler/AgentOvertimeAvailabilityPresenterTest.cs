@@ -88,17 +88,17 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				_presenter.RunCommand(_command);
 			}
 		}
-	
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+
+		[Test]
 		public void ShouldThrowExceptionWhenNullCommand()
 		{
-			_presenter.RunCommand(null);	
+			Assert.Throws<ArgumentNullException>(() => _presenter.RunCommand(null));
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowExceptionWhenNullDayCreator()
 		{
-			_presenter.CommandToExecute(TimeSpan.FromHours(1), TimeSpan.FromHours(2), null);
+			Assert.Throws<ArgumentNullException>(() => _presenter.CommandToExecute(TimeSpan.FromHours(1), TimeSpan.FromHours(2), null));
 		}
 
 		[Test]
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			{
 				bool startError;
 				bool endError;
-				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> ()));
+				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData>()));
 				Expect.Call(_dayCreator.CanCreate(startTime, endTime, out startError, out endError)).Return(true);
 			}
 
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			{
 				var toExecute = _presenter.CommandToExecute(startTime, endTime, _dayCreator);
 				Assert.IsInstanceOf<AgentOvertimeAvailabilityAddCommand>(toExecute);
-			}	
+			}
 		}
 
 		[Test]
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			{
 				var toExecute = _presenter.CommandToExecute(startTime, endTime, _dayCreator);
 				Assert.IsInstanceOf<AgentOvertimeAvailabilityEditCommand>(toExecute);
-			}		
+			}
 		}
 
 		[Test]
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			{
 				var toExecute = _presenter.CommandToExecute(startTime, endTime, _dayCreator);
 				Assert.IsNull(toExecute);
-			}	
+			}
 		}
 
 		private void addPeriodAndContractToPerson()

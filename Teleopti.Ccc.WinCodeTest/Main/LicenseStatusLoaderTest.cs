@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
     [TestFixture]
     public class LicenseStatusLoaderTest
     {
-        [Test, ExpectedException(typeof(SignatureValidationException))]
+        [Test]
         public void ShouldLoadFromRepository()
         {
             var xml = @"<?xml version='1.0' encoding='utf-8'?><LicenseStatus/>";
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
             Expect.Call(rep.LoadAll()).Return(new List<ILicenseStatus> {status});
             Expect.Call(status.XmlString).Return(xml);
             mocks.ReplayAll();
-            target.GetStatus(uow);
+			Assert.Throws<SignatureValidationException>(() => target.GetStatus(uow));
             mocks.VerifyAll();
         }
     }

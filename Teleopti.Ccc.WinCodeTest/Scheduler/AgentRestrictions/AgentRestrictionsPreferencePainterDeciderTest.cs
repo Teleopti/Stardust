@@ -34,40 +34,40 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		}
 
 		
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowExceptionOnNullArgumentShouldPaint()
 		{
-			_decider.ShouldPaint(null);
+			Assert.Throws<ArgumentNullException>(() => _decider.ShouldPaint(null));
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowExceptionOnNullArgumentShouldPaintPreferredDayOff()
 		{
-			_decider.ShouldPaintPreferredDayOff(null);
+			Assert.Throws<ArgumentNullException>(() => _decider.ShouldPaintPreferredDayOff(null));
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowExceptionOnNullArgumentShouldPaintPreferredShiftCategory()
 		{
-			_decider.ShouldPaintPreferredDayOff(null);
+			Assert.Throws<ArgumentNullException>(() => _decider.ShouldPaintPreferredDayOff(null));
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowExceptionOnNullArgumentShouldPaintPreferredAbsence()
 		{
-			_decider.ShouldPaintPreferredAbsence(null);
+			Assert.Throws<ArgumentNullException>(() => _decider.ShouldPaintPreferredAbsence(null));
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowExceptionOnNullArgumentShouldPaintPreferredAbsenceOnContractDayOff()
 		{
-			_decider.ShouldPaintPreferredAbsenceOnContractDayOff(null);
+			Assert.Throws<ArgumentNullException>(() => _decider.ShouldPaintPreferredAbsenceOnContractDayOff(null));
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowExceptionOnNullArgumentShouldPaintPreferredExtended()
 		{
-			_decider.ShouldPaintPreferredExtended(null);
+			Assert.Throws<ArgumentNullException>(() => _decider.ShouldPaintPreferredExtended(null));
 		}
 
 		[Test]

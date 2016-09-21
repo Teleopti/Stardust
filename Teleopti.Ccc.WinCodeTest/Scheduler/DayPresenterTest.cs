@@ -92,10 +92,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.AreEqual((int)ColumnType.StartScheduleColumns + 3, column);
         }
 
-        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test]
         public void VerifyPotentialOverflowIsFixed()
         {
-            target.GetLocalDateFromColumn(-2);
+            Assert.Throws<ArgumentOutOfRangeException>(() => target.GetLocalDateFromColumn(-2));
         }
 
         private class DayPresenterTestClass : DayPresenter

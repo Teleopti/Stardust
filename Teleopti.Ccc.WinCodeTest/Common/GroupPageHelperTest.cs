@@ -239,11 +239,14 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             Assert.IsNotNull(_target.CreateGroupingsCreator());
         }
 
-        [Test, ExpectedException(typeof(InvalidOperationException))]
+        [Test]
         public void ShouldRequireLoadAllBeforeCollectionsAreUsed()
         {
-            var collection = _target.ContractCollection;
-            Assert.Fail("Should have thrown exception. Number of items in list = {0}", collection.Count());
+	        Assert.Throws<InvalidOperationException>(() =>
+	        {
+				var collection = _target.ContractCollection;
+				Assert.Fail($"Should have thrown exception. Number of items in list = {collection.Count()}");
+			});
         }
 
         [Test]

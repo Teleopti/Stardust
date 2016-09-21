@@ -35,16 +35,16 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
             _mocks.VerifyAll();
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowIfRepositoryIsNull()
         {
-            _target = new InfoWindowTextFormatter(null, _unitOfWorkFactory);
+            Assert.Throws<ArgumentNullException>(() => _target = new InfoWindowTextFormatter(null, _unitOfWorkFactory));
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowIfFactoryIsNull()
         {
-            _target = new InfoWindowTextFormatter(_settingDataRepository, null);
+            Assert.Throws<ArgumentNullException>(() => _target = new InfoWindowTextFormatter(_settingDataRepository, null));
         }
 
         [Test]

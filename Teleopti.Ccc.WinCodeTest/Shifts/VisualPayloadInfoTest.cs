@@ -29,10 +29,10 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
             Assert.AreEqual("Phone", _target.Name);
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowIfActivitiesIsNull()
         {
-            _target.SetUnderlyingActivities(null);
+            Assert.Throws<ArgumentNullException>(() => _target.SetUnderlyingActivities(null));
         }
 
         [Test]

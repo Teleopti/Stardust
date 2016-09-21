@@ -39,17 +39,17 @@ namespace Teleopti.Ccc.WinCodeTest.Presentation
             Assert.AreEqual(person, _target.Person);
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowExceptionIfPersonIdIsNull()
         {
             IPerson person = new Person();
-            _target = new ReportUserSelectorAuditingModel(person);
+            Assert.Throws<ArgumentNullException>(() => _target = new ReportUserSelectorAuditingModel(person));
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowExceptionIfPersonIsNull()
         {
-            _target = new ReportUserSelectorAuditingModel(null);
+            Assert.Throws<ArgumentNullException>(() => _target = new ReportUserSelectorAuditingModel(null));
         }
     }
 }

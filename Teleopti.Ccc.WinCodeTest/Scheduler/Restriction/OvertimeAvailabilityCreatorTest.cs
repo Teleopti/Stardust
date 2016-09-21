@@ -112,10 +112,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
             Assert.IsTrue(endTimeError);
         } 
 		
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowExceptionOnNullScheduleDay()
         {
-            _target.Create(null, null, null);
+            Assert.Throws<ArgumentNullException>(() => _target.Create(null, null, null));
         }
     }
 

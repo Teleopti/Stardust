@@ -37,18 +37,18 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
             Assert.That(_target.ConvertToUserTimeZone(meetingStart,_timeZone),Is.EqualTo(meetingStart));
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowIfTimeZoneIsNull()
         {
             var meetingStart = new DateTime(2011, 3, 27, 3, 30, 0);
-            Assert.That(_target.ConvertToMeetingTimeZone(meetingStart, null), Is.EqualTo(meetingStart));
+	        Assert.Throws<ArgumentNullException>(() => _target.ConvertToMeetingTimeZone(meetingStart, null));
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowHereTooIfTimeZoneIsNull()
         {
             var meetingStart = new DateTime(2011, 3, 27, 3, 30, 0);
-            Assert.That(_target.ConvertToUserTimeZone(meetingStart, null), Is.EqualTo(meetingStart));
+	        Assert.Throws<ArgumentNullException>(() => _target.ConvertToUserTimeZone(meetingStart, null));
         }
 
         [Test]

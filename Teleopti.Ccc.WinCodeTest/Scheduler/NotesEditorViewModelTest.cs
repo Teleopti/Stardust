@@ -72,15 +72,15 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.IsNotNull(_model1.ChangedPublicNoteCommand);
             Assert.IsNotNull(_model1.DeleteCommandModel);
             Assert.IsNotNull(_model1.DeletePublicNoteCommandModel);
-            Assert.IsNullOrEmpty(_model1.ScheduleNote);
-            Assert.IsNullOrEmpty(_model1.PublicScheduleNote);
+            Assert.That(_model1.ScheduleNote, Is.Null.Or.Empty);
+			Assert.That(_model1.PublicScheduleNote, Is.Null.Or.Empty);
 
-            Assert.IsNotNullOrEmpty(_model2.ScheduleNote);
-            Assert.IsNotNullOrEmpty(_model2.PublicScheduleNote);
+			Assert.That(_model2.ScheduleNote, Is.Not.Null.And.Not.Empty);
+			Assert.That(_model2.PublicScheduleNote, Is.Not.Null.And.Not.Empty);
 
-            Assert.IsNullOrEmpty(_model3.ScheduleNote);
-            Assert.IsNullOrEmpty(_model3.PublicScheduleNote);
-        }
+			Assert.That(_model3.ScheduleNote, Is.Null.Or.Empty);
+			Assert.That(_model3.PublicScheduleNote, Is.Null.Or.Empty);
+		}
 
         [Test]
         public void VerifyCanLoadSchedulePart()
@@ -112,9 +112,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.IsTrue(_model1.IsEnabled);
             Assert.IsNull(_model2.SchedulePart);
             Assert.IsFalse(_model2.IsEnabled);
-            Assert.IsNotNullOrEmpty(_model3.ScheduleNote);
-            Assert.IsNotNullOrEmpty(_model3.PublicScheduleNote);
-            Assert.IsTrue(_model3.IsEnabled);
+			Assert.That(_model3.ScheduleNote, Is.Not.Null.And.Not.Empty);
+
+			Assert.That(_model3.PublicScheduleNote, Is.Not.Null.And.Not.Empty);
+			Assert.IsTrue(_model3.IsEnabled);
         }
 
         [Test]
@@ -211,7 +212,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 _model1.NoteRemoved();
             }
 
-            Assert.IsNullOrEmpty(_model1.ScheduleNote);
+	        Assert.That(_model1.ScheduleNote, Is.Null.Or.Empty);
         }
 
         [Test]
@@ -264,7 +265,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
                 Assert.AreEqual(UserTexts.Resources.Delete, deleteCommand.Text);
                 Assert.IsTrue(args.CanExecute);
-                Assert.IsNullOrEmpty(_model1.ScheduleNote);
+				Assert.That(_model1.ScheduleNote, Is.Null.Or.Empty);
             }
         }
 
@@ -293,7 +294,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
                 Assert.AreEqual(UserTexts.Resources.Delete, deleteCommand.Text);
                 Assert.IsTrue(args.CanExecute);
-                Assert.IsNullOrEmpty(_model1.PublicScheduleNote);
+	            Assert.That(_model1.PublicScheduleNote, Is.Null.Or.Empty);
             }
         }
 

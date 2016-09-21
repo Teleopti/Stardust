@@ -294,23 +294,23 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Assert.IsNull(result);
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowExceptionOnEmptyDay()
 		{
 			var data = new AgentPreferenceData();
-			_preferenceDayCreator.Create(null, data);	
+			Assert.Throws<ArgumentNullException>(() => _preferenceDayCreator.Create(null, data));	
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowExceptionOnEmptyData()
 		{
-			_preferenceDayCreator.Create(_scheduleDay, null);
+			Assert.Throws<ArgumentNullException>(() => _preferenceDayCreator.Create(_scheduleDay, null));
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowExceptionOnEmptyDataCanCreate()
 		{
-			_preferenceDayCreator.CanCreate(null);
+			Assert.Throws<ArgumentNullException>(() => _preferenceDayCreator.CanCreate(null));
 		}
 
 		[Test]

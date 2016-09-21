@@ -243,10 +243,10 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             _mocks.VerifyAll();
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowIfMasterActivityToDeleteIsNull()
         {
-            _target.DeleteMasterActivity(null);
+			Assert.Throws<ArgumentNullException>(() => _target.DeleteMasterActivity(null));
         }
 
         [Test]

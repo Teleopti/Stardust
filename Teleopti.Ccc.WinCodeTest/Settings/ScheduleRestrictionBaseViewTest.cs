@@ -173,12 +173,10 @@ namespace Teleopti.Ccc.WinCodeTest.Settings
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void TryCrashGetWeek()
 		{
 			Assert.IsNotNull(_targetView);
-
-			ScheduleRestrictionBaseView.GetWeek(int.MinValue);
+			Assert.Throws<ArgumentOutOfRangeException>(() => ScheduleRestrictionBaseView.GetWeek(int.MinValue));
 		}
 
 		[Test]

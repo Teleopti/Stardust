@@ -175,10 +175,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             _model.AssertWasNotCalled(x=>x.ReloadModel(new DateOnlyPeriod(), true));
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ExceptionIfBudgetGroupComboBoxIsNull()
         {
-            _target.OnComboBoxAdvBudgetGroupSelectedIndexChanged(null);
+            Assert.Throws<ArgumentNullException>(() => _target.OnComboBoxAdvBudgetGroupSelectedIndexChanged(null));
         }
 
         [Test]

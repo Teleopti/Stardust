@@ -64,17 +64,15 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void CanReturnErrorWhenStringFormatIsWrongEnd()
         {
-            OpenHourHelper.OpenHourPeriod(inCorrectEnd, TimeSpan.Zero);
+            Assert.Throws<ArgumentOutOfRangeException>(() => OpenHourHelper.OpenHourPeriod(inCorrectEnd, TimeSpan.Zero));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void CanReturnErrorWhenStringFormatIsWrongStart()
         {
-            OpenHourHelper.OpenHourPeriod(inCorrectStart, TimeSpan.Zero);
+            Assert.Throws<ArgumentOutOfRangeException>(() => OpenHourHelper.OpenHourPeriod(inCorrectStart, TimeSpan.Zero));
         }
 
         [Test]

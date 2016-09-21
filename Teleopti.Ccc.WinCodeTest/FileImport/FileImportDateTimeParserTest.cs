@@ -48,17 +48,15 @@ namespace Teleopti.Ccc.WinCodeTest.FileImport
         }
 
         [Test]
-        [ExpectedException(typeof(FormatException))]
         public void VerifyInParameterDate()
         {
-            Assert.AreEqual(_utcDateTime,_target.UtcDateTime("Hej","08:00"));
+            Assert.Throws<FormatException>(() => _target.UtcDateTime("Hej","08:00"));
         }
 
         [Test]
-        [ExpectedException(typeof(FormatException))]
         public void VerifyInParameterTime()
         {
-            Assert.AreEqual(_utcDateTime, _target.UtcDateTime("20090101", "08:hej"));
+            Assert.Throws<FormatException>(() => _target.UtcDateTime("20090101", "08:hej"));
         }
 
         [Test]

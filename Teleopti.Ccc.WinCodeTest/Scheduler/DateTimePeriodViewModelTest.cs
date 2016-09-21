@@ -330,23 +330,21 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         #endregion //ValidState
         #region Utc
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void VerifyMinUtc()
         {
-            _target.Min = new DateTime(2001, 1, 1, 1, 1, 0, DateTimeKind.Local);
-        }
-        [Test]
-        [ExpectedException(typeof(ArgumentException))]
-        public void VerifyMaxUtc()
-        {
-            _target.Max = new DateTime(2001, 1, 1, 1, 1, 0, DateTimeKind.Local);
+            Assert.Throws<ArgumentException>(() => _target.Min = new DateTime(2001, 1, 1, 1, 1, 0, DateTimeKind.Local));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
+        public void VerifyMaxUtc()
+        {
+            Assert.Throws<ArgumentException>(() => _target.Max = new DateTime(2001, 1, 1, 1, 1, 0, DateTimeKind.Local));
+        }
+
+        [Test]
         public void VerifyStartUtc()
         {
-            _target.Start = new DateTime(2001, 1, 1, 1, 1, 0, DateTimeKind.Local);
+            Assert.Throws<ArgumentException>(() => _target.Start = new DateTime(2001, 1, 1, 1, 1, 0, DateTimeKind.Local));
         }
 
         /// <summary>
@@ -356,10 +354,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         /// Created date: 2008-09-09
         /// </remarks>
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void VerifyEndUtc()
         {
-            _target.End = new DateTime(2001, 1, 1, 1, 1, 0, DateTimeKind.Local);
+            Assert.Throws<ArgumentException>(() => _target.End = new DateTime(2001, 1, 1, 1, 1, 0, DateTimeKind.Local));
         }
         #endregion
 

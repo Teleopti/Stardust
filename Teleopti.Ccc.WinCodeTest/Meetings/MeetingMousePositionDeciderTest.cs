@@ -121,10 +121,11 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             }
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowExceptionOnNullPixelConverterGetLayerRectangle()
         {
-            _target.CheckMousePosition(0, new Rectangle(), null, new DateTimePeriod(), 0, TimeSpan.Zero);
+	        Assert.Throws<ArgumentNullException>(
+		        () => _target.CheckMousePosition(0, new Rectangle(), null, new DateTimePeriod(), 0, TimeSpan.Zero));
         }
     }
 }

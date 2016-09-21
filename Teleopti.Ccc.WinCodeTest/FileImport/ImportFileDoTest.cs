@@ -40,10 +40,10 @@ namespace Teleopti.Ccc.WinCodeTest.FileImport
             Assert.AreEqual(_target.AbandonWithinServiceLevelCount, "0");
         }
 
-        [Test, ExpectedException(typeof(FileImportException))]
+        [Test]
         public void VerifyCannotUseWrongFormatString()
         {
-            _target = ImportFileDo.Create("24;20090220;06:00;6", ";", 1);
+            Assert.Throws<FileImportException>(() => _target = ImportFileDo.Create("24;20090220;06:00;6", ";", 1));
         }
     }
 }

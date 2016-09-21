@@ -29,10 +29,10 @@ namespace Teleopti.Ccc.WinCodeTest.Payroll.PayrollExportPages
             _target = new PayrollExportPropertiesPages(_payrollExport,_repositoryFactory,_unitOfWorkFactory);
         }
 
-        [Test, ExpectedException(typeof(NotImplementedException))]
+        [Test]
         public void VerifyCreateRootIsNotPossible()
         {
-            _target.CreateNewRoot();
+            Assert.Throws<NotImplementedException>(() => _target.CreateNewRoot());
         }
 
         [Test]

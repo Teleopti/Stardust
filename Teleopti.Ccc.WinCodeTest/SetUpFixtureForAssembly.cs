@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.WinCodeTest
     [SetUpFixture]
     public class SetupFixtureForAssembly
     {
-        [SetUp]
+        [OneTimeSetUp]
         public void RunBeforeAnyTest()
         {
             var dataSource = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
