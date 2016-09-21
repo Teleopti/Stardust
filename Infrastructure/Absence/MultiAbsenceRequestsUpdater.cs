@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using log4net;
-using NHibernate;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -15,7 +14,6 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -44,7 +42,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly IStardustJobFeedback _feedback;
 		private readonly ArrangeRequestsByProcessOrder _arrangeRequestsByProcessOrder;
-		private IPersonRepository _personRepository;
+		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 
 		public MultiAbsenceRequestsUpdater(IResourceCalculationPrerequisitesLoader prereqLoader, 
 			ICurrentScenario scenarioRepository,
@@ -60,7 +58,8 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, 
 			ICommandDispatcher commandDispatcher,
 			IStardustJobFeedback feedback, 
-			ArrangeRequestsByProcessOrder arrangeRequestsByProcessOrder, IPersonRepository personRepository)
+			ArrangeRequestsByProcessOrder arrangeRequestsByProcessOrder, 
+			IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
 			_prereqLoader = prereqLoader;
 			_scenarioRepository = scenarioRepository;
@@ -77,14 +76,13 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			_commandDispatcher = commandDispatcher;
 			_feedback = feedback;
 			_arrangeRequestsByProcessOrder = arrangeRequestsByProcessOrder;
-			_personRepository = personRepository;
+			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
 		public void UpdateAbsenceRequest(List<IPersonRequest> personRequests,
 										 ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
-
 			var aggregatedValidatorList = new HashSet<IAbsenceRequestValidator>();
 			using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
@@ -97,7 +95,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 						aggregatedValidatorList.UnionWith(mergedPeriod.GetSelectedValidatorList());
 					}
 				}
-
 				loadDataForResourceCalculation(personRequests, aggregatedValidatorList);
 				_feedback.SendProgress?.Invoke("Done loading data for resource calculation!");
 
@@ -105,12 +102,12 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				var firstComeFirstServe = _arrangeRequestsByProcessOrder.GetRequestsSortedByDate(personRequests);
 				processOrderList(seniority, schedulingResultStateHolder);
 				processOrderList(firstComeFirstServe, schedulingResultStateHolder);
-			}
 
+			}
 			foreach (var personRequest in personRequests)
 			{
 				var count = 0;
-				while (count < 3)		
+				while (count < 3)
 				{
 					try
 					{
@@ -148,7 +145,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				var agentTimeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
 				var dateOnlyPeriod = absenceRequest.Period.ToDateOnlyPeriod(agentTimeZone);
 
-				var undoRedoContainer = new UndoRedoContainer(new DoNothingScheduleDayChangeCallBack(), 400);
+				var undoRedoContainer = new UndoRedoContainer(_scheduleDayChangeCallback, 400);
 
 				var workflowControlSet = absenceRequest.Person.WorkflowControlSet;
 				if (workflowControlSet == null)
