@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(MultiAbsenceRequestsHandler));
 		private readonly IPersonRequestRepository _personRequestRepository;
-		private readonly IMultiAbsenceRequestProcessor _absenceRequestProcessor;
 		private static readonly isNullOrNotNewSpecification personRequestSpecification = new isNullOrNotNewSpecification();
 		private static readonly isNullSpecification absenceRequestSpecification = new isNullSpecification();
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
@@ -27,21 +26,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly ISkillRepository _skillRepository;
+		private readonly IMultiAbsenceRequestsUpdater _multiAbsenceRequestsUpdater;
 
 
-		public MultiAbsenceRequestsHandler(IPersonRequestRepository personRequestRepository,
-			IMultiAbsenceRequestProcessor absenceRequestProcessor, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, 
+		public MultiAbsenceRequestsHandler(IPersonRequestRepository personRequestRepository, ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, 
 			IStardustJobFeedback stardustJobFeedback, IWorkflowControlSetRepository workflowControlSetRepository, 
-			IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IPersonRepository personRepository, ISkillRepository skillRepository)
+			IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IPersonRepository personRepository, 
+			ISkillRepository skillRepository, IMultiAbsenceRequestsUpdater multiAbsenceRequestsUpdater)
 		{
 			_personRequestRepository = personRequestRepository;
-			_absenceRequestProcessor = absenceRequestProcessor;
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_feedback = stardustJobFeedback;
 			_workflowControlSetRepository = workflowControlSetRepository;
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
 			_personRepository = personRepository;
 			_skillRepository = skillRepository;
+			_multiAbsenceRequestsUpdater = multiAbsenceRequestsUpdater;
 		}
 
 		[AsSystem]
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			
 			_feedback.SendProgress?.Invoke("Done Checking Person Requests.");
 			if (!personRequests.IsNullOrEmpty())
-				_absenceRequestProcessor.ProcessAbsenceRequest(personRequests);
+				_multiAbsenceRequestsUpdater.UpdateAbsenceRequest(personRequests);
 
 			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{

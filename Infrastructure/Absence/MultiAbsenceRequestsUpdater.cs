@@ -14,12 +14,13 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Absence
 {
-	public class MultiAbsenceRequestsUpdater
+	public class MultiAbsenceRequestsUpdater : IMultiAbsenceRequestsUpdater
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(MultiAbsenceRequestsUpdater));
 
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private readonly IPersonRequestCheckAuthorization _authorization;
 		private readonly IRequestFactory _requestFactory;
 		private readonly ICurrentScenario _scenarioRepository;
-		private ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly IStardustJobFeedback _feedback;
@@ -59,7 +60,8 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			ICommandDispatcher commandDispatcher,
 			IStardustJobFeedback feedback, 
 			ArrangeRequestsByProcessOrder arrangeRequestsByProcessOrder, 
-			IScheduleDayChangeCallback scheduleDayChangeCallback)
+			IScheduleDayChangeCallback scheduleDayChangeCallback, 
+			ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			_prereqLoader = prereqLoader;
 			_scenarioRepository = scenarioRepository;
@@ -77,12 +79,11 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			_feedback = feedback;
 			_arrangeRequestsByProcessOrder = arrangeRequestsByProcessOrder;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
+			_schedulingResultStateHolder = schedulingResultStateHolder;
 		}
 
-		public void UpdateAbsenceRequest(List<IPersonRequest> personRequests,
-										 ISchedulingResultStateHolder schedulingResultStateHolder)
+		public void UpdateAbsenceRequest(List<IPersonRequest> personRequests)
 		{
-			_schedulingResultStateHolder = schedulingResultStateHolder;
 			var aggregatedValidatorList = new HashSet<IAbsenceRequestValidator>();
 			using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
@@ -100,8 +101,8 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 				var seniority = _arrangeRequestsByProcessOrder.GetRequestsSortedBySeniority(personRequests);
 				var firstComeFirstServe = _arrangeRequestsByProcessOrder.GetRequestsSortedByDate(personRequests);
-				processOrderList(seniority, schedulingResultStateHolder);
-				processOrderList(firstComeFirstServe, schedulingResultStateHolder);
+				processOrderList(seniority, _schedulingResultStateHolder);
+				processOrderList(firstComeFirstServe, _schedulingResultStateHolder);
 
 			}
 			foreach (var personRequest in personRequests)
@@ -137,7 +138,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			{
 				var absenceRequest = personRequest.Request as IAbsenceRequest;
 
-				IProcessAbsenceRequest process = null;
+				IProcessAbsenceRequest process;
 				IEnumerable<IAbsenceRequestValidator> validatorList = null;
 				IPersonAccountBalanceCalculator personAccountBalanceCalculator = null;
 				IRequestApprovalService requestApprovalServiceScheduler = null;

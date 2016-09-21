@@ -658,7 +658,7 @@
     <Compile Include="IJsonSerializer.cs" />
     <Compile Include="IMapiMailMessage.cs" />
     <Compile Include="Domain\ISchedulePeriodTargetTimeCalculator.cs" />
-    <Compile Include="IMultiAbsenceRequestProcessor.cs" />
+    <Compile Include="IMultiAbsenceRequestsUpdater.cs" />
     <Compile Include="Infrastructure\Analytics\IAnalyticsAbsence.cs" />
     <Compile Include="Infrastructure\Analytics\IAnalyticsFactScheduleDate.cs" />
     <Compile Include="Infrastructure\Analytics\IAnalyticsFactScheduleDayCount.cs" />

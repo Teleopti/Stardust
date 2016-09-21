@@ -48,12 +48,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			builder.RegisterModule<PayrollContainerInstaller>();
 			builder.RegisterType<StardustJobFeedback>().As<IStardustJobFeedback>().SingleInstance();
 			builder.RegisterType<ResourceCalculateReadModelUpdater>().As<IHandle<UpdateResourceCalculateReadModelEvent>>().SingleInstance();
-			builder.RegisterType<ValidateReadModelsHandler>()
-				.As<IHandle<ValidateReadModelsEvent>>().SingleInstance().ApplyAspects();
+			builder.RegisterType<ValidateReadModelsHandler>().As<IHandle<ValidateReadModelsEvent>>().SingleInstance().ApplyAspects();
 			builder.RegisterType<FixReadModelsHandler>().As<IHandle<FixReadModelsEvent>>().SingleInstance().ApplyAspects();
 			builder.RegisterType<MultiAbsenceRequestsHandler>().As<IHandle<NewMultiAbsenceRequestsCreatedEvent>>().InstancePerLifetimeScope().ApplyAspects();
-			builder.RegisterType<MultiAbsenceRequestProcessor>().As<IMultiAbsenceRequestProcessor>().InstancePerLifetimeScope().ApplyAspects();
-			builder.RegisterType<MultiAbsenceRequestsUpdater>().InstancePerLifetimeScope().ApplyAspects();
+			builder.RegisterType<MultiAbsenceRequestsUpdater>().As<IMultiAbsenceRequestsUpdater>().InstancePerLifetimeScope().ApplyAspects();
 		}
 	}
 }
