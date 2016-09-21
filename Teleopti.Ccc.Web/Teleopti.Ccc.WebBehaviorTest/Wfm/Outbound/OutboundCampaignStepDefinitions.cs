@@ -265,6 +265,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 				{"manualBacklogInput" , "0" } 
 			}, true);
 
+			Thread.Sleep(100);
+
 			Browser.Interactions.AssertScopeValue("campaign-commands-pane", "manualBacklogInput", "0", true);
 			Browser.Interactions.Click(".btn-save-backlog");			
 		}
