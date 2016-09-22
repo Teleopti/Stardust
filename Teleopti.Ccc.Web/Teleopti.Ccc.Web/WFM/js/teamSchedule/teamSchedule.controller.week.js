@@ -3,9 +3,9 @@
 
 	angular.module('wfm.teamSchedule').controller('TeamScheduleWeeklyCtrl', TeamScheduleWeeklyCtrl);
 
-	TeamScheduleWeeklyCtrl.$inject = ['$stateParams', '$locale', '$filter', 'PersonScheduleWeekViewCreator', 'UtilityService', 'weekViewScheduleSvc', 'Toggle', 'TeamSchedule', 'signalRSVC'];
+	TeamScheduleWeeklyCtrl.$inject = ['$stateParams', '$locale', '$filter', 'PersonScheduleWeekViewCreator', 'UtilityService', 'weekViewScheduleSvc', 'Toggle', 'TeamSchedule', 'signalRSVC', '$scope'];
 
-	function TeamScheduleWeeklyCtrl(params, $locale, $filter, WeekViewCreator, Util, weekViewScheduleSvc, toggleSvc, teamScheduleSvc, signalR) {
+	function TeamScheduleWeeklyCtrl(params, $locale, $filter, WeekViewCreator, Util, weekViewScheduleSvc, toggleSvc, teamScheduleSvc, signalR, $scope) {
 		var vm = this;
 		vm.searchOptions = {
 			keyword: angular.isDefined(params.keyword) && params.keyword !== '' ? params.keyword : '',
@@ -107,7 +107,7 @@
 		}
 
 		function scheduleChangedEventHandler() {
-			vm.loadSchedules();
+			$scope.$evalAsync(vm.loadSchedules);
 		}
 
 	}
