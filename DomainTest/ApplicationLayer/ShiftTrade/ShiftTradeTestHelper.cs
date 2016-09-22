@@ -86,21 +86,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				new LoadSchedulesForRequestWithoutResourceCalculation (new FakePersonAbsenceAccountRepository(), _scheduleStorage);
 		}
 
-		internal void UseMaxSeatReadModelValidator(bool enabled)
+		internal void UseMaxSeatReadModelValidator(bool useReadModelForValidation)
 		{
-			if (enabled)
-				setValidator (_shiftTradeMaxSeatReadModelValidator);
-			else
-			{
-				setValidator(_shiftTradeMaxSeatValidator);
-			}
+			setValidator (useReadModelForValidation ? _shiftTradeMaxSeatReadModelValidator : _shiftTradeMaxSeatValidator);
 		}
 
 		internal static WorkflowControlSet CreateWorkFlowControlSet(bool autoGrantShiftTrade)
 		{
 			var workflowControlSet = new WorkflowControlSet { AutoGrantShiftTradeRequest = autoGrantShiftTrade }.WithId();
 			return workflowControlSet;
-
 		}
 
 		internal void OverrideShiftTradeGlobalSettings(ShiftTradeSettings shiftTradeSettings)

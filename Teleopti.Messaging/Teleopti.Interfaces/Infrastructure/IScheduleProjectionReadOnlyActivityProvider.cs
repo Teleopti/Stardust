@@ -19,4 +19,6 @@ namespace Teleopti.Interfaces.Infrastructure
 
 		bool RequiresSeat { get; set; }
 	}
+
+
 }

@@ -51,16 +51,11 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			using (DataSource.OnThisThreadUse ("Teleopti WFM"))
 				AsSystem.Logon ("Teleopti WFM", new Guid ("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 
-			var shiftTradeRequests = new List<IPersonRequest>();
-
-
-			var disableMaxSeatsCheck = true;
-
-
-
+			var personRequests = new List<IPersonRequest>();
+			
 			WithUnitOfWork.Do (() =>
 			{
-				setupData (shiftTradeRequests, disableMaxSeatsCheck);
+				setupData (personRequests);
 			});
 
 			WithUnitOfWork.Do (() =>
@@ -68,16 +63,13 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 				var sw = new Stopwatch();
 				sw.Start();
 
-				shiftTradeRequests.ForEach (shiftTradeRequest =>
+				personRequests.ForEach (shiftTradeRequest =>
 				{
 					ShiftTradeRequestHandler.Handle (new AcceptShiftTradeEvent()
 					{
-						PersonRequestId = shiftTradeRequest.Id.Value
+						PersonRequestId = shiftTradeRequest.Id.GetValueOrDefault()
 					});
-
-
 				});
-
 
 				sw.Stop();
 
@@ -87,23 +79,19 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			var expectedResults = new Dictionary<Guid, RequestStatus>();
 			var actualResults = new Dictionary<Guid, RequestStatus>();
 
-			expectedResults.Add (shiftTradeRequests[0].Id.Value, RequestStatus.Pending);
-			expectedResults.Add (shiftTradeRequests[1].Id.Value, RequestStatus.Pending);
-			expectedResults.Add (shiftTradeRequests[2].Id.Value, RequestStatus.Pending);
-			expectedResults.Add (shiftTradeRequests[3].Id.Value, RequestStatus.Pending);
-			expectedResults.Add (shiftTradeRequests[4].Id.Value, RequestStatus.Denied);
-			expectedResults.Add (shiftTradeRequests[5].Id.Value, RequestStatus.Denied);
-			expectedResults.Add (shiftTradeRequests[6].Id.Value, RequestStatus.Pending);
-			expectedResults.Add (shiftTradeRequests[7].Id.Value, RequestStatus.Pending);
-			//expectedResults.Add(shiftTradeRequests[8].Id.Value, RequestStatus.Pending);
-			//expectedResults.Add(shiftTradeRequests[9].Id.Value, RequestStatus.Pending);
-			//expectedResults.Add(shiftTradeRequests[10].Id.Value, RequestStatus.Pending);
-			//expectedResults.Add(shiftTradeRequests[11].Id.Value, RequestStatus.Denied);
-
+			expectedResults.Add (personRequests[0].Id.Value, RequestStatus.Pending);
+			expectedResults.Add (personRequests[1].Id.Value, RequestStatus.Pending);
+			expectedResults.Add (personRequests[2].Id.Value, RequestStatus.Pending);
+			expectedResults.Add (personRequests[3].Id.Value, RequestStatus.Pending);
+			expectedResults.Add (personRequests[4].Id.Value, RequestStatus.Denied);
+			expectedResults.Add (personRequests[5].Id.Value, RequestStatus.Denied);
+			expectedResults.Add (personRequests[6].Id.Value, RequestStatus.Pending);
+			expectedResults.Add (personRequests[7].Id.Value, RequestStatus.Pending);
+			
 			WithUnitOfWork.Do (() =>
 			{
 
-				foreach (var req in shiftTradeRequests)
+				foreach (var req in personRequests)
 				{
 					var request = PersonRequestRepository.Get (req.Id.Value);
 					var requestStatus = RequestStatus.New;
@@ -131,12 +119,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 				configureWorkflowControlSet (shiftTradeRequest.PersonFrom.WorkflowControlSet);
 				configureWorkflowControlSet (shiftTradeRequest.PersonTo.WorkflowControlSet);
 			}
-
-
-			//var workflowControlSet = WorkflowControlSetRepository.Get(new Guid("E97BC114-8939-4A70-AE37-A338010FFF19"));
-
-
-
+			
 			var shiftTradeSettings = GlobalSettingDataRepository.FindValueByKey (ShiftTradeSettings.SettingsKey,
 				new ShiftTradeSettings());
 
@@ -186,31 +169,15 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 				var personFrom = getPerson (people, personIds[count]);
 				var personTo = getPerson (people, personIds[count + 1]);
 
-
 				var dateOnly = new DateOnly (2016, 4, 20);
 
 				personFrom.MyTeam (dateOnly).Site.MaxSeats = 80;
 				personTo.MyTeam (dateOnly).Site.MaxSeats = 80;
-
-				//ROBTODO: tidy
-
-				var skills = personFrom.WorkflowControlSet.MustMatchSkills;
-				skills.ForEach (skill =>
-				{
-					personFrom.AddSkill (skill, dateOnly);
-					personTo.AddSkill (skill, dateOnly);
-				});
-
-				skills = personTo.WorkflowControlSet.MustMatchSkills;
-				skills.ForEach (skill =>
-				{
-					personFrom.AddSkill (skill, dateOnly);
-					personTo.AddSkill (skill, dateOnly);
-				});
-
+				
+				ensureSkillsMatch(personFrom, personTo, dateOnly);
+				
 				personRequests.Add (createShiftTradeRequest (personFrom, personTo, dateOnly, dateOnly));
-
-
+				
 				var readModels = ReadModelScheduleProjectionUpdater.Build (personTo, dateOnly).ToList();
 
 				ReadModelFixer.FixScheduleProjectionReadOnly (new ReadModelData
@@ -236,6 +203,22 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 #pragma warning restore 618
 			}
 
+		}
+
+		private static void ensureSkillsMatch(IPerson personFrom, IPerson personTo, DateOnly dateOnly)
+		{
+			personTo.WorkflowControlSet.MustMatchSkills.ForEach(skill =>
+			{
+				personFrom.AddSkill(skill, dateOnly);
+				personTo.AddSkill(skill, dateOnly);
+			});
+
+
+			personFrom.WorkflowControlSet.MustMatchSkills.ForEach (skill =>
+			{
+				personFrom.AddSkill (skill, dateOnly);
+				personTo.AddSkill (skill, dateOnly);
+			});
 		}
 
 		private static void configureWorkflowControlSet (IWorkflowControlSet workflowControlSet)

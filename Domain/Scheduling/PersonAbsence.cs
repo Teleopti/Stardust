@@ -277,9 +277,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var retObj = (PersonAbsence)NoneEntityClone();
 			retObj._scenario = parameters.Scenario;
 			retObj._person = parameters.Person;
-			
-			//ROBTODO: REVIEW do we need a retObj._personRequest = null here?
-
 			return retObj;
 		}
 

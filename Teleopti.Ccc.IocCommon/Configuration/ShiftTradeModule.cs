@@ -2,7 +2,9 @@
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnly;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -26,6 +28,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ShiftTradePersonalActivitySpecification>().As<IShiftTradeSpecification>();
 			builder.RegisterType<ShiftTradeMeetingSpecification>().As<IShiftTradeSpecification>();
 
+			builder.RegisterType<ScheduleProjectionReadOnlyActivityProvider>()
+			  .As<IScheduleProjectionReadOnlyActivityProvider>()
+			  .SingleInstance();
+
 			if (_configuration.Toggle (Toggles.Wfm_Requests_Check_Max_Seats_39937))
 			{
 				builder.RegisterType<ShiftTradeMaxSeatsSpecification>().As<IShiftTradeSpecification>();
@@ -36,7 +42,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<ShiftTradeMaxSeatsSpecification>().As<IShiftTradeSpecification>();
 				builder.RegisterType<ShiftTradeMaxSeatValidator>().As<IShiftTradeMaxSeatValidator>().SingleInstance();
 			}
-
 
 			builder.RegisterType<ShiftTradeValidator>().As<IShiftTradeValidator>();
 			builder.RegisterType<ShiftTradeLightValidator>().As<IShiftTradeLightValidator>();

@@ -213,10 +213,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	        builder.RegisterType<ScheduleProjectionReadOnlyPersister>()
 		        .As<IScheduleProjectionReadOnlyPersister>()
 		        .SingleInstance();
-	        builder.RegisterType<ScheduleProjectionReadOnlyActivityProvider>()
-		        .As<IScheduleProjectionReadOnlyActivityProvider>()
-		        .SingleInstance();
-
 	      
 			builder.RegisterType<ScheduleForecastSkillReadModelRepository>()
 				  .As<IScheduleForecastSkillReadModelRepository>()

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -77,10 +74,22 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 				}
 
 			}
-
-
+			
 			return false;
 		}
+
+	}
+
+	public class SiteActivity : ISiteActivity
+	{
+		public Guid PersonId { get; set; }
+		public Guid ActivityId { get; set; }
+		public Guid SiteId { get; set; }
+
+		public DateTime StartDateTime { get; set; }
+		public DateTime EndDateTime { get; set; }
+
+		public bool RequiresSeat { get; set; }
 
 	}
 }
