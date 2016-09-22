@@ -66,13 +66,13 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 				return true;
 			}
 
-			if (hasMaxSeatViolation(personToTeam.Site, shiftTradeSwapDetail.DateTo,
+			if (hasMaxSeatViolation(personToTeam.Site,
 									 timeZoneTo, shiftTradeSwapDetail.SchedulePartFrom, shiftTradeSwapDetail.SchedulePartTo))
 			{
 				return false;
 			}
 
-			return !hasMaxSeatViolation(personFromTeam.Site, shiftTradeSwapDetail.DateFrom,
+			return !hasMaxSeatViolation(personFromTeam.Site,
 											timeZoneFrom, shiftTradeSwapDetail.SchedulePartTo, shiftTradeSwapDetail.SchedulePartFrom);
 		}
 
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 			return true;
 		}
 
-		private bool hasMaxSeatViolation(ISite site, DateOnly date, TimeZoneInfo timeZoneInfo, IScheduleDay scheduleDayIncoming, IScheduleDay scheduleDayOutgoing)
+		private bool hasMaxSeatViolation(ISite site, TimeZoneInfo timeZoneInfo, IScheduleDay scheduleDayIncoming, IScheduleDay scheduleDayOutgoing)
 		{
 			if (!site.MaxSeats.HasValue) return false;
 
