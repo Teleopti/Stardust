@@ -243,7 +243,7 @@
 			</table>
 			<div class="pull-right" data-bind="visible: !isDetailVisible() && isPageVisible()">
 				<ul class="pagination pagination-sm">
-					<li><a data-bind="click: goToFirstPage"><i class="glyphicon glyphicon-fast-backward"></i></a></li>
+					<li><a data-bind="click: goToFirstPage,css:{'disabled':selectedPageIndex()===1,'hidden':selectablePages().length===0}"><i class="glyphicon glyphicon-fast-backward"></i></a></li>
 					<li>
 						<a data-bind="click: goPreviousPages, visible: isPreviousMore()">...</a>
 					</li>
@@ -256,7 +256,7 @@
 						<a data-bind="click: goNextPages, visible: isMore()">...</a>
 					</li>
 					<li>
-						<a data-bind="click: goToLastPage"><i class="glyphicon glyphicon-fast-forward"></i></a>
+						<a data-bind="click: goToLastPage,css:{'disabled':pageCount()===selectedPageIndex(),'hidden':selectablePages().length===0}"><i class="glyphicon glyphicon-fast-forward"></i></a>
 					</li>
 				</ul>
 			</div>

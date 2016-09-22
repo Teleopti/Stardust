@@ -577,9 +577,11 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	};
 
 	self.goToFirstPage = function () {
+		if (self.selectedPageIndex() === 1) return;
 		self.initSelectablePages(self.pageCount());
 	};
 	self.goToLastPage = function () {
+		if (self.pageCount() === self.selectedPageIndex()) return;
 		var start = Math.floor(self.pageCount() / self.maxPagesVisible) * self.maxPagesVisible + 1;
 		if (start > self.pageCount()) start = Math.max(1, start - self.maxPagesVisible);
 		self.selectablePages.removeAll();
@@ -642,6 +644,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	};
 
 	self.selectPage = function (page) {
+		if (page.index() === self.selectedPageIndex()) return;
 		self.setSelectPage(page.index());
 	};
 
