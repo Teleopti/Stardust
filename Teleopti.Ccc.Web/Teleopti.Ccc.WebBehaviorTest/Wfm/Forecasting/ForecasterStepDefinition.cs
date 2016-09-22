@@ -459,8 +459,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			Browser.Interactions.FillWith(".skill-service-level-percent input", newSkill.ServiceLevelPercent);
 			Browser.Interactions.FillWith(".skill-service-level-seconds input", newSkill.ServiceLevelSeconds);
 			Browser.Interactions.FillWith(".skill-shrinkage input", newSkill.Shrinkage);
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format("md-option:contains('{0}')", newSkill.Activity));
 			Browser.Interactions.Click("#activityId");
 			Browser.Interactions.ClickContaining("md-option", newSkill.Activity);
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format("md-option:contains('{0}')", newSkill.Timezone));
 			Browser.Interactions.Click("#timezoneId");
 			Browser.Interactions.ClickContaining("md-option", newSkill.Timezone);
 			Browser.Interactions.ClickContaining(".skill-queues .big-table-wrapper .ui-grid-cell-contents", newSkill.Queues);
