@@ -458,7 +458,6 @@
     <Compile Include="ResourceCalculation\FullResourceCalculationWithCascading.cs" />
     <Compile Include="ResourceCalculation\IPersonalSkillsProvider.cs" />
     <Compile Include="ResourceCalculation\IResourceCalculationContextFactory.cs" />
-    <Compile Include="ResourceCalculation\ISharedResourceContext.cs" />
     <Compile Include="ResourceCalculation\PersonalSkills.cs" />
     <Compile Include="ResourceCalculation\PersonalSkillsProvider.cs" />
     <Compile Include="ResourceCalculation\PersonalSkillsProviderNoCascading.cs" />

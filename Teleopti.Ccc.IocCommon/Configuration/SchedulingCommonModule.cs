@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<PersonalSkillsProviderNoCascading>().As<IPersonalSkillsProvider>().SingleInstance();
 			}
 
-			builder.RegisterType<SharedResourceContextOldSchedulingScreenBehavior>().As<ISharedResourceContext>().InstancePerLifetimeScope();
+			builder.RegisterType<SharedResourceContextOldSchedulingScreenBehavior>().InstancePerLifetimeScope();
 			builder.RegisterType<SchedulerStateScheduleDayChangedCallback>().As<IScheduleDayChangeCallback>().InstancePerLifetimeScope();
 			
 			builder.RegisterType<SchedulingOptionsProvider>().As<ISchedulingOptionsProvider>().AsSelf().InstancePerLifetimeScope();

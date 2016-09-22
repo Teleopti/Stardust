@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 
 			_undoRedo.CommitBatch();
-			_schedulingScreen.RecalculateResources(true);
+			_schedulingScreen.RecalculateResources();
 		}
 
         private List<DateOnly> getLockedDates(IEnumerable<DateOnly> dates, List<IPerson> personList)
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					return;
 				}
 				_undoRedo.CommitBatch();
-				_schedulingScreen.RecalculateResources(true);
+				_schedulingScreen.RecalculateResources();
 			}
 		}
 

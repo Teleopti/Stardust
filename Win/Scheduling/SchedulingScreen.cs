@@ -568,7 +568,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_scheduleView.ViewGrid != null)
 			{
 				_scheduleView.ViewGrid.InvalidateRange(_scheduleView.ViewGrid.ViewLayout.VisibleCellsRange);
-				RecalculateResources(true);
+				RecalculateResources();
 			}
 		}
 
@@ -674,7 +674,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						break;
 				}
 				_scheduleView.Presenter.ClipHandlerSchedule.Clear();
-				RecalculateResources(false);
+				RecalculateResources();
 				RunActionWithDelay(updateShiftEditor, 50);
 			}
 		}
@@ -792,7 +792,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 					_schedulerState.MarkDateToBeRecalculated(date);
 				}
-				RecalculateResources(true);
+				RecalculateResources();
 				statusStrip1.BackColor = Color.FromArgb(22, 165, 220);
 			}
 		}
@@ -1248,7 +1248,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						}
 					}
 				}
-				RecalculateResources(true);
+				RecalculateResources();
 			}
 		}
 
@@ -1812,7 +1812,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_backgroundWorkerRunning = true;
 			_scheduleView.GridClipboardPaste(options, _undoRedo);
 			_backgroundWorkerRunning = false;
-			RecalculateResources(false);
+			RecalculateResources();
 		}
 
 		#endregion
@@ -2070,11 +2070,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void _currentView_viewPasteCompleted(object sender, EventArgs e)
 		{
-			RecalculateResources(false);
+			RecalculateResources();
 			_grid.Invalidate();
 		}
 
-		public void RecalculateResources(bool forceNewContext)
+		public void RecalculateResources()
 		{
 			if (_backgroundWorkerRunning) return;
 
@@ -2106,7 +2106,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			_backgroundWorkerResourceCalculator.WorkerReportsProgress = true;
 			_backgroundWorkerRunning = true;
-			_backgroundWorkerResourceCalculator.RunWorkerAsync(forceNewContext);
+			_backgroundWorkerResourceCalculator.RunWorkerAsync();
 		}
 
 		private void _backgroundWorkerResourceCalculator_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -2163,9 +2163,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			setThreadCulture();
 			if (!_schedulerState.SchedulingResultState.Skills.Any()) return;
 			if (!_schedulerState.DaysToRecalculate.Any()) return;
-			var forceNewContext = (bool) e.Argument;
 
-			using (_container.Resolve<ISharedResourceContext>().MakeSureExists(new DateOnlyPeriod(_schedulerState.DaysToRecalculate.Min().AddDays(-1), _schedulerState.DaysToRecalculate.Max()), forceNewContext))
+			using (_container.Resolve<SharedResourceContextOldSchedulingScreenBehavior>().MakeSureExists(new DateOnlyPeriod(_schedulerState.DaysToRecalculate.Min().AddDays(-1), _schedulerState.DaysToRecalculate.Max())))
 			{
 				_optimizationHelperExtended.ResourceCalculateMarkedDays(new BackgroundWorkerWrapper(_backgroundWorkerResourceCalculator), SchedulerState.ConsiderShortBreaks, true);
 			}
@@ -2843,7 +2842,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				releaseUserInterface(e.Cancelled);
 
 			updateShiftEditor();
-			RecalculateResources(false);
+			RecalculateResources();
 		}
 
 		private bool shouldCancelBeforeStartingDeleteAction()
@@ -3121,7 +3120,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			//Next line will start work on another background thread.
 			//No code after next line please.
-			RecalculateResources(true);
+			RecalculateResources();
 		}
 
 		private void _backgroundWorkerScheduling_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -3235,7 +3234,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (rethrowBackgroundException(e))
 				return;
 
-			RecalculateResources(true);
+			RecalculateResources();
 		}
 
 		private void _backgroundWorkerOptimization_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -3475,7 +3474,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_personsToValidate.Add(permittedPerson);
 			}
 
-			RecalculateResources(true);	
+			RecalculateResources();
 		}
 
 		private void _backgroundWorkerOptimization_DoWork(object sender, DoWorkEventArgs e)
@@ -3593,7 +3592,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				backgroundWorkerLoadData.ReportProgress(1, LanguageResourceHelper.Translate("XXCalculatingResourcesDotDotDot"));
 				var requestPeriod = _schedulerState.RequestedPeriod.DateOnlyPeriod;
-				using (_container.Resolve<ISharedResourceContext>().MakeSureExists(new DateOnlyPeriod(requestPeriod.StartDate.AddDays(-1), requestPeriod.EndDate.AddDays(1)), true))
+				using (_container.Resolve<SharedResourceContextOldSchedulingScreenBehavior>().MakeSureExists(new DateOnlyPeriod(requestPeriod.StartDate.AddDays(-1), requestPeriod.EndDate.AddDays(1))))
 				{
 					_optimizationHelperExtended.ResourceCalculateAllDays(new BackgroundWorkerWrapper(backgroundWorkerLoadData), true);
 				}
@@ -4058,7 +4057,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				Cursor = Cursors.Default;
 				updateRequestCommandsAvailability();
 				updateShiftEditor();
-				RecalculateResources(true);
+				RecalculateResources();
 			}
 		}
 
@@ -5637,14 +5636,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 				selectedActivity = e.SelectedLayer.Payload as IActivity;
 
 			_scheduleView.Presenter.AddActivity(new List<IScheduleDay> {e.SchedulePart}, e.Period, selectedActivity);
-			RecalculateResources(false);
+			RecalculateResources();
 		}
 
 		private void wpfShiftEditor_AddPersonalShift(object sender, ShiftEditorEventArgs e)
 		{
 			if (_scheduleView == null) return;
 			_scheduleView.Presenter.AddPersonalShift(new List<IScheduleDay> {e.SchedulePart}, e.Period);
-			RecalculateResources(false);
+			RecalculateResources();
 		}
 
 		private void wpfShiftEditor_AddOvertime(object sender, ShiftEditorEventArgs e)
@@ -5652,14 +5651,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_scheduleView == null) return;
 			_scheduleView.Presenter.AddOvertime(new List<IScheduleDay> {e.SchedulePart}, e.Period,
 				MultiplicatorDefinitionSet.Where(m => m.MultiplicatorType == MultiplicatorType.Overtime).ToList());
-			RecalculateResources(false);
+			RecalculateResources();
 		}
 
 		private void wpfShiftEditor_AddAbsence(object sender, ShiftEditorEventArgs e)
 		{
 			if (_scheduleView == null) return;
 			_scheduleView.Presenter.AddAbsence(new List<IScheduleDay> {e.SchedulePart}, e.Period);
-			RecalculateResources(false);
+			RecalculateResources();
 		}
 
 		private void wpfShiftEditor_Undo(object sender, EventArgs e)
@@ -5805,7 +5804,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone).DayCollection();
 				days.ForEach(_schedulerState.MarkDateToBeRecalculated);
 			}
-			RecalculateResources(true);
+			RecalculateResources();
 		}
 
 		private void toolStripButtonReplyAndDeny_Click(object sender, EventArgs e)
@@ -5918,7 +5917,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				selectCellFromPersonDate(_lastModifiedPart.ModifiedPerson,_lastModifiedPart.ModifiedPart.DateOnlyAsPeriod.DateOnly);
 			}
 
-			RecalculateResources(false);
+			RecalculateResources();
 			if (_requestView != null)
 				updateShiftEditor();
 		}
@@ -6086,7 +6085,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				refreshEntitiesUsingMessageBroker();
 				_schedulerState.Schedules.ForEach(p => p.Value.ForceRecalculationOfTargetTimeContractTimeAndDaysOff());
-				RecalculateResources(true);
+				RecalculateResources();
 				updateShiftEditor();
 				var selectedSchedules = _scheduleView.SelectedSchedules();
 				updateSelectionInfo(selectedSchedules);
@@ -6264,7 +6263,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_schedulerState.MarkDateToBeRecalculated(new DateOnly(period.Period.StartDateTimeLocal(_schedulerState.TimeZoneInfo)));
 			}
 
-			RecalculateResources(true);
+			RecalculateResources();
 			((ToolStripMenuItem) _contextMenuSkillGrid.Items["UseShrinkage"]).Checked = useShrinkage;
 			toolStripButtonShrinkage.Checked = useShrinkage;
 			Cursor = Cursors.Default;
