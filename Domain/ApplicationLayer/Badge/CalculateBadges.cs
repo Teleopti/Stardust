@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 		private static readonly ILog logger = LogManager.GetLogger(typeof (CalculateBadges));
 		private readonly IGlobalSettingDataRepository _globalSettingRep;
 		private readonly IPersonRepository _personRepository;
-		private readonly int _databaseTimeoutInSecond;
 
 		public CalculateBadges(
 			ITeamGamificationSettingRepository teamSettingsRepository,
@@ -44,8 +43,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			_badgeWithRankRepository = badgeWithRankRepository;
 			_globalSettingRep = globalSettingRep;
 			_personRepository = personRepository;
-
-			_databaseTimeoutInSecond = getDatabaseTimeout();
 		}
 
 		public void Calculate(CalculateBadgeMessage message)
@@ -93,8 +90,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			{
 				var newAwardedBadgesWithRankForAdherence =
 					_badgeWithRankCalculator.CalculateAdherenceBadges(agentsWithSetting, message.TimeZoneCode, calculateDate,
-						adherenceReportSetting.CalculationMethod, setting, message.LogOnBusinessUnitId,
-						_databaseTimeoutInSecond).ToList();
+						adherenceReportSetting.CalculationMethod, setting, message.LogOnBusinessUnitId).ToList();
 				if (logger.IsDebugEnabled)
 				{
 					logger.DebugFormat("Total {0} agents will get new badge for adherence",
@@ -106,8 +102,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			{
 				var newAwardedBadgesForAdherence =
 					_calculator.CalculateAdherenceBadges(agentsWithSetting, message.TimeZoneCode, calculateDate,
-						adherenceReportSetting.CalculationMethod, setting, message.LogOnBusinessUnitId,
-						_databaseTimeoutInSecond).ToList();
+						adherenceReportSetting.CalculationMethod, setting, message.LogOnBusinessUnitId).ToList();
 				if (logger.IsDebugEnabled)
 				{
 					logger.DebugFormat("Total {0} agents will get new badge for adherence", newAwardedBadgesForAdherence.Count);
@@ -125,7 +120,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			{
 				var newAwardedBadgesWithRankForAht =
 					_badgeWithRankCalculator.CalculateAHTBadges(agentsWithSetting, message.TimeZoneCode, calculateDate, setting,
-						message.LogOnBusinessUnitId, _databaseTimeoutInSecond).ToList();
+						message.LogOnBusinessUnitId).ToList();
 				if (logger.IsDebugEnabled)
 				{
 					logger.DebugFormat("Total {0} agents will get new badge for AHT", newAwardedBadgesWithRankForAht.Count);
@@ -137,7 +132,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			{
 				var newAwardedBadgesForAht =
 					_calculator.CalculateAHTBadges(agentsWithSetting, message.TimeZoneCode, calculateDate, setting,
-						message.LogOnBusinessUnitId, _databaseTimeoutInSecond).ToList();
+						message.LogOnBusinessUnitId).ToList();
 				if (logger.IsDebugEnabled)
 				{
 					logger.DebugFormat("Total {0} agents will get new badge for AHT", newAwardedBadgesForAht.Count);
@@ -155,7 +150,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			{
 				var newAwardedBadgesWithRankForAnsweredCalls =
 					_badgeWithRankCalculator.CalculateAnsweredCallsBadges(agentsWithSetting, message.TimeZoneCode, calculateDate,
-						setting, message.LogOnBusinessUnitId, _databaseTimeoutInSecond).ToList();
+						setting, message.LogOnBusinessUnitId).ToList();
 				if (logger.IsDebugEnabled)
 				{
 					logger.DebugFormat("Total {0} agents will get new badge for answered calls",
@@ -168,7 +163,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			{
 				var newAwardedBadgesForAnsweredCalls =
 					_calculator.CalculateAnsweredCallsBadges(agentsWithSetting, message.TimeZoneCode,
-						calculateDate, setting, message.LogOnBusinessUnitId, _databaseTimeoutInSecond).ToList();
+						calculateDate, setting, message.LogOnBusinessUnitId).ToList();
 				if (logger.IsDebugEnabled)
 				{
 					logger.DebugFormat("Total {0} agents will get new badge for answered calls",
@@ -425,17 +420,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 				.CreateConversation(Resources.Congratulations, message, false, messageType)
 				.To(person)
 				.SendConversation(_msgPersister);
-		}
-
-		private int getDatabaseTimeout()
-		{
-			var timeoutInSecond = 60;
-			if (ConfigurationManager.AppSettings["databaseTimeout"] != null)
-			{
-				int.TryParse(ConfigurationManager.AppSettings["databaseTimeout"], out timeoutInSecond);
-			}
-
-			return timeoutInSecond;
 		}
 
 		private enum BadgeRank

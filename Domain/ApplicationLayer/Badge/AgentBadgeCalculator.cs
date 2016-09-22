@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 	public class AgentBadgeCalculator : IAgentBadgeCalculator
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(AgentBadgeCalculator));
-		private readonly IStatisticRepository _statisticRepository;
+		private readonly IBadgeCalculationRepository _badgeCalculationRepository;
 		private readonly IAgentBadgeTransactionRepository _transactionRepository;
 		private readonly IDefinedRaptorApplicationFunctionFactory _appFunctionFactory;
 		private readonly IScheduleStorage _scheduleStorage;
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 		private readonly IPersonRepository _personRepository;
 		private readonly INow _now;
 
-		public AgentBadgeCalculator(IStatisticRepository statisticRepository,
+		public AgentBadgeCalculator(IBadgeCalculationRepository badgeCalculationRepository,
 			IAgentBadgeTransactionRepository transactionRepository,
 			IDefinedRaptorApplicationFunctionFactory appFunctionFactory,
 			IPersonRepository personRepository,
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			IScenarioRepository scenarioRepository,
 			INow now)
 		{
-			_statisticRepository = statisticRepository;
+			_badgeCalculationRepository = badgeCalculationRepository;
 			_transactionRepository = transactionRepository;
 			_appFunctionFactory = appFunctionFactory;
 			_scheduleStorage = scheduleStorage;
@@ -43,7 +43,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 		{
 			var newAwardedBadges = new List<IAgentBadgeTransaction>();
 
-			var agentIdListShouldGetBadge = agentIdsThatShouldGetBadge as IList<Guid> ?? agentIdsThatShouldGetBadge.Where(a => a!=null).ToList();
+			var agentIdListShouldGetBadge = agentIdsThatShouldGetBadge as IList<Guid>
+				?? agentIdsThatShouldGetBadge.Where(a => a!=null).ToList();
 			if (!agentIdListShouldGetBadge.Any())
 			{
 				return newAwardedBadges;
@@ -111,7 +112,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 		}
 
 		public IEnumerable<IAgentBadgeTransaction> CalculateAdherenceBadges(IEnumerable<IPerson> allPersons, string timezoneCode, DateOnly date,
-			AdherenceReportSettingCalculationMethod adherenceCalculationMethod, IGamificationSetting setting, Guid businessUnitId, int timeoutInSecond)
+			AdherenceReportSettingCalculationMethod adherenceCalculationMethod, IGamificationSetting setting, Guid businessUnitId)
 		{
 			if (logger.IsDebugEnabled)
 			{
@@ -124,12 +125,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			var personList = allPersons.ToList();
 			var newAwardedBadges = new List<IAgentBadgeTransaction>();
 			var agentAdherenceList =
-				_statisticRepository.LoadAgentsOverThresholdForAdherence(adherenceCalculationMethod, timezoneCode, date.Date, setting.AdherenceThreshold,
-				businessUnitId, timeoutInSecond);
+				_badgeCalculationRepository.LoadAgentsOverThresholdForAdherence(adherenceCalculationMethod, timezoneCode, date.Date, setting.AdherenceThreshold, businessUnitId);
 
-			if (agentAdherenceList.Count > 0)
+			if (agentAdherenceList.Any())
 			{
-				var personIdList = (from object[] data in agentAdherenceList select (Guid)data[0]).ToList();
+				var personIdList = agentAdherenceList.Keys;
 				var personsList = _personRepository.FindPeople(personIdList);
 				var schedules = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(personsList,
 					new ScheduleDictionaryLoadOptions(true, false), new DateOnlyPeriod(date, date),
@@ -193,8 +193,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			return newAwardedBadges;
 		}
 
-		public IEnumerable<IAgentBadgeTransaction> CalculateAHTBadges(IEnumerable<IPerson> allPersons, string timezoneCode, DateOnly date,
-			IGamificationSetting setting, Guid businessUnitId, int timeoutInSecond)
+		public IEnumerable<IAgentBadgeTransaction> CalculateAHTBadges(IEnumerable<IPerson> allPersons, string timezoneCode, DateOnly date, IGamificationSetting setting, Guid businessUnitId)
 		{
 			if (logger.IsDebugEnabled)
 			{
@@ -206,17 +205,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 
 			var personList = allPersons.ToList();
 			var newAwardedBadges = new List<IAgentBadgeTransaction>();
-			var agentsList = _statisticRepository.LoadAgentsUnderThresholdForAHT(timezoneCode, date.Date, setting.AHTThreshold,
-				businessUnitId, timeoutInSecond);
+			var agentsList = _badgeCalculationRepository.LoadAgentsUnderThresholdForAht(timezoneCode, date.Date, setting.AHTThreshold, businessUnitId);
 
-			var agents = new List<Guid>();
-			if (agentsList.Count > 0)
+			if (agentsList.Any())
 			{
-				agents.AddRange(from object[] data in agentsList select (Guid)data[0]);
-			}
-
-			if (agents.Any())
-			{
+				var agents = agentsList.Keys;
 				if (logger.IsDebugEnabled)
 				{
 					logger.DebugFormat("{0} agents will get badge for AHT", agents.Count);
@@ -242,7 +235,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 		}
 
 		public IEnumerable<IAgentBadgeTransaction> CalculateAnsweredCallsBadges(IEnumerable<IPerson> allPersons, string timezoneCode, DateOnly date,
-			IGamificationSetting setting, Guid businessUnitId, int timeoutInSecond)
+			IGamificationSetting setting, Guid businessUnitId)
 		{
 			if (logger.IsDebugEnabled)
 			{
@@ -254,17 +247,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 
 			var personList = allPersons.ToList();
 			var newAwardedBadges = new List<IAgentBadgeTransaction>();
-			var agentsList = _statisticRepository.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, date.Date, setting.AnsweredCallsThreshold,
-				businessUnitId, timeoutInSecond);
+			var agentsList = _badgeCalculationRepository.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, date.Date, setting.AnsweredCallsThreshold, businessUnitId);
 
-			var agents = new List<Guid>();
-			if (agentsList.Count > 0)
+			if (agentsList.Any())
 			{
-				agents.AddRange(from object[] data in agentsList select (Guid)data[0]);
-			}
-
-			if (agents.Any())
-			{
+				var agents = agentsList.Keys;
 				if (logger.IsDebugEnabled)
 				{
 					logger.DebugFormat("{0} agents will get badge for answered calls", agents.Count);

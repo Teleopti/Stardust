@@ -17,7 +17,6 @@ using Teleopti.Ccc.Domain.LogObject;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -381,81 +380,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.List());
 		}
 
-		public IList LoadAgentsOverThresholdForAnsweredCalls(string timezoneCode, DateTime date, int answeredCallsThreshold,
-			Guid businessUnitId, int? timeoutInSecond)
-		{
-			return repositoryActionWithRetry(uow =>
-			{
-				const string sql = "exec [mart].[raptor_number_of_calls_per_agent_by_date] @threshold=:threshold, "
-								   + "@time_zone_code=:timezoneCode, @local_date=:date, @business_unit_code=:businessUnitId";
-
-				var query = ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(sql);
-				if (timeoutInSecond != null)
-				{
-					query.SetTimeout(timeoutInSecond.Value);
-				}
-				return query.SetReadOnly(true)
-					.SetInt32("threshold", answeredCallsThreshold)
-					.SetString("timezoneCode", timezoneCode)
-					.SetDateTime("date", date)
-					.SetGuid("businessUnitId", businessUnitId)
-					.List();
-			});
-		}
-
-		public IList LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod adherenceCalculationMethod,
-			string timezoneCode, DateTime date, Percent adherenceThreshold, Guid businessUnitId, int? timeoutInSecond)
-		{
-			var reportSetting = new AdherenceReportSetting
-			{
-				CalculationMethod = adherenceCalculationMethod
-			};
-
-			return repositoryActionWithRetry(uow =>
-			{
-				const string sql = "exec [mart].[raptor_adherence_per_agent_by_date] @threshold=:threshold, "
-								   + "@time_zone_code=:timezoneCode, @local_date=:date, @adherence_id=:adherenceId, "
-								   + "@business_unit_code=:businessUnitId";
-
-				var query = ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(sql);
-				if (timeoutInSecond != null)
-				{
-					query.SetTimeout(timeoutInSecond.Value);
-				}
-
-				return query.SetReadOnly(true)
-					.SetDouble("threshold", adherenceThreshold.Value)
-					.SetString("timezoneCode", timezoneCode)
-					.SetDateTime("date", date)
-					.SetInt32("adherenceId", reportSetting.AdherenceIdForReport())
-					.SetGuid("businessUnitId", businessUnitId)
-					.List();
-			});
-		}
-
-		public IList LoadAgentsUnderThresholdForAHT(string timezoneCode, DateTime date, TimeSpan ahtThreshold,
-			Guid businessUnitId, int? timeoutInSecond)
-		{
-			return repositoryActionWithRetry(uow =>
-			{
-				const string sql = "exec [mart].[raptor_AHT_per_agent_by_date] @threshold=:threshold, "
-								   + "@time_zone_code=:timezoneCode, @local_date=:date, @business_unit_code=:businessUnitId";
-
-				var query = ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(sql);
-				if (timeoutInSecond != null)
-				{
-					query.SetTimeout(timeoutInSecond.Value);
-				}
-
-				return query.SetReadOnly(true)
-					.SetDouble("threshold", ahtThreshold.TotalSeconds)
-					.SetString("timezoneCode", timezoneCode)
-					.SetDateTime("date", date)
-					.SetGuid("businessUnitId", businessUnitId)
-					.List();
-			});
-		}
-
 		public IEnumerable<RunningEtlJob> GetRunningEtlJobs()
 		{
 			return repositoryActionWithRetry(uow =>
@@ -534,7 +458,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				if (ex.InnerException is Win32Exception && attempt < 6)
 				{
-					_logger.Warn(String.Format("Retry - Count:{0}, Exception:{1}, StackTrace:{2}", attempt, ex, ex.StackTrace));
+					_logger.Warn(string.Format("Retry - Count:{0}, Exception:{1}, StackTrace:{2}", attempt, ex, ex.StackTrace));
 					return repositoryActionWithRetry(innerAction, ++attempt);
 				}
 				throw;

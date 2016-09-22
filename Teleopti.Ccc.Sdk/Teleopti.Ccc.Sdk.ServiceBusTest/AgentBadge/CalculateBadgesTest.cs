@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer.Badge;
@@ -18,7 +17,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 	[TestFixture]
 	public class CalculateBadgesTest
 	{
-		private const int defaultDatabaseTimeout = 60;
 		private const string settingNameForTest = "test";
 		private ITeamGamificationSettingRepository teamSettingsRepository;
 		private IAgentBadgeRepository badgeRepository;
@@ -63,28 +61,28 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			// Mock badge calculator
 			badgeCalculator = MockRepository.GenerateMock<IAgentBadgeCalculator>();
 			badgeCalculator.Stub(x => x.CalculateAHTBadges(new List<IPerson>(), "", DateOnly.Today,
-				new GamificationSetting(settingNameForTest), _businessUnitId, defaultDatabaseTimeout))
+				new GamificationSetting(settingNameForTest), _businessUnitId))
 				.IgnoreArguments().Return(new List<IAgentBadgeTransaction>());
 			badgeCalculator.Stub(x => x.CalculateAdherenceBadges(new List<IPerson>(), "", DateOnly.Today,
 				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
-				new GamificationSetting(settingNameForTest), _businessUnitId, defaultDatabaseTimeout))
+				new GamificationSetting(settingNameForTest), _businessUnitId))
 				.IgnoreArguments().Return(new List<IAgentBadgeTransaction>());
 			badgeCalculator.Stub(x => x.CalculateAnsweredCallsBadges(new List<IPerson>(), "", DateOnly.Today,
-				new GamificationSetting(settingNameForTest), _businessUnitId, defaultDatabaseTimeout))
+				new GamificationSetting(settingNameForTest), _businessUnitId))
 				.IgnoreArguments().Return(new List<IAgentBadgeTransaction>());
 
 			// Mock badge with rank calculator
 			badgeWithRankCalculator = MockRepository.GenerateMock<IAgentBadgeWithRankCalculator>();
 			badgeWithRankCalculator.Stub(x => x.CalculateAHTBadges(new List<IPerson>(), "", DateOnly.Today,
-				new GamificationSetting(settingNameForTest), _businessUnitId, defaultDatabaseTimeout))
+				new GamificationSetting(settingNameForTest), _businessUnitId))
 				.IgnoreArguments().Return(new List<IAgentBadgeWithRankTransaction>());
 			badgeWithRankCalculator.Stub(x => x.CalculateAdherenceBadges(new List<IPerson>(), "", DateOnly.Today,
 				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
-				new GamificationSetting(settingNameForTest), _businessUnitId, defaultDatabaseTimeout))
+				new GamificationSetting(settingNameForTest), _businessUnitId))
 				.IgnoreArguments().Return(new List<IAgentBadgeWithRankTransaction>());
 
 			badgeWithRankCalculator.Stub(x => x.CalculateAnsweredCallsBadges(new List<IPerson>(), "", DateOnly.Today,
-				new GamificationSetting(settingNameForTest), _businessUnitId, defaultDatabaseTimeout))
+				new GamificationSetting(settingNameForTest), _businessUnitId))
 				.IgnoreArguments().Return(new List<IAgentBadgeWithRankTransaction>());
 
 			etlJobChecker = MockRepository.GenerateMock<IRunningEtlJobChecker>();
@@ -141,8 +139,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 					Arg<string>.Is.Anything,
 					Arg<DateOnly>.Is.Anything,
 					Arg<IGamificationSetting>.Is.Equal(newSetting),
-					Arg<Guid>.Is.Equal(_businessUnitId),
-					Arg<int>.Is.Equal(defaultDatabaseTimeout)));
+					Arg<Guid>.Is.Equal(_businessUnitId)));
 
 			badgeCalculator.AssertWasCalled(
 				x => x.CalculateAdherenceBadges(
@@ -151,8 +148,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 					Arg<DateOnly>.Is.Anything,
 					Arg<AdherenceReportSettingCalculationMethod>.Is.Anything,
 					Arg<IGamificationSetting>.Is.Equal(newSetting),
-					Arg<Guid>.Is.Equal(_businessUnitId),
-					Arg<int>.Is.Equal(defaultDatabaseTimeout)));
+					Arg<Guid>.Is.Equal(_businessUnitId)));
 
 			badgeCalculator.AssertWasCalled(
 				x => x.CalculateAnsweredCallsBadges(
@@ -160,87 +156,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 					Arg<string>.Is.Anything,
 					Arg<DateOnly>.Is.Anything,
 					Arg<IGamificationSetting>.Is.Equal(newSetting),
-					Arg<Guid>.Is.Equal(_businessUnitId),
-					Arg<int>.Is.Equal(defaultDatabaseTimeout)));
-
-			badgeWithRankCalculatorShouldNotBeCalledAtAll();
-		}
-
-		[Test]
-		public void ShouldCalculateBadgeWithTimeoutSettingFromConfig()
-		{
-			var timezone = TimeZoneInfo.Utc;
-			var today = new DateTime(2014, 8, 8);
-			now.Stub(x => x.UtcDateTime()).Return(today);
-
-			var newSetting = new GamificationSetting(settingNameForTest)
-			{
-				AdherenceBadgeEnabled = true,
-				AHTBadgeEnabled = true,
-				AnsweredCallsBadgeEnabled = true,
-				GamificationSettingRuleSet = GamificationSettingRuleSet.RuleWithRatioConvertor
-			};
-
-			var team = TeamFactory.CreateSimpleTeam("team");
-			team.SetId(Guid.NewGuid());
-
-			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateTime().AddDays(-1), TimeZoneInfo.Local, timezone);
-			var calculationDateOnly = new DateOnly(calculationDate);
-
-			var persons = new List<IPerson> {new Person()};
-			var period = new DateOnlyPeriod(calculationDateOnly.AddDays(-1), calculationDateOnly.AddDays(1));
-			personRepository.Stub(x =>x.FindPeopleBelongTeam(team, period)).Return(persons);
-
-			const int timeoutSetting = 1234;
-			ConfigurationManager.AppSettings["databaseTimeout"] = timeoutSetting.ToString();
-
-			teamSettingsRepository.Stub(x => x.FindAllTeamGamificationSettingsSortedByTeam())
-				.Return(new[]
-				{
-					new TeamGamificationSetting
-					{
-						Team = team,
-						GamificationSetting = newSetting
-					}
-				});
-
-			var message = new CalculateBadgeMessage
-			{
-				TimeZoneCode = timezone.Id,
-				CalculationDate = calculationDate
-			};
-
-			var newTarget = new CalculateBadges(teamSettingsRepository, msgRepository, badgeCalculator, badgeWithRankCalculator,
-				badgeRepository, badgeWithRankRepository, globalSettingRep, personRepository);
-			newTarget.Calculate(message);
-
-			badgeCalculator.AssertWasCalled(
-				x => x.CalculateAHTBadges(
-					Arg<IEnumerable<IPerson>>.Is.Anything,
-					Arg<string>.Is.Anything,
-					Arg<DateOnly>.Is.Anything,
-					Arg<IGamificationSetting>.Is.Equal(newSetting),
-					Arg<Guid>.Is.Equal(_businessUnitId),
-					Arg<int>.Is.Equal(timeoutSetting)));
-
-			badgeCalculator.AssertWasCalled(
-				x => x.CalculateAdherenceBadges(
-					Arg<IEnumerable<IPerson>>.Is.Anything,
-					Arg<string>.Is.Anything,
-					Arg<DateOnly>.Is.Anything,
-					Arg<AdherenceReportSettingCalculationMethod>.Is.Anything,
-					Arg<IGamificationSetting>.Is.Equal(newSetting),
-					Arg<Guid>.Is.Equal(_businessUnitId),
-					Arg<int>.Is.Equal(timeoutSetting)));
-
-			badgeCalculator.AssertWasCalled(
-				x => x.CalculateAnsweredCallsBadges(
-					Arg<IEnumerable<IPerson>>.Is.Anything,
-					Arg<string>.Is.Anything,
-					Arg<DateOnly>.Is.Anything,
-					Arg<IGamificationSetting>.Is.Equal(newSetting),
-					Arg<Guid>.Is.Equal(_businessUnitId),
-					Arg<int>.Is.Equal(timeoutSetting)));
+					Arg<Guid>.Is.Equal(_businessUnitId)));
 
 			badgeWithRankCalculatorShouldNotBeCalledAtAll();
 		}
@@ -295,8 +211,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 					Arg<string>.Is.Anything,
 					Arg<DateOnly>.Is.Anything,
 					Arg<IGamificationSetting>.Is.Equal(newSetting),
-					Arg<Guid>.Is.Equal(_businessUnitId),
-					Arg<int>.Is.Equal(defaultDatabaseTimeout)));
+					Arg<Guid>.Is.Equal(_businessUnitId)));
 
 			badgeWithRankCalculator.AssertWasCalled(
 				x => x.CalculateAdherenceBadges(
@@ -305,8 +220,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 					Arg<DateOnly>.Is.Anything,
 					Arg<AdherenceReportSettingCalculationMethod>.Is.Anything,
 					Arg<IGamificationSetting>.Is.Equal(newSetting),
-					Arg<Guid>.Is.Equal(_businessUnitId),
-					Arg<int>.Is.Equal(defaultDatabaseTimeout)));
+					Arg<Guid>.Is.Equal(_businessUnitId)));
 
 			badgeWithRankCalculator.AssertWasCalled(
 				x => x.CalculateAnsweredCallsBadges(
@@ -314,86 +228,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 					Arg<string>.Is.Anything,
 					Arg<DateOnly>.Is.Anything,
 					Arg<IGamificationSetting>.Is.Equal(newSetting),
-					Arg<Guid>.Is.Equal(_businessUnitId),
-					Arg<int>.Is.Equal(defaultDatabaseTimeout)));
-		}
-
-		[Test]
-		public void ShouldCalculateBadgeWithRankWithTimeoutSettingFromConfig()
-		{
-			var timezone = TimeZoneInfo.Utc;
-			var today = new DateTime(2014, 8, 8);
-			now.Stub(x => x.UtcDateTime()).Return(today);
-
-			var newSetting = new GamificationSetting(settingNameForTest)
-			{
-				AdherenceBadgeEnabled = true,
-				AHTBadgeEnabled = true,
-				AnsweredCallsBadgeEnabled = true,
-				GamificationSettingRuleSet = GamificationSettingRuleSet.RuleWithDifferentThreshold
-			};
-
-			var team = TeamFactory.CreateSimpleTeam("team");
-			team.SetId(Guid.NewGuid());
-
-			var teamGamificationSetting = new TeamGamificationSetting
-			{
-				Team = team,
-				GamificationSetting = newSetting
-			};
-
-			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateTime().AddDays(-1), TimeZoneInfo.Local, timezone);
-			var calculationDateOnly = new DateOnly(calculationDate);
-
-			var persons = new List<IPerson> { new Person() };
-			var period = new DateOnlyPeriod(calculationDateOnly.AddDays(-1), calculationDateOnly.AddDays(1));
-			personRepository.Stub(x => x.FindPeopleBelongTeam(team, period)).Return(persons);
-
-			teamSettingsRepository.Stub(x => x.FindAllTeamGamificationSettingsSortedByTeam())
-				.Return(new[] { teamGamificationSetting });
-
-			var message = new CalculateBadgeMessage
-			{
-				TimeZoneCode = timezone.Id,
-				CalculationDate = calculationDate
-			};
-
-			const int timeoutSetting = 1234;
-			ConfigurationManager.AppSettings["databaseTimeout"] = timeoutSetting.ToString();
-
-			var newTarget = new CalculateBadges(teamSettingsRepository, msgRepository, badgeCalculator, badgeWithRankCalculator,
-				badgeRepository, badgeWithRankRepository, globalSettingRep, personRepository);
-			newTarget.Calculate(message);
-
-			badgeCalculatorShouldNotBeCalledAtAll();
-
-			badgeWithRankCalculator.AssertWasCalled(
-				x => x.CalculateAHTBadges(
-					Arg<IEnumerable<IPerson>>.Is.Anything,
-					Arg<string>.Is.Anything,
-					Arg<DateOnly>.Is.Anything,
-					Arg<IGamificationSetting>.Is.Equal(newSetting),
-					Arg<Guid>.Is.Equal(_businessUnitId),
-					Arg<int>.Is.Equal(timeoutSetting)));
-
-			badgeWithRankCalculator.AssertWasCalled(
-				x => x.CalculateAdherenceBadges(
-					Arg<IEnumerable<IPerson>>.Is.Anything,
-					Arg<string>.Is.Anything,
-					Arg<DateOnly>.Is.Anything,
-					Arg<AdherenceReportSettingCalculationMethod>.Is.Anything,
-					Arg<IGamificationSetting>.Is.Equal(newSetting),
-					Arg<Guid>.Is.Equal(_businessUnitId),
-					Arg<int>.Is.Equal(timeoutSetting)));
-
-			badgeWithRankCalculator.AssertWasCalled(
-				x => x.CalculateAnsweredCallsBadges(
-					Arg<IEnumerable<IPerson>>.Is.Anything,
-					Arg<string>.Is.Anything,
-					Arg<DateOnly>.Is.Anything,
-					Arg<IGamificationSetting>.Is.Equal(newSetting),
-					Arg<Guid>.Is.Equal(_businessUnitId),
-					Arg<int>.Is.Equal(timeoutSetting)));
+					Arg<Guid>.Is.Equal(_businessUnitId)));
 		}
 
 		[Test]
@@ -435,16 +270,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			badgeCalculatorShouldNotBeCalledAtAll();
 
 			badgeWithRankCalculator.AssertWasNotCalled(x => x.CalculateAHTBadges(persons, "",
-				DateOnly.Today, newSetting, _businessUnitId, defaultDatabaseTimeout),
+				DateOnly.Today, newSetting, _businessUnitId),
 				o => o.IgnoreArguments());
 
 			badgeWithRankCalculator.AssertWasCalled(x => x.CalculateAdherenceBadges(persons, "",
 				DateOnly.Today, AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
-				newSetting, _businessUnitId, defaultDatabaseTimeout),
+				newSetting, _businessUnitId),
 				o => o.IgnoreArguments());
 
 			badgeWithRankCalculator.AssertWasCalled(x => x.CalculateAnsweredCallsBadges(persons, "",
-				DateOnly.Today, newSetting, _businessUnitId, defaultDatabaseTimeout),
+				DateOnly.Today, newSetting, _businessUnitId),
 				o => o.IgnoreArguments());
 		}
 
@@ -561,23 +396,23 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private void badgeCalculatorShouldNotBeCalledAtAll()
 		{
 			badgeCalculator.AssertWasNotCalled(x => x.CalculateAHTBadges(new List<IPerson>(), "", DateOnly.Today,
-				new GamificationSetting(settingNameForTest), _businessUnitId, defaultDatabaseTimeout), o => o.IgnoreArguments());
+				new GamificationSetting(settingNameForTest), _businessUnitId), o => o.IgnoreArguments());
 			badgeCalculator.AssertWasNotCalled(x => x.CalculateAdherenceBadges(new List<IPerson>(), "", DateOnly.Today,
 				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime, new GamificationSetting(settingNameForTest),
-				_businessUnitId, defaultDatabaseTimeout), o => o.IgnoreArguments());
+				_businessUnitId), o => o.IgnoreArguments());
 			badgeCalculator.AssertWasNotCalled(x => x.CalculateAnsweredCallsBadges(new List<IPerson>(), "", DateOnly.Today,
-				new GamificationSetting(settingNameForTest), _businessUnitId, defaultDatabaseTimeout), o => o.IgnoreArguments());
+				new GamificationSetting(settingNameForTest), _businessUnitId), o => o.IgnoreArguments());
 		}
 
 		private void badgeWithRankCalculatorShouldNotBeCalledAtAll()
 		{
 			badgeWithRankCalculator.AssertWasNotCalled(x => x.CalculateAHTBadges(new List<IPerson>(), "", DateOnly.Today,
-				new GamificationSetting(settingNameForTest), _businessUnitId, defaultDatabaseTimeout), o => o.IgnoreArguments());
+				new GamificationSetting(settingNameForTest), _businessUnitId), o => o.IgnoreArguments());
 			badgeWithRankCalculator.AssertWasNotCalled(x => x.CalculateAdherenceBadges(new List<IPerson>(), "", DateOnly.Today,
 				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime, new GamificationSetting(settingNameForTest),
-				_businessUnitId, defaultDatabaseTimeout), o => o.IgnoreArguments());
+				_businessUnitId), o => o.IgnoreArguments());
 			badgeWithRankCalculator.AssertWasNotCalled(x => x.CalculateAnsweredCallsBadges(new List<IPerson>(), "", DateOnly.Today,
-					new GamificationSetting(settingNameForTest), _businessUnitId, defaultDatabaseTimeout), o => o.IgnoreArguments());
+					new GamificationSetting(settingNameForTest), _businessUnitId), o => o.IgnoreArguments());
 		}
 	}
 }

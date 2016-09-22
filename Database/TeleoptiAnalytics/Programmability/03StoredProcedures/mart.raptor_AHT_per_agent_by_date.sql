@@ -19,8 +19,7 @@ CREATE PROCEDURE [mart].[raptor_AHT_per_agent_by_date]
 @business_unit_code uniqueidentifier
 AS
 Begin
-select p.person_code,
-       d.date_date,
+select p.person_code As PersonId,
        convert(decimal(18,2),((sum(talk_time_s + after_call_work_time_s))/case when sum(answered_calls)= 0 THEN 1 ELSE sum(answered_calls) END)) as AHT
   from mart.fact_agent_queue f
  inner join mart.bridge_acd_login_person b

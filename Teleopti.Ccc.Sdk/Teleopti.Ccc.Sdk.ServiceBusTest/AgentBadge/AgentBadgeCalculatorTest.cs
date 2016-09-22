@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Rhino.Mocks;
 using System;
 using System.Collections.Generic;
@@ -20,13 +19,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 	public class AgentBadgeCalculatorTest
 	{
 		private const string timezoneCode = "";
-		private const int defaultDatabaseTimeout = 60;
 
 		private IAgentBadgeCalculator _calculator;
 		private DateOnly _calculateDateOnly;
 		private Guid _lastPersonId;
 		private List<IPerson> _allPersons;
-		private IStatisticRepository _statisticRepository;
+		private IBadgeCalculationRepository _badgeCalculationRepository;
 		private IAgentBadgeTransactionRepository _badgeTransactionRepository;
 		private IGamificationSetting _gamificationSetting;
 		private INow _now;
@@ -82,24 +80,21 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			_businessUnitId = new Guid();
 
 			_lastPersonId = (Guid) person.Id;
-			_statisticRepository = MockRepository.GenerateMock<IStatisticRepository>();
-			_statisticRepository.Stub(
-				x =>
-					x.LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
+			_badgeCalculationRepository = MockRepository.GenerateMock<IBadgeCalculationRepository>();
+			_badgeCalculationRepository.Stub(
+				x =>x.LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
 						timezoneCode, now, _gamificationSetting.AdherenceThreshold, _businessUnitId))
-				.IgnoreArguments().Return(new ArrayList {new object[] {_lastPersonId, 0.01}});
+				.IgnoreArguments().Return(new Dictionary<Guid, double> { { _lastPersonId, 0.01 } });
 
-			_statisticRepository.Stub(
-				x =>
-					x.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, now, _gamificationSetting.AnsweredCallsThreshold, _businessUnitId))
-				.IgnoreArguments()
-				.Return(new ArrayList {new object[] {_lastPersonId, now, 100}});
+			_badgeCalculationRepository.Stub(
+				x =>x.LoadAgentsOverThresholdForAnsweredCalls(timezoneCode, now, _gamificationSetting.AnsweredCallsThreshold, _businessUnitId))
+				.IgnoreArguments().Return(new Dictionary<Guid, int> { { _lastPersonId, 100}});
 
-			_statisticRepository.Stub(
+			_badgeCalculationRepository.Stub(
 				x =>
-					x.LoadAgentsUnderThresholdForAHT(timezoneCode, now, _gamificationSetting.AHTThreshold, _businessUnitId))
+					x.LoadAgentsUnderThresholdForAht(timezoneCode, now, _gamificationSetting.AHTThreshold, _businessUnitId))
 				.IgnoreArguments()
-				.Return(new ArrayList {new object[] {_lastPersonId, now, 120}});
+				.Return(new Dictionary<Guid, double> { { _lastPersonId, 120}});
 
 			_badgeTransactionRepository = MockRepository.GenerateMock<IAgentBadgeTransactionRepository>();
 			_badgeTransactionRepository.Stub(x => x.Find(person, BadgeType.Adherence, DateOnly.Today)).IgnoreArguments().Return(null);
@@ -131,7 +126,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				.IgnoreArguments()
 				.Return(new ScheduleDictionaryForTest(defaultScenario, now));
 
-			_calculator = new AgentBadgeCalculator(_statisticRepository, _badgeTransactionRepository, appFunctionFactory,
+			_calculator = new AgentBadgeCalculator(_badgeCalculationRepository, _badgeTransactionRepository, appFunctionFactory,
 				personRepository, scheduleStorage, scenarioRepository, _now);
 		}
 
@@ -140,7 +135,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		{
 			var result = _calculator.CalculateAdherenceBadges(_allPersons, timezoneCode, _calculateDateOnly,
 				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
-				_gamificationSetting,	_businessUnitId, 60);
+				_gamificationSetting,	_businessUnitId);
 
 			var badge = result.Single(x => x.Person.Id == _lastPersonId);
 			Assert.AreEqual(badge.Person.Id, _lastPersonId);
@@ -152,7 +147,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		public void ShouldCalculateAhtBadgeForCorrectAgents()
 		{
 			var result = _calculator.CalculateAHTBadges(_allPersons, timezoneCode, _calculateDateOnly,
-				_gamificationSetting, _businessUnitId, defaultDatabaseTimeout);
+				_gamificationSetting, _businessUnitId);
 
 			var badge = result.Single(x => x.Person.Id == _lastPersonId);
 			Assert.AreEqual(badge.Person.Id, _lastPersonId);
@@ -164,7 +159,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		public void ShouldCalculateAnsweredCallsBadgeForCorrectAgents()
 		{
 			var result = _calculator.CalculateAnsweredCallsBadges(_allPersons, timezoneCode, _calculateDateOnly,
-				_gamificationSetting, _businessUnitId, defaultDatabaseTimeout);
+				_gamificationSetting, _businessUnitId);
 
 			var badge = result.Single(x => x.Person.Id == _lastPersonId);
 			Assert.AreEqual(badge.Person.Id, _lastPersonId);
@@ -181,7 +176,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			}
 
 			var result = _calculator.CalculateAnsweredCallsBadges(_allPersons, timezoneCode, _calculateDateOnly,
-				_gamificationSetting, _businessUnitId, defaultDatabaseTimeout);
+				_gamificationSetting, _businessUnitId);
 
 			Assert.AreEqual(result.Any(), false);
 		}
@@ -196,7 +191,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 
 			var result = _calculator.CalculateAdherenceBadges(_allPersons, timezoneCode, _calculateDateOnly,
 				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
-				_gamificationSetting, _businessUnitId, defaultDatabaseTimeout);
+				_gamificationSetting, _businessUnitId);
 
 			Assert.AreEqual(result.Any(), false);
 		}
@@ -210,7 +205,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			}
 
 			var result = _calculator.CalculateAHTBadges(_allPersons, timezoneCode, _calculateDateOnly,
-				_gamificationSetting, _businessUnitId, defaultDatabaseTimeout);
+				_gamificationSetting, _businessUnitId);
 
 			Assert.AreEqual(result.Any(), false);
 		}
@@ -236,12 +231,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				.IgnoreArguments()
 				.Return(scheduleDict);
 
-			_calculator = new AgentBadgeCalculator(_statisticRepository, _badgeTransactionRepository, appFunctionFactory,
+			_calculator = new AgentBadgeCalculator(_badgeCalculationRepository, _badgeTransactionRepository, appFunctionFactory,
 				personRepository, scheduleStorage, scenarioRepository, _now);
 
 			var result = _calculator.CalculateAdherenceBadges(_allPersons, timezoneCode, _calculateDateOnly,
 				AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime,
-				_gamificationSetting, _businessUnitId, defaultDatabaseTimeout);
+				_gamificationSetting, _businessUnitId);
 
 			Assert.AreEqual(result.Any(), false);
 		}

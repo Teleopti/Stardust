@@ -1,9 +1,7 @@
 using System;
 using System.Configuration;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
@@ -14,8 +12,10 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Hangfire;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
@@ -33,10 +33,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		[NonSerialized]
 		private ConfigFileDefaultHost _requestBus;
+
 		[NonSerialized]
 		private ConfigFileDefaultHost _generalBus;
+
 		[NonSerialized]
 		private ConfigFileDefaultHost _denormalizeBus;
+
 		[NonSerialized]
 		private ConfigFileDefaultHost _payrollBus;
 
@@ -95,7 +98,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					_payrollBus = new ConfigFileDefaultHost("PayrollQueue.config", new PayrollBusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
 					_payrollBus.Start();
 				}
-
 			}
 			AppDomain.MonitoringIsEnabled = true;
 
@@ -145,6 +147,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				}
 				catch (Exception)
 				{
+					// ignored
 				}
 			}
 			if (_generalBus != null)
@@ -155,6 +158,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				}
 				catch (Exception)
 				{
+					// ignored
 				}
 			}
 			if (_denormalizeBus != null)
@@ -165,6 +169,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				}
 				catch (Exception)
 				{
+					// ignored
 				}
 			}
 			if (_payrollBus != null)
@@ -175,6 +180,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				}
 				catch (Exception)
 				{
+					// ignored
 				}
 			}
 		}
@@ -189,6 +195,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterModule(new CommonModule(configuration));
 			builder.RegisterModule(new TenantServerModule(configuration));
 			builder.RegisterModule(new NodeHandlersModule(configuration));
+
+			// Implementation for IBadgeCalculationRepository is different in ServiceBus and ETL
+			// So it's not placed in CommonModule
+			builder.RegisterType<BadgeCalculationRepository>().As<IBadgeCalculationRepository>();
+
 			var container = builder.Build();
 
 			var messageBroker = container.Resolve<IMessageBrokerComposite>();

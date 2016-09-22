@@ -5,7 +5,6 @@ using System.Data;
 using Teleopti.Ccc.Domain.ETL;
 using Teleopti.Ccc.Domain.LogObject;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
@@ -34,15 +33,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IList LoadAgentStat(Guid scenarioCode, DateTime startDate, DateTime endDate, string timeZoneId, Guid personCode);
 
 		IList LoadAgentQueueStat(DateTime startDate, DateTime endDate, string timeZoneId, Guid personCode);
-
-		IList LoadAgentsOverThresholdForAnsweredCalls(string timezoneCode, DateTime date, int answeredCallsThreshold,
-			Guid businessUnitId, int? timeoutInSecond = null);
-
-		IList LoadAgentsOverThresholdForAdherence(AdherenceReportSettingCalculationMethod adherenceCalculationMethod,
-			string timezoneCode, DateTime date, Percent adherenceThreshold, Guid businessUnitId, int? timeoutInSecond = null);
-
-		IList LoadAgentsUnderThresholdForAHT(string timezoneCode, DateTime date, TimeSpan ahtThreshold, Guid businessUnitId,
-			int? timeoutInSecond = null);
 
 		IEnumerable<RunningEtlJob> GetRunningEtlJobs();
 
