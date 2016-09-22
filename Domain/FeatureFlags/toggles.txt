@@ -72,14 +72,14 @@ WfmTeamSchedule_MoveActivity_37744 = true
 WfmTeamSchedule_ShowContractTime_38509 = true
 WfmTeamSchedule_RevertToPreviousSchedule_39002 = true
 WfmTeamSchedule_ShowNightlyRestWarning_39619 = true
-WfmTeamSchedule_ShowWeeklyWorktimeWarning_39799 = RC
-WfmTeamSchedule_ShowWeeklyRestTimeWarning_39800 = RC
-WfmTeamSchedule_ShowDayOffWarning_39801 = RC
-WfmTeamSchedule_FilterValidationWarnings_40110 = RC
+WfmTeamSchedule_ShowWeeklyWorktimeWarning_39799 = true
+WfmTeamSchedule_ShowWeeklyRestTimeWarning_39800 = true
+WfmTeamSchedule_ShowDayOffWarning_39801 = true
+WfmTeamSchedule_FilterValidationWarnings_40110 = true
 
 WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938 = true
 WfmTeamSchedule_ShowOverwrittenLayerWarning_40109 = true
-WfmTeamSchedule_AutoMoveOverwrittenActivityForOperations_40279 = RC
+WfmTeamSchedule_AutoMoveOverwrittenActivityForOperations_40279 = true
 
 WfmTeamSchedule_ShowShiftCategory_39796 = true
 WfmTeamSchedule_ModifyShiftCategory_39797 = true
