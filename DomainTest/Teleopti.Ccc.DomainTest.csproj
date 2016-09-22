@@ -193,6 +193,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\EmptyExistingStateTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStatesViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStatesViewModelBuilderStateValuesTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilderExcludingStateGroupsTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelShiftTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelSnapshotTests.cs" />

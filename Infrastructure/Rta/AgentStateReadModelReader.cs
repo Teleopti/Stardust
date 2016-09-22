@@ -126,28 +126,43 @@ AND :today BETWEEN g.StartDate and g.EndDate
 {1}";
 		private const string hardcodedSkillGroupingPageId = "4CE00B41-0722-4B36-91DD-0A3B63C545CF";
 
-		public IEnumerable<AgentStateReadModel> LoadForSkill(IEnumerable<Guid> skillId)
+		public IEnumerable<AgentStateReadModel> LoadForSkills(IEnumerable<Guid> skillIds)
 		{
 			return transform(
 				_unitOfWork.Current().Session()
 				.CreateSQLQuery(string.Format(agentsForSkillQuery, "", ""))
-				.SetParameterList("skillId", skillId)
+				.SetParameterList("skillId", skillIds)
 				.SetParameter("today", _now.UtcDateTime().Date)
 				.SetParameter("skillGroupingPageId", hardcodedSkillGroupingPageId)
 				);
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadAlarmsForSkill(IEnumerable<Guid> skillId)
+		public IEnumerable<AgentStateReadModel> LoadAlarmsForSkills(IEnumerable<Guid> skillIds)
 		{
 			var query = string.Format(agentsForSkillQuery," TOP 50 ", " AND AlarmStartTime <= :now ORDER BY AlarmStartTime ASC ");
 			return transform(
 				_unitOfWork.Current().Session()
 				.CreateSQLQuery(query)
-				.SetParameterList("skillId", skillId)
+				.SetParameterList("skillId", skillIds)
 				.SetParameter("today", _now.UtcDateTime().Date)
 				.SetParameter("now", _now.UtcDateTime())
 				.SetParameter("skillGroupingPageId", hardcodedSkillGroupingPageId)
 				);
+		}
+
+		public IEnumerable<AgentStateReadModel> LoadAlarmsForSites(IEnumerable<Guid> siteIds, IEnumerable<Guid> excludedStateGroupIds)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IEnumerable<AgentStateReadModel> LoadAlarmsForTeams(IEnumerable<Guid> teamIds, IEnumerable<Guid> excludedStateGroupIds)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IEnumerable<AgentStateReadModel> LoadAlarmsForSkills(IEnumerable<Guid> skillIds, IEnumerable<Guid> excludedStateGroupIds)
+		{
+			throw new NotImplementedException();
 		}
 
 		private IEnumerable<AgentStateReadModel> transform(IQuery query)

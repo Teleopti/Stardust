@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				StatePersister.Persist(new AgentStateReadModelForTest { PersonId = personId });
 			});
 
-			WithUnitOfWork.Get(() => Target.LoadForSkill(new []{ currentSkillId }))
+			WithUnitOfWork.Get(() => Target.LoadForSkills(new []{ currentSkillId }))
 				.Count().Should().Be(1);
 		}
 		[Test]
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			});
 
 
-			WithUnitOfWork.Get(() => Target.LoadForSkill(new []{ skill1, skill2 }))
+			WithUnitOfWork.Get(() => Target.LoadForSkills(new []{ skill1, skill2 }))
 				.Count().Should().Be(2);
 		}	
 
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			});
 
 
-			WithUnitOfWork.Get(() => Target.LoadForSkill(new []{ skill1, skill2 }))
+			WithUnitOfWork.Get(() => Target.LoadForSkills(new []{ skill1, skill2 }))
 				.Count().Should().Be(1);
 		}
 
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				StatePersister.Persist(new AgentStateReadModelForTest {PersonId = agent2});
 			});
 
-			WithUnitOfWork.Get(() => Target.LoadForSkill(new[] { currentSkillId }))
+			WithUnitOfWork.Get(() => Target.LoadForSkills(new[] { currentSkillId }))
 				.Single().PersonId.Should().Be(agent1);
 		}
 
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				StatePersister.Persist(new AgentStateReadModelForTest { PersonId = personId });
 			});
 
-			WithUnitOfWork.Get(() => Target.LoadForSkill(new[] { email }))
+			WithUnitOfWork.Get(() => Target.LoadForSkills(new[] { email }))
 				.Should().Be.Empty();
 		}
 
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.LoadAlarmsForSkill(new Guid[] { currentSkillId } ))
+			WithUnitOfWork.Get(() => Target.LoadAlarmsForSkills(new Guid[] { currentSkillId } ))
 				.Count().Should().Be(1);
 		}
 
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			});
 
 
-			WithUnitOfWork.Get(() => Target.LoadAlarmsForSkill(new [] { skill1, skill2 } ))
+			WithUnitOfWork.Get(() => Target.LoadAlarmsForSkills(new [] { skill1, skill2 } ))
 				.Count().Should().Be(2);
 		}
 
@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			});
 
 
-			WithUnitOfWork.Get(() => Target.LoadAlarmsForSkill(new [] { skill1, skill2 } ))
+			WithUnitOfWork.Get(() => Target.LoadAlarmsForSkills(new [] { skill1, skill2 } ))
 				.Count().Should().Be(1);
 		}
 
@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.LoadAlarmsForSkill(new [] { currentSkillId }))
+			WithUnitOfWork.Get(() => Target.LoadAlarmsForSkills(new [] { currentSkillId }))
 				.Count().Should().Be(1);
 		}
 
@@ -275,7 +275,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				});
 			});
 
-			var agents = WithUnitOfWork.Get(() => Target.LoadAlarmsForSkill(new Guid[] { currentSkillId }).ToArray());
+			var agents = WithUnitOfWork.Get(() => Target.LoadAlarmsForSkills(new Guid[] { currentSkillId }).ToArray());
 			agents.First().PersonId.Should().Be(personId1);
 			agents.Last().PersonId.Should().Be(personId2);
 		}
@@ -306,7 +306,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				});
 			});
 
-			var outOfAdherence = WithUnitOfWork.Get(() => Target.LoadForSkill(new [] {currentSkillId}))
+			var outOfAdherence = WithUnitOfWork.Get(() => Target.LoadForSkills(new [] {currentSkillId}))
 				.Single().OutOfAdherences.Single();
 
 			outOfAdherence.StartTime.Should().Be("2016-06-16 08:00".Utc());

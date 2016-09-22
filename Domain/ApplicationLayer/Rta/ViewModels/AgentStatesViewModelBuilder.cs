@@ -76,6 +76,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			return build(_agentStateReadModelReader.LoadAlarmsForSites(siteIds));
 		}
 
+		public AgentStatesViewModel InAlarmForSites(Guid[] siteIds, Guid[] excludedStateGroupIds)
+		{
+			return build(_agentStateReadModelReader.LoadAlarmsForSites(siteIds, excludedStateGroupIds));
+		}
+
 		public AgentStatesViewModel ForTeams(Guid[] teamIds)
 		{
 			return build(_agentStateReadModelReader.LoadForTeams(teamIds));
@@ -86,14 +91,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			return build(_agentStateReadModelReader.LoadAlarmsForTeams(teamIds));
 		}
 
-		public AgentStatesViewModel ForSkill(Guid[] skills)
+		public AgentStatesViewModel InAlarmForTeams(Guid[] teamIds, Guid[] excludedStateGroupIds)
 		{
-			return build(_agentStateReadModelReader.LoadForSkill(skills));
+			return build(_agentStateReadModelReader.LoadAlarmsForTeams(teamIds, excludedStateGroupIds));
+		}
+
+		public AgentStatesViewModel ForSkills(Guid[] skills)
+		{
+			return build(_agentStateReadModelReader.LoadForSkills(skills));
 		}
 		
-		public AgentStatesViewModel InAlarmForSkill(Guid[] skills)
+		public AgentStatesViewModel InAlarmForSkills(Guid[] skills)
 		{
-			return build(_agentStateReadModelReader.LoadAlarmsForSkill(skills));
+			return build(_agentStateReadModelReader.LoadAlarmsForSkills(skills));
+		}
+
+		public AgentStatesViewModel InAlarmForSkills(Guid[] skills, Guid[] excludedStateGroupIds)
+		{
+			return build(_agentStateReadModelReader.LoadAlarmsForSkills(skills, excludedStateGroupIds));
 		}
 
 		private AgentStatesViewModel build(IEnumerable<AgentStateReadModel> states)

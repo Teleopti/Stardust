@@ -82,51 +82,69 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForTeams")]
-		public virtual IHttpActionResult GetStatesForTeams([FromUri]StatesQuery query)
+		public virtual IHttpActionResult GetStatesForTeams([FromUri]Query query)
 		{
 			return Ok(_agentStatesBuilder.ForTeams(query.Ids));
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/GetAlarmStatesForTeams")]
-		public virtual IHttpActionResult GetAlarmStatesForTeams([FromUri]StatesQuery query)
+		public virtual IHttpActionResult GetAlarmStatesForTeams([FromUri]Query query)
 		{
 			return Ok(_agentStatesBuilder.InAlarmForTeams(query.Ids));
 		}
+		
+		[UnitOfWork, HttpPost, Route("api/Agents/GetAlarmStatesForTeamsExcludingStateGroups")]
+		public virtual IHttpActionResult GetAlarmStatesForTeamsExcludingGroups([FromBody]QueryExcludingStateGroups query)
+		{
+			return Ok(_agentStatesBuilder.InAlarmForTeams(query.Ids, query.ExcludedStateGroupIds));
+		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForSites")]
-		public virtual IHttpActionResult GetStatesForSites([FromUri]StatesQuery query)
+		public virtual IHttpActionResult GetStatesForSites([FromUri]Query query)
 		{
 			return Ok(_agentStatesBuilder.ForSites(query.Ids));
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/GetAlarmStatesForSites")]
-		public virtual IHttpActionResult GetAlarmStatesForSites([FromUri]StatesQuery query)
+		public virtual IHttpActionResult GetAlarmStatesForSites([FromUri]Query query)
 		{
 			return Ok(_agentStatesBuilder.InAlarmForSites(query.Ids));
 		}
 
-		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForSkills")]
-		public virtual IHttpActionResult GetStatesForSkill([FromUri] StatesQuery skillIds)
+		[UnitOfWork, HttpPost, Route("api/Agents/GetAlarmStatesForSitesExcludingStateGroups")]
+		public virtual IHttpActionResult GetAlarmStatesForSitesExcludingGroups([FromBody]QueryExcludingStateGroups query)
 		{
-			return Ok(_agentStatesBuilder.ForSkill(skillIds.Ids));
+			return Ok(_agentStatesBuilder.InAlarmForSites(query.Ids, query.ExcludedStateGroupIds));
+		}
+
+		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForSkills")]
+		public virtual IHttpActionResult GetStatesForSkills([FromUri] Query skillIds)
+		{
+			return Ok(_agentStatesBuilder.ForSkills(skillIds.Ids));
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/GetAlarmStatesForSkills")]
-		public virtual IHttpActionResult GetAlarmStatesForSkill([FromUri] StatesQuery skillIds)
+		public virtual IHttpActionResult GetAlarmStatesForSkills([FromUri] Query skillIds)
 		{
-			return Ok(_agentStatesBuilder.InAlarmForSkill(skillIds.Ids));
+			return Ok(_agentStatesBuilder.InAlarmForSkills(skillIds.Ids));
 		}
 
+		[UnitOfWork, HttpPost, Route("api/Agents/GetAlarmStatesForSitesExcludingStateGroups")]
+		public virtual IHttpActionResult GetAlarmStatesForSkillsExcludingGroups([FromBody]QueryExcludingStateGroups query)
+		{
+			return Ok(_agentStatesBuilder.InAlarmForSkills(query.Ids, query.ExcludedStateGroupIds));
+		}
 	}
 
-	public class StatesQuery
+	public class Query
 	{
 		public Guid[] Ids { get; set; }
 	}
 
-	public class SkillQuery
+	public class QueryExcludingStateGroups
 	{
-		public Guid SkillId { get; set; }
+		public Guid[] Ids { get; set; }
+		public Guid[] ExcludedStateGroupIds { get; set; }
 	}
 
 	public class PersonDetailModel

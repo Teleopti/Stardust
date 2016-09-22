@@ -359,7 +359,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					PersonId = person,
 				});
 
-			var agentState = Target.ForSkill(new [] { skill } ).States.Single();
+			var agentState = Target.ForSkills(new [] { skill } ).States.Single();
 
 			agentState.PersonId.Should().Be(person);
 		}
@@ -378,7 +378,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.Has(new AgentStateReadModel { PersonId = person2 })
 				;
 
-			var agentState = Target.ForSkill(new [] {skill1,skill2}).States;
+			var agentState = Target.ForSkills(new [] {skill1,skill2}).States;
 
 			agentState.Select(x => x.PersonId).Should().Have.SameValuesAs(person1, person2);
 		}
@@ -407,7 +407,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					AlarmStartTime = "2016-06-21 08:29".Utc()
 				});
 
-			var agentState = Target.InAlarmForSkill(new [] { skill1, skill2 }).States;
+			var agentState = Target.InAlarmForSkills(new [] { skill1, skill2 }).States;
 
 			agentState.Select(x => x.PersonId).Should().Have.SameValuesAs(person1, person2);
 		}
