@@ -30,10 +30,9 @@ namespace Teleopti.Ccc.DomainTest.Common
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyMinimumValueIsNotTooHigh()
         {
-            new MinMax<int>(7, 6);
+            Assert.Throws<ArgumentOutOfRangeException>(() => new MinMax<int>(7, 6));
         }
 
         [Test]

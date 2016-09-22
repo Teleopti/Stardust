@@ -43,10 +43,9 @@ namespace Teleopti.Ccc.DomainTest.Helper
 		}
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyAgentsReturnsErrorWhenSlaGreaterThanOne()
         {
-			_calculatorService.TeleoptiAgents(2, _serviceTime, _calls, _averageHandlingTime, _periodLength);
+			Assert.Throws<ArgumentOutOfRangeException>(() => _calculatorService.TeleoptiAgents(2, _serviceTime, _calls, _averageHandlingTime, _periodLength));
         }
 
         [Test]

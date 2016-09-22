@@ -78,36 +78,36 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.IsNotNull(_target);
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void VerifyPersonOneCannotBeNull()
         {
-            _target.Swap(null, _person2, _dates, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance));
+			Assert.Throws<ArgumentNullException>(() => _target.Swap(null, _person2, _dates, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance)));
         }
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void VerifyPersonTwoCannotBeNull()
         {
-            _target.Swap(_person1, null, _dates, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance));
+			Assert.Throws<ArgumentNullException>(() => _target.Swap(_person1, null, _dates, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance)));
         }
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void VerifyDatesCannotBeNull()
         {
-            _target.Swap(_person1, _person2, null, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance));
+			Assert.Throws<ArgumentNullException>(() => _target.Swap(_person1, _person2, null, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance)));
         }
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void VerifyDictionaryCannotBeNull()
         {
-            _target.Swap(_person1, _person2, _dates, null, null, new ScheduleTagSetter(NullScheduleTag.Instance));
+			Assert.Throws<ArgumentNullException>(() => _target.Swap(_person1, _person2, _dates, null, null, new ScheduleTagSetter(NullScheduleTag.Instance)));
         }
-        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test]
         public void VerifyDatesCannotBeEmpty()
         {
-            _target.Swap(_person1, _person2, _dates, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance));
+			Assert.Throws<ArgumentOutOfRangeException>(() => _target.Swap(_person1, _person2, _dates, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance)));
         }
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifyPersonsCannotSame()
         {
             _dates.Add(new DateOnly(2009,02,02));
-            _target.Swap(_person1, _person1, _dates, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance));
+			Assert.Throws<ArgumentException>(() => _target.Swap(_person1, _person1, _dates, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance)));
         }
 
         [Test]

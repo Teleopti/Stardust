@@ -29,14 +29,11 @@ namespace Teleopti.Ccc.DomainTest.Time
           
         }
 
-
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyResolutionIsGreaterThanZero()
         {
-            _baseDateTime.ToInterval(0);
+            Assert.Throws<ArgumentOutOfRangeException>(() => _baseDateTime.ToInterval(0));
         }
-
 
         [Test]
         public void VerifyHourIsChangedWhenRoundingUpToNearestHour()

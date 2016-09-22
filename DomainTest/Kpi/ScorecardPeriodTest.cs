@@ -27,17 +27,15 @@ namespace Teleopti.Ccc.DomainTest.Kpi
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void CannotCreateScorecardPeriodWithAnIdHigherThanFour()
         {
-            _target = new ScorecardPeriod(5);
+            Assert.Throws<ArgumentOutOfRangeException>(() => _target = new ScorecardPeriod(5));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void CannotCreateScorecardPeriodWithAnIdLowerThanZero()
         {
-            _target = new ScorecardPeriod(-1);
+			Assert.Throws<ArgumentOutOfRangeException>(() => _target = new ScorecardPeriod(-1));
         }
 
         [Test]

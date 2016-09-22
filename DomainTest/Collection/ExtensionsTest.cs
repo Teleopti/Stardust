@@ -102,12 +102,9 @@ namespace Teleopti.Ccc.DomainTest.Collection
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "testInt")]
         public void VerifyThrowsNullException()
         {
-            IList<int> test = null;
-            int testInt = test.GetRandom();
+            Assert.Throws<ArgumentNullException>(() => ((IList<int>) null).GetRandom());
         }
 
         private bool HasDifferentElement(IList<int> sourceList, IList<int> compareList)

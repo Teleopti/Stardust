@@ -52,17 +52,15 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void VerifyConstructorOverload3()
         {
-            _target = new ApplicationFunction(string.Empty, _parent);
+            Assert.Throws<ArgumentException>(() => _target = new ApplicationFunction(string.Empty, _parent));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyConstructorOverload4()
         {
-            _target = new ApplicationFunction("Function", null);
+			Assert.Throws<ArgumentNullException>(() => _target = new ApplicationFunction("Function", null));
         }
 
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]

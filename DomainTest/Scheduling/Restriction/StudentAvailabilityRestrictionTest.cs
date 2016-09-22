@@ -24,8 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restriction
             _dateOnly = new DateOnly(2009, 2, 2);
             _studentRestriction = new StudentAvailabilityRestriction();
             _studentRestrictions = new List<IStudentAvailabilityRestriction> { _studentRestriction };
-            _target = new StudentAvailabilityDay(_person, _dateOnly, _studentRestrictions);
-            _target.NotAvailable = true;
+	        _target = new StudentAvailabilityDay(_person, _dateOnly, _studentRestrictions) {NotAvailable = true};
         }
 
         [Test]
@@ -37,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restriction
             _target.NotAvailable = false;
             Assert.AreEqual(1, _target.RestrictionCollection.Count);
             Assert.AreEqual(_person,_target.MainRoot);
-            Assert.IsNotNullOrEmpty(_target.FunctionPath);
+			Assert.That(_target.FunctionPath, Is.Not.Null.Or.Empty);
             Assert.IsNull(_target.Scenario);
             Assert.AreEqual(0, _target.IndexInCollection(_studentRestriction));
         }

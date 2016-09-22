@@ -133,12 +133,11 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void VerifyConstructorTeamMustNotBeNull()
 		{
 			IPersonContract personContract = PersonContractFactory.CreatePersonContract();
 
-			_target = new PersonPeriod(new DateOnly(), personContract, null);
+			Assert.Throws<ArgumentNullException>(() => _target = new PersonPeriod(new DateOnly(), personContract, null));
 		}
 
 		[Test]
@@ -202,16 +201,16 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			Assert.AreEqual(0, _target.ExternalLogOnCollection.Count);
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void VerifyRemoveLoginCannotTakeNull()
 		{
-			_target.RemoveExternalLogOn(null);
+			Assert.Throws<ArgumentNullException>(() => _target.RemoveExternalLogOn(null));
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void VerifyAddLoginCannotTakeNull()
 		{
-			_target.AddExternalLogOn(null);
+			Assert.Throws<ArgumentNullException>(() => _target.AddExternalLogOn(null));
 		}
 
 		[Test]
@@ -332,7 +331,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			Assert.AreSame(budgetGroup, _target.BudgetGroup);
 		}
 
-		[Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+		[Test]
 		public void ShouldThrowIfForecastSourceIsNotMaxSeatSkill()
 		{
 			var mocks = new MockRepository();
@@ -344,11 +343,11 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			Expect.Call(skill.SkillType).Return(skillType);
 			Expect.Call(skillType.ForecastSource).Return(ForecastSource.OutboundTelephony);
 			mocks.ReplayAll();
-			_target.AddPersonMaxSeatSkill(personSkill);
+			Assert.Throws<ArgumentOutOfRangeException>(() => _target.AddPersonMaxSeatSkill(personSkill));
 			mocks.VerifyAll();
 		}
 
-        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test]
         public void ShouldThrowIfForecastSourceIsNotNonBlendSkill()
         {
             var mocks = new MockRepository();
@@ -360,7 +359,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
             Expect.Call(skill.SkillType).Return(skillType);
             Expect.Call(skillType.ForecastSource).Return(ForecastSource.OutboundTelephony);
             mocks.ReplayAll();
-            _target.AddPersonNonBlendSkill(personSkill);
+			Assert.Throws<ArgumentOutOfRangeException>(() => _target.AddPersonNonBlendSkill(personSkill));
             mocks.VerifyAll();
         }
 

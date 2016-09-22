@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 				_analyticsHourlyAvailabilityRepository, _scenarioRepository);
 		}
 
-		[Test, ExpectedException]
+		[Test]
 		public void PersonPeriodMissingFromAnalyticsShouldThrow()
 		{
 			var personCode = Guid.NewGuid();
@@ -57,12 +57,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 			_personRepository.Add(person);
 			_availabilityDayRepository.Add(new StudentAvailabilityDay(person, today, new IStudentAvailabilityRestriction[] { new StudentAvailabilityRestriction() }));
 
-			_target.Handle(new AvailabilityChangedEvent
+			Assert.Throws<ApplicationException>(() => _target.Handle(new AvailabilityChangedEvent
 			{
 				AvailabilityId = Guid.NewGuid(),
 				PersonId = personCode,
 				Date = today
-			});
+			}));
 		}
 
 		[Test]

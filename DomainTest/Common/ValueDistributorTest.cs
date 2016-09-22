@@ -293,10 +293,10 @@ namespace Teleopti.Ccc.DomainTest.Common
 			Assert.AreEqual(TimeSpan.FromSeconds(30).Ticks, targets[0].AverageTaskTime.Ticks);
 		}
 
-		[Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+		[Test]
 		public void VerifyDistributeAverageTaskTimesEvenDoesNotAcceptNegativeTime()
 		{
-			ValueDistributor.DistributeAverageTaskTime(0d, TimeSpan.FromSeconds(-10), new List<ITaskOwner>(), DistributionType.Even);
+			Assert.Throws<ArgumentOutOfRangeException>(() => ValueDistributor.DistributeAverageTaskTime(0d, TimeSpan.FromSeconds(-10), new List<ITaskOwner>(), DistributionType.Even));
 		}
 
 		[Test]
@@ -337,10 +337,10 @@ namespace Teleopti.Ccc.DomainTest.Common
 			Assert.AreEqual(TimeSpan.FromSeconds(30).Ticks, targets[0].AverageAfterTaskTime.Ticks);
 		}
 
-		[Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+		[Test]
 		public void VerifyDistributeAverageAfterTaskTimesEvenDoesNotAcceptNegativeTime()
 		{
-			ValueDistributor.DistributeAverageAfterTaskTime(0d, TimeSpan.FromSeconds(-10), new List<ITaskOwner>(), DistributionType.Even);
+			Assert.Throws<ArgumentOutOfRangeException>(() => ValueDistributor.DistributeAverageAfterTaskTime(0d, TimeSpan.FromSeconds(-10), new List<ITaskOwner>(), DistributionType.Even));
 		}
 
 		[Test]
@@ -365,12 +365,12 @@ namespace Teleopti.Ccc.DomainTest.Common
 			Assert.AreEqual(null, targets[0].OverrideAverageTaskTime);
 		}
 
-		[Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+		[Test]
 		public void VerifyDistributeOverrideAverageTaskTimesEvenDoesNotAcceptNegativeTime()
 		{
 			IList<testDistributionTarget> targets = getDistributionTargetsForTest();
 
-			ValueDistributor.DistributeOverrideAverageTaskTime(0d, TimeSpan.FromSeconds(-10), targets, DistributionType.Even);
+			Assert.Throws<ArgumentOutOfRangeException>(() => ValueDistributor.DistributeOverrideAverageTaskTime(0d, TimeSpan.FromSeconds(-10), targets, DistributionType.Even));
 		}
 
 		[Test]
@@ -423,12 +423,12 @@ namespace Teleopti.Ccc.DomainTest.Common
 			Assert.AreEqual(null, targets[0].OverrideAverageAfterTaskTime);
 		}
 
-		[Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+		[Test]
 		public void VerifyDistributeOverrideAverageAfterTaskTimesEvenDoesNotAcceptNegativeTime()
 		{
 			IList<testDistributionTarget> targets = getDistributionTargetsForTest();
 
-			ValueDistributor.DistributeOverrideAverageAfterTaskTime(0d, TimeSpan.FromSeconds(-10), targets, DistributionType.Even);
+			Assert.Throws<ArgumentOutOfRangeException>(() => ValueDistributor.DistributeOverrideAverageAfterTaskTime(0d, TimeSpan.FromSeconds(-10), targets, DistributionType.Even));
 		}
 
 		[Test]

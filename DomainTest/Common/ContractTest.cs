@@ -140,10 +140,10 @@ namespace Teleopti.Ccc.DomainTest.Common
             _testContract.AddMultiplicatorDefinitionSetCollection(definitionSet);
             Assert.IsTrue(1 == _testContract.MultiplicatorDefinitionSetCollection.Count);
         }
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void VerifyNullCannotBeAddedMultiplicatorDefinitionSets()
         {
-            _testContract.AddMultiplicatorDefinitionSetCollection(null);
+            Assert.Throws<ArgumentNullException>(() => _testContract.AddMultiplicatorDefinitionSetCollection(null));
         }
 
         [Test]

@@ -30,37 +30,32 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyActivityIsNotNull()
         {
-            new WorkShiftTemplateGenerator(null, new TimePeriodWithSegment(8, 0, 9, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), category);
+			Assert.Throws<ArgumentNullException>(() => new WorkShiftTemplateGenerator(null, new TimePeriodWithSegment(8, 0, 9, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), category));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyCategoryIsNotNull()
         {
-            new WorkShiftTemplateGenerator(dummyActivity, new TimePeriodWithSegment(8, 0, 9, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), null);
+			Assert.Throws<ArgumentNullException>(() => new WorkShiftTemplateGenerator(dummyActivity, new TimePeriodWithSegment(8, 0, 9, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), null));
         }
 
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyCannotSetActivityToNull()
         {
             IWorkShiftTemplateGenerator template = new WorkShiftTemplateGenerator(dummyActivity,
                                                                                   new TimePeriodWithSegment(8, 0, 9, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), category);
-            template.BaseActivity = null;
+			Assert.Throws<ArgumentNullException>(() => template.BaseActivity = null);
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyCannotSetCategoryToNull()
         {
             IWorkShiftTemplateGenerator template = new WorkShiftTemplateGenerator(dummyActivity,
                                                                                   new TimePeriodWithSegment(8, 0, 9, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), category);
-            template.Category = null;
-
+			Assert.Throws<ArgumentNullException>(() => template.Category = null);
         }
 
         [Test]

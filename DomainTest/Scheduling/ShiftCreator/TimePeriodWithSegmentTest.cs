@@ -35,10 +35,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifySegmentLengthMoreThanZero()
         {
-            target = new TimePeriodWithSegment(10,0,11,0,0);
+			Assert.Throws<ArgumentOutOfRangeException>(() => target = new TimePeriodWithSegment(10,0,11,0,0));
         }
 
         [Test]
@@ -78,10 +77,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyDoNotAllowNegativeTime()
         {
-            target = new TimePeriodWithSegment(0, -1, 1, 1, 1);
+			Assert.Throws<ArgumentOutOfRangeException>(() => target = new TimePeriodWithSegment(0, -1, 1, 1, 1));
         }
     }
 }

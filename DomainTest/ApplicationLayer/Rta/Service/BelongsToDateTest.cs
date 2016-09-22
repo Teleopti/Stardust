@@ -237,7 +237,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		[Ignore]
+		[Ignore("Reason mandatory for NUnit 3")]
 		public void ShouldPublishActivityActualStartEventWithBelongsToDate()
 		{
 			var personId = Guid.NewGuid();

@@ -60,13 +60,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 			_teamInfo = _mocks.StrictMock<ITeamInfo>();
 			_person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly());
 			_person.Period(_dateOnly).RuleSetBag = new RuleSetBag();
-			_blockInfo = new BlockInfo(new DateOnlyPeriod(_dateOnly,_dateOnly));
+			_blockInfo = new BlockInfo(new DateOnlyPeriod(_dateOnly, _dateOnly));
 			_shiftProjectionCache = _mocks.StrictMock<IShiftProjectionCache>();
 			_scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
 			_scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
 			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
 			_personAssignment = _mocks.StrictMock<IPersonAssignment>();
-			_personAssignment = new PersonAssignment(_person, new Scenario("_"), _dateOnly );
+			_personAssignment = new PersonAssignment(_person, new Scenario("_"), _dateOnly);
 			_scheduleRange = _mocks.StrictMock<IScheduleRange>();
 		}
 
@@ -76,14 +76,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 			using (_mocks.Record())
 			{
 				Expect.Call(_teamBlock.TeamInfo).Return(_teamInfo);
-				Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson> {_person});
+				Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson> { _person });
 				Expect.Call(_teamBlock.BlockInfo).Return(_blockInfo);
 
 				Expect.Call(_teamBlock.TeamInfo).Return(_teamInfo);
 				Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson> { _person });
 				Expect.Call(_teamBlock.BlockInfo).Return(_blockInfo);
 
-				Expect.Call(_teamBlock.MatrixesForGroupAndBlock()).Return(new List<IScheduleMatrixPro> {_scheduleMatrixPro});
+				Expect.Call(_teamBlock.MatrixesForGroupAndBlock()).Return(new List<IScheduleMatrixPro> { _scheduleMatrixPro });
 				Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(_blockInfo.BlockPeriod.StartDate)).Return(_scheduleDayPro);
 				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.PersonAssignment(true)).Return(_personAssignment);
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 			}
 			using (_mocks.Playback())
 			{
-				_target.Execute(new List<ITeamBlockInfo> {_teamBlock}, _schedulingOptions, _schedulingResultStateHolder,
+				_target.Execute(new List<ITeamBlockInfo> { _teamBlock }, _schedulingOptions, _schedulingResultStateHolder,
 					_rollBackService, _resourceCalculateDelayer);
 			}
 		}
@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 			}
 		}
 
-		[Test, ExpectedException(typeof(ArgumentException))]
+		[Test]
 		public void ShouldTrowIfTeamMembersMoreThanOne()
 		{
 			using (_mocks.Record())
@@ -216,28 +216,37 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 				Expect.Call(_teamBlock.TeamInfo).Return(_teamInfo);
 				Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson> { _person, _person });
 			}
-			using (_mocks.Playback())
+			Assert.Throws<ArgumentException>(() =>
 			{
-				_target.Execute(new List<ITeamBlockInfo> { _teamBlock }, _schedulingOptions, _schedulingResultStateHolder,
-					_rollBackService, _resourceCalculateDelayer);
-			}
+				using (_mocks.Playback())
+				{
+					_target.Execute(new List<ITeamBlockInfo> { _teamBlock }, _schedulingOptions, _schedulingResultStateHolder,
+						_rollBackService, _resourceCalculateDelayer);
+				}
+
+			});
+
 		}
 
-		[Test, ExpectedException(typeof(ArgumentException))]
+		[Test]
 		public void ShouldTrowIfBlockPeriodMoreThanOneDay()
 		{
-			_blockInfo = new BlockInfo(new DateOnlyPeriod(2014,9,23,2014,9,24));
+			_blockInfo = new BlockInfo(new DateOnlyPeriod(2014, 9, 23, 2014, 9, 24));
 			using (_mocks.Record())
 			{
 				Expect.Call(_teamBlock.TeamInfo).Return(_teamInfo);
 				Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson> { _person });
 				Expect.Call(_teamBlock.BlockInfo).Return(_blockInfo);
 			}
-			using (_mocks.Playback())
+			Assert.Throws<ArgumentException>(() =>
 			{
-				_target.Execute(new List<ITeamBlockInfo> { _teamBlock }, _schedulingOptions, _schedulingResultStateHolder,
-					_rollBackService, _resourceCalculateDelayer);
-			}
+				using (_mocks.Playback())
+				{
+					_target.Execute(new List<ITeamBlockInfo> { _teamBlock }, _schedulingOptions, _schedulingResultStateHolder,
+						_rollBackService, _resourceCalculateDelayer);
+				}
+			});
+
 		}
 
 		[Test]
@@ -263,7 +272,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 			}
 			using (_mocks.Playback())
 			{
-				_target.Progress+=_target_Progress;
+				_target.Progress += _target_Progress;
 				_target.Execute(new List<ITeamBlockInfo> { _teamBlock, _teamBlock }, _schedulingOptions, _schedulingResultStateHolder,
 					_rollBackService, _resourceCalculateDelayer);
 				_target.Progress -= _target_Progress;

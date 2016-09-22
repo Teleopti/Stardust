@@ -51,32 +51,28 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void VerifyLastValidDayInPeriod()
         {
             _periodRange = new MinMax<int>(12, 19);
             _target = new FreeWeekendValidator(new MinMax<int>(2, 2), _officialWeekendDays, _periodRange);
-            Assert.IsFalse(_target.IsValid(_bitArray, 19));
+			Assert.Throws<ArgumentException>(() => _target.IsValid(_bitArray, 19));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyInvalidDayBeforeFirstDayInPeriod()
         {
             _periodRange = new MinMax<int>(12, 19);
             _target = new FreeWeekendValidator(new MinMax<int>(1, 7), _officialWeekendDays, _periodRange);
-            Assert.IsTrue(_target.IsValid(_bitArray, 11));
-        }
+			Assert.Throws<ArgumentOutOfRangeException>(() => _target.IsValid(_bitArray, 11));
+		}
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyInvalidDayAfterLastDayInPeriod()
         {
             _periodRange = new MinMax<int>(12, 19);
             _target = new FreeWeekendValidator(new MinMax<int>(1, 7), _officialWeekendDays, _periodRange);
-            Assert.IsTrue(_target.IsValid(_bitArray, 20));
-
-        }
+			Assert.Throws<ArgumentOutOfRangeException>(() => _target.IsValid(_bitArray, 20));
+		}
 
     	private static BitArray createBitArrayForTest()
         {

@@ -30,25 +30,25 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyActivityIsNotNull()
         {
-            target = new AutoPositionedActivityExtender(null, new TimePeriodWithSegment(), new TimeSpan());
+			Assert.Throws<ArgumentNullException>(() => target = new AutoPositionedActivityExtender(null, new TimePeriodWithSegment(), new TimeSpan()));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyStartSegmentHasPositiveValue()
         {
-            target = new AutoPositionedActivityExtender(activity, new TimePeriodWithSegment(), new TimeSpan(0));
+			Assert.Throws<ArgumentOutOfRangeException>(() => target = new AutoPositionedActivityExtender(activity, new TimePeriodWithSegment(), new TimeSpan(0)));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyStartSegmentPropertyHasPositiveValue()
         {
-            target = new AutoPositionedActivityExtender(activity, new TimePeriodWithSegment(), new TimeSpan(1));
-            target.StartSegment = new TimeSpan(0);
+			Assert.Throws<ArgumentOutOfRangeException>(() =>
+			target = new AutoPositionedActivityExtender(activity, new TimePeriodWithSegment(), new TimeSpan(1))
+	        {
+		        StartSegment = new TimeSpan(0)
+	        });
         }
 
         [Test]

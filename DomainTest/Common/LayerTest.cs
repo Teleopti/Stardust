@@ -46,11 +46,10 @@ namespace Teleopti.Ccc.DomainTest.Common
         /// <summary>
         /// Activities must not be set to null when creating an activitylayer.
         /// </summary>
-        [ExpectedException(typeof (ArgumentNullException))]
         [Test]
         public void PayloadMustNotBeSetToNull()
         {
-            new FakeLayerClass(null, new DateTimePeriod());
+            Assert.Throws<ArgumentNullException>(() => new FakeLayerClass(null, new DateTimePeriod()));
         }
 
         /// <summary>

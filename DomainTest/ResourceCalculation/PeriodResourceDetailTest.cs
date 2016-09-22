@@ -21,11 +21,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		 }
 
 		 [Test]
-		 [ExpectedException(typeof(ArgumentOutOfRangeException))]
 		 public void ShouldNotAcceptValueValueLowerThanZero()
 		 {
-			 var target = new PeriodResourceDetail(1, -1);
-		 }
+			Assert.Throws<ArgumentOutOfRangeException>(() =>
+			{
+				var target = new PeriodResourceDetail(1, -1);
+			});
+		}
 
 		 [Test]
 		 public void ShouldRoundResourceToFiveDecimalsToAvoidLeftOversWhenRemovingCount()
@@ -42,10 +44,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 
 		 [Test]
-		 [ExpectedException(typeof(ArgumentOutOfRangeException))]
 		 public void CountShouldNotAcceptValueValueLowerThanZero()
 		 {
-			 var target = new PeriodResourceDetail(-1, 1);
+			Assert.Throws<ArgumentOutOfRangeException>(() =>
+			{
+				var target = new PeriodResourceDetail(-1, 1);
+			});
+			
 		 }
 	}
 }

@@ -56,20 +56,20 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             Assert.AreEqual(UserTexts.Resources.Intraday, _target.DisplayText);
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void VerifySchedulingResultStateHolderCannotBeNull()
         {
             DateTimePeriod requestedDateTimePeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
             IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
-            _target.Validate(_personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod), new RequiredForHandlingAbsenceRequest(null,null,_resourceOptimizationHelper,null,null));
+            Assert.Throws<ArgumentNullException>(() => _target.Validate(_personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod), new RequiredForHandlingAbsenceRequest(null,null,_resourceOptimizationHelper,null,null)));
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void VerifyResourceOptimizationHelperCannotBeNull()
         {
             DateTimePeriod requestedDateTimePeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
             IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
-            _target.Validate(_personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod), new RequiredForHandlingAbsenceRequest(_schedulingResultStateHolder,null,null,null,null));
+            Assert.Throws<ArgumentNullException>(() =>_target.Validate(_personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod), new RequiredForHandlingAbsenceRequest(_schedulingResultStateHolder,null,null,null,null)));
         }
 
         [Test]
@@ -501,18 +501,18 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             Assert.IsTrue(result.IsValid);
         }
 
-	    [Test, ExpectedException(typeof (ArgumentNullException))]
+	    [Test]
         public void ShouldThrowExceptionIfSkillStaffPeriodListIsNull()
         {
             var skill = SkillFactory.CreateSkill("test");
-            StaffingThresholdValidator.ValidateSeriousUnderstaffing(skill, null, skill.TimeZone, new UnderstaffingDetails());
+            Assert.Throws<ArgumentNullException>(() => StaffingThresholdValidator.ValidateSeriousUnderstaffing(skill, null, skill.TimeZone, new UnderstaffingDetails()));
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowExceptionIfSkillStaffPeriodListArgumentIsNull()
         {
             var skill = SkillFactory.CreateSkill("test");
-            StaffingThresholdValidator.ValidateUnderstaffing(skill, null, skill.TimeZone, new UnderstaffingDetails());
+            Assert.Throws<ArgumentNullException>(() => StaffingThresholdValidator.ValidateUnderstaffing(skill, null, skill.TimeZone, new UnderstaffingDetails()));
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
@@ -525,7 +525,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             var target = new StaffingThresholdValidator();
             var result = target.GetUnderStaffingDateString(underStaffDict, new CultureInfo(1033), new CultureInfo(1033));
 
-            Assert.IsNotNullOrEmpty(result);
+            Assert.That(result, Is.Not.Null.And.Not.Empty);
         }
 
         [Test]
@@ -538,7 +538,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             var target = new StaffingThresholdValidator();
             var result = target.GetUnderStaffingHourString(underStaffDict, new CultureInfo(1033), new CultureInfo(1033), _timeZone, new DateTime(2012,01,01));
 
-            Assert.IsNotNullOrEmpty(result);
+			Assert.That(result, Is.Not.Null.And.Not.Empty);
         }
      }
 }

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using NUnit.Framework;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.Licensing;
@@ -15,7 +17,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public FakeLicenseRepository()
 		{
-			_license = new Lazy<License>(() => new License { XmlString = System.IO.File.ReadAllText("Teleopti_RD.xml") });
+			_license = new Lazy<License>(() => new License { XmlString = System.IO.File.ReadAllText(Path.Combine(TestContext.CurrentContext.TestDirectory, "Teleopti_RD.xml")) });
 		}
 
 		public ILicenseRepository MakeRepository(IUnitOfWorkFactory unitOfWorkFactory)

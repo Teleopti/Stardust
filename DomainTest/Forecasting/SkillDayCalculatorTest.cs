@@ -350,13 +350,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(expectedEndToLoad,periodToLoad.EndDate);
         }
 
-        [Test, ExpectedException(typeof(ValidationException))]
+        [Test]
         public void VerifyCheckRestrictions()
         {
             skillDays[1].SkillDataPeriodCollection[0].MinimumPersons = 5;
             skillDays[1].SkillDataPeriodCollection[0].MaximumPersons = 4;
 
-            target.CheckRestrictions();
+			Assert.Throws<ValidationException>(() => target.CheckRestrictions());
         }
 
         [Test]

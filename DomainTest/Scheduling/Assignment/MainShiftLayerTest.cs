@@ -12,11 +12,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 	[TestFixture]
 	public class MainShiftLayerTest
 	{
-		[Test, ExpectedException(typeof(ArgumentException))]
+		[Test]
 		public void ShouldNotAcceptPeriodWithSeconds()
 		{
 			var someDate = new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-			new MainShiftLayer(new Activity("d"), new DateTimePeriod(someDate, someDate.AddHours(1).AddSeconds(1)));
+			Assert.Throws<ArgumentException>(() => new MainShiftLayer(new Activity("d"), new DateTimePeriod(someDate, someDate.AddHours(1).AddSeconds(1))));
+			
 		}
 
 		[Test]

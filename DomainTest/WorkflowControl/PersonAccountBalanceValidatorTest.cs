@@ -93,25 +93,25 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             Assert.IsFalse(result.IsValid);
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void VerifySchedulingResultStateHolderCannotBeNull()
         {
             DateTimePeriod requestedDateTimePeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
             IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
 
-            _target.Validate(_personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod),
+			Assert.Throws<ArgumentNullException>(() => _target.Validate(_personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod),
                              new RequiredForHandlingAbsenceRequest(null, _personAccountBalanceCalculator, null, null,
-                                                                   null));
+                                                                   null)));
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void VerifyPersonAccountBalanceCalculatorCannotBeNull()
         {
             DateTimePeriod requestedDateTimePeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
             IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
 
-            _target.Validate(_personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod),
-                             new RequiredForHandlingAbsenceRequest(_schedulingResultStateHolder, null, null, null, null));
+            Assert.Throws<ArgumentNullException>(() => _target.Validate(_personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod),
+							 new RequiredForHandlingAbsenceRequest(_schedulingResultStateHolder, null, null, null, null)));
         }
 
         [Test]

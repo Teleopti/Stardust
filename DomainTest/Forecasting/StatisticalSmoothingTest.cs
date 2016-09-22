@@ -349,10 +349,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyExceptionIsThrownIfSmootheningFactorIsBelow1()
         {
-            target.CalculateRunningAverage(0);
+			Assert.Throws<ArgumentOutOfRangeException>(() => target.CalculateRunningAverage(0));
         }
 
 

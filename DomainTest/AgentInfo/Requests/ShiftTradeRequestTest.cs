@@ -296,10 +296,10 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			mocks.VerifyAll();
 		}
 
-        [Test,ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void VerifyMustSupplyPersonToAccept()
         {
-            _target.Accept(null,new EmptyShiftTradeRequestSetChecksum(),_authorization);
+            Assert.Throws<ArgumentNullException>(() => _target.Accept(null,new EmptyShiftTradeRequestSetChecksum(),_authorization));
         }
 
         [Test, SetCulture("sv-SE")]
@@ -358,46 +358,46 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             Assert.AreEqual("Mama Hawa, Day Trader, 2008/7/16", text);
         }
 
-        [Test, ExpectedException(typeof(ShiftTradeRequestStatusException))]
+        [Test]
         public void VerifyCannotGoFromReferredToOkByBothParts()
         {
             _target.Refer(_authorization);
-            _target.SetShiftTradeStatus(ShiftTradeStatus.OkByBothParts,_authorization);
+			Assert.Throws<ShiftTradeRequestStatusException>(() => _target.SetShiftTradeStatus(ShiftTradeStatus.OkByBothParts,_authorization));
         }
 
-        [Test, ExpectedException(typeof(ShiftTradeRequestStatusException))]
+        [Test]
         public void VerifyCannotGoFromReferredWhenAccepting()
         {
             _target.Refer(_authorization);
-            _target.Accept(_tradePerson,new EmptyShiftTradeRequestSetChecksum(),_authorization);
+			Assert.Throws<ShiftTradeRequestStatusException>(() => _target.Accept(_tradePerson,new EmptyShiftTradeRequestSetChecksum(),_authorization));
         }
 
-        [Test, ExpectedException(typeof(ShiftTradeRequestStatusException))]
+        [Test]
         public void VerifyCannotAddShiftTradeSwapDetailsWhenOkByBothParts()
         {
             _target.Accept(_tradePerson,new EmptyShiftTradeRequestSetChecksum(),_authorization);
-            _target.AddShiftTradeSwapDetail(new ShiftTradeSwapDetail(_requestedPerson,_requestedPerson,_shiftTradeSwapDetail.DateFrom,_shiftTradeSwapDetail.DateTo));
+			Assert.Throws<ShiftTradeRequestStatusException>(() => _target.AddShiftTradeSwapDetail(new ShiftTradeSwapDetail(_requestedPerson,_requestedPerson,_shiftTradeSwapDetail.DateFrom,_shiftTradeSwapDetail.DateTo)));
         }
 
-        [Test, ExpectedException(typeof(ShiftTradeRequestStatusException))]
+        [Test]
         public void VerifyCannotAddShiftTradeSwapDetailsWhenNotValid()
         {
             _target.SetShiftTradeStatus(ShiftTradeStatus.NotValid,_authorization);
-            _target.AddShiftTradeSwapDetail(new ShiftTradeSwapDetail(_requestedPerson, _requestedPerson, _shiftTradeSwapDetail.DateFrom, _shiftTradeSwapDetail.DateTo));
+			Assert.Throws<ShiftTradeRequestStatusException>(() => _target.AddShiftTradeSwapDetail(new ShiftTradeSwapDetail(_requestedPerson, _requestedPerson, _shiftTradeSwapDetail.DateFrom, _shiftTradeSwapDetail.DateTo)));
         }
 
-        [Test, ExpectedException(typeof(ShiftTradeRequestStatusException))]
+        [Test]
         public void VerifyCannotClearShiftTradeSwapDetailsWhenOkByBothParts()
         {
             _target.Accept(_tradePerson,new EmptyShiftTradeRequestSetChecksum(),_authorization);
-            _target.ClearShiftTradeSwapDetails();
+			Assert.Throws<ShiftTradeRequestStatusException>(() => _target.ClearShiftTradeSwapDetails());
         }
 
-        [Test, ExpectedException(typeof(ShiftTradeRequestStatusException))]
+        [Test]
         public void VerifyCannotClearShiftTradeSwapDetailsWhenNotValid()
         {
             _target.SetShiftTradeStatus(ShiftTradeStatus.NotValid,_authorization);
-            _target.ClearShiftTradeSwapDetails();
+			Assert.Throws<ShiftTradeRequestStatusException>(() => _target.ClearShiftTradeSwapDetails());
         }
 
         [Test]
@@ -497,7 +497,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			IList<IBusinessRuleResponse> brokenRules = personRequest.Approve(requestApprovalService, _authorization);
 			Assert.AreEqual(0, brokenRules.Count);
 
-			Assert.IsNotNullOrEmpty(target.TextForNotification);
+			Assert.That(target.TextForNotification, Is.Not.Null.Or.Empty);
 
 			mocks.VerifyAll();
         }
@@ -546,7 +546,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             Assert.AreEqual(new DateTimePeriod(), _target.Period);
             _target.AddShiftTradeSwapDetail(new ShiftTradeSwapDetail(_requestedPerson,_requestedPerson,dateOnly,dateOnly));
             _target.AddShiftTradeSwapDetail(new ShiftTradeSwapDetail(_requestedPerson,_requestedPerson,dateOnly2,dateOnly2));
-            Assert.IsNotNullOrEmpty(_target.TextForNotification);
+            Assert.That(_target.TextForNotification, Is.Not.Null.Or.Empty);
             Assert.AreEqual(2,_target.ShiftTradeSwapDetails.Count);
         }
 
@@ -569,7 +569,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             //                                       target.Period.StartDateTimeLocal(
             //                                           _requestedPerson.PermissionInformation.DefaultTimeZone()).
             //                                           ToString(datepattern));
-            Assert.IsNotNullOrEmpty(target.TextForNotification);
+            Assert.That(target.TextForNotification, Is.Not.Null.Or.Empty);
         }
     }
 }

@@ -85,11 +85,11 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _mocks.VerifyAll();
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void VerifyRequestApprovalServiceIsSet()
         {
             var handling = new RequiredForHandlingAbsenceRequest();
-            _target.Process(null, _absenceRequest, new RequiredForProcessingAbsenceRequest(null,null,_authorization), handling, _validators);
+           Assert.Throws<ArgumentNullException>(() => _target.Process(null, _absenceRequest, new RequiredForProcessingAbsenceRequest(null, null, _authorization), handling, _validators));
         }
 
         [Test]

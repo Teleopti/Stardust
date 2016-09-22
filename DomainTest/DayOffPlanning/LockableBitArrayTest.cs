@@ -56,11 +56,12 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             Assert.IsFalse(_target[0]);
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifyLockedIndexCannotBeChanged()
         {
+			
             _target.Lock(0, true);
-            _target.Set(0, true);
+			Assert.Throws<ArgumentException>(() => _target.Set(0, true));
         }
 
         [Test]

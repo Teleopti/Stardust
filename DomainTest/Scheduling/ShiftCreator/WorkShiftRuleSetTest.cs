@@ -49,10 +49,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyCannotSetNullGeneratorInConstructor()
         {
-            _target = new WorkShiftRuleSet(null);
+			Assert.Throws<ArgumentNullException>(() => _target = new WorkShiftRuleSet(null));
         }
 
         [Test]
@@ -108,10 +107,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyCannotAddNullAsExtender()
         {
-            _target.AddExtender(null);
+			Assert.Throws<ArgumentNullException>(() => _target.AddExtender(null));
         }
 
         [Test]
@@ -135,10 +133,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyCannotAddNullAsLimiter()
         {
-            _target.AddLimiter(null);
+			Assert.Throws<ArgumentNullException>(() => _target.AddLimiter(null));
         }
 
 
@@ -369,21 +366,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 	    }
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void InsertExtender_InsertNull_ThrowArgumentNullException()
 		{
-			_target.InsertExtender(0, null);
+			Assert.Throws<ArgumentNullException>(() => _target.InsertExtender(0, null));
 		}
 
 	    [Test]
-	    [ExpectedException(typeof (ArgumentException))]
 	    public void InsertExtender_ParentNotNull_ThrowArgumentException()
 	    {
 		    IWorkShiftExtender extender = new ActivityAbsoluteStartExtender(ActivityFactory.CreateActivity("Hepp"),
 		                                                                    new TimePeriodWithSegment(),
 		                                                                    new TimePeriodWithSegment());
 			extender.SetParent(WorkShiftRuleSetFactory.Create());
-		    _target.InsertExtender(0, extender);
+			Assert.Throws<ArgumentException>(() => _target.InsertExtender(0, extender));
 	    }
 
 	    private static void doAssertsForCollectionsCloned(IWorkShiftRuleSet target, IWorkShiftRuleSet cloned, bool checkForRuleSetBags)

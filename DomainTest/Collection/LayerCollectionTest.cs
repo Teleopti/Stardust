@@ -26,10 +26,9 @@ namespace Teleopti.Ccc.DomainTest.Collection
         /// Verifies that null cannot be added to list.
         /// </summary>
         [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
         public void VerifyNullCannotBeAddedToList()
         {
-            target.Add(null);
+            Assert.Throws<ArgumentNullException>(() => target.Add(null));
         }
 
 				/// <summary>

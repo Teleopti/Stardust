@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         public void VerifyDescriptionKey()
         {
             _page.DescriptionKey = "test key";
-            Assert.IsNotNullOrEmpty(_page.Key);
+			Assert.That(_page.Key, Is.Not.Null.Or.Empty);
         }
 
         [Test]

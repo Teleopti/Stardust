@@ -165,20 +165,18 @@ namespace Teleopti.Ccc.DomainTest.Time
         /// Verifies that the start DateTime is not later than end DateTime
         /// </summary>
         [Test]
-        [ExpectedException(typeof (ArgumentOutOfRangeException))]
         public void VerifyStartDateTimeEqualOrBeforeEndDateTime()
         {
-            _period = new DateTimePeriod(_end, _start);
+            Assert.Throws<ArgumentOutOfRangeException>(() => _period = new DateTimePeriod(_end, _start));
         }
 
         /// <summary>
         /// Verifies that the start DateTime is not later than end DateTime
         /// </summary>
         [Test]
-        [ExpectedException(typeof (ArgumentOutOfRangeException))]
         public void VerifyStartDateTimeEqualOrBeforeEndDateTimeWhenUsingSixParameters()
         {
-            _period = new DateTimePeriod(2001, 1, 1, 2000, 1, 1);
+            Assert.Throws<ArgumentOutOfRangeException>(() => _period = new DateTimePeriod(2001, 1, 1, 2000, 1, 1));
         }
 
         /// <summary>
@@ -534,14 +532,13 @@ namespace Teleopti.Ccc.DomainTest.Time
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void VerifyToSmallResolutionIsNotAllowedOnIntervalCollection()
         {
             DateTime startDateTime = new DateTime(2007, 10, 27, 23, 0, 0);
             DateTime endDateTime = new DateTime(2007, 10, 28, 3, 45, 0);
 
             _period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTime, endDateTime);
-            _period.IntervalsFromHourCollection(0, TimeZoneHelper.CurrentSessionTimeZone);
+            Assert.Throws<ArgumentException>(() => _period.IntervalsFromHourCollection(0, TimeZoneHelper.CurrentSessionTimeZone));
         }
 
         [Test]

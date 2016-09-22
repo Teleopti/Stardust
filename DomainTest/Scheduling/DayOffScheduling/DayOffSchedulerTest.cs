@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			}
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowIfRollbackServiceIsNull()
 		{
 			_effectiveRestriction.DayOffTemplate = _schedulingOptions.DayOffTemplate;
@@ -199,11 +199,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 
 				mocksForNotAddingContractDaysoff();
 			}
-
-			using (_mocks.Playback())
+			Assert.Throws<ArgumentNullException>(() =>
 			{
-				_target.DayOffScheduling(matrixProList, null, _schedulingOptions, _scheduleTagSetter);
-			}
+				using (_mocks.Playback())
+				{
+					_target.DayOffScheduling(matrixProList, null, _schedulingOptions, _scheduleTagSetter);
+				}
+			});
+			
 		}
 
 		[Test]

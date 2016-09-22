@@ -136,14 +136,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void VerifyLoadBudgetSkillDaysWithMultisiteSkill()
         {
             var multisiteSkill = SkillFactory.CreateMultisiteSkill("skill1");
             _skills.Add(multisiteSkill);
             _mocks.ReplayAll();
 
-            _target.LoadBudgetSkillDays(_dtp, _skills, _scenario);
+			Assert.Throws<ArgumentException>(() => _target.LoadBudgetSkillDays(_dtp, _skills, _scenario));
 
             _mocks.VerifyAll();
         }

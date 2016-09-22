@@ -122,16 +122,19 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsNotNull(result);
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifyIsShiftCategoryOverPeriodLimitThrowsWhenCalledWithWeek()
         {
             _shiftCategoryLimitation.Weekly = true;
             _shiftCategoryLimitation.MaxNumberOf = 3;
 
-            using (_mocks.Playback())
-            {
-                _target.IsShiftCategoryOverPeriodLimit(_shiftCategoryLimitation);
-            }
+	        Assert.Throws<ArgumentException>(() =>
+	        {
+				using (_mocks.Playback())
+				{
+					_target.IsShiftCategoryOverPeriodLimit(_shiftCategoryLimitation);
+				}
+			});
         }
 
         [Test]

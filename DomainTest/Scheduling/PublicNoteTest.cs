@@ -143,22 +143,22 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             text = text.PadRight(255, 'x');
             _target.AppendScheduleNote(text);
         }
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifyExceptionIsThrownIfTextIsLongerThan255WhenAppending()
         {
             const string text = "z";
             string currentText = string.Empty;
             currentText = currentText.PadRight(255, 'x');
             _target = new PublicNote(_person, _noteDate, _scenario, currentText);
-            _target.AppendScheduleNote(text);
+			Assert.Throws<ArgumentException>(() => _target.AppendScheduleNote(text));
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifyExceptionIsThrownIfTextIsLongerThan255WhenCreatingNote()
         {
             string text = string.Empty;
             text = text.PadRight(256, 'x');
-            _target = new PublicNote(_person, _noteDate, _scenario, text);
+			Assert.Throws<ArgumentException>(() => _target = new PublicNote(_person, _noteDate, _scenario, text));
         }
         
         [Test]

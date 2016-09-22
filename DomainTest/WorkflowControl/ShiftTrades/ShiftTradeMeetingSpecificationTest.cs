@@ -57,10 +57,10 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			Assert.AreEqual("ShiftTradeMeetingSpecificationDenyReason", _target.DenyReason);
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowExceptionWhenInParameterIsNull()
 		{
-			_target.IsSatisfiedBy(null);
+			Assert.Throws<ArgumentNullException>(() => _target.IsSatisfiedBy(null));
 		}
 
 		[Test]

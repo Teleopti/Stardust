@@ -879,7 +879,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		
 		#region Performance Benchmarks
 
-		[Test, Ignore]
+		[Test]
+		[Ignore("Reason mandatory for NUnit 3")]
 		public void ShouldHavePerformance()
 		{
 			var seatBookingRequests =
@@ -906,7 +907,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			Console.WriteLine(stopwatch.Elapsed);
 		}
 
-		[Test, Ignore]
+		[Test]
+		[Ignore("Reason mandatory for NUnit 3")]
 		public void ShouldHavePerformanceWithHierachyOfLocations()
 		{
 			var person = PersonFactory.CreatePerson();

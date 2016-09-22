@@ -267,23 +267,26 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.IsFalse(testContractSchedule.IsWorkday(owningPeriodStartDate, requestedDate));
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifyIsWorkdayUnresolvedRequestedDateThrowsException()
         {
-            testContractSchedule = new ContractSchedule("test");
-            IContractScheduleWeek week = new ContractScheduleWeek();
-            week.Add(DayOfWeek.Monday, true);
-            week.Add(DayOfWeek.Tuesday, true);
-            testContractSchedule.AddContractScheduleWeek(week);
-            week = new ContractScheduleWeek();
-            week.Add(DayOfWeek.Wednesday, true);
-            week.Add(DayOfWeek.Thursday, true);
-            week.Add(DayOfWeek.Friday, true);
-            testContractSchedule.AddContractScheduleWeek(week);
+	        Assert.Throws<ArgumentException>(() =>
+	        {
+				testContractSchedule = new ContractSchedule("test");
+				IContractScheduleWeek week = new ContractScheduleWeek();
+				week.Add(DayOfWeek.Monday, true);
+				week.Add(DayOfWeek.Tuesday, true);
+				testContractSchedule.AddContractScheduleWeek(week);
+				week = new ContractScheduleWeek();
+				week.Add(DayOfWeek.Wednesday, true);
+				week.Add(DayOfWeek.Thursday, true);
+				week.Add(DayOfWeek.Friday, true);
+				testContractSchedule.AddContractScheduleWeek(week);
 
-            DateOnly owningPeriodStartDate = new DateOnly(2009, 1, 1);
-            DateOnly requestedDate = new DateOnly(2008, 1, 19);
-            Assert.IsFalse(testContractSchedule.IsWorkday(owningPeriodStartDate, requestedDate));
+				DateOnly owningPeriodStartDate = new DateOnly(2009, 1, 1);
+				DateOnly requestedDate = new DateOnly(2008, 1, 19);
+				Assert.IsFalse(testContractSchedule.IsWorkday(owningPeriodStartDate, requestedDate));
+			});
         }
 
         

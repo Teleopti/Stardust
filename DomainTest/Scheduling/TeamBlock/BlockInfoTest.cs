@@ -71,11 +71,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			Assert.AreEqual(new DateOnly(2013, 2, 27), _target.UnLockedDates()[0]);
 		}
 
-		[Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+		[Test]
 		public void TryingToLocDateOutsideBlockShouldThrow()
 		{
 			_target = new BlockInfo(new DateOnlyPeriod(new DateOnly(2013, 2, 27), new DateOnly(2013, 2, 28)));
-			_target.LockDate(new DateOnly(2013, 2, 29));
+			Assert.Throws<ArgumentOutOfRangeException>(() => _target.LockDate(new DateOnly(2013, 2, 29)));
 		}
 
 		[Test]

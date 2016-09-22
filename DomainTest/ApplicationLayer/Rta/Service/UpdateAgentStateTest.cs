@@ -32,13 +32,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database.PersistedReadModel.Should().Not.Be.Null();
 		}
 
-		[Test, Ignore]
+		[Test]
+		[Ignore("Reason mandatory for NUnit 3")]
 		public void ShouldNotPersistWhenWrongDataSource()
 		{
 			Assert.Fail();
 		}
 
-		[Test, Ignore]
+		[Test]
+		[Ignore("Reason mandatory for NUnit 3")]
 		public void ShouldNotPersisthenWrongPerson()
 		{
 			Assert.Fail();

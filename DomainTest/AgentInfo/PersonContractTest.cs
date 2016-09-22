@@ -103,24 +103,21 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyPropertyContractMustNotSetNull()
         {
-            _PersonContract.Contract = null;
+            Assert.Throws<ArgumentNullException>(() => _PersonContract.Contract = null);
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyPropertyPartTimePercentageMustNotSetNull()
         {
-            _PersonContract.PartTimePercentage = null;
+			Assert.Throws<ArgumentNullException>(() => _PersonContract.PartTimePercentage = null);
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyPropertyContractScheduleMustNotSetNull()
         {
-            _PersonContract.ContractSchedule = null;
+			Assert.Throws<ArgumentNullException>(() => _PersonContract.ContractSchedule = null);
         }
     }
 }

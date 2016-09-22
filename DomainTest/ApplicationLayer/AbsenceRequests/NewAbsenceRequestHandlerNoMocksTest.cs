@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			newAbsenceRequestConsumer.Handle(new NewAbsenceRequestCreatedEvent() { PersonRequestId = newRequest.Id.Value });
 
 			Assert.IsTrue(existingDeniedRequest.IsApproved);
-			Assert.IsNullOrEmpty(existingDeniedRequest.DenyReason);
+			Assert.That(existingDeniedRequest.DenyReason, Is.Not.Null.Or.Empty);
 			//new request should be denied as is a request for the same day as the accepted absence request
 			//now it is denied
 			Assert.IsTrue(newRequest.IsDenied && !newRequest.IsWaitlisted);

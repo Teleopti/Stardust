@@ -21,13 +21,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
         [SetUp]
         public void Setup()
         {
-            _ob1 = new Multiplicator(MultiplicatorType.OBTime);
-            _ob1.MultiplicatorValue = 1.5;
-            _ob1.Description = new Description("ob night");
-            _ob2 = new Multiplicator(MultiplicatorType.OBTime);
-            _ob2.MultiplicatorValue = 2;
-            _ob2.Description = new Description("ob holiday");
-            _d1 = new DayOfWeekMultiplicatorDefinition(_ob1, DayOfWeek.Monday, new TimePeriod(TimeSpan.FromHours(18), TimeSpan.FromHours(30)));
+	        _ob1 = new Multiplicator(MultiplicatorType.OBTime)
+	        {
+		        MultiplicatorValue = 1.5,
+		        Description = new Description("ob night")
+	        };
+	        _ob2 = new Multiplicator(MultiplicatorType.OBTime)
+	        {
+		        MultiplicatorValue = 2,
+		        Description = new Description("ob holiday")
+	        };
+	        _d1 = new DayOfWeekMultiplicatorDefinition(_ob1, DayOfWeek.Monday, new TimePeriod(TimeSpan.FromHours(18), TimeSpan.FromHours(30)));
             _d2 = new DateTimeMultiplicatorDefinition(_ob2, new DateOnly(2008, 12, 2), new DateOnly(2008, 12, 3), TimeSpan.FromHours(0), TimeSpan.FromHours(6));
             _d3 = new DayOfWeekMultiplicatorDefinition(_ob1, DayOfWeek.Tuesday, new TimePeriod(TimeSpan.FromHours(18), TimeSpan.FromHours(30)));
         }
@@ -52,13 +56,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             Assert.AreEqual(_target, _target.DefinitionCollection[1].Parent);
         }
 
-        [Test, ExpectedException(typeof (ArgumentException))]
+        [Test]
         public void VerifyAddDefinitionWhenDifferentMultiplicatorType()
         {
             _target = new MultiplicatorDefinitionSet("Hello", MultiplicatorType.OBTime);
             IMultiplicator mp = new Multiplicator(MultiplicatorType.Overtime);
             _d1 = new DayOfWeekMultiplicatorDefinition(mp, DayOfWeek.Monday, new TimePeriod(TimeSpan.FromHours(18), TimeSpan.FromHours(30)));
-            _target.AddDefinition(_d1);
+			Assert.Throws<ArgumentException>(() => _target.AddDefinition(_d1));
         }
 
         [Test]
@@ -76,13 +80,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             Assert.AreEqual(_target, _target.DefinitionCollection[1].Parent);
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifyAddDefinitionAtWhenDifferentMultiplicatorType()
         {
             _target = new MultiplicatorDefinitionSet("Hello", MultiplicatorType.OBTime);
             IMultiplicator mp = new Multiplicator(MultiplicatorType.Overtime);
             _d1 = new DayOfWeekMultiplicatorDefinition(mp, DayOfWeek.Monday, new TimePeriod(TimeSpan.FromHours(18), TimeSpan.FromHours(30)));
-            _target.AddDefinitionAt(_d1, 0);
+			Assert.Throws<ArgumentException>(() => _target.AddDefinitionAt(_d1, 0));
         }
 
         [Test]

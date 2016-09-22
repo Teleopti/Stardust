@@ -194,13 +194,12 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		}
 
 		[Test]
-		[ExpectedException(typeof(NotSupportedException))]
 		public void VerifyAddKeyValuePairNotSupported()
 		{
-			KeyValuePair<IPerson, IScheduleRange> item =
+			var item =
 				new KeyValuePair<IPerson, IScheduleRange>(dummyPerson,
 				new ScheduleRange(target, new ScheduleParameters(scenario, dummyPerson, new DateTimePeriod(2001, 1, 1, 2002, 1, 1)), dataPermissionChecker));
-			target.Add(item);
+			Assert.Throws<NotSupportedException>(() => target.Add(item));
 		}
 
 		[Test]
@@ -1589,26 +1588,23 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
 
 		[Test]
-		[ExpectedException(typeof(NotSupportedException))]
 		public void VerifySet()
 		{
-			target[dummyPerson] = new ScheduleRange(target, new ScheduleParameters(scenario, dummyPerson, new DateTimePeriod(2001, 1, 1, 2002, 1, 1)), dataPermissionChecker);
+			Assert.Throws<NotSupportedException>(() => target[dummyPerson] = new ScheduleRange(target, new ScheduleParameters(scenario, dummyPerson, new DateTimePeriod(2001, 1, 1, 2002, 1, 1)), dataPermissionChecker));
 		}
 
 
 		[Test]
-		[ExpectedException(typeof(NotSupportedException))]
 		public void VerifyAddNoSupported()
 		{
-			target.Add(dummyPerson, _dummyScheduleRange);
+			Assert.Throws<NotSupportedException>(() => target.Add(dummyPerson, _dummyScheduleRange));
 		}
 
 
 		[Test]
-		[ExpectedException(typeof(NotSupportedException))]
 		public void VerifyAddKeyValueNotSupported()
 		{
-			target.Add(new KeyValuePair<IPerson, IScheduleRange>(dummyPerson, _dummyScheduleRange));
+			Assert.Throws<NotSupportedException>(() => target.Add(new KeyValuePair<IPerson, IScheduleRange>(dummyPerson, _dummyScheduleRange)));
 		}
 
 		[Test]

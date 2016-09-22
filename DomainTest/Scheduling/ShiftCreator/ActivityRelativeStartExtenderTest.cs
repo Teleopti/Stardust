@@ -38,11 +38,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyActivityMustNotBeNull()
         {
-            target =
-                new ActivityRelativeStartExtender(null, new TimePeriodWithSegment(1, 0, 1, 0, 1), new TimePeriodWithSegment(1, 0, 1, 0, 1));
+			Assert.Throws<ArgumentNullException>(() => target =
+                new ActivityRelativeStartExtender(null, new TimePeriodWithSegment(1, 0, 1, 0, 1), new TimePeriodWithSegment(1, 0, 1, 0, 1)));
         }
 
         [Test]
@@ -94,11 +93,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void CannotSetActivityToNull()
         {
-            target = new ActivityRelativeStartExtender(dummyActivity, new TimePeriodWithSegment(), new TimePeriodWithSegment());
-            target.ExtendWithActivity = null;
+			Assert.Throws<ArgumentNullException>(() => target = new ActivityRelativeStartExtender(dummyActivity, new TimePeriodWithSegment(),
+		        new TimePeriodWithSegment()) {ExtendWithActivity = null});
         }
 
 
@@ -163,13 +161,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyProcessShiftWorkShiftMustNotBeNull()
         {
             target = new ActivityRelativeStartExtender(new Activity("for test"),
                                                        new TimePeriodWithSegment(0, 10, 0, 10, 15),
-                                                       new TimePeriodWithSegment(1, 0, 2, 0, 15)); 
-            target.ReplaceWithNewShifts(null);
+                                                       new TimePeriodWithSegment(1, 0, 2, 0, 15));
+			Assert.Throws<ArgumentNullException>(() => target.ReplaceWithNewShifts(null));
         }
 
 

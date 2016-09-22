@@ -43,8 +43,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             Assert.AreEqual(blue, new ColorNumber().Disassemble(act.DisplayColor));
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test, Explicit("This one is for you, Roger")]
-        public void VerifyThatRefreshWorksWithRemovedTemplate()
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+	    [Test]
+	    [Explicit("This one is for you, Roger")]
+	    public void VerifyThatRefreshWorksWithRemovedTemplate()
         {
             IUnitOfWork UnitOfWork2 = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork();
             ISkillType skillType = SkillTypeFactory.CreateSkillType();

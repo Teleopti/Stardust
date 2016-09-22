@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 		}
 
-		[Ignore]
+		[Ignore("Reason mandatory for NUnit 3")]
 		[Test]
 		public void ShouldSelectBestShiftAsRoleModel()
 		{

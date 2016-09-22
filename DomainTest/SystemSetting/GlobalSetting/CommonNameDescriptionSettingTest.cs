@@ -64,19 +64,17 @@ namespace Teleopti.Ccc.DomainTest.SystemSetting.GlobalSetting
         }
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void ShouldCheckParameter()
 		{
 			IPerson person = null;
-			_target2.BuildCommonNameDescription(person);
+			Assert.Throws<ArgumentNullException>(() => _target2.BuildCommonNameDescription(person));
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void ShouldCheckParameterForCommonNameDescriptionSettingScheduleExport()
 		{
 			ILightPerson person = null;
-			_target2.BuildCommonNameDescription(person);
+			Assert.Throws<ArgumentNullException>(() => _target2.BuildCommonNameDescription(person));
 		}
 
         [Test]

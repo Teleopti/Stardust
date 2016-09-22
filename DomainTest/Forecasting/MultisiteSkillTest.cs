@@ -370,7 +370,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         /// Created by: robink
         /// Created date: 2008-05-02
         /// </remarks>
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifyCannotRemoveIfChildSkillIsInTemplate()
         {
             MultisiteDayTemplate template = (MultisiteDayTemplate) target.GetTemplateAt(TemplateTarget.Multisite, (int)DayOfWeek.Monday);
@@ -391,7 +391,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.IsTrue(template.TemplateMultisitePeriodCollection[0].IsValid);
             target.SetChildSkills(_childSkills);
             Assert.AreEqual(2, target.ChildSkills.Count);
-            target.RemoveChildSkill(_childSkill1);
+			Assert.Throws<ArgumentException>(() => target.RemoveChildSkill(_childSkill1));
         }
 
         /// <summary>
@@ -420,10 +420,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         /// Created by: robink
         /// Created date: 2008-04-25
         /// </remarks>
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void VerifyCannotAddNull()
         {
-            target.AddChildSkill(null);
+			Assert.Throws<ArgumentNullException>(() => target.AddChildSkill(null));
         }
 
         [Test]
@@ -513,14 +513,14 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.IsTrue(target.TemplateMultisiteWeekCollection.Values.Contains(multisiteDayTemplate2));
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifyCanRefreshTemplatesFromNewlyLoadedInstanceRequiresSkill()
         {
             target.SetId(Guid.NewGuid());
-            target.RefreshTemplates(WorkloadFactory.CreateWorkload(target));
+			Assert.Throws<ArgumentException>(() => target.RefreshTemplates(WorkloadFactory.CreateWorkload(target)));
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifyCanRefreshTemplatesFromNewlyLoadedInstanceRequiresSameSkill()
         {
             target.SetId(Guid.NewGuid());
@@ -528,7 +528,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             ISkill clonedSkill = target.EntityClone();
             clonedSkill.SetId(Guid.NewGuid());
 
-            target.RefreshTemplates(clonedSkill);
+			Assert.Throws<ArgumentException>(() => target.RefreshTemplates(clonedSkill));
         }
 
         [Test]

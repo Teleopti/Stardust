@@ -44,10 +44,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyCategoryIsNotNull()
         {
-            target = new WorkShift(null);
+			Assert.Throws<ArgumentNullException>(() => target = new WorkShift(null));
         }
 
         /// <summary>
@@ -94,10 +93,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void CannotAddNothingButWorkShiftActivityLayer()
         {
-					target.LayerCollection.Add(new ActivityLayer(new Activity("fd"), new DateTimePeriod(2002, 1, 1, 2003, 1, 1)));
+			Assert.Throws<ArgumentException>(() => target.LayerCollection.Add(new ActivityLayer(new Activity("fd"), new DateTimePeriod(2002, 1, 1, 2003, 1, 1))));
         }
 
 

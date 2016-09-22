@@ -40,10 +40,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restriction
             Assert.AreEqual(6, day.Index);
         }
 
-        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test]
         public void NegativeDayProducesError()
         {
-            _availabilityRotation.FindAvailabilityDay(-1);
+			Assert.Throws<ArgumentOutOfRangeException>(() => _availabilityRotation.FindAvailabilityDay(-1));
         }
 
         [Test]
@@ -60,10 +60,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restriction
             Assert.AreEqual(7, _availabilityRotation.AvailabilityDays.Count);
         }
 
-        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test]
         public void CannotRemoveMoreDaysThanThereAre()
         {
-            _availabilityRotation.RemoveDays(15);
+			Assert.Throws<ArgumentOutOfRangeException>(() => _availabilityRotation.RemoveDays(15));
         }
 
         [Test]

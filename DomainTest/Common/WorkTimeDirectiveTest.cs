@@ -85,48 +85,36 @@ namespace Teleopti.Ccc.DomainTest.Common
         /// Verifies MaxTimePerWeek limit works.
         /// </summary>
         [Test]
-        [ExpectedException(typeof (ArgumentOutOfRangeException))]
         public void VerifyMaxTimePerWeekLimitWorks()
         {
-            WorkTimeDirective workTimeDirective =
-				new WorkTimeDirective(_minTimePerWeek, new TimeSpan(7 * 24, 1, 0), _nightlyRest, _weeklyRest);
-            Assert.AreEqual(workTimeDirective, workTimeDirective);
+            Assert.Throws<ArgumentOutOfRangeException>(() => new WorkTimeDirective(_minTimePerWeek, new TimeSpan(7 * 24, 1, 0), _nightlyRest, _weeklyRest));
         }
 
         /// <summary>
         /// Verifies MinTimePerWeek limit works.
         /// </summary>
         [Test]
-        [ExpectedException(typeof (ArgumentOutOfRangeException))]
         public void VerifyMinTimePerWeekLimitWorks()
         {
-            WorkTimeDirective workTimeDirective =
-				new WorkTimeDirective(new TimeSpan(7 * 24, 1, 0), _maxTimePerWeek, _nightlyRest, _weeklyRest);
-            Assert.AreEqual(workTimeDirective, workTimeDirective);
+				Assert.Throws<ArgumentOutOfRangeException>(() => new WorkTimeDirective(new TimeSpan(7 * 24, 1, 0), _maxTimePerWeek, _nightlyRest, _weeklyRest));
         }
 
         /// <summary>
         /// Verifies NightlyRest limit works.
         /// </summary>
         [Test]
-        [ExpectedException(typeof (ArgumentOutOfRangeException))]
         public void VerifyNightlyRestLimitWorks()
         {
-            WorkTimeDirective workTimeDirective =
-				new WorkTimeDirective(_minTimePerWeek, _maxTimePerWeek, new TimeSpan(24, 1, 0), _weeklyRest);
-            Assert.AreEqual(workTimeDirective, workTimeDirective);
+			Assert.Throws<ArgumentOutOfRangeException>(() => new WorkTimeDirective(_minTimePerWeek, _maxTimePerWeek, new TimeSpan(24, 1, 0), _weeklyRest));
         }
 
         /// <summary>
         /// Verifies WeeklyRest limit works.
         /// </summary>
         [Test]
-        [ExpectedException(typeof (ArgumentOutOfRangeException))]
         public void VerifyWeeklyRestLimitWorks()
         {
-            WorkTimeDirective workTimeDirective =
-				new WorkTimeDirective(_minTimePerWeek, _maxTimePerWeek, _nightlyRest, new TimeSpan(7 * 24, 1, 0));
-            Assert.AreEqual(workTimeDirective, workTimeDirective);
+			Assert.Throws<ArgumentOutOfRangeException>(() => new WorkTimeDirective(_minTimePerWeek, _maxTimePerWeek, _nightlyRest, new TimeSpan(7 * 24, 1, 0)));
         }
     }
 }

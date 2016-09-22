@@ -116,17 +116,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
             Assert.IsNotNull(_target);
         }
 
-        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test]
         public void VerifyDatesCannotBeEmpty()
         {
-            _target.FindSlots(_dates[0], _duration, _startTime, _endTime, _dictionary, _persons);
+			Assert.Throws<ArgumentOutOfRangeException>(() => _target.FindSlots(_dates[0], _duration, _startTime, _endTime, _dictionary, _persons));
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void VerifyDictionaryCannotBeNull()
         {
             _dates.Add(new DateOnly(2009, 02, 02));
-            _target.FindSlots(_dates[0], _duration, _startTime, _endTime, null, _persons);
+			Assert.Throws<ArgumentNullException>(() => _target.FindSlots(_dates[0], _duration, _startTime, _endTime, null, _persons));
         }
 
         [Test]

@@ -41,12 +41,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyPartIsNotNull()
         {
             _part = null;
-			ISignificantPartProvider provider = new SchedulePartSignificantPartDefinitions(_part, _hasContractDayOffDefinition);
-            Assert.IsNull(provider,"We will not touch this, but fxcop will");
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				ISignificantPartProvider provider = new SchedulePartSignificantPartDefinitions(_part, _hasContractDayOffDefinition);
+				Assert.IsNull(provider, "We will not touch this, but fxcop will");
+
+			});
         }
 
         [Test]

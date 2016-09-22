@@ -41,16 +41,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restriction
             Assert.AreEqual(6, day.Index);
         }
 
-        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test]
         public void NegativeDayProducesError()
         {
-            _rotation.FindRotationDay(-1);
+			Assert.Throws<ArgumentOutOfRangeException>(() => _rotation.FindRotationDay(-1));
         }
 
-        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test]
         public void CannotRemoveMoreDaysThanThereAre()
         {
-            _rotation.RemoveDays(50);
+			Assert.Throws<ArgumentOutOfRangeException>(() => _rotation.RemoveDays(50));
         }
 
         [Test]

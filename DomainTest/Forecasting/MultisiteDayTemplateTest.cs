@@ -22,13 +22,14 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [SetUp]
         public void Setup()
         {
-            _multisitePeriods = new List<ITemplateMultisitePeriod>();
-            _multisitePeriods.Add(
-                new TemplateMultisitePeriod(
-                    new DateTimePeriod(_dt.Add(TimeSpan.FromHours(4)), _dt.Add(TimeSpan.FromHours(19))),
-                    new Dictionary<IChildSkill, Percent>()));
+	        _multisitePeriods = new List<ITemplateMultisitePeriod>
+	        {
+		        new TemplateMultisitePeriod(
+			        new DateTimePeriod(_dt.Add(TimeSpan.FromHours(4)), _dt.Add(TimeSpan.FromHours(19))),
+				        new Dictionary<IChildSkill, Percent>())
+	        };
 
-            _name = "<MONDAY>";
+	        _name = "<MONDAY>";
 
             target = new MultisiteDayTemplate(_name, _multisitePeriods);
         }
@@ -80,10 +81,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         /// Created by: robink
         /// Created date: 2008-05-12
         /// </remarks>
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void VerifyCannotSetNullName()
         {
-            target.Name = null;
+			Assert.Throws<ArgumentNullException>(() => target.Name = null);
         }
 
         /// <summary>
@@ -130,7 +131,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         /// Created date: 2008-03-17
         /// </remarks>
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifySetMultisitePeriodCollectionWithoutOfRangeDateGivesException()
         {
             DateTime date = _dt.AddDays(5);
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                     new DateTimePeriod(date.Add(TimeSpan.FromHours(4)), date.Add(TimeSpan.FromHours(19))),
                     new Dictionary<IChildSkill, Percent>()));
 
-            target.SetMultisitePeriodCollection(multisitePeriods);
+			Assert.Throws<ArgumentOutOfRangeException>(() => target.SetMultisitePeriodCollection(multisitePeriods));
         }
 
         /// <summary>
@@ -228,22 +228,22 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.IsNotNull(discardedItem.Parent);
        }
 
-        [Test, ExpectedException(typeof(InvalidOperationException))]
+        [Test]
         public void VerifyCannotHaveMultiplePeriodsWithSameStartTime()
         {
             _multisitePeriods.Add(new TemplateMultisitePeriod(
                                     new DateTimePeriod(_dt.Add(TimeSpan.FromHours(4)), _dt.Add(TimeSpan.FromHours(17))),
                                     new Dictionary<IChildSkill, Percent>()));
-            target.SetMultisitePeriodCollection(_multisitePeriods);                                                                                                                                                                                                
+			Assert.Throws<InvalidOperationException>(() => target.SetMultisitePeriodCollection(_multisitePeriods));                                                                                                                                                                                                
         }
 
-        [Test, ExpectedException(typeof(InvalidOperationException))]
+        [Test]
         public void VerifyCannotHaveMultiplePeriodsWithSameStartTimeInConstructor()
         {
             _multisitePeriods.Add(new TemplateMultisitePeriod(
                                     new DateTimePeriod(_dt.Add(TimeSpan.FromHours(4)), _dt.Add(TimeSpan.FromHours(17))),
                                     new Dictionary<IChildSkill, Percent>()));
-            target = new MultisiteDayTemplate("XYZ", _multisitePeriods);
+			Assert.Throws<InvalidOperationException>(() => target = new MultisiteDayTemplate("XYZ", _multisitePeriods));
         }
 
         [Test]

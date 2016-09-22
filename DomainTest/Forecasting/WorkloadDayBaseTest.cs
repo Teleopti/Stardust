@@ -59,11 +59,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		}
 
 		[Test]
-		[ExpectedException(typeof(InvalidOperationException))]
 		public void VerifyTotalTasksCannotBeSetIfClosed()
 		{
 			_workloadDayBase.Close();
-			_workloadDayBase.Tasks = 112;
+			Assert.Throws<InvalidOperationException>(() => _workloadDayBase.Tasks = 112);
 		}
 
 		[Test]
@@ -132,11 +131,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			Assert.IsInstanceOf<ReadOnlyCollection<TimePeriod>>(_workloadDayBase.OpenHourList);
 		}
 
-		[Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+		[Test]
 		public void VerifySetOpenHourListOutsideMidnightBreak()
 		{
 			_skill.MidnightBreakOffset = TimeSpan.FromHours(8);
-			_workloadDayBase.ChangeOpenHours(new List<TimePeriod> { new TimePeriod(2, 0, 8, 0) });
+			Assert.Throws<ArgumentOutOfRangeException>(() => _workloadDayBase.ChangeOpenHours(new List<TimePeriod> { new TimePeriod(2, 0, 8, 0) }));
 		}
 
 		[Test]
@@ -518,35 +517,31 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void VerifyNullAsWorkloadGivesException()
 		{
 			_workloadDayBase = new TestWorkloadDayBase();
-			_workloadDayBase.Create(_workloadDayBase.CurrentDate, null, _openHours);
+			Assert.Throws<ArgumentNullException>(() => _workloadDayBase.Create(_workloadDayBase.CurrentDate, null, _openHours));
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void VerifyNullAsScenarioGivesException()
 		{
 			_workloadDayBase = new TestWorkloadDayBase();
-			_workloadDayBase.Create(_workloadDayBase.CurrentDate, null, _openHours);
+			Assert.Throws<ArgumentNullException>(() => _workloadDayBase.Create(_workloadDayBase.CurrentDate, null, _openHours));
 		}
 
 		[Test]
-		[ExpectedException(typeof(InvalidOperationException))]
 		public void VerifyCannotSetAverageTaskTimeIfClosed()
 		{
 			_workloadDayBase.Close();
-			_workloadDayBase.AverageTaskTime = TimeSpan.FromSeconds(5);
+			Assert.Throws<InvalidOperationException>(() => _workloadDayBase.AverageTaskTime = TimeSpan.FromSeconds(5));
 		}
 
 		[Test]
-		[ExpectedException(typeof(InvalidOperationException))]
 		public void VerifyCannotSetAverageAfterTaskTimeIfClosed()
 		{
 			_workloadDayBase.Close();
-			_workloadDayBase.AverageAfterTaskTime = TimeSpan.FromSeconds(5);
+			Assert.Throws<InvalidOperationException>(() => _workloadDayBase.AverageAfterTaskTime = TimeSpan.FromSeconds(5));
 		}
 
 		[Test]
@@ -879,20 +874,20 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			Assert.AreEqual(1, _workloadDayBase.TaskPeriodList.Count);
 		}
 
-		[Test, ExpectedException(typeof(ArgumentException))]
+		[Test]
 		public void ShouldNotMergeTemplateTaskPeriodFromOtherParent()
 		{
 			_workload.TemplateWeekCollection[0].MakeOpen24Hours();
 			Assert.AreNotEqual(0, _workload.TemplateWeekCollection[0].TaskPeriodList.Count);
-			_workloadDayBase.MergeTemplateTaskPeriods(new List<ITemplateTaskPeriod>(_workload.TemplateWeekCollection[0].TaskPeriodList));
+			Assert.Throws<ArgumentException>(() => _workloadDayBase.MergeTemplateTaskPeriods(new List<ITemplateTaskPeriod>(_workload.TemplateWeekCollection[0].TaskPeriodList)));
 		}
 
-		[Test, ExpectedException(typeof(ArgumentException))]
+		[Test]
 		public void ShouldNotSplitTemplateTaskPeriodFromOtherParent()
 		{
 			_workload.TemplateWeekCollection[0].MakeOpen24Hours();
 			Assert.AreNotEqual(0, _workload.TemplateWeekCollection[0].TaskPeriodList.Count);
-			_workloadDayBase.SplitTemplateTaskPeriods(new List<ITemplateTaskPeriod>(_workload.TemplateWeekCollection[0].TaskPeriodList));
+			Assert.Throws<ArgumentException>(() => _workloadDayBase.SplitTemplateTaskPeriods(new List<ITemplateTaskPeriod>(_workload.TemplateWeekCollection[0].TaskPeriodList)));
 		}
 
 		[Test]
@@ -1105,43 +1100,38 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		}
 
 		[Test]
-		[ExpectedException(typeof(InvalidOperationException))]
 		public void VerifySetCampaignTasksWhenClosedGivesException()
 		{
 			_workloadDayBase.Close();
-			_workloadDayBase.CampaignTasks = new Percent();
+			Assert.Throws<InvalidOperationException>(() => _workloadDayBase.CampaignTasks = new Percent());
 		}
 
 		[Test]
-		[ExpectedException(typeof(InvalidOperationException))]
 		public void VerifySetCampaignTaskTimeWhenClosedGivesException()
 		{
 			_workloadDayBase.Close();
-			_workloadDayBase.CampaignTaskTime = new Percent();
+			Assert.Throws<InvalidOperationException>(() => _workloadDayBase.CampaignTaskTime = new Percent());
 		}
 
 		[Test]
-		[ExpectedException(typeof(InvalidOperationException))]
 		public void VerifySetCampaignAfterTaskTimeWhenClosedGivesException()
 		{
 			_workloadDayBase.Close();
-			_workloadDayBase.CampaignAfterTaskTime = new Percent();
+			Assert.Throws<InvalidOperationException>(() => _workloadDayBase.CampaignAfterTaskTime = new Percent());
 		}
 
 		[Test]
-		[ExpectedException(typeof(InvalidOperationException))]
 		public void VerifySetTasksWhenClosedGivesException()
 		{
 			_workloadDayBase.Close();
-			_workloadDayBase.Tasks = 1d;
+			Assert.Throws<InvalidOperationException>(() => _workloadDayBase.Tasks = 1d);
 		}
 
 		[Test]
-		[ExpectedException(typeof(InvalidOperationException))]
 		public void ShouldGiveExceptionWhenSettingOverrideTasksOnClosedDay()
 		{
 			_workloadDayBase.Close();
-			_workloadDayBase.SetOverrideTasks(1d, null);
+			Assert.Throws<InvalidOperationException>(() => _workloadDayBase.SetOverrideTasks(1d, null));
 		}
 
 		[Test]

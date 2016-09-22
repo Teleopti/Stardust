@@ -63,16 +63,16 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void VerifyPersonNotNull()
         {
-            _target = new PersonAvailability(null, _availability, _startDate);
+	        Assert.Throws<ArgumentNullException>(() => _target = new PersonAvailability(null, _availability, _startDate));
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void VerifyRotationNotNull()
         {
-            _target = new PersonAvailability(_person, null, _startDate);
+			Assert.Throws<ArgumentNullException>(() => _target = new PersonAvailability(_person, null, _startDate));
         }
 
         //[Test]
@@ -94,11 +94,11 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
             Assert.AreEqual(expectedavailabilityDay, availabilityDay);
         }
 
-        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test]
         public void VerifyDateIsNotLargerThanStartDate()
         {
             DateOnly date = new DateOnly(2008, 7, 15);
-            _target.GetAvailabilityDay(date);
+			Assert.Throws<ArgumentOutOfRangeException>(() => _target.GetAvailabilityDay(date));
         }
 
         [Test]

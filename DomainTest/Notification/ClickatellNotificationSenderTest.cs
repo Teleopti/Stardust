@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			_target.SendNotification(smsMessage, new NotificationHeader { MobileNumber = "46709218108" });
 		}
 
-		[Test, ExpectedException(typeof(SendNotificationException))]
+		[Test]
 		public void ShouldSearchForSuccess()
 		{
 			const string xmlWithSuccessCheck = @"<?xml version='1.0' encoding='utf-8' ?>
@@ -232,11 +232,11 @@ namespace Teleopti.Ccc.DomainTest.Notification
 						.Return(writer.BaseStream);
 
 				_target.SetConfigReader(_notificationConfigReader);
-				_target.SendNotification(smsMessage, new NotificationHeader { MobileNumber = "46709218108" });
+				Assert.Throws<SendNotificationException>(() => _target.SendNotification(smsMessage, new NotificationHeader { MobileNumber = "46709218108" }));
 			}
 		}
 
-		[Test, ExpectedException(typeof(SendNotificationException))]
+		[Test]
 		public void ShouldSearchForFailure()
 		{
 			const string xmlWithSuccessCheck = @"<?xml version='1.0' encoding='utf-8' ?>
@@ -279,7 +279,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 						.Return(writer.BaseStream);
 
 				_target.SetConfigReader(_notificationConfigReader);
-				_target.SendNotification(smsMessage, new NotificationHeader { MobileNumber = "46709218108" });
+				Assert.Throws<SendNotificationException>(() => _target.SendNotification(smsMessage, new NotificationHeader { MobileNumber = "46709218108" }));
 			}
 		}
 

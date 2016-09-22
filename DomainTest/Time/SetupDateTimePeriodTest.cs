@@ -44,10 +44,10 @@ namespace Teleopti.Ccc.DomainTest.Time
             Assert.AreEqual(scheduleDay2.Period.EndDateTime.Subtract(TimeSpan.FromMinutes(1)), target.Period.EndDateTime, "Make sure its  23:59 on the last schedule day.");
         }
 
-        [Test, ExpectedException(typeof(InvalidOperationException))]
+        [Test]
         public void ShouldThrowExceptionWhenNoPeriodAvailable()
         {
-            target = new SetupDateTimePeriodToSelectedSchedules(new List<IScheduleDay>());
+            Assert.Throws<InvalidOperationException>(() => target = new SetupDateTimePeriodToSelectedSchedules(new List<IScheduleDay>()));
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]

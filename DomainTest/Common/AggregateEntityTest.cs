@@ -75,7 +75,6 @@ namespace Teleopti.Ccc.DomainTest.Common
         /// Verifies that the parent is not null.
         /// </summary>
         [Test]
-        [ExpectedException(typeof (AggregateException))]
         public void VerifyParentIsNotNull()
         {
             using (mocks.Record())
@@ -84,17 +83,19 @@ namespace Teleopti.Ccc.DomainTest.Common
                     .Call(target.Parent)
                     .Return(null);
             }
-            using (mocks.Playback())
-            {
-                ((IAggregateEntity) target).Root();
-            }
+	        Assert.Throws<AggregateException>(() =>
+	        {
+				using (mocks.Playback())
+				{
+					((IAggregateEntity) target).Root();
+				}
+	        });
         }
 
         /// <summary>
         /// Verifies that the aggregate entity must have aggregate entity as parent.
         /// </summary>
         [Test]
-        [ExpectedException(typeof (AggregateException))]
         public void VerifyAggregateEntityMustHaveAggregateEntityAsParent()
         {
             IAggregateEntity level1 = mocks.StrictMock<IAggregateEntity>();
@@ -108,10 +109,14 @@ namespace Teleopti.Ccc.DomainTest.Common
                     .Call(level1.Parent)
                     .Return(level2);
             }
-            using (mocks.Playback())
-            {
-                ((IAggregateEntity) target).Root();
-            }
+	        Assert.Throws<AggregateException>(() =>
+	        {
+				using (mocks.Playback())
+				{
+					((IAggregateEntity)target).Root();
+				}
+			});
+            
         }
     }
 }

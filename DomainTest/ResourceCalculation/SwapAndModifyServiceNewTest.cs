@@ -75,57 +75,57 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_mock.BackToRecord(_dictionary);
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowExceptionWhenSwapServiceIsNull()
 		{
-			_swapAndModifyServiceNew = new SwapAndModifyServiceNew(null,_scheduleDayChangeCallback, new PersistableScheduleDataPermissionChecker());	
+			Assert.Throws<ArgumentNullException>(() => _swapAndModifyServiceNew = new SwapAndModifyServiceNew(null,_scheduleDayChangeCallback, new PersistableScheduleDataPermissionChecker()));	
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowExceptionWhenPersonOneIsNull()
 		{
-            _swapAndModifyServiceNew.Swap(null, _person2, _dates, _lockedDates, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance));
+			Assert.Throws<ArgumentNullException>(() => _swapAndModifyServiceNew.Swap(null, _person2, _dates, _lockedDates, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance)));
 		}
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowExceptionWhenPersonTwoIsNull()
 		{
-            _swapAndModifyServiceNew.Swap(_person1, null, _dates, _lockedDates, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance));
+			Assert.Throws<ArgumentNullException>(() => _swapAndModifyServiceNew.Swap(_person1, null, _dates, _lockedDates, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance)));
 		}
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowExceptionWhenDatesIsNull()
 		{
-            _swapAndModifyServiceNew.Swap(_person1, _person2, null, _lockedDates, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance));
+			Assert.Throws<ArgumentNullException>(() => _swapAndModifyServiceNew.Swap(_person1, _person2, null, _lockedDates, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance)));
 		}
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowExceptionWhenDictionaryIsNull()
 		{
-            _swapAndModifyServiceNew.Swap(_person1, _person2, _dates, _lockedDates, null, null, new ScheduleTagSetter(NullScheduleTag.Instance));
+			Assert.Throws<ArgumentNullException>(() => _swapAndModifyServiceNew.Swap(_person1, _person2, _dates, _lockedDates, null, null, new ScheduleTagSetter(NullScheduleTag.Instance)));
 		}
-		[Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+		[Test]
 		public void ShouldThrowExceptionWhenNoDates()
 		{
-            _swapAndModifyServiceNew.Swap(_person1, _person2, _dates, _lockedDates, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance));
+			Assert.Throws<ArgumentOutOfRangeException>(() => _swapAndModifyServiceNew.Swap(_person1, _person2, _dates, _lockedDates, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance)));
 		}
-		[Test, ExpectedException(typeof(ArgumentException))]
+		[Test]
 		public void ShouldThrowExceptionWhenPersonOneAndPersonTwoIsSame()
 		{
 			_dates = new List<DateOnly> { new DateOnly(2011, 1, 1) };
-            _swapAndModifyServiceNew.Swap(_person1, _person1, _dates, _lockedDates, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance));
+			Assert.Throws<ArgumentException>(() => _swapAndModifyServiceNew.Swap(_person1, _person1, _dates, _lockedDates, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance)));
 		}
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowExceptionWhenLockedDatesIsNull()
 		{
 			_dates = new List<DateOnly> { new DateOnly(2011, 1, 1) };
-            _swapAndModifyServiceNew.Swap(_person1, _person2, _dates, null, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance));
+			Assert.Throws<ArgumentNullException>(() => _swapAndModifyServiceNew.Swap(_person1, _person2, _dates, null, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance)));
 		}
-		[Test, ExpectedException(typeof(PermissionException))]
+		[Test]
 		public void ShouldThrowExceptionWhenNoPermissionForModifyingPersonAss()
 		{
 			_dates = new List<DateOnly> {new DateOnly(2011, 1, 1)};
 			var authorizer = new NoPermission();
 			using (new CustomAuthorizationContext(authorizer))
 			{
-				_swapAndModifyServiceNew.Swap(_person1, _person2, _dates, _lockedDates, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance));
+				Assert.Throws<PermissionException>(() => _swapAndModifyServiceNew.Swap(_person1, _person2, _dates, _lockedDates, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance)));
 			}
 		}
 

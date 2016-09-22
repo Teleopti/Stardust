@@ -101,7 +101,6 @@ namespace Teleopti.Ccc.DomainTest.Common
         }
 
         [Test]
-        [ExpectedException(typeof(PermissionException))]
         public void CannotSetDateIfNoPermission()
         {
             MockRepository mocks = new MockRepository();
@@ -111,13 +110,16 @@ namespace Teleopti.Ccc.DomainTest.Common
                 Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SetWriteProtection))
                     .Return(false);
             }
-            using(mocks.Playback())
-            {
-                using(new CustomAuthorizationContext(authorization))
-                {
-                    _target.PersonWriteProtectedDate = new DateOnly(2000,1,1);
-                }
-            }
+	        Assert.Throws<PermissionException>(() =>
+	        {
+				using (mocks.Playback())
+				{
+					using (new CustomAuthorizationContext(authorization))
+					{
+						_target.PersonWriteProtectedDate = new DateOnly(2000, 1, 1);
+					}
+				}
+			});
         }
     }
 }

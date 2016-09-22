@@ -64,15 +64,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyConstructorExceptionNullSchedulePart()
         {
-            _target = new SchedulePartExtractor(null);
-            Assert.IsNotNull(_target);
+			Assert.Throws<ArgumentNullException>(() => _target = new SchedulePartExtractor(null));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void VerifyConstructorExceptionNullPerson()
         {
             IScheduleDay schedulePart = _mockRepository.StrictMock<IScheduleDay>();
@@ -82,8 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             _mockRepository.ReplayAll();
 
-            _target = new SchedulePartExtractor(schedulePart);
-            Assert.IsNotNull(_target);
+			Assert.Throws<ArgumentException>(() => _target = new SchedulePartExtractor(schedulePart));
 			
 			_mockRepository.VerifyAll();
         }

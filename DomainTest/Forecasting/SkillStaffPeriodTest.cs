@@ -1772,13 +1772,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void VerifyIExistsInList()
         {
-            _target.CalculateStaff(new List<ISkillStaffPeriod>());
+			Assert.Throws<ArgumentException>(() => _target.CalculateStaff(new List<ISkillStaffPeriod>()));
         }
-
-
 
         [Test]
         public void VerifyIncomingAndDistributedDifference()
@@ -2025,20 +2022,20 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(MinMaxStaffBroken.BothBroken, agg.AggregatedMinMaxStaffAlarm);
         }
 
-        [Test, ExpectedException(typeof(InvalidCastException))]
+        [Test]
         public void VerifyCombineAggregatedSkillStaffPeriodThrowsExceptionIfInstanceIsNotAggregate()
         {
             ISkillStaffPeriod target2 = new SkillStaffPeriod(_tp, _task, _sa, _staffingCalculatorService);
             IAggregateSkillStaffPeriod aggregateSkillStaffPeriod2 = (IAggregateSkillStaffPeriod)target2;
-            aggregateSkillStaffPeriod2.CombineAggregatedSkillStaffPeriod(_aggregateSkillStaffPeriod);
+			Assert.Throws<InvalidCastException>(() => aggregateSkillStaffPeriod2.CombineAggregatedSkillStaffPeriod(_aggregateSkillStaffPeriod));
         }
 
-        [Test, ExpectedException(typeof(InvalidCastException))]
+        [Test]
         public void VerifyCombineAggregatedSkillStaffPeriodThrowsExceptionIfParameterIsNotAggregate()
         {
             ISkillStaffPeriod target2 = new SkillStaffPeriod(_tp, _task, _sa, _staffingCalculatorService);
             IAggregateSkillStaffPeriod aggregateSkillStaffPeriod2 = (IAggregateSkillStaffPeriod)target2;
-            _aggregateSkillStaffPeriod.CombineAggregatedSkillStaffPeriod(aggregateSkillStaffPeriod2);
+			Assert.Throws<InvalidCastException>(() => _aggregateSkillStaffPeriod.CombineAggregatedSkillStaffPeriod(aggregateSkillStaffPeriod2));
         }
 
         private static void calculateStaff(List<ISkillStaffPeriod> list)
@@ -2129,7 +2126,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             return periodlist;
         }
 
-        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test]
         public void VerifySplitSkillStaffPeriodWithLowerPeriodLength()
         {
             // try to split 30 minutes in 60, can't be done
@@ -2143,10 +2140,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                                                                   new Percent(2)),
                                              _staffingCalculatorService);
 
-            stPeriod1.Split(new TimeSpan(1, 0, 0));
+			Assert.Throws<ArgumentOutOfRangeException>(() => stPeriod1.Split(new TimeSpan(1, 0, 0)));
         }
 
-        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test]
         public void VerifySplitSkillStaffPeriodWithUnevenPeriodLengths()
         {
             // try to split 35 minutes in 15 can't be done
@@ -2160,7 +2157,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                                                                   new Percent(2)),
                                              _staffingCalculatorService);
 
-            stPeriod1.Split(new TimeSpan(0, 15, 0));
+			Assert.Throws<ArgumentOutOfRangeException>(() => stPeriod1.Split(new TimeSpan(0, 15, 0)));
         }
 
         [Test, Ignore("Payload have no longer a setter")]

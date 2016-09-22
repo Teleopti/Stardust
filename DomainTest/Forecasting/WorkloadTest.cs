@@ -40,10 +40,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.IsNotNull(_target);
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifyNameCannotBeTooLong()
         {
-            _target.Name = string.Empty.PadRight(51);
+			Assert.Throws<ArgumentException>(() => _target.Name = string.Empty.PadRight(51));
         }
 
         /// <summary>
@@ -158,11 +158,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(workloadDay2, _target.GetTemplateAt(TemplateTarget.Workload, (int)DayOfWeek.Friday));
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void CannotSetTemplateFromOtherWorkload()
         {
             IWorkloadDayTemplate workloadDay2 = new WorkloadDayTemplate();
-            _target.SetTemplate(DayOfWeek.Friday, workloadDay2);
+			Assert.Throws<ArgumentException>(() => _target.SetTemplate(DayOfWeek.Friday, workloadDay2));
         }
 
         [Test]
@@ -283,10 +283,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         /// Created date: 2008-02-14
         /// </remarks>
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void VerifyWorkloadCannotHaveEmptyName()
         {
-            _target.Name = string.Empty;
+			Assert.Throws<ArgumentException>(() => _target.Name = string.Empty);
         }
 
         [Test]
@@ -420,14 +419,14 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.IsTrue(_target.TemplateWeekCollection.Values.Contains(workloadDayTemplate2));
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifyCanRefreshTemplatesFromNewlyLoadedInstanceRequiresSkill()
         {
             _target.SetId(Guid.NewGuid());
-            _target.RefreshTemplates(_skill);
+			Assert.Throws<ArgumentException>(() => _target.RefreshTemplates(_skill));
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifyCanRefreshTemplatesFromNewlyLoadedInstanceRequiresSameSkill()
         {
             _target.SetId(Guid.NewGuid());
@@ -435,7 +434,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             IWorkload clonedWorkload = _target.EntityClone();
             clonedWorkload.SetId(Guid.NewGuid());
 
-            _target.RefreshTemplates(clonedWorkload);
+			Assert.Throws<ArgumentException>(() => _target.RefreshTemplates(clonedWorkload));
         }
 
         //[Test]

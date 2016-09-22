@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SkillDay
 			_analyticsForecastWorkloadRepository.AnalyticsForcastWorkloads.Should().Be.Empty();
 		}
 
-		[Test, ExpectedException(typeof(ScenarioMissingInAnalyticsException))]
+		[Test]
 		public void ShouldThrowWhenScenarioMissingFromAnalytics()
 		{
 			var skill = SkillFactory.CreateSkill("TestSkill");
@@ -75,14 +75,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SkillDay
 			skillDay.SetId(Guid.NewGuid());
 			_skillDayRepository.Add(skillDay);
 
-			_target.Handle(new SkillDayChangedEvent
+			Assert.Throws<ScenarioMissingInAnalyticsException>(() => _target.Handle(new SkillDayChangedEvent
 			{
 				SkillDayId = skillDay.Id.GetValueOrDefault(),
 				LogOnBusinessUnitId = Guid.NewGuid()
-			});
+			}));
 		}
 
-		[Test, ExpectedException(typeof(WorkloadMissingInAnalyticsException))]
+		[Test]
 		public void ShouldThrowWhenWorkloadMissingFromAnalytics()
 		{
 			var skill = SkillFactory.CreateSkill("TestSkill");
@@ -96,14 +96,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SkillDay
 			_skillDayRepository.Add(skillDay);
 			_analyticsScenarioRepository.AddScenario(AnalyticsScenarioFactory.CreateAnalyticsScenario(scenario));
 
-			_target.Handle(new SkillDayChangedEvent
+			Assert.Throws<WorkloadMissingInAnalyticsException>(() => _target.Handle(new SkillDayChangedEvent
 			{
 				SkillDayId = skillDay.Id.GetValueOrDefault(),
 				LogOnBusinessUnitId = Guid.NewGuid()
-			});
+			}));
 		}
 
-		[Test, ExpectedException(typeof(DateMissingInAnalyticsException))]
+		[Test]
 		public void ShouldThrowWhenDateMissingFromAnalytics()
 		{
 			_analyticsDateRepository.Clear();
@@ -120,11 +120,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SkillDay
 			_skillDayRepository.Add(skillDay);
 			_analyticsScenarioRepository.AddScenario(AnalyticsScenarioFactory.CreateAnalyticsScenario(scenario));
 
-			_target.Handle(new SkillDayChangedEvent
+			Assert.Throws<DateMissingInAnalyticsException>(() => _target.Handle(new SkillDayChangedEvent
 			{
 				SkillDayId = skillDay.Id.GetValueOrDefault(),
 				LogOnBusinessUnitId = Guid.NewGuid()
-			});
+			}));
 		}
 
 		[Test]

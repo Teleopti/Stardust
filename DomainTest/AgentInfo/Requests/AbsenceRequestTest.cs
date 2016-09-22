@@ -50,16 +50,16 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             Assert.IsNotNull(_target);
         }
 
-        [Test, ExpectedException(typeof(NotImplementedException))]
+        [Test]
         public void VerifyAcceptNotImplemented()
         {
-            _target.Accept(null, null, null);
+            Assert.Throws<NotImplementedException>(() => _target.Accept(null, null, null));
         }
 
-        [Test, ExpectedException(typeof(NotImplementedException))]
+        [Test]
         public void VerifyReferNotImplemented()
         {
-            _target.Refer(null);
+			Assert.Throws<NotImplementedException>(() => _target.Refer(null));
         }
 
         [Test]
@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
             IList<IBusinessRuleResponse> brokenRules = personRequest.Approve(requestApprovalService, authorization);
             Assert.AreEqual(0, brokenRules.Count);
-            Assert.IsNotNullOrEmpty(target.TextForNotification);
+			Assert.That(target.TextForNotification, Is.Not.Null.Or.Empty);
             mocks.VerifyAll();
         }
 

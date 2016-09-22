@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Import
                 UtcDateTimeTo = utcDateTimeTo
             };
 
-            Assert.IsNotNullOrEmpty(forecastRow.ToString());
-        }
+			Assert.That(forecastRow.ToString(), Is.Not.Null.Or.Empty);
+		}
     }
 }

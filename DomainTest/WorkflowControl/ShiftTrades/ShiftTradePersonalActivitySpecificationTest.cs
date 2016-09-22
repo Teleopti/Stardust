@@ -142,10 +142,10 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			}
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowExceptionWhenInParameterIsNull()
 		{
-			_target.IsSatisfiedBy(null);
+			Assert.Throws<ArgumentNullException>(() => _target.IsSatisfiedBy(null));
 		}
 	}
 }

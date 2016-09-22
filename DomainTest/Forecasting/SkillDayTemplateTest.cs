@@ -85,10 +85,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         /// Created by: robink
         /// Created date: 2008-05-12
         /// </remarks>
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void VerifyCannotSetNullName()
         {
-            target.Name = null;
+			Assert.Throws<ArgumentNullException>(() => target.Name = null);
         }
 
         /// <summary>
@@ -141,7 +141,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         /// Created date: 2008-03-17
         /// </remarks>
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifySetSkillDataPeriodCollectionWithoutOfRangeDateGivesException()
         {
             DateTime date = _dt.AddDays(5);
@@ -156,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                                 new SkillPersonData(),
                                 new DateTimePeriod(date.Add(TimeSpan.FromHours(4)), date.Add(TimeSpan.FromHours(19)))));
 
-            target.SetSkillDataPeriodCollection(skillDataPeriods);
+			Assert.Throws<ArgumentOutOfRangeException>(() => target.SetSkillDataPeriodCollection(skillDataPeriods));
         }
 
         /// <summary>
@@ -268,7 +267,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(new Percent(0.5), target.TemplateSkillDataPeriodCollection[1].ServiceLevelPercent);
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifyOnlyMergePeriodsWithTheGivenParent()
         {
             var dummyPeriod = new TemplateSkillDataPeriod(
@@ -281,10 +280,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             //Merge
             var listToMerge = new List<ITemplateSkillDataPeriod> { dummyPeriod };
-            target.MergeTemplateSkillDataPeriods(listToMerge);
+			Assert.Throws<ArgumentException>(() => target.MergeTemplateSkillDataPeriods(listToMerge));
         }
 
-        [Test, ExpectedException(typeof(InvalidOperationException))]
+        [Test]
         public void VerifyConsistencyIsCheckedAfterSettingDataPeriods()
         {
             var dummyPeriod1 = new TemplateSkillDataPeriod(
@@ -302,10 +301,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
 
             var listToSet = new List<ITemplateSkillDataPeriod> { dummyPeriod1, dummyPeriod2 };
-            target.SetSkillDataPeriodCollection(listToSet);
+			Assert.Throws<InvalidOperationException>(() => target.SetSkillDataPeriodCollection(listToSet));
         }
 
-        [Test, ExpectedException(typeof(InvalidOperationException))]
+        [Test]
         public void ShouldNotBeAbleToAddDuplicateSkillDataPeriods()
         {
             var noDuplicatePeriod = new TemplateSkillDataPeriod(
@@ -330,10 +329,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
 
             var listToSet = new List<ITemplateSkillDataPeriod> { noDuplicatePeriod, duplicatePeriod1, duplicatePeriod2 };
-            target.SetSkillDataPeriodCollection(listToSet);
+			Assert.Throws<InvalidOperationException>(() => target.SetSkillDataPeriodCollection(listToSet));
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifyOnlySplitPeriodsWithTheGivenParent()
         {
             var dummyPeriod = new TemplateSkillDataPeriod(
@@ -346,7 +345,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             //Split
             var listToSplit = new List<ITemplateSkillDataPeriod> { dummyPeriod };
-            target.SplitTemplateSkillDataPeriods(listToSplit);
+			Assert.Throws<ArgumentException>(() => target.SplitTemplateSkillDataPeriods(listToSplit));
         }
 
         [Test]

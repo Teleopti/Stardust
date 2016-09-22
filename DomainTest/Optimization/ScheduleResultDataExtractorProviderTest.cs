@@ -24,10 +24,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _target = new ScheduleResultDataExtractorProvider(new PersonalSkillsProvider());
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowIfMatrixIsNull()
         {
-			_target.CreatePersonalSkillDataExtractor(null, _advancedPreferences);
+			Assert.Throws<ArgumentNullException>(() => _target.CreatePersonalSkillDataExtractor(null, _advancedPreferences));
         }
 
         [Test]

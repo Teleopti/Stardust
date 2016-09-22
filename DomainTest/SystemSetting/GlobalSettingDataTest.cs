@@ -39,12 +39,14 @@ namespace Teleopti.Ccc.DomainTest.SystemSetting
         [Test]
         public void VerifyDeserialize()
         {
-            SettingForTest1 original = new SettingForTest1();
-            original.Prop1 = "hej";
-            original.Prop2 = new List<int> { 1, 2, 3 };
-            target.SetValue(original);
-            SettingForTest1 newDefault = new SettingForTest1();
-            SettingForTest1 returned = target.GetValue(newDefault);
+	        var original = new SettingForTest1
+	        {
+		        Prop1 = "hej",
+		        Prop2 = new List<int> {1, 2, 3}
+	        };
+	        target.SetValue(original);
+            var newDefault = new SettingForTest1();
+            var returned = target.GetValue(newDefault);
             Assert.AreEqual("hej", returned.Prop1);
             Assert.AreEqual(3, returned.Prop2.Count);
             Assert.AreSame(target, ((ISettingValue)returned).BelongsTo);
@@ -53,14 +55,14 @@ namespace Teleopti.Ccc.DomainTest.SystemSetting
         [Test]
         public void VerifyDefaultIsReturnedIfFailToDeserialize()
         {
-            SettingForTest1 original = new SettingForTest1();
+            var original = new SettingForTest1();
             original.Prop1 = "hej";
             original.Prop2 = new List<int> { 1, 2, 3 };
             target.SetValue(original);
-            SettingForTest2 newDefault = new SettingForTest2();
+            var newDefault = new SettingForTest2();
             newDefault.Prop1 = "hej då";
             newDefault.Prop2 = new List<int> { 1 };
-            SettingForTest2 returned = target.GetValue(newDefault);
+            var returned = target.GetValue(newDefault);
             Assert.AreEqual("hej då", returned.Prop1);
             Assert.AreEqual(1, returned.Prop2.Count);
             Assert.AreSame(target, ((ISettingValue)returned).BelongsTo);
@@ -69,30 +71,33 @@ namespace Teleopti.Ccc.DomainTest.SystemSetting
         [Test]
         public void VerifyDefaultIsReturnedIfNotInitialized()
         {
-            SettingForTest2 newDefault = new SettingForTest2();
-            newDefault.Prop1 = "hej då";
-            newDefault.Prop2 = new List<int> { 1 };
-            SettingForTest2 returned = target.GetValue(newDefault);
+	        var newDefault = new SettingForTest2
+	        {
+		        Prop1 = "hej då",
+		        Prop2 = new List<int> {1}
+	        };
+	        var returned = target.GetValue(newDefault);
             Assert.AreEqual("hej då", returned.Prop1);
             Assert.AreEqual(1, returned.Prop2.Count);
             Assert.AreSame(target, ((ISettingValue)returned).BelongsTo);
         }
 
-        [Test, ExpectedException(typeof(SerializationException))]
+        [Test]
         public void VerifySerializationExceptionIfSerializationFails()
         {
-            NotValid newDefault = new NotValid();
-            newDefault.Prop1 = "Hallo";
-            target.GetValue(newDefault);
+	        var newDefault = new NotValid {Prop1 = "Hallo"};
+	        Assert.Throws<SerializationException>(() => target.GetValue(newDefault));
         }
 
         [Test]
         public void VerifyReturnedDefaultValueIsNewInstance()
         {
-            SettingForTest2 newDefault = new SettingForTest2();
-            newDefault.Prop1 = "hej då";
-            newDefault.Prop2 = new List<int> { 1 };
-            SettingForTest2 returned = target.GetValue(newDefault);
+	        var newDefault = new SettingForTest2
+	        {
+		        Prop1 = "hej då",
+		        Prop2 = new List<int> {1}
+	        };
+	        var returned = target.GetValue(newDefault);
             Assert.AreNotSame(newDefault, returned);
             Assert.AreSame(target, ((ISettingValue)returned).BelongsTo);
         }
@@ -100,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.SystemSetting
         [Test]
         public void VerifyBusinessUnit()
         {
-            exposingBu s = new exposingBu();
+            var s = new exposingBu();
             Assert.IsNotNull(s.BusinessUnit);
 
             var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);

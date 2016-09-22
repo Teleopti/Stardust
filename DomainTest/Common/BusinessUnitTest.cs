@@ -50,21 +50,18 @@ namespace Teleopti.Ccc.DomainTest.Common
         /// Make sure the constructor does not take null as argument
         /// </summary>
         [Test]
-        [ExpectedException(typeof (ArgumentException))]
         public void CannotSetNameToNull()
         {
-            _target = BusinessUnitFactory.CreateSimpleBusinessUnit(null);
+           Assert.Throws<ArgumentException>(() => _target = BusinessUnitFactory.CreateSimpleBusinessUnit(null));
         }
 
         /// <summary>
         /// Make sure the constructor does not take empty string as argument
         /// </summary>
         [Test]
-        [ExpectedException(typeof (ArgumentException))]
         public void CannotSetEmptyName()
         {
-            String myName = String.Empty;
-            _target = BusinessUnitFactory.CreateSimpleBusinessUnit(myName);
+			Assert.Throws<ArgumentException>(() => _target = BusinessUnitFactory.CreateSimpleBusinessUnit(string.Empty));
         }
 
         /// <summary>
@@ -129,17 +126,15 @@ namespace Teleopti.Ccc.DomainTest.Common
         /// Null units are not allowed.
         /// </summary>
         [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
         public void NullUnitsAreNotAllowed()
         {
-            _target.AddSite(null);
+            Assert.Throws<ArgumentNullException>(() => _target.AddSite(null));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void NullSitesAreNotAllowedToRemove()
         {
-            _target.RemoveSite(null);
+			Assert.Throws<ArgumentNullException>(() => _target.RemoveSite(null));
         }
 
         [Test]

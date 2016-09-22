@@ -110,10 +110,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         /// Created date: 2008-01-04
         /// </remarks>
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyNullAsSkillGivesException()
         {
-            _skillDay = new SkillDay(_dt, null, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(_dt.Date, _skill), _skillDataPeriods);
+			Assert.Throws<ArgumentNullException>(() => _skillDay = new SkillDay(_dt, null, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(_dt.Date, _skill), _skillDataPeriods));
         }
 
         /// <summary>
@@ -124,26 +123,23 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         /// Created date: 2008-01-04
         /// </remarks>
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyNullAsScenarioGivesException()
         {
-            _skillDay = new SkillDay(_dt, _skill, null, WorkloadDayFactory.GetWorkloadDaysForTest(_dt.Date, _skill), _skillDataPeriods);
+			Assert.Throws<ArgumentNullException>(() => _skillDay = new SkillDay(_dt, _skill, null, WorkloadDayFactory.GetWorkloadDaysForTest(_dt.Date, _skill), _skillDataPeriods));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void VerifySkillInWorkloadDayMustBeSameAsinSkillDay()
         {
             Skill newSkill = new Skill("skill1", "skill1", Color.Red, 15, SkillTypeFactory.CreateSkillType());
-            _skillDay = new SkillDay(_dt, newSkill, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(_dt.Date, _skill), _skillDataPeriods);
+			Assert.Throws<ArgumentException>(() => _skillDay = new SkillDay(_dt, newSkill, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(_dt.Date, _skill), _skillDataPeriods));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void VerifyDateInWorkloadDayMustBeSameAsinSkillDay()
         {
             var dt = new DateOnly(2007, 1, 2);
-            _skillDay = new SkillDay(dt, _skill, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(_dt.Date, _skill), _skillDataPeriods);
+			Assert.Throws<ArgumentException>(() => _skillDay = new SkillDay(dt, _skill, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(_dt.Date, _skill), _skillDataPeriods));
         }
 
         [Test]
@@ -834,16 +830,16 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         /// Created by: robink
         /// Created date: 2008-03-05
         /// </remarks>
-        [Test, ExpectedException(typeof(NotImplementedException))]
+        [Test]
         public void VerifyCampaignTimesCannotBeSet()
         {
-            _skillDay.CampaignTaskTime = new Percent(0.25d);
+			Assert.Throws<NotImplementedException>(() => _skillDay.CampaignTaskTime = new Percent(0.25d));
         }
 
-        [Test, ExpectedException(typeof(NotImplementedException))]
+        [Test]
         public void VerifyCampaignAfterTaskTimesCannotBeSet()
         {
-            _skillDay.CampaignAfterTaskTime = new Percent(0.5d);
+			Assert.Throws<NotImplementedException>(() => _skillDay.CampaignAfterTaskTime = new Percent(0.5d));
         }
 
         /// <summary>
@@ -1088,10 +1084,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(0d, _skillDay.TotalAverageAfterTaskTime.TotalSeconds);
         }
 
-        [Test, ExpectedException(typeof(NotImplementedException))]
+        [Test]
         public void CanReset()
         {
-            _skillDay.ResetTaskOwner();
+	        Assert.Throws<NotImplementedException>(() => _skillDay.ResetTaskOwner());
         }
 
         /// <summary>
@@ -1275,20 +1271,20 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(calculator, _skillDay.SkillDayCalculator);
         }
 
-        [Test, ExpectedException(typeof(InvalidOperationException))]
+        [Test]
         public void VerifyNoSkillDayCalculatorThrowsException()
         {
             _skillDay.SkillDayCalculator = null;
-            _skillDay.SkillTaskPeriodCollection();
+			Assert.Throws<InvalidOperationException>(() => _skillDay.SkillTaskPeriodCollection());
         }
 
         [Test]
         public void VerifyNoSkillDayCalculatorGivesNoResultForChildSkill()
         {
-            _skillDay = new SkillDay(_skillDay.CurrentDate, new ChildSkill("test", "test", Color.Red, 15, _skill.SkillType),
-                                     _scenario, new List<IWorkloadDay>(), new List<ISkillDataPeriod>());
-            _skillDay.SkillDayCalculator = null;
-            Assert.AreEqual(0, _skillDay.SkillTaskPeriodCollection().Count);
+	        _skillDay = new SkillDay(_skillDay.CurrentDate,
+		        new ChildSkill("test", "test", Color.Red, 15, _skill.SkillType),
+		        _scenario, new List<IWorkloadDay>(), new List<ISkillDataPeriod>()) {SkillDayCalculator = null};
+	        Assert.AreEqual(0, _skillDay.SkillTaskPeriodCollection().Count);
         }
 
         [Test]
@@ -1299,36 +1295,36 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.IsFalse(_skillDay.EnableSpillover);
         }
 
-        [Test, ExpectedException(typeof(NotImplementedException))]
+        [Test]
         public void VerifySetTasksNotImplemented()
         {
-            _skillDay.Tasks = 10d;
+	        Assert.Throws<NotImplementedException>(() => _skillDay.Tasks = 10d);
         }
 
-        [Test, ExpectedException(typeof(NotImplementedException))]
+        [Test]
         public void VerifySetAverageTaskTimeNotImplemented()
         {
-            _skillDay.AverageTaskTime = TimeSpan.FromSeconds(10d);
+	        Assert.Throws<NotImplementedException>(() => _skillDay.AverageTaskTime = TimeSpan.FromSeconds(10d));
         }
 
-        [Test, ExpectedException(typeof(NotImplementedException))]
+        [Test]
         public void VerifySetAverageAfterTaskTimeNotImplemented()
         {
-            _skillDay.AverageAfterTaskTime = TimeSpan.FromSeconds(10d);
+			Assert.Throws<NotImplementedException>(() => _skillDay.AverageAfterTaskTime = TimeSpan.FromSeconds(10d));
         }
 
-        [Test, ExpectedException(typeof(NotImplementedException))]
+        [Test]
         public void VerifySetCampaignTasksNotImplemented()
         {
-            _skillDay.CampaignTasks = new Percent(0.1d);
+			Assert.Throws<NotImplementedException>(() => _skillDay.CampaignTasks = new Percent(0.1d));
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifyCannotHaveWorkloadDayWithOtherDateTime()
         {
             WorkloadDay day = new WorkloadDay();
             day.Create(_skillDay.CurrentDate.AddDays(2), _skill.WorkloadCollection.First(), new List<TimePeriod>());
-            _skillDay.AddWorkloadDay(day);
+			Assert.Throws<ArgumentException>(() => _skillDay.AddWorkloadDay(day));
         }
 
         [Test]

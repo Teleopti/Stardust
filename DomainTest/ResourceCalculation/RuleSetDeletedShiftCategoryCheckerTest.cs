@@ -27,10 +27,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_ruleSet = _mocks.StrictMock<IWorkShiftRuleSet>();
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowExceptionIfRuleSetIsNull()
 		{
-			_ruleSetDeletedShiftCategoryChecker.ContainsDeletedShiftCategory(null);
+			Assert.Throws<ArgumentNullException>(() => _ruleSetDeletedShiftCategoryChecker.ContainsDeletedShiftCategory(null));
 		}
 
 		[Test]

@@ -87,17 +87,15 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void CannotAddNullAsApplicationRole()
         {
-            target.AddApplicationRole(null);
+			Assert.Throws<ArgumentNullException>(() => target.AddApplicationRole(null));
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void VerifyApplicationRoleCollectionIsLocked()
         {
-            target.ApplicationRoleCollection.Add(new ApplicationRole());
+			Assert.Throws<NotSupportedException>(() => target.ApplicationRoleCollection.Add(new ApplicationRole()));
         }
         #endregion
 
@@ -113,10 +111,9 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
         /// Verifies the not null as time zone.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyNotNullAsTimeZone()
         {
-            ((PermissionInformation)target).SetDefaultTimeZone(null);
+			Assert.Throws<ArgumentNullException>(() => ((PermissionInformation)target).SetDefaultTimeZone(null));
         }
         #endregion
 
@@ -196,10 +193,9 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
         }
 
         [Test]
-        [ExpectedException(typeof(NotImplementedException))]
         public void VerifyNoneEntityClone()
         {
-            target.NoneEntityClone();
+			Assert.Throws<NotImplementedException>(() => target.NoneEntityClone());
         }
 
 

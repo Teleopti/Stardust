@@ -389,11 +389,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         /// Created date: 2007-12-19
         /// </remarks>
         [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void VerifySetAverageAfterTaskTimeGivesExceptionWhenClosed()
         {
-            target = new TaskOwnerPeriod(new DateOnly(2007, 8, 1), null, TaskOwnerPeriodType.Other);
-            target.AverageAfterTaskTime = TimeSpan.FromSeconds(3d);
+	        Assert.Throws<InvalidOperationException>(() =>
+		        target = new TaskOwnerPeriod(new DateOnly(2007, 8, 1), null, TaskOwnerPeriodType.Other)
+		        {
+			        AverageAfterTaskTime = TimeSpan.FromSeconds(3d)
+		        });
         }
 
         /// <summary>
@@ -404,10 +406,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         /// Created date: 2008-03-03
         /// </remarks>
         [Test]
-        [ExpectedException(typeof(NotImplementedException))]
+       
         public void VerifyUpdateTemplateNameNotImplemented()
         {
-            target.UpdateTemplateName();
+	        Assert.Throws<NotImplementedException>(() => target.UpdateTemplateName());
         }
 
         /// <summary>
@@ -418,11 +420,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         /// Created date: 2007-12-20
         /// </remarks>
         [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void VerifySetTasksGivesExceptionWhenClosed()
         {
-            target = new TaskOwnerPeriod(new DateOnly(2007, 8, 1), null, TaskOwnerPeriodType.Other);
-            target.Tasks = 50;
+			Assert.Throws<InvalidOperationException>(() => target = new TaskOwnerPeriod(new DateOnly(2007, 8, 1), null, TaskOwnerPeriodType.Other) {Tasks = 50});
         }
 
         /// <summary>
@@ -433,11 +433,12 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         /// Created date: 2007-12-19
         /// </remarks>
         [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void VerifySetAverageTaskTimeGivesExceptionWhenClosed()
         {
-            target = new TaskOwnerPeriod(new DateOnly(2007, 8, 1), null, TaskOwnerPeriodType.Other);
-            target.AverageTaskTime = TimeSpan.FromSeconds(3d);
+			Assert.Throws<InvalidOperationException>(() => target = new TaskOwnerPeriod(new DateOnly(2007, 8, 1), null, TaskOwnerPeriodType.Other)
+	        {
+		        AverageTaskTime = TimeSpan.FromSeconds(3d)
+	        });
         }
 
         /// <summary>
@@ -1241,14 +1242,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         /// Created date: 2008-03-04
         /// </remarks>
         [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void VerifySetCampaignTasksWhenClosedGivesException()
         {
             foreach (ITaskOwner wld in target.TaskOwnerDayCollection)
             {
                 ((WorkloadDay)wld).Close();
             }
-            target.CampaignTasks = new Percent();
+			Assert.Throws<InvalidOperationException>(() => target.CampaignTasks = new Percent());
         }
 
         /// <summary>
@@ -1259,14 +1259,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         /// Created date: 2008-03-04
         /// </remarks>
         [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void VerifySetCampaignTaskTimeWhenClosedGivesException()
         {
             foreach (ITaskOwner wld in target.TaskOwnerDayCollection)
             {
                 ((WorkloadDay)wld).Close();
             }
-            target.CampaignTaskTime = new Percent();
+			Assert.Throws<InvalidOperationException>(() => target.CampaignTaskTime = new Percent());
         }
 
         /// <summary>
@@ -1277,14 +1276,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         /// Created date: 2008-03-04
         /// </remarks>
         [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void VerifySetCampaignAfterTaskTimeWhenClosedGivesException()
         {
             foreach (ITaskOwner wld in target.TaskOwnerDayCollection)
             {
                 ((WorkloadDay)wld).Close();
             }
-            target.CampaignAfterTaskTime = new Percent();
+			Assert.Throws<InvalidOperationException>(() => target.CampaignAfterTaskTime = new Percent());
         }
 
         /// <summary>

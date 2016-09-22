@@ -538,10 +538,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 	    [Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void VerifyScheduleParametersIsNotNull()
 		{
-			new ScheduleRange(_dic, null, _permissionChecker);
+			Assert.Throws<ArgumentNullException>(() => new ScheduleRange(_dic, null, _permissionChecker));
 		}
 
 		[Test]
@@ -756,33 +755,29 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 		#region Add checks
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void VerifyCannotAddNullToScheduleDataPersonTimeActivity()
 		{
-			_target.Add(null);
+			Assert.Throws<ArgumentNullException>(() => _target.Add(null));
 		}
 		
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void VerifyCorrectPerson()
 		{
 			IPersonAbsence pAbs = new PersonAbsence(PersonFactory.CreatePerson(),
 												   _scenario,
 												   new AbsenceLayer(AbsenceFactory.CreateAbsence("abs"), new DateTimePeriod(2000, 2, 1, 2000, 3, 2)));
-			_target.Add(pAbs);
+			Assert.Throws<ArgumentOutOfRangeException>(() => _target.Add(pAbs));
 		}
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void VerifyCorrectScenario()
 		{
 			PersonAbsence pAbs = new PersonAbsence(_person,
 												   ScenarioFactory.CreateScenarioAggregate(),
 												   new AbsenceLayer(AbsenceFactory.CreateAbsence("abs"), new DateTimePeriod(2000, 2, 1, 2000, 3, 2)));
-			_target.Add(pAbs);
+			Assert.Throws<ArgumentOutOfRangeException>(() => _target.Add(pAbs));
 		}
 
 		[Test]
-		[ExpectedException(typeof(PermissionException))]
 		public void VerifyCannotAddIfNoPermission()
 		{
 			_target = new scheduleExposingInternalCollections(_dic, _parameters);
@@ -793,19 +788,22 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 					.Return(new List<DateOnlyPeriod>());
 				Expect.Call(_dic.PermissionsEnabled).Return(true);
 			}
-			using(_mocks.Playback())
+			Assert.Throws<PermissionException>(() =>
 			{
-                using (new CustomAuthorizationContext(_authorization))
-                {
-                    _target.Add(PersonAbsenceFactory.CreatePersonAbsence(_person, _scenario,
-                                                                         new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
-                }
-			}
+				using (_mocks.Playback())
+				{
+					using (new CustomAuthorizationContext(_authorization))
+					{
+						_target.Add(PersonAbsenceFactory.CreatePersonAbsence(_person, _scenario,
+																			 new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
+					}
+				}
+			});
+			
 		}
 
 
 		[Test]
-		[ExpectedException(typeof(PermissionException))]
 		public void VerifyCannotAddIfOutsidePermission()
 		{
 			_target = new scheduleExposingInternalCollections(_dic, _parameters);
@@ -816,14 +814,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 					.Return(new List<DateOnlyPeriod> { new DateOnlyPeriod(2002, 1, 1, 2003, 1, 1) });
 				Expect.Call(_dic.PermissionsEnabled).Return(true);
 			}
-			using (_mocks.Playback())
+			Assert.Throws<PermissionException>(() =>
 			{
-                using (new CustomAuthorizationContext(_authorization))
-                {
-                    _target.Add(PersonAbsenceFactory.CreatePersonAbsence(_person, _scenario,
-                                                                         new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
-                }
-			}
+				using (_mocks.Playback())
+				{
+					using (new CustomAuthorizationContext(_authorization))
+					{
+						_target.Add(PersonAbsenceFactory.CreatePersonAbsence(_person, _scenario,
+																			 new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
+					}
+				}
+			});
+			
 		}
 
 		[Test]

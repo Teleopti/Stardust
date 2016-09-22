@@ -51,12 +51,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         /// Created date: 2008-03-07
         /// </remarks>
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyServiceLevelAboveOneHundredPercentGivesException()
         {
             Percent percent = new Percent(1.01);
-            
-            target.Percent = percent;
+
+			Assert.Throws<ArgumentOutOfRangeException>(() => target.Percent = percent);
         }
 
         /// <summary>
@@ -67,12 +66,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         /// Created date: 2008-03-07
         /// </remarks>
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyServiceLevelAboveOneHundredPercentGivesExceptionInConstructor()
         {
             Percent percent = new Percent(1.01);
 
-            target = new ServiceLevel(percent,target.Seconds);
+			Assert.Throws<ArgumentOutOfRangeException>(() => target = new ServiceLevel(percent,target.Seconds));
         }
 
         [Test]

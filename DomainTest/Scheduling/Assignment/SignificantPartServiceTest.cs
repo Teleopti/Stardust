@@ -17,12 +17,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             _source = new TestSignificantPartSource();
         }
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyPartIsNotNull()
         {
-            _source = null;
-            _service = SignificantPartService.CreateService(_source);
-            Assert.IsNotNull(_service,"we will not touch this, but fxcop will");
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				_source = null;
+				_service = SignificantPartService.CreateService(_source);
+				Assert.IsNotNull(_service, "we will not touch this, but fxcop will");
+
+			});
         }
 
         [Test]

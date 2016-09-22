@@ -106,10 +106,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void CannotAddNullAsRuleSet()
         {
-            _target.AddRuleSet(null);
+			Assert.Throws<ArgumentNullException>(() => _target.AddRuleSet(null));
         }
 
         [Test]

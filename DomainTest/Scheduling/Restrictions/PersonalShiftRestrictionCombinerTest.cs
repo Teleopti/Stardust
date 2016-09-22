@@ -33,11 +33,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void VerifyNullScheduleDayParameter()
 		{
 			_scheduleDay = null;
-			_target.Combine(_scheduleDay, _restriction);
+			Assert.Throws<ArgumentNullException>(() => _target.Combine(_scheduleDay, _restriction));
 		}
 
 		[Test]

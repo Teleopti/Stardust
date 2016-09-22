@@ -32,17 +32,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ScenarioCannotBeNull()
         {
-            target = new ScheduleParameters(null, person, period);
+			Assert.Throws<ArgumentNullException>(() => target = new ScheduleParameters(null, person, period));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void PersonCannotBeNull()
         {
-            target = new ScheduleParameters(scenario, null, period);
+			Assert.Throws<ArgumentNullException>(() => target = new ScheduleParameters(scenario, null, period));
         }
     }
 }

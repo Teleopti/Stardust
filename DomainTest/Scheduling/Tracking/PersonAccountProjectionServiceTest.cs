@@ -54,7 +54,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
 
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void VerifyThatPersonMustBeTheSameOnAccountAndSchedule()
         {
             IPerson person1 = new Person();
@@ -67,10 +66,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
                 Expect.Call(_account.Parent).Return(person1);
                 Expect.Call(_schedule.Person).Return(person2);
             }
-            using (_mocker.Playback())
-            {
-                _target = new PersonAccountProjectionService(_account, _schedule);
-            }
+			Assert.Throws<ArgumentException>(() =>
+			{
+				using (_mocker.Playback())
+				{
+					_target = new PersonAccountProjectionService(_account, _schedule);
+				}
+			});
+			
         }
 
         [Test]

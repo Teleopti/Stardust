@@ -76,11 +76,9 @@ namespace Teleopti.Ccc.DomainTest.Common
         /// Verifies average work time limit works.
         /// </summary>
         [Test]
-        [ExpectedException(typeof (ArgumentOutOfRangeException))]
         public void VerifyWorkTimeLimitWorks()
         {
-            WorkTime workTime = new WorkTime(TimeSpan.FromHours(25));
-            Assert.AreEqual(workTime, workTime);
+            Assert.Throws<ArgumentOutOfRangeException>(() => new WorkTime(TimeSpan.FromHours(25)));
         }
     }
 }

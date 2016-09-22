@@ -96,14 +96,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         /// Verifies correct anchor placed in date and time is of kind UTC
         /// </summary>
         [Test]
-        [ExpectedException(typeof (ArgumentException))]
         public void VerifyCorrectAnchorDateTimePeriodIsUtc()
         {
 
             TimeSpan duration = TimeSpan.FromHours(4);
-            //Percent flexibility = new Percent(0.66);
-			DayOff per = new DayOff(DateTime.SpecifyKind(anchor, DateTimeKind.Local), duration, flexibility, description, displayColor, payrollCode, Guid.NewGuid());
-            Assert.AreEqual(per,per);
+			//Percent flexibility = new Percent(0.66);
+			Assert.Throws<ArgumentException>(() =>
+			{
+				DayOff per = new DayOff(DateTime.SpecifyKind(anchor, DateTimeKind.Local), duration, flexibility, description, displayColor, payrollCode, Guid.NewGuid());
+				Assert.AreEqual(per, per);
+			});
+			
         }
 
         [Test]

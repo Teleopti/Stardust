@@ -204,13 +204,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Assert.That(mainShifts.Distinct().Count(),Is.EqualTo(1),"All mainshiftlayers expected to start at the same time");
 		}
 
-        [Test, ExpectedException(typeof(ConstraintException))]
+        [Test]
         public void VerifyInvalidList()
         {
             _list = new List<IScheduleDay>();
             SwapService service = new SwapService();
             service.Init(_list);
-            service.SwapAssignments(_dictionary);
+			Assert.Throws<ConstraintException>(() => service.SwapAssignments(_dictionary));
         }
         
         private void SetupForAssignmentSwap()

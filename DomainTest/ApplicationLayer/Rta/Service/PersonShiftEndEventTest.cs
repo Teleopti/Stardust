@@ -133,7 +133,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			@event.ShiftEndTime.Should().Be("2014-10-20 10:00".Utc());
 		}
 
-		[Test, Ignore]
+		[Test]
+		[Ignore("Reason mandatory for NUnit 3")]
 		public void ShouldPublishWithCurrentTimeAsShiftEndTimeWhenShiftIsRemoved()
 		{
 			var personId = Guid.NewGuid();

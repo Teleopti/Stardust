@@ -122,72 +122,60 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyInvalidDayBeforeFirstDayInPeriodWhenConsideringBothWeekBeforeAndWeekAfter()
         {
             _target = new ConsecutiveDayOffValidator(new MinMax<int>(1, 7), true, true);
-            Assert.IsTrue(_target.IsValid(_periodDays, -1));
+	        Assert.Throws<ArgumentOutOfRangeException>(() => _target.IsValid(_periodDays, -1));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyInvalidDayAfterLastDayInPeriodWhenConsideringBothWeekBeforeAndWeekAfter()
         {
             _target = new ConsecutiveDayOffValidator(new MinMax<int>(1, 7), true, true);
-            Assert.IsTrue(_target.IsValid(_periodDays, 35));
-
+			Assert.Throws<ArgumentOutOfRangeException>(() => _target.IsValid(_periodDays, 35));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyInvalidDayBeforeFirstDayInPeriodWhenConsideringWeekBefore()
         {
             _target = new ConsecutiveDayOffValidator(new MinMax<int>(1, 7), true, false);
-            Assert.IsTrue(_target.IsValid(_periodDays, 30));
-        }
+			Assert.Throws<ArgumentOutOfRangeException>(() => _target.IsValid(_periodDays, 30));
+		}
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyInvalidDayAfterLastDayInPeriodWhenConsideringWeekBefore()
         {
             _target = new ConsecutiveDayOffValidator(new MinMax<int>(1, 7), true, false);
-            Assert.IsTrue(_target.IsValid(_periodDays, 28));
-
-        }
+			Assert.Throws<ArgumentOutOfRangeException>(() => _target.IsValid(_periodDays, 28));
+		}
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyInvalidDayBeforeFirstDayInPeriodWhenConsideringWeekAfter()
         {
             _target = new ConsecutiveDayOffValidator(new MinMax<int>(1, 7), false, true);
-            Assert.IsTrue(_target.IsValid(_periodDays, 5));
-        }
+			Assert.Throws<ArgumentOutOfRangeException>(() => _target.IsValid(_periodDays, 5));
+		}
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyInvalidDayAfterLastDayInPeriodWhenConsideringWeekAfter()
         {
             _target = new ConsecutiveDayOffValidator(new MinMax<int>(1, 7), false, true);
-            Assert.IsTrue(_target.IsValid(_periodDays, 35));
-
-        }
+			Assert.Throws<ArgumentOutOfRangeException>(() => _target.IsValid(_periodDays, 35));
+		}
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyInvalidDayBeforeFirstDayInPeriodWhenConsideringNeitherWeekBeforeNorWeekAfter()
         {
             _target = new ConsecutiveDayOffValidator(new MinMax<int>(1, 7), false, false);
-            Assert.IsTrue(_target.IsValid(_periodDays, 5));
-        }
+			Assert.Throws<ArgumentOutOfRangeException>(() => _target.IsValid(_periodDays, 5));
+		}
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyInvalidDayAfterLastDayInPeriodWhenConsideringNeitherWeekBeforeNorWeekAfter()
         {
             _target = new ConsecutiveDayOffValidator(new MinMax<int>(1, 7), false, false);
-            Assert.IsTrue(_target.IsValid(_periodDays, 28));
-
-        }
+			Assert.Throws<ArgumentOutOfRangeException>(() => _target.IsValid(_periodDays, 28));
+		}
 
         [Test]
         public void VerifyIsValidWithBitArray()
@@ -206,13 +194,13 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             Assert.IsTrue(_target.IsValid(bitArray, 7));
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifyIsValidWithBitArrayThrowsExceptionWhenNotIndexIsNotDayOff()
         {
             BitArray bitArray = createBitArrayForTest();
             _target = new ConsecutiveDayOffValidator(new MinMax<int>(1, 3), true, true);
-            Assert.IsTrue(_target.IsValid(bitArray, 1));
-        }
+			Assert.Throws<ArgumentException>(() => _target.IsValid(bitArray, 1));
+		}
 
         #endregion
 

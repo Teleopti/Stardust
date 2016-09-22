@@ -59,12 +59,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		/// Created date: 2008-04-02
 		/// </remarks>
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void VerifyWorkloadCannotBeNull()
 		{
 			mocks.ReplayAll();
 			target = new StatisticHelper(_repositoryFactory, _skillDayRep, _validatedVolumeDayRep);
-			target.GetWorkloadDaysWithValidatedStatistics(_period, null, new List<IValidatedVolumeDay>());
+			Assert.Throws<ArgumentNullException>(() => target.GetWorkloadDaysWithValidatedStatistics(_period, null, new List<IValidatedVolumeDay>()));
 		}
 
 		/// <summary>
@@ -75,12 +74,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 		/// Created date: 2008-05-16
 		/// </remarks>
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void VerifyExistingValidatedVolumeDaysCannotBeNull()
 		{
 			mocks.ReplayAll();
 			target = new StatisticHelper(_repositoryFactory, _skillDayRep, _validatedVolumeDayRep);
-			target.GetWorkloadDaysWithValidatedStatistics(_period, _workload, null);
+			Assert.Throws<ArgumentNullException>(() => target.GetWorkloadDaysWithValidatedStatistics(_period, _workload, null));
 		}
 		/// <summary>
 		/// Verifies the get workload days with statistics.

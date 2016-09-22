@@ -60,14 +60,14 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             _workloadDayTemplate.Workload.Should().Be.SameInstanceAs(newWorkloadInstance);
         }
 
-        [Test,ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void ShouldThrowExceptionWhenNotSameWorkload()
         {
             _workload.SetId(Guid.NewGuid());
 
             var newWorkloadInstance = WorkloadFactory.CreateWorkload(_skill);
-            
-            _workloadDayTemplate.SetWorkloadInstance(newWorkloadInstance);
+
+			Assert.Throws<ArgumentException>(() => _workloadDayTemplate.SetWorkloadInstance(newWorkloadInstance));
         }
 
         [Test]

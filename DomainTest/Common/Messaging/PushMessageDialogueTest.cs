@@ -50,11 +50,10 @@ namespace Teleopti.Ccc.DomainTest.Common.Messaging
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void VerifySenderMustNotBeNull()
         {
             const string messageText = "Hello mr nullperson";
-            _target.DialogueReply(messageText, null);
+            Assert.Throws<ArgumentNullException>(() => _target.DialogueReply(messageText, null));
         }
 
         [Test]
@@ -94,11 +93,11 @@ namespace Teleopti.Ccc.DomainTest.Common.Messaging
             }
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifyCannotReplyWithTextOnMessageNotAllowingReplyText()
         {
             _pushMessage.AllowDialogueReply = false;
-            _target.DialogueReply("This is a text message", _person);
+            Assert.Throws<ArgumentException>(() => _target.DialogueReply("This is a text message", _person));
         }
 
         [Test]

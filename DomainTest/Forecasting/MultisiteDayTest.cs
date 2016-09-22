@@ -115,10 +115,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         /// Created date: 2008-01-04
         /// </remarks>
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyNullAsSkillGivesException()
         {
-            target = new MultisiteDay(_dt, null, _scenario);
+			Assert.Throws<ArgumentNullException>(() => target = new MultisiteDay(_dt, null, _scenario));
         }
 
         /// <summary>
@@ -129,10 +128,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         /// Created date: 2008-01-04
         /// </remarks>
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyNullAsScenarioGivesException()
         {
-            target = new MultisiteDay(_dt, _skill, null);
+			Assert.Throws<ArgumentNullException>(() => target = new MultisiteDay(_dt, _skill, null));
         }
 
         /// <summary>
@@ -593,7 +591,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual("<NONE>", target.TemplateReference.TemplateName);
         }
 
-        [Test, ExpectedException(typeof(InvalidOperationException))]
+        [Test]
         public void VerifyCannotHaveMultiplePeriodsWithSameStartTime()
         {
 	        _multisitePeriods.Add(
@@ -601,7 +599,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			        new DateTimePeriod(DateTime.SpecifyKind(_dt.Date, DateTimeKind.Utc).Add(TimeSpan.FromHours(4)),
 				        DateTime.SpecifyKind(_dt.Date, DateTimeKind.Utc).Add(TimeSpan.FromHours(17))),
 			        new Dictionary<IChildSkill, Percent>()));
-            target.SetMultisitePeriodCollection(_multisitePeriods);
+			Assert.Throws<InvalidOperationException>(() => target.SetMultisitePeriodCollection(_multisitePeriods));
         }
 
         [Test]

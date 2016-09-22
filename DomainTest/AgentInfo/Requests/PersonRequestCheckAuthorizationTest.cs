@@ -36,12 +36,12 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             target.HasViewRequestPermission(personRequest).Should().Be.True();
         }
 
-        [Test,ExpectedException(typeof(PermissionException))]
+        [Test]
         public void ShouldThrowWhenNoPermissionWhenVerifying()
         {
             using(new CustomAuthorizationContext(new NoPermission()))
             {
-                target.VerifyEditRequestPermission(personRequest);
+                Assert.Throws<PermissionException>(() => target.VerifyEditRequestPermission(personRequest));
             }
         }
     }

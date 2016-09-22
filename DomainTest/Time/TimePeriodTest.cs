@@ -84,10 +84,9 @@ namespace Teleopti.Ccc.DomainTest.Time
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyStartTimeMustOccurBeforeEndTime()
         {
-            new TimePeriod(new TimeSpan(3), new TimeSpan(2));
+            Assert.Throws<ArgumentOutOfRangeException>(() => new TimePeriod(new TimeSpan(3), new TimeSpan(2)));
         }
 
         /// <summary>
@@ -219,10 +218,9 @@ namespace Teleopti.Ccc.DomainTest.Time
         /// Created date: 2007-12-13
         /// </remarks>
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestInvalidValueInConstructor()
         {
-            _per = new TimePeriod("8:30/17:25");
+            Assert.Throws<ArgumentException>(() => _per = new TimePeriod("8:30/17:25"));
         }
 
         [Test, SetCulture("en-GB")]

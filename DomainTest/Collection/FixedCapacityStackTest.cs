@@ -40,10 +40,9 @@ namespace Teleopti.Ccc.DomainTest.Collection
         /// Verifies pop from empty stack is forbidden.
         /// </summary>
         [Test]
-        [ExpectedException(typeof (InvalidOperationException))]
         public void VerifyCannotPopFromEmptyStack()
         {
-            target.Pop();
+            Assert.Throws<InvalidOperationException>(() => target.Pop());
         }
 
         /// <summary>
@@ -89,20 +88,18 @@ namespace Teleopti.Ccc.DomainTest.Collection
         /// Verifies the stack length not set to zero.
         /// </summary>
         [Test]
-        [ExpectedException(typeof (ArgumentOutOfRangeException))]
         public void VerifyStackLengthNotSetToZero()
         {
-            target = new FixedCapacityStack<int>(0);
+            Assert.Throws<ArgumentOutOfRangeException>(() => target = new FixedCapacityStack<int>(0));
         }
 
         /// <summary>
         /// Verifies the stack length is not negative.
         /// </summary>
         [Test]
-        [ExpectedException(typeof (ArgumentOutOfRangeException))]
         public void VerifyStackLengthNotNegative()
         {
-            target = new FixedCapacityStack<int>(-17);
+            Assert.Throws<ArgumentOutOfRangeException>(() => target = new FixedCapacityStack<int>(-17));
         }
 
         /// <summary>

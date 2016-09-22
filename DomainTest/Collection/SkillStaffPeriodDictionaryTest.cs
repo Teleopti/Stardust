@@ -81,17 +81,17 @@ namespace Teleopti.Ccc.DomainTest.Collection
             Assert.IsNotNull(((IEnumerable) _target).GetEnumerator());
         }
 
-        [Test, ExpectedException(typeof(InvalidConstraintException))]
+        [Test]
         public void VerifyInvalidKey()
         {
             _target.Clear();
-            _target.Add(_dtp1, _ssp2);
+            Assert.Throws<InvalidConstraintException>(() => _target.Add(_dtp1, _ssp2));
         }
 
-        [Test, ExpectedException(typeof(NotImplementedException))]
+        [Test]
         public void VerifyKeySetNotImplemented()
         {
-            _target[_dtp1] = _ssp2;
+	        Assert.Throws<NotImplementedException>(() => _target[_dtp1] = _ssp2);
         }
 
         [Test]

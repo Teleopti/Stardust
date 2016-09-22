@@ -22,12 +22,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Import
         }
 
         [Test]
-        [ExpectedException(typeof(ValidationException))]
         public void ShouldHandleWrongFileStream()
         {
             _fileContent = Encoding.UTF8.GetBytes("Insurance,20120301 12:45,20120301 13:00,17,179,0,");
 
-            _target.LoadContent(_fileContent, _timeZone);
+			Assert.Throws<ValidationException>(() => _target.LoadContent(_fileContent, _timeZone));
         }
 
         [Test]

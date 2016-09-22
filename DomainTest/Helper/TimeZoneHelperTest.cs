@@ -167,12 +167,11 @@ namespace Teleopti.Ccc.DomainTest.Helper
         /// Created date: 2008-01-29
         /// </remarks>
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyCreateNewDateTimePeriodWithNullAsTimeZone()
         {
             DateTime utcStartDateTime = DateTime.UtcNow.AddHours(-1);
             DateTime utcEndDateTime = DateTime.UtcNow.AddHours(1);
-            TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(utcStartDateTime, utcEndDateTime, null);
+			Assert.Throws<ArgumentNullException>(() => TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(utcStartDateTime, utcEndDateTime, null));
         }
 
 

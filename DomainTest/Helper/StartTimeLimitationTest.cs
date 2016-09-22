@@ -61,17 +61,15 @@ namespace Teleopti.Ccc.DomainTest.Helper
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyStartToBig()
         {
-            target = new StartTimeLimitation(new TimeSpan(1, 0, 0, 0), null);
+            Assert.Throws<ArgumentOutOfRangeException>(() => target = new StartTimeLimitation(new TimeSpan(1, 0, 0, 0), null));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyEndToBig()
         {
-			  target = new StartTimeLimitation(null, new TimeSpan(1, 0, 0, 0));
+			Assert.Throws<ArgumentOutOfRangeException>(() => target = new StartTimeLimitation(null, new TimeSpan(1, 0, 0, 0)));
         }
 
         [Test]

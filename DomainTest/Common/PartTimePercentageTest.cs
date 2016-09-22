@@ -60,17 +60,15 @@ namespace Teleopti.Ccc.DomainTest.Common
         /// Verifies that percentage is withing valid range.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyValidPercentageCanSet()
         {
-            testPartTimePercentage.Percentage = new Percent(1.3d);
+            Assert.Throws<ArgumentOutOfRangeException>(() => testPartTimePercentage.Percentage = new Percent(1.3d));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyPercentCannotBeSetBelowZero()
         {
-            testPartTimePercentage.Percentage = new Percent(-0.8d);
+			Assert.Throws<ArgumentOutOfRangeException>(() => testPartTimePercentage.Percentage = new Percent(-0.8d));
         }
 
         [Test]

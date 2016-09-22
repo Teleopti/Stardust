@@ -19,9 +19,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
         [SetUp]
         public void Setup()
         {
-            _multiplicator = new Multiplicator(MultiplicatorType.OBTime);
-            _multiplicator.MultiplicatorValue = 3.5;
-            _tp = new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(9));
+	        _multiplicator = new Multiplicator(MultiplicatorType.OBTime) {MultiplicatorValue = 3.5};
+	        _tp = new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(9));
             _tzInfo = (TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
             _target = new DayOfWeekMultiplicatorDefinition(_multiplicator, DayOfWeek.Monday, _tp);
         }
@@ -44,13 +43,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             _target.Multiplicator.Should().Not.Be.EqualTo(_multiplicator);
         }
 
-        [Test, ExpectedException(typeof (ArgumentException))]
+        [Test]
         public void VerifyArgumentExceptionIfWrongDayOfWeek()
         {
-            DateTime local = new DateTime(2008, 2, 3, 8, 0, 0, DateTimeKind.Unspecified);
-            DateTime utc = TimeZoneHelper.ConvertToUtc(local, _tzInfo);
-            DateTimePeriod utcPeriod = new DateTimePeriod(utc, utc.AddHours(1));
-            Assert.AreEqual(utcPeriod, _target.ConvertToDateTimePeriod(new DateOnly(2008, 2, 3), _tzInfo));
+			Assert.Throws<ArgumentException>(() =>
+			{
+				DateTime local = new DateTime(2008, 2, 3, 8, 0, 0, DateTimeKind.Unspecified);
+				DateTime utc = TimeZoneHelper.ConvertToUtc(local, _tzInfo);
+				DateTimePeriod utcPeriod = new DateTimePeriod(utc, utc.AddHours(1));
+				Assert.AreEqual(utcPeriod, _target.ConvertToDateTimePeriod(new DateOnly(2008, 2, 3), _tzInfo));
+
+			});
         }
 
         [Test]
@@ -72,10 +75,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             Assert.AreEqual(utcPeriod, _target.ConvertToLayer(new DateOnly(2008, 2, 4), _tzInfo).Period);
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void VerifyOrderIndexThrowsExceptionIfParentNull()
         {
-            Assert.AreEqual(1, _target.OrderIndex);
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Assert.AreEqual(1, _target.OrderIndex);
+			}); 
         }
 
         [Test]

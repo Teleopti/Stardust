@@ -41,17 +41,20 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
             }
         }
 
-        [Test,ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test]
         public void ShouldRequirePercentageOfZeroOrMore()
         {
             using (mocks.Record())
             {
                 Expect.Call(budgetGroup.IsCustomEfficiencyShrinkage(customShrinkageId)).Return(true);
             }
-            using (mocks.Playback())
-            {
-                target.SetEfficiencyShrinkage(customShrinkageId, new Percent(-0.1d));
-            }
+	        Assert.Throws<ArgumentOutOfRangeException>(() =>
+	        {
+				using (mocks.Playback())
+				{
+					target.SetEfficiencyShrinkage(customShrinkageId, new Percent(-0.1d));
+				}
+			});
         }
 
         [Test]
@@ -75,17 +78,21 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
             Assert.AreEqual(new Percent(), target.GetEfficiencyShrinkage(customShrinkageId));
         }
 
-        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test]
         public void ShouldThrowExceptionGivenNoCustomShrinkageDefinedForBudgetGroup()
         {
             using (mocks.Record())
             {
                 Expect.Call(budgetGroup.IsCustomEfficiencyShrinkage(customShrinkageId)).Return(false);
             }
-            using (mocks.Playback())
-            {
-                target.SetEfficiencyShrinkage(customShrinkageId, new Percent(0.1d));
-            }
+
+			Assert.Throws<ArgumentOutOfRangeException>(() =>
+			{
+				using (mocks.Playback())
+				{
+					target.SetEfficiencyShrinkage(customShrinkageId, new Percent(0.1d));
+				}
+			});
         }
 
         [Test]

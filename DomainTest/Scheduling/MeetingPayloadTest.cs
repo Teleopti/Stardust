@@ -56,28 +56,28 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         }
 
 
-        [Test, ExpectedException(typeof(NotImplementedException))]
+        [Test]
         public void VerifyCannotSetTracker()
         {
-            _target.Tracker = null;
+			Assert.Throws<NotImplementedException>(() => _target.Tracker = null);
         }
 
-        [Test, ExpectedException(typeof(NotImplementedException))]
+        [Test]
         public void VerifyCannotSetInWorkTime()
         {
-            _target.InWorkTime = false;
+			Assert.Throws<NotImplementedException>(() => _target.InWorkTime = false);
         }
 
-        [Test, ExpectedException(typeof(NotImplementedException))]
+        [Test]
         public void VerifyCannotSetInPaidTime()
         {
-            _target.InPaidTime = false;
+			Assert.Throws<NotImplementedException>(() => _target.InPaidTime = false);
         }
 
-        [Test, ExpectedException(typeof(NotImplementedException))]
+        [Test]
         public void VerifyCannotSetInContractTime()
         {
-            _target.InContractTime = false;
+			Assert.Throws<NotImplementedException>(() => _target.InContractTime = false);
         }
 
     }

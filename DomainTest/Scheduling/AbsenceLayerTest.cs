@@ -43,10 +43,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.IsTrue(ReflectionHelper.HasDefaultConstructor(target.GetType()));
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void ShouldNotAcceptPeriodWithSeconds()
         {
-            target = new AbsenceLayer(target.Payload, target.Period.MovePeriod(TimeSpan.FromSeconds(4)));
+			Assert.Throws<ArgumentException>(() => target = new AbsenceLayer(target.Payload, target.Period.MovePeriod(TimeSpan.FromSeconds(4))));
         }
 
     }

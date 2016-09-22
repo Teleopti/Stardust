@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
     [SetUpFixture]
     public class SetupFixtureForAssembly
     {
-        [SetUp]
+        [OneTimeSetUp]
         public void SetupTestAssembly()
         {
             var state = new FakeState();

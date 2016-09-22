@@ -158,12 +158,13 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		/// Created by: robink
 		/// Created date: 2008-06-09
 		/// </remarks>
-		[Test, ExpectedException(typeof(InvalidOperationException))]
+		[Test]
 		public void VerifyMessageCannotBeChangedWhenDenied()
 		{
 			_target.Deny(null, null, _authorization);
 			_target.Persisted();
-			_target.TrySetMessage(_message);
+
+			Assert.Throws<InvalidOperationException>(() => _target.TrySetMessage(_message));
 		}
 
 		/// <summary>
@@ -173,14 +174,14 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		/// Created by: robink
 		/// Created date: 2008-06-09
 		/// </remarks>
-		[Test, ExpectedException(typeof(InvalidOperationException))]
-		[Ignore]//approved absence request now can be cancelled, maybe allowed to reply
+		[Test]
+		[Ignore("approved absence request now can be cancelled, maybe allowed to reply")]
 		public void VerifyMessageCannotBeChangedWhenApproved()
 		{
 			_target.Pending();
 			_target.Approve(null, _authorization);
 			_target.Persisted();
-			_target.TrySetMessage(_message);
+			Assert.Throws<InvalidOperationException>(() => _target.TrySetMessage(_message));
 		}
 
 		[Test]
@@ -355,10 +356,10 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		/// Created by: robink
 		/// Created date: 2008-06-05
 		/// </remarks>
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void VerifyPersonCannotBeNull()
 		{
-			_target = new PersonRequest(null);
+			Assert.Throws<ArgumentNullException>(() => _target = new PersonRequest(null));
 		}
 
 		/// <summary>
@@ -615,17 +616,15 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void GetMessageThrowExceptionIfThereIsNoTextFormatter()
 		{
-			_target.GetMessage(null);
+			Assert.Throws<ArgumentNullException>(() => _target.GetMessage(null));
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void GetSubjectThrowExceptionIfThereIsNoTextFormatter()
 		{
-			_target.GetSubject(null);
+			Assert.Throws<ArgumentNullException>(() => _target.GetSubject(null));
 		}
 
 		[Test]

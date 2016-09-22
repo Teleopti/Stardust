@@ -48,11 +48,10 @@ namespace Teleopti.Ccc.DomainTest.Common
         /// Teams property should be locked.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void TeamsPropertyShouldBeLocked()
         {
             ICollection<ITeam> temp = UnitWithOneTeam.TeamCollection;
-            temp.Add(TeamFactory.CreateSimpleTeam());
+            Assert.Throws<NotSupportedException>(() => temp.Add(TeamFactory.CreateSimpleTeam()));
         }
 
         /// <summary>
@@ -112,17 +111,15 @@ namespace Teleopti.Ccc.DomainTest.Common
         /// Null teams are not allowed.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void NullTeamsAreNotAllowed()
         {
-            UnitWithOneTeam.AddTeam(null);
+            Assert.Throws<ArgumentNullException>(() => UnitWithOneTeam.AddTeam(null));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void NullTeamsAreNotAllowedToRemove()
         {
-            UnitWithOneTeam.RemoveTeam(null);
+            Assert.Throws<ArgumentNullException>(() => UnitWithOneTeam.RemoveTeam(null));
         }
 
         [Test]

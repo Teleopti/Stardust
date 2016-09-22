@@ -21,15 +21,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ScheduleTagging
             Assert.IsFalse(_target.IsDeleted);
             _target.SetDeleted();
             Assert.IsTrue(_target.IsDeleted);
-            Assert.IsNullOrEmpty(_target.Description);
-            _target.Description = "012345678912345";
+			Assert.That(_target.Description, Is.Null.Or.Empty);
+			_target.Description = "012345678912345";
             Assert.AreEqual("012345678912345", _target.Description);
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void ShouldThrowIfDescriptionLongerThan15()
         {
-            _target.Description = "0123456789123456";
+			Assert.Throws<ArgumentException>(() => _target.Description = "0123456789123456");
         }
     }
 }

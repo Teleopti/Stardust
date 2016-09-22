@@ -94,22 +94,25 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsFalse(ShiftCategoryLimitationChecker.IsThisDayCorrectCategory(part, shiftCategory));
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifyIsShiftCategoryOverOrAtPeriodLimitThrows()
         {
             _shiftCategoryLimitation.MaxNumberOf = 1;
             _shiftCategoryLimitation.Weekly = true;
             IList<DateOnly> datesWithCategory;
             mockExpections();
-
-	        using (_mocks.Playback())
+	        Assert.Throws<ArgumentException>(() =>
 	        {
-		        Assert.IsTrue(ShiftCategoryLimitationChecker.IsShiftCategoryOverOrAtPeriodLimit(_shiftCategoryLimitation,
-		                                                                                        new DateOnlyPeriod(2010, 1, 1,
-		                                                                                                           2010, 1, 1),
-		                                                                                        _dic[_person],
-		                                                                                        out datesWithCategory));
-	        }
+				using (_mocks.Playback())
+				{
+					Assert.IsTrue(ShiftCategoryLimitationChecker.IsShiftCategoryOverOrAtPeriodLimit(_shiftCategoryLimitation,
+																									new DateOnlyPeriod(2010, 1, 1,
+																													   2010, 1, 1),
+																									_dic[_person],
+																									out datesWithCategory));
+				}
+
+			});
         }
 
         [Test]
@@ -129,23 +132,25 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	        }
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifyIsShiftCategoryOverOrAtWeekLimitThrow()
         {
             _shiftCategoryLimitation.Weekly = false;
             _shiftCategoryLimitation.MaxNumberOf = 1;
             IList<DateOnly> datesWithCategory;
             mockExpections();
-
-	        using (_mocks.Playback())
+	        Assert.Throws<ArgumentException>(() =>
 	        {
-		        Assert.IsTrue(ShiftCategoryLimitationChecker.IsShiftCategoryOverOrAtWeekLimit(_shiftCategoryLimitation,
-		                                                                                      _dic[_person],
-		                                                                                      new DateOnlyPeriod(
-			                                                                                      new DateOnly(2009, 12, 28),
-			                                                                                      new DateOnly(2010, 1, 3)),
-		                                                                                      out datesWithCategory));
-	        }
+				using (_mocks.Playback())
+				{
+					Assert.IsTrue(ShiftCategoryLimitationChecker.IsShiftCategoryOverOrAtWeekLimit(_shiftCategoryLimitation,
+																								  _dic[_person],
+																								  new DateOnlyPeriod(
+																									  new DateOnly(2009, 12, 28),
+																									  new DateOnly(2010, 1, 3)),
+																								  out datesWithCategory));
+				}
+			});
         }
 
         [Test, SetCulture("en-GB")]

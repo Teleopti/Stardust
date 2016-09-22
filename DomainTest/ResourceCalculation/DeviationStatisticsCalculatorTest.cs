@@ -58,33 +58,41 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyCalculatorConstructorWithNullExpectedParameter()
         {
             double[] real = { 13.4d, 18.3d, 20.5d, 25d, 32.1d };
 
-            Assert.AreEqual(0.1237d, new DeviationStatisticsCalculator(null, real).RelativeRootMeanSquare, 0.01d);
+	        Assert.Throws<ArgumentNullException>(() =>
+	        {
+				Assert.AreEqual(0.1237d, new DeviationStatisticsCalculator(null, real).RelativeRootMeanSquare, 0.01d);
+			});
+            
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyCalculatorConstructorWithNullRealParameter()
         {
             double[] expected = { 13.4d, 18.3d, 20.5d, 25d, 32.1d };
 
-            Assert.AreEqual(0.1237d, new DeviationStatisticsCalculator(expected, null).RelativeRootMeanSquare, 0.01d);
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Assert.AreEqual(0.1237d, new DeviationStatisticsCalculator(expected, null).RelativeRootMeanSquare, 0.01d);
+			});
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void VerifyCalculatorConstructorWithDifferentLength()
         {
             double[] expected = { 11.4d, 17.3d, 21.3d, 25.9d, 40.1d, 0d };
             double[] real = { 13.4d, 18.3d, 20.5d, 25d, 32.1d };
 
-            Assert.AreEqual(0.1237d, new DeviationStatisticsCalculator(expected, real).RelativeRootMeanSquare, 0.01d);
+			Assert.Throws<ArgumentException>(() =>
+			{
+
+				Assert.AreEqual(0.1237d, new DeviationStatisticsCalculator(expected, real).RelativeRootMeanSquare, 0.01d);
+			});
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]

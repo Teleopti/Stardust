@@ -55,10 +55,9 @@ namespace Teleopti.Ccc.DomainTest.Collection
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void PayloadMustBeSet()
         {
-            target = VisualLayerCollectionSpecification.OneSpecificLayer(null);
+           Assert.Throws<ArgumentNullException>(() => target = VisualLayerCollectionSpecification.OneSpecificLayer(null)) ;
         }
 
         private IVisualLayer createLayer(IActivity activity)

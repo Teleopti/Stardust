@@ -53,10 +53,10 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             Assert.AreNotSame(Target.StaffingThresholdValidatorList[1],Target.StaffingThresholdValidator);
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void VerifyCannotSetNullAsStaffingThresholdValidator()
         {
-            Target.StaffingThresholdValidator = null;
+            Assert.Throws<ArgumentNullException>(() => Target.StaffingThresholdValidator = null);
         }
 
         [Test]
@@ -74,10 +74,10 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             Assert.AreNotSame(Target.PersonAccountValidatorList[1], Target.PersonAccountValidator);
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void VerifyCannotSetNullAsPersonAccountValidator()
         {
-            Target.PersonAccountValidator = null;
+            Assert.Throws<ArgumentNullException>(() => Target.PersonAccountValidator = null);
         }
 
 
@@ -88,10 +88,10 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             Assert.AreNotSame(Target.AbsenceRequestProcessList[1], Target.AbsenceRequestProcess);
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void VerifyCannotSetNullAsAbsenceRequestProcess()
         {
-            Target.AbsenceRequestProcess = null;
+            Assert.Throws<ArgumentNullException>(() => Target.AbsenceRequestProcess = null);
         }
 
         [Test]

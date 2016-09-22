@@ -44,10 +44,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
             Assert.AreEqual(WeekNumber.Last,_target.WeekOfMonth);
         }
 
-        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test]
         public void VerifyIncrementalDayCountCannotBeLessThanOne()
         {
-            _target.IncrementCount = 0;
+			Assert.Throws<ArgumentOutOfRangeException>(() => _target.IncrementCount = 0);
         }
 
         [Test]

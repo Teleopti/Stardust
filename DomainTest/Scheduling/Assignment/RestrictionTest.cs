@@ -72,10 +72,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         /// Created date: 2007-11-07
         /// </remarks>
         [Test]
-        [ExpectedException(typeof(ValidationException))]
         public void VerifyCheckEntityGivesValidationException()
         {
-            Target.CheckEntity(CreateInvalidEntityToVerify());
+			Assert.Throws<ValidationException>(() => Target.CheckEntity(CreateInvalidEntityToVerify()));
         }
 
         /// <summary>

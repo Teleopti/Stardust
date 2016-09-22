@@ -369,34 +369,31 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         /// Created date: 2008-01-21
         /// </remarks>
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyTimeZoneCannotBeNull()
         {
-            target.TimeZone = null;
+			Assert.Throws<ArgumentNullException>(() => target.TimeZone = null);
         }
 
         /// <summary>
         /// Verifies that name cannot be set to String.Empty
         /// </summary>
         [Test]
-        [ExpectedException(typeof (ArgumentException))]
         public void NameCannotBeStringEmpty()
         {
-			target.ChangeName(string.Empty);
+			Assert.Throws<ArgumentException>(() => target.ChangeName(string.Empty));
 		}
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifyNameCannotBeTooLong()
         {
-	        target.ChangeName(string.Empty.PadRight(51));
+			Assert.Throws<ArgumentException>(() => target.ChangeName(string.Empty.PadRight(51)));
         }
 
         [Test]
-        [ExpectedException(typeof(MissingMemberException))]
         public void ThrowsExceptionIfTryingToRemoveWorkloadNotInList()
         {
             ISkill skill = SkillFactory.CreateSkill("SkillName", SkillTypeFactory.CreateSkillType(), 15);
-            target.RemoveWorkload(new Workload(skill));
+			Assert.Throws<MissingMemberException>(() => target.RemoveWorkload(new Workload(skill)));
         }
         
         #region Workload
@@ -449,11 +446,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         /// Null layers are not allowed.
         /// </summary>
         [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
         public void NullForecastsAreNotAllowed()
         {
             ISkill skill = SkillFactory.CreateSkill("SkillName", SkillTypeFactory.CreateSkillType(), 15);
-            skill.AddWorkload(null);
+			Assert.Throws<ArgumentNullException>(() => skill.AddWorkload(null));
         }
 
         #endregion
@@ -572,14 +568,14 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.IsTrue(target.TemplateWeekCollection.Values.Contains(skillDayTemplate2));
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifyCanRefreshTemplatesFromNewlyLoadedInstanceRequiresSkill()
         {
             target.SetId(Guid.NewGuid());
-            target.RefreshTemplates(WorkloadFactory.CreateWorkload(target));
+			Assert.Throws<ArgumentException>(() => target.RefreshTemplates(WorkloadFactory.CreateWorkload(target)));
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifyCanRefreshTemplatesFromNewlyLoadedInstanceRequiresSameSkill()
         {
             target.SetId(Guid.NewGuid());
@@ -587,7 +583,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             ISkill clonedSkill = target.EntityClone();
             clonedSkill.SetId(Guid.NewGuid());
 
-            target.RefreshTemplates(clonedSkill);
+			Assert.Throws<ArgumentException>(() => target.RefreshTemplates(clonedSkill));
         }
 
         [Test]
@@ -659,16 +655,16 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(256, target.PriorityValue);
         }
 
-        [Test,ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test]
         public void VerifyPriorityMustBeBetweenOneAndSeven()
         {
-            target.Priority = 8;
+			Assert.Throws<ArgumentOutOfRangeException>(() => target.Priority = 8);
         }
 
-        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test]
         public void VerifyPriorityMustBeBetweenOneAndSeven2()
         {
-            target.Priority = 0;
+			Assert.Throws<ArgumentOutOfRangeException>(() => target.Priority = 0);
         }
 
         [Test]
@@ -678,34 +674,34 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             target.OverstaffingFactor = new Percent(.3);
             Assert.AreEqual(new Percent(.30), target.OverstaffingFactor);
         }
-        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test]
         public void VerifyOverstaffToHigh()
         {
-            target.OverstaffingFactor = new Percent(2);
+			Assert.Throws<ArgumentOutOfRangeException>(() => target.OverstaffingFactor = new Percent(2));
         }
-        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test]
         public void VerifyOverstaffToLow()
         {
-            target.OverstaffingFactor = new Percent(-1);
+			Assert.Throws<ArgumentOutOfRangeException>(() => target.OverstaffingFactor = new Percent(-1));
         }
 
-		[Test, ExpectedException(typeof(InvalidOperationException))]
+		[Test]
 		public void AddingMaxSeatSkillToAggregateShouldThrowException()
 		{
 			ISkill maxSeatSkill = SkillFactory.CreateSiteSkill("poff");
-			target.AddAggregateSkill(maxSeatSkill);
+			Assert.Throws<InvalidOperationException>(() => target.AddAggregateSkill(maxSeatSkill));
 		}
 
-		[Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+		[Test]
 		public void ShouldThrowIfMaxParallelTasksIsZero()
 		{
-			target.MaxParallelTasks = 0;
+			Assert.Throws<ArgumentOutOfRangeException>(() => target.MaxParallelTasks = 0);
 		}
 
-		[Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+		[Test]
 		public void ShouldThrowIfMaxParallelTasksIsBiggerThanHundred()
 		{
-			target.MaxParallelTasks = 101;
+			Assert.Throws<ArgumentOutOfRangeException>(() => target.MaxParallelTasks = 101);
 		}
     }
 }

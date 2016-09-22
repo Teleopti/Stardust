@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             Assert.That(_target.ActualAgentStates.Values.First(), Is.EqualTo(state));
         }
 
-		[Test, ExpectedException(typeof(DefaultStateGroupException))]
+		[Test]
 		public void MustHaveDefaultStateGroup()
 		{
 			Expect.Call(_rtaStateGroupRepository.LoadAllCompleteGraph()).Return(new List<IRtaStateGroup>());
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 			_mocks.ReplayAll();
 			_target = new RtaStateHolder(_schedulingResultStateHolder, _rtaStateGroupRepository);
 			_target.Initialize();
-			_target.VerifyDefaultStateGroupExists();
+			Assert.Throws<DefaultStateGroupException>(() => _target.VerifyDefaultStateGroupExists());
 			_mocks.VerifyAll();
 		}
 

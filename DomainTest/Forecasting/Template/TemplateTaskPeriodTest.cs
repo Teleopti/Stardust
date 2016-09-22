@@ -160,10 +160,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
         /// Created date: 2008-01-22
         /// </remarks>
         [Test]
-        [ExpectedException(typeof(NotImplementedException))]
         public void VerifyRecalculateDailyAverageTimesNotImplemented()
         {
-            _target.RecalculateDailyAverageTimes();
+			Assert.Throws<NotImplementedException>(() => _target.RecalculateDailyAverageTimes());
         }
 
         /// <summary>
@@ -174,10 +173,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
         /// Created date: 2008-01-22
         /// </remarks>
         [Test]
-        [ExpectedException(typeof(NotImplementedException))]
+       
         public void VerifyRecalculateDailyTasksNotImplemented()
         {
-            _target.RecalculateDailyTasks();
+			Assert.Throws<NotImplementedException>(() => _target.RecalculateDailyTasks());
         }
 
         /// <summary>
@@ -188,10 +187,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
         /// Created date: 2008-03-03
         /// </remarks>
         [Test]
-        [ExpectedException(typeof(NotImplementedException))]
         public void VerifyRecalculateDailyStatisticTasksNotImplemented()
         {
-            _target.RecalculateDailyStatisticTasks();
+			Assert.Throws<NotImplementedException>(() => _target.RecalculateDailyStatisticTasks());
         }
 
         /// <summary>
@@ -202,10 +200,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
         /// Created date: 2008-03-03
         /// </remarks>
         [Test]
-        [ExpectedException(typeof(NotImplementedException))]
         public void VerifyRecalculateDailyAverageStatisticTimesNotImplemented()
         {
-            _target.RecalculateDailyAverageStatisticTimes();
+			Assert.Throws<NotImplementedException>(() => _target.RecalculateDailyAverageStatisticTimes());
         }
 
         /// <summary>
@@ -216,10 +213,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
         /// Created date: 2008-03-04
         /// </remarks>
         [Test]
-        [ExpectedException(typeof(NotImplementedException))]
         public void VerifyRecalculateDailyAverageCampaignTimesNotImplemented()
         {
-            _target.RecalculateDailyAverageCampaignTimes();
+			Assert.Throws<NotImplementedException>(() => _target.RecalculateDailyAverageCampaignTimes());
         }
 
         /// <summary>
@@ -230,10 +226,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
         /// Created date: 2008-03-04
         /// </remarks>
         [Test]
-        [ExpectedException(typeof(NotImplementedException))]
         public void VerifyRecalculateDailyCampaignTasksNotImplemented()
         {
-            _target.RecalculateDailyCampaignTasks();
+			Assert.Throws<NotImplementedException>(() => _target.RecalculateDailyCampaignTasks());
         }
 
         /// <summary>
@@ -326,10 +321,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
         /// Created date: 2008-01-28
         /// </remarks>
         [Test]
-        [ExpectedException(typeof(NotImplementedException))]
         public void VerifyRemoveParentGivesException()
         {
-            _target.RemoveParent(null);
+			Assert.Throws<NotImplementedException>(() => _target.RemoveParent(null));
         }
 
         /// <summary>
@@ -340,10 +334,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
         /// Created date: 2008-02-20
         /// </remarks>
         [Test]
-        [ExpectedException(typeof(NotImplementedException))]
         public void VerifyUpdateTemplateNameGivesException()
         {
-            _target.UpdateTemplateName();
+			Assert.Throws<NotImplementedException>(() => _target.UpdateTemplateName());
         }
 
         /// <summary>
@@ -481,7 +474,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
             Assert.AreEqual(_target.Period, taskPeriodClone.Period);
         }
 
-        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test]
         public void VerifySplitTemplateTaskPeriodWithLowerPeriodLength()
         {
             // try to split 30 minutes in 60, can't be done
@@ -492,10 +485,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
             _timePeriod = new DateTimePeriod(start, end);
             _target = new TemplateTaskPeriod(_task, _timePeriod);
 
-            _target.Split(new TimeSpan(1, 0, 0));
+			Assert.Throws<ArgumentOutOfRangeException>(() => _target.Split(new TimeSpan(1, 0, 0)));
         }
 
-        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test]
         public void VerifySplitTemplateTaskPeriodWithUnevenPeriodLengths()
         {
             // try to split 35 minutes in 15 can't be done
@@ -506,7 +499,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Template
             _timePeriod = new DateTimePeriod(start, end);
             _target = new TemplateTaskPeriod(_task, _timePeriod);
 
-            _target.Split(new TimeSpan(0, 15, 0));
+			Assert.Throws<ArgumentOutOfRangeException>(() => _target.Split(new TimeSpan(0, 15, 0)));
         }
 
         [Test]

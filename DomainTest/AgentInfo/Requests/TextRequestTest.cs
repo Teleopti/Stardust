@@ -47,16 +47,16 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             Assert.AreEqual(UserTexts.Resources.TextRequest + ", 2:00 AM - 2:00 AM", text);
         }
 
-        [Test, ExpectedException(typeof(NotImplementedException))]
+        [Test]
         public void VerifyAcceptNotImplemented()
         {
-            target.Accept(null,null,null);
+			Assert.Throws<NotImplementedException>(() => target.Accept(null,null,null));
         }
 
-        [Test, ExpectedException(typeof(NotImplementedException))]
+        [Test]
         public void VerifyReferNotImplemented()
         {
-            target.Refer(null);
+			Assert.Throws<NotImplementedException>(() => target.Refer(null));
         }
 
         [Test]

@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Workload
 			_analyticsWorkloadRepository.Workloads.Should().Be.Empty();
 		}
 
-		[Test, ExpectedException(typeof(BusinessUnitMissingInAnalyticsException))]
+		[Test]
 		public void ShouldThrowWhenBusinessUnitMissingFromAnalytics()
 		{
 			var skill = SkillFactory.CreateSkill("TestSkill");
@@ -55,10 +55,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Workload
 			_workloadRepository.Add(workload);
 			_analyticsBusinessUnitRepository.ReturnNull = true;
 
-			_target.Handle(new WorkloadChangedEvent { WorkloadId = workloadId, LogOnBusinessUnitId = businessUnitId });
+			Assert.Throws<BusinessUnitMissingInAnalyticsException>(() => _target.Handle(new WorkloadChangedEvent { WorkloadId = workloadId, LogOnBusinessUnitId = businessUnitId }));
 		}
 
-		[Test, ExpectedException(typeof(SkillMissingInAnalyticsException))]
+		[Test]
 		public void ShouldThrowWhenSkillMissingFromAnalytics()
 		{
 			var skill = SkillFactory.CreateSkill("TestSkill");
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Workload
 			workload.SetId(workloadId);
 			_workloadRepository.Add(workload);
 
-			_target.Handle(new WorkloadChangedEvent { WorkloadId = workloadId, LogOnBusinessUnitId = businessUnitId });
+			Assert.Throws<SkillMissingInAnalyticsException>(() => _target.Handle(new WorkloadChangedEvent { WorkloadId = workloadId, LogOnBusinessUnitId = businessUnitId }));
 		}
 
 		[Test]

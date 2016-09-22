@@ -21,9 +21,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
         [SetUp]
         public void Setup()
         {
-            _multiplicator = new Multiplicator(MultiplicatorType.OBTime);
-            _multiplicator.MultiplicatorValue = 3.5;
-            _startDate = new DateOnly(2008, 1, 1);
+	        _multiplicator = new Multiplicator(MultiplicatorType.OBTime) {MultiplicatorValue = 3.5};
+	        _startDate = new DateOnly(2008, 1, 1);
             _endDate = new DateOnly(2008, 1, 3);
             _startTime = TimeSpan.FromHours(6);
             _endTime = TimeSpan.FromHours(18);
@@ -37,21 +36,24 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             Assert.AreEqual(3.5, _target.Multiplicator.MultiplicatorValue);
         }
 
-        [Test, ExpectedException(typeof (ArgumentOutOfRangeException))]
+        [Test]
         public void VerifyConstructorWhenValidationFails()
         {
-            _target = new DateTimeMultiplicatorDefinition(_multiplicator, _endDate, _startDate, _startTime, _endTime);
+			Assert.Throws<ArgumentOutOfRangeException>(() => _target = new DateTimeMultiplicatorDefinition(_multiplicator, _endDate, _startDate, _startTime, _endTime));
         }
 
         [Test]
         public void VerifyProperties()
         {
-            _target = new DateTimeMultiplicatorDefinition(_multiplicator, _startDate.AddDays(1), _endDate.AddDays(1), _startTime.Add(TimeSpan.FromHours(1)), _endTime.Add(TimeSpan.FromHours(1)));
-            _target.StartDate = _startDate;
-            _target.EndDate = _startDate;
-            _target.StartTime = _startTime;
-            _target.EndTime = _startTime;
-            Assert.AreEqual(_startDate, _target.StartDate);
+	        _target = new DateTimeMultiplicatorDefinition(_multiplicator, _startDate.AddDays(1), _endDate.AddDays(1),
+		        _startTime.Add(TimeSpan.FromHours(1)), _endTime.Add(TimeSpan.FromHours(1)))
+	        {
+		        StartDate = _startDate,
+		        EndDate = _startDate,
+		        StartTime = _startTime,
+		        EndTime = _startTime
+	        };
+	        Assert.AreEqual(_startDate, _target.StartDate);
             Assert.AreEqual(_startDate, _target.EndDate);
             Assert.AreEqual(_startTime, _target.StartTime);
             Assert.AreEqual(_startTime, _target.EndTime);
@@ -100,10 +102,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             Assert.AreEqual(periodUtc, _target.ConvertToLayer(tzInfo).Period);
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void VerifyOrderIndexThrowsExceptionIfParentNull()
         {
-            Assert.AreEqual(1, _target.OrderIndex);
+			Assert.Throws<ArgumentNullException>(() =>
+			{
+				Assert.AreEqual(1, _target.OrderIndex);
+			});
         }
 
         [Test]

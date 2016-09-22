@@ -464,16 +464,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         /// Created by: robink
         /// Created date: 2008-07-10
         /// </remarks>
-        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test]
         public void VerifyNumberOfDaysOffCannotBeLessThanOne()
         {
-            _periodMonth.SetDaysOff(-1);
+			Assert.Throws<ArgumentOutOfRangeException>(() => _periodMonth.SetDaysOff(-1));
         }
 
-        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test]
         public void VerifyNumberOfDaysOffCannotBeGreaterThan999()
         {
-            _periodMonth.SetDaysOff(1000);
+			Assert.Throws<ArgumentOutOfRangeException>(() => _periodMonth.SetDaysOff(1000));
         }
 
         [Test]
@@ -525,16 +525,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Assert.AreEqual(80, _periodMonth.Number);
         }
 
-        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test]
         public void VerifyNumberGreaterThanZero()
         {
-            _periodDay.Number = 0;
+			Assert.Throws<ArgumentOutOfRangeException>(() => _periodDay.Number = 0);
         }
 
-        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test]
         public void VerifyNumberGreaterThanZeroInConstructor()
         {
-            var periodException = new SchedulePeriod(new DateOnly(), SchedulePeriodType.Day, 0);
+			Assert.Throws<ArgumentOutOfRangeException>(() =>
+			{
+				var periodException = new SchedulePeriod(new DateOnly(), SchedulePeriodType.Day, 0);
+			});
         }
 
         [Test]
@@ -606,13 +609,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Assert.AreEqual(1, _periodMonth.ShiftCategoryLimitationCollection().Count);
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void CannotAddShiftCategoryLimitationWithSameCategory()
         {
-            IShiftCategoryLimitation shiftCategoryLimitation =
-                new ShiftCategoryLimitation(ShiftCategoryFactory.CreateShiftCategory("xx"));
-            _periodMonth.AddShiftCategoryLimitation(shiftCategoryLimitation);
-            _periodMonth.AddShiftCategoryLimitation(shiftCategoryLimitation);
+			Assert.Throws<ArgumentException>(() =>
+			{
+				IShiftCategoryLimitation shiftCategoryLimitation =
+				new ShiftCategoryLimitation(ShiftCategoryFactory.CreateShiftCategory("xx"));
+				_periodMonth.AddShiftCategoryLimitation(shiftCategoryLimitation);
+				_periodMonth.AddShiftCategoryLimitation(shiftCategoryLimitation);
+			});
+			
         }
 
         [Test]
@@ -645,11 +652,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Assert.AreEqual(_mustHavePreference, _periodMonth.MustHavePreference);
         }
 
-        [Test, ExpectedException (typeof(ArgumentOutOfRangeException))]
+        [Test]
         public void VerifyMustHavePreferencesCannotBeLessThanZero()
         {
-            _periodMonth.MustHavePreference = -1;
-            Assert.AreEqual(_mustHavePreference, _periodMonth.MustHavePreference);
+			Assert.Throws<ArgumentOutOfRangeException>(() =>
+			{
+				_periodMonth.MustHavePreference = -1;
+				Assert.AreEqual(_mustHavePreference, _periodMonth.MustHavePreference);
+			});
         }
 
         [Test]

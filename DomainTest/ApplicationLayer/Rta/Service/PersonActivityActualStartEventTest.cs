@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
 	[TestFixture]
 	[RtaTest]
-	[Ignore]
+	[Ignore("Reason mandatory for NUnit 3")]
 	public class PersonActivityActualStartEventTest
 	{
 		public FakeRtaDatabase Database;

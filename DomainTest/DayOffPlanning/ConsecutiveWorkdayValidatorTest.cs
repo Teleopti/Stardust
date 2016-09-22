@@ -356,13 +356,10 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyValidationThrowsExceptionIfNoValidDate()
         {
             _target = new ConsecutiveWorkdayValidator(new MinMax<int>(1, 7), true, true);
-            bool result = _target.IsValid(_periodDays, 35);
-            Assert.IsTrue(result);
-
+	        Assert.Throws<ArgumentOutOfRangeException>(() => _target.IsValid(_periodDays, 35));
         }
 
         [Test]
@@ -385,13 +382,12 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void VerifyIsValidThrowsExceptionWhenNotIndexIsNotDayOff()
         {
             BitArray bitArray = createBitArrayForTest();
             _target = new ConsecutiveWorkdayValidator(new MinMax<int>(1, 3), true, true);
-            Assert.IsTrue(_target.IsValid(bitArray, 2));
-        }
+			Assert.Throws<ArgumentException>(() => _target.IsValid(bitArray, 2));
+		}
 
         private static BitArray createBitArrayForTest()
         {

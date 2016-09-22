@@ -140,22 +140,22 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(skillDaysChild1[0], skillDaysChild1Result[0]);
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifyCannotGetChildSkillDaysForChildSkillNotSet()
         {
             var skillDaysChild1 = new List<ISkillDay>();
 
             target.SetChildSkillDays(childSkill1, skillDaysChild1);
-            target.GetVisibleChildSkillDays(childSkill2);
+			Assert.Throws<ArgumentException>(() => target.GetVisibleChildSkillDays(childSkill2));
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifyChildSkillMustBelongToMultisiteSkill()
         {
             var skillDaysChild1 = new List<ISkillDay>();
             IChildSkill childSkill = new ChildSkill("test", "test", Color.Red, 15, skill.SkillType);
 
-            target.SetChildSkillDays(childSkill, skillDaysChild1);
+			Assert.Throws<ArgumentException>(() => target.SetChildSkillDays(childSkill, skillDaysChild1));
         }
 
         [Test]
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.IsTrue(multisiteDays[0].ChildSkillDays.Contains(skillDaysChild2[0]));
         }
 
-        [Test, ExpectedException(typeof(InvalidOperationException))]
+        [Test]
         public void VerifyAllChildSkillDaysMustBeSet()
         {
             var skillDaysChild1 = new List<ISkillDay>
@@ -192,19 +192,18 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                                 SkillDayFactory.CreateSkillDay(childSkill1, SkillDayTemplate.BaseDate)
                             };
             target.SetChildSkillDays(childSkill1, skillDaysChild1);
-            target.InitializeChildSkills();
+			Assert.Throws<InvalidOperationException>(() => target.InitializeChildSkills());
         }
 
-        [Test, ExpectedException(typeof(ValidationException))]
+        [Test]
         public void VerifyCheckRestrictionsForMultisiteDay()
         {
-            var distribution = new Dictionary<IChildSkill, Percent>();
-            distribution.Add(childSkill1,new Percent(1.1d));
-            multisiteDays[1].SetMultisitePeriodCollection(new List<IMultisitePeriod> { new MultisitePeriod(new DateOnlyPeriod(multisiteDays[1].MultisiteDayDate, multisiteDays[1].MultisiteDayDate).ToDateTimePeriod(skill.TimeZone), distribution) });
-            target.CheckRestrictions();
+	        var distribution = new Dictionary<IChildSkill, Percent> {{childSkill1, new Percent(1.1d)}};
+	        multisiteDays[1].SetMultisitePeriodCollection(new List<IMultisitePeriod> { new MultisitePeriod(new DateOnlyPeriod(multisiteDays[1].MultisiteDayDate, multisiteDays[1].MultisiteDayDate).ToDateTimePeriod(skill.TimeZone), distribution) });
+			Assert.Throws<ValidationException>(() => target.CheckRestrictions());
         }
 
-        [Test, ExpectedException(typeof(ValidationException))]
+        [Test]
         public void VerifyCheckRestrictionsForChildSkillDay()
         {
             var skillDaysChild1 = new List<ISkillDay>
@@ -218,7 +217,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             skillDaysChild1[1].SkillDataPeriodCollection[0].MinimumPersons = 5;
             skillDaysChild1[1].SkillDataPeriodCollection[0].MaximumPersons = 4;
 
-            target.CheckRestrictions();
+			Assert.Throws<ValidationException>(() => target.CheckRestrictions());
         }
 
         [Test]
@@ -288,18 +287,18 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(1,percentage.Value);
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifyCannotHaveChildSkillFromOtherMultisiteSkill()
         {
             IChildSkill childSkill = new ChildSkill("test", "test", Color.Red, 15, skill.SkillType);
-            target.GetPercentageForInterval(childSkill, new DateTimePeriod());
+			Assert.Throws<ArgumentException>(() => target.GetPercentageForInterval(childSkill, new DateTimePeriod()));
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void VerifyCannotHaveSkillNotInThisSkillDayCalculator()
         {
             ISkill dummySkill = new Skill("test", "test", Color.Red, 15, skill.SkillType);
-            target.GetPercentageForInterval(dummySkill, new DateTimePeriod());
+			Assert.Throws<ArgumentException>(() => target.GetPercentageForInterval(dummySkill, new DateTimePeriod()));
         }
 
         [Test]

@@ -89,10 +89,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         /// Created date: 2008-03-27
         /// </remarks>
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void VerifyWorkloadCannotBeNull()
         {
-            target = new ValidatedVolumeDay(null, _date);
+			Assert.Throws<ArgumentNullException>(() => target = new ValidatedVolumeDay(null, _date));
         }
 
         /// <summary>
@@ -353,10 +352,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         #region ITaskOwner tests
 
         [Test]
-        [ExpectedException(typeof(NotImplementedException))]
         public void CanReset()
         {
-            target.ResetTaskOwner();
+			Assert.Throws<NotImplementedException>(() => target.ResetTaskOwner());
         }
         /// <summary>
         /// Verifies the total tasks.

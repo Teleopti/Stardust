@@ -30,11 +30,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _target = new RuleSetDeletedActivityChecker();
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowIfRuleSetIsNull()
         {
             _ruleSet = null;
-            _target.ContainsDeletedActivity(_ruleSet);
+			Assert.Throws<ArgumentNullException>(() => _target.ContainsDeletedActivity(_ruleSet));
         }
 
         [Test]

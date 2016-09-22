@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.DomainTest
     [SetUpFixture]
     public class SetupFixtureForAssembly
     {
-        [SetUp]
+        [OneTimeSetUp]
         public void RunBeforeAnyTest()
         {
             var stateMock = new FakeState();

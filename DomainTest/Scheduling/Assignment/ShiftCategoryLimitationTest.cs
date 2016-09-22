@@ -25,16 +25,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Assert.AreEqual(_target.ShiftCategory, _shiftCategory);
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShiftCategoryCannotBeNull()
         {
-            _target.ShiftCategory = null;
+			Assert.Throws<ArgumentNullException>(() => _target.ShiftCategory = null);
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShiftCategoryCannotBeNull2()
         {
-            _target = new ShiftCategoryLimitation(null);
+			Assert.Throws<ArgumentNullException>(() => _target = new ShiftCategoryLimitation(null));
         }
     }
 }

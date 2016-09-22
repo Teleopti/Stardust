@@ -74,22 +74,22 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
             Assert.AreEqual(0, _target.StartDay);
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void VerifyPersonNotNull()
         {
-            _target = new PersonRotation(null, _rotation, _startDate, _startRow);
+            Assert.Throws<ArgumentNullException>(() => _target = new PersonRotation(null, _rotation, _startDate, _startRow));
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void VerifyRotationNotNull()
         {
-            _target = new PersonRotation(_person, null, _startDate, _startRow);
+			Assert.Throws<ArgumentNullException>(() => _target = new PersonRotation(_person, null, _startDate, _startRow));
         }
 
-        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test]
         public void VerifyStartDayIsPositive()
         {
-            _target = new PersonRotation(_person, _rotation, _startDate, -1);
+			Assert.Throws<ArgumentOutOfRangeException>(() => _target = new PersonRotation(_person, _rotation, _startDate, -1));
         }
 
 
@@ -125,11 +125,11 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
             Assert.AreEqual(expectedRotationDay, rotationDay);
         }
         
-        [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]
+        [Test]
         public void VerifyDateIsNotLargerThanStartDate()
         {
             DateOnly date = new DateOnly(2008, 7, 15);
-            _target.GetRotationDay(date);
+            Assert.Throws<ArgumentOutOfRangeException>(() => _target.GetRotationDay(date));
         }
 
        

@@ -60,10 +60,10 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
 			Assert.IsTrue(ReflectionHelper.HasDefaultConstructor(_target.GetType(), true));
 		}
 
-		[Test, ExpectedException(typeof (ArgumentOutOfRangeException))]
+		[Test]
 		public void VerifyCannotHaveNegativeThresholdTime()
 		{
-			_target.ThresholdTime = TimeSpan.FromSeconds(-20).Seconds;
+			Assert.Throws<ArgumentOutOfRangeException>(() => _target.ThresholdTime = TimeSpan.FromSeconds(-20).Seconds);
 		}
 
 		[Test]

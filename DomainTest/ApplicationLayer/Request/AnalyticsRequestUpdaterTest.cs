@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 			_target = new AnalyticsRequestUpdater(_personRequestRepository, _analyticsRequestRepository, _analyticsDateRepository, _analyticsBusinessUnitRepository, _personPeriodRepository, _analyticsAbsenceRepository);
 		}
 
-		[Test, ExpectedException(typeof(DateMissingInAnalyticsException))]
+		[Test]
 		public void MssingDateInAnalyticsDatabaseThrows()
 		{
 			_analyticsDateRepository = new FakeAnalyticsDateRepository(new DateTime(2000, 1, 1), new DateTime(2000, 1, 1));
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 				ValidToDate = new DateTime(2000, 1, 3, 0, 0, 0, DateTimeKind.Utc)
 			});
 
-			_target.Handle(new PersonRequestChangedEvent { PersonRequestId = personRequest.Id.GetValueOrDefault(), LogOnBusinessUnitId = Guid.NewGuid() });
+			Assert.Throws<DateMissingInAnalyticsException>(() => _target.Handle(new PersonRequestChangedEvent { PersonRequestId = personRequest.Id.GetValueOrDefault(), LogOnBusinessUnitId = Guid.NewGuid() }));
 		}
 
 		[Test]
@@ -74,14 +74,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 			_analyticsRequestRepository.AnalyticsRequests.Should().Be.Empty();
 		}
 
-		[Test, ExpectedException(typeof(PersonPeriodMissingInAnalyticsException))]
+		[Test]
 		public void MissingPersonPeriodInAnalyticsDatabaseThrows()
 		{
 			var personRequest = new PersonRequestFactory().CreatePersonRequest();
 			personRequest.SetId(Guid.NewGuid());
 			personRequest.Request.SetId(Guid.NewGuid());
 			_personRequestRepository.Add(personRequest);
-			_target.Handle(new PersonRequestChangedEvent { PersonRequestId = personRequest.Id.GetValueOrDefault(), LogOnBusinessUnitId = Guid.NewGuid() });
+			Assert.Throws<PersonPeriodMissingInAnalyticsException>(() => _target.Handle(new PersonRequestChangedEvent { PersonRequestId = personRequest.Id.GetValueOrDefault(), LogOnBusinessUnitId = Guid.NewGuid() }));
 		}
 
 		[Test]

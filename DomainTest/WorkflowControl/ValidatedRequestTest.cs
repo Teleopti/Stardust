@@ -11,9 +11,11 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         [SetUp]
         public void Setup()
         {
-            target = new ValidatedRequest();
-            target.IsValid = true;
-            target.ValidationErrors = string.Empty;
+	        target = new ValidatedRequest
+	        {
+		        IsValid = true,
+		        ValidationErrors = string.Empty
+	        };
         }
 
         [Test]
@@ -23,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             target.ValidationErrors = "Invalid";
             
             Assert.IsFalse(target.IsValid);
-            Assert.IsNotNullOrEmpty(target.ValidationErrors);
+			Assert.That(target.ValidationErrors, Is.Not.Null.Or.Empty);
 
         }
     }

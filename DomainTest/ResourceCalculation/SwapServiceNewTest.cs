@@ -109,13 +109,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.IsTrue(service.CanSwapAssignments());
         }
 
-		[Test, ExpectedException(typeof(ConstraintException))]
+		[Test]
 		public void VerifyInvalidList()
 		{
 			_list = new List<IScheduleDay>();
 			var service = new SwapServiceNew();
 			service.Init(_list);
-			service.Swap(_dictionary);
+			Assert.Throws<ConstraintException>(() => service.Swap(_dictionary));
 		}
 
         [Test]

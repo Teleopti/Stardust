@@ -91,16 +91,17 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test]
 		public void VerifyWhenSequenceContainsNonNumericValuesOnly()
 		{
-			double expected = Domain.Calculation.Variances.StandardDeviation(new[] { Double.NaN });
+			double expected = Domain.Calculation.Variances.StandardDeviation(new[] { double.NaN });
 			Assert.AreEqual(0, expected);
 		}
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyWhenZero()
         {
-            _target = new PeriodDistribution(_skillStaffPeriod, _activity, _period, 0, _demandedTraff);
-            Assert.AreEqual(0,_target.PeriodDetailAverage);
+			Assert.Throws<ArgumentOutOfRangeException>(() =>
+			{
+				_target = new PeriodDistribution(_skillStaffPeriod, _activity, _period, 0, _demandedTraff);
+			});
         }
 
         [Test]

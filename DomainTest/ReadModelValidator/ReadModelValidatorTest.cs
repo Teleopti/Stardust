@@ -512,7 +512,6 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 		}
 
 		[Test]
-		[ExpectedException(typeof (ValidationException))]
 		public void ShouldThrowWhenReinitializeReadModelWithResidualReadmodels()
 		{
 			var scenario = CurrentScenario.Current();
@@ -539,7 +538,7 @@ namespace Teleopti.Ccc.DomainTest.ReadModelValidator
 				Label = "sd"
 			});
 
-			Target.Validate(ValidateReadModelType.ScheduleDay,new DateTime(2016,1,1),new DateTime(2016,1,1), ReadModelValidationMode.Reinitialize);
+			Assert.Throws<ValidationException>(() => Target.Validate(ValidateReadModelType.ScheduleDay,new DateTime(2016,1,1),new DateTime(2016,1,1), ReadModelValidationMode.Reinitialize));
 		}
 
 	}

@@ -53,52 +53,55 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_locks = new Dictionary<IPerson, IList<DateOnly>>();
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowExceptionWhenRollbackServiceIsNull()
 		{
-			_swapRawService.Swap(null, _selectionOne, _selectionTwo, _locks);
+			Assert.Throws<ArgumentNullException>(() => _swapRawService.Swap(null, _selectionOne, _selectionTwo, _locks));
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowExceptionWhenSelectionOneIsNull()
 		{
-			_swapRawService.Swap(_schedulePartModifyAndRollbackService, null, _selectionTwo, _locks);
+			Assert.Throws<ArgumentNullException>(() => _swapRawService.Swap(_schedulePartModifyAndRollbackService, null, _selectionTwo, _locks));
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowExceptionWhenSelectionTwoIsNull()
 		{
-			_swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, null, _locks);
+			Assert.Throws<ArgumentNullException>(() => _swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, null, _locks));
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void ShouldThrowExceptionWhenLocksIsNull()
 		{
-			_swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, _selectionTwo, null);
+			Assert.Throws<ArgumentNullException>(() => _swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, _selectionTwo, null));
 		}
 
-		[Test, ExpectedException(typeof(ArgumentException))]
+		[Test]
 		public void ShouldThrowExceptionWhenSelectionsNotOfEqualSize()
 		{
 			using (_mockRepository.Record())
 			{
 				Expect.Call(_scheduleDictionary.Scenario).Return(_scenario).Repeat.AtLeastOnce();
 			}
-
-			using (_mockRepository.Playback())
+			Assert.Throws<ArgumentException>(() =>
 			{
-				_scheduleDayOnePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2011, 1, 1));
-				_scheduleDayTwoPersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2011, 1, 2));
-				_scheduleDayOnePersonTwo = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personTwo, new DateOnly(2011, 1, 1));
+				using (_mockRepository.Playback())
+				{
+					_scheduleDayOnePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2011, 1, 1));
+					_scheduleDayTwoPersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2011, 1, 2));
+					_scheduleDayOnePersonTwo = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personTwo, new DateOnly(2011, 1, 1));
 
-				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne, _scheduleDayTwoPersonOne };
-				_selectionTwo = new List<IScheduleDay> { _scheduleDayOnePersonTwo };
+					_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne, _scheduleDayTwoPersonOne };
+					_selectionTwo = new List<IScheduleDay> { _scheduleDayOnePersonTwo };
 
-				_swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, _selectionTwo, _locks);
-			}
+					_swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, _selectionTwo, _locks);
+				}
+			});
+			
 		}
 
-		[Test, ExpectedException(typeof(PermissionException))]
+		[Test]
 		public void ShouldThrowExceptionWhenNoPermission()
 		{
 			using (_mockRepository.Record())
@@ -106,17 +109,20 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Expect.Call(_scheduleDictionary.Scenario).Return(_scenario).Repeat.AtLeastOnce();
 				Expect.Call(_authorizationService.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment, new DateOnly(2011, 1, 1), _personOne)).Return(false);
 			}
-
-			using (_mockRepository.Playback())
+			Assert.Throws<PermissionException>(() =>
 			{
-				_scheduleDayOnePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2011, 1, 1));
-				_scheduleDayOnePersonTwo = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personTwo, new DateOnly(2011, 1, 1));
+				using (_mockRepository.Playback())
+				{
+					_scheduleDayOnePersonOne = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personOne, new DateOnly(2011, 1, 1));
+					_scheduleDayOnePersonTwo = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _personTwo, new DateOnly(2011, 1, 1));
 
-				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne };
-				_selectionTwo = new List<IScheduleDay> { _scheduleDayOnePersonTwo };
+					_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne };
+					_selectionTwo = new List<IScheduleDay> { _scheduleDayOnePersonTwo };
 
-				_swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, _selectionTwo, _locks);
-			}
+					_swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, _selectionTwo, _locks);
+				}
+			});
+			
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]

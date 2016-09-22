@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			_analyticsScheduleRepository.AssertWasNotCalled(x => x.DeleteFactSchedule(dateId, personPart.PersonId, scenario.ScenarioId));
 		}
 
-		[Test, ExpectedException(typeof(PersonPeriodMissingInAnalyticsException))]
+		[Test]
 		public void ShouldNotTryToSaveScheduleChangeWhenPersonPeriodIdIsEmpty()
 		{
 			var scenario = new AnalyticsScenario { ScenarioCode = Guid.NewGuid(), ScenarioId = 6 };
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			const int dateId = 0;
 			_dateHandler.Stub(x => x.MapDateId(Arg<DateOnly>.Is.Anything, out Arg<int>.Out(dateId).Dummy)).Return(true);
 
-			_target.Handle(@event);
+			Assert.Throws<PersonPeriodMissingInAnalyticsException>(() => _target.Handle(@event));
 
 			_analyticsScheduleRepository.AssertWasNotCalled(x => x.DeleteFactSchedule(dateId, personPart.PersonId, scenario.ScenarioId));
 		}
@@ -301,7 +301,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			_analyticsScheduleRepository.AssertWasNotCalled(x => x.PersistFactScheduleDayCountRow(null));
 		}
 
-		[Test, ExpectedException(typeof(ScenarioMissingInAnalyticsException))]
+		[Test]
 		public void ShouldNotBeHandledScenarioDoesNotExistInAnalytics()
 		{
 			var scheduleDay = new ProjectionChangedEventScheduleDay
@@ -315,7 +315,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				ScenarioId = Guid.NewGuid()
 			};
 
-			_target.Handle(@event);
+			Assert.Throws<ScenarioMissingInAnalyticsException>(() => _target.Handle(@event));
 
 			_analyticsScheduleRepository.AssertWasNotCalled(x => x.DeleteFactSchedule(Arg<int>.Is.Anything, Arg<int>.Is.Anything, Arg<int>.Is.Anything));
 			_analyticsScheduleRepository.AssertWasNotCalled(x => x.PersistFactScheduleBatch(Arg<IList<IFactScheduleRow>>.Is.Anything));

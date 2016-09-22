@@ -171,12 +171,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			Assert.That(teamInfo3.Equals(teamInfo4), Is.False);
 		}
 
-		[Test, ExpectedException(typeof (ArgumentOutOfRangeException))]
+		[Test]
 		public void ShouldTrowIfTryingToLockAPersonThatIsNotMember()
 		{
 			Group group1 = new Group(new List<IPerson> { _person1 }, "Hej");
 			var teamInfo1 = new TeamInfo(group1, _groupMatrixes);
-			teamInfo1.LockMember(new DateOnlyPeriod(_date, _date),  _person2);
+			Assert.Throws<ArgumentOutOfRangeException>(() => teamInfo1.LockMember(new DateOnlyPeriod(_date, _date),  _person2));
 		}
 
 		[Test]
