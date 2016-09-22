@@ -82,11 +82,10 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			expectedResults.Add (personRequests[0].Id.Value, RequestStatus.Pending);
 			expectedResults.Add (personRequests[1].Id.Value, RequestStatus.Pending);
 			expectedResults.Add (personRequests[2].Id.Value, RequestStatus.Pending);
-			expectedResults.Add (personRequests[3].Id.Value, RequestStatus.Pending);
+			expectedResults.Add (personRequests[3].Id.Value, RequestStatus.Denied);
 			expectedResults.Add (personRequests[4].Id.Value, RequestStatus.Denied);
-			expectedResults.Add (personRequests[5].Id.Value, RequestStatus.Denied);
+			expectedResults.Add (personRequests[5].Id.Value, RequestStatus.Pending);
 			expectedResults.Add (personRequests[6].Id.Value, RequestStatus.Pending);
-			expectedResults.Add (personRequests[7].Id.Value, RequestStatus.Pending);
 			
 			WithUnitOfWork.Do (() =>
 			{
@@ -137,8 +136,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 
 			var personIds = new[]
 			{
-				new Guid ("55E3A133-6305-4C9A-8AEA-A1410113C47D"),
-				new Guid ("87E6CEF0-388A-4365-94FA-A1410113C47D"),
 				new Guid ("6069902E-5760-4DF4-B733-A5E00105B099"), //same site.
 				new Guid ("BF50C741-A780-4930-A64B-A5E00105F325"),
 
