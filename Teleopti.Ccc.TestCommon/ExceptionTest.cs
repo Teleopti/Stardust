@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.TestCommon
         {
             Assert.IsNotNull(ex);
         }
-
+		
         /// <summary>
         /// Verifies that the message and inner constructor works.
         /// </summary>

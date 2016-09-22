@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 		private DataCreator dataCreator;
 		private AnalyticsDatabase analyticsDatabase;
 
-		[SetUp]
+		[OneTimeSetUp]
 		public void Setup()
 		{
 			XmlConfigurator.Configure();
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 			StateHolderProxyHelper.Logout();
 		}
 
-		[TearDown]
+		[OneTimeTearDown]
 		public void Teardown()
 		{
 			TestSiteConfigurationSetup.TearDown();

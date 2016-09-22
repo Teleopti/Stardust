@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account.Concurrent
 		protected abstract void ThenPersonAccountWithSolvedConflicts(IPersonAbsenceAccount personAccountWithSolvedConflicts);
 
 		[Test]
-		public async void DoTheTest()
+		public async Task DoTheTest()
 		{
 			var otherAccounts = FetchPersonAccount();
 			var myAccounts = FetchPersonAccount();

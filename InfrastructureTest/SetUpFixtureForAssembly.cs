@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Autofac;
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 		internal static IDataSource DataSource;
 		private static int dataHash = 0;
 
-		[SetUp]
+		[OneTimeSetUp]
 		public void BeforeTestSuite()
 		{
 			var builder = new ContainerBuilder();
@@ -51,6 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			ConfigurationManager.AppSettings.AllKeys.ToList().ForEach(
 				 name => appSettings.Add(name, ConfigurationManager.AppSettings[name]));
 
+			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
 			DataSource = DataSourceHelper.CreateDatabasesAndDataSource(container.Resolve<ICurrentTransactionHooks>(), "TestData");
 
 			container.Resolve<HangfireClientStarter>().Start();
@@ -125,7 +127,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			}
 		}
 
-		[TearDown]
+		[OneTimeTearDown]
 		public void AfterTestSuite()
 		{
 			DataSource.Application.Dispose();

@@ -84,8 +84,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             var licenseRepository = new LicenseStatusRepository(UnitOfWork);
             var license = new LicenseStatus { XmlString = "<foo></foo>" };
             var oneLicenseTooMany = new LicenseStatus { XmlString = "<overflow></overflow>" };
-            licenseRepository.AddRange(new Collection<ILicenseStatus> { license, oneLicenseTooMany });
-            Assert.Throws<DataSourceException>(() => Session.Flush());
+			Assert.Throws<DataSourceException>(() => licenseRepository.AddRange(new Collection<ILicenseStatus> { license, oneLicenseTooMany }));
+	        Session.Flush();
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]

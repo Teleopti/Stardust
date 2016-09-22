@@ -6,13 +6,13 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 	[SetUpFixture]
 	public class NUnitSetup
 	{
-		[SetUp]
+		[OneTimeSetUp]
 		public void Setup()
 		{
 			TestSiteConfigurationSetup.Setup();
 		}
 
-		[TearDown]
+		[OneTimeTearDown]
 		public void CleanUp()
 		{
 			TestSiteConfigurationSetup.TearDown();

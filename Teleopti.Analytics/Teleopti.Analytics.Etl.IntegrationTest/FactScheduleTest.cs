@@ -111,7 +111,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		}
 
 		[Test]
-		[Ignore]
+		[Ignore("Reason mandatory for NUnit 3")]
 		public void ShouldWorkWithOverlappingShifts()
 		{
 			var testDate = new DateTime(2013, 06, 15);

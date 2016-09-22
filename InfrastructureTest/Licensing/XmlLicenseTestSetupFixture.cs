@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             get { return _publicKeyXmlString; }
         }
 
-        [SetUp]
+        [OneTimeSetUp]
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public void Setup()
         {
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             }
         }
 
-        [TearDown]
+        [OneTimeTearDown]
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public void Teardown()
         {

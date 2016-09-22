@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 		private DefaultDataCreator defaultDataCreator;
 		private DataCreator dataCreator;
 
-		[SetUp]
+		[OneTimeSetUp]
 		public void Setup()
 		{
 			XmlConfigurator.Configure();
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			StateHolderProxyHelper.Logout();
 		}
 
-		[TearDown]
+		[OneTimeTearDown]
 		public void Teardown()
 		{
 			TestSiteConfigurationSetup.TearDown();

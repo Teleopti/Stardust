@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Authentication
         }
 
         [Test]
-        public async void ShouldNotDeadlockWhenInsertingAndClearingExpired()
+        public async Task ShouldNotDeadlockWhenInsertingAndClearingExpired()
         {
             var random = new Random();
             var timestamp = DateTime.Today;

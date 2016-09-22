@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules.Concurrent
 			bool myScheduleRangeWasTheOneWithConflicts);
 
 		[Test]
-		public async void DoTheTestConcurrent()
+		public async Task DoTheTestConcurrent()
 		{
 			var otherRange = LoadScheduleRange();
 			var myRange = LoadScheduleRange();

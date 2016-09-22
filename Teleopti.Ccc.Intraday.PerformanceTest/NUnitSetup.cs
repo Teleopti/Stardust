@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Intraday.PerformanceTest
 	[SetUpFixture]
 	public class NUnitSetup
 	{
-		[SetUp]
+		[OneTimeSetUp]
 		public void Setup()
 		{
 			TestSiteConfigurationSetup.Setup();
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Intraday.PerformanceTest
 			builder.Build();
 		}
 
-		[TearDown]
+		[OneTimeTearDown]
 		public void CleanUp()
 		{
 			TestSiteConfigurationSetup.TearDown();

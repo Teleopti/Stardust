@@ -100,8 +100,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             ILicenseRepository licenseRepository = new LicenseRepository(UnitOfWork);
             ILicense license = new License { XmlString = "<foo></foo>" };
             ILicense oneLicenseTooMany = new License { XmlString = "<overflow></overflow>" };
-            licenseRepository.AddRange(new Collection<ILicense> { license, oneLicenseTooMany });
-            Assert.Throws<DataSourceException>(() => Session.Flush());
+			Assert.Throws<DataSourceException>(() => licenseRepository.AddRange(new Collection<ILicense> { license, oneLicenseTooMany }));
+            Session.Flush();
         }
 
         [Test]

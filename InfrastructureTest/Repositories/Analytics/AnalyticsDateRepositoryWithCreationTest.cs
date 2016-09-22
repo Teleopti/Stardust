@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		}
 
 		[Test]
-		public async void ShouldHandleMultipleRequestsAtTheSameTime()
+		public async Task ShouldHandleMultipleRequestsAtTheSameTime()
 		{
 			var tasks = new List<Task>();
 
