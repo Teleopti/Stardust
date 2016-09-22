@@ -282,5 +282,41 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			result.TeamId.Should().Be(teamId);
 			result.SiteId.Should().Be(siteId);
 		}
+
+		[Test]
+		public void ShouldPersistStateGroupId()
+		{
+			var personId = Guid.NewGuid();
+			var stateGroupId = Guid.NewGuid();
+
+			Target.Persist(new AgentStateReadModelForTest
+			{
+				PersonId = personId,
+				StateGroupId = stateGroupId
+			});
+
+			Target.Get(personId).StateGroupId.Should().Be(stateGroupId);
+		}
+
+
+		[Test]
+		public void ShouldUpdateStateGroupId()
+		{
+			var personId = Guid.NewGuid();
+			var stateGroupId = Guid.NewGuid();
+			Target.Persist(new AgentStateReadModelForTest
+			{
+				PersonId = personId,
+				StateGroupId = null
+			});
+
+			Target.Persist(new AgentStateReadModelForTest
+			{
+				PersonId = personId,
+				StateGroupId = stateGroupId
+			});
+
+			Target.Get(personId).StateGroupId.Should().Be(stateGroupId);
+		}
 	}
 }
