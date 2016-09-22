@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		}
 
 		[Test]
+		[Repeat(25)] //to make sure it works if/when threads are reused
 		public void ShouldShareBetweenThreads()
 		{
 			SchedulerStateHolder.Fill(new Scenario("_"), DateOnly.Today.ToDateOnlyPeriod(), Enumerable.Empty<IPerson>(), Enumerable.Empty<IPersistableScheduleData>(), Enumerable.Empty<ISkillDay>());

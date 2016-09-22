@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using NHibernate.Util;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -174,6 +175,48 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.EqualTo(0);
 			skillDayB.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0);
+		}
+
+
+		[Test, Ignore("#38872")]
+		[Toggle(Toggles.ResourcePlanner_SpeedUpManualChanges_37029)]
+		public void ShouldBaseBestShiftOnPrimarySkillOpenHoursEvenIfSubskillIsOpenWithHigherDemand()
+		{
+			var date = new DateOnly(2016, 9, 19); //mån
+			var period = new DateOnlyPeriod(date, date.AddWeeks(1));
+			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			var activity = new Activity("_").WithId();
+			var scenario = new Scenario("_");
+			var skillA = new Skill("A", "_", Color.AliceBlue, 15, new SkillTypePhone(new Description("_"), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc}.WithId();
+			skillA.SetCascadingIndex(1);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(0, 0, 8, 0));
+			var skillDaysA = skillA.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date, 1, 1, 1, 1, 1, 1, 1); //lower demand
+			var skillB = new Skill("B", "_", Color.AliceBlue, 15, new SkillTypePhone(new Description("_"), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillB.SetCascadingIndex(2);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(16, 0, 24, 0));
+			var skillDaysB = skillB.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date, 2, 2, 2, 2, 2, 2, 2); //higher demand
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(0, 0, 16, 0, 60), new TimePeriodWithSegment(8, 0, 24, 0, 60), new ShiftCategory("_").WithId()));
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+			agent.AddPeriodWithSkills(new PersonPeriod(date, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA, skillB });
+			agent.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Week, 1));
+			agent.Period(date).RuleSetBag = new RuleSetBag(ruleSet);
+			agent.SchedulePeriod(date).SetDaysOff(2);
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, Enumerable.Empty<IScheduleData>(), skillDaysA.Union(skillDaysB));
+
+			Target.Execute(new OptimizerOriginalPreferences(new SchedulingOptions()),
+				new NoSchedulingProgress(),
+				stateHolder.Schedules.SchedulesForPeriod(period, agent).ToArray(),
+				new OptimizationPreferences(),
+				new DaysOffPreferences()
+				);
+
+			var asses = stateHolder.Schedules[agent].ScheduledDayCollection(period).Select(x => x.PersonAssignment()).Where(x => x.DayOff()==null);
+			asses.Count().Should().Be.EqualTo(5);
+			asses.ForEach(x =>
+			{
+				x.Period.StartDateTime.TimeOfDay
+					.Should().Be.EqualTo(TimeSpan.FromHours(0));
+			});
 		}
 	}
 }
