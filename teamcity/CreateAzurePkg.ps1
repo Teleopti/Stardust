@@ -23,7 +23,7 @@ properties {
 	$AzurePackagePath = "$WorkingDir\TeleoptiWFM.cspkg"
 	$AzurePackagePath_Large = "$WorkingDir\TeleoptiWFM_Large.cspkg"
 	
-	$IndexMSBuildFile = "$WorkingDir\teamcity\Azure\UpdateIndexHtml.msbuild"
+	$IndexMSBuildFile = "$WorkingDir\StartPage\index.html"
 	$CSPackEXE = "$env:AzureSDK_2_8_Path\bin\cspack.exe"
 	
 }
