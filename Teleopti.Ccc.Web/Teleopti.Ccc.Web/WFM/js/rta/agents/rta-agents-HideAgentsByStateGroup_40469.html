@@ -65,10 +65,10 @@
     <wfm-right-panel ng-if="agentsInAlarm" panel-options="rightPanelOptions" style="min-height:400px">
         <h3><i class="mdi mdi-filter-outline"></i>Include agents in state group:</h3>
         <div class="wfm-checkbox" ng-repeat="group in stateGroups">
-            <input type="checkbox" id="{{group.Id}}" ng-model="group.Selected" ng-change="selectedStatusChanged(group)" />
-            <label for="{{group.Id}}">
+            <input type="checkbox" id="{{group.StateId}}" ng-model="group.Selected"/>
+            <label for="{{group.StateId}}">
                 <span class="wfm-checkbox-toggle"></span>
-                <span class="wfm-checkbox-label">{{group.Name}}</span>
+                <span class="wfm-checkbox-label">{{group.State}}</span>
             </label>
         </div>
     </wfm-right-panel>

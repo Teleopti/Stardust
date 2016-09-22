@@ -46,7 +46,7 @@ Wfm_ChangePlanningPeriod_33043 = true
 MyTimeWeb_ShowSeatBookingMonthView_39068 = true
 MessageBroker_SchedulingScreenMailbox_32733 = true
 RTA_ScheduleProjectionReadOnlyHangfire_35703 = true
-RTA_HideAgentsByStateGroup_40469 = false
+RTA_HideAgentsByStateGroup_40469 = DEV
 
 RTA_Optimize_39667 = true
 RTA_RuleMappingOptimization_39812 = true
