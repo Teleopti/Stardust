@@ -142,7 +142,7 @@ ResourcePlanner_TeamBlockDayOffForIndividuals_37998 = false # needs to be false 
 ResourcePlanner_ScheduleOvertimeOnNonWorkingDays_38025 = true
 ResourcePlanner_CascadingSkills_38524 = true
 ResourcePlanner_CascadingSkillsGUI_40018 = RC #Hold release of Cascading UI until we have a proper UI
-ResourcePlanner_SpeedUpManualChanges_37029 = RC #Hold release until 38872 and 38983 are fixed (caused by this feature)
+ResourcePlanner_SpeedUpManualChanges_37029 = false #remove this - causing a lot of troubles...
 ResourcePlanner_CalculateFarAwayTimeZones_40646 = RC
 
 Wfm_DisplayOnlineHelp_39402 = RC

@@ -178,8 +178,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 
-		[Test, Ignore("#38872")]
-		[Toggle(Toggles.ResourcePlanner_SpeedUpManualChanges_37029)]
+		[Test]
 		public void ShouldBaseBestShiftOnPrimarySkillOpenHoursEvenIfSubskillIsOpenWithHigherDemand()
 		{
 			var date = new DateOnly(2016, 9, 19); //mån
