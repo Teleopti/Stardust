@@ -21,7 +21,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[TestFixture, DomainTest]
-	public class FixNotOverwriteLayerCommandHandlerTest : ISetup
+	public class FixNotOverwriteLayerCommandHandlerTest:ISetup
 	{
 		public FixNotOverwriteLayerCommandHandler Target;
 		public FakeWriteSideRepository<IPerson> PersonRepository;
@@ -77,13 +77,259 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var command = new FixNotOverwriteLayerCommand
 			{
 				PersonId = PersonRepository.Single().Id.Value,
-				Date = new DateOnly(2013,11,14)			
+				Date = new DateOnly(2013,11,14)
 			};
 			Target.Handle(command);
-			
+
 			var movedLunchLayer = PersonAssignmentRepo.Single().ShiftLayers.First(l => l.Payload == lunchActivity);
-			movedLunchLayer.Period.Should().Be(new DateTimePeriod(2013,11,14,12,2013,11,14,15));			
+			movedLunchLayer.Period.Should().Be(new DateTimePeriod(2013,11,14,12,2013,11,14,15));
 		}
 
+
+		[Test]
+		public void ShouldFixNotOverwriteLayerThatIsCoveredByMultipleLayersInShift()
+		{
+			var scenario = CurrentScenario.Current();
+			PersonRepository.Add(PersonFactory.CreatePersonWithId());
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
+			ShiftCategoryRepository.Add(shiftCategory);
+			var mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
+			var meetingActivity = ActivityFactory.CreateActivity("Meeting").WithId();
+			var lunchActivity = ActivityFactory.CreateActivity("Lunch").WithId();
+
+			mainActivity.AllowOverwrite = true;
+			lunchActivity.AllowOverwrite = false;
+			meetingActivity.AllowOverwrite = true;
+
+			ActivityRepository.Add(meetingActivity);
+			ActivityRepository.Add(mainActivity);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				mainActivity,PersonRepository.Single(),
+				new DateTimePeriod(2013,11,14,8,2013,11,14,15),shiftCategory,scenario);
+			pa.AddActivity(lunchActivity,new DateTimePeriod(2013,11,14,11,2013,11,14,14));
+			pa.AddActivity(meetingActivity,new DateTimePeriod(2013,11,14,11,2013,11,14,12));
+			pa.AddActivity(meetingActivity,new DateTimePeriod(2013,11,14,13,2013,11,14,15));
+			pa.ShiftLayers.ForEach(l => l.WithId());
+			PersonAssignmentRepo.Add(pa);
+			ScheduleStorage.Add(pa);
+
+
+			var command = new FixNotOverwriteLayerCommand
+			{
+				PersonId = PersonRepository.Single().Id.Value,
+				Date = new DateOnly(2013,11,14)
+			};
+			Target.Handle(command);
+
+			var movedLunchLayer = PersonAssignmentRepo.Single().ShiftLayers.First(l => l.Payload == lunchActivity);
+			movedLunchLayer.Period.Should().Be(new DateTimePeriod(2013,11,14,08,2013,11,14,11));
+		}
+
+		[Test]
+		public void ShouldFixNotOverwriteLayerThatIsCoveredByMultipleLayersAndOneEndIsOutsideTheMainShift()
+		{
+			var scenario = CurrentScenario.Current();
+			PersonRepository.Add(PersonFactory.CreatePersonWithId());
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
+			ShiftCategoryRepository.Add(shiftCategory);
+			var mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
+			var meetingActivity = ActivityFactory.CreateActivity("Meeting").WithId();
+			var lunchActivity = ActivityFactory.CreateActivity("Lunch").WithId();
+
+			mainActivity.AllowOverwrite = true;
+			lunchActivity.AllowOverwrite = false;
+			meetingActivity.AllowOverwrite = true;
+
+			ActivityRepository.Add(meetingActivity);
+			ActivityRepository.Add(mainActivity);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				mainActivity,PersonRepository.Single(),
+				new DateTimePeriod(2013,11,14,9,2013,11,14,18),shiftCategory,scenario);
+			pa.AddActivity(lunchActivity,new DateTimePeriod(2013,11,14,11,2013,11,14,14));
+			pa.AddActivity(meetingActivity,new DateTimePeriod(2013,11,14,11,2013,11,14,12));
+			pa.AddActivity(meetingActivity,new DateTimePeriod(2013,11,14,13,2013,11,14,15));
+			pa.ShiftLayers.ForEach(l => l.WithId());
+			PersonAssignmentRepo.Add(pa);
+			ScheduleStorage.Add(pa);
+
+
+			var command = new FixNotOverwriteLayerCommand
+			{
+				PersonId = PersonRepository.Single().Id.Value,
+				Date = new DateOnly(2013,11,14)
+			};
+			Target.Handle(command);
+
+			var movedLunchLayer = PersonAssignmentRepo.Single().ShiftLayers.First(l => l.Payload == lunchActivity);
+			movedLunchLayer.Period.Should().Be(new DateTimePeriod(2013,11,14,15,2013,11,14,18));
+		}
+
+		[Test]
+		public void ShouldFixMultipleNotOverwriteLayersInShift()
+		{
+			var scenario = CurrentScenario.Current();
+			PersonRepository.Add(PersonFactory.CreatePersonWithId());
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
+			ShiftCategoryRepository.Add(shiftCategory);
+			var mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
+			var meetingActivity = ActivityFactory.CreateActivity("Meeting").WithId();
+			var lunchActivity = ActivityFactory.CreateActivity("Lunch").WithId();
+			var shortBreakActivity = ActivityFactory.CreateActivity("Short Break").WithId();
+
+			mainActivity.AllowOverwrite = true;
+			lunchActivity.AllowOverwrite = false;
+			meetingActivity.AllowOverwrite = true;
+			shortBreakActivity.AllowOverwrite = false;
+
+			ActivityRepository.Add(meetingActivity);
+			ActivityRepository.Add(mainActivity);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				mainActivity,PersonRepository.Single(),
+				new DateTimePeriod(2013,11,14,8,2013,11,14,18),shiftCategory,scenario);
+			pa.AddActivity(lunchActivity,new DateTimePeriod(2013,11,14,10,2013,11,14,11));
+			pa.AddActivity(shortBreakActivity,new DateTimePeriod(2013,11,14,13,2013,11,14,14));
+			pa.AddActivity(meetingActivity,new DateTimePeriod(2013,11,14,10,2013,11,14,14));
+			pa.ShiftLayers.ForEach(l => l.WithId());
+			PersonAssignmentRepo.Add(pa);
+			ScheduleStorage.Add(pa);
+
+
+			var command = new FixNotOverwriteLayerCommand
+			{
+				PersonId = PersonRepository.Single().Id.Value,
+				Date = new DateOnly(2013,11,14)
+			};
+			Target.Handle(command);
+
+			var movedLunchLayer = PersonAssignmentRepo.Single().ShiftLayers.First(l => l.Payload == lunchActivity);
+			var movedShortBreakLayer = PersonAssignmentRepo.Single().ShiftLayers.First(l => l.Payload == shortBreakActivity);
+			movedLunchLayer.Period.Should().Be(new DateTimePeriod(2013,11,14,9,2013,11,14,10));
+			movedShortBreakLayer.Period.Should().Be(new DateTimePeriod(2013,11,14,14,2013,11,14,15));
+		}
+
+		[Test]
+		public void ShouldFixNotOverwritableLayerWhichIsAlreadyOverwrittenInShift()
+		{
+			var scenario = CurrentScenario.Current();
+			PersonRepository.Add(PersonFactory.CreatePersonWithId());
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
+			ShiftCategoryRepository.Add(shiftCategory);
+			var mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
+			var meetingActivity = ActivityFactory.CreateActivity("Meeting").WithId();
+			var lunchActivity = ActivityFactory.CreateActivity("Lunch").WithId();
+
+			mainActivity.AllowOverwrite = true;
+			lunchActivity.AllowOverwrite = false;
+			meetingActivity.AllowOverwrite = true;
+
+			ActivityRepository.Add(meetingActivity);
+			ActivityRepository.Add(mainActivity);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				mainActivity,PersonRepository.Single(),
+				new DateTimePeriod(2013,11,14,8,2013,11,14,18),shiftCategory,scenario);
+			pa.AddActivity(lunchActivity,new DateTimePeriod(2013,11,14,10,2013,11,14,12));
+			pa.AddActivity(mainActivity,new DateTimePeriod(2013,11,14,11,2013,11,14,12));
+			pa.AddActivity(meetingActivity,new DateTimePeriod(2013,11,14,10,2013,11,14,14));
+			pa.ShiftLayers.ForEach(l => l.WithId());
+			PersonAssignmentRepo.Add(pa);
+			ScheduleStorage.Add(pa);
+
+			var command = new FixNotOverwriteLayerCommand
+			{
+				PersonId = PersonRepository.Single().Id.Value,
+				Date = new DateOnly(2013,11,14)
+			};
+			Target.Handle(command);
+
+			var movedLunchLayer = PersonAssignmentRepo.Single().ShiftLayers.First(l => l.Payload == lunchActivity);
+			movedLunchLayer.Period.Should().Be(new DateTimePeriod(2013,11,14,8,2013,11,14,10));
+		}
+
+		[Test]
+		public void ShouldFixMultipleNotOverwritableLayersWhenTheyOverlapEachOther()
+		{
+			var scenario = CurrentScenario.Current();
+			PersonRepository.Add(PersonFactory.CreatePersonWithId());
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
+			ShiftCategoryRepository.Add(shiftCategory);
+			var mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
+			var meetingActivity = ActivityFactory.CreateActivity("Meeting").WithId();
+			var lunchActivity = ActivityFactory.CreateActivity("Lunch").WithId();
+			var shortBreakActivity = ActivityFactory.CreateActivity("Short Break").WithId();
+
+			mainActivity.AllowOverwrite = true;
+			lunchActivity.AllowOverwrite = false;
+			meetingActivity.AllowOverwrite = true;
+			shortBreakActivity.AllowOverwrite = false;
+
+			ActivityRepository.Add(meetingActivity);
+			ActivityRepository.Add(mainActivity);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				mainActivity,PersonRepository.Single(),
+				new DateTimePeriod(2013,11,14,8,2013,11,14,18),shiftCategory,scenario);
+			pa.AddActivity(lunchActivity,new DateTimePeriod(2013,11,14,10,2013,11,14,12));
+			pa.AddActivity(shortBreakActivity,new DateTimePeriod(2013,11,14,11,2013,11,14,13));
+			pa.AddActivity(meetingActivity,new DateTimePeriod(2013,11,14,10,2013,11,14,14));
+			pa.ShiftLayers.ForEach(l => l.WithId());
+			PersonAssignmentRepo.Add(pa);
+			ScheduleStorage.Add(pa);
+
+			var command = new FixNotOverwriteLayerCommand
+			{
+				PersonId = PersonRepository.Single().Id.Value,
+				Date = new DateOnly(2013,11,14)
+			};
+			Target.Handle(command);
+
+			var movedLunchLayer = PersonAssignmentRepo.Single().ShiftLayers.First(l => l.Payload == lunchActivity);
+			var movedShortBreakLayer = PersonAssignmentRepo.Single().ShiftLayers.First(l => l.Payload == shortBreakActivity);
+			movedLunchLayer.Period.Should().Be(new DateTimePeriod(2013,11,14,8,2013,11,14,10));
+			movedShortBreakLayer.Period.Should().Be(new DateTimePeriod(2013,11,14,14,2013,11,14,16));
+		}
+
+		[Test]
+		public void ShouldReturnErrorMessageWhenScheduleDayCanNotBeFixedCompletely()
+		{
+			var scenario = CurrentScenario.Current();
+			PersonRepository.Add(PersonFactory.CreatePersonWithId());
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
+			ShiftCategoryRepository.Add(shiftCategory);
+			var mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
+			var meetingActivity = ActivityFactory.CreateActivity("Meeting").WithId();
+			var lunchActivity = ActivityFactory.CreateActivity("Lunch").WithId();
+			var shortBreakActivity = ActivityFactory.CreateActivity("Short Break").WithId();
+
+			mainActivity.AllowOverwrite = true;
+			lunchActivity.AllowOverwrite = false;
+			meetingActivity.AllowOverwrite = true;
+			shortBreakActivity.AllowOverwrite = false;
+
+			ActivityRepository.Add(meetingActivity);
+			ActivityRepository.Add(mainActivity);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				mainActivity,PersonRepository.Single(),
+				new DateTimePeriod(2013,11,14,8,2013,11,14,18),shiftCategory,scenario);
+			pa.AddActivity(lunchActivity,new DateTimePeriod(2013,11,14,10,2013,11,14,12));
+			pa.AddActivity(meetingActivity,new DateTimePeriod(2013,11,14,9,2013,11,14,17));
+			pa.ShiftLayers.ForEach(l => l.WithId());
+			PersonAssignmentRepo.Add(pa);
+			ScheduleStorage.Add(pa);
+
+			var command = new FixNotOverwriteLayerCommand
+			{
+				PersonId = PersonRepository.Single().Id.Value,
+				Date = new DateOnly(2013,11,14)
+			};
+			Target.Handle(command);
+
+			var error = command.ErrorMessages.Single();
+			error.Should().Be.EqualTo(Resources.OverlappedNonoverwritableActivitiesExist);
+		}
 	}
 }

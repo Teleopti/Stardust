@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				Id = l.LayerBelowId,
 				Period = l.LayerBelowPeriod
 			}, l => l.LayerAbovePeriod).OrderBy(g => g.Key.Period.StartDateTime);
-
+			var isFixed = true;
 			foreach (var g in overlappedGroups)
 			{
 				var avoidPeriod = new DateTimePeriod(g.Min(x => x.StartDateTime), g.Max(x => x.EndDateTime));
@@ -59,11 +60,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 				if (movingDistance != TimeSpan.Zero)
 				{
-					var targetLayer = personAssignment.ShiftLayers.First(l => l.Id.Value.Equals(g.Key.Id));
+					var targetLayer = personAssignment.ShiftLayers.First(l => l.Id.HasValue && l.Id.Value.Equals(g.Key.Id));
 					personAssignment.MoveActivityAndKeepOriginalPriority(targetLayer,
-								targetLayer.Period.StartDateTime.Add(movingDistance),null,true);
+						targetLayer.Period.StartDateTime.Add(movingDistance), null, true);
+				}
+				else
+				{
+					isFixed = false;
 				}
 			}
+			command.ErrorMessages = !isFixed ? new List<string> {Resources.OverlappedNonoverwritableActivitiesExist} : new List<string>();
 		}
 	}
 

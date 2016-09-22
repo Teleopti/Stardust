@@ -14963,4 +14963,7 @@ These options are activated:
     <value>Shift Trade Request Settings</value>
     <comment>Used in the Options Module to define Shift Trade Request Settings that appear under the System Settings option</comment>
   </data>
+  <data name="OverlappedNonoverwritableActivitiesExist" xml:space="preserve">
+    <value>There are still overlapped non-overwritable activities</value>
+  </data>
 </root>

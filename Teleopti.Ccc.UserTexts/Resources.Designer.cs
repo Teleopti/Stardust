@@ -4386,7 +4386,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Not overwritable activity overwritten.
+        ///   Looks up a localized string similar to Non-overwritable activity overwritten.
         /// </summary>
         public static string BusinessRuleOverlappingFriendlyName3 {
             get {
@@ -16433,7 +16433,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Move nonoverwritable activities for these agents.
+        ///   Looks up a localized string similar to Move non-overwritable activities for these agents.
         /// </summary>
         public static string MoveNonoverwritableActivityForTheseAgents {
             get {
@@ -17135,7 +17135,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The new added activity overlaps nonoverwritable activitie(s).
+        ///   Looks up a localized string similar to The new added activity overlaps non-overwritable activities.
         /// </summary>
         public static string NewActivityOverlapsNonoverwritableActivities {
             get {
@@ -19925,6 +19925,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string OverflowOut {
             get {
                 return ResourceManager.GetString("OverflowOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are still overlapped non-overwritable activities.
+        /// </summary>
+        public static string OverlappedNonoverwritableActivitiesExist {
+            get {
+                return ResourceManager.GetString("OverlappedNonoverwritableActivitiesExist", resourceCulture);
             }
         }
         
