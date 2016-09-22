@@ -260,7 +260,6 @@
     <Compile Include="Intraday\LatestStatisticsTimeProviderTest.cs" />
     <Compile Include="ReadModelValidator\ReadModelValidatorTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationTest.cs" />
-    <Compile Include="ResourceCalculation\SharedResourceContextTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationCascadingDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationTeamBlockDesktopTest.cs" />
@@ -334,7 +333,6 @@
     <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeOnNonScheduledDaysTest.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\GuessResourceCalculationHasBeenMadeTest.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\ResourceCalculateCorrectDaysTest.cs" />
-    <Compile Include="SchedulingScenarios\ResourceCalculation\ResourceCalculationContextScopeTest.cs" />
     <Compile Include="SchedulingScenarios\ScheduleDictionaryCreator.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\BackToLegalShiftCommandTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\FullSchedulingTest.cs" />

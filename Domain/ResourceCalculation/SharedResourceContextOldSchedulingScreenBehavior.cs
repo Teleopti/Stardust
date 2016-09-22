@@ -1,11 +1,9 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpManualChanges_37029)]
 	public class SharedResourceContextOldSchedulingScreenBehavior : ISharedResourceContext
 	{
 		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
@@ -21,7 +19,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			var stateHolder = _stateHolder();
 			IDisposable disposableContext = null;
-			if (!ResourceCalculationContext.InContext)
+			if (!ResourceCalculationContext.InContext) //TODO: this if probably never returns false... would be nice to get rid of it!
 			{
 				disposableContext = _resourceCalculationContextFactory.Create(stateHolder.Schedules, stateHolder.SchedulingResultState.Skills, period);
 			}

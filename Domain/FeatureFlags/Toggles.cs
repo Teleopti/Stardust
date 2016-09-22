@@ -130,7 +130,6 @@
 		ResourcePlanner_ScheduleOvertimeOnNonWorkingDays_38025,
 		ResourcePlanner_CascadingSkills_38524,
 		ResourcePlanner_CascadingSkillsGUI_40018,
-		ResourcePlanner_SpeedUpManualChanges_37029,
 		ResourcePlanner_CalculateFarAwayTimeZones_40646,
 
 		Wfm_DisplayOnlineHelp_39402,
