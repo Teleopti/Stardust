@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 					.ToList()
 				);
 		}
-
+		
 		public IEnumerable<AgentStateReadModel> Load(IEnumerable<Guid> personIds)
 		{
 			var ret = new List<AgentStateReadModel>();
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			}
 			return ret;
 		}
-
+		
 		public IEnumerable<AgentStateReadModel> LoadForTeam(Guid teamId)
 		{
 			return transform(_unitOfWork.Current().Session()
@@ -57,6 +57,14 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				);
 		}
 
+
+
+
+
+
+
+
+		private const string selectAgentState = @"SELECT {0} * FROM [ReadModel].AgentState {1}";
 		public IEnumerable<AgentStateReadModel> LoadForSites(IEnumerable<Guid> siteIds)
 		{
 			var query = string.Format(selectAgentState, "", @"WITH (NOLOCK) WHERE SiteId IN (:siteIds)");
@@ -91,6 +99,29 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			return transform(_unitOfWork.Current().Session()
 				.CreateSQLQuery(query)
 				.SetParameterList("teamIds", teamIds)
+				.SetParameter("now", _now.UtcDateTime())
+				);
+		}
+
+
+		public IEnumerable<AgentStateReadModel> LoadAlarmsForSites(IEnumerable<Guid> siteIds, IEnumerable<Guid> excludedStateGroupIds)
+		{
+			var query = string.Format(selectAgentState, " TOP 50 ", @"WITH (NOLOCK) WHERE StateGroupId NOT IN (:excludedStateGroupIds) AND SiteId IN (:siteIds) AND AlarmStarttime <= :now ORDER BY AlarmStartTime ASC");
+			return transform(_unitOfWork.Current().Session()
+				.CreateSQLQuery(query)
+				.SetParameterList("siteIds", siteIds)
+				.SetParameterList("excludedStateGroupIds", excludedStateGroupIds)
+				.SetParameter("now", _now.UtcDateTime())
+				);
+		}
+
+		public IEnumerable<AgentStateReadModel> LoadAlarmsForTeams(IEnumerable<Guid> teamIds, IEnumerable<Guid> excludedStateGroupIds)
+		{
+			var query = string.Format(selectAgentState, " TOP 50 ", @"WITH (NOLOCK) WHERE StateGroupId NOT IN (:excludedStateGroupIds) AND TeamId IN (:teamIds) AND AlarmStartTime <= :now ORDER BY AlarmStartTime ASC");
+			return transform(_unitOfWork.Current().Session()
+				.CreateSQLQuery(query)
+				.SetParameterList("teamIds", teamIds)
+				.SetParameterList("excludedStateGroupIds", excludedStateGroupIds)
 				.SetParameter("now", _now.UtcDateTime())
 				);
 		}
@@ -150,19 +181,18 @@ AND :today BETWEEN g.StartDate and g.EndDate
 				);
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadAlarmsForSites(IEnumerable<Guid> siteIds, IEnumerable<Guid> excludedStateGroupIds)
-		{
-			throw new NotImplementedException();
-		}
-
-		public IEnumerable<AgentStateReadModel> LoadAlarmsForTeams(IEnumerable<Guid> teamIds, IEnumerable<Guid> excludedStateGroupIds)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IEnumerable<AgentStateReadModel> LoadAlarmsForSkills(IEnumerable<Guid> skillIds, IEnumerable<Guid> excludedStateGroupIds)
 		{
-			throw new NotImplementedException();
+			var query = string.Format(agentsForSkillQuery, " TOP 50 ", " AND AlarmStartTime <= :now AND StateGroupId NOT IN (:excludedStateGroupIds) ORDER BY AlarmStartTime ASC ");
+			return transform(
+				_unitOfWork.Current().Session()
+				.CreateSQLQuery(query)
+				.SetParameterList("skillId", skillIds)
+				.SetParameter("today", _now.UtcDateTime().Date)
+				.SetParameter("now", _now.UtcDateTime())
+				.SetParameterList("excludedStateGroupIds", excludedStateGroupIds)
+				.SetParameter("skillGroupingPageId", hardcodedSkillGroupingPageId)
+				);
 		}
 
 		private IEnumerable<AgentStateReadModel> transform(IQuery query)
@@ -181,8 +211,6 @@ AND :today BETWEEN g.StartDate and g.EndDate
 				})
 				.ToArray();
 		}
-
-		private static readonly string selectAgentState = @"SELECT {0} * FROM [ReadModel].AgentState {1}";
 
 		private class internalModel : AgentStateReadModel
 		{

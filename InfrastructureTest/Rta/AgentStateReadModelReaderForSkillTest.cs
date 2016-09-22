@@ -154,6 +154,42 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		}
 
 		[Test]
+		public void ShouldLoadStatesInAlarmForSkillExcludingStateGroupIds()
+		{
+			Now.Is("2016-06-20 12:10");
+			Database
+				.WithAgent("agent1")
+				.WithSkill("phone")
+				.WithAgent("agent2")
+				.WithSkill("phone");
+			var personId1 = Database.PersonIdFor("agent1");
+			var personId2 = Database.PersonIdFor("agent2");
+			var skill = Database.SkillIdFor("phone");
+			var loggedOut = Guid.NewGuid();
+			WithUnitOfWork.Do(() =>
+			{
+				Groupings.UpdateGroupingReadModel(new[] { personId1, personId2 });
+				StatePersister.Persist(new AgentStateReadModelForTest
+				{
+					PersonId = personId1,
+					AlarmStartTime = "2016-06-20 12:00".Utc(),
+					IsRuleAlarm = true,
+					StateGroupId = loggedOut
+				});
+				StatePersister.Persist(new AgentStateReadModelForTest
+				{
+					PersonId = personId2,
+					AlarmStartTime = "2016-06-20 12:00".Utc(),
+					IsRuleAlarm = true,
+					StateGroupId = Guid.NewGuid()
+				});
+			});
+			
+			WithUnitOfWork.Get(() => Target.LoadAlarmsForSkills(new[] { skill }, new [] {loggedOut}))
+				.Single().PersonId.Should().Be(personId2);
+		}
+
+		[Test]
 		public void ShouldLoadStatesInAlarmForMultipleSkills()
 		{
 			Now.Is("2016-06-20 12:10");
