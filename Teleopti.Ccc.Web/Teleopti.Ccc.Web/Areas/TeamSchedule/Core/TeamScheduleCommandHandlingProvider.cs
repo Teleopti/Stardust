@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
+using Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Interfaces.Domain;
 
@@ -317,6 +318,48 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			return result;
 		}
 
+		public IList<ActionResult> MoveNonoverwritableLayers(MoveNonoverwritableLayersFormData input)
+		{
+			var permissions = new Dictionary<string,string>
+			{
+				{ DefinedRaptorApplicationFunctionPaths.MoveInvalidOverlappedActivity, Resources.NoPermissionToMoveInvalidOverlappedActivity }
+			};
+
+			var result = new List<ActionResult>();
+
+			foreach(var personId in input.PersonIds)
+			{
+				var actionResult = new ActionResult();
+				var person = _personRepository.Get(personId);
+				actionResult.PersonId = personId;
+				actionResult.ErrorMessages = new List<string>();
+
+				if(checkPermissionFn(permissions,input.Date,person,actionResult.ErrorMessages))
+				{
+					var command = new FixNotOverwriteLayerCommand
+					{
+						PersonId = personId,
+						Date = input.Date,
+						TrackedCommandInfo =
+							input.TrackedCommandInfo != null
+								? input.TrackedCommandInfo
+								: new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
+					};
+
+					_commandDispatcher.Execute(command);
+					if(command.ErrorMessages != null && command.ErrorMessages.Any())
+					{
+						actionResult.ErrorMessages.AddRange(command.ErrorMessages);
+					}
+				}
+
+				if(actionResult.ErrorMessages.Any())
+					result.Add(actionResult);
+			}
+
+			return result;
+		}
+
 		private bool agentScheduleIsWriteProtected(DateOnly date, IPerson agent)
 		{
 			return !_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule)
@@ -351,5 +394,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		List<ActionResult> MoveActivity(MoveActivityFormData input);
 		List<ActionResult> BackoutScheduleChange(BackoutScheduleChangeFormData input);
 		List<ActionResult> ChangeShiftCategory(ChangeShiftCategoryFormData input);
+		IList<ActionResult> MoveNonoverwritableLayers(MoveNonoverwritableLayersFormData input);
 	}
 }

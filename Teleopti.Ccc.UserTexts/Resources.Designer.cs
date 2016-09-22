@@ -16397,6 +16397,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Move invalid overlapped activity.
+        /// </summary>
+        public static string MoveInvalidOverlappedActivity {
+            get {
+                return ResourceManager.GetString("MoveInvalidOverlappedActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move Left.
         /// </summary>
         public static string MoveLeft {
@@ -18349,6 +18358,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoPermissionToModifyPersonAssignment {
             get {
                 return ResourceManager.GetString("NoPermissionToModifyPersonAssignment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have no permission to move invalid overlapped activity. .
+        /// </summary>
+        public static string NoPermissionToMoveInvalidOverlappedActivity {
+            get {
+                return ResourceManager.GetString("NoPermissionToMoveInvalidOverlappedActivity", resourceCulture);
             }
         }
         

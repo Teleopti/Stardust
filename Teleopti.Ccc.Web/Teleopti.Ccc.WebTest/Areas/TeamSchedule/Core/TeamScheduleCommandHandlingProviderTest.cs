@@ -11,6 +11,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Interfaces.Domain;
@@ -143,6 +144,59 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			Target.AddPersonalActivity(input);
 
 			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldNotFixOverwriteLayerWithoutPermission()
+		{
+			PermissionProvider.Enable();
+			var person1 = PersonFactory.CreatePersonWithGuid("a","b");
+			var person2 = PersonFactory.CreatePersonWithGuid("c","d");
+			PersonRepository.Has(person1);
+			PersonRepository.Has(person2);
+
+			var date = new DateOnly(2016,4,16);
+
+			var input = new MoveNonoverwritableLayersFormData
+			{
+				PersonIds = new[] { person1.Id.Value,person2.Id.Value },
+				Date = date,
+				TrackedCommandInfo = new TrackedCommandInfo()
+			};
+
+			ActivityCommandHandler.ResetCalledCount();
+
+			Target.MoveNonoverwritableLayers(input);
+
+			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldFixOverwriteLayerWithPermission()
+		{
+			PermissionProvider.Enable();
+			var person1 = PersonFactory.CreatePersonWithGuid("a","b");
+			var person2 = PersonFactory.CreatePersonWithGuid("c","d");
+			PersonRepository.Has(person1);
+			PersonRepository.Has(person2);
+
+			var date = new DateOnly(2016,4,16);
+
+			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.MoveInvalidOverlappedActivity,person1,date);
+			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.MoveInvalidOverlappedActivity,person2,date);
+			
+			var input = new MoveNonoverwritableLayersFormData
+			{
+				PersonIds = new[] { person1.Id.Value,person2.Id.Value },
+				Date = date,
+				TrackedCommandInfo = new TrackedCommandInfo()
+			};
+
+			ActivityCommandHandler.ResetCalledCount();
+
+			Target.MoveNonoverwritableLayers(input);
+
+			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(2);
 		}
 
 		[Test]
@@ -690,7 +744,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		IHandleCommand<RemoveActivityCommand>, 
 		IHandleCommand<MoveShiftLayerCommand>,
 		IHandleCommand<BackoutScheduleChangeCommand>,
-		IHandleCommand<ChangeShiftCategoryCommand>
+		IHandleCommand<ChangeShiftCategoryCommand>,
+		IHandleCommand<FixNotOverwriteLayerCommand>
 	{
 		private int calledCount;
 		private IList<ITrackableCommand> commands = new List<ITrackableCommand>(); 
@@ -739,6 +794,18 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		}
 
 		public void Handle(ChangeShiftCategoryCommand command)
+		{
+			calledCount++;
+			commands.Add(command);
+		}
+
+		public void Handle(MoveActivityCommand command)
+		{
+			calledCount++;
+			commands.Add(command);
+		}
+
+		public void Handle(FixNotOverwriteLayerCommand command)
 		{
 			calledCount++;
 			commands.Add(command);

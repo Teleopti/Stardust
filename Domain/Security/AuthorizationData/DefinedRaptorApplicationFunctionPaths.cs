@@ -127,6 +127,7 @@
 		public const string SwapShifts = "Raptor/Anywhere/Schedules/SwapShifts";
 		public const string RealTimeAdherenceOverview = "Raptor/Anywhere/RealTimeAdherenceOverview";
 		public const string EditShiftCategory = "Raptor/Anywhere/Schedules/EditShiftCategory";
+		public const string MoveInvalidOverlappedActivity = "Raptor/Anywhere/Schedules/MoveInvalidOverlappedActivity";
 
 		// Angel
 		public const string WebForecasts = "Raptor/Anywhere/WebForecasts";

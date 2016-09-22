@@ -157,6 +157,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.RemoveActivity, "xxRemoveActivity", DefinedRaptorApplicationFunctionForeignIds.RemoveActivity, null);
 			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.SwapShifts, "xxSwapShifts", DefinedRaptorApplicationFunctionForeignIds.SwapShifts, null);
 			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.EditShiftCategory, "xxEditShiftCategory", DefinedRaptorApplicationFunctionForeignIds.EditShiftCategory, null);
+			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.MoveInvalidOverlappedActivity, "xxMoveInvalidOverlappedActivity", DefinedRaptorApplicationFunctionForeignIds.MoveInvalidOverlappedActivity, null);
 			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, "xxRealTimeAdherenceOverview", DefinedRaptorApplicationFunctionForeignIds.RealTimeAdherenceOverview, null);
 			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.WebForecasts, "xxForecasts", DefinedRaptorApplicationFunctionForeignIds.WebForecasts, null);
 			createAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.WebPermissions, "xxPermissions", DefinedRaptorApplicationFunctionForeignIds.WebPermissions, null);

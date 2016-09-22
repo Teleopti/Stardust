@@ -69,6 +69,7 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 				DefinedRaptorApplicationFunctionPaths.MyTimeCancelRequest,
 				DefinedRaptorApplicationFunctionPaths.TeamSchedule,
 				DefinedRaptorApplicationFunctionPaths.EditShiftCategory,
+				DefinedRaptorApplicationFunctionPaths.MoveInvalidOverlappedActivity,
 				DefinedRaptorApplicationFunctionPaths.ViewAllGroupPages,
 				DefinedRaptorApplicationFunctionPaths.MyReportQueueMetrics,
 				DefinedRaptorApplicationFunctionPaths.Anywhere,
