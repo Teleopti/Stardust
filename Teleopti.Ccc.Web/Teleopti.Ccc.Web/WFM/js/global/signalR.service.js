@@ -25,6 +25,7 @@
         }
 
         service.subscribeBatchMessage = function(options, messageHandler, timeout) {
+            $.connection.hub.stop();
             hub.client.onEventMessage = function(message) {
                 pendingMessage.push(message);
                 messageHandlingTimeout !== null && $timeout.cancel(messageHandlingTimeout);
