@@ -101,8 +101,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			Expect.Call(_dayOffDecisionMaker.Execute(_workingArray, _dataExtractorValues)).IgnoreArguments().Return(false);
 
 			List<IDayOffBackToLegalStateSolver> solverList = new List<IDayOffBackToLegalStateSolver>();
-			Expect.Call(_daysOffBackToLegal.BuildSolverList(_workingArray, _daysOffPreferences)).IgnoreArguments().Return(solverList);
-			Expect.Call(_daysOffBackToLegal.Execute(solverList, 100)).Return(true);
+			Expect.Call(_daysOffBackToLegal.BuildSolverList(_workingArray, _daysOffPreferences)).IgnoreArguments().Return(solverList).Repeat.AtLeastOnce();
+			Expect.Call(_daysOffBackToLegal.Execute(solverList, 100)).Return(true).Repeat.AtLeastOnce();
 
 			Expect.Call(_dataExtractor.Values()).Return(_dataExtractorValues);
 			Expect.Call(_dayOffDecisionMaker.Execute(_workingArray, _dataExtractorValues)).IgnoreArguments().Return(!failOnNoMoveFound);

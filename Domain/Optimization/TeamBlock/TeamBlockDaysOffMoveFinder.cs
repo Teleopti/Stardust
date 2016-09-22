@@ -51,6 +51,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						continue;
 				}
 
+
+				if(!_daysOffBackToLegal.Execute(_daysOffBackToLegal.BuildSolverList(workingBitArray, daysOffPreferences), 100))
+					continue;
+				
 				return workingBitArray;
 			}
 
