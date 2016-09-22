@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading;
 using NUnit.Framework;
+using NUnit.Framework.Interfaces;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
@@ -399,12 +400,12 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 
 		public ActionTargets Targets { get { return ActionTargets.Test; } }
 
-		public void BeforeTest(TestDetails testDetails)
+		public void BeforeTest(ITest testDetails)
 		{
 			_table = new TestTable(_name);
 		}
 
-		public void AfterTest(TestDetails testDetails)
+		public void AfterTest(ITest testDetails)
 		{
 			_table.Dispose();
 			_table = null;

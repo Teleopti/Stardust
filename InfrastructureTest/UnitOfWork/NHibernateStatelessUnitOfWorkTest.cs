@@ -43,10 +43,9 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
         /// The nhibernate session must not be null.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void SessionMustNotBeNull()
         {
-            new TestUnitOfWork(null);
+            Assert.Throws<ArgumentNullException>(() => new TestUnitOfWork(null));
         }
 
         /// <summary>

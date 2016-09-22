@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// Created by: robink
         /// Created date: 2008-05-30
         /// </remarks>
-        [Test, ExpectedException(typeof(ConstraintViolationException))]
+        [Test]
         public void VerifyCannotSaveMultipleMultisiteDays()
         {
             IMultisiteDay day1 = CreateAggregateWithCorrectBusinessUnit();
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IMultisiteDay day2 = CreateAggregateWithCorrectBusinessUnit();
 
             PersistAndRemoveFromUnitOfWork(day1);
-            PersistAndRemoveFromUnitOfWork(day2);
+            Assert.Throws<ConstraintViolationException>(() => PersistAndRemoveFromUnitOfWork(day2));
         }
 
         [Test]

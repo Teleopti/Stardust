@@ -21,11 +21,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void VerifyToDistinctGenericCollectionFailsWithNonIList()
         {
             int anInt = 3;
-            Infrastructure.Repositories.CollectionHelper.ToDistinctGenericCollection<int>(anInt);
+            Assert.Throws<ArgumentException>(() => Infrastructure.Repositories.CollectionHelper.ToDistinctGenericCollection<int>(anInt));
         }
     }
 }

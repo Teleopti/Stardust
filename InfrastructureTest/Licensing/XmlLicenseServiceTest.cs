@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 		}
 
 		[Test]
-		[ExpectedException(typeof(SignatureValidationException))]
 		public void VerifyConstructor()
 		{
 			XmlDocument doc = new XmlDocument();
@@ -54,15 +53,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 				Expect.Call(licenseRepository.LoadAll()).Return(new List<ILicense> { license }).Repeat.Once();
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			}
-			using (_mocks.Playback())
+			Assert.Throws<SignatureValidationException>(() =>
 			{
-				const int numberOfActiveAgents = 43289;
+				using (_mocks.Playback())
+				{
+					const int numberOfActiveAgents = 43289;
 
-				_licenseService = new XmlLicenseServiceFactory().Make(licenseRepository, numberOfActiveAgents);
-			}
+					_licenseService = new XmlLicenseServiceFactory().Make(licenseRepository, numberOfActiveAgents);
+				}
+			});
 		}
 
-		[Test, ExpectedException(typeof(LicenseMissingException))]
+		[Test]
 		public void ShouldCreateInstanceWithUnitOfWorkFactory()
 		{
 			var unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
@@ -76,13 +78,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 				Expect.Call(licenseRepository.LoadAll()).Return(new List<ILicense>());
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			}
-			using (_mocks.Playback())
+			Assert.Throws<LicenseMissingException>(() =>
 			{
-				_licenseService = new XmlLicenseServiceFactory().Make(unitOfWorkFactory, licenseRepository, personRepository);
-			}
+				using (_mocks.Playback())
+				{
+					_licenseService = new XmlLicenseServiceFactory().Make(unitOfWorkFactory, licenseRepository, personRepository);
+				}
+			});
 		}
 
-		[Test, ExpectedException(typeof(LicenseMissingException))]
+		[Test]
 		[SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults")]
 		public void VerifyExceptionInConstructor()
 		{
@@ -92,10 +97,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 			{
 				Expect.Call(licenseRepository.LoadAll()).Return(new List<ILicense>());
 			}
-			using (_mocks.Playback())
+			Assert.Throws<LicenseMissingException>(() =>
 			{
-				_licenseService = new XmlLicenseServiceFactory().Make(licenseRepository, 4329);
-			}
+				using (_mocks.Playback())
+				{
+					_licenseService = new XmlLicenseServiceFactory().Make(licenseRepository, 4329);
+				}
+			});
 		}
 
 		[Test]
@@ -240,16 +248,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 			Assert.IsTrue(_licenseService.TeleoptiCccFreemiumForecastsEnabled);
 		}
 
-		[Test, ExpectedException(typeof(LicenseMissingException))]
+		[Test]
 		[SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults")]
 		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
 		public void VerifyLicenseFileMissingHandling()
 		{
-			new XmlLicenseService(null, XmlLicenseTestSetupFixture.PublicKeyXmlString, 432);
+			Assert.Throws<LicenseMissingException>(() => new XmlLicenseService(null, XmlLicenseTestSetupFixture.PublicKeyXmlString, 432));
 		}
 
 
-		[Test, ExpectedException(typeof(LicenseExpiredException))]
+		[Test]
 		[SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults")]
 		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
 		public void VerifyLicenseExpired()
@@ -262,7 +270,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 			int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
 			Assert.AreEqual((int)ExitCode.Success, exitCode);
 
-			new XmlLicenseService(XDocument.Load(new XmlNodeReader(doc)), XmlLicenseTestSetupFixture.PublicKeyXmlString, 234);
+			Assert.Throws<LicenseExpiredException>(() => new XmlLicenseService(XDocument.Load(new XmlNodeReader(doc)), XmlLicenseTestSetupFixture.PublicKeyXmlString, 234));
 		}
 
 		[Test]
@@ -344,7 +352,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 			}
 		}
 
-		[Test, ExpectedException(typeof(DataSourceException))]
+		[Test]
 		public void VerifySaveThrowsExceptionWhenHibernateError()
 		{
 			string licenseFileName = Path.GetTempFileName();
@@ -378,14 +386,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 				licenseRepository.Add(new License());
 				LastCall.IgnoreArguments();
 			}
-			using (_mocks.Playback())
+			Assert.Throws<DataSourceException>(() =>
 			{
-				new XmlLicensePersister().SaveNewLicense(licenseFileName, unitOfWorkFactory, licenseRepository,
-															XmlLicenseTestSetupFixture.PublicKeyXmlString, personRepository);
-			}
+				using (_mocks.Playback())
+				{
+					new XmlLicensePersister().SaveNewLicense(licenseFileName, unitOfWorkFactory, licenseRepository,
+																XmlLicenseTestSetupFixture.PublicKeyXmlString, personRepository);
+				}
+			});
 		}
 
-		[Test, ExpectedException(typeof(TooManyActiveAgentsException))]
+		[Test]
 		public void VerifySaveFailsIfTooManyActiveAgents()
 		{
 			string licenseFileName = Path.GetTempFileName();
@@ -410,8 +421,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 			LastCall.IgnoreArguments();
 
 			_mocks.ReplayAll();
-			new XmlLicensePersister().SaveNewLicense(licenseFileName, licenseRepository,
-														XmlLicenseTestSetupFixture.PublicKeyXmlString, personRepository);
+			Assert.Throws<TooManyActiveAgentsException>(
+				() => new XmlLicensePersister().SaveNewLicense(licenseFileName, licenseRepository, XmlLicenseTestSetupFixture.PublicKeyXmlString, personRepository));
 		}
 
 		[Test]
@@ -432,7 +443,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 			Assert.IsTrue(_licenseService.IsThisAlmostTooManyActiveAgents(10100));
 		}
 
-		[Test, ExpectedException(typeof(TooManyActiveAgentsException))]
+		[Test]
 		[SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults")]
 		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
 		public void VerifyActiveAgentsException()
@@ -443,7 +454,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 			int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
 			Assert.AreEqual((int)ExitCode.Success, exitCode);
 
-			new XmlLicenseService(XDocument.Load(new XmlNodeReader(doc)), XmlLicenseTestSetupFixture.PublicKeyXmlString, 11100);
+			Assert.Throws<TooManyActiveAgentsException>(() => new XmlLicenseService(XDocument.Load(new XmlNodeReader(doc)), XmlLicenseTestSetupFixture.PublicKeyXmlString, 11100));
 		}
 
 		[Test]
@@ -471,7 +482,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 			Assert.That(_licenseService.MaxActiveAgents, Is.EqualTo(2000));
 		}
 
-		[Test, ExpectedException(typeof(MajorVersionNotFoundException))]
+		[Test]
 		public void ShouldThrowIfNoMajorVersion()
 		{
 			var doc = new XmlDocument();
@@ -480,7 +491,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 			int exitCode = XmlLicense.Sign(doc, new CryptoSettingsFromMachineStore(XmlLicenseTestSetupFixture.TestKeyContainterName));
 			Assert.AreEqual((int)ExitCode.Success, exitCode);
 
-			new XmlLicenseService(XDocument.Load(new XmlNodeReader(doc)), XmlLicenseTestSetupFixture.PublicKeyXmlString, 234);
+			Assert.Throws<MajorVersionNotFoundException>(() => new XmlLicenseService(XDocument.Load(new XmlNodeReader(doc)), XmlLicenseTestSetupFixture.PublicKeyXmlString, 234));
 		}
 
 		/// <summary>

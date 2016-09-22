@@ -61,21 +61,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			repository.Retries.Should().Be.EqualTo(2);
 		}
 
-		[Test, ExpectedException(typeof(SqlException))]
+		[Test]
 		public void ShouldThrowException()
 		{
 			var mock = MockRepository.GenerateMock<IConnectionStrings>();
 			mock.Stub(x => x.Application()).Return(InfraTestConfigReader.InvalidConnectionString);
 			var repository = new IndexMaintenanceRepository(mock);
 			repository.SetTimespanBetweenRetries(TimeSpan.FromSeconds(1));
-			repository.PerformIndexMaintenance(DatabaseEnum.Application);
+			Assert.Throws<SqlException>(() => repository.PerformIndexMaintenance(DatabaseEnum.Application));
 		}
 
-		[TestCase("Data Source=.;Initial Catalog=TeleoptiAnalyics", Result = "Data Source=.;Initial Catalog=AggName")]
-		[TestCase("Data Source=.;Initial Catalog=A", Result = "Data Source=.;Initial Catalog=AggName")]
-		[TestCase("Data Source=.;Initial Catalog=TeleoptiAnalyics;", Result = "Data Source=.;Initial Catalog=AggName;")]
-		[TestCase("Initial Catalog=TeleoptiAnalyics;Data Source=.;", Result = "Initial Catalog=AggName;Data Source=.;")]
-		[TestCase("Data Source=tssccdv,1533;User Id=teleopticcc;Password=123;Initial Catalog=TeleoptiAnalyics;Application Name=Teleopti.wfm.etl.service", Result = "Data Source=tssccdv,1533;User Id=teleopticcc;Password=123;Initial Catalog=AggName;Application Name=Teleopti.wfm.etl.service")]
+		[TestCase("Data Source=.;Initial Catalog=TeleoptiAnalyics", ExpectedResult = "Data Source=.;Initial Catalog=AggName")]
+		[TestCase("Data Source=.;Initial Catalog=A", ExpectedResult = "Data Source=.;Initial Catalog=AggName")]
+		[TestCase("Data Source=.;Initial Catalog=TeleoptiAnalyics;", ExpectedResult = "Data Source=.;Initial Catalog=AggName;")]
+		[TestCase("Initial Catalog=TeleoptiAnalyics;Data Source=.;", ExpectedResult = "Initial Catalog=AggName;Data Source=.;")]
+		[TestCase("Data Source=tssccdv,1533;User Id=teleopticcc;Password=123;Initial Catalog=TeleoptiAnalyics;Application Name=Teleopti.wfm.etl.service", ExpectedResult = "Data Source=tssccdv,1533;User Id=teleopticcc;Password=123;Initial Catalog=AggName;Application Name=Teleopti.wfm.etl.service")]
 		public string ShoudTransformConnectionStringCorrectly(string connectionString)
 		{
 			return IndexMaintenanceRepository.GetAggConnectionString("AggName", connectionString);

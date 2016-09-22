@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
             }
 
             var description = assignment.ShiftCategory.Description.Name;
-            Assert.IsNotNullOrEmpty(description);
+            Assert.That(description, Is.Not.Null.And.Not.Empty);
         }
 
 		[Test]
@@ -248,10 +248,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void ShouldThrowIfNotPositiveMaxResult()
 		{
-			target.FindRevisions(Agent, new DateOnly(Today), 0);
+			Assert.Throws<ArgumentOutOfRangeException>(() => target.FindRevisions(Agent, new DateOnly(Today), 0));
 		}
 
 		[Test]

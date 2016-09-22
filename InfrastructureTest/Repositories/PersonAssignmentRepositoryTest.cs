@@ -158,10 +158,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void CannotUseNullAsScenario()
         {
-            _rep.Find(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), null);
+            Assert.Throws<ArgumentNullException>(() => _rep.Find(new DateOnlyPeriod(2000, 1, 1, 2001, 1, 1), null));
         }
 
 

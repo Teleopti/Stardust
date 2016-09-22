@@ -95,14 +95,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
         [Test]
-        [ExpectedException(typeof(DataSourceException))]
         public void VerifyMultipleLicensesNotAllowedWithAddRange2()
         {
             ILicenseRepository licenseRepository = new LicenseRepository(UnitOfWork);
             ILicense license = new License { XmlString = "<foo></foo>" };
             ILicense oneLicenseTooMany = new License { XmlString = "<overflow></overflow>" };
             licenseRepository.AddRange(new Collection<ILicense> { license, oneLicenseTooMany });
-            Session.Flush();
+            Assert.Throws<DataSourceException>(() => Session.Flush());
         }
 
         [Test]

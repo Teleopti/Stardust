@@ -791,39 +791,39 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 () => _target.LoadScheduleDataAggregate(typeof (IPersistableScheduleData), Guid.NewGuid()));
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowExceptionOnNullPeriod()
         {
             var personProvider = _mocks.StrictMock<IPersonProvider>();
             var scheduleDictionaryLoadOptions = _mocks.StrictMock<IScheduleDictionaryLoadOptions>();
-			_target.FindSchedulesForPersons(null, _scenario, personProvider, scheduleDictionaryLoadOptions, new List<IPerson>());
+			Assert.Throws<ArgumentNullException>(() => _target.FindSchedulesForPersons(null, _scenario, personProvider, scheduleDictionaryLoadOptions, new List<IPerson>()));
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowExceptionOnNullPersonProvider()
         {
             var scheduleDictionaryLoadOptions = _mocks.StrictMock<IScheduleDictionaryLoadOptions>();
-			_target.FindSchedulesForPersons(_schedPeriod, _scenario, null, scheduleDictionaryLoadOptions, new List<IPerson>());
+			Assert.Throws<ArgumentNullException>(() => _target.FindSchedulesForPersons(_schedPeriod, _scenario, null, scheduleDictionaryLoadOptions, new List<IPerson>()));
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowExceptionOnNullScheduleDictionaryLoadOptions()
         {
             var personProvider = _mocks.StrictMock<IPersonProvider>();
-			_target.FindSchedulesForPersons(_schedPeriod, _scenario, personProvider, null, new List<IPerson>());
+			Assert.Throws<ArgumentNullException>(() => _target.FindSchedulesForPersons(_schedPeriod, _scenario, personProvider, null, new List<IPerson>()));
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowExceptionOnNullPersonProviderInGivenPeriod()
         {
             var scheduleDictionaryLoadOptions = _mocks.StrictMock<IScheduleDictionaryLoadOptions>();
-			_target.FindSchedulesForPersonsOnlyInGivenPeriod(null, scheduleDictionaryLoadOptions, _longDateOnlyPeriod, _scenario);
+			Assert.Throws<ArgumentNullException>(() => _target.FindSchedulesForPersonsOnlyInGivenPeriod(null, scheduleDictionaryLoadOptions, _longDateOnlyPeriod, _scenario));
         }
 
-        [Test, ExpectedException(typeof(ArgumentNullException))]
+        [Test]
         public void ShouldThrowExceptionOnNullScheduleDictionaryLoadOptionsInGivenPeriod()
         {
-			_target.FindSchedulesForPersonsOnlyInGivenPeriod(new IPerson[]{}, null, _longDateOnlyPeriod, _scenario);
+			Assert.Throws<ArgumentNullException>(() => _target.FindSchedulesForPersonsOnlyInGivenPeriod(new IPerson[]{}, null, _longDateOnlyPeriod, _scenario));
         }
     }
 }

@@ -123,21 +123,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults")]
         public void VerifyMissingArgumentsProvideLicenseActivator()
         {
-            LicenseProvider.ProvideLicenseActivator("",null);
+	        Assert.Throws<ArgumentNullException>(() => LicenseProvider.ProvideLicenseActivator("", null));
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
         [SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults")]
         [SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public void VerifyMissingArgumentsLicense()
         {
-            LicenseProvider.GetLicenseActivator(null);
+			Assert.Throws<ArgumentNullException>(() => LicenseProvider.GetLicenseActivator(null));
         }
 
         private class stubStandardLicenseService : ILicenseService

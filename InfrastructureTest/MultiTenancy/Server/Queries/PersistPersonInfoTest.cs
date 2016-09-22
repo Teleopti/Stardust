@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			loaded.Id.Should().Be.EqualTo(id);
 		}
 
-		[Test, ExpectedException(typeof(DuplicateApplicationLogonNameException))]
+		[Test]
 		public void SameApplicationLogonShouldThrow()
 		{
 			var logonName = RandomName.Make();
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 
 			target.Persist(personInfo1);
 			_tenantUnitOfWorkManager.CurrentSession().Flush();
-			target.Persist(personInfo2);
+			Assert.Throws<DuplicateApplicationLogonNameException>(() => target.Persist(personInfo2));
 		}
 
 		[Test]
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			Assert.DoesNotThrow(_tenantUnitOfWorkManager.CurrentSession().Flush);
 		}
 
-		[Test, ExpectedException(typeof(DuplicateIdentityException))]
+		[Test]
 		public void SameIdentityShouldThrow()
 		{
 			var identity = RandomName.Make();
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 
 			target.Persist(personInfo1);
 			_tenantUnitOfWorkManager.CurrentSession().Flush();
-			target.Persist(personInfo2);
+			Assert.Throws<DuplicateIdentityException>(() => target.Persist(personInfo2));
 		}
 
 		[Test]

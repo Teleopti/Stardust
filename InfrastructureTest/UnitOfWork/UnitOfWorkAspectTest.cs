@@ -162,7 +162,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			sites.Single().Id.Should().Be(site2.Id.Value);
 		}
 
-		[Test, Ignore]
+		[Test]
+		[Ignore("Reason mandatory for NUnit 3")]
 		public void ShouldFilterOnBusinessUnitFromHttpHeaderOverQueryString()
 		{
 			Assert.Fail();

@@ -42,10 +42,10 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			Assert.AreEqual("shift1".GetHashCode(), target.GetHashCode("shift1"));
 		}
 
-		[Test, ExpectedException(typeof(ArgumentNullException))]
+		[Test]
 		public void VerifyGetHashCodeFailsWithNullArgument()
 		{
-			target.GetHashCode(null);
+			Assert.Throws<ArgumentNullException>(() => target.GetHashCode(null));
 		}
 
 		[Test]
@@ -70,10 +70,10 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			mocks.VerifyAll();
 		}
 
-		[Test, ExpectedException(typeof(InvalidOperationException))]
+		[Test]
 		public void VerifyNullSafeGetExceptionWithTooManyNames()
 		{
-			target.NullSafeGet(null, new[] { "name1", "name2" }, null);
+			Assert.Throws<InvalidOperationException>(() => target.NullSafeGet(null, new[] { "name1", "name2" }, null));
 		}
 
 		[Test]

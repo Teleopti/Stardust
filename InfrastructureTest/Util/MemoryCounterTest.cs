@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Util
 		[Test]
 		public void VerifyResultIsValidString()
 		{
-			Assert.IsNotNullOrEmpty(_target.CurrentMemoryConsumptionString());
+			Assert.That(_target.CurrentMemoryConsumptionString(), Is.Not.Null.And.Not.Empty);
 		}
 	}
 }

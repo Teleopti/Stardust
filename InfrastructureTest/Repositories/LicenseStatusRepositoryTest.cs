@@ -79,14 +79,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
         [Test]
-        [ExpectedException(typeof(DataSourceException))]
         public void VerifyMultipleLicensesNotAllowedWithAddRange2()
         {
             var licenseRepository = new LicenseStatusRepository(UnitOfWork);
             var license = new LicenseStatus { XmlString = "<foo></foo>" };
             var oneLicenseTooMany = new LicenseStatus { XmlString = "<overflow></overflow>" };
             licenseRepository.AddRange(new Collection<ILicenseStatus> { license, oneLicenseTooMany });
-            Session.Flush();
+            Assert.Throws<DataSourceException>(() => Session.Flush());
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]

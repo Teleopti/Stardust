@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             _mocks.VerifyAll();
         }
 
-        [Test, ExpectedException(typeof(LicenseMissingException))]
+        [Test]
         public void ShouldThrowIfNoLicense()
         {
             var uow = _mocks.StrictMock<IUnitOfWork>();
@@ -89,8 +89,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             Expect.Call(licenseRep.LoadAll()).Return(new List<ILicense>());
 			Expect.Call(uow.Dispose);
             _mocks.ReplayAll();
-            var serv = _target.XmlLicenseService(0);
-            Assert.That(serv, Is.Not.Null);
+	        Assert.Throws<LicenseMissingException>(() =>
+	        {
+				var serv = _target.XmlLicenseService(0);
+				Assert.That(serv, Is.Not.Null);
+	        });
             _mocks.VerifyAll();
         }
     }

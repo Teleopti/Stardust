@@ -301,10 +301,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// List of agents must not be null when calling find by agent and period.
         /// </summary>
         [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
         public void AgentListMustNotBeNullWhenCallingFindByAgentAndPeriod()
         {
-			new PersonAbsenceRepository(CurrUnitOfWork).Find(null, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
+			Assert.Throws<ArgumentNullException>(() => new PersonAbsenceRepository(CurrUnitOfWork).Find(null, new DateTimePeriod(2000, 1, 1, 2000, 1, 2)));
         }
 
         [Test]
