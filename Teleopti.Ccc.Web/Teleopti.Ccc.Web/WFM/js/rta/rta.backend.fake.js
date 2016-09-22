@@ -176,7 +176,7 @@
 					}];
 				});
 
-			fakePost(/\.\.\/api\/Agents\/GetAlarmStatesForTeamsExcludingGroups/,
+			fakePost(/\.\.\/api\/Agents\/GetAlarmStatesForTeamsExcludingStateGroups/,
 				function(data) {
 					var alarmStatesForTeams = alarmStatesFor(data.ids, function(a) {
 						return a.TeamId
@@ -200,7 +200,7 @@
 					}];
 				});
 
-			fakePost(/\.\.\/api\/Agents\/GetAlarmStatesForSitesExcludingGroups/,
+			fakePost(/\.\.\/api\/Agents\/GetAlarmStatesForSitesExcludingStateGroups/,
 				function(data) {
 					var alarmStatesForSites = alarmStatesFor(data.ids, function(a) {
 						return a.SiteId
@@ -224,7 +224,7 @@
 					}];
 				});
 
-			fakePost(/\.\.\/api\/Agents\/GetAlarmStatesForSkillsExcludingGroups/,
+			fakePost(/\.\.\/api\/Agents\/GetAlarmStatesForSkillsExcludingStateGroups/,
 				function(data) {
 					var alarmStatesForSkills = alarmStatesFor(data.ids, function(a) {
 						return a.SkillId

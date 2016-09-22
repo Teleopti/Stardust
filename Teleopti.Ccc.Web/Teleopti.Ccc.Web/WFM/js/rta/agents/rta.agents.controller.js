@@ -140,7 +140,7 @@
 					if (skillIds.length > 0) {
 						if (inAlarm) {
 							if (excludedStateGroupIds().length >0)
-									return RtaService.getAlarmStatesForSkillsExcludingGroups;
+									return RtaService.getAlarmStatesForSkillsExcludingStateGroups;
 							return RtaService.getAlarmStatesForSkills;
 						}
 						return RtaService.getStatesForSkills;
@@ -148,14 +148,14 @@
 					if (teamIds.length > 0) {
 						if (inAlarm) {
 							if (excludedStateGroupIds().length >0)
-									return RtaService.getAlarmStatesForTeamsExcludingGroups;
+									return RtaService.getAlarmStatesForTeamsExcludingStateGroups;
 							return RtaService.getAlarmStatesForTeams;
 						}
 						return RtaService.getStatesForTeams;
 					}
 					if (inAlarm) {
 						if (excludedStateGroupIds().length >0)
-								return RtaService.getAlarmStatesForSitesExcludingGroups;
+								return RtaService.getAlarmStatesForSitesExcludingStateGroups;
 						return RtaService.getAlarmStatesForSites;
 					}
 					return RtaService.getStatesForSites;

@@ -84,8 +84,8 @@
 				}).$promise;
 			};
 
-			this.getAlarmStatesForSitesExcludingGroups = function(data) {
-				return $resource('../api/Agents/GetAlarmStatesForSitesExcludingGroups', {}, {
+			this.getAlarmStatesForSitesExcludingStateGroups = function(data) {
+				return $resource('../api/Agents/GetAlarmStatesForSitesExcludingStateGroups', {}, {
 						query: {
 							method: 'POST'
 						}
@@ -107,8 +107,8 @@
 					.$promise;
 			};
 
-			this.getAlarmStatesForSkillsExcludingGroups = function(data) {
-				return $resource('../api/Agents/GetAlarmStatesForSkillsExcludingGroups',
+			this.getAlarmStatesForSkillsExcludingStateGroups = function(data) {
+				return $resource('../api/Agents/GetAlarmStatesForSkillsExcludingStateGroups',
 					{},
 					{
 						query: {
@@ -139,8 +139,8 @@
 					.$promise;
 			};
 
-			this.getAlarmStatesForTeamsExcludingGroups = function(data) {
-				return $resource('../api/Agents/GetAlarmStatesForTeamsExcludingGroups', {}, {
+			this.getAlarmStatesForTeamsExcludingStateGroups = function(data) {
+				return $resource('../api/Agents/GetAlarmStatesForTeamsExcludingStateGroups', {}, {
 						query: {
 							method: 'POST'
 						}
