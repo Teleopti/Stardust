@@ -141,12 +141,12 @@
 								},
 								names: {
 									ASA: $translate.instant('AverageSpeedOfAnswer') + ' ←',
-									Abandoned_rate: $translate.instant('AbandonedRate') + ' ←',
+									Abandoned_rate: $translate.instant('AbandonedRate') + ' →',
 									Service_level: $translate.instant('ServiceLevel') + ' →',
 								},
 								axes: {
 									Service_level: 'y2',
-									Current:'y2'
+									Abandoned_rate: 'y2'
 								}
 							},
 							axis: {
@@ -163,11 +163,13 @@
 									}
 								},
 								y:{
+									label: $translate.instant('SecondShort'),
 									tick: {
 										format: d3.format('.1f')
 									}
 								},
 								y2: {
+									label: $translate.instant('%'),
 									show: true,
 									tick: {
 										format: d3.format('.1f')
