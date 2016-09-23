@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 	{
 		public Guid PersonId { get; set; }
 		public string State { get; set; }
+		public Guid? StateId { get; set; }
 		public string Activity { get; set; }
 		public string NextActivity { get; set; }
 		public string NextActivityStartTime { get; set; }
@@ -129,6 +130,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				{
 					PersonId = x.PersonId,
 					State = x.StateName,
+					StateId = x.StateGroupId,
 					Activity = x.Activity,
 					NextActivity = x.NextActivity,
 					NextActivityStartTime = formatTime(x.NextActivityStartTime),

@@ -112,6 +112,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			assertAgentStatus(status);
 		}
 
+		[When(@"I deselect state group '(.*)'")]
+		public void WhenIDeselectStateGroup(string stateGroup)
+		{
+			Browser.Interactions.AssertAnyContains(".grid", stateGroup);
+			Browser.Interactions.ClickContaining(".call-out-button", "");
+			Browser.Interactions.ClickContaining(".wfm-checkbox-label", stateGroup);
+			Browser.Interactions.ClickContaining(".chevron", "");
+		}
+
 		[Then(@"I should see agent '(.*)' with state '(.*)'")]
 		public void ThenIShouldSeeAgentStatusForWithState(string name, string stateCode)
 		{

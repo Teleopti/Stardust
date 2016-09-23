@@ -9,9 +9,9 @@
 				<button class="wfm-btn wfm-btn-default" ng-click="goToSelectItem()">Select skill</button>
 				<span class="wfm-chip">
 					<span ng-if="skill" class="chip-text rta-default-cursor">You are now viewing <span ng-if="openedMaxNumberOfAgents"><b>top {{maxNumberOfAgents}}</b></span> agents with skill: <b>{{skillName}}</b></span>
-					<span ng-if="skillArea" class="chip-text rta-default-cursor">You are now viewing <span ng-if="openedMaxNumberOfAgents"><b>top {{maxNumberOfAgents}}</b></span> agents with skill area: <b>{{skillAreaName}}</b></span>
-					<span ng-if="!(skill || skillArea) && openedMaxNumberOfAgents" class="chip-text rta-default-cursor">You are now viewing <b>top {{maxNumberOfAgents}}</b> agents in alarm</span>
-				</span>
+			<span ng-if="skillArea" class="chip-text rta-default-cursor">You are now viewing <span ng-if="openedMaxNumberOfAgents"><b>top {{maxNumberOfAgents}}</b></span> agents with skill area: <b>{{skillAreaName}}</b></span>
+			<span ng-if="!(skill || skillArea) && openedMaxNumberOfAgents" class="chip-text rta-default-cursor">You are now viewing <b>top {{maxNumberOfAgents}}</b> agents in alarm</span>
+			</span>
 			</span>
 		</div>
 	</div>
@@ -30,8 +30,7 @@
 <div class="panel material-depth-1">
 	<div class="sub-header" ng-show="showBreadcrumb">
 		<div>
-			<a class="rta-nav-link" href="{{goBackToRootWithUrl()}}">{{'RealTimeAdherence'|translate}}</a>
-			/
+			<a class="rta-nav-link" href="{{goBackToRootWithUrl()}}">{{'RealTimeAdherence'|translate}}</a> /
 			<a class="rta-nav-link" ng-if="showPath" href="{{goBackToTeamsWithUrl}}">{{siteName}}</a>
 			<span ng-if="!showPath">{{siteName}}</span>
 			<span ng-if="showPath">/</span>
@@ -47,8 +46,8 @@
 		</div>
 		<div class="con-flex">
 			<div class="wfm-switch panel-switch line-right">
-				<input id="switch1" ng-model="agentsInAlarm" type="checkbox"/>
-				<label  class="rta-agents-in-alarm-switch" for="switch1" ng-if="agents.length <= maxNumberOfAgents && !isLoading">
+				<input id="switch1" ng-model="agentsInAlarm" type="checkbox" />
+				<label class="rta-agents-in-alarm-switch" for="switch1" ng-if="agents.length <= maxNumberOfAgents && !isLoading">
 					<span class="wfm-switch-label">{{'InAlarm'|translate}}</span>
 					<span class="wfm-switch-toggle"></span>
 				</label>
@@ -56,20 +55,22 @@
 			</div>
 		</div>
 	</div>
-    <div class="con-row">
-        <div class="con-flex agent-table-wrapper">
-            <div class="grid" ng-style="getTableHeight()" ng-if="allGrid && !agentsInAlarm" ui-grid-auto-resize ui-grid-auto-resize ui-grid-resize-columns ui-grid-disable-animation ui-grid="allGrid"></div>
-            <div class="grid" ng-style="getTableHeight()" ng-if="inAlarmGrid && agentsInAlarm" ui-grid-auto-resize ui-grid-auto-resize ui-grid-resize-columns ui-grid-disable-animation ui-grid="inAlarmGrid"></div>
-        </div>
-    </div>
-    <wfm-right-panel ng-if="agentsInAlarm" panel-options="rightPanelOptions" style="min-height:400px">
-        <h3><i class="mdi mdi-filter-outline"></i>Include agents in state group:</h3>
-        <div class="wfm-checkbox" ng-repeat="group in stateGroups">
-            <input type="checkbox" id="{{group.StateId}}" ng-model="group.Selected"/>
-            <label for="{{group.StateId}}">
+	<div class="con-row">
+		<div class="con-flex agent-table-wrapper">
+			<div class="grid" ng-style="getTableHeight()" ng-if="allGrid && !agentsInAlarm" ui-grid-auto-resize ui-grid-auto-resize ui-grid-resize-columns ui-grid-disable-animation ui-grid="allGrid"></div>
+			<div class="grid" ng-style="getTableHeight()" ng-if="inAlarmGrid && agentsInAlarm" ui-grid-auto-resize ui-grid-auto-resize ui-grid-resize-columns ui-grid-disable-animation ui-grid="inAlarmGrid"></div>
+		</div>
+	</div>
+	<wfm-right-panel ng-if="agentsInAlarm" panel-options="rightPanelOptions" style="min-height:400px">
+		<h3><i class="mdi mdi-filter-outline"></i>Include agents in state group:</h3>
+		<div ng-repeat="group in stateGroups">
+			<div class="wfm-checkbox">
+				<label>
+								<input type="checkbox" name="checkbox" id="{{group.StateId}}" ng-model="group.Selected" />
                 <span class="wfm-checkbox-toggle"></span>
                 <span class="wfm-checkbox-label">{{group.State}}</span>
-            </label>
-        </div>
-    </wfm-right-panel>
+        </label>
+			</div>
+		</div>
+	</wfm-right-panel>
 </div>

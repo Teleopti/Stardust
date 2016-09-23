@@ -247,6 +247,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			Target.LoadAlarmsForSites(new[] { siteId }, new[] { loggedOut })
 				.Single().PersonId.Should().Be(personId1);
 		}
+		
+		[Test]
+		public void ShouldLoadWithStateGroupId()
+		{
+			Now.Is("2016-06-15 12:00");
+			var site = Guid.NewGuid();
+			var person = Guid.NewGuid();
+			var phoneState = Guid.NewGuid();
+			Persister.Persist(new AgentStateReadModelForTest
+			{
+				PersonId = person,
+				SiteId = site,
+				AlarmStartTime = "2016-06-15 12:00".Utc(),
+				IsRuleAlarm = true,
+				StateGroupId = phoneState
+			});
+
+			Target.LoadAlarmsForSites(new[] { site })
+				.Single().StateGroupId.Should().Be(phoneState);
+		}
 
 		[Test]
 		public void ShouldLoadStatesOrderByLongestAlarmTimeFirstForSites()

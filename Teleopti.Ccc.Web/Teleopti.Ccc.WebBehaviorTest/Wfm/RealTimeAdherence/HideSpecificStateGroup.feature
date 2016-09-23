@@ -12,21 +12,21 @@ Background:
 	And Ashley Andeen has a person period with
 	| Field      | Value      |
 	| Team       | Red        |
-	| Start Date | 2015-11-23 |
+	| Start Date | 2016-01-01 |
 	And Pierre Baldi has a person period with
 	| Field      | Value      |
 	| Team       | Red        |
-	| Start Date | 2015-11-23 |
+	| Start Date | 2016-01-01 |
 	And Ashley Andeen has a shift with
 	| Field                    | Value            |
 	| Activity                 | Phone            |
-	| Start time               | 2015-11-23 08:00 |
-	| End time                 | 2015-11-23 17:00 |
+	| Start time               | 2016-11-23 08:00 |
+	| End time                 | 2016-11-23 17:00 |
 	And Pierre Baldi has a shift with
 	| Field                    | Value            |
 	| Activity                 | Phone            |
-	| Start time               | 2015-11-23 08:00 |
-	| End time                 | 2015-11-23 17:00 |
+	| Start time               | 2016-11-23 08:00 |
+	| End time                 | 2016-11-23 17:00 |
 	And there is a rule with 
 	| Field           | Value        |
 	| Adherence       | Out          |
@@ -40,16 +40,16 @@ Background:
 	| Activity        | Phone      |
 	| Phone state     | LoggedOut  |
 	| Is alarm        | True       |
-	| Alarm threshold | 00:01:00   |
+	| Alarm threshold | 00:00:00   |
  
- @ignore
-@OnlyRunIfEnabled('RTA_HideAgentsBeingLoggedOut_40469')
+
+@OnlyRunIfEnabled('RTA_HideAgentsByStateGroup_40469')
 Scenario: Hide logged out agents
-	Given the time is '2015-11-22 17:00:00'			
+	Given the time is '2016-11-22 17:00:00'			
 	And 'Ashley Andeen' sets her phone state to 'LoggedOut'		
-	And I am viewing real time adherence for agents on team 'Red'
-	And the time is '2015-11-23 08:10:00'	
-	And 'Pierre Baldi' sets his phone state to 'Training'
-	When I deselet state group 'LoggedOut'
+	And the time is '2016-11-23 08:10:00'
+	And 'Pierre Baldi' sets his phone state to 'Training'	
+	Given I am viewing real time adherence for agents on team 'Red'
+	When I deselect state group 'LoggedOut'
 	Then I should not see agent 'Ashley Andeen'
 	And I should see agent status for 'Pierre Baldi'

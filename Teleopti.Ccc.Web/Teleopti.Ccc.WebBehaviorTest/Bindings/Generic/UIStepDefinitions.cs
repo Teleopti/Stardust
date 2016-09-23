@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			Browser.Interactions.ClickUsingJQuery(string.Format("button.{0}", cssClass.Name));
 		}
 
-
 		// I click agent 'mathias stenbom'
 		// I click the agent 'mathias stenbom'
 		// I click super agent 'james bond'

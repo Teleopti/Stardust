@@ -113,5 +113,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 
 			agentState.Single().PersonId.Should().Be(person1);
 		}
+
+		[Test]
+		public void ShouldGetWithStateGroupIdForSkill()
+		{
+			var person = Guid.NewGuid();
+			var skill = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.Has(new AgentStateReadModel
+				{
+					PersonId = person,
+					StateGroupId = phone,
+					IsRuleAlarm = true,
+					AlarmStartTime = "2016-09-22 08:00".Utc()
+				})
+				.WithPersonSkill(person, skill);
+			Now.Is("2016-09-22 08:10");
+
+			var agentState = Target.InAlarmForSkills(new[] { skill }).States;
+
+			agentState.Single().StateId.Should().Be(phone);
+		}
 	}
 }

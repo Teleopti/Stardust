@@ -128,26 +128,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		private const string agentsForSkillQuery = @"
 SELECT DISTINCT {0}
-	a.[PersonId],
-	a.[BusinessUnitId],
-	a.[SiteId],
-	a.[TeamId],
-	a.[ReceivedTime],
-	a.[Activity],
-	a.[NextActivity],
-	a.[NextActivityStartTime],
-	a.[StateCode],
-	a.[StateName],
-	a.[StateStartTime],
-	a.[RuleName],
-	a.[RuleStartTime],
-	a.[RuleColor],
-	a.[StaffingEffect],
-	a.[IsRuleAlarm],
-	a.[AlarmStartTime],
-	a.[AlarmColor],
-	a.[Shift],
-	a.[OutOfAdherences]
+	a.*
 FROM ReadModel.AgentState AS a WITH (NOLOCK)
 INNER JOIN ReadModel.GroupingReadOnly AS g
 	ON a.PersonId = g.PersonId

@@ -190,6 +190,32 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		}
 
 		[Test]
+		public void ShouldLoadWithStateGroupId()
+		{
+			Now.Is("2016-09-23 08:00");
+			var phoneState = Guid.NewGuid();
+			Database
+				.WithAgent("agent1")
+				.WithSkill("phone");
+			var person = Database.PersonIdFor("agent1");
+			var skill = Database.SkillIdFor("phone");
+			WithUnitOfWork.Do(() =>
+			{
+				Groupings.UpdateGroupingReadModel(new[] { person });
+				StatePersister.Persist(new AgentStateReadModelForTest
+				{
+					PersonId = person,
+					AlarmStartTime = "2016-09-23 07:50".Utc(),
+					IsRuleAlarm = true,
+					StateGroupId = phoneState
+				});
+			});
+
+			WithUnitOfWork.Get(() => Target.LoadAlarmsForSkills(new[] { skill }))
+				.Single().StateGroupId.Should().Be(phoneState);
+		}
+
+		[Test]
 		public void ShouldLoadStatesInAlarmForMultipleSkills()
 		{
 			Now.Is("2016-06-20 12:10");
