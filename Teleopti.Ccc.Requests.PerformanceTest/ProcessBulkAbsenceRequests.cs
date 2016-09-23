@@ -2,34 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
-using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Logon;
-using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.Infrastructure.Absence;
-using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Hangfire;
-using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Services;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Messaging.Client;
 
 namespace Teleopti.Ccc.Requests.PerformanceTest
 {
@@ -48,6 +33,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 		public IBudgetDayRepository BudgetDayRepository;
 		public IScenarioRepository ScenarioRepository;
 		public IBusinessUnitRepository BusinessUnitRepository;
+		public IQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
 
 		[Test]
 		public void ShouldProcessMultipleAbsenceRequests()
@@ -84,7 +70,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 
 			WithUnitOfWork.Do(() =>
 			{
-				var wfcs = WorkflowControlSetRepository.Get(new Guid("E97BC114-8939-4A70-AE37-A338010FFF19"));
+				var wfcs = WorkflowControlSetRepository.Get(new Guid("E97BC114-8939-4A70-AE37-A338010FFF19")); //Consumer Support
 				foreach (var period in wfcs.AbsenceRequestOpenPeriods)
 				{
 					period.OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(2016, 3, 1), new DateOnly(2099, 5, 30));
@@ -107,7 +93,10 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 
 				foreach (var person in persons)
 				{
-					personReqs.Add(createAbsenceRequest(person, absence));
+					for (int i = 0; i < 300; i++)
+					{
+						personReqs.Add(createAbsenceRequest(person, absence));
+					}
 				}
 
 
@@ -130,8 +119,10 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 					Timestamp = DateTime.Parse("2016-08-08T11:06:00.7366909Z"),
 					Sent = DateTime.UtcNow
 				};
+				//queueRequests(absenceRequestIds);
 
 				Target.Process(newMultiAbsenceRequestsCreatedEvent);
+
 			});
 
 			var expectedStatuses = new Dictionary<Guid, int>();
@@ -167,6 +158,25 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			});
 
 			CollectionAssert.AreEquivalent(expectedStatuses, resultStatuses);
+		}
+
+		private void queueRequests(List<Guid> absenceRequestIds)
+		{
+			foreach (var requestId in absenceRequestIds)
+			{
+				var queuedAbsenceRequest = new QueuedAbsenceRequest()
+				{
+					PersonRequest = requestId,
+					Created = new DateTime(2016, 3, 10, 8, 0, 0, DateTimeKind.Utc),
+					StartDateTime = new DateTime(2016, 3, 10, 8, 0, 0, DateTimeKind.Utc),
+					EndDateTime = new DateTime(2016, 3, 10, 18, 0, 0, DateTimeKind.Utc)
+				};
+				QueuedAbsenceRequestRepository.Add(queuedAbsenceRequest);
+
+			}
+#pragma warning disable 618
+			QueuedAbsenceRequestRepository.UnitOfWork.PersistAll();
+#pragma warning restore 618
 		}
 
 		[Test]
@@ -602,34 +612,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 		{
 			var req = new AbsenceRequest(absence,dateTimePeriod);
 			return new PersonRequest(person) { Request = req };
-		}
-	}
-
-	public class RequestPerformanceTestAttribute : IoCTestAttribute
-	{
-
-		protected override void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			base.Setup(system, configuration);
-			system.AddModule(new CommonModule(configuration));
-			system.UseTestDouble<MultiAbsenceRequestsUpdater>().For<IMultiAbsenceRequestsUpdater>();
-			system.UseTestDouble<MultiAbsenceRequestsHandler>().For<MultiAbsenceRequestsHandler>();
-			system.UseTestDouble<ProcessMultipleAbsenceRequests>().For<IProcessMultipleAbsenceRequest>();
-			system.UseTestDouble<ApproveRequestCommandHandler>().For<IHandleCommand<ApproveRequestCommand>>();
-			system.UseTestDouble<DenyRequestCommandHandler>().For<IHandleCommand<DenyRequestCommand>>();
-			system.UseTestDouble<RequestApprovalServiceFactory>().For<IRequestApprovalServiceFactory>();
-			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
-			system.UseTestDouble<StardustJobFeedback>().For<IStardustJobFeedback>();
-			system.UseTestDouble<ArrangeRequestsByProcessOrder>().For<ArrangeRequestsByProcessOrder>();
-			system.AddService<Database>();
-			system.AddModule(new TenantServerModule(configuration));
-
-		}
-
-		protected override void Startup(IComponentContext container)
-		{
-			base.Startup(container);
-			container.Resolve<HangfireClientStarter>().Start();
 		}
 	}
 }
