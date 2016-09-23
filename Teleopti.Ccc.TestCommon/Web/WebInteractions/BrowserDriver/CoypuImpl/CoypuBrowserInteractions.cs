@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 
 		public void AssertFirstContains(string selector, string text)
 		{
-			Console.WriteLine("Assert first element match selector \"{0}\" contain text \"{1}\"", selector, text);
+			Console.WriteLine($"Assert first element match selector \"{selector}\" contain text \"{text}\"");
 			assert(_browser.FindCss(selector, options()).HasContentMatch(new Regex(Regex.Escape(text))), Is.True,
 				"Failed to assert that " + selector + " contained text " + text);
 		}
@@ -168,13 +168,13 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 
 		public void AssertUrlContains(string url)
 		{
-			eventualAssert(() => _browser.Location.ToString(), Is.StringContaining(url), () => "Failed to assert that current url contains " + url);
+			eventualAssert(() => _browser.Location.ToString(), Does.Contain(url), () => "Failed to assert that current url contains " + url);
 		}
 
 		public void AssertUrlNotContains(string urlContains, string urlNotContains)
 		{
 			AssertUrlContains(urlContains);
-			eventualAssert(() => _browser.Location.ToString(), Is.Not.StringContaining(urlNotContains), () => "Failed to assert that current url did not contain " + urlNotContains);
+			eventualAssert(() => _browser.Location.ToString(), Does.Not.Contain(urlNotContains), () => "Failed to assert that current url did not contain " + urlNotContains);
 		}
 
 		public void CloseWindow(string name)
@@ -191,8 +191,8 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 				actual = result == null ? null : result.ToString();
 				return actual;
 			},
-				Is.StringContaining(text),
-				() => string.Format("Failed to assert that javascript \"{0}\" returned a value containing \"{1}\". Last attempt returned \"{2}\". ", javascript, text, actual));
+				Does.Contain(text),
+				() => $"Failed to assert that javascript \"{javascript}\" returned a value containing \"{text}\". Last attempt returned \"{actual}\". ");
 		}
 
 		public void DumpInfo(Action<string> writer)
