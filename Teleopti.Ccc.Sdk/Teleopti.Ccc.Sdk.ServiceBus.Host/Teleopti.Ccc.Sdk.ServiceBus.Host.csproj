@@ -164,9 +164,6 @@
     <None Include="..\..\Teleopti.Ccc.snk">
       <Link>Teleopti.Ccc.snk</Link>
     </None>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
     <Content Include="PayrollQueue.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
