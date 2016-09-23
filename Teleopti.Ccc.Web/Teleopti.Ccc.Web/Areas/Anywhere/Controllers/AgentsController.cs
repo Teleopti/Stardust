@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return Ok(_agentStatesBuilder.InAlarmForSkills(skillIds.Ids));
 		}
 
-		[UnitOfWork, HttpPost, Route("api/Agents/GetAlarmStatesForSitesExcludingStateGroups")]
+		[UnitOfWork, HttpPost, Route("api/Agents/GetAlarmStatesForSkillsExcludingStateGroups")]
 		public virtual IHttpActionResult GetAlarmStatesForSkillsExcludingGroups([FromBody]QueryExcludingStateGroups query)
 		{
 			return Ok(_agentStatesBuilder.InAlarmForSkills(query.Ids, query.ExcludedStateGroupIds));
