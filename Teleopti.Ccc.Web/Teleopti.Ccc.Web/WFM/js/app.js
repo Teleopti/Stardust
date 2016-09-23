@@ -247,12 +247,13 @@ wfm.config([
 				});
 				$state.go(next, toParams);
 
-				$rootScope.$on('$localeChangeSuccess', function () {
-					if ($locale.id === 'zh-cn')
-						$locale.DATETIME_FORMATS.FIRSTDAYOFWEEK = 0;
-				});
 			});
 		};
+
+		$rootScope.$on('$localeChangeSuccess', function () {
+			if ($locale.id === 'zh-cn')
+				$locale.DATETIME_FORMATS.FIRSTDAYOFWEEK = 0;
+		});
 
 		$rootScope.$on('$stateChangeStart', function(event, next, toParams) {
 
