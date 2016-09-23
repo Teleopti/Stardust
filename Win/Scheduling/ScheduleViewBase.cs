@@ -747,9 +747,12 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
  
         protected void AddMarkersToCell(GridDrawCellEventArgs e, IScheduleDay scheduleRange, SchedulePartView significantPart)
-        {  
-            //conflicts
-            addConflictMarkers(e, scheduleRange);
+        {
+			//Notes
+			addNoteMarkers(e, scheduleRange);
+
+			//conflicts
+			addConflictMarkers(e, scheduleRange);
 
             //part day absences
             addAbsenceMarkers(e, scheduleRange, significantPart);
@@ -762,9 +765,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             //meetings
             addMeetingMarkers(e, scheduleRange);
-
-            //Notes
-            addNoteMarkers(e, scheduleRange);
 
             //locks
             addLockMarkers(e, scheduleRange);
