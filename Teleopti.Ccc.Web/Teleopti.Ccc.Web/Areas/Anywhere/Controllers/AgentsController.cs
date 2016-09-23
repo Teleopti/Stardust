@@ -93,10 +93,10 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return Ok(_agentStatesBuilder.InAlarmForTeams(query.Ids));
 		}
 		
-		[UnitOfWork, HttpPost, Route("api/Agents/GetAlarmStatesForTeamsExcludingStateGroups")]
+		[UnitOfWork, HttpPost, Route("api/Agents/GetAlarmStatesForTeamsExcludingStates")]
 		public virtual IHttpActionResult GetAlarmStatesForTeamsExcludingGroups([FromBody]QueryExcludingStateGroups query)
 		{
-			return Ok(_agentStatesBuilder.InAlarmForTeams(query.Ids, query.ExcludedStateGroupIds));
+			return Ok(_agentStatesBuilder.InAlarmForTeams(query.Ids, query.ExcludedStateIds));
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForSites")]
@@ -111,10 +111,10 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return Ok(_agentStatesBuilder.InAlarmForSites(query.Ids));
 		}
 
-		[UnitOfWork, HttpPost, Route("api/Agents/GetAlarmStatesForSitesExcludingStateGroups")]
+		[UnitOfWork, HttpPost, Route("api/Agents/GetAlarmStatesForSitesExcludingStates")]
 		public virtual IHttpActionResult GetAlarmStatesForSitesExcludingGroups([FromBody]QueryExcludingStateGroups query)
 		{
-			return Ok(_agentStatesBuilder.InAlarmForSites(query.Ids, query.ExcludedStateGroupIds));
+			return Ok(_agentStatesBuilder.InAlarmForSites(query.Ids, query.ExcludedStateIds));
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForSkills")]
@@ -129,13 +129,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return Ok(_agentStatesBuilder.InAlarmForSkills(skillIds.Ids));
 		}
 
-		[UnitOfWork, HttpPost, Route("api/Agents/GetAlarmStatesForSkillsExcludingStateGroups")]
+		[UnitOfWork, HttpPost, Route("api/Agents/GetAlarmStatesForSkillsExcludingStates")]
 		public virtual IHttpActionResult GetAlarmStatesForSkillsExcludingGroups([FromBody]QueryExcludingStateGroups query)
 		{
-			return Ok(_agentStatesBuilder.InAlarmForSkills(query.Ids, query.ExcludedStateGroupIds));
+			return Ok(_agentStatesBuilder.InAlarmForSkills(query.Ids, query.ExcludedStateIds));
 		}
 	}
-
+	
 	public class Query
 	{
 		public Guid[] Ids { get; set; }
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 	public class QueryExcludingStateGroups
 	{
 		public Guid[] Ids { get; set; }
-		public Guid[] ExcludedStateGroupIds { get; set; }
+		public Guid[] ExcludedStateIds { get; set; }
 	}
 
 	public class PersonDetailModel

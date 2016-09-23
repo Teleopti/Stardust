@@ -57,18 +57,18 @@
 	</div>
 	<div class="con-row">
 		<div class="con-flex agent-table-wrapper">
-			<div class="grid" ng-style="getTableHeight()" ng-if="allGrid && !agentsInAlarm" ui-grid-auto-resize ui-grid-auto-resize ui-grid-resize-columns ui-grid-disable-animation ui-grid="allGrid"></div>
-			<div class="grid" ng-style="getTableHeight()" ng-if="inAlarmGrid && agentsInAlarm" ui-grid-auto-resize ui-grid-auto-resize ui-grid-resize-columns ui-grid-disable-animation ui-grid="inAlarmGrid"></div>
+			<div class="grid" ng-style="getTableHeight()" ng-if="allGrid && !agentsInAlarm" ui-grid-auto-resize ui-grid-resize-columns ui-grid-disable-animation ui-grid="allGrid"></div>
+			<div class="grid" ng-style="getTableHeight()" ng-if="inAlarmGrid && agentsInAlarm" ui-grid-auto-resize ui-grid-resize-columns ui-grid-disable-animation ui-grid="inAlarmGrid"></div>
 		</div>
 	</div>
 	<wfm-right-panel ng-if="agentsInAlarm" panel-options="rightPanelOptions" style="min-height:400px">
-		<h3><i class="mdi mdi-filter-outline"></i>Include agents in state group:</h3>
-		<div ng-repeat="group in stateGroups">
+		<h3><i class="mdi mdi-filter-outline"></i>Include agents in states:</h3>
+		<div ng-repeat="state in states">
 			<div class="wfm-checkbox">
 				<label>
-					<input type="checkbox" name="checkbox" id="{{group.StateId}}" ng-model="group.Selected" />
+					<input type="checkbox" name="checkbox" id="{{state.Id}}" ng-model="state.Selected" />
 					<span class="wfm-checkbox-toggle"></span>
-					<span class="wfm-checkbox-label rta-deselect-state">{{group.State}}</span>
+					<span class="wfm-checkbox-label rta-deselect-state">{{state.Name}}</span>
 				</label>
 			</div>
 		</div>

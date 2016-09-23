@@ -47,7 +47,7 @@
 				$httpBackend.whenPOST(url)
 					.respond(function(method, url, data, headers, params) {
 						return response(JSON.parse(data), method, url, data, headers, params);
-					})
+					});
 			};
 
 
@@ -105,14 +105,14 @@
 			fake(/\.\.\/api\/Agents\/ForSites(.*)/,
 				function(params) {
 					return [200, agentsIn(params.siteIds, function(a) {
-						return a.SiteId
+						return a.SiteId;
 					})];
 				});
 
 			fake(/\.\.\/api\/Agents\/ForSkills(.*)/,
 				function(params) {
 					return [200, agentsIn(params.skillIds, function(a) {
-						return a.SkillId
+						return a.SkillId;
 					})];
 				});
 
@@ -126,7 +126,7 @@
 			fake(/\.\.\/api\/Agents\/GetStatesForTeams(.*)/,
 				function(params) {
 					var statesForTeams = statesFor(params.ids, function(a) {
-						return a.TeamId
+						return a.TeamId;
 					});
 					return [200, {
 						Time: serverTime,
@@ -137,7 +137,7 @@
 			fake(/\.\.\/api\/Agents\/GetStatesForSites(.*)/,
 				function(params) {
 					var statesForSites = statesFor(params.ids, function(a) {
-						return a.SiteId
+						return a.SiteId;
 					});
 					return [200, {
 						Time: serverTime,
@@ -148,7 +148,7 @@
 			fake(/\.\.\/api\/Agents\/GetStatesForSkills(.*)/,
 				function(params) {
 					var statesForSkills = statesFor(params.ids, function(a) {
-						return a.SkillId
+						return a.SkillId;
 					});
 					return [200, {
 						Time: serverTime,
@@ -168,7 +168,7 @@
 			fake(/\.\.\/api\/Agents\/GetAlarmStatesForTeams(.*)/,
 				function(params) {
 					var alarmStatesForTeams = alarmStatesFor(params.ids, function(a) {
-						return a.TeamId
+						return a.TeamId;
 					});
 					return [200, {
 						Time: serverTime,
@@ -176,12 +176,12 @@
 					}];
 				});
 
-			fakePost(/\.\.\/api\/Agents\/GetAlarmStatesForTeamsExcludingStateGroups/,
+			fakePost(/\.\.\/api\/Agents\/GetAlarmStatesForTeamsExcludingStates/,
 				function(data) {
 					var alarmStatesForTeams = alarmStatesFor(data.ids, function(a) {
-						return a.TeamId
+						return a.TeamId;
 					}).filter(function(s) {
-						return data.excludedStateGroupIds.indexOf(s.StateId) === -1
+						return data.excludedStateIds.indexOf(s.StateId) === -1;
 					});
 					return [200, {
 						Time: serverTime,
@@ -192,7 +192,7 @@
 			fake(/\.\.\/api\/Agents\/GetAlarmStatesForSites(.*)/,
 				function(params) {
 					var alarmStatesForSites = alarmStatesFor(params.ids, function(a) {
-						return a.SiteId
+						return a.SiteId;
 					});
 					return [200, {
 						Time: serverTime,
@@ -200,12 +200,12 @@
 					}];
 				});
 
-			fakePost(/\.\.\/api\/Agents\/GetAlarmStatesForSitesExcludingStateGroups/,
+			fakePost(/\.\.\/api\/Agents\/GetAlarmStatesForSitesExcludingStates/,
 				function(data) {
 					var alarmStatesForSites = alarmStatesFor(data.ids, function(a) {
-						return a.SiteId
+						return a.SiteId;
 					}).filter(function(s) {
-						return data.excludedStateGroupIds.indexOf(s.StateId) === -1
+						return data.excludedStateIds.indexOf(s.StateId) === -1;
 					});
 					return [200, {
 						Time: serverTime,
@@ -216,7 +216,7 @@
 			fake(/\.\.\/api\/Agents\/GetAlarmStatesForSkills(.*)/,
 				function(params) {
 					var alarmStatesForSkills = alarmStatesFor(params.ids, function(a) {
-						return a.SkillId
+						return a.SkillId;
 					});
 					return [200, {
 						Time: serverTime,
@@ -224,12 +224,12 @@
 					}];
 				});
 
-			fakePost(/\.\.\/api\/Agents\/GetAlarmStatesForSkillsExcludingStateGroups/,
+			fakePost(/\.\.\/api\/Agents\/GetAlarmStatesForSkillsExcludingStates/,
 				function(data) {
 					var alarmStatesForSkills = alarmStatesFor(data.ids, function(a) {
-						return a.SkillId
+						return a.SkillId;
 					}).filter(function(s) {
-						return data.excludedStateGroupIds.indexOf(s.StateId) === -1
+						return data.excludedStateIds.indexOf(s.StateId) === -1;
 					});
 					return [200, {
 						Time: serverTime,
@@ -258,14 +258,14 @@
 			fake(/\.\.\/api\/Agents\/PersonDetails(.*)/,
 				function(params) {
 					return [200, personDetails.find(function(p) {
-						return p.PersonId === params.personId
+						return p.PersonId === params.personId;
 					})];
 				});
 
 			fake(/\.\.\/api\/Adherence\/ForDetails(.*)/,
 				function(params) {
 					return [200, activityAdherences.filter(function(a) {
-						return a.PersonId === params.personId
+						return a.PersonId === params.personId;
 					})];
 				});
 

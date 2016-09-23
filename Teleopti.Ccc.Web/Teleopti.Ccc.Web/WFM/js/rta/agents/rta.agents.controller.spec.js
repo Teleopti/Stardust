@@ -352,12 +352,12 @@ describe('RtaAgentsCtrl', function() {
 		$controllerBuilder.createController()
 			.apply('agentsInAlarm = true');
 
-		expect(scope.stateGroups[0].State).toEqual('LoggedOut');
-		expect(scope.stateGroups[0].StateId).toEqual('17560fe4-0130-4568-97de-9b5e015b2555');
-		expect(scope.stateGroups[0].Selected).toEqual(true);
+		expect(scope.states[0].Name).toEqual('LoggedOut');
+		expect(scope.states[0].Id).toEqual('17560fe4-0130-4568-97de-9b5e015b2555');
+		expect(scope.states[0].Selected).toEqual(true);
 	});
 
-	it('should not have duplicate state groups', function() {
+	it('should not have duplicate states', function() {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
 		$fakeBackend.withAgent({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
@@ -383,7 +383,7 @@ describe('RtaAgentsCtrl', function() {
 		$controllerBuilder.createController()
 			.apply('agentsInAlarm = true');
 
-		expect(scope.stateGroups.length).toEqual(1);
+		expect(scope.states.length).toEqual(1);
 	});
 
 	[{
@@ -417,7 +417,7 @@ describe('RtaAgentsCtrl', function() {
 			}
 		}
 	}].forEach(function(selection) {
-		it('should get selected state groups for ' + selection.name, function() {
+		it('should get selected state for ' + selection.name, function() {
 			stateParams[selection.type] = selection.id;
 			$fakeBackend
 				.withAgent(
@@ -440,8 +440,8 @@ describe('RtaAgentsCtrl', function() {
 			var c = $controllerBuilder.createController()
 				.apply('agentsInAlarm = true')
 				.apply(function() {
-					scope.stateGroups.filter(function(sg) {
-						return sg.StateId === 'LoggedOutGuid'
+					scope.states.filter(function(s) {
+						return s.Id === 'LoggedOutGuid';
 					})[0].Selected = false;
 				});
 			c.wait(5000);

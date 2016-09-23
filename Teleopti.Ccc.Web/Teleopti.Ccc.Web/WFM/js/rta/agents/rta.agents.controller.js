@@ -47,7 +47,7 @@
 				$scope.filterText = "";
 				$scope.timestamp = "";
 				$scope.agents = [];
-				$scope.stateGroups = [];
+				$scope.states = [];
 				$scope.format = RtaFormatService.formatDateTime;
 				$scope.formatDuration = RtaFormatService.formatDuration;
 				$scope.hexToRgb = RtaFormatService.formatHexToRgb;
@@ -131,7 +131,7 @@
 							siteIds: siteIds,
 							teamIds: teamIds,
 							skillIds: skillIds,
-							excludedStateGroupIds : excludedStateGroupIds()
+							excludedStateIds: excludedStateIds()
 						})
 						.then(setStatesInAgents);
 				}
@@ -139,30 +139,30 @@
 				function getStates(inAlarm) {
 					if (skillIds.length > 0) {
 						if (inAlarm) {
-							if (excludedStateGroupIds().length >0)
-									return RtaService.getAlarmStatesForSkillsExcludingStateGroups;
+							if (excludedStateIds().length > 0)
+									return RtaService.getAlarmStatesForSkillsExcludingStates;
 							return RtaService.getAlarmStatesForSkills;
 						}
 						return RtaService.getStatesForSkills;
 					}
 					if (teamIds.length > 0) {
 						if (inAlarm) {
-							if (excludedStateGroupIds().length >0)
-									return RtaService.getAlarmStatesForTeamsExcludingStateGroups;
+							if (excludedStateIds().length > 0)
+									return RtaService.getAlarmStatesForTeamsExcludingStates;
 							return RtaService.getAlarmStatesForTeams;
 						}
 						return RtaService.getStatesForTeams;
 					}
 					if (inAlarm) {
-						if (excludedStateGroupIds().length >0)
-								return RtaService.getAlarmStatesForSitesExcludingStateGroups;
+						if (excludedStateIds().length > 0)
+								return RtaService.getAlarmStatesForSitesExcludingStates;
 						return RtaService.getAlarmStatesForSites;
 					}
 					return RtaService.getStatesForSites;
 				};
 
-				function excludedStateGroupIds(){
-					return $scope.stateGroups.filter(function(s) { return s.Selected === false;}).map(function(s){ return s.StateId; });
+				function excludedStateIds(){
+					return $scope.states.filter(function(s) { return s.Selected === false;}).map(function(s){ return s.Id; });
 				}
 
 				function setStatesInAgents(states) {
@@ -213,14 +213,14 @@
 								Shift: getShift(state, timeInfo)
 							});
 
-							if ($scope.stateGroups
-								.map(function(sg) {
-									return sg.StateId;
+							if ($scope.states
+								.map(function(s) {
+									return s.Id;
 								})
 								.indexOf(state.StateId) === -1) {
-								$scope.stateGroups.push({
-									StateId: state.StateId,
-									State: state.State,
+								$scope.states.push({
+									Id: state.StateId,
+									Name: state.State,
 									Selected: true,
 								})
 							}
