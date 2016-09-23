@@ -22,13 +22,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
 		private readonly IConfigReader configReader;
+		private readonly IntradayRequestProcessor _intradayRequestProcessor;
 
 
-		public QueuedAbsenceRequestFastIntradayHandler(IPersonRequestRepository personRequestRepository, IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IAbsenceRequestCancelService absenceRequestCancelService, IConfigReader configReader)
+		public QueuedAbsenceRequestFastIntradayHandler(IPersonRequestRepository personRequestRepository, IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IAbsenceRequestCancelService absenceRequestCancelService, IConfigReader configReader, IntradayRequestProcessor intradayRequestProcessor)
 			: base(personRequestRepository, queuedAbsenceRequestRepository, absenceRequestCancelService)
 		{
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
 			this.configReader = configReader;
+			_intradayRequestProcessor = intradayRequestProcessor;
 		}
 
 		[ImpersonateSystem]
@@ -59,7 +61,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 			if (intradayPeriod.Contains(personRequest.Request.Period.StartDateTime) && intradayPeriod.Contains(personRequest.Request.Period.EndDateTime))
 			{
-				//process as intraday request
+				_intradayRequestProcessor.Process(personRequest);
 			}
 			else
 			{
