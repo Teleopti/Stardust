@@ -151,6 +151,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		[Test]
 		public void ShouldConsiderDayOffPreferences()
 		{
+			//hard-to-understand-test... setup is like in bugdb mentioned here: http://challenger:8080/tfs/web/UI/Pages/WorkItems/WorkItemEdit.aspx?Id=40314
+
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddWeeks(3));
 			var activity = new Activity("_");
