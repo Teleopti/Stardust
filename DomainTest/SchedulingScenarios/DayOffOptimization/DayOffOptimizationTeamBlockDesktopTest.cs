@@ -194,69 +194,41 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 				for (var j = 0; j < 21; j++)
 				{
+					var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(j));
+					ass.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
+					ass.SetShiftCategory(shiftCategory);
 					if (i < 7)
 					{
-						var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(j));	
 						if (j == 5 || j == 6 || j == 12 || j == 13 || j == 19 || j == 20)
 						{
 							ass.SetDayOff(dayOffTemplate); //saturday/sunday
 						}
-						else
-						{
-							ass.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
-							ass.SetShiftCategory(shiftCategory);
-						}
-
-						asses.Add(ass);
 					}
 
 					if (i == 7)
 					{
-						var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(j));
 						if (j == 3 || j == 4 || j == 11 || j == 12 || j == 19 || j == 20)
 						{
 							ass.SetDayOff(dayOffTemplate); 
 						}
-						else
-						{
-							ass.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
-							ass.SetShiftCategory(shiftCategory);
-						}
-
-						asses.Add(ass);
 					}
 
 					if (i == 8)
 					{
-						var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(j));
 						if (j == 5 || j == 6 || j == 12 || j == 13 || j == 17 || j == 18)
 						{
 							ass.SetDayOff(dayOffTemplate);
 						}
-						else
-						{
-							ass.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
-							ass.SetShiftCategory(shiftCategory);
-						}
-
-						asses.Add(ass);
 					}
 
 					if (i == 9)
 					{
-						var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(j));
 						if (j == 5 || j == 6 || j == 12 || j == 13 || j == 16 || j == 17)
 						{
 							ass.SetDayOff(dayOffTemplate); 
 						}
-						else
-						{
-							ass.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
-							ass.SetShiftCategory(shiftCategory);
-						}
-
-						asses.Add(ass);
 					}
+					asses.Add(ass);
 				}
 			}
 			
