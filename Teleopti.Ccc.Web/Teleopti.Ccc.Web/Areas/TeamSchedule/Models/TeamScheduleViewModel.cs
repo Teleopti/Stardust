@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 		public bool HasMoveActivityPermission { get; set; }
 		public bool HasAddingPersonalActivityPermission { get; set; }
 		public bool HasEditShiftCategoryPermission { get; set; }
+		public bool HasMoveInvalidOverlappedActivityPermission { get; set; }
 	}
 
 	public class PagingGroupScheduleShiftViewModel

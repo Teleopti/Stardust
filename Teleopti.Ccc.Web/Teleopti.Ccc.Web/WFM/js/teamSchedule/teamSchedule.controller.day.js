@@ -330,7 +330,8 @@
 									 || toggleSvc.WfmTeamSchedule_ShowWeeklyRestTimeWarning_39800
 									 || toggleSvc.WfmTeamSchedule_ShowDayOffWarning_39801
 									 || toggleSvc.WfmTeamSchedule_ShowOverwrittenLayerWarning_40109,
-				FilterValidationWarnings: toggleSvc.WfmTeamSchedule_FilterValidationWarnings_40110
+				FilterValidationWarnings: toggleSvc.WfmTeamSchedule_FilterValidationWarnings_40110,
+				MoveInvalidOverlappedActivityEnabled: toggleSvc.WfmTeamSchedule_MoveInvalidOverlappedActivity_40688
 			};
 
 			vm.toggles.SeeScheduleChangesByOthers && monitorScheduleChanged();
@@ -339,6 +340,7 @@
 			vm.cmdConfigurations = {
 				toggles: vm.toggles,
 				permissions: vm.permissions,
+				validateWarningToggle: vm.validateWarningToggle,
 				currentCommandName: null
 			}
 			vm.permissionsAndTogglesLoaded = true;
