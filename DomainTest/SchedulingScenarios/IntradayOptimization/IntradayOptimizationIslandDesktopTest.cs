@@ -788,7 +788,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 
-		[Test, Ignore]
+		[Test, Ignore("Need a reason since NUnit 3.")]
 		public void ShouldNotCrashWhenUsingKeepExistingDaysOff()
 		{
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
