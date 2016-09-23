@@ -63,6 +63,7 @@
     </Compile>
     <Compile Include="IProcessMultipleAbsenceRequest.cs" />
     <Compile Include="MultiAbsenceRequestsTest.cs" />
+    <Compile Include="IntradayAbsenceRequestTest.cs" />
     <Compile Include="ProcessBulkAbsenceRequests.cs" />
     <Compile Include="ProcessMultipleAbsenceRequests.cs" />
     <Compile Include="ShiftTradeRequestsTest.cs" />
