@@ -19,8 +19,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IOptimizationPreferences optimizationPreferences,
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer,
-			ISchedulingResultStateHolder schedulingResultStateHolder,
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
+			ISchedulingResultStateHolder schedulingResultStateHolder);
 
 		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 	}
@@ -34,17 +33,17 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ITeamBlockClearer _teamBlockClearer;
 		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 		private readonly ITeamBlockGenerator _teamBlockGenerator;
-		private readonly ITeamBlockOptimizationLimits _teamBlockOptimizationLimits;
 		private readonly IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
 		private readonly ITeamBlockSteadyStateValidator _teamTeamBlockSteadyStateValidator;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
+		private readonly TeamBlockIntradayRestrictionOverLimitValidator _teamBlockOptimizationLimits;
 
 		public TeamBlockIntradayOptimizationService(ITeamBlockGenerator teamBlockGenerator,
 			ITeamBlockScheduler teamBlockScheduler,
 			ISchedulingOptionsCreator schedulingOptionsCreator,
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
 			ITeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker,
-			ITeamBlockOptimizationLimits teamBlockOptimizationLimits,
+			TeamBlockIntradayRestrictionOverLimitValidator teamBlockOptimizationLimits,
 			ITeamBlockClearer teamBlockClearer,
 			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
 			IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock,
@@ -72,8 +71,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IOptimizationPreferences optimizationPreferences,
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer,
-			ISchedulingResultStateHolder schedulingResultStateHolder,
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+			ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			var cancelMe = false;
 			var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, Resources.OptimizingIntraday + Resources.Colon + Resources.CollectingData,()=>cancelMe=true));
@@ -91,8 +89,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					schedulingOptions, remainingInfoList,
 					schedulePartModifyAndRollbackService,
 					resourceCalculateDelayer,
-					schedulingResultStateHolder, ()=> { cancelMe = true; },
-					dayOffOptimizationPreferenceProvider);
+					schedulingResultStateHolder, ()=> { cancelMe = true; });
 				foreach (var teamBlock in teamBlocksToRemove)
 				{
 					remainingInfoList.Remove(teamBlock);
@@ -116,8 +113,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions,
 			IList<ITeamBlockInfo> allTeamBlockInfos, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder, 
-			Action cancelAction,
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+			Action cancelAction)
 		{
 			var teamBlockToRemove = new List<ITeamBlockInfo>();
 
@@ -161,7 +157,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					continue;
 				}
 
-				if (!_teamBlockMaxSeatChecker.CheckMaxSeat(datePoint, schedulingOptions, teamBlockInfo.TeamInfo) || !_teamBlockOptimizationLimits.Validate(teamBlockInfo, optimizationPreferences, dayOffOptimizationPreferenceProvider))
+				if (!_teamBlockMaxSeatChecker.CheckMaxSeat(datePoint, schedulingOptions, teamBlockInfo.TeamInfo) || !_teamBlockOptimizationLimits.Validate(teamBlockInfo, optimizationPreferences))
 				{
 					var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, Resources.OptimizingIntraday + Resources.Colon + Resources.RollingBackSchedulesFor + " " + teamBlockInfo.BlockInfo.BlockPeriod.DateString + " " + teamName,cancelAction));
 					teamBlockToRemove.Add(teamBlockInfo);

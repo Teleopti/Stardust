@@ -432,6 +432,7 @@
     <Compile Include="Optimization\ScheduleBlankSpots.cs" />
     <Compile Include="Optimization\ScheduleMatrixesPrimarySkillExtractor.cs" />
     <Compile Include="Optimization\SmartDayOffBackToLegalStateSolverContainer.cs" />
+    <Compile Include="Optimization\TeamBlock\TeamBlockIntradayRestrictionOverLimitValidator.cs" />
     <Compile Include="Optimization\WorkShiftBackToLegalStateServiceProFactory.cs" />
     <Compile Include="Repositories\IAnalyticsAbsenceRepository.cs" />
     <Compile Include="Repositories\IAnalyticsBridgeTimeZoneRepository.cs" />
