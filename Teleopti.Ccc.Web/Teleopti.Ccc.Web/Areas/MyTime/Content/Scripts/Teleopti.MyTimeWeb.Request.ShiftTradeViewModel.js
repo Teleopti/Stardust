@@ -776,7 +776,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 
 	self.loadTeamsUnderSite = function (siteId) {
 
-		var siteIds = (siteId === self.allTeamsId) ? self.getAllSiteIds() : [siteId];
+		var siteIds = (siteId === self.allSitesId) ? self.getAllSiteIds() : [siteId];
 		var teamToSelect = self.selectedTeamInternal() ? self.selectedTeamInternal() : self.myTeamId();
 
 		ajax.Ajax({
