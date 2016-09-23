@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using NHibernate.Criterion;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -241,35 +242,32 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				General = { ScheduleTag = new ScheduleTag(), OptimizationStepDaysOff = true},
 				Extra = { UseBlockSameShiftCategory = true, UseTeamBlockOption = true}
 			};
-			var dayOffsPreferences = new DaysOffPreferences()
+			var dayOffsPreferences = new DaysOffPreferences
 			{
 				UseDaysOffPerWeek = true,
 				UseConsecutiveDaysOff = true,
 				UseConsecutiveWorkdays = true,
 				DaysOffPerWeekValue = new MinMax<int>(2, 2),
 				ConsecutiveDaysOffValue = new MinMax<int>(2, 2),
-				ConsecutiveWorkdaysValue = new MinMax<int>(2, 6)	
+				ConsecutiveWorkdaysValue = new MinMax<int>(2, 6)
 			};
 
 			Target.Execute(period, stateHolder.Schedules.SchedulesForPeriod(period, agents[0]), new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences), groupPageLight, () => new WorkShiftFinderResultHolder(), (o, args) => { });
 
 			var consecutiveDaysOff = 0;
-			for (var i = 0; i < 21; i ++)
+			for (var day = 0; day < 21; day ++)
 			{
-				if (stateHolder.Schedules[agents[0]].ScheduledDay(firstDay.AddDays(i)).PersonAssignment().DayOff() != null)
+				if (stateHolder.Schedules[agents[0]].ScheduledDay(firstDay.AddDays(day)).HasDayOff())
 				{
 					consecutiveDaysOff++;
 				}
 				else
 				{
-					if (consecutiveDaysOff > 0)
-					{
-						consecutiveDaysOff.Should().Be.EqualTo(2);
-					}
+					if (consecutiveDaysOff == 0)
+							continue;
+					consecutiveDaysOff.Should().Be.EqualTo(2);
 					consecutiveDaysOff = 0;
 				}
-
-				consecutiveDaysOff.Should().Not.Be.GreaterThan(2);
 			}
 		}
 	}
