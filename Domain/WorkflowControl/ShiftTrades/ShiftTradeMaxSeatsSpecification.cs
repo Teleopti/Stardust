@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 
 			foreach (var activity in incomingActivitiesRequiringSeats)
 			{
-				// create 15 minute intervals to check for max seat usage...
+				// create intervals to check for max seat usage...
 				var startInterval = activity.Period.StartDateTime.ToInterval(intervalTimespan.Minutes, IntervalRounding.Down);
 				var endInterval = activity.Period.EndDateTime.ToInterval(intervalTimespan.Minutes, IntervalRounding.Up);
 

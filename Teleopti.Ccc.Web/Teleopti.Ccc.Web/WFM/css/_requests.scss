@@ -278,6 +278,15 @@
         transition: none;
     }
 
+    /* Fix angular material issue where tabs are not displayed correctly on occasion
+        https://github.com/angular/material/issues/9660
+        https://github.com/angular/material/issues/9644 seem to be related.
+    */
+    md-tab-item{
+        float: none !important;
+        top: 6px !important;
+    }
+
     .ui-grid-canvas .ui-grid-cell {
         display: flex;
         flex-flow: column nowrap;
