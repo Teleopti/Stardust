@@ -158,19 +158,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var channelSales = new Skill("A", "_", Color.AliceBlue, 15, new SkillTypePhone(new Description("_"), ForecastSource.InboundTelephony)) { Activity = activity }.WithId();
 			var directSales = new Skill("B", "_", Color.AliceBlue, 15, new SkillTypePhone(new Description("_"), ForecastSource.InboundTelephony)) { Activity = activity }.WithId();
 
-			var workloadChannelSales = WorkloadFactory.CreateWorkload(channelSales);
-			for (var i = 0; i < workloadChannelSales.TemplateWeekCollection.Count; i++)
-			{
-				if (i < 5)
-				{
-					workloadChannelSales.TemplateWeekCollection[i].MakeOpen24Hours();
-				}
-				else
-				{
-					workloadChannelSales.TemplateWeekCollection[i].Close();
-				}
-
-			}
+			WorkloadFactory.CreateWorkloadWithFullOpenHoursDuringWeekdays(channelSales);
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(directSales);
 
 			var scenario = new Scenario("_");
@@ -184,7 +172,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var asses = new List<IPersonAssignment>();
 			var dayOffTemplate = new DayOffTemplate();
 
-			for (int i = 0; i < 10; i++)
+			for (var i = 0; i < 10; i++)
 			{
 				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 				var personPeriod = new PersonPeriod(firstDay.AddWeeks(-1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), team) { RuleSetBag = ruleSetBag };
@@ -192,14 +180,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				agent.AddSchedulePeriod(schedulePeriod);
 				agents.Add(agent);
 
-				for (var j = 0; j < 21; j++)
+				for (var day = 0; day < 21; day++)
 				{
-					var ass = new PersonAssignment(agent, scenario, firstDay.AddDays(j));
+					var currentDay = firstDay.AddDays(day);
+					var ass = new PersonAssignment(agent, scenario, currentDay);
 					ass.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
 					ass.SetShiftCategory(shiftCategory);
 					if (i < 7)
 					{
-						if (j == 5 || j == 6 || j == 12 || j == 13 || j == 19 || j == 20)
+						if (day == 5 || day == 6 || day == 12 || day == 13 || day == 19 || day == 20)
 						{
 							ass.SetDayOff(dayOffTemplate); //saturday/sunday
 						}
@@ -207,7 +196,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 					if (i == 7)
 					{
-						if (j == 3 || j == 4 || j == 11 || j == 12 || j == 19 || j == 20)
+						if (day == 3 || day == 4 || day == 11 || day == 12 || day == 19 || day == 20)
 						{
 							ass.SetDayOff(dayOffTemplate); 
 						}
@@ -215,7 +204,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 					if (i == 8)
 					{
-						if (j == 5 || j == 6 || j == 12 || j == 13 || j == 17 || j == 18)
+						if (day == 5 || day == 6 || day == 12 || day == 13 || day == 17 || day == 18)
 						{
 							ass.SetDayOff(dayOffTemplate);
 						}
@@ -223,7 +212,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 					if (i == 9)
 					{
-						if (j == 5 || j == 6 || j == 12 || j == 13 || j == 16 || j == 17)
+						if (day == 5 || day == 6 || day == 12 || day == 13 || day == 16 || day == 17)
 						{
 							ass.SetDayOff(dayOffTemplate); 
 						}

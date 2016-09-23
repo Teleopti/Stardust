@@ -39,6 +39,23 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return workload;
         }
 
+		public static IWorkload CreateWorkloadWithFullOpenHoursDuringWeekdays(ISkill skill)
+		{
+			var workload = CreateWorkload(skill);
+			for (var i = 0; i < workload.TemplateWeekCollection.Count; i++)
+			{
+				if (i < 5)
+				{
+					workload.TemplateWeekCollection[i].MakeOpen24Hours();
+				}
+				else
+				{
+					workload.TemplateWeekCollection[i].Close();
+				}
+			}
+			return workload;
+		}
+
 		public static IWorkload CreateWorkloadWithOpenHours(ISkill skill, TimePeriod openHours)
 		{
 			IWorkload workload = new Workload(skill);
