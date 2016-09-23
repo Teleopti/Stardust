@@ -137,27 +137,6 @@ Scenario: Add cross midnight on night shift
 	| Start time | 23:00 |
 	| End time   | 01:00 |
 	| Color      | Red   |
-@ignore
-Scenario: Adding overlapping of shift
-	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' has a shift with
-	| Field          | Value            |
-	| Shift category | Day              |
-	| Activity       | Phone            |
-	| Start time     | 2013-11-15 11:00 |
-	| End time       | 2013-11-15 17:00 |
-	When I view person schedules add intraday absence form for 'Pierre Baldi' in 'Team green' on '2013-11-15'
-	And I input these intraday absence values
-	| Field      | Value   |
-	| Absence    | Illness |
-	| Start time | 16:00   |
-	| End time   | 18:00   |
-	And I initiate 'apply'
-	Then I should see 'Pierre Baldi' with the scheduled activity
-	| Field      | Value |
-	| Start time | 16:00 |
-	| End time   | 17:00 |
-	| Color      | Red   |
 
 @ignore
 Scenario: Prevent invalid times

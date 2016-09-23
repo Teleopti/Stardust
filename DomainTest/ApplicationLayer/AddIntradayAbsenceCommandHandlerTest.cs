@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
@@ -100,6 +101,42 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
+		public void ShouldNotChangeShiftEndAfterAddingAbsence()
+		{
+			var mainActivity = ActivityFactory.CreateActivity("Phone");
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory();
+			var scenario = _currentScenario.Current();
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				mainActivity, _personRepository.Single(),
+				new DateTimePeriod(2013, 11, 27, 8, 2013, 11, 27, 16),
+				shiftCategory, scenario);
+			_scheduleStorage.Add(pa);
+
+			var target = new AddIntradayAbsenceCommandHandler(_personAbsenceCreator, _absenceCommandConverter);
+
+			var operatedPersonId = Guid.NewGuid();
+			var command = new AddIntradayAbsenceCommand
+			{
+				AbsenceId = _absenceRepository.Single().Id.Value,
+				PersonId = _personRepository.Single().Id.Value,
+				StartTime = new DateTime(2013, 11, 27, 14, 00, 00, DateTimeKind.Utc),
+				EndTime = new DateTime(2013, 11, 27, 18, 00, 00, DateTimeKind.Utc),
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					OperatedPersonId = operatedPersonId
+				}
+			};
+			target.Handle(command);
+
+			var scheduleDay = getScheduleDay(new DateOnly(2013, 11, 27), _personRepository.Single());
+			var projection = scheduleDay.ProjectionService().CreateProjection().ToList();
+
+			projection.Last().Period.StartDateTime.Should().Be(new DateTime(2013, 11, 27, 14, 00, 00, DateTimeKind.Utc));
+			projection.Last().Period.EndDateTime.Should().Be(new DateTime(2013, 11, 27, 16, 00, 00, DateTimeKind.Utc));
+			projection.Last().Payload.Id.Should().Be(_absenceRepository.Single().Id.Value);
+		}
+
+		[Test]
 		public void ShouldConvertTimesFromUsersTimeZone()
 		{
 			var userTimeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
@@ -123,6 +160,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var @event = personAbsence.PopAllEvents().Single() as PersonAbsenceAddedEvent;
 			@event.StartDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.StartTime, userTimeZone));
 			@event.EndDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.EndTime, userTimeZone));
+		}
+
+		private IScheduleDictionary getScheduleDictionary(DateOnly date, IPerson person)
+		{
+			var period = new DateOnlyPeriod(date, date).Inflate(1);
+			var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
+				new ScheduleDictionaryLoadOptions(false, false),
+				period,
+				_currentScenario.Current());
+			return schedules;
+		}
+
+		private IScheduleDay getScheduleDay(DateOnly date, IPerson person)
+		{
+			var schedules = getScheduleDictionary(date, person);
+			return schedules[person].ScheduledDay(date);
 		}
 	}
 }
