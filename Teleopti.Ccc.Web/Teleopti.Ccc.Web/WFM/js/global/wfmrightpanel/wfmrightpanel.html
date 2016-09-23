@@ -1,7 +1,7 @@
 ﻿<md-backdrop class="md-sidenav-backdrop md-opaque ng-scope" ng-if="vm.panelOptions.showBackdrop && vm.panelOptions.panelState"
 			 ng-click="vm.panelOptions.panelState = false;"></md-backdrop>
 
-<button class="call-out-button wfm-btn wfm-btn-invis-primary" ng-if="vm.panelOptions.showPopupButton" ng-click="vm.panelOptions.panelState = true">
+<button class="open-right-panel call-out-button wfm-btn wfm-btn-invis-primary" ng-if="vm.panelOptions.showPopupButton" ng-click="vm.panelOptions.panelState = true">
 	<i class="mdi mdi-chevron-double-left"></i>
 </button>
 
@@ -10,7 +10,7 @@
 	<md-sidenav class="md-sidenav-right wfm-right-panel drsElement" md-component-id="right-panel" md-is-open="vm.panelOptions.panelState">
 
 		<div class="sidenav-header">
-			<span class="chevron pull-left" ng-click="vm.closePanel()" ng-if="vm.panelOptions.showCloseButton">
+			<span class="close-right-panel chevron pull-left" ng-click="vm.closePanel()" ng-if="vm.panelOptions.showCloseButton">
 				<i class="mdi mdi-arrow-right"></i>
 				<md-tooltip>{{"HidePanel" | translate}}</md-tooltip>
 			</span>

@@ -116,9 +116,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public void WhenIDeselectStateGroup(string stateGroup)
 		{
 			Browser.Interactions.AssertAnyContains(".grid", stateGroup);
-			Browser.Interactions.ClickContaining(".call-out-button", "");
-			Browser.Interactions.ClickContaining(".wfm-checkbox-label", stateGroup);
-			Browser.Interactions.ClickContaining(".chevron", "");
+			Browser.Interactions.ClickContaining(".open-right-panel", "");
+			Browser.Interactions.ClickContaining(".rta-deselect-state", stateGroup);
+			Browser.Interactions.ClickContaining(".close-right-panel", "");
 		}
 
 		[Then(@"I should see agent '(.*)' with state '(.*)'")]

@@ -66,10 +66,10 @@
 		<div ng-repeat="group in stateGroups">
 			<div class="wfm-checkbox">
 				<label>
-								<input type="checkbox" name="checkbox" id="{{group.StateId}}" ng-model="group.Selected" />
-                <span class="wfm-checkbox-toggle"></span>
-                <span class="wfm-checkbox-label">{{group.State}}</span>
-        </label>
+					<input type="checkbox" name="checkbox" id="{{group.StateId}}" ng-model="group.Selected" />
+					<span class="wfm-checkbox-toggle"></span>
+					<span class="wfm-checkbox-label rta-deselect-state">{{group.State}}</span>
+				</label>
 			</div>
 		</div>
 	</wfm-right-panel>
