@@ -41,7 +41,7 @@ GO
 -- 20090708 KJ Added UPDATE for ace_login_name.
 -- 2011-07-18 Dual agg databases DJ
 -- =============================================
---mart.etl_dim_acd_login_load 1
+--mart.etl_dim_acd_login_load -2
 CREATE PROCEDURE [mart].[etl_dim_acd_login_load]
 @datasource_id smallint
 AS
@@ -120,6 +120,7 @@ BEGIN
 		mart.sys_datasource sys
 		ON
 		d.datasource_id=sys.datasource_id
+		AND d.datasource_id=' + CAST(@datasource_id as nvarchar(10)) + '
 	WHERE NOT EXISTS(
 		SELECT  agg.agent_id
 		FROM'
@@ -131,13 +132,11 @@ BEGIN
 	+ ' 
 		WHERE acd_login_agg_id = agg.agent_id
 		AND agg.log_object_id = sys.log_object_id
-		AND agg.Agent_name = d.acd_login_name
+		AND agg.Agent_name = d.acd_login_name collate database_default
 		)
 		AND d.acd_login_id>=0
 		AND d.is_active = 1'
 
-	
-			
 	--Exec
 	EXEC sp_executesql @sqlstring
 
