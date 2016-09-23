@@ -1704,7 +1704,7 @@
       <Name>Teleopti.Ccc.IocCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
-      <Project>{68A028B6-864C-4969-8830-9C3C6BD56A98}</Project>
+      <Project>{68a028b6-864c-4969-8830-9c3c6bd56a98}</Project>
       <Name>Teleopti.Ccc.TestCommon</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Ccc.UserTexts\Teleopti.Ccc.UserTexts.csproj">

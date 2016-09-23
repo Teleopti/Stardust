@@ -1,6 +1,8 @@
 using System;
+using System.IO;
 using log4net;
 using log4net.Config;
+using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
@@ -16,6 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 		public void Setup()
 		{
+			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
 			XmlConfigurator.Configure();
 
 			log.Debug("Preparing for test run");
@@ -30,6 +33,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void BeforeScenario()
 		{
 			log.Debug($"Preparing for scenario {ScenarioContext.Current.ScenarioInfo.Title}");
+			
 			Browser.SelectBrowserByTag();
 
 			ToggleStepDefinition.IgnoreScenarioIfDisabledByToggle();
@@ -54,7 +58,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void AfterScenario()
 		{
 			log.Debug($"Cleaning up after scenario {ScenarioContext.Current.ScenarioInfo.Title}");
-
+			log.Info(TestContext.CurrentContext.Result.Outcome.Status);
 			Browser.Interactions.GoTo("about:blank");
 			DataMaker.AfterScenario();
 
