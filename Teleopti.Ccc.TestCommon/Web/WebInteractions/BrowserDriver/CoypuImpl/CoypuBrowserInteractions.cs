@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 
 		public void AssertUrlContains(string url)
 		{
-			eventualAssert(() => _browser.Location.ToString(), Does.Contain(url), () => "Failed to assert that current url contains " + url);
+			eventualAssert(() => _browser.Location.ToString(), Contains.Substring(url), () => "Failed to assert that current url contains " + url);
 		}
 
 		public void AssertUrlNotContains(string urlContains, string urlNotContains)
@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver.CoypuImpl
 				actual = result == null ? null : result.ToString();
 				return actual;
 			},
-				Does.Contain(text),
+				Contains.Substring(text),
 				() => $"Failed to assert that javascript \"{javascript}\" returned a value containing \"{text}\". Last attempt returned \"{actual}\". ");
 		}
 
