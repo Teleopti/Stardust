@@ -7,21 +7,22 @@ using Teleopti.Ccc.TestCommon.FakeData;
 
 namespace Teleopti.Ccc.DomainTest
 {
-    [SetUpFixture]
-    public class SetupFixtureForAssembly
-    {
-        [OneTimeSetUp]
-        public void RunBeforeAnyTest()
-        {
-            var stateMock = new FakeState();
+	[SetUpFixture]
+	[Parallelizable]
+	public class SetupFixtureForAssembly
+	{
+		[OneTimeSetUp]
+		public void RunBeforeAnyTest()
+		{
+			var stateMock = new FakeState();
 
-	        var dataSource = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
-            var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
-            StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
-			
-            StateHolderProxyHelper.ClearAndSetStateHolder(stateMock);
-			
-            BasicConfigurator.Configure(new DoNothingAppender());
-        }
-    }
+			var dataSource = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
+			var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
+			StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
+
+			StateHolderProxyHelper.ClearAndSetStateHolder(stateMock);
+
+			BasicConfigurator.Configure(new DoNothingAppender());
+		}
+	}
 }
