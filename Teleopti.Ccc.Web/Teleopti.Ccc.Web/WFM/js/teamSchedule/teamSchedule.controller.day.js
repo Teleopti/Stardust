@@ -32,8 +32,7 @@
 		vm.toggleForSelectAgentsPerPageEnabled = false;
 		vm.onlyLoadScheduleWithAbsence = false;
 		vm.permissionsAndTogglesLoaded = false;
-		vm.lastCommandTrackId = "";
-		vm.validateWarningToggle = false;
+		vm.lastCommandTrackId = '';
 
 		vm.searchEnabled = $state.current.name != 'myTeamSchedule.for';
 		vm.showDatePicker = false;
@@ -210,7 +209,7 @@
 		};
 
 		vm.checkValidationWarningForCurrentPage = function(){
-			if (vm.validateWarningToggle) {
+			if (vm.cmdConfigurations.validateWarningToggle) {
 				var currentPagePersonIds = scheduleMgmtSvc.groupScheduleVm.Schedules.map(function(schedule) {
 					return schedule.PersonId;
 				});
@@ -219,7 +218,7 @@
 		};
 
 		vm.checkValidationWarningForCommandTargets = function (personIds) {
-			if (vm.validateWarningToggle) {
+			if (vm.cmdConfigurations.validateWarningToggle) {
 				ValidateRulesService.updateValidateRulesResultForPeople(vm.scheduleDateMoment(), personIds);
 			}
 		};
@@ -340,7 +339,7 @@
 			vm.cmdConfigurations = {
 				toggles: vm.toggles,
 				permissions: vm.permissions,
-				validateWarningToggle: vm.validateWarningToggle,
+				validateWarningToggle: false,
 				currentCommandName: null
 			}
 			vm.permissionsAndTogglesLoaded = true;

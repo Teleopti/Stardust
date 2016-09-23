@@ -23,7 +23,7 @@
 
 		<div class="warning-container" ng-if="vm.toggles.ShowValidationWarnings">
 			<div id="show-warnings" class="wfm-switch">
-				<input type="checkbox" id="validateWarning" ng-model="vm.validateWarningToggle" ng-change="vm.checkValidationWarningForCurrentPage()" />
+				<input type="checkbox" id="validateWarning" ng-model="vm.cmdConfigurations.validateWarningToggle" ng-change="vm.checkValidationWarningForCurrentPage()" />
 				<label for="validateWarning">
 					<span class="wfm-switch-label" translate>ShowWarnings</span>
 					<span class="wfm-switch-toggle"></span>
@@ -53,7 +53,7 @@
 				<i class='mdi mdi-alert'></i>{{'TooManyResultsForSearchKeywords'|translate}}
 			</div>
 			<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
-			<schedule-table select-mode="vm.scheduleTableSelectMode" selected-date="vm.scheduleDate" show-warnings="vm.validateWarningToggle" cmd-configurations="vm.cmdConfigurations"/>
+			<schedule-table select-mode="vm.scheduleTableSelectMode" selected-date="vm.scheduleDate" show-warnings="vm.cmdConfigurations.validateWarningToggle" cmd-configurations="vm.cmdConfigurations"/>
 		</div>
 
 		<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="teamschedule-command-container">

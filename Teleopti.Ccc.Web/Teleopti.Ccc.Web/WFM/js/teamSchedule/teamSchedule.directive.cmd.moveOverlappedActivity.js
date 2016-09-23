@@ -3,11 +3,41 @@
 
 	angular.module('wfm.teamSchedule').directive('moveOverlappedActivity', moveOverlappedActivityDirective);
 
-	moveOverlappedActivityCtrl.$inject = ['PersonSelection', 'ActivityService', '$wfmModal', 'teamScheduleNotificationService', 'ScenarioTestUtil'];
+	moveOverlappedActivityCtrl.$inject = ['PersonSelection', 'ActivityService', 'teamScheduleNotificationService'];
 
-	function moveOverlappedActivityCtrl(PersonSelection, ActivityService, notification, ScenarioTestUtil) {
+	function moveOverlappedActivityCtrl(PersonSelection, ActivityService, notification) {
 		var vm = this;
 		vm.label = 'MoveInvalidOverlappedActivity';
+		vm.init = function(){
+			moveOverlappedActivity();
+		}
+
+		function moveOverlappedActivity(){
+			var selectedPersonInfo = PersonSelection.getCheckedPersonInfoList();
+			var selectedPersonIds = selectedPersonInfo.map(function (p) {
+				return p.PersonId;
+			});
+			var cmdInput = {
+				PersonIds: selectedPersonIds,
+				Date: vm.selectedDate(),
+				TrackedCommandInfo: { TrackId: vm.trackId }
+			}
+			ActivityService.moveInvalidOverlappedActivity(cmdInput).then(function (response) {
+				if (vm.getActionCb(vm.label)) {
+					vm.getActionCb(vm.label)(vm.trackId, selectedPersonIds);
+				}
+
+				notification.reportActionResult({
+					"success": 'MoveInvalidOverlappedActivitySuccess',
+					"warning": 'MoveInvalidOverlappedActivityWarning'
+				}, selectedPersonInfo.map(function (x) {
+					return {
+						PersonId: x.PersonId,
+						Name: x.Name
+					}
+				}), response.data);
+			})
+		}
 	}
 
 	function moveOverlappedActivityDirective() {

@@ -14974,4 +14974,12 @@ These options are activated:
   <data name="OverlappedNonoverwritableActivitiesExist" xml:space="preserve">
     <value>There are still overlapped non-overwritable activities</value>
   </data>
+  <data name="MoveInvalidOverlappedActivitySuccess" xml:space="preserve">
+    <value>Successfully moved invalid overlapped activities for selected agents</value>
+    <comment>Success message for moving invalid overlapped activities</comment>
+  </data>
+  <data name="MoveInvalidOverlappedActivityWarning" xml:space="preserve">
+    <value>Moving invalid overlapped activities for {0} agent(s), {1} succeeded and {2} failed.</value>
+    <comment>Partial success message for moving invalid overlapped activities</comment>
+  </data>
 </root>

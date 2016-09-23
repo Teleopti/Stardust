@@ -16406,6 +16406,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Successfully moved invalid overlapped activities for selected agents.
+        /// </summary>
+        public static string MoveInvalidOverlappedActivitySuccess {
+            get {
+                return ResourceManager.GetString("MoveInvalidOverlappedActivitySuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Moving invalid overlapped activities for {0} agent(s), {1} succeeded and {2} failed..
+        /// </summary>
+        public static string MoveInvalidOverlappedActivityWarning {
+            get {
+                return ResourceManager.GetString("MoveInvalidOverlappedActivityWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move Left.
         /// </summary>
         public static string MoveLeft {
