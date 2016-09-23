@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using NUnit.Framework;
 using Teleopti.Ccc.WinCode.Common.Time.Timeline;
 using Teleopti.Ccc.WinCodeTest.Helpers;
@@ -6,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.Time.Timeline
 {
-    [TestFixture, RequiresSTA]
+    [TestFixture, Apartment(ApartmentState.STA)]
     public class TickMarkViewModelTest
     {
         private TickMarkViewModel _target;

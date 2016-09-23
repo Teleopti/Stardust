@@ -1,11 +1,12 @@
-﻿using System.Windows;
+﻿using System.Threading;
+using System.Windows;
 using System.Windows.Controls;
 using NUnit.Framework;
 using Teleopti.Ccc.WinCode.Common.CustomPanels.Grouping;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.CustomPanelsTest.Grouping
 {
-    [TestFixture,RequiresSTA]
+    [TestFixture, Apartment(ApartmentState.STA)]
     public class BaseGroupingPanelTest
     {
         private TestPanel _target;

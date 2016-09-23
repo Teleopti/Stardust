@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             _shifteditorViewModel = new ShiftEditorViewModel(_collection, _eventAggregator, _service, true, _editableShiftMapper);
         }
 
-        [Test,RequiresSTA]
+        [Test, Apartment(ApartmentState.STA)]
         public void VerifyDoesNotTryToSelectALayerIfNoLayerIsSelected()
         {
            
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         }
 
 
-        [Test, RequiresSTA]
+        [Test, Apartment(ApartmentState.STA)]
         public void VerifyThatSelectedLayerStillSelectedByCallingWithASelectorIfALayerIsSelected()
         {
             var mainShiftActivityLayer = new MainShiftLayer(ActivityFactory.CreateActivity("dummy"), new DateTimePeriod(2001, 1, 1, 2001, 1, 2));

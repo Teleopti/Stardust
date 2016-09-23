@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Syncfusion.Windows.Forms.Tools;
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.WinCodeTest.Permissions.Commands
             _target = new LoadFunctionsOnPersonLightCommand(_unitOfWorkFactory, _repositoryFactory, _permissionViewerRoles);
         }
 
-        [Test, RequiresSTA]
+        [Test, Apartment(ApartmentState.STA)]
         public void ShouldGetFunctionsFromRepAndLoadListView()
         {
             var id = Guid.NewGuid();

@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		private Absence deletedAbsence;
 		private AbsenceController target;
 
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void Setup()
 		{
 			requestableAbsence = new Absence

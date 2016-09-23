@@ -12,7 +12,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public StardustController Target;
 		public StardustRepository StardustRepository;
 
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void TestFixtureSetUp()
 		{
 			StardustRepository = new StardustRepository(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);

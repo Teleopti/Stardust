@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Windows.Threading;
 using NUnit.Framework;
 using Teleopti.Ccc.WinCode.Common;
@@ -9,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WinCodeTest.Common.Time.Timeline
 {
     //  Note: Will be replaced with TimlineViewModel
-    [TestFixture, RequiresSTA]
+    [TestFixture, Apartment(ApartmentState.STA)]
     public class TimelineControlViewModelTest
     {
         private TimelineControlViewModel _target;

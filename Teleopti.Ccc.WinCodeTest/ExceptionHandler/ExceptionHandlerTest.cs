@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows.Forms;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -64,7 +65,7 @@ namespace Teleopti.Ccc.WinCodeTest.ExceptionHandler
             }
         }
 
-        [Test, RequiresSTA]//, Ignore("Clipboard should be injected")]
+        [Test, Apartment(ApartmentState.STA)]//, Ignore("Clipboard should be injected")]
         public void CanCopyToClipboard()
         {
             var completeStackTrace = _model.CompleteStackAndAssemblyText();

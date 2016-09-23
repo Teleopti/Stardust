@@ -2,6 +2,7 @@
 using Teleopti.Ccc.TestCommon.FakeData;
 using Is = Rhino.Mocks.Constraints.Is;
 using System;
+using System.Threading;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -405,7 +406,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
 
         }
 
-        [Test,RequiresSTA]
+        [Test, Apartment(ApartmentState.STA)]
         public void VerifySurroundingTimeIsAddedToLoadedPart()
         {
             //When a new part is loaded, the timeline should show extra time before and after:

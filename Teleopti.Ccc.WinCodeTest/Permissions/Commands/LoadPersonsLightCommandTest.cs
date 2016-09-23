@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Windows.Forms;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.WinCodeTest.Permissions.Commands
             _target = new LoadPersonsLightCommand(_unitOfWorkFactory, _repositoryFactory, _permissionViewerRoles);
         }
 
-        [Test, RequiresSTA]
+        [Test, Apartment(ApartmentState.STA)]
         public void ShouldGetPersonsFromRepAndLoadListView()
         {
             var uow = _mocks.StrictMock<IStatelessUnitOfWork>();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Commands.CommandBehaviors
 
        
 
-        [Test, RequiresSTA]
+        [Test, Apartment(ApartmentState.STA)]
         public void VerifyCommandShouldBeExecutedWhenEventIsRaised()
         {
 
@@ -79,7 +80,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Commands.CommandBehaviors
             }
         }
 
-        [Test,RequiresSTA]
+        [Test, Apartment(ApartmentState.STA)]
         public void VerifyCommandRebindsToNewEvent()
         {
             ICommand command = _mocker.StrictMock<ICommand>();
@@ -100,8 +101,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Commands.CommandBehaviors
             }
         }
 
-        [Test, RequiresSTA]
-        public void VerifyCommandBindingToAction()
+		[Test, Apartment(ApartmentState.STA)]
+		public void VerifyCommandBindingToAction()
         {
             CommandBehaviorBinding target = new CommandBehaviorBinding();
 

@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Teleopti.Ccc.WinCode.Common.Commands;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.Commands
 {
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Commands
         }
 
 
-        [Test, RequiresSTA]
+        [Test, Apartment(ApartmentState.STA)]
         public void VerifyCanAddMultipleCommandModelsToAnElement()
         {
             var element = new FrameworkElement(); //just something that can hold commandbindings
@@ -40,8 +41,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Commands
 
         }
 
-        [Test, RequiresSTA]
-        public void VerifyOnlyAddsUniqueCommands()
+		[Test, Apartment(ApartmentState.STA)]
+		public void VerifyOnlyAddsUniqueCommands()
         {
             var element = new FrameworkElement(); //just something that can hold commandbindings
 
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Commands
 
         #region bindabletarget
        
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test, RequiresSTA]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test, Apartment(ApartmentState.STA)]
         public void VerifyThatAllExposedCommandModelsGetsRegistered()
         {
             ViewModelExposingCommands viewModelExposingCommands = new ViewModelExposingCommands();

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Windows;
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
@@ -12,7 +13,7 @@ using Teleopti.Ccc.WinCode.Scheduling.Editor;
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
 {
 	
-	[TestFixture, RequiresSTA]
+	[TestFixture, Apartment(ApartmentState.STA)]
 	public class Bug26842
 	{
 		private EventAggregator _eventAggregator;
