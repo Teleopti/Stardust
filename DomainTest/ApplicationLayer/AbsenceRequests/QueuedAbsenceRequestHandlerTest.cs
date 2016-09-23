@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 	public class QueuedAbsenceRequestHandlerTest : ISetup
 	{
 		public QueuedAbsenceRequestHandler Target;
+		public QueuedAbsenceRequestFastIntradayHandler TargetFast;
 
 		public FakePersonRequestRepository PersonRequestRepository;
 		public FakeQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
@@ -32,6 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakeCurrentScenario CurrentScenario;
 		public FakeEventPublisher EventPublisher;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
+		public FakeConfigReader ConfigReader;
 
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
@@ -39,6 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			system.UseTestDouble<FakeScheduleDataReadScheduleStorage>().For<FakeScheduleDataReadScheduleStorage>();
 			system.UseTestDouble<FakeCurrentScenario>().For<FakeCurrentScenario>();
 			system.UseTestDouble<QueuedAbsenceRequestHandler>().For<QueuedAbsenceRequestHandler>();
+			system.UseTestDouble<QueuedAbsenceRequestFastIntradayHandler>().For<QueuedAbsenceRequestFastIntradayHandler>();
 		}
 
 
@@ -67,39 +70,95 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			QueuedAbsenceRequestRepository.LoadAll().FirstOrDefault().PersonRequest.Should().Be.EqualTo(removedEvent.PersonRequestId);
 		}
 
+		[Test]
+		public void ShouldNotPutRequestOnQueueIfIntradayRequest()
+		{
+			var now = DateTime.UtcNow;
+			var period = new DateTimePeriod(now.AddHours(2), now.AddHours(5)); 
+
+			var reqEvent = createNewRequestEvent(period);
+			IBusinessUnit businessUnit = BusinessUnitFactory.CreateWithId("something");
+			reqEvent.LogOnBusinessUnitId = businessUnit.Id.Value;
+			BusinessUnitRepository.Add(businessUnit);
+			
+
+			TargetFast.Handle(reqEvent);
+			QueuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldPutRequestOnQueueIfNOTIntradayRequest()
+		{
+			var now = DateTime.UtcNow;
+			var period = new DateTimePeriod(now.AddDays(1).AddHours(2), now.AddDays(1).AddHours(5));
+
+			var reqEvent = createNewRequestEvent(period);
+			IBusinessUnit businessUnit = BusinessUnitFactory.CreateWithId("something");
+			reqEvent.LogOnBusinessUnitId = businessUnit.Id.Value;
+			BusinessUnitRepository.Add(businessUnit);
+
+
+			TargetFast.Handle(reqEvent);
+			QueuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(1);
+		}
+
+
+
+		[Test]
+		public void ShouldReadStartUtcDateTimeFromAppSettingIfExist()
+		{
+			var period = new DateTimePeriod(new DateTime(2016, 3, 14, 15, 0, 0, DateTimeKind.Utc),
+											new DateTime(2016, 3, 14, 17, 00, 00, DateTimeKind.Utc));
+
+			var reqEvent = createNewRequestEvent(period);
+			IBusinessUnit businessUnit = BusinessUnitFactory.CreateWithId("something");
+			reqEvent.LogOnBusinessUnitId = businessUnit.Id.Value;
+			BusinessUnitRepository.Add(businessUnit);
+
+			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-03-14 08:00");
+
+			TargetFast.Handle(reqEvent);
+			QueuedAbsenceRequestRepository.LoadAll().Count.Should().Be.EqualTo(0);
+		}
+
+
 		private RequestPersonAbsenceRemovedEvent createRequestPersonAbsenceRemovedEvent()
 		{
-			var startDateTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc);
-			var endDateTime = new DateTime(2016, 3, 1, 23, 59, 00, DateTimeKind.Utc);
+			var period = new DateTimePeriod(new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc),
+											new DateTime(2016, 3, 1, 23, 59, 00, DateTimeKind.Utc));
 
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
 			var workflowControlSet = createWorkFlowControlSet(new DateTime(2016, 01, 01), new DateTime(2016, 12, 31), absence);
-			var person = createAndSetupPerson(startDateTime, endDateTime, workflowControlSet);
+			var person = createAndSetupPerson(period, workflowControlSet);
 
-			var request = createAbsenceRequest(person, absence, new DateTimePeriod(startDateTime, endDateTime));
+			var request = createAbsenceRequest(person, absence, period);
 			request.Pending();
 			request.Approve(new ApprovalServiceForTest(), new PersonRequestAuthorizationCheckerForTest());
 			request.Cancel(new PersonRequestAuthorizationCheckerForTest());
 			var requestPersonAbsenceRemovedEvent = new RequestPersonAbsenceRemovedEvent()
 			{
 				PersonRequestId = request.Id.GetValueOrDefault(),
-				StartDateTime = startDateTime,
-				EndDateTime = endDateTime
+				StartDateTime = period.StartDateTime,
+				EndDateTime = period.EndDateTime
 			};
 			return requestPersonAbsenceRemovedEvent;
 		}
 
+		
 
 		private NewAbsenceRequestCreatedEvent createNewRequestEvent()
 		{
-			var startDateTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc);
-			var endDateTime = new DateTime(2016, 3, 1, 23, 59, 00, DateTimeKind.Utc);
+			return createNewRequestEvent(new DateTimePeriod(new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc),
+															new DateTime(2016, 3, 1, 23, 59, 00, DateTimeKind.Utc)));
+		}
 
+		private NewAbsenceRequestCreatedEvent createNewRequestEvent(DateTimePeriod dateTimePeriod)
+		{
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
 			var workflowControlSet = createWorkFlowControlSet(new DateTime(2016, 01, 01), new DateTime(2016, 12, 31), absence);
-			var person = createAndSetupPerson(startDateTime, endDateTime, workflowControlSet);
+			var person = createAndSetupPerson(dateTimePeriod, workflowControlSet);
 
-			var request = createAbsenceRequest(person, absence, new DateTimePeriod(startDateTime, endDateTime));
+			var request = createAbsenceRequest(person, absence, dateTimePeriod);
 
 			var newAbsenceCreatedEvent = new NewAbsenceRequestCreatedEvent()
 			{
@@ -108,12 +167,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			return newAbsenceCreatedEvent;
 		}
 
-		private IPerson createAndSetupPerson(DateTime startDateTime, DateTime endDateTime, IWorkflowControlSet workflowControlSet)
+		private IPerson createAndSetupPerson(DateTimePeriod period, IWorkflowControlSet workflowControlSet)
 		{
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
 
-			var assignmentOne = createAssignment(person, startDateTime, endDateTime, CurrentScenario);
+			var assignmentOne = createAssignment(person, period, CurrentScenario);
 			ScheduleRepository.Set(new IScheduleData[] {assignmentOne});
 
 			person.WorkflowControlSet = workflowControlSet;
@@ -141,12 +200,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			return workflowControlSet;
 		}
 
-		private IPersonAssignment createAssignment(IPerson person, DateTime startDate, DateTime endDate, ICurrentScenario currentScenario)
+		private IPersonAssignment createAssignment(IPerson person, DateTimePeriod period, ICurrentScenario currentScenario)
 		{
+			period = period.ChangeStartTime(TimeSpan.FromSeconds(-period.StartDateTime.Second));
+			period = period.ChangeEndTime(TimeSpan.FromSeconds(-period.EndDateTime.Second));
 			return PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
 				currentScenario.Current(),
 				person,
-				new DateTimePeriod(startDate, endDate));
+				period);
 		}
 
 
