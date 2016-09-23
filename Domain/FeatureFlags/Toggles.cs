@@ -189,7 +189,8 @@
 		ETL_RobustAnalyticsScheduleChangeUpdater_39556,
 
 		AbsenceRequests_UseMultiRequestProcessing_39960,
-		ETL_EventbasedDate_39562
+        AbsenceRequests_SpeedupIntradayRequests_40754,
+        ETL_EventbasedDate_39562
 		// ReSharper restore InconsistentNaming
 	}
 }
