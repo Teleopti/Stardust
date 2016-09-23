@@ -121,6 +121,18 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		}
 
 		[Test]
+		public void ShouldGetMoveInvalidOverlappedActivityPermission()
+		{
+			const bool expectedResult = true;
+			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.MoveInvalidOverlappedActivity))
+				.Return(expectedResult);
+
+			var result = target.GetPermissions();
+
+			result.Content.HasMoveInvalidOverlappedActivityPermission.Should().Be.EqualTo(expectedResult);
+		}
+
+		[Test]
 		public void ShouldAssignOperatePersonForAddFullDayAbsence()
 		{
 			var expectedPerson = new Person();

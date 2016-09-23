@@ -6,6 +6,7 @@
 	<add-absence ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'AddAbsence'" tabindex="200"></add-absence>
 	<remove-absence ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'RemoveAbsence'"></remove-absence>
 	<move-activity ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'MoveActivity'" tabindex="201"></move-activity>
+	<move-overlapped-activity ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'MoveInvalidOverlappedActivity'" ></move-overlapped-activity>
 	<undo-schedule ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'Undo'" tabindex="202"></undo-schedule>
 	<modify-shift-category ng-if="!vm.activeCommandCheck() && vm.activeCmd == 'EditShiftCategory'" tabindex="203"></modify-shift-category>
 	<command-check ng-if="vm.activeCommandCheck()" tabindex="204"></command-check>

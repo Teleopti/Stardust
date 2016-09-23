@@ -1,7 +1,8 @@
 ﻿describe("team schedule command menu directive test", function() {
 	var $compile,
 		$rootScope,
-		$httpBackend;
+		$httpBackend,
+		personSelectionSvc;
 
 	beforeEach(module('wfm.templates'));
 	beforeEach(module('wfm.teamSchedule'));
@@ -11,11 +12,15 @@
 	};
 
 	beforeEach(function() {
+		personSelectionSvc = new FakePersonSelection();
 		module(function($provide) {
 			$provide.value('ShortCuts', function() {
 				return fakeShortCuts;
 			}());
 			$provide.value('keyCodes', function() {});
+			$provide.service('PersonSelection', function () {
+				return personSelectionSvc;
+			});
 		});
 
 	});
@@ -27,6 +32,35 @@
 
 		$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
 	}));
+
+	function FakePersonSelection(){
+		var hasSelected = false;
+		this.hasAgentSelected = function(value){
+			hasSelected = value;
+		}
+		this.anyAgentChecked = function(){
+			return hasSelected;
+		}
+		this.getTotalSelectedPersonAndProjectionCount = function () {
+			return {
+				CheckedPersonCount: 0,
+				SelectedActivityInfo: {
+					PersonCount: 0,
+					ActivityCount: 0
+				},
+				SelectedAbsenceInfo: {
+					PersonCount: 0,
+					AbsenceCount: 0
+				}
+			};
+		};
+		this.isAnyAgentSelected = function () {
+			return false;
+		};
+		this.canSwapShifts = function () {
+			return false;
+		};
+	}
 
 	it('should not view menu without any permitted', function() {
 		var html = '<teamschedule-command-menu configurations="getConfigurations()"></teamschedule-command>';
@@ -290,8 +324,98 @@
 
 		var menu = angular.element(element[0].querySelector('#scheduleContextMenuButton'));
 		var menuListItem = angular.element(element[0].querySelector('.wfm-list #menuItemUndo'));
+		expect(menu.length).toBe(1);
+		expect(menuListItem.length).toBe(1);
+	});
+
+	it('should not show menu item when toggle is disabled', function () {
+		var html = '<teamschedule-command-menu configurations="getConfigurations()"></teamschedule-command-menu>';
+		var scope = $rootScope.$new();
+		scope.vm = {
+			toggleCurrentSidenav: function() {}
+		};
+		var config = {
+			toggles: {
+				MoveInvalidOverlappedActivityEnabled: false
+			},
+		};
+
+		scope.getConfigurations = function() {
+			return config;
+		};
+
+		var element = $compile(html)(scope);
+
+		scope.$apply();
+
+		var menu = angular.element(element[0].querySelector('#scheduleContextMenuButton'));
+		var menuListItem = angular.element(element[0].querySelector('.wfm-list #menuItemMoveInvalidOverlappedActivity'));
+
+		expect(menu.length).toBe(0);
+		expect(menuListItem.length).toBe(0);
+	});
+
+	it('should view menu when move invalid overlapped activity is permitted', function () {
+		var html = '<teamschedule-command-menu configurations="getConfigurations()"></teamschedule-command-menu>';
+		var scope = $rootScope.$new();
+		scope.vm = {
+			toggleCurrentSidenav: function() {}
+		};
+		var config = {
+			toggles: {
+				MoveInvalidOverlappedActivityEnabled: true
+			},
+			permissions: {
+				HasMoveInvalidOverlappedActivityPermission: true
+			},
+		};
+
+		scope.getConfigurations = function() {
+			return config;
+		};
+
+		var element = $compile(html)(scope);
+
+		scope.$apply();
+
+		var menu = angular.element(element[0].querySelector('#scheduleContextMenuButton'));
+		var menuListItem = angular.element(element[0].querySelector('.wfm-list #menuItemMoveInvalidOverlappedActivity'));
 
 		expect(menu.length).toBe(1);
 		expect(menuListItem.length).toBe(1);
+	});
+
+	it('should make Move Invalid Overlapped Activity command menu clickable when requirements are met', function () {
+		var html = '<teamschedule-command-menu configurations="getConfigurations()"></teamschedule-command-menu>';
+		var scope = $rootScope.$new();
+		scope.vm = {
+			toggleCurrentSidenav: function() {}
+		};
+		var config = {
+			toggles: {
+				MoveInvalidOverlappedActivityEnabled: true
+			},
+			permissions: {
+				HasMoveInvalidOverlappedActivityPermission: true
+			},
+			validateWarningToggle: true
+		};
+
+		scope.getConfigurations = function() {
+			return config;
+		};
+
+		personSelectionSvc.hasAgentSelected(true);
+
+		var element = $compile(html)(scope);
+
+		scope.$apply();
+
+		var menu = angular.element(element[0].querySelector('#scheduleContextMenuButton'));
+		var menuListItem = angular.element(element[0].querySelector('.wfm-list #menuItemMoveInvalidOverlappedActivity'));
+
+		expect(menu.length).toBe(1);
+		expect(menuListItem.length).toBe(1);
+		expect(menuListItem[0].disabled).toBe(false);
 	});
 })

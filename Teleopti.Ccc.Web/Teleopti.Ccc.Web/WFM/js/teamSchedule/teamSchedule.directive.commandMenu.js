@@ -64,6 +64,14 @@
 				visible: function () { return vm.canActiveMoveActivity(); }
 			},
 			{
+				label: "MoveInvalidOverlappedActivity",
+				shortcut: "Alt+O",
+				keys: [[keyCodes.O], [keyCodes.ALT]],
+				action: buildAction("MoveInvalidOverlappedActivity", false),
+				clickable: function () { return vm.canMoveInvalidOverlappedActivity(); },
+				visible: function () { return vm.canActiveMoveInvalidOverlappedActivity(); }
+			},
+			{
 				label: "SwapShifts",
 				shortcut: "Alt+S",
 				keys: [[keyCodes.S], [keyCodes.ALT]],
@@ -123,6 +131,10 @@
 			return vm.toggles.MoveActivityEnabled && vm.permissions.HasMoveActivityPermission;
 		};
 
+		vm.canActiveMoveInvalidOverlappedActivity = function () {
+			return vm.toggles.MoveInvalidOverlappedActivityEnabled && vm.permissions.HasMoveInvalidOverlappedActivityPermission;
+		};
+
 		vm.canActiveRemoveAbsence = function () {
 			return vm.toggles.RemoveAbsenceEnabled && vm.permissions.IsRemoveAbsenceAvailable;
 		};
@@ -147,6 +159,10 @@
 			return personSelectionSvc.isAnyAgentSelected() &&
 				!(personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedAbsenceInfo.AbsenceCount > 0) &&
 				personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.ActivityCount > 0;
+		};
+
+		vm.canMoveInvalidOverlappedActivity = function () {
+			return personSelectionSvc.anyAgentChecked() && vm.configurations.validateWarningToggle;
 		};
 
 		vm.canRemoveAbsence = function () {
@@ -191,6 +207,7 @@
 					|| vm.canActiveAddPersonalActivity()
 					|| vm.canActiveModifyShiftCategory()
 					|| vm.canActiveUndoScheduleCmd()
+					|| vm.canActiveMoveInvalidOverlappedActivity()
 				;
 			};
 			registerShortCuts();
