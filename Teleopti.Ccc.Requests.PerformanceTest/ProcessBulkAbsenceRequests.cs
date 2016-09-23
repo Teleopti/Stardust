@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using NUnit.Framework;
@@ -34,6 +35,12 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 		public IScenarioRepository ScenarioRepository;
 		public IBusinessUnitRepository BusinessUnitRepository;
 		public IQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
+
+		[SetUp]
+		public void Setup()
+		{
+			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
+		}
 
 		[Test]
 		public void ShouldProcessMultipleAbsenceRequests()

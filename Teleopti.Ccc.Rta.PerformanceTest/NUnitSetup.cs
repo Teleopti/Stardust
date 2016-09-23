@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 		[OneTimeSetUp]
 		public void Setup()
 		{
+			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
 			XmlConfigurator.Configure();
 
 			TestSiteConfigurationSetup.Setup();

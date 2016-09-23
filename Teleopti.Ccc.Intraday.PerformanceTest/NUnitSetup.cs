@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.IO;
+using Autofac;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
@@ -18,6 +19,7 @@ namespace Teleopti.Ccc.Intraday.PerformanceTest
 		[OneTimeSetUp]
 		public void Setup()
 		{
+			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
 			TestSiteConfigurationSetup.Setup();
 
 			var builder = new ContainerBuilder();
