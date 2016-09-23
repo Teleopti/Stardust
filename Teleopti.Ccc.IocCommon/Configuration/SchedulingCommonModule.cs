@@ -281,7 +281,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<MaxMovedDaysOverLimitValidator>().As<IMaxMovedDaysOverLimitValidator>().SingleInstance();
 			builder.RegisterType<TeamBlockRestrictionOverLimitValidator>().As<ITeamBlockRestrictionOverLimitValidator>().SingleInstance();
 			builder.RegisterType<TeamBlockOptimizationLimits>().As<ITeamBlockOptimizationLimits>().SingleInstance();
-			builder.RegisterType<TeamBlockIntradayRestrictionOverLimitValidator>().SingleInstance();
+			builder.RegisterType<RestrictionOverLimitValidator>().SingleInstance();
 			builder.RegisterType<TeamBlockDayOffOptimizerService>().As<ITeamBlockDayOffOptimizerService>().InstancePerLifetimeScope();
 
 			builder.RegisterType<TeamBlockRemoveShiftCategoryOnBestDateService>().As<ITeamBlockRemoveShiftCategoryOnBestDateService>();

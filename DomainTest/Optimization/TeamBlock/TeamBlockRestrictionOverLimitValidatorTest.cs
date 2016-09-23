@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_maxMovedDaysOverLimitValidator = _mocks.StrictMock<IMaxMovedDaysOverLimitValidator>();
 			_restrictionOverLimitDecider = _mocks.StrictMock<IRestrictionOverLimitDecider>();
 			_optimizerPreferences = new OptimizationPreferences();
-			_target = new TeamBlockRestrictionOverLimitValidator(_restrictionOverLimitDecider, _maxMovedDaysOverLimitValidator);
+			_target = new TeamBlockRestrictionOverLimitValidator(_maxMovedDaysOverLimitValidator, new RestrictionOverLimitValidator(_restrictionOverLimitDecider));
 			_groupMember = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill>());
 			Group group = new Group(new List<IPerson> { _groupMember }, "hej");
 			IList<IList<IScheduleMatrixPro>> matrixes = new List<IList<IScheduleMatrixPro>>();

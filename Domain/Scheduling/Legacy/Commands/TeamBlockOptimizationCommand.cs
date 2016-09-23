@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly DayOffOptimizationDesktopTeamBlock _dayOffOptimizationDesktopTeamBlock;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
-		private readonly TeamBlockIntradayRestrictionOverLimitValidator _teamBlockIntradayRestrictionOverLimitValidator;
+		private readonly RestrictionOverLimitValidator _restrictionOverLimitValidator;
 
 		public TeamBlockOptimizationCommand(Func<ISchedulerStateHolder> schedulerStateHolder,
 			ITeamBlockClearer teamBlockCleaner,
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			TeamInfoFactoryFactory teamInfoFactoryFactory,
 			DayOffOptimizationDesktopTeamBlock dayOffOptimizationDesktopTeamBlock,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
-			TeamBlockIntradayRestrictionOverLimitValidator teamBlockIntradayRestrictionOverLimitValidator)
+			RestrictionOverLimitValidator restrictionOverLimitValidator)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_teamBlockCleaner = teamBlockCleaner;
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 			_dayOffOptimizationDesktopTeamBlock = dayOffOptimizationDesktopTeamBlock;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
-			_teamBlockIntradayRestrictionOverLimitValidator = teamBlockIntradayRestrictionOverLimitValidator;
+			_restrictionOverLimitValidator = restrictionOverLimitValidator;
 		}
 
 		public void Execute(ISchedulingProgress backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
@@ -259,7 +259,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					_schedulingOptionsCreator,
 					_safeRollbackAndResourceCalculation,
 					_teamBlockIntradayDecisionMaker,
-					_teamBlockIntradayRestrictionOverLimitValidator,
+					_restrictionOverLimitValidator,
 					_teamBlockCleaner,
 					_teamBlockMaxSeatChecker,
 					_dailyTargetValueCalculatorForTeamBlock,

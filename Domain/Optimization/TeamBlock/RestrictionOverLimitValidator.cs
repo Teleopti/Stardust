@@ -1,25 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
-	public class TeamBlockIntradayRestrictionOverLimitValidator
+	public class RestrictionOverLimitValidator
 	{
 		private readonly IRestrictionOverLimitDecider _restrictionOverLimitDecider;
 
-		public TeamBlockIntradayRestrictionOverLimitValidator(IRestrictionOverLimitDecider restrictionOverLimitDecider)
+		public RestrictionOverLimitValidator(IRestrictionOverLimitDecider restrictionOverLimitDecider)
 		{
 			_restrictionOverLimitDecider = restrictionOverLimitDecider;
 		}
 		
-		public bool Validate(ITeamBlockInfo teamBlockInfo, IOptimizationPreferences optimizationPreferences)
-		{
-			return validateMatrixes(teamBlockInfo.MatrixesForGroupAndBlock(), optimizationPreferences);
-		}
-
-		private bool validateMatrixes(IEnumerable<IScheduleMatrixPro> matrixes, IOptimizationPreferences optimizationPreferences)
+		public bool Validate(IEnumerable<IScheduleMatrixPro> matrixes, IOptimizationPreferences optimizationPreferences)
 		{
 			foreach (var matrix in matrixes)
 			{

@@ -36,14 +36,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
 		private readonly ITeamBlockSteadyStateValidator _teamTeamBlockSteadyStateValidator;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
-		private readonly TeamBlockIntradayRestrictionOverLimitValidator _teamBlockOptimizationLimits;
+		private readonly RestrictionOverLimitValidator _teamBlockOptimizationLimits;
 
 		public TeamBlockIntradayOptimizationService(ITeamBlockGenerator teamBlockGenerator,
 			ITeamBlockScheduler teamBlockScheduler,
 			ISchedulingOptionsCreator schedulingOptionsCreator,
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
 			ITeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker,
-			TeamBlockIntradayRestrictionOverLimitValidator teamBlockOptimizationLimits,
+			RestrictionOverLimitValidator teamBlockOptimizationLimits,
 			ITeamBlockClearer teamBlockClearer,
 			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
 			IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock,
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					continue;
 				}
 
-				if (!_teamBlockMaxSeatChecker.CheckMaxSeat(datePoint, schedulingOptions, teamBlockInfo.TeamInfo) || !_teamBlockOptimizationLimits.Validate(teamBlockInfo, optimizationPreferences))
+				if (!_teamBlockMaxSeatChecker.CheckMaxSeat(datePoint, schedulingOptions, teamBlockInfo.TeamInfo) || !_teamBlockOptimizationLimits.Validate(teamBlockInfo.MatrixesForGroupAndBlock(), optimizationPreferences))
 				{
 					var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, Resources.OptimizingIntraday + Resources.Colon + Resources.RollingBackSchedulesFor + " " + teamBlockInfo.BlockInfo.BlockPeriod.DateString + " " + teamName,cancelAction));
 					teamBlockToRemove.Add(teamBlockInfo);
