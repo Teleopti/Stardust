@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			loggedOnUser.Expect(l => loggedOnUser.CurrentUser()).Return(currentUser);
 		    nameFormatSettingsProvider = new FakeNameFormatSettingProvider();
 
-            target = new PossibleShiftTradePersonsProvider(personRepository, shiftTradeValidator, loggedOnUser, permissionProvider, personForScheduleFinder, nameFormatSettingsProvider);
+            target = new PossibleShiftTradePersonsProvider(nameFormatSettingsProvider, new ShiftTradePersonProvider (personRepository, shiftTradeValidator, permissionProvider, personForScheduleFinder, loggedOnUser));
 		}
 
 		[Test]

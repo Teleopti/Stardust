@@ -8,6 +8,7 @@ using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Global;
 using Teleopti.Ccc.Web.Models.Shared;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 {

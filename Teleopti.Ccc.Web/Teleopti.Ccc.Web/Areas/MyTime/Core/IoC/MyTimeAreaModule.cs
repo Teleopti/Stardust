@@ -281,7 +281,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<SiteViewModelFactory>().As<ISiteViewModelFactory>();
 			builder.RegisterType<PersonNameProvider>().As<IPersonNameProvider>().SingleInstance();
 			builder.RegisterType<TimeFilterHelper>().As<ITimeFilterHelper>().SingleInstance();
-			builder.RegisterType<PersonForScheduleFinder>().As<IPersonForScheduleFinder>();
 		}
 	}
 }

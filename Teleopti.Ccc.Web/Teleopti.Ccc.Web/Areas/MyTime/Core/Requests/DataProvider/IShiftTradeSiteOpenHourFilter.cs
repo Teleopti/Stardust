@@ -13,5 +13,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 		IEnumerable<IShiftExchangeOffer> FilterShiftExchangeOffer(IEnumerable<IShiftExchangeOffer> shiftExchangeOffers,
 			ShiftTradeAddPersonScheduleViewModel personFromScheduleView);
+
+		bool FilterSchedule (IScheduleDay toScheduleDay, ShiftTradeAddPersonScheduleViewModel personFromScheduleView);
 	}
 }

@@ -79,6 +79,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ReadModelValidationResultPersister>()
 				.As<IReadModelValidationResultPersister>()
 				.SingleInstance();
+
+			builder.RegisterType<PersonForScheduleFinder>().As<IPersonForScheduleFinder>().SingleInstance();
 		}
 
 		private bool hasCorrectCtor(Type repositoryType)

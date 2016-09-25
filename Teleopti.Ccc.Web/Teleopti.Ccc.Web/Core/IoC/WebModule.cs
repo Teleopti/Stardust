@@ -4,7 +4,9 @@ using Autofac.Configuration;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.SignalR;
 using Autofac.Integration.WebApi;
+using Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -49,6 +51,7 @@ using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
 using Teleopti.Ccc.Web.Core.Startup;
 using Teleopti.Ccc.Web.Filters;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Core.IoC
 {
@@ -134,7 +137,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<DefaultSessionSpecificCookieForIdentityProviderDataProviderSettings>()
 				.As<ISessionSpecificCookieForIdentityProviderDataProviderSettings>();
 			builder.RegisterType<SetThreadCulture>().As<ISetThreadCulture>();
-			builder.RegisterType<PermissionProvider>().As<IPermissionProvider>();
+
 			builder.RegisterType<AreaWithPermissionPathProvider>().As<IAreaWithPermissionPathProvider>();
 			builder.RegisterType<AbsenceTypesProvider>().As<IAbsenceTypesProvider>();
 			builder.RegisterType<PushMessageProvider>().As<IPushMessageProvider>();

@@ -1267,8 +1267,6 @@
     <Compile Include="Areas\MyTime\Core\JsonSerializationExtensions.cs" />
     <Compile Include="Areas\MyTime\Core\LayoutBase\DatePickerGlobalizationViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\LayoutBase\IDatePickerGlobalizationViewModelFactory.cs" />
-    <Compile Include="Areas\MyTime\Core\Portal\DataProvider\IPermissionProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\Portal\DataProvider\PermissionProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Portal\ViewModelFactory\PortalViewModelFactory.cs" />
     <Compile Include="Core\RequestContext\Cookie\DefaultSessionSpecificCookieDataProviderSettings.cs" />
     <Compile Include="Core\RequestContext\ISetThreadCulture.cs" />

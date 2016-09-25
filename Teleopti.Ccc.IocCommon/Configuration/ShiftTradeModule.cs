@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnly;
@@ -48,6 +49,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ShiftTradeRequestSetChecksum>().As<IShiftTradeRequestSetChecksum>().SingleInstance();
 			builder.RegisterType<ShiftTradeRequestStatusChecker>().As<IShiftTradeRequestStatusChecker>().SingleInstance();
 			builder.RegisterType<ShiftTradeSwapScheduleDetailsMapper>().As<IShiftTradeSwapScheduleDetailsMapper>().SingleInstance();
+			builder.RegisterType<ShiftTradePersonProvider>().As<IShiftTradePersonProvider>().SingleInstance();
 		}
 	}
 }

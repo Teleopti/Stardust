@@ -15,13 +15,57 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IToggleManager _toggleManager;
 		private readonly ISiteOpenHoursSpecification _siteOpenHoursSpecification;
+		private readonly IProjectionProvider _projectionProvider;
 
 		public ShiftTradeSiteOpenHourFilter(ILoggedOnUser loggedOnUser, IToggleManager toggleManager,
-			ISiteOpenHoursSpecification siteOpenHoursSpecification)
+			ISiteOpenHoursSpecification siteOpenHoursSpecification, IProjectionProvider projectionProvider)
 		{
 			_loggedOnUser = loggedOnUser;
 			_toggleManager = toggleManager;
 			_siteOpenHoursSpecification = siteOpenHoursSpecification;
+			_projectionProvider = projectionProvider;
+		}
+
+		public bool FilterSchedule(IScheduleDay toScheduleDay, ShiftTradeAddPersonScheduleViewModel personFromScheduleView)
+		{
+			if (!isFilterEnabled())
+			{
+				return false;
+			}
+
+			if (personFromScheduleView.ScheduleLayers == null || !personFromScheduleView.ScheduleLayers.Any())
+			{
+				return false;
+			}
+
+			var personTo = toScheduleDay.Person;
+			var personFrom = _loggedOnUser.CurrentUser();
+
+			var personFromSchedulePeriod = getSchedulePeriod(personFromScheduleView, personFrom.PermissionInformation.DefaultTimeZone());
+
+
+			var projection = _projectionProvider.Projection (toScheduleDay);
+
+
+			if (!projection.HasLayers)
+			{
+				return true;
+			}
+
+			var personToScheduleTimePeriod = projection.Period().GetValueOrDefault();
+			var isSatisfiedPersonFromSiteOpenHours = _siteOpenHoursSpecification.IsSatisfiedBy(new SiteOpenHoursCheckItem
+			{
+				Period = personToScheduleTimePeriod,
+				Person = personFrom
+			});
+			var isSatisfiedPersonToSiteOpenHours = _siteOpenHoursSpecification.IsSatisfiedBy(new SiteOpenHoursCheckItem
+			{
+				Period = personFromSchedulePeriod,
+				Person = personTo
+			});
+
+			return isSatisfiedPersonFromSiteOpenHours && isSatisfiedPersonToSiteOpenHours;
+
 		}
 
 		public IEnumerable<ShiftTradeAddPersonScheduleViewModel> FilterScheduleView(
@@ -40,6 +84,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 			var personDictionary = datePersons.Persons.ToDictionary(p => p.Id.GetValueOrDefault(Guid.NewGuid()));
 			var personFrom = _loggedOnUser.CurrentUser();
+
 			var personFromSchedulePeriod = getSchedulePeriod(personFromScheduleView, personFrom.PermissionInformation.DefaultTimeZone());
 
 			return personToScheduleViews.Where(

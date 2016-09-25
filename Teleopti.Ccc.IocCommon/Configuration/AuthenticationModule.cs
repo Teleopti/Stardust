@@ -61,6 +61,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ApplicationFunctionsProvider>().As<IApplicationFunctionsProvider>().SingleInstance();
 			builder.RegisterType<ApplicationFunctionsToggleFilter>().As<IApplicationFunctionsToggleFilter>().SingleInstance();
 			builder.RegisterType<DefinedRaptorApplicationFunctionFactory>().As<IDefinedRaptorApplicationFunctionFactory>().InstancePerDependency();
+			builder.RegisterType<PermissionProvider>().As<IPermissionProvider>().SingleInstance();
 
 			builder.Register(c => StateHolder.Instance.StateReader.ApplicationScopeData)
 				.As<IApplicationData>().SingleInstance()

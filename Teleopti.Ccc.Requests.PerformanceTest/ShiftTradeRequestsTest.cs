@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 	{
 
 		public AsSystem AsSystem;
+		
 		public IDataSourceScope DataSource;
 		public IPersonRepository PersonRepository;
 		public IPersonRequestRepository PersonRequestRepository;
@@ -44,7 +45,8 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 		public IGlobalSettingDataRepository GlobalSettingDataRepository;
 		public IReadModelScheduleProjectionReadOnlyValidator ReadModelScheduleProjectionUpdater;
 		public IReadModelFixer ReadModelFixer;
-
+		
+		
 		[Test]
 		public void ShouldBePerformantWhenValidatingAndReferringShiftTradeRequests()
 		{
@@ -268,6 +270,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
 			system.UseTestDouble<StardustJobFeedback>().For<IStardustJobFeedback>();
 			system.UseTestDouble<ShiftTradeRequestHandler>().For<ShiftTradeRequestHandler>();
+
 			system.AddService<Database>();
 			system.AddModule (new TenantServerModule (configuration));
 

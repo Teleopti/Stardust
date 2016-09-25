@@ -4,6 +4,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Filters;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Filters
 {

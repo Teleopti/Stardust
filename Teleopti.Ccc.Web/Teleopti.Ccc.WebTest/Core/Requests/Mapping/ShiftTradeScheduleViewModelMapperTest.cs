@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonSc
 using Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -30,6 +31,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		private IPersonRequestRepository _personRequestRepository;
 		private IScheduleProvider _scheduleProvider;
 		private ILoggedOnUser _loggedOnUser;
+		private IProjectionProvider _projectionProvider;
 
 		[SetUp]
 		public void Setup()
@@ -41,11 +43,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			_scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
 			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			_projectionProvider = new ProjectionProvider();
 
 			_target = new ShiftTradeScheduleViewModelMapper(_shiftTradeRequestProvider, _possibleShiftTradePersonsProvider,
 				_shiftTradePersonScheduleViewModelMapper, _shiftTradeTimeLineHoursViewModelMapper, _personRequestRepository,
 				_scheduleProvider, _loggedOnUser,
-				new ShiftTradeSiteOpenHourFilter(_loggedOnUser, new FakeToggleManager(), new SiteOpenHoursSpecification()));
+				new ShiftTradeSiteOpenHourFilter(_loggedOnUser, new FakeToggleManager(), new SiteOpenHoursSpecification(), _projectionProvider));
 		}
 
 		[Test]
