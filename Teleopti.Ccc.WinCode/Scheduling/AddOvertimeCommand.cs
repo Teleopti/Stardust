@@ -50,16 +50,17 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             IVisualLayer visualLayer;
             IActivity defaultActivity = null;
             IPersonAssignment personAssignment = null;
-            if (!VerifySelectedSchedule(ScheduleParts)) return;
-            if (ScheduleParts.Count > 0)
+			var filteredScheduleParts = SchedulePartsOnePerAgent();
+
+			if (!VerifySelectedSchedule(filteredScheduleParts)) return;
+            if (filteredScheduleParts.Count > 0)
             {
-                personAssignment = ScheduleParts[0].PersonAssignment();
+                personAssignment = filteredScheduleParts[0].PersonAssignment();
             }
 
-			//if (personAssignment != null && personAssignment.HasProjection)
             if (personAssignment != null && (personAssignment.MainActivities().Any() || personAssignment.OvertimeActivities().Any()))
             {
-                DateTimePeriod assPeriod = personAssignment.Period;
+                var assPeriod = personAssignment.Period;
                 if (!DefaultIsSet)
                     DefaultPeriod = new DateTimePeriod(assPeriod.EndDateTime, assPeriod.EndDateTime.AddHours(1));
 				var shift = _editableShiftMapper.CreateEditorShift(personAssignment);
@@ -70,7 +71,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 }
             }
 
-        	foreach (var schedulePart in ScheduleParts)
+        	foreach (var schedulePart in filteredScheduleParts)
         	{
 				if (!schedulePart.Person.IsAgent(schedulePart.DateOnlyAsPeriod.DateOnly))
 				{
@@ -80,41 +81,37 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					
         	}
 
-            _definitionSets = DefinitionSetsAccordingToSchedule(ScheduleParts, _definitionSets);
+            _definitionSets = DefinitionSetsAccordingToSchedule(filteredScheduleParts, _definitionSets);
 
-            if (!VerifySelectedSchedule(ScheduleParts)) return;
+            if (!VerifySelectedSchedule(filteredScheduleParts)) return;
 
-            DateTimePeriod addPeriod = DefaultPeriod ?? ScheduleParts[0].Period;
-
-            IAddOvertimeViewModel dialog1 =
-                ScheduleViewBase.CreateAddOvertimeViewModel( SchedulerStateHolder.CommonStateHolder.ActiveActivities,
+            var addPeriod = DefaultPeriod ?? filteredScheduleParts[0].Period;
+            var dialog1 = ScheduleViewBase.CreateAddOvertimeViewModel( SchedulerStateHolder.CommonStateHolder.ActiveActivities,
                                                             _definitionSets, defaultActivity,
                                                             addPeriod, SchedulerStateHolder.TimeZoneInfo);
 
 
-            bool result = dialog1.Result;
+            var result = dialog1.Result;
 
             if (!result) return;
 
-            IActivity activity = dialog1.SelectedItem;
-            IMultiplicatorDefinitionSet definitionSet = dialog1.SelectedMultiplicatorDefinitionSet;
+            var activity = dialog1.SelectedItem;
+            var definitionSet = dialog1.SelectedMultiplicatorDefinitionSet;
             period = dialog1.SelectedPeriod;
 
-            foreach (IScheduleDay part in ScheduleParts)
+            foreach (var part in filteredScheduleParts)
             {
-								part.CreateAndAddOvertime(activity, period, definitionSet);
+				part.CreateAndAddOvertime(activity, period, definitionSet);
             }
 
-
-            Presenter.ModifySchedulePart(ScheduleParts);
-            foreach (IScheduleDay part in ScheduleParts)
+            Presenter.ModifySchedulePart(filteredScheduleParts);
+            foreach (var part in filteredScheduleParts)
             {
                 ScheduleViewBase.RefreshRangeForAgentPeriod(part.Person, period);
             }
-
         }
 
-        public static IList<IMultiplicatorDefinitionSet> DefinitionSetsAccordingToSchedule(IList<IScheduleDay> schedules, IList<IMultiplicatorDefinitionSet> definitionSets)
+		public static IList<IMultiplicatorDefinitionSet> DefinitionSetsAccordingToSchedule(IList<IScheduleDay> schedules, IList<IMultiplicatorDefinitionSet> definitionSets)
         {
             IList<IMultiplicatorDefinitionSet> returnDefinitionSets = new List<IMultiplicatorDefinitionSet>();
             foreach (IMultiplicatorDefinitionSet set in definitionSets)
