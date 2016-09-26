@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly IConfigReader _config;
 
-		public ContextLoaderWithPersonOrganizationQueryOptimization(IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper, IAgentStatePersister agentStatePersister, IMappingReader mappingReader, IDatabaseReader databaseReader, IScheduleProjectionReadOnlyReader scheduleProjectionReadOnlyReader, AppliedAdherence appliedAdherence, ProperAlarm appliedAlarm, IConfigReader config) : base(databaseLoader, now, stateMapper, agentStatePersister, mappingReader, databaseReader, scheduleProjectionReadOnlyReader, appliedAdherence, appliedAlarm)
+		public ContextLoaderWithPersonOrganizationQueryOptimization(IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper, IAgentStatePersister agentStatePersister, IMappingReader mappingReader, IDatabaseReader databaseReader, IScheduleReader scheduleReader, AppliedAdherence appliedAdherence, ProperAlarm appliedAlarm, IConfigReader config) : base(databaseLoader, now, stateMapper, agentStatePersister, mappingReader, databaseReader, scheduleReader, appliedAdherence, appliedAlarm)
 		{
 			_config = config;
 		}
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					.ForEach(exceptions.Add);
 
 				var personIds = agentStates.Select(x => x.PersonId);
-				var schedules = _scheduleProjectionReadOnlyReader.GetCurrentSchedules(now, personIds);
+				var schedules = ScheduleReader.GetCurrentSchedules(now, personIds);
 				var mappings = new MappingsState(() => _mappingReader.Read());
 
 				return new batchData
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							state.TeamId.GetValueOrDefault(),
 							state.SiteId.GetValueOrDefault(),
 							() => state,
-							() => new ScheduleState(_scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, state.PersonId), false),
+							() => new ScheduleState(ScheduleReader.GetCurrentSchedule(now, state.PersonId), false),
 							s => mappings,
 							c => _agentStatePersister.Update(c.MakeAgentState()),
 							_stateMapper,
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						state.TeamId.GetValueOrDefault(),
 						state.SiteId.GetValueOrDefault(),
 						() => state,
-						() => new ScheduleState(_scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, x), false),
+						() => new ScheduleState(ScheduleReader.GetCurrentSchedule(now, x), false),
 						s => mappings,
 						c => _agentStatePersister.Update(c.MakeAgentState()),
 						_stateMapper,

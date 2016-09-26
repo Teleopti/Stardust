@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_ScheduleQueryOptimization_40260)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_ScheduleQueryOptimizationFilteredCache_40260)]
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_ConnectionQueryOptimizeAllTheThings_40262)]
+	//[Toggle(Domain.FeatureFlags.Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
 	public class DomainTestAttribute : IoCTestAttribute
 	{
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
@@ -169,8 +170,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeIntradayQueueStatisticsLoader>().For<IIntradayQueueStatisticsLoader>();
 
 			// schedule readmodels
-			system.UseTestDouble<FakeScheduleProjectionReadOnlyPersister>()
-				.For<IScheduleProjectionReadOnlyPersister, IScheduleProjectionReadOnlyReader>();
+			system.UseTestDouble<FakeScheduleProjectionReadOnlyPersister>().For<IScheduleProjectionReadOnlyPersister>();
 			system.UseTestDouble<FakeProjectionVersionPersister>().For<IProjectionVersionPersister>();
 			
 			system.UseTestDouble<FakeJobStorageWrapper>().For<IJobStorageWrapper>();

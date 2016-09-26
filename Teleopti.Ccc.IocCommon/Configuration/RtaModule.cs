@@ -78,10 +78,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.CacheKey(c.Resolve<CachePerDataSource>())
 				);
 			builder.CacheByInterfaceProxy<DatabaseLoader, IDatabaseLoader>().SingleInstance();
-			builder.RegisterType<DatabaseReader>()
-				.As<IScheduleProjectionReadOnlyReader>()
-				.As<IDatabaseReader>()
-				.SingleInstance();
+			builder.RegisterType<DatabaseReader>().As<IDatabaseReader>().SingleInstance();
+			if (_config.Toggle(Toggles.RTA_FasterUpdateOfScheduleChanges_40536))
+				builder.RegisterType<FromPersonAssignment>().As<IScheduleReader>().SingleInstance();
+			else
+				builder.RegisterType<FromReadModel>().As<IScheduleReader>().SingleInstance();
 			if (_config.Toggle(Toggles.RTA_RuleMappingOptimization_39812))
 				builder.RegisterType<MappingReadModelReader>().As<IMappingReader>().SingleInstance();
 			else

@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		protected readonly IAgentStatePersister _agentStatePersister;
 		protected readonly IMappingReader _mappingReader;
 		protected readonly IDatabaseReader _databaseReader;
-		protected readonly IScheduleProjectionReadOnlyReader _scheduleProjectionReadOnlyReader;
+		protected readonly IScheduleReader ScheduleReader;
 		protected readonly AppliedAdherence _appliedAdherence;
 		protected readonly ProperAlarm _appliedAlarm;
 
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IAgentStatePersister agentStatePersister,
 			IMappingReader mappingReader,
 			IDatabaseReader databaseReader,
-			IScheduleProjectionReadOnlyReader scheduleProjectionReadOnlyReader,
+			IScheduleReader scheduleReader,
 			AppliedAdherence appliedAdherence,
 			ProperAlarm appliedAlarm
 			)
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_agentStatePersister = agentStatePersister;
 			_mappingReader = mappingReader;
 			_databaseReader = databaseReader;
-			_scheduleProjectionReadOnlyReader = scheduleProjectionReadOnlyReader;
+			ScheduleReader = scheduleReader;
 			_appliedAdherence = appliedAdherence;
 			_appliedAlarm = appliedAlarm;
 		}
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							state.TeamId,
 							state.SiteId,
 							() => _agentStatePersister.Get(state.PersonId),
-							() => new ScheduleState(_scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, state.PersonId), false),
+							() => new ScheduleState(ScheduleReader.GetCurrentSchedule(now, state.PersonId), false),
 							s =>
 							{
 								return new MappingsState(() =>
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						x.TeamId,
 						x.SiteId,
 						() => state,
-						() => new ScheduleState(_scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, state.PersonId), false),
+						() => new ScheduleState(ScheduleReader.GetCurrentSchedule(now, state.PersonId), false),
 						s => mappings,
 						c => _agentStatePersister.Update(c.MakeAgentState()),
 						_stateMapper,
@@ -237,7 +237,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					state.TeamId.GetValueOrDefault(),
 					state.SiteId.GetValueOrDefault(),
 					() => state,
-					() => new ScheduleState(_scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, state.PersonId), false), 
+					() => new ScheduleState(ScheduleReader.GetCurrentSchedule(now, state.PersonId), false), 
 					s => mappings,
 					c => _agentStatePersister.Update(c.MakeAgentState()),
 					_stateMapper,
@@ -271,7 +271,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						state.TeamId.GetValueOrDefault(),
 						state.SiteId.GetValueOrDefault(),
 						null,
-						() => new ScheduleState(_scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, state.PersonId), false),
+						() => new ScheduleState(ScheduleReader.GetCurrentSchedule(now, state.PersonId), false),
 						s => mappings,
 						null,
 						_stateMapper,

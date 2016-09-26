@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, "phone", "2016-09-12 08:00", "2016-09-12 12:00")
 				.WithSchedule(personId, "admin", "2016-09-12 12:00", "2016-09-12 17:00")
-				.WithSchedule(personId, "phone", "2016-09-13 08:00", "2016-09-12 17:00")
+				.WithSchedule(personId, "phone", "2016-09-13 08:00", "2016-09-13 17:00")
 				;
 
 			Now.Is("2016-09-11 00:00");

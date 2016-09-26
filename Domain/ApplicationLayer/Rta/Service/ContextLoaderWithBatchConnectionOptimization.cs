@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly IConfigReader _config;
 
-		public ContextLoaderWithBatchConnectionOptimization(IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper, IAgentStatePersister agentStatePersister, IMappingReader mappingReader, IDatabaseReader databaseReader, IScheduleProjectionReadOnlyReader scheduleProjectionReadOnlyReader, AppliedAdherence appliedAdherence, ProperAlarm appliedAlarm, IConfigReader config) : base(databaseLoader, now, stateMapper, agentStatePersister, mappingReader, databaseReader, scheduleProjectionReadOnlyReader, appliedAdherence, appliedAlarm)
+		public ContextLoaderWithBatchConnectionOptimization(IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper, IAgentStatePersister agentStatePersister, IMappingReader mappingReader, IDatabaseReader databaseReader, IScheduleReader scheduleReader, AppliedAdherence appliedAdherence, ProperAlarm appliedAlarm, IConfigReader config) : base(databaseLoader, now, stateMapper, agentStatePersister, mappingReader, databaseReader, scheduleReader, appliedAdherence, appliedAlarm)
 		{
 			_config = config;
 		}
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 									x.TeamId,
 									x.SiteId,
 									() => _agentStatePersister.Get(x.PersonId),
-									() => new ScheduleState(_scheduleProjectionReadOnlyReader.GetCurrentSchedule(now, x.PersonId), false),
+									() => new ScheduleState(ScheduleReader.GetCurrentSchedule(now, x.PersonId), false),
 									s =>
 									{
 										return new MappingsState(() =>

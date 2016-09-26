@@ -1,13 +1,18 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
@@ -70,14 +75,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		private readonly FakeBusinessUnitRepository _businessUnits;
 		private readonly FakeScheduleProjectionReadOnlyPersister _schedules;
 		private readonly AgentStateMaintainer _agentStateMaintainer;
+		private readonly FakePersonRepository _persons;
+		private readonly FakePersonAssignmentRepository _personAssignments;
+		private readonly ICurrentScenario _scenario;
+		private readonly IScheduleStorage _scheduleStorage;
 
-		private class userData
-		{
-			public int DataSourceId;
-			public PersonOrganizationData Data;
-		}
+		//private class userData
+		//{
+		//	public int DataSourceId;
+		//	public PersonOrganizationData Data;
+		//}
 
-		private readonly List<userData> _userInfos = new List<userData>();
+		//private readonly List<userData> _userInfos = new List<userData>();
 
 		public FakeRtaDatabase(
 			INow now,
@@ -91,7 +100,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			FakeDataSourceForTenant dataSourceForTenant,
 			FakeBusinessUnitRepository businessUnits,
 			FakeScheduleProjectionReadOnlyPersister schedules,
-			AgentStateMaintainer agentStateMaintainer
+			AgentStateMaintainer agentStateMaintainer,
+			FakePersonRepository persons,
+			FakePersonAssignmentRepository personAssignments,
+			ICurrentScenario scenario,
+			IScheduleStorage scheduleStorage
 			)
 		{
 			_now = now;
@@ -106,6 +119,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_businessUnits = businessUnits;
 			_schedules = schedules;
 			_agentStateMaintainer = agentStateMaintainer;
+			_persons = persons;
+			_personAssignments = personAssignments;
+			_scenario = scenario;
+			_scheduleStorage = scheduleStorage;
 
 			withTenant("default", LegacyAuthenticationKey.TheKey);
 			WithSource(new StateForTest().SourceId);
@@ -163,31 +180,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public FakeRtaDatabase WithUser(string userCode, Guid personId, Guid? businessUnitId, Guid? teamId, Guid? siteId)
 		{
-			if (businessUnitId.HasValue)
-				WithBusinessUnit(businessUnitId.Value);
+			_database.WithAgent(personId, userCode, teamId, siteId, businessUnitId);
 			
-			if (!teamId.HasValue) teamId = Guid.NewGuid();
-			if (!siteId.HasValue) siteId = Guid.NewGuid();
-			
-			_userInfos.Add(new userData
-			{
-				DataSourceId = _database.CurrentDataSourceId(),
-				Data = new PersonOrganizationData
-				{
-					UserCode = userCode,
-					PersonId = personId,
-					BusinessUnitId = _database.CurrentBusinessUnitId(),
-					TeamId = teamId.Value,
-					SiteId = siteId.Value
-				}
-			});
-
 			_agentStates.Prepare(new AgentStatePrepare
 			{
 				PersonId = personId,
 				BusinessUnitId = _database.CurrentBusinessUnitId(),
-				TeamId = teamId.Value,
-				SiteId = siteId.Value,
+				TeamId = _database.CurrentTeamId(),
+				SiteId = _database.CurrentSiteId(),
 				ExternalLogons = new[]
 				{
 					new ExternalLogon
@@ -200,22 +200,41 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return this;
 		}
 
-		public FakeRtaDatabase WithSchedule(Guid personId, Guid activityId, string start, string end, DateOnly? belongsToDate, string name, Color? color)
+		public FakeRtaDatabase WithSchedule(Guid personId, Guid activityId, string start, string end, string belongsToDate, string name, Color? color)
 		{
-			if (!belongsToDate.HasValue)
-				belongsToDate = new DateOnly(start.Utc());
-			if (!color.HasValue)
-				color = Color.Black;
-			_schedules.AddActivity(new ScheduleProjectionReadOnlyModel
-			{
-				PersonId = personId,
-				PayloadId = activityId,
-				Name = name,
-				StartDateTime = start.Utc(),
-				EndDateTime = end.Utc(),
-				BelongsToDate = belongsToDate.Value,
-				DisplayColor = color.Value.ToArgb()
-			});
+			_database.WithPerson(personId, null);
+			_database.WithAssignment(personId, belongsToDate ?? start);
+			_database.WithActivity(activityId, name, color);
+			_database.WithAssignedActivity(start, end);
+
+			_schedules.Clear();
+			var min = _personAssignments.LoadAll().SelectMany(x => x.ShiftLayers).Min(x => x.Period.StartDateTime);
+			var max = _personAssignments.LoadAll().SelectMany(x => x.ShiftLayers).Max(x => x.Period.EndDateTime);
+			var period = new DateTimePeriod(min.AddDays(-2), max.AddDays(2));
+			Debug.WriteLine("");
+			FromPersonAssignment.MakeScheduledActivities(_scenario, _scheduleStorage, _persons.LoadAll(), period)
+				.Select(l => JsonConvert.DeserializeObject<ScheduleProjectionReadOnlyModel>(JsonConvert.SerializeObject(l)))
+				.ForEach(x =>
+				{
+					Debug.WriteLine($"{x.StartDateTime} - {x.EndDateTime}: {x.Name}");
+					_schedules.AddActivity(x);
+				});
+
+			//if (!belongsToDate.HasValue)
+			//	belongsToDate = new DateOnly(start.Utc());
+			//if (!color.HasValue)
+			//	color = Color.Black;
+			//_schedules.AddActivity(new ScheduleProjectionReadOnlyModel
+			//{
+			//	PersonId = personId,
+			//	PayloadId = activityId,
+			//	Name = name,
+			//	StartDateTime = start.Utc(),
+			//	EndDateTime = end.Utc(),
+			//	BelongsToDate = belongsToDate.Value,
+			//	DisplayColor = color.Value.ToArgb()
+			//});
+
 			_agentStateMaintainer.Handle(new ScheduleProjectionReadOnlyChangedEvent
 			{
 				PersonId = personId
@@ -226,6 +245,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		public FakeRtaDatabase ClearSchedule(Guid personId)
 		{
 			_schedules.Clear(personId);
+			_database.ClearScheduleData(personId);
 			_agentStateMaintainer.Handle(new ScheduleProjectionReadOnlyChangedEvent
 			{
 				PersonId = personId
@@ -274,31 +294,62 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public IEnumerable<PersonOrganizationData> LoadPersonOrganizationData(int dataSourceId, string externalLogOn)
 		{
-			return _userInfos
+			return userDatas()
 				.Where(x =>
 					x.Data.UserCode == externalLogOn &&
 					x.DataSourceId == dataSourceId)
-				.Select(m => m.Data.CopyBySerialization())
+				.Select(m => m.Data)
 				.ToArray();
 		}
 
 		public IEnumerable<PersonOrganizationData> LoadPersonOrganizationDatas(int dataSourceId, IEnumerable<string> externalLogOns)
 		{
-			return _userInfos
+			return userDatas()
 				.Where(x =>
 					externalLogOns.Contains(x.Data.UserCode) &&
 					x.DataSourceId == dataSourceId)
-				.Select(m => m.Data.CopyBySerialization())
+				.Select(m => m.Data)
 				.ToArray();
 		}
 
 		public IEnumerable<PersonOrganizationData> LoadAllPersonOrganizationData()
 		{
-			return _userInfos
-				.Select(m => m.Data.CopyBySerialization())
-				.ToArray();
+			return userDatas()
+				.Select(x => x.Data);
 		}
 
+		private class userData
+		{
+			public int DataSourceId;
+			public PersonOrganizationData Data;
+		}
+
+		private IEnumerable<userData> userDatas()
+		{
+			return _persons.LoadAll()
+				.Select(x => x.Period(new DateOnly(_now.UtcDateTime())))
+				.Where(x => x != null)
+				.SelectMany(x =>
+					x.ExternalLogOnCollection.Select(e => new
+					{
+						externalLogon = e,
+						period = x
+					}))
+				.Select(x =>
+					new userData
+					{
+						DataSourceId = x.externalLogon.DataSourceId,
+						Data = new PersonOrganizationData
+						{
+							UserCode = x.externalLogon.AcdLogOnOriginalId,
+							PersonId = x.period.Parent.Id.Value,
+							TeamId = x.period.Team.Id.Value,
+							SiteId = x.period.Team.Site.Id.Value,
+							BusinessUnitId = x.period.Team.Site.BusinessUnit.Id.Value,
+						}
+					})
+				.ToArray();
+		}
 	}
 
 	public static class FakeDatabaseUserExtensions
@@ -335,25 +386,20 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			return fakeDataBuilder.WithSchedule(personId, activityId, start, end, null, name, null);
 		}
-
-		public static FakeRtaDatabase WithSchedule(this FakeRtaDatabase fakeDataBuilder, Guid personId, Guid activityId, DateOnly belongsToDate, string start, string end)
-		{
-			return fakeDataBuilder.WithSchedule(personId, activityId, start, end, belongsToDate, null, null);
-		}
-
-		public static FakeRtaDatabase WithSchedule(this FakeRtaDatabase fakeDataBuilder, Guid personId, Guid activityId, string name, DateOnly belongsToDate, string start, string end)
+		
+		public static FakeRtaDatabase WithSchedule(this FakeRtaDatabase fakeDataBuilder, Guid personId, Guid activityId, string name, string belongsToDate, string start, string end)
 		{
 			return fakeDataBuilder.WithSchedule(personId, activityId, start, end, belongsToDate, null, Color.Black);
 		}
 
 		public static FakeRtaDatabase WithSchedule(this FakeRtaDatabase fakeDataBuilder, Guid personId, Color color, string start, string end)
 		{
-			return fakeDataBuilder.WithSchedule(personId, Guid.NewGuid(), start, end, new DateOnly(start.Utc()), null, color);
+			return fakeDataBuilder.WithSchedule(personId, Guid.NewGuid(), start, end, null, null, color);
 		}
 
 		public static FakeRtaDatabase WithSchedule(this FakeRtaDatabase fakeDataBuilder, Guid personId, string name, string start, string end)
 		{
-			return fakeDataBuilder.WithSchedule(personId, Guid.NewGuid(), start, end, new DateOnly(start.Utc()), name, null);
+			return fakeDataBuilder.WithSchedule(personId, Guid.NewGuid(), start, end, null, name, null);
 		}
 
 	}

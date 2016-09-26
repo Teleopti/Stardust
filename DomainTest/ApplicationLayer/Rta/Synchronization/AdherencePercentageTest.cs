@@ -25,9 +25,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			var phone = Guid.NewGuid();
 			Now.Is("2015-01-08 11:00");
 			Database
+				.WithUser("user", personId)
 				.WithSchedule(personId, phone, "2015-01-08 11:00", "2015-01-08 13:00")
 				.WithRule("phone", phone, 0)
-				.WithUser("user", personId)
 				;
 			Rta.SaveState(new StateForTest
 			{
@@ -51,8 +51,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 			var businessUnitId = Guid.NewGuid();
 			Now.Is("2015-04-10 8:00");
 			Database
-				.WithSchedule(personId, Guid.NewGuid(), "2015-04-10 8:00", "2015-04-10 17:00")
-				.WithUser("user", personId, businessUnitId, null, null);
+				.WithUser("user", personId, businessUnitId, null, null)
+				.WithSchedule(personId, Guid.NewGuid(), "2015-04-10 8:00", "2015-04-10 17:00");
 			Rta.CheckForActivityChanges(Database.TenantName(), personId);
 			Persister.Clear();
 			Now.Is("2015-04-11 8:00");

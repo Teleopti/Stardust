@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				.WithAgent(person, "jågej")
 				.WithActivity(phone)
 				.WithScenario(scenario)
-				.WithAssignment("2016-06-30", person)
+				.WithAssignment("2016-06-30")
 				.WithAssignedActivity("2016-06-30 08:00", "2016-06-30 17:00")
 				;
 
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				.WithAgent(person, "jågej")
 				.WithActivity(phone)
 				.WithScenario(scenario)
-				.WithAssignment("2016-06-30", person)
+				.WithAssignment("2016-06-30")
 				.WithAssignedActivity("2016-06-30 08:00", "2016-06-30 09:00")
 				.WithAssignedActivity("2016-06-30 08:45", "2016-06-30 10:00")
 				;
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				.WithAgent(person, "jågej")
 				.WithScenario(scenario)
 				.WithDayOffTemplate("Day off", "DO")
-				.WithAssignment("2016-10-02", person)
+				.WithAssignment("2016-10-02")
 				.WithDayOff()
 				;
 
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				.WithAgent(person, "jågej", TimeZoneInfoFactory.StockholmTimeZoneInfo())
 				.WithScenario(scenario)
 				.WithDayOffTemplate("Day off", "DO")
-				.WithAssignment("2016-10-08", person)
+				.WithAssignment("2016-10-08")
 				.WithDayOff()
 				;
 
@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			Database
 				.WithAgent(person, "jågej")
 				.WithScenario(scenario)
-				.WithAssignment("2016-10-08", person)
+				.WithAssignment("2016-10-08")
 				.WithDayOff()
 				.WithPersonAbsence("2016-10-08")
 				;
@@ -228,9 +228,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			Database
 				.WithAgent(person, "jågej")
 				.WithScenario(scenario)
-				.WithAssignment("2016-10-07", person)
+				.WithAssignment("2016-10-07")
 				.WithAssignedActivity("2016-10-07 22:00", "2016-10-08 06:00")
-				.WithAssignment("2016-10-08", person)
+				.WithAssignment("2016-10-08")
 				.WithDayOff()
 				;
 
@@ -258,7 +258,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			Database
 				.WithAgent(person, "jågej")
 				.WithScenario(scenario)
-				.WithAssignment("2016-10-07", person)
+				.WithAssignment("2016-10-07")
 				.WithAssignedActivity("2016-10-07 22:00", "2016-10-08 06:00")
 				;
 
@@ -283,7 +283,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			Database
 				.WithAgent(person, "jågej")
 				.WithScenario(scenario)
-				.WithAssignment("2016-10-07", person)
+				.WithAssignment("2016-10-07")
 				.WithAssignedActivity("2016-10-07 08:00", "2016-10-07 17:00")
 				;
 
@@ -315,11 +315,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var person2 = Guid.NewGuid();
 			var scenario = Guid.NewGuid();
 			Database
-				.WithAgent(person1, "jågej")
-				.WithAgent(person2, "hejman")
 				.WithScenario(scenario)
-				.WithAssignment("2016-10-07", person1)
-				.WithAssignment("2016-10-08", person2)
+				.WithAgent(person1, "jågej")
+				.WithAssignment("2016-10-07")
+				.WithAgent(person2, "hejman")
+				.WithAssignment("2016-10-08")
 				;
 
 			Target.Handle(new ScheduleChangedEventForTest

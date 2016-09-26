@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
-	public class DatabaseReader : IDatabaseReader, IScheduleProjectionReadOnlyReader
+	public class DatabaseReader : IDatabaseReader
 	{
 		private readonly ICurrentAnalyticsUnitOfWork _analyticsUnitOfWork;
 		private readonly ICurrentUnitOfWork _unitOfWork;
@@ -25,56 +25,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_analyticsUnitOfWork = analyticsUnitOfWork;
 			_unitOfWork = unitOfWork;
 			_now = now;
-		}
-
-		public IEnumerable<ScheduledActivity> GetCurrentSchedule(DateTime utcNow, Guid personId)
-		{
-			return _unitOfWork.Current()
-				.Session()
-				.CreateSQLQuery(scheduleQuery("PersonId = :PersonId"))
-				.SetParameter("PersonId", personId)
-				.SetParameter("StartDate", utcNow.Date.AddDays(-1))
-				.SetParameter("EndDate", utcNow.Date.AddDays(1))
-				.SetResultTransformer(Transformers.AliasToBean(typeof (internalScheduledActivity)))
-				.List<ScheduledActivity>();
-		}
-
-		public IEnumerable<ScheduledActivity> GetCurrentSchedules(DateTime utcNow, IEnumerable<Guid> personIds)
-		{
-			return _unitOfWork.Current()
-				.Session()
-				.CreateSQLQuery(scheduleQuery("PersonId IN (:PersonIds)"))
-				.SetParameterList("PersonIds", personIds)
-				.SetParameter("StartDate", utcNow.Date.AddDays(-1))
-				.SetParameter("EndDate", utcNow.Date.AddDays(1))
-				.SetResultTransformer(Transformers.AliasToBean(typeof(internalScheduledActivity)))
-				.List<ScheduledActivity>();
-		}
-
-		private static string scheduleQuery(string constraint)
-		{
-			return $@"
-SELECT
-	PersonId,
-	PayloadId,
-	StartDateTime as start,
-	EndDateTime as [end],
-	Name,
-	ShortName,
-	DisplayColor, 
-	BelongsToDate as date
-FROM ReadModel.ScheduleProjectionReadOnly
-WHERE 
-	{constraint} AND
-	BelongsToDate BETWEEN :StartDate AND :EndDate
-ORDER BY EndDateTime ASC";
-		}
-
-		private class internalScheduledActivity : ScheduledActivity
-		{
-			public DateTime date { set { base.BelongsToDate = new DateOnly(value); } }
-			public DateTime start { set { base.StartDateTime = DateTime.SpecifyKind(value, DateTimeKind.Utc); } }
-			public DateTime end { set { base.EndDateTime = DateTime.SpecifyKind(value, DateTimeKind.Utc); } }
 		}
 
 		public ConcurrentDictionary<string, int> Datasources()

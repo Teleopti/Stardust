@@ -30,6 +30,7 @@
 		RTA_ConnectionQueryOptimizeAllTheThings_40262,
 		RTA_RemoveSiteTeamOutOfAdherenceReadModels_40069,
         RTA_HideAgentsByStateGroup_40469,
+		RTA_FasterUpdateOfScheduleChanges_40536,
 
 
         MessageBroker_SchedulingScreenMailbox_32733,

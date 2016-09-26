@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 	[UnitOfWorkTest]
 	public class DatabaseReaderLoadScheduleTest
 	{
-		public IScheduleProjectionReadOnlyReader Reader;
+		public IScheduleReader Reader;
 		public MutableNow Now;
 		public IScheduleProjectionReadOnlyPersister Persister;
 

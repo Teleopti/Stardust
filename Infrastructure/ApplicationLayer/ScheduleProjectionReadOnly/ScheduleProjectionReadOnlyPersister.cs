@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -13,22 +14,22 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 {
     public class ScheduleProjectionReadOnlyPersister : IScheduleProjectionReadOnlyPersister
     {
-	    private readonly ICurrentUnitOfWork _currentUnitOfWork;
+	    private readonly ICurrentUnitOfWork _unitOfWork;
 
-	    public ScheduleProjectionReadOnlyPersister(ICurrentUnitOfWork currentUnitOfWork)
+	    public ScheduleProjectionReadOnlyPersister(ICurrentUnitOfWork unitOfWork)
 	    {
-		    _currentUnitOfWork = currentUnitOfWork;
+		    _unitOfWork = unitOfWork;
 	    }
 
 	    public ScheduleProjectionReadOnlyPersister(IUnitOfWorkFactory unitOfWorkFactory)
 	    {
-		    _currentUnitOfWork = new FromFactory(() => unitOfWorkFactory);
+		    _unitOfWork = new FromFactory(() => unitOfWorkFactory);
 	    }
 
 	    public IEnumerable<PayloadWorkTime> AbsenceTimePerBudgetGroup(DateOnlyPeriod period, IBudgetGroup budgetGroup,
                                                                       IScenario scenario)
         {
-	        return _currentUnitOfWork.Session().CreateSQLQuery(
+	        return _unitOfWork.Session().CreateSQLQuery(
 		        "exec ReadModel.LoadBudgetAllowanceReadModel @BudgetGroupId	= :budgetGroupId, @ScenarioId = :scenarioId, @DateFrom = :StartDate, @DateTo = :EndDate")
 		        .SetDateOnly("StartDate", period.StartDate)
 		        .SetDateOnly("EndDate", period.EndDate)
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 	    public bool BeginAddingSchedule(DateOnly date, Guid scenarioId, Guid personId,  int version)
         {
 
-		    return _currentUnitOfWork.Session().CreateSQLQuery(
+		    return _unitOfWork.Session().CreateSQLQuery(
 			    "exec ReadModel.DeleteScheduleProjectionReadOnly @PersonId=:person, @ScenarioId=:scenario, @BelongsToDate=:date, @Version=:version")
 			    .SetGuid("person", personId)
 			    .SetGuid("scenario", scenarioId)
@@ -54,7 +55,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 		public void AddActivity(ScheduleProjectionReadOnlyModel model)
 		{
 			
-			_currentUnitOfWork.Session().CreateSQLQuery(
+			_unitOfWork.Session().CreateSQLQuery(
 				@"exec ReadModel.UpdateScheduleProjectionReadOnly 
 					@PersonId=:PersonId,
 					@ScenarioId =:ScenarioId,
@@ -86,7 +87,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 		
         public bool IsInitialized()
         {
-			var result = _currentUnitOfWork.Session().CreateSQLQuery(
+			var result = _unitOfWork.Session().CreateSQLQuery(
                 "SELECT TOP 1 * FROM ReadModel.ScheduleProjectionReadOnly")
                                                      .List();
             return result.Count > 0;
@@ -94,7 +95,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 
 	    public IEnumerable<ScheduleProjectionReadOnlyModel> ForPerson(DateOnly date, Guid personId, Guid scenarioId)
 	    {
-			return _currentUnitOfWork.Session().CreateSQLQuery(
+			return _unitOfWork.Session().CreateSQLQuery(
 				   "SELECT PersonId,ScenarioId,BelongsToDate,PayloadId,StartDateTime,EndDateTime,WorkTime,Name,ShortName,DisplayColor,ContractTime FROM ReadModel.ScheduleProjectionReadOnly WHERE ScenarioId=:ScenarioId AND PersonId=:PersonId AND BelongsToDate=:Date")
 										   .SetGuid("ScenarioId", scenarioId)
 										   .SetGuid("PersonId", personId)
@@ -129,7 +130,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 	                                    ) a
                                     group by BelongsToDate";
 
-            var queryResult = _currentUnitOfWork.Session().CreateSQLQuery(query)
+            var queryResult = _unitOfWork.Session().CreateSQLQuery(query)
 														  .SetDateOnly("currentDate", currentDate)
                                                           .SetGuid("budgetGroupId", budgetGroupId)
                                                           .SetResultTransformer(Transformers.AliasToBean(typeof(AbsenceRequestInfo)))
@@ -151,6 +152,57 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 			public new long ContractTime { set { base.ContractTime = TimeSpan.FromTicks(value); } }
 			public new DateTime BelongsToDate { set { base.BelongsToDate = new DateOnly(value); } }
 		}
+
+		public IEnumerable<ScheduledActivity> ForPerson(DateOnly from, DateOnly to, Guid personId)
+		{
+			return _unitOfWork.Current()
+				.Session()
+				.CreateSQLQuery(scheduleQuery("PersonId = :PersonId"))
+				.SetParameter("PersonId", personId)
+				.SetParameter("StartDate", from.Date)
+				.SetParameter("EndDate", to.Date)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalScheduledActivity)))
+				.List<ScheduledActivity>();
+		}
+
+		public IEnumerable<ScheduledActivity> ForPersons(DateOnly from, DateOnly to, IEnumerable<Guid> personIds)
+		{
+			return _unitOfWork.Current()
+				.Session()
+				.CreateSQLQuery(scheduleQuery("PersonId IN (:PersonIds)"))
+				.SetParameterList("PersonIds", personIds)
+				.SetParameter("StartDate", from.Date)
+				.SetParameter("EndDate", to.Date)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalScheduledActivity)))
+				.List<ScheduledActivity>();
+		}
+		
+		private static string scheduleQuery(string constraint)
+		{
+			return $@"
+SELECT
+	PersonId,
+	PayloadId,
+	StartDateTime as start,
+	EndDateTime as [end],
+	Name,
+	ShortName,
+	DisplayColor, 
+	BelongsToDate as date
+FROM ReadModel.ScheduleProjectionReadOnly
+WHERE 
+	{constraint} AND
+	BelongsToDate BETWEEN :StartDate AND :EndDate
+ORDER BY EndDateTime ASC";
+		}
+
+		private class internalScheduledActivity : ScheduledActivity
+		{
+			public DateTime date { set { base.BelongsToDate = new DateOnly(value); } }
+			public DateTime start { set { base.StartDateTime = DateTime.SpecifyKind(value, DateTimeKind.Utc); } }
+			public DateTime end { set { base.EndDateTime = DateTime.SpecifyKind(value, DateTimeKind.Utc); } }
+		}
+
 	}
 
 	public class ActivityPeriod

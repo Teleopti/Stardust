@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, Guid.NewGuid(), "Lunch", "2014-10-20 10:00", "2014-10-20 11:00")
-				.WithSchedule(personId, Guid.NewGuid(), "Phone", "2014-10-20 11:00", "2014-10-20 11:00")
+				.WithSchedule(personId, Guid.NewGuid(), "Phone", "2014-10-20 11:00", "2014-10-20 12:00")
 				;
 			Now.Is("2014-10-20 10:00");
 

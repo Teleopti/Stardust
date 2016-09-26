@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly ICurrentDataSource _dataSource;
 		private readonly IConfigReader _config;
 
-		public ContextLoaderWithConnectionQueryOptimizeAllTheThings(IScheduleCacheStrategy scheduleCacheStrategy, ICurrentDataSource dataSource, IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper, IAgentStatePersister agentStatePersister, IMappingReader mappingReader, IDatabaseReader databaseReader, IScheduleProjectionReadOnlyReader scheduleProjectionReadOnlyReader, AppliedAdherence appliedAdherence, ProperAlarm appliedAlarm, IConfigReader config) : base(databaseLoader, now, stateMapper, agentStatePersister, mappingReader, databaseReader, scheduleProjectionReadOnlyReader, appliedAdherence, appliedAlarm)
+		public ContextLoaderWithConnectionQueryOptimizeAllTheThings(IScheduleCacheStrategy scheduleCacheStrategy, ICurrentDataSource dataSource, IDatabaseLoader databaseLoader, INow now, StateMapper stateMapper, IAgentStatePersister agentStatePersister, IMappingReader mappingReader, IDatabaseReader databaseReader, IScheduleReader scheduleReader, AppliedAdherence appliedAdherence, ProperAlarm appliedAlarm, IConfigReader config) : base(databaseLoader, now, stateMapper, agentStatePersister, mappingReader, databaseReader, scheduleReader, appliedAdherence, appliedAlarm)
 		{
 			_scheduleCacheStrategy = scheduleCacheStrategy;
 			_dataSource = dataSource;
@@ -376,7 +376,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							.ToArray();
 						if (loadSchedulesFor.Any())
 						{
-							var loaded = _scheduleProjectionReadOnlyReader.GetCurrentSchedules(now, loadSchedulesFor);
+							var loaded = ScheduleReader.GetCurrentSchedules(now, loadSchedulesFor);
 							var loadedSchedules = loadSchedulesFor
 								.Select(x => new scheduleData(_scheduleCacheStrategy.FilterSchedules(loaded.Where(l => l.PersonId == x), now), true, x));
 							schedules = schedules.Concat(loadedSchedules);

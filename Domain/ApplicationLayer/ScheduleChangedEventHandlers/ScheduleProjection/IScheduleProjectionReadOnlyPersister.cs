@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Interfaces.Domain;
 
@@ -17,6 +18,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 
 		IEnumerable<ScheduleProjectionReadOnlyModel> ForPerson(DateOnly date, Guid personId, Guid scenarioId);	
 
+		IEnumerable<ScheduledActivity> ForPerson(DateOnly from, DateOnly to, Guid personId);
+		IEnumerable<ScheduledActivity> ForPersons(DateOnly from, DateOnly to, IEnumerable<Guid> personIds);
 	}
 
 	public class ScheduleProjectionReadOnlyModel : IEquatable<ScheduleProjectionReadOnlyModel>
