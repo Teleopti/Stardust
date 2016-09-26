@@ -1,3 +1,3 @@
 ﻿(function () {
-    angular.module('wfm.permissions', ['ngResource', 'wfm.notice']);
+    angular.module('wfm.permissions', ['ngResource', 'ui.router','wfm.notice']);
 })();

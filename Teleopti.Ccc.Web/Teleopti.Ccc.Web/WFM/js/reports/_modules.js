@@ -1,6 +1,6 @@
 ﻿(function() {
 	'use strict';
 
-	angular.module('wfm.reports', ['currentUserInfoService', 'toggleService']);
+	angular.module('wfm.reports', ['currentUserInfoService', 'toggleService', 'ui.router']);
 
 })()
