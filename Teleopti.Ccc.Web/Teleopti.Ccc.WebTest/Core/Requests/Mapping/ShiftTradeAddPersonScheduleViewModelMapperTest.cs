@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			// dont know why I have to ignore arguments here but...
 			layerMapper.Expect(x => x.Map(shift.Projection)).Return(layerViewModels).IgnoreArguments().Repeat.Twice();
 
-			var target = new ShiftTradeAddPersonScheduleViewModelMapper(layerMapper, _personNameProvider, _personRepo);
+			var target = new ShiftTradeAddPersonScheduleViewModelMapper(layerMapper, _personNameProvider);
 			var result = target.Map(readModel);
 
 			result.PersonId.Should().Be.EqualTo(readModel.PersonId);
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			layerMapper.Stub(x => x.Map(shift.Projection)).Return(layerViewModels);
 
-			var target = new ShiftTradeAddPersonScheduleViewModelMapper(layerMapper, _personNameProvider, _personRepo);
+			var target = new ShiftTradeAddPersonScheduleViewModelMapper(layerMapper, _personNameProvider);
 			var result = target.Map(new[] { readModel, readModel });
 
 			result.Count.Should().Be.EqualTo(readModel.Total);
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			layerMapper.Stub(x => x.Map(shift.Projection)).Return(layerViewModels);
 
-			var target = new ShiftTradeAddPersonScheduleViewModelMapper(layerMapper, _personNameProvider, _personRepo);
+			var target = new ShiftTradeAddPersonScheduleViewModelMapper(layerMapper, _personNameProvider);
 
 			var result = target.Map(readModel);
 
@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			layerMapper.Stub(x => x.Map(shift.Projection)).Return(layerViewModels);
 
-			var target = new ShiftTradeAddPersonScheduleViewModelMapper(layerMapper, _personNameProvider, _personRepo);
+			var target = new ShiftTradeAddPersonScheduleViewModelMapper(layerMapper, _personNameProvider);
 
 			var result = target.Map(readModel);
 			result.ShiftExchangeOfferId.Should().Be.EqualTo(expectedId);

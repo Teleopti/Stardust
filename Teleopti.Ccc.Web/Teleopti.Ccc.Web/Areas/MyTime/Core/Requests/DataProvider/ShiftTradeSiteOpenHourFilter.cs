@@ -118,45 +118,41 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				});
 		}
 
-		public IEnumerable<IShiftExchangeOffer> FilterShiftExchangeOffer(IEnumerable<IShiftExchangeOffer> shiftExchangeOffers,
+		public bool FilterShiftExchangeOffer(IShiftExchangeOffer shiftExchangeOffer,
 			ShiftTradeAddPersonScheduleViewModel personFromScheduleView)
 		{
 			if (!isFilterEnabled())
 			{
-				return shiftExchangeOffers;
+				return true;
 			}
 
 			if (personFromScheduleView.ScheduleLayers == null || !personFromScheduleView.ScheduleLayers.Any())
 			{
-				return shiftExchangeOffers;
+				return true;
 			}
 
 			var personFrom = _loggedOnUser.CurrentUser();
 			var personFromSchedulePeriod = getSchedulePeriod(personFromScheduleView, personFrom.PermissionInformation.DefaultTimeZone());
 
-			return shiftExchangeOffers.Where(
-				shiftExchangeOffer =>
-				{
-					if (!shiftExchangeOffer.MyShiftPeriod.HasValue)
-					{
-						return true;
-					}
+			if (!shiftExchangeOffer.MyShiftPeriod.HasValue)
+			{
+				return true;
+			}
 
-					var personTo = shiftExchangeOffer.Person;
-					var personToScheduleDateTimePeriod = shiftExchangeOffer.MyShiftPeriod.Value;
-					var isSatisfiedPersonFromSiteOpenHours = _siteOpenHoursSpecification.IsSatisfiedBy(new SiteOpenHoursCheckItem
-					{
-						Period = personToScheduleDateTimePeriod,
-						Person = personFrom
-					});
-					var isSatisfiedPersonToSiteOpenHours = _siteOpenHoursSpecification.IsSatisfiedBy(new SiteOpenHoursCheckItem
-					{
-						Period = personFromSchedulePeriod,
-						Person = personTo
-					});
+			var personTo = shiftExchangeOffer.Person;
+			var personToScheduleDateTimePeriod = shiftExchangeOffer.MyShiftPeriod.Value;
+			var isSatisfiedPersonFromSiteOpenHours = _siteOpenHoursSpecification.IsSatisfiedBy(new SiteOpenHoursCheckItem
+			{
+				Period = personToScheduleDateTimePeriod,
+				Person = personFrom
+			});
+			var isSatisfiedPersonToSiteOpenHours = _siteOpenHoursSpecification.IsSatisfiedBy(new SiteOpenHoursCheckItem
+			{
+				Period = personFromSchedulePeriod,
+				Person = personTo
+			});
 
-					return isSatisfiedPersonFromSiteOpenHours && isSatisfiedPersonToSiteOpenHours;
-				});
+			return isSatisfiedPersonFromSiteOpenHours && isSatisfiedPersonToSiteOpenHours;
 		}
 
 		private bool isFilterEnabled()

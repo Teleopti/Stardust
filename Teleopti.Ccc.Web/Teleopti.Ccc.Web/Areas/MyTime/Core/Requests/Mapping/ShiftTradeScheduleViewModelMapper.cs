@@ -126,7 +126,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			if (myScheduleViewModel != null)
 			{
 				filteredShiftExchangeOffers =
-					_shiftTradeSiteOpenHourFilter.FilterShiftExchangeOffer(filteredShiftExchangeOffers, myScheduleViewModel);
+					filteredShiftExchangeOffers.Where(
+						shiftExchangeOffer =>
+							_shiftTradeSiteOpenHourFilter.FilterShiftExchangeOffer(shiftExchangeOffer, myScheduleViewModel));
 			}
 
 			var possibleTradeSchedule = getBulletinSchedules(filteredShiftExchangeOffers, data.Paging);
