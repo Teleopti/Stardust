@@ -131,13 +131,14 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 
 	    public DateTime GetLastCalculatedTime()
 	    {
-            var result = ((NHibernateUnitOfWork)_currentUnitOfWorkFactory.Current().CurrentUnitOfWork()).Session.CreateSQLQuery(
-                @"SELECT 
+	        var result =
+	            ( (NHibernateUnitOfWork) _currentUnitOfWorkFactory.Current().CurrentUnitOfWork()).Session.CreateSQLQuery(
+	                    @"SELECT 
 					max(CalculatedOn) as CalculatedOn
 				 FROM [ReadModel].[ScheduleForecastSkill]")
-                .List<DateTime>();
-
-            return result.FirstOrDefault();
+	                .UniqueResult<DateTime?>();
+            
+            return result.GetValueOrDefault();
         }
 	}
 }

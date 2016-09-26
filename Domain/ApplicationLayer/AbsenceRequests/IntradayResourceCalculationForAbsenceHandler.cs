@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using log4net;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.Collection;
@@ -9,6 +10,7 @@ using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -31,6 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
         private readonly IConfigReader _configReader;
         private static readonly ILog logger = LogManager.GetLogger(typeof(IntradayResourceCalculationForAbsenceHandler));
 
+
         public IntradayResourceCalculationForAbsenceHandler(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IBusinessUnitRepository businessUnitRepository, IPersonRepository personRepository, IUpdatedByScope updatedByScope, IBusinessUnitScope businessUnitScope, INow now, IEventPublisher publisher, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository, IConfigReader configReader)
         {
             _currentUnitOfWorkFactory = currentUnitOfWorkFactory;
@@ -44,7 +47,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
             _configReader = configReader;
         }
 
-        public void Handle(TenantMinuteTickEvent @event)
+        public virtual void Handle(TenantMinuteTickEvent @event)
         {
             //for now its 20 minutes should it be 10 minutes? and its going to calculate data from now till next 24 hours
 
