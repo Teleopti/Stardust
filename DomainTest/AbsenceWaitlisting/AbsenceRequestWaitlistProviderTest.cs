@@ -112,8 +112,8 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 
 			Assert.AreEqual(4, waitlist.Length);
 
-			Assert.IsTrue(waitlist[0].Request == absenceRequest1);
-			Assert.IsTrue(waitlist[1].Request == absenceRequest4);
+			Assert.IsTrue(waitlist[0].Request == absenceRequest4);
+			Assert.IsTrue(waitlist[1].Request == absenceRequest1);
 			Assert.IsTrue(waitlist[2].Request == absenceRequest3);
 			Assert.IsTrue(waitlist[3].Request == absenceRequest2);
 		}
