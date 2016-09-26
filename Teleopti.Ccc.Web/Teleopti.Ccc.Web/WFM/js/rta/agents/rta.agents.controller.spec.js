@@ -417,7 +417,7 @@ describe('RtaAgentsCtrl', function() {
 			}
 		}
 	}].forEach(function(selection) {
-		it('should get selected state for ' + selection.name, function() {
+		it('should hide states when unselecting state for ' + selection.name, function() {
 			stateParams[selection.type] = selection.id;
 			$fakeBackend
 				.withAgent(

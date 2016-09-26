@@ -48,13 +48,13 @@
 				$scope.timestamp = "";
 				$scope.agents = [];
 				$scope.states = [];
+				$scope.filteredData = [];
 				$scope.format = RtaFormatService.formatDateTime;
 				$scope.formatDuration = RtaFormatService.formatDuration;
 				$scope.hexToRgb = RtaFormatService.formatHexToRgb;
 				$scope.agentDetailsUrl = RtaRouteService.urlForAgentDetails;
 				$scope.goBackToRootWithUrl = RtaRouteService.urlForSites;
 				$scope.goBackToTeamsWithUrl = RtaRouteService.urlForTeams(siteIds[0]);
-				$scope.filteredData = [];
 				$scope.agentsInAlarm = !$stateParams.showAllAgents;
 				var allGrid = RtaGridService.makeAllGrid();
 				allGrid.data = 'filteredData';
