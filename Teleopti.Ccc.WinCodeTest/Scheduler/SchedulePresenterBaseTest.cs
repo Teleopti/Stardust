@@ -1402,10 +1402,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             var dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2001, 1, 1), (TimeZoneInfo.Local));
             var person = _mocks.StrictMock<IPerson>();
-            var personPeriod = _mocks.StrictMock<IPersonPeriod>();
             var ass = _mocks.StrictMock<IPersonAssignment>();
-            var mainShift = EditableShiftFactory.CreateEditorShiftWithThreeActivityLayers();
-            var period = _schedulerState.RequestedPeriod.Period();
             IList<IMultiplicatorDefinitionSet> multiplicatorDefinitionSets = new List<IMultiplicatorDefinitionSet>();
             var schedulePart = _mocks.StrictMock<IScheduleDay>();
             var dialog = _mocks.StrictMock<IAddOvertimeViewModel>();
@@ -1413,11 +1410,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(_viewBase.SelectedSchedules()).Return(new List<IScheduleDay> { schedulePart });
 			Expect.Call(_viewBase.CreateAddOvertimeViewModel( null, multiplicatorDefinitionSets, null, new DateTimePeriod(2001, 1, 1, 2001, 1, 2), TimeZoneInfo.Local)).IgnoreArguments().Return(dialog);
             Expect.Call(schedulePart.PersonAssignment()).Return(ass);
-            //Expect.Call(ass.Period).Return(period);
 			Expect.Call(ass.MainActivities()).Return(new List<IMainShiftLayer>());
             Expect.Call(dialog.Result).Return(false);
             LastCall.Repeat.Once();
-            Expect.Call(schedulePart.Person).Return(person);
+            Expect.Call(schedulePart.Person).Return(person).Repeat.AtLeastOnce();
             Expect.Call(schedulePart.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod);
             Expect.Call(person.IsAgent(new DateOnly(2001,1,1))).Return(true);
 			Expect.Call(ass.OvertimeActivities()).Return(new List<IOvertimeShiftLayer>());
@@ -1439,7 +1435,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(schedulePart.PersonAssignment()).Return(ass);
 			Expect.Call(ass.MainActivities()).Return(new List<IMainShiftLayer>());
             Expect.Call(schedulePart.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2)).Repeat.Twice();
-            Expect.Call(schedulePart.Person).Return(person);
+            Expect.Call(schedulePart.Person).Return(person).Repeat.AtLeastOnce();
             Expect.Call(schedulePart.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod);
             Expect.Call(person.IsAgent(new DateOnly(2001, 1, 1))).Return(false);
             Expect.Call(() => _viewBase.ShowInformationMessage(UserTexts.Resources.CouldNotAddOverTimeNoPersonPeriods, UserTexts.Resources.Information));
