@@ -14964,7 +14964,7 @@ These options are activated:
     <comment>Used in the Options Module to define Shift Trade Request Settings that appear under the System Settings option</comment>
   </data>
   <data name="MoveInvalidOverlappedActivity" xml:space="preserve">
-    <value>Move invalid overlapped activity</value>
+    <value>Move Invalid Overlapped Activity</value>
     <comment>The MoveInvalidOverlappedActivity command</comment>
   </data>
   <data name="NoPermissionToMoveInvalidOverlappedActivity" xml:space="preserve">

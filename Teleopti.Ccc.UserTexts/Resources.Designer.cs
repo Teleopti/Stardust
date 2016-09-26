@@ -16397,7 +16397,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Move invalid overlapped activity.
+        ///   Looks up a localized string similar to Move Invalid Overlapped Activity.
         /// </summary>
         public static string MoveInvalidOverlappedActivity {
             get {
