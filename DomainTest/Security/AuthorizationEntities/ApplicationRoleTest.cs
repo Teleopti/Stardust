@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
             Assert.AreEqual(setValue, getValue);
         }
 
-        [Test, Explicit("Tamas! Have a look at this one!")]
+        [Test]
         public void VerifyBusinessUnitCanBeSet()
         {
             Assert.IsNull(_target.BusinessUnit);

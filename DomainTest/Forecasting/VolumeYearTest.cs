@@ -8,7 +8,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting
 {
-	[Explicit("Integration test")]
 	[TestFixture, Category("LongRunning")]
 	public class VolumeYearTest
 	{

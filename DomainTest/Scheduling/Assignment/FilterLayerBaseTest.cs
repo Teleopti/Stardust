@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Assert.AreEqual(1, target.FilterLayers(createPeriod(11, 12)).Count());
         }
 
-        [Test, Explicit("Keep this for perf test")]
+        [Test]
         public void PerformanceTestToRunWithDotTrace()
 		{
 			internalCollection.Add(createLayer(4, 7));

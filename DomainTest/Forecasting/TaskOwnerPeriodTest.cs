@@ -182,8 +182,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         /// Created by: robink
         /// Created date: 2007-12-17
         /// </remarks>
-        [Test, Explicit("Integration test")]
-        [Category("LongRunning")]
+        [Test]
         public void VerifyNumberOfDaysInMonthForAllCultures()
         {
             CultureInfo[] cultures = CultureInfo.GetCultures(CultureTypes.SpecificCultures);
