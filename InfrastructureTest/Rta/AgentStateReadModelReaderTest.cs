@@ -114,42 +114,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		}
 
 		[Test]
-		public void ShouldLoadStatesInAlarmForTeamsExcludingStateGroups()
-		{
-			Now.Is("2016-06-15 12:00");
-			var teamId = Guid.NewGuid();
-			var personId1 = Guid.NewGuid();
-			var loggedOut = Guid.NewGuid();
-			Persister.Persist(new AgentStateReadModelForTest
-			{
-				PersonId = personId1,
-				TeamId = teamId,
-				AlarmStartTime = "2016-06-15 12:00".Utc(),
-				IsRuleAlarm = true,
-				StateGroupId = Guid.NewGuid()
-			});
-			Persister.Persist(new AgentStateReadModelForTest
-			{
-				PersonId = Guid.NewGuid(),
-				TeamId = teamId,
-				AlarmStartTime = "2016-06-15 12:00".Utc(),
-				IsRuleAlarm = true,
-				StateGroupId = loggedOut
-			});
-			Persister.Persist(new AgentStateReadModelForTest
-			{
-				PersonId = Guid.NewGuid(),
-				TeamId = teamId,
-				AlarmStartTime = null,
-				IsRuleAlarm = false,
-				StateGroupId = Guid.NewGuid()
-			});
-
-			Target.LoadAlarmsForTeams(new[] { teamId }, new [] {loggedOut})
-				.Single().PersonId.Should().Be(personId1);
-		}
-
-		[Test]
 		public void ShouldLoadStatesOrderByLongestAlarmTimeFirst()
 		{
 			Now.Is("2016-06-15 12:00");
@@ -212,41 +176,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		}
 
 
-		[Test]
-		public void ShouldLoadStatesInAlarmForSitesExcludingStateGroups()
-		{
-			Now.Is("2016-06-15 12:00");
-			var siteId = Guid.NewGuid();
-			var personId1 = Guid.NewGuid();
-			var loggedOut = Guid.NewGuid();
-			Persister.Persist(new AgentStateReadModelForTest
-			{
-				PersonId = personId1,
-				SiteId = siteId,
-				AlarmStartTime = "2016-06-15 12:00".Utc(),
-				IsRuleAlarm = true,
-				StateGroupId = Guid.NewGuid()
-			});
-			Persister.Persist(new AgentStateReadModelForTest
-			{
-				PersonId = Guid.NewGuid(),
-				SiteId = siteId,
-				AlarmStartTime = "2016-06-15 12:00".Utc(),
-				IsRuleAlarm = true,
-				StateGroupId = loggedOut
-			});
-			Persister.Persist(new AgentStateReadModelForTest
-			{
-				PersonId = Guid.NewGuid(),
-				SiteId = siteId,
-				AlarmStartTime = null,
-				IsRuleAlarm = false,
-				StateGroupId = Guid.NewGuid()
-			});
-
-			Target.LoadAlarmsForSites(new[] { siteId }, new[] { loggedOut })
-				.Single().PersonId.Should().Be(personId1);
-		}
 		
 		[Test]
 		public void ShouldLoadWithStateGroupId()

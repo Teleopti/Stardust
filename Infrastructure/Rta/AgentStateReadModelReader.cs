@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public IEnumerable<AgentStateReadModel> LoadAlarmsForSites(IEnumerable<Guid> siteIds, IEnumerable<Guid> excludedStateGroupIds)
 		{
-			var query = string.Format(selectAgentState, " TOP 50 ", @"WITH (NOLOCK) WHERE StateGroupId NOT IN (:excludedStateGroupIds) AND SiteId IN (:siteIds) AND AlarmStarttime <= :now ORDER BY AlarmStartTime ASC");
+			var query = string.Format(selectAgentState, " TOP 50 ", @"WITH (NOLOCK) WHERE (StateGroupId NOT IN (:excludedStateGroupIds) OR StateGroupId IS NULL) AND SiteId IN (:siteIds) AND AlarmStarttime <= :now ORDER BY AlarmStartTime ASC");
 			return transform(_unitOfWork.Current().Session()
 				.CreateSQLQuery(query)
 				.SetParameterList("siteIds", siteIds)
@@ -115,17 +115,43 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				);
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadAlarmsForTeams(IEnumerable<Guid> teamIds, IEnumerable<Guid> excludedStateGroupIds)
+
+		private const string selectAgentStateInAlarm = @"SELECT TOP 50 * FROM [ReadModel].AgentState WITH (NOLOCK) WHERE {0} AND AlarmStartTime <= :now ORDER BY AlarmStartTime ASC";
+
+		public IEnumerable<AgentStateReadModel> LoadAlarmsForTeams(IEnumerable<Guid> teamIds,
+			IEnumerable<Guid?> excludedStateGroupIds)
 		{
-			var query = string.Format(selectAgentState, " TOP 50 ", @"WITH (NOLOCK) WHERE StateGroupId NOT IN (:excludedStateGroupIds) AND TeamId IN (:teamIds) AND AlarmStartTime <= :now ORDER BY AlarmStartTime ASC");
-			return transform(_unitOfWork.Current().Session()
-				.CreateSQLQuery(query)
-				.SetParameterList("teamIds", teamIds)
-				.SetParameterList("excludedStateGroupIds", excludedStateGroupIds)
-				.SetParameter("now", _now.UtcDateTime())
-				);
+			var stateGroupIdsWithoutNull = excludedStateGroupIds.Where(x => x != null);
+			if (excludedStateGroupIds.All(x => x == null))
+			{
+				return transform(
+					createSQLQuery(string.Format(selectAgentStateInAlarm,
+						"StateGroupId IS NOT NULL AND TeamId IN (:teamIds)"),
+						q => q.SetParameterList("teamIds", teamIds),
+						q => q));
+			}
+			if (excludedStateGroupIds.Any(x => x == null))
+			{
+				return transform(
+					createSQLQuery(string.Format(selectAgentStateInAlarm,
+						"StateGroupId NOT IN (:excludedStateGroupIds) AND StateGroupId IS NOT NULL AND TeamId IN (:teamIds)"),
+						q => q.SetParameterList("teamIds", teamIds),
+						q => q.SetParameterList("excludedStateGroupIds", stateGroupIdsWithoutNull)));
+			}
+			return transform(
+				createSQLQuery(string.Format(selectAgentStateInAlarm,
+					"(StateGroupId NOT IN (:excludedStateGroupIds) OR StateGroupId IS NULL) AND TeamId IN (:teamIds)"),
+					q => q.SetParameterList("teamIds", teamIds),
+					q => q.SetParameterList("excludedStateGroupIds", stateGroupIdsWithoutNull)));
 		}
 
+		private IQuery createSQLQuery(string query, Func<IQuery, IQuery> func2, Func<IQuery, IQuery> func)
+		{
+			return func2(func(_unitOfWork.Current().Session()
+					.CreateSQLQuery(query)
+					.SetParameter("now", _now.UtcDateTime())));
+		}
+		
 		private const string agentsForSkillQuery = @"
 SELECT DISTINCT {0}
 	a.*
@@ -164,7 +190,7 @@ AND :today BETWEEN g.StartDate and g.EndDate
 
 		public IEnumerable<AgentStateReadModel> LoadAlarmsForSkills(IEnumerable<Guid> skillIds, IEnumerable<Guid> excludedStateGroupIds)
 		{
-			var query = string.Format(agentsForSkillQuery, " TOP 50 ", " AND AlarmStartTime <= :now AND StateGroupId NOT IN (:excludedStateGroupIds) ORDER BY AlarmStartTime ASC ");
+			var query = string.Format(agentsForSkillQuery, " TOP 50 ", " AND (StateGroupId NOT IN (:excludedStateGroupIds) OR StateGroupId IS NULL) AND AlarmStartTime <= :now ORDER BY AlarmStartTime ASC ");
 			return transform(
 				_unitOfWork.Current().Session()
 				.CreateSQLQuery(query)

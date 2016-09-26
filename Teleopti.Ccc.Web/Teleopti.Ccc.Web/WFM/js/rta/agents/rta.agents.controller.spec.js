@@ -385,26 +385,7 @@ describe('RtaAgentsCtrl', function() {
 
 		expect(scope.states.length).toEqual(1);
 	});
-
-	it('should not have empty state', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
-		$fakeBackend.withAgent({
-				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
-			})
-			.withState({
-				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				State: "",
-				StateId: null,
-				TimeInAlarm: 15
-			});
-
-		$controllerBuilder.createController()
-			.apply('agentsInAlarm = true');
-
-		expect(scope.states.length).toEqual(0);
-	});
-
+	
 	it('should order states by name', function() {
 		stateParams.teamId = "teamGuid";
 		$fakeBackend.withAgent({

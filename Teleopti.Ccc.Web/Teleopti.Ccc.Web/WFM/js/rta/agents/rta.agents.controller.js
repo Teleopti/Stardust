@@ -217,13 +217,12 @@
 								.map(function(s) {
 									return s.Id;
 								})
-								.indexOf(state.StateId) === -1 && 
-								state.StateId!==null) {
+								.indexOf(state.StateId) === -1) {
 								$scope.states.push({
 									Id: state.StateId,
 									Name: state.State,
-									Selected: true,
-								})
+									Selected: true
+								});
 							}
 						}
 					});

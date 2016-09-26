@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				select m;
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadAlarmsForTeams(IEnumerable<Guid> teamIds, IEnumerable<Guid> excludedStateGroupIds)
+		public IEnumerable<AgentStateReadModel> LoadAlarmsForTeams(IEnumerable<Guid> teamIds, IEnumerable<Guid?> excludedStateGroupIds)
 		{
 			return from s in teamIds
 				from m in _data.Values
