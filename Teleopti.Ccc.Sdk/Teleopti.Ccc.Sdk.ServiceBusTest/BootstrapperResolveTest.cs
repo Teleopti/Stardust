@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Autofac;
 using NUnit.Framework;
 using Rhino.ServiceBus;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 				createFakeBus(container, new Uri("dummy://test"));
 
 				new ContainerConfiguration(container, new FalseToggleManager()).Configure(null);
-				var fakeBus = new ConfigFileDefaultHost("testQueue.config", new BusBootStrapper(container));
+				var fakeBus = new ConfigFileDefaultHost(Path.Combine(TestContext.CurrentContext.TestDirectory, "testQueue.config"), new BusBootStrapper(container));
 				fakeBus.Start();
 				fakeBus.Dispose();
 			}

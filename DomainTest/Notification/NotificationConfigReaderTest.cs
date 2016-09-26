@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Xml;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Notification;
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		[SetUp]
 		public void Setup()
 		{
-			_target = new NotificationConfigReader("NotificationConfig.xml.notinuse");
+			_target = new NotificationConfigReader(Path.Combine(TestContext.CurrentContext.TestDirectory, "NotificationConfig.xml.notinuse"));
 			_emptyDoc = @"<?xml version='1.0' encoding='utf-8' ?>
 					<Config>
 					</Config>";

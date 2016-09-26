@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.DayInMonthIndex
 
         private IList<ITaskOwner> getWorkloadDays()
         {
-            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"Forecasting\DayInMonthIndex\DayInMonthSeasonalityData.txt");
+            string path = Path.Combine(TestContext.CurrentContext.TestDirectory, @"Forecasting\DayInMonthIndex\DayInMonthSeasonalityData.txt");
             var ret = new List<ITaskOwner>();
             string line;
             var file = new StreamReader(path);
