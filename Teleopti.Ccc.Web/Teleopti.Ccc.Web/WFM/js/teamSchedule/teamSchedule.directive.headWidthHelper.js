@@ -10,6 +10,7 @@
 					element.css({"width":"100%"});
 				}else{
 					//desktop: keep width of calc( 100% - 1.2em + 1px );
+					element.css({"width":"calc( 100% - 1.2em + 1px )"});
 	        	}
 	        }
 	    }
