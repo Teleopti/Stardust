@@ -49,6 +49,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			Assert.AreEqual(0, weekOfMonth.PeriodTypeCollection.Count);
 		}
 
+		private void areEqualWithDelta(double expected, double actual)
+		{
+			Assert.AreEqual(expected, actual, 0.0000001);
+		}
 		#endregion
 
 		#region Month
@@ -407,10 +411,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
 			//Should be 1.5 larger after aftertalktimeindex is set
 			monthOfYear.PeriodTypeCollection[1].AfterTalkTimeIndex = 1.5;
-			Assert.AreEqual(Math.Round((averageBefore * 1.5) / indexBefore, 3), Math.Round(monthOfYear.PeriodTypeCollection[1].AverageAfterWorkTime.TotalSeconds, 3));
+			areEqualWithDelta(Math.Round((averageBefore * 1.5) / indexBefore, 3), Math.Round(monthOfYear.PeriodTypeCollection[1].AverageAfterWorkTime.TotalSeconds, 3));
 
 			monthOfYear.PeriodTypeCollection[1].AfterTalkTimeIndex = indexBefore; //Should now go back to original
-			Assert.AreEqual(Math.Round(averageBefore, 3), Math.Round(monthOfYear.PeriodTypeCollection[1].AverageAfterWorkTime.TotalSeconds, 3));
+			areEqualWithDelta(Math.Round(averageBefore, 3), Math.Round(monthOfYear.PeriodTypeCollection[1].AverageAfterWorkTime.TotalSeconds, 3));
 
 			indexBefore = monthOfYear.PeriodTypeCollection[1].AfterTalkTimeIndex;
 			double secondsAverageBefore2 = monthOfYear.PeriodTypeCollection[1].AverageAfterWorkTime.TotalSeconds;
@@ -418,17 +422,17 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
 			monthOfYear.PeriodTypeCollection[1].AverageAfterWorkTime = new TimeSpan(0, 0, 8);
 
-			Assert.AreEqual(Math.Round((8 / secondsAverageBefore2) * indexBefore, 3), Math.Round(monthOfYear.PeriodTypeCollection[1].AfterTalkTimeIndex, 3));
+			areEqualWithDelta(Math.Round((8 / secondsAverageBefore2) * indexBefore, 3), Math.Round(monthOfYear.PeriodTypeCollection[1].AfterTalkTimeIndex, 3));
 
 			////Set it back and the index should also set back
 			monthOfYear.PeriodTypeCollection[1].AverageAfterWorkTime = new TimeSpan(ticksAverageBefore2);
-			Assert.AreEqual(indexBefore, monthOfYear.PeriodTypeCollection[1].AfterTalkTimeIndex);
+			areEqualWithDelta(indexBefore, monthOfYear.PeriodTypeCollection[1].AfterTalkTimeIndex);
 
 			//Also give it a below zero value
 			indexBefore = monthOfYear.PeriodTypeCollection[1].AfterTalkTimeIndex;
 			averageBefore = monthOfYear.PeriodTypeCollection[1].AverageAfterWorkTime.TotalSeconds;
 			monthOfYear.PeriodTypeCollection[1].AfterTalkTimeIndex = 0.5;
-			Assert.AreEqual(Math.Round((averageBefore * 0.5) / indexBefore, 3), Math.Round(monthOfYear.PeriodTypeCollection[1].AverageAfterWorkTime.TotalSeconds, 3));
+			areEqualWithDelta(Math.Round((averageBefore * 0.5) / indexBefore, 3), Math.Round(monthOfYear.PeriodTypeCollection[1].AverageAfterWorkTime.TotalSeconds, 3));
 		}
 		#endregion
 
@@ -714,10 +718,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
 			//Should be 1.5 larger after aftertalktimeindex is set
 			weekOfMonth.PeriodTypeCollection[1].AfterTalkTimeIndex = 1.5;
-			Assert.AreEqual(Math.Round((averageBefore * 1.5) / indexBefore, 3), Math.Round(weekOfMonth.PeriodTypeCollection[1].AverageAfterWorkTime.TotalSeconds, 3));
+			areEqualWithDelta(Math.Round((averageBefore * 1.5) / indexBefore, 3), Math.Round(weekOfMonth.PeriodTypeCollection[1].AverageAfterWorkTime.TotalSeconds, 3));
 
 			weekOfMonth.PeriodTypeCollection[1].AfterTalkTimeIndex = indexBefore; //Should now go back to original
-			Assert.AreEqual(Math.Round(averageBefore, 3), Math.Round(weekOfMonth.PeriodTypeCollection[1].AverageAfterWorkTime.TotalSeconds, 3));
+			areEqualWithDelta(Math.Round(averageBefore, 3), Math.Round(weekOfMonth.PeriodTypeCollection[1].AverageAfterWorkTime.TotalSeconds, 3));
 
 			indexBefore = weekOfMonth.PeriodTypeCollection[1].AfterTalkTimeIndex;
 			double secondsAverageBefore2 = weekOfMonth.PeriodTypeCollection[1].AverageAfterWorkTime.TotalSeconds;
@@ -725,17 +729,17 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
 			weekOfMonth.PeriodTypeCollection[1].AverageAfterWorkTime = new TimeSpan(0, 0, 8);
 
-			Assert.AreEqual(Math.Round((8 / secondsAverageBefore2) * indexBefore, 3), Math.Round(weekOfMonth.PeriodTypeCollection[1].AfterTalkTimeIndex, 3));
+			areEqualWithDelta(Math.Round((8 / secondsAverageBefore2) * indexBefore, 3), Math.Round(weekOfMonth.PeriodTypeCollection[1].AfterTalkTimeIndex, 3));
 
 			////Set it back and the index should also set back
 			weekOfMonth.PeriodTypeCollection[1].AverageAfterWorkTime = new TimeSpan(ticksAverageBefore2);
-			Assert.AreEqual(indexBefore, weekOfMonth.PeriodTypeCollection[1].AfterTalkTimeIndex);
+			areEqualWithDelta(indexBefore, weekOfMonth.PeriodTypeCollection[1].AfterTalkTimeIndex);
 
 			//Also give it a below zero value
 			indexBefore = weekOfMonth.PeriodTypeCollection[1].AfterTalkTimeIndex;
 			averageBefore = weekOfMonth.PeriodTypeCollection[1].AverageAfterWorkTime.TotalSeconds;
 			weekOfMonth.PeriodTypeCollection[1].AfterTalkTimeIndex = 0.5;
-			Assert.AreEqual(Math.Round((averageBefore * 0.5) / indexBefore, 3), Math.Round(weekOfMonth.PeriodTypeCollection[1].AverageAfterWorkTime.TotalSeconds, 3));
+			areEqualWithDelta(Math.Round((averageBefore * 0.5) / indexBefore, 3), Math.Round(weekOfMonth.PeriodTypeCollection[1].AverageAfterWorkTime.TotalSeconds, 3));
 		}
 
 		#endregion
