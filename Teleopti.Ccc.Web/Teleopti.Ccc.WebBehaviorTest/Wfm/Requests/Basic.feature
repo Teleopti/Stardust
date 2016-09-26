@@ -1,4 +1,5 @@
-﻿@OnlyRunIfEnabled('Wfm_Requests_Basic_35986')
+﻿@WFM
+@OnlyRunIfEnabled('Wfm_Requests_Basic_35986')
 Feature: Requests Basic Operations
 	In order to approval/deny agent's requests
 	As a resource planner

@@ -1,4 +1,5 @@
-﻿@ignore
+﻿@RTA
+@ignore
 Feature: Adherence details
 	In order to easier check realtime/historical adherence details for agents
 	As a real time analyst

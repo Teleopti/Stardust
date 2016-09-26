@@ -1,4 +1,5 @@
-﻿Feature: AdjustSkillsAfterTraining
+﻿@WFM
+Feature: AdjustSkillsAfterTraining
 	In order to let new employed agents work with new skills after training
 	As a resource planner
 	I want to assign new skills to the agents

@@ -1,4 +1,5 @@
-﻿Feature: Monitor agents by skill area
+﻿@RTA
+Feature: Monitor agents by skill area
 	In order to monitor and drive adherence
 	As an intraday analyst
 	I want to see what agents are doing based on skill area

@@ -1,4 +1,5 @@
-﻿Feature: Add intraday absence on shift
+﻿@Anywhere
+Feature: Add intraday absence on shift
 	In order to keep track of persons absences
 	As a team leader
 	I want to add that an agent is absent for a part of his/her shift

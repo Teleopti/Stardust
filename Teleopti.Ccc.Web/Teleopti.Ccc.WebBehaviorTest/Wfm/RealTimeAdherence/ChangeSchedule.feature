@@ -1,4 +1,4 @@
-﻿
+﻿@RTA
 Feature: Change schedule
 	In order to ...
 	As a real time analyst

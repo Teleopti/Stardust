@@ -1,4 +1,5 @@
-﻿Feature: ImportUsers
+﻿@WFM
+Feature: ImportUsers
 	In order to easily create large amount of users
 	As a IT administrator
 	I want to add users by importing a file which includes all users I want to add

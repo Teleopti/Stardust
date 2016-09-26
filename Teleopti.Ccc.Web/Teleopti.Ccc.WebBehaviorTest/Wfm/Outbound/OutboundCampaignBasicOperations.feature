@@ -1,4 +1,5 @@
-﻿Feature: OutboundCampaignBasicOperations
+﻿@WFM
+Feature: OutboundCampaignBasicOperations
 	In order to plan outbound campaigns
 	As a resource planner
 	I want to perform basic operations for outbound campaigns

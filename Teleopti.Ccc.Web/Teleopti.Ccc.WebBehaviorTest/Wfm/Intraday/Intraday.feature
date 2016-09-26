@@ -1,4 +1,5 @@
-﻿Feature: Intraday
+﻿@WFM
+Feature: Intraday
     In order to be in control of my part of the business
     As an intraday analyst
     I want to be able to monitor my part of the business

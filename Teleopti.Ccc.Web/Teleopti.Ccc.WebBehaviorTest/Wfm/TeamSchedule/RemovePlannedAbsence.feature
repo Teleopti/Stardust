@@ -1,4 +1,5 @@
-﻿@OnlyRunIfEnabled('WfmTeamSchedule_RemoveAbsence_36705')
+﻿@WFM
+@OnlyRunIfEnabled('WfmTeamSchedule_RemoveAbsence_36705')
 Feature: Remove Planned Absence
 	As a team leader
 	I need to remove or shorten absences for multiple reasons.

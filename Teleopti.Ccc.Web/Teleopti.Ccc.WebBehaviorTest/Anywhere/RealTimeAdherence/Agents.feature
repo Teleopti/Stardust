@@ -1,4 +1,5 @@
-﻿Feature: Real time adherence agents
+﻿@RTA
+Feature: Real time adherence agents
 	In order to easier find the agent to blame
 	As a real time analyst
 	I want to see who is currently not adhering to the schedule

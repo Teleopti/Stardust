@@ -1,4 +1,5 @@
-﻿Feature: Neutral adherence policy
+﻿@RTA
+Feature: Neutral adherence policy
 	In order to improve adherence with neutral alarm occured
 	As a real time analyst
 	I want to see correct adherence value

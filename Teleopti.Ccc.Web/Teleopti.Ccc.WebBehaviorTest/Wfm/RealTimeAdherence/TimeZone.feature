@@ -1,4 +1,4 @@
-﻿
+﻿@RTA
 Feature: Time zone
 	In order to improve hawaii agents adherence 
 	As a real time analyst

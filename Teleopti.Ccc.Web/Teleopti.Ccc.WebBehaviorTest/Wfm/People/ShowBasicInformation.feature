@@ -1,4 +1,5 @@
-﻿Feature: ShowBasicInformation
+﻿@WFM
+Feature: ShowBasicInformation
 	In order to have an overview about the group
 	As a team leader
 	I want to view the basic information of all the people in specific group

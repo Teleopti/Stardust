@@ -1,4 +1,5 @@
-﻿Feature: Preferences feedback
+﻿@MyTimePreferences
+Feature: Preferences feedback
 	In order to know at which times I might work
 	As an agent
 	I want feedback for my preferences

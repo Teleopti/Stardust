@@ -1,4 +1,5 @@
-﻿@OnlyRunIfEnabled('Wfm_Requests_Filtering_37748')
+﻿@WFM
+@OnlyRunIfEnabled('Wfm_Requests_Filtering_37748')
 Feature: Filtering
 	In order to approve certain requests before other.
 	As a manager

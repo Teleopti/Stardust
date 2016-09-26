@@ -1,4 +1,5 @@
-﻿@OnlyRunIfEnabled('Wfm_Requests_ShiftTrade_37751')
+﻿@WFM
+@OnlyRunIfEnabled('Wfm_Requests_ShiftTrade_37751')
 Feature: Shift Trade Requests
 	In order to approval/deny agent's shift trade requests
 	As a resource planner

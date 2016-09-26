@@ -1,4 +1,5 @@
-﻿Feature: Alarm context
+﻿@RTA
+Feature: Alarm context
 	In order to have an idea why an agent is out of adherence or in alarm
 	As a real time analyst
 	I do want to see parts of the agents shift to give me some context

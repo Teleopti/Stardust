@@ -1,4 +1,5 @@
-﻿Feature: Add full day absence
+﻿@Anywhere
+Feature: Add full day absence
 	In order to keep track of persons absences
 	As a team leader
 	I want to add absence for an person

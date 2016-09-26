@@ -1,4 +1,5 @@
-﻿Feature: Team schedule sorting
+﻿@Anywhere
+Feature: Team schedule sorting
 	In order to easily find who is working at a specific time
 	As a team leader
 	I want to get the persons sorted in order of the schedules

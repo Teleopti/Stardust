@@ -1,4 +1,5 @@
-﻿Feature: View activity and absence details in team schedule
+﻿@Anywhere
+Feature: View activity and absence details in team schedule
 	In order to know what the agents are scheduled to work on
 	As a team leader
 	I want to see the activity or absence name and the start/end times

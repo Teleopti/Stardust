@@ -1,4 +1,5 @@
-﻿Feature: Seat Map
+﻿@WFM
+Feature: Seat Map
 	As a seat planner
 	I want to manage locations and seats
 

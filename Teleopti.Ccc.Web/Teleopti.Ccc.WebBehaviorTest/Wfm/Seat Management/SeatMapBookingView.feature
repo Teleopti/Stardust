@@ -1,4 +1,5 @@
-﻿Feature: SeatMapBookingView
+﻿@WFM
+Feature: SeatMapBookingView
 	I want to view the seat bookings and assign agents to seat
 
 Background: 

@@ -1,4 +1,5 @@
-﻿Feature: View group schedule
+﻿@Anywhere
+Feature: View group schedule
 	In order to contact agents with a specific skill
 	or belonging to a specific team
 	or that are part-timers

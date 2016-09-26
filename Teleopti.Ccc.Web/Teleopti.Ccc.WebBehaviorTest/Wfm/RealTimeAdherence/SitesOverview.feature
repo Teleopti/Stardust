@@ -1,4 +1,5 @@
-﻿Feature: Sites overview
+﻿@RTA
+Feature: Sites overview
 	In order to easier find the site leader to blame
 	As a real time analyst
 	I want to see how many agents that are in alarm for each site

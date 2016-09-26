@@ -1,4 +1,5 @@
-﻿Feature: Adherence percentage
+﻿@RTA
+Feature: Adherence percentage
 	In order to ...
 	As a real time analyst
 	I want to see ...

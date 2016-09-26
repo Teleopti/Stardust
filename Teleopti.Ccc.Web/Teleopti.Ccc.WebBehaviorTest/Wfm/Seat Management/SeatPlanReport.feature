@@ -1,4 +1,5 @@
-﻿Feature: SeatPlanReport
+﻿@WFM
+Feature: SeatPlanReport
 	As a seat planner
 	I want to be able to view the result of SeatPlan in SeatPlanReport
 

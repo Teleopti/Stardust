@@ -1,4 +1,5 @@
-﻿Feature: Recent out of adherences
+﻿@RTA
+Feature: Recent out of adherences
 	In order to ??
 	As a real time analyst
 	I want to see recent out of adherence times

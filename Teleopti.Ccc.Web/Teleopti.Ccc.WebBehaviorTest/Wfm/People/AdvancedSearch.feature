@@ -1,4 +1,5 @@
-﻿Feature: AdvancedSearch
+﻿@WFM
+Feature: AdvancedSearch
 	In order to find the exact group of people I want
 	As a team leader
 	I want to find people with advanced options

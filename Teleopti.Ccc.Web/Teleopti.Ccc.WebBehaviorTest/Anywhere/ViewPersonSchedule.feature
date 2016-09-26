@@ -1,4 +1,5 @@
-﻿Feature: View person schedule
+﻿@Anywhere
+Feature: View person schedule
 	In order to know how a person in my team should work
 	As a team leader
 	I want to see the schedule for the person

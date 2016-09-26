@@ -1,4 +1,5 @@
-﻿Feature: Global
+﻿@WFM
+Feature: Global
 	As a resource planner
 	I want to have some global featues
 

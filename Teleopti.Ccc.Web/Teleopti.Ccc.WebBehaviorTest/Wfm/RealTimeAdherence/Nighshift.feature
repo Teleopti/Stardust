@@ -1,4 +1,5 @@
-﻿Feature: Night shifts
+﻿@RTA
+Feature: Night shifts
 	In order to improve night shift agents adherence 
 	As a real time analyst
 	I want to see adherence things

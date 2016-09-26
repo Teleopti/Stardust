@@ -1,4 +1,5 @@
-﻿@OnlyRunIfEnabled('WfmReportPortal_Basic_38825')
+﻿@WFM
+@OnlyRunIfEnabled('WfmReportPortal_Basic_38825')
 
 Feature: ReportItems
 I can see reports and can navigate to the report.

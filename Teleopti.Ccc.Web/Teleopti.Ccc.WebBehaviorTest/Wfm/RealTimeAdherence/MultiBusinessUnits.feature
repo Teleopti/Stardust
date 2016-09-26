@@ -1,4 +1,5 @@
-﻿Feature: Multiple business units
+﻿@RTA
+Feature: Multiple business units
 	In order to ...
 	As a real time analyst
 	I want to see ...

@@ -1,4 +1,5 @@
-﻿@OnlyRunIfEnabled('WfmTeamSchedule_WeekView_39870')
+﻿@WFM
+@OnlyRunIfEnabled('WfmTeamSchedule_WeekView_39870')
 Feature: WeekView
 	As a team leader
 	I want to view agent's activities weekly

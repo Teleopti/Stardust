@@ -1,4 +1,5 @@
-﻿Feature: Remove absences
+﻿@Anywhere
+Feature: Remove absences
 	In order to keep track of persons absences
 	As a team leader
 	I need to be able to remove incorrect absences on persons

@@ -1,4 +1,5 @@
-﻿@OnlyRunIfEnabled('WfmReportPortal_LeaderBoard_39440')
+﻿@WFM
+@OnlyRunIfEnabled('WfmReportPortal_LeaderBoard_39440')
 Feature: Leaderboard
 
 Background:

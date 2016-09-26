@@ -1,4 +1,5 @@
-﻿Feature: Reports
+﻿@Anywhere
+Feature: Reports
 	In order to know the reports for my team
 	As a team leader
 	I want to see the reports for the team

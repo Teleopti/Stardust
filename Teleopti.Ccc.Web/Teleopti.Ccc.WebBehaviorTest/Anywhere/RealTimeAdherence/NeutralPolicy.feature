@@ -1,4 +1,5 @@
-﻿Feature: Real time adherence with neutral alarms
+﻿@RTA
+Feature: Real time adherence with neutral alarms
 	In order to improve adherence with neutral alarm occured
 	As a real time analyst
 	I want to see correct adherence value

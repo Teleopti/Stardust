@@ -1,4 +1,5 @@
-﻿Feature: Modify absence
+﻿@Anywhere
+Feature: Modify absence
 	In order to keep track of persons absences
 	As a team leader
 	I need to be able to record that an agent has returned to work before the end date/time of an absence

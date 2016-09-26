@@ -1,4 +1,4 @@
-﻿
+﻿@WFM
 Feature: SeatPlan
 	As a seat planner
 	I want to be able to allocate seats to agents

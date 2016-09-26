@@ -1,4 +1,5 @@
-﻿Feature: View adherence in hawaii call center
+﻿@RTA
+Feature: View adherence in hawaii call center
 	In order to improve hawaii agents adherence 
 	As a real time analyst
 	I want to see adherence things

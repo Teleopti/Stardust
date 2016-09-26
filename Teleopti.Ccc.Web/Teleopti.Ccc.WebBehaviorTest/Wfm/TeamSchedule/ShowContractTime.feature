@@ -1,4 +1,5 @@
-﻿@OnlyRunIfEnabled('WfmTeamSchedule_ShowContractTime_38509')
+﻿@WFM
+@OnlyRunIfEnabled('WfmTeamSchedule_ShowContractTime_38509')
 Feature: ShowContractTime
 	As a team leader
 	I want to see agents' contract times

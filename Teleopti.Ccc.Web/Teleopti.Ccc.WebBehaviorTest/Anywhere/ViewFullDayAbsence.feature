@@ -1,4 +1,5 @@
-﻿Feature: View full day absence
+﻿@Anywhere
+Feature: View full day absence
 	In order to keep track of scheduled full day absences for a person in my team
 	As a team leader
 	I want to see the scheduled absences for the person

@@ -1,4 +1,5 @@
-﻿@ignore
+﻿@RTA
+@ignore
 Feature: Pause button
 	In order to have time to analyze current situation
 	As a real time analyst

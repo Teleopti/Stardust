@@ -1,4 +1,5 @@
-﻿Feature: Hide specific state groups
+﻿@RTA
+Feature: Hide specific state groups
             In order to faster find the agents that can answer the phone
             As a real time analyst
             I want to hide specific state groups 

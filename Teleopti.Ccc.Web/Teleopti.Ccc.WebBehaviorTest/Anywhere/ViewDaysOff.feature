@@ -1,4 +1,5 @@
-﻿Feature: View days off
+﻿@Anywhere
+Feature: View days off
 	In order to keep track of scheduled days off for a person in my team
 	As a team leader
 	I want to see the scheduled days off for the person

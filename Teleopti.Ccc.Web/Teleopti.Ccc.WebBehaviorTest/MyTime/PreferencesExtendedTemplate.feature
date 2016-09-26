@@ -1,4 +1,5 @@
-﻿Feature: Preferences Extended Template
+﻿@MyTimePreferences
+Feature: Preferences Extended Template
 	In order to add my preferences fast and easy
 	As an agent
 	I want to create and use a preference template

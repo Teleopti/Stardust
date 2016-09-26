@@ -1,4 +1,5 @@
-﻿Feature: Real time adherence overview
+﻿@RTA
+Feature: Real time adherence overview
 	In order to easier find the team leader to blame
 	As a real time analyst
 	I want to see which parts of the organization currently not adhering to the schedule

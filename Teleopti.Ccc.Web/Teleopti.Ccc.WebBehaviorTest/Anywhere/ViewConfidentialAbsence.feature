@@ -1,4 +1,5 @@
-﻿Feature: View confidential absence
+﻿@Anywhere
+Feature: View confidential absence
 	In order to keep privacy of persons absences
 	As a team leader
 	I have permissions to see confidential absence names for agents in my team

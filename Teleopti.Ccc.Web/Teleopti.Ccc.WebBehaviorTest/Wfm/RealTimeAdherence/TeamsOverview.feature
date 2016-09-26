@@ -1,4 +1,5 @@
-﻿Feature: Teams overview
+﻿@RTA
+Feature: Teams overview
 	In order to easier find the team leader to blame
 	As a real time analyst
 	I want to see how many agents that are in alarm for each site

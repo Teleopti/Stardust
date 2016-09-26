@@ -1,4 +1,5 @@
-﻿Feature: Absence Report On Mobile Week Schedule
+﻿@MyTimeAbsence
+Feature: Absence Report On Mobile Week Schedule
  In order to report absence directly
  As an agent
  I want to report I need be on absence for today or tomorrow directly when I feel sick for example.

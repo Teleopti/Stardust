@@ -1,4 +1,5 @@
-﻿Feature: Monitor agents by skill
+﻿@RTA
+Feature: Monitor agents by skill
 	In order to easier find the agent to blame
 	As a real time analyst
 	I want to see what agents are doing by skills

@@ -1,4 +1,5 @@
-﻿Feature: ActivityActions
+﻿@WFM
+Feature: ActivityActions
 	As a team leader
 	I want to modify agent's activities
 

@@ -1,4 +1,5 @@
-﻿Feature: Buster test
+﻿@Anywhere
+Feature: Buster test
 	In order do test driven development in javascript
 	As a developer
 	I want to run the javascript tests in the browser
