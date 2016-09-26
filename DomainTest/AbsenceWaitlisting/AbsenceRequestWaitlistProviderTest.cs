@@ -16,7 +16,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 {
 	[TestFixture]
-	class AbsenceRequestWaitlistProviderTest
+	public class AbsenceRequestWaitlistProviderTest
 	{
 		private IPersonRepository _personRepository;
 		private IPersonRequestRepository _personRequestRepository;
@@ -87,9 +87,9 @@ namespace Teleopti.Ccc.DomainTest.AbsenceWaitlisting
 			var person4 = createAndSetupPerson(workflowControlSetProcessWaitlistBySeniority);
 
 			person1.AddPersonPeriod(new PersonPeriod(new DateOnly(2016, 03, 01), personContract, team));
-			person2.AddPersonPeriod(new PersonPeriod(new DateOnly(2016, 04, 01), personContract, team));
-			person3.AddPersonPeriod(new PersonPeriod(new DateOnly(2016, 04, 01), personContract, team));
-			person4.AddPersonPeriod(new PersonPeriod(new DateOnly(2016, 02, 01), personContract, team));
+			person2.AddPersonPeriod(new PersonPeriod(new DateOnly(2016, 05, 01), personContract, team));
+			person3.AddPersonPeriod(new PersonPeriod(new DateOnly(2016, 05, 01), personContract, team));
+			person4.AddPersonPeriod(new PersonPeriod(new DateOnly(2016, 01, 01), personContract, team));
 
 			var absenceRequest1 = createAutoDeniedAbsenceRequest(person1, _absence,
 				new DateTimePeriod(baseTime.AddHours(15), baseTime.AddHours(19)));
