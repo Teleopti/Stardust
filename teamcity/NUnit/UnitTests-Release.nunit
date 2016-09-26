@@ -1,0 +1,18 @@
+<NUnitProject>
+<Settings activeconfig="active" appbase="."/>
+	<Config name="active">
+		<assembly path=".\DomainTest\bin\Release\Teleopti.Ccc.DomainTest.dll"/>
+		<assembly path=".\Teleopti.Ccc.Web\Teleopti.Ccc.WebTest\bin\Release\Teleopti.Ccc.WebTest.dll"/>
+		<assembly path=".\Teleopti.Analytics\Teleopti.Analytics.Etl.CommonTest\bin\Release\Teleopti.Analytics.Etl.CommonTest.dll"/>
+		<assembly path=".\Teleopti.Ccc.IocCommonTest\bin\Release\Teleopti.Ccc.IocCommonTest.dll"/>
+		<assembly path=".\Teleopti.Ccc.Payroll\Teleopti.Ccc.PayrollFormatterTest\bin\Release\Teleopti.Ccc.PayrollFormatterTest.dll"/>
+		<assembly path=".\Teleopti.Ccc.Payroll\Teleopti.Ccc.PayrollTest\bin\Release\Teleopti.Ccc.PayrollTest.dll"/>
+		<assembly path=".\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.LogicTest\bin\Release\Teleopti.Ccc.Sdk.LogicTest.dll"/>
+		<assembly path=".\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBusTest\bin\Release\Teleopti.Ccc.Sdk.ServiceBusTest.dll"/>
+		<assembly path=".\Teleopti.Ccc.Web.AuthTest\bin\Release\Teleopti.Ccc.Web.AuthTest.dll"/>
+		<assembly path=".\Teleopti.Ccc.Web.WindowsIdentityProviderTest\bin\Release\Teleopti.Ccc.Web.WindowsIdentityProviderTest.dll"/>
+		<assembly path=".\Teleopti.Ccc.WinCodeTest\bin\Release\Teleopti.Ccc.WinCodeTest.dll"/>
+		<assembly path=".\Teleopti.MessagingTest\bin\Release\Teleopti.MessagingTest.dll"/>
+		<assembly path=".\Teleopti.Support.CodeTest\bin\Release\Teleopti.Support.CodeTest.dll"/>
+	</Config>
+</NUnitProject>
