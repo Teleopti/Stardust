@@ -1,6 +1,5 @@
 ﻿using System;
 using log4net;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Interfaces.Domain;
 
@@ -19,39 +18,34 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 		public void Process(IPersonRequest personRequest)
 		{
-			IAbsenceRequest request = personRequest.Request as AbsenceRequest;
-			if (request == null)
-			{
-				logger.WarnFormat("Person Request is not an Absence Request. (Id = {0})", personRequest.Id.GetValueOrDefault());
-				return;
-			}
+			personRequest.Pending();
 
-			var workflowControlSet = request.Person.WorkflowControlSet;
+			var workflowControlSet = personRequest.Request.Person.WorkflowControlSet;
 			if (workflowControlSet == null)
 			{
-				handleNoWorkflowControlSet(request);
+				handleNoWorkflowControlSet(personRequest);
 				return;
 			}
 
-			sendApproveCommand(request.Id.GetValueOrDefault());
+			sendApproveCommand(personRequest.Id.GetValueOrDefault());
 		
 		}
 
-		private void handleNoWorkflowControlSet(IAbsenceRequest absenceRequest)
+		private void handleNoWorkflowControlSet(IPersonRequest personRequest)
 		{
 			var denyReason = UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonNoWorkflow",
-																		   absenceRequest.Person.PermissionInformation.Culture());
+																		   personRequest.Request.Person.PermissionInformation.Culture());
 
-			sendDenyCommand(absenceRequest.Id.GetValueOrDefault(), denyReason, false);
+			sendDenyCommand(personRequest.Id.GetValueOrDefault(), denyReason, false);
 
 		}
 
 
-		private void sendDenyCommand(Guid requestId, string denyReason, bool isAlreadyAbsent)
+		private void sendDenyCommand(Guid personRequestId, string denyReason, bool isAlreadyAbsent)
 		{
 			var command = new DenyRequestCommand()
 			{
-				PersonRequestId = requestId,
+				PersonRequestId = personRequestId,
 				DenyReason = denyReason,
 				IsAlreadyAbsent = isAlreadyAbsent
 			};
@@ -63,11 +57,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			}
 		}
 
-		private void sendApproveCommand(Guid requestId)
+		private void sendApproveCommand(Guid personRequestId)
 		{
 			var command = new ApproveRequestCommand()
 			{
-				PersonRequestId = requestId
+				PersonRequestId = personRequestId,
+				IsAutoGrant = true
 			};
 			_commandDispatcher.Execute(command);
 

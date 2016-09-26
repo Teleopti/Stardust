@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_intradayRequestProcessor = intradayRequestProcessor;
 		}
 
-		[ImpersonateSystem]
+		[AsSystem]
 		[UnitOfWork]
 		public new virtual void Handle(NewAbsenceRequestCreatedEvent @event)
 		{
@@ -140,6 +140,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				{
 					logger.WarnFormat(
 						"No person request found with the supplied Id, or the request is not in New status mode. (Id = {0})",
+						requestId);
+				}
+				return null;
+			}
+			if (!(personRequest.Request is IAbsenceRequest))
+			{
+				if (logger.IsWarnEnabled)
+				{
+					logger.WarnFormat(
+						"Request is not an absence request! (PersonRequestId = {0})",
 						requestId);
 				}
 				return null;

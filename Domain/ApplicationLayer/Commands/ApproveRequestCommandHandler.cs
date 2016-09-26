@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			try
 			{
-				personRequest.Approve(_requestApprovalService, _personRequestCheckAuthorization);
+				personRequest.Approve(_requestApprovalService, _personRequestCheckAuthorization, command.IsAutoGrant);
 			}
 			catch (InvalidRequestStateTransitionException)
 			{

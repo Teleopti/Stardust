@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 	{
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
 		public Guid PersonRequestId { get; set; }
+		public bool IsAutoGrant { get; set; } = false;
 		public Guid? AffectedRequestId { get; set; }
 		public IList<string> ErrorMessages { get; set; }
 		public string ReplyMessage { get; set; }
