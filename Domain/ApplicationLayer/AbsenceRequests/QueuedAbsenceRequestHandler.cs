@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Globalization;
 using log4net;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Config;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private static readonly ILog logger = LogManager.GetLogger(typeof(QueuedAbsenceRequestHandler));
 
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
-		private readonly IConfigReader configReader;
+		private readonly IConfigReader _configReader;
 		private readonly IntradayRequestProcessor _intradayRequestProcessor;
 
 
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			: base(personRequestRepository, queuedAbsenceRequestRepository, absenceRequestCancelService)
 		{
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
-			this.configReader = configReader;
+			_configReader = configReader;
 			_intradayRequestProcessor = intradayRequestProcessor;
 		}
 
@@ -37,13 +38,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		[UnitOfWork]
 		public new virtual void Handle(NewAbsenceRequestCreatedEvent @event)
 		{
-			var personRequest = CheckPersonRequest(@event.PersonRequestId);
+			IPersonRequest personRequest = CheckPersonRequest(@event.PersonRequestId);
 			if (personRequest == null)
 				return;
 
 			var startDateTime = DateTime.UtcNow;
 
-			var fakeIntradayStartUtcDateTime = configReader.AppConfig("FakeIntradayUtcStartDateTime");
+			var fakeIntradayStartUtcDateTime = _configReader.AppConfig("FakeIntradayUtcStartDateTime");
 			if (fakeIntradayStartUtcDateTime != null)
 			{
 				try
@@ -77,12 +78,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		}
 	}
 
-	[EnabledBy(Toggles.AbsenceRequests_UseMultiRequestProcessing_39960)]
-	[DisabledBy(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754)]
+	[EnabledBy(Toggles.AbsenceRequests_UseMultiRequestProcessing_39960), DisabledBy(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754)]
 	public class QueuedAbsenceRequestHandler : QueuedAbsenceRequestHandlerBase, IHandleEvent<NewAbsenceRequestCreatedEvent>, IHandleEvent<RequestPersonAbsenceRemovedEvent>
 	{
-		private static readonly ILog logger = LogManager.GetLogger(typeof(QueuedAbsenceRequestHandler));
-
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
 
 
@@ -154,14 +152,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			public override bool IsSatisfiedBy(IPersonRequest obj)
 			{
 				return (obj == null || !obj.IsNew);
-			}
-		}
-
-		private class isNullSpecification : Specification<IAbsenceRequest>
-		{
-			public override bool IsSatisfiedBy(IAbsenceRequest obj)
-			{
-				return (obj == null);
 			}
 		}
 
