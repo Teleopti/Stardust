@@ -231,8 +231,25 @@
 				th{
 					font-weight: bold;
 					padding: 0 10px;
+					word-break: normal;
+					white-space: normal;
 					border-left: 1px solid $gray012;
 					border-right: 1px solid $gray012;
+				}
+
+				th .date {
+					float: right;
+				}
+			}
+
+			@media(max-width: 768px){
+				thead tr.weekview-thead th{
+					padding: 0;
+					text-align: center;
+				}
+				
+				thead tr.weekview-thead th .date{
+					float: none;
 				}
 			}
 
@@ -252,10 +269,6 @@
 					overflow: hidden;
 					text-overflow: ellipsis;
 				}
-			}
-
-			td.weekview-td.dayoff{
-				//background-color: beige;
 			}
 
 			td.weekview-td.terminated{

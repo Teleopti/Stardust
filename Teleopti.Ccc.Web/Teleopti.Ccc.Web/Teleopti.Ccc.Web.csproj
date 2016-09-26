@@ -1524,6 +1524,7 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.controller.day.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.controller.week.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.cmd.settings.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.directive.headWidthHelper.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.scheduletable.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.cmd.addAbsence.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.cmd.addAbsence.spec.js" />

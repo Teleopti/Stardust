@@ -29,12 +29,12 @@
 			</div>
 			<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
 			<table>
-				<thead>
+				<thead head-width-helper>
 					<tr class="weekview-thead">
 						<th class="agent-name-colomn"></th>
 						<th class="date-header" ng-repeat="day in vm.weekDays">
 							<span translate>{{day.name}}</span>
-							<span class="pull-right">{{day.date | date : 'dd'}}</span>
+							<span class="date">{{day.date | date : 'dd'}}</span>
 						</th>
 						<th class="contract-time-header contract-time-column" ng-if="vm.toggles.WeekViewContractTimeEnabled">{{'ContractTime' | translate}}</th>
 					</tr>
