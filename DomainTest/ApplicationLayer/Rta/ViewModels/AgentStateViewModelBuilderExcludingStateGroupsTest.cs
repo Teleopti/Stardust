@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				});
 			Now.Is("2016-09-22 08:10");
 
-			var agentState = Target.InAlarmForTeams(new[] { team}, new[] {loggedOut}).States;
+			var agentState = Target.InAlarmForTeams(new[] { team}, new Guid?[] {loggedOut}).States;
 
 			agentState.Single().PersonId.Should().Be(person1);
 		}
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				});
 			Now.Is("2016-09-22 08:10");
 
-			var agentState = Target.InAlarmForSites(new[] { site }, new[] { loggedOut }).States;
+			var agentState = Target.InAlarmForSites(new[] { site }, new Guid?[] { loggedOut }).States;
 
 			agentState.Single().PersonId.Should().Be(person1);
 		}

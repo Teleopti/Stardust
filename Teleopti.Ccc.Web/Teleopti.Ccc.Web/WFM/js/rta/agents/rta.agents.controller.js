@@ -220,7 +220,7 @@
 								.indexOf(state.StateId) === -1) {
 								$scope.states.push({
 									Id: state.StateId,
-									Name: state.State,
+									Name: state.StateId === null ? "No State" : state.State,
 									Selected: true
 								});
 							}
