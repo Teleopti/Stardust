@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Web.IntegrationTest.Areas.Reporting.Core
 		[SetUp]
 		public void Setup()
 		{
+			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
 			_dataSource = DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks());
 			_reportGenerator = new ReportGenerator(new testPath());
 		}

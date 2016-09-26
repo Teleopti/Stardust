@@ -1,4 +1,6 @@
 ﻿using System.Configuration;
+using System.IO;
+using NUnit.Framework;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -20,6 +22,8 @@ namespace Teleopti.Wfm.AdministrationTest
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			base.Setup(system, configuration);
+
+			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
 
 			system.AddModule(new WfmAdminModule());
 			system.UseTestDouble<ConsoleLogger>().For<IUpgradeLog>();
