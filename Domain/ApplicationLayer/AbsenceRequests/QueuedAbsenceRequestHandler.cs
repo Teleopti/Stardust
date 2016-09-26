@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.Globalization;
+using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
@@ -12,6 +13,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Specification;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
@@ -23,10 +25,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
 		private readonly IConfigReader _configReader;
-		private readonly IntradayRequestProcessor _intradayRequestProcessor;
+		private readonly IIntradayRequestProcessor _intradayRequestProcessor;
 
 
-		public QueuedAbsenceRequestFastIntradayHandler(IPersonRequestRepository personRequestRepository, IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IAbsenceRequestCancelService absenceRequestCancelService, IConfigReader configReader, IntradayRequestProcessor intradayRequestProcessor)
+		public QueuedAbsenceRequestFastIntradayHandler(IPersonRequestRepository personRequestRepository, 
+			IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, IAbsenceRequestCancelService absenceRequestCancelService, 
+			IConfigReader configReader, IIntradayRequestProcessor intradayRequestProcessor)
 			: base(personRequestRepository, queuedAbsenceRequestRepository, absenceRequestCancelService)
 		{
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
@@ -58,9 +62,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			}
 
 			var intradayPeriod = new DateTimePeriod(startDateTime, startDateTime.AddHours(24));
+			
+			var validators = personRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((AbsenceRequest)personRequest.Request)
+				.GetSelectedValidatorList();
 
+			bool isIntradayRequest = intradayPeriod.Contains(personRequest.Request.Period.StartDateTime) && intradayPeriod.Contains(personRequest.Request.Period.EndDateTime);
 
-			if (intradayPeriod.Contains(personRequest.Request.Period.StartDateTime) && intradayPeriod.Contains(personRequest.Request.Period.EndDateTime))
+			if (isIntradayRequest && validators.Any(v => typeof(StaffingThresholdValidator) == v.GetType()))
 			{
 				_intradayRequestProcessor.Process(personRequest);
 			}

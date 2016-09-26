@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
-	public class IntradayRequestProcessor
+	public class IntradayRequestProcessor : IIntradayRequestProcessor
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(IntradayRequestProcessor));
 

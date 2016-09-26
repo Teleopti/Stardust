@@ -381,6 +381,7 @@
     <Compile Include="TestData\Analytics\Team.cs" />
     <Compile Include="TestData\Core\ILogonName.cs" />
     <Compile Include="TestData\Core\ITenantUserSetup.cs" />
+    <Compile Include="TestData\FakeIntradayRequestProcessor.cs" />
     <Compile Include="TestData\GlobalPrincipalState.cs" />
     <Compile Include="TestData\Setups\Configurable\PersonConfigurable.cs" />
     <Compile Include="TestData\Setups\Default\DefaultAnalyticsDataCreator.cs" />
