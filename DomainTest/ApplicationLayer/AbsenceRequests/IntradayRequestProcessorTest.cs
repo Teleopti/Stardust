@@ -4,7 +4,6 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -37,28 +36,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 			system.UseTestDouble<ApprovalServiceForTest>().For<IRequestApprovalService>();
-
-		}
-
-		[Test]
-		public void ShouldDenyIfNoWorkflowControlSet()
-		{
-			var request = createNewRequest(false);
-
-			Target.Process(request);
-
-			Assert.AreEqual(getRequestStatus(PersonRequestRepository.Get(request.Id.GetValueOrDefault())), 4);
-		}
-
-		[Test]
-		public void ShouldDenyIfAlreadyAbsent()
-		{	
-
-		}
-
-		[Test]
-		public void ShouldDenyIfNotEnoughPersonAccountBalance()
-		{
 
 		}
 

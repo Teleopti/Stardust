@@ -20,26 +20,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		{
 			personRequest.Pending();
 
-			var workflowControlSet = personRequest.Request.Person.WorkflowControlSet;
-			if (workflowControlSet == null)
-			{
-				handleNoWorkflowControlSet(personRequest);
-				return;
-			}
+			IntradayStaffingCheck();
 
 			sendApproveCommand(personRequest.Id.GetValueOrDefault());
 		
 		}
 
-		private void handleNoWorkflowControlSet(IPersonRequest personRequest)
+		private void IntradayStaffingCheck()
 		{
-			var denyReason = UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonNoWorkflow",
-																		   personRequest.Request.Person.PermissionInformation.Culture());
-
-			sendDenyCommand(personRequest.Id.GetValueOrDefault(), denyReason, false);
-
+			//Do something and send Deny if understaffed
 		}
-
+		
 
 		private void sendDenyCommand(Guid personRequestId, string denyReason, bool isAlreadyAbsent)
 		{
