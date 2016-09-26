@@ -37,17 +37,6 @@ namespace Teleopti.Interfaces.Domain
 
 
         /// <summary>
-        /// Is a certain period within this schedulerange?
-        /// </summary>
-        /// <param name="period">The period.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2009-08-17
-        /// </remarks>
-        bool WithinRange(DateTimePeriod period);
-
-        /// <summary>
         /// Returns the total period of all IScheduledata, even if its not in the projection
         /// Returns null if empty
         /// </summary>
