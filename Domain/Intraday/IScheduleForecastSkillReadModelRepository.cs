@@ -10,5 +10,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 		void Persist(IEnumerable<ResourcesDataModel> items, DateOnly date);
 		IEnumerable<SkillStaffingInterval> GetBySkill(Guid skillId, DateTime startDateTime, DateTime endDateTime);
 		IEnumerable<SkillStaffingInterval> GetBySkillArea(Guid skillAreaId, DateTime startDateTime, DateTime endDateTime);
+	    DateTime GetLastCalculatedTime();
 	}
 }

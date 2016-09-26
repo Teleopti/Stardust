@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Schedule
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DistributedLock;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
 using Teleopti.Ccc.Domain.MultiTenancy;
@@ -168,9 +169,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeLatestStatisticsIntervalIdLoader>().For<ILatestStatisticsIntervalIdLoader>();
 			system.UseTestDouble<FakeRuleSetBagRepository>().For<IRuleSetBagRepository>();
 			system.UseTestDouble<FakeIntradayQueueStatisticsLoader>().For<IIntradayQueueStatisticsLoader>();
+            system.UseTestDouble<FakeScheduleForecastSkillReadModelRepository>().For<IScheduleForecastSkillReadModelRepository>();
 
-			// schedule readmodels
-			system.UseTestDouble<FakeScheduleProjectionReadOnlyPersister>().For<IScheduleProjectionReadOnlyPersister>();
+            // schedule readmodels
+            system.UseTestDouble<FakeScheduleProjectionReadOnlyPersister>()
+				.For<IScheduleProjectionReadOnlyPersister, IScheduleProjectionReadOnlyReader>();
 			system.UseTestDouble<FakeProjectionVersionPersister>().For<IProjectionVersionPersister>();
 			
 			system.UseTestDouble<FakeJobStorageWrapper>().For<IJobStorageWrapper>();

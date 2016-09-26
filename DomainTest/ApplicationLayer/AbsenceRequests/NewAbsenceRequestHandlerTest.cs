@@ -37,7 +37,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private readonly IScenario _scenario = new Scenario("Test");
 		private readonly IAbsence _absence = new Absence { Description = new Description("Vacation", "VAC"), Tracker = Tracker.CreateDayTracker() };
 		private readonly DateTimePeriod _period = new DateTimePeriod(2010, 3, 30, 2010, 3, 31);
-		private readonly DateOnlyPeriod _dateOnlyPeriod = new DateOnlyPeriod(2010, 3, 30, 2010, 3, 30);
 		private IWorkflowControlSet _workflowControlSet;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		

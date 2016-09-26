@@ -99,5 +99,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public DateTime EndDateTime { get; set; }
 		public double Forecast { get; set; }
 		public double StaffingLevel { get; set; }
+        public DateTime CalculatedOn { get; set; }
 	}
 }
