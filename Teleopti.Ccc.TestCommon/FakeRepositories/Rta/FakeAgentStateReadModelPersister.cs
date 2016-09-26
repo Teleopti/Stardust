@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				select m;
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadAlarmsForSites(IEnumerable<Guid> siteIds, IEnumerable<Guid> excludedStateGroupIds)
+		public IEnumerable<AgentStateReadModel> LoadAlarmsForSites(IEnumerable<Guid> siteIds, IEnumerable<Guid?> excludedStateGroupIds)
 		{
 			return from s in siteIds
 				   from m in _data.Values
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				select m;
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadAlarmsForSkills(IEnumerable<Guid> skillIds, IEnumerable<Guid> excludedStateGroupIds)
+		public IEnumerable<AgentStateReadModel> LoadAlarmsForSkills(IEnumerable<Guid> skillIds, IEnumerable<Guid?> excludedStateGroupIds)
 		{
 			return from sk in skillIds
 				   from m in _data.Values

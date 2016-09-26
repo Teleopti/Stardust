@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		public AgentStatesViewModel InAlarmForSites(Guid[] siteIds, Guid[] excludedStateGroupIds)
 		{
-			return build(_agentStateReadModelReader.LoadAlarmsForSites(siteIds, excludedStateGroupIds));
+			return build(_agentStateReadModelReader.LoadAlarmsForSites(siteIds, excludedStateGroupIds.Cast<Guid?>()));
 		}
 
 		public AgentStatesViewModel ForTeams(Guid[] teamIds)
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		public AgentStatesViewModel InAlarmForSkills(Guid[] skills, Guid[] excludedStateGroupIds)
 		{
-			return build(_agentStateReadModelReader.LoadAlarmsForSkills(skills, excludedStateGroupIds));
+			return build(_agentStateReadModelReader.LoadAlarmsForSkills(skills, excludedStateGroupIds.Cast<Guid?>()));
 		}
 
 		private AgentStatesViewModel build(IEnumerable<AgentStateReadModel> states)
