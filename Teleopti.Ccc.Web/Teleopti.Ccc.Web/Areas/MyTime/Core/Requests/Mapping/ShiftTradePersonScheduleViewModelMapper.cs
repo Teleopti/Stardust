@@ -16,21 +16,25 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IShiftTradePersonScheduleProvider _personScheduleProvider;
-		private readonly ITeamScheduleProjectionProvider _projectionProvider;
+		private readonly ITeamScheduleProjectionProvider _teamScheduleProjectionProjectionProvider;
 		private readonly IPossibleShiftTradePersonsProvider _possibleShiftTradePersonsProvider;
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IShiftTradeSiteOpenHourFilter _shiftTradeSiteOpenHourFilter;
+		private readonly IProjectionProvider _projectionProvider;
 
-
-		public ShiftTradePersonScheduleViewModelMapper(IPermissionProvider permissionProvider, ILoggedOnUser loggedOnUser, IShiftTradePersonScheduleProvider personScheduleProvider, ITeamScheduleProjectionProvider projectionProvider, IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider, IPersonRequestRepository personRequestRepository, IShiftTradeSiteOpenHourFilter shiftTradeSiteOpenHourFilter)
+		public ShiftTradePersonScheduleViewModelMapper(IPermissionProvider permissionProvider, ILoggedOnUser loggedOnUser
+			, IShiftTradePersonScheduleProvider personScheduleProvider, ITeamScheduleProjectionProvider teamScheduleProjectionProvider
+			, IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider, IPersonRequestRepository personRequestRepository
+			, IShiftTradeSiteOpenHourFilter shiftTradeSiteOpenHourFilter, IProjectionProvider projectionProvider)
 		{
 			_permissionProvider = permissionProvider;
 			_loggedOnUser = loggedOnUser;
 			_personScheduleProvider = personScheduleProvider;
-			_projectionProvider = projectionProvider;
+			_teamScheduleProjectionProjectionProvider = teamScheduleProjectionProvider;
 			_possibleShiftTradePersonsProvider = possibleShiftTradePersonsProvider;
 			_personRequestRepository = personRequestRepository;
 			_shiftTradeSiteOpenHourFilter = shiftTradeSiteOpenHourFilter;
+			_projectionProvider = projectionProvider;
 		}
 
 		public ShiftTradeAddPersonScheduleViewModel MakeMyScheduleViewModel(ShiftTradeScheduleViewModelData inputData)
@@ -39,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				_loggedOnUser.CurrentUser()) || _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)
 				? _personScheduleProvider.GetScheduleForPersons(inputData.ShiftTradeDate, new[] { _loggedOnUser.CurrentUser() }).SingleOrDefault()
 				: null;
-			var myScheduleViewModel = _projectionProvider.MakeScheduleReadModel(_loggedOnUser.CurrentUser(), myScheduleDay, true);
+			var myScheduleViewModel = _teamScheduleProjectionProjectionProvider.MakeScheduleReadModel(_loggedOnUser.CurrentUser(), myScheduleDay, true);
 			return new ShiftTradeAddPersonScheduleViewModel(myScheduleViewModel);
 		}
 
@@ -59,7 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 					var person = req.Person;
 					var scheduleDay =
 						_personScheduleProvider.GetScheduleForPersons (inputData.ShiftTradeDate, new[] {person}).SingleOrDefault();
-					if (_projectionProvider.IsFullDayAbsence(scheduleDay) || _projectionProvider.IsOvertimeOnDayOff(scheduleDay))
+					if (_teamScheduleProjectionProjectionProvider.IsFullDayAbsence(scheduleDay) || _teamScheduleProjectionProjectionProvider.IsOvertimeOnDayOff(scheduleDay))
 					{
 						return null;
 					}
@@ -69,17 +73,30 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 			pageCount = (int)Math.Ceiling((double)possibleScheduleDayTuples.Count()/inputData.Paging.Take);
 
-			possibleScheduleDayTuples = possibleScheduleDayTuples.OrderBy (tuple => tuple.Item1?.Period.StartDateTime ?? default(DateTime));
+			possibleScheduleDayTuples = possibleScheduleDayTuples.OrderBy (scheduleDayDateTimeOrder);
 			possibleScheduleDayTuples = possibleScheduleDayTuples.Skip (inputData.Paging.Skip).Take (inputData.Paging.Take);
 
 			var possibleExchangedScheduleViews = possibleScheduleDayTuples
-				.Select (tuple => new ShiftTradeAddPersonScheduleViewModel (_projectionProvider.MakeScheduleReadModel (tuple.Item2.Person
+				.Select (tuple => new ShiftTradeAddPersonScheduleViewModel (_teamScheduleProjectionProjectionProvider.MakeScheduleReadModel (tuple.Item2.Person
 				, tuple.Item1, true))
 				{
 					ShiftExchangeOfferId = new Guid(tuple.Item2.ShiftExchangeOfferId)
 				}).ToList();
 
 			return possibleExchangedScheduleViews;
+		}
+
+		private DateTime scheduleDayDateTimeOrder(Tuple<IScheduleDay, IShiftExchangeOffer> tuple)
+		{
+			if (tuple.Item1 == null)
+				return default(DateTime);
+
+			var projection = _projectionProvider.Projection(tuple.Item1);
+			var period = projection.Period();
+			if (!period.HasValue)
+				return default(DateTime);
+
+			return period.Value.StartDateTime;
 		}
 	}
 
