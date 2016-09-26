@@ -40,18 +40,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 			if (personFromScheduleView.ScheduleLayers == null || !personFromScheduleView.ScheduleLayers.Any())
 			{
-				return false;
+				return true;
 			}
 
 			var personTo = toScheduleDay.Person;
 			var personFrom = _loggedOnUser.CurrentUser();
 
 			var personFromSchedulePeriod = getSchedulePeriod(personFromScheduleView, personFrom.PermissionInformation.DefaultTimeZone());
-
-
 			var projection = _projectionProvider.Projection (toScheduleDay);
-
-
 			if (!projection.HasLayers)
 			{
 				return true;
