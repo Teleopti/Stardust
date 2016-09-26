@@ -81,6 +81,7 @@ WfmTeamSchedule_FilterValidationWarnings_40110 = true
 WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938 = true
 WfmTeamSchedule_ShowOverwrittenLayerWarning_40109 = true
 WfmTeamSchedule_AutoMoveOverwrittenActivityForOperations_40279 = true
+WfmTeamSchedule_EditAndDisplayInternalNotes_40671 = DEV
 
 WfmTeamSchedule_ShowShiftCategory_39796 = true
 WfmTeamSchedule_ModifyShiftCategory_39797 = true
