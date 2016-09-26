@@ -172,8 +172,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
             system.UseTestDouble<FakeScheduleForecastSkillReadModelRepository>().For<IScheduleForecastSkillReadModelRepository>();
 
             // schedule readmodels
-            system.UseTestDouble<FakeScheduleProjectionReadOnlyPersister>()
-				.For<IScheduleProjectionReadOnlyPersister, IScheduleProjectionReadOnlyReader>();
+            system.UseTestDouble<FakeScheduleProjectionReadOnlyPersister>().For<IScheduleProjectionReadOnlyPersister>();
 			system.UseTestDouble<FakeProjectionVersionPersister>().For<IProjectionVersionPersister>();
 			
 			system.UseTestDouble<FakeJobStorageWrapper>().For<IJobStorageWrapper>();
