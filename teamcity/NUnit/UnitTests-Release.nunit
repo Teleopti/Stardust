@@ -1,5 +1,5 @@
 <NUnitProject>
-<Settings activeconfig="active" appbase="."/>
+<Settings activeconfig="active" appbase="..\..\"/>
 	<Config name="active">
 		<assembly path=".\DomainTest\bin\Release\Teleopti.Ccc.DomainTest.dll"/>
 		<assembly path=".\Teleopti.Ccc.Web\Teleopti.Ccc.WebTest\bin\Release\Teleopti.Ccc.WebTest.dll"/>
