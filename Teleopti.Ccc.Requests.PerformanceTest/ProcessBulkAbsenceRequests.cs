@@ -100,10 +100,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 
 				foreach (var person in persons)
 				{
-					for (int i = 0; i < 300; i++)
-					{
-						personReqs.Add(createAbsenceRequest(person, absence));
-					}
+					personReqs.Add(createAbsenceRequest(person, absence));
 				}
 
 
