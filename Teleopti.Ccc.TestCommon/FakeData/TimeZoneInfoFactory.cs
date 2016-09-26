@@ -90,5 +90,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		    return TimeZoneInfo.FindSystemTimeZoneById("Taipei Standard Time");
 		}
 
-	}
+	    public static TimeZoneInfo MountainTimeZoneInfo()
+	    {
+			return TimeZoneInfo.FindSystemTimeZoneById("Mountain Standard Time");
+		}
+    }
 }
