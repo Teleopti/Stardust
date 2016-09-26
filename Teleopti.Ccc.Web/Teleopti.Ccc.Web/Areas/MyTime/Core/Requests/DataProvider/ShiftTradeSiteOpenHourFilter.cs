@@ -33,6 +33,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				return true;
 			}
 
+			if (toScheduleDay == null)
+			{
+				return true;
+			}
+
 			if (personFromScheduleView.ScheduleLayers == null || !personFromScheduleView.ScheduleLayers.Any())
 			{
 				return false;
