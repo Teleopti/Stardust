@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly IDataSourceConfigurationSetter _dataSourceConfigurationSetter;
 		private readonly ICurrentHttpContext _httpContext;
 		private readonly IUpdatedBy _updatedBy;
+		private readonly INHibernateConfigurationCache _nhibernateConfigurationCache;
 
 		public const string AnalyticsDataSourceName = "AnalyticsDatasource";
 
@@ -30,13 +31,14 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			ICurrentTransactionHooks transactionHooks,
 			IDataSourceConfigurationSetter dataSourceConfigurationSetter, 
 			ICurrentHttpContext httpContext,
-			IUpdatedBy updatedBy)
+			IUpdatedBy updatedBy, INHibernateConfigurationCache nhibernateConfigurationCache)
 		{
 			_enversConfiguration = enversConfiguration;
 			_transactionHooks = transactionHooks;
 			_dataSourceConfigurationSetter = dataSourceConfigurationSetter;
 			_httpContext = httpContext;
 			_updatedBy = updatedBy;
+			_nhibernateConfigurationCache = nhibernateConfigurationCache;
 		}
 
 		public IDataSource Create(IDictionary<string, string> applicationNhibConfiguration, string statisticConnectionString)
@@ -114,9 +116,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private Configuration createApplicationConfiguration(IDictionary<string, string> settings)
 		{
-			var appCfg = new Configuration();
-			appCfg.SetProperties(settings);
+			var cachedConfiguration = _nhibernateConfigurationCache.GetOrDefault(settings);
+			if (cachedConfiguration != null)
+				return cachedConfiguration;
+			var appCfg = new Configuration()
+				.SetProperties(settings);
 			setDefaultValuesOnApplicationConf(appCfg);
+			_nhibernateConfigurationCache.Store(settings, appCfg);
 			return appCfg;
 		}
 

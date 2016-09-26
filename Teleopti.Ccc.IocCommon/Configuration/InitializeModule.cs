@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterInstance(_iocConfiguration.Args().DataSourceConfigurationSetter);
 			builder.RegisterType<InitializeApplication>().As<IInitializeApplication>().SingleInstance();
+			builder.RegisterType<MemoryNhibernateConfigurationCache>().As<INHibernateConfigurationCache>().SingleInstance();
 			builder.RegisterType<DataSourcesFactory>().As<IDataSourcesFactory>().SingleInstance();
 			builder.RegisterType<SetLicenseActivator>().As<ISetLicenseActivator>().SingleInstance();
 			builder.RegisterType<LicenseVerifierFactory>().As<ILicenseVerifierFactory>().SingleInstance();
