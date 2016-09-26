@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithPersonSkill(person2, phone);
 			Now.Is("2016-09-22 08:10");
 
-			var agentState = Target.InAlarmForSkills(new[] { phone }, new[] { loggedOut }).States;
+			var agentState = Target.InAlarmForSkills(new[] { phone }, new Guid?[] { loggedOut }).States;
 
 			agentState.Single().PersonId.Should().Be(person1);
 		}

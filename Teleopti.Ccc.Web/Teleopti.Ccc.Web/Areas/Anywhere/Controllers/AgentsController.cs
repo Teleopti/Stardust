@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 	public class QueryExcludingStateGroups
 	{
 		public Guid[] Ids { get; set; }
-		public Guid[] ExcludedStateIds { get; set; }
+		public Guid?[] ExcludedStateIds { get; set; }
 	}
 
 	public class PersonDetailModel
