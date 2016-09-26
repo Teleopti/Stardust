@@ -51,6 +51,8 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2010-02-11
         /// </remarks>
         bool Contains(IScheduleData scheduleData, bool includeNonPermitted);
+		bool Contains(IScheduleData scheduleData);
+
 
 		TimeSpan CalculatedContractTimeHolderOnPeriod(DateOnlyPeriod periodToCheck);
 

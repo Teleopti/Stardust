@@ -826,7 +826,6 @@ namespace Teleopti.Ccc.DomainTest.Collection
 					//nothing should have been changed here!
 					var res = target[dummyPerson].ScheduledDay(new DateOnly(2000, 1, 1));
 
-					Assert.IsFalse(res.Contains(pAss2BeAdded));
 					res.PersonAssignment().Should().Be.Null();
 					Assert.AreEqual(1, res.PersonAbsenceCollection().Count);
 					Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2001, 1, 1),

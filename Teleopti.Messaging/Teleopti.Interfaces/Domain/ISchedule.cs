@@ -23,20 +23,6 @@ namespace Teleopti.Interfaces.Domain
         IScheduleDictionary Owner { get; }
 
         /// <summary>
-        /// Determines whether [contains] [the specified schedule data].
-        /// </summary>
-        /// <param name="scheduleData">The schedule data.</param>
-        /// <returns>
-        /// 	<c>true</c> if [contains] [the specified schedule data]; otherwise, <c>false</c>.
-        /// </returns>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-05-26
-        /// </remarks>
-        bool Contains(IScheduleData scheduleData);
-
-
-        /// <summary>
         /// Gets the business rule response internal collection.
         /// </summary>
         /// <value>The business rule response internal collection.</value>
