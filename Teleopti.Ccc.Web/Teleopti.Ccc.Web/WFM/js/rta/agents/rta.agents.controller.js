@@ -217,7 +217,8 @@
 								.map(function(s) {
 									return s.Id;
 								})
-								.indexOf(state.StateId) === -1) {
+								.indexOf(state.StateId) === -1 && 
+								state.StateId!==null) {
 								$scope.states.push({
 									Id: state.StateId,
 									Name: state.State,
@@ -225,6 +226,9 @@
 								})
 							}
 						}
+					});
+					$scope.states = $filter('orderBy')($scope.states, function(state){
+						return state.Name;
 					});
 				}
 
