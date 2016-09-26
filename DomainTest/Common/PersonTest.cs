@@ -4,10 +4,12 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -814,6 +816,22 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var team = new Team() { Site = site };
 			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(DateOnly.Today, team);
 			person.SiteOpenHour(DateOnly.Today).TimePeriod.Should().Be.EqualTo(timePeriod);
+		}
+
+		[Test]
+		public void ShouldPublish()
+		{
+			var person = new Person();
+			var personPeriod = new PersonPeriod("2016-09-26".Date(),
+				new PersonContract(
+					new Contract("_"), 
+					new PartTimePercentage("_"), 
+					new ContractSchedule("_")), 
+				new Team());
+
+			person.AddExternalLogOn(new ExternalLogOn(),personPeriod);
+
+			person.PopAllEvents().OfType<PersonPeriodChangedEvent>().Should().Not.Be.Empty();
 		}
 	}
 }

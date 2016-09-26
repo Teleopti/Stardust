@@ -214,21 +214,27 @@ namespace Teleopti.Ccc.Domain.Common
 			var modify = personPeriod as IPersonPeriodModifyExternalLogon;
 			if (modify == null) return;
 			modify.AddExternalLogOn(externalLogOn);
+
+			addPersonPeriodChangedEvent();
 		}
 
 	    public virtual void ResetExternalLogOn(IPersonPeriod personPeriod)
 	    {
 		    var modify = personPeriod as IPersonPeriodModifyExternalLogon;
 		    if (modify == null) return;
-		    modify.ResetExternalLogOn();
-	    }
+			modify.ResetExternalLogOn();
+
+			addPersonPeriodChangedEvent();
+		}
 
 	    public virtual void RemoveExternalLogOn(IExternalLogOn externalLogOn, IPersonPeriod personPeriod)
 	    {
 		    var modify = personPeriod as IPersonPeriodModifyExternalLogon;
 		    if (modify == null) return;
-		    modify.RemoveExternalLogOn(externalLogOn);
-	    }
+			modify.RemoveExternalLogOn(externalLogOn);
+
+			addPersonPeriodChangedEvent();
+		}
 
 	    public virtual bool IsTerminated()
 	    {
@@ -383,27 +389,12 @@ namespace Teleopti.Ccc.Domain.Common
 			{
 				period.SetParent(this);
 				_personPeriodCollection.Add(period.StartDate, period);
-				AddEvent(() =>
-				{
-					var info = currentAssociationInfo(ServiceLocatorForEntity.Now);
-					var previousAssociation = previousAssociations(ServiceLocatorForEntity.Now);
-					return new PersonPeriodChangedEvent
-					{
-						PersonId = Id.GetValueOrDefault(),
-						CurrentBusinessUnitId = info.BusinessUnitId,
-						CurrentSiteId = info.SiteId,
-						CurrentTeamId = info.TeamId,
-						PreviousAssociation = previousAssociation,
-						ExternalLogons = info.ExternalLogons
-					};
-				});
+				addPersonPeriodChangedEvent();
 			}
 		}
 
-	    public virtual void DeletePersonPeriod(IPersonPeriod period)
+	    private void addPersonPeriodChangedEvent()
 	    {
-		    InParameter.NotNull("period", period);
-		    _personPeriodCollection.Remove(period.StartDate);
 		    AddEvent(() =>
 		    {
 				var info = currentAssociationInfo(ServiceLocatorForEntity.Now);
@@ -420,6 +411,14 @@ namespace Teleopti.Ccc.Domain.Common
 		    });
 	    }
 
+	    public virtual void DeletePersonPeriod(IPersonPeriod period)
+	    {
+		    InParameter.NotNull("period", period);
+		    _personPeriodCollection.Remove(period.StartDate);
+
+			addPersonPeriodChangedEvent();
+		}
+
 	    public virtual void ChangePersonPeriodStartDate(DateOnly startDate, IPersonPeriod personPeriod)
 		{
 			InParameter.NotNull("personPeriod", personPeriod);
@@ -432,21 +431,8 @@ namespace Teleopti.Ccc.Domain.Common
 			}
 			personPeriod.StartDate = startDate;
 			_personPeriodCollection.Add(startDate, personPeriod);
-			
-			AddEvent(() =>
-			{
-				var info = currentAssociationInfo(ServiceLocatorForEntity.Now);
-				var previousAssociation = previousAssociations(ServiceLocatorForEntity.Now);
-				return new PersonPeriodChangedEvent
-				{
-					PersonId = Id.GetValueOrDefault(),
-					CurrentBusinessUnitId = info.BusinessUnitId,
-					CurrentSiteId = info.SiteId,
-					CurrentTeamId = info.TeamId,
-					PreviousAssociation = previousAssociation,
-					ExternalLogons = info.ExternalLogons
-				};
-			});
+
+			addPersonPeriodChangedEvent();
 		}
 
 		public virtual void RemoveAllPersonPeriods()
@@ -461,19 +447,8 @@ namespace Teleopti.Ccc.Domain.Common
 				})
 				.ToArray();
 			_personPeriodCollection.Clear();
-			AddEvent(() =>
-			{
-				var info = currentAssociationInfo(ServiceLocatorForEntity.Now);
-				return new PersonPeriodChangedEvent
-				{
-					PersonId = Id.GetValueOrDefault(),
-					CurrentBusinessUnitId = info.BusinessUnitId,
-					CurrentSiteId = info.SiteId,
-					CurrentTeamId = info.TeamId,
-					PreviousAssociation = previousAssociations,
-					ExternalLogons = info.ExternalLogons
-				};
-			});
+
+			addPersonPeriodChangedEvent();
 		}
 
 	    public virtual IPersonPeriod Period(DateOnly dateOnly)
