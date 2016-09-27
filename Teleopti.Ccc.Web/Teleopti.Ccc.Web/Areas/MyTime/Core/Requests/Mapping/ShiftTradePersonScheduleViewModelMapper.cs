@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
@@ -47,43 +46,52 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			return new ShiftTradeAddPersonScheduleViewModel(myScheduleViewModel);
 		}
 
-		public IList<ShiftTradeAddPersonScheduleViewModel> MakePossibleShiftTradeAddPersonScheduleViewModels(ShiftTradeScheduleViewModelData inputData, ShiftTradeAddPersonScheduleViewModel myScheduleView, out int pageCount)
+		public IList<ShiftTradeAddPersonScheduleViewModel> MakePossibleShiftTradeAddPersonScheduleViewModels(
+			ShiftTradeScheduleViewModelData inputData, ShiftTradeAddPersonScheduleViewModel myScheduleView, out int pageCount)
 		{
-			var myScheduleDay =
-				_personScheduleProvider.GetScheduleForPersons(inputData.ShiftTradeDate, new List<IPerson> { _loggedOnUser.CurrentUser() })
-					.FirstOrDefault();
+			var myScheduleDay = _personScheduleProvider.GetScheduleForPersons(inputData.ShiftTradeDate, new List<IPerson>
+				{_loggedOnUser.CurrentUser()}).FirstOrDefault();
 
 			var persons = _possibleShiftTradePersonsProvider.RetrievePersons(inputData);
-			var shiftTradeRequests = _personRequestRepository.FindShiftExchangeOffersForBulletin(persons.Persons, inputData.ShiftTradeDate)
-				.Where(x => x.IsWantedSchedule(myScheduleDay));
+			var shiftTradeRequests = _personRequestRepository.FindShiftExchangeOffersForBulletin(persons.Persons,
+					inputData.ShiftTradeDate).Where(x => x.IsWantedSchedule(myScheduleDay));
 
-			var possibleScheduleDayTuples = shiftTradeRequests.Select (
+			var allPossibleScheduleDayTuples = shiftTradeRequests.Select(
 				req =>
 				{
 					var person = req.Person;
 					var scheduleDay =
-						_personScheduleProvider.GetScheduleForPersons (inputData.ShiftTradeDate, new[] {person}).SingleOrDefault();
-					if (_teamScheduleProjectionProjectionProvider.IsFullDayAbsence(scheduleDay) || _teamScheduleProjectionProjectionProvider.IsOvertimeOnDayOff(scheduleDay))
+						_personScheduleProvider.GetScheduleForPersons(inputData.ShiftTradeDate, new[] {person}).SingleOrDefault();
+					if (_teamScheduleProjectionProjectionProvider.IsFullDayAbsence(scheduleDay) ||
+						_teamScheduleProjectionProjectionProvider.IsOvertimeOnDayOff(scheduleDay))
 					{
 						return null;
 					}
 					var tupleValue = new Tuple<IScheduleDay, IShiftExchangeOffer>(scheduleDay, req);
 					return _shiftTradeSiteOpenHourFilter.FilterSchedule(scheduleDay, myScheduleView) ? tupleValue : null;
-				}).Where (scheduleDay => scheduleDay != null);
+				}).Where(scheduleDay => scheduleDay != null)
+				.OrderBy(scheduleDayDateTimeOrder).ToList();
 
-			pageCount = (int)Math.Ceiling((double)possibleScheduleDayTuples.Count()/inputData.Paging.Take);
+			var allPossibleExchangedScheduleViews = new List<ShiftTradeAddPersonScheduleViewModel>();
+			foreach (var tuple in allPossibleScheduleDayTuples)
+			{
+				var agent = tuple.Item2.Person;
+				var scheduleVm = _teamScheduleProjectionProjectionProvider.MakeScheduleReadModel(agent, tuple.Item1, true);
 
-			possibleScheduleDayTuples = possibleScheduleDayTuples.OrderBy (scheduleDayDateTimeOrder);
-			possibleScheduleDayTuples = possibleScheduleDayTuples.Skip (inputData.Paging.Skip).Take (inputData.Paging.Take);
+				// Agent may create multiple shift trade post for same day, only return first one
+				if (allPossibleExchangedScheduleViews.Any(x => x.PersonId == agent.Id && x.StartTimeUtc == scheduleVm.StartTimeUtc))
+				{
+					continue;
+				}
 
-			var possibleExchangedScheduleViews = possibleScheduleDayTuples
-				.Select (tuple => new ShiftTradeAddPersonScheduleViewModel (_teamScheduleProjectionProjectionProvider.MakeScheduleReadModel (tuple.Item2.Person
-				, tuple.Item1, true))
+				allPossibleExchangedScheduleViews.Add(new ShiftTradeAddPersonScheduleViewModel(scheduleVm)
 				{
 					ShiftExchangeOfferId = new Guid(tuple.Item2.ShiftExchangeOfferId)
-				}).ToList();
+				});
+			}
 
-			return possibleExchangedScheduleViews;
+			pageCount = (int)Math.Ceiling((double)allPossibleExchangedScheduleViews.Count / inputData.Paging.Take);
+			return allPossibleExchangedScheduleViews.Skip(inputData.Paging.Skip).Take(inputData.Paging.Take).ToList();
 		}
 
 		private DateTime scheduleDayDateTimeOrder(Tuple<IScheduleDay, IShiftExchangeOffer> tuple)
