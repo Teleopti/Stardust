@@ -248,7 +248,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			ICollection<IPerson> people, Guid[] peopleCanSeeConfidentialAbsencesFor, int pageSize, int currentPageIndex)
 		{
 			var userTimeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
-			var scheduleDays = _scheduleProvider.GetScheduleForPersons(dateInUserTimeZone, people).ToList();
+			var scheduleDays = _scheduleProvider.GetScheduleForPersons(dateInUserTimeZone, people, true).ToList();
 			var scheduleDaysForPreviousDay =
 				_scheduleProvider.GetScheduleForPersons(dateInUserTimeZone.AddDays(-1), people) ??
 				new IScheduleDay[] {};
@@ -314,7 +314,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 							Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToFixedDateFormat(),
 							Projection = new List<GroupScheduleProjectionViewModel>()
 						};
-					vm.InternalNotes = scheduleDay.NoteCollection().Any()
+					vm.InternalNotes = scheduleDay.DateOnlyAsPeriod.DateOnly == dateInUserTimeZone && scheduleDay.NoteCollection().Any()
 						? scheduleDay.NoteCollection().FirstOrDefault().GetScheduleNote(new NoFormatting())
 						: string.Empty;
 					list.Add(vm);

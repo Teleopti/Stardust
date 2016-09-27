@@ -36,13 +36,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			return getSchedule(period, options, ScheduleVisibleReasons.StudentAvailability);
 		}
 
-		public IEnumerable<IScheduleDay> GetScheduleForPersons(DateOnly date, IEnumerable<IPerson> persons)
+		public IEnumerable<IScheduleDay> GetScheduleForPersons(DateOnly date, IEnumerable<IPerson> persons, bool loadNotes = false)
 		{
 			var defaultScenario = _scenarioRepository.Current();
 
 			var dictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
 				persons, 
-				new ScheduleDictionaryLoadOptions(false, false),
+				new ScheduleDictionaryLoadOptions(false, loadNotes),
 				new DateOnlyPeriod(date, date),
 			    defaultScenario);
 
