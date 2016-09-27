@@ -3,7 +3,7 @@ module.exports = function(grunt) {
 	grunt.initConfig({
 		watch: {
 			dev: {
-				files: ['css/*.scss', 'index.tpl.html', 'js/**/*.html', 'html/**/*.html', 'js/**/*.js'],
+				files: ['css/*.scss', 'index.tpl.html', 'app/**/*.html', 'html/**/*.html', 'app/**/*.js'],
 				tasks: ['devDist'],
 				options: {
 					spawn: false,
@@ -232,7 +232,7 @@ module.exports = function(grunt) {
 		uglify: {
 			dist: {
 				files: {
-					'dist/main.min.js': ['js/**/*.js', '!js/**/*.spec.js', '!js/**/*.fake.js', '!js/**/*.fortest.js', '!js/app_desktop_client.js'],
+					'dist/main.min.js': ['app/**/*.js', '!app/**/*.spec.js', '!app/**/*.fake.js', '!app/**/*.fortest.js', '!app/app_desktop_client.js'],
 					'dist/modules.min.js': ['dist/modules.js'],
 					'dist/templates.min.js': ['dist/templates.js']
 				},
@@ -244,12 +244,12 @@ module.exports = function(grunt) {
 			},
 			distForDesktop: {
 				files: {
-					'dist/mainForDesktop.min.js': ['js/**/*.js', '!js/**/*.spec.js', '!js/**/*.fake.js', '!js/**/*.fortest.js', '!js/app.js']
+					'dist/mainForDesktop.min.js': ['app/**/*.js', '!app/**/*.spec.js', '!app/**/*.fake.js', '!app/**/*.fortest.js', '!app/app.js']
 				}
 			},
 			dev: {
 				files: {
-					'dist/main.min.js': ['js/**/*.js', '!js/**/*.spec.js', '!js/**/*.fake.js', '!js/**/*.fortest.js', '!js/app_desktop_client.js']
+					'dist/main.min.js': ['app/**/*.js', '!app/**/*.spec.js', '!app/**/*.fake.js', '!app/**/*.fortest.js', '!app/app_desktop_client.js']
 				},
 				options: {
 					sourceMap: true,
@@ -331,7 +331,7 @@ module.exports = function(grunt) {
 
 		ngtemplates: {
 			'wfm.templates': {
-				src: ['html/**/*.html', 'js/**/*.html', 'js/**/html/*.html'],
+				src: ['html/**/*.html', 'app/**/*.html', 'app/**/html/*.html'],
 				dest: 'dist/templates.js',
 				options: {
 					standalone: true
