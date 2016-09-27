@@ -87,7 +87,7 @@
 			this.getAlarmStatesForSitesExcludingStates = function (data) {
 				return $resource('../api/Agents/GetAlarmStatesForSitesExcludingStates', {}, {
 					query: {
-						method: 'POST'
+						method: 'GET'
 					}
 				}).query({ ids: data.siteIds, excludedStateIds: data.excludedStateIds })
 					.$promise;
@@ -112,7 +112,7 @@
 					{},
 					{
 						query: {
-							method: 'POST'
+							method: 'GET'
 						}
 					})
 					.query({
@@ -142,7 +142,7 @@
 			this.getAlarmStatesForTeamsExcludingStates = function (data) {
 				return $resource('../api/Agents/GetAlarmStatesForTeamsExcludingStates', {}, {
 					query: {
-						method: 'POST'
+						method: 'GET'
 					}
 				}).query({ ids: data.teamIds, excludedStateIds: data.excludedStateIds })
 					.$promise;

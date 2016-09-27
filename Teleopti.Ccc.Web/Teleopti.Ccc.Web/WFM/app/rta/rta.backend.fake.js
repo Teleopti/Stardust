@@ -43,14 +43,6 @@
 					});
 			};
 
-			var fakePost = function(url, response) {
-				$httpBackend.whenPOST(url)
-					.respond(function(method, url, data, headers, params) {
-						return response(JSON.parse(data), method, url, data, headers, params);
-					});
-			};
-
-
 			fake(/\.\.\/api\/Skills\/NameFor(.*)/,
 				function(params) {
 					var result = skills
@@ -165,7 +157,7 @@
 				});
 			}
 
-			fake(/\.\.\/api\/Agents\/GetAlarmStatesForTeams(.*)/,
+			fake(/\.\.\/api\/Agents\/GetAlarmStatesForTeams\?(.*)/,
 				function(params) {
 					var alarmStatesForTeams = alarmStatesFor(params.ids, function(a) {
 						return a.TeamId;
@@ -176,12 +168,12 @@
 					}];
 				});
 
-			fakePost(/\.\.\/api\/Agents\/GetAlarmStatesForTeamsExcludingStates/,
-				function(data) {
-					var alarmStatesForTeams = alarmStatesFor(data.ids, function(a) {
+			fake(/\.\.\/api\/Agents\/GetAlarmStatesForTeamsExcludingStates(.*)/,
+				function(params) {
+					var alarmStatesForTeams = alarmStatesFor(params.ids, function(a) {
 						return a.TeamId;
 					}).filter(function(s) {
-						return data.excludedStateIds.indexOf(s.StateId) === -1;
+						return params.excludedStateIds.indexOf(s.StateId) === -1;
 					});
 					return [200, {
 						Time: serverTime,
@@ -189,7 +181,7 @@
 					}];
 				});
 
-			fake(/\.\.\/api\/Agents\/GetAlarmStatesForSites(.*)/,
+			fake(/\.\.\/api\/Agents\/GetAlarmStatesForSites\?(.*)/,
 				function(params) {
 					var alarmStatesForSites = alarmStatesFor(params.ids, function(a) {
 						return a.SiteId;
@@ -200,12 +192,12 @@
 					}];
 				});
 
-			fakePost(/\.\.\/api\/Agents\/GetAlarmStatesForSitesExcludingStates/,
-				function(data) {
-					var alarmStatesForSites = alarmStatesFor(data.ids, function(a) {
+			fake(/\.\.\/api\/Agents\/GetAlarmStatesForSitesExcludingStates(.*)/,
+				function (params) {
+					var alarmStatesForSites = alarmStatesFor(params.ids, function (a) {
 						return a.SiteId;
 					}).filter(function(s) {
-						return data.excludedStateIds.indexOf(s.StateId) === -1;
+						return params.excludedStateIds.indexOf(s.StateId) === -1;
 					});
 					return [200, {
 						Time: serverTime,
@@ -213,7 +205,7 @@
 					}];
 				});
 
-			fake(/\.\.\/api\/Agents\/GetAlarmStatesForSkills(.*)/,
+			fake(/\.\.\/api\/Agents\/GetAlarmStatesForSkills\?(.*)/,
 				function(params) {
 					var alarmStatesForSkills = alarmStatesFor(params.ids, function(a) {
 						return a.SkillId;
@@ -224,7 +216,7 @@
 					}];
 				});
 
-			fakePost(/\.\.\/api\/Agents\/GetAlarmStatesForSkillsExcludingStates/,
+			fake(/\.\.\/api\/Agents\/GetAlarmStatesForSkillsExcludingStates(.*)/,
 				function(data) {
 					var alarmStatesForSkills = alarmStatesFor(data.ids, function(a) {
 						return a.SkillId;

@@ -93,8 +93,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return Ok(_agentStatesBuilder.InAlarmForTeams(query.Ids));
 		}
 		
-		[UnitOfWork, HttpPost, Route("api/Agents/GetAlarmStatesForTeamsExcludingStates")]
-		public virtual IHttpActionResult GetAlarmStatesForTeamsExcludingGroups([FromBody]QueryExcludingStateGroups query)
+		[UnitOfWork, HttpGet, Route("api/Agents/GetAlarmStatesForTeamsExcludingStates")]
+		public virtual IHttpActionResult GetAlarmStatesForTeamsExcludingGroups([FromUri] QueryExcludingStateGroups query)
 		{
 			return Ok(_agentStatesBuilder.InAlarmForTeams(query.Ids, query.ExcludedStateIds));
 		}
@@ -111,8 +111,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return Ok(_agentStatesBuilder.InAlarmForSites(query.Ids));
 		}
 
-		[UnitOfWork, HttpPost, Route("api/Agents/GetAlarmStatesForSitesExcludingStates")]
-		public virtual IHttpActionResult GetAlarmStatesForSitesExcludingGroups([FromBody]QueryExcludingStateGroups query)
+		[UnitOfWork, HttpGet, Route("api/Agents/GetAlarmStatesForSitesExcludingStates")]
+		public virtual IHttpActionResult GetAlarmStatesForSitesExcludingGroups([FromUri] QueryExcludingStateGroups query)
 		{
 			return Ok(_agentStatesBuilder.InAlarmForSites(query.Ids, query.ExcludedStateIds));
 		}
@@ -129,8 +129,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return Ok(_agentStatesBuilder.InAlarmForSkills(skillIds.Ids));
 		}
 
-		[UnitOfWork, HttpPost, Route("api/Agents/GetAlarmStatesForSkillsExcludingStates")]
-		public virtual IHttpActionResult GetAlarmStatesForSkillsExcludingGroups([FromBody]QueryExcludingStateGroups query)
+		[UnitOfWork, HttpGet, Route("api/Agents/GetAlarmStatesForSkillsExcludingStates")]
+		public virtual IHttpActionResult GetAlarmStatesForSkillsExcludingGroups([FromUri] QueryExcludingStateGroups query)
 		{
 			return Ok(_agentStatesBuilder.InAlarmForSkills(query.Ids, query.ExcludedStateIds));
 		}
