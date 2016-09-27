@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security;
@@ -406,6 +407,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				retList.Add(ScheduleDay(dayAndPeriod, canSeeUnpublished, availablePeriods));
 			}
 			return retList;
+		}
+
+		[RemoveMeWithToggle("Please check if this one could be removed when toggle is removed", Toggles.ETL_SpeedUpETL_30791)]
+		public void RemoveSchedulesOutsideRange_Hack_RemoveMeLater()
+		{
+			foreach (var scheduleData in ScheduleDataInternalCollection())
+			{
+				if (!WithinRange(scheduleData.Period))
+				{
+					Remove(scheduleData);
+				}
+			}
 		}
 	}
 	public class PersistableScheduleDataForAuthorization : IPersistableScheduleDataAuthorizer

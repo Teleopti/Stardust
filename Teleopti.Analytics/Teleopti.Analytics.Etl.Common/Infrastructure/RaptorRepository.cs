@@ -13,6 +13,7 @@ using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
@@ -634,8 +635,8 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 				IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, false, true) { LoadDaysAfterLeft = true };
 
 				var scheduleDateTimePeriod = new ScheduleDateTimePeriod(period);
-				var schedulesDictionary =
-					scheduleRepository.FindSchedulesForPersons(scheduleDateTimePeriod, scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions, persons);
+				var schedulesDictionary = scheduleRepository.FindSchedulesForPersons(scheduleDateTimePeriod, scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions, persons);
+				removeScheduleDataOutsideRanges(schedulesDictionary);
 
 				//Clean ScheduleDictionary from all persons not present in PersonsInOrganization
 				IList<IPerson> personsToRemove = new List<IPerson>();
@@ -651,6 +652,18 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 
 				return schedulesDictionary;
 			}
+		}
+
+		[RemoveMeWithToggle("Please check if this one could be removed when toggle is removed", Toggles.ETL_SpeedUpETL_30791)]
+		private static void removeScheduleDataOutsideRanges(IScheduleDictionary schedulesDictionary)
+		{
+			//don't think this is needed but at the time #40763 was fixed, three ETL tests was failing so keep old behavior
+			//can maybe/probably be removed when old intradaystep is removed
+			foreach (ScheduleRange range in schedulesDictionary.Values)
+			{
+				range.RemoveSchedulesOutsideRange_Hack_RemoveMeLater();
+			}
+			schedulesDictionary.TakeSnapshot();
 		}
 
 		public void RemoveDuplicatesWorkaroundFor27636()

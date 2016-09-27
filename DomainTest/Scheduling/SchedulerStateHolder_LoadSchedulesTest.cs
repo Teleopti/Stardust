@@ -19,10 +19,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 	public class SchedulerStateHolder_LoadSchedulesTest
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
-		public IScheduleStorage ScheduleStorage; //TODO: Why is this injected?
+		public IScheduleStorage ScheduleStorage;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 
-		[Test, Ignore("Failing test for #40763")]
+		[Test]
 		public void ShouldLoadDataEvenIfDifferentTimeZonesSeemsToMakeDataBeOnOtherDay()
 		{
 			var userTimeZone = TimeZoneInfoFactory.MountainTimeZoneInfo();
@@ -33,10 +33,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			assignment.AddActivity(new Activity("_"), new TimePeriod(1,0,2,0));
 			PersonAssignmentRepository.Has(assignment);
 			var stateHolder = SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(date, date.AddWeeks(1)), new[] {agent}, new[] {assignment}, Enumerable.Empty<ISkillDay>(), userTimeZone);
-			stateHolder.SetRequestedScenario(scenario); //TODO: why is this needed?
-			var scheduleDateTimePeriod = new ScheduleDateTimePeriod(stateHolder.RequestedPeriod.Period(), stateHolder.SchedulingResultState.PersonsInOrganization); //TODO: why is this injected?
+			stateHolder.SetRequestedScenario(scenario);
 
-			stateHolder.LoadSchedules(ScheduleStorage, new PersonProvider(new[] { agent }), new ScheduleDictionaryLoadOptions(false, false), scheduleDateTimePeriod);
+			stateHolder.LoadSchedules(ScheduleStorage, new PersonProvider(new[] { agent }), new ScheduleDictionaryLoadOptions(false, false), new ScheduleDateTimePeriod(stateHolder.RequestedPeriod.Period()));
 
 			stateHolder.Schedules[agent].ScheduledDay(date).PersonAssignment()
 				.Should().Be.EqualTo(assignment);
