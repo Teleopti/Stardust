@@ -143,7 +143,10 @@ Teleopti.MyTimeWeb.AjaxSettings = { baseUrl: '' };
 Teleopti.MyTimeWeb.Ajax.UI = (function ($) {
 
 	function _ajaxErrorBody(jqXHR, textStatus, errorThrown) {
-		$('#body-inner').html('<h2>Error: ' + jqXHR.status + '</h2>');
+		var htmlString = '<h2>Error: ' + textStatus + ' - ' + errorThrown + '</h2>';
+		htmlString += '<a href="javascript:window.location.reload()">Reload</a>';
+
+		$('#body-inner').html(htmlString);
 	}
 
 	function _ajaxErrorDialog(jqXHR, textStatus, errorThrown) {
