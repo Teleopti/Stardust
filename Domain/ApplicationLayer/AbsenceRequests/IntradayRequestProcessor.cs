@@ -2,11 +2,13 @@
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
+	[EnabledBy(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754)]
 	public class IntradayRequestProcessor : IIntradayRequestProcessor
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(IntradayRequestProcessor));
@@ -34,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 																	 personRequest.Request.Period.StartDateTime, personRequest.Request.Period.EndDateTime);
 
 				//already understaffed
-				if (skillStaffingIntervals.Any(x => x.StaffingLevel < x.Forecast))
+				if (skillStaffingIntervals.Any(x => x.StaffingLevel < x.Forecast + 1))
 				{
 					sendDenyCommand(personRequest.Id.GetValueOrDefault(), "A Skill is already understaffed");
 					return;
