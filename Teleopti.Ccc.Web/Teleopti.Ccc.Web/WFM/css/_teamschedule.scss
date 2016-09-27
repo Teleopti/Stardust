@@ -325,8 +325,12 @@
 			width: auto;
 		}
 
-		.validate-warning {
+		.validate-warning, .schedule-note {
 			float: right;
+		}
+
+		.schedule-note .mdi-comment-outline:before {
+			font-size:13px !important
 		}
 
 		.validate-warning md-progress-circular{

@@ -30,8 +30,8 @@
 					</label>
 				</div>
 				<div class="person-name" ng-hide="vm.selectMode">{{personSchedule.Name}}</div>
-				<span class="validate-warning" ng-if="vm.toggles.EditAndViewInternalNoteEnabled && personSchedule.InternalNotes && personSchedule.InternalNotes.length > 0">
-					<span ><i class="mdi mdi-comment"></i></span>
+				<span class="schedule-note" ng-if="vm.toggles.EditAndViewInternalNoteEnabled && personSchedule.InternalNotes && personSchedule.InternalNotes.length > 0">
+					<span ><i class="mdi mdi-comment-outline"></i></span>
 					<md-tooltip class="multiline-tooltip" md-direction="right">
 						{{personSchedule.InternalNotes}}
 					</md-tooltip>
