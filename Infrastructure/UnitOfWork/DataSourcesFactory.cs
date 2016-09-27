@@ -48,9 +48,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public IDataSource Create(string tenantName, string applicationConnectionString, string statisticConnectionString)
 		{
-			var applicationNhibConfiguration = new Dictionary<string, string>();
-			applicationNhibConfiguration[Environment.SessionFactoryName] = tenantName;
-			applicationNhibConfiguration[Environment.ConnectionString] = applicationConnectionString;
+			var applicationNhibConfiguration = new Dictionary<string, string>
+			{
+				[Environment.SessionFactoryName] = tenantName,
+				[Environment.ConnectionString] = applicationConnectionString
+			};
 			return createDataSource(applicationNhibConfiguration, statisticConnectionString);
 		}
 
@@ -104,12 +106,16 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return new DataSource(appFactory, statFactory, readModel);
 		}
 
-		private static ISessionFactory buildSessionFactory(Configuration configuration)
+		private ISessionFactory buildSessionFactory(Configuration configuration)
 		{
-			using (PerformanceOutput.ForOperation("Building sessionfactory for " + configuration.Properties[Environment.SessionFactoryName]))
+			var cachedSessionFactory = _nhibernateConfigurationCache.GetOrDefault(configuration);
+			if (cachedSessionFactory != null)
+				return cachedSessionFactory;
+			using (PerformanceOutput.ForOperation($"Building sessionfactory for {configuration.Properties[Environment.SessionFactoryName]}"))
 			{
 				var sessionFactory = configuration.BuildSessionFactory();
 				sessionFactory.Statistics.IsStatisticsEnabled = true;
+				_nhibernateConfigurationCache.StoreSessionFactory(configuration, sessionFactory);
 				return sessionFactory;
 			}
 		}
