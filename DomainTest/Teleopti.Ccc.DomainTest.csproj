@@ -181,6 +181,7 @@
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodTransformerTests.cs" />
     <Compile Include="ApplicationLayer\ReplyRequestCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Request\AnalyticsRequestUpdaterTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\Maintainer\ScheduleInvalidationTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\ShiftStartEndTimeTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentState\PersonChangedTeamTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\Mappings\MappingsTest.cs" />

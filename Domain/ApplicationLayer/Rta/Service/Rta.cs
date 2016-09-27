@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -14,7 +15,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		IHandleEvent<PersonDeletedEvent>,
 		IHandleEvent<PersonAssociationChangedEvent>,
 		IHandleEvent<ScheduleProjectionReadOnlyChangedEvent>,
-		IHandleEvent<ScheduleChangedEvent>
+		IHandleEvent<ScheduleChangedEvent>,
+		IHandleEventOnQueue<ScheduleChangedEvent>
 	{
 		private readonly IAgentStatePersister _persister;
 		private readonly INow _now;
@@ -71,10 +73,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[EnabledBy(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
 		public virtual void Handle(ScheduleChangedEvent @event)
 		{
+			if (scheduleChangeToday(@event))
+				_persister.InvalidateSchedules(@event.PersonId);
+		}
+
+		public string QueueTo(ScheduleChangedEvent @event)
+		{
+			return scheduleChangeToday(@event) ? Queues.ScheduleChangesToday : null;
+		}
+
+		private bool scheduleChangeToday(ScheduleChangedEvent @event)
+		{
 			var now = _now.UtcDateTime();
-			if (@event.StartDateTime > now.AddDays(2) || @event.EndDateTime < now.AddDays(-2))
-				return;
-			_persister.InvalidateSchedules(@event.PersonId);
+			return new DateTimePeriod(@event.StartDateTime, @event.EndDateTime)
+				.Intersect(new DateTimePeriod(now.AddDays(-2), now.AddDays(2)));
 		}
 	}
 

@@ -20,6 +20,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			public string UserCode { get; set; }
 		}
 
+		public void Has(AgentStateFound model)
+		{
+			_data.Add(new data
+			{
+				State = model,
+				PersonId = model.PersonId,
+				DataSourceId = model.DataSourceId,
+				UserCode = model.UserCode
+			});
+		}
+
 		public void Prepare(AgentStatePrepare model)
 		{
 			lock(_lock)
