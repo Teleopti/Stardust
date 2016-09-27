@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 																	 personRequest.Request.Period.StartDateTime, personRequest.Request.Period.EndDateTime);
 
 				//already understaffed
-				if (skillStaffingIntervals.Any(x => x.StaffingLevel < x.Forecast + 1))
+				if (skillStaffingIntervals.Any(x => x.StaffingLevel < x.ForecastWithShrinkage + 1))
 				{
 					sendDenyCommand(personRequest.Id.GetValueOrDefault(), "A Skill is already understaffed");
 					return;
