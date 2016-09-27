@@ -37,17 +37,6 @@ namespace Teleopti.Interfaces.Domain
 
 
         /// <summary>
-        /// Returns the total period of all IScheduledata, even if its not in the projection
-        /// Returns null if empty
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: henrika
-        /// Created date: 2008-10-13
-        /// </remarks>
-        DateTimePeriod? TotalPeriod();
-
-        /// <summary>
         /// Gets the business rule response internal collection.
         /// </summary>
         /// <value>The business rule response internal collection.</value>

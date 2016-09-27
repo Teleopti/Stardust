@@ -20,13 +20,6 @@ namespace Teleopti.Ccc.TestCommon
 			return ScheduleDayStub(new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc));
 		}
 
-		public IScheduleDay ScheduleDayStub(DateTimePeriod totalPeriod)
-		{
-            var person = new Person();
-            person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			return ScheduleDayStub(totalPeriod.StartDateTime, person, SchedulePartView.MainShift, null, null, null, null, totalPeriod);
-		}
-
 		public IScheduleDay ScheduleDayStub(DateTime date)
 		{
 			return ScheduleDayStub(date, SchedulePartView.None, null, null, null);
@@ -77,11 +70,10 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IScheduleDay ScheduleDayStub(DateTime date, IPerson person, SchedulePartView significantPartToDisplay, IPersonAssignment personAssignment, IEnumerable<IPersonAbsence> personAbsences, IPublicNote publicNote)
 		{
-			return ScheduleDayStub(date, person, significantPartToDisplay, personAssignment, personAbsences,
-								   publicNote, null, null);
+			return ScheduleDayStub(date, person, significantPartToDisplay, personAssignment, personAbsences, publicNote, null);
 		}
 
-		public IScheduleDay ScheduleDayStub(DateTime date, IPerson person, SchedulePartView significantPartToDisplay, IPersonAssignment personAssignment, IEnumerable<IPersonAbsence> personAbsences, IPublicNote publicNote, IEnumerable<IPersonMeeting> meetings, DateTimePeriod? totalPeriod)
+		public IScheduleDay ScheduleDayStub(DateTime date, IPerson person, SchedulePartView significantPartToDisplay, IPersonAssignment personAssignment, IEnumerable<IPersonAbsence> personAbsences, IPublicNote publicNote, IEnumerable<IPersonMeeting> meetings)
 		{
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
 			                       
@@ -91,7 +83,6 @@ namespace Teleopti.Ccc.TestCommon
 			scheduleDay.Stub(x => x.SignificantPartForDisplay()).Return(significantPartToDisplay);
 			scheduleDay.Stub(x => x.SignificantPart()).Return(significantPartToDisplay);
 			scheduleDay.Stub(x => x.TimeZone).Return(timeZone);
-			scheduleDay.Stub(x => x.TotalPeriod()).Return(totalPeriod);
 			if (person != null)
 				scheduleDay.Stub(x => x.Person).Return(person);
 			if (publicNote != null)

@@ -11,19 +11,21 @@ namespace Teleopti.Interfaces.Domain
     /// Created by: rogerkr
     /// Created date: 2008-08-25
     /// </remarks>
-    public interface    IScheduleRange : ISchedule
+    public interface IScheduleRange : ISchedule
     {
-        /// <summary>
-        /// Extracts all schedule data including data with no permission.
-        /// The extractor is responsible of keeping all this data internal!
-        /// </summary>
-        /// <param name="extractor">The extractor.</param>
-        /// <param name="period">The period.</param>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-05-19
-        /// </remarks>
-        void ExtractAllScheduleData(IScheduleExtractor extractor, DateTimePeriod period);
+		DateTimePeriod? TotalPeriod();
+
+		/// <summary>
+		/// Extracts all schedule data including data with no permission.
+		/// The extractor is responsible of keeping all this data internal!
+		/// </summary>
+		/// <param name="extractor">The extractor.</param>
+		/// <param name="period">The period.</param>
+		/// <remarks>
+		/// Created by: rogerkr
+		/// Created date: 2008-05-19
+		/// </remarks>
+		void ExtractAllScheduleData(IScheduleExtractor extractor, DateTimePeriod period);
 
         /// <summary>
         /// Gets the cloned schedule for a certain day

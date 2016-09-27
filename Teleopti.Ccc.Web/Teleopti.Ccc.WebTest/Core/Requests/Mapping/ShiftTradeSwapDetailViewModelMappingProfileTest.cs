@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var expectedStart = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 			var expectedEnd = expectedStart.AddHours(23);
 			var scheduleDayFrom = _scheduleFactory.ScheduleDayStub();
-			var scheduleDayTo = _scheduleFactory.ScheduleDayStub(new DateTimePeriod(expectedStart.AddHours(2), expectedEnd));
+			var scheduleDayTo = _scheduleFactory.ScheduleDayStub();
 			_projectionProvider.Expect(x => x.Projection(scheduleDayFrom)).Return(_scheduleFactory.ProjectionStub(new DateTimePeriod(expectedStart, expectedStart.AddHours(1))));
 			_projectionProvider.Expect(x => x.Projection(scheduleDayTo)).Return(_scheduleFactory.ProjectionStub(new DateTimePeriod(expectedStart.AddHours(2), expectedEnd)));
 
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			Mapper.AddProfile(new MappingProfileForProbing<IScheduleDay, ShiftTradeEditPersonScheduleViewModel>());
 			var expectedStart = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 			var expectedEnd = expectedStart.AddHours(10);
-			var scheduleDayFrom = _scheduleFactory.ScheduleDayStub(new DateTimePeriod(expectedStart, expectedEnd));
+			var scheduleDayFrom = _scheduleFactory.ScheduleDayStub();
 			var scheduleDayTo = _scheduleFactory.ScheduleDayStub();
 			_projectionProvider.Expect(x => x.Projection(scheduleDayFrom)).Return(_scheduleFactory.ProjectionStub(new DateTimePeriod(expectedStart, expectedEnd)));
 			_projectionProvider.Expect(x => x.Projection(scheduleDayTo)).Return(_scheduleFactory.ProjectionStub());
