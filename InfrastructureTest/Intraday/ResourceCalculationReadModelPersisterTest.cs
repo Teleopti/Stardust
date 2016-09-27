@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 						}
 				}
 			};
-			Target.Persist(items, new DateOnly(2016, 06, 16));
+			Target.Persist(items);
 
 			Target.GetBySkill(skillId,new DateTime(2016, 06, 16, 0, 0, 0), new DateTime(2016, 06, 16, 23, 59, 59))
 				.Count()
@@ -81,8 +81,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 						}
 				}
 			};
-			Target.Persist(items, new DateOnly(2016, 06, 16));
-			Target.Persist(items, new DateOnly(2016, 06, 16));
+			Target.Persist(items);
+			Target.Persist(items);
 
 		}
 
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
                         }
                 }
             };
-            Target.Persist(items, new DateOnly(2016, 06, 16));
+            Target.Persist(items);
 
             var result =  Target.GetBySkill(skillId, new DateTime(2016, 06, 16, 0, 0, 0), new DateTime(2016, 06, 16, 23, 59, 59));
             result.First().CalculatedOn.Should().Be.EqualTo(calculatedOn);
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
                         }
                 }
             };
-            Target.Persist(items, new DateOnly(2016, 06, 16));
+            Target.Persist(items);
 
             var result = Target.GetLastCalculatedTime();
             result.Should().Be.EqualTo(new DateTime(2016, 06, 16, 03, 15, 0, DateTimeKind.Utc));
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
                         }
                 }
             };
-            Target.Persist(items, new DateOnly(2016, 06, 16));
+            Target.Persist(items);
 
             var result = Target.GetBySkill(skillId, new DateTime(2016, 06, 16, 0, 0, 0), new DateTime(2016, 06, 16, 23, 59, 59));
             result.First().ForecastWithShrinkage.Should().Be.EqualTo(25);
