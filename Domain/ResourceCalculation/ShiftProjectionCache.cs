@@ -60,6 +60,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             }
         }
 
+	    public TimeSpan WorkShiftProjectionWorkTime
+	    {
+		    get { return _workShiftProjection.Value.WorkTime(); }
+	    }
+
         public DateTimePeriod WorkShiftProjectionPeriod
         {
             get 

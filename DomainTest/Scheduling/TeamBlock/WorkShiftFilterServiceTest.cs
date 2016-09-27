@@ -221,6 +221,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldReturnNullIfEffectiveRestrictionShiftFilterSaysFalse()
 		{
+			_activity.InWorkTime = true;
 			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
 				new EndTimeLimitation(), new WorkTimeLimitation(null,TimeSpan.FromHours(7)), null, null, null, new List<IActivityRestriction>());
 			_schedulingOptions.MainShiftOptimizeActivitySpecification = new All<IEditableShift>();

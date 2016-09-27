@@ -21,13 +21,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 		private readonly ITeamInfoFactory _teamInfoFactory;
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
+		private readonly IWeeksFromScheduleDaysExtractor _weeksFromScheduleDaysExtractor;
 
 		public ScheduleOvertimeOnNonScheduleDays(Func<ISchedulerStateHolder> schedulerStateHolder,
 			ITeamBlockScheduler teamBlockScheduler,
 			IMatrixListFactory matrixListFactory,
 			ITeamBlockInfoFactory teamBlockInfoFactory,
 			ITeamInfoFactory teamInfoFactory,
-			IGroupPersonBuilderWrapper groupPersonBuilderWrapper)
+			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
+			IWeeksFromScheduleDaysExtractor weeksFromScheduleDaysExtractor)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_teamBlockScheduler = teamBlockScheduler;
@@ -35,6 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_teamInfoFactory = teamInfoFactory;
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
+			_weeksFromScheduleDaysExtractor = weeksFromScheduleDaysExtractor;
 		}
 
 		public void SchedulePersonOnDay(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences, IResourceCalculateDelayer resourceCalculateDelayer)
@@ -67,8 +70,41 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				stateHolder.SchedulingResultState, shiftNudgeDirective, createRules(overtimePreferences));
 		}
 
-		private static ShiftNudgeDirective createShiftNudgeDirective(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences)
+		private ShiftNudgeDirective createShiftNudgeDirective(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences)
 		{
+			var shiftNudgeDirective = new ShiftNudgeDirective();
+			var person = scheduleDay.Person;
+			var workTimeLimitation = new WorkTimeLimitation();
+
+			if (!overtimePreferences.AllowBreakMaxWorkPerWeek)
+			{
+				var personWeek = _weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(new[] { scheduleDay }).First();
+				var currentSchedules = _schedulerStateHolder().Schedules[person];
+				double currentWorkTimeForWeek = 0;
+				foreach (var schedule in currentSchedules.ScheduledDayCollection(personWeek.Week))
+				{
+					currentWorkTimeForWeek += schedule.ProjectionService().CreateProjection().WorkTime().TotalMinutes;
+				}
+
+				var maxContractWorkTimePerWeek = 0d;
+				foreach (var dateOnly in personWeek.Week.DayCollection())
+				{
+					var period = person.Period(dateOnly);
+					if (period == null) continue;
+					var workTime = period.PersonContract.Contract.WorkTimeDirective.MaxTimePerWeek.TotalMinutes;
+					if (workTime > maxContractWorkTimePerWeek) maxContractWorkTimePerWeek = workTime;
+				}
+
+				var worktimeLeftOnWeek = maxContractWorkTimePerWeek - currentWorkTimeForWeek;
+				if (worktimeLeftOnWeek > 0)
+				{
+					worktimeLeftOnWeek = Math.Min(WorkTimeLimitation.VerifyLimit.TotalMinutes, worktimeLeftOnWeek);
+					workTimeLimitation = new WorkTimeLimitation(null, TimeSpan.FromMinutes(worktimeLeftOnWeek));
+					var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), workTimeLimitation, null, null, null, new List<IActivityRestriction>());
+					shiftNudgeDirective = new ShiftNudgeDirective(effectiveRestriction, ShiftNudgeDirective.NudgeDirection.Left);
+				}
+			}
+
 			if (overtimePreferences.AvailableAgentsOnly)
 			{
 				var avail = scheduleDay.PersistableScheduleDataCollection().OfType<IOvertimeAvailability>().First();
@@ -77,13 +113,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					var startTimeLimitation = new StartTimeLimitation(avail.StartTime, null);
 					var endTimeLimitation = new EndTimeLimitation(null, avail.EndTime);
 					var effectiveRestriction = new EffectiveRestriction(startTimeLimitation, endTimeLimitation,
-																		new WorkTimeLimitation(),
+																		workTimeLimitation,
 																		null, null, null, new List<IActivityRestriction>());
 					return new ShiftNudgeDirective(effectiveRestriction, ShiftNudgeDirective.NudgeDirection.Left);
 				}
 			}
 
-			return new ShiftNudgeDirective();
+			return shiftNudgeDirective;
 		}
 
 		private static INewBusinessRuleCollection createRules(IOvertimePreferences overtimePreferences)

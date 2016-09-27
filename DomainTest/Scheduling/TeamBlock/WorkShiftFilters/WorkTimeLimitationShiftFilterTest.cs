@@ -87,8 +87,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				Expect.Call(ps1.CreateProjection()).Return(lc1);
 				Expect.Call(ps2.CreateProjection()).Return(lc2);
 
-				Expect.Call(lc1.ContractTime()).Return(new TimeSpan(7, 0, 0));
-				Expect.Call(lc2.ContractTime()).Return(new TimeSpan(10, 0, 0));
+				Expect.Call(lc1.WorkTime()).Return(new TimeSpan(7, 0, 0));
+				Expect.Call(lc2.WorkTime()).Return(new TimeSpan(10, 0, 0));
 			}
 
 			IList<IShiftProjectionCache> retShifts;

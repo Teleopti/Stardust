@@ -24,8 +24,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			{
 				foreach (ShiftProjectionCache proj in shiftList)
 				{
-					TimeSpan contractTime = proj.WorkShiftProjectionContractTime;
-					if (restriction.WorkTimeLimitation.IsCorrespondingToWorkTimeLimitation(contractTime))
+					var workTime = proj.WorkShiftProjectionWorkTime;
+
+					if (restriction.WorkTimeLimitation.IsCorrespondingToWorkTimeLimitation(workTime))
 						workShiftsWithinMinMax.Add(proj);
 				}
 				finderResult.AddFilterResults(

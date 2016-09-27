@@ -33,7 +33,7 @@ namespace Teleopti.Interfaces.Domain
 			verifyTimes(startTime, endTime);
 		  }
 
-	    private static readonly TimeSpan VerifyLimit = new TimeSpan(36, 0, 0);
+	    public static readonly TimeSpan VerifyLimit = new TimeSpan(36, 0, 0);
 		private static void verifyTimes(TimeSpan? startTime, TimeSpan? endTime)
 		{
 			if (startTime.HasValue)

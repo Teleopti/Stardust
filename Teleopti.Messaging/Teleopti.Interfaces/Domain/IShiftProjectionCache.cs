@@ -44,6 +44,8 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         TimeSpan WorkShiftProjectionContractTime { get; }
 
+		TimeSpan WorkShiftProjectionWorkTime { get; }
+
         /// <summary>
         /// Gets the work shift projection period.
         /// </summary>
