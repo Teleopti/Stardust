@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Web.Core.Data;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
@@ -17,5 +16,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public ShiftCategoryViewModel ShiftCategory { get; set; }
 		public bool IsFullDayAbsence { get; set; }
 		public GroupScheduleDayOffViewModel DayOff { get; set; }
+		public string InternalNotes { get; set; }
 	}
 }

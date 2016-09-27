@@ -868,6 +868,27 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			result.Schedules.Second().Projection.First().Description.Should().Be("activity2");
 		}
 
+
+		[Test]
+		public void ShouldReturnInternalNotesWhenThereIsForScheduleSearch()
+		{
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
+			PeopleSearchProvider.Add(person);
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
+			scheduleDay.CreateAndAddNote("dummy notes");
+
+			ScheduleProvider.AddScheduleDay(scheduleDay);
+
+			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+			result.Count.Should().Be.EqualTo(1);
+
+			var schedule = result.Single();
+			schedule.Name.Should().Be.EqualTo("Sherlock@Holmes");
+			schedule.InternalNotes.Should().Be("dummy notes");
+		}
+
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeScheduleProvider>().For<IScheduleProvider>();

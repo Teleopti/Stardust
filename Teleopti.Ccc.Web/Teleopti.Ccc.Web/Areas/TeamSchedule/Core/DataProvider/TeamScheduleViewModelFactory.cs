@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -304,15 +305,19 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				foreach(var scheduleDay in schedules)
 				{
 					var isPublished = isSchedulePublished(scheduleDay.DateOnlyAsPeriod.DateOnly,person);
-					list.Add(isPublished || canSeeUnpublishedSchedules
-						? _teamScheduleProjectionProvider.Projection(scheduleDay,canViewConfidential,nameDescriptionSetting)
+					var vm = isPublished || canSeeUnpublishedSchedules
+						? _teamScheduleProjectionProvider.Projection(scheduleDay, canViewConfidential, nameDescriptionSetting)
 						: new GroupScheduleShiftViewModel
 						{
 							PersonId = person.Id.GetValueOrDefault().ToString(),
 							Name = nameDescriptionSetting.BuildCommonNameDescription(person),
 							Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToFixedDateFormat(),
 							Projection = new List<GroupScheduleProjectionViewModel>()
-						});
+						};
+					vm.InternalNotes = scheduleDay.NoteCollection().Any()
+						? scheduleDay.NoteCollection().FirstOrDefault().GetScheduleNote(new NoFormatting())
+						: string.Empty;
+					list.Add(vm);
 				}
 
 			}
