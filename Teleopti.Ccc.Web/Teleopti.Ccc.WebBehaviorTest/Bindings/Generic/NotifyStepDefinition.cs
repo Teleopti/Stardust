@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		const string notifyTextSelector = "#noty_bottom_layout_container .noty_bar .noty_message .noty_text";
 
 		[When(@"I wait until week schedule is fully loaded")]
+		[Then(@"I wait until week schedule is fully loaded")]
 		public void WhenIWaitUntilWeekScheduleIsFullyLoaded()
 		{
 			Browser.Interactions.AssertUrlContains("MyTime#Schedule/Week");
@@ -18,8 +19,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		}
 
 		[When(@"An activity '(.*)' with time '(.*)' to '(.*)' is added to my schedule")]
-		public void WhenAnActivityWithTimeToIsAddedToMySchedule(string activity, string startTime, string endTime)
+		[Then(@"An activity '(.*)' with time '(.*)' to '(.*)' is added to my schedule")]
+		public void ThenAnActivityWithTimeToIsAddedToMySchedule(string activity, string startTime, string endTime)
 		{
+			Browser.Interactions.Javascript("$('#loading').show()");
 			var fetchActivityUrl = "/api/TeamScheduleData/FetchActivities";
 			var addActivityUrl = "/api/TeamScheduleCommand/AddActivity";
 			var getActivityId = "(function(activities){" +
@@ -31,30 +34,46 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 									"return result;" +
 								"})(data)";
 
-			var js = "Teleopti.MyTimeWeb.Common.GetUserData(function(user){" +
-							"$.ajax({" +
-								"url:'"+ fetchActivityUrl + "'," +
-								"type:'GET'," +
-								"contentType:'application/json'," +
-								"success:function(data){" +
+			var addActivityJs = "Teleopti.MyTimeWeb.Common.GetUserData(function(user){" +
 									"$.ajax({" +
-										"url:'"+ addActivityUrl + "'," +
-										"type:'POST'," +
+										"url:'" + fetchActivityUrl + "'," +
+										"type:'GET'," +
 										"contentType:'application/json'," +
-										"data:JSON.stringify({" +
-												"ActivityId: "+ getActivityId +"," +
-												"Date:'"+ startTime.Split(' ')[0] +"', " +
-												"StartTime:'"+ startTime + "'," +
-												"EndTime:'"+ endTime + "'," +
-												"PersonIds:[user.AgentId]" +
-										"})" +
-									"});" +
-								"}" +
-							"});" +
-						"})";
+										"success:function(data){" +
+											"$.ajax({" +
+												"url:'"+ addActivityUrl + "'," +
+												"type:'POST'," +
+												"contentType:'application/json'," +
+												"data:JSON.stringify({" +
+														"ActivityId: "+ getActivityId + "," +
+														"ActivityType: 1," +
+														"Date:'"+ startTime.Split(' ')[0] +"', " +
+														"StartTime:'"+ startTime + "'," +
+														"EndTime:'"+ endTime + "'," +
+														"PersonIds:[user.AgentId]" +
+												"})," +
+												"success: function(){}" +
+												"});" +
+											"}" +
+										"});" +
+									"});";
+			Browser.Interactions.Javascript(addActivityJs);
+			Browser.Interactions.Javascript("$('#loading').hide()");
+		}
 
-			Browser.Interactions.Javascript(js);
-			Browser.Interactions.AssertAnyContains(".schedule-table-container", activity);
+		[Then(@"I should see activity '(.*)' on my schedule table")]
+		public void ThenIShouldSeeActivityOnMyScheduleTable(string activity)
+		{
+			Browser.TimeoutScope(new TimeSpan(0, 0, 5));
+			Browser.Interactions.AssertNotExists(".schedule-table-container", activity+activity);
+			Browser.Interactions.AssertExists(".schedule-table-container", activity);
+		}
+
+		[Then(@"I should not see activity '(.*)' on my schedule table")]
+		public void ThenIShouldNotSeeActivityOnMyScheduleTable(string activity)
+		{
+			Browser.TimeoutScope(new TimeSpan(0, 0, 10));
+			Browser.Interactions.AssertNotExists(".schedule-table-container", activity);
 		}
 
 		[Then(@"I should see one notify message")]
