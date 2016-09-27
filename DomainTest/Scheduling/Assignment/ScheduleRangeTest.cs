@@ -493,6 +493,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyPersonAbsenceDateTimeSortOrder()
 		{
+			Expect.Call(_dic.PermissionsEnabled).Return(true);
 			fullPermission(true);
 			_mocks.ReplayAll();
 
@@ -635,6 +636,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			
 			using (_mocks.Record())
 			{
+				Expect.Call(_dic.PermissionsEnabled).Return(true);
 				Expect.Call(_dic.Scenario).Return(_scenario);
 			}
 

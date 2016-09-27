@@ -216,6 +216,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 throw new ArgumentOutOfRangeException("scheduleData", "Trying to add schedule info to incorrect person.");
             if (!scheduleData.BelongsToScenario(Scenario))
                 throw new ArgumentOutOfRangeException("scheduleData", "Trying to add schedule info to incorrect scenario.");
+            if (!WithinRange(scheduleData.Period))
+            {
+                if (!Owner.PermissionsEnabled)
+                    return false; //if loaded from db, ignore stuff outside period
+				////TODO check with RK, problems when splitting long absence periods
+				//if (!(scheduleData is IPersonAbsence))
+				//    throw new ArgumentOutOfRangeException(scheduleData.Period + " is outside " + Period + ". Cannot add to Schedule.");
+            }
+
             return CheckPermission(scheduleData);
         }
 

@@ -326,6 +326,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			using (_mockRepository.Record())
 			{
 				commonMocks();
+				Expect.Call(_scheduleDictionary.PermissionsEnabled).Return(true);
 			}
 
 			using (_mockRepository.Playback())
