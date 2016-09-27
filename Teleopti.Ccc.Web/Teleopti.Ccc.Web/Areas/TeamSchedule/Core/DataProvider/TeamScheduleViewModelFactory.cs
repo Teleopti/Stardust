@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.People.Core.Providers;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Interfaces.Domain;
@@ -255,9 +254,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			scheduleDays.AddRange(
 				scheduleDaysForPreviousDay.Where(
 					scheduleDay =>
-						scheduleDay != null && scheduleDay.PersonAssignment() != null &&
-						TimeZoneHelper.ConvertFromUtc(scheduleDay.PersonAssignment().Period.EndDateTime, userTimeZone) >
-						dateInUserTimeZone.Date));
+					{
+						var personAssignment = scheduleDay?.PersonAssignment();
+						return personAssignment != null &&
+							   TimeZoneHelper.ConvertFromUtc(personAssignment.Period.EndDateTime, userTimeZone) >
+							   dateInUserTimeZone.Date;
+					}));
 
 			var canSeeUnpublishedSchedules =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
@@ -291,7 +293,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				var person = personScheduleDay.Person;
 				var schedules = personScheduleDay.Schedules.ToArray();
 				var canViewConfidential = peopleCanSeeConfidentialAbsencesFor.Contains(person.Id.GetValueOrDefault());
-				if (!schedules.Any(s =>s.DateOnlyAsPeriod.DateOnly == dateInUserTimeZone))
+				if (schedules.All(s => s.DateOnlyAsPeriod.DateOnly != dateInUserTimeZone))
 				{
 					list.Add(new GroupScheduleShiftViewModel
 					{
@@ -314,8 +316,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 							Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToFixedDateFormat(),
 							Projection = new List<GroupScheduleProjectionViewModel>()
 						};
-					vm.InternalNotes = scheduleDay.DateOnlyAsPeriod.DateOnly == dateInUserTimeZone && scheduleDay.NoteCollection().Any()
-						? scheduleDay.NoteCollection().FirstOrDefault().GetScheduleNote(new NoFormatting())
+					var note = scheduleDay.NoteCollection().FirstOrDefault();
+					vm.InternalNotes = note != null && scheduleDay.DateOnlyAsPeriod.DateOnly == dateInUserTimeZone
+						? note.GetScheduleNote(new NormalizeText())
 						: string.Empty;
 					list.Add(vm);
 				}
