@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 {
 	public class MessageBrokerServer : IMessageBrokerServer
 	{
-		private readonly IActionScheduler _actionScheduler;
 		private readonly ISignalR _signalR;
 		private readonly IMailboxRepository _mailboxRepository;
 		private readonly INow _now;
@@ -24,14 +23,12 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 	    private readonly MessageBrokerTracer _tracer = new MessageBrokerTracer();
 
 		public MessageBrokerServer(
-			IActionScheduler actionScheduler,
 			ISignalR signalR,
 			IBeforeSubscribe beforeSubscribe,
 			IMailboxRepository mailboxRepository,
 			IConfigReader config,
 			INow now)
 		{
-			_actionScheduler = actionScheduler;
 			_signalR = signalR;
 			_mailboxRepository = mailboxRepository;
 			_now = now;
@@ -116,8 +113,7 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Server
 
 			foreach (var route in routes)
 			{
-				var r = route;
-				_actionScheduler.Do(() => _signalR.CallOnEventMessage(RouteToGroupName(r), r, message));
+				_signalR.CallOnEventMessage(RouteToGroupName(route), route, message);
 			}
 
 			_tracer.ClientsNotified(message);

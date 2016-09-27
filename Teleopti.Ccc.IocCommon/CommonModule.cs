@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule(new TenantClientModule(_configuration));
 			builder.RegisterModule<DistributedLockModule>();
 			builder.RegisterModule(new RtaModule(_configuration));
-			builder.RegisterModule(new MessageBrokerServerModule(_configuration));
+			builder.RegisterModule<MessageBrokerServerModule>();
 			builder.RegisterModule<SchedulePersistModule>();
 			builder.RegisterModule(new HangfireModule(_configuration));
 			builder.RegisterModule<ForecastEventModule>();

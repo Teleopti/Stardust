@@ -11,12 +11,10 @@ namespace Teleopti.Ccc.Web.Broker
 	{
 		public ILog Logger = LogManager.GetLogger(typeof(MessageBrokerHub));
 
-		private IActionScheduler _actionScheduler;
 		private readonly IMessageBrokerServer _server;
 
-		public MessageBrokerHub(IActionScheduler actionScheduler, IMessageBrokerServer server)
+		public MessageBrokerHub(IMessageBrokerServer server)
 		{
-			_actionScheduler = actionScheduler;
 			_server = server;
 		}
 
@@ -54,16 +52,8 @@ namespace Teleopti.Ccc.Web.Broker
 		{
 			for (var i = 0; i < expectedNumberOfSentMessages; i++)
 			{
-				_actionScheduler.Do(Ping);
+				Ping();
 			}
-		}
-
-		public void Ping(int expectedNumberOfSentMessages, int messagesPerSecond)
-		{
-			_actionScheduler = new ActionThrottle(messagesPerSecond);
-			((ActionThrottle)_actionScheduler).Start();
-
-			Ping(expectedNumberOfSentMessages);
 		}
 	}
 

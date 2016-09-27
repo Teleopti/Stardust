@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Web.Broker
 			if (!string.IsNullOrEmpty(value))
 			{
 				int seconds;
-				settings.KeepAlive = Int32.TryParse(value,NumberStyles.Integer,CultureInfo.InvariantCulture,out seconds) ? TimeSpan.FromSeconds(seconds) : (TimeSpan?)null;
+				settings.KeepAlive = int.TryParse(value,NumberStyles.Integer,CultureInfo.InvariantCulture,out seconds) ? TimeSpan.FromSeconds(seconds) : (TimeSpan?)null;
 			}
 
 			value = ConfigurationManager.AppSettings["ConnectionTimeout"];
@@ -37,12 +37,6 @@ namespace Teleopti.Ccc.Web.Broker
 
 			value = ConfigurationManager.AppSettings["EnablePerformanceCounters"];
 			settings.EnablePerformanceCounters = !string.IsNullOrEmpty(value) && Convert.ToBoolean(value);
-
-			value = ConfigurationManager.AppSettings["ThrottleMessages"];
-			settings.ThrottleMessages = string.IsNullOrEmpty(value) || Convert.ToBoolean(value);
-
-			value = ConfigurationManager.AppSettings["MessagesPerSecond"];
-			settings.MessagesPerSecond = string.IsNullOrEmpty(value) ? 80 : Convert.ToInt32(value);
 
 			value = ConfigurationManager.AppSettings["SignalRBackplaneType"];
 			settings.SignalRBackplaneType = parseSignalRBackplaneType(value);
@@ -77,8 +71,6 @@ namespace Teleopti.Ccc.Web.Broker
 		public TimeSpan? ConnectionTimeout { get; set; }
 		public TimeSpan? DisconnectTimeout { get; set; }
 		public int? DefaultMessageBufferSize { get; set; }
-		public bool ThrottleMessages { get; set; }
-		public int MessagesPerSecond { get; set; }
 		public bool EnablePerformanceCounters { get; set; }
 		public string SignalRBackplaneConnectionString { get; set; }
 		public string SignalRBackplanePrefix { get; set; }
