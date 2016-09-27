@@ -88,7 +88,15 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			throw new NotImplementedException();
 		}
-	
+
+		public void SubtractAbsenceMinutesDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay, double minutes)
+		{
+		}
+
+		public void ClearAbsenceMinutesDuringCurrentRequestHandlingCycle()
+		{
+		}
+
 		public void AddAbsenceHeadCountDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay)
 		{
 			

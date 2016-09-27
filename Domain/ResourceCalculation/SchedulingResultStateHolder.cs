@@ -132,6 +132,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			addedAbsenceMinutesDictionary.AddOrUpdate(budgetDay, minutes,(b, m) => m+minutes);
 		}
 
+		public void SubtractAbsenceMinutesDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay, double minutes)
+		{
+			addedAbsenceMinutesDictionary.AddOrUpdate(budgetDay, 0, (b, m) => Math.Max(0, m - minutes));
+		}
+
+		public void ClearAbsenceMinutesDuringCurrentRequestHandlingCycle()
+		{
+			addedAbsenceMinutesDictionary.Clear();
+		}
+
 		private readonly ConcurrentDictionary<IBudgetDay, int> addedAbsenceHeadCountDictionary = new ConcurrentDictionary<IBudgetDay, int>();
 		public int AddedAbsenceHeadCountDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay)
 		{

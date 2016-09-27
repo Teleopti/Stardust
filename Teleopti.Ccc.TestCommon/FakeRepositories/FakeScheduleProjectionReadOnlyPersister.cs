@@ -17,9 +17,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly IList<ScheduleProjectionReadOnlyModel> _data = new List<ScheduleProjectionReadOnlyModel>();
 		private int _numberOfHeadCounts;
 
-		public IEnumerable<PayloadWorkTime> AbsenceTimePerBudgetGroup(DateOnlyPeriod period, IBudgetGroup budgetGroup, IScenario scenario)
+		public IEnumerable<PayloadWorkTime> AbsenceTimePerBudgetGroup(DateOnlyPeriod period, IBudgetGroup budgetGroup,
+			IScenario scenario)
 		{
-			throw new NotImplementedException();
+			return _data.Where(d => d.ScenarioId == scenario.Id && d.StartDateTime <= period.StartDate.Date
+									&& d.EndDateTime >= period.EndDate.Date).Select(d => new PayloadWorkTime
+									{
+										TotalContractTime = d.ContractTime.Ticks
+									});
 		}
 
 		public void AddActivity(ScheduleProjectionReadOnlyModel model)

@@ -5,10 +5,13 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.PersonAbsences;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -428,7 +431,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Assert.IsTrue(newRequest.IsDenied);
 		}
 
-
 		[Test]
 		public void ShouldAllowDenyReasonToBeUpdatedForWaitlistedRequest()
 		{
@@ -478,6 +480,118 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		}
 
+		[Test]
+		public void ShouldApprovePreviousWaitlistedRequestAfterRemoveAnAbsenceRequest()
+		{
+			var date = new DateOnly(2016, 9, 23);
+			var budgetGroup = createBudgetGroup(new Dictionary<DateOnly, int> { { date, 1 } });
+
+			var newAbsenceRequestHandler = createNewAbsenceRequestHandler(true, false);
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday").WithId();
+			var workflowControlSet = createBudgetGroupAllowanceCheckStaffingWorkFlowControlSet(absence);
+
+			var person1 = createAndSetupPerson(budgetGroup, workflowControlSet).WithId();
+			var request1 = createAbsenceRequest(person1, absence, date.ToDateTimePeriod(person1.PermissionInformation.DefaultTimeZone()));
+			newAbsenceRequestHandler.Handle(new NewAbsenceRequestCreatedEvent { PersonRequestId = request1.Id.Value });
+			Assert.IsTrue(request1.IsApproved, "request1 is not approved");
+
+			_scheduleProjectionReadOnlyPersister.AddActivity(
+				new ScheduleProjectionReadOnlyModel
+				{
+					BelongsToDate = date,
+					PayloadId = absence.Id.Value,
+					PersonId = person1.Id.Value,
+					ScenarioId = _currentScenario.Current().Id.Value,
+					StartDateTime = request1.Request.Period.StartDateTime,
+					EndDateTime = request1.Request.Period.EndDateTime,
+					ContractTime = TimeSpan.FromHours(8)
+				});
+
+			var person2 = createAndSetupPerson(budgetGroup, workflowControlSet);
+			var request2 = createAbsenceRequest(person2, absence, date.ToDateTimePeriod(person2.PermissionInformation.DefaultTimeZone()));
+			newAbsenceRequestHandler.Handle(new NewAbsenceRequestCreatedEvent { PersonRequestId = request2.Id.Value });
+			Assert.IsTrue(request2.IsWaitlisted, "request2 is not waitlisted");
+
+			_scheduleProjectionReadOnlyPersister.Clear(person1.Id.Value);
+			createRequestPersonAbsenceRemovedHandler().Handle(new RequestPersonAbsenceRemovedEvent
+			{
+				PersonRequestId = request1.Id.Value
+			});
+
+			Assert.IsTrue(request1.IsCancelled, "request1 is not cancelled");
+			Assert.IsTrue(request2.IsApproved, "request2 is not approved");
+		}
+
+		[Test]
+		public void ShouldApproveRequestAgainAfterRemoveAnAbsenceRequest()
+		{
+			var date = new DateOnly(2016, 9, 23);
+			var budgetGroup = createBudgetGroup(new Dictionary<DateOnly, int> { { date, 1 } });
+
+			var newAbsenceRequestHandler = createNewAbsenceRequestHandler(true, false);
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var workflowControlSet = createBudgetGroupAllowanceCheckStaffingWorkFlowControlSet(absence);
+
+			var person1 = createAndSetupPerson(budgetGroup, workflowControlSet);
+			var request1 = createAbsenceRequest(person1, absence, date.ToDateTimePeriod(person1.PermissionInformation.DefaultTimeZone()));
+			newAbsenceRequestHandler.Handle(new NewAbsenceRequestCreatedEvent { PersonRequestId = request1.Id.Value });
+			Assert.IsTrue(request1.IsApproved, "request1 is not approved");
+
+			createRequestPersonAbsenceRemovedHandler().Handle(new RequestPersonAbsenceRemovedEvent
+			{
+				PersonRequestId = request1.Id.Value
+			});
+			Assert.IsTrue(request1.IsCancelled, "request1 is not cancelled");
+
+			var request2 = createAbsenceRequest(person1, absence, date.ToDateTimePeriod(person1.PermissionInformation.DefaultTimeZone()));
+			newAbsenceRequestHandler.Handle(new NewAbsenceRequestCreatedEvent { PersonRequestId = request2.Id.Value });
+			Assert.IsTrue(request2.IsApproved, "request2 is not approved");
+		}
+
+		[Test]
+		public void ShouldApproveOneDayRequestAfterTwoDaysRequestFailed()
+		{
+			var date1 = new DateOnly(2016, 9, 23);
+			var date2 = new DateOnly(2016, 9, 24);
+			var budgetGroup = createBudgetGroup(new Dictionary<DateOnly, int> { { date1, 1}, { date2, 0 } });
+
+			var newAbsenceRequestHandler = createNewAbsenceRequestHandler(true, false);
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var workflowControlSet = createBudgetGroupAllowanceCheckStaffingWorkFlowControlSet(absence);
+
+			var person1 = createAndSetupPerson(budgetGroup, workflowControlSet);
+			var request1 = createAbsenceRequest(person1, absence,
+				new DateTimePeriod(
+					new DateTime(date1.Year, date1.Month, date1.Day, 0, 0, 0, DateTimeKind.Utc),
+					new DateTime(date2.Year, date2.Month, date2.Day, 0, 0, 0, DateTimeKind.Utc)));
+			newAbsenceRequestHandler.Handle(new NewAbsenceRequestCreatedEvent { PersonRequestId = request1.Id.Value });
+			Assert.IsTrue(request1.IsWaitlisted, "request1 is not waitlisted");
+
+			var request2 = createAbsenceRequest(person1, absence, date1.ToDateTimePeriod(person1.PermissionInformation.DefaultTimeZone()));
+			newAbsenceRequestHandler.Handle(new NewAbsenceRequestCreatedEvent { PersonRequestId = request2.Id.Value });
+			Assert.IsTrue(request2.IsApproved, "request2 is not approved");
+		}
+
+		private BudgetGroup createBudgetGroup(Dictionary<DateOnly, int> dateAllowances)
+		{
+			var budgetGroup = new BudgetGroup {Name = "budgetGroup1"};
+			foreach (var dateAllowance in dateAllowances)
+			{
+				var budgetDay = new BudgetDay(budgetGroup, _currentScenario.Current(), dateAllowance.Key)
+				{
+					OvertimeHours = 1,
+					TotalAllowance = dateAllowance.Value,
+					Allowance = dateAllowance.Value,
+					FulltimeEquivalentHours = 8
+				};
+				_fakeBudgetDayRepository.Add(budgetDay);
+			}
+			return budgetGroup;
+		}
+
 		private void createPersonAbsenceAccount(IPerson person, IAbsence absence, IAccount accountDay)
 		{
 			var personAbsenceAccount = new PersonAbsenceAccount(person, absence);
@@ -501,7 +615,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				_scheduleRepository.Set(new[] { assignment });
 			}
 		}
-
 
 		private PersonRequest createAbsenceRequest(IPerson person, IAbsence absence, DateTimePeriod requestDateTimePeriod)
 		{
@@ -543,6 +656,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			return person;
 		}
 
+		private IPerson createAndSetupPerson(IBudgetGroup budgetGroup, IWorkflowControlSet workflowControlSet)
+		{
+			var personPeriodDateOnly = new DateOnly(2016, 1, 1);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(personPeriodDateOnly);
+			person.PersonPeriods(personPeriodDateOnly.ToDateOnlyPeriod()).FirstOrDefault().BudgetGroup = budgetGroup;
+			person.WorkflowControlSet = workflowControlSet;
+			return person;
+		}
+
 		private static WorkflowControlSet createWorkFlowControlSet(DateTime startDate, DateTime endDate, IAbsence absence, IProcessAbsenceRequest processAbsenceRequest, bool waitlistingIsEnabled)
 		{
 			var workflowControlSet = new WorkflowControlSet { AbsenceRequestWaitlistEnabled = waitlistingIsEnabled };
@@ -565,42 +687,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		}
 
+		private static WorkflowControlSet createBudgetGroupAllowanceCheckStaffingWorkFlowControlSet(IAbsence absence)
+		{
+			var workflowControlSet = WorkflowControlSetFactory.CreateWorkFlowControlSet(absence, new GrantAbsenceRequest(), true);
+			var absenceRequestOpenPeriod = workflowControlSet.AbsenceRequestOpenPeriods.FirstOrDefault();
+			absenceRequestOpenPeriod.StaffingThresholdValidator = new BudgetGroupAllowanceValidator();
+			return workflowControlSet;
+		}
+
 		private NewAbsenceRequestHandler createNewAbsenceRequestHandler(bool enableWaitlisting, bool forceAccountRecalcBeforeProcessingRequest)
 		{
-			var resourceCalculator = new ResourceCalculationPrerequisitesLoader(_unitOfWorkFactory,
-				new FakeContractScheduleRepository(),
-				new FakeActivityRepository(), new FakeAbsenceRepository());
-
-			var requestFactory =
-				new RequestFactory(new SwapAndModifyService(new SwapService(), new DoNothingScheduleDayChangeCallBack()),
-					new PersonRequestAuthorizationCheckerForTest(), new FakeGlobalSettingDataRepository(), null, new DoNothingScheduleDayChangeCallBack());
-
-
-			var toggleManager = enableWaitlisting
-							? new FakeToggleManager(Toggles.Wfm_Requests_Waitlist_36232)
-							: new FakeToggleManager();
-
-			if (forceAccountRecalcBeforeProcessingRequest)
-			{
-				toggleManager.Enable(Toggles.Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850);
-			}
-
-			var absenceRequestStatusUpdater = new AbsenceRequestUpdater(new PersonAbsenceAccountProvider(_personAbsenceAccountRepository),
-				resourceCalculator,
-				new DefaultScenarioFromRepository(_scenarioRepository),
-				_loadSchedulingStateHolderForResourceCalculation,
-				_loadSchedulesForRequestWithoutResourceCalculation,
-				requestFactory,
-				new AlreadyAbsentSpecification(),
-				new ScheduleIsInvalidSpecification(),
-				new PersonRequestCheckAuthorization(),
-				new BudgetGroupHeadCountSpecification(_scenarioRepository, _fakeBudgetDayRepository,
-					_scheduleProjectionReadOnlyPersister),
-				null,
-				new BudgetGroupAllowanceSpecification(_currentScenario, _fakeBudgetDayRepository,
-					_scheduleProjectionReadOnlyPersister),
-				new FakeScheduleDifferenceSaver(_scheduleRepository),
-				_personAccountUpdaterDummy, toggleManager);
+			var absenceRequestStatusUpdater = createAbsenceRequestUpdater(enableWaitlisting, forceAccountRecalcBeforeProcessingRequest);
 
 			var absenceProcessor = new AbsenceRequestProcessor(absenceRequestStatusUpdater, () => _schedulingResultStateHolder);
 			var absenceRequestWaitlistProcessor = new AbsenceRequestWaitlistProcessor(absenceRequestStatusUpdater, () => _schedulingResultStateHolder, new AbsenceRequestWaitlistProvider(_personRequestRepository));
@@ -610,12 +707,62 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			return newAbsenceRequestConsumer;
 		}
 
+		private AbsenceRequestUpdater createAbsenceRequestUpdater(bool enableWaitlisting, bool forceAccountRecalcBeforeProcessingRequest)
+		{
+			var toggleManager = enableWaitlisting
+				? new FakeToggleManager(Toggles.Wfm_Requests_Waitlist_36232)
+				: new FakeToggleManager();
+
+			if (forceAccountRecalcBeforeProcessingRequest)
+			{
+				toggleManager.Enable(Toggles.Request_RecalculatePersonAccountBalanceOnRequestConsumer_36850);
+			}
+
+			var requestFactory =
+				new RequestFactory(new SwapAndModifyService(new SwapService(), new DoNothingScheduleDayChangeCallBack()),
+				new PersonRequestAuthorizationCheckerForTest(), new FakeGlobalSettingDataRepository(), null, new DoNothingScheduleDayChangeCallBack());
+
+			var resourceCalculator = new ResourceCalculationPrerequisitesLoader(_unitOfWorkFactory,
+				new FakeContractScheduleRepository(),
+				new FakeActivityRepository(), new FakeAbsenceRepository());
+
+			var absenceRequestStatusUpdater =
+				new AbsenceRequestUpdater(new PersonAbsenceAccountProvider(_personAbsenceAccountRepository),
+					resourceCalculator,
+					new DefaultScenarioFromRepository(_scenarioRepository),
+					_loadSchedulingStateHolderForResourceCalculation,
+					_loadSchedulesForRequestWithoutResourceCalculation,
+					requestFactory,
+					new AlreadyAbsentSpecification(),
+					new ScheduleIsInvalidSpecification(),
+					new PersonRequestCheckAuthorization(),
+					new BudgetGroupHeadCountSpecification(_scenarioRepository, _fakeBudgetDayRepository,
+						_scheduleProjectionReadOnlyPersister),
+					null,
+					new BudgetGroupAllowanceSpecification(_currentScenario, _fakeBudgetDayRepository,
+						_scheduleProjectionReadOnlyPersister),
+					new FakeScheduleDifferenceSaver(_scheduleRepository),
+					_personAccountUpdaterDummy, toggleManager);
+			return absenceRequestStatusUpdater;
+		}
+
 		private IPersonAssignment createAssignment(IPerson person, DateTime startDate, DateTime endDate, ICurrentScenario currentScenario)
 		{
 			return PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
 				currentScenario.Current(),
 				person,
 				new DateTimePeriod(startDate, endDate));
+		}
+
+		private RequestPersonAbsenceRemovedHandler createRequestPersonAbsenceRemovedHandler()
+		{
+			var absenceRequestStatusUpdater = createAbsenceRequestUpdater(true, false);
+			var absenceRequestWaitlistProcessor = new AbsenceRequestWaitlistProcessor(absenceRequestStatusUpdater
+				, () => _schedulingResultStateHolder, new AbsenceRequestWaitlistProvider(_personRequestRepository));
+			var absenceRequestCancelService = new AbsenceRequestCancelService(new PersonRequestAuthorizationCheckerConfigurable(), _currentScenario);
+			var requestPersonAbsenceRemovedHandler = new RequestPersonAbsenceRemovedHandler(_unitOfWorkFactory, absenceRequestWaitlistProcessor
+				, _personRequestRepository, absenceRequestCancelService);
+			return requestPersonAbsenceRemovedHandler;
 		}
 
 	}

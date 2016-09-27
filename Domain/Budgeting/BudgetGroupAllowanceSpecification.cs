@@ -80,6 +80,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 			var scheduleRange = schedulingResultStateHolder.Schedules[absenceRequest.Person];
 			var count = 0;
 			var invalidDays = string.Empty;
+			var alreayAddedMinuteDictionary = new Dictionary<IBudgetDay, double>();
 
 			foreach (var budgetDay in budgetDays.OrderBy(x => x.Day))
 			{
@@ -94,6 +95,15 @@ namespace Teleopti.Ccc.Domain.Budgeting
 
 				if (remainingAllowanceMinutes < requestedAbsenceMinutes)
 				{
+					if (alreayAddedMinuteDictionary.Any())
+					{
+						alreayAddedMinuteDictionary.ForEach(item =>
+						{
+							schedulingResultStateHolder
+							.SubtractAbsenceMinutesDuringCurrentRequestHandlingCycle(item.Key, item.Value);
+						});
+					}
+
 					// only showing first 5 days if a person request conatins more than 5 days.
 					count++;
 					if (count > 5) break;
@@ -108,6 +118,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 				else
 				{
 					schedulingResultStateHolder.AddAbsenceMinutesDuringCurrentRequestHandlingCycle(budgetDay, requestedAbsenceMinutes);
+					alreayAddedMinuteDictionary.Add(budgetDay, requestedAbsenceMinutes);
 				}
 			}
 			return invalidDays.IsEmpty() ? invalidDays : invalidDays.Substring(0, invalidDays.Length - 1);

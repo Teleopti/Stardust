@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			_schedulingResultStateHolder = _scheduleResultStateHolder();
 			var waitlistedRequestsForPeriod = _absenceRequestWaitlistProvider.GetWaitlistedRequests(period, workflowControlSet);
 			processRequests(unitOfWork, waitlistedRequestsForPeriod);
+			_schedulingResultStateHolder.ClearAbsenceMinutesDuringCurrentRequestHandlingCycle();
 		}
 
 		private void processRequests(IUnitOfWork unitOfWork, IEnumerable<IPersonRequest> waitlistedRequests)
