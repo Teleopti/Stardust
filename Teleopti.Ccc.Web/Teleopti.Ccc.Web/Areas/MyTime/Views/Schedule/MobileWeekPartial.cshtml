@@ -3,6 +3,23 @@
 	Layout = null;
 }
 
+<script>
+	$(function() {
+		Teleopti.MyTimeWeb.Schedule.MobileWeek.SetupResource({
+			xRequests: '@Resources.XRequests',
+			subjectColon: '@Resources.SubjectColon',
+			locationColon: '@Resources.LocationColon',
+			descriptionColon: '@Resources.DescriptionColon',
+			chanceOfGettingAbsencerequestGranted: '@Resources.ChanceOfGettingAbsenceRequestGranted',
+			seatBookingsTitle: '@Resources.SeatBookings',
+			noSeatBookingsForDate: '@Resources.YouHaveNotBeenAllocatedSeat',
+			fair: '@Resources.Fair',
+			poor: '@Resources.Poor',
+			good: '@Resources.Good'
+		});
+	});
+</script>
+
 <script type="text/html" id="add-absence-report-detail-template">
 	@Html.Partial("AddAbsenceReportPartial")
 </script>
