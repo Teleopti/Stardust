@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			filters.Add(new Log4NetMvCLogger(_log4NetLogger));
 			if (string.IsNullOrEmpty(_configReader.AppConfig("DisableCsrfProtection")))
 			{
-				//filters.Add(new CsrfFilter());
+				filters.Add(new CsrfFilter());
 			}
 			filters.Add(new NoCacheFilterMvc());
 			filters.Add(new AjaxHandleErrorAttribute(_errorMessageProvider));

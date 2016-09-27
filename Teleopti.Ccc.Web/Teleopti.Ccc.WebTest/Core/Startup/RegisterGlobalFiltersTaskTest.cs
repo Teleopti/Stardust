@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			GlobalFilters.Filters.Clear();
 		}
 
-		[Test, Ignore("blocking issue 40733")]
+		[Test]
 		public void ShouldBeAdded()
 		{
 			target.Execute(null);

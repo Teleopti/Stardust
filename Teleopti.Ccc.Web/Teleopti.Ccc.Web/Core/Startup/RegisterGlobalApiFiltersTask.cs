@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 				if (string.IsNullOrEmpty(_configReader.AppConfig("DisableCsrfProtection")))
 				{
-					//c.Filters.Add(new CsrfFilterHttp());
+					c.Filters.Add(new CsrfFilterHttp());
 				}
 				c.Filters.Add(new NoCacheFilterHttp());
 				c.Services.Add(typeof (IExceptionLogger), new Log4NetWebApiLogger(_log4NetLogger));

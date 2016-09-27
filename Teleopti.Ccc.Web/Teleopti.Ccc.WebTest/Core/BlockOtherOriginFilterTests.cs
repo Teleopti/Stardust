@@ -2,7 +2,6 @@
 using System.Net;
 using System.Net.Http;
 using System.Web.Http.Controllers;
-using System.Web.Mvc;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Core.Startup;
@@ -73,6 +72,18 @@ namespace Teleopti.Ccc.WebTest.Core
 			context.Response.IsSuccessStatusCode.Should().Be.True();
 		}
 
+		[Test]
+		public void ShouldAllowRelativeOrigin()
+		{
+			var context = CreateExecutedContext();
+			context.Request.Headers.Add("Origin", "/test/2");
+			context.Request.RequestUri = new Uri("http://wfmserver1/teleoptiwfm");
+			var filter = new CsrfFilterHttp();
+			filter.OnActionExecuting(context);
+
+			context.Response.IsSuccessStatusCode.Should().Be.True();
+		}
+
 		private HttpActionContext CreateExecutedContext()
 		{
 			var httpActionContext = new HttpActionContext();
@@ -131,6 +142,30 @@ namespace Teleopti.Ccc.WebTest.Core
 			filterTester.InvokeFilter(filter);
 
 			filterTester.ControllerContext.HttpContext.Response.StatusCode.Should().Be.EqualTo(HttpStatusCode.Forbidden);
+		}
+
+		[Test]
+		public void ShouldHandleRelativeOrigin()
+		{
+			var filter = new CsrfFilter();
+			var filterTester = new FilterTester();
+			filterTester.AddHeader("Origin", "/test/2");
+			filterTester.UsePost();
+			filterTester.InvokeFilter(filter);
+
+			filterTester.ControllerContext.HttpContext.Response.StatusCode.Should().Not.Be.EqualTo(HttpStatusCode.Forbidden);
+		}
+
+		[Test]
+		public void ShouldHandleRelativeReferer()
+		{
+			var filter = new CsrfFilter();
+			var filterTester = new FilterTester();
+			filterTester.AddHeader("Referer", "/test/2");
+			filterTester.UsePost();
+			filterTester.InvokeFilter(filter);
+
+			filterTester.ControllerContext.HttpContext.Response.StatusCode.Should().Not.Be.EqualTo(HttpStatusCode.Forbidden);
 		}
 
 		[Test]

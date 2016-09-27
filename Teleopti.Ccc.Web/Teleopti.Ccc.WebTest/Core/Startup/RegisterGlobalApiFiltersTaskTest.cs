@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 	[TestFixture]
 	public class RegisterGlobalApiFiltersTaskTest
 	{
-		[Test, Ignore("blocking issue 40733")]
+		[Test]
 		public void FiltersShouldBeAdded()
 		{
 			var config = new HttpConfiguration();

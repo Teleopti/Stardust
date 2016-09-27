@@ -20,10 +20,10 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				var firstOrigin = foundValues.FirstOrDefault();
 				if (!string.IsNullOrEmpty(firstOrigin))
 				{
-					referrer = new Uri(firstOrigin);
+					referrer = new Uri(firstOrigin, UriKind.RelativeOrAbsolute);
 				}
 			}
-			if (referrer != null && referrer.Authority != actionContext.Request.RequestUri.Authority)
+			if (referrer != null && referrer.IsAbsoluteUri && referrer.Host != actionContext.Request.RequestUri.Host)
 			{
 				actionContext.Response.StatusCode = HttpStatusCode.Forbidden;
 			}
@@ -44,8 +44,8 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			var url = filterContext.HttpContext.Request.Url;
 			if (!string.IsNullOrEmpty(referer) && url!=null)
 			{
-				var refererUri = new Uri(referer);
-				if (refererUri.Host != url.Host)
+				var refererUri = new Uri(referer, UriKind.RelativeOrAbsolute);
+				if (refererUri.IsAbsoluteUri && refererUri.Host != url.Host)
 				{
 					filterContext.Result = new HttpStatusCodeResult(403);
 					filterContext.HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
