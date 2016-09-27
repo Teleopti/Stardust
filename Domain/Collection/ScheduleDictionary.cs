@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.Domain.Collection
 			var ret = new DifferenceCollection<IPersistableScheduleData>();
             foreach (var range in _dictionary.Values)
             {
-                range.DifferenceSinceSnapshot(DifferenceCollectionService).ForEach(ret.Add);
+                range.DifferenceSinceSnapshot(_differenceCollectionService).ForEach(ret.Add);
             }
             return ret;
         }
@@ -611,11 +611,6 @@ namespace Teleopti.Ccc.Domain.Collection
         public bool IsReadOnly
         {
             get { return false; }
-        }
-
-		public IDifferenceCollectionService<IPersistableScheduleData> DifferenceCollectionService
-        {
-            get { return _differenceCollectionService; }
         }
 
         IEnumerator<KeyValuePair<IPerson, IScheduleRange>> IEnumerable<KeyValuePair<IPerson, IScheduleRange>>.GetEnumerator()

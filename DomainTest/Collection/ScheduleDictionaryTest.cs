@@ -835,14 +835,6 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		}
 
 		[Test]
-		public void VerifyInstanceWhenRealConstructorIsUsed()
-		{
-			Assert.AreSame(scenario, target.Scenario);
-			Assert.AreEqual(period, target.Period);
-			Assert.IsNotNull(target.DifferenceCollectionService);
-		}
-
-		[Test]
 		public void VerifyItemAddsNewIfNotExists()
 		{
 			using (mocks.Record())

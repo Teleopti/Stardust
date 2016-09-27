@@ -142,16 +142,6 @@ namespace Teleopti.Interfaces.Domain
         void TakeSnapshot();
 
         /// <summary>
-        /// Gets the difference service.
-        /// </summary>
-        /// <value>The difference service.</value>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-05-29
-        /// </remarks>
-        IDifferenceCollectionService<IPersistableScheduleData> DifferenceCollectionService { get; }
-
-        /// <summary>
         /// Holds a list of modifyed personal accounts
         /// </summary>
         ICollection<IPersonAbsenceAccount> ModifiedPersonAccounts { get;}
