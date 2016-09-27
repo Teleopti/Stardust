@@ -21,30 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 
 		}
-
-		/// <summary>
-		/// Finds the specified PersonAbsence.
-		/// </summary>
-		/// <param name="persons">The persons.</param>
-		/// <param name="period">The period.</param>
-		/// <returns></returns>
-		public ICollection<IPersonAbsence> Find(IEnumerable<IPerson> persons, DateTimePeriod period)
-		{
-			InParameter.NotNull("persons", persons);
-
-			var restrictions = Restrictions.Conjunction().Add(Restrictions.Gt("Layer.Period.period.Maximum", period.StartDateTime))
-				.Add(Restrictions.Lt("Layer.Period.period.Minimum", period.EndDateTime));
-
-			ICollection<IPersonAbsence> retList = Session.CreateCriteria(typeof(PersonAbsence), "abs")
-							.Add(restrictions)
-							.Add(Restrictions.InG("Person", new List<IPerson>(persons)))
-							.SetResultTransformer(Transformers.DistinctRootEntity)
-							.List<IPersonAbsence>();
-			initializeAbsences(retList);
-			return retList;
-
-		}
-
+		
 		/// <summary>
 		/// Finds the specified persons.
 		/// </summary>

@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return retList;
         }
 
-        public IList<IOvertimeAvailability > Find(DateOnlyPeriod period, IEnumerable<IPerson> persons)
+        public IList<IOvertimeAvailability> Find(DateOnlyPeriod period, IEnumerable<IPerson> persons)
         {
             var result = new List<IOvertimeAvailability >();
 

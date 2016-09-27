@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public IValidatedVolumeDay FindLatestUpdated(ISkill skill)
         {
             ICriteria query = Session.CreateCriteria(typeof(ValidatedVolumeDay), "vd")
-                .Add(Restrictions.In("vd.Workload", skill.WorkloadCollection.ToList()));
+                .Add(Restrictions.InG("vd.Workload", skill.WorkloadCollection.ToArray()));
 
             IValidatedVolumeDay validatedVolumeDay = query
                 .AddOrder(Order.Desc("vd.UpdatedOn"))

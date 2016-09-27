@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.People.Core.ViewModels;
 using Teleopti.Interfaces.Domain;
 
@@ -19,13 +18,14 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 		private readonly IPersonAbsenceRepository _personAbsenceRepository;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly ICurrentBusinessUnit _businessUnitProvider;
+		private readonly ICurrentScenario _currentScenario;
 
 		public PeopleSearchProvider(
 			IPersonFinderReadOnlyRepository searchRepository,
 			IPersonRepository personRepository,
 			IPermissionProvider permissionProvider,
 			IOptionalColumnRepository optionalColumnRepository, IPersonAbsenceRepository personAbsenceRepository,
-			ILoggedOnUser loggedOnUser, IUserCulture culture, ICurrentBusinessUnit businessUnitProvider)
+			ILoggedOnUser loggedOnUser, ICurrentBusinessUnit businessUnitProvider, ICurrentScenario currentScenario)
 		{
 			_searchRepository = searchRepository;
 			_personRepository = personRepository;
@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 			_personAbsenceRepository = personAbsenceRepository;
 			_loggedOnUser = loggedOnUser;
 			_businessUnitProvider = businessUnitProvider;
+			_currentScenario = currentScenario;
 		}
 
 		public PeopleSummaryModel SearchPermittedPeopleSummary(IDictionary<PersonFinderField, string> criteriaDictionary,
@@ -74,7 +75,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 				_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
 
 			var personAbsences =
-				_personAbsenceRepository.Find(permittedPeople, new DateTimePeriod(startDateTime, endDateTime)).ToList();
+				_personAbsenceRepository.Find(permittedPeople, new DateTimePeriod(startDateTime, endDateTime), _currentScenario.Current()).ToList();
 
 			return personAbsences.Select(personAbsence => personAbsence.Person).ToList();
 		}

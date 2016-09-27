@@ -18,7 +18,6 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.WebTest.Areas.Global;
 using Teleopti.Interfaces.Domain;
@@ -220,7 +219,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			target.CreateViewModel(person.Id.Value, DateTime.Today);
 
 			personScheduleViewModelMapper.AssertWasNotCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => s.Model != null)));
-			personAbsenceRepository.AssertWasNotCalled(x => x.Find(new[] { person }, new DateTimePeriod()), y => y.IgnoreArguments());
+			personAbsenceRepository.AssertWasNotCalled(x => x.Find(new[] { person }, new DateTimePeriod(),_currentScenario.Current()), y => y.IgnoreArguments());
 		}
 
 		[Test]

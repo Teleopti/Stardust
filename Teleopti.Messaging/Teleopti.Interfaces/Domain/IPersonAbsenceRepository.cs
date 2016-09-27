@@ -9,14 +9,6 @@ namespace Teleopti.Interfaces.Domain
 	public interface IPersonAbsenceRepository : IRepository<IPersonAbsence>, IWriteSideRepository<IPersonAbsence>, ILoadAggregateFromBroker<IPersonAbsence>
 	{
 		/// <summary>
-		/// Finds the specified Assignments.
-		/// </summary>
-		/// <param name="persons">The agents.</param>
-		/// <param name="period">The period.</param>
-		/// <returns></returns>
-		ICollection<IPersonAbsence> Find(IEnumerable<IPerson> persons, DateTimePeriod period);
-
-		/// <summary>
 		/// Finds the specified persons.
 		/// </summary>
 		/// <param name="persons">The persons.</param>
@@ -64,6 +56,5 @@ namespace Teleopti.Interfaces.Domain
 		ICollection<DateTimePeriod> AffectedPeriods(IPerson person, IScenario scenario, DateTimePeriod period, IAbsence absence = null);
 
 		IList<IPersonAbsence> Find (IPersonRequest personRequest, IScenario scenario);
-
 	}
 }

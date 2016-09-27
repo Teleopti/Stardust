@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                        .SetFetchMode("accountCollection", FetchMode.Join)
                        .SetFetchMode("Person", FetchMode.Join)
                        .SetFetchMode("Absence", FetchMode.Join)
-                       .Add(Restrictions.In("Person", personBatch.ToArray()))
+                       .Add(Restrictions.InG("Person", personBatch.ToArray()))
                        .SetResultTransformer(Transformers.DistinctRootEntity)
                        .List<IPersonAbsenceAccount>();
 

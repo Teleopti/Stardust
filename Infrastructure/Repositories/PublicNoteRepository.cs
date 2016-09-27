@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Collection;
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             {
                 ICriteria crit = Session.CreateCriteria(typeof(PublicNote))
                 .Add(Restrictions.Between("NoteDate", dateOnlyPeriod.StartDate, dateOnlyPeriod.EndDate))
-                .Add(Restrictions.In("Person", new List<IPerson>(personList)))
+                .Add(Restrictions.InG("Person", personList.ToArray()))
                 .Add(Restrictions.Eq("Scenario", scenario))
                 .AddOrder(Order.Asc("Person"))
                 .AddOrder(Order.Asc("NoteDate"));

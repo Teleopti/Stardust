@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		    {
                 personAvailabilites.AddRange(Session.CreateCriteria(typeof(PersonAvailability))
                     .SetFetchMode("Availability",FetchMode.Join)
-                    .Add(Restrictions.In("Person", personBatch.ToArray()))
+                    .Add(Restrictions.InG("Person", personBatch.ToArray()))
                     .List<IPersonAvailability>());
 		    }
 		    return personAvailabilites;
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				personAvailabilites.AddRange(Session.CreateCriteria(typeof(PersonAvailability))
 					.Add(Restrictions.Between("StartDate", period.StartDate, period.EndDate))
-					.Add(Restrictions.In("Person", personBatch.ToArray()))
+					.Add(Restrictions.InG("Person", personBatch.ToArray()))
 					.List<IPersonAvailability>());
 			}
 			return personAvailabilites;

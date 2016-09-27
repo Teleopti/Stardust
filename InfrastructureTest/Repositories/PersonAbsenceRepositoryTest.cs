@@ -15,9 +15,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-    /// <summary>
-    /// Tests for AssignmentRepository
-    /// </summary>
     [TestFixture]
     [Category("LongRunning")]
     public class PersonAbsenceRepositoryTest : RepositoryTest<IPersonAbsence>
@@ -25,12 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         private IAbsence absenceSick;
         private IPerson agent;
         private IScenario defaultScenario;
-
-        #region Override methods
-
-        /// <summary>
-        /// Runs once a test
-        /// </summary>
+		
         protected override void ConcreteSetup()
         {
 			absenceSick = AbsenceFactory.CreateAbsence("Sjuk");
@@ -40,23 +32,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(agent);
 			PersistAndRemoveFromUnitOfWork(defaultScenario);
         }
-
-        /// <summary>
-        /// Creates an aggregate using the Bu of logged in user.
-        /// Should be a "full detailed" aggregate
-        /// </summary>
-        /// <returns></returns>
+		
         protected override IPersonAbsence CreateAggregateWithCorrectBusinessUnit()
         {
             var period1 = new DateTimePeriod(new DateTime(2007, 8, 1, 10, 15, 0, DateTimeKind.Utc), new DateTime(2007, 8, 1, 17, 15, 0, DateTimeKind.Utc));
             var layer1 = new AbsenceLayer(absenceSick, period1);
             return new PersonAbsence(agent, defaultScenario, layer1);
         }
-
-        /// <summary>
-        /// Verifies the aggregate graph properties.
-        /// </summary>
-        /// <param name="loadedAggregateFromDatabase">The loaded aggregate from database.</param>
+		
         protected override void VerifyAggregateGraphProperties(IPersonAbsence loadedAggregateFromDatabase)
         {
             Assert.IsNotNull(loadedAggregateFromDatabase.Person);
@@ -66,9 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsNotNull(loadedAggregateFromDatabase.Person.Id);
         }
 
-        #endregion
-
-        [Test]
+	    [Test]
         public void VerifyLoadGraphById()
         {
             var personAbsence = CreateAggregateWithCorrectBusinessUnit();
@@ -252,60 +233,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.IsFalse(retList.Contains(period2), "invalid period");
 			Assert.AreEqual(1, retList.Count);
 		}
-
-        [Test]
-        public void CanFindAssignmentsByDatesAndAgents()
-        {
-            DateTimePeriod period1 =
-                new DateTimePeriod(new DateTime(2007, 8, 1, 10, 15, 0, DateTimeKind.Utc),
-                                   new DateTime(2007, 8, 1, 17, 15, 0, DateTimeKind.Utc));
-            DateTimePeriod period2 =
-                new DateTimePeriod(new DateTime(2007, 8, 2, 10, 15, 0, DateTimeKind.Utc),
-                                   new DateTime(2007, 8, 2, 17, 15, 0, DateTimeKind.Utc));
-            DateTimePeriod period3 =
-                new DateTimePeriod(new DateTime(2007, 8, 20, 10, 15, 0, DateTimeKind.Utc),
-                                   new DateTime(2007, 8, 21, 17, 15, 0, DateTimeKind.Utc));
-            
-			var dummyAgent2 = PersonFactory.CreatePerson("i");
-			PersistAndRemoveFromUnitOfWork(dummyAgent2);
-			
-            AbsenceLayer layer1 = new AbsenceLayer(absenceSick, period1);
-            AbsenceLayer layer2 = new AbsenceLayer(absenceSick, period2);
-            AbsenceLayer layer3 = new AbsenceLayer(absenceSick, period3);
-            
-            PersonAbsence agAbsValid1 = new PersonAbsence(agent, defaultScenario, layer1);
-            PersonAbsence agAbsValid2 = new PersonAbsence(agent, defaultScenario, layer2);
-            PersonAbsence agAbsValid3 = new PersonAbsence(agent, defaultScenario, layer3);
-            PersonAbsence agAbsValid4 = new PersonAbsence(dummyAgent2, defaultScenario, layer1);
-
-            PersistAndRemoveFromUnitOfWork(agAbsValid1);
-            PersistAndRemoveFromUnitOfWork(agAbsValid2);
-            PersistAndRemoveFromUnitOfWork(agAbsValid3);
-            PersistAndRemoveFromUnitOfWork(agAbsValid4);
-
-            var agList = new List<IPerson> {agent};
-	        var searchPeriod =
-                new DateTimePeriod(new DateTime(2007, 8, 1, 9, 15, 0, DateTimeKind.Utc),
-                                   new DateTime(2007, 8, 2, 10, 30, 0, DateTimeKind.Utc));
-
-			var retList = new PersonAbsenceRepository(CurrUnitOfWork).Find(agList, searchPeriod);
-
-            verifyRelatedObjectsAreEagerlyLoaded(retList);
-            Assert.IsTrue(retList.Contains(agAbsValid1));
-            Assert.IsTrue(retList.Contains(agAbsValid2));
-            Assert.AreEqual(2, retList.Count);
-        }
-
-
-        /// <summary>
-        /// List of agents must not be null when calling find by agent and period.
-        /// </summary>
-        [Test]
-        public void AgentListMustNotBeNullWhenCallingFindByAgentAndPeriod()
-        {
-			Assert.Throws<ArgumentNullException>(() => new PersonAbsenceRepository(CurrUnitOfWork).Find(null, new DateTimePeriod(2000, 1, 1, 2000, 1, 2)));
-        }
-
+		
         [Test]
         public void CanFindAgentAbsencesWithCorrectScenario()
         {

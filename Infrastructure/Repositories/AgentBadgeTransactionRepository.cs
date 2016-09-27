@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			foreach (var personList in personCollection.Batch(400))
 			{
 				var result = Session.CreateCriteria(typeof (IAgentBadgeTransaction), "ab")
-					.Add(Restrictions.In("Person", new List<IPerson>(personList)))
+					.Add(Restrictions.InG("Person", personList.ToArray()))
 					.Add(Restrictions.Between("CalculatedDate", period.StartDate, period.EndDate))
 					.List<IAgentBadgeTransaction>();
 

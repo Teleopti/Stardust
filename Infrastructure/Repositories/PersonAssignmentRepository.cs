@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				var personArray = personList.ToArray();
 				var crit = personAssignmentCriteriaLoader(period, scenario);
-				crit.Add(Restrictions.In("ass.Person", personArray));
+				crit.Add(Restrictions.InG("ass.Person", personArray));
 				retList.AddRange(crit.List<IPersonAssignment>());
 			}
 

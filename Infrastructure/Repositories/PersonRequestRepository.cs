@@ -12,8 +12,6 @@ using NHibernate;
 using System.Linq;
 using NHibernate.Dialect.Function;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
@@ -116,23 +114,23 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IList<IPersonRequest> Find(List<Guid> ids)
 		{
-			var returnPersonRequests = Session.CreateCriteria(typeof(PersonRequest), "req")
-				.Add(Restrictions.In("Id", ids))
-				.SetFetchMode("requests", FetchMode.Join)
-				.List<IPersonRequest>();
-			
-			if (returnPersonRequests != null)
+			var returnPersonRequests = new List<IPersonRequest>();
+			foreach (var idBatch in ids.Batch(1000))
 			{
-				foreach (var returnPersonRequest in returnPersonRequests)
-				{
-					var absenceRequest = returnPersonRequest.Request as IAbsenceRequest;
-					if (absenceRequest != null)
-					{
-						LazyLoadingManager.Initialize(absenceRequest.Absence);
-					}
-				}
+				returnPersonRequests.AddRange(Session.CreateCriteria(typeof(PersonRequest), "req")
+					.Add(Restrictions.In("Id", idBatch.ToArray()))
+					.SetFetchMode("requests", FetchMode.Join)
+					.List<IPersonRequest>());
 			}
 
+			foreach (var returnPersonRequest in returnPersonRequests)
+			{
+				var absenceRequest = returnPersonRequest.Request as IAbsenceRequest;
+				if (absenceRequest != null)
+				{
+					LazyLoadingManager.Initialize(absenceRequest.Absence);
+				}
+			}
 			return returnPersonRequests;
 		}
 
@@ -220,14 +218,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			var people = persons.ToArray();
 
-			criteria.Add(Restrictions.Or(includeRequestsWithShiftTradePersonTo(people), Restrictions.In("Person", people)));
+			criteria.Add(Restrictions.Or(includeRequestsWithShiftTradePersonTo(people), Restrictions.InG("Person", people)));
 		}
 
 		private static AbstractCriterion includeRequestsWithShiftTradePersonTo(IPerson[] people)
 		{
 			var shiftTradeDetailsForAgentPersonTo = DetachedCriteria.For<ShiftTradeSwapDetail>()
 				.SetProjection(Projections.Property("Parent"))
-				.Add(Restrictions.In("PersonTo", people));
+				.Add(Restrictions.InG("PersonTo", people));
 
 			var shiftTradeRequestsForAgentPersonTo = DetachedCriteria.For<ShiftTradeRequest>()
 				.SetProjection(Projections.Property("Parent"))
@@ -728,7 +726,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.CreateCriteria("Parent", "req", JoinType.InnerJoin)
 				.Add(Restrictions.Eq("req.IsDeleted", false))
 				.Add(Restrictions.Eq("offer.Date", shiftTradeDate))
-				.Add(Restrictions.In("offer.Person", personList.ToList()))
+				.Add(Restrictions.InG("offer.Person", personList.ToArray()))
 				.Add(Restrictions.Ge("offer.Criteria.ValidTo", new DateOnly(DateTime.UtcNow.Date)))
 				.Add(Restrictions.Eq("offer.Status", ShiftExchangeOfferStatus.Pending))
 				.List<ShiftExchangeOffer>();
