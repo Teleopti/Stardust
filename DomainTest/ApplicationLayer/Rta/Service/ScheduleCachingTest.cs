@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
 	[TestFixture]
 	[RtaTest]
-	[Toggle(Domain.FeatureFlags.Toggles.RTA_ScheduleQueryOptimizationFilteredCache_40260)]
 	public class ScheduleCachingTest
 	{
 		public FakeRtaDatabase Database;
@@ -92,12 +91,32 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 		}
 
+		[Test]
+		public void ShouldInvalidateOldScheduleWithoutStateChange()
+		{
+			var personId = Guid.NewGuid();
+			Database
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, "phone", "2016-09-06 14:00", "2016-09-06 16:00")
+				.WithSchedule(personId, "admin", "2016-09-16 14:00", "2016-09-16 16:00")
+				;
+
+			Now.Is("2016-09-06 15:00");
+			Target.CheckForActivityChanges(Database.TenantName());
+			Now.Is("2016-09-16 15:00");
+			Target.CheckForActivityChanges(Database.TenantName());
+
+			Database.StoredState.Schedule.Single().Name.Should().Be.EqualTo("admin");
+
+		}
+
 
 
 
 
 
 		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.RTA_ScheduleQueryOptimizationFilteredCache_40260)]
 		public void ShouldIncludeEarlierShiftWhenBetweenShifts()
 		{
 			var personId = Guid.NewGuid();
@@ -120,6 +139,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.RTA_ScheduleQueryOptimizationFilteredCache_40260)]
 		public void ShouldOnlyIncludeUpcommingShiftWhenBetweenShifts()
 		{
 			var personId = Guid.NewGuid();
@@ -142,6 +162,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.RTA_ScheduleQueryOptimizationFilteredCache_40260)]
 		public void ShouldOnlyIncludeCurrentShift()
 		{
 			var personId = Guid.NewGuid();
@@ -170,6 +191,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.RTA_ScheduleQueryOptimizationFilteredCache_40260)]
 		public void ShouldIncludePastShiftInTimeWindow()
 		{
 			var personId = Guid.NewGuid();
@@ -192,6 +214,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.RTA_ScheduleQueryOptimizationFilteredCache_40260)]
 		public void ShouldIncludeAnyShiftStartingInTimeWindow()
 		{
 			var personId = Guid.NewGuid();
@@ -218,6 +241,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.RTA_ScheduleQueryOptimizationFilteredCache_40260)]
 		public void ShouldIncludeNextShiftWhenStartingInTimeWindowWhenCurrentShiftEnds()
 		{
 			var personId = Guid.NewGuid();
@@ -243,6 +267,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 
 		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.RTA_ScheduleQueryOptimizationFilteredCache_40260)]
 		public void ShouldInvalidateJumpsOverShift()
 		{
 			var personId = Guid.NewGuid();
@@ -265,6 +290,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
+		[Toggle(Domain.FeatureFlags.Toggles.RTA_ScheduleQueryOptimizationFilteredCache_40260)]
 		public void ShouldInvalidateJumpsBetweenShifts()
 		{
 			var personId = Guid.NewGuid();
@@ -285,5 +311,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			actual.Should().Contain("2016-09-12 10:00".Utc());
 			actual.Should().Contain("2016-09-12 20:00".Utc());
 		}
+		
 	}
 }

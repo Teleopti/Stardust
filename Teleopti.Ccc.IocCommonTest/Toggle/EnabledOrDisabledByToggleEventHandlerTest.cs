@@ -12,110 +12,110 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 {
 	[TestFixture]
 	[IoCTest]
-	public class UseOnToggleEventHandlerTest
+	public class EnabledOrDisabledByToggleEventHandlerTest
 	{
 		public IComponentContext Container;
 
 		[Test]
 		[Toggle(Toggles.TestToggle)]
-		public void ShouldResolveHandlerUsedOnTestToggle()
+		public void ShouldResolveHandlerEnabledByTestToggle()
 		{
 			var handlers = Container
 				.Resolve<IEnumerable<IHandleEvent<TestToggleEvent>>>()
 				.Select(ProxyUtil.GetUnproxiedType);
 
 			handlers.Should()
-				.Contain(typeof(HandlerUsedOnTestToggle));
+				.Contain(typeof(HandlerEnabledByTestToggle));
 		}
 
 		[Test]
 		[ToggleOff(Toggles.TestToggle)]
-		public void ShouldNotResolveHandlerUsedOnTestToggle()
+		public void ShouldNotResolveHandlerEnabledByTestToggle()
 		{
 			var handlers = Container
 				.Resolve<IEnumerable<IHandleEvent<TestToggleEvent>>>()
 				.Select(ProxyUtil.GetUnproxiedType);
 
 			handlers.Should()
-				.Not.Contain(typeof(HandlerUsedOnTestToggle));
+				.Not.Contain(typeof(HandlerEnabledByTestToggle));
 		}
 
 		[Test]
 		[Toggle(Toggles.TestToggle)]
 		[Toggle(Toggles.TestToggle2)]
-		public void ShouldResolveHandlerWithMethodUsedOnTestToggle2()
+		public void ShouldResolveHandlerWithMethodEnabledByTestToggle2()
 		{
 			var handlers = Container
 				.Resolve<IEnumerable<IHandleEvent<TestToggle2Event>>>()
 				.Select(ProxyUtil.GetUnproxiedType);
 
 			handlers.Should()
-				.Contain(typeof(HandlerUsedOnTestToggle_WithMethodUsedOnTestToggle2));
+				.Contain(typeof(HandlerEnabledByTestToggle_WithMethodEnabledByTestToggle2));
 		}
 
 		[Test]
 		[Toggle(Toggles.TestToggle)]
 		[ToggleOff(Toggles.TestToggle2)]
-		public void ShouldNotResolveHandlerWithMethodUsedOnTestToggle2()
+		public void ShouldNotResolveHandlerWithMethodEnabledByTestToggle2()
 		{
 			var handlers = Container
 				.Resolve<IEnumerable<IHandleEvent<TestToggle2Event>>>()
 				.Select(ProxyUtil.GetUnproxiedType);
 
 			handlers.Should()
-				.Not.Contain(typeof(HandlerUsedOnTestToggle_WithMethodUsedOnTestToggle2));
+				.Not.Contain(typeof(HandlerEnabledByTestToggle_WithMethodEnabledByTestToggle2));
 		}
 
 		[Test]
 		[Toggle(Toggles.TestToggle)]
 		[ToggleOff(Toggles.TestToggle2)]
-		public void ShouldResolveHandlerWithMethodUsedOnTestToggle2ByTestToggle()
+		public void ShouldResolveHandlerWithMethodEnabledByTestToggle2ByTestToggle()
 		{
 			var handlers = Container
 				.Resolve<IEnumerable<IHandleEvent<TestToggleEvent>>>()
 				.Select(ProxyUtil.GetUnproxiedType);
 
 			handlers.Should()
-				.Contain(typeof(HandlerUsedOnTestToggle_WithMethodUsedOnTestToggle2));
+				.Contain(typeof(HandlerEnabledByTestToggle_WithMethodEnabledByTestToggle2));
 		}
 
 		[Test]
 		[ToggleOff(Toggles.TestToggle)]
 		[Toggle(Toggles.TestToggle2)]
-		public void ShouldNotResolveHandlerUsedOnTestToggleWithMethodUsedOnTestToggle2()
+		public void ShouldNotResolveHandlerEnabledByTestToggleWithMethodEnabledByTestToggle2()
 		{
 			var handlers = Container
 				.Resolve<IEnumerable<IHandleEvent<TestToggle2Event>>>()
 				.Select(ProxyUtil.GetUnproxiedType);
 
 			handlers.Should()
-				.Not.Contain(typeof(HandlerUsedOnTestToggle_WithMethodUsedOnTestToggle2));
+				.Not.Contain(typeof(HandlerEnabledByTestToggle_WithMethodEnabledByTestToggle2));
 		}
 
 		[Test]
 		[Toggle(Toggles.TestToggle)]
-		public void ShouldNotResolveHandlerNotUsedOnTestToggle()
+		public void ShouldNotResolveHandlerDisabledByTestToggle()
 		{
 			var handlers = Container
 				.Resolve<IEnumerable<IHandleEvent<TestToggleEvent>>>()
 				.Select(ProxyUtil.GetUnproxiedType).ToList();
 
 			handlers.Should()
-				.Not.Contain(typeof(HandlerNotUsedOnTestToggle));
+				.Not.Contain(typeof(HandlerDisabledByTestToggle));
 			handlers.Should()
-				.Contain(typeof(HandlerUsedOnTestToggle));
+				.Contain(typeof(HandlerEnabledByTestToggle));
 		}
 
 		[Test]
 		[Toggle(Toggles.TestToggle)]
-		public void ShouldNotResolveHandlerWithHandleNotUsedOnTestToggle()
+		public void ShouldNotResolveHandlerWithHandleDisabledByTestToggle()
 		{
 			var handlers = Container
 				.Resolve<IEnumerable<IHandleEvent<TestToggleEvent>>>()
 				.Select(ProxyUtil.GetUnproxiedType);
 
 			handlers.Should()
-				.Not.Contain(typeof(HandlerMethodNotUsedOnTestToggle));
+				.Not.Contain(typeof(HandlerMethodDisabledByTestToggle));
 		}
 	}
 }

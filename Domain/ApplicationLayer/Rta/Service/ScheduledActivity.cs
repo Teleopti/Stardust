@@ -87,6 +87,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var defaultScenario = scenario.Current();
 			if (defaultScenario == null)
 				return Enumerable.Empty<ScheduledActivity>();
+
 			return people.SelectMany(person =>
 			{
 				var schedules = scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,

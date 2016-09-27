@@ -79,15 +79,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		private readonly FakePersonAssignmentRepository _personAssignments;
 		private readonly ICurrentScenario _scenario;
 		private readonly IScheduleStorage _scheduleStorage;
-
-		//private class userData
-		//{
-		//	public int DataSourceId;
-		//	public PersonOrganizationData Data;
-		//}
-
-		//private readonly List<userData> _userInfos = new List<userData>();
-
+		
 		public FakeRtaDatabase(
 			INow now,
 			FakeDatabase database,
@@ -211,30 +203,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			var min = _personAssignments.LoadAll().SelectMany(x => x.ShiftLayers).Min(x => x.Period.StartDateTime);
 			var max = _personAssignments.LoadAll().SelectMany(x => x.ShiftLayers).Max(x => x.Period.EndDateTime);
 			var period = new DateTimePeriod(min.AddDays(-2), max.AddDays(2));
-			Debug.WriteLine("");
 			FromPersonAssignment.MakeScheduledActivities(_scenario, _scheduleStorage, _persons.LoadAll(), period)
 				.Select(l => JsonConvert.DeserializeObject<ScheduleProjectionReadOnlyModel>(JsonConvert.SerializeObject(l)))
-				.ForEach(x =>
-				{
-					Debug.WriteLine($"{x.StartDateTime} - {x.EndDateTime}: {x.Name}");
-					_schedules.AddActivity(x);
-				});
-
-			//if (!belongsToDate.HasValue)
-			//	belongsToDate = new DateOnly(start.Utc());
-			//if (!color.HasValue)
-			//	color = Color.Black;
-			//_schedules.AddActivity(new ScheduleProjectionReadOnlyModel
-			//{
-			//	PersonId = personId,
-			//	PayloadId = activityId,
-			//	Name = name,
-			//	StartDateTime = start.Utc(),
-			//	EndDateTime = end.Utc(),
-			//	BelongsToDate = belongsToDate.Value,
-			//	DisplayColor = color.Value.ToArgb()
-			//});
-
+				.ForEach(x => _schedules.AddActivity(x));
+			
 			_agentStateMaintainer.Handle(new ScheduleProjectionReadOnlyChangedEvent
 			{
 				PersonId = personId

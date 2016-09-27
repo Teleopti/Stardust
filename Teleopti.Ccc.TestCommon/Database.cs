@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
@@ -237,6 +238,13 @@ namespace Teleopti.Ccc.TestCommon
 		[UnitOfWork]
 		public virtual Database WithAgent(string name)
 		{
+			var existing = _persons.LoadAll().SingleOrDefault(x => x.Name.FirstName == name);
+			if (existing != null)
+			{
+				_person = new Name(name, name).ToString();
+				return this;
+			}
+
 			var person = new Person { Name = new Name(name, name) };
 			_person = person.Name.ToString();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
@@ -263,7 +271,7 @@ namespace Teleopti.Ccc.TestCommon
 
 			return this;
 		}
-
+		
 		private IPerson person()
 		{
 			return _persons.LoadAll().Single(x => x.Name.ToString() == _person);
@@ -309,12 +317,7 @@ namespace Teleopti.Ccc.TestCommon
 
 			return skill;
 		}
-
-
-
-
-
-
+		
 		[UnitOfWork]
 		public virtual Database WithActivity(string name)
 		{
@@ -460,5 +463,6 @@ namespace Teleopti.Ccc.TestCommon
 			_eventPublisher.Publish(new TenantMinuteTickEvent(), new TenantHourTickEvent());
 			return this;
 		}
+		
 	}
 }
