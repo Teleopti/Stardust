@@ -376,20 +376,6 @@ namespace Teleopti.Ccc.DomainTest.Common
 			Assert.IsNull(target.PreviousPeriod(personPeriod1));
 		}
 
-		[Test]
-		public void CanGetNextSchedulePeriod()
-		{
-			SchedulePeriod period1 = new SchedulePeriod(new DateOnly(2005, 1, 1), SchedulePeriodType.Week, 4);
-			SchedulePeriod period2 = new SchedulePeriod(new DateOnly(2006, 1, 1), SchedulePeriodType.Month, 1);
-
-			var target = new Person();
-			target.AddSchedulePeriod(period1);
-			target.AddSchedulePeriod(period2);
-
-			Assert.AreEqual(period2, target.NextSchedulePeriod(period1));
-			Assert.IsNull(target.NextSchedulePeriod(period2));
-		}
-
 		/// <summary>
 		/// Determines whether this instance [can return person periods in time period].
 		/// </summary>

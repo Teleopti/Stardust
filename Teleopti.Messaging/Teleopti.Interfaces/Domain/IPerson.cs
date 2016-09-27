@@ -153,13 +153,6 @@ namespace Teleopti.Interfaces.Domain
         IPersonPeriod PreviousPeriod(IPersonPeriod period);
 
         /// <summary>
-        /// Gets the next schedule period
-        /// </summary>
-        /// <param name="period"></param>
-        /// <returns></returns>
-        ISchedulePeriod NextSchedulePeriod(ISchedulePeriod period);
-
-        /// <summary>
         /// Gets the person rotation day restriction.
         /// </summary>
         /// <param name="personRestrictions">The person restrictions.</param>

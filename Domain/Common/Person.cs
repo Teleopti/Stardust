@@ -604,27 +604,6 @@ namespace Teleopti.Ccc.Domain.Common
             return InternalPersonPeriodCollection.OrderByDescending(p => p.StartDate.Date).FirstOrDefault(p => p.StartDate < period.StartDate);
         }
 
-        public virtual ISchedulePeriod NextSchedulePeriod(ISchedulePeriod period)
-        {
-            ISchedulePeriod ret = null;
-
-            DateTime nextDate = DateTime.MaxValue;
-
-            foreach (ISchedulePeriod p in PersonSchedulePeriodCollection)
-            {
-                if (p.DateFrom > period.DateFrom)
-                {
-                    if (p.DateFrom.Date < nextDate)
-                    {
-                        nextDate = p.DateFrom.Date;
-                        ret = p;
-                    }
-                }
-            }
-
-            return ret;
-        }
-
         public virtual IList<IRotationRestriction> GetPersonRotationDayRestrictions(IEnumerable<IPersonRotation> personRestrictions, DateOnly currentDate)
         {
             // filter on person
