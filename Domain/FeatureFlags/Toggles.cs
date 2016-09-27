@@ -42,6 +42,7 @@
 		MyTimeWeb_ShiftTradeBoardNoReadModel_36662,
 		MyTimeWeb_MakeRequestsResponsiveOnMobile_40266,
 		MyTimeWeb_ShiftTradeFilterSite_40374,
+		MyTimeWeb_ShiftTradeOptimization_40792,
 
 		Backlog_Module_23980,
 

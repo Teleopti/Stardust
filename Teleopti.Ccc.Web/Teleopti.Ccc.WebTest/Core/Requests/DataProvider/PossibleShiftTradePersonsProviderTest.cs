@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		private IPersonForScheduleFinder personForScheduleFinder;
 		private ITeam myTeam;
 	    private ISettingsPersisterAndProvider<NameFormatSettings> nameFormatSettingsProvider;
+		private IPeopleForShiftTradeFinder peopleForShiftTradeFinder;
 
 		[SetUp]
 		public void Setup()
@@ -50,8 +52,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			loggedOnUser.Expect(l => loggedOnUser.CurrentUser()).Return(currentUser);
 		    nameFormatSettingsProvider = new FakeNameFormatSettingProvider();
+			peopleForShiftTradeFinder = MockRepository.GenerateMock<IPeopleForShiftTradeFinder>();
 
-            target = new PossibleShiftTradePersonsProvider(nameFormatSettingsProvider, new ShiftTradePersonProvider (personRepository, shiftTradeValidator, permissionProvider, personForScheduleFinder, loggedOnUser));
+			target = new PossibleShiftTradePersonsProvider(nameFormatSettingsProvider, new ShiftTradePersonProvider (personRepository, shiftTradeValidator, permissionProvider, personForScheduleFinder, loggedOnUser, peopleForShiftTradeFinder)
+				,new FakeToggleManager());
 		}
 
 		[Test]

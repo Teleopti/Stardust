@@ -17,46 +17,66 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 		private readonly IShiftTradeLightValidator _shiftTradeValidator;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IPersonForScheduleFinder _personForScheduleFinder;
+		private readonly IPeopleForShiftTradeFinder _peopleForShiftTradeFinder;
 		private readonly ILoggedOnUser _loggedOnUser;
 
-		public ShiftTradePersonProvider(IPersonRepository personRepository, IShiftTradeLightValidator shiftTradeValidator, IPermissionProvider permissionProvider, IPersonForScheduleFinder personForScheduleFinder, ILoggedOnUser loggedOnUser)
+
+		public ShiftTradePersonProvider(IPersonRepository personRepository, IShiftTradeLightValidator shiftTradeValidator, IPermissionProvider permissionProvider, IPersonForScheduleFinder personForScheduleFinder, ILoggedOnUser loggedOnUser, IPeopleForShiftTradeFinder peopleForShiftTradeFinder)
 		{
 			_personRepository = personRepository;
 			_shiftTradeValidator = shiftTradeValidator;
 			_permissionProvider = permissionProvider;
 			_personForScheduleFinder = personForScheduleFinder;
 			_loggedOnUser = loggedOnUser;
+			_peopleForShiftTradeFinder = peopleForShiftTradeFinder;
 		}
 
-		public IEnumerable<IPerson> RetrievePersons (DateOnly shiftTradeDate, Guid[] teamIds, string personName,
+		public IEnumerable<IPerson> RetrievePersons(DateOnly shiftTradeDate, Guid[] teamIds, string personName,
 			NameFormatSetting nameFormatSettings)
 		{
-			var personForShiftTradeList = _personForScheduleFinder.GetPersonFor (shiftTradeDate,
+			var personForShiftTradeList = _personForScheduleFinder.GetPersonFor(shiftTradeDate,
 				teamIds, personName,
 				nameFormatSettings);
 
+			return processShiftTradePeople(shiftTradeDate, personForShiftTradeList);
+		}
+
+		public IEnumerable<IPerson> RetrievePeopleOptimized(DateOnly shiftTradeDate, Guid[] teamIds, string personName,
+			NameFormatSetting nameFormatSettings)
+		{
+			//ROBTODO: Temporary - Person From Shift Period is currently not being passed to Get People, this is currently not being used by the query,
+			//	but is a requested parameter to add for further optimisation
+			var dummyDateTimePeriod = new DateTimePeriod(DateTime.Today.ToUniversalTime(), DateTime.Now.ToUniversalTime());
+
+			var personForShiftTradeList = _peopleForShiftTradeFinder.GetPeople(_loggedOnUser.CurrentUser(), shiftTradeDate, dummyDateTimePeriod,
+				teamIds, personName,
+				nameFormatSettings);
+
+			return processShiftTradePeople(shiftTradeDate, personForShiftTradeList);
+		}
+
+		private IEnumerable<IPerson> processShiftTradePeople(DateOnly shiftTradeDate, IList<IAuthorizeOrganisationDetail> personForShiftTradeList)
+		{
 			var me = _loggedOnUser.CurrentUser();
 
-			personForShiftTradeList = personForShiftTradeList.Where (
+			personForShiftTradeList = personForShiftTradeList.Where(
 				personGuid => personGuid.PersonId != me.Id &&
-							  (_permissionProvider.HasOrganisationDetailPermission (DefinedRaptorApplicationFunctionPaths.ViewSchedules,
-								  shiftTradeDate, personGuid) ||
-							   _permissionProvider.HasApplicationFunctionPermission (
+							  (_permissionProvider.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules,
+								   shiftTradeDate, personGuid) ||
+							   _permissionProvider.HasApplicationFunctionPermission(
 								   DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))).ToList();
 
-			var personGuidList = personForShiftTradeList.Select (item => item.PersonId).ToList();
+			var personGuidList = personForShiftTradeList.Select(item => item.PersonId).ToList();
 
-			var personList = _personRepository.FindPeople (personGuidList);
+			var personList = _personRepository.FindPeople(personGuidList);
 
 
-
-			return personList.Where (
+			return personList.Where(
 				person =>
-					_shiftTradeValidator.Validate (new ShiftTradeAvailableCheckItem (shiftTradeDate, me, person))
-						.Value && (_permissionProvider.IsPersonSchedulePublished (shiftTradeDate, person) ||
-								   _permissionProvider.HasApplicationFunctionPermission (
+					_shiftTradeValidator.Validate(new ShiftTradeAvailableCheckItem(shiftTradeDate, me, person))
+						.Value && (_permissionProvider.IsPersonSchedulePublished(shiftTradeDate, person) ||
+								   _permissionProvider.HasApplicationFunctionPermission(
 									   DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)));
-
 		}
 	}
 
@@ -64,6 +84,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 	public interface IShiftTradePersonProvider
 	{
 		IEnumerable<IPerson> RetrievePersons(DateOnly shiftTradeDate, Guid[] teamIds, string personName,
+			NameFormatSetting nameFormatSettings);
+
+		IEnumerable<IPerson> RetrievePeopleOptimized(DateOnly shiftTradeDate, Guid[] teamIds, string personName,
 			NameFormatSetting nameFormatSettings);
 	}
 }

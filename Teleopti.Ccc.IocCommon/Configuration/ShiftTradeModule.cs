@@ -21,7 +21,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<ShiftTradeSkillSpecification>().As<IShiftTradeLightSpecification>();
+			if (!_configuration.Toggle (Toggles.MyTimeWeb_ShiftTradeOptimization_40792))
+			{
+				builder.RegisterType<ShiftTradeSkillSpecification>().As<IShiftTradeLightSpecification>();
+			}
+
 			builder.RegisterType<OpenShiftTradePeriodSpecification>().As<IShiftTradeLightSpecification>();
 			builder.RegisterType<ShiftTradeDateSpecification>().As<IShiftTradeSpecification>();
 			builder.RegisterType<ShiftTradeTargetTimeSpecification>().As<IShiftTradeSpecification>();

@@ -453,6 +453,7 @@
     <Compile Include="Repositories\IBadgeCalculationRepository.cs" />
     <Compile Include="Repositories\IIntradayQueueStatisticsLoader.cs" />
     <Compile Include="Repositories\IKpiRepository.cs" />
+    <Compile Include="Repositories\IPeopleForShiftTradeFinder.cs" />
     <Compile Include="Repositories\IQueuedAbsenceRequestRepository.cs" />
     <Compile Include="Repositories\ISiteOpenHourRepository.cs" />
     <Compile Include="ResourceCalculation\CalculateForReadModel.cs" />

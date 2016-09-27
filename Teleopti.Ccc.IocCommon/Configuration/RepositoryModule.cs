@@ -81,6 +81,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.SingleInstance();
 
 			builder.RegisterType<PersonForScheduleFinder>().As<IPersonForScheduleFinder>().SingleInstance();
+			builder.RegisterType<PeopleForShiftTradeFinder>().As<IPeopleForShiftTradeFinder>().SingleInstance();
 		}
 
 		private bool hasCorrectCtor(Type repositoryType)
