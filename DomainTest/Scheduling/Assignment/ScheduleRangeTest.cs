@@ -4,7 +4,6 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -48,65 +47,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 								_person, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			_target = new scheduleExposingInternalCollections(_dic, _parameters);
 			_permissionChecker = new PersistableScheduleDataPermissionChecker();
-		}
-
-		[Test, Ignore("This is no longer valid - maybe it will be soon. Remove if still ignored on main")]
-		public void VerifyExtractAllDataRegardingTimeZones()
-		{
-			_target = new scheduleExposingInternalCollections(_dic, new ScheduleParameters(_scenario, _person, new DateTimePeriod(1800,1,1,2200,1,1)));
-			var extractor = new Extractor();
-			var periodToExtract = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
-
-			var early = createPersonAssignment(new DateTimePeriod(new DateTime(1999, 12, 31, 23,0,0,DateTimeKind.Utc), new DateTime(2000, 1, 1).ToUniversalTime()));
-			var late = createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3));
-
-			using(_mocks.Record())
-			{
-				fullPermission(false);
-			}
-			using (_mocks.Playback())
-			{
-                using (new CustomAuthorizationContext(_authorization))
-                {
-                    _target.Add(early);
-                    _target.Add(late);
-
-                    _person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.Utc));
-                    _target.ExtractAllScheduleData(extractor, periodToExtract);
-                    CollectionAssert.IsEmpty(extractor.ScheduleDataCollection);
-
-                    extractor.ScheduleDataCollection.Clear();
-                    _person.PermissionInformation.SetDefaultTimeZone(
-                        (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"))); //+1
-                    _target.ExtractAllScheduleData(extractor, periodToExtract);
-                    Assert.AreEqual(2, extractor.ScheduleDataCollection.Count(),
-                                    "Yes it looks a bit strange, but it _should_ be 2 not 1");
-                    CollectionAssert.Contains(extractor.ScheduleDataCollection, early);
-
-                    extractor.ScheduleDataCollection.Clear();
-                    _person.PermissionInformation.SetDefaultTimeZone(
-                        (TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time"))); //-6h
-                    _target.ExtractAllScheduleData(extractor, periodToExtract);
-                    Assert.AreEqual(2, extractor.ScheduleDataCollection.Count(),
-                                    "Yes it looks a bit strange, but it _should_ be 2 not 1");
-                    CollectionAssert.Contains(extractor.ScheduleDataCollection, late);
-                }
-			}
-		}
-
-		private class Extractor : IScheduleExtractor
-		{
-			public Extractor()
-			{
-				ScheduleDataCollection = new List<IScheduleData>();
-			}
-
-			public void AddSchedulePart(IScheduleDay schedulePart)
-			{
-				schedulePart.PersistableScheduleDataCollection().ForEach(ScheduleDataCollection.Add);
-			}
-
-			public ICollection<IScheduleData> ScheduleDataCollection { get; set; }
 		}
 
 		[Test]
