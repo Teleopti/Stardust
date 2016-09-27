@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			var options = new BackgroundJobServerOptions
 			{
 				WorkerCount = setThisToOneAndErikWillHuntYouDownAndKillYouSlowlyAndPainfully,
-				Queues = QueueName.All().ToArray()
+				Queues = Queues.OrderOfPriority().ToArray()
 			};
 			app.UseHangfireServer(options);
 		}

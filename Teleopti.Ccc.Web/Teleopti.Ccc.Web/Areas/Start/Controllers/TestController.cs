@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker;
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly ISettings _settings;
 		private readonly IPhysicalApplicationPath _physicalApplicationPath;
 		private readonly IFindPersonInfo _findPersonInfo;
-		private readonly IHangfireUtilities _hangfire;
+		private readonly HangfireUtilities _hangfire;
 		private readonly TenantTickEventPublisher _tenantTickEventPublisher;
 		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
 
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			ISettings settings,
 			IPhysicalApplicationPath physicalApplicationPath,
 			IFindPersonInfo findPersonInfo,
-			IHangfireUtilities hangfire,
+			HangfireUtilities hangfire,
 			TenantTickEventPublisher tenantTickEventPublisher,
 			Domain.ApplicationLayer.Rta.Service.Rta rta)
 		{

@@ -8,4 +8,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 	{
 		void Handle(TEvent @event);
 	}
+
+	public interface IHandleEventOnQueue<TEvent> where TEvent : IEvent
+	{
+		string QueueTo(TEvent @event);
+	}
 }

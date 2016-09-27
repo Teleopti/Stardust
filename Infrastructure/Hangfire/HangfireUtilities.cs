@@ -4,15 +4,16 @@ using System.Linq;
 using System.Threading;
 using Castle.Core.Internal;
 using Hangfire;
+using Hangfire.Server;
 using Hangfire.Storage;
 using Hangfire.Storage.Monitoring;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Interfaces.Messages;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
-	public class HangfireUtilities : IHangfireUtilities
+	public class HangfireUtilities : ICleanHangfire
 	{
 		private readonly JobStorage _storage;
 		private readonly IBackgroundJobClient _backgroundJobs;
@@ -39,17 +40,42 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			});
 		}
 
-		public void CancelQueue()
+		public void CleanQueue()
 		{
-			foreach (var queueName in QueueName.All())
+			foreach (var queueName in Queues.OrderOfPriority())
 			{
-				_monitoring
-				.EnqueuedJobs(queueName, 0, 100)
-				.ForEach(j => _backgroundJobs.Delete(j.Key));
+				var enqueued = _monitoring.EnqueuedJobs(queueName, 0, 1000);
+				while (enqueued.Count > 0)
+				{
+					enqueued.ForEach(j =>
+					{
+						_backgroundJobs.Delete(j.Key);
+						// fake a worker processing the deleted job will remove it from the job queue
+						new Worker().Execute(
+							new BackgroundProcessContext(
+								"fake server",
+								JobStorage.Current,
+								new Dictionary<string, object>(),
+								new CancellationToken()
+							));
+					});
+					enqueued = _monitoring.EnqueuedJobs(queueName, 0, 1000);
+				}
 			}
 			
+		}
+
+		public void CancelQueue()
+		{
+			foreach (var queueName in Queues.OrderOfPriority())
+			{
+				_monitoring
+				.EnqueuedJobs(queueName, 0, 1000)
+				.ForEach(j => _backgroundJobs.Delete(j.Key));
+			}
+
 			_monitoring
-				.ScheduledJobs(0, 100)
+				.ScheduledJobs(0, 1000)
 				.ForEach(j => _backgroundJobs.Delete(j.Key));
 		}
 
@@ -92,7 +118,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			{
 				long enqueuedCount = 0;
 				long fetchedCount = 0;
-				foreach (var queueName in QueueName.All())
+				foreach (var queueName in Queues.OrderOfPriority())
 				{
 					enqueuedCount += _monitoring.EnqueuedCount(queueName);
 					fetchedCount += _monitoring.FetchedCount(queueName);

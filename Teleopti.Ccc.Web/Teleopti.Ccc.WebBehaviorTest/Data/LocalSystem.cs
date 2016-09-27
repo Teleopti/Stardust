@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static ICurrentUnitOfWork UnitOfWork;
 		public static DefaultDataCreator DefaultDataCreator;
 		public static DefaultAnalyticsDataCreator DefaultAnalyticsDataCreator;
-		public static IHangfireUtilities Hangfire;
+		public static HangfireUtilities Hangfire;
 		public static MutableNow Now;
 		public static IEventPublisher EventPublisher;
 		public static ITenantUnitOfWork TenantUnitOfWork;
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			_container.Resolve<IMessageBrokerUrl>().Configure(TestSiteConfigurationSetup.URL.ToString());
 			_container.Resolve<ISignalRClient>().StartBrokerService();
 			_container.Resolve<HangfireClientStarter>().Start();
-			Hangfire = _container.Resolve<IHangfireUtilities>();
+			Hangfire = _container.Resolve<HangfireUtilities>();
 		}
 	}
 }

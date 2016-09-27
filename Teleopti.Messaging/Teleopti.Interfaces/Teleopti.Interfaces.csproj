@@ -731,7 +731,6 @@
     <Compile Include="Domain\IRestrictionSet.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Infrastructure\IHangfireUtilities.cs" />
     <Compile Include="Infrastructure\IHttpServer.cs" />
     <Compile Include="Infrastructure\IIntervalLengthFetcher.cs" />
     <Compile Include="Infrastructure\ILatestStatisticsIntervalIdLoader.cs" />
@@ -846,7 +845,7 @@
     <Compile Include="Messages\General\ExportMultisiteSkillToSkill.cs" />
     <Compile Include="Messages\General\IForecastsRow.cs" />
     <Compile Include="Messages\General\MultisiteSkillSelection.cs" />
-    <Compile Include="Messages\IRunWithPriority.cs" />
+    <Compile Include="Messages\Queues.cs" />
     <Compile Include="Messages\ILogOnContext.cs" />
     <Compile Include="Messages\Requests\NewAbsenceRequestCreated.cs" />
     <Compile Include="Messages\Requests\AcceptShiftTrade.cs" />

@@ -32,5 +32,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				);
 		}
 
+		public string QueueTo(Type handler, IEvent @event)
+		{
+			// check for interface? Naaahh...
+			return handler
+				.GetMethods()
+				.FirstOrDefault(m =>
+						m.Name == "QueueTo" &&
+						m.GetParameters().Single().ParameterType == @event.GetType()
+				)
+				?.Invoke(_resolve.Resolve(handler), new[] {@event}) as string;
+		}
 	}
 }

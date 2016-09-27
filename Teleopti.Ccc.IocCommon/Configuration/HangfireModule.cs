@@ -1,9 +1,9 @@
 using Autofac;
 using Hangfire;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Hangfire;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -33,7 +33,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<RecurringJobManager>()
 				.SingleInstance();
 
-			builder.RegisterType<HangfireUtilities>().As<IHangfireUtilities>().SingleInstance().ApplyAspects();
+			builder.RegisterType<HangfireUtilities>()
+				.AsSelf()
+				.As<ICleanHangfire>()
+				.SingleInstance()
+				.ApplyAspects();
 		}
 	}
 }

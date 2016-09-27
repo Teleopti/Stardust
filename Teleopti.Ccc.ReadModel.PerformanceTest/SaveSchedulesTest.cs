@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 		public WithUnitOfWork WithUnitOfWork;
 		public Http Http;
 		public MutableNow Now;
-		public IHangfireUtilities Hangfire;
+		public HangfireUtilities Hangfire;
 		public IDataSourceScope DataSource;
 		public ImpersonateSystem Impersonate;
 		public IScenarioRepository Scenarios;

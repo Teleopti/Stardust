@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Autofac;
 using NHibernate.Util;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -17,17 +18,20 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		private readonly IHangfireEventClient _client;
 		private readonly IJsonEventSerializer _serializer;
 		private readonly ResolveEventHandlers _resolver;
+		private readonly IResolve _resolver2;
 		private readonly ICurrentDataSource _dataSource;
 
 		public HangfireEventPublisher(
 			IHangfireEventClient client,
 			IJsonEventSerializer serializer,
 			ResolveEventHandlers resolver,
+			IResolve resolver2,
 			ICurrentDataSource dataSource)
 		{
 			_client = client;
 			_serializer = serializer;
 			_resolver = resolver;
+			_resolver2 = resolver2;
 			_dataSource = dataSource;
 		}
 
@@ -74,7 +78,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			public string Event;
 			public Type HandlerType;
 			public string HandlerTypeName;
-			public string QueueName { get; set; }
+			public string QueueName;
 
 			public string IdForJob(IEvent @event)
 			{
@@ -100,7 +104,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				Event = serialized,
 				HandlerType = handlerType,
 				HandlerTypeName = $"{handlerType.FullName}, {handlerType.Assembly.GetName().Name}",
-				QueueName = QueueName.Default
+				QueueName = _resolver.QueueTo(handlerType, @event)
 			});
 		}
 
