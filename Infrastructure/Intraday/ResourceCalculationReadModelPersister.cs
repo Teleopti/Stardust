@@ -29,12 +29,11 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			dt.Columns.Add("BelongsToDate",typeof(DateTime));
 			dt.Columns.Add("StartDateTime", typeof(DateTime));
 			dt.Columns.Add("EndDateTime", typeof(DateTime));
-            
             dt.Columns.Add("Forecast", typeof(double));
-           
             dt.Columns.Add("StaffingLevel", typeof(double));
             dt.Columns.Add("CalculatedOn", typeof(DateTime));
             dt.Columns.Add("InsertedOn", typeof(DateTime));
+            dt.Columns.Add("ForecastWithShrinkage", typeof(double));
 
 
             foreach (var item in items)
@@ -46,12 +45,11 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 					row["BelongsToDate"] =  date.Date;
 					row["StartDateTime"] = skillStaffingInterval.StartDateTime;
 					row["EndDateTime"] = skillStaffingInterval.EndDateTime;
-                    
                     row["Forecast"] = skillStaffingInterval.Forecast;
-                    
                     row["StaffingLevel"] = skillStaffingInterval.StaffingLevel;
                     row["CalculatedOn"] = skillStaffingInterval.CalculatedOn;
                     row["InsertedOn"] = skillStaffingInterval.CalculatedOn;
+                    row["ForecastWithShrinkage"] = skillStaffingInterval.ForecastWithShrinkage;
                     dt.Rows.Add(row);
 				}
 			}
@@ -87,7 +85,8 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			,[EndDateTime]
 			,[Forecast]
 			,[StaffingLevel],
-            [CalculatedOn]
+            [CalculatedOn],
+            [ForecastWithShrinkage]
 				 FROM [ReadModel].[ScheduleForecastSkill]
 				where [startDateTime] between :startDateTime and :endDateTime
 				and SkillId = :skillId")
@@ -96,7 +95,8 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 				.AddScalar("Forecast", NHibernateUtil.Double)
 				.AddScalar("StaffingLevel", NHibernateUtil.Double)
 				.AddScalar("CalculatedOn", NHibernateUtil.DateTime)
-				.SetDateTime("startDateTime", startDateTime)
+                .AddScalar("ForecastWithShrinkage", NHibernateUtil.Double)
+                .SetDateTime("startDateTime", startDateTime)
 				.SetDateTime("endDateTime", endDateTime)
 				.SetGuid("skillId", skillId)
 				.SetResultTransformer(Transformers.AliasToBean(typeof (SkillStaffingInterval)))
@@ -108,8 +108,8 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 		public IEnumerable<SkillStaffingInterval> GetBySkillArea(Guid id, DateTime startDateTime, DateTime endDateTime)
 		{
 			var result = ((NHibernateUnitOfWork)_currentUnitOfWorkFactory.Current().CurrentUnitOfWork()).Session.CreateSQLQuery(
-				@"SELECT 
-					StartDateTime,EndDateTime,Sum(Forecast) as Forecast,Sum(StaffingLevel) as StaffingLevel, CalculatedOn
+                @"SELECT 
+					StartDateTime,EndDateTime,Sum(Forecast) as Forecast,Sum(StaffingLevel) as StaffingLevel, CalculatedOn, ForecastWithShrinkage
 				 FROM [ReadModel].[ScheduleForecastSkill]
 				inner join SkillAreaSkillCollection on SkillId = Skill
 				where [startDateTime] between :startDateTime and :endDateTime
@@ -120,9 +120,10 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 				.AddScalar("Forecast", NHibernateUtil.Double)
 				.AddScalar("CalculatedOn", NHibernateUtil.DateTime)
 				.AddScalar("StaffingLevel", NHibernateUtil.Double)
-				.SetDateTime("startDateTime", startDateTime)
+                .AddScalar("ForecastWithShrinkage", NHibernateUtil.Double)
+                .SetDateTime("startDateTime", startDateTime)
 				.SetDateTime("endDateTime", endDateTime)
-				.SetGuid("id", id)
+                .SetGuid("id", id)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(SkillStaffingInterval)))
 				.List<SkillStaffingInterval>();
 

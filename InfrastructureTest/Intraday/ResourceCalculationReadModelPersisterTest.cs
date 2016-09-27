@@ -121,7 +121,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
         public void ShouldGetLastestDateOfResourceCalculation()
         {
             var skillId = Guid.NewGuid();
-            var calculatedOn = new DateTime(2016, 06, 16, 01, 0, 0, DateTimeKind.Utc);
             var items = new List<ResourcesDataModel>()
             {
                 new ResourcesDataModel()
@@ -161,6 +160,37 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 
             var result = Target.GetLastCalculatedTime();
             result.Should().Be.EqualTo(new DateTime(2016, 06, 16, 03, 15, 0, DateTimeKind.Utc));
+
+        }
+
+        [Test]
+        public void ShouldPersistForecastWithShrinkage()
+        {
+            var skillId = Guid.NewGuid();
+            var items = new List<ResourcesDataModel>()
+            {
+                new ResourcesDataModel()
+                {
+                    Id = skillId,
+                    Intervals =
+                        new List<SkillStaffingInterval>()
+                        {
+                             new SkillStaffingInterval()
+                            {
+                                StaffingLevel = 10,
+                                EndDateTime = new DateTime(2016, 06, 16, 02, 15, 0,DateTimeKind.Utc),
+                                Forecast = 20,
+                                StartDateTime = new DateTime(2016, 06, 16, 02, 0, 0,DateTimeKind.Utc),
+                                CalculatedOn =  new DateTime(2016, 06, 16, 01, 0, 0, DateTimeKind.Utc),
+                                ForecastWithShrinkage = 25
+                            }
+                        }
+                }
+            };
+            Target.Persist(items, new DateOnly(2016, 06, 16));
+
+            var result = Target.GetBySkill(skillId, new DateTime(2016, 06, 16, 0, 0, 0), new DateTime(2016, 06, 16, 23, 59, 59));
+            result.First().ForecastWithShrinkage.Should().Be.EqualTo(25);
 
         }
 
