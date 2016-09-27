@@ -12,14 +12,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly LoaderForResourceCalculation _loaderForResourceCalculation;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly IScheduleForecastSkillReadModelRepository _scheduleForecastSkillReadModelRepository;
+	    private readonly INow _now;
 
 		public CalculateForReadModel(
 			LoaderForResourceCalculation loaderForResourceCalculation,
-			IResourceOptimizationHelper resourceOptimizationHelper, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository)
+			IResourceOptimizationHelper resourceOptimizationHelper, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository, INow now)
 		{
 			_loaderForResourceCalculation = loaderForResourceCalculation;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
+		    _now = now;
 		}
 
 		[LogTime]
@@ -59,7 +61,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			if (skillSkillStaffPeriodExtendedDictionary.Keys.Count > 0)
 			{
-				foreach (var skill in skillSkillStaffPeriodExtendedDictionary.Keys)
+			    var now = _now.UtcDateTime();
+                foreach (var skill in skillSkillStaffPeriodExtendedDictionary.Keys)
 				{
 					var ret = new ResourcesDataModel();
 					ret.Id = skill.Id.GetValueOrDefault();
@@ -73,8 +76,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 							StartDateTime = skillStaffPeriod.Period.StartDateTime,
 							EndDateTime = skillStaffPeriod.Period.EndDateTime,
 							Forecast = skillStaffPeriod.FStaff,
-							StaffingLevel = skillStaffPeriod.CalculatedResource
-						});
+							StaffingLevel = skillStaffPeriod.CalculatedResource,
+                            CalculatedOn = now
+                        });
 					}
 					items.Add(ret);
 				}
