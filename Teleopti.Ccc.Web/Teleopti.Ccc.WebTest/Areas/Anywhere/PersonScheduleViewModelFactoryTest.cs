@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon;
@@ -27,18 +26,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 	[TestFixture]
 	public class PersonScheduleViewModelFactoryTest
 	{
-		private IPermissionProvider _permissionProvider;
+		private FakePermissionProvider _permissionProvider;
 		private CommonAgentNameProvider _commonAgentNameProvider;
 		private ICurrentScenario _currentScenario;
 
 		[SetUp]
 		public void Setup()
 		{
-			_permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			var globalSettingRepository = MockRepository.GenerateMock<IGlobalSettingDataRepository>();
-			globalSettingRepository.Stub(x => x.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting()))
-				.IgnoreArguments()
-				.Return(new CommonNameDescriptionSetting());
+			_permissionProvider = new FakePermissionProvider();
+			var globalSettingRepository = new FakeGlobalSettingDataRepository();
 			_commonAgentNameProvider = new CommonAgentNameProvider(globalSettingRepository);
 			Mapper.Initialize(c => c.AddProfile(new PersonScheduleViewModelMappingProfile(new FakeUserTimeZone(TimeZoneInfo.Local), new Now())));
 			_currentScenario = new FakeCurrentScenario();
@@ -62,8 +58,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 
 		private static IPersonRepository FakePersonRepository(IPerson person)
 		{
-			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
-			personRepository.Stub(x => x.Get(Guid.NewGuid())).IgnoreArguments().Return(person);
+			var personRepository = new FakePersonRepository();
+			personRepository.Add(person);
 			return personRepository;
 		}
 
@@ -71,9 +67,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 		public void ShouldPassDateToMapping()
 		{
 			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
-			var target = new PersonScheduleViewModelFactory(FakePersonRepository(), MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), MockRepository.GenerateMock<IAbsenceRepository>(), MockRepository.GenerateMock<IActivityRepository>(), personScheduleViewModelMapper, MockRepository.GenerateMock<IPersonAbsenceRepository>(), new NewtonsoftJsonSerializer(), _permissionProvider, _commonAgentNameProvider, MockRepository.GenerateMock<IIanaTimeZoneProvider>(), new UtcTimeZone(), _currentScenario);
+			var person = FakePerson();
+			var target = new PersonScheduleViewModelFactory(FakePersonRepository(person), MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), MockRepository.GenerateMock<IAbsenceRepository>(), MockRepository.GenerateMock<IActivityRepository>(), personScheduleViewModelMapper, MockRepository.GenerateMock<IPersonAbsenceRepository>(), new NewtonsoftJsonSerializer(), _permissionProvider, _commonAgentNameProvider, MockRepository.GenerateMock<IIanaTimeZoneProvider>(), new UtcTimeZone(), _currentScenario);
 			
-			target.CreateViewModel(Guid.NewGuid(), DateTime.Today);
+			target.CreateViewModel(person.Id.GetValueOrDefault(), DateTime.Today);
 
 			personScheduleViewModelMapper.AssertWasCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => s.Date == DateTime.Today)));
 		}
@@ -122,31 +119,27 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 		{
 			var person = FakePerson();
 			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
-			var ianaTimeZoneProvider = MockRepository.GenerateMock<IIanaTimeZoneProvider>();
-			var userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
-			var target = new PersonScheduleViewModelFactory(FakePersonRepository(person), MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), 
-				MockRepository.GenerateMock<IAbsenceRepository>(), MockRepository.GenerateMock<IActivityRepository>(), personScheduleViewModelMapper, 
-				MockRepository.GenerateMock<IPersonAbsenceRepository>(), new NewtonsoftJsonSerializer(), _permissionProvider, _commonAgentNameProvider, 
+			var ianaTimeZoneProvider = new IanaTimeZoneProvider();
+			var userTimeZone = new FakeUserTimeZone(TimeZoneInfoFactory.BrazilTimeZoneInfo());
+			var fakePersonRepository = FakePersonRepository(person);
+			var target = new PersonScheduleViewModelFactory(fakePersonRepository, new FakePersonScheduleDayReadModelFinder(new FakePersonAssignmentRepository(), fakePersonRepository), 
+				new FakeAbsenceRepository(), new FakeActivityRepository(), personScheduleViewModelMapper, 
+				new FakePersonAbsenceRepository(), new NewtonsoftJsonSerializer(), _permissionProvider, _commonAgentNameProvider, 
 				ianaTimeZoneProvider, userTimeZone, _currentScenario);
-
-			var brazilTimeZone = TimeZoneInfoFactory.BrazilTimeZoneInfo();
 			
-			userTimeZone.Stub(x => x.TimeZone()).Return(brazilTimeZone);
-			ianaTimeZoneProvider.Stub(x => x.WindowsToIana(brazilTimeZone.Id)).Return("Brazil/Brasilia");
-
 			target.CreateViewModel(person.Id.Value, DateTime.Today);
 
-			personScheduleViewModelMapper.AssertWasCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => s.IanaTimeZoneLoggedOnUser == "Brazil/Brasilia")));
+			personScheduleViewModelMapper.AssertWasCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => !string.IsNullOrEmpty(s.IanaTimeZoneLoggedOnUser))));
 		}
 
 		[Test]
 		public void ShouldRetrieveHasViewConfidentialPermissionToMapping()
 		{
 			var person = FakePerson();
+			_permissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.ViewConfidential, DateOnly.Today, person);
 			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
 			var target = new PersonScheduleViewModelFactory(FakePersonRepository(person), MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), MockRepository.GenerateMock<IAbsenceRepository>(), MockRepository.GenerateMock<IActivityRepository>(), personScheduleViewModelMapper, MockRepository.GenerateMock<IPersonAbsenceRepository>(), new NewtonsoftJsonSerializer(), _permissionProvider, _commonAgentNameProvider, MockRepository.GenerateMock<IIanaTimeZoneProvider>(), new UtcTimeZone(), _currentScenario);
-			_permissionProvider.Stub(x => x.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential,
-			                                                    DateOnly.Today, person)).Return(true);
+
 			target.CreateViewModel(person.Id.Value, DateTime.Today);
 
 			personScheduleViewModelMapper.AssertWasCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => s.HasViewConfidentialPermission)));
@@ -155,34 +148,38 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 		[Test]
 		public void ShouldRetrieveAbsencesToMapping()
 		{
-			var absenceRepository = MockRepository.GenerateMock<IAbsenceRepository>();
+			var absenceRepository = new FakeAbsenceRepository();
+			var absence = new Absence();
+			absenceRepository.Has(absence);
 			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
-			var target = new PersonScheduleViewModelFactory(FakePersonRepository(), MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), absenceRepository, MockRepository.GenerateMock<IActivityRepository>(), personScheduleViewModelMapper, MockRepository.GenerateMock<IPersonAbsenceRepository>(), new NewtonsoftJsonSerializer(), _permissionProvider, _commonAgentNameProvider, MockRepository.GenerateMock<IIanaTimeZoneProvider>(), new UtcTimeZone(), _currentScenario);
-			var absences = new[] { new Absence() };
-			absenceRepository.Stub(x => x.LoadAllSortByName()).Return(absences);
+			var person = FakePerson();
+			var target = new PersonScheduleViewModelFactory(FakePersonRepository(person), MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), absenceRepository, MockRepository.GenerateMock<IActivityRepository>(), personScheduleViewModelMapper, MockRepository.GenerateMock<IPersonAbsenceRepository>(), new NewtonsoftJsonSerializer(), _permissionProvider, _commonAgentNameProvider, MockRepository.GenerateMock<IIanaTimeZoneProvider>(), new UtcTimeZone(), _currentScenario);
+			
+			target.CreateViewModel(person.Id.GetValueOrDefault(), DateTime.Today);
 
-			target.CreateViewModel(Guid.NewGuid(), DateTime.Today);
-
-			personScheduleViewModelMapper.AssertWasCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => s.Absences == absences)));
+			personScheduleViewModelMapper.AssertWasCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => absence.Equals(s.Absences.Single()))));
 		}
 
 		[Test]
 		public void ShouldRetrieveActivitiesToMapping()
 		{
-			var activityRepository = MockRepository.GenerateMock<IActivityRepository>();
+			var activityRepository = new FakeActivityRepository();
+			var activity = new Activity("test activity");
+			activityRepository.Has(activity);
+
+			var person = FakePerson();
 			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
-			var target = new PersonScheduleViewModelFactory(FakePersonRepository(),
+			var target = new PersonScheduleViewModelFactory(FakePersonRepository(person),
 			                                                MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(),
 			                                                MockRepository.GenerateMock<IAbsenceRepository>(),
 															activityRepository,
 			                                                personScheduleViewModelMapper,
 			                                                MockRepository.GenerateMock<IPersonAbsenceRepository>(),
 																											new NewtonsoftJsonSerializer(), _permissionProvider, _commonAgentNameProvider, MockRepository.GenerateMock<IIanaTimeZoneProvider>(), new UtcTimeZone(), _currentScenario);
-			var activities = new[] { new Activity("test activity") };
-			activityRepository.Stub(x => x.LoadAllSortByName()).Return(activities);
-			target.CreateViewModel(Guid.NewGuid(), DateTime.Today);
 
-			personScheduleViewModelMapper.AssertWasCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => s.Activities == activities)));
+			target.CreateViewModel(person.Id.GetValueOrDefault(), DateTime.Today);
+
+			personScheduleViewModelMapper.AssertWasCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => activity.Equals(s.Activities.Single()))));
 		}
 
 		[Test]
@@ -212,7 +209,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
 			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
 			var personAbsenceRepository = MockRepository.GenerateMock<IPersonAbsenceRepository>();
-			var target = new PersonScheduleViewModelFactory(FakePersonRepository(person), personScheduleDayReadModelRepository, MockRepository.GenerateMock<IAbsenceRepository>(), MockRepository.GenerateMock<IActivityRepository>(), personScheduleViewModelMapper, personAbsenceRepository, new NewtonsoftJsonSerializer(), _permissionProvider, _commonAgentNameProvider, MockRepository.GenerateMock<IIanaTimeZoneProvider>(), new UtcTimeZone(), _currentScenario);
+			var target = new PersonScheduleViewModelFactory(FakePersonRepository(person), personScheduleDayReadModelRepository, MockRepository.GenerateMock<IAbsenceRepository>(), MockRepository.GenerateMock<IActivityRepository>(), personScheduleViewModelMapper, personAbsenceRepository, new NewtonsoftJsonSerializer(), new FakeNoPermissionProvider(), _commonAgentNameProvider, MockRepository.GenerateMock<IIanaTimeZoneProvider>(), new UtcTimeZone(), _currentScenario);
 			var readModel = new PersonScheduleDayReadModel {Model = Newtonsoft.Json.JsonConvert.SerializeObject(new Model {FirstName = "Pierre"})};
 			personScheduleDayReadModelRepository.Stub(x => x.ForPerson(DateOnly.Today, person.Id.Value)).Return(readModel);
 
@@ -225,9 +222,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 		[Test]
 		public void ShouldMapScheduleWhenHasViewUnpublishedSchedulePermission()
 		{
-			_permissionProvider.Stub(
-				x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
-			                   .Return(true);
 			var person = FakePerson();
 			person.WorkflowControlSet = new WorkflowControlSet
 			{
@@ -251,11 +245,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 		public void ShouldCreateViewModelUsingMapping()
 		{
 			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
-			var target = new PersonScheduleViewModelFactory(FakePersonRepository(), MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), MockRepository.GenerateMock<IAbsenceRepository>(), MockRepository.GenerateMock<IActivityRepository>(), personScheduleViewModelMapper, MockRepository.GenerateMock<IPersonAbsenceRepository>(), new NewtonsoftJsonSerializer(), _permissionProvider, _commonAgentNameProvider, MockRepository.GenerateMock<IIanaTimeZoneProvider>(), new UtcTimeZone(), _currentScenario);
+			var person = FakePerson();
+			var target = new PersonScheduleViewModelFactory(FakePersonRepository(person), MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), MockRepository.GenerateMock<IAbsenceRepository>(), MockRepository.GenerateMock<IActivityRepository>(), personScheduleViewModelMapper, MockRepository.GenerateMock<IPersonAbsenceRepository>(), new NewtonsoftJsonSerializer(), _permissionProvider, _commonAgentNameProvider, MockRepository.GenerateMock<IIanaTimeZoneProvider>(), new UtcTimeZone(), _currentScenario);
 			var viewModel = new PersonScheduleViewModel();
 			personScheduleViewModelMapper.Stub(x => x.Map(Arg<PersonScheduleData>.Is.Anything)).Return(viewModel);
 
-			var result = target.CreateViewModel(Guid.NewGuid(), DateTime.Today);
+			var result = target.CreateViewModel(person.Id.GetValueOrDefault(), DateTime.Today);
 
 			result.Should().Be.SameInstanceAs(viewModel);
 		}
