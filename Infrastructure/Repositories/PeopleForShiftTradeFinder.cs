@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			_unitOfWork = unitOfWork;
 		}
 
-		public IList<IAuthorizeOrganisationDetail> GetPeople (IPerson personFrom, DateOnly shiftTradeDate, DateTimePeriod personFromShiftPeriod, IList<Guid> groupIdList,
+		public IList<IAuthorizeOrganisationDetail> GetPeople (IPerson personFrom, DateOnly shiftTradeDate, IList<Guid> groupIdList,
 			string name, NameFormatSetting nameFormat = NameFormatSetting.FirstNameThenLastName)
 		{
 			var useChineseNameFormat = name != null && StringHelper.StringContainsChinese(name);
@@ -41,6 +41,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							   + "@shiftStartUTC = :shiftStartUTC, "
 							   + "@shiftEndUTC = :shiftEndUTC";
 			var result = new List<IAuthorizeOrganisationDetail>();
+			//ROBTODO: Temporary - Person From Shift Period is currently not being passed to Get People, this is currently not being used by the query,
+			//	but is a requested parameter to add for further optimisation
+			var dummyDateTimePeriod = new DateTimePeriod(DateTime.Today.ToUniversalTime(), DateTime.Now.ToUniversalTime());
 			groupIdList.Batch(100).ForEach(l =>
 			{
 				var batchResult = ((NHibernateUnitOfWork)_unitOfWork.Current()).Session.CreateSQLQuery(sql)
@@ -52,8 +55,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetGuid("businessUnitId", getBusinessUnitId())
 				.SetGuid("workflowControlSetId", personFrom.WorkflowControlSet.Id.GetValueOrDefault())
 				.SetGuid("fromPersonId", personFrom.Id.GetValueOrDefault())
-				.SetDateTime("shiftStartUTC", personFromShiftPeriod.StartDateTime)
-				.SetDateTime("shiftEndUTC", personFromShiftPeriod.EndDateTime)
+				.SetDateTime("shiftStartUTC", dummyDateTimePeriod.StartDateTime)
+				.SetDateTime("shiftEndUTC", dummyDateTimePeriod.EndDateTime)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(PersonSelectorShiftTrade)))
 				.SetReadOnly(true)
 				.List<IAuthorizeOrganisationDetail>();

@@ -255,6 +255,7 @@
     <Compile Include="Repositories\DayOffRulesRepositoryTest.cs" />
     <Compile Include="Repositories\IndexMaintenanceRepositoryTest.cs" />
     <Compile Include="Repositories\LoadSkillInIntradaysTest.cs" />
+    <Compile Include="Repositories\PeopleForShiftTradeFinderTest.cs" />
     <Compile Include="Repositories\PersonInRoleQuerierTest.cs" />
     <Compile Include="Repositories\QueuedAbsenceRequestRepositoryTest.cs" />
     <Compile Include="Repositories\ProjectionVersionPersisterTest.cs" />

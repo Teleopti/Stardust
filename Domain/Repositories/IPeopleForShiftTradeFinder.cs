@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 {
 	public interface IPeopleForShiftTradeFinder
 	{
-		IList<IAuthorizeOrganisationDetail> GetPeople(IPerson personFrom, DateOnly shiftTradeDate, DateTimePeriod personFromShiftPeriod
+		IList<IAuthorizeOrganisationDetail> GetPeople(IPerson personFrom, DateOnly shiftTradeDate
 			, IList<Guid> teamIdList, string name, NameFormatSetting nameFormat = NameFormatSetting.FirstNameThenLastName);
 	}
 }

@@ -44,11 +44,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 		public IEnumerable<IPerson> RetrievePeopleOptimized(DateOnly shiftTradeDate, Guid[] teamIds, string personName,
 			NameFormatSetting nameFormatSettings)
 		{
-			//ROBTODO: Temporary - Person From Shift Period is currently not being passed to Get People, this is currently not being used by the query,
-			//	but is a requested parameter to add for further optimisation
-			var dummyDateTimePeriod = new DateTimePeriod(DateTime.Today.ToUniversalTime(), DateTime.Now.ToUniversalTime());
-
-			var personForShiftTradeList = _peopleForShiftTradeFinder.GetPeople(_loggedOnUser.CurrentUser(), shiftTradeDate, dummyDateTimePeriod,
+			var personForShiftTradeList = _peopleForShiftTradeFinder.GetPeople(_loggedOnUser.CurrentUser(), shiftTradeDate,
 				teamIds, personName,
 				nameFormatSettings);
 
