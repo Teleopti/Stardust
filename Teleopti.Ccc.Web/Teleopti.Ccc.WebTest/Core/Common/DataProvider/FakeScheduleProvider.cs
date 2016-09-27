@@ -28,7 +28,15 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			return _scheduleDays;
 		}
 
-		public IEnumerable<IScheduleDay> GetScheduleForPersons(DateOnly date, IEnumerable<IPerson> persons)
+	    public IEnumerable<IScheduleDay> GetScheduleForPersons(DateOnly date, IEnumerable<IPerson> persons, bool loadNotes = false)
+	    {
+			return _scheduleDays.Where(sd =>
+			{
+				return persons.Any(p => p == sd.Person || p.Id == sd.Person.Id) && sd.DateOnlyAsPeriod.DateOnly == date;
+			});
+		}
+
+	    public IEnumerable<IScheduleDay> GetScheduleForPersons(DateOnly date, IEnumerable<IPerson> persons)
 		{
 			
 			return _scheduleDays.Where(sd =>
