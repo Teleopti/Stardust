@@ -742,4 +742,14 @@
 		}
 
 	}
+
+	
+}
+
+md-select-menu md-option:first-child:not([disabled]):focus {	
+	background: inherit;		
+}
+
+md-select-menu md-option:first-child:not([disabled]):hover {	
+	background: $gray-300;		
 }
