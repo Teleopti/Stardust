@@ -19,7 +19,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
-    [EnabledBy(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754)]
+    [EnabledBy(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754, Toggles.AbsenceRequests_UseMultiRequestProcessing_39960)]
     public class IntradayResourceCalculationForAbsenceHandler : IHandleEvent<TenantMinuteTickEvent>, IRunOnHangfire
     {
         private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
             _configReader = configReader;
         }
 
-        public virtual void Handle(TenantMinuteTickEvent @event)
+        public void Handle(TenantMinuteTickEvent @event)
         {
             //for now its 20 minutes should it be 10 minutes? and its going to calculate data from now till next 24 hours
 
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
             using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
             {
                 var lastExecuted = _scheduleForecastSkillReadModelRepository.GetLastCalculatedTime();
-                if (lastExecuted.AddMinutes(20) < now)
+                if (lastExecuted.AddMinutes(20) < _now.UtcDateTime())
                 {
                     var businessUnits = _businessUnitRepository.LoadAll();
                     var person = _personRepository.Get(SystemUser.Id);

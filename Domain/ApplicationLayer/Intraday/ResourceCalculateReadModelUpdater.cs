@@ -9,7 +9,8 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 {
-	[EnabledBy(Toggles.Intraday_ResourceCalculateReadModel_39200)]
+	//[EnabledBy(Toggles.Intraday_ResourceCalculateReadModel_39200)]
+	[EnabledBy(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754, Toggles.AbsenceRequests_UseMultiRequestProcessing_39960)]
 	public class ResourceCalculateReadModelUpdater : IHandleEvent<UpdateResourceCalculateReadModelEvent>, IRunOnStardust
 	{
 		private readonly CalculateForReadModel _calculateForReadModel;

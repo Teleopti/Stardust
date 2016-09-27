@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
@@ -10,35 +12,46 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private static readonly ILog logger = LogManager.GetLogger(typeof(IntradayRequestProcessor));
 
 		private readonly ICommandDispatcher _commandDispatcher;
+		private readonly IScheduleForecastSkillReadModelRepository _scheduleForecastSkillReadModelRepository;
 
-		public IntradayRequestProcessor(ICommandDispatcher commandDispatcher)
+		public IntradayRequestProcessor(ICommandDispatcher commandDispatcher, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository)
 		{
 			_commandDispatcher = commandDispatcher;
+			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
 		}
 
 		public void Process(IPersonRequest personRequest)
 		{
 			personRequest.Pending();
+			var cascadingPersonSkills = personRequest.Person.Period(DateOnly.Today).CascadingSkills();
 
-			IntradayStaffingCheck();
+			var lowestIndex = cascadingPersonSkills.Min(x => x.Skill.CascadingIndex);
+			var primarySkills = cascadingPersonSkills.Where(x => x.Skill.CascadingIndex == lowestIndex);
+			
+			foreach (var primarySkill in primarySkills)
+			{
+				var skillStaffingIntervals = _scheduleForecastSkillReadModelRepository.GetBySkill(primarySkill.Skill.Id.GetValueOrDefault(),
+																	 personRequest.Request.Period.StartDateTime, personRequest.Request.Period.EndDateTime);
 
+				//already understaffed
+				if (skillStaffingIntervals.Any(x => x.StaffingLevel < x.Forecast))
+				{
+					sendDenyCommand(personRequest.Id.GetValueOrDefault(), "A Skill is already understaffed");
+					return;
+				}
+
+			}
 			sendApproveCommand(personRequest.Id.GetValueOrDefault());
-		
-		}
 
-		private void IntradayStaffingCheck()
-		{
-			//Do something and send Deny if understaffed
 		}
 		
-
-		private void sendDenyCommand(Guid personRequestId, string denyReason, bool isAlreadyAbsent)
+		private void sendDenyCommand(Guid personRequestId, string denyReason)
 		{
 			var command = new DenyRequestCommand()
 			{
 				PersonRequestId = personRequestId,
 				DenyReason = denyReason,
-				IsAlreadyAbsent = isAlreadyAbsent
+				IsAlreadyAbsent = false
 			};
 			_commandDispatcher.Execute(command);
 
