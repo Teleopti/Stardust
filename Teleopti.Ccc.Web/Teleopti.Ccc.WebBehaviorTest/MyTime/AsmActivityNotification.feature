@@ -75,6 +75,7 @@ Background:
 	| StartTime                     | 2030-01-04 08:00 |
 	| EndTime                       | 2030-01-04 17:00 |
 
+@ignore
 @broker
 Scenario: Alert agent when schedule changed
 	Given I have the role 'Full access to mytime'
