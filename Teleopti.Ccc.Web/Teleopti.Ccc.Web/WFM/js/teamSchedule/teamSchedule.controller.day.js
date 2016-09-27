@@ -330,7 +330,8 @@
 									 || toggleSvc.WfmTeamSchedule_ShowDayOffWarning_39801
 									 || toggleSvc.WfmTeamSchedule_ShowOverwrittenLayerWarning_40109,
 				FilterValidationWarnings: toggleSvc.WfmTeamSchedule_FilterValidationWarnings_40110,
-				MoveInvalidOverlappedActivityEnabled: toggleSvc.WfmTeamSchedule_MoveInvalidOverlappedActivity_40688
+				MoveInvalidOverlappedActivityEnabled: toggleSvc.WfmTeamSchedule_MoveInvalidOverlappedActivity_40688,
+				EditAndViewInternalNoteEnabled: toggleSvc.WfmTeamSchedule_EditAndDisplayInternalNotes_40671
 			};
 
 			vm.toggles.SeeScheduleChangesByOthers && monitorScheduleChanged();

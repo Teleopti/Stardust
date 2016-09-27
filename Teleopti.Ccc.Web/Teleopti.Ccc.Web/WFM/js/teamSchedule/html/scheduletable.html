@@ -30,6 +30,12 @@
 					</label>
 				</div>
 				<div class="person-name" ng-hide="vm.selectMode">{{personSchedule.Name}}</div>
+				<span class="validate-warning" ng-if="vm.toggles.EditAndViewInternalNoteEnabled && personSchedule.InternalNotes && personSchedule.InternalNotes.length > 0">
+					<span ><i class="mdi mdi-comment"></i></span>
+					<md-tooltip class="multiline-tooltip" md-direction="right">
+						{{personSchedule.InternalNotes}}
+					</md-tooltip>
+				</span>
 				<span class="validate-warning" ng-if="vm.showWarnings">
 					<span ng-if="vm.checkIsLoadedValidationForPerson(personSchedule.PersonId) &&
 					vm.checkBusinessRulesWarningMessage(personSchedule.PersonId).length > 0">
