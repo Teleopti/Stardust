@@ -355,8 +355,8 @@ $(document).ready(function () {
 		viewModel.loadSites();
 
 		equal(viewModel.selectedSite(), "A");
-		equal(viewModel.availableSites().length, 3);
-		var siteTwo = viewModel.availableSites()[1];
+		equal(viewModel.availableSites().length, 4);
+		var siteTwo = viewModel.availableSites()[2];
 		equal(siteTwo.id, "B");
 		equal(siteTwo.text, "Site B");
 	});

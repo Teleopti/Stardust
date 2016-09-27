@@ -739,16 +739,8 @@ Teleopti.MyTimeWeb.Request.ShiftTradeViewModel = function (ajax) {
 	};
 
 	self.setSiteAll = function () {
-		ajax.Ajax({
-			url: "RequestsShiftTradeScheduleFilter/GetAllSitesText",
-			dataType: "json",
-			type: 'GET',
-			contentType: 'application/json; charset=utf-8',
-			success: function (data) {
-				var text = data ? data : "All Sites";
-				self.availableSites.unshift({ id: self.allSitesId, text: text });
-			}
-		});
+		var text = $("#Request-all-permitted-sites").val() ? $("#Request-all-permitted-sites").val() : "All Sites";
+		self.availableSites.unshift({ id: self.allSitesId, text: text });
 	};
 
 	self.loadTeams = function (date) {

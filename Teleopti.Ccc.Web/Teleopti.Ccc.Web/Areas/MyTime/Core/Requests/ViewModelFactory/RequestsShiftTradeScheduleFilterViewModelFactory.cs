@@ -37,10 +37,5 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 
 			return ret;
 		}
-
-		public string GetAllSitesText()
-		{
-			return Resources.AllPermittedSitesToMakeShiftTradeWith;
-		}
 	}
 }

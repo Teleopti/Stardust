@@ -5,6 +5,5 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 	public interface IRequestsShiftTradeScheduleFilterViewModelFactory
 	{
 		RequestsShiftTradeScheduleFilterViewModel ViewModel();
-		string GetAllSitesText();
 	}
 }

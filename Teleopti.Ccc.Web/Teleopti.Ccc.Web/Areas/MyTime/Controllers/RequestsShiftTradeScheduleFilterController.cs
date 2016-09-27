@@ -21,12 +21,5 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		 {
 			 return Json(_viewModelFactory.ViewModel(), JsonRequestBehavior.AllowGet);
 		 }
-
-		 [UnitOfWork]
-		 [HttpGet]
-		 public virtual JsonResult GetAllSitesText()
-		 {
-			 return Json(_viewModelFactory.GetAllSitesText(), JsonRequestBehavior.AllowGet);
-		 }
     }
 }
