@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using MbCache.Configuration;
@@ -61,13 +62,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterAssemblyTypes(typeof(IHandleEvent<>).Assembly)
                 .Where(t =>
                 {
-                    var handleInterfaces = (
-                        from i in t.GetInterfaces()
-                        let isHandler = i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IHandleEvent<>)
-                        let isHandlerEnabled = t.TypeEnabledByToggle(_config)
-                        where isHandler && isHandlerEnabled
-                        select i
-                        ).ToArray();
+					var handleInterfaces = (
+						from i in t.GetInterfaces()
+						let isHandler = i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IHandleEvent<>)
+						where isHandler
+						let isHandlerEnabled = t.TypeEnabledByToggle(_config)
+						where isHandlerEnabled select i)
+						.ToArray();
 
                     var hasHandleInterfaces = handleInterfaces.Any();
 
@@ -80,26 +81,19 @@ namespace Teleopti.Ccc.IocCommon.Configuration
                         var runOnStardust = typeof(IRunOnStardust).IsAssignableFrom(t);
                         var runInProcess = typeof(IRunInProcess).IsAssignableFrom(t);
                         if (!(runOnHangfire ^ runOnServiceBus ^ runOnStardust ^ runInProcess))
-                            throw new Exception(string.Format("All events handlers need to implement IRunOnHangfire or IRunOnServiceBus or IRunOnStardust or IRunInProcess. {0} does not.", t.Name));
+                            throw new Exception($"All events handlers need to implement IRunOnHangfire or IRunOnServiceBus or IRunOnStardust or IRunInProcess. {t.Name} does not.");
                     }
 
                     return hasHandleInterfaces;
                 })
-                .As(t =>
-                {
-                    return
-                        from i in t.GetInterfaces()
+                .As(t => from i in t.GetInterfaces()
 
-                        let isHandler = i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IHandleEvent<>)
-                        let eventType = isHandler ? i.GetMethods().Single().GetParameters().Single().ParameterType : null
-                        let isHandleMethodEnabled = isHandler && t.GetMethod("Handle", new[] { eventType }).MethodEnabledByToggle(_config)
-
-                        let isInitializable = i == typeof(IInitializeble)
-                        where
-                            (isHandler && isHandleMethodEnabled) ||
-                            isInitializable
-                        select i;
-                })
+	                let isHandler = i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IHandleEvent<>)
+	                let eventType = isHandler ? i.GetMethods().Single().GetParameters().Single().ParameterType : null
+	                let isHandleMethodEnabled = isHandler && t.GetMethod("Handle", new[] { eventType }).MethodEnabledByToggle(_config)
+	                let isInitializable = i == typeof(IInitializeble)
+	                where (isHandler && isHandleMethodEnabled) || isInitializable
+	                select i)
                 .AsSelf()
                 .SingleInstance()
                 .ApplyAspects()
