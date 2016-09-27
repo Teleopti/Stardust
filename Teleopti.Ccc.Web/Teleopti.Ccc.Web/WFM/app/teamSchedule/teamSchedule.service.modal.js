@@ -9,8 +9,8 @@
 
     function wfmModalService($rootScope, $compile, $controller, $templateRequest, $q) {
 
-        var defaultTemplate = 'js/teamSchedule/html/commandConfirmDialog.tpl.html';
-        var confirmModalTemplate = 'js/teamSchedule/html/miniConfirmModal.tpl.html';
+        var defaultTemplate = 'app/teamSchedule/html/commandConfirmDialog.tpl.html';
+        var confirmModalTemplate = 'app/teamSchedule/html/miniConfirmModal.tpl.html';
         var defaultController = 'commandConfirmDialog';
 
         function show(options) {

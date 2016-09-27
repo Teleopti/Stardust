@@ -6,7 +6,7 @@ angular.module('wfm.rta').provider('RtaState', function() {
 		RTA_HideAgentsByStateGroup_40469: false
 	};
 	var rtaAgentsTemplateUrl = function(elem, attr) {
-		return toggles.RTA_HideAgentsByStateGroup_40469 ? 'js/rta/agents/rta-agents-HideAgentsByStateGroup_40469.html' : 'js/rta/agents/rta-agents.html';
+		return toggles.RTA_HideAgentsByStateGroup_40469 ? 'app/rta/agents/rta-agents-HideAgentsByStateGroup_40469.html' : 'app/rta/agents/rta-agents.html';
 	}
 
 	this.$get = function() {

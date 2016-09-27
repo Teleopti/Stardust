@@ -2,7 +2,7 @@
 	'use strict';
 	angular.module('wfm.rta').service('RtaGridService', ['Toggle', 'uiGridConstants', 'RtaLocaleLanguageSortingService',
 		function(toggleService, uiGridConstants, RtaLocaleLanguageSortingService) {
-			
+
 			this.makeAllGrid = function() {
 				return makeGridOptions(false);
 			};
@@ -13,10 +13,10 @@
 
 			function makeGridOptions(alarmOnly) {
 				var coloredCellTemplate = '<div class="ui-grid-cell-contents">{{COL_FIELD}}</div>';
-				
+
 				var alarmCellTemplate = '<div class="ui-grid-cell-contents"><div class="label rta-label" ng-attr-style="font-size: 14px; color: white; background-color: {{grid.appScope.hexToRgb(row.entity.Color)}}">{{COL_FIELD}}</div></div>';
-				var headerCellTemplate = 'js/rta/agents/rta-agents-headercelltemplate.html';
-			
+				var headerCellTemplate = 'app/rta/agents/rta-agents-headercelltemplate.html';
+
 				var name = {
 					displayName: 'Name',
 					field: 'Name',
@@ -65,9 +65,9 @@
 					displayName: 'Shift',
 					field: 'Shift',
 					enableColumnMenu: false,
-					headerCellTemplate: 'js/rta/agents/rta-agents-headershiftcelltemplate.html',
+					headerCellTemplate: 'app/rta/agents/rta-agents-headershiftcelltemplate.html',
 					cellClass: 'shift-class',
-					cellTemplate: 'js/rta/agents/rta-agents-shiftcelltemplate.html',
+					cellTemplate: 'app/rta/agents/rta-agents-shiftcelltemplate.html',
 					headerCellFilter: 'translate',
 					width: "42%",
 					headerCellClass: 'white-cell-header',
@@ -77,9 +77,9 @@
 				var columnDefs = [];
 
 				//if (toggleService.RTA_AdherenceDetails_34267)
-				//	rowTemplate = 'js/rta/agents/rta-agents-rowtemplate-AdherenceDetails_34267.html';
+				//	rowTemplate = 'app/rta/agents/rta-agents-rowtemplate-AdherenceDetails_34267.html';
 
-				var rowTemplate = 'js/rta/agents/rta-agents-rowtemplate.html';
+				var rowTemplate = 'app/rta/agents/rta-agents-rowtemplate.html';
 				columnDefs.push(name);
 				columnDefs.push(siteAndTeam);
 				columnDefs.push(shift);

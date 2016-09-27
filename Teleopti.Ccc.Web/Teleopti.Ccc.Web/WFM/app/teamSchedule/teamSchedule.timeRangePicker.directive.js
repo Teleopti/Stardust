@@ -5,7 +5,7 @@
 	angular.module('wfm.teamSchedule')
            .directive('activityTimeRangePicker', ['$filter', timeRangePicker]);
 
-	var defaultTemplate = 'js/teamSchedule/html/addActivityTimeRangePicker.tpl.html';
+	var defaultTemplate = 'app/teamSchedule/html/addActivityTimeRangePicker.tpl.html';
 
 	function timeRangePicker($filter) {
 		return {

@@ -41,13 +41,13 @@
 						<i class="mdi mdi-calendar"></i>
 					</button>
 
-					<input type="text" ng-model="vm.shortDateFormatStart" ng-change="vm.afterShortDateStringChange()"> 
-					<input type="text" ng-model="vm.shortDateFormatEnd" ng-change="vm.afterShortDateStringChange()"> 
+					<input type="text" ng-model="vm.shortDateFormatStart" ng-change="vm.afterShortDateStringChange()">
+					<input type="text" ng-model="vm.shortDateFormatEnd" ng-change="vm.afterShortDateStringChange()">
 
 					<div ng-if="vm.showInputTimeInvalidErrorMessage" class="error-msg-container error-msg-popup-container alert-error notice-spacer">
 						<i class="mdi mdi-alert-octagon"></i><span>{{'StartDateMustBeEqualToOrEarlierThanEndDate' | translate}}</span>
 					</div>
-					
+
 					<div ng-if="vm.showInputTimeFormatErrorMessage" class="error-msg-container error-msg-popup-container alert-error notice-spacer">
 						<i class="mdi mdi-alert-octagon"></i><span>{{'StartDateAndEndDateMustBeSet' | translate}}</span>
 					</div>
@@ -64,9 +64,9 @@
 						<tr>
 							<td class="agent-badge-header">{{'Rank' | translate}}</td>
 							<td class="agent-badge-header">{{'AgentName' | translate}} </td>
-							<td class="agent-badge-num gold"><img src="js/reports/images/gold.png" /></td>
-							<td class="agent-badge-num silver"><img src="js/reports/images/silver.png" /></td>
-							<td class="agent-badge-num bronze"><img src="js/reports/images/bronze.png" /></td>
+							<td class="agent-badge-num gold"><img src="app/reports/images/gold.png" /></td>
+							<td class="agent-badge-num silver"><img src="app/reports/images/silver.png" /></td>
+							<td class="agent-badge-num bronze"><img src="app/reports/images/bronze.png" /></td>
 						</tr>
 					</thead>
 

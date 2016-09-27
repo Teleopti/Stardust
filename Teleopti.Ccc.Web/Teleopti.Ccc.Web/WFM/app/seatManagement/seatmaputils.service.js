@@ -483,7 +483,7 @@
 			};
 
 			function loadSeatBookedImage(canvas, occupiedSeat, callback) {
-				var seatWithBookingUrl = 'js/SeatManagement/Images/seatWithBooking.svg';
+				var seatWithBookingUrl = 'app/SeatManagement/Images/seatWithBooking.svg';
 				fabric.loadSVGFromURL(seatWithBookingUrl, function (objects, options) {
 					var groupedSvgObj = fabric.util.groupSVGElements(objects, options);
 					fabric.util.loadImage(seatWithBookingUrl, function (img) {

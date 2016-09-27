@@ -31,7 +31,7 @@ angular.module('wfm.seatMap')
 			spaceActiveGroupHorizontal: spaceActiveGroupHorizontal
 		};
 
-		
+
 		function copy(canvas) {
 			if (utils.hasActiveGroup(canvas)) {
 				// selected separate objects
@@ -195,7 +195,7 @@ angular.module('wfm.seatMap')
 
 			var seatPriority = utils.getHighestSeatPriority(canvas) + 1;
 
-			var imgName = 'js/seatManagement/images/';
+			var imgName = 'app/seatManagement/images/';
 			if (withDesk) {
 				imgName += 'seatAndDesk.svg';
 			} else {
@@ -329,7 +329,7 @@ angular.module('wfm.seatMap')
 				}
 			}
 		};
-		
+
 		//Alignment, Spacing Rotation and Flip
 
 		function alignLeft(canvas) {
