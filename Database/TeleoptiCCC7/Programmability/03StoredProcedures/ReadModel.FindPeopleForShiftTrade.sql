@@ -70,7 +70,7 @@ BEGIN
 		INNER JOIN Person p ON gr.PersonId = p.Id
 		INNER JOIN @GroupIds gids ON gids.GroupId = gr.GroupId
 		INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
-		INNER JOIN PersonSkill ps ON ps.Parent = pp.Id
+		LEFT JOIN PersonSkill ps ON ps.Parent = pp.Id
 		INNER JOIN WorkflowControlSet wcs on p.WorkflowControlSet = wcs.Id
 	WHERE gr.Businessunitid = @businessUnitId
 		AND @scheduleDate BETWEEN gr.StartDate and isnull(gr.EndDate,'2059-12-31')
