@@ -13,12 +13,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 	[EnabledBy(Toggles.AbsenceRequests_SpeedupIntradayRequests_40754, Toggles.AbsenceRequests_UseMultiRequestProcessing_39960)]
 	public class ResourceCalculateReadModelUpdater : IHandleEvent<UpdateResourceCalculateReadModelEvent>, IRunOnStardust
 	{
-		private readonly CalculateForReadModel _calculateForReadModel;
+		private readonly CalculateResourceReadModel _calculateResourceReadModel;
 		private readonly ICurrentUnitOfWorkFactory _currentFactory;
 
-		public ResourceCalculateReadModelUpdater(CalculateForReadModel calculateForReadModel, ICurrentUnitOfWorkFactory current)
+		public ResourceCalculateReadModelUpdater(CalculateResourceReadModel calculateResourceReadModel, ICurrentUnitOfWorkFactory current)
 		{
-			_calculateForReadModel = calculateForReadModel;
+			_calculateResourceReadModel = calculateResourceReadModel;
 			_currentFactory = current;
 		}
 
@@ -26,8 +26,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 		[UnitOfWork]
 		public virtual void Handle(UpdateResourceCalculateReadModelEvent @event)
 		{
-			var period = new DateOnlyPeriod(new DateOnly(@event.StartDateTime), new DateOnly(@event.EndDateTime));
-			_calculateForReadModel.ResourceCalculatePeriod(period);
+			var period = new DateTimePeriod(@event.StartDateTime, @event.EndDateTime);
+			_calculateResourceReadModel.ResourceCalculatePeriod(period);
 			var current = _currentFactory.Current().CurrentUnitOfWork();
 			//an ugly solution for bug 39594
 			if (current.IsDirty())

@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 				{
 					InitiatorId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault(),
 					StartDateTime = period.Value.StartDate.Date,
-					EndDateTime = period.Value.EndDate.Date
+					EndDateTime = period.Value.EndDate.Date.AddDays(1) //Add one day since it is a DateTimePeriod now
 				});
 			}
 			return Ok();

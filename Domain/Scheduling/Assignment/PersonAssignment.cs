@@ -383,8 +383,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					var activityAddedEvent = new UpdateResourceCalculateReadModelEvent()
 					{
 						InitiatorId = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Id.Value,
-						StartDateTime = period.StartDateTime.Date,
-						EndDateTime = period.EndDateTime.Date
+						StartDateTime = period.StartDateTime,
+						EndDateTime = period.EndDateTime
 					};
 					
 					return activityAddedEvent;

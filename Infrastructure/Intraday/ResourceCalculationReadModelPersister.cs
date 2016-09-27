@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 		}
 
-		public void Persist(IEnumerable<ResourcesDataModel> items, DateOnly date)
+		public void Persist(IEnumerable<ResourcesDataModel> items)
 		{
 			var dt = new DataTable();
 			dt.Columns.Add("SkillId",typeof(Guid));
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 				{
 					var row = dt.NewRow();
 					row["SkillId"] = item.Id;
-					row["BelongsToDate"] =  date.Date;
+					row["BelongsToDate"] = skillStaffingInterval.StartDateTime.Date;
 					row["StartDateTime"] = skillStaffingInterval.StartDateTime;
 					row["EndDateTime"] = skillStaffingInterval.EndDateTime;
                     row["Forecast"] = skillStaffingInterval.Forecast;
@@ -60,10 +60,8 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			{
 				connection.Open();
 
-				var deleteCommandstring = @"DELETE ReadModel.ScheduleForecastSkill  
-										 WHERE BelongsToDate = @date";
+				var deleteCommandstring = @"DELETE from ReadModel.ScheduleForecastSkill";
 				var deleteCommand = new SqlCommand(deleteCommandstring,connection);
-				deleteCommand.Parameters.AddWithValue("@date", date.Date);
 				deleteCommand.ExecuteNonQuery();
 
 				using (var sqlBulkCopy = new SqlBulkCopy(connection))

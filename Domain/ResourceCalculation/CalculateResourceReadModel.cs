@@ -7,14 +7,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	public class CalculateForReadModel
+	public class CalculateResourceReadModel
 	{
 		private readonly LoaderForResourceCalculation _loaderForResourceCalculation;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly IScheduleForecastSkillReadModelRepository _scheduleForecastSkillReadModelRepository;
 	    private readonly INow _now;
 
-		public CalculateForReadModel(
+		public CalculateResourceReadModel(
 			LoaderForResourceCalculation loaderForResourceCalculation,
 			IResourceOptimizationHelper resourceOptimizationHelper, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository, INow now)
 		{
@@ -25,26 +25,22 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		}
 
 		[LogTime]
-		public virtual IEnumerable<ResourcesDataModel> ResourceCalculatePeriod(DateOnlyPeriod publishedPeriod)
+		public virtual IEnumerable<ResourcesDataModel> ResourceCalculatePeriod(DateTimePeriod period)
 		{
+			var periodDateOnly = new DateOnlyPeriod(new DateOnly(period.StartDateTime), new DateOnly(period.EndDateTime));
+			_loaderForResourceCalculation.PreFillInformation(periodDateOnly);
 
-			_loaderForResourceCalculation.PreFillInformation( publishedPeriod);
+			var resCalcData = _loaderForResourceCalculation.ResourceCalculationData(periodDateOnly);
+			DoCalculation(periodDateOnly, resCalcData);
 
-			foreach (var day in publishedPeriod.DayCollection())
-			{
-				var period = new DateOnlyPeriod(day, day.AddDays(1));
-				var resCalcData = _loaderForResourceCalculation.ResourceCalculationData(period);
-				DoCalculation(period, resCalcData);
+			var skillStaffPeriodDictionary = resCalcData.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary;
+			var models = CreateReadModel(skillStaffPeriodDictionary, period);
+			_scheduleForecastSkillReadModelRepository.Persist(models);
 
-				var skillStaffPeriodDictionary = resCalcData.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary;
-				var model = CreateReadModel(skillStaffPeriodDictionary, day.Date);
-				_scheduleForecastSkillReadModelRepository.Persist(model,day);
-			}
-			
 			return null;
 		}
 
-	   [LogTime]
+		[LogTime]
 		public virtual void DoCalculation(DateOnlyPeriod period, IResourceCalculationData resCalcData)
 		{
 			foreach (var dateOnly in period.DayCollection())
@@ -55,7 +51,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		
 		[LogTime]
-		public virtual IEnumerable<ResourcesDataModel> CreateReadModel(ISkillSkillStaffPeriodExtendedDictionary skillSkillStaffPeriodExtendedDictionary, DateTime date)
+		public virtual IEnumerable<ResourcesDataModel> CreateReadModel(ISkillSkillStaffPeriodExtendedDictionary skillSkillStaffPeriodExtendedDictionary, DateTimePeriod period)
 		{
 			var items  = new List<ResourcesDataModel>(); 
 
@@ -69,7 +65,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					ret.Intervals = new List<SkillStaffingInterval>();
 					foreach (var skillStaffPeriod in skillSkillStaffPeriodExtendedDictionary[skill].Values)
 					{
-						if (  skillStaffPeriod.Period.StartDateTime.Date != date )
+						if ( !period.Contains(skillStaffPeriod.Period.StartDateTime) )
 							continue;
 						ret.Intervals.Add(new SkillStaffingInterval
 						{
