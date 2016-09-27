@@ -78,10 +78,11 @@
 			});
 		}
 
-		function checkValidationForPerson(personId) {
+		function checkValidationForPerson(personId, filteredRuleType) {
 			 if (!warningDict[personId]) return [];
-
 			 var result = warningDict[personId].warnings.filter(function(w) {
+			 	if(filteredRuleType)
+			 		return filteredRuleType == w.RuleType;
 			 	return currentEnabledTypes[w.RuleType];
 			 }).map(function(w) {
 			 	return w.Content;
