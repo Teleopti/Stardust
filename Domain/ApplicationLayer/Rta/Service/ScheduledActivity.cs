@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -59,68 +58,65 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public IEnumerable<ScheduledActivity> GetCurrentSchedule(DateTime utcNow, Guid personId)
 		{
+			var from = new DateOnly(utcNow.Date.AddDays(-1));
+			var to = new DateOnly(utcNow.Date.AddDays(1));
 			return MakeScheduledActivities(
 				_currentScenario,
 				_scheduleStorage,
 				new[] {_personRepository.Get(personId)},
-				new DateTimePeriod(utcNow.Date.AddDays(-2), utcNow.Date.AddDays(2))
-				).ToArray();
+				new DateOnlyPeriod(from.AddDays(-1), to.AddDays(1))
+				)
+				.Where(x => x.BelongsToDate >= from && x.BelongsToDate <= to)
+				.ToArray();
 		}
 
 		public IEnumerable<ScheduledActivity> GetCurrentSchedules(DateTime utcNow, IEnumerable<Guid> personIds)
 		{
+			var from = new DateOnly(utcNow.Date.AddDays(-1));
+			var to = new DateOnly(utcNow.Date.AddDays(1));
 			var persons = personIds.Select(x => _personRepository.Get(x));
 			return MakeScheduledActivities(
 				_currentScenario,
 				_scheduleStorage,
 				persons,
-				new DateTimePeriod(utcNow.Date.AddDays(-2), utcNow.Date.AddDays(2))
-				).ToArray();
+				new DateOnlyPeriod(from.AddDays(-1), to.AddDays(1))
+				)
+				.Where(x => x.BelongsToDate >= from && x.BelongsToDate <= to)
+				.ToArray();
 		}
 		
 		public static IEnumerable<ScheduledActivity> MakeScheduledActivities(
 			ICurrentScenario scenario,
 			IScheduleStorage scheduleStorage,
 			IEnumerable<IPerson> people,
-			DateTimePeriod period)
+			DateOnlyPeriod period)
 		{
 			var defaultScenario = scenario.Current();
 			if (defaultScenario == null)
 				return Enumerable.Empty<ScheduledActivity>();
-
-			return people.SelectMany(person =>
-			{
-				var schedules = scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
+			
+			var schedules = scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(people,
 					new ScheduleDictionaryLoadOptions(false, false),
 					period,
 					defaultScenario);
 
-				var schedule = schedules[person];
-				var timeZone = person.PermissionInformation.DefaultTimeZone();
-				var activities = new List<ScheduledActivity>();
-
-				var scheduledDayCollection = schedule.ScheduledDayCollection(period.ToDateOnlyPeriod(timeZone));
-				foreach (var scheduleDay in scheduledDayCollection)
+			return (
+				from person in people
+				from scheduleDay in schedules[person].ScheduledDayCollection(period)
+				let date = scheduleDay.DateOnlyAsPeriod.DateOnly
+				from layer in scheduleDay.ProjectionService().CreateProjection()
+				select new ScheduledActivity
 				{
-					var projection = scheduleDay.ProjectionService().CreateProjection();
-					projection.ForEach(layer =>
-					{
-						activities.Add(new ScheduledActivity
-						{
-							BelongsToDate = scheduleDay.DateOnlyAsPeriod.DateOnly,
-							DisplayColor = layer.DisplayColor().ToArgb(),
-							EndDateTime = layer.Period.EndDateTime,
-							Name = layer.DisplayDescription().Name,
-							PayloadId = layer.Payload.Id.Value,
-							PersonId = layer.Person.Id.Value,
-							ShortName = layer.DisplayDescription().ShortName,
-							StartDateTime = layer.Period.StartDateTime
-						});
-					});
-				}
-
-				return activities;
-			}).ToArray();
+					BelongsToDate = date,
+					DisplayColor = layer.DisplayColor().ToArgb(),
+					EndDateTime = layer.Period.EndDateTime,
+					Name = layer.DisplayDescription().Name,
+					PayloadId = layer.Payload.Id.Value,
+					PersonId = person.Id.Value,
+					ShortName = layer.DisplayDescription().ShortName,
+					StartDateTime = layer.Period.StartDateTime
+				})
+				.ToArray();
 		}
 	}
 
