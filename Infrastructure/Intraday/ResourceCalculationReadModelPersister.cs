@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 				.AddScalar("CalculatedOn", NHibernateUtil.DateTime)
                 .AddScalar("ForecastWithShrinkage", NHibernateUtil.Double)
                 .SetDateTime("startDateTime", startDateTime)
-				.SetDateTime("endDateTime", endDateTime)
+				.SetDateTime("endDateTime", endDateTime.AddSeconds(-1)) //-1 to not include next interval
 				.SetGuid("skillId", skillId)
 				.SetResultTransformer(Transformers.AliasToBean(typeof (SkillStaffingInterval)))
 				.List<SkillStaffingInterval>();

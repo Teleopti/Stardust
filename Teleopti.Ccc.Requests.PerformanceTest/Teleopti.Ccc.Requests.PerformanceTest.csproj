@@ -66,6 +66,7 @@
     <Compile Include="IntradayAbsenceRequestTest.cs" />
     <Compile Include="ProcessBulkAbsenceRequests.cs" />
     <Compile Include="ProcessMultipleAbsenceRequests.cs" />
+    <Compile Include="IntradayRequestPerformanceTestAttribute.cs" />
     <Compile Include="RequestPerformanceTestAttribute.cs" />
     <Compile Include="ShiftTradeRequestsTest.cs" />
   </ItemGroup>

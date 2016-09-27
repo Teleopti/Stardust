@@ -4,6 +4,8 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.Absence;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -34,10 +36,8 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
 			system.UseTestDouble<StardustJobFeedback>().For<IStardustJobFeedback>();
 			system.UseTestDouble<ArrangeRequestsByProcessOrder>().For<ArrangeRequestsByProcessOrder>();
-			system.UseTestDouble<NewAbsenceRequestHandler>().For<INewAbsenceRequestHandler>();
 			system.AddService<Database>();
 			system.AddModule(new TenantServerModule(configuration));
-
 		}
 
 		protected override void Startup(IComponentContext container)

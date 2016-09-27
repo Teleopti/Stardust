@@ -1,43 +1,58 @@
 ﻿using System;
+using System.Globalization;
+using System.IO;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Requests.PerformanceTest
 {
-	[RequestPerformanceTest]
+	[IntradayRequestPerformanceTest]
 	public class IntradayAbsenceRequestTest
 	{
 		public IAbsenceRepository AbsenceRepository;
-		public AsSystem AsSystem;
-		public IDataSourceScope DataSource;
 		public IPersonRepository PersonRepository;
 		public IPersonRequestRepository PersonRequestRepository;
-		public INewAbsenceRequestHandler Target;
+		public ISkillRepository SkillRepository;
+		//public INewAbsenceRequestHandler Target;
+		public QueuedAbsenceRequestFastIntradayHandler Target;
 		public WithUnitOfWork WithUnitOfWork;
 		public IWorkflowControlSetRepository WorkflowControlSetRepository;
+		public FakeConfigReader ConfigReader;
+		public ResourceCalculateReadModelUpdater ResourceCalculateReadModelUpdater;
+		public IDataSourceScope DataSource;
+		public AsSystem AsSystem;
+
+		[SetUp]
+		public void Setup()
+		{
+			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
+		}
 
 		[Test]
 		public void ShouldApproveAbsenceRequest()
 		{
-			using (DataSource.OnThisThreadUse("Teleopti WFM"))
-				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
+			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-03-15 05:00");
 
-			var requestPeriod = new DateTimePeriod(new DateTime(2016, 3, 15, 20, 15, 0, DateTimeKind.Utc),
-													   new DateTime(2016, 3, 15, 21, 15, 0, DateTimeKind.Utc));
+			var requestPeriod = new DateTimePeriod(new DateTime(2016, 3, 15, 07, 0, 0, DateTimeKind.Utc),
+													   new DateTime(2016, 3, 15, 07, 15, 0, DateTimeKind.Utc));
 
 			var request = prepareAndCreateRequest(requestPeriod);
 			var newRequestEvent = new NewAbsenceRequestCreatedEvent() { PersonRequestId = request.Id.GetValueOrDefault() };
 
 
-			Target.Handle(newRequestEvent);
+			WithUnitOfWork.Do(() => Target.Handle(newRequestEvent));
 
 
 			WithUnitOfWork.Do(() => request = PersonRequestRepository.Get(request.Id.GetValueOrDefault()));
@@ -47,8 +62,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 		[Test]
 		public void ShouldDenyAbsenceRequest()
 		{
-			using (DataSource.OnThisThreadUse("Teleopti WFM"))
-				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
+			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-03-14 05:00");
 
 			var requestPeriod = new DateTimePeriod(new DateTime(2016, 3, 14, 8, 15, 0, DateTimeKind.Utc),
 													   new DateTime(2016, 3, 14, 10, 0, 0, DateTimeKind.Utc));
@@ -57,7 +71,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			var newRequestEvent = new NewAbsenceRequestCreatedEvent() { PersonRequestId = request.Id.GetValueOrDefault() };
 
 
-			Target.Handle(newRequestEvent);
+			WithUnitOfWork.Do(() => Target.Handle(newRequestEvent));
 
 
 			WithUnitOfWork.Do(() => request = PersonRequestRepository.Get(request.Id.GetValueOrDefault()));
@@ -106,13 +120,17 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 					if (datePeriod != null)
 						datePeriod.Period = period.OpenForRequestsPeriod;
 				}
-				
+
+				var supportBb = SkillRepository.Get(new Guid("0165E0EA-210A-4393-B25A-A15000925656"));
+				supportBb.SetCascadingIndex(1);
+
 				request = createAbsenceRequest(person, absence, requestPeriod);
 
 				PersonRequestRepository.Add(request);
 #pragma warning disable 618
 				WorkflowControlSetRepository.UnitOfWork.PersistAll();
 				PersonRequestRepository.UnitOfWork.PersistAll();
+				SkillRepository.UnitOfWork.PersistAll();
 #pragma warning restore 618
 			});
 			return request;
@@ -123,6 +141,9 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			var req = new AbsenceRequest(absence, dateTimePeriod);
 			return new PersonRequest(person) {Request = req};
 		}
+
+
+	
 	}
 
 
