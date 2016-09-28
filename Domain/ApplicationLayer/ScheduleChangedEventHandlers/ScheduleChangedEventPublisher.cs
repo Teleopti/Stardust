@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			_publisher = publisher;
 		}
-
+		
 		public void Handle(PersonalActivityAddedEvent @event)
 		{
 			_publisher.Publish(new ScheduleChangedEvent

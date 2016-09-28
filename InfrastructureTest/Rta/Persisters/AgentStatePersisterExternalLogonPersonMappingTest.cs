@@ -4,7 +4,10 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.TestCommon.TestData;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 {
@@ -13,6 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 	public class AgentStatePersisterExternalLogonPersonMappingTest
 	{
 		public IAgentStatePersister Target;
+		public ICurrentUnitOfWork UnitOfWork;
 
 		[Test]
 		public void ShouldPrepareForEachUserCode()
@@ -423,5 +427,31 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				.Have.SameSequenceAs(new[] {person1, person2}.OrderBy(x => x));
 		}
 
+		[Test]
+		public void ShouldRemoveLegacyData()
+		{
+			var person = Guid.NewGuid();
+			UnitOfWork.Current().FetchSession()
+				.CreateSQLQuery(@"INSERT INTO [dbo].[AgentState] (PersonId) VALUES (:PersonId)")
+				.SetParameter("PersonId", person)
+				.ExecuteUpdate();
+
+			Target.Prepare(new AgentStatePrepare
+			{
+				PersonId = person,
+				ExternalLogons = new[]
+				{
+					new ExternalLogon
+					{
+						DataSourceId = 1,
+						UserCode = "user"
+					}
+				}
+			});
+
+			UnitOfWork.Current().FetchSession()
+				.CreateSQLQuery(@"SELECT COUNT(*) FROM [dbo].[AgentState] WHERE DataSourceId IS NULL AND UserCode IS NULL")
+				.UniqueResult<int>().Should().Be(0);
+		}
 	}
 }

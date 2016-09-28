@@ -107,7 +107,11 @@ WHERE
 DELETE FROM [dbo].[AgentState]
 WHERE
 	PersonId = :PersonId AND
-	CAST(DataSourceId AS varchar(max)) + ';' + UserCode NOT IN (:DataSourceIdUserCode)")
+	(
+		CAST(DataSourceId AS varchar(max)) + ';' + UserCode NOT IN (:DataSourceIdUserCode) OR
+		DataSourceId IS NULL OR
+		UserCode IS NULL
+	)")
 				.SetParameter("PersonId", model.PersonId)
 				.SetParameterList("DataSourceIdUserCode", model.ExternalLogons.Select(x => $"{x.DataSourceId};{x.UserCode}"))
 				.ExecuteUpdate();
