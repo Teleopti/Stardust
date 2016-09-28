@@ -61,8 +61,7 @@ DECLARE @GroupIds table
 )
 
 INSERT INTO @GroupIds
-SELECT t.Id FROM Team t INNER JOIN [Site] s ON s.Id = t.Site
-Where S.BusinessUnit = @businessUnitId
+	SELECT * FROM dbo.SplitStringString(@groupIdList)
 
 --the number of skills that must match
 DECLARE @numMatch int = (SELECT COUNT(*) FROM #personSkill)
@@ -80,11 +79,11 @@ BEGIN
         FROM Person p 
         INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
         AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate,'2059-12-31')
+        AND pp.Team in(SELECT * FROM @GroupIds)
         LEFT JOIN PersonSkill ps ON ps.Parent = pp.Id AND ps.Active = 1
         WHERE (p.TerminalDate >= '2016-09-25' OR p.TerminalDate IS NULL)
         AND p.WorkflowControlSet IS NOT NULL
         AND p.id <> @fromPersonId
-        AND pp.Team in(SELECT * FROM @GroupIds)
         GROUP BY p.id
 END
 ELSE
@@ -96,13 +95,13 @@ BEGIN
         SELECT p.id
         FROM Person p 
         INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
+        AND pp.Team in(SELECT * FROM @GroupIds)
         AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate,'2059-12-31')
         INNER JOIN PersonSkill ps ON ps.Parent = pp.Id AND ps.Active = 1
         WHERE Skill in(SELECT * FROM #personSkill)
         AND (p.TerminalDate >= '2016-09-25' OR p.TerminalDate IS NULL)
         AND p.WorkflowControlSet IS NOT NULL
         AND p.id <> @fromPersonId
-        AND pp.Team in(SELECT * FROM @GroupIds)
         GROUP BY p.id
         HAVING count(*) = @numMatch       
 END
@@ -132,8 +131,8 @@ gr.TeamId as TeamId,
 gr.SiteId as SiteId,
 gr.BusinessUnitId as BusinessUnitId
 FROM ReadModel.GroupingReadOnly gr
-INNER JOIN Person p ON p.id = gr.PersonId         
-WHERE GR.PersonId IN(select * from #persons)
+INNER JOIN Person p ON p.id = gr.PersonId
+WHERE gr.PersonId IN(select * from #persons)
 AND @scheduleDate BETWEEN gr.StartDate and isnull(gr.EndDate,'2059-12-31')
 AND (gr.LeavingDate >= @scheduleDate OR gr.LeavingDate IS NULL)
 AND ((@namesearch is null or @namesearch = '')
