@@ -18,7 +18,7 @@ using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Requests.PerformanceTest
+namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 {
 	[RequestPerformanceTest]
 	public class ProcessBulkAbsenceRequests 

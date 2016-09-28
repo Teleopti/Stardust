@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.UnitOfWork;
@@ -17,7 +16,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Messaging.Client;
 
-namespace Teleopti.Ccc.Requests.PerformanceTest
+namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 {
 	public class IntradayRequestPerformanceTestAttribute : IoCTestAttribute
 	{

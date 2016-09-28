@@ -23,7 +23,7 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Messaging.Client;
 
-namespace Teleopti.Ccc.Requests.PerformanceTest
+namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 {
 	[DomainTest, Ignore("Reason mandatory for NUnit 3")]
 	public class MultiAbsenceRequestsTest : ISetup

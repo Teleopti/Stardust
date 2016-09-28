@@ -1,7 +1,7 @@
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 
-namespace Teleopti.Ccc.Requests.PerformanceTest
+namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 {
 	public class ProcessMultipleAbsenceRequests : IProcessMultipleAbsenceRequest
 	{
