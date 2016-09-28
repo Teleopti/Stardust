@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 		}
 
-		public void ClearAbsenceMinutesDuringCurrentRequestHandlingCycle()
+		public void ClearAbsenceDataDuringCurrentRequestHandlingCycle()
 		{
 		}
 
@@ -105,6 +105,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public int AddedAbsenceHeadCountDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay)
 		{
 			return 0;
+		}
+
+		public void SubtractAbsenceHeadCountDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay)
+		{
 		}
 	}
 }

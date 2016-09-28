@@ -481,7 +481,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 		[Test]
-		public void ShouldApprovePreviousWaitlistedRequestAfterRemoveAnAbsenceRequest()
+		public void ShouldApprovePreviousWaitlistedRequestAfterRemoveAnAbsenceRequest([Values]bool useBudgetGroupAllowanceValidator)
 		{
 			var date = new DateOnly(2016, 9, 23);
 			var budgetGroup = createBudgetGroup(new Dictionary<DateOnly, int> { { date, 1 } });
@@ -489,31 +489,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var newAbsenceRequestHandler = createNewAbsenceRequestHandler(true, false);
 
 			var absence = AbsenceFactory.CreateAbsence("Holiday").WithId();
-			var workflowControlSet = createBudgetGroupAllowanceCheckStaffingWorkFlowControlSet(absence);
+			var workflowControlSet = createBudgetGroupCheckStaffingWorkFlowControlSet(absence, useBudgetGroupAllowanceValidator);
 
 			var person1 = createAndSetupPerson(budgetGroup, workflowControlSet).WithId();
 			var request1 = createAbsenceRequest(person1, absence, date.ToDateTimePeriod(person1.PermissionInformation.DefaultTimeZone()));
 			newAbsenceRequestHandler.Handle(new NewAbsenceRequestCreatedEvent { PersonRequestId = request1.Id.Value });
 			Assert.IsTrue(request1.IsApproved, "request1 is not approved");
 
-			_scheduleProjectionReadOnlyPersister.AddActivity(
-				new ScheduleProjectionReadOnlyModel
-				{
-					BelongsToDate = date,
-					PayloadId = absence.Id.Value,
-					PersonId = person1.Id.Value,
-					ScenarioId = _currentScenario.Current().Id.Value,
-					StartDateTime = request1.Request.Period.StartDateTime,
-					EndDateTime = request1.Request.Period.EndDateTime,
-					ContractTime = TimeSpan.FromHours(8)
-				});
+			updateReadModel(useBudgetGroupAllowanceValidator, request1);
 
 			var person2 = createAndSetupPerson(budgetGroup, workflowControlSet);
 			var request2 = createAbsenceRequest(person2, absence, date.ToDateTimePeriod(person2.PermissionInformation.DefaultTimeZone()));
 			newAbsenceRequestHandler.Handle(new NewAbsenceRequestCreatedEvent { PersonRequestId = request2.Id.Value });
 			Assert.IsTrue(request2.IsWaitlisted, "request2 is not waitlisted");
 
-			_scheduleProjectionReadOnlyPersister.Clear(person1.Id.Value);
+			clearReadModel(useBudgetGroupAllowanceValidator, person1);
 			createRequestPersonAbsenceRemovedHandler().Handle(new RequestPersonAbsenceRemovedEvent
 			{
 				PersonRequestId = request1.Id.Value
@@ -523,8 +513,42 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Assert.IsTrue(request2.IsApproved, "request2 is not approved");
 		}
 
+		private void updateReadModel(bool useBudgetGroupAllowanceValidator, PersonRequest request)
+		{
+			if (useBudgetGroupAllowanceValidator)
+			{
+				_scheduleProjectionReadOnlyPersister.AddActivity(
+					new ScheduleProjectionReadOnlyModel
+					{
+						BelongsToDate = new DateOnly(request.Request.Period.StartDateTime),
+						PayloadId = (request.Request as IAbsenceRequest).Absence.Id.Value,
+						PersonId = request.Person.Id.Value,
+						ScenarioId = _currentScenario.Current().Id.Value,
+						StartDateTime = request.Request.Period.StartDateTime,
+						EndDateTime = request.Request.Period.EndDateTime,
+						ContractTime = TimeSpan.FromHours(8)
+					});
+			}
+			else
+			{
+				_scheduleProjectionReadOnlyPersister.SetNumberOfAbsencesPerDayAndBudgetGroup(1);
+			}
+		}
+
+		private void clearReadModel(bool useBudgetGroupAllowanceValidator, IPerson person)
+		{
+			if (useBudgetGroupAllowanceValidator)
+			{
+				_scheduleProjectionReadOnlyPersister.Clear(person.Id.Value);
+			}
+			else
+			{
+				_scheduleProjectionReadOnlyPersister.SetNumberOfAbsencesPerDayAndBudgetGroup(0);
+			}
+		}
+
 		[Test]
-		public void ShouldApproveRequestAgainAfterRemoveAnAbsenceRequest()
+		public void ShouldApproveRequestAgainAfterRemoveAnAbsenceRequest([Values]bool useBudgetGroupAllowanceValidator)
 		{
 			var date = new DateOnly(2016, 9, 23);
 			var budgetGroup = createBudgetGroup(new Dictionary<DateOnly, int> { { date, 1 } });
@@ -532,7 +556,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var newAbsenceRequestHandler = createNewAbsenceRequestHandler(true, false);
 
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
-			var workflowControlSet = createBudgetGroupAllowanceCheckStaffingWorkFlowControlSet(absence);
+			var workflowControlSet = createBudgetGroupCheckStaffingWorkFlowControlSet(absence, useBudgetGroupAllowanceValidator);
 
 			var person1 = createAndSetupPerson(budgetGroup, workflowControlSet);
 			var request1 = createAbsenceRequest(person1, absence, date.ToDateTimePeriod(person1.PermissionInformation.DefaultTimeZone()));
@@ -551,7 +575,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 		[Test]
-		public void ShouldApproveOneDayRequestAfterTwoDaysRequestFailed()
+		public void ShouldApproveOneDayRequestAfterTwoDaysRequestFailed([Values]bool useBudgetGroupAllowanceValidator)
 		{
 			var date1 = new DateOnly(2016, 9, 23);
 			var date2 = new DateOnly(2016, 9, 24);
@@ -560,7 +584,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var newAbsenceRequestHandler = createNewAbsenceRequestHandler(true, false);
 
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
-			var workflowControlSet = createBudgetGroupAllowanceCheckStaffingWorkFlowControlSet(absence);
+			var workflowControlSet = createBudgetGroupCheckStaffingWorkFlowControlSet(absence, useBudgetGroupAllowanceValidator);
 
 			var person1 = createAndSetupPerson(budgetGroup, workflowControlSet);
 			var request1 = createAbsenceRequest(person1, absence,
@@ -687,11 +711,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		}
 
-		private static WorkflowControlSet createBudgetGroupAllowanceCheckStaffingWorkFlowControlSet(IAbsence absence)
+		private static WorkflowControlSet createBudgetGroupCheckStaffingWorkFlowControlSet(IAbsence absence, bool useBudgetGroupAllowanceValidator)
 		{
 			var workflowControlSet = WorkflowControlSetFactory.CreateWorkFlowControlSet(absence, new GrantAbsenceRequest(), true);
 			var absenceRequestOpenPeriod = workflowControlSet.AbsenceRequestOpenPeriods.FirstOrDefault();
-			absenceRequestOpenPeriod.StaffingThresholdValidator = new BudgetGroupAllowanceValidator();
+			if (useBudgetGroupAllowanceValidator)
+			{
+				absenceRequestOpenPeriod.StaffingThresholdValidator = new BudgetGroupAllowanceValidator();
+			}
+			else
+			{
+				absenceRequestOpenPeriod.StaffingThresholdValidator = new BudgetGroupHeadCountValidator();
+			}
 			return workflowControlSet;
 		}
 

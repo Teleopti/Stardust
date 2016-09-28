@@ -63,6 +63,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 		{
 			var count = 0;
 			var invalidDays = string.Empty;
+			var alreayAddedHeadCountDictionary = new Dictionary<IBudgetDay, int>();
 
 			foreach (var budgetDay in budgetDays.OrderBy(x => x.Day))
 			{
@@ -76,11 +77,25 @@ namespace Teleopti.Ccc.Domain.Budgeting
 				alreadyUsedAllowance += addedBefore;
 				if (Math.Floor(allowance) <= alreadyUsedAllowance)
 				{
+					if (alreayAddedHeadCountDictionary.Any())
+					{
+						alreayAddedHeadCountDictionary.ForEach(item =>
+						{
+							schedulingResultStateHolder
+								.SubtractAbsenceHeadCountDuringCurrentRequestHandlingCycle(item.Key);
+						});
+					}
+
 					count++;
 					if (count > 5) break;
 					invalidDays += currentDay.ToShortDateString(culture) + ",";
-				}else
+				}
+				else
+				{
 					schedulingResultStateHolder.AddAbsenceHeadCountDuringCurrentRequestHandlingCycle(budgetDay);
+					alreayAddedHeadCountDictionary.Add(budgetDay, 1);
+				}
+
 			}
 			return invalidDays.IsEmpty() ? invalidDays : invalidDays.Substring(0, invalidDays.Length - 1);
 		}

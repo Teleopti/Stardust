@@ -137,11 +137,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			addedAbsenceMinutesDictionary.AddOrUpdate(budgetDay, 0, (b, m) => Math.Max(0, m - minutes));
 		}
 
-		public void ClearAbsenceMinutesDuringCurrentRequestHandlingCycle()
-		{
-			addedAbsenceMinutesDictionary.Clear();
-		}
-
 		private readonly ConcurrentDictionary<IBudgetDay, int> addedAbsenceHeadCountDictionary = new ConcurrentDictionary<IBudgetDay, int>();
 		public int AddedAbsenceHeadCountDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay)
 		{
@@ -154,6 +149,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public void AddAbsenceHeadCountDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay)
 		{
 			addedAbsenceHeadCountDictionary.AddOrUpdate(budgetDay,1, (b, m) => m + 1);
+		}
+
+		public void SubtractAbsenceHeadCountDuringCurrentRequestHandlingCycle(IBudgetDay budgetDay)
+		{
+			addedAbsenceHeadCountDictionary.AddOrUpdate(budgetDay, 0, (b, m) => Math.Max(0, m - 1));
+		}
+
+		public void ClearAbsenceDataDuringCurrentRequestHandlingCycle()
+		{
+			addedAbsenceMinutesDictionary.Clear();
+			addedAbsenceHeadCountDictionary.Clear();
 		}
 
 		/// <summary>
