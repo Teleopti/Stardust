@@ -19,16 +19,24 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public ISkill Has(string skillName, IActivity activity, int? cascadingIndex)
 		{
-			var skill = (Skill)SkillFactory.CreateSkill(skillName);
+			var skill = SkillFactory.CreateSkill(skillName).WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
 			skill.Activity = activity;
-			skill.SetId(Guid.NewGuid());
 			_skills.Add(skill);
 
 			if (cascadingIndex.HasValue)
 			{
 				skill.SetCascadingIndex(cascadingIndex.Value);
 			}
+			return skill;
+		}
+
+		public ISkill Has(string skillName, IActivity activity, TimePeriod openHours)
+		{
+			var skill = SkillFactory.CreateSkill(skillName).WithId();
+			WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHours);
+			skill.Activity = activity;
+			_skills.Add(skill);
 			return skill;
 		}
 
