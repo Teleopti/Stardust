@@ -18,19 +18,26 @@ namespace Teleopti.Ccc.DomainTest.Common.TimeLogger
 		public LogTimeTester LogTimeTester;
 		public LogSpy LogSpy;
 
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.AddService<LogTimeTester>();
+			var fakeLogger = new LogSpy();
+			system.UseTestDouble(fakeLogger).For<ILog>();
+			system.UseTestDouble(new FakeLogManagerWrapper(fakeLogger)).For<ILogManagerWrapper>();
+		}
+
 		[Test]
-		public void ShouldCreateOneLogOutput()
+		public void ShouldLog()
 		{
 			LogTimeTester.TestMethod();
-			LogSpy.DebugMessages.Count
-				.Should().Be.EqualTo(1);
+			LogSpy.DebugMessages.Should().Have.Count.GreaterThan(0);
 		}
 
 		[Test]
 		public void MessageShouldContainMethodName()
 		{
 			LogTimeTester.TestMethod();
-			var logMessage = LogSpy.DebugMessages[0];
+			var logMessage = LogSpy.DebugMessages.Last();
 			logMessage.Should().Contain("LogTimeTester");
 			logMessage.Should().Contain("TestMethod");
 		}
@@ -46,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Common.TimeLogger
 		public void ShouldNotLogExceptionTextIfNoException()
 		{
 			LogTimeTester.TestMethod();
-			var logMessage = LogSpy.DebugMessages[0];
+			var logMessage = LogSpy.DebugMessages.Last();
 			logMessage.ToLower().Should().Not.Contain("exception");
 		}
 
@@ -54,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Common.TimeLogger
 		public void ShouldLogExceptionTextIfException()
 		{
 			Assert.Throws<NotImplementedException>(() => LogTimeTester.TestMethodThatThrows());
-			var logMessage = LogSpy.DebugMessages[0];
+			var logMessage = LogSpy.DebugMessages.Last();
 			logMessage.ToLower().Should().Contain("exception");
 		}
 
@@ -62,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Common.TimeLogger
 		public void ShouldLogMethodNameIfException()
 		{
 			Assert.Throws<NotImplementedException>(() => LogTimeTester.TestMethodThatThrows());
-			var logMessage = LogSpy.DebugMessages[0];
+			var logMessage = LogSpy.DebugMessages.Last();
 			logMessage.Should().Contain("LogTimeTester");
 			logMessage.Should().Contain("TestMethod");
 		}
@@ -80,12 +87,5 @@ namespace Teleopti.Ccc.DomainTest.Common.TimeLogger
 			}
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			system.AddService<LogTimeTester>();
-			var fakeLogger = new LogSpy();
-			system.UseTestDouble(fakeLogger).For<ILog>();
-			system.UseTestDouble(new FakeLogManagerWrapper(fakeLogger)).For<ILogManagerWrapper>();
-		}
 	}
 }
