@@ -1,5 +1,5 @@
 ﻿'use strict';
-describe('AreasCtrl', function() {
+describe('AreasController', function() {
 	var $q,
 	    $rootScope,
 	    $httpBackend;
@@ -29,7 +29,7 @@ describe('AreasCtrl', function() {
 			}
 		};
 
-		$controller('AreasCtrl', { $scope: scope, AreasSvrc: svrc });
+		$controller('AreasController', { $scope: scope, areasService: svrc });
 		expect($controller).not.toBe(null);
 	}));
 
@@ -46,9 +46,9 @@ describe('AreasCtrl', function() {
 			}
 		};
 
-		$controller('AreasCtrl', { $scope: scope, AreasSvrc: svrc });
-		scope.loadAreas();
+		var vm = $controller('AreasController', { $scope: scope, areasService: svrc });
+		vm.loadAreas();
 		scope.$digest();
-		expect(scope.areas[1].name).toEqual('Scheduling');
+		expect(vm.areas[1].name).toEqual('Scheduling');
 	}));
 });

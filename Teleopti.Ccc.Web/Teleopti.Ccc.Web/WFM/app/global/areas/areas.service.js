@@ -1,27 +1,37 @@
-﻿
-'use strict';
+(function() {
+    'use strict';
 
-var areaService = angular.module('restAreasService', ['ngResource']);
-areaService.service('AreasSvrc', [
-	'$resource', 
-	function($resource) {
-		var service = {};
-		var areas;
+    angular
+        .module('wfm.areas') //restAreasService
+        .factory('areasService', areasService); //AreasSvrc
 
-		service.getAreas = function(){
-			if(!areas){
-				areas = getAreasFromServer.query({}).$promise;
-			}
-			return areas;
-		}
+    areasService.$inject = ['$resource'];
 
-		var getAreasFromServer = $resource('../api/Global/Application/Areas', {}, {
-			query: {
-				method: 'GET',
-				params: {},
-				isArray: true
-			}
-		});
-		return service;
-	}
-]);
+    /* @ngInject */
+    function areasService($resource) {
+      	var areas;
+        var service = {
+            getAreas: getAreas
+        };
+
+        return service;
+
+        function getAreas(){
+    			if(!areas){
+    				areas = getAreasFromServer();
+    			}
+    			return areas;
+    		}
+
+        function getAreasFromServer(){
+          return $resource('../api/Global/Application/Areas', {}, {
+      			query: {
+      				method: 'GET',
+      				params: {},
+      				isArray: true
+      			}
+      		}).query().$promise;
+
+        }
+    }
+})();

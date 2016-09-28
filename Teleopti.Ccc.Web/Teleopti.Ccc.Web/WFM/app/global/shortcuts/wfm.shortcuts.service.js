@@ -3,7 +3,7 @@
 	'use strict';
 
 	angular.module('wfm')
-	.service('WfmShortcuts', ['$state', '$document', 'ShortCuts', 'AreasSvrc', 'keyCodes', function($state, $document, ShortCuts, AreasSvrc, keyCodes) {
+	.service('WfmShortcuts', ['$state', '$document', 'ShortCuts', 'keyCodes', function($state, $document, ShortCuts, keyCodes) {
 		var service = {};
 		var focusStyle = '1px solid #09F';
 		service.tabbedTargets = [];

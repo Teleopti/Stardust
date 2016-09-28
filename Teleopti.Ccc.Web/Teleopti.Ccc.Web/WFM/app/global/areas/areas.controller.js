@@ -1,26 +1,33 @@
-﻿'use strict';
+(function() {
+    'use strict';
 
-var notification = angular.module('wfm.areas', ['restAreasService']);
-notification.controller('AreasCtrl', [
-	'$scope', 'AreasSvrc',
-	function ($scope, AreasSvrc) {
-		$scope.areas = [];
-		$scope.filters = [];
+    angular
+        .module('wfm.areas', [])
+        .controller('AreasController', AreasController);
 
-		$scope.loadAreas = function () {
-			AreasSvrc.getAreas().then(function (result) {
-				for (var i = 0; i < result.length; i++) {
-					result[i].filters = [];
-				}
-				$scope.areas = result;
-				$scope.areasLoaded = true;
-			});
-		};
+    AreasController.$inject = ['$scope', 'areasService'];
 
-		$scope.unauthModal = true;
+    /* @ngInject */
+    function AreasController($scope, areasService) {
+        var vm = this;
+        vm.areas = [];
+    		var filters = [];
 
-		$scope.dismissUnauthModal = function () {
-		    window.history.back();
-		}
-	}
-]);
+        vm.loadAreas = function() {
+    			areasService.getAreas().then(function (result) {
+    				for (var i = 0; i < result.length; i++) {
+    					result[i].filters = [];
+    				}
+    				vm.areas = result;
+    				vm.areasLoaded = true;
+    			});
+    		};
+
+        vm.unauthModal = true;
+
+    		vm.dismissUnauthModal = function () {
+    		    window.history.back();
+    		};
+
+    }
+})();
