@@ -208,6 +208,16 @@
 				}).$promise;
 			};
 
+			this.getPhoneStates = function (data) {
+				return $resource('../api/Agents/GetPhoneStateFor', {}, {
+					query: {
+						method: 'GET'
+					}
+				}).query({
+					ids: data
+				}).$promise;
+			};
+
 			this.forToday = function (data) {
 				return $resource('../api/Adherence/ForToday', {}, {
 					query: {

@@ -1,5 +1,5 @@
 'use strict';
-describe('RtaAgentsCtrl', function() {
+describe('RtaAgentsCtrl hide states', function() {
 	var $interval,
 		$httpBackend,
 		$state,
@@ -134,6 +134,26 @@ describe('RtaAgentsCtrl', function() {
 
 		expect(scope.states[0].Name).toEqual("A");
 		expect(scope.states[1].Name).toEqual("B");
+	});
+
+	it('should get names for hidden states sent through stateParams', function() {
+		stateParams.teamId = "teamGuid";
+		stateParams.es = ["loggedOutGuid"];
+		$fakeBackend
+			.withPhoneState({
+				Name: "LoggedOut",
+				Id: "loggedOutGuid"
+			})
+			.withAgent({
+				PersonId: "personGuid1",
+				TeamId: "teamGuid",
+			});
+
+		$controllerBuilder.createController();
+
+		expect(scope.states[0].Name).toEqual('LoggedOut');
+		expect(scope.states[0].Id).toEqual('loggedOutGuid');
+		expect(scope.states[0].Selected).toEqual(false);
 	});
 
 
@@ -378,5 +398,6 @@ describe('RtaAgentsCtrl', function() {
 
 		expect(scope.filteredData.length).toEqual(2);
 		});
+
 	});
 });
