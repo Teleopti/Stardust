@@ -118,12 +118,29 @@ AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate,'2059-12-31')
 INNER JOIN PersonSkill ps ON ps.Parent = pp.Id AND ps.Active = 1 AND ws.Skill = ps.Skill
 LEFT JOIN #allPersonSkill aps ON aps.Skill = ps.Skill
 WHERE p.Id in(select * from #persons)
-                                                  
+
 --and then we remove the persons that had such a skill that i had not
 DELETE P
 FROM #persons p
 INNER JOIN #othersMustMatch o ON o.Id = p.Id
 WHERE o.Skill IS NULL
+
+-- remove the possibility to trade with an agent when my workflowControlSet has a must have skill
+-- that the other agent has, but I do not.
+
+SELECT p.id
+INTO #othersHaveMustHaveSkillFromMyWCS
+FROM Person p
+INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
+AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate,'2059-12-31')
+INNER JOIN PersonSkill ps ON ps.Parent = pp.Id AND ps.Active = 1 
+INNER JOIN #matching ON #matching.Skill = ps.Skill
+WHERE p.Id in(select * from #persons)
+AND ps.SKill not in (select Skill from #allPersonSkill)
+										          
+DELETE P 
+FROM #persons p
+INNER JOIN #othersHaveMustHaveSkillFromMyWCS o on o.Id = p.Id
                                                   
 SELECT DISTINCT
 gr.PersonId as PersonId,

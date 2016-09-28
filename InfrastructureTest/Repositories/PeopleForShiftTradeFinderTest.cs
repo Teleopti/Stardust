@@ -181,6 +181,36 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			result.Any(r => r.PersonId.Equals(per2.Id.Value)).Should().Be(true);
 		}
 
+
+
+		[Test]
+		public void ShouldFilterOutWhenFromDoesntHaveSkillFromMergedWCSMustHaveSkills()
+		{
+			target = new PeopleForShiftTradeFinder(CurrentUnitOfWork.Make());
+
+			var team = createAndPersistTeam(site);
+			var skills = createAndPersistSkills();
+
+			var workflowControlSetA = createAndPersistWorkflowControlSet(skills[1]);
+			var workflowControlSetB = createAndPersistWorkflowControlSet(skills[0]);
+
+			var per1 = createPersonWithWorkflowControlSet(workflowControlSetA);
+			var per2 = createPersonWithWorkflowControlSet(workflowControlSetB);
+			
+
+			createAndPersistPersonPeriod(per1, team, skills[0]); //per1 only has one skill
+			createAndPersistPersonPeriod(per2, team, skills);
+			
+
+			persistReadModel(per1, team, site);
+			persistReadModel(per2, team, site);
+			
+
+			var result = target.GetPeople(per1, new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "");
+			result.ToArray().Length.Should().Be.EqualTo(0);
+			
+		}
+
 		private Team createAndPersistTeam (ISite site)
 		{
 			PersistAndRemoveFromUnitOfWork (site);
