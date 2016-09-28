@@ -52,12 +52,20 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		private IPersonPeriod personPeriod;
 		private IPerson me;
 
+		private DateTime baseDateLocal;
+		private DateTime baseDateUtc;
+		private DateOnly baseDateOnly;
+
 		private void setUpMe()
 		{
+			baseDateLocal = new DateTime(2016, 01, 13);
+			baseDateUtc = DateTime.SpecifyKind(baseDateLocal, DateTimeKind.Utc);
+			baseDateOnly = new DateOnly(baseDateLocal);
+
 			scenario = CurrentScenario.Current();
 			team = TeamFactory.CreateSimpleTeam("team");
 			TeamRepository.Add(team);
-			personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2016, 1, 13), team);
+			personPeriod = PersonPeriodFactory.CreatePersonPeriod(baseDateOnly, team);
 			me = PersonFactory.CreatePerson("me");
 			me.AddPersonPeriod(personPeriod);
 			PersonRepository.Add(me);
@@ -66,23 +74,23 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 		private void setUpMySchedule()
 		{
+			var period = new DateTimePeriod(baseDateUtc.AddHours(8), baseDateUtc.AddHours(10));
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, me,
-				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 8, 0, 0), DateTimeKind.Utc),
-					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 10, 0, 0), DateTimeKind.Utc)),
-				ShiftCategoryFactory.CreateShiftCategory("mainShift"));
+				period, ShiftCategoryFactory.CreateShiftCategory("mainShift"));
 			ScheduleStorage.Add(personAss);
 		}
 
-		private string setUpOffer(IPerson person, ShiftExchangeLookingForDay exchangeType = ShiftExchangeLookingForDay.WorkingShift)
+		private string setUpOffer(IPerson person,
+			ShiftExchangeLookingForDay exchangeType = ShiftExchangeLookingForDay.WorkingShift)
 		{
-			var periodStart = DateTime.SpecifyKind(new DateTime(2016, 1, 13, 0, 0, 0), DateTimeKind.Utc);
-			var periodEnd = DateTime.SpecifyKind(new DateTime(2016, 1, 13, 23, 0, 0), DateTimeKind.Utc);
+			var periodStart = baseDateUtc;
+			var periodEnd = baseDateUtc.AddHours(23);
 			var period = exchangeType != ShiftExchangeLookingForDay.EmptyDay
 				? new DateTimePeriod(periodStart, periodEnd)
 				: (DateTimePeriod?) null;
 
 			var criteria = new ShiftExchangeCriteria(DateOnly.Today, new ScheduleDayFilterCriteria(exchangeType, period));
-			var offer = new ShiftExchangeOffer(ScheduleDayFactory.Create(new DateOnly(2016, 1, 13), person, scenario), criteria,
+			var offer = new ShiftExchangeOffer(ScheduleDayFactory.Create(baseDateOnly, person, scenario), criteria,
 				ShiftExchangeOfferStatus.Pending)
 			{
 				ShiftExchangeOfferId = Guid.NewGuid().ToString()
@@ -99,17 +107,18 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		{
 			setUpMe();
 			setUpMySchedule();
+
 			var result = Target.CreateShiftTradeBulletinViewModelFromRawData(new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
-				ShiftTradeDate = new DateOnly(2016, 1, 13),
+				ShiftTradeDate = baseDateOnly,
 				TeamIdList = new[] {team.Id.GetValueOrDefault()}
 			});
 
 			result.MySchedule.ScheduleLayers.Length.Should().Be(1);
 			result.MySchedule.Name.Should().Be.EqualTo("me me");
-			result.MySchedule.ScheduleLayers[0].Start.Should().Be.EqualTo(new DateTime(2016, 1, 13, 8, 0, 0));
-			result.MySchedule.StartTimeUtc.Should().Be.EqualTo(new DateTime(2016, 1, 13, 8, 0, 0));
+			result.MySchedule.ScheduleLayers[0].Start.Should().Be.EqualTo(baseDateLocal.AddHours(8));
+			result.MySchedule.StartTimeUtc.Should().Be.EqualTo(baseDateLocal.AddHours(8));
 		}
 
 		[Test]
@@ -117,27 +126,26 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		{
 			setUpMe();
 
+			var period1 = new DateTimePeriod(baseDateUtc.AddHours(8), baseDateUtc.AddHours(10));
 			var myAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, me,
-				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 8, 0, 0), DateTimeKind.Utc),
-					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 10, 0, 0), DateTimeKind.Utc)),
-				ShiftCategoryFactory.CreateShiftCategory("mainShift"));
+				period1, ShiftCategoryFactory.CreateShiftCategory("mainShift"));
+
+			var period2 = new DateTimePeriod(baseDateUtc.AddHours(6), baseDateUtc.AddHours(8));
 			myAss.AddOvertimeActivity(ActivityFactory.CreateActivity("overtime"),
-				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 6, 0, 0), DateTimeKind.Utc),
-					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 8, 0, 0), DateTimeKind.Utc)),
-				new MultiplicatorDefinitionSet("a", MultiplicatorType.Overtime));
+				period2, new MultiplicatorDefinitionSet("a", MultiplicatorType.Overtime));
 			ScheduleStorage.Add(myAss);
 
 			var result = Target.CreateShiftTradeBulletinViewModelFromRawData(new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
-				ShiftTradeDate = new DateOnly(2016, 1, 13),
+				ShiftTradeDate = baseDateOnly,
 				TeamIdList = new[] {team.Id.GetValueOrDefault()}
 			});
 
 			result.MySchedule.ScheduleLayers.Length.Should().Be(2);
 			result.MySchedule.Name.Should().Be.EqualTo("me me");
 			result.MySchedule.ScheduleLayers[0].IsOvertime.Should().Be.EqualTo(true);
-			result.MySchedule.StartTimeUtc.Should().Be.EqualTo(new DateTime(2016, 1, 13, 6, 0, 0));
+			result.MySchedule.StartTimeUtc.Should().Be.EqualTo(baseDateLocal.AddHours(6));
 		}
 
 		[Test]
@@ -148,10 +156,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var someone = PersonFactory.CreatePersonWithGuid("someone", "someone");
 			someone.AddPersonPeriod(personPeriod);
 			PersonRepository.Add(someone);
+
+			var period = new DateTimePeriod(baseDateUtc.AddHours(8), baseDateUtc.AddHours(10));
+
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, someone,
-				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 8, 0, 0), DateTimeKind.Utc),
-					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 10, 0, 0), DateTimeKind.Utc)),
-				ShiftCategoryFactory.CreateShiftCategory("mainshift"));
+				period, ShiftCategoryFactory.CreateShiftCategory("mainshift"));
 			ScheduleStorage.Add(personAss);
 
 			var offerId = setUpOffer(someone);
@@ -159,7 +168,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var result = Target.CreateShiftTradeBulletinViewModelFromRawData(new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
-				ShiftTradeDate = new DateOnly(2016, 1, 13),
+				ShiftTradeDate = baseDateOnly,
 				TeamIdList = new[] {team.Id.GetValueOrDefault()}
 			});
 
@@ -174,17 +183,18 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var someone = PersonFactory.CreatePersonWithGuid("someone", "someone");
 			someone.AddPersonPeriod(personPeriod);
 			PersonRepository.Add(someone);
+
+			var period = new DateTimePeriod(baseDateUtc.AddHours(8), baseDateUtc.AddHours(10));
+
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, someone,
-				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 8, 0, 0), DateTimeKind.Utc),
-					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 10, 0, 0), DateTimeKind.Utc)),
-				ShiftCategoryFactory.CreateShiftCategory("mainshift"));
+				period, ShiftCategoryFactory.CreateShiftCategory("mainshift"));
 			ScheduleStorage.Add(personAss);
 			setUpOffer(someone);
 
 			var result = Target.CreateShiftTradeBulletinViewModelFromRawData(new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
-				ShiftTradeDate = new DateOnly(2016, 1, 13),
+				ShiftTradeDate = new DateOnly(baseDateUtc),
 				TeamIdList = new[] {team.Id.GetValueOrDefault()}
 			});
 
@@ -203,17 +213,17 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			PersonRepository.Add(personWithAbsence);
 			PersonRepository.Add(personWithoutAbsence);
 
+			var period = new DateTimePeriod(baseDateUtc, baseDateUtc.AddHours(23));
+
 			var abs = AbsenceFactory.CreateAbsence("abs");
 			var personAssWithDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, personWithAbsence,
-				new DateOnly(2016, 1, 13), new DayOffTemplate());
-			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personWithAbsence, scenario,
-				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 0, 0, 0), DateTimeKind.Utc),
-					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 23, 0, 0), DateTimeKind.Utc)), abs);
+				baseDateOnly, new DayOffTemplate());
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personWithAbsence, scenario, period, abs);
 			ScheduleStorage.Add(personAssWithDayOff);
 			ScheduleStorage.Add(personAbsence);
 
 			var p3AssWithDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, personWithoutAbsence,
-				new DateOnly(2016, 1, 13), new DayOffTemplate());
+				baseDateOnly, new DayOffTemplate());
 			ScheduleStorage.Add(p3AssWithDayOff);
 
 			setUpOffer(personWithAbsence);
@@ -222,7 +232,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var result = Target.CreateShiftTradeBulletinViewModelFromRawData(new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
-				ShiftTradeDate = new DateOnly(2016, 1, 13),
+				ShiftTradeDate = baseDateOnly,
 				TeamIdList = new[] {team.Id.GetValueOrDefault()}
 			});
 
@@ -241,16 +251,14 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			PersonRepository.Add(personWithAbsence);
 			PersonRepository.Add(personWithoutAbsence);
 
+			var period = new DateTimePeriod(baseDateUtc, baseDateUtc.AddHours(23));
+
 			var abs = AbsenceFactory.CreateAbsence("abs");
-			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personWithAbsence, scenario,
-				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 0, 0, 0), DateTimeKind.Utc),
-					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 23, 0, 0), DateTimeKind.Utc)), abs);
+			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personWithAbsence, scenario, period, abs);
 			ScheduleStorage.Add(personAbsence);
 
 			var personWithoutAbsenceAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, personWithoutAbsence,
-				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 0, 0, 0), DateTimeKind.Utc),
-					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 23, 0, 0), DateTimeKind.Utc)),
-				ShiftCategoryFactory.CreateShiftCategory("mainshift"));
+				period, ShiftCategoryFactory.CreateShiftCategory("mainshift"));
 			ScheduleStorage.Add(personWithoutAbsenceAss);
 
 			setUpOffer(personWithAbsence);
@@ -259,7 +267,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var result = Target.CreateShiftTradeBulletinViewModelFromRawData(new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
-				ShiftTradeDate = new DateOnly(2016, 1, 13),
+				ShiftTradeDate = baseDateOnly,
 				TeamIdList = new[] {team.Id.GetValueOrDefault()}
 			});
 
@@ -279,16 +287,15 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			PersonRepository.Add(personWithAbsence);
 			PersonRepository.Add(personWithoutAbsence);
 
+			var period = new DateTimePeriod(baseDateUtc, baseDateUtc.AddHours(23));
+
 			var abs = AbsenceFactory.CreateAbsence("abs");
 			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personWithAbsence, scenario,
-				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 0, 0, 0), DateTimeKind.Utc),
-					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 23, 0, 0), DateTimeKind.Utc)), abs);
+				period, abs);
 			ScheduleStorage.Add(personAbsence);
 
 			var personWithoutAbsenceAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, personWithoutAbsence,
-				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 0, 0, 0), DateTimeKind.Utc),
-					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 23, 0, 0), DateTimeKind.Utc)),
-				ShiftCategoryFactory.CreateShiftCategory("mainshift"));
+				period, ShiftCategoryFactory.CreateShiftCategory("mainshift"));
 			ScheduleStorage.Add(personWithoutAbsenceAss);
 
 			setUpOffer(personWithAbsence);
@@ -297,7 +304,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var result = Target.CreateShiftTradeBulletinViewModelFromRawData(new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
-				ShiftTradeDate = new DateOnly(2016, 1, 13),
+				ShiftTradeDate = baseDateOnly,
 				TeamIdList = new[] {team.Id.GetValueOrDefault()}
 			});
 
@@ -316,16 +323,15 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			PersonRepository.Add(personWithMainShift);
 			PersonRepository.Add(personWithOvertimeOnDayOff);
 
+			var period = new DateTimePeriod(baseDateUtc.AddHours(13), baseDateUtc.AddHours(23));
+
 			var personAssWithMainShift = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, personWithMainShift,
-				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 0, 0, 0), DateTimeKind.Utc),
-					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 23, 0, 0), DateTimeKind.Utc)),
-				ShiftCategoryFactory.CreateShiftCategory("mainshift"));
+				period, ShiftCategoryFactory.CreateShiftCategory("mainshift"));
 			var personAssWithDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, personWithOvertimeOnDayOff,
-				new DateOnly(2016, 1, 13), new DayOffTemplate());
+				baseDateOnly, new DayOffTemplate());
+
 			personAssWithDayOff.AddOvertimeActivity(ActivityFactory.CreateActivity("overtime"),
-				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 0, 0, 0), DateTimeKind.Utc),
-					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 23, 0, 0), DateTimeKind.Utc)),
-				new MultiplicatorDefinitionSet("a", MultiplicatorType.Overtime));
+				period, new MultiplicatorDefinitionSet("a", MultiplicatorType.Overtime));
 			ScheduleStorage.Add(personAssWithMainShift);
 			ScheduleStorage.Add(personAssWithDayOff);
 
@@ -335,7 +341,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var result = Target.CreateShiftTradeBulletinViewModelFromRawData(new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
-				ShiftTradeDate = new DateOnly(2016, 1, 13),
+				ShiftTradeDate = baseDateOnly,
 				TeamIdList = new[] {team.Id.GetValueOrDefault()}
 			});
 
@@ -354,10 +360,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			PersonRepository.Add(personWithMainShift);
 			PersonRepository.Add(personWithoutSchedule);
 
-			var personAssWithMainShift = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, personWithMainShift,
-				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 0, 0, 0), DateTimeKind.Utc),
-					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 23, 0, 0), DateTimeKind.Utc)),
-				ShiftCategoryFactory.CreateShiftCategory("mainshift"));
+			var period = new DateTimePeriod(baseDateUtc, baseDateUtc.AddHours(23));
+			var personAssWithMainShift = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,
+				personWithMainShift, period, ShiftCategoryFactory.CreateShiftCategory("mainshift"));
 
 			ScheduleStorage.Add(personAssWithMainShift);
 
@@ -367,7 +372,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var result = Target.CreateShiftTradeBulletinViewModelFromRawData(new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
-				ShiftTradeDate = new DateOnly(2016, 1, 13),
+				ShiftTradeDate = baseDateOnly,
 				TeamIdList = new[] {team.Id.GetValueOrDefault()}
 			});
 
@@ -391,20 +396,17 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			PersonRepository.Add(person2);
 			PersonRepository.Add(person3);
 
+			var period1 = new DateTimePeriod(baseDateUtc.AddHours(12), baseDateUtc.AddHours(17));
 			var person1Ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person1,
-				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 12, 0, 0), DateTimeKind.Utc),
-					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 17, 0, 0), DateTimeKind.Utc)),
-				ShiftCategoryFactory.CreateShiftCategory("mainshift"));
+				period1, ShiftCategoryFactory.CreateShiftCategory("mainshift"));
 
+			var period2 = new DateTimePeriod(baseDateUtc.AddHours(9), baseDateUtc.AddHours(17));
 			var person2Ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person2,
-				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 9, 0, 0), DateTimeKind.Utc),
-					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 17, 0, 0), DateTimeKind.Utc)),
-				ShiftCategoryFactory.CreateShiftCategory("mainshift"));
+				period2, ShiftCategoryFactory.CreateShiftCategory("mainshift"));
 
+			var period3 = new DateTimePeriod(baseDateUtc.AddHours(8), baseDateUtc.AddHours(17));
 			var person3Ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person3,
-				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 8, 0, 0), DateTimeKind.Utc),
-					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 17, 0, 0), DateTimeKind.Utc)),
-				ShiftCategoryFactory.CreateShiftCategory("mainshift"));
+				period3, ShiftCategoryFactory.CreateShiftCategory("mainshift"));
 
 			ScheduleStorage.Add(person1Ass);
 			ScheduleStorage.Add(person2Ass);
@@ -417,7 +419,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var result = Target.CreateShiftTradeBulletinViewModelFromRawData(new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
-				ShiftTradeDate = new DateOnly(2016, 1, 13),
+				ShiftTradeDate = baseDateOnly,
 				TeamIdList = new[] {team.Id.GetValueOrDefault()}
 			});
 
@@ -443,20 +445,17 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			PersonRepository.Add(person2);
 			PersonRepository.Add(person3);
 
+			var period1 = new DateTimePeriod(baseDateUtc.AddHours(12), baseDateUtc.AddHours(17));
 			var person1Ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person1,
-				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 12, 0, 0), DateTimeKind.Utc),
-					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 17, 0, 0), DateTimeKind.Utc)),
-				ShiftCategoryFactory.CreateShiftCategory("mainshift"));
+				period1, ShiftCategoryFactory.CreateShiftCategory("mainshift"));
 
+			var period2 = new DateTimePeriod(baseDateUtc.AddHours(9), baseDateUtc.AddHours(17));
 			var person2Ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person2,
-				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 9, 0, 0), DateTimeKind.Utc),
-					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 17, 0, 0), DateTimeKind.Utc)),
-				ShiftCategoryFactory.CreateShiftCategory("mainshift"));
+				period2, ShiftCategoryFactory.CreateShiftCategory("mainshift"));
 
+			var period3 = new DateTimePeriod(baseDateUtc.AddHours(8), baseDateUtc.AddHours(17));
 			var person3Ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person3,
-				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 8, 0, 0), DateTimeKind.Utc),
-					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 17, 0, 0), DateTimeKind.Utc)),
-				ShiftCategoryFactory.CreateShiftCategory("mainshift"));
+				period3, ShiftCategoryFactory.CreateShiftCategory("mainshift"));
 
 			ScheduleStorage.Add(person1Ass);
 			ScheduleStorage.Add(person2Ass);
@@ -476,7 +475,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var result = Target.CreateShiftTradeBulletinViewModelFromRawData(new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
-				ShiftTradeDate = new DateOnly(2016, 1, 13),
+				ShiftTradeDate = baseDateOnly,
 				TeamIdList = new[] {team.Id.GetValueOrDefault()}
 			});
 
@@ -502,20 +501,17 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			PersonRepository.Add(person2);
 			PersonRepository.Add(person3);
 
+			var period1 = new DateTimePeriod(baseDateUtc.AddHours(12), baseDateUtc.AddHours(17));
 			var person1Ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person1,
-				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 12, 0, 0), DateTimeKind.Utc),
-					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 17, 0, 0), DateTimeKind.Utc)),
-				ShiftCategoryFactory.CreateShiftCategory("mainshift"));
+				period1, ShiftCategoryFactory.CreateShiftCategory("mainshift"));
 
+			var period2 = new DateTimePeriod(baseDateUtc.AddHours(9), baseDateUtc.AddHours(17));
 			var person2Ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person2,
-				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 9, 0, 0), DateTimeKind.Utc),
-					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 17, 0, 0), DateTimeKind.Utc)),
-				ShiftCategoryFactory.CreateShiftCategory("mainshift"));
+				period2, ShiftCategoryFactory.CreateShiftCategory("mainshift"));
 
+			var period3 = new DateTimePeriod(baseDateUtc.AddHours(8), baseDateUtc.AddHours(17));
 			var person3Ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person3,
-				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 8, 0, 0), DateTimeKind.Utc),
-					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 17, 0, 0), DateTimeKind.Utc)),
-				ShiftCategoryFactory.CreateShiftCategory("mainshift"));
+				period3, ShiftCategoryFactory.CreateShiftCategory("mainshift"));
 
 			ScheduleStorage.Add(person1Ass);
 			ScheduleStorage.Add(person2Ass);
@@ -528,7 +524,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var result = Target.CreateShiftTradeBulletinViewModelFromRawData(new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 1, Take = 1},
-				ShiftTradeDate = new DateOnly(2016, 1, 13),
+				ShiftTradeDate = baseDateOnly,
 				TeamIdList = new[] {team.Id.GetValueOrDefault()}
 			});
 
@@ -553,20 +549,17 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			PersonRepository.Add(person2);
 			PersonRepository.Add(person3);
 
+			var period1 = new DateTimePeriod(baseDateUtc.AddHours(12), baseDateUtc.AddHours(17));
 			var person1Ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person1,
-				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 12, 0, 0), DateTimeKind.Utc),
-					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 17, 0, 0), DateTimeKind.Utc)),
-				ShiftCategoryFactory.CreateShiftCategory("mainshift"));
+				period1, ShiftCategoryFactory.CreateShiftCategory("mainshift"));
 
+			var period2 = new DateTimePeriod(baseDateUtc.AddHours(9), baseDateUtc.AddHours(17));
 			var person2Ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person2,
-				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 9, 0, 0), DateTimeKind.Utc),
-					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 17, 0, 0), DateTimeKind.Utc)),
-				ShiftCategoryFactory.CreateShiftCategory("mainshift"));
+				period2, ShiftCategoryFactory.CreateShiftCategory("mainshift"));
 
+			var period3 = new DateTimePeriod(baseDateUtc.AddHours(8), baseDateUtc.AddHours(17));
 			var person3Ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person3,
-				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 8, 0, 0), DateTimeKind.Utc),
-					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 17, 0, 0), DateTimeKind.Utc)),
-				ShiftCategoryFactory.CreateShiftCategory("mainshift"));
+				period3, ShiftCategoryFactory.CreateShiftCategory("mainshift"));
 
 			ScheduleStorage.Add(person1Ass);
 			ScheduleStorage.Add(person2Ass);
@@ -585,9 +578,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 			var result = Target.CreateShiftTradeBulletinViewModelFromRawData(new ShiftTradeScheduleViewModelData
 			{
-				Paging = new Paging { Skip = 2, Take = 1 },
-				ShiftTradeDate = new DateOnly(2016, 1, 13),
-				TeamIdList = new[] { team.Id.GetValueOrDefault() }
+				Paging = new Paging {Skip = 2, Take = 1},
+				ShiftTradeDate = baseDateOnly,
+				TeamIdList = new[] {team.Id.GetValueOrDefault()}
 			});
 
 			result.PossibleTradeSchedules.Count().Should().Be.EqualTo(1);
@@ -603,10 +596,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var someone = PersonFactory.CreatePersonWithGuid("someone", "someone");
 			someone.AddPersonPeriod(personPeriod);
 			PersonRepository.Add(someone);
+
+			var period = new DateTimePeriod(baseDateUtc.AddHours(8), baseDateUtc.AddHours(10));
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, someone,
-				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 8, 0, 0), DateTimeKind.Utc),
-					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 10, 0, 0), DateTimeKind.Utc)),
-				ShiftCategoryFactory.CreateShiftCategory("mainshift"));
+				period, ShiftCategoryFactory.CreateShiftCategory("mainshift"));
 			ScheduleStorage.Add(personAss);
 
 			setUpOffer(someone);
@@ -614,7 +607,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var result = Target.CreateShiftTradeBulletinViewModelFromRawData(new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging {Skip = 0, Take = 20},
-				ShiftTradeDate = new DateOnly(2016, 1, 13),
+				ShiftTradeDate = baseDateOnly,
 				TeamIdList = new[] {team.Id.GetValueOrDefault()}
 			});
 
