@@ -28,91 +28,127 @@ BEGIN
 	declare @namesearch nvarchar(max);
 	set @namesearch = '%' + @name + '%';
 
-	DECLARE @GroupIds table
-	(
-		GroupId uniqueidentifier
-	)
+	-- Get all skills that the persons I can change with must have
+select Skill 
+INTO #matching 
+    FROM WorkflowControlSetSkills
+    where WorkflowControlSet = @workflowControlSetId 
 
-	INSERT INTO @GroupIds
-	SELECT * FROM dbo.SplitStringString(@groupIdList)
+-- ALL my skills so I can use that to see that I have all the skills that THEY have that I must have
+SELECT ps.Skill 
+into #allPersonSkill
+                         FROM PersonSkill ps 
+                         INNER JOIN PersonPeriod pp ON pp.Id = ps.Parent
+                         AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate,'2059-12-31')
+                         INNER JOIN Person p ON pp.Parent = p.Id
+                         WHERE p.id = @fromPersonId
+                         AND ps.Active = 1
+
+-- here is all Skills that I have that are configured that the other person must have to make a trade possible
+SELECT ps.Skill 
+into #personSkill
+                         FROM PersonSkill ps 
+                         INNER JOIN PersonPeriod pp ON pp.Id = ps.Parent
+                         AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate,'2059-12-31')
+                         INNER JOIN Person p ON pp.Parent = p.Id
+                         INNER JOIN #matching m on m.Skill = ps.Skill
+                         WHERE p.id = @fromPersonId
+                         AND ps.Active = 1
+
+DECLARE @GroupIds table
+(
+    GroupId uniqueidentifier
+)
+
+INSERT INTO @GroupIds
+SELECT t.Id FROM Team t INNER JOIN [Site] s ON s.Id = t.Site
+Where S.BusinessUnit = @businessUnitId
+
+--the number of skills that must match
+DECLARE @numMatch int = (SELECT COUNT(*) FROM #personSkill)
+
+--  bypass syntax checking so we can fill #persons in else clause below --
+SELECT p.Id into #persons
+FROM Person p 
+WHERE 1=0;
+
+IF (@numMatch = 0) 
+BEGIN
+       Insert
+        into #persons
+        SELECT p.id
+        FROM Person p 
+        INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
+        AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate,'2059-12-31')
+        LEFT JOIN PersonSkill ps ON ps.Parent = pp.Id AND ps.Active = 1
+        WHERE (p.TerminalDate >= '2016-09-25' OR p.TerminalDate IS NULL)
+        AND p.WorkflowControlSet IS NOT NULL
+        AND p.id <> @fromPersonId
+        AND pp.Team in(SELECT * FROM @GroupIds)
+        GROUP BY p.id
+END
+ELSE
+BEGIN
+
+ -- all the person that have the skills that are must to make trade
+        Insert
+        into #persons
+        SELECT p.id
+        FROM Person p 
+        INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
+        AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate,'2059-12-31')
+        INNER JOIN PersonSkill ps ON ps.Parent = pp.Id AND ps.Active = 1
+        WHERE Skill in(SELECT * FROM #personSkill)
+        AND (p.TerminalDate >= '2016-09-25' OR p.TerminalDate IS NULL)
+        AND p.WorkflowControlSet IS NOT NULL
+        AND p.id <> @fromPersonId
+        AND pp.Team in(SELECT * FROM @GroupIds)
+        GROUP BY p.id
+        HAVING count(*) = @numMatch       
+END
+                             
+ --of that persons that have another WCS and have must have skills configured
+ --if I don't have one or more of those skills the Skill column will become null
+SELECT p.id, aps.Skill
+INTO #othersMustMatch
+FROM Person p
+INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
+INNER JOIN WorkflowControlSet wcs ON p.WorkflowControlSet = wcs.id
+INNER JOIN WorkflowControlSetSkills ws on ws.WorkflowControlSet =wcs.Id
+AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate,'2059-12-31')
+INNER JOIN PersonSkill ps ON ps.Parent = pp.Id AND ps.Active = 1 AND ws.Skill = ps.Skill
+LEFT JOIN #allPersonSkill aps ON aps.Skill = ps.Skill
+WHERE p.Id in(select * from #persons)
+                                                  
+--and then we remove the persons that had such a skill that i had not
+DELETE P
+FROM #persons p
+INNER JOIN #othersMustMatch o ON o.Id = p.Id
+WHERE o.Skill IS NULL
+                                                  
+SELECT DISTINCT
+gr.PersonId as PersonId,
+gr.TeamId as TeamId,
+gr.SiteId as SiteId,
+gr.BusinessUnitId as BusinessUnitId
+FROM ReadModel.GroupingReadOnly gr
+INNER JOIN Person p ON p.id = gr.PersonId         
+WHERE GR.PersonId IN(select * from #persons)
+AND @scheduleDate BETWEEN gr.StartDate and isnull(gr.EndDate,'2059-12-31')
+AND (gr.LeavingDate >= @scheduleDate OR gr.LeavingDate IS NULL)
+AND ((@namesearch is null or @namesearch = '')
+            OR (@noSpaceInName = 1 AND @firstNameFirst = 0 AND ((p.LastName + p.FirstName) like @namesearch))
+            OR (@noSpaceInName = 1 AND @firstNameFirst = 1 AND ((p.FirstName + p.LastName) like @namesearch)) 
+            OR (@noSpaceInName = 0 AND @firstNameFirst = 0 AND ((p.LastName + ' ' + p.FirstName) like @namesearch))
+            OR (@noSpaceInName = 0 AND @firstNameFirst = 1 AND ((p.FirstName + ' ' + p.LastName) like @namesearch)))
+
+            ORDER BY PersonId
+
+drop table #matching
+drop table #personSkill
+drop table #persons
+drop table #allPersonSkill
+drop table #othersMustMatch
 
 
-	DECLARE @WorkflowControlSetSkillsFrom table
-	(
-		SkillId uniqueidentifier
-	)
-
-	Insert INTO @WorkflowControlSetSkillsFrom
-	Select wcsSkill.SKill from WorkflowControlSetSkills wcsSkill, WorkflowControlSet wcs 
-	where wcsSkill.WorkflowControlSet = wcs.Id 
-	and wcs.Id = @workflowControlSetId
-
-	DECLARE @AllPersonSkillsFrom table
-	(
- 		SkillId uniqueidentifier
-	)
-
-	Insert Into @AllPersonSkillsFrom
-		SELECT ps.Skill
-		FROM PersonSkill ps 
-		INNER JOIN PersonPeriod pp ON pp.Id = ps.Parent
-		AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate,'2059-12-31')
-		AND ps.Active = 1
-		INNER JOIN Person p ON pp.Parent = p.Id
-		WHERE p.id = @fromPersonId
-
-	SELECT DISTINCT
-		gr.PersonId as PersonId,
-		gr.TeamId as TeamId,
-		gr.SiteId as SiteId,
-		gr.BusinessUnitId as BusinessUnitId
-	FROM ReadModel.GroupingReadOnly gr
-		INNER JOIN Person p ON gr.PersonId = p.Id
-		INNER JOIN @GroupIds gids ON gids.GroupId = gr.GroupId
-		INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
-		LEFT JOIN PersonSkill ps ON ps.Parent = pp.Id
-		INNER JOIN WorkflowControlSet wcs on p.WorkflowControlSet = wcs.Id
-	WHERE gr.Businessunitid = @businessUnitId
-		AND @scheduleDate BETWEEN gr.StartDate and isnull(gr.EndDate,'2059-12-31')
-		AND (gr.LeavingDate >= @scheduleDate OR gr.LeavingDate IS NULL)
-		AND p.WorkflowControlSet IS NOT NULL
-		--AND PageName = 'xxMain'
-		AND ((@namesearch is null or @namesearch = '')
-			OR (@noSpaceInName = 1 AND @firstNameFirst = 0 AND ((p.LastName + p.FirstName) like @namesearch))
-			OR (@noSpaceInName = 1 AND @firstNameFirst = 1 AND ((p.FirstName + p.LastName) like @namesearch)) 
-			OR (@noSpaceInName = 0 AND @firstNameFirst = 0 AND ((p.LastName + ' ' + p.FirstName) like @namesearch))
-			OR (@noSpaceInName = 0 AND @firstNameFirst = 1 AND ((p.FirstName + ' ' + p.LastName) like @namesearch)))
-		AND  NOT EXISTS (
-			Select Id from SKILL where ( 
-				Skill.Id in ( 
-					Select SkillId From @AllPersonSkillsFrom 
-					EXCEPT
-					Select ps.Skill
-					FROM PersonSkill ps 
-					INNER JOIN PersonPeriod pp ON pp.Id = ps.Parent
-						AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate,'2059-12-31')
-					AND pp.Parent = p.Id
-					WHERE ps.Active = 1 )
-				OR
-				Skill.Id in (
-					Select ps.Skill
-					FROM PersonSkill ps 
-					INNER JOIN PersonPeriod pp ON pp.Id = ps.Parent
-						AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate,'2059-12-31')
-					AND pp.Parent = p.Id
-					WHERE ps.Active = 1
-					EXCEPT
-					Select SkillId From @AllPersonSkillsFrom 
-				)															
-			)
-			AND
-				Skill.Id in (
-					SELECT SkillId From @WorkflowControlSetSkillsFrom
-					UNION
-					Select wcsSkill.SKill from WorkflowControlSetSkills wcsSkill 
-					where wcsSkill.WorkflowControlSet = wcs.Id 
-				)
-		) 
-	
-	OPTION	(FORCE ORDER)
 END

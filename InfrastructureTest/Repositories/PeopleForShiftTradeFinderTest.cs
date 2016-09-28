@@ -57,8 +57,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			persistReadModel(per2, team, site);
 			persistReadModel(per3, team, site);
 
-			var result = target.GetPeople(per1, new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "");
-			result.ToArray().Length.Should().Be.EqualTo(3);
+			var result = target.GetPeople(per1, new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "").ToList();
+			result.Count.Should().Be.EqualTo(2);
+			result.Any (person => person.PersonId == per2.Id).Should().Be.True();
+			result.Any(person => person.PersonId == per3.Id).Should().Be.True();
 		}
 
 		[Test]
@@ -84,9 +86,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			persistReadModel(per3, team, site);
 
 			var result = target.GetPeople(per1, new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "");
-			result.ToArray().Length.Should().Be.EqualTo(2);
 
-			result.Any (r => r.PersonId.Equals (per2.Id.Value)).Should().Be (false);
+			result.Count.Should().Be.EqualTo(1);
+			result.Any (r => r.PersonId.Equals (per3.Id.Value)).Should().Be (true);
 		}
 
 		[Test]
@@ -113,9 +115,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			persistReadModel(per3, team, site);
 
 			var result = target.GetPeople(per1, new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "");
-			result.ToArray().Length.Should().Be.EqualTo(2);
+			result.ToArray().Length.Should().Be.EqualTo(1);
 
-			result.Any(r => r.PersonId.Equals(per3.Id.Value)).Should().Be(false);
+			result.Any(r => r.PersonId.Equals(per2.Id.Value)).Should().Be(true);
 		}
 
 
@@ -145,9 +147,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			persistReadModel(per3, team, site);
 
 			var result = target.GetPeople(per1, new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "");
-			result.ToArray().Length.Should().Be.EqualTo(2);
+			result.ToArray().Length.Should().Be.EqualTo(1);
 
-			result.Any(r => r.PersonId.Equals(per2.Id.Value)).Should().Be(false);
+			result.Any(r => r.PersonId.Equals(per3.Id.Value)).Should().Be(true);
 		}
 
 		[Test]
@@ -174,9 +176,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			persistReadModel(per3, team, site);
 
 			var result = target.GetPeople(per1, new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "");
-			result.ToArray().Length.Should().Be.EqualTo(2);
+			result.ToArray().Length.Should().Be.EqualTo(1);
 
-			result.Any(r => r.PersonId.Equals(per3.Id.Value)).Should().Be(false);
+			result.Any(r => r.PersonId.Equals(per2.Id.Value)).Should().Be(true);
 		}
 
 		private Team createAndPersistTeam (ISite site)
