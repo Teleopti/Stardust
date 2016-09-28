@@ -75,20 +75,6 @@ Background:
 	| StartTime                     | 2030-01-04 08:00 |
 	| EndTime                       | 2030-01-04 17:00 |
 
-@ignore
-@broker
-Scenario: Alert agent when schedule changed
-	Given I have the role 'Full access to mytime'
-	And Alert Time setting is '180' seconds
-	And the time is '2030-01-04 09:00:00'
-	When I am viewing week schedule
-	And I wait until week schedule is fully loaded
-	Then I should not see activity 'Training' on my schedule table
-	And An activity 'Training' with time '2030-01-04 12:00' to '2030-01-04 13:00' is added to my schedule
-	Then I wait until week schedule is fully loaded
-	And I should see activity 'Training' on my schedule table
-	Then I should see one notify message
-
 Scenario: Alert agent before first activity starts
 	Given I have the role 'Full access to mytime'
 	And Alert Time setting is '180' seconds
