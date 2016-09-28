@@ -458,6 +458,7 @@
     <Compile Include="Repositories\IKpiRepository.cs" />
     <Compile Include="Repositories\IPeopleForShiftTradeFinder.cs" />
     <Compile Include="Repositories\IQueuedAbsenceRequestRepository.cs" />
+    <Compile Include="Repositories\ISeniorityWorkDayRanksRepository.cs" />
     <Compile Include="Repositories\ISiteOpenHourRepository.cs" />
     <Compile Include="ResourceCalculation\CalculateResourceReadModel.cs" />
     <Compile Include="ResourceCalculation\CascadingPersonalSkills.cs" />

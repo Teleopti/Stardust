@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Common.Configuration
@@ -12,10 +13,10 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 		private readonly ISeniorityControlView _view;
 		private ISeniorityWorkDayRanks _modelWorkDayRank;
 		private IList<ISeniorityShiftCategoryRank> _modelShiftCategoryRanks; 
-		private readonly IRepository<ISeniorityWorkDayRanks> _repositoryWorkDayRanks;
+		private readonly ISeniorityWorkDayRanksRepository _repositoryWorkDayRanks;
 		private readonly IRepository<IShiftCategory> _repositoryShiftCategory;
 
-		public SeniorityControlPresenter(ISeniorityControlView view, IRepository<ISeniorityWorkDayRanks> repositoryWorkDayRanks, IRepository<IShiftCategory> repositoryShiftCategory  )
+		public SeniorityControlPresenter(ISeniorityControlView view, ISeniorityWorkDayRanksRepository repositoryWorkDayRanks, IRepository<IShiftCategory> repositoryShiftCategory  )
 		{
 			_view = view;
 			_repositoryWorkDayRanks = repositoryWorkDayRanks;
@@ -93,12 +94,12 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 			{
 				seniorityShiftCategoryRank.ShiftCategory.Rank = seniorityShiftCategoryRank.Rank;
 #pragma warning disable 618
-				_repositoryShiftCategory.UnitOfWork.Merge(seniorityShiftCategoryRank.ShiftCategory);
+				_repositoryWorkDayRanks.UnitOfWork.Merge(seniorityShiftCategoryRank.ShiftCategory);
 #pragma warning restore 618
 			}
 
 #pragma warning disable 618
-			_repositoryShiftCategory.UnitOfWork.PersistAll();	
+			_repositoryWorkDayRanks.UnitOfWork.PersistAll();
 #pragma warning restore 618
 		}
 

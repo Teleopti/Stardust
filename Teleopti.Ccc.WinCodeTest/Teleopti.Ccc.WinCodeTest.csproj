@@ -240,7 +240,6 @@
     <Compile Include="Common\Commands\CommandModelTest.cs" />
     <Compile Include="Common\Commands\CommonRoutedCommandsTest.cs" />
     <Compile Include="Common\Commands\CreateCommandBindingTest.cs" />
-    <Compile Include="Common\Commands\RepositoryCommandModelTest.cs" />
     <Compile Include="Common\Commands\RoutedEventBehaviorFactoryTest.cs" />
     <Compile Include="Common\Commands\BehaviorTest.cs" />
     <Compile Include="Common\Commands\SimpleCommandModelTest.cs" />

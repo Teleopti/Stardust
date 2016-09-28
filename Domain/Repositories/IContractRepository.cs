@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
@@ -23,5 +25,8 @@ namespace Teleopti.Ccc.Domain.Repositories
         ICollection<IContract> FindAllContractByDescription();
 
 	    IEnumerable<IContract> FindContractsContain(string searchString, int maxHits);
-    }
+
+		[Obsolete("Don't use! Shouldn't be here - use ICurrentUnitOfWork instead (or get the unitofwork in some other way).")]
+		IUnitOfWork UnitOfWork { get; }
+	}
 }

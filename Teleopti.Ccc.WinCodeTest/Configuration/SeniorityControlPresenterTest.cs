@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common.Configuration;
 using Teleopti.Interfaces.Domain;
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		private SeniorityControlPresenter _target;
 		private ISeniorityWorkDayRanks _modelWorkDayRanks;
 		private ISeniorityControlView _view;
-		private IRepository<ISeniorityWorkDayRanks> _repositoryWorkDay;
+		private ISeniorityWorkDayRanksRepository _repositoryWorkDay;
 		private IRepository<IShiftCategory> _repositoryShiftCategory;
 		private IList<ISeniorityWorkDayRanks> _seniorityWorkDayRanks;
 		private IShiftCategory _shiftCategory1;
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		public void SetUp()
 		{
 			_view = MockRepository.GenerateMock<ISeniorityControlView>();
-			_repositoryWorkDay = MockRepository.GenerateMock<IRepository<ISeniorityWorkDayRanks>>();
+			_repositoryWorkDay = MockRepository.GenerateMock<ISeniorityWorkDayRanksRepository>();
 			_repositoryShiftCategory = MockRepository.GenerateMock<IRepository<IShiftCategory>>();
 	
 			_shiftCategory1 = ShiftCategoryFactory.CreateShiftCategory("shiftCategory1");
@@ -79,7 +80,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			_repositoryWorkDay.Stub(x => x.Add(_modelWorkDayRanks));
 			_unitOfWork.Stub(x => x.PersistAll());
 
-			_repositoryShiftCategory.Stub(x => x.UnitOfWork).Return(_unitOfWork);
+			_repositoryWorkDay.Stub(x => x.UnitOfWork).Return(_unitOfWork);
 			_unitOfWork.Stub(x => x.Merge(_shiftCategory1)).Return(_shiftCategory1);
 			_unitOfWork.Stub(x => x.Merge(_shiftCategory2)).Return(_shiftCategory2);
 

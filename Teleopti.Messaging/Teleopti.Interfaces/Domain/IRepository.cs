@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -48,8 +47,5 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <param name="entityCollection">The entity collection.</param>
         void AddRange(IEnumerable<T> entityCollection);
-
-        [Obsolete("Will hopefully be removed in the future. Don't add new usages of this prop - use ICurrentUnitOfWork instead (or get the unitofwork in some other way).")]
-        IUnitOfWork UnitOfWork { get; }
     }
 }
