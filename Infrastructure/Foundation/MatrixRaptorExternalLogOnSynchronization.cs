@@ -63,7 +63,8 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			        raptorLogin.AcdLogOnOriginalId = matrixLogin.AcdLogOnOriginalId;
 			        raptorLogin.AcdLogOnName = matrixLogin.AcdLogOnName;
 			        raptorLogin.DataSourceId = matrixLogin.DataSourceId;
-			        externalLogOnsToAdd.Remove(matrixLogin);
+                    raptorLogin.DataSourceName = matrixLogin.DataSourceName;
+                    externalLogOnsToAdd.Remove(matrixLogin);
 			        updatedCount += 1;
 		        }
 	        }

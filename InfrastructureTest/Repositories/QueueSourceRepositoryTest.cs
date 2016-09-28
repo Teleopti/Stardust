@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using NUnit.Framework;
-using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -91,36 +90,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(queueSources.Count, 3);
 
         }
-
-        [Test]
-        public void CanLoadAllQueuesSourcesDistinctLogName()
-        {
-            var qs1 = new QueueSource { LogObjectName = "4", DataSourceId = 4 };
-            var qs2 = new QueueSource { LogObjectName = "8", DataSourceId = 8 };
-            PersistAndRemoveFromUnitOfWork(qs1);
-            PersistAndRemoveFromUnitOfWork(qs2);
-
-            var target = new QueueSourceRepository(UnitOfWork);
-            var queueSources = target.GetDistinctLogItemName();
-            queueSources.Count.Should().Be.EqualTo(2);
-            queueSources[4].Should().Be.EqualTo("4");
-            queueSources[8].Should().Be.EqualTo("8");
-        }
-
-        [Test]
-        public void ShouldNotCrashIfDifferentNameForSameId()
-        {
-            var qs1 = new QueueSource { LogObjectName = "4", DataSourceId = 4, QueueAggId = 1};
-            var qs2 = new QueueSource { LogObjectName = "8", DataSourceId = 4, QueueAggId = 2 };
-            PersistAndRemoveFromUnitOfWork(qs1);
-            PersistAndRemoveFromUnitOfWork(qs2);
-
-            var target = new QueueSourceRepository(UnitOfWork);
-            var queueSources = target.GetDistinctLogItemName();
-            queueSources.Count.Should().Be.EqualTo(1);
-            //don't matter if 4 or 8 is used - shouldn't crash, thats all
-        }
-
+        
         protected override Repository<IQueueSource> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
             return new QueueSourceRepository(currentUnitOfWork.Current());

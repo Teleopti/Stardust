@@ -12,8 +12,10 @@ BEGIN
         acd_login_original_id	AcdLogOnOriginalId,
         acd_login_name			AcdLogOnName,
         is_active				Active,
-        datasource_id			DataSourceId 
-	FROM mart.dim_acd_login 
+        sys.datasource_id			DataSourceId,
+		sys.log_object_name			DataSourceName
+	FROM mart.dim_acd_login d
+	INNER JOIN mart.sys_datasource sys ON sys.datasource_id=d.datasource_id
 	WHERE acd_login_id > -1
 END
 GO

@@ -982,17 +982,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 			_externalLogOnCollection.Clear();
 
 			var r = new ExternalLogOnRepository(GetUnitOfWork);
-			var logObjectUniqueRecord = new QueueSourceRepository(GetUnitOfWork);
-			var logObjectInfo = logObjectUniqueRecord.GetDistinctLogItemName();
 			var externalLogOnList = r.LoadAll();
-			foreach (var extLogOnItem in externalLogOnList)
-			{
-				if (logObjectInfo.ContainsKey(extLogOnItem.DataSourceId))
-				{
-					extLogOnItem.DataSourceName = logObjectInfo[extLogOnItem.DataSourceId];
-				}
-
-			}
+			
 			_externalLogOnCollection.AddRange(externalLogOnList);
 			_externalLogOnCollection.Sort();
 			_externalLogOnAdapterCollection.AddRange(_externalLogOnCollection.ConvertAll((EntityConverter.ConvertToOther<IExternalLogOn,

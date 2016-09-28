@@ -48,6 +48,11 @@
     <property name="DataSourceId"
 					not-null="true"
 					type="int"/>
+    
+    <property name="DataSourceName"
+      not-null="false"
+      type="string"
+      length="100"/>
 
     <property name="IsDeleted"
       type="boolean"

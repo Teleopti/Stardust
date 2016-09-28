@@ -150,6 +150,7 @@ BEGIN
 		acd_login_agg_id,
 		acd_login_original_id, 
 		acd_login_name, 
+		log_object_name,
 		is_active,
 		datasource_id,
 		time_zone_id
@@ -158,6 +159,7 @@ BEGIN
 		acd_login_agg_id		= agg.agent_id, 
 		acd_login_original_id	= ltrim(rtrim(agg.orig_agent_id)), 
 		acd_login_name			= ltrim(rtrim(agg.agent_name)),
+		log_object_name			= sys.log_object_name,
 		is_active				= agg.is_active,
 		datasource_id			= sys.datasource_id,
 		time_zone_id			= sys.time_zone_id

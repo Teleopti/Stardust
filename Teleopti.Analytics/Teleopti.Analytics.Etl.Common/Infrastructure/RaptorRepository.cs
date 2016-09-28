@@ -995,11 +995,13 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 					string acdLogOnName = row["AcdLogOnName"] == DBNull.Value ? null : (string)row["AcdLogOnName"];
 					int acdLogOnAggId = row["AcdLogOnAggId"] == DBNull.Value ? -1 : (int)row["AcdLogOnAggId"];
 					int dsId = row["DataSourceId"] == DBNull.Value ? -1 : (short)row["DataSourceId"];
+                    string dsName = row["DataSourceName"] == DBNull.Value ? null : (string)row["DataSourceName"];
 
-					IExternalLogOn externalLogOn = new ExternalLogOn((int)row["AcdLogOnMartId"], acdLogOnAggId,
+                    IExternalLogOn externalLogOn = new ExternalLogOn((int)row["AcdLogOnMartId"], acdLogOnAggId,
 																	 acdLogOnOriginalId, acdLogOnName, true);
 					externalLogOn.DataSourceId = dsId;
-					externalLogOns.Add(externalLogOn);
+                    externalLogOn.DataSourceName = dsName;
+                    externalLogOns.Add(externalLogOn);
 				}
 			}
 

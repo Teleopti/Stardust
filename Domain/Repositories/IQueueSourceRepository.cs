@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
@@ -12,11 +11,5 @@ namespace Teleopti.Ccc.Domain.Repositories
     /// </remarks>
     public interface IQueueSourceRepository : IRepository<IQueueSource>
     {
-        /// <summary>
-        /// This is to get the distinct log item names
-        /// </summary>
-        /// <returns></returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
-        IDictionary<int, string> GetDistinctLogItemName();
     }
 }

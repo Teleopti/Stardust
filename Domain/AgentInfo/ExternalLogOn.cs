@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
         private bool _active;
         private int _dataSourceId = -1;
         private bool _isDeleted;
-        private string _dataSourceName;
+        private string _dataSourceName = "";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExternalLogOn"/> class.
