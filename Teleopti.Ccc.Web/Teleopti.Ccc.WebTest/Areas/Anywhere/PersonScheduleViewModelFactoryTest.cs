@@ -50,12 +50,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 				};
 			return person;
 		}
-
-		private static IPersonRepository FakePersonRepository()
-		{
-			return FakePersonRepository(FakePerson());
-		}
-
+		
 		private static IPersonRepository FakePersonRepository(IPerson person)
 		{
 			var personRepository = new FakePersonRepository();
@@ -171,7 +166,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
 			var target = new PersonScheduleViewModelFactory(FakePersonRepository(person),
 			                                                MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(),
-			                                                MockRepository.GenerateMock<IAbsenceRepository>(),
+			                                                new FakeAbsenceRepository(), 
 															activityRepository,
 			                                                personScheduleViewModelMapper,
 			                                                MockRepository.GenerateMock<IPersonAbsenceRepository>(),
@@ -188,7 +183,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			var person = FakePerson();
 			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
 			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
-			var target = new PersonScheduleViewModelFactory(FakePersonRepository(person), personScheduleDayReadModelRepository, MockRepository.GenerateMock<IAbsenceRepository>(), MockRepository.GenerateMock<IActivityRepository>(), personScheduleViewModelMapper, MockRepository.GenerateMock<IPersonAbsenceRepository>(), new NewtonsoftJsonSerializer(), _permissionProvider, _commonAgentNameProvider, MockRepository.GenerateMock<IIanaTimeZoneProvider>(), new UtcTimeZone(), _currentScenario);
+			var target = new PersonScheduleViewModelFactory(FakePersonRepository(person), personScheduleDayReadModelRepository, new FakeAbsenceRepository(), new FakeActivityRepository(), personScheduleViewModelMapper, MockRepository.GenerateMock<IPersonAbsenceRepository>(), new NewtonsoftJsonSerializer(), _permissionProvider, _commonAgentNameProvider, new FakeIanaTimeZoneProvider(), new UtcTimeZone(), _currentScenario);
 			var readModel = new PersonScheduleDayReadModel {Model = Newtonsoft.Json.JsonConvert.SerializeObject(new Model {FirstName = "Pierre"})};
 
 			personScheduleDayReadModelRepository.Stub(x => x.ForPerson(DateOnly.Today, person.Id.Value)).Return(readModel);
@@ -209,7 +204,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
 			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
 			var personAbsenceRepository = MockRepository.GenerateMock<IPersonAbsenceRepository>();
-			var target = new PersonScheduleViewModelFactory(FakePersonRepository(person), personScheduleDayReadModelRepository, MockRepository.GenerateMock<IAbsenceRepository>(), MockRepository.GenerateMock<IActivityRepository>(), personScheduleViewModelMapper, personAbsenceRepository, new NewtonsoftJsonSerializer(), new FakeNoPermissionProvider(), _commonAgentNameProvider, MockRepository.GenerateMock<IIanaTimeZoneProvider>(), new UtcTimeZone(), _currentScenario);
+			var target = new PersonScheduleViewModelFactory(FakePersonRepository(person), personScheduleDayReadModelRepository,
+				new FakeAbsenceRepository(), new FakeActivityRepository(), personScheduleViewModelMapper, personAbsenceRepository,
+				new NewtonsoftJsonSerializer(), new FakeNoPermissionProvider(), _commonAgentNameProvider,
+				new FakeIanaTimeZoneProvider(), new UtcTimeZone(), _currentScenario);
 			var readModel = new PersonScheduleDayReadModel {Model = Newtonsoft.Json.JsonConvert.SerializeObject(new Model {FirstName = "Pierre"})};
 			personScheduleDayReadModelRepository.Stub(x => x.ForPerson(DateOnly.Today, person.Id.Value)).Return(readModel);
 
@@ -230,7 +228,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
 			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
 			var personAbsenceRepository = MockRepository.GenerateMock<IPersonAbsenceRepository>();
-			var target = new PersonScheduleViewModelFactory(FakePersonRepository(person), personScheduleDayReadModelRepository, MockRepository.GenerateMock<IAbsenceRepository>(), MockRepository.GenerateMock<IActivityRepository>(), personScheduleViewModelMapper, personAbsenceRepository, new NewtonsoftJsonSerializer(), _permissionProvider, _commonAgentNameProvider, MockRepository.GenerateMock<IIanaTimeZoneProvider>(), new UtcTimeZone(), _currentScenario);
+			var target = new PersonScheduleViewModelFactory(FakePersonRepository(person), personScheduleDayReadModelRepository, new FakeAbsenceRepository(), new FakeActivityRepository(), personScheduleViewModelMapper, personAbsenceRepository, new NewtonsoftJsonSerializer(), _permissionProvider, _commonAgentNameProvider, new FakeIanaTimeZoneProvider(), new UtcTimeZone(), _currentScenario);
 			var readModel = new PersonScheduleDayReadModel {Model = Newtonsoft.Json.JsonConvert.SerializeObject(new Model {FirstName = "Pierre"})};
 
 			personScheduleDayReadModelRepository.Stub(x => x.ForPerson(DateOnly.Today, person.Id.Value)).Return(readModel);
