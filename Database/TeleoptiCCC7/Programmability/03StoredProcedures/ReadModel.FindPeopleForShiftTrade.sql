@@ -141,7 +141,7 @@ AND ps.SKill not in (select Skill from #allPersonSkill)
 										          
 DELETE P 
 FROM #persons p
-INNER JOIN #othersHaveMustHaveSkillFromMyWCS o on o.Id = p.Id
+WHERE p.id in (select id from #othersHaveMustHaveSkillFromMyWCS)
                                                   
 SELECT DISTINCT
 gr.PersonId as PersonId,
