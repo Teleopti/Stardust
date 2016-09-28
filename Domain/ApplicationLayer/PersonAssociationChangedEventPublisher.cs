@@ -39,7 +39,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 		[UnitOfWork]
 		[ReadModelUnitOfWork]
-		[RecurringJob]
 		public virtual void Handle(TenantMinuteTickEvent @event)
 		{
 			_distributedLock.TryLockForTypeOf(this, () =>
@@ -53,7 +52,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		}
 
 		[UnitOfWork]
-		[RecurringJob]
 		public virtual void Handle(TenantHourTickEvent @event)
 		{
 			publishEventsFor(data =>

@@ -171,7 +171,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			IRunOnHangfire,
 			IHandleEvent<HangfireTestEvent>
 		{
-			[RecurringJob]
 			public void Handle(HangfireTestEvent @event)
 			{
 			}
@@ -185,7 +184,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			IRunOnHangfire,
 			IHandleEvent<MultiHandlerTestEvent>
 		{
-			[RecurringJob]
 			public void Handle(MultiHandlerTestEvent @event)
 			{
 			}
@@ -195,7 +193,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			IRunOnHangfire,
 			IHandleEvent<MultiHandlerTestEvent>
 		{
-			[RecurringJob]
 			public void Handle(MultiHandlerTestEvent @event)
 			{
 			}
@@ -209,7 +206,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			IRunOnHangfire,
 			IHandleEvent<LongNameHandlerTestEvent>
 		{
-			[RecurringJob]
 			public void Handle(LongNameHandlerTestEvent @event)
 			{
 			}
@@ -219,7 +215,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			IRunOnHangfire,
 			IHandleEvent<LongNameHandlerTestEvent>
 		{
-			[RecurringJob]
 			public void Handle(LongNameHandlerTestEvent @event)
 			{
 			}

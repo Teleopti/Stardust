@@ -635,7 +635,6 @@
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsPersonPeriodUpdater.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\UpdateGroupingReadModelHandler.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationChangedEventPublisher.cs" />
-    <Compile Include="ApplicationLayer\RecurringJob.cs" />
     <Compile Include="ApplicationLayer\ResolveEventHandlers.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\IntradayOptimizationCommand.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\IntradayOptimizationCommandHandler.cs" />

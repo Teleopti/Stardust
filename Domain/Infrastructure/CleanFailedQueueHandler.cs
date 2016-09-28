@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Domain.Infrastructure
 			_config = config;
 		}
 
-		[RecurringJob]
 		public void Handle(CleanFailedQueue @event)
 		{
 			var expiryDays = _config.ReadValue("HangfireCleanFailedJobsAfterDays", 90);

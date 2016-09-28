@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_distributedLock = distributedLock;
 		}
 
-		[RecurringJob]
 		public void Handle(TenantMinuteTickEvent @event)
 		{
 			_distributedLock.TryLockForTypeOf(this, _activityChangeChecker.CheckForActivityChanges);
