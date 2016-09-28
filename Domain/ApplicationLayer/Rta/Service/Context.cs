@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -100,7 +99,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public bool ShouldProcessState()
 		{
-			if (Stored == null)
+			if (Stored == null || _schedule.Value.CacheSchedules)
 				return true;
 			
 			var isSameState =

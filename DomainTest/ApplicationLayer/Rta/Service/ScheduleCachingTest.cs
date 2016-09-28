@@ -39,6 +39,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
+		public void ShouldCacheEmptySchedule()
+		{
+			var personId = Guid.NewGuid();
+			Database
+				.WithUser("usercode", personId)
+				;
+
+			Now.Is("2016-09-28 13:00");
+			Target.CheckForActivityChanges(Database.TenantName());
+			Database
+				.WithSchedule(personId, "phone", "2016-09-28 08:00", "2016-09-28 17:00")
+				.ClearSchedule(personId);
+			Target.CheckForActivityChanges(Database.TenantName());
+
+			Database.StoredState.Schedule.Should().Have.Count.EqualTo(0);
+		}
+
+		[Test]
 		public void ShouldInvalidateOldSchedule()
 		{
 			var personId = Guid.NewGuid();
@@ -110,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database.StoredState.Schedule.Single().Name.Should().Be.EqualTo("admin");
 
 		}
-
+		
 
 
 
