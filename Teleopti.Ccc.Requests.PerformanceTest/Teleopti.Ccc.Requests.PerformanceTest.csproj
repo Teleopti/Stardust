@@ -61,13 +61,13 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="IProcessMultipleAbsenceRequest.cs" />
-    <Compile Include="MultiAbsenceRequestsTest.cs" />
-    <Compile Include="IntradayAbsenceRequestTest.cs" />
-    <Compile Include="ProcessBulkAbsenceRequests.cs" />
-    <Compile Include="ProcessMultipleAbsenceRequests.cs" />
-    <Compile Include="IntradayRequestPerformanceTestAttribute.cs" />
-    <Compile Include="RequestPerformanceTestAttribute.cs" />
+    <Compile Include="AbsenceRequests\IProcessMultipleAbsenceRequest.cs" />
+    <Compile Include="AbsenceRequests\MultiAbsenceRequestsTest.cs" />
+    <Compile Include="AbsenceRequests\IntradayAbsenceRequestTest.cs" />
+    <Compile Include="AbsenceRequests\ProcessBulkAbsenceRequests.cs" />
+    <Compile Include="AbsenceRequests\ProcessMultipleAbsenceRequests.cs" />
+    <Compile Include="AbsenceRequests\IntradayRequestPerformanceTestAttribute.cs" />
+    <Compile Include="AbsenceRequests\RequestPerformanceTestAttribute.cs" />
     <Compile Include="ShiftTradeRequestsTest.cs" />
   </ItemGroup>
   <ItemGroup>

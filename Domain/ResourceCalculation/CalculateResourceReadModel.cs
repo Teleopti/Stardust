@@ -73,7 +73,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 							EndDateTime = skillStaffPeriod.Period.EndDateTime,
 							Forecast = skillStaffPeriod.FStaff,
 							StaffingLevel = skillStaffPeriod.CalculatedResource,
-                            CalculatedOn = now,
                             ForecastWithShrinkage = skillStaffPeriod.ForecastedDistributedDemandWithShrinkage
                         });
 					}
@@ -100,7 +99,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public DateTime EndDateTime { get; set; }
 		public double Forecast { get; set; }
 		public double StaffingLevel { get; set; }
-        public DateTime CalculatedOn { get; set; }
 	    public double ForecastWithShrinkage { get; set; }
 	}
 }

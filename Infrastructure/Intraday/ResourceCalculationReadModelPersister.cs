@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Threading;
 using NHibernate;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -17,10 +16,12 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 	public class ScheduleForecastSkillReadModelRepository : IScheduleForecastSkillReadModelRepository
 	{
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+		private readonly INow _now;
 
-		public ScheduleForecastSkillReadModelRepository(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
+		public ScheduleForecastSkillReadModelRepository(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, INow now)
 		{
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
+			_now = now;
 		}
 
 		public void Persist(IEnumerable<ResourcesDataModel> items)
@@ -32,10 +33,10 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			dt.Columns.Add("EndDateTime", typeof(DateTime));
             dt.Columns.Add("Forecast", typeof(double));
             dt.Columns.Add("StaffingLevel", typeof(double));
-            dt.Columns.Add("CalculatedOn", typeof(DateTime));
             dt.Columns.Add("InsertedOn", typeof(DateTime));
             dt.Columns.Add("ForecastWithShrinkage", typeof(double));
 
+			var insertedOn = _now.UtcDateTime();
 
             foreach (var item in items)
 			{
@@ -48,8 +49,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 					row["EndDateTime"] = skillStaffingInterval.EndDateTime;
                     row["Forecast"] = skillStaffingInterval.Forecast;
                     row["StaffingLevel"] = skillStaffingInterval.StaffingLevel;
-                    row["CalculatedOn"] = skillStaffingInterval.CalculatedOn;
-                    row["InsertedOn"] = skillStaffingInterval.CalculatedOn;
+                    row["InsertedOn"] = insertedOn;
                     row["ForecastWithShrinkage"] = skillStaffingInterval.ForecastWithShrinkage;
                     dt.Rows.Add(row);
 				}
@@ -93,7 +93,6 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			,[EndDateTime]
 			,[Forecast]
 			,[StaffingLevel],
-            [CalculatedOn],
             [ForecastWithShrinkage]
 				 FROM [ReadModel].[ScheduleForecastSkill]
 				where [startDateTime] between :startDateTime and :endDateTime
@@ -102,7 +101,6 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 				.AddScalar("EndDateTime", NHibernateUtil.DateTime)
 				.AddScalar("Forecast", NHibernateUtil.Double)
 				.AddScalar("StaffingLevel", NHibernateUtil.Double)
-				.AddScalar("CalculatedOn", NHibernateUtil.DateTime)
                 .AddScalar("ForecastWithShrinkage", NHibernateUtil.Double)
                 .SetDateTime("startDateTime", startDateTime)
 				.SetDateTime("endDateTime", endDateTime.AddSeconds(-1)) //-1 to not include next interval
@@ -117,7 +115,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 		{
 			var result = ((NHibernateUnitOfWork)_currentUnitOfWorkFactory.Current().CurrentUnitOfWork()).Session.CreateSQLQuery(
                 @"SELECT 
-					StartDateTime,EndDateTime,Sum(Forecast) as Forecast,Sum(StaffingLevel) as StaffingLevel, CalculatedOn, ForecastWithShrinkage
+					StartDateTime,EndDateTime,Sum(Forecast) as Forecast,Sum(StaffingLevel) as StaffingLevel, ForecastWithShrinkage
 				 FROM [ReadModel].[ScheduleForecastSkill]
 				inner join SkillAreaSkillCollection on SkillId = Skill
 				where [startDateTime] between :startDateTime and :endDateTime
@@ -126,7 +124,6 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 				.AddScalar("StartDateTime", NHibernateUtil.DateTime)
 				.AddScalar("EndDateTime", NHibernateUtil.DateTime)
 				.AddScalar("Forecast", NHibernateUtil.Double)
-				.AddScalar("CalculatedOn", NHibernateUtil.DateTime)
 				.AddScalar("StaffingLevel", NHibernateUtil.Double)
                 .AddScalar("ForecastWithShrinkage", NHibernateUtil.Double)
                 .SetDateTime("startDateTime", startDateTime)
@@ -143,7 +140,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 	        var result =
 	            ( (NHibernateUnitOfWork) _currentUnitOfWorkFactory.Current().CurrentUnitOfWork()).Session.CreateSQLQuery(
 	                    @"SELECT 
-					max(CalculatedOn) as CalculatedOn
+					max(InsertedOn) as InsertedOn
 				 FROM [ReadModel].[ScheduleForecastSkill]")
 	                .UniqueResult<DateTime?>();
             

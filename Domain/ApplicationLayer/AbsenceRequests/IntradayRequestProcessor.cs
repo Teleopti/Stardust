@@ -45,8 +45,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 				if (underStaffingDetails.UnderstaffingTimes.Any())
                     {
-					
-
 					var denyReason = GetUnderStaffingHourString(underStaffingDetails, personRequest);
 					sendDenyCommand(personRequest.Id.GetValueOrDefault(), denyReason);
                         return;

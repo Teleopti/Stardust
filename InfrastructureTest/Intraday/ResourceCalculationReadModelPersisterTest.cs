@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Intraday
 {
@@ -16,10 +16,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 	{
 		public IScheduleForecastSkillReadModelRepository Target { get; set; }
 		public ISkillRepository SkillRepository;
+		public MutableNow Now; 
 
 		[Test]
 		public void ShouldPersist()
 		{
+			Now.Is("2016-06-16 03:15");
 			var skillId = Guid.NewGuid();
 			var items = new List<ResourcesDataModel>()
 			{
@@ -34,16 +36,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 								StaffingLevel = 10,
 								EndDateTime = new DateTime(2016, 06, 16, 02, 15, 0,DateTimeKind.Utc),
 								Forecast = 20,
-								StartDateTime = new DateTime(2016, 06, 16, 02, 0, 0,DateTimeKind.Utc),
-                                 CalculatedOn = new DateTime(2016, 06, 16, 01, 15, 0,DateTimeKind.Utc)
+								StartDateTime = new DateTime(2016, 06, 16, 02, 0, 0,DateTimeKind.Utc)
                             },
 							new SkillStaffingInterval()
 							{
 								StaffingLevel = 10,
 								EndDateTime = new DateTime(2016, 06, 17, 0, 15, 0,DateTimeKind.Utc),
 								Forecast = 20,
-								StartDateTime = new DateTime(2016, 06, 17, 0, 0, 0,DateTimeKind.Utc),
-                                 CalculatedOn = new DateTime(2016, 06, 16, 01, 15, 0,DateTimeKind.Utc)
+								StartDateTime = new DateTime(2016, 06, 17, 0, 0, 0,DateTimeKind.Utc)
                             }
 						}
 				}
@@ -61,6 +61,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 		[Test]
 		public void ShouldPersistMultipleTimes()
 		{
+			Now.Is("2016-06-16 03:15");
 			var skillId = Guid.NewGuid();
 			var items = new List<ResourcesDataModel>()
 			{
@@ -75,8 +76,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 								StaffingLevel = 10,
 								EndDateTime = new DateTime(2016, 06, 16,02,15,0),
 								Forecast = 20,
-								StartDateTime = new DateTime(2016, 06, 16,02,15,0),
-                                 CalculatedOn = new DateTime(2016, 06, 16, 01, 15, 0,DateTimeKind.Utc)
+								StartDateTime = new DateTime(2016, 06, 16,02,15,0)
                             }
 						}
 				}
@@ -87,40 +87,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 		}
 
         [Test]
-        public void ShouldPersistWithCalculatedDate()
-        {
-            var skillId = Guid.NewGuid();
-            var calculatedOn = new DateTime(2016, 06, 16, 01, 0, 0, DateTimeKind.Utc);
-            var items = new List<ResourcesDataModel>()
-            {
-                new ResourcesDataModel()
-                {
-                    Id = skillId,
-                    Intervals =
-                        new List<SkillStaffingInterval>()
-                        {
-                            new SkillStaffingInterval()
-                            {
-                                StaffingLevel = 10,
-                                EndDateTime = new DateTime(2016, 06, 16, 02, 15, 0,DateTimeKind.Utc),
-                                Forecast = 20,
-                                StartDateTime = new DateTime(2016, 06, 16, 02, 0, 0,DateTimeKind.Utc),
-                                CalculatedOn = calculatedOn
-                            }
-                        }
-                }
-            };
-            Target.Persist(items);
-
-            var result =  Target.GetBySkill(skillId, new DateTime(2016, 06, 16, 0, 0, 0), new DateTime(2016, 06, 16, 23, 59, 59));
-            result.First().CalculatedOn.Should().Be.EqualTo(calculatedOn);
-
-        }
-
-        [Test]
         public void ShouldGetLastestDateOfResourceCalculation()
         {
-            var skillId = Guid.NewGuid();
+			Now.Is("2016-06-16 03:15");
+			var skillId = Guid.NewGuid();
             var items = new List<ResourcesDataModel>()
             {
                 new ResourcesDataModel()
@@ -134,24 +104,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
                                 StaffingLevel = 10,
                                 EndDateTime = new DateTime(2016, 06, 16, 02, 15, 0,DateTimeKind.Utc),
                                 Forecast = 20,
-                                StartDateTime = new DateTime(2016, 06, 16, 02, 0, 0,DateTimeKind.Utc),
-                                CalculatedOn = new DateTime(2016, 06, 16, 02, 15, 0,DateTimeKind.Utc)
+                                StartDateTime = new DateTime(2016, 06, 16, 02, 0, 0,DateTimeKind.Utc)
                             },
                             new SkillStaffingInterval()
                             {
                                 StaffingLevel = 10,
                                 EndDateTime = new DateTime(2016, 06, 16, 0, 15, 0,DateTimeKind.Utc),
                                 Forecast = 20,
-                                StartDateTime = new DateTime(2016, 06, 16, 0, 0, 0,DateTimeKind.Utc),
-                                CalculatedOn = new DateTime(2016, 06, 16, 03, 15, 0,DateTimeKind.Utc)
+                                StartDateTime = new DateTime(2016, 06, 16, 0, 0, 0,DateTimeKind.Utc)
                             },
                              new SkillStaffingInterval()
                             {
                                 StaffingLevel = 10,
                                 EndDateTime = new DateTime(2016, 06, 16, 3, 15, 0,DateTimeKind.Utc),
                                 Forecast = 20,
-                                StartDateTime = new DateTime(2016, 06, 16, 3, 0, 0,DateTimeKind.Utc),
-                                 CalculatedOn = new DateTime(2016, 06, 16, 01, 15, 0,DateTimeKind.Utc)
+                                StartDateTime = new DateTime(2016, 06, 16, 3, 0, 0,DateTimeKind.Utc)
                             }
                         }
                 }
@@ -160,13 +127,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 
             var result = Target.GetLastCalculatedTime();
             result.Should().Be.EqualTo(new DateTime(2016, 06, 16, 03, 15, 0, DateTimeKind.Utc));
-
         }
 
         [Test]
         public void ShouldPersistForecastWithShrinkage()
         {
-            var skillId = Guid.NewGuid();
+			Now.Is("2016-06-16 03:15");
+			var skillId = Guid.NewGuid();
             var items = new List<ResourcesDataModel>()
             {
                 new ResourcesDataModel()
@@ -181,7 +148,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
                                 EndDateTime = new DateTime(2016, 06, 16, 02, 15, 0,DateTimeKind.Utc),
                                 Forecast = 20,
                                 StartDateTime = new DateTime(2016, 06, 16, 02, 0, 0,DateTimeKind.Utc),
-                                CalculatedOn =  new DateTime(2016, 06, 16, 01, 0, 0, DateTimeKind.Utc),
                                 ForecastWithShrinkage = 25
                             }
                         }
