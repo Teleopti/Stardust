@@ -370,6 +370,6 @@ module.exports = function(grunt) {
 	grunt.registerTask('generateIndexDev', ['processhtml:dev', 'cacheBust:dist']);
 
 	// for desktop client
-	grunt.registerTask('buildForDesktop', ['ngtemplates', 'sass', 'concat:distJsForDesktop', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:distForDesktop', 'copy:sourceMaps', 'processhtml:distForDesktop', 'cacheBust:distForDesktop']);
+	grunt.registerTask('buildForDesktop', ['ngtemplates', 'sass', 'concat:distJs', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'copy:sourceMaps', 'processhtml:dist', 'cacheBust:dist']);
 
 };
