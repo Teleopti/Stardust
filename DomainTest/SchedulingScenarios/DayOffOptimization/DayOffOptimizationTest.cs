@@ -39,8 +39,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public IScheduleStorage ScheduleStorage;
 		public IPersonWeekViolatingWeeklyRestSpecification CheckWeeklyRestRule;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
-		public FakeBusinessUnitRepository BusinessUnitRepository;
-
 
 		public DayOffOptimizationTest(bool teamBlockDayOffForIndividuals, bool cascading) : base(teamBlockDayOffForIndividuals, cascading)
 		{
@@ -92,12 +90,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var skill = SkillRepository.Has("skill", activity);
 			skill.TimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
 			var scenario = ScenarioRepository.Has("some name");
-			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
-			var site = new Site("site");
-			var team = new Team { Description = new Description("team") };
-			site.AddTeam(team);
-			businessUnit.AddSite(site);
-			BusinessUnitRepository.Has(businessUnit);
+			var team = new Team { Description = new Description("team"), Site = new Site("_")};
 			var contract = new Contract("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var normalRuleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
@@ -167,12 +160,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var skill = SkillRepository.Has("skill", activity);
 			skill.TimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
 			var scenario = ScenarioRepository.Has("some name");
-			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
-			var site = new Site("site");
-			var team = new Team { Description = new Description("team") };
-			site.AddTeam(team);
-			businessUnit.AddSite(site);
-			BusinessUnitRepository.Has(businessUnit);
+			var team = new Team { Description = new Description("team"), Site = new Site("_")};
 			var contract = new Contract("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var normalRuleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
