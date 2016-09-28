@@ -134,8 +134,9 @@ FROM Person p
 INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
 AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate,'2059-12-31')
 INNER JOIN PersonSkill ps ON ps.Parent = pp.Id AND ps.Active = 1 
-INNER JOIN #matching ON #matching.Skill = ps.Skill
+--INNER JOIN #matching ON #matching.Skill = ps.Skill
 WHERE p.Id in(select * from #persons)
+AND ps.Skill in ( select Skill from #matching)
 AND ps.SKill not in (select Skill from #allPersonSkill)
 										          
 DELETE P 
