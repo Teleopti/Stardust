@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			site = SiteFactory.CreateSimpleSite("d");
 			PersistAndRemoveFromUnitOfWork (contract);
 			PersistAndRemoveFromUnitOfWork(site);
-
 		}
 
 		[Test]
