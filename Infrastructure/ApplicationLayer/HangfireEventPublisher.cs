@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Autofac;
 using NHibernate.Util;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
@@ -18,20 +16,17 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		private readonly IHangfireEventClient _client;
 		private readonly IJsonEventSerializer _serializer;
 		private readonly ResolveEventHandlers _resolver;
-		private readonly IResolve _resolver2;
 		private readonly ICurrentDataSource _dataSource;
 
 		public HangfireEventPublisher(
 			IHangfireEventClient client,
 			IJsonEventSerializer serializer,
 			ResolveEventHandlers resolver,
-			IResolve resolver2,
 			ICurrentDataSource dataSource)
 		{
 			_client = client;
 			_serializer = serializer;
 			_resolver = resolver;
-			_resolver2 = resolver2;
 			_dataSource = dataSource;
 		}
 
@@ -43,14 +38,6 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				{
 					_client.Enqueue(j.DisplayName, j.Tenant, j.QueueName, j.EventTypeName, j.Event, j.HandlerTypeName);
 				});
-			});
-		}
-
-		public void PublishDaily(IEvent @event, TimeZoneInfo timeZone)
-		{
-			jobsFor(@event).ForEach(j =>
-			{
-				_client.AddOrUpdateDaily(j.DisplayName, j.IdForJob(@event), j.Tenant, j.EventTypeName, j.Event, j.HandlerTypeName, timeZone);
 			});
 		}
 

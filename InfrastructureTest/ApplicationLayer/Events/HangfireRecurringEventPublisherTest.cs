@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -36,15 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			system.AddService<TestLongNameHandlerVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLongWithLongId>();
 			system.AddService<TestLongNameHandlerVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLongWithLongId2>();
 		}
-
-		[Test]
-		public void ShouldAddOrUpdateDaily()
-		{
-			Target.PublishDaily(new HangfireTestEvent(), TimeZoneInfo.Utc);
-
-			JobClient.Recurring.Single().Daily.Should().Be.True();
-		}
-
+		
 		[Test]
 		public void ShouldAddOrUpdateHourly()
 		{
