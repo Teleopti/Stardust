@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Requests.PerformanceTest
 {
@@ -35,6 +36,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 		public IScenarioRepository ScenarioRepository;
 		public IBusinessUnitRepository BusinessUnitRepository;
 		public IQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
+		public ICurrentUnitOfWork CurrentUnitOfWork;
 
 		[SetUp]
 		public void Setup()
@@ -87,9 +89,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 					if (datePeriod != null)
 						datePeriod.Period = period.OpenForRequestsPeriod;
 				}
-#pragma warning disable 618
-				WorkflowControlSetRepository.UnitOfWork.PersistAll();
-#pragma warning restore 618
+				CurrentUnitOfWork.Current().PersistAll();
 
 				// load some persons
 				var persons = PersonRepository.FindPeople(personIds);
@@ -107,9 +107,8 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 				foreach (var pReq in personReqs)
 				{
 					PersonRequestRepository.Add(pReq);
-#pragma warning disable 618
-					PersonRequestRepository.UnitOfWork.PersistAll();
-#pragma warning restore 618
+					CurrentUnitOfWork.Current().PersistAll();
+
 
 					absenceRequestIds.Add(pReq.Id.GetValueOrDefault());
 				}
@@ -178,9 +177,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 				QueuedAbsenceRequestRepository.Add(queuedAbsenceRequest);
 
 			}
-#pragma warning disable 618
-			QueuedAbsenceRequestRepository.UnitOfWork.PersistAll();
-#pragma warning restore 618
+			CurrentUnitOfWork.Current().PersistAll();
 		}
 
 		[Test]
@@ -219,10 +216,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 				}
 				wfcs.AbsenceRequestWaitlistEnabled = true;
 
-#pragma warning disable 618
-				WorkflowControlSetRepository.UnitOfWork.PersistAll();
-#pragma warning restore 618
-
 				var scenario = ScenarioRepository.Load(new Guid("10E3B023-5C3B-4219-AF34-A11C00F0F283"));
 				var budgetGroup = BudgetGroupRepository.Get(new Guid("F6EA1653-8C48-4F5B-9214-A53A00FFF8C6")); //Digital support
 				var budgetDays = BudgetDayRepository.Find(scenario, budgetGroup,
@@ -232,10 +225,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 				{
 					budgetDay.Allowance = 0;
 				});
-
-#pragma warning disable 618
-				BudgetDayRepository.UnitOfWork.PersistAll();
-#pragma warning restore 618
 				
 				
 				//Add a request to waitlist
@@ -244,9 +233,9 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 				waitListedRequest.Deny(waitListedRequest.Person, "Deny Monster says: DENY!", new PersonRequestAuthorizationCheckerForTest());
 				PersonRequestRepository.Add(waitListedRequest);
 				personReqs.Add(waitListedRequest);
-#pragma warning disable 618
-				PersonRequestRepository.UnitOfWork.PersistAll();
-#pragma warning restore 618
+
+				CurrentUnitOfWork.Current().PersistAll();
+
 				Thread.Sleep(1000); // 1 sec sleep to make sure 'first come first serve'
 
 
@@ -255,9 +244,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 				{
 					budgetDay.Allowance = 1;
 				});
-#pragma warning disable 618
-				BudgetDayRepository.UnitOfWork.PersistAll();
-#pragma warning restore 618
 
 
 				foreach (var person in persons.Where(x => !x.Name.ToString().Contains("Sara")))
@@ -267,9 +253,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 					PersonRequestRepository.Add(pReq);
 					absenceRequestIds.Add(pReq.Id.GetValueOrDefault());
 				}
-#pragma warning disable 618
-				PersonRequestRepository.UnitOfWork.PersistAll();
-#pragma warning restore 618
+				CurrentUnitOfWork.Current().PersistAll();
 
 				var newMultiAbsenceRequestsCreatedEvent = new NewMultiAbsenceRequestsCreatedEvent()
 				{
@@ -372,9 +356,9 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 				PersonRequestRepository.Add(req6th);
 				personRequests.Add(req6th);
 
-#pragma warning disable 618
-				PersonRequestRepository.UnitOfWork.PersistAll();
-#pragma warning restore 618
+
+				CurrentUnitOfWork.Current().PersistAll();
+
 				var absenceRequestIds = new List<Guid> {req4th.Id.GetValueOrDefault(), req5th.Id.GetValueOrDefault(), req6th.Id.GetValueOrDefault()};
 
 				var newMultiAbsenceRequestsCreatedEvent = new NewMultiAbsenceRequestsCreatedEvent()
@@ -438,10 +422,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 					}
 				}
 
-#pragma warning disable 618
-				WorkflowControlSetRepository.UnitOfWork.PersistAll();
-#pragma warning restore 618
-
 				var scenario = ScenarioRepository.Load(new Guid("10E3B023-5C3B-4219-AF34-A11C00F0F283"));
 				var budgetGroup = BudgetGroupRepository.Get(new Guid("81BAF583-4875-43EC-8E1D-A53A00DF0B3D"));
 				var budgetDays = BudgetDayRepository.Find(scenario, budgetGroup,
@@ -452,9 +432,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 					budgetDay.TotalAllowance = 1;
 					budgetDay.AbsenceOverride = 1;
 				});
-#pragma warning disable 618
-				BudgetDayRepository.UnitOfWork.PersistAll();
-#pragma warning restore 618
+
 				// person Englund, Rasmus 
 				var person1 = PersonRepository.Load(new Guid("90FA4DCD-65CA-4599-B1EB-A276008EC775"));
 				//Persson, Josefin
@@ -471,9 +449,9 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 				PersonRequestRepository.Add(req2);
 				personRequests.Add(req2);
 
-#pragma warning disable 618
-				PersonRequestRepository.UnitOfWork.PersistAll();
-#pragma warning restore 618
+
+				CurrentUnitOfWork.Current().PersistAll();
+
 				var absenceRequestIds = new List<Guid> { req1.Id.GetValueOrDefault(), req2.Id.GetValueOrDefault()};
 
 				var newMultiAbsenceRequestsCreatedEvent = new NewMultiAbsenceRequestsCreatedEvent()
@@ -559,10 +537,9 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 						new DateTime(2016, 4, 11, 18, 0, 0, DateTimeKind.Utc)));
 				PersonRequestRepository.Add(req4Th2);
 				personRequests.Add(req4Th2);
+				
+				CurrentUnitOfWork.Current().PersistAll();
 
-#pragma warning disable 618
-				PersonRequestRepository.UnitOfWork.PersistAll();
-#pragma warning restore 618
 				var absenceRequestIds = new List<Guid> { req4Th.Id.GetValueOrDefault(), req4Th2.Id.GetValueOrDefault()};
 
 				var newMultiAbsenceRequestsCreatedEvent = new NewMultiAbsenceRequestsCreatedEvent()

@@ -20,6 +20,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Messaging.Client;
 
 namespace Teleopti.Ccc.Requests.PerformanceTest
@@ -39,6 +40,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 		private List<IPersonRequest> _personRequests;
 		private FakeConfigReader _configReader;
 		public FakeEventPublisherWithOverwritingHandlers EventPublisher;
+		public ICurrentUnitOfWork CurrentUnitOfWork;
 
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
@@ -135,9 +137,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 					if (datePeriod != null)
 						datePeriod.Period = period.OpenForRequestsPeriod;
 				}
-#pragma warning disable 618
-				WorkflowControlSetRepository.UnitOfWork.PersistAll();
-#pragma warning restore 618
 
 				// load some persons
 				var persons = PersonRepository.FindPeople(_personIds);
@@ -155,9 +154,8 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 				foreach (var pReq in _personRequests)
 				{
 					PersonRequestRepository.Add(pReq);
-#pragma warning disable 618
-					PersonRequestRepository.UnitOfWork.PersistAll();
-#pragma warning restore 618
+
+					CurrentUnitOfWork.Current().PersistAll();
 				}
 			});
 		}

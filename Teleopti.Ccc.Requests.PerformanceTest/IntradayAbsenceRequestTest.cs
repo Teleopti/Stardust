@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Requests.PerformanceTest
 {
@@ -33,6 +34,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 		public ResourceCalculateReadModelUpdater ResourceCalculateReadModelUpdater;
 		public IDataSourceScope DataSource;
 		public AsSystem AsSystem;
+		public ICurrentUnitOfWork CurrentUnitOfWork;
 
 		[SetUp]
 		public void Setup()
@@ -127,11 +129,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 				request = createAbsenceRequest(person, absence, requestPeriod);
 
 				PersonRequestRepository.Add(request);
-#pragma warning disable 618
-				WorkflowControlSetRepository.UnitOfWork.PersistAll();
-				PersonRequestRepository.UnitOfWork.PersistAll();
-				SkillRepository.UnitOfWork.PersistAll();
-#pragma warning restore 618
 			});
 			return request;
 		}
