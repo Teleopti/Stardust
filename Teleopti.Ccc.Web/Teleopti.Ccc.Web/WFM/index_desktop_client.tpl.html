@@ -70,8 +70,8 @@
 		}
 	</style>
 </head>
-<body ng-show="isAuthenticated" ng-cloak ng-controller="mainController">
-	<div class="backdrop" ng-if="!styleIsFullyLoaded">
+<body ng-show="isAuthenticated" ng-cloak ng-controller="MainController as main">
+	<div class="backdrop" ng-if="!main.styleIsFullyLoaded">
 		<div class="pulse">
 			<div class="loader">
 				<svg width="1em" height="1em"><circle cx="0.5em" cy="0.5em" r="0.45em" /></svg>
