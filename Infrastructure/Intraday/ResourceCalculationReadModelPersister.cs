@@ -62,11 +62,12 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			{
 				connection.Open();
                 using (var transaction = connection.BeginTransaction(IsolationLevel.Serializable))
-				var deleteCommandstring = @"DELETE from ReadModel.ScheduleForecastSkill";
+                {
+                    var deleteCommandstring = @"DELETE from ReadModel.ScheduleForecastSkill";
                     var deleteCommand = new SqlCommand(deleteCommandstring, connection);
                     deleteCommand.Transaction = transaction;
                     deleteCommand.ExecuteNonQuery();
-                    
+
                     using (var sqlBulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, transaction))
                     {
                         sqlBulkCopy.DestinationTableName = "[ReadModel].[ScheduleForecastSkill]";
@@ -74,9 +75,11 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
                     }
                     transaction.Commit();
                 }
+			    
+            }
 
                 
-			}
+			
 			
 
 		}
