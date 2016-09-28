@@ -5,7 +5,7 @@ datepicker.fillMonthsGregorian = datepicker.fillMonths;
 datepicker.fillMonthsJalaali = function () {
 	var html = '';
 	var i = 0;
-	var monthsShort = $.proxy(moment.langData().jMonthsShort, moment.langData());
+	var monthsShort = $.proxy(moment.localeData().jMonthsShort, moment.langData());
 	while (i < 12) {
 		html += '<span class="month">' + monthsShort(moment().jMonth(i)) + '</span>';
 		i++;
@@ -46,7 +46,7 @@ datepicker.fillJalaaliCal = function () {
 datepicker.displayMonthText = function (jMonth, jYear) {
 	//render html and use &lrm; to ensure the year appears on the right.
 	this.picker.find('.datepicker-days th:eq(1)')
-		.html(moment.langData().jMonths(moment().jMonth(jMonth)) + " &lrm; " + jYear);
+		.html(moment.localeData().jMonths(moment().jMonth(jMonth)) + " &lrm; " + jYear);
 
 };
 

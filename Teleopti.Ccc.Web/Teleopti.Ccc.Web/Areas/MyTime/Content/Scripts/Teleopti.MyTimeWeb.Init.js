@@ -5,8 +5,8 @@
 
 	for (var i = 0; i < languages.length; i++) {
 		try {
-			moment.lang(languages[i]);
-			if (moment.lang() == languages[i]) return;
+			moment.locale(languages[i]);
+			if (moment.locale() == languages[i]) return;
 		} catch (e) {
 			continue;
 		}
