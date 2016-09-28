@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public SchedulingOptionsProvider SchedulingOptionsProvider;
 		public FakePreferenceDayRepository PreferenceDayRepository;
-		public ScheduleCommand ScheduleCommand;
 
 		[Test]
 		public void TeamBlockSchedulingShouldNotUseShiftsMarkedForRestrictionOnlyWhenThereIsNoRestriction()
