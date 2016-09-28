@@ -30,6 +30,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AsSystemAspect>().SingleInstance();
 			builder.RegisterType<AsSystem>().SingleInstance();
 
+			builder.RegisterType<FullPermissions>().SingleInstance();
+			builder.RegisterType<FullPermissionsAspect>().SingleInstance();
+
 			builder.RegisterType<ImpersonateSystem>().SingleInstance();
 			builder.RegisterType<ImpersonateSystemAspect>().SingleInstance();
 

@@ -426,6 +426,9 @@
     <Compile Include="Intraday\StaffingDataSeries.cs" />
     <Compile Include="Intraday\StaffingIntervalModel.cs" />
     <Compile Include="LogObject\LogObjectDetail.cs" />
+    <Compile Include="Logon\FullPermissions.cs" />
+    <Compile Include="Logon\FullPermissionsAspect.cs" />
+    <Compile Include="Logon\FullPermissionsAttribute.cs" />
     <Compile Include="Logon\ImpersonateSystem.cs" />
     <Compile Include="Logon\ImpersonateSystemAspect.cs" />
     <Compile Include="Logon\ImpersonateSystemAttribute.cs" />

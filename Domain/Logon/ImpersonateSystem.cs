@@ -2,7 +2,6 @@ using System;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UnitOfWork;
 
@@ -16,11 +15,12 @@ namespace Teleopti.Ccc.Domain.Logon
 		private readonly WithUnitOfWork _withUnitOfWork;
 		private readonly IBusinessUnitScope _businessUnit;
 		private readonly IUpdatedByScope _updatedBy;
-		private readonly IAuthorizationScope _authorization;
-		private readonly SystemUserAuthorization _systemUserAuthorization;
+		private readonly FullPermissions _fullPermissions;
 
 		[ThreadStatic]
 		private static IDisposable _tenantScope;
+		[ThreadStatic]
+		private static IDisposable _permissionsScope;
 
 		public ImpersonateSystem(
 			IDataSourceScope dataSource,
@@ -29,8 +29,7 @@ namespace Teleopti.Ccc.Domain.Logon
 			WithUnitOfWork withUnitOfWork,
 			IBusinessUnitScope businessUnit,
 			IUpdatedByScope updatedBy,
-			IAuthorizationScope authorization,
-			IDefinedRaptorApplicationFunctionFactory applicationFunctions)
+			FullPermissions fullPermissions)
 		{
 			_dataSource = dataSource;
 			_businessUnits = businessUnits;
@@ -38,8 +37,7 @@ namespace Teleopti.Ccc.Domain.Logon
 			_withUnitOfWork = withUnitOfWork;
 			_businessUnit = businessUnit;
 			_updatedBy = updatedBy;
-			_authorization = authorization;
-			_systemUserAuthorization = new SystemUserAuthorization(applicationFunctions);
+			_fullPermissions = fullPermissions;
 		}
 
 		public void Impersonate(string tenant, Guid businessUnitId)
@@ -53,13 +51,13 @@ namespace Teleopti.Ccc.Domain.Logon
 				var person = _persons.Load(SystemUser.Id);
 				_updatedBy.OnThisThreadUse(person);
 
-				_authorization.OnThisThreadUse(_systemUserAuthorization);
+				_permissionsScope = _fullPermissions.Apply();
 			});
 		}
 
 		public void EndImpersonation()
 		{
-			_authorization.OnThisThreadUse(null);
+			_permissionsScope.Dispose();
 			_updatedBy.OnThisThreadUse(null);
 			_businessUnit.OnThisThreadUse(null);
 			_tenantScope.Dispose();
