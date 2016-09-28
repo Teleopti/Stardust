@@ -174,7 +174,9 @@
 						.map(function(s){ return s.Id; });
 					var deselectedfromUrlAndManuallySelected = excludedStatesFromUrl()
 						.filter(function(s){
-							return deselected.indexOf(s.Id) > -1;
+							if (deselected.indexOf(s.Id) > -1)
+								return false;
+							return true;
 						})
 					var excludedStateIds = deselectedfromUrlAndManuallySelected.concat(deselected)
 

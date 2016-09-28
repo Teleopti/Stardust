@@ -487,7 +487,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		{
 			GoToPage("wfm/#/rta/agents/" + siteId + "/" + teamId + "?showAllAgents=true");
 		}
-		
+
+		public static void GotoRealTimeAdherenceAgentsWithoutStateOnTeam(Guid businessUnitId, Guid siteId, Guid teamId, Guid state)
+		{
+			GoToPage("wfm/#/rta/agents/" + siteId + "/" + teamId + "?es=" + state);
+		}
+
 		public static void GoToAgentDetails(Guid personId)
 		{
 			GoToPage("wfm/#/rta/agent-details/" + personId);
@@ -522,5 +527,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
         {
             GoToPage("wfm/#/reports/leaderboard");
         }
+
 	}
 }

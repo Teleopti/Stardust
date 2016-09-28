@@ -22,6 +22,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string IsAlarm { get; set; }
 		public string AlarmThreshold { get; set; }
 
+		public IRtaStateGroup RtaStateGroup { get; private set; }
+
 
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
@@ -65,6 +67,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 					stateGroup.AddState(PhoneState, PhoneState, Guid.Empty);
 					stateGroupRepository.Add(stateGroup);
 				}
+				RtaStateGroup = stateGroup;
 			}
 
 			IActivity activity = null;

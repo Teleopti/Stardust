@@ -50,7 +50,6 @@ Scenario: Hide logged out agents
 	And 'Ashley Andeen' sets her phone state to 'LoggedOut'		
 	And the time is '2016-11-23 08:10:00'
 	And 'Pierre Baldi' sets his phone state to 'Training'	
-	Given I am viewing real time adherence for agents on team 'Red'
-	When I deselect state group 'LoggedOut'
+	When I am viewing real time adherence for agents without state 'LoggedOut' on team 'Red'
 	Then I should not see agent 'Ashley Andeen'
 	And I should see agent status for 'Pierre Baldi'

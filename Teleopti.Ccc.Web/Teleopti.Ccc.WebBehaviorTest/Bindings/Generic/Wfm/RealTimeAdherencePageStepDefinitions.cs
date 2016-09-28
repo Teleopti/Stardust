@@ -111,16 +111,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			var status = new RealTimeAdherenceAgentState() { Name = name };
 			assertAgentStatus(status);
 		}
-
-		[When(@"I deselect state group '(.*)'")]
-		public void WhenIDeselectStateGroup(string stateGroup)
-		{
-			Browser.Interactions.AssertAnyContains(".grid", stateGroup);
-			Browser.Interactions.ClickContaining(".open-right-panel", "");
-			Browser.Interactions.ClickContaining(".rta-deselect-state", stateGroup);
-			Browser.Interactions.ClickContaining(".close-right-panel", "");
-		}
-
+		
 		[Then(@"I should see agent '(.*)' with state '(.*)'")]
 		public void ThenIShouldSeeAgentStatusForWithState(string name, string stateCode)
 		{

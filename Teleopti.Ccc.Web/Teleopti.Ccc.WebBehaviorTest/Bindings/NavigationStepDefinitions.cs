@@ -293,6 +293,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			return skillId;
 		}
 
+
+		private Guid IdForState(string state)
+		{
+			return (from s in DataMaker.Data().UserDatasOfType<RtaMapConfigurable>()
+				where s.PhoneState == state
+				select s.RtaStateGroup.Id.Value).Single();
+		}
+
 		private Guid IdForSkillArea(string skillArea)
 		{
 			return (from s in DataMaker.Data().UserDatasOfType<SkillAreaConfigurable>()
@@ -593,6 +601,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoRealTimeAdherenceAllAgentsOnTeam(buIdForTeam(team), SiteIdForTeam(team), IdForTeam(team));
 		}
 
+		[When(@"I am viewing real time adherence for agents without state '(.*)' on team '(.*)'")]
+		public void WhenIAmViewingRealTimeAdherenceWithoutStateForAgentsOnTeam(string state, string team)
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoRealTimeAdherenceAgentsWithoutStateOnTeam(buIdForTeam(team), SiteIdForTeam(team), IdForTeam(team), IdForState(state));
+		}
+		
 		[When(@"I view real time adherence for agents with skills '(.*)'")]
 		public void WhenIViewRealTimeAdherenceForAgentsWithSkills(string skill)
 		{
