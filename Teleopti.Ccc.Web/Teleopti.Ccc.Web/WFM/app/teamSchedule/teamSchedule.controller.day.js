@@ -17,10 +17,11 @@
 		'NoticeService',
 		'ValidateRulesService',
 		'CommandCheckService',
+		'ScheduleNoteManagementService',
 		TeamScheduleController]);
 
 	function TeamScheduleController($scope, $q, $translate, $stateParams, $state, $mdSidenav, teamScheduleSvc, groupScheduleFactory, personSelectionSvc,
-		scheduleMgmtSvc, toggleSvc, signalRSVC, NoticeService, ValidateRulesService, CommandCheckService) {
+		scheduleMgmtSvc, toggleSvc, signalRSVC, NoticeService, ValidateRulesService, CommandCheckService, ScheduleNoteManagementService) {
 
 		var vm = this;
 
@@ -183,6 +184,7 @@
 
 				teamScheduleSvc.searchSchedules.query(params).$promise.then(function (result) {
 					scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment());
+					ScheduleNoteManagementService.resetScheduleNotes(result.Schedules, vm.scheduleDateMoment());
 					afterSchedulesLoaded(result);
 					personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
 					vm.isLoading = false;
@@ -193,6 +195,7 @@
 
 				teamScheduleSvc.getSchedules(date, preSelectPersonIds).then(function(result) {
 					scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment());
+					ScheduleNoteManagementService.resetScheduleNotes(result.Schedules, vm.scheduleDateMoment());
 					afterSchedulesLoaded(result);
 					personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
 					personSelectionSvc.preSelectPeople(preSelectPersonIds, scheduleMgmtSvc.groupScheduleVm.Schedules, vm.scheduleDate);

@@ -1334,6 +1334,9 @@
     <Content Include="Content\signalr\jquery.signalR-2.2.0.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.0.min.js" />
     <None Include="WFM\css\_wfmmultiplesearchinput.scss" />
+    <Content Include="WFM\app\teamSchedule\html\noteEditor.html" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.directive.note-editor.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.service.scheduleNote.js" />
     <Content Include="WFM\index_desktop_client.tpl.html" />
     <Content Include="WFM\index.tpl.html" />
     <Content Include="WFM\app\app_desktop_client.js" />

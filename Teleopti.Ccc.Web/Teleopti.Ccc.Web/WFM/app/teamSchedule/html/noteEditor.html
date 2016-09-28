@@ -1,0 +1,12 @@
+﻿<modal-dialog show='vm.noteInputOption.showEditor' ng-cloak>
+	<h1 class="modal-title">{{vm.label}}</h1>
+	<div class="modal-inner-content">
+		<textarea ng-model="vm.internalNotes"></textarea>
+	</div>
+	<div class="modal-actions">
+		<aside>
+			<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.submit()">{{ 'Submit' | translate }}</button>
+			<button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.cancel()">{{ 'Cancel' | translate }}</button>
+		</aside>
+	</div>
+</modal-dialog>

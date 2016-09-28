@@ -2,7 +2,7 @@
 	'use strict';
 	angular.module('wfm.teamSchedule')
 		.directive('scheduleTable', scheduleTableDirective)
-		.controller('scheduleTableCtrl', ['$scope', 'Toggle', 'PersonSelection', 'ScheduleManagement', 'ValidateRulesService', scheduleTableController]);
+		.controller('scheduleTableCtrl', ['$scope', 'Toggle', 'PersonSelection', 'ScheduleManagement', 'ValidateRulesService', 'ScheduleNoteManagementService', scheduleTableController]);
 
 	function scheduleTableDirective() {
 		return {
@@ -20,7 +20,7 @@
 		};
 	}
 
-	function scheduleTableController($scope, toggleSvc, personSelectionSvc, ScheduleMgmt, ValidateRulesService) {
+	function scheduleTableController($scope, toggleSvc, personSelectionSvc, ScheduleMgmt, ValidateRulesService, ScheduleNoteMgmt) {
 		var vm = this;
 		vm.ShowContractTimeEnabled = toggleSvc.WfmTeamSchedule_ShowContractTime_38509;
 		vm.updateAllSelectionInCurrentPage = function (isAllSelected) {
@@ -114,6 +114,18 @@
 		vm.checkIsLoadedValidationForPerson = function(personId){
 			return ValidateRulesService.checkIsLoadedValidationForPerson(personId);
 		};
+
+		vm.getScheduleNoteForPerson = function (personId) {
+			return ScheduleNoteMgmt.getInternalNoteForPerson(personId);
+		}
+
+		vm.editScheduleNote = function (personId) {
+			vm.noteEditorInputOption = {
+				selectedDate: vm.selectedDate,
+				personId: personId,
+				showEditor:true
+			}
+		}
 
 		function isAllInCurrentPageSelected() {
 			var isAllSelected = true;

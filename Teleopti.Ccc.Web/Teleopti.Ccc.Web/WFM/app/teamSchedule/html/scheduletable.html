@@ -1,43 +1,43 @@
 ﻿<table class="table" ng-if="vm.scheduleVm.Schedules.length > 0" id="team-schedule">
 	<thead>
-		<tr class="person">
-			<th class="person-name person-name-column">
-				<div class="wfm-checkbox" ng-if="vm.selectMode">
-					<label>
-						<input type="checkbox" ng-model="vm.toggleAllInCurrentPage" ng-change="vm.updateAllSelectionInCurrentPage(vm.toggleAllInCurrentPage)">
-						<span class="wfm-checkbox-toggle"></span>
-						<span class="wfm-checkbox-label person-name nowrap">{{'AgentName' | translate}}</span>
-					</label>
-				</div>
-				<div ng-hide="vm.selectMode" class="wfm-checkbox-label person-name nowrap">{{'AgentName' | translate}}</div>
-			</th>
-			<th class="shift-category-cell-header" ng-if="vm.toggles.ViewShiftCategoryEnabled"></th>
-			<th id="time-line-container" class="schedule schedule-column">
-				<time-line ng-if="vm.scheduleVm.Schedules.length > 0" times="vm.scheduleVm.TimeLine.HourPoints" schedule-count="vm.scheduleVm.Schedules.length"></time-line>
-			</th>
-		    <th class="right-border-empty"></th>
-			<th class="schedule-note-column" ng-if="vm.toggles.EditAndViewInternalNoteEnabled"></th>
-			<th class="contract-time-header contract-time-column" ng-if="vm.ShowContractTimeEnabled">{{'ContractTime' | translate}}</th>
-		</tr>
+	<tr class="person">
+		<th class="person-name person-name-column">
+			<div class="wfm-checkbox" ng-if="vm.selectMode">
+				<label>
+					<input type="checkbox" ng-model="vm.toggleAllInCurrentPage" ng-change="vm.updateAllSelectionInCurrentPage(vm.toggleAllInCurrentPage)">
+					<span class="wfm-checkbox-toggle"></span>
+					<span class="wfm-checkbox-label person-name nowrap">{{'AgentName' | translate}}</span>
+				</label>
+			</div>
+			<div ng-hide="vm.selectMode" class="wfm-checkbox-label person-name nowrap">{{'AgentName' | translate}}</div>
+		</th>
+		<th class="shift-category-cell-header" ng-if="vm.toggles.ViewShiftCategoryEnabled"></th>
+		<th id="time-line-container" class="schedule schedule-column">
+			<time-line ng-if="vm.scheduleVm.Schedules.length > 0" times="vm.scheduleVm.TimeLine.HourPoints" schedule-count="vm.scheduleVm.Schedules.length"></time-line>
+		</th>
+		<th class="right-border-empty"></th>
+		<th class="schedule-note-column" ng-if="vm.toggles.EditAndViewInternalNoteEnabled"></th>
+		<th class="contract-time-header contract-time-column" ng-if="vm.ShowContractTimeEnabled">{{'ContractTime' | translate}}</th>
+	</tr>
 	</thead>
 	<tbody>
-		<tr ng-repeat="personSchedule in vm.scheduleVm.Schedules" ng-click="vm.togglePerson(personSchedule, $event)">
-			<td class="person-name person-name-column">
-				<div class="wfm-checkbox" ng-show="vm.selectMode">
-					<label>
-						<input type="checkbox" ng-model="personSchedule.IsSelected" ng-change="vm.updatePersonSelection(personSchedule)">
-						<span class="wfm-checkbox-toggle"></span>
-						<span class="wfm-checkbox-label person-name">{{personSchedule.Name}}</span>
-					</label>
-				</div>
-				<div class="person-name" ng-hide="vm.selectMode">{{personSchedule.Name}}</div>
-				<span class="schedule-note" ng-if="vm.toggles.EditAndViewInternalNoteEnabled && personSchedule.InternalNotes && personSchedule.InternalNotes.length > 0">
+	<tr ng-repeat="personSchedule in vm.scheduleVm.Schedules" ng-click="vm.togglePerson(personSchedule, $event)">
+		<td class="person-name person-name-column">
+			<div class="wfm-checkbox" ng-show="vm.selectMode">
+				<label>
+					<input type="checkbox" ng-model="personSchedule.IsSelected" ng-change="vm.updatePersonSelection(personSchedule)">
+					<span class="wfm-checkbox-toggle"></span>
+					<span class="wfm-checkbox-label person-name">{{personSchedule.Name}}</span>
+				</label>
+			</div>
+			<div class="person-name" ng-hide="vm.selectMode">{{personSchedule.Name}}</div>
+			<span class="schedule-note" ng-if="vm.toggles.EditAndViewInternalNoteEnabled && personSchedule.InternalNotes && personSchedule.InternalNotes.length > 0">
 					<span ><i class="mdi mdi-comment-outline"></i></span>
 					<md-tooltip class="multiline-tooltip" md-direction="right">
 						{{personSchedule.InternalNotes}}
 					</md-tooltip>
 				</span>
-				<span class="validate-warning" ng-if="vm.showWarnings">
+			<span class="validate-warning" ng-if="vm.showWarnings">
 					<span ng-if="vm.checkIsLoadedValidationForPerson(personSchedule.PersonId) &&
 					vm.checkBusinessRulesWarningMessage(personSchedule.PersonId).length > 0">
 						<span class="warning-icon"><i class="mdi mdi-account-alert"></i></span>
@@ -47,42 +47,43 @@
 					</span>
 					<md-progress-circular md-mode="indeterminate" md-diameter="15" ng-if="!vm.checkIsLoadedValidationForPerson(personSchedule.PersonId)"></md-progress-circular>
 				</span>
-			</td>
-			<td class="shift-category-cell" ng-if="vm.toggles.ViewShiftCategoryEnabled" ng-click="personSchedule.ShiftCategory.Name && vm.modifyShiftCategoryForAgent($event, personSchedule)" ng-style="{cursor: (personSchedule.ShiftCategory.Name ? 'pointer' : 'default')}">
-				<span id="name" ng-if="personSchedule.ShiftCategory.Name" ng-style="{background: personSchedule.ShiftCategory.DisplayColor, color: personSchedule.ShiftCategory.ContrastColor}">
+		</td>
+		<td class="shift-category-cell" ng-if="vm.toggles.ViewShiftCategoryEnabled" ng-click="personSchedule.ShiftCategory.Name && vm.modifyShiftCategoryForAgent($event, personSchedule)" ng-style="{cursor: (personSchedule.ShiftCategory.Name ? 'pointer' : 'default')}">
+			<span id="name" ng-if="personSchedule.ShiftCategory.Name" ng-style="{background: personSchedule.ShiftCategory.DisplayColor, color: personSchedule.ShiftCategory.ContrastColor}">
 					{{personSchedule.ShiftCategory.ShortName}}
 				</span>
-				<md-tooltip md-direction="right" ng-if="personSchedule.ShiftCategory.Name">{{personSchedule.ShiftCategory.Name}}</md-tooltip>
-			</td>
-			<td class="schedule schedule-column">
-				<div class="relative time-line-for">
-					<span class="dayoff absolute" ng-repeat="dayOff in personSchedule.DayOffs" ng-if="personSchedule.DayOffs.length > 0"
+			<md-tooltip md-direction="right" ng-if="personSchedule.ShiftCategory.Name">{{personSchedule.ShiftCategory.Name}}</md-tooltip>
+		</td>
+		<td class="schedule schedule-column">
+			<div class="relative time-line-for">
+				<span class="dayoff absolute" ng-repeat="dayOff in personSchedule.DayOffs" ng-if="personSchedule.DayOffs.length > 0"
 						  ng-style="{left: dayOff.StartPosition + '%', width: dayOff.Length + '%'}">
 						<md-tooltip ng-if="dayOff.DayOffName !=''"> {{dayOff.DayOffName}} </md-tooltip>
 					</span>
-					<div class="shift" ng-repeat="shift in personSchedule.Shifts">
-						<div class="layer absolute floatleft selectable projection-layer" projection-name="{{projection.Description}}" ng-repeat="projection in shift.Projections"
-							 ng-style="{left: projection.StartPosition + '%', width: projection.Length + '%', backgroundColor: projection.Color}"
-							 ng-class="{overtimeLight: projection.IsOvertime && projection.UseLighterBorder, overtimeDark: projection.IsOvertime && !projection.UseLighterBorder,
+				<div class="shift" ng-repeat="shift in personSchedule.Shifts">
+					<div class="layer absolute floatleft selectable projection-layer" projection-name="{{projection.Description}}" ng-repeat="projection in shift.Projections"
+						 ng-style="{left: projection.StartPosition + '%', width: projection.Length + '%', backgroundColor: projection.Color}"
+						 ng-class="{overtimeLight: projection.IsOvertime && projection.UseLighterBorder, overtimeDark: projection.IsOvertime && !projection.UseLighterBorder,
 							 personAbsence:projection.ParentPersonAbsences !== null, noneSelected:vm.totalSelectedProjections() == 0 && !projection.IsOvertime,
 							 hasSelected:vm.totalSelectedProjections() != 0 && !projection.IsOvertime, selected:projection.Selected, lighterBorder: projection.UseLighterBorder, unselectable: !vm.canToggleSelection(projection, shift, vm.selectedDate),
 							 sameTypeAsLast: projection.SameTypeAsLast}"
-							 ng-click="vm.ToggleProjectionSelection(projection, personSchedule, shift, vm.selectedDate)">
-							<md-tooltip>{{projection.Description}}</md-tooltip>
-						</div>
+						 ng-click="vm.ToggleProjectionSelection(projection, personSchedule, shift, vm.selectedDate)">
+						<md-tooltip>{{projection.Description}}</md-tooltip>
 					</div>
 				</div>
-			</td>
-			<td class="right-border-empty"></td>
-			<td class="schedule-note-column" ng-if="vm.toggles.EditAndViewInternalNoteEnabled">
-				<span class="schedule-note">
-					<span ng-class="{noComment:!personSchedule.InternalNotes}"><i class="mdi mdi-comment"></i></span>
-					<md-tooltip class="multiline-tooltip" md-direction="left" ng-if="personSchedule.InternalNotes && personSchedule.InternalNotes.length > 0">
-						{{personSchedule.InternalNotes}}
+			</div>
+		</td>
+		<td class="right-border-empty"></td>
+		<td class="schedule-note-column" ng-if="vm.toggles.EditAndViewInternalNoteEnabled">
+			<span class="schedule-note">
+					<span ng-class="{noComment:!vm.getScheduleNoteForPerson(personSchedule.PersonId)}" ng-click="vm.editScheduleNote(personSchedule.PersonId)"><i class="mdi mdi-comment"></i></span>
+					<md-tooltip class="multiline-tooltip" md-direction="left" ng-if="vm.getScheduleNoteForPerson(personSchedule.PersonId) && vm.getScheduleNoteForPerson(personSchedule.PersonId).length > 0">
+						{{vm.getScheduleNoteForPerson(personSchedule.PersonId)}}
 					</md-tooltip>
 				</span>
-			</td>
-			<td class="contract-time contract-time-column" ng-if="vm.ShowContractTimeEnabled">{{personSchedule.ContractTime}}</td>
-		</tr>
+		</td>
+		<td class="contract-time contract-time-column" ng-if="vm.ShowContractTimeEnabled">{{personSchedule.ContractTime}}</td>
+	</tr>
 	</tbody>
 </table>
+<note-editor note-input-option="vm.noteEditorInputOption"></note-editor>
