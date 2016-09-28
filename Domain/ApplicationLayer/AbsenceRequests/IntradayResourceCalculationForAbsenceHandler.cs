@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using log4net;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.Collection;
@@ -29,10 +30,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
         private readonly IEventPublisher _publisher;
         private readonly IScheduleForecastSkillReadModelRepository _scheduleForecastSkillReadModelRepository;
         private readonly IConfigReader _configReader;
+	    private readonly IRequestStrategySettingsReader _requestStrategySettingsReader;
+
         private static readonly ILog logger = LogManager.GetLogger(typeof(IntradayResourceCalculationForAbsenceHandler));
 
 
-        public IntradayResourceCalculationForAbsenceHandler(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IBusinessUnitRepository businessUnitRepository, IPersonRepository personRepository, IUpdatedByScope updatedByScope, IBusinessUnitScope businessUnitScope, INow now, IEventPublisher publisher, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository, IConfigReader configReader)
+        public IntradayResourceCalculationForAbsenceHandler(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, IBusinessUnitRepository businessUnitRepository, IPersonRepository personRepository, IUpdatedByScope updatedByScope, IBusinessUnitScope businessUnitScope, INow now, IEventPublisher publisher, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository, IConfigReader configReader, IRequestStrategySettingsReader requestStrategySettingsReader)
         {
             _currentUnitOfWorkFactory = currentUnitOfWorkFactory;
             _businessUnitRepository = businessUnitRepository;
@@ -43,6 +46,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
             _publisher = publisher;
             _scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
             _configReader = configReader;
+	        _requestStrategySettingsReader = requestStrategySettingsReader;
         }
 
         public void Handle(TenantMinuteTickEvent @event)
@@ -65,8 +69,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
                 
             using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
             {
-                var lastExecuted = _scheduleForecastSkillReadModelRepository.GetLastCalculatedTime();
-                if (lastExecuted.AddMinutes(20) < _now.UtcDateTime())
+				var updateResourceReadModelIntervalMinutes = _requestStrategySettingsReader.GetIntSetting("UpdateResourceReadModelIntervalMinutes", 60);
+
+				var lastExecuted = _scheduleForecastSkillReadModelRepository.GetLastCalculatedTime();
+                if (lastExecuted.AddMinutes(updateResourceReadModelIntervalMinutes) < _now.UtcDateTime())
                 {
                     var businessUnits = _businessUnitRepository.LoadAll();
                     var person = _personRepository.Get(SystemUser.Id);
