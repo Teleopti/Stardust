@@ -15,7 +15,8 @@
 			<th id="time-line-container" class="schedule schedule-column">
 				<time-line ng-if="vm.scheduleVm.Schedules.length > 0" times="vm.scheduleVm.TimeLine.HourPoints" schedule-count="vm.scheduleVm.Schedules.length"></time-line>
 			</th>
-			<th class="right-border-empty"></th>
+		    <th class="right-border-empty"></th>
+			<th class="schedule-note-column" ng-if="vm.toggles.EditAndViewInternalNoteEnabled"></th>
 			<th class="contract-time-header contract-time-column" ng-if="vm.ShowContractTimeEnabled">{{'ContractTime' | translate}}</th>
 		</tr>
 	</thead>
@@ -73,6 +74,14 @@
 				</div>
 			</td>
 			<td class="right-border-empty"></td>
+			<td class="schedule-note-column" ng-if="vm.toggles.EditAndViewInternalNoteEnabled">
+				<span class="schedule-note">
+					<span ng-class="{noComment:!personSchedule.InternalNotes}"><i class="mdi mdi-comment"></i></span>
+					<md-tooltip class="multiline-tooltip" md-direction="left" ng-if="personSchedule.InternalNotes && personSchedule.InternalNotes.length > 0">
+						{{personSchedule.InternalNotes}}
+					</md-tooltip>
+				</span>
+			</td>
 			<td class="contract-time contract-time-column" ng-if="vm.ShowContractTimeEnabled">{{personSchedule.ContractTime}}</td>
 		</tr>
 	</tbody>

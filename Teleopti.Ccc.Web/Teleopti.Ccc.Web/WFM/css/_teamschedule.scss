@@ -212,7 +212,25 @@
 				white-space: nowrap;
 			}
 
-			th.shift-category-cell-header, td.shift-category-cell{
+			th.schedule-note-column{
+				width:0;
+			}
+
+			td.schedule-note-column {
+				width: 0 ;
+				.schedule-note {
+					float: left;
+				}
+
+				.schedule-note .mdi:before {
+					font-size: 13px !important;
+				}
+				.schedule-note .noComment{
+					color:$gray026 ;
+				}
+			}
+
+			th.shift-category-cell-header, td.shift-category-cell {
 				width: 30px;
 			}
 
