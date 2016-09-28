@@ -34,25 +34,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 			var lowestIndex = cascadingPersonSkills.Min(x => x.Skill.CascadingIndex);
 			var primarySkills = cascadingPersonSkills.Where(x => x.Skill.CascadingIndex == lowestIndex);
-			
-			foreach (var primarySkill in primarySkills)
-			{
-				var skillStaffingIntervals = _scheduleForecastSkillReadModelRepository.GetBySkill(primarySkill.Skill.Id.GetValueOrDefault(),
-																	 personRequest.Request.Period.StartDateTime, personRequest.Request.Period.EndDateTime);
+		    if (primarySkills.Any())
+		    {
+                foreach (var primarySkill in primarySkills)
+                {
+                    var skillStaffingIntervals = _scheduleForecastSkillReadModelRepository.GetBySkill(primarySkill.Skill.Id.GetValueOrDefault(),
+                                                                         personRequest.Request.Period.StartDateTime, personRequest.Request.Period.EndDateTime);
 				
 				var underStaffingDetails = getUnderStaffedPeriods(skillStaffingIntervals);
 
 				if (underStaffingDetails.UnderstaffingTimes.Any())
-				{
+                    {
 					
 
 					var denyReason = GetUnderStaffingHourString(underStaffingDetails, personRequest);
 					sendDenyCommand(personRequest.Id.GetValueOrDefault(), denyReason);
-					return;
-				}
+                        return;
+                    }
 				
-			}
-			sendApproveCommand(personRequest.Id.GetValueOrDefault());
+                }
+                sendApproveCommand(personRequest.Id.GetValueOrDefault());
+            }
 
 		}
 
