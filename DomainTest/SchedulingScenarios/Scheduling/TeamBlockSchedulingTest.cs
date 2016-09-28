@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -33,6 +32,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public SchedulingOptionsProvider SchedulingOptionsProvider;
 		public FakePreferenceDayRepository PreferenceDayRepository;
+		public FakeRuleSetBagRepository RuleSetBagRepository;
 
 		[Test]
 		public void TeamBlockSchedulingShouldNotUseShiftsMarkedForRestrictionOnlyWhenThereIsNoRestriction()
@@ -154,21 +154,18 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test, Ignore("#40404")]
-		public void ShouldHandleClosedSkillIntervalsCorrectly()
+		public void ShouldNotPlaceShiftOutsideSkillsOpenHourWhenSchedulingTeam()
 		{
 			var date = DateOnly.Today;
 			var activity = ActivityRepository.Has("_");
 			var skill1 = SkillRepository.Has("skill open only during lunch", activity, new TimePeriod(12,0,13,0));
 			var skill2 = SkillRepository.Has("open skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
-			var team = new Team { Description = new Description("team") };
-			var contract = new Contract("_");
-			var contractSchedule = new ContractSchedule("_");
-			var agent1 = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(date, SchedulePeriodType.Day, 1), skill1);
-			var agent2 = PersonRepository.Has(contract, contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(date, SchedulePeriodType.Day, 1), skill1, skill2);
+			var agent1 = PersonRepository.Has(new Contract("_"), new SchedulePeriod(date, SchedulePeriodType.Day, 1), skill1);
+			var agent2 = PersonRepository.Has(new Contract("_"), new SchedulePeriod(date, SchedulePeriodType.Day, 1), skill1, skill2);
 			var shiftCategory = new ShiftCategory("_").WithId();
-			var ruleSetBag = new RuleSetBag(new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory)));
+			var ruleSetBag = new RuleSetBag(new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory))) {Description = new Description("_")};
+			RuleSetBagRepository.Has(ruleSetBag);
 			agent1.Period(date).RuleSetBag = ruleSetBag;
 			agent2.Period(date).RuleSetBag = ruleSetBag;
 			SkillDayRepository.Has(new[]
@@ -182,7 +179,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			{
 				DayOffTemplate = dayOffTemplate,
 				ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
-				GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
+				GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.RuleSetBag),
 				UseTeam = true,
 				TeamSameShiftCategory = true,
 				TagToUseOnScheduling = NullScheduleTag.Instance
