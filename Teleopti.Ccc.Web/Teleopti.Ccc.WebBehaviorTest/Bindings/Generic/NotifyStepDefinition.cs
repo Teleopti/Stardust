@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Linq;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
+using Teleopti.Ccc.WebBehaviorTest.Data;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
@@ -23,40 +26,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void ThenAnActivityWithTimeToIsAddedToMySchedule(string activity, string startTime, string endTime)
 		{
 			Browser.Interactions.Javascript("$('#loading').show()");
-			var fetchActivityUrl = "/api/TeamScheduleData/FetchActivities";
 			var addActivityUrl = "/api/TeamScheduleCommand/AddActivity";
-			var getActivityId = "(function(activities){" +
-									"var result;" +
-									"activities.forEach(function(activity){" +
-										"if(activity.Name == '" + activity + "')" +
-											"result = activity.Id; " +
-									"});" +
-									"return result;" +
-								"})(data)";
+			var userId = idForLogonUser();
+			var activityId = idForActivity(activity);
 
-			var addActivityJs = "Teleopti.MyTimeWeb.Common.GetUserData(function(user){" +
-									"$.ajax({" +
-										"url:'" + fetchActivityUrl + "'," +
-										"type:'GET'," +
-										"contentType:'application/json'," +
-										"success:function(data){" +
-											"$.ajax({" +
-												"url:'"+ addActivityUrl + "'," +
-												"type:'POST'," +
-												"contentType:'application/json'," +
-												"data:JSON.stringify({" +
-														"ActivityId: "+ getActivityId + "," +
-														"ActivityType: 1," +
-														"Date:'"+ startTime.Split(' ')[0] +"', " +
-														"StartTime:'"+ startTime + "'," +
-														"EndTime:'"+ endTime + "'," +
-														"PersonIds:[user.AgentId]" +
-												"})," +
-												"success: function(){}" +
-												"});" +
-											"}" +
-										"});" +
-									"});";
+			var addActivityJs ="$.ajax({" +
+									"url:'"+ addActivityUrl + "'," +
+									"type:'POST'," +
+									"contentType:'application/json'," +
+									"data:JSON.stringify({" +
+											"ActivityId: '"+ activityId + "'," +
+											"ActivityType: 1," +
+											"Date:'"+ startTime.Split(' ')[0] +"', " +
+											"StartTime:'"+ startTime + "'," +
+											"EndTime:'"+ endTime + "'," +
+											"PersonIds:['" + userId + "']" +
+										"})," +
+									"success: function(){}" +
+								"});";
+								
 			Browser.Interactions.Javascript(addActivityJs);
 			Browser.Interactions.Javascript("$('#loading').hide()");
 		}
@@ -64,15 +52,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should see activity '(.*)' on my schedule table")]
 		public void ThenIShouldSeeActivityOnMyScheduleTable(string activity)
 		{
-			Browser.TimeoutScope(new TimeSpan(0, 0, 5));
-			Browser.Interactions.AssertNotExists(".schedule-table-container", activity+activity);
 			Browser.Interactions.AssertExists(".schedule-table-container", activity);
 		}
 
 		[Then(@"I should not see activity '(.*)' on my schedule table")]
 		public void ThenIShouldNotSeeActivityOnMyScheduleTable(string activity)
 		{
-			Browser.TimeoutScope(new TimeSpan(0, 0, 10));
 			Browser.Interactions.AssertNotExists(".schedule-table-container", activity);
 		}
 
@@ -108,6 +93,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			Browser.TimeoutScope(new TimeSpan(0, 1, 0));
 			Browser.Interactions.AssertNotExists("#notifyLogger", "#noty_bottom_layout_container");
+		}
+
+		private static Guid idForActivity(string activityName)
+		{
+			var activityId = (from a in DataMaker.Data().UserDatasOfType<ActivityConfigurable>()
+						  let activity = a.Activity
+						  where activity.Name.Equals(activityName)
+						  select activity.Id.GetValueOrDefault()).First();
+			return activityId;
+		}
+
+		private static Guid idForLogonUser()
+		{
+			return DataMaker.Me().Person.Id.GetValueOrDefault();
 		}
 	}
 }
