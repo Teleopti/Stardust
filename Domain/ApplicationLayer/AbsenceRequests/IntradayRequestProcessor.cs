@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Text;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
@@ -34,19 +39,51 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			{
 				var skillStaffingIntervals = _scheduleForecastSkillReadModelRepository.GetBySkill(primarySkill.Skill.Id.GetValueOrDefault(),
 																	 personRequest.Request.Period.StartDateTime, personRequest.Request.Period.EndDateTime);
+				
+				var underStaffingDetails = getUnderStaffedPeriods(skillStaffingIntervals);
 
-				//already understaffed
-				if (skillStaffingIntervals.Any(x => x.StaffingLevel < x.ForecastWithShrinkage + 1))
+				if (underStaffingDetails.UnderstaffingTimes.Any())
 				{
-					sendDenyCommand(personRequest.Id.GetValueOrDefault(), "A Skill is already understaffed");
+					
+
+					var denyReason = GetUnderStaffingHourString(underStaffingDetails, personRequest);
+					sendDenyCommand(personRequest.Id.GetValueOrDefault(), denyReason);
 					return;
 				}
-
+				
 			}
 			sendApproveCommand(personRequest.Id.GetValueOrDefault());
 
 		}
-		
+
+		private UnderstaffingDetails getUnderStaffedPeriods(IEnumerable<SkillStaffingInterval> skillStaffingIntervals)
+		{
+			var result = new UnderstaffingDetails();
+			foreach (var interval in skillStaffingIntervals.Where(x => x.StaffingLevel < x.ForecastWithShrinkage + 1))
+			{
+				result.AddUnderstaffingTime(new TimePeriod(interval.StartDateTime.Hour, interval.StartDateTime.Minute, interval.EndDateTime.Hour, interval.EndDateTime.Minute));
+			}
+			return result;
+		}
+
+		public string GetUnderStaffingHourString(UnderstaffingDetails underStaffingDetails, IPersonRequest personRequest)
+		{
+			var culture = personRequest.Person.PermissionInformation.Culture();
+			var uiCulture = personRequest.Person.PermissionInformation.UICulture();
+			var timeZone = personRequest.Person.PermissionInformation.DefaultTimeZone();
+			var dateTime = personRequest.Request.Period.StartDateTimeLocal(timeZone);
+
+			var errorMessageBuilder = new StringBuilder();
+				var understaffingHoursValidationError = string.Format(uiCulture,
+					Resources.ResourceManager.GetString("InsufficientStaffingHours", uiCulture),
+					dateTime.ToString("d", culture));
+				var insufficientHours = string.Join(", ",
+					underStaffingDetails.UnderstaffingTimes.Select(t => t.ToShortTimeString(culture)).Take(5)); //5 = max items
+				errorMessageBuilder.AppendLine(string.Format("{0}{1}{2}", understaffingHoursValidationError, insufficientHours,
+					Environment.NewLine));
+			return errorMessageBuilder.ToString();
+		}
+
 		private void sendDenyCommand(Guid personRequestId, string denyReason)
 		{
 			var command = new DenyRequestCommand()
