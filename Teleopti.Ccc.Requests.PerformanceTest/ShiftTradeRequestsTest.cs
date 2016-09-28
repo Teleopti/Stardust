@@ -195,11 +195,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 					PersonId = personFrom.Id.Value,
 					ScheduleProjectionReadOnly = readModelsFrom
 				});
-
-
-#pragma warning disable 618
-				PersonRequestRepository.UnitOfWork.PersistAll();
-#pragma warning restore 618
 			}
 
 		}
