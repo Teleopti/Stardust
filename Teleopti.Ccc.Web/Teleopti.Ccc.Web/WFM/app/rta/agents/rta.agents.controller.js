@@ -12,6 +12,7 @@
 			'$sessionStorage',
 			'$q',
 			'$translate',
+			'$location',
 			'RtaService',
 			'RtaGridService',
 			'RtaFormatService',
@@ -27,6 +28,7 @@
 				$sessionStorage,
 				$q,
 				$translate,
+				$location,
 				RtaService,
 				RtaGridService,
 				RtaFormatService,
@@ -41,6 +43,7 @@
 				var teamIds = $stateParams.teamIds || ($stateParams.teamId ? [$stateParams.teamId] : []);
 				var skillIds = ($stateParams.skillId ? [$stateParams.skillId] : []);
 				var skillAreaId = $stateParams.skillAreaId || undefined;
+				var excludedStatesFromUrl = function (){ return $stateParams.es || []};
 				var propertiesForFiltering = ["Name", "State", "Activity", "Alarm", "SiteAndTeamName"];
 				$scope.adherence = {};
 				$scope.adherencePercent = null;
@@ -74,7 +77,7 @@
 				$scope.openedMaxNumberOfAgents = false;
 				$scope.maxNumberOfAgents = 50;
 				$scope.isLoading = true;
-
+				
 				$scope.$watch('pause', function() {
 					if ($scope.pause) {
 						$scope.pausedAt = moment(lastUpdate).format('YYYY-MM-DD HH:mm:ss');
@@ -103,7 +106,7 @@
 						}
 					}
 				});
-
+				
 				(function initialize() {
 					if (siteIds.length > 0 || teamIds.length > 0 || skillIds.length > 0 || skillAreaId) {
 						getAgents()
@@ -127,19 +130,21 @@
 				function updateStates() {
 					if ($scope.pause || !(siteIds.length > 0 || teamIds.length > 0 || skillIds.length > 0 || skillAreaId))
 						return;
-					getStates($scope.agentsInAlarm)({
+					var excludedStates = excludedStateIds().map(function(s){ if (s === "noState") return null; return s;});
+					var excludeStates = excludedStates.length > 0;
+					getStates($scope.agentsInAlarm, excludeStates)({
 							siteIds: siteIds,
 							teamIds: teamIds,
 							skillIds: skillIds,
-							excludedStateIds: excludedStateIds()
+							excludedStateIds: excludedStates
 						})
 						.then(setStatesInAgents);
 				}
 
-				function getStates(inAlarm) {
+				function getStates(inAlarm, excludeStates) { 
 					if (skillIds.length > 0) {
 						if (inAlarm) {
-							if (excludedStateIds().length > 0)
+							if (excludeStates)
 									return RtaService.getAlarmStatesForSkillsExcludingStates;
 							return RtaService.getAlarmStatesForSkills;
 						}
@@ -147,14 +152,14 @@
 					}
 					if (teamIds.length > 0) {
 						if (inAlarm) {
-							if (excludedStateIds().length > 0)
+							if (excludeStates)
 									return RtaService.getAlarmStatesForTeamsExcludingStates;
 							return RtaService.getAlarmStatesForTeams;
 						}
 						return RtaService.getStatesForTeams;
 					}
 					if (inAlarm) {
-						if (excludedStateIds().length > 0)
+						if (excludeStates)
 								return RtaService.getAlarmStatesForSitesExcludingStates;
 						return RtaService.getAlarmStatesForSites;
 					}
@@ -162,7 +167,19 @@
 				};
 
 				function excludedStateIds(){
-					return $scope.states.filter(function(s) { return s.Selected === false;}).map(function(s){ return s.Id; });
+					var deselected = $scope.states
+						.filter(function(s) { 
+							return s.Selected === false;
+						})
+						.map(function(s){ return s.Id; });
+					var deselectedfromUrlAndManuallySelected = excludedStatesFromUrl()
+						.filter(function(s){
+							return deselected.indexOf(s.Id) > -1;
+						})
+					var excludedStateIds = deselectedfromUrlAndManuallySelected.concat(deselected)
+
+					$state.go($state.current.name, {es: excludedStateIds}, {notify: false})
+					return excludedStateIds;
 				}
 
 				function setStatesInAgents(states) {
@@ -213,16 +230,17 @@
 								Shift: getShift(state, timeInfo)
 							});
 
+							state.StateId = state.StateId || "noState";
+							state.State = state.State || "No State";
 							if ($scope.states
 								.map(function(s) {
 									return s.Id;
 								})
-								.indexOf(state.StateId) === -1 && 
-								state.StateId!==null) {
+								.indexOf(state.StateId) === -1) {
 								$scope.states.push({
 									Id: state.StateId,
 									Name: state.State,
-									Selected: true,
+									Selected: excludedStatesFromUrl().indexOf(state.StateId) == -1
 								})
 							}
 						}

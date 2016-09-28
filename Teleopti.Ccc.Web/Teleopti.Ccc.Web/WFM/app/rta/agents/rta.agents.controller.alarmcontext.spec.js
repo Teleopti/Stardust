@@ -33,6 +33,7 @@ describe('RtaAgentsCtrl', function() {
 
 		$fakeBackend.clear();
 
+		spyOn($state, 'go');
 	}));
 
 	[

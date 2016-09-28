@@ -35,6 +35,7 @@ describe('RtaAgentsCtrlMonitorBySkills_39081', function () {
 
 		scope = $controllerBuilder.setup('RtaAgentsCtrl');
 
+		spyOn($state, 'go');
 	}));
 
 	it('should display skill name', function () {

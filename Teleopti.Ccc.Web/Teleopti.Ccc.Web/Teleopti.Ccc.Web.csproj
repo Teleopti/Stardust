@@ -1335,6 +1335,7 @@
     <Content Include="Content\signalr\jquery.signalR-2.2.0.min.js" />
     <None Include="WFM\css\_wfmmultiplesearchinput.scss" />
     <Content Include="WFM\app\teamSchedule\html\noteEditor.html" />
+    <Content Include="WFM\app\rta\agents\rta.agents.controller.hideStates.spec.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.directive.cmd.moveOverlappedActivity.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.directive.note-editor.js" />
     <Content Include="WFM\app\teamSchedule\teamSchedule.service.scheduleNote.js" />

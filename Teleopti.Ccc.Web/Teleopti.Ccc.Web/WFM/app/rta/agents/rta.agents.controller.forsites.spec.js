@@ -33,6 +33,7 @@ describe('RtaAgentsCtrl for sites', function() {
 
 		$fakeBackend.clear();
 
+		spyOn($state, 'go');
 	}));
 
 	it('should get agents for multiple sites', function() {

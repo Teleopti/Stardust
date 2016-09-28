@@ -33,6 +33,7 @@ describe('RtaAgentsCtrl for teams', function() {
 
 		$fakeBackend.clear();
 
+		spyOn($state, 'go');
 	}));
 
 	it('should get agents for multiple teams', function() {
@@ -153,7 +154,6 @@ describe('RtaAgentsCtrl for teams', function() {
 
 	it('should go back to sites when business unit is changed', function() {
 		$sessionStorage.buid = "928dd0bc-bf40-412e-b970-9b5e015aadea";
-		spyOn($state, 'go');
 
 		$controllerBuilder.createController()
 			.apply(function() {
@@ -203,7 +203,6 @@ describe('RtaAgentsCtrl for teams', function() {
 
 	it('should not go back to sites overview when business unit is not initialized yet', function() {
 		$sessionStorage.buid = undefined;
-		spyOn($state, 'go');
 
 		$controllerBuilder.createController()
 			.apply(function() {

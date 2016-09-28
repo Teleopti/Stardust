@@ -35,6 +35,7 @@ describe('RtaAgentsCtrl', function() {
 
 		$fakeBackend.clear();
 
+		spyOn($state, 'go');
 	}));
 
 	it('should display states in alarm only', function() {

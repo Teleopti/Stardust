@@ -33,6 +33,7 @@ describe('RtaAgentsCtrlTotalOutOfAdherenceTime_38702', function() {
 
 		scope = $controllerBuilder.setup('RtaAgentsCtrl');
 
+		spyOn($state, 'go');
 	}));
 
 	it('should display time in rule', function() {

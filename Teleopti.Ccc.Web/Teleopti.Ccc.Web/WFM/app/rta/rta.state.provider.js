@@ -41,41 +41,65 @@ angular.module('wfm.rta').provider('RtaState', function() {
 				templateUrl: rtaAgentsTemplateUrl,
 				controller: 'RtaAgentsCtrl'
 			})
+
 			.state('rta.agents', {
-				url: '/agents/:siteId/:teamId?showAllAgents',
+				url: '/agents/:siteId/:teamId?showAllAgents&es',
 				templateUrl: rtaAgentsTemplateUrl,
-				controller: 'RtaAgentsCtrl'
+				controller: 'RtaAgentsCtrl',
+				params: {
+					es: {
+						array: true
+					}
+				}
 			})
 			.state('rta.agents-teams', {
-				url: '/agents-teams/?teamIds',
+				url: '/agents-teams/?teamIds&es',
 				templateUrl: rtaAgentsTemplateUrl,
 				controller: 'RtaAgentsCtrl',
 				params: {
 					teamIds: {
 						array: true
+					},
+					es: {
+						array: true
 					}
 				}
 			})
 			.state('rta.agents-sites', {
-				url: '/agents-sites/?siteIds',
+				url: '/agents-sites/?siteIds&es',
 				templateUrl: rtaAgentsTemplateUrl,
 				controller: 'RtaAgentsCtrl',
 				params: {
 					siteIds: {
 						array: true
+					},
+					es: {
+						array: true
 					}
 				}
 			})
 			.state('rta.agents-skill-area', {
-				url: '/agents-skill-area/:skillAreaId',
+				url: '/agents-skill-area/:skillAreaId&es',
 				templateUrl: rtaAgentsTemplateUrl,
 				controller: 'RtaAgentsCtrl',
+				params: {
+					es: {
+						array: true
+					}
+				}
 			})
 			.state('rta.agents-skill', {
-				url: '/agents-skill/:skillId',
+				url: '/agents-skill/:skillId&es',
 				templateUrl: rtaAgentsTemplateUrl,
-				controller: 'RtaAgentsCtrl'
+				controller: 'RtaAgentsCtrl',
+				params: {
+					es: {
+						array: true
+					}
+				}
 			})
+
+			
 			.state('rta.agent-details', {
 				url: '/agent-details/:personId',
 				templateUrl: 'app/rta/details/rta-agent-details.html',

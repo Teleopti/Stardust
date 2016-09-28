@@ -32,6 +32,7 @@ describe('RtaAgentsCtrl', function() {
 
 		$fakeBackend.clear();
 
+		spyOn($state, 'go');
 	}));
 
 	it('should set to team', function() {

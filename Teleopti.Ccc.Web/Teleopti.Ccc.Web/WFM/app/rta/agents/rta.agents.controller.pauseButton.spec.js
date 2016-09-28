@@ -35,6 +35,7 @@ describe('RtaAgentsCtrlPauseButton_39144', function() {
 
 		scope = $controllerBuilder.setup('RtaAgentsCtrl');
 
+		spyOn($state, 'go');
 	}));
 
 	it('should stop polling agent states when paused', function() {
