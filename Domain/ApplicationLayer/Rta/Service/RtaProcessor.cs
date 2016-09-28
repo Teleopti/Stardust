@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_agentStateReadModelUpdater = agentStateReadModelUpdater;
 		}
 
-		[InfoLog]
+		[LogInfo]
 		public virtual void Process(Context context)
 		{
 			if (!context.ShouldProcessState())

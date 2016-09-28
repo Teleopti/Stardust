@@ -2,16 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Aop.Core;
 
-namespace Teleopti.Ccc.Infrastructure.Aop
+namespace Teleopti.Ccc.Domain.Aop
 {
-	public class InfoLogAspect : ILogAspect
+	public class LogInfoAspect : IAspect
 	{
 		private readonly ILogManagerWrapper _logManagerWrapper;
 
-		public InfoLogAspect(ILogManagerWrapper logManagerWrapper)
+		public LogInfoAspect(ILogManagerWrapper logManagerWrapper)
 		{
 			_logManagerWrapper = logManagerWrapper;
 		}
@@ -21,7 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 			var logger = _logManagerWrapper.GetLogger(invocation.TargetType.ToString());
 			if (!logger.IsInfoEnabled)
 				return;
-			logger.Info(invocation.Method.Name + "(" + string.Join(", ", getParametersAndArguments(invocation)) + ")");
+			logger.Info($"{invocation.Method.Name}({string.Join(", ", getParametersAndArguments(invocation))})");
 		}
 
 		public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
@@ -31,9 +30,9 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 			if (!logger.IsInfoEnabled)
 				return;
 			if (invocation.Method.ReturnType == typeof(void))
-				logger.Info("/" + invocation.Method.Name);
+				logger.Info($"/{invocation.Method.Name}");
 			else
-				logger.Info("/" + invocation.Method.Name + " resulted with " + formatValue(invocation.ReturnValue));
+				logger.Info($"/{invocation.Method.Name} resulted with {formatValue(invocation.ReturnValue)}");
 		}
 
 		private static IEnumerable<string> getParametersAndArguments(IInvocationInfo invocation)

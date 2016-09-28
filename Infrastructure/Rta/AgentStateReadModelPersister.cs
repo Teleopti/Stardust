@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_deserializer = deserializer;
 		}
 
-		[InfoLog]
+		[LogInfo]
 		public virtual void Persist(AgentStateReadModel model)
 		{
 			var updated = _unitOfWork.Current().Session()

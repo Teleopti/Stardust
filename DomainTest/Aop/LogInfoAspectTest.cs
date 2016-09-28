@@ -12,7 +12,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.Aop
 {
 	[IoCTest]
-	public class InfoLogAspectTest : ISetup
+	public class LogInfoAspectTest : ISetup
 	{
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -161,61 +161,61 @@ namespace Teleopti.Ccc.DomainTest.Aop
 
 	public class Service
 	{
-		[InfoLog]
+		[LogInfo]
 		public virtual void DoesSomething(string theString)
 		{
 			
 		}
 
-		[InfoLog]
+		[LogInfo]
 		public virtual void DoesSomethingWithIEnumerable(IEnumerable<object> enumerable)
 		{
 			
 		}
 
-		[InfoLog]
+		[LogInfo]
 		public virtual void DoesSomethingWithIEnumerable(IEnumerable<int> enumerable)
 		{
 			
 		}
 
-		[InfoLog]
+		[LogInfo]
 		public virtual void DoesSomethingWithMultipleArguments(string theString, int index)
 		{
 			
 		}
 
-		[InfoLog]
+		[LogInfo]
 		public virtual void DoesSomethingWithParamsArray(params object[] theThing)
 		{
 			
 		}
 
-		[InfoLog]
+		[LogInfo]
 		public virtual int ReturnsInt()
 		{
 			return 1;
 		}
 		
-		[InfoLog]
+		[LogInfo]
 		public virtual IEnumerable<int> ReturnsArrayAsIEnumerable()
 		{
 			return new []{1};
 		}
 
-		[InfoLog]
+		[LogInfo]
 		public virtual IEnumerable<int> ReturnsIEnumerable()
 		{
 			return from i in Enumerable.Range(0, 10) select i;
 		}
 
-		[InfoLog]
+		[LogInfo]
 		public virtual IEnumerable<int> ReturnsListAsIEnumerable()
 		{
 			return new List<int>{1,2,3};
 		}
 
-		[InfoLog]
+		[LogInfo]
 		public virtual string ReturnsNullString()
 		{
 			return null;

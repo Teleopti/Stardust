@@ -1,3 +1,4 @@
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.DistributedLock;
 
@@ -19,7 +20,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_distributedLock = distributedLock;
 		}
 
-		public void Handle(TenantMinuteTickEvent @event)
+		[LogInfo]
+		public virtual void Handle(TenantMinuteTickEvent @event)
 		{
 			_distributedLock.TryLockForTypeOf(this, _activityChangeChecker.CheckForActivityChanges);
 		}

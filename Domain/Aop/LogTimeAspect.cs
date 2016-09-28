@@ -1,37 +1,34 @@
 using System;
 using System.Diagnostics;
-using Teleopti.Ccc.Domain.Aop;
+using log4net;
 using Teleopti.Ccc.Domain.Aop.Core;
 
-namespace Teleopti.Ccc.Domain.Common.TimeLogger
+namespace Teleopti.Ccc.Domain.Aop
 {
 	public class LogTimeAspect : IAspect
 	{
-		private const string output = "Time spent in method '{0}' on type '{1}': {2}";
-		private const string loggerName = "Teleopti.LogTime";
-		private readonly ILogManagerWrapper _logger;
 		private readonly Stopwatch _stopwatch;
+		private readonly ILog _logger;
 
 		public LogTimeAspect(ILogManagerWrapper logger)
 		{
-			_logger = logger;
+			_logger = logger.GetLogger("Teleopti.LogTime");
 			_stopwatch = new Stopwatch();
 		}
 
 		public void OnBeforeInvocation(IInvocationInfo invocation)
 		{
+			_logger.Debug($"{invocation.Method.DeclaringType}.{invocation.Method.Name}");
 			_stopwatch.Start();
 		}
 
 		public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
 		{
-			var message = output;
+			_stopwatch.Stop();
+			var message = $@"{invocation.Method.DeclaringType}./{invocation.Method.Name}: {_stopwatch.Elapsed:hh\:mm\:ss}";
 			if (exception != null)
-			{
 				message += " (exception occured during execution)";
-			}
-			_logger.GetLogger(loggerName)
-				.DebugFormat(message, invocation.Method.Name, invocation.Method.DeclaringType, _stopwatch.Elapsed.ToString(@"hh\:mm\:ss"));
+			_logger.Debug(message);
 		}
 	}
 }

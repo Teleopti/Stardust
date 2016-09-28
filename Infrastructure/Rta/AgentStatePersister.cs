@@ -83,7 +83,7 @@ WHERE
 			_serializer = serializer;
 		}
 
-		[InfoLog]
+		[LogInfo]
 		public virtual void Prepare(AgentStatePrepare model)
 		{
 			if (model.ExternalLogons.IsNullOrEmpty())
@@ -211,7 +211,7 @@ VALUES
 				});
 		}
 		
-		[InfoLog]
+		[LogInfo]
 		public virtual void InvalidateSchedules(Guid personId)
 		{
 			_unitOfWork.Current().Session()
@@ -220,7 +220,7 @@ VALUES
 				.ExecuteUpdate();
 		}
 
-		[InfoLog]
+		[LogInfo]
 		public virtual void Update(AgentState model)
 		{
 			_unitOfWork.Current().Session()
@@ -279,7 +279,7 @@ WHERE
 				;
 		}
 		
-		[InfoLog]
+		[LogInfo]
 		public virtual AgentState Get(Guid personId)
 		{
 			var sql = SelectAgentState + "WITH (UPDLOCK) WHERE PersonId = :PersonId";
@@ -291,7 +291,7 @@ WHERE
 				.FirstOrDefault();
 		}
 
-		[InfoLog]
+		[LogInfo]
 		public virtual IEnumerable<AgentStateFound> Find(int dataSourceId, string userCode)
 		{
 			var sql = SelectAgentState + "WITH (UPDLOCK) WHERE DataSourceId = :DataSourceId AND UserCode = :UserCode";
@@ -304,7 +304,7 @@ WHERE
 				;
 		}
 
-		[InfoLog]
+		[LogInfo]
 		public virtual IEnumerable<AgentStateFound> Find(int dataSourceId, IEnumerable<string> userCodes)
 		{
 			var sql = SelectAgentState + "WITH (UPDLOCK) WHERE DataSourceId = :DataSourceId AND UserCode IN (:UserCodes)";
@@ -317,7 +317,7 @@ WHERE
 				;
 		}
 
-		[InfoLog]
+		[LogInfo]
 		public virtual IEnumerable<AgentState> Get(IEnumerable<Guid> personIds)
 		{
 			var sql = SelectAgentState + "WITH (UPDLOCK) WHERE PersonId IN (:PersonIds)";
@@ -331,7 +331,7 @@ WHERE
 				;
 		}
 
-		[InfoLog]
+		[LogInfo]
 		public virtual IEnumerable<Guid> GetPersonIdsForClosingSnapshot(DateTime snapshotId, string sourceId, string loggedOutState)
 		{
 			return _unitOfWork.Current().Session().CreateSQLQuery(@"
@@ -352,7 +352,7 @@ WHERE
 				;
 		}
 
-		[InfoLog]
+		[LogInfo]
 		public virtual IEnumerable<Guid> GetAllPersonIds()
 		{
 			var sql = @"SELECT DISTINCT PersonId FROM [dbo].[AgentState] WITH (NOLOCK)";
@@ -364,7 +364,7 @@ WHERE
 				;
 		}
 
-		[InfoLog]
+		[LogInfo]
 		public virtual IEnumerable<AgentState> GetStates()
 		{
 			var sql = SelectAgentState + "WITH (TABLOCK UPDLOCK)";
@@ -377,7 +377,7 @@ WHERE
 				;
 		}
 
-		[InfoLog]
+		[LogInfo]
 		public virtual IEnumerable<AgentState> GetStatesNotInSnapshot(DateTime snapshotId, string sourceId)
 		{
 			var sql = SelectAgentState +

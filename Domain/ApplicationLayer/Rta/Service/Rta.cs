@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_contextLoader = contextLoader;
 		}
 		
-		[InfoLog]
+		[LogInfo]
 		[TenantScope]
 		public virtual void SaveStateBatch(BatchInputModel batch)
 		{
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			});
 		}
 
-		[InfoLog]
+		[LogInfo]
 		[TenantScope]
 		public virtual void SaveState(StateInputModel input)
 		{
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			});
 		}
 		
-		[InfoLog]
+		[LogInfo]
 		[TenantScope]
 		public virtual void CloseSnapshot(CloseSnapshotInputModel input)
 		{
@@ -166,14 +166,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				throw new InvalidPlatformException("Platform id is required");
 		}
 		
-		[InfoLog]
+		[LogInfo]
 		[TenantScope]
 		public virtual void CheckForActivityChanges(string tenant)
 		{
 			_activityChangeChecker.CheckForActivityChanges();
 		}
 
-		[InfoLog]
+		[LogInfo]
 		[LogTime]
 		[TenantScope]
 		public virtual void Touch(string tenant)
