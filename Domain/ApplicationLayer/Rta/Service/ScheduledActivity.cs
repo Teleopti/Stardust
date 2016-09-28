@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -56,7 +59,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_currentScenario = currentScenario;
 		}
 
-		public IEnumerable<ScheduledActivity> GetCurrentSchedule(DateTime utcNow, Guid personId)
+		[LogInfo]
+		[FullPermissions]
+		public virtual IEnumerable<ScheduledActivity> GetCurrentSchedule(DateTime utcNow, Guid personId)
 		{
 			var from = new DateOnly(utcNow.Date.AddDays(-1));
 			var to = new DateOnly(utcNow.Date.AddDays(1));
@@ -70,7 +75,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				.ToArray();
 		}
 
-		public IEnumerable<ScheduledActivity> GetCurrentSchedules(DateTime utcNow, IEnumerable<Guid> personIds)
+		[LogInfo]
+		[FullPermissions]
+		public virtual IEnumerable<ScheduledActivity> GetCurrentSchedules(DateTime utcNow, IEnumerable<Guid> personIds)
 		{
 			var from = new DateOnly(utcNow.Date.AddDays(-1));
 			var to = new DateOnly(utcNow.Date.AddDays(1));
@@ -95,10 +102,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			if (defaultScenario == null)
 				return Enumerable.Empty<ScheduledActivity>();
 			
-			var schedules = scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(people,
-					new ScheduleDictionaryLoadOptions(false, false),
-					period,
-					defaultScenario);
+			var schedules = scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
+				people,
+				new ScheduleDictionaryLoadOptions(false, false),
+				period,
+				defaultScenario);
 
 			return (
 				from person in people

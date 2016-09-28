@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
 	[TestFixture]
 	[RtaTest]
+	[RealPermissions]
 	public class ScheduleCachingTest
 	{
 		public FakeRtaDatabase Database;

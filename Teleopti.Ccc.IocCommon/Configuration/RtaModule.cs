@@ -80,9 +80,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.CacheByInterfaceProxy<DatabaseLoader, IDatabaseLoader>().SingleInstance();
 			builder.RegisterType<DatabaseReader>().As<IDatabaseReader>().SingleInstance();
 			if (_config.Toggle(Toggles.RTA_FasterUpdateOfScheduleChanges_40536))
-				builder.RegisterType<FromPersonAssignment>().As<IScheduleReader>().SingleInstance();
+				builder.RegisterType<FromPersonAssignment>().As<IScheduleReader>().SingleInstance().ApplyAspects();
 			else
-				builder.RegisterType<FromReadModel>().As<IScheduleReader>().SingleInstance();
+				builder.RegisterType<FromReadModel>().As<IScheduleReader>().SingleInstance().ApplyAspects();
 			if (_config.Toggle(Toggles.RTA_RuleMappingOptimization_39812))
 				builder.RegisterType<MappingReadModelReader>().As<IMappingReader>().SingleInstance();
 			else
