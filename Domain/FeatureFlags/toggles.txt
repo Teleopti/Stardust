@@ -204,4 +204,5 @@ ETL_SpeedUpNightlyBusinessUnit_38932 = RC
 ETL_RobustAnalyticsScheduleChangeUpdater_39556 = true
 AddActivity_TriggerResourceCalculation_39346 = RC
 AbsenceRequests_UseMultiRequestProcessing_39960 = RC
+AbsenceRequests_SpeedupIntradayRequests_40754 = RC
 ETL_EventbasedDate_39562 = RC
