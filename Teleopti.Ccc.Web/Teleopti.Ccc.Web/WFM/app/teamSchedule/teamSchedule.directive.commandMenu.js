@@ -9,14 +9,14 @@
 				configurations: '=',
 				triggerCommand: '&?'
 			},
-			controller: ['$scope', 'PersonSelection', 'ShortCuts', 'keyCodes', teamscheduleCommandMenuCtrl],
+			controller: ['$scope', 'PersonSelection', 'ValidateRulesService','ShortCuts', 'keyCodes', teamscheduleCommandMenuCtrl],
 			controllerAs: 'vm',
 			bindToController: true,
 			templateUrl: 'app/teamSchedule/html/commandMenu.tpl.html'
 		};
 	}
 
-	function teamscheduleCommandMenuCtrl($scope, personSelectionSvc, shortCuts, keyCodes) {
+	function teamscheduleCommandMenuCtrl($scope, personSelectionSvc, validateRulesService, shortCuts, keyCodes) {
 		var vm = this;
 
 		function buildAction(label, openSidePanel) {
@@ -162,7 +162,8 @@
 		};
 
 		vm.canMoveInvalidOverlappedActivity = function () {
-			return personSelectionSvc.anyAgentChecked() && vm.configurations.validateWarningToggle;
+			var filteredRuleType = "NotOverwriteLayerRuleName";
+			return personSelectionSvc.anyAgentChecked() && checkValidationResultForSelectedPerson(personSelectionSvc.getCheckedPersonIds(), filteredRuleType) && vm.configurations.validateWarningToggle;
 		};
 
 		vm.canRemoveAbsence = function () {
@@ -180,6 +181,15 @@
 		vm.canUndoSchedule = function () {
 			return personSelectionSvc.anyAgentChecked();
 		};
+
+		function checkValidationResultForSelectedPerson(selectedPersonIds, filteredRuleType){
+			var hasInvalidOverlap = false;
+			selectedPersonIds.forEach(function(personId){
+				if(validateRulesService.checkValidationForPerson(personId, filteredRuleType).length > 0)
+					hasInvalidOverlap = true;
+			});
+			return hasInvalidOverlap;
+		}
 
 		function registerShortCuts() {
 			vm.commands.forEach(function (cmd) {
