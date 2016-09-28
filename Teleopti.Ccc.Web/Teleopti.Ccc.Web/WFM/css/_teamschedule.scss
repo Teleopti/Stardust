@@ -223,20 +223,24 @@
 				white-space: nowrap;
 			}
 
+			td.contract-time-column{
+				border-left: 1px solid $gray012;
+			}
+
 			th.schedule-note-column{
-				width:0;
+				width: 2%;
 			}
 
 			td.schedule-note-column {
-				width: 0 ;
-				.schedule-note {
-					float: left;
+				width: 2%;
+				cursor: pointer;
+				text-align: center;
+
+				.mdi:before {
+					font-size: 14px !important;
 				}
 
-				.schedule-note .mdi:before {
-					font-size: 13px !important;
-				}
-				.schedule-note .noComment{
+				.noComment{
 					color:$gray026 ;
 				}
 			}

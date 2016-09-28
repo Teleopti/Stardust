@@ -20,8 +20,7 @@
 		'ScheduleNoteManagementService',
 		TeamScheduleController]);
 
-	function TeamScheduleController($scope, $q, $translate, $stateParams, $state, $mdSidenav, teamScheduleSvc, groupScheduleFactory, personSelectionSvc,
-		scheduleMgmtSvc, toggleSvc, signalRSVC, NoticeService, ValidateRulesService, CommandCheckService, ScheduleNoteManagementService) {
+	function TeamScheduleController($scope, $q, $translate, $stateParams, $state, $mdSidenav, teamScheduleSvc, groupScheduleFactory, personSelectionSvc, scheduleMgmtSvc, toggleSvc, signalRSVC, NoticeService, ValidateRulesService, CommandCheckService, ScheduleNoteManagementService) {
 
 		var vm = this;
 
@@ -313,47 +312,58 @@
 
 		vm.init = function() {
 			vm.toggles = {
-				AddActivityEnabled: toggleSvc.WfmTeamSchedule_AddActivity_37541,
-				RemoveActivityEnabled: toggleSvc.WfmTeamSchedule_RemoveActivity_37743,
-				AbsenceReportingEnabled: toggleSvc.WfmTeamSchedule_AbsenceReporting_35995,
-				RemoveAbsenceEnabled: toggleSvc.WfmTeamSchedule_RemoveAbsence_36705,
 				SeeScheduleChangesByOthers: toggleSvc.WfmTeamSchedule_SeeScheduleChangesByOthers_36303,
 				SelectAgentsPerPageEnabled: toggleSvc.WfmTeamSchedule_SetAgentsPerPage_36230,
+				
+				AbsenceReportingEnabled: toggleSvc.WfmTeamSchedule_AbsenceReporting_35995,
+				AddActivityEnabled: toggleSvc.WfmTeamSchedule_AddActivity_37541,
+				AddPersonalActivityEnabled: toggleSvc.WfmTeamSchedule_AddPersonalActivity_37742,
+				RemoveAbsenceEnabled: toggleSvc.WfmTeamSchedule_RemoveAbsence_36705,
+				RemoveActivityEnabled: toggleSvc.WfmTeamSchedule_RemoveActivity_37743,
 				SwapShiftEnabled: toggleSvc.WfmTeamSchedule_SwapShifts_36231,
 				MoveActivityEnabled: toggleSvc.WfmTeamSchedule_MoveActivity_37744,
-				AddPersonalActivityEnabled: toggleSvc.WfmTeamSchedule_AddPersonalActivity_37742,
 				ModifyShiftCategoryEnabled: toggleSvc.WfmTeamSchedule_ModifyShiftCategory_39797,
 				UndoScheduleEnabled: toggleSvc.WfmTeamSchedule_RevertToPreviousSchedule_39002,
-				CheckOverlappingCertainActivitiesEnabled: toggleSvc.WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938,
-				AutoMoveOverwrittenActivityForOperationsEnabled: toggleSvc.WfmTeamSchedule_AutoMoveOverwrittenActivityForOperations_40279,
+				MoveInvalidOverlappedActivityEnabled: toggleSvc.WfmTeamSchedule_MoveInvalidOverlappedActivity_40688,
+				
 				WeekViewEnabled: toggleSvc.WfmTeamSchedule_WeekView_39870,
+				
+				AutoMoveOverwrittenActivityForOperationsEnabled: toggleSvc.WfmTeamSchedule_AutoMoveOverwrittenActivityForOperations_40279,
+				CheckOverlappingCertainActivitiesEnabled: toggleSvc.WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938,
+				
+				ViewShiftCategoryEnabled: toggleSvc.WfmTeamSchedule_ShowShiftCategory_39796,
+				ModifyShiftCategoryEnabled: toggleSvc.WfmTeamSchedule_ModifyShiftCategory_39797,
+
+				ShowContractTimeEnabled: toggleSvc.WfmTeamSchedule_ShowContractTime_38509,
+				
+				EditAndViewInternalNoteEnabled : toggleSvc.WfmTeamSchedule_EditAndDisplayInternalNotes_40671,
+				
+				FilterValidationWarningsEnabled: toggleSvc.WfmTeamSchedule_FilterValidationWarnings_40110,
 				ShowValidationWarnings: toggleSvc.WfmTeamSchedule_ShowNightlyRestWarning_39619
 									 || toggleSvc.WfmTeamSchedule_ShowWeeklyWorktimeWarning_39799
 									 || toggleSvc.WfmTeamSchedule_ShowWeeklyRestTimeWarning_39800
 									 || toggleSvc.WfmTeamSchedule_ShowDayOffWarning_39801
-									 || toggleSvc.WfmTeamSchedule_ShowOverwrittenLayerWarning_40109,
-				FilterValidationWarnings: toggleSvc.WfmTeamSchedule_FilterValidationWarnings_40110,
-				MoveInvalidOverlappedActivityEnabled: toggleSvc.WfmTeamSchedule_MoveInvalidOverlappedActivity_40688,
-				EditAndViewInternalNoteEnabled: toggleSvc.WfmTeamSchedule_EditAndDisplayInternalNotes_40671
+									 || toggleSvc.WfmTeamSchedule_ShowOverwrittenLayerWarning_40109
 			};
 
 			vm.toggles.SeeScheduleChangesByOthers && monitorScheduleChanged();
-			vm.resetSchedulePage();
 
 			vm.cmdConfigurations = {
 				toggles: vm.toggles,
 				permissions: vm.permissions,
 				validateWarningToggle: false,
 				currentCommandName: null
-			}
+			};
+
 			vm.permissionsAndTogglesLoaded = true;
 
 			vm.scheduleTableSelectMode = vm.toggles.AbsenceReportingEnabled
-				|| vm.toggles.AddActivityEnabled
-				|| vm.toggles.RemoveActivityEnabled
-				|| vm.toggles.RemoveAbsenceEnabled
-				|| vm.toggles.SwapShiftEnabled
-				|| vm.toggles.ModifyShiftCategoryEnabled;
+										|| vm.toggles.AddActivityEnabled
+										|| vm.toggles.RemoveActivityEnabled
+										|| vm.toggles.RemoveAbsenceEnabled
+										|| vm.toggles.SwapShiftEnabled
+										|| vm.toggles.ModifyShiftCategoryEnabled;
+			vm.resetSchedulePage();
 
 			var template = $translate.instant('WFMReleaseNotification');
 			var moduleName = $translate.instant('MyTeam');
@@ -363,10 +373,12 @@
 				.replace('{3}', '<a href="../Anywhere#teamschedule">' + moduleName + '</a>');
 			NoticeService.info(message, null, true);
 		};
+
 		$q.all([
 			teamScheduleSvc.PromiseForloadedPermissions(function (result) {
 				vm.permissions = result;
 			}),
+
 			teamScheduleSvc.PromiseForGetAgentsPerPageSetting(function (result) {
 				result.Agents > 0 && (vm.paginationOptions.pageSize = result.Agents);
 			})

@@ -22,7 +22,6 @@
 
 	function scheduleTableController($scope, toggleSvc, personSelectionSvc, ScheduleMgmt, ValidateRulesService, ScheduleNoteMgmt) {
 		var vm = this;
-		vm.ShowContractTimeEnabled = toggleSvc.WfmTeamSchedule_ShowContractTime_38509;
 		vm.updateAllSelectionInCurrentPage = function (isAllSelected) {
 			vm.scheduleVm.Schedules.forEach(function (personSchedule) {
 				personSchedule.IsSelected = isAllSelected;
@@ -31,13 +30,6 @@
 				});
 			});
 		};
-
-		$scope.$watch(function () {
-			return ScheduleMgmt.groupScheduleVm.Schedules;
-		}, function (newVal) {
-			if (newVal)
-				vm.init();
-		});
 
 		$scope.$watch(function () {
 			return isAllInCurrentPageSelected();
@@ -57,7 +49,7 @@
 		};
 
 		vm.canToggleSelection = function (currentProjection, shift, viewDate) {
-			if (!toggleSvc.WfmTeamSchedule_RemoveAbsence_36705 && !toggleSvc.WfmTeamSchedule_RemoveActivity_37743)
+			if (!vm.toggles.RemoveAbsenceEnabled && !vm.toggles.RemoveActivityEnabled)
 				return false;
 
 			var isSameDay = shift.Date.format('YYYY-MM-DD') === moment(viewDate).format('YYYY-MM-DD');
@@ -87,7 +79,7 @@
 		};
 
 		vm.modifyShiftCategoryForAgent = function($event, personSchedule){
-			if (!(vm.cmdConfigurations.toggles.ModifyShiftCategoryEnabled && vm.cmdConfigurations.permissions.HasEditShiftCategoryPermission)) {
+			if (!(vm.toggles.ModifyShiftCategoryEnabled && vm.cmdConfigurations.permissions.HasEditShiftCategoryPermission)) {
 				return;
 			}
 
@@ -148,9 +140,48 @@
 			vm.toggleAllInCurrentPage = isAllInCurrentPageSelected();
 			vm.scheduleVm = ScheduleMgmt.groupScheduleVm;
 			vm.toggles = {
+				SeeScheduleChangesByOthers: toggleSvc.WfmTeamSchedule_SeeScheduleChangesByOthers_36303,
+				SelectAgentsPerPageEnabled: toggleSvc.WfmTeamSchedule_SetAgentsPerPage_36230,
+				
+				AbsenceReportingEnabled: toggleSvc.WfmTeamSchedule_AbsenceReporting_35995,
+				AddActivityEnabled: toggleSvc.WfmTeamSchedule_AddActivity_37541,
+				AddPersonalActivityEnabled: toggleSvc.WfmTeamSchedule_AddPersonalActivity_37742,
+				RemoveAbsenceEnabled: toggleSvc.WfmTeamSchedule_RemoveAbsence_36705,
+				RemoveActivityEnabled: toggleSvc.WfmTeamSchedule_RemoveActivity_37743,
+				SwapShiftEnabled: toggleSvc.WfmTeamSchedule_SwapShifts_36231,
+				MoveActivityEnabled: toggleSvc.WfmTeamSchedule_MoveActivity_37744,
+				ModifyShiftCategoryEnabled: toggleSvc.WfmTeamSchedule_ModifyShiftCategory_39797,
+				UndoScheduleEnabled: toggleSvc.WfmTeamSchedule_RevertToPreviousSchedule_39002,
+				MoveInvalidOverlappedActivityEnabled: toggleSvc.WfmTeamSchedule_MoveInvalidOverlappedActivity_40688,
+				
+				WeekViewEnabled: toggleSvc.WfmTeamSchedule_WeekView_39870,
+				
+				AutoMoveOverwrittenActivityForOperationsEnabled: toggleSvc.WfmTeamSchedule_AutoMoveOverwrittenActivityForOperations_40279,
+				CheckOverlappingCertainActivitiesEnabled: toggleSvc.WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938,
+				
 				ViewShiftCategoryEnabled: toggleSvc.WfmTeamSchedule_ShowShiftCategory_39796,
-				ModifyShiftCategoryEnabled: toggleSvc.WfmTeamSchedule_ModifyShiftCategory_39797
+				ModifyShiftCategoryEnabled: toggleSvc.WfmTeamSchedule_ModifyShiftCategory_39797,
+
+				ShowContractTimeEnabled: toggleSvc.WfmTeamSchedule_ShowContractTime_38509,
+				
+				EditAndViewInternalNoteEnabled : toggleSvc.WfmTeamSchedule_EditAndDisplayInternalNotes_40671,
+				
+				FilterValidationWarningsEnabled: toggleSvc.WfmTeamSchedule_FilterValidationWarnings_40110,
+				ShowValidationWarnings: toggleSvc.WfmTeamSchedule_ShowNightlyRestWarning_39619
+									 || toggleSvc.WfmTeamSchedule_ShowWeeklyWorktimeWarning_39799
+									 || toggleSvc.WfmTeamSchedule_ShowWeeklyRestTimeWarning_39800
+									 || toggleSvc.WfmTeamSchedule_ShowDayOffWarning_39801
+									 || toggleSvc.WfmTeamSchedule_ShowOverwrittenLayerWarning_40109
 			};
 		};
+
+		vm.init();
+
+		$scope.$watch(function () {
+			return ScheduleMgmt.groupScheduleVm.Schedules;
+		}, function (newVal) {
+			if (newVal)
+				vm.init();
+		});
 	};
 }());
