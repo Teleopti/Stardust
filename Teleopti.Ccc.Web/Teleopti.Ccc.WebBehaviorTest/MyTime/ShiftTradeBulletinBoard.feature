@@ -1,4 +1,6 @@
-﻿@MyTimeShiftTrades
+﻿
+@ignore
+@MyTimeShiftTrades
 Feature: Shift trade bulletin board from requests
 	In order to make a shift trade with someone who has the same wishs
 	As an agent
@@ -193,6 +195,7 @@ Scenario: Should possible make shift trade with empty day in Bulletin board
 	Then Shift trade bulletin board view should not be visible
 	And I should see a shift trade request in the list with subject 'A nice subject'
 	
+
 Scenario: Should see the anonymous name when viewing empty day in Bulletin board
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Anonymous trade 30 days forward'
