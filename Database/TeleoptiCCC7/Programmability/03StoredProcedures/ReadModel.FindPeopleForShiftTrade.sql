@@ -84,6 +84,7 @@ BEGIN
         WHERE (p.TerminalDate >= '2016-09-25' OR p.TerminalDate IS NULL)
         AND p.WorkflowControlSet IS NOT NULL
         AND p.id <> @fromPersonId
+		AND p.IsDeleted = 0
         GROUP BY p.id
 END
 ELSE
@@ -102,6 +103,7 @@ BEGIN
         AND (p.TerminalDate >= '2016-09-25' OR p.TerminalDate IS NULL)
         AND p.WorkflowControlSet IS NOT NULL
         AND p.id <> @fromPersonId
+		AND p.IsDeleted = 0
         GROUP BY p.id
         HAVING count(*) = @numMatch       
 END
@@ -158,14 +160,5 @@ AND ((@namesearch is null or @namesearch = '')
             OR (@noSpaceInName = 1 AND @firstNameFirst = 1 AND ((p.FirstName + p.LastName) like @namesearch)) 
             OR (@noSpaceInName = 0 AND @firstNameFirst = 0 AND ((p.LastName + ' ' + p.FirstName) like @namesearch))
             OR (@noSpaceInName = 0 AND @firstNameFirst = 1 AND ((p.FirstName + ' ' + p.LastName) like @namesearch)))
-
-            ORDER BY PersonId
-
-drop table #matching
-drop table #personSkill
-drop table #persons
-drop table #allPersonSkill
-drop table #othersMustMatch
-
 
 END
