@@ -63,6 +63,7 @@
 			flex-wrap: wrap;
 			flex-direction: row;
 			justify-content: flex-start;
+			padding-left: 20px;
 		}
 
 		.wfm-switch {
@@ -78,7 +79,7 @@
 		}
 
 		.settings-container{
-			margin: 10px;
+			margin: 10px 20px;
 			display: inline-block;
 
 			i{
@@ -94,6 +95,16 @@
 		.context-menu .context-menu-left {
 			z-index: 1000;
 			text-transform: none;
+			white-space: nowrap;
+			
+			li > div{
+				display: flex;
+				justify-content: space-between;
+
+				span:nth-child(1){
+					margin-right: 5px;
+				}
+			}
 		}
 		.view-navigator-container .wfm-btn{
 			padding: 5px;
