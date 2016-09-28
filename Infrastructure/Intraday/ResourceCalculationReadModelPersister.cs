@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading;
 using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Intraday;
@@ -55,20 +56,26 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			}
 
 			var connectionString = _currentUnitOfWorkFactory.Current().ConnectionString;
+		    
 			
 			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-
+                using (var transaction = connection.BeginTransaction(IsolationLevel.Serializable))
 				var deleteCommandstring = @"DELETE from ReadModel.ScheduleForecastSkill";
-				var deleteCommand = new SqlCommand(deleteCommandstring,connection);
-				deleteCommand.ExecuteNonQuery();
+                    var deleteCommand = new SqlCommand(deleteCommandstring, connection);
+                    deleteCommand.Transaction = transaction;
+                    deleteCommand.ExecuteNonQuery();
+                    
+                    using (var sqlBulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, transaction))
+                    {
+                        sqlBulkCopy.DestinationTableName = "[ReadModel].[ScheduleForecastSkill]";
+                        sqlBulkCopy.WriteToServer(dt);
+                    }
+                    transaction.Commit();
+                }
 
-				using (var sqlBulkCopy = new SqlBulkCopy(connection))
-				{
-					sqlBulkCopy.DestinationTableName = "[ReadModel].[ScheduleForecastSkill]";
-					sqlBulkCopy.WriteToServer(dt);
-				}
+                
 			}
 			
 
