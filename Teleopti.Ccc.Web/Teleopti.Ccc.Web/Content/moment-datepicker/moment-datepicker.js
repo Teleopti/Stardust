@@ -166,7 +166,6 @@
         place: function () {
             var sourceItem = this.component ? this.component : this.element;
             var offset = sourceItem.offset();
-            console.log(this.element.parents()[1]);
             if (this.calendarPlacement == 'left') {
                 this.picker.css({
                     top: offset.top + this.height,

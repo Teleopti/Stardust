@@ -139,10 +139,10 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		self.ShowRequests = function (data) {
 		    ko.utils.arrayForEach(data, function (item) {
 		        ko.utils.arrayForEach(self.Requests(), function (request) {
-		            if (item!==undefined && request.Id()===item.Id) {
+		            if (item !== undefined && request.Id() === item.Id) {
 		                var index = data.indexOf(item);
 		                if (index !== -1) {
-		                    data.splice(index, 1);
+		                    delete data[index];
 		                }
 		            }
 		        });
@@ -156,7 +156,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		};
 
 		self.ColumnRequests = ko.computed(function () {
-			var list = ko.utils.arrayFilter(self.Requests(), function (request) {
+		    var list = ko.utils.arrayFilter(self.Requests(), function (request) {
 				return request.isValid();
 			});
 			var result = [];
