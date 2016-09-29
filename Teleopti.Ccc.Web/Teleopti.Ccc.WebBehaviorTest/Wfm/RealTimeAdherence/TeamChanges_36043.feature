@@ -55,7 +55,7 @@ Background:
 Scenario: Exclude person changed team
 	Given the time is '2016-02-01 09:00:00'
 	When I view Real time adherence for teams on site 'Paris'
-	And 'Ashely Andeen ' sets his phone state to 'Pause'
+	And 'Ashely Andeen' sets her phone state to 'Pause'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
 	Then I should see team 'Red' with 2 agents in alarm
 	When 'Pierre Baldi' changes team to 'Green'
@@ -64,7 +64,7 @@ Scenario: Exclude person changed team
 Scenario: Exclude person that changed team to different site
 	Given the time is '2016-02-01 09:00:00'
 	When I view Real time adherence sites
-	And 'Ashely Andeen ' sets his phone state to 'Pause'
+	And 'Ashely Andeen' sets her phone state to 'Pause'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
 	Then I should see site 'Paris' with 2 agents in alarm
 	When 'Pierre Baldi' changes team to 'Orange'
@@ -73,7 +73,7 @@ Scenario: Exclude person that changed team to different site
 Scenario: Exclude person changed team over time
 	Given the time is '2016-02-01 09:00:00'
 	When I view Real time adherence for teams on site 'Paris'
-	And 'Ashely Andeen ' sets his phone state to 'Pause'
+	And 'Ashely Andeen' sets her phone state to 'Pause'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
 	Then I should see team 'Red' with 2 agents in alarm
 	When the time is '2016-02-02 09:00:00'
