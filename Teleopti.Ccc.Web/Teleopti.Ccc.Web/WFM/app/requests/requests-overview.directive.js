@@ -180,20 +180,17 @@
 				};
 				return target;
 			}, function (newValue) {
-				if (!newValue || !newValue.isActive) {
-					return;
-				}
-
-				if (!validateDateParameters(newValue.startDate, newValue.endDate)) {
+				if (!newValue || !validateDateParameters(newValue.startDate, newValue.endDate)) {
 					vm.loaded = true;
 					return;
 				}
+
+				scope.$broadcast('reload.requests.without.selection');
 
 				if (!ctrl.loadRequestWatchersInitialized) {
 					listenToReload();
 				}
 
-				scope.$broadcast('reload.requests.without.selection');
 			}, true);
 
 			scope.$watch(function() {

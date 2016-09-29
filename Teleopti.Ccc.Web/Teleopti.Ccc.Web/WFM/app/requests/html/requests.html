@@ -42,7 +42,7 @@
 					<md-tab label="{{'Absence' | translate}} {{'And' | translate}} {{'Text' | translate}}">
 						<md-content class="md-padding text-absence-view">
 							<requests-overview is-active="requests.selectedTabIndex == 0"
-											   period="requests.period"
+											   period="requests.absencePeriod"
 											   agent-search-term="requests.agentSearchTerm"
 											   filter-enabled="requests.filterEnabled" >
 							</requests-overview>
@@ -53,7 +53,7 @@
 						<md-content class="md-padding shift-trade-view">
 							<requests-overview shift-trade-view
 											   is-active="requests.selectedTabIndex == 1"
-											   period="requests.period"
+											   period="requests.shiftTradePeriod"
 											   agent-search-term="requests.agentSearchTerm"
 											   filter-enabled="requests.filterEnabled">
 							</requests-overview>

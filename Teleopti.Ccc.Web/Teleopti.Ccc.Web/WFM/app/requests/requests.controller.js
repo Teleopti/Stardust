@@ -39,10 +39,11 @@
 			vm.filterEnabled = vm.filterToggleEnabled;
 
 			var defaultDateRange = {
-				startDate: moment().add(-3, 'day').toDate(),
-				endDate: moment().add(+3, 'day').toDate()
+				startDate: moment().startOf('week')._d,
+				endDate: moment().endOf('week')._d
 			};
-			vm.period = defaultDateRange;
+			vm.absencePeriod = defaultDateRange;
+			vm.shiftTradePeriod = defaultDateRange;
 			periodForAbsenceRequest = defaultDateRange;
 			periodForShiftTradeRequest = defaultDateRange;
 
@@ -149,17 +150,31 @@
 		}, function (currentTab, previousTab) {
 			if (vm.period != undefined) {
 				if (previousTab === absenceRequestTabIndex) {
-					periodForAbsenceRequest = vm.period;
+					periodForAbsenceRequest = vm.absencePeriod;
 				} else if (previousTab === shiftTradeRequestTabIndex) {
-					periodForShiftTradeRequest = vm.period;
+					periodForShiftTradeRequest = vm.shiftTradePeriod;
 				}
 			}
 
-			if (currentTab === absenceRequestTabIndex) {
-				vm.period = periodForAbsenceRequest;
-			} else if (currentTab === shiftTradeRequestTabIndex) {
-				vm.period = periodForShiftTradeRequest;
+			if (vm.selectedTabIndex === absenceRequestTabIndex) {
+				vm.absencePeriod = periodForAbsenceRequest;
+			} else if (vm.selectedTabIndex === shiftTradeRequestTabIndex) {
+				vm.shiftTradePeriod = periodForShiftTradeRequest;
 			}
+
+			vm.period = isShiftTradeViewActive() ? vm.shiftTradePeriod : vm.absencePeriod;
+		});
+
+		$scope.$watch(function() {
+			return vm.period;
+		}, function (newValue) {
+			$scope.$evalAsync(function() {
+				if (isShiftTradeViewActive()) {
+					vm.shiftTradePeriod = newValue;
+				} else {
+					vm.absencePeriod = newValue;
+				}
+			});
 		});
 	}
 })();

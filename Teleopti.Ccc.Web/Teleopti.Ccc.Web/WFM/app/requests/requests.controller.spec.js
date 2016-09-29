@@ -82,18 +82,18 @@ describe('RequestsControllerTests', function () {
 		var controller = test.target;
 		controller.selectedTabIndex = absenceRequestTabIndex;
 		test.scope.$digest();
-		controller.period = periodForAbsenceRequest;
+		controller.absencePeriod = periodForAbsenceRequest;
 
 		controller.selectedTabIndex = shiftTradeRequestTabIndex;
 		test.scope.$digest();
-		controller.period = periodForShiftTradeRequest;
+		controller.shiftTradePeriod = periodForShiftTradeRequest;
 
 		controller.selectedTabIndex = absenceRequestTabIndex;
 		test.scope.$digest();
-		expect(controller.period).toEqual(periodForAbsenceRequest);
+		expect(controller.absencePeriod).toEqual(periodForAbsenceRequest);
 
 		controller.selectedTabIndex = shiftTradeRequestTabIndex;
 		test.scope.$digest();
-		expect(controller.period).toEqual(periodForShiftTradeRequest);
+		expect(controller.shiftTradePeriod).toEqual(periodForShiftTradeRequest);
 	});
 });
