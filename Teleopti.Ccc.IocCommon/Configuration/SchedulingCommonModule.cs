@@ -546,7 +546,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		private static void registerTeamBlockIntradayOptimizerService(ContainerBuilder builder)
 		{
 			builder.RegisterType<TeamBlockIntradayDecisionMaker>().As<ITeamBlockIntradayDecisionMaker>().InstancePerLifetimeScope();
-			builder.RegisterType<RelativeDailyValueCalculatorForTeamBlock>().As<IRelativeDailyValueCalculatorForTeamBlock>().SingleInstance();
 		}
 
 		private static void registerTeamBlockDayOffOptimizerService(ContainerBuilder builder)
