@@ -1,7 +1,6 @@
 ﻿using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.TestCommon;
 
-namespace Teleopti.Ccc.InfrastructureTest.Rta
+namespace Teleopti.Ccc.TestCommon
 {
 	public class TestConnectionStrings : IConnectionStrings
 	{

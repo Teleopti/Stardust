@@ -4,7 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
+namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeTransactionHook : ITransactionHook
 	{

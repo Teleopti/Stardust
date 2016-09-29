@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
 using Teleopti.Ccc.Domain.Repositories;
@@ -12,17 +10,13 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Web;
-using Teleopti.Ccc.InfrastructureTest.Persisters.Schedules;
-using Teleopti.Ccc.InfrastructureTest.Rta;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.InfrastructureTest
+namespace Teleopti.Ccc.TestCommon.IoC
 {
 	public class InfrastructureTestAttribute : IoCTestAttribute
 	{
@@ -88,7 +82,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			base.BeforeTest();
 			
 			DataSourceForTenant.MakeSureDataSourceCreated(
-				SetupFixtureForAssembly.DataSource.DataSourceName,
+				DataSourceHelper.TestTenantName,
 				InfraTestConfigReader.ConnectionString,
 				InfraTestConfigReader.AnalyticsConnectionString,
 				null);

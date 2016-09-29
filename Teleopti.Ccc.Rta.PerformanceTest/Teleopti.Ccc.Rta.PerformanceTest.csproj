@@ -47,6 +47,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -60,6 +61,7 @@
     </Compile>
     <Compile Include="ActualAgentStateUpdateTest.cs" />
     <Compile Include="BackgroundWorkTest.cs" />
+    <Compile Include="Measurements\MeasurementTest.cs" />
     <Compile Include="BatchSendTest.cs" />
     <Compile Include="Code\DataCreator.cs" />
     <Compile Include="Code\RtaPerformanceTestAttribute.cs" />
@@ -70,12 +72,24 @@
     <Compile Include="StateSendTest.cs" />
     <Compile Include="Code\StatesSender.cs" />
     <Compile Include="Code\StateChange.cs" />
+    <Compile Include="Service References\TeleoptiRtaService\Reference.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+    <None Include="Service References\TeleoptiRtaService\Reference.map" />
+    <None Include="Service References\TeleoptiRtaService\TeleoptiRtaService.wsdl" />
+    <None Include="Service References\TeleoptiRtaService\TeleoptiRtaService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TeleoptiRtaService\TeleoptiRtaService0.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TeleoptiRtaService\TeleoptiRtaService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
@@ -115,6 +129,10 @@
       <Link>Teleopti_RD.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Service References\TeleoptiRtaService\TeleoptiRtaService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

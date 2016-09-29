@@ -4,13 +4,12 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 using BusinessUnit = Teleopti.Ccc.Domain.Common.BusinessUnit;
 using Person = Teleopti.Ccc.Domain.Common.Person;
 using Team = Teleopti.Ccc.Domain.AgentInfo.Team;
 
-namespace Teleopti.Ccc.InfrastructureTest.Rta
+namespace Teleopti.Ccc.TestCommon
 {
 	public class DatabaseLegacy
 	{

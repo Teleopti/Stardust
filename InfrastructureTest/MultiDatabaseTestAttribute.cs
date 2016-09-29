@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.InfrastructureTest
+﻿using Teleopti.Ccc.TestCommon.IoC;
+
+namespace Teleopti.Ccc.InfrastructureTest
 {
 	public class MultiDatabaseTestAttribute : InfrastructureTestAttribute
 	{

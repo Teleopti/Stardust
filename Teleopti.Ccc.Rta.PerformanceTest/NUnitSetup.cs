@@ -4,13 +4,11 @@ using log4net.Config;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Rta.PerformanceTest.Code;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
@@ -26,6 +24,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 		private ICurrentTransactionHooks transactionHooks;
 		private DefaultDataCreator defaultDataCreator;
 		private DataCreator dataCreator;
+		private DefaultAnalyticsDataCreator defaultAnalyticsDataCreator;
 
 		[OneTimeSetUp]
 		public void Setup()
@@ -39,11 +38,13 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			var args = new IocArgs(new ConfigReader())
 			{
 				AllEventPublishingsAsSync = true,
+				FeatureToggle = TestSiteConfigurationSetup.URL.ToString()
 			};
-			var configuration = new IocConfiguration(args, new FakeToggleManager(Toggles.RTA_RuleMappingOptimization_39812));
+			var configuration = new IocConfiguration(args, CommonModule.ToggleManagerForIoc(args));
 			builder.RegisterModule(new CommonModule(configuration));
 			builder.RegisterType<MutableNow>().AsSelf().As<INow>().SingleInstance();
 			builder.RegisterType<DefaultDataCreator>().SingleInstance();
+			builder.RegisterType<DefaultAnalyticsDataCreator>().SingleInstance();
 			builder.RegisterType<TestConfiguration>().SingleInstance();
 			builder.RegisterType<Http>().SingleInstance();
 			builder.RegisterType<DataCreator>().SingleInstance().ApplyAspects();
@@ -54,6 +55,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 
 			transactionHooks = container.Resolve<ICurrentTransactionHooks>();
 			defaultDataCreator = container.Resolve<DefaultDataCreator>();
+			defaultAnalyticsDataCreator = container.Resolve<DefaultAnalyticsDataCreator>();
 			dataCreator = container.Resolve<DataCreator>();
 
 			var dataHash = defaultDataCreator.HashValue ^ TestConfiguration.HashValue;
@@ -79,6 +81,9 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 				);
 
 			defaultDataCreator.Create();
+			defaultAnalyticsDataCreator.OneTimeSetup();
+			DataSourceHelper.ClearAnalyticsData();
+			defaultAnalyticsDataCreator.Create();
 			dataCreator.Create();
 
 			DataSourceHelper.BackupApplicationDatabaseBySql(path, dataHash);

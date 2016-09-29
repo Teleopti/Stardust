@@ -1,12 +1,10 @@
-﻿
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
+﻿using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.TestCommon
+namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class FakeRequestFactory : IRequestFactory
 	{

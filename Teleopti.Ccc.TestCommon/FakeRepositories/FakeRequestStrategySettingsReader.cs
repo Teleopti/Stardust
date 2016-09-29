@@ -1,6 +1,6 @@
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
+namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeRequestStrategySettingsReader : IRequestStrategySettingsReader
 	{

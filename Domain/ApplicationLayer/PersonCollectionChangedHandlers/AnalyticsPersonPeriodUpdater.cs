@@ -15,8 +15,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
 	[EnabledBy(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439)]
 	public class AnalyticsPersonPeriodUpdater : IHandleEvent<PersonCollectionChangedEvent>,
-	   IHandleEvent<PersonDeletedEvent>,
-	   IRunOnHangfire
+		IHandleEvent<PersonDeletedEvent>,
+		IRunOnHangfire
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsPersonPeriodUpdater));
 		private readonly AcdLoginPersonTransformer _analyticsAcdLoginPerson;
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository,
 			IEventPublisher eventPublisher,
 			ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork,
-			IPersonPeriodFilter personPeriodFilter, 
+			IPersonPeriodFilter personPeriodFilter,
 			IPersonPeriodTransformer personPeriodTransformer)
 		{
 			_personRepository = personRepository;
