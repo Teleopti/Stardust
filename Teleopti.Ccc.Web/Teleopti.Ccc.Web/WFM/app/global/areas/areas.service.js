@@ -2,12 +2,11 @@
     'use strict';
 
     angular
-        .module('wfm.areas') //restAreasService
-        .factory('areasService', areasService); //AreasSvrc
+        .module('wfm.areas')
+        .factory('areasService', areasService);
 
     areasService.$inject = ['$resource'];
 
-    /* @ngInject */
     function areasService($resource) {
       	var areas;
         var service = {

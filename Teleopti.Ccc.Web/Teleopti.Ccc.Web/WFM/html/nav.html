@@ -3,11 +3,11 @@
 		<span class="brand" ui-sref="main">Teleopti WFM </span>
 
 		<div class="navbar-left">
-			<span ng-controller="BusinessUnitsCtrl">
-				<span ng-if="show">
-					<md-select class="bu-select" name="business-unit-select" id="business-unit-select" ng-change="changeBusinessUnit(data.selectedBu)" ng-model="data.selectedBu" placeholder="{{data.selectedBu.Name}}">
+			<span ng-controller="BusinessUnitsCtrl as businessunit">
+				<span ng-if="businessunit.show">
+					<md-select class="bu-select" name="business-unit-select" id="business-unit-select" ng-change="businessunit.changeBusinessUnit(businessunit.data.selectedBu)" ng-model="businessunit.data.selectedBu" placeholder="{{businessunit.data.selectedBu.Name}}">
 						<!--<md-tooltip>{{'BusinessUnit' |translate}}</md-tooltip>-->
-						<md-option ng-repeat="bu in data.businessUnits" ng-value="bu">{{bu.Name}}</md-option>
+						<md-option ng-repeat="bu in businessunit.data.businessUnits" ng-value="bu">{{bu.Name}}</md-option>
 					</md-select>
 				</span>
 			</span>

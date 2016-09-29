@@ -1,32 +1,36 @@
-﻿(function() {
-	'use strict';
-	angular.module('wfm.businessunits')
-		.controller('BusinessUnitsCtrl', [
-			'$scope', '$resource', '$http', '$filter', '$state', '$sessionStorage', '$window', 'BusinessUnitsService',
-			function ($scope, $resource, $http, $filter, $state, $sessionStorage, $window, BusinessUnitsService) {
+(function() {
+    'use strict';
 
-				$scope.show = false;
+    angular
+        .module('wfm.businessunits')
+        .controller('BusinessUnitsCtrl', BusinessUnitsCtrl);
 
-				$scope.data = {
+    BusinessUnitsCtrl.$inject = ['$scope', '$resource', '$http', '$filter', '$state', '$sessionStorage', '$window', 'BusinessUnitsService'];
+
+    function BusinessUnitsCtrl($scope, $resource, $http, $filter, $state, $sessionStorage, $window, BusinessUnitsService) {
+        var vm = this;
+
+				vm.show = false;
+
+				vm.data = {
 					selectedBu: null
 				};
 
-				$scope.changeBusinessUnit = function (selectedBu) {
+				vm.changeBusinessUnit = function (selectedBu) {
 					BusinessUnitsService.setBusinessUnit(selectedBu.Id);
 					$window.location.reload();
 				};
 
 				BusinessUnitsService.getAllBusinessUnits().then(function(result) {
-					$scope.data.businessUnits = result;
-					$scope.show = (result.length > 1);
+					vm.data.businessUnits = result;
+					vm.show = (result.length > 1);
 					var buid = BusinessUnitsService.getBusinessUnitFromSessionStorage();
 					if (buid) {
 						var businessUnit = $filter('filter')(result, function(d) { return d.Id === buid; })[0];
-						$scope.data.selectedBu = businessUnit;
+						vm.data.selectedBu = businessUnit;
 					} else {
-						$scope.data.selectedBu = result[0];
+						vm.data.selectedBu = result[0];
 					}
 				});
-			}
-		]);
+    }
 })();

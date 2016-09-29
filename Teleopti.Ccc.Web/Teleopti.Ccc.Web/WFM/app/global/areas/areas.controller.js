@@ -7,7 +7,6 @@
 
     AreasController.$inject = ['$scope', 'areasService'];
 
-    /* @ngInject */
     function AreasController($scope, areasService) {
         var vm = this;
         vm.areas = [];
