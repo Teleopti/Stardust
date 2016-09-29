@@ -41,6 +41,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public void Remove(DateTime sentTimeStamp)
 		{
+			if (sentTimeStamp.Year < 1800 || sentTimeStamp.Year > 9999) //bug 40907 sometimes looks like we get wrong timestamp
+				return;
 			var hql = @"DELETE FROM QueuedAbsenceRequest WHERE Sent = :sent";
 			var sqlQuery = Session.CreateSQLQuery(hql);
 			sqlQuery.SetDateTime("sent", sentTimeStamp);
