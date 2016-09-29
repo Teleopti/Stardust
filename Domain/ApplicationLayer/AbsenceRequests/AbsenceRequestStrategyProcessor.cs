@@ -10,8 +10,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
 	public interface IAbsenceRequestStrategyProcessor
 	{
-		IList<IEnumerable<Guid>> Get(DateTime nearFutureThresholdTime, DateTime farFutureThresholdTime, DateTime pastThresholdTime, DateOnlyPeriod initialPeriod,
-									 int windowSize);
+		IList<IEnumerable<Guid>> Get(DateTime interval, DateTime farFutureTimeStampInterval, DateTimePeriod nearFuturePeriod,
+			int windowSize);
 	}
 
 	public class AbsenceRequestStrategyProcessor : IAbsenceRequestStrategyProcessor
@@ -23,31 +23,31 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_queuedAbsenceRequestRepo = queuedAbsenceRequestRepo;
 		}
 
-		public IList<IEnumerable<Guid>> Get(DateTime nearFutureThresholdTime, DateTime farFutureThresholdTime, DateTime pastThresholdTime,
-											DateOnlyPeriod initialPeriod, int windowSize)
+		public IList<IEnumerable<Guid>> Get(DateTime nearFutureTimeStampInterval, DateTime farFutureTimeStampInterval,
+											DateTimePeriod nearFuturePeriod,
+											int windowSize)
 		{
 			var allRequestsRaw = _queuedAbsenceRequestRepo.LoadAll();
 			var allNewRequests = new List<IQueuedAbsenceRequest>();
 			allNewRequests.AddRange(allRequestsRaw.Where(x => (x.EndDateTime.Subtract(x.StartDateTime)).Days <= 60 && x.Sent == null));
-
-			//filter out requests that is not in a period that is already beeing processed
 			var processingPeriods = getProcessingPeriods(allRequestsRaw.Where(x => x.Sent != null));
 			var notConflictingRequests = getNotConflictingRequests(allNewRequests, processingPeriods);
-			if (!notConflictingRequests.Any()) return new List<IEnumerable<Guid>>();
 
-			var futureRequests = getFutureRequests(notConflictingRequests, initialPeriod);
-			var nearFutureRequestIds = getNearFutureRequestIds(nearFutureThresholdTime, initialPeriod, futureRequests);
+			if (!notConflictingRequests.Any()) return new List<IEnumerable<Guid>>();
+			var futureRequests = getFutureRequests(notConflictingRequests, nearFuturePeriod);
+			var nearFutureRequestIds = getNearFutureRequestIds(nearFutureTimeStampInterval, nearFuturePeriod, futureRequests);
 
 			if (nearFutureRequestIds.Any())
 				return nearFutureRequestIds;
 
-			var farFutureRequests = getFarFutureRequests(notConflictingRequests, initialPeriod);
-			var farFutureRequestIds = getFarFutureRequestIds(farFutureThresholdTime, initialPeriod, farFutureRequests, windowSize);
+			var farFutureRequests = getFarFutureRequests(notConflictingRequests, nearFuturePeriod);
+			var farFutureRequestIds = getFarFutureRequestIds(farFutureTimeStampInterval, nearFuturePeriod, farFutureRequests,
+				windowSize);
 			if (farFutureRequestIds.Any())
 				return farFutureRequestIds;
 
-			var pastRequests = getPastRequests(notConflictingRequests, initialPeriod);
-			var pastRequestIds = getPastRequestIds(pastThresholdTime, initialPeriod, pastRequests, windowSize);
+			var pastRequests = getPastRequests(notConflictingRequests, nearFuturePeriod);
+			var pastRequestIds = getPastRequestIds(nearFuturePeriod, pastRequests, windowSize);
 			return pastRequestIds;
 		}
 
@@ -67,10 +67,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			foreach (var request in processingRequests)
 			{
 				groupedRequests.AddOrUpdate(request.Sent.GetValueOrDefault(), new List<IQueuedAbsenceRequest>() {request}, (key, oldValue) =>
-											{
-												oldValue.Add(request);
-												return oldValue;
-											});
+				{
+					oldValue.Add(request);
+					return oldValue;
+				});
 			}
 
 			var periods = new List<DateTimePeriod>();
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			{
 				var min = DateTime.MaxValue;
 				var max = DateTime.MinValue;
-
+				
 				var requestsWithSameTimeStamp = groupedRequests[timeStamp];
 				foreach (var request in requestsWithSameTimeStamp)
 				{
@@ -87,73 +87,72 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					if (request.EndDateTime > max)
 						max = request.EndDateTime;
 				}
-				if (min < max)
+				if(min < max)
 					periods.Add(new DateTimePeriod(min.Utc(), max.Utc()));
 			}
 			return periods;
 		}
 
 
-		private static IList<IQueuedAbsenceRequest> getPastRequests(IEnumerable<IQueuedAbsenceRequest> allRequests, DateOnlyPeriod initialPeriod)
+		private static IList<IQueuedAbsenceRequest> getPastRequests(IEnumerable<IQueuedAbsenceRequest> allRequests, DateTimePeriod nearFuturePeriod)
 		{
-			return allRequests.Where(x => x.StartDateTime.Date < initialPeriod.StartDate.Date).ToList();
+			return allRequests.Where(x => x.StartDateTime.Date < nearFuturePeriod.StartDateTime.Date).ToList();	
 		}
 
-		private static List<IQueuedAbsenceRequest> getFarFutureRequests(IEnumerable<IQueuedAbsenceRequest> allRequests, DateOnlyPeriod initialPeriod)
+		private static List<IQueuedAbsenceRequest> getFarFutureRequests(IEnumerable<IQueuedAbsenceRequest> allRequests, DateTimePeriod nearFuturePeriod)
 		{
-			return allRequests.Where(x => x.StartDateTime.Date > initialPeriod.EndDate.Date).ToList();
+			return allRequests.Where(x => x.StartDateTime.Date > nearFuturePeriod.EndDateTime.Date).ToList();
 		}
 
-		private static List<IQueuedAbsenceRequest> getFutureRequests(IEnumerable<IQueuedAbsenceRequest> allRequests, DateOnlyPeriod nearFuturePeriod)
+		private static List<IQueuedAbsenceRequest> getFutureRequests(IEnumerable<IQueuedAbsenceRequest> allRequests, DateTimePeriod nearFuturePeriod)
 		{
-			return allRequests.Where(x => x.StartDateTime.Date >= nearFuturePeriod.StartDate.Date).ToList();
+			return allRequests.Where(x => x.StartDateTime.Date >= nearFuturePeriod.StartDateTime.Date).ToList();
 		}
 
-		private static IList<IEnumerable<Guid>> getNearFutureRequestIds(DateTime nearFutureThresholdTime, DateOnlyPeriod nearFuturePeriod, IList<IQueuedAbsenceRequest> futureRequests)
+		private static IList<IEnumerable<Guid>> getNearFutureRequestIds(DateTime nearFutureTimeStampInterval, DateTimePeriod nearFuturePeriod, IList<IQueuedAbsenceRequest> futureRequests)
 		{
 			var result = new List<IEnumerable<Guid>>();
 			if (!futureRequests.Any()) return result;
-
-			var requests = getRequestsOnPeriod(nearFutureThresholdTime, nearFuturePeriod, futureRequests);
+			var requests = getRequestsOnPeriod(nearFutureTimeStampInterval, nearFuturePeriod, futureRequests);
 			if (requests.Any())
 				result.Add(requests);
-
 			return result;
 		}
 
-		private static IList<IEnumerable<Guid>> getPastRequestIds(DateTime pastThresholdTime, DateOnlyPeriod period, IList<IQueuedAbsenceRequest> pastRequests, int windowSize)
+		private static IList<IEnumerable<Guid>> getPastRequestIds(DateTimePeriod windowPeriod,
+			IList<IQueuedAbsenceRequest> pastRequests, int windowSize)
 		{
 			var result = new List<IEnumerable<Guid>>();
-			//Add Min check to stop in time if a request is "missed in the list" bug #40891
-			while (pastRequests.Any(x => x.StartDateTime.Date <= period.StartDate.Date) && period.StartDate.Date > DateTime.MinValue.AddYears(1)) 
+			while (pastRequests.Any())
 			{
-				period = new DateOnlyPeriod(period.StartDate.AddDays(-windowSize),
-												  period.StartDate.AddDays(-1));
-
-				var windowRequests = getRequestsOnPeriod(pastThresholdTime, period, pastRequests);
+				windowPeriod = new DateTimePeriod(windowPeriod.StartDateTime.AddDays(-windowSize).Utc(),
+					windowPeriod.StartDateTime.AddDays(-1).Utc());
+				var windowRequests = getRequestsOnPeriod(windowPeriod, pastRequests);
+				pastRequests = removeRequests(pastRequests, windowRequests);
 				if (windowRequests.Any())
 					result.Add(windowRequests);
 			}
 			return result;
 		}
 
-		private static IList<IEnumerable<Guid>> getFarFutureRequestIds(DateTime farFutureThresholdTime, DateOnlyPeriod period,
-																	   IList<IQueuedAbsenceRequest> farFutureRequests, int windowSize)
+		private static IList<IEnumerable<Guid>> getFarFutureRequestIds(DateTime farFutureTimeStampInterval, DateTimePeriod windowPeriod,
+			IList<IQueuedAbsenceRequest> farFutureRequests, int windowSize)
 		{
 			var result = new List<IEnumerable<Guid>>();
-			//Add Min check to stop in time if a request is "missed in the list" bug #40891
-			while (farFutureRequests.Any(x => x.StartDateTime.Date >= period.StartDate.Date) && period.StartDate.Date < DateTime.MaxValue.AddYears(-1))
+			while (farFutureRequests.Any(x => x.StartDateTime >= windowPeriod.StartDateTime))
 			{
-				period = new DateOnlyPeriod(period.EndDate.AddDays(1),
-											period.EndDate.AddDays(windowSize));
-				var windowRequests = getRequestsOnPeriod(farFutureThresholdTime, period, farFutureRequests);
+				windowPeriod = new DateTimePeriod(windowPeriod.EndDateTime.AddDays(1).Utc(),
+					windowPeriod.EndDateTime.AddDays(windowSize).Utc());
+				var windowRequests = getRequestsOnPeriod(farFutureTimeStampInterval, windowPeriod, farFutureRequests);
+				farFutureRequests = removeRequests(farFutureRequests, windowRequests);
 				if (windowRequests.Any())
 					result.Add(windowRequests);
 			}
 			return result;
 		}
 
-		private static void removeRequests(IList<IQueuedAbsenceRequest> removeFromList, IEnumerable<Guid> ids)
+		private static IList<IQueuedAbsenceRequest> removeRequests(IList<IQueuedAbsenceRequest> removeFromList,
+			IEnumerable<Guid> ids)
 		{
 			foreach (var id in ids)
 			{
@@ -161,36 +160,49 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				if (foundRequest != null)
 					removeFromList.Remove(foundRequest);
 			}
+			return removeFromList;
 		}
 
-		private static List<Guid> getRequestsOnPeriod(DateTime thresholdTime, DateOnlyPeriod windowPeriod,
-													  IList<IQueuedAbsenceRequest> requests)
+		private static List<Guid> getRequestsOnPeriod(DateTimePeriod windowPeriod,
+			IList<IQueuedAbsenceRequest> requests)
 		{
-			var requestsInPeriod = requests.Where(x => x.StartDateTime.Date >= windowPeriod.StartDate.Date &&
-													   x.StartDateTime.Date <= windowPeriod.EndDate.Date).ToList();
+			var requestsInPeriod = requests.Where(y => y.StartDateTime.Date >= windowPeriod.StartDateTime.Date &&
+																		 y.StartDateTime.Date <= windowPeriod.EndDateTime.Date).ToList();
 			if (!requestsInPeriod.Any()) return new List<Guid>();
-
 			var min = requestsInPeriod.Select(x => x.StartDateTime).Min();
 			var max = requestsInPeriod.Select(x => x.EndDateTime).Max();
 
-			var requestsinExtendedPeriod = findRequestsCompletelyWithinPeriod(requests, min, max).ToList();
+			var overlappingRequests =
+				findAbsencesWithinPeriod(requests, min, max).ToList();
+			return overlappingRequests.Any() ? overlappingRequests.Select(x => x.PersonRequest).ToList() : new List<Guid>();
+		}
 
-			if (requestsinExtendedPeriod.Any(x => x.Created <= thresholdTime))
-			{
-				removeRequests(requests, requestsinExtendedPeriod.Select(x => x.PersonRequest));
-				return requestsinExtendedPeriod.Select(x => x.PersonRequest).ToList();
-			}
-			removeRequests(requests, requestsInPeriod.Select(x => x.PersonRequest));
+		private static List<Guid> getRequestsOnPeriod(DateTime interval, DateTimePeriod windowPeriod,
+			IList<IQueuedAbsenceRequest> requests)
+		{
+			var requestsInPeriod = requests.Where(y => y.StartDateTime.Date >= windowPeriod.StartDateTime.Date &&
+																		 y.StartDateTime.Date <= windowPeriod.EndDateTime.Date).ToList();
+			if (!requestsInPeriod.Any()) return new List<Guid>();
+			var min = requestsInPeriod.Select(x => x.StartDateTime).Min();
+			var max = requestsInPeriod.Select(x => x.EndDateTime).Max();
+
+			var overlappingRequests =
+				findAbsencesWithinPeriod(requests, min, max).ToList();
+			if (overlappingRequests.Any(x => x.Created <= interval))
+				return overlappingRequests.Select(x => x.PersonRequest).ToList();
+			removeRequests(requests,
+				requests.Where(x =>   x.StartDateTime <= windowPeriod.EndDateTime).Select(x => x.PersonRequest).ToList());
 
 			return new List<Guid>();
 		}
 
-		private static IEnumerable<IQueuedAbsenceRequest> findRequestsCompletelyWithinPeriod(IEnumerable<IQueuedAbsenceRequest> requests,
-																							 DateTime min, DateTime max)
+		private static IEnumerable<IQueuedAbsenceRequest> findAbsencesWithinPeriod(IEnumerable<IQueuedAbsenceRequest> requests,
+			DateTime min, DateTime max)
 		{
 			return requests.Where(
-				x => (x.StartDateTime >= min && x.StartDateTime <= max) &&
-					 (x.EndDateTime > min && x.EndDateTime <= max));
+				x =>
+					(x.StartDateTime >= min && x.StartDateTime <= max) &&
+					(x.EndDateTime > min && x.EndDateTime <= max));
 		}
 	}
 }
