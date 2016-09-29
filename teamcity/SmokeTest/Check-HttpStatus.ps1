@@ -8,17 +8,13 @@
   $WaitingTime=1
   )
 
-$UrlToCheck1 = $UrlToTest + '/Web'
-$UrlToCheck2 = $UrlToTest + '/AuthenticationBridge'
-$UrlToCheck3 = $UrlToTest + '/SDK/TeleoptiCCCSdkService.svc'
-
 $username = 'toptinet\tfsintegration'
 $password = 'm8kemew0rk'
 
 function Check-URL ($UrlToCheck)
 {
     while ($true) {
-        Write-Host "Checking if $UrlToCheck is accessible..." -ForegroundColor Cyan -NoNewline
+        Write-Output "Checking if $UrlToCheck is accessible..."
         # Ignore SSL cert 
         [System.Net.ServicePointManager]::ServerCertificateValidationCallback = {$true}
 
@@ -33,13 +29,13 @@ function Check-URL ($UrlToCheck)
             $HTTP_Response = $HTTP_Request.GetResponse()
         } catch [System.Net.WebException] {
             $HTTP_Response = $_.Exception.Response
-            Write-Host " $($_.Exception.Message)" -ForegroundColor Red -NoNewline
+            Write-Output "[$UrlToCheck]`t $($_.Exception.Message)"
         }
         
         # HTTP code as an integer.
         $HTTP_Status = [int]$HTTP_Response.StatusCode
 
-        Write-Host " ($HTTP_Status)" -ForegroundColor DarkCyan
+        Write-Output "[$UrlToCheck]`tReturned status $HTTP_Status"
 
         if ($HTTP_Status -eq 200)
         {
@@ -49,8 +45,7 @@ function Check-URL ($UrlToCheck)
         Start-Sleep -Seconds 2
     }
 
-    Write-Host "$UrlToCheck is up and running!" -ForegroundColor Green
-    Write-Host ''
+    Write-Output "$UrlToCheck is up and running!"
     $HTTP_Response.Close()
 }
 
@@ -72,6 +67,18 @@ foreach($i in (1..$WaitingTime)) {
     Start-Sleep -Seconds 1
 }
 
-Check-URL $UrlToCheck1
-Check-URL $UrlToCheck2
-Check-URL $UrlToCheck3
+workflow parallelCheckUrl {
+param ($UrlToTest)
+
+$UrlToCheck1 = $UrlToTest + '/Web'
+$UrlToCheck2 = $UrlToTest + '/AuthenticationBridge'
+$UrlToCheck3 = $UrlToTest + '/SDK/TeleoptiCCCSdkService.svc'
+
+  parallel {
+    Check-URL $UrlToCheck1
+    Check-URL $UrlToCheck2
+    Check-URL $UrlToCheck3
+  }
+}
+
+parallelCheckUrl -UrlToTest $UrlToTest
