@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test, Ignore("#40404")]
-		public void ShouldNotPlaceShiftOutsideSkillsOpenHourWhenSchedulingTeam()
+		public void ShouldNotPlaceShiftThatDoesntMatchAllGroupsInvolvedSkillsOpenHour()
 		{
 			var date = DateOnly.Today;
 			var activity = ActivityRepository.Has("_");
@@ -188,8 +188,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			Target.DoScheduling(date.ToDateOnlyPeriod());
 
 			AssignmentRepository.Find(date.ToDateOnlyPeriod(), scenario)
-				.Single()
-				.Person.Should().Be.EqualTo(agent2);
+				.Should().Be.Empty();
 		}
 
 		[Test]
