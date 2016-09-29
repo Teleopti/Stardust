@@ -43,6 +43,7 @@ Teleopti.MyTimeWeb.Ajax = function () {
 		var errorCallback = options.error;
 
 		options.error = function (jqXHR, textStatus, errorThrown) {
+			
 			if (options.abort && jqXHR && textStatus == "abort") {
 				options.abort(jqXHR, textStatus, errorThrown);
 				return;
@@ -67,6 +68,7 @@ Teleopti.MyTimeWeb.Ajax = function () {
 				errorCallback(jqXHR, textStatus, errorThrown);
 				return;
 			}
+			
 			Teleopti.MyTimeWeb.Ajax.UI.ShowAjaxError(jqXHR, textStatus, errorThrown);
 		};
 	}
@@ -143,9 +145,9 @@ Teleopti.MyTimeWeb.AjaxSettings = { baseUrl: '' };
 Teleopti.MyTimeWeb.Ajax.UI = (function ($) {
 
 	function _ajaxErrorBody(jqXHR, textStatus, errorThrown) {
-		var htmlString = '<h2>Error: ' + textStatus + ' - ' + errorThrown + '</h2>';
-		htmlString += '<a href="javascript:window.location.reload()">Reload</a>';
-
+		var message = 'An error has occurred ' + ((errorThrown && errorThrown.length > 0) ? '(' + errorThrown + ')' : '');
+		var htmlString = '<h4 style="text-align:center;">' + message + '</h4>';
+		htmlString += '<p style="text-align:center;"><a href="javascript:window.location.reload()">Refresh</a></p>';
 		$('#body-inner').html(htmlString);
 	}
 

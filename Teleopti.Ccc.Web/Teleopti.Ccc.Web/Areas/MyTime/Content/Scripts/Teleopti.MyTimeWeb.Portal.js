@@ -319,6 +319,11 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 				$('#body-inner').show();
 				_invokeInitCallback(viewId, secondAction);
 				currentViewId = viewId;
+			},
+			error: function () {
+				var htmlString = '<h4 style="text-align:center;">Unable to load the page.</h4>';
+				$('#body-inner').show();
+				$('#body-inner').html(htmlString);
 			}
 		});
 	}
