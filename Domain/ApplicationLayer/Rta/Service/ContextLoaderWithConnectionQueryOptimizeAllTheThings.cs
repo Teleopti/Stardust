@@ -372,13 +372,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							.Select(x => new scheduleData(x.state.Schedule, false, x.state.PersonId));
 						var loadSchedulesFor = validated
 							.Where(x => !x.valid)
-							.Select(x => x.state.PersonId)
+							.Select(x => new PersonBusinessUnit {BusinessUnitId = x.state.BusinessUnitId, PersonId = x.state.PersonId})
 							.ToArray();
 						if (loadSchedulesFor.Any())
 						{
 							var loaded = ScheduleReader.GetCurrentSchedules(now, loadSchedulesFor);
 							var loadedSchedules = loadSchedulesFor
-								.Select(x => new scheduleData(_scheduleCacheStrategy.FilterSchedules(loaded.Where(l => l.PersonId == x), now), true, x));
+								.Select(x => new scheduleData(_scheduleCacheStrategy.FilterSchedules(loaded.Where(l => l.PersonId == x.PersonId), now), true, x.PersonId));
 							schedules = schedules.Concat(loadedSchedules);
 						}
 						schedules = schedules.ToArray();

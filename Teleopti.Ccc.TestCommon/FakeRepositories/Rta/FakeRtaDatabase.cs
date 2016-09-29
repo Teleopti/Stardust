@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		private readonly AgentStateMaintainer _agentStateMaintainer;
 		private readonly FakePersonRepository _persons;
 		private readonly FakePersonAssignmentRepository _personAssignments;
-		private readonly ICurrentScenario _scenario;
+		private readonly FakeScenarioRepository _scenarios;
 		private readonly IScheduleStorage _scheduleStorage;
 		
 		public FakeRtaDatabase(
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			AgentStateMaintainer agentStateMaintainer,
 			FakePersonRepository persons,
 			FakePersonAssignmentRepository personAssignments,
-			ICurrentScenario scenario,
+			FakeScenarioRepository scenarios,
 			IScheduleStorage scheduleStorage
 			)
 		{
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_agentStateMaintainer = agentStateMaintainer;
 			_persons = persons;
 			_personAssignments = personAssignments;
-			_scenario = scenario;
+			_scenarios = scenarios;
 			_scheduleStorage = scheduleStorage;
 
 			withTenant("default", LegacyAuthenticationKey.TheKey);
@@ -203,7 +203,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			var min = _personAssignments.LoadAll().SelectMany(x => x.ShiftLayers).Min(x => x.Period.StartDateTime);
 			var max = _personAssignments.LoadAll().SelectMany(x => x.ShiftLayers).Max(x => x.Period.EndDateTime);
 			var period = new DateOnlyPeriod(new DateOnly(min.AddDays(-2)), new DateOnly(max.AddDays(2)));
-			FromPersonAssignment.MakeScheduledActivities(_scenario, _scheduleStorage, _persons.LoadAll(), period)
+			FromPersonAssignment.MakeScheduledActivities(
+					_scenarios.Load(_database.CurrentScenarioId()),
+					_scheduleStorage,
+					_persons.LoadAll(),
+					period)
 				.Select(l => JsonConvert.DeserializeObject<ScheduleProjectionReadOnlyModel>(JsonConvert.SerializeObject(l)))
 				.ForEach(x => _schedules.AddActivity(x));
 			
