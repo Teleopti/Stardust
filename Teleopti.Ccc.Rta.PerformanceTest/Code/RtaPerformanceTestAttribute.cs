@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		{
 			base.AfterTest();
 
-			//Impersonate.EndImpersonation();
+			Impersonate.EndImpersonation();
 		}
 
 		protected override void Startup(IComponentContext container)
