@@ -17,33 +17,50 @@ $password = 'm8kemew0rk'
 
 function Check-URL ($UrlToCheck)
 {
-    do {
-start-sleep -seconds 2
-Write-Host "Checking if $UrlToCheck is accessible..." -fore cyan
-# Ignore SSL cert 
-[System.Net.ServicePointManager]::ServerCertificateValidationCallback = {$true}
-# Create the request.
-$HTTP_Request = [System.Net.WebRequest]::Create($UrlToCheck)
-# Pass default credentials (To be able to ping SDK)
-$HTTP_Request.Credentials = New-Object System.Net.NetworkCredential -ArgumentList $username, $password
-# Response from site
-$HTTP_Response = $HTTP_Request.GetResponse()
-# HTTP code as an integer.
-$HTTP_Status = [int]$HTTP_Response.StatusCode
+    while ($true) {
+        Write-Host "Checking if $UrlToCheck is accessible..." -ForegroundColor Cyan -NoNewline
+        # Ignore SSL cert 
+        [System.Net.ServicePointManager]::ServerCertificateValidationCallback = {$true}
 
-} until ($HTTP_Status -eq 200)
-Write-Host "$UrlToCheck is up and running!" -fore green
-Write-Host ''
+        # Create the request.
+        $HTTP_Request = [System.Net.WebRequest]::Create($UrlToCheck)
 
-$HTTP_Response.Close()
+        # Pass default credentials (To be able to ping SDK)
+        $HTTP_Request.Credentials = New-Object System.Net.NetworkCredential -ArgumentList $username, $password
+
+        try  {
+            # Response from site
+            $HTTP_Response = $HTTP_Request.GetResponse()
+        } catch [System.Net.WebException] {
+            $HTTP_Response = $_.Exception.Response
+            Write-Host " $($_.Exception.Message)" -ForegroundColor Red -NoNewline
+        }
+        
+        # HTTP code as an integer.
+        $HTTP_Status = [int]$HTTP_Response.StatusCode
+
+        Write-Host " ($HTTP_Status)" -ForegroundColor DarkCyan
+
+        if ($HTTP_Status -eq 200)
+        {
+            break;
+        }
+
+        Start-Sleep -Seconds 2
+    }
+
+    Write-Host "$UrlToCheck is up and running!" -ForegroundColor Green
+    Write-Host ''
+    $HTTP_Response.Close()
 }
 
 #Waiting for Autodeploy to complete
-$Time=get-date
+$Time=Get-Date
 $DisplayTime = $WaitingTime/60
-Write-Host "$Time" -fore cyan
+Write-Host "$Time" -ForegroundColor cyan
 Write-Host ''
-Write-Host "Waiting $DisplayTime min for AutoDeploy of: " -Fore Cyan -nonewline; Write-Host "$URLtoTest" -fore Yellow
+Write-Host "Waiting $DisplayTime min for AutoDeploy of: " -ForegroundColor Cyan -NoNewline; 
+Write-Host "$URLtoTest" -ForegroundColor Yellow
 Write-Host ''
 
 $WaitingTime =  #Timeout value, 750sec = 12,5min, 900sec = 15min
@@ -52,7 +69,7 @@ foreach($i in (1..$WaitingTime)) {
     $remaining = New-TimeSpan -Seconds ($WaitingTime - $i)
     $message = '{0:p0} complete, remaining time {1}' -f $percentage, $remaining
     Write-Progress -Activity $message -PercentComplete ($percentage * 100)
-    Start-Sleep 1
+    Start-Sleep -Seconds 1
 }
 
 Check-URL $UrlToCheck1
