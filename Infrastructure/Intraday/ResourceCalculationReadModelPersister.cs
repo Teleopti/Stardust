@@ -77,11 +77,6 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
                 }
 			    
             }
-
-                
-			
-			
-
 		}
 		
 
@@ -149,12 +144,52 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 
 	    public void PersistChange(StaffingIntervalChange staffingIntervalChanges)
 	    {
-	        throw new NotImplementedException();
-	    }
+            ((NHibernateUnitOfWork)_currentUnitOfWorkFactory.Current().CurrentUnitOfWork()).Session.CreateSQLQuery(@"
+						INSERT INTO [ReadModel].[ScheduleForecastSkillChange]
+						(
+							[SkillId]
+                            ,[StartDateTime]
+                            ,[EndDateTime]
+                            ,[StaffingLevel]
+                            ,[InsertedOn]
+						)
+						VALUES
+						(
+							:SkillId,
+							:StartDateTime,
+							:EndDateTime,
+							:StaffingLevel,
+							:InsertedOn
+						)
+					")
+                    .SetParameter("SkillId", staffingIntervalChanges.SkillId)
+                    .SetParameter("StartDateTime", staffingIntervalChanges.StartDateTime)
+                    .SetParameter("EndDateTime", staffingIntervalChanges.EndDateTime)
+                    .SetParameter("StaffingLevel", staffingIntervalChanges.StaffingLevel)
+                    .SetParameter("InsertedOn", _now.UtcDateTime())
+                    .ExecuteUpdate();
+        }
 
 	    public IEnumerable<StaffingIntervalChange> GetReadModelChanges(DateTimePeriod dateTimePeriod)
 	    {
-	        throw new NotImplementedException();
-	    }
+            var result = ((NHibernateUnitOfWork)_currentUnitOfWorkFactory.Current().CurrentUnitOfWork()).Session.CreateSQLQuery(
+                @"SELECT 
+					[SkillId]
+                            ,[StartDateTime]
+                            ,[EndDateTime]
+                            ,[StaffingLevel]
+				 FROM [ReadModel].[ScheduleForecastSkillChange]
+                    where [StartDateTime] >= :startDateTime and [EndDateTime] <= :endDateTime")
+                .AddScalar("StartDateTime", NHibernateUtil.DateTime)
+                .AddScalar("EndDateTime", NHibernateUtil.DateTime)
+                .AddScalar("SkillId", NHibernateUtil.Guid)
+                .AddScalar("StaffingLevel", NHibernateUtil.Double)
+                .SetDateTime("startDateTime", dateTimePeriod.StartDateTime)
+                .SetDateTime("endDateTime", dateTimePeriod.EndDateTime)
+                .SetResultTransformer(Transformers.AliasToBean(typeof(StaffingIntervalChange)))
+                .List<StaffingIntervalChange>();
+
+            return result;
+        }
 	}
 }

@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			var primarySkills = cascadingPersonSkills.Where(x => x.Skill.CascadingIndex == lowestIndex);
 		    if (primarySkills.Any())
 		    {
+                //this could be improved to do one db call if there are many skills
                 foreach (var primarySkill in primarySkills)
                 {
                     var skillStaffingIntervals = _scheduleForecastSkillReadModelRepository.GetBySkill(primarySkill.Skill.Id.GetValueOrDefault(),

@@ -38,14 +38,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
             return LastCalculatedDate;
         }
 
+        private  List<StaffingIntervalChange> _readModelChanges = new List<StaffingIntervalChange>();
+
         public void PersistChange(StaffingIntervalChange staffingIntervalChanges)
         {
-            throw new NotImplementedException();
+            _readModelChanges.Add(staffingIntervalChanges);
         }
 
         public IEnumerable<StaffingIntervalChange> GetReadModelChanges(DateTimePeriod dateTimePeriod)
         {
-            throw new NotImplementedException();
+            return
+                _readModelChanges.Where(
+                    x => x.StartDateTime >= dateTimePeriod.StartDateTime && x.EndDateTime <= dateTimePeriod.EndDateTime);
         }
 
         public DateTime LastCalculatedDate { get; set; }

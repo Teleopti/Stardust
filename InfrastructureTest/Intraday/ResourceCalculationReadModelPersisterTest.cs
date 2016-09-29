@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Intraday;
@@ -161,21 +160,51 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 
         }
 
-        [Ignore("in dev"), Test]
+        [Test]
         public void ShouldPersistReadModelChanges()
 	    {
 	         Target.PersistChange(new StaffingIntervalChange()
 	        {
 	            SkillId = Guid.NewGuid(),
-	            StartDateTime = new DateTime(),
-	            EndDateTime = new DateTime(),
+	            StartDateTime = new DateTime(2016, 06, 16, 8, 0, 0, DateTimeKind.Utc),
+	            EndDateTime = new DateTime(2016, 06, 16, 8, 15, 0, DateTimeKind.Utc),
 	            StaffingLevel = 1
 	        });
 
-	        var changes = Target.GetReadModelChanges(new DateTimePeriod(DateTime.Now, DateTime.Now));
-	        changes.Should().Be.Equals(1);
+	        var changes = Target.GetReadModelChanges(new DateTimePeriod(new DateTime(2016, 06, 16, 8, 0, 0, DateTimeKind.Utc), new DateTime(2016, 06, 16, 8, 15, 0, DateTimeKind.Utc)));
+            changes.Should().Be.Equals(1);
+            changes.First().StartDateTime.Should().Be.EqualTo(new DateTime(2016, 06, 16, 8, 0, 0, DateTimeKind.Utc));
+	        changes.First().EndDateTime.Should().Be.EqualTo(new DateTime(2016, 06, 16, 8, 15, 0, DateTimeKind.Utc));
+	        changes.First().StaffingLevel.Should().Be.EqualTo(1);
 
 	    }
+
+        [Test]
+        public void ShouldGetReadmodelChangesWitinGivenPeriod()
+        {
+            Target.PersistChange(new StaffingIntervalChange()
+            {
+                SkillId = Guid.NewGuid(),
+                StartDateTime = new DateTime(2016, 06, 16, 8, 0, 0, DateTimeKind.Utc),
+                EndDateTime = new DateTime(2016, 06, 16, 8, 15, 0, DateTimeKind.Utc),
+                StaffingLevel = 1
+            });
+
+            Target.PersistChange(new StaffingIntervalChange()
+            {
+                SkillId = Guid.NewGuid(),
+                StartDateTime = new DateTime(2016, 06, 16, 8, 15, 0, DateTimeKind.Utc),
+                EndDateTime = new DateTime(2016, 06, 16, 8, 30, 0, DateTimeKind.Utc),
+                StaffingLevel = 1
+            });
+
+            var changes = Target.GetReadModelChanges(new DateTimePeriod(new DateTime(2016, 06, 16, 8, 0, 0, DateTimeKind.Utc), new DateTime(2016, 06, 16, 8, 15, 0, DateTimeKind.Utc)));
+            changes.Should().Be.Equals(1);
+            changes.First().StartDateTime.Should().Be.EqualTo(new DateTime(2016, 06, 16, 8, 0, 0, DateTimeKind.Utc));
+            changes.First().EndDateTime.Should().Be.EqualTo(new DateTime(2016, 06, 16, 8, 15, 0, DateTimeKind.Utc));
+            changes.First().StaffingLevel.Should().Be.EqualTo(1);
+
+        }
 
     }
 

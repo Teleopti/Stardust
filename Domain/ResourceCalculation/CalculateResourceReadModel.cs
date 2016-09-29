@@ -107,6 +107,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public Guid SkillId { get; set; }
         public DateTime StartDateTime { get; set; }
         public DateTime EndDateTime { get; set; }
-        public int StaffingLevel { get; set; }
+        public double StaffingLevel { get; set; }
     }
 }
