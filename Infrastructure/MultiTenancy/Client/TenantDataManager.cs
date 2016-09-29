@@ -64,6 +64,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 			{
 				ret.Success = false;
 				ret.FailReason += string.Format(UserTexts.Resources.ApplicationLogonExists, tenantAuthenticationData.ApplicationLogonName);
+				ret.ExistingPerson = tmpResult.ExistingPerson;
 			}
 			if (!tmpResult.IdentityIsValid)
 			{

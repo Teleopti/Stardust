@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 																														var logonData = _tenantDataManager.GetLogonInfoModelsForGuids(selectedGuids);
 																														ITraceableRefreshService service = new TraceableRefreshService(_currentScenario, new ScheduleStorage(new ThisUnitOfWork(uow), new RepositoryFactory(), new PersistableScheduleDataPermissionChecker()));
 
-																														var filteredPeopleHolder = new FilteredPeopleHolder(service, accounts, saviour)
+																														var filteredPeopleHolder = new FilteredPeopleHolder(service, accounts, saviour, _personRepository)
 																														{
 																															SelectedDate = _selectorPresenter.SelectedDate,
 																															GetUnitOfWork = uow
@@ -235,7 +235,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 				ITraceableRefreshService cacheServiceForPersonAccounts = new TraceableRefreshService(_currentScenario, new ScheduleStorage(new ThisUnitOfWork(uow), new RepositoryFactory(), new PersistableScheduleDataPermissionChecker()));
 				var state = new WorksheetStateHolder();
 				var saviour = _container.Resolve<ITenantDataManager>();
-				var filteredPeopleHolder = new FilteredPeopleHolder(cacheServiceForPersonAccounts, accounts, saviour)
+				var filteredPeopleHolder = new FilteredPeopleHolder(cacheServiceForPersonAccounts, accounts, saviour, _personRepository)
 				{
 					SelectedDate = DateOnly.Today,
 					GetUnitOfWork = uow

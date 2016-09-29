@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
+﻿using System;
+
+namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 {
 	public class PersistPersonInfoFake : IPersistPersonInfo
 	{
@@ -7,7 +9,7 @@
 			LastPersist = personInfo;
 			if (personInfo.ApplicationLogonInfo.LogonName == "existingId@teleopti.com")
 			{
-				throw new DuplicateApplicationLogonNameException();
+				throw new DuplicateApplicationLogonNameException(Guid.NewGuid());
 			}
 		}
 

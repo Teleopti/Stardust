@@ -48,11 +48,12 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		public void ShouldReturnSuccessFalseWhenDoubleAppLogon()
 		{
 			var tenantAuthenticationData = new TenantAuthenticationData();
-			var saveResult = new PersistPersonInfoResult { PasswordStrengthIsValid = true, ApplicationLogonNameIsValid = false, IdentityIsValid = true };
+			var saveResult = new PersistPersonInfoResult { PasswordStrengthIsValid = true, ApplicationLogonNameIsValid = false, IdentityIsValid = true, ExistingPerson = Guid.NewGuid()};
 			HttpRequestFake.SetReturnValue(saveResult);
 			var result = Target.SaveTenantData(tenantAuthenticationData);
 			HttpRequestFake.CalledUrl.Should().Contain("PersonInfo/Persist");
 			result.Success.Should().Be.False();
+			result.ExistingPerson.Should().Not.Be.EqualTo(Guid.Empty);
 		}
 
 		[Test]

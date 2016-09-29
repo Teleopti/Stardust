@@ -40,9 +40,10 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 			{
 				ret.PasswordStrengthIsValid = false;
 			}
-			catch (DuplicateApplicationLogonNameException)
+			catch (DuplicateApplicationLogonNameException e)
 			{
 				ret.ApplicationLogonNameIsValid = false;
+				ret.ExistingPerson = e.ExistingPerson;
 			}
 			catch (DuplicateIdentityException)
 			{

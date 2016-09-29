@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Model
+﻿using System;
+
+namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Model
 {
 	public class PersistPersonInfoResult
 	{
@@ -11,5 +13,6 @@
 		public bool PasswordStrengthIsValid { get; set; }
 		public bool ApplicationLogonNameIsValid { get; set; }
 		public bool IdentityIsValid { get; set; }
+		public Guid ExistingPerson { get; set; }
 	}
 }

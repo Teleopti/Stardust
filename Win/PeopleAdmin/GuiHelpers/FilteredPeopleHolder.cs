@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 		private readonly ITraceableRefreshService _refreshService;
 		private readonly IDictionary<IPerson, IPersonAccountCollection> _allAccounts;
 		private readonly ITenantDataManager _tenantDataManager;
+		private readonly IPersonRepository _personRepository;
 		private readonly List<IPerson> _personCollection = new List<IPerson>();
 		public List<Guid> PersonIdCollection { get; }
 		private readonly List<IPerson> _filteredPersonCollection = new List<IPerson>();
@@ -76,11 +77,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
 		public FilteredPeopleHolder(ITraceableRefreshService refreshService,
 				IDictionary<IPerson, IPersonAccountCollection> allAccounts,
-				ITenantDataManager tenantDataManager)
+				ITenantDataManager tenantDataManager,
+				IPersonRepository personRepository)
 		{
 			_refreshService = refreshService;
 			_allAccounts = allAccounts;
 			_tenantDataManager = tenantDataManager;
+			_personRepository = personRepository;
 			PersonIdCollection = new List<Guid>();
 			FilteredPersonIdCollection = new List<Guid>();
 		}
@@ -1581,9 +1584,20 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 						toBeRemovedList.Add(tenantAuthenticationData.PersonId);
 						continue;
 					}
+					retrySave:
 					var result = _tenantDataManager.SaveTenantData(tenantAuthenticationData);
 					if (!result.Success)
 					{
+						if (result.ExistingPerson != Guid.Empty)
+						{
+							//check and repair if an old delete has went wrong and a deleted person still exists in tenant
+							var isThisDeleted = _personRepository.Load(result.ExistingPerson) as IDeleteTag;
+							if (isThisDeleted != null && isThisDeleted.IsDeleted)
+							{
+								_tenantDataManager.DeleteTenantPersons(new List<Guid> {result.ExistingPerson});
+								goto retrySave;
+							}
+						}
 						var user = "";
 						if (! string.IsNullOrEmpty(tenantAuthenticationData.Identity))
 							user = tenantAuthenticationData.Identity;

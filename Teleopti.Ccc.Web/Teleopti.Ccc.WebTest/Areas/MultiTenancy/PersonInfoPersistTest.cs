@@ -1,4 +1,5 @@
-﻿using System.Web;
+﻿using System;
+using System.Web;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
@@ -35,7 +36,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		{
 			foreach (var propertyInfo in result.GetType().GetProperties())
 			{
-				((bool)propertyInfo.GetValue(result)).Should().Be.True();
+				if(propertyInfo.Name != "ExistingPerson")
+					((bool)propertyInfo.GetValue(result)).Should().Be.True();
+				else
+					((Guid)propertyInfo.GetValue(result)).Should().Be.EqualTo(Guid.Empty);
 			}
 		}
 
@@ -55,11 +59,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MultiTenancy
 		public void ShouldHandleDuplicateApplicationLogonNameException()
 		{
 			var personInfoModel = new PersonInfoModel { ApplicationLogonName = RandomName.Make(), Password = RandomName.Make() };
-			TenantUnitOfWork.WillThrowAtCommit(new DuplicateApplicationLogonNameException());
+			TenantUnitOfWork.WillThrowAtCommit(new DuplicateApplicationLogonNameException(Guid.NewGuid()));
 
 			var result = Target.Persist(personInfoModel).Result<PersistPersonInfoResult>();
 
 			result.ApplicationLogonNameIsValid.Should().Be.False();
+			result.ExistingPerson.Should().Not.Be.EqualTo(Guid.Empty);
 			TenantUnitOfWork.WasCommitted.Should().Be.False();
 		}
 

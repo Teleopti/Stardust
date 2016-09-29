@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 				{
 					if (sqle.Message.Contains("UQ_PersonInfo_ApplicationLogonName"))
 					{
-						return new DuplicateApplicationLogonNameException();
+						return new DuplicateApplicationLogonNameException(Guid.Empty);
 					}
 					if (sqle.Message.Contains("UQ_PersonInfo_Identity"))
 					{

@@ -22,11 +22,12 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries
 			if (!string.IsNullOrEmpty(personInfo.ApplicationLogonInfo.LogonName))
 			{
 				//if already exists
-				if (session.GetNamedQuery("applicationLogonNameUQCheck")
+				var existing = session.GetNamedQuery("applicationLogonNameUQCheck")
 					.SetGuid("id", personInfo.Id)
 					.SetString("applicationLogonName", personInfo.ApplicationLogonInfo.LogonName)
-					.UniqueResult<PersonInfo>() != null)
-					throw new DuplicateApplicationLogonNameException();
+					.UniqueResult<PersonInfo>();
+				if (existing != null)
+					throw new DuplicateApplicationLogonNameException(existing.Id);
 			}
 			if (!string.IsNullOrEmpty(personInfo.Identity))
 			{
