@@ -414,6 +414,7 @@
     </Compile>
     <Compile Include="Areas\Anywhere\Controllers\AdherenceController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\GroupScheduleController.cs" />
+    <Compile Include="Areas\Anywhere\Controllers\PhoneStateController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\SkillsController.cs" />
     <Compile Include="Areas\Anywhere\Core\GetBusinessUnitId.cs" />
     <Compile Include="Areas\Anywhere\Core\GroupScheduleProjectionViewModel.cs" />

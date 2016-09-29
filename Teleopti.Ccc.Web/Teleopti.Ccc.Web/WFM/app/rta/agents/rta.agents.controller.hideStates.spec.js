@@ -106,6 +106,23 @@ describe('RtaAgentsCtrl hide states', function() {
 		expect(scope.states[0].Name).toEqual("No State");
 	});
 
+	it('should not get information for No State (fakeBackend will throw if you do)', function() {
+		stateParams.teamId = "teamGuid";
+		stateParams.es = ["noState"];
+		$fakeBackend
+			.withAgent({
+				PersonId: "personGuid1",
+				TeamId: "teamGuid",
+			});
+
+		$controllerBuilder.createController();
+
+		expect(scope.states[0].Name).toEqual('No State');
+		expect(scope.states[0].Selected).toEqual(false);
+	});
+
+	
+
 	it('should order states by name', function() {
 		stateParams.teamId = "teamGuid";
 		$fakeBackend.withAgent({
@@ -156,6 +173,27 @@ describe('RtaAgentsCtrl hide states', function() {
 		expect(scope.states[0].Selected).toEqual(false);
 	});
 
+	it('should still get phone state information when deselct multiple from stateParam', function() {
+		stateParams.teamId = "teamGuid";
+		stateParams.es = ["noState", "loggedOutGuid"];
+		$fakeBackend
+			.withPhoneState({
+				Name: "LoggedOut",
+				Id: "loggedOutGuid"
+			})
+			.withAgent({
+				PersonId: "personGuid1",
+				TeamId: "teamGuid",
+			});
+
+		$controllerBuilder.createController();
+
+		var result = scope.states.filter(function(s){ return s.Id === 'loggedOutGuid'})[0]
+		expect(scope.states.length).toEqual(2);
+		expect(result.Name).toEqual('LoggedOut');
+		expect(result.Id).toEqual('loggedOutGuid');
+		expect(result.Selected).toEqual(false);
+	});
 
 
 

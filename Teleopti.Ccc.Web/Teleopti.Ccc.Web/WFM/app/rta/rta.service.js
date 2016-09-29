@@ -209,7 +209,7 @@
 			};
 
 			this.getPhoneStates = function (data) {
-				return $resource('../api/Agents/GetPhoneStateFor', {}, {
+				return $resource('../api/PhoneState/InfoFor', {}, {
 					query: {
 						method: 'GET'
 					}

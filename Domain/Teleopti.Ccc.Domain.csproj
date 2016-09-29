@@ -201,6 +201,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\ContextLoaderWithConnectionQueryOptimizeAllTheThings.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ContextLoaderWithScheduleOptimization.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IScheduleCacheStrategy.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\PhoneStateViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradePersonProvider.cs" />
     <Compile Include="Cascading\OrderedSkillGroups.cs" />
     <Compile Include="Cascading\ResourceDistributionForSkillGroupsWithSameIndex.cs" />

@@ -194,6 +194,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\ScheduleCachingTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelOutOfAdherencesTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\EmptyExistingStateTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\PhoneStateViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStatesViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStatesViewModelBuilderStateValuesTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilderExcludingStateGroupsTest.cs" />

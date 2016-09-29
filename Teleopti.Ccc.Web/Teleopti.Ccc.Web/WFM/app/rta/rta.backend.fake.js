@@ -244,8 +244,11 @@
 				});
 			}
 
-			fake(/\.\.\/api\/Agents\/GetPhoneStateFor(.*)/,
+			fake(/\.\.\/api\/PhoneState\/InfoFor(.*)/,
 				function (data) {
+					if (data.ids.indexOf(null) > -1 || data.ids.indexOf("noState") > -1 )
+						throw "Nope, dont ask server for that"
+
 					var result = phoneStates.filter(function (s) {
 						return data.ids.indexOf(s.Id) > -1
 					});

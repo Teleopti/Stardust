@@ -172,13 +172,20 @@
 
 				function updatePhoneStatesFromStateParams() {
 					var stateIds = excludedStatesFromStateParams()
-						.map(function (s) { return s === nullStateId ? null : s; })
-					if (stateIds.length !== 0) {
-						RtaService.getPhoneStates(stateIds)
+					if (stateIds.indexOf(nullStateId) > -1 && $scope.states.filter(function (s) { return s.Id === nullStateId; }).length === 0) {
+						$scope.states.push({
+							Id: nullStateId,
+							Name: "No State",
+							Selected: false
+						});
+					}
+					var stateIdsWithoutNull = stateIds.filter(function(s){return s !== nullStateId;})
+					if (stateIdsWithoutNull.length !== 0) {
+						RtaService.getPhoneStates(stateIdsWithoutNull)
 							.then(function (states) {
 								$scope.states = $scope.states.concat(states.result.map(function (s) {
 									return {
-										Id : s.Id || nullStateId,
+										Id: s.Id || nullStateId,
 										Name: s.Name || "No State",
 										Selected: false
 									}
