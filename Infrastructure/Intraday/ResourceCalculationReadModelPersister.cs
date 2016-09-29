@@ -146,5 +146,15 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
             
             return result.GetValueOrDefault();
         }
+
+	    public void PersistChange(StaffingIntervalChange staffingIntervalChanges)
+	    {
+	        throw new NotImplementedException();
+	    }
+
+	    public IEnumerable<StaffingIntervalChange> GetReadModelChanges(DateTimePeriod dateTimePeriod)
+	    {
+	        throw new NotImplementedException();
+	    }
 	}
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Intraday;
@@ -56,7 +57,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 				.Be.EqualTo(1);
 
 		}
-
 
 		[Test]
 		public void ShouldPersistMultipleTimes()
@@ -160,7 +160,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 
         }
 
+        [Ignore("in dev"), Test]
+        public void ShouldPersistReadModelChanges()
+	    {
+	         Target.PersistChange(new StaffingIntervalChange()
+	        {
+	            SkillId = Guid.NewGuid(),
+	            StartDateTime = new DateTime(),
+	            EndDateTime = new DateTime(),
+	            StaffingLevel = 1
+	        });
+
+	        var changes = Target.GetReadModelChanges(new DateTimePeriod(DateTime.Now, DateTime.Now));
+	        changes.Should().Be.Equals(1);
+
+	    }
+
     }
 
-	
+    
 }

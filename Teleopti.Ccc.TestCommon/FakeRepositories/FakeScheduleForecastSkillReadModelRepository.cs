@@ -38,6 +38,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
             return LastCalculatedDate;
         }
 
+        public void PersistChange(StaffingIntervalChange staffingIntervalChanges)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<StaffingIntervalChange> GetReadModelChanges(DateTimePeriod dateTimePeriod)
+        {
+            throw new NotImplementedException();
+        }
+
         public DateTime LastCalculatedDate { get; set; }
     }
 }

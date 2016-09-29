@@ -101,4 +101,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public double StaffingLevel { get; set; }
 	    public double ForecastWithShrinkage { get; set; }
 	}
+
+    public class StaffingIntervalChange
+    {
+        public Guid SkillId { get; set; }
+        public DateTime StartDateTime { get; set; }
+        public DateTime EndDateTime { get; set; }
+        public int StaffingLevel { get; set; }
+    }
 }
