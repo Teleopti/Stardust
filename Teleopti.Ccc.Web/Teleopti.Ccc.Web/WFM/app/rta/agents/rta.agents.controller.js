@@ -178,18 +178,20 @@
 							Name: "No State",
 							Selected: false
 						});
+						sortStatesByName();
 					}
 					var stateIdsWithoutNull = stateIds.filter(function(s){return s !== nullStateId;})
 					if (stateIdsWithoutNull.length !== 0) {
 						RtaService.getPhoneStates(stateIdsWithoutNull)
 							.then(function (states) {
-								$scope.states = $scope.states.concat(states.result.map(function (s) {
+								$scope.states = $scope.states.concat(states.PhoneStates.map(function (s) {
 									return {
-										Id: s.Id || nullStateId,
-										Name: s.Name || "No State",
+										Id: s.Id,
+										Name: s.Name,
 										Selected: false
 									}
 								}));
+								sortStatesByName();
 							});
 					}
 				}
@@ -212,7 +214,11 @@
 							return false;
 
 						});
-					var excludedStateIds = deselectedfromUrlAndManuallySelected.concat(deselected);
+
+					var excludedStateIds = deselectedfromUrlAndManuallySelected.filter(function(s){
+						return deselected.indexOf(s) === -1 ?  true : false;
+					}).concat(deselected);
+					
 					$state.go($state.current.name, { es: excludedStateIds }, { notify: false })
 					return excludedStateIds;
 				}
@@ -280,11 +286,14 @@
 							}
 						}
 					});
+					sortStatesByName();
+				}
+
+				function sortStatesByName(){
 					$scope.states = $filter('orderBy')($scope.states, function (state) {
 						return state.Name;
 					});
 				}
-
 				function getTimeOutOfAdherence(state, timeInfo) {
 					if (state.OutOfAdherences.length > 0) {
 						var lastOOA = state.OutOfAdherences[state.OutOfAdherences.length - 1];

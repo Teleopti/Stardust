@@ -219,7 +219,6 @@
 
 			fake(/\.\.\/api\/Agents\/GetAlarmStatesForSkillsExcludingStates(.*)/,
 				function (data) {
-					
 					var alarmStatesForSkills = alarmStatesFor(data.ids, function (a) {
 						return a.SkillId;
 					}).filter(function (s) {
@@ -265,7 +264,7 @@
 										Id: s.StateId
 							}});
 					}
-					return [200, { result }]
+					return [200, { PhoneStates: result }]
 				});
 
 			fake(/ToggleHandler\/AllToggles(.*)/,

@@ -17,6 +17,9 @@
 				try { // the internal mock will throw if no requests were made
 					$httpBackend.flush();
 				} catch (e) {
+					if (e.message.includes("No pending request to flush !"))
+						return;
+					console.error(e.message)
 				}
 			};
 

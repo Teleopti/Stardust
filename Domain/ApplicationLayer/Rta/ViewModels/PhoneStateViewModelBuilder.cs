@@ -7,6 +7,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 {
 	public class PhoneStateViewModel
 	{
+		public IEnumerable<PhoneStates> PhoneStates { get; set; }
+	}
+
+	public class PhoneStates
+	{
 		public Guid Id { get; set; }
 		public string Name { get; set; }
 	}
@@ -20,14 +25,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_stateGroups = stateGroups;
 		}
 
-		public IEnumerable<PhoneStateViewModel> For(Guid[] ids)
+		public PhoneStateViewModel For(Guid[] ids)
 		{
-			return 
-				from s in _stateGroups.LoadAll()
-				from id in ids
-				let sid = s.Id.Value
-				where sid == id
-				select new PhoneStateViewModel {Id = sid, Name = s.Name};
+			return new PhoneStateViewModel
+			{
+				PhoneStates =
+					(from s in _stateGroups.LoadAll()
+						from id in ids
+						let sid = s.Id.Value
+						where sid == id
+						select new PhoneStates {Id = sid, Name = s.Name}).ToArray()
+			};
 		}
 	}
 }

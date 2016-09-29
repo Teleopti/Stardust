@@ -3,15 +3,8 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
-using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 {
@@ -29,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Database
 				.WithStateGroup(phoneId, "phone");
 
-			var result = Target.For(new[] { phoneId }).Single();
+			var result = Target.For(new[] { phoneId }).PhoneStates.Single();
 
 			result.Id.Should().Be(phoneId);
 			result.Name.Should().Be("phone");
@@ -43,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithStateGroup(phoneId, "phone")
 				.WithStateGroup(Guid.NewGuid(), "someOtherStateGroup");
 
-			var result = Target.For(new[] { phoneId }).Single();
+			var result = Target.For(new[] { phoneId }).PhoneStates.Single();
 
 			result.Id.Should().Be(phoneId);
 			result.Name.Should().Be("phone");
