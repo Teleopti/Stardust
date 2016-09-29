@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				{
 					var targetLayer = personAssignment.ShiftLayers.First(l => l.Id.HasValue && l.Id.Value.Equals(g.Key.Id));
 					personAssignment.MoveActivityAndKeepOriginalPriority(targetLayer,
-						targetLayer.Period.StartDateTime.Add(movingDistance), null, true);
+						targetLayer.Period.StartDateTime.Add(movingDistance), command.TrackedCommandInfo, false);
 				}
 				else
 				{

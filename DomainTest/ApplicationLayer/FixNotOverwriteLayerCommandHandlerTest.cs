@@ -8,6 +8,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.IocCommon;
@@ -85,6 +86,56 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			movedLunchLayer.Period.Should().Be(new DateTimePeriod(2013,11,14,12,2013,11,14,15));
 		}
 
+		[Test]
+		public void ShouldRaiseFixNotOverwriteLayerEvent()
+		{
+			var scenario = CurrentScenario.Current();
+			PersonRepository.Add(PersonFactory.CreatePersonWithId());
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
+			ShiftCategoryRepository.Add(shiftCategory);
+			var mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
+			var meetingActivity = ActivityFactory.CreateActivity("Meeting").WithId();
+			var lunchActivity = ActivityFactory.CreateActivity("Lunch").WithId();
+
+			mainActivity.AllowOverwrite = true;
+			lunchActivity.AllowOverwrite = false;
+			meetingActivity.AllowOverwrite = true;
+
+			ActivityRepository.Add(meetingActivity);
+			ActivityRepository.Add(mainActivity);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				mainActivity,PersonRepository.Single(),
+				new DateTimePeriod(2013,11,14,8,2013,11,14,15),shiftCategory,scenario);
+			pa.AddActivity(lunchActivity,new DateTimePeriod(2013,11,14,11,2013,11,14,14));
+			pa.AddActivity(meetingActivity,new DateTimePeriod(2013,11,14,11,2013,11,14,12));
+			pa.ShiftLayers.ForEach(l => l.WithId());
+			PersonAssignmentRepo.Add(pa);
+			ScheduleStorage.Add(pa);
+
+			var operatePersonId = Guid.NewGuid();
+			var trackId = Guid.NewGuid();
+			var command = new FixNotOverwriteLayerCommand
+			{
+				PersonId = PersonRepository.Single().Id.Value,
+				Date = new DateOnly(2013,11,14),
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					OperatedPersonId = operatePersonId,
+					TrackId = trackId
+				}
+			};
+			Target.Handle(command);
+
+			var movedLunchLayer = PersonAssignmentRepo.Single().ShiftLayers.First(l => l.Payload == lunchActivity);
+			movedLunchLayer.Period.Should().Be(new DateTimePeriod(2013,11,14,12,2013,11,14,15));
+			var @event = PersonAssignmentRepo.Single().PopAllEvents().OfType<ActivityMovedEvent>().Single();
+			@event.PersonId.Should().Be(PersonRepository.Single().Id.Value);
+			@event.ScenarioId.Should().Be(PersonAssignmentRepo.Single().Scenario.Id.Value);
+			@event.InitiatorId.Should().Be(operatePersonId);
+			@event.CommandId.Should().Be(trackId);
+			@event.LogOnBusinessUnitId.Should().Be(scenario.BusinessUnit.Id.GetValueOrDefault());
+		}
 
 		[Test]
 		public void ShouldFixNotOverwriteLayerThatIsCoveredByMultipleLayersInShift()
