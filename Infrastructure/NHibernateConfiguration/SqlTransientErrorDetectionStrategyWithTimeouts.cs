@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			var sqlException = exception as SqlException;
 			if (sqlException != null)
 			{
-				return sqlException.Errors.Cast<SqlError>().Any(error => error.Number == 0 && (error.Message.Contains("existing connection was forcibly closed") || error.Message.Contains("marked by the server as unrecoverable")));
+				return sqlException.Errors.Cast<SqlError>().Any(error => error.Message.Contains("existing connection was forcibly closed") || error.Message.Contains("marked by the server as unrecoverable"));
 			}
 			return false;
 		}
