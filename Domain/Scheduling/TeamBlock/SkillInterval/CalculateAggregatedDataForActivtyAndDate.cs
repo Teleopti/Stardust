@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 
 		public IList<ISkillIntervalData> CalculateFor(List<ISkillDay> skillDaysForPersonalSkill, IActivity skillActivity, int resolution)
 		{
-			
 			var skillIntervalDatasForActivity = new List<IList<ISkillIntervalData>>();
 			foreach (var skillDay in skillDaysForPersonalSkill)
 			{
@@ -52,8 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 					skillIntervalDatasForActivity.Add(adjustedIntervalDatas);
 				}
 			}
-			var dayIntervalData = _intervalDataAggregator.AggregateSkillIntervalData(skillIntervalDatasForActivity);
-			return dayIntervalData;
+			return _intervalDataAggregator.AggregateSkillIntervalData(skillIntervalDatasForActivity);
 		}
 	}
 }

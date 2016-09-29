@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
     public class SkillIntervalDataAggregatorTest
     {
         private MockRepository _mock;
-        private ISkillIntervalDataAggregator _target;
+        private SkillIntervalDataAggregator _target;
         private IList<IList<ISkillIntervalData>> _multipleSkillIntervalDataList;
         private ISkillIntervalData _skillAIntervalData1;
         private ISkillIntervalData _skillAIntervalData2;

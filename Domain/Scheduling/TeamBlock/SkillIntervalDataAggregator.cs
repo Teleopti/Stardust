@@ -8,9 +8,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     public interface ISkillIntervalDataAggregator
     {
         IList<ISkillIntervalData> AggregateSkillIntervalData(IList<IList<ISkillIntervalData>> multipleSkillIntervalDataList);
-
-	    ISkillIntervalData AggregateTwoIntervals(ISkillIntervalData skillIntervalData1,
-	                                             ISkillIntervalData skillIntervalData2);
     }
 
     public class SkillIntervalDataAggregator : ISkillIntervalDataAggregator
