@@ -50,11 +50,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public void AddRange(IEnumerable<ILicense> entityCollection)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IUnitOfWork UnitOfWork { get; set; }
 
 		public IList<ActiveAgent> GetActiveAgents()

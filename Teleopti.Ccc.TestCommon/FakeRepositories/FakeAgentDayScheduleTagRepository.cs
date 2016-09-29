@@ -40,11 +40,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public void AddRange(IEnumerable<IAgentDayScheduleTag> entityCollection)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IUnitOfWork UnitOfWork { get; private set; }
 		IAgentDayScheduleTag ILoadAggregateByTypedId<IAgentDayScheduleTag, Guid>.LoadAggregate(Guid id)
 		{

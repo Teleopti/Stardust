@@ -46,11 +46,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return _campaigns.Count;
 		}
 
-		public void AddRange(IEnumerable<IOutboundCampaign> entityCollection)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IUnitOfWork UnitOfWork { get; private set; }
 		public IList<IOutboundCampaign> GetCampaigns(DateOnlyPeriod period)
 		{

@@ -34,11 +34,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public void AddRange(IEnumerable<ISiteOpenHour> entityCollection)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IUnitOfWork UnitOfWork { get; }
 	}
 }

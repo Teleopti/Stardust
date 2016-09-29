@@ -65,11 +65,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			throw new NotImplementedException();
 		}
 
-		public void AddRange(IEnumerable<IActivity> entityCollection)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IUnitOfWork UnitOfWork { get; private set; }
 
 		public IList<IActivity> LoadAllSortByName()

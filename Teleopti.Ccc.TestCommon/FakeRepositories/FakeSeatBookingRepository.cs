@@ -50,11 +50,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _seatBookings.Count();
 		}
 
-		public void AddRange (IEnumerable<ISeatBooking> entityCollection)
-		{
-			entityCollection.ForEach (Add);
-		}
-
 		public IUnitOfWork UnitOfWork { get; private set; }
 		
 		public ISeatBooking LoadAggregate (Guid id)

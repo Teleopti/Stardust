@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -43,11 +41,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         private class FakeRepositoryThatAllowsOldAddRange : LicenseStatusRepository
         {
             public FakeRepositoryThatAllowsOldAddRange(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork) { }
-
-            public override void AddRange(IEnumerable<ILicenseStatus> entityCollection)
-            {
-                entityCollection.ForEach(Add);
-            }
         }
 
         [Test]
@@ -76,16 +69,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             licenseRepository.AddRange(new Collection<ILicenseStatus> {oneLicenseTooMany} );
             Session.Flush();
             Assert.AreEqual(1, licenseRepository.LoadAll().Count);
-        }
-
-        [Test]
-        public void VerifyMultipleLicensesNotAllowedWithAddRange2()
-        {
-            var licenseRepository = new LicenseStatusRepository(UnitOfWork);
-            var license = new LicenseStatus { XmlString = "<foo></foo>" };
-            var oneLicenseTooMany = new LicenseStatus { XmlString = "<overflow></overflow>" };
-			Assert.Throws<DataSourceException>(() => licenseRepository.AddRange(new Collection<ILicenseStatus> { license, oneLicenseTooMany }));
-	        Session.Flush();
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]

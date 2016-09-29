@@ -36,11 +36,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _skillTypes.First(x => x.Id.GetValueOrDefault() == id);
 		}
 
-		public void AddRange(IEnumerable<ISkillType> entityCollection)
-		{
-			_skillTypes.AddRange(entityCollection);
-		}
-
 		public IUnitOfWork UnitOfWork { get; }
 	}
 }

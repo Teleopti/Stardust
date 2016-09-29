@@ -460,6 +460,7 @@
     <Compile Include="Repositories\IQueuedAbsenceRequestRepository.cs" />
     <Compile Include="Repositories\ISeniorityWorkDayRanksRepository.cs" />
     <Compile Include="Repositories\ISiteOpenHourRepository.cs" />
+    <Compile Include="Repositories\RepositoryExtensions.cs" />
     <Compile Include="ResourceCalculation\CalculateResourceReadModel.cs" />
     <Compile Include="ResourceCalculation\CascadingPersonalSkills.cs" />
     <Compile Include="ResourceCalculation\CascadingPersonSkillProvider.cs" />

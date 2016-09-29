@@ -46,11 +46,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			throw new NotImplementedException();
 		}
 
-		public void AddRange(IEnumerable<IRtaStateGroup> entityCollection)
-		{
-			_data.AddRange(entityCollection);
-		}
-
 		public IUnitOfWork UnitOfWork
 		{
 			get { throw new NotImplementedException(); }

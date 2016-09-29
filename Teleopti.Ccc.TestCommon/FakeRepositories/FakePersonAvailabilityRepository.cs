@@ -39,11 +39,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public void AddRange(IEnumerable<IPersonAvailability> entityCollection)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IUnitOfWork UnitOfWork { get; private set; }
 		public ICollection<IPersonAvailability> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period)
 		{

@@ -47,11 +47,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public void AddRange(IEnumerable<IPersonAbsence> entityCollection)
-		{
-			_personAbsences.AddRange(entityCollection);
-		}
-
 		public IUnitOfWork UnitOfWork
 		{
 			get { throw new NotImplementedException(); }

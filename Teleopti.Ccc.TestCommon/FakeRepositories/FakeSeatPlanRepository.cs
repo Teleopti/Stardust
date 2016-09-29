@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -42,11 +41,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public long CountAllEntities()
 		{
 			throw new NotImplementedException();
-		}
-
-		public void AddRange (IEnumerable<ISeatPlan> entityCollection)
-		{
-			entityCollection.ForEach(Add);
 		}
 
 		public IUnitOfWork UnitOfWork { get; private set; }

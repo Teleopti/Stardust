@@ -36,11 +36,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _kpis.First(x => x.Id.GetValueOrDefault() == id);
 		}
 
-		public void AddRange(IEnumerable<IKeyPerformanceIndicator> entityCollection)
-		{
-			_kpis.AddRange(entityCollection);
-		}
-
 		public IUnitOfWork UnitOfWork { get; }
 	}
 }

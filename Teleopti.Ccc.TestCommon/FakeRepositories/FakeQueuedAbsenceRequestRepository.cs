@@ -40,11 +40,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return null;
 		}
 
-		public void AddRange(IEnumerable<IQueuedAbsenceRequest> entityCollection)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IUnitOfWork UnitOfWork { get; }
 
 		public IQueuedAbsenceRequest Get(Guid personRequestId)

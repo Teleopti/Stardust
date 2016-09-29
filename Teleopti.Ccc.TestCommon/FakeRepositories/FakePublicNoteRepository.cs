@@ -52,11 +52,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public void AddRange (IEnumerable<IPublicNote> entityCollection)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IUnitOfWork UnitOfWork { get; private set; }
 		IPublicNote ILoadAggregateByTypedId<IPublicNote, Guid>.LoadAggregate (Guid id)
 		{

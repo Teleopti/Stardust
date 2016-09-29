@@ -83,11 +83,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return _skills.Count;
 		}
 
-		public void AddRange(IEnumerable<ISkill> entityCollection)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IUnitOfWork UnitOfWork { get; private set; }
 		public ICollection<ISkill> FindAllWithWorkloadAndQueues()
 		{

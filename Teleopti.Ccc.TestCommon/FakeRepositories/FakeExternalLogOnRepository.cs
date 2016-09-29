@@ -30,10 +30,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return null;
 		}
 
-		public void AddRange(IEnumerable<IExternalLogOn> entityCollection)
-		{
-		}
-
 		public IUnitOfWork UnitOfWork { get; }
 	}
 }

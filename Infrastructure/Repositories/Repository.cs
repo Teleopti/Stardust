@@ -74,20 +74,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			Session.SaveOrUpdate(root);
 		}
 
-        /// <summary>
-        /// Adds the specified entity collection to repository.
-        /// Will be persisted when PersistAll is called (or sooner).
-        /// </summary>
-        /// <param name="entityCollection">The entity collection.</param>
-        public virtual void AddRange(IEnumerable<T> entityCollection)
-        {
-            foreach (T entity in entityCollection)
-            {
-                Add(entity);
-            }
-        }
-
-        /// <summary>
+	    /// <summary>
         /// Removes the specified entity from repository.
         /// Will be deleted when PersistAll is called (or sooner).
         /// </summary>

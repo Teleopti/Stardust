@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using NHibernate.Transform;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -53,29 +51,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             base.Add(entity);
         }
 
-        /// <summary>
-        /// Adds the specified license collection to repository.
-        /// Will be persisted when PersistAll is called (or sooner).
-        /// </summary>
-        /// <param name="entityCollection">The entity collection.</param>
-        /// <remarks>
-        /// Created by: Klas
-        /// Created date: 2008-12-03
-        /// </remarks>
-        public override void AddRange(IEnumerable<ILicense> entityCollection)
-        {
-            if (entityCollection.Count() > 1)
-                throw new DataSourceException("Attempted to add more than one license");
-            if (entityCollection.Any())
-            {
-                foreach (ILicense license in entityCollection)
-                {
-                    Add(license);
-                }
-            }
-        }
-
-		public IList<ActiveAgent> GetActiveAgents()
+	    public IList<ActiveAgent> GetActiveAgents()
 		{
 			const string sql = @"select b.Name BusinessUnit, FirstName, LastName, Email, EmploymentNumber, MIN(StartDate) StartDate, p.TerminalDate LeavingDate from Person p
 INNER JOIN PersonPeriod pp ON pp.Parent=p.Id and pp.StartDate<GETDATE()

@@ -1,5 +1,4 @@
-﻿using NHibernate.Util;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Criterion;
@@ -39,11 +38,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IPersonRequest Load(Guid id)
 		{
 			return Get(id);
-		}
-
-		public void AddRange(IEnumerable<IPersonRequest> entityCollection)
-		{
-			entityCollection.ForEach(Add);
 		}
 
 		public IUnitOfWork UnitOfWork { get; private set; }

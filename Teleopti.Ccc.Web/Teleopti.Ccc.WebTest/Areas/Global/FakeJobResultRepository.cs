@@ -46,11 +46,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			throw new NotImplementedException();
 		}
 
-		public void AddRange(IEnumerable<IJobResult> entityCollection)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IUnitOfWork UnitOfWork { get; private set; }
 		public ICollection<IJobResult> LoadHistoryWithPaging(PagingDetail pagingDetail, params string[] jobCategories)
 		{

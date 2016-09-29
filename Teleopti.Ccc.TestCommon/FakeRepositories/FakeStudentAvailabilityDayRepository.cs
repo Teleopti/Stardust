@@ -41,11 +41,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public void AddRange(IEnumerable<IStudentAvailabilityDay> entityCollection)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IUnitOfWork UnitOfWork { get; private set; }
 		IStudentAvailabilityDay ILoadAggregateByTypedId<IStudentAvailabilityDay, Guid>.LoadAggregate(Guid id)
 		{

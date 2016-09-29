@@ -46,11 +46,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public void AddRange(IEnumerable<IRuleSetBag> entityCollection)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IUnitOfWork UnitOfWork { get; }
 		public IEnumerable<IRuleSetBag> LoadAllWithRuleSets()
 		{

@@ -66,11 +66,6 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			throw new NotImplementedException();
 		}
 
-		public void AddRange(IEnumerable<IWorkShiftRuleSet> entityCollection)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IUnitOfWork UnitOfWork { get; private set; }
 
 		public ICollection<IWorkShiftRuleSet> FindAllWithLimitersAndExtenders()
@@ -109,11 +104,6 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		}
 
 		public long CountAllEntities()
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AddRange(IEnumerable<IRuleSetBag> entityCollection)
 		{
 			throw new NotImplementedException();
 		}
@@ -165,11 +155,6 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			throw new NotImplementedException();
 		}
 
-		public void AddRange(IEnumerable<IContractSchedule> entityCollection)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IUnitOfWork UnitOfWork { get; private set; }
 
 		public ICollection<IContractSchedule> FindAllContractScheduleByDescription()
@@ -217,11 +202,6 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 			throw new NotImplementedException();
 		}
 
-		public void AddRange(IEnumerable<IPartTimePercentage> entityCollection)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IUnitOfWork UnitOfWork { get; private set; }
 
 		public ICollection<IPartTimePercentage> FindAllPartTimePercentageByDescription()
@@ -260,11 +240,6 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		}
 
 		public long CountAllEntities()
-		{
-			throw new NotImplementedException();
-		}
-
-		public void AddRange(IEnumerable<IContract> entityCollection)
 		{
 			throw new NotImplementedException();
 		}

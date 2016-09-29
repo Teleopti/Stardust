@@ -40,11 +40,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			throw new NotImplementedException();
 		}
 
-		public void AddRange(IEnumerable<IRtaMap> entityCollection)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IUnitOfWork UnitOfWork
 		{
 			get { throw new NotImplementedException(); }

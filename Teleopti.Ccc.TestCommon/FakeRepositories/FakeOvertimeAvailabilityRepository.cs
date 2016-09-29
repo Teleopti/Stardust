@@ -38,11 +38,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public void AddRange(IEnumerable<IOvertimeAvailability> entityCollection)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IUnitOfWork UnitOfWork { get; private set; }
 		IOvertimeAvailability ILoadAggregateByTypedId<IOvertimeAvailability, Guid>.LoadAggregate(Guid id)
 		{

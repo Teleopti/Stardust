@@ -41,11 +41,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public void AddRange(IEnumerable<IPreferenceDay> entityCollection)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IUnitOfWork UnitOfWork { get; set; }
 		IPreferenceDay ILoadAggregateByTypedId<IPreferenceDay, Guid>.LoadAggregate(Guid id)
 		{

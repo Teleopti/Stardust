@@ -64,11 +64,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _scenario.Count;
 		}
 
-		public void AddRange(IEnumerable<IScenario> entityCollection)
-		{
-			_scenario.AddRange(entityCollection);
-		}
-
 		public IUnitOfWork UnitOfWork { get; private set; }
 
 		public void SetDefault(IScenario myScenario)

@@ -40,11 +40,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public void AddRange(IEnumerable<IAvailableData> entityCollection)
-		{
-			_roles.AddRange(entityCollection);
-		}
-
 		public IUnitOfWork UnitOfWork { get; private set; }
 		public IList<IAvailableData> LoadAllAvailableData()
 		{

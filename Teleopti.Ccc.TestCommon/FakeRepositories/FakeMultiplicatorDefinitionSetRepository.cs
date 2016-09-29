@@ -35,11 +35,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return Get(id);
 		}
 
-		public void AddRange(IEnumerable<IMultiplicatorDefinitionSet> entityCollection)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IUnitOfWork UnitOfWork { get; private set; }
 
 		public IList<IMultiplicatorDefinitionSet> FindAllOvertimeDefinitions()
