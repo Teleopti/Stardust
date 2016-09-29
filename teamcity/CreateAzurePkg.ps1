@@ -115,7 +115,6 @@ function global:CorrectingURLinHTML {
 	Write-Host "Updating $IndexMSBuildFile..."
 	Write-Host "Replacing: $word  with: $replacement"
 	
-	$newText = $text -replace $word,$replacement
-	$newText > $path
-	
+	$newText = $text -replace $word,$replacement | Out-File $Path -Encoding UTF8
+		
 }
