@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			}
 		}
 
-		[Test, Ignore("#40404")]
+		[Test, Ignore("#40904")]
 		public void ShouldNotPlaceShiftThatDoesntMatchAllGroupsInvolvedSkillsOpenHour()
 		{
 			var date = DateOnly.Today;
