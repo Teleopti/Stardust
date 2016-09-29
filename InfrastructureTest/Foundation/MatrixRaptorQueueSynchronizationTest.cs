@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			raptorQueueInvalidMartData.QueueOriginalId.Should().Be.EqualTo(0);
 			raptorQueueInvalidMartData.DataSourceId.Should().Be.EqualTo(0);
 
-			queueSourceRepository.AssertWasNotCalled(x => x.AddRange(new List<IQueueSource>()), o => o.IgnoreArguments());
+			queueSourceRepository.AssertWasNotCalled(x => x.Add(null), o => o.IgnoreArguments());
 		}
 
 		[Test]
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			raptorQueueCleared.Name.Should().Be.EqualTo(matrixQueue.Name);
 			raptorQueueCleared.Description.Should().Be.EqualTo(matrixQueue.Description);
 
-			queueSourceRepository.AssertWasNotCalled(x => x.AddRange(new List<IQueueSource>()), o => o.IgnoreArguments());
+			queueSourceRepository.AssertWasNotCalled(x => x.Add(null), o => o.IgnoreArguments());
 		}
 
 		[Test]
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			raptorQueueCleared.QueueOriginalId.Should().Be.EqualTo(0);
 			raptorQueueCleared.DataSourceId.Should().Be.EqualTo(0);
 
-			queueSourceRepository.AssertWasCalled(x => x.AddRange(new List<IQueueSource> {matrixQueue}));
+			queueSourceRepository.AssertWasCalled(x => x.Add(matrixQueue));
 		}
 
 		[Test]
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			raptorQueue.Name.Should().Be.EqualTo(matrixQueue.Name);
 			raptorQueue.Description.Should().Be.EqualTo(matrixQueue.Description);
 
-			queueSourceRepository.AssertWasNotCalled(x => x.AddRange(new List<IQueueSource>()), o => o.IgnoreArguments());
+			queueSourceRepository.AssertWasNotCalled(x => x.Add(null), o => o.IgnoreArguments());
 		}
 
 		[Test]
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			var affectedQueues = target.SynchronizeQueues(new List<IQueueSource> { matrixQueue });
 
 			affectedQueues.Should().Be.EqualTo(2);
-			queueSourceRepository.AssertWasNotCalled(x => x.AddRange(new List<IQueueSource>()), o => o.IgnoreArguments());
+			queueSourceRepository.AssertWasNotCalled(x => x.Add(null), o => o.IgnoreArguments());
 		}
 
 		[Test]
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			var affectedQueues = target.SynchronizeQueues(new List<IQueueSource> { matrixQueue });
 
 			affectedQueues.Should().Be.EqualTo(1);
-			queueSourceRepository.AssertWasNotCalled(x => x.AddRange(new List<IQueueSource>()), o => o.IgnoreArguments());
+			queueSourceRepository.AssertWasNotCalled(x => x.Add(null), o => o.IgnoreArguments());
 		}
 	}
 }

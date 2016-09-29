@@ -72,7 +72,10 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 			if (queuesToAdd.Count > 0)
 			{
-				_queueSourceRepository.AddRange(queuesToAdd);
+				foreach (var queue in queuesToAdd)
+				{
+					_queueSourceRepository.Add(queue);
+				}
 			}
 
 			return queuesToAdd.Count + updatedCount;
