@@ -23,7 +23,7 @@ CREATE PROCEDURE [ReadModel].[UpdateFindPersonData]
 
 -- =============================================
 AS
--- exec [ReadModel].[UpdateFindPersonData] '82A49700-B5B2-4AB3-88B6-9EF500BD080C'
+-- exec [ReadModel].[UpdateFindPersonData] '3d5dd51a-8713-42e9-9f33-9b5e015ab71b'
 --SET NOCOUNT ON
 CREATE TABLE #ids(id uniqueidentifier)
 INSERT INTO #ids SELECT * FROM SplitStringString(@ids)
@@ -66,9 +66,9 @@ INNER JOIN PersonPeriod pp WITH(NOLOCK) ON fp.PersonId = pp.Parent AND pp.[Budge
 UPDATE [ReadModel].[FindPerson]
 SET SearchValue = Name, StartDateTime = pp.StartDate, EndDateTime = pp.EndDate
 FROM [ReadModel].[FindPerson] fp
-INNER JOIN Skill WITH(NOLOCK) ON Skill.Id = SearchValueId 
-INNER JOIN PersonPeriod pp WITH(NOLOCK) ON fp.PersonId = pp.Parent 
-INNER JOIN #ids on #ids.id = SearchValueId
+INNER JOIN Skill WITH(NOLOCK) ON Skill.Id = fp.SearchValueId
+INNER JOIN PersonPeriod pp WITH(NOLOCK) ON fp.PersonId = pp.Parent and fp.StartDateTime = pp.StartDate
+INNER JOIN #ids on #ids.id = Skill.Id
 INNER JOIN PersonSkill ps WITH(NOLOCK) ON pp.Id = ps.Parent AND ps.Skill = SearchValueId
 
 UPDATE [ReadModel].[FindPerson]
