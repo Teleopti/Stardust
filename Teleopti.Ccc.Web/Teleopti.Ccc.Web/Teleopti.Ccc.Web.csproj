@@ -1332,6 +1332,7 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewNew.js" />
     <Content Include="Content\jquery\jquery-1.12.4.js" />
     <Content Include="Content\jquery\jquery-1.12.4.min.js" />
+    <Content Include="Content\moment-datepicker\moment-datepicker-ext.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.0.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.0.min.js" />
     <None Include="WFM\css\_wfmmultiplesearchinput.scss" />

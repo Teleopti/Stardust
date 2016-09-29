@@ -110,11 +110,11 @@
             return (this.moment && this.moment.format(format || this.format)) || '';
         },
         show: function (e) {
-	        
-        	if (this.isInput && this.element.is(':disabled')) { return; }
 
-        	else if (this.element.children('input').is(':disabled')) { return; }
-	        
+            if (this.isInput && this.element.is(':disabled')) { return; }
+
+            else if (this.element.children('input').is(':disabled')) { return; }
+
             this.picker.show();
             this.height = (this.component && this.component.outerHeight()) || this.element.outerHeight();
             this.place();
@@ -166,10 +166,11 @@
         place: function () {
             var sourceItem = this.component ? this.component : this.element;
             var offset = sourceItem.offset();
+
             if (this.calendarPlacement == 'left') {
                 this.picker.css({
                     top: offset.top + this.height,
-                    left: this.element.parents()[1].offsetLeft
+                    left: offset.left + sourceItem[0].offsetWidth - this.picker[0].offsetWidth
                 });
             } else {
                 this.picker.css({
@@ -228,7 +229,7 @@
             var i = 0
             var monthsShort = $.proxy(moment.localeData().monthsShort, moment.localeData());
             while (i < 12) {
-            	html += '<span class="month">' + monthsShort(moment().startOf('month').month(i++)) + '</span>';
+                html += '<span class="month">' + monthsShort(moment().startOf('month').month(i++)) + '</span>';
             }
             this.picker.find('.datepicker-months td').append(html);
         },
@@ -388,7 +389,7 @@
             }
             this.picker.find('>div').hide().filter('.datepicker-' + DPGlobal.modes[this.viewMode].clsName).show();
         },
-        setCustomClasses: function() {
+        setCustomClasses: function () {
             if (this.calendarPlacement == 'left') {
                 this.picker.addClass('datepicker-left');
             }
@@ -417,7 +418,7 @@
     };
 
     $.fn.datepicker.defaults = {
-    	container : 'body'
+        container: 'body'
     };
     $.fn.datepicker.Constructor = Datepicker;
 
