@@ -74,6 +74,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private ICriteria personAssignmentCriteriaLoader(DateOnlyPeriod period, IScenario scenario)
 		{
 			var assCriteria = Session.CreateCriteria(typeof (PersonAssignment), "ass")
+				.SetTimeout(300)
 			                         .SetFetchMode("ShiftLayers", FetchMode.Join)
 			                         .SetResultTransformer(Transformers.DistinctRootEntity);
 			addScenarioAndFilterClauses(assCriteria, scenario, period);

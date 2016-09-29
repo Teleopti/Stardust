@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Data.SqlClient;
 using System.Linq;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
@@ -19,10 +18,10 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		protected virtual bool IsTransientTimeout(Exception ex)
 		{
-			if (this.IsConnectionTimeout(ex))
+			if (IsConnectionTimeout(ex))
 				return true;
 			if (ex.InnerException != null)
-				return this.IsTransientTimeout(ex.InnerException);
+				return IsTransientTimeout(ex.InnerException);
 			return false;
 		}
 
@@ -30,12 +29,12 @@ namespace Teleopti.Ccc.DBManager.Library
 		{
 			SqlException sqlException;
 			if (ex != null && (sqlException = ex as SqlException) != null)
-				return Enumerable.Any<SqlError>(Enumerable.Cast<SqlError>((IEnumerable)sqlException.Errors), (Func<SqlError, bool>)(error =>
+				return sqlException.Errors.Cast<SqlError>().Any(error =>
 				{
 					if (error.Number != -2)
 						return error.Number == 121;
 					return true;
-				}));
+				});
 			return false;
 		}
 	}

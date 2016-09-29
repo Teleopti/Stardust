@@ -107,14 +107,13 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 
 		protected virtual SqlCommand SetCommandMaintenance(SqlConnection conn)
 		{
-			const string timeout = "21600";
 			return new SqlCommand
 				{
 					CommandText = _commandText,
 					Connection = conn,
 					CommandType = _commandType,
-					CommandTimeout = int.Parse(timeout, CultureInfo.InvariantCulture)
-				};
+					CommandTimeout = 21600
+			};
 		}
 
 		protected virtual SqlCommand SetCommand(SqlTransaction transaction)
