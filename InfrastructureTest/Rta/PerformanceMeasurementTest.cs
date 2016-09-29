@@ -81,53 +81,57 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			var userCodes = Enumerable.Range(0, 1000).Select(x => $"user{x}").ToArray();
 			userCodes.ForEach(x => Database.WithAgent(x));
 			Publisher.Publish(new TenantMinuteTickEvent());
+			var states = 5000;
 
-			var batches = Enumerable.Range(0, 100)
-				.Select(_ =>
-					new BatchForTest
+			var results = (
+				from parallelTransactions in new[] {5, 7, 9}
+				from transactionSize in new[] {80, 100, 150}
+				from batchSize in new[] {400, 500, 600, 700, 1500, 2500}
+				from variation in new[] {"A", "B", "C"}
+				select new {parallelTransactions, transactionSize, batchSize, variation}).Select(x =>
+			{
+				var batches = Enumerable.Range(0, states)
+					.Batch(x.batchSize)
+					.Select(_ => new BatchForTest
 					{
 						States = userCodes
 							.Randomize()
-							.Take(50)
+							.Take(x.batchSize)
 							.Select(y => new BatchStateForTest
 							{
 								UserCode = y,
 								StateCode = "phone"
 							})
 							.ToArray()
-					}
-				);
+					});
+					
+				RemoveMeWithToggleAttribute.This(Toggles.RTA_ScheduleQueryOptimization_40260);
+				Config.FakeSetting("RtaBatchTransactions", x.parallelTransactions.ToString());
 
-			var results = (
-				from transactions in new[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
-				from size in new[] {100}
-				from variation in new[] {"A", "B", "C"}
-				select new {transactions, size, variation}).Select(x =>
+				Config.FakeSetting("RtaParallelTransactions", x.parallelTransactions.ToString());
+				Config.FakeSetting("RtaMaxTransactionSize", x.transactionSize.ToString());
+
+				var timer = new Stopwatch();
+				timer.Start();
+
+				batches.ForEach(Rta.SaveStateBatch);
+
+				timer.Stop();
+
+				return new
 				{
-					RemoveMeWithToggleAttribute.This(Toggles.RTA_ScheduleQueryOptimization_40260);
-					Config.FakeSetting("RtaBatchTransactions", x.transactions.ToString());
-
-					Config.FakeSetting("RtaParallelTransactions", x.transactions.ToString());
-					Config.FakeSetting("RtaMaxTransactionSize", x.size.ToString());
-
-					var timer = new Stopwatch();
-					timer.Start();
-
-					batches.ForEach(Rta.SaveStateBatch);
-
-					timer.Stop();
-					return new
-					{
-						timer.Elapsed,
-						x.transactions,
-						x.size,
-						x.variation
-					};
-				});
+					timer.Elapsed,
+					stateTime = new TimeSpan(timer.Elapsed.Ticks / states),
+					x.parallelTransactions,
+					x.transactionSize,
+					x.batchSize,
+					x.variation
+				};
+			});
 
 			results
 				.OrderBy(x => x.Elapsed)
-				.ForEach(x => Debug.WriteLine($"{x.Elapsed} - {x.size} {x.transactions} {x.variation}"));
+				.ForEach(x => Console.WriteLine($"{x.Elapsed} - {x.stateTime} {x.transactionSize} {x.parallelTransactions} {x.batchSize} {x.variation}"));
 		}
 
 		[Test]
