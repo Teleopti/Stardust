@@ -43,7 +43,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		{
 			var ret = new ShiftTradeScheduleViewModel();
 			ret.MySchedule = _personScheduleViewModelMapper.MakeMyScheduleViewModel(inputData);
-			if (ret.MySchedule.IsFullDayAbsence || ret.MySchedule.IsDayOff && ret.MySchedule.ScheduleLayers.Any()&&ret.MySchedule.ScheduleLayers.All(l=>l.IsOvertime))
+
+			if (ret.MySchedule.IsFullDayAbsence || ret.MySchedule.IsDayOff
+				|| (ret.MySchedule.ScheduleLayers.Any() && ret.MySchedule.ScheduleLayers.All(l => l.IsOvertime)))
 			{
 				ret.PossibleTradeSchedules = new List<ShiftTradeAddPersonScheduleViewModel>();
 				ret.PageCount = 0;
@@ -62,10 +64,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 				var canViewConfidential = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential);
 
 				possiblePersonSchedules = possiblePersonSchedules.Where (pair => _shiftTradeSiteOpenHourFilter.FilterSchedule (pair.Item2, ret.MySchedule)).ToArray();
-				
-				Array.Sort(possiblePersonSchedules, new TeamScheduleComparer(canViewUnpublished, _permissionProvider));
 
-				var personList = new List<IPerson>();
+				Array.Sort(possiblePersonSchedules, new TeamScheduleComparer(canViewUnpublished, _permissionProvider));
 
 				var allSortedPossibleSchedules = possiblePersonSchedules.Skip (inputData.Paging.Skip).Take (inputData.Paging.Take)
 					.Select(pair =>
@@ -73,11 +73,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 						var person = pair.Item1;
 						var scheduleDay = pair.Item2;
 						var scheduleReadModel = _projectionProvider.MakeScheduleReadModel(person, scheduleDay, canViewConfidential);
-						personList.Add(person);
 						return new ShiftTradeAddPersonScheduleViewModel(scheduleReadModel);
 					}).ToList();
-				
-				ret.PageCount = (int)Math.Ceiling((double)possiblePersonSchedules.Count() / inputData.Paging.Take);
+
+				ret.PageCount = (int)Math.Ceiling((double)possiblePersonSchedules.Length / inputData.Paging.Take);
 				ret.PossibleTradeSchedules = allSortedPossibleSchedules;
 			}
 
