@@ -5,17 +5,27 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public interface IScheduleReader
 	{
+		[RemoveMeWithToggle(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
 		IEnumerable<ScheduledActivity> GetCurrentSchedule(DateTime utcNow, Guid personId);
+		[RemoveMeWithToggle(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
 		IEnumerable<ScheduledActivity> GetCurrentSchedules(DateTime utcNow, IEnumerable<Guid> personIds);
+
+		IEnumerable<ScheduledActivity> GetCurrentSchedules(DateTime utcNow, IEnumerable<PersonBusinessUnit> persons);
+	}
+
+	public class PersonBusinessUnit
+	{
+		public Guid PersonId;
+		public Guid BusinessUnitId;
 	}
 
 	public class FromReadModel : IScheduleReader
@@ -41,72 +51,79 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return _scheduleProjection.ForPersons(from, to, personIds);
 		}
 
+		public IEnumerable<ScheduledActivity> GetCurrentSchedules(DateTime utcNow, IEnumerable<PersonBusinessUnit> persons)
+		{
+			throw new NotImplementedException();
+		}
 	}
 
 	public class FromPersonAssignment : IScheduleReader
 	{
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IPersonRepository _personRepository;
-		private readonly ICurrentScenario _currentScenario;
+		private readonly IScenarioRepository _scenarios;
+		private readonly IBusinessUnitRepository _businessUnits;
 
 		public FromPersonAssignment(
 			IScheduleStorage scheduleStorage, 
 			IPersonRepository personRepository, 
-			ICurrentScenario currentScenario)
+			IScenarioRepository scenarios,
+			IBusinessUnitRepository businessUnits)
 		{
 			_scheduleStorage = scheduleStorage;
 			_personRepository = personRepository;
-			_currentScenario = currentScenario;
+			_scenarios = scenarios;
+			_businessUnits = businessUnits;
+		}
+
+		public IEnumerable<ScheduledActivity> GetCurrentSchedule(DateTime utcNow, Guid personId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IEnumerable<ScheduledActivity> GetCurrentSchedules(DateTime utcNow, IEnumerable<Guid> personIds)
+		{
+			throw new NotImplementedException();
 		}
 
 		[LogInfo]
 		[FullPermissions]
-		public virtual IEnumerable<ScheduledActivity> GetCurrentSchedule(DateTime utcNow, Guid personId)
+		public virtual IEnumerable<ScheduledActivity> GetCurrentSchedules(DateTime utcNow, IEnumerable<PersonBusinessUnit> persons)
 		{
 			var from = new DateOnly(utcNow.Date.AddDays(-1));
 			var to = new DateOnly(utcNow.Date.AddDays(1));
-			return MakeScheduledActivities(
-				_currentScenario,
-				_scheduleStorage,
-				new[] {_personRepository.Get(personId)},
-				new DateOnlyPeriod(from.AddDays(-1), to.AddDays(1))
-				)
-				.Where(x => x.BelongsToDate >= from && x.BelongsToDate <= to)
-				.ToArray();
+			return persons
+				.GroupBy(x => x.BusinessUnitId, x => x.PersonId)
+				.SelectMany(x =>
+				{
+					var scenario = _scenarios.LoadDefaultScenario(_businessUnits.Load(x.Key));
+					var people = x.Select(id => _personRepository.Load(id));
+					return MakeScheduledActivities(
+							scenario,
+							_scheduleStorage,
+							people,
+							new DateOnlyPeriod(from.AddDays(-1), to.AddDays(1))
+						)
+						.Where(a => a.BelongsToDate >= from && a.BelongsToDate <= to)
+						.ToArray();
+
+				});
 		}
 
-		[LogInfo]
-		[FullPermissions]
-		public virtual IEnumerable<ScheduledActivity> GetCurrentSchedules(DateTime utcNow, IEnumerable<Guid> personIds)
-		{
-			var from = new DateOnly(utcNow.Date.AddDays(-1));
-			var to = new DateOnly(utcNow.Date.AddDays(1));
-			var persons = personIds.Select(x => _personRepository.Get(x));
-			return MakeScheduledActivities(
-				_currentScenario,
-				_scheduleStorage,
-				persons,
-				new DateOnlyPeriod(from.AddDays(-1), to.AddDays(1))
-				)
-				.Where(x => x.BelongsToDate >= from && x.BelongsToDate <= to)
-				.ToArray();
-		}
-		
 		public static IEnumerable<ScheduledActivity> MakeScheduledActivities(
-			ICurrentScenario scenario,
+			IScenario scenario,
 			IScheduleStorage scheduleStorage,
 			IEnumerable<IPerson> people,
 			DateOnlyPeriod period)
 		{
-			var defaultScenario = scenario.Current();
-			if (defaultScenario == null)
+			if (scenario == null)
 				return Enumerable.Empty<ScheduledActivity>();
 			
 			var schedules = scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
 				people,
 				new ScheduleDictionaryLoadOptions(false, false),
 				period,
-				defaultScenario);
+				scenario);
 
 			return (
 				from person in people
