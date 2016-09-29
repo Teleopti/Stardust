@@ -181,12 +181,15 @@
 
 		vm.clearFilters = clearAllFilters;
 
-		requestsDataSvc.getRequestableAbsences().then(function (result) {
-			vm.AllRequestableAbsences = result.data;
-			angular.forEach(vm.AllRequestableAbsences, function (absence) {
-				absence.Selected = false;
+		if (!vm.shiftTradeView) {
+			requestsDataSvc.getRequestableAbsences().then(function (result) {
+				vm.AllRequestableAbsences = result.data;
+				angular.forEach(vm.AllRequestableAbsences, function (absence) {
+					absence.Selected = false;
+				});
 			});
-		});
+		}
+
 		vm.AllRequestStatuses = requestsDataSvc.getAllRequestStatuses(vm.shiftTradeView);
 
 		vm.absenceFilterClose = function () {

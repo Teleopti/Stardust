@@ -423,6 +423,14 @@
 			expect(vm.shiftTradeScheduleViewModels[1].length).toEqual(1);
 		});
 
+		it('should not load absences for shif trade request', function() {
+			var test = setUpTarget();
+			test.scope.shiftTradeView = true;
+			test.scope.$apply();
+			var vm = test.target.isolateScope().requestsTableContainer;
+			expect(angular.isDefined(vm.AllRequestableAbsences)).toEqual(false);
+		});
+
 		xit('should load schedules for shift trade request', function () {
 			var test = setUpTarget();
 
