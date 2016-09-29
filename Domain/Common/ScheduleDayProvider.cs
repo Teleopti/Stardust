@@ -1,4 +1,3 @@
-using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
@@ -14,19 +13,21 @@ namespace Teleopti.Ccc.Domain.Common
 			_currentScenario = currentScenario;
 		}
 
-		public IScheduleDictionary GetScheduleDictionary(DateOnly date, IPerson person)
+		public IScheduleDictionary GetScheduleDictionary(DateOnly date, IPerson person, ScheduleDictionaryLoadOptions loadOptions = null)
 		{
 			var period = new DateOnlyPeriod(date, date).Inflate(1);
+			var scheduleDicLoadOption = loadOptions ?? new ScheduleDictionaryLoadOptions(false, false);
 			var dictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
-				new ScheduleDictionaryLoadOptions(false, false),
+				scheduleDicLoadOption,
 				period,
 				_currentScenario.Current());
 			return dictionary;
 		}
 
-		public IScheduleDay GetScheduleDay(DateOnly date, IPerson person)
+		public IScheduleDay GetScheduleDay(DateOnly date, IPerson person, ScheduleDictionaryLoadOptions loadOptions = null)
 		{
-			var dictionary = GetScheduleDictionary(date, person);
+			var scheduleDicLoadOption = loadOptions ?? new ScheduleDictionaryLoadOptions(false, false);
+			var dictionary = GetScheduleDictionary(date, person, scheduleDicLoadOption);
 			return dictionary[person].ScheduledDay(date);
 		}
 	}

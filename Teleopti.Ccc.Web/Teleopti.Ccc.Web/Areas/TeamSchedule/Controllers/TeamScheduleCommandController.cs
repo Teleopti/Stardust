@@ -5,7 +5,6 @@ using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 {
@@ -66,14 +65,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			return _commandHandlingProvider.MoveNonoverwritableLayers(input);
 		}
 
-
-
-	}
-
-	public class MoveNonoverwritableLayersFormData
-	{
-		public Guid[] PersonIds;
-		public DateOnly Date { get; set; }
-		public TrackedCommandInfo TrackedCommandInfo { get; set; }
+		[UnitOfWork, HttpPost, Route("api/TeamScheduleCommand/EditScheduleNote")]
+		public virtual IList<ActionResult> EditScheduleNote([FromBody] EditScheduleNoteFormData input)
+		{
+			return _commandHandlingProvider.EditScheduleNote(input);
+		}
 	}
 }

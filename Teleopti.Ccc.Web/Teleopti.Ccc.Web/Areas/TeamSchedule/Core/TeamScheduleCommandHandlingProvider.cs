@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Interfaces.Domain;
@@ -360,6 +359,45 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			return result;
 		}
 
+		public IList<ActionResult> EditScheduleNote(EditScheduleNoteFormData input)
+		{
+			var actionResult = new ActionResult
+			{
+				PersonId = input.PersonId
+			};
+
+			var retResult = new List<ActionResult>();
+			var person = _personRepository.Get(input.PersonId);
+
+			if (agentScheduleIsWriteProtected(input.SelectedDate, person))
+			{
+				actionResult.ErrorMessages = new List<string>
+				{
+					Resources.WriteProtectSchedule
+				};
+				retResult.Add(actionResult);
+				return retResult;
+			}
+
+			var command = new EditScheduleNoteCommand
+			{
+				PersonId = input.PersonId,
+				Date = input.SelectedDate,
+				InternalNote = input.InternalNote
+			};
+			_commandDispatcher.Execute(command);
+
+			
+			if (command.ErrorMessages.Any())
+				retResult.Add(new ActionResult
+				{
+					PersonId = input.PersonId,
+					ErrorMessages = command.ErrorMessages
+				});
+
+			return retResult;
+		}
+
 		private bool agentScheduleIsWriteProtected(DateOnly date, IPerson agent)
 		{
 			return !_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule)
@@ -395,5 +433,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		List<ActionResult> BackoutScheduleChange(BackoutScheduleChangeFormData input);
 		List<ActionResult> ChangeShiftCategory(ChangeShiftCategoryFormData input);
 		IList<ActionResult> MoveNonoverwritableLayers(MoveNonoverwritableLayersFormData input);
+		IList<ActionResult> EditScheduleNote(EditScheduleNoteFormData input);
 	}
 }

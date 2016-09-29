@@ -171,6 +171,7 @@
     <Compile Include="ApplicationLayer\ChangeShiftCategoryCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Date\AnalyticsDateChangedHandlerTest.cs" />
     <Compile Include="ApplicationLayer\DenyRequestCommandHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\EditScheduleNoteCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\FakeMessageBrokerComposite.cs" />
     <Compile Include="ApplicationLayer\Availability\AnalyticsAvailabilityUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\FixNotOverwriteLayerCommandHandlerTest.cs" />

@@ -674,6 +674,8 @@
     <Compile Include="Areas\Global\ThrottledAction.cs" />
     <Compile Include="Areas\People\Core\Providers\IPeopleSearchProvider.cs" />
     <Compile Include="Areas\Rta\Log4NetWcfLogger.cs" />
+    <Compile Include="Areas\TeamSchedule\Controllers\EditScheduleNoteFormData.cs" />
+    <Compile Include="Areas\TeamSchedule\Controllers\MoveNonoverwritableLayersFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\ITeamScheduleProjectionProvider.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\ProjectionSplitter.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\ScheduleValidationProvider.cs" />

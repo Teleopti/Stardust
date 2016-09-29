@@ -1,14 +1,20 @@
 ﻿"use strict";
 
 describe("teamschedule schedule note management service tests", function () {
-	var target;
+	var target, $httpBackend, requestHandler;
 
 	beforeEach(function () {
 		module("wfm.teamSchedule");
 	});
 
-	beforeEach(inject(function (ScheduleNoteManagementService) {
+	beforeEach(inject(function (ScheduleNoteManagementService, _$httpBackend_) {
 		target = ScheduleNoteManagementService;
+		$httpBackend = _$httpBackend_;
+
+		requestHandler = $httpBackend.when('POST', '../api/TeamScheduleCommand/EditScheduleNote')
+							.respond(function() {
+				return [200, []];
+			});
 	}));
 
 	var scheduleDate = "2016-01-02";
@@ -42,14 +48,28 @@ describe("teamschedule schedule note management service tests", function () {
 		expect(note2).toEqual(null);
 	}));
 
-	it("Can set schedule note for person", function() {
+	it("Can set schedule note for person", function () {
+		$httpBackend.expectPOST("../api/TeamScheduleCommand/EditScheduleNote").respond(200, []);
 		target.resetScheduleNotes([schedule1, schedule3, schedule2], scheduleDateMoment);
-		target.setInternalNoteForPerson("221B-Baker-SomeoneElse", "newNotes");
-		target.setInternalNoteForPerson("221B-Sherlock", "newNotes for sherlock");
+		target.setInternalNoteForPerson("221B-Baker-SomeoneElse", "newNotes", scheduleDateMoment);
+		target.setInternalNoteForPerson("221B-Sherlock", "newNotes for sherlock", scheduleDateMoment);
+		$httpBackend.flush();
 
 		var note1 = target.getInternalNoteForPerson("221B-Baker-SomeoneElse");
 		var note2 = target.getInternalNoteForPerson("221B-Sherlock");
 		expect(note1).toEqual("newNotes");
 		expect(note2).toEqual("newNotes for sherlock");
+		$httpBackend.verifyNoOutstandingRequest();
+	});
+
+	it("wont set schedule note for person when server respond with error", function () {
+		$httpBackend.expectPOST("../api/TeamScheduleCommand/EditScheduleNote").respond(200, [[{ PersonId: '221B-Baker-SomeoneElse', ErrorMessages:'error' }]]);
+		target.resetScheduleNotes([schedule1, schedule3, schedule2], scheduleDateMoment);
+		target.setInternalNoteForPerson("221B-Baker-SomeoneElse", "newNotes", scheduleDateMoment);
+		$httpBackend.flush();
+
+		var note1 = target.getInternalNoteForPerson("221B-Baker-SomeoneElse");
+		expect(note1).toEqual("test");
+		$httpBackend.verifyNoOutstandingRequest();
 	});
 });

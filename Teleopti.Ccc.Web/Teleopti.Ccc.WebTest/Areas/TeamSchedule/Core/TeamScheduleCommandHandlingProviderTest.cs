@@ -650,6 +650,33 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			results.First().ErrorMessages[0].Should().Be.EqualTo(Resources.WriteProtectSchedule);
 		}
 
+
+		[Test]
+		public void ShouldNotChangeNoteForWriteProtectedSchedule()
+		{
+			PermissionProvider.Enable();
+			var person = PersonFactory.CreatePersonWithGuid("a", "b");
+			PersonRepository.Has(person);
+			person.PersonWriteProtection.PersonWriteProtectedDate = new DateOnly(2016, 6, 1);
+
+			var date = new DateOnly(2016, 4, 16);
+
+			var input = new EditScheduleNoteFormData
+			{
+				SelectedDate = date,
+				PersonId = person.Id.Value,
+				InternalNote = "new note"
+			};
+
+			ActivityCommandHandler.ResetCalledCount();
+			var results = Target.EditScheduleNote(input);
+			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
+
+			results.Count.Should().Be.EqualTo(1);
+			results.First().ErrorMessages.Count.Should().Be.EqualTo(1);
+			results.First().ErrorMessages[0].Should().Be.EqualTo(Resources.WriteProtectSchedule);
+		}
+
 		[Test]
 		public void ShouldInvokeBackoutScheduleChangeCommandHandler()
 		{
@@ -736,6 +763,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
 			results.Count.Should().Be.EqualTo(1);
 		}
+
+
+		
 	}
 
 	public class FakeActivityCommandHandler : 
@@ -745,7 +775,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		IHandleCommand<MoveShiftLayerCommand>,
 		IHandleCommand<BackoutScheduleChangeCommand>,
 		IHandleCommand<ChangeShiftCategoryCommand>,
-		IHandleCommand<FixNotOverwriteLayerCommand>
+		IHandleCommand<FixNotOverwriteLayerCommand>,
+		IHandleCommand<EditScheduleNoteCommand>
 	{
 		private int calledCount;
 		private IList<ITrackableCommand> commands = new List<ITrackableCommand>(); 
@@ -806,6 +837,12 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		}
 
 		public void Handle(FixNotOverwriteLayerCommand command)
+		{
+			calledCount++;
+			commands.Add(command);
+		}
+
+		public void Handle(EditScheduleNoteCommand command)
 		{
 			calledCount++;
 			commands.Add(command);

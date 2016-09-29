@@ -177,6 +177,8 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\MultiAbsenceRequestsHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\QueuedAbsenceRequestHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandler.cs" />
+    <Compile Include="ApplicationLayer\Commands\EditScheduleNoteCommand.cs" />
+    <Compile Include="ApplicationLayer\Commands\EditScheduleNoteCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\FixNotOverwriteLayerCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\FixNotOverwriteLayerCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Dates\AnalyticsDateChangedHandler.cs" />
