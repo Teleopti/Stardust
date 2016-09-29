@@ -1,41 +1,64 @@
-﻿(function() {
+(function() {
 	'use strict';
 
-	angular.module('wfmDate',['currentUserInfoService']).service('WFMDate', WFMDate);
+	angular
+		.module('wfmDate', ['currentUserInfoService'])
+		.factory('WFMDate', WFMDate);
 
 	WFMDate.$inject = ['CurrentUserInfo'];
 
 	function WFMDate(CurrentUserInfo) {
+
 		var nowDate = new Date();
 		var tick = 15;
-		this.setNowDate = function(date) {
+
+		var service = {
+			setNowDate: setNowDate,
+			now: now,
+			nowMoment: nowMoment,
+			nowInUserTimeZone: nowInUserTimeZone,
+			getNextTick: getNextTick,
+			getNextTickNoEarlierThanEight: getNextTickNoEarlierThanEight
+		};
+
+		return service;
+
+
+		function setNowDate(date) {
 			nowDate = date;
 		}
-		this.now = function() {
+
+		function now() {
 			return nowDate;
 		};
-		this.nowMoment = function() {
+
+		function nowMoment() {
 			return moment(nowDate);
 		}
-		this.nowInUserTimeZone = function () {
-			return moment.tz(this.nowMoment(), CurrentUserInfo.DefaultTimeZone).format();
+
+		function nowInUserTimeZone() {
+			return moment.tz(nowMoment(), CurrentUserInfo.DefaultTimeZone).format();
 		}
-		this.getNextTick= function() {
-			var nowInUserTimeZoneMoment = moment(this.nowInUserTimeZone());
+
+		function getNextTick() {
+			var nowInUserTimeZoneMoment = moment(nowInUserTimeZone());
 
 			var minutes = Math.ceil(nowInUserTimeZoneMoment.minute() / tick) * tick;
 			var start = nowInUserTimeZoneMoment.startOf('hour').minutes(minutes);
 			return start.format();
 		}
-		this.getNextTickNoEarlierThanEight = function () {
-			var nowInUserTimeZoneMoment = moment(this.nowInUserTimeZone());
+
+		function getNextTickNoEarlierThanEight() {
+			var nowInUserTimeZoneMoment = moment(nowInUserTimeZone());
 
 			var minutes = Math.ceil(nowInUserTimeZoneMoment.minute() / tick) * tick;
 			var start = nowInUserTimeZoneMoment.startOf('hour').minutes(minutes);
 
-			start.hours() < 8 && start.hours(8) &&start.minutes(minutes);
+			start.hours() < 8 && start.hours(8) && start.minutes(minutes);
 
 			return start.format();
 		}
+
+
 	}
 })();
