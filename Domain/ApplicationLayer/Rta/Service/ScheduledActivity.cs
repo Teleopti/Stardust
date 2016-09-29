@@ -53,7 +53,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public IEnumerable<ScheduledActivity> GetCurrentSchedules(DateTime utcNow, IEnumerable<PersonBusinessUnit> persons)
 		{
-			throw new NotImplementedException();
+			var from = new DateOnly(utcNow.Date.AddDays(-1));
+			var to = new DateOnly(utcNow.Date.AddDays(1));
+			return _scheduleProjection.ForPersons(from, to, persons.Select(x => x.PersonId).ToArray());
 		}
 	}
 
