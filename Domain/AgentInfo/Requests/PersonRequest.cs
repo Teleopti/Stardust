@@ -441,7 +441,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			{
 				type = MessageType.ShiftTradeFromOffer;
 			}
-			string title = String.IsNullOrEmpty(Subject) ? message : Subject;
+			var title = string.IsNullOrEmpty(Subject) ? message : Subject;
 
 			return SendPushMessageService.CreateConversation(title, message, false, type).
 										  To(Request.ReceiversForNotification).TranslateMessage().AddReplyOption("OK");
@@ -450,7 +450,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		public virtual string DenyReason
 		{
 			get { return _denyReason ?? string.Empty; }
-			protected set { _denyReason = value; }
+			protected set
+			{
+				//bug 40906 max 150 in db
+				if (value.Length > 150)
+					value = value.Substring(150);
+				_denyReason = value;
+			}
 		}
 
 		public virtual void SetNew()
