@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 			{
 				Expect.Call(dictionary.DifferenceSinceSnapshot()).Return(differenceCollectionItems);
 				Expect.Call(scheduleDay.Owner).Return(dictionary);
+				Expect.Call(dictionary.ModifiedPersonAccounts).Return(new List<IPersonAbsenceAccount>());
 				Expect.Call(dictionary.Modify(ScheduleModifier.Scheduler, new [] { scheduleDay }, null, null, null)).IgnoreArguments().Return(response);
 				Expect.Call(() => scheduleDictionarySaver.SaveChanges(differenceCollectionItems, null)).IgnoreArguments();
 				Expect.Call(dictionary.MakeEditable);
@@ -87,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 				Expect.Call(scheduleDay.Owner).Return(dictionary);
 				Expect.Call(dictionary.Modify(ScheduleModifier.Scheduler, new[] { scheduleDay }, null, null, null)).IgnoreArguments().Return(response);
 				Expect.Call(dictionary.MakeEditable);
-
+				Expect.Call(dictionary.ModifiedPersonAccounts).Return(new List<IPersonAbsenceAccount>());
 				Expect.Call(dictionary.DifferenceSinceSnapshot()).Return(differenceCollectionItems);
 				Expect.Call(() => scheduleDictionarySaver.SaveChanges(differenceCollectionItems, null)).IgnoreArguments();
 			}
