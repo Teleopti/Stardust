@@ -85,12 +85,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IScenario LoadDefaultScenario()
 		{
-			return _scenario.Single(s => s.DefaultScenario);
+			return _scenario.FirstOrDefault(s => s.DefaultScenario);
 		}
 
 		public IScenario LoadDefaultScenario(IBusinessUnit businessUnit)
 		{
-			return _scenario.SingleOrDefault(s => s.DefaultScenario && s.BusinessUnit == businessUnit);
+			throw new NotImplementedException();
 		}
 	}
 }

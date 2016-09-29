@@ -342,12 +342,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _businessUnit.Id.Value;
 		}
 
-		public Guid CurrentScenarioId()
-		{
-			ensureExists(_scenarios, null, () => WithScenario(null, true));
-			return _scenario.Id.Value;
-		}
-
 		public Guid CurrentSiteId()
 		{
 			ensureExists(_sites, null, () => WithSite(null, null));
@@ -541,12 +535,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public FakeDatabase WithScenario(Guid? id, bool? @default)
 		{
-			ensureExists(_businessUnits, null, () => WithBusinessUnit(null));
 			_scenario = new Scenario(RandomName.Make("scenario"));
 			_scenario.SetId(id ?? Guid.NewGuid());
 			if (@default.HasValue)
 				_scenario.DefaultScenario = @default.Value;
-			_scenario.SetBusinessUnit(_businessUnit);
 			_scenarios.Has(_scenario);
 			return this;
 		}
@@ -812,6 +804,5 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			if (all.IsEmpty())
 				createAction();
 		}
-
 	}
 }
