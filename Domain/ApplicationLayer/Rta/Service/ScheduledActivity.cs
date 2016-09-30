@@ -100,14 +100,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					var scenario = _scenarios.LoadDefaultScenario(_businessUnits.Load(x.Key));
 					var people = x.Select(id => _personRepository.Load(id));
 					return MakeScheduledActivities(
-							scenario,
-							_scheduleStorage,
-							people,
-							new DateOnlyPeriod(from.AddDays(-1), to.AddDays(1))
-						)
-						.Where(a => a.BelongsToDate >= from && a.BelongsToDate <= to)
-						.ToArray();
-				}).ToArray();
+						scenario,
+						_scheduleStorage,
+						people,
+						new DateOnlyPeriod(from.AddDays(-1), to.AddDays(1))
+					);
+				})
+				.Where(a => a.BelongsToDate >= from && a.BelongsToDate <= to)
+				.ToArray();
 		}
 
 		public static IEnumerable<ScheduledActivity> MakeScheduledActivities(
@@ -128,11 +128,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return (
 				from person in people
 				from scheduleDay in schedules[person].ScheduledDayCollection(period)
-				let date = scheduleDay.DateOnlyAsPeriod.DateOnly
 				from layer in scheduleDay.ProjectionService().CreateProjection()
 				select new ScheduledActivity
 				{
-					BelongsToDate = date,
+					BelongsToDate = scheduleDay.DateOnlyAsPeriod.DateOnly,
 					DisplayColor = layer.DisplayColor().ToArgb(),
 					EndDateTime = layer.Period.EndDateTime,
 					Name = layer.DisplayDescription().Name,
