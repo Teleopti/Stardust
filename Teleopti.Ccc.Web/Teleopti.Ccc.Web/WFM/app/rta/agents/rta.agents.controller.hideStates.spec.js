@@ -1,5 +1,5 @@
 'use strict';
-fdescribe('RtaAgentsCtrl hide states', function () {
+describe('RtaAgentsCtrl hide states', function () {
 	var $interval,
 		$httpBackend,
 		$state,
