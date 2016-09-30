@@ -19,7 +19,6 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
@@ -120,24 +119,29 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldReturnSitOptionsAsJsonForShiftTradeBoard()
+		public void ShouldReturnSiteOptionsAsJsonForShiftTradeBoard()
 		{
 			var siteRepository = new FakeSiteRepository();
 			var businessUnit = new BusinessUnit("myBU");
 			var site = new Site("mySite");
+			site.SetId(Guid.NewGuid());
 			site.SetBusinessUnit(businessUnit);
 			siteRepository.Add(site);
+
+			var team1 = new Team();
+			team1.Site = site;
+			var teamRepository = new FakeTeamRepository(team1);
 
 			var person = PersonFactory.CreatePerson();
 			var identity = new TeleoptiIdentity("test", null, null, null, null);
 
 			var mockAuthorize = MockRepository.GenerateMock<IAuthorizeAvailableData>();
-			mockAuthorize.Stub(m => m.Check(new OrganisationMembership(), DateOnly.Today, site)).IgnoreArguments().Return(true);
+			mockAuthorize.Stub(m => m.Check(new OrganisationMembership(), DateOnly.Today, team1)).IgnoreArguments().Return(true);
 
 			var claimSet =
 				new DefaultClaimSet(
 					new System.IdentityModel.Claims.Claim(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace +
-						"/Raptor/MyTimeWeb/ShiftTradeBulletinBoard", "true", Rights.PossessProperty),
+						"/Raptor/MyTimeWeb/ShiftTradeRequests", "true", Rights.PossessProperty),
 					new System.IdentityModel.Claims.Claim(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace +
 						"/AvailableData", mockAuthorize, Rights.PossessProperty)
 					);
@@ -148,12 +152,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var authorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(teleoptiPrincipal));
 			var permissionProvider = new PermissionProvider(authorization);
 
-			var siteProvider = new SiteProvider(siteRepository, permissionProvider, null);
+			var siteProvider = new SiteProvider(siteRepository, permissionProvider, teamRepository);
 
 			var viewModelFactory = new SiteViewModelFactory(siteProvider);
 			var target = new TeamController(null, new Now(), viewModelFactory);
 
-			var result = target.SitesForShiftTradeBoard(DateOnly.Today);
+			var result = target.SitesForShiftTrade(DateOnly.Today);
 			var data = result.Data as IEnumerable<ISelectOption>;
 			var selectOption = data.FirstOrDefault();
 			selectOption.text.Should().Equals("mysite");
@@ -165,10 +169,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var expectedId = Guid.NewGuid();
 			var expectedResult = new List<ISelectOption> { new SelectOptionItem {id = expectedId.ToString(), text = "myTeam"} };
 			var viewModelFactory = MockRepository.GenerateMock<ISiteViewModelFactory>();
-			viewModelFactory.Stub(x => x.GetTeams(new List<Guid> { new Guid() })).IgnoreArguments().Return(expectedResult);
+			viewModelFactory.Stub(x => x.GetTeams(new List<Guid> { new Guid() }, DateOnly.Today, DefinedRaptorApplicationFunctionPaths.TeamSchedule)).IgnoreArguments().Return(expectedResult);
 
 			var target = new TeamController(null, null, viewModelFactory);
-			var result = target.TeamsUnderSiteForShiftTrade("00000000-0000-0000-0000-000000000000");
+			var result = target.TeamsUnderSiteForShiftTrade("00000000-0000-0000-0000-000000000000", DateOnly.Today);
 
 			result.Data.Should().Be.EqualTo(expectedResult);
 	}

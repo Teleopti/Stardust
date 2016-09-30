@@ -41,13 +41,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 			return options;
 		}
 
-		public IEnumerable<ISelectOption> GetTeams(List<Guid> siteIds)
+		public IEnumerable<ISelectOption> GetTeams(List<Guid> siteIds, DateOnly date, string applicationFunctionPath)
 		{
 			var options = new List<ISelectOption>();
 
 			foreach (var siteId in siteIds)
 			{
-				var teams = _siteProvider.GetTeamsUnderSite(siteId).ToList();
+				var teams = _siteProvider.GetPermittedTeamsUnderSite(siteId, date, applicationFunctionPath).ToList();
 				var teamOptions = from t in teams
 										select new SelectOptionItem
 										{

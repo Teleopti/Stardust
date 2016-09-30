@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
@@ -23,15 +21,26 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 		public IEnumerable<ISite> GetPermittedSites(DateOnly date, string functionPath)
 		{
+			var permittedSite = new List<ISite>();
 			var sites = _repository.LoadAllOrderByName() ?? new ISite[] { };
-			return (from t in sites
-					  where _permissionProvider.HasSitePermission(functionPath, date, t)
-					  select t).ToArray();
+			 foreach (var site in sites)
+			{
+				var teams = _teamRepository.FindTeamsForSite(site.Id.Value);
+				if (teams.Any(team => _permissionProvider.HasTeamPermission(functionPath, date, team)))
+				{
+					permittedSite.Add(site);
+				}
+			}
+
+			return permittedSite;
 		}
 
-		public IEnumerable<ITeam> GetTeamsUnderSite(Guid siteId)
+		public IEnumerable<ITeam> GetPermittedTeamsUnderSite(Guid siteId, DateOnly date, string functionPath)
 		{
-			return _teamRepository.FindTeamsForSite(siteId);
+			var teams = _teamRepository.FindTeamsForSite(siteId) ?? new ITeam[] {};
+			return (from t in teams
+				where _permissionProvider.HasTeamPermission(functionPath, date, t)
+				select t).ToArray();
 		} 
 	}
 }

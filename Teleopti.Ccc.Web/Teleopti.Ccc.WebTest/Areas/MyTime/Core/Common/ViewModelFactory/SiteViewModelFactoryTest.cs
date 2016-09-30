@@ -60,12 +60,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 
 			var siteIds = new List<Guid>() { siteId1, siteId2 };
 
-			_siteProvider.Stub(x => x.GetTeamsUnderSite(siteId1)).Return(new List<ITeam> { team1 });
-			_siteProvider.Stub(x => x.GetTeamsUnderSite(siteId2)).Return(new List<ITeam> { team2 });
+			_siteProvider.Stub(x => x.GetPermittedTeamsUnderSite(siteId1, DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)).Return(new List<ITeam> { team1 });
+			_siteProvider.Stub(x => x.GetPermittedTeamsUnderSite(siteId2, DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)).Return(new List<ITeam> { team2 });
 
 			var target = new SiteViewModelFactory(_siteProvider);
 
-			var result = target.GetTeams(siteIds);
+			var result = target.GetTeams(siteIds, DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb);
 			result.ToList()[0].text.Should().Be.EqualTo(teamName1);
 			result.ToList()[1].text.Should().Be.EqualTo(teamName2);
 	}

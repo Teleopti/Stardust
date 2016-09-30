@@ -46,10 +46,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWork]
 		[HttpPost]
-		public virtual JsonResult TeamsUnderSiteForShiftTrade(string siteIds)
+		public virtual JsonResult TeamsUnderSiteForShiftTrade(string siteIds, DateOnly? date)
 		{
+			if (!date.HasValue) date = _now.LocalDateOnly();
+
 			var allSiteIds = siteIds.Split(',').Select(siteId => new Guid(siteId)).ToList();
-			return Json(_siteViewModelFactory.GetTeams(allSiteIds));
+			return Json(_siteViewModelFactory.GetTeams(allSiteIds, date.Value, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb));
 		}
 
 		[UnitOfWork]
@@ -64,14 +66,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWork]
-		public virtual JsonResult SitesForShiftTradeBoard(DateOnly? date)
+		public virtual JsonResult SitesForShiftTrade(DateOnly? date)
 		{
-			if (!date.HasValue)
-				date = _now.LocalDateOnly();
-			return
-				Json(
-					_siteViewModelFactory.CreateSiteOptionsViewModel(date.Value, DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard),
-					JsonRequestBehavior.AllowGet);
+			if (!date.HasValue) date = _now.LocalDateOnly();
+			return Json( _siteViewModelFactory.CreateSiteOptionsViewModel(date.Value, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb), JsonRequestBehavior.AllowGet);
 		}
 
 		[UnitOfWork]

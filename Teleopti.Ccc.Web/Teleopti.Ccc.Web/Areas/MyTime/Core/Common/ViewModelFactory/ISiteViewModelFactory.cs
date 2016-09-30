@@ -10,6 +10,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 	{
 		IEnumerable<ISelectOption> CreateSiteOptionsViewModel(DateOnly date, string applicationFunctionPath);
 
-		IEnumerable<ISelectOption> GetTeams(List<Guid> siteIds);
+		IEnumerable<ISelectOption> GetTeams(List<Guid> siteIds, DateOnly date, string applicationFunctionPath);
 	}
 }

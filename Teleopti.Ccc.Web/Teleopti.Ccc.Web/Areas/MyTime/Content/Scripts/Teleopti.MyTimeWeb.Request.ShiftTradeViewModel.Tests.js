@@ -335,7 +335,7 @@ $(document).ready(function () {
 	test("should load sites", function () {
 		var ajax = {
 			Ajax: function (options) {
-				if (options.url == "Team/SitesForShiftTradeBoard") {
+				if (options.url == "Team/SitesForShiftTrade") {
 					options.success(
 							[
 								{ id: "A", text: "Site A"},
