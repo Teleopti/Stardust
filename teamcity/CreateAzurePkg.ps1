@@ -66,8 +66,7 @@ task CreateAzurePkg -depends Init, PreReq -description "Create Azure Package" {
 			InlineScript {& $Using:CSPackEXE "$Using:WorkingDir\teamcity\Azure\ServiceDefinition.csdef" `
 			  "/role:TeleoptiCCC;$Using:WorkingDir\TeleoptiCCC" `
 			  "/rolePropertiesFile:TeleoptiCCC;$Using:WorkingDir\teamcity\Azure\AzureRoleProperties.txt" `
-			  "/out:$Using:AzurePackagePath"
-			  pwd}
+			  "/out:$Using:AzurePackagePath"}
 			
 			#Create Azure Large pkg
 			InlineScript {& $Using:CSPackEXE "$Using:WorkingDir\teamcity\Azure\ServiceDefinition_Large.csdef" `
@@ -78,13 +77,7 @@ task CreateAzurePkg -depends Init, PreReq -description "Create Azure Package" {
 	}
 	
 	parallelAzurePackaging -CSPackEXE $CSPackEXE -AzurePackagePath $AzurePackagePath -AzurePackagePath_Large $AzurePackagePath_Large -WorkingDir $WorkingDir
-	<#Create Azure Pkg
-	$Arg = @("Azure\ServiceDefinition.csdef", '/role:TeleoptiCCC;Azure\TeleoptiCCC', '/rolePropertiesFile:TeleoptiCCC;Azure\AzureRoleProperties.txt', "/out:$AzurePackagePath")
-    & $CSPackEXE $Arg 
-	
-	Create Azure Pkg Large version
-	$Arg = @('Azure\ServiceDefinition_Large.csdef', '/role:TeleoptiCCC;Azure\TeleoptiCCC', '/rolePropertiesFile:TeleoptiCCC;Azure\AzureRoleProperties.txt', "/out:$AzurePackagePath_Large")
-	& $CSPackEXE $Arg #>
+
 }
 
 task PostReq -depends Init, PreReq, CreateAzurePkg -description "PostReq steps" {
