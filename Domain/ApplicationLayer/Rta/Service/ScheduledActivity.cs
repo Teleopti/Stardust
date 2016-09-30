@@ -107,8 +107,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						)
 						.Where(a => a.BelongsToDate >= from && a.BelongsToDate <= to)
 						.ToArray();
-
-				});
+				}).ToArray();
 		}
 
 		public static IEnumerable<ScheduledActivity> MakeScheduledActivities(
