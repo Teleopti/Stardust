@@ -109,15 +109,15 @@
 
 		vm.getScheduleNoteForPerson = function (personId) {
 			return ScheduleNoteMgmt.getInternalNoteForPerson(personId);
-		}
+		};
 
 		vm.editScheduleNote = function (personId) {
 			vm.noteEditorInputOption = {
 				selectedDate: vm.selectedDate,
 				personId: personId,
 				showEditor:true
-			}
-		}
+			};
+		};
 
 		function isAllInCurrentPageSelected() {
 			var isAllSelected = true;

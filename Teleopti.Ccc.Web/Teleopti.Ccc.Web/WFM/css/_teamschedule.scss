@@ -641,6 +641,11 @@
 	.unselectable {
 		cursor: not-allowed !important;
 	}
+
+	note-editor textarea{
+		width: 100%;
+		min-height: 200px;
+	}
 }
 
 .team-schedule-command-confirm-dialog {
