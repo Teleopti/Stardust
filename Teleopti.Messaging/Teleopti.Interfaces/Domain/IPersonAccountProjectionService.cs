@@ -8,19 +8,6 @@ namespace Teleopti.Interfaces.Domain
     public interface IPersonAccountProjectionService
     {
         /// <summary>
-        /// Periods  to load from Repository
-        /// </summary>
-        /// <returns></returns>
-        IList<DateTimePeriod> PeriodsToLoad();
-
-
-        /// <summary>
-        /// Periods to read from the loaded schedule.
-        /// </summary>
-        /// <returns></returns>
-        DateTimePeriod? PeriodToReadFromSchedule();
-
-        /// <summary>
         /// Alls the visual layers from loaded data and repository.
         /// </summary>
         /// <param name="storage">The repository.</param>

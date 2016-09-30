@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
         private DateTime _dateTime2;
         private DateTime _dateTime3;
         private DateTime _dateTime4;
-        private IPersonAccountProjectionService _target;
+        private PersonAccountProjectionService _target;
 
         private List<DateTimePeriod> _periodsToReadFromDatabase;
         private DateOnlyPeriod _accountPeriod;
