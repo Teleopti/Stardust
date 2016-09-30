@@ -41,7 +41,7 @@
 					$scope.siteName = name;
 				});
 
-			if ($state.siteId !== null) {
+			if ($scope.siteId === null) {
 				var message = $translate.instant('WFMReleaseNotification')
 					.replace('{0}', 'RTA')
 					.replace('{1}', "<a href=' http://www.teleopti.com/wfm/customer-feedback.aspx'>")

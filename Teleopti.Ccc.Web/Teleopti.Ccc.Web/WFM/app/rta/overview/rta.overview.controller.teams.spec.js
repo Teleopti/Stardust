@@ -6,7 +6,8 @@ describe('RtaOverviewCtrl', function () {
 		$sessionStorage,
 		$fakeBackend,
 		$controllerBuilder,
-		scope;
+		scope,
+		NoticeService;
 
 	var stateParams = {};
 
@@ -21,13 +22,14 @@ describe('RtaOverviewCtrl', function () {
 		});
 	});
 
-	beforeEach(inject(function (_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_) {
+	beforeEach(inject(function (_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_, _NoticeService_) {
 		$interval = _$interval_;
 		$state = _$state_;
 		$sessionStorage = _$sessionStorage_;
 		$httpBackend = _$httpBackend_;
 		$fakeBackend = _FakeRtaBackend_;
 		$controllerBuilder = _ControllerBuilder_;
+		NoticeService = _NoticeService_;
 
 		scope = $controllerBuilder.setup('RtaOverviewCtrl');
 
@@ -243,5 +245,15 @@ describe('RtaOverviewCtrl', function () {
 		var result = scope.getAdherencePercent(5, 10);
 
 		expect(result).toEqual(50);
+	});
+
+
+	it('should not call notify service', function () {
+		stateParams.siteId = "6a21c802-7a34-4917-8dfd-9b5e015ab461";
+		spyOn(NoticeService, 'info');
+
+		$controllerBuilder.createController();
+
+		expect(NoticeService.info).not.toHaveBeenCalled();
 	});
 });
