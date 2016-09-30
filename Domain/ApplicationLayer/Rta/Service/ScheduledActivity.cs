@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public Guid BusinessUnitId;
 	}
 
+	[RemoveMeWithToggle(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
 	public class FromReadModel : IScheduleReader
 	{
 		private readonly IScheduleProjectionReadOnlyPersister _scheduleProjection;
@@ -53,9 +54,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public IEnumerable<ScheduledActivity> GetCurrentSchedules(DateTime utcNow, IEnumerable<PersonBusinessUnit> persons)
 		{
-			var from = new DateOnly(utcNow.Date.AddDays(-1));
-			var to = new DateOnly(utcNow.Date.AddDays(1));
-			return _scheduleProjection.ForPersons(from, to, persons.Select(x => x.PersonId).ToArray());
+			return GetCurrentSchedules(utcNow, persons.Select(x => x.PersonId).ToArray());
 		}
 	}
 
