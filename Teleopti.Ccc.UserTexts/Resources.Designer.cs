@@ -13210,6 +13210,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Internal Note.
+        /// </summary>
+        public static string InternalNote {
+            get {
+                return ResourceManager.GetString("InternalNote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Internal Note:.
         /// </summary>
         public static string InternalNoteColon {

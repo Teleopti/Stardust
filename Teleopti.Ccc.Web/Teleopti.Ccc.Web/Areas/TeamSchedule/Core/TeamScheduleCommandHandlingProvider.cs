@@ -388,7 +388,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			_commandDispatcher.Execute(command);
 
 			
-			if (command.ErrorMessages.Any())
+			if (command.ErrorMessages != null && command.ErrorMessages.Any())
 				retResult.Add(new ActionResult
 				{
 					PersonId = input.PersonId,

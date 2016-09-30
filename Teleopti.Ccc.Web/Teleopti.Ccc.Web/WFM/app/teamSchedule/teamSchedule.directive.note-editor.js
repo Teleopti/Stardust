@@ -8,7 +8,7 @@
 
 	function noteEditorCtrl($scope, ScheduleNoteMgmt, NoticeService) {
 		var vm = this;
-		vm.label = 'InternalNotes';
+		vm.label = 'InternalNote';
 		vm.submit = function () {
 			var result = ScheduleNoteMgmt.setInternalNoteForPerson(vm.noteInputOption.personId, vm.internalNotes, vm.noteInputOption.selectedDate);
 			vm.noteInputOption.showEditor = false;
