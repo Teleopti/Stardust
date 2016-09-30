@@ -643,4 +643,13 @@ input[type=search]::-ms-clear {
     .full-day-label {
 	    max-width: 100px;
     }
+    .request-date {
+        max-width: 270px;
+        left: 10px;
+    }
+    .request-new-datefrom.request-new-datefrom,
+    .request-new-dateto.request-new-dateto {
+        width: 107%;
+	    left: -10px;
+    }
 }

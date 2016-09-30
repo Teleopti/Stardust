@@ -6,7 +6,7 @@ datepicker.place = function() {
     if (this.calendarPlacement === 'left') {
         this.picker.css({
             top: offset.top + this.height,
-            left: this.element.parents()[1].offsetLeft
+            left: offset.left + sourceItem[0].offsetWidth - this.picker[0].offsetWidth
         });
     } else {
         this.picker.css({
