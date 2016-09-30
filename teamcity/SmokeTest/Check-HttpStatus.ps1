@@ -77,7 +77,7 @@ $UrlToCheck3 = $UrlToTest + '/SDK/TeleoptiCCCSdkService.svc'
   parallel {
     Check-URL $UrlToCheck1
     Check-URL $UrlToCheck2
-#    Check-URL $UrlToCheck3
+    Check-URL $UrlToCheck3
   }
 }
 
