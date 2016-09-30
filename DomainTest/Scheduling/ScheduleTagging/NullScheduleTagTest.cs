@@ -49,8 +49,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ScheduleTagging
         [Test]
         public void VerifyChangedInfo()
         {
-            Assert.IsNull(_target.CreatedBy);
-            Assert.IsNull(_target.CreatedOn);
             Assert.IsNull(_target.UpdatedBy);
             Assert.IsNull(_target.UpdatedOn);
         }

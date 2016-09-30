@@ -39,16 +39,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.ScheduleTagging
         {
         }
 
-        public IPerson CreatedBy
-        {
-            get { return null; }
-        }
-
-        public DateTime? CreatedOn
-        {
-            get { return null; }
-        }
-
         public IPerson UpdatedBy
         {
             get { return null; }
