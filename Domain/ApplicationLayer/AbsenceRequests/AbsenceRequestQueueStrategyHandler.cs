@@ -68,6 +68,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				_queuedAbsenceRequestRepository.CheckAndUpdateSent(bulkRequestTimeoutMinutes);
 				uow.PersistAll();
 			}
+			var initialBu = ((ICurrentBusinessUnit)_businessUnitScope).Current();
 
 			businessUnits.ForEach(businessUnit =>
 			{
@@ -93,7 +94,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 							PersonRequestIds = absenceRequests.ToList(),
 							Sent = sent
 						};
-						_publisher.Publish(multiAbsenceRequestsEvent);
+						_publisher.Publish(multiAbsenceRequestsEvent);	
 						_queuedAbsenceRequestRepository.Send(absenceRequests.ToList(), sent);
 						Thread.Sleep(1000); //Sleep 1 second to make unique timestamps
 					});
@@ -102,6 +103,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				}
 
 			});
+			_businessUnitScope.OnThisThreadUse(initialBu);
 		}
 	}
 }
