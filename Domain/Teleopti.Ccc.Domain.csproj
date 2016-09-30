@@ -2454,10 +2454,6 @@
     <Compile Include="UnitOfWork\WithUnitOfWork.cs" />
     <Compile Include="DisabledBy.cs" />
     <Compile Include="EnabledBy.cs" />
-    <Compile Include="WebReport\ReportDataForecastVersusActualWorkload.cs" />
-    <Compile Include="WebReport\ReportDataQueueStatAbandoned.cs" />
-    <Compile Include="WebReport\ReportDataServiceLevelAgentsReady.cs" />
-    <Compile Include="WebReport\ReportControlSkillGet.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestNoneValidator.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenDatePeriod.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenPeriod.cs" />

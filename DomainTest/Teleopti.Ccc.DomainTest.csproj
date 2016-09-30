@@ -1536,10 +1536,6 @@
     <Compile Include="UndoRedo\UndoRedoContainerTest.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="WebReport\ReportDataServiceLevelAgentsReadyTest.cs" />
-    <Compile Include="WebReport\ReportControlSkillGetTest.cs" />
-    <Compile Include="WebReport\ReportDataQueueStatAbandonedTest.cs" />
-    <Compile Include="WebReport\ReportDataForecastVersusActualWorkloadTest.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestNoneValidatorTest.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenDatePeriodTest.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenPeriodMergerTest.cs" />
