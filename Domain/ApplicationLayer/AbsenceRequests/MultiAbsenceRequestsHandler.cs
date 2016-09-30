@@ -47,9 +47,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		[AsSystem]
 		public virtual void Handle(NewMultiAbsenceRequestsCreatedEvent @event)
 		{
+			_feedback.SendProgress?.Invoke($"Received {@event.PersonRequestIds.Count} Absence Requests.");
+
 			var personRequests = checkPersonRequest(@event);
 			
-			_feedback.SendProgress?.Invoke("Done Checking Person Requests.");
+			_feedback.SendProgress?.Invoke($"Done Checking Person Requests. {personRequests.Count} will be processed.");
 			if (!personRequests.IsNullOrEmpty())
 				_multiAbsenceRequestsUpdater.UpdateAbsenceRequest(personRequests);
 
@@ -82,26 +84,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					}
 				}
 
+
 				var personRequests = _personRequestRepository.Find(@event.PersonRequestIds);
 
 				foreach (var personRequest in personRequests)
 				{
 					if (personRequestSpecification.IsSatisfiedBy(personRequest))
 					{
-						if (logger.IsWarnEnabled)
-						{
-							logger.WarnFormat(
-								"No person request found with the supplied Id, or the request is not in New status mode. (Id = {0})",
-								personRequest.Id);
-						}
+						string warning = $"No person request found with the supplied Id, or the request is not in New status mode. (Id = {personRequest.Id})";
+						_feedback.SendProgress?.Invoke(warning);
+						logger.Warn(warning);
 					}
 					else if (absenceRequestSpecification.IsSatisfiedBy((IAbsenceRequest) personRequest.Request))
 					{
-						if (logger.IsWarnEnabled)
-						{
-							logger.WarnFormat("The found person request is not of type absence request. (Id = {0})",
-											  personRequest.Id);
-						}
+						string warning = $"The found person request is not of type absence request. (Id = {personRequest.Id})";
+						logger.Warn(warning);
+						_feedback.SendProgress?.Invoke(warning);
 					}
 					else
 					{
@@ -123,12 +121,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					DateTimePeriod period = new DateTimePeriod(min.Utc(), max.Utc());
 					var waitListIds = _personRequestRepository.GetWaitlistRequests(period).ToList();
 					requests.AddRange(_personRequestRepository.Find(waitListIds));
+					_feedback.SendProgress?.Invoke($"Picked up {waitListIds.Count} waitlisted requests in period {period}.");
 				}
 
 				//preload some data
 				_personRepository.FindPeople(requests.Select(x => x.Person.Id.GetValueOrDefault()));
 				_skillRepository.LoadAllSkills();
-				
+
 				uow.PersistAll();
 			}
 			return requests;
