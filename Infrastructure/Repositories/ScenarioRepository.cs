@@ -64,13 +64,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public IScenario LoadDefaultScenario(IBusinessUnit businessUnit)
         {
-            using(UnitOfWork.DisableFilter(QueryFilter.BusinessUnit))
-            {
-                return Session.CreateCriteria(typeof(Scenario))
-                 .Add(Property.ForName("DefaultScenario").Eq(true))
-                 .Add(Property.ForName("BusinessUnit").Eq(businessUnit))
-                 .UniqueResult<IScenario>();
-            }
+	        return Session.CreateCriteria(typeof(Scenario))
+		        .Add(Property.ForName("DefaultScenario").Eq(true))
+		        .Add(Property.ForName("BusinessUnit").Eq(businessUnit))
+		        .UniqueResult<IScenario>();
         }
     }
 }
