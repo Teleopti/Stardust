@@ -1593,11 +1593,3 @@ End personal drop down menu
 		background-color: transparent !important;
 	}
 }
-
-
-/*Hide user name in small screen*/
-@media(max-width: 768px) {
-	.bdd-mytime-top-menu span.user-name {
-		display: none;
-	}
-}

@@ -1,5 +1,4 @@
-﻿
-@media (min-width: 768px) {
+﻿@media (min-width: 768px) {
 	.custom-collapsed .navbar-header {
 		float: none;
 	}
@@ -13,23 +12,23 @@
 		box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
 	}
 
-		.custom-collapsed .navbar-collapse.collapse {
-			display: none !important;
-		}
+	.custom-collapsed .navbar-collapse.collapse {
+		display: none !important;
+	}
 
 	.custom-collapsed .navbar-nav {
 		float: none !important;
 		margin: 7.5px -15px;
 	}
 
-		.custom-collapsed .navbar-nav > li {
-			float: none;
-		}
+	.custom-collapsed .navbar-nav > li {
+		float: none;
+	}
 
-			.custom-collapsed .navbar-nav > li > a {
-				padding-top: 10px;
-				padding-bottom: 10px;
-			}
+	.custom-collapsed .navbar-nav > li > a {
+		padding-top: 10px;
+		padding-bottom: 10px;
+	}
 
 	.custom-collapsed .navbar-collapse.collapse.in {
 		display: block !important;
@@ -51,9 +50,9 @@
 		display: none !important;
 	}
 
-		.custom-collapsed .offcanvas.in {
-			display: block !important;
-		}
+	.custom-collapsed .offcanvas.in {
+		display: block !important;
+	}
 
 	.custom-collapsed .navbar-offcanvas {
 		width: 300px;
@@ -71,15 +70,20 @@
 		border-width: 0 0 0 1px;
 	}
 
-		.custom-collapsed .navbar-offcanvas.navmenu-fixed-left {
-			right: auto;
-			left: 0;
-			border-width: 0 1px 0 0;
-		}
+	.custom-collapsed .navbar-offcanvas.navmenu-fixed-left {
+		right: auto;
+		left: 0;
+		border-width: 0 1px 0 0;
+	}
 
-		.custom-collapsed .navbar-offcanvas .navbar-nav {
-			margin: 0;
-		}
+	.custom-collapsed .navbar-offcanvas .navbar-nav {
+		margin: 0;
+	}
+
+	.navbar-nav.navbar-user-setting{
+		margin-right: 10px;
+		margin-left: 10px;
+	}
 }
 
 /* overides so can keep a nav bar uncollapsed*/
@@ -124,4 +128,16 @@
 
 .navbar-collapse {
 	max-height: none !important;
+}
+
+.navbar-nav.navbar-user-setting{
+	margin-right: 10px;
+	margin-left: 10px;
+}
+
+/*Hide user name in small screen*/
+@media(max-width: 768px) {
+	.bdd-mytime-top-menu span.user-name {
+		display: none;
+	}
 }
