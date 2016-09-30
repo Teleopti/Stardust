@@ -34,10 +34,11 @@ namespace Teleopti.Wfm.Administration.Core
 				var oldTenant = _loadAllTenants.Tenants().FirstOrDefault(x => x.Name.Equals(model.OriginalName));
 				if (oldTenant != null)
 				{
-					var appBuilder = new SqlConnectionStringBuilder { DataSource = model.Server, InitialCatalog = model.AppDatabase, UserID = model.UserName, Password = model.Password, IntegratedSecurity = model.UseIntegratedSecurity};
-					var analBuilder = new SqlConnectionStringBuilder(appBuilder.ConnectionString) { InitialCatalog = model.AnalyticsDatabase };
-					oldTenant.DataSourceConfiguration.SetApplicationConnectionString(appBuilder.ConnectionString);
-					oldTenant.DataSourceConfiguration.SetAnalyticsConnectionString(analBuilder.ConnectionString);
+					// bug 40926 We can't edit them so no need to change them
+					//var appBuilder = new SqlConnectionStringBuilder { DataSource = model.Server, InitialCatalog = model.AppDatabase, UserID = model.UserName, Password = model.Password, IntegratedSecurity = model.UseIntegratedSecurity};
+					//var analBuilder = new SqlConnectionStringBuilder(appBuilder.ConnectionString) { InitialCatalog = model.AnalyticsDatabase };
+					//oldTenant.DataSourceConfiguration.SetApplicationConnectionString(appBuilder.ConnectionString);
+					//oldTenant.DataSourceConfiguration.SetAnalyticsConnectionString(analBuilder.ConnectionString);
 					oldTenant.DataSourceConfiguration.SetNHibernateConfig(Environment.CommandTimeout, model.CommandTimeout.ToString());
 				    oldTenant.Active = model.Active;
 					_currentTenantSession.CurrentSession().Save(oldTenant);
