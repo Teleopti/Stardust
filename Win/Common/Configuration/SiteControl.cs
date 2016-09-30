@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private void addCellmodels()
 		{
 			// Adds the cell models to the grid control
-			gridControlSites.CellModels.Add("NullableIntegerCellModel", new NullableIntegerCellModel(gridControlSites.Model));
+			gridControlSites.CellModels.Add("NullableIntegerCellModel", new NullableIntegerCellModel(gridControlSites.Model) { MinValue = 1 });
 			gridControlSites.CellModels.Add("DescriptionNameCell", new DescriptionNameCellModel(gridControlSites.Model));
 			gridControlSites.CellModels.Add("DescriptionShortNameCellModel",
 									   new DescriptionShortNameCellModel(gridControlSites.Model));
