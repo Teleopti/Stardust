@@ -8,13 +8,13 @@
   $WaitingTime=1
   )
 
-$username = 'toptinet\tfsintegration'
-$password = 'm8kemew0rk'
-
 function Check-URL ($UrlToCheck)
 {
     while ($true) {
-        Write-Output "Checking if $UrlToCheck is accessible..."
+        
+		$username = 'toptinet\tfsintegration'
+		$password = 'm8kemew0rk'
+		Write-Output "Checking if $UrlToCheck is accessible..."
         # Ignore SSL cert 
         [System.Net.ServicePointManager]::ServerCertificateValidationCallback = {$true}
 
@@ -77,7 +77,7 @@ $UrlToCheck3 = $UrlToTest + '/SDK/TeleoptiCCCSdkService.svc'
   parallel {
     Check-URL $UrlToCheck1
     Check-URL $UrlToCheck2
-#    Check-URL $UrlToCheck3
+    Check-URL $UrlToCheck3
   }
 }
 
