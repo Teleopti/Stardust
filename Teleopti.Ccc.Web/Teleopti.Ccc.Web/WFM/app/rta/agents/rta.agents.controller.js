@@ -189,7 +189,7 @@
 				}
 
 				function getStateNamesForAnyExcludedStates(stateIds) {
-					var stateIdsWithoutNull = stateIds.filter(function (s) { return s !== nullStateId && s !== null; })
+					var stateIdsWithoutNull = stateIds.filter(function (s) { return s !== nullStateId; })
 					if (stateIdsWithoutNull.length !== 0) {
 						RtaService.getPhoneStates(stateIdsWithoutNull)
 							.then(function (states) {
