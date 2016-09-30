@@ -438,6 +438,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				skillNode.Nodes.Add(workLoadNode);
 				reloadQueueSourceNodes(workLoadNode);
 			}
+			skillNode.Nodes.Sort();
 		}
 
 		private void reloadSkillTypeNode(TreeNodeAdv node)
@@ -480,6 +481,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				workLoadNode.Nodes.Add(ctiQueueSourceNode);
 				ctiQueueSourceNode.Tag = queueSource;
 			}
+			workLoadNode.Nodes.Sort();
 		}
 
 		private static TreeNodeAdv getSkillNode(skillModel aSkill)
