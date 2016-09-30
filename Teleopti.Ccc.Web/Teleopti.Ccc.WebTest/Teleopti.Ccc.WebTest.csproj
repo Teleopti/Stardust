@@ -265,7 +265,6 @@
     <Compile Include="Areas\MyTime\Core\Common\ViewModelFactory\SiteViewModelFactoryTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PersonPreferenceDayOccupationFactoryTest.cs" />
     <Compile Include="Core\BlockOtherOriginFilterTests.cs" />
-    <Compile Include="Core\Requests\ViewModelFactory\RequestsShiftTradeScheduleViewModelFactoryTest.cs" />
     <Compile Include="Core\TeamSchedule\ScheduleValidationProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamSchedulePersonsProviderTest.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\PerformanceToolApiControllerTest.cs" />
@@ -407,6 +406,7 @@
     <Compile Include="Core\Requests\Mapping\ShiftTradeSwapDetailViewModelMappingProfileTest.cs" />
     <Compile Include="Core\Requests\ViewModelFactory\AbsenceRequestDetailViewModelFactoryTests.cs" />
     <Compile Include="Core\Requests\ViewModelFactory\RequestsShiftTradebulletinViewModelFactoryTest.cs" />
+    <Compile Include="Core\Requests\ViewModelFactory\RequestsShiftTradeViewModelFactoryTest.cs" />
     <Compile Include="Core\SeatPlanner\Provider\SeatBookingReportProviderTest.cs" />
     <Compile Include="Core\SeatPlanner\Provider\SeatManagementProviderTestUtils.cs" />
     <Compile Include="Core\SeatPlanner\Provider\SeatMapProviderTest.cs" />
