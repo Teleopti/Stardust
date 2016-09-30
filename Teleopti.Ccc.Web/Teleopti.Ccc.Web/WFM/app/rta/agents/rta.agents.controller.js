@@ -43,7 +43,7 @@
 				var teamIds = $stateParams.teamIds || ($stateParams.teamId ? [$stateParams.teamId] : []);
 				var skillIds = ($stateParams.skillId ? [$stateParams.skillId] : []);
 				var skillAreaId = $stateParams.skillAreaId || undefined;
-				var excludedStatesFromStateParams = function () { return $stateParams.es || [] };
+				var excludedStatesFromUrl = function () { return $stateParams.es || [] };
 				var propertiesForFiltering = ["Name", "State", "Activity", "Alarm", "SiteAndTeamName"];
 				$scope.adherence = {};
 				$scope.adherencePercent = null;
@@ -134,16 +134,18 @@
 				function updateStates() {
 					if ($scope.pause || !(siteIds.length > 0 || teamIds.length > 0 || skillIds.length > 0 || skillAreaId))
 						return;
-					var excludedStates = excludedStateIds().map(function (s) { if (s === nullStateId) return null; return s; });
+					var excludedStates = excludedStateIds();
 					var excludeStates = excludedStates.length > 0;
 					getStates($scope.agentsInAlarm, excludeStates)({
 						siteIds: siteIds,
 						teamIds: teamIds,
 						skillIds: skillIds,
-						excludedStateIds: excludedStates
+						excludedStateIds: excludedStates.map(function (s) { return s === nullStateId ? null : s; })
 					})
-						.then(setStatesInAgents);
+						.then(setStatesInAgents)
+						.then(updateUrlWithExcludedStateIds(excludedStates));
 				}
+
 
 				function getStates(inAlarm, excludeStates) {
 					if (skillIds.length > 0) {
@@ -171,55 +173,44 @@
 				};
 
 				function updatePhoneStatesFromStateParams() {
-					var stateIds = excludedStatesFromStateParams()
-					if (stateIds.indexOf(nullStateId) > -1 && $scope.states.filter(function (s) { return s.Id === nullStateId; }).length === 0) {
+					var stateIds = excludedStatesFromUrl();
+					addNoStateIfNeeded(stateIds);
+					getStateNamesForAnyExcludedStates(stateIds)
+				}
+
+				function addNoStateIfNeeded(stateIds) {
+					if (stateIds.indexOf(nullStateId) > -1 &&
+						$scope.states.filter(function (s) { return s.Id === nullStateId; }).length === 0) {
 						$scope.states.push({
-							Id: nullStateId,
-							Name: "No State",
-							Selected: false
+							Id: nullStateId, Name: "No State", Selected: false
 						});
 						sortStatesByName();
 					}
-					var stateIdsWithoutNull = stateIds.filter(function(s){return s !== nullStateId;})
+				}
+
+				function getStateNamesForAnyExcludedStates(stateIds) {
+					var stateIdsWithoutNull = stateIds.filter(function (s) { return s !== nullStateId && s !== null; })
 					if (stateIdsWithoutNull.length !== 0) {
 						RtaService.getPhoneStates(stateIdsWithoutNull)
 							.then(function (states) {
-								$scope.states = $scope.states.concat(states.PhoneStates.map(function (s) {
-									return {
-										Id: s.Id,
-										Name: s.Name,
-										Selected: false
-									}
-								}));
+								$scope.states = $scope.states.concat(states.PhoneStates);
 								sortStatesByName();
 							});
 					}
 				}
 
 				function excludedStateIds() {
-					var deselected = $scope.states
-						.filter(function (s) {
-							return s.Selected === false;
-						})
+					var included = $scope.states
+						.filter(function (s) { return s.Selected === true; })
 						.map(function (s) { return s.Id; });
-					var selected = $scope.states
-						.filter(function (s) {
-							return s.Selected === true;
-						})
+					var excludedViaUrlAndNotManuallyIncluded = excludedStatesFromUrl()
+						.filter(function (s) { return included.indexOf(s) === -1; });
+					var excluded = $scope.states
+						.filter(function (s) { return s.Selected === false; })
 						.map(function (s) { return s.Id; });
-					var deselectedfromUrlAndManuallySelected = excludedStatesFromStateParams()
-						.filter(function (s) {
-							if (selected.indexOf(s) === -1)
-								return true;
-							return false;
-
-						});
-
-					var excludedStateIds = deselectedfromUrlAndManuallySelected.filter(function(s){
-						return deselected.indexOf(s) === -1 ?  true : false;
-					}).concat(deselected);
-					
-					$state.go($state.current.name, { es: excludedStateIds }, { notify: false })
+					var excludedUnique = excludedViaUrlAndNotManuallyIncluded
+						.filter(function (s) { return excluded.indexOf(s) === -1; });
+					var excludedStateIds = excludedUnique.concat(excluded);
 					return excludedStateIds;
 				}
 
@@ -281,7 +272,7 @@
 								$scope.states.push({
 									Id: state.StateId,
 									Name: state.State,
-									Selected: excludedStatesFromStateParams().indexOf(state.StateId) == -1
+									Selected: excludedStatesFromUrl().indexOf(state.StateId) == -1
 								})
 							}
 						}
@@ -289,11 +280,7 @@
 					sortStatesByName();
 				}
 
-				function sortStatesByName(){
-					$scope.states = $filter('orderBy')($scope.states, function (state) {
-						return state.Name;
-					});
-				}
+
 				function getTimeOutOfAdherence(state, timeInfo) {
 					if (state.OutOfAdherences.length > 0) {
 						var lastOOA = state.OutOfAdherences[state.OutOfAdherences.length - 1];
@@ -541,6 +528,18 @@
 						$scope.goBackToTeamsWithUrl = RtaRouteService.urlForTeams(agentsInfo[0].SiteId);
 						$scope.showPath = true;
 					}
+				};
+
+
+
+				function updateUrlWithExcludedStateIds(excludedStates) {
+					$state.go($state.current.name, { es: excludedStates }, { notify: false });
+				};
+
+				function sortStatesByName() {
+					$scope.states = $filter('orderBy')($scope.states, function (state) {
+						return state.Name;
+					});
 				};
 
 				$scope.goToOverview = function () {

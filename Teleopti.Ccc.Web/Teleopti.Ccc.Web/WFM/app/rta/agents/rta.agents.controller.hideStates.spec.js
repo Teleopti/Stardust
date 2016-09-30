@@ -192,7 +192,7 @@ describe('RtaAgentsCtrl hide states', function () {
 
 		expect(scope.states[0].Name).toEqual('LoggedOut');
 		expect(scope.states[0].Id).toEqual('loggedOutGuid');
-		expect(scope.states[0].Selected).toEqual(false);
+		expect(scope.states[0].Selected).toBeFalsy();
 	});
 
 	it('should still get phone state information when deselct multiple from stateParam', function () {
@@ -214,7 +214,7 @@ describe('RtaAgentsCtrl hide states', function () {
 		expect(scope.states.length).toEqual(2);
 		expect(result.Name).toEqual('LoggedOut');
 		expect(result.Id).toEqual('loggedOutGuid');
-		expect(result.Selected).toEqual(false);
+		expect(result.Selected).toBeFalsy();
 	});
 
 
