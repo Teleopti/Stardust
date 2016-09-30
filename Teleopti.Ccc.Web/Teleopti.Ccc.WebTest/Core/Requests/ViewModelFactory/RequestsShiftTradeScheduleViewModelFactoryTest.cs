@@ -14,7 +14,6 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 	}
 
 	[TestFixture, MyTimeWebRequestsShiftTradeViewModelFactoryTest]
-	public class RequestsShiftTradeViewModelFactoryTest
+	public class RequestsShiftTradeScheduleViewModelFactoryTest
 	{
 		public FakePersonRepository PersonRepository;
 		public FakeCurrentScenario CurrentScenario;
@@ -48,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		public IRequestsShiftTradeScheduleViewModelFactory Target;
 		public Areas.Global.FakePermissionProvider PermissionProvider;
 		public IPersonAssignmentRepository PersonAssignmentRepository;
-		public FakePersonAbsenceRepository PersonAbsenceRepository;	
+		public FakePersonAbsenceRepository PersonAbsenceRepository;
 
 		[Test]
 		public void ShouldRetrieveMyScheduleFromRawScheduleDataWhenPublished()
@@ -110,7 +109,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 			result.MySchedule.ScheduleLayers.Should().Be.Null();
 		}
-		
+
 		[Test]
 		public void ShouldSeeMyUnpublisedScheduleWhenIHaveViewUnpublishedSchedulePermission()
 		{
@@ -125,11 +124,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2016, 1, 13), team);
 			me.AddPersonPeriod(personPeriod);
 			PersonRepository.Add(me);
-			
+
 			LoggedOnUser.SetFakeLoggedOnUser(me);
 
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, me,
-				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13,8,0,0), DateTimeKind.Utc), 
+				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13,8,0,0), DateTimeKind.Utc),
 					DateTime.SpecifyKind(new DateTime(2016, 1, 13,10,0,0), DateTimeKind.Utc)),
 				ShiftCategoryFactory.CreateShiftCategory("mainShift"));
 			ScheduleStorage.Add(personAss);
@@ -144,7 +143,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			result.MySchedule.ScheduleLayers.Should().Not.Be.Null();
 			result.MySchedule.ScheduleLayers.Count().Should().Be(1);
 		}
-		
+
 		[Test]
 		public void ShouldSeeAgentUnpublisedScheduleWhenLoggedOnUserHasViewUnpublishedSchedulePermission()
 		{
@@ -162,11 +161,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			me.AddPersonPeriod(personPeriod);
 			PersonRepository.Add(agent);
 			PersonRepository.Add(me);
-			
+
 			LoggedOnUser.SetFakeLoggedOnUser(me);
 
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, agent,
-				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13,8,0,0), DateTimeKind.Utc), 
+				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13,8,0,0), DateTimeKind.Utc),
 					DateTime.SpecifyKind(new DateTime(2016, 1, 13,10,0,0), DateTimeKind.Utc)),
 				ShiftCategoryFactory.CreateShiftCategory("mainShift"));
 			ScheduleStorage.Add(personAss);
@@ -195,14 +194,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			TeamRepository.Add(team);
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2016, 1, 13), team);
 			personUnpublished.AddPersonPeriod(personPeriod);
-			
+
 			PersonRepository.Add(personUnpublished);
 
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, personUnpublished,
 				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 8, 0, 0), DateTimeKind.Utc), DateTime.SpecifyKind(new DateTime(2016, 1, 13, 10, 0, 0), DateTimeKind.Utc)),
 				ShiftCategoryFactory.CreateShiftCategory("mainShift"));
 			ScheduleStorage.Add(personAss);
-
 
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
 			{
@@ -231,7 +229,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				ShiftCategoryFactory.CreateShiftCategory("mainShift"));
 			ScheduleStorage.Add(personAss);
 
-
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging { Skip = 0, Take = 20 },
@@ -245,9 +242,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 			possibleTradeSchedule.StartTimeUtc.Should().Be(new DateTime(2016, 1, 13, 8, 0, 0));
 			possibleTradeSchedule.ScheduleLayers.First().LengthInMinutes.Should().Be(120);
-
 		}
-
 
 		[Test]
 		public void ShouldViewConfidentialAbsenceWhenAllowed()
@@ -276,7 +271,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			ScheduleStorage.Add(personAss);
 			ScheduleStorage.Add(personAbs);
 
-
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging { Skip = 0, Take = 20 },
@@ -296,7 +290,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		[Test]
 		public void ShouldViewConfidentialAbsenceWhenNotAllowed()
 		{
-
 			PermissionProvider.Enable();
 
 			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.ViewSchedules);
@@ -321,7 +314,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			ScheduleStorage.Add(personAss);
 			ScheduleStorage.Add(personAbs);
 
-
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging { Skip = 0, Take = 20 },
@@ -341,7 +333,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		[Test]
 		public void ShouldFilterOutFullAbsence()
 		{
-
 			var scenario = CurrentScenario.Current();
 			var personPublished = PersonFactory.CreatePersonWithGuid("person", "published");
 			var personWithAbsenceOnDayOff = PersonFactory.CreatePersonWithGuid("p2", "p2");
@@ -380,7 +371,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 13, 0, 0, 0), DateTimeKind.Utc),
 					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 23, 0, 0), DateTimeKind.Utc)), abs);
 			ScheduleStorage.Add(p3Abs);
-
 
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
 			{
@@ -475,7 +465,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 0, 0, 0), DateTimeKind.Utc),
 					DateTime.SpecifyKind(new DateTime(2016, 1, 16, 23, 0, 0), DateTimeKind.Utc)), abs);
 			ScheduleStorage.Add(p3Abs);
-
 
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
 			{
@@ -576,14 +565,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				new DateOnly(2016, 1, 16), new DayOffTemplate());
 			ScheduleStorage.Add(personWithDayoffAss);
 
-
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging { Skip = 0, Take = 20 },
 				ShiftTradeDate = new DateOnly(2016, 1, 16),
 				TeamIdList = new[] { team.Id.GetValueOrDefault() }
 			});
-		
+
 			result.PossibleTradeSchedules.Count().Should().Be.EqualTo(6);
 			var possibleSchedules = result.PossibleTradeSchedules.ToList();
 			possibleSchedules[0].Name.Should().Be.EqualTo("overtime person");
@@ -655,14 +643,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				new DateOnly(2016, 1, 16), new DayOffTemplate());
 			ScheduleStorage.Add(personWithDayoffAss);
 
-
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging { Skip = 0, Take = 20 },
 				ShiftTradeDate = new DateOnly(2016, 1, 16),
 				TeamIdList = new[] { team.Id.GetValueOrDefault() }
 			});
-		
+
 			result.PossibleTradeSchedules.Count().Should().Be.EqualTo(6);
 			var possibleSchedules = result.PossibleTradeSchedules.ToList();
 			possibleSchedules[0].Name.Should().Be.EqualTo("overtime person");
@@ -679,7 +666,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var scenario = CurrentScenario.Current();
 			var personPublished = PersonFactory.CreatePersonWithGuid("person", "published");
 			var me = PersonFactory.CreatePersonWithGuid("me","publised");
-			
+
 			var team = TeamFactory.CreateTeamWithId("team");
 			TeamRepository.Add(team);
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2016, 1, 16), team);
@@ -691,11 +678,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			LoggedOnUser.SetFakeLoggedOnUser(me);
 
 			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndOvertimeShift(scenario, personPublished,
-				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 8, 0, 0), DateTimeKind.Utc), 
+				new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 8, 0, 0), DateTimeKind.Utc),
 					DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)));
 			ScheduleStorage.Add(personAss);
 			var meAss = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndOvertimeShift(scenario, me,
-							new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 8, 0, 0), DateTimeKind.Utc), 
+							new DateTimePeriod(DateTime.SpecifyKind(new DateTime(2016, 1, 16, 8, 0, 0), DateTimeKind.Utc),
 								DateTime.SpecifyKind(new DateTime(2016, 1, 16, 17, 0, 0), DateTimeKind.Utc)));
 			ScheduleStorage.Add(meAss);
 
@@ -755,7 +742,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				new DateOnly(2016, 1, 16), new DayOffTemplate());
 			ScheduleStorage.Add(personWithDayoffAss);
 
-
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging { Skip = 2, Take = 2 },
@@ -805,7 +791,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			result.PossibleTradeSchedules.Count().Should().Be.EqualTo(0);
 			result.MySchedule.IsFullDayAbsence.Should().Be.True();
 		}
-		
+
 		[Test]
 		public void ShouldReturnEmptyPossibleScheduleListWhenMyScheduleIsFullDayAbsenceOnDayOff()
 		{
@@ -847,6 +833,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			result.MySchedule.IsFullDayAbsence.Should().Be.True();
 			result.MySchedule.IsDayOff.Should().Be.True();
 		}
+
 		[Test]
 		public void ShouldReturnEmptyPossibleScheduleListWhenMyScheduleIsFullDayAbsenceOnContractDayOff()
 		{
@@ -927,6 +914,4 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			result.MySchedule.IsDayOff.Should().Be.True();
 		}
 	}
-
-
 }
