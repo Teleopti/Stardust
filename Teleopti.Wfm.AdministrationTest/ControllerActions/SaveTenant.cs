@@ -30,8 +30,8 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 				var tenant = new Tenant("Old One");
 				CurrentTenantSession.CurrentSession().Save(tenant);
 			}
-			var model = new UpdateTenantModel {NewName = "old one", OriginalName = "someother name"};
-            Target.NameIsFree(model).Content.Success.Should().Be.False();
+			var model = new UpdateTenantModel { NewName = "old one", OriginalName = "someother name" };
+			Target.NameIsFree(model).Content.Success.Should().Be.False();
 		}
 
 		[Test]
@@ -70,15 +70,15 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 					Password = "password",
 					AnalyticsDatabase = "Southwind",
 					AppDatabase = "Southwind"
-				};	
+				};
 				var result = Target.Save(model);
 				result.Content.Success.Should().Be.False();
 			}
-			
+
 		}
 
-      [Test]
-		public void ShouldUpdateExistingTenant()
+		[Test]
+		public void ShouldOnlyUpdateExistingTenantActiveAndTimeout()
 		{
 			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
@@ -97,20 +97,20 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 					Server = "(local)",
 					UserName = "ola",
 					Password = "password",
-               AnalyticsDatabase = "Southwind",
+					AnalyticsDatabase = "Southwind",
 					AppDatabase = "Southwind",
 					CommandTimeout = 180,
-                    Active = false
+					Active = false
 				};
 				Target.Save(model);
 			}
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var loadedTenant = Tenants.Tenants().FirstOrDefault(t => t.Name.Equals("Old One"));
-				loadedTenant.DataSourceConfiguration.ApplicationConnectionString.Should().Contain("Initial Catalog=Southwind");
-				loadedTenant.DataSourceConfiguration.AnalyticsConnectionString.Should().Contain("Initial Catalog=Southwind");
+				loadedTenant.DataSourceConfiguration.ApplicationConnectionString.Should().Contain("Initial Catalog=Northwind");
+				loadedTenant.DataSourceConfiguration.AnalyticsConnectionString.Should().Contain("Initial Catalog=Northwind");
 				loadedTenant.DataSourceConfiguration.ApplicationNHibernateConfig[Environment.CommandTimeout].Should().Be.EqualTo("180");
-                loadedTenant.Active.Should().Be.False();
+				loadedTenant.Active.Should().Be.False();
 			}
 		}
 	}
