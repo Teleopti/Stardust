@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		public Func<IResourceOptimizationHelperExtended> ResourceOptimizationHelperExtended;
 
 		[TestCase(2000, 0, 2000)]
-		[TestCase(2000, 0.38, 3225)]
+		[TestCase(2000, 0.38, 3225)] //some "magic numbers" here to expose bug #40338
 		public void ShouldCalculateEslCorrect(int demandedAgents, double shrinkage, int scheduledAgents)
 		{
 			const double expectedServiceLevel = 0.8;
