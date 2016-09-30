@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
@@ -40,11 +41,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 		[When(@"I select to load requests from '(.*)' to '(.*)'")]
 		public void WhenISelectToLoadRequestsFromTo(string from, string to)
 		{
-			Browser.Interactions.SetScopeValues("date-range-picker", new Dictionary<string, string>
-			{
-				{"requests.period.startDate", $"new Date('{@from}')"},
-				{"requests.period.endDate", $"new Date('{to}')"}
-			});
+			Browser.Interactions.FillWith(".request-date-range-picker .start-date-input", from);
+			Browser.Interactions.FillWith(".request-date-range-picker .end-date-input", to);
 		}
 
 		[When(@"I select to load requests in status '(.*)'")]
