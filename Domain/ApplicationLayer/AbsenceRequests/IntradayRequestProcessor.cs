@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -34,28 +34,79 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 			var lowestIndex = cascadingPersonSkills.Min(x => x.Skill.CascadingIndex);
 			var primarySkills = cascadingPersonSkills.Where(x => x.Skill.CascadingIndex == lowestIndex);
-		    if (primarySkills.Any())
-		    {
-                //this could be improved to do one db call if there are many skills
-                foreach (var primarySkill in primarySkills)
-                {
-                    var skillStaffingIntervals = _scheduleForecastSkillReadModelRepository.GetBySkill(primarySkill.Skill.Id.GetValueOrDefault(),
-                                                                         personRequest.Request.Period.StartDateTime, personRequest.Request.Period.EndDateTime);
-				
+			
+			//this could be improved to do one db call if there are many skills
+			//var changes = _scheduleForecastSkillReadModelRepository.GetReadModelChanges(personRequest.Request.Period);
+
+			foreach (var primarySkill in primarySkills)
+			{
+				//var skillStaffingIntervals =
+				//	_scheduleForecastSkillReadModelRepository.GetBySkill(primarySkill.Skill.Id.GetValueOrDefault(),
+				//		personRequest.Request.Period.StartDateTime, personRequest.Request.Period.EndDateTime);
+				var skillStaffingIntervals = getSkillStaffIntervals(primarySkill.Skill.Id.GetValueOrDefault(), personRequest.Request.Period);
+				//skillStaffingIntervals = applyChanges(skillStaffingIntervals,
+				//	changes.Where(x => x.SkillId == primarySkill.Skill.Id.GetValueOrDefault()));
+
 				var underStaffingDetails = getUnderStaffedPeriods(skillStaffingIntervals);
 
 				if (underStaffingDetails.UnderstaffingTimes.Any())
-                    {
+				{
 					var denyReason = GetUnderStaffingHourString(underStaffingDetails, personRequest);
 					sendDenyCommand(personRequest.Id.GetValueOrDefault(), denyReason);
-                        return;
-                    }
-				
-                }
-                sendApproveCommand(personRequest.Id.GetValueOrDefault());
-            }
+					return;
+				}
 
+			}
+			sendApproveCommand(personRequest.Id.GetValueOrDefault());
+			
 		}
+
+		private IEnumerable<SkillStaffingInterval> getSkillStaffIntervals(Guid skillId, DateTimePeriod requestPeriod)
+		{
+			var skillStaffingIntervals =
+				_scheduleForecastSkillReadModelRepository.GetBySkill(skillId, requestPeriod.StartDateTime, requestPeriod.EndDateTime);
+			var mergedStaffingIntervals = new List<SkillStaffingInterval>();
+			var intervalChanges =  _scheduleForecastSkillReadModelRepository.GetReadModelChanges(requestPeriod).Where(x => x.SkillId == skillId);
+			if (intervalChanges.Any())
+			{
+				skillStaffingIntervals.ForEach(interval =>
+				{
+					var changes =
+						intervalChanges.Where(x => x.StartDateTime == interval.StartDateTime && x.EndDateTime == interval.EndDateTime);
+					if (changes.Any())
+					{
+						interval.StaffingLevel += changes.Sum((x => x.StaffingLevel));
+					}
+					mergedStaffingIntervals.Add(interval);
+				});
+			}
+			else
+			{
+				mergedStaffingIntervals = skillStaffingIntervals.ToList();
+			}
+			return mergedStaffingIntervals;
+		}
+
+
+		//private IEnumerable<SkillStaffingInterval> applyChanges(IEnumerable<SkillStaffingInterval> skillStaffingIntervals, IEnumerable<StaffingIntervalChange> intervalChanges)
+		//{
+		//	if (intervalChanges.Any())
+		//	{
+		//		var mergedStaffingIntervals = new List<SkillStaffingInterval>();
+		//		skillStaffingIntervals.ForEach(interval =>
+		//		{
+		//			var changes =
+		//				intervalChanges.Where(x => x.StartDateTime == interval.StartDateTime && x.EndDateTime == interval.EndDateTime);
+		//			if (changes.Any())
+		//			{
+		//				interval.StaffingLevel += changes.Sum((x => x.StaffingLevel));
+		//			}
+		//			mergedStaffingIntervals.Add(interval);
+		//		});
+		//		return mergedStaffingIntervals;
+		//	}
+		//	return skillStaffingIntervals;
+		//}
 
 		private UnderstaffingDetails getUnderStaffedPeriods(IEnumerable<SkillStaffingInterval> skillStaffingIntervals)
 		{

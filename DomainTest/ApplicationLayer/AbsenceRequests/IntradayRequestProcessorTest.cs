@@ -114,6 +114,85 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Assert.AreEqual(2, getRequestStatus(PersonRequestRepository.Get(request.Id.GetValueOrDefault())));
 		}
 
+		[Test]
+		public void ShouldDenyIfUnderstaffedAfterApplyingChanges()
+		{
+			var request = createNewRequest();
+			ScheduleForecastSkillReadModelRepository.FakeStaffingList = new Dictionary<Guid, List<SkillStaffingInterval>>();
+			var staffingList = new List<SkillStaffingInterval>()
+			{
+				new SkillStaffingInterval()
+				{
+					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
+					EndDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc),
+					ForecastWithShrinkage = 10,
+					StaffingLevel = 12
+				}
+			};
+			// adding three different  changes on the same interval on the same skill
+			ScheduleForecastSkillReadModelRepository.PersistChange(new StaffingIntervalChange()
+			{
+				StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc),
+				SkillId = _skill1.Id.GetValueOrDefault(),
+				StaffingLevel = -1
+			});
+			ScheduleForecastSkillReadModelRepository.PersistChange(new StaffingIntervalChange()
+			{
+				StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc),
+				SkillId = _skill1.Id.GetValueOrDefault(),
+				StaffingLevel = -1
+			});
+
+			ScheduleForecastSkillReadModelRepository.FakeStaffingList.Add(_skill1.Id.GetValueOrDefault(), staffingList);
+			staffingList = new List<SkillStaffingInterval>()
+			{
+				new SkillStaffingInterval()
+				{
+					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
+					EndDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc),
+					ForecastWithShrinkage = 5,
+					StaffingLevel = 10
+				}
+			};
+			ScheduleForecastSkillReadModelRepository.FakeStaffingList.Add(_skill2.Id.GetValueOrDefault(), staffingList);
+
+			Target.Process(request);
+
+			Assert.AreEqual(4, getRequestStatus(PersonRequestRepository.Get(request.Id.GetValueOrDefault())));
+		}
+
+		[Test]
+		public void ShouldApproveIfTheReadModelChangeIsOnDifferentInterval()
+		{
+			var request = createNewRequest();
+			ScheduleForecastSkillReadModelRepository.FakeStaffingList = new Dictionary<Guid, List<SkillStaffingInterval>>();
+			var staffingList = new List<SkillStaffingInterval>()
+			{
+				new SkillStaffingInterval()
+				{
+					StartDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc),
+					EndDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc),
+					ForecastWithShrinkage = 10,
+					StaffingLevel = 12
+				}
+			};
+			
+			ScheduleForecastSkillReadModelRepository.PersistChange(new StaffingIntervalChange()
+			{
+				StartDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 3, 14, 13, 30, 0, DateTimeKind.Utc),
+				SkillId = _skill1.Id.GetValueOrDefault(),
+				StaffingLevel = -1
+			});
+			ScheduleForecastSkillReadModelRepository.FakeStaffingList.Add(_skill1.Id.GetValueOrDefault(), staffingList);
+			
+			Target.Process(request);
+
+			Assert.AreEqual(2, getRequestStatus(PersonRequestRepository.Get(request.Id.GetValueOrDefault())));
+		}
+
 		private IPersonRequest createNewRequest(bool useWorkflowControlSet = true)
 		{
 

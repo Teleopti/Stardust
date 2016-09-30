@@ -182,9 +182,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
         [Test]
         public void ShouldGetReadmodelChangesWitinGivenPeriod()
         {
-            Target.PersistChange(new StaffingIntervalChange()
+	        var skillId = Guid.NewGuid();
+			Target.PersistChange(new StaffingIntervalChange()
             {
-                SkillId = Guid.NewGuid(),
+                SkillId = skillId,
                 StartDateTime = new DateTime(2016, 06, 16, 8, 0, 0, DateTimeKind.Utc),
                 EndDateTime = new DateTime(2016, 06, 16, 8, 15, 0, DateTimeKind.Utc),
                 StaffingLevel = 1
@@ -203,6 +204,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
             changes.First().StartDateTime.Should().Be.EqualTo(new DateTime(2016, 06, 16, 8, 0, 0, DateTimeKind.Utc));
             changes.First().EndDateTime.Should().Be.EqualTo(new DateTime(2016, 06, 16, 8, 15, 0, DateTimeKind.Utc));
             changes.First().StaffingLevel.Should().Be.EqualTo(1);
+	        changes.First().SkillId.Should().Be.EqualTo(skillId);
 
         }
 
