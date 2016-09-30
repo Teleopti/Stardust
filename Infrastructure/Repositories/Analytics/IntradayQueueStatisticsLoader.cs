@@ -13,24 +13,24 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
 	public class IntradayQueueStatisticsLoader : IIntradayQueueStatisticsLoader
 	{
-		public IList<SkillWorkload> LoadActualWorkloadInSeconds(IList<Guid> skillIdList, TimeZoneInfo timeZone, DateOnly today)
+		public IList<SkillIntervalCalls> LoadActualCallPerSkillInterval(IList<Guid> skillIdList, TimeZoneInfo timeZone, DateOnly today)
 		{
 
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
 				var skillListString = String.Join(",", skillIdList.Select(id => id.ToString()).ToArray());
 
-				var workloadInSecondsPerSkillInterval =
+				var callsPerSkillInterval =
 					uow.Session()
 						.CreateSQLQuery(
-							@"mart.web_intraday_workload_in_seconds @time_zone_code=:TimeZone, @today=:Today, @skill_list=:SkillList")
+							@"mart.web_intraday_calls_per_skill_interval @time_zone_code=:TimeZone, @today=:Today, @skill_list=:SkillList")
 						.SetString("TimeZone", timeZone.Id)
 						.SetString("Today", today.ToShortDateString(CultureInfo.InvariantCulture))
 						.SetString("SkillList", skillListString)
-						.SetResultTransformer(Transformers.AliasToBean(typeof(SkillWorkload)))
-						.List<SkillWorkload>();
+						.SetResultTransformer(Transformers.AliasToBean(typeof(SkillIntervalCalls)))
+						.List<SkillIntervalCalls>();
 
-				return workloadInSecondsPerSkillInterval;
+				return callsPerSkillInterval;
 			}
 		}
 

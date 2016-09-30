@@ -1,14 +1,14 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[web_intraday_workload_in_seconds]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [mart].[web_intraday_workload_in_seconds]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[web_intraday_calls_per_skill_interval]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [mart].[web_intraday_calls_per_skill_interval]
 GO
 
 -- =============================================
 -- Author:		Jonas & Maria S
 -- Create date: 2016-09-05
--- Description:	Get the workload (offered calls * handle time) in seconds for the given day. 
+-- Description:	Get the offered calls for the given day. 
 -- =============================================
--- EXEC [mart].[web_intraday_workload_in_seconds] 'W. Europe Standard Time', '2016-09-19', 'F08D75B3-FDB4-484A-AE4C-9F0800E2F753,48D3423F-D044-45F0-8C5B-A0A200F2F3C0'
-CREATE PROCEDURE [mart].[web_intraday_workload_in_seconds]
+-- EXEC [mart].[web_intraday_calls_per_skill_interval] 'W. Europe Standard Time', '2013-03-04', 'F08D75B3-FDB4-484A-AE4C-9F0800E2F753'
+CREATE PROCEDURE [mart].[web_intraday_calls_per_skill_interval]
 @time_zone_code nvarchar(100),
 @today smalldatetime,
 @skill_list nvarchar(max)
@@ -30,7 +30,7 @@ BEGIN
 		skill_code uniqueidentifier,
 		date_id int, 
 		utc_interval_id smallint,
-		workload_seconds int
+		offered_calls int
 	)
 
 	CREATE TABLE #result(
@@ -67,7 +67,7 @@ BEGIN
 		skill_code = q.skill_code,
 		date_id = fq.date_id,
 		utc_interval_id = interval_id,
-		workload_seconds = ISNULL(fq.handle_time_s, 0)
+		offered_calls = ISNULL(fq.offered_calls, 0)
 	FROM 
 		#queues q
 		INNER JOIN mart.fact_queue fq ON q.queue_id = fq.queue_id
@@ -79,7 +79,7 @@ BEGIN
 	SELECT
 		qs.skill_code AS SkillId,
 		DATEADD(mi, DATEDIFF(MINUTE, DATEADD(DAY, DATEDIFF(DAY, 0, i.interval_start), 0), i.interval_start), d.date_date) AS StartTime,
-		SUM(qs.workload_seconds) AS WorkloadInSeconds
+		SUM(qs.offered_calls) AS Calls
 	FROM
 		#queue_stats qs
 		INNER JOIN mart.bridge_time_zone bz ON qs.date_id = bz.date_id AND qs.utc_interval_id = bz.interval_id

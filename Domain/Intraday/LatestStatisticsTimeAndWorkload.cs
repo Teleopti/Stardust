@@ -6,13 +6,13 @@ namespace Teleopti.Ccc.Domain.Intraday
 	public class LatestStatisticsTimeAndWorkload
 	{
 		public int? LatestStatisticsStartTime { get; set; }
-		public IList<SkillWorkload> ActualWorkloadInSecondsPerSkill { get; set; }
+		public IList<SkillIntervalCalls> ActualWorkloadInSecondsPerSkill { get; set; }
 	}
 
-	public class SkillWorkload
+	public class SkillIntervalCalls
 	{
 		public Guid SkillId { get; set; }
-		public double WorkloadInSeconds { get; set; }
+		public double Calls { get; set; }
 		public DateTime StartTime { get; set; }
 	}
 }

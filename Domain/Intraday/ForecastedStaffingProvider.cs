@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var usersToday = new DateOnly(usersNow);
 			TimeSpan wantedIntervalResolution = TimeSpan.FromMinutes(minutesPerInterval);
 
-			var workloadInSecondsPerSkill = new Dictionary<Guid, List<SkillWorkload>>();
+			var callsPerSkill= new Dictionary<Guid, List<SkillIntervalCalls>>();
 
 			var latestStatisticsTimeUtc = latestStatisticsTime.HasValue
 				? TimeZoneHelper.ConvertToUtc(latestStatisticsTime.Value, _timeZone.TimeZone())
@@ -60,11 +60,11 @@ namespace Teleopti.Ccc.Domain.Intraday
 					mergedTaskPeriodList.AddRange(getTaskPeriods(skillDay, minutesPerInterval, latestStatisticsTimeUtc, usersNowStartOfDayUtc));
 				}
 
-				workloadInSecondsPerSkill.Add(skill.Id.Value, mergedTaskPeriodList.Select(x => new SkillWorkload
+				callsPerSkill.Add(skill.Id.Value, mergedTaskPeriodList.Select(x => new SkillIntervalCalls
 				{
 					SkillId = skill.Id.Value,
 					StartTime = TimeZoneHelper.ConvertFromUtc(x.Period.StartDateTime, _timeZone.TimeZone()),
-					WorkloadInSeconds = x.TotalTasks * (x.TotalAverageTaskTime.TotalSeconds + x.TotalAverageAfterTaskTime.TotalSeconds)
+					Calls = x.TotalTasks
 				})
 				.ToList());
 			}
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			return new ForecastedStaffingModel()
 			{
 				StaffingIntervals = staffingIntervals,
-				WorkloadInSecondsPerSkill = workloadInSecondsPerSkill
+				CallsPerSkill = callsPerSkill
 			};
 		}
 
@@ -140,6 +140,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 	public class ForecastedStaffingModel
 	{
 		public IList<StaffingIntervalModel> StaffingIntervals { get; set; }
-		public Dictionary<Guid, List<SkillWorkload>> WorkloadInSecondsPerSkill { get; set; }
+		public Dictionary<Guid, List<SkillIntervalCalls>> CallsPerSkill { get; set; }
 	}
 }

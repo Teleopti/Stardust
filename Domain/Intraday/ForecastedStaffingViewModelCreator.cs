@@ -34,11 +34,11 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var minutesPerInterval = _intervalLengthFetcher.IntervalLength;
 			var usersNow = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
 			var usersToday = new DateOnly(usersNow);
-			var actualWorkloadPerSkillInterval = _intradayQueueStatisticsLoader.LoadActualWorkloadInSeconds(skillIdList, _timeZone.TimeZone(), usersToday);
+			var actualCallsPerSkillInterval = _intradayQueueStatisticsLoader.LoadActualCallPerSkillInterval(skillIdList, _timeZone.TimeZone(), usersToday);
 			DateTime? latestStatsTime = null;
 
-			if (actualWorkloadPerSkillInterval.Count > 0)
-				latestStatsTime = actualWorkloadPerSkillInterval.Max(d => d.StartTime);
+			if (actualCallsPerSkillInterval.Count > 0)
+				latestStatsTime = actualCallsPerSkillInterval.Max(d => d.StartTime);
 
 			var forecastedStaffingModel = _forecastedStaffingProvider.Load(skillIdList, latestStatsTime, minutesPerInterval);
 
@@ -48,8 +48,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			var updatedForecastedSeries = getUpdatedForecastedStaffing(
 				staffingForUsersToday,
-				actualWorkloadPerSkillInterval, 
-				forecastedStaffingModel.WorkloadInSecondsPerSkill,
+				actualCallsPerSkillInterval, 
+				forecastedStaffingModel.CallsPerSkill,
 				latestStatsTime, 
 				usersNow, 
 				minutesPerInterval
@@ -84,8 +84,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 		private List<double?> getUpdatedForecastedStaffing(
 			List<StaffingIntervalModel> forecastedStaffingList, 
-			IList<SkillWorkload> actualworkloadInSeconds, 
-			Dictionary<Guid, List<SkillWorkload>> forecastedWorkloadDictionary, 
+			IList<SkillIntervalCalls> actualCallsPerSkillList, 
+			Dictionary<Guid, List<SkillIntervalCalls>> forecastedCallsPerSkillDictionary, 
 			DateTime? latestStatsTime, 
 			DateTime usersNow, 
 			int minutesPerInterval)
@@ -103,30 +103,30 @@ namespace Teleopti.Ccc.Domain.Intraday
 				.Select(s => s)
 				.ToDictionary(x => x.Key, x => forecastedStaffingList.Where(s => s.SkillId == x.Key));
 
-			var actualWorkloadDictionary = actualworkloadInSeconds
+			var actualCallsPerSkillDictionary = actualCallsPerSkillList
 				.GroupBy(g => g.SkillId)
 				.Select(s => s)
-				.ToDictionary(x => x.Key, x => actualworkloadInSeconds.Where(s => s.SkillId == x.Key));
+				.ToDictionary(x => x.Key, x => actualCallsPerSkillList.Where(s => s.SkillId == x.Key));
 
 			var updatedForecastedSeries = new List<StaffingIntervalModel>();
 
-			foreach (var skillId in forecastedWorkloadDictionary.Keys)
+			foreach (var skillId in forecastedCallsPerSkillDictionary.Keys)
 			{
 				double averageDeviation = 1;
-				if (actualWorkloadDictionary.ContainsKey(skillId))
+				if (actualCallsPerSkillDictionary.ContainsKey(skillId))
 				{
-					IEnumerable<SkillWorkload> actualWorkload = actualWorkloadDictionary[skillId];
-					double workloadDeviationFactor = 0;
-					foreach (var forecastedWorkloadInterval in forecastedWorkloadDictionary[skillId])
+					IEnumerable<SkillIntervalCalls> actualCalls = actualCallsPerSkillDictionary[skillId];
+					double callsDeviationFactor = 0;
+					foreach (var forecastedIntervalCalls in forecastedCallsPerSkillDictionary[skillId])
 					{
-						var actualWorkloadInterval =
-							actualWorkload.SingleOrDefault(x => x.StartTime == forecastedWorkloadInterval.StartTime);
-						if (actualWorkloadInterval == null)
+						var actualIntervalCalls =
+							actualCalls.SingleOrDefault(x => x.StartTime == forecastedIntervalCalls.StartTime);
+						if (actualIntervalCalls == null)
 							continue;
-						workloadDeviationFactor += actualWorkloadInterval.WorkloadInSeconds / forecastedWorkloadInterval.WorkloadInSeconds;
+						callsDeviationFactor += actualIntervalCalls.Calls / forecastedIntervalCalls.Calls;
 					}
 
-					averageDeviation = workloadDeviationFactor / actualWorkload.Count();
+					averageDeviation = callsDeviationFactor / actualCalls.Count();
 				}
 				
 				var updatedForecastedSeriesPerSkill = forecastedStaffingDictionary[skillId]

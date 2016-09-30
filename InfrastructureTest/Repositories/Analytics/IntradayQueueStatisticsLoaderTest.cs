@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		public void ShouldCheckThatStoredProcedureExists()
 		{
 			var target = new IntradayQueueStatisticsLoader();
-			var actualWorkloadInSecondsPerSkillInterval = target.LoadActualWorkloadInSeconds(new Guid[] { Guid.NewGuid() }, TimeZoneInfo.Utc, DateOnly.Today);
+			var actualWorkloadInSecondsPerSkillInterval = target.LoadActualCallPerSkillInterval(new Guid[] { Guid.NewGuid() }, TimeZoneInfo.Utc, DateOnly.Today);
 
 			actualWorkloadInSecondsPerSkillInterval.Count.Should().Be.EqualTo(0);
 		}
