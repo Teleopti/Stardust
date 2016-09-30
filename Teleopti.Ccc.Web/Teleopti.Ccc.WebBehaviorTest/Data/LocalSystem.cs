@@ -1,14 +1,12 @@
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Interfaces.Domain;
@@ -18,8 +16,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
 	public static class LocalSystem
 	{
-		private static IContainer _container;
-
 		public static IToggleManager Toggles;
 		public static ICurrentTransactionHooks TransactionHooks;
 		public static ICurrentUnitOfWorkFactory UnitOfWorkFactory;
@@ -34,38 +30,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static void Setup()
 		{
-			var builder = new ContainerBuilder();
-			var args = new IocArgs(new ConfigReader())
-			{
-				AllEventPublishingsAsSync = true,
-				FeatureToggle = TestSiteConfigurationSetup.URL.ToString()
-			};
-			var iocConfiguration = new IocConfiguration(args, CommonModule.ToggleManagerForIoc(args));
-			builder.RegisterModule(new CommonModule(iocConfiguration));
-			builder.RegisterType<DefaultDataCreator>().SingleInstance();
-			builder.RegisterModule(new TenantServerModule(iocConfiguration));
+			IntegrationIoCTest.Setup();
 
-			_container = builder.Build();
+			Toggles = IntegrationIoCTest.Container.Resolve<IToggleManager>();
+			Now = IntegrationIoCTest.Container.Resolve<INow>() as MutableNow;
+			TransactionHooks = IntegrationIoCTest.Container.Resolve<ICurrentTransactionHooks>();
+			UnitOfWorkFactory = IntegrationIoCTest.Container.Resolve<ICurrentUnitOfWorkFactory>();
+			UnitOfWork = IntegrationIoCTest.Container.Resolve<ICurrentUnitOfWork>();
+			EventPublisher = IntegrationIoCTest.Container.Resolve<IEventPublisher>();
+			TenantUnitOfWork = IntegrationIoCTest.Container.Resolve<ITenantUnitOfWork>();
+			CurrentTenantSession = IntegrationIoCTest.Container.Resolve<ICurrentTenantSession>();
 
-			Toggles = _container.Resolve<IToggleManager>();
-			Now = _container.Resolve<INow>() as MutableNow;
-			TransactionHooks = _container.Resolve<ICurrentTransactionHooks>();
-			UnitOfWorkFactory = _container.Resolve<ICurrentUnitOfWorkFactory>();
-			UnitOfWork = _container.Resolve<ICurrentUnitOfWork>();
-			EventPublisher = _container.Resolve<IEventPublisher>();
-			TenantUnitOfWork = _container.Resolve<ITenantUnitOfWork>();
-			CurrentTenantSession = _container.Resolve<ICurrentTenantSession>();
-
-			DefaultDataCreator = _container.Resolve<DefaultDataCreator>();
-			DefaultAnalyticsDataCreator = new DefaultAnalyticsDataCreator();
+			DefaultDataCreator = IntegrationIoCTest.Container.Resolve<DefaultDataCreator>();
+			DefaultAnalyticsDataCreator = IntegrationIoCTest.Container.Resolve<DefaultAnalyticsDataCreator>();
 		}
 
 		public static void Start()
 		{
-			_container.Resolve<IMessageBrokerUrl>().Configure(TestSiteConfigurationSetup.URL.ToString());
-			_container.Resolve<ISignalRClient>().StartBrokerService();
-			_container.Resolve<HangfireClientStarter>().Start();
-			Hangfire = _container.Resolve<HangfireUtilities>();
+			IntegrationIoCTest.Container.Resolve<IMessageBrokerUrl>().Configure(TestSiteConfigurationSetup.URL.ToString());
+			IntegrationIoCTest.Container.Resolve<ISignalRClient>().StartBrokerService();
+			IntegrationIoCTest.Container.Resolve<HangfireClientStarter>().Start();
+			Hangfire = IntegrationIoCTest.Container.Resolve<HangfireUtilities>();
 		}
 	}
 }

@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Rta.PerformanceTest.Code;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Rta.PerformanceTest
 {
