@@ -54,19 +54,30 @@ task PreReq -depends init -description "Move/Copy preparation of files" {
 }
 
 task CreateAzurePkg -depends Init, PreReq -description "Create Azure Package" {
-    
-	#Create Azure pkg
-    & $CSPackEXE "Azure\ServiceDefinition.csdef" `
-      "/role:TeleoptiCCC;..\TeleoptiCCC" `
-      "/rolePropertiesFile:TeleoptiCCC;Azure\AzureRoleProperties.txt" `
-      "/out:$AzurePackagePath"
+    workflow parallelAzurePackaging {
+		param(
+		$CSPackEXE,
+		$AzurePackagePath,
+		$AzurePackagePath_Large,
+		$WorkingDir
+			)
+		parallel {
+			#Create Azure pkg
+			InlineScript {& $Using:CSPackEXE "$Using:WorkingDir\teamcity\Azure\ServiceDefinition.csdef" `
+			  "/role:TeleoptiCCC;$Using:WorkingDir\TeleoptiCCC" `
+			  "/rolePropertiesFile:TeleoptiCCC;$Using:WorkingDir\teamcity\Azure\AzureRoleProperties.txt" `
+			  "/out:$Using:AzurePackagePath"
+			  pwd}
+			
+			#Create Azure Large pkg
+			InlineScript {& $Using:CSPackEXE "$Using:WorkingDir\teamcity\Azure\ServiceDefinition_Large.csdef" `
+			  "/role:TeleoptiCCC;$Using:WorkingDir\TeleoptiCCC" `
+			  "/rolePropertiesFile:TeleoptiCCC;$Using:WorkingDir\teamcity\Azure\AzureRoleProperties.txt" `
+			  "/out:$Using:AzurePackagePath_Large"}
+		}
+	}
 	
-	#Create Azure Large pkg
-	& $CSPackEXE "Azure\ServiceDefinition_Large.csdef" `
-	  "/role:TeleoptiCCC;..\TeleoptiCCC" `
-	  "/rolePropertiesFile:TeleoptiCCC;Azure\AzureRoleProperties.txt" `
-	  "/out:$AzurePackagePath_Large" 
-	
+	parallelAzurePackaging -CSPackEXE $CSPackEXE -AzurePackagePath $AzurePackagePath -AzurePackagePath_Large $AzurePackagePath_Large -WorkingDir $WorkingDir
 	<#Create Azure Pkg
 	$Arg = @("Azure\ServiceDefinition.csdef", '/role:TeleoptiCCC;Azure\TeleoptiCCC', '/rolePropertiesFile:TeleoptiCCC;Azure\AzureRoleProperties.txt', "/out:$AzurePackagePath")
     & $CSPackEXE $Arg 
