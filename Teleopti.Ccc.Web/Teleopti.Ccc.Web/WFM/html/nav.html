@@ -15,24 +15,24 @@
 	</div>
 	<div class="con-flex split-1-2" ng-show="searchmode">
 		<div >
-		  <input type="text" id="searchbar" ng-blur="delayFocus()" class="navbar-search" placeholder="{{'SearchThreeDots' | translate}}" ng-model="keyword" ng-change="searchKeyword()"/>
-		  <div class="search-results material-depth-2">
-		    <ul class="wfm-list">
-		      <div ng-repeat="gp in searchResultGroups">
-		        <li class="wfm-search-li" style="pointer-events:none;">
-		          <button ng-if="gp == 'Permission' " class="wfm-fab mini result-icon"><i class="mdi mdi-account-key"></i></button>
-		          <button ng-if="gp == 'Planning Period' " class="wfm-fab mini info result-icon"><i class="mdi mdi-calendar"></i></button>
-		          {{gp}}
-		        </li>
-		        <li ng-repeat="item in searchResult | filter:{ SearchGroup: gp }">
-		          <div ng-click="clickedItem(item);searchbarFocus();">
-		            {{item.Name}}
-		          </div>
-		        </li>
-		        <li ng-if="searchResult.length == 0"></li>
-		      </div>
-		    </ul>
-		  </div>
+			<input type="text" id="searchbar" ng-blur="delayFocus()" class="navbar-search" placeholder="{{'SearchThreeDots' | translate}}" ng-model="keyword" ng-change="searchKeyword()"/>
+			<div class="search-results material-depth-2">
+				<ul class="wfm-list">
+					<div ng-repeat="gp in searchResultGroups">
+						<li class="wfm-search-li" style="pointer-events:none;">
+							<button ng-if="gp == 'Permission' " class="wfm-fab mini result-icon"><i class="mdi mdi-account-key"></i></button>
+							<button ng-if="gp == 'Planning Period' " class="wfm-fab mini info result-icon"><i class="mdi mdi-calendar"></i></button>
+							{{gp}}
+						</li>
+						<li ng-repeat="item in searchResult | filter:{ SearchGroup: gp }">
+							<div ng-click="clickedItem(item);searchbarFocus();">
+								{{item.Name}}
+							</div>
+						</li>
+						<li ng-if="searchResult.length == 0"></li>
+					</div>
+				</ul>
+			</div>
 		</div>
 	</div>
 	<div class="con-flex"></div>
@@ -83,14 +83,17 @@
 			<div ng-include="'app/global/wfm-themes/themes-menu.html'"></div>
 		</a>
 
-		<a href="{{help.currentHelp.helpUrl}}" target="_blank"  ng-controller="HelpController" ng-show="displayHelp">
-			<div class="panel-menu">
-				<div tabindex=0 class="context-menu card-context">
-					<i class="mdi mdi-help-circle"></i>
+		<span ng-controller="HelpController as vm">
+			<a href="{{vm.helpUrl}}" target="_blank" ng-show="vm.displayHelp">
+				<div class="panel-menu">
+					<div tabindex=0 class="context-menu card-context">
+						<i class="mdi mdi-help-circle"></i>
+					</div>
 				</div>
-			</div>
-			<md-tooltip>{{'HelpLabel'|translate}}</md-tooltip>
-		</a>
+				<md-tooltip>{{'HelpLabel'|translate}}</md-tooltip>
+			</a>
+		</span>
+
 
 		<a href="../Authentication/SignOut">
 			<div class=" panel-menu">

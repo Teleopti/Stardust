@@ -1,26 +1,37 @@
-﻿
-'use strict';
+(function() {
+	'use strict';
 
-angular.module('toggleService', ['ngResource']).service('Toggle', [
-	'$resource', '$q',
-	function($resource, $q) {
-		var that = this;
+	angular
+	.module('toggleService', ['ngResource'])
+	.factory('Toggle', Toggle);
 
-		that.loadAllToggles = $resource('../ToggleHandler/AllToggles', {}, {
-			query: {
-				method: 'GET',
-				isArray: false
-			}
-		});
+	Toggle.$inject = ['$resource', '$q'];
 
-		that.togglesLoaded = $q.all([
-			that.loadAllToggles.query().$promise.then(function(result) {
+	function Toggle($resource, $q) {
+		var thisToggle = {};
+		var togglesLoaded = $q.all([
+			loadAllToggles().then(function(result){
 				for (var toggle in result) {
 					if (toggle.indexOf('$') !== 0 && result.hasOwnProperty(toggle) && typeof (result[toggle]) === 'boolean') {
-						that[toggle] = result[toggle];
+						thisToggle[toggle] = result[toggle];
 					}
 				}
 			})
 		]);
+
+		var service = {
+			togglesLoaded: togglesLoaded
+		};
+
+		function loadAllToggles() {
+			return $resource('../ToggleHandler/AllToggles', {}, {
+				query: {
+					method: 'GET',
+					isArray: false
+				}
+			}).query().$promise;
+		}
+		return service;
+
 	}
-]);
+})();

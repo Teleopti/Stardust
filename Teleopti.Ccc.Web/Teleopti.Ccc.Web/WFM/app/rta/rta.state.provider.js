@@ -99,7 +99,7 @@ angular.module('wfm.rta').provider('RtaState', function() {
 				}
 			})
 
-			
+
 			.state('rta.agent-details', {
 				url: '/agent-details/:personId',
 				templateUrl: 'app/rta/details/rta-agent-details.html',
