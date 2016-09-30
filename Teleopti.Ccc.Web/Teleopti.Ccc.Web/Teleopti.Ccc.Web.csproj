@@ -1497,7 +1497,6 @@
     <Content Include="WFM\app\rta\agents\rta.agents.controller.spec.js" />
     <Content Include="WFM\app\rta\agents\rta.agents.filters.spec.js" />
     <Content Include="WFM\app\rta\agents\rta.agents.controller.forsites.spec.js" />
-    <Content Include="WFM\app\rta\agents\rta.agents.controller.forteams.spec.js" />
     <Content Include="WFM\app\rta\rta.faketime.service.js" />
     <Content Include="WFM\app\global\http\http.js" />
     <Content Include="WFM\app\rta\rta.format.service.spec.js" />

@@ -48,30 +48,6 @@ describe('RtaAgentsCtrl', function() {
 		expect(scope.agents[0].PersonId).toEqual("11610fe4-0130-4568-97de-9b5e015b2564");
 	});
 
-	it('should display site name London', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
-		$fakeBackend.withAgent({
-			SiteName: "London",
-			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-		});
-
-		$controllerBuilder.createController();
-
-		expect(scope.siteName).toEqual("London");
-	});
-
-	it('should display team name Team Preferences', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
-		$fakeBackend.withAgent({
-			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
-			TeamName: "Team Preferences"
-		});
-
-		$controllerBuilder.createController();
-
-		expect(scope.teamName).toEqual("Team Preferences");
-	});
-
 	it('should get agent states', function() {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
 		$fakeBackend.withAgent({

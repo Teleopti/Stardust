@@ -48,6 +48,48 @@ describe('RtaAgentsCtrl', function() {
 		expect(scope.teamName).toEqual("Team Preferences");
 	});
 
+	it('should set to site', function() {
+		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		$fakeBackend.withAgent({
+			SiteName: "London",
+			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
+		});
+
+		$controllerBuilder.createController();
+
+		expect(scope.siteName).toEqual("London");
+	});
+
+	it('should display skill name', function () {
+		stateParams.skillId = "f08d75b3-fdb4-484a-ae4c-9f0800e2f753";
+		$fakeBackend
+			.withSkill({
+				Name: "Phone",
+				Id: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753",
+			});
+
+		$controllerBuilder.createController();
+
+		expect(scope.skillName).toEqual("Phone");
+	});
+
+	it('should show name for skill area', function () {
+		stateParams.skillAreaId = "bb8d75b3-fdb4-484a-ae4c-9f0800e2f753";
+
+		$fakeBackend
+				.withSkillAreas([
+					{
+						Id: "bb8d75b3-fdb4-484a-ae4c-9f0800e2f753",
+						Name: "my skill area 2",
+						Skills: [{ Id: "5f15b334-22d1-4bc1-8e41-72359805d30f", Name: "skill x" }]
+					}
+				]);
+
+		$controllerBuilder.createController();
+
+		expect(scope.skillAreaName).toEqual("my skill area 2");
+	});
+
 	it('should set to multiple teams when selecting teams', function() {
 		stateParams.teamIds = ["e5f968d7-6f6d-407c-81d5-9b5e015ab495", "d7a9c243-8cd8-406e-9889-9b5e015ab495"];
 
