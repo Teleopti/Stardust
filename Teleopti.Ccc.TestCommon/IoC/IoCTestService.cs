@@ -28,17 +28,17 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		public void InjectFrom(IContainer container)
 		{
 			_container = container;
-			injectMembers(_attribute.GetType(), _attribute);
-			injectMembers(_fixtureType, Fixture);
+			InjectTo(_container, _attribute);
+			InjectTo(_container, Fixture);
 		}
-		
-		private void injectMembers(IReflect type, object instance)
+
+		public static void InjectTo(IContainer container, object instance)
 		{
-			var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
-				.Where(x => x.CanWrite);
-			properties.ForEach(x => x.SetValue(instance, _container.Resolve(x.PropertyType), null));
+			var type = instance.GetType();
+			var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(x => x.CanWrite);
+			properties.ForEach(x => x.SetValue(instance, container.Resolve(x.PropertyType), null));
 			var fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance);
-			fields.ForEach(x => x.SetValue(instance, _container.Resolve(x.FieldType)));
+			fields.ForEach(x => x.SetValue(instance, container.Resolve(x.FieldType)));
 		}
 
 		public IEnumerable<T> QueryAllAttributes<T>()

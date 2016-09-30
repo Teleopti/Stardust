@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			CurrentTenantSession = IntegrationIoCTest.Container.Resolve<ICurrentTenantSession>();
 
 			DefaultDataCreator = IntegrationIoCTest.Container.Resolve<DefaultDataCreator>();
-			DefaultAnalyticsDataCreator = new DefaultAnalyticsDataCreator();
+			DefaultAnalyticsDataCreator = IntegrationIoCTest.Container.Resolve<DefaultAnalyticsDataCreator>();
 		}
 
 		public static void Start()
