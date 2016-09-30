@@ -119,16 +119,14 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 
 		private IList<ISeatUsageForInterval> createTimeSlotsToCountSeatUsage(IEnumerable<IVisualLayer> incomingActivitiesRequiringSeats)
 		{
-
-
 			var intervalTimespan = TimeSpan.FromMinutes(_shiftTradeSettings.MaxSeatsValidationSegmentLength);
 			var seatUsageOnEachIntervalDic = new List<ISeatUsageForInterval>();
 
 			foreach (var activity in incomingActivitiesRequiringSeats)
 			{
 				// create intervals to check for max seat usage...
-				var startInterval = activity.Period.StartDateTime.ToInterval(intervalTimespan.Minutes, IntervalRounding.Down);
-				var endInterval = activity.Period.EndDateTime.ToInterval(intervalTimespan.Minutes, IntervalRounding.Up);
+				var startInterval = activity.Period.StartDateTime.ToInterval((int)intervalTimespan.TotalMinutes, IntervalRounding.Down);
+				var endInterval = activity.Period.EndDateTime.ToInterval((int)intervalTimespan.TotalMinutes, IntervalRounding.Up);
 
 				var activityIntervals = new DateTimePeriod(startInterval, endInterval).Intervals(intervalTimespan);
 
