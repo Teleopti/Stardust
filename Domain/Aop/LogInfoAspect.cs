@@ -53,8 +53,6 @@ namespace Teleopti.Ccc.Domain.Aop
 				return "Count = " + ((Array) argument).Length;
 			if (argument is IList)
 				return "Count = " + ((IList) argument).Count;
-			if (argument.GetType().IsGenericType)
-				return "Enumerable";
 			return argument;
 		}
 

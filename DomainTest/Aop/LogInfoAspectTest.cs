@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.DomainTest.Aop
 		public LogSpy Logger;
 		public Service Service;
 
-
 		[Test]
 		public void ShouldLogSomething()
 		{
@@ -120,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.Aop
 		[Test]
 		public void ShouldLogReturnValue()
 		{
-			Service.ReturnsInt();
+			Service.Returns(() => 1);
 
 			Logger.InfoMessage.Should().Contain("1");
 		}
@@ -128,35 +127,43 @@ namespace Teleopti.Ccc.DomainTest.Aop
 		[Test]
 		public void ShouldLogReturnValueNull()
 		{
-			Service.ReturnsNullString();
+			Service.Returns<string>(() => null);
 
 			Logger.InfoMessage.Should().Contain("null");
 		}
 
 		[Test]
-		public void ShouldLogEnumerableReturnCount()
+		public void ShouldLogEnumerableReturnCountFromArray()
 		{
-			Service.ReturnsArrayAsIEnumerable();
+			Service.Returns<IEnumerable<int>>(() => new[] {1});
 
 			Logger.InfoMessage.Should().Contain("Count = 1");
 		}
 
+		[Test]
+		public void ShouldLogEnumerableReturnCountFromList()
+		{
+			Service.Returns<IEnumerable<int>>(() => new List<int> { 1, 2, 3 });
+
+			Logger.InfoMessage.Should().Contain("Count = 3");
+		}
 
 		[Test]
 		public void ShouldLogSomethingReadableWhenReturningIEnumerable()
 		{
-			Service.ReturnsIEnumerable();
+			Service.Returns(() => from i in Enumerable.Range(0, 10) select i);
 
 			Logger.InfoMessage.Should().Contain("Enumerable");
 		}
-		
-		[Test]
-		public void ShouldLogEnumerableReturnCountFromList()
-		{
-			Service.ReturnsListAsIEnumerable();
 
-			Logger.InfoMessage.Should().Contain("Count = 3");
+		[Test]
+		public void ShouldLogSomethingReadableWhenReturningGeneric()
+		{
+			Service.Returns(() => new Lazy<int>(() => 1));
+
+			Logger.InfoMessage.Should().Contain("Lazy");
 		}
+		
 	}
 
 	public class Service
@@ -192,33 +199,9 @@ namespace Teleopti.Ccc.DomainTest.Aop
 		}
 
 		[LogInfo]
-		public virtual int ReturnsInt()
+		public virtual T Returns<T>(Func<T> func )
 		{
-			return 1;
-		}
-		
-		[LogInfo]
-		public virtual IEnumerable<int> ReturnsArrayAsIEnumerable()
-		{
-			return new []{1};
-		}
-
-		[LogInfo]
-		public virtual IEnumerable<int> ReturnsIEnumerable()
-		{
-			return from i in Enumerable.Range(0, 10) select i;
-		}
-
-		[LogInfo]
-		public virtual IEnumerable<int> ReturnsListAsIEnumerable()
-		{
-			return new List<int>{1,2,3};
-		}
-
-		[LogInfo]
-		public virtual string ReturnsNullString()
-		{
-			return null;
+			return func.Invoke();
 		}
 	}
 }
