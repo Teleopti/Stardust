@@ -22,42 +22,51 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Measurements
 {
 	[TestFixture]
 	[RtaPerformanceTest]
+	[Toggle(Toggles.RTA_ScheduleProjectionReadOnlyHangfire_35703)]
+	[Toggle(Toggles.RTA_Optimize_39667)]
+	[Toggle(Toggles.RTA_RuleMappingOptimization_39812)]
+	[Toggle(Toggles.RTA_BatchConnectionOptimization_40116)]
+	[Toggle(Toggles.RTA_BatchQueryOptimization_40169)]
+	[Toggle(Toggles.RTA_PersonOrganizationQueryOptimization_40261)]
+	[Toggle(Toggles.RTA_ScheduleQueryOptimization_40260)]
+	[Toggle(Toggles.RTA_ConnectionQueryOptimizeAllTheThings_40262)]
+	[Toggle(Toggles.RTA_FasterUpdateOfScheduleChanges_40536)]
 	[Explicit]
-	public class MeasurementTest
+	public class MeasurementTest : ISetup
 	{
 		public Database Database;
 		public AnalyticsDatabase Analytics;
+		public ConfigurableSyncEventPublisher Publisher;
 		public IDataSourceScope Tenant;
 		public Http Http;
-		public IEventPublisherScope EventPublisher;
-		public ConfigurableSyncEventPublisher Publisher;
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<ConfigurableSyncEventPublisher>().For<IEventPublisher>();
+		}
 
 		[Test]
 		public void BatchTest()
 		{
-			var userCodes = Enumerable.Range(0, 1000).Select(x => $"user{x}").ToArray();
 			Publisher.AddHandler<MappingReadModelUpdater>();
 			Publisher.AddHandler<PersonAssociationChangedEventPublisher>();
 			Publisher.AddHandler<AgentStateMaintainer>();
-			using (EventPublisher.OnThisThreadPublishTo(Publisher))
-			{
-				Analytics.WithDataSource(9, "sourceId");
-				Database
-					.WithDefaultScenario("default")
-					.WithStateGroup("phone")
-					.WithStateCode("phone");
-				Enumerable.Range(0, 100).ForEach(x => Database.WithStateGroup($"code{x}").WithStateCode($"code{x}"));
-				Enumerable.Range(0, 10).ForEach(x => Database.WithActivity($"activity{x}"));
-				userCodes.ForEach(x => Database.WithAgent(x));
-				Publisher.Publish(new TenantMinuteTickEvent());
-			}
-
+			Analytics.WithDataSource(9, "sourceId");
+			Database
+				.WithDefaultScenario("default")
+				.WithStateGroup("phone")
+				.WithStateCode("phone");
+			Enumerable.Range(0, 100).ForEach(x => Database.WithStateGroup($"code{x}").WithStateCode($"code{x}"));
+			Enumerable.Range(0, 10).ForEach(x => Database.WithActivity($"activity{x}"));
+			var userCodes = Enumerable.Range(0, 1000).Select(x => $"user{x}").ToArray();
+			userCodes.ForEach(x => Database.WithAgent(x));
+			Publisher.Publish(new TenantMinuteTickEvent());
 			var states = 20000;
 
 			var service = new TeleoptiRtaService {Url = TestSiteConfigurationSetup.URL + "/TeleoptiRtaService.svc"};
 
 			var results = (
-				from api in new[] {"wcf", "json"}
+				from api in new[] { "wcf", "json"}
 				from batchSize in new[] {500, 1000, 2500, 5000}
 				from variation in new[] {"A", "B", "C"}
 				select new {api, batchSize, variation}).Select(x =>
@@ -149,6 +158,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Measurements
 				.OrderBy(x => x.Elapsed)
 				.ForEach(x => Console.WriteLine($"{x.api} {x.Elapsed} - {x.stateTime} {x.batchSize} {x.variation} {x.exception}"));
 		}
-
+	
 	}
 }

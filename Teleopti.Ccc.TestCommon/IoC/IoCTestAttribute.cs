@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Autofac;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
@@ -22,11 +23,16 @@ namespace Teleopti.Ccc.TestCommon.IoC
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = false)]
 	public class IoCTestAttribute : Attribute, ITestAction, IIoCTestContext
 	{
-		public ActionTargets Targets => ActionTargets.Test;
+		public ActionTargets Targets
+		{
+			get { return ActionTargets.Test; }
+		}
 
 		private IContainer _container;
 		private TestDoubles _testDoubles;
-		private IoCTestService _service;
+		private object _fixture;
+		private Type _fixtureType;
+		private MethodInfo _method;
 
 		protected virtual FakeToggleManager Toggles()
 		{
@@ -47,6 +53,17 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			return config;
 		}
 
+		protected IEnumerable<T> QueryAllAttributes<T>()
+		{
+			var fromFixture = _fixtureType.GetCustomAttributes(typeof (T), true).Cast<T>();
+			var fromTest = _method.GetCustomAttributes(typeof (T), true).Cast<T>();
+			var fromAttribute = GetType().GetCustomAttributes(typeof (T), true).Cast<T>();
+			return fromFixture
+				.Union(fromTest)
+				.Union(fromAttribute)
+				.ToArray();
+		}
+
 		protected virtual void Setup(ISystem system, IIocConfiguration configuration)
 		{
 		}
@@ -65,10 +82,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 		public void BeforeTest(ITest testDetails)
 		{
-			_service = new IoCTestService(testDetails, this);
+			fixture(testDetails);
+			method(testDetails);
 			buildContainer();
 			Startup(_container);
-			_service.InjectFrom(_container);
+			injectMembers();
 			BeforeTest();
 		}
 
@@ -78,7 +96,18 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			disposeContainer();
 			disposeTestDoubles();
 		}
-		
+
+		private void fixture(ITest testDetails)
+		{
+			_fixture = testDetails.Fixture;
+			_fixtureType = _fixture.GetType();
+		}
+
+		private void method(ITest testDetails)
+		{
+			_method = testDetails.Method.MethodInfo;
+		}
+
 		private void buildContainer()
 		{
 			var builder = new ContainerBuilder();
@@ -97,7 +126,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 		private void disposeTestDoubles()
 		{
-			_testDoubles?.Dispose();
+			if (_testDoubles != null)
+				_testDoubles.Dispose();
 			_testDoubles = null;
 		}
 
@@ -105,9 +135,14 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 			var configReader = Config();
 			var toggleManager = Toggles();
-			(_service.Fixture as IConfigureToggleManager)?.Configure(toggleManager);
+			var fixtureAsConfigureToggleManager = _fixture as IConfigureToggleManager;
+			if (fixtureAsConfigureToggleManager != null)
+			{
+				fixtureAsConfigureToggleManager.Configure(toggleManager);
+			}
 			var args = new IocArgs(configReader);
-			(_service.Fixture as ISetupConfiguration)?.SetupConfiguration(args);
+			if (_fixture is ISetupConfiguration)
+				(_fixture as ISetupConfiguration).SetupConfiguration(args);
 			var configuration = new IocConfiguration(args, toggleManager);
 			
 			system.AddModule(new CommonModule(configuration));
@@ -123,35 +158,47 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.AddService<ConcurrencyRunner>();
 
 			Setup(system, configuration);
-			(_service.Fixture as ISetup)?.Setup(system, configuration);
+			if (_fixture is ISetup)
+				(_fixture as ISetup).Setup(system, configuration);
 		}
 
 		private void disposeContainer()
 		{
-			_container?.Dispose();
+			if (_container != null)
+				_container.Dispose();
 			_container = null;
 		}
-		
-		protected IEnumerable<T> QueryAllAttributes<T>()
+
+		private void injectMembers()
 		{
-			return _service.QueryAllAttributes<T>();
+			injectMembers(GetType(), this);
+			injectMembers(_fixtureType, _fixture);
+		}
+
+		private void injectMembers(IReflect type, object instance)
+		{
+			var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+				.Where(x => x.CanWrite);
+			properties.ForEach(x => x.SetValue(instance, _container.Resolve(x.PropertyType), null));
+			var fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance);
+			fields.ForEach(x => x.SetValue(instance, _container.Resolve(x.FieldType)));
 		}
 
 		protected object Resolve(Type targetType)
 		{
-			return _service.Resolve(targetType);
+			return _container.Resolve(targetType);
 		}
 
 		protected T Resolve<T>()
 		{
-			return _service.Resolve<T>();
+			return _container.Resolve<T>();
 		}
 
 		public void SimulateRestart()
 		{
 			disposeContainer();
 			rebuildContainer();
-			_service.InjectFrom(_container);
+			injectMembers();
 		}
 
 		private class ignoringTestDoubles : SystemImpl

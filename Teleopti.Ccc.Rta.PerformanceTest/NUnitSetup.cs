@@ -1,36 +1,30 @@
-﻿using System;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using Autofac;
 using log4net.Config;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Logon;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.Aop;
-using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Rta.PerformanceTest.Code;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Messaging.Client;
 
 namespace Teleopti.Ccc.Rta.PerformanceTest
 {
 	[SetUpFixture]
 	public class NUnitSetup
 	{
-		public ICurrentTransactionHooks TransactionHooks;
-		public DefaultDataCreator DefaultDataCreator;
-		public DataCreator DataCreator;
-		public DefaultAnalyticsDataCreator DefaultAnalyticsDataCreator;
-		public HangfireClientStarter HangfireClientStarter;
-		public ImpersonateSystem Impersonate;
-		public IDataSourceScope DataSource;
-		public WithUnitOfWork WithUnitOfWork;
-		public IBusinessUnitRepository BusinessUnits;
+		private ICurrentTransactionHooks transactionHooks;
+		private DefaultDataCreator defaultDataCreator;
+		private DataCreator dataCreator;
+		private DefaultAnalyticsDataCreator defaultAnalyticsDataCreator;
 
 		[OneTimeSetUp]
 		public void Setup()
@@ -40,17 +34,31 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 
 			TestSiteConfigurationSetup.Setup();
 
-			IntegrationIoCTest.Setup(builder =>
+			var builder = new ContainerBuilder();
+			var args = new IocArgs(new ConfigReader())
 			{
-				builder.RegisterType<TestConfiguration>().SingleInstance();
-				builder.RegisterType<DataCreator>().SingleInstance().ApplyAspects();
-				builder.RegisterType<StatesSender>().SingleInstance().ApplyAspects();
-				builder.RegisterType<StatesArePersisted>().SingleInstance().ApplyAspects();
-				builder.RegisterType<DataCreator>().SingleInstance().ApplyAspects();
-				builder.RegisterType<ConfigurableSyncEventPublisher>().SingleInstance();
-			}, this);
-			
-			var dataHash = DefaultDataCreator.HashValue ^ TestConfiguration.HashValue;
+				AllEventPublishingsAsSync = true,
+				FeatureToggle = TestSiteConfigurationSetup.URL.ToString()
+			};
+			var configuration = new IocConfiguration(args, CommonModule.ToggleManagerForIoc(args));
+			builder.RegisterModule(new CommonModule(configuration));
+			builder.RegisterType<MutableNow>().AsSelf().As<INow>().SingleInstance();
+			builder.RegisterType<DefaultDataCreator>().SingleInstance();
+			builder.RegisterType<DefaultAnalyticsDataCreator>().SingleInstance();
+			builder.RegisterType<TestConfiguration>().SingleInstance();
+			builder.RegisterType<Http>().SingleInstance();
+			builder.RegisterType<DataCreator>().SingleInstance().ApplyAspects();
+			builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
+			builder.RegisterModule(new TenantServerModule(configuration));
+
+			var container = builder.Build();
+
+			transactionHooks = container.Resolve<ICurrentTransactionHooks>();
+			defaultDataCreator = container.Resolve<DefaultDataCreator>();
+			defaultAnalyticsDataCreator = container.Resolve<DefaultAnalyticsDataCreator>();
+			dataCreator = container.Resolve<DataCreator>();
+
+			var dataHash = defaultDataCreator.HashValue ^ TestConfiguration.HashValue;
 			var path = Path.Combine(InfraTestConfigReader.DatabaseBackupLocation, "Rta");
 
 			var haveDatabases =
@@ -59,14 +67,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			if (!haveDatabases)
 				createDatabase(path, dataHash);
 
-			HangfireClientStarter.Start();
-
 			TestSiteConfigurationSetup.StartApplicationSync();
-
-			Guid businessUnitId;
-			using (DataSource.OnThisThreadUse(DataSourceHelper.TestTenantName))
-				businessUnitId = WithUnitOfWork.Get(() => BusinessUnits.LoadAll().First()).Id.Value;
-			Impersonate.Impersonate(DataSourceHelper.TestTenantName, businessUnitId);
 		}
 
 		private void createDatabase(string path, int dataHash)
@@ -74,16 +75,16 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			DataSourceHelper.CreateDatabases();
 
 			StateHolderProxyHelper.SetupFakeState(
-				DataSourceHelper.CreateDataSource(TransactionHooks),
+				DataSourceHelper.CreateDataSource(transactionHooks),
 				DefaultPersonThatCreatesData.PersonThatCreatesDbData,
 				DefaultBusinessUnit.BusinessUnit
 				);
 
-			DefaultDataCreator.Create();
-			DefaultAnalyticsDataCreator.OneTimeSetup();
+			defaultDataCreator.Create();
+			defaultAnalyticsDataCreator.OneTimeSetup();
 			DataSourceHelper.ClearAnalyticsData();
-			DefaultAnalyticsDataCreator.Create();
-			DataCreator.Create();
+			defaultAnalyticsDataCreator.Create();
+			dataCreator.Create();
 
 			DataSourceHelper.BackupApplicationDatabaseBySql(path, dataHash);
 			DataSourceHelper.BackupAnalyticsDatabaseBySql(path, dataHash);
