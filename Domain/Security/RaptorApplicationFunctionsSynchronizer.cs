@@ -15,36 +15,6 @@ namespace Teleopti.Ccc.Domain.Security
 		/// Digests the reports from matrix.
 		/// </summary>
 		CheckRaptorApplicationFunctionsResult CheckRaptorApplicationFunctions();
-
-		/// <summary>
-		/// Digests the reports from matrix.
-		/// </summary>
-		void DigestApplicationFunctions();
-
-		/// <summary>
-		/// Yield enumeration on every defined application function where no matching database
-		/// pair found 
-		/// </summary>
-		/// <param name="databaseFunctions">The database functions.</param>
-		/// <param name="definedFunctions">The defined functions.</param>
-		/// <returns></returns>
-		IEnumerable<IApplicationFunction> AddedRaptorApplicationFunctions(ICollection<IApplicationFunction> databaseFunctions, IEnumerable<IApplicationFunction> definedFunctions);
-
-		/// <summary>
-		/// Yield enumeration on every application function in the database where no matching pre-defined
-		/// pair found 
-		/// </summary>
-		/// <param name="definedFunctions">The defined functions.</param>
-		/// <param name="databaseFunctions">The database functions.</param>
-		/// <returns></returns>
-		IEnumerable<IApplicationFunction> DeletedRaptorApplicationFunctions(ICollection<IApplicationFunction> definedFunctions, IEnumerable<IApplicationFunction> databaseFunctions);
-
-		/// <summary>
-		/// Filters to the existing pre-defined application functions.
-		/// </summary>
-		/// <param name="applicationFunctions">All application functions.</param>
-		/// <returns></returns>
-		IList<IApplicationFunction> FilterExistingDefinedRaptorApplicationFunctions(IEnumerable<IApplicationFunction> applicationFunctions);
 	}
 
 	/// <summary>
