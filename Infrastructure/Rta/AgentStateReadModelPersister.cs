@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
@@ -71,8 +72,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.SetParameter("IsRuleAlarm", model.IsRuleAlarm)
 				.SetParameter("AlarmStartTime", model.AlarmStartTime)
 				.SetParameter("AlarmColor", model.AlarmColor)
-				.SetParameter("Shift", _serializer.SerializeObject(model.Shift))
-				.SetParameter("OutOfAdherences", _serializer.SerializeObject(model.OutOfAdherences))
+				.SetParameter("Shift", _serializer.SerializeObject(model.Shift), NHibernateUtil.StringClob)
+				.SetParameter("OutOfAdherences", _serializer.SerializeObject(model.OutOfAdherences), NHibernateUtil.StringClob)
 				.SetParameter("StateGroupId", model.StateGroupId)
 				.ExecuteUpdate();
 			if (updated == 0)
@@ -146,8 +147,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 					.SetParameter("IsRuleAlarm", model.IsRuleAlarm)
 					.SetParameter("AlarmStartTime", model.AlarmStartTime)
 					.SetParameter("AlarmColor", model.AlarmColor)
-					.SetParameter("Shift", _serializer.SerializeObject(model.Shift))
-					.SetParameter("OutOfAdherences", _serializer.SerializeObject(model.OutOfAdherences))
+					.SetParameter("Shift", _serializer.SerializeObject(model.Shift), NHibernateUtil.StringClob)
+					.SetParameter("OutOfAdherences", _serializer.SerializeObject(model.OutOfAdherences), NHibernateUtil.StringClob)
 					.SetParameter("StateGroupId", model.StateGroupId)
 					.ExecuteUpdate();
 			}

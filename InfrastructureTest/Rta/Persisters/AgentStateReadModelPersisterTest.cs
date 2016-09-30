@@ -190,6 +190,33 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		}
 
 		[Test]
+		public void ShouldUpdateLargeShift()
+		{
+			var personId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			Target.Persist(
+				new AgentStateReadModelForTest
+				{
+					PersonId = personId,
+					TeamId = teamId,
+				});
+
+			Target.Persist(new AgentStateReadModelForTest
+			{
+				PersonId = personId,
+				TeamId = teamId,
+				Shift = Enumerable.Range(0, 100)
+				.Select(_ => new AgentStateActivityReadModel
+				{
+					Name = new string('x', 100),
+					Color = Color.Green.ToArgb()
+				})
+			});
+
+			Target.Get(personId).Shift.Should().Have.Count.EqualTo(100);
+		}
+
+		[Test]
 		public void ShouldPersistOutOfAdherences()
 		{
 			var state = new AgentStateReadModelForTest
@@ -255,6 +282,25 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		}
 
 		[Test]
+		public void ShouldUpdateAlotOfOutOfAdherences()
+		{
+			var personId = Guid.NewGuid();
+
+			Target.Persist(new AgentStateReadModelForTest
+			{
+				PersonId = personId,
+				OutOfAdherences = Enumerable.Range(0, 59)
+				.Select(m => new AgentStateOutOfAdherenceReadModel
+				{
+					StartTime = $"2016-06-16 08:{m:00}".Utc(),
+					EndTime = $"2016-06-16 08:{m+1:00}".Utc()
+				})
+			});
+			
+			Target.Get(personId).OutOfAdherences.Should().Have.Count.EqualTo(59);
+		}
+
+		[Test]
 		public void ShouldDelete()
 		{
 			var personId = Guid.NewGuid();
@@ -297,7 +343,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Get(personId).StateGroupId.Should().Be(stateGroupId);
 		}
-
 
 		[Test]
 		public void ShouldUpdateStateGroupId()
