@@ -18,9 +18,10 @@
 		'ValidateRulesService',
 		'CommandCheckService',
 		'ScheduleNoteManagementService',
+		'CurrentUserInfo',
 		TeamScheduleController]);
 
-	function TeamScheduleController($scope, $q, $translate, $stateParams, $state, $mdSidenav, teamScheduleSvc, groupScheduleFactory, personSelectionSvc, scheduleMgmtSvc, toggleSvc, signalRSVC, NoticeService, ValidateRulesService, CommandCheckService, ScheduleNoteManagementService) {
+	function TeamScheduleController($scope, $q, $translate, $stateParams, $state, $mdSidenav, teamScheduleSvc, groupScheduleFactory, personSelectionSvc, scheduleMgmtSvc, toggleSvc, signalRSVC, NoticeService, ValidateRulesService, CommandCheckService, ScheduleNoteManagementService, CurrentUserInfo) {
 
 		var vm = this;
 
@@ -28,6 +29,8 @@
 		vm.scheduleFullyLoaded = false;
 		vm.scheduleDate = $stateParams.selectedDate ? $stateParams.selectedDate : new Date();
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
+		vm.availableTimezones = [];
+		vm.selectedTimezone = CurrentUserInfo.CurrentUserInfo().DefaultTimeZone;
 
 		vm.toggleForSelectAgentsPerPageEnabled = false;
 		vm.onlyLoadScheduleWithAbsence = false;
@@ -174,6 +177,37 @@
 			vm.scheduleFullyLoaded = true;
 		};
 
+		function populateAvailableTimezones(schedules) {
+			var timeZones = {};
+			timeZones[CurrentUserInfo.CurrentUserInfo().DefaultTimeZone] = CurrentUserInfo.CurrentUserInfo().DefaultTimeZoneName;
+
+			schedules.Schedules.forEach(function(s) {
+				timeZones[s.Timezone.IanaId] = s.Timezone.DisplayName;
+			});
+
+			for (var ianaId in timeZones) {
+				vm.availableTimezones.push({
+					ianaId: ianaId,
+					displayName: timeZones[ianaId]
+				});
+			}
+		}
+
+		vm.onTimeZoneSelected = function () {
+
+			var displayName = '';
+			var reg = /\((.+)\)/;
+			for (var i = 0; i < vm.availableTimezones.length; i++) {
+				if (vm.availableTimezones[i].ianaId === vm.selectedTimezone) {
+					displayName = vm.availableTimezones[i].displayName;
+					break;
+				}
+			}
+
+			var result = reg.exec(displayName);
+			return result ? result[1] : '';
+		};
+
 		vm.loadSchedules = function() {
 			vm.isLoading = true;
 			var preSelectPersonIds = $stateParams.personId ? [$stateParams.personId] : [];
@@ -188,6 +222,7 @@
 					personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
 					vm.isLoading = false;
 					vm.checkValidationWarningForCurrentPage();
+					populateAvailableTimezones(result);
 				});
 			}else if(preSelectPersonIds.length > 0){
 				var date = vm.scheduleDateMoment().format('YYYY-MM-DD');
@@ -200,6 +235,7 @@
 					personSelectionSvc.preSelectPeople(preSelectPersonIds, scheduleMgmtSvc.groupScheduleVm.Schedules, vm.scheduleDate);
 
 					vm.checkValidationWarningForCurrentPage();
+					populateAvailableTimezones(result);
 					vm.isLoading = false;
 				});
 			}

@@ -10,6 +10,7 @@
     function CurrentUserInfo(AuthenticationRequests, $q, $sessionStorage, wfmI18nService, BusinessUnitsService, ThemeService, Settings) {
 				var userName;
 				var defaultTimeZone;
+				var defaultTimeZoneName;
 				var language;
 				var dateFormatLocale;
 				var timeout;
@@ -24,6 +25,7 @@
         function SetCurrentUserInfo(data) {
 					userName = data.UserName;
 					defaultTimeZone = data.DefaultTimeZone;
+					defaultTimeZoneName = data.DefaultTimeZoneName;
 					language = data.Language;
 					dateFormatLocale = data.DateFormatLocale;
 					theme = data.Theme;
@@ -33,6 +35,7 @@
 					return {
 						UserName: userName,
 						DefaultTimeZone: defaultTimeZone,
+						DefaultTimeZoneName: defaultTimeZoneName,
 						Language: language,
 						DateFormatLocale: dateFormatLocale,
 						Theme: theme

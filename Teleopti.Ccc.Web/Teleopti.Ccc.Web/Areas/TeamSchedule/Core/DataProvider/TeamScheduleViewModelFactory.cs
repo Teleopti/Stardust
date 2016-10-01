@@ -25,11 +25,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly IPeopleSearchProvider _searchProvider;
 		private readonly IPersonRepository _personRepository;
 		private readonly IUserCulture _userCulture;
+		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
+
 
 		public TeamScheduleViewModelFactory(IPermissionProvider permissionProvider, IScheduleProvider scheduleProvider, 
 			ITeamScheduleProjectionProvider teamScheduleProjectionProvider, ILoggedOnUser loggedOnUser,
 			ICommonAgentNameProvider commonAgentNameProvider, IPeopleSearchProvider searchProvider,
-			IPersonRepository personRepository, IUserCulture userCulture, IProjectionProvider projectionProvider)
+			IPersonRepository personRepository, IUserCulture userCulture, IProjectionProvider projectionProvider, IIanaTimeZoneProvider ianaTimeZoneProvider)
 		{
 			_permissionProvider = permissionProvider;
 			_scheduleProvider = scheduleProvider;
@@ -40,6 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			_personRepository = personRepository;
 			_userCulture = userCulture;
 			_projectionProvider = projectionProvider;
+			_ianaTimeZoneProvider = ianaTimeZoneProvider;
 		}
 
 		public GroupScheduleViewModel CreateViewModel(IDictionary<PersonFinderField, string> criteriaDictionary,
@@ -123,7 +126,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 						PersonId = person.Id.GetValueOrDefault().ToString(),
 						Name = nameDescriptionSetting.BuildCommonNameDescription(person),
 						Date = dateInUserTimeZone.Date.ToFixedDateFormat(),
-						Projection = new List<GroupScheduleProjectionViewModel>()
+						Projection = new List<GroupScheduleProjectionViewModel>(),
+						Timezone = new TimeZoneViewModel
+						{
+							IanaId = _ianaTimeZoneProvider.WindowsToIana(person.PermissionInformation.DefaultTimeZone().Id),
+							DisplayName = person.PermissionInformation.DefaultTimeZone().DisplayName
+						}
 					});
 				}
 
@@ -143,6 +151,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					vm.InternalNotes = note != null && scheduleDay.DateOnlyAsPeriod.DateOnly == dateInUserTimeZone
 						? note.GetScheduleNote(new NormalizeText())
 						: string.Empty;
+					vm.Timezone = new TimeZoneViewModel
+					{						
+						IanaId = _ianaTimeZoneProvider.WindowsToIana(person.PermissionInformation.DefaultTimeZone().Id),
+						DisplayName = person.PermissionInformation.DefaultTimeZone().DisplayName
+					};
 					list.Add(vm);
 				}
 			}

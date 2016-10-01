@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 			{
 				UserName = principal.Identity.Name,
 				DefaultTimeZone = _ianaTimeZoneProvider.WindowsToIana(principal.Regional.TimeZone.Id),
+				DefaultTimeZoneName = principal.Regional.TimeZone.DisplayName,
 				Language = CultureInfo.CurrentUICulture.IetfLanguageTag,
 				DateFormatLocale = CultureInfo.CurrentCulture.Name,
 				NumberFormat = CultureInfo.CurrentCulture.NumberFormat
