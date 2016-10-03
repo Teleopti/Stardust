@@ -1,4 +1,4 @@
-ALTER TABLE [dbo].[ExternalLogOn]ADD DataSourceName nvarchar(100)
+ALTER TABLE [dbo].[ExternalLogOn] ADD DataSourceName nvarchar(100)
 GO
 UPDATE [dbo].[ExternalLogOn]
 SET DataSourceName = q.LogObjectName
