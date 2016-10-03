@@ -1,23 +1,42 @@
 ﻿using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel
 {
+	[EnabledBy(Toggles.ReadModel_ToHangfire_39147)]
+	public class ScheduleDayReadModelHandlerHangfire :
+		ScheduleDayReadModelHandlerBase,
+		IRunOnHangfire
+	{
+		public ScheduleDayReadModelHandlerHangfire(IPersonRepository personRepository, INotificationValidationCheck notificationValidationCheck, IScheduleDayReadModelsCreator scheduleDayReadModelsCreator, IScheduleDayReadModelRepository scheduleDayReadModelRepository) : base(personRepository, notificationValidationCheck, scheduleDayReadModelsCreator, scheduleDayReadModelRepository)
+		{
+		}
+	}
+
+	[EnabledBy(Toggles.ReadModel_ToHangfire_39147)]
+	public class ScheduleDayReadModelHandlerServiceBus :
+		ScheduleDayReadModelHandlerBase,
 #pragma warning disable 618
-	public class ScheduleDayReadModelHandler : 
-		IHandleEvent<ProjectionChangedEvent>, 
-		IHandleEvent<ProjectionChangedEventForScheduleDay>,
 		IRunOnServiceBus
 #pragma warning restore 618
+	{
+		public ScheduleDayReadModelHandlerServiceBus(IPersonRepository personRepository, INotificationValidationCheck notificationValidationCheck, IScheduleDayReadModelsCreator scheduleDayReadModelsCreator, IScheduleDayReadModelRepository scheduleDayReadModelRepository) : base(personRepository, notificationValidationCheck, scheduleDayReadModelsCreator, scheduleDayReadModelRepository)
+		{
+		}
+	}
+
+	public abstract class ScheduleDayReadModelHandlerBase : 
+		IHandleEvent<ProjectionChangedEvent>, 
+		IHandleEvent<ProjectionChangedEventForScheduleDay>
 	{
 		private readonly IPersonRepository _personRepository;
 		private readonly INotificationValidationCheck _notificationValidationCheck;
 		private readonly IScheduleDayReadModelsCreator _scheduleDayReadModelsCreator;
 		private readonly IScheduleDayReadModelRepository _scheduleDayReadModelRepository;
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "sms")]
-		public ScheduleDayReadModelHandler(IPersonRepository personRepository,
+		protected ScheduleDayReadModelHandlerBase(IPersonRepository personRepository,
 																			 INotificationValidationCheck notificationValidationCheck,
 																			 IScheduleDayReadModelsCreator scheduleDayReadModelsCreator,
 																			 IScheduleDayReadModelRepository scheduleDayReadModelRepository)
@@ -28,7 +47,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			_scheduleDayReadModelRepository = scheduleDayReadModelRepository;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Handle(ProjectionChangedEvent @event)
 		{
 			createReadModel(@event);

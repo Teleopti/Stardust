@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 {
 	[TestFixture]
 	public class ShiftExchangeOfferHandlerTest
@@ -31,16 +31,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			personRepository.Stub(x => x.Get(personId)).Return(person);
 			var target = new ShiftExchangeOfferHandler(personRepository,
-								 MockRepository.GenerateMock<IPushMessagePersister>(), personRequestRepository);
+				MockRepository.GenerateMock<IPushMessagePersister>(), personRequestRepository);
 			target.Handle(new ProjectionChangedEvent
 			{
 				PersonId = personId,
 				ScheduleDays = new[] {
-					new ProjectionChangedEventScheduleDay{CheckSum = checksum}, 
+					new ProjectionChangedEventScheduleDay{CheckSum = checksum},
 					new ProjectionChangedEventScheduleDay
-				{
-					Date = dateTime
-				} }
+					{
+						Date = dateTime
+					} }
 			});
 
 			shiftExchangeOffer.Status.Should().Be.EqualTo(ShiftExchangeOfferStatus.Invalid);
@@ -68,15 +68,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			personRepository.Stub(x => x.Get(personId)).Return(person);
 
-			
+
 			var target = new ShiftExchangeOfferHandler(personRepository,
-								 MockRepository.GenerateMock<IPushMessagePersister>(), personRequestRepository);
+				MockRepository.GenerateMock<IPushMessagePersister>(), personRequestRepository);
 			target.Handle(new ProjectionChangedEvent
 			{
 				PersonId = personId,
 				ScheduleDays = new[] {
-					new ProjectionChangedEventScheduleDay{CheckSum = checksum}, 
-					new ProjectionChangedEventScheduleDay{NotScheduled = true} 
+					new ProjectionChangedEventScheduleDay{CheckSum = checksum},
+					new ProjectionChangedEventScheduleDay{NotScheduled = true}
 				}
 			});
 

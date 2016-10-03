@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.TestCommon.FakeData;
 
-namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 {
 	[TestFixture]
 	public class ScheduleDayReadModelsCreatorTest
@@ -27,16 +27,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			var ret =
 				_target.GetReadModel(new ProjectionChangedEventScheduleDay
-				                     	{
-				                     		ContractTime = TimeSpan.FromHours(8),
-				                     		WorkTime = TimeSpan.FromHours(7),
-				                     		Date = new DateTime(2012, 12, 2),
-											Shift = new ProjectionChangedEventShift
-												{
-													StartDateTime = new DateTime(2012, 12, 1, 8, 0, 0, DateTimeKind.Utc),
-													EndDateTime = new DateTime(2012, 12, 1, 17, 0, 0, DateTimeKind.Utc),
-												}
-				                     	}, person);
+				{
+					ContractTime = TimeSpan.FromHours(8),
+					WorkTime = TimeSpan.FromHours(7),
+					Date = new DateTime(2012, 12, 2),
+					Shift = new ProjectionChangedEventShift
+					{
+						StartDateTime = new DateTime(2012, 12, 1, 8, 0, 0, DateTimeKind.Utc),
+						EndDateTime = new DateTime(2012, 12, 1, 17, 0, 0, DateTimeKind.Utc),
+					}
+				}, person);
 
 			ret.ContractTime.Should().Be.EqualTo(TimeSpan.FromHours(8));
 			ret.WorkTime.Should().Be.EqualTo(TimeSpan.FromHours(7));

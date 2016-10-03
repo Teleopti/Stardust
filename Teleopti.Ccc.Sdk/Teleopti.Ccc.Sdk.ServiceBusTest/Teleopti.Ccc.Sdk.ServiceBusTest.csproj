@@ -122,9 +122,6 @@
     <Compile Include="BudgetGroupAllowanceSpecificationTest.cs" />
     <Compile Include="BudgetGroupHeadCountSpecificationTest.cs" />
     <Compile Include="Container\ContainerConfigurationTest.cs" />
-    <Compile Include="Denormalizer\ShiftExchangeOfferHandlerTest.cs" />
-    <Compile Include="Denormalizer\ScheduleDayReadModelHandlerTest.cs" />
-    <Compile Include="Denormalizer\ScheduleDayReadModelsCreatorTest.cs" />
     <Compile Include="Diagnostics\ServiceBusHealthCheckEventHandlerTest.cs" />
     <Compile Include="NoNewConsumersTest.cs" />
     <Compile Include="PayrollDllCopyTest.cs" />

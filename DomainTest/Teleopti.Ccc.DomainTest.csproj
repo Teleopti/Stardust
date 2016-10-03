@@ -207,6 +207,9 @@
     <Compile Include="ApplicationLayer\Rta\ViewModels\TeamViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeUpdaterHangfireTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangedInDefaultScenarioNotificationTest.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModelHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModelsCreatorTest.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ShiftExchangeOfferHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ShiftCategoryTests\AnalyticsShiftCategoryUpdaterTests.cs" />
     <Compile Include="ApplicationLayer\ActivityTests\ActivityChangedHandlerTests.cs" />
     <Compile Include="ApplicationLayer\AddActivityCommandHandlerTest.cs" />
