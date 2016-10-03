@@ -460,8 +460,6 @@
     <Compile Include="Repositories\IEtlReadModelRepository.cs" />
     <Compile Include="Repositories\LogObjectDetail.cs" />
     <Compile Include="Repositories\SeniorityWorkDayRanksRepository.cs" />
-    <Compile Include="Rta\Persisters\SiteOutOfAdherenceReadModelPersister.cs" />
-    <Compile Include="Rta\Persisters\TeamOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="Repositories\TeamGamificationSettingRepository.cs" />
     <Compile Include="Foundation\ConnectionStrings.cs" />
     <Compile Include="Rta\DatabaseReader.cs" />

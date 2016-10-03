@@ -101,8 +101,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeMappingReader>().For<IMappingReader>();
 			system.UseTestDouble<FakeAgentStateReadModelPersister>().For<IAgentStateReadModelReader, IAgentStateReadModelPersister>();
 			system.UseTestDouble<FakeAgentStatePersister>().For<IAgentStatePersister>();
-			system.UseTestDouble<FakeTeamOutOfAdherenceReadModelPersister>().For<ITeamOutOfAdherenceReadModelPersister>();
-			system.UseTestDouble<FakeSiteOutOfAdherenceReadModelPersister>().For<ISiteOutOfAdherenceReadModelPersister>();
 			system.UseTestDouble<FakeAdherenceDetailsReadModelPersister>().For<IAdherenceDetailsReadModelPersister, IAdherenceDetailsReadModelReader>();
 			system.UseTestDouble<FakeAdherencePercentageReadModelPersister>().For<IAdherencePercentageReadModelPersister, IAdherencePercentageReadModelReader>();
 			system.UseTestDouble<FakeNumberOfAgentsInSiteReader>().For<INumberOfAgentsInSiteReader>();

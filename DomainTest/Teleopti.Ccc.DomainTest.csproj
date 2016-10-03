@@ -186,8 +186,6 @@
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\ShiftStartEndTimeTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentState\PersonChangedTeamTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\Mappings\MappingsTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteAdherence\OptimizeReadingDataFromDatabase.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TeamAdherence\OptimizeReadingDataFromDatabase.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ExecuteBatchesInParallelTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ExternalLogonPersonMappingTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\NoRtaLicenseTest.cs" />
@@ -290,10 +288,6 @@
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodDateTransformerTests.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodMapTests.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentState\TerminatedPersonTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteAdherence\SiteChangesTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteAdherence\PersonTerminatedTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TeamAdherence\PersonTerminatedTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TeamAdherence\TeamChanges.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TestCaseExtensions.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ScaleOutTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\PersonAdherenceScheduleRemovedTest.cs" />
@@ -316,8 +310,6 @@
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherenceDetails\DeletedTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\DeletedTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentState\DeletedPersonTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteAdherence\PersonDeletedTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TeamAdherence\PersonDeletedTest.cs" />
     <Compile Include="Forecasting\StaffingCalculatorServiceFacadeTest.cs" />
     <Compile Include="Intraday\CreateSkillAreaTest.cs" />
     <Compile Include="Intraday\MonitorSkillsProviderTest.cs" />
@@ -421,18 +413,11 @@
     <Compile Include="ApplicationLayer\Rta\Service\PersonStateChangedEventTest.cs" />
     <Compile Include="ApplicationLayer\Rta\RtaExtensions.cs" />
     <Compile Include="ApplicationLayer\Rta\RtaTestAttribute.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteAdherence\UpdaterTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteAdherence\UnorderedEventsTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\SnapshotTests.cs" />
     <Compile Include="ApplicationLayer\Rta\Synchronization\AdherenceDetailsTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Synchronization\AdherencePercentageTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\Synchronization\IndividualModelsTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Synchronization\InitializeProcessTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Synchronization\HandlerLockingTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\Synchronization\SiteAdherenceTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\Synchronization\TeamAdherenceTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TeamAdherence\UpdaterTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TeamAdherence\UnorderedEventsTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UnrecognizedStateTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleDateHandlerTest.cs" />

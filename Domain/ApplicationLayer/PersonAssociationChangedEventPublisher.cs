@@ -86,7 +86,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			public IPerson person;
 			public IPersonPeriod previousPeriod;
 			public IPersonPeriod currentPeriod;	
-			public DateOnly agentDate;	
 			public DateTime? timeOfChange;
 			public DateTime now;
 		}
@@ -109,7 +108,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 						person = person,
 						previousPeriod = previousPeriod,
 						currentPeriod = currentPeriod,
-						agentDate = agentDate,
 						timeOfChange = time,
 						now = now
 					};
@@ -123,26 +121,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 					var siteId = data.currentPeriod?.Team.Site.Id;
 					var businessUnitId = data.currentPeriod?.Team.Site.BusinessUnit.Id;
 
-					var previousAssociation = (
-						from p in data.person.PersonPeriodCollection
-						where p != null &&
-							  p.StartDate < data.agentDate
-						select new Association
-						{
-							TeamId = p.Team.Id.Value,
-							SiteId = p.Team.Site.Id.Value,
-							BusinessUnitId = p.Team.Site.BusinessUnit.Id.Value
-						}).ToArray();
-
 					_eventPublisher.Publish(new PersonAssociationChangedEvent
 					{
-						Version = 2,
 						PersonId = data.person.Id.Value,
 						Timestamp = now,
 						TeamId = teamId,
 						SiteId = siteId,
 						BusinessUnitId = businessUnitId,
-						PreviousAssociation = previousAssociation,
 						ExternalLogons = (data.currentPeriod?.ExternalLogOnCollection ?? Enumerable.Empty<IExternalLogOn>())
 							.Select(x => new ExternalLogon
 							{
@@ -189,13 +174,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 			_eventPublisher.Publish(new PersonAssociationChangedEvent
 			{
-				Version = 2,
 				PersonId = @event.PersonId,
 				Timestamp = now,
 				TeamId = @event.TeamId,
 				SiteId = @event.SiteId,
 				BusinessUnitId = @event.BusinessUnitId,
-				PreviousAssociation = @event.PreviousAssociations,
 				ExternalLogons = @event.ExternalLogons
 			});
 		}
@@ -217,13 +200,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		{
 			_eventPublisher.Publish(new PersonAssociationChangedEvent
 			{
-				Version = 2,
 				PersonId = @event.PersonId,
 				Timestamp = @event.Timestamp,
 				BusinessUnitId = @event.CurrentBusinessUnitId,
 				SiteId = @event.CurrentSiteId,
 				TeamId = @event.CurrentTeamId,
-				PreviousAssociation = @event.PreviousAssociations,
 				ExternalLogons = @event.ExternalLogons
 			});
 		}
@@ -232,13 +213,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		{
 			_eventPublisher.Publish(new PersonAssociationChangedEvent
 			{
-				Version = 2,
 				PersonId = @event.PersonId,
 				Timestamp = @event.Timestamp,
 				BusinessUnitId = @event.CurrentBusinessUnitId,
 				SiteId = @event.CurrentSiteId,
 				TeamId = @event.CurrentTeamId,
-				PreviousAssociation = @event.PreviousAssociation,
 				ExternalLogons = @event.ExternalLogons
 			});
 		}

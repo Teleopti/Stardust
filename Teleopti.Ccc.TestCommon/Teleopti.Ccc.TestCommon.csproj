@@ -340,7 +340,6 @@
     <Compile Include="FakeShiftTradeLightValidator.cs" />
     <Compile Include="FakeSignalR.cs" />
     <Compile Include="FakeSignalRClient.cs" />
-    <Compile Include="FakeRepositories\Rta\FakeSiteOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeTeamOutOfAdherenceReadModelPersister.cs" />
     <Compile Include="FakeTimeZoneGuard.cs" />
     <Compile Include="FakeUserCulture.cs" />

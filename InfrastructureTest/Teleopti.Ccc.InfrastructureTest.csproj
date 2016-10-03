@@ -282,10 +282,8 @@
     <Compile Include="Rta\AgentStateReadModelReaderForSkillTest.cs" />
     <Compile Include="Rta\Persisters\MappingReadModelPersisterTest.cs" />
     <Compile Include="Rta\Persisters\MappingReadModelUpdaterTest.cs" />
-    <Compile Include="Rta\Persisters\SiteOutOfAdherenceReadModelPersisterConcurrencyTest.cs" />
     <Compile Include="Rta\Persisters\SiteInAlarmFromAgentStatesReadModelTest.cs" />
     <Compile Include="Rta\Persisters\TeamInAlarmFromAgentStatesReadModelTest.cs" />
-    <Compile Include="Rta\Persisters\TeamOutOfAdherenceReadModelPersisterConcurrencyTest.cs" />
     <Compile Include="Rta\PublishRtaEventsToHangfireTest.cs" />
     <Compile Include="Rta\ScheduleInvalidationTest.cs" />
     <Compile Include="Rta\SnapshotTest.cs" />
@@ -332,8 +330,6 @@
     <Compile Include="ReadModelUnitOfWorkTestAttribute.cs" />
     <Compile Include="Repositories\SeatMapLocationRepositoryTest.cs" />
     <Compile Include="Repositories\SeniorityWorkDayRanksRepositoryTest.cs" />
-    <Compile Include="Rta\Persisters\SiteOutOfAdherenceReadModelPersisterTest.cs" />
-    <Compile Include="Rta\Persisters\TeamOutOfAdherenceReadModelPersisterTest.cs" />
     <Compile Include="Repositories\TeamGamificationSettingRepositoryTest.cs" />
     <Compile Include="Rta\AgentStateReadModelForTest.cs" />
     <Compile Include="Rta\Persisters\AgentStatePersisterGetTest.cs" />

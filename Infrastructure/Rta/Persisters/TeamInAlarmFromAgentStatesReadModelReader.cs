@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 {
-	public class TeamInAlarmFromAgentStatesReadModelReader : ITeamOutOfAdherenceReadModelReader
+	public class TeamInAlarmFromAgentStatesReadModelReader : ITeamInAlarmReader
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly INow _now;
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 			_now = now;
 		}
 
-		public IEnumerable<TeamOutOfAdherenceReadModel> Read(Guid siteId)
+		public IEnumerable<TeamInAlarmModel> Read(Guid siteId)
 		{
 			return _unitOfWork.Current().Session()
 				.CreateSQLQuery(@"
@@ -32,9 +32,9 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 					")
 				.SetParameter("siteId", siteId)
 				.SetParameter("now", _now.UtcDateTime())
-				.SetResultTransformer(Transformers.AliasToBean(typeof(TeamOutOfAdherenceReadModel)))
+				.SetResultTransformer(Transformers.AliasToBean(typeof(TeamInAlarmModel)))
 				.List()
-				.Cast<TeamOutOfAdherenceReadModel>();
+				.Cast<TeamInAlarmModel>();
 		}
 	}
 }

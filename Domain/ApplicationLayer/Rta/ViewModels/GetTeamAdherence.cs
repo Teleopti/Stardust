@@ -9,19 +9,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 	public class GetTeamAdherence : IGetTeamAdherence
 	{
 		private readonly ISiteRepository _siteRepository;
-		private readonly ITeamOutOfAdherenceReadModelReader _teamOutOfAdherenceReadModelReader;
+		private readonly ITeamInAlarmReader _teamInAlarmReader;
 
 		public GetTeamAdherence(
 			ISiteRepository siteRepository, 
-			ITeamOutOfAdherenceReadModelReader teamOutOfAdherenceReadModelReader)
+			ITeamInAlarmReader teamInAlarmReader)
 		{
 			_siteRepository = siteRepository;
-			_teamOutOfAdherenceReadModelReader = teamOutOfAdherenceReadModelReader;
+			_teamInAlarmReader = teamInAlarmReader;
 		}
 
 		public IEnumerable<TeamOutOfAdherence> GetOutOfAdherenceForTeamsOnSite(Guid siteId)
 		{
-			var adherence = _teamOutOfAdherenceReadModelReader.Read(siteId);
+			var adherence = _teamInAlarmReader.Read(siteId);
 			var site = _siteRepository.Get(siteId);
 			var teams = site.TeamCollection;
 			return teams.Select(t =>

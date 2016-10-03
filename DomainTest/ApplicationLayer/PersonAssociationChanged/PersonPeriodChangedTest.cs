@@ -45,37 +45,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			result.SiteId.Should().Be(siteId);
 			result.TeamId.Should().Be(teamId);
 		}
-		
-		[Test]
-		public void ShouldPublishWithPreviousAssociation()
-		{
-			var personId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
-			var siteId = Guid.NewGuid();
-			var teamId = Guid.NewGuid();
-
-			Target.Handle(new PersonPeriodChangedEvent
-			{
-				Timestamp = "2016-02-01 00:00:01".Utc(),
-				PersonId = personId,
-				PreviousAssociation = new[]
-				{
-					new Association
-					{
-						BusinessUnitId = businessUnitId,
-						SiteId = siteId,
-						TeamId = teamId,
-					}
-				},
-
-			});
-
-			var @event = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();
-			@event.Version.Should().Be(2);
-			var previousAssociation = @event.PreviousAssociation.Single();
-			previousAssociation.BusinessUnitId.Should().Be(businessUnitId);
-			previousAssociation.SiteId.Should().Be(siteId);
-			previousAssociation.TeamId.Should().Be(teamId);
-		}
 	}
 }

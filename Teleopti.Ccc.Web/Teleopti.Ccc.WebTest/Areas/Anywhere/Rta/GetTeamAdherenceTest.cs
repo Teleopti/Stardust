@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -22,14 +24,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 		public IGetTeamAdherence Target;
 		public FakeTeamRepository Teams;
 		public FakeSiteRepository Sites;
-		public FakeTeamOutOfAdherenceReadModelPersister OutOfAdherence;
+		public FakeTeamInAlarmReader OutOfAdherence;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddModule(new WebAppModule(configuration));
 			system.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
 			system.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
-			system.UseTestDouble<FakeTeamOutOfAdherenceReadModelPersister>().For<ITeamOutOfAdherenceReadModelReader>();
+			system.UseTestDouble<FakeTeamInAlarmReader>().For<ITeamInAlarmReader>();
 		}
 
 		[Test]
@@ -41,11 +43,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			site.AddTeam(team);
 			Teams.Has(team);
 			Sites.Has(site);
-			OutOfAdherence.Has(new TeamOutOfAdherenceReadModel
+			OutOfAdherence.Has(new AgentStateReadModel
 			{
 				TeamId = team.Id.Value,
 				SiteId = site.Id.Value,
-				Count = 1
+				IsRuleAlarm = true,
+				AlarmStartTime = DateTime.MinValue
 			});
 
 			var result = Target.GetOutOfAdherenceForTeamsOnSite(site.Id.GetValueOrDefault());

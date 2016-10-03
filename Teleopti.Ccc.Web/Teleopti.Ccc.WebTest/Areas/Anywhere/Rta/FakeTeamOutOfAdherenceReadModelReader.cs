@@ -2,23 +2,30 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 {
-    public class FakeTeamOutOfAdherenceReadModelReader : ITeamOutOfAdherenceReadModelReader
+    public class FakeTeamInAlarmReader : ITeamInAlarmReader
     {
-        private IEnumerable<TeamOutOfAdherenceReadModel> _data = Enumerable.Empty<TeamOutOfAdherenceReadModel>();
-
-        public void Has(Guid siteId, Guid teamId, int outOfAdherence)
+        private readonly List<AgentStateReadModel> _data = new List<AgentStateReadModel>();
+		
+        public void Has(AgentStateReadModel model)
         {
-            _data =
-                _data.Concat(new[]
-                {new TeamOutOfAdherenceReadModel {SiteId = siteId, TeamId = teamId, Count = outOfAdherence}});
+			_data.Add(model);
         }
 
-        public IEnumerable<TeamOutOfAdherenceReadModel> Read(Guid siteId)
+        public IEnumerable<TeamInAlarmModel> Read(Guid siteId)
         {
-            return _data.Where(x => x.SiteId == siteId);
+            return _data
+				.Where(x => x.SiteId == siteId && x.IsRuleAlarm && x.AlarmStartTime == DateTime.MinValue)
+				.GroupBy(x => x.TeamId)
+				.Select(x => new TeamInAlarmModel
+				{
+					SiteId = siteId,
+					TeamId = x.Key.Value,
+					Count = x.Count()
+				});
         }
     }
 }

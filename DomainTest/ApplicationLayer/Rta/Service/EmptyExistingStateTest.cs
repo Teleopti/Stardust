@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	{
 		public FakeRtaDatabase Database;
 		public Domain.ApplicationLayer.Rta.Service.Rta Rta;
-		public FakeTeamOutOfAdherenceReadModelPersister Model;
 		public RtaTestAttribute Context;
 		public FakeEventPublisher Publisher;
 
@@ -30,21 +29,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Rta.Touch(Database.TenantName());
 
 			Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Should().Be.Empty();
-		}
-		
-		[Test]
-		public void ShouldNotSynchronize()
-		{
-			var person = Guid.NewGuid();
-			var team = Guid.NewGuid();
-			Database
-				.WithUser("user", person, null, team, null)
-				;
-
-			Context.SimulateRestart();
-			Rta.Touch(Database.TenantName());
-
-			Model.Get(team).Should().Be.Null();
 		}
 
 		[Test]

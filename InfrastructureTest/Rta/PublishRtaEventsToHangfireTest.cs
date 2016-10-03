@@ -35,27 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 			Bus.WasEnqueued.Should().Be.False();
 		}
-
-		[Test]
-		public void ShouldRunSiteOutOfAdherenceReadModelUpdaterOnHangfire()
-		{
-			Target.Publish(new PersonOutOfAdherenceEvent());
-
-			Hangfire.HandlerTypes.Where(x => x.Contains(typeof (SiteOutOfAdherenceReadModelUpdater).Name))
-				.Should()
-				.Have.Count.EqualTo(1);
-		}
-
-		[Test]
-		public void ShouldRunTeamOutOfAdherenceReadModelUpdaterOnHangfire()
-		{
-			Target.Publish(new PersonOutOfAdherenceEvent());
-
-			Hangfire.HandlerTypes.Where(x => x.Contains(typeof(TeamOutOfAdherenceReadModelUpdater).Name))
-				.Should()
-				.Have.Count.EqualTo(1);
-		}
-
+		
 		[Test]
 		[Toggle(Toggles.RTA_AdherenceDetails_34267)]
 		public void ShouldRunAdherenceDetailsReadModelUpdaterOnHangfire()

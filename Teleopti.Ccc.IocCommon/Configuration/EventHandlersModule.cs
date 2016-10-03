@@ -147,34 +147,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
                 .As<IAdherenceDetailsReadModelPersister>()
                 .As<IAdherenceDetailsReadModelReader>()
                 .SingleInstance();
-
-            builder.RegisterType<TeamOutOfAdherenceReadModelPersister>()
-                .As<ITeamOutOfAdherenceReadModelPersister>()
-                .SingleInstance();
-	        builder.RegisterType<SiteOutOfAdherenceReadModelPersister>()
-		        .As<ISiteOutOfAdherenceReadModelPersister>()
-		        .SingleInstance();
-
-	        if (_config.Toggle(Toggles.RTA_RemoveSiteTeamOutOfAdherenceReadModels_40069))
-	        {
-		        builder.RegisterType<SiteInAlarmFromAgentStatesReadModelReader>()
-			        .As<ISiteOutOfAdherenceReadModelReader>()
-			        .SingleInstance();
-		        builder.RegisterType<TeamInAlarmFromAgentStatesReadModelReader>()
-			        .As<ITeamOutOfAdherenceReadModelReader>()
-			        .SingleInstance();
-	        }
-	        else
-	        {
-		        builder.RegisterType<SiteOutOfAdherenceReadModelPersister>()
-			        .As<ISiteOutOfAdherenceReadModelReader>()
-			        .SingleInstance();
-		        builder.RegisterType<TeamOutOfAdherenceReadModelPersister>()
-			        .As<ITeamOutOfAdherenceReadModelReader>()
-			        .SingleInstance();
-			}
-
-	        builder.RegisterType<IntervalLengthFetcher>().As<IIntervalLengthFetcher>().SingleInstance();
+			
+			builder.RegisterType<SiteInAlarmReader>()
+					.As<ISiteInAlarmReader>()
+					.SingleInstance();
+			builder.RegisterType<TeamInAlarmFromAgentStatesReadModelReader>()
+				.As<ITeamInAlarmReader>()
+				.SingleInstance();
+			
+			builder.RegisterType<IntervalLengthFetcher>().As<IIntervalLengthFetcher>().SingleInstance();
             builder.RegisterType<AnalyticsFactScheduleTimeHandler>().As<IAnalyticsFactScheduleTimeHandler>().SingleInstance();
             builder.RegisterType<AnalyticsFactScheduleDateHandler>().As<IAnalyticsFactScheduleDateHandler>().SingleInstance();
             builder.RegisterType<AnalyticsFactSchedulePersonHandler>().As<IAnalyticsFactSchedulePersonHandler>().SingleInstance();

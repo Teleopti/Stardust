@@ -5,19 +5,16 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 {
 	[TestFixture]
-	[Toggle(Toggles.RTA_RemoveSiteTeamOutOfAdherenceReadModels_40069)]
 	[UnitOfWorkTest]
 	public class SiteInAlarmFromAgentStatesReadModelTest
 	{
 		public IAgentStateReadModelPersister Persister;
-		public ISiteOutOfAdherenceReadModelReader Target;
+		public ISiteInAlarmReader Target;
 		public MutableNow Now;
 
 		[Test]

@@ -1,7 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -20,13 +22,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 	{
 		public IGetSiteAdherence Target;
 		public FakeSiteRepository Sites;
-		public FakeSiteOutOfAdherenceReadModelPersister OutOfAdherence;
+		public FakeSiteInAlarmReader AgentState;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddModule(new WebAppModule(configuration));
 			system.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
-			system.UseTestDouble<FakeSiteOutOfAdherenceReadModelPersister>().For<ISiteOutOfAdherenceReadModelReader>();
+			system.UseTestDouble<FakeSiteInAlarmReader>().For<ISiteInAlarmReader>();
 		}
 
 		[Test]
@@ -34,12 +36,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 		{
 			var site = new Site("s").WithId();
 			Sites.Has(site);
-			OutOfAdherence.Has(new SiteOutOfAdherenceReadModel
+			AgentState.Has(new AgentStateReadModel
 			{
 				SiteId = site.Id.Value,
-				Count = 1
+				IsRuleAlarm = true,
+				AlarmStartTime = DateTime.MinValue
 			});
-			
+
 			var result = Target.OutOfAdherence();
 
 			result.Single().Id.Should().Be(site.Id);
@@ -58,4 +61,5 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			result.Single().OutOfAdherence.Should().Be(0);
 		}
 	}
+
 }

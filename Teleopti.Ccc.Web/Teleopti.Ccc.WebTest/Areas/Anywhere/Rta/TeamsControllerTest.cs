@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 		public FakeSiteRepository SiteRepository;
 		public FakeTeamRepository TeamRepository;
 		public FakeNumberOfAgentsInTeamReader NumberOfAgentsInTeam;
-		public FakeTeamOutOfAdherenceReadModelReader TeamOutOfAdherenceReadModelReader;
+		public FakeTeamInAlarmReader TeamInAlarmReader;
 		public TeamsController Target;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			system.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
 			system.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
 			system.UseTestDouble<FakeNumberOfAgentsInTeamReader>().For<INumberOfAgentsInTeamReader>();
-			system.UseTestDouble<FakeTeamOutOfAdherenceReadModelReader>().For<ITeamOutOfAdherenceReadModelReader>();
+			system.UseTestDouble<FakeTeamInAlarmReader>().For<ITeamInAlarmReader>();
 			system.UseTestDouble<FakeReadModelUnitOfWorkAspect>().For<IReadModelUnitOfWorkAspect>();
 		}
 
@@ -91,20 +91,5 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			Target.GetBusinessUnitId(team.Id.GetValueOrDefault()).Result<Guid>().Should().Be(businessUnit.Id.GetValueOrDefault());
 		}
 
-		[Test, Ignore("Incorrect")]
-		public void ShouldGetOutOfAdherencerForAllTeams()
-		{
-			var team1 = Guid.NewGuid();
-			var team2 = Guid.NewGuid();
-			var siteId = Guid.NewGuid();
-
-			TeamOutOfAdherenceReadModelReader.Has(siteId, team1, 1);
-			TeamOutOfAdherenceReadModelReader.Has(siteId, team2, 2);
-
-			var result = Target.GetOutOfAdherenceForTeamsOnSite(siteId).Result<IEnumerable<TeamOutOfAdherence>>();
-
-			result.Single(x => x.Id == team1).OutOfAdherence.Should().Be(1);
-			result.Single(x => x.Id == team2).OutOfAdherence.Should().Be(2);
-		}
 	}
 }

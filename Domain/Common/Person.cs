@@ -81,7 +81,6 @@ namespace Teleopti.Ccc.Domain.Common
 
 			    AddEvent(() =>
 				{
-					var previousAssociation = previousAssociations(ServiceLocatorForEntity.Now);
 					var info = currentAssociationInfo(ServiceLocatorForEntity.Now);
 					return new PersonTerminalDateChangedEvent
 					{
@@ -92,7 +91,6 @@ namespace Teleopti.Ccc.Domain.Common
 						TimeZoneInfoId = PermissionInformation.DefaultTimeZone().Id,
 						PreviousTerminationDate = valueBefore,
 						TerminationDate = valueAfter,
-						PreviousAssociations = previousAssociation,
 						ExternalLogons = info.ExternalLogons
 					};
 			    });
@@ -101,14 +99,7 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public virtual void ChangeTeam(ITeam team, IPersonPeriod personPeriod)
 		{
-			Association previousAssociation = null;
-			if (personPeriod.Team.Site?.BusinessUnit != null)
-				previousAssociation = new Association
-				{
-					BusinessUnitId = personPeriod.Team.Site.BusinessUnit.Id.GetValueOrDefault(),
-					SiteId = personPeriod.Team.Site.Id.GetValueOrDefault(),
-					TeamId = personPeriod.Team.Id.GetValueOrDefault(),
-				};
+			
 			personPeriod.Team = team;
 			AddEvent(() =>
 			{
@@ -119,26 +110,10 @@ namespace Teleopti.Ccc.Domain.Common
 					CurrentBusinessUnitId = info.BusinessUnitId,
 					CurrentSiteId = info.SiteId,
 					CurrentTeamId = info.TeamId,
-					PreviousAssociations = new[] {previousAssociation},
 					ExternalLogons = info.ExternalLogons
 				};
 			});
 		}
-
-	    private IEnumerable<Association> previousAssociations(INow now)
-	    {
-		    var nowDateOnly = new DateOnly(now.UtcDateTime());
-		    var period = Period(nowDateOnly);
-		    var periodStart = period?.StartDate ?? nowDateOnly;
-			return InternalPersonPeriodCollection
-			    .Where(p => p.StartDate < periodStart)
-			    .Select(x => new Association
-			    {
-				    TeamId = x.Team.Id.GetValueOrDefault(),
-				    SiteId = x.Team.Site.Id.GetValueOrDefault(),
-				    BusinessUnitId = x.Team.Site.BusinessUnit.Id.GetValueOrDefault()
-				});
-	    }
 
 		private personAssociationInfo currentAssociationInfo(INow now)
 		{
@@ -398,14 +373,12 @@ namespace Teleopti.Ccc.Domain.Common
 		    AddEvent(() =>
 		    {
 				var info = currentAssociationInfo(ServiceLocatorForEntity.Now);
-				var previousAssociation = previousAssociations(ServiceLocatorForEntity.Now);
 				return new PersonPeriodChangedEvent
 				{
 					PersonId = Id.GetValueOrDefault(),
 					CurrentBusinessUnitId = info.BusinessUnitId,
 					CurrentSiteId = info.SiteId,
 					CurrentTeamId = info.TeamId,
-					PreviousAssociation = previousAssociation,
 					ExternalLogons = info.ExternalLogons
 				};
 		    });
@@ -437,15 +410,6 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public virtual void RemoveAllPersonPeriods()
 		{
-			var previousAssociations = InternalPersonPeriodCollection
-				.Where(x => x.Team.Site?.BusinessUnit != null)
-				.Select(x => new Association
-				{
-					BusinessUnitId = x.Team.Site.BusinessUnit.Id.GetValueOrDefault(),
-					SiteId = x.Team.Site.Id.GetValueOrDefault(),
-					TeamId = x.Team.Id.GetValueOrDefault(),
-				})
-				.ToArray();
 			_personPeriodCollection.Clear();
 
 			addPersonPeriodChangedEvent();

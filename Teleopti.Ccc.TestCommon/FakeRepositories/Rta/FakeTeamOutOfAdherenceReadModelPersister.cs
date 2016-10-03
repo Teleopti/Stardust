@@ -2,42 +2,30 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
-	public class FakeTeamOutOfAdherenceReadModelPersister : ITeamOutOfAdherenceReadModelPersister, ITeamOutOfAdherenceReadModelReader
+	public class FakeSiteInAlarmReader : ISiteInAlarmReader
 	{
-		private readonly List<TeamOutOfAdherenceReadModel> _models = new List<TeamOutOfAdherenceReadModel>();
+		private readonly List<AgentStateReadModel> _data = new List<AgentStateReadModel>();
 
-		public void Persist(TeamOutOfAdherenceReadModel model)
+		public void Has(AgentStateReadModel model)
 		{
-			_models.RemoveAll(x => x.TeamId == model.TeamId);
-			_models.Add(model);
+			_data.Add(model);
 		}
 
-		public TeamOutOfAdherenceReadModel Get(Guid teamId)
+		public IEnumerable<SiteInAlarmModel> Read()
 		{
-			return _models.FirstOrDefault(m => m.TeamId == teamId);
-		}
-
-		public IEnumerable<TeamOutOfAdherenceReadModel> GetAll()
-		{
-			return _models.ToArray();
-		}
-
-		public IEnumerable<TeamOutOfAdherenceReadModel> Read(Guid siteId)
-		{
-			return _models.Where(x => x.SiteId == siteId);
-		}
-
-		public bool HasData()
-		{
-			return _models.Any();
-		}
-
-		public void Has(TeamOutOfAdherenceReadModel model)
-		{
-			_models.Add(model);
+			return
+				_data
+					.Where(x => x.IsRuleAlarm && x.AlarmStartTime == DateTime.MinValue)
+					.GroupBy(x => x.SiteId)
+					.Select(x => new SiteInAlarmModel
+					{
+						SiteId = x.Key.Value,
+						Count = x.Count()
+					});
 		}
 	}
 }

@@ -43,7 +43,6 @@ Background:
 	| Phone state | Pause |
 	| Is Alarm    | true  |
 
-@OnlyRunIfEnabled('RTA_RemoveSiteTeamOutOfAdherenceReadModels_40069')
 Scenario: See how many agents that are in alarm for each site
 	Given the time is '2016-08-18 13:00'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
@@ -52,7 +51,6 @@ Scenario: See how many agents that are in alarm for each site
 	Then I should see site 'Paris' with 1 of 1 agents in alarm
 	And I should see site 'London' with 0 of 1 agents in alarm
 
-@OnlyRunIfEnabled('RTA_RemoveSiteTeamOutOfAdherenceReadModels_40069')
 Scenario: See updates of how many agents that are in alarm for each site
 	Given the time is '2016-08-18 13:00'
 	 When I view Real time adherence sites

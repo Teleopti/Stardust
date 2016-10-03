@@ -8,18 +8,18 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 {
-	public class SiteInAlarmFromAgentStatesReadModelReader : ISiteOutOfAdherenceReadModelReader
+	public class SiteInAlarmReader : ISiteInAlarmReader
 	{
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly INow _now;
 
-		public SiteInAlarmFromAgentStatesReadModelReader(ICurrentUnitOfWork currentUnitOfWork, INow now)
+		public SiteInAlarmReader(ICurrentUnitOfWork currentUnitOfWork, INow now)
 		{
 			_currentUnitOfWork = currentUnitOfWork;
 			_now = now;
 		}
 
-		public IEnumerable<SiteOutOfAdherenceReadModel> Read()
+		public IEnumerable<SiteInAlarmModel> Read()
 		{
 			return _currentUnitOfWork.Current().Session()
 				.CreateSQLQuery(@"
@@ -29,9 +29,9 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 					GROUP BY SiteId
 					")
 				.SetParameter("now", _now.UtcDateTime())
-				.SetResultTransformer(Transformers.AliasToBean(typeof(SiteOutOfAdherenceReadModel)))
+				.SetResultTransformer(Transformers.AliasToBean(typeof(SiteInAlarmModel)))
 				.List()
-				.Cast<SiteOutOfAdherenceReadModel>();
+				.Cast<SiteInAlarmModel>();
 		}
 	}
 }

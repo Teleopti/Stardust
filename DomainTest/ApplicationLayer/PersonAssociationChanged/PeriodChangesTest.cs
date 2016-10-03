@@ -98,33 +98,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 
 			Publisher.PublishedEvents.Should().Be.Empty();
 		}
-		
-		[Test]
-		public void ShouldPublishWithPreviousAssociation()
-		{
-			var businessUnit = Guid.NewGuid();
-			var previousSite1 = Guid.NewGuid();
-			var previousSite2 = Guid.NewGuid();
-			var previousTeam1 = Guid.NewGuid();
-			var previousTeam2 = Guid.NewGuid();
-			var newTeam = Guid.NewGuid();
-			Now.Is("2016-02-01 00:00");
-			Data.WithAgent("pierre", previousTeam1, previousSite1, businessUnit)
-				.WithPeriod("2016-01-15", previousTeam2, previousSite2, businessUnit)
-				.WithPeriod("2016-02-01", newTeam);
-
-			Target.Handle(new TenantHourTickEvent());
-
-			var @event = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();
-			@event.PreviousAssociation.Count().Should().Be(2);
-			@event.PreviousAssociation.Count(x =>
-				x.BusinessUnitId == businessUnit &&
-				x.SiteId == previousSite1 &&
-				x.TeamId == previousTeam1).Should().Be(1);
-			@event.PreviousAssociation.Count(x =>
-				x.BusinessUnitId == businessUnit &&
-				x.SiteId == previousSite2 &&
-				x.TeamId == previousTeam2).Should().Be(1);
-		}
 	}
 }

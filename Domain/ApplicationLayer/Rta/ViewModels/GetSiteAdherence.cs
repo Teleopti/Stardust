@@ -7,20 +7,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 {
 	public class GetSiteAdherence : IGetSiteAdherence
 	{
-		private readonly ISiteOutOfAdherenceReadModelReader _siteOutOfAdherenceReadModelPersister;
+		private readonly ISiteInAlarmReader _siteInAlarmReader;
 		private readonly ISiteRepository _siteRepository;
 
 		public GetSiteAdherence(
-			ISiteOutOfAdherenceReadModelReader siteOutOfAdherenceReadModelPersister,
+			ISiteInAlarmReader siteInAlarmReader,
 			ISiteRepository siteRepository)
 		{
-			_siteOutOfAdherenceReadModelPersister = siteOutOfAdherenceReadModelPersister;
+			_siteInAlarmReader = siteInAlarmReader;
 			_siteRepository = siteRepository;
 		}
 
 		public IEnumerable<SiteOutOfAdherence> OutOfAdherence()
 		{
-			var adherence = _siteOutOfAdherenceReadModelPersister.Read();
+			var adherence = _siteInAlarmReader.Read();
 			var sites = _siteRepository.LoadAll();
 			return sites.Select(s =>
 				new SiteOutOfAdherence

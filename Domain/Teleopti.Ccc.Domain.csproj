@@ -703,8 +703,8 @@
     <Compile Include="UnitOfWork\IReadModelTransactionSyncronization.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\INotificationCreator.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IRtaEventPublisher.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\ISiteOutOfAdherenceReadModelPersister.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\ITeamOutOfAdherenceReadModelPersister.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\ISiteInAlarmReader.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\ITeamInAlarmReader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\NotificationCreator.cs" />
     <Compile Include="ApplicationLayer\Rta\Performance\PersonGenerator.cs" />
     <Compile Include="ApplicationLayer\Rta\Performance\ScheduleGenerator.cs" />
@@ -718,8 +718,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\ShiftEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AdherencePercentageViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\StateInputModel.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteOutOfAdherenceReadModel.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteOutOfAdherenceReadModelUpdater.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteInAlarmModel.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StateCodeAdder.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StateEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\ExternalUserStateWebModel.cs" />
@@ -727,8 +726,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\Context.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StateMapper.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StateStreamSynchronizer.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TeamOutOfAdherenceReadModel.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TeamOutOfAdherenceReadModelUpdater.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TeamInAlarmModel.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventShiftExtension.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleDate.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleDayCount.cs" />

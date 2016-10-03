@@ -13,9 +13,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public Guid? CurrentSiteId { get; set; }
 		public Guid? CurrentTeamId { get; set; }
 
-		[RemoveMeWithToggle(Toggles.RTA_RemoveSiteTeamOutOfAdherenceReadModels_40069)]
-		public IEnumerable<Association> PreviousAssociation { get; set; }
-
 		public IEnumerable<ExternalLogon> ExternalLogons { get; set; }
 
 	}
