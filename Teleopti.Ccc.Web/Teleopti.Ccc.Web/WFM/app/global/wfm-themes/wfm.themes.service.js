@@ -1,14 +1,26 @@
-﻿
-(function() {﻿
-	'use strict';﻿
-	angular.module('wfm.themes').service('ThemeService', ['$http', '$rootScope', '$q', 'Toggle', function($http, $rootScope, $q, Toggle) {
-		var service = {};
+(function() {
+	'use strict';
 
-		service.getTheme = function() {
-			return $http.get('../api/Theme');
+	angular
+	.module('wfm.themes')
+	.factory('ThemeService', ThemeService);
+
+	ThemeService.$inject = ['$http', '$rootScope', '$q', 'Toggle'];
+
+	function ThemeService($http, $rootScope, $q, Toggle) {
+		var service = {
+			getTheme: getTheme,
+			init: init,
+			saveTheme: saveTheme
 		};
 
-		service.init = function() {
+		return service;
+
+		function getTheme() {
+			return $http.get('../api/Theme');
+		}
+
+		function init(){
 			var themeToggle = Toggle.togglesLoaded.then(function() {
 				if (Toggle.WfmGlobalLayout_personalOptions_37114) {
 					return service.getTheme();
@@ -23,17 +35,16 @@
 				$rootScope.setTheme('classic');
 			});
 			return themeToggle;
-		};
+		}
 
-		service.saveTheme = function(name, overlay) {
+		function saveTheme(name, overlay) {
 			if (name === 'classic' || name === 'dark') {
 				$http.post("../api/Theme/Change", {
 					Name: name,
 					Overlay: overlay
 				});
 			}
-		};
+		}
 
-		return service;
-	}]);﻿
-})();
+	}
+})();﻿

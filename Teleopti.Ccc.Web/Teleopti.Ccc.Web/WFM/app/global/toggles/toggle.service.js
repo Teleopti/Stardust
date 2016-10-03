@@ -8,18 +8,18 @@
 	Toggle.$inject = ['$resource', '$q'];
 
 	function Toggle($resource, $q) {
-		var thisToggle = {};
+		var service = this;
 		var togglesLoaded = $q.all([
 			loadAllToggles().then(function(result){
 				for (var toggle in result) {
 					if (toggle.indexOf('$') !== 0 && result.hasOwnProperty(toggle) && typeof (result[toggle]) === 'boolean') {
-						thisToggle[toggle] = result[toggle];
+						service[toggle] = result[toggle];
 					}
 				}
 			})
 		]);
 
-		var service = {
+	 service = {
 			togglesLoaded: togglesLoaded
 		};
 
