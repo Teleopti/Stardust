@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldReturnCorrectProjectionWhenThereIsNoScheduleForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
+			var person = PersonFactory.CreatePersonWithGuid("Sherlock", "Holmes");
 			PeopleSearchProvider.Add(person);
 
 			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldReturnCorrectProjectionWhenThereIsMainShiftForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
+			var person = PersonFactory.CreatePersonWithGuid("Sherlock", "Holmes");
 			PeopleSearchProvider.Add(person);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldReturnShiftCategoryDescriptionWhenThereIsMainShiftForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
+			var person = PersonFactory.CreatePersonWithGuid("Sherlock", "Holmes");
 			PeopleSearchProvider.Add(person);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldReturnNullShiftCategoryWhenThereIsDayOffForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
+			var person = PersonFactory.CreatePersonWithGuid("Sherlock", "Holmes");
 			PeopleSearchProvider.Add(person);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldReturnNullShiftCategoryWhenThereIsFullDayAbsenceOnlyForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(scheduleDate.AddDays(-1)));
+			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(scheduleDate.AddDays(-1))).WithId();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 			PeopleSearchProvider.Add(person);
 
@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldReturnCorrectProjectionWhenThereIsDayOffForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
+			var person = PersonFactory.CreatePersonWithGuid("Sherlock", "Holmes");
 			PeopleSearchProvider.Add(person);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldGetCorrectIdsForNeighboringPersonAbsences()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
+			var person = PersonFactory.CreatePersonWithGuid("Sherlock", "Holmes");
 			PeopleSearchProvider.Add(person);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
@@ -219,11 +219,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 				new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 17));
 			var absence = AbsenceFactory.CreateAbsenceWithId();
 			var personAbsence1 = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
-				new DateTimePeriod(2020, 1, 1, 11, 2020, 1, 1, 12), absence);
-			personAbsence1.SetId(Guid.NewGuid());
+				new DateTimePeriod(2020, 1, 1, 11, 2020, 1, 1, 12), absence).WithId();
 			var personAbsence2 = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
-				new DateTimePeriod(2020, 1, 1, 12, 2020, 1, 1, 13), absence);
-			personAbsence2.SetId(Guid.NewGuid());
+				new DateTimePeriod(2020, 1, 1, 12, 2020, 1, 1, 13), absence).WithId();
 			scheduleDay.Add(personAbsence1);
 			scheduleDay.Add(personAbsence2);
 
@@ -245,7 +243,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldReturnCorrectProjectionWhenThereIsFullDayAbsenceOnlyForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(scheduleDate.AddDays(-1)));
+			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(scheduleDate.AddDays(-1))).WithId();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 			PeopleSearchProvider.Add(person);
 
@@ -277,7 +275,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldReturnCorrectProjectionWhenThereIsFullDayAbsenceAndShiftForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
+			var person = PersonFactory.CreatePersonWithGuid("Sherlock", "Holmes");
 			PeopleSearchProvider.Add(person);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
@@ -309,7 +307,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldReturnCorrectProjectionWhenThereIsFullDayAbsenceAndDayoffForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(scheduleDate.AddDays(-1)));
+			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(scheduleDate.AddDays(-1))).WithId();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 			PeopleSearchProvider.Add(person);
 
@@ -341,7 +339,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldReturnCorrectProjectionWhenThereIsFullDayAbsenceOnAContractDayOffDayForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 4, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
+			var person = PersonFactory.CreatePersonWithGuid("Sherlock", "Holmes");
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(scheduleDate.AddDays(-1)));
 			personPeriod.PersonContract.ContractSchedule.AddContractScheduleWeek(new ContractScheduleWeek());
 			person.AddPersonPeriod(personPeriod);
@@ -379,7 +377,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			ShouldReturnCorrectProjectionWhenThereIsConfidentialAbsenceAndShiftAndNoPermissionForConfidentialForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person = PersonFactory.CreatePerson("pNoConfidential", "pNoConfidential");
+			var person = PersonFactory.CreatePersonWithGuid("pNoConfidential", "pNoConfidential");
 			PeopleSearchProvider.Add(person);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
@@ -418,7 +416,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			ShouldReturnCorrectProjectionWhenThereIsConfidentialAbsenceAndShiftAndWithPermissionForConfidentialForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
+			var person = PersonFactory.CreatePersonWithGuid("Sherlock", "Holmes");
 			PeopleSearchProvider.Add(person);
 			PeopleSearchProvider.AddPersonWithViewConfidentialPermission(person);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
@@ -461,7 +459,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		{
 			PermissionProvider.Enable();
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
+			var person = PersonFactory.CreatePersonWithGuid("Sherlock", "Holmes");
 			person.WorkflowControlSet = new WorkflowControlSet("testWCS")
 			{
 				SchedulePublishedToDate = new DateTime(2019, 12, 30)
@@ -493,7 +491,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldReturnScheduleForPreviousDayWhenThereIsOvernightShiftForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
+			var person = PersonFactory.CreatePersonWithGuid("Sherlock", "Holmes");
 			PeopleSearchProvider.Add(person);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
@@ -522,7 +520,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldReturnEmptyScheduleVmForEmptyScheduleWhenThereIsOvernightShiftForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
+			var person = PersonFactory.CreatePersonWithGuid("Sherlock", "Holmes");
 			PeopleSearchProvider.Add(person);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
@@ -544,7 +542,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldIndicateOvertimeActivityForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
+			var person = PersonFactory.CreatePersonWithGuid("Sherlock", "Holmes");
 			PeopleSearchProvider.Add(person);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
@@ -571,17 +569,17 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldReturnSchedulesWithCorrectOrderForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person1 = PersonFactory.CreatePerson("a1", "a1");
+			var person1 = PersonFactory.CreatePersonWithGuid("a1", "a1");
 			PeopleSearchProvider.Add(person1);
-			var person2 = PersonFactory.CreatePerson("b1", "b1");
+			var person2 = PersonFactory.CreatePersonWithGuid("b1", "b1");
 			PeopleSearchProvider.Add(person2);
-			var person3 = PersonFactory.CreatePerson("c1", "c1");
+			var person3 = PersonFactory.CreatePersonWithGuid("c1", "c1");
 			PeopleSearchProvider.Add(person3);
-			var person4 = PersonFactory.CreatePerson("d1", "d1");
+			var person4 = PersonFactory.CreatePersonWithGuid("d1", "d1");
 			PeopleSearchProvider.Add(person4);
-			var person5 = PersonFactory.CreatePerson("e1", "e1");
+			var person5 = PersonFactory.CreatePersonWithGuid("e1", "e1");
 			PeopleSearchProvider.Add(person5);
-			var person6 = PersonFactory.CreatePerson("f1", "f1");
+			var person6 = PersonFactory.CreatePersonWithGuid("f1", "f1");
 			PeopleSearchProvider.Add(person6);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
@@ -646,7 +644,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldSetUniqueShiftLayerIdForLayersBelongingToOneShiftLayer()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
+			var person = PersonFactory.CreatePersonWithGuid("Sherlock", "Holmes");
 			PeopleSearchProvider.Add(person);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
@@ -674,13 +672,13 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldReturnSchedulesWithCorrectOrderOnContractDayOffDayForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 4, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person1 = PersonFactory.CreatePerson("a1", "a1");
+			var person1 = PersonFactory.CreatePersonWithGuid("a1", "a1");
 			PeopleSearchProvider.Add(person1);
-			var person2 = PersonFactory.CreatePerson("b1", "b1");
+			var person2 = PersonFactory.CreatePersonWithGuid("b1", "b1");
 			PeopleSearchProvider.Add(person2);
-			var person3 = PersonFactory.CreatePerson("c1", "c1");
+			var person3 = PersonFactory.CreatePersonWithGuid("c1", "c1");
 			PeopleSearchProvider.Add(person3);
-			var person4 = PersonFactory.CreatePerson("d1", "d1");
+			var person4 = PersonFactory.CreatePersonWithGuid("d1", "d1");
 			PeopleSearchProvider.Add(person4);
 
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(scheduleDate.AddDays(-1)));
@@ -689,9 +687,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var schedulePeriod = SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(scheduleDate.AddDays(-1)));
 			person4.AddSchedulePeriod(schedulePeriod);
 
-			var person5 = PersonFactory.CreatePerson("e1", "e1");
+			var person5 = PersonFactory.CreatePersonWithGuid("e1", "e1");
 			PeopleSearchProvider.Add(person5);
-			var person6 = PersonFactory.CreatePerson("f1", "f1");
+			var person6 = PersonFactory.CreatePersonWithGuid("f1", "f1");
 			PeopleSearchProvider.Add(person6);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
@@ -753,17 +751,17 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldReturnSchedulesWithCorrectOrderForSpecificPageForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person1 = PersonFactory.CreatePerson("a1", "a1");
+			var person1 = PersonFactory.CreatePersonWithGuid("a1", "a1");
 			PeopleSearchProvider.Add(person1);
-			var person2 = PersonFactory.CreatePerson("b1", "b1");
+			var person2 = PersonFactory.CreatePersonWithGuid("b1", "b1");
 			PeopleSearchProvider.Add(person2);
-			var person3 = PersonFactory.CreatePerson("c1", "c1");
+			var person3 = PersonFactory.CreatePersonWithGuid("c1", "c1");
 			PeopleSearchProvider.Add(person3);
-			var person4 = PersonFactory.CreatePerson("d1", "d1");
+			var person4 = PersonFactory.CreatePersonWithGuid("d1", "d1");
 			PeopleSearchProvider.Add(person4);
-			var person5 = PersonFactory.CreatePerson("e1", "e1");
+			var person5 = PersonFactory.CreatePersonWithGuid("e1", "e1");
 			PeopleSearchProvider.Add(person5);
-			var person6 = PersonFactory.CreatePerson("f1", "f1");
+			var person6 = PersonFactory.CreatePersonWithGuid("f1", "f1");
 			PeopleSearchProvider.Add(person6);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
@@ -873,7 +871,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldReturnInternalNotesWhenThereIsForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
+			var person = PersonFactory.CreatePersonWithGuid("Sherlock", "Holmes");
 			PeopleSearchProvider.Add(person);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);

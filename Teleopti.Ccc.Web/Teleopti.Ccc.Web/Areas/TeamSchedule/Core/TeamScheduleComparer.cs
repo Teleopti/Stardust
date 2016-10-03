@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Linq;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
@@ -32,8 +31,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			var personSchedule2 = (Tuple<IPerson, IScheduleDay>)y;
 			var person1 = personSchedule1.Item1;
 			var person2 = personSchedule2.Item1;
-			var schedule1 = personSchedule1.Item2;
-			var schedule2 = personSchedule2.Item2;
+			var schedule1 = new scheduleDayDetail(personSchedule1.Item2);
+			var schedule2 = new scheduleDayDetail(personSchedule2.Item2);
 
 			if (isEmptySchedule(schedule1) && isEmptySchedule(schedule2))
 			{
@@ -86,7 +85,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				return -1;
 			}
 
-			if (schedule1.PersonAssignment() != null && schedule2.PersonAssignment() != null)
+			if (schedule1.PersonAssignment.Value != null && schedule2.PersonAssignment.Value != null)
 			{
 				var offset1 = getMinActivityStartTimeOffset(schedule1);
 				var offset2 = getMinActivityStartTimeOffset(schedule2);
@@ -100,47 +99,68 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			return string.CompareOrdinal(person1.Name.LastName, person2.Name.LastName);
 		}
 
-		private int getMinActivityStartTimeOffset(IScheduleDay schedule)
+		private int getMinActivityStartTimeOffset(scheduleDayDetail schedule)
 		{
-			return (int)schedule.PersonAssignment().Period.StartDateTime.Subtract(schedule.DateOnlyAsPeriod.DateOnly.Date).TotalMinutes;
+			return (int)schedule.PersonAssignment.Value.Period.StartDateTime.Subtract(schedule.ScheduleDay.Period.StartDateTime).TotalMinutes;
 		}
 
-		private int getMinAbsenceStartTimeOffset(IScheduleDay schedule)
+		private int getMinAbsenceStartTimeOffset(scheduleDayDetail schedule)
 		{
-			var mininumAbsenceStartTime = schedule.PersonAssignment() != null
-					? schedule.PersonAssignment().Period.StartDateTime
-					: schedule.PersonAbsenceCollection().Select(personAbsence => personAbsence.Period.StartDateTime).Min();
-			mininumAbsenceStartTime = mininumAbsenceStartTime.Date == schedule.DateOnlyAsPeriod.DateOnly.Date
+			var personAssignment = schedule.PersonAssignment.Value;
+			var mininumAbsenceStartTime = personAssignment?.Period.StartDateTime ?? schedule.ScheduleDay.PersonAbsenceCollection().Select(personAbsence => personAbsence.Period.StartDateTime).Min();
+			mininumAbsenceStartTime = schedule.ScheduleDay.Period.Contains(mininumAbsenceStartTime)
 				? mininumAbsenceStartTime
-				: schedule.DateOnlyAsPeriod.DateOnly.Date;
+				: schedule.ScheduleDay.Period.StartDateTime;
 
-			return (int)mininumAbsenceStartTime.Subtract(schedule.DateOnlyAsPeriod.DateOnly.Date).TotalMinutes;
+			return (int)mininumAbsenceStartTime.Subtract(schedule.ScheduleDay.Period.StartDateTime).TotalMinutes;
 		}
 
-		private bool isEmptySchedule(IScheduleDay schedule)
+		private bool isEmptySchedule(scheduleDayDetail schedule)
 		{
-			if (schedule == null) return true;
-			var person = schedule.Person;
-			var date = schedule.DateOnlyAsPeriod.DateOnly;
-			var hasLayers = schedule.ProjectionService().CreateProjection().HasLayers;
+			if (schedule.ScheduleDay == null) return true;
+			var person = schedule.ScheduleDay.Person;
+			var date = schedule.ScheduleDay.DateOnlyAsPeriod.DateOnly;
+			var hasLayers = schedule.Projection.Value.HasLayers;
 			return (!_permissionProvider.IsPersonSchedulePublished(date, person, _scheduleVisibleReason) && !_hasPermissionForUnpublishedSchedule) ||
 						(!isDayOff(schedule) && !hasLayers);
 		}
 
-		private bool isFullDayAbsence(IScheduleDay schedule)
+		private bool isFullDayAbsence(scheduleDayDetail schedule)
 		{
-			if (schedule == null) return false;
-			var significantPart = schedule.SignificantPartForDisplay();
-			return !schedule.HasDayOff() && (significantPart == SchedulePartView.FullDayAbsence ||
+			if (schedule.ScheduleDay == null) return false;
+			var significantPart = schedule.SignificantPartForDisplay.Value;
+			return !schedule.ScheduleDay.HasDayOff() && (significantPart == SchedulePartView.FullDayAbsence ||
 			   (significantPart == SchedulePartView.DayOff &&
-							  schedule.ProjectionService().CreateProjection().HasLayers));
+							  schedule.Projection.Value.HasLayers));
 		}
 
-		private bool isDayOff(IScheduleDay schedule)
+		private bool isDayOff(scheduleDayDetail schedule)
 		{
-			if (schedule == null) return false;
-			var significantPart = schedule.SignificantPartForDisplay();
-			return schedule.HasDayOff() || significantPart == SchedulePartView.ContractDayOff;
+			if (schedule.ScheduleDay == null) return false;
+			var significantPart = schedule.SignificantPartForDisplay.Value;
+			return schedule.ScheduleDay.HasDayOff() || significantPart == SchedulePartView.ContractDayOff;
+		}
+
+		private class scheduleDayDetail
+		{
+			public scheduleDayDetail(IScheduleDay scheduleDay)
+			{
+				if (scheduleDay != null)
+				{
+					Projection = new Lazy<IVisualLayerCollection>(() => scheduleDay.ProjectionService().CreateProjection());
+					SignificantPartForDisplay = new Lazy<SchedulePartView>(scheduleDay.SignificantPartForDisplay);
+					PersonAssignment = new Lazy<IPersonAssignment>(() => scheduleDay.PersonAssignment());
+				}
+				ScheduleDay = scheduleDay;
+			}
+
+			public IScheduleDay ScheduleDay { get; }
+
+			public Lazy<IPersonAssignment> PersonAssignment { get; }
+
+			public Lazy<SchedulePartView> SignificantPartForDisplay { get; }
+
+			public Lazy<IVisualLayerCollection> Projection { get; }
 		}
 	}
 }

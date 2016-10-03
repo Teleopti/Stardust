@@ -66,16 +66,9 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 		public IEnumerable<IPerson> SearchPermittedPeopleWithAbsence(IEnumerable<IPerson> permittedPeople,
 			DateOnly dateInUserTimeZone)
 		{
-			var startDateTime = dateInUserTimeZone.Date;
-			startDateTime = TimeZoneHelper.ConvertToUtc(startDateTime,
-				_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
-
-			var endDateTime = dateInUserTimeZone.Date.AddDays(1).AddSeconds(-1);
-			endDateTime = TimeZoneHelper.ConvertToUtc(endDateTime,
-				_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
-
+			var dateTimePeriod = dateInUserTimeZone.ToDateTimePeriod(_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()).ChangeEndTime(TimeSpan.FromSeconds(-1));
 			var personAbsences =
-				_personAbsenceRepository.Find(permittedPeople, new DateTimePeriod(startDateTime, endDateTime), _currentScenario.Current()).ToList();
+				_personAbsenceRepository.Find(permittedPeople, dateTimePeriod, _currentScenario.Current()).ToList();
 
 			return personAbsences.Select(personAbsence => personAbsence.Person).ToList();
 		}
@@ -99,13 +92,17 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 			string function)
 		{		
 			return
-				people.Where(p => _permissionProvider.HasOrganisationDetailPermission(function, currentDate, new PersonFinderDisplayRow
+				people.Where(p =>
 				{
-					PersonId = p.Id.GetValueOrDefault(),
-					TeamId = p.MyTeam(currentDate)?.Id,
-					SiteId = p.MyTeam(currentDate)?.Site.Id,
-					BusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault()
-				}));
+					var myTeam = p.MyTeam(currentDate);
+					return _permissionProvider.HasOrganisationDetailPermission(function, currentDate, new PersonFinderDisplayRow
+					{
+						PersonId = p.Id.GetValueOrDefault(),
+						TeamId = myTeam?.Id,
+						SiteId = myTeam?.Site.Id,
+						BusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault()
+					});
+				});
 		}
 
 		public PersonFinderSearchCriteria CreatePersonFinderSearchCriteria(IDictionary<PersonFinderField, string> criteriaDictionary,

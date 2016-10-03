@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 
 		public TeamScheduleViewModel CreateViewModel()
 		{
-			return new TeamScheduleViewModel()
+			return new TeamScheduleViewModel
 			{
 				ShiftTradePermisssion =
 					_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb),
