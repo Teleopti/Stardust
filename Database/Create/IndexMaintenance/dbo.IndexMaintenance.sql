@@ -27,7 +27,8 @@ BEGIN
 				@LogToTable='Y',
 				@PageCountLevel=100,
 				@UpdateStatistics = 'ALL',
-				@OnlyModifiedStatistics = 'Y'
+				@OnlyModifiedStatistics = 'Y',
+				@FillFactor = 90
 END
 
 IF @ReturnCode <> 0
