@@ -849,6 +849,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Wfm\RealTimeAdherence\SiteAndTeamOnSkillOverview.feature.cs">
+      <DependentUpon>SiteAndTeamOnSkillOverview.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Wfm\RealTimeAdherence\MonitorBySkillArea_39337.feature.cs">
       <DependentUpon>MonitorBySkillArea_39337.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -1404,6 +1409,10 @@
     <None Include="Wfm\RealTimeAdherence\HideSpecificStateGroup.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>HideSpecificStateGroup.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\RealTimeAdherence\SiteAndTeamOnSkillOverview.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>SiteAndTeamOnSkillOverview.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\RealTimeAdherence\MonitorBySkillArea_39337.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
