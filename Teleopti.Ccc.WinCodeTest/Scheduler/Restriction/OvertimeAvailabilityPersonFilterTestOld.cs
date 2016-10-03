@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -72,7 +73,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
                 commonPersistableScheduleDataCollectionMocks();
             }
             var personList = new OvertimeAvailabilityPersonFilter(new FakeTimeZoneGuard(TimeZoneInfoFactory.StockholmTimeZoneInfo()))
-				.GetFilteredPerson(_scheduleDaysList, _dateOnly, new TimePeriod(_filterStartTime, _filterEndTime), false);
+				.GetFilteredPerson(_scheduleDaysList, new TimePeriod(_filterStartTime, _filterEndTime), false);
             Assert.AreEqual(personList.Count(),0);
 
         }
@@ -87,7 +88,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
                 commonPersistableScheduleDataCollectionMocks();
             }
             var personList = new OvertimeAvailabilityPersonFilter(new FakeTimeZoneGuard(TimeZoneInfoFactory.StockholmTimeZoneInfo()))
-				.GetFilteredPerson(_scheduleDaysList, _dateOnly, new TimePeriod(_filterStartTime, _filterEndTime), false);
+				.GetFilteredPerson(_scheduleDaysList, new TimePeriod(_filterStartTime, _filterEndTime), false);
             Assert.AreEqual(personList.Count(),0);
 
         }
@@ -104,7 +105,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
                 commonPersistableScheduleDataCollectionMocks();
             }
 			var personList = new OvertimeAvailabilityPersonFilter(new FakeTimeZoneGuard(TimeZoneInfoFactory.StockholmTimeZoneInfo()))
-							.GetFilteredPerson(_scheduleDaysList, _dateOnly, new TimePeriod(_filterStartTime, _filterEndTime), false);
+							.GetFilteredPerson(_scheduleDaysList, new TimePeriod(_filterStartTime, _filterEndTime), false);
             Assert.AreEqual(personList.Count(),1);
             Assert.AreEqual(personList.First(),_person3);
 
@@ -128,7 +129,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
                 commonPersistableScheduleDataCollectionMocks();
             }
 			var personList = new OvertimeAvailabilityPersonFilter(new FakeTimeZoneGuard(TimeZoneInfoFactory.StockholmTimeZoneInfo()))
-				.GetFilteredPerson(_scheduleDaysList, _dateOnly, new TimePeriod(_filterStartTime, _filterEndTime), false);
+				.GetFilteredPerson(_scheduleDaysList, new TimePeriod(_filterStartTime, _filterEndTime), false);
             Assert.AreEqual(3, personList.Count());
             
         }
@@ -154,7 +155,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
                commonPersistableScheduleDataCollectionMocks();
            }
 			var personList = new OvertimeAvailabilityPersonFilter(new FakeTimeZoneGuard(TimeZoneInfoFactory.StockholmTimeZoneInfo()))
-				.GetFilteredPerson(_scheduleDaysList, _dateOnly, new TimePeriod(TimeSpan.FromHours(14), TimeSpan.FromHours(16)), false);
+				.GetFilteredPerson(_scheduleDaysList, new TimePeriod(TimeSpan.FromHours(14), TimeSpan.FromHours(16)), false);
            Assert.AreEqual(0, personList.Count());
 
        }
@@ -178,7 +179,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
                commonPersistableScheduleDataCollectionMocks();
            }
 			var personList = new OvertimeAvailabilityPersonFilter(new FakeTimeZoneGuard(TimeZoneInfoFactory.StockholmTimeZoneInfo()))
-				.GetFilteredPerson(_scheduleDaysList, _dateOnly, new TimePeriod(TimeSpan.FromHours(14), TimeSpan.FromHours(16)), false);
+				.GetFilteredPerson(_scheduleDaysList, new TimePeriod(TimeSpan.FromHours(14), TimeSpan.FromHours(16)), false);
            Assert.AreEqual(personList.Count(), 1);
 
        }
@@ -204,7 +205,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
                commonPersistableScheduleDataCollectionMocks();
            }
 			var personList = new OvertimeAvailabilityPersonFilter(new FakeTimeZoneGuard(TimeZoneInfoFactory.StockholmTimeZoneInfo()))
-				.GetFilteredPerson(_scheduleDaysList, _dateOnly, new TimePeriod(TimeSpan.FromHours(23), filterEndDate), false);
+				.GetFilteredPerson(_scheduleDaysList, new TimePeriod(TimeSpan.FromHours(23), filterEndDate), false);
            Assert.AreEqual(personList.Count(), 2);
 
        }
@@ -225,7 +226,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
 				commonPersistableScheduleDataCollectionMocks();
 			}
 			var personList = new OvertimeAvailabilityPersonFilter(new FakeTimeZoneGuard(TimeZoneInfoFactory.StockholmTimeZoneInfo()))
-				.GetFilteredPerson(_scheduleDaysList, _dateOnly, new TimePeriod(TimeSpan.FromHours(12), TimeSpan.FromHours(13)), false);
+				.GetFilteredPerson(_scheduleDaysList, new TimePeriod(TimeSpan.FromHours(12), TimeSpan.FromHours(13)), false);
 			personList.Count().Should().Be.EqualTo(0); //the agent is in another time zone and I only want OT on 12-13 my time zone
 
 		}
@@ -236,6 +237,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
             Expect.Call(_scheduleDay1.PersistableScheduleDataCollection()).Return(_persistableScheduleData1);
             Expect.Call(_scheduleDay2.PersistableScheduleDataCollection()).Return(_persistableScheduleData2);
             Expect.Call(_scheduleDay3.PersistableScheduleDataCollection()).Return(_persistableScheduleData3);
+	        Expect.Call(_scheduleDay1.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(_dateOnly, TimeZoneInfoFactory.StockholmTimeZoneInfo()));
+	        Expect.Call(_scheduleDay2.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(_dateOnly, TimeZoneInfoFactory.StockholmTimeZoneInfo()));
+	        Expect.Call(_scheduleDay3.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(_dateOnly, TimeZoneInfoFactory.StockholmTimeZoneInfo()));
 			Expect.Call(_scheduleDay1.Person).Return(_person1);
 			Expect.Call(_scheduleDay2.Person).Return(_person2);
 			Expect.Call(_scheduleDay3.Person).Return(_person3);

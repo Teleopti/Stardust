@@ -15,15 +15,17 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
 			_timeZoneGuard = timeZoneGuard;
 		}
 
-		public IEnumerable<IPerson> GetFilteredPerson(IEnumerable<IScheduleDay> scheduleDaysList, DateOnly date, TimePeriod filterPeriod, bool allowIntersect)
+		public IEnumerable<IPerson> GetFilteredPerson(IEnumerable<IScheduleDay> scheduleDaysList, TimePeriod filterPeriod, bool allowIntersect)
 		{
 			var personList = new List<IPerson>();
-			var filterStartDateTimeLocal = new DateTime(date.Year, date.Month, date.Day).Add(filterPeriod.StartTime);
-			var filterEndDateTimeLocal = new DateTime(date.Year, date.Month, date.Day).Add(filterPeriod.EndTime);
-			var filterUtcPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(filterStartDateTimeLocal, filterEndDateTimeLocal, _timeZoneGuard.CurrentTimeZone());
 
 			foreach (var scheduleDay in scheduleDaysList)
 			{
+				var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
+				var filterStartDateTimeLocal = new DateTime(date.Year, date.Month, date.Day).Add(filterPeriod.StartTime);
+				var filterEndDateTimeLocal = new DateTime(date.Year, date.Month, date.Day).Add(filterPeriod.EndTime);
+				var filterUtcPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(filterStartDateTimeLocal, filterEndDateTimeLocal, _timeZoneGuard.CurrentTimeZone());
+
 				var overtimeAvailability = scheduleDay.PersistableScheduleDataCollection().OfType<IOvertimeAvailability>().FirstOrDefault();
 				if (overtimeAvailability != null)
 				{

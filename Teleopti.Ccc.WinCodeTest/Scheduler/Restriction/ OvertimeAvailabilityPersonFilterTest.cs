@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
 			existingSchedule.Add(overtimeAvail);
 
 			var target = new OvertimeAvailabilityPersonFilter(new FakeTimeZoneGuard(TimeZoneInfo.Utc));
-			target.GetFilteredPerson(new[] {existingSchedule}, date, new TimePeriod(9, 0, 11, 0), true)
+			target.GetFilteredPerson(new[] {existingSchedule}, new TimePeriod(9, 0, 11, 0), true)
 				.Should().Have.SameValuesAs(existingSchedule.Person);
 		}
 	}

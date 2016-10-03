@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 _schedules.AddRange(scheduleDays);
             }
             var filter = new OvertimeAvailabilityPersonFilter(new TimeZoneGuardWrapper());
-			var filteredPersons = filter.GetFilteredPerson(_schedules, value, filterPeriod, false);
+			var filteredPersons = filter.GetFilteredPerson(_schedules, filterPeriod, false);
 			_schedulerStateHolder.FilterPersonsOvertimeAvailability(filteredPersons);
 		}
 	}
