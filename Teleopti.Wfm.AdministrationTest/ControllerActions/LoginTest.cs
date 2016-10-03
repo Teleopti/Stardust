@@ -79,7 +79,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			var hangfireCookie = new FakeHangfireCookie();
 			Target = new AccountController(TenantTestAttribute.TenantUnitOfWorkForTest(), hangfireCookie);
 			hangfireCookie.CookieIsSet.Should().Be.False();
-			
+
 			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
@@ -117,6 +117,20 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			}
 
 			hangfireCookie.CookieIsSet.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldReturnFalseIfNameOrPasswordMissing()
+		{
+			var model = new LoginModel { GrantType = "password", Password = "", UserName = "ola@teleopti.com" };
+
+			var result = Target.Login(model).Content;
+			result.Success.Should().Be.False();
+			result.Message.Should().Be.EqualTo("Both user name and password must be provided.");
+			model = new LoginModel { GrantType = "password", Password = "password", UserName = "" };
+			result = Target.Login(model).Content;
+			result.Success.Should().Be.False();
+			result.Message.Should().Be.EqualTo("Both user name and password must be provided.");
 		}
 	}
 }

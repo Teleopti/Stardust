@@ -36,6 +36,10 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[Route("Login")]
 		public virtual JsonResult<LoginResult> Login(LoginModel model)
 		{
+
+			if (string.IsNullOrEmpty(model.UserName) || string.IsNullOrEmpty(model.Password))
+				return Json(new LoginResult { Success = false, Message = "Both user name and password must be provided." });
+
 			var hashed = encryptString(model.Password);
 
 			string sql = "SELECT Id, Name, AccessToken FROM Tenant.AdminUser WHERE  Email=@email AND Password=@password";
@@ -84,7 +88,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 						_currentTenantSession.CurrentSession()
 							.GetNamedQuery("loadAllTenantUsers")
 							.List<TenantAdminUser>()
-							.Select(t => new TenantAdminUser {Id = t.Id, Email = t.Email, Name = t.Name})
+							.Select(t => new TenantAdminUser { Id = t.Id, Email = t.Email, Name = t.Name })
 							.ToArray());
 		}
 
@@ -294,10 +298,10 @@ namespace Teleopti.Wfm.Administration.Controllers
 		{
 			if (hasUser())
 			{
-				return new UpdateUserResultModel {Success = false, Message = "First user was already created."};
+				return new UpdateUserResultModel { Success = false, Message = "First user was already created." };
 			}
 
-			var result= addOneUser(model);
+			var result = addOneUser(model);
 			if (result.Success)
 			{
 				var existing = _currentTenantSession
