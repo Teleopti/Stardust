@@ -31,9 +31,11 @@
 		RTA_RemoveSiteTeamOutOfAdherenceReadModels_40069,
         RTA_HideAgentsByStateGroup_40469,
 		RTA_FasterUpdateOfScheduleChanges_40536,
+		RTA_SiteAndTeamOnSkillOverview_40817,
 
 
-        MessageBroker_SchedulingScreenMailbox_32733,
+
+		MessageBroker_SchedulingScreenMailbox_32733,
 
 		Portal_NewLandingpage_29415,
 		Show_StaticPageOnNoInternet_29415,
