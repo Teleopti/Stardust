@@ -17,7 +17,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
-	[DomainTest, Ignore("#40338")]
+	[DomainTest]
 	public class ResourceCalculationEslTest
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;

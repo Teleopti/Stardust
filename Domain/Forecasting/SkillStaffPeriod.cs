@@ -395,22 +395,41 @@ namespace Teleopti.Ccc.Domain.Forecasting
 					Payload.ForecastedIncomingDemandWithoutShrinkage,
 					SkillDay.Skill.MaxParallelTasks));
 
-                var shrinkage = Payload.UseShrinkage ? 1 + Payload.Shrinkage.Value : 1;
-                var scheduledAgentsIncomingWithShrinkage = ScheduledAgentsIncoming / shrinkage;
-                _estimatedServiceLevelShrinkage = new Percent(_staffingCalculatorService.ServiceLevelAchievedOcc(
-                    scheduledAgentsIncomingWithShrinkage,
-                    Payload.ServiceAgreementData.ServiceLevel.Seconds,
-                    Payload.TaskData.Tasks,
-					Payload.TaskData.AverageHandlingTaskTime.TotalSeconds,
-                    Period.ElapsedTime(),
-					Payload.ServiceAgreementData.ServiceLevel.Percent.Value,
-					Payload.ForecastedIncomingDemandWithoutShrinkage,
-					SkillDay.Skill.MaxParallelTasks));
-
-            }
+				if (largeVolumes())
+				{
+					_estimatedServiceLevelShrinkage = new Percent(_staffingCalculatorService.ServiceLevelAchievedOcc(
+						 ScheduledAgentsIncoming,
+						 Payload.ServiceAgreementData.ServiceLevel.Seconds,
+						 Payload.TaskData.Tasks,
+						 Payload.TaskData.AverageHandlingTaskTime.TotalSeconds,
+						 Period.ElapsedTime(),
+						 Payload.ServiceAgreementData.ServiceLevel.Percent.Value,
+						 Payload.ForecastedIncomingDemand,
+						 SkillDay.Skill.MaxParallelTasks));
+				}
+				else
+				{
+					var shrinkage = Payload.UseShrinkage ? 1 + Payload.Shrinkage.Value : 1;
+					var scheduledAgentsIncomingWithShrinkage = ScheduledAgentsIncoming / shrinkage;
+					_estimatedServiceLevelShrinkage = new Percent(_staffingCalculatorService.ServiceLevelAchievedOcc(
+						scheduledAgentsIncomingWithShrinkage,
+						Payload.ServiceAgreementData.ServiceLevel.Seconds,
+						Payload.TaskData.Tasks,
+						Payload.TaskData.AverageHandlingTaskTime.TotalSeconds,
+						Period.ElapsedTime(),
+						Payload.ServiceAgreementData.ServiceLevel.Percent.Value,
+						Payload.ForecastedIncomingDemandWithoutShrinkage,
+						SkillDay.Skill.MaxParallelTasks));
+				}
+			}
         }
 
-        public void SetCalculatedResource65(double value)
+	    private bool largeVolumes()
+	    {
+		    return ScheduledAgentsIncoming > 100;
+	    }
+
+	    public void SetCalculatedResource65(double value)
         {
             SkillStaff skillStaff = (SkillStaff) Payload;
             skillStaff.CalculatedResource = value;
