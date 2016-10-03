@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
 {
 	public class OvertimeAvailabilityPersonFilter
 	{
-		public IList<IPerson> GetFilteredPerson(IList<IScheduleDay> scheduleDaysList, TimeSpan filterStartTime, TimeSpan filterEndTime, TimeZoneInfo myTimeZone, DateOnly date, bool allowIntersect)
+		public IList<IPerson> GetFilteredPerson(IList<IScheduleDay> scheduleDaysList, DateOnly date, TimeSpan filterStartTime, TimeSpan filterEndTime, TimeZoneInfo myTimeZone, bool allowIntersect)
 		{
 			var personList = new List<IPerson>();
 			var filterStartDateTimeLocal = new DateTime(date.Year, date.Month, date.Day).Add(filterStartTime);
