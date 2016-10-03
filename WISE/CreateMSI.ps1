@@ -27,6 +27,8 @@ properties {
     $SdkHostPath = "$SourceDir\SDK\bin"
     $SdkFile = "$MountKDirectory\Teamcity\SdkDoc\docSdkx64.shfbproj" 
 	
+	$ServerWsi = "$SourceDir\Wise\ccc7_server\ccc7_server.wsi"
+	$ClientWsi = "$SourceDir\Wise\ccc7_client\ccc7_client.wsi"
 }
 
 Set-ExecutionPolicy bypass -force
@@ -78,6 +80,24 @@ task CompileWse -depends Init, PreReq, MountK -description "Complie all WSE file
 }
 
 task CompileWsi -depends Init, PreReq, MountK -description "Complie all WSI files to MSI" {
+	workflow parallelWsiCompiling {
+	param(
+		$ClientWsi,
+		$ServerWsi,
+		$WsiCompiler
+		)
+			parallel {
+		
+			InlineScript {& $Using:WsiCompiler $Using:ServerWsi "/c" "/s"}
+			InlineScript {& $Using:WsiCompiler $Using:ClientWsi "/c" "/s"}
+			
+			}
+	}
+	parallelWsiCompiling -ClientWsi $ClientWsi -ServerWsi $ServerWsi -WsiCompiler $WsiCompiler
+}
+
+<#
+task CompileWsi -depends Init, PreReq, MountK -description "Complie all WSI files to MSI" {
 
     #Locate WSI files (Exclude Forecast)
     $WsiFiles = Get-ChildItem $SourceDir -Recurse -Include *.wsi -Exclude ccc7_forecast.wsi
@@ -91,6 +111,7 @@ task CompileWsi -depends Init, PreReq, MountK -description "Complie all WSI file
     & $Command $Arg | Out-Null
     }
 }
+#>
 
 task ProductVersion -depends CompileWse, CompileWsi -description "Sets the current version number in MSI" {
     
