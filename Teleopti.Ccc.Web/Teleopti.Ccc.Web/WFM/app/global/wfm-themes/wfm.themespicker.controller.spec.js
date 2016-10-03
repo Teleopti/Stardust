@@ -1,5 +1,5 @@
 'use strict';
-describe('themesPickerController', function() {
+describe('ThemesPickerController', function() {
 	var $q,
 		$rootScope,
 		$httpBackend;
@@ -59,13 +59,13 @@ describe('themesPickerController', function() {
 	it('should toggle theme to dark', inject(function($controller) {
 		var scope = $rootScope.$new();
 		setUpTemplate();
-		$controller('themesPickerController', {
+		var vm = $controller('ThemesPickerController', {
 			$scope: scope
 		});
 
-		expect(scope.currentTheme).toEqual(undefined);
-		scope.toggleTheme();
-		expect(scope.currentTheme).toEqual('dark');
+		expect(vm.currentTheme).toEqual(undefined);
+		vm.toggleTheme();
+		expect(vm.currentTheme).toEqual('dark');
 		teardownTemplate();
 	}));
 

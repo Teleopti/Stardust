@@ -1,4 +1,4 @@
-<span ng-show="showOverlay" class="animate-show warm-overlay"></span>
+<span ng-show="vm.showOverlay" class="animate-show warm-overlay"></span>
 <div class="panel-menu">
 	<div tabindex=0 class="context-menu card-context">
 		<span class="nav-context-menu" id="themeMenu">
@@ -11,15 +11,16 @@
 					<div class="notification-list">
 						<h4>{{'Personalize'|translate}}</h4>
 						<form>
-							<div class="wfm-checkbox" ng-click="toggleOverlay()">
-								<input ng-model="showOverlay" tabindex="-1" type="checkbox" id="overlay" />
+							<div class="wfm-checkbox" ng-click="vm.toggleOverlay()">
+								<input ng-model="vm.showOverlay" tabindex="-1" type="checkbox" id="overlay" />
 								<label for="overlay">
 									<span class="wfm-checkbox-toggle"></span>
 									<span class="wfm-checkbox-label">{{'ToggleLowLightFilter'|translate}}</span>
 								</label>
 							</div>
-							<div class="wfm-checkbox" ng-click="toggleTheme()">
-								<input ng-model="darkTheme" tabindex="-1" type="checkbox" id="darkTheme"  />
+
+							<div class="wfm-checkbox" ng-click="vm.toggleTheme()">
+								<input ng-model="vm.darkTheme" tabindex="-1" type="checkbox" id="darkTheme"  />
 								<label for="darkTheme">
 									<span class="wfm-checkbox-toggle"></span>
 									<span class="wfm-checkbox-label">{{'ToggleDarkTheme'|translate}}</span>

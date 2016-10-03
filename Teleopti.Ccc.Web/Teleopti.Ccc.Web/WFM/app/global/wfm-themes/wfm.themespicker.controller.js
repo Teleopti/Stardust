@@ -1,80 +1,95 @@
 (function() {
 	'use strict';
-	var themespicker = angular.module('wfm.themes');
 
-	themespicker.controller('themesPickerController', [
-		'$scope', 'Toggle', '$rootScope', 'ThemeService', '$q',
-		function($scope, Toggle, $rootScope, ThemeService, $q) {
+	angular
+	.module('wfm.themes')
+	.controller('ThemesPickerController', ThemesPickerController);
 
-			Toggle.togglesLoaded.then(function() {
-				$scope.personalizeToggle = Toggle.WfmGlobalLayout_personalOptions_37114;
-			});
+	ThemesPickerController.$inject = ['$scope', 'Toggle', '$rootScope', 'ThemeService', '$q'];
 
-			var focusMenu = function() {
-				document.getElementById("themeMenu").focus();
+	function ThemesPickerController($scope, Toggle, $rootScope, ThemeService, $q) {
+		var vm = this;
+		vm.toggleTheme = toggleTheme;
+		vm.toggleOverlay = toggleOverlay;
+		vm.showOverlay = showOverlay;
+
+		loadToggles();
+		checkThemeState().then(function(result) {
+			if (result.data.Name == null) {
+				result.data.Name = "classic";
 			};
-
-			checkThemeState().then(function(result) {
-				if (result.data.Name == null) {
-					result.data.Name = "classic";
-				};
-				$scope.showOverlay = result.data.Overlay;
-				$scope.currentTheme = result.data.Name;
-				replaceCurrentTheme($scope.currentTheme, $scope.showOverlay);
-				if ($scope.currentTheme === "dark") {
-					$scope.darkTheme = true;
-				} else {
-					$scope.darkTheme = false;
-				}
-			});
-
-			function checkThemeState() {
-				var deferred = $q.defer();
-				ThemeService.getTheme().then(function(response) {
-					deferred.resolve(response);
-				});
-				return deferred.promise;
+			vm.showOverlay = result.data.Overlay;
+			vm.currentTheme = result.data.Name;
+			replaceCurrentTheme(vm.currentTheme, vm.showOverlay);
+			if (vm.currentTheme === "dark") {
+				vm.darkTheme = true;
+			} else {
+				vm.darkTheme = false;
 			}
-			var toggleActiveOverlay = function() {
-				$scope.showOverlay = !$scope.showOverlay;
-				replaceCurrentTheme($scope.currentTheme, $scope.showOverlay);
-			};
-			$scope.toggleOverlay = function(state) {
-				if (state === true || state === false) {
-					$scope.showOverlay = state;
-					replaceCurrentTheme($scope.currentTheme, $scope.showOverlay);
-				} else {
-					toggleActiveOverlay();
-					focusMenu();
-				}
-			};
+		});
 
-			var replaceCurrentTheme = function(theme, overlay) {
-				$rootScope.setTheme(theme);
-				ThemeService.saveTheme(theme, overlay);
-			};
-			var toggleActiveTheme = function() {
-				if ($scope.darkTheme) {
-					$scope.currentTheme = 'classic';
-					replaceCurrentTheme('classic', $scope.showOverlay);
-				} else {
-					$scope.currentTheme = 'dark';
-					replaceCurrentTheme('dark', $scope.showOverlay);
-				}
-			};
-
-			$scope.toggleTheme = function(theme) {
-				if (theme === "classic" || theme === "dark") {
-					$scope.currentTheme = theme;
-					replaceCurrentTheme(theme, $scope.showOverlay);
-					return;
-				} else {
-					toggleActiveTheme();
-					focusMenu();
-				}
-				$scope.darkTheme = !$scope.darkTheme;
-			};
-
+		function showOverlay(){
+			return overylay = true;
 		}
-	]);
+
+		function toggleOverlay(state) {
+			if (state === true || state === false) {
+				vm.showOverlay = state;
+				replaceCurrentTheme(vm.currentTheme, vm.showOverlay);
+			} else {
+				toggleActiveOverlay();
+				focusMenu();
+			}
+		}
+
+		function toggleTheme(theme) {
+			if (theme === "classic" || theme === "dark") {
+				vm.currentTheme = theme;
+				replaceCurrentTheme(theme, vm.showOverlay);
+				return;
+			} else {
+				toggleActiveTheme();
+				focusMenu();
+			}
+			vm.darkTheme = !vm.darkTheme;
+		};
+
+		function loadToggles() {
+			Toggle.togglesLoaded.then(function() {
+				vm.personalizeToggle = Toggle.WfmGlobalLayout_personalOptions_37114;
+			});
+		}
+
+		function toggleActiveTheme() {
+			if (vm.darkTheme) {
+				vm.currentTheme = 'classic';
+				replaceCurrentTheme('classic', vm.showOverlay);
+			} else {
+				vm.currentTheme = 'dark';
+				replaceCurrentTheme('dark', vm.showOverlay);
+			}
+		}
+
+		function replaceCurrentTheme(theme, overlay) {
+			$rootScope.setTheme(theme);
+			ThemeService.saveTheme(theme, overlay);
+		}
+
+		function toggleActiveOverlay() {
+			vm.showOverlay = !vm.showOverlay;
+			replaceCurrentTheme(vm.currentTheme, vm.showOverlay);
+		}
+
+		function checkThemeState() {
+			var deferred = $q.defer();
+			ThemeService.getTheme().then(function(response) {
+				deferred.resolve(response);
+			});
+			return deferred.promise;
+		}
+
+		function focusMenu () {
+			document.getElementById("themeMenu").focus();
+		}
+	}
 })();
