@@ -9,7 +9,7 @@
 ﻿
 ﻿    function Settings($http) {
 ﻿        var service = {
-﻿            init: init,
+﻿            init: init
 ﻿        };
 ﻿
 ﻿        return service;
