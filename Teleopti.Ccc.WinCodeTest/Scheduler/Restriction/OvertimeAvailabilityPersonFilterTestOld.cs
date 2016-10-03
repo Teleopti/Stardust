@@ -39,9 +39,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
         {
             _mock = new MockRepository();
 	        _dateOnly = new DateOnly(2016, 7, 22);
-            _scheduleDay1 = _mock.StrictMock<IScheduleDay>();
-            _scheduleDay2 = _mock.StrictMock<IScheduleDay>();
-            _scheduleDay3 = _mock.StrictMock<IScheduleDay>();
+            _scheduleDay1 = _mock.Stub<IScheduleDay>();
+            _scheduleDay2 = _mock.Stub<IScheduleDay>();
+            _scheduleDay3 = _mock.Stub<IScheduleDay>();
             _scheduleDaysList = new List<IScheduleDay>{_scheduleDay1,_scheduleDay2,_scheduleDay3 };
             _filterStartTime = TimeSpan.FromHours(8);
             _filterEndTime = TimeSpan.FromHours(16);

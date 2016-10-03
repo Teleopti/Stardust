@@ -17,8 +17,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
 
 		public IEnumerable<IPerson> GetFilteredPerson(IEnumerable<IScheduleDay> scheduleDaysList, TimePeriod filterPeriod, bool allowIntersect)
 		{
-			var personList = new List<IPerson>();
-
 			foreach (var scheduleDay in scheduleDaysList)
 			{
 				var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
@@ -43,19 +41,18 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
 					{
 						if (availUtcPeriod.Intersect(filterUtcPeriod))
 						{
-							personList.Add(overtimeAvailability.Person);
+							yield return overtimeAvailability.Person;
 						}
 					}
 					else
 					{
 						if (availUtcPeriod.StartDateTime <= filterUtcPeriod.StartDateTime && availUtcPeriod.EndDateTime >= filterUtcPeriod.EndDateTime)
 						{
-							personList.Add(overtimeAvailability.Person);
+							yield return overtimeAvailability.Person;
 						}
 					}
 				}
 			}
-			return personList;
 		}
 	}
 }
