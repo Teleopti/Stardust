@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		[TestCase(2000, 0.38, 3225)] //some "magic numbers" here to expose bug #40338
 		public void ShouldCalculateEslCorrect(int demandedAgents, double shrinkage, int scheduledAgents)
 		{
-			const double expectedServiceLevel = 0.8;
+			const double serviceLevel = 0.8;
 			var scenario = new Scenario("_");
 			var date = DateOnly.Today;
 			var activity = new Activity("_");
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			{
 				skillStaffPeriod.Payload.UseShrinkage = true;
 				skillStaffPeriod.Payload.Shrinkage = new Percent(shrinkage);
-				skillStaffPeriod.Payload.ServiceAgreementData.ServiceLevel.Percent = new Percent(expectedServiceLevel);
+				skillStaffPeriod.Payload.ServiceAgreementData.ServiceLevel.Percent = new Percent(serviceLevel);
 			}
 			var agents = new List<IPerson>();
 			var asses = new List<IPersonAssignment>();
@@ -62,7 +62,40 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			ResourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
 
 			skillDay.SkillStaffPeriodCollection.First().EstimatedServiceLevelShrinkage.Value
-				.Should().Be.IncludedIn(expectedServiceLevel-0.01, expectedServiceLevel+0.01);
+				.Should().Be.IncludedIn(serviceLevel-0.01, serviceLevel+0.01);
 		}
+
+		[Test]
+		public void ShouldCalculateEslCorrectOnLowVolumes()
+		{
+			var scenario = new Scenario("_");
+			var date = DateOnly.Today;
+			var activity = new Activity("_");
+			var skill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony))
+			{
+				Activity = activity,
+				TimeZone = TimeZoneInfo.Utc
+			};
+			WorkloadFactory.CreateWorkloadWithOpenHours(skill, new TimePeriod(9, 0, 17, 0));
+			var skillDay = skill.CreateSkillDayWithDemand(scenario, date, 2.4555555);
+			foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
+			{
+				skillStaffPeriod.Payload.UseShrinkage = true;
+				skillStaffPeriod.Payload.Shrinkage = new Percent(0.05);
+				skillStaffPeriod.Payload.ServiceAgreementData.ServiceLevel.Percent = new Percent(0.8);
+				skillStaffPeriod.Payload.TaskData = new Task(6.7015881588450847, new TimeSpan(0, 2, 0).Add(TimeSpan.FromSeconds(3.174)), TimeSpan.FromSeconds(3.7983919));
+			}
+			var agent = new Person().WithId();
+			agent.AddPeriodWithSkill(new PersonPeriod(date, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
+			agent.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Day, 1));
+			var ass = new PersonAssignment(agent, scenario, date);
+			ass.AddActivity(activity, new TimePeriod(9, 0, 17, 0));
+			SchedulerStateHolder.Fill(scenario, date.ToDateOnlyPeriod(), new[] {agent}, new[] {ass}, skillDay);
+
+			ResourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
+
+			skillDay.SkillStaffPeriodCollection.First().EstimatedServiceLevelShrinkage.Value.Should().Be.EqualTo(0);
+		}
+
 	}
 }
