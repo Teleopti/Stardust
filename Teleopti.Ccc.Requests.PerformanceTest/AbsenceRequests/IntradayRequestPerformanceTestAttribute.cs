@@ -46,17 +46,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 		{
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
-
-			WithUnitOfWork.Do(() =>
-							  {
-
-								  var updateEvent = new UpdateResourceCalculateReadModelEvent()
-								  {
-									  StartDateTime = new DateTime(2016, 3, 14, 8, 0, 0, DateTimeKind.Utc),
-									  EndDateTime = new DateTime(2016, 3, 15, 8, 0, 0, DateTimeKind.Utc)
-								  };
-								  ResourceCalculateReadModelUpdater.Handle(updateEvent);
-							  });
 		}
 
 		protected override FakeConfigReader Config()

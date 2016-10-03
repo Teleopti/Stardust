@@ -33,12 +33,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 		public AsSystem AsSystem;
 		public ICurrentUnitOfWork CurrentUnitOfWork;
 
-		[SetUp]
-		public void Setup()
-		{
-			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
-		}
-
 		[Test]
 		public void ShouldApproveAbsenceRequest()
 		{
