@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
 			_timeZoneGuard = timeZoneGuard;
 		}
 
-		public IList<IPerson> GetFilteredPerson(IList<IScheduleDay> scheduleDaysList, DateOnly date, TimePeriod filterPeriod, bool allowIntersect)
+		public IEnumerable<IPerson> GetFilteredPerson(IEnumerable<IScheduleDay> scheduleDaysList, DateOnly date, TimePeriod filterPeriod, bool allowIntersect)
 		{
 			var personList = new List<IPerson>();
 			var filterStartDateTimeLocal = new DateTime(date.Year, date.Month, date.Day).Add(filterPeriod.StartTime);

@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		void FilterPersons(IList<IPerson> selectedPersons);
 
-		void FilterPersonsOvertimeAvailability(IList<IPerson> selectedPersons);
+		void FilterPersonsOvertimeAvailability(IEnumerable<IPerson> selectedPersons);
 
 		void FilterPersonsHourlyAvailability(IList<IPerson> selectedPersons);
 

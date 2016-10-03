@@ -318,7 +318,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		}
 
-		public void FilterPersonsOvertimeAvailability(IList<IPerson> selectedPersons)
+		public void FilterPersonsOvertimeAvailability(IEnumerable<IPerson> selectedPersons)
 		{
 			_filteredPersonsOvertimeAvailability =
 				(from p in selectedPersons orderby CommonAgentName(p) select p).ToDictionary(p => p.Id.Value);

@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
 			var personList = new OvertimeAvailabilityPersonFilter(new FakeTimeZoneGuard(TimeZoneInfoFactory.StockholmTimeZoneInfo()))
 							.GetFilteredPerson(_scheduleDaysList, _dateOnly, new TimePeriod(_filterStartTime, _filterEndTime), false);
             Assert.AreEqual(personList.Count(),1);
-            Assert.AreEqual(personList[0],_person3);
+            Assert.AreEqual(personList.First(),_person3);
 
         }
         
