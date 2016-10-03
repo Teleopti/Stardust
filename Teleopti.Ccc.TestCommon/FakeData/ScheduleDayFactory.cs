@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -26,5 +27,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			 return Create (dateOnly, person);
 
 		 }
+
+		public static IScheduleDay Create(DateOnly dateOnly, TimeZoneInfo timeZoneInfo)
+		{
+			var person = new Person();
+			person.PermissionInformation.SetDefaultTimeZone(timeZoneInfo);
+			return Create(dateOnly, person);
+		}
 	}
 }
