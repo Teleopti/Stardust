@@ -24,8 +24,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
             });
 
 	        var filteredChanges = _readModelChanges.Where(x => x.InsertedOn >= timeWhenResourceCalcDataLoaded);
-
-	        _readModelChanges = filteredChanges.ToList();
+			if(filteredChanges.Any())
+				_readModelChanges = filteredChanges.ToList();
 
         }
 
