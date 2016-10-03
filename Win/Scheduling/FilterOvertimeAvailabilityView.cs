@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var endTime = outlookTimePickerTo.TimeValue();
 			if (checkBoxAdvNextDay.Checked && endTime.HasValue)
 				endTime = endTime.Value.Add(TimeSpan.FromDays(1));
-			_presenter.Filter(startTime.Value, endTime.Value, new DateOnly(datePicker.Value));
+			_presenter.Filter(new TimePeriod(startTime.Value, endTime.Value), new DateOnly(datePicker.Value));
 			DialogResult = DialogResult.OK;
 			Close();
 		}
