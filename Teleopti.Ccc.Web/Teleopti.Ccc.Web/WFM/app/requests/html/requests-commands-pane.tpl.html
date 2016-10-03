@@ -56,6 +56,11 @@
 				<i class="mdi mdi-settings"></i>
 				<span>{{ 'ManageOpenHours' | translate }}</span>
 			</li>
+				<li ng-click="requestsCommandsPane.showResourceCalculations()"
+				ng-if="requestsCommandsPane.isUpdateResourceCalculationsEnabled">
+				<i class="mdi mdi-calculator"></i>
+				<span>Update Resource Calculations</span>
+			</li>
 		</ul>
 	</div>
 </div>
@@ -88,7 +93,6 @@
 						show-original-message="requestsCommandsPane.showOriginalMessage"></requests-reply-message>
 
 <requests-site-open-hours show-site="requestsCommandsPane.shouldShowSiteOpenHour" ng-if="requestsCommandsPane.shouldShowSiteOpenHour"></requests-site-open-hours>
-
 <modal-dialog show="requestsCommandsPane.showProcessWaitlistModal" ng-cloak>
 	<h1 class="modal-title">{{'WaitlistPeriod' | translate}}</h1>
 	<div class="modal-inner-content">
@@ -141,5 +145,16 @@
 				</aside>
 			</div>
 		</div>
+	</div>
+</modal-dialog>
+<modal-dialog show="requestsCommandsPane.shouldShowResourceCalculations" ng-cloak>
+	<h1 class="modal-title">Resource calculations</h1>
+	<div class="modal-inner-content">
+		<h2>The read model was last calculated: {{requestsCommandsPane.lastCaluclated}}</h2>
+	</div>
+	<div class="modal-actions">
+		<aside>
+			<button class="wfm-btn wfm-btn-invis-primary"  ng-click="requestsCommandsPane.triggerResourceCalculate()">Trigger calculation manually</button>
+		</aside>
 	</div>
 </modal-dialog>

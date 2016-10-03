@@ -7,11 +7,11 @@
 
 	requestsCommandsPaneCtrl.$inject = [
 		'requestsDefinitions', 'requestsDataService', 'requestCommandParamsHolder', 'Toggle',
-		'signalRSVC'
+		'signalRSVC','NoticeService'
 	];
 
 	function requestsCommandsPaneCtrl(requestsDefinitions, requestsDataService, requestCommandParamsHolder, toggleSvc,
-		signalRSVC) {
+		signalRSVC, NoticeService) {
 		var vm = this;
 		vm.approveRequests = approveRequests;
 		vm.replyRequests = replyRequests;
@@ -21,12 +21,15 @@
 		vm.disableCommands = disableCommands;
 		vm.canCancelRequests = canCancelRequests;
 		vm.cancelToggleIsEnabled = cancelToggleIsEnabled;
+		vm.isUpdateResourceCalculationsEnabled = toggleSvc.AbsenceRequests_SpeedupIntradayRequests_40754;
 		vm.toggleCancelConfirmationModal = toggleCancelConfirmationModal;
 		vm.toggleProcessWaitlistModal = toggleProcessWaitlistModal;
 		vm.processWaitlistRequests = processWaitlistRequests;
 		vm.runWaitlistToggleIsEnabled = runWaitlistToggleIsEnabled;
 		vm.cancelRequests = cancelRequests;
 		vm.showApproveBasedOnRulesPanel = false;
+		vm.shouldShowResourceCalculations = false;
+		vm.lastCaluclated = null;
 		vm.toggleApproveBasedOnRulesPanel = toggleApproveBasedOnRulesPanel;
 		vm.approveBasedOnBusinessRules = approveBasedOnBusinessRules;
 		vm.isApproveBasedOnBusinessRulesEnabled = isApproveBasedOnBusinessRulesEnabled;
@@ -34,8 +37,10 @@
 		vm.anyRuleSelected = anyRuleSelected;
 		vm.isUpdateSiteOpenHoursEnabled = toggleSvc.Wfm_Requests_Site_Open_Hours_39936;
 		vm.showSiteOpenHour = showSiteOpenHour;
+		vm.showResourceCalculations = showResourceCalculations;
 		vm.shouldShowSiteOpenHour = false;
 		initWaitlistProcessPeriod();
+		vm.triggerResourceCalculate = triggerResourceCalculate;
 
 		subscribeSignalRMessage('IRunRequestWaitlistEventMessage', vm.onProcessWaitlistFinished);
 		subscribeSignalRMessage('IApproveRequestsWithValidatorsEventMessage', vm.onApproveBasedOnBusinessRulesFinished);
@@ -47,6 +52,21 @@
 		}
 		function showSiteOpenHour() {
 			vm.shouldShowSiteOpenHour = true;
+		}
+
+		function showResourceCalculations(){
+			vm.shouldShowResourceCalculations =! vm.shouldShowResourceCalculations;
+			requestsDataService.getLastCaluclatedDateTime().success(function(result){
+				result = moment(result).format('MMMM Do YYYY, h:mm:ss a');
+				vm.lastCaluclated = result;
+			})
+		}
+		
+		function triggerResourceCalculate(){
+			requestsDataService.triggerResourceCalculate().success(function(){
+				NoticeService.success('Resource calculation successfully triggered ', 5000, true);
+				vm.shouldShowResourceCalculations = false;
+			})
 		}
 
 		function initWaitlistProcessPeriod() {

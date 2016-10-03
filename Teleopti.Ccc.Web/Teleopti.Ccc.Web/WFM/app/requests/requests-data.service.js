@@ -16,6 +16,8 @@
 		var replyRequestsUrl = '../api/Requests/replyRequests';
 		var getSitesUrl = '../api/sites';
 		var maintainOpenHoursUrl = '../api/Sites/MaintainOpenHours';
+		var getLastCaluclatedDateUrl = '../GetLastCaluclatedDateTime';
+		var resourceCalculateUrl = '../TriggerResourceCalculate';
 
 		this.getAllRequestsPromise_old = function (filter, sortingOrders) {
 			return $http.post(loadTextAndAbsenceRequestsUrl_old, requestsDefinitions.normalizeRequestsFilter_old(filter, sortingOrders));
@@ -73,6 +75,13 @@
 
 		this.getRequestableAbsences = function () {
 			return $http.get(requestableAbsenceUrl);
+		}
+
+		this.getLastCaluclatedDateTime = function() {
+			return $http.get(getLastCaluclatedDateUrl);
+		}
+		this.triggerResourceCalculate = function() {
+			return $http.get(resourceCalculateUrl);
 		}
 
 		this.getAllRequestStatuses = function (isShiftTradeView) {
