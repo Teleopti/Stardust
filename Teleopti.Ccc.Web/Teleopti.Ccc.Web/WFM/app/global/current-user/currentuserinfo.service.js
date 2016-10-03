@@ -1,36 +1,35 @@
-﻿(function () {
-	'use strict';
+(function() {
+    'use strict';
 
-	angular.module('currentUserInfoService', ['angularMoment', 'ngStorage', 'wfm.i18n', 'wfm.businessunits', 'wfm.themes'])
-		.service('AuthenticationRequests', ['$injector', function ($injector) {
-			var service = {};
+    angular
+        .module('currentUserInfoService')
+        .service('CurrentUserInfo', CurrentUserInfo);
 
-			service.getCurrentUser = function () {
-				var $http = $injector.get('$http');
-				return $http.get('../api/Global/User/CurrentUser');
-			};
+    CurrentUserInfo.$inject = ['AuthenticationRequests', '$q', '$sessionStorage', 'wfmI18nService', 'BusinessUnitsService', 'ThemeService', 'Settings'];
 
-			return service;
-		}])
-		.service('CurrentUserInfo', ['AuthenticationRequests', '$q', '$sessionStorage', 'wfmI18nService', 'BusinessUnitsService', 'ThemeService', 'Settings',
-			function (AuthenticationRequests, $q, $sessionStorage, wfmI18nService, BusinessUnitsService, ThemeService, Settings) {
+    function CurrentUserInfo(AuthenticationRequests, $q, $sessionStorage, wfmI18nService, BusinessUnitsService, ThemeService, Settings) {
 				var userName;
 				var defaultTimeZone;
 				var language;
 				var dateFormatLocale;
 				var timeout;
 				var theme;
-				var service = {};
+        this.SetCurrentUserInfo = SetCurrentUserInfo;
+				this.CurrentUserInfo = CurrentUserInfo;
+				this.getCurrentUserFromServer = getCurrentUserFromServer;
+				this.initContext = initContext;
+				this.isConnected = isConnected;
+				this.resetContext = resetContext;
 
-				service.SetCurrentUserInfo = function (data) {
+        function SetCurrentUserInfo(data) {
 					userName = data.UserName;
 					defaultTimeZone = data.DefaultTimeZone;
 					language = data.Language;
 					dateFormatLocale = data.DateFormatLocale;
 					theme = data.Theme;
-				}
+        }
 
-				service.CurrentUserInfo = function () {
+				function CurrentUserInfo() {
 					return {
 						UserName: userName,
 						DefaultTimeZone: defaultTimeZone,
@@ -38,20 +37,20 @@
 						DateFormatLocale: dateFormatLocale,
 						Theme: theme
 					}
-				};
+				}
 
-				service.getCurrentUserFromServer = function() {
+				function getCurrentUserFromServer() {
 					return AuthenticationRequests.getCurrentUser();
-				};
+				}
 
-				service.initContext = function () {
+				function initContext() {
 					var deferred = $q.defer();
-					var context = service.getCurrentUserFromServer();
+					var context = getCurrentUserFromServer();
 
 					context.success(function (data) {
 						timeout = Date.now() + 90000;
 						wfmI18nService.setLocales(data);
-						service.SetCurrentUserInfo(data);
+						SetCurrentUserInfo(data);
 						BusinessUnitsService.initBusinessUnit();
 						Settings.init();
 						ThemeService.init().then(function(){
@@ -61,39 +60,22 @@
 						});
 					});
 					return deferred.promise;
-				};
+				}
 
-				service.isConnected = function () {
-					return timeout > Date.now();
-				};
+			function isConnected() {
+				return timeout > Date.now();
+			}
 
-				service.resetContext = function () {
-					if (window.location.hash.length > "#/".length) {
-						var d = new Date();
-						d.setTime(d.getTime() + (5 * 60 * 1000));
-						var expires = 'expires=' + d.toUTCString();
-						document.cookie = 'returnHash=WFM/' + window.location.hash + '; ' + expires + '; path=/';
-					}
-					timeout = Date.now();
-					$sessionStorage.$reset();
-					window.location.href = 'Authentication?redirectUrl='+window.location.hash;
-				};
-
-				return service;
-			}]).service('Settings', ['$http',
-			function ($http) {
-				var service = {};
-
-				service.supportEmailSetting = 'ServiceDesk@teleopti.com';
-				service.init = function() {
-					return $http.get('../api/Settings/SupportEmail').success(function (data) {
-						service.supportEmailSetting = data ? data : 'ServiceDesk@teleopti.com';
-					});
-				};
-
-				return service;
-			}]);
-
-
-
+			function resetContext() {
+				if (window.location.hash.length > "#/".length) {
+					var d = new Date();
+					d.setTime(d.getTime() + (5 * 60 * 1000));
+					var expires = 'expires=' + d.toUTCString();
+					document.cookie = 'returnHash=WFM/' + window.location.hash + '; ' + expires + '; path=/';
+				}
+				timeout = Date.now();
+				$sessionStorage.$reset();
+				window.location.href = 'Authentication?redirectUrl='+window.location.hash;
+			};
+    }
 })();
