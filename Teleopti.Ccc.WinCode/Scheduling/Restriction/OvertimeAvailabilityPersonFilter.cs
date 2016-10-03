@@ -1,18 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
 {
 	public class OvertimeAvailabilityPersonFilter
 	{
-		public IList<IPerson> GetFilteredPerson(IList<IScheduleDay> scheduleDaysList, DateOnly date, TimePeriod filterPeriod, TimeZoneInfo myTimeZone, bool allowIntersect)
+		private readonly ITimeZoneGuard _timeZoneGuard;
+
+		public OvertimeAvailabilityPersonFilter(ITimeZoneGuard timeZoneGuard)
+		{
+			_timeZoneGuard = timeZoneGuard;
+		}
+
+		public IList<IPerson> GetFilteredPerson(IList<IScheduleDay> scheduleDaysList, DateOnly date, TimePeriod filterPeriod, bool allowIntersect)
 		{
 			var personList = new List<IPerson>();
 			var filterStartDateTimeLocal = new DateTime(date.Year, date.Month, date.Day).Add(filterPeriod.StartTime);
 			var filterEndDateTimeLocal = new DateTime(date.Year, date.Month, date.Day).Add(filterPeriod.EndTime);
-			var filterUtcPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(filterStartDateTimeLocal, filterEndDateTimeLocal, myTimeZone);
+			var filterUtcPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(filterStartDateTimeLocal, filterEndDateTimeLocal, _timeZoneGuard.CurrentTimeZone());
 
 			foreach (var scheduleDay in scheduleDaysList)
 			{
