@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				skillStaffPeriod.Payload.UseShrinkage = true;
 				skillStaffPeriod.Payload.Shrinkage = new Percent(0.05);
 				skillStaffPeriod.Payload.ServiceAgreementData.ServiceLevel.Percent = new Percent(0.8);
-				skillStaffPeriod.Payload.TaskData = new Task(6.7015881588450847, new TimeSpan(0, 2, 0).Add(TimeSpan.FromSeconds(3.174)), TimeSpan.FromSeconds(3.7983919));
+				skillStaffPeriod.Payload.TaskData = new Task(7, TimeSpan.Zero, TimeSpan.FromSeconds(1));
 			}
 			var agent = new Person().WithId();
 			agent.AddPeriodWithSkill(new PersonPeriod(date, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
@@ -96,6 +96,5 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 
 			skillDay.SkillStaffPeriodCollection.First().EstimatedServiceLevelShrinkage.Value.Should().Be.EqualTo(0);
 		}
-
 	}
 }
