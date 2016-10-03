@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -24,11 +25,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_stateHolder = _mocks.StrictMock<ISchedulerStateHolder>();
+			_stateHolder = _mocks.Stub<ISchedulerStateHolder>();
 			_target = new FilterOvertimeAvailabilityPresenter(_stateHolder);
-	        _scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-            _scheduleRange = _mocks.StrictMock<IScheduleRange>();
-            _scheduleDay = _mocks.StrictMock<IScheduleDay>();
+	        _scheduleDictionary = _mocks.Stub<IScheduleDictionary>();
+            _scheduleRange = _mocks.Stub<IScheduleRange>();
+            _scheduleDay = _mocks.Stub<IScheduleDay>();
 		}
 
 		
@@ -48,10 +49,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             {
                 Expect.Call(_stateHolder.FilteredCombinedAgentsDictionary).Return(listOfPerson);
                 Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
-                Expect.Call(_scheduleDictionary[person]).Return(_scheduleRange);
+                _scheduleDictionary[person] = _scheduleRange;
                 Expect.Call(_scheduleRange.ScheduledDayCollection(dateOnlyPeriod)).Return(new List<IScheduleDay> { _scheduleDay });
 				Expect.Call(_scheduleDay.Person).Return(person);
-
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(DateOnly.Today, TimeZoneInfo.Utc));
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(persistableCollection);
                 Expect.Call(() => _stateHolder.FilterPersonsOvertimeAvailability(new List<IPerson>())).IgnoreArguments();
             }
