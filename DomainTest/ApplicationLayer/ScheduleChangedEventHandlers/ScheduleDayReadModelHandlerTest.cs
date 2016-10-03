@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 	[TestFixture]
 	public class ScheduleDayReadModelHandlerTest
 	{
-		private ScheduleDayReadModelHandlerBase _target;
+		private ScheduleDayReadModelHandlerHangfire _target;
 		private IPersonRepository _personRepository;
 		private IScheduleDayReadModelsCreator _scheduleDayReadModelsCreator;
 		private IScheduleDayReadModelRepository _scheduleDayReadModelRepository;

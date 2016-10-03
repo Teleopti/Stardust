@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using log4net;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MessageBroker;
@@ -11,16 +12,32 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 	[EnabledBy(Toggles.ReadModel_ToHangfire_39147)]
 	public class PersonScheduleDayReadModelUpdaterHangfire :
 		PersonScheduleDayReadModelUpdaterBase,
+		IHandleEvent<ProjectionChangedEvent>,
+		IHandleEvent<ProjectionChangedEventForPersonScheduleDay>,
 		IRunOnHangfire
 	{
 		public PersonScheduleDayReadModelUpdaterHangfire(IPersonScheduleDayReadModelsCreator scheduleDayReadModelsCreator, IPersonScheduleDayReadModelPersister scheduleDayReadModelRepository, ITrackingMessageSender trackingMessageSender) : base(scheduleDayReadModelsCreator, scheduleDayReadModelRepository, trackingMessageSender)
 		{
+		}
+
+		[UnitOfWork]
+		public virtual void Handle(ProjectionChangedEvent @event)
+		{
+			HandleBase(@event);
+		}
+
+		[UnitOfWork]
+		public virtual void Handle(ProjectionChangedEventForPersonScheduleDay @event)
+		{
+			HandleBase(@event);
 		}
 	}
 
 	[DisabledBy(Toggles.ReadModel_ToHangfire_39147)]
 	public class PersonScheduleDayReadModelUpdaterServiceBus :
 		PersonScheduleDayReadModelUpdaterBase,
+		IHandleEvent<ProjectionChangedEvent>,
+		IHandleEvent<ProjectionChangedEventForPersonScheduleDay>,
 #pragma warning disable 618
 		IRunOnServiceBus
 #pragma warning restore 618
@@ -28,11 +45,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		public PersonScheduleDayReadModelUpdaterServiceBus(IPersonScheduleDayReadModelsCreator scheduleDayReadModelsCreator, IPersonScheduleDayReadModelPersister scheduleDayReadModelRepository, ITrackingMessageSender trackingMessageSender) : base(scheduleDayReadModelsCreator, scheduleDayReadModelRepository, trackingMessageSender)
 		{
 		}
+
+		public void Handle(ProjectionChangedEvent @event)
+		{
+			HandleBase(@event);
+		}
+
+		public void Handle(ProjectionChangedEventForPersonScheduleDay @event)
+		{
+			HandleBase(@event);
+		}
 	}
 
-	public abstract class PersonScheduleDayReadModelUpdaterBase :
-		IHandleEvent<ProjectionChangedEvent>, 
-		IHandleEvent<ProjectionChangedEventForPersonScheduleDay>
+	public abstract class PersonScheduleDayReadModelUpdaterBase
 	{
 		private readonly IPersonScheduleDayReadModelsCreator _scheduleDayReadModelsCreator;
 		private readonly IPersonScheduleDayReadModelPersister _scheduleDayReadModelRepository;
@@ -50,7 +75,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 			_trackingMessageSender = trackingMessageSender;
 		}
 
-		public void Handle(ProjectionChangedEvent @event)
+		protected void HandleBase(ProjectionChangedEvent @event)
 		{
 			createReadModel(@event);
 			if (_trackingMessageSender != null && @event.CommandId != Guid.Empty)
@@ -61,7 +86,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 				});
 		}
 
-		public void Handle(ProjectionChangedEventForPersonScheduleDay @event)
+		protected void HandleBase(ProjectionChangedEventForPersonScheduleDay @event)
 		{
 			createReadModel(@event);
 		}
