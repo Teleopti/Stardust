@@ -105,6 +105,8 @@ BEGIN
 		ON pp.parent=p.id
 	LEFT JOIN team t
 		ON t.id=pp.team
+	GROUP BY pageid,pagename,businessunit,groupid,tr.name ,p.firstname,p.lastname,p.employmentnumber,p.id ,pp.team ,t.site ,isnull(pp.startdate,'1900-01-01') ,pp.EndDate ,p.terminaldate
+
 END
 GO
 --=============

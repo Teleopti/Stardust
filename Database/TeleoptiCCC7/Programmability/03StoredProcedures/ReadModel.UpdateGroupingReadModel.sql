@@ -13,7 +13,7 @@ GO
 --				Ola 2012-05-16 Added parameter to just update changed persons
 --				AF 20130806 Execute as owner, otherwise we are not allowed to do truncate table. 
 -- =============================================
--- exec ReadModel.UpdateGroupingReadModel 'B0C67CB1-1C4F-4047-8DC1-9EF500DC79A6, 2AE730A0-5AF7-49B7-9498-9EF500DC79A6'
+-- exec ReadModel.UpdateGroupingReadModel '553b73c6-ff9c-44e6-bef1-a58d00854c2b'
 CREATE PROCEDURE ReadModel.UpdateGroupingReadModel
 @persons nvarchar(max)
 WITH EXECUTE AS OWNER
@@ -279,6 +279,7 @@ END
 		ON pp.parent=p.id
 	LEFT JOIN team t
 		ON t.id=pp.team
+	GROUP BY pageid,pagename,businessunit,groupid,tr.name ,p.firstname,p.lastname,p.employmentnumber,p.id ,pp.team ,t.site ,isnull(pp.startdate,'1900-01-01') ,pp.EndDate ,p.terminaldate 
 END
 GO
 
