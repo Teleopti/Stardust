@@ -9,46 +9,45 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class CalculateResourceReadModel
 	{
-		private readonly LoaderForResourceCalculation _loaderForResourceCalculation;
-		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+		//private readonly ILoaderForResourceCalculation _loaderForResourceCalculation;
+		//private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly IScheduleForecastSkillReadModelRepository _scheduleForecastSkillReadModelRepository;
-	    private readonly INow _now;
+		private readonly IExtractSkillStaffDataForResourceCalcualtion _extractSkillStaffDataForResourceCalcualtion;
+		private readonly INow _now;
 
-		public CalculateResourceReadModel(
-			LoaderForResourceCalculation loaderForResourceCalculation,
-			IResourceOptimizationHelper resourceOptimizationHelper, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository, INow now)
+		public CalculateResourceReadModel( IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository, 
+			INow now, IExtractSkillStaffDataForResourceCalcualtion extractSkillStaffDataForResourceCalcualtion)
 		{
-			_loaderForResourceCalculation = loaderForResourceCalculation;
-			_resourceOptimizationHelper = resourceOptimizationHelper;
+			//_loaderForResourceCalculation = loaderForResourceCalculation;
+			//_resourceOptimizationHelper = resourceOptimizationHelper;
 			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
 		    _now = now;
+			_extractSkillStaffDataForResourceCalcualtion = extractSkillStaffDataForResourceCalcualtion;
 		}
 
 		[LogTime]
-		public virtual IEnumerable<ResourcesDataModel> ResourceCalculatePeriod(DateTimePeriod period)
+		public virtual void ResourceCalculatePeriod(DateTimePeriod period)
 		{
 			var periodDateOnly = new DateOnlyPeriod(new DateOnly(period.StartDateTime), new DateOnly(period.EndDateTime));
-			var timeWhenResourceCalcDataLoaded = _now.UtcDateTime();
-			_loaderForResourceCalculation.PreFillInformation(periodDateOnly);
-
-			var resCalcData = _loaderForResourceCalculation.ResourceCalculationData(periodDateOnly);
-			DoCalculation(periodDateOnly, resCalcData);
-
-			var skillStaffPeriodDictionary = resCalcData.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary;
+			//var timeWhenResourceCalcDataLoaded = _now.UtcDateTime();
+			var skillStaffPeriodDictionary = extractSkillStaffPeriodDictionary(periodDateOnly);
 			var models = CreateReadModel(skillStaffPeriodDictionary, period);
-			_scheduleForecastSkillReadModelRepository.Persist(models, timeWhenResourceCalcDataLoaded);
-
-			return null;
+			_scheduleForecastSkillReadModelRepository.Persist(models, _now.UtcDateTime());
 		}
 
-		[LogTime]
-		public virtual void DoCalculation(DateOnlyPeriod period, IResourceCalculationData resCalcData)
+		private ISkillSkillStaffPeriodExtendedDictionary extractSkillStaffPeriodDictionary(DateOnlyPeriod periodDateOnly)
 		{
-			foreach (var dateOnly in period.DayCollection())
-			{
-				_resourceOptimizationHelper.ResourceCalculate(dateOnly, resCalcData);
-			}
+			return _extractSkillStaffDataForResourceCalcualtion.ExtractSkillStaffPeriodDictionary(periodDateOnly);
+			//_loaderForResourceCalculation.PreFillInformation(periodDateOnly);
+
+			//var resCalcData = _loaderForResourceCalculation.ResourceCalculationData(periodDateOnly);
+			//DoCalculation(periodDateOnly, resCalcData);
+
+			//var skillStaffPeriodDictionary = resCalcData.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary;
+			//return skillStaffPeriodDictionary;
 		}
+
+		
 
 		
 		[LogTime]
@@ -85,8 +84,44 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		}
 	}
 
+	public class ExtractSkillStaffDataForResourceCalcualtion : IExtractSkillStaffDataForResourceCalcualtion
+	{
+		private readonly LoaderForResourceCalculation _loaderForResourceCalculation;
+		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 
-	
+		public ExtractSkillStaffDataForResourceCalcualtion(LoaderForResourceCalculation loaderForResourceCalculation, IResourceOptimizationHelper resourceOptimizationHelper)
+		{
+			_loaderForResourceCalculation = loaderForResourceCalculation;
+			_resourceOptimizationHelper = resourceOptimizationHelper;
+		}
+
+		public ISkillSkillStaffPeriodExtendedDictionary ExtractSkillStaffPeriodDictionary(DateOnlyPeriod periodDateOnly)
+		{
+			_loaderForResourceCalculation.PreFillInformation(periodDateOnly);
+
+			var resCalcData = _loaderForResourceCalculation.ResourceCalculationData(periodDateOnly);
+			DoCalculation(periodDateOnly, resCalcData);
+
+			var skillStaffPeriodDictionary = resCalcData.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary;
+			return skillStaffPeriodDictionary;
+		}
+
+		[LogTime]
+		public virtual void DoCalculation(DateOnlyPeriod period, IResourceCalculationData resCalcData)
+		{
+			foreach (var dateOnly in period.DayCollection())
+			{
+				_resourceOptimizationHelper.ResourceCalculate(dateOnly, resCalcData);
+			}
+		}
+	}
+
+	public interface IExtractSkillStaffDataForResourceCalcualtion
+	{
+		ISkillSkillStaffPeriodExtendedDictionary ExtractSkillStaffPeriodDictionary(DateOnlyPeriod periodDateOnly);
+	}
+
+
 	public class ResourcesDataModel
 	{
 		public Guid Id { get; set; }

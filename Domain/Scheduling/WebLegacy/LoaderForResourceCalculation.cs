@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
-	public class LoaderForResourceCalculation
+	public class LoaderForResourceCalculation 
 	{
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
@@ -116,27 +116,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			return agentSkills;
 		}
 	}
-
-	//dont mess with the period on calculation only
-	public class ResourceCalculateRangeToLoadCalculator : ISchedulerRangeToLoadCalculator
-	{
-		private readonly DateTimePeriod _requestedDateTimePeriod;
-
-		public ResourceCalculateRangeToLoadCalculator(DateTimePeriod requestedDateTimePeriod)
-		{
-			_requestedDateTimePeriod = requestedDateTimePeriod;
-			
-		}
-		public DateTimePeriod SchedulerRangeToLoad(IPerson person)
-		{
-			return _requestedDateTimePeriod;
-		}
-
-		public DateTimePeriod RequestedPeriod {
-			get
-			{
-				return _requestedDateTimePeriod;
-			}
-		}
-	}
+	
 }
