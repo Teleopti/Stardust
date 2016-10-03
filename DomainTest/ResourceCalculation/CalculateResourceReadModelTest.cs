@@ -58,6 +58,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			ScheduleForecastSkillReadModelRepository.PersistChange(new StaffingIntervalChange() { StartDateTime = dateTime, EndDateTime = dateTime.AddMinutes(15) });
 			ScheduleForecastSkillReadModelRepository.PersistChange(new StaffingIntervalChange() { StartDateTime = dateTime.AddMinutes(15), EndDateTime = dateTime.AddMinutes(30) });
 			ScheduleForecastSkillReadModelRepository.UtcNow = new DateTime(2016, 10, 03, 11, 30, 0, DateTimeKind.Utc);
+
 			Now.Is(new DateTime(2016, 10, 03, 11, 30, 0, DateTimeKind.Utc));
 			ScheduleForecastSkillReadModelRepository.PersistChange(new StaffingIntervalChange() { StartDateTime = dateTime.AddMinutes(30), EndDateTime = dateTime.AddMinutes(60) });
 
@@ -86,6 +87,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			return new SkillStaffPeriod(period, new Task(), new ServiceAgreement(), new StaffingCalculatorServiceFacade());
 		}
+
 	}
 
 	public class FakeExtractSkillStaffDataForResourceCalcualtion : IExtractSkillStaffDataForResourceCalcualtion

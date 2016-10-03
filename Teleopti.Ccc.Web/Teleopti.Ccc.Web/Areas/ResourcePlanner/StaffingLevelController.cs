@@ -13,23 +13,21 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 	public class StaffingLevelController : ApiController
 	{
 		private readonly IEventPublisher _publisher;
-		private readonly ILoggedOnUser _loggedOnUser;
-		private readonly IPersonRepository _personRepository;
 		private readonly IScheduleForecastSkillProvider _scheduleForecastSkillProvider;
+		private readonly INow _now;
 
-		public StaffingLevelController(IEventPublisher publisher, ILoggedOnUser loggedOnUser, IPersonRepository personRepository,
-			 IScheduleForecastSkillProvider scheduleForecastSkillProvider)
+		public StaffingLevelController(IEventPublisher publisher,
+			IScheduleForecastSkillProvider scheduleForecastSkillProvider, INow now)
 		{
 			_publisher = publisher;
-			_loggedOnUser = loggedOnUser;
-			_personRepository = personRepository;
 			_scheduleForecastSkillProvider = scheduleForecastSkillProvider;
+			_now = now;
 		}
 
 		[UnitOfWork, HttpGet, Route("ForecastAndStaffingForSkill")]
 		public virtual IHttpActionResult ForecastAndStaffingForSkill(DateTime date, Guid skillId)
 		{
-			var intervals =  _scheduleForecastSkillProvider.GetBySkill(skillId, date);
+			var intervals = _scheduleForecastSkillProvider.GetBySkill(skillId, date);
 			return Json(intervals);
 		}
 
@@ -43,35 +41,20 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		[UnitOfWork, HttpGet, Route("TriggerResourceCalculate")]
 		public virtual IHttpActionResult TriggerResourceCalculate()
 		{
-			var period = getPublishedPeriod();
-			if (period.HasValue)
+			var now = _now.UtcDateTime();
+			_publisher.Publish(new UpdateResourceCalculateReadModelEvent()
 			{
-				_publisher.Publish(new UpdateResourceCalculateReadModelEvent()
-				{
-					InitiatorId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault(),
-					StartDateTime = period.Value.StartDate.Date,
-					EndDateTime = period.Value.EndDate.Date.AddDays(1) //Add one day since it is a DateTimePeriod now
-				});
-			}
+				StartDateTime = now,
+				EndDateTime = now.AddHours(24)
+			});
+
 			return Ok();
 		}
 
-		private DateOnlyPeriod? getPublishedPeriod()
+		[UnitOfWork, HttpGet, Route("GetLastCaluclatedDateTime")]
+		public virtual IHttpActionResult GetLastCaluclatedDateTime()
 		{
-			var allPeople = _personRepository.LoadAll();
-			var maxPublishedDate =
-				allPeople.Where(x => x.WorkflowControlSet != null)
-					.Select(y => y.WorkflowControlSet)
-					.Where(w => w.SchedulePublishedToDate != null)
-					.Max(u => u.SchedulePublishedToDate);
-			if (maxPublishedDate.HasValue)
-			{
-				if (maxPublishedDate.Value.Date < DateTime.Today)
-					return null;
-			}
-			var publishedPeriod = new DateOnlyPeriod(DateOnly.Today, new DateOnly(maxPublishedDate.Value));
-			return publishedPeriod;
+			return Json(_scheduleForecastSkillProvider.GetLastCaluclatedDateTime());
 		}
-
 	}
 }

@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 	{
 		IEnumerable<SkillStaffingInterval> GetBySkill(Guid skillId, DateTime date);
 		IEnumerable<SkillStaffingInterval> GetBySkillArea(Guid skillAreaId, DateTime date);
+		DateTime GetLastCaluclatedDateTime();
 	}
 
 	public class ScheduleForecastSkillProvider : IScheduleForecastSkillProvider
@@ -22,8 +23,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_loggedOnUser = loggedOnUser;
 			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
 		}
-
-		
 
 		public IEnumerable<SkillStaffingInterval> GetBySkill(Guid skillId, DateTime date)
 		{
@@ -49,6 +48,12 @@ namespace Teleopti.Ccc.Domain.Intraday
 			return intervals;
 			
 		}
+
+		public DateTime GetLastCaluclatedDateTime()
+		{
+			return _scheduleForecastSkillReadModelRepository.GetLastCalculatedTime();
+		}
+		
 
 		private void convertIntervalToLoggedOnTimezone(IEnumerable<SkillStaffingInterval> intervals, TimeSpan timezoneOffset)
 		{
