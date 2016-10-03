@@ -32,13 +32,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
         public FakeScheduleForecastSkillReadModelRepository ScheduleForecastSkillReadModelRepository;
         public FakeEventPublisher Publisher;
         public IMutateNow Now;
+	    public FakeCurrentBusinessUnit BuesinessUnitScope;
 
-        public void Setup(ISystem system, IIocConfiguration configuration)
+		public void Setup(ISystem system, IIocConfiguration configuration)
         {
             system.UseTestDouble<AbsenceRequestStrategyProcessor>().For<IAbsenceRequestStrategyProcessor>();
             system.UseTestDouble<IntradayResourceCalculationForAbsenceHandler>().For<IHandleEvent<TenantMinuteTickEvent>>();
             system.UseTestDouble<FakeConfigReader>().For<IConfigReader>();
             system.UseTestDouble(new MutableNow("2016-03-01 10:00")).For<INow>();
+			system.UseTestDouble<FakeCurrentBusinessUnit>().For<IBusinessUnitScope>();
         }
 
         [Test]
@@ -77,5 +79,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
         }
 
-    }
+		[Test]
+		public void ShouldResetTheExistingValueOfBusinessUnit()
+		{
+			BuesinessUnitScope.OnThisThreadUse(null);
+			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-02-01 08:10");
+			ScheduleForecastSkillReadModelRepository.LastCalculatedDate = new DateTime(2016, 03, 01, 8, 0, 0, DateTimeKind.Utc);
+			BusinessUnitRepository.Add(BusinessUnitFactory.CreateSimpleBusinessUnit());
+			IPerson person = PersonFactory.CreatePerson();
+			person.SetId(SystemUser.Id);
+			PersonRepository.Add(person);
+			Target.Handle(new TenantMinuteTickEvent());
+			BuesinessUnitScope.Current().Should().Be.Null();
+		}
+
+	}
 }

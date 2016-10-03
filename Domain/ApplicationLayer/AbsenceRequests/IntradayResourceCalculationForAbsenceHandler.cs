@@ -51,8 +51,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
         public void Handle(TenantMinuteTickEvent @event)
         {
-            //for now its 20 minutes should it be 10 minutes? and its going to calculate data from now till next 24 hours
-
             var now = _now.UtcDateTime();
             var configuredNow = _configReader.AppConfig("FakeIntradayUtcStartDateTime");
             if (configuredNow != null)
@@ -66,18 +64,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
                     logger.Warn("The app setting 'FakeIntradayStartDateTime' is not specified correctly. Format your datetime as 'yyyy-MM-dd HH:mm' ");
                 }
             }
-                
+            
             using (_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
             {
 				var updateResourceReadModelIntervalMinutes = _requestStrategySettingsReader.GetIntSetting("UpdateResourceReadModelIntervalMinutes", 60);
 
 				var lastExecuted = _scheduleForecastSkillReadModelRepository.GetLastCalculatedTime();
+	            var currentBusinessUnit = ((ICurrentBusinessUnit) _businessUnitScope).Current();
                 if (lastExecuted.AddMinutes(updateResourceReadModelIntervalMinutes) < _now.UtcDateTime())
                 {
                     var businessUnits = _businessUnitRepository.LoadAll();
                     var person = _personRepository.Get(SystemUser.Id);
                     _updatedByScope.OnThisThreadUse(person);
-
+					
                     businessUnits.ForEach(businessUnit =>
                     {
                         _businessUnitScope.OnThisThreadUse(businessUnit);
@@ -88,6 +87,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
                         });
                     });
                 }
+				_businessUnitScope.OnThisThreadUse(currentBusinessUnit);
 
             }
         }

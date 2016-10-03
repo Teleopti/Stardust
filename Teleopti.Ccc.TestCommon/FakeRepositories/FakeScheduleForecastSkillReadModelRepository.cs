@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	    public Dictionary<Guid, List<SkillStaffingInterval>> FakeStaffingList { get; set; }
 
 
-		public void Persist(IEnumerable<ResourcesDataModel> items)
+		public void Persist(IEnumerable<ResourcesDataModel> items, DateTime timeWhenResourceCalcDataLoaded)
         {
             throw new NotImplementedException();
         }

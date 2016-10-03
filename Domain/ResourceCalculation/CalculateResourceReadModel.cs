@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public virtual IEnumerable<ResourcesDataModel> ResourceCalculatePeriod(DateTimePeriod period)
 		{
 			var periodDateOnly = new DateOnlyPeriod(new DateOnly(period.StartDateTime), new DateOnly(period.EndDateTime));
+			var timeWhenResourceCalcDataLoaded = _now.UtcDateTime();
 			_loaderForResourceCalculation.PreFillInformation(periodDateOnly);
 
 			var resCalcData = _loaderForResourceCalculation.ResourceCalculationData(periodDateOnly);
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			var skillStaffPeriodDictionary = resCalcData.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary;
 			var models = CreateReadModel(skillStaffPeriodDictionary, period);
-			_scheduleForecastSkillReadModelRepository.Persist(models);
+			_scheduleForecastSkillReadModelRepository.Persist(models, timeWhenResourceCalcDataLoaded);
 
 			return null;
 		}

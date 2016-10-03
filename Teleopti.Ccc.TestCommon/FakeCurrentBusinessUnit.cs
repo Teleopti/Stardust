@@ -1,8 +1,9 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Domain.Common;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon
 {
-	public class FakeCurrentBusinessUnit : ICurrentBusinessUnit
+	public class FakeCurrentBusinessUnit : ICurrentBusinessUnit, IBusinessUnitScope
 	{
 		private IBusinessUnit _businessUnit;
 
@@ -14,6 +15,11 @@ namespace Teleopti.Ccc.TestCommon
 		public IBusinessUnit Current()
 		{
 			return _businessUnit;
+		}
+
+		public void OnThisThreadUse(IBusinessUnit businessUnit)
+		{
+			_businessUnit = businessUnit;
 		}
 	}
 

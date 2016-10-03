@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			_now = now;
 		}
 
-		public void Persist(IEnumerable<ResourcesDataModel> items)
+		public void Persist(IEnumerable<ResourcesDataModel> items, DateTime timeWhenResourceCalcDataLoaded)
 		{
 			var dt = new DataTable();
 			dt.Columns.Add("SkillId",typeof(Guid));
