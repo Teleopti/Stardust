@@ -7,7 +7,9 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Intraday
 {
@@ -17,7 +19,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 	{
 		public IScheduleForecastSkillReadModelRepository Target { get; set; }
 		public ISkillRepository SkillRepository;
-		public MutableNow Now; 
+		public MutableNow Now;
+		public ICurrentUnitOfWork CurrentUnitOfWork;
 
 		[Test]
 		public void ShouldPersist()
@@ -208,7 +211,58 @@ namespace Teleopti.Ccc.InfrastructureTest.Intraday
 
         }
 
-    }
+		[Test]
+		public void ShouldPurgeChangesOlderThanGivenDate()
+		{
+			var skillId = Guid.NewGuid();
+			Now.Is("2016-06-16 08:00");
+			Target.PersistChange(new StaffingIntervalChange()
+			{
+				SkillId = Guid.NewGuid(),
+				StartDateTime = new DateTime(2016, 06, 16, 8, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 06, 16, 8, 15, 0, DateTimeKind.Utc),
+				StaffingLevel = 1
+			});
+
+			Now.Is("2016-06-16 09:00");
+			Target.PersistChange(new StaffingIntervalChange()
+			{
+				SkillId = skillId,
+				StartDateTime = new DateTime(2016, 06, 16, 8, 15, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2016, 06, 16, 8, 30, 0, DateTimeKind.Utc),
+				StaffingLevel = 1
+			});
+
+			CurrentUnitOfWork.Current().PersistAll();
+			var items = new List<ResourcesDataModel>()
+			{
+				new ResourcesDataModel()
+				{
+					Id = skillId,
+					Intervals =
+						new List<SkillStaffingInterval>()
+						{
+							new SkillStaffingInterval()
+							{
+								StaffingLevel = 10,
+								EndDateTime = new DateTime(2016, 06, 16, 02, 15, 0,DateTimeKind.Utc),
+								Forecast = 20,
+								StartDateTime = new DateTime(2016, 06, 16, 02, 0, 0,DateTimeKind.Utc)
+							}
+						}
+				}
+			};
+			Target.Persist(items, new DateTime(2016,06,16,9,0,0,DateTimeKind.Utc));
+
+			var changes = Target.GetReadModelChanges(new DateTimePeriod(new DateTime(2016, 06, 16, 8, 0, 0, DateTimeKind.Utc), new DateTime(2016, 06, 16, 8, 30, 0, DateTimeKind.Utc)));
+			changes.Should().Be.Equals(1);
+			changes.First().StartDateTime.Should().Be.EqualTo(new DateTime(2016, 06, 16, 8, 15, 0, DateTimeKind.Utc));
+			changes.First().EndDateTime.Should().Be.EqualTo(new DateTime(2016, 06, 16, 8, 30, 0, DateTimeKind.Utc));
+			changes.First().SkillId.Should().Be.EqualTo(skillId);
+
+		}
+
+	}
 
     
 }

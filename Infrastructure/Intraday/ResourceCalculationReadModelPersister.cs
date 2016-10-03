@@ -67,13 +67,19 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
                     var deleteCommand = new SqlCommand(deleteCommandstring, connection);
                     deleteCommand.Transaction = transaction;
                     deleteCommand.ExecuteNonQuery();
-
-                    using (var sqlBulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, transaction))
+					
+					using (var sqlBulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, transaction))
                     {
                         sqlBulkCopy.DestinationTableName = "[ReadModel].[ScheduleForecastSkill]";
                         sqlBulkCopy.WriteToServer(dt);
                     }
-                    transaction.Commit();
+
+					var deleteCommandForChanges = new SqlCommand(@"DELETE from ReadModel.ScheduleForecastSkillChange where insertedOn < @timeWhenResourceCalcDataLoaded ", connection);
+					deleteCommandForChanges.Transaction = transaction;
+					deleteCommandForChanges.Parameters.AddWithValue("@timeWhenResourceCalcDataLoaded", timeWhenResourceCalcDataLoaded);
+					deleteCommandForChanges.ExecuteNonQuery();
+
+					transaction.Commit();
                 }
 			    
             }

@@ -49,7 +49,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			var request = createNewRequest();
 
-			ScheduleForecastSkillReadModelRepository.FakeStaffingList = new Dictionary<Guid, List<SkillStaffingInterval>>();
 			var staffingList = new List<SkillStaffingInterval>()
 			{
 				new SkillStaffingInterval()
@@ -60,7 +59,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 					StaffingLevel = 10
 				}
 			};
-			ScheduleForecastSkillReadModelRepository.FakeStaffingList.Add(_skill1.Id.GetValueOrDefault(), staffingList);
+			ScheduleForecastSkillReadModelRepository.Persist(new List<ResourcesDataModel>()
+			{
+				new ResourcesDataModel() {Id = _skill1.Id.GetValueOrDefault(), Intervals = staffingList}
+			},DateTime.Now);
+
 			staffingList = new List<SkillStaffingInterval>()
 			{
 				new SkillStaffingInterval()
@@ -71,7 +74,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 					StaffingLevel = 10
 				}
 			};
-			ScheduleForecastSkillReadModelRepository.FakeStaffingList.Add(_skill2.Id.GetValueOrDefault(), staffingList);
+			ScheduleForecastSkillReadModelRepository.Persist(new List<ResourcesDataModel>()
+			{
+				new ResourcesDataModel() {Id = _skill2.Id.GetValueOrDefault(), Intervals = staffingList}
+			}, DateTime.Now);
 
 
 			Target.Process(request);
@@ -85,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			var request = createNewRequest();
 
-			ScheduleForecastSkillReadModelRepository.FakeStaffingList = new Dictionary<Guid, List<SkillStaffingInterval>>();
+			
 			var staffingList = new List<SkillStaffingInterval>()
 			{
 				new SkillStaffingInterval()
@@ -96,7 +102,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 					StaffingLevel = 10
 				}
 			};
-			ScheduleForecastSkillReadModelRepository.FakeStaffingList.Add(_skill1.Id.GetValueOrDefault(), staffingList);
+			ScheduleForecastSkillReadModelRepository.Persist(new List<ResourcesDataModel>()
+			{
+				new ResourcesDataModel() {Id = _skill1.Id.GetValueOrDefault(), Intervals = staffingList}
+			}, DateTime.Now);
 			staffingList = new List<SkillStaffingInterval>()
 			{
 				new SkillStaffingInterval()
@@ -107,7 +116,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 					StaffingLevel = 10
 				}
 			};
-			ScheduleForecastSkillReadModelRepository.FakeStaffingList.Add(_skill2.Id.GetValueOrDefault(), staffingList);
+			ScheduleForecastSkillReadModelRepository.Persist(new List<ResourcesDataModel>()
+			{
+				new ResourcesDataModel() {Id = _skill2.Id.GetValueOrDefault(), Intervals = staffingList}
+			}, DateTime.Now);
 
 			Target.Process(request);
 
@@ -118,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public void ShouldDenyIfUnderstaffedAfterApplyingChanges()
 		{
 			var request = createNewRequest();
-			ScheduleForecastSkillReadModelRepository.FakeStaffingList = new Dictionary<Guid, List<SkillStaffingInterval>>();
+			
 			var staffingList = new List<SkillStaffingInterval>()
 			{
 				new SkillStaffingInterval()
@@ -145,7 +157,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				StaffingLevel = -1
 			});
 
-			ScheduleForecastSkillReadModelRepository.FakeStaffingList.Add(_skill1.Id.GetValueOrDefault(), staffingList);
+			ScheduleForecastSkillReadModelRepository.Persist(new List<ResourcesDataModel>()
+			{
+				new ResourcesDataModel() {Id = _skill1.Id.GetValueOrDefault(), Intervals = staffingList}
+			}, DateTime.Now);
 			staffingList = new List<SkillStaffingInterval>()
 			{
 				new SkillStaffingInterval()
@@ -156,7 +171,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 					StaffingLevel = 10
 				}
 			};
-			ScheduleForecastSkillReadModelRepository.FakeStaffingList.Add(_skill2.Id.GetValueOrDefault(), staffingList);
+			ScheduleForecastSkillReadModelRepository.Persist(new List<ResourcesDataModel>()
+			{
+				new ResourcesDataModel() {Id = _skill2.Id.GetValueOrDefault(), Intervals = staffingList}
+			}, DateTime.Now);
 
 			Target.Process(request);
 
@@ -167,7 +185,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public void ShouldApproveIfTheReadModelChangeIsOnDifferentInterval()
 		{
 			var request = createNewRequest();
-			ScheduleForecastSkillReadModelRepository.FakeStaffingList = new Dictionary<Guid, List<SkillStaffingInterval>>();
+			
 			var staffingList = new List<SkillStaffingInterval>()
 			{
 				new SkillStaffingInterval()
@@ -186,8 +204,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				SkillId = _skill1.Id.GetValueOrDefault(),
 				StaffingLevel = -1
 			});
-			ScheduleForecastSkillReadModelRepository.FakeStaffingList.Add(_skill1.Id.GetValueOrDefault(), staffingList);
-			
+			ScheduleForecastSkillReadModelRepository.Persist(new List<ResourcesDataModel>()
+			{
+				new ResourcesDataModel() {Id = _skill1.Id.GetValueOrDefault(), Intervals = staffingList}
+			}, DateTime.Now);
+
 			Target.Process(request);
 
 			Assert.AreEqual(2, getRequestStatus(PersonRequestRepository.Get(request.Id.GetValueOrDefault())));
