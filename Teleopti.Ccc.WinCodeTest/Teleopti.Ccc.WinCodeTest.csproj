@@ -577,7 +577,7 @@
     <Compile Include="Scheduler\AgentOvertimeAvailabilityRemoveCommandTest.cs" />
     <Compile Include="Scheduler\Restriction\HourlyAvailabilityPersonFilterTest.cs" />
     <Compile Include="Scheduler\Restriction\OvertimeAvailabilityCreatorTest.cs" />
-    <Compile Include="Scheduler\Restriction\OvertimeAvailabilityPersonFilterTest.cs" />
+    <Compile Include="Scheduler\Restriction\OvertimeAvailabilityPersonFilterTestOld.cs" />
     <Compile Include="Scheduler\SchedulePartNoteTests.cs" />
     <Compile Include="Scheduler\ScheduleSortingCommands\ScheduleSortBySeniorityRankingCommandsTest.cs" />
     <Compile Include="Scheduler\SchedulingScreenPersisterTest.cs" />

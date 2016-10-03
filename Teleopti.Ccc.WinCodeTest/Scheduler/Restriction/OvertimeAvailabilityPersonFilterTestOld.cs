@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
 {
     [TestFixture]
-    public class OvertimeAvailabilityPersonFilterTest
+    public class OvertimeAvailabilityPersonFilterTestOld
     {
         private MockRepository _mock;
         private OvertimeAvailabilityPersonFilter _target;
