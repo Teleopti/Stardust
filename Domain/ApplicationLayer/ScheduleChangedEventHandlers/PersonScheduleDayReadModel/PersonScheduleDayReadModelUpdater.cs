@@ -2,25 +2,46 @@
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel
 {
+	[EnabledBy(Toggles.ReadModel_ToHangfire_39147)]
+	public class PersonScheduleDayReadModelUpdaterHangfire :
+		PersonScheduleDayReadModelUpdaterBase,
+		IRunOnHangfire
+	{
+		public PersonScheduleDayReadModelUpdaterHangfire(IPersonScheduleDayReadModelsCreator scheduleDayReadModelsCreator, IPersonScheduleDayReadModelPersister scheduleDayReadModelRepository, ITrackingMessageSender trackingMessageSender) : base(scheduleDayReadModelsCreator, scheduleDayReadModelRepository, trackingMessageSender)
+		{
+		}
+	}
+
+	[DisabledBy(Toggles.ReadModel_ToHangfire_39147)]
+	public class PersonScheduleDayReadModelUpdaterServiceBus :
+		PersonScheduleDayReadModelUpdaterBase,
 #pragma warning disable 618
-	public class PersonScheduleDayReadModelUpdater :
-		IHandleEvent<ProjectionChangedEvent>, 
-		IHandleEvent<ProjectionChangedEventForPersonScheduleDay>,
 		IRunOnServiceBus
 #pragma warning restore 618
+	{
+		public PersonScheduleDayReadModelUpdaterServiceBus(IPersonScheduleDayReadModelsCreator scheduleDayReadModelsCreator, IPersonScheduleDayReadModelPersister scheduleDayReadModelRepository, ITrackingMessageSender trackingMessageSender) : base(scheduleDayReadModelsCreator, scheduleDayReadModelRepository, trackingMessageSender)
+		{
+		}
+	}
+
+	public abstract class PersonScheduleDayReadModelUpdaterBase :
+		IHandleEvent<ProjectionChangedEvent>, 
+		IHandleEvent<ProjectionChangedEventForPersonScheduleDay>
+
 	{
 		private readonly IPersonScheduleDayReadModelsCreator _scheduleDayReadModelsCreator;
 		private readonly IPersonScheduleDayReadModelPersister _scheduleDayReadModelRepository;
 		private readonly ITrackingMessageSender _trackingMessageSender;
 
-		private readonly static ILog Logger = LogManager.GetLogger(typeof(PersonScheduleDayReadModelUpdater));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(PersonScheduleDayReadModelUpdaterBase));
 
-		public PersonScheduleDayReadModelUpdater(
+		protected PersonScheduleDayReadModelUpdaterBase(
 			IPersonScheduleDayReadModelsCreator scheduleDayReadModelsCreator,
 			IPersonScheduleDayReadModelPersister scheduleDayReadModelRepository,
 			ITrackingMessageSender trackingMessageSender)
@@ -48,19 +69,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 
 		private void createReadModel(ProjectionChangedEventBase message)
 		{
-			if (Logger.IsDebugEnabled)
-				Logger.DebugFormat("Updating model PersonScheduleDayReadModel for person {0}", message.PersonId);
+			if (logger.IsDebugEnabled)
+				logger.Debug($"Updating model PersonScheduleDayReadModel for person {message.PersonId}");
 
 			if (!message.IsDefaultScenario)
 			{
-				if (Logger.IsDebugEnabled)
-					Logger.Debug("Skipping update of model PersonScheduleDayReadModel because its not in default scenario");
+				if (logger.IsDebugEnabled)
+					logger.Debug("Skipping update of model PersonScheduleDayReadModel because its not in default scenario");
 				return;
 			}
 			if (message.ScheduleDays == null || message.ScheduleDays.Count == 0)
 			{
-				if (Logger.IsDebugEnabled)
-					Logger.Debug("Skipping update of model PersonScheduleDayReadModel because the event did not contain any days");
+				if (logger.IsDebugEnabled)
+					logger.Debug("Skipping update of model PersonScheduleDayReadModel because the event did not contain any days");
 				return;
 			}
 

@@ -194,7 +194,8 @@
 
 		AbsenceRequests_UseMultiRequestProcessing_39960,
         AbsenceRequests_SpeedupIntradayRequests_40754,
-        ETL_EventbasedDate_39562
+        ETL_EventbasedDate_39562,
+		ReadModel_ToHangfire_39147
 		// ReSharper restore InconsistentNaming
 	}
 }
