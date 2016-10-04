@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             }
             using (_mocks.Playback())
             {
-                _target.Filter(new TimePeriod(TimeSpan.FromHours(17), TimeSpan.FromHours(18)), DateOnly.Today);
+                _target.Filter(new TimePeriod(TimeSpan.FromHours(17), TimeSpan.FromHours(18)), DateOnly.Today, false);
             }
         }
 
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             }
             using (_mocks.Playback())
             {
-                _target.Filter(new TimePeriod(TimeSpan.FromHours(17), TimeSpan.FromHours(18)), date);
+                _target.Filter(new TimePeriod(TimeSpan.FromHours(17), TimeSpan.FromHours(18)), date, false);
             }
         }
 

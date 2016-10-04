@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		    _schedulerStateHolder = schedulerStateHolder;
 		}
 
-		public void Filter(TimePeriod filterPeriod, DateOnly value)
+		public void Filter(TimePeriod filterPeriod, DateOnly value, bool allowIntersect)
 		{
             var persons = _schedulerStateHolder.FilteredCombinedAgentsDictionary.Values;
             foreach (var person in persons)
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 _schedules.AddRange(scheduleDays);
             }
             var filter = new OvertimeAvailabilityPersonFilter(new TimeZoneGuardWrapper());
-			var filteredPersons = filter.GetFilteredPerson(_schedules, filterPeriod, false);
+			var filteredPersons = filter.GetFilteredPerson(_schedules, filterPeriod, allowIntersect);
 			_schedulerStateHolder.FilterPersonsOvertimeAvailability(filteredPersons);
 		}
 	}

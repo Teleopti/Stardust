@@ -2312,6 +2312,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All time.
+        /// </summary>
+        public static string AllTime {
+            get {
+                return ResourceManager.GetString("AllTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All Unavailable.
         /// </summary>
         public static string AllUnavailable {
@@ -15200,6 +15209,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Match:.
+        /// </summary>
+        public static string MatchColon {
+            get {
+                return ResourceManager.GetString("MatchColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Matching skills.
         /// </summary>
         public static string MatchingSkills {
@@ -20276,6 +20294,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Participants {
             get {
                 return ResourceManager.GetString("Participants", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Part of time.
+        /// </summary>
+        public static string PartOfTime {
+            get {
+                return ResourceManager.GetString("PartOfTime", resourceCulture);
             }
         }
         
