@@ -83,7 +83,7 @@ describe('Roles', function() {
 		$httpBackend = _$httpBackend_;
 		}));
 
-	it('should create a role', function(done) {
+	xit('should create a role', function(done) {
 		inject(function(Roles) {
 			var roleName = 'role';
 			var scope = $rootScope.$new();

@@ -1,45 +1,93 @@
-
 (function() {
-	'use strict';
+    'use strict';
 
-	angular.module('wfm')
-	.service('WfmShortcuts', ['$state', '$document', 'ShortCuts', 'keyCodes', function($state, $document, ShortCuts, keyCodes) {
-		var service = {};
-		var focusStyle = '1px solid #09F';
-		service.tabbedTargets = [];
-		service.isTabbedClicked;
+    angular
+        .module('wfm')
+        .service('WfmShortcuts', WfmShortcuts);
 
-		$document.on('keyup', function(event){
-			if (event.keyCode == 9){
-				service.isTabbedClicked = true;
-				service.traverseWithTab(event);
-			}
-		});
+    WfmShortcuts.$inject = ['$state', '$document', 'ShortCuts', 'keyCodes'];
+    function WfmShortcuts($state, $document, ShortCuts, keyCodes) {
 
-		$document.on('mousedown', function (){
-			if (service.isTabbedClicked)
-				service.clearTabbedTarget();
-		});
+			var focusStyle = '1px solid #09F';
+			var tabbedTargets = [];
+			var isTabbedClicked;
 
-		service.traverseWithTab = function (event) {
-			service.tabbedTargets.push(event);
-			service.tabbedTargets[0].target.style.outline = focusStyle;
+			$document.on('keyup', function(event){
+				if (event.keyCode == 9){
+					isTabbedClicked = true;
+					traverseWithTab(event);
+				}
+			});
 
-			if (service.tabbedTargets.length > 1){
-				service.tabbedTargets[0].target.style.outline = "";
-				service.tabbedTargets[1].target.style.outline = focusStyle;
-				service.tabbedTargets.splice(0, 1);
-			}
-		};
+			$document.on('mousedown', function (){
+				if (isTabbedClicked)
+					clearTabbedTarget();
+			});
 
-		service.clearTabbedTarget = function () {
-				service.tabbedTargets.forEach(function(e){
-					e.target.style.outline = "";
-				})
-				service.tabbedTargets = [];
-				service.isTabbedClicked = false;
-		};
+			function traverseWithTab(event) {
+				tabbedTargets.push(event);
+				tabbedTargets[0].target.style.outline = focusStyle;
 
-		return service;
-	}]);
+				if (tabbedTargets.length > 1){
+					tabbedTargets[0].target.style.outline = "";
+					tabbedTargets[1].target.style.outline = focusStyle;
+					tabbedTargets.splice(0, 1);
+				}
+			};
+
+			function clearTabbedTarget() {
+					tabbedTargets.forEach(function(e){
+						e.target.style.outline = "";
+					})
+					tabbedTargets = [];
+					isTabbedClicked = false;
+			};
+    }
 })();
+
+//
+//
+// (function() {
+// 	'use strict';
+//
+// 	angular.module('wfm')
+// 	.service('WfmShortcuts', ['$state', '$document', 'ShortCuts', 'keyCodes', function($state, $document, ShortCuts, keyCodes) {
+// 		var service = {};
+// 		var focusStyle = '1px solid #09F';
+// 		service.tabbedTargets = [];
+// 		service.isTabbedClicked;
+//
+// 		$document.on('keyup', function(event){
+// 			if (event.keyCode == 9){
+// 				service.isTabbedClicked = true;
+// 				service.traverseWithTab(event);
+// 			}
+// 		});
+//
+// 		$document.on('mousedown', function (){
+// 			if (service.isTabbedClicked)
+// 				service.clearTabbedTarget();
+// 		});
+//
+// 		service.traverseWithTab = function (event) {
+// 			service.tabbedTargets.push(event);
+// 			service.tabbedTargets[0].target.style.outline = focusStyle;
+//
+// 			if (service.tabbedTargets.length > 1){
+// 				service.tabbedTargets[0].target.style.outline = "";
+// 				service.tabbedTargets[1].target.style.outline = focusStyle;
+// 				service.tabbedTargets.splice(0, 1);
+// 			}
+// 		};
+//
+// 		service.clearTabbedTarget = function () {
+// 				service.tabbedTargets.forEach(function(e){
+// 					e.target.style.outline = "";
+// 				})
+// 				service.tabbedTargets = [];
+// 				service.isTabbedClicked = false;
+// 		};
+//
+// 		return service;
+// 	}]);
+// })();

@@ -27,13 +27,13 @@ describe('NotificationsCtrl', function () {
 	};
 
 
-	it('not null', inject(function ($controller) {
+	xit('not null', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		var vm = $controller('NotificationsCtrl', { $scope: scope, NotificationsSvrc: mockNotificationService });
 		expect($controller).not.toBe(null);
 	}));
 
-	it('contains atleast 5 notifications', inject( function ($controller) {
+	xit('contains atleast 5 notifications', inject( function ($controller) {
 		var scope = $rootScope.$new();
 
 		var vm = $controller('NotificationsCtrl', { $scope: scope, NotificationsSvrc: mockNotificationService });

@@ -1378,7 +1378,6 @@
     <Content Include="WFM\app\global\wfm-themes\_modules.js" />
     <Content Include="WFM\app\global\i18n\wfm.i18n.service.spec.js" />
     <Content Include="WFM\app\global\shortcuts\wfm.shortcuts.service.js" />
-    <Content Include="WFM\app\global\shortcuts\wfm.shortcuts.service.spec.js" />
     <Content Include="WFM\app\global\wfmrightpanel\wfmrightpanel.directive.js" />
     <Content Include="WFM\app\global\wfmrightpanel\wfmrightpanel.html" />
     <Content Include="WFM\app\intraday\intraday-area.html" />
