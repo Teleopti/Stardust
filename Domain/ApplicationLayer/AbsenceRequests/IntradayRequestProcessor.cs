@@ -47,8 +47,32 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					return;
 				}
 			}
+			updateResources(personRequest);
 			sendApproveCommand(personRequest.Id.GetValueOrDefault());
 			
+		}
+
+		private void updateResources(IPersonRequest personRequest)
+		{
+			var skillCollection = personRequest.Person.Period(DateOnly.Today).PersonSkillCollection;
+
+			double resourcefactor = -(double)1/skillCollection.Count();
+			foreach (var skill in skillCollection.Select(x => x.Skill))
+			{
+				var skillStaffingInterval = _scheduleForecastSkillReadModelRepository.GetBySkill(skill.Id.GetValueOrDefault(), personRequest.Request.Period.StartDateTime, personRequest.Request.Period.EndDateTime);
+
+				foreach (var interval in skillStaffingInterval)
+				{
+					var staffingIntervalChange = new StaffingIntervalChange()
+					{
+						StartDateTime = interval.StartDateTime,
+						EndDateTime = interval.EndDateTime,
+						SkillId = skill.Id.GetValueOrDefault(),
+						StaffingLevel = resourcefactor
+					};
+					_scheduleForecastSkillReadModelRepository.PersistChange(staffingIntervalChange);
+				}
+			}
 		}
 
 		private IEnumerable<SkillStaffingInterval> getSkillStaffIntervals(Guid skillId, DateTimePeriod requestPeriod)

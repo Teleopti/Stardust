@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
@@ -30,9 +31,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakeConfigReader ConfigReader;
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakeScheduleForecastSkillReadModelRepository ScheduleForecastSkillReadModelRepository;
+		public FakeSkillRepository SkillRepository;
 		private ISkill _skill1;
 		private ISkill _skill2;
-
+		private ISkill _skill3;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -124,6 +126,79 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Target.Process(request);
 
 			Assert.AreEqual(2, getRequestStatus(PersonRequestRepository.Get(request.Id.GetValueOrDefault())));
+		}
+
+
+		[Test]
+		public void ShouldUpdateResourcesWhenApproveBySplitResourceOnAllAgentSkills()
+		{
+			var request = createNewRequest();
+			var startDateTime = new DateTime(2016, 3, 14, 13, 0, 0, DateTimeKind.Utc);
+			var endDateTime = new DateTime(2016, 3, 14, 13, 15, 0, DateTimeKind.Utc);
+
+			var intervals = new List<SkillStaffingInterval>()
+			{
+				new SkillStaffingInterval()
+				{
+					StartDateTime = startDateTime,
+					EndDateTime = endDateTime,
+					Forecast = 2,
+					StaffingLevel = 10
+				}
+			};
+
+			var resourceList = new List<ResourcesDataModel>
+			{
+				new ResourcesDataModel()
+				{
+					Id = _skill1.Id.GetValueOrDefault(),
+					Intervals = intervals
+				},
+				new ResourcesDataModel()
+				{
+					Id = _skill2.Id.GetValueOrDefault(),
+					Intervals = intervals
+				},
+				new ResourcesDataModel()
+				{
+					Id = _skill3.Id.GetValueOrDefault(),
+					Intervals = intervals
+				}
+			};
+
+			ScheduleForecastSkillReadModelRepository.Persist(resourceList, DateTime.Now);
+
+			Target.Process(request);
+
+			var changes = ScheduleForecastSkillReadModelRepository.GetReadModelChanges(new DateTimePeriod(startDateTime, endDateTime)).ToList();
+
+			double resourceFactor = -(double)1/3;
+			var expectedChanges = new List<StaffingIntervalChange>()
+			{
+				new StaffingIntervalChange()
+				{
+					StartDateTime = startDateTime,
+					EndDateTime = endDateTime,
+					SkillId = _skill1.Id.GetValueOrDefault(),
+					StaffingLevel = resourceFactor
+				},
+				new StaffingIntervalChange()
+				{
+					StartDateTime = startDateTime,
+					EndDateTime = endDateTime,
+					SkillId = _skill2.Id.GetValueOrDefault(),
+					StaffingLevel = resourceFactor
+				},
+					new StaffingIntervalChange()
+				{
+					StartDateTime = startDateTime,
+					EndDateTime = endDateTime,
+					SkillId = _skill3.Id.GetValueOrDefault(),
+					StaffingLevel = resourceFactor
+				}
+			};
+
+			CollectionAssert.AreEquivalent(expectedChanges, changes);
 		}
 
 		[Test]
@@ -238,12 +313,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private IPerson createAndSetupPerson(IWorkflowControlSet workflowControlSet, bool useWorkflowControlSet)
 		{
 			//var person = PersonFactory.CreatePersonWithId();
-			_skill1 = SkillFactory.CreateSkillWithId("GoodSkillName1");
+			_skill1 = SkillFactory.CreateSkillWithId("CascadingSkill1");
 			_skill1.SetCascadingIndex(1);
-			_skill2 = SkillFactory.CreateSkillWithId("GoodSkillName2");
+			_skill2 = SkillFactory.CreateSkillWithId("CascadingSkill2");
 			_skill2.SetCascadingIndex(1);
+			_skill3 = SkillFactory.CreateSkillWithId("NotCascadingSkill");
 
-			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 03, 01), new[] {_skill1, _skill2});
+			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 03, 01), new[] {_skill1, _skill2, _skill3});
 			PersonRepository.Add(person);
 
 			if(useWorkflowControlSet)
