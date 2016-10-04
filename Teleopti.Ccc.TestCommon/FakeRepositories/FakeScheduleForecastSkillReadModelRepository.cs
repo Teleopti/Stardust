@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Util;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
@@ -10,18 +9,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
     public class FakeScheduleForecastSkillReadModelRepository : IScheduleForecastSkillReadModelRepository
     {
-	    private Dictionary<Guid, List<SkillStaffingInterval>> _fakeStaffingList  = new Dictionary<Guid, List<SkillStaffingInterval>>();
+	    private List<SkillStaffingInterval> _fakeStaffingList  = new List<SkillStaffingInterval>();
 		private List<CustomStaffingIntervalChange> _readModelChanges = new List<CustomStaffingIntervalChange>();
 		public DateTime UtcNow = DateTime.UtcNow;
 
-		public void Persist(IEnumerable<ResourcesDataModel> items, DateTime timeWhenResourceCalcDataLoaded)
-        {
-			if(_fakeStaffingList==null)
-				_fakeStaffingList = new Dictionary<Guid, List<SkillStaffingInterval>>();
-			items.ForEach(x =>
-            {
-	            _fakeStaffingList.Add(x.Id,x.Intervals);
-            });
+		public void Persist(IEnumerable<SkillStaffingInterval> items, DateTime timeWhenResourceCalcDataLoaded)
+		{
+			_fakeStaffingList.AddRange(items);
 
 	        var filteredChanges = _readModelChanges.Where(x => x.InsertedOn >= timeWhenResourceCalcDataLoaded);
 			if(filteredChanges.Any())
@@ -31,13 +25,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
         public IEnumerable<SkillStaffingInterval> GetBySkill(Guid skillId, DateTime startDateTime, DateTime endDateTime)
         {
-	        if (_fakeStaffingList.ContainsKey(skillId))
-	        {
-		        var thatSkill = _fakeStaffingList[skillId];
-		        return thatSkill.Where(x => x.StartDateTime >= startDateTime && x.EndDateTime <= endDateTime);
-	        }
-			return new List<SkillStaffingInterval>();
-
+	       return _fakeStaffingList.Where(x => x.SkillId == skillId && x.StartDateTime >= startDateTime && x.EndDateTime <= endDateTime);
         }
 
         public IEnumerable<SkillStaffingInterval> GetBySkillArea(Guid skillAreaId, DateTime startDateTime, DateTime endDateTime)

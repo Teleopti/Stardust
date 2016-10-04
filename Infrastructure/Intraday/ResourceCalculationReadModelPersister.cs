@@ -4,7 +4,6 @@ using System.Data;
 using System.Data.SqlClient;
 using NHibernate;
 using NHibernate.Transform;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -24,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			_now = now;
 		}
 
-		public void Persist(IEnumerable<ResourcesDataModel> items, DateTime timeWhenResourceCalcDataLoaded)
+		public void Persist(IEnumerable<SkillStaffingInterval> intervals, DateTime timeWhenResourceCalcDataLoaded)
 		{
 			var dt = new DataTable();
 			dt.Columns.Add("SkillId",typeof(Guid));
@@ -38,21 +37,18 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 
 			var insertedOn = _now.UtcDateTime();
 
-            foreach (var item in items)
+			foreach (var interval in intervals)
 			{
-				foreach (var skillStaffingInterval in item.Intervals)
-				{
-					var row = dt.NewRow();
-					row["SkillId"] = item.Id;
-					row["BelongsToDate"] = skillStaffingInterval.StartDateTime.Date;
-					row["StartDateTime"] = skillStaffingInterval.StartDateTime;
-					row["EndDateTime"] = skillStaffingInterval.EndDateTime;
-                    row["Forecast"] = skillStaffingInterval.Forecast;
-                    row["StaffingLevel"] = skillStaffingInterval.StaffingLevel;
-                    row["InsertedOn"] = insertedOn;
-                    row["ForecastWithShrinkage"] = skillStaffingInterval.ForecastWithShrinkage;
-                    dt.Rows.Add(row);
-				}
+				var row = dt.NewRow();
+				row["SkillId"] = interval.SkillId;
+				row["BelongsToDate"] = interval.StartDateTime.Date;
+				row["StartDateTime"] = interval.StartDateTime;
+				row["EndDateTime"] = interval.EndDateTime;
+				row["Forecast"] = interval.Forecast;
+				row["StaffingLevel"] = interval.StaffingLevel;
+				row["InsertedOn"] = insertedOn;
+				row["ForecastWithShrinkage"] = interval.ForecastWithShrinkage;
+				dt.Rows.Add(row);
 			}
 
 			var connectionString = _currentUnitOfWorkFactory.Current().ConnectionString;

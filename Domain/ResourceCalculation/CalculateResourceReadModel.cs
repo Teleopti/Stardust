@@ -38,24 +38,21 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		
 		
 		[LogTime]
-		public virtual IEnumerable<ResourcesDataModel> CreateReadModel(ISkillSkillStaffPeriodExtendedDictionary skillSkillStaffPeriodExtendedDictionary, DateTimePeriod period)
+		public virtual IEnumerable<SkillStaffingInterval> CreateReadModel(ISkillSkillStaffPeriodExtendedDictionary skillSkillStaffPeriodExtendedDictionary, DateTimePeriod period)
 		{
-			var items  = new List<ResourcesDataModel>(); 
+			var ret = new List<SkillStaffingInterval>();
 			_feedback.SendProgress?.Invoke($"Will update {skillSkillStaffPeriodExtendedDictionary.Keys.Count} skills.");
 			if (skillSkillStaffPeriodExtendedDictionary.Keys.Count > 0)
 			{
                 foreach (var skill in skillSkillStaffPeriodExtendedDictionary.Keys)
 				{
-					
-					var ret = new ResourcesDataModel();
-					ret.Id = skill.Id.GetValueOrDefault();
-					ret.Intervals = new List<SkillStaffingInterval>();
 					foreach (var skillStaffPeriod in skillSkillStaffPeriodExtendedDictionary[skill].Values)
 					{
 						if ( !period.Contains(skillStaffPeriod.Period.StartDateTime) )
 							continue;
-						ret.Intervals.Add(new SkillStaffingInterval
+						ret.Add(new SkillStaffingInterval
 						{
+							SkillId = skill.Id.GetValueOrDefault(),
 							StartDateTime = skillStaffPeriod.Period.StartDateTime,
 							EndDateTime = skillStaffPeriod.Period.EndDateTime,
 							Forecast = skillStaffPeriod.FStaff,
@@ -64,24 +61,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                         });
 					}
 					_feedback.SendProgress?.Invoke($"Updated {skill}.");
-					items.Add(ret);
 				}
 			}
-
-			return items;
+			return ret;
 		}
-	}
-
-
-	public class ResourcesDataModel
-	{
-		public Guid Id { get; set; }
-		public string Area { get; set; }
-		public List<SkillStaffingInterval> Intervals { get; set; }
 	}
 
 	public class SkillStaffingInterval
 	{
+		public Guid SkillId { get; set; }
 		public DateTime StartDateTime { get; set; }
 		public DateTime EndDateTime { get; set; }
 		public double Forecast { get; set; }
@@ -100,7 +88,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public bool Equals(StaffingIntervalChange other)
 		{
 			if (other == null) return false;
-			return SkillId == other.SkillId && StartDateTime == other.StartDateTime && EndDateTime == other.EndDateTime && Math.Abs(StaffingLevel - other.StaffingLevel) < 0.001;
+			return SkillId == other.SkillId
+				   && StartDateTime == other.StartDateTime
+				   && EndDateTime == other.EndDateTime
+				   && Math.Abs(StaffingLevel - other.StaffingLevel) < 0.001;
 		}
     }
 }

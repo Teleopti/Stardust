@@ -47,28 +47,36 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					return;
 				}
 			}
-			updateResources(personRequest);
+			updateResources(personRequest, lowestIndex.GetValueOrDefault());
 			sendApproveCommand(personRequest.Id.GetValueOrDefault());
 			
 		}
 
-		private void updateResources(IPersonRequest personRequest)
+		private void updateResources(IPersonRequest personRequest, int primarySkillIndex)
 		{
-			var skillCollection = personRequest.Person.Period(DateOnly.Today).PersonSkillCollection;
-
-			double resourcefactor = -(double)1/skillCollection.Count();
-			foreach (var skill in skillCollection.Select(x => x.Skill))
+			var skills = personRequest.Person.Period(DateOnly.Today).PersonSkillCollection.Select(x => x.Skill).Where(y => !y.IsCascading() || y.CascadingIndex == primarySkillIndex);
+			
+			var skillStaffingIntervals = new List<SkillStaffingInterval>();
+			foreach (var skill in skills)
 			{
-				var skillStaffingInterval = _scheduleForecastSkillReadModelRepository.GetBySkill(skill.Id.GetValueOrDefault(), personRequest.Request.Period.StartDateTime, personRequest.Request.Period.EndDateTime);
+				var intervals = _scheduleForecastSkillReadModelRepository.GetBySkill(skill.Id.GetValueOrDefault(), personRequest.Request.Period.StartDateTime, personRequest.Request.Period.EndDateTime).ToList();
+				skillStaffingIntervals.AddRange(intervals);
+			}
 
-				foreach (var interval in skillStaffingInterval)
+			foreach (var startDate in skillStaffingIntervals.GroupBy(x => x.StartDateTime))
+			{
+				var intervalsWithSamePeriod = skillStaffingIntervals.Where(x => x.StartDateTime == startDate.Key);
+
+				double totaloverstaffing = intervalsWithSamePeriod.Sum(interval => interval.StaffingLevel - interval.ForecastWithShrinkage);
+
+				foreach (var interval in intervalsWithSamePeriod)
 				{
 					var staffingIntervalChange = new StaffingIntervalChange()
 					{
 						StartDateTime = interval.StartDateTime,
 						EndDateTime = interval.EndDateTime,
-						SkillId = skill.Id.GetValueOrDefault(),
-						StaffingLevel = resourcefactor
+						SkillId = interval.SkillId,
+						StaffingLevel = -(interval.StaffingLevel-interval.ForecastWithShrinkage) / totaloverstaffing
 					};
 					_scheduleForecastSkillReadModelRepository.PersistChange(staffingIntervalChange);
 				}
