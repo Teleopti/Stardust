@@ -126,6 +126,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			_projectionChangedEventBuilder.Build<T>(@event, data.ScheduleRange, data.RealPeriod, data.Versions)
 				.ForEach(e =>
 				{
+					
 					e.ScheduleLoadTimestamp = data.ScheduleLoadedTime;
 					_publisher.Publish(e);
 				});
@@ -144,17 +145,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			var scenario = _scenarioRepository.Get(@event.ScenarioId);
 			if (scenario == null)
 			{
-				Logger.InfoFormat("Scenario not found (Id: {0})", @event.ScenarioId);
+				Logger.Info($"Scenario not found (Id: {@event.ScenarioId})");
 				return null;
 			}
 
 			var period = new DateTimePeriod(@event.StartDateTime.Subtract(TimeSpan.FromDays(1)), @event.EndDateTime);
-			Logger.DebugFormat("Period start: {0}, end: {1}", period.StartDateTime, period.EndDateTime);
+			Logger.Debug($"Period start: {period.StartDateTime}, end: {period.EndDateTime}");
 
 			var person = _personRepository.FindPeople(new[] { @event.PersonId }).FirstOrDefault();
 			if (person == null)
 			{
-				Logger.InfoFormat("Person not found (Id: {0})", @event.PersonId);
+				Logger.Info($"Person not found (Id: {@event.PersonId})");
 				return null;
 			}
 

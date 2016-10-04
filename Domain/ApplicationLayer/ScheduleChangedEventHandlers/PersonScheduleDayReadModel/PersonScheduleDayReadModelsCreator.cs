@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 			{
 				var readmodel = MakePersonScheduleDayReadModel( person, scheduleDay);
 				readmodel.ScheduleLoadTimestamp = schedule.ScheduleLoadTimestamp;
+				readmodel.Version = scheduleDay.Version;
 				yield return readmodel;
 			}
 		}

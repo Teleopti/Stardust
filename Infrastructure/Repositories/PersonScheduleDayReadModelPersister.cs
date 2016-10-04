@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private readonly IMessageCreator _messageBroker;
 		private readonly ICurrentDataSource _currentDataSource;
 
-		private readonly static ILog Logger = LogManager.GetLogger(typeof(PersonScheduleDayReadModelPersister));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(PersonScheduleDayReadModelPersister));
 
 		public PersonScheduleDayReadModelPersister(ICurrentUnitOfWork currentUnitOfWork, IMessageCreator messageBroker, ICurrentDataSource currentDataSource)
 		{
@@ -30,15 +30,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public void UpdateReadModels(DateOnlyPeriod period, Guid personId, Guid businessUnitId, IEnumerable<PersonScheduleDayReadModel> readModels, bool initialLoad)
 		{
-			if (Logger.IsDebugEnabled)
-				Logger.Debug("Persisting model PersonScheduleDayReadModel");
+			logger.Debug("Persisting model PersonScheduleDayReadModel");
 
 			var changed = false;
 
 			if (readModels != null)
 			{
-				if (Logger.IsDebugEnabled)
-					Logger.Debug("Saving model PersonScheduleDayReadModel");
+				logger.Debug("Saving model PersonScheduleDayReadModel");
 				readModels.ForEach(readModel =>
 				{
 					var count = SaveReadModel(readModel, initialLoad);
@@ -52,8 +50,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			if (changed)
 				_currentUnitOfWork.Current().AfterSuccessfulTx(() =>
 				{
-					if (Logger.IsDebugEnabled)
-						Logger.Debug("Sending notification for persisted model IPersonScheduleDayReadModel");
+					logger.Debug("Sending notification for persisted model IPersonScheduleDayReadModel");
 					_messageBroker.Send(_currentDataSource.CurrentName(), businessUnitId, period.StartDate.Date, period.EndDate.Date,
 						Guid.Empty, personId, typeof (Person), Guid.Empty, typeof (IPersonScheduleDayReadModel),
 						DomainUpdateType.NotApplicable, null);
@@ -62,30 +59,39 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public int SaveReadModel(PersonScheduleDayReadModel model, bool initialLoad)
 		{
-			if (Logger.IsDebugEnabled)
-				Logger.DebugFormat(
-					"Trying to save model PersonScheduleDayReadModel on date {0} for person {1}, Start {2}, End {3}, LoadedScheduleTime {4}",
-					model.BelongsToDate, model.PersonId, model.Start, model.End, model.ScheduleLoadTimestamp);
+			logger.Debug($"Trying to save model PersonScheduleDayReadModel on date {model.BelongsToDate} for person {model.PersonId}, Start {model.Start}, End {model.End}, LoadedScheduleTime {model.ScheduleLoadTimestamp}");
 
 			var updatedCount = _currentUnitOfWork.Session().CreateSQLQuery(
-				"EXEC ReadModel.UpdatePersonScheduleDay @PersonId=:PersonId,@Start=:Start,@End=:End,@BelongsToDate=:BelongsToDate,@IsDayOff=:IsDayOff,@Model=:Model,@ScheduleLoadedTime=:ScheduleLoadedTime,@IsInitialLoad=:IsInitialLoad")
-				.SetGuid("PersonId", model.PersonId)				
-				.SetParameter("Start", model.Start)
-				.SetParameter("End", model.End)
-				.SetDateOnly("BelongsToDate", model.BelongsToDate)
-				.SetParameter("IsDayOff", model.IsDayOff)
-				.SetParameter("Model", model.Model, NHibernateUtil.Custom(typeof (CompressedString)))
-				.SetDateTime("ScheduleLoadedTime", model.ScheduleLoadTimestamp)
-				.SetBoolean("IsInitialLoad", initialLoad).List<int>().FirstOrDefault();
+				$@"EXEC ReadModel.UpdatePersonScheduleDay 
+					@PersonId=:{nameof(model.PersonId)},
+					@Start=:{nameof(model.Start)},
+					@End=:{nameof(model.End)},
+					@BelongsToDate=:{nameof(model.BelongsToDate)},
+					@IsDayOff=:{nameof(model.IsDayOff)},
+					@Model=:{nameof(model.Model)},
+					@ScheduleLoadedTime=:{nameof(model.ScheduleLoadTimestamp)},
+					@IsInitialLoad=:{nameof(initialLoad)},
+					@Version=:{nameof(model.Version)}
+				")
+				.SetGuid(nameof(model.PersonId), model.PersonId)				
+				.SetParameter(nameof(model.Start), model.Start)
+				.SetParameter(nameof(model.End), model.End)
+				.SetDateOnly(nameof(model.BelongsToDate), model.BelongsToDate)
+				.SetParameter(nameof(model.IsDayOff), model.IsDayOff)
+				.SetParameter(nameof(model.Model), model.Model, NHibernateUtil.Custom(typeof (CompressedString)))
+				.SetDateTime(nameof(model.ScheduleLoadTimestamp), model.ScheduleLoadTimestamp)
+				.SetBoolean(nameof(initialLoad), initialLoad)
+				.SetParameter(nameof(model.Version), model.Version)
+				.List<int>().FirstOrDefault();
 			return updatedCount;
 		}
 
 		public void DeleteReadModel(Guid personId, DateOnly date)
 		{
 			_currentUnitOfWork.Session().CreateSQLQuery(
-				"DELETE FROM ReadModel.PersonScheduleDay WHERE PersonId = :PersonId AND BelongsToDate =:BelongsToDate")
-				.SetGuid("PersonId", personId)
-				.SetDateOnly("BelongsToDate", date)
+				$"DELETE FROM ReadModel.PersonScheduleDay WHERE PersonId = :{nameof(personId)} AND BelongsToDate =:{nameof(date)}")
+				.SetGuid(nameof(personId), personId)
+				.SetDateOnly(nameof(date), date)
 				.ExecuteUpdate();
 		}
 

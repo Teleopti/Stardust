@@ -160,6 +160,7 @@
     <Compile Include="ApplicationLayer\Events\MultiEventPublishingTest.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduleProjectionReadOnlyConcurrencyTest.cs" />
     <Compile Include="ApplicationLayer\Events\RunInProcessEventPublisherTest.cs" />
+    <Compile Include="ApplicationLayer\PersonScheduleDayReadModel\PersonScheduleDayReadModelUpdaterConcurrencyTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleProjectionReadOnly\ScheduleProjectionReadOnlyPersisterConcurrencyTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleProjectionReadOnly\ScheduleProjectionReadOnlyPersisterTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleProjectionReadOnly\ScheduleProjectionReadOnlyUpdaterTest.cs" />

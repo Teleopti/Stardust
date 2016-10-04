@@ -20,13 +20,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		public bool IsLastPage { get; set; }
 		public int Total { get; set; }
 		public DateTime ScheduleLoadTimestamp { get; set; }
+		public int Version { get; set; }
+
 		public bool Equals(PersonScheduleDayReadModel other)
 		{
 			if (other == null) return false;
-			return (PersonId == other.PersonId && Date == other.Date && 
-					BelongsToDate == other.BelongsToDate && Start == other.Start &&
-					End == other.End && IsDayOff == other.IsDayOff
-					&& Model == other.Model);
+			return PersonId == other.PersonId && Date == other.Date && 
+				   BelongsToDate == other.BelongsToDate && Start == other.Start &&
+				   End == other.End && IsDayOff == other.IsDayOff
+				   && Model == other.Model;
 		}		
 	}
 

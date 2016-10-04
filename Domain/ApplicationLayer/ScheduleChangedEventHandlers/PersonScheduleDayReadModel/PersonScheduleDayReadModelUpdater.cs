@@ -93,27 +93,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 
 		private void createReadModel(ProjectionChangedEventBase message)
 		{
-			if (logger.IsDebugEnabled)
-				logger.Debug($"Updating model PersonScheduleDayReadModel for person {message.PersonId}");
+			logger.Debug($"Updating model PersonScheduleDayReadModel for person {message.PersonId}");
 
 			if (!message.IsDefaultScenario)
 			{
-				if (logger.IsDebugEnabled)
-					logger.Debug("Skipping update of model PersonScheduleDayReadModel because its not in default scenario");
+				logger.Debug("Skipping update of model PersonScheduleDayReadModel because its not in default scenario");
 				return;
 			}
 			if (message.ScheduleDays == null || message.ScheduleDays.Count == 0)
 			{
-				if (logger.IsDebugEnabled)
-					logger.Debug("Skipping update of model PersonScheduleDayReadModel because the event did not contain any days");
+				logger.Debug("Skipping update of model PersonScheduleDayReadModel because the event did not contain any days");
 				return;
 			}
 
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(message.ScheduleDays.Min(s => s.Date.Date)),
-			                                        new DateOnly(message.ScheduleDays.Max(s => s.Date.Date)));
+													new DateOnly(message.ScheduleDays.Max(s => s.Date.Date)));
 
 			var readModels = _scheduleDayReadModelsCreator.MakeReadModels(message);
-			_scheduleDayReadModelRepository.UpdateReadModels(dateOnlyPeriod, message.PersonId, message.LogOnBusinessUnitId, readModels, initialLoad: message.IsInitialLoad);
+			_scheduleDayReadModelRepository.UpdateReadModels(dateOnlyPeriod, message.PersonId, message.LogOnBusinessUnitId, readModels, message.IsInitialLoad);
 		}
 	}
 }

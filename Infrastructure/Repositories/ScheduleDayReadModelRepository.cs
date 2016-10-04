@@ -42,7 +42,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 
 			_currentUnitOfWork.Session().CreateSQLQuery(
-					"exec [ReadModel].[UpdateScheduleDay] @PersonId=:PersonId,@BelongsToDate=:BelongsToDate,@StartDateTime=:StartDateTime,@EndDateTime=:EndDateTime,@Workday=:Workday,@WorkTime=:WorkTime,@ContractTime=:ContractTime,@Label=:Label,@DisplayColor=:DisplayColor,@NotScheduled=:NotScheduled")
+					@"
+					exec [ReadModel].[UpdateScheduleDay] 
+					@PersonId=:PersonId,
+					@BelongsToDate=:BelongsToDate,
+					@StartDateTime=:StartDateTime,
+					@EndDateTime=:EndDateTime,
+					@Workday=:Workday,
+					@WorkTime=:WorkTime,
+					@ContractTime=:ContractTime,
+					@Label=:Label,
+					@DisplayColor=:DisplayColor,
+					@NotScheduled=:NotScheduled")
 					.SetGuid("PersonId", model.PersonId)
 					.SetDateTime("StartDateTime", model.StartDateTime)
 					.SetDateTime("EndDateTime", model.EndDateTime)

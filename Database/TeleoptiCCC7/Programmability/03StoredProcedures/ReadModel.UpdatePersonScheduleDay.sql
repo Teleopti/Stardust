@@ -10,7 +10,8 @@ CREATE PROCEDURE [ReadModel].[UpdatePersonScheduleDay]
 @IsDayOff bit,
 @Model nvarchar(max),
 @ScheduleLoadedTime datetime,
-@IsInitialLoad bit
+@IsInitialLoad bit,
+@Version int
 WITH EXECUTE AS OWNER
 
 -- =============================================
@@ -28,36 +29,36 @@ BEGIN
 		WHERE PersonId = @PersonId
 			AND BelongsToDate = @BelongsToDate)
 	BEGIN
-		INSERT INTO ReadModel.PersonScheduleDay (PersonId, Start,[End],BelongsToDate,IsDayOff,Model,ScheduleLoadedTime) 
-		VALUES (@PersonId, @Start,@End,@BelongsToDate,@IsDayOff,@Model,@ScheduleLoadedTime)
+		INSERT INTO ReadModel.PersonScheduleDay (PersonId, Start,[End],BelongsToDate,IsDayOff,Model,ScheduleLoadedTime, [Version]) 
+		VALUES (@PersonId, @Start,@End,@BelongsToDate,@IsDayOff,@Model,@ScheduleLoadedTime, @Version)
 	END
 	SELECT 1 -- number of records changed
 	RETURN
 END
 
-DECLARE @existingScheduleLoadedTime datetime
+DECLARE @currentVersion int
 
-SELECT @existingScheduleLoadedTime = ScheduleLoadedTime
-FROM ReadModel.PersonScheduleDay
+SELECT @currentVersion = [Version]
+FROM ReadModel.PersonScheduleDay WITH (UPDLOCK)
 WHERE PersonId = @PersonId
 AND BelongsToDate = @BelongsToDate
 
-IF (@existingScheduleLoadedTime IS NULL)
+IF (@currentVersion IS NULL)
 BEGIN
-	INSERT INTO ReadModel.PersonScheduleDay (PersonId,Start,[End],BelongsToDate,IsDayOff,Model,ScheduleLoadedTime) 
-	VALUES (@PersonId,@Start,@End,@BelongsToDate,@IsDayOff,@Model,@ScheduleLoadedTime)
+	INSERT INTO ReadModel.PersonScheduleDay (PersonId,Start,[End],BelongsToDate,IsDayOff,Model,ScheduleLoadedTime, [Version]) 
+	VALUES (@PersonId,@Start,@End,@BelongsToDate,@IsDayOff,@Model,@ScheduleLoadedTime, @Version)
 	SELECT 1 -- number of records changed
 	RETURN
 END
 
-IF (@existingScheduleLoadedTime <= @ScheduleLoadedTime)
+IF (@currentVersion < @Version)
 BEGIN
 	DELETE FROM ReadModel.PersonScheduleDay
 	WHERE PersonId = @PersonId
 	AND BelongsToDate = @BelongsToDate
 
-	INSERT INTO ReadModel.PersonScheduleDay (PersonId,Start,[End],BelongsToDate,IsDayOff,Model,ScheduleLoadedTime) 
-	VALUES (@PersonId,@Start,@End,@BelongsToDate,@IsDayOff,@Model,@ScheduleLoadedTime)
+	INSERT INTO ReadModel.PersonScheduleDay (PersonId,Start,[End],BelongsToDate,IsDayOff,Model,ScheduleLoadedTime, [Version]) 
+	VALUES (@PersonId,@Start,@End,@BelongsToDate,@IsDayOff,@Model,@ScheduleLoadedTime, @Version)
 	SELECT 1 -- number of records changed
 END
 

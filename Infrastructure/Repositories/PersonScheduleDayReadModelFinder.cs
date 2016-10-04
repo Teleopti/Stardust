@@ -30,19 +30,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public bool IsInitialized()
 		{
-			var result = _unitOfWork.Session().CreateSQLQuery(
-				"SELECT TOP 1 * FROM ReadModel.PersonScheduleDay")
+			var result = _unitOfWork.Session().CreateSQLQuery("SELECT TOP 1 * FROM ReadModel.PersonScheduleDay")
 													 .List();
 			return result.Count > 0;
 		}
 
 		public IEnumerable<PersonScheduleDayReadModel> ForPerson(DateOnly startDate, DateOnly endDate, Guid personId)
 		{
-			const string sql
-				= "SELECT PersonId, BelongsToDate AS Date, Start, [End], IsDayOff, Model "
-				  + "FROM ReadModel.PersonScheduleDay "
-				  + "WHERE PersonId=:personid AND BelongsToDate Between :startdate AND :enddate";
-			return _unitOfWork.Session().CreateSQLQuery(sql)
+			return _unitOfWork.Session().CreateSQLQuery(@"
+					SELECT PersonId, BelongsToDate AS Date, Start, [End], IsDayOff, Model 
+					FROM ReadModel.PersonScheduleDay
+					WHERE PersonId=:personid AND BelongsToDate Between :startdate AND :enddate")
 				.AddScalar("PersonId", NHibernateUtil.Guid)				
 				.AddScalar("Date", NHibernateUtil.DateTime)
 				.AddScalar("Start", NHibernateUtil.DateTime)
@@ -64,10 +62,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<PersonScheduleDayReadModel> ForPeople(DateTimePeriod period, IEnumerable<Guid> personIds)
 		{
-			const string sql
-				= "SELECT PersonId, BelongsToDate AS Date, Start, [End], Model "
-				  + "FROM ReadModel.PersonScheduleDay "
-				  + "WHERE PersonId In (:PersonIds) AND Start IS NOT NULL AND Start < :DateEnd AND [End] > :DateStart";
+			const string sql = @"
+					SELECT PersonId, BelongsToDate AS Date, Start, [End], Model 
+					FROM ReadModel.PersonScheduleDay
+					WHERE PersonId In (:PersonIds) AND Start IS NOT NULL AND Start < :DateEnd AND [End] > :DateStart";
 			var res = new List<PersonScheduleDayReadModel>();
 			foreach (var ids in personIds.Batch(2000))
 			{
@@ -89,13 +87,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<PersonScheduleDayReadModel> ForBulletinPersons(IEnumerable<string> shiftExchangeOfferIdList, Paging paging)
 		{
-			const string sql
-				= @"EXEC [ReadModel].[LoadShiftTradeBulletinSchedules]"
-				+" @shiftExchangeOfferIdList =:shiftExchangeOfferIdList,"
-				+ "@skip=:skip, "
-				+ "@take=:take";
 			var idlist = string.Join(",", shiftExchangeOfferIdList);
-			return _unitOfWork.Session().CreateSQLQuery(sql)
+			return _unitOfWork.Session().CreateSQLQuery(@"
+					EXEC [ReadModel].[LoadShiftTradeBulletinSchedules]
+					@shiftExchangeOfferIdList =:shiftExchangeOfferIdList,
+					@skip=:skip, 
+					@take=:take")
 				.AddScalar("PersonId", NHibernateUtil.Guid)		
 				.AddScalar("FirstName", NHibernateUtil.String)
 				.AddScalar("LastName", NHibernateUtil.String)
@@ -119,16 +116,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			IEnumerable<Guid> personIdList, Paging paging, TimeFilterInfo filter = null, string timeSortOrder ="" )
 		{
 			const string sql
-				= @"EXEC  [ReadModel].[LoadPersonSchedule] "
-				  + "@scheduleDate=:shiftTradeDate, "
-				  + "@personList=:personIdList, "
-				  + "@filterStartTimes=:filterStartTimes, "
-				  + "@filterEndTimes=:filterEndTimes, "
-				  + "@isDayOff=:isDayOff,"
-				  + "@isEmptyDay=:isEmptyDay,"
-				  + "@isWorkingDay=:isWorkingDay,"
-				  + "@skip=:skip, @take=:take,"
-				  + "@timeSortOrder=:timeSortOrder";
+				= @"EXEC [ReadModel].[LoadPersonSchedule]
+					@scheduleDate=:shiftTradeDate,
+					@personList=:personIdList,
+					@filterStartTimes=:filterStartTimes,
+					@filterEndTimes=:filterEndTimes,
+					@isDayOff=:isDayOff,
+					@isEmptyDay=:isEmptyDay,
+					@isWorkingDay=:isWorkingDay,
+					@skip=:skip, @take=:take,
+					@timeSortOrder=:timeSortOrder";
 			var idlist = string.Join(",", personIdList);
 			var filterString = getTimeFilterString(filter);
 			return _unitOfWork.Session().CreateSQLQuery(sql)
@@ -166,7 +163,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private TimeFilterString getTimeFilterString(TimeFilterInfo filter)
 		{
 			const string dateTimeFormat = "yyyy-MM-dd HH:mm";
-			var filterString = new TimeFilterString() { startTimes = "", endTimes = ""};
+			var filterString = new TimeFilterString { startTimes = "", endTimes = ""};
 
 			if (filter == null) return filterString;
 
@@ -177,7 +174,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					let end = s.EndDateTime.ToString(dateTimeFormat)
 					select new
 					{
-						startTime = start + ";" + end,
+						startTime = $"{start};{end}",
 					};
 			var endTimes = filter.EndTimes ?? new List<DateTimePeriod>();
 			var endTimesAsString
@@ -186,7 +183,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					let end = e.EndDateTime.ToString(dateTimeFormat)
 					select new
 					{
-						endTime = start + ";" + end,
+						endTime = $"{start};{end}",
 					};
 			filterString.startTimes = string.Join(",", startTimesAsString.Select(d => d.startTime));
 			filterString.endTimes = string.Join(",", endTimesAsString.Select(d => d.endTime));

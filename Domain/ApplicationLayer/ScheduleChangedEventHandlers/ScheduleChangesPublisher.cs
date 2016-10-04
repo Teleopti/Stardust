@@ -48,10 +48,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 					{
 						if (t.IsFaulted)
 						{
-							logger.ErrorFormat(
-								string.Format(
-									"Couldn't send schedule change notification for person ({0}) to subscriber {1} ({2}).",
-									@event.PersonId, scheduleChangeSubscription.Name, scheduleChangeSubscription.Uri),
+							logger.ErrorFormat($"Couldn't send schedule change notification for person ({@event.PersonId}) to subscriber {scheduleChangeSubscription.Name} ({scheduleChangeSubscription.Uri}).",
 								t.Exception.Flatten());
 						}
 					});
