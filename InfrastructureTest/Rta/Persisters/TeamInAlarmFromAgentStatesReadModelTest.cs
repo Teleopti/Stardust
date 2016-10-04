@@ -74,5 +74,31 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Read(siteId).Single().Count.Should().Be(1);
 		}
+
+		[Test]
+		public void ShouldNotCountDeletedAgents()
+		{
+			var personId = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			Now.Is("2016-08-18 08:05".Utc());
+			Persister.Persist(new AgentStateReadModelForTest
+			{
+				PersonId = Guid.NewGuid(),
+				SiteId = siteId,
+				TeamId = teamId,
+				AlarmStartTime = "2016-08-18 08:05".Utc()
+			});
+			Persister.Persist(new AgentStateReadModelForTest
+			{
+				PersonId = personId,
+				SiteId = siteId,
+				TeamId = teamId,
+				AlarmStartTime = "2016-08-18 08:05".Utc()
+			});
+			Persister.SetDeleted(personId, "2016-08-18 08:05".Utc());
+
+			Target.Read(siteId).Single().Count.Should().Be(1);
+		}
 	}
 }

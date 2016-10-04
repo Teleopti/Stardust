@@ -301,18 +301,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		}
 
 		[Test]
-		public void ShouldDelete()
+		public void ShouldSetDeleted()
 		{
 			var personId = Guid.NewGuid();
 			var model = new AgentStateReadModelForTest { PersonId = personId };
 			Target.Persist(model);
 
-			Target.Delete(personId);
+			Target.SetDeleted(personId, "2016-10-04 08:00".Utc());
 
-			Target.Get(personId)
-				.Should().Be.Null();
+			var result = Target.Get(personId);
+			result.IsDeleted.Should().Be(true);
+			result.ExpiresAt.Should().Be("2016-10-04 08:00".Utc());
 		}
-
+		
 		[Test]
 		public void ShouldUpdatePersonAssociation()
 		{
@@ -362,6 +363,32 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			});
 
 			Target.Get(personId).StateGroupId.Should().Be(stateGroupId);
+		}
+
+		[Test]
+		public void ShouldRemoveOldRows()
+		{
+			var personId = Guid.NewGuid();
+			var model = new AgentStateReadModelForTest { PersonId = personId };
+			Target.Persist(model);
+			Target.SetDeleted(personId, "2016-10-04 08:30".Utc());
+			
+			Target.DeleteOldRows("2016-10-04 08:30".Utc());
+
+			Target.Get(personId).Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldRemoveOlderRows()
+		{
+			var personId = Guid.NewGuid();
+			var model = new AgentStateReadModelForTest { PersonId = personId };
+			Target.Persist(model);
+			Target.SetDeleted(personId, "2016-10-04 08:30".Utc());
+
+			Target.DeleteOldRows("2016-10-04 09:00".Utc());
+
+			Target.Get(personId).Should().Be.Null();
 		}
 	}
 }

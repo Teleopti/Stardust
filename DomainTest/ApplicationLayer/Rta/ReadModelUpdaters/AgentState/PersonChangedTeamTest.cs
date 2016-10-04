@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 	[ReadModelUpdaterTest]
 	public class PersonChangedTeamTest
 	{
-		public AgentStateReadModelCleaner Target;
+		public AgentStateReadModelMaintainer Target;
 		public FakeAgentStateReadModelPersister Persister;
 
 		[Test]

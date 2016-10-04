@@ -28,6 +28,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 					FROM ReadModel.AgentState
 					WHERE AlarmStartTime <= :now
 					AND SiteId = :siteId
+					AND IsDeleted <> 1
+					OR IsDeleted IS NULL
 					GROUP BY TeamId
 					")
 				.SetParameter("siteId", siteId)

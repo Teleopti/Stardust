@@ -36,7 +36,32 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		}
 
-		void IAgentStateReadModelPersister.Delete(Guid personId)
+		public void SetDeleted(Guid personId, DateTime expiresAt)
+		{
+			AgentStateReadModel updated;
+			if (!_data.TryGetValue(personId, out updated)) return;
+			var copy = updated.CopyBySerialization();
+			updated.IsDeleted = true;
+			updated.ExpiresAt = expiresAt;
+			_data.TryUpdate(personId, updated, copy);
+		}
+
+		public void DeleteOldRows(DateTime now)
+		{
+			var toRemove = 
+				_data.Values
+				.Where(x => x.IsDeleted && now >= x.ExpiresAt)
+				.Select(x => x.PersonId)
+				.ToList();
+
+			foreach (var personId in toRemove)
+			{
+				AgentStateReadModel model;
+				_data.TryRemove(personId, out model);
+			}
+		}
+
+		public void Delete(Guid personId)
 		{
 			AgentStateReadModel model;
 			_data.TryRemove(personId, out model);

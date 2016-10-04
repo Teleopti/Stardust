@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public void Update(Context context, IEnumerable<IEvent> events)
 		{
 			var model = LoadModel(context);
+			if (model.IsDeleted) return;
 
 			model.ReceivedTime = context.CurrentTime;
 			model.PersonId = context.PersonId;
@@ -64,7 +65,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				});
 
 			BeforePersist(model, events);
-
 			_persister.Persist(model);
 		}
 

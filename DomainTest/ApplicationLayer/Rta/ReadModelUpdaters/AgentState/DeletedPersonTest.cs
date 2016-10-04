@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -11,18 +12,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 	[ReadModelUpdaterTest]
 	public class DeletedPersonTest
 	{
-		public AgentStateReadModelCleaner Target;
+		public AgentStateReadModelMaintainer Target;
 		public FakeAgentStateReadModelPersister Persister;
 
 		[Test]
-		public void ShouldRemoveReadModelWhenPersonIsDeleted()
+		public void ShouldSetDeletedWhenPersonIsDeleted()
 		{
 			var personId = Guid.NewGuid();
 			Persister.Persist(new AgentStateReadModel {PersonId = personId});
 
 			Target.Handle(new PersonDeletedEvent {PersonId = personId});
 
-			Persister.Models.Should().Be.Empty();
+			Persister.Models.Single().IsDeleted.Should().Be(true);
 		}
 	}
 }

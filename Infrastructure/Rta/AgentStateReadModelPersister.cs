@@ -154,12 +154,23 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			}
 		}
 
-		public virtual void Delete(Guid personId)
+		public virtual void SetDeleted(Guid personId, DateTime expiresAt)
 		{
 			_unitOfWork.Current().Session()
 				.CreateSQLQuery(
-					@"DELETE [ReadModel].[AgentState] WHERE PersonId = :PersonId")
+					@"UPDATE [ReadModel].[AgentState] SET IsDeleted=1, ExpiresAt = :ExpiresAt WHERE PersonId = :PersonId")
 				.SetParameter("PersonId", personId)
+				.SetParameter("ExpiresAt", expiresAt)
+				.ExecuteUpdate()
+				;
+		}
+
+		public void DeleteOldRows(DateTime now)
+		{
+			_unitOfWork.Current().Session()
+				.CreateSQLQuery(
+					@"DELETE FROM [ReadModel].[AgentState] WHERE ExpiresAt <= :now")
+				.SetParameter("now", now)
 				.ExecuteUpdate()
 				;
 		}

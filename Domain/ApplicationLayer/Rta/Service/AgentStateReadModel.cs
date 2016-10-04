@@ -32,6 +32,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public IEnumerable<AgentStateActivityReadModel> Shift { get; set; }
 
 		public IEnumerable<AgentStateOutOfAdherenceReadModel> OutOfAdherences { get; set; }
+		public bool IsDeleted { get; set; }
+		public DateTime? ExpiresAt { get; set; }
 
 		public override string ToString()
 		{

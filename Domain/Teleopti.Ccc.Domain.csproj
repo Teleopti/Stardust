@@ -226,7 +226,7 @@
     <Compile Include="ApplicationLayer\Events\ScheduleProjectionReadOnlyChangedEvent.cs" />
     <Compile Include="ApplicationLayer\IKeyValueStorePersister.cs" />
     <Compile Include="ApplicationLayer\KeyValueStorePersisterExtensions.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\AgentStateReadModelCleaner.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\AgentStateReadModelMaintainer.cs" />
     <Compile Include="ApplicationLayer\SiteOpenHours\ISiteOpenHoursPersister.cs" />
     <Compile Include="ApplicationLayer\SiteOpenHours\ISiteOpenHoursSpecification.cs" />
     <Compile Include="ApplicationLayer\SiteOpenHours\SiteOpenHoursCheckItem.cs" />

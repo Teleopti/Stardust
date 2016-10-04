@@ -411,5 +411,33 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 
 			agentState.Select(x => x.PersonId).Should().Have.SameValuesAs(person1, person2);
 		}
+
+		[Test]
+		public void ShouldNotBuildForDeletedAgents()
+		{
+			Now.Is("2016-06-21 08:30");
+			var person = Guid.NewGuid();
+			var team = Guid.NewGuid();
+			var site = Guid.NewGuid();
+			var skill = Guid.NewGuid();
+			Database
+				.WithPersonSkill(person, skill)
+				.Has(new AgentStateReadModel
+				{
+					PersonId = person,
+					TeamId = team,
+					SiteId = site,
+					IsRuleAlarm = true,
+					AlarmStartTime = "2016-06-21 08:29".Utc(),
+					IsDeleted = true
+				});
+
+			Target.ForSites(new[] { site }).States.Should().Be.Empty();
+			Target.ForTeams(new[] { team }).States.Should().Be.Empty();
+			Target.ForSkills(new[] { skill }).States.Should().Be.Empty();
+			Target.InAlarmForSites(new[] { site }).States.Should().Be.Empty();
+			Target.InAlarmForTeams(new[] { team }).States.Should().Be.Empty();
+			Target.InAlarmForSkills(new[] { skill }).States.Should().Be.Empty();
+		}
 	}
 }

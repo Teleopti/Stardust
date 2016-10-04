@@ -26,6 +26,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 					SELECT SiteId, COUNT(*) AS Count
 					FROM ReadModel.AgentState
 					WHERE AlarmStartTime <= :now
+					AND IsDeleted != 1
+					OR IsDeleted IS NULL
 					GROUP BY SiteId
 					")
 				.SetParameter("now", _now.UtcDateTime())
