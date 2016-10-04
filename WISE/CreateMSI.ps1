@@ -89,9 +89,9 @@ task CompileWsi -depends Init, PreReq, MountK -description "Complie all WSI file
 		)
 			Parallel {
 		
-			InlineScript {& $Using:WsiCompiler "$Using:ServerWsi" "/c /s"}
+			InlineScript {& $Using:WsiCompiler "$Using:ServerWsi" /c /s | out-null}
 			
-            InlineScript {& $Using:WsiCompiler "$Using:ClientWsi" "/c /s"}
+            InlineScript {& $Using:WsiCompiler "$Using:ClientWsi" /c /s | out-null}
 			
 		}
 	}
