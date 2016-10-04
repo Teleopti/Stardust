@@ -132,7 +132,6 @@
 		WfmGlobalLayout_personalOptions_37114,
 
 		ResourcePlanner_TeamBlockDayOffForIndividuals_37998,
-		ResourcePlanner_ScheduleOvertimeOnNonWorkingDays_38025,
 		ResourcePlanner_CascadingSkills_38524,
 		ResourcePlanner_CascadingSkillsGUI_40018,
 		ResourcePlanner_CalculateFarAwayTimeZones_40646,

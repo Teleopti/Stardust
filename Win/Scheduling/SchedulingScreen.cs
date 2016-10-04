@@ -6815,16 +6815,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 					}
 
-					var toggleManager = _container.Resolve<IToggleManager>();
-					var scheduleOvetimeOnNonWorkingDays = toggleManager.IsEnabled(Toggles.ResourcePlanner_ScheduleOvertimeOnNonWorkingDays_38025);
-					using (
-						var options = new OvertimePreferencesDialog(_schedulerState.CommonStateHolder.ActiveScheduleTags,
+					using (var options = new OvertimePreferencesDialog(_schedulerState.CommonStateHolder.ActiveScheduleTags,
 																	"OvertimePreferences", 
 																	_schedulerState.CommonStateHolder.ActiveActivities, 
 																	resolution, 
 																	definitionSets,
-																	ruleSetBags,
-																	scheduleOvetimeOnNonWorkingDays))
+																	ruleSetBags))
 					{
 						if (options.ShowDialog(this) != DialogResult.OK) return;
 						options.Refresh();

@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly int _resolution;
 		private readonly IList<IMultiplicatorDefinitionSet> _definitionSets;
 		private readonly IList<IRuleSetBag> _shiftBags;
-		private readonly bool _scheduleOvetimeOnNonWorkingDays;
 		private readonly IEnumerable<IScheduleTag> _scheduleTags;
 		private readonly OvertimePreferencesDialogPresenter _presenter;
 		
@@ -33,8 +32,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 										IEnumerable<IActivity> availableActivity, 
 										int resolution, 
 										IList<IMultiplicatorDefinitionSet> definitionSets,
-										IList<IRuleSetBag> shiftBags,
-										bool scheduleOvetimeOnNonWorkingDays)
+										IList<IRuleSetBag> shiftBags)
 			: this()
 		{
 			_scheduleTags = scheduleTags;
@@ -43,7 +41,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_resolution = resolution;
 			_definitionSets = definitionSets;
 			_shiftBags = shiftBags;
-			_scheduleOvetimeOnNonWorkingDays = scheduleOvetimeOnNonWorkingDays;
 			_overtimePreferences = new OvertimePreferences();	
 			_presenter = new OvertimePreferencesDialogPresenter(this);
 			
@@ -72,23 +69,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void initShiftBags()
 		{
-			if (_scheduleOvetimeOnNonWorkingDays)
-			{
-				var noneRuleSetBag = new RuleSetBag {Description = new Description(UserTexts.Resources.None)};
-				_shiftBags.Insert(0, noneRuleSetBag);
-				comboBoxShiftBags.DataSource = _shiftBags;
-				comboBoxShiftBags.DisplayMember = "Description";
-				if (_overtimePreferences.ShiftBagToUse == null)
-					comboBoxShiftBags.SelectedIndex = 0;
-				else
-					comboBoxShiftBags.SelectedItem = _overtimePreferences.ShiftBagToUse;
-			}
+			var noneRuleSetBag = new RuleSetBag {Description = new Description(UserTexts.Resources.None)};
+			_shiftBags.Insert(0, noneRuleSetBag);
+			comboBoxShiftBags.DataSource = _shiftBags;
+			comboBoxShiftBags.DisplayMember = "Description";
+			if (_overtimePreferences.ShiftBagToUse == null)
+				comboBoxShiftBags.SelectedIndex = 0;
 			else
-			{
-				label6.Visible = false;
-				label7.Visible = false;
-				comboBoxShiftBags.Visible = false;
-			}
+				comboBoxShiftBags.SelectedItem = _overtimePreferences.ShiftBagToUse;
 		}
 
 		private void overtimePreferencesDialogLoad(object sender, EventArgs e)
