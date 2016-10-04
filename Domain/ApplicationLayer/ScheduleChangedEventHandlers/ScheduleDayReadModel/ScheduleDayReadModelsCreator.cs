@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			ret.ColorCode = schedule.DisplayColor;
 			ret.Workday = schedule.IsWorkday;
 			ret.NotScheduled = schedule.NotScheduled;
+			ret.Version = schedule.Version;
 
 			return ret;
 		}

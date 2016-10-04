@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		public TimeSpan WorkTime { get { return TimeSpan.FromTicks(WorkTimeTicks); } }
 		public long ContractTimeTicks { get; set; }
 		public TimeSpan ContractTime { get { return TimeSpan.FromTicks(ContractTimeTicks); } }
+		public int Version { get; set; }
 
 		public bool Equals(ScheduleDayReadModel other)
 		{

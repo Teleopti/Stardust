@@ -19,10 +19,22 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IList<ScheduleDayReadModel> ReadModelsOnPerson(DateOnly startDate, DateOnly toDate, Guid personId)
 		{
             return _currentUnitOfWork.Session().CreateSQLQuery(
-				"SELECT PersonId, BelongsToDate AS Date, StartDateTime, EndDateTime, Workday, Label, DisplayColor AS ColorCode, WorkTime AS WorkTimeTicks, ContractTime AS ContractTimeTicks, NotScheduled FROM ReadModel.ScheduleDay WHERE PersonId=:personid AND BelongsToDate Between :startdate AND :enddate")
-				.SetGuid("personid", personId)
-				.SetDateOnly("startdate", startDate)
-				.SetDateOnly("enddate", toDate)
+				$@"SELECT 
+						PersonId, 
+						BelongsToDate AS Date, 
+						StartDateTime, 
+						EndDateTime, 
+						Workday, 
+						Label, 
+						DisplayColor AS ColorCode, 
+						WorkTime AS WorkTimeTicks, 
+						ContractTime AS ContractTimeTicks, 
+						NotScheduled 
+					FROM ReadModel.ScheduleDay 
+					WHERE PersonId=:{nameof(personId)} AND BelongsToDate Between :{nameof(startDate)} AND :{nameof(toDate)}")
+				.SetGuid(nameof(personId), personId)
+				.SetDateOnly(nameof(startDate), startDate)
+				.SetDateOnly(nameof(toDate), toDate)
 				.SetResultTransformer(Transformers.AliasToBean(typeof (ScheduleDayReadModel)))
 				.SetReadOnly(true)
 				.List<ScheduleDayReadModel>();
@@ -31,46 +43,46 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public void ClearPeriodForPerson(DateOnlyPeriod period, Guid personId)
 		{
             _currentUnitOfWork.Session().CreateSQLQuery(
-				"DELETE FROM ReadModel.ScheduleDay WHERE PersonId=:person AND BelongsToDate BETWEEN :StartDate AND :EndDate")
-				.SetGuid("person", personId)
-				.SetDateOnly("StartDate", period.StartDate)
-				.SetDateOnly("EndDate", period.EndDate)
+				$"DELETE FROM ReadModel.ScheduleDay WHERE PersonId=:{nameof(personId)} AND BelongsToDate BETWEEN :{nameof(period.StartDate)} AND :{nameof(period.EndDate)}")
+				.SetGuid(nameof(personId), personId)
+				.SetDateOnly(nameof(period.StartDate), period.StartDate)
+				.SetDateOnly(nameof(period.EndDate), period.EndDate)
 				.ExecuteUpdate();
 		}
 
 		public void SaveReadModel(ScheduleDayReadModel model)
 		{
-
 			_currentUnitOfWork.Session().CreateSQLQuery(
-					@"
-					exec [ReadModel].[UpdateScheduleDay] 
-					@PersonId=:PersonId,
-					@BelongsToDate=:BelongsToDate,
-					@StartDateTime=:StartDateTime,
-					@EndDateTime=:EndDateTime,
-					@Workday=:Workday,
-					@WorkTime=:WorkTime,
-					@ContractTime=:ContractTime,
-					@Label=:Label,
-					@DisplayColor=:DisplayColor,
-					@NotScheduled=:NotScheduled")
-					.SetGuid("PersonId", model.PersonId)
-					.SetDateTime("StartDateTime", model.StartDateTime)
-					.SetDateTime("EndDateTime", model.EndDateTime)
-					.SetInt64("WorkTime", model.WorkTime.Ticks)
-					.SetInt64("ContractTime", model.ContractTime.Ticks)
-					.SetBoolean("Workday", model.Workday)
-					.SetString("Label", model.Label)
-					.SetInt32("DisplayColor", model.DisplayColor.ToArgb())
-					.SetDateOnly("BelongsToDate", model.BelongsToDate)
-					.SetBoolean("NotScheduled", model.NotScheduled)
+					$@"
+					EXEC [ReadModel].[UpdateScheduleDay] 
+						@PersonId=:{nameof(model.PersonId)},
+						@BelongsToDate=:{nameof(model.BelongsToDate)},
+						@StartDateTime=:{nameof(model.StartDateTime)},
+						@EndDateTime=:{nameof(model.EndDateTime)},
+						@Workday=:{nameof(model.Workday)},
+						@WorkTime=:{nameof(model.WorkTime)},
+						@ContractTime=:{nameof(model.ContractTime)},
+						@Label=:{nameof(model.Label)},
+						@DisplayColor=:{nameof(model.DisplayColor)},
+						@NotScheduled=:{nameof(model.NotScheduled)},
+						@Version=:{nameof(model.Version)}")
+					.SetGuid(nameof(model.PersonId), model.PersonId)
+					.SetDateTime(nameof(model.StartDateTime), model.StartDateTime)
+					.SetDateTime(nameof(model.EndDateTime), model.EndDateTime)
+					.SetInt64(nameof(model.WorkTime), model.WorkTime.Ticks)
+					.SetInt64(nameof(model.ContractTime), model.ContractTime.Ticks)
+					.SetBoolean(nameof(model.Workday), model.Workday)
+					.SetString(nameof(model.Label), model.Label)
+					.SetInt32(nameof(model.DisplayColor), model.DisplayColor.ToArgb())
+					.SetDateOnly(nameof(model.BelongsToDate), model.BelongsToDate)
+					.SetBoolean(nameof(model.NotScheduled), model.NotScheduled)
+					.SetParameter(nameof(model.Version), model.Version)
 					.ExecuteUpdate();
 		}
 
 		public bool IsInitialized()
 		{
-            var result = _currentUnitOfWork.Session().CreateSQLQuery(
-				"SELECT TOP 1 * FROM ReadModel.ScheduleDay")
+            var result = _currentUnitOfWork.Session().CreateSQLQuery("SELECT TOP 1 * FROM ReadModel.ScheduleDay")
 				.List();
 			return result.Count > 0;
 		}
