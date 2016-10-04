@@ -3,7 +3,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http.Controllers;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Filters
@@ -57,7 +56,6 @@ namespace Teleopti.Ccc.Web.Filters
 				throw new ArgumentNullException("actionContext");
 			}
 			actionContext.Response = actionContext.ControllerContext.Request.CreateErrorResponse(HttpStatusCode.Forbidden, UserTexts.Resources.NotAllowed);
-		} 
-
+		}
 	}
 }
