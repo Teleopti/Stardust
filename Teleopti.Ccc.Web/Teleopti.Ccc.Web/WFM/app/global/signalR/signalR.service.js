@@ -1,62 +1,61 @@
-﻿(function() {
-
+(function() {
     'use strict';
 
-    angular.module('wfm.signalR',[])
+    angular
+        .module('wfm.signalR', [])
         .constant('$', window.jQuery)
-        .service('signalRSVC', ['$', '$timeout', signalRService]);
+        .service('signalRSVC', signalRSVC);
 
-    function signalRService($, $timeout) {
-        var service = this;
-        var hub = $.connection.MessageBrokerHub;
-        var pendingMessage = [];
-        var messageHandlingTimeout = null;
-	    var messageHandlers = [];
+    signalRSVC.$inject = ['$', '$timeout'];
 
-		service.subscribe = function (options, messsageHandler) {
-			messageHandlers[options.DomainType] = messsageHandler;
-			hub.client.onEventMessage = function (message) {
-				messageHandlers[message.DomainType](message);
-			}
+    function signalRSVC($, $timeout) {
+      var hub = $.connection.MessageBrokerHub;
+      var pendingMessage = [];
+      var messageHandlingTimeout = null;
+      var messageHandlers = [];
 
-            setNegotiationLocation();
+      this.subscribe = subscribe;
+      this.subscribeBatchMessage = subscribeBatchMessage;
 
-            connectToServerAddSubscription(options);
+      function subscribe(options, messsageHandler) {
+        messageHandlers[options.DomainType] = messsageHandler;
+        hub.client.onEventMessage = function (message) {
+          messageHandlers[message.DomainType](message);
         }
+          setNegotiationLocation();
+          connectToServerAddSubscription(options);
+      }
 
-        service.subscribeBatchMessage = function(options, messageHandler, timeout) {
-            $.connection.hub.stop();
-            hub.client.onEventMessage = function(message) {
-                pendingMessage.push(message);
-                messageHandlingTimeout !== null && $timeout.cancel(messageHandlingTimeout);
+      function subscribeBatchMessage(options, messageHandler, timeout) {
+          $.connection.hub.stop();
+          hub.client.onEventMessage = function(message) {
+              pendingMessage.push(message);
+              messageHandlingTimeout !== null && $timeout.cancel(messageHandlingTimeout);
 
-                messageHandlingTimeout = $timeout(function() {
-                    messageHandler(pendingMessage);
-                    resetPendingMessages();
-                }, timeout);
-            };
+              messageHandlingTimeout = $timeout(function() {
+                  messageHandler(pendingMessage);
+                  resetPendingMessages();
+              }, timeout);
+          }
+          setNegotiationLocation();
+          connectToServerAddSubscription(options);
+      }
 
-            setNegotiationLocation();
+      function resetPendingMessages() {
+          pendingMessage = [];
+          messageHandlingTimeout = null;
+      }
 
-            connectToServerAddSubscription(options);
-        }
+      function setNegotiationLocation() {
+          $.connection.hub.url = '../signalr';
+      }
 
-        function resetPendingMessages() {
-            pendingMessage = [];
-            messageHandlingTimeout = null;
-        }
-
-        function setNegotiationLocation() {
-            $.connection.hub.url = '../signalr';
-        }
-
-        function connectToServerAddSubscription(options) {
-            $.connection.hub.start().done(function() {
-                hub.server.addSubscription(options);
-            }).fail(function(error) {
-                //todo: notification.notify();
-            });
-        }
-
+      function connectToServerAddSubscription(options) {
+          $.connection.hub.start().done(function() {
+              hub.server.addSubscription(options);
+          }).fail(function(error) {
+              //todo: notification.notify();
+          });
+      }
     }
 })();
