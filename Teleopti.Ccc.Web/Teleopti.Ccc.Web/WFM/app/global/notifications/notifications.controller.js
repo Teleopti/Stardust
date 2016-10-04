@@ -11,7 +11,7 @@
         var vm = this;
 
 				vm.notificationResult = [];
-				NotificationsSvrc.getNotifications.query({ }).$promise.then(function (result) {
+				NotificationsSvrc.getNotifications().then(function (result) {
 					vm.notificationResult = result;
 				});
     }

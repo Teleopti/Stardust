@@ -17,7 +17,7 @@
 				function getNotifications() {
 					return $resource('../api/notifications', {}, {
 						query: { method: 'GET', params: { }, isArray: true }
-					});
+					}).query().$promise;
 				}
     }
 })();
