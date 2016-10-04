@@ -15,9 +15,11 @@
               id: selectedItem.Id
             })
             .$promise.then(function (result) {
-              startTime = $filter('date')(result.latestIntervalTime.StartTime, 'shortTime');
-              endTime = $filter('date')(result.latestIntervalTime.EndTime, 'shortTime');
-            },
+			          if (result.latestIntervalTime) {
+				          startTime = $filter('date')(result.latestIntervalTime.StartTime, 'shortTime');
+				          endTime = $filter('date')(result.latestIntervalTime.EndTime, 'shortTime');
+			          }
+		          },
             function (error) {
               return;
             });
