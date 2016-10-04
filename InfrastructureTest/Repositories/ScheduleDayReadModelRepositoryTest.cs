@@ -11,7 +11,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-	[TestFixture, Category("LongRunning")]
+	[TestFixture]
+	[Category("LongRunning")]
 	public class ScheduleDayReadModelRepositoryTest : DatabaseTest
 	{
 		private ScheduleDayReadModelRepository _target;
@@ -57,7 +58,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				EndDateTime = new DateTime(2012, 8, 29, 17, 0, 0),
 				Label = "DY",
 				PersonId = personId,
-				Workday = true
+				Workday = true,
+				Version = 1
 			};
 			_target.SaveReadModel(model);
 		}

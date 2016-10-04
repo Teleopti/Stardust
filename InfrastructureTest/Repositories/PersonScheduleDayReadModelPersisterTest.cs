@@ -16,7 +16,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-	[TestFixture, Category("LongRunning")]
+	[TestFixture]
+	[Category("LongRunning")]
 	public class PersonScheduleDayReadModelPersisterTest : DatabaseTest
 	{
 		[Test]
@@ -36,7 +37,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				Start = date.AddHours(10),
 				End = date.AddHours(18),
 				Model = "{shift: blablabla}",
-				ScheduleLoadTimestamp = DateTime.UtcNow
+				ScheduleLoadTimestamp = DateTime.UtcNow,
+				Version = 1
 			};
 
 			Assert.That(target.IsInitialized(), Is.False);
@@ -66,8 +68,9 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 					Start = new DateTime(2012, 8, 29, 10, 0, 0, DateTimeKind.Utc),
 					End = new DateTime(2012, 8, 29, 18, 0, 0, DateTimeKind.Utc),
 					Model = shift,
-					ScheduleLoadTimestamp = DateTime.UtcNow
-				};
+					ScheduleLoadTimestamp = DateTime.UtcNow,
+					Version = 1
+			};
 
 			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(model.Date), new DateOnly(model.Date)), personId,Guid.NewGuid(), new[] { model }, false);
 		}
@@ -86,8 +89,9 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 					Start = new DateTime(2012, 8, 29, 10, 0, 0, DateTimeKind.Utc),
 					End = new DateTime(2012, 8, 29, 18, 0, 0, DateTimeKind.Utc),
 					Model = "{shift: blablabla}",
-					ScheduleLoadTimestamp = DateTime.UtcNow
-				};
+					ScheduleLoadTimestamp = DateTime.UtcNow,
+				Version = 1
+			};
 
 			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(model.Date), new DateOnly(model.Date)), model.PersonId,Guid.NewGuid(), new[] { model }, false);
 
@@ -109,7 +113,8 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 				Start = date.AddHours(10),
 				End = date.AddHours(18),
 				Model = "{shift: blablabla}",
-				ScheduleLoadTimestamp = DateTime.UtcNow
+				ScheduleLoadTimestamp = DateTime.UtcNow,
+				Version = 1
 			};
 
 			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), readModel.PersonId, Guid.NewGuid(), new[] { readModel }, false);
@@ -133,7 +138,8 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 				Start = date.AddHours(10),
 				End = date.AddHours(18),
 				Model = "{shift: blablabla}",
-				ScheduleLoadTimestamp = DateTime.UtcNow
+				ScheduleLoadTimestamp = DateTime.UtcNow,
+				Version = 1
 			};
 
 			var anotherReadModel = new PersonScheduleDayReadModel
@@ -143,7 +149,8 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 				Start = date.AddHours(10),
 				End = date.AddHours(18),
 				Model = "{shift: blablabla}",
-				ScheduleLoadTimestamp = DateTime.UtcNow
+				ScheduleLoadTimestamp = DateTime.UtcNow,
+				Version = 1
 			};
 
 			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), readModel.PersonId, buId, new[] { readModel, anotherReadModel }, false);
@@ -172,7 +179,8 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 				Start = date.AddHours(10),
 				End = date.AddHours(18),
 				Model = "{shift: blablabla}",
-				ScheduleLoadTimestamp = oldTimestamp
+				ScheduleLoadTimestamp = oldTimestamp,
+				Version = 1
 			};
 
 			var newerReadModel = new PersonScheduleDayReadModel
@@ -183,7 +191,8 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 				End = date.AddHours(18),
 				IsDayOff = true,
 				Model = "{shift: blablabla}",
-				ScheduleLoadTimestamp = oldTimestamp.AddHours(1)
+				ScheduleLoadTimestamp = oldTimestamp.AddHours(1),
+				Version = 2
 			};
 
 			var buId = Guid.NewGuid();
@@ -218,7 +227,8 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 				End = date.AddHours(18),
 				IsDayOff = false,
 				Model = "{shift: blablabla}",
-				ScheduleLoadTimestamp = oldTimestamp
+				ScheduleLoadTimestamp = oldTimestamp,
+				Version = 1
 			};
 
 			var newTimestampReadModel = new PersonScheduleDayReadModel
@@ -229,7 +239,8 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 				End = date.AddHours(18),
 				IsDayOff = true,
 				Model = "{shift: blablabla}",
-				ScheduleLoadTimestamp = oldTimestamp.AddHours(1)
+				ScheduleLoadTimestamp = oldTimestamp.AddHours(1),
+				Version = 2
 			};
 
 			var buId = Guid.NewGuid();
@@ -266,7 +277,8 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 				End = date.AddHours(18),
 				IsDayOff = false,
 				Model = "{shift: blablabla}",
-				ScheduleLoadTimestamp = oldTimestamp
+				ScheduleLoadTimestamp = oldTimestamp,
+				Version = 1
 			};
 
 			var newTimestampReadModel = new PersonScheduleDayReadModel
@@ -277,7 +289,8 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 				End = date.AddHours(18),
 				IsDayOff = true,
 				Model = "{shift: blablabla}",
-				ScheduleLoadTimestamp = oldTimestamp.AddHours(1)
+				ScheduleLoadTimestamp = oldTimestamp.AddHours(1),
+				Version = 2
 			};
 
 			var buId = Guid.NewGuid();
@@ -316,7 +329,8 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 				Start = date.AddHours(10),
 				End = date.AddHours(18),
 				Model = "{shift: blablabla}",
-				ScheduleLoadTimestamp = oldTimestamp
+				ScheduleLoadTimestamp = oldTimestamp,
+				Version = 1
 			};
 
 			var newerReadModel = new PersonScheduleDayReadModel
@@ -327,7 +341,8 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 				End = date.AddHours(18),
 				IsDayOff = true,
 				Model = "{shift: blablabla}",
-				ScheduleLoadTimestamp = oldTimestamp.AddHours(1)
+				ScheduleLoadTimestamp = oldTimestamp.AddHours(1),
+				Version = 2
 			};
 
 			var buId = Guid.NewGuid();
