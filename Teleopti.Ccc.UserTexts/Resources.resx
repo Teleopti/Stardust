@@ -14986,16 +14986,16 @@ These options are activated:
     <value>Internal Note</value>
     <comment>Internal Note</comment>
   </data>
-  <data name="AllTime" xml:space="preserve">
-    <value>All time</value>
-    <comment>All time</comment>
+  <data name="Full" xml:space="preserve">
+    <value>Full</value>
+    <comment>Full</comment>
   </data>
   <data name="MatchColon" xml:space="preserve">
     <value>Match:</value>
     <comment>Match:</comment>
   </data>
-  <data name="PartOfTime" xml:space="preserve">
-    <value>Part of time</value>
-    <comment>Part of time</comment>
+  <data name="FullOrPartial" xml:space="preserve">
+    <value>Full or partial</value>
+    <comment>Full or partial</comment>
   </data>
 </root>

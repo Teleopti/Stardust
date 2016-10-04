@@ -392,10 +392,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.tableLayoutPanel4.SetColumnSpan(this.radioButtonAll, 2);
 			this.radioButtonAll.Location = new System.Drawing.Point(97, 83);
 			this.radioButtonAll.Name = "radioButtonAll";
-			this.radioButtonAll.Size = new System.Drawing.Size(76, 19);
+			this.radioButtonAll.Size = new System.Drawing.Size(54, 19);
 			this.radioButtonAll.TabIndex = 5;
 			this.radioButtonAll.TabStop = true;
-			this.radioButtonAll.Text = "xxAllTime";
+			this.radioButtonAll.Text = "xxFull";
 			this.radioButtonAll.UseVisualStyleBackColor = true;
 			// 
 			// radioButtonPart
@@ -404,9 +404,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.tableLayoutPanel4.SetColumnSpan(this.radioButtonPart, 2);
 			this.radioButtonPart.Location = new System.Drawing.Point(97, 109);
 			this.radioButtonPart.Name = "radioButtonPart";
-			this.radioButtonPart.Size = new System.Drawing.Size(96, 19);
+			this.radioButtonPart.Size = new System.Drawing.Size(100, 19);
 			this.radioButtonPart.TabIndex = 6;
-			this.radioButtonPart.Text = "xxPartOfTime";
+			this.radioButtonPart.Text = "xxFullOrPartial";
 			this.radioButtonPart.UseVisualStyleBackColor = true;
 			// 
 			// errorProvider1

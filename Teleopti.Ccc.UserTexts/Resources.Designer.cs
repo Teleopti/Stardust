@@ -2312,15 +2312,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All time.
-        /// </summary>
-        public static string AllTime {
-            get {
-                return ResourceManager.GetString("AllTime", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to All Unavailable.
         /// </summary>
         public static string AllUnavailable {
@@ -11724,6 +11715,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Full.
+        /// </summary>
+        public static string Full {
+            get {
+                return ResourceManager.GetString("Full", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Full Day.
         /// </summary>
         public static string FullDay {
@@ -11774,6 +11774,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string FullName {
             get {
                 return ResourceManager.GetString("FullName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Full or partial.
+        /// </summary>
+        public static string FullOrPartial {
+            get {
+                return ResourceManager.GetString("FullOrPartial", resourceCulture);
             }
         }
         
@@ -20294,15 +20303,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Participants {
             get {
                 return ResourceManager.GetString("Participants", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Part of time.
-        /// </summary>
-        public static string PartOfTime {
-            get {
-                return ResourceManager.GetString("PartOfTime", resourceCulture);
             }
         }
         

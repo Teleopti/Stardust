@@ -148,6 +148,7 @@ ResourcePlanner_ScheduleOvertimeOnNonWorkingDays_38025 = true
 ResourcePlanner_CascadingSkills_38524 = true
 ResourcePlanner_CascadingSkillsGUI_40018 = RC #Hold release of Cascading UI until we have a proper UI
 ResourcePlanner_CalculateFarAwayTimeZones_40646 = RC
+ResourcePlanner_FilterOvertimeAvail_37113 = RC
 
 Wfm_DisplayOnlineHelp_39402 = RC
 

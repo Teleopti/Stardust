@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 	public partial class FilterOvertimeAvailabilityView : BaseDialogForm
 	{
 		private readonly FilterOvertimeAvailabilityPresenter _presenter;
-		public FilterOvertimeAvailabilityView(DateOnly defaultDate, ISchedulerStateHolder schedulerStateHolder)
+		public FilterOvertimeAvailabilityView(DateOnly defaultDate, ISchedulerStateHolder schedulerStateHolder, bool useAllowIntersect)
 		{
 			InitializeComponent();
 			outlookTimePickerFrom.EnableNull = false;
@@ -21,6 +21,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			datePicker.Value = defaultDate.Date;
 			datePicker.SetCultureInfoSafe(CultureInfo.CurrentCulture);
 			SetTexts();
+
+			labelMatch.Visible = useAllowIntersect;
+			radioButtonAll.Visible = useAllowIntersect;
+			radioButtonPart.Visible = useAllowIntersect;
+
 			_presenter = new FilterOvertimeAvailabilityPresenter(schedulerStateHolder);
 		}
 

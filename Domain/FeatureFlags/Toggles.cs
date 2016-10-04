@@ -136,6 +136,7 @@
 		ResourcePlanner_CascadingSkills_38524,
 		ResourcePlanner_CascadingSkillsGUI_40018,
 		ResourcePlanner_CalculateFarAwayTimeZones_40646,
+		ResourcePlanner_FilterOvertimeAvail_37113,
 
 		Wfm_DisplayOnlineHelp_39402,
 
