@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			InnerGoto(new Uri(url), interceptors);
 		}
 
-		private static bool _nested = false;
+		private static bool _nested;
 
 		private static void InnerGoto(Uri url, params INavigationInterceptor[] interceptors)
 		{

@@ -1,8 +1,5 @@
-using System.Globalization;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
-using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WebBehaviorTest.Data;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
@@ -18,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I initiate '([a-z|\s]*)'")]
 		public void WhenIClickButtonWithClass(CssClass cssClass)
 		{
-			Browser.Interactions.ClickUsingJQuery(string.Format("button.{0}", cssClass.Name));
+			Browser.Interactions.ClickUsingJQuery(string.Format("button.{0}:enabled", cssClass.Name));
 		}
 
 		// I click agent 'mathias stenbom'

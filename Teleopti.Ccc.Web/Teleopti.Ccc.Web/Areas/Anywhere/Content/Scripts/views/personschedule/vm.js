@@ -42,7 +42,7 @@ define([
 
 		this.Resources = resources;
 		
-		this.Loading = ko.observable(false);
+		this.Loading = ko.observable(true);
 		
 		this.Persons = ko.observableArray();
 
