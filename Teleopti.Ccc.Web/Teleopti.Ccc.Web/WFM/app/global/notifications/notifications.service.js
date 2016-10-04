@@ -1,10 +1,23 @@
-﻿'use strict';
+(function() {
+    'use strict';
 
-var restNotificationService = angular.module('restNotificationService', ['ngResource']);
-restNotificationService.service('NotificationsSvrc', [
-	'$resource', function ($resource) {
-		this.getNotifications = $resource('../api/notifications', {}, {
-			query: { method: 'GET', params: { }, isArray: true }
-		});
-	}
-]);
+    angular
+        .module('restNotificationService', ['ngResource'])
+        .factory('NotificationsSvrc', NotificationsSvrc);
+
+    NotificationsSvrc.$inject = ['$resource'];
+
+    function NotificationsSvrc($resource) {
+        var service = {
+            getNotifications: getNotifications
+        };
+
+        return service;
+
+				function getNotifications() {
+					return $resource('../api/notifications', {}, {
+						query: { method: 'GET', params: { }, isArray: true }
+					});
+				}
+    }
+})();

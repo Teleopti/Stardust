@@ -29,16 +29,15 @@ describe('NotificationsCtrl', function () {
 
 	it('not null', inject(function ($controller) {
 		var scope = $rootScope.$new();
-
-		$controller('NotificationsCtrl', { $scope: scope, NotificationsSvrc: mockNotificationService });
+		var vm = $controller('NotificationsCtrl', { $scope: scope, NotificationsSvrc: mockNotificationService });
 		expect($controller).not.toBe(null);
 	}));
 
 	it('contains atleast 5 notifications', inject( function ($controller) {
 		var scope = $rootScope.$new();
 
-		$controller('NotificationsCtrl', { $scope: scope, NotificationsSvrc: mockNotificationService });
+		var vm = $controller('NotificationsCtrl', { $scope: scope, NotificationsSvrc: mockNotificationService });
 		scope.$digest();
-		expect(scope.notificationResult.length).toEqual(5);
+		expect(vm.notificationResult.length).toEqual(5);
 	}));
 });

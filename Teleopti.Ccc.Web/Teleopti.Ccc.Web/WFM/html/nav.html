@@ -61,9 +61,9 @@
 								<div class="notification-list">
 									<h4>{{'Notifications'|translate}}
 									</h4>
-									<div ng-controller="NotificationsCtrl">
+									<div ng-controller="NotificationsCtrl as vm">
 										<ul class="notification-list wfm-simple-list">
-											<li ng-repeat="alarm in notificationResult" ng-if="alarm.length > 0">
+											<li ng-repeat="alarm in vm.notificationResult">
 												<i class="mdi mdi-alert-circle"></i>
 												<b>{{alarm.JobCategory}}</b>
 												<span class="pull-right">{{alarm.Timestamp | date:'HH:mm'}}</span>
