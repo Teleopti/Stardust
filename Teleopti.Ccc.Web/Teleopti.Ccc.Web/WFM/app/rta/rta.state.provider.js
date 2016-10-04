@@ -79,7 +79,7 @@ angular.module('wfm.rta').provider('RtaState', function() {
 				}
 			})
 			.state('rta.agents-skill-area', {
-				url: '/agents-skill-area/:skillAreaId&es',
+				url: '/agents-skill-area/:skillAreaId?es',
 				templateUrl: rtaAgentsTemplateUrl,
 				controller: 'RtaAgentsCtrl',
 				params: {
@@ -89,7 +89,7 @@ angular.module('wfm.rta').provider('RtaState', function() {
 				}
 			})
 			.state('rta.agents-skill', {
-				url: '/agents-skill/:skillId&es',
+				url: '/agents-skill/:skillId?es',
 				templateUrl: rtaAgentsTemplateUrl,
 				controller: 'RtaAgentsCtrl',
 				params: {
