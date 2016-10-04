@@ -6,11 +6,13 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
@@ -26,6 +28,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			system.UseTestDouble<CalculateResourceReadModel>().For<CalculateResourceReadModel>();
 			system.UseTestDouble<FakeExtractSkillStaffDataForResourceCalcualtion>().For<IExtractSkillStaffDataForResourceCalcualtion>();
+			system.UseTestDouble<StardustJobFeedback>().For<IStardustJobFeedback>();
 		}
 
 		[Test]
