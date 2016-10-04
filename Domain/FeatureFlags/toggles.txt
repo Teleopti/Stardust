@@ -206,4 +206,4 @@ AddActivity_TriggerResourceCalculation_39346 = RC
 AbsenceRequests_UseMultiRequestProcessing_39960 = RC
 AbsenceRequests_SpeedupIntradayRequests_40754 = RC
 ETL_EventbasedDate_39562 = RC
-ReadModel_ToHangfire_39147 = DEV
+ReadModel_ToHangfire_39147 = RC
