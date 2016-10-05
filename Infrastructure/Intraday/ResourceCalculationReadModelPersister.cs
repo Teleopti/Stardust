@@ -207,10 +207,6 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 
 		protected string AddArrayParameters(SqlCommand sqlCommand, Guid[] array, string paramName)
 		{
-			/* An array cannot be simply added as a parameter to a SqlCommand so we need to loop through things and add it manually. 
-			 * Each item in the array will end up being it's own SqlParameter so the return value for this must be used as part of the
-			 * IN statement in the CommandText.
-			 */
 			var parameters = new string[array.Length];
 			for (int i = 0; i < array.Length; i++)
 			{
