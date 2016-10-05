@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		// GOSH.. Sooo much text...
 		public void Start(string connectionString)
 		{
-			var retries = _config.ReadValue("HangfireAutomaticRetryAttempts", 10);
 			var jobExpiration = _config.ReadValue("HangfireJobExpirationSeconds", TimeSpan.FromHours(1).TotalSeconds);
 			var pollInterval = _config.ReadValue("HangfireQueuePollIntervalSeconds", TimeSpan.FromSeconds(2).TotalSeconds);
 			var jobExpirationCheck = _config.ReadValue("HangfireJobExpirationCheckIntervalSeconds", TimeSpan.FromMinutes(15).TotalSeconds);
@@ -61,11 +60,11 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			// for optimization, only add the filters that we currently use
 			// NOT FUTURE PROOF! DANGER DANGER!
 			GlobalJobFilters.Filters.Clear();
-			GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute
-			{
-				Attempts = retries,
-				OnAttemptsExceeded = AttemptsExceededAction.Fail
-			});
+			//GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute
+			//{
+			//	Attempts = 10,
+			//	OnAttemptsExceeded = AttemptsExceededAction.Fail
+			//});
 			GlobalJobFilters.Filters.Add(new JobExpirationTimeAttribute
 			{
 				JobExpirationTimeoutSeconds = (int) jobExpiration
@@ -92,7 +91,6 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			if (logger.IsDebugEnabled)
 			{
 				var hangfireConfigLog = "Hangfire setup: ";
-				hangfireConfigLog += $"{nameof(retries)}={retries}, ";
 				hangfireConfigLog += $"{nameof(jobExpiration)}={jobExpiration}, ";
 				hangfireConfigLog += $"{nameof(pollInterval)}={pollInterval}, ";
 				hangfireConfigLog += $"{nameof(jobExpirationCheck)}={jobExpirationCheck}, ";

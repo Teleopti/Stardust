@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -11,15 +12,14 @@ using Teleopti.Interfaces.Messages;
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
 	[TestFixture]
-	[AnalyticsDatabaseTest]
+	[HangfireTest]
 	public class HangfireQueueSelectionEventPublishingTest : ISetup
 	{
-		public HangfireUtilities Hangfire;
+		public Lazy<HangfireUtilities> Hangfire;
 		public IEventPublisher Publisher;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.AddService<HangfireEventClient>();// register over the fake, which already registeres over the common registration ;)
 			system.AddService<DefaultQueueHandler>();
 			system.AddService<OtherQueueHandler>();
 		}
@@ -29,8 +29,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			Publisher.Publish(new DefaultQueueEvent());
 
-			Hangfire.NumberOfJobsInQueue(Queues.Default).Should().Be(1);
-			Hangfire.NumberOfJobsInQueue(Queues.ScheduleChangesToday).Should().Be(0);
+			Hangfire.Value.NumberOfJobsInQueue(Queues.Default).Should().Be(1);
+			Hangfire.Value.NumberOfJobsInQueue(Queues.ScheduleChangesToday).Should().Be(0);
 		}
 
 		[Test]
@@ -38,8 +38,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			Publisher.Publish(new OtherQueueEvent());
 
-			Hangfire.NumberOfJobsInQueue(Queues.Default).Should().Be(0);
-			Hangfire.NumberOfJobsInQueue(Queues.ScheduleChangesToday).Should().Be(1);
+			Hangfire.Value.NumberOfJobsInQueue(Queues.Default).Should().Be(0);
+			Hangfire.Value.NumberOfJobsInQueue(Queues.ScheduleChangesToday).Should().Be(1);
 		}
 
 		public class DefaultQueueEvent : IEvent

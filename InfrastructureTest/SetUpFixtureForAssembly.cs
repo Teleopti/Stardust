@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { FeatureToggle = "http://notinuse" }, new FalseToggleManager())));
 			builder.RegisterType<FakeToggleManager>().As<IToggleManager>().SingleInstance();
 			builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
+			builder.RegisterType<FakeHangfireEventClient>().As<IHangfireEventClient>().SingleInstance();
 			var container = builder.Build();
 
 			IDictionary<string, string> appSettings = new Dictionary<string, string>();
@@ -54,8 +56,6 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
 			DataSource = DataSourceHelper.CreateDatabasesAndDataSource(container.Resolve<ICurrentTransactionHooks>(), DataSourceHelper.TestTenantName);
-
-			container.Resolve<HangfireClientStarter>().Start();
 
 			loggedOnPerson = PersonFactory.CreatePerson("logged on person");
 
@@ -70,7 +70,6 @@ namespace Teleopti.Ccc.InfrastructureTest
 			persistBusinessUnit();
 			deleteAllAggregates();
 			dataHash = 4566;
-			container.Resolve<HangfireUtilities>().CleanQueue();
 
 			DataSourceHelper.BackupApplicationDatabase(dataHash);
 			DataSourceHelper.BackupAnalyticsDatabase(dataHash);

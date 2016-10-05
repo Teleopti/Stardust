@@ -25,26 +25,20 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			_storage = new Lazy<JobStorage>(storage.GetJobStorage);
 		}
 
-		public void Enqueue(string displayName, string tenant, string queueName, string eventType, string serializedEvent, string handlerType)
+		public void Enqueue(string displayName, string tenant, string queueName, int attempts, string eventType, string serializedEvent, string handlerType)
 		{
-			_jobClient.Value.Enqueue<HangfireEventServer>(x => x.Process(displayName, tenant, queueName, eventType, serializedEvent, handlerType));
-		}
-
-		public void AddOrUpdateDaily(string displayName, string id, string tenant, string eventType, string serializedEvent, string handlerType, TimeZoneInfo timeZone)
-		{
-			Expression<Action<HangfireEventServer>> f = x => x.Process(displayName, tenant, null, eventType, serializedEvent, handlerType);
-			_recurringJob.Value.AddOrUpdate(id, Job.FromExpression(f), Cron.Daily(), timeZone);
+			_jobClient.Value.Enqueue<HangfireEventServer>(x => x.Process(displayName, tenant, queueName, attempts, eventType, serializedEvent, handlerType));
 		}
 
 		public void AddOrUpdateHourly(string displayName, string id, string tenant, string eventType, string serializedEvent, string handlerType)
 		{
-			Expression<Action<HangfireEventServer>> f = x => x.Process(displayName, tenant, null, eventType, serializedEvent, handlerType);
+			Expression<Action<HangfireEventServer>> f = x => x.Process(displayName, tenant, null, 1, eventType, serializedEvent, handlerType);
 			_recurringJob.Value.AddOrUpdate(id, Job.FromExpression(f), Cron.Hourly());
 		}
 
 		public void AddOrUpdateMinutely(string displayName, string id, string tenant, string eventType, string serializedEvent, string handlerType)
 		{
-			Expression<Action<HangfireEventServer>> f = x => x.Process(displayName, tenant, null, eventType, serializedEvent, handlerType);
+			Expression<Action<HangfireEventServer>> f = x => x.Process(displayName, tenant, null, 1, eventType, serializedEvent, handlerType);
 			_recurringJob.Value.AddOrUpdate(id, Job.FromExpression(f), Cron.Minutely());
 		}
 

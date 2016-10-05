@@ -5,14 +5,9 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
 	public class CannotPublishToHangfire : IHangfireEventClient
 	{
-		public void Enqueue(string displayName, string tenant, string queueName, string eventType, string serializedEvent, string handlerType)
+		public void Enqueue(string displayName, string tenant, string queueName, int attempts, string eventType, string serializedEvent, string handlerType)
 		{
 			throw new System.NotImplementedException();
-		}
-
-		public void AddOrUpdateDaily(string displayName, string id, string tenant, string eventType, string serializedEvent, string handlerType, TimeZoneInfo timeZone)
-		{
-			throw new NotImplementedException();
 		}
 
 		public void AddOrUpdateHourly(string displayName, string id, string tenant, string eventType, string serializedEvent, string handlerType)

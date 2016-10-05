@@ -43,26 +43,40 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		public void CleanQueue()
 		{
 			foreach (var queueName in Queues.OrderOfPriority())
+				DeleteJobs(() => _monitoring.EnqueuedJobs(queueName, 0, 10).Select(x => x.Key), WorkerIteration);
+			DeleteJobs(() => _monitoring.ScheduledJobs(0, 10).Select(x => x.Key), null);
+			DeleteJobs(() => _monitoring.FailedJobs(0, 10).Select(x => x.Key), null);
+			DeleteJobs(() => _monitoring.SucceededJobs(0, 10).Select(x => x.Key), null);
+		}
+
+		private void DeleteJobs(Func<IEnumerable<string>> ids, Action afterDelete)
+		{
+			var jobs = ids.Invoke();
+			while (jobs.Any())
 			{
-				var enqueued = _monitoring.EnqueuedJobs(queueName, 0, 1000);
-				while (enqueued.Count > 0)
+				jobs.ForEach(j =>
 				{
-					enqueued.ForEach(j =>
-					{
-						_backgroundJobs.Delete(j.Key);
-						// fake a worker processing the deleted job will remove it from the job queue
-						new Worker().Execute(
-							new BackgroundProcessContext(
-								"fake server",
-								JobStorage.Current,
-								new Dictionary<string, object>(),
-								new CancellationToken()
-							));
-					});
-					enqueued = _monitoring.EnqueuedJobs(queueName, 0, 1000);
-				}
+					_backgroundJobs.Delete(j);
+					afterDelete?.Invoke();
+				});
+				jobs = ids.Invoke();
 			}
-			
+		}
+
+		public void WorkerIteration()
+		{
+			// will hang if nothing to work with
+			var count = Queues.OrderOfPriority()
+				.Select(x => _monitoring.EnqueuedCount(x))
+				.Sum();
+			if (count > 0)
+				new Worker(Queues.OrderOfPriority().ToArray()).Execute(
+					new BackgroundProcessContext(
+						"fake server",
+						_storage,
+						new Dictionary<string, object>(),
+						new CancellationToken()
+					));
 		}
 
 		public void CancelQueue()
@@ -87,6 +101,11 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		public long NumberOfFailedJobs()
 		{
 			return _monitoring.FailedCount();
+		}
+
+		public long NumberOfScheduledJobs()
+		{
+			return _monitoring.ScheduledCount();
 		}
 
 		public void CleanFailedJobsBefore(DateTime time)
@@ -136,14 +155,17 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 
 				// requeue any scheduled retries if queue is empty
 				if (enqueuedCount == 0 && scheduledCount > 0)
-				{
-					_monitoring
-						.ScheduledJobs(0, 100)
-						.ForEach(j => _backgroundJobs.Requeue(j.Key));
-				}
+					RequeueScheduledJobs();
 
 				Thread.Sleep(20);
 			}
 		}
-    }
+
+		public void RequeueScheduledJobs()
+		{
+			_monitoring
+				.ScheduledJobs(0, 100)
+				.ForEach(j => _backgroundJobs.Requeue(j.Key));
+		}
+	}
 }

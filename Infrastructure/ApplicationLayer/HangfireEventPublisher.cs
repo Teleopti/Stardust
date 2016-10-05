@@ -10,6 +10,17 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
+
+	public class Attempts : Attribute
+	{
+		public int Retries { get; set; }
+
+		public Attempts(int retries)
+		{
+			Retries = retries;
+		}
+	}
+
 	public class HangfireEventPublisher : IEventPublisher, IRecurringEventPublisher
 	{
 		private const string delimiter = ":::";
@@ -36,7 +47,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			{
 				jobsFor(e).ForEach(j =>
 				{
-					_client.Enqueue(j.DisplayName, j.Tenant, j.QueueName, j.EventTypeName, j.Event, j.HandlerTypeName);
+					_client.Enqueue(j.DisplayName, j.Tenant, j.QueueName, j.Attempts, j.EventTypeName, j.Event, j.HandlerTypeName);
 				});
 			});
 		}
@@ -66,6 +77,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			public Type HandlerType;
 			public string HandlerTypeName;
 			public string QueueName;
+			public int Attempts;
 
 			public string IdForJob(IEvent @event)
 			{
@@ -91,7 +103,11 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				Event = serialized,
 				HandlerType = handlerType,
 				HandlerTypeName = $"{handlerType.FullName}, {handlerType.Assembly.GetName().Name}",
-				QueueName = _resolver.QueueTo(handlerType, @event)
+				QueueName = _resolver.QueueTo(handlerType, @event),
+				Attempts = _resolver
+							   .HandleMethodFor(handlerType, @event)
+							   .GetCustomAttributes(typeof(Attempts), true)
+							   .Cast<Attempts>().SingleOrDefault()?.Retries ?? 3
 			});
 		}
 
