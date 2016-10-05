@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Security
     {
         private const string Salt = "adgvabar4g61qt46gv";
 
-        public string EncryptString(string value)
+		public string EncryptString(string value)
         {
         	return EncryptString(value, Salt);
         }
