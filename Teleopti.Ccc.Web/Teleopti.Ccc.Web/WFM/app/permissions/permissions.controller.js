@@ -3,7 +3,7 @@
 	angular.module('wfm.permissions')
         .controller('PermissionsCtrl', [
 			'$scope', '$filter', 'PermissionsService', 'Roles', '$stateParams',
-			function($scope, $filter, Permissions, Roles, $stateParams) {
+			function($scope, $filter, PermissionsService, Roles, $stateParams) {
 				$scope.roleName = null;
 				$scope.roleDetails = 'functionsAvailable';
 
@@ -85,12 +85,12 @@
 				};
 
 				$scope.updateRole = function(role) {
-					Permissions.manageRole.update({ Id: role.Id, newDescription: role.DescriptionText });
+					PermissionsService.manageRole.update({ Id: role.Id, newDescription: role.DescriptionText });
 				};
 
 				$scope.submitRole = function(role, tempName){
 					if (tempName !== '') {
-						Permissions.manageRole.update({ Id: role.Id, newDescription: tempName });
+						PermissionsService.manageRole.update({ Id: role.Id, newDescription: tempName });
 						role.DescriptionText = tempName;
 					}
 					role.editing = false;
