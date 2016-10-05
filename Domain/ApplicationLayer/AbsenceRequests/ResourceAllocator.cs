@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			}
 
 			//Calculate resources on shortest common periods
-			var periods = getShortestCommonPeriods(skillStaffingIntervals).ToList();
+			var periods = getShortestCommonPeriods(skillStaffingIntervals, personRequest.Request.Period.StartDateTime, personRequest.Request.Period.EndDateTime).ToList();
 
 			var unmergedIntervalChanges = new List<StaffingIntervalChange>();
 			foreach (var period in periods)
@@ -87,20 +87,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 
 
-		private static IEnumerable<DateTimePeriod> getShortestCommonPeriods(List<SkillStaffingInterval> skillStaffingIntervals)
+		private static IEnumerable<DateTimePeriod> getShortestCommonPeriods(List<SkillStaffingInterval> skillStaffingIntervals, DateTime StartDateTime, DateTime EndDateTime)
 		{
 			var intervalWithShortestSkillInterval = skillStaffingIntervals.Aggregate((interval, nextInterval) => interval.GetTimeSpan() < nextInterval.GetTimeSpan() ? interval : nextInterval);
 			var shortestTimeSpan = intervalWithShortestSkillInterval.GetTimeSpan();
 
-			var intervalWithEarliestStartDate = skillStaffingIntervals.Aggregate((interval, nextInterval) => interval.StartDateTime < nextInterval.StartDateTime ? interval : nextInterval);
-			var earliestStartDateTime = intervalWithEarliestStartDate.StartDateTime;
-
-			var intervalWithLatestEndDate = skillStaffingIntervals.Aggregate((interval, nextInterval) => interval.StartDateTime < nextInterval.StartDateTime ? interval : nextInterval);
-			var latestEndDateTime = intervalWithLatestEndDate.EndDateTime;
-
-			var ret = new List<DateTimePeriod>(){new DateTimePeriod(earliestStartDateTime, earliestStartDateTime.Add(shortestTimeSpan))};
+			var ret = new List<DateTimePeriod>(){new DateTimePeriod(StartDateTime, StartDateTime.Add(shortestTimeSpan))};
 			
-			while (ret.Last().EndDateTime < latestEndDateTime)
+			while (ret.Last().EndDateTime < EndDateTime)
 			{
 				var startDateTime = ret.Last().EndDateTime;
 				var endDateTime = startDateTime.Add(shortestTimeSpan);
