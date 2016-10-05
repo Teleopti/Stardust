@@ -11,9 +11,9 @@ namespace Teleopti.Ccc.Domain.Optimization
     public class ScheduleMatrixPersonalSkillExtractor : ISkillExtractor
     {
         private readonly IScheduleMatrixPro _scheduleMatrix;
-	    private readonly IPersonalSkillsProvider _personalSkillsProvider;
+	    private readonly PersonalSkillsProvider _personalSkillsProvider;
 
-	    public ScheduleMatrixPersonalSkillExtractor(IScheduleMatrixPro scheduleMatrix, IPersonalSkillsProvider personalSkillsProvider)
+	    public ScheduleMatrixPersonalSkillExtractor(IScheduleMatrixPro scheduleMatrix, PersonalSkillsProvider personalSkillsProvider)
 	    {
 		    _scheduleMatrix = scheduleMatrix;
 		    _personalSkillsProvider = personalSkillsProvider;

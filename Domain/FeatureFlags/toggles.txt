@@ -144,7 +144,6 @@ Scheduler_IntradayOptimization_36617 = true
 WfmGlobalLayout_personalOptions_37114 = true
 
 ResourcePlanner_TeamBlockDayOffForIndividuals_37998 = false # needs to be false until we get further....
-ResourcePlanner_CascadingSkills_38524 = true
 ResourcePlanner_CascadingSkillsGUI_40018 = RC #Hold release of Cascading UI until we have a proper UI
 ResourcePlanner_CalculateFarAwayTimeZones_40646 = true
 ResourcePlanner_FilterOvertimeAvail_37113 = RC

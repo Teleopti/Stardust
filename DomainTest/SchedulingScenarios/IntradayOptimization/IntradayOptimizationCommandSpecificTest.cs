@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[DomainTest]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
 	[ShareLogonOnThreads]
-	public class IntradayOptimizationCommandSpecificTest : IntradayOptimizationScenario, ISetup
+	public class IntradayOptimizationCommandSpecificTest : ISetup
 	{
 		public FakeSkillRepository SkillRepository;
 		public FakePersonRepository PersonRepository;
@@ -33,11 +33,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public IPersonWeekViolatingWeeklyRestSpecification CheckWeeklyRestRule;
 		public IScheduleStorage ScheduleStorage;
 		public TrackOptimizeDaysForAgents TrackOptimizeDaysForAgents;
-
-		public IntradayOptimizationCommandSpecificTest() 
-			: base(true)
-		{
-		}
 
 		[Test]
 		public void ShouldNotResolveWeeklyRestIfCommandSaysItShouldNotRun()

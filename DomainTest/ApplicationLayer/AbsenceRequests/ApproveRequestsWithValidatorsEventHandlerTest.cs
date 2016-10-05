@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Budgeting;
+using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
@@ -362,7 +363,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		private IResourceOptimizationHelper createResourceOptimizationHelper()
 		{
-			return new ResourceOptimizationHelper(
+			//should really use ioc here instead...
+			return new CascadingResourceCalculation(
+
+			new ResourceOptimizationHelper(
 				new OccupiedSeatCalculator(),
 				new NonBlendSkillCalculator(),
 				new PersonSkillProvider(),
@@ -376,8 +380,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 						new FullIntervalFinder()
 						)
 					), new TimeZoneGuardWrapper(),
-				new ResourceCalculationContextFactory(new PersonSkillProvider(), new TimeZoneGuardWrapper())
-				);
+				new CascadingResourceCalculationContextFactory(new CascadingPersonSkillProvider(), new TimeZoneGuardWrapper())
+				), new ShovelResources(new AddResourcesToSubSkills(), new ReducePrimarySkillResources(), new SkillGroupPerActivityProvider(), new PrimarySkillOverstaff(), new FakeTimeZoneGuard()));
 		}
 
 		private void setPersonPeriodWithSkill(ISkill skill)

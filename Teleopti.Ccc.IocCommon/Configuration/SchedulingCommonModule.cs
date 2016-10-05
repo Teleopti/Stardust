@@ -75,22 +75,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PrimarySkillOverstaff>().SingleInstance();
 			builder.RegisterType<ReducePrimarySkillResources>().SingleInstance();
 			builder.RegisterType<SkillGroupPerActivityProvider>().SingleInstance();
-			if (_configuration.Toggle(Toggles.ResourcePlanner_CascadingSkills_38524))
-			{
-				builder.RegisterType<FullResourceCalculationWithCascading>().As<IFullResourceCalculation>().InstancePerLifetimeScope();
-				builder.RegisterType<ResourceOptimizationHelper>().SingleInstance();
-				builder.RegisterType<CascadingResourceCalculation>().As<IResourceOptimizationHelper>().AsSelf().SingleInstance();
-				builder.RegisterType<CascadingResourceCalculationContextFactory>().As<IResourceCalculationContextFactory>().SingleInstance();
-				builder.RegisterType<CascadingPersonSkillProvider>().SingleInstance();
-				builder.RegisterType<PersonalSkillsProvider>().As<IPersonalSkillsProvider>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<FullResourceCalculationWithoutCascading>().As<IFullResourceCalculation>().InstancePerLifetimeScope();
-				builder.RegisterType<ResourceOptimizationHelper>().As<IResourceOptimizationHelper>().SingleInstance();
-				builder.RegisterType<ResourceCalculationContextFactory>().As<IResourceCalculationContextFactory>().SingleInstance();
-				builder.RegisterType<PersonalSkillsProviderNoCascading>().As<IPersonalSkillsProvider>().SingleInstance();
-			}
+
+			builder.RegisterType<FullResourceCalculation>().InstancePerLifetimeScope();
+			builder.RegisterType<ResourceOptimizationHelper>().SingleInstance();
+			builder.RegisterType<CascadingResourceCalculation>().As<IResourceOptimizationHelper>().AsSelf().SingleInstance();
+			builder.RegisterType<CascadingResourceCalculationContextFactory>().SingleInstance();
+			builder.RegisterType<CascadingPersonSkillProvider>().SingleInstance();
+			builder.RegisterType<PersonalSkillsProvider>().SingleInstance();
+
 
 			builder.RegisterType<SharedResourceContextOldSchedulingScreenBehavior>().InstancePerLifetimeScope();
 			builder.RegisterType<SchedulerStateScheduleDayChangedCallback>().As<IScheduleDayChangeCallback>().InstancePerLifetimeScope();
@@ -127,7 +119,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DisableDeletedFilter>().As<IDisableDeletedFilter>().SingleInstance();
 			builder.RegisterType<InnerOptimizerHelperHelper>().As<IOptimizerHelperHelper>().SingleInstance();
 			builder.RegisterType<ResourceOptimizationHelperExtended>().As<IResourceOptimizationHelperExtended>().InstancePerLifetimeScope();
-			builder.RegisterType<DoFullResourceOptimizationOneTime>().InstancePerLifetimeScope();
 			builder.RegisterType<RequiredScheduleHelper>().As<IRequiredScheduleHelper>().InstancePerLifetimeScope();
 			builder.RegisterType<CommonStateHolder>().As<ICommonStateHolder>().InstancePerLifetimeScope();
 			builder.RegisterType<PeriodExtractorFromScheduleParts>().SingleInstance();

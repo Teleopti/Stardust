@@ -61,12 +61,12 @@ namespace Teleopti.Ccc.Win.Intraday
 		private bool _userWantsToCloseIntraday;
 		private MultipleHostControl shiftEditorHost;
 		private readonly IResourceOptimizationHelperExtended _resourceOptimizationHelperExtended;
-		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 
 		public IntradayViewContent(IntradayPresenter presenter, IIntradayView owner, IEventAggregator eventAggregator, ISchedulerStateHolder schedulerStateHolder,
-			 IntradaySettingManager settingManager, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, IResourceOptimizationHelperExtended resourceOptimizationHelperExtended, 
-			 IResourceCalculationContextFactory resourceCalculationContextFactory, IScheduleDayChangeCallback scheduleDayChangeCallback)
+			 IntradaySettingManager settingManager, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, IResourceOptimizationHelperExtended resourceOptimizationHelperExtended,
+			 CascadingResourceCalculationContextFactory resourceCalculationContextFactory, IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
 			if (presenter == null) throw new ArgumentNullException("presenter");
 			if (owner == null) throw new ArgumentNullException("owner");

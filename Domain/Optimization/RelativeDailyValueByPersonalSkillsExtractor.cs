@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	    private readonly ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
 	    private readonly ISkillIntervalDataDivider _skillIntervalDataDivider;
 	    private readonly ISkillIntervalDataAggregator _skillIntervalDataAggregator;
-	    private readonly IPersonalSkillsProvider _personalSkillsProvider;
+	    private readonly PersonalSkillsProvider _personalSkillsProvider;
 	    private readonly IScheduleMatrixPro _scheduleMatrix;
 
 	    public RelativeDailyValueByPersonalSkillsExtractor(IScheduleMatrixPro scheduleMatrix,
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		                                                       skillStaffPeriodToSkillIntervalDataMapper,
 	                                                       ISkillIntervalDataDivider skillIntervalDataDivider,
 															ISkillIntervalDataAggregator skillIntervalDataAggregator,
-															IPersonalSkillsProvider personalSkillsProvider)
+															PersonalSkillsProvider personalSkillsProvider)
 	    {
 		    _scheduleMatrix = scheduleMatrix;
 		    _advancedPreferences = advancedPreferences;

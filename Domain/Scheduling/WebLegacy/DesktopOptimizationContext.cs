@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
 	public class DesktopOptimizationContext : FillSchedulerStateHolder, ISynchronizeIntradayOptimizationResult, IOptimizationPreferencesProvider, IPeopleInOrganization, ICurrentIntradayOptimizationCallback
 	{
-		public DesktopOptimizationContext(IPersonalSkillsProvider personalSkillsProvider) : base(personalSkillsProvider)
+		public DesktopOptimizationContext(PersonalSkillsProvider personalSkillsProvider) : base(personalSkillsProvider)
 		{
 		}
 

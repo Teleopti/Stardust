@@ -19,11 +19,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		private readonly IDailySkillForecastAndScheduledValueCalculator _dailySkillForecastAndScheduledValueCalculator;
 		private readonly IDeviationStatisticData _deviationStatisticData;
-		private readonly IPersonalSkillsProvider _personalSkillsProvider;
+		private readonly PersonalSkillsProvider _personalSkillsProvider;
 
 		public DayOffOptimizerPreMoveResultPredictor(IDailySkillForecastAndScheduledValueCalculator dailySkillForecastAndScheduledValueCalculator, 
 																		IDeviationStatisticData deviationStatisticData,
-																		IPersonalSkillsProvider personalSkillsProvider)
+																		PersonalSkillsProvider personalSkillsProvider)
 
 		{
 			_dailySkillForecastAndScheduledValueCalculator = dailySkillForecastAndScheduledValueCalculator;

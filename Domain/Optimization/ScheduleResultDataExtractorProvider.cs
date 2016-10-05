@@ -18,9 +18,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 
     public class ScheduleResultDataExtractorProvider : IScheduleResultDataExtractorProvider
     {
-	    private readonly IPersonalSkillsProvider _personalSkillsProvider;
+	    private readonly PersonalSkillsProvider _personalSkillsProvider;
 
-	    public ScheduleResultDataExtractorProvider(IPersonalSkillsProvider personalSkillsProvider)
+	    public ScheduleResultDataExtractorProvider(PersonalSkillsProvider personalSkillsProvider)
 	    {
 		    _personalSkillsProvider = personalSkillsProvider;
 	    }

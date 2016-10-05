@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<IWorkShiftFinderResultHolder> _workShiftFinderResultHolder;
 		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-		private readonly IPersonalSkillsProvider _personalSkillsProvider;
+		private readonly PersonalSkillsProvider _personalSkillsProvider;
 		private readonly IResourceCalculateDaysDecider _resourceCalculateDaysDecider;
 
 		public ClassicDaysOffOptimizationCommand(IOptimizerHelperHelper optimizerHelperHelper, 
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
 			IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
-			IPersonalSkillsProvider personalSkillsProvider,
+			PersonalSkillsProvider personalSkillsProvider,
 			IResourceCalculateDaysDecider resourceCalculateDaysDecider)
 		{
 			_optimizerHelperHelper = optimizerHelperHelper;

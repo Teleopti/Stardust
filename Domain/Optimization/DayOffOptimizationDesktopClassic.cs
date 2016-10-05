@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IResourceOptimizationHelperExtended _resouceOptimizationHelperExtended;
 		private readonly WorkShiftBackToLegalStateServiceProFactory _workShiftBackToLegalStateServiceProFactory;
 		private readonly ScheduleBlankSpots _scheduleBlankSpots;
-		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 
 		public DayOffOptimizationDesktopClassic(ClassicDaysOffOptimizationCommand classicDaysOffOptimizationCommand,
 								IMatrixListFactory matrixListFactory,
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 								IResourceOptimizationHelperExtended resouceOptimizationHelperExtended,
 								WorkShiftBackToLegalStateServiceProFactory workShiftBackToLegalStateServiceProFactory,
 								ScheduleBlankSpots scheduleBlankSpots,
-								IResourceCalculationContextFactory resourceCalculationContextFactory)
+								CascadingResourceCalculationContextFactory resourceCalculationContextFactory)
 		{
 			_classicDaysOffOptimizationCommand = classicDaysOffOptimizationCommand;
 			_matrixListFactory = matrixListFactory;

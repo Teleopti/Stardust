@@ -9,9 +9,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class PersonSkillDayCreator : IPersonSkillDayCreator
 	{
-		private readonly IPersonalSkillsProvider _personalSkillsProvider;
+		private readonly PersonalSkillsProvider _personalSkillsProvider;
 
-		public PersonSkillDayCreator(IPersonalSkillsProvider personalSkillsProvider)
+		public PersonSkillDayCreator(PersonalSkillsProvider personalSkillsProvider)
 		{
 			_personalSkillsProvider = personalSkillsProvider;
 		}

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -11,7 +10,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
 	[DomainTest]
-	[Toggle(Toggles.ResourcePlanner_CascadingSkills_38524)]
 	public class CascadingResourceCalculationContextTest
 	{
 		public IResourceOptimizationHelper Target;

@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	{
 		private readonly LoaderForResourceCalculation _loaderForResourceCalculation;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
-		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 
-		public ExtractSkillStaffDataForResourceCalculation(LoaderForResourceCalculation loaderForResourceCalculation, IResourceOptimizationHelper resourceOptimizationHelper, IResourceCalculationContextFactory resourceCalculationContextFactory)
+		public ExtractSkillStaffDataForResourceCalculation(LoaderForResourceCalculation loaderForResourceCalculation, IResourceOptimizationHelper resourceOptimizationHelper, CascadingResourceCalculationContextFactory resourceCalculationContextFactory)
 		{
 			_loaderForResourceCalculation = loaderForResourceCalculation;
 			_resourceOptimizationHelper = resourceOptimizationHelper;

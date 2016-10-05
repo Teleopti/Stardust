@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 		private readonly IMatrixListFactory _matrixListFactory;
-		private readonly IPersonalSkillsProvider _personalSkillsProvider;
+		private readonly PersonalSkillsProvider _personalSkillsProvider;
 
 		public IntradayOptimizer2Creator(
 			IIntradayDecisionMaker decisionMaker,
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IScheduleDayEquator scheduleDayEquator,
 			IOptimizerHelperHelper optimizerHelperHelper, 
 			IMatrixListFactory matrixListFactory,
-			IPersonalSkillsProvider personalSkillsProvider)
+			PersonalSkillsProvider personalSkillsProvider)
 		{
 			_decisionMaker = decisionMaker;
 			_scheduleService = scheduleService;

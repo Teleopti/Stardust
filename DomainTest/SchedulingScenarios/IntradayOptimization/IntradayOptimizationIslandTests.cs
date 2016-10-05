@@ -19,12 +19,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
-	[TestFixture(false)]
-	[TestFixture(true)]
 	[DomainTest]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
 	[ShareLogonOnThreads]
-	public class IntradayOptimizationIslandTests : IntradayOptimizationScenario, ISetup
+	public class IntradayOptimizationIslandTests : ISetup
 	{
 		public IntradayOptimizationFromWeb Target;
 		public FakeSkillRepository SkillRepository;
@@ -33,12 +31,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillDayRepositorySimulateNewUnitOfWork SkillDayRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-
-		public IntradayOptimizationIslandTests(bool cascading) 
-			: base(cascading)
-		{
-		}
-
+		
 		[Test]
 		public void ShouldWorkCompleteWayWithMultipleIslands()
 		{

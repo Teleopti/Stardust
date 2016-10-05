@@ -21,17 +21,15 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
-	[TestFixture(false, false)]
-	[TestFixture(false, true)]
-	[TestFixture(true, false)]
-	[TestFixture(true, true)]
+	[TestFixture(false)]
+	[TestFixture(true)]
 	[DomainTest]
 	public class DayOffOptimizationDesktopTest : DayOffOptimizationScenario
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public IDayOffOptimizationDesktop Target;
 
-		public DayOffOptimizationDesktopTest(bool teamBlockDayOffForIndividuals, bool cascading) : base(teamBlockDayOffForIndividuals, cascading)
+		public DayOffOptimizationDesktopTest(bool teamBlockDayOffForIndividuals) : base(teamBlockDayOffForIndividuals)
 		{
 		}
 

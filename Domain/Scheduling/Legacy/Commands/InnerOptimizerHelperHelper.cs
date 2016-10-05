@@ -10,9 +10,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	public class InnerOptimizerHelperHelper : IOptimizerHelperHelper
 	{
 		private readonly IRestrictionExtractor _restrictionExtractor;
-		private readonly IPersonalSkillsProvider _personalSkillsProvider;
+		private readonly PersonalSkillsProvider _personalSkillsProvider;
 
-		public InnerOptimizerHelperHelper(IRestrictionExtractor restrictionExtractor, IPersonalSkillsProvider personalSkillsProvider)
+		public InnerOptimizerHelperHelper(IRestrictionExtractor restrictionExtractor, PersonalSkillsProvider personalSkillsProvider)
 		{
 			_restrictionExtractor = restrictionExtractor;
 			_personalSkillsProvider = personalSkillsProvider;

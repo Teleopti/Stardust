@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IResourceOptimizationHelperExtended _resouceOptimizationHelperExtended;
-		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 
 		public DayOffOptimizationDesktopTeamBlock(IResourceOptimizationHelper resourceOptimizationHelper,
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 								IOptimizerHelperHelper optimizerHelperHelper,
 								Func<ISchedulerStateHolder> schedulerStateHolder,
 								IResourceOptimizationHelperExtended resouceOptimizationHelperExtended,
-								IResourceCalculationContextFactory resourceCalculationContextFactory,
+								CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 								TeamInfoFactoryFactory teamInfoFactoryFactory)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;

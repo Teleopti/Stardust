@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
 		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
-		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 
 		public ScheduleCommand(Func<ISchedulerStateHolder> schedulerStateHolder,
 			IRequiredScheduleHelper requiredScheduleOptimizerHelper,
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
 			IWeeklyRestSolverCommand weeklyRestSolverCommand,
 			PeriodExtractorFromScheduleParts periodExtractor,
-			IResourceCalculationContextFactory resourceCalculationContextFactory
+			CascadingResourceCalculationContextFactory resourceCalculationContextFactory
 			)
 		{
 			_schedulerStateHolder = schedulerStateHolder;

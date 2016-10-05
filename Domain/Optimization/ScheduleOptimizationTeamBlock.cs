@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly DayOffOptimizationPreferenceProviderUsingFiltersFactory _dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
-		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly OptimizationResult _optimizationResult;
 		private readonly ITeamBlockDayOffOptimizerService _teamBlockDayOffOptimizerService;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
@@ -42,8 +42,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IOptimizationPreferencesProvider optimizationPreferencesProvider,
 			IMatrixListFactory matrixListFactory,
 			DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory,
-			IOptimizerHelperHelper optimizerHelperHelper, 
-			IResourceCalculationContextFactory resourceCalculationContextFactory,
+			IOptimizerHelperHelper optimizerHelperHelper,
+			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 			OptimizationResult optimizationResult,
 			ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService,
 			IResourceOptimizationHelper resourceOptimizationHelper,

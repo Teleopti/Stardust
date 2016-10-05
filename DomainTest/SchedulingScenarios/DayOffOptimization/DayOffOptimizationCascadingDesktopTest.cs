@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public IDayOffOptimizationDesktop Target;
 
-		public DayOffOptimizationCascadingDesktopTest(bool teamBlockDayOffForIndividuals) : base(teamBlockDayOffForIndividuals, true)
+		public DayOffOptimizationCascadingDesktopTest(bool teamBlockDayOffForIndividuals) : base(teamBlockDayOffForIndividuals)
 		{	
 		}
 

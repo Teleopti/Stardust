@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
 	[DomainTest]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
-	[Toggle(Toggles.ResourcePlanner_CascadingSkills_38524)]
 	[ShareLogonOnThreads]
 	public class IntradayOptimizationCascadingTest
 	{

@@ -3,11 +3,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	public class PersonalSkillsProvider : IPersonalSkillsProvider
+	public class PersonalSkillsProvider
 	{
 		private readonly PersonalSkills personalSkills = new PersonalSkills();
 		private readonly CascadingPersonalSkills cascadingPersonSkills = new CascadingPersonalSkills();
-
 
 		public IEnumerable<IPersonSkill> PersonSkills(IPersonPeriod period)
 		{

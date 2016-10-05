@@ -11,9 +11,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 	public class GroupPersonSkillAggregator : IGroupPersonSkillAggregator
 	{
-		private readonly IPersonalSkillsProvider _personalSkillsProvider;
+		private readonly PersonalSkillsProvider _personalSkillsProvider;
 
-		public GroupPersonSkillAggregator(IPersonalSkillsProvider personalSkillsProvider)
+		public GroupPersonSkillAggregator(PersonalSkillsProvider personalSkillsProvider)
 		{
 			_personalSkillsProvider = personalSkillsProvider;
 		}

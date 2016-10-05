@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly IDayOffOptimizationPreferenceProvider _dayOffOptimizationPreferenceProvider;
 		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
-		private readonly IPersonalSkillsProvider _personalSkillsProvider;
+		private readonly PersonalSkillsProvider _personalSkillsProvider;
 
 		public MoveTimeOptimizerCreator(
 			IList<IScheduleMatrixOriginalStateContainer> scheduleMatrixContainerList,
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IResourceOptimizationHelper resourceOptimizationHelper,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
-			IPersonalSkillsProvider personalSkillsProvider)
+			PersonalSkillsProvider personalSkillsProvider)
 		{
 			_scheduleMatrixContainerList = scheduleMatrixContainerList;
 			_workShiftContainerList = workShiftContainerList;

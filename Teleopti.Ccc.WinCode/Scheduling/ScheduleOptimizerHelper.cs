@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private ResourceOptimizerProgressEventArgs _progressEvent;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 		private readonly IScheduleMatrixLockableBitArrayConverterEx _bitArrayConverter;
-		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly IDayOffOptimizationDesktop _dayOffOptimizationDesktop;
 		private readonly DaysOffBackToLegalState _daysOffBackToLegalState;
 
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
 			_optimizerHelperHelper = _container.Resolve<IOptimizerHelperHelper>();
 			_bitArrayConverter = _container.Resolve<IScheduleMatrixLockableBitArrayConverterEx>();
-			_resourceCalculationContextFactory = _container.Resolve<IResourceCalculationContextFactory>();
+			_resourceCalculationContextFactory = _container.Resolve<CascadingResourceCalculationContextFactory>();
 			_dayOffOptimizationDesktop = _container.Resolve<IDayOffOptimizationDesktop>();
 			_daysOffBackToLegalState = _container.Resolve<DaysOffBackToLegalState>();
 		}
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					_container.Resolve<IResourceOptimizationHelper>(),
 					dayOffOptimizationPreferenceProvider,
 					_container.Resolve<IDeleteAndResourceCalculateService>(),
-					_container.Resolve<IPersonalSkillsProvider>());
+					_container.Resolve<PersonalSkillsProvider>());
 
 			IList<IMoveTimeOptimizer> optimizers = creator.Create();
 			var service = new MoveTimeOptimizerContainer(optimizers, periodValueCalculator);

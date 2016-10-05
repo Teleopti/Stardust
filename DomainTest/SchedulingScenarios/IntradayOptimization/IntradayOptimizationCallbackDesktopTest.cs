@@ -22,20 +22,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
-	[TestFixture(false)]
-	[TestFixture(true)]
 	[DomainTest]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
-	public class IntradayOptimizationCallbackDesktopTest : IntradayOptimizationScenario, ISetup
+	public class IntradayOptimizationCallbackDesktopTest : ISetup
 	{
 		public OptimizeIntradayIslandsDesktop Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public DesktopOptimizationContext DesktopOptimizationContext;
-
-		public IntradayOptimizationCallbackDesktopTest(bool cascading) 
-			: base(cascading)
-		{
-		}
 
 		[Test]
 		public void ShouldDoSuccesfulCallbacks()

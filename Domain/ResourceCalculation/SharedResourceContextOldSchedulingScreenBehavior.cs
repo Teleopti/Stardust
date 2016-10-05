@@ -6,10 +6,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class SharedResourceContextOldSchedulingScreenBehavior
 	{
-		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly Func<ISchedulerStateHolder> _stateHolder;
 
-		public SharedResourceContextOldSchedulingScreenBehavior(IResourceCalculationContextFactory resourceCalculationContextFactory, Func<ISchedulerStateHolder> stateHolder)
+		public SharedResourceContextOldSchedulingScreenBehavior(CascadingResourceCalculationContextFactory resourceCalculationContextFactory, Func<ISchedulerStateHolder> stateHolder)
 		{
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_stateHolder = stateHolder;

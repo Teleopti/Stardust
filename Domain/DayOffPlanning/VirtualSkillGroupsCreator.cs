@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 {
 	public class VirtualSkillGroupsCreator
 	{
-		private readonly IPersonalSkillsProvider _personalSkillsProvider;
+		private readonly PersonalSkillsProvider _personalSkillsProvider;
 
-		public VirtualSkillGroupsCreator(IPersonalSkillsProvider personalSkillsProvider)
+		public VirtualSkillGroupsCreator(PersonalSkillsProvider personalSkillsProvider)
 		{
 			_personalSkillsProvider = personalSkillsProvider;
 		}

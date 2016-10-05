@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IOptimizerHelperHelper _optimizerHelper;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		private readonly ITeamBlockDayOffOptimizerService _teamBlockDayOffOptimizerService;
-		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly DayOffOptimizationDesktopTeamBlock _dayOffOptimizationDesktopTeamBlock;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IOptimizerHelperHelper optimizerHelper,
 			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
 			ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService,
-			IResourceCalculationContextFactory resourceCalculationContextFactory,
+			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 			TeamInfoFactoryFactory teamInfoFactoryFactory,
 			DayOffOptimizationDesktopTeamBlock dayOffOptimizationDesktopTeamBlock,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,

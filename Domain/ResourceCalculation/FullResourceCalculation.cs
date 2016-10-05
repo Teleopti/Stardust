@@ -4,12 +4,12 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	public class FullResourceCalculationWithCascading : IFullResourceCalculation
+	public class FullResourceCalculation
 	{
 		private readonly CascadingResourceCalculation _cascadingResourceCalculation;
 		private readonly Func<ISchedulerStateHolder> _stateHolder;
 
-		public FullResourceCalculationWithCascading(CascadingResourceCalculation cascadingResourceCalculation, Func<ISchedulerStateHolder> stateHolder)
+		public FullResourceCalculation(CascadingResourceCalculation cascadingResourceCalculation, Func<ISchedulerStateHolder> stateHolder)
 		{
 			_cascadingResourceCalculation = cascadingResourceCalculation;
 			_stateHolder = stateHolder;

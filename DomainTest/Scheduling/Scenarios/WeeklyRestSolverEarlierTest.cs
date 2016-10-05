@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization;
@@ -29,6 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 		public IWeeklyRestSolverCommand Target;
 		public IMatrixListFactory MatrixListFactory;
 		public SchedulerStateHolder SchedulerStateHolder;
+		public CascadingResourceCalculation CascadingResourceCalculation;
 
 		private DateOnlyPeriod weekPeriod = new DateOnlyPeriod(2015, 9, 28, 2015, 10, 04);
 		private readonly IScenario scenario = new Scenario("unimportant");
@@ -380,26 +382,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 						new NullScheduleTag()
 						)
 					),
-				new ResourceCalculateDelayer(
-					new ResourceOptimizationHelper(
-						new OccupiedSeatCalculator(),
-						new NonBlendSkillCalculator(),
-						new PersonSkillProvider(),
-						new PeriodDistributionService(),
-						new IntraIntervalFinderService(
-							new SkillDayIntraIntervalFinder(
-								new IntraIntervalFinder(),
-								new SkillActivityCountCollector(
-									new SkillActivityCounter()
-									),
-								new FullIntervalFinder()
-								)
-							), new TimeZoneGuardWrapper(), new ResourceCalculationContextFactory(new PersonSkillProvider(), new TimeZoneGuardWrapper())
-						),
-					1,
-					true,
-					SchedulerStateHolder.SchedulingResultState
-					),
+					new ResourceCalculateDelayer(CascadingResourceCalculation, 1, true, SchedulerStateHolder.SchedulingResultState),
 				selectedPeriod,
 				matrixlist,
 				new NoSchedulingProgress(),
@@ -558,26 +541,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 						new NullScheduleTag()
 						)
 					),
-				new ResourceCalculateDelayer(
-					new ResourceOptimizationHelper(
-						new OccupiedSeatCalculator(),
-						new NonBlendSkillCalculator(),
-						new PersonSkillProvider(),
-						new PeriodDistributionService(),
-						new IntraIntervalFinderService(
-							new SkillDayIntraIntervalFinder(
-								new IntraIntervalFinder(),
-								new SkillActivityCountCollector(
-									new SkillActivityCounter()
-									),
-								new FullIntervalFinder()
-								)
-							), new TimeZoneGuardWrapper(), new ResourceCalculationContextFactory(new PersonSkillProvider(), new TimeZoneGuardWrapper())
-						),
-					1,
-					true,
-					SchedulerStateHolder.SchedulingResultState
-					),
+					new ResourceCalculateDelayer(CascadingResourceCalculation, 1, true, SchedulerStateHolder.SchedulingResultState),
 				selectedPeriod,
 				matrixlist,
 				new NoSchedulingProgress(),

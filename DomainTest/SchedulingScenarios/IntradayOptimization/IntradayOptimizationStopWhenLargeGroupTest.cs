@@ -19,12 +19,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
-	[TestFixture(false)]
-	[TestFixture(true)]
 	[DomainTest]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
 	[ShareLogonOnThreads]
-	public class IntradayOptimizationStopWhenLargeGroupTest : IntradayOptimizationScenario, ISetup
+	public class IntradayOptimizationStopWhenLargeGroupTest : ISetup
 	{
 		public IntradayOptimizationFromWeb Target;
 		public TrackOptimizeDaysForAgents TrackOptimizeDaysForAgents;
@@ -36,11 +34,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakeSkillDayRepositorySimulateNewUnitOfWork SkillDayRepository;
 		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-
-		public IntradayOptimizationStopWhenLargeGroupTest(bool cascading) 
-			: base(cascading)
-		{
-		}
 
 		[Test]
 		public void ShouldOptimizeNoneIf0PercentShouldBeOptimized()

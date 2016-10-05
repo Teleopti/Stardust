@@ -17,9 +17,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 	public class RuleSetPersonalSkillsActivityFilter : IRuleSetPersonalSkillsActivityFilter
 	{
 		private readonly IRuleSetSkillActivityChecker _ruleSetSkillActivityChecker;
-		private readonly IPersonalSkillsProvider _personalSkillsProvider;
+		private readonly PersonalSkillsProvider _personalSkillsProvider;
 
-		public RuleSetPersonalSkillsActivityFilter(IRuleSetSkillActivityChecker ruleSetSkillActivityChecker, IPersonalSkillsProvider personalSkillsProvider)
+		public RuleSetPersonalSkillsActivityFilter(IRuleSetSkillActivityChecker ruleSetSkillActivityChecker, PersonalSkillsProvider personalSkillsProvider)
 		{
 			_ruleSetSkillActivityChecker = ruleSetSkillActivityChecker;
 			_personalSkillsProvider = personalSkillsProvider;

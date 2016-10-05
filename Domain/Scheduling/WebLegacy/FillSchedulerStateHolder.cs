@@ -10,9 +10,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
 	public abstract class FillSchedulerStateHolder : IFillSchedulerStateHolder
 	{
-		private readonly IPersonalSkillsProvider _personalSkillsProvider;
+		private readonly PersonalSkillsProvider _personalSkillsProvider;
 
-		protected FillSchedulerStateHolder(IPersonalSkillsProvider personalSkillsProvider)
+		protected FillSchedulerStateHolder(PersonalSkillsProvider personalSkillsProvider)
 		{
 			_personalSkillsProvider = personalSkillsProvider;
 		}

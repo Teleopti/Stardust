@@ -9,11 +9,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly VirtualSkillContext _virtualSkillContext;
-		private readonly IResourceCalculationContextFactory _resourceCalculationContext;
+		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContext;
 
 		public IntradayOptimizationContext(Func<ISchedulerStateHolder> schedulerStateHolder, 
-				VirtualSkillContext virtualSkillContext, 
-				IResourceCalculationContextFactory resourceCalculationContext)
+				VirtualSkillContext virtualSkillContext,
+				CascadingResourceCalculationContextFactory resourceCalculationContext)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_virtualSkillContext = virtualSkillContext;

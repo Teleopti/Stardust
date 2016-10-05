@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void WebShouldRespectCascadingToggle()
 		{
-			using (var container = buildContainer(Toggles.ResourcePlanner_CascadingSkills_38524, true))
+			using (var container = buildContainer())
 			{
 				container.Resolve<IResourceOptimizationHelper>()
 					.Should().Be.OfType<CascadingResourceCalculation>();

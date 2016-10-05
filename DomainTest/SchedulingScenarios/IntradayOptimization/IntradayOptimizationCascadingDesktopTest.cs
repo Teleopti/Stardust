@@ -28,14 +28,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
 	[DomainTest]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
-	[Toggle(Toggles.ResourcePlanner_CascadingSkills_38524)]
 	[ShareLogonOnThreads]
 	public class IntradayOptimizationCascadingDesktopTest : ISetup
 	{
 		public OptimizeIntradayIslandsDesktop Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
-		public IResourceCalculationContextFactory ResourceCalculationContextFactory;
-		public IFullResourceCalculation FullResourceCalculation;
+		public CascadingResourceCalculationContextFactory ResourceCalculationContextFactory;
+		public FullResourceCalculation FullResourceCalculation;
 
 		[Test]
 		public void ShouldShovelResources()

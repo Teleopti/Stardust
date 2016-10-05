@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	public class ResourceOptimizationHelper : IResourceOptimizationHelper
+	public class ResourceOptimizationHelper
 	{
 		private readonly IOccupiedSeatCalculator _occupiedSeatCalculator;
 		private readonly INonBlendSkillCalculator _nonBlendSkillCalculator;
@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly IPeriodDistributionService _periodDistributionService;
 		private readonly IIntraIntervalFinderService _intraIntervalFinderService;
 		private readonly ITimeZoneGuard _timeZoneGuard;
-		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 
 		public ResourceOptimizationHelper(IOccupiedSeatCalculator occupiedSeatCalculator,
 			INonBlendSkillCalculator nonBlendSkillCalculator,
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			IPeriodDistributionService periodDistributionService,
 			IIntraIntervalFinderService intraIntervalFinderService,
 			ITimeZoneGuard timeZoneGuard,
-			IResourceCalculationContextFactory resourceCalculationContextFactory)
+			CascadingResourceCalculationContextFactory resourceCalculationContextFactory)
 		{
 			_occupiedSeatCalculator = occupiedSeatCalculator;
 			_nonBlendSkillCalculator = nonBlendSkillCalculator;
@@ -64,11 +64,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					context.Dispose();
 				}
 			}
-		}
-
-		public void ResourceCalculate(DateOnlyPeriod dateOnlyPeriod, IResourceCalculationData resourceCalculationData)
-		{
-			throw new NotImplementedException("Not implemented yet in this one.");
 		}
 
 		private DateTimePeriod getPeriod(DateOnly localDate)

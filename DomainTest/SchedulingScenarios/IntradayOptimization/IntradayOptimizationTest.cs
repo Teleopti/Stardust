@@ -20,12 +20,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
-	[TestFixture(false)]
-	[TestFixture(true)]
 	[DomainTest]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
 	[ShareLogonOnThreads]
-	public class IntradayOptimizationTest : IntradayOptimizationScenario
+	public class IntradayOptimizationTest
 	{
 		public FakeSkillRepository SkillRepository;
 		public FakePersonRepository PersonRepository;
@@ -37,11 +35,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public IScheduleStorage ScheduleStorage;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public Func<IGridlockManager> LockManager;
-
-		public IntradayOptimizationTest(bool cascading) 
-			: base(cascading)
-		{
-		}
 
 		[Test]
 		public void ShouldUseShiftThatCoverHigherDemand()

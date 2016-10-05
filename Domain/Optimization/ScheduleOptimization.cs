@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly DayOffOptimizationPreferenceProviderUsingFiltersFactory _dayOffOptimizationPreferenceProviderUsingFiltersFactory;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
-		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly OptimizationResult _optimizationResult;
 		private readonly IResourceOptimizationHelperExtended _resourceOptimizationHelperExtended;
 
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			WeeklyRestSolverExecuter weeklyRestSolverExecuter, IOptimizationPreferencesProvider optimizationPreferencesProvider,
 			IMatrixListFactory matrixListFactory, IScheduleDayEquator scheduleDayEquator,
 			DayOffOptimizationPreferenceProviderUsingFiltersFactory dayOffOptimizationPreferenceProviderUsingFiltersFactory,
-			IOptimizerHelperHelper optimizerHelperHelper, IResourceCalculationContextFactory resourceCalculationContextFactory,
+			IOptimizerHelperHelper optimizerHelperHelper, CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 			OptimizationResult optimizationResult, IResourceOptimizationHelperExtended resourceOptimizationHelperExtended)
 		{
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;

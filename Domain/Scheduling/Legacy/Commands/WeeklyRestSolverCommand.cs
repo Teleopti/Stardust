@@ -16,13 +16,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 		private readonly Func<IWeeklyRestSolverService> _weeklyRestSolverService;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 
 		public WeeklyRestSolverCommand(ITeamBlockInfoFactory teamBlockInfoFactory,
 			ITeamBlockSchedulingOptions teamBlockSchedulingOptions, Func<IWeeklyRestSolverService> weeklyRestSolverService,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
-			IResourceCalculationContextFactory resourceCalculationContextFactory,
+			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 			TeamInfoFactoryFactory teamInfoFactoryFactory)
 		{
 			_teamBlockInfoFactory = teamBlockInfoFactory;

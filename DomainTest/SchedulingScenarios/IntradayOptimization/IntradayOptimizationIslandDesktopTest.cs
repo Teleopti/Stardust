@@ -28,21 +28,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
-	[TestFixture(false)]
-	[TestFixture(true)]
 	[DomainTest]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
 	[ShareLogonOnThreads]
-	public class IntradayOptimizationIslandDesktopTest : IntradayOptimizationScenario, ISetup
+	public class IntradayOptimizationIslandDesktopTest : ISetup
 	{
 		public OptimizeIntradayIslandsDesktop Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public Func<IGridlockManager> LockManager;
-
-		public IntradayOptimizationIslandDesktopTest(bool cascading) 
-			: base(cascading)
-		{
-		}
 
 		[Test]
 		public void ShouldNotPlaceSameShiftForAllAgentsInIsland()

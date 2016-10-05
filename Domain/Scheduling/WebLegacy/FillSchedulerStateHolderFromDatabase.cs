@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		private readonly IPersonRepository _personRepository;
 		private readonly ISkillRepository _skillRepository;
 
-		public FillSchedulerStateHolderFromDatabase(IPersonalSkillsProvider personalSkillsProvider,
+		public FillSchedulerStateHolderFromDatabase(PersonalSkillsProvider personalSkillsProvider,
 					IScenarioRepository scenarioRepository,
 					ISkillDayLoadHelper skillDayLoadHelper,
 					IScheduleStorage scheduleStorage,
