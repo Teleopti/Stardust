@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public string FindSignificantChanges(ScheduleDayReadModel newReadModel, ScheduleDayReadModel existingReadModel, CultureInfo cultureInfo, DateOnly currentDate)
         {
-            string message = null;
             string weekDayName = cultureInfo.DateTimeFormat.GetDayName(currentDate.DayOfWeek);;
 
 			string currentDateFormat = currentDate.ToShortDateString(cultureInfo);
@@ -32,8 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
                 //if new ReadModel is NULL and existing Read Model is not NULL  (From Working Day to an OFF Day)
             if(newReadModel==null)
             {
-				message = weekDayName + " " + currentDateFormat + UserTexts.Resources.ResourceManager.GetString("NotWorking", cultureInfo);
-                return message;
+				return $"{weekDayName} {currentDateFormat}{UserTexts.Resources.ResourceManager.GetString("NotWorking", cultureInfo)}";
             }
 
 			string startDateTime = newReadModel.StartDateTime.ToString(cultureInfo.DateTimeFormat.ShortTimePattern, cultureInfo);
@@ -42,31 +40,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
             // if existingReadModel is NULL and new read model is NOT NULL  (From OFF Day to a working day)
             if (existingReadModel==null)
             {
-                message = weekDayName + " " + currentDateFormat + " " + startDateTime + "-" + endDateTime;
-                return message;
+                return $"{weekDayName} {currentDateFormat} {startDateTime}-{endDateTime}";
             }
 
             if(newReadModel.Workday!= existingReadModel.Workday)
             {
-                // if chnage working day to an Off day.
+                // if change working day to an Off day.
                 if (!newReadModel.Workday)
                 {
-                    message = weekDayName + " " + currentDateFormat + " " + UserTexts.Resources.ResourceManager.GetString("NotWorking",cultureInfo);
+                    return $"{weekDayName} {currentDateFormat} {UserTexts.Resources.ResourceManager.GetString("NotWorking", cultureInfo)}";
                 }
                 else  // From Off Day to Working day.
                 {
-                    message = weekDayName + " " + currentDateFormat + " " + startDateTime + "-" + endDateTime;
+                    return $"{weekDayName} {currentDateFormat} {startDateTime}-{endDateTime}";
                 }
-                return message;
             }
 
             // If new and existing both are WORKING Days but the shift start or end time is changed.
             if ((newReadModel.StartDateTime.Truncate(TimeSpan.FromMinutes(1)) != existingReadModel.StartDateTime.Truncate(TimeSpan.FromMinutes(1))) || (newReadModel.EndDateTime.Truncate(TimeSpan.FromMinutes(1)) != existingReadModel.EndDateTime.Truncate(TimeSpan.FromMinutes(1))))
             {
-                message = weekDayName + " " + currentDateFormat + " " + startDateTime + "-" + endDateTime;
+                return $"{weekDayName} {currentDateFormat} {startDateTime}-{endDateTime}";
             }
 
-            return message;
+            return null;
         }
     }
 }
