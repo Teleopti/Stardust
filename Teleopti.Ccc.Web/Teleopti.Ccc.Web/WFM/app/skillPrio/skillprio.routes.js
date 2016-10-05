@@ -8,7 +8,7 @@
     function stateConfig($stateProvider) {
         $stateProvider.state('skillPrio', {
             url: '/skillprio',
-            templateUrl: 'app/skillPrio/skillPrio.html',
+            templateUrl: 'app/skillPrio/skillprio.html',
             controller: 'skillPrioController as vm'
         })
     }

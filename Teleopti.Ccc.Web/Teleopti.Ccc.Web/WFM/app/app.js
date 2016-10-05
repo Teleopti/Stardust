@@ -30,6 +30,7 @@ var wfm = angular.module('wfm', [
 	'wfm.resourceplanner',
 	'wfm.searching',
 	'wfm.seatMap',
+	'wfm.skillPrio',
 	'wfm.seatPlan',
 	'wfm.notifications',
 	'wfm.notice',
