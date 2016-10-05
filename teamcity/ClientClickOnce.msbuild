@@ -47,30 +47,9 @@
 		</PropertyGroup>
 		<ItemGroup>
 			<SourceFiles Include="$(SourceDirectory)\**\*.*" />
-			<WebImages Include="$(WorkingDirectory)\BuildArtifacts\images\*.*" />
-			<HowToMultiSDK Include="$(WorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\HowToMultiSDK\*.*" />
 		</ItemGroup>
 		<Copy SourceFiles="@(SourceFiles)"
 			 DestinationFiles="@(SourceFiles->'$(OutputDirectory)\%(RecursiveDir)%(Filename)%(Extension).deploy')"/>
-		<Copy SourceFiles="$(WorkingDirectory)\BuildArtifacts\ClickOnceLandingPage.htm"
-				 DestinationFiles="$(OutputDirectory)\$(NameOfStartPage)"/>			 
-		<Copy SourceFiles="@(WebImages)"
-				 DestinationFiles="@(WebImages->'$(OutputDirectory)\%(Filename)%(Extension)')"/>				 
-		<Copy SourceFiles="@(HowToMultiSDK)"
-				 DestinationFiles="@(HowToMultiSDK->'$(OutputDirectory)\%(Filename)%(Extension)')"/>
-	
-		<FileUpdate
-				  Files="$(OutputDirectory)\$(NameOfStartPage)"
-				  Regex="#APPLICATION_NAME#"
-				  ReplacementText="$(NameOfClickOnceItem)"/>
-		<FileUpdate
-				  Files="$(OutputDirectory)\$(NameOfStartPage)"
-				  Regex="#TITLE#"
-				  ReplacementText="TELEOPTI WFM"/>
-		<FileUpdate
-				  Files="$(OutputDirectory)\$(NameOfStartPage)"
-				  Regex="#VERSION#"
-				  ReplacementText="$(CCCVersion)"/>
 	</Target>
 	
 	<Target Name="ClearOutput">
