@@ -1564,8 +1564,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 			{
 				GetUnitOfWork.PersistAll();
 				uow.PersistAll();
+				PersistTenantData();
 			}
-			PersistTenantData();
 		}
 
 		public void PersistTenantData()
