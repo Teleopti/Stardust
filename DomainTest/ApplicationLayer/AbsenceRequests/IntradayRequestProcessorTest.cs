@@ -239,6 +239,122 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Assert.AreEqual(2, getRequestStatus(PersonRequestRepository.Get(request.Id.GetValueOrDefault())));
 		}
 
+		[Test]
+		public void DenyIfUnderstaffedOnNonCascadingSkills()
+		{
+			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-03-14 05:00");
+
+			var period = new DateTimePeriod(new DateTime(2016, 3, 14, 13, 30, 0, DateTimeKind.Utc),
+											new DateTime(2016, 3, 14, 13, 45, 00, DateTimeKind.Utc));
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var workflowControlSet = createWorkFlowControlSet(absence);
+			var primarySkill = SkillFactory.CreateSkillWithId("PrimarySkill1");
+			primarySkill.SetCascadingIndex(1);
+			var cascadingSkill = SkillFactory.CreateSkillWithId("cascadingSkill");
+
+			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 03, 01), new[] { primarySkill, cascadingSkill });
+			person.WorkflowControlSet = workflowControlSet;
+
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
+			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, person);
+
+			var request = new FakePersonRequest(person, new AbsenceRequest(absence, period));
+
+			request.SetId(Guid.NewGuid());
+			request.SetCreated(new DateTime(2016, 3, 14, 0, 5, 0, DateTimeKind.Utc));
+			PersonRequestRepository.Add(request);
+
+			var staffingList = new List<SkillStaffingInterval>()
+			{
+				new SkillStaffingInterval()
+				{
+					SkillId = primarySkill.Id.GetValueOrDefault(),
+					StartDateTime = new DateTime(2016, 3, 14, 13, 30, 0, DateTimeKind.Utc),
+					EndDateTime = new DateTime(2016, 3, 14, 13, 45, 0, DateTimeKind.Utc),
+					ForecastWithShrinkage = 2,
+					StaffingLevel = 10
+				}
+			};
+			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
+
+			staffingList = new List<SkillStaffingInterval>()
+			{
+				new SkillStaffingInterval()
+				{
+					SkillId = cascadingSkill.Id.GetValueOrDefault(),
+					StartDateTime = new DateTime(2016, 3, 14, 13, 30, 0, DateTimeKind.Utc),
+					EndDateTime = new DateTime(2016, 3, 14, 13, 45, 0, DateTimeKind.Utc),
+					ForecastWithShrinkage = 15,
+					StaffingLevel = 10
+				}
+			};
+			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
+
+			Target.Process(request);
+
+			Assert.AreEqual(4, getRequestStatus(PersonRequestRepository.Get(request.Id.GetValueOrDefault())));
+		}
+
+		[Test]
+		public void ApproveIfOverstaffedOnNonCascadingSkill()
+		{
+			ConfigReader.FakeSetting("FakeIntradayUtcStartDateTime", "2016-03-14 05:00");
+
+			var period = new DateTimePeriod(new DateTime(2016, 3, 14, 13, 30, 0, DateTimeKind.Utc),
+											new DateTime(2016, 3, 14, 13, 45, 00, DateTimeKind.Utc));
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var workflowControlSet = createWorkFlowControlSet(absence);
+			var primarySkill = SkillFactory.CreateSkillWithId("PrimarySkill1");
+			primarySkill.SetCascadingIndex(1);
+			var cascadingSkill = SkillFactory.CreateSkillWithId("cascadingSkill");
+
+			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 03, 01), new[] { primarySkill, cascadingSkill });
+			person.WorkflowControlSet = workflowControlSet;
+
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+			var newIdentity = new TeleoptiIdentity("test2", null, null, null, null);
+			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, person);
+
+			var request = new FakePersonRequest(person, new AbsenceRequest(absence, period));
+
+			request.SetId(Guid.NewGuid());
+			request.SetCreated(new DateTime(2016, 3, 14, 0, 5, 0, DateTimeKind.Utc));
+			PersonRequestRepository.Add(request);
+
+			var staffingList = new List<SkillStaffingInterval>()
+			{
+				new SkillStaffingInterval()
+				{
+					SkillId = primarySkill.Id.GetValueOrDefault(),
+					StartDateTime = new DateTime(2016, 3, 14, 13, 30, 0, DateTimeKind.Utc),
+					EndDateTime = new DateTime(2016, 3, 14, 13, 45, 0, DateTimeKind.Utc),
+					ForecastWithShrinkage = 2,
+					StaffingLevel = 10
+				}
+			};
+			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
+
+			staffingList = new List<SkillStaffingInterval>()
+			{
+				new SkillStaffingInterval()
+				{
+					SkillId = cascadingSkill.Id.GetValueOrDefault(),
+					StartDateTime = new DateTime(2016, 3, 14, 13, 30, 0, DateTimeKind.Utc),
+					EndDateTime = new DateTime(2016, 3, 14, 13, 45, 0, DateTimeKind.Utc),
+					ForecastWithShrinkage = 10,
+					StaffingLevel = 15
+				}
+			};
+			ScheduleForecastSkillReadModelRepository.Persist(staffingList, DateTime.Now);
+
+			Target.Process(request);
+
+			Assert.AreEqual(2, getRequestStatus(PersonRequestRepository.Get(request.Id.GetValueOrDefault())));
+		}
+
 		private IPersonRequest createNewRequest(bool useWorkflowControlSet = true)
 		{
 

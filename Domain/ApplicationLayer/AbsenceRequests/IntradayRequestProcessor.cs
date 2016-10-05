@@ -33,12 +33,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		{
 			personRequest.Pending();
 			var cascadingPersonSkills = personRequest.Person.Period(DateOnly.Today).CascadingSkills();
-
 			var lowestIndex = cascadingPersonSkills.Min(x => x.Skill.CascadingIndex);
-			var primarySkills = cascadingPersonSkills.Where(x => x.Skill.CascadingIndex == lowestIndex);
 			
-			//this could be improved to do one db call if there are many skills
-			foreach (var primarySkill in primarySkills)
+			var primaryAndUnSortedSkills =
+				personRequest.Person.Period(DateOnly.Today).PersonSkillCollection.Where(x => (x.Skill.CascadingIndex == lowestIndex) || !x.Skill.CascadingIndex.HasValue );
+			foreach (var primarySkill in primaryAndUnSortedSkills)
 			{
 				var skillStaffingIntervals = getSkillStaffIntervals(primarySkill.Skill.Id.GetValueOrDefault(), personRequest.Request.Period);
 				var underStaffingDetails = getUnderStaffedPeriods(skillStaffingIntervals);
@@ -48,6 +47,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					sendDenyCommand(personRequest.Id.GetValueOrDefault(), denyReason);
 					return;
 				}
+				//approve an absence request if its outside the opening hours 
 			}
 			updateResources(personRequest);
 			sendApproveCommand(personRequest.Id.GetValueOrDefault());
