@@ -4,15 +4,17 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	public class ExtractSkillStaffDataForResourceCalcualtion : IExtractSkillStaffDataForResourceCalcualtion
+	public class ExtractSkillStaffDataForResourceCalculation : IExtractSkillStaffDataForResourceCalculation
 	{
 		private readonly LoaderForResourceCalculation _loaderForResourceCalculation;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
 
-		public ExtractSkillStaffDataForResourceCalcualtion(LoaderForResourceCalculation loaderForResourceCalculation, IResourceOptimizationHelper resourceOptimizationHelper)
+		public ExtractSkillStaffDataForResourceCalculation(LoaderForResourceCalculation loaderForResourceCalculation, IResourceOptimizationHelper resourceOptimizationHelper, IResourceCalculationContextFactory resourceCalculationContextFactory)
 		{
 			_loaderForResourceCalculation = loaderForResourceCalculation;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
+			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 		}
 
 		public ISkillSkillStaffPeriodExtendedDictionary ExtractSkillStaffPeriodDictionary(DateOnlyPeriod periodDateOnly)
@@ -29,15 +31,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		[LogTime]
 		public virtual void DoCalculation(DateOnlyPeriod period, IResourceCalculationData resCalcData)
 		{
-			foreach (var dateOnly in period.DayCollection())
+			using (_resourceCalculationContextFactory.Create(resCalcData.Schedules, resCalcData.Skills))
 			{
-				_resourceOptimizationHelper.ResourceCalculate(dateOnly, resCalcData);
+				ResourceCalculationContext.Fetch().PrimarySkillMode = true;
+				_resourceOptimizationHelper.ResourceCalculate(period, resCalcData);
 			}
 		}
-		
+
 	}
 
-	public interface IExtractSkillStaffDataForResourceCalcualtion
+	public interface IExtractSkillStaffDataForResourceCalculation
 	{
 		ISkillSkillStaffPeriodExtendedDictionary ExtractSkillStaffPeriodDictionary(DateOnlyPeriod periodDateOnly);
 	}

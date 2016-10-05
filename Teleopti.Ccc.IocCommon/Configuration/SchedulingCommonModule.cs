@@ -393,7 +393,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<LoaderForResourceCalculation>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<CalculateResourceReadModel>().InstancePerLifetimeScope().ApplyAspects();
-			builder.RegisterType<ExtractSkillStaffDataForResourceCalcualtion>().As<IExtractSkillStaffDataForResourceCalcualtion>().InstancePerLifetimeScope().ApplyAspects();
+			builder.RegisterType<ExtractSkillStaffDataForResourceCalculation>().As<IExtractSkillStaffDataForResourceCalculation>().InstancePerLifetimeScope().ApplyAspects();
 
 			// Analytics fact schedule updates
 			if (_configuration.Toggle(Toggles.ETL_SpeedUpFactScheduleNightly_38019))

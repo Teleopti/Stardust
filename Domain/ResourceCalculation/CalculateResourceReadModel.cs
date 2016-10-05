@@ -11,16 +11,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public class CalculateResourceReadModel
 	{
 		private readonly IScheduleForecastSkillReadModelRepository _scheduleForecastSkillReadModelRepository;
-		private readonly IExtractSkillStaffDataForResourceCalcualtion _extractSkillStaffDataForResourceCalcualtion;
+		private readonly IExtractSkillStaffDataForResourceCalculation _extractSkillStaffDataForResourceCalculation;
 		private readonly INow _now;
 		private readonly IStardustJobFeedback _feedback;
 
-		public CalculateResourceReadModel( IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository, 
-			INow now, IExtractSkillStaffDataForResourceCalcualtion extractSkillStaffDataForResourceCalcualtion, IStardustJobFeedback feedback)
+		public CalculateResourceReadModel(IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository,
+			INow now, IExtractSkillStaffDataForResourceCalculation extractSkillStaffDataForResourceCalculation, IStardustJobFeedback feedback)
 		{
 			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
-		    _now = now;
-			_extractSkillStaffDataForResourceCalcualtion = extractSkillStaffDataForResourceCalcualtion;
+			_now = now;
+			_extractSkillStaffDataForResourceCalculation = extractSkillStaffDataForResourceCalculation;
 			_feedback = feedback;
 		}
 
@@ -31,12 +31,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_feedback.SendProgress?.Invoke($"Starting Read Model update for period {period}");
 			var timeWhenResourceCalcDataLoaded = _now.UtcDateTime();
 			var skillStaffPeriodDictionary =
-				_extractSkillStaffDataForResourceCalcualtion.ExtractSkillStaffPeriodDictionary(periodDateOnly);
+				_extractSkillStaffDataForResourceCalculation.ExtractSkillStaffPeriodDictionary(periodDateOnly);
 			var models = CreateReadModel(skillStaffPeriodDictionary, period);
 			_scheduleForecastSkillReadModelRepository.Persist(models, timeWhenResourceCalcDataLoaded);
 		}
-		
-		
+
+
 		[LogTime]
 		public virtual IEnumerable<SkillStaffingInterval> CreateReadModel(ISkillSkillStaffPeriodExtendedDictionary skillSkillStaffPeriodExtendedDictionary, DateTimePeriod period)
 		{
@@ -44,11 +44,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_feedback.SendProgress?.Invoke($"Will update {skillSkillStaffPeriodExtendedDictionary.Keys.Count} skills.");
 			if (skillSkillStaffPeriodExtendedDictionary.Keys.Count > 0)
 			{
-                foreach (var skill in skillSkillStaffPeriodExtendedDictionary.Keys)
+				foreach (var skill in skillSkillStaffPeriodExtendedDictionary.Keys)
 				{
 					foreach (var skillStaffPeriod in skillSkillStaffPeriodExtendedDictionary[skill].Values)
 					{
-						if ( !period.Contains(skillStaffPeriod.Period.StartDateTime) )
+						if (!period.Contains(skillStaffPeriod.Period.StartDateTime))
 							continue;
 						ret.Add(new SkillStaffingInterval
 						{
@@ -57,8 +57,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 							EndDateTime = skillStaffPeriod.Period.EndDateTime,
 							Forecast = skillStaffPeriod.FStaff,
 							StaffingLevel = skillStaffPeriod.CalculatedResource,
-                            ForecastWithShrinkage = skillStaffPeriod.ForecastedDistributedDemandWithShrinkage
-                        });
+							ForecastWithShrinkage = skillStaffPeriod.ForecastedDistributedDemandWithShrinkage
+						});
 					}
 					_feedback.SendProgress?.Invoke($"Updated {skill}.");
 				}
@@ -74,24 +74,24 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public DateTime EndDateTime { get; set; }
 		public double Forecast { get; set; }
 		public double StaffingLevel { get; set; }
-	    public double ForecastWithShrinkage { get; set; }
+		public double ForecastWithShrinkage { get; set; }
 	}
 
-    public class StaffingIntervalChange :  IEquatable<StaffingIntervalChange> 
+	public class StaffingIntervalChange : IEquatable<StaffingIntervalChange>
 	{
-        public Guid SkillId { get; set; }
-        public DateTime StartDateTime { get; set; }
-        public DateTime EndDateTime { get; set; }
-        public double StaffingLevel { get; set; }
+		public Guid SkillId { get; set; }
+		public DateTime StartDateTime { get; set; }
+		public DateTime EndDateTime { get; set; }
+		public double StaffingLevel { get; set; }
 
 
 		public bool Equals(StaffingIntervalChange other)
 		{
 			if (other == null) return false;
 			return SkillId == other.SkillId
-				   && StartDateTime == other.StartDateTime
-				   && EndDateTime == other.EndDateTime
-				   && Math.Abs(StaffingLevel - other.StaffingLevel) < 0.001;
+					&& StartDateTime == other.StartDateTime
+					&& EndDateTime == other.EndDateTime
+					&& Math.Abs(StaffingLevel - other.StaffingLevel) < 0.001;
 		}
-    }
+	}
 }

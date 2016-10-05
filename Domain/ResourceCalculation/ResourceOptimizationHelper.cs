@@ -66,6 +66,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 		}
 
+		public void ResourceCalculate(DateOnlyPeriod dateOnlyPeriod, IResourceCalculationData resourceCalculationData)
+		{
+			throw new NotImplementedException("Not implemented yet in this one.");
+		}
+
 		private DateTimePeriod getPeriod(DateOnly localDate)
 		{
 			var currentStart = localDate;

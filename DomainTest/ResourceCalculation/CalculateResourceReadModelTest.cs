@@ -20,14 +20,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	public class CalculateResourceReadModelTest : ISetup
 	{
 		public CalculateResourceReadModel Target;
-		public FakeExtractSkillStaffDataForResourceCalcualtion ExtractSkillStaffDataForResourceCalcualtion;
+		public FakeExtractSkillStaffDataForResourceCalculation ExtractSkillStaffDataForResourceCalculation;
 		public FakeScheduleForecastSkillReadModelRepository ScheduleForecastSkillReadModelRepository;
 		public MutableNow Now;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<CalculateResourceReadModel>().For<CalculateResourceReadModel>();
-			system.UseTestDouble<FakeExtractSkillStaffDataForResourceCalcualtion>().For<IExtractSkillStaffDataForResourceCalcualtion>();
+			system.UseTestDouble<FakeExtractSkillStaffDataForResourceCalculation>().For<IExtractSkillStaffDataForResourceCalculation>();
 			system.UseTestDouble<StardustJobFeedback>().For<IStardustJobFeedback>();
 		}
 
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			skillStaffPeriodDic.Add(new DateTimePeriod(dateTime.AddMinutes(30), dateTime.AddMinutes(60)), getSkillStaffPeriod(new DateTimePeriod(dateTime.AddMinutes(30), dateTime.AddMinutes(60))));
 
 			skillStaffPeriodExt.Add(skill,skillStaffPeriodDic);
-			ExtractSkillStaffDataForResourceCalcualtion.FakeDictionary = skillStaffPeriodExt;
+			ExtractSkillStaffDataForResourceCalculation.FakeDictionary = skillStaffPeriodExt;
 
 			Target.ResourceCalculatePeriod(new DateTimePeriod(dateTime,dateTime.AddDays(1)));
 
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			skillStaffPeriodDic.Add(new DateTimePeriod(dateTime.AddMinutes(30), dateTime.AddMinutes(60)), getSkillStaffPeriod(new DateTimePeriod(dateTime.AddMinutes(30), dateTime.AddMinutes(60))));
 
 			skillStaffPeriodExt.Add(skill, skillStaffPeriodDic);
-			ExtractSkillStaffDataForResourceCalcualtion.FakeDictionary = skillStaffPeriodExt;
+			ExtractSkillStaffDataForResourceCalculation.FakeDictionary = skillStaffPeriodExt;
 
 			Target.ResourceCalculatePeriod(new DateTimePeriod(dateTime, dateTime.AddDays(1)));
 
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 	}
 
-	public class FakeExtractSkillStaffDataForResourceCalcualtion : IExtractSkillStaffDataForResourceCalcualtion
+	public class FakeExtractSkillStaffDataForResourceCalculation : IExtractSkillStaffDataForResourceCalculation
 	{
 		public ISkillSkillStaffPeriodExtendedDictionary FakeDictionary { get; set; }
 
