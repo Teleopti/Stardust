@@ -346,6 +346,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			result.SiteId.Should().Be(siteId);
 			result.BusinessUnitId.Should().Be(businessUnitId);
 		}
+		
+		[Test]
+		public void ShouldUnSoftDeleteWhenUpdatingPersonAssociation()
+		{
+			var personId = Guid.NewGuid();
+			Target.Persist(new AgentStateReadModelForTest {PersonId = personId});
+			Target.SetDeleted(personId, "2016-10-05 08:00".Utc());
+			
+			Target.UpsertAssociation(personId, Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
+
+			var result = Target.Get(personId);
+			result.IsDeleted.Should().Be.False();
+			result.ExpiresAt.Should().Be(null);
+		}
 
 		[Test]
 		public void ShouldPersistStateGroupId()

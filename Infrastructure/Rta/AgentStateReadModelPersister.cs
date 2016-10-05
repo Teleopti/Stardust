@@ -232,7 +232,9 @@ MERGE INTO [ReadModel].[AgentState] AS T
 		UPDATE SET
 			BusinessUnitId = S.BusinessUnitId,
 			SiteId = S.SiteId,
-			TeamId = S.TeamId
+			TeamId = S.TeamId,
+			IsDeleted = null,
+			ExpiresAt = null
 		;")
 				.SetParameter("PersonId", personId)
 				.SetParameter("BusinessUnitId", businessUnitId)
