@@ -75,12 +75,25 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return null;
 		}
 
-		public void UpdateAssociation(Guid personId, Guid teamId, Guid? siteId)
+		public void UpsertAssociation(Guid personId, Guid teamId, Guid? siteId, Guid? businessUnitId)
 		{
 			AgentStateReadModel removed;
-			if (!_data.TryRemove(personId, out removed)) return;
+			if (!_data.TryRemove(personId, out removed))
+			{
+				_data.TryAdd(personId, new AgentStateReadModel
+				{
+					PersonId = personId,
+					BusinessUnitId = businessUnitId,
+					SiteId = siteId,
+					TeamId = teamId
+				});
+				return;
+			}
 			removed.TeamId = teamId;
 			removed.SiteId = siteId;
+			removed.BusinessUnitId = businessUnitId.GetValueOrDefault();
+			removed.IsDeleted = false;
+			removed.ExpiresAt = null;
 			_data.AddOrUpdate(personId, removed, (g, m) => removed);
 		}
 

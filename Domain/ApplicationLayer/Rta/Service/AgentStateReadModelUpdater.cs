@@ -34,9 +34,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			model.ReceivedTime = context.CurrentTime;
 			model.PersonId = context.PersonId;
-			model.BusinessUnitId = context.BusinessUnitId;
-			model.SiteId = context.SiteId;
-			model.TeamId = context.TeamId;
 
 			model.Activity = context.Schedule.CurrentActivityName();
 			model.NextActivity = context.Schedule.NextActivityName();

@@ -12,11 +12,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 {
 	[TestFixture]
 	[ReadModelUpdaterTest]
-	public class TerminatedPersonTest
+	public class SoftDeleteTest
 	{
 		public AgentStateReadModelMaintainer Target;
 		public MutableNow Now;
 		public FakeAgentStateReadModelPersister Persister;
+
+		[Test]
+		public void ShouldSetDeletedWhenPersonIsDeleted()
+		{
+			var personId = Guid.NewGuid();
+			Persister.Persist(new AgentStateReadModel { PersonId = personId });
+
+			Target.Handle(new PersonDeletedEvent { PersonId = personId });
+
+			Persister.Models.Single().IsDeleted.Should().Be(true);
+		}
 		
 		[Test]
 		public void ShouldSetDeletedIfPersonIsTerminated()
@@ -34,7 +45,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 		}
 
 		[Test]
-		public void ShouldDeleteRowIfSoftDeletedForMoreThanThirtyMinutes()
+		public void ShouldKeepReadModelIfPersonIsInATeam()
+		{
+			var personId = Guid.NewGuid();
+			Persister.Persist(new AgentStateReadModel { PersonId = personId });
+
+			Target.Handle(new PersonAssociationChangedEvent
+			{
+				PersonId = personId,
+				TeamId = Guid.Empty
+			});
+
+			Persister.Models.Single().PersonId.Should().Be(personId);
+		}
+
+		[Test]
+		public void ShouldDeleteReadModelIfSoftDeletedForMoreThanThirtyMinutes()
 		{
 			var personId = Guid.NewGuid();
 			Persister.Persist(new AgentStateReadModel { PersonId = personId });
@@ -57,19 +83,40 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 		}
 
 		[Test]
-		public void ShouldKeepReadModelIfPersonIsInATeam()
+		public void ShouldUnDeleteReadModel()
 		{
 			var personId = Guid.NewGuid();
 			Persister.Persist(new AgentStateReadModel { PersonId = personId });
+			Target.Handle(new PersonAssociationChangedEvent
+			{
+				PersonId = personId,
+				TeamId = null,
+				Timestamp = "2016-10-04 08:00".Utc()
+			});
 
 			Target.Handle(new PersonAssociationChangedEvent
 			{
 				PersonId = personId,
-				TeamId = Guid.Empty
+				TeamId = Guid.NewGuid(),
+				Timestamp = "2016-10-04 08:10".Utc()
 			});
 
-			Persister.Models.Single().PersonId.Should().Be(personId);
+			Persister.Get(personId).IsDeleted.Should().Be.False();
 		}
-		
+
+		[Test]
+		public void ShouldInsertReadModel()
+		{
+			var personId = Guid.NewGuid();			
+
+			Target.Handle(new PersonAssociationChangedEvent
+			{
+				PersonId = personId,
+				TeamId = Guid.NewGuid(),
+				Timestamp = "2016-10-04 08:10".Utc()
+			});
+
+			Persister.Get(personId).Should().Not.Be.Null();
+		}
 	}
 }

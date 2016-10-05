@@ -47,5 +47,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 
 			Persister.Models.Single().SiteId.Should().Be(siteId);
 		}
+
+		[Test]
+		public void ShouldMovePersonTonewTeamOnDifferentBusinessUnit()
+		{
+			var personId = Guid.NewGuid();
+			var businessUnit = Guid.NewGuid();
+			Persister.Persist(new AgentStateReadModel { PersonId = personId });
+
+			Target.Handle(new PersonAssociationChangedEvent
+			{
+				PersonId = personId,
+				TeamId = Guid.NewGuid(),
+				SiteId = Guid.NewGuid(),
+				BusinessUnitId = businessUnit
+			});
+
+			Persister.Models.Single().BusinessUnitId.Should().Be(businessUnit);
+
+		}
 	}
 }

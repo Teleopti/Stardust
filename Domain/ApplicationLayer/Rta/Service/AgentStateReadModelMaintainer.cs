@@ -1,3 +1,4 @@
+using System;
 using System.Security.Cryptography.X509Certificates;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -22,18 +23,28 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[UnitOfWork]
 		public virtual void Handle(PersonDeletedEvent @event)
 		{
-			_persister.SetDeleted(@event.PersonId, @event.Timestamp.AddMinutes(30));
+			_persister.SetDeleted(@event.PersonId, expirationFor(@event));
 		}
 
 		[UnitOfWork]
 		public virtual void Handle(PersonAssociationChangedEvent @event)
 		{
 			_persister.DeleteOldRows(_now.UtcDateTime());
-			
+
 			if (@event.TeamId.HasValue)
-				_persister.UpdateAssociation(@event.PersonId, @event.TeamId.Value, @event.SiteId);
+			{
+				var model = _persister.Get(@event.PersonId);
+				if (model == null || expirationFor(@event) >= model.ExpiresAt.GetValueOrDefault())
+					_persister.UpsertAssociation(@event.PersonId, @event.TeamId.Value, @event.SiteId, @event.BusinessUnitId);
+			}
+			
 			else
-				_persister.SetDeleted(@event.PersonId, @event.Timestamp.AddMinutes(30));
+				_persister.SetDeleted(@event.PersonId, expirationFor(@event));
+		}
+
+		private static DateTime expirationFor(IEvent @event)
+		{
+			return ((dynamic) @event).Timestamp.AddMinutes(30);
 		}
 	}
 }

@@ -64,11 +64,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		public void ShouldPersistTeamId()
+		public void ShouldNotPersistAssociation()
 		{
-			var teamId = Guid.NewGuid();
 			Database
-				.WithUser("user", Guid.NewGuid(), Guid.NewGuid(), teamId, null);
+				.WithUser("user", Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
 
 			Target.SaveState(new StateForTest
 			{
@@ -76,25 +75,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "state"
 			});
 
-			Database.PersistedReadModel.TeamId.Should().Be(teamId);
+			Database.PersistedReadModel.TeamId.Should().Be(null);
+			Database.PersistedReadModel.SiteId.Should().Be(null);
+			Database.PersistedReadModel.BusinessUnitId.Should().Be(null);
 		}
-
-		[Test]
-		public void ShouldPersistSiteId()
-		{
-			var siteId = Guid.NewGuid();
-			Database
-				.WithUser("user", Guid.NewGuid(), Guid.NewGuid(), null, siteId);
-
-			Target.SaveState(new StateForTest
-			{
-				UserCode = "user",
-				StateCode = "state",
-			});
-
-			Database.PersistedReadModel.SiteId.Should().Be(siteId);
-		}
-
+		
 		[Test]
 		public void ShouldUpdateCurrentActivityChanges()
 		{

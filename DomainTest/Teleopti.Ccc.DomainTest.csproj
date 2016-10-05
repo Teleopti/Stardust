@@ -292,7 +292,7 @@
     <Compile Include="SchedulingScenarios\ApplicationLayer\IntradayOptimizationCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodDateTransformerTests.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodMapTests.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentState\TerminatedPersonTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentState\SoftDeleteTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TestCaseExtensions.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ScaleOutTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\PersonAdherenceScheduleRemovedTest.cs" />
@@ -314,7 +314,6 @@
     <Compile Include="Forecasting\OverrideTaskTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherenceDetails\DeletedTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\DeletedTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AgentState\DeletedPersonTest.cs" />
     <Compile Include="Forecasting\StaffingCalculatorServiceFacadeTest.cs" />
     <Compile Include="Intraday\CreateSkillAreaTest.cs" />
     <Compile Include="Intraday\MonitorSkillsProviderTest.cs" />

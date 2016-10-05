@@ -320,14 +320,31 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var personId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
-			var model = new AgentStateReadModelForTest { PersonId = personId };
-			Target.Persist(model);
+			var businessUnitId = Guid.NewGuid();
+			Target.Persist(new AgentStateReadModelForTest { PersonId = personId });
 
-			Target.UpdateAssociation(personId, teamId, siteId);
+			Target.UpsertAssociation(personId, teamId, siteId, businessUnitId);
 
 			var result = Target.Get(personId);
 			result.TeamId.Should().Be(teamId);
 			result.SiteId.Should().Be(siteId);
+			result.BusinessUnitId.Should().Be(businessUnitId);
+		}
+
+		[Test]
+		public void ShouldInsertPersonAssociation()
+		{
+			var personId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+
+			Target.UpsertAssociation(personId, teamId, siteId, businessUnitId);
+
+			var result = Target.Get(personId);
+			result.TeamId.Should().Be(teamId);
+			result.SiteId.Should().Be(siteId);
+			result.BusinessUnitId.Should().Be(businessUnitId);
 		}
 
 		[Test]

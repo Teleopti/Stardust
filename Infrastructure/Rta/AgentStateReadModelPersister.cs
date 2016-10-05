@@ -194,18 +194,48 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.FirstOrDefault();
 		}
 
-		public void UpdateAssociation(Guid personId, Guid teamId, Guid? siteId)
+		public void UpsertAssociation(Guid personId, Guid teamId, Guid? siteId, Guid? businessUnitId)
 		{
 			_unitOfWork.Current().Session()
 				.CreateSQLQuery(@"
-					UPDATE [ReadModel].[AgentState]
-					SET
-						SiteId = :SiteId,
-						TeamId = :TeamId
-					WHERE 
-						PersonId = :PersonId
-				")
+MERGE INTO [ReadModel].[AgentState] AS T
+	USING (
+		VALUES
+		(
+			:PersonId,
+			:BusinessUnitId,
+			:SiteId,
+			:TeamId
+		)
+	) AS S (
+			PersonId,
+			BusinessUnitId,
+			SiteId,
+			TeamId
+		)
+	ON 
+		T.PersonId = S.PersonId
+	WHEN NOT MATCHED THEN
+		INSERT
+		(
+			PersonId,
+			BusinessUnitId,
+			SiteId,
+			TeamId
+		) VALUES (
+			S.PersonId,
+			S.BusinessUnitId,
+			S.SiteId,
+			S.TeamId
+		)
+	WHEN MATCHED THEN
+		UPDATE SET
+			BusinessUnitId = S.BusinessUnitId,
+			SiteId = S.SiteId,
+			TeamId = S.TeamId
+		;")
 				.SetParameter("PersonId", personId)
+				.SetParameter("BusinessUnitId", businessUnitId)
 				.SetParameter("SiteId", siteId)
 				.SetParameter("TeamId", teamId)
 				.ExecuteUpdate();
