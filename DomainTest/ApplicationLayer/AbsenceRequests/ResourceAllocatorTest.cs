@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 
-		[Test, Ignore("To Be Implemented")]
+		[Test]
 		public void ShouldSplitResourceForWholeSkillIntervalIfRequestIsNotCoveringWholeInterval()
 		{
 			var requestLength = new TimeSpan(0, 5, 0);
@@ -99,9 +99,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 					StartDateTime = startDateTime1,
 					EndDateTime = endDateTime2,
 					SkillId = _unsortedSkill30.Id.GetValueOrDefault(),
-					StaffingLevel = -((overstaffedUnsorted30/totaloverstaffed1 + overstaffedUnsorted30/totaloverstaffed2))/6
+					StaffingLevel = -overstaffedUnsorted30/(totaloverstaffed1*6)
 				},
 			};
+			var sum = expectedChanges.Sum(x => x.StaffingLevel) + expectedChanges.Last().StaffingLevel; //Should be -0.333..
 			CollectionAssert.AreEquivalent(expectedChanges, changes);
 		}
 
