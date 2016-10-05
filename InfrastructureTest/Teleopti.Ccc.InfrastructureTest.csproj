@@ -168,6 +168,7 @@
     <Compile Include="Authentication\CryptoKeyInfoRepositoryTest.cs" />
     <Compile Include="Authentication\LoadUserUnauthorizedTest.cs" />
     <Compile Include="Authentication\NonceInfoRepositoryTest.cs" />
+    <Compile Include="Bugs\Bug40950DeadlockTest.cs" />
     <Compile Include="Bugs\BugShiftExchangeInvalidUpdate.cs" />
     <Compile Include="DatabaseTestAttribute.cs" />
     <Compile Include="DistributedLock\DistributedLockTest.cs" />
