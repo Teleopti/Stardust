@@ -5,8 +5,11 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.Reporting.Core;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
 {
@@ -18,6 +21,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
 		private IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
 		private IAnalyticsPermissionExecutionRepository _analyticsPermissionExecutionRepository;
 		private IPermissionsConverter _permissionsConverter;
+		private IDistributedLockAcquirer _distributedLockAcquirer;
+		private ICurrentAnalyticsUnitOfWork _currentAnalyticsUnitOfWork;
 		private Guid businessUnitId;
 		private Guid personId;
 
@@ -28,6 +33,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
 			_analyticsBusinessUnitRepository = MockRepository.GenerateMock<IAnalyticsBusinessUnitRepository>();
 			_analyticsPermissionExecutionRepository = MockRepository.GenerateMock<IAnalyticsPermissionExecutionRepository>();
 			_permissionsConverter = MockRepository.GenerateMock<IPermissionsConverter>();
+			_distributedLockAcquirer = new FakeDistributedLockAcquirer();
+			_currentAnalyticsUnitOfWork = MockRepository.GenerateMock<ICurrentAnalyticsUnitOfWork>();
+			_currentAnalyticsUnitOfWork.Stub(x => x.Current()).Return(MockRepository.GenerateMock<IUnitOfWork>());
 
 			businessUnitId = Guid.NewGuid();
 			personId = Guid.NewGuid();
@@ -35,7 +43,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
 			target = new AnalyticsPermissionsUpdater(_analyticsPermissionRepository, 
 				_analyticsBusinessUnitRepository, 
 				_analyticsPermissionExecutionRepository, 
-				_permissionsConverter);
+				_permissionsConverter,
+				_distributedLockAcquirer,
+				_currentAnalyticsUnitOfWork);
 		}
 
 		[Test]

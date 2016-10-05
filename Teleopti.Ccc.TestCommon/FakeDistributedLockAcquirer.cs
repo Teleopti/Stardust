@@ -21,5 +21,12 @@ namespace Teleopti.Ccc.TestCommon
 			action.Invoke();
 			Monitor.Exit(type);
 		}
+
+		public IDisposable LockForGuid(object lockObject, Guid guid)
+		{
+			var lockString = lockObject.GetType()+ guid.ToString();
+			Monitor.Enter(lockString);
+			return new GenericDisposable(() => Monitor.Exit(lockString));
+		}
 	}
 }

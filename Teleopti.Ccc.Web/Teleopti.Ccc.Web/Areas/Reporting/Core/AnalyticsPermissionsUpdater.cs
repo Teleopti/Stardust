@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
+using Teleopti.Ccc.Domain.DistributedLock;
 using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 {
@@ -11,15 +13,19 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 		private readonly IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
 		private readonly IAnalyticsPermissionExecutionRepository _analyticsPermissionExecutionRepository;
 		private readonly IPermissionsConverter _permissionsConverter;
+		private readonly IDistributedLockAcquirer _distributedLockAcquirer;
+		private readonly ICurrentAnalyticsUnitOfWork _analyticsUnitOfWork;
 
 		public AnalyticsPermissionsUpdater(IAnalyticsPermissionRepository analyticsPermissionRepository,
 			IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository,
-			IAnalyticsPermissionExecutionRepository analyticsPermissionExecutionRepository, IPermissionsConverter permissionsConverter)
+			IAnalyticsPermissionExecutionRepository analyticsPermissionExecutionRepository, IPermissionsConverter permissionsConverter, IDistributedLockAcquirer distributedLockAcquirer, ICurrentAnalyticsUnitOfWork analyticsUnitOfWork)
 		{
 			_analyticsPermissionRepository = analyticsPermissionRepository;
 			_analyticsBusinessUnitRepository = analyticsBusinessUnitRepository;
 			_analyticsPermissionExecutionRepository = analyticsPermissionExecutionRepository;
 			_permissionsConverter = permissionsConverter;
+			_distributedLockAcquirer = distributedLockAcquirer;
+			_analyticsUnitOfWork = analyticsUnitOfWork;
 		}
 
 		public void Handle(Guid personId, Guid businessUnitId)
@@ -31,6 +37,13 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 			if (DateTime.UtcNow - lastUpdate < TimeSpan.FromMinutes(15))
 				return;
 
+			var distributedLock = _distributedLockAcquirer.LockForGuid(typeof(AnalyticsPermissionsUpdater), personId);
+			_analyticsUnitOfWork.Current().AfterSuccessfulTx(() =>
+				{
+					distributedLock.Dispose();
+				}
+			);
+
 			var currentPermissions = _permissionsConverter.GetApplicationPermissionsAndConvert(personId, businessUnit.BusinessUnitId).ToList();
 			var currentAnalyticsPermissions = _analyticsPermissionRepository.GetPermissionsForPerson(personId, businessUnit.BusinessUnitId);
 
@@ -40,6 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 			_analyticsPermissionRepository.DeletePermissions(toBeDeleted);
 
 			_analyticsPermissionExecutionRepository.Set(personId, businessUnit.BusinessUnitId);
+
 		}
 	}
 }

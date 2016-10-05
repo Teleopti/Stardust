@@ -34,6 +34,19 @@ namespace Teleopti.Ccc.Infrastructure.DistributedLock
 			});
 		}
 
+		public IDisposable LockForGuid(object lockObject, Guid guid)
+		{
+			var connection = new SqlConnection(_connectionStrings.Application());
+			connection.Open();
+			var @lock = _monitor.Enter(ProxyUtil.GetUnproxiedType(lockObject).Name + guid, timeout(), connection);
+			return new GenericDisposable(() =>
+			{
+				@lock.Dispose();
+				connection.Close();
+				connection.Dispose();
+			});
+		}
+
 		public void TryLockForTypeOf(object lockObject, Action action)
 		{
 			using (var connection = new SqlConnection(_connectionStrings.Application()))

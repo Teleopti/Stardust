@@ -6,5 +6,6 @@ namespace Teleopti.Ccc.Domain.DistributedLock
 	{
 		IDisposable LockForTypeOf(object lockObject);
 		void TryLockForTypeOf(object lockObject, Action action);
+		IDisposable LockForGuid(object lockObject, Guid guid);
 	}
 }
