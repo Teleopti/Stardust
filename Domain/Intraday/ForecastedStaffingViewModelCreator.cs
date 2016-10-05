@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			if (actualCallsPerSkillInterval.Count > 0)
 				latestStatsTime = actualCallsPerSkillInterval.Max(d => d.StartTime);
 
-			var forecastedStaffingModel = _forecastedStaffingProvider.Load(skillIdList, latestStatsTime, minutesPerInterval);
+			var forecastedStaffingModel = _forecastedStaffingProvider.Load(skillIdList, latestStatsTime, minutesPerInterval, actualCallsPerSkillInterval);
 
 			var staffingForUsersToday = forecastedStaffingModel.StaffingIntervals
 												.Where(t => t.StartTime >= usersToday.Date && t.StartTime < usersToday.Date.AddDays(1))
@@ -77,9 +77,35 @@ namespace Teleopti.Ccc.Domain.Intraday
 								.Select(t => t.Agents)
 								.ToArray(),
 					UpdatedForecastedStaffing = updatedForecastedSeries
+								.ToArray(),
+					ActualStaffing = getActualStaffingSeries(forecastedStaffingModel.ActualStaffingPerSkill, latestStatsTime,minutesPerInterval, staffingForUsersToday)
 								.ToArray()
 				}
 			};
+		}
+
+		private List<double?> getActualStaffingSeries(List<StaffingIntervalModel> actualStaffingPerSkill, DateTime? latestStatsTime, int minutesPerInterval, List<StaffingIntervalModel> staffingForUsersToday)
+		{
+			var returnValue = new List<double?>();
+
+			if (!latestStatsTime.HasValue)
+				return new List<double?>();
+
+			returnValue.AddRange(actualStaffingPerSkill
+				.OrderBy(x => x.StartTime)
+				.GroupBy(y => y.StartTime)
+				.Select(s => (double?) s.Sum(a => a.Agents))
+				.ToList());
+
+			var nullStartTime = latestStatsTime.Value.AddMinutes(minutesPerInterval);
+			var nullEndTime = staffingForUsersToday.Max(x => x.StartTime);
+
+			for (DateTime i = nullStartTime; i <= nullEndTime; i = i.AddMinutes(minutesPerInterval))
+			{
+				returnValue.Add(null);
+			}
+
+			return returnValue;
 		}
 
 		private List<double?> getUpdatedForecastedStaffing(

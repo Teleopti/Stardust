@@ -14,5 +14,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 		public Guid SkillId { get; set; }
 		public double Calls { get; set; }
 		public DateTime StartTime { get; set; }
+		public double AverageHandleTime { get; set; }
 	}
 }
