@@ -141,9 +141,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 					StartDateTime = startDateTime1,
 					EndDateTime = endDateTime2,
 					SkillId = _unsortedSkill30.Id.GetValueOrDefault(),
-					StaffingLevel = -overstaffedUnsorted30/totaloverstaffed1
+					StaffingLevel = -overstaffedUnsorted30/(totaloverstaffed1*2) //resource shared for whole period
 				},
 			};
+			
+			//var sum = expectedChanges.Sum(x => x.StaffingLevel) + expectedChanges.Last().StaffingLevel; //Should be -1
 			CollectionAssert.AreEquivalent(expectedChanges, changes);
 		}
 
@@ -200,6 +202,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 					StaffingLevel = -(overstaffedUnsorted30/totaloverstaffed1 + overstaffedUnsorted30/totaloverstaffed2) 
 				},
 			};
+		//	var sum = expectedChanges.Sum(x => x.StaffingLevel); //Should be -2
 			CollectionAssert.AreEquivalent(expectedChanges, changes);
 		}
 

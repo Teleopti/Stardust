@@ -80,6 +80,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			return EndDateTime.Subtract(StartDateTime);
 		}
+
+		public double GetTimeSpanFactor(TimeSpan ts)
+		{
+			return (double)GetTimeSpan().Ticks/ts.Ticks;
+		}
 	}
 
 	public class StaffingIntervalChange : IEquatable<StaffingIntervalChange>
