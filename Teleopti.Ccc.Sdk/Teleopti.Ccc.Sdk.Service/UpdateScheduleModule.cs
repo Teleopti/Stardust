@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			builder.RegisterType<OccupiedSeatCalculator>().As<IOccupiedSeatCalculator>();
 			builder.RegisterType<PersonSkillProvider>().As<IPersonSkillProvider>().InstancePerLifetimeScope();
 			builder.RegisterType<PeriodDistributionService>().As<IPeriodDistributionService>();
-			builder.RegisterType<ResourceOptimizationHelper>().As<IResourceOptimizationHelper>().InstancePerLifetimeScope();
 			builder.RegisterType<IntraIntervalFinderService>().As<IIntraIntervalFinderService>();	
 			builder.RegisterType<SkillDayLoadHelper>().As<ISkillDayLoadHelper>().InstancePerLifetimeScope();
 			builder.RegisterType<PeopleAndSkillLoaderDecider>().As<IPeopleAndSkillLoaderDecider>().InstancePerLifetimeScope();
@@ -40,7 +39,6 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			builder.RegisterGeneric(typeof(PairDictionaryFactory<>)).As(typeof(IPairDictionaryFactory<>)).InstancePerLifetimeScope();
 			builder.RegisterType<LoadSchedulingStateHolderForResourceCalculation>().As<ILoadSchedulingStateHolderForResourceCalculation>().InstancePerLifetimeScope();
 			builder.RegisterType<ServiceLevelCalculator>().As<IServiceLevelCalculator>().SingleInstance();
-			
 		}
 	}
 }
