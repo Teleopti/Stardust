@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
-using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -23,8 +21,7 @@ namespace Teleopti.Ccc.Win.Meetings
 		private IMeetingDetailView _currentView;
 		private readonly IEventAggregator _eventAggregator;
 		private readonly IToggleManager _toogleManager;
-		private readonly IIntraIntervalFinderService _intraIntervalFinderService;
-		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 
 		public event EventHandler<ModifyMeetingEventArgs> ModificationOccurred;
 
@@ -37,15 +34,15 @@ namespace Teleopti.Ccc.Win.Meetings
 		}
 
 		public MeetingComposerView(IMeetingViewModel meetingViewModel, ISchedulerStateHolder schedulerStateHolder, 
-			bool editPermission, bool viewSchedulesPermission, IEventAggregator eventAggregator, IToggleManager toogleManager, IIntraIntervalFinderService intraIntervalFinderService, IResourceCalculationContextFactory resourceCalculationContextFactory)
+			bool editPermission, bool viewSchedulesPermission, IEventAggregator eventAggregator, IToggleManager toogleManager,
+			IResourceOptimizationHelper resourceOptimizationHelper)
 			: this()
 		{
 			bool editMeetingPermission = editPermission;
 			_viewSchedulesPermission = viewSchedulesPermission;
 			_eventAggregator = eventAggregator;
 			_toogleManager = toogleManager;
-			_intraIntervalFinderService = intraIntervalFinderService;
-			_resourceCalculationContextFactory = resourceCalculationContextFactory;
+			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_meetingComposerPresenter = new MeetingComposerPresenter(this, meetingViewModel, new DisableDeletedFilter(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make())), schedulerStateHolder);
 			panelContent.Enabled = editMeetingPermission;
 			ribbonControlAdv1.Enabled = editMeetingPermission;
@@ -316,7 +313,7 @@ namespace Teleopti.Ccc.Win.Meetings
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		private IMeetingImpactView getImpactView()
 		{
-			return new MeetingImpactView(_meetingComposerPresenter.Model, _meetingComposerPresenter.SchedulerStateHolder, this, _toogleManager, _intraIntervalFinderService, _resourceCalculationContextFactory);
+			return new MeetingImpactView(_meetingComposerPresenter.Model, _meetingComposerPresenter.SchedulerStateHolder, this, _toogleManager, _resourceOptimizationHelper);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]

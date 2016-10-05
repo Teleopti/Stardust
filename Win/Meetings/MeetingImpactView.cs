@@ -6,13 +6,8 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
-using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
-using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -37,18 +32,20 @@ namespace Teleopti.Ccc.Win.Meetings
 		private readonly TransparentMeetingMeetingControl _transparentMeetingMeetingControl;
 		private readonly MeetingStateHolderLoaderHelper _meetingStateHolderLoaderHelper;
 		private readonly IToggleManager _toggleManager;
-		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
 
 		public MeetingImpactView()
 		{
 			InitializeComponent();
 		}
 
-		public MeetingImpactView(IMeetingViewModel meetingViewModel, ISchedulerStateHolder schedulerStateHolder, MeetingComposerView meetingComposerView, IToggleManager toggleManager, IIntraIntervalFinderService intraIntervalFinderService, IResourceCalculationContextFactory resourceCalculationContextFactory)
+		public MeetingImpactView(IMeetingViewModel meetingViewModel, 
+								ISchedulerStateHolder schedulerStateHolder, 
+								MeetingComposerView meetingComposerView, 
+								IToggleManager toggleManager,
+								IResourceOptimizationHelper resourceOptimizationHelper)
 			: this()
 		{
 			_toggleManager = toggleManager;
-			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_transparentMeetingMeetingControl = new TransparentMeetingMeetingControl();
 			_skillIntradayGridControl = new SkillIntradayGridControl("MeetingSkillIntradayGridAndChart", _toggleManager);
 
@@ -62,11 +59,6 @@ namespace Teleopti.Ccc.Win.Meetings
 			var stateHolderLoader = new SchedulerStateLoader(schedulerStateHolder);
 			var slotCalculator = new MeetingSlotImpactCalculator(schedulerStateHolder.SchedulingResultState, new AllLayersAreInWorkTimeSpecification());
 			var slotFinder = new BestSlotForMeetingFinder(slotCalculator);
-			var personSkillProvider = new PersonSkillProvider();
-			var optimizationHelperWin = new ResourceOptimizationHelper(new OccupiedSeatCalculator(),
-																	   new NonBlendSkillCalculator(),
-																	   personSkillProvider, new PeriodDistributionService(), 
-																		intraIntervalFinderService, new TimeZoneGuardWrapper(), _resourceCalculationContextFactory);
 			var decider = new PeopleAndSkillLoaderDecider(new PersonRepository(new FromFactory(() =>UnitOfWorkFactory.Current)), new PairMatrixService<Guid>(new PairDictionaryFactory<Guid>()));
 			var gridHandler = new MeetingImpactSkillGridHandler(this, meetingViewModel, schedulerStateHolder,
 																UnitOfWorkFactory.Current, decider);
@@ -75,7 +67,7 @@ namespace Teleopti.Ccc.Win.Meetings
 																						 SchedulingResultState);
 			_meetingStateHolderLoaderHelper = new MeetingStateHolderLoaderHelper(decider, schedulerStateHolder, stateHolderLoader, UnitOfWorkFactory.Current);
 			_presenter = new MeetingImpactPresenter(schedulerStateHolder, this, meetingViewModel, _meetingStateHolderLoaderHelper,
-				slotFinder, new MeetingImpactCalculator(schedulerStateHolder, optimizationHelperWin, meetingViewModel.Meeting),
+				slotFinder, new MeetingImpactCalculator(schedulerStateHolder, resourceOptimizationHelper, meetingViewModel.Meeting),
 				gridHandler, transparentWindowHandler, UnitOfWorkFactory.Current);
 			SetTexts();
 

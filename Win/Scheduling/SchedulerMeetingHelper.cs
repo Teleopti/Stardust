@@ -7,8 +7,6 @@ using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -27,24 +25,15 @@ namespace Teleopti.Ccc.Win.Scheduling
     {
         private readonly IInitiatorIdentifier _initiatorIdentifier;
         private readonly ISchedulerStateHolder _schedulerStateHolder;
-	    private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
+	    private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 	    private readonly IRepositoryFactory _repositoryFactory = new RepositoryFactory();
 	    private readonly MeetingParticipantPermittedChecker _meetingParticipantPermittedChecker = new MeetingParticipantPermittedChecker();
 
-	    /// <summary>
-        /// Initializes a new instance of the <see cref="SchedulerMeetingHelper"/> class.
-        /// </summary>
-        /// <param name="initiatorIdentifier">The message broker module.</param>
-        /// <param name="schedulerStateHolder">The scheduler state holder.</param>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2009-10-26
-        /// </remarks>
-        internal SchedulerMeetingHelper(IInitiatorIdentifier initiatorIdentifier, ISchedulerStateHolder schedulerStateHolder, IResourceCalculationContextFactory resourceCalculationContextFactory)
+	    internal SchedulerMeetingHelper(IInitiatorIdentifier initiatorIdentifier, ISchedulerStateHolder schedulerStateHolder, IResourceOptimizationHelper resourceOptimizationHelper)
         {
             _initiatorIdentifier = initiatorIdentifier;
             _schedulerStateHolder = schedulerStateHolder;
-		    _resourceCalculationContextFactory = resourceCalculationContextFactory;
+	        _resourceOptimizationHelper = resourceOptimizationHelper;
         }
 
         internal event EventHandler<ModifyMeetingEventArgs> ModificationOccured;
@@ -141,7 +130,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 	    /// <summary>
         /// start meeting composer with supplied meeting, or null if new meeting should be created
         /// </summary>
-        internal void MeetingComposerStart(IMeeting meeting, IScheduleViewBase scheduleViewBase, bool editPermission, bool viewSchedulesPermission, IToggleManager toggleManager, IIntraIntervalFinderService intraIntervalFinderService)
+        internal void MeetingComposerStart(IMeeting meeting, IScheduleViewBase scheduleViewBase, bool editPermission, bool viewSchedulesPermission, IToggleManager toggleManager)
         {
             if(scheduleViewBase == null) return;
 
@@ -192,7 +181,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 }
             }
 
-            using (MeetingComposerView meetingComposerView = new MeetingComposerView(meetingViewModel, _schedulerStateHolder, editPermission, viewSchedulesPermission, new EventAggregator(), toggleManager, intraIntervalFinderService, _resourceCalculationContextFactory))
+            using (MeetingComposerView meetingComposerView = new MeetingComposerView(meetingViewModel, _schedulerStateHolder, editPermission, viewSchedulesPermission, new EventAggregator(), toggleManager, _resourceOptimizationHelper))
             {
 				meetingComposerView.SetInstanceId(_initiatorIdentifier.InitiatorId);
                 meetingComposerView.ModificationOccurred += meetingComposerView_ModificationOccurred;

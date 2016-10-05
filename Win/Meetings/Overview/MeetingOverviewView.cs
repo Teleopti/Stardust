@@ -10,7 +10,6 @@ using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Schedule;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 		private readonly CalendarAndTextPanel _calendarAndTextPanel;
 		private readonly MeetingsScheduleProvider _dataProvider;
 		private readonly IMeetingOverviewFilter _meetingOverviewFilter;
-		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 
 		private IScheduleAppointment _selectedItem;
 		private readonly Control _nextButton;
@@ -40,12 +39,12 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 		private DateTime _clickedDate;
 
 
-		public MeetingOverviewView(IEventAggregator eventAggregator, MeetingsScheduleProvider dataProvider,IMeetingOverviewFilter meetingOverviewFilter, IResourceCalculationContextFactory resourceCalculationContextFactory)
+		public MeetingOverviewView(IEventAggregator eventAggregator, MeetingsScheduleProvider dataProvider,IMeetingOverviewFilter meetingOverviewFilter, IResourceOptimizationHelper resourceOptimizationHelper)
 		{
 			_eventAggregator = eventAggregator;
 			_dataProvider = dataProvider;
 			_meetingOverviewFilter = meetingOverviewFilter;
-			_resourceCalculationContextFactory = resourceCalculationContextFactory;
+			_resourceOptimizationHelper = resourceOptimizationHelper;
 
 			InitializeComponent();
 			SetTexts();
@@ -422,7 +421,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 		{
 			var viewSchedulesPermission = isPermittedToViewSchedules();
 			var meetingComposerView = new MeetingComposerView(meetingViewModel, null, true, viewSchedulesPermission,
-															  _eventAggregator, toggleManager, intraIntervalFinderService, _resourceCalculationContextFactory);
+															  _eventAggregator, toggleManager, _resourceOptimizationHelper);
 			meetingComposerView.ShowDialog(this);
 		}
 

@@ -4,8 +4,6 @@ using System.Reflection;
 using System.Windows.Forms;
 using Autofac;
 using Microsoft.Practices.Composite.Events;
-using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.WinCode.Grouping;
@@ -122,7 +120,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
             public void ShowMeetingComposerView(IPersonSelectorView parent, IMeetingViewModel meetingViewModel, bool viewSchedulesPermission)
             {
                 var meetingComposerView = new MeetingComposerView(meetingViewModel, null, true, viewSchedulesPermission,
-															   new EventAggregator(), _container.Resolve<IToggleManager>(), _container.Resolve<IIntraIntervalFinderService>(), _container.Resolve<IResourceCalculationContextFactory>());
+															   new EventAggregator(), _container.Resolve<IToggleManager>(), _container.Resolve<IResourceOptimizationHelper>());
                 meetingComposerView.Show((Control)parent);
             }
         }
